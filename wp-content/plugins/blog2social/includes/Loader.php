@@ -39,7 +39,7 @@ class B2S_Loader {
         define('B2S_PLUGIN_SCHED_DEFAULT_TIMES', serialize(array(1 => array(18, 22), 2 => array(8, 10), 3 => array(7, 10), 4 => array(20, 22), 5 => array(), 6 => array(19, 22), 7 => array(7, 9), 8 => array(7, 10), 9 => array(16, 19), 10 => array(7, 10), 11 => array(8, 10), 12 => array(19, 22), 13 => array(11, 13), 14 => array(6, 8), 15 => array(6, 9), 16 => array(16, 19), 17 => array(21, 24), 18 => array(19, 21), 19 => array(7, 10), 24 => array(10, 12))));
         define('B2S_PLUGIN_SCHED_DEFAULT_TIMES_INFO', serialize(array(1 => array(0 => array(13, 16), 1 => array(18, 22)), 2 => array(0 => array(7, 10), 1 => array(11, 13), 2 => array(16, 19)), 3 => array(0 => array(7, 10), 1 => array(17, 18)), 4 => array(0 => array(20, 22)), 5 => array(), 6 => array(0 => array(12, 14), 1 => array(19, 22)), 7 => array(0 => array(7, 9), 1 => array(17, 19)), 8 => array(0 => array(7, 10), 1 => array(17, 18)), 9 => array(0 => array(8, 10), 1 => array(11, 13), 2 => array(16, 19)), 10 => array(0 => array(7, 10), 1 => array(14, 15)), 11 => array(0 => array(8, 10)), 12 => array(0 => array(11, 13), 1 => array(19, 22)), 13 => array(0 => array(8, 10), 1 => array(11, 13), 2 => array(16, 19)), 14 => array(0 => array(6, 8)), 15 => array(0 => array(6, 9)), 16 => array(0 => array(16, 19)), 17 => array(0 => array(21, 1)), 18 => array(0 => array(9, 11), 1 => array(19, 21)), 19 => array(0 => array(7, 10), 1 => array(17, 18)), 20 => array(0 => array(12, 14), 1 => array(19, 22)), 24 => array(0 => array(10, 12), 1 => array(17, 19)))));
         define('B2S_PLUGIN_NETWORK_ALLOW_PROFILE', serialize(array(1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 24)));
-        define('B2S_PLUGIN_NETWORK_ALLOW_PAGE', serialize(array(1, 3, 10, 17, 19)));
+        define('B2S_PLUGIN_NETWORK_ALLOW_PAGE', serialize(array(1, 3, 10, 12, 17, 19)));
         define('B2S_PLUGIN_NETWORK_ALLOW_GROUP', serialize(array(1, 10, 11, 17, 19)));
         define('B2S_PLUGIN_NETWORK_CROSSPOSTING_LIMIT', serialize(array(19 => array(2 => 3)))); //2=group
         define('B2S_PLUGIN_NETWORK_ALLOW_MODIFY_BOARD_AND_GROUP', serialize(array(6 => array('TYPE' => array(0), 'TITLE' => esc_html__('Modify pin board', 'blog2social')), 8 => array('TYPE' => array(2), 'TITLE' => esc_html__('Edit group settings', 'blog2social')), 15 => array('TYPE' => array(0), 'TITLE' => esc_html__('Modify subreddit', 'blog2social')), 19 => array('TYPE' => array(2), 'TITLE' => esc_html__('Modify forum', 'blog2social')), 20 => array('TYPE' => array(0), 'TITLE' => esc_html__('Modify pin board', 'blog2social')))));
@@ -47,32 +47,33 @@ class B2S_Loader {
         define('B2S_PLUGIN_RE_POST_LIMIT', serialize(array(0 => 0, 1 => 25, 2 => 50, 3 => 100, 4 => 100)));
         define('B2S_PLUGIN_NETWORK_OAUTH', serialize(array(1, 2, 3, 4, 7, 8, 11, 15, 17, 18, 20, 21)));
         define('B2S_PLUGIN_NETWORK_SETTINGS_TEMPLATE_DEFAULT', serialize(array(
-            1 => array(0 => array('short_text' => array('active' => 0, 'range_min' => 239, 'range_max' => 400, 'excerpt_range_min' => 239, 'excerpt_range_max' => 400, 'limit' => 500), 'content' => '{CONTENT} {KEYWORDS}', 'format' => 0, 'addLink' => false),
-                1 => array('short_text' => array('active' => 0, 'range_min' => 239, 'range_max' => 400, 'excerpt_range_min' => 239, 'excerpt_range_max' => 400, 'limit' => 0), 'content' => '{CONTENT} {KEYWORDS}', 'format' => 0, 'addLink' => false),
-                2 => array('short_text' => array('active' => 0, 'range_min' => 239, 'range_max' => 400, 'excerpt_range_min' => 239, 'excerpt_range_max' => 400, 'limit' => 0), 'content' => '{CONTENT} {KEYWORDS}', 'format' => 0, 'addLink' => false)
+            1 => array(0 => array('short_text' => array('active' => 0, 'range_min' => 200, 'range_max' => 400, 'excerpt_range_min' => 200, 'excerpt_range_max' => 400, 'limit' => 500), 'content' => "{CONTENT}\n{KEYWORDS}", 'format' => 0, 'addLink' => false),
+                1 => array('short_text' => array('active' => 0, 'range_min' => 200, 'range_max' => 400, 'excerpt_range_min' => 200, 'excerpt_range_max' => 400, 'limit' => 0), 'content' => "{CONTENT}\n{KEYWORDS}", 'format' => 0, 'addLink' => false),
+                2 => array('short_text' => array('active' => 0, 'range_min' => 200, 'range_max' => 400, 'excerpt_range_min' => 200, 'excerpt_range_max' => 400, 'limit' => 0), 'content' => "{CONTENT}\n{KEYWORDS}", 'format' => 0, 'addLink' => false)
             ),
-            2 => array(0 => array('short_text' => array('active' => 0, 'range_min' => 200, 'range_max' => 256, 'excerpt_range_min' => 200, 'excerpt_range_max' => 256, 'limit' => 280), 'content' => '{CONTENT} {KEYWORDS}', 'format' => 1)),
-            3 => array(0 => array('short_text' => array('active' => 0, 'range_min' => 239, 'range_max' => 400, 'excerpt_range_min' => 239, 'excerpt_range_max' => 400, 'limit' => 1300), 'content' => '{CONTENT} {KEYWORDS}', 'format' => 0),
-                1 => array('short_text' => array('active' => 0, 'range_min' => 239, 'range_max' => 400, 'excerpt_range_min' => 239, 'excerpt_range_max' => 400, 'limit' => 1300), 'content' => '{CONTENT} {KEYWORDS}', 'format' => 0),
+            2 => array(0 => array('short_text' => array('active' => 0, 'range_min' => 200, 'range_max' => 254, 'excerpt_range_min' => 200, 'excerpt_range_max' => 254, 'limit' => 280), 'content' => '{CONTENT} {KEYWORDS}', 'format' => 1, 'addLink' => true)),
+            3 => array(0 => array('short_text' => array('active' => 0, 'range_min' => 200, 'range_max' => 400, 'excerpt_range_min' => 200, 'excerpt_range_max' => 400, 'limit' => 1300), 'content' => "{CONTENT}\n{KEYWORDS}", 'format' => 0),
+                1 => array('short_text' => array('active' => 0, 'range_min' => 200, 'range_max' => 400, 'excerpt_range_min' => 200, 'excerpt_range_max' => 400, 'limit' => 1300), 'content' => "{CONTENT}\n{KEYWORDS}", 'format' => 0),
             ),
-            4 => array(0 => array('short_text' => array('active' => 0, 'range_min' => 1000, 'range_max' => 1500, 'excerpt_range_min' => 1000, 'excerpt_range_max' => 1500, 'limit' => 0), 'content' => '{CONTENT}', 'format' => false, 'disableKeywords' => true)),
-            6 => array(0 => array('short_text' => array('active' => 0, 'range_min' => 350, 'range_max' => 421, 'excerpt_range_min' => 350, 'excerpt_range_max' => 421, 'limit' => 495), 'content' => '{CONTENT} {KEYWORDS}', 'format' => false)),
+            4 => array(0 => array('short_text' => array('active' => 0, 'range_min' => 1000, 'range_max' => 20000, 'excerpt_range_min' => 1000, 'excerpt_range_max' => 20000, 'limit' => 0), 'content' => '{CONTENT}', 'format' => false, 'disableKeywords' => true)),
+            6 => array(0 => array('short_text' => array('active' => 0, 'range_min' => 350, 'range_max' => 421, 'excerpt_range_min' => 350, 'excerpt_range_max' => 421, 'limit' => 495), 'content' => "{CONTENT}\n{KEYWORDS}", 'format' => false)),
             7 => array(0 => array('short_text' => array('active' => 0, 'range_min' => 1000, 'range_max' => 1500, 'excerpt_range_min' => 1000, 'excerpt_range_max' => 1500, 'limit' => 0), 'content' => '{CONTENT}', 'format' => false, 'disableKeywords' => true)),
             9 => array(0 => array('short_text' => array('active' => 0, 'range_min' => 200, 'range_max' => 250, 'excerpt_range_min' => 200, 'excerpt_range_max' => 250, 'limit' => 250), 'content' => '{CONTENT}', 'format' => false, 'disableKeywords' => true)),
-            11 => array(0 => array('short_text' => array('active' => 0, 'range_min' => 1000, 'range_max' => 1500, 'excerpt_range_min' => 1000, 'excerpt_range_max' => 1500, 'limit' => 0), 'content' => '{CONTENT}', 'format' => false, 'disableKeywords' => true),
-                2 => array('short_text' => array('active' => 0, 'range_min' => 1000, 'range_max' => 1500, 'excerpt_range_min' => 1000, 'excerpt_range_max' => 1500, 'limit' => 0), 'content' => '{CONTENT}', 'format' => false, 'disableKeywords' => true)),
-            12 => array(0 => array('short_text' => array('active' => 0, 'range_min' => 240, 'range_max' => 400, 'excerpt_range_min' => 240, 'excerpt_range_max' => 400, 'limit' => 2000), 'content' => '{CONTENT} {KEYWORDS}', 'format' => 1, 'addLink' => false, 'shuffleHashtags' => false)),
-            14 => array(0 => array('short_text' => array('active' => 0, 'range_min' => 1000, 'range_max' => 1500, 'excerpt_range_min' => 1000, 'excerpt_range_max' => 1500, 'limit' => 0), 'content' => '{CONTENT}', 'format' => false, 'disableKeywords' => true)),
+            11 => array(0 => array('short_text' => array('active' => 0, 'range_min' => 1000, 'range_max' => 20000, 'excerpt_range_min' => 1000, 'excerpt_range_max' => 20000, 'limit' => 0), 'content' => '{CONTENT}', 'format' => false, 'separateKeywords' => true),
+                2 => array('short_text' => array('active' => 0, 'range_min' => 1000, 'range_max' => 20000, 'excerpt_range_min' => 1000, 'excerpt_range_max' => 20000, 'limit' => 0), 'content' => '{CONTENT}', 'format' => false, 'separateKeywords' => true)),
+            12 => array(0 => array('short_text' => array('active' => 0, 'range_min' => 200, 'range_max' => 400, 'excerpt_range_min' => 240, 'excerpt_range_max' => 400, 'limit' => 2000), 'content' => "{CONTENT}\n{KEYWORDS}", 'format' => 1, 'addLink' => false, 'shuffleHashtags' => false),
+                1 => array('short_text' => array('active' => 0, 'range_min' => 200, 'range_max' => 400, 'excerpt_range_min' => 240, 'excerpt_range_max' => 400, 'limit' => 2000), 'content' => "{CONTENT}\n{KEYWORDS}", 'format' => 1, 'addLink' => false, 'shuffleHashtags' => false)),
+            14 => array(0 => array('short_text' => array('active' => 0, 'range_min' => 1000, 'range_max' => 20000, 'excerpt_range_min' => 1000, 'excerpt_range_max' => 20000, 'limit' => 0), 'content' => '{CONTENT}', 'format' => false, 'disableKeywords' => true)),
             15 => array(0 => array('short_text' => array('active' => 0, 'range_min' => 200, 'range_max' => 300, 'excerpt_range_min' => 200, 'excerpt_range_max' => 300, 'limit' => 0), 'content' => '{CONTENT}', 'format' => false, 'disableKeywords' => true)),
             16 => array(0 => array('short_text' => array('active' => 0, 'range_min' => 1000, 'range_max' => 1500, 'excerpt_range_min' => 1000, 'excerpt_range_max' => 1500, 'limit' => 0), 'content' => '{CONTENT}', 'format' => false, 'disableKeywords' => true)),
-            17 => array(0 => array('short_text' => array('active' => 0, 'range_min' => 1000, 'range_max' => 1500, 'excerpt_range_min' => 1000, 'excerpt_range_max' => 1500, 'limit' => 0), 'content' => '{CONTENT} {KEYWORDS}', 'format' => 0),
-                1 => array('short_text' => array('active' => 0, 'range_min' => 1000, 'range_max' => 1500, 'excerpt_range_min' => 1000, 'excerpt_range_max' => 1500, 'limit' => 0), 'content' => '{CONTENT} {KEYWORDS}', 'format' => 0),
-                2 => array('short_text' => array('active' => 0, 'range_min' => 1000, 'range_max' => 1500, 'excerpt_range_min' => 1000, 'excerpt_range_max' => 1500, 'limit' => 0), 'content' => '{CONTENT} {KEYWORDS}', 'format' => 0)),
-            18 => array(0 => array('short_text' => array('active' => 0, 'range_min' => 1000, 'range_max' => 1500, 'excerpt_range_min' => 1000, 'excerpt_range_max' => 1500, 'limit' => 1500), 'content' => '{CONTENT} {KEYWORDS}', 'format' => false)),
-            19 => array(0 => array('short_text' => array('active' => 0, 'range_min' => 239, 'range_max' => 320, 'excerpt_range_min' => 239, 'excerpt_range_max' => 320, 'limit' => 1000), 'content' => '{CONTENT}', 'format' => 0, 'disableKeywords' => true),
-                1 => array('short_text' => array(0 => array('active' => 0, 'range_min' => 239, 'range_max' => 320, 'excerpt_range_min' => 239, 'excerpt_range_max' => 320, 'limit' => 400), 4 => array('active' => 0, 'range_min' => 880, 'range_max' => 920, 'excerpt_range_min' => 880, 'excerpt_range_max' => 920, 'limit' => 1000)), 'content' => '{CONTENT}', 'format' => 1, 'disableKeywords' => true),
-                2 => array('short_text' => array('active' => 0, 'range_min' => 239, 'range_max' => 320, 'excerpt_range_min' => 239, 'excerpt_range_max' => 320, 'limit' => 10000), 'content' => '{CONTENT}', 'format' => 1, 'disableKeywords' => true)),
-            24 => array(0 => array('short_text' => array('active' => 0, 'range_min' => 239, 'range_max' => 320, 'excerpt_range_min' => 239, 'excerpt_range_max' => 320, 'limit' => 420), 'content' => '{CONTENT}', 'format' => 0))
+            17 => array(0 => array('short_text' => array('active' => 0, 'range_min' => 1000, 'range_max' => 1500, 'excerpt_range_min' => 1000, 'excerpt_range_max' => 1500, 'limit' => 0), 'content' => "{CONTENT}\n{KEYWORDS}", 'format' => 0),
+                1 => array('short_text' => array('active' => 0, 'range_min' => 1000, 'range_max' => 1500, 'excerpt_range_min' => 1000, 'excerpt_range_max' => 1500, 'limit' => 0), 'content' => "{CONTENT}\n{KEYWORDS}", 'format' => 0),
+                2 => array('short_text' => array('active' => 0, 'range_min' => 1000, 'range_max' => 1500, 'excerpt_range_min' => 1000, 'excerpt_range_max' => 1500, 'limit' => 0), 'content' => "{CONTENT}\n{KEYWORDS}", 'format' => 0)),
+            18 => array(0 => array('short_text' => array('active' => 0, 'range_min' => 1000, 'range_max' => 1500, 'excerpt_range_min' => 1000, 'excerpt_range_max' => 1500, 'limit' => 1500), 'content' => "{CONTENT}\n{KEYWORDS}", 'format' => false)),
+            19 => array(0 => array('short_text' => array('active' => 0, 'range_min' => 200, 'range_max' => 320, 'excerpt_range_min' => 200, 'excerpt_range_max' => 320, 'limit' => 1000), 'content' => '{CONTENT}', 'format' => 0, 'disableKeywords' => true),
+                1 => array('short_text' => array(0 => array('active' => 0, 'range_min' => 200, 'range_max' => 320, 'excerpt_range_min' => 200, 'excerpt_range_max' => 320, 'limit' => 1000), 4 => array('active' => 0, 'range_min' => 880, 'range_max' => 920, 'excerpt_range_min' => 880, 'excerpt_range_max' => 920, 'limit' => 1000)), 'content' => '{CONTENT}', 'format' => 1, 'disableKeywords' => true),
+                2 => array('short_text' => array('active' => 0, 'range_min' => 200, 'range_max' => 320, 'excerpt_range_min' => 200, 'excerpt_range_max' => 320, 'limit' => 10000), 'content' => '{CONTENT}', 'format' => 1, 'disableKeywords' => true)),
+            24 => array(0 => array('short_text' => array('active' => 0, 'range_min' => 200, 'range_max' => 320, 'excerpt_range_min' => 200, 'excerpt_range_max' => 320, 'limit' => 420), 'content' => '{CONTENT}', 'format' => false, 'addLink' => true))
         )));
         define('B2S_PLUGIN_SYSTEMREQUIREMENT_WORDPRESSVERSION', '4.7.0');
         define('B2S_PLUGIN_SYSTEMREQUIREMENT_PHPVERSION', '5.5.3');
@@ -639,10 +640,10 @@ class B2S_Loader {
                                                     if ($res !== false && is_array($res)) {
                                                         $ship = true;
                                                         $res = array_merge($res, $defaultPostData);
-                                                        if ((int) $value->networkId == 12 && isset($optionPostFormat[12][0]['addLink']) && $optionPostFormat[12][0]['addLink'] === false) {
+                                                        if (((int) $value->networkId == 12 && isset($optionPostFormat[12][0]['addLink']) && $optionPostFormat[12][0]['addLink'] === false) || ((int) $value->networkId == 24 && isset($optionPostFormat[24][0]['addLink']) && $optionPostFormat[24][0]['addLink'] === false)) {
                                                             $res['url'] = '';
                                                         }
-                                                        if ((int) $value->networkId == 1 && isset($optionPostFormat[1][$value->networkType]['format']) && $optionPostFormat[1][$value->networkType]['format'] == 1 && isset($optionPostFormat[1][$value->networkType]['addLink']) && $optionPostFormat[1][$value->networkType]['addLink'] === false) {
+                                                        if (((int) $value->networkId == 1 || (int) $value->networkId == 2) && isset($optionPostFormat[1][$value->networkType]['format']) && $optionPostFormat[1][$value->networkType]['format'] == 1 && isset($optionPostFormat[1][$value->networkType]['addLink']) && $optionPostFormat[1][$value->networkType]['addLink'] === false) {
                                                             $res['url'] = '';
                                                         }
                                                         $shareApprove = (isset($value->instant_sharing) && (int) $value->instant_sharing == 1) ? 1 : 0;
@@ -885,7 +886,7 @@ class B2S_Loader {
             'INVALID_CONTENT' => sprintf(__('The network can not publish special characters such as Emoji. Please see the following <a target="_blank" href="%s">guide</a>.', 'blog2social'), esc_url(B2S_Tools::getSupportLink('share_error'))),
             'EXISTS_CONTENT' => esc_html__('Your post is a duplicate.', 'blog2social'),
             'URL_CONTENT' => esc_html__('The network requires a public url.', 'blog2social'),
-            'BLOGPOST_NOT_PUBLISHED' => esc_html__('Your blog post was not available for the network at the time of publication.', 'blog2social'),
+            'BLOGPOST_NOT_PUBLISHED' => esc_html__('Your blog post was not available for the network at the time of publishing.', 'blog2social'),
             'EXISTS_RELAY' => esc_html__('You have already retweeted this post.', 'blog2social'),
             'DEPRECATED_NETWORK_8' => esc_html__('This XING API is no longer supported by XING. Please connect your XING accounts with the new XING interface to reschedule your posts.', 'blog2social'),
             'IMAGE_FOR_CURATION' => esc_html__('An image is required to post on this social network.', 'blog2social'), // special for content curation V.5.0.0
@@ -921,7 +922,6 @@ class B2S_Loader {
         $tokenInfo = get_option('B2S_PLUGIN_USER_VERSION_' . B2S_PLUGIN_BLOG_USER_ID);
         if ($tokenInfo == false || !isset($tokenInfo['B2S_PLUGIN_USER_VERSION']) || !isset($tokenInfo['B2S_PLUGIN_VERSION']) || $tokenInfo['B2S_PLUGIN_USER_VERSION_NEXT_REQUEST'] < time() || (isset($tokenInfo['B2S_PLUGIN_VERSION']) && (int) $tokenInfo['B2S_PLUGIN_VERSION'] < (int) B2S_PLUGIN_VERSION) || (isset($tokenInfo['B2S_PLUGIN_TRAIL_END']) && strtotime($tokenInfo['B2S_PLUGIN_TRAIL_END']) < strtotime(gmdate('Y-m-d H:i:s')))) {
             B2S_Tools::setUserDetails();
-            $this->checkUpdate();
         } else {
             define('B2S_PLUGIN_USER_VERSION', $tokenInfo['B2S_PLUGIN_USER_VERSION']);
             if (isset($tokenInfo['B2S_PLUGIN_TRAIL_END'])) {
@@ -929,11 +929,17 @@ class B2S_Loader {
                 update_option('B2S_PLUGIN_DISABLE_TRAIL', true, false);
             }
         }
+        
+        $checkUpdateOption = get_option('B2S_PLUGIN_NEXT_CHECK_UPDATE_REQUEST');
+        if($checkUpdateOption == false || $checkUpdateOption < time()) {
+            $this->checkUpdate();
+            update_option('B2S_PLUGIN_NEXT_CHECK_UPDATE_REQUEST', time() + 86400, false);
+        }
     }
 
     private function checkUpdate() {
         $args = array(
-            'timeout' => '15',
+            'timeout' => '5',
             'redirection' => '5',
             'user-agent' => "Blog2Social/" . B2S_PLUGIN_VERSION . " (Wordpress/Plugin)"
         );

@@ -43,10 +43,10 @@ class WooCommerce extends \WC_Integration
         $this->_main = $OutoftheBox;
 
         // Add Filter to remove the default 'Guest - ' part from the Private Folder name
-        add_filter('outofthebox_private_folder_name_guests', [&$this, 'rename_private_folder_for_guests']);
+        add_filter('outofthebox_private_folder_name_guests', [$this, 'rename_private_folder_for_guests']);
 
         // Update shortcodes with Product ID/Order ID when available
-        add_filter('outofthebox_shortcode_add_options', [&$this, 'update_shortcode'], 10, 3);
+        add_filter('outofthebox_shortcode_add_options', [$this, 'update_shortcode'], 10, 3);
 
         if (defined('DOING_AJAX') && (!isset($_REQUEST['action']) || 'outofthebox-wcpd-direct-download' !== $_REQUEST['action'])) {
             return false;
@@ -125,21 +125,22 @@ class WooCommerce_Downloads
         $this->_woocommerce = $_woocommerce;
 
         // Actions
-        add_action('woocommerce_download_file_force', [&$this, 'do_direct_download'], 1, 2);
-        add_action('woocommerce_download_file_xsendfile', [&$this, 'do_xsendfile_download'], 1, 2);
-        add_action('woocommerce_download_file_redirect', [&$this, 'do_redirect_download'], 1, 2);
+        add_action('woocommerce_download_file_force', [$this, 'do_direct_download'], 1, 2);
+        add_action('woocommerce_download_file_xsendfile', [$this, 'do_xsendfile_download'], 1, 2);
+        add_action('woocommerce_download_file_redirect', [$this, 'do_redirect_download'], 1, 2);
 
         if (class_exists('WC_Product_Documents')) {
-            add_action('wp_ajax_nopriv_outofthebox-wcpd-direct-download', [&$this, 'wc_product_documents_download_via_url']);
-            add_action('wp_ajax_outofthebox-wcpd-direct-download', [&$this, 'wc_product_documents_download_via_url']);
-            add_filter('wc_product_documents_link_target', [&$this, 'wc_product_documents_open_link_in_new_window'], 10, 4);
-            add_filter('wc_product_documents_get_sections', [&$this, 'wc_product_documents_update_document_urls'], 10, 3);
+            add_action('wp_ajax_nopriv_outofthebox-wcpd-direct-download', [$this, 'wc_product_documents_download_via_url']);
+            add_action('wp_ajax_outofthebox-wcpd-direct-download', [$this, 'wc_product_documents_download_via_url']);
+            add_filter('wc_product_documents_link_target', [$this, 'wc_product_documents_open_link_in_new_window'], 10, 4);
+            add_filter('wc_product_documents_get_sections', [$this, 'wc_product_documents_update_document_urls'], 10, 3);
         }
 
         // Load custom scripts in the admin area
         if (is_admin()) {
             add_action('admin_enqueue_scripts', [$this, 'add_scripts']);
-            add_action('edit_form_advanced', [&$this, 'render_file_selector'], 1, 1);
+            add_action('edit_form_advanced', [$this, 'render_file_selector'], 1, 1); // Classic Editor on Product edit page
+            add_action('block_editor_meta_box_hidden_fields', [$this, 'render_file_selector'], 1, 1); // Gutenberg Editor on Product edit page
         }
     }
 
@@ -167,9 +168,35 @@ class WooCommerce_Downloads
               'addfolder' => '0',
               'showbreadcrumb' => '1',
               'downloadrole' => 'none',
+              'search' => '1',
               'candownloadzip' => '0',
               'showsharelink' => '0',
               'mcepopup' => 'woocommerce', ];
+
+        $user_folder_backend = apply_filters('outofthebox_use_user_folder_backend', $this->get_woocommerce()->get_processor()->get_setting('userfolder_backend'));
+
+        if ('No' !== $user_folder_backend) {
+            $atts['userfolders'] = $user_folder_backend;
+
+            $private_root_folder = $this->get_woocommerce()->get_processor()->get_setting('userfolder_backend_auto_root');
+            if ('auto' === $user_folder_backend && !empty($private_root_folder) && isset($private_root_folder['id'])) {
+                if (!isset($private_root_folder['account']) || empty($private_root_folder['account'])) {
+                    $main_account = $this->get_woocommerce()->get_processor()->get_accounts()->get_primary_account();
+                    $atts['account'] = $main_account->get_id();
+                } else {
+                    $atts['account'] = $private_root_folder['account'];
+                }
+
+                $atts['dir'] = $private_root_folder['id'];
+
+                if (!isset($private_root_folder['view_roles']) || empty($private_root_folder['view_roles'])) {
+                    $private_root_folder['view_roles'] = ['none'];
+                }
+                $atts['viewuserfoldersrole'] = implode('|', $private_root_folder['view_roles']);
+            }
+        }
+
+        $atts = apply_filters('outofthebox_set_shortcode_filebrowser_wc_backend', $atts);
 
         echo $this->get_woocommerce()->get_processor()->create_from_shortcode(
             $atts
@@ -200,7 +227,7 @@ class WooCommerce_Downloads
 
         // enqueue scripts/styles
         wp_enqueue_style('OutoftheBox.ShortcodeBuilder');
-        wp_enqueue_style('Awesome-Font-5-css');
+        wp_enqueue_style('Awesome-Font-5');
         wp_enqueue_style('outofthebox-woocommerce');
         wp_enqueue_script('outofthebox-woocommerce');
         wp_enqueue_script('OutoftheBox');
@@ -547,30 +574,30 @@ class WooCommerce_Uploads
 
         // Add Tabs & Content to Product Edit Page
         add_action('admin_enqueue_scripts', [$this, 'add_scripts']);
-        add_filter('product_type_options', [&$this, 'add_uploadable_product_option']);
-        add_filter('woocommerce_product_data_tabs', [&$this, 'add_product_data_tab']);
-        add_action('woocommerce_product_data_panels', [&$this, 'add_product_data_tab_content']);
-        add_action('woocommerce_process_product_meta_simple', [&$this, 'save_product_data_fields']);
-        add_action('woocommerce_process_product_meta_variable', [&$this, 'save_product_data_fields']);
-        add_action('woocommerce_ajax_save_product_variations', [&$this, 'save_product_data_fields']);
-        add_action('woocommerce_process_product_meta_composite', [&$this, 'save_product_data_fields']);
+        add_filter('product_type_options', [$this, 'add_uploadable_product_option']);
+        add_filter('woocommerce_product_data_tabs', [$this, 'add_product_data_tab']);
+        add_action('woocommerce_product_data_panels', [$this, 'add_product_data_tab_content']);
+        add_action('woocommerce_process_product_meta_simple', [$this, 'save_product_data_fields']);
+        add_action('woocommerce_process_product_meta_variable', [$this, 'save_product_data_fields']);
+        add_action('woocommerce_ajax_save_product_variations', [$this, 'save_product_data_fields']);
+        add_action('woocommerce_process_product_meta_composite', [$this, 'save_product_data_fields']);
 
         // Add Upload button to my Order Table
-        add_filter('woocommerce_my_account_my_orders_actions', [&$this, 'add_orders_column_actions'], 10, 2);
+        add_filter('woocommerce_my_account_my_orders_actions', [$this, 'add_orders_column_actions'], 10, 2);
 
         // Add Upload Box to Order Page
-        //add_action('woocommerce_view_order', array(&$this, 'render_upload_field'), 11);
-        add_action('woocommerce_order_details_before_order_table', [&$this, 'render_upload_field'], 11);
-        add_action('woocommerce_order_details_after_order_table', [&$this, 'render_upload_field'], 11);
+        //add_action('woocommerce_view_order', array($this, 'render_upload_field'), 11);
+        add_action('woocommerce_order_details_before_order_table', [$this, 'render_upload_field'], 11);
+        add_action('woocommerce_order_details_after_order_table', [$this, 'render_upload_field'], 11);
 
         // Add link to upload box in the Thank You text
-        add_filter('woocommerce_thankyou_order_received_text', [&$this, 'change_order_received_text'], 10, 2);
+        add_filter('woocommerce_thankyou_order_received_text', [$this, 'change_order_received_text'], 10, 2);
 
         // Add Upload Box to Admin Order Page
-        add_action('add_meta_boxes', [&$this, 'add_meta_box'], 10, 2);
+        add_action('add_meta_boxes', [$this, 'add_meta_box'], 10, 2);
 
         // Add Order note when uploading files
-        add_action('outofthebox_upload_post_process', [&$this, 'add_order_note'], 10, 2);
+        add_action('outofthebox_upload_post_process', [$this, 'add_order_note'], 10, 2);
     }
 
     public function add_order_note($_uploaded_entries, $processor)
@@ -638,7 +665,7 @@ class WooCommerce_Uploads
             return false;
         }
 
-        add_meta_box('woocommerce-outofthebox-box-order-detail', esc_html__('Uploaded Files', 'wpcloudplugins'), [&$this, 'render_meta_box'], 'shop_order', 'advanced', 'high');
+        add_meta_box('woocommerce-outofthebox-box-order-detail', esc_html__('Uploaded Files', 'wpcloudplugins'), [$this, 'render_meta_box'], 'shop_order', 'advanced', 'high');
     }
 
     /**
@@ -764,7 +791,7 @@ class WooCommerce_Uploads
             [
                 'id' => 'outofthebox_upload_box_folder_template',
                 'label' => esc_html__('Upload Folder Name', 'wpcloudplugins'),
-                'description' => '<br><br>'.esc_html__('Unique folder name where the uploads should be stored. Make sure that Private Folder feature is enabled in the shortcode', 'wpcloudplugins').'. '.sprintf(esc_html__('Available placeholders: %s', 'wpcloudplugins'), '<code>%wc_order_id%</code>, <code>%wc_order_date_created%</code>, <code>%wc_order_quantity%</code>, <code>%wc_product_id%</code>, <code>%wc_product_id%</code>, <code>%wc_product_sku%</code>, <code>%wc_product_quantity%</code>, <code>%wc_product_name%</code>, <code>%user_login%</code>, <code>%user_email%</code>, <code>%display_name%</code>, <code>%ID%</code>, <code>%user_role%</code>, <code>%jjjj-mm-dd%</code>'),
+                'description' => '<br><br>'.esc_html__('Unique folder name where the uploads should be stored. Make sure that Private Folder feature is enabled in the shortcode', 'wpcloudplugins').'. '.sprintf(esc_html__('Available placeholders: %s', 'wpcloudplugins'), '<code>%wc_order_id%</code>, <code>%wc_order_date_created%</code>, <code>%wc_order_quantity%</code>, <code>%wc_product_id%</code>, <code>%wc_product_id%</code>, <code>%wc_product_sku%</code>, <code>%wc_product_quantity%</code>, <code>%wc_product_name%</code>, <code>%user_login%</code>, <code>%user_email%</code>, <code>%display_name%</code>, <code>%ID%</code>, <code>%user_role%</code>, <code>%yyyy-mm-dd%</code>, <code>%directory_separator%</code>'),
                 'desc_tip' => false,
                 'placeholder' => $default_folder_template,
                 'value' => empty($folder_template) ? $default_folder_template : $folder_template,
@@ -929,11 +956,11 @@ class WooCommerce_Uploads
         /* Only render the upload form once
          * Preferably before the order table, but not all templates have this hook available */
         if (doing_action('woocommerce_order_details_before_order_table')) {
-            remove_action('woocommerce_order_details_after_order_table', [&$this, 'render_upload_field'], 11);
+            remove_action('woocommerce_order_details_after_order_table', [$this, 'render_upload_field'], 11);
         }
 
         if (doing_action('woocommerce_order_details_after_order_table')) {
-            remove_action('woocommerce_order_details_before_order_table', [&$this, 'render_upload_field'], 11);
+            remove_action('woocommerce_order_details_before_order_table', [$this, 'render_upload_field'], 11);
         }
 
         $order = new \WC_Order($order_id);
@@ -1176,30 +1203,15 @@ class WooCommerce_Uploads
             $user->user_role = esc_html__('Anonymous user', 'wpcloudplugins');
         }
 
-        $product_quantity = 0;
-        foreach ($order->get_items() as $item_id => $item_product) {
-            if ($item_product->get_product_id() == $product->get_id()) {
-                $product_quantity = $order->get_item_count($item_product->get_type());
-            }
-        }
-
-        $output = strtr($template, [
-            '%wc_order_id%' => $order->get_order_number(),
-            '%wc_order_quantity%' => $order->get_item_count(),
-            '%wc_order_date_created%' => $order->get_date_created()->format('Y-m-d'),
-            '%wc_product_id%' => $product->get_id(),
-            '%wc_product_sku%' => $product->get_sku(),
-            '%wc_product_name%' => $product->get_name(),
-            '%wc_product_quantity%' => $product_quantity,
-            '%user_login%' => isset($user->user_login) ? $user->user_login : '',
-            '%user_email%' => isset($user->user_email) ? $user->user_email : '',
-            '%user_firstname%' => isset($user->user_firstname) ? $user->user_firstname : '',
-            '%user_lastname%' => isset($user->user_lastname) ? $user->user_lastname : '',
-            '%display_name%' => isset($user->display_name) ? $user->display_name : '',
-            '%ID%' => isset($user->ID) ? $user->ID : '',
-            '%user_role%' => isset($user->roles) ? implode(',', $user->roles) : '',
-            '%jjjj-mm-dd%' => date('Y-m-d'),
-        ]);
+        $output = \TheLion\OutoftheBox\Helpers::apply_placeholders(
+            $template,
+            $this->get_woocommerce()->get_processor(),
+            [
+                'user_data' => $user,
+                'wc_order' => $order,
+                'wc_product' => $product,
+            ]
+        );
 
         return apply_filters('outofthebox_woocommerce_set_placeholders', $output, $template, $order, $product);
     }

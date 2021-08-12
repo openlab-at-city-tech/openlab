@@ -7,30 +7,30 @@
  *
  * @version
  * 2.1.364 (October 15 2009)
- * 
+ *
  * @copyright
  * Copyright (C) 2004-2009 Alex Gorbatchev.
  *
  * @license
  * This file is part of SyntaxHighlighter.
- * 
+ *
  * SyntaxHighlighter is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * SyntaxHighlighter is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with SyntaxHighlighter.  If not, see <http://www.gnu.org/copyleft/lesser.html>.
  */
 SyntaxHighlighter.brushes.Cpp = function()
 {
 	// Copyright 2006 Shin, YoungJin
-	
+
 	var datatypes =	'ATOM BOOL BOOLEAN BYTE CHAR COLORREF DWORD DWORDLONG DWORD_PTR ' +
 					'DWORD32 DWORD64 FLOAT HACCEL HALF_PTR HANDLE HBITMAP HBRUSH ' +
 					'HCOLORSPACE HCONV HCONVLIST HCURSOR HDC HDDEDATA HDESK HDROP HDWP ' +
@@ -54,7 +54,8 @@ SyntaxHighlighter.brushes.Cpp = function()
 					'jmp_buf mbstate_t _off_t _onexit_t _PNH ptrdiff_t _purecall_handler ' +
 					'sig_atomic_t size_t _stat __stat64 _stati64 terminate_function ' +
 					'time_t __time64_t _timeb __timeb64 tm uintptr_t _utimbuf ' +
-					'va_list wchar_t wctrans_t wctype_t wint_t signed';
+					'va_list wchar_t wctrans_t wctype_t wint_t signed ' +
+					'int8_t int16_t int_32_t int64_t uint8_t uint16_t uint32_t uint64_t';
 
 	var keywords =	'break case catch class const __finally __exception __try ' +
 					'const_cast continue private public protected __declspec ' +
@@ -65,7 +66,7 @@ SyntaxHighlighter.brushes.Cpp = function()
 					'sizeof static static_cast struct switch template this ' +
 					'thread throw true false try typedef typeid typename union ' +
 					'using uuid virtual void volatile whcar_t while';
-					
+
 	var functions =	'assert isalnum isalpha iscntrl isdigit isgraph islower isprint' +
 					'ispunct isspace isupper isxdigit tolower toupper errno localeconv ' +
 					'setlocale acos asin atan atan2 ceil cos cosh exp fabs floor fmod ' +

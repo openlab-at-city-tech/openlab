@@ -406,7 +406,7 @@ if ( ! class_exists( 'EWWW_Nextcellent' ) ) {
 				<h1><?php esc_html_e( 'Bulk Optimize', 'ewww-image-optimizer' ); ?></h1>
 				<?php
 				if ( ewww_image_optimizer_get_option( 'ewww_image_optimizer_cloud_key' ) ) {
-					ewww_image_optimizer_cloud_verify();
+					ewww_image_optimizer_cloud_verify( ewww_image_optimizer_get_option( 'ewww_image_optimizer_cloud_key' ) );
 					echo '<a id="ewww-bulk-credits-available" target="_blank" class="page-title-action" style="float:right;" href="https://ewww.io/my-account/">' . esc_html__( 'Image credits available:', 'ewww-image-optimizer' ) . ' ' . esc_html( ewww_image_optimizer_cloud_quota() ) . '</a>';
 				}
 				// Retrieve the value of the 'bulk resume' option and set the button text for the form to use.
@@ -614,9 +614,13 @@ if ( ! class_exists( 'EWWW_Nextcellent' ) ) {
 			$attachments         = get_option( 'ewww_image_optimizer_bulk_ngg_attachments' );
 			$id                  = array_shift( $attachments );
 			list( $fres, $tres ) = $this->ewww_ngg_optimize( $id );
-			$ewww_status         = get_transient( 'ewww_image_optimizer_cloud_status' );
-			if ( ! empty( $ewww_status ) && preg_match( '/exceeded/', $ewww_status ) ) {
+			if ( 'exceeded' === get_transient( 'ewww_image_optimizer_cloud_status' ) ) {
 				$output['error'] = '<a href="https://ewww.io/buy-credits/" target="_blank">' . esc_html__( 'License Exceeded', 'ewww-image-optimizer' ) . '</a>';
+				ewwwio_ob_clean();
+				wp_die( wp_json_encode( $output ) );
+			}
+			if ( 'exceeded quota' === get_transient( 'ewww_image_optimizer_cloud_status' ) ) {
+				$output['error'] = '<a href="https://docs.ewww.io/article/101-soft-quotas-on-unlimited-plans" target="_blank">' . esc_html__( 'Soft quota reached, contact us for more', 'ewww-image-optimizer' ) . '</a>';
 				ewwwio_ob_clean();
 				wp_die( wp_json_encode( $output ) );
 			}

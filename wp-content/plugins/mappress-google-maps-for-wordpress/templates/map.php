@@ -1,48 +1,34 @@
 <script type='text/template' id='mapp-tmpl-map'>
-	<#
-		let id = (map.name) ? map.name + "-layout" : '';
-		let classes = 'mapp-layout';
-		let layout = (map.layout) ? map.layout : mappl10n.options.layout;
-
-		classes += (layout == 'left') ? ' mapp-left' : ' mapp-inline';
-		classes += (mappl10n.options.engine == 'leaflet') ? ' mapp-leaflet ' : ' mapp-google ';
-
-		let alignment = (map.alignment) ? map.alignment : mappl10n.options.alignment;
-		classes += (alignment) ? ' mapp-align-' + alignment : '';
-
-		// Gutenberg additional classes https://core.trac.wordpress.org/ticket/45882
-		classes += (map.classname) ? ' ' + map.classname : '';
-	#>
-
-	<div id='{{id}}' class='{{classes}}'>
-		<div class='mapp-wrapper'>
-			<div class='mapp-content'>
-				<# print(mapp.lib.template('map-header', { map : map })); #>
-				<div class='mapp-main'>
-					<# print(mapp.lib.template('map-filters', { map : map })); #>
-					<# if (layout != 'inline') { #>
-						<div class='mapp-list'></div>
+	<div class='mapp-wrapper'>
+		<div class='mapp-content'>
+			<# print(mapp.lib.template('map-header', { map : map })); #>
+			<div class='mapp-main'>
+				<# print(mapp.lib.template('map-filters', { map : map })); #>
+				<# if (layout != 'inline') { #>
+					<div class='mapp-list'></div>
+				<# } #>
+				<# print(mapp.lib.template('map-directions', { map : map })); #>
+				<div class='mapp-canvas-panel'>
+					<div class='mapp-canvas'></div>
+					<# print(mapp.lib.template('map-menu', { map : map })); #>
+					<# if (mappl10n.options.ssl) { #>
+						<div class='mapp-geolocate-control-wrapper'>
+							<div class='mapp-geolocate-control' data-mapp-action='geolocate' title='<?php _e('Your Location', 'mappress-google-maps-for-wordpress');?>'></div>
+						</div>
 					<# } #>
-					<# print(mapp.lib.template('map-directions', { map : map })); #>
-					<div class='mapp-canvas-panel'>
-						<div class='mapp-canvas'></div>
-						<# print(mapp.lib.template('map-menu', { map : map })); #>
-						<# var iwClass = (map.editable) ? 'mapp-iw-edit' : 'mapp-iw'; #>
-						<div class='{{{iwClass}}}'></div>
-						<div class='mapp-dialog'></div>
-					</div>
+					<div class='mapp-dialog'></div>
 				</div>
-				<# print(mapp.lib.template('map-footer', { map : map })); #>
 			</div>
+			<# print(mapp.lib.template('map-footer', { map : map })); #>
 		</div>
-		<# if (layout == 'inline') { #>
-			<div class='mapp-list'></div>
-		<# } #>
 	</div>
+	<# if (layout == 'inline') { #>
+		<div class='mapp-list'></div>
+	<# } #>
 </script>
 
 <script type='text/template' id='mapp-tmpl-map-header'>
-	<# var filter = !map.editable && map.query && mappl10n.options.filter; #>
+	<# var filter = !map.editable && map.query && mappl10n.options.filters && mappl10n.options.filters.length > 0; #>
 	<# var search = map.editable || (map.query && mappl10n.options.search); #>
 	<# if (search || filter) { #>
 		<div class='mapp-header'>
@@ -62,7 +48,7 @@
 </script>
 
 <script type='text/template' id='mapp-tmpl-map-menu'>
-	<# if (!map.editable) { #>
+	<# if (!map.editable && mappl10n.options.engine != 'leaflet') { #>
 		<div class='mapp-controls'>
 			<div class='mapp-menu-toggle' data-mapp-action='menu-toggle' title='<?php _e('Menu', 'mappress-google-maps-for-wordpress');?>'></div>
 			<div class='mapp-menu'>
@@ -73,6 +59,7 @@
 					<div class='mapp-menu-item' data-mapp-action='layer' data-mapp-layer='bicycling'><?php _e('Bicycling', 'mappress-google-maps-for-wordpress');?></div>
 					<div class='mapp-menu-item' data-mapp-action='layer' data-mapp-layer='transit'><?php _e('Transit', 'mappress-google-maps-for-wordpress');?></div>
 				<?php } ?>
+				<div class='mapp-menu-footer' title='<?php _e('Get help', 'mappress-google-maps-for-wordpress');?>'><a href='https://mappresspro.com/mappress-documentation' target='_blank'><div class='mapp-menu-help'>?</div></div></a>
 			</div>
 		</div>
 	<# } #>

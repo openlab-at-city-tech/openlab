@@ -163,7 +163,7 @@ class BP_REST_Blogs_Endpoint extends WP_REST_Controller {
 	 * @since 6.0.0
 	 *
 	 * @param WP_REST_Request $request Full data about the request.
-	 * @return WP_Error|bool
+	 * @return true|WP_Error
 	 */
 	public function get_items_permissions_check( $request ) {
 
@@ -172,7 +172,7 @@ class BP_REST_Blogs_Endpoint extends WP_REST_Controller {
 		 *
 		 * @since 6.0.0
 		 *
-		 * @param bool|WP_Error   $retval  Returned value.
+		 * @param true|WP_Error   $retval  Returned value.
 		 * @param WP_REST_Request $request The request sent to the API.
 		 */
 		return apply_filters( 'bp_rest_blogs_get_items_permissions_check', true, $request );
@@ -227,7 +227,7 @@ class BP_REST_Blogs_Endpoint extends WP_REST_Controller {
 	 * @since 6.0.0
 	 *
 	 * @param WP_REST_Request $request Full details about the request.
-	 * @return WP_Error|bool
+	 * @return true|WP_Error
 	 */
 	public function get_item_permissions_check( $request ) {
 
@@ -236,7 +236,7 @@ class BP_REST_Blogs_Endpoint extends WP_REST_Controller {
 		 *
 		 * @since 6.0.0
 		 *
-		 * @param bool|WP_Error   $retval  Returned value.
+		 * @param true|WP_Error   $retval  Returned value.
 		 * @param WP_REST_Request $request The request sent to the API.
 		 */
 		return apply_filters( 'bp_rest_blogs_get_item_permissions_check', true, $request );
@@ -357,29 +357,29 @@ class BP_REST_Blogs_Endpoint extends WP_REST_Controller {
 	 * @since 7.0.0
 	 *
 	 * @param WP_REST_Request $request Full details about the request.
-	 * @return WP_Error|bool
+	 * @return true|WP_Error
 	 */
 	public function create_item_permissions_check( $request ) {
-		$retval = true;
+		$retval = new WP_Error(
+			'bp_rest_authorization_required',
+			__( 'Sorry, you are not allowed to perform this action.', 'buddypress' ),
+			array(
+				'status' => rest_authorization_required_code(),
+			)
+		);
 
-		if ( ! is_user_logged_in() ) {
-			$retval = new WP_Error(
-				'bp_rest_authorization_required',
-				__( 'Sorry, you are not allowed to perform this action.', 'buddypress' ),
-				array(
-					'status' => rest_authorization_required_code(),
-				)
-			);
-		}
-
-		if ( true === $retval && false === bp_blog_signup_enabled() ) {
-			$retval = new WP_Error(
-				'bp_rest_blogs_signup_disabled',
-				__( 'Sorry, blog creation is disabled.', 'buddypress' ),
-				array(
-					'status' => 500,
-				)
-			);
+		if ( is_user_logged_in() ) {
+			if ( true === bp_blog_signup_enabled() ) {
+				$retval = true;
+			} else {
+				$retval = new WP_Error(
+					'bp_rest_blogs_signup_disabled',
+					__( 'Sorry, blog creation is disabled.', 'buddypress' ),
+					array(
+						'status' => 500,
+					)
+				);
+			}
 		}
 
 		/**
@@ -387,7 +387,7 @@ class BP_REST_Blogs_Endpoint extends WP_REST_Controller {
 		 *
 		 * @since 7.0.0
 		 *
-		 * @param bool|WP_Error   $retval  Returned value.
+		 * @param true|WP_Error   $retval  Returned value.
 		 * @param WP_REST_Request $request The request sent to the API.
 		 */
 		return apply_filters( 'bp_rest_blogs_create_item_permissions_check', $retval, $request );
@@ -414,17 +414,15 @@ class BP_REST_Blogs_Endpoint extends WP_REST_Controller {
 			'last_activity' => bp_rest_prepare_date_response( $blog->last_activity ),
 		);
 
-		// Get item schema.
-		$schema = $this->get_item_schema();
-
 		// Blog Avatars.
-		if ( ! empty( $schema['properties']['avatar_urls'] ) ) {
+		if ( true === buddypress()->avatar->show_avatars ) {
 			$data['avatar_urls'] = array(
 				'thumb' => bp_get_blog_avatar(
 					array(
 						'type'          => 'thumb',
 						'blog_id'       => $blog->blog_id,
 						'admin_user_id' => $blog->admin_user_id,
+						'html'          => false,
 					)
 				),
 				'full'  => bp_get_blog_avatar(
@@ -432,6 +430,7 @@ class BP_REST_Blogs_Endpoint extends WP_REST_Controller {
 						'type'          => 'full',
 						'blog_id'       => $blog->blog_id,
 						'admin_user_id' => $blog->admin_user_id,
+						'html'          => false,
 					)
 				),
 			);
@@ -476,7 +475,7 @@ class BP_REST_Blogs_Endpoint extends WP_REST_Controller {
 			'collection' => array(
 				'href' => rest_url( $base ),
 			),
-			'user'       => array(
+			'user'      => array(
 				'href'       => rest_url( bp_rest_get_user_url( $blog->admin_user_id ) ),
 				'embeddable' => true,
 			),
@@ -620,93 +619,97 @@ class BP_REST_Blogs_Endpoint extends WP_REST_Controller {
 	 * @return array
 	 */
 	public function get_item_schema() {
-		$schema = array(
-			'$schema'    => 'http://json-schema.org/draft-04/schema#',
-			'title'      => 'bp_blogs',
-			'type'       => 'object',
-			'properties' => array(
-				'id'            => array(
-					'context'     => array( 'view', 'edit' ),
-					'description' => __( 'A unique numeric ID for the blog.', 'buddypress' ),
-					'readonly'    => true,
-					'type'        => 'integer',
-				),
-				'user_id'       => array(
-					'context'     => array( 'view', 'edit' ),
-					'description' => __( 'A unique numeric ID for the blog admin.', 'buddypress' ),
-					'readonly'    => true,
-					'type'        => 'integer',
-				),
-				'name'          => array(
-					'context'     => array( 'view', 'edit' ),
-					'description' => __( 'The name of the blog.', 'buddypress' ),
-					'readonly'    => true,
-					'type'        => 'string',
-					'arg_options' => array(
-						'sanitize_callback' => 'sanitize_text_field',
+		if ( is_null( $this->schema ) ) {
+			$schema = array(
+				'$schema'    => 'http://json-schema.org/draft-04/schema#',
+				'title'      => 'bp_blogs',
+				'type'       => 'object',
+				'properties' => array(
+					'id'            => array(
+						'context'     => array( 'view', 'edit', 'embed' ),
+						'description' => __( 'A unique numeric ID for the blog.', 'buddypress' ),
+						'readonly'    => true,
+						'type'        => 'integer',
+					),
+					'user_id'       => array(
+						'context'     => array( 'view', 'edit', 'embed' ),
+						'description' => __( 'A unique numeric ID for the blog admin.', 'buddypress' ),
+						'readonly'    => true,
+						'type'        => 'integer',
+					),
+					'name'          => array(
+						'context'     => array( 'view', 'edit', 'embed' ),
+						'description' => __( 'The name of the blog.', 'buddypress' ),
+						'readonly'    => true,
+						'type'        => 'string',
+						'arg_options' => array(
+							'sanitize_callback' => 'sanitize_text_field',
+						),
+					),
+					'permalink'     => array(
+						'context'     => array( 'view', 'edit', 'embed' ),
+						'description' => __( 'The permalink of the blog.', 'buddypress' ),
+						'readonly'    => true,
+						'type'        => 'string',
+						'format'      => 'uri',
+					),
+					'description'   => array(
+						'context'     => array( 'view', 'edit', 'embed' ),
+						'description' => __( 'The description of the blog.', 'buddypress' ),
+						'readonly'    => true,
+						'type'        => 'string',
+					),
+					'path'          => array(
+						'context'     => array( 'view', 'edit', 'embed' ),
+						'description' => __( 'The path of the blog.', 'buddypress' ),
+						'readonly'    => true,
+						'type'        => 'string',
+					),
+					'domain'        => array(
+						'context'     => array( 'view', 'edit', 'embed' ),
+						'description' => __( 'the domain of the blog.', 'buddypress' ),
+						'readonly'    => true,
+						'type'        => 'string',
+					),
+					'last_activity' => array(
+						'context'     => array( 'view', 'edit', 'embed' ),
+						'description' => __( "The last activity date from the blog, in the site's timezone.", 'buddypress' ),
+						'type'        => 'string',
+						'format'      => 'date-time',
 					),
 				),
-				'permalink'     => array(
-					'context'     => array( 'view', 'edit' ),
-					'description' => __( 'The permalink of the blog.', 'buddypress' ),
-					'readonly'    => true,
+			);
+
+			if ( true === buddypress()->avatar->show_avatars ) {
+				$avatar_properties = array();
+
+				$avatar_properties['full'] = array(
+					/* translators: 1: Full avatar width in pixels. 2: Full avatar height in pixels */
+					'description' => sprintf( __( 'Avatar URL with full image size (%1$d x %2$d pixels).', 'buddypress' ), number_format_i18n( bp_core_avatar_full_width() ), number_format_i18n( bp_core_avatar_full_height() ) ),
 					'type'        => 'string',
 					'format'      => 'uri',
-				),
-				'description'   => array(
-					'context'     => array( 'view', 'edit' ),
-					'description' => __( 'The description of the blog.', 'buddypress' ),
+					'context'     => array( 'view', 'edit', 'embed' ),
+				);
+
+				$avatar_properties['thumb'] = array(
+					/* translators: 1: Thumb avatar width in pixels. 2: Thumb avatar height in pixels */
+					'description' => sprintf( __( 'Avatar URL with thumb image size (%1$d x %2$d pixels).', 'buddypress' ), number_format_i18n( bp_core_avatar_thumb_width() ), number_format_i18n( bp_core_avatar_thumb_height() ) ),
+					'type'        => 'string',
+					'format'      => 'uri',
+					'context'     => array( 'view', 'edit', 'embed' ),
+				);
+
+				$schema['properties']['avatar_urls'] = array(
+					'description' => __( 'Avatar URLs for the blog.', 'buddypress' ),
+					'type'        => 'object',
+					'context'     => array( 'view', 'edit', 'embed' ),
 					'readonly'    => true,
-					'type'        => 'string',
-				),
-				'path'          => array(
-					'context'     => array( 'view', 'edit' ),
-					'description' => __( 'The path of the blog.', 'buddypress' ),
-					'readonly'    => true,
-					'type'        => 'string',
-				),
-				'domain'        => array(
-					'context'     => array( 'view', 'edit' ),
-					'description' => __( 'the domain of the blog.', 'buddypress' ),
-					'readonly'    => true,
-					'type'        => 'string',
-				),
-				'last_activity' => array(
-					'context'     => array( 'view', 'edit' ),
-					'description' => __( "The last activity date from the blog, in the site's timezone.", 'buddypress' ),
-					'type'        => 'string',
-					'format'      => 'date-time',
-				),
-			),
-		);
+					'properties'  => $avatar_properties,
+				);
+			}
 
-		// Blog Avatars.
-		if ( buddypress()->avatar->show_avatars ) {
-			$avatar_properties = array();
-
-			$avatar_properties['full'] = array(
-				/* translators: 1: Full avatar width in pixels. 2: Full avatar height in pixels */
-				'description' => sprintf( __( 'Avatar URL with full image size (%1$d x %2$d pixels).', 'buddypress' ), number_format_i18n( bp_core_avatar_full_width() ), number_format_i18n( bp_core_avatar_full_height() ) ),
-				'type'        => 'string',
-				'format'      => 'uri',
-				'context'     => array( 'view', 'edit' ),
-			);
-
-			$avatar_properties['thumb'] = array(
-				/* translators: 1: Thumb avatar width in pixels. 2: Thumb avatar height in pixels */
-				'description' => sprintf( __( 'Avatar URL with thumb image size (%1$d x %2$d pixels).', 'buddypress' ), number_format_i18n( bp_core_avatar_thumb_width() ), number_format_i18n( bp_core_avatar_thumb_height() ) ),
-				'type'        => 'string',
-				'format'      => 'uri',
-				'context'     => array( 'view', 'edit' ),
-			);
-
-			$schema['properties']['avatar_urls'] = array(
-				'description' => __( 'Avatar URLs for the blog.', 'buddypress' ),
-				'type'        => 'object',
-				'context'     => array( 'view', 'edit' ),
-				'readonly'    => true,
-				'properties'  => $avatar_properties,
-			);
+			// Cache current schema here.
+			$this->schema = $schema;
 		}
 
 		/**
@@ -716,7 +719,7 @@ class BP_REST_Blogs_Endpoint extends WP_REST_Controller {
 		 *
 		 * @param array $schema The endpoint schema.
 		 */
-		return apply_filters( 'bp_rest_blogs_schema', $this->add_additional_fields_schema( $schema ) );
+		return apply_filters( 'bp_rest_blogs_schema', $this->add_additional_fields_schema( $this->schema ) );
 	}
 
 	/**

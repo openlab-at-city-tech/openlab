@@ -34,6 +34,10 @@ class MeowCommon_Classes_Rest
 			'methods' => 'POST',
 			'callback' => [ $this, 'sql_request' ]
 		]);
+		register_rest_route( $this->namespace, '/error_logs/', [
+			'methods' => 'POST',
+			'callback' => [ $this, 'rest_error_logs' ]
+		]);
 		register_rest_route( $this->namespace, '/all_settings/', [
 			'methods' => 'GET',
 			'callback' => [ $this, 'rest_all_settings' ]
@@ -83,6 +87,10 @@ class MeowCommon_Classes_Rest
 		catch (Exception $e) {
 			return new WP_REST_Response([ 'success' => false, 'message' => $e->getMessage() ], 500 );
 		}
+	}
+
+	function rest_error_logs( $request ) {
+		return new WP_REST_Response( [ 'success' => true, 'data' => MeowCommon_Helpers::php_error_logs() ], 200 );
 	}
 
 }

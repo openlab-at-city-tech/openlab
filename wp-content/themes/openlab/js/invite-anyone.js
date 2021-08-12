@@ -8,9 +8,9 @@
 		var hasAddresses  = $importMembersAddresses.val().length > 0;
 
 		if ( isAcknowleged && hasAddresses ) {
-			$importMembersSubmit.removeAttr('disabled');
+			$importMembersSubmit.prop('disabled', false);
 		} else {
-			$importMembersSubmit.attr('disabled', 'disabled');
+			$importMembersSubmit.prop('disabled', 'disabled');
 		}
 	}
 

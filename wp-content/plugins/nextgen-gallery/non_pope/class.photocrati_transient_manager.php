@@ -45,9 +45,11 @@ class C_Photocrati_Transient_Manager
 	function _update_tracker()
 	{
 		global $_wp_using_ext_object_cache;
-		if ($_wp_using_ext_object_cache) {
-			delete_option('photocrati_cache_tracker');
-			add_option('photocrati_cache_tracker', $this->_tracker, '', 'no');
+		if ($_wp_using_ext_object_cache)
+		{
+            $current_value = get_option('photocrati_cache_tracker', []);
+            if ($current_value !== $this->_tracker)
+                update_option('photocrati_cache_tracker', $this->_tracker, 'no');
 		}
 	}
 

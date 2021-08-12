@@ -2,7 +2,7 @@
 Contributors: Marios Alexandrou
 Donate link: https://infolific.com/technology/software-worth-using/ultimate-category-excluder/
 Tags: category, categories, exclude, exclude category, exclude categories, visible, hidden, hide, invisible, remove
-Requires at least: 4.0
+Requires at least: 5.0
 Tested up to: 5.6
 License: GPLv2 or later
 
@@ -31,6 +31,15 @@ Go into your "Category Exclusion" settings, choose at least one option from the 
 1. Check the categories you want to exclude.
 
 == Changelog ==
+
+= 1.5 =
+* Corrected text domain value.
+
+= 1.4 =
+* No code changes. Syncing files.
+
+= 1.3 =
+* Modified implementation of text domain to match the standard approach.
 
 = 1.2 =
 * Addressed minor vulnerability reported by SCA AppSec of Checkmarx. If concerned, review your UCE category settings to ensure they are set as expected.

@@ -790,7 +790,15 @@ class BP_Email {
 			// Load the template.
 			add_filter( 'bp_locate_template_and_load', '__return_true' );
 
+			// Set up the `$post` global.
+			global $post;
+			$reset_post = $post;
+			$post       = $this->post_object;
+
 			bp_locate_template( bp_email_get_template( $this->post_object ), true, false );
+
+			// Reset the `$post` global.
+			$post = $reset_post;
 
 			remove_filter( 'bp_locate_template_and_load', '__return_true' );
 
@@ -997,6 +1005,14 @@ class BP_Email {
 			! $this->get_template()
 		) {
 			$retval = new WP_Error( 'missing_parameter', __CLASS__, $this );
+		}
+
+		// Has the user opted out of receiving any email from this site?
+		$recipient_to       = $this->get_to();
+		$recipient_to_first = array_shift( $recipient_to );
+		$recipient_address  = $recipient_to_first->get_address();
+		if ( bp_user_has_opted_out( $recipient_address ) ) {
+			$retval = new WP_Error( 'user_has_opted_out', __( 'The email recipient has opted out from receiving communication from this site.', 'buddypress' ), $recipient_address );
 		}
 
 		/**

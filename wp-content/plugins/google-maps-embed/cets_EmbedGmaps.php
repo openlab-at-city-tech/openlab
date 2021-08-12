@@ -25,7 +25,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 class cets_EmbedGmaps {
 
-	function cets_EmbedGmaps() {	
+	function __construct() {	
 				
 		// define URL
 		define('cets_EmbedGmaps_ABSPATH', WP_PLUGIN_DIR.'/'.plugin_basename( dirname(__FILE__) ).'/' );

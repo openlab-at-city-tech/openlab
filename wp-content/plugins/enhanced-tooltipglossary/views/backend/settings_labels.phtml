@@ -1,0 +1,105 @@
+<div class="block">
+    <h3>Labels</h3>
+    <table class="floated-form-table form-table">
+        <tr valign="top">
+            <th scope="row">Glossary Item singular label</th>
+            <td><input type="text" name="cmtt_glossaryItemSingularName" value="<?php echo \CM\CMTT_Settings::get('cmtt_glossaryItemSingularName', 'Glossary Item'); ?>" /></td>
+            <td colspan="2" class="cm_field_help_container">
+                The label describing the CM Tooltip Glossary Custom Post Types, often used to generate the breadcrumbs in themes. Default: "Glossary Item"
+                <br/><i>This label is a part of the Permalink Structure. It's best to refresh the permalink structure database. (Go to Settings -> Permalinks -> "Save Changes")</i>
+            </td>
+        </tr>
+        <tr valign="top">
+            <th scope="row">Title attribute prefix</th>
+            <td><input type="text" name="cmtt_titleAttributeLabelPrefix" value="<?php echo \CM\CMTT_Settings::get('cmtt_titleAttributeLabelPrefix', 'Glossary:'); ?>" /></td>
+            <td colspan="2" class="cm_field_help_container">
+                The text which appears in the title attribute if the option: "Show HTML "title" attribute for glossary links" is enabled.
+            </td>
+        </tr>
+        <tr valign="top" class="onlyinpro">
+            <th scope="row">Sharing box label</th>
+            <td><?php echo \CM\CMTT_Settings::renderOnlyin(); ?></td>
+            <td colspan="2" class="cm_field_help_container">
+                What should be the label of the sharing box on the Glossary Index Page. Leave blank to disable. Default: "Share This"
+                <br/><i>Works only if "Show Glossary Index page with definition" is enabled</i>
+            </td>
+        </tr>
+        <tr valign="top">
+            <th scope="row">Text for "no results" on the Glossary Index page</th>
+            <td><?php echo \CM\CMTT_Settings::renderOnlyin(); ?></td>
+            <td colspan="2" class="cm_field_help_container">This is the text which appears if the filters return no results on the Glossary Index page.
+                <br/><i>Works only if the "Show the search on the Glossary Index page" is enabled.</i></td>
+        </tr>
+        <tr valign="top">
+            <th scope="row">Label for [ALL] in alphabetic index</th>
+            <td>
+                <input type="text" name="cmtt_index_allLabel" value="<?php echo \CM\CMTT_Settings::get('cmtt_index_allLabel', 'ALL'); ?>" />
+            </td>
+            <td colspan="2" class="cm_field_help_container">Label for the option displaying all terms in the alphabetic index. Displays [ALL] by default.</td>
+        </tr>
+        <tr valign="top">
+            <th scope="row">Prefix of the title:</th>
+            <td><input  type="text" name="cmtt_glossaryBeforeTitle" value="<?php echo \CM\CMTT_Settings::get('cmtt_glossaryBeforeTitle'); ?>" /></td>
+            <td colspan="2" class="cm_field_help_container">What text should appear before the term title on the Glossary Term page
+                (e.g. if prefix is "Term:" the glossary term title would appear as "Term: Something")</td>
+        </tr>
+        <tr valign="top" class="onlyinpro">
+            <th scope="row">Back link text (top)</th>
+            <td><?php echo \CM\CMTT_Settings::renderOnlyin(); ?></td>
+            <td colspan="2" class="cm_field_help_container">Text to display as backlink</td>
+        </tr>
+        <tr valign="top">
+            <th scope="row">Back link text (bottom)</th>
+            <td><input type="text" name="cmtt_glossary_backLinkBottomText" value="<?php echo esc_attr(\CM\CMTT_Settings::get('cmtt_glossary_backLinkBottomText')); ?>" /></td>
+            <td colspan="2" class="cm_field_help_container">Text to display as backlink</td>
+        </tr>
+        <tr valign="top" class="onlyinpro">
+            <th scope="row">Title of related articles:</th>
+            <td><?php echo \CM\CMTT_Settings::renderOnlyin(); ?></td>
+            <td colspan="2" class="cm_field_help_container">What should be the title of related articles widget?</td>
+        </tr>
+        <tr valign="top" class="onlyinpro">
+            <th scope="row">Number of related glossary terms:</th>
+            <td><?php echo \CM\CMTT_Settings::renderOnlyin(); ?></td>
+            <td colspan="2" class="cm_field_help_container">How many related glossary terms should be shown? Works only if "Show related articles and glossary terms together" is enabled</td>
+        </tr>
+        <tr valign="top" class="onlyinpro">
+            <th scope="row">Title of related glossary terms list:</th>
+            <td><?php echo \CM\CMTT_Settings::renderOnlyin(); ?></td>
+            <td colspan="2" class="cm_field_help_container">What should be the title of related glossary terms widget? Works only if "Show related articles and glossary terms together" is enabled</td>
+        </tr>
+        <tr valign="top" class="onlyinpro">
+            <th scope="row">Prefix for related articles that are glossary terms:</th>
+            <td><?php echo \CM\CMTT_Settings::renderOnlyin(); ?></td>
+            <td colspan="2" class="cm_field_help_container">Prefix for related articles that are glossary terms (leave empty to disable). Works only if "Show related articles and glossary terms together" is enabled</td>
+        </tr>
+        <tr valign="top">
+            <th scope="row">Title of linked glossary terms list:</th>
+            <td><?php echo \CM\CMTT_Settings::renderOnlyin(); ?></td>
+            <td colspan="2" class="cm_field_help_container">What should be the title of linked glossary items widget?</td>
+        </tr>
+        <tr valign="top" class="onlyinpro">
+            <th scope="row">Prefix for linked glossary terms:</th>
+            <td><?php echo \CM\CMTT_Settings::renderOnlyin(); ?></td>
+            <td colspan="2" class="cm_field_help_container">Prefix for linked glossary items (leave empty to disable).</td>
+        </tr>
+        <tr valign="top" class="onlyinpro">
+            <th scope="row">Title of synonyms list:</th>
+            <td><?php echo \CM\CMTT_Settings::renderOnlyin(); ?></td>
+            <td colspan="2" class="cm_field_help_container">What should be the title of synonyms widget?</td>
+        </tr>
+        <tr valign="top" class="onlyinpro">
+            <th scope="row">Term details link label</th>
+            <td><?php echo \CM\CMTT_Settings::renderOnlyin(); ?></td>
+            <td colspan="2" class="cm_field_help_container">Select the label for the link to the term details which shows in the tooltip if the length is limited.<br/>
+                <i>Works only if "Show Glossary Index page with definition" is enabled</i></td>
+        </tr>
+        <tr valign="top" class="onlyinpro">
+            <th scope="row">Label before term title on custom template</th>
+            <td><?php echo \CM\CMTT_Settings::renderOnlyin(); ?></td>
+            <td colspan="2" class="cm_field_help_container">
+
+            </td>
+        </tr>
+    </table>
+</div>

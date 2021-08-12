@@ -54,6 +54,7 @@ class link_library_plugin_admin {
 		add_action( 'created_link_library_category', array( $this, 'll_save_link_library_category_new_fields' ), 10, 2 );
 
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_scripts' ), 99 );
+		add_action( 'enqueue_block_editor_assets', array( $this, 'admin_scripts' ), 99 );
 
 		add_action( 'restrict_manage_posts', array( $this, 'll_link_cat_filter_list' ) );
 
@@ -73,6 +74,55 @@ class link_library_plugin_admin {
 		add_action( 'wp_ajax_link_library_recipbrokencheck', 'link_library_reciprocal_link_checker' );
 
 		add_filter( 'wp_dropdown_cats', 'wp_dropdown_cats_multiple', 10, 2 );
+	}
+
+	function allowed_html_tags() {
+		return array(
+			'a' => array(
+				'href' => array(),
+				'title' => array(),
+				'class' => array(),
+				'data' => array(),
+				'rel'   => array(),
+		  	),
+		  	'br' => array(),
+		  	'em' => array(),
+		  	'ul' => array(
+				'class' => array(),
+		  	),
+		  	'ol' => array(
+				'class' => array(),
+		  	),
+		  	'li' => array(
+				'class' => array(),
+		  	),
+		  	'strong' => array(),
+		  	'div' => array(
+				'class' => array(),
+				'data' => array(),
+				'style' => array(),
+		  	),
+		  	'span' => array(
+				'class' => array(),
+				'style' => array(),
+		  	),
+		  	'img' => array(
+				'alt'    => array(),
+			  	'class'  => array(),
+			  	'height' => array(),
+			  	'src'    => array(),
+			  	'width'  => array(),
+		  	),
+		  	'select' => array(
+				'id'   => array(),
+			  	'class' => array(),
+			  	'name' => array(),
+		  	),
+		  	'option' => array(
+			  	'value' => array(),
+			  	'selected' => array(),
+		  	),
+		);
 	}
 
 	function is_edit_page( $new_edit = null ) {
@@ -101,6 +151,14 @@ class link_library_plugin_admin {
 
 		if ( 'edit.php' === $hook && isset( $_GET['post_type'] ) && 'link_library_links' === $_GET['post_type'] ) {
 			wp_enqueue_script( 'll_quick_edit', plugins_url('js/ll_admin_edit.js', __FILE__), false, null, true );
+		} elseif ( 'post.php' === $hook ) {
+			wp_enqueue_style( 'll_general_css', site_url( '/?link_library_css=1' ) );
+		} elseif ( 'link_library_links_page_link-library-stylesheet' === $hook || 'link_library_links_page_link-library-settingssets' === $hook ) {
+			$cm_settings['codeEditor'] = wp_enqueue_code_editor( array( 'type' => 'text/css' ) );
+			wp_localize_script( 'jquery', 'cm_settings', $cm_settings );
+			
+			wp_enqueue_script( 'wp-theme-plugin-editor' );
+			wp_enqueue_style( 'wp-codemirror' );
 		}
 	}
 
@@ -331,11 +389,11 @@ class link_library_plugin_admin {
 		}
 
 		if ( isset( $_POST['ll_category_url'] ) ) {
-			update_term_meta( $term_id, 'linkcaturl', $_POST['ll_category_url'] );
+			update_term_meta( $term_id, 'linkcaturl', esc_url( $_POST['ll_category_url'] ) );
 		}
 
 		if ( isset( $_POST['cat_extra_query_string'] ) ) {
-			update_term_meta( $term_id, 'linkextraquerystring', $_POST['cat_extra_query_string'] );
+			update_term_meta( $term_id, 'linkextraquerystring', sanitize_text_field( $_POST['cat_extra_query_string'] ) );
 		}
 	}
 
@@ -347,7 +405,7 @@ class link_library_plugin_admin {
 			}
 		}
 
-		if ( isset( $_GET['page'] ) && ( ( $_GET['page'] == 'link-library-general-options' ) || $_GET['page'] == 'link-library-settingssets' || $_GET['page'] == 'link-library-moderate' || $_GET['page'] == 'link-library-stylesheet' || $_GET['page'] == 'link-library-reciprocal' || $_GET['page'] == 'link-library-accessibe' ) ) {
+		if ( isset( $_GET['page'] ) && ( ( $_GET['page'] == 'link-library-general-options' ) || $_GET['page'] == 'link-library-settingssets' || $_GET['page'] == 'link-library-moderate' || $_GET['page'] == 'link-library-stylesheet' || $_GET['page'] == 'link-library-reciprocal' ) ) {
 			wp_enqueue_style( 'LibraryLibraryAdminStyle', plugins_url( 'link-library-admin.css', __FILE__ ) );
 		}
 	}
@@ -356,7 +414,7 @@ class link_library_plugin_admin {
 		$genoptions = get_option( 'LinkLibraryGeneral' );
 
 		if ( substr( $plugin_file, 0, 25 ) == substr( plugin_basename( __FILE__ ), 0, 25 ) && ( isset( $genoptions['hidedonation'] ) && !$genoptions['hidedonation'] ) ) {
-			$links_array = array_merge( $links_array, array( '<a target="_blank" href="https://ylefebvre.home.blog/wordpress-plugins/link-library/">Donate</a>' ) );
+			$links_array = array_merge( $links_array, array( '<a target="_blank" href="https://ylefebvre.github.io/wordpress-plugins/link-library/">Donate</a>' ) );
 		}
 
 		return $links_array;
@@ -529,8 +587,42 @@ class link_library_plugin_admin {
 	function action_admin_init() {
 
 		if ( isset($_GET['page']) && $_GET['page'] == 'link-library-faq' ) {
-			wp_redirect( 'https://ylefebvre.home.blog/wordpress-plugins/link-library/link-library-faq/' );
+			wp_redirect( 'https://github.com/ylefebvre/link-library/wiki' );
 			exit();
+		} elseif ( isset($_GET['page']) && $_GET['page'] == 'link-library-donate' ) {
+			wp_redirect( 'https://ylefebvre.github.io/wordpress-plugins/link-library/' );
+			exit();
+		} elseif ( !empty( $_GET['linkurl'] ) && !empty( $_GET['action'] ) ) {
+			$incoming_link_url = esc_url( urldecode( $_GET['linkurl'] ) );			
+			$reg_incoming_link_url = str_replace("https://", "http://", $incoming_link_url );
+			$ssl_incoming_link_url = str_replace("http://", "https://", $incoming_link_url );	
+		
+			$find_post_args = array( 'post_type' => 'link_library_links',
+				'meta_key' => 'link_url',
+				'meta_value' => $reg_incoming_link_url,
+				'meta_compare' => '=',
+				'numberposts' => 1 );
+
+			$reg_posts_same_url_array = get_posts( $find_post_args );
+			
+			$find_post_args = array( 'post_type' => 'link_library_links',
+				'meta_key' => 'link_url',
+				'meta_value' => $ssl_incoming_link_url,
+				'meta_compare' => '=',
+				'numberposts' => 1 );
+
+			$ssl_posts_same_url_array = get_posts( $find_post_args );
+
+			if ( !empty( $reg_posts_same_url_array ) || !empty( $ssl_posts_same_url_array ) ) {
+				$existing_link_post_id = '';
+				if ( !empty( $reg_posts_same_url_array ) ) {
+					$existing_link_post_id = $reg_posts_same_url_array[0]->ID;
+				} else if ( !empty( $ssl_posts_same_url_array ) ) {
+					$existing_link_post_id = $ssl_posts_same_url_array[0]->ID;
+				}
+				
+				wp_redirect( add_query_arg( array( 'post' => $existing_link_post_id, 'action' => 'edit', 'existinglink' => 'true' ), admin_url( 'post.php') ) );
+			}
 		}
 
 		//register the callback been used if options of page been submitted and needs to be processed
@@ -576,11 +668,11 @@ class link_library_plugin_admin {
 				add_action( 'admin_notices', array( $this, 'll_shrinktheweb_warning' ) );
 			}
 
-			if ( isset( $_GET['dismissll67update'] ) ) {
-				$genoptions['dismissll67update'] = true;
+			if ( isset( $_GET['dismissll70update'] ) ) {
+				$genoptions['dismissll70update'] = true;
 				update_option( 'LinkLibraryGeneral', $genoptions );
-			} elseif ( !$dismissll67update ) {
-				add_action( 'admin_notices', array( $this, 'll67update' ) );
+			} elseif ( !isset( $dismissll70update ) ) {
+				add_action( 'admin_notices', array( $this, 'll70update' ) );
 			}
 		}
 
@@ -632,7 +724,7 @@ class link_library_plugin_admin {
 
 	function ll_inner_custom_box( $post ) {
 		$editor_config = array( 'textarea_rows' => 8 );
-		wp_editor( $post->post_content, 'content', $editor_config );
+wp_editor( $post->post_content, 'content', $editor_config );
 	}
 
 	function ll_thumbshots_warning() {
@@ -650,8 +742,8 @@ class link_library_plugin_admin {
         <div id='ll-warning' class='updated fade'><p><strong>" . __( 'Link Library: No Link Categories on your site', 'link-library' ) . "</strong></p> <p>" . __( 'There are currently no link categories defined in your WordPress site. Link Library will not work correctly without categories. Please create at least one before trying to use Link Library and make sure each link is assigned a category.', 'link-library' ) . "</p></div>";
 	}
 
-	function ll67update() {
-		echo "<div id='ll-warning' class='updated fade'><span style='float: left; margin-right: 20px; margin-top: 40px; margin-bottom: 40px'><img src='" . plugins_url( 'icons/new_icon.png', __FILE__ ) . "' /></span><p><strong>Link Library 6.7: Recent new features and supporting your humble developer</strong></p> <p>You may not have noticed, but Link Library keeps adding a steady stream of new features, along with bug fixes, with each new version. In recent months, new capabilities such a <a href='" . add_query_arg( array( 'post_type' => 'link_library_links', 'currenttab' => 'll-advanced', 'page' => 'link-library-settingssets'), admin_url( 'edit.php' )) . "'>User Voting system</a>, <a href='" . add_query_arg( array( 'post_type' => 'link_library_links', 'currenttab' => 'll-customfields', 'page' => 'link-library-general-options'), admin_url( 'edit.php' )) . "'>Custom URL Fields</a>, the <a href='" . add_query_arg( array( 'post_type' => 'link_library_links', 'currenttab' => 'll-userform', 'page' => 'link-library-settingssets'), admin_url( 'edit.php' )) . "'>ability for users to upload files to be used as the link URL</a> and <a href='" . add_query_arg( array( 'post_type' => 'link_library_links', 'currenttab' => 'll-userform', 'page' => 'link-library-settingssets'), admin_url( 'edit.php' )) . "'>User-Submission Form Tooltips</a> and many more have been added to Link Library. If you have ideas for new features, drop me a line in the <a href='https://wordpress.org/support/plugin/link-library/'>support forum</a>. I can't promise I'll put them all in, but all ideas are considered.<br /><br />If you use the plugin as a regular feature of your site and have never contributed to Link Library's development, <a href='https://ylefebvre.home.blog/wordpress-plugins/link-library/'>please consider a donation</a>. Repeat donations are just as welcome :) Answering support questions and implementing new features for this free plugin takes time and effort and your support helps with this work and its associated costs. Thanks in advance!<br /><br /><a href='" . add_query_arg( array( 'post_type' => 'link_library_links', 'currenttab' => 'll-usage', 'page' => 'link-library-settingssets', 'dismissll67update' => 'true'), admin_url( 'edit.php' )) . "'>Dismiss</a></p></div>";
+	function ll70update() {
+		echo "<div id='ll-warning' class='updated fade'><span style='float: left; margin-right: 20px; margin-top: 40px; margin-bottom: 40px'><img src='" . plugins_url( 'icons/new_icon.png', __FILE__ ) . "' /></span><p><strong>Link Library 7.0: Recent new features and supporting your humble developer</strong></p> <p>You may not have noticed, but Link Library keeps adding a steady stream of new features, along with bug fixes, with each new version. In recent months, new capabilities such as Link Library blocks in the WordPress Block Editor, <a href='" . add_query_arg( array( 'post_type' => 'link_library_links', 'currenttab' => 'll-userform', 'page' => 'link-library-settingssets'), admin_url( 'edit.php' )) . "'>the ability to re-order fields and add custom fields in user-submission forms</a>, <a href='" . add_query_arg( array( 'post_type' => 'link_library_links', 'currenttab' => 'll-globalsearchresultslayout', 'page' => 'link-library-general-options'), admin_url( 'edit.php' )) . "'>customization of link output in Global site search results</a>, an <a href='" . add_query_arg( array( 'post_type' => 'link_library_links', 'page' => 'link-library-stylesheet'), admin_url( 'edit.php' )) . "'>updated stylesheet editor with syntax highlighting and error checking</a> and many more have been added to Link Library. If you have ideas for new features, drop me a line in the <a href='https://wordpress.org/support/plugin/link-library/'>support forum</a>. I can't promise I'll put them all in, but all ideas are considered.<br /><br />If you use the plugin as a regular feature of your site and have never contributed to Link Library's development, <a href='https://ylefebvre.github.io/wordpress-plugins/link-library/'>please consider a donation</a>. Repeat donations are just as welcome :) Answering support questions and implementing new features for this free plugin takes time and effort and your support helps with this work and its associated costs. Thanks in advance!<br /><br /><a href='" . add_query_arg( array( 'post_type' => 'link_library_links', 'currenttab' => 'll-usage', 'page' => 'link-library-settingssets', 'dismissll70update' => 'true'), admin_url( 'edit.php' )) . "'>Dismiss</a></p></div>";
 	}
 
 	function filter_mce_buttons( $buttons ) {
@@ -712,7 +804,7 @@ class link_library_plugin_admin {
 	//extend the admin menu
 	function on_admin_menu() {
 		//add our own option page, you can also add it to different sections or use your own one
-		global $pagehookmoderate, $pagehooksettingssets, $pagehookstylesheet, $pagehookreciprocal, $pagehookaccessibe;
+		global $pagehookmoderate, $pagehooksettingssets, $pagehookstylesheet, $pagehookreciprocal;
 
 		$genoptions = get_option( 'LinkLibraryGeneral' );
 		$genoptions = wp_parse_args( $genoptions, ll_reset_gen_settings( 'return' ) );
@@ -766,9 +858,9 @@ class link_library_plugin_admin {
 
 		$pagehookreciprocal = add_submenu_page( LINK_LIBRARY_ADMIN_PAGE_NAME, 'Link Library - ' . __( 'Link checking tools', 'link-library' ), __( 'Link checking tools', 'link-library' ), $admin_capability, 'link-library-reciprocal', array( $this, 'on_show_page' ) );
 
-		add_submenu_page( LINK_LIBRARY_ADMIN_PAGE_NAME, 'Link Library - ' . __( 'FAQ', 'link-library' ), __( 'FAQ', 'link-library' ), $admin_capability, 'link-library-faq', array( $this, 'on_show_page' ) );
+		add_submenu_page( LINK_LIBRARY_ADMIN_PAGE_NAME, 'Link Library - ' . __( 'Donate', 'link-library' ), __( 'Donate', 'link-library' ), $admin_capability, 'link-library-donate', array( $this, 'on_show_page' ) );
 
-		$pagehookaccessibe = add_submenu_page( LINK_LIBRARY_ADMIN_PAGE_NAME, 'Accessibe', 'Accessibe', $admin_capability, 'link-library-accessibe', array( $this, 'on_show_page' ) );
+		add_submenu_page( LINK_LIBRARY_ADMIN_PAGE_NAME, 'Link Library - ' . __( 'FAQ', 'link-library' ), __( 'FAQ', 'link-library' ), $admin_capability, 'link-library-faq', array( $this, 'on_show_page' ) );
 
 		//register  callback gets call prior your own page gets rendered
 		add_action( 'load-' . $pagehookgeneraloptions, array( $this, 'on_load_page' ) );
@@ -776,7 +868,6 @@ class link_library_plugin_admin {
 		add_action( 'load-' . $pagehookmoderate, array( $this, 'on_load_page' ) );
 		add_action( 'load-' . $pagehookstylesheet, array( $this, 'on_load_page' ) );
 		add_action( 'load-' . $pagehookreciprocal, array( $this, 'on_load_page' ) );
-		add_action( 'load-' . $pagehookaccessibe, array( $this, 'on_load_page' ) );
 	}
 
 	//will be executed if wordpress core detects this page has to be rendered
@@ -954,6 +1045,10 @@ class link_library_plugin_admin {
 				echo "<div id='message' class='updated fade'><p><strong>" . __( 'Link Library plugin directory needs to be writable to perform this action', 'link-library' ) . "</strong></p></div>";
 			} else if ( isset( $_GET['message'] ) && $_GET['message'] == '4' ) {
 				echo "<div id='message' class='updated fade'><p><strong>" . __( 'You must set the Google reCAPTCHA Site and Secret Keys to be able to set the captcha generator to Google reCAPTCHA.', 'link-library' ) . "</strong></p></div>";
+			} else if ( isset( $_GET['message'] ) && $_GET['message'] == '7' ) {
+				echo "<div id='message' class='updated fade'><p><strong>" . __( 'Global Options successfully imported.', 'link-library' ) . "</strong></p></div>";
+			} else if ( isset( $_GET['message'] ) && $_GET['message'] == '8' ) {
+				echo "<div id='message' class='updated fade'><p><strong>" . __( 'Failed to import Global Options', 'link-library' ) . "</strong></p></div>";
 			} else if ( isset( $_GET['message'] ) && $_GET['message'] == '9' ) {
 				echo "<div id='message' class='updated fade'><p><strong>" . $_GET['importrowscount'] . " " . __( 'row(s) found', 'link-library' ) . ". " . ( isset( $_GET['successimportcount'] ) ? intval( $_GET['successimportcount'] ) : '0' ) . " " . __( 'link(s) imported', 'link-library' ) . ", " . ( isset( $_GET['successupdatecount'] ) ? intval( $_GET['successupdatecount'] ): '0' ) . " " . __( 'link(s) updated', 'link-library' ) . ".</strong></p></div>";
 			}
@@ -968,7 +1063,41 @@ class link_library_plugin_admin {
 			}
 
 			if ( isset( $_GET['newlayout'] ) ) {
-				$options = ll_modify_layout( $settings, intval( $_GET['newlayout']) );
+				$layout_list = simplexml_load_file( plugin_dir_path( __FILE__ ) . '/presets/PresetList.xml' );
+				$layout_id = intval( $_GET['newlayout'] );
+
+				if ( !empty( $layout_list ) ) {
+					foreach ( $layout_list as $layout ) {
+						if ( $layout->ID == $layout_id ) {
+							$handle = fopen( plugin_dir_path( __FILE__ ) . '/presets/' . $layout->File, "r" );
+
+							$row         = 1;
+							$optionnames = array();
+							$options     = array();
+
+							while ( ( $data = fgetcsv( $handle, 5000, "," ) ) !== false ) {
+								if ( $row == 1 ) {
+									$optionnames = $data;
+									$row ++;
+								} else if ( $row == 2 ) {
+									for ( $counter = 0; $counter <= count( $data ) - 1; $counter ++ ) {
+										$options[$optionnames[$counter]] = $data[$counter];
+									}
+									$row ++;
+								}
+							}
+
+							if ( !empty( $options ) ) {
+								$settingsname = 'LinkLibraryPP' . $settings;
+
+								$options = wp_parse_args( $options, ll_reset_options( 1, 'list', 'return' ) );
+								update_option( $settingsname, $options );
+							}
+
+							fclose( $handle );
+						}
+					}
+				}
 			}
 
 			$pagetitle = __( 'Library', 'link-library' ) . ' #' . $settings . " - " . stripslashes( $options['settingssetname'] );
@@ -1049,20 +1178,60 @@ class link_library_plugin_admin {
 
 			if ( isset( $_GET['message'] ) && $_GET['message'] == '1' ) {
 				echo "<div id='message' class='updated fade'><p><strong>" . __( 'Settings updated', 'link-library' ) . ".</strong></p></div>";
-			} elseif ( isset( $_GET['message'] ) && ( $_GET['message'] == '2' || $_GET['message'] == '3' ) ) { ?>
+			} elseif ( isset( $_GET['message'] ) && ( $_GET['message'] == '2' || $_GET['message'] == '3' || $_GET['message'] == 6 ) ) { ?>
 				<div id='message' class='updated fade'><p>
 				<strong>
 				<?php
-					if ( $_GET['message'] == '2' ) {
+					$mode = '';
+					if ( intval( $_GET['message'] ) == 2 ) {
 						_e( 'Reciprocal Link Checker Report', 'link-library' );
-					} else {
+						$mode = 'reciprocal';
+					} elseif ( intval( $_GET['message'] ) == 3 ) {
 						_e( 'Broken Link Checker Report', 'link-library' );
+						$mode = 'broken';
+					} elseif ( intval( $_GET['message'] ) == 6 ) {
+						_e( 'RSS Link Checker Report', 'link-library' );
+						$mode = 'rss';
 					}
 				?></strong><br />
 				<span class="loadingicon"><img src="<?php echo plugins_url( 'icons/Ajax-loader.gif', __FILE__ ); ?> " /></span><span class="processinglinks">Processing Link <span class="currentlinknumber">0</span> / <span class="totallinknumber">
 				<?php
-				$post_count = wp_count_posts( 'link_library_links' );
-				$total_post_count = $post_count->publish + $post_count->future + $post_count->draft + $post_count->pending + $post_count->private;
+				$args = array(
+					'post_type' => 'link_library_links',
+					'post_status' => array( 'publish', 'pending', 'draft', 'future', 'private' ),
+					'orderby' => 'post_title',
+					'order' => 'ASC',
+					'meta_value' => ' ',
+					'meta_compare' => '!=',
+					'posts_per_page' => -1,
+					'paged' => ( isset( $_POST['index'] ) ? intval( $_POST['index'] ) : 1 )
+				);
+		
+				$the_link_query = new WP_Query( $args );
+				$total_post_count = 0;
+
+				if ( $the_link_query->have_posts() ) {
+					while ( $the_link_query->have_posts() ) {
+						$the_link_query->the_post();
+
+						if ( 'reciprocal' == $mode ) {
+							$link_reciprocal = get_post_meta( get_the_ID(), 'link_reciprocal', true );
+
+							if ( !empty( $link_reciprocal ) ) {
+								$total_post_count++;
+							}
+						} elseif ( 'broken' == $mode ) {
+							$total_post_count++;
+						} elseif( 'rss' == $mode )  {
+							$link_rss = get_post_meta( get_the_ID(), 'link_rss', true );
+
+							if ( !empty( $link_rss ) ) {
+								$total_post_count++;
+							}
+						}						
+					}
+				}
+
 				echo $total_post_count;
 				?>
 				</span></span>
@@ -1087,7 +1256,7 @@ class link_library_plugin_admin {
 								data   : {
 									action      : 'link_library_recipbrokencheck',
 									_ajax_nonce : '<?php echo wp_create_nonce( 'link_library_recipbrokencheck' ); ?>',
-									mode        : '<?php if ( $_GET['message'] == '2' ) { echo 'reciprocal'; } elseif ( $_GET['message'] == 3 ) { echo 'broken'; } ?>',
+									mode        : '<?php echo $mode; ?>',
 									index		: currentlinkindex,
 									RecipCheckAddress: jQuery('#recipcheckaddress').val(),
 									recipcheckdelete403 : jQuery('#recipcheckdelete403').is(':checked')
@@ -1118,9 +1287,11 @@ class link_library_plugin_admin {
 				echo "<div id='message' class='updated fade'><p>";
 				$this->link_library_duplicate_link_checker( $this );
 				echo "</p></div>";
+			} elseif ( isset( $_GET['message'] ) && $_GET['message'] == '5' ) {
+				echo "<div id='message' class='updated fade'><p>";
+				$this->link_library_empty_cat_link_checker( $this );
+				echo "</p></div>";
 			}
-		} elseif ( $_GET['page'] == 'link-library-accessibe' ) {
-			$formvalue = 'save_link_library_accessibe';
 		}
 
 		$data               = array();
@@ -1164,11 +1335,11 @@ class link_library_plugin_admin {
 								} ?>><?php _e( 'Reciprocal Check', 'link-library' ); ?></a>
 							</li>
 							<li class="link-library-page">
-								<a target="LinkLibraryFAQ" href="https://ylefebvre.home.blog/wordpress-plugins/link-library/link-library-faq/"><?php _e( 'FAQ', 'link-library' ); ?></a>
+								<a target="LinkLibraryFAQ" href="https://github.com/ylefebvre/link-library/wiki"><?php _e( 'FAQ', 'link-library' ); ?></a>
 							</li>
 							<?php if ( isset( $genoptions['hidedonation'] ) && !$genoptions['hidedonation'] ) { ?>
 								<li class="link-library-page">
-									<a href="https://ylefebvre.home.blog/wordpress-plugins/link-library/"><img src="<?php echo plugins_url( '/icons/btn_donate_LG.gif', __FILE__ ); ?>" /></a>
+									<a href="https://ylefebvre.github.io/wordpress-plugins/link-library/"><img src="<?php echo plugins_url( '/icons/btn_donate_LG.gif', __FILE__ ); ?>" /></a>
 								</li>
 							<?php } ?>
 
@@ -1198,7 +1369,7 @@ class link_library_plugin_admin {
 					<input type="hidden" name="action" value="<?php echo $formvalue; ?>" />
 
 					<style type="text/css">
-						#sortable {
+						#sortable, #usersubmissionsortable {
 							list-style-type: none;
 							margin: 0;
 							padding: 0;
@@ -1206,7 +1377,7 @@ class link_library_plugin_admin {
 							list-style-type: none;
 						}
 
-						#sortable li {
+						#sortable li, #usersubmissionsortable li {
 							list-style: none;
 							margin: 5px;
 							padding: 5px 10px 5px 10px;
@@ -1218,7 +1389,7 @@ class link_library_plugin_admin {
 							cursor: move
 						}
 
-						#sortable li span {
+						#sortable li span, #usersubmissionsortable li span {
 							position: absolute;
 							margin-left: -1.3em;
 						}
@@ -1233,6 +1404,7 @@ class link_library_plugin_admin {
 									$this->general_meta_box( $data );
 									$this->general_custom_fields_meta_box( $data );
 									$this->general_singleitemlayout_meta_box( $data );
+									$this->general_globalsearchresultslayout_meta_box( $data );
 									$this->general_image_meta_box( $data );
 									$this->general_meta_bookmarklet_box( $data );
 									$this->general_moderation_meta_box( $data );
@@ -1252,7 +1424,8 @@ class link_library_plugin_admin {
 									$this->settingssets_categories_meta_box( $data );
 									$this->settingssets_linkelement_meta_box( $data );
 									$this->settingssets_subfieldtable_meta_box( $data );
-									$this->settingssets_linkpopup_meta_box( $data );
+									$this->settingssets_stylesheet_meta_box( $data );
+									$this->settingssets_linkpopup_meta_box( $data );									
 									$this->settingssets_rssconfig_meta_box( $data );
 									$this->settingssets_thumbnails_meta_box( $data );
 									$this->settingssets_rssgen_meta_box( $data );
@@ -1269,8 +1442,6 @@ class link_library_plugin_admin {
 									do_meta_boxes( $pagehookstylesheet, 'normal', $data );
 								} elseif ( $_GET['page'] == 'link-library-reciprocal' ) {
 									do_meta_boxes( $pagehookreciprocal, 'normal', $data );
-								} elseif ( $_GET['page'] == 'link-library-accessibe' ) {
-									$this->display_accessibe_page( $data );
 								}
 								?>
 							</div>
@@ -1295,8 +1466,6 @@ class link_library_plugin_admin {
 					{echo $pagehookstylesheet;}
 				elseif ($_GET['page'] == 'link-library-reciprocal')
 					{echo $pagehookreciprocal;}
-				elseif ($_GET['page'] == 'link-library-accessibe')
-					{echo $pagehookstylesheet;}
 				?>');
 			});
 			//]]>
@@ -1327,6 +1496,15 @@ class link_library_plugin_admin {
 					}
 				});
 
+				jQuery("#usersubmissionsortable").sortable({
+					opacity: 0.6, cursor: 'move', update: function () {
+						var order = jQuery("#usersubmissionsortable").sortable('toArray');
+						order.clean("");
+						stringorder = order.join(',');
+						document.getElementById('usersubmissiondragndroporder').value = stringorder;
+					}
+				});
+
 			});
 
 		</script>
@@ -1339,6 +1517,7 @@ class link_library_plugin_admin {
 			$tabitems = array ( 'll-general' => __( 'General', 'link-library' ),
 								'll-customfields' => __( 'Custom Fields', 'link-library ' ),
 								'll-singleitem' => __( 'Single Item Layout', 'link-library' ),
+								'll-globalsearchresultslayout' => __( 'Global Search Results / Main Site RSS Feed Item Layout', 'link-library' ),
 			                    'll-images' => __( 'Images', 'link-library' ),
 			                    'll-bookmarklet' => __( 'Bookmarklet', 'link-library' ),
 			                    'll-moderation' => __( 'Moderation', 'link-library' ),
@@ -1356,6 +1535,7 @@ class link_library_plugin_admin {
 			                    'll-categories' => __( 'Categories', 'link-library' ),
 			                    'll-links' => __( 'Links', 'link-library' ),
 			                    'll-advanced' => __( 'Advanced', 'link-library' ),
+								'll-style' => __( 'Stylesheet', 'link-library' ),
 			                    'll-popup' => __( 'Pop-Ups', 'link-library' ),
 			                    'll-rssdisplay' => __( 'RSS Display', 'link-library' ),
 			                    'll-thumbnails' => __( 'Thumbnails', 'link-library' ),
@@ -1377,20 +1557,26 @@ class link_library_plugin_admin {
 		?>
 		<div>
 			<input type="hidden" name="currenttab" class="current-tab" value="<?php echo $array_keys[$currenttab]; ?>">
-		<ul id="settings-sections" class="subsubsub hide-if-no-js">
-			<?php
-				$index = 0;
-				foreach ( $tabitems as $tabkey => $tabitem ) { ?>
-				<li><a href="#<?php echo $tabkey; ?>" class="ll-tab <?php echo $tabkey; ?> ll-general <?php if ( $currenttab == $index ) echo 'll-current'; ?>"><?php echo $tabitem; ?></a> | </li>
-			<?php
-				$index++;
-				} ?>
-		</ul>
+			<ul id="settings-sections" class="subsubsub hide-if-no-js">
+				<?php
+					$index = 0;
+					foreach ( $tabitems as $tabkey => $tabitem ) { ?>
+					<li><a href="#<?php echo $tabkey; ?>" class="ll-tab <?php echo $tabkey; ?> ll-general <?php if ( $currenttab == $index ) echo 'current'; ?>"><?php echo $tabitem; ?></a> | </li>
+				<?php
+					$index++;
+					} ?>
+			</ul>
 		</div>
 		<br /><br />
 
 		<script type="text/javascript">
 			jQuery(document).ready(function() {
+				<?php if ( $menu_name != 'general' ) { ?>
+					if ( jQuery( '.CodeMirror' ).length == 0 ) {
+						wp.codeEditor.initialize( jQuery('#fancy-textarea'), cm_settings );
+					}	
+				<?php } ?>
+				
 				jQuery('.content-section:not(:eq(<?php echo $currenttab; ?>))').hide();
 				jQuery('.subsubsub a.ll-tab').click(function(e) {
 
@@ -1408,6 +1594,12 @@ class link_library_plugin_admin {
 					jQuery('.content-section#' + toShow).show();
 
 					jQuery('.current-tab').val(toShow);
+
+					<?php if ( $menu_name != 'general' ) { ?>					
+					if ( jQuery( '.CodeMirror' ).length == 0 ) {
+						wp.codeEditor.initialize( jQuery('#fancy-textarea'), cm_settings );
+					}	
+					<?php } ?>				
 
 					return false;
 				});
@@ -1429,6 +1621,8 @@ class link_library_plugin_admin {
 		$successfulimport = 0;
 		$successfulupdate = 0;
 
+		$genoptions = get_option( 'LinkLibraryGeneral' );
+
 		if ( isset( $_POST['importlinks'] ) ) {
 			wp_defer_term_counting( true );
 			wp_defer_comment_counting( true );
@@ -1436,363 +1630,418 @@ class link_library_plugin_admin {
 			define( 'WP_IMPORTING', true );
 			set_time_limit( 1800 );
 
-			$handle = fopen( $_FILES['linksfile']['tmp_name'], "r" );
+			if ( !empty( $_FILES['linksfile']['tmp_name'] ) ) {
+				$handle = fopen( $_FILES['linksfile']['tmp_name'], "r" );
 
-			if ( $handle ) {
-				$skiprow = 1;
-				$import_columns = array();
-
-				while ( ( $data = fgetcsv( $handle, 5000, "," ) ) !== false ) {
-					$row += 1;
-					if ( $skiprow == 1 && $row >= 2 ) {
-						$skiprow = 0;
-					}
-
-					if ( 1 == $row ) {
-						foreach ( $data as $index => $column_name ) {
-							$import_columns[$column_name] = $index;
+				if ( $handle ) {
+					$skiprow = 1;
+					$import_columns = array();
+	
+					while ( ( $data = fgetcsv( $handle, 5000, "," ) ) !== false ) {
+						$row += 1;
+						if ( $skiprow == 1 && $row >= 2 ) {
+							$skiprow = 0;
 						}
-					} else {
-						$existing_link_post_id = '';
-						$matched_link_cats = array();
-						$matched_link_tags = array();
-
-						if ( ( isset( $import_columns['Category Slugs'] ) && !empty( $data[$import_columns['Category Slugs']] ) ) ) {
-							$new_link_cats_slugs_array = array();
-							if ( isset( $import_columns['Category Slugs'] ) ) {
-								$new_link_cats_slugs_array = explode( ',', $data[$import_columns['Category Slugs']] );
+	
+						if ( 1 == $row ) {
+							foreach ( $data as $index => $column_name ) {
+								$import_columns[$column_name] = $index;
 							}
-
-							if ( ( isset( $import_columns['Category Names'] ) && !empty( $data[$import_columns['Category Names']] ) ) || ( isset( $import_columns['cat_name'] ) && !empty( $data[$import_columns['cat_name']] ) ) ) {
-								if ( isset( $import_columns['Category Names'] ) ) {
-									$new_link_cats_array = explode( ',', $data[$import_columns['Category Names']] );
-								} elseif( isset( $import_columns['cat_name'] ) ) {
-									$new_link_cats_array = explode( ',', $data[$import_columns['cat_name']] );
-								}
-							}
-
-							foreach ( $new_link_cats_slugs_array as $index => $new_link_cat_slug ) {
-								$cat_matched_term = get_term_by( 'slug', $new_link_cat_slug, 'link_library_category' );
-
-								if ( false !== $cat_matched_term ) {
-									$matched_link_cats[] = $cat_matched_term->term_id;
-								} else {
-									$new_link_cat = '';
-									if ( !empty( $new_link_cats_array ) && isset( $new_link_cats_array[$index] ) ) {
-										$new_link_cat = $new_link_cats_array[$index];
-									} else {
-										$new_link_cat = $new_link_cat_slug;
-									}
-
-									$new_cat_term_data   = wp_insert_term( $new_link_cat, 'link_library_category', array( 'slug' => $new_link_cat_slug ) );
-									if ( is_wp_error( $new_cat_term_data ) ) {
-										print_r( 'Failed creating category ' . $new_link_cat );
-									} else {
-										$matched_link_cats[] = $new_cat_term_data['term_id'];
-									}
-								}
-							}
-						}
-
-						if ( ( isset( $import_columns['Tag Slugs'] ) && !empty( $data[$import_columns['Tag Slugs']] ) ) ) {
-							$new_link_tags_slugs_array = array();
-							if ( isset( $import_columns['Tag Slugs'] ) ) {
-								$new_link_tags_slugs_array = explode( ',', $data[$import_columns['Tag Slugs']] );
-							}
-
-							if ( ( isset( $import_columns['Tag Names'] ) && !empty( $data[$import_columns['Tag Names']] ) ) ) {
-								if ( isset( $import_columns['Tag Names'] ) ) {
-									$new_link_tags_array = explode( ',', $data[$import_columns['Tag Names']] );
-								}
-							}
-
-							foreach ( $new_link_tags_slugs_array as $index => $new_link_tag_slug ) {
-								$tag_matched_term = get_term_by( 'slug', $new_link_tag_slug, 'link_library_tags' );
-
-								if ( false !== $tag_matched_term ) {
-									$matched_link_tags[] = $tag_matched_term->term_id;
-								} else {
-									$new_link_tag = '';
-									if ( !empty( $new_link_tags_array ) && isset( $new_link_tags_array[$index] ) ) {
-										$new_link_tag = $new_link_tags_array[$index];
-									} else {
-										$new_link_tag = $new_link_tag_slug;
-									}
-
-									$new_tag_term_data   = wp_insert_term( $new_link_tag, 'link_library_tags', array( 'slug' => $new_link_tag_slug ) );
-									if ( is_wp_error( $new_tag_term_data ) ) {
-										print_r( 'Failed creating tag ' . $new_link_tag );
-									} else {
-										$matched_link_tags[] = $new_tag_term_data['term_id'];
-									}
-								}
-							}
-						}
-
-						$link_url = '';
-						$url_labels = array( 'Address', 'link_url' );
-						foreach( $url_labels as $url_label ) {
-							if ( isset( $import_columns[$url_label] ) ) {
-								if ( !empty( $data[$import_columns[$url_label]] ) ) {
-									$link_url = esc_url( $data[$import_columns[$url_label]] );
-								}
-							}
-						}
-
-						if ( isset( $_POST['updatesameurl'] ) ) {
-							$find_post_args = array( 'post_type' => 'link_library_links',
-													 'meta_key' => 'link_url',
-													 'meta_value' => $link_url,
-													 'numberposts' => 1 );
-
-							$posts_same_url_array = get_posts( $find_post_args );
-
-							if ( !empty( $posts_same_url_array ) ) {
-								$existing_link_post_id = $posts_same_url_array[0]->ID;
-							}
-						}
-
-						$post_status = 'publish';
-						$post_status_import_value = '';
-
-						$visible_labels = array( 'Status', 'Visible', 'link_visible' );
-						foreach( $visible_labels as $visible_label ) {
-							if ( isset( $import_columns[$visible_label] ) ) {
-								$post_status_import_value = $data[$import_columns[$visible_label]];
-							}
-						}
-
-						if ( in_array( $post_status_import_value, array( 'publish', 'draft', 'private' ) ) ) {
-							$post_status = $post_status_import_value;
-						} elseif ( 'N' == $post_status_import_value ) {
-							$post_status = 'private';
-						}
-
-						$post_title = '';
-						$title_labels = array( 'Link Name', 'link_name', 'Name' );
-						foreach( $title_labels as $title_label ) {
-							if ( isset( $import_columns[$title_label] ) ) {
-								if ( ! empty( $data[ $import_columns[$title_label] ] ) ) {
-									$post_title = sanitize_text_field( $data[ $import_columns[$title_label] ] );
-								}
-							}
-						}
-
-						$new_link_data = array(
-							'post_type' => 'link_library_links',
-							'post_content' => '',
-							'post_title' => $post_title,
-							'tax_input' => array( 'link_library_category' => $matched_link_cats, 'link_library_tags' => $matched_link_tags ),
-							'post_status' => $post_status
-						);
-
-						if ( !empty( $existing_link_post_id ) ) {
-							$new_link_data['ID'] = $existing_link_post_id;
-							$new_link_ID = wp_insert_post( $new_link_data );
-							$successfulupdate++;
 						} else {
-							$new_link_ID = wp_insert_post( $new_link_data );
-							$successfulimport++;
-						}
-
-						update_post_meta( $new_link_ID, 'link_url', $link_url );
-
-						$link_image = '';
-						$image_labels = array( 'Image Address', 'link_image' );
-						foreach( $image_labels as $image_label ) {
-							if ( isset( $import_columns[$image_label] ) ) {
-								$link_image = esc_url( $data[$import_columns[$image_label]] );
+							$existing_link_post_id = '';
+							$matched_link_cats = array();
+							$matched_link_tags = array();
+	
+							if ( ( isset( $import_columns['Category Slugs'] ) && !empty( $data[$import_columns['Category Slugs']] ) ) ) {
+								$new_link_cats_slugs_array = array();
+								if ( isset( $import_columns['Category Slugs'] ) ) {
+									$new_link_cats_slugs_array = explode( ',', $data[$import_columns['Category Slugs']] );
+								}
+	
+								if ( ( isset( $import_columns['Category Names'] ) && !empty( $data[$import_columns['Category Names']] ) ) || ( isset( $import_columns['cat_name'] ) && !empty( $data[$import_columns['cat_name']] ) ) ) {
+									if ( isset( $import_columns['Category Names'] ) ) {
+										$new_link_cats_array = explode( ',', $data[$import_columns['Category Names']] );
+									} elseif( isset( $import_columns['cat_name'] ) ) {
+										$new_link_cats_array = explode( ',', $data[$import_columns['cat_name']] );
+									}
+								}
+	
+								foreach ( $new_link_cats_slugs_array as $index => $new_link_cat_slug ) {
+									$cat_matched_term = get_term_by( 'slug', $new_link_cat_slug, 'link_library_category' );
+	
+									if ( false !== $cat_matched_term ) {
+										$matched_link_cats[] = $cat_matched_term->term_id;
+									} else {
+										$new_link_cat = '';
+										if ( !empty( $new_link_cats_array ) && isset( $new_link_cats_array[$index] ) ) {
+											$new_link_cat = $new_link_cats_array[$index];
+										} else {
+											$new_link_cat = $new_link_cat_slug;
+										}
+	
+										$new_cat_term_data   = wp_insert_term( $new_link_cat, 'link_library_category', array( 'slug' => $new_link_cat_slug ) );
+										if ( is_wp_error( $new_cat_term_data ) ) {
+											print_r( 'Failed creating category ' . $new_link_cat );
+										} else {
+											$matched_link_cats[] = $new_cat_term_data['term_id'];
+										}
+									}
+								}
 							}
-						}
-						update_post_meta( $new_link_ID, 'link_image', $link_image );
-
-						if ( empty( $link_image ) ) {
-							delete_post_thumbnail( $new_link_ID );
-						} else {
-							$wpFileType = wp_check_filetype( $link_image, null);
-
-							$attachment = array(
-								'post_mime_type' => $wpFileType['type'],  // file type
-								'post_title' => sanitize_file_name( $link_image ),  // sanitize and use image name as file name
-								'post_content' => '',  // could use the image description here as the content
-								'post_status' => 'inherit'
+	
+							if ( ( isset( $import_columns['Tag Slugs'] ) && !empty( $data[$import_columns['Tag Slugs']] ) ) ) {
+								$new_link_tags_slugs_array = array();
+								if ( isset( $import_columns['Tag Slugs'] ) ) {
+									$new_link_tags_slugs_array = explode( ',', $data[$import_columns['Tag Slugs']] );
+								}
+	
+								if ( ( isset( $import_columns['Tag Names'] ) && !empty( $data[$import_columns['Tag Names']] ) ) ) {
+									if ( isset( $import_columns['Tag Names'] ) ) {
+										$new_link_tags_array = explode( ',', $data[$import_columns['Tag Names']] );
+									}
+								}
+	
+								foreach ( $new_link_tags_slugs_array as $index => $new_link_tag_slug ) {
+									$tag_matched_term = get_term_by( 'slug', $new_link_tag_slug, 'link_library_tags' );
+	
+									if ( false !== $tag_matched_term ) {
+										$matched_link_tags[] = $tag_matched_term->term_id;
+									} else {
+										$new_link_tag = '';
+										if ( !empty( $new_link_tags_array ) && isset( $new_link_tags_array[$index] ) ) {
+											$new_link_tag = $new_link_tags_array[$index];
+										} else {
+											$new_link_tag = $new_link_tag_slug;
+										}
+	
+										$new_tag_term_data   = wp_insert_term( $new_link_tag, 'link_library_tags', array( 'slug' => $new_link_tag_slug ) );
+										if ( is_wp_error( $new_tag_term_data ) ) {
+											print_r( 'Failed creating tag ' . $new_link_tag );
+										} else {
+											$matched_link_tags[] = $new_tag_term_data['term_id'];
+										}
+									}
+								}
+							}
+	
+							$link_url = '';
+							$url_labels = array( 'Address', 'link_url' );
+							foreach( $url_labels as $url_label ) {
+								if ( isset( $import_columns[$url_label] ) ) {
+									if ( !empty( $data[$import_columns[$url_label]] ) ) {
+										$link_url = esc_url( $data[$import_columns[$url_label]] );
+									}
+								}
+							}
+	
+							if ( isset( $_POST['updatesameurl'] ) ) {
+								$search_link_url = preg_replace("(^https?://)", "", $link_url );
+								$find_post_args = array( 'post_type' => 'link_library_links',
+														 'meta_key' => 'link_url',
+														 'meta_value' => $search_link_url,
+														 'meta_compare' => 'LIKE',
+														 'numberposts' => 1 );
+	
+								$posts_same_url_array = get_posts( $find_post_args );
+	
+								if ( !empty( $posts_same_url_array ) ) {
+									$existing_link_post_id = $posts_same_url_array[0]->ID;
+								}
+							}
+	
+							$post_status = 'publish';
+							$post_status_import_value = '';
+	
+							$visible_labels = array( 'Status', 'Visible', 'link_visible' );
+							foreach( $visible_labels as $visible_label ) {
+								if ( isset( $import_columns[$visible_label] ) ) {
+									$post_status_import_value = $data[$import_columns[$visible_label]];
+								}
+							}
+	
+							if ( in_array( $post_status_import_value, array( 'publish', 'draft', 'private' ) ) ) {
+								$post_status = $post_status_import_value;
+							} elseif ( 'N' == $post_status_import_value ) {
+								$post_status = 'private';
+							}
+	
+							$post_title = '';
+							$title_labels = array( 'Link Name', 'link_name', 'Name' );
+							foreach( $title_labels as $title_label ) {
+								if ( isset( $import_columns[$title_label] ) ) {
+									if ( ! empty( $data[ $import_columns[$title_label] ] ) ) {
+										$post_title = sanitize_text_field( $data[ $import_columns[$title_label] ] );
+									}
+								}
+							}
+	
+	
+							$link_publication = current_time( 'mysql' );
+							$publication_labels = array( 'Publication Date' );
+							foreach( $publication_labels as $publication_label ) {
+								if ( isset( $import_columns[$publication_label] ) ) {
+									if ( !empty( $import_columns[$publication_label] ) ) {
+										$link_publication = $data[ $import_columns[$publication_label] ];
+									}
+								}
+							}
+	
+							$new_link_data = array(
+								'post_type' => 'link_library_links',
+								'post_content' => '',
+								'post_title' => $post_title,
+								'tax_input' => array( 'link_library_category' => $matched_link_cats, 'link_library_tags' => $matched_link_tags ),
+								'post_status' => $post_status,
+								'post_date' => $link_publication
 							);
-
-							// insert and return attachment id
-							$attachmentId = wp_insert_attachment( $attachment, $link_image, $new_link_ID );
-							$attachmentData = wp_generate_attachment_metadata( $attachmentId, $link_image );
-							wp_update_attachment_metadata( $attachmentId, $attachmentData );
-							set_post_thumbnail( $new_link_ID, $attachmentId );
-						}
-
-						$link_target = '';
-						$target_labels = array( 'Link Target', 'link_target' );
-						foreach( $target_labels as $target_label ) {
-							if ( isset( $import_columns[$target_label] ) ) {
-								$link_target = sanitize_text_field( $data[$import_columns[$target_label]] );
+	
+							if ( !empty( $existing_link_post_id ) ) {
+								$new_link_data['ID'] = $existing_link_post_id;
+								$new_link_ID = wp_insert_post( $new_link_data );
+								$successfulupdate++;
+							} else {
+								$new_link_ID = wp_insert_post( $new_link_data );
+								$successfulimport++;
 							}
-						}
-						update_post_meta( $new_link_ID, 'link_target', $link_target );
-
-						$link_description = '';
-						$description_labels = array( 'Description', 'link_description' );
-						foreach( $description_labels as $description_label ) {
-							if ( isset( $import_columns[$description_label] ) ) {
-								$link_description = sanitize_text_field( $data[$import_columns[$description_label]] );
-								$link_description = str_replace( '(LinkLibrary:AwaitingModeration:RemoveTextToApprove)', '', $link_description );
-							}
-						}
-						update_post_meta( $new_link_ID, 'link_description', $link_description );
-
-						$link_rating = '';
-						$rating_labels = array( 'Rating', 'rating' );
-						foreach( $rating_labels as $rating_label ) {
-							if ( isset( $import_columns[$rating_label] ) ) {
-								$newrating = intval( $data[$import_columns[$rating_label]] );
-								if ( $newrating < 0 ) {
-									$newrating = 0;
-								}
-								$link_rating = $newrating;
-							}
-						}
-						update_post_meta( $new_link_ID, 'link_rating', $link_rating );
-
-						update_post_meta( $new_link_ID, '_thumbs_rating_up', 0 );
-
-						$link_updated = current_time( 'timestamp' );
-						$updated_labels = array( 'Updated Date - Empty for none', 'link_updated' );
-						foreach( $updated_labels as $updated_label ) {
-							if ( isset( $import_columns[$updated_label] ) ) {
-								if ( !empty( $import_columns[$updated_label] ) ) {
-									$link_updated = strtotime( $data[ $import_columns[$updated_label] ] );
+	
+							update_post_meta( $new_link_ID, 'link_url', $link_url );
+	
+							$link_image = '';
+							$image_labels = array( 'Image Address', 'link_image' );
+							foreach( $image_labels as $image_label ) {
+								if ( isset( $import_columns[$image_label] ) ) {
+									$link_image = esc_url( $data[$import_columns[$image_label]] );
 								}
 							}
-						}
-						update_post_meta( $new_link_ID, 'link_updated', $link_updated );
-
-						$link_notes = '';
-						$notes_labels = array( 'Notes', 'link_notes' );
-						foreach( $notes_labels as $notes_label ) {
-							if ( isset( $import_columns[$notes_label] ) ) {
-								$link_notes = sanitize_text_field( $data[$import_columns[$notes_label]] );
+							update_post_meta( $new_link_ID, 'link_image', $link_image );
+	
+							if ( empty( $link_image ) ) {
+								delete_post_thumbnail( $new_link_ID );
+							} else {
+								$wpFileType = wp_check_filetype( $link_image, null);
+	
+								$attachment = array(
+									'post_mime_type' => $wpFileType['type'],  // file type
+									'post_title' => sanitize_file_name( $link_image ),  // sanitize and use image name as file name
+									'post_content' => '',  // could use the image description here as the content
+									'post_status' => 'inherit'
+								);
+	
+								// insert and return attachment id
+								$attachmentId = wp_insert_attachment( $attachment, $link_image, $new_link_ID );
+								$attachmentData = wp_generate_attachment_metadata( $attachmentId, $link_image );
+								wp_update_attachment_metadata( $attachmentId, $attachmentData );
+								set_post_thumbnail( $new_link_ID, $attachmentId );
 							}
-						}
-						update_post_meta( $new_link_ID, 'link_notes', $link_notes );
-
-						$link_rss = '';
-						$rss_labels = array( 'RSS', 'link_rss' );
-						foreach( $rss_labels as $rss_label ) {
-							if ( isset( $import_columns[$rss_label] ) ) {
-								$link_rss = esc_url( $data[$import_columns[$rss_label]] );
-							}
-						}
-						update_post_meta( $new_link_ID, 'link_rss', $link_rss );
-
-						$link_second_url = '';
-						$second_url_labels = array( 'Secondary URL', 'link_second_url' );
-						foreach( $second_url_labels as $second_url_label ) {
-							if ( isset( $import_columns[$second_url_label] ) ) {
-								$link_second_url = esc_url( $data[$import_columns[$second_url_label]] );
-							}
-						}
-						update_post_meta( $new_link_ID, 'link_second_url',  $link_second_url );
-
-						$link_telephone = '';
-						$telephone_labels = array( 'Telephone', 'link_telephone' );
-						foreach( $telephone_labels as $telephone_label ) {
-							if ( isset( $import_columns[$telephone_label] ) ) {
-								$link_telephone = sanitize_text_field( $data[$import_columns[$telephone_label]] );
-							}
-						}
-						update_post_meta( $new_link_ID, 'link_telephone', $link_telephone );
-
-						$link_email = '';
-						$email_labels = array( 'E-mail', 'link_email' );
-						foreach( $email_labels as $email_label ) {
-							if ( isset( $import_columns[$email_label] ) ) {
-								$link_email = sanitize_email( $data[$import_columns[$email_label]] );
-							}
-						}
-						update_post_meta( $new_link_ID, 'link_email', $link_email );
-
-						if ( empty( $existing_link_post_id ) ) {
-							$link_visits = 0;
-							$link_visits_labels = array( 'Link Visits' );
-							foreach( $link_visits_labels as $link_visits_label ) {
-								if ( isset( $import_columns[$link_visits_label] ) ) {
-									$link_visits = intval( $data[$import_columns[$link_visits_label]] );
+	
+							$link_target = '';
+							$target_labels = array( 'Link Target', 'link_target' );
+							foreach( $target_labels as $target_label ) {
+								if ( isset( $import_columns[$target_label] ) ) {
+									$link_target = sanitize_text_field( $data[$import_columns[$target_label]] );
 								}
 							}
-
-							update_post_meta( $new_link_ID, 'link_visits', $link_visits );
-						}
-
-						$link_reciprocal = '';
-						$reciprocal_labels = array( 'Reciprocal Link', 'link_reciprocal' );
-						foreach( $reciprocal_labels as $reciprocal_label ) {
-							if ( isset( $import_columns[$reciprocal_label] ) ) {
-								$link_reciprocal = esc_url( $data[$import_columns[$reciprocal_label]] );
+							update_post_meta( $new_link_ID, 'link_target', $link_target );
+	
+							$link_description = '';
+							$description_labels = array( 'Description', 'link_description' );
+							foreach( $description_labels as $description_label ) {
+								if ( isset( $import_columns[$description_label] ) ) {
+									$link_description = sanitize_text_field( $data[$import_columns[$description_label]] );
+									$link_description = str_replace( '(LinkLibrary:AwaitingModeration:RemoveTextToApprove)', '', $link_description );
+								}
+							}
+							update_post_meta( $new_link_ID, 'link_description', $link_description );
+	
+							$link_rating = '';
+							$rating_labels = array( 'Rating', 'rating' );
+							foreach( $rating_labels as $rating_label ) {
+								if ( isset( $import_columns[$rating_label] ) ) {
+									$newrating = intval( $data[$import_columns[$rating_label]] );
+									if ( $newrating < 0 ) {
+										$newrating = 0;
+									}
+									$link_rating = $newrating;
+								}
+							}
+							update_post_meta( $new_link_ID, 'link_rating', $link_rating );
+	
+							update_post_meta( $new_link_ID, '_thumbs_rating_up', 0 );
+	
+							$link_updated = current_time( 'timestamp' );
+							$updated_labels = array( 'Updated Date - Empty for none', 'link_updated' );
+							foreach( $updated_labels as $updated_label ) {
+								if ( isset( $import_columns[$updated_label] ) ) {
+									if ( !empty( $import_columns[$updated_label] ) ) {
+										$link_updated = strtotime( $data[ $import_columns[$updated_label] ] );
+									}
+								}
+							}
+							update_post_meta( $new_link_ID, 'link_updated', $link_updated );
+	
+							$link_notes = '';
+							$notes_labels = array( 'Notes', 'link_notes' );
+							foreach( $notes_labels as $notes_label ) {
+								if ( isset( $import_columns[$notes_label] ) ) {
+									$link_notes = sanitize_text_field( $data[$import_columns[$notes_label]] );
+								}
+							}
+							update_post_meta( $new_link_ID, 'link_notes', $link_notes );
+	
+							$link_rss = '';
+							$rss_labels = array( 'RSS', 'link_rss' );
+							foreach( $rss_labels as $rss_label ) {
+								if ( isset( $import_columns[$rss_label] ) ) {
+									$link_rss = esc_url( $data[$import_columns[$rss_label]] );
+								}
+							}
+							update_post_meta( $new_link_ID, 'link_rss', $link_rss );
+	
+							$link_second_url = '';
+							$second_url_labels = array( 'Secondary URL', 'link_second_url' );
+							foreach( $second_url_labels as $second_url_label ) {
+								if ( isset( $import_columns[$second_url_label] ) ) {
+									$link_second_url = esc_url( $data[$import_columns[$second_url_label]] );
+								}
+							}
+							update_post_meta( $new_link_ID, 'link_second_url',  $link_second_url );
+	
+							$link_telephone = '';
+							$telephone_labels = array( 'Telephone', 'link_telephone' );
+							foreach( $telephone_labels as $telephone_label ) {
+								if ( isset( $import_columns[$telephone_label] ) ) {
+									$link_telephone = sanitize_text_field( $data[$import_columns[$telephone_label]] );
+								}
+							}
+							update_post_meta( $new_link_ID, 'link_telephone', $link_telephone );
+	
+							$link_email = '';
+							$email_labels = array( 'E-mail', 'link_email' );
+							foreach( $email_labels as $email_label ) {
+								if ( isset( $import_columns[$email_label] ) ) {
+									$link_email = sanitize_email( $data[$import_columns[$email_label]] );
+								}
+							}
+							update_post_meta( $new_link_ID, 'link_email', $link_email );
+	
+							if ( empty( $existing_link_post_id ) ) {
+								$link_visits = 0;
+								$link_visits_labels = array( 'Link Visits' );
+								foreach( $link_visits_labels as $link_visits_label ) {
+									if ( isset( $import_columns[$link_visits_label] ) ) {
+										$link_visits = intval( $data[$import_columns[$link_visits_label]] );
+									}
+								}
+	
+								update_post_meta( $new_link_ID, 'link_visits', $link_visits );
+							}
+	
+							$link_reciprocal = '';
+							$reciprocal_labels = array( 'Reciprocal Link', 'link_reciprocal' );
+							foreach( $reciprocal_labels as $reciprocal_label ) {
+								if ( isset( $import_columns[$reciprocal_label] ) ) {
+									$link_reciprocal = esc_url( $data[$import_columns[$reciprocal_label]] );
+								}
+							}
+							update_post_meta( $new_link_ID, 'link_reciprocal', $link_reciprocal );
+	
+							$link_large_description = '';
+							$large_description_labels = array( 'Large Description', 'link_textfield' );
+							foreach( $large_description_labels as $large_description_label ) {
+								if ( isset( $import_columns[$large_description_label] ) ) {
+									$link_large_description = sanitize_text_field( $data[$import_columns[$large_description_label]] );
+								}
+							}
+							update_post_meta( $new_link_ID, 'link_textfield', $link_large_description );
+	
+							$link_no_follow = 0;
+							$no_follow_labels = array( 'No Follow', 'link_no_follow' );
+							foreach( $no_follow_labels as $no_follow_labels ) {
+								if ( isset( $import_columns[$no_follow_labels] ) ) {
+									$link_no_follow = $data[$import_columns[$no_follow_labels]];
+								}
+							}
+	
+							if ( '1' == $link_no_follow || 'Y' == $link_no_follow ) {
+								update_post_meta( $new_link_ID, 'link_no_follow', true );
+							} else {
+								update_post_meta( $new_link_ID, 'link_no_follow', false );
+							}
+	
+							$link_featured = 0;
+							$featured_labels = array( 'Link Featured' );
+							foreach( $featured_labels as $featured_label ) {
+								if ( isset( $import_columns[$featured_label] ) ) {
+									$link_featured = $data[$import_columns[$featured_label]];
+								}
+							}
+	
+							if ( '1' == $link_featured || 'Y' == $link_featured ) {
+								update_post_meta( $new_link_ID, 'link_featured', true );
+							} else {
+								update_post_meta( $new_link_ID, 'link_featured', false );
+							}
+	
+							$link_submitter_name = '';
+							$submitter_name_labels = array( 'Link Submitter Name' );
+							foreach( $submitter_name_labels as $submitter_name_label ) {
+								if ( isset( $import_columns[$submitter_name_label] ) ) {
+									$link_submitter_name = sanitize_text_field( $data[$import_columns[$submitter_name_label]] );
+								}
+							}
+							update_post_meta( $new_link_ID, 'link_submitter_name', $link_submitter_name );
+	
+							$link_submitter_email = '';
+							$submitter_email_labels = array( 'Link Submitter E-mail' );
+							foreach( $submitter_email_labels as $submitter_email_label ) {
+								if ( isset( $import_columns[$submitter_email_label] ) ) {
+									$link_submitter_email = sanitize_email( $data[$import_columns[$submitter_email_label]] );
+								}
+							}
+							update_post_meta( $new_link_ID, 'link_submitter_email', $link_submitter_email );
+	
+							for ( $customurlfieldnumber = 1; $customurlfieldnumber < 6; $customurlfieldnumber++ ) {
+								$custom_link = '';
+								if ( $genoptions['customurl' . $customurlfieldnumber . 'active'] ) {
+									$valuelabel = 'Custom URL ' . $customurlfieldnumber;
+									$valuefield = 'link_custom_url_' . $customurlfieldnumber;
+									if ( isset( $import_columns[$valuelabel] ) ) {
+										$custom_link = esc_url( $data[$import_columns[$valuelabel]] );
+									}
+	
+									update_post_meta( $new_link_ID, $valuefield, $custom_link );
+								}
+							}
+	
+							for ( $customtextfieldnumber = 1; $customtextfieldnumber < 6; $customtextfieldnumber++ ) {
+								$custom_text = '';
+								if ( $genoptions['customtext' . $customtextfieldnumber . 'active'] ) {
+									$valuelabel = 'Custom Text ' . $customtextfieldnumber;
+									$valuefield = 'link_custom_text_' . $customtextfieldnumber;
+									if ( isset( $import_columns[$valuelabel] ) ) {
+										$custom_text = sanitize_text_field( $data[$import_columns[$valuelabel]] );
+									}
+	
+									update_post_meta( $new_link_ID, $valuefield, $custom_text );
+								}
+							}
+	
+							for ( $customlistnumber = 1; $customlistnumber < 6; $customlistnumber++ ) {
+								$custom_list = '';
+								if ( $genoptions['customlist' . $customlistnumber . 'active'] ) {
+									$valuelabel = 'Custom List ' . $customlistnumber;
+									$valuefield = 'link_custom_list_' . $customlistnumber;
+									if ( isset( $import_columns[$valuelabel] ) ) {
+										$custom_list = intval( $data[$import_columns[$valuelabel]] );
+									}
+	
+									update_post_meta( $new_link_ID, $valuefield, $custom_list );
+								}
 							}
 						}
-						update_post_meta( $new_link_ID, 'link_reciprocal', $link_reciprocal );
-
-						$link_large_description = '';
-						$large_description_labels = array( 'Large Description', 'link_textfield' );
-						foreach( $large_description_labels as $large_description_label ) {
-							if ( isset( $import_columns[$large_description_label] ) ) {
-								$link_large_description = sanitize_text_field( $data[$import_columns[$large_description_label]] );
-							}
-						}
-						update_post_meta( $new_link_ID, 'link_textfield', $link_large_description );
-
-						$link_no_follow = 0;
-						$no_follow_labels = array( 'No Follow', 'link_no_follow' );
-						foreach( $no_follow_labels as $no_follow_labels ) {
-							if ( isset( $import_columns[$no_follow_labels] ) ) {
-								$link_no_follow = $data[$import_columns[$no_follow_labels]];
-							}
-						}
-
-						if ( '1' == $link_no_follow || 'Y' == $link_no_follow ) {
-							update_post_meta( $new_link_ID, 'link_no_follow', true );
-						} else {
-							update_post_meta( $new_link_ID, 'link_no_follow', false );
-						}
-
-						$link_featured = 0;
-						$featured_labels = array( 'Link Featured' );
-						foreach( $featured_labels as $featured_label ) {
-							if ( isset( $import_columns[$featured_label] ) ) {
-								$link_featured = $data[$import_columns[$featured_label]];
-							}
-						}
-
-						if ( '1' == $link_featured || 'Y' == $link_featured ) {
-							update_post_meta( $new_link_ID, 'link_featured', true );
-						} else {
-							update_post_meta( $new_link_ID, 'link_featured', false );
-						}
-
-						$link_submitter_name = '';
-						$submitter_name_labels = array( 'Link Submitter Name' );
-						foreach( $submitter_name_labels as $submitter_name_label ) {
-							if ( isset( $import_columns[$submitter_name_label] ) ) {
-								$link_submitter_name = sanitize_text_field( $data[$import_columns[$submitter_name_label]] );
-							}
-						}
-						update_post_meta( $new_link_ID, 'link_submitter_name', $link_submitter_name );
-
-						$link_submitter_email = '';
-						$submitter_email_labels = array( 'Link Submitter E-mail' );
-						foreach( $submitter_email_labels as $submitter_email_label ) {
-							if ( isset( $import_columns[$submitter_email_label] ) ) {
-								$link_submitter_email = sanitize_email( $data[$import_columns[$submitter_email_label]] );
-							}
-						}
-						update_post_meta( $new_link_ID, 'link_submitter_email', $link_submitter_email );
 					}
 				}
-			}
+			}			
 
 			$row -= 1;
 
@@ -1877,9 +2126,11 @@ class link_library_plugin_admin {
 					$incomingcatdata = $_POST['siteimportcat'];
 
 					if ( isset( $_POST['siteimportupdatesameurl'] ) ) {
+						$search_link_url = esc_url( $node->getAttribute( "href" ) );
+						$search_link_url = preg_replace("(^https?://)", "", $search_link_url );
 						$find_post_args = array( 'post_type' => 'link_library_links',
 						                         'meta_key' => 'link_url',
-						                         'meta_value' => esc_url( $node->getAttribute( "href" ) ),
+						                         'meta_value' => $search_link_url,
 						                         'numberposts' => 1 );
 
 						$posts_same_url_array = get_posts( $find_post_args );
@@ -2007,17 +2258,41 @@ class link_library_plugin_admin {
 						$link_object['No Follow'] = get_post_meta( get_the_ID(), 'link_no_follow', true );
 						$link_object['Rating'] = get_post_meta( get_the_ID(), 'link_rating', true );
 						$link_object['Link Target'] = get_post_meta( get_the_ID(), 'link_target', true );
-						$link_object['Updated Date - Empty for none'] = date( 'Y-m-d', intval( get_post_meta( get_the_ID(), 'link_updated', true ) ) );
+						$link_object['Updated Date - Empty for none'] = date( 'Y-m-d H:i:s', intval( get_post_meta( get_the_ID(), 'link_updated', true ) ) );
 						$link_object['Link Featured'] = get_post_meta( get_the_ID(), 'link_featured', true );
 						$link_object['Link Submitter Name'] = get_post_meta( get_the_ID(), 'link_submitter_name', true );
 						$link_object['Link Submitter E-mail'] = get_post_meta( get_the_ID(), 'link_submitter_email', true );
 						$link_object['Link Visits'] = get_post_meta( get_the_ID(), 'link_visits', true );
+						$link_object['Publication Date'] = get_the_date( 'Y-m-d H:i:s', get_the_ID() );
+
+						for ( $customurlfieldnumber = 1; $customurlfieldnumber < 6; $customurlfieldnumber++ ) {
+							if ( $genoptions['customurl' . $customurlfieldnumber . 'active'] ) {
+								$valuefield = 'link_custom_url_' . $customurlfieldnumber;
+								$link_object['Custom URL ' . $customurlfieldnumber] = get_post_meta( get_the_ID(), $valuefield, true );
+							}
+						}
+
+						for ( $customtextfieldnumber = 1; $customtextfieldnumber < 6; $customtextfieldnumber++ ) {
+							if ( $genoptions['customtext' . $customtextfieldnumber . 'active'] ) {
+								$valuefield = 'link_custom_text_' . $customtextfieldnumber;
+								$link_object['Custom Text ' . $customtextfieldnumber] = get_post_meta( get_the_ID(), $valuefield, true );
+							}
+						}
+
+						for ( $customlistnumber = 1; $customlistnumber < 6; $customlistnumber++ ) {
+							if ( $genoptions['customlist' . $customlistnumber . 'active'] ) {
+								$valuefield = 'link_custom_list_' . $customlistnumber;
+								$link_object['Custom List ' . $customlistnumber] = get_post_meta( get_the_ID(), $valuefield, true );
+							}
+						}
 
 						$link_items[] = $link_object;
 					}
 				}
 
 				wp_reset_postdata();
+				
+				$link_items = apply_filters( 'link_library_export_all_links', $link_items );
 
 				if ( $link_items ) {
 					$headerrow = array();
@@ -2131,18 +2406,93 @@ class link_library_plugin_admin {
 
 			$delete_links_query = 'DELETE FROM ' . $this->db_prefix() . 'links ';
 			$wpdb->get_results( $delete_links_query );
-		} else {
-			$genoptions = get_option( 'LinkLibraryGeneral' );
+		} elseif ( isset( $_POST['exportgeneralsettings'] ) ) {
+			$upload_dir = wp_upload_dir();
+			if ( is_writable( $upload_dir['path'] ) ) {
+				$myFile = $upload_dir['path'] . "/LinkLibraryGeneralSettingsExport.csv";
+				$fh = fopen( $myFile, 'w' ) or die( "can't open file" );
 
+				$sourcesettingsname = 'LinkLibraryGeneral';
+				$sourceoptions      = get_option( $sourcesettingsname );
+
+				$headerrow = array();
+
+				foreach ( $sourceoptions as $key => $option ) {
+					$headerrow[] = '"' . $key . '"';
+				}
+
+				$headerdata = join( ',', $headerrow ) . "\n";
+				fwrite( $fh, $headerdata );
+
+				$datarow = array();
+
+				foreach ( $sourceoptions as $key => $option ) {
+					if ( is_array( $option ) ) {
+						$datarow[] = '"' . implode( ",", $option ) . '"';	
+					} else {
+						$datarow[] = '"' . $option . '"';
+					}					
+				}
+
+				$data = join( ',', $datarow ) . "\n";
+				fwrite( $fh, $data );
+
+				fclose( $fh );
+
+				if (file_exists($myFile)) {
+					header('Content-Description: File Transfer');
+					header('Content-Type: application/octet-stream');
+					header('Content-Disposition: attachment; filename='.basename($myFile));
+					header('Expires: 0');
+					header('Cache-Control: must-revalidate');
+					header('Pragma: public');
+					header('Content-Length: ' . filesize($myFile));
+					readfile($myFile);
+				exit;
+				}
+			}
+		} elseif ( isset( $_POST['importgeneralsettings'] ) ) {
+			if ( $_FILES['generalsettingsfile']['tmp_name'] != "" ) {
+				$handle = fopen( $_FILES['generalsettingsfile']['tmp_name'], "r" );
+
+				$row         = 1;
+				$optionnames = array();
+				$options     = array();
+
+				while ( ( $data = fgetcsv( $handle, 5000, "," ) ) !== false ) {
+					if ( $row == 1 ) {
+						$optionnames = $data;
+						$row ++;
+					} else if ( $row == 2 ) {
+						for ( $counter = 0; $counter <= count( $data ) - 1; $counter ++ ) {
+							$options[$optionnames[$counter]] = $data[$counter];
+						}
+						$row ++;
+					}
+				}
+
+				if ( !empty( $options ) ) {
+					$settingsname = 'LinkLibraryGeneral';
+
+					update_option( $settingsname, $options );
+
+					$message = '7';
+				}
+
+				fclose( $handle );
+			} else {
+				$message = '8';
+			}
+		} else {
 			foreach (
 				array(
 					'numberstylesets', 'includescriptcss', 'pagetitleprefix', 'pagetitlesuffix', 'schemaversion', 'thumbshotscid', 'approvalemailtitle',
 					'moderatorname', 'moderatoremail', 'rejectedemailtitle', 'approvalemailbody', 'rejectedemailbody', 'moderationnotificationtitle',
-					'linksubmissionthankyouurl', 'recipcheckaddress', 'imagefilepath', 'catselectmethod', 'expandiconpath', 'collapseiconpath', 'updatechannel',
+					'linksubmissionthankyouurl', 'imagefilepath', 'catselectmethod', 'expandiconpath', 'collapseiconpath', 'updatechannel',
 					'extraprotocols', 'thumbnailsize', 'thumbnailgenerator', 'rsscachedelay', 'single_link_layout', 'rolelevel', 'editlevel', 'cptslug',
 					'defaultlinktarget', 'bp_link_page_url', 'bp_link_settings', 'defaultprotocoladmin', 'pagepeekerid', 'pagepeekersize', 'stwthumbnailsize', 'shrinkthewebaccesskey', 'customurl1label', 'customurl2label',
 					'customurl3label', 'customurl4label', 'customurl5label', 'customtext1label', 'customtext2label', 'customtext3label', 'customtext4label', 'customtext5label', 'customlist1label', 'customlist2label', 'customlist3label', 'customlist4label', 'customlist5label', 'customlist1values', 'customlist2values', 'customlist3values', 'customlist4values', 'customlist5values',
-					'customlist1html', 'customlist2html', 'customlist3html', 'customlist4html', 'customlist5html'
+					'customlist1html', 'customlist2html', 'customlist3html', 'customlist4html', 'customlist5html', 'global_search_results_layout', 'globalsearchresultstitleprefix'
 				) as $option_name
 			) {
 				if ( isset( $_POST[$option_name] ) ) {
@@ -2168,7 +2518,7 @@ class link_library_plugin_admin {
 			foreach ( array( 'debugmode', 'emaillinksubmitter', 'suppressemailfooter', 'usefirstpartsubmittername', 'hidedonation', 'publicly_queryable', 'exclude_from_search', 'bp_log_activity', 'deletelocalfile', 'customurl1active',
 				'customurl2active', 'customurl3active', 'customurl4active', 'customurl5active', 'customtext1active', 'customtext2active',
 				'customtext3active', 'customtext4active', 'customtext5active', 'customlist1active', 'customlist2active',
-				'customlist3active', 'customlist4active', 'customlist5active' ) as $option_name ) {
+				'customlist3active', 'customlist4active', 'customlist5active', 'globalsearchresultslinkurl', 'add_to_main_rss' ) as $option_name ) {
 				if ( isset( $_POST[$option_name] ) ) {
 					$genoptions[$option_name] = true;
 				} else {
@@ -2311,6 +2661,23 @@ class link_library_plugin_admin {
 
 			$genoptions = get_option( 'LinkLibraryGeneral' );
 
+			if ( $options['rsslibraryitemspersite'] != $_POST['rsslibraryitemspersite'] || $options['rsslibrarymaxwordsitem'] != $_POST['rsslibrarymaxwordsitem'] ) {
+				global $wpdb;
+
+				$sql = "SELECT `option_name` AS `name`, `option_value` AS `value`
+						FROM $wpdb->options
+						WHERE `option_name` LIKE '%_transient_RSSLibraryLink%'";
+
+				$transients = $wpdb->get_results( $sql );
+				
+				if ( !empty( $transients ) ) {
+					foreach ( $transients as $transient ) {
+						$transient_name = str_replace( '_transient_', '', $transient->name );
+						delete_transient( $transient_name );
+					}
+				}
+			}
+
 			if ( !$options['showuservotes'] && isset( $_POST['showuservotes'] ) ) {
 				$post_query_args = array(
 					'post_type' => 'link_library_links',
@@ -2331,6 +2698,12 @@ class link_library_plugin_admin {
 				}
 			}
 
+			foreach ( array ( 'stylesheet' ) as $option_name ) {
+				if ( isset( $_POST[$option_name] ) ) {
+					$options[$option_name] = $_POST[$option_name];
+				}
+			}
+
 			foreach (
 				array(
 					'order', 'table_width', 'num_columns', 'position',
@@ -2339,12 +2712,24 @@ class link_library_plugin_admin {
 					'catlistdescpos', 'rsspreviewwidth', 'rsspreviewheight', 'numberofrssitems',
 					'displayweblink', 'sourceweblink', 'showtelephone', 'sourcetelephone', 'showemail', 'sourceimage', 'sourcename', 'popup_width', 'popup_height', 'rssfeedinlinedayspublished', 'tooltipname', 'catlistchildcatdepthlimit', 'childcatdepthlimit', 'showcurrencyplacement', 'tooltipname', 'showupdatedpos', 'datesource', 'taglinks', 'linkcurrencyplacement', 'displaycustomurl1', 'displaycustomurl2', 'displaycustomurl3', 'displaycustomurl4', 'displaycustomurl5', 'displaycustomtext1', 'displaycustomtext2',
 					'displaycustomtext3', 'displaycustomtext4', 'displaycustomtext5', 'displaycustomlist1', 'displaycustomlist2',
-					'displaycustomlist3', 'displaycustomlist4', 'displaycustomlist5'
+					'displaycustomlist3', 'displaycustomlist4', 'displaycustomlist5', 'catnameformat', 'rsslibraryitemspersite', 'rsslibrarymaxwordsitem', 
+					'rsslibrarypaginationnb',
 				)
 				as $option_name
 			) {
 				if ( isset( $_POST[$option_name] ) ) {
 					$options[$option_name] = str_replace( "\"", "'", strtolower( $_POST[$option_name] ) );
+				}
+			}
+
+			foreach (
+				array(
+					'rsslibrarytemplate', 
+				)
+				as $option_name
+			) {
+				if ( isset( $_POST[$option_name] ) ) {
+					$options[$option_name] = wp_kses( $_POST[$option_name], $this->allowed_html_tags() );
 				}
 			}
 
@@ -2384,7 +2769,12 @@ class link_library_plugin_admin {
 					'beforecatname', 'aftercatname', 'linkimagelabel', 'showaddlinkimage', 'linknametooltip', 'linkaddrtooltip', 'linkrsstooltip',
 					'linkcattooltip', 'linkusercattooltip', 'linkusertagtooltip', 'linkdesctooltip', 'linknotestooltip', 'linkimagetooltip', 'linkreciptooltip',
 					'linksecondtooltip', 'linktelephonetooltip', 'linkemailtooltip', 'submitternametooltip', 'submitteremailtooltip',
-					'submittercommenttooltip', 'largedesctooltip', 'linktagtooltip', 'linkfilelabel', 'linkfiletooltip', 'showaddlinkfile', 'linkfileallowedtypes', 'beforecustomurl1', 'beforecustomurl2', 'beforecustomurl3', 'beforecustomurl4', 'beforecustomurl5', 'aftercustomurl1', 'aftercustomurl2', 'aftercustomurl3', 'aftercustomurl4', 'aftercustomurl5', 'labelcustomurl1',  'labelcustomurl2', 'labelcustomurl3', 'labelcustomurl4', 'labelcustomurl5', 'customurl1target', 'customurl2target', 'customurl3target', 'customurl4target', 'customurl5target', 'beforeuservotes', 'afteruservotes', 'uservotelikelabel', 'beforecustomtext1', 'beforecustomtext2', 'beforecustomtext3', 'beforecustomtext4', 'beforecustomtext5', 'aftercustomtext1', 'aftercustomtext2', 'aftercustomtext3', 'aftercustomtext4', 'aftercustomtext5', 'beforecustomlist1', 'beforecustomlist2', 'beforecustomlist3', 'beforecustomlist4', 'beforecustomlist5', 'aftercustomlist1', 'aftercustomlist2', 'aftercustomlist3', 'aftercustomlist4', 'aftercustomlist5'
+					'submittercommenttooltip', 'largedesctooltip', 'linktagtooltip', 'linkfilelabel', 'linkfiletooltip', 'showaddlinkfile', 'linkfileallowedtypes', 'beforecustomurl1', 'beforecustomurl2', 'beforecustomurl3', 'beforecustomurl4', 'beforecustomurl5', 'aftercustomurl1', 'aftercustomurl2', 'aftercustomurl3', 'aftercustomurl4', 'aftercustomurl5', 'labelcustomurl1',  'labelcustomurl2', 'labelcustomurl3', 'labelcustomurl4', 'labelcustomurl5', 'customurl1target', 'customurl2target', 'customurl3target', 'customurl4target', 'customurl5target', 'beforeuservotes', 'afteruservotes', 'uservotelikelabel', 'beforecustomtext1', 'beforecustomtext2', 'beforecustomtext3', 'beforecustomtext4', 'beforecustomtext5', 'aftercustomtext1', 'aftercustomtext2', 'aftercustomtext3', 'aftercustomtext4', 'aftercustomtext5', 'beforecustomlist1', 'beforecustomlist2', 'beforecustomlist3', 'beforecustomlist4', 'beforecustomlist5', 'aftercustomlist1', 'aftercustomlist2', 'aftercustomlist3', 'aftercustomlist4', 'aftercustomlist5', 'categoryseparator', 'customqueryarg', 'customqueryargvalue', 'usersubmissiondragndroporder',
+					'showlinkreferencelist', 'linkreferencelabel', 'linkreferencetooltip', 'showcustomurl1', 'showcustomurl2', 'showcustomurl3', 'showcustomurl4',
+					'showcustomurl5', 'customurl1tooltip', 'customurl2tooltip', 'customurl3tooltip', 'customurl4tooltip', 'customurl5tooltip', 'showcustomtext1', 'showcustomtext2', 
+					'showcustomtext3', 'showcustomtext4', 'showcustomtext5', 'customtext1tooltip', 'customtext2tooltip', 'customtext3tooltip', 'customtext4tooltip',
+					'customtext5tooltip', 'showcustomlist1', 'showcustomlist2', 'showcustomlist3', 'showcustomlist4', 'showcustomlist5', 'customlist1tooltip', 'customlist2tooltip',
+					'customlist3tooltip', 'customlist4tooltip', 'customlist5tooltip', 'rss_item_date_source', 'updateddays'
 				) as $option_name
 			) {
 				if ( isset( $_POST[$option_name] ) ) {
@@ -2406,7 +2796,15 @@ class link_library_plugin_admin {
 					'hidechildcattop', 'catlinkspermalinksmode', 'showbreadcrumbspermalinks', 'showlinktags', 'showlinkprice', 'show0asfree', 'lazyloadimages',
 					'allowcolumnsorting', 'showsearchreset', 'showscheduledlinks', 'suppressnoreferrer', 'dropdownselectionprompt',
 					'showcatname', 'onelinkperdomain', 'showupdatedtooltip', 'searchtextinsearchbox', 'showuservotes', 'membersonlylinkvotes',
-					'searchfiltercats'
+					'searchfiltercats', 'suppress_image_if_empty', 'suppress_link_date_if_empty', 'suppress_link_desc_if_empty',
+					'suppress_link_notes_if_empty', 'suppress_rss_icon_if_empty', 'suppress_tel_if_empty',
+					'suppress_email_if_empty', 'suppress_rating_if_empty', 'suppress_large_desc_if_empty', 'suppress_submitter_if_empty', 'suppress_cat_desc_if_empty',
+					'suppress_link_tags_if_empty', 'suppress_link_price_if_empty', 'suppress_cat_name_if_empty', 'suppress_custom_url_1_if_empty',
+					'suppress_custom_url_2_if_empty', 'suppress_custom_url_3_if_empty', 'suppress_custom_url_4_if_empty', 'suppress_custom_url_5_if_empty',
+					'suppress_custom_text_1_if_empty', 'suppress_custom_text_2_if_empty', 'suppress_custom_text_3_if_empty',
+					'suppress_custom_text_4_if_empty', 'suppress_custom_text_5_if_empty', 'suppress_custom_list_1_if_empty', 'suppress_custom_list_2_if_empty',
+					'suppress_custom_list_3_if_empty', 'suppress_custom_list_4_if_empty', 'suppress_custom_list_5_if_empty', 'catnamelink', 'hideemptycats',
+					'rsslibrarypagination', 'showupdatedonly'
 				)
 				as $option_name
 			) {
@@ -2569,7 +2967,7 @@ class link_library_plugin_admin {
 					$message = $emailbody;
 
 					if ( !$genoptions['suppressemailfooter'] ) {
-						$message .= "<br /><br />" . __( 'Message generated by', 'link-library' ) . " <a href='https://ylefebvre.home.blog/wordpress-plugins/link-library/'>Link Library</a> for Wordpress";
+						$message .= "<br /><br />" . __( 'Message generated by', 'link-library' ) . " <a href='https://ylefebvre.github.io/wordpress-plugins/link-library/'>Link Library</a> for Wordpress";
 					}
 
 					wp_mail( $submitter_email, $emailtitle, $message, $headers );
@@ -2612,7 +3010,9 @@ class link_library_plugin_admin {
 
 					$message = $emailbody;
 
-					$message .= "<br /><br />" . __( 'Message generated by', 'link-library' ) . " <a href='https://ylefebvre.home.blog/wordpress-plugins/link-library/'>Link Library</a> for Wordpress";
+					if ( !$genoptions['suppressemailfooter'] ) {
+						$message .= "<br /><br />" . __('Message generated by', 'link-library') . " <a href='https://ylefebvre.github.io/wordpress-plugins/link-library/'>Link Library</a> for Wordpress";
+					}
 
 					wp_mail( $submitter_email, $emailtitle, $message, $headers );
 
@@ -2684,12 +3084,26 @@ class link_library_plugin_admin {
 
 		$genoptions = get_option( 'LinkLibraryGeneral' );
 
-		$genoptions['recipcheckaddress']   = ( ( isset( $_POST['recipcheckaddress'] ) && $_POST['recipcheckaddress'] !== '' ) ? $_POST['recipcheckaddress'] : "" );
-		$genoptions['recipcheckdelete403'] = ( ( isset( $_POST['recipcheckdelete403'] ) && $_POST['recipcheckdelete403'] !== '' ) ? $_POST['recipcheckdelete403'] : "" );
+		$genoptions['recipcheckaddress']   = ( ( isset( $_POST['recipcheckaddress'] ) && $_POST['recipcheckaddress'] !== '' ) ? esc_url( $_POST['recipcheckaddress'] ) : '' );
+		$genoptions['rsscheckdays']   = ( ( isset( $_POST['rsscheckdays'] ) && $_POST['rsscheckdays'] !== '' ) ? sanitize_text_field( $_POST['rsscheckdays'] ) : '' );
+		$genoptions['recipcheckdelete403'] = ( ( isset( $_POST['recipcheckdelete403'] ) && $_POST['recipcheckdelete403'] !== '' ) ? $_POST['recipcheckdelete403'] : '' );
+
+		foreach (
+			array(
+				'suppresssubdomainredirection', 'suppressprotocolchangeredirection', 'suppresssubfolderredirection', 'suppressbadconfigredirection'
+			)
+			as $option_name
+		) {
+			if ( isset( $_POST[$option_name] ) ) {
+				$genoptions[$option_name] = true;
+			} else {
+				$genoptions[$option_name] = false;
+			}
+		}
 
 		update_option( 'LinkLibraryGeneral', $genoptions );
 
-		if ( !isset( $_POST['recipcheck'] ) && !isset( $_POST['brokencheck'] ) && !isset( $_POST['duplicatecheck'] ) ) {
+		if ( !isset( $_POST['recipcheck'] ) && !isset( $_POST['brokencheck'] ) && !isset( $_POST['duplicatecheck'] ) && !isset( $_POST['emptycatcheck'] ) && !isset( $_POST['rsscheck'] ) ) {
 			$message = 1;
 		} elseif ( isset( $_POST['recipcheck'] ) ) {
 			$message = 2;
@@ -2697,6 +3111,10 @@ class link_library_plugin_admin {
 			$message = 3;
 		} elseif ( isset( $_POST['duplicatecheck'] ) ) {
 			$message = 4;
+		} elseif ( isset( $_POST['emptycatcheck'] ) ) {
+			$message = 5;
+		} elseif ( isset( $_POST['rsscheck'] ) ) {
+			$message = 6;
 		}
 
 		//lets redirect the post request into get request (you may add additional params at the url, if you need to show save results
@@ -2724,15 +3142,15 @@ class link_library_plugin_admin {
 						</tr>
 						<tr>
 							<td><?php _e( 'Re-import', 'link-library' ); ?></td>
-							<td><button type="button" <?php echo "onclick=\"if ( confirm('" . esc_js( __( "Using the re-import function will delete all links in your Link Library and re-import links from the old Link Library 5.9 format to version 6.x. Only use this function if you recently upgraded from 5.9 to 6.x and are having issues with the converter links.", "link-library" ) ) . "') ) window.location.href='edit.php?page=link-library-general-options&amp;post_type=link_library_links&amp;ll60reupdate=1' \""; ?>><?php _e( 'Re-import links', 'link-library' ); ?></button></td>
+							<td><button class="button" type="button" <?php echo "onclick=\"if ( confirm('" . esc_js( __( "Using the re-import function will delete all links in your Link Library and re-import links from the old Link Library 5.9 format to version 6.x. Only use this function if you recently upgraded from 5.9 to 6.x and are having issues with the converter links.", "link-library" ) ) . "') ) window.location.href='edit.php?page=link-library-general-options&amp;post_type=link_library_links&amp;ll60reupdate=1' \""; ?>><?php _e( 'Re-import links', 'link-library' ); ?></button></td>
 						</tr>
 						<tr>
 							<td><?php _e( 'Category mapping table', 'link-library' ); ?></td>
-							<td><input type="submit" id="ll60catmapping" name="ll60catmapping" value="<?php _e( 'Export category mapping', 'link-library' ); ?>" /></td>
+							<td><input class="button" type="submit" id="ll60catmapping" name="ll60catmapping" value="<?php _e( 'Export category mapping', 'link-library' ); ?>" /></td>
 						</tr>
 						<tr>
 							<td><?php _e( 'Delete old Link Library 5.9 Links', 'link-library' ); ?></td>
-							<td><input type="submit" id="deletell59links" name="deletell59links" value="<?php _e( 'Delete old links', 'link-library' ); ?>" /></td>
+							<td><input class="button" type="submit" id="deletell59links" name="deletell59links" value="<?php _e( 'Delete old links', 'link-library' ); ?>" /></td>
 						</tr>
 						<tr>
 							<td colspan="2"><h4>General Options</h4></td>
@@ -2765,12 +3183,16 @@ class link_library_plugin_admin {
 							</td>
 						</tr>
 						<tr>
-							<td>Individual link pages can be seen by visitors</td>
+							<td><?php _e(  'Individual link pages can be seen by visitors', 'link-library' ); ?></td>
 							<td><input type="checkbox" id="publicly_queryable" name="publicly_queryable" <?php checked( $genoptions['publicly_queryable'] ); ?>/></td>
 						</tr>
 						<tr>
-							<td>Links appear in search results</td>
+							<td><?php _e( 'Links appear in search results', 'link-library' ); ?></td>
 							<td><input type="checkbox" id="exclude_from_search" name="exclude_from_search" <?php checked( $genoptions['exclude_from_search'] ); ?>/></td>
+						</tr>
+						<tr>
+							<td><?php _e( 'Links appear in main site RSS feed', 'link-library' ); ?></td>
+							<td><input type="checkbox" id="add_to_main_rss" name="add_to_main_rss" <?php checked( $genoptions['add_to_main_rss'] ); ?>/></td>
 						</tr>
 						<tr>
 							<td>Minimum role for Link Library configuration</td>
@@ -3227,6 +3649,86 @@ function general_custom_fields_meta_box( $data ) {
 		<?php
 	}
 
+	function general_globalsearchresultslayout_meta_box( $data ) {
+		$genoptions  = $data['genoptions'];
+		?>
+		<div style='padding-top:15px' id="ll-globalsearchresultslayout" class="content-section">
+			<p>This section allows you to specify a template for links when they appear in global site search results. For this to happen, you need to activate the <strong>Individual link pages can be seen by visitors</strong> and <strong>Links appear in search results</strong> options under the General section of Global Settings.</p>
+
+			<h3>Options</h3>
+
+			<table>
+				<tr>
+					<td>Use Link URL for item link</td>
+					<td><input type="checkbox" id="globalsearchresultslinkurl" name="globalsearchresultslinkurl" <?php checked( $genoptions['globalsearchresultslinkurl'] ); ?>/></td></td>
+					<td></td>
+					<td>Add prefix to item title</td>
+					<td><input type="text" id="globalsearchresultstitleprefix" name="globalsearchresultstitleprefix" size="60" value="<?php echo $genoptions['globalsearchresultstitleprefix']; ?>" /></td></td>
+				</td>
+
+			</table>
+			<?php
+			$editorsettings = array( 'media_buttons' => false,
+			                         'textarea_rows' => 15,
+			                         'textarea_name' => 'global_search_results_layout',
+			                         'wpautop' => false );
+
+			wp_editor( isset( $genoptions['global_search_results_layout'] ) ? stripslashes( $genoptions['global_search_results_layout'] ) : '', 'global_search_results_layout', $editorsettings ); ?>
+			<p>The codes that are available to put in this layout template are:</p>
+			<table>
+				<tr>
+					<th>Tag Name</th>
+					<th>Description</th>
+				</tr>
+				<tr>
+					<td>[link_content]</td>
+					<td>Text added in the new full-page content field of the link editor</td>
+				</tr>
+				<tr>
+					<td>[link_title]</td>
+					<td>The name of the link, text only</td>
+				</tr>
+				<tr>
+					<td>[link]</td>
+					<td>Link title, with link tag and link url</td>
+				</tr>
+				<tr>
+					<td>[link_address]</td>
+					<td>Link URL only, without link tag</td>
+				</tr>
+				<tr>
+					<td>[link_description]</td>
+					<td>The link description</td>
+				</tr>
+				<tr>
+					<td>[link_large_description]</td>
+					<td>The link large description</td>
+				</tr>
+				<tr>
+					<td>[link_category]</td>
+					<td>Category or categories that are assigned to link, listed in alphabetical order and separated with commas</td>
+				</tr>
+				<tr>
+					<td>[link_image]</td>
+					<td>Link image URL. You need to add img src tag or other code to display image.</td>
+				</tr>
+				<tr>
+					<td>[link_email]</td>
+					<td>Link e-mail</td>
+				</tr>
+				<tr>
+					<td>[link_telephone]</td>
+					<td>Link telephone number</td>
+				</tr>
+				<tr>
+					<td>[link_price_or_free]</td>
+					<td>Display link price, or the word Free if the price is 0</td>
+				</tr>
+			</table>
+		</div>
+		<?php
+	}
+
 	function general_image_meta_box( $data ) {
 		$genoptions = $data['genoptions'];
 		?>
@@ -3252,7 +3754,90 @@ function general_custom_fields_meta_box( $data ) {
 	}
 
 	function general_meta_bookmarklet_box( $data ) {
-		$bookmarkletcode = 'javascript:void(linkmanpopup=window.open(\'' . get_bloginfo( 'wpurl' ) . '/wp-admin/post-new.php?post_type=link_library_links&action=popup&linkurl=\'+escape(location.href)+\'&post_title=\'+(document.title),\'LinkManager\',\'scrollbars=yes,width=900px,height=600px,left=15,top=15,status=yes,resizable=yes\'));linkmanpopup.focus();window.focus();linkmanpopup.focus();';
+		/* Unencoded bookmarklet code		
+		
+		
+
+		$bookmarkletcode = 'javascript:
+								var code = document.documentElement.outerHTML;
+								var rssregex = /<link[^>]+type=\s*(?:"|)(application\/rss\+xml|application\/atom\+xml)[^>]*>/mgi;
+								var matches = code.match(rssregex);
+								var urlregex = /(http(s)?)?:?\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/mgi;
+								var nodomainurlregex = /(?:href="?)(\/?[-a-zA-Z0-9@:%._\+~#=]{2,256}(\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*))?)+/mgi;
+								var html = "";
+								var rsscount = 0;
+								var prompttext = "Please select the RSS feed to add to your new link\n";
+								var rssarray = new Array();
+								var selectedrss;
+
+								if ( matches != null ) {
+									for (i=0; i<matches.length; i++) {
+										var currentfeed = matches[i].match(urlregex);
+
+										if ( currentfeed == null ) {
+											var currentfeed = matches[i].match(nodomainurlregex).toString();
+											if ( currentfeed != null ) {
+												currentfeed = currentfeed.replace("href=\"", "" );
+												currentfeed = currentfeed.replace("href=", "" );
+												if ( currentfeed.charAt(0) != "/" ) {
+													currentfeed = "/" + currentfeed;
+												}
+												const siteurl = new URL( location.href );
+												currentfeed = siteurl.hostname + currentfeed;
+											}
+										} else {
+											currentfeed = currentfeed.toString();
+											if ( "//" == currentfeed.substring( 0, 2 ) ) {
+												currentfeed = currentfeed.replace("//", "" );
+											}
+										}
+
+										if ( currentfeed != null ) {
+											if ( -1 == currentfeed.indexOf("comments") ) {
+												rsscount++;
+												prompttext += rsscount + ") " + currentfeed + "\n";
+												rssarray.push( currentfeed );
+											}
+										}										
+									}
+								}								
+								
+								if ( rsscount > 1 ) {
+									selectedrss = prompt( prompttext );
+									if ( selectedrss > rssarray.length ) {
+										selectedrss = 1;
+									}
+								} else if ( rsscount == 1 ) {
+									selectedrss = 1;
+								} else {
+									selectedrss = 0;	
+								}
+
+								var selectedtext = "";
+								if ( window.getSelection ) {
+									selectedtext = window.getSelection().toString();
+								} else if (document.selection && document.selection.type != "Control") {
+									selectedtext = document.selection.createRange().text;
+								}
+
+								popuptargetlink = "siteurl/wp-admin/post-new.php?post_type=link_library_links&action=popup&linkurl=" + escape(location.href) + "&post_title=" + (document.title);
+								
+								if ( selectedrss > 0 ) {
+									popuptargetlink = popuptargetlink + "&link_rss=" + rssarray[selectedrss-1];
+								}
+								
+								if ( selectedtext.length > 0 ) {
+									popuptargetlink = popuptargetlink + "&link_description=" + selectedtext;
+								}
+
+								linkmanpopup=window.open(popuptargetlink, "Link Library","scrollbars=yes,width=900px,height=600px,left=15,top=15,status=yes,resizable=yes");
+								linkmanpopup.focus();
+								window.focus();
+								linkmanpopup.focus(); */
+
+
+								//get_bloginfo( 'wpurl' )
+			$bookmarkletcode = 'javascript:(function()%7Bjavascript%3Avar%20code%20%3D%20document.documentElement.outerHTML%3Bvar%20rssregex%20%3D%20%2F%3Clink%5B%5E%3E%5D%2Btype%3D%5Cs*(%3F%3A%22%7C)(application%5C%2Frss%5C%2Bxml%7Capplication%5C%2Fatom%5C%2Bxml)%5B%5E%3E%5D*%3E%2Fmgi%3Bvar%20matches%20%3D%20code.match(rssregex)%3Bvar%20urlregex%20%3D%20%2F(http(s)%3F)%3F%3A%3F%5C%2F%5C%2F(www%5C.)%3F%5B-a-zA-Z0-9%40%3A%25._%5C%2B~%23%3D%5D%7B2%2C256%7D%5C.%5Ba-z%5D%7B2%2C6%7D%5Cb(%5B-a-zA-Z0-9%40%3A%25_%5C%2B.~%23%3F%26%2F%2F%3D%5D*)%2Fmgi%3Bvar%20nodomainurlregex%20%3D%20%2F(%3F%3Ahref%3D%22%3F)(%5C%2F%3F%5B-a-zA-Z0-9%40%3A%25._%5C%2B~%23%3D%5D%7B2%2C256%7D(%5C.%5Ba-z%5D%7B2%2C6%7D%5Cb(%5B-a-zA-Z0-9%40%3A%25_%5C%2B.~%23%3F%26%2F%2F%3D%5D*))%3F)%2B%2Fmgi%3Bvar%20html%20%3D%20%22%22%3Bvar%20rsscount%20%3D%200%3Bvar%20prompttext%20%3D%20%22Please%20select%20the%20RSS%20feed%20to%20add%20to%20your%20new%20link%5Cn%22%3Bvar%20rssarray%20%3D%20new%20Array()%3Bvar%20selectedrss%3Bif%20(%20matches%20!%3D%20null%20)%20%7Bfor%20(i%3D0%3B%20i%3Cmatches.length%3B%20i%2B%2B)%20%7Bvar%20currentfeed%20%3D%20matches%5Bi%5D.match(urlregex)%3Bif%20(%20currentfeed%20%3D%3D%20null%20)%20%7Bvar%20currentfeed%20%3D%20matches%5Bi%5D.match(nodomainurlregex).toString()%3Bif%20(%20currentfeed%20!%3D%20null%20)%20%7Bcurrentfeed%20%3D%20currentfeed.replace(%22href%3D%5C%22%22%2C%20%22%22%20)%3Bcurrentfeed%20%3D%20currentfeed.replace(%22href%3D%22%2C%20%22%22%20)%3Bif%20(%20currentfeed.charAt(0)%20!%3D%20%22%2F%22%20)%20%7Bcurrentfeed%20%3D%20%22%2F%22%20%2B%20currentfeed%3B%7Dconst%20siteurl%20%3D%20new%20URL(%20location.href%20)%3Bcurrentfeed%20%3D%20siteurl.hostname%20%2B%20currentfeed%3B%7D%7D%20else%20%7Bcurrentfeed%20%3D%20currentfeed.toString()%3Bif%20(%20%22%2F%2F%22%20%3D%3D%20currentfeed.substring(%200%2C%202%20)%20)%20%7Bcurrentfeed%20%3D%20currentfeed.replace(%22%2F%2F%22%2C%20%22%22%20)%3B%7D%7Dif%20(%20currentfeed%20!%3D%20null%20)%20%7Bif%20(%20-1%20%3D%3D%20currentfeed.indexOf(%22comments%22)%20)%20%7Brsscount%2B%2B%3Bprompttext%20%2B%3D%20rsscount%20%2B%20%22)%20%22%20%2B%20currentfeed%20%2B%20%22%5Cn%22%3Brssarray.push(%20currentfeed%20)%3B%7D%7D%7D%7Dif%20(%20rsscount%20%3E%201%20)%20%7Bselectedrss%20%3D%20prompt(%20prompttext%20)%3Bif%20(%20selectedrss%20%3E%20rssarray.length%20)%20%7Bselectedrss%20%3D%201%3B%7D%7D%20else%20if%20(%20rsscount%20%3D%3D%201%20)%20%7Bselectedrss%20%3D%201%3B%7D%20else%20%7Bselectedrss%20%3D%200%3B%7Dvar%20selectedtext%20%3D%20%22%22%3Bif%20(%20window.getSelection%20)%20%7Bselectedtext%20%3D%20window.getSelection().toString()%3B%7D%20else%20if%20(document.selection%20%26%26%20document.selection.type%20!%3D%20%22Control%22)%20%7Bselectedtext%20%3D%20document.selection.createRange().text%3B%7Dpopuptargetlink%20%3D%20%22' . get_bloginfo( 'wpurl' ) . '%2Fwp-admin%2Fpost-new.php%3Fpost_type%3Dlink_library_links%26action%3Dpopup%26linkurl%3D%22%20%2B%20escape(location.href)%20%2B%20%22%26post_title%3D%22%20%2B%20(document.title)%3Bif%20(%20selectedrss%20%3E%200%20)%20%7Bpopuptargetlink%20%3D%20popuptargetlink%20%2B%20%22%26link_rss%3D%22%20%2B%20rssarray%5Bselectedrss-1%5D%3B%7Dif%20(%20selectedtext.length%20%3E%200%20)%20%7Bpopuptargetlink%20%3D%20popuptargetlink%20%2B%20%22%26link_description%3D%22%20%2B%20selectedtext%3B%7Dlinkmanpopup%3Dwindow.open(popuptargetlink%2C%20%22Link%20Library%22%2C%22scrollbars%3Dyes%2Cwidth%3D900px%2Cheight%3D600px%2Cleft%3D15%2Ctop%3D15%2Cstatus%3Dyes%2Cresizable%3Dyes%22)%3Blinkmanpopup.focus()%3Bwindow.focus()%3Blinkmanpopup.focus()%7D)()';
 		?>
 		<div style='padding-top:15px' id="ll-bookmarklet" class="content-section">
 		<p><?php _e( 'Add new links to your site with this bookmarklet.', 'link-library' ); ?></p>
@@ -3364,7 +3949,7 @@ function general_custom_fields_meta_box( $data ) {
 				<tr>
 					<td><?php _e( 'Export all links to a CSV file', 'link-library' ); ?></td>
 					<td>
-						<input type="submit" id="exportalllinks" name="exportalllinks" value="<?php _e( 'Export All Links', 'link-library' ); ?>" />
+						<input class="button" type="submit" id="exportalllinks" name="exportalllinks" value="<?php _e( 'Export All Links', 'link-library' ); ?>" />
 					</td>
 				</tr>
 			</table>
@@ -3374,7 +3959,7 @@ function general_custom_fields_meta_box( $data ) {
 					<td class='lltooltip' title='<?php _e( 'Allows for links to be added in batch to the Wordpress links database. CSV file needs to follow template for column layout.', 'link-library' ); ?>' style='width: 330px'><?php _e( 'CSV file to upload to import links', 'link-library' ); ?> (<a href="<?php echo plugins_url( 'importtemplate.csv', __FILE__ ); ?>"><?php _e( 'file template', 'link-library' ); ?></a>)
 					</td>
 					<td><input size="80" name="linksfile" type="file" /></td>
-					<td><input type="submit" name="importlinks" value="<?php _e( 'Import Links from CSV', 'link-library' ); ?>" />
+					<td><input class="button" type="submit" name="importlinks" value="<?php _e( 'Import Links from CSV', 'link-library' ); ?>" />
 					</td>
 				</tr>
 				<tr>
@@ -3383,7 +3968,23 @@ function general_custom_fields_meta_box( $data ) {
 				</tr>
 			</table>
 			<hr />
-
+			<table>
+				<tr>
+					<td class='lltooltip' style='width: 330px'><?php _e( 'Global Options CSV file to import', 'link-library' ); ?>
+					</td>
+					<td><input size="80" name="generalsettingsfile" type="file" /></td>
+					<td><input class="button" type="submit" name="importgeneralsettings" value="<?php _e( 'Import Global Options', 'link-library' ); ?>" />
+					</td>
+				</tr>
+				<tr>
+					<td><?php _e( 'Export Global Options', 'link-library' ); ?></td>
+					<td>
+						<input type="submit" class="button" id="exportgeneralsettings" name="exportgeneralsettings" value="<?php _e( 'Export Global Options', 'link-library' ); ?>" />
+					</td>
+				</tr>
+			</table>
+			<hr />
+			
 			<table>
 				<tr>
 					<td style='width: 230px'><?php _e( 'Import links from site pages', 'link-library' ); ?></td>
@@ -3426,7 +4027,7 @@ function general_custom_fields_meta_box( $data ) {
 							</select>
 						<?php } ?>
 					</td>
-					<td><input type="submit" name="siteimport" value="<?php _e( 'Import Links from Site', 'link-library' ); ?>" /></td>
+					<td><input class="button" type="submit" name="siteimport" value="<?php _e( 'Import Links from Site', 'link-library' ); ?>" /></td>
 				</tr>
 			</table>
 		</div>
@@ -3453,7 +4054,7 @@ function general_custom_fields_meta_box( $data ) {
 	function moderate_meta_box() {
 		$genoptions = get_option( 'LinkLibraryGeneral' );
 		?>
-		<table class='widefat' style='clear:none;width:100%;background-color:#F1F1F1;background-image: linear-gradient(to top, #ECECEC, #F9F9F9);background-position:initial initial;background-repeat: initial initial'>
+		<table class='wp-list-table widefat fixed striped table-view-list'>
 			<tr>
 				<th style='width: 30px'></th>
 				<th style='width: 200px'><?php _e( 'Link Name', 'link-library' ); ?></th>
@@ -3461,6 +4062,8 @@ function general_custom_fields_meta_box( $data ) {
 				<th style='width: 200px'><?php _e( 'Link Tags', 'link-library' ); ?></th>
 				<th style='width: 300px'><?php _e( 'Link URL', 'link-library' ); ?></th>
 				<th><?php _e( 'Link Description', 'link-library' ); ?></th>
+				<th><?php _e( 'Submitter Comment', 'link-library' ); ?></th>
+				<th><?php _e( 'Referenced Link', 'link-library' ); ?></th>
 			</tr>
 			<?php
 			$links_query_args = array( 'post_type' => 'link_library_links', 'posts_per_page' => -1, 'post_status' => 'pending' );
@@ -3474,6 +4077,14 @@ function general_custom_fields_meta_box( $data ) {
 					$link_url = esc_url( get_post_meta( get_the_ID(), 'link_url', true ) );
 					$link_description = esc_html( get_post_meta( get_the_ID(), 'link_description', true ) );
 					$link_categories = wp_get_post_terms( get_the_ID(), 'link_library_category' );
+					$link_comment = esc_html( get_post_meta( get_the_ID(), 'submitter_comment', true ) );
+					$link_reference = get_post_meta( get_the_ID(), 'link_reference', true );
+					$referenced_link = '';
+
+					if ( !empty( $link_reference ) ) {
+						$referenced_link = get_posts( array( 'post_type' => 'link_library_links', 'include' => array( $link_reference ), 'numberposts' => 1 ) );
+					}					
+
 					$link_cat_string = '';
 					$link_cat_id_string = '';
 					$link_cat_IDs = array();
@@ -3516,13 +4127,17 @@ function general_custom_fields_meta_box( $data ) {
 					}
 
 					?>
-					<tr style='background: #FFF'>
+					<tr>
 						<td><input type="checkbox" name="links[]" value="<?php echo get_the_ID(); ?>" /></td>
 						<td><?php echo "<a title='Edit Link: " . get_the_title() . "' href='" . esc_url( add_query_arg( array( 'action' => 'edit', 'post' => get_the_ID() ), admin_url( 'post.php' ) ) ) . "'>" . get_the_title() . "</a>"; ?></td>
 						<td><?php wp_dropdown_categories( array( 'taxonomy' => 'link_library_category', 'hierarchical' => true, 'hide_empty' => false, 'multiple' => true, 'selected' => $link_cat_id_string, 'name' => 'link_category_' . get_the_ID() ) ); ?></td>
 						<td><?php wp_dropdown_categories( array( 'taxonomy' => 'link_library_tags', 'hierarchical' => true, 'hide_empty' => false, 'multiple' => true, 'selected' => $link_tag_id_string, 'name' => 'link_tags_' . get_the_ID() ) ); ?></td>
 						<td><?php echo "<a href='" . $link_url . "'>" . $link_url . "</a>"; ?></td>
 						<td><?php echo $link_description; ?></td>
+						<td><?php echo esc_html( $link_comment ); ?></td>
+						<td><?php if ( !empty( $referenced_link ) ) {
+							echo '<a href="' . esc_url( add_query_arg( array( 'action' => 'edit', 'post' => $link_reference ), admin_url( 'post.php' ) ) ) . '" target="_blank">' , $referenced_link[0]->post_title . '</a>';
+					}	?></td>
 					</tr>
 					<?php
 				}
@@ -3570,10 +4185,16 @@ function general_custom_fields_meta_box( $data ) {
 		<?php _e( 'If the stylesheet editor is empty after upgrading, reset to the default stylesheet using the button below or copy/paste your backup stylesheet into the editor.', 'link-library' ); ?>
 		<br /><br />
 
-		<textarea name='fullstylesheet' id='fullstylesheet' style='font-family:Courier' rows="30" cols="100"><?php echo stripslashes( $genoptions['fullstylesheet'] ); ?></textarea>
+		<textarea name='fullstylesheet' id='fancy-textarea' style='font-family:Courier' rows="30" cols="100"><?php echo stripslashes( $genoptions['fullstylesheet'] ); ?></textarea>
 		<div>
 			<input type="submit" name="submitstyle" value="<?php _e( 'Submit', 'link-library' ); ?>" /><span style='padding-left: 650px'><input type="submit" name="resetstyle" value="<?php _e( 'Reset to default', 'link-library' ); ?>" /></span>
 		</div>
+
+		<script>
+			jQuery(document).ready(function() {
+				wp.codeEditor.initialize( jQuery('#fancy-textarea'), cm_settings );
+			})
+		</script>
 	<?php
 	}
 
@@ -3598,7 +4219,7 @@ function general_custom_fields_meta_box( $data ) {
 					} ?></option>
 			<?php endfor; ?>
 		</SELECT>
-		<INPUT type="button" name="go" value="<?php _e( 'Go', 'link-library' ); ?>!" onClick="window.location= 'admin.php?page=link-library-settingssets&amp;settings=' + jQuery('#settingsetlist').val()">
+		<INPUT class="button" type="button" name="go" value="<?php _e( 'Go', 'link-library' ); ?>!" onClick="window.location= 'admin.php?page=link-library-settingssets&amp;settings=' + jQuery('#settingsetlist').val()">
 		<?php if ( $numberofsets > 1 ): ?>
 			<?php _e( 'Copy from:', 'link-library' ); ?>
 			<SELECT id="copysource" name="copysource" style='width: 300px'>
@@ -3614,22 +4235,9 @@ function general_custom_fields_meta_box( $data ) {
 				?>
 			</SELECT>
 			<?php $copypath = "'admin.php?page=link-library-settingssets&settings=" . $settings . "&settingscopy=" . $settings . "&source=' + jQuery('#copysource').val();"; ?>
-			<INPUT type="button" name="copy" value="<?php _e( 'Copy', 'link-library' ); ?>!" onClick="if (confirm('Are you sure you want to copy the contents of the selected library over the current library settings?')) { var copyurl = <?php echo $copypath; ?> window.location.href = copyurl; };">
+			<INPUT class="button" type="button" name="copy" value="<?php _e( 'Copy', 'link-library' ); ?>!" onClick="if (confirm('Are you sure you want to copy the contents of the selected library over the current library settings?')) { var copyurl = <?php echo $copypath; ?> window.location.href = copyurl; };">
 		<?php endif; ?>
 		</div>
-	<?php }
-
-	function display_accessibe_page( $data ) { ?>
-
-	<div class="accessibead" style="width: 50%; background-color: #fff; padding: 20px; text-align: center">
-		<img src="<?php echo plugins_url( 'icons/AccessibeLogoLarge.png', __FILE__ ) ?>" style="max-width: 100%" />
-		<h1 style="font-size: 30px">The Forefront of <strong>Web Accessibility</strong> Technology</h1>
-		accessiBe is the first and only fully automated web accessibility technology that complies with the WCAG 2.1 and keeps your website accessible at all times.<br /><br />
-
-		<a href="https://accessibe.go2cloud.org/SHL"><div class="button button-primary"><span class="large_text">Get started now</span><br />7-day FREE trial</div></a>
-		<a href="https://accessibe.go2cloud.org/aff_c?offer_id=5&aff_id=8&url_id=7"><div class="button button-primary"><span class="large_text">FREE accesssibility test</span></div></a>
-	</div>
-
 	<?php }
 
 	function settingssets_usage_meta_box( $data ) {
@@ -3637,8 +4245,9 @@ function general_custom_fields_meta_box( $data ) {
 		$settings   = $data['settings'];
 		$genoptions = $data['genoptions'];
 		?>
+		
 		<div style='padding-top:15px' id="ll-usage" class="content-section">
-			<table class='widefat' style='clear:none;width:100%;background-color:#F1F1F1;background-image: linear-gradient(to top, #ECECEC, #F9F9F9);background-position:initial initial;background-repeat: initial initial'>
+			<table class='wp-list-table widefat fixed striped table-view-list'>
 				<thead>
 				<tr>
 					<th style='width:80px' class="lltooltip" title='<?php _e( 'Link Library Supports the Creation of an unlimited number of configurations to display link lists on your site', 'link-library' ); ?>'>
@@ -3655,11 +4264,11 @@ function general_custom_fields_meta_box( $data ) {
 				</tr>
 				</thead>
 				<tr>
-					<td style='background: #FFF'><?php echo $settings; ?></td>
-					<td style='background: #FFF'><?php echo stripslashes( $options['settingssetname'] ); ?></a></td>
-					<td style='background: #FFF'><?php _e( 'Display basic link library', 'link-library' ); ?></td>
-					<td style='background: #FFF'><?php echo "[link-library settings=" . $settings . "]"; ?></td>
-					<td style='background: #FFF'><table style="padding-left:16px;">
+					<td><?php echo $settings; ?></td>
+					<td><?php echo stripslashes( $options['settingssetname'] ); ?></a></td>
+					<td><?php _e( 'Display basic link library', 'link-library' ); ?></td>
+					<td><?php echo "[link-library settings=" . $settings . "]"; ?></td>
+					<td><table style="padding-left:16px;">
 							<tr>
 								<td><strong>Parameter</strong></td><td><strong>Description</strong></td>
 							</tr>
@@ -3697,20 +4306,20 @@ function general_custom_fields_meta_box( $data ) {
 							</tr>
 							<tr>
 								<td>[link-library settings="<?php echo $settings; ?>" linkorderoverride="date"]</td>
-								<td>Changes the link display order. Valid values are 'name', 'id', 'random', 'date', 'hits', 'scpo'</td>
+								<td>Changes the link display order. Valid values are 'name', 'id', 'random', 'date', 'pubdate', 'hits', 'uservotes', 'scpo'</td>
 							</tr>
 							<tr>
-								<td>[link-library settings="<?php echo $settings; ?>" linkdirectionoverride="date"]</td>
+								<td>[link-library settings="<?php echo $settings; ?>" linkdirectionoverride="ASC"]</td>
 								<td>Changes the order in which links are displayed. Valid values are 'ASC', 'DESC'</td>
 							</tr>
 						</table></td>
 				</tr>
 				<tr>
-					<td style='background: #FFF'></td>
-					<td style='background: #FFF'></td>
-					<td style='background: #FFF'><?php _e( 'Display list of link categories', 'link-library' ); ?></td>
-					<td style='background: #FFF'><?php echo "[link-library-cats settings=" . $settings . "]"; ?></td>
-					<td style='background: #FFF'>
+					<td></td>
+					<td></td>
+					<td><?php _e( 'Display list of link categories', 'link-library' ); ?></td>
+					<td><?php echo "[link-library-cats settings=" . $settings . "]"; ?></td>
+					<td>
 						<table style="padding-left:16px;">
 							<tr>
 								<td><strong>Parameter</strong></td><td><strong>Description</strong></td>
@@ -3723,36 +4332,44 @@ function general_custom_fields_meta_box( $data ) {
 								<td>[link-library-cats settings="<?php echo $settings; ?>" excludecategoryoverride="28"]</td>
 								<td>Overrides the list of categories to be excluded in the category list, comma-separated list of category IDs</td>
 							</tr>
+							<tr>
+								<td>[link-library-cats settings="<?php echo $settings; ?>" targetlibrary="1"]</td>
+								<td>Specifies the library to be updated when making category selections</td>
+							</tr>
+							<tr>
+								<td>[link-library-cats settings="<?php echo $settings; ?>" taglistoverride="42"]</td>
+								<td>Overrides the list of tags to be displayed in the category list, comma-separated list of tag IDs</td>
+							</tr>
 						</table>
 					</td>
 				</tr>
 				<tr>
-					<td style='background: #FFF'></td>
-					<td style='background: #FFF'></td>
-					<td style='background: #FFF'><?php _e( 'Display search box', 'link-library' ); ?></td>
-					<td style='background: #FFF'><?php echo "[link-library-search settings=" . $settings . "]"; ?></td>
-					<td style='background: #FFF'></td>
+					<td></td>
+					<td></td>
+					<td><?php _e( 'Display search box', 'link-library' ); ?></td>
+					<td><?php echo "[link-library-search settings=" . $settings . "]"; ?></td>
+					<td></td>
 				</tr>
 				<tr>
-					<td style='background: #FFF'></td>
-					<td style='background: #FFF'></td>
-					<td style='background: #FFF'><?php _e( 'Display link submission form', 'link-library' ); ?></td>
-					<td style='background: #FFF'><?php echo "[link-library-addlink settings=" . $settings . "]"; ?></td>
-					<td style='background: #FFF'></td>
+					<td></td>
+					<td></td>
+					<td><?php _e( 'Display link submission form', 'link-library' ); ?></td>
+					<td><?php echo "[link-library-addlink settings=" . $settings . "]"; ?></td>
+					<td></td>
 				</tr>
 				<tr>
-					<td style='background: #FFF'></td>
-					<td style='background: #FFF'></td>
-					<td style='background: #FFF'><?php _e( 'Display count of links in a library', 'link-library' ); ?></td>
-					<td style='background: #FFF'><?php echo "[link-library-count settings=" . $settings . "]"; ?></td>
-					<td style='background: #FFF'></td>
+					<td></td>
+					<td></td>
+					<td><?php _e( 'Display count of links in a library', 'link-library' ); ?></td>
+					<td><?php echo "[link-library-count settings=" . $settings . "]"; ?></td>
+					<td></td>
 				</tr>
 			</table>
 			<table>
 				<tr>
 					<td style='text-align:right'>
-						<span><button type="button" <?php echo "onclick=\"if ( confirm('" . esc_js( sprintf( __( "You are about to Delete Library #'%s'\n  'Cancel' to stop, 'OK' to delete.", "link-library" ), $settings ) ) . "') ) window.location.href='" . wp_nonce_url( 'admin.php?page=link-library-settingssets&amp;deletesettings=' . $settings, 'link-library-delete' ) . "'\""; ?>><?php _e( 'Delete Library', 'link-library' ); ?> <?php echo $settings ?></button></span>
-						<span><button type="button" <?php echo "onclick=\"if ( confirm('" . esc_js( sprintf( __( "You are about to reset Library '%s'\n  'Cancel' to stop, 'OK' to reset.", "link-library" ), $settings ) ) . "') ) window.location.href='admin.php?page=link-library-settingssets&amp;settings=" . $settings . "&reset=" . $settings . "'\""; ?>><?php _e( 'Reset current Library', 'link-library' ); ?></button></span>
+						<span><button class="button" type="button" <?php echo "onclick=\"if ( confirm('" . esc_js( sprintf( __( "You are about to Delete Library #'%s'\n  'Cancel' to stop, 'OK' to delete.", "link-library" ), $settings ) ) . "') ) window.location.href='" . wp_nonce_url( 'admin.php?page=link-library-settingssets&amp;deletesettings=' . $settings, 'link-library-delete' ) . "'\""; ?>><?php _e( 'Delete Library', 'link-library' ); ?> <?php echo $settings ?></button></span>
+						<span><button class="button" type="button" <?php echo "onclick=\"if ( confirm('" . esc_js( sprintf( __( "You are about to reset Library '%s'\n  'Cancel' to stop, 'OK' to reset.", "link-library" ), $settings ) ) . "') ) window.location.href='admin.php?page=link-library-settingssets&amp;settings=" . $settings . "&reset=" . $settings . "'\""; ?>><?php _e( 'Reset current Library', 'link-library' ); ?></button></span>
 					</td>
 				</tr>
 			</table>
@@ -3764,33 +4381,17 @@ function general_custom_fields_meta_box( $data ) {
 		$options    = $data['options'];
 		$settings   = $data['settings'];
 		$genoptions = $data['genoptions'];
+
+		$layout_list = simplexml_load_file( plugin_dir_path( __FILE__ ) . '/presets/PresetList.xml' );
 		?>
 		<div style='padding-top:15px' id="ll-presets" class="content-section">
-			<div style="text-align: center;float:left;padding:16px;" class="#preset1">
-				<strong>Layout 1: Simple Unordered List</strong><br /><br />
-				<img style="max-width: 400px; border: 2px solid black;" src="<?php echo plugins_url( "layoutimages/Layout1-SimpleListNamesOnly.png", __FILE__ ); ?>"<br /><br /><br />
-				<button type="button" <?php echo "onclick=\"if ( confirm('" . esc_js( sprintf( __( "You are about to change the layout of Library '%s'\n  'Cancel' to stop, 'OK' to modify.", "link-library" ), $settings ) ) . "') ) window.location.href='admin.php?page=link-library-settingssets&amp;settings=" . $settings . "&newlayout=1'\""; ?>><?php _e( 'Apply Layout 1', 'link-library' ); ?> </button>
+			<?php foreach ( $layout_list as $layout ) { ?>
+			<div class="ll_preset" id="#preset<?php echo $layout->ID; ?>">
+				<strong><?php _e( 'Layout', 'link-library' ); echo ' ' . $layout->ID . ": " . $layout->Desc; ?></strong><br /><br />
+				<img style="max-width: 400px; border: 2px solid black;" src="<?php echo plugins_url( "presets/" . $layout->Image, __FILE__ ); ?>"<br /><br /><br />
+				<button class="button" type="button" <?php echo "onclick=\"if ( confirm('" . esc_js( sprintf( __( "You are about to change the layout of Library '%s' and reset all its options\n  'Cancel' to stop, 'OK' to modify.", "link-library" ), $settings ) ) . "') ) window.location.href='admin.php?page=link-library-settingssets&amp;settings=" . $settings . "&newlayout=" . $layout->ID . "'\""; ?>><?php _e( 'Apply Layout', 'link-library' ); ?> <?php echo $layout->ID; ?></button>
 			</div>
-			<div style="text-align: center;float:left;padding:16px;" class="#preset2">
-				<strong>Layout 2: Unordered List with link descriptions</strong><br /><br />
-				<img style="max-width: 400px; border: 2px solid black;" src="<?php echo plugins_url( "layoutimages/Layout2-SimpleListWithDesc.png", __FILE__ ); ?>"<br /><br /><br />
-				<button type="button" <?php echo "onclick=\"if ( confirm('" . esc_js( sprintf( __( "You are about to change the layout of Library '%s'\n  'Cancel' to stop, 'OK' to modify.", "link-library" ), $settings ) ) . "') ) window.location.href='admin.php?page=link-library-settingssets&amp;settings=" . $settings . "&newlayout=2'\""; ?>><?php _e( 'Apply Layout 2', 'link-library' ); ?> </button>
-			</div>
-			<div style="text-align: center;float:left;padding:16px;" class="#preset3">
-				<strong>Layout 3: Table with links and descriptions</strong><br /><br />
-				<img style="max-width: 400px; border: 2px solid black;" src="<?php echo plugins_url( "layoutimages/Layout3-TableView.png", __FILE__ ); ?>"<br /><br /><br />
-				<button type="button" <?php echo "onclick=\"if ( confirm('" . esc_js( sprintf( __( "You are about to change the layout of Library '%s'\n  'Cancel' to stop, 'OK' to modify.", "link-library" ), $settings ) ) . "') ) window.location.href='admin.php?page=link-library-settingssets&amp;settings=" . $settings . "&newlayout=3'\""; ?>><?php _e( 'Apply Layout 3', 'link-library' ); ?> </button>
-			</div>
-			<div style="text-align: center;float:left;padding:16px;" class="#preset4">
-				<strong>Layout 4: Table with link images and descriptions</strong><br /><br />
-				<img style="max-width: 400px; border: 2px solid black;" src="<?php echo plugins_url( "layoutimages/Layout4-TableWithImages.png", __FILE__ ); ?>"<br /><br /><br />
-				<button type="button" <?php echo "onclick=\"if ( confirm('" . esc_js( sprintf( __( "You are about to change the layout of Library '%s'\n  'Cancel' to stop, 'OK' to modify.", "link-library" ), $settings ) ) . "') ) window.location.href='admin.php?page=link-library-settingssets&amp;settings=" . $settings . "&newlayout=4'\""; ?>><?php _e( 'Apply Layout 4', 'link-library' ); ?> </button>
-			</div>
-			<div style="text-align: center;float:left;padding:16px;" class="#preset4">
-				<strong>Layout 5: Table with images separated from link info</strong><br /><br />
-				<img style="max-width: 400px; border: 2px solid black;" src="<?php echo plugins_url( "layoutimages/Layout5-TableWithImagesInSplitCells.png", __FILE__ ); ?>"<br /><br /><br />
-				<button type="button" <?php echo "onclick=\"if ( confirm('" . esc_js( sprintf( __( "You are about to change the layout of Library '%s'\n  'Cancel' to stop, 'OK' to modify.", "link-library" ), $settings ) ) . "') ) window.location.href='admin.php?page=link-library-settingssets&amp;settings=" . $settings . "&newlayout=5'\""; ?>><?php _e( 'Apply Layout 5', 'link-library' ); ?> </button>
-			</div>
+			<?php } ?>
 		</div>
 	<?php }
 
@@ -4156,10 +4757,11 @@ function general_custom_fields_meta_box( $data ) {
 					</td>
 					<td>
 						<select name="flatlist" id="flatlist" style="width:200px;">
-							<option value="table"<?php selected( $options['flatlist'] == 'table' ); ?>><?php _e( 'Table', 'link-library' ); ?></option>
-							<option value="unordered"<?php selected( $options['flatlist'] == 'unordered' ); ?>><?php _e( 'Unordered List', 'link-library' ); ?></option>
-							<option value="dropdown"<?php selected( $options['flatlist'] == 'dropdown' ); ?>><?php _e( 'Drop-Down List', 'link-library' ); ?></option>
-							<option value="dropdowndirect"<?php selected( $options['flatlist'] == 'dropdowndirect' ); ?>><?php _e( 'Drop-Down List Direct Access', 'link-library' ); ?></option>
+							<option value="table" <?php selected( $options['flatlist'] == 'table' ); ?>><?php _e( 'Table', 'link-library' ); ?></option>
+							<option value="unordered" <?php selected( $options['flatlist'] == 'unordered' ); ?>><?php _e( 'Unordered List', 'link-library' ); ?></option>
+							<option value="dropdown" <?php selected( $options['flatlist'] == 'dropdown' ); ?>><?php _e( 'Drop-Down List', 'link-library' ); ?></option>
+							<option value="dropdowndirect" <?php selected( $options['flatlist'] == 'dropdowndirect' ); ?>><?php _e( 'Drop-Down List Direct Access', 'link-library' ); ?></option>
+							<option value="toggles" <?php selected( $options['flatlist'] == 'toggles' ); ?>><?php _e( 'Visibility Toggles', 'link-library' ); ?></option>
 						</select>
 					</td>
 				</tr>
@@ -4177,6 +4779,13 @@ function general_custom_fields_meta_box( $data ) {
 					<td>
 						<input type="checkbox" id="showcatlinkcount" name="showcatlinkcount" <?php checked( $options['showcatlinkcount'] ); ?>/>
 					</td>
+					<td style='width:100px'></td>
+					<td>
+						<?php _e( 'Hide empty categories from category list', 'link-library' ); ?>
+					</td>
+					<td>
+						<input type="checkbox" id="hideemptycats" name="hideemptycats" <?php checked( $options['hideemptycats'] ); ?>/>
+					</td>					
 				</tr>
 				<tr>
 					<td style='width:200px'><?php _e( 'Display categories with search results', 'link-library' ); ?>    </td>
@@ -4304,6 +4913,7 @@ function general_custom_fields_meta_box( $data ) {
 	function settingssets_linkelement_meta_box( $data ) {
 		$options  = $data['options'];
 		$settings = $data['settings'];
+		$genoptions = $data['genoptions'];
 		?>
 		<div style='padding-top:15px' id="ll-links" class="content-section">
 		<table>
@@ -4321,6 +4931,11 @@ function general_custom_fields_meta_box( $data ) {
 						<option value="hits"<?php selected( $options['linkorder'] == 'hits' ); ?>><?php _e( 'Order by number of link visits', 'link-library' ); ?></option>
 						<option value="uservotes"<?php selected( $options['linkorder'] == 'uservotes' ); ?>><?php _e( 'Order by number of user votes', 'link-library' ); ?></option>
 						<option value="scpo"<?php selected( $options['linkorder'] == 'scpo' ); ?>><?php _e( 'Order specified using Simple Custom Post Order plugin', 'link-library' ); ?></option>
+						<?php for ( $fieldcounter = 1; $fieldcounter < 6; $fieldcounter++ ) {
+							if ( $genoptions['customtext' . $fieldcounter . 'active'] ) { ?>
+								<option value="customtext<?php echo $fieldcounter; ?>"<?php selected( $options['linkorder'] == 'customtext' . $fieldcounter ); ?>><?php _e( 'Order by Custom Text Field #', 'link-library' ); echo $fieldcounter; ?></option>
+							<?php }
+						} ?>
 					</select>
 				</td>
 				<td style='width:100px'></td>
@@ -4387,8 +5002,12 @@ function general_custom_fields_meta_box( $data ) {
 				</td>
 			</tr>
 			<tr>
-				<td></td>
-				<td></td>
+			<td style='width:150px'>
+					<?php _e( 'Make category name a link if URL assigned', 'link-library' ); ?>
+				</td>
+				<td style='width:75px;'>
+					<input type="checkbox" id="catnamelink" name="catnamelink" <?php checked( $options['catnamelink'] ); ?>/>
+				</td>
 				<td></td>
 				<td class="lltooltip" title="<?php _e( 'Leave empty to show all results', 'link-library' ); ?>">
 					<?php _e( 'Max number of links to display per category', 'link-library' ); ?>
@@ -4399,14 +5018,14 @@ function general_custom_fields_meta_box( $data ) {
 			</tr>
 			<tr>
 				<td style='width:150px'>
-					<?php _e( 'Show Link Updated Flag', 'link-library' ); ?>
+					<?php _e( 'Show Link Updated/New Flag', 'link-library' ); ?>
 				</td>
 				<td style='width:75px;'>
 					<input type="checkbox" id="showupdated" name="showupdated" <?php checked( $options['showupdated'] ); ?>/>
 				</td>
 				<td></td>
 				<td style='width:150px'>
-					<?php _e( 'Show Link Updated Date in Tooltip', 'link-library' ); ?>
+					<?php _e( 'Show Link Updated/New Date in Tooltip', 'link-library' ); ?>
 				</td>
 				<td style='width:75px;'>
 					<input type="checkbox" id="showupdatedtooltip" name="showupdatedtooltip" <?php checked( $options['showupdatedtooltip'] ); ?>/>
@@ -4414,7 +5033,7 @@ function general_custom_fields_meta_box( $data ) {
 			</tr>
 			<tr>
 				<td style='width:150px'>
-					<?php _e( 'Link Updated Flag Position', 'link-library' ); ?>
+					<?php _e( 'Link Updated/New Flag Position', 'link-library' ); ?>
 				</td>
 				<td style='width:75px;'>
 					<select id="showupdatedpos" name="showupdatedpos">
@@ -4430,10 +5049,25 @@ function general_custom_fields_meta_box( $data ) {
 				<td style='width:20px'>
 				</td>
 				<td class="lltooltip" title="<?php _e( 'Label to be displayed before new links', 'link-library' ); ?>">
-					<?php _e( 'Updated link label', 'link-library' ); ?>
+					<?php _e( 'Updated/New link label', 'link-library' ); ?>
 				</td>
 				<td class="lltooltip" title="<?php _e( 'Label to be displayed before new links', 'link-library' ); ?>">
 					<input type="text" id="updatedlabel" name="updatedlabel" size="40" value="<?php echo $options['updatedlabel']; ?>" />
+				</td>
+			</tr>
+			<tr>
+				<td style='width:150px'>
+					<?php _e( 'Only show updated/new links', 'link-library' ); ?>
+				</td>
+				<td style='width:75px;'>
+					<input type="checkbox" id="showupdatedonly" name="showupdatedonly" <?php checked( $options['showupdatedonly'] ); ?>/>
+				</td>
+				<td></td>
+				<td style='width:150px'>
+					<?php _e( 'Number of days to be considered updated/new', 'link-library' ); ?>
+				</td>
+				<td style='width:75px;'>
+				<input type="text" id="updateddays" name="updateddays" size="4" value="<?php echo $options['updateddays']; ?>" />
 				</td>
 			</tr>
 			<tr>
@@ -4454,7 +5088,7 @@ function general_custom_fields_meta_box( $data ) {
 							$display_as_table = 'true';
 						} elseif( is_bool( $options['displayastable'] ) && !$options['displayastable'] ) {
 							$display_as_table = 'false';
-						} elseif ( in_array( $options['displayastable'], array( 'true', 'false', 'nosurroundingtags' ) ) ) {
+						} elseif ( in_array( $options['displayastable'], array( 'true', 'false', 'nosurroundingtags', 'linkmasonrygrid', 'categorymasonrygrid' ) ) ) {
 							$display_as_table = $options['displayastable'];
 						}
 					?>
@@ -4464,6 +5098,8 @@ function general_custom_fields_meta_box( $data ) {
 						<option value="true"<?php selected( $display_as_table === 'true' ); ?>><?php _e( 'Table', 'link-library' ); ?></option>
 						<option value="false"<?php selected( $display_as_table === 'false' ); ?>><?php _e( 'Unordered List', 'link-library' ); ?></option>
 						<option value="nosurroundingtags"<?php selected( $display_as_table, 'nosurroundingtags' ); ?>><?php _e( 'No surrounding tags', 'link-library' ); ?></option>
+						<option value="linkmasonrygrid"<?php selected( $display_as_table, 'linkmasonrygrid' ); ?>><?php _e( 'Show link items in a Masonry grid', 'link-library' ); ?></option>
+						<option value="categorymasonrygrid"<?php selected( $display_as_table, 'categorymasonrygrid' ); ?>><?php _e( 'Show categories in a Masonry grid', 'link-library' ); ?></option>
 					</select>
 				</td>
 			</tr>
@@ -4568,6 +5204,8 @@ function general_custom_fields_meta_box( $data ) {
 		$options  = $data['options'];
 		$settings = $data['settings'];
 		$genoptions = $data['genoptions'];
+
+		global $colorarray;
 		?>
 
 		<div style='padding-top:15px' id="ll-advanced" class="content-section">
@@ -4590,150 +5228,150 @@ function general_custom_fields_meta_box( $data ) {
 					switch ( $arrayelements ) {
 						case 1:
 							?>
-							<li class="lltooltip" title="<?php _e( 'Image', 'link-library' ); ?>" id="1" style='background-color: #1240ab'>1</li>
+							<li class="lltooltip" title="<?php _e( 'Image', 'link-library' ); ?>" id="1" style='background-color: <?php echo $colorarray[$arrayelements-1]; ?>'>1</li>
 							<?php break;
 						case 2:
 							?>
-							<li class="lltooltip" title="<?php _e( 'Name', 'link-library' ); ?>" id="2" style='background-color: #4671d5'>2</li>
+							<li class="lltooltip" title="<?php _e( 'Name', 'link-library' ); ?>" id="2" style='background-color: <?php echo $colorarray[$arrayelements-1]; ?>'>2</li>
 							<?php break;
 						case 3:
 							?>
-							<li class="lltooltip" title="<?php _e( 'Date', 'link-library' ); ?>" id="3" style='background-color: #39e639'>3</li>
+							<li class="lltooltip" title="<?php _e( 'Date', 'link-library' ); ?>" id="3" style='background-color: <?php echo $colorarray[$arrayelements-1]; ?>'>3</li>
 							<?php break;
 						case 4:
 							?>
-							<li class="lltooltip" title="<?php _e( 'Desc', 'link-library' ); ?>" id="4" style='background-color: #009999'>4</li>
+							<li class="lltooltip" title="<?php _e( 'Desc', 'link-library' ); ?>" id="4" style='background-color: <?php echo $colorarray[$arrayelements-1]; ?>'>4</li>
 							<?php break;
 						case 5:
 							?>
-							<li class="lltooltip" title="<?php _e( 'Notes', 'link-library' ); ?>" id="5" style='background-color: #00cc00'>5</li>
+							<li class="lltooltip" title="<?php _e( 'Notes', 'link-library' ); ?>" id="5" style='background-color: <?php echo $colorarray[$arrayelements-1]; ?>'>5</li>
 							<?php break;
 						case 6:
 							?>
-							<li class="lltooltip" title="<?php _e( 'RSS', 'link-library' ); ?>" id="6" style='background-color: #008500'>6</li>
+							<li class="lltooltip" title="<?php _e( 'RSS', 'link-library' ); ?>" id="6" style='background-color: <?php echo $colorarray[$arrayelements-1]; ?>'>6</li>
 							<?php break;
 						case 7:
 							?>
-							<li class="lltooltip" title="<?php _e( 'Web Link', 'link-library' ); ?>" id="7" style='background-color: #5ccccc'>7</li>
+							<li class="lltooltip" title="<?php _e( 'Web Link', 'link-library' ); ?>" id="7" style='background-color: <?php echo $colorarray[$arrayelements-1]; ?>'>7</li>
 							<?php break;
 						case 8:
 							?>
-							<li class="lltooltip" title="<?php _e( 'Phone', 'link-library' ); ?>" id="8" style='background-color: #6c8cd5'>8</li>
+							<li class="lltooltip" title="<?php _e( 'Phone', 'link-library' ); ?>" id="8" style='background-color: <?php echo $colorarray[$arrayelements-1]; ?>'>8</li>
 							<?php break;
 						case 9:
 							?>
-							<li class="lltooltip" title="<?php _e( 'E-mail', 'link-library' ); ?>" id="9" style='background-color: #67e667'>9</li>
+							<li class="lltooltip" title="<?php _e( 'E-mail', 'link-library' ); ?>" id="9" style='background-color: <?php echo $colorarray[$arrayelements-1]; ?>'>9</li>
 							<?php break;
 						case 10:
 							?>
-							<li class="lltooltip" title="<?php _e( 'Hits', 'link-library' ); ?>" id="10" style='background-color: #33cccc'>10</li>
+							<li class="lltooltip" title="<?php _e( 'Hits', 'link-library' ); ?>" id="10" style='background-color: <?php echo $colorarray[$arrayelements-1]; ?>'>10</li>
 							<?php break;
 						case 11:
 							?>
-							<li class="lltooltip" title="<?php _e( 'Rating', 'link-library' ); ?>" id="11" style='background-color: #33cc00'>11</li>
+							<li class="lltooltip" title="<?php _e( 'Rating', 'link-library' ); ?>" id="11" style='background-color: <?php echo $colorarray[$arrayelements-1]; ?>'>11</li>
 							<?php break;
 						case 12:
 							?>
-							<li class="lltooltip" title="<?php _e( 'Large Desc', 'link-library' ); ?>" id="12" style='background-color: #33ccff'>12</li>
+							<li class="lltooltip" title="<?php _e( 'Large Desc', 'link-library' ); ?>" id="12" style='background-color: <?php echo $colorarray[$arrayelements-1]; ?>'>12</li>
 							<?php break;
 						case 13:
 							?>
-							<li class="lltooltip" title="<?php _e( 'Submitter Name', 'link-library' ); ?>" id="13" style='background-color: #33eecc'>13</li>
+							<li class="lltooltip" title="<?php _e( 'Submitter Name', 'link-library' ); ?>" id="13" style='background-color: <?php echo $colorarray[$arrayelements-1]; ?>'>13</li>
 							<?php break;
 						case 14:
 							?>
-							<li class="lltooltip" title="<?php _e( 'Cat Desc', 'link-library' ); ?>" id="14" style='background-color: #33eeff'>14</li>
+							<li class="lltooltip" title="<?php _e( 'Cat Desc', 'link-library' ); ?>" id="14" style='background-color: <?php echo $colorarray[$arrayelements-1]; ?>'>14</li>
 							<?php break;
 						case 15:
 							?>
-							<li class="lltooltip" title="<?php _e( 'Tags', 'link-library' ); ?>" id="15" style='background-color: #c4d1ee'>15</li>
+							<li class="lltooltip" title="<?php _e( 'Tags', 'link-library' ); ?>" id="15" style='background-color: <?php echo $colorarray[$arrayelements-1]; ?>'>15</li>
 							<?php break;
 						case 16:
 							?>
-							<li class="lltooltip" title="<?php _e( 'Price', 'link-library' ); ?>" id="16" style='background-color: #238e00'>16</li>
+							<li class="lltooltip" title="<?php _e( 'Price', 'link-library' ); ?>" id="16" style='background-color: <?php echo $colorarray[$arrayelements-1]; ?>'>16</li>
 							<?php break;
 						case 17:
 							?>
-							<li class="lltooltip" title="<?php _e( 'Cat Name', 'link-library' ); ?>" id="17" style='background-color: #23A023'>17</li>
+							<li class="lltooltip" title="<?php _e( 'Cat Name', 'link-library' ); ?>" id="17" style='background-color: <?php echo $colorarray[$arrayelements-1]; ?>'>17</li>
 							<?php break;
 						case 18:
 							if ( $genoptions['customurl1active'] ) {
 							?>
-							<li class="lltooltip" title="<?php echo $genoptions['customurl1label'] ?>" id="18" style='background-color: #23A023'>18</li>
+							<li class="lltooltip" title="<?php echo $genoptions['customurl1label'] ?>" id="18" style='background-color: <?php echo $colorarray[$arrayelements-1]; ?>'>18</li>
 							<?php } break;
 						case 19:
 							if ( $genoptions['customurl2active'] ) {
 							?>
-							<li class="lltooltip" title="<?php echo $genoptions['customurl2label'] ?>" id="19" style='background-color: #23A023'>19</li>
+							<li class="lltooltip" title="<?php echo $genoptions['customurl2label'] ?>" id="19" style='background-color: <?php echo $colorarray[$arrayelements-1]; ?>'>19</li>
 							<?php } break;
 						case 20:
 							if ( $genoptions['customurl3active'] ) {
 							?>
-							<li class="lltooltip" title="<?php echo $genoptions['customurl3label'] ?>" id="20" style='background-color: #23A023'>20</li>
+							<li class="lltooltip" title="<?php echo $genoptions['customurl3label'] ?>" id="20" style='background-color: <?php echo $colorarray[$arrayelements-1]; ?>'>20</li>
 							<?php } break;
 						case 21:
 							if ( $genoptions['customurl4active'] ) {
 							?>
-							<li class="lltooltip" title="<?php echo $genoptions['customurl4label'] ?>" id="21" style='background-color: #23A023'>21</li>
+							<li class="lltooltip" title="<?php echo $genoptions['customurl4label'] ?>" id="21" style='background-color: <?php echo $colorarray[$arrayelements-1]; ?>'>21</li>
 							<?php } break;
 						case 22:
 							if ( $genoptions['customurl5active'] ) {
 							?>
-							<li class="lltooltip" title="<?php echo $genoptions['customurl5label'] ?>" id="22" style='background-color: #23A023'>22</li>
+							<li class="lltooltip" title="<?php echo $genoptions['customurl5label'] ?>" id="22" style='background-color: <?php echo $colorarray[$arrayelements-1]; ?>'>22</li>
 							<?php } break;
 						case 23:
 								?>
-							<li class="lltooltip" title="<?php _e( 'User Votes', 'link-library' ); ?>" id="23" style='background-color: #23A023'>23</li>
+							<li class="lltooltip" title="<?php _e( 'User Votes', 'link-library' ); ?>" id="23" style='background-color: <?php echo $colorarray[$arrayelements-1]; ?>'>23</li>
 							<?php  break;
 						case 24:
 							if ( $genoptions['customtext1active'] ) {
 								?>
-								<li class="lltooltip" title="<?php echo $genoptions['customtext1label'] ?>" id="24" style='background-color: #5ccccc'>24</li>
+								<li class="lltooltip" title="<?php echo $genoptions['customtext1label'] ?>" id="24" style='background-color: <?php echo $colorarray[$arrayelements-1]; ?>'>24</li>
 							<?php } break;
 						case 25:
 							if ( $genoptions['customtext2active'] ) {
 								?>
-								<li class="lltooltip" title="<?php echo $genoptions['customtext2label'] ?>" id="25" style='background-color: #23A023'>25</li>
+								<li class="lltooltip" title="<?php echo $genoptions['customtext2label'] ?>" id="25" style='background-color: <?php echo $colorarray[$arrayelements-1]; ?>'>25</li>
 							<?php } break;
 						case 26:
 							if ( $genoptions['customtext3active'] ) {
 								?>
-								<li class="lltooltip" title="<?php echo $genoptions['customtext3label'] ?>" id="26" style='background-color: #23A023'>26</li>
+								<li class="lltooltip" title="<?php echo $genoptions['customtext3label'] ?>" id="26" style='background-color: <?php echo $colorarray[$arrayelements-1]; ?>'>26</li>
 							<?php } break;
 						case 27:
 							if ( $genoptions['customtext4active'] ) {
 								?>
-								<li class="lltooltip" title="<?php echo $genoptions['customtext4label'] ?>" id="27" style='background-color: #23A023'>27</li>
+								<li class="lltooltip" title="<?php echo $genoptions['customtext4label'] ?>" id="27" style='background-color: <?php echo $colorarray[$arrayelements-1]; ?>'>27</li>
 							<?php } break;
 						case 28:
 							if ( $genoptions['customtext5active'] ) {
 								?>
-								<li class="lltooltip" title="<?php echo $genoptions['customtext5label'] ?>" id="28" style='background-color: #23A023'>28</li>
+								<li class="lltooltip" title="<?php echo $genoptions['customtext5label'] ?>" id="28" style='background-color: <?php echo $colorarray[$arrayelements-1]; ?>'>28</li>
 							<?php } break;
 						case 29:
 							if ( $genoptions['customlist1active'] ) {
 								?>
-								<li class="lltooltip" title="<?php echo $genoptions['customlist1label'] ?>" id="29" style='background-color: #5ccccc'>29</li>
+								<li class="lltooltip" title="<?php echo $genoptions['customlist1label'] ?>" id="29" style='background-color: <?php echo $colorarray[$arrayelements-1]; ?>'>29</li>
 							<?php } break;
 						case 30:
 							if ( $genoptions['customlist2active'] ) {
 								?>
-								<li class="lltooltip" title="<?php echo $genoptions['customlist2label'] ?>" id="30" style='background-color: #23A023'>30</li>
+								<li class="lltooltip" title="<?php echo $genoptions['customlist2label'] ?>" id="30" style='background-color: <?php echo $colorarray[$arrayelements-1]; ?>'>30</li>
 							<?php } break;
 						case 31:
 							if ( $genoptions['customlist3active'] ) {
 								?>
-								<li class="lltooltip" title="<?php echo $genoptions['customlist3label'] ?>" id="31" style='background-color: #23A023'>31</li>
+								<li class="lltooltip" title="<?php echo $genoptions['customlist3label'] ?>" id="31" style='background-color: <?php echo $colorarray[$arrayelements-1]; ?>'>31</li>
 							<?php } break;
 						case 32:
 							if ( $genoptions['customlist4active'] ) {
 								?>
-								<li class="lltooltip" title="<?php echo $genoptions['customlist4label'] ?>" id="32" style='background-color: #23A023'>32</li>
+								<li class="lltooltip" title="<?php echo $genoptions['customlist4label'] ?>" id="32" style='background-color: <?php echo $colorarray[$arrayelements-1]; ?>'>32</li>
 							<?php } break;
 						case 33:
 							if ( $genoptions['customlist5active'] ) {
 								?>
-								<li class="lltooltip" title="<?php echo $genoptions['customtext5label'] ?>" id="33" style='background-color: #23A023'>33</li>
+								<li class="lltooltip" title="<?php echo $genoptions['customtext5label'] ?>" id="33" style='background-color: <?php echo $colorarray[$arrayelements-1]; ?>'>33</li>
 							<?php } break;
 					}
 				}
@@ -4742,7 +5380,7 @@ function general_custom_fields_meta_box( $data ) {
 		</ul>
 		<input type="hidden" id="dragndroporder" name="dragndroporder" size="60" value="<?php echo $options['dragndroporder']; ?>" />
 		<br />
-		<table class='widefat' style='width: 1000px;margin:15px 5px 10px 0px;clear:none;background-color:#F1F1F1;background-image: linear-gradient(to top, #ECECEC, #F9F9F9);background-position:initial initial;background-repeat: initial initial'>
+		<table class='wp-list-table widefat fixed striped table-view-list'>
 		<thead>
 		<th style='width: 100px'></th>
 		<th style='width: 40px'><?php _e( 'Display', 'link-library' ); ?></th>
@@ -4750,36 +5388,40 @@ function general_custom_fields_meta_box( $data ) {
 		<th style='width: 80px'><?php _e( 'After', 'link-library' ); ?></th>
 		<th style='width: 80px'><?php _e( 'Additional Details', 'link-library' ); ?></th>
 		<th style='width: 80px'><?php _e( 'Link Source', 'link-library' ); ?></th>
+		<th style='width: 40px'><?php _e( 'Suppress all output if empty', 'link-library' ); ?></th>
 		</thead>
 		<tr>
 			<td class="lltooltip" title='<?php _e( 'This column allows for the output of text/code before the first link in each category', 'link-library' ); ?>'><?php _e( 'Before first link', 'link-library' ); ?></td>
-			<td style='background: #FFF'></td>
-			<td style='background: #FFF' class="lltooltip" title='<?php _e( 'Output of text/code before the first link in each category', 'link-library' ); ?>'>
+			<td></td>
+			<td class="lltooltip" title='<?php _e( 'Output of text/code before the first link in each category', 'link-library' ); ?>'>
 				<input type="text" id="beforefirstlink" name="beforefirstlink" size="22" value="<?php echo stripslashes( $options['beforefirstlink'] ); ?>" />
 			</td>
-			<td style='background: #FFF'></td><td style='background: #FFF'></td><td style='background: #FFF'></td>
+			<td></td><td></td><td></td>
+			<td></td>
 		</tr>
 		<tr>
 			<td class="lltooltip" title='<?php _e( 'This column allows for the output of text/code before a number of links determined by the Display field', 'link-library' ); ?>'><?php _e( 'Intermittent Before Link', 'link-library' ); ?></td>
-			<td style='background: #FFF' class="lltooltip" title='<?php _e( 'Frequency of additional output before and after complete link group', 'link-library' ); ?>'>
-				<input type="text" id="linkaddfrequency" name="linkaddfrequency" size="10" value="<?php echo strval( $options['linkaddfrequency'] ); ?>" />
+			<td class="lltooltip" title='<?php _e( 'Frequency of additional output before and after complete link group', 'link-library' ); ?>'>
+				<input type="text" id="linkaddfrequency" name="linkaddfrequency" size="6" value="<?php echo strval( $options['linkaddfrequency'] ); ?>" />
 			</td>
-			<td style='background: #FFF' class="lltooltip" title='<?php _e( 'Output before complete link group (link, notes, desc, etc...)', 'link-library' ); ?>'>
+			<td class="lltooltip" title='<?php _e( 'Output before complete link group (link, notes, desc, etc...)', 'link-library' ); ?>'>
 				<input type="text" id="addbeforelink" name="addbeforelink" size="22" value="<?php echo stripslashes( $options['addbeforelink'] ); ?>" />
 			</td>
-			<td style='background: #FFF'></td>
-			<td style='background: #FFF'></td>
-			<td style='background: #FFF'></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
 		</tr>
 		<tr>
 			<td class="lltooltip" title='<?php _e( 'This column allows for the output of text/code before each link', 'link-library' ); ?>'><?php _e( 'Before Link', 'link-library' ); ?></td>
-			<td style='background: #FFF'></td>
-			<td style='background: #FFF' class="lltooltip" title='<?php _e( 'Output before complete link group (link, notes, desc, etc...)', 'link-library' ); ?>'>
+			<td></td>
+			<td class="lltooltip" title='<?php _e( 'Output before complete link group (link, notes, desc, etc...)', 'link-library' ); ?>'>
 				<input type="text" id="beforeitem" name="beforeitem" size="22" value="<?php echo stripslashes( $options['beforeitem'] ); ?>" />
 			</td>
-			<td style='background: #FFF'></td>
-			<td style='background: #FFF'></td>
-			<td style='background: #FFF'></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
 		</tr>
 		<?php
 
@@ -4799,21 +5441,21 @@ function general_custom_fields_meta_box( $data ) {
 					case 1: /* -------------------------------- Link Image -------------------------------------------*/
 						?>
 						<tr>
-							<td style='background-color: #1240ab; color: #fff' class="lltooltip" title='<?php _e( 'This column allows for the output of text/code before each link image', 'link-library' ); ?>'>1- <?php _e( 'Image', 'link-library' ); ?></td>
-							<td style='text-align:center;background: #FFF'>
+							<td style='background-color: <?php echo $colorarray[0]; ?>; color: #fff' class="lltooltip" title='<?php _e( 'This column allows for the output of text/code before each link image', 'link-library' ); ?>'>1- <?php _e( 'Image', 'link-library' ); ?></td>
+							<td style='text-align:center;'>
 								<input type="checkbox" id="show_images" name="show_images" <?php checked( $options['show_images'] );?>/>
 							</td>
-							<td style='background: #FFF' class="lltooltip" title='<?php _e( 'Code/Text to be displayed before each link image', 'link-library' ); ?>'>
+							<td class="lltooltip" title='<?php _e( 'Code/Text to be displayed before each link image', 'link-library' ); ?>'>
 								<input type="text" id="beforeimage" name="beforeimage" size="22" value="<?php echo stripslashes( $options['beforeimage'] ); ?>" />
 							</td>
-							<td style='background: #FFF' class="lltooltip" title='<?php _e( 'Code/Text to be displayed after each link image', 'link-library' ); ?>'>
+							<td class="lltooltip" title='<?php _e( 'Code/Text to be displayed after each link image', 'link-library' ); ?>'>
 								<input type="text" id="afterimage" name="afterimage" size="22" value="<?php echo stripslashes( $options['afterimage'] ); ?>" />
 							</td>
-							<td style='background: #FFF' class="lltooltip" title='<?php _e( 'CSS Class to be assigned to link image', 'link-library' ); ?>'>
+							<td class="lltooltip" title='<?php _e( 'CSS Class to be assigned to link image', 'link-library' ); ?>'>
 								<input type="text" id="imageclass" name="imageclass" size="22" value="<?php echo $options['imageclass']; ?>" /><br />
 								Lazy load images <input type="checkbox" id="lazyloadimages" name="lazyloadimages" <?php checked( $options['lazyloadimages'] ); ?>/>
 							</td>
-							<td style='background: #FFF'>
+							<td>
 								<select name="sourceimage" id="sourceimage" style="width:200px;">
 									<option value="primary"<?php selected( $options['sourceimage'] == "primary" ); ?>><?php _e( 'Primary', 'link-library' ); ?></option>
 									<option value="secondary"<?php selected( $options['sourceimage'] == "secondary" ); ?>><?php _e( 'Secondary', 'link-library' ); ?></option>
@@ -4821,28 +5463,29 @@ function general_custom_fields_meta_box( $data ) {
 									<option value="imageonly"<?php selected( $options['sourceimage'] == "imageonly" ); ?>><?php _e( 'Image only', 'link-library' ); ?></option>
 								</select>
 							</td>
+							<td><input type="checkbox" id="suppress_image_if_empty" name="suppress_image_if_empty" <?php checked( $options['suppress_image_if_empty'] );?>/></td>
 						</tr>
 						<?php break;
 					case 2: /* -------------------------------- Link Name -------------------------------------------*/
 						?>
 						<tr>
-							<td style='background-color: #4671d5; color: #fff' class="lltooltip" title='<?php _e( 'This column allows for the output of text/code before and after each link name', 'link-library' ); ?>'>2- <?php _e( 'Link Name', 'link-library' ); ?></td>
-							<td style='text-align:center;background: #FFF'>
+							<td style='background-color: <?php echo $colorarray[1]; ?>; color: #fff' class="lltooltip" title='<?php _e( 'This column allows for the output of text/code before and after each link name', 'link-library' ); ?>'>2- <?php _e( 'Link Name', 'link-library' ); ?></td>
+							<td style='text-align:center;'>
 								<input type="checkbox" id="showname" name="showname" <?php checked( $options['showname'] == true ); ?>/>
 							</td>
-							<td style='background: #FFF' class="lltooltip" title='<?php _e( 'Code/Text to be displayed before each link', 'link-library' ); ?>'>
+							<td class="lltooltip" title='<?php _e( 'Code/Text to be displayed before each link', 'link-library' ); ?>'>
 								<input type="text" id="beforelink" name="beforelink" size="22" value="<?php echo stripslashes( $options['beforelink'] ); ?>" />
 							</td>
-							<td style='background: #FFF' class="lltooltip" title='<?php _e( 'Code/Text to be displayed after each link', 'link-library' ); ?>'>
+							<td class="lltooltip" title='<?php _e( 'Code/Text to be displayed after each link', 'link-library' ); ?>'>
 								<input type="text" id="afterlink" name="afterlink" size="22" value="<?php echo stripslashes( $options['afterlink'] ); ?>" />
 							</td>
-							<td style='background: #FFF'>
+							<td>
 								<select name="tooltipname" id="tooltipname" style="width:200px;">
 									<option value="no_tooltip"<?php selected( $options['tooltipname'], 'no_tooltip' ); ?>><?php _e( 'No Tooltip', 'link-library' ); ?></option>
 									<option value="description"<?php selected( $options['tooltipname'], 'description' ); ?>><?php _e( 'Description', 'link-library' ); ?></option>
 								</select>
 							</td>
-							<td style='background: #FFF'>
+							<td>
 								<select name="sourcename" id="sourcename" style="width:200px;">
 									<option value="primary"<?php selected( $options['sourcename'] == "primary" ); ?>><?php _e( 'Primary', 'link-library' ); ?></option>
 									<option value="secondary"<?php selected( $options['sourcename'] == "secondary" ); ?>><?php _e( 'Secondary', 'link-library' ); ?></option>
@@ -4850,86 +5493,91 @@ function general_custom_fields_meta_box( $data ) {
 									<option value="linknameonly"<?php selected( $options['sourcename'] == "linknameonly" ); ?>><?php _e( 'Link name only', 'link-library' ); ?></option>
 								</select>
 							</td>
+							<td></td>
 						</tr>
 						<?php break;
 					case 3: /* -------------------------------- Link Date -------------------------------------------*/
 						?>
 						<tr>
-							<td style='background-color: #39e639; color:#fff' class="lltooltip" title='<?php _e( 'This column allows for the output of text/code before and after each link date stamp', 'link-library' ); ?>'>3- <?php _e( 'Link Date', 'link-library' ); ?></td>
-							<td style='background: #FFF;text-align:center' class="lltooltip" title='<?php _e( 'Check to display link date', 'link-library' ); ?>'>
+							<td style='background-color: <?php echo $colorarray[2]; ?>; color:#fff' class="lltooltip" title='<?php _e( 'This column allows for the output of text/code before and after each link date stamp', 'link-library' ); ?>'>3- <?php _e( 'Link Date', 'link-library' ); ?></td>
+							<td style='text-align:center' class="lltooltip" title='<?php _e( 'Check to display link date', 'link-library' ); ?>'>
 								<input type="checkbox" id="showdate" name="showdate" <?php checked( $options['showdate'] ); ?>/>
 							</td>
-							<td style='background: #FFF' class="lltooltip" title='<?php _e( 'Code/Text to be displayed before each date', 'link-library' ); ?>'>
+							<td class="lltooltip" title='<?php _e( 'Code/Text to be displayed before each date', 'link-library' ); ?>'>
 								<input type="text" id="beforedate" name="beforedate" size="22" value="<?php echo stripslashes( $options['beforedate'] ); ?>" />
 							</td>
-							<td style='background: #FFF' class="lltooltip" title='<?php _e( 'Code/Text to be displayed after each date', 'link-library' ); ?>'>
+							<td class="lltooltip" title='<?php _e( 'Code/Text to be displayed after each date', 'link-library' ); ?>'>
 								<input type="text" id="afterdate" name="afterdate" size="22" value="<?php echo stripslashes( $options['afterdate'] ); ?>" />
 							</td>
-							<td style='background: #FFF'>
+							<td>
 								<select name="datesource" id="datesource" style="width:200px;">
 									<option value="linkupdated"<?php selected( $options['datesource'] == "linkupdated" ); ?>><?php _e( 'Updated Date', 'link-library' ); ?></option>
 									<option value="linkpublication"<?php selected( $options['datesource'] == "linkpublication" ); ?>><?php _e( 'Publication Date', 'link-library' ); ?></option>
 								</select>
 							</td>
-							<td style='background: #FFF'></td>
+							<td></td>
+							<td><input type="checkbox" id="suppress_link_date_if_empty" name="suppress_link_date_if_empty" <?php checked( $options['suppress_link_date_if_empty'] );?>/></td>
 						</tr>
 						<?php break;
 					case 4: /* -------------------------------- Link Description -------------------------------------------*/
 						?>
 						<tr>
-							<td style='background-color: #009999;color:#fff' class="lltooltip" title='<?php _e( 'This column allows for the output of text/code before and after each link description', 'link-library' ); ?>'>4- <?php _e( 'Link Description', 'link-library' ); ?></td>
-							<td style='background: #FFF;text-align: center' class="lltooltip" title='<?php _e( 'Check to display link descriptions', 'link-library' ); ?>'>
+							<td style='background-color: <?php echo $colorarray[3]; ?>;color:#fff' class="lltooltip" title='<?php _e( 'This column allows for the output of text/code before and after each link description', 'link-library' ); ?>'>4- <?php _e( 'Link Description', 'link-library' ); ?></td>
+							<td style='text-align: center' class="lltooltip" title='<?php _e( 'Check to display link descriptions', 'link-library' ); ?>'>
 								<input type="checkbox" id="showdescription" name="showdescription" <?php checked( $options['showdescription'] ); ?>/>
 							</td>
-							<td style='background: #FFF' class="lltooltip" title='<?php _e( 'Code/Text to be displayed before each description', 'link-library' ); ?>'>
+							<td class="lltooltip" title='<?php _e( 'Code/Text to be displayed before each description', 'link-library' ); ?>'>
 								<input type="text" id="beforedesc" name="beforedesc" size="22" value="<?php echo stripslashes( $options['beforedesc'] ); ?>" />
 							</td>
-							<td style='background: #FFF' class="lltooltip" title='<?php _e( 'Code/Text to be displayed after each description', 'link-library' ); ?>'>
+							<td class="lltooltip" title='<?php _e( 'Code/Text to be displayed after each description', 'link-library' ); ?>'>
 								<input type="text" id="afterdesc" name="afterdesc" size="22" value="<?php echo stripslashes( $options['afterdesc'] ); ?>" />
 							</td>
-							<td style='background: #FFF'></td>
-							<td style='background: #FFF'></td>
+							<td></td>
+							<td></td>
+							<td><input type="checkbox" id="suppress_link_desc_if_empty" name="suppress_link_desc_if_empty" <?php checked( $options['suppress_link_desc_if_empty'] );?>/></td>
 						</tr>
 						<?php break;
 					case 5: /* -------------------------------- Link Notes -------------------------------------------*/
 						?>
 						<tr>
-							<td style='background-color: #00cc00;color:#fff' class="lltooltip" title='<?php _e( 'This column allows for the output of text/code before and after each link notes', 'link-library' ); ?>'>5- <?php _e( 'Link Notes', 'link-library' ); ?></td>
-							<td style='background: #FFF;text-align: center' class="lltooltip" title='<?php _e( 'Check to display link notes', 'link-library' ); ?>'>
+							<td style='background-color: <?php echo $colorarray[4]; ?>;color:#fff' class="lltooltip" title='<?php _e( 'This column allows for the output of text/code before and after each link notes', 'link-library' ); ?>'>5- <?php _e( 'Link Notes', 'link-library' ); ?></td>
+							<td style='text-align: center' class="lltooltip" title='<?php _e( 'Check to display link notes', 'link-library' ); ?>'>
 								<input type="checkbox" id="shownotes" name="shownotes" <?php checked( $options['shownotes'] ); ?>/>
 							</td>
-							<td style='background: #FFF' class="lltooltip" title='<?php _e( 'Code/Text to be displayed before each note', 'link-library' ); ?>'>
+							<td class="lltooltip" title='<?php _e( 'Code/Text to be displayed before each note', 'link-library' ); ?>'>
 								<input type="text" id="beforenote" name="beforenote" size="22" value="<?php echo stripslashes( $options['beforenote'] ); ?>" />
 							</td>
-							<td style='background: #FFF' class="lltooltip" title='<?php _e( 'Code/Text to be displayed after each note', 'link-library' ); ?>'>
+							<td class="lltooltip" title='<?php _e( 'Code/Text to be displayed after each note', 'link-library' ); ?>'>
 								<input type="text" id="afternote" name="afternote" size="22" value="<?php echo stripslashes( $options['afternote'] ); ?>" />
 							</td>
-							<td style='background: #FFF'></td>
-							<td style='background: #FFF'></td>
+							<td></td>
+							<td></td>
+							<td><input type="checkbox" id="suppress_link_notes_if_empty" name="suppress_link_notes_if_empty" <?php checked( $options['suppress_link_notes_if_empty'] );?>/></td>
 						</tr>
 						<?php break;
 					case 6: /* -------------------------------- Link RSS Icons -------------------------------------------*/
 						?>
 						<tr>
-							<td style='background-color: #008500;color:#fff' class="lltooltip" title='<?php _e( 'This column allows for the output of text/code before and after the RSS icons', 'link-library' ); ?>'>6- <?php _e( 'RSS Icons', 'link-library' ); ?></td>
-							<td style='text-align:center;background: #FFF'>
+							<td style='background-color: <?php echo $colorarray[5]; ?>;color:#fff' class="lltooltip" title='<?php _e( 'This column allows for the output of text/code before and after the RSS icons', 'link-library' ); ?>'>6- <?php _e( 'RSS Icons', 'link-library' ); ?></td>
+							<td style='text-align:center;'>
 								<?php _e( 'See below', 'link-library' ); ?>
 							</td>
-							<td style='background: #FFF' class="lltooltip" title='<?php _e( 'Code/Text to be displayed before RSS Icons', 'link-library' ); ?>'>
+							<td class="lltooltip" title='<?php _e( 'Code/Text to be displayed before RSS Icons', 'link-library' ); ?>'>
 								<input type="text" id="beforerss" name="beforerss" size="22" value="<?php echo stripslashes( $options['beforerss'] ); ?>" />
 							</td>
-							<td style='background: #FFF' class="lltooltip" title='<?php _e( 'Code/Text to be displayed after RSS Icons', 'link-library' ); ?>'>
+							<td class="lltooltip" title='<?php _e( 'Code/Text to be displayed after RSS Icons', 'link-library' ); ?>'>
 								<input type="text" id="afterrss" name="afterrss" size="22" value="<?php echo stripslashes( $options['afterrss'] ); ?>" />
 							</td>
-							<td style='background: #FFF'></td>
-							<td style='background: #FFF'></td>
+							<td></td>
+							<td></td>
+							<td><input type="checkbox" id="suppress_rss_icon_if_empty" name="suppress_rss_icon_if_empty" <?php checked( $options['suppress_rss_icon_if_empty'] );?>/></td>
 						</tr>
 						<?php break;
 					case 7: /* -------------------------------- Web Link -------------------------------------------*/
 						?>
 						<tr>
-							<td style='background-color: #5ccccc;color:#fff' class="lltooltip" title='<?php _e( 'This column allows for the output of text/code before and after the Web Link', 'link-library' ); ?>'>7- <?php _e( 'Web Link', 'link-library' ); ?></td>
-							<td style='text-align:center;background: #FFF'>
+							<td style='background-color: <?php echo $colorarray[6]; ?>;color:#fff' class="lltooltip" title='<?php _e( 'This column allows for the output of text/code before and after the Web Link', 'link-library' ); ?>'>7- <?php _e( 'Web Link', 'link-library' ); ?></td>
+							<td style='text-align:center;'>
 								<select name="displayweblink" id="displayweblink" style="width:80px;">
 									<option value="false"<?php selected( $options['displayweblink'] == 'false' ); ?>><?php _e( 'False', 'link-library' ); ?></option>
 									<option value="address"<?php selected( $options['displayweblink'] == 'address' ); ?>><?php _e( 'Web Address Link', 'link-library' ); ?></option>
@@ -4937,29 +5585,30 @@ function general_custom_fields_meta_box( $data ) {
 									<option value="label"<?php selected( $options['displayweblink'] == 'label' ); ?>><?php _e( 'Text Label with Link', 'link-library' ); ?></option>
 								</select>
 							</td>
-							<td style='background: #FFF' class="lltooltip" title='<?php _e( 'Code/Text to be displayed before Web Link', 'link-library' ); ?>'>
+							<td class="lltooltip" title='<?php _e( 'Code/Text to be displayed before Web Link', 'link-library' ); ?>'>
 								<input type="text" id="beforeweblink" name="beforeweblink" size="22" value="<?php echo stripslashes( $options['beforeweblink'] ); ?>" />
 							</td>
-							<td style='background: #FFF' class="lltooltip" title='<?php _e( 'Code/Text to be displayed after Web Link', 'link-library' ); ?>'>
+							<td class="lltooltip" title='<?php _e( 'Code/Text to be displayed after Web Link', 'link-library' ); ?>'>
 								<input type="text" id="afterweblink" name="afterweblink" size="22" value="<?php echo stripslashes( $options['afterweblink'] ); ?>" />
 							</td>
-							<td style='background: #FFF'>
+							<td>
 								<input class="lltooltip" title='<?php _e( 'Text Label that the web link will be assigned to.', 'link-library' ); ?>' type="text" id="weblinklabel" name="weblinklabel" size="9" value="<?php echo stripslashes( $options['weblinklabel'] ); ?>" />
 								<input class="lltooltip" title='<?php _e( 'Target that will be assigned to web links.', 'link-library' ); ?>'  type="text" id="weblinktarget" name="weblinktarget" size="9" value="<?php echo stripslashes( $options['weblinktarget'] ); ?>" />
 							</td>
-							<td style='background: #FFF' class="lltooltip" title='<?php _e( 'Select which link address will be displayed / used for link', 'link-library' ); ?>'>
+							<td class="lltooltip" title='<?php _e( 'Select which link address will be displayed / used for link', 'link-library' ); ?>'>
 								<select name="sourceweblink" id="sourceweblink" style="width:200px;">
 									<option value="primary"<?php selected( $options['sourceweblink'] == "primary" ); ?>><?php _e( 'Primary', 'link-library' ); ?></option>
 									<option value="secondary"<?php selected( $options['sourceweblink'] == "secondary" ); ?>><?php _e( 'Secondary', 'link-library' ); ?></option>
 								</select>
 							</td>
+							<td></td>
 						</tr>
 						<?php break;
 					case 8: /* -------------------------------- Telephone -------------------------------------------*/
 						?>
 						<tr>
-							<td style='background-color: #6c8cd5;color:#fff' class="lltooltip" title='<?php _e( 'This column allows for the output of text/code before and after the Telephone Number', 'link-library' ); ?>'>8- <?php _e( 'Telephone', 'link-library' ); ?></td>
-							<td style='text-align:center;background: #FFF'>
+							<td style='background-color: <?php echo $colorarray[7]; ?>;color:#fff' class="lltooltip" title='<?php _e( 'This column allows for the output of text/code before and after the Telephone Number', 'link-library' ); ?>'>8- <?php _e( 'Telephone', 'link-library' ); ?></td>
+							<td style='text-align:center;'>
 								<select name="showtelephone" id="showtelephone" style="width:80px;">
 									<option value="false"<?php selected( $options['showtelephone'] == "false" ); ?>><?php _e( 'False', 'link-library' ); ?></option>
 									<option value="plain"<?php selected( $options['showtelephone'] == "plain" ); ?>><?php _e( 'Plain Text', 'link-library' ); ?></option>
@@ -4967,29 +5616,30 @@ function general_custom_fields_meta_box( $data ) {
 									<option value="label"<?php selected( $options['showtelephone'] == "label" ); ?>><?php _e( 'Label', 'link-library' ); ?></option>
 								</select>
 							</td>
-							<td style='background: #FFF' class="lltooltip" title='<?php _e( 'Code/Text to be displayed before Telephone Number', 'link-library' ); ?>'>
+							<td class="lltooltip" title='<?php _e( 'Code/Text to be displayed before Telephone Number', 'link-library' ); ?>'>
 								<input type="text" id="beforetelephone" name="beforetelephone" size="22" value="<?php echo stripslashes( $options['beforetelephone'] ); ?>" />
 							</td>
-							<td style='background: #FFF' class="lltooltip" title='<?php _e( 'Code/Text to be displayed after Telephone Number', 'link-library' ); ?>'>
+							<td class="lltooltip" title='<?php _e( 'Code/Text to be displayed after Telephone Number', 'link-library' ); ?>'>
 								<input type="text" id="aftertelephone" name="aftertelephone" size="22" value="<?php echo stripslashes( $options['aftertelephone'] ); ?>" />
 							</td>
-							<td style='background: #FFF' class="lltooltip" title='<?php _e( 'Text Label that the telephone will be assigned to.', 'link-library' ); ?>'>
+							<td class="lltooltip" title='<?php _e( 'Text Label that the telephone will be assigned to.', 'link-library' ); ?>'>
 								<input type="text" id="telephonelabel" name="telephonelabel" size="22" value="<?php echo stripslashes( $options['telephonelabel'] ); ?>" />
 							</td>
-							<td style='background: #FFF' class="lltooltip" title='<?php _e( 'Select which link address will be displayed / used for link', 'link-library' ); ?>'>
+							<td class="lltooltip" title='<?php _e( 'Select which link address will be displayed / used for link', 'link-library' ); ?>'>
 								<select name="sourcetelephone" id="sourcetelephone" style="width:200px;">
 									<option value="primary"<?php selected( $options['sourcetelephone'] == 'primary' ); ?>><?php _e( 'Primary', 'link-library' ); ?></option>
 									<option value="secondary"<?php selected( $options['sourcetelephone'] == 'secondary' ); ?>><?php _e( 'Secondary', 'link-library' ); ?></option>
 									<option value="phone"<?php selected( $options['sourcetelephone'] == 'phone' ); ?>><?php _e( 'Phone', 'link-library' ); ?></option>
 								</select>
 							</td>
+							<td><input type="checkbox" id="suppress_tel_if_empty" name="suppress_tel_if_empty" <?php checked( $options['suppress_tel_if_empty'] );?>/></td>
 						</tr>
 						<?php break;
 					case 9: /* -------------------------------- E-mail -------------------------------------------*/
 						?>
 						<tr>
-							<td style='background-color: #67e667;color:#fff' class="lltooltip" title='<?php _e( 'This column allows for the output of text/code before and after the E-mail', 'link-library' ); ?>'>9- <?php _e( 'E-mail', 'link-library' ); ?></td>
-							<td style='text-align:center;background: #FFF'>
+							<td style='background-color: <?php echo $colorarray[8]; ?>;color:#fff' class="lltooltip" title='<?php _e( 'This column allows for the output of text/code before and after the E-mail', 'link-library' ); ?>'>9- <?php _e( 'E-mail', 'link-library' ); ?></td>
+							<td style='text-align:center;'>
 								<select name="showemail" id="showemail" style="width:80px;">
 									<option value="false"<?php selected( $options['showemail'] == "false" ); ?>><?php _e( 'False', 'link-library' ); ?></option>
 									<option value="plain"<?php selected( $options['showemail'] == "plain" ); ?>><?php _e( 'Plain Text', 'link-library' ); ?></option>
@@ -4999,167 +5649,183 @@ function general_custom_fields_meta_box( $data ) {
 									<option value="commandlabel"<?php selected( $options['showemail'] == "commandlabel" ); ?>><?php _e( 'Formatted Command with Labels', 'link-library' ); ?></option>
 								</select>
 							</td>
-							<td style='background: #FFF' class="lltooltip" title='<?php _e( 'Code/Text to be displayed before E-mail', 'link-library' ); ?>'>
+							<td class="lltooltip" title='<?php _e( 'Code/Text to be displayed before E-mail', 'link-library' ); ?>'>
 								<input type="text" id="beforeemail" name="beforeemail" size="22" value="<?php echo stripslashes( $options['beforeemail'] ); ?>" />
 							</td>
-							<td style='background: #FFF' class="lltooltip" title='<?php _e( 'Code/Text to be displayed after E-mail', 'link-library' ); ?>'>
+							<td class="lltooltip" title='<?php _e( 'Code/Text to be displayed after E-mail', 'link-library' ); ?>'>
 								<input type="text" id="afteremail" name="afteremail" size="22" value="<?php echo stripslashes( $options['afteremail'] ); ?>" />
 							</td>
-							<td style='background: #FFF' class="lltooltip" title='<?php _e( 'Text Label that the e-mail will be assigned to represent the e-mail link.', 'link-library' ); ?>'>
+							<td class="lltooltip" title='<?php _e( 'Text Label that the e-mail will be assigned to represent the e-mail link.', 'link-library' ); ?>'>
 								<input type="text" id="emaillabel" name="emaillabel" size="22" value="<?php echo stripslashes( $options['emaillabel'] ); ?>" />
 							</td>
-							<td style='background: #FFF' class="lltooltip" title='<?php _e( 'Command that the e-mail will be embedded in. In the case of a command, use the symbols #email and #company to indicate the position where these elements should be inserted.', 'link-library' ); ?>'>
+							<td class="lltooltip" title='<?php _e( 'Command that the e-mail will be embedded in. In the case of a command, use the symbols #email and #company to indicate the position where these elements should be inserted.', 'link-library' ); ?>'>
 								<input type="text" id="emailcommand" name="emailcommand" size="22" value="<?php echo stripslashes( $options['emailcommand'] ); ?>" />
 							</td>
+							<td><input type="checkbox" id="suppress_email_if_empty" name="suppress_email_if_empty" <?php checked( $options['suppress_email_if_empty'] );?>/></td>
 						</tr>
 						<?php break;
 					case 10: /* -------------------------------- Link Hits -------------------------------------------*/
 						?>
 						<tr>
-							<td style='background-color: #33cccc;color:#fff' class="lltooltip" title='<?php _e( 'This column allows for the output of text/code before and after Link Hits', 'link-library' ); ?>'>10- <?php _e( 'Link Hits', 'link-library' ); ?></td>
-							<td style='text-align:center;background: #FFF'>
+							<td style='background-color: <?php echo $colorarray[9]; ?>;color:#fff' class="lltooltip" title='<?php _e( 'This column allows for the output of text/code before and after Link Hits', 'link-library' ); ?>'>10- <?php _e( 'Link Hits', 'link-library' ); ?></td>
+							<td style='text-align:center;'>
 								<input type="checkbox" id="showlinkhits" name="showlinkhits" <?php checked( $options['showlinkhits'] ); ?>/>
 							</td>
-							<td style='background: #FFF' class="lltooltip" title='<?php _e( 'Code/Text to be displayed before Link Hits', 'link-library' ); ?>'>
+							<td class="lltooltip" title='<?php _e( 'Code/Text to be displayed before Link Hits', 'link-library' ); ?>'>
 								<input type="text" id="beforelinkhits" name="beforelinkhits" size="22" value="<?php echo stripslashes( $options['beforelinkhits'] ); ?>" />
 							</td>
-							<td style='background: #FFF' class="lltooltip" title='<?php _e( 'Code/Text to be displayed after Link Hits', 'link-library' ); ?>'>
+							<td class="lltooltip" title='<?php _e( 'Code/Text to be displayed after Link Hits', 'link-library' ); ?>'>
 								<input type="text" id="afterlinkhits" name="afterlinkhits" size="22" value="<?php echo stripslashes( $options['afterlinkhits'] ); ?>" />
 							</td>
-							<td style='background: #FFF'></td>
-							<td style='background: #FFF'></td>
+							<td></td>
+							<td></td>
+							<td></td>
 						</tr>
 						<?php break;
 					case 11: /* -------------------------------- Link Rating -------------------------------------------*/
 						?>
 						<tr>
-							<td style='background-color: #33cc00;color:#fff' class="lltooltip" title='<?php _e( 'This column allows for the output of text/code before and after the Link Rating', 'link-library' ); ?>'>11- <?php _e( 'Link Rating', 'link-library' ); ?></td>
-							<td style='text-align:center;background: #FFF'>
+							<td style='background-color: <?php echo $colorarray[10]; ?>;color:#fff' class="lltooltip" title='<?php _e( 'This column allows for the output of text/code before and after the Link Rating', 'link-library' ); ?>'>11- <?php _e( 'Link Rating', 'link-library' ); ?></td>
+							<td style='text-align:center;'>
 								<input type="checkbox" id="showrating" name="showrating" <?php checked( $options['showrating'] ); ?>/>
 							</td>
-							<td style='background: #FFF' class="lltooltip" title='<?php _e( 'Code/Text to be displayed before Link Rating', 'link-library' ); ?>'>
+							<td class="lltooltip" title='<?php _e( 'Code/Text to be displayed before Link Rating', 'link-library' ); ?>'>
 								<input type="text" id="beforelinkrating" name="beforelinkrating" size="22" value="<?php echo stripslashes( $options['beforelinkrating'] ); ?>" />
 							</td>
-							<td style='background: #FFF' class="lltooltip" title='<?php _e( 'Code/Text to be displayed after Link Rating', 'link-library' ); ?>'>
+							<td class="lltooltip" title='<?php _e( 'Code/Text to be displayed after Link Rating', 'link-library' ); ?>'>
 								<input type="text" id="afterlinkrating" name="afterlinkrating" size="22" value="<?php echo stripslashes( $options['afterlinkrating'] ); ?>" />
 							</td>
-							<td style='background: #FFF'></td>
-							<td style='background: #FFF'></td>
+							<td></td>
+							<td></td>
+							<td><input type="checkbox" id="suppress_rating_if_empty" name="suppress_rating_if_empty" <?php checked( $options['suppress_rating_if_empty'] );?>/></td>
 						</tr>
 						<?php break;
 					case 12: /* -------------------------------- Large Description -------------------------------------------*/
 						?>
 						<tr>
-							<td style='background-color: #33ccff;color:#fff' class="lltooltip" title='<?php _e( 'This column allows for the output of text/code before and after the Link Large Description', 'link-library' ); ?>'>12- <?php _e( 'Link Large Description', 'link-library' ); ?></td>
-							<td style='text-align:center;background: #FFF'>
+							<td style='background-color: <?php echo $colorarray[11]; ?>;color:#fff' class="lltooltip" title='<?php _e( 'This column allows for the output of text/code before and after the Link Large Description', 'link-library' ); ?>'>12- <?php _e( 'Link Large Description', 'link-library' ); ?></td>
+							<td style='text-align:center;'>
 								<input type="checkbox" id="showlargedescription" name="showlargedescription" <?php checked( $options['showlargedescription'] ); ?>/>
 							</td>
-							<td style='background: #FFF' class="lltooltip" title='<?php _e( 'Code/Text to be displayed before Link Large Description', 'link-library' ); ?>'>
+							<td class="lltooltip" title='<?php _e( 'Code/Text to be displayed before Link Large Description', 'link-library' ); ?>'>
 								<input type="text" id="beforelargedescription" name="beforelargedescription" size="22" value="<?php echo stripslashes( $options['beforelargedescription'] ); ?>" />
 							</td>
-							<td style='background: #FFF' class="lltooltip" title='<?php _e( 'Code/Text to be displayed after Link Large Description', 'link-library' ); ?>'>
+							<td class="lltooltip" title='<?php _e( 'Code/Text to be displayed after Link Large Description', 'link-library' ); ?>'>
 								<input type="text" id="afterlargedescription" name="afterlargedescription" size="22" value="<?php echo stripslashes( $options['afterlargedescription'] ); ?>" />
 							</td>
-							<td style='background: #FFF'></td>
-							<td style='background: #FFF'></td>
+							<td></td>
+							<td></td>
+							<td><input type="checkbox" id="suppress_large_desc_if_empty" name="suppress_large_desc_if_empty" <?php checked( $options['suppress_large_desc_if_empty'] );?>/></td>
 						</tr>
 						<?php break;
 					case 13: /* -------------------------------- Link Submitter Name -------------------------------------------*/
 						?>
 						<tr>
-							<td style='background-color: #33eecc;color:#fff' class="lltooltip" title='<?php _e( 'This column allows for the output of text/code before and after the Link Large Description', 'link-library' ); ?>'>13- <?php _e( 'Submitter Name', 'link-library' ); ?></td>
-							<td style='text-align:center;background: #FFF'>
+							<td style='background-color: <?php echo $colorarray[12]; ?>;color:#fff' class="lltooltip" title='<?php _e( 'This column allows for the output of text/code before and after the Link Large Description', 'link-library' ); ?>'>13- <?php _e( 'Submitter Name', 'link-library' ); ?></td>
+							<td style='text-align:center;'>
 								<input type="checkbox" id="showsubmittername" name="showsubmittername" <?php checked( $options['showsubmittername'] ); ?>/>
 							</td>
-							<td style='background: #FFF' class="lltooltip" title='<?php _e( 'Code/Text to be displayed before Link Large Description', 'link-library' ); ?>'>
+							<td class="lltooltip" title='<?php _e( 'Code/Text to be displayed before Link Large Description', 'link-library' ); ?>'>
 								<input type="text" id="beforesubmittername" name="beforesubmittername" size="22" value="<?php echo stripslashes( $options['beforesubmittername'] ); ?>" />
 							</td>
-							<td style='background: #FFF' class="lltooltip" title='<?php _e( 'Code/Text to be displayed after Link Large Description', 'link-library' ); ?>'>
+							<td class="lltooltip" title='<?php _e( 'Code/Text to be displayed after Link Large Description', 'link-library' ); ?>'>
 								<input type="text" id="aftersubmittername" name="aftersubmittername" size="22" value="<?php echo stripslashes( $options['aftersubmittername'] ); ?>" />
 							</td>
-							<td style='background: #FFF'></td>
-							<td style='background: #FFF'></td>
+							<td></td>
+							<td></td>
+							<td><input type="checkbox" id="suppress_submitter_if_empty" name="suppress_submitter_if_empty" <?php checked( $options['suppress_submitter_if_empty'] );?>/></td>
 						</tr>
 						<?php break;
 					case 14: /* -------------------------------- Category Description -------------------------------------------*/
 						?>
 						<tr>
-							<td style='background-color: #33eeff;color:#fff' class="lltooltip" title='<?php _e( 'This column allows for the output of text/code before and after the Link Large Description', 'link-library' ); ?>'>14- <?php _e( 'Category Description', 'link-library' ); ?></td>
-							<td style='text-align:center;background: #FFF'>
+							<td style='background-color: <?php echo $colorarray[13]; ?>;color:#fff' class="lltooltip" title='<?php _e( 'This column allows for the output of text/code before and after the Link Large Description', 'link-library' ); ?>'>14- <?php _e( 'Category Description', 'link-library' ); ?></td>
+							<td style='text-align:center;'>
 								<input type="checkbox" id="showcatdesc" name="showcatdesc" <?php checked( $options['showcatdesc'] ); ?>/>
 							</td>
-							<td style='background: #FFF' class="lltooltip" title='<?php _e( 'Code/Text to be displayed before Link Large Description', 'link-library' ); ?>'>
+							<td class="lltooltip" title='<?php _e( 'Code/Text to be displayed before Link Large Description', 'link-library' ); ?>'>
 								<input type="text" id="beforecatdesc" name="beforecatdesc" size="22" value="<?php echo stripslashes( $options['beforecatdesc'] ); ?>" />
 							</td>
-							<td style='background: #FFF' class="lltooltip" title='<?php _e( 'Code/Text to be displayed after Link Large Description', 'link-library' ); ?>'>
+							<td class="lltooltip" title='<?php _e( 'Code/Text to be displayed after Link Large Description', 'link-library' ); ?>'>
 								<input type="text" id="aftercatdesc" name="aftercatdesc" size="22" value="<?php echo stripslashes( $options['aftercatdesc'] ); ?>" />
 							</td>
-							<td style='background: #FFF'></td>
-							<td style='background: #FFF'></td>
+							<td></td>
+							<td></td>
+							<td><input type="checkbox" id="suppress_cat_desc_if_empty" name="suppress_cat_desc_if_empty" <?php checked( $options['suppress_cat_desc_if_empty'] );?>/></td>
 						</tr>
 						<?php break;
 					case 15: /* -------------------------------- Link Tags -------------------------------------------*/
 						?>
 						<tr>
-							<td style='background-color: #c4d1ee;color:#fff' class="lltooltip" title='<?php _e( 'This column allows for the output of tags associated with the link', 'link-library' ); ?>'>15- <?php _e( 'Link Tags', 'link-library' ); ?></td>
-							<td style='text-align:center;background: #FFF'>
+							<td style='background-color: <?php echo $colorarray[14]; ?>;color:#fff' class="lltooltip" title='<?php _e( 'This column allows for the output of tags associated with the link', 'link-library' ); ?>'>15- <?php _e( 'Link Tags', 'link-library' ); ?></td>
+							<td style='text-align:center;'>
 								<input type="checkbox" id="showlinktags" name="showlinktags" <?php checked( $options['showlinktags'] ); ?>/>
 							</td>
-							<td style='background: #FFF' class="lltooltip" title='<?php _e( 'Code/Text to be displayed before Link Tags', 'link-library' ); ?>'>
+							<td class="lltooltip" title='<?php _e( 'Code/Text to be displayed before Link Tags', 'link-library' ); ?>'>
 								<input type="text" id="beforelinktags" name="beforelinktags" size="22" value="<?php echo stripslashes( $options['beforelinktags'] ); ?>" />
 							</td>
-							<td style='background: #FFF' class="lltooltip" title='<?php _e( 'Code/Text to be displayed after Link Tags', 'link-library' ); ?>'>
+							<td class="lltooltip" title='<?php _e( 'Code/Text to be displayed after Link Tags', 'link-library' ); ?>'>
 								<input type="text" id="afterlinktags" name="afterlinktags" size="22" value="<?php echo stripslashes( $options['afterlinktags'] ); ?>" />
 							</td>
-							<td style='background: #FFF'>
+							<td>
 								<select name="taglinks" id="taglinks" style="width:200px;">
 									<option value="inactive"<?php selected( $options['taglinks'], 'inactive' ); ?>><?php _e( 'Tag links inactive', 'link-library' ); ?></option>
 									<option value="active"<?php selected( $options['taglinks'], 'active' ); ?>><?php _e( 'Tag links active', 'link-library' ); ?></option>
 								</select>
 							</td>
-							<td style='background: #FFF'></td>
+							<td></td>
+							<td><input type="checkbox" id="suppress_link_tags_if_empty" name="suppress_link_tags_if_empty" <?php checked( $options['suppress_link_tags_if_empty'] );?>/></td>
 						</tr>
 						<?php break;
 					case 16: /* -------------------------------- Link Price -------------------------------------------*/
 						?>
 						<tr>
-							<td style='background-color: #238e00;color:#fff' class="lltooltip" title='<?php _e( 'This column allows for the output of the price field associated with the link', 'link-library' ); ?>'>16- <?php _e( 'Link Price', 'link-library' ); ?></td>
-							<td style='text-align:center;background: #FFF'>
+							<td style='background-color: <?php echo $colorarray[15]; ?>;color:#fff' class="lltooltip" title='<?php _e( 'This column allows for the output of the price field associated with the link', 'link-library' ); ?>'>16- <?php _e( 'Link Price', 'link-library' ); ?></td>
+							<td style='text-align:center;'>
 								<input type="checkbox" id="showlinkprice" name="showlinkprice" <?php checked( $options['showlinkprice'] ); ?>/>
 							</td>
-							<td style='background: #FFF' class="lltooltip" title='<?php _e( 'Code/Text to be displayed before Link Price', 'link-library' ); ?>'>
+							<td class="lltooltip" title='<?php _e( 'Code/Text to be displayed before Link Price', 'link-library' ); ?>'>
 								<input type="text" id="beforelinkprice" name="beforelinkprice" size="22" value="<?php echo stripslashes( $options['beforelinkprice'] ); ?>" />
 							</td>
-							<td style='background: #FFF' class="lltooltip" title='<?php _e( 'Code/Text to be displayed after Link Price', 'link-library' ); ?>'>
+							<td class="lltooltip" title='<?php _e( 'Code/Text to be displayed after Link Price', 'link-library' ); ?>'>
 								<input type="text" id="afterlinkprice" name="afterlinkprice" size="22" value="<?php echo stripslashes( $options['afterlinkprice'] ); ?>" />
 							</td>
-							<td style='background: #FFF'>
+							<td>
 								<input type="text" id="linkcurrency" name="linkcurrency" size="3" value="<?php echo stripslashes( $options['linkcurrency'] ); ?>"  class="lltooltip" title='<?php _e( 'Currency symbol to be displayed next to price', 'link-library' ); ?>' />
 								Show 0.00 as free <input type="checkbox" id="show0asfree" name="show0asfree" <?php checked( $options['show0asfree'] ); ?>/>
 							</td>
-							<td style='background: #FFF'>
+							<td>
 								<select name="linkcurrencyplacement" id="linkcurrencyplacement" style="width:200px;">
 									<option value="before"<?php selected( $options['linkcurrencyplacement'] == 'before' ); ?>><?php _e( 'Before Price', 'link-library' ); ?></option>
 									<option value="after"<?php selected( $options['linkcurrencyplacement'] == 'after' ); ?>><?php _e( 'After Price', 'link-library' ); ?></option>
 								</select>
 							</td>
+							<td><input type="checkbox" id="suppress_link_price_if_empty" name="suppress_link_price_if_empty" <?php checked( $options['suppress_link_price_if_empty'] );?>/></td>
 						</tr>
 						<?php break;
 					case 17: /* -------------------------------- Category Name -------------------------------------------*/
 						?>
 						<tr>
-							<td style='background-color: #23A023;color:#fff' class="lltooltip" title='<?php _e( 'This column allows for the output of text/code before and after the Link Category Name', 'link-library' ); ?>'>17- <?php _e( 'Category Name', 'link-library' ); ?></td>
-							<td style='text-align:center;background: #FFF'>
+							<td style='background-color: <?php echo $colorarray[17]; ?>;color:#fff' class="lltooltip" title='<?php _e( 'This column allows for the output of text/code before and after the Link Category Name', 'link-library' ); ?>'>17- <?php _e( 'Category Name', 'link-library' ); ?></td>
+							<td style='text-align:center;'>
 								<input type="checkbox" id="showcatname" name="showcatname" <?php checked( $options['showcatname'] ); ?>/>
 							</td>
-							<td style='background: #FFF' class="lltooltip" title='<?php _e( 'Code/Text to be displayed before Category Name', 'link-library' ); ?>'>
+							<td class="lltooltip" title='<?php _e( 'Code/Text to be displayed before Category Name', 'link-library' ); ?>'>
 								<input type="text" id="beforecatname" name="beforecatname" size="22" value="<?php echo stripslashes( $options['beforecatname'] ); ?>" />
 							</td>
-							<td style='background: #FFF' class="lltooltip" title='<?php _e( 'Code/Text to be displayed after Link Large Description', 'link-library' ); ?>'>
+							<td class="lltooltip" title='<?php _e( 'Code/Text to be displayed after Link Large Description', 'link-library' ); ?>'>
 								<input type="text" id="aftercatname" name="aftercatname" size="22" value="<?php echo stripslashes( $options['aftercatname'] ); ?>" />
 							</td>
-							<td style='background: #FFF'></td>
-							<td style='background: #FFF'></td>
+							<td>
+								<select name="catnameformat" id="catnameformat" style="width:200px;">
+									<option value="currentcatname"<?php selected( $options['catnameformat'] == 'currentcatname' ); ?>><?php _e( 'Current cat name only', 'link-library' ); ?></option>
+									<option value="allcatnames"<?php selected( $options['catnameformat'] == 'allcatnames' ); ?>><?php _e( 'All assigned categories', 'link-library' ); ?></option>
+								</select>
+							</td>
+							<td title='<?php _e( 'Text or HTML to put between categories', 'link-library' ); ?>'>
+								<input type="text" id="categoryseparator" name="categoryseparator" size="22" value="<?php echo stripslashes( $options['categoryseparator'] ); ?>" />
+							</td>
+							<td><input type="checkbox" id="suppress_cat_name_if_empty" name="suppress_cat_name_if_empty" <?php checked( $options['suppress_cat_name_if_empty'] );?>/></td>
 						</tr>
 						<?php break;
 					case 18: /* ------------------------- Custom URL Fields ---------------------------------------*/
@@ -5172,8 +5838,8 @@ function general_custom_fields_meta_box( $data ) {
 						if ( $genoptions['customurl' . $customurlfieldid . 'active'] ) {
 						?>
 						<tr>
-							<td style='background-color: #5ccccc;color:#fff' class="lltooltip" title='<?php _e( 'This column allows for the output of text/code before and after the URL', 'link-library' ); ?>'><?php echo $arrayelements; ?>- <?php echo $genoptions['customurl' . $customurlfieldid . 'label']; ?></td>
-							<td style='text-align:center;background: #FFF'>
+							<td style='background-color: <?php echo $colorarray[$arrayelements]; ?>;color:#fff' class="lltooltip" title='<?php _e( 'This column allows for the output of text/code before and after the URL', 'link-library' ); ?>'><?php echo $arrayelements; ?>- <?php echo $genoptions['customurl' . $customurlfieldid . 'label']; ?></td>
+							<td style='text-align:center;'>
 								<select name="displaycustomurl<?php echo $customurlfieldid; ?>" id="displaycustomurl<?php echo $customurlfieldid; ?>" style="width:80px;">
 									<option value="false"<?php selected( $options['displaycustomurl' . $customurlfieldid] == 'false' ); ?>><?php _e( 'False', 'link-library' ); ?></option>
 									<option value="address"<?php selected( $options['displaycustomurl' . $customurlfieldid] == 'address' ); ?>><?php _e( 'Web Address Link', 'link-library' ); ?></option>
@@ -5181,35 +5847,37 @@ function general_custom_fields_meta_box( $data ) {
 									<option value="label"<?php selected( $options['displaycustomurl' . $customurlfieldid] == 'label' ); ?>><?php _e( 'Text Label with Link', 'link-library' ); ?></option>
 								</select>
 							</td>
-							<td style='background: #FFF' class="lltooltip" title='<?php _e( 'Code/Text to be displayed before the URL', 'link-library' ); ?>'>
+							<td class="lltooltip" title='<?php _e( 'Code/Text to be displayed before the URL', 'link-library' ); ?>'>
 								<input type="text" id="beforecustomurl<?php echo $customurlfieldid; ?>" name="beforecustomurl<?php echo $customurlfieldid; ?>" size="22" value="<?php echo stripslashes( $options['beforecustomurl' . $customurlfieldid] ); ?>" />
 							</td>
-							<td style='background: #FFF' class="lltooltip" title='<?php _e( 'Code/Text to be displayed after URL', 'link-library' ); ?>'>
+							<td class="lltooltip" title='<?php _e( 'Code/Text to be displayed after URL', 'link-library' ); ?>'>
 								<input type="text" id="aftercustomurl<?php echo $customurlfieldid; ?>" name="aftercustomurl<?php echo $customurlfieldid; ?>" size="22" value="<?php echo stripslashes( $options['aftercustomurl' . $customurlfieldid] ); ?>" />
 							</td>
-							<td style='background: #FFF'>
+							<td>
 								<input class="lltooltip" title='<?php _e( 'Text Label that the URL will be assigned to.', 'link-library' ); ?>' type="text" id="labelcustomurl<?php echo $customurlfieldid; ?>" name="labelcustomurl<?php echo $customurlfieldid; ?>" size="22" value="<?php echo stripslashes( $options['labelcustomurl' . $customurlfieldid] ); ?>" />
 							</td>
-							<td style='background: #FFF'><input class="lltooltip" title='<?php _e( 'Target that will be assigned to URL', 'link-library' ); ?>'  type="text" id="customurl<?php echo $customurlfieldid; ?>target" name="customurl<?php echo $customurlfieldid; ?>target" size="22" value="<?php echo stripslashes( $options['customurl' . $customurlfieldid . 'target'] ); ?>" /></td>
+							<td><input class="lltooltip" title='<?php _e( 'Target that will be assigned to URL', 'link-library' ); ?>'  type="text" id="customurl<?php echo $customurlfieldid; ?>target" name="customurl<?php echo $customurlfieldid; ?>target" size="22" value="<?php echo stripslashes( $options['customurl' . $customurlfieldid . 'target'] ); ?>" /></td>
+							<td><input type="checkbox" id="suppress_custom_url_<?php echo $customurlfieldid; ?>_if_empty" name="suppress_custom_url_<?php echo $customurlfieldid; ?>_if_empty" <?php checked( $options['suppress_custom_url_' . $customurlfieldid . '_if_empty'] );?>/></td>
 						</tr>
 						<?php } break;
 					case 23: /* -------------------------------- User Votes -------------------------------------------*/
 						?>
 						<tr>
-							<td style='background-color: #23A023;color:#fff' class="lltooltip" title='<?php _e( 'This column allows for the output of text/code before and after the Link Category Name', 'link-library' ); ?>'>23- <?php _e( 'User Votes', 'link-library' ); ?></td>
-							<td style='text-align:center;background: #FFF'>
+							<td style='background-color: <?php echo $colorarray[$arrayelements]; ?>;color:#fff' class="lltooltip" title='<?php _e( 'This column allows for the output of text/code before and after the Link Category Name', 'link-library' ); ?>'>23- <?php _e( 'User Votes', 'link-library' ); ?></td>
+							<td style='text-align:center;'>
 								<input type="checkbox" id="showuservotes" name="showuservotes" <?php checked( $options['showuservotes'] ); ?>/>
 							</td>
-							<td style='background: #FFF' class="lltooltip" title='<?php _e( 'Code/Text to be displayed before User Votes', 'link-library' ); ?>'>
+							<td class="lltooltip" title='<?php _e( 'Code/Text to be displayed before User Votes', 'link-library' ); ?>'>
 								<input type="text" id="beforeuservotes" name="beforeuservotes" size="22" value="<?php echo stripslashes( $options['beforeuservotes'] ); ?>" />
 							</td>
-							<td style='background: #FFF' class="lltooltip" title='<?php _e( 'Code/Text to be displayed after User Votes', 'link-library' ); ?>'>
+							<td class="lltooltip" title='<?php _e( 'Code/Text to be displayed after User Votes', 'link-library' ); ?>'>
 								<input type="text" id="afteruservotes" name="afteruservotes" size="22" value="<?php echo stripslashes( $options['afteruservotes'] ); ?>" />
 							</td>
-							<td style='background: #FFF' class="lltooltip" title='<?php _e( 'Only allow members to vote on links', 'link-library' ); ?>'>
+							<td class="lltooltip" title='<?php _e( 'Only allow members to vote on links', 'link-library' ); ?>'>
 								<?php _e( 'Only members can rate links', 'link-library' ); ?> <input type="checkbox" id="membersonlylinkvotes" name="membersonlylinkvotes" <?php checked( $options['membersonlylinkvotes'] ); ?>/>
 							</td>
-							<td class="lltooltip" title="Text of user voting button" style='background: #FFF'><input type="text" id="uservotelikelabel" name="uservotelikelabel" size="22" value="<?php echo stripslashes( $options['uservotelikelabel'] ); ?>" /></td>
+							<td class="lltooltip" title="Text of user voting button" ><input type="text" id="uservotelikelabel" name="uservotelikelabel" size="22" value="<?php echo stripslashes( $options['uservotelikelabel'] ); ?>" /></td>
+							<td></td>
 						</tr>
 						<?php break;
 					case 24: /* ------------------------- Custom Text Fields ---------------------------------------*/
@@ -5222,21 +5890,22 @@ function general_custom_fields_meta_box( $data ) {
 						if ( $genoptions['customtext' . $customtextfieldid . 'active'] ) {
 							?>
 							<tr>
-								<td style='background-color: #5ccccc;color:#fff' class="lltooltip" title='<?php _e( 'This column allows for the output of text/code before and after the Text Field', 'link-library' ); ?>'><?php echo $arrayelements; ?>- <?php echo $genoptions['customtext' . $customtextfieldid . 'label']; ?></td>
-								<td style='text-align:center;background: #FFF'>
+								<td style='background-color: <?php echo $colorarray[$arrayelements]; ?>;color:#fff' class="lltooltip" title='<?php _e( 'This column allows for the output of text/code before and after the Text Field', 'link-library' ); ?>'><?php echo $arrayelements; ?>- <?php echo $genoptions['customtext' . $customtextfieldid . 'label']; ?></td>
+								<td style='text-align:center;'>
 									<select name="displaycustomtext<?php echo $customtextfieldid; ?>" id="displaycustomtext<?php echo $customtextfieldid; ?>" style="width:80px;">
 										<option value="false"<?php selected( $options['displaycustomtext' . $customtextfieldid] == 'false' ); ?>><?php _e( 'False', 'link-library' ); ?></option>
 										<option value="label"<?php selected( $options['displaycustomtext' . $customtextfieldid] == 'label' ); ?>><?php _e( 'Text', 'link-library' ); ?></option>
 									</select>
 								</td>
-								<td style='background: #FFF' class="lltooltip" title='<?php _e( 'Code/Text to be displayed before the Text Field', 'link-library' ); ?>'>
+								<td class="lltooltip" title='<?php _e( 'Code/Text to be displayed before the Text Field', 'link-library' ); ?>'>
 									<input type="text" id="beforecustomtext<?php echo $customtextfieldid; ?>" name="beforecustomtext<?php echo $customtextfieldid; ?>" size="22" value="<?php echo stripslashes( $options['beforecustomtext' . $customtextfieldid] ); ?>" />
 								</td>
-								<td style='background: #FFF' class="lltooltip" title='<?php _e( 'Code/Text to be displayed after Text Field', 'link-library' ); ?>'>
+								<td class="lltooltip" title='<?php _e( 'Code/Text to be displayed after Text Field', 'link-library' ); ?>'>
 									<input type="text" id="aftercustomtext<?php echo $customtextfieldid; ?>" name="aftercustomtext<?php echo $customtextfieldid; ?>" size="22" value="<?php echo stripslashes( $options['aftercustomtext' . $customtextfieldid] ); ?>" />
 								</td>
-								<td style='background: #FFF'></td>
-								<td style='background: #FFF'></td>
+								<td></td>
+								<td></td>
+								<td><input type="checkbox" id="suppress_custom_text_<?php echo $customtextfieldid; ?>_if_empty" name="suppress_custom_text_<?php echo $customtextfieldid; ?>_if_empty" <?php checked( $options['suppress_custom_text_' . $customtextfieldid . '_if_empty'] );?>/></td>
 							</tr>
 						<?php } break;
 					case 29: /* ------------------------- Custom List Fields ---------------------------------------*/
@@ -5249,22 +5918,23 @@ function general_custom_fields_meta_box( $data ) {
 						if ( $genoptions['customlist' . $customlistfieldid . 'active'] ) {
 							?>
 							<tr>
-								<td style='background-color: #5ccccc;color:#fff' class="lltooltip" title='<?php _e( 'This column allows for the output of text/code before and after the custom list field', 'link-library' ); ?>'><?php echo $arrayelements; ?>- <?php echo $genoptions['customlist' . $customlistfieldid . 'label']; ?></td>
-								<td style='text-align:center;background: #FFF'>
+								<td style='background-color: <?php echo $colorarray[$arrayelements]; ?>;color:#fff' class="lltooltip" title='<?php _e( 'This column allows for the output of text/code before and after the custom list field', 'link-library' ); ?>'><?php echo $arrayelements; ?>- <?php echo $genoptions['customlist' . $customlistfieldid . 'label']; ?></td>
+								<td style='text-align:center;'>
 									<select name="displaycustomlist<?php echo $customlistfieldid; ?>" id="displaycustomlist<?php echo $customlistfieldid; ?>" style="width:80px;">
 										<option value="false"<?php selected( $options['displaycustomlist' . $customlistfieldid] == 'false' ); ?>><?php _e( 'False', 'link-library' ); ?></option>
 										<option value="listentry"<?php selected( $options['displaycustomlist' . $customlistfieldid] == 'listentry' ); ?>><?php _e( 'List Entry', 'link-library' ); ?></option>
 										<option value="listhtml"<?php selected( $options['displaycustomlist' . $customlistfieldid] == 'listhtml' ); ?>><?php _e( 'HTML Code', 'link-library' ); ?></option>
 									</select>
 								</td>
-								<td style='background: #FFF' class="lltooltip" title='<?php _e( 'Code/Text to be displayed before the custom list field', 'link-library' ); ?>'>
+								<td class="lltooltip" title='<?php _e( 'Code/Text to be displayed before the custom list field', 'link-library' ); ?>'>
 									<input type="text" id="beforecustomlist<?php echo $customlistfieldid; ?>" name="beforecustomlist<?php echo $customlistfieldid; ?>" size="22" value="<?php echo stripslashes( $options['beforecustomlist' . $customlistfieldid] ); ?>" />
 								</td>
-								<td style='background: #FFF' class="lltooltip" title='<?php _e( 'Code/Text to be displayed after custom list field', 'link-library' ); ?>'>
+								<td class="lltooltip" title='<?php _e( 'Code/Text to be displayed after custom list field', 'link-library' ); ?>'>
 									<input type="text" id="aftercustomlist<?php echo $customlistfieldid; ?>" name="aftercustomlist<?php echo $customlistfieldid; ?>" size="22" value="<?php echo stripslashes( $options['aftercustomlist' . $customlistfieldid] ); ?>" />
 								</td>
-								<td style='background: #FFF'></td>
-								<td style='background: #FFF'></td>
+								<td></td>
+								<td></td>
+								<td><input type="checkbox" id="suppress_custom_list_<?php echo $customlistfieldid; ?>_if_empty" name="suppress_custom_list_<?php echo $customlistfieldid; ?>_if_empty" <?php checked( $options['suppress_custom_list_' . $customlistfieldid . '_if_empty'] );?>/></td>
 							</tr>
 						<?php } break;
 				}
@@ -5273,31 +5943,34 @@ function general_custom_fields_meta_box( $data ) {
 		?>
 		<tr>
 			<td class="lltooltip" title='<?php _e( 'This column allows for the output of text/code after each link', 'link-library' ); ?>'><?php _e( 'After Link Block', 'link-library' ); ?></td>
-			<td style='background: #FFF'></td>
-			<td style='background: #FFF'></td>
-			<td style='background: #FFF' class="lltooltip" title='<?php _e( 'Output after complete link group (link, notes, desc, etc...)', 'link-library' ); ?>'>
+			<td></td>
+			<td></td>
+			<td class="lltooltip" title='<?php _e( 'Output after complete link group (link, notes, desc, etc...)', 'link-library' ); ?>'>
 				<input type="text" id="afteritem" name="afteritem" size="22" value="<?php echo stripslashes( $options['afteritem'] ); ?>" />
 			</td>
-			<td style='background: #FFF'></td>
-			<td style='background: #FFF'></td>
+			<td></td>
+			<td></td>
+			<td></td>
 		</tr>
 		<tr>
 			<td class="lltooltip" title='<?php _e( 'This column allows for the output of text/code after a number of links determined in the first column', 'link-library' ); ?>'><?php _e( 'Intermittent After Link', 'link-library' ); ?></td>
-			<td style='background: #FFF'></td>
-			<td style='background: #FFF'></td>
-			<td style='background: #FFF'>
+			<td></td>
+			<td></td>
+			<td>
 				<input type="text" id="addafterlink" name="addafterlink" size="22" value="<?php echo stripslashes( $options['addafterlink'] ); ?>" />
 			</td>
-			<td style='background: #FFF'></td>
-			<td style='background: #FFF'></td>
+			<td></td>
+			<td></td>
+			<td></td>
 		</tr>
 		<tr>
 			<td class="lltooltip" title='<?php _e( 'This column allows for the output of text/code after the last link in each category', 'link-library' ); ?>'><?php _e( 'After last link', 'link-library' ); ?></td>
-			<td style='background: #FFF'></td><td style='background: #FFF'></td>
-			<td style='background: #FFF'>
+			<td></td><td></td>
+			<td>
 				<input type="text" id="afterlastlink" name="afterlastlink" size="22" value="<?php echo stripslashes( $options['afterlastlink'] ); ?>" />
 			</td>
-			<td style='background: #FFF'></td><td style='background: #FFF'></td>
+			<td></td><td></td>
+			<td></td>
 		</tr>
 		</table>
 		</table>
@@ -5347,6 +6020,21 @@ function general_custom_fields_meta_box( $data ) {
 				</td>
 				<td style='width:75px;padding:0px 20px 0px 20px'>
 					<input type="checkbox" id="nooutputempty" name="nooutputempty" <?php checked( $options['nooutputempty'] ); ?>/>
+				</td>
+			</tr>
+			<tr>
+			<td>
+					<?php _e( 'Custom WP Query Argument Name', 'link-library' ); ?>
+				</td>
+				<td style='width:75px;padding:0px 20px 0px 20px'>
+					<input type="text" id="customqueryarg" name="customqueryarg" size="22" value="<?php echo stripslashes( $options['customqueryarg'] ); ?>" />
+				</td>
+				<td></td>
+				<td>
+					<?php _e( 'Custom WP Query Argument Value', 'link-library' ); ?>
+				</td>
+				<td style='width:75px;padding:0px 20px 0px 20px'>
+					<input type="text" id="customqueryargvalue" name="customqueryargvalue" size="22" value="<?php echo stripslashes( $options['customqueryargvalue'] ); ?>" />
 				</td>
 			</tr>
 		</table>
@@ -5404,6 +6092,8 @@ function general_custom_fields_meta_box( $data ) {
 				<td style='width:75px;padding-right:20px'>
 					<input type="checkbox" id="show_rss" name="show_rss" <?php checked( $options['show_rss'] ); ?>/>
 				</td>
+			</tr>
+			<tr>
 				<td>
 					<?php _e( 'Show RSS Link using Standard Icon', 'link-library' ); ?>
 				</td>
@@ -5413,18 +6103,16 @@ function general_custom_fields_meta_box( $data ) {
 				<td></td>
 				<td style='width:75px;padding-right:20px'></td>
 			</tr>
+		</table>
+
+		<h2>Inline RSS Preview</h2>
+		<table>	
 			<tr>
 				<td>
-					<?php _e( 'Show RSS Preview Link', 'link-library' ); ?>
+					<?php _e( 'Show RSS Feed Headers in PopUp Preview Link', 'link-library' ); ?>
 				</td>
 				<td>
 					<input type="checkbox" id="rsspreview" name="rsspreview" <?php checked( $options['rsspreview'] ); ?>/>
-				</td>
-				<td>
-					<?php _e( 'Number of articles shown in RSS Preview', 'link-library' ); ?>
-				</td>
-				<td>
-					<input type="text" id="rsspreviewcount" name="rsspreviewcount" size="2" value="<?php echo strval( $options['rsspreviewcount'] ); ?>" />
 				</td>
 				<td>
 					<?php _e( 'Show RSS Feed Headers in Link Library output', 'link-library' ); ?>
@@ -5432,36 +6120,123 @@ function general_custom_fields_meta_box( $data ) {
 				<td>
 					<input type="checkbox" id="rssfeedinline" name="rssfeedinline" <?php checked( $options['rssfeedinline'] ); ?>/>
 				</td>
-			</tr>
-			<tr>
 				<td>
 					<?php _e( 'Show RSS Feed Content in Link Library output', 'link-library' ); ?>
 				</td>
 				<td>
 					<input type="checkbox" id="rssfeedinlinecontent" name="rssfeedinlinecontent" <?php checked( $options['rssfeedinlinecontent'] ); ?>/>
 				</td>
-				<td>
-					<?php _e( 'Number of RSS articles shown in Link Library Output', 'link-library' ); ?>
-				</td>
-				<td>
-					<input type="text" id="rssfeedinlinecount" name="rssfeedinlinecount" size="2" value="<?php echo strval( $options['rssfeedinlinecount'] ); ?>" />
-				</td>
-				<td><?php _e( 'Max number of days since published', 'link-library' ); ?></td>
-				<td><input type="text" id="rssfeedinlinedayspublished" name="rssfeedinlinedayspublished" size="2" value="<?php echo strval( $options['rssfeedinlinedayspublished'] ); ?>" /></td>
 			</tr>
-			<tr>
+			<tr>	
+				<td>
+					<?php _e( 'Number of articles shown in RSS Preview Popup', 'link-library' ); ?>
+				</td>
+				<td>
+					<input type="text" id="rsspreviewcount" name="rsspreviewcount" size="2" value="<?php echo strval( $options['rsspreviewcount'] ); ?>" />
+				</td>
 				<td><?php _e( 'RSS Preview Width', 'link-library' ); ?></td>
 				<td>
 					<input type="text" id="rsspreviewwidth" name="rsspreviewwidth" size="5" value="<?php echo strval( $options['rsspreviewwidth'] ); ?>" /></td></td>
 				<td><?php _e( 'RSS Preview Height', 'link-library' ); ?></td>
 				<td><input type="text" id="rsspreviewheight" name="rsspreviewheight" size="5" value="<?php echo strval( $options['rsspreviewheight'] ); ?>" /></td>
+			</tr>
+			<tr>	
+				<td>
+					<?php _e( 'Number of RSS articles shown in Inline Link Library Output', 'link-library' ); ?>
+				</td>
+				<td>
+					<input type="text" id="rssfeedinlinecount" name="rssfeedinlinecount" size="2" value="<?php echo strval( $options['rssfeedinlinecount'] ); ?>" />
+				</td>
+			</tr>
+			<tr>				
+				<td><?php _e( 'Max number of days since published', 'link-library' ); ?></td>
+				<td><input type="text" id="rssfeedinlinedayspublished" name="rssfeedinlinedayspublished" size="2" value="<?php echo strval( $options['rssfeedinlinedayspublished'] ); ?>" /></td>
+			</tr>
+			<tr>				
 				<td><?php _e( 'Skip links with no RSS inline items', 'link-library' ); ?></td>
 				<td><input type="checkbox" id="rssfeedinlineskipempty" name="rssfeedinlineskipempty" <?php checked( $options['rssfeedinlineskipempty'] ); ?>/></td>
 			</tr>
 		</table>
+		
+		<h2>RSS Library Shortcode</h2>
+		<table>
+			<tr>			
+				<td>
+					<?php _e( 'Number of RSS items per site', 'link-library' ); ?>
+				</td>
+				<td>
+					<input type="text" id="rsslibraryitemspersite" name="rsslibraryitemspersite" size="2" value="<?php echo strval( $options['rsslibraryitemspersite'] ); ?>" />
+				</td>
+				<td></td>
+				<td>
+					<?php _e( 'Max number of words per item', 'link-library' ); ?>
+				</td>
+				<td>
+					<input type="text" id="rsslibrarymaxwordsitem" name="rsslibrarymaxwordsitem" size="2" value="<?php echo strval( $options['rsslibrarymaxwordsitem'] ); ?>" />
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<?php _e( 'Paginate items', 'link-library' ); ?>
+				</td>
+				<td>
+					<input type="checkbox" id="rsslibrarypagination" name="rsslibrarypagination" <?php checked( $options['rsslibrarypagination'] ); ?>/>
+				</td>
+				<td></td>
+				<td>
+					<?php _e( 'Number of RSS items per page', 'link-library' ); ?>
+				</td>
+				<td>
+					<input type="text" id="rsslibrarypaginationnb" name="rsslibrarypaginationnb" size="2" value="<?php echo strval( $options['rsslibrarypaginationnb'] ); ?>" />
+				</td>
+			</tr>
+		</table>
+
+		<textarea name='rsslibrarytemplate' id='fancy-textarea' style='font-family:Courier' rows="10" cols="100"><?php echo stripslashes( $options['rsslibrarytemplate'] ); ?></textarea>
+		<table>
+				<tr>
+					<th>Tag Name</th>
+					<th>Description</th>
+				</tr>
+				<tr>
+					<td>[link_title]</td>
+					<td>The name of the link, text only</td>
+				</tr>
+				<tr>
+					<td>[link_category]</td>
+					<td>The category(ies) assigned to the link</td>
+				</tr>
+				<tr>
+					<td>[rss_item_title]</td>
+					<td>RSS item title</td>
+				</tr>
+				<tr>
+					<td>[rss_item_date]</td>
+					<td>RSS item date</td>
+				</tr>
+				<tr>
+					<td>[rss_item_time]</td>
+					<td>RSS item time</td>
+				</tr>
+				<tr>
+					<td>[rss_item_content]</td>
+					<td>RSS item content</td>
+				</tr>
+			</table>
 		</div>
 	<?php
 	}
+
+	function settingssets_stylesheet_meta_box( $data ) {
+		$options  = $data['options'];
+		$settings = $data['settings'];
+		?>
+
+		<div style='padding-top:15px' id="ll-style" class="content-section">
+			<textarea name='stylesheet' id='fancy-textarea' style='font-family:Courier' rows="30" cols="100"><?php echo $options['stylesheet']; ?></textarea>
+		</div>
+
+	<?php }
 
 	function settingssets_thumbnails_meta_box( $data ) {
 		$options    = $data['options'];
@@ -5490,16 +6265,16 @@ function general_custom_fields_meta_box( $data ) {
 				<td><?php _e( 'Generate Images / Favorite Icons', 'link-library' ); ?></td>
 				<td class="lltooltip" title="<?php if ( $genoptions['thumbnailgenerator'] == 'thumbshots' && empty( $genoptions['thumbshotscid'] ) ) {
 					_e( 'This button is only available when a valid API key is entered under the Link Library General Settings.', 'link-library' );
-				} ?>"><INPUT type="button" name="genthumbs" <?php disabled( $genoptions['thumbnailgenerator'] == 'thumbshots' && empty( $genoptions['thumbshotscid'] ) ); ?> value="<?php _e( 'Generate Thumbnails and Store locally', 'link-library' ); ?>" onClick="window.location= 'admin.php?page=link-library-settingssets&amp;settings=<?php echo $settings; ?>&amp;genthumbs=<?php echo $settings; ?>'">
+				} ?>"><INPUT class="button" type="button" name="genthumbs" <?php disabled( $genoptions['thumbnailgenerator'] == 'thumbshots' && empty( $genoptions['thumbshotscid'] ) ); ?> value="<?php _e( 'Generate Thumbnails and Store locally', 'link-library' ); ?>" onClick="window.location= 'admin.php?page=link-library-settingssets&amp;settings=<?php echo $settings; ?>&amp;genthumbs=<?php echo $settings; ?>'">
 				</td>
 				<td>
-					<INPUT type="button" name="genfavicons" value="<?php _e( 'Generate Favorite Icons and Store locally', 'link-library' ); ?>" onClick="window.location= 'admin.php?page=link-library-settingssets&amp;settings=<?php echo $settings; ?>&amp;genfavicons=<?php echo $settings; ?>'">
+					<INPUT class="button" type="button" name="genfavicons" value="<?php _e( 'Generate Favorite Icons and Store locally', 'link-library' ); ?>" onClick="window.location= 'admin.php?page=link-library-settingssets&amp;settings=<?php echo $settings; ?>&amp;genfavicons=<?php echo $settings; ?>'">
 				</td>
 			</tr>
 			<tr>
 				<td><?php _e( 'Delete all local thumbnails and icons', 'link-library' ); ?></td>
-				<td><INPUT type="button" name="deleteallthumbs" value="<?php _e( 'Delete all local thumbnails', 'link-library' ); ?>" onClick="window.location= 'admin.php?page=link-library-settingssets&amp;deleteallthumbs=1'"></td>
-				<td><INPUT type="button" name="deleteallicons" value="<?php _e( 'Delete all local icons', 'link-library' ); ?>" onClick="window.location= 'admin.php?page=link-library-settingssets&amp;deleteallicons=1'"></td>
+				<td><INPUT class="button" type="button" name="deleteallthumbs" value="<?php _e( 'Delete all local thumbnails', 'link-library' ); ?>" onClick="window.location= 'admin.php?page=link-library-settingssets&amp;deleteallthumbs=1'"></td>
+				<td><INPUT class="button" type="button" name="deleteallicons" value="<?php _e( 'Delete all local icons', 'link-library' ); ?>" onClick="window.location= 'admin.php?page=link-library-settingssets&amp;deleteallicons=1'"></td>
 			</tr>
 		</table>
 		</div>
@@ -5544,6 +6319,15 @@ function general_custom_fields_meta_box( $data ) {
 				<td><?php _e( 'RSS Feed Web Address (default yoursite.com/feed/linklibraryfeed?settingsset=1 )', 'link-library' ); ?></td>
 				<td colspan=3>
 					<input type="text" id="rssfeedaddress" name="rssfeedaddress" size="80" value="<?php echo strval( esc_html( stripslashes( $options['rssfeedaddress'] ) ) ); ?>" />
+				</td>
+			</tr>
+			<tr>
+				<td><?php _e( 'Item Date Source', 'link-library' ); ?></td>
+				<td>
+					<select name="rss_item_date_source">
+						<option <?php selected( 'updated_date', $options['rss_item_date_source'] ); ?> value="updated_date"><?php _e( 'Updated Date', 'link-library' ); ?></option>
+						<option <?php selected( 'pub_date', $options['rss_item_date_source'] ); ?> value="pub_date"><?php _e( 'Publication Date', 'link-library' ); ?></option>
+					</select>
 				</td>
 			</tr>
 		</table>
@@ -5614,6 +6398,9 @@ function general_custom_fields_meta_box( $data ) {
 	function settingssets_linksubmission_meta_box( $data ) {
 		$options  = $data['options'];
 		$settings = $data['settings'];
+		$genoptions = $data['genoptions'];
+
+		global $colorarray;
 
 		if ( $options['showaddlinkrss'] === false ) {
 			$options['showaddlinkrss'] = 'hide';
@@ -5701,7 +6488,183 @@ function general_custom_fields_meta_box( $data ) {
 		?>
 		<div style='padding-top:15px' id="ll-userform" class="content-section">
 
-		<table class='widefat' style='width:100%;margin:15px 5px 10px 0px;clear:none;background-color:#F1F1F1;background-image: linear-gradient(to top, #ECECEC, #F9F9F9);background-position:initial initial;background-repeat: initial initial'>
+		<?php _e( 'Arrange the items below via drag-and-drop to order the various Link Library elements.', 'link-library' ); ?>
+		<br /><br />
+		<ul id="usersubmissionsortable">
+			<?php
+			$usersubmissiondragndroporder = $options['usersubmissiondragndroporder'];
+
+			$usersubmissiondragndroporder = explode( ',', $usersubmissiondragndroporder );
+
+			foreach ( range( 1, 34 ) as $new_entry ) {
+				if ( !in_array( $new_entry, $usersubmissiondragndroporder ) ) {
+					$usersubmissiondragndroporder[] = $new_entry;
+				}
+			}
+
+			if ( $usersubmissiondragndroporder ) {
+				foreach ( $usersubmissiondragndroporder as $arrayelements ) {
+					switch ( $arrayelements ) {
+						case 1:
+							?>
+							<li class="lltooltip" title="<?php _e( 'Link Name', 'link-library' ); ?>" id="1" style='background-color: <?php echo $colorarray[$arrayelements-1]; ?>'>1</li>
+							<?php break;
+						case 2:
+							?>
+							<li class="lltooltip" title="<?php _e( 'Link Address', 'link-library' ); ?>" id="2" style='background-color: <?php echo $colorarray[$arrayelements-1]; ?>'>2</li>
+							<?php break;
+						case 3:
+							?>
+							<li class="lltooltip" title="<?php _e( 'Link File', 'link-library' ); ?>" id="3" style='background-color: <?php echo $colorarray[$arrayelements-1]; ?>'>3</li>
+							<?php break;
+						case 4:
+							?>
+							<li class="lltooltip" title="<?php _e( 'Link RSS', 'link-library' ); ?>" id="4" style='background-color: <?php echo $colorarray[$arrayelements-1]; ?>'>4</li>
+							<?php break;
+						case 5:
+							?>
+							<li class="lltooltip" title="<?php _e( 'Link Category', 'link-library' ); ?>" id="5" style='background-color: <?php echo $colorarray[$arrayelements-1]; ?>'>5</li>
+							<?php break;
+						case 6:
+							?>
+							<li class="lltooltip" title="<?php _e( 'Tags', 'link-library' ); ?>" id="6" style='background-color: <?php echo $colorarray[$arrayelements-1]; ?>'>6</li>
+							<?php break;
+						case 7:
+							?>
+							<li class="lltooltip" title="<?php _e( 'Link Description', 'link-library' ); ?>" id="7" style='background-color: <?php echo $colorarray[$arrayelements-1]; ?>'>7</li>
+							<?php break;
+						case 8:
+							?>
+							<li class="lltooltip" title="<?php _e( 'Large Description', 'link-library' ); ?>" id="8" style='background-color: <?php echo $colorarray[$arrayelements-1]; ?>'>8</li>
+							<?php break;
+						case 9:
+							?>
+							<li class="lltooltip" title="<?php _e( 'Link Notes', 'link-library' ); ?>" id="9" style='background-color: <?php echo $colorarray[$arrayelements-1]; ?>'>9</li>
+							<?php break;
+						case 10:
+							?>
+							<li class="lltooltip" title="<?php _e( 'Link Image', 'link-library' ); ?>" id="10" style='background-color: <?php echo $colorarray[$arrayelements-1]; ?>'>10</li>
+							<?php break;
+						case 11:
+							?>
+							<li class="lltooltip" title="<?php _e( 'Reciprocal Link', 'link-library' ); ?>" id="11" style='background-color: <?php echo $colorarray[$arrayelements-1]; ?>'>11</li>
+							<?php break;
+						case 12:
+							?>
+							<li class="lltooltip" title="<?php _e( 'Secondary Address', 'link-library' ); ?>" id="12" style='background-color: <?php echo $colorarray[$arrayelements-1]; ?>'>12</li>
+							<?php break;
+						case 13:
+							?>
+							<li class="lltooltip" title="<?php _e( 'Link Telephone', 'link-library' ); ?>" id="13" style='background-color: <?php echo $colorarray[$arrayelements-1]; ?>'>13</li>
+							<?php break;
+						case 14:
+							?>
+							<li class="lltooltip" title="<?php _e( 'Link E-mail', 'link-library' ); ?>" id="14" style='background-color: <?php echo $colorarray[$arrayelements-1]; ?>'>14</li>
+							<?php break;
+						case 15:
+							?>
+							<li class="lltooltip" title="<?php _e( 'Link Submitter Name', 'link-library' ); ?>" id="15" style='background-color: <?php echo $colorarray[$arrayelements-1]; ?>'>15</li>
+							<?php break;
+						case 16:
+							?>
+							<li class="lltooltip" title="<?php _e( 'Link Submitter E-mail', 'link-library' ); ?>" id="16" style='background-color: <?php echo $colorarray[$arrayelements-1]; ?>'>16</li>
+							<?php break;
+						case 17:
+							?>
+							<li class="lltooltip" title="<?php _e( 'Link Submitter Comment', 'link-library' ); ?>" id="17" style='background-color: <?php echo $colorarray[$arrayelements-1]; ?>'>17</li>
+							<?php break;
+						case 18:
+							?>
+							<li class="lltooltip" title="<?php _e( 'Custom Captcha Question', 'link-library' ); ?>" id="18" style='background-color: <?php echo $colorarray[$arrayelements-1]; ?>'>18</li>
+							<?php break;
+						case 19:
+							?>
+							<li class="lltooltip" title="<?php _e( 'Link Reference', 'link-library' ); ?>" id="19" style='background-color: <?php echo $colorarray[$arrayelements-1]; ?>'>19</li>
+							<?php break;
+						case 20:
+							if ( $genoptions['customurl1active'] ) {
+							?>
+							<li class="lltooltip" title="<?php echo $genoptions['customurl1label'] ?>" id="20" style='background-color: <?php echo $colorarray[$arrayelements-1]; ?>'>20</li>
+							<?php } break;
+						case 21:
+							if ( $genoptions['customurl2active'] ) {
+							?>
+							<li class="lltooltip" title="<?php echo $genoptions['customurl2label'] ?>" id="21" style='background-color: <?php echo $colorarray[$arrayelements-1]; ?>'>21</li>
+							<?php } break;
+						case 22:
+							if ( $genoptions['customurl3active'] ) {
+							?>
+							<li class="lltooltip" title="<?php echo $genoptions['customurl3label'] ?>" id="22" style='background-color: <?php echo $colorarray[$arrayelements-1]; ?>'>22</li>
+							<?php } break;
+						case 23:
+							if ( $genoptions['customurl4active'] ) {
+							?>
+							<li class="lltooltip" title="<?php echo $genoptions['customurl4label'] ?>" id="23" style='background-color: <?php echo $colorarray[$arrayelements-1]; ?>'>23</li>
+							<?php } break;
+						case 24:
+							if ( $genoptions['customurl5active'] ) {
+							?>
+							<li class="lltooltip" title="<?php echo $genoptions['customurl5label'] ?>" id="24" style='background-color: <?php echo $colorarray[$arrayelements-1]; ?>'>24</li>
+							<?php } break;
+						case 25:
+							if ( $genoptions['customtext1active'] ) {
+								?>
+								<li class="lltooltip" title="<?php echo $genoptions['customtext1label'] ?>" id="25" style='background-color: <?php echo $colorarray[$arrayelements-1]; ?>'>25</li>
+							<?php } break;
+						case 26:
+							if ( $genoptions['customtext2active'] ) {
+								?>
+								<li class="lltooltip" title="<?php echo $genoptions['customtext2label'] ?>" id="26" style='background-color: <?php echo $colorarray[$arrayelements-1]; ?>'>26</li>
+							<?php } break;
+						case 27:
+							if ( $genoptions['customtext3active'] ) {
+								?>
+								<li class="lltooltip" title="<?php echo $genoptions['customtext3label'] ?>" id="27" style='background-color: <?php echo $colorarray[$arrayelements-1]; ?>'>27</li>
+							<?php } break;
+						case 28:
+							if ( $genoptions['customtext4active'] ) {
+								?>
+								<li class="lltooltip" title="<?php echo $genoptions['customtext4label'] ?>" id="28" style='background-color: <?php echo $colorarray[$arrayelements-1]; ?>'>28</li>
+							<?php } break;
+						case 29:
+							if ( $genoptions['customtext5active'] ) {
+								?>
+								<li class="lltooltip" title="<?php echo $genoptions['customtext5label'] ?>" id="29" style='background-color: <?php echo $colorarray[$arrayelements-1]; ?>'>29</li>
+							<?php } break;
+						case 30:
+							if ( $genoptions['customlist1active'] ) {
+								?>
+								<li class="lltooltip" title="<?php echo $genoptions['customlist1label'] ?>" id="30" style='background-color: <?php echo $colorarray[$arrayelements-1]; ?>'>30</li>
+							<?php } break;
+						case 31:
+							if ( $genoptions['customlist2active'] ) {
+								?>
+								<li class="lltooltip" title="<?php echo $genoptions['customlist2label'] ?>" id="31" style='background-color: <?php echo $colorarray[$arrayelements-1]; ?>'>31</li>
+							<?php } break;
+						case 32:
+							if ( $genoptions['customlist3active'] ) {
+								?>
+								<li class="lltooltip" title="<?php echo $genoptions['customlist3label'] ?>" id="32" style='background-color: <?php echo $colorarray[$arrayelements-1]; ?>'>32</li>
+							<?php } break;
+						case 33:
+							if ( $genoptions['customlist4active'] ) {
+								?>
+								<li class="lltooltip" title="<?php echo $genoptions['customlist4label'] ?>" id="33" style='background-color: <?php echo $colorarray[$arrayelements-1]; ?>'>33</li>
+							<?php } break;
+						case 34:
+							if ( $genoptions['customlist5active'] ) {
+								?>
+								<li class="lltooltip" title="<?php echo $genoptions['customtext5label'] ?>" id="34" style='background-color: <?php echo $colorarray[$arrayelements-1]; ?>'>34</li>
+							<?php } break;
+					}
+				}
+			}
+			?>
+		</ul>
+
+		<input type="hidden" id="usersubmissiondragndroporder" name="usersubmissiondragndroporder" size="60" value="<?php echo $options['usersubmissiondragndroporder']; ?>" />
+
+		<table class='widefat striped' style='width:100%;margin:15px 5px 10px 0px;clear:none;'>
 		<thead>
 		<th style='width: 60px'>Field Name</th>
 		<th style='width: 120px'><?php _e( 'Display', 'link-library' ); ?></th>
@@ -5716,241 +6679,389 @@ function general_custom_fields_meta_box( $data ) {
 			<td></td>
 			<td></td>
 		</tr>
-		<tr>
-			<td><?php _e( 'Link Name', 'link-library' ); ?></td>
-			<td style='width: 120px'></td>
-			<td><input type="text" id="linknamelabel" name="linknamelabel" size="30" value="<?php echo $options['linknamelabel']; ?>" /></td>
-			<td><input type="text" id="linknametooltip" name="linknametooltip" size="30" value="<?php echo $options['linknametooltip']; ?>" /></td>
-			<td></td>
-		</tr>
-		<tr>
-			<td><?php _e( 'Link Address', 'link-library' ); ?></td>
-			<td></td>
-			<td><input type="text" id="linkaddrlabel" name="linkaddrlabel" size="30" value="<?php echo $options['linkaddrlabel']; ?>" /></td>
-			<td><input type="text" id="linkaddrtooltip" name="linkaddrtooltip" size="30" value="<?php echo $options['linkaddrtooltip']; ?>" /></td>
-			<td></td>
-		</tr>
-		<tr>
-			<td style='width:200px' class="lltooltip" title="Selecting to display the link file field will hide the link address field since they are mutually exclusive"><?php _e( 'Link File', 'link-library' ); ?></td>
-			<td style='width: 20px' class="lltooltip" title="Selecting to display the link file field will hide the link address field since they are mutually exclusive"><select name="showaddlinkfile" id="showaddlinkfile" style="width:80px;">
-				<option value="hide"<?php selected( $options['showaddlinkfile'] == 'hide' ); ?>><?php _e( 'Hide', 'link-library' ); ?></option>
-				<option value="show"<?php selected( $options['showaddlinkfile'] == 'show' ); ?>><?php _e( 'Show', 'link-library' ); ?></option>
-			</select></td>
-			<td class="lltooltip" title="Selecting to display the link file field will hide the link address field since they are mutually exclusive"><input type="text" id="linkfilelabel" name="linkfilelabel" size="30" value="<?php echo $options['linkfilelabel']; ?>" /></td>
-			<td class="lltooltip" title="Selecting to display the link file field will hide the link address field since they are mutually exclusive"><input type="text" id="linkfiletooltip" name="linkfiletooltip" size="30" value="<?php echo $options['linkfiletooltip']; ?>" /></td>
-			<td class="lltooltip" title="<?php _e( 'Link file types allowed', 'link-library' ); ?>"><input type="text" id="linkfileallowedtypes" name="linkfileallowedtypes" size="30" value="<?php echo $options['linkfileallowedtypes']; ?>" /></td>
-		</tr>
-		<tr>
-			<td><?php _e( 'Link RSS', 'link-library' ); ?></td>
-			<td><select name="showaddlinkrss" id="showaddlinkrss" style="width:80px;">
-					<option value="hide"<?php selected( $options['showaddlinkrss'] == 'hide' ); ?>><?php _e( 'Hide', 'link-library' ); ?></option>
-					<option value="show"<?php selected( $options['showaddlinkrss'] == 'show' ); ?>><?php _e( 'Show', 'link-library' ); ?></option>
-					<option value="required"<?php selected( $options['showaddlinkrss'] == 'required' ); ?>><?php _e( 'Required', 'link-library' ); ?></option>
-				</select></td>
-			<td><input type="text" id="linkrsslabel" name="linkrsslabel" size="30" value="<?php echo $options['linkrsslabel']; ?>" />
-			</td>
-			<td><input type="text" id="linkrsstooltip" name="linkrsstooltip" size="30" value="<?php echo $options['linkrsstooltip']; ?>" /></td>
-			<td></td>
-		</tr>
-		<tr>
-			<td><?php _e( 'Link Category', 'link-library' ); ?></td>
-			<td><select name="showaddlinkcat" id="showaddlinkcat" style="width:120px;">
-					<option value="hide"<?php selected( $options['showaddlinkcat'] == 'hide' ); ?>><?php _e( 'Hide', 'link-library' ); ?></option>
-					<option value="show"<?php selected( $options['showaddlinkcat'] == 'show' ); ?>><?php _e( 'Drop-down list', 'link-library' ); ?></option>
-					<option value="selectmultiple"<?php selected( $options['showaddlinkcat'] == 'selectmultiple' ); ?>><?php _e( 'Multi-select list', 'link-library' ); ?></option>
-				</select></td>
-			<td><input type="text" id="linkcatlabel" name="linkcatlabel" size="30" value="<?php echo $options['linkcatlabel']; ?>" /></td>
-			<td>
-				<input type="text" id="linkcattooltip" name="linkcattooltip" size="30" value="<?php echo $options['linkcattooltip']; ?>" />
-			</td>
-			<td colspan=3 class='lltooltip' title='<?php _e( 'Comma-seperated list of categories to be displayed in category selection box (e.g. 1,5,4)', 'link-library' ); ?>'>
-				<input type="text" id="addlinkcatlistoverride" name="addlinkcatlistoverride" size="50" value="<?php echo $options['addlinkcatlistoverride']; ?>" />
-			<td style='width:200px'></td>
-		</tr>
-		<tr>
-			<td></td>
-			<td></td>
-			<td class="lltooltip" title="<?php _e( 'Select a category label', 'link-library' ); ?>"><input type="text" id="userlinkcatselectionlabel" name="userlinkcatselectionlabel" size="30" value="<?php echo $options['userlinkcatselectionlabel']; ?>" /></td>
-			<td></td>
-			<td class="lltooltip" title="<?php _e( 'Select a category label', 'link-library' ); ?>"><?php
+		<?php $usersubmissiondragndroporder = $options['usersubmissiondragndroporder'];
 
-				$include_links_array = explode( ',', $options['categorylist_cpt'] );
-				$excluded_links_array = explode( ',', $options['excludecategorylist_cpt'] );
-				$link_categories_query_args = array( 'hide_empty' => false );
-				$link_categories_query_args['include'] = $include_links_array;
-				$link_categories_query_args['exclude'] = $excluded_links_array;
-				$linkcats = get_terms( 'link_library_category', $link_categories_query_args );
+		$usersubmissiondragndroporder = explode( ',', $usersubmissiondragndroporder );
 
-				if ( $linkcats ) { ?>
-					<select name="addlinkdefaultcat" id="addlinkdefaultcat" value="<?php echo $options['addlinkdefaultcat']; ?>">
-						<option value="nodefaultcat">No default category</option>
-						<?php foreach ( $linkcats as $linkcat ) { ?>
-							<option value="<?php echo $linkcat->term_id; ?>" <?php selected( $linkcat->term_id, $options['addlinkdefaultcat'] ); ?>><?php echo $linkcat->name; ?></option>
-						<?php } ?>
-					</select>
-				<?php } ?></td>
-		</tr>
-		<tr>
-			<td><?php _e( 'User-submitted Category', 'link-library' ); ?></td>
-			<td><select name="addlinkcustomcat" id="addlinkcustomcat" style="width:60px;">
-					<option value="hide"<?php selected( $options['addlinkcustomcat'] == 'hide' ); ?>><?php _e( 'No', 'link-library' ); ?></option>
-					<option value="show"<?php selected( $options['addlinkcustomcat'] == 'show' ); ?>><?php _e( 'Allow', 'link-library' ); ?></option>
-				</select></td>
-			<td><input type="text" id="linkcustomcatlabel" name="linkcustomcatlabel" size="30" value="<?php echo $options['linkcustomcatlabel']; ?>" /></td>
-			<td class="lltooltip" title="<?php _e( 'User-submitted category prompt', 'link-library' ); ?>"><input type="text" id="linkusercattooltip" name="linkusercattooltip" size="30" value="<?php echo $options['linkusercattooltip']; ?>" /></td>
-			<td class="lltooltip" title="<?php _e( 'User-submitted category prompt', 'link-library' ); ?>"><input type="text" id="linkcustomcatlistentry" name="linkcustomcatlistentry" size="50" value="<?php echo $options['linkcustomcatlistentry']; ?>" /></td>
-		</tr>
-		<tr>
-			<td><?php _e( 'Tags', 'link-library' ); ?></td>
-			<td><select name="showaddlinktags" id="showaddlinktags" style="width:80px;">
-					<option value="hide"<?php selected( $options['showaddlinktags'] == 'hide' ); ?>><?php _e( 'Hide', 'link-library' ); ?></option>
-					<option value="show"<?php selected( $options['showaddlinktags'] == 'show' ); ?>><?php _e( 'Show', 'link-library' ); ?></option>
-				</select></td>
-			<td><input type="text" id="linktagslabel" name="linktagslabel" size="30" value="<?php echo $options['linktagslabel']; ?>" /></td>
-			<td><input type="text" id="linktagtooltip" name="linktagtooltip" size="30" value="<?php echo $options['linktagtooltip']; ?>" /></td>
-			<td class="lltooltip" title="<?php _e( 'Comma-seperated list of tag IDs to be displayed in category selection box (e.g. 1,5,4) instead of displaying all tags', 'link-library' ); ?>"><input type="text" id="addlinktaglistoverride" name="addlinktaglistoverride" size="50" value="<?php echo $options['addlinktaglistoverride']; ?>" /></td>
-		</tr>
-		<tr>
-			<td><?php _e( 'User-Submitted Tags', 'link-library' ); ?></td>
-			<td><select name="addlinkcustomtag" id="addlinkcustomtag" style="width:80px;">
-					<option value="hide"<?php selected( $options['addlinkcustomtag'] == 'hide' ); ?>><?php _e( 'No', 'link-library' ); ?></option>
-					<option value="show"<?php selected( $options['addlinkcustomtag'] == 'show' ); ?>><?php _e( 'Allow', 'link-library' ); ?></option>
-				</select></td>
-			<td><input type="text" id="linkcustomtaglabel" name="linkcustomtaglabel" size="30" value="<?php echo $options['linkcustomtaglabel']; ?>" /></td>
-			<td></td>
-			<td class="lltooltip" title="<?php _e( 'User-submitted tags prompt', 'link-library' ); ?>"><input type="text" id="linkcustomtaglistentry" name="linkcustomtaglistentry" size="50" value="<?php echo $options['linkcustomtaglistentry']; ?>" /></td>
-		</tr>
-		<tr>
-			<td><?php _e( 'Link Description', 'link-library' ); ?></td>
-			<td><select name="showaddlinkdesc" id="showaddlinkdesc" style="width:80px;">
-					<option value="hide"<?php selected( $options['showaddlinkdesc'] == 'hide' ); ?>><?php _e( 'Hide', 'link-library' ); ?></option>
-					<option value="show"<?php selected( $options['showaddlinkdesc'] == 'show' ); ?>><?php _e( 'Show', 'link-library' ); ?></option>
-					<option value="required"<?php selected( $options['showaddlinkdesc'] == 'required' ); ?>><?php _e( 'Required', 'link-library' ); ?></option>
-				</select></td>
-			<td><input type="text" id="linkdesclabel" name="linkdesclabel" size="30" value="<?php echo $options['linkdesclabel']; ?>" /></td>
-			<td><input type="text" id="linkdesctooltip" name="linkdesctooltip" size="30" value="<?php echo $options['linkdesctooltip']; ?>" /></td>
-			<td></td>
-		</tr>
-		<tr>
-			<td><?php _e( 'Large Description', 'link-library' ); ?></td>
-			<td><select name="showuserlargedescription" id="showuserlargedescription" style="width:80px;">
-					<option value="hide"<?php selected( $options['showuserlargedescription'] == 'hide' ); ?>><?php _e( 'Hide', 'link-library' ); ?></option>
-					<option value="show"<?php selected( $options['showuserlargedescription'] == 'show' ); ?>><?php _e( 'Show', 'link-library' ); ?></option>
-					<option value="required"<?php selected( $options['showuserlargedescription'] == 'required' ); ?>><?php _e( 'Required', 'link-library' ); ?></option>
-				</select></td>
-			<td><input type="text" id="linklargedesclabel" name="linklargedesclabel" size="30" value="<?php echo $options['linklargedesclabel']; ?>" /></td>
-			<td><input type="text" id="largedesctooltip" name="largedesctooltip" size="30" value="<?php echo $options['largedesctooltip']; ?>" /></td>
-			<td></td>
-		</tr>
-		<tr>
-			<td><?php _e( 'Link Notes', 'link-library' ); ?></td>
-			<td><select name="showaddlinknotes" id="showaddlinknotes" style="width:80px;">
-					<option value="hide"<?php selected( $options['showaddlinknotes'] == 'hide' ); ?>><?php _e( 'Hide', 'link-library' ); ?></option>
-					<option value="show"<?php selected( $options['showaddlinknotes'] == 'show' ); ?>><?php _e( 'Show', 'link-library' ); ?></option>
-					<option value="required"<?php selected( $options['showaddlinknotes'] == 'required' ); ?>><?php _e( 'Required', 'link-library' ); ?></option>
-				</select></td>
-			<td><input type="text" id="linknoteslabel" name="linknoteslabel" size="30" value="<?php echo $options['linknoteslabel']; ?>" /></td>
-			<td><input type="text" id="linknotestooltip" name="linknotestooltip" size="30" value="<?php echo $options['linknotestooltip']; ?>" /></td>
-			<td></td>
-		</tr>
-		<tr>
-			<td><?php _e( 'Link Image', 'link-library' ); ?></td>
-			<td><select name="showaddlinkimage" id="showaddlinkimage" style="width:80px;">
-					<option value="hide"<?php selected( $options['showaddlinkimage'] == 'hide' ); ?>><?php _e( 'Hide', 'link-library' ); ?></option>
-					<option value="show"<?php selected( $options['showaddlinkimage'] == 'show' ); ?>><?php _e( 'Show', 'link-library' ); ?></option>
-					<option value="required"<?php selected( $options['showaddlinkimage'] == 'required' ); ?>><?php _e( 'Required', 'link-library' ); ?></option>
-				</select></td>
-			<td><input type="text" id="linkimagelabel" name="linkimagelabel" size="30" value="<?php echo $options['linkimagelabel']; ?>" /></td>
-			<td><input type="text" id="linkimagetooltip" name="linkimagetooltip" size="30" value="<?php echo $options['linkimagetooltip']; ?>" /></td>
-			<td></td>
-		</tr>
-		<tr>
-			<td><?php _e( 'Reciprocal Link', 'link-library' ); ?></td>
-			<td><select name="showaddlinkreciprocal" id="showaddlinkreciprocal" style="width:80px;">
-					<option value="hide"<?php selected( $options['showaddlinkreciprocal'] == 'hide' ); ?>><?php _e( 'Hide', 'link-library' ); ?></option>
-					<option value="show"<?php selected( $options['showaddlinkreciprocal'] == 'show' ); ?>><?php _e( 'Show', 'link-library' ); ?></option>
-					<option value="required"<?php selected( $options['showaddlinkreciprocal'] == 'required' ); ?>><?php _e( 'Required', 'link-library' ); ?></option>
-				</select></td>
-			<td><input type="text" id="linkreciprocallabel" name="linkreciprocallabel" size="30" value="<?php echo $options['linkreciprocallabel']; ?>" /></td>
-			<td><input type="text" id="linkreciptooltip" name="linkreciptooltip" size="30" value="<?php echo $options['linkreciptooltip']; ?>" /></td>
-			<td></td>
-		</tr>
-		<tr>
-			<td><?php _e( 'Secondary Address', 'link-library' ); ?></td>
-			<td><select name="showaddlinksecondurl" id="showaddlinksecondurl" style="width:80px;">
-					<option value="hide"<?php selected( $options['showaddlinksecondurl'] == 'hide' ); ?>><?php _e( 'Hide', 'link-library' ); ?></option>
-					<option value="show"<?php selected( $options['showaddlinksecondurl'] == 'show' ); ?>><?php _e( 'Show', 'link-library' ); ?></option>
-					<option value="required"<?php selected( $options['showaddlinksecondurl'] == 'required' ); ?>><?php _e( 'Required', 'link-library' ); ?></option>
-				</select></td>
-			<td><input type="text" id="linksecondurllabel" name="linksecondurllabel" size="30" value="<?php echo $options['linksecondurllabel']; ?>" /></td>
-			<td><input type="text" id="linksecondtooltip" name="linksecondtooltip" size="30" value="<?php echo $options['linksecondtooltip']; ?>" /></td>
-			<td></td>
-		</tr>
-		<tr>
-			<td><?php _e( 'Link Telephone', 'link-library' ); ?></td>
-			<td><select name="showaddlinktelephone" id="showaddlinktelephone" style="width:80px;">
-					<option value="hide"<?php selected( $options['showaddlinktelephone'] == 'hide' ); ?>><?php _e( 'Hide', 'link-library' ); ?></option>
-					<option value="show"<?php selected( $options['showaddlinktelephone'] == 'show' ); ?>><?php _e( 'Show', 'link-library' ); ?></option>
-					<option value="required"<?php selected( $options['showaddlinktelephone'] == 'required' ); ?>><?php _e( 'Required', 'link-library' ); ?></option>
-				</select></td>
-			<td><input type="text" id="linktelephonelabel" name="linktelephonelabel" size="30" value="<?php echo $options['linktelephonelabel']; ?>" /></td>
-			<td><input type="text" id="linktelephonetooltip" name="linktelephonetooltip" size="30" value="<?php echo $options['linktelephonetooltip']; ?>" /></td>
-			<td></td>
-		</tr>
-		<tr>
-			<td><?php _e( 'Link E-mail', 'link-library' ); ?></td>
-			<td><select name="showaddlinkemail" id="showaddlinkemail" style="width:80px;">
-					<option value="hide"<?php selected( $options['showaddlinkemail'] == 'hide' ); ?>><?php _e( 'Hide', 'link-library' ); ?></option>
-					<option value="show"<?php selected( $options['showaddlinkemail'] == 'show' ); ?>><?php _e( 'Show', 'link-library' ); ?></option>
-					<option value="required"<?php selected( $options['showaddlinkemail'] == 'required' ); ?>><?php _e( 'Required', 'link-library' ); ?></option>
-				</select></td>
-			<td><input type="text" id="linkemaillabel" name="linkemaillabel" size="30" value="<?php echo $options['linkemaillabel']; ?>" /></td>
-			<td><input type="text" id="linkemailtooltip" name="linkemailtooltip" size="30" value="<?php echo $options['linkemailtooltip']; ?>" /></td>
-			<td></td>
-		</tr>
-		<tr>
-			<td><?php _e( 'Link Submitter Name', 'link-library' ); ?></td>
-			<td><select name="showlinksubmittername" id="showlinksubmittername" style="width:80px;">
-					<option value="hide"<?php selected( $options['showlinksubmittername'] == 'hide' ); ?>><?php _e( 'Hide', 'link-library' ); ?></option>
-					<option value="show"<?php selected( $options['showlinksubmittername'] == 'show' ); ?>><?php _e( 'Show', 'link-library' ); ?></option>
-					<option value="required"<?php selected( $options['showlinksubmittername'] == 'required' ); ?>><?php _e( 'Required', 'link-library' ); ?></option>
-				</select></td>
-			<td><input type="text" id="linksubmitternamelabel" name="linksubmitternamelabel" size="30" value="<?php echo $options['linksubmitternamelabel']; ?>" /></td>
-			<td><input type="text" id="submitternametooltip" name="submitternametooltip" size="30" value="<?php echo $options['submitternametooltip']; ?>" /></td>
-			<td></td>
-		</tr>
-		<tr>
-			<td><?php _e( 'Link Submitter E-mail', 'link-library' ); ?></td>
-			<td><select name="showaddlinksubmitteremail" id="showaddlinksubmitteremail" style="width:80px;">
-					<option value="hide"<?php selected( $options['showaddlinksubmitteremail'] == 'hide' ); ?>><?php _e( 'Hide', 'link-library' ); ?></option>
-					<option value="show"<?php selected( $options['showaddlinksubmitteremail'] == 'show' ); ?>><?php _e( 'Show', 'link-library' ); ?></option>
-					<option value="required"<?php selected( $options['showaddlinksubmitteremail'] == 'required' ); ?>><?php _e( 'Required', 'link-library' ); ?></option>
-				</select></td>
-			<td><input type="text" id="linksubmitteremaillabel" name="linksubmitteremaillabel" size="30" value="<?php echo $options['linksubmitteremaillabel']; ?>" /></td>
-			<td><input type="text" id="submitteremailtooltip" name="submitteremailtooltip" size="30" value="<?php echo $options['submitteremailtooltip']; ?>" /></td>
-			<td></td>
-		</tr>
-		<tr>
-			<td><?php _e( 'Link Submitter Comment', 'link-library' ); ?></td>
-			<td><select name="showlinksubmittercomment" id="showlinksubmittercomment" style="width:80px;">
-					<option value="hide"<?php selected( $options['showlinksubmittercomment'] == 'hide' ); ?>><?php _e( 'Hide', 'link-library' ); ?></option>
-					<option value="show"<?php selected( $options['showlinksubmittercomment'] == 'show' ); ?>><?php _e( 'Show', 'link-library' ); ?></option>
-					<option value="required"<?php selected( $options['showlinksubmittercomment'] == 'required' ); ?>><?php _e( 'Required', 'link-library' ); ?></option>
-				</select></td>
-			<td><input type="text" id="linksubmittercommentlabel" name="linksubmittercommentlabel" size="30" value="<?php echo $options['linksubmittercommentlabel']; ?>" /></td>
-			<td><input type="text" id="submittercommenttooltip" name="submittercommenttooltip" size="30" value="<?php echo $options['submittercommenttooltip']; ?>" /></td>
-			<td></td>
-		</tr>
-		<tr>
-			<td><?php _e( 'Custom Captcha Question', 'link-library' ); ?></td>
-			<td><select name="showcustomcaptcha" id="showcustomcaptcha" style="width:80px;">
-					<option value="hide"<?php selected( $options['showcustomcaptcha'] == 'hide' ); ?>><?php _e( 'Hide', 'link-library' ); ?></option>
-					<option value="show"<?php selected( $options['showcustomcaptcha'] == 'show' ); ?>><?php _e( 'Show', 'link-library' ); ?></option>
-				</select></td>
-			<td><input type="text" id="customcaptchaquestion" name="customcaptchaquestion" size="30" value="<?php echo $options['customcaptchaquestion']; ?>" /></td>
-			<td></td>
-			<td class="lltooltip" title="<?php _e( 'Custom Captcha Answer', 'link-library' ); ?>"><input type="text" id="customcaptchaanswer" name="customcaptchaanswer" size="30" value="<?php echo $options['customcaptchaanswer']; ?>" /></td>
-		</tr>
+		foreach ( range( 1, 34 ) as $new_entry ) {
+			if ( !in_array( $new_entry, $usersubmissiondragndroporder ) ) {
+				$usersubmissiondragndroporder[] = $new_entry;
+			}
+		}
+
+		if ( $usersubmissiondragndroporder ) {
+			foreach ( $usersubmissiondragndroporder as $arrayelements ) {
+				switch ( $arrayelements ) {
+					case 1:  /* -------------------------------- Link Name -------------------------------------------*/
+					?>
+						<tr>
+							<td style="background-color:<?php echo $colorarray[0]; ?>;color:#fff;">1- <?php _e( 'Link Name', 'link-library' ); ?></td>
+							<td style='width: 120px'></td>
+							<td><input type="text" id="linknamelabel" name="linknamelabel" size="30" value="<?php echo $options['linknamelabel']; ?>" /></td>
+							<td><input type="text" id="linknametooltip" name="linknametooltip" size="30" value="<?php echo $options['linknametooltip']; ?>" /></td>
+							<td></td>
+						</tr>
+					<?php break;
+					case 2:  /* -------------------------------- Link Address -------------------------------------------*/
+					?>					
+						<tr>
+							<td style="background-color:<?php echo $colorarray[1]; ?>;color:#fff;">2- <?php _e( 'Link Address', 'link-library' ); ?></td>
+							<td></td>
+							<td><input type="text" id="linkaddrlabel" name="linkaddrlabel" size="30" value="<?php echo $options['linkaddrlabel']; ?>" /></td>
+							<td><input type="text" id="linkaddrtooltip" name="linkaddrtooltip" size="30" value="<?php echo $options['linkaddrtooltip']; ?>" /></td>
+							<td></td>
+						</tr>
+					<?php break;
+					case 3: /* -------------------------------- Link File -------------------------------------------*/
+					?>
+						<tr>
+							<td style='width:200px;background-color:<?php echo $colorarray[2]; ?>;color:#fff;' class="lltooltip" title="Selecting to display the link file field will hide the link address field since they are mutually exclusive">3- <?php _e( 'Link File', 'link-library' ); ?></td>
+							<td style='width: 20px' class="lltooltip" title="Selecting to display the link file field will hide the link address field since they are mutually exclusive"><select name="showaddlinkfile" id="showaddlinkfile" style="width:80px;">
+								<option value="hide"<?php selected( $options['showaddlinkfile'] == 'hide' ); ?>><?php _e( 'Hide', 'link-library' ); ?></option>
+								<option value="show"<?php selected( $options['showaddlinkfile'] == 'show' ); ?>><?php _e( 'Show', 'link-library' ); ?></option>
+							</select></td>
+							<td class="lltooltip" title="Selecting to display the link file field will hide the link address field since they are mutually exclusive"><input type="text" id="linkfilelabel" name="linkfilelabel" size="30" value="<?php echo $options['linkfilelabel']; ?>" /></td>
+							<td class="lltooltip" title="Selecting to display the link file field will hide the link address field since they are mutually exclusive"><input type="text" id="linkfiletooltip" name="linkfiletooltip" size="30" value="<?php echo $options['linkfiletooltip']; ?>" /></td>
+							<td class="lltooltip" title="<?php _e( 'Link file types allowed', 'link-library' ); ?>"><input type="text" id="linkfileallowedtypes" name="linkfileallowedtypes" size="30" value="<?php echo $options['linkfileallowedtypes']; ?>" /></td>
+						</tr>
+					<?php break;
+					case 4: /* -------------------------------- Link RSS -------------------------------------------*/
+					?>
+						<tr>
+							<td style='width:200px;background-color:<?php echo $colorarray[3]; ?>;color:#fff;'>4- <?php _e( 'Link RSS', 'link-library' ); ?></td>
+							<td><select name="showaddlinkrss" id="showaddlinkrss" style="width:80px;">
+									<option value="hide"<?php selected( $options['showaddlinkrss'] == 'hide' ); ?>><?php _e( 'Hide', 'link-library' ); ?></option>
+									<option value="show"<?php selected( $options['showaddlinkrss'] == 'show' ); ?>><?php _e( 'Show', 'link-library' ); ?></option>
+									<option value="required"<?php selected( $options['showaddlinkrss'] == 'required' ); ?>><?php _e( 'Required', 'link-library' ); ?></option>
+								</select></td>
+							<td><input type="text" id="linkrsslabel" name="linkrsslabel" size="30" value="<?php echo $options['linkrsslabel']; ?>" />
+							</td>
+							<td><input type="text" id="linkrsstooltip" name="linkrsstooltip" size="30" value="<?php echo $options['linkrsstooltip']; ?>" /></td>
+							<td></td>
+						</tr>
+					<?php break;
+					case 5: /* -------------------------------- Link Category -------------------------------------------*/
+					?>
+						<tr>
+							<td style='width:200px;background-color:<?php echo $colorarray[4]; ?>;color:#fff;'>5- <?php _e( 'Link Category', 'link-library' ); ?></td>
+							<td><select name="showaddlinkcat" id="showaddlinkcat" style="width:120px;">
+									<option value="hide"<?php selected( $options['showaddlinkcat'] == 'hide' ); ?>><?php _e( 'Hide', 'link-library' ); ?></option>
+									<option value="show"<?php selected( $options['showaddlinkcat'] == 'show' ); ?>><?php _e( 'Drop-down list', 'link-library' ); ?></option>
+									<option value="selectmultiple"<?php selected( $options['showaddlinkcat'] == 'selectmultiple' ); ?>><?php _e( 'Multi-select list', 'link-library' ); ?></option>
+								</select></td>
+							<td><input type="text" id="linkcatlabel" name="linkcatlabel" size="30" value="<?php echo $options['linkcatlabel']; ?>" /></td>
+							<td>
+								<input type="text" id="linkcattooltip" name="linkcattooltip" size="30" value="<?php echo $options['linkcattooltip']; ?>" />
+							</td>
+							<td class='lltooltip' title='<?php _e( 'Comma-seperated list of categories to be displayed in category selection box (e.g. 1,5,4)', 'link-library' ); ?>'>
+								<input type="text" id="addlinkcatlistoverride" name="addlinkcatlistoverride" size="50" value="<?php echo $options['addlinkcatlistoverride']; ?>" />
+						</tr>
+						<tr>
+							<td></td>
+							<td></td>
+							<td class="lltooltip" title="<?php _e( 'Select a category label', 'link-library' ); ?>"><input type="text" id="userlinkcatselectionlabel" name="userlinkcatselectionlabel" size="30" value="<?php echo $options['userlinkcatselectionlabel']; ?>" /></td>
+							<td></td>
+							<td class="lltooltip" title="<?php _e( 'Select a category label', 'link-library' ); ?>"><?php
+
+								$include_links_array = explode( ',', $options['categorylist_cpt'] );
+								$excluded_links_array = explode( ',', $options['excludecategorylist_cpt'] );
+								$link_categories_query_args = array( 'hide_empty' => false );
+								$link_categories_query_args['include'] = $include_links_array;
+								$link_categories_query_args['exclude'] = $excluded_links_array;
+								$linkcats = get_terms( 'link_library_category', $link_categories_query_args );
+
+								if ( $linkcats ) { ?>
+									<select name="addlinkdefaultcat" id="addlinkdefaultcat" value="<?php echo $options['addlinkdefaultcat']; ?>">
+										<option value="nodefaultcat">No default category</option>
+										<?php foreach ( $linkcats as $linkcat ) { ?>
+											<option value="<?php echo $linkcat->term_id; ?>" <?php selected( $linkcat->term_id, $options['addlinkdefaultcat'] ); ?>><?php echo $linkcat->name; ?></option>
+										<?php } ?>
+									</select>
+								<?php } ?></td>
+						</tr>
+						<tr>
+							<td><?php _e( 'User-submitted Category', 'link-library' ); ?></td>
+							<td><select name="addlinkcustomcat" id="addlinkcustomcat" style="width:60px;">
+									<option value="hide"<?php selected( $options['addlinkcustomcat'] == 'hide' ); ?>><?php _e( 'No', 'link-library' ); ?></option>
+									<option value="show"<?php selected( $options['addlinkcustomcat'] == 'show' ); ?>><?php _e( 'Allow', 'link-library' ); ?></option>
+								</select></td>
+							<td><input type="text" id="linkcustomcatlabel" name="linkcustomcatlabel" size="30" value="<?php echo $options['linkcustomcatlabel']; ?>" /></td>
+							<td class="lltooltip" title="<?php _e( 'User-submitted category prompt', 'link-library' ); ?>"><input type="text" id="linkusercattooltip" name="linkusercattooltip" size="30" value="<?php echo $options['linkusercattooltip']; ?>" /></td>
+							<td class="lltooltip" title="<?php _e( 'User-submitted category prompt', 'link-library' ); ?>"><input type="text" id="linkcustomcatlistentry" name="linkcustomcatlistentry" size="50" value="<?php echo $options['linkcustomcatlistentry']; ?>" /></td>
+						</tr>
+					<?php break;
+					case 6: /* -------------------------------- Link Tags -------------------------------------------*/
+					?>
+						<tr>
+							<td style='width:200px;background-color:<?php echo $colorarray[5]; ?>;color:#fff;'>6- <?php _e( 'Tags', 'link-library' ); ?></td>
+							<td><select name="showaddlinktags" id="showaddlinktags" style="width:80px;">
+									<option value="hide"<?php selected( $options['showaddlinktags'] == 'hide' ); ?>><?php _e( 'Hide', 'link-library' ); ?></option>
+									<option value="show"<?php selected( $options['showaddlinktags'] == 'show' ); ?>><?php _e( 'Show', 'link-library' ); ?></option>
+								</select></td>
+							<td><input type="text" id="linktagslabel" name="linktagslabel" size="30" value="<?php echo $options['linktagslabel']; ?>" /></td>
+							<td><input type="text" id="linktagtooltip" name="linktagtooltip" size="30" value="<?php echo $options['linktagtooltip']; ?>" /></td>
+							<td class="lltooltip" title="<?php _e( 'Comma-seperated list of tag IDs to be displayed in category selection box (e.g. 1,5,4) instead of displaying all tags', 'link-library' ); ?>"><input type="text" id="addlinktaglistoverride" name="addlinktaglistoverride" size="50" value="<?php echo $options['addlinktaglistoverride']; ?>" /></td>
+						</tr>
+						<tr>
+							<td><?php _e( 'User-Submitted Tags', 'link-library' ); ?></td>
+							<td><select name="addlinkcustomtag" id="addlinkcustomtag" style="width:80px;">
+									<option value="hide"<?php selected( $options['addlinkcustomtag'] == 'hide' ); ?>><?php _e( 'No', 'link-library' ); ?></option>
+									<option value="show"<?php selected( $options['addlinkcustomtag'] == 'show' ); ?>><?php _e( 'Allow', 'link-library' ); ?></option>
+								</select></td>
+							<td><input type="text" id="linkcustomtaglabel" name="linkcustomtaglabel" size="30" value="<?php echo $options['linkcustomtaglabel']; ?>" /></td>
+							<td></td>
+							<td class="lltooltip" title="<?php _e( 'User-submitted tags prompt', 'link-library' ); ?>"><input type="text" id="linkcustomtaglistentry" name="linkcustomtaglistentry" size="50" value="<?php echo $options['linkcustomtaglistentry']; ?>" /></td>
+						</tr>
+					<?php break;
+					case 7: /* -------------------------------- Link Description -------------------------------------------*/
+					?>
+						<tr>
+							<td style='width:200px;background-color:<?php echo $colorarray[6]; ?>;color:#fff;'>7- <?php _e( 'Link Description', 'link-library' ); ?></td>
+							<td><select name="showaddlinkdesc" id="showaddlinkdesc" style="width:80px;">
+									<option value="hide"<?php selected( $options['showaddlinkdesc'] == 'hide' ); ?>><?php _e( 'Hide', 'link-library' ); ?></option>
+									<option value="show"<?php selected( $options['showaddlinkdesc'] == 'show' ); ?>><?php _e( 'Show', 'link-library' ); ?></option>
+									<option value="required"<?php selected( $options['showaddlinkdesc'] == 'required' ); ?>><?php _e( 'Required', 'link-library' ); ?></option>
+								</select></td>
+							<td><input type="text" id="linkdesclabel" name="linkdesclabel" size="30" value="<?php echo $options['linkdesclabel']; ?>" /></td>
+							<td><input type="text" id="linkdesctooltip" name="linkdesctooltip" size="30" value="<?php echo $options['linkdesctooltip']; ?>" /></td>
+							<td></td>
+						</tr>
+					<?php break;
+					case 8: /* -------------------------------- Large Description -------------------------------------------*/
+					?>	
+						<tr>
+							<td style='width:200px;background-color:<?php echo $colorarray[7]; ?>;color:#fff;'>8- <?php _e( 'Large Description', 'link-library' ); ?></td>
+							<td><select name="showuserlargedescription" id="showuserlargedescription" style="width:80px;">
+									<option value="hide"<?php selected( $options['showuserlargedescription'] == 'hide' ); ?>><?php _e( 'Hide', 'link-library' ); ?></option>
+									<option value="show"<?php selected( $options['showuserlargedescription'] == 'show' ); ?>><?php _e( 'Show', 'link-library' ); ?></option>
+									<option value="required"<?php selected( $options['showuserlargedescription'] == 'required' ); ?>><?php _e( 'Required', 'link-library' ); ?></option>
+								</select></td>
+							<td><input type="text" id="linklargedesclabel" name="linklargedesclabel" size="30" value="<?php echo $options['linklargedesclabel']; ?>" /></td>
+							<td><input type="text" id="largedesctooltip" name="largedesctooltip" size="30" value="<?php echo $options['largedesctooltip']; ?>" /></td>
+							<td></td>
+						</tr>
+					<?php break;
+					case 9: /* -------------------------------- Link Notes -------------------------------------------*/
+					?>
+						<tr>
+							<td style='width:200px;background-color:<?php echo $colorarray[8]; ?>;color:#fff;'>9- <?php _e( 'Link Notes', 'link-library' ); ?></td>
+							<td><select name="showaddlinknotes" id="showaddlinknotes" style="width:80px;">
+									<option value="hide"<?php selected( $options['showaddlinknotes'] == 'hide' ); ?>><?php _e( 'Hide', 'link-library' ); ?></option>
+									<option value="show"<?php selected( $options['showaddlinknotes'] == 'show' ); ?>><?php _e( 'Show', 'link-library' ); ?></option>
+									<option value="required"<?php selected( $options['showaddlinknotes'] == 'required' ); ?>><?php _e( 'Required', 'link-library' ); ?></option>
+								</select></td>
+							<td><input type="text" id="linknoteslabel" name="linknoteslabel" size="30" value="<?php echo $options['linknoteslabel']; ?>" /></td>
+							<td><input type="text" id="linknotestooltip" name="linknotestooltip" size="30" value="<?php echo $options['linknotestooltip']; ?>" /></td>
+							<td></td>
+						</tr>
+					<?php break;
+					case 10: /* -------------------------------- Link Image -------------------------------------------*/
+					?>
+						<tr>
+							<td style='width:200px;background-color:<?php echo $colorarray[9]; ?>;color:#fff;'>10- <?php _e( 'Link Image', 'link-library' ); ?></td>
+							<td><select name="showaddlinkimage" id="showaddlinkimage" style="width:80px;">
+									<option value="hide"<?php selected( $options['showaddlinkimage'] == 'hide' ); ?>><?php _e( 'Hide', 'link-library' ); ?></option>
+									<option value="show"<?php selected( $options['showaddlinkimage'] == 'show' ); ?>><?php _e( 'Show', 'link-library' ); ?></option>
+									<option value="required"<?php selected( $options['showaddlinkimage'] == 'required' ); ?>><?php _e( 'Required', 'link-library' ); ?></option>
+								</select></td>
+							<td><input type="text" id="linkimagelabel" name="linkimagelabel" size="30" value="<?php echo $options['linkimagelabel']; ?>" /></td>
+							<td><input type="text" id="linkimagetooltip" name="linkimagetooltip" size="30" value="<?php echo $options['linkimagetooltip']; ?>" /></td>
+							<td></td>
+						</tr>
+					<?php break;
+					case 11: /* -------------------------------- Reciprocal Link -------------------------------------------*/
+					?>
+						<tr>
+							<td style='width:200px;background-color:<?php echo $colorarray[10]; ?>;color:#fff;'>11- <?php _e( 'Reciprocal Link', 'link-library' ); ?></td>
+							<td><select name="showaddlinkreciprocal" id="showaddlinkreciprocal" style="width:80px;">
+									<option value="hide"<?php selected( $options['showaddlinkreciprocal'] == 'hide' ); ?>><?php _e( 'Hide', 'link-library' ); ?></option>
+									<option value="show"<?php selected( $options['showaddlinkreciprocal'] == 'show' ); ?>><?php _e( 'Show', 'link-library' ); ?></option>
+									<option value="required"<?php selected( $options['showaddlinkreciprocal'] == 'required' ); ?>><?php _e( 'Required', 'link-library' ); ?></option>
+								</select></td>
+							<td><input type="text" id="linkreciprocallabel" name="linkreciprocallabel" size="30" value="<?php echo $options['linkreciprocallabel']; ?>" /></td>
+							<td><input type="text" id="linkreciptooltip" name="linkreciptooltip" size="30" value="<?php echo $options['linkreciptooltip']; ?>" /></td>
+							<td></td>
+						</tr>
+					<?php break;
+					case 12: /* -------------------------------- Reciprocal Link -------------------------------------------*/
+					?>
+						<tr>
+							<td style='width:200px;background-color:<?php echo $colorarray[11]; ?>;color:#fff;'>12- <?php _e( 'Secondary Address', 'link-library' ); ?></td>
+							<td><select name="showaddlinksecondurl" id="showaddlinksecondurl" style="width:80px;">
+									<option value="hide"<?php selected( $options['showaddlinksecondurl'] == 'hide' ); ?>><?php _e( 'Hide', 'link-library' ); ?></option>
+									<option value="show"<?php selected( $options['showaddlinksecondurl'] == 'show' ); ?>><?php _e( 'Show', 'link-library' ); ?></option>
+									<option value="required"<?php selected( $options['showaddlinksecondurl'] == 'required' ); ?>><?php _e( 'Required', 'link-library' ); ?></option>
+								</select></td>
+							<td><input type="text" id="linksecondurllabel" name="linksecondurllabel" size="30" value="<?php echo $options['linksecondurllabel']; ?>" /></td>
+							<td><input type="text" id="linksecondtooltip" name="linksecondtooltip" size="30" value="<?php echo $options['linksecondtooltip']; ?>" /></td>
+							<td></td>
+						</tr>
+					<?php break;
+					case 13: /* -------------------------------- Link Telephone -------------------------------------------*/
+					?>
+						<tr>
+							<td style='width:200px;background-color:<?php echo $colorarray[12]; ?>;color:#fff;'>13- <?php _e( 'Link Telephone', 'link-library' ); ?></td>
+							<td><select name="showaddlinktelephone" id="showaddlinktelephone" style="width:80px;">
+									<option value="hide"<?php selected( $options['showaddlinktelephone'] == 'hide' ); ?>><?php _e( 'Hide', 'link-library' ); ?></option>
+									<option value="show"<?php selected( $options['showaddlinktelephone'] == 'show' ); ?>><?php _e( 'Show', 'link-library' ); ?></option>
+									<option value="required"<?php selected( $options['showaddlinktelephone'] == 'required' ); ?>><?php _e( 'Required', 'link-library' ); ?></option>
+								</select></td>
+							<td><input type="text" id="linktelephonelabel" name="linktelephonelabel" size="30" value="<?php echo $options['linktelephonelabel']; ?>" /></td>
+							<td><input type="text" id="linktelephonetooltip" name="linktelephonetooltip" size="30" value="<?php echo $options['linktelephonetooltip']; ?>" /></td>
+							<td></td>
+						</tr>
+					<?php break;
+					case 14: /* -------------------------------- Link E-mail -------------------------------------------*/
+					?>
+						<tr>
+							<td style='width:200px;background-color:<?php echo $colorarray[13]; ?>;color:#fff;'>14- <?php _e( 'Link E-mail', 'link-library' ); ?></td>
+							<td><select name="showaddlinkemail" id="showaddlinkemail" style="width:80px;">
+									<option value="hide"<?php selected( $options['showaddlinkemail'] == 'hide' ); ?>><?php _e( 'Hide', 'link-library' ); ?></option>
+									<option value="show"<?php selected( $options['showaddlinkemail'] == 'show' ); ?>><?php _e( 'Show', 'link-library' ); ?></option>
+									<option value="required"<?php selected( $options['showaddlinkemail'] == 'required' ); ?>><?php _e( 'Required', 'link-library' ); ?></option>
+								</select></td>
+							<td><input type="text" id="linkemaillabel" name="linkemaillabel" size="30" value="<?php echo $options['linkemaillabel']; ?>" /></td>
+							<td><input type="text" id="linkemailtooltip" name="linkemailtooltip" size="30" value="<?php echo $options['linkemailtooltip']; ?>" /></td>
+							<td></td>
+						</tr>
+					<?php break;
+					case 15: /* -------------------------------- Reciprocal Link -------------------------------------------*/
+					?>
+						<tr>
+							<td style='width:200px;background-color:<?php echo $colorarray[14]; ?>;color:#fff;'>15- <?php _e( 'Link Submitter Name', 'link-library' ); ?></td>
+							<td><select name="showlinksubmittername" id="showlinksubmittername" style="width:80px;">
+									<option value="hide"<?php selected( $options['showlinksubmittername'] == 'hide' ); ?>><?php _e( 'Hide', 'link-library' ); ?></option>
+									<option value="show"<?php selected( $options['showlinksubmittername'] == 'show' ); ?>><?php _e( 'Show', 'link-library' ); ?></option>
+									<option value="required"<?php selected( $options['showlinksubmittername'] == 'required' ); ?>><?php _e( 'Required', 'link-library' ); ?></option>
+								</select></td>
+							<td><input type="text" id="linksubmitternamelabel" name="linksubmitternamelabel" size="30" value="<?php echo $options['linksubmitternamelabel']; ?>" /></td>
+							<td><input type="text" id="submitternametooltip" name="submitternametooltip" size="30" value="<?php echo $options['submitternametooltip']; ?>" /></td>
+							<td></td>
+						</tr>
+					<?php break;
+					case 16: /* -------------------------------- Link Submitter E-mail -------------------------------------------*/
+						?>
+						<tr>
+							<td style='width:200px;background-color:<?php echo $colorarray[15]; ?>;color:#fff;'>16- <?php _e( 'Link Submitter E-mail', 'link-library' ); ?></td>
+							<td><select name="showaddlinksubmitteremail" id="showaddlinksubmitteremail" style="width:80px;">
+									<option value="hide"<?php selected( $options['showaddlinksubmitteremail'] == 'hide' ); ?>><?php _e( 'Hide', 'link-library' ); ?></option>
+									<option value="show"<?php selected( $options['showaddlinksubmitteremail'] == 'show' ); ?>><?php _e( 'Show', 'link-library' ); ?></option>
+									<option value="required"<?php selected( $options['showaddlinksubmitteremail'] == 'required' ); ?>><?php _e( 'Required', 'link-library' ); ?></option>
+								</select></td>
+							<td><input type="text" id="linksubmitteremaillabel" name="linksubmitteremaillabel" size="30" value="<?php echo $options['linksubmitteremaillabel']; ?>" /></td>
+							<td><input type="text" id="submitteremailtooltip" name="submitteremailtooltip" size="30" value="<?php echo $options['submitteremailtooltip']; ?>" /></td>
+							<td></td>
+						</tr>
+					<?php break;
+					case 17: /* -------------------------------- Link Submitter Comment -------------------------------------------*/
+						?>
+						<tr>
+							<td style='width:200px;background-color:<?php echo $colorarray[16]; ?>;color:#fff;'>17- <?php _e( 'Link Submitter Comment', 'link-library' ); ?></td>
+							<td><select name="showlinksubmittercomment" id="showlinksubmittercomment" style="width:80px;">
+									<option value="hide"<?php selected( $options['showlinksubmittercomment'] == 'hide' ); ?>><?php _e( 'Hide', 'link-library' ); ?></option>
+									<option value="show"<?php selected( $options['showlinksubmittercomment'] == 'show' ); ?>><?php _e( 'Show', 'link-library' ); ?></option>
+									<option value="required"<?php selected( $options['showlinksubmittercomment'] == 'required' ); ?>><?php _e( 'Required', 'link-library' ); ?></option>
+								</select></td>
+							<td><input type="text" id="linksubmittercommentlabel" name="linksubmittercommentlabel" size="30" value="<?php echo $options['linksubmittercommentlabel']; ?>" /></td>
+							<td><input type="text" id="submittercommenttooltip" name="submittercommenttooltip" size="30" value="<?php echo $options['submittercommenttooltip']; ?>" /></td>
+							<td></td>
+						</tr>
+					<?php break;
+					case 18: /* -------------------------------- Custom Captcha Question -------------------------------------------*/
+						?>
+						<tr>
+							<td style='width:200px;background-color:<?php echo $colorarray[17]; ?>;color:#fff;'>18- <?php _e( 'Custom Captcha Question', 'link-library' ); ?></td>
+							<td><select name="showcustomcaptcha" id="showcustomcaptcha" style="width:80px;">
+									<option value="hide"<?php selected( $options['showcustomcaptcha'] == 'hide' ); ?>><?php _e( 'Hide', 'link-library' ); ?></option>
+									<option value="show"<?php selected( $options['showcustomcaptcha'] == 'show' ); ?>><?php _e( 'Show', 'link-library' ); ?></option>
+								</select></td>
+							<td><input type="text" id="customcaptchaquestion" name="customcaptchaquestion" size="30" value="<?php echo $options['customcaptchaquestion']; ?>" /></td>
+							<td></td>
+							<td class="lltooltip" title="<?php _e( 'Custom Captcha Answer', 'link-library' ); ?>"><input type="text" id="customcaptchaanswer" name="customcaptchaanswer" size="30" value="<?php echo $options['customcaptchaanswer']; ?>" /></td>
+						</tr>
+					<?php break;
+					case 19:  /* -------------------------------- Link Reference -------------------------------------------*/
+						?>
+						<tr>
+							<td style='width:200px;background-color:<?php echo $colorarray[18]; ?>;color:#fff;'>19- <?php _e( 'Link Reference', 'link-library' ); ?></td>
+							<td><select name="showlinkreferencelist" id="showlinkreferencelist" style="width:80px;">
+									<option value="hide"<?php selected( $options['showlinkreferencelist'] == 'hide' ); ?>><?php _e( 'Hide', 'link-library' ); ?></option>
+									<option value="show"<?php selected( $options['showlinkreferencelist'] == 'show' ); ?>><?php _e( 'Show', 'link-library' ); ?></option>
+									<option value="required"<?php selected( $options['showlinkreferencelist'] == 'required' ); ?>><?php _e( 'Required', 'link-library' ); ?></option>
+								</select></td>
+							<td><input type="text" id="linkreferencelabel" name="linkreferencelabel" size="30" value="<?php echo $options['linkreferencelabel']; ?>" /></td>
+							<td><input type="text" id="linkreferencetooltip" name="linkreferencetooltip" size="30" value="<?php echo $options['linkreferencetooltip']; ?>" /></td>
+							<td></td>
+						</tr>
+					<?php break;
+					case 20:  /* -------------------------------- Custom URL Fields -------------------------------------------*/
+					case 21:
+					case 22:
+					case 23:
+					case 24:
+						$customurlfieldid = $arrayelements - 19;
+						$colorindex = $arrayelements - 1;
+
+						if ( $genoptions['customurl' . $customurlfieldid . 'active'] ) {
+						?>
+						<tr>
+							<td style='width:200px;background-color:<?php echo $colorarray[$colorindex]; ?>;color:#fff;'><?php echo $arrayelements; ?>- <?php echo $genoptions['customurl' . $customurlfieldid . 'label']; ?></td>
+							<td><select name="showcustomurl<?php echo $customurlfieldid; ?>" id="showcustomurl<?php echo $customurlfieldid; ?>" style="width:80px;">
+									<option value="hide"<?php selected( $options['showcustomurl' . $customurlfieldid] == 'hide' ); ?>><?php _e( 'Hide', 'link-library' ); ?></option>
+									<option value="show"<?php selected( $options['showcustomurl' . $customurlfieldid] == 'show' ); ?>><?php _e( 'Show', 'link-library' ); ?></option>
+									<option value="required"<?php selected( $options['showcustomurl' . $customurlfieldid] == 'required' ); ?>><?php _e( 'Required', 'link-library' ); ?></option>
+								</select></td>
+							<td></td>
+							<td><input type="text" id="customurl<?php echo $customurlfieldid; ?>tooltip" name="customurl<?php echo $customurlfieldid; ?>tooltip" size="30" value="<?php echo $options['customurl' . $customurlfieldid . 'tooltip']; ?>" /></td>
+							<td></td>
+						</tr>
+					<?php } break;
+					case 25:  /* -------------------------------- Custom Text Fields -------------------------------------------*/
+					case 26:
+					case 27:
+					case 28:
+					case 29:
+						$customtextfieldid = $arrayelements - 24;
+						$colorindex = $arrayelements - 1;
+
+						if ( $genoptions['customtext' . $customtextfieldid . 'active'] ) {
+						?>
+						<tr>
+							<td style='width:200px;background-color:<?php echo $colorarray[$colorindex]; ?>;color:#fff;'><?php echo $arrayelements; ?>- <?php echo $genoptions['customtext' . $customtextfieldid . 'label']; ?></td>
+							<td><select name="showcustomtext<?php echo $customtextfieldid; ?>" id="showcustomtext<?php echo $customtextfieldid; ?>" style="width:80px;">
+									<option value="hide"<?php selected( $options['showcustomtext' . $customtextfieldid] == 'hide' ); ?>><?php _e( 'Hide', 'link-library' ); ?></option>
+									<option value="show"<?php selected( $options['showcustomtext' . $customtextfieldid] == 'show' ); ?>><?php _e( 'Show', 'link-library' ); ?></option>
+									<option value="required"<?php selected( $options['showcustomtext' . $customtextfieldid] == 'required' ); ?>><?php _e( 'Required', 'link-library' ); ?></option>
+								</select></td>
+							<td></td>
+							<td><input type="text" id="customtext<?php echo $customtextfieldid; ?>tooltip" name="customtext<?php echo $customtextfieldid; ?>tooltip" size="30" value="<?php echo $options['customtext' . $customtextfieldid . 'tooltip']; ?>" /></td>
+							<td></td>
+						</tr>
+					<?php } break;
+					case 30:  /* -------------------------------- Custom List Fields -------------------------------------------*/
+					case 31:
+					case 32:
+					case 33:
+					case 34:
+						$customlistfieldid = $arrayelements - 29;
+						$colorindex = $arrayelements - 1;
+
+						if ( $genoptions['customlist' . $customlistfieldid . 'active'] ) {
+						?>
+						<tr>
+							<td style='width:200px;background-color:<?php echo $colorarray[$colorindex]; ?>;color:#fff;'><?php echo $arrayelements; ?>- <?php echo $genoptions['customlist' . $customlistfieldid . 'label']; ?></td>
+							<td><select name="showcustomlist<?php echo $customlistfieldid; ?>" id="showcustomlist<?php echo $customlistfieldid; ?>" style="width:80px;">
+									<option value="hide"<?php selected( $options['showcustomlist' . $customlistfieldid] == 'hide' ); ?>><?php _e( 'Hide', 'link-library' ); ?></option>
+									<option value="show"<?php selected( $options['showcustomlist' . $customlistfieldid] == 'show' ); ?>><?php _e( 'Show', 'link-library' ); ?></option>
+									<option value="required"<?php selected( $options['showcustomlist' . $customlistfieldid] == 'required' ); ?>><?php _e( 'Required', 'link-library' ); ?></option>
+								</select></td>
+							<td></td>
+							<td><input type="text" id="customlist<?php echo $customlistfieldid; ?>tooltip" name="customlist<?php echo $customlistfieldid; ?>tooltip" size="30" value="<?php echo $options['customlist' . $customlistfieldid . 'tooltip']; ?>" /></td>
+							<td></td>
+						</tr>
+					<?php } break;
+				} } } ?>
+
 		<tr>
 			<td><?php _e( 'Submit button label', 'link-library' ); ?></td>
 			<td></td>
@@ -6080,13 +7191,13 @@ function general_custom_fields_meta_box( $data ) {
 				<td class='lltooltip' title='<?php _e( 'Overwrites current library settings with contents of CSV file', 'link-library' ); ?>' style='width: 330px'><?php _e( 'Library Settings CSV file to import', 'link-library' ); ?></td>
 				<td><input size="80" name="settingsfile" type="file" /></td>
 				<td>
-					<input type="submit" name="importsettings" value="<?php _e( 'Import Library Settings', 'link-library' ); ?>" />
+					<input class="button" type="submit" name="importsettings" value="<?php _e( 'Import Library Settings', 'link-library' ); ?>" />
 				</td>
 			</tr>
 			<tr>
 				<td class='lltooltip' style='width: 330px' title='<?php _e( 'Generates CSV file with current library configuration for download', 'link-library' ); ?>'><?php _e( 'Export current library settings', 'link-library' ); ?></td>
 				<td>
-					<input type="submit" name="exportsettings" value="<?php _e( 'Export Library Settings', 'link-library' ); ?>" />
+					<input class="button" type="submit" name="exportsettings" value="<?php _e( 'Export Library Settings', 'link-library' ); ?>" />
 				</td>
 			</tr>
 		</table>
@@ -6111,18 +7222,56 @@ function general_custom_fields_meta_box( $data ) {
 			</tr>
 			<tr>
 				<td>
-					<input type='submit' id="recipcheck" name="recipcheck" value="<?php _e( 'Check Reciprocal Links', 'link-library' ); ?>" />
+					<input class="button" type='submit' id="recipcheck" name="recipcheck" value="<?php _e( 'Check Reciprocal Links', 'link-library' ); ?>" />
 				</td>
 			</tr>
 			<tr><td colspan="2"><hr /></td></tr>
 			<tr>
 				<td>
-					<input type='submit' id="brokencheck" name="brokencheck" value="<?php _e( 'Check Broken Links', 'link-library' ); ?>" />
+					<input class="button" type='submit' id="brokencheck" name="brokencheck" value="<?php _e( 'Check Broken Links', 'link-library' ); ?>" />
+				</td>
+			</tr>
+			<tr>
+				<td><?php _e( 'Suppress protocol change redirections', 'link-library' ); ?></td>
+				<td>
+					<input type="checkbox" id="suppressprotocolchangeredirection" name="suppressprotocolchangeredirection" <?php checked( $genoptions['suppressprotocolchangeredirection'] ); ?>/></td>
+			</tr>
+			<tr>
+				<td><?php _e( 'Suppress subdomain redirections', 'link-library' ); ?></td>
+				<td>
+					<input type="checkbox" id="suppresssubdomainredirection" name="suppresssubdomainredirection" <?php checked( $genoptions['suppresssubdomainredirection'] ); ?>/></td>
+			</tr>
+			<tr>
+				<td><?php _e( 'Suppress subfolder redirections', 'link-library' ); ?></td>
+				<td>
+					<input type="checkbox" id="suppresssubfolderredirection" name="suppresssubfolderredirection" <?php checked( $genoptions['suppresssubfolderredirection'] ); ?>/></td>
+			</tr>
+			<tr>
+				<td><?php _e( 'Suppress redirection due to badly configured server', 'link-library' ); ?></td>
+				<td>
+					<input type="checkbox" id="suppressbadconfigredirection" name="suppressbadconfigredirection" <?php checked( $genoptions['suppressbadconfigredirection'] ); ?>/></td>
+			</tr>
+			<tr><td colspan="2"><hr /></td></tr>
+			<tr>
+				<td>
+					<input class="button" type='submit' id="rsscheck" name="rsscheck" value="<?php _e( 'Check RSS Feed Links', 'link-library' ); ?>" />
+				</td>
+			</tr>
+			<tr>
+				<td style='width: 250px'><?php _e( 'RSS Feed freshness threshold (days)', 'link-library' ); ?></td>
+				<td>
+					<input type="text" id="rsscheckdays" name="rsscheckdays" size="3" value="<?php echo $genoptions['rsscheckdays']; ?>" />
+				</td>
+			</tr>
+			<tr><td colspan="2"><hr /></td></tr>
+			<tr>
+				<td>
+					<input class="button" type='submit' id="duplicatecheck" name="duplicatecheck" value="<?php _e( 'Check Duplicate Links', 'link-library' ); ?>" />
 				</td>
 			</tr>
 			<tr>
 				<td>
-					<input type='submit' id="duplicatecheck" name="duplicatecheck" value="<?php _e( 'Check Duplicate Links', 'link-library' ); ?>" />
+					<input class="button" type='submit' id="emptycatcheck" name="emptycatcheck" value="<?php _e( 'Check Links Missing Categories', 'link-library' ); ?>" />
 				</td>
 			</tr>
 		</table>
@@ -6146,6 +7295,11 @@ function general_custom_fields_meta_box( $data ) {
 
 		$link_description = get_post_meta( $link->ID, 'link_description', true );
 		$link_description = htmlentities( $link_description );
+
+		if ( empty( $link_description ) && isset( $_GET['link_description'] ) ) {
+			$link_description = urldecode( $_GET['link_description'] );
+		}
+
 		$link_textfield = get_post_meta( $link->ID, 'link_textfield', true );
 
 		if ( metadata_exists( 'post', $link->ID, 'link_target' ) ) {
@@ -6155,9 +7309,19 @@ function general_custom_fields_meta_box( $data ) {
 		}
 
 		$link_rss = get_post_meta( $link->ID, 'link_rss', true );
+
+		if ( empty( $link_rss ) && isset( $_GET['link_rss'] ) ) {
+			$link_rss = esc_url( urldecode( $_GET['link_rss'] ) );
+		}
+
 		$link_notes = get_post_meta( $link->ID, 'link_notes', true );
 		$link_notes = htmlentities( $link_notes );
 		wp_nonce_field( plugin_basename( __FILE__ ), 'link_edit_nonce' );
+
+		if ( isset( $_GET['existinglink'] ) && 'true' == $_GET['existinglink'] ) {
+			echo '<h2 style="color:#f00;font-weight:bold">'. __( 'Existing link found with target URL in Link Library. Showing existing link to edit.', 'link-library' ) . '</h2>';
+		}
+
 		?>
 
 		<table style="width:100%">
@@ -6433,6 +7597,8 @@ function general_custom_fields_meta_box( $data ) {
 		$link_submitter = get_post_meta( $link->ID, 'link_submitter', true );
 		$link_submitter_name = get_post_meta( $link->ID, 'link_submitter_name', true );
 		$link_submitter_email = get_post_meta( $link->ID, 'link_submitter_email', true );
+		$link_submitter_comment = get_post_meta( $link->ID, 'submitter_comment', true );
+		$link_reference = get_post_meta( $link->ID, 'link_reference', true );
 		$link_price = get_post_meta( $link->ID, 'link_price', true );
 		$link_reciprocal = get_post_meta( $link->ID, 'link_reciprocal', true );
 		$link_rel = get_post_meta( $link->ID, 'link_rel', true );
@@ -6591,6 +7757,27 @@ function general_custom_fields_meta_box( $data ) {
 				</td>
 			</tr>
 			<tr>
+				<td><?php _e( 'Submitter Comment', 'link-library' ); ?></td>
+				<td>
+					<textarea style="width: 100%" id="link_submitter_comment" name="link_submitter_comment"><?php echo esc_html( $link_submitter_comment ); ?></textarea>
+				</td>
+			</tr>
+			<tr>
+				<td><?php _e( 'Referenced Link', 'link-library' ); ?></td>
+				<td>
+					<?php if (!empty( $link_reference ) ) { 
+						$referenced_link = get_posts( array( 'post_type' => 'link_library_links', 'include' => array( $link_reference ), 'numberposts' => 1 ) );
+
+						if ( !empty( $referenced_link ) ) {
+							echo $referenced_link[0]->post_title . ' - ';
+						}							
+						?>
+						
+						<a href="<?php echo esc_url( add_query_arg( array( 'action' => 'edit', 'post' => $link_reference ), admin_url( 'post.php' ) ) ); ?>" target="_blank"><?php _e( 'Edit', 'link-library' ); ?></a>
+					<?php } ?>
+				</td>
+			</tr>			
+			<tr>
 				<td><?php _e( 'Rel Tags', 'link-library' ); ?></td>
 				<td>
 					<input type="text" id="link_rel" name="link_rel" size="80" value="<?php echo $link_rel; ?>" />
@@ -6629,6 +7816,12 @@ function general_custom_fields_meta_box( $data ) {
 				if ( isset( $_POST[$array_url] ) ) {
 					$submitted_url = $_POST[$array_url];
 
+					if ( 'https' == $genoptions['defaultprotocoladmin'] && false === strpos( $submitted_url, '://' ) && !empty( $submitted_url ) ) {
+						$submitted_url = 'https://' . $submitted_url;
+					}
+
+					$submitted_url = esc_url ( $submitted_url );
+
 					if ( 'link_image' == $array_url ) {
 						if ( empty( $submitted_url ) ) {
 							delete_post_thumbnail( $link_id );
@@ -6636,7 +7829,7 @@ function general_custom_fields_meta_box( $data ) {
 							$previous_image_url = get_post_meta( $link_id, 'link_image', true );
 
 							if ( has_post_thumbnail( $link_id ) && $submitted_url == $previous_image_url ) {
-								break;
+								continue;
 							}
 
 							global $wpdb;
@@ -6654,7 +7847,7 @@ function general_custom_fields_meta_box( $data ) {
 
 								$attachment = array(
 									'post_mime_type' => $wpFileType['type'],  // file type
-									'post_title' => sanitize_file_name( $submitted_url ),  // sanitize and use image name as file name
+									'post_title' => esc_url( $submitted_url ),  // sanitize and use image name as file name
 									'post_content' => '',  // could use the image description here as the content
 									'post_status' => 'inherit'
 								);
@@ -6663,36 +7856,19 @@ function general_custom_fields_meta_box( $data ) {
 								$attachmentId = wp_insert_attachment( $attachment, $submitted_url, $link_id );
 								$attachmentData = wp_generate_attachment_metadata( $attachmentId, $submitted_url );
 								wp_update_attachment_metadata( $attachmentId, $attachmentData );
+
+								set_post_thumbnail( $link_id, $attachmentId );
 							} else {
 								set_post_thumbnail( $link_id, $attachmentId );
 							}
 						}
 					}
 
-					if ( 'https' == $genoptions['defaultprotocoladmin'] ) {
-						$submitted_url = str_replace( ' ', '%20', $submitted_url );
-						$submitted_url = preg_replace( '|[^a-z0-9-~+_.?#=!&;,/:%@$\|*\'()\[\]\\x80-\\xff]|i', '', $submitted_url );
-
-						if ( 0 !== stripos( $submitted_url, 'mailto:' ) ) {
-							$strip = array( '%0d', '%0a', '%0D', '%0A' );
-							$submitted_url   = _deep_replace( $strip, $submitted_url );
-						}
-
-						$submitted_url = str_replace( ';//', '://', $submitted_url );
-						/* If the URL doesn't appear to contain a scheme, we
-						 * presume it needs http:// prepended (unless a relative
-						 * link starting with /, # or ? or a php file).
-						 */
-						if ( !empty( $submitted_url ) && strpos( $submitted_url, ':' ) === false && ! preg_match( '/^[a-z0-9-]+?\.php/i', $submitted_url ) ) {
-							$submitted_url = 'https://' . $submitted_url;
-						}
-					}
-
-					update_post_meta( $link_id, $array_url, esc_url( $submitted_url ) );
+					update_post_meta( $link_id, $array_url, $submitted_url );
 				}
 			}
 
-			$array_escape_items = array( 'link_description', 'link_notes', 'link_telephone', 'link_reciprocal', 'link_submitter', 'link_submitter_name', 'link_rel', 'link_custom_text_1', 'link_custom_text_2', 'link_custom_text_3', 'link_custom_text_4', 'link_custom_text_5', 'link_custom_list_1', 'link_custom_list_2', 'link_custom_list_3', 'link_custom_list_4', 'link_custom_list_5' );
+			$array_escape_items = array( 'link_description', 'link_notes', 'link_telephone', 'link_reciprocal', 'link_submitter', 'link_submitter_name', 'link_rel', 'link_custom_text_1', 'link_custom_text_2', 'link_custom_text_3', 'link_custom_text_4', 'link_custom_text_5', 'link_custom_list_1', 'link_custom_list_2', 'link_custom_list_3', 'link_custom_list_4', 'link_custom_list_5', 'link_submitter_comment' );
 			foreach ( $array_escape_items as $array_escape_item ) {
 				if ( isset( $_POST[$array_escape_item] ) ) {
 					update_post_meta( $link_id, $array_escape_item, sanitize_text_field( $_POST[$array_escape_item] ) );
@@ -6876,6 +8052,7 @@ function general_custom_fields_meta_box( $data ) {
 		$columns['link_library_updated'] = 'link_library_updated';
 		$columns['link_library_url'] = 'link_library_url';
 		$columns['link_library_rating'] = 'link_library_rating';
+		$columns['link_library_visits'] = 'link_library_visits';
 
 		return $columns;
 	}
@@ -6896,6 +8073,10 @@ function general_custom_fields_meta_box( $data ) {
 		} elseif ( isset( $vars['orderby'] ) && 'link_library_rating' == $vars['orderby'] ) {
 			$vars = array_merge( $vars, array(
 				'meta_key' => 'link_rating',
+				'orderby' => 'meta_value_num' ) );
+		} elseif ( isset( $vars['orderby'] ) && 'link_library_visits' == $vars['orderby'] ) {
+			$vars = array_merge( $vars, array(
+				'meta_key' => 'link_visits',
 				'orderby' => 'meta_value_num' ) );
 		}
 
@@ -6998,7 +8179,7 @@ function general_custom_fields_meta_box( $data ) {
 		$screen = get_current_screen();
 		global $wp_query;
 
-		if ( $screen->post_type == 'link_library_links' ) {
+		if ( $screen->post_type == 'link_library_links' && !empty( get_terms( array( 'taxonomy' => 'link_library_category' ) ) ) ) {
 			wp_dropdown_categories(array(
 					'show_option_all' => 'All Link Categories',
 					'taxonomy' => 'link_library_category',
@@ -7015,7 +8196,7 @@ function general_custom_fields_meta_box( $data ) {
 			);
 		}
 
-		if ( $screen->post_type == 'link_library_links' ) {
+		if ( $screen->post_type == 'link_library_links' && !empty( get_tags( 'link_library_tags' ) ) ) {
 			wp_dropdown_categories(array(
 					'show_option_all' => 'All Link Tags',
 					'taxonomy' => 'link_library_tags',
@@ -7072,7 +8253,7 @@ function general_custom_fields_meta_box( $data ) {
 
 		$linkquery = "SELECT p.ID, p.post_title FROM " . $ll_admin_class->db_prefix() . "posts p INNER JOIN";
 		$linkquery .= "(SELECT trim( TRAILING '/' FROM post_title ) as trim_post_title ";
-		$linkquery .= "FROM " . $ll_admin_class->db_prefix() . "posts p WHERE p.post_status in ( 'publish', 'pending', 'draft', 'future', 'private' ) GROUP BY post_title HAVING count(p.ID) > 1) dup ";
+		$linkquery .= "FROM " . $ll_admin_class->db_prefix() . "posts p WHERE p.post_type = 'link_library_links' AND p.post_status in ( 'publish', 'pending', 'draft', 'future', 'private' ) GROUP BY post_title HAVING count(p.ID) > 1) dup ";
 		$linkquery .= "ON p.post_title = dup.trim_post_title ";
 		$linkquery .= "WHERE p.post_type = 'link_library_links' AND p.post_status in ( 'publish', 'pending', 'draft', 'future', 'private' ) ";
 
@@ -7087,6 +8268,33 @@ function general_custom_fields_meta_box( $data ) {
 			}
 		} else {
 			echo 'No duplicate name links found';
+		}
+
+		echo '<br />';
+	}
+
+	function link_library_empty_cat_link_checker( $ll_admin_class ) {
+		global $wpdb;  // Kept with CPT update
+		echo "<strong>" . __( 'Empty Cat Link Checker Report', 'link-library' ) . "</strong><br /><br />";
+
+		$linkquery = "SELECT p.ID, p.post_title, pm.meta_value FROM " . $ll_admin_class->db_prefix() . "posts p, " . $ll_admin_class->db_prefix() . "postmeta pm ";
+		$linkquery .= "WHERE p.ID = pm.post_id AND p.post_type = 'link_library_links' and p.post_status in ( 'publish', 'pending', 'draft', 'future', 'private' ) ";
+		$linkquery .= "and pm.meta_key = 'link_url'AND NOT EXISTS ( SELECT * FROM " . $ll_admin_class->db_prefix() . "term_relationships rel ";
+		$linkquery .= "JOIN " . $ll_admin_class->db_prefix() . "term_taxonomy tax ";
+		$linkquery .= "ON tax.term_taxonomy_id = rel.term_taxonomy_id ";
+		$linkquery .= "AND tax.taxonomy = 'link_library_category' ";
+		$linkquery .= "JOIN " . $ll_admin_class->db_prefix() . "terms term ";
+		$linkquery .= "ON term.term_id = tax.term_id ";
+		$linkquery .= "WHERE   p.ID = rel.object_id )";
+
+		$links  = $wpdb->get_results( $linkquery );
+
+		if ( $links ) {
+			foreach ( $links as $link ) {
+				echo $link->ID . ' - ' . $link->post_title . ': ' . $link->meta_value . ' <a href="' . esc_url( add_query_arg( array( 'action' => 'edit', 'post' => $link->ID ), admin_url( 'post.php' ) ) ) . '">Edit</a><br /><br />';
+			}
+		} else {
+			echo 'No duplicate URL links found';
 		}
 
 		echo '<br />';
@@ -7111,11 +8319,15 @@ function wp_dropdown_cats_multiple( $output, $r ) {
 
 function link_library_reciprocal_link_checker() {
 
-	$RecipCheckAddress = ( isset( $_POST['RecipCheckAddress'] ) && !empty( $_POST['RecipCheckAddress'] ) ? $_POST['RecipCheckAddress'] : '' );
-	$recipcheckdelete403 = ( isset( $_POST['recipcheckdelete403'] ) && !empty( $_POST['recipcheckdelete403'] ) && 'true' == $_POST['recipcheckdelete403'] ? true : false );
-	$check_type = ( isset( $_POST['mode'] ) && !empty( $_POST['mode'] ) ? $_POST['mode'] : 'reciprocal' );
+	$genoptions = get_option( 'LinkLibraryGeneral' );
+	$genoptions = wp_parse_args( $genoptions, ll_reset_gen_settings( 'return' ) );
 
-	if ( ! empty( $RecipCheckAddress ) || ( empty( $RecipCheckAddress ) && 'reciprocal' != $check_type ) ) {
+	$RecipCheckAddress = ( isset( $_POST['RecipCheckAddress'] ) && !empty( $_POST['RecipCheckAddress'] ) ? esc_url( $_POST['RecipCheckAddress'] ) : '' );
+	$recipcheckdelete403 = ( isset( $_POST['recipcheckdelete403'] ) && !empty( $_POST['recipcheckdelete403'] ) && 'true' == $_POST['recipcheckdelete403'] ? true : false );
+	$check_type = ( isset( $_POST['mode'] ) && !empty( $_POST['mode'] ) ? sanitize_text_field( $_POST['mode'] ) : 'reciprocal' );
+	$rsscheckdays = ( ( isset( $_POST['rsscheckdays'] ) && !empty( $_POST['rsscheckdays'] ) ) ? intval( $_POST['rsscheckdays'] ) : $genoptions['rsscheckdays'] );
+
+	if ( ! empty( $RecipCheckAddress ) || ( empty( $RecipCheckAddress ) && ( 'reciprocal' != $check_type || 'emptycat' == $check_type ) )  ) {
 		$args = array(
 			'post_type' => 'link_library_links',
 			'post_status' => array( 'publish', 'pending', 'draft', 'future', 'private' ),
@@ -7124,14 +8336,15 @@ function link_library_reciprocal_link_checker() {
 			'meta_value' => ' ',
 			'meta_compare' => '!=',
 			'posts_per_page' => 1,
-			'paged' => ( isset( $_POST['index'] ) ? $_POST['index'] : 1 )
+			'paged' => ( isset( $_POST['index'] ) ? intval( $_POST['index'] ) : 1 )
 		);
 
 		if ( 'reciprocal' == $check_type ) {
 			$args['meta_key'] = 'link_reciprocal';
-
 		} elseif ( 'broken' == $check_type ) {
 			$args['meta_key'] = 'link_url';
+		} elseif( 'rss' == $check_type )  {
+			$args['meta_key'] = 'link_rss';
 		}
 
 		$the_link_query = new WP_Query( $args );
@@ -7142,23 +8355,85 @@ function link_library_reciprocal_link_checker() {
 
 				global $my_link_library_plugin;
 				$link_url = get_post_meta( get_the_ID(), 'link_url', true );
+				$link_rss = get_post_meta( get_the_ID(), 'link_rss', true );
 
 				if ( 'reciprocal' == $check_type ) {
 					$link_reciprocal = get_post_meta( get_the_ID(), 'link_reciprocal', true );
-					$reciprocal_result = $my_link_library_plugin->CheckReciprocalLink( $RecipCheckAddress, $link_reciprocal );
+					$reciprocal_result = $my_link_library_plugin->CheckReciprocalLink( $RecipCheckAddress, $link_reciprocal, 'reciprocal' );
 				} elseif ( 'broken' == $check_type ) {
-					$reciprocal_result = $my_link_library_plugin->CheckReciprocalLink( $RecipCheckAddress, $link_url );
+					$reciprocal_result = $my_link_library_plugin->CheckReciprocalLink( $RecipCheckAddress, $link_url, 'broken' );
+				} elseif ( 'rss' == $check_type ) {
+					$reciprocal_result = $my_link_library_plugin->CheckReciprocalLink( $RecipCheckAddress, $link_rss, 'rss' );
+				} 
+
+				$broken_responses = array( 'exists_redirected', 'exists_protocol_redirect', 'exists_subdomain_redirect', 'exists_redirected_subfolder', 'exists_redirected_fileurl' );
+
+				foreach( $broken_responses as $key => $value ) {
+					if ( $genoptions['suppressprotocolchangeredirection'] && 'exists_protocol_redirect' == $value ) {
+						unset( $broken_responses[$key] );
+					}
+
+					if ( $genoptions['suppresssubdomainredirection'] && 'exists_subdomain_redirect' == $value ) {
+						unset( $broken_responses[$key] );
+					}
+
+					if ( $genoptions['suppresssubfolderredirection'] && 'exists_redirected_subfolder' == $value ) {
+						unset( $broken_responses[$key] );
+					}
+
+					if ( $genoptions['suppressbadconfigredirection'] && 'exists_redirected_fileurl' == $value ) {
+						unset( $broken_responses[$key] );
+					}
 				}
 
-				if ( ( 'reciprocal' == $check_type && $reciprocal_result == 'exists_found' ) || 'broken' == $check_type && $reciprocal_result != 'exists_redirected' && strpos( $reciprocal_result, 'exists' ) !== false ) {
+				if ( ( 'reciprocal' == $check_type && $reciprocal_result == 'exists_found' ) || 'broken' == $check_type && !in_array( $reciprocal_result, $broken_responses ) && strpos( $reciprocal_result, 'exists' ) !== false ) {
 					echo '<div class="nextcheckitem"></div>';
-					continue;
+					wp_reset_postdata();
+					die();
+				} 
+
+				$old_rss = false;
+				
+				if ( 'rss' == $check_type ) {
+					if ( !empty( $link_rss ) ) {
+						$rss = fetch_feed( $link_rss );
+						if ( !is_wp_error( $rss ) ) {
+							$maxitems = $rss->get_item_quantity( 1 );
+
+							$current_link_simplepie_objects = $rss->get_items( 0, $maxitems );
+
+							if ( $current_link_simplepie_objects ) {
+								foreach ( $current_link_simplepie_objects as $index => $item ) {								
+									$pub_timestamp = strtotime( $item->get_date( 'F j, Y, g:i a' ) );
+
+									$date_diff = time() - $pub_timestamp;
+									$time_limit = intval( $rsscheckdays ) * 86400;
+
+									if ( $date_diff > $time_limit ) {
+										$old_rss = true;
+									} elseif ( !in_array( $reciprocal_result, $broken_responses ) && strpos( $reciprocal_result, 'exists' ) !== false ) {
+										echo '<div class="nextcheckitem"></div>';
+										wp_reset_postdata();
+										die();
+									}
+								}
+							}
+						} 
+					} 
 				}
 
-				echo '<a href="' . $link_url . '">' . get_the_title() . '</a>: ';
+				echo '<a href="' . esc_url( $link_url ) . '">' . esc_html( get_the_title() ) . '</a>: ';
 
-				if ( 'broken' == $check_type && $reciprocal_result == 'exists_redirected' ) {
+				if ( ( 'rss' == $check_type || 'broken' == $check_type ) && $reciprocal_result == 'exists_redirected' ) {
 					echo '<span style="color: #FF0000">' . __( 'Redirected to a different address', 'link-library' ) . '</span>';
+				} elseif ( ( 'rss' == $check_type || 'broken' == $check_type ) && $reciprocal_result == 'exists_protocol_redirect' ) {
+					echo '<span style="color: #ff7948">' . __( 'Redirection to a different protocol', 'link-library' ) . '</span>';
+				} elseif ( ( 'rss' == $check_type || 'broken' == $check_type ) && $reciprocal_result == 'exists_subdomain_redirect' ) {
+					echo '<span style="color: #6581ce">' . __( 'Redirected to a sub-domain on same server', 'link-library' ) . '</span>';
+				} elseif ( ( 'rss' == $check_type || 'broken' == $check_type ) && $reciprocal_result == 'exists_redirected_subfolder' ) {
+					echo '<span style="color: #b362b9">' . __( 'Redirected to a different subfolder on same server', 'link-library' ) . '</span>';
+				} elseif ( ( 'rss' == $check_type || 'broken' == $check_type ) && $reciprocal_result == 'exists_redirected_fileurl' ) {
+					echo '<span style="color: #ff4887">' . __( 'Redirected to a different subfolder on same server with bad configuration', 'link-library' ) . '</span>';
 				} elseif ( 'reciprocal' == $check_type && $reciprocal_result == 'exists_notfound' ) {
 					echo '<span style="color: #FF0000">' . __( 'Not Found', 'link-library' ) . '</span>';
 				} elseif ( $reciprocal_result == 'error_403' && $recipcheckdelete403 == true ) {
@@ -7170,18 +8445,30 @@ function link_library_reciprocal_link_checker() {
 					echo '<span style="color: #FF0000">' . __( 'Website Unreachable', 'link-library' ) . '</span>';
 				}
 
+				if ( 'rss' == $check_type && $old_rss ) {
+					if ( in_array( $reciprocal_result, $broken_responses ) ) {
+						echo ' - ';
+					}
+					echo '<span style="color: #FF0000">' . __( 'Latest item is older than limit', 'link-library' ) . '</span>';
+				}
+
 				echo ' - <a target="linkedit' . get_the_ID() . '" href="' . esc_url( add_query_arg( array( 'action' => 'edit', 'post' => get_the_ID() ), admin_url( 'post.php' ) ) );
 				echo '">(' . __('Edit', 'link-library') . ')</a><br />';
 
 				echo '<div class="nextcheckitem"></div>';
 			}
 		} else {
-			if ( 'reciprocal' == $check_type ) {
-				echo __( 'There are no links with reciprocal links associated with them', 'link-library' ) . ".<br />";
-			} elseif ( 'broken' == $check_type ) {
-				echo __( 'There are no links to check', 'link-library' ) . ".<br />";
+			if ( intval( $_POST['index'] ) == 1 ) {
+				if ( 'reciprocal' == $check_type ) {
+					echo __( 'There are no links with reciprocal links associated with them', 'link-library' ) . ".<br />";
+				} elseif ( 'broken' == $check_type ) {
+					echo __( 'There are no links to check', 'link-library' ) . ".<br />"; 
+				} elseif ( 'rss' == $check_type ) {
+					echo __( 'There are no links with RSS feeds associated with them or no errors', 'link-library' ) . ".<br />";
+				}
+			} else {
+				echo __( 'End of report', 'link-library' );
 			}
-
 		}
 
 		wp_reset_postdata();

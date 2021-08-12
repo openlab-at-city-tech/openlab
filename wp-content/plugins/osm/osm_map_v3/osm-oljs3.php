@@ -1,5 +1,5 @@
 <?php
-/*  (c) Copyright 2020  MiKa (wp-osm-plugin.HanBlog.Net)
+/*  (c) Copyright 2021  MiKa (wp-osm-plugin.HyuMiKa.com)
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by

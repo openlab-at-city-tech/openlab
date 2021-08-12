@@ -3,7 +3,7 @@
 Plugin Name: Subscribe2
 Plugin URI: https://getwemail.io
 Description: Notifies an email list when new entries are posted.
-Version: 10.34
+Version: 10.35
 Author: weMail
 Author URI: https://getwemail.io
 Licence: GPLv3
@@ -54,7 +54,7 @@ if ( is_plugin_active_for_network( plugin_basename( __FILE__ ) ) ) {
 
 // our version number. Don't touch this or any line below
 // unless you know exactly what you are doing
-define( 'S2VERSION', '10.34' );
+define( 'S2VERSION', '10.35' );
 define( 'S2PLUGIN', __FILE__ );
 define( 'S2PATH', trailingslashit( dirname( __FILE__ ) ) );
 define( 'S2DIR', trailingslashit( dirname( plugin_basename( __FILE__ ) ) ) );

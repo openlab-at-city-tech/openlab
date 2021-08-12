@@ -1,3 +1,12 @@
+### 5.9.8
+
+**What's new**
+
+- Improved handling of nested dynamic elements within Tabs
+- Improved handling of nested dynamic elements within Spoiler
+- Tested compatibility with WordPress 5.7
+
+
 ### 5.9.7
 
 **What's new**

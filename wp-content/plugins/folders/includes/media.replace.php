@@ -52,6 +52,110 @@ class folders_replace_media {
 	    add_action('admin_head', array($this,  'premio_replace_file_CSS'));
 
 	    add_action('wp_enqueue_media', array($this, 'replace_media_file_script'));
+
+	    add_action('admin_notices', array($this, 'admin_notices'));
+    }
+
+    public function admin_notices() {
+        if(isset($_REQUEST['premio_message']) && $_REQUEST['premio_message'] == "success") { ?>
+            <div class="notice notice-success is-dismissible">
+                <p><b><?php esc_html_e( 'File successfully replaced', 'folders' ); ?></b></p>
+                <p><?php esc_html_e( 'The file has been successfully replaced using the file replacement feature', 'folders' ); ?></p>
+            </div>
+
+            <style>
+                .folders-undo-notification {
+                    position: fixed;
+                    right: -500px;
+                    bottom: 25px;
+                    width: 280px;
+                    background: #fff;
+                    padding: 15px;
+                    -webkit-box-shadow: 0 3px 6px -4px rgb(0 0 0 / 12%), 0 6px 16px 0 rgb(0 0 0 / 8%), 0 9px 28px 8px rgb(0 0 0 / 5%);
+                    box-shadow: 0 3px 6px -4px rgb(0 0 0 / 12%), 0 6px 16px 0 rgb(0 0 0 / 8%), 0 9px 28px 8px rgb(0 0 0 / 5%);
+                    transition: all .25s linear;
+                    z-index: 250010;
+                }
+                .folders-undo-body {
+                    position: relative;
+                    font-size: 13px;
+                    padding: 0 0 5px 0;
+                }
+                .close-undo-box {
+                    position: absolute;
+                    right: -10px;
+                    top: 0;
+                    width: 16px;
+                    height: 16px;
+                    transition: all .25s linear;
+                }
+                .close-undo-box span {
+                    display: block;
+                    position: relative;
+                    width: 16px;
+                    height: 16px;
+                    transition: all .2s linear;
+                }
+                .close-undo-box span:after, .close-undo-box span:before {
+                    content: "";
+                    position: absolute;
+                    width: 12px;
+                    height: 2px;
+                    background-color: #333;
+                    display: block;
+                    border-radius: 2px;
+                    transform: rotate(45deg);
+                    top: 7px;
+                    left: 2px;
+                }
+                .close-undo-box span:after {
+                    transform: rotate(-45deg);
+                }
+                .folders-undo-header {
+                    font-weight: 500;
+                    font-size: 14px;
+                    padding: 0 0 3px 0;
+                    color: #014737;
+                }
+                .folders-undo-notification.success {
+                    border-left: solid 3px #70C6A3;
+                }
+                html[dir="rtl"] .folders-undo-notification {
+                    right: auto;
+                    left: -500px
+                }
+                html[dir="rtl"] .folders-undo-notification.active {
+                    left: 25px;
+                }
+                html[dir="rtl"] .folders-undo-notification.success {
+                    border-left: none;
+                    border-right: solid 3px #70C6A3;
+                }
+                html[dir="rtl"] .close-undo-box {
+                    right: auto;
+                    left: -10px;
+                }
+            </style>
+            <div class="folders-undo-notification success" id="media-success">
+                <div class="folders-undo-body">
+                    <a href="javascript:;" class="close-undo-box"><span></span></a>
+                    <div class="folders-undo-header"><?php esc_html_e( 'File successfully replaced', 'folders' ); ?></div>
+                    <div class="folders-undo-body" style="padding:0"><?php esc_html_e( 'The file has been successfully replaced using the file replacement feature', 'folders' ); ?></div>
+                </div>
+            </div>
+            <script>
+                jQuery(document).ready(function(){
+                     jQuery("#media-success").addClass("active");
+                     setTimeout(function(){
+                         jQuery("#media-success").removeClass("active");
+                     }, 5000);
+
+                     jQuery(document).on("click", ".close-undo-box", function(){
+                         jQuery("#media-success").removeClass("active");
+                     });
+                });
+            </script>
+        <?php }
     }
 
 	public function change_file_name_box($post) { ?>
@@ -357,7 +461,7 @@ class folders_replace_media {
 
                         $this->searchAndReplace();
 
-                        wp_redirect(admin_url("post.php?post=" . $attachment_id . "&action=edit"));
+                        wp_redirect(admin_url("post.php?post=" . $attachment_id . "&action=edit&premio_message=success"));
                         exit;
                     } else {
                         wp_die("Error during uploading file");

@@ -3,10 +3,11 @@
 $cminds_plugin_config = array(
     'plugin-is-pro'                 => false,
     'plugin-has-addons'             => TRUE,
-    'plugin-version'                => '3.6.0',
+    'plugin-version'                => '3.9.15',
     'plugin-abbrev'                 => 'cmtt',
     'plugin-affiliate'              => '',
-    'plugin-redirect-after-install' => admin_url( 'admin.php?page=cmtt_settings' ),
+    'plugin-redirect-after-install' => admin_url('admin.php?page=cmtt_settings'),
+    'plugin-campign'             => '?utm_source=glossary&utm_campaign=freeupgrade&upgrade=1',
     'plugin-show-guide'             => TRUE,
     'plugin-show-upgrade'           => TRUE,
     'plugin-show-upgrade-first'     => TRUE,
@@ -23,44 +24,45 @@ $cminds_plugin_config = array(
     </div>',
     'plugin-guide-video-height'     => 240,
     'plugin-guide-videos'           => array(
-        array( 'title' => 'Installation tutorial', 'video_id' => '157868636' ),
+        array('title' => 'Installation tutorial', 'video_id' => '157868636'),
     ),
     'plugin-upgrade-text'           => 'Use the most trusted WordPress knowledge base plugin to improve your site organization, SEO, and user experience all in one! Quickly build a dictionary, encyclopedia, wiki, online library, or glossary of terms with popup info boxes internally linking to dedicated term and index pages.',
     'plugin-upgrade-text-list'      => array(
-        array( 'title' => 'Why you should upgrade to Pro', 'video_time' => '0:00' ),
-        array( 'title' => 'Related Terms', 'video_time' => '0:03' ),
-        array( 'title' => 'Multiple Glossaries', 'video_time' => '0:33' ),
-        array( 'title' => 'Mobile Responsive Tooltips', 'video_time' => '1:59' ),
-        array( 'title' => 'Index Page Templates', 'video_time' => '2:16' ),
-        array( 'title' => 'Custom Fonts', 'video_time' => '2:43' ),
-        array( 'title' => 'Images in Tooltips', 'video_time' => '3:26' ),
-        array( 'title' => 'Video Tooltip', 'video_time' => '4:01' ),
-        array( 'title' => 'Audio Tooltip', 'video_time' => '4:47' ),
-        array( 'title' => 'Wikipedia Integration', 'video_time' => '5:27' ),
-        array( 'title' => 'Merriam Webster and Glosbe Dictionary Integration', 'video_time' => '6:08' ),
+        array('title' => 'Why you should upgrade', 'video_time' => '0:00'),
+        array('title' => 'Related Terms', 'video_time' => '0:03'),
+        array('title' => 'Multiple Glossaries', 'video_time' => '0:33'),
+        array('title' => 'Mobile Responsive Tooltips', 'video_time' => '1:59'),
+        array('title' => 'Index Page Templates', 'video_time' => '2:16'),
+        array('title' => 'Custom Fonts', 'video_time' => '2:43'),
+        array('title' => 'Images in Tooltips', 'video_time' => '3:26'),
+        array('title' => 'Video Tooltip', 'video_time' => '4:01'),
+        array('title' => 'Audio Tooltip', 'video_time' => '4:47'),
+        array('title' => 'Wikipedia Integration', 'video_time' => '5:27'),
+        array('title' => 'Merriam Webster and Glosbe Dictionary Integration', 'video_time' => '6:08'),
     ),
-    'plugin-upgrade-video-height' => 240,
-    'plugin-upgrade-videos'       => array(
-        array( 'title' => 'Glossary Introduction', 'video_id' => '266461556' ),
+    'plugin-upgrade-video-height'   => 240,
+    'plugin-upgrade-videos'         => array(
+        array('title' => 'Glossary Introduction', 'video_id' => '266461556'),
     ),
-    'plugin-file'                 => CMTT_PLUGIN_FILE,
-    'plugin-dir-path'             => plugin_dir_path( CMTT_PLUGIN_FILE ),
-    'plugin-dir-url'              => plugin_dir_url( CMTT_PLUGIN_FILE ),
-    'plugin-basename'             => plugin_basename( CMTT_PLUGIN_FILE ),
-    'plugin-icon'                 => '',
-    'plugin-name'                 => CMTT_NAME,
-    'plugin-license-name'         => CMTT_CANONICAL_NAME,
-    'plugin-slug'                 => '',
-    'plugin-short-slug'           => 'tooltip',
-    'plugin-menu-item'            => CMTT_MENU_OPTION,
-    'plugin-textdomain'           => CMTT_SLUG_NAME,
-    'plugin-userguide-key'        => '6-cm-tooltip',
-    'plugin-store-url'            => 'https://www.cminds.com/store/tooltipglossary/',
-    'plugin-support-url'          => 'https://wordpress.org/support/plugin/enhanced-tooltipglossary/',
-    'plugin-review-url'           => 'https://wordpress.org/support/view/plugin-reviews/enhanced-tooltipglossary/',
-    'plugin-changelog-url'        => CMTT_RELEASE_NOTES,
-    'plugin-licensing-aliases'    => array( CMTT_LICENSE_NAME ),
-    'plugin-compare-table'        => '
+    'plugin-file'                   => CMTT_PLUGIN_FILE,
+    'plugin-dir-path'               => plugin_dir_path(CMTT_PLUGIN_FILE),
+    'plugin-dir-url'                => plugin_dir_url(CMTT_PLUGIN_FILE),
+    'plugin-basename'               => plugin_basename(CMTT_PLUGIN_FILE),
+    'plugin-icon'                   => '',
+    'plugin-name'                   => CMTT_NAME,
+    'plugin-license-name'           => CMTT_CANONICAL_NAME,
+    'plugin-slug'                   => '',
+    'plugin-short-slug'             => 'tooltip',
+    'plugin-menu-item'              => CMTT_MENU_OPTION,
+    'plugin-textdomain'             => CMTT_SLUG_NAME,
+    'plugin-userguide-key'          => '2162-cm-tooltip-cmtg-free-version-tutorial',
+    'plugin-video-tutorials-url'    => 'https://www.cminds.com/video-lesson/lesson/tooltip-glossary-plugin/',
+    'plugin-store-url'              => 'https://www.cminds.com/store/tooltipglossary/',
+    'plugin-support-url'            => 'https://wordpress.org/support/plugin/enhanced-tooltipglossary/',
+    'plugin-review-url'             => 'https://wordpress.org/support/view/plugin-reviews/enhanced-tooltipglossary/',
+    'plugin-changelog-url'          => CMTT_RELEASE_NOTES,
+    'plugin-licensing-aliases'      => array(CMTT_LICENSE_NAME),
+    'plugin-compare-table'          => '
             <div class="pricing-table" id="pricing-table"><h2 style="padding-left:10px;">Upgrade The Tooltip Glossary Plugin:</h2>
                 <ul>
                     <li class="heading" style="background-color:red;">Current Edition</li>
@@ -72,14 +74,14 @@ $cminds_plugin_config = array(
                     <hr>
                     Other CreativeMinds Offerings
                     <hr>
-                 <a href="https://www.cminds.com/wordpress-plugins-library/seo-keyword-hound-wordpress/" target="blank"><img src="' . plugin_dir_url( __FILE__ ). 'views/Hound2.png"  width="220"></a><br><br><br>
-                <a href="https://www.cminds.com/store/cm-wordpress-plugins-yearly-membership/" target="blank"><img src="' . plugin_dir_url( __FILE__ ). 'views/banner_yearly-membership_220px.png"  width="220"></a><br>
+                 <a href="https://www.cminds.com/wordpress-plugins-library/seo-keyword-hound-wordpress/" target="blank"><img src="' . plugin_dir_url(__FILE__) . 'views/Hound2.png"  width="220"></a><br><br><br>
+                <a href="https://www.cminds.com/store/cm-wordpress-plugins-yearly-membership/" target="blank"><img src="' . plugin_dir_url(__FILE__) . 'views/banner_yearly-membership_220px.png"  width="220"></a><br>
                  </ul>
 
                 <ul>
-                    <li class="heading">Pro<a href="https://www.cminds.com/store/tooltipglossary/af/4806?utm_source=Wordpress&utm_medium=Glossary" style="float:right;font-size:11px;color:white;" target="_blank">More</a></li>
-                    <li class="price">$29.00<br /> <span style="font-size:14px;">(For one Year / Site)<br />Additional pricing options available <a href="https://www.cminds.com/store/tooltipglossary/af/4806?utm_source=WordPress&utm_medium=Glossary" target="_blank"> >>> </a></span> <br /></li>
-                    <li class="action"><a href="https://www.cminds.com/af/4806?utm_source=WordPress&utm_medium=Glossary&edd_action=add_to_cart&download_id=693&wp_referrer=https://www.cminds.com/checkout/&edd_options[price_id]=2" style="font-size:18px;" target="_blank">Upgrade Now</a></li>
+                    <li class="heading">Essential (Pro)<a href="https://www.cminds.com/store/tooltipglossary?utm_source=glossary&utm_campaign=freeupgrade&upgrade=1" style="float:right;font-size:11px;color:white;" target="_blank">More</a></li>
+                    <li class="price">$36.00<br /> <span style="font-size:14px;">(For one Year / Site)<br />Additional pricing options available <a href="https://www.cminds.com/store/tooltipglossary?utm_source=glossary&utm_campaign=freeupgrade&upgrade=1" target="_blank"> >>> </a></span> <br /></li>
+                    <li class="action"><a href="https://www.cminds.com/?utm_source=glossary&utm_campaign=freeupgrade&upgrade=1&edd_action=add_to_cart&download_id=693&edd_options[price_id]=21" style="font-size:18px;" target="_blank">Upgrade Now</a></li>
                      <li style="text-align:left;"><span class="dashicons dashicons-plus-alt"></span><span style="background-color:lightyellow">&nbsp;All Free Version Features </span><span class="dashicons dashicons-admin-comments cminds-package-show-tooltip" style="color:green" title="All free features are supported in the pro"></span></li>
                     <li style="text-align:left;"><span class="dashicons dashicons-yes"></span>Unlimited glossary terms <span class="dashicons dashicons-admin-comments cminds-package-show-tooltip" style="color:green" title="While free version is limited to 500 terms the pro has no restriction and glossary can have even 10,000 terms "></span></li>
                     <li style="text-align:left;"><span class="dashicons dashicons-yes"></span>Optimized for Speed <span class="dashicons dashicons-admin-comments cminds-package-show-tooltip" style="color:green" title="All pro versions have been optimized for speed to be able to support large amount of terms in Glossary. We have many sites running more than 3000 terms or more "></span></li>
@@ -101,9 +103,9 @@ $cminds_plugin_config = array(
                  </ul>
 
               <ul>
-                     <li class="heading">Pro+<a href="https://www.cminds.com/store/tooltipglossary/af/4806?utm_source=WordPress&utm_medium=Glossary" style="float:right;font-size:11px;color:white;" target="_blank">More</a></li>
-                    <li class="price">$49.00<br /> <span style="font-size:14px;">(For one Year / Site)<br />Additional pricing options available <a href="https://www.cminds.com/store/tooltipglossary/af/4806?utm_source=WordPress&utm_medium=Glossary" target="_blank"> >>> </a></span> <br /></li>
-                    <li class="action"><a href="https://www.cminds.com/af/4806?utm_source=WordPress&utm_medium=Glossary&edd_action=add_to_cart&download_id=693&wp_referrer=https://www.cminds.com/checkout/&edd_options[price_id]=5" style="font-size:18px;" target="_blank">Upgrade Now</a></li>
+                     <li class="heading">Advanced (Pro+)<a href="https://www.cminds.com/store/tooltipglossary?utm_source=glossary&utm_campaign=freeupgrade&upgrade=1" style="float:right;font-size:11px;color:white;" target="_blank">More</a></li>
+                    <li class="price">$59.00<br /> <span style="font-size:14px;">(For one Year / 3 Sites)<br />Additional pricing options available <a href="https://www.cminds.com/store/tooltipglossary?utm_source=glossary&utm_campaign=freeupgrade&upgrade=1" target="_blank"> >>> </a></span> <br /></li>
+                    <li class="action"><a href="https://www.cminds.com/?utm_source=glossary&utm_campaign=freeupgrade&upgrade=1&edd_action=add_to_cart&download_id=11728&edd_options[price_id]=7" style="font-size:18px;" target="_blank">Upgrade Now</a></li>
                      <li style="text-align:left;"><span class="dashicons dashicons-plus-alt"></span><span style="background-color:lightyellow">&nbsp;All Free and Pro Version Features</span> <span class="dashicons dashicons-admin-comments cminds-package-show-tooltip" style="color:green" title="All free and pro features are supported in the pro+"></span></li>
                     <li style="text-align:left;"><span class="dashicons dashicons-yes"></span>Share This widget <span class="dashicons dashicons-admin-comments cminds-package-show-tooltip" style="color:green" title="Option to show social sharing icons in the glossary term page"></span></li>
                     <li style="text-align:left;"><span class="dashicons dashicons-yes"></span>Customize term template <span class="dashicons dashicons-admin-comments cminds-package-show-tooltip" style="color:green" title="Ability to customize the glossary term template and style it in your own way"></span></li>
@@ -124,9 +126,9 @@ $cminds_plugin_config = array(
                         <span class="dashicons dashicons-yes"></span> Save 40% once renewing license <span class="dashicons dashicons-admin-comments cminds-package-show-tooltip" style="color:grey" title="Once license expires, If you choose to renew the plugin license you can do this anytime you choose. The renewal cost will be 35% off the product cost."></span></li>
                </ul>
                             <ul>
-                    <li class="heading">Ecommerce<a href="https://www.cminds.com/store/tooltipglossary/af/4806?utm_source=WordPress&utm_medium=Glossary" style="float:right;font-size:11px;color:white;" target="_blank">More</a></li>
-                    <li class="price">$69.00<br /> <span style="font-size:14px;">(For one Year / Site)<br />Additional pricing options available <a href="https://www.cminds.com/store/tooltipglossary/af/4806?utm_source=WordPress&utm_medium=Glossary" target="_blank"> >>> </a></span> <br /></li>
-                    <li class="action"><a href="https://www.cminds.com/af/4806?utm_source=WordPress&utm_medium=Glossary&edd_action=add_to_cart&download_id=693&wp_referrer=https://www.cminds.com/checkout/&edd_options[price_id]=7" style="font-size:18px;" target="_blank">Upgrade Now</a></li>
+                    <li class="heading">Expert (Ecom)<a href="https://www.cminds.com/store/tooltipglossary?utm_source=glossary&utm_campaign=freeupgrade&upgrade=1" style="float:right;font-size:11px;color:white;" target="_blank">More</a></li>
+                    <li class="price">$89.00<br /> <span style="font-size:14px;">(For one Year / 5 Sites)<br />Additional pricing options available <a href="https://www.cminds.com/store/tooltipglossary?utm_source=glossary&utm_campaign=freeupgrade&upgrade=1" target="_blank"> >>> </a></span> <br /></li>
+                    <li class="action"><a href="https://www.cminds.com/?utm_source=glossary&utm_campaign=freeupgrade&upgrade=1&edd_action=add_to_cart&download_id=6764&edd_options[price_id]=7" style="font-size:18px;" target="_blank">Upgrade Now</a></li>
                      <li style="text-align:left;"><span class="dashicons dashicons-plus-alt"></span><span style="background-color:lightyellow">&nbsp;All Free, Pro and Pro+ Version Features </span><span class="dashicons dashicons-admin-comments cminds-package-show-tooltip" style="color:green" title="All free, pro and Pro+ features are supported"></span></li>
                   <li style="text-align:left;"><span class="dashicons dashicons-yes"></span>Embed audio in tooltip <span class="dashicons dashicons-admin-comments cminds-package-show-tooltip" style="color:green" title="Support an audio player inside the tooltip. This is usefull once adding an audio file to the glossary term page"></span></li>
                     <li style="text-align:left;"><span class="dashicons dashicons-yes"></span>Embed video in tooltip <span class="dashicons dashicons-admin-comments cminds-package-show-tooltip" style="color:green" title="Support a video player inside the tooltip. This is usefull once adding a video file to the glossary term page"></span></li>

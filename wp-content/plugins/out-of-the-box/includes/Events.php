@@ -21,15 +21,15 @@ class Events
 
     public function _load_hooks()
     {
-        add_action('wp_ajax_nopriv_outofthebox-event-stats', [&$this, 'get_stats']);
-        add_action('wp_ajax_outofthebox-event-stats', [&$this, 'get_stats']);
+        add_action('wp_ajax_nopriv_outofthebox-event-stats', [$this, 'get_stats']);
+        add_action('wp_ajax_outofthebox-event-stats', [$this, 'get_stats']);
 
-        add_action('wp_ajax_nopriv_outofthebox-event-log', [&$this, 'log_ajax_event']);
-        add_action('wp_ajax_outofthebox-event-log', [&$this, 'log_ajax_event']);
+        add_action('wp_ajax_nopriv_outofthebox-event-log', [$this, 'log_ajax_event']);
+        add_action('wp_ajax_outofthebox-event-log', [$this, 'log_ajax_event']);
 
-        add_action('outofthebox_log_event', [&$this, 'log_event'], 10, 3);
+        add_action('outofthebox_log_event', [$this, 'log_event'], 10, 3);
 
-        add_action('outofthebox_send_event_summary', [&$this, 'send_event_summary']);
+        add_action('outofthebox_send_event_summary', [$this, 'send_event_summary']);
     }
 
     public function _install_cron_job()
@@ -69,10 +69,10 @@ class Events
             $new_event['entry_name'] = $cached_entry->get_name();
             $new_event['entry_path'] = $cached_entry->get_path();
             $new_event['parent_path'] = $cached_entry->get_parent();
-        }
 
-        if (empty($new_event['entry_mimetype'])) {
-            $new_event['entry_mimetype'] = ($cached_entry->is_dir()) ? 'folder' : 'application/octet-stream';
+            if (empty($new_event['entry_mimetype'])) {
+                $new_event['entry_mimetype'] = ($cached_entry->is_dir()) ? 'folder' : 'application/octet-stream';
+            }
         }
 
         if (!empty($extra_data)) {
@@ -807,7 +807,7 @@ class Events
             ],
             [
                 'db' => 'account_id', 'dt' => 'account_id', 'field' => 'account_id', 'as' => 'account_id',
-            ],            
+            ],
             [
                 'db' => 'entry_mimetype', 'dt' => 'entry_mimetype', 'field' => 'entry_mimetype',
             ],
@@ -1070,7 +1070,7 @@ class Events
                 ];
 
                 break;
-                
+
             default:
                 $text = $type;
                 $icon = 'fa-star';
@@ -1203,7 +1203,7 @@ class Events
             case 'outofthebox_sent_notification':
                 $subject = ($data && isset($data['subject'])) ? $data['subject'] : '';
                 $recipients = ($data && isset($data['recipients'])) ? count($data['recipients']) : 1;
-                $description = sprintf(esc_html__('Notification "%s" send to %s recipient(s)', 'wpcloudplugins'), $subject, $recipients);
+                $description = sprintf(esc_html__('Notification "%s" sent to %s recipient(s)', 'wpcloudplugins'), $subject, $recipients);
 
                 break;
 
@@ -1408,7 +1408,6 @@ class Events
         $primaryKey = 'id';
 
         require_once OUTOFTHEBOX_ROOTDIR.'/vendors/datatables/ssp.class.php';
-
 
         return SSP::simple($_GET, $table, $primaryKey, $columns, $join, $where, $groupBy, $having, $limit);
     }

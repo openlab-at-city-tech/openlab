@@ -37,7 +37,7 @@ class M_NextGen_Basic_Gallery extends C_Base_Module
             NGG_BASIC_GALLERY,
             'NextGEN Basic Gallery',
             "Provides NextGEN Gallery's basic thumbnail/slideshow integrated gallery",
-            '3.3.21',
+            '3.9.0',
             'https://www.imagely.com/wordpress-gallery-plugin/nextgen-gallery/',
             'Imagely',
             'https://www.imagely.com'
@@ -91,67 +91,36 @@ class M_NextGen_Basic_Gallery extends C_Base_Module
             );
         }
 
-        // Frontend-only components
-        if (!is_admin() && apply_filters('ngg_load_frontend_logic', TRUE, $this->module_id))
-        {
-            // Provides the controllers for the display types
-            $this->get_registry()->add_adapter(
-                'I_Display_Type_Controller',
-                'A_NextGen_Basic_Slideshow_Controller',
-                NGG_BASIC_SLIDESHOW
-            );
-            $this->get_registry()->add_adapter(
-                'I_Display_Type_Controller',
-                'A_NextGen_Basic_Thumbnails_Controller',
-                NGG_BASIC_THUMBNAILS
-            );
+        // Provides the controllers for the display types
+        $this->get_registry()->add_adapter('I_Display_Type_Controller', 'A_NextGen_Basic_Slideshow_Controller', NGG_BASIC_SLIDESHOW);
+        $this->get_registry()->add_adapter('I_Display_Type_Controller', 'A_NextGen_Basic_Thumbnails_Controller', NGG_BASIC_THUMBNAILS);
+        $this->get_registry()->add_adapter('I_Display_Type_Controller', 'A_NextGen_Basic_Gallery_Controller', NGG_BASIC_SLIDESHOW);
+        $this->get_registry()->add_adapter('I_Display_Type_Controller', 'A_NextGen_Basic_Gallery_Controller', NGG_BASIC_THUMBNAILS);
 
-            $this->get_registry()->add_adapter(
-                'I_Display_Type_Controller',
-                'A_NextGen_Basic_Gallery_Controller',
-                NGG_BASIC_SLIDESHOW
-            );
-            $this->get_registry()->add_adapter(
-                'I_Display_Type_Controller',
-                'A_NextGen_Basic_Gallery_Controller',
-                NGG_BASIC_THUMBNAILS
-            );
-        }
-        
         // Provide defaults for the display types
-        $this->get_registry()->add_adapter(
-            'I_Display_Type_Mapper',
-            'A_NextGen_Basic_Gallery_Mapper'
-        );
+        $this->get_registry()->add_adapter('I_Display_Type_Mapper', 'A_NextGen_Basic_Gallery_Mapper');
         
         // Provides validation for the display types
-        $this->get_registry()->add_adapter(
-            'I_Display_Type',
-            'A_NextGen_Basic_Gallery_Validation'
-        );
+        $this->get_registry()->add_adapter('I_Display_Type', 'A_NextGen_Basic_Gallery_Validation');
         
         // Provides url generation support for the display types
-        $this->get_registry()->add_adapter(
-			'I_Routing_App',
-			'A_NextGen_Basic_Gallery_Urls'
-		);
+        $this->get_registry()->add_adapter('I_Routing_App', 'A_NextGen_Basic_Gallery_Urls');
     }
     
     function _register_hooks()
 	{
-        if (apply_filters('ngg_load_frontend_logic', TRUE, $this->module_id)
-        && (!defined('NGG_DISABLE_LEGACY_SHORTCODES') || !NGG_DISABLE_LEGACY_SHORTCODES))
+        if (!defined('NGG_DISABLE_LEGACY_SHORTCODES') || !NGG_DISABLE_LEGACY_SHORTCODES)
         {
-            C_NextGen_Shortcode_Manager::add('random',    array(&$this, 'render_random_images'));
-            C_NextGen_Shortcode_Manager::add('recent',    array(&$this, 'render_recent_images'));
-            C_NextGen_Shortcode_Manager::add('thumb',     array(&$this, 'render_thumb_shortcode'));
-            C_NextGen_Shortcode_Manager::add('slideshow', array(&$this, 'render_slideshow'));
-            C_NextGen_Shortcode_Manager::add('nggallery',    array(&$this, 'render'));
-            C_NextGen_Shortcode_Manager::add('nggtags',      array(&$this, 'render_based_on_tags'));
-            C_NextGen_Shortcode_Manager::add('nggslideshow', array(&$this, 'render_slideshow'));
-            C_NextGen_Shortcode_Manager::add('nggrandom',    array(&$this, 'render_random_images'));
-            C_NextGen_Shortcode_Manager::add('nggrecent',    array(&$this, 'render_recent_images'));
-            C_NextGen_Shortcode_Manager::add('nggthumb',     array(&$this, 'render_thumb_shortcode'));
+            C_NextGen_Shortcode_Manager::add('random',       NULL, [$this, 'render_random_images']);
+            C_NextGen_Shortcode_Manager::add('recent',       NULL, [$this, 'render_recent_images']);
+            C_NextGen_Shortcode_Manager::add('thumb',        NULL, [$this, 'render_thumb_shortcode']);
+            C_NextGen_Shortcode_Manager::add('slideshow',    NULL, [$this, 'render_slideshow']);
+            C_NextGen_Shortcode_Manager::add('nggallery',    NULL, [$this, 'render_nggallery']);
+            C_NextGen_Shortcode_Manager::add('nggtags',      NULL, [$this, 'render_based_on_tags']);
+            C_NextGen_Shortcode_Manager::add('nggslideshow', NULL, [$this, 'render_slideshow']);
+            C_NextGen_Shortcode_Manager::add('nggrandom',    NULL, [$this, 'render_random_images']);
+            C_NextGen_Shortcode_Manager::add('nggrecent',    NULL, [$this, 'render_recent_images']);
+            C_NextGen_Shortcode_Manager::add('nggthumb',     NULL, [$this, 'render_thumb_shortcode']);
         }
 
         add_action('ngg_routes', array(&$this, 'define_routes'));
@@ -202,100 +171,81 @@ class M_NextGen_Basic_Gallery extends C_Base_Module
         return (isset($params[$name])) ? $params[$name] : $default;
     }
 
+
 	/**
      * Short-cut for rendering an thumbnail gallery
      * @param array $params
-     * @param null $inner_content
-     * @return string
+     * @return array
      */
-	function render($params, $inner_content=NULL)
+	function render_nggallery($params)
     {
         $params['gallery_ids']     = $this->_get_param('id', NULL, $params);
         $params['display_type']    = $this->_get_param('display_type', NGG_BASIC_THUMBNAILS, $params);
         if (isset($params['images']))
-        {
             $params['images_per_page'] = $this->_get_param('images', NULL, $params);
-        }
         unset($params['id']);
         unset($params['images']);
-
-		$renderer = C_Displayed_Gallery_Renderer::get_instance();
-        return $renderer->display_images($params, $inner_content);
+        return $params;
     }
 
-	function render_based_on_tags($params, $inner_content=NULL)
+	function render_based_on_tags($params)
     {
         $params['tag_ids']      = $this->_get_param('gallery', $this->_get_param('album', array(), $params), $params);
         $params['source']       = $this->_get_param('source', 'tags', $params);
         $params['display_type'] = $this->_get_param('display_type', NGG_BASIC_THUMBNAILS, $params);
         unset($params['gallery']);
-
-        $renderer = C_Displayed_Gallery_Renderer::get_instance();
-        return $renderer->display_images($params, $inner_content);
+        return $params;
     }
 
-	function render_random_images($params, $inner_content=NULL)
+	function render_random_images($params)
 	{
 		$params['source']             = $this->_get_param('source', 'random', $params);
         $params['images_per_page']    = $this->_get_param('max', NULL, $params);
         $params['disable_pagination'] = $this->_get_param('disable_pagination', TRUE, $params);
         $params['display_type']       = $this->_get_param('display_type', NGG_BASIC_THUMBNAILS, $params);
 
-        // inside if because Mixin_Displayed_Gallery_Instance_Methods->get_entities() doesn't handle NULL container_ids
-        // correctly
+        // inside if because Mixin_Displayed_Gallery_Instance_Methods->get_entities() doesn't handle NULL container_ids correctly
         if (isset($params['id']))
-        {
             $params['container_ids'] = $this->_get_param('id', NULL, $params);
-        }
 
         unset($params['max']);
         unset($params['id']);
-
-        $renderer = C_Displayed_Gallery_Renderer::get_instance();
-        return $renderer->display_images($params, $inner_content);
+        return $params;
 	}
 
-	function render_recent_images($params, $inner_content=NULL)
+	function render_recent_images($params)
 	{
-		        $params['source']             = $this->_get_param('source', 'recent', $params);
+        $params['source']             = $this->_get_param('source', 'recent', $params);
         $params['images_per_page']    = $this->_get_param('max', NULL, $params);
         $params['disable_pagination'] = $this->_get_param('disable_pagination', TRUE, $params);
         $params['display_type']       = $this->_get_param('display_type', NGG_BASIC_THUMBNAILS, $params);
 
         if (isset($params['id']))
-        {
             $params['container_ids'] = $this->_get_param('id', NULL, $params);
-        }
 
         unset($params['max']);
         unset($params['id']);
-
-        $renderer = C_Displayed_Gallery_Renderer::get_instance();
-        return $renderer->display_images($params, $inner_content);
+        return $params;
 	}
 
-	function render_thumb_shortcode($params, $inner_content=NULL)
+	function render_thumb_shortcode($params)
 	{
 		$params['entity_ids']   = $this->_get_param('id', NULL, $params);
         $params['source']       = $this->_get_param('source', 'galleries', $params);
         $params['display_type'] = $this->_get_param('display_type', NGG_BASIC_THUMBNAILS, $params);
         unset($params['id']);
-
-        $renderer = C_Displayed_Gallery_Renderer::get_instance();
-        return $renderer->display_images($params, $inner_content);
+        return $params;
 	}
     
-	function render_slideshow($params, $inner_content=NULL)
+	function render_slideshow($params)
 	{
 		$params['gallery_ids']    = $this->_get_param('id', NULL, $params);
         $params['display_type']   = $this->_get_param('display_type', NGG_BASIC_SLIDESHOW, $params);
         $params['gallery_width']  = $this->_get_param('w', NULL, $params);
         $params['gallery_height'] = $this->_get_param('h', NULL, $params);
         unset($params['id'], $params['w'], $params['h']);
-
-        $renderer = C_Displayed_Gallery_Renderer::get_instance();
-        return $renderer->display_images($params, $inner_content);
-	}    
+        return $params;
+	}
 
     function filter_thumbnail_view_dir($dirs) 
     {

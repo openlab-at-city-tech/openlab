@@ -22,6 +22,9 @@ function breadcrumb_settings_tabs_content_options(){
 //    $breadcrumb_display_auto_post_types = get_option( 'breadcrumb_display_auto_post_types' );
 //    $breadcrumb_display_auto_post_title_positions = get_option( 'breadcrumb_display_auto_post_title_positions' );
 
+
+    var_dump($breadcrumb_home_text);
+
     ?>
 
 
@@ -90,6 +93,7 @@ function breadcrumb_settings_tabs_content_options(){
             'value'		=> $breadcrumb_word_char,
             'default'		=> 'word',
             'args'		=> array(
+                'none'=>__('None','breadcrumb'),
                 'word'=>__('Word','breadcrumb'),
                 'character'=>__('Character','breadcrumb'),
 
@@ -1072,10 +1076,10 @@ if(!function_exists('breadcrumb_settings_save')) {
         $breadcrumb_options = isset($_POST['breadcrumb_options']) ? breadcrumb_recursive_sanitize_arr($_POST['breadcrumb_options']) : array();
         update_option('breadcrumb_options', $breadcrumb_options);
 
-        $breadcrumb_text = sanitize_text_field($_POST['breadcrumb_text']);
+        $breadcrumb_text = wp_kses_post($_POST['breadcrumb_text']);
         update_option('breadcrumb_text', $breadcrumb_text);
 
-        $breadcrumb_separator = sanitize_text_field($_POST['breadcrumb_separator']);
+        $breadcrumb_separator = wp_kses_post($_POST['breadcrumb_separator']);
         update_option('breadcrumb_separator', $breadcrumb_separator);
 
         $breadcrumb_display_last_separator = sanitize_text_field($_POST['breadcrumb_display_last_separator']);
@@ -1087,7 +1091,7 @@ if(!function_exists('breadcrumb_settings_save')) {
         $breadcrumb_word_char_count = sanitize_text_field($_POST['breadcrumb_word_char_count']);
         update_option('breadcrumb_word_char_count', $breadcrumb_word_char_count);
 
-        $breadcrumb_word_char_end = sanitize_text_field($_POST['breadcrumb_word_char_end']);
+        $breadcrumb_word_char_end = wp_kses_post($_POST['breadcrumb_word_char_end']);
         update_option('breadcrumb_word_char_end', $breadcrumb_word_char_end);
 
 
@@ -1115,7 +1119,7 @@ if(!function_exists('breadcrumb_settings_save')) {
         $breadcrumb_display_home = sanitize_text_field($_POST['breadcrumb_display_home']);
         update_option('breadcrumb_display_home', $breadcrumb_display_home);
 
-        $breadcrumb_home_text = sanitize_text_field($_POST['breadcrumb_home_text']);
+        $breadcrumb_home_text = wp_kses_post($_POST['breadcrumb_home_text']);
         update_option('breadcrumb_home_text', $breadcrumb_home_text);
 
         $breadcrumb_url_hash = sanitize_text_field($_POST['breadcrumb_url_hash']);

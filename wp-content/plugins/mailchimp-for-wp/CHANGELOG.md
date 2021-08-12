@@ -1,6 +1,33 @@
 Changelog
 =========
 
+#### 4.8.6 - Jun 24, 2021
+
+- Add nonce field to button for dismissing notice asking for plugin review.
+- Add strings from config/ directory to POT file.
+- Add nonce check to AJAX endpoint for refreshing cached Mailchimp lists.
+- Add capability check to AJAX endpoint for retrieving list details.
+- Schedule event to refresh cached Mailchimp list upon plugin activation.
+
+Thanks to the team over at [pluginvulnerabilities.com](https://www.pluginvulnerabilities.com/) for bringing some of these changes to our attention.
+
+
+#### 4.8.5 - Jun 1, 2021
+
+Add nonce verification to all URL's using _mc4wp_action query parameter.
+This fixes a CSRF vulnerability where a malicious website could trick a logged-in admin user in performing unwanted actions.
+
+A special thanks to Erwan from [WPScan](https://wpscan.com/) for bringing this issue to our attention.
+
+
+#### 4.8.4 - May 7, 2021
+
+- Add `defer` attribute to JS file, so page parsing isn't blocked at all.
+- Rewrite plugin CSS to optimize for selector performance and get rid of some duplication.
+
+After installing this update, make sure to also update any add-on plugins like [Mailchimp for WordPress Premium](https://www.mc4wp.com/premium-features/) and [Mailchimp Top Bar](https://wordpress.org/plugins/mailchimp-top-bar/).
+
+
 #### 4.8.3 - Jan 21, 2021
 
 - Fix fatal error on older PHP versions when submitting form without any subscriber tags set in the form settings.

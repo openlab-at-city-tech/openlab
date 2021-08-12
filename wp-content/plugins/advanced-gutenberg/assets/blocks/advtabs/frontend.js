@@ -17,34 +17,20 @@ jQuery(document).ready(function ($) {
         var borderRadius = tab.css('border-radius');
         var textColor = tab.find('a').css('color');
 
-        if($(this).prop('id') !== '') {
-            $( this ).find( ".advgb-tab a:not(.ui-tabs-anchor)" ).unbind( "click" );
-            // Render tabs UI
-            $( this ).tabs( {
-                active: parseInt( activeTab ),
-                activate: function ( e, ui ) {
-                    var newIdx = ui.newTab.index();
-                    bodyHeaders.removeClass( 'header-active' );
-                    bodyHeaders.eq( newIdx ).addClass( 'header-active' );
-                }
-            } );
-        } else {
+        $( this ).find( ".advgb-tab a:not(.advgb-tabs-anchor)" ).unbind( "click" );
 
-            $( this ).find( ".advgb-tab a:not(.advgb-tabs-anchor)" ).unbind( "click" );
+        tabs.on( 'click', function ( event ) {
+            event.preventDefault();
+            var currentTabActive = $( event.target ).closest( '.advgb-tab' );
+            var href = currentTabActive.find( 'a' ).attr( 'href' );
 
-            tabs.on( 'click', function ( event ) {
-                event.preventDefault();
-                var currentTabActive = $( event.target ).closest( '.advgb-tab' );
-                var href = currentTabActive.find( 'a' ).attr( 'href' );
+            tabs.removeClass( 'advgb-tab-active' );
+            currentTabActive.addClass( 'advgb-tab-active' );
+            bodyContainers.find( '.advgb-tab-body' ).hide();
+            bodyContainers.find( '.advgb-tab-body[aria-labelledby="' + href.replace( /^#/, "" ) + '"]' ).show();
+        } );
 
-                tabs.removeClass( 'advgb-tab-active' );
-                currentTabActive.addClass( 'advgb-tab-active' );
-                bodyContainers.find( '.advgb-tab-body' ).hide();
-                bodyContainers.find( '.advgb-tab-body[aria-labelledby="' + href.replace( /^#/, "" ) + '"]' ).show();
-            } );
-
-            tabs.eq( activeTab ).trigger( 'click' ); // Default
-        }
+        tabs.eq( activeTab ).trigger( 'click' ); // Default
 
         bodyHeaders.eq(activeTab).addClass('header-active');
         bodyHeaders.css({

@@ -2,15 +2,15 @@
 
 	Theme Name: Hemingway
     Text Domain: hemingway
-	Version: 2.1.0
-	Description: Hemingway is a clean and beautiful two-column theme for bloggers. It features a responsive design, retina-ready assets, Block Editor support, full-width header image with parallax scrolling effect, custom accent color settings, custom logo upload, and editor styles. Demo: https://www.andersnoren.se/themes/hemingway/
-	Tags: blog, two-columns, right-sidebar, custom-colors, custom-header, custom-menu, editor-style, featured-images, footer-widgets, full-width-template, post-formats, sticky-post, theme-options, threaded-comments, translation-ready, block-styles
+	Version: 2.1.2
+	Description: Hemingway is a clean and beautiful two-column theme for bloggers. It features a responsive design, retina-ready assets, Block Editor support, full-width header image with parallax scrolling effect, custom accent color settings, custom logo upload, and editor styles. Demo: https://andersnoren.se/themes/hemingway/
+	Tags: blog, two-columns, right-sidebar, custom-colors, custom-header, custom-menu, editor-style, featured-images, footer-widgets, full-width-template, post-formats, sticky-post, theme-options, threaded-comments, translation-ready, block-styles, wide-blocks
 	Author: Anders Norén
-	Author URI: https://www.andersnoren.se
-	Theme URI: https://www.andersnoren.se/teman/hemingway-wordpress-theme/
+	Author URI: https://andersnoren.se
+	Theme URI: https://andersnoren.se/teman/hemingway-wordpress-theme/
 	License: GNU General Public License version 2.0
 	License URI: http://www.gnu.org/licenses/gpl-2.0.html
-	Tested up to: 5.5
+	Tested up to: 5.7.1
 	Requires PHP: 5.6
 
 	All files, unless otherwise stated, are released under the GNU General Public License
@@ -173,6 +173,20 @@ input#s,
 	top: 5px;
 	width: auto;
 	z-index: 100000; /* Above WP toolbar. */
+}
+
+/* Skip Link --------------------------------- */
+
+.skip-link {
+	position: absolute;
+		left: -9999rem;
+		top: 2.5rem;
+	z-index: 999999999;
+}
+
+.skip-link:focus {
+	left: 2.5rem;
+	text-decoration: none;
 }
 
 
@@ -1205,60 +1219,7 @@ input[type="submit"]:hover {
 :root .has-large-font-size { font-size: 1.263em; }
 :root .has-larger-font-size { font-size: 1.684em; }
 
-/* Block: Base Margins ----------------------- */
-
-:root *[class*="_inner-container"] > *:first-child { margin-top: 0; }
-:root *[class*="_inner-container"] > *:last-child { margin-bottom: 0; }
-
-.wp-block-archives,
-.wp-block-button,
-.wp-block-buttons,
-.wp-block-categories,
-.wp-block-code,
-.wp-block-columns,
-.wp-block-cover,
-.wp-block-cover-image,
-.wp-block-embed,
-.wp-block-gallery,
-.wp-block-group,
-.wp-block-image,
-.wp-block-latest-comments,
-.wp-block-latest-posts,
-.wp-block-media-text,
-.wp-block-preformatted,
-.wp-block-pullquote,
-.wp-block-social,
-.wp-block-social-links,
-.wp-block-quote,
-.wp-block-quote.is-large,
-.wp-block-quote.is-style-large,
-.wp-block-verse,
-.wp-block-video {
-	margin-bottom: 30px;
-	margin-top: 30px;
-}
-
-/* Block: Shared Nesting Alignment Resets ---- */
-
-[class*="__inner-container"] .wp-block-group:not(.alignfull):not(.alignwide):not(.alignleft):not(.alignright),
-[class*="__inner-container"] .wp-block-cover:not(.alignfull):not(.alignwide):not(.alignleft):not(.alignright) {
-	margin-left: auto;
-	margin-right: auto;
-	max-width: 676px;
-}
-
-.alignfull > [class*="__inner-container"] > .wp-block-group.alignwide,
-.alignfull > [class*="__inner-container"] > .wp-block-group:not(.alignfull):not(.alignwide):not(.alignleft):not(.alignright),
-.alignfull > [class*="__inner-container"] > .wp-block-cover.alignwide,
-.alignfull > [class*="__inner-container"] > .wp-block-cover:not(.alignfull):not(.alignwide):not(.alignleft):not(.alignright) {
-	margin-left: auto;
-	margin-right: auto;
-}
-
-.alignfull > [class*="__inner-container"] > .wp-block-group:not(.alignfull):not(.alignwide):not(.alignleft):not(.alignright),
-.alignfull > [class*="__inner-container"] > .wp-block-cover:not(.alignfull):not(.alignwide):not(.alignleft):not(.alignright) {
-	margin-left: 0;
-}
+ain co
 
 /* Block: Audio ------------------------------ */
 
@@ -1988,6 +1949,12 @@ p.form-allowed-tags {
 	padding-left: 12px;
 }
 
+/* Error 404 --------------------------------- */
+
+.error404 .post-content .search-form {
+	margin-top: 30px;
+}
+
 
 /* -------------------------------------------------------------------------------- */
 /*	13. Sidebar
@@ -2080,33 +2047,33 @@ p.form-allowed-tags {
 
 /* Widget: Search ---------------------------- */
 
-.searchform {
+.search-form {
 	background: transparent;
-	margin: 0;
-}
-
-.searchform > div {
 	display: flex;
+	margin: 0;
 	width: 100%;
 }
 
-.searchform input#s {
+.search-form label {
+	margin: 0;
+	width: 100%;
+}
+
+.search-form .search-field {
 	background-color: #fff;
 	border-radius: 3px 0 0 3px;
 	border-right-width: 0;
 	padding: 16px 18px;
-	min-width: 0;
 	width: 100%;
 }
 
-.searchform #searchsubmit {
+.search-form .search-submit {
 	background-color: #1abc9c;
 	border-radius: 0 3px 3px 0;
 	display: block;
-	flex: none;
+	flex-shrink: 0;
 	font-size: 13px;
 	letter-spacing: 1px;
-	min-width: 0;
 	text-transform: uppercase;
 }
 
@@ -2440,7 +2407,7 @@ p.form-allowed-tags {
 		background-color: #282828;
 	}
 
-	.blog-search .searchform input#s {
+	.blog-search .search-form .search-submit {
 		border: none;
 	}
 

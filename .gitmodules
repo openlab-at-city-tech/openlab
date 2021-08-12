@@ -7,3 +7,6 @@
 [submodule "wp-content/plugins/openlab-badges"]
 	path = wp-content/plugins/openlab-badges
 	url = https://github.com/livinglab/openlab-badges.git
+[submodule "wp-content/plugins/openlab-import-export"]
+	path = wp-content/plugins/openlab-import-export
+	url = git@github.com:openlab-at-city-tech/openlab-import-export

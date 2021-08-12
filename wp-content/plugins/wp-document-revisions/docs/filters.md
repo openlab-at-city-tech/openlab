@@ -4,6 +4,18 @@ This plugin makes use of many filters to tailor the delivered processing accordi
 
 Most of them are named with a leading 'document-' but there are a few additional non-standard ones shown at the bottom.
 
+## Filter document_block_taxonomies
+
+In: class-wp-document-revisions-front-end.php
+
+Filters the Document taxonomies (allowing users to select the first three for the block widget.
+
+## Filter document_buffer_size
+
+In: class-wp-document-revisions.php
+
+Filter to define file writing buffer size (Default 0 = No buffering).
+
 ## Filter document_caps
 
 In: class-wp-document-revisions.php
@@ -46,7 +58,7 @@ Filters the default help text for current screen.
 
 In: class-wp-document-revisions.php
 
-Filters the encoded file name for the attached document.
+Filters the encoded file name for the attached document (on save).
 
 ## Filter document_lock_check
 
@@ -60,6 +72,12 @@ In: class-wp-document-revisions.php
 
 Filters the lost lock document email text.
 
+## Filter document_output_sent_is_ok
+
+In: class-wp-document-revisions.php
+
+Filter to serve file even if output already written.
+
 ## Filter document_path
 
 In: class-wp-document-revisions.php
@@ -71,6 +89,12 @@ Filters the file name for WAMP settings (filter routine provided by plugin).
 In: class-wp-document-revisions.php
 
 Filters the Document permalink.
+
+## Filter document_read_uses_read
+
+In: class-wp-document-revisions.php
+
+Filters the users capacities to require read (or read_document) capability.
 
 ## Filter document_revision_query
 
@@ -118,13 +142,25 @@ Filters the HTTP headers sent when a file is served through WP Document Revision
 
 In: class-wp-document-revisions.php
 
-Filter to switch off use of Edit_Flow capabilities.
+Filter to switch off integration with Edit_Flow/PublishPress statuses.
 
 ## Filter document_rewrite_rules
 
 In: class-wp-document-revisions.php
 
 Filters the Document rewrite rules.
+
+## Filter document_serve
+
+In: class-wp-document-revisions.php
+
+Filters file name of document served. (Useful if file is encrypted at rest).
+
+## Filter document_serve_use_gzip
+
+In: class-wp-document-revisions.php
+
+Filter to determine if gzip should be used to serve file (subject to browser negotiation).
 
 ## Filter document_shortcode_atts
 
@@ -143,6 +179,12 @@ Filters the controlling option to display an edit option against each document.
 In: class-wp-document-revisions.php
 
 Filters the document slug.
+
+## Filter document_taxonomy_term_count
+
+In: class-wp-document-revisions.php
+
+Filter to select which taxonomies with default term count to be modified to count all non-trashed posts.
 
 ## Filter document_title
 
@@ -168,7 +210,7 @@ In: class-wp-document-revisions.php
 
 Allows the RSS feed to be switched off.
 
-## Filter default_workflow_state
+## Filter default_workflow_states
 
 In: class-wp-document-revisions.php
 

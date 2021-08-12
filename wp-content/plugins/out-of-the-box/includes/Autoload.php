@@ -1,6 +1,8 @@
 <?php
 
-function out_of_the_box_autoload($className)
+namespace TheLion\OutoftheBox;
+
+function autoload($className)
 {
     $classPath = explode('\\', $className);
     if ('TheLion' != $classPath[0]) {
@@ -16,4 +18,5 @@ function out_of_the_box_autoload($className)
         require_once $filePath;
     }
 }
-spl_autoload_register('out_of_the_box_autoload');
+
+spl_autoload_register(__NAMESPACE__.'\autoload');

@@ -1,0 +1,1752 @@
+# Copyright (C) 2016 Watu
+# This file is distributed under the same license as the Watu package.
+msgid ""
+msgstr ""
+"Project-Id-Version: Watu 2.8.1\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/watu\n"
+"POT-Creation-Date: 2016-09-27 23:54+0200\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2019-07-22 19:00+0300\n"
+"Language-Team: Andrei Ciuculescu <ciuculescu.andrei.dev@gmail.com>\n"
+"X-Generator: Poedit 2.2.3\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n==0 || (n!=1 && n%100>=1 && n"
+"%100<=19) ? 1 : 2);\n"
+"Last-Translator: \n"
+"Language: ro\n"
+
+#: controllers/exam.php:8
+msgid "Test updated"
+msgstr "Test actualizat"
+
+#: controllers/exam.php:9
+msgid "Error occured"
+msgstr "Eroare"
+
+#: controllers/exam.php:19
+msgid "Test deleted"
+msgstr "Test șters"
+
+#: controllers/exam.php:135
+msgid ""
+"<p>Congratulations - you have completed %%QUIZ_NAME%%.</p>\n"
+"\n"
+"<p>You scored %%POINTS%% points out of %%MAX-POINTS%% points total.</p>\n"
+"\n"
+"<p>Your obtained grade is <b>%%GRADE-TITLE%%</b></p><p>%%GRADE-DESCRIPTION%"
+"%</p>\n"
+"\n"
+"<p>Your answers are shown below:<p>%%ANSWERS%%"
+msgstr ""
+"<p>Felicitări - ați finalizat%%QUIZ_NAME%%.</p>\n"
+"\n"
+"<p>Ați obținut %%POINTS%% din %%MAX-POINTS%%% puncte în total.</p>\n"
+"\n"
+"<p>Nota obținută este <b>%%GRADE-TITLE%%</b></p><p>%%GRADE-DESCRIPTION%%</"
+"p>\n"
+"\n"
+"<p>Răspunsurile dumneavoastră sunt prezentate mai jos:<p>%%ANSWERS%%"
+
+#: controllers/grades.php:9
+msgid "Unrecognized quiz ID"
+msgstr "ID test nerecunoscut"
+
+#: controllers/show_exam.php:7
+msgid "Please go to <a href='%s'>%s</a> to view the test"
+msgstr "Vă rugăm navigați la <a href='%s'>%s</a> pentru a vizualiza testul"
+
+#: controllers/show_exam.php:17
+msgid "Quiz not found."
+msgstr "Testul nu a fost găsit."
+
+#: controllers/show_exam.php:21
+msgid "You need to be registered and logged in to take this %s."
+msgstr "Trebuie să fiți înregistrat si autentificat pentru a da testul %s."
+
+#: controllers/show_exam.php:21 controllers/show_exam.php:36
+#: views/exam_form.php:44
+msgid "quiz"
+msgstr "test"
+
+#: controllers/show_exam.php:22
+msgid "Log in"
+msgstr "Autentificați-vă"
+
+#: controllers/show_exam.php:24
+msgid "or"
+msgstr "sau"
+
+#: controllers/show_exam.php:24
+msgid "Register"
+msgstr "Înregistrați-vă"
+
+#: controllers/show_exam.php:36
+msgid "Sorry, you can take this %s only once!"
+msgstr "Ne pare rău, puteți da testul %s doar o data!"
+
+#: controllers/show_exam.php:43
+msgid "Sorry, you can take this quiz only %d times."
+msgstr "Ne pare rău, puteți da testul acesta doar de %d ori."
+
+#: controllers/show_exam.php:69
+msgid "No answer to the verification question."
+msgstr "Nu există un răspuns la întrebarea de verificare."
+
+#: controllers/show_exam.php:79
+msgid "Wrong answer to the verification question."
+msgstr "Răspuns gresit la întrebarea de verificare."
+
+#: controllers/show_exam.php:121
+msgid "Question was not answered"
+msgstr "Nu a fost dat un răspuns pentru întrebarea asta"
+
+#: controllers/show_exam.php:145 models/exam.php:93
+msgid "Failed"
+msgstr "Picat"
+
+#: controllers/show_exam.php:145
+msgid "Just Passed"
+msgstr "Trecut la limită"
+
+#: controllers/show_exam.php:147
+msgid "Satisfactory"
+msgstr "Satisfăcător"
+
+#: controllers/show_exam.php:147
+msgid "Competent"
+msgstr "Competent"
+
+#: controllers/show_exam.php:147
+msgid "Good"
+msgstr "Bun"
+
+#: controllers/show_exam.php:147
+msgid "Very Good"
+msgstr "Foarte bun"
+
+#: controllers/show_exam.php:147
+msgid "Excellent"
+msgstr "Excelent"
+
+#: controllers/show_exam.php:147
+msgid "Unbeatable"
+msgstr "Imbatabil"
+
+#: controllers/show_exam.php:147
+msgid "Cheater"
+msgstr "Trișor"
+
+#: controllers/show_exam.php:154
+msgid "None"
+msgstr "Niciunul"
+
+#: controllers/social-sharing.php:124
+msgid "Share your results on Facebook"
+msgstr "Împărtășiți rezultatele pe Facebook"
+
+#: controllers/takings.php:130
+msgid "User or IP;Date;Points;Result/Grade"
+msgstr "Utilizator sau IP;Dată;Puncte;Rezultat/Notă"
+
+#: controllers/takings.php:184 watu.php:121
+msgid "You do not have sufficient permissions to access this page"
+msgstr "Nu aveți suficiente drepturi să accesați această pagina"
+
+#: controllers/takings.php:214
+msgid "You: %d%% correct"
+msgstr "Ai făcutȘ %d%% corect"
+
+#: controllers/takings.php:215
+msgid "Avg. %d%% correct"
+msgstr "Aprox. %d%% corect"
+
+#: controllers/takings.php:216
+msgid "Your points: %s"
+msgstr "Punctele tale: %s"
+
+#: controllers/takings.php:217
+msgid "Avg. points: %s"
+msgstr "Puncte medii: %s"
+
+#: lib/functions.php:96
+msgid "User results on \"%s\""
+msgstr "Rezultatele utilizatorilor pentru \"%s\""
+
+#: lib/functions.php:97
+msgid "Guest"
+msgstr "Vizitator"
+
+#: lib/functions.php:112
+msgid "Your results on \"%s\""
+msgstr "Rezultatele tale pentru \"%s\""
+
+#: models/exam.php:52
+msgid ""
+"<p>Congratulations - you have completed %%QUIZ_NAME%%.</p>\n"
+"\n"
+"<p>You scored %%POINTS%% points out of %%MAX-POINTS%% points total.</p>\n"
+"\n"
+"<p>Your obtained grade is <b>%%GRADE-TITLE%%</b></p><p>%%GRADE-DESCRIPTION%"
+"%</p>"
+msgstr ""
+"<p>Felicitări - ați finalizat%%QUIZ_NAME%%.</p>\n"
+"\n"
+"<p>Ați obținut %%POINTS%% din %%MAX-POINTS%%% puncte în total.</p>\n"
+"\n"
+"<p>Nota obținută este <b>%%GRADE-TITLE%%</b></p><p>%%GRADE-DESCRIPTION%%</p>"
+
+#: models/exam.php:56
+msgid "Demo Quiz"
+msgstr "Test Demo"
+
+#: models/exam.php:56
+msgid ""
+"This quiz is automatically created to help you get started. It will be "
+"created only once."
+msgstr ""
+"Acest test este creat automat ca sa te ajute sa începi. Va fi creat doar o "
+"dată."
+
+#: models/exam.php:62
+msgid "Select the correct answer:"
+msgstr "Alege răspunsul corect:"
+
+#: models/exam.php:66
+msgid "The Earth is a star"
+msgstr "Pământul este o stea"
+
+#: models/exam.php:69
+msgid "The Sun is a planet"
+msgstr "Soarele este o planetă"
+
+#: models/exam.php:72
+msgid "The Earth is a planet"
+msgstr "Pământul este o planetă"
+
+#: models/exam.php:75
+msgid "Select all correct answers:"
+msgstr "Alege toate răspunsurile corecte:"
+
+#: models/exam.php:79
+msgid "WordPress is open source software"
+msgstr "WordPress este un soft open source"
+
+#: models/exam.php:82
+msgid "There are no quiz plugins for WordPress"
+msgstr "Nu exista module pentru teste in WordPress"
+
+#: models/exam.php:85
+msgid "WordPress can be used for a lot more than blogging"
+msgstr "WordPress poate fi folosit pentru mai mult decât blog"
+
+#: models/exam.php:88
+msgid "Do you have any comments about this quiz?"
+msgstr "Aveți ceva de spus despre acest test?"
+
+#: models/exam.php:93
+msgid "Sorry, you could not collect enough points to pass this quiz"
+msgstr "Ne pare rău, nu ai colectat destule puncte pentru a trece testul"
+
+#: models/exam.php:96
+msgid "Passed"
+msgstr "Trecut"
+
+#: models/exam.php:96
+msgid "Congratulations, you passed!"
+msgstr "Felicitari, ai trecut!"
+
+#: options.php:37
+msgid "Options updated"
+msgstr "Test actualizat"
+
+#: options.php:57
+msgid "What is the color of the snow? = white"
+msgstr "Care este culoarea zăpezii? = alba"
+
+#: options.php:57
+msgid "Is fire hot or cold? = hot"
+msgstr "Focul este fierbinte sau rece? = fierbinte"
+
+#: options.php:58
+msgid "In which continent is Norway? = Europe"
+msgstr "Pe ce continent este Norvegia? = Europa"
+
+#: views/exam_form.php:13 views/question-form.html.php:5
+#: views/questions.html.php:6
+msgid "Back to quizzes"
+msgstr "Inapoi la teste"
+
+#: views/exam_form.php:15 views/exams.html.php:43 views/grades.html.php:5
+#: watu.php:113
+msgid "Manage Questions"
+msgstr "Administreaza Întrebările"
+
+#: views/exam_form.php:16 views/questions.html.php:7
+msgid "Manage Grades / Results"
+msgstr "Administrează Notele / Rezultatele"
+
+#: views/exam_form.php:23
+msgid "%s Name and Settings"
+msgstr "%s Nume si Setări"
+
+#: views/exam_form.php:23
+msgid "Quiz"
+msgstr "Test"
+
+#: views/exam_form.php:29
+msgid ""
+"Automatically publish this quiz in new post once I hit the \"Save\" button. "
+"(The new post will be auto-generated with the quiz title used for post "
+"title.)"
+msgstr ""
+"Publică automat acest test într-o nouă postare când apăs pe butonul "
+"„Salvează“. (Noul post va fi generat automat cu titlul testului utilizat "
+"pentru titlul postării.)"
+
+#: views/exam_form.php:31 views/sidebar.php:7
+msgid "Randomize questions"
+msgstr "Setează întrebările aleator"
+
+#: views/exam_form.php:31
+msgid "and pull random"
+msgstr "și trage-le aleator"
+
+#: views/exam_form.php:32
+msgid ""
+"questions from the quiz. Leave 0 to pull all the questions (default "
+"behavior)."
+msgstr ""
+"întrebările din test. Pune 0 ca sa tragem toate întrebările (comportament "
+"predefinit)."
+
+#: views/exam_form.php:34
+msgid "Randomize answers"
+msgstr "Setează răspunsurile aleator"
+
+#: views/exam_form.php:36
+msgid ""
+"Note: randomization will not work well if you are caching the page where "
+"your quiz is published!"
+msgstr ""
+"Notă: modul aleator nu va funcționa bine dacă faci si cache pe pagina unde e "
+"publicat testul!"
+
+#: views/exam_form.php:38
+msgid "Show all questions on single page"
+msgstr "Arată toate întrebările pe o singură pagină"
+
+#: views/exam_form.php:40
+msgid "Show 'previous question' button"
+msgstr "Arată butonul 'pagina antrerioară'"
+
+#: views/exam_form.php:42
+msgid ""
+"Require user login (displays login and / or register link depending on your "
+"blog settings.)"
+msgstr ""
+"Cere autentificare (afișează linkul pentru autentificare si / sau "
+"înregistrare in funcție de setările blogului.)"
+
+#: views/exam_form.php:44
+msgid "Allow users to submit the %s multiple times:"
+msgstr "Permite utilizatorilor sa trimită %s de mai multe ori:"
+
+#: views/exam_form.php:46
+msgid "Allow"
+msgstr "Permite de"
+
+#: views/exam_form.php:46
+msgid ""
+"times (For unlimited times enter 0) There is even more flexibility in "
+"WatuPRO."
+msgstr ""
+"ori (Pentru nelimitat introdu 0) WatuPRO are chiar mai multa flexibilitate."
+
+#: views/exam_form.php:48
+msgid ""
+"Notify me when someone takes this quiz (the email goes to the address given "
+"in your WordPress Settings page)."
+msgstr ""
+"Notifică-mă când cineva face testul asta (mail-ul se trimite la adresa "
+"setată in pagina de Setări WordPress)."
+
+#: views/exam_form.php:50
+msgid "Email address(es) to notify:"
+msgstr "Adresă(e) de notificat:"
+
+#: views/exam_form.php:50
+msgid "You can specify multiple email addresses separated with comma."
+msgstr "Poți specifica mai multe email-uri separate cu virgula."
+
+#: views/exam_form.php:52
+msgid ""
+"Send email to the quiz taker (if taker is non-logged in this will generate a "
+"required email field on the quiz page)."
+msgstr ""
+"Trimite mail persoanei care a dat testul (daca nu este autentificat, se va "
+"genera un camp obligatoriu de email pe pagina testului)."
+
+#: views/exam_form.php:54
+msgid "Do not store user answers in the database to save DB space."
+msgstr ""
+"Nu stoca raspunsurile la teste in baza de date pentru a economisi spatiul."
+
+#: views/exam_form.php:56
+msgid "Do not display question numbers."
+msgstr "Nu arăta numerele întrebărilor."
+
+#: views/exam_form.php:58
+msgid "Do not alert the user when skipping a non-required question."
+msgstr "Nu notifica utilizatorul când sare peste o întrebare optională."
+
+#: views/exam_form.php:60
+msgid "Anti-Spam Measures"
+msgstr "Măsuri anti-spam"
+
+#: views/exam_form.php:61
+msgid "Require question based captcha to submit the quiz"
+msgstr "Cere întrebare bazată pe captcha ca să trimita testul"
+
+#: views/exam_form.php:62
+msgid ""
+"Use a \"honeypot\" field (It is almost as efficient as captchas but is "
+"unobtrusive and does not require any action from the user)"
+msgstr ""
+"Foloseste un câmp \"honeypot\" (E similar de eficient cu captcha dar "
+"inobtrusiv si nu are nevoie de acțiunea utilizatorului)"
+
+#: views/exam_form.php:67
+msgid "Correct Answer Display"
+msgstr "Afisarea Raspunsului Corect"
+
+#: views/exam_form.php:69
+msgid ""
+"Show the answer of a question immediately after the user have selected an "
+"answer. (Will not work in single page mode and <b>is not secure</b> - use it "
+"only for fun quizzes, not exams. You can handle exams in this mode with "
+"WatuPRO.)"
+msgstr ""
+"Arată răspunsul intrebării imediat ce utilizatorul selectează un răspuns. "
+"(Nu va folosi in modul o singură pagină si <B>nu e sigur</b> - folosește-l "
+"numai pentru teste de amuzament, nu examene. Poti folosi acest mod pentru "
+"examene cu WaptuPRO.)"
+
+#: views/exam_form.php:70
+msgid ""
+"\"<b>Show answers at the end of the Quiz\" is now obsolete option.</b> "
+"Instead of using it, enter the %%ANSWERS%% variable where you want the "
+"results to appear."
+msgstr ""
+"\"<b>Arata răspunsurile la finalul testului\" este o opțiune veche.</b> În "
+"locul eu, folosește variabila %%ANSWERS%% acolo unde vrei să apară "
+"rezultatele."
+
+#: views/exam_form.php:75
+msgid "Description"
+msgstr "Descriere"
+
+#: views/exam_form.php:78
+msgid ""
+"If provided, description shows on top of the quiz. It can optionally be "
+"included in the final output as well."
+msgstr ""
+"Daca există, descrierea se afisează deasupra testului. Opțional, poate fi "
+"inclusa si la final."
+
+#: views/exam_form.php:83
+msgid "Final Screen"
+msgstr "Ecranul Final"
+
+#: views/exam_form.php:87
+msgid "Send different content to the notification email sent to user / admin."
+msgstr ""
+"Trimite conținut diferit in mail-ul de notificare trimis utilizatorului / "
+"administratorului."
+
+#: views/exam_form.php:91
+msgid ""
+"If you leave this empty, the contents from the \"Final screen\" will be sent "
+"by email as well."
+msgstr ""
+"Daca lași asta goală, conținutul din \"Ecranul final\" va fi și el, trimis "
+"prin email."
+
+#: views/exam_form.php:92
+msgid ""
+"By default this content is used for both the email sent to user, and the "
+"email sent to admin. You can however use the %s tag to make the email "
+"contents different. The content before the %s tag will be sent to the user "
+"(if the corresponding checkbox is checked) and the content after the %s tag "
+"- to the admin."
+msgstr ""
+"Setarea implicită este ca acest conținut este folosit atat pentru email-ul "
+"trimis utilizatorului cât si administratorului. Poți însă folosi tag-ul %s "
+"ca să faci conținuturile mail-ulilor diferite. Conținutul de dinainte de tag-"
+"ul %s va fi trimis utilizatorului (dacă este bifat acolo) si conținutul dupa "
+"tag-ul %s va fi trimis administratorului."
+
+#: views/exam_form.php:95
+msgid "Usable Variables:"
+msgstr "Variabile Folositoare:"
+
+#: views/exam_form.php:97
+msgid "Variable"
+msgstr "Variabilă"
+
+#: views/exam_form.php:97
+msgid "Value"
+msgstr "Valoare"
+
+#: views/exam_form.php:98
+msgid ""
+"This will display the questions along with the answers that user gave to "
+"them marked as correct or incorrect."
+msgstr ""
+"Se vor afișa intrebările impreună cu răspunsurile date de utilizator, "
+"marcate cu bife pentru corect si incorect."
+
+#: views/exam_form.php:99
+msgid "The number of points collected. (The old %%SCORE%% tag also works)"
+msgstr "Numărul de pucte colectate. (Vechiul tag %%SCORE%% inca functioneaza)"
+
+#: views/exam_form.php:100
+msgid "Maximum number of points"
+msgstr "Numarul maxim de puncte"
+
+#: views/exam_form.php:101
+msgid ""
+"Shows the achieved grade - title and description together. If you want to "
+"design this better, you can use %%GRADE-TITLE%% for grade title and %%GRADE-"
+"DESCRIPTION%% for grade description"
+msgstr ""
+"Arata nota obținută - titlul și descrierea împreună. Daca vrei sa arate mai "
+"bine, poti folosi %%GRADE-TITLE%% pentru titlul notei si %%GRADE-DESCRIPTION%"
+"% pentru descrierea notei"
+
+#: views/exam_form.php:102
+msgid ""
+"Number of correct answers. In multiple-select questions even one correct "
+"answer makes the question correct. In WatuPRO this is configurable"
+msgstr ""
+"Numarul de răspunsuri corecte. Pentru întrebările cu selecție multiplă, "
+"chiar și un răspuns corect marchează întrebarea cu bifa corect. In WatuPRO "
+"asta se poate configura"
+
+#: views/exam_form.php:103
+msgid "Number of answers you got wrong"
+msgstr "Numărul de răspunsuri greșite"
+
+#: views/exam_form.php:104
+msgid ""
+"A rating of your performance - it could be 'Failed'(0-39%), 'Just "
+"Passed'(40%-50%), 'Satisfactory', 'Competent', 'Good', 'Excellent' and "
+"'Unbeatable'(100%)."
+msgstr ""
+"Un scor al performanței tale - poate fi 'Picat'(0-39%), 'Trecut la "
+"limită'(40%-50%), ' Satisfăcător', 'Competent', 'Bun', 'Excelent', "
+"'Imbatabil'(100%)."
+
+#: views/exam_form.php:104
+msgid ""
+"The rating can be changed only by <a href=\"%s\" target=\"_blank"
+"\">translating the plugin</a>. So we recommend you to use the grades "
+"instead. They are fully configurable right from this page."
+msgstr ""
+"Scorul poate fi modificat doar prin <a href=\"%s\" target=\"_blank"
+"\">traducerea modulului</a>. Așa că recomandă, sa folosiți notele in loc. "
+"Sunt complet configurabile chiar din pagina asta."
+
+#: views/exam_form.php:105
+msgid "The name of the quiz"
+msgstr "Numele testului"
+
+#: views/exam_form.php:106
+msgid "The text entered in the description field."
+msgstr "Textul pe care l-ai introdus in campul descrierii."
+
+#: views/exam_form.php:107
+msgid "The average points earned by the other quiz participants."
+msgstr "Numărul mediu de puncte câștigate de ceilalți participanți la test."
+
+#: views/exam_form.php:108
+msgid "Shows the percentage of users collected less points on the quiz."
+msgstr "Arată procentul de utilizatori care au avut mai puține puncte la test."
+
+#: views/exam_form.php:109
+msgid ""
+"The user email address if we know it - use it only if you require / expect "
+"logged in users OR you have selected the option to email user their results "
+"(so email address will be requested)."
+msgstr ""
+"Adresa de mail a utilizatorului daca o stim - folosit doar daca ai nevoie / "
+"aștepți utilizatori logați SAU daca ai selectat opțiunea de a trimite mail-"
+"uri cu rezultatele catre utilizatori (va fi cerută adresa de mail)."
+
+#: views/exam_form.php:112
+msgid ""
+"The shortcode %s lets you display a chart of user points vs. average "
+"collected points. It accepts arguments <b>%s</b> and <b>%s</b> to specify "
+"the colors of the bars."
+msgstr ""
+"Codul %s iți permite sa afișezi un grafic cu punctele utilizatorilor vs. "
+"punctele colectate in medie. Accepta argumentele <b>%s</b> and <b>%s</"
+"b>pentru a specifica culorile barelor."
+
+#: views/exam_form.php:122 views/question-form.html.php:168
+msgid "Save"
+msgstr "Salvează"
+
+#: views/exams.html.php:2
+msgid "Manage %s"
+msgstr "Administrează %s"
+
+#: views/exams.html.php:2
+msgid "Quizzes"
+msgstr "Teste"
+
+#: views/exams.html.php:6
+msgid "Watu for Wordpress is a light version of"
+msgstr "Watu pentru WordPress este o versiune light a"
+
+#: views/exams.html.php:8 views/options.html.php:7
+msgid "Go to"
+msgstr "Du-te la"
+
+#: views/exams.html.php:8 views/options.html.php:3
+msgid "Watu Settings"
+msgstr "Setări Watu"
+
+#: views/exams.html.php:10 views/exams.html.php:57
+msgid "Create New Quiz"
+msgstr "Crează Test Nou"
+
+#: views/exams.html.php:12 views/options.html.php:8
+msgid "Social Sharing Options"
+msgstr "Opțiuni de partajare socială"
+
+#: views/exams.html.php:14
+msgid ""
+"To publish a quiz copy its shortcode and place it in a post or page. Use "
+"only one quiz shortcode in each post or page."
+msgstr ""
+"Pentru a publica un test, copiază-i shortcode-ul si pune-l într-un post sau "
+"o pagina. Folosește maxim un shortcode in fiecare post sau pagina."
+
+#: views/exams.html.php:19
+msgid "ID"
+msgstr "ID"
+
+#: views/exams.html.php:20
+msgid "Title"
+msgstr "Titlu"
+
+#: views/exams.html.php:21
+msgid "Shortcode"
+msgstr "Shortcode"
+
+#: views/exams.html.php:22
+msgid "No. Questions"
+msgstr "Nr. Intrebari"
+
+#: views/exams.html.php:23
+msgid "View Results"
+msgstr "Vezi Rezultate"
+
+#: views/exams.html.php:24 views/questions.html.php:22
+msgid "Action"
+msgstr "Acțiune"
+
+#: views/exams.html.php:42
+msgid "Taken %d times"
+msgstr "Dat de %d ori"
+
+#: views/exams.html.php:44 watu.php:115
+msgid "Manage Grades"
+msgstr "Administreaza Note"
+
+#: views/exams.html.php:45 views/questions.html.php:50
+msgid "Edit"
+msgstr "Editează"
+
+#: views/exams.html.php:46
+msgid ""
+"You are about to delete this quiz? This will delete all the questions and "
+"answers within this quiz. Press 'OK' to delete and 'Cancel' to stop."
+msgstr ""
+"Ești sigur că vrei sa ștergi acest test? Vei șterge toate întrebările si "
+"răspunsurile din test. Apasă 'OK' ca să ștergi si 'Înapoi' ca sa mergi "
+"înapoi."
+
+#: views/exams.html.php:46 views/questions.html.php:51 views/takings.php:71
+#: views/takings.php:85
+msgid "Delete"
+msgstr "Șterge"
+
+#: views/exams.html.php:51
+msgid "No Quizzes found."
+msgstr "Nu au fost găsite Teste."
+
+#: views/exams.html.php:59
+msgid "Get free traffic to your quizzes by submitting them to"
+msgstr "Ca să primești trafic gratis la testele tale trimite-le la"
+
+#: views/exams.html.php:59
+msgid "our directory."
+msgstr "directorul nostru."
+
+#: views/grades.html.php:3
+msgid "Manage Grading for Quiz '%s'"
+msgstr "Administreaza Notarea pentru Test '%s'"
+
+#: views/grades.html.php:4 views/takings.php:7
+msgid "Back to quizzes list"
+msgstr "Înapoi la lista de teste"
+
+#: views/grades.html.php:6
+msgid "Edit quiz"
+msgstr "Modifică test"
+
+#: views/grades.html.php:9
+msgid "Add New Grade / Result"
+msgstr "Adaugă Notă noua / Rezultat"
+
+#: views/grades.html.php:12 views/grades.html.php:26
+msgid "Grade Title:"
+msgstr "Titlul Notei:"
+
+#: views/grades.html.php:12 views/grades.html.php:26
+msgid "Description (optional):"
+msgstr "Descriere (opțional):"
+
+#: views/grades.html.php:12 views/grades.html.php:26
+msgid "From points:"
+msgstr "De la atâtea puncte:"
+
+#: views/grades.html.php:12 views/grades.html.php:26
+msgid "To points:"
+msgstr "La atâtea puncte:"
+
+#: views/grades.html.php:13 views/grades.html.php:27
+msgid "If this grade is achieved redirect to URL (optional):"
+msgstr "Daca nota asta e primită redirecteaza la URL (opțional):"
+
+#: views/grades.html.php:15
+msgid "Save new grade"
+msgstr "Salvează noua notă"
+
+#: views/grades.html.php:21
+msgid "Existing Grades / Quiz Results"
+msgstr "Note existente / Rezultatele testului"
+
+#: views/grades.html.php:29
+msgid "Save grade"
+msgstr "Salvează nota"
+
+#: views/grades.html.php:30
+msgid "Delete grade"
+msgstr "Șterge nota"
+
+#: views/grades.html.php:48
+msgid "Please enter grade title"
+msgstr "Introdu titlul notei"
+
+#: views/grades.html.php:54
+msgid "Please enter From points, numbers only"
+msgstr "Introdu De la câte puncte, doar numere"
+
+#: views/grades.html.php:60
+msgid "Please enter To points, numbers only"
+msgstr "Introdu Pana la puncte, doar numere"
+
+#: views/grades.html.php:69 views/takings.php:112
+msgid "Are you sure?"
+msgstr "Ești sigur?"
+
+#: views/help.html.php:2
+msgid "Watu - Help and Support"
+msgstr "Watu - Ajutor si Suport"
+
+#: views/help.html.php:5
+msgid "Creating Quizzes"
+msgstr "Crearea de Teste"
+
+#: views/help.html.php:7
+msgid ""
+"Go to Watu Quizzes and click on \"Create new quiz\". Each quiz has title, "
+"description and various settings. The quiz also consists of questions and "
+"grades / results."
+msgstr ""
+"Du-te la Teste Watu si apasă pe \"Crează test nou\". Fiecare test are titlu, "
+"descriere si alte setări. Testul conține și întrebări și note / rezultate."
+
+#: views/help.html.php:8
+msgid ""
+"Questions are mandatory - you cannot have a quiz without at least one "
+"question. Grades are optional - for example if you want to use quizzes as "
+"surveys you might not need grades. But the regular quizzes will have grades "
+"because this is the whole purpose of a quiz - to calculate a result based on "
+"the collected points."
+msgstr ""
+"Intrebările sunt obligatorii - nu poți avea un test fără măcar o intrebare. "
+"Notele sunt optionale - de exemplu daca vrei să folosești testele ca studii "
+"poate nu ai nevoie de note. Dar testele obișnuite vor avea note deoarece "
+"ăsta e scopul unui test - calcularea unui rezultat pe baza colectării "
+"punctelor."
+
+#: views/help.html.php:9
+msgid ""
+"Make sure to calculate how many points the user could collect if they answer "
+"all questions correctly or all wrong so your grades cover both edges of min/"
+"max collected points."
+msgstr ""
+"Asigură-te ca ai calculat câte puncte obtine utilizatorul daca răspund "
+"corect sau greșit la toate întrebările - astfel, notele tale vor funcționa "
+"pentru punctele colectate maxim cât si minim."
+
+#: views/help.html.php:11
+msgid "Frequently Asked Questions"
+msgstr "Intrebări Frecvente"
+
+#: views/help.html.php:13
+msgid "Please check them <a href=\"%s\" target=\"_blank\">online</a>."
+msgstr "Te rog verifică <b>%s</b> and <b>%s</b>online</a>."
+
+#: views/help.html.php:15
+msgid "Requesting Help"
+msgstr "Cere Ajutor"
+
+#: views/help.html.php:17
+msgid ""
+"When opening a <a href=\"%s\" target=\"_blank\">support thread</a> please "
+"provide URL (link) where we can see your problem."
+msgstr ""
+"Când deschizi un <a href=\"%s\" target=\"_blank\">thread de suport</a> te "
+"rog sa pui un URL (link) unde se vede problema."
+
+#: views/help.html.php:19
+msgid "PRO Inquiries"
+msgstr "Întrebari PRO"
+
+#: views/help.html.php:21
+msgid ""
+"If you have pre-sales or support questions about WatuPRO please send them "
+"using the contact details on the <a href=\"%s\" target=\"_blank\">official "
+"WatuPRO site</a>. Do not use the wordpress.org forum for this - it allows "
+"only free plugin discussions."
+msgstr ""
+"Daca ai întrebări legate de vânzări sau suport despre WatuPRO te rog trimite-"
+"le folosind detaliile de contact de pe <a href=\"%s\" target=\"_blank\">site-"
+"ul oficial WatuPRO</a>. Nu folosi forumul wordpress.org pentru asta - sunt "
+"permise doar discuții despre module gratuite."
+
+#: views/help.html.php:23
+msgid "MailChimp Integration"
+msgstr "Integrare MailChimp"
+
+#: views/help.html.php:25
+msgid ""
+"You can integrate your quizzes with MailChimp so when someone completes a "
+"chosen quiz with a given result, they can be subscribed in a mailing list. "
+"You will need <a href=\"%s\" target=\"_blank\">this free bridge</a> to do "
+"that."
+msgstr ""
+"Poți integrate testele tale cu MailChimp pentru înregistrarea unui cursant "
+"dupa completarea unui test. Vei avea nevoie de <a href=\"%s\" target=\"_blank"
+"\">acest bridge gratuit</a> pentru asta."
+
+#: views/options.html.php:7
+msgid "Manage Your Exams"
+msgstr "Administrează Examenele Tale"
+
+#: views/options.html.php:12
+msgid "Send the automated emails from this address:"
+msgstr "Trimite mail-uri automate de la adresa asta:"
+
+#: views/options.html.php:13
+msgid ""
+"This defaults to your main admin email. However to set a friendlier sender "
+"name you can overwrite it here by entering your name in format: <b>Your Name "
+"&lt;email@domain.com&gt;</b><br>If you have problems with getting your "
+"emails delivered, please install a plugin like <a href=\"%s\" target=\"_blank"
+"\">Postman SMTP</a>. Watu will send the emails through the SMTP server that "
+"you congigure in it."
+msgstr ""
+"Setarea implicită a mail-ului de administrator. Dacă vrei să setezi un nume "
+"mai prietenos, il poți suprascrie aici, completând numele in formatul: "
+"<b>Numele tau &lt;email@domeniu.com&gt;</b><br>Dacă ai probleme cu "
+"trimiterea mail-urilor, te rog instalează un modul gratis ca <a href=\"%s\" "
+"target=\"_blank\">Postman SMTP</a>. Watu va trimite mail-uri prin server-ul "
+"SMTP pe care îl configurezi în el."
+
+#: views/options.html.php:15
+msgid ""
+"Enable debug mode to see SQL errors. (Useful in case you have any problems)"
+msgstr ""
+"Activează modul debug pentru a vedea erori SQL. (Folositor daca ai vreo "
+"problemă)"
+
+#: views/options.html.php:20
+msgid "Default Answer Type"
+msgstr "Tipul Implicit de Răspuns"
+
+#: views/options.html.php:27 views/question-form.html.php:123
+msgid "Single Answer"
+msgstr "Raspuns Unic"
+
+#: views/options.html.php:29 views/question-form.html.php:125
+msgid "Multiple Answers"
+msgstr "Răspunsuri Multiple"
+
+#: views/options.html.php:34
+msgid "Question based captcha"
+msgstr "Captcha pe baza de întrebare"
+
+#: views/options.html.php:36
+msgid ""
+"You can use a simple text-based captcha. We have loaded 3 basic questions "
+"but you can edit them and load your own. Make sure to enter only one "
+"question per line and use = to separate question from answer."
+msgstr ""
+"Poți folosi captcha pe bază de text. Am încărcat 3 întrebări de bază dar le "
+"poți edita și încărca altele. Asigură-te ca introduci doar o întrebare pe "
+"linie si folosește = sa separi întrebarea de răspuns."
+
+#: views/options.html.php:39
+msgid ""
+"This question-based captcha can be enabled individually by selecting a "
+"checkbox in the quiz settings form. If you do not check the checkbox, the "
+"captcha question will not be generated."
+msgstr ""
+"Captcha pe bază de întrebare poate fi activată individual prin selectarea "
+"bifei în formularul din setările testului. Daca nu bifezi acolo, întrebarea "
+"captcha nu va fi generată."
+
+#: views/options.html.php:45
+msgid "Role Management"
+msgstr "Administrarea Rolurilor"
+
+#: views/options.html.php:46
+msgid "WordPress roles that can administrate the plugin"
+msgstr "Roluri WordPress care pot administra modulul"
+
+#: views/options.html.php:48
+msgid ""
+"By default this is only the blog administrator. Here you can enable any of "
+"the other roles as well"
+msgstr ""
+"Implicit este doar administratorul blogului. Aici poti activa oricare alt rol"
+
+#: views/options.html.php:61
+msgid "Other settings"
+msgstr "Alte setări"
+
+#: views/options.html.php:63
+msgid ""
+"Use \"the_content\" instead of our custom content filter (do not select this "
+"unless adviced so)"
+msgstr ""
+"Folosește \"the_content\" în locul filtrului nostru personalizat (nu bifa "
+"asta decât daca te-a sfătuit cineva)"
+
+#: views/options.html.php:68
+msgid "Database Option"
+msgstr "Optiuni pentru Baza de date"
+
+#: views/options.html.php:73
+msgid "Delete stored Watu data when deinstalling the plugin."
+msgstr "Sterge datele Watu când dezinstalezi modulul."
+
+#: views/options.html.php:76
+msgid "Please confirm by typing \"yes\" in the box:"
+msgstr "Ca să confirmi te rog scrie \"yes\" în chenar:"
+
+#: views/options.html.php:84
+msgid "Save Options"
+msgstr "Opțiuni Stocare"
+
+#: views/options.html.php:96
+msgid "Ajax in quizzes"
+msgstr "Ajax in teste"
+
+#: views/options.html.php:98
+msgid ""
+"Here you can select quizzes which will be submitted by regular post submit "
+"rather than using Ajax. You may want to do this mostly for the following "
+"reason:"
+msgstr ""
+"Aici poți selecta teste care vor fi trimise prin post cu formularul și nu "
+"prin Ajax. Ai putea să faci asta in principal deoarece:"
+
+#: views/options.html.php:101
+msgid ""
+"To embed in the \"Final screen\" content from plugins that do not normally "
+"work well in Ajax mode."
+msgstr ""
+"Ca să adaugi in \"Ecranul final\" conținut din module care in mod normal nu "
+"funcționeaza bine în modul Ajax."
+
+#: views/options.html.php:104
+msgid "The selected quizzes will NOT use Ajax when users submit them."
+msgstr "Testele selectate NU vor folosi Ajax când utilizatorii le trimit."
+
+#: views/options.html.php:114
+msgid "Save Ajax Related Settings"
+msgstr "Salvează Setarile legate de Ajax"
+
+#: views/question-form.html.php:2 views/question-form.html.php:107
+#: views/questions.html.php:20 views/show_exam.html.php:64
+msgid "Question"
+msgstr "Îtrebare"
+
+#: views/question-form.html.php:4
+msgid "Back to questions"
+msgstr "Înapoi la întrebări"
+
+#: views/question-form.html.php:30
+msgid "Correct Answer "
+msgstr "Răspuns Corect "
+
+#: views/question-form.html.php:41
+msgid "Points: "
+msgstr "Puncte: "
+
+#: views/question-form.html.php:63
+msgid "Please enter the question"
+msgstr "Te rog introdu întrebarea"
+
+#: views/question-form.html.php:76
+msgid "Please enter atleast two answers"
+msgstr "Te rog introdu măcar două răspunsuri"
+
+#: views/question-form.html.php:113
+msgid "Answer Type"
+msgstr "Tipul Răspunsului"
+
+#: views/question-form.html.php:127
+msgid "Open End (Essay)"
+msgstr "Text Liber (Eseu)"
+
+#: views/question-form.html.php:128
+msgid "This is a required question"
+msgstr "Este o întrebare obligatorie"
+
+#: views/question-form.html.php:132
+msgid "Answers"
+msgstr "Răspunsuri"
+
+#: views/question-form.html.php:134
+msgid ""
+"Answers to open-end questions will be considered matched when there is exact "
+"case-insensitive match. For more flexibility check <a href=\"%s\" target="
+"\"_blank\">WatuPRO</a>"
+msgstr ""
+"Răspunsurile la întrebarile cu text liber vor fi considerate corecte dacă "
+"sunt exact la fel ca răspunsul corect case-insensitive. Pentru mai multă "
+"flexibilitate vezi <a href=\"%s\" target=\"_blank\">WatuPRO</a>"
+
+#: views/question-form.html.php:138
+msgid "Correct Answer"
+msgstr "Răspuns Corect"
+
+#: views/question-form.html.php:140
+msgid "Points:"
+msgstr "Puncte:"
+
+#: views/question-form.html.php:145
+msgid "Add New Answer"
+msgstr "Adaugă Răspuns Nou"
+
+#: views/question-form.html.php:151
+msgid "Explanation / feedback"
+msgstr "Explicație / feedback"
+
+#: views/question-form.html.php:156
+msgid ""
+"You can use this field to explain the correct answer. This will be shown "
+"only at the end of the quiz if you have selected the option to display the "
+"correct answers. You can use the %s tag to specify different feedback for "
+"correctly or incorrectly answered question. Place the explanation that will "
+"be shown for correct answer before the %s tag, and the one that will be "
+"shown for wrong answer after the %s tag. Using the split tag will NOT work "
+"in \"Show the answer of a question immediately after the user have selected "
+"an answer.\" mode.<br> This feedback option is a lot more flexible in <a "
+"href=\"%s\" target=\"_blank\">WatuPRO</a>."
+msgstr ""
+"Puteți utiliza acest câmp pentru a explica răspunsul corect. Aceasta va fi "
+"afișată numai la sfârșitul testului dacă ați selectat opțiunea de afișare a "
+"răspunsurilor corecte. Puteți utiliza eticheta %s pentru a specifica "
+"feedback diferit pentru răspunsurile corecte si cele eronate. Plasați "
+"explicația care va fi afișată pentru răspunsul corect înainte de eticheta %s "
+"și cea care va fi afișată pentru răspunsul greșit după eticheta %s. "
+"Utilizarea tag-ului split NU funcționează în modul \"Afișați răspunsul la o "
+"întrebare imediat după ce utilizatorul a selectat un răspuns\". <br> Această "
+"opțiune de feedback este mult mai flexibilă în <a href=\"%s\" target=\"_blank"
+"\">WatuPRO</a>."
+
+#: views/question-form.html.php:170
+msgid "Go to Questions Page"
+msgstr "Accesați pagina Întrebări"
+
+#: views/questions.html.php:2
+msgid "Manage Questions in"
+msgstr "Gestionați întrebările în"
+
+#: views/questions.html.php:6
+msgid "Edit this quiz"
+msgstr "Editați acest test"
+
+#: views/questions.html.php:14
+msgid "To add this exam to your blog, insert the code "
+msgstr "Pentru a adăuga acest examen la blogul dvs., introduceți codul "
+
+#: views/questions.html.php:14
+msgid "into any post or page."
+msgstr "în orice post sau pagină."
+
+#: views/questions.html.php:21
+msgid "Number Of Answers"
+msgstr "Numărul de răspunsuri"
+
+#: views/questions.html.php:41
+msgid "Move Up"
+msgstr "Mută în sus"
+
+#: views/questions.html.php:44
+msgid "Move Down"
+msgstr "Mută în jos"
+
+#: views/questions.html.php:51
+msgid ""
+"You are about to delete this question. This will delete the answers to this "
+"question. Press 'OK' to delete and 'Cancel' to stop."
+msgstr ""
+"Sunteți pe cale să ștergeți această întrebare. Aceasta va șterge "
+"răspunsurile la această întrebare. Apăsați \"OK\" pentru a șterge și "
+"\"Anulare\" pentru a opri."
+
+#: views/questions.html.php:58
+msgid "No questions found."
+msgstr "Nu au fost găsite întrebări."
+
+#: views/questions.html.php:66
+msgid "Create New Question"
+msgstr "Creați o nouă întrebare"
+
+#: views/sharing-options.html.php:2
+msgid "Watu Social Sharing"
+msgstr "Watu Social Sharing"
+
+#: views/sharing-options.html.php:4
+msgid "Back to Watu Options"
+msgstr "Înapoi la opțiunile Watu"
+
+#: views/sharing-options.html.php:6
+msgid ""
+"You can use the shortcode %s to display Facebook share button on the \"Final "
+"screen\" on your quiz."
+msgstr ""
+"Puteți utiliza codul scurt %s pentru a afișa butonul de partajare Facebook "
+"pe \"Ecranul final\" din testul dvs."
+
+#: views/sharing-options.html.php:7
+msgid ""
+"The social media buttons are provided by Arbenting. Feel free to replace "
+"them with other icons by replacing the files in img/share folder of the "
+"plugin."
+msgstr ""
+"Butoanele social media sunt furnizate de Arbenting. Simțiți-vă liber să le "
+"înlocuiți cu alte pictograme prin înlocuirea fișierelor în folderul img / "
+"share al pluginului."
+
+#: views/sharing-options.html.php:10
+msgid "Facebook Sharing"
+msgstr "Partajare Facebook"
+
+#: views/sharing-options.html.php:12
+msgid "Your Facebook App ID:"
+msgstr "ID-ul dvs. de aplicație Facebook:"
+
+#: views/sharing-options.html.php:12
+msgid "Get one here"
+msgstr "Primești unul aici"
+
+#: views/sharing-options.html.php:13
+msgid "If you leave it empty, no Facebook share button will be generated."
+msgstr ""
+"Dacă o lăsați goală, nu va fi generat niciun buton de partajare Facebook."
+
+#: views/sharing-options.html.php:15
+msgid "Title:"
+msgstr "Titlu:"
+
+#: views/sharing-options.html.php:16
+msgid "Text:"
+msgstr "Text:"
+
+#: views/sharing-options.html.php:17
+msgid ""
+"You can use the variables {{{quiz-name}}}, {{{url}}}, {{{grade-title}}} and "
+"{{{grade-description}}}."
+msgstr ""
+"Puteți utiliza variabilele {{{quiz-name}}}, {{{url}}}, {{{grade-title}}} și "
+"{{{grade-description}}}."
+
+#: views/sharing-options.html.php:19
+msgid ""
+"If you leave title and text empty, grade title and grade description will be "
+"used respectively."
+msgstr ""
+"Dacă lăsați titlul și textul gol, se va folosi, respectiv, titlul și "
+"descrierea gradului."
+
+#: views/sharing-options.html.php:21
+msgid ""
+"IMPORTANT: Facebook needs to be able to access your site to retrieve the "
+"social sharing data. If the site is on localhost or behind a htaccess login "
+"box sharing will not work properly."
+msgstr ""
+"IMPORTANT: Facebook trebuie să poată accesa site-ul dvs. pentru a prelua "
+"datele de partajare socială. Dacă site-ul este pe localhost sau în spatele "
+"unei casete de conectare htaccess, partajarea nu va funcționa corect."
+
+#: views/sharing-options.html.php:23
+msgid "Twitter Sharing Options:"
+msgstr "Opțiuni de partajare Twitter:"
+
+#: views/sharing-options.html.php:25
+msgid ""
+"If you leave \"Tweet text\" empty the tweet text will be extracted from the "
+"grade description. If it is empty, the grade title will be used."
+msgstr ""
+"Dacă lăsați \"Tweet text\" gol, textul va fi scos din descrierea notei. Dacă "
+"este gol, va fi folosit titlul notei."
+
+#: views/sharing-options.html.php:27
+msgid "Show Tweet button"
+msgstr "Afișați butonul Tweet"
+
+#: views/sharing-options.html.php:30
+msgid "Show count"
+msgstr "Afișați numărul"
+
+#: views/sharing-options.html.php:31
+msgid "Via @"
+msgstr "Via @"
+
+#: views/sharing-options.html.php:32
+msgid "Hashtag #"
+msgstr "Hashtag #"
+
+#: views/sharing-options.html.php:33
+msgid "Tweet text (No more than 140 chars):"
+msgstr "Tweet text (nu mai mult de 140 de caractere):"
+
+#: views/sharing-options.html.php:34
+msgid ""
+"You can use the variables {{{quiz-name}}}, {{{grade-title}}} and {{{grade-"
+"description}}}."
+msgstr ""
+"Puteți utiliza variabilele {{{quiz-name}}}, {{{grade-title}}} și {{{grade-"
+"description}}}."
+
+#: views/sharing-options.html.php:37
+msgid ""
+"More social sharing options like Google Plus, LinkedIn, and Email are "
+"available in <a href=\"%s\" target=\"_blank\">WatuPRO</a>"
+msgstr ""
+"Mai multe opțiuni de partajare socială precum Google Plus, LinkedIn și Email "
+"sunt disponibile în <a href=\"%s\" target=\"_blank\">WatuPRO</a>"
+
+#: views/sharing-options.html.php:40
+msgid "Save All Settings"
+msgstr "Salvați toate setările"
+
+#: views/show_exam.html.php:6
+msgid "Please enter your email:"
+msgstr "Vă rugăm să introduceți adresa dvs. de email:"
+
+#: views/show_exam.html.php:53
+msgid "Loading"
+msgstr "Încărcare"
+
+#: views/show_exam.html.php:61 watu.php:339
+msgid "Show Answer"
+msgstr "Afișare răspuns"
+
+#: views/show_exam.html.php:64
+msgid "of"
+msgstr "din"
+
+#: views/show_exam.html.php:66
+msgid "Previous"
+msgstr "Anterior"
+
+#: views/show_exam.html.php:68
+msgid "Next"
+msgstr "Următorul"
+
+#: views/show_exam.html.php:70
+msgid "Show Results"
+msgstr "Afișați rezultatele"
+
+#: views/show_exam.html.php:72
+msgid "Submit"
+msgstr "Trimiteți"
+
+#: views/sidebar.php:2
+msgid "Go PRO!"
+msgstr "Încearcă PRO!"
+
+#: views/sidebar.php:4
+msgid "Get more powerful features by"
+msgstr "Obțineți funcții mai puternice prin"
+
+#: views/sidebar.php:4
+msgid "upgrading to the PRO version:"
+msgstr "actualizarea la versiunea PRO:"
+
+#: views/sidebar.php:7
+msgid "and pull random numbers."
+msgstr "și trageți numere aleatorii."
+
+#: views/sidebar.php:8
+msgid "Detailed stats."
+msgstr "Statistici detaliate."
+
+#: views/sidebar.php:8
+msgid "You can see who and how has answered to your exam."
+msgstr "Puteți vedea cine și cum a răspuns la examen."
+
+#: views/sidebar.php:9
+msgid "Printable certificates"
+msgstr "Certificate de imprimat"
+
+#: views/sidebar.php:9
+msgid "assigned to the different grades."
+msgstr "atribuită diferitelor note."
+
+#: views/sidebar.php:10
+msgid "Export results and import/export questions"
+msgstr "\"Export de rezultate și import / export întrebări\""
+
+#: views/sidebar.php:10
+msgid "from/to CSV file."
+msgstr "din / în fișierul CSV."
+
+#: views/sidebar.php:11
+msgid "Students login."
+msgstr "Conectarea studenților."
+
+#: views/sidebar.php:11
+msgid "Registered users have a dashboard, can re-take exams etc."
+msgstr ""
+"Utilizatorii înregistrați au un tablou de bord, pot relua examenele etc."
+
+#: views/sidebar.php:12
+msgid "Questions and exam categories."
+msgstr "Categorii de întrebări și examene."
+
+#: views/sidebar.php:12
+msgid "User groups with different access to them."
+msgstr "Grupurile de utilizatori au acces diferit la ele."
+
+#: views/sidebar.php:13
+msgid "Copy quizzes"
+msgstr "Copierea chestionarelor"
+
+#: views/sidebar.php:13
+msgid "and their questions into a new or existing quizzes."
+msgstr "și întrebările lor în teste noi sau existente."
+
+#: views/sidebar.php:14
+msgid "More question types"
+msgstr "Mai multe tipuri de întrebări"
+
+#: views/sidebar.php:14
+msgid "and more control on defining correctly answered questions."
+msgstr "și mai mult control asupra definirii răspunsurilor corecte."
+
+#: views/sidebar.php:15
+msgid "Shortcodes"
+msgstr "Shortcodes"
+
+#: views/sidebar.php:15
+msgid "for user reports and user dashboard."
+msgstr ""
+"pentru rapoartele utilizatorilor și tabloul de bord pentru utilizatori."
+
+#: views/sidebar.php:16
+msgid "More social sharing"
+msgstr "Mai multă partajare socială"
+
+#: views/sidebar.php:16
+msgid "options: Google+, LinkedIn, Twitter."
+msgstr "opțiuni: Google+, LinkedIn, Twitter."
+
+#: views/sidebar.php:17
+msgid "Transfer all your data"
+msgstr "Transferul tuturor datelor"
+
+#: views/sidebar.php:17
+msgid "from free to PRO with a single click."
+msgstr "de la gratuit la PRO cu un singur clic."
+
+#: views/sidebar.php:18
+msgid "And a lot more - just come to see!"
+msgstr "Și mult mai mult - doar veniți să vedeți!"
+
+#: views/sidebar.php:21
+msgid "Just go ahead and"
+msgstr "Mergi înainte și"
+
+#: views/sidebar.php:21
+msgid "take the tour"
+msgstr "parcurgeți turul"
+
+#: views/sidebar.php:21
+msgid "or check the"
+msgstr "sau verificați"
+
+#: views/sidebar.php:21
+msgid "online demo."
+msgstr "demo online."
+
+#: views/sidebar.php:23
+msgid ""
+"Upgrading to PRO comes with <strong>60 days money-back guarantee</strong>, "
+"one year <strong>free upgrades</strong> and one year <strong>free support</"
+"strong>."
+msgstr ""
+"Actualizarea la PRO vine cu <strong>60 de zile de garanție a returnării "
+"banilor </strong>, un an <strong>actualizări gratuite </strong> și un an "
+"<strong> suport gratuit </strong>."
+
+#: views/sidebar.php:28
+msgid "Need Support?"
+msgstr "Aveți nevoie de asistență?"
+
+#: views/sidebar.php:30
+msgid "Please ask your question in the"
+msgstr "Vă rugăm să puneți întrebarea dvs. în"
+
+#: views/sidebar.php:30
+msgid "support forum at Wordpress."
+msgstr "forumul de suport al Wordpress."
+
+#: views/sidebar.php:32
+msgid ""
+"Use the forum only for issues concerning the free version. If you have a pre-"
+"sales question about Watu PRO please contact us"
+msgstr ""
+"Utilizați forumul numai pentru probleme legate de versiunea gratuită. Dacă "
+"aveți o întrebare pre-vânzare despre Watu PRO, vă rugăm să ne contactați"
+
+#: views/sidebar.php:32
+msgid "through our site."
+msgstr "prin site-ul nostru."
+
+#: views/sidebar.php:37
+msgid "Help To Spread The Word!"
+msgstr "Ajută să răspândim vorba!"
+
+#: views/sidebar.php:39
+msgid "If you like this plugin you can do some of the following:"
+msgstr "Dacă vă place acest plugin puteți face unele dintre următoarele:"
+
+#: views/sidebar.php:42
+msgid "Rate it 5 starts at Wordpress.org"
+msgstr "Evaluați 5 stele la Wordpress.org"
+
+#: views/sidebar.php:43
+msgid "Let others know about it by blogging or posting"
+msgstr "Spuneți și altora despre modul prin blogging sau posting"
+
+#: views/sidebar.php:43
+msgid "our home page"
+msgstr "pe pagina noastră"
+
+#: views/sidebar.php:43
+msgid "on social networks."
+msgstr "pe rețelele sociale."
+
+#: views/sidebar.php:44
+msgid "Go PRO"
+msgstr "Încearcă PRO"
+
+#: views/sidebar.php:44
+msgid "to empower your site with extra benefits"
+msgstr "pentru a oferi mai multe beneficii site-ului dvs"
+
+#: views/taking_details.html.php:3
+msgid "Details for taken exam "
+msgstr "Detalii despre examen "
+
+#: views/taking_details.html.php:5
+msgid "User:"
+msgstr "Utilizator:"
+
+#: views/taking_details.html.php:5
+msgid "<b>N/A</b>"
+msgstr "<b>N/A</b>"
+
+#: views/taking_details.html.php:7
+msgid "Date:"
+msgstr "Data:"
+
+#: views/taking_details.html.php:8
+msgid "Total points collected:"
+msgstr "Totalul punctelor colectate:"
+
+#: views/taking_details.html.php:9
+msgid "Achieved grade:"
+msgstr "Nota obținută:"
+
+#: views/taking_details.html.php:12
+msgid ""
+"The textual details below show exact snapshot of the questions in the way "
+"that student have seen them when taking the exam. If you have added, edited "
+"or deleted questions since then you will not see these changes here."
+msgstr ""
+"Detaliile de mai jos prezintă un instantaneu exact al întrebărilor în modul "
+"acel student le-a văzut la examen Dacă ați adăugat, editat sau șters "
+"întrebări de atunci, nu veți vedea aceste schimbări aici."
+
+#: views/takings.php:3
+msgid "Users who submitted the exam '%s'"
+msgstr "Utilizatorii care au trimis examenul '%s'"
+
+#: views/takings.php:5
+msgid ""
+"A lot more detailed reports, filters, exports, and other important features "
+"are available in"
+msgstr ""
+"Rapoarte mult mai detaliate, filtre, exporturi și alte caracteristici "
+"importante sunt disponibile în"
+
+#: views/takings.php:9
+msgid "Filter/search these records"
+msgstr "Filtrați / căutați aceste înregistrări"
+
+#: views/takings.php:11
+msgid "Export as CSV (semicolon delimited)"
+msgstr "Export ca CSV (cu delimitare punct și virgulă)"
+
+#: views/takings.php:11
+msgid "(Filters apply)"
+msgstr "(Se aplică filtrele)"
+
+#: views/takings.php:13
+msgid "Delete all user-submitted data for this exam"
+msgstr "Ștergeți toate datele trimise de utilizator pentru acest examen"
+
+#: views/takings.php:15
+msgid "Shortcode to publish a simplified version of this page:"
+msgstr "Cod scurt pentru a publica o versiune simplificată a acestei pagini:"
+
+#: views/takings.php:22
+msgid "Username"
+msgstr "Utilizator"
+
+#: views/takings.php:23 views/takings.php:29 views/takings.php:35
+#: views/takings.php:41
+msgid "Equals"
+msgstr "Egal"
+
+#: views/takings.php:24 views/takings.php:30 views/takings.php:36
+msgid "Starts with"
+msgstr "Începe cu"
+
+#: views/takings.php:25 views/takings.php:31 views/takings.php:37
+msgid "Ends with"
+msgstr "Se termină cu"
+
+#: views/takings.php:26 views/takings.php:32 views/takings.php:38
+msgid "Contains"
+msgstr "Conține"
+
+#: views/takings.php:28
+msgid "Email"
+msgstr "E-mail"
+
+#: views/takings.php:34
+msgid "IP Address"
+msgstr "Adresa IP"
+
+#: views/takings.php:40
+msgid "Date Taken"
+msgstr "Data preluării"
+
+#: views/takings.php:42
+msgid "Is before"
+msgstr "Este înainte"
+
+#: views/takings.php:43
+msgid "Is after"
+msgstr "Este după"
+
+#: views/takings.php:45
+msgid "Points received"
+msgstr "Punctele primite"
+
+#: views/takings.php:46
+msgid "Equal"
+msgstr "Egal"
+
+#: views/takings.php:47
+msgid "Are less than"
+msgstr "Sunt mai puțin decât"
+
+#: views/takings.php:48
+msgid "Are more than"
+msgstr "Sunt mai mult decât"
+
+#: views/takings.php:51
+msgid "Grade/result equals:"
+msgstr "Nota / rezultatul este egal cu:"
+
+#: views/takings.php:52
+msgid "- Any grade / result -"
+msgstr "- Orice notă / rezultat -"
+
+#: views/takings.php:56
+msgid "(This filter will exclude grades earned prior to Watu version 2.4.7)"
+msgstr ""
+"(Acest filtru va exclude notele obținute înainte de Watu versiunea 2.4.7)"
+
+#: views/takings.php:58
+msgid "Search/Filter"
+msgstr "Căutare / filtrare"
+
+#: views/takings.php:59
+msgid "Clear Filters"
+msgstr "Ștergeți filtrele"
+
+#: views/takings.php:66
+msgid "Name"
+msgstr "Nume"
+
+#: views/takings.php:67
+msgid "IP"
+msgstr "IP"
+
+#: views/takings.php:68
+msgid "Date"
+msgstr "Data"
+
+#: views/takings.php:69
+msgid "Points"
+msgstr "Puncte"
+
+#: views/takings.php:69
+msgid "Result"
+msgstr "Rezultat"
+
+#: views/takings.php:71
+msgid "Details"
+msgstr "Detalii"
+
+#: views/takings.php:77
+msgid "N/a"
+msgstr "N/a"
+
+#: views/takings.php:83
+msgid "n/a"
+msgstr "n/a"
+
+#: views/takings.php:84
+msgid "view"
+msgstr "vizualizare"
+
+#: views/takings.php:91
+msgid "Previous page"
+msgstr "Pagina anterioară"
+
+#: views/takings.php:93
+msgid "Next page"
+msgstr "Următoarea pagină"
+
+#: views/takings.php:96
+msgid "No results match your search criteria."
+msgstr "Niciun rezultat nu corespunde criteriilor dvs. de căutare."
+
+#: views/takings.php:118
+msgid "Are you sure? This will delete ALL user results for this quiz!"
+msgstr ""
+"Ești sigur? Vei șterge TOATE rezultatele utilizatorilor pentru acest test!"
+
+#: watu.php:106
+msgid "Watu Quizzes"
+msgstr "Teste Watu"
+
+#: watu.php:107
+msgid "Settings"
+msgstr "Setări"
+
+#: watu.php:108
+msgid "Social Sharing"
+msgstr "Partajarea socială"
+
+#: watu.php:109
+msgid "Help &amp; Support"
+msgstr "Ajutor &amp; Suport"
+
+#: watu.php:112
+msgid "Add/Edit Quiz"
+msgstr "Adăugare / Editare test"
+
+#: watu.php:114
+msgid "Add/Edit Question"
+msgstr "Adăugare / Editare Întrebare"
+
+#: watu.php:116
+msgid "Exam submissions"
+msgstr "Prezentări pentru examene"
+
+#: watu.php:120
+msgid "Your are not allowed to to perform this operation"
+msgstr "Nu vi se permite să efectuați această operație"
+
+#: watu.php:290
+msgid ""
+"All the questions in the quiz along with their answers are shown below. Your "
+"answers are bolded. The correct answers have a green background while the "
+"incorrect ones have a red background."
+msgstr ""
+"Toate întrebările din chestionar împreună cu răspunsurile lor sunt "
+"prezentate mai jos. Răspunsurile dvs. sunt ingroșate. Răspunsurile corecte "
+"au un fundal verde, iar cele incorecte au un fundal roșu."
+
+#: watu.php:307
+msgid ""
+"<h2>Thank you for activating Watu!</h2> <p>Please go to your <a href=\"tools."
+"php?page=watu_exams\">Quizzes page</a> to get started! If this is the first "
+"time you have activated the plugin there will be a small demo quiz "
+"automatically created for you. Feel free to explore it to get better idea "
+"how things work.</p>"
+msgstr ""
+"<h2> Vă mulțumim pentru activarea Watu! </h2> <p> Vă rugăm să mergeți la "
+"pagina <a href=\"tools.php?page=watu_exams\">pagina Teste</a> pentru a "
+"începe! Dacă aceasta este prima dată când ați activat pluginul, va fi creat "
+"automat un test demo pentru dvs. Simțiți-vă liber să-l explorați pentru a vă "
+"face o idee mai bună despre cum funcționează lucrurile. </p>"
+
+#: watu.php:337
+msgid "You have missed to answer a required question"
+msgstr "Ați greșit răspunsul la o întrebare obligatorie"
+
+#: watu.php:338
+msgid "You did not select any answer. Are you sure you want to continue?"
+msgstr "Nu ați selectat niciun răspuns. Sunteți sigur că doriți să continuați?"
+
+#: watu.php:340
+msgid "You need to answer the verification question"
+msgstr "Trebuie să răspundeți la întrebarea de verificare"
+
+#: watu.php:341
+msgid "Try again"
+msgstr "Încercați din nou"
+
+#: watu.php:342
+msgid "Valid email address is required."
+msgstr "Este necesară o adresă de e-mail valabilă."

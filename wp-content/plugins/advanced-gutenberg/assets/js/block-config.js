@@ -11,7 +11,7 @@ jQuery(document).ready(function ($) {
     $('.minicolors-input').minicolors();
 
     // Add block name for top header
-    $('.block-config-modal-title').text(parent.window.blockLabel + $('.block-config-modal-title').text());
+    $('.block-config-modal-title').text(parent.window.blockLabel + ' ' + $('.block-config-modal-title').text());
 
     $('.block-config-save').unbind('click').click(function () {
         var dataSubmit = {};

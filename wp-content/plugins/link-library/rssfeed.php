@@ -15,7 +15,7 @@ function link_library_generate_rss_feed () {
     }
 
     $settingsname = 'LinkLibraryPP' . $settingsetid;
-    $options = get_option($settingsname);
+    $options = get_option( $settingsname );
 
     $rss = new rssGenesis();
 
@@ -41,8 +41,14 @@ function link_library_generate_rss_feed () {
         null // Skip Hours
     );
 
-    $link_query_args = array( 'post_type' => 'link_library_links', 'posts_per_page' => $options['numberofrssitems'], 'post_status' => 'publish',
-                              'orderby' => 'meta_value_num', 'meta_key' => 'link_updated', 'order' => 'DESC' );
+    $link_query_args = array( 'post_type' => 'link_library_links', 'posts_per_page' => $options['numberofrssitems'], 'post_status' => 'publish', 'order' => 'DESC' );
+
+    if ( 'updated_date' == $options['rss_item_date_source'] ) {
+        $link_query_args['orderby'] = 'meta_value_num';
+        $link_query_args['meta_key'] = 'link_updated';
+    } elseif( 'pub_date' == $options['rss_item_date_source'] ) {
+        $link_query_args['orderby'] = 'date';
+    }
 
     if ( $options['showinvisible'] == true ) {
         $link_query_args['post_status'] = array( 'publish', 'private' );
@@ -79,8 +85,14 @@ function link_library_generate_rss_feed () {
             $the_link_query->the_post();
 
             $link_url = get_post_meta( get_the_ID(), 'link_url', true );
-            $link_description = get_post_meta( get_the_ID(), 'link_description', true );
-            $link_updated = get_post_meta( get_the_ID(), 'link_updated', true );
+            $link_description = get_post_meta( get_the_ID(), 'link_description', true );          
+
+            if ( 'updated_date' == $options['rss_item_date_source'] ) {
+                $link_updated = get_post_meta( get_the_ID(), 'link_updated', true );    
+            } elseif( 'pub_date' == $options['rss_item_date_source'] ) {
+                $link_updated = get_post_time();
+            }
+            
             $human_date = date( "Y-m-d H:i", $link_updated );
 
             $link_categories = wp_get_post_terms( get_the_ID(), 'link_library_category' );
@@ -112,7 +124,11 @@ function link_library_generate_rss_feed () {
 
     wp_reset_postdata();
 
-	header( 'Content-Type: '. feed_content_type('rss') . '; charset=' . get_option('blog_charset') );
-    print( $rss->getFeed() );
+	if ( $options['publishrssfeed'] ) {
+        header( 'Content-Type: '. feed_content_type('rss') . '; charset=' . get_option('blog_charset') );
+        print( $rss->getFeed() );    
+    } else {
+        header( 'Location: ' . home_url() );
+    }
     exit;
 }

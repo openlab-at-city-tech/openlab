@@ -98,6 +98,7 @@ jQuery(document).on('click', '.b2sDetailsPublishPostBtn', function () {
                 'postId': postId,
                 'type': jQuery('#b2sType').val(),
                 'showByDate': showByDate,
+                'sharedByUser': jQuery('#b2sSortPostSharedBy').val(),
                 'b2s_security_nonce': jQuery('#b2s_security_nonce').val()
             },
             error: function () {

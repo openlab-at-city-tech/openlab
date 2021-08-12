@@ -44,7 +44,7 @@ class NGGModal extends React.Component {
     }
 
     render() {
-        let attach_to_post_url = nextgen_gallery_attach_to_post_url + '&origin=block';
+        let attach_to_post_url = window.igw.url + '&origin=block';
 
         if (this.props.content) {
             attach_to_post_url += '&shortcode=';

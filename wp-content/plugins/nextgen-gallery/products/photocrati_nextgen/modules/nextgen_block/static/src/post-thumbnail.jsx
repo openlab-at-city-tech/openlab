@@ -6,11 +6,12 @@ const {Fragment} = wp.element
 
 function setFeaturedImageDisplay(OriginalComponent) {
     return (props) => {
-        const meta = select('core/editor').getCurrentPostAttribute('meta');
+        const meta = select('core/editor').getCurrentPostAttribute('meta')
+        const nggFeaturedImage = meta ? <NGGFeaturedImage {...props} meta={meta}/> : null
         return (
             <Fragment>
                 <OriginalComponent {...props}/>
-                <NGGFeaturedImage {...props} meta={meta}/>
+                {nggFeaturedImage}
             </Fragment>
         );
     }

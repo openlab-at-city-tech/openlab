@@ -1,1 +1,185 @@
-this.wp=this.wp||{},this.wp.blob=function(e){var t={};function n(r){if(t[r])return t[r].exports;var o=t[r]={i:r,l:!1,exports:{}};return e[r].call(o.exports,o,o.exports,n),o.l=!0,o.exports}return n.m=e,n.c=t,n.d=function(e,t,r){n.o(e,t)||Object.defineProperty(e,t,{enumerable:!0,get:r})},n.r=function(e){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(e,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(e,"__esModule",{value:!0})},n.t=function(e,t){if(1&t&&(e=n(e)),8&t)return e;if(4&t&&"object"==typeof e&&e&&e.__esModule)return e;var r=Object.create(null);if(n.r(r),Object.defineProperty(r,"default",{enumerable:!0,value:e}),2&t&&"string"!=typeof e)for(var o in e)n.d(r,o,function(t){return e[t]}.bind(null,o));return r},n.n=function(e){var t=e&&e.__esModule?function(){return e.default}:function(){return e};return n.d(t,"a",t),t},n.o=function(e,t){return Object.prototype.hasOwnProperty.call(e,t)},n.p="",n(n.s=263)}({263:function(e,t,n){"use strict";n.r(t),n.d(t,"createBlobURL",(function(){return f})),n.d(t,"getBlobByURL",(function(){return c})),n.d(t,"revokeBlobURL",(function(){return l})),n.d(t,"isBlobURL",(function(){return d}));var r=window.URL,o=r.createObjectURL,u=r.revokeObjectURL,i={};function f(e){var t=o(e);return i[t]=e,t}function c(e){return i[e]}function l(e){i[e]&&u(e),delete i[e]}function d(e){return!(!e||!e.indexOf)&&0===e.indexOf("blob:")}}});
+window["wp"] = window["wp"] || {}; window["wp"]["blob"] =
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId]) {
+/******/ 			return installedModules[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// define __esModule on exports
+/******/ 	__webpack_require__.r = function(exports) {
+/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 		}
+/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 	};
+/******/
+/******/ 	// create a fake namespace object
+/******/ 	// mode & 1: value is a module id, require it
+/******/ 	// mode & 2: merge all properties of value into the ns
+/******/ 	// mode & 4: return value when already ns object
+/******/ 	// mode & 8|1: behave like require
+/******/ 	__webpack_require__.t = function(value, mode) {
+/******/ 		if(mode & 1) value = __webpack_require__(value);
+/******/ 		if(mode & 8) return value;
+/******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
+/******/ 		var ns = Object.create(null);
+/******/ 		__webpack_require__.r(ns);
+/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
+/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
+/******/ 		return ns;
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+/******/
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = 278);
+/******/ })
+/************************************************************************/
+/******/ ({
+
+/***/ 278:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createBlobURL", function() { return createBlobURL; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getBlobByURL", function() { return getBlobByURL; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getBlobTypeByURL", function() { return getBlobTypeByURL; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "revokeBlobURL", function() { return revokeBlobURL; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isBlobURL", function() { return isBlobURL; });
+/**
+ * Browser dependencies
+ */
+const {
+  createObjectURL,
+  revokeObjectURL
+} = window.URL;
+/**
+ * @type {Record<string, File|undefined>}
+ */
+
+const cache = {};
+/**
+ * Create a blob URL from a file.
+ *
+ * @param {File} file The file to create a blob URL for.
+ *
+ * @return {string} The blob URL.
+ */
+
+function createBlobURL(file) {
+  const url = createObjectURL(file);
+  cache[url] = file;
+  return url;
+}
+/**
+ * Retrieve a file based on a blob URL. The file must have been created by
+ * `createBlobURL` and not removed by `revokeBlobURL`, otherwise it will return
+ * `undefined`.
+ *
+ * @param {string} url The blob URL.
+ *
+ * @return {File|undefined} The file for the blob URL.
+ */
+
+function getBlobByURL(url) {
+  return cache[url];
+}
+/**
+ * Retrieve a blob type based on URL. The file must have been created by
+ * `createBlobURL` and not removed by `revokeBlobURL`, otherwise it will return
+ * `undefined`.
+ *
+ * @param {string} url The blob URL.
+ *
+ * @return {string|undefined} The blob type.
+ */
+
+function getBlobTypeByURL(url) {
+  var _getBlobByURL;
+
+  return (_getBlobByURL = getBlobByURL(url)) === null || _getBlobByURL === void 0 ? void 0 : _getBlobByURL.type.split('/')[0]; // 0: media type , 1: file extension eg ( type: 'image/jpeg' ).
+}
+/**
+ * Remove the resource and file cache from memory.
+ *
+ * @param {string} url The blob URL.
+ */
+
+function revokeBlobURL(url) {
+  if (cache[url]) {
+    revokeObjectURL(url);
+  }
+
+  delete cache[url];
+}
+/**
+ * Check whether a url is a blob url.
+ *
+ * @param {string} url The URL.
+ *
+ * @return {boolean} Is the url a blob url?
+ */
+
+function isBlobURL(url) {
+  if (!url || !url.indexOf) {
+    return false;
+  }
+
+  return url.indexOf('blob:') === 0;
+}
+//# sourceMappingURL=index.js.map
+
+/***/ })
+
+/******/ });

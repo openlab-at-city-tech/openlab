@@ -406,6 +406,9 @@ class Notification
         $this->placeholders['%user_first_name%'] = (is_user_logged_in()) ? wp_get_current_user()->first_name : '';
         $this->placeholders['%user_last_name%'] = (is_user_logged_in()) ? wp_get_current_user()->last_name : '';
 
+        // Account data
+        $this->placeholders['%account_email%'] = $this->get_processor()->get_current_account()->get_email();
+        
         // Location data
         $location_data_required = $this->_is_placeholder_needed('%location%');
         if ($location_data_required) {

@@ -1,0 +1,163 @@
+/* Replacements Settings */
+.cmtt-glossary-replacement-add {
+    border: 1px solid #CCC;
+    border-radius: 5px;
+    background: #EEE;
+    margin-top: 30px;
+    padding-bottom: 12px;
+}
+.cmtt-glossary-replacement-add input.invalid{
+    border: 1px solid red;
+}
+.glossary_loading {
+    background: url('images/ajax-loader.gif') no-repeat center center;
+    background-color: #DDD;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0.5;
+    display: none;
+}
+.glossary_replacements_list tr:hover {
+    background-color: #EEE;
+}
+.glossary_replacements_list th {
+    font-weight: bold;
+}
+
+/* Media Uploader */
+.cmtt_Media_Image.cmtt_hasThumb {
+    width: 70px;
+    height: 70px;
+    background-size: cover;
+    background-position: center;
+    margin-bottom: 5px;
+    position: relative;
+    cursor: pointer;
+}
+.cmtt_Media_Image.cmtt_hasThumb::before, .cmtt_Media_Image.cmtt_hasThumb::after {
+    content: '';
+    display: block;
+    position: absolute;
+    width: 14px;
+    height: 2px;
+    left: 50%;
+    top: 50%;
+    background: rgba(255,255,255,0.4);
+    margin-top: -1px;
+    margin-left: -7px;
+}
+.cmtt_Media_Image.cmtt_hasThumb::before {
+    -webkit-transform: rotate(45deg);
+    -moz-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+.cmtt_Media_Image.cmtt_hasThumb::after {
+    -webkit-transform: rotate(-45deg);
+    -moz-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+}
+.single-sidebar-glossary #primary {
+    margin-left: 0;
+    width: 70%;
+    float: left;
+    padding-right: 15px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+.single-sidebar-glossary #secondary {
+    width: 30%;
+    float: left;
+    padding-left: 15px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+/* Dashicons picker */
+.dashicon-picker-container {
+    position: absolute;
+    width: 220px;
+    height: 252px;
+    font-size: 14px;
+    background-color: #fff;
+    -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    padding: 5px;
+    box-sizing: border-box;
+    z-index: 9999;
+}
+.dashicon-picker-container ul {
+    margin: 0;
+    padding: 0;
+    margin-bottom: 10px;
+}
+.dashicon-picker-container ul .dashicons {
+    width: 20px;
+    height: 20px;
+    font-size: 20px;
+}
+.dashicon-picker-container ul li {
+    display: inline-block;
+    margin: 5px;
+    float: left;
+}
+.dashicon-picker-container ul li a {
+    display: block;
+    text-decoration: none;
+    color: #373737;
+    padding: 5px 5px;
+    border: 1px solid #dfdfdf;
+}
+.dashicon-picker-container ul li a:hover {
+    border-color: #999;
+    background: #efefef;
+}
+.dashicon-picker-control {
+    height: 32px;
+}
+.dashicon-picker-control a {
+    padding: 5px;
+    text-decoration: none;
+    line-height: 32px;
+    width: 25px;
+}
+.dashicon-picker-control a span {
+    display: inline;
+    vertical-align: middle;
+}
+.dashicon-picker-control input {
+    font-size: 12px;
+    width: 140px;
+}
+
+.cmtt_meaning_label{
+    margin: 10px 0;
+}
+
+/* Amazon Banners Settings */
+#amazon-api-container {
+    display: block;
+    margin: 0 0 30px 0;
+}
+#amazon-api-container .amazon-api-item,
+.amazon-api-item-add-row {
+    display: grid;
+    grid-template-columns: 1fr 100px;
+    grid-gap: 10px;
+    align-items: center;
+    margin: 0 0 10px 0;
+}
+#amazon-api-container .amazon-api-item input[type="text"],
+.amazon-api-item-add-row input[type="text"] {
+    width: 100%;
+}
+
+#cmtt_definitionLengthTester {
+    display: block;
+    margin: 1px;
+    padding: 3px 5px;
+    width: 193px;
+}

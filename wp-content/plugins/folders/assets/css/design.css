@@ -18,7 +18,6 @@
     margin: 0;
     padding: 0;
     top: 0;
-    margin-top: 0;
     max-height: 100% !important;
     width: 100%;
     border-radius: 2px;
@@ -113,6 +112,9 @@ li.active > span > i.fa-folder:before {
     transition: all .15s linear;
     -webkit-transition: all .15s linear;
     -moz-transition: all .15s linear;
+}
+body.add-folder-zindex .wcp-content {
+    z-index: 10000;
 }
 html[dir=rtl] .wcp-content {
     left: auto;
@@ -347,7 +349,7 @@ body:not(.no-hover-css) .wcp-container .route .title:hover .ui-icon .pfolder-fol
 }
 .form-options {
     background: #fff;
-    padding: 5px;
+    padding: 0 5px 5px 5px;
     margin: 0 0;
     border-radius: 4px;
     box-shadow: 0px 4px 21px rgba(7, 16, 28, 0.1);
@@ -372,10 +374,10 @@ body:not(.no-hover-css) .wcp-container .route .title:hover .ui-icon .pfolder-fol
 .form-options > ul > li > a {
     display: inline-block;
     text-decoration: none;
-    padding: 5px 5px;
+    padding: 5px 7px;
     color: #000;
     vertical-align: middle;
-    margin: 0 0 5px 0;
+    margin: 0;
     background: #F1F1F1;
     border-radius: 4px;
 }
@@ -394,11 +396,10 @@ a#expand-collapse-list.all-open span {
     color: #ffffff
 }
 .form-options > ul > li > a.expand-collapse {
-    width: 14px;
     text-align: center;
 }
 .form-options a.expand-collapse span.icon {
-    font-size: 10px;
+    font-size: 6px;
 }
 .form-options span.icon {
     font-size: 12px;
@@ -485,7 +486,7 @@ span.total-count {
     left: auto;
     right: 5px;
     background: #fff;
-    width: 170px;
+    width: 235px;
     padding: 0;
     z-index: 1000001;
     -webkit-box-shadow: 0 0 5px 0 rgba(0, 0, 0, .25);
@@ -509,12 +510,13 @@ span.total-count {
 }
 .dynamic-menu a {
     text-decoration: none;
-    color: #333333;
     position: relative;
     display: block;
     padding: 5px 10px;
     line-height: 18px;
-    white-space: nowrap
+    white-space: nowrap;
+    font-size: 13px;
+    color: #333;
 }
 .dynamic-menu ul > li > a > span, .dynamic-menu ul > li > a > span span {
     position: relative !important;
@@ -537,6 +539,10 @@ span.total-count {
 }
 #custom-menu .dynamic-menu ul > li > a .sticky-pin i {
     font-size: 16px !important;
+}
+.dynamic-menu ul > li > a > span.dashicons {
+    font-size: 18px;
+    text-align: left;
 }
 .dynamic-menu ul > li > a > span span {
     top: auto;
@@ -1275,7 +1281,7 @@ span.media-info-message.active {
 }
 .folder-form-message {
     font-size: 15px;
-    line-height: 18px;
+    line-height: 20px;
     color: #4A5568;
     padding: 25px 70px;
 }
@@ -1598,8 +1604,7 @@ span.folder-count:empty {
     -webkit-filter: invert(0%);
 }
 .form-options > ul > li.last > a.sort-folder-order {
-    width: 28px;
-    padding: 5px;
+    padding: 5px 10px;
     text-align: center;
     display: inline-block;
     box-sizing: border-box;
@@ -1617,7 +1622,7 @@ span.folder-count:empty {
 }
 .folder-sort-menu {
     position: absolute;
-    right: 0;
+    left: 0;
     width: 120px;
     z-index: 101;
     background: #fff;
@@ -1857,6 +1862,20 @@ span.pro-tip {
     color: #fff;
     border-radius: 4px;
 }
+select#media-attachment-dynamic-filter {
+    display: none !important;
+}
+.dynamic-tree-data-separator {
+    margin: 7px 10px 10px;
+    height: 1px;
+    background: #E9E5E5;
+}
+#custom-scroll-menu .mCSB_container {
+    background: #fff;
+}
+.folder-inline-tooltip span.pfolder-arrow-down {
+    font-size: 6px;
+}
 @media screen and (max-width: 960px) {
     .wcp-content {
         left: 36px
@@ -1903,4 +1922,5 @@ span.pro-tip {
         padding-bottom: 30px
     }
 }
+
 

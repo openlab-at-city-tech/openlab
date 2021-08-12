@@ -353,7 +353,7 @@ class Client
         // Preview for Media files in HTML5 Player
         if (in_array($entry->get_extension(), ['mp4', 'm4v', 'ogg', 'ogv', 'webmv', 'mp3', 'm4a', 'ogg', 'oga', 'wav'])) {
             if ($this->has_shared_link($entry)) {
-                $temporarily_link = $this->get_shared_link($entry).'?raw=1';
+                $temporarily_link = str_replace('/s/', '/s/raw/', $this->get_shared_link($entry));
             } else {
                 $temporarily_link = $this->get_temporarily_link($entry);
             }
@@ -365,16 +365,17 @@ class Client
         // Preview for Image files
         if (in_array($entry->get_extension(), ['txt', 'jpg', 'jpeg', 'gif', 'png'])) {
             $shared_link = $this->get_shared_link($entry);
-            header('Location: '.$shared_link.'?raw=1');
+            $shared_link = str_replace('/s/', '/s/raw/', $this->get_shared_link($entry));
+            header('Location: '.$shared_link);
 
             exit();
         }
 
         // Preview for PDF files, read only via Google Viewer when needed
         if ('pdf' === $entry->get_extension()) {
-            $shared_link = $this->get_shared_link($entry).'?raw=1';
+            $shared_link = str_replace('/s/', '/s/raw/', $this->get_shared_link($entry));
             if (false === $this->get_processor()->get_user()->can_download() && $entry->get_size() < 25000000) {
-                $shared_link = 'https://docs.google.com/viewer?embedded=true&url='.$shared_link;
+                $shared_link = 'https://docs.google.com/viewerng/viewer?embedded=true&url='.$shared_link;
             }
             header('Location: '.$shared_link);
 
@@ -436,7 +437,7 @@ class Client
         //    die();
         //}
 
-        if (0 !== count($entry->save_as)) {
+        if (!empty($entry->save_as) && 'web' !== $entry->get_extension()) {
             $this->export_entry($entry);
 
             do_action('outofthebox_download', $entry, null);
@@ -444,12 +445,20 @@ class Client
 
             exit();
         }
+
         if ('url' === $entry->get_extension()) {
             $download_file = $this->_client->download($entry->get_id());
             preg_match_all('/URL=(.*)/', $download_file->getContents(), $location, PREG_SET_ORDER);
 
             if (2 === count($location[0])) {
                 $temporarily_link = $location[0][1];
+            }
+        } elseif ('web' === $entry->get_extension()) {
+            $download_file = $this->_client->download($entry->get_id(), true);
+            $data = json_decode($download_file->getContents());
+
+            if (isset($data->url)) {
+                $temporarily_link = $data->url;
             }
         } else {
             $temporarily_link = $this->get_temporarily_link($entry);
@@ -743,18 +752,14 @@ class Client
 
     public function get_embedded_link(Entry $entry)
     {
-        $shared_link = $this->get_shared_link($entry).'?raw=1';
-
-        if (
-                !in_array($entry->get_extension(), ['pdf', 'jpg', 'jpeg', 'png', 'gif'])
-        ) {
-            // Embed via Google
-            // Update URL so that it directly points to the content
-            $shared_link = str_replace('www.dropbox.com', 'dl.dropboxusercontent.com', $shared_link);
-            $shared_link = 'https://docs.google.com/viewer?embedded=true&url='.rawurlencode($shared_link);
+        if (false === $entry->get_can_preview_by_cloud()
+         || in_array($entry->get_extension(), ['pdf', 'jpg', 'jpeg', 'png', 'gif'])
+         || in_array($entry->get_extension(), ['mp4', 'm4v', 'ogg', 'ogv', 'webmv', 'mp3', 'm4a', 'ogg', 'oga', 'wav'])
+         ) {
+            return str_replace('/s/', '/s/raw/', $this->get_shared_link($entry));
         }
 
-        return $shared_link;
+        return OUTOFTHEBOX_ADMIN_URL."?action=outofthebox-embed-entry&OutoftheBoxpath={$entry->get_id()}&account_id={$this->get_processor()->get_current_account()->get_id()}";
     }
 
     public function get_shared_link_for_output($entry_path = null)
@@ -780,33 +785,56 @@ class Client
 
     public function shorten_url($entry, $url)
     {
+        if (false !== strpos($url, 'localhost')) {
+            // Most APIs don't support localhosts
+            return $url;
+        }
+
         try {
             switch ($this->get_processor()->get_setting('shortlinks')) {
                 case 'Bit.ly':
-                    $requestBody = json_encode(['long_url' => $url]);
-                    $headers = ['Authorization ' => 'Bearer '.$this->get_processor()->get_setting('bitly_apikey'), 'Content-Type' => 'application/json'];
-                    $rawResponse = $this->get_library()->getClient()->getHttpClient()->send('https://api-ssl.bitly.com/v4/shorten', 'POST', $requestBody, $headers);
+                    $response = wp_remote_post('https://api-ssl.bitly.com/v4/shorten', [
+                        'body' => json_encode(
+                            [
+                                'long_url' => $url,
+                            ]
+                        ),
+                        'headers' => [
+                            'Authorization' => 'Bearer '.$this->get_processor()->get_setting('bitly_apikey'),
+                            'Content-Type' => 'application/json',
+                        ],
+                    ]);
 
-                    $body = $rawResponse->getBody();
-                    $data = json_decode($body, true);
+                    $data = json_decode($response['body'], true);
 
                     return $data['link'];
 
                 case 'Shorte.st':
-                    $rawResponse = $this->get_library()->getClient()->getHttpClient()->send('https://api.shorte'.'.st/s/'.$this->get_processor()->get_setting('shortest_apikey').'/'.$url, 'GET', '');
-                    $body = $rawResponse->getBody();
-                    $data = json_decode($body, true);
+                    $response = wp_remote_get('https://api.shorte'.'.st/s/'.$this->get_processor()->get_setting('shortest_apikey').'/'.$url);
+
+                    $data = json_decode($response['body'], true);
 
                     return $data['shortenedUrl'];
 
                 case 'Rebrandly':
-                    $requestBody = json_encode(['title' => $entry->get_name(), 'destination' => $url, 'domain' => $this->get_processor()->get_setting('rebrandly_domain')]);
-                    $headers = ['apikey' => $this->get_processor()->get_setting('rebrandly_apikey'), 'Content-Type' => 'application/json'];
-                    $rawResponse = $this->get_library()->getClient()->getHttpClient()->send('https://api.rebrandly.com/v1/links', 'POST', $requestBody, $headers);
-                    $body = $rawResponse->getBody();
-                    $data = json_decode($body, true);
+                    $response = wp_remote_post('https://api.rebrandly.com/v1/links', [
+                        'body' => json_encode(
+                            [
+                                'title' => $entry->get_name(),
+                                'destination' => $url,
+                                'domain' => ['fullName' => $this->get_processor()->get_setting('rebrandly_domain')],
+                            ]
+                        ),
+                        'headers' => [
+                            'apikey' => $this->get_processor()->get_setting('rebrandly_apikey'),
+                            'Content-Type' => 'application/json',
+                            'workspace' => $this->get_processor()->get_setting('rebrandly_workspace'),
+                        ],
+                    ]);
 
-                    return '//'.$data['shortUrl'];
+                    $data = json_decode($response['body'], true);
+
+                    return 'https://'.$data['shortUrl'];
 
                 case 'None':
                 default:
@@ -839,7 +867,7 @@ class Client
 
         try {
             $api_entry_new = $this->_client->createFolder($new_folder_path);
-            CacheRequest::clear_local_cache_for_shortcode($this->get_processor()->get_listtoken());
+            CacheRequest::clear_local_cache_for_shortcode($this->get_processor()->get_current_account()->get_id(), $this->get_processor()->get_listtoken());
 
             $new_entry = new Entry($api_entry_new);
 
@@ -887,7 +915,7 @@ class Client
             $api_entry = $this->_client->move($target_entry->get_path(), $new_entry_path);
 
             $cached_request = new CacheRequest($this->get_processor());
-            $cached_request->clear_local_cache_for_shortcode($this->get_processor()->get_listtoken());
+            $cached_request->clear_local_cache_for_shortcode($this->get_processor()->get_current_account()->get_id(), $this->get_processor()->get_listtoken());
 
             $new_entry = new Entry($api_entry);
             do_action('outofthebox_log_event', 'outofthebox_renamed_entry', $new_entry, ['old_name' => $target_entry->get_name()]);
@@ -909,7 +937,7 @@ class Client
         }
 
         if (false === $target_entry) {
-            $message = '[WP Cloud Plugin message]: '.sprintf('Failed to copy the file %s.', $target_entry->get_path());
+            $message = '[WP Cloud Plugin message]: Failed to copy the file %s.';
 
             error_log($message);
 
@@ -948,7 +976,7 @@ class Client
             $api_entry = $this->_client->copy($target_entry->get_path(), $new_entry_path, $params);
 
             $cached_request = new CacheRequest($this->get_processor());
-            $cached_request->clear_local_cache_for_shortcode($this->get_processor()->get_listtoken());
+            $cached_request->clear_local_cache_for_shortcode($this->get_processor()->get_current_account()->get_id(), $this->get_processor()->get_listtoken());
 
             $new_entry = new Entry($api_entry);
             do_action('outofthebox_log_event', 'outofthebox__copied_entry', $new_entry, ['original' => $target_entry->get_name()]);
@@ -963,7 +991,7 @@ class Client
         }
 
         // Clear Cached Requests
-        CacheRequest::clear_local_cache_for_shortcode($this->get_processor()->get_listtoken());
+        CacheRequest::clear_local_cache_for_shortcode($this->get_processor()->get_current_account()->get_id(), $this->get_processor()->get_listtoken());
 
         return true;
     }
@@ -1046,8 +1074,6 @@ class Client
 
             return $entries_to_move;
         }
-
-        //CacheRequest::clear_local_cache_for_shortcode($this->get_processor()->get_listtoken());
 
         return $entries_to_move;
     }

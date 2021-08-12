@@ -121,7 +121,7 @@ class Jufeedback
         register_deactivation_hook(self::$main_plugin_file, array(__CLASS__, 'jureviewDeactivation'));
 
         $install_time = get_option(self::$plugin_prefix . '_jureview_installation_time');
-        if (!empty($install_time) && $install_time !== 'unnecessary' && ($install_time + (30 * 24 * 60 * 60) < time())) {
+        if (!empty($install_time) && $install_time !== 'unnecessary' && ($install_time + (7 * 24 * 60 * 60) < time())) {
             add_action('admin_notices', array(__CLASS__, 'jureviewNotice'));
         }
     }
@@ -611,7 +611,7 @@ class Jufeedback
         //phpcs:disable WordPress.WP.I18n.NonSingularStringLiteralDomain -- Already use text domain for extensions
         echo '<div id="' . esc_attr(self::$plugin_prefix) . '-review-notice" class="updated jureview-notice" data-slug="' . esc_attr(self::$plugin_slug) . '">
 	          <p>' . sprintf(
-            esc_html__('Thanks for using %s, it’s been more than a month now! Would you consider leaving a review on the plugin directory? It helps us make the plugin & support better :)', self::$text_domain),
+            esc_html__('Thanks for using %s, it’s been more than a week now! Would you consider leaving a review on the plugin directory? It helps us make the plugin & support better :)', self::$text_domain),
             esc_html(self::$plugin_name)
         ) . '</p>
 	          <p class="submit">

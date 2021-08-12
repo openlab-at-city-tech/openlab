@@ -30,7 +30,7 @@
  */
 
 use Easy_Plugins\Table_Of_Contents\Debug;
-use function Easy_Plugins\Table_Of_Contents\String\mb_find_replace;
+use function Easy_Plugins\Table_Of_Contents\TOCString\mb_find_replace;
 
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) exit;

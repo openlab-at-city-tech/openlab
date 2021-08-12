@@ -18,7 +18,7 @@ class M_NextGen_Settings extends C_Base_Module
 			'photocrati-nextgen_settings',
 			'NextGEN Gallery Settings',
 			'Provides central management for NextGEN Gallery settings',
-			'3.3.6',
+			'3.10',
 			'https://www.imagely.com/wordpress-gallery-plugin/nextgen-gallery/',
 			'Imagely',
 			'https://www.imagely.com'
@@ -133,14 +133,28 @@ class C_NextGen_Settings_Installer
 			'CSSfile'     => 'nggallery.css',     // set default css filename
 			'always_enable_frontend_logic' => FALSE,
 
-            // Misc
+            // Misc //
+
             // It is known that WPEngine disables 'order by rand()' by default, but exposes it as an option to users
             'use_alternate_random_method' => (function_exists('is_wpe') && is_wpe()) ? TRUE : FALSE,
+
+            // Prevent conflicts with other plugins that enqueue fontawesome
             'disable_fontawesome'         => FALSE,
+
+            // Prevent the /ngg_tag/ page from being enabled
+            'disable_ngg_tags_page'       => FALSE,
 
             // Duration of caching of 'random' widgets image IDs
             'random_widget_cache_ttl' => 30
         ]);
+
+		if (is_multisite()) {
+			if ($options = get_site_option('ngg_options'))
+				$gallerypath = $options['gallerypath'];
+			else
+				$gallerypath = $this->_global_settings['gallerypath'];
+			$this->_local_settings['gallerypath'] = $this->gallerypath_replace($gallerypath);
+		}
 	}
 
 	function install_global_settings($reset=FALSE)
@@ -172,7 +186,7 @@ class C_NextGen_Settings_Installer
 
 			// a gallerypath setting has already been set, so we explicitly set a default AND set a new value
 			$this->blog_settings->set_default_value('gallerypath', $gallerypath);
-			$this->blog_settings->set('gallerypath', $gallerypath);
+			if ($reset) $this->blog_settings->set('gallerypath', $gallerypath);
 		}
 	}
 
@@ -196,6 +210,7 @@ class C_NextGen_Settings_Installer
 	{
 		$gallerypath = str_replace('%BLOG_NAME%', get_bloginfo('name'),  $gallerypath);
 		$gallerypath = str_replace('%BLOG_ID%',   get_current_blog_id(), $gallerypath);
+		$gallerypath = str_replace('%SITE_ID%',   get_current_blog_id(), $gallerypath);
 		return $gallerypath;
 	}
 }

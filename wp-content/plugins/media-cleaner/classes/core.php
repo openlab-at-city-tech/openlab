@@ -9,7 +9,7 @@ class Meow_WPMC_Core {
 	public $engine = null;
 	public $catch_timeout = true; // This will halt the plugin before reaching the PHP timeout.
 	private $regex_file = '/[A-Za-z0-9-_,.\(\)\s]+[.]{1}(MIMETYPES)/';
-	public $types = "jpg|jpeg|jpe|gif|png|tiff|bmp|csv|pdf|xls|xlsx|doc|docx|odt|wpd|rtf|tiff|mp3|mp4|mov|wav|lua";
+	public $types = "jpg|jpeg|jpe|gif|png|tiff|bmp|csv|svg|pdf|xls|xlsx|doc|docx|odt|wpd|rtf|tiff|mp3|mp4|mov|wav|lua";
 	public $current_method = 'media';
 	private $refcache = array();
 	public $servername = null; // meowapps.com (site URL without http/https)
@@ -24,17 +24,11 @@ class Meow_WPMC_Core {
 	private $allow_setup = null;
 
 	public function __construct() {
-		add_action( 'plugins_loaded', array( $this, 'init' ) );
+		add_action( 'plugins_loaded', array( $this, 'plugins_loaded' ) );
+		add_action( 'init', array( $this, 'init' ) );
 	}
 
-	function init() {
-		
-		// Check the roles
-		$this->allow_usage = apply_filters( 'wpmc_allow_usage', current_user_can( 'administrator' ) );
-		$this->allow_setup = apply_filters( 'wpmc_allow_setup', current_user_can( 'manage_options' ) );
-		if ( !$this->allow_usage ) {
-			return;
-		}
+	function plugins_loaded() {
 
 		// Variables
 		$this->site_url = get_site_url();
@@ -52,6 +46,13 @@ class Meow_WPMC_Core {
 		$this->is_cli = defined( 'WP_CLI' ) && WP_CLI;
 		global $wpmc;
 		$wpmc = $this;
+
+		// Check the roles
+		$this->allow_usage = apply_filters( 'wpmc_allow_usage', current_user_can( 'administrator' ) );
+		$this->allow_setup = apply_filters( 'wpmc_allow_setup', current_user_can( 'manage_options' ) );
+		if ( !$this->is_cli && !$this->allow_usage ) {
+			return;
+		}
 
 		// Language
 		load_plugin_textdomain( WPMC_DOMAIN, false, basename( WPMC_PATH ) . '/languages' );
@@ -79,6 +80,10 @@ class Meow_WPMC_Core {
 		if ( is_admin() ) {
 			new Meow_WPMC_UI( $this, $this->admin );
 		}
+	}
+
+	function init() {
+		remove_action( 'wp_scheduled_delete', 'wp_scheduled_delete' );
 	}
 
 	function initialize_parsers() {
@@ -204,7 +209,13 @@ class Meow_WPMC_Core {
 
 		// Proposal/fix by @copytrans
 		// Discussion: https://wordpress.org/support/topic/bug-in-core-php/#post-11647775
-		$html = mb_convert_encoding( $html, 'HTML-ENTITIES', 'UTF-8' );
+		// Modified by Jordy again in 2021 for those who don't have MB enabled
+		if ( function_exists( 'mb_convert_encoding' ) ) {
+			$html = mb_convert_encoding( $html, 'HTML-ENTITIES', 'UTF-8' );
+		}
+		else {
+			$html = htmlspecialchars_decode( utf8_decode( htmlentities( $html, ENT_COMPAT, 'utf-8', false ) ) );
+		}
 
 		// Resolve src-set and shortcodes
 		if ( !get_option( 'wpmc_shortcodes_disabled', false ) )
@@ -271,7 +282,7 @@ class Meow_WPMC_Core {
 		}
 
 
-		// Images, src, srcset
+		// Images: src, srcset
 		$imgs = $dom->getElementsByTagName( 'img' );
 		foreach ( $imgs as $img ) {
 			//error_log($img->getAttribute('src'));
@@ -287,6 +298,22 @@ class Meow_WPMC_Core {
 					}
 				}
 			}
+		}
+
+		// Videos: src
+		$videos = $dom->getElementsByTagName( 'video' );
+		foreach ( $videos as $video ) {
+			//error_log($video->getAttribute('src'));
+			$src = $this->clean_url( $video->getAttribute('src') );
+    	array_push( $results, $src );
+		}
+
+		// Audios: src
+		$audios = $dom->getElementsByTagName( 'audio' );
+		foreach ( $audios as $audio ) {
+			//error_log($audio->getAttribute('src'));
+			$src = $this->clean_url( $audio->getAttribute('src') );
+    	array_push( $results, $src );
 		}
 
 		// Links, href
@@ -316,7 +343,7 @@ class Meow_WPMC_Core {
 		preg_match_all( "/((https?:\/\/)?[^\\&\#\[\] \"\?]+\.pdf)/", $html, $res );
 		if ( !empty( $res ) && isset( $res[1] ) && count( $res[1] ) > 0 ) {
 			foreach ( $res[1] as $url ) {
-				if ( $this->is_url($url) )
+				if ( $this->is_url( $url ) )
 					array_push( $results, $this->clean_url( $url ) );
 			}
 		}
@@ -325,7 +352,7 @@ class Meow_WPMC_Core {
 		preg_match_all( "/url\(\'?\"?((https?:\/\/)?[^\\&\#\[\] \"\?]+\.(jpe?g|gif|png))\'?\"?/", $html, $res );
 		if ( !empty( $res ) && isset( $res[1] ) && count( $res[1] ) > 0 ) {
 			foreach ( $res[1] as $url ) {
-				if ( $this->is_url($url) )
+				if ( $this->is_url( $url ) )
 					array_push( $results, $this->clean_url( $url ) );
 			}
 		}
@@ -467,7 +494,12 @@ class Meow_WPMC_Core {
 		if ( $this->is_multilingual() ) {
 			$languages = icl_get_languages();
 			foreach ( $languages as $language ) {
-				array_push( $results, $language['code'] );
+				if ( isset( $language['code'] ) ) {
+					array_push( $results, $language['code'] );
+				}
+				else if ( isset( $language['language_code'] ) ) {
+					array_push( $results, $language['language_code'] );
+				}
 			}
 		}
 		return $results;

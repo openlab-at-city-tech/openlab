@@ -116,8 +116,8 @@ final class Tribe__Customizer {
 
 		// front end styles from customizer
 		add_action( 'tribe_events_pro_widget_render', [ $this, 'inline_style' ], 101 );
-		add_action( 'wp_print_footer_scripts', [ $this, 'shortcode_inline_style' ], 5 );
-		add_action( 'wp_print_footer_scripts', [ $this, 'widget_inline_style' ], 5 );
+		add_action( 'wp_print_footer_scripts', [ $this, 'shortcode_inline_style' ], 10 );
+		add_action( 'wp_print_footer_scripts', [ $this, 'widget_inline_style' ], 10 );
 
 		/**
 		 * Allows filtering the action that will be used to trigger the printing of inline scripts.
@@ -156,7 +156,7 @@ final class Tribe__Customizer {
 	}
 
 	/**
-	 * Loads a Section to the Customizer on the The Events Calendar Panel
+	 * Loads a Section to the Customizer on The Events Calendar's Panel
 	 *
 	 * @since  4.4
 	 *
@@ -191,7 +191,7 @@ final class Tribe__Customizer {
 		 * @deprecated
 		 * @since 4.0
 		 *
-		 * @param array $selection_class
+		 * @param array $sections_class
 		 * @param self  $customizer
 		 */
 		$this->sections_class = apply_filters( 'tribe_events_pro_customizer_sections_class', $this->sections_class, $this );
@@ -201,12 +201,31 @@ final class Tribe__Customizer {
 		 *
 		 * @since 4.4
 		 *
-		 * @param array $selection_class
+		 * @param array $sections_class
 		 * @param self  $customizer
 		 */
 		$this->sections_class = apply_filters( 'tribe_customizer_sections_class', $this->sections_class, $this );
 
 		return $this->sections_class;
+	}
+
+	/**
+	 * Returns the section requested by ID.
+	 *
+	 * @since 4.13.3
+	 *
+	 * @param string $id The ID of the desired section.
+	 *
+	 * @return boolean|Tribe__Customizer__Section The requested section or boolean false if not found.
+	 */
+	public function get_section( $id ) {
+		$sections = $this->get_loaded_sections();
+
+		if ( empty( $sections[ $id ] ) ) {
+			return false;
+		}
+
+		return $sections[ $id ];
 	}
 
 	/**
@@ -267,11 +286,14 @@ final class Tribe__Customizer {
 	}
 
 	/**
-	 * Get an option from the database, using index search you can retrieve the full panel, a section or even a setting
+	 * Get an option from the database, using index search you can retrieve the full panel, a section or even a setting.
 	 *
-	 * @param  array $search   Index search, array( 'section_name', 'setting_name' )
-	 * @param  mixed $default  The default, if the requested variable doesn't exits
-	 * @return mixed           The requested option or the default
+	 * @since 4.4
+	 *
+	 * @param  array $search   Index search, array( 'section_name', 'setting_name' ).
+	 * @param  mixed $default  The default, if the requested variable doesn't exits.
+	 *
+	 * @return mixed           The requested option or the default.
 	 */
 	public function get_option( $search = null, $default = null ) {
 		$sections = get_option( $this->ID, $default );
@@ -346,14 +368,14 @@ final class Tribe__Customizer {
 	 *
 	 * @param strings Using the following structure: self::has_option( 'section_name', 'setting_name' );
 	 *
-	 * @return boolean Wheter the option exists in the database
+	 * @return boolean Whether the option exists in the database
 	 */
 	public function has_option() {
 		$search = func_get_args();
 		$option = self::get_option();
 		$real_option = get_option( $this->ID, [] );
 
-		// Get section and Settign based on keys
+		// Get section and Settings based on keys
 		$section = reset( $search );
 		$setting = end( $search );
 
@@ -435,7 +457,7 @@ final class Tribe__Customizer {
 	 *
 	 * @since 4.12.15 Added the `$force` parameter to force the print of the style inline.
 	 *
-	 * @param bool $force Whether to ignore the context to try and printe the style inline, or not.
+	 * @param bool $force Whether to ignore the context to try and print the style inline, or not.
 	 */
 	public function inline_style( $force = false ) {
 		// Only load once on front-end.
@@ -553,7 +575,7 @@ final class Tribe__Customizer {
 	 * @return void
 	 */
 	public function register( WP_Customize_Manager $customizer ) {
-		// Set the Cutomizer on a class variable
+		// Set the Customizer on a class variable
 		$this->manager = $customizer;
 
 		/**
@@ -567,7 +589,7 @@ final class Tribe__Customizer {
 		$this->panel = apply_filters( 'tribe_customizer_panel', $this->register_panel(), $this );
 
 		/**
-		 * Filter the Sections within our Panel before they are added to the Cutomize Manager
+		 * Filter the Sections within our Panel before they are added to the Customize Manager
 		 *
 		 * @since 4.4
 		 *
@@ -707,10 +729,10 @@ final class Tribe__Customizer {
 	 * @param  string $slug    The actual Setting name
 	 * @param  string|WP_Customize_Section $section [description]
 	 *
-	 * @return string          HTML name Attribute name o the setting
+	 * @return string          HTML name Attribute name of the setting.
 	 */
 	public function get_setting_name( $slug, $section = null ) {
-		$name = $this->panel->id;
+		$name = ! empty( $this->panel->id ) ? $this->panel->id : '';
 
 		// If there is a section set append it
 		if ( $section instanceof WP_Customize_Section ) {

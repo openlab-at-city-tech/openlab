@@ -419,7 +419,7 @@ abstract class Tribe__Extension {
 			'<p><strong>%1$s:</strong> %2$s</p>',
 			$this->get_name(),
 			esc_html_x(
-				"This extension has been programmatically disallowed. The most common reason is due to another Modern Tribe plugin having absorbed or replaced this extension's functionality. This extension plugin has been deactivated, and you should likely delete it.",
+				"This extension has been programmatically disallowed. The most common reason is due to another The Events Calendar plugin having absorbed or replaced this extension's functionality. This extension plugin has been deactivated, and you should likely delete it.",
 				'extension disallowed',
 				'tribe-common'
 			)
@@ -431,7 +431,7 @@ abstract class Tribe__Extension {
 	 *
 	 * @return void
 	 */
-	final private function __clone() {
+	final public function __clone() {
 		_doing_it_wrong(
 			__FUNCTION__,
 			'Can not use this method on singletons.',
@@ -444,7 +444,7 @@ abstract class Tribe__Extension {
 	 *
 	 * @return void
 	 */
-	final private function __wakeup() {
+	final public function __wakeup() {
 		_doing_it_wrong(
 			__FUNCTION__,
 			'Can not use this method on singletons.',

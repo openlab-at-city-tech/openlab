@@ -3,6 +3,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 } // Exit if accessed directly
 
+global $colorarray;
+
+$colorarray = array( "#67b484", "#4c6be0", "#9fbb32", "#4d7ad3", "#62c655", "#ce4050", "#45c37c", "#da4f2e", "#41c8d7", "#de862e", "#55a3d9", "#d5ac31", "#4865a2", "#4b9b2f", "#8a96de", "#beb54c", "#2ba198", "#a94c27", "#5ecead", "#e8866b", "#115e41", "#bd6569", "#4e9953", "#925e2a", "#3a9371", "#dba268", "#25735a", "#97831e", "#3b8554", "#a17d3f", "#296437", "#bdb26f", "#387533", "#97ba6d", "#666020", "#3f7821", "#848a49", "#4d6318", "#75902f", "#597236" );
+
 /************************** Function called to create default settings or to reset them on user request **************************/
 function ll_reset_options( $settings = 1, $layout = 'list', $setoptions = 'return' ) {
 
@@ -102,7 +106,7 @@ function ll_reset_options( $settings = 1, $layout = 'list', $setoptions = 'retur
 	$options['rssfeedinline']                 = false;
 	$options['rssfeedinlinecontent']          = false;
 	$options['rssfeedinlinecount']            = 1;
-	$options['rssfeedinlinedayspublished']    = 0;
+	$options['rssfeedinlinedayspublished']    = 90;
 	$options['rssfeedinlineskipempty']        = false;
 	$options['direction']                     = 'ASC';
 	$options['linkdirection']                 = 'ASC';
@@ -366,6 +370,89 @@ function ll_reset_options( $settings = 1, $layout = 'list', $setoptions = 'retur
 	$options['aftercustomlist4']                 = '';
 	$options['aftercustomlist5']                 = '';
 	$options['lazyloadimages']                   = false;
+	$options['emailhidepluginmessage']			 = false;
+	$options['suppress_image_if_empty']			 = false;
+	$options['suppress_link_date_if_empty']		 = false;
+	$options['suppress_link_desc_if_empty']		 = false;
+	$options['suppress_link_notes_if_empty']	 = false;
+	$options['suppress_rss_icon_if_empty']		 = false;
+	$options['suppress_tel_if_empty']			 = false;
+	$options['suppress_email_if_empty']			 = false;
+	$options['suppress_rating_if_empty']		 = false;
+	$options['suppress_large_desc_if_empty']	 = false;
+	$options['suppress_submitter_if_empty']		 = false;
+	$options['suppress_cat_desc_if_empty']		 = false;
+	$options['suppress_link_tags_if_empty']		 = false;
+	$options['suppress_link_price_if_empty']	 = false;
+	$options['suppress_cat_name_if_empty']		 = false;
+	$options['suppress_custom_url_1_if_empty']	 = false;
+	$options['suppress_custom_url_2_if_empty']	 = false;
+	$options['suppress_custom_url_3_if_empty']	 = false;
+	$options['suppress_custom_url_4_if_empty']	 = false;
+	$options['suppress_custom_url_5_if_empty']	 = false;
+	$options['suppress_custom_text_1_if_empty']	 = false;
+	$options['suppress_custom_text_2_if_empty']	 = false;
+	$options['suppress_custom_text_3_if_empty']	 = false;
+	$options['suppress_custom_text_4_if_empty']	 = false;
+	$options['suppress_custom_text_5_if_empty']	 = false;
+	$options['suppress_custom_list_1_if_empty']	 = false;
+	$options['suppress_custom_list_2_if_empty']	 = false;
+	$options['suppress_custom_list_3_if_empty']	 = false;
+	$options['suppress_custom_list_4_if_empty']	 = false;
+	$options['suppress_custom_list_5_if_empty']	 = false;
+	$options['catnameformat']					 = 'currentcatname';
+	$options['catnamelink']						 = true;
+	$options['categoryseparator']				 = ' | ';
+	$options['customqueryarg']					 = '';
+	$options['customqueryargvalue']				 = '';
+	$options['usersubmissiondragndroporder']	 = '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33';
+	$options['showlinkreferencelist']			 = 'hide';
+	$options['linkreferencelabel']				 = __( 'Link Reference', 'link-library' );
+	$options['linkreferencetooltip']		     = '';
+	$options['showcustomurl1']				 	 = 'hide';
+	$options['showcustomurl2']				 	 = 'hide';
+	$options['showcustomurl3']				 	 = 'hide';
+	$options['showcustomurl4']				 	 = 'hide';
+	$options['showcustomurl5']				 	 = 'hide';
+	$options['customurl1tooltip']				 = '';
+	$options['customurl2tooltip']				 = '';
+	$options['customurl3tooltip']				 = '';
+	$options['customurl4tooltip']				 = '';
+	$options['customurl5tooltip']				 = '';
+	$options['showcustomtext1']				 	 = 'hide';
+	$options['showcustomtext2']				 	 = 'hide';
+	$options['showcustomtext3']				 	 = 'hide';
+	$options['showcustomtext4']				 	 = 'hide';
+	$options['showcustomtext5']				 	 = 'hide';
+	$options['customtext1tooltip']				 = '';
+	$options['customtext2tooltip']				 = '';
+	$options['customtext3tooltip']				 = '';
+	$options['customtext4tooltip']				 = '';
+	$options['customtext5tooltip']				 = '';
+	$options['showcustomlist1']				 	 = 'hide';
+	$options['showcustomlist2']				 	 = 'hide';
+	$options['showcustomlist3']				 	 = 'hide';
+	$options['showcustomlist4']				 	 = 'hide';
+	$options['showcustomlist5']				 	 = 'hide';
+	$options['customlist1tooltip']				 = '';
+	$options['customlist2tooltip']				 = '';
+	$options['customlist3tooltip']				 = '';
+	$options['customlist4tooltip']				 = '';
+	$options['customlist5tooltip']				 = '';	
+	$options['stylesheet']						 = '';
+	$options['rss_item_date_source']			 = 'updated_date';
+	$options['hideemptycats']					 = false;
+	$options['rsslibraryitemspersite']			 = 10;
+	$options['rsslibrarymaxwordsitem']			 = 30;
+	$options['rsslibrarypagination']			 = true;
+	$options['rsslibrarypaginationnb']			 = 10;
+	$options['rsslibrarytemplate']				 = '<div class="rss_library_item">
+	<div class="rss-library-title">[rss_item_title]</div>
+	<div class="rss-library-source"><span class="rss-library-site">[link_title]</span><span class="rss-library-date">[rss_item_date] - [rss_item_time]</span></div>
+	<div class="rss-library-content">[rss_item_content]</div>
+</div>';
+	$options['showupdatedonly']					 = false;
+	$options['updateddays']						 = 7;
 
 	if ( 'return_and_set' == $setoptions ) {
 		$settingsname = 'LinkLibraryPP' . $settings;
@@ -468,6 +555,15 @@ function ll_reset_gen_settings( $setoptions = 'return' ) {
 	$genoptions['customlist3html']               = '';
 	$genoptions['customlist4html']               = '';
 	$genoptions['customlist5html']               = '';
+	$genoptions['global_search_results_layout']  = '[link_description]';
+	$genoptions['globalsearchresultslinkurl']	 = true;
+	$genoptions['globalsearchresultstitleprefix'] = '';
+	$genoptions['add_to_main_rss']				  = false;
+	$genoptions['suppressprotocolchangeredirection'] = false;
+	$genoptions['suppresssubdomainredirection']	  = false;
+	$genoptions['suppresssubfolderredirection']	  = false;
+	$genoptions['suppressbadconfigredirection']   = false;
+	$genoptions['rsscheckdays']					 = 90;
 
 	if ( 'return_and_set' == $setoptions ) {
 		$stylesheetlocation           = plugins_url( 'stylesheettemplate.css', __FILE__ );
@@ -477,279 +573,4 @@ function ll_reset_gen_settings( $setoptions = 'return' ) {
 	}
 
 	return $genoptions;
-}
-
-function ll_modify_layout( $settings, $newlayout ) {
-	$settingsname = 'LinkLibraryPP' . $settings;
-	$options      = get_option( $settingsname );
-
-	if ( 1 == $newlayout || 2 == $newlayout) {
-		// Layout 1: Simple Unordered List
-		// Layout 2: Unordered list with link descriptions
-		$options['displayastable']    = 'false';
-		$options['showcolumnheaders'] = false;
-		$options['columnheaderoverride'] = '';
-		$options['linkaddfrequency']     = 0;
-
-		$options['beforefirstlink']   = '';
-		$options['afterlastlink']     = '';
-
-		$options['beforeitem']        = '<li>';
-		$options['afteritem']         = '</li>';
-
-		$options['showname']          = true;
-		$options['beforelink']        = '';
-		$options['afterlink']         = '';
-
-		if ( 1 == $newlayout ) {
-			$options['showdescription']   = false;
-		} else {
-			$options['showdescription']   = true;
-		}
-
-		$options['beforedesc']        = '';
-		$options['afterdesc']         = '';
-
-		$options['shownotes']         = false;
-		$options['beforenote']        = '';
-		$options['afternote']         = '';
-
-		$options['show_images']         = false;
-		$options['beforeimage']       = '';
-		$options['afterimage']        = '';
-
-		$options['showdate']          = false;
-		$options['beforedate']        = '';
-		$options['afterdate']         = '';
-
-		$options['showlargedescription']    = false;
-		$options['beforelargedescription']  = '';
-		$options['afterlargedescription']   = '';
-
-		$options['displayweblink']    = 'false';
-		$options['beforeweblink']     = '';
-		$options['afterweblink']      = '';
-
-		$options['showtelephone']     = 'false';
-		$options['beforetelephone']   = '';
-		$options['aftertelephone']    = '';
-
-		$options['showemail']         = 'false';
-		$options['beforeemail']       = '';
-		$options['afteremail']        = '';
-
-		$options['showlinkhits']      = false;
-		$options['beforelinkhits']    = '';
-		$options['afterlinkhits']     = '';
-
-		$options['showrating']        = false;
-		$options['beforelinkrating']  = '';
-		$options['afterlinkrating']   = '';
-
-		$options['showsubmittername']   = false;
-		$options['beforesubmittername'] = '';
-		$options['aftersubmittername']  = '';
-
-		$options['showcatdesc']      = false;
-		$options['beforecatdesc']    = '';
-		$options['aftercatdesc']     = '';
-
-		$options['showlinktags']      = false;
-		$options['beforelinktags']    = '';
-		$options['afterlinktags']     = '';
-
-		$options['showlinkprice']      = false;
-		$options['beforelinkprice']    = '';
-		$options['afterlinkprice']     = '';
-
-		$options['showcatname']      = false;
-		$options['beforecatname']    = '';
-		$options['aftercatname']     = '';
-
-		$options['beforerss']         = '';
-		$options['afterrss']          = '';
-
-		$options['addbeforelink']   = '';
-		$options['addafterlink']    = '';
-	} elseif ( 3 == $newlayout ) {
-
-		$options['displayastable']    = 'true';
-		$options['showcolumnheaders'] = true;
-		$options['columnheaderoverride'] = 'Link,Description';
-		$options['linkaddfrequency']     = 0;
-
-		$options['beforefirstlink']   = '';
-		$options['afterlastlink']     = '';
-
-		$options['beforeitem']        = '<tr>';
-		$options['afteritem']         = '</tr>';
-
-		$options['showname']          = true;
-		$options['beforelink']        = '<td>';
-		$options['afterlink']         = '</td>';
-
-		$options['showdescription']   = true;
-
-		$options['beforedesc']        = '<td>';
-		$options['afterdesc']         = '</td>';
-
-		$options['shownotes']         = false;
-		$options['beforenote']        = '<td>';
-		$options['afternote']         = '</td>';
-
-		$options['show_images']         = false;
-		$options['beforeimage']       = '<td>';
-		$options['afterimage']        = '</td>';
-
-		$options['showdate']          = false;
-		$options['beforedate']        = '<td>';
-		$options['afterdate']         = '</td>';
-
-		$options['showlargedescription']    = false;
-		$options['beforelargedescription']  = '<td>';
-		$options['afterlargedescription']   = '</td>';
-
-		$options['displayweblink']    = 'false';
-		$options['beforeweblink']     = '<td>';
-		$options['afterweblink']      = '</td>';
-
-		$options['showtelephone']     = 'false';
-		$options['beforetelephone']   = '<td>';
-		$options['aftertelephone']    = '</td>';
-
-		$options['showemail']         = 'false';
-		$options['beforeemail']       = '<td>';
-		$options['afteremail']        = '</td>';
-
-		$options['showlinkhits']      = false;
-		$options['beforelinkhits']    = '<td>';
-		$options['afterlinkhits']     = '</td>';
-
-		$options['showrating']        = false;
-		$options['beforelinkrating']  = '<td>';
-		$options['afterlinkrating']   = '</td>';
-
-		$options['showsubmittername']   = false;
-		$options['beforesubmittername'] = '<td>';
-		$options['aftersubmittername']  = '</td>';
-
-		$options['showcatdesc']      = false;
-		$options['beforecatdesc']    = '<td>';
-		$options['aftercatdesc']     = '</td>';
-
-		$options['showlinktags']      = false;
-		$options['beforelinktags']    = '<td>';
-		$options['afterlinktags']     = '</td>';
-
-		$options['showlinkprice']      = false;
-		$options['beforelinkprice']    = '<td>';
-		$options['afterlinkprice']     = '</td>';
-
-		$options['showcatname']      = false;
-		$options['beforecatname']    = '<td>';
-		$options['aftercatname']     = '</td>';
-
-		$options['beforerss']         = '<td>';
-		$options['afterrss']          = '</td>';
-
-		$options['addbeforelink']   = '';
-		$options['addafterlink']    = '';
-	} elseif ( 4 == $newlayout || 5 == $newlayout ) {
-
-		$options['displayastable']    = 'true';
-		$options['showcolumnheaders'] = false;
-		$options['columnheaderoverride'] = 'Link,Description';
-		$options['linkaddfrequency']     = 2;
-
-		$options['beforefirstlink']   = '';
-		$options['afterlastlink']     = '';
-
-		$options['beforeitem']        = '';
-		$options['afteritem']         = '';
-
-		$options['showname']          = true;
-
-		if ( 4 == $newlayout ) {
-			$options['beforelink'] = '';
-		} elseif ( 5 == $newlayout ) {
-			$options['beforelink'] = '<td>';
-		}
-		$options['afterlink']         = '<br />';
-
-		$options['showdescription']   = true;
-		$options['beforedesc']        = '';
-		$options['afterdesc']         = '<br />';
-
-		$options['shownotes']         = false;
-		$options['beforenote']        = '';
-		$options['afternote']         = '<br />';
-
-		$options['show_images']         = true;
-
-		if ( 4 == $newlayout ) {
-			$options['beforeimage']       = "<td style='width:50%'>";
-			$options['afterimage']        = '<br />';
-		} elseif ( 5 == $newlayout ) {
-			$options['beforeimage']       = "<td style='width:100px'>";
-			$options['afterimage']        = '</td>';
-		}
-
-		$options['showdate']          = false;
-		$options['beforedate']        = '';
-		$options['afterdate']         = '<br />';
-
-		$options['showlargedescription']    = false;
-		$options['beforelargedescription']  = '';
-		$options['afterlargedescription']   = '<br />';
-
-		$options['displayweblink']    = 'false';
-		$options['beforeweblink']     = '';
-		$options['afterweblink']      = '<br />';
-
-		$options['showtelephone']     = 'false';
-		$options['beforetelephone']   = '';
-		$options['aftertelephone']    = '<br />';
-
-		$options['showemail']         = 'false';
-		$options['beforeemail']       = '';
-		$options['afteremail']        = '<br />';
-
-		$options['showlinkhits']      = false;
-		$options['beforelinkhits']    = '';
-		$options['afterlinkhits']     = '<br />';
-
-		$options['showrating']        = false;
-		$options['beforelinkrating']  = '';
-		$options['afterlinkrating']   = '<br />';
-
-		$options['showsubmittername']   = false;
-		$options['beforesubmittername'] = '';
-		$options['aftersubmittername']  = '<br />';
-
-		$options['showcatdesc']      = false;
-		$options['beforecatdesc']    = '';
-		$options['aftercatdesc']     = '<br />';
-
-		$options['showlinktags']      = false;
-		$options['beforelinktags']    = '';
-		$options['afterlinktags']     = '<br />';
-
-		$options['showlinkprice']      = false;
-		$options['beforelinkprice']    = '';
-		$options['afterlinkprice']     = '<br />';
-
-		$options['showcatname']      = false;
-		$options['beforecatname']    = '';
-		$options['aftercatname']     = '<br />';
-
-		$options['beforerss']         = '';
-		$options['afterrss']          = '<br />';
-
-		$options['addbeforelink']   = '<tr>';
-		$options['addafterlink']    = '</tr>';
-	}
-
-	update_option( $settingsname, $options );
-
-	return $options;
 }

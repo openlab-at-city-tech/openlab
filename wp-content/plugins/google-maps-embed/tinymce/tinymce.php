@@ -9,7 +9,7 @@ class add_cets_EmbedGmaps_button {
 	
 	var $pluginname = "cets_EmbedGmaps";
 	
-	function add_cets_EmbedGmaps_button()  {
+	function __construct()  {
 		
 		// Modify the version when tinyMCE plugins are changed.
 		add_filter('tiny_mce_version', array (&$this, 'change_tinymce_version') );

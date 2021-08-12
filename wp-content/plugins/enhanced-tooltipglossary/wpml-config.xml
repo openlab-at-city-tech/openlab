@@ -1,0 +1,33 @@
+<wpml-config>
+  <custom-types>
+    <custom-type translate="1">glossary</custom-type>
+  </custom-types>
+  <taxonomies>
+    <taxonomy translate="1">glossary-categories</taxonomy>
+    <taxonomy translate="1">glossary-tags</taxonomy>
+  </taxonomies>
+  <admin-texts>
+    <key name="cmtt_glossaryShowShareBoxLabel"/>
+    <key name="cmtt_index_letters"/>
+    <key name="cmtt_index_allLabel"/>
+    <key name="cmtt_glossary_backLinkText"/>
+    <key name="cmtt_glossary_backLinkBottomText"/>
+    <key name="cmtt_glossary_showRelatedArticlesTitle"/>
+    <key name="cmtt_glossary_relatedArticlesPrefix"/>
+    <key name="cmtt_glossary_addSynonymsTitle"/>
+    <key name="cmtt_glossaryTermDetailsLink"/>
+    <key name="cmtt_glossaryCategoriesLabel"/>
+    <key name="cmtt_glossary_SearchLabel"/>
+    <key name="cmtt_glossary_SearchButtonLabel"/>
+    <key name="cmtt_glossary_NoResultsLabel"/>
+    <key name="cmtt_glossarySearchHelp"/>
+    <key name="cmtt_glossary_AllCategoriesLabel"/>
+    <key name="cmtt_glossary_ClearLabel"/>
+    <key name="cmtt_glossary_showRelatedArticlesGlossaryTitle"/>
+    <key name="cmtt_glossary_showRelatedTermsTitle"/>
+    <key name="cmtt_glossary_relatedTermsPrefix"/>
+    <key name="cmtt_glossaryMobileSupportLabel"/>
+    <key name="cmtt_tooltipOnOffWidgetDisableText"/>
+    <key name="cmtt_tooltipOnOffWidgetEnableText"/>
+  </admin-texts>
+</wpml-config>

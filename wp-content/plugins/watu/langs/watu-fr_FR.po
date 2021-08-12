@@ -1,0 +1,1770 @@
+# Copyright (C) 2016 Watu
+# This file is distributed under the same license as the Watu package.
+msgid ""
+msgstr ""
+"Project-Id-Version: Watu 2.8.1\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/watu\n"
+"POT-Creation-Date: 2016-09-27 23:54+0200\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2016-10-02 22:55+0200\n"
+"Language-Team: \n"
+"X-Generator: Poedit 1.8.9\n"
+"Last-Translator: \n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Language: fr_FR\n"
+
+#: controllers/exam.php:8
+msgid "Test updated"
+msgstr "Test mis à jour"
+
+#: controllers/exam.php:9
+msgid "Error occured"
+msgstr "Une erreur est survenue"
+
+#: controllers/exam.php:19
+msgid "Test deleted"
+msgstr "Test supprimé"
+
+#: controllers/exam.php:135
+msgid ""
+"<p>Congratulations - you have completed %%QUIZ_NAME%%.</p>\n"
+"\n"
+"<p>You scored %%POINTS%% points out of %%MAX-POINTS%% points total.</p>\n"
+"\n"
+"<p>Your obtained grade is <b>%%GRADE-TITLE%%</b></p><p>%%GRADE-DESCRIPTION%"
+"%</p>\n"
+"\n"
+"<p>Your answers are shown below:<p>%%ANSWERS%%"
+msgstr ""
+"<h4><b>%%GRADE-TITLE%% </b></h4>\n"
+"\n"
+"<p><strong>Note: %%POINTS%% / %%MAX-POINTS%%</strong></p>\n"
+"\n"
+"<h6>%%GRADE-DESCRIPTION%%</h6>\n"
+"\n"
+"<p><span style=\"text-decoration: underline;\">Correction</span> :</p>\n"
+"\n"
+"%%ANSWERS%%"
+
+#: controllers/grades.php:9
+msgid "Unrecognized quiz ID"
+msgstr "ID du test non reconnu"
+
+#: controllers/show_exam.php:7
+msgid "Please go to <a href='%s'>%s</a> to view the test"
+msgstr "Veuillez aller sur <a href='%s'>%s</a> pour voir le test"
+
+#: controllers/show_exam.php:17
+msgid "Quiz not found."
+msgstr "Test non trouvé"
+
+#: controllers/show_exam.php:21
+msgid "You need to be registered and logged in to take this %s."
+msgstr "Vous devez être inscrit et connecté pour faire ce %s."
+
+#: controllers/show_exam.php:21 controllers/show_exam.php:36
+#: views/exam_form.php:44
+msgid "quiz"
+msgstr "test"
+
+#: controllers/show_exam.php:22
+msgid "Log in"
+msgstr "Se connecter"
+
+#: controllers/show_exam.php:24
+msgid "or"
+msgstr "ou"
+
+#: controllers/show_exam.php:24
+msgid "Register"
+msgstr "S’inscrire"
+
+#: controllers/show_exam.php:36
+msgid "Sorry, you can take this %s only once!"
+msgstr "Désolé, vous ne pouvez faire ce test qu’une seule fois !"
+
+#: controllers/show_exam.php:43
+msgid "Sorry, you can take this quiz only %d times."
+msgstr "Désolé, vous ne pouvez faire ce test que %d fois !"
+
+#: controllers/show_exam.php:69
+msgid "No answer to the verification question."
+msgstr "Veuillez répondre à la question de vérification"
+
+#: controllers/show_exam.php:79
+msgid "Wrong answer to the verification question."
+msgstr "Mauvaise réponse à la question de vérification"
+
+#: controllers/show_exam.php:121
+msgid "Question was not answered"
+msgstr "Pas de réponse à la question"
+
+#: controllers/show_exam.php:145 models/exam.php:93
+msgid "Failed"
+msgstr "Échec"
+
+#: controllers/show_exam.php:145
+msgid "Just Passed"
+msgstr "Passable"
+
+#: controllers/show_exam.php:147
+msgid "Satisfactory"
+msgstr "Satisfaisant"
+
+#: controllers/show_exam.php:147
+msgid "Competent"
+msgstr "Compétent"
+
+#: controllers/show_exam.php:147
+msgid "Good"
+msgstr "Bien"
+
+#: controllers/show_exam.php:147
+msgid "Very Good"
+msgstr "Très bien"
+
+#: controllers/show_exam.php:147
+msgid "Excellent"
+msgstr "Excellent"
+
+#: controllers/show_exam.php:147
+msgid "Unbeatable"
+msgstr "Imbattable"
+
+#: controllers/show_exam.php:147
+msgid "Cheater"
+msgstr "Tricheur"
+
+#: controllers/show_exam.php:154
+msgid "None"
+msgstr "Aucun"
+
+#: controllers/social-sharing.php:124
+msgid "Share your results on Facebook"
+msgstr "Partager vos résultats sur Facebook"
+
+#: controllers/takings.php:130
+msgid "User or IP;Date;Points;Result/Grade"
+msgstr "Utilisateur ou IP;Date;Points;Résultat/Note"
+
+#: controllers/takings.php:184 watu.php:121
+msgid "You do not have sufficient permissions to access this page"
+msgstr ""
+"Vous n’avez pas le niveau de permission requis pour accéder à cette page"
+
+#: controllers/takings.php:214
+msgid "You: %d%% correct"
+msgstr "Vous :  %d%% juste"
+
+#: controllers/takings.php:215
+msgid "Avg. %d%% correct"
+msgstr "Moy. :  %d%% juste"
+
+#: controllers/takings.php:216
+msgid "Your points: %s"
+msgstr "Vos points : %s"
+
+#: controllers/takings.php:217
+msgid "Avg. points: %s"
+msgstr "Moy. des points : %s"
+
+#: lib/functions.php:96
+msgid "User results on \"%s\""
+msgstr "Résultats de l’utilisateur pour \"%s\""
+
+#: lib/functions.php:97
+msgid "Guest"
+msgstr "Invité"
+
+#: lib/functions.php:112
+msgid "Your results on \"%s\""
+msgstr "Vos résultats pour  \"%s\""
+
+#: models/exam.php:52
+msgid ""
+"<p>Congratulations - you have completed %%QUIZ_NAME%%.</p>\n"
+"\n"
+"<p>You scored %%POINTS%% points out of %%MAX-POINTS%% points total.</p>\n"
+"\n"
+"<p>Your obtained grade is <b>%%GRADE-TITLE%%</b></p><p>%%GRADE-DESCRIPTION%"
+"%</p>"
+msgstr ""
+"<h4><b>%%GRADE-TITLE%% </b></h4>\n"
+"\n"
+"<p><strong>Note: %%POINTS%% / %%MAX-POINTS%%</strong></p>\n"
+"\n"
+"<h6>%%GRADE-DESCRIPTION%%</h6>\n"
+"\n"
+"<p><span style=\"text-decoration: underline;\">Correction</span> :</p>\n"
+"\n"
+"%%ANSWERS%%"
+
+#: models/exam.php:56
+msgid "Demo Quiz"
+msgstr "Test démo"
+
+#: models/exam.php:56
+msgid ""
+"This quiz is automatically created to help you get started. It will be "
+"created only once."
+msgstr ""
+"Ce test est créé automatiquement pour vous aider à démarrer. Il ne sera créé "
+"qu’une seule fois."
+
+#: models/exam.php:62
+msgid "Select the correct answer:"
+msgstr "Choisissez la bonne réponse :"
+
+#: models/exam.php:66
+msgid "The Earth is a star"
+msgstr "La terre est une étoile"
+
+#: models/exam.php:69
+msgid "The Sun is a planet"
+msgstr "Le soleil est une planète"
+
+#: models/exam.php:72
+msgid "The Earth is a planet"
+msgstr "La terre est une planète"
+
+#: models/exam.php:75
+msgid "Select all correct answers:"
+msgstr "Choisissez toutes les bonnes réponses :"
+
+#: models/exam.php:79
+msgid "WordPress is open source software"
+msgstr "Wordpress est un logiciel libre"
+
+#: models/exam.php:82
+msgid "There are no quiz plugins for WordPress"
+msgstr "Il n’y a pas de plugins de quiz pour Wordpress"
+
+#: models/exam.php:85
+msgid "WordPress can be used for a lot more than blogging"
+msgstr "Wordpress peut-être utilisé pour faire bien plus qu’un blog"
+
+#: models/exam.php:88
+msgid "Do you have any comments about this quiz?"
+msgstr "Avez-vous un commentaire à faire à propos de ce test ?"
+
+#: models/exam.php:93
+msgid "Sorry, you could not collect enough points to pass this quiz"
+msgstr "Désolé, vous n’avez pas eu assez de points pour réussir ce test"
+
+#: models/exam.php:96
+msgid "Passed"
+msgstr "Réussi"
+
+#: models/exam.php:96
+msgid "Congratulations, you passed!"
+msgstr "Félicitations, vous avez réussi !"
+
+#: options.php:37
+msgid "Options updated"
+msgstr "Options mises à jours"
+
+#: options.php:57
+msgid "What is the color of the snow? = white"
+msgstr "Quelle est la couleur de la neige ? = blanc"
+
+#: options.php:57
+msgid "Is fire hot or cold? = hot"
+msgstr "Le feu est-il chaud ou froid ? = chaud"
+
+#: options.php:58
+msgid "In which continent is Norway? = Europe"
+msgstr "Sur quel continent se trouve la Norvège ? = Europe"
+
+#: views/exam_form.php:13 views/question-form.html.php:5
+#: views/questions.html.php:6
+msgid "Back to quizzes"
+msgstr "Retour aux tests"
+
+#: views/exam_form.php:15 views/exams.html.php:43 views/grades.html.php:5
+#: watu.php:113
+msgid "Manage Questions"
+msgstr "Gestion Questions"
+
+#: views/exam_form.php:16 views/questions.html.php:7
+msgid "Manage Grades / Results"
+msgstr "Gestion Notes/Résultats"
+
+#: views/exam_form.php:23
+msgid "%s Name and Settings"
+msgstr "%s Nom et Paramètres"
+
+#: views/exam_form.php:23
+msgid "Quiz"
+msgstr "Test"
+
+#: views/exam_form.php:29
+msgid ""
+"Automatically publish this quiz in new post once I hit the \"Save\" button. "
+"(The new post will be auto-generated with the quiz title used for post "
+"title.)"
+msgstr ""
+"Automatiquement publier ce test dans un nouveau post une fois que j’ai "
+"cliqué sur le bouton « enregistrer ». (Le nouveau post sera auto-généré avec "
+"le titre du test comme titre du post.)"
+
+#: views/exam_form.php:31 views/sidebar.php:7
+msgid "Randomize questions"
+msgstr "Mélanger les questions"
+
+#: views/exam_form.php:31
+msgid "and pull random"
+msgstr "et poser au hasard"
+
+#: views/exam_form.php:32
+msgid ""
+"questions from the quiz. Leave 0 to pull all the questions (default "
+"behavior)."
+msgstr ""
+"questions du tests. Laissez 0 pour poser toutes les questions (par défaut)"
+
+#: views/exam_form.php:34
+msgid "Randomize answers"
+msgstr "Mélanger les réponses"
+
+#: views/exam_form.php:36
+msgid ""
+"Note: randomization will not work well if you are caching the page where "
+"your quiz is published!"
+msgstr ""
+"Note : les mélanges ne fonctionneront pas correctement si vous utilisez le "
+"cache pour la page sur laquelle le test est publié !"
+
+#: views/exam_form.php:38
+msgid "Show all questions on single page"
+msgstr "Montrer toutes les questions sur une seule page"
+
+#: views/exam_form.php:40
+msgid "Show 'previous question' button"
+msgstr "Montrer le bouton « question précédente »"
+
+#: views/exam_form.php:42
+msgid ""
+"Require user login (displays login and / or register link depending on your "
+"blog settings.)"
+msgstr ""
+"Utilisateur connecté requis (affichera un lien de connexion et/ou "
+"d’enregistrement conformément aux paramètres de votre blog.)"
+
+#: views/exam_form.php:44
+msgid "Allow users to submit the %s multiple times:"
+msgstr "Autoriser les utilisateurs à soumettre plusieurs fois le %s :"
+
+#: views/exam_form.php:46
+msgid "Allow"
+msgstr "Autoriser"
+
+#: views/exam_form.php:46
+msgid ""
+"times (For unlimited times enter 0) There is even more flexibility in "
+"WatuPRO."
+msgstr ""
+"fois (Pas de limites, entrez 0) Il y a encore plus de flexibilité dans "
+"WatuPRO"
+
+#: views/exam_form.php:48
+msgid ""
+"Notify me when someone takes this quiz (the email goes to the address given "
+"in your WordPress Settings page)."
+msgstr ""
+"Me prévenir quand quelqu’un fait ce test (l’email sera envoyer à l’adresse "
+"paramètre dans vos réglages Wordpress)."
+
+#: views/exam_form.php:50
+msgid "Email address(es) to notify:"
+msgstr "Adresse(s) email à prévenir :"
+
+#: views/exam_form.php:50
+msgid "You can specify multiple email addresses separated with comma."
+msgstr "Vous pouvez spécifier plusieurs adresses séparées par une virgule."
+
+#: views/exam_form.php:52
+msgid ""
+"Send email to the quiz taker (if taker is non-logged in this will generate a "
+"required email field on the quiz page)."
+msgstr ""
+"Envoyer un email à la personne ayant répondu au test (s’il n’est pas "
+"connecté cela générera un champs d’email requis sur la page du test)."
+
+#: views/exam_form.php:54
+msgid "Do not store user answers in the database to save DB space."
+msgstr ""
+"Ne pas enregistrer les réponses de l’utilisateur dans la base de données "
+"pour économiser de la place"
+
+#: views/exam_form.php:56
+msgid "Do not display question numbers."
+msgstr "Ne pas afficher les numéros de questions"
+
+#: views/exam_form.php:58
+msgid "Do not alert the user when skipping a non-required question."
+msgstr ""
+"Ne pas avertir l’utilisateur quand il passe une question non obligatoire"
+
+#: views/exam_form.php:60
+msgid "Anti-Spam Measures"
+msgstr "Mesures anti-spam"
+
+#: views/exam_form.php:61
+msgid "Require question based captcha to submit the quiz"
+msgstr "Exiger une question captcha pour soumettre le test"
+
+#: views/exam_form.php:62
+msgid ""
+"Use a \"honeypot\" field (It is almost as efficient as captchas but is "
+"unobtrusive and does not require any action from the user)"
+msgstr ""
+"Utiliser un champ « Honeypot » (presque aussi efficace qu’un captcha mais "
+"non-intrusif et ne requiert aucune action de l’utilisateur)"
+
+#: views/exam_form.php:67
+msgid "Correct Answer Display"
+msgstr "Affichage des bonnes réponses"
+
+#: views/exam_form.php:69
+msgid ""
+"Show the answer of a question immediately after the user have selected an "
+"answer. (Will not work in single page mode and <b>is not secure</b> - use it "
+"only for fun quizzes, not exams. You can handle exams in this mode with "
+"WatuPRO.)"
+msgstr ""
+"Montrer la bonne réponse immédiatement après que l’utilisateur ait choisi "
+"une réponse. (Ne fonctionne pas en mode « une seule page » et <b> non "
+"sécurisé </b> - à n’utiliser que pour les test fun, pas les examens. Vous "
+"pouvez gérer les examens dans ce mode avec WatuPRO.)"
+
+#: views/exam_form.php:70
+msgid ""
+"\"<b>Show answers at the end of the Quiz\" is now obsolete option.</b> "
+"Instead of using it, enter the %%ANSWERS%% variable where you want the "
+"results to appear."
+msgstr ""
+"« <b>Montrer les réponses à la fin du test » est une option obsolète.</b> À "
+"la place, mettre la variable %%ANSWERS%% où vous voulez que les résultats "
+"apparaissent."
+
+#: views/exam_form.php:75
+msgid "Description"
+msgstr "Description"
+
+#: views/exam_form.php:78
+msgid ""
+"If provided, description shows on top of the quiz. It can optionally be "
+"included in the final output as well."
+msgstr ""
+"Si fourni, la description apparaitra en haut du test. Elle peut aussi être "
+"inclut dans l’écran final, en option."
+
+#: views/exam_form.php:83
+msgid "Final Screen"
+msgstr "Écran final"
+
+#: views/exam_form.php:87
+msgid "Send different content to the notification email sent to user / admin."
+msgstr ""
+"Envoyer un contenu différent pour les mails de notification utilisateur / "
+"admin"
+
+#: views/exam_form.php:91
+msgid ""
+"If you leave this empty, the contents from the \"Final screen\" will be sent "
+"by email as well."
+msgstr ""
+"Si vous laissez ceci vide, le contenu de « l’écran final » sera envoyé par "
+"mail également."
+
+#: views/exam_form.php:92
+msgid ""
+"By default this content is used for both the email sent to user, and the "
+"email sent to admin. You can however use the %s tag to make the email "
+"contents different. The content before the %s tag will be sent to the user "
+"(if the corresponding checkbox is checked) and the content after the %s tag "
+"- to the admin."
+msgstr ""
+"Par défaut ce contenu est utilisé à la fois pour le mail envoyé à "
+"l’utilisateur et celui envoyé à l’admin. Vous pouvez néanmoins utiliser le "
+"tag %s pour différencier les contenus des mails. Le contenu avant le tag %s "
+"sera envoyé à l’utilisateur (si la case correspondante est cochée) et le "
+"contenu après le tag %s à l’admin."
+
+#: views/exam_form.php:95
+msgid "Usable Variables:"
+msgstr "Variables disponibles :"
+
+#: views/exam_form.php:97
+msgid "Variable"
+msgstr "Variable"
+
+#: views/exam_form.php:97
+msgid "Value"
+msgstr "Valeur"
+
+#: views/exam_form.php:98
+msgid ""
+"This will display the questions along with the answers that user gave to "
+"them marked as correct or incorrect."
+msgstr ""
+"Ceci affichera les questions avec les réponses données par l’utilisateur "
+"marquées comme juste ou fausse."
+
+#: views/exam_form.php:99
+msgid "The number of points collected. (The old %%SCORE%% tag also works)"
+msgstr ""
+"Le nombre de points collecté. (L’ancien tag %%SCORE%% fonctionne aussi)"
+
+#: views/exam_form.php:100
+msgid "Maximum number of points"
+msgstr "Nombre de points maximum"
+
+#: views/exam_form.php:101
+msgid ""
+"Shows the achieved grade - title and description together. If you want to "
+"design this better, you can use %%GRADE-TITLE%% for grade title and %%GRADE-"
+"DESCRIPTION%% for grade description"
+msgstr ""
+"Affiche la note obtenue - titre et description ensemble. Si vous voulez "
+"améliorer la présentation, vous pouvez utiliser %%GRADE-TITLE%% pour le "
+"titre de la note et %%GRADE-DESCRIPTION%% pour la description de la note"
+
+#: views/exam_form.php:102
+msgid ""
+"Number of correct answers. In multiple-select questions even one correct "
+"answer makes the question correct. In WatuPRO this is configurable"
+msgstr ""
+"Nombre de réponses justes. Dans les questions à choix multiple, un seul "
+"choix correct valide la réponse juste. Dans WatuPro ceci est configurable"
+
+#: views/exam_form.php:103
+msgid "Number of answers you got wrong"
+msgstr "Nombre de réponses fausses"
+
+#: views/exam_form.php:104
+msgid ""
+"A rating of your performance - it could be 'Failed'(0-39%), 'Just "
+"Passed'(40%-50%), 'Satisfactory', 'Competent', 'Good', 'Excellent' and "
+"'Unbeatable'(100%)."
+msgstr ""
+"Une évaluation de votre performance - ce peut-être 'Échec' (0-39%), "
+"'Passable' (40-50%), 'Satisfaisant', 'Compétent', 'Bien', 'Très bien', "
+"'Excellent' et 'Imbattable' (100%)."
+
+#: views/exam_form.php:104
+msgid ""
+"The rating can be changed only by <a href=\"%s\" target=\"_blank"
+"\">translating the plugin</a>. So we recommend you to use the grades "
+"instead. They are fully configurable right from this page."
+msgstr ""
+"L’évaluation ne peut être modifié que par la <a href=\"%s\" target=\"_blank"
+"\">traduction du plugin</a>. Donc nous vous conseillons d’utiliser plutôt "
+"les notes. Elles sont totalement paramètrables depuis cette page."
+
+#: views/exam_form.php:105
+msgid "The name of the quiz"
+msgstr "Le nom du test"
+
+#: views/exam_form.php:106
+msgid "The text entered in the description field."
+msgstr "Le texte entré dans le champs de description."
+
+#: views/exam_form.php:107
+msgid "The average points earned by the other quiz participants."
+msgstr "La moyenne des points obtenus par les autres participants au test"
+
+#: views/exam_form.php:108
+msgid "Shows the percentage of users collected less points on the quiz."
+msgstr ""
+"Montre le pourcentage d’utilisateurs qui ont obtenu moins de points au test"
+
+#: views/exam_form.php:109
+msgid ""
+"The user email address if we know it - use it only if you require / expect "
+"logged in users OR you have selected the option to email user their results "
+"(so email address will be requested)."
+msgstr ""
+"L’email de l’utilisateur si nous la connaissons - n’utilisez que si vous "
+"exigez / attendez que des utilisateurs loggués OU si vous avez choisi "
+"l’option d’envoyer par mail leurs résultats aux utilisateurs (ainsi "
+"l’adresse email sera requise). "
+
+#: views/exam_form.php:112
+msgid ""
+"The shortcode %s lets you display a chart of user points vs. average "
+"collected points. It accepts arguments <b>%s</b> and <b>%s</b> to specify "
+"the colors of the bars."
+msgstr ""
+"Le shortcode %s vous permet d’afficher un graphique des points de "
+"l’utilisateur vs la moyenne des points obtenus. Il accepte les arguments <b>"
+"%s</b> et <b>%s</b> pour spécifier les couleurs des barres."
+
+#: views/exam_form.php:122 views/question-form.html.php:168
+msgid "Save"
+msgstr "Enregistrer"
+
+#: views/exams.html.php:2
+msgid "Manage %s"
+msgstr "Gestion %s"
+
+#: views/exams.html.php:2
+msgid "Quizzes"
+msgstr "Tests"
+
+#: views/exams.html.php:6
+msgid "Watu for Wordpress is a light version of"
+msgstr "Watts pour wordpress est une version lite de"
+
+#: views/exams.html.php:8 views/options.html.php:7
+msgid "Go to"
+msgstr "Allez à"
+
+#: views/exams.html.php:8 views/options.html.php:3
+msgid "Watu Settings"
+msgstr "Paramètres Watu"
+
+#: views/exams.html.php:10 views/exams.html.php:57
+msgid "Create New Quiz"
+msgstr "Créer Nouveau Test"
+
+#: views/exams.html.php:12 views/options.html.php:8
+msgid "Social Sharing Options"
+msgstr "Option Partage"
+
+#: views/exams.html.php:14
+msgid ""
+"To publish a quiz copy its shortcode and place it in a post or page. Use "
+"only one quiz shortcode in each post or page."
+msgstr ""
+"Pour publier un test copiez son shortcode et copiez le dans un post ou une "
+"page. N’utilisez qu’un shortcode de test par post ou page."
+
+#: views/exams.html.php:19
+msgid "ID"
+msgstr "ID"
+
+#: views/exams.html.php:20
+msgid "Title"
+msgstr "Titre"
+
+#: views/exams.html.php:21
+msgid "Shortcode"
+msgstr "Shortcode"
+
+#: views/exams.html.php:22
+msgid "No. Questions"
+msgstr "N° Questions"
+
+#: views/exams.html.php:23
+msgid "View Results"
+msgstr "Voir les Résultats"
+
+#: views/exams.html.php:24 views/questions.html.php:22
+msgid "Action"
+msgstr "Action"
+
+#: views/exams.html.php:42
+msgid "Taken %d times"
+msgstr "Passé %d fois"
+
+#: views/exams.html.php:44 watu.php:115
+msgid "Manage Grades"
+msgstr "Gestion Notes"
+
+#: views/exams.html.php:45 views/questions.html.php:50
+msgid "Edit"
+msgstr "Éditer"
+
+#: views/exams.html.php:46
+msgid ""
+"You are about to delete this quiz? This will delete all the questions and "
+"answers within this quiz. Press 'OK' to delete and 'Cancel' to stop."
+msgstr ""
+"Vous êtes sur le point de supprimer ce test ? Toutes les questions et "
+"réponses du test seront supprimées. Cliquez 'OK' pour supprimer et 'Annuler' "
+"pour arrêter."
+
+#: views/exams.html.php:46 views/questions.html.php:51 views/takings.php:71
+#: views/takings.php:85
+msgid "Delete"
+msgstr "Supprimer"
+
+#: views/exams.html.php:51
+msgid "No Quizzes found."
+msgstr "Aucun Test trouvé."
+
+#: views/exams.html.php:59
+msgid "Get free traffic to your quizzes by submitting them to"
+msgstr "Obtenez du traffic gratuitement pour vos tests en les enregistrant sur"
+
+#: views/exams.html.php:59
+msgid "our directory."
+msgstr "notre répertoire"
+
+#: views/grades.html.php:3
+msgid "Manage Grading for Quiz '%s'"
+msgstr "Gestion des notes pour le test '%s'"
+
+#: views/grades.html.php:4 views/takings.php:7
+msgid "Back to quizzes list"
+msgstr "Retour liste tests"
+
+#: views/grades.html.php:6
+msgid "Edit quiz"
+msgstr "Éditer test"
+
+#: views/grades.html.php:9
+msgid "Add New Grade / Result"
+msgstr "Ajouter Nouv. Note / Résultat"
+
+#: views/grades.html.php:12 views/grades.html.php:26
+msgid "Grade Title:"
+msgstr "Titre Note :"
+
+#: views/grades.html.php:12 views/grades.html.php:26
+msgid "Description (optional):"
+msgstr "Description (optionel) :"
+
+#: views/grades.html.php:12 views/grades.html.php:26
+msgid "From points:"
+msgstr "Points min :"
+
+#: views/grades.html.php:12 views/grades.html.php:26
+msgid "To points:"
+msgstr "Points max :"
+
+#: views/grades.html.php:13 views/grades.html.php:27
+msgid "If this grade is achieved redirect to URL (optional):"
+msgstr "Si cette note est obtenue rediriger vers l’URL (optionel) :"
+
+#: views/grades.html.php:15
+msgid "Save new grade"
+msgstr "Enregistrer nouvelle note"
+
+#: views/grades.html.php:21
+msgid "Existing Grades / Quiz Results"
+msgstr "Notes existantes / Résultats Test"
+
+#: views/grades.html.php:29
+msgid "Save grade"
+msgstr "Enregistrer note"
+
+#: views/grades.html.php:30
+msgid "Delete grade"
+msgstr "Supprimer note"
+
+#: views/grades.html.php:48
+msgid "Please enter grade title"
+msgstr "Veuillez saisir le titre de la note :"
+
+#: views/grades.html.php:54
+msgid "Please enter From points, numbers only"
+msgstr "Veuillez saisir les points min, nombre seulement"
+
+#: views/grades.html.php:60
+msgid "Please enter To points, numbers only"
+msgstr "Veuillez saisir les points max, nombre seulement"
+
+#: views/grades.html.php:69 views/takings.php:112
+msgid "Are you sure?"
+msgstr "Êtes-vous sûr ?"
+
+#: views/help.html.php:2
+msgid "Watu - Help and Support"
+msgstr "Watts - Aide &amp; Support"
+
+#: views/help.html.php:5
+msgid "Creating Quizzes"
+msgstr "Création Tests"
+
+#: views/help.html.php:7
+msgid ""
+"Go to Watu Quizzes and click on \"Create new quiz\". Each quiz has title, "
+"description and various settings. The quiz also consists of questions and "
+"grades / results."
+msgstr ""
+"Allez dans les tests Watu et cliquez sur « Créer Nouveau Test ». Chaque test "
+"a un titre, une description et divers paramètres. Le test contient aussi des "
+"questions et des notes / résultats."
+
+#: views/help.html.php:8
+msgid ""
+"Questions are mandatory - you cannot have a quiz without at least one "
+"question. Grades are optional - for example if you want to use quizzes as "
+"surveys you might not need grades. But the regular quizzes will have grades "
+"because this is the whole purpose of a quiz - to calculate a result based on "
+"the collected points."
+msgstr ""
+"Les questions sont obligatoires - vous ne pouvez pas avoir de test sans au "
+"moins une question. Les notes sont optionnels- par exemple si vous voulez "
+"utiliser un test comme un sondage vous n’aurez pas besoin de notes. Mais les "
+"tests classiques auront des notes car c’est tout le principe d’un test - "
+"calculer un résultat basé sur les points obtenus."
+
+#: views/help.html.php:9
+msgid ""
+"Make sure to calculate how many points the user could collect if they answer "
+"all questions correctly or all wrong so your grades cover both edges of min/"
+"max collected points."
+msgstr ""
+"Vérifiez combien de points un utilisateur peut obtenir en répondant à toutes "
+"les questions justes ou toutes fausses pour que vos notes couvrent les "
+"points min et max obtenus."
+
+#: views/help.html.php:11
+msgid "Frequently Asked Questions"
+msgstr "FAQ"
+
+#: views/help.html.php:13
+msgid "Please check them <a href=\"%s\" target=\"_blank\">online</a>."
+msgstr "Veuillez les consulter <a href=\"%s\" target=\"_blank\">en ligne</a>."
+
+#: views/help.html.php:15
+msgid "Requesting Help"
+msgstr "Demander de l’aide"
+
+#: views/help.html.php:17
+msgid ""
+"When opening a <a href=\"%s\" target=\"_blank\">support thread</a> please "
+"provide URL (link) where we can see your problem."
+msgstr ""
+"Quand vous ouvrez un <a href=\"%s\" target=\"_blank\">ticket de support</a> "
+"merci de fournir une URL (lien) où nous pouvons voir le problème."
+
+#: views/help.html.php:19
+msgid "PRO Inquiries"
+msgstr "Questions PRO"
+
+#: views/help.html.php:21
+msgid ""
+"If you have pre-sales or support questions about WatuPRO please send them "
+"using the contact details on the <a href=\"%s\" target=\"_blank\">official "
+"WatuPRO site</a>. Do not use the wordpress.org forum for this - it allows "
+"only free plugin discussions."
+msgstr ""
+"Si vous avez besoin d’information avant achat ou d’aide pour WatuPRO, merci "
+"de poser vos questions via le formulaire de contact sur le <a href=\"%s\" "
+"target=\"_blank\">site officiel WatuPRO</a>. N’utilisez pas le forum de "
+"wordpress.org pour ça - il ne permet que des discussions sur le plugin "
+"gratuit."
+
+#: views/help.html.php:23
+msgid "MailChimp Integration"
+msgstr "Intégration Mailchimp"
+
+#: views/help.html.php:25
+msgid ""
+"You can integrate your quizzes with MailChimp so when someone completes a "
+"chosen quiz with a given result, they can be subscribed in a mailing list. "
+"You will need <a href=\"%s\" target=\"_blank\">this free bridge</a> to do "
+"that."
+msgstr ""
+"Vous pouvez intégrer vos tests avec Mailchimp pour que quand quelqu’un "
+"complète un certain test avec un certain résultat, il soit inscrit dans une "
+"mailing liste. Vous aurez besoin de <a href=\"%s\" target=\"_blank\">ce "
+"bridge gratuit</a> pour le faire."
+
+#: views/options.html.php:7
+msgid "Manage Your Exams"
+msgstr "Gestion Examens"
+
+#: views/options.html.php:12
+msgid "Send the automated emails from this address:"
+msgstr "Envoyer les emails automatiques depuis cette adresse :"
+
+#: views/options.html.php:13
+msgid ""
+"This defaults to your main admin email. However to set a friendlier sender "
+"name you can overwrite it here by entering your name in format: <b>Your Name "
+"&lt;email@domain.com&gt;</b><br>If you have problems with getting your "
+"emails delivered, please install a plugin like <a href=\"%s\" target=\"_blank"
+"\">Postman SMTP</a>. Watu will send the emails through the SMTP server that "
+"you congigure in it."
+msgstr ""
+"Par défaut ce sera votre email administrateur. Toutefois pour paramétrer un "
+"expéditeur plus sympathique vous pouvez le modifier en saisissant votre nom "
+"au format : <b>Votre Nom &lt;email@domain.com&gt;</b><br>Si vous avez des "
+"problèmes de délivrabilité, veuillez installer un plugin comme <a href=\"%s"
+"\" target=\"_blank\">Postman SMTP</a>. Watu enverra les emails via le "
+"serveur SMTP que vous y aurez configuré."
+
+#: views/options.html.php:15
+msgid ""
+"Enable debug mode to see SQL errors. (Useful in case you have any problems)"
+msgstr ""
+"Activer le mode Debug pour voir les erreurs SQL. (Utile si vous rencontrez "
+"un problème quelconque)"
+
+#: views/options.html.php:20
+msgid "Default Answer Type"
+msgstr "Type Réponse Défaut"
+
+#: views/options.html.php:27 views/question-form.html.php:123
+msgid "Single Answer"
+msgstr "Réponse unique"
+
+#: views/options.html.php:29 views/question-form.html.php:125
+msgid "Multiple Answers"
+msgstr "Réponses multiples"
+
+#: views/options.html.php:34
+msgid "Question based captcha"
+msgstr "Question captcha"
+
+#: views/options.html.php:36
+msgid ""
+"You can use a simple text-based captcha. We have loaded 3 basic questions "
+"but you can edit them and load your own. Make sure to enter only one "
+"question per line and use = to separate question from answer."
+msgstr ""
+"Vous pouvez utiliser un simple captcha texte. Nous avons chargé 3 questions "
+"basiques mais vous pouvez les éditer et charger les votre. Ne mettez qu’une "
+"question par ligne et utilisez = pour séparer la question de la réponse."
+
+#: views/options.html.php:39
+msgid ""
+"This question-based captcha can be enabled individually by selecting a "
+"checkbox in the quiz settings form. If you do not check the checkbox, the "
+"captcha question will not be generated."
+msgstr ""
+"Ce captcha peut être activé individuellement en cochant un case dans les "
+"réglages des paramètres du test. Si vous ne cochez pas la case, le captcha "
+"ne sera pas généré."
+
+#: views/options.html.php:45
+msgid "Role Management"
+msgstr "Gestion des Rôles"
+
+#: views/options.html.php:46
+msgid "WordPress roles that can administrate the plugin"
+msgstr "Rôles Wordpress qui peuvent administrer le plugin"
+
+#: views/options.html.php:48
+msgid ""
+"By default this is only the blog administrator. Here you can enable any of "
+"the other roles as well"
+msgstr ""
+"Par défaut ce n’est que l’administrateur du blog. Ici vous pouvez également "
+"autoriser tous les autres rôles"
+
+#: views/options.html.php:61
+msgid "Other settings"
+msgstr "Autres paramètres"
+
+#: views/options.html.php:63
+msgid ""
+"Use \"the_content\" instead of our custom content filter (do not select this "
+"unless adviced so)"
+msgstr ""
+"Utiliser « le contenu » plutôt que notre filtre de contenu personnalisé (ne "
+"pas sélectionner à moins que l’on vous le conseil)"
+
+#: views/options.html.php:68
+msgid "Database Option"
+msgstr "Option Base de Données"
+
+#: views/options.html.php:73
+msgid "Delete stored Watu data when deinstalling the plugin."
+msgstr ""
+"Supprimer les données Watu enregistrées à la désinstallation du plugin."
+
+#: views/options.html.php:76
+msgid "Please confirm by typing \"yes\" in the box:"
+msgstr "Merci de confirmer en tapant « yes » dans la boîte :"
+
+#: views/options.html.php:84
+msgid "Save Options"
+msgstr "Enregistrer Options"
+
+#: views/options.html.php:96
+msgid "Ajax in quizzes"
+msgstr "Ajax dans les tests"
+
+#: views/options.html.php:98
+msgid ""
+"Here you can select quizzes which will be submitted by regular post submit "
+"rather than using Ajax. You may want to do this mostly for the following "
+"reason:"
+msgstr ""
+"Ici vous pouvez choisir les test qui seront soumis par post régulier plutôt "
+"qu’avec Ajax. Vous pourriez faire ce choix surtout pour les raisons "
+"suivantes :"
+
+#: views/options.html.php:101
+msgid ""
+"To embed in the \"Final screen\" content from plugins that do not normally "
+"work well in Ajax mode."
+msgstr ""
+"Pour inclure dans « l’écran final » du contenu de plugins qui ne fonctionne "
+"pas correctement en mode Ajax."
+
+#: views/options.html.php:104
+msgid "The selected quizzes will NOT use Ajax when users submit them."
+msgstr ""
+"Les tests sélectionnés N’utiliseront PAS Ajax lors de la soumission de "
+"l’utilisateur."
+
+#: views/options.html.php:114
+msgid "Save Ajax Related Settings"
+msgstr "Enregistrer les paramètres relatifs à Ajax"
+
+#: views/question-form.html.php:2 views/question-form.html.php:107
+#: views/questions.html.php:20 views/show_exam.html.php:64
+msgid "Question"
+msgstr "Question"
+
+#: views/question-form.html.php:4
+msgid "Back to questions"
+msgstr "Retour aux questions"
+
+#: views/question-form.html.php:30
+msgid "Correct Answer "
+msgstr "Réponse Juste"
+
+#: views/question-form.html.php:41
+msgid "Points: "
+msgstr "Points :"
+
+#: views/question-form.html.php:63
+msgid "Please enter the question"
+msgstr "Veuillez saisir la question"
+
+#: views/question-form.html.php:76
+msgid "Please enter atleast two answers"
+msgstr "Veuillez saisir au moins 2 réponses"
+
+#: views/question-form.html.php:113
+msgid "Answer Type"
+msgstr "Type de Réponse"
+
+#: views/question-form.html.php:127
+msgid "Open End (Essay)"
+msgstr "Ouverte (dissertation)"
+
+#: views/question-form.html.php:128
+msgid "This is a required question"
+msgstr "C’est une question obligatoire"
+
+#: views/question-form.html.php:132
+msgid "Answers"
+msgstr "Réponses"
+
+#: views/question-form.html.php:134
+msgid ""
+"Answers to open-end questions will be considered matched when there is exact "
+"case-insensitive match. For more flexibility check <a href=\"%s\" target="
+"\"_blank\">WatuPRO</a>"
+msgstr ""
+"Les réponses aux questions ouvertes seront considérées correctes quand il y "
+"a une correspondance insensible à la casse exacte. Pour plus de flexibilité "
+"voir <a href=\"%s\" target=\"_blank\">WatuPRO</a>"
+
+#: views/question-form.html.php:138
+msgid "Correct Answer"
+msgstr "Réponse Juste"
+
+#: views/question-form.html.php:140
+msgid "Points:"
+msgstr "Points :"
+
+#: views/question-form.html.php:145
+msgid "Add New Answer"
+msgstr "Ajouter Nouvelle Réponse"
+
+#: views/question-form.html.php:151
+msgid "Explanation / feedback"
+msgstr "Explications / feedback"
+
+#: views/question-form.html.php:156
+msgid ""
+"You can use this field to explain the correct answer. This will be shown "
+"only at the end of the quiz if you have selected the option to display the "
+"correct answers. You can use the %s tag to specify different feedback for "
+"correctly or incorrectly answered question. Place the explanation that will "
+"be shown for correct answer before the %s tag, and the one that will be "
+"shown for wrong answer after the %s tag. Using the split tag will NOT work "
+"in \"Show the answer of a question immediately after the user have selected "
+"an answer.\" mode.<br> This feedback option is a lot more flexible in <a "
+"href=\"%s\" target=\"_blank\">WatuPRO</a>."
+msgstr ""
+"Vous pouvez utiliser ce champs pour expliquer la réponse juste. Ça "
+"n’apparaitre qu’à la fin du test et si vous avez choisi l’option d’affichage "
+"des réponses justes. Vous pouvez utiliser le tag %s pour spécifier "
+"différents feedback pour les réponses justes ou fausses. Placez "
+"l’explication à afficher en cas de réponse juste avant le tag %s, et celle à "
+"afficher en cas de réponse fausse après le tag %s. L’utilisation de ce tag "
+"NE fonctionnera PAS en mode « Montrer la réponse à une question "
+"immédiatement après que l’utilisateur ait donné une réponse ».<br> Cette "
+"option de feedback est beaucoup plus flexible avec <a href=\"%s\" target="
+"\"_blank\">WatuPRO</a>."
+
+#: views/question-form.html.php:170
+msgid "Go to Questions Page"
+msgstr "Allez à la Page des Questions"
+
+#: views/questions.html.php:2
+msgid "Manage Questions in"
+msgstr "Gestion Questions dans"
+
+#: views/questions.html.php:6
+msgid "Edit this quiz"
+msgstr "Éditer ce test"
+
+#: views/questions.html.php:14
+msgid "To add this exam to your blog, insert the code "
+msgstr "Pour ajouter ce test à votre blog, insérer le code "
+
+#: views/questions.html.php:14
+msgid "into any post or page."
+msgstr "dans un post ou une page."
+
+#: views/questions.html.php:21
+msgid "Number Of Answers"
+msgstr "Nombre de Réponses"
+
+#: views/questions.html.php:41
+msgid "Move Up"
+msgstr "Remonter"
+
+#: views/questions.html.php:44
+msgid "Move Down"
+msgstr "Descendre"
+
+#: views/questions.html.php:51
+msgid ""
+"You are about to delete this question. This will delete the answers to this "
+"question. Press 'OK' to delete and 'Cancel' to stop."
+msgstr ""
+"Vous êtes sur le point de supprimer cette question. Cela supprimera les "
+"réponses de cette question. Cliquez 'OK' pour supprimer et 'Annuler' pour "
+"arrêter."
+
+#: views/questions.html.php:58
+msgid "No questions found."
+msgstr "Aucune question trouvée."
+
+#: views/questions.html.php:66
+msgid "Create New Question"
+msgstr "Créer Nouvelle question"
+
+#: views/sharing-options.html.php:2
+msgid "Watu Social Sharing"
+msgstr "Partage Watu"
+
+#: views/sharing-options.html.php:4
+msgid "Back to Watu Options"
+msgstr "Retour aux options Watu"
+
+#: views/sharing-options.html.php:6
+msgid ""
+"You can use the shortcode %s to display Facebook share button on the \"Final "
+"screen\" on your quiz."
+msgstr ""
+"Vous pouvez utiliser le shortcode %s pour afficher le bouton de partage "
+"Facebook sur « l’écran final » de votre test."
+
+#: views/sharing-options.html.php:7
+msgid ""
+"The social media buttons are provided by Arbenting. Feel free to replace "
+"them with other icons by replacing the files in img/share folder of the "
+"plugin."
+msgstr ""
+"Les boutons de réseaux sociaux sont fourni par Arbenting. Vous pouvez les "
+"remplacer par d’autres icônes en remplaçant les fichiers dans le dossier img/"
+"share du plugin."
+
+#: views/sharing-options.html.php:10
+msgid "Facebook Sharing"
+msgstr "Partage Facebook"
+
+#: views/sharing-options.html.php:12
+msgid "Your Facebook App ID:"
+msgstr "Votre App ID Facebook :"
+
+#: views/sharing-options.html.php:12
+msgid "Get one here"
+msgstr "Obtenez en une ici"
+
+#: views/sharing-options.html.php:13
+msgid "If you leave it empty, no Facebook share button will be generated."
+msgstr "Si vous laissez vide, aucun bouton de partage Facebook ne sera généré."
+
+#: views/sharing-options.html.php:15
+msgid "Title:"
+msgstr "Titre"
+
+#: views/sharing-options.html.php:16
+msgid "Text:"
+msgstr "Texte :"
+
+#: views/sharing-options.html.php:17
+msgid ""
+"You can use the variables {{{quiz-name}}}, {{{url}}}, {{{grade-title}}} and "
+"{{{grade-description}}}."
+msgstr ""
+"Vous pouvez utiliser les variables {{{quiz-name}}}, {{{url}}}, {{{grade-"
+"title}}} et {{{grade-description}}}."
+
+#: views/sharing-options.html.php:19
+msgid ""
+"If you leave title and text empty, grade title and grade description will be "
+"used respectively."
+msgstr ""
+"Si vous laissez vide le titre et le texte, le titre et la description de la "
+"note seront utilisés respectivement."
+
+#: views/sharing-options.html.php:21
+msgid ""
+"IMPORTANT: Facebook needs to be able to access your site to retrieve the "
+"social sharing data. If the site is on localhost or behind a htaccess login "
+"box sharing will not work properly."
+msgstr ""
+"IMPORTANT : Facebook doit pouvoir avoir accès à votre site pour récupérer "
+"les données de partage social. Si votre site est en localhost ou protégé par "
+"htaccess, le partage ne fonctionnera pas correctement."
+
+#: views/sharing-options.html.php:23
+msgid "Twitter Sharing Options:"
+msgstr "Options Partage Twitter :"
+
+#: views/sharing-options.html.php:25
+msgid ""
+"If you leave \"Tweet text\" empty the tweet text will be extracted from the "
+"grade description. If it is empty, the grade title will be used."
+msgstr ""
+"Si vous laissez « Tweet text » vide le texte du tweet sera extrait de la "
+"description de la note. Si elle est vide le titre de la note sera utilisé."
+
+#: views/sharing-options.html.php:27
+msgid "Show Tweet button"
+msgstr "Montrer le bouton Tweet"
+
+#: views/sharing-options.html.php:30
+msgid "Show count"
+msgstr "Montrer compte"
+
+#: views/sharing-options.html.php:31
+msgid "Via @"
+msgstr "Via @"
+
+#: views/sharing-options.html.php:32
+msgid "Hashtag #"
+msgstr "Hashtag #"
+
+#: views/sharing-options.html.php:33
+msgid "Tweet text (No more than 140 chars):"
+msgstr "text du tweet (max 140 caractères) :"
+
+#: views/sharing-options.html.php:34
+msgid ""
+"You can use the variables {{{quiz-name}}}, {{{grade-title}}} and {{{grade-"
+"description}}}."
+msgstr ""
+"Vous pouvez utiliser les variables {{{quiz-name}}}, {{{grade-title}}} et "
+"{{{grade-description}}}."
+
+#: views/sharing-options.html.php:37
+msgid ""
+"More social sharing options like Google Plus, LinkedIn, and Email are "
+"available in <a href=\"%s\" target=\"_blank\">WatuPRO</a>"
+msgstr ""
+"Plus de partage comme Google Plus, LinkedIn et par Email sont disponibles "
+"avec <a href=\"%s\" target=\"_blank\">WatuPRO</a>"
+
+#: views/sharing-options.html.php:40
+msgid "Save All Settings"
+msgstr "Enregistrer les paramètres"
+
+#: views/show_exam.html.php:6
+msgid "Please enter your email:"
+msgstr "Veuillez saisir votre email :"
+
+#: views/show_exam.html.php:53
+msgid "Loading"
+msgstr "Chargement"
+
+#: views/show_exam.html.php:61 watu.php:339
+msgid "Show Answer"
+msgstr "Montrer la réponse"
+
+#: views/show_exam.html.php:64
+msgid "of"
+msgstr "sur"
+
+#: views/show_exam.html.php:66
+msgid "Previous"
+msgstr "Précédent"
+
+#: views/show_exam.html.php:68
+msgid "Next"
+msgstr "Suivant"
+
+#: views/show_exam.html.php:70
+msgid "Show Results"
+msgstr "Montrer les résultats"
+
+#: views/show_exam.html.php:72
+msgid "Submit"
+msgstr "Envoyé"
+
+#: views/sidebar.php:2
+msgid "Go PRO!"
+msgstr "Passer PRO"
+
+#: views/sidebar.php:4
+msgid "Get more powerful features by"
+msgstr "Obtenez des fonctionnalités plus puissantes en"
+
+#: views/sidebar.php:4
+msgid "upgrading to the PRO version:"
+msgstr "passant à la version PRO :"
+
+#: views/sidebar.php:7
+msgid "and pull random numbers."
+msgstr "et tirer des nombres au hasard."
+
+#: views/sidebar.php:8
+msgid "Detailed stats."
+msgstr "Stats détaillées."
+
+#: views/sidebar.php:8
+msgid "You can see who and how has answered to your exam."
+msgstr "Vous pouvez voir qui et comment a répondu à votre examen."
+
+#: views/sidebar.php:9
+msgid "Printable certificates"
+msgstr "Certificats à imprimer"
+
+#: views/sidebar.php:9
+msgid "assigned to the different grades."
+msgstr "assigné aux différents notes."
+
+#: views/sidebar.php:10
+msgid "Export results and import/export questions"
+msgstr "Exporter les résultats et importer/exporter les questions"
+
+#: views/sidebar.php:10
+msgid "from/to CSV file."
+msgstr "Depuis/vers une fichier CSV."
+
+#: views/sidebar.php:11
+msgid "Students login."
+msgstr "Connexion étudiants."
+
+#: views/sidebar.php:11
+msgid "Registered users have a dashboard, can re-take exams etc."
+msgstr ""
+"Les utilisateurs enregistrés ont une interface, peuvent repasser les examens "
+"etc."
+
+#: views/sidebar.php:12
+msgid "Questions and exam categories."
+msgstr "Catégories de questions et examens."
+
+#: views/sidebar.php:12
+msgid "User groups with different access to them."
+msgstr "Des groupes d’utilisateurs avec différents accès."
+
+#: views/sidebar.php:13
+msgid "Copy quizzes"
+msgstr "Copier les tests"
+
+#: views/sidebar.php:13
+msgid "and their questions into a new or existing quizzes."
+msgstr "et leurs questions dans un nouveau test ou un test existant."
+
+#: views/sidebar.php:14
+msgid "More question types"
+msgstr "Plus de types de questions"
+
+#: views/sidebar.php:14
+msgid "and more control on defining correctly answered questions."
+msgstr "et plus de contrôle pour définir les réponses justes."
+
+#: views/sidebar.php:15
+msgid "Shortcodes"
+msgstr "Shortcodes"
+
+#: views/sidebar.php:15
+msgid "for user reports and user dashboard."
+msgstr "pour les rapports d’utilisateurs et l’interface utilisateur."
+
+#: views/sidebar.php:16
+msgid "More social sharing"
+msgstr "Plus de réseaux sociaux"
+
+#: views/sidebar.php:16
+msgid "options: Google+, LinkedIn, Twitter."
+msgstr "options: Google+, LinkedIn, Twitter."
+
+#: views/sidebar.php:17
+msgid "Transfer all your data"
+msgstr "Transférer toutes vos données"
+
+#: views/sidebar.php:17
+msgid "from free to PRO with a single click."
+msgstr "de gratuit à PRO en un simple clic."
+
+#: views/sidebar.php:18
+msgid "And a lot more - just come to see!"
+msgstr "Et beaucoup plus - Venez voir !"
+
+#: views/sidebar.php:21
+msgid "Just go ahead and"
+msgstr "Allez-y et"
+
+#: views/sidebar.php:21
+msgid "take the tour"
+msgstr "faites le tour"
+
+#: views/sidebar.php:21
+msgid "or check the"
+msgstr "ou allez voir la "
+
+#: views/sidebar.php:21
+msgid "online demo."
+msgstr "Démo en ligne."
+
+#: views/sidebar.php:23
+msgid ""
+"Upgrading to PRO comes with <strong>60 days money-back guarantee</strong>, "
+"one year <strong>free upgrades</strong> and one year <strong>free support</"
+"strong>."
+msgstr ""
+"Upgrader en PRO vous donne droit à <strong>60 jours de garantie satisfait ou "
+"remboursé</strong>, un an <strong>de mises à jour gratuites</strong> et un "
+"an <strong>support gratuit</strong>."
+
+#: views/sidebar.php:28
+msgid "Need Support?"
+msgstr "Besoin d’aide ?"
+
+#: views/sidebar.php:30
+msgid "Please ask your question in the"
+msgstr "Merci de poser votre question dans le"
+
+#: views/sidebar.php:30
+msgid "support forum at Wordpress."
+msgstr "forum d’aide sur Wordpress."
+
+#: views/sidebar.php:32
+msgid ""
+"Use the forum only for issues concerning the free version. If you have a pre-"
+"sales question about Watu PRO please contact us"
+msgstr ""
+"N’utilisez le forum que pour les problèmes concernât la version gratuite. Si "
+"vous avez des questions avant d’acheter Watu PRO, merci de nous contacter"
+
+#: views/sidebar.php:32
+msgid "through our site."
+msgstr "Sur notre site."
+
+#: views/sidebar.php:37
+msgid "Help To Spread The Word!"
+msgstr "Aidez à passer le mot !"
+
+#: views/sidebar.php:39
+msgid "If you like this plugin you can do some of the following:"
+msgstr "Si vous aimez ce plugin vous pouvez :"
+
+#: views/sidebar.php:42
+msgid "Rate it 5 starts at Wordpress.org"
+msgstr "Donnez lui 5 étoiles sur Wordpress.org"
+
+#: views/sidebar.php:43
+msgid "Let others know about it by blogging or posting"
+msgstr "Parlez-en sur votre site ou votre blog"
+
+#: views/sidebar.php:43
+msgid "our home page"
+msgstr "notre page d’accueil"
+
+#: views/sidebar.php:43
+msgid "on social networks."
+msgstr "sur les réseaux sociaux."
+
+#: views/sidebar.php:44
+msgid "Go PRO"
+msgstr "Passer PRO"
+
+#: views/sidebar.php:44
+msgid "to empower your site with extra benefits"
+msgstr "pour offrir à votre site des avantages supplémentaires"
+
+#: views/taking_details.html.php:3
+msgid "Details for taken exam "
+msgstr "Détails de l’examen passé"
+
+#: views/taking_details.html.php:5
+msgid "User:"
+msgstr "Utilisateur :"
+
+#: views/taking_details.html.php:5
+msgid "<b>N/A</b>"
+msgstr "<b>N/A</b>"
+
+#: views/taking_details.html.php:7
+msgid "Date:"
+msgstr "Date :"
+
+#: views/taking_details.html.php:8
+msgid "Total points collected:"
+msgstr "Total des points reçus :"
+
+#: views/taking_details.html.php:9
+msgid "Achieved grade:"
+msgstr "Note obtenue :"
+
+#: views/taking_details.html.php:12
+msgid ""
+"The textual details below show exact snapshot of the questions in the way "
+"that student have seen them when taking the exam. If you have added, edited "
+"or deleted questions since then you will not see these changes here."
+msgstr ""
+"Les détails textuels ci-dessous montre les questions exactement comme les "
+"ont vues les étudiants quand ils ont passé l’examen. Si vous avez ajouté, "
+"modifié ou supprimer des questions depuis, vous ne verrez pas ces "
+"changements ici."
+
+#: views/takings.php:3
+msgid "Users who submitted the exam '%s'"
+msgstr "Utilisateurs ayant soumis l’examen '%s'"
+
+#: views/takings.php:5
+msgid ""
+"A lot more detailed reports, filters, exports, and other important features "
+"are available in"
+msgstr ""
+"Des rapports, filtres, exports bien plus détaillés et d’autres "
+"fonctionnalités importantes sont disponibles dans"
+
+#: views/takings.php:9
+msgid "Filter/search these records"
+msgstr "Filtrer/rechercher ces enregistrements"
+
+#: views/takings.php:11
+msgid "Export as CSV (semicolon delimited)"
+msgstr "Exporter en CSV (délimité par point virgule)"
+
+#: views/takings.php:11
+msgid "(Filters apply)"
+msgstr "(Filtres appliqués)"
+
+#: views/takings.php:13
+msgid "Delete all user-submitted data for this exam"
+msgstr "Supprimer toutes les données utilisateurs de cet examen"
+
+#: views/takings.php:15
+msgid "Shortcode to publish a simplified version of this page:"
+msgstr "Shortcode pour publier une version simplifiée de cette page :"
+
+#: views/takings.php:22
+msgid "Username"
+msgstr "Username"
+
+#: views/takings.php:23 views/takings.php:29 views/takings.php:35
+#: views/takings.php:41
+msgid "Equals"
+msgstr "Égale"
+
+#: views/takings.php:24 views/takings.php:30 views/takings.php:36
+msgid "Starts with"
+msgstr "Commence par"
+
+#: views/takings.php:25 views/takings.php:31 views/takings.php:37
+msgid "Ends with"
+msgstr "Fini par"
+
+#: views/takings.php:26 views/takings.php:32 views/takings.php:38
+msgid "Contains"
+msgstr "Contient"
+
+#: views/takings.php:28
+msgid "Email"
+msgstr "Email"
+
+#: views/takings.php:34
+msgid "IP Address"
+msgstr "Adresse IP"
+
+#: views/takings.php:40
+msgid "Date Taken"
+msgstr "Date de passage"
+
+#: views/takings.php:42
+msgid "Is before"
+msgstr "est avant"
+
+#: views/takings.php:43
+msgid "Is after"
+msgstr "est après"
+
+#: views/takings.php:45
+msgid "Points received"
+msgstr "Points reçus"
+
+#: views/takings.php:46
+msgid "Equal"
+msgstr "Égale"
+
+#: views/takings.php:47
+msgid "Are less than"
+msgstr "sont inférieur à"
+
+#: views/takings.php:48
+msgid "Are more than"
+msgstr "sont supérieur à"
+
+#: views/takings.php:51
+msgid "Grade/result equals:"
+msgstr "Note/résultat ="
+
+#: views/takings.php:52
+msgid "- Any grade / result -"
+msgstr "- Tous les notes / résultats -"
+
+#: views/takings.php:56
+msgid "(This filter will exclude grades earned prior to Watu version 2.4.7)"
+msgstr "(Ce filtre exclura les notes obtenues avant la version 2.4.7 de Watu)"
+
+#: views/takings.php:58
+msgid "Search/Filter"
+msgstr "Recherche/Filtre"
+
+#: views/takings.php:59
+msgid "Clear Filters"
+msgstr "Annuler Filtres"
+
+#: views/takings.php:66
+msgid "Name"
+msgstr "Nom"
+
+#: views/takings.php:67
+msgid "IP"
+msgstr "IP"
+
+#: views/takings.php:68
+msgid "Date"
+msgstr "Date"
+
+#: views/takings.php:69
+msgid "Points"
+msgstr "Points"
+
+#: views/takings.php:69
+msgid "Result"
+msgstr "Résultat"
+
+#: views/takings.php:71
+msgid "Details"
+msgstr "Détails "
+
+#: views/takings.php:77
+msgid "N/a"
+msgstr "N/a"
+
+#: views/takings.php:83
+msgid "n/a"
+msgstr "n/a"
+
+#: views/takings.php:84
+msgid "view"
+msgstr "Voir"
+
+#: views/takings.php:91
+msgid "Previous page"
+msgstr "Page Précédente"
+
+#: views/takings.php:93
+msgid "Next page"
+msgstr "Page Suivante"
+
+#: views/takings.php:96
+msgid "No results match your search criteria."
+msgstr "Aucun résultats ne correspond à votre recherche."
+
+#: views/takings.php:118
+msgid "Are you sure? This will delete ALL user results for this quiz!"
+msgstr ""
+"Êtes-vous sûr? Ceci effacera TOUS les résultats de l’utilisateur pour ce "
+"test !"
+
+#: watu.php:106
+msgid "Watu Quizzes"
+msgstr "Tests Watu"
+
+#: watu.php:107
+msgid "Settings"
+msgstr "Paramètres"
+
+#: watu.php:108
+msgid "Social Sharing"
+msgstr "Réseaux sociaux"
+
+#: watu.php:109
+msgid "Help &amp; Support"
+msgstr "Aide &amp; Support"
+
+#: watu.php:112
+msgid "Add/Edit Quiz"
+msgstr "Ajouter/Modifier Test"
+
+#: watu.php:114
+msgid "Add/Edit Question"
+msgstr "Ajouter/Modifier Question"
+
+#: watu.php:116
+msgid "Exam submissions"
+msgstr "Soumissions d’examen"
+
+#: watu.php:120
+msgid "Your are not allowed to to perform this operation"
+msgstr "Vous n’êtes pas autorisé à faire cette opération"
+
+#: watu.php:290
+msgid ""
+"All the questions in the quiz along with their answers are shown below. Your "
+"answers are bolded. The correct answers have a green background while the "
+"incorrect ones have a red background."
+msgstr ""
+"Toutes les questions du test ainsi que leurs réponses sont ci-dessous. Vos "
+"réponses sont en gras. Les réponses justes sont sur fond vert tandis que les "
+"réponses fausses sont sur fond rouge."
+
+#: watu.php:307
+msgid ""
+"<h2>Thank you for activating Watu!</h2> <p>Please go to your <a href=\"tools."
+"php?page=watu_exams\">Quizzes page</a> to get started! If this is the first "
+"time you have activated the plugin there will be a small demo quiz "
+"automatically created for you. Feel free to explore it to get better idea "
+"how things work.</p>"
+msgstr ""
+"<h2>Merci d’avoir activé Watu!</h2> <p>Merci d’aller sur votre <a href="
+"\"tools.php?page=watu_exams\">page des tests</a> pour commencer ! Si c’est "
+"la première fois que vous avez activé le plugin il y aura un petit test démo "
+"créé automatiquement pour vous. N’hésitez pas à l’explorer pour avoir une "
+"meilleure idée du fonctionnement de ce plugin.</p>"
+
+#: watu.php:337
+msgid "You have missed to answer a required question"
+msgstr "vous n’avez pas répondu à une question obligatoire"
+
+#: watu.php:338
+msgid "You did not select any answer. Are you sure you want to continue?"
+msgstr ""
+"Vous n’avez choisi aucune réponse. Êtes-vous sûr de vouloir continuer ?"
+
+#: watu.php:340
+msgid "You need to answer the verification question"
+msgstr "Vous devez répondra à la question de vérification"
+
+#: watu.php:341
+msgid "Try again"
+msgstr "Essayez encore"
+
+#: watu.php:342
+msgid "Valid email address is required."
+msgstr "Un email valide est requis"

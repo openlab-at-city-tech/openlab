@@ -38,6 +38,121 @@ class Tribe__Assets {
 	public function __construct() {
 		// Hook the actual registering of.
 		add_action( 'init', [ $this, 'register_in_wp' ], 1, 0 );
+		add_filter( 'script_loader_tag', [ $this, 'filter_tag_async_defer' ], 50, 2 );
+
+		// Enqueue late.
+		add_filter( 'script_loader_tag', [ $this, 'filter_add_localization_data' ], 500, 2 );
+	}
+
+	/**
+	 * Handles adding localization data, when attached to `script_loader_tag` which allows dependencies to load in their
+	 * localization data as well.
+	 *
+	 * @since 4.13.0
+	 *
+	 * @param string $tag    Tag we are filtering.
+	 * @param string $handle Which is the ID/Handle of the tag we are about to print.
+	 *
+	 * @return string Script tag with the localization variable HTML attached to it.
+	 */
+	public function filter_add_localization_data( $tag, $handle ) {
+		// Only filter for own own filters.
+		if ( ! $asset = $this->get( $handle ) ) {
+			return $tag;
+		}
+
+		// Bail when not dealing with JS assets.
+		if ( 'js' !== $asset->type ) {
+			return $tag;
+		}
+
+		// Only localize on JS and if we have data.
+		if ( empty( $asset->localize ) ) {
+			return $tag;
+		}
+
+		global $wp_scripts;
+
+		// Makes sure we have an Array of Localize data.
+		if ( is_object( $asset->localize ) ) {
+			$localization = [ $asset->localize ];
+		} else {
+			$localization = (array) $asset->localize;
+		}
+
+		/**
+		 * Check to ensure we haven't already localized it before.
+		 *
+		 * @since 4.5.8
+		 */
+		foreach ( $localization as $localize ) {
+			if ( in_array( $localize->name, $this->localized ) ) {
+				continue;
+			}
+
+			// If we have a Callable as the Localize data we execute it.
+			if ( is_callable( $localize->data ) ) {
+				$localize->data = call_user_func( $localize->data, $asset );
+			}
+
+			wp_localize_script( $asset->slug, $localize->name, $localize->data );
+
+			$this->localized[] = $localize->name;
+		}
+
+		// Fetch the HTML for all the localized data.
+		ob_start();
+		$wp_scripts->print_extra_script( $asset->slug, true );
+		$localization_html = ob_get_clean();
+
+		// After printing it remove data;|
+		$wp_scripts->add_data( $asset->slug, 'data', '' );
+
+		return $localization_html . $tag;
+	}
+
+	/**
+	 * Filters the Script tags to attach Async and/or Defer based on the rules we set in our Asset class.
+	 *
+	 * @since 4.13.0
+	 *
+	 * @param string $tag    Tag we are filtering.
+	 * @param string $handle Which is the ID/Handle of the tag we are about to print.
+	 *
+	 * @return string Script tag with the defer and/or async attached.
+	 */
+	public function filter_tag_async_defer( $tag, $handle ) {
+		// Only filter for own own filters.
+		if ( ! $asset = $this->get( $handle ) ) {
+			return $tag;
+		}
+
+		// Bail when not dealing with JS assets.
+		if ( 'js' !== $asset->type ) {
+			return $tag;
+		}
+
+		// When async and defer are false we bail with the tag.
+		if ( ! $asset->defer && ! $asset->async ) {
+			return $tag;
+		}
+
+		$tag_has_async = false !== strpos( $tag, ' async ' );
+		$tag_has_defer = false !== strpos( $tag, ' defer ' );
+		$replacement = '<script ';
+
+		if ( $asset->async && ! $tag_has_async ) {
+			$replacement .= 'async ';
+		}
+
+		if ( $asset->defer && ! $tag_has_defer ) {
+			$replacement .= 'defer ';
+		}
+
+		$replacement_src  = $replacement . 'src=';
+		$replacement_type = $replacement . 'type=';
+
+		return str_replace( [ '<script src=', '<script type=' ], [ $replacement_src, $replacement_type ], $tag );
 	}
 
 	/**
@@ -225,43 +340,28 @@ class Tribe__Assets {
 			}
 
 			if ( 'js' === $asset->type ) {
-				wp_enqueue_script( $asset->slug );
-
-				// Only localize on JS and if we have data.
-				if ( ! empty( $asset->localize ) ) {
-					// Makes sure we have an Array of Localize data.
-					if ( is_object( $asset->localize ) ) {
-						$localization = [ $asset->localize ];
-					} else {
-						$localization = (array) $asset->localize;
-					}
-
-					/**
-					 * Check to ensure we haven't already localized it before.
-					 *
-					 * @since 4.5.8
-					 */
-					foreach ( $localization as $localize ) {
-						if ( in_array( $localize->name, $this->localized ) ) {
-							continue;
-						}
-
-						// If we have a Callable as the Localize data we execute it.
-						if ( is_callable( $localize->data ) ) {
-							$localize->data = call_user_func( $localize->data, $asset );
-						}
-
-						wp_localize_script( $asset->slug, $localize->name, $localize->data );
-						$this->localized[] = $localize->name;
-					}
+				if ( $asset->print && ! $asset->already_printed ) {
+					$asset->already_printed = true;
+					wp_print_scripts( [ $asset->slug ] );
 				}
+				// We print first, and tell the system it was enqueued, WP is smart not to do it twice.
+				wp_enqueue_script( $asset->slug );
 
 				// If available, load the script translations.
 				if ( isset( $asset->translations['domain'], $asset->translations['path'] ) && function_exists( 'wp_set_script_translations' ) ) {
 					wp_set_script_translations( $asset->slug, $asset->translations['domain'], $asset->translations['path'] );
 				}
 			} else {
+				if ( $asset->print && ! $asset->already_printed ) {
+					$asset->already_printed = true;
+					wp_print_styles( [ $asset->slug ] );
+				}
+				// We print first, and tell the system it was enqueued, WP is smart not to do it twice.
 				wp_enqueue_style( $asset->slug );
+			}
+
+			if ( ! empty( $asset->after_enqueue ) && is_callable( $asset->after_enqueue ) ) {
+				call_user_func_array( $asset->after_enqueue, [ $asset ] );
 			}
 
 			$asset->already_enqueued = true;
@@ -439,8 +539,16 @@ class Tribe__Assets {
 			'groups'        => [],
 			'version'       => $version,
 			'media'         => 'all',
+
+			'print'         => false,
+
+			'async'         => false,
+			'defer'         => false,
+
 			'in_footer'     => true,
 			'is_registered' => false,
+
+			// Origin related params
 			'origin_path'   => null,
 			'origin_url'    => null,
 			'origin_name'   => null,
@@ -448,8 +556,14 @@ class Tribe__Assets {
 			// Bigger Variables at the end.
 			'localize'      => [],
 			'conditionals'  => [],
+
 			// Used to handle Translations handled in the JavaScript side of the Assets.
 			'translations'  => [],
+
+			// Execute after the asset is enqueued.
+			'after_enqueue'    => null,
+			'already_enqueued' => false,
+			'already_printed'  => false,
 		];
 
 		// Merge Arguments.
@@ -485,16 +599,6 @@ class Tribe__Assets {
 		}
 
 		/**
-		 * Deprecated filter to allow changing version based on the type of Asset.
-		 *
-		 * @todo remove on 4.6
-		 * @deprecated 4.3
-		 *
-		 * @param string $version
-		 */
-		$asset->version = apply_filters( "tribe_events_{$asset->type}_version", $asset->version );
-
-		/**
 		 * Filter to change version number on assets.
 		 *
 		 * @since 4.3
@@ -514,7 +618,7 @@ class Tribe__Assets {
 			$asset->priority = 1;
 		}
 
-		$is_vendor = strpos( $asset->file, 'vendor/' ) !== false ? true : false;
+		$is_vendor = strpos( $asset->file, 'vendor/' ) !== false || strpos( $asset->file, 'node_modules/' ) !== false ? true : false;
 
 		// Setup the actual URL.
 		if ( filter_var( $asset->file, FILTER_VALIDATE_URL ) ) {

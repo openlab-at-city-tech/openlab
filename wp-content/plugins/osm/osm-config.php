@@ -52,11 +52,13 @@ define ("Osm_OpenTopoMap_Tiles", 'https://{a-c}.tile.opentopomap.org/{z}/{x}/{y}
 define ("Osm_OL_LibraryPath", OSM_PLUGIN_URL.'js/OL/2.13.1/');
 define ("Osm_OL_LibraryLocation", OSM_PLUGIN_URL."js/OL/2.13.1/OpenLayers.js");
 
-define ("Osm_OL_3_LibraryLocation", OSM_PLUGIN_URL."js/OL/6.4.3/ol.js");
-define ("Osm_OL_3_CSS", OSM_PLUGIN_URL."js/OL/6.4.3/ol.css");
+define ("Osm_OL_3_LibraryLocation", OSM_PLUGIN_URL."js/OL/6.5.0/ol.js");
+define ("Osm_OL_3_CSS", OSM_PLUGIN_URL."js/OL/6.5.0/ol.css");
 define ("Osm_map_CSS", OSM_PLUGIN_URL."css/osm_map.css");
 define ("Osm_OL_3_Ext_LibraryLocation", OSM_PLUGIN_URL."js/osm-v3-plugin-lib.js");
 define ("Osm_OL_3_MetaboxEvents_LibraryLocation", OSM_PLUGIN_URL."js/osm-metabox-events.js");
+define ("Osm_OL_3_Metabox_LibraryLocation", OSM_PLUGIN_URL."js/osm-metabox.js");
+
 define ("Osm_OL_3_Ext_CSS", OSM_PLUGIN_URL."css/osm_map_v3.css");
 
 // OpenSeaMap scripts

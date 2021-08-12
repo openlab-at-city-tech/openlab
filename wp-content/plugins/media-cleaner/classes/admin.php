@@ -80,6 +80,7 @@ class Meow_WPMC_Admin extends MeowCommon_Admin {
       'wpmc_file_op_buffer' => get_option( 'wpmc_file_op_buffer', 20 ),
       'wpmc_delay' => get_option( 'wpmc_delay', 100 ),
       'wpmc_shortcodes_disabled' => get_option( 'wpmc_shortcodes_disabled' ),
+      'wpmc_posts_per_page' => get_option( 'wpmc_posts_per_page', 10 ),
     ];
   }
 

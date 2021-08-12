@@ -3770,6 +3770,8 @@ OpenLab.nav = (function ($) {
 			OpenLab.nav.focusActions();
 			OpenLab.nav.blurActions();
 
+			OpenLab.nav.addBorderToIconGroups();
+
 			OpenLab.nav.hyphenateInit();
 
 						OpenLab.nav.adminToolbarPosition();
@@ -3915,6 +3917,9 @@ OpenLab.nav = (function ($) {
 				}
 			);
 
+		},
+		addBorderToIconGroups() {
+			$('.icon-group-1').last().addClass('last-icon-in-group');
 		},
 		removeDefaultScreenReaderShortcut: function () {
 

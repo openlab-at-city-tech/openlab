@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<Document>
+  <name>WP OSM Plugin sample</name>
+    <Style id="black_pin">
+      <IconStyle>
+        <scale>1</scale>
+        <Icon>
+          <href>../../../../wp-content/plugins/osm/icons/mic_black_pinother_02.png</href>
+        </Icon>
+        <hotSpot x="20" y="2" xunits="pixels" yunits="pixels"/>
+      </IconStyle>
+    </Style>
+     <Style id="green_pin">
+      <IconStyle>
+        <scale>1</scale>
+        <Icon>
+          <href>../../../../wp-content/plugins/osm/icons/mic_green_pinother_02.png</href>
+        </Icon>
+        <hotSpot x="20" y="2" xunits="pixels" yunits="pixels"/>
+      </IconStyle>
+    </Style>
+    <Placemark>
+    <name>First Marker</name>
+    <description><![CDATA[
+      <div style="width:300px; height:200px">
+        <img src="../../../../wp-content/plugins/osm/images/Company_01.jpg"/>
+      </div>
+]]></description>
+    <styleUrl>#black_pin</styleUrl>
+    <Point><coordinates>17.130,49.977,0</coordinates></Point>
+  </Placemark>
+  <Placemark>
+    <name>Second Marker</name>
+    <description>
+      This is the text for the second marker!
+    </description>
+    <styleUrl>#green_pin</styleUrl>
+    <Point><coordinates>17.133,49.979,0</coordinates></Point>
+  </Placemark>
+    <Placemark>
+    <name>Third Marker</name>
+    <description>
+       This is the text for third marker!
+    </description>
+    <styleUrl>#green_pin</styleUrl>
+    <Point><coordinates>17.134,49.979,0</coordinates></Point>
+  </Placemark>
+  </Document>
+</kml>

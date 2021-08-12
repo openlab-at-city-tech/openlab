@@ -87,7 +87,7 @@ class B2S_Ship_Navbar {
         $content .= '</div>';
         $content .= '<div class="b2s-network-details">';
         $content .= '<h4>' . esc_html($username) . '</h4>';
-        $content .= '<p>' .esc_html(($data->networkId == 19 && $data->networkType == 1 && isset($this->networkKindName[$data->networkKind]) ? $this->networkKindName[$data->networkKind] : (($data->networkId == 4) ? esc_html__('Blog', 'blog2social') : $this->networkTypeName[$data->networkType])) . ' | ' . $this->neworkName[$data->networkId]) . '</p>';
+        $content .= '<p>' .esc_html(($data->networkId == 19 && $data->networkType == 1 && isset($this->networkKindName[$data->networkKind]) ? $this->networkKindName[$data->networkKind] : (($data->networkId == 4) ? esc_html__('Blog', 'blog2social') : (($data->networkId == 12) ? (($data->networkType == 0) ? esc_html__('Personal', 'blog2social') : esc_html__('Business', 'blog2social')) : $this->networkTypeName[$data->networkType]))) . ' | ' . $this->neworkName[$data->networkId]) . '</p>';
         $content .= '</div>';
         $content .= '<div class="b2s-network-status" data-network-auth-id="' . esc_attr($data->networkAuthId) . '">';
         $content .= '<span class="b2s-network-hide b2s-network-status-img glyphicon glyphicon-ok glyphicon-success"></span>';

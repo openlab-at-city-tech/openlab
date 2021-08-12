@@ -2,8 +2,6 @@
 
 namespace TheLion\OutoftheBox;
 
-require_once OUTOFTHEBOX_ROOTDIR.'/vendors/dropbox-sdk/vendor/autoload.php';
-
 class Authorization
 {
     /**
@@ -268,7 +266,7 @@ class Authorization
         $dump = preg_replace('/^O:\d+:"[^"]++"/', 'O:8:"stdClass"', $dump);
 
         // 3. Make private and protected properties public.
-        $dump = preg_replace_callback('/:\d+:"\0.*?\0([^"]+)"/', [&$this, 'calc_key_length'], $dump);
+        $dump = preg_replace_callback('/:\d+:"\0.*?\0([^"]+)"/', [$this, 'calc_key_length'], $dump);
 
         // 4. Unserialize the modified object again.
         return unserialize($dump);

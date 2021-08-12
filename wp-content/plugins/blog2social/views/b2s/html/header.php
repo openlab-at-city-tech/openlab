@@ -94,7 +94,7 @@ if (!B2S_System::isblockedArea('B2S_USER_POLICY', B2S_PLUGIN_ADMIN)) {
 
 <div class="panel panel-group b2s-meta-tags-yoast b2s-meta-tags-success" style="display:<?php echo $showYoast; ?>;">
     <div class="panel-body">
-        <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('You have Yoast SEO active. Blog2Social Social Meta Tags overrides the meta tags from Yoast SEO.', 'blog2social'); ?>
+        <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('You have both Yoast SEO and Blog2Social Meta Tags active. Please make sure that you use only one plugin to set social meta tags so that the networks can show the link preview of your post correctly.', 'blog2social'); ?><br><?php echo sprintf(__('Get more information in the <a href="%s" target="_blank">social meta tag guide</a>.', 'blog2social'), B2S_Tools::getSupportLink('open_graph_tags')) ?>
     </div>
 </div>
 

@@ -31,7 +31,7 @@ class Latest_Past_View extends View {
 	 *
 	 * @var bool
 	 */
-	protected static $publicly_visible = true;
+	protected static $publicly_visible = false;
 
 	/**
 	 * Safe list of Templates to display when Latest Past Events is Active.
@@ -141,6 +141,7 @@ class Latest_Past_View extends View {
 		'latest-past/event/date-tag',
 		'latest-past/event/date/featured',
 		'latest-past/event/date/meta',
+		'latest-past/event/featured-image',
 
 		// Add-ons.
 		'components/filter-bar',

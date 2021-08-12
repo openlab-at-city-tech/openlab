@@ -2,7 +2,7 @@
 Contributors: Anlino
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=anders%40andersnoren%2ese&lc=US&item_name=Free%20WordPress%20Themes%20from%20Anders%20Noren&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted
 Requires at least: 4.5
-Tested up to: 5.5
+Tested up to: 5.7.1
 Requires PHP: 5.6
 Stable tag: trunk
 License: GPLv2 or later
@@ -41,6 +41,18 @@ Source: http://www.unsplash.com
 
 
 == Changelog ==
+
+Version 2.1.2 (2021-05-05)
+-------------------------
+- Fixed issue with duplicate #s IDs when having multiple search forms by switching to the HTML5 markup version of the form, and updated search styles targeting accordingly.
+- Added the wide-blocks style.css theme tag.
+
+Version 2.1.1 (2021-04-26)
+-------------------------
+- A11y: Added skip link, changed the .wrapper element to use the main element and gave it the site-content id.
+- Compressed screenshot.jpg to shave off 100KB.
+- Bumped "Tested up to" to 5.7.1.
+- Updated author URL to not include www.
 
 Version 2.1.0 (2020-08-26)
 -------------------------

@@ -1,24 +1,24 @@
 ===Blog2Social: Social Media Auto Post & Scheduler===
 Contributors: Blog2Social, pr-gateway
 Requires PHP: 5.5.3
-Tags: auto post, auto publish, social media scheduling, social media calendar, social media automation, social media share, auto-publish, scheduling, social media post, social url share, social network share, share tweet, share links, share this, share text posts, share images, share video links, social tools, admin, api, auto share to, autopost, auto-Posting, auto-schedule, auto-schedule social media posts, automatic social sharing plugin, blog marketing, blog2social, blogger, buffer, crossposting, cross-promotion, cross-promoting, bloglovin, bloglovin auto post, facebook, facebook auto post, facebook pages, google auto post, instagram, instagram auto post, jetpack, jetpack sharing, linkedin, linkedin auto post, medium, medium auto post, multiposting, pinterest, re-post, scheduling plugin, social media, social media auto publish, social media button, social media manager, social media plugin, social media publishing, social media scheduling tool, social media sharing, social media tool, social network auto publish, social network icon, social network widget, socialmedia, timing, torial, torial auto post, tumblr, twitter, twitter auto post, xing, xing auto post, xing groups, xing gruppen, xing personal profiles, xing company profiles, xing business pages, xing pages, xing seiten, auto post scheduler, repost, social media management, facebook fan page auto post, facebook profile auto post, social auto post, social autoposting, flickr, flickr auto posting, linkedin, linkedin auto posting, linkedin profile, facebook group, facebook gruppen, reddit, reddit auto posting, reddit auto post, social media calendar, editorial calendar, calendar plugin, Social Media Automatisierung, Social Media Management, Kalender, Planungs Kalender, Social Media Kalender, Content Marketing, Revive, Revive posts, Revive old posts, old posts, Reshare, Re-Share, automatically re-post, automatically reshare, auto repost, auto republish, recycle posts, bulk schedule, Google My Business, Google posts, imgur, vk, vkontakte, Vkontakte.ru, vk.com. Telegram, Telegram channels, Telegram groups, share multiple images, image gallery 
+Tags: auto post, auto publish, social media scheduling, social media calendar, social media automation, social media share, auto-publish, scheduling, social media post, social url share, social network share, share tweet, share links, share this, share text posts, share images, share video links, social tools, admin, api, auto share to, autopost, auto-Posting, auto-schedule, auto-schedule social media posts, automatic social sharing plugin, blog marketing, blog2social, blogger, buffer, crossposting, cross-promotion, cross-promoting, bloglovin, bloglovin auto post, facebook, facebook auto post, facebook pages, google auto post, instagram, instagram auto post, jetpack, jetpack sharing, linkedin, linkedin auto post, medium, medium auto post, multiposting, pinterest, re-post, scheduling plugin, social media, social media auto publish, social media button, social media manager, social media plugin, social media publishing, social media scheduling tool, social media sharing, social media tool, social network auto publish, social network icon, social network widget, socialmedia, timing, torial, torial auto post, tumblr, twitter, twitter auto post, xing, xing auto post, xing groups, xing gruppen, xing personal profiles, xing company profiles, xing business pages, xing pages, xing seiten,instagram business, auto post scheduler, repost, social media management, facebook fan page auto post, facebook profile auto post, social auto post, social autoposting, flickr, flickr auto posting, linkedin, linkedin auto posting, linkedin profile, facebook group, facebook gruppen, reddit, reddit auto posting, reddit auto post, social media calendar, editorial calendar, calendar plugin, Social Media Automatisierung, Social Media Management, Kalender, Planungs Kalender, Social Media Kalender, Content Marketing, Revive, Revive posts, Revive old posts, old posts, Reshare, Re-Share, automatically re-post, automatically reshare, auto repost, auto republish, recycle posts, bulk schedule, Google My Business, Google posts, imgur, vk, vkontakte, Vkontakte.ru, vk.com. Telegram, Telegram channels, Telegram groups, share multiple images, image gallery 
 Donate link: https://paypal.me/adenion
 Requires at least: 4.7.0
-Tested up to: 5.6
-Stable tag: 6.6.4
+Tested up to: 5.7
+Stable tag: 6.7.2
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Autopost, schedule and share blog posts and contents on social media, pages & groups on Facebook, Twitter, LinkedIn, Instagram, XING etc.
+Autopost, schedule and share blog posts and contents on social media, pages & groups on Facebook, Twitter, LinkedIn, Instagram Business, XING etc.
 
 == Description ==
 **Social Media Auto-Posting and Scheduling Plugin for WordPress Sites and Blogs.** 
-Autopost, cross-promote, schedule and automatically share your blog posts to social networks such as **Facebook, Twitter, Google My Business, LinkedIn, XING, Instagram, Pinterest, Imgur, Flickr, Reddit, VK.com, Medium, Tumblr, Torial, Diigo, Bloglovin and Telegram.**
+Autopost, cross-promote, schedule and automatically share your blog posts to social networks such as **Facebook, Twitter, Google My Business, LinkedIn, XING, Instagram Business, Pinterest, Imgur, Flickr, Reddit, VK.com, Medium, Tumblr, Torial, Diigo, Bloglovin and Telegram.**
 Blog2Social automatically creates social media posts for your content and auto-posts at the best times for each network. Save time and pain of manually sharing and promoting your site on social media.
 
 _Compatible with WooCommerce, Gutenberg Editor, Hummingbird, Bitly, Rebrand.ly, Sniply, WP Automatic Plugin, Page Builder & RSS Importer._
 
-* Version 6.6: Share text-posts and video links, Instagram hashtag shuffle and Telegram add-on for your Smart or Pro license
+* Version 6.7: Instagram Business Account, Post Templates
 
 Download Blog2Social today to make your social media marketing for your WordPress site or blog easier than ever. Blog2Social is a freemium plugin, with a free comprehensive basic version and premium plans offering more advanced features. To ensure compliance with the high quality standards of the new networks’ API rules and community guidelines, some functions of the auto-poster are premium features and not part of the free version. 
 The Blog2Social free version offers you a wide range of features. ([See what’s included in the free version](https://wordpress.org/plugins/blog2social/#faq "Blog2Social Free Features")). 
@@ -30,7 +30,7 @@ To benefit from all the advanced features for automatic sharing and scheduling y
 * **Google My Business** (Premium) - Post to your Business Listing on Google
 * **LinkedIn** - Post to your profile (Free) or page (Premium)
 * **XING** - Post to your profile (Free), page (Premium), and in groups (Premium) 
-* **Instagram** - Post to your Instagram profile (Free)
+* **Instagram** - Post to your Instagram Business Account (Premium)
 * **Pinterest** - Post to all your different Pinboards (Free)
 * **Imgur** - Post to your Imgur profile (Free)
 * **Flickr** - Post to your Flickr profile (Free)
@@ -47,7 +47,7 @@ To benefit from all the advanced features for automatic sharing and scheduling y
 
 BLOG2SOCIAL FREE
 
-* Share your posts and pages on 15 different networks: Twitter, Facebook (profile and page), LinkedIn (profile), XING (profile), Instagram, Pinterest, Imgur, Reddit, Torial, Medium, Tumblr, Flickr, Diigo, Bloglovin, and VK at once.
+* Share your posts and pages on 13 different networks: Twitter, Facebook (profile and page), LinkedIn (profile), XING (profile), Pinterest, Reddit, Torial, Medium, Tumblr, Flickr, Diigo and Bloglovin at once.
 * Customize your social media posts with unique personal comments, hashtags, handles, emojis, and select an image or animated GIF of your choice. 
 * You can even edit the complete HTML markup for re-publishing your post on Tumblr, Torial, and Medium. 
 * Manage all users posts and pages and share them on your channels.
@@ -133,7 +133,7 @@ The Blog2Social Plugin is available in the following language versions
 * Thanks to [Almaz](https://almazworks.com/ "Almaz") for translating this plugin into Russian
 * Thanks to [Olivier](https://extraspeech.com/ "Olivier") for translating this plugin into French
 * Thanks to [Daniel](https://bananklubben.se/ "Daniel Guldstrand") for translating this plugin into Swedish
-* Thanks to [Olga](https://jascin.net "Olga Jascin") and [Francesco](https://ceotech.it "Francesco Palmieri") for translating this plugin into Italian
+* Thanks to [Olga](https://jascin.net "Olga Jascin"), [Francesco](https://ceotech.it "Francesco Palmieri") and [Stefano](https://stefanocassone.com "Stefano Cassone") for translating this plugin into Italian
 
 == Installation ==
 1. Go to the Admin Panel of your WordPress dashboard
@@ -166,7 +166,7 @@ Blog2Social is a freemium plugin with a free comprehensive basic version and pre
 = What can I do with the free version? =
 
 There is quite a lot you can do with the free version of Blog2Social for your social media marketing:
-* You can share your blog posts and pages as well as content from other sources on 13 different networks: Twitter, Facebook (profile and page), LinkedIn (profile), XING (profile), Instagram, Pinterest, Reddit, Torial, Medium, Tumblr, Flickr, Diigo, Bloglovin, and VK at once.
+* You can share your blog posts and pages as well as content from other sources on 13 different networks: Twitter, Facebook (profile and page), LinkedIn (profile), XING (profile), Pinterest, Reddit, Torial, Medium, Tumblr, Flickr, Diigo and Bloglovin at once.
 * You can customize your social media posts with personal comments, hashtags, handles, emojis, and select an image of your choice. You can even edit the complete HTML markup for re-publishing your post on Tumblr, Torial, and Medium.
 With the free version you can also:
 * manage all users’ posts and pages and share them on your channels
@@ -221,6 +221,12 @@ To get started with the basics of Blog2Social and maybe find some useful tips an
 7. Keep track of your shared posts and scheduling plan with the Social Media Calendar.
 
 == Changelog ==
+= 6.7.2 = 
+Usability Optimization
+= 6.7.1 = 
+Usability Optimization
+= 6.7.0 = 
+Instagram Business Solution & Usability Optimization
 = 6.6.4 = 
 Usability Optimization
 = 6.6.3 = 
@@ -269,54 +275,14 @@ Usability Optimization
 Usability Optimization, Rebrandly integration, url parameter settings
 = 6.0.0 = 
 New Image Posts, Imgur, Animated Gifs and Emojis
-= 5.9.0 = 
-Usability Optimization & Gif support
-= 5.8.1 = 
-Usability Optimization
-= 5.8.0 = 
-Wordpress Multisite compatible
-= 5.7.2 = 
-Additional Security Update and improvements
-= 5.7.1 = 
-Additional Security Update and improvements
-= 5.7.0 = 
-Save your social media posts as drafts
-= 5.6.1 = 
-Improvments and Bugfixes Posting Template
-= 5.6.0 = 
-Post Templates
-= 5.5.0 = 
-Team function
-= 5.4.1 = 
-Usability Optimization
-= 5.4.0 = 
-New Content Curation features and Debugger Tool
-= 5.3.0 = 
-A new look, improved support hub and calendar
-= 5.2.0 = 
-New XING Interface and Google + News
-= 5.1.4 = 
-Connection of Blog2Social and press distribution service PR- Gateway and additional language extension
-= 5.1.3 = 
-Additional Security Update
-= 5.1.2 = 
-Security Update
-= 5.1.1 = 
-Introducing Instant Sharing for Google+ 
-= 5.1.0 = 
-Advanced Best Time Manager 
-= 5.0.4 = 
-Network Format and Calendar Optimization
-= 5.0.3 =
-Usability Optimization 
-= 5.0.2 =
-Usability Optimization
-= 5.0.1 =
-Usability Optimization
-= 5.0.0 =
-Content Curation with links, WooCommerce compatibility, gutenberg editor compatibility
 
 == Upgrade Notice ==
+= 6.7.2 = 
+Usability Optimization
+= 6.7.1 = 
+Usability Optimization
+= 6.7.0 = 
+Instagram Business Solution & Usability Optimization
 = 6.6.4 = 
 Usability Optimization
 = 6.6.3 = 
@@ -365,49 +331,3 @@ Usability Optimization
 Usability Optimization, Rebrandly integration, url parameter settings
 = 6.0.0 = 
 New Image Posts, Imgur, Animated Gifs and Emojis
-= 5.9.0 = 
-Usability Optimization & Gif support
-= 5.8.1 = 
-Usability Optimization
-= 5.8.0 = 
-Wordpress Multisite compatible
-= 5.7.2 = 
-Additional Security Update and improvements
-= 5.7.1 = 
-Additional Security Update and improvements
-= 5.7.0 = 
-Save your social media posts as drafts
-= 5.6.1 = 
-Improvments and Bugfixes Posting Template
-= 5.6.0 = 
-Post Templates
-= 5.5.0 = 
-Team function
-= 5.4.1 = 
-Usability Optimization
-= 5.4.0 = 
-New Content Curation features and Debugger Tool
-= 5.3.0 = 
-A new look, improved support hub and calendar
-= 5.2.0 = 
-Usability Optimization
-= 5.1.4 = 
-Usability Optimization, language portuguese
-= 5.1.3 = 
-Usability Optimization
-= 5.1.2 = 
-Usability Optimization
-= 5.1.1 = 
-Usability Optimization, google plus instant sharing
-= 5.1.0 = 
-Usability Optimization, new content seeding plan
-= 5.0.4 = 
-Usability Optimization, calendar Optimization
-= 5.0.3 =
-Usability Optimization
-= 5.0.2 =
-Usability Optimization
-= 5.0.1 =
-Usability Optimization
-= 5.0.0 =
-Content Curation with links, WooCommerce compatibility, gutenberg editor compatibility

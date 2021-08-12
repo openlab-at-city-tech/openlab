@@ -2666,55 +2666,80 @@ img {
   }
 }
 
-.qtip.su-qtip {
-  max-width: 480px !important;
-}
-
 .su-tooltip {
-  display: inline-block;
-}
-
-.su-qtip-size-1 {
-  font-size: 0.8em !important;
-}
-
-.su-qtip-size-2 {
-  font-size: 0.9em !important;
-}
-
-.su-qtip-size-3 {
-  font-size: 1em !important;
-}
-
-.su-qtip-size-4 {
-  font-size: 1.1em !important;
-}
-
-.su-qtip-size-5 {
-  font-size: 1.2em !important;
-}
-
-.su-qtip-size-6 {
-  font-size: 1.3em !important;
-}
-
-.su-tooltip-content {
   display: none;
 }
 
-.su-tooltip-content > :last-child {
-  margin-bottom: 0;
+.su-tooltip.su-tooltip-visible {
+  display: block;
 }
 
-.qtip-content .su-tooltip-content img,
-.qtip-content .su-tooltip-content object,
-.qtip-content .su-tooltip-content iframe,
-.qtip-content .su-tooltip-content embed {
-  max-width: 430px;
+.su-tooltip-inner {
+  display: block;
+  position: relative;
+  padding: 0.7em 0.85em;
 }
 
-.qtip-content .su-tooltip-content .su-u-responsive-media-yes {
-  width: 430px;
+.su-tooltip-title {
+  display: block;
+  font-weight: bold;
+  font-size: 1.1em;
+  margin-bottom: 0.25em;
+}
+
+.su-tooltip-title:empty {
+  display: none;
+}
+
+.su-tooltip-content {
+  display: block;
+}
+
+.su-tooltip-shadow-yes {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.su-tooltip-button {
+  position: relative;
+}
+
+.su-tooltip-button-outline-no:focus {
+  outline: 0;
+}
+
+.su-tooltip-arrow,
+.su-tooltip-arrow::before {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: inherit;
+}
+
+.su-tooltip-arrow {
+  visibility: hidden;
+}
+
+.su-tooltip-arrow::before {
+  visibility: visible;
+  content: '';
+  -webkit-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+.su-tooltip[data-popper-placement^='top'] > .su-tooltip-arrow {
+  bottom: -4px;
+}
+
+.su-tooltip[data-popper-placement^='bottom'] > .su-tooltip-arrow {
+  top: -4px;
+}
+
+.su-tooltip[data-popper-placement^='left'] > .su-tooltip-arrow {
+  right: -4px;
+}
+
+.su-tooltip[data-popper-placement^='right'] > .su-tooltip-arrow {
+  left: -4px;
 }
 
 .su-video {

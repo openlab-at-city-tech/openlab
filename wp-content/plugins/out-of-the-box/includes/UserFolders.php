@@ -154,9 +154,6 @@ class UserFolders
             return false;
         }
 
-        // Increase our unique ID counter
-        $this->update_unique_id();
-
         $user_folder = new Entry($api_entry_new);
         do_action('outofthebox_log_event', 'outofthebox_created_entry', $user_folder);
 
@@ -290,19 +287,7 @@ class UserFolders
 
     public function get_user_name_template($user_data)
     {
-        $user_folder_name = strtr($this->_user_name_template, [
-            '%user_login%' => isset($user_data->user_login) ? $user_data->user_login : '',
-            '%user_email%' => isset($user_data->user_email) ? $user_data->user_email : '',
-            '%user_firstname%' => isset($user_data->user_firstname) ? $user_data->user_firstname : '',
-            '%user_lastname%' => isset($user_data->user_lastname) ? $user_data->user_lastname : '',
-            '%display_name%' => isset($user_data->display_name) ? $user_data->display_name : '',
-            '%ID%' => isset($user_data->ID) ? $user_data->ID : '',
-            '%user_role%' => isset($user_data->roles) ? implode(',', $user_data->roles) : '',
-            '%jjjj-mm-dd%' => date('Y-m-d'),
-            '%hh:mm%' => date('Hi'),
-            '%uniqueID%' => get_option('out_of_the_box_uniqueID', 0) + 1,
-        ]);
-
+        $user_folder_name = Helpers::apply_placeholders($this->_user_name_template, $this->get_processor(),['user_data' => $user_data]);
         return apply_filters('outofthebox_private_folder_name', $user_folder_name, $this->get_processor());
     }
 
@@ -332,11 +317,6 @@ class UserFolders
         }
 
         return $id;
-    }
-
-    public function update_unique_id()
-    {
-        update_option('out_of_the_box_uniqueID', get_option('out_of_the_box_uniqueID', 0) + 1);
     }
 
     /**

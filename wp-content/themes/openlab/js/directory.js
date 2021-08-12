@@ -63,7 +63,7 @@
 				var $elLabel = $( 'label[for="' + sidebarFilterId + '"]' );
 
 				// Everything is enabled by default.
-				$el.removeProp( 'disabled' ).removeClass( 'disabled-checkbox' );
+				$el.prop( 'disabled', false ).removeClass( 'disabled-checkbox' );
 				$elLabel.removeClass( 'disabled-label' );
 
 				if ( -1 !== disabledFilters.indexOf( sidebarFilterId ) ) {

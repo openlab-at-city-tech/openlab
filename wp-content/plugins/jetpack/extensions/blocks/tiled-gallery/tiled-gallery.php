@@ -5,11 +5,13 @@
  *
  * @since 6.9.0
  *
- * @package Jetpack
+ * @package automattic/jetpack
  */
 
 namespace Automattic\Jetpack\Extensions;
 
+use Automattic\Jetpack\Blocks;
+use Jetpack;
 use Jetpack_Gutenberg;
 use Jetpack_Plan;
 
@@ -31,12 +33,17 @@ class Tiled_Gallery {
 	 * Register the block
 	 */
 	public static function register() {
-		jetpack_register_block(
-			self::BLOCK_NAME,
-			array(
-				'render_callback' => array( __CLASS__, 'render' ),
-			)
-		);
+		if (
+			( defined( 'IS_WPCOM' ) && IS_WPCOM )
+			|| Jetpack::is_connection_ready()
+		) {
+			Blocks::jetpack_register_block(
+				self::BLOCK_NAME,
+				array(
+					'render_callback' => array( __CLASS__, 'render' ),
+				)
+			);
+		}
 	}
 
 	/**

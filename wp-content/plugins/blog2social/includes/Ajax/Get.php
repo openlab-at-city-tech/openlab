@@ -267,7 +267,8 @@ class Ajax_Get {
                 $postData = new B2S_Post_Item();
                 $showByDate = isset($_POST['showByDate']) ? (preg_match("#^[0-9\-.\]]+$#", trim($_POST['showByDate'])) ? trim($_POST['showByDate']) : "") : "";
                 $type = (isset($_POST['type']) && in_array($_POST['type'], array('publish', 'notice'))) ? $_POST['type'] : 'publish';
-                $result = $postData->getPublishPostDataHtml((int) $_POST['postId'], $type, $showByDate);
+                $sharedByUser = (isset($_POST['sharedByUser']) && (int) $_POST['sharedByUser'] > 0) ? (int) $_POST['sharedByUser'] : 0;
+                $result = $postData->getPublishPostDataHtml((int) $_POST['postId'], $type, $showByDate, $sharedByUser);
                 if ($result !== false) {
                     echo json_encode(array('result' => true, 'postId' => (int) $_POST['postId'], 'content' => $result));
                     wp_die();

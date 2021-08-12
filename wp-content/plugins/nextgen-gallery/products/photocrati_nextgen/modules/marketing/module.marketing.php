@@ -28,7 +28,10 @@ class M_Marketing extends C_Base_Module
 
     public static function is_plus_or_pro_enabled()
     {
-        return defined('NGG_PRO_PLUGIN_BASENAME') || defined('NGG_PLUS_PLUGIN_BASENAME') || is_multisite();
+        return defined('NGG_PRO_PLUGIN_BASENAME')
+            || defined('NGG_PLUS_PLUGIN_BASENAME')
+            || defined('NGG_STARTER_PLUGIN_BASENAME')
+            || is_multisite();
     }
 
     /**

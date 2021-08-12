@@ -41,21 +41,20 @@ function create_color_boxes_table($colors, $settings)
 
 function create_upload_button_for_custom_images($option)
 {
-    $field_value = $option['value'];
+    $field_value = empty($option['value']) ? $option['default'] : $option['value'];
+
     $button_html = '<div class="upload_row">';
 
     $button_html .= '<div class="screenshot" id="'.$option['id'].'_image">'."\n";
 
-    if ('' !== $field_value) {
-        $button_html .= '<img src="'.$field_value.'" alt="" />'."\n";
-        $button_html .= '<a href="javascript:void(0)" class="wpcp-upload-remove">'.esc_html__('Remove', 'wpcloudplugins').'</a>'."\n";
-        $button_html .= '<a href="javascript:void(0)" class="upload-default">'.esc_html__('Default', 'wpcloudplugins').'</a>'."\n";
-    }
+    $button_html .= '<img src="'.$field_value.'" alt="" />'."\n";
+    $button_html .= '<a href="javascript:void(0)" class="wpcp-image-remove-button">'.esc_html__('Remove', 'wpcloudplugins').'</a>'."\n";
+    $button_html .= '<a href="javascript:void(0)" class="upload-default">'.esc_html__('Default', 'wpcloudplugins').'</a>'."\n";
 
     $button_html .= '</div>';
 
     $button_html .= '<input id="'.esc_attr($option['id']).'" class="upload outofthebox-option-input-large" type="text" name="'.esc_attr($option['name']).'" value="'.esc_attr($field_value).'" autocomplete="off" />';
-    $button_html .= '<input class="wpcp-upload-button simple-button blue" type="button" value="'.esc_html__('Select Image', 'wpcloudplugins').'" title="'.esc_html__('Upload or select a file from the media library', 'wpcloudplugins').'" />';
+    $button_html .= '<input class="wpcp-image-select-button simple-button blue" type="button" value="'.esc_html__('Select Image', 'wpcloudplugins').'" title="'.esc_html__('Upload or select a file from the media library', 'wpcloudplugins').'" />';
 
     if ($field_value !== $option['default']) {
         $button_html .= '<input id="wpcp-default-image-button" class="wpcp-default-image-button simple-button" type="button" value="'.esc_html__('Default', 'wpcloudplugins').'" title="'.esc_html__('Fallback to the default value', 'wpcloudplugins').'"  data-default="'.$option['default'].'"/>';
@@ -74,7 +73,7 @@ function create_upload_button_for_custom_images($option)
     <div class="wrap">
       <div class="outofthebox-header">
         <div class="outofthebox-logo"><a href="https://www.wpcloudplugins.com" target="_blank"><img src="<?php echo OUTOFTHEBOX_ROOTPATH; ?>/css/images/wpcp-logo-dark.svg" height="64" width="64"/></a></div>
-        <div class="outofthebox-form-buttons"> <div id="save_settings" class="simple-button default save_settings" name="save_settings"><?php esc_html_e('Save Settings', 'wpcloudplugins'); ?>&nbsp;<div class='wpcp-spinner'></div></div></div>
+        <div class="outofthebox-form-buttons"> <div id="wpcp-save-settings-button" class="simple-button default"><?php esc_html_e('Save Settings', 'wpcloudplugins'); ?>&nbsp;<div class='wpcp-spinner'></div></div></div>
         <div class="outofthebox-title"><?php esc_html_e('Settings', 'wpcloudplugins'); ?></div>
       </div>
 
@@ -135,12 +134,12 @@ function create_upload_button_for_custom_images($option)
                       <div class='account-info-container'>
                         <div class='account-info'>
                           <div class='account-actions'>
-                            <div id='add_dropbox_button' type='button' class='simple-button blue' data-url="<?php echo $app->get_auth_url(['force_reapprove' => 'true']); ?>" title="<?php esc_html_e('Add account', 'wpcloudplugins'); ?>"><i class='fas fa-plus-circle' aria-hidden='true'></i>&nbsp;<?php esc_html_e('Add account', 'wpcloudplugins'); ?></div>
+                            <div id='wpcp-add-account-button' type='button' class='simple-button blue' data-url="<?php echo $app->get_auth_url(['force_reapprove' => 'true']); ?>" title="<?php esc_html_e('Add account', 'wpcloudplugins'); ?>"><i class='fas fa-plus-circle' aria-hidden='true'></i>&nbsp;<?php esc_html_e('Add account', 'wpcloudplugins'); ?></div>
                           </div>
                           <div class="account-info-name">
-                            <?php esc_html_e('Add account', 'wpcloudplugins'); ?>
+                            <?php esc_html_e('Link a new account to the plugin', 'wpcloudplugins'); ?>
                           </div>
-                          <span class="account-info-space"><?php esc_html_e('Link a new account to the plugin', 'wpcloudplugins'); ?></span>
+                          <span class="account-info-space"><a href="#" id="wpcp-read-privacy-policy"><i class="fas fa-shield-alt"></i> <?php esc_html_e('What happens with my data when I authorize the plugin?', 'wpcloudplugins'); ?></a></span>   
                         </div>
                       </div>
                     </div>
@@ -215,6 +214,11 @@ function create_upload_button_for_custom_images($option)
               $button = ['value' => $this->settings['loaders']['error'], 'id' => 'loaders_error', 'name' => 'out_of_the_box_settings[loaders][error]', 'default' => OUTOFTHEBOX_ROOTPATH.'/css/images/loader_error.png'];
               echo create_upload_button_for_custom_images($button);
               ?>
+              <div class="outofthebox-option-title"><?php esc_html_e('iFrame Loader', 'wpcloudplugins'); ?></div>
+              <?php
+              $button = ['value' => $this->settings['loaders']['iframe'], 'id' => 'loaders_iframe', 'name' => 'out_of_the_box_settings[loaders][iframe]', 'default' => OUTOFTHEBOX_ROOTPATH.'/css/images/wpcp-loader.svg'];
+              echo create_upload_button_for_custom_images($button);
+              ?>     
             </div>
 
             <div class="outofthebox-accordion-title outofthebox-option-title"><?php esc_html_e('Color Palette', 'wpcloudplugins'); ?></div>
@@ -339,7 +343,7 @@ function create_upload_button_for_custom_images($option)
                 <option value="false" <?php echo 'false' === $this->settings['lightbox_showheader'] ? "selected='selected'" : ''; ?>><?php esc_html_e('Never', 'wpcloudplugins'); ?></option>
               </select>  
 
-              <div class="outofthebox-option-title"><?php esc_html_e('Caption/Description', 'wpcloudplugins'); ?></div>
+              <div class="outofthebox-option-title"><?php esc_html_e('Caption / Description', 'wpcloudplugins'); ?></div>
               <div class="outofthebox-option-description"><?php esc_html_e('When should the description be shown in the Gallery Lightbox', 'wpcloudplugins'); ?>.</div>
               <select type="text" name="out_of_the_box_settings[lightbox_showcaption]" id="lightbox_showcaption">
                 <option value="true" <?php echo 'true' === $this->settings['lightbox_showcaption'] ? "selected='selected'" : ''; ?>><?php esc_html_e('Always', 'wpcloudplugins'); ?></option>
@@ -448,7 +452,7 @@ function create_upload_button_for_custom_images($option)
               <div class="outofthebox-option-description"><?php esc_html_e('Try to remove Private Folders after they are deleted', 'wpcloudplugins'); ?>.</div>
 
               <div class="outofthebox-option-title"><?php esc_html_e('Name Template', 'wpcloudplugins'); ?></div>
-              <div class="outofthebox-option-description"><?php echo esc_html__('Template name for automatically created Private Folders.', 'wpcloudplugins').' '.sprintf(esc_html__('Available placeholders: %s', 'wpcloudplugins'), '').'<code>%user_login%</code>, <code>%user_firstname%</code>, <code>%user_lastname%</code>, <code>%user_email%</code>, <code>%display_name%</code>, <code>%ID%</code>, <code>%user_role%</code>, <code>%jjjj-mm-dd%</code>, <code>%hh:mm%</code>, <code>%uniqueID%</code>'; ?>.</div>
+              <div class="outofthebox-option-description"><?php echo esc_html__('Template name for automatically created Private Folders.', 'wpcloudplugins').' '.esc_html__('The naming template can also be set per shortcode individually.', 'wpcloudplugins').' '.sprintf(esc_html__('Available placeholders: %s', 'wpcloudplugins'), '').'<code>%user_login%</code>,  <code>%user_firstname%</code>, <code>%user_lastname%</code>, <code>%user_email%</code>, <code>%display_name%</code>, <code>%ID%</code>, <code>%user_role%</code>, <code>%yyyy-mm-dd%</code>, <code>%hh:mm%</code>, <code>%uniqueID%</code>, <code>%directory_separator% (/)</code>'; ?>.</div>
               <input class="outofthebox-option-input-large" type="text" name="out_of_the_box_settings[userfolder_name]" id="userfolder_name" value="<?php echo esc_attr($this->settings['userfolder_name']); ?>">
 
                           </div>
@@ -524,7 +528,7 @@ function create_upload_button_for_custom_images($option)
                     <input class="private-folders-auto-input-account" type='hidden' value='<?php echo $private_auto_folder['account']; ?>' name='out_of_the_box_settings[userfolder_backend_auto_root][account]'/>
                     <input class="private-folders-auto-input-id" type='hidden' value='<?php echo $private_auto_folder['id']; ?>' name='out_of_the_box_settings[userfolder_backend_auto_root][id]'/>
                     <input class="private-folders-auto-input-name" type='hidden' value='<?php echo $private_auto_folder['name']; ?>' name='out_of_the_box_settings[userfolder_backend_auto_root][name]'/>
-                    <div id="wpcp_root_folder_button" type="button" class="button-primary private-folders-auto-button"><?php esc_html_e('Select Folder', 'wpcloudplugins'); ?>&nbsp;<div class='wpcp-spinner'></div></div>
+                    <div id="wpcp-select-root-button" type="button" class="button-primary private-folders-auto-button"><?php esc_html_e('Select Folder', 'wpcloudplugins'); ?>&nbsp;<div class='wpcp-spinner'></div></div>
 
                     <div id='oftb-embedded' style='clear:both;display:none'>
                       <?php
@@ -728,7 +732,7 @@ function create_upload_button_for_custom_images($option)
               <div class="shareon shareon-settings">
                 <?php foreach ($this->settings['share_buttons'] as $button => $value) {
               $title = ucfirst($button);
-              echo "<button type='button' class='shareon-setting-button {$button} shareon-{$value} ' title='{$title}'></button>";
+              echo "<button type='button' class='wpcp-shareon-toggle-button {$button} shareon-{$value} ' title='{$title}'></button>";
               echo "<input type='hidden' value='{$value}' name='out_of_the_box_settings[share_buttons][{$button}]'/>";
           }
                 ?>
@@ -743,7 +747,7 @@ function create_upload_button_for_custom_images($option)
 
             <div>
               <div class="outofthebox-option-description"><?php esc_html_e('Select which Url Shortener Service you want to use', 'wpcloudplugins'); ?>.</div>
-              <select type="text" name="out_of_the_box_settings[shortlinks]" id="wpcp_shortlinks">
+              <select type="text" name="out_of_the_box_settings[shortlinks]" id="wpcp-shortlinks-selector">
                 <option value="None"  <?php echo 'None' === $this->settings['shortlinks'] ? "selected='selected'" : ''; ?>>None</option>
                 <option value="Shorte.st"  <?php echo 'Shorte.st' === $this->settings['shortlinks'] ? "selected='selected'" : ''; ?>>Shorte.st</option>
                 <option value="Rebrandly"  <?php echo 'Rebrandly' === $this->settings['shortlinks'] ? "selected='selected'" : ''; ?>>Rebrandly</option>
@@ -775,6 +779,9 @@ function create_upload_button_for_custom_images($option)
 
                 <div class="outofthebox-option-title">Rebrandly Domain (optional)</div>
                 <input class="outofthebox-option-input-large" type="text" name="out_of_the_box_settings[rebrandly_domain]" id="rebrandly_domain" value="<?php echo esc_attr($this->settings['rebrandly_domain']); ?>">
+
+                <div class="outofthebox-option-title">Rebrandly WorkSpace ID (optional)</div>
+                <input class="outofthebox-option-input-large" type="text" name="out_of_the_box_settings[rebrandly_workspace]" id="rebrandly_workspace" value="<?php echo esc_attr($this->settings['rebrandly_workspace']); ?>">
               </div>
             </div>
           </div> 
@@ -862,7 +869,8 @@ function create_upload_button_for_custom_images($option)
                 <code>%number_of_files%</code>, 
                 <code>%user_name%</code>, 
                 <code>%user_email%</code>, 
-                <code>%admin_email%</code>, 
+                <code>%admin_email%</code>,
+                <code>%account_email%</code>,   
                 <code>%file_name%</code>, 
                 <code>%file_size%</code>, 
                 <code>%file_icon%</code>, 
@@ -906,7 +914,8 @@ function create_upload_button_for_custom_images($option)
                 <code>%number_of_files%</code>, 
                 <code>%user_name%</code>, 
                 <code>%user_email%</code>, 
-                <code>%admin_email%</code>, 
+                <code>%admin_email%</code>,
+                <code>%account_email%</code>,   
                 <code>%file_name%</code>, 
                 <code>%file_size%</code>, 
                 <code>%file_icon%</code>, 
@@ -953,7 +962,8 @@ function create_upload_button_for_custom_images($option)
                 <code>%number_of_files%</code>, 
                 <code>%user_name%</code>, 
                 <code>%user_email%</code>, 
-                <code>%admin_email%</code>, 
+                <code>%admin_email%</code>,
+                <code>%account_email%</code>,   
                 <code>%file_name%</code>, 
                 <code>%file_size%</code>, 
                 <code>%file_icon%</code>, 
@@ -1008,7 +1018,7 @@ function create_upload_button_for_custom_images($option)
             </div>
           </div>
 
-          <div id="wpcp_reset_notifications_button" type="button" class="simple-button blue"><?php esc_html_e('Reset to default notifications', 'wpcloudplugins'); ?>&nbsp;<div class="wpcp-spinner"></div></div>
+          <div id="wpcp-reset-notifications-button" type="button" class="simple-button blue"><?php esc_html_e('Reset to default notifications', 'wpcloudplugins'); ?>&nbsp;<div class="wpcp-spinner"></div></div>
 
         </div>
         <!-- End Notifications Tab -->
@@ -1134,11 +1144,57 @@ function create_upload_button_for_custom_images($option)
           <div class="outofthebox-option-title"><?php esc_html_e('Support & Documentation', 'wpcloudplugins'); ?></div>
           <div id="message">
             <p><?php esc_html_e('Check the documentation of the plugin in case you encounter any problems or are looking for support.', 'wpcloudplugins'); ?></p>
-            <div id='wpcp_documentation_button' type='button' class='simple-button blue'><?php esc_html_e('Open Documentation', 'wpcloudplugins'); ?></div>
+            <div id='wpcp-open-docs-button' type='button' class='simple-button blue'><?php esc_html_e('Open Documentation', 'wpcloudplugins'); ?></div>
           </div>
         </div>  
       </div>
       <!-- End Help info -->
     </div>
   </form>
+
+  <!-- End Privacy Policy -->
+  <div id="wpcp-privacy-policy" style='clear:both;display:none'>  
+    <div class="outofthebox outofthebox-tb-content">
+      <div class="outofthebox-option-title"><?php esc_html_e('Requested scopes and justification', 'wpcloudplugins'); ?></div>
+      <div class="outofthebox-option-description"> <?php echo sprintf(esc_html__('In order to display your content stored on %s, you have to authorize it with your %s account.', 'wpcloudplugins'), 'Dropbox', 'Dropbox'); ?> <?php _e('The authorization will ask you to grant the application the following scopes:', 'wpcloudplugins'); ?>
+
+      <br/><br/>
+      <table class="widefat">
+        <thead>
+          <tr>
+            <th>Scope</th>
+            <th>Reason</th>
+
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>files.content.write</code></td>
+            <td>Edit content of your Dropbox files and folders. Required to create/upload/copy/rename/delete content on your Dropbox</td>
+          </thead>
+          <tr>
+            <td><code>files.content.read</code></td>
+            <td>View content of your Dropbox files and folders. Used to display your content in the plugins modules, preview it and download the files.</td>
+          </tr>
+          <tr>
+            <td><code>sharing.write</code></td>
+            <td>View and manage your Dropbox sharing settings and collaborators. Required to create shared links or direct links to your files.</td>
+          </tr>
+          <tr>
+            <td><code>account_info.read</code></td>
+            <td><?php (esc_html_e('Allow the plugin to see your publicly available personal info, like email, name and profile picture. This information will only be displayed on this page for easy account identification.', 'wpcloudplugins')); ?></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <br/>
+      <div class="outofthebox-option-title"><?php esc_html_e('Information about the data', 'wpcloudplugins'); ?></div>
+      The authorization tokens will be stored, encrypted, on this server and is not accessible by the developer or any third party. When you use the Application, all communications are strictly between your server and the cloud storage service servers. The communication is encrypted and the communication will not go through WP Cloud Plugins servers. We do not collect and do not have access to your personal data.
+      
+      <br/><br/>
+      <i class="fas fa-shield-alt"></i> <?php echo sprintf(esc_html__('Read the full %sPrivacy Policy%s if you have any further privacy concerns.', 'wpcloudplugins'), '<a href="https://www.wpcloudplugins.com/privacy-policy/privacy-policy-out-of-the-box/">', '</a>'); ?></div>
+    </div>
+  </div>
+  <!-- End Short Privacy Policy -->
+
 </div>

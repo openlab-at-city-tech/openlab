@@ -2,8 +2,8 @@
 Contributors: conjur3r
 Tags: table of contents, indexes, toc, sitemap, cms, options, list, page listing, category listing
 Requires at least: 3.2
-Tested up to: 5.3 
-Stable tag: 2002
+Tested up to: 5.7
+Stable tag: 2106
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -99,6 +99,13 @@ I will never ask for any form of reward or compensation.  Helping others achieve
 
 
 == Changelog ==
+= 2106 =
+* Released: 23 June 2021
+* Add compatibility with Rank Math SEO
+* Bump tested WordPress version to 5.7
+* Add PHP coding style
+* Adhere to majority of coding tips
+
 = 2002 =
 * Released: 9 February 2020
 * Fixed encoding when using %PAGE_TITLE% or %PAGE_NAME%

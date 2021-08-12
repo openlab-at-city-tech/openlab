@@ -12,7 +12,7 @@
 // Ensure the global `tp` object exists.
 window.tp = window.tp || {};
 
-jQuery( document ).ready( function( $ ) {
+jQuery( function( $ ) {
 
 	'use strict';
 
@@ -53,15 +53,15 @@ jQuery( document ).ready( function( $ ) {
 		},
 		change_id: function( /* event */ ) {
 			// empty table IDs are not allowed
-			if ( '' === $.trim( $id( 'table-new-id' ).val() ) ) {
+			if ( '' === $id( 'table-new-id' ).val().toString().trim() ) {
 				alert( tablepress_strings.table_id_not_empty );
-				$id( 'table-new-id' ).val( tp.table.new_id ).focus().select();
+				$id( 'table-new-id' ).val( tp.table.new_id ).trigger( 'focus' ).trigger( 'select' );
 				return;
 			}
 			// the '0' table ID is not allowed
-			if ( '0' === $.trim( $id( 'table-new-id' ).val() ) ) {
+			if ( '0' === $id( 'table-new-id' ).val().toString().trim() ) {
 				alert( tablepress_strings.table_id_not_zero );
-				$id( 'table-new-id' ).val( tp.table.new_id ).focus().select();
+				$id( 'table-new-id' ).val( tp.table.new_id ).trigger( 'focus' ).trigger( 'select' );
 				return;
 			}
 
@@ -71,7 +71,7 @@ jQuery( document ).ready( function( $ ) {
 
 			if ( confirm( tablepress_strings.ays_change_table_id ) ) {
 				tp.table.new_id = this.value;
-				$( '.table-shortcode' ).val( '[' + tablepress_options.shortcode + ' id=' + tp.table.new_id + ' /]' ).click(); // click() to focus and select
+				$( '.table-shortcode' ).val( '[' + tablepress_options.shortcode + ' id=' + tp.table.new_id + ' /]' ).trigger( 'click' ); // click() to focus and select
 				tp.table.set_table_changed();
 			} else {
 				$(this).val( tp.table.new_id );
@@ -79,7 +79,7 @@ jQuery( document ).ready( function( $ ) {
 		},
 		change_table_head: function( /* event */ ) {
 			tp.table.head = $(this).prop( 'checked' );
-			$id( 'option-use-datatables' ).prop( 'disabled', ! tp.table.head ).change();
+			$id( 'option-use-datatables' ).prop( 'disabled', ! tp.table.head ).trigger( 'change' );
 			$id( 'notice-datatables-head-row' ).toggle( ! tp.table.head );
 			tp.rows.stripe();
 		},
@@ -190,12 +190,12 @@ jQuery( document ).ready( function( $ ) {
 				// validation checks
 				if ( $id( 'option-datatables-paginate' ).prop( 'checked' ) && ! ( /^[1-9][0-9]{0,4}$/ ).test( $id( 'option-datatables-paginate_entries' ).val() ) ) {
 					alert( tablepress_strings.num_pagination_entries_invalid );
-					$id( 'option-datatables-paginate_entries' ).focus().select();
+					$id( 'option-datatables-paginate_entries' ).trigger( 'focus' ).trigger( 'select' );
 					return;
 				}
 				if ( ( /[^A-Za-z0-9- _:]/ ).test( $id( 'option-extra-css-classes' ).val() ) ) {
 					alert( tablepress_strings.extra_css_classes_invalid );
-					$id( 'option-extra-css-classes' ).focus().select();
+					$id( 'option-extra-css-classes' ).trigger( 'focus' ).trigger( 'select' );
 					return;
 				}
 
@@ -282,7 +282,7 @@ jQuery( document ).ready( function( $ ) {
 
 			if ( ! ( /^[1-9][0-9]{0,4}$/ ).test( num_rows ) ) {
 				alert( tablepress_strings.append_num_rows_invalid );
-				$id( 'rows-append-number' ).focus().select();
+				$id( 'rows-append-number' ).trigger( 'focus' ).trigger( 'select' );
 				return;
 			}
 
@@ -478,7 +478,7 @@ jQuery( document ).ready( function( $ ) {
 			}
 			helper = $( helper );
 			var $rows = $id( 'edit-form-body' ).children().removeClass( 'odd head-row foot-row' ).not( helper );
-			$rows.filter( ':even' ).addClass( 'odd' );
+			$rows.even().addClass( 'odd' );
 			$rows = $rows.not( '.row-hidden' );
 			if ( helper.hasClass( 'row-hidden' ) ) {
 				$rows = $rows.not( '.ui-sortable-placeholder' );
@@ -500,7 +500,7 @@ jQuery( document ).ready( function( $ ) {
 
 			if ( ! ( /^[1-9][0-9]{0,4}$/ ).test( num_columns ) ) {
 				alert( tablepress_strings.append_num_columns_invalid );
-				$id( 'columns-append-number' ).focus().select();
+				$id( 'columns-append-number' ).trigger( 'focus' ).trigger( 'select' );
 				return;
 			}
 
@@ -760,11 +760,11 @@ jQuery( document ).ready( function( $ ) {
 				}
 
 				var $advanced_editor = $id( 'advanced-editor-content' );
-				tp.cells.$textarea = $(this).blur();
+				tp.cells.$textarea = $(this).trigger( 'blur' );
 				$advanced_editor.val( tp.cells.$textarea.val() );
 				$id( 'advanced-editor' ).wpdialog( 'open' );
 				$advanced_editor.get(0).selectionStart = $advanced_editor.get(0).selectionEnd = $advanced_editor.val().length;
-				$advanced_editor.focus();
+				$advanced_editor.trigger( 'focus' );
 			},
 			buttonopen: function() {
 				if ( ! tp.cells.advanced_editor.prompt_shown ) {
@@ -776,22 +776,22 @@ jQuery( document ).ready( function( $ ) {
 				tp.cells.advanced_editor.prompt_shown = true;
 				$id( 'edit-form-body' ).one( 'click', 'textarea', function() {
 					var $advanced_editor = $id( 'advanced-editor-content' );
-					tp.cells.$textarea = $(this).blur();
+					tp.cells.$textarea = $(this).trigger( 'blur' );
 					$advanced_editor.val( tp.cells.$textarea.val() );
 					$id( 'advanced-editor' ).wpdialog( 'open' );
 					$advanced_editor.get(0).selectionStart = $advanced_editor.get(0).selectionEnd = $advanced_editor.val().length;
-					$advanced_editor.focus();
+					$advanced_editor.trigger( 'focus' );
 				} );
 			},
 			save: function() {
-				var $ve_content = $id( 'advanced-editor-content' ).blur().val();
+				var $ve_content = $id( 'advanced-editor-content' ).trigger( 'blur' ).val();
 				if ( tp.cells.$textarea.val() !== $ve_content ) {
 					tp.cells.$textarea.val( $ve_content );
 					// position cursor at the end
 					tp.cells.$textarea.get(0).selectionStart = tp.cells.$textarea.get(0).selectionEnd = tp.cells.$textarea.val().length;
 					tp.table.set_table_changed();
 				}
-				tp.cells.$textarea.focus();
+				tp.cells.$textarea.trigger( 'focus' );
 				tp.cells.advanced_editor.close();
 			},
 			close: function() {
@@ -873,7 +873,7 @@ jQuery( document ).ready( function( $ ) {
 
 					// Remove focus from the textarea to prevent Opera from showing the outline of the textarea above the modal.
 					// See: WP Core #22445
-					$(this).blur();
+					$(this).trigger( 'blur' );
 
 					wp.media.editor.open( editor, options );
 					tp.table.set_table_changed();
@@ -894,7 +894,7 @@ jQuery( document ).ready( function( $ ) {
 				// Automatically deactivate DataTables, if cells are combined
 				if ( $id( 'option-use-datatables' ).prop( 'checked' ) ) {
 					if ( confirm( tablepress_strings.span_add_datatables_warning ) ) {
-						$id( 'option-use-datatables' ).prop( 'checked', false ).change();
+						$id( 'option-use-datatables' ).prop( 'checked', false ).trigger( 'change' );
 					} else {
 						return;
 					}
@@ -967,39 +967,52 @@ jQuery( document ).ready( function( $ ) {
 			$row = $( row );
 			$row.find( 'textarea' )
 				.val( function( column_idx, value ) {
-					// If the cell is not a formula, there's nothing to do here
+					// If the cell is not a formula, there's nothing to do here.
 					if ( ( '' === value ) || ( '=' !== value.charAt(0) ) ) {
 						return value;
 					}
 
-					return value.replace( /([A-Z]+[0-9]+)(?::([A-Z]+[0-9]+))?/g, function( full_match, first_cell, second_cell ) {
-						// first_cell must always exist, while second_cell only exists in ranges like A4:B7
-						// we will use full_match as our result variable, so that we don't need an extra one
+					// Support putting formulas in strings, like =Total: {A3+A4}.
+					var expressions = value.match( /{.+?}/g );
+					if ( null === expressions ) {
+						// Fill array so that it has the same structure as if it came from match().
+						expressions = new Array( value );
+					}
 
-						if ( ! known_references.hasOwnProperty( first_cell ) ) {
-							$cell = $id( 'cell-' + first_cell );
-							if ( $cell.length ) {
-								known_references[ first_cell ] = tp.columns.number_to_letter( $cell.parent().index() - tp.table.no_data_columns_pre + 1 ) + ( $cell.closest( 'tr' ).index() + 1 );
-							} else {
-								known_references[ first_cell ] = first_cell;
-							}
-						}
-						full_match = known_references[ first_cell ];
+					// Find the replacement value (with updated cell references) for each expression and replace the old one with it.
+					expressions.forEach( function( expression ) {
+						var new_expression = expression.replace( /([A-Z]+[0-9]+)(?::([A-Z]+[0-9]+))?/g, function( full_match, first_cell, second_cell ) {
+							// first_cell must always exist, while second_cell only exists in ranges like A4:B7
+							// we will use full_match as our result variable, so that we don't need an extra one
 
-						if ( ( 'undefined' !== typeof second_cell ) && ( '' !== second_cell ) ) { // Chrome and IE pass an undefined variable, while Firefox passes an empty string
-							if ( ! known_references.hasOwnProperty( second_cell ) ) {
-								$cell = $id( 'cell-' + second_cell );
+							if ( ! known_references.hasOwnProperty( first_cell ) ) {
+								$cell = $id( 'cell-' + first_cell );
 								if ( $cell.length ) {
-									known_references[ second_cell ] = tp.columns.number_to_letter( $cell.parent().index() - tp.table.no_data_columns_pre + 1 ) + ( $cell.closest( 'tr' ).index() + 1 );
+									known_references[ first_cell ] = tp.columns.number_to_letter( $cell.parent().index() - tp.table.no_data_columns_pre + 1 ) + ( $cell.closest( 'tr' ).index() + 1 );
 								} else {
-									known_references[ second_cell ] = second_cell;
+									known_references[ first_cell ] = first_cell;
 								}
 							}
-							full_match += ':' + known_references[ second_cell ];
-						}
+							full_match = known_references[ first_cell ];
 
-						return full_match;
+							if ( ( 'undefined' !== typeof second_cell ) && ( '' !== second_cell ) ) { // Chrome and IE pass an undefined variable, while Firefox passes an empty string
+								if ( ! known_references.hasOwnProperty( second_cell ) ) {
+									$cell = $id( 'cell-' + second_cell );
+									if ( $cell.length ) {
+										known_references[ second_cell ] = tp.columns.number_to_letter( $cell.parent().index() - tp.table.no_data_columns_pre + 1 ) + ( $cell.closest( 'tr' ).index() + 1 );
+									} else {
+										known_references[ second_cell ] = second_cell;
+									}
+								}
+								full_match += ':' + known_references[ second_cell ];
+							}
+
+							return full_match;
+						} );
+						value = value.replace( expression, new_expression );
 					} );
+
+					return value;
 				} )
 				.attr( 'name', function( column_idx /*, old_name */ ) {
 					return 'table[data][' + row_idx + '][' + column_idx + ']';
@@ -1026,18 +1039,18 @@ jQuery( document ).ready( function( $ ) {
 			// validation checks
 			if ( $id( 'option-datatables-paginate' ).prop( 'checked' ) && ! ( /^[1-9][0-9]{0,4}$/ ).test( $id( 'option-datatables-paginate_entries' ).val() ) ) {
 				alert( tablepress_strings.num_pagination_entries_invalid );
-				$id( 'option-datatables-paginate_entries' ).focus().select();
+				$id( 'option-datatables-paginate_entries' ).trigger( 'focus' ).trigger( 'select' );
 				return;
 			}
 			if ( ( /[^A-Za-z0-9- _:]/ ).test( $id( 'option-extra-css-classes' ).val() ) ) {
 				alert( tablepress_strings.extra_css_classes_invalid );
-				$id( 'option-extra-css-classes' ).focus().select();
+				$id( 'option-extra-css-classes' ).trigger( 'focus' ).trigger( 'select' );
 				return;
 			}
 
 			if ( event.shiftKey ) {
 				tp.made_changes = false; // to prevent onunload warning
-				$id( 'tablepress-page' ).find( 'form' ).submit();
+				$id( 'tablepress-page' ).find( 'form' ).trigger( 'submit' );
 				return;
 			}
 
@@ -1190,9 +1203,9 @@ jQuery( document ).ready( function( $ ) {
 		$( window ).on( 'beforeunload', tp.check.changes_saved );
 
 		// do this before the next lines, to not trigger set_table_changed()
-		$id( 'option-table-head' ).change(); // init changed/disabled states of DataTables JS features checkboxes
-		$id( 'option-print-name' ).change( tp.table.change_print_name_description ).change(); // init dropdowns for name and description position
-		$id( 'option-print-description' ).change( tp.table.change_print_name_description ).change();
+		$id( 'option-table-head' ).trigger( 'change' ); // init changed/disabled states of DataTables JS features checkboxes
+		$id( 'option-print-name' ).on( 'change', tp.table.change_print_name_description ).trigger( 'change' ); // init dropdowns for name and description position
+		$id( 'option-print-description' ).on( 'change', tp.table.change_print_name_description ).trigger( 'change' );
 
 		// just once is enough, will be reset after saving
 		$table.one( 'change', 'textarea', tp.table.set_table_changed );

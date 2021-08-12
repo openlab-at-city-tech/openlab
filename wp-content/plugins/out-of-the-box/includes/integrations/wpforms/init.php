@@ -38,8 +38,8 @@ class WPForms_Field_Upload_Box extends \WPForms_Field
         add_filter('wpforms_pro_admin_entries_export_ajax_get_data', [$this, 'export_value'], 10, 2);
 
         // Custom Private Folder names
-        add_filter('outofthebox_private_folder_name', [&$this, 'new_private_folder_name'], 10, 2);
-        add_filter('outofthebox_private_folder_name_guests', [&$this, 'rename_private_folder_names_for_guests'], 10, 2);
+        add_filter('outofthebox_private_folder_name', [$this, 'new_private_folder_name'], 10, 2);
+        add_filter('outofthebox_private_folder_name_guests', [$this, 'rename_private_folder_names_for_guests'], 10, 2);
     }
 
     ////////////////////////////////

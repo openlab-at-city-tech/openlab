@@ -13,6 +13,11 @@ class Clone_Async_Process extends WP_Async_Request {
 			return;
 		}
 
+		$running = groups_get_groupmeta( $group_id, 'clone_in_progress', true );
+		if ( $running && ( ( time() - $running ) < ( 5 * MINUTES_IN_SECONDS ) ) ) {
+			return;
+		}
+
 		$group_id = (int) $_POST['group_id'];
 
 		$steps = groups_get_groupmeta( $group_id, 'clone_steps', true );
@@ -21,6 +26,8 @@ class Clone_Async_Process extends WP_Async_Request {
 		if ( ! $steps ) {
 			return;
 		}
+
+		groups_update_groupmeta( $group_id, 'clone_in_progress', time() );
 
 		$the_step = reset( $steps );
 
@@ -60,7 +67,13 @@ class Clone_Async_Process extends WP_Async_Request {
 		add_action( 'bp_activity_after_save', 'ass_group_notification_activity', 50 );
 
 		$new_steps = array_diff( $steps, [ $the_step ] );
-		groups_update_groupmeta( $group_id, 'clone_steps', $new_steps );
+		if ( $new_steps ) {
+			groups_update_groupmeta( $group_id, 'clone_steps', $new_steps );
+		} else {
+			groups_delete_groupmeta( $group_id, 'clone_steps' );
+		}
+
+		groups_delete_groupmeta( $group_id, 'clone_in_progress' );
 
 		if ( $new_steps ) {
 			$this->data( [ 'group_id' => $group_id ] )->dispatch();

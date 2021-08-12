@@ -8,7 +8,7 @@ jQuery(document).ready(function () {
     jQuery('#b2s_calendar').fullCalendar({
         header: {
             left: 'title',
-            right: 'month,basicWeek, prev,next'
+            right: 'today month,basicWeek, prev,next'
         },
         views: {
             month: {
@@ -495,7 +495,7 @@ function b2sSortFormSubmit() {
     return false;
 }
 //Overlay second modal
-jQuery('#b2s-show-post-type-modal').on('hidden.bs.modal', function () {
+jQuery('#b2s-show-post-all-modal').on('shown.bs.modal', function () {
     jQuery('body').addClass('modal-open');
 });
 

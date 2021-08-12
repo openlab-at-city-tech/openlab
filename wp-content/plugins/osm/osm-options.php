@@ -2,7 +2,7 @@
 /*
   Option page for OSM wordpress plugin
   MiKa * created: april 2009
-  plugin: http://wp-osm-plugin.HanBlog.net
+  plugin: http://wp-osm-plugin.hyumika.com
 */
 ?>
 
@@ -17,8 +17,8 @@
 
 <h3><?php _e('Some usefull sites for this plugin:','OSM') ?></h3>
 <ol>
-  <li><?php _e('for advanced samples visit the ','OSM') ?><a target="_new" href="http://wp-osm-plugin.HanBlog.net">osm-plugin page</a>.</li>
-  <li><?php _e('for questions, bugs and other feedback visit the','OSM') ?> <a target="_new" href="http://wp-osm-plugin.hanblog.net/forum/forum-en/">EN forum</a>, <a target="_new" href="http://wp-osm-plugin.hanblog.net/forum/forum-de/">DE forum</a></li>
+  <li><?php _e('for advanced samples visit the ','OSM') ?><a target="_new" href="http://wp-osm-plugin.hyumika.com">osm-plugin page</a>.</li>
+  <li><?php _e('for questions, bugs and other feedback visit the','OSM') ?> <a target="_new" href="https://wp-osm-plugin.hyumika.com/forums/forum/WordPress-OpenStreetMap">forum</a></a></li>
   <li><?php _e('Follow us on twitter: ','OSM') ?><a target="_new" href="https://twitter.com/wp_osm_plugin">wp-osm-plugin</a>.</li>
   <li><?php _e('download the last version at WordPress.org ','OSM') ?><a target="_new" href="http://wordpress.org/extend/plugins/osm/">osm-plugin download</a>.</li>
 </ol>

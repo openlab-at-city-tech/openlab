@@ -2,9 +2,9 @@
 Contributors: takayukister
 Donate link: https://contactform7.com/donate/
 Tags: captcha
-Requires at least: 4.7
-Tested up to: 5.2
-Stable tag: trunk
+Requires at least: 5.5
+Tested up to: 5.7
+Stable tag: 2.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -91,6 +91,10 @@ If you have any further questions, please submit them [to the support forum](htt
 
 == Changelog ==
 
+= 2.1 =
+
+* Uses `hash_equals()` to compare strings.
+
 = 2.0.2 =
 
 * "Stable tag" refers to trunk.
@@ -103,10 +107,3 @@ If you have any further questions, please submit them [to the support forum](htt
 
 * Did some rewrite of the code following the coding standard.
 * Updated the license file; added a section for bundled font files.
-
-= 1.9 =
-
-* Change the default file mode: 0644 for image and 0640 for answer.
-* Add "Text Domain" field to the plugin header.
-* Update bundled font: Gentium Basic 1.102.
-* Add $max argument to cleanup() to prevent an endless file cleanup.

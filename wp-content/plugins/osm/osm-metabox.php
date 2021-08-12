@@ -1,5 +1,5 @@
 <?php
-/*  (c) Copyright 2020  MiKa (http://wp-osm-plugin.hyumika.com)
+/*  (c) Copyright 2021  MiKa (http://wp-osm-plugin.hyumika.com)
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -15,11 +15,21 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
-function osm_map_create() {
-  //create a custom meta box
 
-  wp_enqueue_script( 'ajax-script', plugins_url( '/js/osm-plugin-lib.js', __FILE__ ), array('jquery') );
-  wp_enqueue_script('OSM_metabox_Script',Osm_OL_3_MetaboxEvents_LibraryLocation);
+function osm_enqueue_scripts_styles() {
+
+  wp_enqueue_style( 'Osm_OL_3_style', Osm_OL_3_CSS);
+  wp_enqueue_style( 'Osm_OL_3_Ext_style', Osm_OL_3_Ext_CSS);
+  wp_enqueue_style( 'osm_map_style', Osm_map_CSS);
+
+  wp_enqueue_script('Osm_OL_3',Osm_OL_3_LibraryLocation); 
+  wp_enqueue_script('Osm_OL_3ext',Osm_OL_3_Ext_LibraryLocation);  
+  wp_enqueue_script('OSM_metabox_event_Script',Osm_OL_3_MetaboxEvents_LibraryLocation); 
+  wp_enqueue_script('Osm_map_startup_3',Osm_map_startup_LibraryLocation);
+  wp_enqueue_script('OSM_metabox-script',Osm_OL_3_Metabox_LibraryLocation, array('jquery') );
+    
+  wp_enqueue_script('ajax-script', plugins_url( '/js/osm-plugin-lib.js', __FILE__ ), array('jquery') );
+ 
   wp_localize_script( 'ajax-script', 'osm_ajax_object',
             array( 'ajax_url' => admin_url( 'admin-ajax.php' ),
                    'lat' => '',
@@ -41,6 +51,12 @@ function osm_map_create() {
                    'map_name' => '',
                    'map_attr' => 1
             ));
+}
+
+function osm_map_create() {
+  //create a custom meta box
+
+  add_action( 'admin_enqueue_scripts', 'osm_enqueue_scripts_styles' ); 
 
   $post_types = get_post_types();
   foreach ($post_types as $post_type) {
@@ -51,82 +67,59 @@ function osm_map_create() {
 function osm_map_create_shortcode_function( $post ) {
 ?>
 
-  <script type="text/javascript">
-  /* <![CDATA[ */
-
-  jQuery(document).ready(function(){
-
-	jQuery('ul.osm-tabs li').click(function(){
-		var tab_id = jQuery(this).attr('data-tab');
-
-		jQuery('ul.osm-tabs li').removeClass('current');
-		jQuery('.osm-tab-content').removeClass('current');
-
-		jQuery(this).addClass('current');
-		jQuery("#"+tab_id).addClass('current');
-/*
-                if(typeof map_ol3js_1 === "undefined"){
-                 map_ol3js_3.updateSize();
-                }
-                else {
-                  map_ol3js_1.updateSize();
-                 }
-*/                
-      AddMarker_map.updateSize();
-		FileSC_map.updateSize();	
-		TaggedSC_map.updateSize();
-		map_ol3js_1.updateSize();
-                
-	})
-
-	jQuery('ul.osm-marker-tabs li').click(function(){
-		var tab_id = jQuery(this).attr('marker-tab');
-
-		jQuery('ul.osm-marker-tabs li').removeClass('current');
-		jQuery('.marker-tab-content').removeClass('current');
-
-		jQuery(this).addClass('current');
-		jQuery("#"+tab_id).addClass('current');
-                
-	})
-	jQuery('ul.osm-geo-marker-tabs li').click(function(){
-		var tab_id = jQuery(this).attr('geo-marker-tab');
-
-		jQuery('ul.osm-geo-marker-tabs li').removeClass('current');
-		jQuery('.geo-marker-tab-content').removeClass('current');
-
-		jQuery(this).addClass('current');
-		jQuery("#"+tab_id).addClass('current');
-                
-	})
-
-})
-
-  // sometimes mapNr starts with 2 ... needs to by analysed
-  jQuery(window).load(function(){	
-  if(typeof map_ol3js_1 === "undefined"){
-    map_ol3js_2.updateSize();
-  }
-  else {
-   map_ol3js_1.updateSize();
-  }
-  });
-
-
-
-  /* ]]> */
-  </script>
-
 <div class="osm-tab-container">
   	<ul class="osm-tabs">
-		<li class="tab-link current" data-tab="tab_add_marker"><?php _e('Map & Marker','OSM') ?></li>
+		<li class="tab-link current" data-tab="tab_welcome"><?php _e('Welcome','OSM') ?></li>
+		<li class="tab-link" data-tab="tab_add_marker"><?php _e('Map & Marker','OSM') ?></li>
 		<li class="tab-link" data-tab="tab_file_list"><?php _e('Map & GPX | KML','OSM') ?></li>
-		<li class="tab-link" data-tab="tab_geotag"><?php _e('Map & geotags','OSM') ?></li>
-		<li class="tab-link" data-tab="tab_set_geotag"><?php _e('Set Geotag','OSM') ?></li>
-		<li class="tab-link" data-tab="tab_about"><?php _e('About','OSM') ?></li>
+		<li class="tab-link" data-tab="tab_geotag"><?php _e('Map & Locations','OSM') ?></li>
+		<li class="tab-link" data-tab="tab_set_geotag"><?php _e('Add Location','OSM') ?></li>
+		<li class="tab-link" data-tab="tab_troubleshooting"><?php _e('Troubleshooting','OSM') ?></li>
+		<li class="tab-link" data-tab="tab_about"><?php _e('About','OSM') ?></li>		
 	</ul>
 
-    <div id="tab_add_marker" class="osm-tab-content current"><br/>
+	
+   <!-- id="tab_welcome" -->	
+	
+     <div id="tab_welcome" class="osm-tab-content current">
+<?php  echo '<p><img src="'.OSM_PLUGIN_URL.'/WP_OSM_Plugin_Logo.png" align="left" vspace="10" hspace="20" alt="Osm Logo"></p>'; ?>
+ <h3><?php echo 'WordPress OSM Plugin '.PLUGIN_VER.' '; ?></h3>
+At the top of this panel / metabox you find tabs which allow you to generate a shorcode. You have to copy (Ctrl+C) this shortcode and paste (Ctrl+V) it to your post / page.<br></br> 
+<table border="0" >
+  <tr>
+    <th>Tab</th>
+    <th>... what to do</th>
+  </tr>
+  <tr>
+    <td><?php _e('Map & Marker','OSM') ?></td>
+    <td>... use this tab if you want to create a map with no or one marker.</td>
+   </tr>
+   <tr>
+     <td><?php _e('Map & GPX | KML','OSM') ?></td>
+    <td>... use this tab if you want to create a map with one or more tracks (GPX or KML) or if you want to load a file with more than one marker.</td>
+   </tr>
+   <tr>
+     <td><?php _e('Map & Locations','OSM') ?></td>
+     <td>... use this tab if you want to show a map with markers where posts or pages are geotagged. You can geotag a post / page at tab <?php _e('Add Location','OSM') ?>.</td>
+   </tr>
+   <tr>
+     <td><?php _e('Add Location','OSM') ?></td>
+     <td>... set a geotag to your post and page. This location is saved with your post / page. You can show a map with your geotags at tab <?php _e('Map & Locations','OSM') ?></td>
+   </tr>
+   <tr>
+     <td><?php _e('Troubleshooting','OSM') ?></td>
+     <td>... if it does not work</td>
+   </tr>     
+   <tr>
+     <td><?php _e('About','OSM') ?></td>
+     <td>... some Information about the plugin</td>
+   </tr>  
+</table>
+     </div> <!-- id="tab_welcome" -->	
+	
+	<!-- id="tab_add_marker" -->
+    <div id="tab_add_marker" class="osm-tab-content"><br/>
+    	<?php _e('Add a map with one marker.','OSM') ?><br/><br/>
       <b>1. <?php _e('map type','OSM') ?></b>:
       <select name="osm_add_marker_map_type" id="osm_add_marker_map_type">
       <?php include('osm-maptype-select.php'); ?>
@@ -142,7 +135,7 @@ function osm_map_create_shortcode_function( $post ) {
         <input type="checkbox" name="osm_add_marker_scaleline" id="osm_add_marker_scaleline" value="scaleline"> <?php _e('scaleline','OSM') ?>
         <input type="checkbox" name="osm_add_marker_mouseposition" id="osm_add_marker_mouseposition" value="mouseposition"> <?php _e('mouse position','OSM') ?>
         <input type="checkbox" name="osm_add_marker_bckgrnd_img" id="osm_add_marker_bckgrnd_img" value="osm_add_marker_bckgrnd_img"> <?php _e('background image (GDPR)','OSM') ?> <br/> <br/>
-        <input type="checkbox" name="osm_add_marker_show_attribution" id="osm_add_marker_show_attribution" value="osm_add_marker_show_attribution"> <?php _e('Display attribution (credit) in the map. ','OSM') ?>
+        <input type="checkbox" name="osm_add_marker_show_attribution" id="osm_add_marker_show_attribution" value="osm_add_marker_show_attribution" checked> <?php _e('Display attribution (credit) in the map. ','OSM') ?>
         <span style="color:red"><?php _e('Warning: If you do not check this box, it may violate the license of data or map and have legal consequences!','OSM') ?></span> <!-- <br/>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Why not enabled by default? Read <a target="_new" href="https://developer.wordpress.org/plugins/wordpress-org/detailed-plugin-guidelines/#10-plugins-may-not-embed-external-links-or-credits-on-the-public-site-without-explicitly-asking-the-user%e2%80%99s-permission">Plugins may not embed external links or credits ...</a> --> <br/><br/>
       
@@ -183,7 +176,7 @@ function osm_map_create_shortcode_function( $post ) {
         <input type="checkbox" name="file_scaleline" id="file_scaleline" value="file_scaleline"> <?php _e('scaleline','OSM') ?>
         <input type="checkbox" name="file_mouseposition" id="file_mouseposition" value="file_mouseposition"> <?php _e('mouse position','OSM') ?>
         <input type="checkbox" name="file_bckgrnd_img" id="file_bckgrnd_img" value="file_bckgrnd_img"> <?php _e('background image (GDPR)','OSM') ?> <br/><br/>
-        <input type="checkbox" name="osm_file_show_attribution" id="osm_file_show_attribution" value="osm_file_show_attribution"> <?php _e('Display attribution (credit) in the map. ','OSM') ?>
+        <input type="checkbox" name="osm_file_show_attribution" id="osm_file_show_attribution" value="osm_file_show_attribution" checked> <?php _e('Display attribution (credit) in the map. ','OSM') ?>
         <span style="color:red"><?php _e('Warning: If you do not check this box, it may violate the license of data or map and have legal consequences!','OSM') ?></span><!-- <br/>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Why not enabled by default? Read <a target="_new" href="https://developer.wordpress.org/plugins/wordpress-org/detailed-plugin-guidelines/#10-plugins-may-not-embed-external-links-or-credits-on-the-public-site-without-explicitly-asking-the-user%e2%80%99s-permission">Plugins may not embed external links or credits ...</a>--><br/><br/>
 
@@ -234,6 +227,8 @@ function osm_map_create_shortcode_function( $post ) {
 
      </div> <!-- id="tab_file_list" -->
 
+
+  <!-- id="add map with geotag" -->
     <div id="tab_geotag" class="osm-tab-content">
 
 	<?php _e('Add a map with all geotagged posts / pages of your site. <br/>Set geotag to your post at [Set geotag] tab.','OSM') ?><br/><br/>
@@ -244,7 +239,7 @@ function osm_map_create_shortcode_function( $post ) {
           <?php include('osm-maptype-select.php'); ?>
           </select>
         </li>
-        <input type="checkbox" name="osm_geotag_show_attribution" id="osm_geotag_show_attribution" value="osm_geotag_show_attribution"> <?php _e('Display attribution (credit) in the map. ','OSM') ?>
+        <input type="checkbox" name="osm_geotag_show_attribution" id="osm_geotag_show_attribution" value="osm_geotag_show_attribution" checked> <?php _e('Display attribution (credit) in the map. ','OSM') ?>
         <span style="color:red"><?php _e('Warning: If you do not check this box, it may violate the license of data or map and have legal consequences!','OSM') ?></span> <!-- <br/>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Why not enabled by default? Read <a target="_new" href="https://developer.wordpress.org/plugins/wordpress-org/detailed-plugin-guidelines/#10-plugins-may-not-embed-external-links-or-credits-on-the-public-site-without-explicitly-asking-the-user%e2%80%99s-permission">Plugins may not embed external links or credits ...</a>--><br/><br/>
     <li>
@@ -266,8 +261,9 @@ function osm_map_create_shortcode_function( $post ) {
     <li>
       <?php _e('post type','OSM') ?>
       <select name="osm_geotag_posttype" id="osm_geotag_posttype">
-        <option value="post"><?php _e('post','OSM') ?></option>
-        <option value="page"><?php _e('page','OSM') ?></option>
+        <option value="post"><?php _e('all posts','OSM') ?></option>
+        <option value="page"><?php _e('all pages','OSM') ?></option>
+        <option value="actual"><?php _e('this post / page','OSM') ?></option>
       </select>
     </li>
     <li>
@@ -302,12 +298,32 @@ function osm_map_create_shortcode_function( $post ) {
        <b>2. <?php _e('Click into the map for geotag!','OSM') ?></b>:
 
 	   <?php $latlon = OSM_default_lat.','.OSM_default_lon; $zoom = OSM_default_zoom;
-		 echo Osm::sc_OL3JS(array('map_center'=>$latlon,'zoom'=>$zoom, 'width'=>'100%','height'=>'450', 'map_event'=>'SetGeotag')); ?>
+		 echo Osm::sc_OL3JS(array('map_center'=>$latlon,'zoom'=>$zoom, 'width'=>'100%','height'=>'450', 'map_event'=>'SetGeotag', 'map_div_name' => 'AddGeotag_map')); ?>
 
        <div id="Geotag_Div"><br/></div><br/>
        <a class="button" onClick="osm_saveGeotag();"> <?php _e('Save','OSM')?> </a><br/><br/>
     </div>  <!-- class="tab_set_geotag" -->
-
+   
+   
+   <!-- id="tab_troubleshooting" -->		
+   <div id="tab_troubleshooting" class="osm-tab-content">
+<table border="0" >
+  <tr>
+    <td><?php  echo '<p><img src="'.OSM_PLUGIN_URL.'/WP_OSM_Plugin_Logo.png" align="left" vspace="10" hspace="20" alt="Osm Logo"></p>'; ?></td>
+    <td> <h3><?php echo 'WordPress OSM Plugin '.PLUGIN_VER.' '; ?></h3></td>
+   </tr>
+</table>
+     <b><?php _e('Loading my GPX / KML file does not work','OSM') ?></b><br>
+     There are three GPX files provided by the WP OSM Plugin. Try to use them and see if there is a generic problem or it is caused by your personal GPX / KML file: <br><br>
+       <?php echo OSM_PLUGIN_URL; echo "examples/sample01.gpx" ?><br>
+       <?php echo OSM_PLUGIN_URL; echo "examples/sample02.gpx" ?><br>
+       <?php echo OSM_PLUGIN_URL; echo "examples/sample03.gpx" ?><br><br>
+       
+     <b><?php _e('How can I show more than one marker in a map?','OSM') ?></b><br>       
+     You have to use a KML file, find a sample here: <br><br>
+     <?php echo OSM_PLUGIN_URL; echo "examples/MarkerSample.kml" ?><br>
+     </div> <!-- id="tab_troubleshooting" -->	
+     
      <div id="tab_about" class="osm-tab-content">
      <b><?php echo 'WordPress OSM Plugin '.PLUGIN_VER.' '; ?></b><br/>
      <b><font color="#FF0000"><?php echo 'We need help for translations!'; ?></b></font>
@@ -330,15 +346,11 @@ function osm_map_create_shortcode_function( $post ) {
      <b><?php _e('Some usefull sites for this plugin:','OSM') ?></b>
      <ol>
        <li><?php _e('for advanced samples visit the ','OSM') ?><a target="_new" href="http://wp-osm-plugin.hyumika.com">osm-plugin page</a>.</li>
-       <li><?php _e('for questions, bugs and other feedback visit the','OSM') ?> <a target="_new" href="http://wp-osm-plugin.hanblog.net/forums/">EN | DE forum</a></li>
+       <li><?php _e('for questions, bugs and other feedback visit the','OSM') ?> <a target="_new" href="https://wp-osm-plugin.hyumika.com/forums/forum/WordPress-OpenStreetMap/">EN | DE forum</a></li>
        <li><?php _e('Follow us on twitter: ','OSM') ?><a target="_new" href="https://twitter.com/wp_osm_plugin">wp-osm-plugin</a>.</li>
       <li><?php _e('download the last version at WordPress.org ','OSM') ?><a target="_new" href="http://wordpress.org/extend/plugins/osm/">osm-plugin download</a>.</li>
     </ol>
-     <b><?php _e('Some GPX samples:','OSM') ?></b><br>
 
-       <?php echo OSM_PLUGIN_URL; echo "examples/sample01.gpx" ?><br>
-       <?php echo OSM_PLUGIN_URL; echo "examples/sample02.gpx" ?><br>
-       <?php echo OSM_PLUGIN_URL; echo "examples/sample03.gpx" ?>
 
  </div> <!-- id="tab_about" -->
 

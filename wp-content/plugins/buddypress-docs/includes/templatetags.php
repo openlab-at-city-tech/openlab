@@ -601,7 +601,12 @@ function bp_docs_is_doc_edit_locked( $doc_id = false ) {
 
 			// Because we're not using WP autosave at the moment, ensure that
 			// the lock interval always returns as in process
-			add_filter( 'wp_check_post_lock_window', create_function( false, 'return time();' ) );
+			add_filter(
+				'wp_check_post_lock_window',
+				function() {
+					return time();
+				}
+			);
 
 			$is_edit_locked = wp_check_post_lock( $doc_id );
 		}

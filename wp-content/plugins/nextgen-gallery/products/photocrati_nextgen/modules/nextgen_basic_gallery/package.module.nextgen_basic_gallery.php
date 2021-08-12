@@ -3,13 +3,22 @@
  * Class A_NextGen_Basic_Gallery_Controller
  * @mixin C_Display_Type_Controller
  * @adapts I_Display_Type_Controller for both "photocrati-nextgen_basic_slideshow" and "photocrati-nextgen_basic_thumbnails" contexts
+ * @property C_Display_Type_Controller|A_NextGen_Basic_Gallery_Controller $object
  */
 class A_NextGen_Basic_Gallery_Controller extends Mixin
 {
-    function index_action($displayed_gallery, $return = FALSE)
+    protected static $alternate_displayed_galleries = array();
+    /**
+     * @param C_Displayed_Gallery $displayed_gallery
+     * @return C_Displayed_Gallery
+     */
+    function get_alternate_displayed_gallery($displayed_gallery)
     {
-        $retval = '';
-        $call_parent = TRUE;
+        // Prevent recursive checks for further alternates causing additional modifications to the settings array
+        $id = $displayed_gallery->id();
+        if (!empty(self::$alternate_displayed_galleries[$id])) {
+            return self::$alternate_displayed_galleries[$id];
+        }
         $show = $this->object->param('show');
         $pid = $this->object->param('pid');
         if (!empty($pid) && isset($displayed_gallery->display_settings['use_imagebrowser_effect']) && intval($displayed_gallery->display_settings['use_imagebrowser_effect'])) {
@@ -22,16 +31,27 @@ class A_NextGen_Basic_Gallery_Controller extends Mixin
             if ((!empty($ds['show_slideshow_link']) || !empty($ds['show_thumbnail_link']) || !empty($ds['use_imagebrowser_effect'])) && $show != $this->object->context) {
                 // Render the new display type
                 $renderer = C_Displayed_Gallery_Renderer::get_instance();
-                $displayed_gallery->original_display_type = $displayed_gallery->display_type;
-                $displayed_gallery->original_settings = $displayed_gallery->display_settings;
-                $displayed_gallery->display_type = $show;
-                $params = (array) $displayed_gallery->get_entity();
+                $params['original_display_type'] = $displayed_gallery->display_type;
+                $params['original_settings'] = $displayed_gallery->display_settings;
+                $params['display_type'] = $show;
                 $params['display_settings'] = array();
-                $retval = $renderer->display_images($params, $return);
-                $call_parent = FALSE;
+                $displayed_gallery = $renderer->params_to_displayed_gallery($params);
+                if (is_null($displayed_gallery->id())) {
+                    $displayed_gallery->id(md5(json_encode($displayed_gallery->get_entity())));
+                }
+                self::$alternate_displayed_galleries[$id] = $displayed_gallery;
             }
         }
-        return $call_parent ? $this->call_parent('index_action', $displayed_gallery, $return) : $retval;
+        return $displayed_gallery;
+    }
+    function index_action($displayed_gallery, $return = FALSE)
+    {
+        $alternate_displayed_gallery = $this->object->get_alternate_displayed_gallery($displayed_gallery);
+        if ($displayed_gallery !== $alternate_displayed_gallery) {
+            $renderer = C_Displayed_Gallery_Renderer::get_instance();
+            return $renderer->display_images($alternate_displayed_gallery, $return);
+        }
+        return $this->call_parent('index_action', $displayed_gallery, $return);
     }
     /**
      * Returns a url to view the displayed gallery using an alternate display
@@ -582,6 +602,21 @@ class A_NextGen_Basic_Thumbnails_Controller extends Mixin
                 $output = $this->object->legacy_render($display_settings['template'], $params, $return, 'gallery');
             } else {
                 $params = $display_settings;
+                // Additional values for the carousel display view
+                if (!empty($this->param('pid'))) {
+                    foreach ($images as $image) {
+                        if ($image->image_slug === $this->param('pid')) {
+                            $params['current_image'] = $image;
+                        }
+                    }
+                    if ($pagination_result) {
+                        $params['pagination_prev'] = $pagination_result['prev'];
+                        $params['pagination_next'] = $pagination_result['next'];
+                    }
+                }
+                if (empty($params['current_image'])) {
+                    $params['current_image'] = reset($images);
+                }
                 $params['storage'] =& $storage;
                 $params['images'] =& $images;
                 $params['displayed_gallery_id'] = $gallery_id;

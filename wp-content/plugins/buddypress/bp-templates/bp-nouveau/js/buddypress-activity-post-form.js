@@ -1,10 +1,10 @@
-/* global bp, BP_Nouveau, _, Backbone */
+/* global BP_Nouveau, _, Backbone */
 /* @since 3.0.0 */
-/* @version 5.0.0 */
+/* @version 8.0.0 */
 window.wp = window.wp || {};
 window.bp = window.bp || {};
 
-( function( exports, $ ) {
+( function( bp, $ ) {
 	bp.Nouveau = bp.Nouveau || {};
 
 	// Bail if not set
@@ -672,6 +672,7 @@ window.bp = window.bp || {};
 		},
 
 		cleanFeedback: function() {
+			this.model.unset( 'errors', { silent: true } );
 			_.each( this.views._views[''], function( view ) {
 				if ( 'message' === view.$el.prop( 'id' ) ) {
 					view.remove();
@@ -777,7 +778,6 @@ window.bp = window.bp || {};
 					bp.Nouveau.inject( '#activity-stream ul.activity-list', response.activity, 'prepend' );
 				}
 			} ).fail( function( response ) {
-
 				self.model.set( 'errors', { type: 'error', value: response.message } );
 			} );
 		}
@@ -785,4 +785,4 @@ window.bp = window.bp || {};
 
 	bp.Nouveau.Activity.postForm.start();
 
-} )( bp, jQuery );
+} )( window.bp, jQuery );

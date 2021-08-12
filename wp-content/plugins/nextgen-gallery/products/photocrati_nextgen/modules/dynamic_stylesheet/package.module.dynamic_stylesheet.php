@@ -77,7 +77,7 @@ class Mixin_Dynamic_Stylesheet_Instance_Methods extends Mixin
                 wp_add_inline_style('ngg_dyncss', $css);
             } else {
                 $data = $this->object->encode($data);
-                wp_enqueue_style('dyncss-' . $index . $data . '@dynamic', $this->object->get_router()->get_url("/{$this->object->_app}", array()) . "?index={$index}&data={$data}", FALSE, NGG_SCRIPT_VERSION);
+                wp_enqueue_style('dyncss-' . $index . $data . '@dynamic', $this->object->get_router()->get_url("/{$this->object->_app}", TRUE) . "?index={$index}&data={$data}", FALSE, NGG_SCRIPT_VERSION);
             }
         }
     }

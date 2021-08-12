@@ -1,62 +1,60 @@
 <?php get_header(); ?>
 
-<div class="content section-inner">
-																	                    
-	<?php if ( have_posts() ) : ?>
+<main id="site-content" class="content section-inner">
 	
-		<div class="posts">
-	
-			<?php
+	<div class="posts">
 
-			$paged = get_query_var( 'paged' ) ? get_query_var( 'paged' ) : 1;
-			$total_post_count = wp_count_posts();
-			$published_post_count = $total_post_count->publish;
-			$total_pages = ceil( $published_post_count / $posts_per_page );
+		<?php
+	
+		$archive_title 			= get_the_archive_title();
+		$archive_description 	= get_the_archive_description();
+
+		if ( $archive_title || $archive_description ) : ?>
+
+			<header class="archive-header contain-margins">
+
+				<?php if ( $archive_title ) : ?>
+					<h1 class="archive-title"><?php echo wp_kses_post( $archive_title ); ?></h1>
+				<?php endif; ?>
+
+				<?php if ( $archive_description ) : ?>
+					<div class="archive-description contain-margins"><?php echo wpautop( wp_kses_post( $archive_description ) ); ?></div>
+				<?php endif; ?>
+				
+			</header><!-- .archive-header -->
+
+			<?php 
+		endif;
+
+		if ( have_posts() ) :
 			
-			if ( "1" < $paged ) : ?>
-			
-				<div class="page-title">
-				
-					<h4><?php printf( __( 'Page %1$s of %2$s', 'lingonberry' ), $paged, $wp_query->max_num_pages ); ?></h4>
-					
-				</div>
-				
-				<div class="clear"></div>
-			
-			<?php endif; ?>
-				
-		    	<?php while ( have_posts() ) : the_post(); ?>
-		    	
-					<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
-		    	
-			    		<?php get_template_part( 'content', get_post_format() ); ?>
-			    		
-			    		<div class="clear"></div>
-		    		
-		    		</div><!-- .post -->
-		    			        		            
-		        <?php endwhile; ?>
-	        	        		
-			<?php if ( $wp_query->max_num_pages > 1 ) : ?>
-			
-				<div class="post-nav archive-nav">
-				
-					<?php echo get_next_posts_link( __( '&laquo; Older<span> posts</span>', 'lingonberry' ) ); ?>
-								
-					<?php echo get_previous_posts_link( __( 'Newer<span> posts</span> &raquo;', 'lingonberry' ) ); ?>
-					
-					<div class="clear"></div>
-					
-				</div><!-- .post-nav archive-nav -->
-				
-			<div class="clear"></div>
-				
-			<?php endif; ?>
-        	                    
-		<?php endif; ?>
+			while ( have_posts() ) {
+				the_post(); 
+				get_template_part( 'content', get_post_format() ); 
+			}
+
+			get_template_part( 'pagination' ); 
+
+		elseif ( is_search() ) : 
+			?>
+
+			<div class="post-bubbles">
+				<div class="format-bubble"></div>
+			</div>
 		
+			<div class="content-inner">
+				<div class="post-content">
+					<p><?php _e( 'No results. Try again, would you kindly?', 'lingonberry' ); ?></p>
+					<?php get_search_form(); ?>
+				</div><!-- .post-content -->
+			</div><!-- .content-inner -->
+
+			<?php
+		endif;
+		?>
+
 	</div><!-- .posts -->
 		
-</div><!-- .content section-inner -->
-	              	        
+</main><!-- #site-content -->
+
 <?php get_footer(); ?>

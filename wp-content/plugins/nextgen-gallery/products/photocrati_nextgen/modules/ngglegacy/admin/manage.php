@@ -689,6 +689,9 @@ class nggManageGallery {
 				case 'set_watermark':
 					nggAdmin::do_ajax_operation( 'set_watermark' , $_POST['doaction'], __('Set watermark', 'nggallery') );
 					break;
+                case 'strip_orientation_tag':
+                    nggAdmin::do_ajax_operation( 'strip_orientation_tag' , $_POST['doaction'], __('Remove EXIF Orientation', 'nggallery') );
+                    break;
 				case 'delete_images':
 					if ( is_array($_POST['doaction']) ) {
 						foreach ( $_POST['doaction'] as $imageID ) {

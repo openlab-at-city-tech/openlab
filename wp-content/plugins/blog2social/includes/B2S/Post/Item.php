@@ -630,6 +630,7 @@ class B2S_Post_Item {
             } else {
                 $addSearchShowByDate = (!empty($this->searchShowByDate)) ? (($this->type == 'publish' || $this->type == 'notice') ? " AND DATE_FORMAT(posts.publish_date,'%Y-%m-%d') = '" . $this->searchShowByDate . "' " : " AND DATE_FORMAT(posts.sched_date,'%Y-%m-%d') = '" . $this->searchShowByDate . "' ") : '';
                 $addWhere = ($this->type == 'notice') ? ' AND posts.`publish_error_code` != "" ' : ' AND posts.`publish_error_code` = "" ';
+                $addWhere .= ((int) $this->searchPostSharedById > 0) ? ' AND posts.`blog_user_id` = '.$this->searchPostSharedById.' ' : ' ';
                 $where = ($this->type == 'publish' || $this->type == 'notice') ? " (posts.`sched_date` = '0000-00-00 00:00:00' OR (posts.`sched_type` = 3 AND posts.`publish_date` != '0000-00-00 00:00:00')) AND posts.`post_for_approve`= 0 " . $addWhere : " (posts.`sched_type` != 3 OR (posts.`sched_type` = 3 AND posts.`publish_date` = '0000-00-00 00:00:00')) AND posts.`publish_date` = '0000-00-00 00:00:00' AND ((posts.`sched_date_utc` != '0000-00-00 00:00:00' AND posts.`post_for_approve` = 0) OR (posts.`sched_date_utc` >= '" . gmdate('Y-m-d H:i:s') . "' AND posts.`post_for_approve` = 1)) ";
             }
             $sqlPostsTotal = "SELECT COUNT(posts.`post_id`) FROM `{$wpdb->prefix}b2s_posts` posts $addLeftJoin $addLeftJoinNetwork WHERE $addLeftJoinWhere $addLeftJoinWhereNetwork $where $addNotAdmin $addSearchShowByDate AND posts.`hide` = 0 AND posts.`post_id` = " . $post_id;
@@ -717,13 +718,14 @@ class B2S_Post_Item {
         return $this->postPagination;
     }
 
-    public function getPublishPostDataHtml($post_id = 0, $type = 'publish', $showByDate = '') {
+    public function getPublishPostDataHtml($post_id = 0, $type = 'publish', $showByDate = '', $sharedByUser = 0) {
         if ($post_id > 0) {
             global $wpdb;
             $addNotAdminPosts = (!B2S_PLUGIN_ADMIN) ? (' AND blog_user_id =' . B2S_PLUGIN_BLOG_USER_ID) : '';
+            $addSharedByUser = ($sharedByUser > 0) ? (' AND blog_user_id =' . $sharedByUser) : '';
             $addSearchShowByDate = (!empty($showByDate)) ? " AND DATE_FORMAT(`{$wpdb->prefix}b2s_posts`.`publish_date`,'%%Y-%%m-%%d') = '" . $showByDate . "' " : '';
             $addWhere = ($type == 'notice') ? ' AND `' . $wpdb->prefix . 'b2s_posts`.`publish_error_code` != "" ' : ' AND `' . $wpdb->prefix . 'b2s_posts`.`publish_error_code` = "" ';
-            $sqlData = $wpdb->prepare("SELECT `{$wpdb->prefix}b2s_posts`.`id`,`blog_user_id`, `sched_date`,`publish_date`,`publish_link`,`sched_type`,`publish_error_code`,`{$wpdb->prefix}b2s_posts_network_details`.`network_id`,`{$wpdb->prefix}b2s_posts_network_details`.`network_type`, `{$wpdb->prefix}b2s_posts_network_details`.`network_auth_id`, `{$wpdb->prefix}b2s_posts_network_details`.`network_display_name` FROM `{$wpdb->prefix}b2s_posts` LEFT JOIN `{$wpdb->prefix}b2s_posts_network_details` ON `{$wpdb->prefix}b2s_posts`.`network_details_id` = `{$wpdb->prefix}b2s_posts_network_details`.`id` WHERE `{$wpdb->prefix}b2s_posts`.`hide` = 0 AND `{$wpdb->prefix}b2s_posts`.`post_for_approve`= 0  AND (`{$wpdb->prefix}b2s_posts`.`sched_date` = '0000-00-00 00:00:00' OR (`{$wpdb->prefix}b2s_posts`.`sched_type` = 3 AND `{$wpdb->prefix}b2s_posts`.`publish_date` != '0000-00-00 00:00:00')) $addWhere $addNotAdminPosts $addSearchShowByDate AND `{$wpdb->prefix}b2s_posts`.`post_id` = %d ORDER BY `{$wpdb->prefix}b2s_posts`.`publish_date` DESC", $post_id);
+            $sqlData = $wpdb->prepare("SELECT `{$wpdb->prefix}b2s_posts`.`id`,`blog_user_id`, `sched_date`,`publish_date`,`publish_link`,`sched_type`,`publish_error_code`,`{$wpdb->prefix}b2s_posts_network_details`.`network_id`,`{$wpdb->prefix}b2s_posts_network_details`.`network_type`, `{$wpdb->prefix}b2s_posts_network_details`.`network_auth_id`, `{$wpdb->prefix}b2s_posts_network_details`.`network_display_name` FROM `{$wpdb->prefix}b2s_posts` LEFT JOIN `{$wpdb->prefix}b2s_posts_network_details` ON `{$wpdb->prefix}b2s_posts`.`network_details_id` = `{$wpdb->prefix}b2s_posts_network_details`.`id` WHERE `{$wpdb->prefix}b2s_posts`.`hide` = 0 AND `{$wpdb->prefix}b2s_posts`.`post_for_approve`= 0  AND (`{$wpdb->prefix}b2s_posts`.`sched_date` = '0000-00-00 00:00:00' OR (`{$wpdb->prefix}b2s_posts`.`sched_type` = 3 AND `{$wpdb->prefix}b2s_posts`.`publish_date` != '0000-00-00 00:00:00')) $addWhere $addNotAdminPosts $addSharedByUser $addSearchShowByDate AND `{$wpdb->prefix}b2s_posts`.`post_id` = %d ORDER BY `{$wpdb->prefix}b2s_posts`.`publish_date` DESC", $post_id);
             $result = $wpdb->get_results($sqlData);
             $specialPostingData = array(3 => esc_html__('Auto-Posting', 'blog2social'), 4 => esc_html__('Retweet', 'blog2social'), 5 => esc_html__('Re-Share', 'blog2social'));
             if (!empty($result) && is_array($result)) {

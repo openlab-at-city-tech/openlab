@@ -20,7 +20,7 @@ window.bp = window.bp || {};
 	 * @since 2.1.0
 	 */
 	$.fn.bp_mentions = function( options ) {
-		if ( $.isArray( options ) ) {
+		if ( Array.isArray( options ) ) {
 			options = { data: options };
 		}
 
@@ -178,7 +178,8 @@ window.bp = window.bp || {};
 
 					params = { 'action': 'bp_get_suggestions', 'term': query, 'type': 'members' };
 
-					if ( $.isNumeric( this.$inputor.data( 'suggestions-group-id' ) ) ) {
+					var groupId = this.$inputor.data( 'suggestions-group-id' );
+					if ( ( 'number' === typeof groupId || 'string' === typeof groupId ) && ! isNaN( groupId - parseFloat( groupId ) ) ) {
 						params['group-id'] = parseInt( this.$inputor.data( 'suggestions-group-id' ), 10 );
 					}
 

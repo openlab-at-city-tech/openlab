@@ -1,0 +1,74 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Sudar
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Posts By Tag v1.3\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/posts-by-tag\n"
+"POT-Creation-Date: 2009-07-27 13:11+0000\n"
+"PO-Revision-Date: 2010-07-16 15:08+0100\n"
+"Last-Translator: Rian van Spaandonk <rian.vanspaandonk@pangaea.nl>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Poedit-Language: German\n"
+"X-Poedit-Country: GERMANY\n"
+
+#: posts-by-tag.php:72
+msgid "Widget that shows posts from a set of tags"
+msgstr "Widget, das Nachrichten eines Tagsets zeigt"
+
+#. #-#-#-#-#  posts-by-tag.pot (Posts By Tag 0.1)  #-#-#-#-#
+#. Plugin Name of an extension
+#: posts-by-tag.php:78
+msgid "Posts By Tag"
+msgstr "Posts By Tag"
+
+#: posts-by-tag.php:121
+msgid "Posted by: "
+msgstr "Geschrieben von:"
+
+#: posts-by-tag.php:163
+msgid "Title:"
+msgstr "Titel:"
+
+#: posts-by-tag.php:169
+msgid "Tags:"
+msgstr "Tags:"
+
+#: posts-by-tag.php:172
+msgid "Seperate multiple tags by comma"
+msgstr "Tags mit einem Komma trennen"
+
+#: posts-by-tag.php:177
+msgid "Number of posts to show:"
+msgstr "Zahl der gezeigten Nachrichten:"
+
+#: posts-by-tag.php:184
+msgid "Show Post thumbnails"
+msgstr "Miniaturansichte Zeigen"
+
+#: posts-by-tag.php:190
+msgid "Show post excerpt"
+msgstr "Auszug zeigen"
+
+#. Plugin URI of an extension
+msgid "http://sudarmuthu.com/wordpress/posts-by-tag"
+msgstr "http://sudarmuthu.com/wordpress/posts-by-tag"
+
+#. Description of an extension
+msgid "Provide sidebar widgets that cna be used to display posts from a set of tags in the sidebar."
+msgstr "Bietet Randleiste-Widgets womit Nachrichten eines Tagsets in der Randleiste gezeigt werden k&ouml;nnen."
+
+#. Author of an extension
+msgid "Sudar"
+msgstr "Sudar"
+
+#. Author URI of an extension
+msgid "http://sudarmuthu.com/"
+msgstr "http://sudarmuthu.com/"
+

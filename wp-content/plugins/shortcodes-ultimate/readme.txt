@@ -6,7 +6,7 @@ Tags: shortcode, toggle, columns, button, slider
 Requires PHP: 5.3
 Requires at least: 4.6
 Tested up to: 5.7
-Stable tag: 5.9.8
+Stable tag: 5.10.0
 
 A comprehensive collection of visual components for your site
 
@@ -140,19 +140,18 @@ Yes! Shortcodes Ultimate is designed to work with any theme, but your theme must
 
 ### Where can I get help?
 
-First, visit the [Help Center](https://getshortcodes.com/support/). If you get stuck, ask for help at the [official support forum](https://wordpress.org/support/plugin/shortcodes-ultimate). Also, you can get personal support from the developer by purchasing any of the [premium add-ons](https://getshortcodes.com/add-ons/).
+First, visit the [Help Center](https://getshortcodes.com/support/). If you get stuck, ask for help at the [community support forum](https://wordpress.org/support/plugin/shortcodes-ultimate). Also, you can get personal support from the developer by purchasing any of the [premium add-ons](https://getshortcodes.com/add-ons/).
 
 
 ## Changelog
 
 
-### 5.9.8
+### 5.10.0
 
 **What's new**
 
-- Improved handling of nested dynamic elements within Tabs
-- Improved handling of nested dynamic elements within Spoiler
-- Tested compatibility with WordPress 5.7
+- Major update to the `su_tooltip` shortcode, now it works without jQuery migrate and has more options
+- Fixed logic of the `su_user` shortcode
 
 ---
 [Version history →](https://plugins.trac.wordpress.org/browser/shortcodes-ultimate/trunk/changelog.txt)

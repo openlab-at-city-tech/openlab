@@ -2,7 +2,7 @@
 /**
  * Widget for adding ads to a sidebar.
  *
- * @package Jetpack.
+ * @package automattic/jetpack
  */
 
 /**
@@ -79,7 +79,9 @@ class WordAds_Sidebar_Widget extends WP_Widget {
 
 			$snippet = $wordads->get_house_ad( $unit );
 		} else {
-			$snippet = $wordads->get_ad_snippet( $section_id, $height, $width, 'widget' );
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			echo $wordads->get_ad_snippet( $section_id, $height, $width, 'widget' );
+			return;
 		}
 
 		?>

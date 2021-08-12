@@ -422,7 +422,7 @@ class BP_Invitation {
 		 * invite_sent
 		 * Only create a where statement if something less than "all" has been
 		 * specifically requested.
-		 */ 
+		 */
 		if ( ! empty( $args['invite_sent'] ) && 'all' !== $args['invite_sent'] ) {
 			if ( $args['invite_sent'] == 'draft' ) {
 				$where_conditions['invite_sent'] = "invite_sent = 0";
@@ -443,7 +443,7 @@ class BP_Invitation {
 		// search_terms.
 		if ( ! empty( $args['search_terms'] ) ) {
 			$search_terms_like = '%' . bp_esc_like( $args['search_terms'] ) . '%';
-			$where_conditions['search_terms'] = $wpdb->prepare( "( class LIKE %s )", $search_terms_like, $search_terms_like );
+			$where_conditions['search_terms'] = $wpdb->prepare( '( invitee_email LIKE %s OR content LIKE %s )', $search_terms_like, $search_terms_like );
 		}
 
 		// Custom WHERE.
@@ -640,6 +640,12 @@ class BP_Invitation {
 			}
 		}
 
+		// date_modified
+		if ( ! empty( $args['date_modified'] ) ) {
+			$where_clauses['data']['date_modified'] = $args['date_modified'];
+			$where_clauses['format'][] = '%s';
+		}
+
 		return $where_clauses;
 	}
 
@@ -654,7 +660,7 @@ class BP_Invitation {
 	 *     Associative array of arguments. All arguments but $page and
 	 *     $per_page can be treated as filter values for get_where_sql()
 	 *     and get_query_clauses(). All items are optional.
-	 *     @type int|array    $id                ID of invitation being updated.
+	 *     @type int|array    $id                ID of invitation being fetched.
 	 *                                           Can be an array of IDs.
 	 *     @type int|array    $user_id           ID of user being queried. Can be an
 	 *                                           Can be an array of IDs.
@@ -694,9 +700,9 @@ class BP_Invitation {
 	 *     @type int          $per_page          Number of items to show per page.
 	 *                                           Default: false (no pagination,
 	 *                                           all items).
-  	 *     @type string       $fields            Which fields to return. Specify 'item_ids' to fetch a list of Item_IDs.
-  	 *                                           Specify 'ids' to fetch a list of Invitation IDs.
- 	 *                                           Default: 'all' (return BP_Invitation objects).
+	 *     @type string       $fields            Which fields to return. Specify 'item_ids' to fetch a list of Item_IDs.
+	 *                                           Specify 'ids' to fetch a list of Invitation IDs.
+	 *                                           Default: 'all' (return BP_Invitation objects).
 	 * }
 	 *
 	 * @return array BP_Invitation objects | IDs of found invite.
@@ -830,10 +836,29 @@ class BP_Invitation {
 		global $wpdb;
 		$invites_table_name = BP_Invitation_Manager::get_table_name();
 
+		$r  = bp_parse_args( $args, array(
+			'id'                => false,
+			'user_id'           => false,
+			'inviter_id'        => false,
+			'invitee_email'     => false,
+			'class'             => false,
+			'item_id'           => false,
+			'secondary_item_id' => false,
+			'type'              => 'all',
+			'invite_sent'       => 'all',
+			'accepted'          => 'pending',
+			'search_terms'      => '',
+			'order_by'          => false,
+			'sort_order'        => false,
+			'page'              => false,
+			'per_page'          => false,
+			'fields'            => 'all',
+		), 'bp_invitations_invitation_get_total_count' );
+
 		// Build the query
 		$select_sql = "SELECT COUNT(*)";
 		$from_sql   = "FROM {$invites_table_name}";
-		$where_sql  = self::get_where_sql( $args );
+		$where_sql  = self::get_where_sql( $r );
 		$sql        = "{$select_sql} {$from_sql} {$where_sql}";
 
 		// Return the queried results
@@ -892,7 +917,7 @@ class BP_Invitation {
 		 */
 		do_action( 'bp_invitation_after_update', $where_args, $update_args );
 
-  		return $retval;
+		return $retval;
 	}
 
 	/**
@@ -968,9 +993,17 @@ class BP_Invitation {
 	 *
 	 * @since 5.0.0
 	 *
-	 * @param int $id The ID of the invitation to mark as sent.
+	 * @param int   $id   The ID of the invitation to mark as sent.
+	 * @param array $args {
+	 *     Optional. Invitation characteristics used
+	 *     to override certain sending behaviors.
+	 *
+	 *     @type string $date_modified Modified time in 'Y-m-d h:i:s' format, GMT.
+	 *                                 Defaults to current time if not specified.
+	 * }
+	 * @return int|bool The number of rows updated, or false on error.
 	 */
-	public static function mark_sent( $id = 0 ) {
+	public static function mark_sent( $id = 0, $args = array() ) {
 
 		if ( ! $id ) {
 			return false;
@@ -978,8 +1011,13 @@ class BP_Invitation {
 
 		// Values to be updated.
 		$update_args = array(
-			'invite_sent' => 'sent',
+			'invite_sent'   => 'sent',
+			'date_modified' => bp_core_current_time(),
 		);
+		// Respect a specified `date-modified`.
+		if ( ! empty( $args['date_modified'] ) ) {
+			$update_args['date_modified'] = $args['date_modified'];
+		}
 
 		// WHERE clauses.
 		$where_args = array(
@@ -995,14 +1033,20 @@ class BP_Invitation {
 	 *
 	 * @since 5.0.0
 	 *
- 	 * @param array $args See BP_Invitation::update().
+	 * @param array $args See BP_Invitation::update().
+	 * @return int|bool The number of rows updated, or false on error.
 	 */
 	public static function mark_sent_by_data( $args ) {
 
 		// Values to be updated.
 		$update_args = array(
-			'invite_sent' => 'sent',
+			'invite_sent'   => 'sent',
+			'date_modified' => bp_core_current_time(),
 		);
+		// Respect a specified `date-modified`.
+		if ( ! empty( $args['date_modified'] ) ) {
+			$update_args['date_modified'] = $args['date_modified'];
+		}
 
 		return self::update( $update_args, $args );
 	}
@@ -1014,9 +1058,17 @@ class BP_Invitation {
 	 *
 	 * @since 5.0.0
 	 *
-	 * @param int $id The ID of the invitation to mark as sent.
+	 * @param int   $id   The ID of the invitation to mark as sent.
+	 * @param array $args {
+	 *     Optional. Invitation characteristics used
+	 *     to override certain sending behaviors.
+	 *
+	 *     @type string $date_modified Modified time in 'Y-m-d h:i:s' format, GMT.
+	 *                                 Defaults to current time if not specified.
+	 * }
+	 * @return int|bool The number of rows updated, or false on error.
 	 */
-	public static function mark_accepted( $id = 0 ) {
+	public static function mark_accepted( $id = 0, $args = array() ) {
 
 		if ( ! $id ) {
 			return false;
@@ -1024,8 +1076,13 @@ class BP_Invitation {
 
 		// Values to be updated.
 		$update_args = array(
-			'accepted' => 'accepted',
+			'accepted'      => 'accepted',
+			'date_modified' => bp_core_current_time(),
 		);
+		// Respect a specified `date-modified`.
+		if ( ! empty( $args['date_modified'] ) ) {
+			$update_args['date_modified'] = $args['date_modified'];
+		}
 
 		// WHERE clauses.
 		$where_args = array(
@@ -1041,14 +1098,20 @@ class BP_Invitation {
 	 *
 	 * @since 5.0.0
 	 *
- 	 * @param array $args See BP_Invitation::update().
+	 * @param array $args See BP_Invitation::update().
+	 * @return int|bool The number of rows updated, or false on error.
 	 */
 	public static function mark_accepted_by_data( $args ) {
 
 		// Values to be updated.
 		$update_args = array(
-			'accepted' => 'accepted',
+			'accepted'      => 'accepted',
+			'date_modified' => bp_core_current_time(),
 		);
+		// Respect a specified `date-modified`.
+		if ( ! empty( $args['date_modified'] ) ) {
+			$update_args['date_modified'] = $args['date_modified'];
+		}
 
 		return self::update( $update_args, $args );
 	}

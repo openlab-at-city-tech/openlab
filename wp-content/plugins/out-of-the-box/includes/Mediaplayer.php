@@ -24,7 +24,7 @@ class Mediaplayer
 
     public function get_media_list()
     {
-        $this->_folder = $this->get_processor()->get_client()->get_folder(null, true, true, false);
+        $this->_folder = $this->get_processor()->get_client()->get_folder(null, false, true, false);
 
         if ((false !== $this->_folder)) {
             //Create Gallery array
@@ -40,7 +40,7 @@ class Mediaplayer
             }
         }
 
-        die();
+        exit();
     }
 
     public function setFolder($folder)
@@ -95,7 +95,7 @@ class Mediaplayer
         //Create Filelist array
         if ($this->_folder->has_children()) {
             foreach ($this->_folder->get_children() as $child) {
-                if (false === $this->is_media_file($child)) {
+                if (false === $this->is_media_file($child) || false === $this->get_processor()->_is_entry_authorized($child)) {
                     continue;
                 }
 
@@ -128,9 +128,8 @@ class Mediaplayer
                         }
                     }
 
-
                     $last_edited = $child->get_last_edited();
-                    $localtime = get_date_from_gmt(date('Y-m-d H:i:s', strtotime($last_edited)));
+                    $localtime = get_date_from_gmt(date('Y-m-d H:i:s', $last_edited));
 
                     $files[$path] = [
                         'title' => $basename,
@@ -142,6 +141,7 @@ class Mediaplayer
                         'poster' => $poster,
                         'thumb' => $thumbnailsmall,
                         'size' => $child->get_size(),
+                        'last_edited' => $last_edited,
                         'last_edited_date_str' => !empty($last_edited) ? date_i18n(get_option('date_format'), strtotime($localtime)) : '',
                         'last_edited_time_str' => !empty($last_edited) ? date_i18n(get_option('time_format'), strtotime($localtime)) : '',
                         'download' => (('1' === $this->get_processor()->get_shortcode_option('linktomedia')) && $this->get_processor()->get_user()->can_download()) ? str_replace('outofthebox-stream', 'outofthebox-download', $source_url) : false,

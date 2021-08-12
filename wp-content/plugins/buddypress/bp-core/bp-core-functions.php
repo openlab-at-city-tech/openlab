@@ -433,16 +433,12 @@ function bp_is_username_compatibility_mode() {
  */
 function bp_use_wp_admin_bar() {
 
-	// Default to true (to avoid loading deprecated BuddyBar code).
+	// Default to true.
 	$use_admin_bar = true;
 
 	// Has the WP Toolbar constant been explicitly opted into?
 	if ( defined( 'BP_USE_WP_ADMIN_BAR' ) ) {
 		$use_admin_bar = (bool) BP_USE_WP_ADMIN_BAR;
-
-	// ...or is the old BuddyBar being forced back into use?
-	} elseif ( bp_force_buddybar( false ) ) {
-		$use_admin_bar = false;
 	}
 
 	/**
@@ -706,7 +702,7 @@ function bp_core_add_page_mappings( $components, $existing = 'keep' ) {
 
 	// Register and Activate are not components, but need pages when
 	// registration is enabled.
-	if ( bp_get_signup_allowed() ) {
+	if ( bp_get_signup_allowed() || bp_get_members_invitations_allowed()  ) {
 		foreach ( array( 'register', 'activate' ) as $slug ) {
 			if ( ! isset( $pages[ $slug ] ) ) {
 				$pages_to_create[ $slug ] = $page_titles[ $slug ];
@@ -950,6 +946,54 @@ function bp_core_get_component_search_query_arg( $component = null ) {
 }
 
 /**
+ * Get a list of all active component objects.
+ *
+ * @since 8.0.0
+ *
+ * @param array $args {
+ *     Optional. An array of key => value arguments to match against the component objects.
+ *     Default empty array.
+ *
+ *     @type string $name          Translatable name for the component.
+ *     @type string $id            Unique ID for the component.
+ *     @type string $slug          Unique slug for the component, for use in query strings and URLs.
+ *     @type bool   $has_directory True if the component has a top-level directory. False otherwise.
+ *     @type string $root_slug     Slug used by the component's directory page.
+ * }
+ * @param string $output   Optional. The type of output to return. Accepts 'ids'
+ *                         or 'objects'. Default 'ids'.
+ * @param string $operator Optional. The logical operation to perform. 'or' means only one
+ *                         element from the array needs to match; 'and' means all elements
+ *                         must match. Accepts 'or' or 'and'. Default 'and'.
+ * @return array A list of component ids or objects.
+ */
+function bp_core_get_active_components( $args = array(), $output = 'ids', $operator = 'and' ) {
+	$bp = buddypress();
+
+	$active_components = array_keys( $bp->active_components );
+
+	$xprofile_id = array_search( 'xprofile', $active_components, true );
+	if ( false !== $xprofile_id ) {
+		$active_components[ $xprofile_id ] = 'profile';
+	}
+
+	$components = array();
+	foreach ( $active_components as $id ) {
+		if ( isset( $bp->{$id} ) && $bp->{$id} instanceof BP_Component ) {
+			$components[ $id ] = $bp->{$id};
+		}
+	}
+
+	$components = wp_filter_object_list( $components, $args, $operator );
+
+	if ( 'ids' === $output ) {
+		$components = wp_list_pluck( $components, 'id' );
+	}
+
+	return $components;
+}
+
+/**
  * Determine whether BuddyPress should register the bp-themes directory.
  *
  * @since 1.9.0
@@ -1133,21 +1177,183 @@ function bp_core_current_time( $gmt = true, $type = 'mysql' ) {
 }
 
 /**
- * Get an English-language representation of the time elapsed since a given date.
+ * Calculate the human time difference between two dates.
  *
  * Based on function created by Dunstan Orchard - http://1976design.com
  *
+ * @since 8.0.0
+ *
+ * @param array $args {
+ *     An array of arguments. All arguments are technically optional.
+ *
+ *     @type int|string $older_date  An integer Unix timestamp or a date string of the format 'Y-m-d h:i:s'.
+ *     @type int|string $newer_date  An integer Unix timestamp or a date string of the format 'Y-m-d h:i:s'.
+ *     @type int        $time_chunks The number of time chunks to get (1 or 2).
+ * }
+ * @return null|array|false Null if there's no time diff. An array containing 1 or 2 chunks
+ *                          of human time. False if travelling into the future.
+ */
+function bp_core_time_diff( $args = array() ) {
+	$retval = null;
+	$r      = wp_parse_args(
+		$args,
+		array(
+			'older_date'     => 0,
+			'newer_date'     => bp_core_current_time( true, 'timestamp' ),
+			'time_chunks'    => 2,
+		)
+	);
+
+	// Array of time period chunks.
+	$chunks = array(
+		YEAR_IN_SECONDS,
+		30 * DAY_IN_SECONDS,
+		WEEK_IN_SECONDS,
+		DAY_IN_SECONDS,
+		HOUR_IN_SECONDS,
+		MINUTE_IN_SECONDS,
+		1
+	);
+
+	foreach ( array( 'older_date', 'newer_date' ) as $date ) {
+		if ( ! $r[ $date ] ) {
+			continue;
+		}
+
+		if ( ! is_numeric( $r[ $date ] ) ) {
+			$time_chunks = explode( ':', str_replace( ' ', ':', $r[ $date ] ) );
+			$date_chunks = explode( '-', str_replace( ' ', '-', $r[ $date ] ) );
+			$r[ $date ]  = gmmktime(
+				(int) $time_chunks[1],
+				(int) $time_chunks[2],
+				(int) $time_chunks[3],
+				(int) $date_chunks[1],
+				(int) $date_chunks[2],
+				(int) $date_chunks[0]
+			);
+		}
+	}
+
+	// Difference in seconds.
+	$diff = $r['newer_date'] - $r['older_date'];
+
+	/**
+	 * We only want to return one or two chunks of time here, eg:
+	 * - `array( 'x years', 'xx months' )`,
+	 * - `array( 'x days', 'xx hours' )`.
+	 * So there's only two bits of calculation below.
+	 */
+	if ( 0 <= $diff && (int) $r['time_chunks'] ) {
+		// Step one: the first chunk.
+		for ( $i = 0, $j = count( $chunks ); $i < $j; ++$i ) {
+			$seconds = $chunks[$i];
+
+			// Finding the biggest chunk (if the chunk fits, break).
+			$count = floor( $diff / $seconds );
+			if ( 0 != $count ) {
+				break;
+			}
+		}
+
+		// Add the first chunk of time diff.
+		if ( isset( $chunks[ $i ] ) ) {
+			$retval = array();
+
+			switch ( $seconds ) {
+				case YEAR_IN_SECONDS :
+					/* translators: %s: the number of years. */
+					$retval[] = sprintf( _n( '%s year', '%s years', $count, 'buddypress' ), $count );
+					break;
+				case 30 * DAY_IN_SECONDS :
+					/* translators: %s: the number of months. */
+					$retval[] = sprintf( _n( '%s month', '%s months', $count, 'buddypress' ), $count );
+					break;
+				case WEEK_IN_SECONDS :
+					/* translators: %s: the number of weeks. */
+					$retval[]= sprintf( _n( '%s week', '%s weeks', $count, 'buddypress' ), $count );
+					break;
+				case DAY_IN_SECONDS :
+					/* translators: %s: the number of days. */
+					$retval[] = sprintf( _n( '%s day', '%s days', $count, 'buddypress' ), $count );
+					break;
+				case HOUR_IN_SECONDS :
+					/* translators: %s: the number of hours. */
+					$retval[] = sprintf( _n( '%s hour', '%s hours', $count, 'buddypress' ), $count );
+					break;
+				case MINUTE_IN_SECONDS :
+					/* translators: %s: the number of minutes. */
+					$retval[] = sprintf( _n( '%s minute', '%s minutes', $count, 'buddypress' ), $count );
+					break;
+				default:
+					/* translators: %s: the number of seconds. */
+					$retval[] = sprintf( _n( '%s second', '%s seconds', $count, 'buddypress' ), $count );
+			}
+
+			/**
+			 * Step two: the second chunk.
+			 *
+			 * A quirk in the implementation means that this condition fails in the case of minutes and seconds.
+			 * We've left the quirk in place, since fractions of a minute are not a useful piece of information
+			 * for our purposes.
+			 */
+			if ( 2 === (int) $r['time_chunks'] && $i + 2 < $j ) {
+				$seconds2 = $chunks[$i + 1];
+				$count2   = floor( ( $diff - ( $seconds * $count ) ) / $seconds2 );
+
+				// Add the second chunk of time diff.
+				if ( 0 !== (int) $count2 ) {
+
+					switch ( $seconds2 ) {
+						case 30 * DAY_IN_SECONDS :
+							/* translators: %s: the number of months. */
+							$retval[] = sprintf( _n( '%s month', '%s months', $count2, 'buddypress' ), $count2 );
+							break;
+						case WEEK_IN_SECONDS :
+							/* translators: %s: the number of weeks. */
+							$retval[] = sprintf( _n( '%s week', '%s weeks', $count2, 'buddypress' ), $count2 );
+							break;
+						case DAY_IN_SECONDS :
+							/* translators: %s: the number of days. */
+							$retval[] = sprintf( _n( '%s day', '%s days',  $count2, 'buddypress' ), $count2 );
+							break;
+						case HOUR_IN_SECONDS :
+							/* translators: %s: the number of hours. */
+							$retval[] = sprintf( _n( '%s hour', '%s hours', $count2, 'buddypress' ), $count2 );
+							break;
+						case MINUTE_IN_SECONDS :
+							/* translators: %s: the number of minutes. */
+							$retval[] = sprintf( _n( '%s minute', '%s minutes', $count2, 'buddypress' ), $count2 );
+							break;
+						default:
+							/* translators: %s: the number of seconds. */
+							$retval[] = sprintf( _n( '%s second', '%s seconds', $count2, 'buddypress' ), $count2 );
+					}
+				}
+			}
+		}
+	} else {
+		// Something went wrong with date calculation and we ended up with a negative date.
+		$retval = false;
+	}
+
+	return $retval;
+}
+
+/**
+ * Get an English-language representation of the time elapsed since a given date.
+ *
  * This function will return an English representation of the time elapsed
  * since a given date.
- * eg: 2 hours and 50 minutes
+ * eg: 2 hours, 50 minutes
  * eg: 4 days
- * eg: 4 weeks and 6 days
+ * eg: 4 weeks, 6 days
  *
  * Note that fractions of minutes are not represented in the return string. So
  * an interval of 3 minutes will be represented by "3 minutes ago", as will an
  * interval of 3 minutes 59 seconds.
  *
  * @since 1.0.0
+ * @since 8.0.0 Move the time difference calculation into `bp_core_time_diff()`.
  *
  * @param int|string $older_date The earlier time from which you're calculating
  *                               the time elapsed. Enter either as an integer Unix timestamp,
@@ -1155,7 +1361,7 @@ function bp_core_current_time( $gmt = true, $type = 'mysql' ) {
  * @param int|bool   $newer_date Optional. Unix timestamp of date to compare older
  *                               date to. Default: false (current time).
  * @return string String representing the time since the older date, eg
- *         "2 hours and 50 minutes".
+ *         "2 hours, 50 minutes".
  */
 function bp_core_time_since( $older_date, $newer_date = false ) {
 
@@ -1173,23 +1379,17 @@ function bp_core_time_since( $older_date, $newer_date = false ) {
 		return $pre_value;
 	}
 
-	/**
-	 * Filters the value to use if the time since is unknown.
-	 *
-	 * @since 1.5.0
-	 *
-	 * @param string $value String representing the time since the older date.
-	 */
-	$unknown_text   = apply_filters( 'bp_core_time_since_unknown_text',   __( 'sometime',  'buddypress' ) );
+	$newer_date = (int) $newer_date;
+	$args       = array(
+		'older_date' => $older_date,
+	);
 
-	/**
-	 * Filters the value to use if the time since is right now.
-	 *
-	 * @since 1.5.0
-	 *
-	 * @param string $value String representing the time since the older date.
-	 */
-	$right_now_text = apply_filters( 'bp_core_time_since_right_now_text', __( 'right now', 'buddypress' ) );
+	if ( $newer_date) {
+		$args['newer_date'] = $newer_date;
+	}
+
+	// Calculate the time difference.
+	$time_diff = bp_core_time_diff( $args );
 
 	/**
 	 * Filters the value to use if the time since is some time ago.
@@ -1204,145 +1404,29 @@ function bp_core_time_since( $older_date, $newer_date = false ) {
 		__( '%s ago', 'buddypress' )
 	);
 
-	// Array of time period chunks.
-	$chunks = array(
-		YEAR_IN_SECONDS,
-		30 * DAY_IN_SECONDS,
-		WEEK_IN_SECONDS,
-		DAY_IN_SECONDS,
-		HOUR_IN_SECONDS,
-		MINUTE_IN_SECONDS,
-		1
-	);
-
-	if ( !empty( $older_date ) && !is_numeric( $older_date ) ) {
-		$time_chunks = explode( ':', str_replace( ' ', ':', $older_date ) );
-		$date_chunks = explode( '-', str_replace( ' ', '-', $older_date ) );
-		$older_date  = gmmktime( (int) $time_chunks[1], (int) $time_chunks[2], (int) $time_chunks[3], (int) $date_chunks[1], (int) $date_chunks[2], (int) $date_chunks[0] );
-	}
-
 	/**
-	 * $newer_date will equal false if we want to know the time elapsed between
-	 * a date and the current time. $newer_date will have a value if we want to
-	 * work out time elapsed between two known dates.
+	 * Filters the value to use if the time since is right now.
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param string $value String representing the time since the older date.
 	 */
-	$newer_date = ( !$newer_date ) ? bp_core_current_time( true, 'timestamp' ) : $newer_date;
+	$output = apply_filters( 'bp_core_time_since_right_now_text', __( 'right now', 'buddypress' ) );
 
-	// Difference in seconds.
-	$since = $newer_date - $older_date;
-
-	// Something went wrong with date calculation and we ended up with a negative date.
-	if ( 0 > $since ) {
-		$output = $unknown_text;
-
-	/**
-	 * We only want to output two chunks of time here, eg:
-	 * x years, xx months
-	 * x days, xx hours
-	 * so there's only two bits of calculation below:
-	 */
-	} else {
-
-		// Step one: the first chunk.
-		for ( $i = 0, $j = count( $chunks ); $i < $j; ++$i ) {
-			$seconds = $chunks[$i];
-
-			// Finding the biggest chunk (if the chunk fits, break).
-			$count = floor( $since / $seconds );
-			if ( 0 != $count ) {
-				break;
-			}
-		}
-
-		// If $i iterates all the way to $j, then the event happened 0 seconds ago.
-		if ( !isset( $chunks[$i] ) ) {
-			$output = $right_now_text;
-
-		} else {
-
-			// Set output var.
-			switch ( $seconds ) {
-				case YEAR_IN_SECONDS :
-					/* translators: %s: the number of years. */
-					$output = sprintf( _n( '%s year',   '%s years',   $count, 'buddypress' ), $count );
-					break;
-				case 30 * DAY_IN_SECONDS :
-					/* translators: %s: the number of months. */
-					$output = sprintf( _n( '%s month',  '%s months',  $count, 'buddypress' ), $count );
-					break;
-				case WEEK_IN_SECONDS :
-					/* translators: %s: the number of weeks. */
-					$output = sprintf( _n( '%s week',   '%s weeks',   $count, 'buddypress' ), $count );
-					break;
-				case DAY_IN_SECONDS :
-					/* translators: %s: the number of days. */
-					$output = sprintf( _n( '%s day',    '%s days',    $count, 'buddypress' ), $count );
-					break;
-				case HOUR_IN_SECONDS :
-					/* translators: %s: the number of hours. */
-					$output = sprintf( _n( '%s hour',   '%s hours',   $count, 'buddypress' ), $count );
-					break;
-				case MINUTE_IN_SECONDS :
-					/* translators: %s: the number of minutes. */
-					$output = sprintf( _n( '%s minute', '%s minutes', $count, 'buddypress' ), $count );
-					break;
-				default:
-					/* translators: %s: the number of seconds. */
-					$output = sprintf( _n( '%s second', '%s seconds', $count, 'buddypress' ), $count );
-			}
-
-			// Step two: the second chunk
-			// A quirk in the implementation means that this
-			// condition fails in the case of minutes and seconds.
-			// We've left the quirk in place, since fractions of a
-			// minute are not a useful piece of information for our
-			// purposes.
-			if ( $i + 2 < $j ) {
-				$seconds2 = $chunks[$i + 1];
-				$count2   = floor( ( $since - ( $seconds * $count ) ) / $seconds2 );
-
-				// Add to output var.
-				if ( 0 != $count2 ) {
-					$output .= _x( ',', 'Separator in time since', 'buddypress' ) . ' ';
-
-					switch ( $seconds2 ) {
-						case 30 * DAY_IN_SECONDS :
-							/* translators: %s: the number of months. */
-							$output .= sprintf( _n( '%s month',  '%s months',  $count2, 'buddypress' ), $count2 );
-							break;
-						case WEEK_IN_SECONDS :
-							/* translators: %s: the number of weeks. */
-							$output .= sprintf( _n( '%s week',   '%s weeks',   $count2, 'buddypress' ), $count2 );
-							break;
-						case DAY_IN_SECONDS :
-							/* translators: %s: the number of days. */
-							$output .= sprintf( _n( '%s day',    '%s days',    $count2, 'buddypress' ), $count2 );
-							break;
-						case HOUR_IN_SECONDS :
-							/* translators: %s: the number of hours. */
-							$output .= sprintf( _n( '%s hour',   '%s hours',   $count2, 'buddypress' ), $count2 );
-							break;
-						case MINUTE_IN_SECONDS :
-							/* translators: %s: the number of minutes. */
-							$output .= sprintf( _n( '%s minute', '%s minutes', $count2, 'buddypress' ), $count2 );
-							break;
-						default:
-							/* translators: %s: the number of seconds. */
-							$output .= sprintf( _n( '%s second', '%s seconds', $count2, 'buddypress' ), $count2 );
-					}
-				}
-			}
-
-			// No output, so happened right now.
-			if ( ! (int) trim( $output ) ) {
-				$output = $right_now_text;
-			}
-		}
-	}
-
-	// Append 'ago' to the end of time-since if not 'right now'.
-	if ( $output != $right_now_text ) {
-		$output = sprintf( $ago_text, $output );
+	if ( is_array( $time_diff ) ) {
+		$separator = _x( ',', 'Separator in time since', 'buddypress' ) . ' ';
+		$diff_text = implode( $separator, $time_diff );
+		$output    = sprintf( $ago_text, $diff_text );
+	} elseif ( false === $time_diff ) {
+		/**
+		 * Filters the value to use if the time since is unknown.
+		 *
+		 * @since 1.5.0
+		 *
+		 * @param string $value String representing the time since the older date.
+		 */
+		$unknown_text = apply_filters( 'bp_core_time_since_unknown_text', __( 'sometime',  'buddypress' ) );
+		$output       = sprintf( $ago_text, $unknown_text );
 	}
 
 	/**
@@ -1355,6 +1439,42 @@ function bp_core_time_since( $older_date, $newer_date = false ) {
 	 * @param string $newer_date Unix timestamp of date to compare older time to.
 	 */
 	return apply_filters( 'bp_core_time_since', $output, $older_date, $newer_date );
+}
+
+/**
+ * Get an age to display according to the birth date.
+ *
+ * @since 8.0.0
+ *
+ * @param int|string $birth_date A timestamp or a MySQL formatted date.
+ * @return string The age to display.
+ */
+function bp_core_time_old( $birth_date ) {
+	$time_diff = bp_core_time_diff( array( 'older_date' => $birth_date, 'time_chunks' => 1 ) );
+	$retval    = '&mdash;';
+
+	if ( $time_diff ) {
+		$age = reset( $time_diff );
+
+		/**
+		 * Filters the value to use to display the age.
+		 *
+		 * @since 8.0.0
+		 *
+		 * @param string $value String representing the time since the older date.
+		 * @param int    $age   The age.
+		 */
+		$age_text = apply_filters(
+			'bp_core_time_old_text',
+			/* translators: %d: the age . */
+			__( '%s old', 'buddypress' ),
+			$age
+		);
+
+		$retval = sprintf( $age_text, $age );
+	}
+
+	return $retval;
 }
 
 /**
@@ -3428,6 +3548,9 @@ function bp_send_email( $email_type, $to, $args = array() ) {
 	// From, subject, content are set automatically.
 	if ( 'settings-verify-email-change' === $email_type && isset( $args['tokens']['displayname'] ) ) {
 		$email->set_to( $to, $args['tokens']['displayname'] );
+	// Emails sent to nonmembers will have no recipient.name populated.
+	} else if ( 'bp-members-invitation' === $email_type ) {
+		$email->set_to( $to, $to );
 	} else {
 		$email->set_to( $to );
 	}
@@ -3684,6 +3807,14 @@ function bp_email_get_schema() {
 	 * @param array $emails The array of emails schema.
 	 */
 	return (array) apply_filters( 'bp_email_get_schema', array(
+		'core-user-activation' => array(
+			/* translators: do not remove {} brackets or translate its contents. */
+			'post_title'   => __( '[{{{site.name}}}] Welcome!', 'buddypress' ),
+			/* translators: do not remove {} brackets or translate its contents. */
+			'post_content' => __( "Welcome to {{site.name}}!\n\nVisit your <a href=\"{{{profile.url}}}\">profile</a>, where you can tell us more about yourself, change your preferences, or make new connections, to get started.\n\nForgot your password? Don't worry, you can reset it with your email address from <a href=\"{{{lostpassword.url}}}\">this page</a> of our site", 'buddypress' ),
+			/* translators: do not remove {} brackets or translate its contents. */
+			'post_excerpt' => __( "Welcome to {{site.name}}!\n\nVisit your profile, where you can tell us more about yourself, change your preferences, or make new connections, to get started: {{{profile.url}}}\n\nForgot your password? Don't worry, you can reset it with your email address from this page of our site: {{{lostpassword.url}}}", 'buddypress' ),
+		),
 		'activity-comment' => array(
 			/* translators: do not remove {} brackets or translate its contents. */
 			'post_title'   => __( '[{{{site.name}}}] {{poster.name}} replied to one of your updates', 'buddypress' ),
@@ -3763,9 +3894,9 @@ function bp_email_get_schema() {
 			/* translators: do not remove {} brackets or translate its contents. */
 			'post_title'   => __( '[{{{site.name}}}] You have an invitation to the group: "{{group.name}}"', 'buddypress' ),
 			/* translators: do not remove {} brackets or translate its contents. */
-			'post_content' => __( "<a href=\"{{{inviter.url}}}\">{{inviter.name}}</a> has invited you to join the group: &quot;{{group.name}}&quot;.\n{{invite.message}}\n<a href=\"{{{invites.url}}}\">Go here to accept your invitation</a> or <a href=\"{{{group.url}}}\">visit the group</a> to learn more.", 'buddypress' ),
+			'post_content' => __( "<a href=\"{{{inviter.url}}}\">{{inviter.name}}</a> has invited you to join the group: &quot;{{group.name}}&quot;.\n\n{{invite.message}}\n\n<a href=\"{{{invites.url}}}\">Go here to accept your invitation</a> or <a href=\"{{{group.url}}}\">visit the group</a> to learn more.", 'buddypress' ),
 			/* translators: do not remove {} brackets or translate its contents. */
-			'post_excerpt' => __( "{{inviter.name}} has invited you to join the group: \"{{group.name}}\".\n\nTo accept your invitation, visit: {{{invites.url}}}\n\nTo learn more about the group, visit: {{{group.url}}}.\nTo view {{inviter.name}}'s profile, visit: {{{inviter.url}}}", 'buddypress' ),
+			'post_excerpt' => __( "{{inviter.name}} has invited you to join the group: \"{{group.name}}\".\n\n{{invite.message}}\n\nTo accept your invitation, visit: {{{invites.url}}}\n\nTo learn more about the group, visit: {{{group.url}}}.\nTo view {{inviter.name}}'s profile, visit: {{{inviter.url}}}", 'buddypress' ),
 		),
 		'groups-member-promoted' => array(
 			/* translators: do not remove {} brackets or translate its contents. */
@@ -3815,6 +3946,14 @@ function bp_email_get_schema() {
 			/* translators: do not remove {} brackets or translate its contents. */
 			'post_excerpt' => __( "Your membership request for the group \"{{group.name}}\" has been rejected.\n\nTo request membership again, visit: {{{group.url}}}", 'buddypress' ),
 		),
+		'bp-members-invitation' => array(
+			/* translators: do not remove {} brackets or translate its contents. */
+			'post_title'   => __( '{{inviter.name}} has invited you to join {{site.name}}', 'buddypress' ),
+			/* translators: do not remove {} brackets or translate its contents. */
+			'post_content' => __( "<a href=\"{{{inviter.url}}}\">{{inviter.name}}</a> has invited you to join the site: &quot;{{site.name}}&quot;.\n\n{{usermessage}}\n\n<a href=\"{{{invite.accept_url}}}\">Accept your invitation</a> or <a href=\"{{{site.url}}}\">visit the site</a> to learn more.", 'buddypress' ),
+			/* translators: do not remove {} brackets or translate its contents. */
+			'post_excerpt' => __( "{{inviter.name}} has invited you to join the site \"{{site.name}}\".\n\n{{usermessage}}\n\nTo accept your invitation, visit: {{{invite.accept_url}}}\n\nTo learn more about the site, visit: {{{site.url}}}.\nTo view {{inviter.name}}'s profile, visit: {{{inviter.url}}}", 'buddypress' ),
+		),
 	) );
 }
 
@@ -3838,121 +3977,152 @@ function bp_email_get_schema() {
  */
 function bp_email_get_type_schema( $field = 'description' ) {
 	$activity_comment = array(
-		'description'	=> __( 'A member has replied to an activity update that the recipient posted.', 'buddypress' ),
-		'unsubscribe'	=> array(
-			'meta_key'	=> 'notification_activity_new_reply',
-			'message'	=> __( 'You will no longer receive emails when someone replies to an update or comment you posted.', 'buddypress' ),
+		'description'	   => __( 'A member has replied to an activity update that the recipient posted.', 'buddypress' ),
+		'named_salutation' => true,
+		'unsubscribe'	   => array(
+			'meta_key' => 'notification_activity_new_reply',
+			'message'  => __( 'You will no longer receive emails when someone replies to an update or comment you posted.', 'buddypress' ),
 		),
 	);
 
 	$activity_comment_author = array(
-		'description'	=> __( 'A member has replied to a comment on an activity update that the recipient posted.', 'buddypress' ),
-		'unsubscribe'	=> array(
-			'meta_key'	=> 'notification_activity_new_reply',
-			'message'	=> __( 'You will no longer receive emails when someone replies to an update or comment you posted.', 'buddypress' ),
+		'description'	   => __( 'A member has replied to a comment on an activity update that the recipient posted.', 'buddypress' ),
+		'named_salutation' => true,
+		'unsubscribe'	   => array(
+			'meta_key' => 'notification_activity_new_reply',
+			'message'  => __( 'You will no longer receive emails when someone replies to an update or comment you posted.', 'buddypress' ),
 		),
 	);
 
 	$activity_at_message = array(
-		'description'	=> __( 'Recipient was mentioned in an activity update.', 'buddypress' ),
-		'unsubscribe'	=> array(
-			'meta_key'	=> 'notification_activity_new_mention',
-			'message'	=> __( 'You will no longer receive emails when someone mentions you in an update.', 'buddypress' ),
+		'description'	   => __( 'Recipient was mentioned in an activity update.', 'buddypress' ),
+		'named_salutation' => true,
+		'unsubscribe'	   => array(
+			'meta_key' => 'notification_activity_new_mention',
+			'message'  => __( 'You will no longer receive emails when someone mentions you in an update.', 'buddypress' ),
 		),
 	);
 
 	$groups_at_message = array(
-		'description'	=> __( 'Recipient was mentioned in a group activity update.', 'buddypress' ),
-		'unsubscribe'	=> array(
-			'meta_key'	=> 'notification_activity_new_mention',
-			'message'	=> __( 'You will no longer receive emails when someone mentions you in an update.', 'buddypress' ),
+		'description'	   => __( 'Recipient was mentioned in a group activity update.', 'buddypress' ),
+		'named_salutation' => true,
+		'unsubscribe'	   => array(
+			'meta_key' => 'notification_activity_new_mention',
+			'message'  => __( 'You will no longer receive emails when someone mentions you in an update.', 'buddypress' ),
 		),
 	);
 
 	$core_user_registration = array(
-		'description'	=> __( 'Recipient has registered for an account.', 'buddypress' ),
-		'unsubscribe'	=> false,
+		'description'	   => __( 'Recipient has registered for an account.', 'buddypress' ),
+		'named_salutation' => true,
+		'unsubscribe'	   => false,
 	);
 
 	$core_user_registration_with_blog = array(
-		'description'	=> __( 'Recipient has registered for an account and site.', 'buddypress' ),
-		'unsubscribe'	=> false,
+		'description'	   => __( 'Recipient has registered for an account and site.', 'buddypress' ),
+		'named_salutation' => true,
+		'unsubscribe'	   => false,
 	);
 
 	$friends_request = array(
-		'description'	=> __( 'A member has sent a friend request to the recipient.', 'buddypress' ),
-		'unsubscribe'	=> array(
-			'meta_key'	=> 'notification_friends_friendship_request',
-			'message'	=> __( 'You will no longer receive emails when someone sends you a friend request.', 'buddypress' ),
+		'description'	   => __( 'A member has sent a friend request to the recipient.', 'buddypress' ),
+		'named_salutation' => true,
+		'unsubscribe'	   => array(
+			'meta_key' => 'notification_friends_friendship_request',
+			'message'  => __( 'You will no longer receive emails when someone sends you a friend request.', 'buddypress' ),
 		),
 	);
 
 	$friends_request_accepted = array(
-		'description'	=> __( 'Recipient has had a friend request accepted by a member.', 'buddypress' ),
-		'unsubscribe'	=> array(
-			'meta_key'	=> 'notification_friends_friendship_accepted',
-			'message'	=> __( 'You will no longer receive emails when someone accepts your friendship request.', 'buddypress' ),
+		'description'	   => __( 'Recipient has had a friend request accepted by a member.', 'buddypress' ),
+		'named_salutation' => true,
+		'unsubscribe'	   => array(
+			'meta_key' => 'notification_friends_friendship_accepted',
+			'message'  => __( 'You will no longer receive emails when someone accepts your friendship request.', 'buddypress' ),
 		),
 	);
 
 	$groups_details_updated = array(
-		'description'	=> __( "A group's details were updated.", 'buddypress' ),
-		'unsubscribe'	=> array(
-			'meta_key'	=> 'notification_groups_group_updated',
-			'message'	=> __( 'You will no longer receive emails when one of your groups is updated.', 'buddypress' ),
+		'description'	   => __( "A group's details were updated.", 'buddypress' ),
+		'named_salutation' => true,
+		'unsubscribe'	   => array(
+			'meta_key' => 'notification_groups_group_updated',
+			'message'  => __( 'You will no longer receive emails when one of your groups is updated.', 'buddypress' ),
 		),
 	);
 
 	$groups_invitation = array(
-		'description'	=> __( 'A member has sent a group invitation to the recipient.', 'buddypress' ),
-		'unsubscribe'	=> array(
-			'meta_key'	=> 'notification_groups_invite',
-			'message'	=> __( 'You will no longer receive emails when you are invited to join a group.', 'buddypress' ),
+		'description'	   => __( 'A member has sent a group invitation to the recipient.', 'buddypress' ),
+		'named_salutation' => true,
+		'unsubscribe'	   => array(
+			'meta_key' => 'notification_groups_invite',
+			'message'  => __( 'You will no longer receive emails when you are invited to join a group.', 'buddypress' ),
 		),
 	);
 
 	$groups_member_promoted = array(
-		'description'	=> __( "Recipient's status within a group has changed.", 'buddypress' ),
-		'unsubscribe'	=> array(
-			'meta_key'	=> 'notification_groups_admin_promotion',
-			'message'	=> __( 'You will no longer receive emails when you have been promoted in a group.', 'buddypress' ),
+		'description'	   => __( "Recipient's status within a group has changed.", 'buddypress' ),
+		'named_salutation' => true,
+		'unsubscribe' => array(
+			'meta_key' => 'notification_groups_admin_promotion',
+			'message'  => __( 'You will no longer receive emails when you have been promoted in a group.', 'buddypress' ),
 		),
 	);
 
 	$groups_membership_request = array(
-		'description'	=> __( 'A member has requested permission to join a group.', 'buddypress' ),
-		'unsubscribe'	=> array(
-			'meta_key'	=> 'notification_groups_membership_request',
-			'message'	=> __( 'You will no longer receive emails when someone requests to be a member of your group.', 'buddypress' ),
+		'description'	   => __( 'A member has requested permission to join a group.', 'buddypress' ),
+		'named_salutation' => true,
+		'unsubscribe'	   => array(
+			'meta_key' => 'notification_groups_membership_request',
+			'message'  => __( 'You will no longer receive emails when someone requests to be a member of your group.', 'buddypress' ),
 		),
 	);
 
 	$messages_unread = array(
-		'description'	=> __( 'Recipient has received a private message.', 'buddypress' ),
-		'unsubscribe'	=> array(
-			'meta_key'	=> 'notification_messages_new_message',
-			'message'	=> __( 'You will no longer receive emails when someone sends you a message.', 'buddypress' ),
+		'description'	   => __( 'Recipient has received a private message.', 'buddypress' ),
+		'named_salutation' => true,
+		'unsubscribe'	   => array(
+			'meta_key' => 'notification_messages_new_message',
+			'message'  => __( 'You will no longer receive emails when someone sends you a message.', 'buddypress' ),
 		),
 	);
 
 	$settings_verify_email_change = array(
-		'description'	=> __( 'Recipient has changed their email address.', 'buddypress' ),
-		'unsubscribe'	=> false,
+		'description'	   => __( 'Recipient has changed their email address.', 'buddypress' ),
+		'named_salutation' => true,
+		'unsubscribe'	   => false,
 	);
 
 	$groups_membership_request_accepted = array(
-		'description'	=> __( 'Recipient had requested to join a group, which was accepted.', 'buddypress' ),
-		'unsubscribe'	=> array(
-			'meta_key'	=> 'notification_membership_request_completed',
-			'message'	=> __( 'You will no longer receive emails when your request to join a group has been accepted or denied.', 'buddypress' ),
+		'description'	   => __( 'Recipient had requested to join a group, which was accepted.', 'buddypress' ),
+		'named_salutation' => true,
+		'unsubscribe'	   => array(
+			'meta_key' => 'notification_membership_request_completed',
+			'message'  => __( 'You will no longer receive emails when your request to join a group has been accepted or denied.', 'buddypress' ),
 		),
 	);
 
 	$groups_membership_request_rejected = array(
-		'description'	=> __( 'Recipient had requested to join a group, which was rejected.', 'buddypress' ),
-		'unsubscribe'	=> array(
-			'meta_key'	=> 'notification_membership_request_completed',
-			'message'	=> __( 'You will no longer receive emails when your request to join a group has been accepted or denied.', 'buddypress' ),
+		'description'	   => __( 'Recipient had requested to join a group, which was rejected.', 'buddypress' ),
+		'named_salutation' => true,
+		'unsubscribe'	   => array(
+			'meta_key' => 'notification_membership_request_completed',
+			'message'  => __( 'You will no longer receive emails when your request to join a group has been accepted or denied.', 'buddypress' ),
+		),
+	);
+
+	$core_user_activation = array(
+		'description'	   => __( 'Recipient has successfully activated an account.', 'buddypress' ),
+		'named_salutation' => true,
+		'unsubscribe'	   => false,
+	);
+
+	$members_invitation = array(
+		'description'	   => __( 'A site member has sent a site invitation to the recipient.', 'buddypress' ),
+		'named_salutation' => false,
+		'unsubscribe'	   => array(
+			'meta_key' => 'notification_bp_members_invite',
+			'message'  => __( 'You will no longer receive emails when you are invited to join this site.', 'buddypress' ),
 		),
 	);
 
@@ -3973,6 +4143,8 @@ function bp_email_get_type_schema( $field = 'description' ) {
 		'settings-verify-email-change'       => $settings_verify_email_change,
 		'groups-membership-request-accepted' => $groups_membership_request_accepted,
 		'groups-membership-request-rejected' => $groups_membership_request_rejected,
+		'core-user-activation'               => $core_user_activation,
+		'bp-members-invitation'              => $members_invitation,
 	);
 
 	if ( $field !== 'all' ) {
@@ -3992,10 +4164,19 @@ function bp_email_unsubscribe_handler() {
 	$raw_email_type = ! empty( $_GET['nt'] ) ? $_GET['nt'] : '';
 	$raw_hash       = ! empty( $_GET['nh'] ) ? $_GET['nh'] : '';
 	$raw_user_id    = ! empty( $_GET['uid'] ) ? absint( $_GET['uid'] ) : 0;
-	$new_hash       = hash_hmac( 'sha1', "{$raw_email_type}:{$raw_user_id}", bp_email_get_salt() );
+	$raw_user_email = ! empty( $_GET['uem'] ) ? $_GET['uem'] : '';
+	$raw_member_id  = ! empty( $_GET['mid'] ) ? absint( $_GET['mid'] ) : 0;
+	$redirect_to    = '';
+
+	$new_hash = '';
+	if ( ! empty( $raw_user_id ) ) {
+		$new_hash = hash_hmac( 'sha1', "{$raw_email_type}:{$raw_user_id}", bp_email_get_salt() );
+	} else if ( ! empty( $raw_user_email ) ) {
+		$new_hash = hash_hmac( 'sha1', "{$raw_email_type}:{$raw_user_email}", bp_email_get_salt() );
+	}
 
 	// Check required values.
-	if ( ! $raw_user_id || ! $raw_email_type || ! $raw_hash || ! array_key_exists( $raw_email_type, $emails ) ) {
+	if ( ( ! $raw_user_id && ! $raw_user_email ) || ! $raw_email_type || ! $raw_hash || ! array_key_exists( $raw_email_type, $emails ) ) {
 		$redirect_to = wp_login_url();
 		$result_msg  = __( 'Something has gone wrong.', 'buddypress' );
 		$unsub_msg   = __( 'Please log in and go to your settings to unsubscribe from notification emails.', 'buddypress' );
@@ -4021,6 +4202,25 @@ function bp_email_unsubscribe_handler() {
 			$redirect_to = bp_core_get_user_domain( get_current_user_id() );
 		}
 
+	// This is an unsubscribe request from a nonmember.
+	} else if ( $raw_user_email ) {
+		// Unsubscribe.
+		if ( bp_user_has_opted_out() ) {
+			$result_msg = $emails[ $raw_email_type ]['unsubscribe']['message'];
+			$unsub_msg  = __( 'You have already unsubscribed from all communication from this site.', 'buddypress' );
+		} else {
+			$optout_args = array(
+				'email_address' => $raw_user_email,
+				'user_id'       => $raw_member_id,
+				'email_type'    => $raw_email_type,
+				'date_modified' => bp_core_current_time(),
+			);
+			bp_add_optout( $optout_args );
+			$result_msg = $emails[ $raw_email_type ]['unsubscribe']['message'];
+			$unsub_msg  = __( 'You have been unsubscribed.', 'buddypress' );
+		}
+
+	// This is an unsubscribe request from a current member.
 	} else {
 		if ( bp_is_active( 'settings' ) ) {
 			$redirect_to = sprintf(
@@ -4040,17 +4240,29 @@ function bp_email_unsubscribe_handler() {
 		$unsub_msg  = __( 'You can change this or any other email notification preferences in your email settings.', 'buddypress' );
 	}
 
-	$message = sprintf(
-		'%1$s <a href="%2$s">%3$s</a>',
-		$result_msg,
-		esc_url( $redirect_to ),
-		esc_html( $unsub_msg )
-	);
+	if ( $raw_user_id && $redirect_to ) {
+		$message = sprintf(
+			'%1$s <a href="%2$s">%3$s</a>',
+			$result_msg,
+			esc_url( $redirect_to ),
+			esc_html( $unsub_msg )
+		);
 
-	bp_core_add_message( $message );
-	bp_core_redirect( bp_core_get_user_domain( $raw_user_id ) );
+		// Template notices are only displayed on BP pages.
+		bp_core_add_message( $message );
+		bp_core_redirect( bp_core_get_user_domain( $raw_user_id ) );
 
-	exit;
+		exit;
+	} else {
+		wp_die(
+			sprintf( '%1$s %2$s', esc_html( $unsub_msg ), esc_html( $result_msg ) ),
+			esc_html( $unsub_msg ),
+			array(
+				'link_url'  => home_url(),
+				'link_text' => __( 'Go to website\'s home page.', 'buddypress' ),
+			)
+		);
+	}
 }
 
 /**
@@ -4065,6 +4277,7 @@ function bp_email_unsubscribe_handler() {
  *    @type string $notification_type Which notification type is being sent.
  *    @type string $user_id           The ID of the user to whom the notification is sent.
  *    @type string $redirect_to       Optional. The url to which the user will be redirected. Default is the activity directory.
+ *    @type string $email             Optional. The email address of the user to whom the notification is sent.
  * }
  * @return string The unsubscribe link.
  */
@@ -4084,15 +4297,34 @@ function bp_email_get_unsubscribe_link( $args ) {
 		return '';
 	}
 
-	$link = add_query_arg(
-		array(
-			'action' => 'unsubscribe',
-			'nh'     => hash_hmac( 'sha1', "{$email_type}:{$user_id}", bp_email_get_salt() ),
-			'nt'     => $args['notification_type'],
-			'uid'    => $user_id,
-		),
-		$redirect_to
-	);
+	$link = '';
+	// Case where the recipient is a member of the site.
+	if ( ! empty( $user_id ) ) {
+		$link = add_query_arg(
+			array(
+				'action' => 'unsubscribe',
+				'nh'     => hash_hmac( 'sha1', "{$email_type}:{$user_id}", bp_email_get_salt() ),
+				'nt'     => $args['notification_type'],
+				'uid'    => $user_id,
+			),
+			$redirect_to
+		);
+
+	// Case where the recipient is not a member of the site.
+	} else if ( ! empty( $args['email_address'] ) ) {
+		$email_address = $args['email_address'];
+		$member_id     = (int) $args['member_id'];
+		$link          = add_query_arg(
+			array(
+				'action' => 'unsubscribe',
+				'nh'     => hash_hmac( 'sha1', "{$email_type}:{$email_address}", bp_email_get_salt() ),
+				'nt'     => $args['notification_type'],
+				'mid'    => $member_id,
+				'uem'    => $email_address,
+			),
+			$redirect_to
+		);
+	}
 
 	/**
 	 * Filters the unsubscribe link.
@@ -4134,6 +4366,27 @@ function bp_email_get_unsubscribe_type_schema() {
 	 * @param array $emails The array of email types and their schema.
 	 */
 	return (array) apply_filters( 'bp_email_get_unsubscribe_type_schema', $emails );
+}
+
+/**
+ * Gets the BP Email type of a BP Email ID or object.
+ *
+ * @since 8.0.0
+ *
+ * @param int|WP_Post $email Optional. BP Email ID or BP Email object. Defaults to global $post.
+ * @return string The type of the BP Email object.
+ */
+function bp_email_get_type( $email = null ) {
+	$email = get_post( $email );
+
+	if ( ! $email ) {
+		return '';
+	}
+
+	$types = bp_get_object_terms( $email->ID, bp_get_email_tax_type(), array( 'fields' => 'slugs' ) );
+	$type  = reset( $types );
+
+	return $type;
 }
 
 /**
@@ -4231,4 +4484,105 @@ function bp_get_widget_max_count_limit( $widget_class = '' ) {
 	 * @param string $widget_class Class name of the calling widget.
 	 */
 	return apply_filters( 'bp_get_widget_max_count_limit', 50, $widget_class );
+}
+
+/**
+ * Add a new BP_Optout.
+ *
+ * @since 8.0.0
+ *
+ * @param array $args {
+ *     An array of arguments describing the new opt-out.
+ *     @type string $email_address Email address of user who has opted out.
+ *     @type int    $user_id       Optional. ID of user whose communication
+ *                                 prompted the user to opt-out.
+ *     @type string $email_type    Optional. Name of the email type that
+ *                                 prompted the user to opt-out.
+ *     @type string $date_modified Optional. Specify a time, else now will be used.
+ * }
+ * @return false|int False on failure, ID of new (or existing) opt-out if successful.
+ */
+function bp_add_optout( $args = array() ) {
+	$optout = new BP_Optout();
+	$r      = bp_parse_args(
+		$args, array(
+			'email_address' => '',
+			'user_id'       => 0,
+			'email_type'    => '',
+			'date_modified' => bp_core_current_time(),
+		),
+		'add_optout'
+	);
+
+	// Opt-outs must have an email address.
+	if ( empty( $r['email_address'] ) ) {
+		return false;
+	}
+
+	// Avoid creating duplicate opt-outs.
+	$optout_id = $optout->optout_exists(
+		array(
+			'email_address' => $r['email_address'],
+			'user_id'       => $r['user_id'],
+			'email_type'    => $r['email_type'],
+		)
+	);
+
+	if ( ! $optout_id ) {
+		// Set up the new opt-out.
+		$optout->email_address = $r['email_address'];
+		$optout->user_id       = $r['user_id'];
+		$optout->email_type    = $r['email_type'];
+		$optout->date_modified = $r['date_modified'];
+
+		$optout_id = $optout->save();
+	}
+
+	return $optout_id;
+}
+
+/**
+ * Find matching BP_Optouts.
+ *
+ * @since 8.0.0
+ *
+ * @see BP_Optout::get() for a description of parameters and return values.
+ *
+ * @param array $args See {@link BP_Optout::get()}.
+ * @return array See {@link BP_Optout::get()}.
+ */
+function bp_get_optouts( $args = array() ) {
+	$optout_class = new BP_Optout();
+	return $optout_class::get( $args );
+}
+
+/**
+ * Check an email address to see if that individual has opted out.
+ *
+ * @since 8.0.0
+ *
+ * @param string $email_address Email address to check.
+ * @return bool True if the user has opted out, false otherwise.
+ */
+function bp_user_has_opted_out( $email_address = '' ) {
+	$optout_class = new BP_Optout();
+	$optout_id    = $optout_class->optout_exists(
+		array(
+			'email_address' => $email_address,
+		)
+	);
+	return (bool) $optout_id;
+}
+
+/**
+ * Delete a BP_Optout by ID.
+ *
+ * @since 8.0.0
+ *
+ * @param int $id ID of the optout to delete.
+ * @return bool True on success, false on failure.
+ */
+function bp_delete_optout_by_id( $id = 0 ) {
+	$optout_class = new BP_Optout();
+	return $optout_class::delete_by_id( $id );
 }

@@ -36,12 +36,15 @@ class C_Ngg_Post_Thumbnails
     }
     public function register_hooks()
     {
-        add_action('admin_enqueue_scripts', [$this, 'enqueue_post_thumbnails'], 1);
-        add_action('rest_insert_post', [$this, 'set_or_remove_ngg_post_thumbnail'], PHP_INT_MAX - 1, 2);
-        add_action('rest_insert_page', [$this, 'set_or_remove_ngg_post_thumbnail'], PHP_INT_MAX - 1, 2);
+        add_action('enqueue_block_editor_assets', [$this, 'enqueue_post_thumbnails'], 1);
         // Expose a field for posts/pages to set the ngg_post_thumbnail via REST API
-        register_meta('post', 'ngg_post_thumbnail', ['type' => 'integer', 'single' => TRUE, 'show_in_rest' => TRUE]);
-        register_meta('page', 'ngg_post_thumbnail', ['type' => 'integer', 'single' => TRUE, 'show_in_rest' => TRUE]);
+        add_action('init', function () {
+            array_map(function ($post_type) {
+                add_post_type_support($post_type, 'custom-fields');
+                register_meta($post_type, 'ngg_post_thumbnail', ['type' => 'integer', 'single' => TRUE, 'show_in_rest' => TRUE]);
+                add_action('rest_insert_' . $post_type, [$this, 'set_or_remove_ngg_post_thumbnail'], PHP_INT_MAX - 1, 2);
+            }, get_post_types_by_support('thumbnail'));
+        }, 11);
     }
     function register_adapters()
     {
@@ -76,11 +79,10 @@ class C_Ngg_Post_Thumbnails
     function enqueue_post_thumbnails()
     {
         add_thickbox();
-        global $wp_scripts;
         wp_enqueue_script('ngg-post-thumbnails', C_Router::get_instance()->get_static_url(NEXTGEN_BLOCK . '#build/post-thumbnail.min.js'), ['lodash', 'wp-element', 'wp-data', 'wp-editor', 'wp-components', 'wp-i18n', 'photocrati_ajax'], NGG_PLUGIN_VERSION);
         wp_localize_script('ngg-post-thumbnails', 'ngg_featured_image', ['modal_url' => admin_url("/media-upload.php?post_id=%post_id%&type=image&tab=nextgen&from=block-editor&TB_iframe=true")]);
         if (preg_match("/media-upload\\.php/", $_SERVER['REQUEST_URI']) && $_GET['tab'] == 'nextgen') {
-            wp_add_inline_style('wp-admin', "#media-upload-header {display: none }");
+            wp_add_inline_style('wp-admin', "#media-upload-header {display: none; }");
             if (isset($_GET['from']) && $_GET['from'] == 'block-editor') {
                 add_action('admin_enqueue_scripts', [$this, 'media_upload_footer']);
             }

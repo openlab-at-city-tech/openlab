@@ -221,12 +221,14 @@ Hello, this is the BP Nouveau's Twenty Twenty-One companion stylesheet.
 		}
 	}
 
-	.notifications-options-nav {
+	.notifications-options-nav,
+	.invitations-options-nav {
 		margin-top: 1em;
+	}
 
-		input#notification-bulk-manage {
-			line-height: 1.2;
-		}
+	.notifications-options-nav input#notification-bulk-manage,
+	.invitations-options-nav input#invitation-bulk-manage {
+		line-height: 1.2;
 	}
 }
 
@@ -571,6 +573,13 @@ body {
 			}
 		}
 	}
+
+	#groups-dir-list {
+
+		.current-group-type {
+			text-align: center;
+		}
+	}
 }
 
 
@@ -618,10 +627,6 @@ body {
 #buddypress.twentytwentyone {
 
 	#group-create-body {
-
-		#avatar-crop-pane {
-			margin-bottom: 1em;
-		}
 
 		nav.group-create-links {
 
@@ -735,6 +740,65 @@ body {
 		h4.creation-step-name {
 			font-size: var(--heading--font-size-h4);
 			letter-spacing: var(--heading--letter-spacing-h4);
+		}
+
+		.bp-avatar {
+
+			#avatar-crop-pane {
+				margin-bottom: 1em;
+			}
+		}
+
+		.bp-avatar-nav {
+
+			ul.avatar-nav-items {
+				border-bottom: 1px solid var(--global--color-primary);
+
+				li {
+
+					&.current {
+						border: 1px solid var(--global--color-primary);
+						border-bottom: 1px solid var(--global--color-background);
+					}
+				}
+			}
+		}
+
+		#drag-drop-area {
+			border: 4px dashed var(--global--color-secondary);
+
+			.drag-drop-info {
+				color: var(--global--color-secondary);
+			}
+
+			#bp-browse-button {
+				margin: 50px auto 0;
+			}
+		}
+
+		.bp-avatar-status,
+		.bp-cover-image-status {
+
+			.warning,
+			.success {
+				background-color: var(--global--color-light-gray);
+				border: none;
+				border-left-width: 4px;
+				border-left-style: solid;
+				color: var(--global--color-dark-gray);
+			}
+
+			.warning {
+				border-left-color: var(--global--color-orange);
+			}
+
+			.success {
+				border-left-color: var(--global--color-green);
+			}
+
+			.error {
+				border-left-color: var(--global--color-red);
+			}
 		}
 	}
 }
@@ -1004,54 +1068,6 @@ body {
 	.field-visibility-settings,
 	.field-visibility-settings-header {
 		color: var(--global--color-secondary);
-	}
-
-	.bp-avatar-nav {
-
-		ul.avatar-nav-items {
-			border-bottom: 1px solid var(--global--color-primary);
-
-			li {
-
-				&.current {
-					border: 1px solid var(--global--color-primary);
-					border-bottom: 1px solid var(--global--color-background);
-				}
-			}
-		}
-	}
-
-	#drag-drop-area {
-		border: 4px dashed var(--global--color-secondary);
-
-		.drag-drop-info {
-			color: var(--global--color-secondary);
-		}
-	}
-
-	.bp-avatar-status,
-	.bp-cover-image-status {
-
-		.warning,
-		.success {
-			background-color: var(--global--color-light-gray);
-			border: none;
-			border-left-width: 4px;
-			border-left-style: solid;
-			color: var(--global--color-dark-gray);
-		}
-
-		.warning {
-			border-left-color: var(--global--color-orange);
-		}
-
-		.success {
-			border-left-color: var(--global--color-green);
-		}
-
-		.error {
-			border-left-color: var(--global--color-red);
-		}
 	}
 }
 
@@ -1424,13 +1440,6 @@ body {
 		}
 	}
 
-	.wp-pwd {
-
-		&:not(.is-open) {
-			display: none;
-		}
-	}
-
 	input[type="checkbox"],
 	input[type="radio"] {
 		width: 25px;
@@ -1490,6 +1499,19 @@ body {
 		p.description {
 			color: var(--global--primary-color);
 			background-color: var(--global--color-background);
+		}
+	}
+}
+
+body.bp-user.settings.general {
+
+	#buddypress.twentytwentyone {
+
+		.wp-pwd {
+
+			&:not(.is-open) {
+				display: none;
+			}
 		}
 	}
 }

@@ -4,7 +4,7 @@
 * Plugin URI: http://www.badgeos.org/
 * Description: BadgeOS lets your site’s users complete tasks and earn badges, ranks, and points that recognize their achievement. Define achievements and choose from a range of options that determine when they're complete. Badges are Mozilla Open Badges (OBI) compatible so the users can easily validate the earned badges.
 * Author: LearningTimes
-* Version: 3.6.9
+* Version: 3.6.10
 * Author URI: https://credly.com/
 * License: GNU AGPL
 * Text Domain: badgeos
@@ -32,7 +32,7 @@ class BadgeOS {
 	 *
 	 * @var string
 	 */
-	public static $version = '3.6.9';
+	public static $version = '3.6.10';
 
 	/**
 	 * BadgeOS Achievement Date
@@ -242,6 +242,7 @@ class BadgeOS {
             $badgeos_settings['submission_manager_role'] 		= 'manage_options';
             $badgeos_settings['submission_email'] 				= 'enabled';
             $badgeos_settings['debug_mode']       				= 'disabled';
+			$badgeos_settings['badgeos_not_earned_image']       = 'disabled';
             $badgeos_settings['ranks_main_post_type']       	= 'rank_types';
             $badgeos_settings['ranks_step_post_type']       	= 'rank_requirement';
 
@@ -263,6 +264,7 @@ class BadgeOS {
         if ( empty( $badgeos_admin_tools ) ) {
             $badgeos_admin_tools['badgeos_tools_email_logo_url']   = '';
             $badgeos_admin_tools['badgeos_tools_email_logo_dir']   = '';
+			$badgeos_admin_tools['badgeos_tools_email_preheader_text']   = '';
 			$badgeos_admin_tools['email_general_footer_text']   = '';
 			$badgeos_admin_tools['allow_unsubscribe_email']   = 'No';
 			$badgeos_admin_tools['unsubscribe_email_page']   = '0';

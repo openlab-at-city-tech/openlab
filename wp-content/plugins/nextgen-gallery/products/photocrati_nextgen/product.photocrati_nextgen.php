@@ -37,7 +37,7 @@ class P_Photocrati_NextGen extends C_Base_Product
 		'photocrati-nextgen_pagination'         =>  'always',
 
 		// Front-end only
-		'photocrati-dynamic_stylesheet'         =>  'frontend',
+		'photocrati-dynamic_stylesheet'         =>  'always',
 
 		// Backend-only
 		'photocrati-nextgen_pro_upgrade'        =>  'backend',

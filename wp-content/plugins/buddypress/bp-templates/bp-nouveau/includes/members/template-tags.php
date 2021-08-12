@@ -3,7 +3,7 @@
  * Members template tags
  *
  * @since 3.0.0
- * @version 6.0.0
+ * @version 8.0.0
  */
 
 // Exit if accessed directly.
@@ -449,12 +449,12 @@ function bp_nouveau_members_loop_buttons( $args = array() ) {
 							'class' => $parent_class,
 						),
 						'button_attr'       => array(
-							'href'  => trailingslashit( bp_loggedin_user_domain() . bp_get_messages_slug() ) . 'compose?r=' . bp_core_get_username( $user_id ),
+							'href'  => trailingslashit( bp_loggedin_user_domain() . bp_nouveau_get_component_slug( 'messages' ) ) . 'compose?r=' . bp_core_get_username( $user_id ),
 							'id'    => false,
 							'class' => $button_args['link_class'],
 							'rel'   => '',
 							'title' => '',
-							),
+						),
 					);
 
 					unset( bp_nouveau()->members->button_args );
@@ -660,6 +660,8 @@ function bp_nouveau_member_template_part() {
 			$template = 'profile';
 		} elseif ( bp_is_user_notifications() ) {
 			$template = 'notifications';
+		} elseif ( bp_is_user_members_invitations() ) {
+			$template = 'invitations';
 		} elseif ( bp_is_user_settings() ) {
 			$template = 'settings';
 		}
@@ -1037,3 +1039,32 @@ function bp_nouveau_wp_profile_field_data() {
 		$field = bp_nouveau()->members->wp_profile_current;
 		return $field->data;
 	}
+
+/**
+ * Outputs the Invitations bulk actions dropdown list.
+ *
+ * @since 8.0.0
+ */
+function bp_nouveau_invitations_bulk_management_dropdown() {
+	?>
+	<div class="select-wrap">
+
+		<label class="bp-screen-reader-text" for="invitation-select">
+			<?php
+			esc_html_e( 'Select Bulk Action', 'buddypress' );
+			?>
+		</label>
+
+		<select name="invitation_bulk_action" id="invitation-select">
+			<option value="" selected="selected"><?php esc_html_e( 'Bulk Actions', 'buddypress' ); ?></option>
+			<option value="resend"><?php echo esc_html_x( 'Resend', 'button', 'buddypress' ); ?></option>
+			<option value="cancel"><?php echo esc_html_x( 'Cancel', 'button', 'buddypress' ); ?></option>
+		</select>
+
+		<span class="select-arrow"></span>
+
+	</div><!-- // .select-wrap -->
+
+	<input type="submit" id="invitation-bulk-manage" class="button action" value="<?php echo esc_attr_x( 'Apply', 'button', 'buddypress' ); ?>">
+	<?php
+}

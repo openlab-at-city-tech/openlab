@@ -3,6 +3,7 @@
 
 
 // Not used yet
+// phpcs:disable
 function fs_connect( $directories = array() ) {
   global $wp_filesystem;
 
@@ -30,6 +31,7 @@ function fs_connect( $directories = array() ) {
   }
   return true;
 }
+// phpcs:enable
 
 function check_filesystem(){
   $msg = array();
@@ -45,6 +47,7 @@ function check_filesystem(){
   }
 
 
+  // phpcs:ignore PHPCompatibility.IniDirectives.RemovedIniDirectives.safe_modeDeprecatedRemoved
   if( ini_get('safe_mode') ){
     $msg['safemode'] = "PHP is running in safe mode, uploading compositions will not work.";
   }

@@ -252,10 +252,10 @@ svg#successAnimation {
 .form-options > ul > li > a {
     display: inline-block;
     text-decoration: none;
-    padding: 5px 5px;
+    padding: 5px 7px;
     color: #000;
     vertical-align: middle;
-    margin: 0 0 5px 0;
+    margin: 0;
     background: #f1f1f1;
     border-radius: 4px
 }
@@ -286,7 +286,7 @@ svg#successAnimation {
 
 .folder-sort-menu {
     position: absolute;
-    right: 0;
+    left: 0;
     width: 120px;
     z-index: 101;
     background: #fff;
@@ -295,7 +295,14 @@ svg#successAnimation {
     box-shadow: 0 0 5px 0 rgba(0, 0, 0, .25);
     display: none
 }
-
+.folder-sort-menu.is-pro {
+    width: 170px;
+}
+.folder-sort-menu.is-pro a span {
+    display: inline-block;
+    color: #ff5983;
+    font-weight: 500;
+}
 .folder-sort-menu li {
     display: block;
     margin: 0;
@@ -610,19 +617,23 @@ body:not(.no-hover-css) .wcp-container .route .title:hover .ui-icon .pfolder-fol
     content: "\e901" !important;
 }
 .sticky-folders li.is-high a span.star-icon, .wcp-container .route.is-high > h3 > span.star-icon {
-    display: block
+    display: inline-block
 }
 
 .dynamic-menu {
     position: fixed;
     left: 50px;
     background: #fff;
-    width: 170px;
+    width: 235px;
     padding: 0;
     z-index: 1000001;
     -webkit-box-shadow: 0 0 5px 0 rgba(0, 0, 0, .25);
     -moz-box-shadow: 0 0 5px 0 rgba(0, 0, 0, .25);
-    box-shadow: 0 0 5px 0 rgba(0, 0, 0, .25)
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, .25);
+    font-size: 13px;
+}
+.dynamic-menu.no-key {
+    width: 195px;
 }
 .dynamic-menu ul {
     margin: 0;
@@ -643,13 +654,14 @@ body:not(.no-hover-css) .wcp-container .route .title:hover .ui-icon .pfolder-fol
 
 .dynamic-menu a {
     text-decoration: none;
-    color: #848484;
     position: relative;
     display: block;
     padding: 5px 10px;
     line-height: 18px;
     white-space: nowrap;
     color: #333;
+    font-size:13px;
+    font-weight: normal;
 }
 
 .dynamic-menu ul > li > a > span, .dynamic-menu ul > li > a > span span {
@@ -660,7 +672,7 @@ body:not(.no-hover-css) .wcp-container .route .title:hover .ui-icon .pfolder-fol
     top: auto !important;
     width: 20px !important;
     height: 20px !important;
-    line-height: 14px;
+    line-height: 18px;
     text-align: center;
 }
 
@@ -1126,8 +1138,8 @@ li.active-menu {
     display: inline-block;
 }
 .form-options .form-options {
-    background: transparent;
     padding: 0;
+    margin: 0;
     box-shadow: none;
 }
 .attachments-browser .media-toolbar-secondary {
@@ -1144,18 +1156,22 @@ body *.media-frame.hide-menu .media-frame-menu {
 }
 
 .folder-modal .media-frame:not(.hide-menu):not(.hide-router) .media-frame-content, .folder-modal .media-frame:not(.hide-menu):not(.hide-router) .media-frame-router, .folder-modal .media-frame:not(.hide-menu):not(.hide-router) .media-frame-title, .folder-modal .media-frame:not(.hide-menu):not(.hide-router) .media-frame-toolbar {
-    left: 275px;
+    left: 275px !important;
 }
 .media-frame-menu.has-folder-menu {
-    width: 275px;
+    width: 275px !important;
+}
+.media-frame:not(.hide-router) .media-frame-content, .folder-modal .media-frame:not(.hide-router) .media-frame-router, .folder-modal .media-frame:not(.hide-router) .media-frame-title, .folder-modal .media-frame:not(.hide-router) .media-frame-toolbar {
+    left: 275px !important;
 }
 .media-frame-menu.has-folder-menu .folder-custom-menu {
     position: relative;
     border: none;
     width: 100%;
+    height: auto;
 }
 .media-frame.mode-select.hide-router .media-frame-title, .media-frame.mode-select.hide-router .media-frame-router, .media-frame.mode-select.hide-router .media-frame-content, .media-frame.mode-select.hide-router .media-frame-toolbar {
-    left: 275px;
+    left: 275px !important;
 }
 .media-frame.mode-select.hide-router select#media-attachment-taxonomy-filter {
     display: none;
@@ -1180,11 +1196,35 @@ html[dir=rtl] .media-frame .folder-modal .media-frame-content, html[dir=rtl] .fo
     left: 0 !important;
     right: 275px !important;
 }
-.sticky-folders > ul > li {
-    position: relative !important;
+html[dir=rtl] .media-frame:not(.hide-router) .media-frame-content, html[dir=rtl] .folder-modal .media-frame:not(.hide-router) .media-frame-router, html[dir=rtl] .folder-modal .media-frame:not(.hide-router) .media-frame-title, html[dir=rtl] .folder-modal .media-frame:not(.hide-router) .media-frame-toolbar {
+    left: 0 !important;
+    right: 275px !important;
+}
+.media-frame .sticky-folders > ul > li {
+    position: relative;
 }
 #vakata-dnd {
     z-index: 10000000 !important;
+}
+.dynamic-menu.is-locked .remove-folder {
+    background: #ececec;
+}
+.dynamic-menu.is-locked .remove-folder a {
+    cursor: no-drop;
+}
+.jstree-node.is-locked, .jstree-node.is-locked a {
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+    user-drag: none;
+    -webkit-user-drag: none;
+    -o-user-drag: none;
+    -moz-user-drag: none;
+}
+.jstree-node.is-locked i.pfolder-folder-close {
+    cursor: not-allowed;
 }
 .add-folder-note {
     font-size: 13px;
@@ -1262,4 +1302,115 @@ span.pro-tip {
     height: 20px;
     color: #fff;
     border-radius: 4px;
+}
+select#media-attachment-dynamic-filter {
+    display: none !important;
+}
+.dynamic-tree-data-separator {
+    margin: 7px 10px 10px;
+    height: 1px;
+    background: #E9E5E5;
+}
+
+/* Date: Feb 2021 */
+.dynamic-tree-data {
+    display: none;
+    padding: 5px 0 0 0;
+}
+#dynamic-tree-folders {
+    background: #fff;
+    padding: 0 10px 0 0;
+}
+.dynamic-folders .folder-checkbox, .dynamic-folders  .folder-actions {
+    display: none !important;
+}
+
+.folders-undo-notification {
+    position: fixed;
+    right: -500px;
+    bottom: 25px;
+    width: 280px;
+    background: #fff;
+    padding: 15px;
+    -webkit-box-shadow: 0 3px 6px -4px rgb(0 0 0 / 12%), 0 6px 16px 0 rgb(0 0 0 / 8%), 0 9px 28px 8px rgb(0 0 0 / 5%);
+    box-shadow: 0 3px 6px -4px rgb(0 0 0 / 12%), 0 6px 16px 0 rgb(0 0 0 / 8%), 0 9px 28px 8px rgb(0 0 0 / 5%);
+    transition: all 0.25s linear;
+    z-index: 1001;
+}
+.folders-undo-notification.active {
+    right: 25px;
+}
+.folders-undo-header {
+    font-weight: 500;
+    font-size: 14px;
+    padding: 0 0 3px 0;
+}
+.folders-undo-body {
+    font-size: 13px;
+    padding: 0 0 5px 0;
+}
+.folders-undo-footer {
+    text-align: right;
+    padding: 5px 0 0 0;
+}
+.folders-undo-footer .undo-button {
+    background: #1da1f4;
+    border: none;
+    color: #fff;
+    padding: 3px 10px;
+    font-size: 12px;
+    border-radius: 2px;
+    cursor: pointer;
+}
+.folders-undo-body {
+    position: relative;
+}
+.close-undo-box {
+    position: absolute;
+    right: -10px;
+    top: 0;
+    width: 16px;
+    height: 16px;
+    transition: all 0.25s linear;
+}
+.close-undo-box:hover {
+    transform: rotate(180deg);
+}
+.close-undo-box span {
+    display: block;
+    position: relative;
+    width: 16px;
+    height: 16px;
+    transition: all .2s linear;
+}
+.close-undo-box span:after, .close-undo-box span:before {
+    content: "";
+    position: absolute;
+    width: 12px;
+    height: 2px;
+    background-color: #333;
+    display: block;
+    border-radius: 2px;
+    transform: rotate(45deg);
+    top: 7px;
+    left: 2px;
+}
+.close-undo-box span:after {
+    transform: rotate(-45deg);
+}
+#custom-scroll-menu .mCSB_container {
+    background: #fff;
+}
+.folder-separator-2 {
+    padding: 0;
+    height: 1px;
+    background: #E9E5E5;
+    margin: 0px 0 5px 0;
+}
+.form-options > ul > li > a.expand-collapse {
+    width: 14px;
+    text-align: center;
+}
+.form-options a.expand-collapse span.icon {
+    font-size: 8px;
 }

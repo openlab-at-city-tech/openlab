@@ -167,9 +167,9 @@ class Gutenberg
      * Add WP Cloud Plugins category to blocks.
      *
      * @param mixed $categories
-     * @param mixed $post
+     * @param mixed $editor_context
      */
-    public function create_block_category($categories, $post)
+    public function create_block_category($categories, $editor_context)
     {
         $category_slugs = wp_list_pluck($categories, 'slug');
 
@@ -193,7 +193,13 @@ class Gutenberg
     {
         \add_action('init', [$this, 'register_block']);
         \add_action('enqueue_block_editor_assets', [$this, 'enqueue_block_editor_assets']);
-        \add_filter('block_categories', [$this, 'create_block_category'], 10, 2);
+
+        //block_categories is deprecated since version 5.8.0. Use block_categories_all instead.
+        if (version_compare(get_bloginfo('version'), '5.8', '<')) {
+            \add_filter('block_categories', [$this, 'create_block_category'], 10, 2);
+        } else {
+            \add_filter('block_categories_all', [$this, 'create_block_category'], 10, 2);
+        }
     }
 }
 new Gutenberg();

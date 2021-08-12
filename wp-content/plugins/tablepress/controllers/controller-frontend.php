@@ -246,7 +246,7 @@ class TablePress_Frontend_Controller extends TablePress_Controller {
 					$js_options['datatables_paginate'] = false;
 				}
 				// Sanitize, as it may come from a Shortcode attribute.
-				$js_options['datatables_paginate_entries'] = intval( $js_options['datatables_paginate_entries'] );
+				$js_options['datatables_paginate_entries'] = (int) $js_options['datatables_paginate_entries'];
 
 				// DataTables language/translation handling.
 				/**
@@ -400,7 +400,7 @@ class TablePress_Frontend_Controller extends TablePress_Controller {
 		// Echo DataTables strings and JS calls.
 		echo <<<JS
 <script type="text/javascript">
-jQuery(document).ready(function($){
+jQuery(function($){
 {$datatables_strings}{$commands}
 });
 </script>

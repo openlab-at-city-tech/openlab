@@ -11,7 +11,7 @@ class FormHelpers
 {
     public function __construct()
     {
-        add_filter('outofthebox_render_formfield_data', [&$this, 'render_form_value'], 10, 3);
+        add_filter('outofthebox_render_formfield_data', [$this, 'render_form_value'], 10, 3);
     }
 
     public function render_form_value($data, $ashtml, $formclass)

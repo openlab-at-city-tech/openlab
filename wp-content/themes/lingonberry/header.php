@@ -18,6 +18,8 @@
 			wp_body_open(); 
 		}
 		?>
+
+		<a class="skip-link button" href="#site-content"><?php esc_html_e( 'Skip to the content', 'lingonberry' ); ?></a>
 	
 		<div class="navigation">
 				
@@ -25,64 +27,61 @@
 		
 				<ul class="blog-menu">
 				
-					<?php if ( has_nav_menu( 'primary' ) ) {
-																		
+					<?php 
+					if ( has_nav_menu( 'primary' ) ) {
 						wp_nav_menu( array( 
 							'container'			=> '', 
 							'items_wrap' 		=> '%3$s',
 							'theme_location' 	=> 'primary', 
-							'walker' 			=> new lingonberry_nav_walker,
 						) ); 
-					
 					} else {
-					
 						wp_list_pages( array(
 							'container' => '',
 							'title_li' 	=> '',
 						) );
-						
-					} ?>
+					}
+					?>
 					
 				 </ul>
 				 
 				 <?php get_search_form(); ?>
-				 
-				 <div class="clear"></div>
 			 
 			</div><!-- .navigation-inner -->
 		 
 		</div><!-- .navigation -->
 	
-		<div class="header section">
+		<header class="header section" id="site-header">
 				
-			<div class="header-inner section-inner">
+			<div class="header-inner section-inner group">
+
+				<button class="nav-toggle">
+					<div class="bar"></div>
+					<div class="bar"></div>
+					<div class="bar"></div>
+				</button>
+
+				<div class="blog-title-wrapper">
 			
-				<?php if ( get_header_image() != '' ) : ?>
-							
-					<a href="<?php echo esc_url( home_url() ); ?>/" title="<?php echo esc_attr( get_bloginfo( 'title' ) ); ?> | <?php echo esc_attr( get_bloginfo( 'description' ) ); ?>" rel="home" class="logo">
-						<img src="<?php header_image(); ?>" alt="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?>">
-					</a>
+					<?php if ( get_header_image() != '' ) : ?>
+								
+						<a href="<?php echo esc_url( home_url() ); ?>/" rel="home" class="logo">
+							<img src="<?php header_image(); ?>" alt="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?>">
+						</a>
+						
+					<?php else : ?>
 					
-				<?php else : ?>
-				
-					<a href="<?php echo esc_url( home_url() ); ?>/" title="<?php echo esc_attr( get_bloginfo( 'title' ) ); ?> &mdash; <?php echo esc_attr( get_bloginfo( 'description' ) ); ?>" rel="home" class="logo noimg"></a>
-				
-				<?php endif; ?>
-			        				
-				<h1 class="blog-title">
-					<a href="<?php echo esc_url( home_url() ); ?>/" title="<?php echo esc_attr( get_bloginfo( 'title' ) ); ?> &mdash; <?php echo esc_attr( get_bloginfo( 'description' ) ); ?>" rel="home"><?php echo esc_attr( get_bloginfo( 'title' ) ); ?></a>
-				</h1>
-				
-				<div class="nav-toggle">
-				
-					<div class="bar"></div>
-					<div class="bar"></div>
-					<div class="bar"></div>
-				
-				</div>
-				 				
-				 <div class="clear"></div>
+						<a href="<?php echo esc_url( home_url() ); ?>/" rel="home" class="logo noimg"></a>
+					
+					<?php endif; ?>
+
+					<?php if ( is_front_page() && is_home() && ! is_paged() ) : ?>
+						<h1 class="blog-title"><a href="<?php echo esc_url( home_url() ); ?>/" rel="home"><?php echo get_bloginfo( 'title' ); ?></a></h1>
+					<?php else : ?>
+						<div class="blog-title"><a href="<?php echo esc_url( home_url() ); ?>/" rel="home"><?php echo get_bloginfo( 'title' ); ?></a></div>
+					<?php endif; ?>
+
+				</div><!-- .blog-title-wrapper -->
 																							
 			</div><!-- .header section -->
 			
-		</div><!-- .header-inner section-inner -->
+		</header><!-- .header-inner section-inner -->

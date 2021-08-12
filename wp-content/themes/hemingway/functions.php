@@ -45,6 +45,9 @@ if ( ! function_exists( 'hemingway_setup' ) ) {
 		// Set content width
 		global $content_width;
 		$content_width = 676;
+
+		// HTML5 semantic markup for search forms.
+		add_theme_support( 'html5', array( 'search-form' ) );
 		
 		// Add nav menu
 		register_nav_menu( 'primary', __( 'Primary Menu', 'hemingway' ) );

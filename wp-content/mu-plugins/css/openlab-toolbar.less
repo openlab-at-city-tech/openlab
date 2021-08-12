@@ -209,6 +209,24 @@
 						}
 					}
 				}
+
+				&.openlab-favorites-admin-bar-menu {
+					li {
+						a {
+							text-decoration: underline;
+
+							&:hover,
+							&:focus {
+								background: inherit;
+								text-decoration: none;
+							}
+						}
+					}
+
+					.ab-sub-wrapper {
+						padding-bottom: 10px;
+					}
+				}
 			}
 			.ab-sub-wrapper {
 				background: #fff;
@@ -615,7 +633,7 @@
 					width: 160px;
 				}
 			}
-			#wp-admin-bar-activity {
+			.last-icon-in-group {
 				border-right: 1px solid #000000;
 			}
 			#wp-admin-bar-top-logout,
@@ -1329,6 +1347,9 @@ body {
 	overflow: hidden;
 }
 
+.edit-post-layout__metaboxes:not(:empty) .edit-post-meta-boxes-area {
+	margin-top: 50px;
+}
 
 @media (min-width: 782px) {
 	#editor {

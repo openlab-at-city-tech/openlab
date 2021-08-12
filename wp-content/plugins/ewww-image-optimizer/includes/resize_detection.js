@@ -20,6 +20,14 @@ function checkImageSizes() {
 	return false;
 }
 function checkImageScale(img) {
+	if (!img.src) {
+		return;
+	}
+	if ('string' == typeof img.src && img.src.search(/\.svg/) > -1) {
+		console.log('not checking size of SVG: ' + img.src);
+		return;
+	}
+	console.log('checking size of: ' + img.src);
         if (img.naturalWidth) {
         	if (img.naturalWidth > 25 && img.naturalHeight > 25 && img.clientWidth > 25 && img.clientHeight > 25) {
                 	// For each image with a natural width which isn't
@@ -44,6 +52,9 @@ function clearScaledImages() {
 }
 document.addEventListener('lazyloaded', function(e){
 	e.target.classList.remove('scaled-image');
-        e.target.title = '';
+	var current_title = e.target.title;
+	if (0 === current_title.search('Forced to wrong size')) {
+        	e.target.title = '';
+	}
 	checkImageScale(e.target);
 });

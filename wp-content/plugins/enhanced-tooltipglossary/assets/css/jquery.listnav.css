@@ -1,0 +1,308 @@
+.listNav {
+    margin: 0 0 20px;
+    position:relative;
+}
+.cm-glossary .listNav .ln-letters {
+    margin: 20px 0 10px;
+    overflow: visible;
+}
+.cm-glossary .listNav .ln-letters:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+.ln-letters:after {
+    content: '';
+    display: table;
+    clear: both;
+}
+.glossary .ln-letters {
+    margin-bottom: 10px;
+}
+.ln-letters a {
+    font-size: 7pt;
+    display:block;
+    float:left;
+    padding:2px 6px;
+    border:1px solid silver;
+    text-decoration:none;
+    margin-left: -1px;
+    box-shadow: none;
+}
+.ln-letters a:hover {
+    margin-top: -10px;
+    padding-top: 12px;
+}
+.ln-letters a:first-child,
+.ln-letters a.ln-first,
+.ln-letters a.ln-after-newline {
+    margin-left: 0;
+}
+.ln-letters a.ln-disabled + a.ln-first {
+    margin-left: -1px;
+}
+.small .ln-letters a {
+    font-size: 7pt;
+    line-height: 2.5em;
+}
+.medium .ln-letters a {
+    font-size: 10pt;
+    line-height: 2em;
+}
+.large .ln-letters a {
+    font-size: 14pt;
+    line-height: 1.75em;
+}
+.ln-letters a.ln-last {
+    border-right:1px solid silver;
+}
+.ln-letters a:hover,
+.ln-letters a.ln-selected {
+    background-color: #eaeaea;
+}
+.ln-letters a.ln-disabled {
+    color: #ccc;
+}
+#glossaryList-nav .ln-letters a.ln-disabled.ln-newline {
+    clear: both;
+    display: block;
+    width: 0;
+    border: 0;
+    padding: 0;
+    margin: 0;
+    height: 0;
+}
+#glossaryList-nav:after {
+    content: '';
+    display: table;
+    clear: both;
+}
+.ln-letter-count {
+    text-align:center;
+    font-size:0.7em;
+    line-height:1;
+    margin-bottom:3px;
+    color:#000;
+    background-color: #eaeaea;
+    pointer-events: none;
+    border: none;
+    box-sizing: border-box;
+    border-bottom: none;
+}
+.small .ln-letter-count,
+.glossary-container.no-counts .small .ln-letters a {
+    font-size: 7pt;
+}
+.medium .ln-letter-count {
+    font-size: 8pt;
+}
+.large .ln-letter-count {
+    font-size: 9pt;
+}
+.glossary-container.no-counts .ln-letters a:hover {
+    margin-top: 0;
+    padding-top: 2px;
+}
+.glossary-container.no-counts .cm-glossary .listNav .ln-letters {
+    margin: 0; overflow: hidden;
+}
+.glossary-container.no-counts .ln-letter-count {
+    text-align:center;
+    font-size:0.7em;
+    line-height:1;
+    margin-bottom:3px;
+    color:#000;
+    background-color: #eaeaea;
+    pointer-events: none;
+    border: none;
+    box-sizing: border-box;
+    border-bottom: none;
+}
+.glossary-container.no-counts .small .ln-letters a,
+.glossary-container.no-counts .medium .ln-letters a,
+.glossary-container.no-counts .large .ln-letters a {
+    line-height: 1.25em;
+}
+.glossary-container.no-counts .medium .ln-letters a {
+    font-size: 10pt;
+}
+.glossary-container.no-counts .large .ln-letters a {
+    font-size: 14pt;
+}
+.glossary-container .glossaryList li .glossary_itemdesc {
+    margin: 0 0 20px 0;
+}
+
+/* Tiles style */
+.tiles {
+    max-width: 100%;
+    clear: both;
+    overflow: hidden;
+}
+.tiles ul.glossaryList {
+    list-style-type:none;
+    margin:0;
+}
+.tiles ul.glossaryList li {
+    float:left;
+    display:block;
+    text-align:center;
+    min-width:85px;
+    width:85px;
+    word-wrap:break-word;
+    border:1px solid silver;
+    padding:10px;
+    margin:0 10px 10px 0;
+    text-decoration:none;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+.tiles ul.glossaryList li:hover {
+    cursor: pointer;
+    background-color: #eee;
+    z-index: 0;
+    white-space: normal;
+    width: auto;
+}
+.tiles ul.glossaryList li .glossary_itemdesc {
+    margin-bottom: 0;
+}
+.cm-glossary.table.classic ul.glossaryList li {
+    float: left;
+    width: 200px;
+    list-style: none;
+    margin: 0 20px 0 75px;
+    display: inline;
+}
+.cm-glossary.table.classic ul.glossaryList li.the-index-letter {
+    float: left;
+    width: 21px;
+    margin: 0;
+    margin-right: -20px;
+    font-size: 36px;
+    line-height: 1.5em;
+    text-transform: uppercase;
+    padding: 0;
+    border: 0;
+}
+.cm-glossary.table.classic ul.glossaryList li.the-letter-separator {
+    clear: both;
+    height: 10px;
+    width: 100%;
+    border-top: 1px solid #eaeaea;
+    margin: 10px 1px 0 0;
+    border-bottom: none;
+}
+.cm-glossary.table ul.glossaryList li.the-index-letter > * {
+    margin: 0;
+    padding: 0;
+}
+.cm-glossary.table.modern ul.glossaryList li.the-letter-separator {
+    clear: both;
+    width: 100%;
+    border: none;
+    height: 0;
+    margin: 0;
+    min-height: 0;
+}
+
+/* Sidebar + term page */
+.cm-glossary.sidebar-termpage {
+    position: relative;
+}
+.cm-glossary.sidebar-termpage > div {
+    display: inline-block;
+    vertical-align: top;
+}
+.cm-glossary.sidebar-termpage .glossary-container {
+    width: 35%;
+}
+.cm-glossary.sidebar-termpage .glossary-container:before,
+.cm-glossary.sidebar-termpage .glossary-container:after {
+    display: table;
+    content: " ";
+    clear: both;
+}
+.cm-glossary.sidebar-termpage #glossary-categories {
+    float: none;
+    margin: 10px 0;
+}
+.cm-glossary.sidebar-termpage .glossary-term-content {
+    width: 65%;
+    overflow: hidden;
+}
+.cm-glossary.sidebar-termpage .glossary-term-content .glossary_term_title {
+    font-size: 24pt;
+    margin-bottom: 1em;
+}
+.cm-glossary.sidebar-termpage .glossary-term-content > div.glossary_term_description {
+    width: 60%;
+    overflow: hidden;
+}
+ul.pageNumbers {
+    font-size: 12px;
+    clear: both;
+}
+ul.pageNumbers li {
+    display:inline-block;
+    border:solid 1px silver;
+    border-right:none;
+    padding:3px 5px;
+    list-style-type:none;
+    margin:0;
+    line-height:1;
+    background-color:#fff;
+}
+ul.pageNumbers li.selected,
+ul.pageNumbers li:hover {
+    background-color:#ccc;
+}
+ul.pageNumbers li+li {
+    border-right:solid 1px silver;
+    display: inline-block;
+}
+ul.pageNumbers li a {
+    text-decoration: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* Styles for AMP version of the plugin  */
+form.amp-form-submit-success ul.glossaryList,
+form.amp-form-submit-success div[id^="rendered-message-amp-form"] .glossary_top_filter,
+form.amp-form-submit-success div[id^="rendered-message-amp-form"] #glossaryList-nav,
+form.amp-form-submitting ul.glossaryList,
+form.amp-form-submitting div[id^="rendered-message-amp-form"] .glossary_top_filter,
+form.amp-form-submitting div[id^="rendered-message-amp-form"] #glossaryList-nav {
+    display: none;
+}
+form.amp-form-submit-success div[id^="rendered-message-amp-form"] ul.glossaryList {
+    display: block;
+}
+.cmtt-social-box > amp-social-share {
+    vertical-align: middle;
+}
+
+.glossary-container span.glossaryLink {
+    cursor: pointer;
+}
+.ln-serv-letter {
+    position: relative;
+}
+.ln-serv-letter .ln-letter-count-amp {
+    display: none;
+    position: absolute;
+    top: -5px;
+    left: 0;
+    width: 100%;
+    text-align: center;
+}
+.ln-serv-letter:hover .ln-letter-count-amp {
+    display: inline-block;
+}
+div.glossary-container #cmttForm > p br,
+div.glossary-container #cmttForm br {
+    display: none !important;
+}

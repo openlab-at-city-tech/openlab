@@ -179,7 +179,7 @@ class Ajax_Post {
                         if (isset($_POST['profile_data_' . $profilId]) && !empty($_POST['profile_data_' . $profilId])) {
                             $networkData = json_decode(base64_decode($_POST['profile_data_' . $profilId]));
                             if ($networkData !== false && is_array($networkData) && !empty($networkData)) {
-                                $notAllowNetwork = array(4, 11, 14, 16, 18);
+                                $notAllowNetwork = array(4, 11, 14, 16);
                                 $tosCrossPosting = unserialize(B2S_PLUGIN_NETWORK_CROSSPOSTING_LIMIT);
                                 $allowNetworkOnlyImage = array(6, 7, 12, 21);
                                 $allowNetworkOnlyLink = array(9, 15);
@@ -2003,7 +2003,7 @@ class Ajax_Post {
                                 )
                             );
                         }
-                        if ((int) $_POST['networkId'] == 12 || (int) $_POST['networkId'] == 1) {
+                        if ((int) $_POST['networkId'] == 24 || (int) $_POST['networkId'] == 12 || (int) $_POST['networkId'] == 1 || (int) $_POST['networkId'] == 2) {
                             $new_template[$type]['addLink'] = ((isset($data['addLink']) && $data['addLink'] == 'false') ? false : true);
                         }
                         if ((int) $_POST['networkId'] == 12) {

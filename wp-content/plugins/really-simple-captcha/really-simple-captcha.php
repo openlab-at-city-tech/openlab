@@ -6,10 +6,10 @@ Description: Really Simple CAPTCHA is a CAPTCHA module intended to be called fro
 Author: Takayuki Miyoshi
 Author URI: https://ideasilo.wordpress.com/
 Text Domain: really-simple-captcha
-Version: 2.0.2
+Version: 2.1
 */
 
-define( 'REALLYSIMPLECAPTCHA_VERSION', '2.0.2' );
+define( 'REALLYSIMPLECAPTCHA_VERSION', '2.1' );
 
 class ReallySimpleCaptcha {
 
@@ -204,7 +204,7 @@ class ReallySimpleCaptcha {
 			$salt = $code[0];
 			$hash = $code[1];
 
-			if ( hash_hmac( 'md5', $response, $salt ) === $hash ) {
+			if ( hash_equals( $hash, hash_hmac( 'md5', $response, $salt ) ) ) {
 				return true;
 			}
 		}

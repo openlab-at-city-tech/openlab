@@ -1,0 +1,281 @@
+/**
+ * Watu Quiz CSS
+ */
+
+:root {
+	--watu-button-style-color: #707070;
+	--watu-correct-answer-color: green;
+	--watu-wrong-answer-color: red;
+}
+
+/* Normalize */
+#watu_quiz *, #watu_quiz *::before, #watu_quiz *::after {
+	box-sizing: border-box;
+}
+
+.watu-question, #action-button {
+	display:none;
+}
+
+form.quiz-form {
+	text-align:left;
+}
+
+.single-page-quiz .watu-question, .single-page-quiz #action-button {
+	display:block;
+}
+
+.watu-question {
+	clear: both;
+	width: 100%;
+}
+
+.single-page-quiz #next-question {
+	display:none;
+}
+.question-content {
+	margin-top:20px;
+}
+
+/* Answers */
+li.answer {
+	clear: both;
+	/*list-style-position: inside;*/
+}
+li.answer span {
+	/*width: calc(100% - 2em);*/
+}
+li.answer::marker {
+	margin: -0.25em;
+}
+li.user-answer::marker {
+	color: var(--watu-wrong-answer-color);
+	margin: -0.25em;
+}
+li.correct-answer::marker {
+	color: var(--watu-correct-answer-color);
+	margin: -0.25em;
+}
+
+.correct-answer>span, .user-answer>span {
+	/*padding-right:20px;  03.04.2021 */
+}
+.user-answer>span {
+	/*font-weight:bold;
+	background:url(wrong.png) no-repeat right top;*/
+}
+
+.user-answer span.answer, .correct-answer span.answer {
+	vertical-align: top;
+	padding-right: 1.5em;
+	display: inline-block; /* bullets problem? */
+	min-height: 100%;
+}
+.user-answer span.answer {
+	font-weight:bold;
+	background:url(wrong.png) no-repeat right 0.15em;
+}
+.correct-answer span.answer {
+	background:url(correct.png) no-repeat right 0.15em;
+}
+
+.user-answer-survey>span {
+	font-weight:bold;	
+}
+
+li.answer span {
+	vertical-align: top;
+	display: inline-block; /* bullets problem? */
+	padding-right: 1.5em;
+}
+
+li.answer span img {
+	clear: none;
+	margin: 10px 0 10px 0;
+	display: unset;
+}
+
+.user-answer span.answer img {
+	border: 2px solid var(--watu-wrong-answer-color);
+}
+.user-answer.correct-answer span.answer img {
+	border: 2px solid var(--watu-correct-answer-color);
+}
+
+.watu-sidebox {
+	border:1px solid black;
+	padding:10px;
+	margin-bottom: 20px;
+}
+
+#watu-sidebar {
+	float:left;
+	min-width:200px;
+	max-width: 320px;
+}
+
+#watu-related, #watu-ad {
+	background-color: #BBEEDD;
+}
+
+.quiz-form label {
+	display: inline-block !important;
+	max-width: calc(100% - 3em);
+	vertical-align: top;
+	font-size: unset; /* to prevent changing from theme */
+}
+
+.watu-basic-chart td, .watu-basic-chart-points td, .watu-basic-chart-percent td {
+	padding: 6px;
+}
+
+.quiz-form input[type='checkbox'] {
+   display: inline !important;
+}
+
+.quiz-form input[type='radio'] {
+   display: inline !important;
+}
+
+.show-question {
+	border-bottom: 1px dashed #DDD;
+	margin-bottom: 7px;	
+}
+
+.show-question-content {
+	font-size:110%;
+}
+
+.watu-admin label {
+	min-width: 150px;
+	display:block;
+	float:left;
+}
+
+.watu-padded {
+	padding: 10px;
+}
+
+.watu-twitter-share-button {
+	margin: 0px !important;
+}
+
+.watu-textarea {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    max-width: 100%;
+}
+
+/* The following is override for themes that set radios and checkboxes on their own line */
+ .quiz-form input[type="checkbox"],
+ .quiz-form input[type="radio"] {
+	 display: inline-block !important;
+	 margin-left: 0.25em;
+	 margin-right: 0.5em; /* 04.05.2021 */
+	 /*vertical-align: -0.15em;*/ /* 04.05.2021 */
+ }
+ form.quiz-form span {
+ 	display: inline;
+ }
+ form.quiz-form input {
+	 display: inline;
+ }
+ input.watu-beehive {
+ 	display:none !important;
+}
+
+/* Question grid */
+.watu-question-choice {
+	width: 100%;
+	display: block;
+	margin: 0.438em 0; /* 7px */
+}
+
+/* Fake (pseudo) element, that enables vertical-align */
+.watu-question-choice:before {
+	content: "";
+	display: inline-block;
+	vertical-align: middle;
+	height: 100%;
+}
+
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+	/* IE10+ CSS styles go here - for IE bug */
+	.watu-question-choice input[type=radio],
+	.watu-question-choice input[type=checkbox] {margin-top:  0.25em; width: 1rem;}
+	.quiz-form label {padding-top: 0; }
+}
+
+.watu-questions-wrap {
+	display: block;
+}
+
+/*.watu-question-gallery .watu-question-choice {
+	width: var(--watu-image-width);
+}*/
+
+.watu-2-columns .watu-question-choice,
+.watu-3-columns .watu-question-choice,
+.watu-4-columns .watu-question-choice,
+.watu-5-columns .watu-question-choice {
+	width: 100%;
+}
+
+/* Questions button style */
+/* thanks to http://viralpatel.net/blogs/css-radio-button-checkbox-background/ */
+.watu-button-style .watu-question-choice input[type=radio],
+.watu-button-style .watu-question-choice input[type=checkbox] {
+	display:none !important;
+}
+
+.watu-button-style .watu-question-choice input[type=radio] + label,
+.watu-button-style .watu-question-choice input[type=checkbox] + label {
+	margin: 0.25em 0 0 0;
+	padding: 0.25em 0.75em;
+	font-size: 1em;
+	text-align: center;
+	vertical-align: middle;
+	cursor: pointer;
+	border: 1px solid var(--watu-button-style-color);
+	background: #fff;
+	color: var(--watu-button-style-color);
+}
+
+.watu-button-style .watu-question-choice.watupro-ansnum input[type=radio] + label,
+.watu-button-style .watu-question-choice.watupro-ansnum input[type=checkbox] + label {
+	max-width: calc(100% - 3em);
+}
+
+.watu-button-style .watu-question-choice input[type=radio]:checked + label,
+.watu-button-style .watu-question-choice input[type=checkbox]:checked + label {
+	background-image: none;
+	outline: 0;
+	background: var(--watu-button-style-color);
+	color: #fff;
+}
+
+@media screen and (min-width: 768px) {
+	.watu-questions-wrap {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: flex-start;
+	}
+
+	.watu-2-columns .watu-question-choice, .watu-2-columns li {
+		width: 50%;
+		padding: 0 2.5em 0 0;
+	}
+	.watu-3-columns .watu-question-choice, .watu-3-columns li {
+		width: 33%;
+		padding: 0 2.5em 0 0;
+	}
+	.watu-4-columns .watu-question-choice, .watu-4-columns li {
+		width: 25%;
+		padding: 0 2.5em 0 0;
+	}
+	.watu-5-columns .watu-question-choice, .watu-5-columns li {
+		width: 20%;
+		padding: 0 2.5em 0 0;
+	}
+}

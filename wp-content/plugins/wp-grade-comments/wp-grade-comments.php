@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: WP Grade Comments
-Version: 1.3.2
+Version: 1.4.2
 Description: Grades and private comments for WordPress blog posts. Built for the City Tech OpenLab.
 Author: Boone Gorges
 Author URI: http://boone.gorg.es
@@ -26,6 +26,19 @@ function olgc_load_plugin_textdomain() {
 	load_plugin_textdomain( 'wp-grade-comments' );
 }
 add_action( 'init', 'olgc_load_plugin_textdomain' );
+
+/**
+ * The plugin activation action.
+ *
+ * @return void
+ */
+function olgc_activate() {
+	// Set up admin notice flag.
+	if ( ! get_option( 'olgc_notice_dismissed' ) ) {
+		update_option( 'olgc_notice_dismissed', '0' );
+	}
+}
+register_activation_hook( __FILE__, 'olgc_activate' );
 
 /**
  * Markup for the checkboxes on the Leave a Comment section.
@@ -258,14 +271,25 @@ add_filter( 'comment_feed_where', 'olgc_filter_comments_from_feed' );
  * @return array Array of comment IDs.
  */
 function olgc_get_inaccessible_comments( $user_id, $post_id = 0 ) {
+	$olpc = is_plugin_active( 'openlab-private-comments/openlab-private-comments.php' );
+
 	// Get a list of private comments
 	remove_action( 'pre_get_comments', 'olgc_remove_private_comments' );
 
+	if ( $olpc ) {
+		remove_action( 'pre_get_comments', 'OpenLab\PrivateComments\remove_private_comments' );
+	}
+
 	$comment_args = array(
 		'meta_query' => array(
+			'relation' => 'OR',
 			array(
 				'key'   => 'olgc_is_private',
 				'value' => '1',
+			),
+			array(
+				'key'      => 'olgc_grade',
+				'operator' => 'EXISTS',
 			),
 		),
 		'status' => 'any',
@@ -279,8 +303,16 @@ function olgc_get_inaccessible_comments( $user_id, $post_id = 0 ) {
 
 	add_action( 'pre_get_comments', 'olgc_remove_private_comments' );
 
-	// Filter out the ones that are written by the logged-in user, as well
-	// as those that are attached to a post that the user is the author of
+	if ( $olpc ) {
+		add_action( 'pre_get_comments', 'OpenLab\PrivateComments\remove_private_comments' );
+	}
+
+	/**
+	 * Filter out the comments that the user should in fact have access to:
+	 * 1. Those written by the logged-in user
+	 * 2. Those attached to a post of which the logged-in user is the author
+	 * 3. Those comments that are public and non-empty but have a grade attached
+	 */
 	$pc_ids = array();
 	foreach ( $private_comments as $private_comment ) {
 		if ( $user_id && ! empty( $private_comment->user_id ) && $user_id == $private_comment->user_id ) {
@@ -290,6 +322,23 @@ function olgc_get_inaccessible_comments( $user_id, $post_id = 0 ) {
 		if ( $user_id ) {
 			$comment_post = get_post( $private_comment->comment_post_ID );
 			if ( $user_id == $comment_post->post_author ) {
+				continue;
+			}
+		}
+
+		// Comment authors should see private replies.
+		if ( ! empty( $private_comment->comment_parent ) ) {
+			$parent_id      = (int) $private_comment->comment_parent;
+			$parent_comment = get_comment( $parent_id );
+
+			if ( $user_id == $parent_comment->user_id ) {
+				continue;
+			}
+		}
+
+		if ( get_comment_meta( $private_comment->comment_ID, 'olgc_grade', true ) ) {
+			$private = get_comment_meta( $private_comment->comment_ID, 'olgc_is_private', true );
+			if ( ! $private && ! empty( $private_comment->comment_content ) ) {
 				continue;
 			}
 		}

@@ -20,6 +20,8 @@
 			wp_body_open(); 
 		}
 		?>
+
+		<a class="skip-link button" href="#site-content"><?php esc_html_e( 'Skip to the content', 'hemingway' ); ?></a>
 	
 		<div class="big-wrapper">
 	

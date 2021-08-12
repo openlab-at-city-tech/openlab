@@ -1,6 +1,6 @@
 <?php
 
-use function Easy_Plugins\Table_Of_Contents\String\br2;
+use function Easy_Plugins\Table_Of_Contents\TOCString\br2;
 
 class ezTOC_Post {
 
@@ -302,7 +302,7 @@ class ezTOC_Post {
 				// * @see wpautop()
 				// */
 				////$eligibleContent = str_replace( array( '<br>', '<br/>' ), array( '<br />' ), $eligibleContent );
-				//$eligibleContent = \Easy_Plugins\Table_Of_Contents\String\force_balance_tags( $eligibleContent );
+				//$eligibleContent = \Easy_Plugins\Table_Of_Contents\TOCString\force_balance_tags( $eligibleContent );
 
 				$this->extractExcludedNodes( $page, $content );
 
@@ -379,7 +379,7 @@ class ezTOC_Post {
 		 *
 		 * @see wpautop()
 		 */
-		//$eligibleContent = \Easy_Plugins\Table_Of_Contents\String\force_balance_tags( $eligibleContent );
+		//$eligibleContent = \Easy_Plugins\Table_Of_Contents\TOCString\force_balance_tags( $eligibleContent );
 	}
 
 	/**

@@ -86,7 +86,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
                 }
             });
             $(document).on("change", "#folder_size", function(){
-                if($(this).val() == "folders-pro" || $(this).val() == "folders-pro-item") {
+                if($(this).val() == "folders-pro" || $(this).val() == "folders-pro-item" || $(this).val() == "folders-item-pro") {
                     $(this).val("16").trigger("change");
                     window.open("<?php echo esc_url($this->getFoldersUpgradeURL()) ?>", "_blank");
                 }
@@ -381,7 +381,11 @@ if ( ! defined( 'ABSPATH' ) ) exit;
             $("#custom-css").html("");
             if($("#folder_font").val() != "") {
                 font_val = $("#folder_font").val();
-                $('head').append('<link href="https://fonts.googleapis.com/css?family=' + font_val + ':400,600,700" rel="stylesheet" type="text/css" class="chaty-google-font">');
+                if(font_val == "System Stack") {
+                    font_val = "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif";
+                } else {
+                    $('head').append('<link href="https://fonts.googleapis.com/css?family=' + font_val + ':400,600,700" rel="stylesheet" type="text/css" class="chaty-google-font">');
+                }
                 $('.preview-box').css('font-family', font_val);
             } else {
                 $('.preview-box').css('style', "");
@@ -467,6 +471,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
             <div class="folder-tab-menu">
                 <ul>
                     <li><a class="<?php echo esc_attr(($setting_page=="folder-settings")?"active":"") ?>" href="<?php echo esc_url($settingURL."&setting_page=folder-settings") ?>"><?php esc_html_e( 'Folders Settings', 'folders'); ?></a></li>
+                    <li><a class="<?php echo esc_attr(($setting_page=="folders-by-user")?"active":"") ?>" href="<?php echo esc_url($settingURL."&setting_page=folders-by-user") ?>"><?php esc_html_e( 'User Restrictions', 'folders'); ?></a></li>
                     <li><a class="<?php echo esc_attr(($setting_page=="customize-folders")?"active":"") ?>" href="<?php echo esc_url($settingURL."&setting_page=customize-folders") ?>"><?php esc_html_e( 'Customize Folders', 'folders'); ?></a></li>
                     <li><a class="<?php echo esc_attr(($setting_page=="folders-import")?"active":"") ?>" href="<?php echo esc_url($settingURL."&setting_page=folders-import") ?>"><?php esc_html_e( 'Tools', 'folders'); ?></a></li>
                     <?php if($isInSettings) { ?>
@@ -567,6 +572,23 @@ if ( ! defined( 'ABSPATH' ) ) exit;
                                             <div class="seconds-box">
                                                 <input type="number" class="seconds-input" name="customize_folders[default_timeout]" value="<?php echo esc_attr($default_timeout) ?>" />
                                             </div>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td style="padding: 15px 10px 15px 0px" colspan="4">
+			                                <?php $replace_media_title = "off"; ?>
+                                            <a class="upgrade-box-link" target="_blank" href="<?php echo esc_url($this->getFoldersUpgradeURL()) ?>" >
+                                                <label for="" class="custom-checkbox send-user-to-pro">
+                                                    <input disabled type="checkbox" class="sr-only" id="enable_media_trash" value="off">
+                                                    <span></span>
+                                                </label>
+                                                <label for="" class="send-user-to-pro">
+					                                <?php esc_html_e("Move files to trash by default before deleting", "folders"); ?>
+                                                    <span class="folder-tooltip" data-title="<?php esc_html_e("When enabled, files will be moved to trash to prevent mistakes, and then you can delete permanently from the trash", "folders") ?>"><span class="dashicons dashicons-editor-help"></span></span></label>
+                                                    <button type="button" class="upgrade-link" href="<?php echo esc_url($this->getFoldersUpgradeURL()) ?>"><?php esc_html_e("Upgrade to Pro", 'folders') ?></button>
+                                                </label>
+                                            </a>
                                         </td>
                                     </tr>
                                     <?php
@@ -757,7 +779,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
                                 <a href="https://premio.io/help/folders/?utm_source=pluginspage" target="_blank">
                                     <div class="premio-help-btn">
                                         <img src="<?php echo esc_url(WCP_FOLDER_URL."assets/images/premio-help.png") ?>" alt="Premio Help" class="Premio Help" />
-                                        <div class="need-help">Need Help</div>
+                                        <div class="need-help">Need Help?</div>
                                         <div class="visit-our">Visit our</div>
                                         <div class="knowledge-base">knowledge base</div>
                                     </div>
@@ -975,7 +997,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
                                 <tr>
                                     <td class="no-padding">
                                         <label for="folder_font" >
-	                                        <?php if($setting_font !== false && $setting_font != "" && !in_array($setting_font, array("Arial","Tahoma","Verdana","Helvetica","Times New Roman","Trebuchet MS","Georgia"))) {
+	                                        <?php if($setting_font !== false && $setting_font != "" && !in_array($setting_font, array("Arial","Tahoma","Verdana","Helvetica","Times New Roman","Trebuchet MS","Georgia", "System Stack"))) {
 		                                        esc_html_e("Folders font", 'folders');
 	                                        } else { ?>
                                                 <a class="upgrade-box-link" target="_blank" href="<?php echo esc_url($this->getFoldersUpgradeURL()) ?>" >
@@ -1028,7 +1050,8 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 	                                        $sizes = array(
 		                                        "folders-pro" => "Small (Pro) 🔑",
 		                                        "16" => "Medium",
-		                                        "folders-pro-item" => "Large (Pro) 🔑"
+		                                        "folders-pro-item" => "Large (Pro) 🔑",
+		                                        "folders-item-pro" => "Custom (Pro) 🔑"
 	                                        );
 	                                        $size = 16;
                                         } else {
@@ -1214,6 +1237,69 @@ if ( ! defined( 'ABSPATH' ) ) exit;
                         <?php include_once "upgrade-table.php"; ?>
                     <?php } ?>
                 </div>
+                <div class="tab-content <?php echo esc_attr(($setting_page=="folders-by-user")?"active":"") ?>" id="folders-by-user">
+		            <?php
+		            $folders_by_users = !isset($customize_folders['folders_by_users'])?"off":$customize_folders['folders_by_users'];
+		            $dynamic_folders_for_admin_only = !isset($customize_folders['dynamic_folders_for_admin_only'])?"off":$customize_folders['dynamic_folders_for_admin_only'];
+		            ?>
+		            <?php if($setting_page=="folders-by-user") { ?>
+                        <div class="folders-by-user">
+                            <div class="send-user-to-pro">
+                                <div class="normal-box">
+                                    <table class="import-export-table">
+                                        <tr>
+                                            <td>
+                                                <span class="danger-info"><?php esc_html_e("Restrict users to their folders only", "folders"); ?></span>
+                                                <span class="danger-data"><?php esc_html_e("Users will only be able to access their folders and media. Only Admin users will be able to view all folders", "folders"); ?>
+                                            </td>
+                                            <td class="last-td" >
+                                                <a class="upgrade-box-link" target="_blank" href="<?php echo esc_url($this->getFoldersUpgradeURL()) ?>" >
+                                                    <span>
+                                                        <label class="folder-switch send-user-to-pro" for="dynamic_folders_for_admin_only">
+                                                            <input type="hidden">
+                                                            <div class="folder-slider round"></div>
+                                                        </label>
+                                                    </span>
+                                                    <button type="button" class="upgrade-link" ><?php esc_html_e("Upgrade to Pro", 'folders') ?></button>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <a class="upgrade-box" target="_blank" href="<?php echo esc_url($this->getFoldersUpgradeURL()) ?>" >
+                                    <button type="button"><?php esc_html_e("Upgrade to Pro", 'folders'); ?></button>
+                                </a>
+                            </div>
+                            <div class="send-user-to-pro">
+                                <div class="normal-box">
+                                    <table class="import-export-table">
+                                        <tr>
+                                            <td>
+                                                <span class="danger-info"><?php esc_html_e("Restrict access to dynamic folders", "folders"); ?></span>
+                                                <span class="danger-data"><?php esc_html_e("Regular users will not access dynamic folders.", "folders"); ?></span>
+                                                <span class="danger-data"><?php esc_html_e("Only Admin users will be able to view dynamic folders.", "folders"); ?></span>
+                                            </td>
+                                            <td class="last-td" >
+                                                <a class="upgrade-box-link" target="_blank" href="<?php echo esc_url($this->getFoldersUpgradeURL()) ?>" >
+                                                    <span>
+                                                        <label class="folder-switch send-user-to-pro" for="folders_by_users">
+                                                            <input type="hidden">
+                                                            <div class="folder-slider round"></div>
+                                                        </label>
+                                                    </span>
+                                                    <button type="button" class="upgrade-link" ><?php esc_html_e("Upgrade to Pro", 'folders') ?></button>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <a class="upgrade-box" target="_blank" href="<?php echo esc_url($this->getFoldersUpgradeURL()) ?>" >
+                                    <button type="button"><?php esc_html_e("Upgrade to Pro", 'folders'); ?></button>
+                                </a>
+                            </div>
+                        </div>
+		            <?php } ?>
+                </div>
             </div>
         </div>
         <?php
@@ -1397,3 +1483,4 @@ if(($option == "show" || get_option("folder_redirect_status") == 2) && $is_plugi
         </div>
     </div>
 </div>
+<?php include_once "help.php" ?>

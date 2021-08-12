@@ -10,7 +10,7 @@ $phpver = phpversion();
 $tabs_data = array(
     array(
         'id' => 'profiles',
-        'title' => __('Profiles', 'advanced-gutenberg'),
+        'title' => __('Block Access', 'advanced-gutenberg'),
         'icon' => 'account-circle',
     ),
     array(
@@ -20,7 +20,7 @@ $tabs_data = array(
     ),
     array(
         'id' => 'block-settings',
-        'title' => __('Default Block Settings', 'advanced-gutenberg'),
+        'title' => __('Block Settings', 'advanced-gutenberg'),
         'icon' => 'settings',
     ),
     array(
@@ -34,7 +34,31 @@ $tabs_data = array(
         'icon' => 'code',
     ),
 );
+
+// Pro
+if(defined('ADVANCED_GUTENBERG_PRO')) {
+    if ( method_exists( 'PPB_AdvancedGutenbergPro\Utils\Definitions', 'advgb_pro_license_page' ) ) {
+        array_push(
+            $tabs_data,
+            PPB_AdvancedGutenbergPro\Utils\Definitions::advgb_pro_license_page('tabs_data')
+        );
+    }
+}
+
+// Pro
+if(!defined('ADVANCED_GUTENBERG_PRO')) {
 ?>
+    <div class="pp-version-notice-bold-purple">
+        <div class="pp-version-notice-bold-purple-message">
+            <?php _e('You\'re using PublishPress Blocks Free. The Pro version has more features and support.', 'advanced-gutenberg') ?>
+        </div>
+        <div class="pp-version-notice-bold-purple-button">
+            <a href="https://publishpress.com/links/blocks" target="_blank">
+                <?php _e('Upgrade to Pro', 'advanced-gutenberg') ?>
+            </a>
+        </div>
+    </div>
+<?php } ?>
 
 <div class="ju-main-wrapper" style="display: none">
     <div class="ju-left-panel-toggle">

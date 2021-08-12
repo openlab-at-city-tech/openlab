@@ -24,9 +24,9 @@ if ('1' === $this->options['upload_auto_start'] || false !== strpos($this->optio
     <input type="hidden" name="encryption" value="0">
     <input type='hidden' name='fileupload-filelist_<?php echo $this->listtoken; ?>' class='fileupload-filelist'
       value='<?php echo isset($_REQUEST['fileupload-filelist_'.$this->listtoken]) ? stripslashes($_REQUEST['fileupload-filelist_'.$this->listtoken]) : ''; ?>'>
-    <input type="file" name="files[]" multiple="multiple" class='upload-input upload-input-files' multiple>
+    <input type="file" name="files[]" class='upload-input upload-input-files' multiple>
     <?php if ('1' === $this->options['upload_folder']) { ?>
-    <input type="file" name="files[]" multiple="multiple" class='upload-input upload-input-folder' multiple directory
+    <input type="file" name="files[]" class='upload-input upload-input-folder' multiple directory
       webkitdirectory>
     <?php } ?>
   </div>
@@ -49,7 +49,7 @@ if ('1' === $this->options['upload_auto_start'] || false !== strpos($this->optio
       </div>
     </div>
     <div class="fileupload-header-button">
-      <button class='fileupload-text-button fileupload-requirements-button button secondary' type="button"><i
+      <button class='fileupload-text-button fileupload-requirements-button button secondary' type="button" title="<?php echo esc_html__('Upload requirements', 'wpcloudplugins'); ?>"><i
           class="fas fa-tasks fa-stack-1x"></i></button>
       <div class='tippy-content-holder'>
         <div class='tippy-content'>
@@ -75,7 +75,7 @@ if ('1' === $this->options['upload_auto_start'] || false !== strpos($this->optio
       </div>
     </div>
     <div class="fileupload-header-button">
-      <button class='fileupload-add-button button' type="button"><i class="fas fa-plus fa-stack-1x"></i></button>
+      <button class='fileupload-add-button button' type="button" title="<?php echo ($this->options['maxnumberofuploads'] > 1 || '-1' === $this->options['maxnumberofuploads']) ? esc_html__('Add your files', 'wpcloudplugins') : esc_html__('Add your file', 'wpcloudplugins'); ?>"><i class="fas fa-plus fa-stack-1x"></i></button>
       <div class='tippy-content-holder'>
         <div class='tippy-content'>
           <ul>

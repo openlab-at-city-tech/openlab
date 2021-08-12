@@ -43,7 +43,35 @@ class S2_Frontend extends S2_Core {
 		$this->subscribe = __( 'subscribe', 'subscribe2' ); //ACTION replacement in subscribing confirmation email
 
 		$this->unsubscribe = __( 'unsubscribe', 'subscribe2' ); //ACTION replacement in unsubscribing in confirmation email
+
+        if ( isset( $_GET['s2_unsub'] ) && ! empty( $_GET['s2_unsub'] ) ) {
+            $this->unsubscribe( $_GET['s2_unsub'] );
+        }
 	}
+
+    /**
+     * Process unsubscribe
+     *
+     * @param $email
+     */
+	public function unsubscribe( $email ) {
+	    global $wpdb;
+        $email = base64_decode( $email );
+
+        if (! filter_var( $email, FILTER_VALIDATE_EMAIL ) ) {
+            return;
+        }
+
+        $count = $wpdb->delete( $wpdb->subscribe2,
+            [
+                'email' =>  $email
+            ]
+        );
+
+        if ( ! $count ) {
+            wp_safe_redirect( home_url() );
+        }
+    }
 
 	/* ===== template and filter functions ===== */
 	/**

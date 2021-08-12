@@ -3,7 +3,7 @@
  * Compatibility files for third-party plugins.
  * This is used to improve compatibility of specific Jetpack features with third-party plugins.
  *
- * @package Jetpack
+ * @package automattic/jetpack
  */
 
 namespace Automattic\Jetpack;
@@ -19,12 +19,15 @@ function load_3rd_party() {
 		'bitly.php',
 		'buddypress.php',
 		'class.jetpack-amp-support.php',
-		'class.jetpack-modules-overrides.php', // Special case. Tools to be used to override module settings.
+		'class-jetpack-crm-data.php',
+		'class-jetpack-modules-overrides.php', // Special case. Tools to be used to override module settings.
+		'creative-mail.php',
 		'debug-bar.php',
-		'domain-mapping.php',
-		'polldaddy.php',
+		'class-domain-mapping.php',
+		'crowdsignal.php',
 		'qtranslate-x.php',
 		'vaultpress.php',
+		'web-stories.php',
 		'wpml.php',
 		'woocommerce.php',
 		'woocommerce-services.php',

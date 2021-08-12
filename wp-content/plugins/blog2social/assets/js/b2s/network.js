@@ -702,6 +702,14 @@ function loginSuccess(networkId, networkType, displayName, networkAuthId, mandan
     if (networkId == 4) {
         networkTypeName = 'Blog';
     }
+    if(networkId == 12) {
+        if(networkType == 0) {
+            networkTypeName = 'Personal';
+        }
+        if(networkType == 1) {
+            networkTypeName = 'Business';
+        }
+    }
 
     //NEW
     if (jQuery('.b2s-network-item-auth-list-li[data-network-auth-id="' + networkAuthId + '"]').length == 0) {
@@ -930,7 +938,7 @@ jQuery(window).on("load", function () {
             jQuery('.b2s-edit-template-post-format[data-network-type=' + jQuery(this).attr('data-network-type') + ']').val('0');
             jQuery('.b2s-edit-template-image-preview[data-network-type=' + jQuery(this).attr('data-network-type') + ']').hide();
             jQuery('.b2s-edit-template-link-preview[data-network-type=' + jQuery(this).attr('data-network-type') + ']').show();
-            if(jQuery('#b2s-edit-template-network-id').val() == 1) {
+            if(jQuery('#b2s-edit-template-network-id').val() == 1 || jQuery('#b2s-edit-template-network-id').val() == 2) {
                 jQuery('.b2s-edit-template-enable-link-area[data-network-type=' + jQuery(this).attr('data-network-type') + ']').hide();
             }
         });
@@ -941,7 +949,7 @@ jQuery(window).on("load", function () {
             jQuery('.b2s-edit-template-post-format[data-network-type=' + jQuery(this).attr('data-network-type') + ']').val('1');
             jQuery('.b2s-edit-template-link-preview[data-network-type=' + jQuery(this).attr('data-network-type') + ']').hide();
             jQuery('.b2s-edit-template-image-preview[data-network-type=' + jQuery(this).attr('data-network-type') + ']').show();
-            if(jQuery('#b2s-edit-template-network-id').val() == 1) {
+            if(jQuery('#b2s-edit-template-network-id').val() == 1 || jQuery('#b2s-edit-template-network-id').val() == 2) {
                 jQuery('.b2s-edit-template-enable-link-area[data-network-type=' + jQuery(this).attr('data-network-type') + ']').show();
             }
         });
@@ -1154,7 +1162,7 @@ jQuery(document).on('click', '.b2s-edit-template-save-btn', function () {
         
         template_data[networkType]['format'] = jQuery('.b2s-edit-template-post-format[data-network-type="' + networkType + '"]').val();
         template_data[networkType]['content'] = jQuery('.b2s-edit-template-post-content[data-network-type="' + networkType + '"]').val();
-        if (jQuery('#b2s-edit-template-network-id').val() == 12 || jQuery('#b2s-edit-template-network-id').val() == 1) {
+        if (jQuery('#b2s-edit-template-network-id').val() == 24 || jQuery('#b2s-edit-template-network-id').val() == 12 || jQuery('#b2s-edit-template-network-id').val() == 1 || jQuery('#b2s-edit-template-network-id').val() == 2) {
             if(jQuery('.b2s-edit-template-enable-link[data-network-type="' + networkType + '"]').is(':checked')) {
                 template_data[networkType]['addLink'] = true;
             } else {
@@ -1377,6 +1385,9 @@ jQuery(document).on('click', '.b2sInfoContentBtn', function () {
 });
 jQuery(document).on('click', '.b2sInfoCharacterLimitBtn', function () {
     jQuery('#b2sInfoCharacterLimit').modal('show');
+});
+jQuery(document).on('click', '.b2s-network-addon-info-btn', function () {
+    jQuery('#b2sNetworkAddonInfo').modal('show');
 });
 
 jQuery(document).on('click', '.b2s-network-auth-update-btn[data-auth-method="client"]', function () {
@@ -1692,6 +1703,17 @@ jQuery(document).on('click', '.b2s-network-add-instagram-info-btn', function() {
     jQuery(document).on('click', '.b2s-add-network-continue-btn', function() {
         jQuery('#b2sNetworkAddInstagramInfoModal').modal('hide');
         wop(b2sAuthUrl + '&choose=profile', 'Blog2Social Network');
+        return false;
+    });
+    return false;
+});
+
+jQuery(document).on('click', '.b2s-network-add-instagram-business-info-btn', function() {
+    jQuery('#b2sNetworkAddInstagramBusinessInfoModal').modal('show');
+    var b2sAuthUrl = jQuery(this).data('b2s-auth-url');
+    jQuery(document).on('click', '.b2s-add-network-continue-btn', function() {
+        jQuery('#b2sNetworkAddInstagramBusinessInfoModal').modal('hide');
+        wop(b2sAuthUrl + '&choose=page', 'Blog2Social Network');
         return false;
     });
     return false;

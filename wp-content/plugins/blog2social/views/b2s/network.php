@@ -53,7 +53,7 @@ $networkData = $networkItem->getData();
                             </div>
                         </div>
                         <div class="row b2s-network-auth-area">
-                            <?php echo $networkItem->getPortale($networkData['mandanten'], $networkData['auth'], $networkData['portale'], $networkData['auth_count']); ?>
+                            <?php echo $networkItem->getPortale($networkData['mandanten'], $networkData['auth'], $networkData['portale'], $networkData['auth_count'], $networkData['addon_count']); ?>
                         </div>
                         <div class="row b2s-loading-area width-100" style="display: none">
                             <div class="b2s-loader-impulse b2s-loader-impulse-md"></div>
@@ -645,6 +645,72 @@ $networkData = $networkItem->getData();
                     <div class="col-md-12">
                         <?php echo sprintf(__('When you connect Blog2Social with your Instagram account, you might get a notification from Instagram that a server from Germany in the Cologne area is trying to access your account. This is a general security notification due to the fact that the Blog2Social server is located in this area. This is an automatic process that is necessary to establish a connection to Instagram. Rest assured, that this is a common and regular security notice to keep your account safe. <a href="%s" target="_blank">More information: How to connect with Instagram.</a>.', 'blog2social'), esc_url(B2S_Tools::getSupportLink('instagram_auth_faq'))); ?>
                         <button class="btn btn-primary pull-right b2s-add-network-continue-btn"><?php esc_html_e('Continue', 'blog2social'); ?></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="b2sNetworkAddInstagramBusinessInfoModal" tabindex="-1" role="dialog" aria-labelledby="b2sNetworkAddInstagramBusinessInfoModal" aria-hidden="true" data-backdrop="false"  style="display:none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="b2s-modal-close close" data-modal-name="#b2sNetworkAddInstagramBusinessInfoModal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title"><?php esc_html_e('Connect Instagram Business Account', 'blog2social') ?></h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <?php echo sprintf(__('Please note: Your Instagram Business Account will be connected with Blog2Social via Facebook. Therefore, please make sure that your Instagram Business Account is linked to a Facebook page and enter the corresponding login data. You will find more information and detailed instructions in the <a href="%s" target="_blank">Instagram Business guide</a>.', 'blog2social'), esc_url(B2S_Tools::getSupportLink('instagram_business_auth_faq'))); ?>
+                        <button class="btn btn-primary pull-right b2s-add-network-continue-btn"><?php esc_html_e('Continue', 'blog2social'); ?></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="b2sNetworkAddonInfo" tabindex="-1" role="dialog" aria-labelledby="b2sNetworkAddonInfo" aria-hidden="true" data-backdrop="false"  style="display:none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="b2s-modal-close close" data-modal-name="#b2sNetworkAddonInfo" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title"><?php esc_html_e('Network connections', 'blog2social') ?></h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <?php esc_html_e('With Blog2Social you can connect up to 16 social media networks and share your posts on your favourite social media accounts automatically.', 'blog2social'); ?>
+                        <br>
+                        <br>
+                        <?php esc_html_e('Each license has a specified number of accounts you can connect per social media network.', 'blog2social'); ?>
+                        <br>
+                        <br>
+                        <?php esc_html_e('Smart: 3 (per user)', 'blog2social'); ?>
+                        <br>
+                        <?php esc_html_e('Pro: 5 (per user)', 'blog2social'); ?>
+                        <br>
+                        <?php esc_html_e('Business: 15 (per user)', 'blog2social'); ?>
+                        <br>
+                        <br>
+                        <?php esc_html_e('For example: With the Pro license, each user can connect 5 Facebook accounts + 5 Twitter accounts + 5 Instagram accounts + ...', 'blog2social'); ?>
+                        <br>
+                        <br>    
+                        <?php esc_html_e('You can also purchase additional groups and sites as add-on to your active Blog2Social Premium Pro or Premium Business license:', 'blog2social'); ?>
+                        <br>
+                        <br>
+                        <?php esc_html_e('Facebook groups', 'blog2social'); ?>
+                        <br>
+                        <?php esc_html_e('Facebook pages', 'blog2social'); ?>
+                        <br>
+                        <?php esc_html_e('LinkedIn pages', 'blog2social'); ?>
+                        <br>
+                        <br>
+                        <?php esc_html_e('For example: If you purchase 5 Facebook groups, these additional 5 Facebook groups are available for all users. So, when 5 users are activated for the Pro or Business license, each user can connect 1 additional Facebook group, or one user can connect 5 additional Facebook groups.', 'blog2social'); ?>
+                        <br>
+                        <br>
+                        <?php echo sprintf(__('<a href="%s" target="_blank">Get more information on how to add more sites or groups.</a>', 'blog2social'), esc_url(B2S_Tools::getSupportLink('network_addon_faq'))); ?>
                     </div>
                 </div>
             </div>

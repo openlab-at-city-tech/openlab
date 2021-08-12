@@ -101,7 +101,7 @@ if ( !class_exists( 'MeowCommon_Classes_Ratings' ) ) {
 			$info = pathinfo( $file );
 			if ( !empty( $info ) ) {
 				if ( $info['filename'] == 'wplr-sync' ) {
-					return "WP/LR Sync";
+					return "Photo Engine";
 				}
 				$info['filename'] = str_replace( '-', ' ', $info['filename'] );
 				$file = ucwords( $info['filename'] );

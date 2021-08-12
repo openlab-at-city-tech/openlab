@@ -4,7 +4,18 @@ namespace TheLion\OutoftheBox;
 
 class StorageInfo
 {
+    /**
+     * Quota used for Cloud Account.
+     *
+     * @var int
+     */
     private $_quota_used;
+
+    /**
+     * Quota available for Cloud Account.
+     *
+     * @var int
+     */
     private $_quota_total;
 
     public function get_quota_used()

@@ -1,3 +1,4 @@
+<?php ?>
  <div class="dialog" id="add-to-protfolio-dialog" aria-hidden="true">
 	<div class="dialog__overlay" tabindex="-1" data-a11y-dialog-hide"></div>
 	<dialog class="dialog__content" aria-labelledby="dialog-title" aria-describedby="dialog-description" role="dialog">

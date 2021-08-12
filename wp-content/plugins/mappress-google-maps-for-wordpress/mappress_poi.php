@@ -64,16 +64,23 @@ class Mappress_Poi extends Mappress_Obj {
 	*/
 	function get_post_excerpt($post) {
 		// Fast excerpts: similar to wp_trim_excerpt() in formatting.php, but without (slow) call to get_the_content()
-		$text = ($post->post_excerpt) ? $post->post_excerpt : $post->post_content;
-		$text = strip_shortcodes($text);
+		$raw = ($post->post_excerpt) ? $post->post_excerpt : $post->post_content;
+		$text = strip_shortcodes($raw);
 		$excerpt_length = 55;
 		$excerpt_more = apply_filters( 'excerpt_more', ' ' . '[&hellip;]' );
-		return wp_trim_words( $text, $excerpt_length, $excerpt_more );
+		$excerpt = wp_trim_words( $text, $excerpt_length, $excerpt_more );
+		return apply_filters('mappress_poi_excerpt', $excerpt, $raw);
 	}
 
+	/**
+	* Get thumbnails if needed.  If dimensions are specified, size 'medium-large' is used to allow scaling w/o pixellation
+	*
+	* @param mixed $post
+	*/
 	function get_thumbnail($post) {
-		$size = (Mappress::$options->thumbSize) ? Mappress::$options->thumbSize : null;
-		$style = (Mappress::$options->thumbWidth && Mappress::$options->thumbHeight) ? sprintf("width: %spx; height : %spx;", Mappress::$options->thumbWidth, Mappress::$options->thumbHeight) : null;
+		$force_size = (Mappress::$options->thumbWidth && Mappress::$options->thumbHeight);
+		$size = (Mappress::$options->thumbSize && !$force_size) ? Mappress::$options->thumbSize : 'medium_large';
+		$style = ($force_size) ? sprintf("width: %spx; height : %spx;", Mappress::$options->thumbWidth, Mappress::$options->thumbHeight) : null;
 		return get_the_post_thumbnail($post, $size, array('style' => $style));			// Slow due to get_post_thumbnail_id()
 	}
 }

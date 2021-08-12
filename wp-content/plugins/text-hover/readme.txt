@@ -1,14 +1,14 @@
 === Text Hover ===
 Contributors: coffee2code
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=6ARCFJ9TX3522
-Tags: text, post content, abbreviations, terms, acronyms, hover, help, tooltips, coffee2code
+Tags: tooltips, abbreviations, terms, acronyms, help, coffee2code
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Requires at least: 4.9
-Tested up to: 5.4
-Stable tag: 4.0
+Tested up to: 5.7
+Stable tag: 4.1
 
-Add hover text to regular text in posts. Handy for providing explanations of names, terms, phrases, abbreviations, and acronyms mentioned in posts/pages.
+Add hover text (aka tooltips) to content in posts. Handy for providing explanations of names, terms, phrases, abbreviations, and acronyms.
 
 
 == Description ==
@@ -27,6 +27,7 @@ Additional features of the plugin controlled both via settings and filters:
 * Hover text can be made case insensitive (it is case sensitive by default)
 * Hover text can be limited to doing only one replacement per term, per post (by default, all occurrences of a term are given hovertext)
 * Hover text can be rendered using the default browser tooltip (by default, the better-looking <a href="http://qtip2.com/">qTip2</a> library is used)
+* Hover text can be expanded to affect other filters
 
 **Note:** This is not the same as my [Text Replace](https://wordpress.org/plugins/text-replace) plugin, which defines terms or phrases that you want replaced by replacement text when displayed on your site. Text Hover instead adds the hover text as additional information for when visitors hover over the term, which is otherwise displayed in the post as you typed it.
 
@@ -39,6 +40,7 @@ Links: [Plugin Homepage](https://coffee2code.com/wp-plugins/text-hover/) | [Plug
 1. Install via the built-in WordPress plugin installer. Or download and unzip `text-hover.zip` inside the plugins directory for your site (typically `wp-content/plugins/`)
 1. Activate the plugin through the 'Plugins' admin menu in WordPress
 1. Go to the `Settings` -> `Text Hover` admin settings page and customize the settings (namely to define the terms/abbreviations and their explanations).
+1. Optional: Configure other plugin settings as desired.
 1. Use the terms/abbreviations in posts and/or pages (terms/abbreviations appearing in existing posts will also be affected by this plugin)
 
 
@@ -75,7 +77,9 @@ By default, the plugin filters the post content, post excerpt fields, widget tex
 
 = How can I get text hover to apply for post titles (or something not processed for text hover by default)? =
 
-You can add to the list of filters that get processed for text hover terms. See the Hooks section for an example.
+The easiest way would be to add "the_title" (or some other filter's name) as a line in the "More filters" setting. That setting allows any additional specified filters to be processed for text hovers.
+
+You can also programmatically add to the list of filters that get processed for text hover terms. See the Hooks section for an example.
 
 = Is the plugin case sensitive? =
 
@@ -92,6 +96,8 @@ Yes, but only if you have the pretty tooltips enabled (via settings or the filte
 = Does this plugin explicitly support any third-party plugins? =
 
 Yes. While this plugin is compatible with many other plugins that modify post and widget text, this plugin has explicit built-in support for Advanced Custom Fields and Elementor, which provide additional content areas. This plugin provides hooks that can be used to enable compatibility with other plugins and themes.
+
+If you know the name of the filter provided by a plugin, you can add it to the "More filters" setting to have its value processed for text hover.
 
 = Does this plugin include unit tests? =
 
@@ -261,11 +267,88 @@ add_filter( 'c2c_text_hover_use_pretty_tooltips', '__return_false' );`
 
 == Changelog ==
 
-= 4.0 (2020-07-16) =
-
+= 4.1 (2021-06-29) =
 Highlights:
 
-* This minor release adds a new setting that can allow the plugin to run later to avoid potential conflicts with other plugins, now allows hover strings to begin or end with punctuation, updates its plugin framework, adds a TODO.md file, updates a few URLs to be HTTPS, expands unit testing, and updates compatibility to be WP 4.9-5.4+.
+This feature release adds a new setting to allow for user-specified filters to be processed, updates the plugin framework significantly, improves the plugin settings page, restructures unit test files, notes compatibility through WP 5.7, and more.
+
+Details:
+
+* New: Add new setting "More filters" to allow for user-specified filters to be processed
+* Change: Update plugin framework to 064
+    * 064:
+    * New: For checkbox settings, support a 'more_help' config option for defining help text to appear below checkbox and its label
+    * Fix: Fix URL for plugin listing donate link
+    * Change: Store donation URL as object variable
+    * Change: Update strings used for settings page donation link
+    * 063:
+    * Fix: Simplify settings initialization to prevent conflicts with other plugins
+    * Change: Remove ability to detect plugin settings page before current screen is set, as it is no longer needed
+    * Change: Enqueue thickbox during `'admin_enqueue_scripts'` action instead of during `'init'`
+    * Change: Use `is_plugin_admin_page()` in `help_tabs()` instead of reproducing its functionality
+    * Change: Trigger a debugging warning if `is_plugin_admin_page()` is used before `'admin_init'` action is fired
+    * 062:
+    * Change: Update `is_plugin_admin_page()` to use `get_current_screen()` when available
+    * Change: Actually prevent object cloning and unserialization by throwing an error
+    * Change: Check that there is a current screen before attempting to access its property
+    * Change: Remove 'type' attribute from `style` tag
+    * Change: Incorporate commonly defined styling for inline_textarea
+    * 061:
+    * Fix bug preventing settings from getting saved
+    * 060:
+    * Rename class from `c2c_{PluginName}_Plugin_051` to `c2c_Plugin_060`
+    * Move string translation handling into inheriting class making the plugin framework code plugin-agnostic
+        * Add abstract function `get_c2c_string()` as a getter for translated strings
+        * Replace all existing string usage with calls to `get_c2c_string()`
+    * Handle WordPress's deprecation of the use of the term "whitelist"
+        * Change: Rename `whitelist_options()` to `allowed_options()`
+        * Change: Use `add_allowed_options()` instead of deprecated `add_option_whitelist()` for WP 5.5+
+        * Change: Hook `allowed_options` filter instead of deprecated `whitelist_options` for WP 5.5+
+    * New: Add initial unit tests (currently just covering `is_wp_version_cmp()` and `get_c2c_string()`)
+    * Add `is_wp_version_cmp()` as a utility to compare current WP version against a given WP version
+    * Refactor `contextual_help()` to be easier to read, and correct function docblocks
+    * Don't translate urlencoded donation email body text
+    * Add inline comments for translators to clarify purpose of placeholders
+    * Change PHP package name (make it singular)
+    * Tweak inline function description
+    * Note compatibility through WP 5.7+
+    * Update copyright date (2021)
+    * 051:
+    * Allow setting integer input value to include commas
+    * Use `number_format_i18n()` to format integer value within input field
+    * Update link to coffee2code.com to be HTTPS
+    * Update `readme_url()` to refer to plugin's readme.txt on plugins.svn.wordpress.org
+    * Remove defunct line of code
+* New: Add `get_default_filters()` as getter for core filters, third-party filters, or both
+* Change: Allow displayed dropdown values for 'when' setting to be translated
+* Change: Improve settings page help text by adding, rephrasing, relocating, and tweaaking some formatting
+* Change: Change text_to_hover setting from being a textarea to inline textarea
+* Change: Move translation of all parent class strings into main plugin file
+* Change: Output newlines after block-level tags in settings page
+* Change: Omit 'cols' attribute for textarea since it is overridden
+* Change: Note compatibility through WP 5.7+
+* Change: Update copyright date (2021)
+* Change: Change plugin's short description
+* Change: Tweak plugin's readme.txt tags
+* Change: Sync installation instructions in README.txt with what's in readme.txt
+* Fix: Use correct textdomain for a string translation
+* Unit tests:
+    * Change: Restructure unit test directories and files into `tests/` top-level directory
+        * Change: Move `bin/` into `tests/`
+        * Change: Move `tests/bootstrap.php` into `tests/phpunit/`
+        * Change: In bootstrap, store path to plugin file constant so its value can be used within that file and in test file
+        * Change: Move `tests/*.php` into `tests/phpunit/tests/`
+        * Change: Remove 'test-' prefix from unit test files
+        * Change: Rename `phpunit.xml` to `phpunit.xml.dist` per best practices
+    * New: Add additional punctuation-related test cases
+    * New: Add helper function `get_core_filters()` and `get_3rd_party_filters()` to DRY up data reuse
+* New: Add a few more possible TODO items
+* Change: Updated screenshot for settings page
+
+= 4.0 (2020-07-16) =
+Highlights:
+
+This minor release adds a new setting that can allow the plugin to run later to avoid potential conflicts with other plugins, now allows hover strings to begin or end with punctuation, updates its plugin framework, adds a TODO.md file, updates a few URLs to be HTTPS, expands unit testing, and updates compatibility to be WP 4.9-5.4+.
 
 Details:
 
@@ -309,40 +392,13 @@ Details:
     * New: Add test to verify the lack of any defined hover text doesn't remove zeroes from text
     * Fix: Correct typo in function name used
 
-= 3.9 (2020-01-08) =
-Highlights:
-
-* This minor release adds support for select third-party plugins (Advanced Custom Fields, Elementor), tweaks plugin initialization, fixes a minor bug, updates the plugin framework to 049, notes compatibility through WP 5.3+, creates CHANGELOG.md, and updates copyright date (2020).
-
-Details:
-
-* New: Add support for third-party plugins: Advanced Custom Fields, Elementor
-* New: Add filter `c2c_text_hover_third_party_filters` for filtering third party filters
-* Fix: Define `uninstall()` as being `static`
-* Change: Initialize plugin on `plugins_loaded` action instead of on load
-* Change: Update plugin framework to 049
-    * 049:
-    * Correct last arg in call to `add_settings_field()` to be an array
-    * Wrap help text for settings in `label` instead of `p`
-    * Only use `label` for help text for checkboxes, otherwise use `p`
-    * Ensure a `textarea` displays as a block to prevent orphaning of subsequent help text
-    * Note compatibility through WP 5.1+
-    * Update copyright date (2019)
-* Change: Variablize the qTip2 version and use it when enqueuing its JS and CSS
-* New: Add CHANGELOG.md and move all but most recent changelog entries into it
-* New: Add inline documentation for hooks
-* Unit tests:
-     * Change: Update unit test install script and bootstrap to use latest WP unit test repo
-     * Change: Explicitly check hook priority when checking that hook is registered
-* Change: Note compatibility through WP 5.3+
-* Change: Update copyright date (2020)
-* Change: Update License URI to be HTTPS
-* Change: Split paragraph in README.md's "Support" section into two
-
 _Full changelog is available in [CHANGELOG.md](https://github.com/coffee2code/text-hover/blob/master/CHANGELOG.md)._
 
 
 == Upgrade Notice ==
+
+= 4.1 =
+Recommended feature release: added new setting to allow for user-specified filters to be processed, updated plugin framework significantly, improved plugin settings page, restructured unit test files, noted compatibility through WP 5.7, and more.
 
 = 4.0 =
 Minor release: added setting to allow plugin to run later to avoid potential conflicts with other plugins, allowed hover strings to begin/end in punctuation, updated plugin framework, added TODO.md, updated some URLs to be HTTPS, expanded unit testing, and updated compatibility to be WP 4.9-5.4+.

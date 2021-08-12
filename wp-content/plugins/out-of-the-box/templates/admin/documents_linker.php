@@ -8,13 +8,12 @@ if (!defined('ABSPATH')) {
 if (
   !(\TheLion\OutoftheBox\Helpers::check_user_role($this->settings['permissions_add_links']))
 ) {
-    die();
+    exit();
 }
 
 // Add own styles and script and remove default ones
 $this->load_scripts();
 $this->load_styles();
-
 
 function OutoftheBox_remove_all_scripts()
 {
@@ -32,8 +31,8 @@ function OutoftheBox_remove_all_styles()
     global $wp_styles;
     $wp_styles->queue = [];
     wp_enqueue_style('OutoftheBox.ShortcodeBuilder');
-    wp_enqueue_style('OutoftheBox');
-    wp_enqueue_style('Awesome-Font-5-css');
+    wp_enqueue_style('OutoftheBox.CustomStyle');
+    wp_enqueue_style('Awesome-Font-5');
 }
 
 add_action('wp_print_scripts', 'OutoftheBox_remove_all_scripts', 1000);
@@ -45,7 +44,7 @@ add_action('wp_print_styles', 'OutoftheBox_remove_all_styles', 1000);
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <title><?php esc_html_e('Insert Direct links','wpcloudplugins'); ?></title>
+  <title><?php esc_html_e('Insert Direct links', 'wpcloudplugins'); ?></title>
   <?php wp_print_scripts(); ?>
   <?php wp_print_styles(); ?>
 </head>
@@ -58,15 +57,15 @@ add_action('wp_print_styles', 'OutoftheBox_remove_all_styles', 1000);
       <div class="outofthebox-header">
         <div class="outofthebox-logo"><a href="https://www.wpcloudplugins.com" target="_blank"><img src="<?php echo OUTOFTHEBOX_ROOTPATH; ?>/css/images/wpcp-logo-dark.svg" height="64" width="64"/></a></div>
         <div class="outofthebox-form-buttons">
-          <div id="do_link" class="simple-button default" name="insert"><?php esc_html_e('Insert Links','wpcloudplugins'); ?>&nbsp;<i class="fas fa-chevron-circle-right" aria-hidden="true"></i></div>
+          <div id="do_link" class="simple-button default" name="insert"><?php esc_html_e('Insert Links', 'wpcloudplugins'); ?>&nbsp;<i class="fas fa-chevron-circle-right" aria-hidden="true"></i></div>
         </div>
 
-        <div class="outofthebox-title"><?php esc_html_e('Insert Direct links','wpcloudplugins'); ?></div>
+        <div class="outofthebox-title"><?php esc_html_e('Insert Direct links', 'wpcloudplugins'); ?></div>
 
       </div>
 
       <div class="outofthebox-panel outofthebox-panel-full">
-        <p><?php esc_html_e('Please note that the embedded files need to be public (with link)','wpcloudplugins'); ?></p>
+        <p><?php esc_html_e('Please note that the embedded files need to be public (with link)', 'wpcloudplugins'); ?></p>
         <?php
 
         $atts = [
@@ -79,6 +78,8 @@ add_action('wp_print_styles', 'OutoftheBox_remove_all_styles', 1000);
             'rename' => '0',
             'addfolder' => '0',
             'viewrole' => 'all',
+            'search' => '1',
+            'searchcontents' => '1',
             'candownloadzip' => '0',
             'showsharelink' => '0',
             'previewinline' => '0',

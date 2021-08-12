@@ -224,15 +224,22 @@ body.perk-iframe {
 }
 
 .gp-field-setting .gp-row {
-    margin: 0 0 14px;
+    margin: 0 0 0.9375rem;
 }
 
 .gp-field-setting .gp-row:last-child {
     margin: 0;
 }
 
-.ui-tabs-panel .gp-field-setting .gp-row label {
-    margin: 0 0 5px !important;
+.gp-field-setting .gp-row > label {
+	margin-bottom: 0.7rem;
+}
+
+/* GF 2.5 provides awesome default styling for text inputs but not number inputs. Let's copy them here. */
+body:not( .gf-legacy-ui ) .gp-field-setting input[type="number"] {
+	max-height: 2.25rem;
+	min-height: 2.25rem;
+	width: 100%;
 }
 
 .gp-notice {
@@ -247,10 +254,51 @@ body.perk-iframe {
 }
 
 .gp-child-settings {
+	border-left: 2px solid #ecedf8;
+	padding: 0.875rem 0 0.875rem 0.875rem;
+	margin-left: 11px;
+	margin-top: 0.7rem;
+}
+
+.gf-legacy-ui .gp-child-settings {
 	border-left: 2px solid #eee;
 	padding: 15px;
 	margin-left: 7px;
 	margin-top: 5px;
+}
+
+.gp-setting {
+	margin-bottom: 0.9375rem;
+}
+
+.panel-block-tabs__body--settings li.field_setting label.section_label + .gp-group {
+	margin-top: 0;
+}
+
+.gp-group {
+	display: flex;
+	align-items: center;
+}
+
+.gp-group + .gp-group {
+	margin-top: 0.5625rem;
+}
+
+.gp-group > div,
+.gp-group > label,
+.gp-group > input {
+	flex: 1;
+}
+
+.gp-group > label {
+	margin-bottom: 0;
+}
+
+/* Force inputs in gp-group containers to fill their containers in < GF 2.4. */
+#gws_field_tab .gp-group input,
+#gws_field_tab .gp-group select {
+	width: 100%;
+	max-width: 100%;
 }
 
 /* WP Pointer */
@@ -275,6 +323,14 @@ body.perk-iframe {
     content: '\f148';
     transform: scale(-1, 1);
     left: -9px;
+}
+
+.gp-tooltip-right:after {
+	right: 12px;
+}
+
+.gp-tooltip-right.ui-tooltip.ui-widget-content {
+	max-width: 12rem;
 }
 
 
