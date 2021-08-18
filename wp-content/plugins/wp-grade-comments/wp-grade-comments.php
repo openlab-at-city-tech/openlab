@@ -271,7 +271,7 @@ add_filter( 'comment_feed_where', 'olgc_filter_comments_from_feed' );
  * @return array Array of comment IDs.
  */
 function olgc_get_inaccessible_comments( $user_id, $post_id = 0 ) {
-	$olpc = is_plugin_active( 'openlab-private-comments/openlab-private-comments.php' );
+	$olpc = defined( '\OpenLab\PrivateComments\VERSION' );
 
 	// Get a list of private comments
 	remove_action( 'pre_get_comments', 'olgc_remove_private_comments' );
