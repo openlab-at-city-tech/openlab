@@ -242,9 +242,14 @@ add_action( 'pre_get_comments', __NAMESPACE__ . '\\remove_private_comments' );
  * @return int[]       Array of comment IDs.
  */
 function get_inaccessible_comments( $user_id = null, $post_id = 0 ) {
+	$olgc = function_exists( 'olgc_remove_private_comments' );
+
 	// Get a list of private comments
 	remove_action( 'pre_get_comments', __NAMESPACE__ . '\\remove_private_comments' );
-	remove_action( 'pre_get_comments', 'olgc_remove_private_comments' );
+
+	if ( $olgc ) {
+		remove_action( 'pre_get_comments', 'olgc_remove_private_comments' );
+	}
 
 	$comment_args = [
 		'meta_query' => [
@@ -263,7 +268,10 @@ function get_inaccessible_comments( $user_id = null, $post_id = 0 ) {
 	$private_comments = get_comments( $comment_args );
 
 	add_action( 'pre_get_comments', __NAMESPACE__ . '\\remove_private_comments' );
-	add_action( 'pre_get_comments', 'olgc_remove_private_comments' );
+
+	if ( $olgc ) {
+		add_action( 'pre_get_comments', 'olgc_remove_private_comments' );
+	}
 
 	// Filter out the ones that are written by the logged-in user, as well
 	// as those that are attached to a post that the user is the author of
