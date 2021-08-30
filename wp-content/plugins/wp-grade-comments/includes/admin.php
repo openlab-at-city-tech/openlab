@@ -252,8 +252,12 @@ function olgc_save_comment_extras( $comment_id ) {
 	if ( isset( $_POST['olgc_grade_edit_nonce'] ) && wp_verify_nonce( $_POST['olgc_grade_edit_nonce'], 'olgc-grade-edit-' . $comment_id ) ) {
 		// Sanitize and update.
 		if ( isset( $_POST['olgc-grade'] ) ) {
-			$grade = wp_unslash( $_POST['olgc-grade'] );
-			update_comment_meta( $comment_id, 'olgc_grade', $grade );
+			$grade = trim( wp_unslash( $_POST['olgc-grade'] ) );
+			if ( $grade ) {
+				update_comment_meta( $comment_id, 'olgc_grade', $grade );
+			} else {
+				delete_comment_meta( $comment_id, 'olgc_grade' );
+			}
 		}
 	}
 
