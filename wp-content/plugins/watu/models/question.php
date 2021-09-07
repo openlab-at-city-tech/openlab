@@ -67,10 +67,11 @@ class WatuQuestion {
 	// so we'll make sure all questions have correct one when loading the page
 	static function fix_sort_order($questions) {
 		global $wpdb;
+		$ct = intval($questions[0]->sort_order); // get the sort order of the first question on the page. If empty for some reason, it will become 1 in the loop	
 		foreach($questions as $cnt => $question) {
-			$cnt++;
-			if(@$question->sort_order!=$cnt) {
-				$wpdb->query("UPDATE ".WATU_QUESTIONS." SET sort_order=$cnt WHERE ID={$question->ID}");
+			$ct++;			
+			if(@$question->sort_order != $ct) {
+				$wpdb->query("UPDATE ".WATU_QUESTIONS." SET sort_order=$ct WHERE ID={$question->ID}");
 			}
 		}
 	}

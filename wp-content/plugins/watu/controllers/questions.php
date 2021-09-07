@@ -107,22 +107,23 @@ function watu_questions() {
 		$wpdb->query("UPDATE ".WATU_QUESTIONS." SET ID=ID $is_required_sql WHERE ID IN ($qid_sql)");		
 	}
 	
+	$filter_sql = $filter_params = '';
+	$offset = empty($_GET['offset']) ? 0 : intval($_GET['offset']);
+	$page_limit = empty($_GET['page_limit']) ? 50 : intval($_GET['page_limit']);	
+	$filter_params .= '&page_limit='.$page_limit;
+	
 	// reorder questions
 	if(!empty($_GET['move'])) {
 		WatuQuestion::reorder($_GET['move'], $_GET['quiz'], $_GET['dir']);
-		watu_redirect("admin.php?page=watu_questions&quiz=".intval($_GET['quiz']));
+		watu_redirect("admin.php?page=watu_questions&quiz=".intval($_GET['quiz']).'&offset='.$offset.'&page_limit='.$page_limit);
 	}		
-	
-	$offset = 0; // for now initialize as 0
-	
-			
-	$filter_sql = '';
 
 	// filter by type
 	if(!empty($_GET['filter_answer_type'])) {
 		$filter_answer_type = $_GET['filter_answer_type'];
 		if( !in_array($filter_answer_type, array('radio', 'checkbox', 'textarea'))) $filter_answer_type = 'radio';
 		$filter_sql .= $wpdb->prepare(" AND Q.answer_type = %s ", $filter_answer_type);
+		$filter_params .= '&filter_answer_type='.$filter_answer_type;
 	}		
 	
 	// filter by ID
@@ -131,22 +132,25 @@ function watu_questions() {
 		$filter_id = $_GET['filter_id'];
 		$filter_id = preg_replace('/[^0-9\s\,]/', '', $filter_id);
 		$filter_sql .= " AND Q.ID IN ($filter_id) ";
+		$filter_params .= '&filter_id='.$filter_id;
 	}
 	
 	// filter by contents
 	if(!empty($_GET['filter_contents'])) {
 		$filter_sql .= $wpdb->prepare(" AND Q.question LIKE %s ", '%'.sanitize_text_field($_GET['filter_contents']).'%');
+		$filter_params .= '&filter_contents='.esc_attr($_GET['filter_contents']);
 	}	
 		
 	// Retrieve the questions
-	$all_question = $wpdb->get_results("SELECT Q.ID,Q.question, Q.answer_type as answer_type, 
-			Q.is_required as is_required, Q.is_inactive as is_inactive,
+	$all_question = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS Q.ID,Q.question, Q.answer_type as answer_type, 
+			Q.is_required as is_required, Q.is_inactive as is_inactive, Q.sort_order as sort_order,
 			(SELECT COUNT(*) FROM ".WATU_ANSWERS." WHERE question_id=Q.ID) AS answer_count
 			FROM `".WATU_QUESTIONS."` as Q
-			WHERE Q.exam_id=$quiz_id $filter_sql ORDER BY Q.sort_order, Q.ID");
+			WHERE Q.exam_id=$quiz_id $filter_sql ORDER BY Q.sort_order, Q.ID
+			LIMIT $offset, $page_limit");
 											
 	if(empty($filter_sql)) WatuQuestion::fix_sort_order($all_question);		
-	$num_questions = sizeof($all_question);	
+	$count = $num_questions = $wpdb->get_var("SELECT FOUND_ROWS()");
 	
 	if(@file_exists(get_stylesheet_directory().'/watu/questions.html.php')) include get_stylesheet_directory().'/watu/questions.html.php';
 	else include(WATU_PATH . '/views/questions.html.php');  

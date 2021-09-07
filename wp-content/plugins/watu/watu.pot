@@ -29,7 +29,7 @@ msgstr ""
 msgid "Unrecognized quiz ID"
 msgstr ""
 
-#: controllers/questions.php:187
+#: controllers/questions.php:191
 msgid "Please upload file"
 msgstr ""
 
@@ -1153,19 +1153,19 @@ msgstr ""
 msgid "To add this %s to your blog, insert the code "
 msgstr ""
 
-#: views/questions.html.php:85
+#: views/questions.html.php:94
 msgid "Inactive"
 msgstr ""
 
-#: views/questions.html.php:86
+#: views/questions.html.php:95
 msgid "Yes"
 msgstr ""
 
-#: views/questions.html.php:86
+#: views/questions.html.php:95
 msgid "No"
 msgstr ""
 
-#: views/questions.html.php:89
+#: views/questions.html.php:98
 msgid "You are about to delete this question. This will delete the answers to this question. Press 'OK' to delete and 'Cancel' to stop."
 msgstr ""
 
@@ -1205,59 +1205,63 @@ msgstr ""
 msgid "Filter questions"
 msgstr ""
 
-#: views/questions.html.php:48
+#: views/questions.html.php:39
+msgid "Questions per page:"
+msgstr ""
+
+#: views/questions.html.php:57
 msgid "Question type"
 msgstr ""
 
-#: views/questions.html.php:49
+#: views/questions.html.php:58
 msgid "Required?"
 msgstr ""
 
-#: views/questions.html.php:50
+#: views/questions.html.php:59
 msgid "Number Of Answers"
 msgstr ""
 
-#: views/questions.html.php:71
+#: views/questions.html.php:80
 msgid "Move Up"
 msgstr ""
 
-#: views/questions.html.php:74
+#: views/questions.html.php:83
 msgid "Move Down"
 msgstr ""
 
-#: views/questions.html.php:96
+#: views/questions.html.php:105
 msgid "No questions found."
 msgstr ""
 
-#: views/questions.html.php:104
+#: views/questions.html.php:113
 msgid "Create New Question"
 msgstr ""
 
-#: views/questions.html.php:107
+#: views/questions.html.php:120
 msgid "Delete Selected"
 msgstr ""
 
-#: views/questions.html.php:108
+#: views/questions.html.php:121
 msgid "Other Mass Changes:"
 msgstr ""
 
-#: views/questions.html.php:109
+#: views/questions.html.php:122
 msgid "Change properties of selected questions:"
 msgstr ""
 
-#: views/questions.html.php:110
+#: views/questions.html.php:123
 msgid "Don't change required status"
 msgstr ""
 
-#: views/questions.html.php:111
+#: views/questions.html.php:124
 msgid "Change all to required"
 msgstr ""
 
-#: views/questions.html.php:112
+#: views/questions.html.php:125
 msgid "Change all to not required"
 msgstr ""
 
-#: views/questions.html.php:116
+#: views/questions.html.php:129
 msgid "Update Selected"
 msgstr ""
 
