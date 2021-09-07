@@ -1720,14 +1720,15 @@ function openlab_catch_olgc_notice_dismissals() {
 add_action( 'admin_init', 'openlab_catch_olgc_notice_dismissals' );
 
 /**
- * Email the course instructor when a wp-grade-comments "private" comment is posted.
+ * Email the course instructor when a wp-grade-comments or openlab-private-comments "private" comment is posted.
  *
  * @param int        $comment_id ID of the comment.
  * @param WP_Comment $comment    Comment object.
  */
 function openlab_olgc_notify_instructor( $comment_id, $comment ) {
-	$is_private = get_comment_meta( $comment_id, 'olgc_is_private', true );
-	if ( ! $is_private ) {
+	$olgc_is_private = get_comment_meta( $comment_id, 'olgc_is_private', true );
+	$olpc_is_private = get_comment_meta( $comment_id, 'ol_is_private', true );
+	if ( ! $olgc_is_private && ! $olpc_is_private ) {
 		return;
 	}
 
