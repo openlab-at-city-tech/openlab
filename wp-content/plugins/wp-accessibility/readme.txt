@@ -3,9 +3,9 @@ Contributors: joedolson
 Donate link: http://www.joedolson.com/donate/
 Tags: title, accessibility, accessible, navigation, wcag, a11y, section508, focus, alt text, labels, aria
 Requires at least: 3.4.2
-Requires PHP: 5.3
-Tested up to: 5.7
-Stable tag: 1.7.7
+Requires PHP: 5.6
+Tested up to: 5.8
+Stable tag: 1.7.9
 Text Domain: wp-accessibility
 License: GPLv2 or later
 
@@ -38,8 +38,7 @@ These are features that address issues caused by inaccessible themes.
 These are features that address issues caused by current or past WordPress core accessibility issues. (Issues added in content, such as target or title attributes, are persistent even when WordPress is updated.) 
 
 * Force a search page error when a search is made with an empty text string. (If your theme has a search.php template.)
-* Remove redundant title attributes from page lists, category lists, and archive menus. 
-* Address some accessibility issues in the WordPress admin styles
+* Remove redundant title attributes from tag clouds.
 
 Content specific fixes:
 
@@ -73,6 +72,20 @@ The plug-in is intended to help with deficiencies commonly found in themes and t
 = Future =
 
 [Suggest a change!](https://github.com/joedolson/wp-accessibility/issues/)
+
+= 1.7.9 =
+
+* Bug fix: potentially undeclared variable in 1.7.8.
+
+= 1.7.8 =
+
+* Bug fix: Avoid showing longdesc interface if no description defined.
+* Bug fix: Update screen reader text classes from antiquated versions.
+* Removal: Adding role attributes to HTML5 structures is no longer significant.
+* Removal: Remove option to make row actions visible. Now available via screen options in core.
+* Removal: Remove tabindex=-1 on skiplink targets. No longer required.
+* Improvement: Catch more potentially invalid or suspicious alt text patterns.
+* Refactor: Move footer scripts into external JS file.
 
 = 1.7.7 =
 
