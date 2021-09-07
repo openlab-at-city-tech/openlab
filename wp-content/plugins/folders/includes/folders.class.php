@@ -431,7 +431,7 @@ class WCP_Folders
 			}
 		}
 		foreach ($terms as $key=>$term ) {
-			if(isset($term->term_id) && isset($term->taxonomy) && !empty($term->taxonomy) && in_array($term->taxonomy, $option_array)) {
+			if(isset($term->term_taxonomy_id) && isset($term->taxonomy) && !empty($term->taxonomy) && in_array($term->taxonomy, $option_array)) {
 				$trash_count = null;
 				if(isset($trash_folders[$term->term_taxonomy_id])) {
 					$trash_count = $trash_folders[$term->term_taxonomy_id];
@@ -457,7 +457,7 @@ class WCP_Folders
 					}
 
 					if ($trash_count === null) {
-						$result = $wpdb->get_var("SELECT COUNT(*) FROM {$post_table} p JOIN {$term_table} rl ON p.ID = rl.object_id WHERE rl.term_taxonomy_id = '{$term->term_taxonomy_id}' AND p.post_status != 'trash' LIMIT 1");
+						//$result = $wpdb->get_var("SELECT COUNT(*) FROM {$post_table} p JOIN {$term_table} rl ON p.ID = rl.object_id WHERE rl.term_taxonomy_id = '{$term->term_taxonomy_id}' AND p.post_status != 'trash' LIMIT 1");
 						$query = "SELECT COUNT(DISTINCT(p.ID)) 
                         FROM {$post_table} p 
                             JOIN {$term_table} rl ON p.ID = rl.object_id 
@@ -479,6 +479,7 @@ class WCP_Folders
 		}
 
 		if(!empty($terms) && $initial_trash_folders != $trash_folders) {
+		    delete_transient("premio_folders_without_trash");
 			set_transient("premio_folders_without_trash", $trash_folders, 3*DAY_IN_SECONDS);
 		}
 		return $terms;
@@ -665,8 +666,8 @@ class WCP_Folders
 		                    $initial_trash_folders = array();
 	                    }
 
-	                    if(isset($trash_folders[$folder_id])) {
-		                    unset($trash_folders[$folder_id]);
+	                    if(isset($term->term_taxonomy_id) && isset($trash_folders[$term->term_taxonomy_id])) {
+		                    unset($trash_folders[$term->term_taxonomy_id]);
 	                    }
 
 	                    if($initial_trash_folders != $trash_folders) {
@@ -903,8 +904,8 @@ class WCP_Folders
 	                );
 	                if(!empty($terms) && count($terms)>0) {
 	                    foreach($terms as $term) {
-	                        if(isset($term->term_id) && isset($trash_folders[$term->term_id])) {
-	                            unset($trash_folders[$term->term_id]);
+	                        if(isset($term->term_taxonomy_id) && isset($trash_folders[$term->term_taxonomy_id])) {
+	                            unset($trash_folders[$term->term_taxonomy_id]);
 	                        }
 	                    }
 	                }
@@ -1447,8 +1448,9 @@ class WCP_Folders
 			}
 
 			foreach($term_ids as $term_id) {
-				if(isset($trash_folders[$term_id])) {
-					unset($trash_folders[$term_id]);
+                $term = get_term($term_id, $taxonomy);
+				if(isset($term->term_taxonomy_id) && isset($trash_folders[$term->term_taxonomy_id])) {
+					unset($trash_folders[$term->term_taxonomy_id]);
 				}
 			}
 
@@ -1468,8 +1470,9 @@ class WCP_Folders
 			}
 
 			foreach($term_ids as $term_id) {
-				if(isset($trash_folders[$term_id])) {
-					unset($trash_folders[$term_id]);
+                $term = get_term($term_id, $taxonomy);
+				if(isset($term->term_taxonomy_id) && isset($trash_folders[$term_id])) {
+					unset($trash_folders[$term->term_taxonomy_id]);
 				}
 			}
 
@@ -1974,8 +1977,8 @@ class WCP_Folders
             if(isset($postData['taxonomy'])) {
                 $taxonomy = self::sanitize_options($postData['taxonomy']);
             }
+            $post_type = self::get_custom_post_type($type);
             if (is_array($postArray)) {
-                $post_type = self::get_custom_post_type($type);
                 foreach ($postArray as $post) {
                     $terms = get_the_terms($post, $post_type);
 	                $post_terms = array(
@@ -1983,16 +1986,16 @@ class WCP_Folders
 		                'terms' => $terms
 	                );
 	                foreach($post_terms as $term) {
-		                if(isset($trash_folders[$term->term_id])) {
-			                unset($trash_folders[$term->term_id]);
+		                if(isset($trash_folders[$term->term_taxonomy_id])) {
+			                unset($trash_folders[$term->term_taxonomy_id]);
 		                }
 	                }
 	                $folderUndoSettings[] = $post_terms;
                     if (!empty($terms)) {
                         foreach ($terms as $term) {
                             if(!empty($taxonomy) && ($term->term_id == $taxonomy || $term->slug == $taxonomy)) {
-                                if(isset($trash_folders[$term->term_id])) {
-                                    unset($trash_folders[$term->term_id]);
+                                if(isset($trash_folders[$term->term_taxonomy_id])) {
+                                    unset($trash_folders[$term->term_taxonomy_id]);
                                 }
                                 wp_remove_object_terms($post, $term->term_id, $post_type);
                             }
@@ -2005,11 +2008,13 @@ class WCP_Folders
 	        delete_transient("folder_undo_settings");
 	        set_transient("folder_undo_settings", $folderUndoSettings, DAY_IN_SECONDS);
 
-	        if(isset($trash_folders[$folderID])) {
-		        unset($trash_folders[$folderID]);
+	        $term = get_term($folderID, $post_type);
+	        if(isset($term->term_taxonomy_id) && isset($trash_folders[$folderID])) {
+		        unset($trash_folders[$term->term_taxonomy_id]);
 	        }
 
 	        if($initial_trash_folders != $trash_folders) {
+	            delete_transient("premio_folders_without_trash");
 		        set_transient("premio_folders_without_trash", $trash_folders, 3*DAY_IN_SECONDS);
 	        }
         }
@@ -2053,16 +2058,16 @@ class WCP_Folders
 					if (!empty($terms)) {
 						foreach ($terms as $term) {
 							wp_remove_object_terms($item['post_id'], $term->term_id, $post_type);
-							if(isset($trash_folders[$term->term_id])) {
-								unset($trash_folders[$term->term_id]);
+							if(isset($trash_folders[$term->term_taxonomy_id])) {
+								unset($trash_folders[$term->term_taxonomy_id]);
 							}
 						}
 					}
 					if(!empty($item['terms']) && is_array($item['terms'])) {
 						foreach($item['terms'] as $term) {
 							wp_set_post_terms($item['post_id'], $term->term_id, $post_type, true);
-							if(isset($trash_folders[$term->term_id])) {
-								unset($trash_folders[$term->term_id]);
+							if(isset($trash_folders[$term->term_taxonomy_id])) {
+								unset($trash_folders[$term->term_taxonomy_id]);
 							}
 						}
 					}
