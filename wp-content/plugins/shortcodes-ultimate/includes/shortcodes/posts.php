@@ -359,7 +359,7 @@ function su_shortcode_posts( $atts = null, $content = null ) {
 				$tax_relation = $original_atts['tax_relation'];
 			}
 
-			$args['tax_query']['relation'] = $tax_relation;
+			$tax_args['tax_query']['relation'] = $tax_relation;
 		}
 
 		$args = array_merge( $args, $tax_args );

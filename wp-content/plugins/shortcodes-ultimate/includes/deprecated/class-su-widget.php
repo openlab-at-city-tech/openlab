@@ -1,4 +1,5 @@
 <?php
+
 class Su_Widget extends WP_Widget {
 
 	function __construct() {
@@ -15,7 +16,9 @@ class Su_Widget extends WP_Widget {
 	}
 
 	public static function register() {
-		register_widget( 'Su_Widget' );
+		if ( defined( 'SITEORIGIN_PANELS_VERSION' ) ) {
+			register_widget( 'Su_Widget' );
+		}
 	}
 
 	function widget( $args, $instance ) {

@@ -91,7 +91,7 @@ function su_error_message( $title = '', $message = '' ) {
 	}
 
 	return sprintf(
-		'<p class="su-error" style="padding:5px 10px;color:#ff685e;border-left:3px solid #ff685e;background:#fff">%1$s%2$s</p>',
+		'<p class="su-error" style="padding:5px 10px;color:#8f3a35;border-left:3px solid #8f3a35;background:#fff7f6;line-height:1.35">%1$s%2$s</p>',
 		$title,
 		$message
 	);
@@ -124,6 +124,27 @@ function su_current_user_can_insert() {
  */
 function su_is_filter_safe( $filter ) {
 	return is_string( $filter ) && false !== strpos( $filter, 'filter' );
+}
+
+/**
+ * Helper function to safely apply user defined filter to a given value
+ * @param  string $filter Filter function name
+ * @param  string $value  Filterable value
+ * @return string         A filtered value if the given filter is safe
+ */
+function su_safely_apply_user_filter( $filter = null, $value = null ) {
+
+	if (
+		is_string( $filter ) &&
+		is_string( $value ) &&
+		su_is_filter_safe( $filter ) &&
+		function_exists( $filter )
+	) {
+		$value = call_user_func( $filter, $value );
+	}
+
+	return $value;
+
 }
 
 /**
@@ -179,7 +200,7 @@ function su_parse_range( $string = '' ) {
 if ( ! function_exists( 'su_get_css_class' ) ) {
 
 	function su_get_css_class( $atts ) {
-		return $atts['class'] ? ' ' . trim( $atts['class'] ) : '';
+		return $atts['class'] ? ' ' . esc_attr( trim( $atts['class'] ) ) : '';
 	}
 
 }
@@ -340,4 +361,20 @@ function su_maybe_add_css_units( $value = '', $units = '' ) {
 
 	return $value;
 
+}
+
+/**
+ * Helper to get the current page URL
+ * @return string Current page URL
+ */
+function su_get_current_url() {
+
+	$protocol = is_ssl() ? 'https' : 'http';
+
+	return esc_url( "{$protocol}://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}" );
+
+}
+
+function su_is_unsafe_features_enabled() {
+	return 'on' === get_option( 'su_option_unsafe_features' );
 }
