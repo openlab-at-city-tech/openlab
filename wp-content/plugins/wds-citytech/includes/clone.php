@@ -444,6 +444,10 @@ class OpenLab_Clone_Credits_Widget extends WP_Widget {
 
 		$credits = openlab_get_credits( $group_id );
 
+		if ( ! $credits['show_acknowledgements'] ) {
+			return;
+		}
+
 		echo $args['before_widget'];
 
 		echo $args['before_title'] . 'Acknowledgments' . $args['after_title'];
@@ -458,6 +462,10 @@ class OpenLab_Clone_Credits_Widget extends WP_Widget {
 				echo $credits_chunk['items'];
 				echo '</ul>';
 			}
+		}
+
+		if ( ! empty( $credits['post_credits_markup'] ) ) {
+			echo $credits['post_credits_markup'];
 		}
 
 		echo $args['after_widget'];
