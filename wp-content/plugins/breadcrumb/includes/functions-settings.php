@@ -23,7 +23,7 @@ function breadcrumb_settings_tabs_content_options(){
 //    $breadcrumb_display_auto_post_title_positions = get_option( 'breadcrumb_display_auto_post_title_positions' );
 
 
-    var_dump($breadcrumb_home_text);
+    //var_dump($breadcrumb_home_text);
 
     ?>
 
@@ -263,7 +263,7 @@ function breadcrumb_settings_tabs_content_builder(){
     $breadcrumb_pages_objects = breadcrumb_pages_objects();
 
 
-
+    $page_views = breadcrumb_page_views();
     //echo '<pre>'.var_export($breadcrumb_pages_objects, ture).'</pre>';
 
     $breadcrumb_tags = breadcrumb_tags();
@@ -319,7 +319,17 @@ function breadcrumb_settings_tabs_content_builder(){
 
             <?php
 
-            foreach ($breadcrumb_pages_objects as $postType => $postTypeData):
+    foreach ($page_views as $view_type => $view) {
+
+        ?>
+        <h2><?php echo ucfirst(str_replace('_',' ', $view_type)); ?></h2>
+        <hr>
+        <?php
+
+
+
+
+    foreach ($view as $postType => $postTypeData):
 
                 $post_type_name = isset($postTypeData['name'])? $postTypeData['name'] : '';
 
@@ -353,6 +363,10 @@ function breadcrumb_settings_tabs_content_builder(){
 
                         if(!empty($post_permalinks)):
                             foreach ($post_permalinks as $permalink_tag => $permalink){
+
+                                //var_dump($permalink);
+                                $args['options'] = $permalink;
+
                                 do_action('breadcrumb_tag_options_'.$permalink_tag, $args);
                             }
                         else:
@@ -372,7 +386,7 @@ function breadcrumb_settings_tabs_content_builder(){
                 </div>
             <?php
             endforeach;
-
+}
             ?>
 
         </div>

@@ -55,52 +55,169 @@ function breadcrumb_pages_objects(){
     return apply_filters('breadcrumb_pages_objects', $objects);
 }
 
+function breadcrumb_posttypes_tags($tags){
+
+    $post_types_array = array();
+    global $wp_post_types;
+
+    $post_types_all = get_post_types( array('public'=> true), 'names' );
+
+//    unset($post_types_all['post']);
+//    unset($post_types_all['page']);
+//    unset($post_types_all['attachment']);
+//    unset($post_types_all['product']);
+
+    foreach ( $post_types_all as $post_type ) {
+
+
+        $obj = $wp_post_types[$post_type];
+        $post_types_array[$post_type] = $obj->labels->singular_name;
+
+        $hierarchical = $obj->hierarchical;
+
+        $tags[$post_type]['front_text'] = array('name' => __('Front text','breadcrumb'));
+        $tags[$post_type]['home'] = array('name' => __('Home','breadcrumb'));
+        $tags[$post_type]['post_title'] = array('name' => __('Post title','breadcrumb'));
+        $tags[$post_type]['post_author'] = array('name' => __('Post author','breadcrumb'));
+//        $tags['post']['post_category'] = array('name' => __('Post category','breadcrumb'));
+//        $tags['post']['post_tag'] = array('name' => __('Post tag','breadcrumb'));
+        $tags[$post_type]['post_date'] = array('name' => __('Post date','breadcrumb'));
+        $tags[$post_type]['post_month'] = array('name' => __('Post month','breadcrumb'));
+        $tags[$post_type]['post_year'] = array('name' => __('Post year','breadcrumb'));
+        $tags[$post_type]['post_id'] = array('name' => __('Post ID','breadcrumb'));
+        //$tags[$post_type]['post_term'] = array('name' => __('Post Term','breadcrumb'));
+
+        if($hierarchical){
+            $tags[$post_type]['post_ancestors'] = array('name' => __('Post ancestors','breadcrumb'));
+        }
+
+        if($post_type == 'post'){
+            $tags['post']['post_category'] = array('name' => __('Post category','breadcrumb'));
+            $tags['post']['post_tag'] = array('name' => __('Post tag','breadcrumb'));
+        }
+
+        if($post_type == 'product'){
+            $tags['product']['wc_shop'] = array('name' => __('Shop','breadcrumb'));
+            $tags['product']['product_cat'] = array('name' => __('Product category','breadcrumb'));
+            $tags['product']['product_tag'] = array('name' => __('Product tag','breadcrumb'));
+
+        }
+
+        $tags[$post_type]['custom_text'] = array('name' => __('Custom text','breadcrumb'));
+
+
+    }
+
+    //echo "<pre>".var_export($tags, true)."</pre>";
+
+    return $tags;
+}
+
+add_filter('breadcrumb_tags', 'breadcrumb_posttypes_tags');
+
+
+function breadcrumb_taxonomy_terms_tags($tags){
+
+    $post_types = get_post_types( array('public'=> true), 'names' );
+
+    //$taxonomies = get_taxonomies();
+    $taxonomies = get_object_taxonomies( $post_types );
+
+    //echo "<pre>".var_export($taxonomies, true)."</pre>";
+
+
+    foreach ($taxonomies as $taxonomy){
+
+//        if(!is_taxonomy_viewable($taxonomy)){
+//            continue;
+//        }
+
+        $tags[$taxonomy]['front_text'] = array('name' => __('Front text','breadcrumb'));
+        $tags[$taxonomy]['home'] = array('name' => __('Home','breadcrumb'));
+
+        if($taxonomy == 'product_cat' || $taxonomy == 'product_tag' || $taxonomy == 'product_shipping_class' ){
+            $tags[$taxonomy]['wc_shop'] = array('name' => __('Shop','breadcrumb'));
+        }
+
+        $tags[$taxonomy]['term_title'] = array('name' => __('Term title','breadcrumb'));
+
+        if(is_taxonomy_hierarchical($taxonomy)){
+            $tags[$taxonomy]['term_parent'] = array('name' => __('Term parent','breadcrumb'));
+            $tags[$taxonomy]['term_ancestors'] = array('name' => __('Term ancestors','breadcrumb'));
+        }
+
+
+        $tags[$taxonomy]['custom_text'] = array('name' => __('Custom text','breadcrumb'));
+
+
+
+    }
+
+
+    return $tags;
+
+}
+
+
+
+add_filter('breadcrumb_tags', 'breadcrumb_taxonomy_terms_tags');
+
+
+
+
+
+
+
+
+
+
+//add_shortcode('breadcrumb_posttypes_tags', 'breadcrumb_taxonomy_terms_tags');
 
 
 function breadcrumb_tags(){
 
-    $tags['post']['front_text'] = array('name' => __('Front text','breadcrumb'));
-    $tags['post']['home'] = array('name' => __('Home','breadcrumb'));
-    $tags['post']['post_title'] = array('name' => __('Post title','breadcrumb'));
-    $tags['post']['post_author'] = array('name' => __('Post author','breadcrumb'));
-    $tags['post']['post_category'] = array('name' => __('Post category','breadcrumb'));
-    $tags['post']['post_tag'] = array('name' => __('Post tag','breadcrumb'));
-    $tags['post']['post_date'] = array('name' => __('Post date','breadcrumb'));
-    $tags['post']['post_month'] = array('name' => __('Post month','breadcrumb'));
-    $tags['post']['post_year'] = array('name' => __('Post year','breadcrumb'));
-    $tags['post']['post_id'] = array('name' => __('Post ID','breadcrumb'));
+//    $tags['post']['front_text'] = array('name' => __('Front text','breadcrumb'));
+//    $tags['post']['home'] = array('name' => __('Home','breadcrumb'));
+//    $tags['post']['post_title'] = array('name' => __('Post title','breadcrumb'));
+//    $tags['post']['post_author'] = array('name' => __('Post author','breadcrumb'));
+//    $tags['post']['post_category'] = array('name' => __('Post category','breadcrumb'));
+//    $tags['post']['post_tag'] = array('name' => __('Post tag','breadcrumb'));
+//    $tags['post']['post_date'] = array('name' => __('Post date','breadcrumb'));
+//    $tags['post']['post_month'] = array('name' => __('Post month','breadcrumb'));
+//    $tags['post']['post_year'] = array('name' => __('Post year','breadcrumb'));
+//    $tags['post']['post_id'] = array('name' => __('Post ID','breadcrumb'));
 
-    $tags['page']['front_text'] = array('name' => __('Front text','breadcrumb'));
-    $tags['page']['home'] = array('name' => __('Home','breadcrumb'));
-    $tags['page']['post_title'] = array('name' => __('Post title','breadcrumb'));
-    $tags['page']['post_author'] = array('name' => __('Post author','breadcrumb'));
-    $tags['page']['post_date'] = array('name' => __('Post date','breadcrumb'));
-    $tags['page']['post_month'] = array('name' => __('Post month','breadcrumb'));
-    $tags['page']['post_year'] = array('name' => __('Post year','breadcrumb'));
-    $tags['page']['post_id'] = array('name' => __('Post ID','breadcrumb'));
-    $tags['page']['post_ancestors'] = array('name' => __('Post ancestors','breadcrumb'));
+//    $tags['page']['front_text'] = array('name' => __('Front text','breadcrumb'));
+//    $tags['page']['home'] = array('name' => __('Home','breadcrumb'));
+//    $tags['page']['post_title'] = array('name' => __('Post title','breadcrumb'));
+//    $tags['page']['post_author'] = array('name' => __('Post author','breadcrumb'));
+//    $tags['page']['post_date'] = array('name' => __('Post date','breadcrumb'));
+//    $tags['page']['post_month'] = array('name' => __('Post month','breadcrumb'));
+//    $tags['page']['post_year'] = array('name' => __('Post year','breadcrumb'));
+//    $tags['page']['post_id'] = array('name' => __('Post ID','breadcrumb'));
+//    $tags['page']['post_ancestors'] = array('name' => __('Post ancestors','breadcrumb'));
 
 
-    $tags['attachment']['front_text'] = array('name' => __('Front text','breadcrumb'));
-    $tags['attachment']['home'] = array('name' => __('Home','breadcrumb'));
-    $tags['attachment']['post_title'] = array('name' => __('Post title','breadcrumb'));
-    $tags['attachment']['post_author'] = array('name' => __('Post author','breadcrumb'));
-    $tags['attachment']['post_date'] = array('name' => __('Post date','breadcrumb'));
-    $tags['attachment']['post_month'] = array('name' => __('Post month','breadcrumb'));
-    $tags['attachment']['post_year'] = array('name' => __('Post year','breadcrumb'));
-    $tags['attachment']['post_id'] = array('name' => __('Post ID','breadcrumb'));
+//    $tags['attachment']['front_text'] = array('name' => __('Front text','breadcrumb'));
+//    $tags['attachment']['home'] = array('name' => __('Home','breadcrumb'));
+//    $tags['attachment']['post_title'] = array('name' => __('Post title','breadcrumb'));
+//    $tags['attachment']['post_author'] = array('name' => __('Post author','breadcrumb'));
+//    $tags['attachment']['post_date'] = array('name' => __('Post date','breadcrumb'));
+//    $tags['attachment']['post_month'] = array('name' => __('Post month','breadcrumb'));
+//    $tags['attachment']['post_year'] = array('name' => __('Post year','breadcrumb'));
+//    $tags['attachment']['post_id'] = array('name' => __('Post ID','breadcrumb'));
 
-    $tags['product']['front_text'] = array('name' => __('Front text','breadcrumb'));
-    $tags['product']['home'] = array('name' => __('Home','breadcrumb'));
-    $tags['product']['post_title'] = array('name' => __('Post title','breadcrumb'));
-    $tags['product']['post_author'] = array('name' => __('Post author','breadcrumb'));
-    $tags['product']['product_cat'] = array('name' => __('Product category','breadcrumb'));
-    $tags['product']['product_tag'] = array('name' => __('Product tag','breadcrumb'));
-    $tags['product']['post_date'] = array('name' => __('Post date','breadcrumb'));
-    $tags['product']['post_month'] = array('name' => __('Post month','breadcrumb'));
-    $tags['product']['post_year'] = array('name' => __('Post year','breadcrumb'));
-    $tags['product']['post_id'] = array('name' => __('Post ID','breadcrumb'));
-    $tags['product']['wc_shop'] = array('name' => __('Shop','breadcrumb'));
+//    $tags['product']['front_text'] = array('name' => __('Front text','breadcrumb'));
+//    $tags['product']['home'] = array('name' => __('Home','breadcrumb'));
+//    $tags['product']['post_title'] = array('name' => __('Post title','breadcrumb'));
+//    $tags['product']['post_author'] = array('name' => __('Post author','breadcrumb'));
+//    $tags['product']['product_cat'] = array('name' => __('Product category','breadcrumb'));
+//    $tags['product']['product_tag'] = array('name' => __('Product tag','breadcrumb'));
+//    $tags['product']['post_date'] = array('name' => __('Post date','breadcrumb'));
+//    $tags['product']['post_month'] = array('name' => __('Post month','breadcrumb'));
+//    $tags['product']['post_year'] = array('name' => __('Post year','breadcrumb'));
+//    $tags['product']['post_id'] = array('name' => __('Post ID','breadcrumb'));
+//    $tags['product']['wc_shop'] = array('name' => __('Shop','breadcrumb'));
 
 
 
@@ -112,6 +229,7 @@ function breadcrumb_tags(){
     $tags['front_page']['post_month'] = array('name' => __('Post month','breadcrumb'));
     $tags['front_page']['post_year'] = array('name' => __('Post year','breadcrumb'));
     $tags['front_page']['post_id'] = array('name' => __('Post ID','breadcrumb'));
+    $tags['front_page']['custom_text'] = array('name' => __('Custom text','breadcrumb'));
 
     $tags['home']['front_text'] = array('name' => __('Front text','breadcrumb'));
     $tags['home']['home'] = array('name' => __('Home','breadcrumb'));
@@ -121,6 +239,7 @@ function breadcrumb_tags(){
     $tags['home']['post_month'] = array('name' => __('Post month','breadcrumb'));
     $tags['home']['post_year'] = array('name' => __('Post year','breadcrumb'));
     $tags['home']['post_id'] = array('name' => __('Post ID','breadcrumb'));
+    $tags['home']['custom_text'] = array('name' => __('Custom text','breadcrumb'));
 
     $tags['blog']['front_text'] = array('name' => __('Front text','breadcrumb'));
     $tags['blog']['home'] = array('name' => __('Home','breadcrumb'));
@@ -130,41 +249,48 @@ function breadcrumb_tags(){
     $tags['blog']['post_month'] = array('name' => __('Post month','breadcrumb'));
     $tags['blog']['post_year'] = array('name' => __('Post year','breadcrumb'));
     $tags['blog']['post_id'] = array('name' => __('Post ID','breadcrumb'));
+    $tags['blog']['custom_text'] = array('name' => __('Custom text','breadcrumb'));
 
     $tags['author']['front_text'] = array('name' => __('Front text','breadcrumb'));
     $tags['author']['home'] = array('name' => __('Home','breadcrumb'));
     $tags['author']['author_name'] = array('name' => __('Author name','breadcrumb'));
+    $tags['author']['custom_text'] = array('name' => __('Custom text','breadcrumb'));
 
     $tags['search']['front_text'] = array('name' => __('Front text','breadcrumb'));
     $tags['search']['home'] = array('name' => __('Home','breadcrumb'));
     $tags['search']['search_word'] = array('name' => __('Search word','breadcrumb'));
+    $tags['search']['custom_text'] = array('name' => __('Custom text','breadcrumb'));
 
 
     $tags['year']['front_text'] = array('name' => __('Front text','breadcrumb'));
     $tags['year']['home'] = array('name' => __('Home','breadcrumb'));
     $tags['year']['year_text'] = array('name' => __('Year','breadcrumb'));
+    $tags['year']['custom_text'] = array('name' => __('Custom text','breadcrumb'));
 
     $tags['month']['front_text'] = array('name' => __('Front text','breadcrumb'));
     $tags['month']['home'] = array('name' => __('Home','breadcrumb'));
     $tags['month']['month_text'] = array('name' => __('Month','breadcrumb'));
+    $tags['month']['custom_text'] = array('name' => __('Custom text','breadcrumb'));
 
     $tags['date']['front_text'] = array('name' => __('Front text','breadcrumb'));
     $tags['date']['home'] = array('name' => __('Home','breadcrumb'));
     $tags['date']['date_text'] = array('name' => __('Date','breadcrumb'));
+    $tags['date']['custom_text'] = array('name' => __('Custom text','breadcrumb'));
 
 
     $tags['404']['front_text'] = array('name' => __('Front text','breadcrumb'));
     $tags['404']['home'] = array('name' => __('Home','breadcrumb'));
     $tags['404']['404_text'] = array('name' => __('404 text','breadcrumb'));
+    $tags['404']['custom_text'] = array('name' => __('Custom text','breadcrumb'));
 
-    $tags['privacy_policy']['front_text'] = array('name' => __('Front text','breadcrumb'));
-    $tags['privacy_policy']['home'] = array('name' => __('Home','breadcrumb'));
-    $tags['privacy_policy']['post_title'] = array('name' => __('Post title','breadcrumb'));
-    $tags['privacy_policy']['post_author'] = array('name' => __('Post author','breadcrumb'));
-    $tags['privacy_policy']['post_date'] = array('name' => __('Post date','breadcrumb'));
-    $tags['privacy_policy']['post_month'] = array('name' => __('Post month','breadcrumb'));
-    $tags['privacy_policy']['post_year'] = array('name' => __('Post year','breadcrumb'));
-    $tags['privacy_policy']['post_id'] = array('name' => __('Post ID','breadcrumb'));
+//    $tags['privacy_policy']['front_text'] = array('name' => __('Front text','breadcrumb'));
+//    $tags['privacy_policy']['home'] = array('name' => __('Home','breadcrumb'));
+//    $tags['privacy_policy']['post_title'] = array('name' => __('Post title','breadcrumb'));
+//    $tags['privacy_policy']['post_author'] = array('name' => __('Post author','breadcrumb'));
+//    $tags['privacy_policy']['post_date'] = array('name' => __('Post date','breadcrumb'));
+//    $tags['privacy_policy']['post_month'] = array('name' => __('Post month','breadcrumb'));
+//    $tags['privacy_policy']['post_year'] = array('name' => __('Post year','breadcrumb'));
+//    $tags['privacy_policy']['post_id'] = array('name' => __('Post ID','breadcrumb'));
 
     $tags['wc_shop']['front_text'] = array('name' => __('Front text','breadcrumb'));
     $tags['wc_shop']['home'] = array('name' => __('Home','breadcrumb'));
@@ -174,29 +300,30 @@ function breadcrumb_tags(){
     $tags['wc_shop']['post_month'] = array('name' => __('Post month','breadcrumb'));
     $tags['wc_shop']['post_year'] = array('name' => __('Post year','breadcrumb'));
     $tags['wc_shop']['post_id'] = array('name' => __('Post ID','breadcrumb'));
+    $tags['wc_shop']['custom_text'] = array('name' => __('Custom text','breadcrumb'));
 
-    $tags['category']['front_text'] = array('name' => __('Front text','breadcrumb'));
-    $tags['category']['home'] = array('name' => __('Home','breadcrumb'));
-    $tags['category']['term_title'] = array('name' => __('Category title','breadcrumb'));
-    $tags['category']['term_parent'] = array('name' => __('Category parent','breadcrumb'));
-    $tags['category']['term_ancestors'] = array('name' => __('Category ancestors','breadcrumb'));
+//    $tags['category']['front_text'] = array('name' => __('Front text','breadcrumb'));
+//    $tags['category']['home'] = array('name' => __('Home','breadcrumb'));
+//    $tags['category']['term_title'] = array('name' => __('Category title','breadcrumb'));
+//    $tags['category']['term_parent'] = array('name' => __('Category parent','breadcrumb'));
+//    $tags['category']['term_ancestors'] = array('name' => __('Category ancestors','breadcrumb'));
 
 
-    $tags['post_tag']['front_text'] = array('name' => __('Front text','breadcrumb'));
-    $tags['post_tag']['home'] = array('name' => __('Home','breadcrumb'));
-    $tags['post_tag']['term_title'] = array('name' => __('Tag title','breadcrumb'));
+//    $tags['post_tag']['front_text'] = array('name' => __('Front text','breadcrumb'));
+//    $tags['post_tag']['home'] = array('name' => __('Home','breadcrumb'));
+//    $tags['post_tag']['term_title'] = array('name' => __('Tag title','breadcrumb'));
 
-    $tags['product_cat']['front_text'] = array('name' => __('Front text','breadcrumb'));
-    $tags['product_cat']['home'] = array('name' => __('Home','breadcrumb'));
-    $tags['product_cat']['wc_shop'] = array('name' => __('Shop','breadcrumb'));
-    $tags['product_cat']['term_title'] = array('name' => __('Category title','breadcrumb'));
-    $tags['product_cat']['term_parent'] = array('name' => __('Category parent','breadcrumb'));
-    $tags['product_cat']['term_ancestors'] = array('name' => __('Category ancestors','breadcrumb'));
-
-    $tags['product_tag']['front_text'] = array('name' => __('Front text','breadcrumb'));
-    $tags['product_tag']['home'] = array('name' => __('Home','breadcrumb'));
-    $tags['product_tag']['wc_shop'] = array('name' => __('Shop','breadcrumb'));
-    $tags['product_tag']['term_title'] = array('name' => __('Tag title','breadcrumb'));
+//    $tags['product_cat']['front_text'] = array('name' => __('Front text','breadcrumb'));
+//    $tags['product_cat']['home'] = array('name' => __('Home','breadcrumb'));
+//    $tags['product_cat']['wc_shop'] = array('name' => __('Shop','breadcrumb'));
+//    $tags['product_cat']['term_title'] = array('name' => __('Category title','breadcrumb'));
+//    $tags['product_cat']['term_parent'] = array('name' => __('Category parent','breadcrumb'));
+//    $tags['product_cat']['term_ancestors'] = array('name' => __('Category ancestors','breadcrumb'));
+//
+//    $tags['product_tag']['front_text'] = array('name' => __('Front text','breadcrumb'));
+//    $tags['product_tag']['home'] = array('name' => __('Home','breadcrumb'));
+//    $tags['product_tag']['wc_shop'] = array('name' => __('Shop','breadcrumb'));
+//    $tags['product_tag']['term_title'] = array('name' => __('Tag title','breadcrumb'));
 
 
 
@@ -208,7 +335,71 @@ function breadcrumb_tags(){
 }
 
 
+function breadcrumb_page_views(){
 
+    $views = array();
+    $post_types_array = array();
+    global $wp_post_types;
+    $post_types_all = get_post_types( array('public'=> true), 'names' );
+
+    /*Post, Page & Custom post types*/
+
+    if(!empty($post_types_all))
+    foreach ( $post_types_all as $post_type ) {
+
+        $obj = $wp_post_types[$post_type];
+
+        //echo '<pre>'.var_export($obj, true).'</pre>';
+
+
+        $post_types_array[$post_type] = $obj->labels->singular_name;
+        $views['post_types'][$post_type] = array('name' => $obj->labels->singular_name, 'id' => $post_type, 'hierarchical' => $obj->hierarchical);
+    }
+
+
+    /*taxonomies & terms pages*/
+    $taxonomies = get_object_taxonomies( $post_types_all );
+
+    if(!empty($taxonomies))
+    foreach ($taxonomies as $taxonomy){
+
+        //echo '<pre>'.var_export($taxonomy, true).'</pre>';
+
+        $taxonomy_data = get_taxonomy($taxonomy);
+        $taxonomy_public = $taxonomy_data->public;
+
+        if($taxonomy_public)
+        $views['taxonomies'][$taxonomy] = array('name' => $taxonomy_data->label, 'id' => $taxonomy);
+
+
+    }
+
+    /*Archives pages*/
+    $views['archives']['search'] = array('name' => 'Search', 'id' => 'search');
+    $views['archives']['author'] = array('name' => 'Author', 'id' => 'author');
+    $views['archives']['date'] = array('name' => 'Date', 'id' => 'date');
+    $views['archives']['month'] = array('name' => 'Month', 'id' => 'month');
+    $views['archives']['year'] = array('name' => 'Year', 'id' => 'year');
+
+    /*front page, home, blog, 404 page*/
+    $views['others']['front_page'] = array('name' => 'Front page', 'id' => 'front_page');
+    $views['others']['home'] = array('name' => 'Home', 'id' => 'home');
+    $views['others']['blog'] = array('name' => 'Blog', 'id' => 'blog');
+    $views['others']['404'] = array('name' => '404', 'id' => '404');
+
+    //$views['others']['privacy_policy'] = array('name' => 'Privacy policy', 'id' => 'privacy_policy');
+    $views['others']['wc_shop'] = array('name' => 'WooCommerce Shop', 'id' => 'wc_shop');
+    //$views['others']['year'] = array('name' => 'Year', 'id' => 'year');
+
+
+
+    //echo '<pre>'.var_export($views, true).'</pre>';
+
+    $views = apply_filters('breadcrumb_page_views', $views);
+
+    return $views;
+
+}
 
 
 
@@ -220,7 +411,7 @@ add_action('breadcrumb_tag_options_post_id', 'breadcrumb_tag_options_post_id');
 function breadcrumb_tag_options_post_id($parameters){
     $settings_tabs_field = new settings_tabs_field();
 
-    $input_name = isset($parameters['input_name']) ? $parameters['input_name'] : '{input_name}'
+    $input_name = isset($parameters['input_name']) ? $parameters['input_name'] : '{input_name}';
 
     ?>
     <div class="item">
@@ -237,6 +428,8 @@ function breadcrumb_tag_options_post_id($parameters){
             $prefix_text = '';
             $args = array(
                 'id'		=> 'prefix_text',
+                'wrapper_class'		=> 'hidden',
+
                 'parent' => $input_name.'[post_id]',
                 'title'		=> __('Prefix text','breadcrumb'),
                 'details'	=> __('Add prefix text.','breadcrumb'),
@@ -261,7 +454,7 @@ add_action('breadcrumb_tag_options_post_ancestors', 'breadcrumb_tag_options_post
 function breadcrumb_tag_options_post_ancestors($parameters){
     $settings_tabs_field = new settings_tabs_field();
 
-    $input_name = isset($parameters['input_name']) ? $parameters['input_name'] : '{input_name}'
+    $input_name = isset($parameters['input_name']) ? $parameters['input_name'] : '{input_name}';
 
     ?>
     <div class="item">
@@ -278,6 +471,7 @@ function breadcrumb_tag_options_post_ancestors($parameters){
             $prefix_text = '';
             $args = array(
                 'id'		=> 'prefix_text',
+                'wrapper_class'		=> 'hidden',
                 'parent' => $input_name.'[post_ancestors]',
                 'title'		=> __('Prefix text','breadcrumb'),
                 'details'	=> __('Add prefix text.','breadcrumb'),
@@ -301,7 +495,7 @@ add_action('breadcrumb_tag_options_post_year', 'breadcrumb_tag_options_post_year
 
 function breadcrumb_tag_options_post_year($parameters){
     $settings_tabs_field = new settings_tabs_field();
-    $input_name = isset($parameters['input_name']) ? $parameters['input_name'] : '{input_name}'
+    $input_name = isset($parameters['input_name']) ? $parameters['input_name'] : '{input_name}';
 
 
     ?>
@@ -319,6 +513,7 @@ function breadcrumb_tag_options_post_year($parameters){
             $prefix_text = '';
             $args = array(
                 'id'		=> 'prefix_text',
+                'wrapper_class'		=> 'hidden',
                 'parent' => $input_name.'[post_year]',
                 'title'		=> __('Prefix text','breadcrumb'),
                 'details'	=> __('Add prefix text.','breadcrumb'),
@@ -343,7 +538,7 @@ add_action('breadcrumb_tag_options_post_month', 'breadcrumb_tag_options_post_mon
 
 function breadcrumb_tag_options_post_month($parameters){
     $settings_tabs_field = new settings_tabs_field();
-    $input_name = isset($parameters['input_name']) ? $parameters['input_name'] : '{input_name}'
+    $input_name = isset($parameters['input_name']) ? $parameters['input_name'] : '{input_name}';
 
 
     ?>
@@ -361,6 +556,7 @@ function breadcrumb_tag_options_post_month($parameters){
             $prefix_text = '';
             $args = array(
                 'id'		=> 'prefix_text',
+                'wrapper_class'		=> 'hidden',
                 'parent' => $input_name.'[post_month]',
                 'title'		=> __('Prefix text','breadcrumb'),
                 'details'	=> __('Add prefix text.','breadcrumb'),
@@ -383,7 +579,7 @@ add_action('breadcrumb_tag_options_post_date', 'breadcrumb_tag_options_post_date
 
 function breadcrumb_tag_options_post_date($parameters){
     $settings_tabs_field = new settings_tabs_field();
-    $input_name = isset($parameters['input_name']) ? $parameters['input_name'] : '{input_name}'
+    $input_name = isset($parameters['input_name']) ? $parameters['input_name'] : '{input_name}';
 
 
     ?>
@@ -401,6 +597,7 @@ function breadcrumb_tag_options_post_date($parameters){
             $prefix_text = '';
             $args = array(
                 'id'		=> 'prefix_text',
+                'wrapper_class'		=> 'hidden',
                 'parent' => $input_name.'[post_date]',
                 'title'		=> __('Prefix text','breadcrumb'),
                 'details'	=> __('Add prefix text.','breadcrumb'),
@@ -424,7 +621,7 @@ add_action('breadcrumb_tag_options_post_tag', 'breadcrumb_tag_options_post_tag')
 
 function breadcrumb_tag_options_post_tag($parameters){
     $settings_tabs_field = new settings_tabs_field();
-    $input_name = isset($parameters['input_name']) ? $parameters['input_name'] : '{input_name}'
+    $input_name = isset($parameters['input_name']) ? $parameters['input_name'] : '{input_name}';
 
 
     ?>
@@ -442,6 +639,7 @@ function breadcrumb_tag_options_post_tag($parameters){
             $prefix_text = '';
             $args = array(
                 'id'		=> 'prefix_text',
+                'wrapper_class'		=> 'hidden',
                 'parent' => $input_name.'[post_tag]',
                 'title'		=> __('Prefix text','breadcrumb'),
                 'details'	=> __('Add prefix text.','breadcrumb'),
@@ -464,7 +662,7 @@ add_action('breadcrumb_tag_options_front_text', 'breadcrumb_tag_options_front_te
 
 function breadcrumb_tag_options_front_text($parameters){
     $settings_tabs_field = new settings_tabs_field();
-    $input_name = isset($parameters['input_name']) ? $parameters['input_name'] : '{input_name}'
+    $input_name = isset($parameters['input_name']) ? $parameters['input_name'] : '{input_name}';
 
 
     ?>
@@ -482,10 +680,13 @@ function breadcrumb_tag_options_front_text($parameters){
             $prefix_text = '';
             $args = array(
                 'id'		=> 'prefix_text',
+                'wrapper_class'		=> 'hidden',
+                'wrapper_class'		=> 'hidden',
+
                 'parent' => $input_name.'[front_text]',
                 'title'		=> __('Prefix text','breadcrumb'),
                 'details'	=> __('Add prefix text.','breadcrumb'),
-                'type'		=> 'text',
+                'type'		=> 'hidden',
                 'value'		=> $prefix_text,
                 'default'		=> '',
             );
@@ -501,13 +702,69 @@ function breadcrumb_tag_options_front_text($parameters){
 }
 
 
+add_action('breadcrumb_tag_options_custom_text', 'breadcrumb_tag_options_custom_text');
+
+function breadcrumb_tag_options_custom_text($parameters){
+    $settings_tabs_field = new settings_tabs_field();
+    $input_name = isset($parameters['input_name']) ? $parameters['input_name'] : '{input_name}';
+    $options = isset($parameters['options']) ? $parameters['options'] : array();
+
+    $text = isset($options['text']) ? $options['text'] : '';
+    $link = isset($options['link']) ? $options['link'] : '';
+
+    ?>
+    <div class="item">
+        <div class="element-title header ">
+            <span class="remove" onclick="jQuery(this).parent().parent().remove()"><i class="fas fa-times"></i></span>
+            <span class="sort"><i class="fas fa-sort"></i></span>
+
+            <span class="expand"><?php echo __('Custom text','breadcrumb'); ?></span>
+        </div>
+        <div class="element-options options">
+
+            <?php
+
+            $prefix_text = '';
+            $args = array(
+                'id'		=> 'text',
+                'parent' => $input_name.'[custom_text]',
+                'title'		=> __('Text','breadcrumb'),
+                'details'	=> __('Write custom text.','breadcrumb'),
+                'type'		=> 'text',
+                'value'		=> $text,
+                'default'		=> '',
+            );
+
+            $settings_tabs_field->generate_field($args);
+
+
+            $args = array(
+                'id'		=> 'link',
+                'parent' => $input_name.'[custom_text]',
+                'title'		=> __('Link','breadcrumb'),
+                'details'	=> __('Write link.','breadcrumb'),
+                'type'		=> 'text',
+                'value'		=> $link,
+                'default'		=> '',
+            );
+
+            $settings_tabs_field->generate_field($args);
+
+            ?>
+
+        </div>
+    </div>
+    <?php
+
+}
+
 
 
 add_action('breadcrumb_tag_options_home', 'breadcrumb_tag_options_home');
 
 function breadcrumb_tag_options_home($parameters){
     $settings_tabs_field = new settings_tabs_field();
-    $input_name = isset($parameters['input_name']) ? $parameters['input_name'] : '{input_name}'
+    $input_name = isset($parameters['input_name']) ? $parameters['input_name'] : '{input_name}';
 
 
     ?>
@@ -525,6 +782,7 @@ function breadcrumb_tag_options_home($parameters){
             $prefix_text = '';
             $args = array(
                 'id'		=> 'prefix_text',
+                'wrapper_class'		=> 'hidden',
                 'parent' => $input_name.'[home]',
                 'title'		=> __('Prefix text','breadcrumb'),
                 'details'	=> __('Add prefix text.','breadcrumb'),
@@ -548,7 +806,7 @@ add_action('breadcrumb_tag_options_post_title', 'breadcrumb_tag_options_post_tit
 
 function breadcrumb_tag_options_post_title($parameters){
     $settings_tabs_field = new settings_tabs_field();
-    $input_name = isset($parameters['input_name']) ? $parameters['input_name'] : '{input_name}'
+    $input_name = isset($parameters['input_name']) ? $parameters['input_name'] : '{input_name}';
 
 
     ?>
@@ -566,6 +824,7 @@ function breadcrumb_tag_options_post_title($parameters){
             $prefix_text = '';
             $args = array(
                 'id'		=> 'prefix_text',
+                'wrapper_class'		=> 'hidden',
                 'parent' => $input_name.'[post_title]',
                 'title'		=> __('Prefix text','breadcrumb'),
                 'details'	=> __('Add prefix text.','breadcrumb'),
@@ -590,7 +849,7 @@ add_action('breadcrumb_tag_options_post_author', 'breadcrumb_tag_options_post_au
 
 function breadcrumb_tag_options_post_author($parameters){
     $settings_tabs_field = new settings_tabs_field();
-    $input_name = isset($parameters['input_name']) ? $parameters['input_name'] : '{input_name}'
+    $input_name = isset($parameters['input_name']) ? $parameters['input_name'] : '{input_name}';
 
 
     ?>
@@ -608,6 +867,7 @@ function breadcrumb_tag_options_post_author($parameters){
             $prefix_text = '';
             $args = array(
                 'id'		=> 'prefix_text',
+                'wrapper_class'		=> 'hidden',
                 'parent' => $input_name.'[post_author]',
                 'title'		=> __('Prefix text','breadcrumb'),
                 'details'	=> __('Add prefix text.','breadcrumb'),
@@ -631,7 +891,7 @@ add_action('breadcrumb_tag_options_post_category', 'breadcrumb_tag_options_post_
 
 function breadcrumb_tag_options_post_category($parameters){
     $settings_tabs_field = new settings_tabs_field();
-    $input_name = isset($parameters['input_name']) ? $parameters['input_name'] : '{input_name}'
+    $input_name = isset($parameters['input_name']) ? $parameters['input_name'] : '{input_name}';
 
 
 
@@ -650,6 +910,7 @@ function breadcrumb_tag_options_post_category($parameters){
             $prefix_text = '';
             $args = array(
                 'id'		=> 'prefix_text',
+                'wrapper_class'		=> 'hidden',
                 'parent' => $input_name.'[post_category]',
                 'title'		=> __('Prefix text','breadcrumb'),
                 'details'	=> __('Add prefix text.','breadcrumb'),
@@ -669,13 +930,74 @@ function breadcrumb_tag_options_post_category($parameters){
 }
 
 
+add_action('breadcrumb_tag_options_post_term', 'breadcrumb_tag_options_post_term');
+
+function breadcrumb_tag_options_post_term($parameters){
+    $settings_tabs_field = new settings_tabs_field();
+    $input_name = isset($parameters['input_name']) ? $parameters['input_name'] : '{input_name}';
+    $options = isset($parameters['options']) ? $parameters['options'] : array();
+    $taxonomy = isset($options['taxonomy']) ? $options['taxonomy'] : '';
+
+    //var_dump($options);
+
+    ?>
+    <div class="item">
+        <div class="element-title header ">
+            <span class="remove" onclick="jQuery(this).parent().parent().remove()"><i class="fas fa-times"></i></span>
+            <span class="sort"><i class="fas fa-sort"></i></span>
+
+            <span class="expand"><?php echo __('Post term(Category/Tag)','breadcrumb'); ?></span>
+        </div>
+        <div class="element-options options">
+
+            <?php
+
+            $prefix_text = '';
+            $args = array(
+                'id'		=> 'prefix_text',
+                'wrapper_class'		=> 'hidden',
+                'parent' => $input_name.'[post_term]',
+                'title'		=> __('Prefix text','breadcrumb'),
+                'details'	=> __('Add prefix text.','breadcrumb'),
+                'type'		=> 'text',
+                'value'		=> $prefix_text,
+                'default'		=> '',
+            );
+
+            $settings_tabs_field->generate_field($args);
+
+            $args = array(
+                'id'		=> 'taxonomy',
+                'parent' => $input_name.'[post_term]',
+                'title'		=> __('Taxonomy','breadcrumb'),
+                'details'	=> __('Write post taxonomy. ex: <code>category, post_tag</code>','breadcrumb'),
+                'type'		=> 'text',
+                'value'		=> $taxonomy,
+                'default'		=> '',
+            );
+
+            $settings_tabs_field->generate_field($args);
+
+
+
+            ?>
+
+        </div>
+    </div>
+    <?php
+
+}
+
+
+
+
 
 
 add_action('breadcrumb_tag_options_product_cat', 'breadcrumb_tag_options_product_cat');
 
 function breadcrumb_tag_options_product_cat($parameters){
     $settings_tabs_field = new settings_tabs_field();
-    $input_name = isset($parameters['input_name']) ? $parameters['input_name'] : '{input_name}'
+    $input_name = isset($parameters['input_name']) ? $parameters['input_name'] : '{input_name}';
 
 
 
@@ -694,6 +1016,7 @@ function breadcrumb_tag_options_product_cat($parameters){
             $prefix_text = '';
             $args = array(
                 'id'		=> 'prefix_text',
+                'wrapper_class'		=> 'hidden',
                 'parent' => $input_name.'[product_cat]',
                 'title'		=> __('Prefix text','breadcrumb'),
                 'details'	=> __('Add prefix text.','breadcrumb'),
@@ -718,7 +1041,7 @@ add_action('breadcrumb_tag_options_product_tag', 'breadcrumb_tag_options_product
 
 function breadcrumb_tag_options_product_tag($parameters){
     $settings_tabs_field = new settings_tabs_field();
-    $input_name = isset($parameters['input_name']) ? $parameters['input_name'] : '{input_name}'
+    $input_name = isset($parameters['input_name']) ? $parameters['input_name'] : '{input_name}';
 
 
 
@@ -737,6 +1060,7 @@ function breadcrumb_tag_options_product_tag($parameters){
             $prefix_text = '';
             $args = array(
                 'id'		=> 'prefix_text',
+                'wrapper_class'		=> 'hidden',
                 'parent' => $input_name.'[product_tag]',
                 'title'		=> __('Prefix text','breadcrumb'),
                 'details'	=> __('Add prefix text.','breadcrumb'),
@@ -762,7 +1086,7 @@ add_action('breadcrumb_tag_options_wc_shop', 'breadcrumb_tag_options_wc_shop');
 
 function breadcrumb_tag_options_wc_shop($parameters){
     $settings_tabs_field = new settings_tabs_field();
-    $input_name = isset($parameters['input_name']) ? $parameters['input_name'] : '{input_name}'
+    $input_name = isset($parameters['input_name']) ? $parameters['input_name'] : '{input_name}';
 
 
 
@@ -781,6 +1105,7 @@ function breadcrumb_tag_options_wc_shop($parameters){
             $prefix_text = '';
             $args = array(
                 'id'		=> 'prefix_text',
+                'wrapper_class'		=> 'hidden',
                 'parent' => $input_name.'[wc_shop]',
                 'title'		=> __('Prefix text','breadcrumb'),
                 'details'	=> __('Add prefix text.','breadcrumb'),
@@ -805,7 +1130,7 @@ add_action('breadcrumb_tag_options_term_title', 'breadcrumb_tag_options_term_tit
 
 function breadcrumb_tag_options_term_title($parameters){
     $settings_tabs_field = new settings_tabs_field();
-    $input_name = isset($parameters['input_name']) ? $parameters['input_name'] : '{input_name}'
+    $input_name = isset($parameters['input_name']) ? $parameters['input_name'] : '{input_name}';
 
 
 
@@ -824,6 +1149,7 @@ function breadcrumb_tag_options_term_title($parameters){
             $prefix_text = '';
             $args = array(
                 'id'		=> 'prefix_text',
+                'wrapper_class'		=> 'hidden',
                 'parent' => $input_name.'[term_title]',
                 'title'		=> __('Prefix text','breadcrumb'),
                 'details'	=> __('Add prefix text.','breadcrumb'),
@@ -847,7 +1173,7 @@ add_action('breadcrumb_tag_options_term_parent', 'breadcrumb_tag_options_term_pa
 
 function breadcrumb_tag_options_term_parent($parameters){
     $settings_tabs_field = new settings_tabs_field();
-    $input_name = isset($parameters['input_name']) ? $parameters['input_name'] : '{input_name}'
+    $input_name = isset($parameters['input_name']) ? $parameters['input_name'] : '{input_name}';
 
 
 
@@ -866,6 +1192,7 @@ function breadcrumb_tag_options_term_parent($parameters){
             $prefix_text = '';
             $args = array(
                 'id'		=> 'prefix_text',
+                'wrapper_class'		=> 'hidden',
                 'parent' => $input_name.'[term_parent]',
                 'title'		=> __('Prefix text','breadcrumb'),
                 'details'	=> __('Add prefix text.','breadcrumb'),
@@ -888,7 +1215,7 @@ add_action('breadcrumb_tag_options_term_ancestors', 'breadcrumb_tag_options_term
 
 function breadcrumb_tag_options_term_ancestors($parameters){
     $settings_tabs_field = new settings_tabs_field();
-    $input_name = isset($parameters['input_name']) ? $parameters['input_name'] : '{input_name}'
+    $input_name = isset($parameters['input_name']) ? $parameters['input_name'] : '{input_name}';
 
 
 
@@ -907,6 +1234,7 @@ function breadcrumb_tag_options_term_ancestors($parameters){
             $prefix_text = '';
             $args = array(
                 'id'		=> 'prefix_text',
+                'wrapper_class'		=> 'hidden',
                 'parent' => $input_name.'[term_ancestors]',
                 'title'		=> __('Prefix text','breadcrumb'),
                 'details'	=> __('Add prefix text.','breadcrumb'),
@@ -931,7 +1259,7 @@ add_action('breadcrumb_tag_options_404_text', 'breadcrumb_tag_options_404_text')
 
 function breadcrumb_tag_options_404_text($parameters){
     $settings_tabs_field = new settings_tabs_field();
-    $input_name = isset($parameters['input_name']) ? $parameters['input_name'] : '{input_name}'
+    $input_name = isset($parameters['input_name']) ? $parameters['input_name'] : '{input_name}';
 
 
 
@@ -950,6 +1278,7 @@ function breadcrumb_tag_options_404_text($parameters){
             $prefix_text = '';
             $args = array(
                 'id'		=> 'prefix_text',
+                'wrapper_class'		=> 'hidden',
                 'parent' => $input_name.'[404_text]',
                 'title'		=> __('Prefix text','breadcrumb'),
                 'details'	=> __('Add prefix text.','breadcrumb'),
@@ -974,9 +1303,12 @@ add_action('breadcrumb_tag_options_date_text', 'breadcrumb_tag_options_date_text
 
 function breadcrumb_tag_options_date_text($parameters){
     $settings_tabs_field = new settings_tabs_field();
-    $input_name = isset($parameters['input_name']) ? $parameters['input_name'] : '{input_name}'
+    $input_name = isset($parameters['input_name']) ? $parameters['input_name'] : '{input_name}';
+    $options = isset($parameters['options']) ? $parameters['options'] : 'd';
 
+    $date_format = isset($options['date_format']) ? $options['date_format'] : 'd';
 
+    //var_dump($parameters);
 
     ?>
     <div class="item">
@@ -993,6 +1325,7 @@ function breadcrumb_tag_options_date_text($parameters){
             $prefix_text = '';
             $args = array(
                 'id'		=> 'prefix_text',
+                'wrapper_class'		=> 'hidden',
                 'parent' => $input_name.'[date_text]',
                 'title'		=> __('Prefix text','breadcrumb'),
                 'details'	=> __('Add prefix text.','breadcrumb'),
@@ -1002,6 +1335,19 @@ function breadcrumb_tag_options_date_text($parameters){
             );
 
             $settings_tabs_field->generate_field($args);
+
+            $args = array(
+                'id'		=> 'date_format',
+                'parent' => $input_name.'[date_text]',
+                'title'		=> __('Date format','breadcrumb'),
+                'details'	=> __('Write date format.','breadcrumb'),
+                'type'		=> 'text',
+                'value'		=> $date_format,
+                'default'		=> '',
+            );
+
+            $settings_tabs_field->generate_field($args);
+
 
             ?>
 
@@ -1016,7 +1362,10 @@ add_action('breadcrumb_tag_options_month_text', 'breadcrumb_tag_options_month_te
 
 function breadcrumb_tag_options_month_text($parameters){
     $settings_tabs_field = new settings_tabs_field();
-    $input_name = isset($parameters['input_name']) ? $parameters['input_name'] : '{input_name}'
+    $input_name = isset($parameters['input_name']) ? $parameters['input_name'] : '{input_name}';
+    $options = isset($parameters['options']) ? $parameters['options'] : 'd';
+
+    $date_format = isset($options['date_format']) ? $options['date_format'] : 'm'
 
 
 
@@ -1035,6 +1384,7 @@ function breadcrumb_tag_options_month_text($parameters){
             $prefix_text = '';
             $args = array(
                 'id'		=> 'prefix_text',
+                'wrapper_class'		=> 'hidden',
                 'parent' => $input_name.'[month_text]',
                 'title'		=> __('Prefix text','breadcrumb'),
                 'details'	=> __('Add prefix text.','breadcrumb'),
@@ -1044,6 +1394,19 @@ function breadcrumb_tag_options_month_text($parameters){
             );
 
             $settings_tabs_field->generate_field($args);
+
+            $args = array(
+                'id'		=> 'date_format',
+                'parent' => $input_name.'[month_text]',
+                'title'		=> __('Date format','breadcrumb'),
+                'details'	=> __('Write date format.','breadcrumb'),
+                'type'		=> 'text',
+                'value'		=> $date_format,
+                'default'		=> '',
+            );
+
+            $settings_tabs_field->generate_field($args);
+
 
             ?>
 
@@ -1059,7 +1422,10 @@ add_action('breadcrumb_tag_options_year_text', 'breadcrumb_tag_options_year_text
 
 function breadcrumb_tag_options_year_text($parameters){
     $settings_tabs_field = new settings_tabs_field();
-    $input_name = isset($parameters['input_name']) ? $parameters['input_name'] : '{input_name}'
+    $input_name = isset($parameters['input_name']) ? $parameters['input_name'] : '{input_name}';
+    $options = isset($parameters['options']) ? $parameters['options'] : 'd';
+
+    $date_format = isset($options['date_format']) ? $options['date_format'] : 'Y'
 
 
 
@@ -1078,6 +1444,7 @@ function breadcrumb_tag_options_year_text($parameters){
             $prefix_text = '';
             $args = array(
                 'id'		=> 'prefix_text',
+                'wrapper_class'		=> 'hidden',
                 'parent' => $input_name.'[year_text]',
                 'title'		=> __('Prefix text','breadcrumb'),
                 'details'	=> __('Add prefix text.','breadcrumb'),
@@ -1087,6 +1454,19 @@ function breadcrumb_tag_options_year_text($parameters){
             );
 
             $settings_tabs_field->generate_field($args);
+
+            $args = array(
+                'id'		=> 'date_format',
+                'parent' => $input_name.'[year_text]',
+                'title'		=> __('Date format','breadcrumb'),
+                'details'	=> __('Write date format.','breadcrumb'),
+                'type'		=> 'text',
+                'value'		=> $date_format,
+                'default'		=> '',
+            );
+
+            $settings_tabs_field->generate_field($args);
+
 
             ?>
 
@@ -1123,6 +1503,7 @@ function breadcrumb_tag_options_search_word($parameters){
             $prefix_text = '';
             $args = array(
                 'id'		=> 'prefix_text',
+                'wrapper_class'		=> 'hidden',
                 'parent' => $input_name.'[search_word]',
                 'title'		=> __('Prefix text','breadcrumb'),
                 'details'	=> __('Add prefix text.','breadcrumb'),
@@ -1165,6 +1546,7 @@ function breadcrumb_tag_options_author_name($parameters){
             $prefix_text = '';
             $args = array(
                 'id'		=> 'prefix_text',
+                'wrapper_class'		=> 'hidden',
                 'parent' => $input_name.'[author_name]',
                 'title'		=> __('Prefix text','breadcrumb'),
                 'details'	=> __('Add prefix text.','breadcrumb'),
@@ -1385,7 +1767,7 @@ function breadcrumb_trail_array_list(){
 
                     $array_list[] = array(
                         'link'=> !empty($breadcrumb_url_hash) ? $breadcrumb_url_hash : get_permalink($post->ID),
-                        'title' => get_the_title($post->ID),
+                        'title' => $post->ID,
                     );
                 }elseif ($item == '%postname%'){
 
