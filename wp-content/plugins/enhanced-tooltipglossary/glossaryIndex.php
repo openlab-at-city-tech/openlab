@@ -1116,7 +1116,7 @@ class CMTT_Glossary_Index {
         if (\CM\CMTT_Settings::get('cmtt_tooltipDisplayanimation') == 'horizontal_flip' || \CM\CMTT_Settings::get('cmtt_tooltiphideanimation') == 'horizontal_flip' || \CM\CMTT_Settings::get('cmtt_tooltipDisplayanimation') == 'grow' || \CM\CMTT_Settings::get('cmtt_tooltipHideanimation') == 'shrink' || \CM\CMTT_Settings::get('cmtt_tooltipDisplayanimation') == 'fade_in' || \CM\CMTT_Settings::get('cmtt_tooltipHideanimation') == 'fade_out') {
             $addflipclass .= ' animated';
         }
-        echo '<div id="tt" role="tooltip" class="' . apply_filters('cmtt_tt_class', $addflipclass) . '"></div>';
+        echo '<div id="tt" role="tooltip" aria-label="Tooltip content" class="' . apply_filters('cmtt_tt_class', $addflipclass) . '"></div>';
     }
 
     public static function outputScripts() {

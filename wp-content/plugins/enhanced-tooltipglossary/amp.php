@@ -236,7 +236,7 @@ class CMTT_AMP {
             $body_styles .= 'font-size:' . \CM\CMTT_Settings::get('cmtt_tooltipFontSize', '14') . 'px;';
             $body_styles .= 'padding:' . \CM\CMTT_Settings::get('cmtt_tooltipPaddingContent', '0') . ';';
 
-            $glossaryItemContent = strip_tags(self::getTheTooltipContentBase('', $glossaryItem));
+            $glossaryItemContent = strip_tags(CMTT_Free::getTheTooltipContentBase('', $glossaryItem));
             if (( \CM\CMTT_Settings::get('cmtt_createGlossaryTermPages', true) && \CM\CMTT_Settings::get('cmtt_glossaryLimitTooltip') >= 30 ) && ( strlen($glossaryItemContent) > \CM\CMTT_Settings::get('cmtt_glossaryLimitTooltip') )) {
                 $glossaryItemContent = cminds_truncate(
                         preg_replace('/<!--(.|\s)*?-->/', '', html_entity_decode($glossaryItemContent)), \CM\CMTT_Settings::get('cmtt_glossaryLimitTooltip'), \CM\CMTT_Settings::get('cmtt_glossaryLimitTooltipSymbol', '(...)'), false, true);
