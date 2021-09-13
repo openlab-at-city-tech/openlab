@@ -1215,7 +1215,7 @@ function openlab_get_credits( $group_id ) {
 			if ( $creator_items ) {
 				$show_acknowledgements = true;
 
-				$credits_intro_text = sprintf( 'Acknowledgements: This %s was created by:', $group_type );
+				$credits_intro_text = sprintf( 'This %s was created by:', $group_type );
 				$credits_markup     = implode( ', ', $creator_items );
 
 				$credits_chunks[] = [
@@ -1238,7 +1238,7 @@ function openlab_get_credits( $group_id ) {
 		}
 	} else {
 		$credits_markup        = openlab_format_group_clone_history_data_list( $clone_history );
-		$credits_intro_text    = sprintf( 'Acknowledgements: This %s is based on the following %s(s):', $group_type, $group_type );
+		$credits_intro_text    = sprintf( 'This %s is based on the following %s(s):', $group_type, $group_type );
 
 		$credits_chunks[] = [
 			'intro' => $credits_intro_text,
