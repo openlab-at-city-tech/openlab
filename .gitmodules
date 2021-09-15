@@ -10,3 +10,6 @@
 [submodule "wp-content/plugins/openlab-import-export"]
 	path = wp-content/plugins/openlab-import-export
 	url = git@github.com:openlab-at-city-tech/openlab-import-export
+[submodule "wp-content/plugins/cac-network-info"]
+	path = wp-content/plugins/cac-network-info
+	url = git@github.com:cuny-academic-commons/cac-network-info
