@@ -4,7 +4,7 @@
 *Plugin URI: http://calendarscripts.info/watu-wordpress.html
 *Description: Create exams and quizzes and display the result immediately after the user takes the exam. Watu for Wordpress is a light version of <a href="http://calendarscripts.info/watupro/" target="_blank">WatuPRO</a>. Check it if you want to run fully featured exams with data exports, student logins, timers, random questions and more. Free support and upgrades are available. Go to <a href="admin.php?page=watu_settings">Watu Settings</a> or <a href="tools.php?page=watu_exams">Manage Your Exams</a> 
 
-*Version: 3.3.0.1
+*Version: 3.3.1.3
 *Author: Kiboko Labs
 *License: GPLv2 or later
 *Text domain: watu
@@ -78,6 +78,12 @@ function watu_init() {
     $quiz_word_plural = $quiz_word_plural ? $quiz_word_plural : __('quizzes', 'watu');  
     define('WATU_QUIZ_WORD', $quiz_word);
     define('WATU_QUIZ_WORD_PLURAL', $quiz_word_plural);
+    
+    // handle tablepress
+	if(class_exists('TablePress')) {
+		//TablePress::$controller = TablePress::load_controller( 'frontend' );
+		//TablePress::$controller->init_shortcodes();	
+	}
 	
 	// add_filter( 'watu_content', 'watu_autop' );	
 	add_filter( 'watu_content', 'wptexturize' );
@@ -139,7 +145,7 @@ function watu_options() {
 }
 
 /**
- * This will scan all the content pages that wordpress outputs for our special code. If the code is found, it will replace the requested quiz.
+ * This will scan all the content pages that WordPress outputs for our special code. If the code is found, it will replace the requested quiz.
  */
 function watu_shortcode( $attr ) {
 	$exam_id = $attr[0];

@@ -174,7 +174,7 @@ function su_shortcode_tabs( $atts = null, $content = null ) {
 
 	$atts['mobile'] = sanitize_key( $atts['mobile'] );
 
-	$output = '<div class="su-tabs su-tabs-style-' . $atts['style'] . ' su-tabs-mobile-' . $atts['mobile'] . su_get_css_class( $atts ) . '" data-active="' . (string) $atts['active'] . '" data-scroll-offset="' . intval( $atts['scroll_offset'] ) . '" data-anchor-in-url="' . sanitize_key( $atts['anchor_in_url'] ) . '"><div class="su-tabs-nav">' . implode( '', $tabs ) . '</div><div class="su-tabs-panes">' . implode( "\n", $panes ) . '</div></div>';
+	$output = '<div class="su-tabs su-tabs-style-' . esc_attr( $atts['style'] ) . ' su-tabs-mobile-' . esc_attr( $atts['mobile'] ) . su_get_css_class( $atts ) . '" data-active="' . esc_attr( $atts['active'] ) . '" data-scroll-offset="' . intval( $atts['scroll_offset'] ) . '" data-anchor-in-url="' . sanitize_key( $atts['anchor_in_url'] ) . '"><div class="su-tabs-nav">' . implode( '', $tabs ) . '</div><div class="su-tabs-panes">' . implode( "\n", $panes ) . '</div></div>';
 
 	// Reset tabs
 	$shortcodes_ultimate_global_tabs       = array();
@@ -211,9 +211,9 @@ function su_shortcode_tab( $atts = null, $content = null ) {
 		'title'    => $atts['title'],
 		'content'  => do_shortcode( $content ),
 		'disabled' => 'yes' === $atts['disabled'] ? ' su-tabs-disabled' : '',
-		'anchor'   => $atts['anchor'] ? ' data-anchor="' . str_replace( array( ' ', '#' ), '', sanitize_text_field( $atts['anchor'] ) ) . '"' : '',
-		'url'      => ' data-url="' . $atts['url'] . '"',
-		'target'   => ' data-target="' . $atts['target'] . '"',
+		'anchor'   => $atts['anchor'] ? ' data-anchor="' . str_replace( array( ' ', '#' ), '', esc_attr( $atts['anchor'] ) ) . '"' : '',
+		'url'      => ' data-url="' . esc_attr( $atts['url'] ) . '"',
+		'target'   => ' data-target="' . esc_attr( $atts['target'] ) . '"',
 		'class'    => $atts['class'],
 	);
 

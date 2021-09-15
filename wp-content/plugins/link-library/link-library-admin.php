@@ -448,6 +448,7 @@ class link_library_plugin_admin {
 	}
 
 	function ll_get_link_image( $url, $name, $mode, $linkid, $cid, $filepath, $filepathtype, $thumbnailsize, $thumbnailgenerator ) {
+		$status = false;
 		if ( $url != "" && $name != "" ) {
 			$protocol = is_ssl() ? 'https://' : 'http://';
 
@@ -466,10 +467,15 @@ class link_library_plugin_admin {
 					if ( !empty ( $cid ) ) {
 						$genthumburl = $protocol . "images.thumbshots.com/image.aspx?cid=" . rawurlencode( $cid ) . "&v1=w=120&url=" . esc_html( $url );
 					}
+				} elseif ( $thumbnailgenerator == 'wordpressmshots' ) {
+					$dimension_array = explode( 'x', $thumbnailsize );
+					$genthumburl = $protocol . "s0.wp.com/mshots/v1/" . rtrim( esc_html( $url ), '/' ) . '?w=' . $dimension_array[0]. '&h=' . $dimension_array[1];
 				}
 			} elseif ( $mode == 'favicon' || $mode == 'favicononly' ) {
 				$genthumburl = $protocol . "www.google.com/s2/favicons?domain=" . $url;
 			}
+
+			linklibrary_write_log( $genthumburl );
 
 			$uploads = wp_upload_dir();
 
@@ -485,7 +491,12 @@ class link_library_plugin_admin {
 
 			$img    = $uploads['basedir'] . "/" . $filepath . "/" . $linkid . '.png';
 			if ( $thumbnailgenerator != 'google' || $mode == 'favicon' || $mode == 'favicononly' ) {
-				$status = file_put_contents( $img, @file_get_contents( $genthumburl ) );
+				$tempfile = download_url( $genthumburl );
+				if ( !is_wp_error( $tempfile ) ) {
+					copy( $tempfile, $img );
+					unlink( $tempfile );
+					$status = true;
+				}
 			} elseif ( $thumbnailgenerator == 'google' && ( $mode == 'thumb' || $mode == 'thumbonly' ) ) {
 				$screenshot = file_get_contents('https://pagespeedonline.googleapis.com/pagespeedonline/v5/runPagespeed?url=' . esc_html( $url ));
 				$data_whole = json_decode($screenshot);
@@ -571,7 +582,7 @@ class link_library_plugin_admin {
 			}
 		}
 
-		return "Parameters are missing";
+		return 'Parameters are missing';
 	}
 
 
@@ -989,7 +1000,7 @@ wp_editor( $post->post_content, 'content', $editor_config );
 						$link_image = get_post_meta( get_the_ID(), 'link_image', true );
 
 						if ( !$options['uselocalimagesoverthumbshots'] || ( $options['uselocalimagesoverthumbshots'] && empty( $link_image ) ) ) {
-							if ( 'robothumb' == $genoptions['thumbnailgenerator'] || 'thumbshots' == $genoptions['thumbnailgenerator'] ) {
+							if ( in_array( $genoptions['thumbnailgenerator'], array( 'robothumb', 'thumbshots', 'wordpressmshots', 'google' ) ) ) {
 								$this->ll_get_link_image( $link_url, get_the_title(), $genmode, get_the_ID(), $genoptions['thumbshotscid'], $filepath, $genoptions['imagefilepath'], $genoptions['thumbnailsize'], $genoptions['thumbnailgenerator'] );
 							} elseif ( 'pagepeeker' == $genoptions['thumbnailgenerator'] ) {
 								$this->ll_get_link_image( $link_url, get_the_title(), $genmode, get_the_ID(), $genoptions['pagepeekerid'], $filepath, $genoptions['imagefilepath'], $genoptions['pagepeekersize'], $genoptions['thumbnailgenerator'] );
@@ -2804,7 +2815,7 @@ wp_editor( $post->post_content, 'content', $editor_config );
 					'suppress_custom_text_1_if_empty', 'suppress_custom_text_2_if_empty', 'suppress_custom_text_3_if_empty',
 					'suppress_custom_text_4_if_empty', 'suppress_custom_text_5_if_empty', 'suppress_custom_list_1_if_empty', 'suppress_custom_list_2_if_empty',
 					'suppress_custom_list_3_if_empty', 'suppress_custom_list_4_if_empty', 'suppress_custom_list_5_if_empty', 'catnamelink', 'hideemptycats',
-					'rsslibrarypagination', 'showupdatedonly'
+					'rsslibrarypagination', 'showupdatedonly', 'searchfromallcats'
 				)
 				as $option_name
 			) {
@@ -3299,6 +3310,7 @@ wp_editor( $post->post_content, 'content', $editor_config );
 									<option value="robothumb" <?php selected( $genoptions['thumbnailgenerator'], 'robothumb' ); ?>>Robothumb.com
 									<option value="shrinktheweb" <?php selected( $genoptions['thumbnailgenerator'], 'shrinktheweb' ); ?>>Shrink The Web
 									<option value="pagepeeker" <?php selected( $genoptions['thumbnailgenerator'], 'pagepeeker' ); ?>>PagePeeker
+									<option value="wordpressmshots" <?php selected( $genoptions['thumbnailgenerator'], 'wordpressmshots' ); ?>>WordPress.com mshots
 									<option value="thumbshots" <?php selected( $genoptions['thumbnailgenerator'], 'thumbshots' ); ?>>Thumbshots.org
 									<option value="google" <?php selected( $genoptions['thumbnailgenerator'], 'google' ); ?>>Google PageSpeed
 								</select>
@@ -3368,6 +3380,27 @@ wp_editor( $post->post_content, 'content', $editor_config );
 							<td>
 								<select id="thumbnailsize" name="thumbnailsize">
 								<?php $sizes = array( '100x75', '120x90', '160x120', '180x135', '240x180', '320x240', '560x420', '640x480', '800x600' );
+
+								foreach ( $sizes as $size ) { ?>
+									<option value="<?php echo $size; ?>" <?php selected( $genoptions['thumbnailsize'], $size ); ?>><?php echo $size; ?>
+								<?php } ?>
+								</select>
+							</td>
+						</tr>
+						<tr class="wordpressmshotswarning" <?php if ( $genoptions['thumbnailgenerator'] != 'wordpressmshots' ) {
+							echo 'style="display:none;"';
+						} ?>>
+							<td colspan="2"><?php _e( 'The WordPress mshots service is only free for non-commercial applications. If using it on a commercial site, contact <a href="https://automattic.com/contact/">Automattic</a> to get a license for use.' ); ?>
+							</td>
+						</tr>
+						<tr class="wordpressmshotssize" <?php if ( $genoptions['thumbnailgenerator'] != 'wordpressmshots' ) {
+							echo 'style="display:none;"';
+						} ?>>
+							<td><?php _e( 'WordPress.com mshots Thumbnail size' ); ?>
+							</td>
+							<td>
+								<select id="thumbnailsize" name="thumbnailsize">
+								<?php $sizes = array( '100x75', '120x90', '160x120', '180x135', '240x180', '320x240', '560x420', '640x480', '800x600', '1280x960' );
 
 								foreach ( $sizes as $size ) { ?>
 									<option value="<?php echo $size; ?>" <?php selected( $genoptions['thumbnailsize'], $size ); ?>><?php echo $size; ?>
@@ -3492,6 +3525,8 @@ wp_editor( $post->post_content, 'content', $editor_config );
 					jQuery(".robothumbsize").hide();
 					jQuery(".pagepeekerid").hide();
 					jQuery(".pagepeekersizes").hide();
+					jQuery(".wordpressmshotswarning").hide();
+					jQuery(".wordpressmshotssize").hide();
 					jQuery(".shrinkthewebsizes").hide();
 					jQuery(".shrinkthewebaccesskey").hide();
 
@@ -3505,6 +3540,9 @@ wp_editor( $post->post_content, 'content', $editor_config );
 					} else if ( jQuery( '#thumbnailgenerator').val() == 'shrinktheweb' ) {
 						jQuery(".shrinkthewebsizes").show();
 						jQuery(".shrinkthewebaccesskey").show();
+					} else if ( jQuery( '#thumbnailgenerator').val() == 'wordpressmshots' ) {
+						jQuery(".wordpressmshotswarning").show();
+						jQuery(".wordpressmshotssize").show();
 					}
 				});
 			});
@@ -6247,10 +6285,10 @@ function general_custom_fields_meta_box( $data ) {
 		<div style='padding-top:15px' id="ll-thumbnails" class="content-section">
 		<table>
 			<tr>
-				<td style='width: 400px' class='lltooltip' title='<?php _e( 'Checking this option will get images from the Robothumb web site every time', 'link-library' ); ?>.'>
+				<td style='width: 400px' class='lltooltip' title='<?php _e( 'Checking this option will get images from the selected thumbnail generation service every time', 'link-library' ); ?>.'>
 					<?php _e( 'Use thumbnail service for dynamic link images', 'link-library' ); ?>
 				</td>
-				<td class='lltooltip' title='<?php _e( 'Checking this option will get images from the thumbshots web site every time', 'link-library' ); ?>.' style='width:75px;padding-right:20px'>
+				<td class='lltooltip' title='<?php _e( 'Checking this option will get images from the selected thumbnail generation service every time', 'link-library' ); ?>.' style='width:75px;padding-right:20px'>
 					<input type="checkbox" id="usethumbshotsforimages" name="usethumbshotsforimages" <?php checked( $options['usethumbshotsforimages'] ); ?>/>
 				</td>
 			</tr>
@@ -6388,6 +6426,14 @@ function general_custom_fields_meta_box( $data ) {
 					</td>
 					<td style='width:75px;padding-right:20px'>
 						<input type="checkbox" id="searchtextinsearchbox" name="searchtextinsearchbox" <?php checked( $options['searchtextinsearchbox'] ); ?>/>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<?php _e( 'Search in all Link Library categories', 'link-library' ); ?>
+					</td>
+					<td style='width:75px;padding-right:20px'>
+						<input type="checkbox" id="searchfromallcats" name="searchfromallcats" <?php checked( $options['searchfromallcats'] ); ?>/>
 					</td>
 				</tr>
 			</table>

@@ -153,6 +153,12 @@ class Shortcodes_Ultimate {
 		 */
 		require_once $this->plugin_path . 'admin/class-shortcodes-ultimate-notice.php';
 		require_once $this->plugin_path . 'admin/class-shortcodes-ultimate-notice-rate.php';
+		require_once $this->plugin_path . 'admin/class-shortcodes-ultimate-notice-unsafe-features.php';
+
+		/**
+		 * Register custom widget
+		 */
+		require_once $this->plugin_path . 'admin/class-shortcodes-ultimate-widget.php';
 
 		/**
 		 * Add Extra Shortcodes
@@ -178,6 +184,7 @@ class Shortcodes_Ultimate {
 		 */
 		require_once $this->plugin_path . 'includes/deprecated/class-su-data.php';
 		require_once $this->plugin_path . 'includes/deprecated/class-su-tools.php';
+		require_once $this->plugin_path . 'includes/deprecated/class-su-widget.php';
 		require_once $this->plugin_path . 'includes/deprecated/functions.php';
 
 		/**
@@ -261,6 +268,7 @@ class Shortcodes_Ultimate {
 			10,
 			1
 		);
+		add_action( 'admin_init', array( $this->settings_menu, 'maybe_disable_unsafe_features' ) );
 
 		/**
 		 * Submenu: Add-ons
@@ -289,10 +297,28 @@ class Shortcodes_Ultimate {
 		add_action( 'admin_post_su_dismiss_notice', array( $this->rate_notice, 'dismiss_notice' ) );
 
 		/**
+		 * Notice: Unsafe features
+		 */
+		$this->unsafe_features_notice = new Shortcodes_Ultimate_Notice_Unsafe_Features(
+			'unsafe-features',
+			$this->plugin_path . 'admin/partials/notices/unsafe-features.php'
+		);
+
+		add_action( 'admin_notices', array( $this->unsafe_features_notice, 'display_notice' ) );
+		add_action( 'admin_post_su_dismiss_notice', array( $this->unsafe_features_notice, 'dismiss_notice' ) );
+
+		/**
 		 * Add/Save 'Slide link' field on attachment page.
 		 */
 		add_filter( 'attachment_fields_to_edit', 'su_slide_link_input', 10, 2 );
 		add_filter( 'attachment_fields_to_save', 'su_slide_link_save', 10, 2 );
+
+		/**
+		 * Register custom widget
+		 */
+		$this->widget = new Shortcodes_Ultimate_Widget( $this->plugin_prefix );
+
+		add_action( 'widgets_init', array( $this->widget, 'register' ) );
 
 		/**
 		 * Add Extra Shortcodes

@@ -5,18 +5,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 require_once plugin_dir_path( __FILE__ ) . 'link-library-defaults.php';
 
-/**
- *
- * Render the output of the link-library-search shortcode
- *
- * @param $LLPluginClass    Link Library main plugin class
- * @param $generaloptions   General Plugin Settings
- * @param $libraryoptions   Selected library settings array
- * @param $settings         Settings ID
- * @param $code             Shortcode used in text that called this function
- * @return                  List of categories output for browser
- */
-
 function addlink_render_category_list( $categories, $select_name, $depth, $order, $libraryoptions, $captureddata ) {
 
 	$output = '';
@@ -382,7 +370,7 @@ function RenderLinkLibraryAddLinkForm( $LLPluginClass, $generaloptions, $library
 						}
 					break;
 					case 5: 	//------------------ Link Categories --------------------
-						$include_links_array = array();
+						$include_links_array = array( );
 						if ( !empty( $categorylist_cpt ) ) {
 							$include_links_array = explode( ',', $categorylist_cpt );
 						}
@@ -392,6 +380,9 @@ function RenderLinkLibraryAddLinkForm( $LLPluginClass, $generaloptions, $library
 						}
 
 						$link_categories_query_args = array( 'hide_empty' => false );
+						if ( empty( $categorylist_cpt ) && empty( $excludecategorylist_cpt ) ) {
+							$link_categories_query_args['parent'] = 0;
+						}
 						if ( !empty( $include_links_array ) ) {
 							$link_categories_query_args['include'] = $include_links_array;
 						}

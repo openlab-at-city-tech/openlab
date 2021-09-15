@@ -1,7 +1,7 @@
 <?php
 if ( ! defined('ABSPATH')) exit; // if direct access 
 
-$current_tab = isset($_POST['tab']) ? sanitize_text_field($_POST['tab']) : 'options';
+$current_tab = isset($_POST['tab']) ? sanitize_text_field($_POST['tab']) : 'builder';
 
 
 
@@ -12,36 +12,40 @@ $breadcrumb_settings_tab = array();
 $breadcrumb_settings_tab[] = array(
     'id' => 'options',
     'title' => sprintf(__('%s Options','breadcrumb'),'<i class="fas fa-laptop-code"></i>'),
-    'priority' => 1,
+    'priority' => 0,
     'active' => ($current_tab == 'options') ? true : false,
 );
+
 
 $breadcrumb_settings_tab[] = array(
     'id' => 'builder',
     'title' => sprintf(__('%s Builder','breadcrumb'),'<i class="fas fa-pencil-ruler"></i>'),
-    'priority' => 2,
+    'priority' => 10,
     'active' => ($current_tab == 'builder') ? true : false,
 );
+
+
+
 
 
 $breadcrumb_settings_tab[] = array(
     'id' => 'style',
     'title' => sprintf(__('%s Style','breadcrumb'),'<i class="fas fa-palette"></i>'),
-    'priority' => 3,
+    'priority' => 20,
     'active' => ($current_tab == 'style') ? true : false,
 );
 
 $breadcrumb_settings_tab[] = array(
     'id' => 'custom_scripts',
     'title' => sprintf(__('%s Custom Scripts','breadcrumb'),'<i class="fas fa-code"></i>'),
-    'priority' => 4,
+    'priority' => 30,
     'active' => ($current_tab == 'custom_scripts') ? true : false,
 );
 
 $breadcrumb_settings_tab[] = array(
     'id' => 'help_support',
     'title' => sprintf(__('%s Help & Support','breadcrumb'),'<i class="fas fa-hands-helping"></i>'),
-    'priority' => 5,
+    'priority' => 80,
     'active' => ($current_tab == 'help_support') ? true : false,
 );
 
@@ -50,7 +54,7 @@ $breadcrumb_settings_tab[] = array(
 $breadcrumb_settings_tab[] = array(
     'id' => 'buy_pro',
     'title' => sprintf(__('%s Buy Pro','breadcrumb'),'<i class="fas fa-store"></i>'),
-    'priority' => 6,
+    'priority' => 90,
     'active' => ($current_tab == 'buy_pro') ? true : false,
 );
 

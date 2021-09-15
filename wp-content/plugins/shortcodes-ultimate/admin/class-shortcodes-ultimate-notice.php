@@ -72,12 +72,12 @@ abstract class Shortcodes_Ultimate_Notice {
 	 * @param string  $notice_id     The ID of the notice.
 	 * @param string  $template_file The full path to the notice template file.
 	 */
-	protected function __construct( $notice_id, $template_file ) {
+	public function __construct( $notice_id, $template_file ) {
 
 		$this->notice_id        = $notice_id;
 		$this->template_file    = $template_file;
 		$this->first_time_delay = 0;
-		$this->defer_delay      = 1 * DAY_IN_SECONDS;
+		$this->defer_delay      = 3 * DAY_IN_SECONDS;
 		$this->capability       = 'manage_options';
 		$this->option_name      = 'su_option_dismissed_notices';
 
@@ -118,15 +118,11 @@ abstract class Shortcodes_Ultimate_Notice {
 		$id        = $this->notice_id;
 
 		if ( $status === 'dismissed' ) {
-			$dismissed[$id] = true;
-		}
-
-		elseif ( $status === 'deferred' ) {
-			$dismissed[$id] = time() + (int) $this->defer_delay;
-		}
-
-		elseif ( is_numeric( $status ) ) {
-			$dismissed[$id] = time() + (int) $status;
+			$dismissed[ $id ] = true;
+		} elseif ( $status === 'deferred' ) {
+			$dismissed[ $id ] = time() + (int) $this->defer_delay;
+		} elseif ( is_numeric( $status ) ) {
+			$dismissed[ $id ] = time() + (int) $status;
 		}
 
 		update_option( $this->option_name, $dismissed );
@@ -185,12 +181,14 @@ abstract class Shortcodes_Ultimate_Notice {
 	 */
 	public function get_dismiss_link( $defer = false, $redirect = '' ) {
 
-		$link = admin_url( sprintf(
+		$link = admin_url(
+			sprintf(
 				'admin-post.php?action=%s&nonce=%s&id=%s',
 				'su_dismiss_notice',
 				wp_create_nonce( 'su_dismiss_notice' ),
 				$this->notice_id
-			) );
+			)
+		);
 
 		if ( $defer ) {
 			$link = add_query_arg( 'defer', 1, $link );
@@ -217,17 +215,17 @@ abstract class Shortcodes_Ultimate_Notice {
 		$id        = $this->notice_id;
 
 		// No data about the notice (not dismissed/deferred)
-		if ( ! isset( $dismissed[$id] ) ) {
+		if ( ! isset( $dismissed[ $id ] ) ) {
 			return false;
 		}
 
 		// Notice deferred
-		if ( is_numeric( $dismissed[$id] ) && time() < $dismissed[$id] ) {
+		if ( is_numeric( $dismissed[ $id ] ) && time() < $dismissed[ $id ] ) {
 			return true;
 		}
 
 		// Notice dismissed
-		if ( $dismissed[$id] === true ) {
+		if ( $dismissed[ $id ] === true ) {
 			return true;
 		}
 
@@ -246,7 +244,7 @@ abstract class Shortcodes_Ultimate_Notice {
 		$dismissed = $this->get_dismissed_notices();
 		$id        = $this->notice_id;
 
-		if ( ! isset( $dismissed[$id] ) ) {
+		if ( ! isset( $dismissed[ $id ] ) ) {
 			$this->update_notice_status( $this->first_time_delay );
 		}
 

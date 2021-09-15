@@ -61,11 +61,10 @@ final class Shortcodes_Ultimate_Upgrade {
 			return;
 		}
 
+		$this->setup_defaults();
+
 		$this->maybe_upgrade_to( '5.0.0' );
 		$this->maybe_upgrade_to( '5.0.7' );
-		$this->maybe_upgrade_to( '5.1.1' );
-		$this->maybe_upgrade_to( '5.2.0' );
-		$this->maybe_upgrade_to( '5.4.0' );
 		$this->maybe_upgrade_to( '5.6.0' );
 		$this->maybe_upgrade_to( '5.9.1' );
 
@@ -143,6 +142,23 @@ final class Shortcodes_Ultimate_Upgrade {
 	 */
 	private function update_saved_version() {
 		update_option( $this->saved_version_option, $this->current_version, false );
+	}
+
+	/**
+	 * Setup missing default settings
+	 */
+	private function setup_defaults() {
+
+		$defaults = su_get_config( 'default-settings' );
+
+		foreach ( $defaults as $option => $value ) {
+
+			if ( get_option( $option, 0 ) === 0 ) {
+				add_option( $option, $value );
+			}
+
+		}
+
 	}
 
 }

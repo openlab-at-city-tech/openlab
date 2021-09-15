@@ -1271,21 +1271,16 @@ function badgeos_not_earned_image_add_metabox () {
     }
     $achievement_main_post_type = $badgeos_settings['achievement_main_post_type'];
     $rank_main_post_type = $badgeos_settings['ranks_main_post_type'];
-    
-    add_meta_box( 
-        'not_earned_image_div', 
-        __( 'Not Earned Image', 'badgeos' ), 
-        'badgeos_not_earned_image_metabox_cb', 
-        array( $achievement_main_post_type , badgeos_get_achievement_types_slugs() ), 
-        'side', 
-        'low'
-    );
+
+    $achievements_post_type = array_merge( array($achievement_main_post_type ), badgeos_get_achievement_types_slugs() );
+    $ranks_post_type = array_merge( array($rank_main_post_type ), badgeos_get_rank_types_slugs() );
+    $badgeos_post_types = array_merge( $achievements_post_type, $ranks_post_type );
 
     add_meta_box( 
         'not_earned_image_div', 
         __( 'Not Earned Image', 'badgeos' ), 
         'badgeos_not_earned_image_metabox_cb', 
-        array( $rank_main_post_type , badgeos_get_rank_types_slugs() ), 
+        $badgeos_post_types, 
         'side', 
         'low'
     );
@@ -1366,17 +1361,6 @@ function badgeos_not_earned_image_metabox_cb ( $post ) {
 function badgeos_set_default_not_earned_image_thumbnail( $post_id ) {
     
     $badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
-	if ( isset ( $_GET['post_type'] ) ){
-		if ( $_GET['post_type'] == $badgeos_settings['points_main_post_type'] ) {
-			return;
-		}
-	}
-
-	if ( isset ( $_GET['post'] ) ) {
-		if ( get_post_type( $_GET['post'] ) == $badgeos_settings['points_main_post_type'] ) {
-			return;
-		}
-	}
 
 	if ( ! isset( $badgeos_settings['badgeos_not_earned_image'] ) || $badgeos_settings['badgeos_not_earned_image'] == 'disabled' ) {
     	return;
@@ -1384,8 +1368,9 @@ function badgeos_set_default_not_earned_image_thumbnail( $post_id ) {
 
     if ( isset( $_POST['_badgeos_not_earned_thumbnail'] ) ) {
         update_post_meta( $post_id, '_badgeos_not_earned_thumbnail', absint( $_POST['_badgeos_not_earned_thumbnail'] ) );
+		return;
     }
-    
+	    
     $thumbnail_id = 0;
     $achievement_type = '';
     // Get the thumbnail of our parent achievement
@@ -1444,7 +1429,77 @@ function badgeos_set_default_not_earned_image_thumbnail( $post_id ) {
             // Upload the image
             $thumbnail_id = media_handle_sideload( $file_array, $post_id );
         }    
-        update_post_meta( $post_id, '_badgeos_not_earned_thumbnail', $thumbnail_id );
+    	update_post_meta( $post_id, '_badgeos_not_earned_thumbnail', $thumbnail_id );
     }
 }
 add_action( 'save_post', 'badgeos_set_default_not_earned_image_thumbnail', 10, 1 );
+
+/**
+ * Revoke Badge on point loss.
+ *
+ * @since  3.6.12
+ *
+ * @param  string $location Original URI.
+ * @return string           Updated URI.
+ */
+
+function revoke_badge_on_point_loss() {
+	global $wpdb;
+	$points_table_name = $wpdb->base_prefix . 'badgeos_points';
+	$postmeta_table = $wpdb->base_prefix . 'postmeta';
+
+	$user_id = get_current_user_id();
+	$query = $wpdb->get_col( "SELECT post_id FROM {$wpdb->postmeta} WHERE meta_key = '_badgeos_revoke_badge_point_loss' " );
+	$achievement_ids = implode( ',', $query );
+
+	if ( strlen( $achievement_ids ) > 0 ) {
+		// Get awarded points by achievemet trigger	
+		$last_points_awarded = $wpdb->get_results( 
+				"SELECT * FROM {$points_table_name} 
+				WHERE type = 'Award' 
+				AND user_id = {$user_id} 
+				AND achievement_id IN ({$achievement_ids})
+				ORDER BY `dateadded` DESC " 
+		);
+
+		if ( ! empty( $last_points_awarded ) ) {
+			foreach( $last_points_awarded as $awarded_points ) {
+				$total_deducted = total_deduct_points( $user_id, $awarded_points->credit_id );
+				if ( $total_deducted >= ( int ) $awarded_points->credit ){
+					$isRevoked = badgeos_revoke_achievement_after_points_deduct( $awarded_points->achievement_id , $user_id );
+				}
+			}
+		}
+	}
+}
+
+add_action( 'admin_init', 'revoke_badge_on_point_loss' );
+
+// Deduct after points are deducted
+function badgeos_revoke_achievement_after_points_deduct( $achievement_id , $user_id ){
+	global $wpdb;
+	$achievements_table_name = $wpdb->base_prefix . 'badgeos_achievements';
+	$result = $wpdb->get_results( 
+		"DELETE FROM {$achievements_table_name} 
+		WHERE user_id = {$user_id} 
+		AND ID = {$achievement_id}" 
+	);
+	if ( count( $result ) > 0 ) {
+		return true;
+	}
+	return false;
+}
+
+// Total deducted points
+function total_deduct_points( $user_id, $credit_id ) {
+	global $wpdb;
+	$points_table_name = $wpdb->base_prefix . 'badgeos_points';
+	$total_deducted_points = $wpdb->get_var( 
+		"SELECT SUM( credit ) FROM {$points_table_name} 
+		WHERE type = 'Deduct' 
+		AND user_id = {$user_id} 
+		AND credit_id = {$credit_id}
+		ORDER BY `dateadded` DESC " 
+	);
+	return ( int ) $total_deducted_points;
+}

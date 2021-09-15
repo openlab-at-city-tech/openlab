@@ -73,6 +73,19 @@ function su_shortcode_csv_table( $atts = null, $content = null ) {
 		'table'
 	);
 
+	if ( ! su_is_unsafe_features_enabled() ) {
+
+		return su_error_message(
+			'CSV Table',
+			sprintf(
+				'%s.<br><a href="https://getshortcodes.com/docs/unsafe-features/" target="_blank">%s</a>',
+				__( 'This shortcode cannot be used while <b>Unsafe features</b> option is turned off', 'shortcodes-ultimate' ),
+				__( 'Learn more', 'shortcodes-ultimate' )
+			)
+		);
+
+	}
+
 	if ( filter_var( $atts['url'], FILTER_VALIDATE_URL ) === false ) {
 		return su_error_message( 'CSV Table', __( 'invalid URL', 'shortcodes-ultimate' ) );
 	}

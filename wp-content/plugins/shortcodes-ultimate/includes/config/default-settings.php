@@ -15,5 +15,6 @@ return apply_filters(
 		'su_option_generator_access'     => 'manage_options',
 		'su_option_enable_shortcodes_in' => array( 'term_description' ),
 		'su_option_hide_deprecated'      => 'on',
+		'su_option_unsafe_features'      => 'on',
 	)
 );

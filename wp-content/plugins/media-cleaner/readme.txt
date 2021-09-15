@@ -3,9 +3,9 @@ Contributors: TigrouMeow
 Tags: clean, delete, file, files, images, image, media, library, upload, acf
 Donate link: https://commerce.coinbase.com/checkout/d047546a-77a8-41c8-9ea9-4a950f61832f
 Requires at least: 5.0
-Tested up to: 5.6
-Requires PHP: 5.6
-Stable tag: 6.1.8
+Tested up to: 5.7.2
+Requires PHP: 7.0
+Stable tag: 6.1.9
 
 Clean your WordPress Website from unused or broken media entries and files.
 
@@ -74,6 +74,12 @@ Better to be safe than sorry. This plugin deletes files! Therefore, backup is no
 1. Media -> Media Cleaner
 
 == Changelog ==
+
+= 6.1.9 (2021/07/05) =
+* Add: Updated UI and libraries.
+* Add: Support for Simple 3D Carousel.
+* Update: Better codebase that will allow new features and enhancements (like Pause, Retry, etc).
+* Info: This plugin is a lot of work everyday. Please help me by giving it a nice review, [here](https://wordpress.org/support/plugin/media-cleaner/reviews/?rate=5#new-post). Thank you so much! Happy Summer Holidays :)
 
 = 6.1.8 (2021/06/14) =
 * Add: Support SVG.
@@ -166,7 +172,6 @@ Better to be safe than sorry. This plugin deletes files! Therefore, backup is no
 * Add: Filter to allow developers to override the decisions of the plugin.
 * Add: Auto-add MEDIA_TRASH.
 * Fix: Fuzzier pattern matching for wording variety.
-* Info: This plugin is a lot of work. Please help me by giving it a nice review, [here](https://wordpress.org/support/plugin/media-cleaner/reviews/?rate=5#new-post).
 
 = 5.6.2 =
 * Add: Always Skip/Retry feature.

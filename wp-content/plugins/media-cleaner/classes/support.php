@@ -100,6 +100,10 @@ class Meow_WPMC_Support {
       array_push( $unsupported, 'Nimble Builder' );
     }
 
+		if ( class_exists( 'fwds3dcar' ) ) {
+      array_push( $unsupported, 'Simple 3D Carousel' );
+    }
+
     return $unsupported;
   }
 }

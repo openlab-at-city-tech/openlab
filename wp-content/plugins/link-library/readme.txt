@@ -3,8 +3,8 @@ Contributors: jackdewey
 Donate link: https://ylefebvre.github.io/wordpress-plugins/link-library/
 Tags: link, list, directory, page, library, AJAX, RSS, feeds, inline, search, paging, add, submit, import, batch, pop-up
 Requires at least: 4.4
-Tested up to: 5.7.2
-Stable tag: 7.2.0
+Tested up to: 5.8
+Stable tag: 7.2.4
 
 The purpose of this plugin is to add the ability to output a list of link categories and a complete list of links with notes and descriptions.
 
@@ -21,7 +21,7 @@ For screenshots showing how to achieve these results, check out my [site](https:
 All pages are generated using different configurations all managed by Link Library. Link Library is compatible with the [My Link Order](http://wordpress.org/extend/plugins/my-link-order/) plugin to define category and link ordering.
 
 * [Changelog](http://wordpress.org/extend/plugins/link-library/other_notes/)
-* [Support Forum](http://wordpress.org/tags/link-library)
+* [Support Forum](https://wordpress.org/support/plugin/link-library/)
 
 == Installation ==
 
@@ -47,6 +47,20 @@ In addition to specifying a library, categories to be displayed can be specified
 Further configuration is available under the Link Library Settings panel.
 
 == Changelog ==
+
+= 7.2.4 =
+* Added new option in search section to look for results in all categories even if library is configured to display from a subset of categories
+* Fix block_categories editor warnings for deprecated filters
+
+= 7.2.3 =
+* Fixed issue with displaying library count for library other than #1
+
+= 7.2.2 =
+* Fix for list of categories in user-submission form when using hierarchical categories
+* Fix for PHP warning when displaying link count
+
+= 7.2.1 =
+* Add support for WordPress mshots thumbnail generator
 
 = 7.2.0 =
 * Links can now be sorted by number of hits in admin

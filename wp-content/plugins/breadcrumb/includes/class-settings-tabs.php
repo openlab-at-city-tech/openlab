@@ -48,7 +48,7 @@ class settings_tabs_field{
     function field_template($option){
 
         $id 			= isset( $option['id'] ) ? $option['id'] : "";
-        $wraper_class			= isset( $option['wraper_class'] ) ? $option['wraper_class'] : "";
+        $wrapper_class			= isset( $option['wrapper_class'] ) ? $option['wrapper_class'] : "";
         $conditions 	= isset( $option['conditions'] ) ? $option['conditions'] : array();
 
         $is_error 			= isset( $option['is_error'] ) ? $option['is_error'] : false;
@@ -142,7 +142,7 @@ class settings_tabs_field{
         ob_start();
 
         ?>
-        <div <?php if(!empty($depends)) {?> data-depends="[<?php echo $depends; ?>]" <?php } ?> class="setting-field <?php if($is_error) echo 'field-error';  ?> <?php echo $wraper_class; ?> <?php if(!empty($depends)) echo 'dependency-field'; ?>">
+        <div <?php if(!empty($depends)) {?> data-depends="[<?php echo $depends; ?>]" <?php } ?> class="setting-field <?php if($is_error) echo 'field-error';  ?> <?php echo $wrapper_class; ?> <?php if(!empty($depends)) echo 'dependency-field'; ?>">
             <div class="field-lable">%s</div>
             <div class="field-input">%s
                 <p class="description">%s</p>

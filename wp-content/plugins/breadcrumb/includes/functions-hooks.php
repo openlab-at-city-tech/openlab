@@ -7,213 +7,519 @@ function breadcrumb_items_override_permalinks($breadcrumb_items){
 
     $breadcrumb_options = get_option('breadcrumb_options');
     $permalinks = isset($breadcrumb_options['permalinks']) ? $breadcrumb_options['permalinks'] : array();
+    $active_plugins = get_option('active_plugins');
 
 
+    //echo '<pre>'.var_export($permalinks, true).'</pre>';
+    if(is_front_page() && is_home()) {
 
-    if(is_singular('post') && !empty($permalinks['post'])){
-
-        $post_id = get_the_id();
         $breadcrumb_items_new = array();
         $breadcrumb_items_latest = array();
 
-        $post_permalinks = isset($permalinks['post']) ? $permalinks['post'] : array();
+        if (isset($permalinks['front_page']) && !empty($permalinks['front_page'])) {
+            $post_type_permalinks = isset($permalinks['front_page']) ? $permalinks['front_page'] : array();
+            //echo '<pre>'.var_export($post_type_permalinks, true).'</pre>';
 
-        $i = 0;
-        if(!empty($post_permalinks))
-        foreach ($post_permalinks as $permalinkIndex => $permalink):
+            $i = 0;
+            if (!empty($post_type_permalinks))
+                foreach ($post_type_permalinks as $permalinkIndex => $permalink):
 
-            $breadcrumb_items_new[$i] = apply_filters('breadcrumb_permalink_'.$permalinkIndex, array());
+                    $breadcrumb_items_new[$i] = apply_filters('breadcrumb_permalink_' . $permalinkIndex, array('permalink'=>$permalink));
 
-            if(!empty($breadcrumb_items_new[$i][0]) && is_array($breadcrumb_items_new[$i][0])):
+                    if (!empty($breadcrumb_items_new[$i][0]) && is_array($breadcrumb_items_new[$i][0])):
 
-                foreach ($breadcrumb_items_new[$i] as $item):
-                    $breadcrumb_items_latest[] = $item;
-                endforeach;
+                        foreach ($breadcrumb_items_new[$i] as $item):
+                            $breadcrumb_items_latest[] = $item;
+                        endforeach;
 
-            else:
-                $breadcrumb_items_latest[] = $breadcrumb_items_new[$i];
-            endif;
-
-            $i++;
-        endforeach;
-        return $breadcrumb_items_latest;
-    }elseif(is_singular('product') && !empty($permalinks['product'])){
-
-        $post_id = get_the_id();
-        $breadcrumb_items_new = array();
-        $breadcrumb_items_latest = array();
-
-        $post_permalinks = isset($permalinks['product']) ? $permalinks['product'] : array();
-
-        $i = 0;
-        if(!empty($post_permalinks))
-            foreach ($post_permalinks as $permalinkIndex => $permalink):
-
-                $breadcrumb_items_new[$i] = apply_filters('breadcrumb_permalink_'.$permalinkIndex, array());
-
-
-                if(!empty($breadcrumb_items_new[$i][0]) && is_array($breadcrumb_items_new[$i][0])):
-
-                    foreach ($breadcrumb_items_new[$i] as $item):
-                        $breadcrumb_items_latest[] = $item;
-                    endforeach;
-
-                else:
-                    $breadcrumb_items_latest[] = $breadcrumb_items_new[$i];
-                endif;
-
-                $i++;
-            endforeach;
-        return $breadcrumb_items_latest;
-
-
-    }elseif(is_singular('page') && !empty($permalinks['page'])){
-
-        $post_id = get_the_id();
-        $breadcrumb_items_new = array();
-        $breadcrumb_items_latest = array();
-
-        $post_permalinks = isset($permalinks['page']) ? $permalinks['page'] : array();
-
-
-        $i = 0;
-        if(!empty($post_permalinks))
-            foreach ($post_permalinks as $permalinkIndex => $permalink):
-
-
-                $breadcrumb_items_new[$i] = apply_filters('breadcrumb_permalink_'.$permalinkIndex, array());
-
-
-                if(!empty($breadcrumb_items_new[$i][0]) && is_array($breadcrumb_items_new[$i][0])):
-
-                    foreach ($breadcrumb_items_new[$i] as $item):
-                        $breadcrumb_items_latest[] = $item;
-                    endforeach;
                     else:
-                    $breadcrumb_items_latest[] = $breadcrumb_items_new[$i];
-                endif;
+                        $breadcrumb_items_latest[] = $breadcrumb_items_new[$i];
+                    endif;
 
-                $i++;
-            endforeach;
-        return $breadcrumb_items_latest;
+                    $i++;
+                endforeach;
+            return $breadcrumb_items_latest;
+        }
+        else{
+            return $breadcrumb_items;
+        }
     }
-    elseif(is_singular('attachment') && !empty($permalinks['attachment'])){
-
-        $post_id = get_the_id();
+    elseif( is_front_page()){
         $breadcrumb_items_new = array();
         $breadcrumb_items_latest = array();
 
-        $post_permalinks = isset($permalinks['attachment']) ? $permalinks['attachment'] : array();
+        if (isset($permalinks['home']) && !empty($permalinks['home'])) {
+            $post_type_permalinks = isset($permalinks['home']) ? $permalinks['home'] : array();
+            //echo '<pre>'.var_export($post_type_permalinks, true).'</pre>';
 
-        $i = 0;
-        if(!empty($post_permalinks))
-            foreach ($post_permalinks as $permalinkIndex => $permalink):
+            $i = 0;
+            if (!empty($post_type_permalinks))
+                foreach ($post_type_permalinks as $permalinkIndex => $permalink):
 
-                $breadcrumb_items_new[$i] = apply_filters('breadcrumb_permalink_'.$permalinkIndex, array());
+                    $breadcrumb_items_new[$i] = apply_filters('breadcrumb_permalink_' . $permalinkIndex, array('permalink'=>$permalink));
 
-                if(!empty($breadcrumb_items_new[$i][0]) && is_array($breadcrumb_items_new[$i][0])):
+                    if (!empty($breadcrumb_items_new[$i][0]) && is_array($breadcrumb_items_new[$i][0])):
 
-                    foreach ($breadcrumb_items_new[$i] as $item):
-                        $breadcrumb_items_latest[] = $item;
-                    endforeach;
+                        foreach ($breadcrumb_items_new[$i] as $item):
+                            $breadcrumb_items_latest[] = $item;
+                        endforeach;
 
-                else:
-                    $breadcrumb_items_latest[] = $breadcrumb_items_new[$i];
-                endif;
+                    else:
+                        $breadcrumb_items_latest[] = $breadcrumb_items_new[$i];
+                    endif;
 
-                $i++;
-            endforeach;
-        return $breadcrumb_items_latest;
-    }else if(is_search()){
+                    $i++;
+                endforeach;
+            return $breadcrumb_items_latest;
 
+        }
+        else{
+            return $breadcrumb_items;
+        }
+
+    }
+
+    elseif( is_home()){
         $breadcrumb_items_new = array();
         $breadcrumb_items_latest = array();
 
-        $search_permalinks = isset($permalinks['search']) ? $permalinks['search'] : array();
+        if (isset($permalinks['blog']) && !empty($permalinks['blog'])) {
+            $post_type_permalinks = isset($permalinks['blog']) ? $permalinks['blog'] : array();
+            //echo '<pre>'.var_export($post_type_permalinks, true).'</pre>';
 
-        $i = 0;
-        if(!empty($search_permalinks))
-            foreach ($search_permalinks as $permalinkIndex => $permalink):
+            $i = 0;
+            if (!empty($post_type_permalinks))
+                foreach ($post_type_permalinks as $permalinkIndex => $permalink):
 
-                $breadcrumb_items_new[$i] = apply_filters('breadcrumb_permalink_'.$permalinkIndex, array());
+                    $breadcrumb_items_new[$i] = apply_filters('breadcrumb_permalink_' . $permalinkIndex, array('permalink'=>$permalink));
 
-                if(!empty($breadcrumb_items_new[$i][0]) && is_array($breadcrumb_items_new[$i][0])):
+                    if (!empty($breadcrumb_items_new[$i][0]) && is_array($breadcrumb_items_new[$i][0])):
 
-                    foreach ($breadcrumb_items_new[$i] as $item):
-                        $breadcrumb_items_latest[] = $item;
-                    endforeach;
+                        foreach ($breadcrumb_items_new[$i] as $item):
+                            $breadcrumb_items_latest[] = $item;
+                        endforeach;
 
-                else:
-                    $breadcrumb_items_latest[] = $breadcrumb_items_new[$i];
-                endif;
+                    else:
+                        $breadcrumb_items_latest[] = $breadcrumb_items_new[$i];
+                    endif;
 
-                $i++;
-            endforeach;
+                    $i++;
+                endforeach;
+            return $breadcrumb_items_latest;
 
-
-        return $breadcrumb_items_latest;
-
+        }
+        else{
+            return $breadcrumb_items;
+        }
     }
-    elseif(is_tax('product_cat')){
 
-        $breadcrumb_items_new = array();
-        $breadcrumb_items_latest = array();
+    else if(in_array( 'woocommerce/woocommerce.php', (array) $active_plugins ) && is_woocommerce() && is_shop()){
 
-        $post_permalinks = isset($permalinks['product_cat']) ? $permalinks['product_cat'] : array();
-
-        $i = 0;
-        if(!empty($post_permalinks))
-            foreach ($post_permalinks as $permalinkIndex => $permalink):
-
-                $breadcrumb_items_new[$i] = apply_filters('breadcrumb_permalink_'.$permalinkIndex, array());
-
-
-                if(!empty($breadcrumb_items_new[$i][0]) && is_array($breadcrumb_items_new[$i][0])):
-
-                    foreach ($breadcrumb_items_new[$i] as $item):
-                        $breadcrumb_items_latest[] = $item;
-                    endforeach;
-
-                else:
-                    $breadcrumb_items_latest[] = $breadcrumb_items_new[$i];
-                endif;
-
-                $i++;
-            endforeach;
-        return $breadcrumb_items_latest;
-
-
-    }
-    elseif(is_tax('product_tag')){
 
         $breadcrumb_items_new = array();
         $breadcrumb_items_latest = array();
 
-        $post_permalinks = isset($permalinks['product_tag']) ? $permalinks['product_tag'] : array();
+        if (isset($permalinks['wc_shop']) && !empty($permalinks['wc_shop'])) {
+            $post_type_permalinks = isset($permalinks['wc_shop']) ? $permalinks['wc_shop'] : array();
+            //echo '<pre>'.var_export($post_type_permalinks, true).'</pre>';
 
-        $i = 0;
-        if(!empty($post_permalinks))
-            foreach ($post_permalinks as $permalinkIndex => $permalink):
+            $i = 0;
+            if (!empty($post_type_permalinks))
+                foreach ($post_type_permalinks as $permalinkIndex => $permalink):
 
-                $breadcrumb_items_new[$i] = apply_filters('breadcrumb_permalink_'.$permalinkIndex, array());
+                    $breadcrumb_items_new[$i] = apply_filters('breadcrumb_permalink_' . $permalinkIndex, array('permalink'=>$permalink));
 
+                    if (!empty($breadcrumb_items_new[$i][0]) && is_array($breadcrumb_items_new[$i][0])):
 
-                if(!empty($breadcrumb_items_new[$i][0]) && is_array($breadcrumb_items_new[$i][0])):
+                        foreach ($breadcrumb_items_new[$i] as $item):
+                            $breadcrumb_items_latest[] = $item;
+                        endforeach;
 
-                    foreach ($breadcrumb_items_new[$i] as $item):
-                        $breadcrumb_items_latest[] = $item;
-                    endforeach;
+                    else:
+                        $breadcrumb_items_latest[] = $breadcrumb_items_new[$i];
+                    endif;
 
-                else:
-                    $breadcrumb_items_latest[] = $breadcrumb_items_new[$i];
-                endif;
+                    $i++;
+                endforeach;
+            return $breadcrumb_items_latest;
 
-                $i++;
-            endforeach;
-        return $breadcrumb_items_latest;
+        }else{
+            return $breadcrumb_items;
+        }
 
 
     }
+    elseif(is_singular()){
+
+        $post_type = get_post_type();
+        $breadcrumb_items_new = array();
+        $breadcrumb_items_latest = array();
+
+        if(isset($permalinks[$post_type]) && !empty($permalinks[$post_type])){
+            $post_type_permalinks = isset($permalinks[$post_type]) ? $permalinks[$post_type] : array();
+            //echo '<pre>'.var_export($post_type_permalinks, true).'</pre>';
+
+            $i = 0;
+            if(!empty($post_type_permalinks))
+                foreach ($post_type_permalinks as $permalinkIndex => $permalink):
+
+                    $breadcrumb_items_new[$i] = apply_filters('breadcrumb_permalink_'.$permalinkIndex, array('permalink'=>$permalink));
+
+                    if(!empty($breadcrumb_items_new[$i][0]) && is_array($breadcrumb_items_new[$i][0])):
+
+                        foreach ($breadcrumb_items_new[$i] as $item):
+                            $breadcrumb_items_latest[] = $item;
+                        endforeach;
+
+                    else:
+                        $breadcrumb_items_latest[] = $breadcrumb_items_new[$i];
+                    endif;
+
+                    $i++;
+                endforeach;
+            return $breadcrumb_items_latest;
+
+
+
+        }
+        else{
+            return $breadcrumb_items;
+        }
+    }
+    elseif(is_tax()){
+
+        $queried_object = get_queried_object () ;
+        //echo '<pre>'.var_export($queried_object, true).'</pre>';
+
+        $taxonomy = $queried_object->taxonomy;
+
+        $breadcrumb_items_new = array();
+        $breadcrumb_items_latest = array();
+
+        if (isset($permalinks[$taxonomy]) && !empty($permalinks[$taxonomy])) {
+            $post_type_permalinks = isset($permalinks[$taxonomy]) ? $permalinks[$taxonomy] : array();
+            //echo '<pre>'.var_export($post_type_permalinks, true).'</pre>';
+
+            $i = 0;
+            if (!empty($post_type_permalinks))
+                foreach ($post_type_permalinks as $permalinkIndex => $permalink):
+
+                    $breadcrumb_items_new[$i] = apply_filters('breadcrumb_permalink_' . $permalinkIndex, array('permalink'=>$permalink));
+
+                    if (!empty($breadcrumb_items_new[$i][0]) && is_array($breadcrumb_items_new[$i][0])):
+
+                        foreach ($breadcrumb_items_new[$i] as $item):
+                            $breadcrumb_items_latest[] = $item;
+                        endforeach;
+
+                    else:
+                        $breadcrumb_items_latest[] = $breadcrumb_items_new[$i];
+                    endif;
+
+                    $i++;
+                endforeach;
+            return $breadcrumb_items_latest;
+
+        }else{
+            return $breadcrumb_items;
+        }
+
+
+    }
+
+    else if(is_category()){
+
+        $queried_object = get_queried_object () ;
+        //echo '<pre>'.var_export($queried_object, true).'</pre>';
+
+        $taxonomy = $queried_object->taxonomy;
+
+        $breadcrumb_items_new = array();
+        $breadcrumb_items_latest = array();
+
+        if (isset($permalinks[$taxonomy]) && !empty($permalinks[$taxonomy])) {
+            $post_type_permalinks = isset($permalinks[$taxonomy]) ? $permalinks[$taxonomy] : array();
+            //echo '<pre>'.var_export($post_type_permalinks, true).'</pre>';
+
+            $i = 0;
+            if (!empty($post_type_permalinks))
+                foreach ($post_type_permalinks as $permalinkIndex => $permalink):
+
+                    $breadcrumb_items_new[$i] = apply_filters('breadcrumb_permalink_' . $permalinkIndex, array('permalink'=>$permalink));
+
+                    if (!empty($breadcrumb_items_new[$i][0]) && is_array($breadcrumb_items_new[$i][0])):
+
+                        foreach ($breadcrumb_items_new[$i] as $item):
+                            $breadcrumb_items_latest[] = $item;
+                        endforeach;
+
+                    else:
+                        $breadcrumb_items_latest[] = $breadcrumb_items_new[$i];
+                    endif;
+
+                    $i++;
+                endforeach;
+            return $breadcrumb_items_latest;
+
+        }else{
+            return $breadcrumb_items;
+        }
+
+
+    }
+    else if(is_tag()){
+
+        $queried_object = get_queried_object () ;
+        //echo '<pre>'.var_export($queried_object, true).'</pre>';
+
+        $taxonomy = $queried_object->taxonomy;
+
+        $breadcrumb_items_new = array();
+        $breadcrumb_items_latest = array();
+
+        if (isset($permalinks[$taxonomy]) && !empty($permalinks[$taxonomy])) {
+            $post_type_permalinks = isset($permalinks[$taxonomy]) ? $permalinks[$taxonomy] : array();
+            //echo '<pre>'.var_export($post_type_permalinks, true).'</pre>';
+
+            $i = 0;
+            if (!empty($post_type_permalinks))
+                foreach ($post_type_permalinks as $permalinkIndex => $permalink):
+
+                    $breadcrumb_items_new[$i] = apply_filters('breadcrumb_permalink_' . $permalinkIndex, array('permalink'=>$permalink));
+
+                    if (!empty($breadcrumb_items_new[$i][0]) && is_array($breadcrumb_items_new[$i][0])):
+
+                        foreach ($breadcrumb_items_new[$i] as $item):
+                            $breadcrumb_items_latest[] = $item;
+                        endforeach;
+
+                    else:
+                        $breadcrumb_items_latest[] = $breadcrumb_items_new[$i];
+                    endif;
+
+                    $i++;
+                endforeach;
+            return $breadcrumb_items_latest;
+
+        }else{
+            return $breadcrumb_items;
+        }
+
+
+    }
+    else if(is_author()){
+        $breadcrumb_items_new = array();
+        $breadcrumb_items_latest = array();
+
+        if (isset($permalinks['author']) && !empty($permalinks['author'])) {
+            $post_type_permalinks = isset($permalinks['author']) ? $permalinks['author'] : array();
+            //echo '<pre>'.var_export($post_type_permalinks, true).'</pre>';
+
+            $i = 0;
+            if (!empty($post_type_permalinks))
+                foreach ($post_type_permalinks as $permalinkIndex => $permalink):
+
+                    $breadcrumb_items_new[$i] = apply_filters('breadcrumb_permalink_' . $permalinkIndex, array('permalink'=>$permalink));
+
+                    if (!empty($breadcrumb_items_new[$i][0]) && is_array($breadcrumb_items_new[$i][0])):
+
+                        foreach ($breadcrumb_items_new[$i] as $item):
+                            $breadcrumb_items_latest[] = $item;
+                        endforeach;
+
+                    else:
+                        $breadcrumb_items_latest[] = $breadcrumb_items_new[$i];
+                    endif;
+
+                    $i++;
+                endforeach;
+            return $breadcrumb_items_latest;
+
+        }else{
+            return $breadcrumb_items;
+        }
+    }
+    elseif(is_search()){
+
+        $breadcrumb_items_new = array();
+        $breadcrumb_items_latest = array();
+
+        if (isset($permalinks['search']) && !empty($permalinks['search'])) {
+            $post_type_permalinks = isset($permalinks['search']) ? $permalinks['search'] : array();
+            //echo '<pre>'.var_export($post_type_permalinks, true).'</pre>';
+
+            $i = 0;
+            if (!empty($post_type_permalinks))
+                foreach ($post_type_permalinks as $permalinkIndex => $permalink):
+
+                    $breadcrumb_items_new[$i] = apply_filters('breadcrumb_permalink_' . $permalinkIndex, array('permalink'=>$permalink));
+
+                    if (!empty($breadcrumb_items_new[$i][0]) && is_array($breadcrumb_items_new[$i][0])):
+
+                        foreach ($breadcrumb_items_new[$i] as $item):
+                            $breadcrumb_items_latest[] = $item;
+                        endforeach;
+
+                    else:
+                        $breadcrumb_items_latest[] = $breadcrumb_items_new[$i];
+                    endif;
+
+                    $i++;
+                endforeach;
+            return $breadcrumb_items_latest;
+
+        }else{
+            return $breadcrumb_items;
+        }
+
+    }
+    else if(is_year()){
+
+        $breadcrumb_items_new = array();
+        $breadcrumb_items_latest = array();
+
+        if (isset($permalinks['year']) && !empty($permalinks['year'])) {
+            $post_type_permalinks = isset($permalinks['year']) ? $permalinks['year'] : array();
+            //echo '<pre>'.var_export($post_type_permalinks, true).'</pre>';
+
+            $i = 0;
+            if (!empty($post_type_permalinks))
+                foreach ($post_type_permalinks as $permalinkIndex => $permalink):
+
+                    $breadcrumb_items_new[$i] = apply_filters('breadcrumb_permalink_' . $permalinkIndex, array('permalink'=>$permalink));
+
+                    if (!empty($breadcrumb_items_new[$i][0]) && is_array($breadcrumb_items_new[$i][0])):
+
+                        foreach ($breadcrumb_items_new[$i] as $item):
+                            $breadcrumb_items_latest[] = $item;
+                        endforeach;
+
+                    else:
+                        $breadcrumb_items_latest[] = $breadcrumb_items_new[$i];
+                    endif;
+
+                    $i++;
+                endforeach;
+            return $breadcrumb_items_latest;
+
+        }else{
+            return $breadcrumb_items;
+        }
+
+    }
+
+    else if(is_month()){
+
+        $breadcrumb_items_new = array();
+        $breadcrumb_items_latest = array();
+
+        if (isset($permalinks['month']) && !empty($permalinks['month'])) {
+            $post_type_permalinks = isset($permalinks['month']) ? $permalinks['month'] : array();
+            //echo '<pre>'.var_export($post_type_permalinks, true).'</pre>';
+
+            $i = 0;
+            if (!empty($post_type_permalinks))
+                foreach ($post_type_permalinks as $permalinkIndex => $permalink):
+
+                    $breadcrumb_items_new[$i] = apply_filters('breadcrumb_permalink_' . $permalinkIndex, array('permalink'=>$permalink));
+
+                    if (!empty($breadcrumb_items_new[$i][0]) && is_array($breadcrumb_items_new[$i][0])):
+
+                        foreach ($breadcrumb_items_new[$i] as $item):
+                            $breadcrumb_items_latest[] = $item;
+                        endforeach;
+
+                    else:
+                        $breadcrumb_items_latest[] = $breadcrumb_items_new[$i];
+                    endif;
+
+                    $i++;
+                endforeach;
+            return $breadcrumb_items_latest;
+
+        }else{
+            return $breadcrumb_items;
+        }
+
+    }
+    else if(is_date()){
+
+        $breadcrumb_items_new = array();
+        $breadcrumb_items_latest = array();
+
+        if (isset($permalinks['date']) && !empty($permalinks['date'])) {
+            $post_type_permalinks = isset($permalinks['date']) ? $permalinks['date'] : array();
+            //echo '<pre>'.var_export($post_type_permalinks, true).'</pre>';
+
+            $i = 0;
+            if (!empty($post_type_permalinks))
+                foreach ($post_type_permalinks as $permalinkIndex => $permalink):
+
+                    $breadcrumb_items_new[$i] = apply_filters('breadcrumb_permalink_' . $permalinkIndex, array('permalink'=>$permalink));
+
+
+                    //echo '<pre>'.var_export($permalink, true).'</pre>';
+
+
+                    if (!empty($breadcrumb_items_new[$i][0]) && is_array($breadcrumb_items_new[$i][0])):
+
+                        foreach ($breadcrumb_items_new[$i] as $item):
+                            $breadcrumb_items_latest[] = $item;
+                        endforeach;
+
+                    else:
+                        $breadcrumb_items_latest[] = $breadcrumb_items_new[$i];
+                    endif;
+
+                    $i++;
+                endforeach;
+            return $breadcrumb_items_latest;
+
+        }else{
+            return $breadcrumb_items;
+        }
+
+
+    }
+    elseif(is_404()){
+
+        $breadcrumb_items_new = array();
+        $breadcrumb_items_latest = array();
+
+        if (isset($permalinks['404']) && !empty($permalinks['404'])) {
+            $post_type_permalinks = isset($permalinks['404']) ? $permalinks['404'] : array();
+            //echo '<pre>'.var_export($post_type_permalinks, true).'</pre>';
+
+            $i = 0;
+            if (!empty($post_type_permalinks))
+                foreach ($post_type_permalinks as $permalinkIndex => $permalink):
+
+                    $breadcrumb_items_new[$i] = apply_filters('breadcrumb_permalink_' . $permalinkIndex, array('permalink'=>$permalink));
+
+
+                    //echo '<pre>'.var_export($permalink, true).'</pre>';
+
+
+                    if (!empty($breadcrumb_items_new[$i][0]) && is_array($breadcrumb_items_new[$i][0])):
+
+                        foreach ($breadcrumb_items_new[$i] as $item):
+                            $breadcrumb_items_latest[] = $item;
+                        endforeach;
+
+                    else:
+                        $breadcrumb_items_latest[] = $breadcrumb_items_new[$i];
+                    endif;
+
+                    $i++;
+                endforeach;
+            return $breadcrumb_items_latest;
+
+        }else{
+            return $breadcrumb_items;
+        }
+
+    }
+
 
     else{
         return $breadcrumb_items;
@@ -236,6 +542,24 @@ function breadcrumb_permalink_front_text($breadcrumb_items){
     );
 
 }
+
+
+add_filter('breadcrumb_permalink_custom_text', 'breadcrumb_permalink_custom_text');
+
+function breadcrumb_permalink_custom_text($args){
+
+    $permalink = isset($args['permalink']) ? $args['permalink'] : '';
+    $text = isset($permalink['text']) ? $permalink['text'] : '';
+    $link = isset($permalink['link']) ? $permalink['link'] : '#';
+
+
+    return array(
+        'link'=> $link,
+        'title' => $text,
+    );
+
+}
+
 
 
 add_filter('breadcrumb_permalink_home', 'breadcrumb_permalink_home');
@@ -417,67 +741,103 @@ function breadcrumb_permalink_post_category($breadcrumb_items){
 add_filter('breadcrumb_permalink_product_cat', 'breadcrumb_permalink_product_cat');
 
 function breadcrumb_permalink_product_cat($breadcrumb_items){
+
     $category_string = get_query_var('product_cat');
     $category_arr = array();
     $breadcrumb_items = array();
 
+    //var_dump($category_string);
+
+
     $taxonomy = 'product_cat';
     $array_list = array();
 
-    if(strpos( $category_string, '/' )){
+    if(!empty($category_string)){
+        if(strpos( $category_string, '/' )){
 
-        $category_arr = explode('/', $category_string);
-        $category_count = count($category_arr);
-        $last_cat = $category_arr[($category_count-1)];
-        $breadcrumb_items_new = array();
-        $term_data = get_term_by('slug',$last_cat, $taxonomy);
+            $category_arr = explode('/', $category_string);
+            $category_count = count($category_arr);
+            $last_cat = $category_arr[($category_count-1)];
+            $breadcrumb_items_new = array();
+            $term_data = get_term_by('slug',$last_cat, $taxonomy);
 
-        $term_id = $term_data->term_id;
-        $term_name = $term_data->name;
-        $term_link = get_term_link( $term_id , $taxonomy);
-
-        $parents_id  = get_ancestors( $term_id, $taxonomy );
-        $parents_id = array_reverse($parents_id);
-
-        foreach($parents_id as $id){
-
-            $parent_term_link = get_term_link( $id , $taxonomy);
-            $paren_term_name = get_term_by('id', $id, $taxonomy);
-
-            $breadcrumb_items_new[] = array(
-                'link'=> $parent_term_link,
-                'title' => $paren_term_name->name,
-            );
-        }
-
-        $breadcrumb_items_new[] = array(
-            'link'=> $term_link,
-            'title' => $term_name,
-        );
-
-
-        $breadcrumb_items = $breadcrumb_items_new;
-
-    }else{
-
-        $term_data = get_term_by('slug',$category_string, $taxonomy);
-
-        $term_id = isset($term_data->term_id) ? $term_data->term_id : '';
-        $term_name = isset($term_data->name) ? $term_data->name : '';
-
-        if(!empty($term_id)):
+            $term_id = $term_data->term_id;
+            $term_name = $term_data->name;
             $term_link = get_term_link( $term_id , $taxonomy);
 
-            $breadcrumb_items_new = array(
+            $parents_id  = get_ancestors( $term_id, $taxonomy );
+            $parents_id = array_reverse($parents_id);
+
+            foreach($parents_id as $id){
+
+                $parent_term_link = get_term_link( $id , $taxonomy);
+                $paren_term_name = get_term_by('id', $id, $taxonomy);
+
+                $breadcrumb_items_new[] = array(
+                    'link'=> $parent_term_link,
+                    'title' => $paren_term_name->name,
+                );
+            }
+
+            $breadcrumb_items_new[] = array(
                 'link'=> $term_link,
                 'title' => $term_name,
             );
-        endif;
 
-        $breadcrumb_items = array_merge($breadcrumb_items, $breadcrumb_items_new);
 
+            $breadcrumb_items = $breadcrumb_items_new;
+
+        }else{
+
+            $term_data = get_term_by('slug', $category_string, $taxonomy);
+            $breadcrumb_items_new = array();
+
+            //var_dump($category_string);
+
+            $term_id = isset($term_data->term_id) ? $term_data->term_id : '';
+            $term_name = isset($term_data->name) ? $term_data->name : '';
+
+            if(!empty($term_id)):
+                $term_link = get_term_link( $term_id , $taxonomy);
+
+                $breadcrumb_items_new = array(
+                    'link'=> $term_link,
+                    'title' => $term_name,
+                );
+            endif;
+
+            $breadcrumb_items = array_merge($breadcrumb_items, $breadcrumb_items_new);
+
+
+        }
+
+    }else{
+
+        if(is_singular()){
+            $post_id = get_the_ID();
+
+            //$terms = get_terms();
+            $terms = get_the_terms( $post_id, $taxonomy );
+            $term_data = isset($terms[0]) ? $terms[0] : '';
+
+            $term_id = isset($term_data->term_id) ? $term_data->term_id : '';
+            $term_name = isset($term_data->name) ? $term_data->name : '';
+
+            if(!empty($term_id)):
+                $term_link = get_term_link( $term_id , $taxonomy);
+
+                $breadcrumb_items_new = array(
+                    'link'=> $term_link,
+                    'title' => $term_name,
+                );
+            endif;
+            $breadcrumb_items = array_merge($breadcrumb_items, $breadcrumb_items_new);
+
+            //echo '<pre>'.var_export($terms[0], true).'</pre>';
+        }
 
     }
+
 
 
 
@@ -486,6 +846,114 @@ function breadcrumb_permalink_product_cat($breadcrumb_items){
 
 }
 
+
+add_filter('breadcrumb_permalink_product_tag', 'breadcrumb_permalink_product_tag');
+
+function breadcrumb_permalink_product_tag($breadcrumb_items){
+
+    $category_string = get_query_var('product_tag');
+    $category_arr = array();
+    $breadcrumb_items = array();
+
+    //var_dump($category_string);
+
+
+    $taxonomy = 'product_tag';
+    $array_list = array();
+
+    if(!empty($category_string)){
+        if(strpos( $category_string, '/' )){
+
+            $category_arr = explode('/', $category_string);
+            $category_count = count($category_arr);
+            $last_cat = $category_arr[($category_count-1)];
+            $breadcrumb_items_new = array();
+            $term_data = get_term_by('slug',$last_cat, $taxonomy);
+
+            $term_id = $term_data->term_id;
+            $term_name = $term_data->name;
+            $term_link = get_term_link( $term_id , $taxonomy);
+
+            $parents_id  = get_ancestors( $term_id, $taxonomy );
+            $parents_id = array_reverse($parents_id);
+
+            foreach($parents_id as $id){
+
+                $parent_term_link = get_term_link( $id , $taxonomy);
+                $paren_term_name = get_term_by('id', $id, $taxonomy);
+
+                $breadcrumb_items_new[] = array(
+                    'link'=> $parent_term_link,
+                    'title' => $paren_term_name->name,
+                );
+            }
+
+            $breadcrumb_items_new[] = array(
+                'link'=> $term_link,
+                'title' => $term_name,
+            );
+
+
+            $breadcrumb_items = $breadcrumb_items_new;
+
+        }else{
+
+            $term_data = get_term_by('slug', $category_string, $taxonomy);
+            $breadcrumb_items_new = array();
+
+            //var_dump($category_string);
+
+            $term_id = isset($term_data->term_id) ? $term_data->term_id : '';
+            $term_name = isset($term_data->name) ? $term_data->name : '';
+
+            if(!empty($term_id)):
+                $term_link = get_term_link( $term_id , $taxonomy);
+
+                $breadcrumb_items_new = array(
+                    'link'=> $term_link,
+                    'title' => $term_name,
+                );
+            endif;
+
+            $breadcrumb_items = array_merge($breadcrumb_items, $breadcrumb_items_new);
+
+
+        }
+
+    }else{
+
+        if(is_singular()){
+            $post_id = get_the_ID();
+
+            //$terms = get_terms();
+            $terms = get_the_terms( $post_id, $taxonomy );
+            $term_data = isset($terms[0]) ? $terms[0] : '';
+
+            $term_id = isset($term_data->term_id) ? $term_data->term_id : '';
+            $term_name = isset($term_data->name) ? $term_data->name : '';
+
+            if(!empty($term_id)):
+                $term_link = get_term_link( $term_id , $taxonomy);
+
+                $breadcrumb_items_new = array(
+                    'link'=> $term_link,
+                    'title' => $term_name,
+                );
+            endif;
+            $breadcrumb_items = array_merge($breadcrumb_items, $breadcrumb_items_new);
+
+            //echo '<pre>'.var_export($terms[0], true).'</pre>';
+        }
+
+    }
+
+
+
+
+
+    return $breadcrumb_items;
+
+}
 
 add_filter('breadcrumb_permalink_wc_shop', 'breadcrumb_permalink_wc_shop');
 
@@ -603,6 +1071,79 @@ function breadcrumb_permalink_post_year($breadcrumb_items){
     );
 
 }
+
+
+
+add_filter('breadcrumb_permalink_date_text', 'breadcrumb_permalink_post_archive_date_text');
+
+function breadcrumb_permalink_post_archive_date_text($args){
+
+    //var_dump('Hello');
+
+    $permalink = isset($args['permalink']) ? $args['permalink'] : array();
+    $date_format = isset($permalink['date_format']) ? $permalink['date_format'] : 'd';
+
+
+    $post_date_year = get_the_time('Y');
+    $post_date_month = get_the_time('m');
+    $post_date_day = get_the_date($date_format);
+    $get_day_link = get_day_link($post_date_year, $post_date_month, $post_date_day);
+
+    return array(
+        'link'=> $get_day_link,
+        'title' => $post_date_day,
+    );
+
+}
+
+
+
+add_filter('breadcrumb_permalink_month_text', 'breadcrumb_permalink_post_archive_month_text');
+
+function breadcrumb_permalink_post_archive_month_text($args){
+
+    //var_dump('Hello');
+
+    $permalink = isset($args['permalink']) ? $args['permalink'] : array();
+    $date_format = isset($permalink['date_format']) ? $permalink['date_format'] : 'm';
+
+
+    $post_date_year = get_the_time('Y');
+    $post_date_month = get_the_time($date_format);
+    $post_date_day = get_the_date($date_format);
+    $get_day_link = get_day_link($post_date_year, $post_date_month, $post_date_day);
+
+    return array(
+        'link'=> $get_day_link,
+        'title' => $post_date_month,
+    );
+
+}
+
+
+
+add_filter('breadcrumb_permalink_year_text', 'breadcrumb_permalink_post_archive_year_text');
+
+function breadcrumb_permalink_post_archive_year_text($args){
+
+    //var_dump('Hello');
+
+    $permalink = isset($args['permalink']) ? $args['permalink'] : array();
+    $date_format = isset($permalink['date_format']) ? $permalink['date_format'] : 'Y';
+
+
+    $post_date_year = get_the_time($date_format);
+    $post_date_month = get_the_time($date_format);
+    $post_date_day = get_the_date($date_format);
+    $get_day_link = get_day_link($post_date_year, $post_date_month, $post_date_day);
+
+    return array(
+        'link'=> $get_day_link,
+        'title' => $post_date_year,
+    );
+
+}
+
 
 
 

@@ -49,6 +49,12 @@ abstract class BaseHandler
 	protected $response;
 
 	/**
+	* URL to redirect to
+	* @var string
+	*/
+	protected $url;
+
+	/**
 	* Plugin Integrations
 	* @var object;
 	*/
@@ -91,7 +97,7 @@ abstract class BaseHandler
 	protected function validateNonce()
 	{
 		if ( ! wp_verify_nonce( $this->nonce, 'nestedpages-nonce' ) ){
-			$this->response = [ 'status' => 'error', 'message' => __('Incorrect Form Field', 'wp-nested-pages') ];
+			$this->response = [ 'status' => 'error', 'message' => __('Invalid Nonce', 'wp-nested-pages') ];
 			$this->sendResponse();
 			die();
 		}
@@ -150,5 +156,13 @@ abstract class BaseHandler
 	protected function sendResponse()
 	{
 		return wp_send_json($this->response);
+	}
+
+	/**
+	* Redirect to new URL
+	*/
+	protected function redirect()
+	{
+		wp_safe_redirect($this->url);
 	}
 }

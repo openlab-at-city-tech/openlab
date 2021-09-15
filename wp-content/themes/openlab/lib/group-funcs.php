@@ -558,11 +558,15 @@ function cuny_group_single() {
     $section = groups_get_groupmeta($group_id, 'wds_section_code');
     $html = groups_get_groupmeta($group_id, 'wds_course_html');
 
-	$credits = openlab_get_credits( $group_id );
+	if ( 'portfolio' === $group_type ) {
+		$show_acknowledgements = false;
+	} else {
+		$credits = openlab_get_credits( $group_id );
 
-	$show_acknowledgements = $credits['show_acknowledgements'];
-	$credits_chunks        = $credits['credits_chunks'];
-	$post_credits_markup   = $credits['post_credits_markup'];
+		$show_acknowledgements = $credits['show_acknowledgements'];
+		$credits_chunks        = $credits['credits_chunks'];
+		$post_credits_markup   = $credits['post_credits_markup'];
+	}
 
     ?>
 
@@ -673,7 +677,7 @@ function cuny_group_single() {
                                     <div class="col-xs-24 status-message clone-acknowledgements">
 										<?php foreach ( $credits_chunks as $credits_chunk ) : ?>
 											<?php if ( ! empty( $credits_chunk['intro'] ) ) : ?>
-												<p><?php echo $credits_chunk['intro']; ?></p>
+												<p>Acknowledgements: <?php echo $credits_chunk['intro']; ?></p>
 											<?php endif; ?>
 
 											<?php if ( ! empty( $credits_chunk['items'] ) ) : ?>
