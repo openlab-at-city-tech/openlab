@@ -66,7 +66,7 @@ if($answer_display == 2 and $single_page != 1) : ?>
 <input type="button" id="show-answer" value="<?php _e('Show Answer', 'watu') ?>"  /><br />
 <?php endif;
 if($single_page != 1 and $answer_display!=2): ?>
-	<p><?php _e('Question', 'watu')?> <span id='numQ'>1</span> <?php _e('of', 'watu')?> <?php echo $num_questions;?></p>
+	<p><?php _e('Question', 'watu')?> <span id='numQ'>1</span> <?php _e('of', 'watu')?> <?php echo count($questions);?></p>
 	<?php if($exam->show_prev_button):?>
 		<input type="button" id="prev-question" value="&lt; <?php _e('Previous', 'watu') ?>" onclick="Watu.nextQuestion(event, 'prev');" style="display:none;" />
 	<?php endif;?>

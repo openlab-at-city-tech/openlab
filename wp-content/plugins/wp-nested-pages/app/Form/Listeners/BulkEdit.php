@@ -6,33 +6,17 @@ use NestedPages\Entities\Post\PostUpdateRepository;
 /**
 * Perform a Bulk Edit
 */
-class BulkEdit 
+class BulkEdit extends BaseHandler
 {
-	/**
-	* URL to redirect to
-	* @var string
-	*/
-	private $url;
-
 	/**
 	* Post IDs (Comma-separated)
 	* @var string
 	*/
 	private $post_ids;
 
-	/**
-	* The Field Data
-	*/
-	private $data;
-
-	/**
-	* Post Update Repo
-	*/
-	private $post_update_repo;
-
 	public function __construct()
 	{
-		$this->post_update_repo = new PostUpdateRepository;
+		parent::__construct();
 		$this->setURL();
 		$this->setFieldData();
 		$this->performEdits();
@@ -68,13 +52,5 @@ class BulkEdit
 			$data['post_id'] = $post_id;
 			$this->post_update_repo->updatePost($data, $append_taxonomies = true);
 		}
-	}
-
-	/**
-	* Redirect to new URL
-	*/
-	private function redirect()
-	{
-		header('Location:' . $this->url);
 	}
 }

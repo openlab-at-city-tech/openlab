@@ -654,6 +654,12 @@ class Meow_WPMC_Core {
 		global $wpdb;
 		$table_name = $wpdb->prefix . "mclean_scan";
 		$issue = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $table_name WHERE id = %d", $id ), OBJECT );
+
+		if ( !isset( $issue ) ) {
+			$this->log( "🚫 Issue {$id} could not be found." );
+			return false;
+		}
+
 		$regex = "^(.*)(\\s\\(\\+.*)$";
 		$issue->path = preg_replace( '/' . $regex . '/i', '$1', $issue->path ); // remove " (+ 6 files)" from path
 

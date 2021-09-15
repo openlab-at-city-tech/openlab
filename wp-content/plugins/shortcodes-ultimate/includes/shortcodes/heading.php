@@ -82,6 +82,6 @@ function su_shortcode_heading( $atts = null, $content = null ) {
 
 	su_query_asset( 'css', 'su-shortcodes' );
 
-	return '<div class="su-heading su-heading-style-' . $atts['style'] . ' su-heading-align-' . $atts['align'] . su_get_css_class( $atts ) . '" id="' . esc_attr( $atts['id'] ) . '" style="font-size:' . intval( $atts['size'] ) . 'px;margin-bottom:' . $atts['margin'] . 'px"><div class="su-heading-inner">' . do_shortcode( $content ) . '</div></div>';
+	return '<div class="su-heading su-heading-style-' . esc_attr( $atts['style'] ) . ' su-heading-align-' . esc_attr( $atts['align'] ) . su_get_css_class( $atts ) . '" id="' . esc_attr( $atts['id'] ) . '" style="font-size:' . intval( $atts['size'] ) . 'px;margin-bottom:' . esc_attr( $atts['margin'] ) . 'px"><div class="su-heading-inner">' . do_shortcode( $content ) . '</div></div>';
 
 }

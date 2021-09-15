@@ -112,8 +112,12 @@ function olgc_insert_comment( $comment_id, $comment ) {
 
 	// Grade
 	if ( olgc_is_instructor() && wp_verify_nonce( $_POST['_olgc_nonce'], 'olgc-grade-entry-' . $comment->comment_post_ID ) && ! empty( $_POST['olgc-add-a-grade'] ) && isset( $_POST['olgc-grade'] ) ) {
-		$grade = wp_unslash( $_POST['olgc-grade'] );
-		update_comment_meta( $comment_id, 'olgc_grade', $grade );
+		$grade = trim( wp_unslash( $_POST['olgc-grade'] ) );
+		if ( $grade ) {
+			update_comment_meta( $comment_id, 'olgc_grade', $grade );
+		} else {
+			delete_comment_meta( $comment_id, 'olgc_grade' );
+		}
 	}
 }
 add_action( 'wp_insert_comment', 'olgc_insert_comment', 10, 2 );
@@ -271,7 +275,7 @@ add_filter( 'comment_feed_where', 'olgc_filter_comments_from_feed' );
  * @return array Array of comment IDs.
  */
 function olgc_get_inaccessible_comments( $user_id, $post_id = 0 ) {
-	$olpc = is_plugin_active( 'openlab-private-comments/openlab-private-comments.php' );
+	$olpc = defined( '\OpenLab\PrivateComments\VERSION' );
 
 	// Get a list of private comments
 	remove_action( 'pre_get_comments', 'olgc_remove_private_comments' );

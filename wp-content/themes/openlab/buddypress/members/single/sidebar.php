@@ -58,11 +58,12 @@ $user_id = bp_is_user() ? bp_displayed_user_id() : bp_loggedin_user_id();
 
 $activity_args = array(
     'user_id' => $user_id,
-    'per_page' => openlab_is_my_profile() ? 4 : 2, // Legacy. Not sure why
+    'max' => openlab_is_my_profile() ? 4 : 2, // Legacy. Not sure why
     'scope' => bp_is_user_friends() ? 'friends' : '',
     'show_hidden' => openlab_is_my_profile(),
     'primary_id' => false,
 );
+
 ?>
 
 <?php if (bp_is_user_friends()) : ?>

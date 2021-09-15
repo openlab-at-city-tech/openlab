@@ -35,6 +35,15 @@
 		
 		<input type="submit" value="<?php _e('Filter questions', 'watu')?>" class="button-primary">
 		<input type="button" class="button" value="<?php _e('Clear filters', 'watu');?>" onclick="window.location='admin.php?page=watu_questions&quiz=<?php echo intval($_GET['quiz'])?>';"></p>	
+		
+		<p><?php _e('Questions per page:', 'watu');?> <select name="page_limit" onchange="this.form.submit();">		
+			<option value="10" <?php if($page_limit == 10) echo 'selected';?>>10</option>
+			<option value="20" <?php if($page_limit == 20) echo 'selected';?>>20</option>
+			<option value="50" <?php if($page_limit == 50) echo 'selected';?>>50</option>
+			<option value="100" <?php if($page_limit == 100) echo 'selected';?>>100</option>
+			<option value="200" <?php if($page_limit == 200) echo 'selected';?>>200</option>
+			<option value="500" <?php if($page_limit == 500) echo 'selected';?>>500</option>
+		</select></p>
 	</form>
 		
 		<form method="post">
@@ -68,10 +77,10 @@
 				<td style="text-align: center;">
 				<div style='float:left;<?php if(!empty($_POST['filter_cat_id'])) echo 'display:none;'?>'>
 				<?php if(($question_count+$offset)>1):?>
-					<a href="admin.php?page=watu_questions&quiz=<?php echo intval($_GET['quiz'])?>&move=<?php echo $question->ID?>&dir=up"><img src="<?php echo  WATU_URL.'/img/arrow-up.png'?>" alt="<?php _e('Move Up', 'watu')?>" border="0"></a>
+					<a href="admin.php?page=watu_questions&quiz=<?php echo intval($_GET['quiz'])?>&move=<?php echo $question->ID?>&dir=up&offset=<?php echo $offset?>&page_limit=<?php echo $page_limit;?>"><img src="<?php echo  WATU_URL.'/img/arrow-up.png'?>" alt="<?php _e('Move Up', 'watu')?>" border="0"></a>
 				<?php else:?>&nbsp;<?php endif;?>
 				<?php if(($question_count+$offset) < $num_questions):?>	
-					<a href="admin.php?page=watu_questions&quiz=<?php echo intval($_GET['quiz'])?>&move=<?php echo $question->ID?>&dir=down"><img src="<?php echo  WATU_URL.'/img/arrow-down.png'?>" alt="<?php _e('Move Down', 'watu')?>"></a>
+					<a href="admin.php?page=watu_questions&quiz=<?php echo intval($_GET['quiz'])?>&move=<?php echo $question->ID?>&dir=down&offset=<?php echo $offset?>&page_limit=<?php echo $page_limit;?>"><img src="<?php echo  WATU_URL.'/img/arrow-down.png'?>" alt="<?php _e('Move Down', 'watu')?>"></a>
 				<?php else:?>&nbsp;<?php endif;?>
 			</div>							
 				<?php echo $question_count ?></td>
@@ -102,6 +111,10 @@
 		</table>
 		
 		<a href="admin.php?page=watu_question&amp;action=new&amp;quiz=<?php echo intval($_REQUEST['quiz']) ?>"><?php _e('Create New Question', 'watu')?></a>
+		
+		<p align="center"><?php if($offset>0):?><a href="admin.php?page=watu_questions&quiz=<?php echo $quiz_id;?>&offset=<?php echo ($offset-$page_limit)?><?php echo $filter_params?>"><?php _e('Previous page', 'watu')?></a><?php endif;?>
+		&nbsp;
+		<?php if($offset + $page_limit < $count):?> <a href="admin.php?page=watu_questions&quiz=<?php echo $quiz_id;?>&offset=<?php echo ($offset+$page_limit)?><?php echo $filter_params?>"><?php _e('Next page', 'watu')?></a> <?php endif;?></p>
 		
 		<div align="center" style="display:none;" id="massDeleteQuesions"><p align="center">
 		<input type="submit" name="mass_delete" onclick="if(!confirm('<?php _e('Are you sure?', 'watu')?>')) return false;" value="<?php _e('Delete Selected', 'watu')?>" class="button"><p>

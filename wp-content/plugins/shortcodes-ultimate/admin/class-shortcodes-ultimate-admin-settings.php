@@ -55,143 +55,6 @@ final class Shortcodes_Ultimate_Admin_Settings extends Shortcodes_Ultimate_Admin
 	}
 
 	/**
-	 * Add menu page.
-	 *
-	 * @since   5.0.0
-	 */
-	public function add_menu_pages() {
-
-		/**
-		 * Submenu: Settings
-		 * admin.php?page=shortcodes-ultimate-settings
-		 */
-		$this->add_submenu_page(
-			rtrim( $this->plugin_prefix, '-_' ),
-			__( 'Settings', 'shortcodes-ultimate' ),
-			__( 'Settings', 'shortcodes-ultimate' ),
-			$this->get_capability(),
-			$this->plugin_prefix . 'settings',
-			array( $this, 'the_menu_page' )
-		);
-
-	}
-
-	/**
-	 * Register plugin settings.
-	 *
-	 * @since  5.0.0
-	 */
-	public function add_settings() {
-
-		add_settings_section(
-			$this->plugin_prefix . 'general',
-			__( 'General settings', 'shortcodes-ultimate' ),
-			array( $this, 'the_settings_section' ),
-			$this->plugin_prefix . 'settings'
-		);
-
-		add_settings_section(
-			$this->plugin_prefix . 'advanced',
-			null,
-			array( $this, 'the_settings_section' ),
-			$this->plugin_prefix . 'advanced-settings'
-		);
-
-		/**
-		 * Register plugin settings.
-		 */
-		foreach ( $this->get_plugin_settings() as $setting ) {
-
-			$setting = wp_parse_args( $setting, $this->setting_defaults );
-
-			add_settings_field(
-				$setting['id'],
-				$setting['title'],
-				$setting['callback'],
-				$setting['page'],
-				$setting['section'],
-				$setting
-			);
-
-			register_setting(
-				$setting['group'],
-				$setting['id'],
-				$setting['sanitize']
-			);
-
-		}
-
-	}
-
-	/**
-	 * Enqueue JavaScript(s) and Stylesheet(s) for the component.
-	 *
-	 * @since   5.4.0
-	 */
-	public function enqueue_scripts() {
-
-		if ( ! $this->is_component_page() ) {
-			return;
-		}
-
-		if ( function_exists( 'wp_enqueue_code_editor' ) ) {
-			wp_enqueue_code_editor( array( 'type' => 'text/css' ) );
-		}
-
-		wp_enqueue_style(
-			'shortcodes-ultimate-admin-settings',
-			plugins_url( 'css/settings.css', __FILE__ ),
-			array( 'su-icons' ),
-			filemtime( plugin_dir_path( __FILE__ ) . 'css/settings.css' )
-		);
-
-	}
-
-	/**
-	 * Add help tabs and set help sidebar at Add-ons page.
-	 *
-	 * @since  5.0.0
-	 * @param WP_Screen $screen WP_Screen instance.
-	 */
-	public function add_help_tabs( $screen ) {
-
-		if ( ! $this->is_component_page() ) {
-			return;
-		}
-
-		$screen->add_help_tab(
-			array(
-				'id'      => 'shortcodes-ultimate-general',
-				'title'   => __( 'General settings', 'shortcodes-ultimate' ),
-				'content' => $this->get_template( 'admin/partials/help/settings' ),
-			)
-		);
-
-		$screen->set_help_sidebar( $this->get_template( 'admin/partials/help/sidebar' ) );
-
-	}
-
-	/**
-	 * Filter to add action links at plugins screen.
-	 *
-	 * @since 5.0.8
-	 * @param array $links Default links.
-	 */
-	public function add_action_links( $links ) {
-
-		$plugin_links = array(
-			sprintf(
-				'<a href="%s">%s</a>',
-				esc_attr( $this->get_component_url() ),
-				esc_html( __( 'Settings', 'shortcodes-ultimate' ) )
-			),
-		);
-
-		return array_merge( $plugin_links, $links );
-
-	}
-
-	/**
 	 * Retrieve the plugin settings data.
 	 *
 	 * @since    5.0.0
@@ -281,6 +144,21 @@ final class Shortcodes_Ultimate_Admin_Settings extends Shortcodes_Ultimate_Admin
 			);
 
 			$this->plugin_settings[] = array(
+				'id'          => 'su_option_unsafe_features',
+				'type'        => 'checkbox',
+				'sanitize'    => array( $this, 'sanitize_checkbox' ),
+				'page'        => $this->plugin_prefix . 'advanced-settings',
+				'group'       => $this->plugin_prefix . 'advanced-settings',
+				'section'     => $this->plugin_prefix . 'advanced',
+				'title'       => __( 'Unsafe features', 'shortcodes-ultimate' ),
+				'description' => sprintf(
+					'%s <a href="https://getshortcodes.com/docs/unsafe-features/" target="_blank">%s</a>.',
+					__( 'This option enables potentially unsafe features of the plugin such as onlick attribute of the Button shortcode. The option is enabled by default and is turned off automatically once you have more than one non-admin user on the site.', 'shortcodes-ultimate' ),
+					__( 'Learn more', 'shortcodes-ultimate' )
+				),
+			);
+
+			$this->plugin_settings[] = array(
 				'id'          => 'su_option_hide_deprecated',
 				'type'        => 'checkbox',
 				'sanitize'    => array( $this, 'sanitize_checkbox' ),
@@ -305,6 +183,164 @@ final class Shortcodes_Ultimate_Admin_Settings extends Shortcodes_Ultimate_Admin
 		}
 
 		return apply_filters( 'su/admin/settings', $this->plugin_settings );
+
+	}
+
+	/**
+	 * Add menu page.
+	 *
+	 * @since   5.0.0
+	 */
+	public function add_menu_pages() {
+
+		/**
+		 * Submenu: Settings
+		 * admin.php?page=shortcodes-ultimate-settings
+		 */
+		$this->add_submenu_page(
+			rtrim( $this->plugin_prefix, '-_' ),
+			__( 'Settings', 'shortcodes-ultimate' ),
+			__( 'Settings', 'shortcodes-ultimate' ),
+			$this->get_capability(),
+			$this->plugin_prefix . 'settings',
+			array( $this, 'the_menu_page' )
+		);
+
+	}
+
+	/**
+	 * Register plugin settings.
+	 *
+	 * @since  5.0.0
+	 */
+	public function add_settings() {
+
+		add_settings_section(
+			$this->plugin_prefix . 'general',
+			__( 'General settings', 'shortcodes-ultimate' ),
+			array( $this, 'the_settings_section' ),
+			$this->plugin_prefix . 'settings'
+		);
+
+		add_settings_section(
+			$this->plugin_prefix . 'advanced',
+			null,
+			array( $this, 'the_settings_section' ),
+			$this->plugin_prefix . 'advanced-settings'
+		);
+
+		/**
+		 * Register plugin settings.
+		 */
+		foreach ( $this->get_plugin_settings() as $setting ) {
+
+			$setting = wp_parse_args( $setting, $this->setting_defaults );
+
+			$setting['label_for'] = $setting['id'];
+
+			add_settings_field(
+				$setting['id'],
+				$setting['title'],
+				$setting['callback'],
+				$setting['page'],
+				$setting['section'],
+				$setting
+			);
+
+			register_setting(
+				$setting['group'],
+				$setting['id'],
+				$setting['sanitize']
+			);
+
+		}
+
+	}
+
+	/**
+	 * Enqueue JavaScript(s) and Stylesheet(s) for the component.
+	 *
+	 * @since   5.4.0
+	 */
+	public function enqueue_scripts() {
+
+		if ( ! $this->is_component_page() ) {
+			return;
+		}
+
+		if ( function_exists( 'wp_enqueue_code_editor' ) ) {
+			wp_enqueue_code_editor( array( 'type' => 'text/css' ) );
+		}
+
+		wp_enqueue_style(
+			'shortcodes-ultimate-admin-settings',
+			plugins_url( 'css/settings.css', __FILE__ ),
+			array( 'su-icons' ),
+			filemtime( plugin_dir_path( __FILE__ ) . 'css/settings.css' )
+		);
+
+	}
+
+	/**
+	 * Add help tabs and set help sidebar at Add-ons page.
+	 *
+	 * @since  5.0.0
+	 * @param WP_Screen $screen WP_Screen instance.
+	 */
+	public function add_help_tabs( $screen ) {
+
+		if ( ! $this->is_component_page() ) {
+			return;
+		}
+
+		$screen->add_help_tab(
+			array(
+				'id'      => 'shortcodes-ultimate-general',
+				'title'   => __( 'General settings', 'shortcodes-ultimate' ),
+				'content' => $this->get_template( 'admin/partials/help/settings' ),
+			)
+		);
+
+		$screen->set_help_sidebar( $this->get_template( 'admin/partials/help/sidebar' ) );
+
+	}
+
+	/**
+	 * Filter to add action links at plugins screen.
+	 *
+	 * @since 5.0.8
+	 * @param array $links Default links.
+	 */
+	public function add_action_links( $links ) {
+
+		$plugin_links = array(
+			sprintf(
+				'<a href="%s">%s</a>',
+				esc_attr( $this->get_component_url() ),
+				esc_html( __( 'Settings', 'shortcodes-ultimate' ) )
+			),
+		);
+
+		return array_merge( $plugin_links, $links );
+
+	}
+
+	public function maybe_disable_unsafe_features() {
+
+		if ( '' === get_option( 'su_option_unsafe_features' ) ) {
+			return;
+		}
+
+		if ( su_current_user_can_insert() ) {
+			return;
+		}
+
+		if ( 0 !== get_option( 'su_option_unsafe_features_auto_off', 0 ) ) {
+			return;
+		}
+
+		update_option( 'su_option_unsafe_features', '' );
+		add_option( 'su_option_unsafe_features_auto_off', true );
 
 	}
 

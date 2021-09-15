@@ -6,14 +6,8 @@ use NestedPages\Entities\PostType\PostTypeRepository;
 /**
 * Redirect to Listing with Specified Sorting Options Applied
 */
-class ListingSort 
+class ListingSort extends BaseHandler
 {
-	/**
-	* URL to redirect to
-	* @var string
-	*/
-	private $url;
-
 	/**
 	* The Post Type
 	* @var string
@@ -28,6 +22,7 @@ class ListingSort
 
 	public function __construct()
 	{
+		parent::__construct();
 		$this->post_type_repo = new PostTypeRepository;
 		$this->setURL();
 		$this->redirect();
@@ -85,13 +80,5 @@ class ListingSort
 				if ( isset($_POST[$tax->name]) && $_POST[$tax->name] !== 'all' ) $this->url .= '&' . $tax->name . '=' . sanitize_text_field($_POST[$tax->name]);
 			endif;
 		endforeach;
-	}
-
-	/**
-	* Redirect to new URL
-	*/
-	private function redirect()
-	{
-		header('Location:' . $this->url);
 	}
 }

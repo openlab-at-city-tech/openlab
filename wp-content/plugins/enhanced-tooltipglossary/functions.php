@@ -543,7 +543,7 @@ if (!function_exists('cminds_cmtt_admin_tooltip_preview')) {
         }
         ?>
 
-        <div id="tt" class="admin-tt-wraper" role="tooltip">
+        <div id="tt" class="admin-tt-wraper" role="tooltip" aria-label="Tooltip preview">
             <div class="admin-tt" id="ttcont">
                 <div id="tttop">
                     <span id="tt-btn-close"

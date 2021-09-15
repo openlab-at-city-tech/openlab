@@ -17,7 +17,7 @@ class class_breadcrumb_settings{
 	
 	public	function breadcrumb_menu_init(){
 
-		add_menu_page(__('Breadcrumb', 'breadcrumb'), __('Breadcrumb', 'breadcrumb'), 'manage_options', 'breadcrumb_settings', array( $this, 'breadcrumb_settings' ), 'dashicons-arrow-right-alt');
+		add_menu_page(__('Breadcrumb', 'breadcrumb'), __('Breadcrumb', 'breadcrumb'), 'manage_options', 'breadcrumb_settings', array( $this, 'breadcrumb_settings' ), breadcrumb_plugin_url.'assets/admin/images/right-arrow.png');
 		}
 
 

@@ -556,15 +556,15 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
 			add_filter( 'get_terms', 'link_library_get_terms_filter_publish_draft_pending', 10, 3 );
 		}
 
-		if ( ( !empty( $categorylist_cpt ) || isset( $_GET['cat_id'] ) ) && empty( $singlelinkid ) && ( $level == 0 || ( $level > 0 && !empty( $categorylist_cpt ) ) ) ) {
+		if ( ( !empty( $categorylist_cpt ) || isset( $_GET['cat_id'] ) ) && empty( $singlelinkid ) && ( 'search' != $mode || false == $searchfromallcats ) && ( $level == 0 || ( $level > 0 && !empty( $categorylist_cpt ) ) ) ) {
 			$link_categories_query_args['include'] = explode( ',', $categorylist_cpt );
 		}
 
-		if ( !empty( $excludecategorylist_cpt ) && empty( $singlelinkid ) ) {
+		if ( !empty( $excludecategorylist_cpt ) && empty( $singlelinkid ) && ( 'search' != $mode || false == $searchfromallcats ) ) {
 			$link_categories_query_args['exclude'] = explode( ',', $excludecategorylist_cpt );
 		}
 
-		if ( ( !empty( $categorysluglist ) || isset( $_GET['catslug'] ) ) && empty( $singlelinkid ) ) {
+		if ( ( !empty( $categorysluglist ) || isset( $_GET['catslug'] ) ) && empty( $singlelinkid ) && ( 'search' != $mode || false == $searchfromallcats ) ) {
 			if ( !empty( $categorysluglist ) ) {
 				$link_categories_query_args['slug'] = explode( ',', $categorysluglist );
 			} elseif ( isset( $_GET['catslug'] ) ) {
@@ -574,11 +574,11 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
 			$link_categories_query_args['exclude'] = array();
 		}
 
-		if ( isset( $categoryname ) && !empty( $categoryname ) && 'HTMLGETPERM' == $showonecatmode && empty( $singlelinkid ) ) {
+		if ( isset( $categoryname ) && !empty( $categoryname ) && 'HTMLGETPERM' == $showonecatmode && empty( $singlelinkid ) && ( 'search' != $mode || false == $searchfromallcats ) ) {
 			$link_categories_query_args['slug'] = $categoryname;
 		}
 
-		if ( ( !empty( $categorynamelist ) || isset( $_GET['catname'] ) ) && empty( $singlelinkid ) ) {
+		if ( ( !empty( $categorynamelist ) || isset( $_GET['catname'] ) ) && empty( $singlelinkid ) && ( 'search' != $mode || false == $searchfromallcats ) ) {
 			$link_categories_query_args['name'] = explode( ',', urldecode( $categorynamelist ) );
 		}
 

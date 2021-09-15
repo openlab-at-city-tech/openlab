@@ -1,3 +1,27 @@
+### 5.10.1
+
+**What's new**
+
+- `su_qrcode`'s data attribute now understands the following variables: `%CURRENT_URL%` for the current page URL, and `%PERMALINK%` for post permalink
+
+**Fixed**
+
+- Fixed `tax_relation` attribute of the `su_posts` shortcode. Thanks to [janeri2021](https://wordpress.org/support/topic/error-in-shortcode-posts/)
+- Fixed compatibility with Page Builder by SiteOrigin. [Details](https://github.com/siteorigin/so-widgets-bundle/issues/1247)
+- Fixed `BlockControls` console warning in the Block Editor
+- Added missing file `popper.min.js.map`
+- Fixed issue with invalid z-index value in the Tooltip shortcode
+- Fixed issue with the shortcode generator presets for the Tooltip shortcode
+
+
+### 5.10.0
+
+**What's new**
+
+- Major update to the `su_tooltip` shortcode, now it works without jQuery migrate and has more options
+- Fixed logic of the `su_user` shortcode
+
+
 ### 5.9.8
 
 **What's new**

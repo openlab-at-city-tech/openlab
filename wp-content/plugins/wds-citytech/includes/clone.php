@@ -442,23 +442,32 @@ class OpenLab_Clone_Credits_Widget extends WP_Widget {
 
 		$group_type_label = openlab_get_group_type_label( [ 'group_id' => $group_id ] );
 
-		$all_group_contacts = openlab_get_all_group_contact_ids( $group_id );
-		if ( count( $all_group_contacts ) <= 1 ) {
-			$exclude_creator = $all_group_contacts[0];
-		} else {
-			$exclude_creator = null;
-		}
+		$credits = openlab_get_credits( $group_id );
 
-		$history = openlab_get_group_clone_history_data( $group_id, $exclude_creator );
-		$markup  = openlab_format_group_clone_history_data_list( $history );
+		if ( ! $credits['show_acknowledgements'] ) {
+			return;
+		}
 
 		echo $args['before_widget'];
 
 		echo $args['before_title'] . 'Acknowledgments' . $args['after_title'];
-		echo '<p>' . sprintf( 'This %s is based on the following %s(s):', esc_html( $group_type_label ), esc_html( $group_type_label ) ) . '</p>';
-		echo '<ul class="clone-credits">';
-		echo $markup;
-		echo '</ul>';
+
+		foreach ( $credits['credits_chunks'] as $credits_chunk ) {
+			if ( ! empty( $credits_chunk['intro'] ) ) {
+				echo '<p>' . $credits_chunk['intro'] . '</p>';
+			}
+
+			if ( ! empty( $credits_chunk['items'] ) ) {
+				echo '<ul class="clone-credits">';
+				echo $credits_chunk['items'];
+				echo '</ul>';
+			}
+		}
+
+		if ( ! empty( $credits['post_credits_markup'] ) ) {
+			echo $credits['post_credits_markup'];
+		}
+
 		echo $args['after_widget'];
 	}
 

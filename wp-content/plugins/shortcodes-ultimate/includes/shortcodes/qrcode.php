@@ -12,7 +12,12 @@ su_add_shortcode(
 			'data'       => array(
 				'default' => '',
 				'name'    => __( 'Data', 'shortcodes-ultimate' ),
-				'desc'    => __( 'The text to store within the QR code. You can use here any text or even URL', 'shortcodes-ultimate' ),
+				'desc'    => sprintf(
+					// translators: %1$s and %2$s will be replaced with %CURRENT_URL% and %PERMALINK% tokens respectively
+					__( 'The content to store in the QR code. You can use here any text or even URL.<br>Use %1$s to display the URL of the current page or %2$s to display the permalink of the current post.', 'shortcodes-ultimate' ),
+					'<b%value>%CURRENT_URL%</b>',
+					'<b%value>%PERMALINK%</b>'
+				),
 			),
 			'title'      => array(
 				'default' => '',
@@ -89,6 +94,7 @@ su_add_shortcode(
 );
 
 function su_shortcode_qrcode( $atts = null, $content = null ) {
+
 	$atts = shortcode_atts(
 		array(
 			'data'       => '',
@@ -105,21 +111,33 @@ function su_shortcode_qrcode( $atts = null, $content = null ) {
 		$atts,
 		'qrcode'
 	);
-	// Check the data
+
 	if ( ! $atts['data'] ) {
 		return su_error_message( 'QR code', __( 'please specify the data', 'shortcodes-ultimate' ) );
 	}
+
+	$atts['data'] = str_replace(
+		array( '%CURRENT_URL%', '%PERMALINK%' ),
+		array( su_get_current_url(), get_permalink() ),
+		$atts['data']
+	);
+
 	$atts['data'] = su_do_attribute( $atts['data'] );
 	$atts['data'] = sanitize_text_field( $atts['data'] );
-	// Prepare link
-	$href = ( $atts['link'] ) ? ' href="' . $atts['link'] . '"' : '';
-	// Prepare clickable class
+
 	if ( $atts['link'] ) {
+
+		$atts['link'] = sprintf(
+			' href="%s"',
+			esc_attr( su_do_attribute( $atts['link'] ) )
+		);
+
 		$atts['class'] .= ' su-qrcode-clickable';
+
 	}
-	// Prepare title
+
 	$atts['title'] = esc_attr( $atts['title'] );
-	// Query assets
+
 	su_query_asset( 'css', 'su-shortcodes' );
 
 	$url = add_query_arg(
@@ -134,6 +152,14 @@ function su_shortcode_qrcode( $atts = null, $content = null ) {
 		'https://api.qrserver.com/v1/create-qr-code/'
 	);
 
-	// Return result
-	return '<span class="su-qrcode su-qrcode-align-' . $atts['align'] . su_get_css_class( $atts ) . '"><a' . $href . ' target="_' . $atts['target'] . '" title="' . $atts['title'] . '"><img src="' . esc_url( $url ) . '" alt="' . $atts['title'] . '" /></a></span>';
+	return sprintf(
+		'<span class="su-qrcode su-qrcode-align-%1$s%2$s"><a%3$s target="_%4$s" title="%5$s"><img src="%6$s" alt="%5$s" /></a></span>',
+		/* %1$s */ esc_attr( $atts['align'] ),
+		/* %2$s */ su_get_css_class( $atts ),
+		/* %3$s */ $atts['link'],
+		/* %4$s */ esc_attr( $atts['target'] ),
+		/* %5$s */ esc_attr( $atts['title'] ),
+		/* %6$s */ esc_url( $url )
+	);
+
 }

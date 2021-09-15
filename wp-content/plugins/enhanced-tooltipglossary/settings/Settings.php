@@ -46,7 +46,9 @@ if (!class_exists('\CM\Settings')) {
 
         public static function render() {
             $result = static::saveOptions();
-            $messages = $result['messages'];
+            if (is_array($result) && isset($result['messages'])) {
+                $messages = $result['messages'];
+            }
 
             ob_start();
             include static::$dir . '/view.php';
@@ -62,7 +64,7 @@ if (!class_exists('\CM\Settings')) {
             $messages = '';
             $post_prefiltered = filter_input_array(INPUT_POST);
             if (empty($post_prefiltered)) {
-                return;
+                return array('messages' => $messages);
             }
             $post = array_map('stripslashes_deep', $post_prefiltered);
 

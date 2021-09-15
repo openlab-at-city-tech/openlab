@@ -14,7 +14,7 @@ su_add_shortcode(
 				'name'    => __( 'Tooltip title', 'shortcodes-ultimate' ),
 				'desc'    => __( 'Title of the tooltip. Use empty value to hide the title', 'shortcodes-ultimate' ),
 			),
-			'content'    => array(
+			'text'       => array(
 				'default' => __( 'Tooltip content', 'shortcodes-ultimate' ),
 				'name'    => __( 'Tooltip content', 'shortcodes-ultimate' ),
 				'desc'    => __( 'Content of the tooltip', 'shortcodes-ultimate' ),
@@ -125,6 +125,8 @@ function su_shortcode_tooltip( $atts = null, $content = null ) {
 			'reference_tag' => 'span',
 			'line_height'   => '1.25',
 			'hide_delay'    => '0',
+			'content'       => '',
+			'z_index'       => '100',
 		)
 	);
 
@@ -172,6 +174,10 @@ function su_shortcode_tooltip( $atts = null, $content = null ) {
 
 	}
 
+	if ( ! empty( $atts['content'] ) ) {
+		$atts['text'] = $atts['content'];
+	}
+
 	if ( 'no' === $atts['rounded'] ) {
 		$atts['radius'] = 0;
 	}
@@ -182,14 +188,6 @@ function su_shortcode_tooltip( $atts = null, $content = null ) {
 		array( 'top', 'right', 'bottom', 'left' ),
 		$atts['position']
 	);
-
-	foreach ( array( 'max_width', 'font_size', 'radius' ) as $attr ) {
-		$atts[ $attr ] = su_maybe_add_css_units( $atts[ $attr ], 'px' );
-	}
-
-	foreach ( array( 'text_align', 'shadow', 'outline', 'reference_tag' ) as $attr ) {
-		$atts[ $attr ] = sanitize_key( $atts[ $attr ] );
-	}
 
 	$atts['tabindex'] = 'yes' === $atts['tabindex'] ? ' tabindex="0"' : '';
 
@@ -203,7 +201,7 @@ function su_shortcode_tooltip( $atts = null, $content = null ) {
 	su_query_asset( 'js', 'popper' );
 	su_query_asset( 'js', 'su-shortcodes' );
 
-	$template = '<{{REFERENCE_TAG}} id="{{ID}}_button" class="su-tooltip-button su-tooltip-button-outline-{{OUTLINE}}{{CSS_CLASS}}" aria-describedby="{{ID}}" data-settings=\'{{JSON}}\'{{TABINDEX}}>{{BUTTON}}</{{REFERENCE_TAG}}><span style="display:none" id="{{ID}}" class="su-tooltip{{CSS_CLASS}}" role="tooltip"><span class="su-tooltip-inner su-tooltip-shadow-{{SHADOW}}" style="background:{{BACKGROUND}};color:{{COLOR}};font-size:{{FONT_SIZE}};border-radius:{{RADIUS}};text-align:{{ALIGN}};max-width:{{MAX_WIDTH}};line-height:{{LINE_HEIGHT}}"><span class="su-tooltip-title">{{TITLE}}</span><span class="su-tooltip-content su-u-trim">{{CONTENT}}</span></span><span id="{{ID}}_arrow" class="su-tooltip-arrow" style="background:{{BACKGROUND}}" data-popper-arrow></span></span>';
+	$template = '<{{REFERENCE_TAG}} id="{{ID}}_button" class="su-tooltip-button su-tooltip-button-outline-{{OUTLINE}}{{CSS_CLASS}}" aria-describedby="{{ID}}" data-settings=\'{{JSON}}\'{{TABINDEX}}>{{BUTTON}}</{{REFERENCE_TAG}}><span style="display:none" id="{{ID}}" class="su-tooltip{{CSS_CLASS}}" role="tooltip"><span class="su-tooltip-inner su-tooltip-shadow-{{SHADOW}}" style="z-index:{{Z_INDEX}};background:{{BACKGROUND}};color:{{COLOR}};font-size:{{FONT_SIZE}};border-radius:{{RADIUS}};text-align:{{ALIGN}};max-width:{{MAX_WIDTH}};line-height:{{LINE_HEIGHT}}"><span class="su-tooltip-title">{{TITLE}}</span><span class="su-tooltip-content su-u-trim">{{TEXT}}</span></span><span id="{{ID}}_arrow" class="su-tooltip-arrow" style="z-index:{{Z_INDEX}};background:{{BACKGROUND}}" data-popper-arrow></span></span>';
 
 	$template_data = array(
 		'{{ID}}'            => uniqid( 'su_tooltip_' ),
@@ -211,18 +209,19 @@ function su_shortcode_tooltip( $atts = null, $content = null ) {
 		'{{JSON}}'          => wp_json_encode( $js_settings ),
 		'{{BUTTON}}'        => do_shortcode( $content ),
 		'{{TITLE}}'         => su_do_attribute( $atts['title'] ),
-		'{{CONTENT}}'       => su_do_attribute( $atts['content'] ),
-		'{{SHADOW}}'        => $atts['shadow'],
-		'{{RADIUS}}'        => $atts['radius'],
-		'{{BACKGROUND}}'    => $atts['background'],
-		'{{COLOR}}'         => $atts['color'],
-		'{{FONT_SIZE}}'     => $atts['font_size'],
-		'{{MAX_WIDTH}}'     => $atts['max_width'],
-		'{{ALIGN}}'         => $atts['text_align'],
-		'{{OUTLINE}}'       => $atts['outline'],
-		'{{REFERENCE_TAG}}' => $atts['reference_tag'],
+		'{{TEXT}}'          => su_do_attribute( $atts['text'] ),
+		'{{SHADOW}}'        => sanitize_key( $atts['shadow'] ),
+		'{{RADIUS}}'        => esc_attr( su_maybe_add_css_units( $atts['radius'], 'px' ) ),
+		'{{BACKGROUND}}'    => esc_attr( $atts['background'] ),
+		'{{COLOR}}'         => esc_attr( $atts['color'] ),
+		'{{FONT_SIZE}}'     => esc_attr( su_maybe_add_css_units( $atts['font_size'], 'px' ) ),
+		'{{MAX_WIDTH}}'     => esc_attr( su_maybe_add_css_units( $atts['max_width'], 'px' ) ),
+		'{{ALIGN}}'         => sanitize_key( $atts['text_align'] ),
+		'{{OUTLINE}}'       => sanitize_key( $atts['outline'] ),
+		'{{REFERENCE_TAG}}' => sanitize_key( $atts['reference_tag'] ),
 		'{{TABINDEX}}'      => $atts['tabindex'],
-		'{{LINE_HEIGHT}}'   => $atts['line_height'],
+		'{{LINE_HEIGHT}}'   => esc_attr( $atts['line_height'] ),
+		'{{Z_INDEX}}'       => intval( $atts['z_index'] ),
 	);
 
 	return str_replace(

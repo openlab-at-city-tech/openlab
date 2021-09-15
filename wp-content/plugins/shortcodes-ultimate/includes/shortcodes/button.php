@@ -335,7 +335,7 @@ function su_shortcode_button( $atts = null, $content = null ) {
 
 	// Prepare <small> with description
 	$desc = $atts['desc']
-		? '<small style="' . implode( ';', $small_css ) . '">' . su_do_attribute( $atts['desc'] ) . '</small>'
+		? '<small style="' . esc_attr( implode( ';', $small_css ) ) . '">' . su_do_attribute( $atts['desc'] ) . '</small>'
 		: '';
 
 	// Wrap with div if button centered
@@ -357,9 +357,23 @@ function su_shortcode_button( $atts = null, $content = null ) {
 	}
 
 	// Prepare onclick action
-	$atts['onclick'] = $atts['onclick']
-		? ' onClick="' . $atts['onclick'] . '"'
-		: '';
+	if ( $atts['onclick'] && ! su_is_unsafe_features_enabled() ) {
+
+		return su_error_message(
+			'Button',
+			sprintf(
+				'%s.<br><a href="https://getshortcodes.com/docs/unsafe-features/" target="_blank">%s</a>',
+				// translators: do not translate the <b>onclick</b> part, the <b>Unsafe features</b> must be translated
+				__( 'The <b>onclick</b> attribute cannot be used while <b>Unsafe features</b> option is turned off', 'shortcodes-ultimate' ),
+				__( 'Learn more', 'shortcodes-ultimate' )
+			)
+		);
+
+	}
+
+	if ( $atts['onclick'] ) {
+		$atts['onclick'] = ' onClick="' . $atts['onclick'] . '"';
+	}
 
 	// Set rel attribute to `noopener noreferrer` if it's empty and target=blank
 	if ( 'blank' === $atts['target'] && '' === $atts['rel'] ) {
@@ -388,6 +402,6 @@ function su_shortcode_button( $atts = null, $content = null ) {
 
 	su_query_asset( 'css', 'su-shortcodes' );
 
-	return $before . '<a href="' . su_do_attribute( $atts['url'] ) . '" class="' . implode( ' ', $classes ) . '" style="' . implode( ';', $a_css ) . '" target="_' . $atts['target'] . '"' . $atts['onclick'] . $atts['rel'] . $atts['title'] . $atts['id'] . $atts['download'] . '><span style="' . implode( ';', $span_css ) . '">' . do_shortcode( stripcslashes( $content ) ) . $desc . '</span></a>' . $after;
+	return $before . '<a href="' . esc_attr( su_do_attribute( $atts['url'] ) ) . '" class="' . esc_attr( implode( ' ', $classes ) ) . '" style="' . esc_attr( implode( ';', $a_css ) ) . '" target="_' . esc_attr( $atts['target'] ) . '"' . $atts['onclick'] . $atts['rel'] . $atts['title'] . $atts['id'] . $atts['download'] . '><span style="' . esc_attr( implode( ';', $span_css ) ) . '">' . do_shortcode( stripcslashes( $content ) ) . $desc . '</span></a>' . $after;
 
 }

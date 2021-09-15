@@ -3,8 +3,8 @@
 	Donate link: https://www.pickplugins.com/item/breadcrumb-awesome-breadcrumbs-style-navigation-for-wordpress/?ref=wordpress.org
 	Tags: breadcrumb, breadcrumbs, breadcrumb nav, trail, woocommerce breadcrumb
 	Requires at least: 3.8
-	Tested up to: 5.7
-	Stable tag: 1.5.21
+	Tested up to: 5.8
+	Stable tag: 1.5.24
 	License: GPLv2 or later
 	License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -121,6 +121,18 @@ use this short-code any where to display breadcrumb
 
 
 == Changelog ==
+
+	= 1.5.24 =
+    * 2021-07-09- add - custom text element added.
+    * 2021-07-09- add - product category and product tag element issue fixed.
+
+	= 1.5.23 =
+    * 2021-07-08- fix - missing post caetgory, post tag elements added
+
+	= 1.5.22 =
+    * 2021-07-08- add - custom post types support added on builder.
+    * 2021-07-08- add - custom taxonomies support added on builder.
+
 
 	= 1.5.21 =
     * 2021-06-26- update - custom html(font icons) on home text.

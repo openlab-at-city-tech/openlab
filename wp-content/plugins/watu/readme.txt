@@ -2,7 +2,7 @@
 Contributors: prasunsen, wakeop
 Tags: exam, test, quiz, survey, wpmu, multisite, touch, mobile
 Requires at least: 4.2
-Tested up to: 5.7
+Tested up to: 5.8
 Stable tag: trunk
 License: GPLv2 or later
 
@@ -140,7 +140,13 @@ You need to create a post and embed the exam code. The exam code is shown in the
 
 = How does it handle user accounts? =
 
-Watu uses the WordPress user registration / login system. So if you want to allow users to register for quizzes simply select "Require user login" in the Edit Quiz page and make sure "Anyone can register" is selected in your WordPress Settings page.
+Watu Quiz uses the WordPress user registration / login system. So if you want to allow users to register for quizzes simply select "Require user login" in the Edit Quiz page and make sure "Anyone can register" is selected in your WordPress Settings page.
+
+= How to embed videos in questions? =
+
+To embed a video from Youtube or a similar remotely hosted video, use the embed shortcode like this: [embed width="680" height="420"]http://www.youtube.com/watch?v=dQw4w9WgXcQ[/embed].
+
+To embed locally hosted video you can use the "Add media" button in the rich text editor and insert your video. Sometimes this doesn't work even in posts so you may want to install some of the many available video player plugins.
 
 = Is it compatible with BuddyPress or membership plugins? =
 
@@ -173,6 +179,9 @@ If the script defines new objects it might not work in Ajax mode. Try to switch 
 3. You can add unlimited number of questions in each quiz or exam, and each question can be of single-answer, multiple-answer, or open-end type. 
 
 == Changelog ==
+
+= Changes in 3.3.1 =
+- Added pagination and "per page" selector on the Manage Questions page.
 
 = Changes in 3.3 =
 - Added two more columns to the question import file: "Is required" and "Answer explanation".

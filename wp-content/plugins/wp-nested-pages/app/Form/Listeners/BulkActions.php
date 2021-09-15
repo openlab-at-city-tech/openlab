@@ -4,14 +4,8 @@ namespace NestedPages\Form\Listeners;
 /**
 * Perform Bulk Actions
 */
-class BulkActions 
+class BulkActions extends BaseHandler
 {
-	/**
-	* URL to redirect to
-	* @var string
-	*/
-	private $url;
-
 	/**
 	* Post IDs (Comma-separated)
 	* @var string
@@ -38,6 +32,7 @@ class BulkActions
 
 	public function __construct()
 	{
+		parent::__construct();
 		$this->setURL();
 		$this->setPostIds();
 		$this->performAction();
@@ -108,13 +103,5 @@ class BulkActions
 		
 		if ( $this->post_ids != '' ) $this->url = $this->url . '&ids=' . $this->post_ids;
 		if ( $this->redirect_post_ids != '' ) $this->url = $this->url . '&link_ids=' . $this->redirect_post_ids;
-	}
-
-	/**
-	* Redirect to new URL
-	*/
-	private function redirect()
-	{
-		header('Location:' . $this->url);
 	}
 }

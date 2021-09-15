@@ -92,11 +92,9 @@ class Shortcodes_Ultimate_Activator {
 
 		foreach ( $defaults as $option => $value ) {
 
-			if ( get_option( $option, 0 ) !== 0 ) {
-				continue;
+			if ( get_option( $option, 0 ) === 0 ) {
+				add_option( $option, $value );
 			}
-
-			add_option( $option, $value );
 
 		}
 

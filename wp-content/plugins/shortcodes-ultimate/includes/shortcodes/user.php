@@ -103,13 +103,7 @@ function su_shortcode_user( $atts = null, $content = null ) {
 		$data = su_do_attribute( $atts['default'] );
 	}
 
-	if (
-		$atts['filter'] &&
-		su_is_filter_safe( $atts['filter'] ) &&
-		function_exists( $atts['filter'] )
-	) {
-		$data = call_user_func( $atts['filter'], $data );
-	}
+	$data = su_safely_apply_user_filter( $atts['filter'], $data );
 
 	return $data ? $atts['before'] . $data . $atts['after'] : '';
 

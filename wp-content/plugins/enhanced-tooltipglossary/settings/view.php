@@ -85,6 +85,16 @@
                             <td colspan="2" class="cm_field_help_container">Uncheck this if you don't want the Glossary Term pages to be created. <strong>After disabling this all of the links to the Glossary Term pages will be removed.</strong></td>
                         </tr>
                         <tr valign="top">
+                            <th scope="row">Exclude Glossary Term Pages from search:</th>
+                            <td>
+                                <input type="hidden" name="cmtt_excludeGlossaryTermPagesFromSearch" value="0"/>
+                                <input type="checkbox"
+                                       name="cmtt_excludeGlossaryTermPagesFromSearch" <?php checked(true, \CM\CMTT_Settings::get('cmtt_excludeGlossaryTermPagesFromSearch', '0')); ?>
+                                       value="1"/>
+                            </td>
+                            <td colspan="2" class="cmtt_field_help_container">Uncheck this to remove Glossary Term pages from search results.</td>
+                        </tr>
+                        <tr valign="top">
                             <th scope="row">Glossary Terms Permalink</th>
                             <td><input type="text" name="cmtt_glossaryPermalink" value="<?php echo \CM\CMTT_Settings::get('cmtt_glossaryPermalink', 'glossary'); ?>" /></td>
                             <td colspan="2" class="cm_field_help_container">Enter the name you would like to use for the permalink to the Glossary Terms.
@@ -899,9 +909,12 @@
                             </td>
                             <td colspan="2" class="cm_field_help_container">Select this option if you want to avoid using the glossary for the following tags: Script, A, H1, H2, H3, PRE, Object.</td>
                         </tr>
-                        <tr valign="top" class="onlyinpro">
+                        <tr valign="top" class="">
                             <th scope="row">Terms case-sensitive?</th>
-                            <td><?php echo \CM\CMTT_Settings::renderOnlyin(); ?></td>
+                            <td>
+                                <input type="hidden" name="cmtt_glossaryCaseSensitive" value="0" />
+                                <input type="checkbox" name="cmtt_glossaryCaseSensitive" <?php checked('1', \CM\CMTT_Settings::get('cmtt_glossaryCaseSensitive')); ?> value="1" />
+                            </td>
                             <td colspan="2" class="cm_field_help_container">Select this option if you want glossary terms to be case-sensitive.</td>
                         </tr>
                         <tr valign="top" class="onlyinpro">

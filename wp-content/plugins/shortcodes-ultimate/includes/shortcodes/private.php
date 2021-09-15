@@ -1,24 +1,26 @@
 <?php
 
-su_add_shortcode( array(
-		'id' => 'private',
+su_add_shortcode(
+	array(
+		'id'       => 'private',
 		'callback' => 'su_shortcode_private',
-		'image' => su_get_plugin_url() . 'admin/images/shortcodes/private.svg',
-		'name' => __( 'Private', 'shortcodes-ultimate' ),
-		'type' => 'wrap',
-		'group' => 'other',
-		'atts' => array(
+		'image'    => su_get_plugin_url() . 'admin/images/shortcodes/private.svg',
+		'name'     => __( 'Private', 'shortcodes-ultimate' ),
+		'type'     => 'wrap',
+		'group'    => 'other',
+		'atts'     => array(
 			'class' => array(
-				'type' => 'extra_css_class',
-				'name' => __( 'Extra CSS class', 'shortcodes-ultimate' ),
-				'desc' => __( 'Additional CSS class name(s) separated by space(s)', 'shortcodes-ultimate' ),
+				'type'    => 'extra_css_class',
+				'name'    => __( 'Extra CSS class', 'shortcodes-ultimate' ),
+				'desc'    => __( 'Additional CSS class name(s) separated by space(s)', 'shortcodes-ultimate' ),
 				'default' => '',
 			),
 		),
-		'content' => __( 'Private note text', 'shortcodes-ultimate' ),
-		'desc' => __( 'Private note for post authors. Any content wrapped with this shortcode will only be visible to post authors (users with publish_posts capability).', 'shortcodes-ultimate' ),
-		'icon' => 'lock',
-	) );
+		'content'  => __( 'Private note text', 'shortcodes-ultimate' ),
+		'desc'     => __( 'Private note for post authors. Any content wrapped with this shortcode will only be visible to post authors (users with publish_posts capability).', 'shortcodes-ultimate' ),
+		'icon'     => 'lock',
+	)
+);
 
 function su_shortcode_private( $atts = null, $content = null ) {
 

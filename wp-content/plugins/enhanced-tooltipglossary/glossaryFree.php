@@ -200,7 +200,7 @@ class CMTT_Free {
         /*
          * Tooltips in WordPress Text Widget
          */
-        if (\CM\CMTT_Settings::get('cmtt_glossaryParseTextWidget', 1) == 1) {
+        if (\CM\CMTT_Settings::get('cmtt_glossaryParseTextWidget', 0) == 1) {
             add_filter('widget_text', array(
                 self::$calledClassName,
                 'cmtt_glossary_parse'
@@ -567,7 +567,7 @@ class CMTT_Free {
     public static function cmtt_comments_number($count, $post_id) {
         $removeComments = \CM\CMTT_Settings::get('cmtt_glossaryRemoveCommentsTermPage', 0);
         $_post = get_post($post_id);
-        if ($removeComments && 'glossary' === $_post->post_type) {
+        if ($removeComments && !empty($_post) && 'glossary' === $_post->post_type) {
             $count = 0;
         }
 
@@ -661,8 +661,8 @@ class CMTT_Free {
              * 3.4.0 - added the option to change the fields being parsed
              */
             if (!in_array($field['type'], (array) apply_filters('cmtt_acf_parsed_field_types', \CM\CMTT_Settings::get('cmtt_acf_parsed_field_types', array(
-                                'text',
-                                'wysiwyg'
+                                        'text',
+                                        'wysiwyg'
                     ))))) {
                 return $value;
             }
@@ -1669,7 +1669,7 @@ class CMTT_Free {
                 if ($excludeTagsCount > 0) {
                     foreach ($excludeGlossaryStrs[0] as $excludeStr) {
                         $content = preg_replace($excludeGlossary_regex, '#' . $i . 'excludeGlossary', $content, 1);
-                        $i ++;
+                        $i++;
                     }
                 }
 
@@ -1718,7 +1718,7 @@ class CMTT_Free {
                     $i = 0;
                     foreach ($excludeGlossaryStrs[0] as $excludeStr) {
                         $content = str_replace('#' . $i . 'excludeGlossary', $excludeStr, $content);
-                        $i ++;
+                        $i++;
                     }
                     //remove all the exclude signs
                     $content = str_replace(array('[glossary_exclude]', '[/glossary_exclude]'), array(
@@ -3167,7 +3167,7 @@ class CMTT_Free {
             if (!empty($atts['color'])) {
                 $style .= 'color:' . esc_attr($atts['color']) . ';';
             }
-            $dashicon = '<span class="dashicons ' . $atts['dashicon'] . '" style="' . $style . 'display:inline;"></span>';
+            $dashicon = '<span class="dashicons ' . esc_attr($atts['dashicon']) . '" style="' . $style . 'display:inline;"></span>';
 
             /*
              * Don't underline unless underline="1"
@@ -3189,7 +3189,7 @@ class CMTT_Free {
         }
 
         if (!empty($atts['link'])) {
-            $tooltip = '<a href="' . $atts['link'] . '" data-cmtooltip="' . $wrappedContent . '" class="glossaryLink' . $additionalClass . '">' . $dashicon .
+            $tooltip = '<a href="' . esc_url($atts['link']) . '" data-cmtooltip="' . $wrappedContent . '" class="glossaryLink' . $additionalClass . '">' . $dashicon .
                     $text . '</a>';
         } else {
             $tooltip = '<span data-cmtooltip="' . $wrappedContent . '" class="glossaryLink' . $additionalClass . '">' . $dashicon . $text . '</span>';
@@ -3660,7 +3660,7 @@ class CMTT_Free {
                             continue;
                         $counts['all'] = '';
                     }
-                    $counts[$firstLetter] ++;
+                    $counts[$firstLetter]++;
                 }
 
                 $counts = apply_filters('cmtt_modify_listnav_counts_term', $counts, $term, $shortcodeAtts);
@@ -3764,12 +3764,14 @@ class CMTT_Free {
         switch ($post_meta) {
             case 0:
                 $post = get_post($post_id);
-                $selected_post_types = \CM\CMTT_Settings::get('cmtt_glossaryOnPosttypes');
+                if (!empty($post)) {
+                    $selected_post_types = \CM\CMTT_Settings::get('cmtt_glossaryOnPosttypes');
 
-                if (is_array($selected_post_types) && !empty($selected_post_types)) {
-                    $disabled = in_array($post->post_type, $selected_post_types) ? FALSE : TRUE;
-                } else {
-                    $disabled = TRUE;
+                    if (is_array($selected_post_types) && !empty($selected_post_types)) {
+                        $disabled = in_array($post->post_type, $selected_post_types) ? FALSE : TRUE;
+                    } else {
+                        $disabled = TRUE;
+                    }
                 }
                 break;
             case 1:

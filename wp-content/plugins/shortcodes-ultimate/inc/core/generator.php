@@ -7,12 +7,12 @@ class Su_Generator {
 	public function __construct() {
 		add_action(
 			'media_buttons',
-			array( __CLASS__, 'classic_editor_button' ),
+			array( __CLASS__, 'button_classic_editor' ),
 			1000
 		);
 		add_action(
 			'enqueue_block_editor_assets',
-			array( __CLASS__, 'block_editor_button' )
+			array( __CLASS__, 'button_block_editor' )
 		);
 
 		add_action( 'wp_footer', array( __CLASS__, 'popup' ) );
@@ -34,10 +34,13 @@ class Su_Generator {
 	 * @deprecated 5.1.0 Replaced with Su_Generator::classic_editor_button()
 	 */
 	public static function button( $args = array() ) {
-		return self::classic_editor_button( $args );
+		return self::button_html_editor( $args );
+	}
+	public static function classic_editor_button( $args = array() ) {
+		return self::button_html_editor( $args );
 	}
 
-	public static function classic_editor_button( $args = array() ) {
+	public static function button_html_editor( $args = array() ) {
 
 		if ( ! self::access_check() ) {
 			return;
@@ -45,12 +48,11 @@ class Su_Generator {
 
 		self::enqueue_generator();
 
-		$target = is_string( $args ) ? $args : 'content';
-
 		$args = wp_parse_args(
 			$args,
 			array(
-				'target'    => $target,
+				'target'    => '',
+				'tag'       => 'button',
 				'text'      => __( 'Insert shortcode', 'shortcodes-ultimate' ),
 				'class'     => 'button',
 				'icon'      => true,
@@ -66,28 +68,26 @@ class Su_Generator {
 		}
 
 		$onclick = sprintf(
-			"SUG.App.insert( 'classic', { editorID: '%s', shortcode: '%s' } );",
+			"SUG.App.insert('html',{editorID:'%s',shortcode:'%s'});return false;",
 			esc_attr( $args['target'] ),
 			esc_attr( $args['shortcode'] )
 		);
 
 		$button = sprintf(
-			'<button
+			'<%6$s
 				type="button"
+				href="javascript:;"
 				class="su-generator-button %1$s"
 				title="%2$s"
 				onclick="%3$s"
-			>
-				%4$s %5$s
-			</button>',
+			>%4$s %5$s</%6$s>',
 			esc_attr( $args['class'] ),
 			esc_attr( $args['text'] ),
 			$onclick,
 			$args['icon'],
-			esc_html( $args['text'] )
+			esc_html( $args['text'] ),
+			sanitize_key( $args['tag'] )
 		);
-
-		do_action( 'su/button', $args );
 
 		if ( $args['echo'] ) {
 			echo $button;
@@ -97,7 +97,40 @@ class Su_Generator {
 
 	}
 
-	public static function block_editor_button() {
+	public static function button_classic_editor( $target ) {
+
+		if ( ! self::access_check() ) {
+			return;
+		}
+
+		self::enqueue_generator();
+
+		$onclick = sprintf(
+			"SUG.App.insert('classic',{editorID:'%s',shortcode:''});",
+			esc_attr( $target )
+		);
+
+		$icon = '<svg style="vertical-align:middle;position:relative;top:-1px;opacity:.8;width:18px;height:18px" viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><path fill="currentcolor" d="M8.48 2.75v2.5H5.25v9.5h3.23v2.5H2.75V2.75h5.73zm9.27 14.5h-5.73v-2.5h3.23v-9.5h-3.23v-2.5h5.73v14.5z"/></svg>';
+
+		$button = sprintf(
+			'<button
+				type="button"
+				class="su-generator-button button"
+				title="%1$s"
+				onclick="%2$s"
+			>
+				%3$s %1$s
+			</button>',
+			__( 'Insert shortcode', 'shortcodes-ultimate' ),
+			$onclick,
+			$icon
+		);
+
+		echo $button;
+
+	}
+
+	public static function button_block_editor() {
 
 		if ( ! self::access_check() ) {
 			return;
@@ -108,7 +141,7 @@ class Su_Generator {
 		wp_enqueue_script(
 			'shortcodes-ultimate-block-editor',
 			plugins_url( 'includes/js/block-editor/index.js', SU_PLUGIN_FILE ),
-			array( 'wp-element', 'wp-editor', 'wp-components', 'su-generator' ),
+			array( 'wp-element', 'wp-components', 'su-generator' ),
 			SU_PLUGIN_VERSION,
 			true
 		);

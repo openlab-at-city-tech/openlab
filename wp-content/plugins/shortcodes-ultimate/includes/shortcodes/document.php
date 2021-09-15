@@ -78,5 +78,5 @@ function su_shortcode_document( $atts = null, $content = null ) {
 
 	su_query_asset( 'css', 'su-shortcodes' );
 
-	return '<div class="su-document su-u-responsive-media-' . $atts['responsive'] . '"><iframe src="//docs.google.com/viewer?embedded=true&url=' . $atts['url'] . '" width="' . $atts['width'] . '" height="' . $atts['height'] . '" class="su-document' . su_get_css_class( $atts ) . '" title="' . esc_attr( $atts['title'] ) . '"></iframe></div>';
+	return '<div class="su-document su-u-responsive-media-' . esc_attr( $atts['responsive'] ) . '"><iframe src="//docs.google.com/viewer?embedded=true&url=' . esc_attr( $atts['url'] ) . '" width="' . esc_attr( $atts['width'] ) . '" height="' . esc_attr( $atts['height'] ) . '" class="su-document' . su_get_css_class( $atts ) . '" title="' . esc_attr( $atts['title'] ) . '"></iframe></div>';
 }

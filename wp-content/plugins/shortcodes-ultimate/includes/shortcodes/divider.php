@@ -103,7 +103,7 @@ function su_shortcode_divider( $atts = null, $content = null ) {
 
 		$top_link = sprintf(
 			'<a href="#%1$s"%2$s>%3$s</a>',
-			$atts['anchor'],
+			esc_attr( $atts['anchor'] ),
 			su_html_style( $a_style ),
 			su_do_attribute( $atts['text'] )
 		);

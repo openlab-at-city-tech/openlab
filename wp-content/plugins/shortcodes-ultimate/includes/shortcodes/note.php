@@ -79,8 +79,12 @@ function su_shortcode_note( $atts = null, $content = null ) {
 		? 'border-radius:' . $atts['radius'] . 'px;-moz-border-radius:' . $atts['radius'] . 'px;-webkit-border-radius:' . $atts['radius'] . 'px;'
 		: '';
 
+	if ( $atts['id'] ) {
+		$atts['id'] = sprintf( 'id="%s"', sanitize_html_class( $atts['id'] ) );
+	}
+
 	su_query_asset( 'css', 'su-shortcodes' );
 
-	return '<div class="su-note' . su_get_css_class( $atts ) . '" id="' . sanitize_html_class( $atts['id'] ) . '" style="border-color:' . su_adjust_brightness( $atts['note_color'], -10 ) . ';' . $radius . '"><div class="su-note-inner su-u-clearfix su-u-trim" style="background-color:' . $atts['note_color'] . ';border-color:' . su_adjust_brightness( $atts['note_color'], 80 ) . ';color:' . $atts['text_color'] . ';' . $radius . '">' . su_do_nested_shortcodes( $content, 'note' ) . '</div></div>';
+	return '<div class="su-note' . su_get_css_class( $atts ) . '" ' . $atts['id'] . ' style="border-color:' . su_adjust_brightness( $atts['note_color'], -10 ) . ';' . esc_attr( $radius ) . '"><div class="su-note-inner su-u-clearfix su-u-trim" style="background-color:' . esc_attr( $atts['note_color'] ) . ';border-color:' . su_adjust_brightness( $atts['note_color'], 80 ) . ';color:' . esc_attr( $atts['text_color'] ) . ';' . esc_attr( $radius ) . '">' . su_do_nested_shortcodes( $content, 'note' ) . '</div></div>';
 
 }

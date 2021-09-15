@@ -5,7 +5,7 @@ Tags: pages, admin, nested, tree view, page tree, sort, quick edit, structure
 Requires at least: 3.8
 Tested up to: 5.7
 Requires PHP: 5.4
-Stable tag: 3.1.14
+Stable tag: 3.1.15
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -105,7 +105,10 @@ No. The menu synchronization currently only works within the pages post type.
 
 == Changelog ==
 
-= 3.1.5 = 
+= 3.1.16 =
+* Includes security updates. Thanks to Ram Gall at Wordfence for reporting
+
+= 3.1.15 = 
 * Action added for outputting markup along with the add new/add multiple buttons (nestedpages_top_buttons)
 * PHP 8 deprecation errors corrected
 * Tested with WordPress v5.8

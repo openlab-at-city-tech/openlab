@@ -114,7 +114,6 @@ function wpa_update_settings() {
 			$wpa_focus                   = ( isset( $_POST['wpa_focus'] ) ) ? 'on' : '';
 			$wpa_focus_color             = ( isset( $_POST['wpa_focus_color'] ) ) ? str_replace( '#', '', $_POST['wpa_focus_color'] ) : '';
 			$wpa_continue                = ( isset( $_POST['wpa_continue'] ) ) ? $_POST['wpa_continue'] : 'Continue Reading';
-			$wpa_row_actions             = ( isset( $_POST['wpa_row_actions'] ) ) ? 'on' : '';
 			$wpa_diagnostics             = ( isset( $_POST['wpa_diagnostics'] ) ) ? 'on' : '';
 			$wpa_insert_roles            = ( isset( $_POST['wpa_insert_roles'] ) ) ? 'on' : '';
 			$wpa_complementary_container = ( isset( $_POST['wpa_complementary_container'] ) ) ? str_replace( '#', '', $_POST['wpa_complementary_container'] ) : '';
@@ -131,10 +130,7 @@ function wpa_update_settings() {
 			update_option( 'wpa_focus', $wpa_focus );
 			update_option( 'wpa_focus_color', $wpa_focus_color );
 			update_option( 'wpa_continue', $wpa_continue );
-			update_option( 'wpa_row_actions', $wpa_row_actions );
 			update_option( 'wpa_diagnostics', $wpa_diagnostics );
-			update_option( 'wpa_insert_roles', $wpa_insert_roles );
-			update_option( 'wpa_complementary_container', $wpa_complementary_container );
 			$message = __( 'Miscellaneous Accessibility Settings Updated', 'wp-accessibility' );
 
 			return "<div class='updated'><p>" . $message . '</p></div>';
@@ -353,12 +349,6 @@ function wpa_admin_settings() {
 										<input type="text" id="wpa_continue" name="wpa_continue" value="<?php echo esc_attr( get_option( 'wpa_continue' ) ); ?>"/>
 									</li>
 									<li>
-										<input type="checkbox" id="wpa_insert_roles" name="wpa_insert_roles" <?php checked( get_option( 'wpa_insert_roles' ), 'on' ); ?>/>
-										<label for="wpa_insert_roles"><?php _e( 'Add landmark roles to HTML5 structural elements', 'wp-accessibility' ); ?></label><br/>
-										<label for="wpa_complementary_container"><?php _e( 'ID for complementary role', 'wp-accessibility' ); ?></label>
-										<input type="text" id="wpa_complementary_container" name="wpa_complementary_container" value="#<?php echo esc_attr( get_option( 'wpa_complementary_container' ) ); ?>"/>
-									</li>
-									<li>
 										<input type="checkbox" id="wpa_labels" name="wpa_labels" <?php checked( get_option( 'wpa_labels' ), 'on' ); ?> />
 										<label for='wpa_labels'><?php _e( 'Automatically Label WordPress search form and comment forms', 'wp-accessibility' ); ?></label>
 									</li>
@@ -396,10 +386,6 @@ function wpa_admin_settings() {
 									<li>
 										<input type="checkbox" id="wpa_longdesc_featured" name="wpa_longdesc_featured" <?php checked( get_option( 'wpa_longdesc_featured' ), 'on' ); ?>/>
 										<label for="wpa_longdesc_featured"><?php _e( 'Support <code>longdesc</code> on featured images', 'wp-accessibility' ); ?></label>
-									</li>
-									<li>
-										<input type="checkbox" id="wpa_row_actions" name="wpa_row_actions" <?php checked( get_option( 'wpa_row_actions' ), 'on' ); ?>/>
-										<label for="wpa_row_actions"><?php _e( 'Make admin row actions always visible', 'wp-accessibility' ); ?></label>
 									</li>
 									<li>
 										<input type="checkbox" id="wpa_image_titles" name="wpa_image_titles" <?php checked( get_option( 'wpa_image_titles' ), 'on' ); ?>/>

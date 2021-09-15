@@ -54,6 +54,20 @@ function su_shortcode_table( $atts = null, $content = null ) {
 		'table'
 	);
 
+	if ( $atts['url'] && ! su_is_unsafe_features_enabled() ) {
+
+		return su_error_message(
+			'Table',
+			sprintf(
+				'%s.<br><a href="https://getshortcodes.com/docs/unsafe-features/" target="_blank">%s</a>',
+				// translators: do not translate the <b>url</b> part, the <b>Unsafe features</b> must be translated
+				__( 'The <b>url</b> attribute cannot be used while <b>Unsafe features</b> option is turned off', 'shortcodes-ultimate' ),
+				__( 'Learn more', 'shortcodes-ultimate' )
+			)
+		);
+
+	}
+
 	foreach ( array( 'responsive', 'alternate', 'fixed' ) as $feature ) {
 
 		if ( 'yes' === $atts[ $feature ] ) {
