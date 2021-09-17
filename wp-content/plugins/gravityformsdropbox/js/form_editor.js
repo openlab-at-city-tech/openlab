@@ -2,6 +2,10 @@ window.GFDropboxFolder = null;
 
 ( function( $ ) {
 
+	$( document ).on( 'keyup', '#field_file_extension', function ( e ) {
+		RefreshSelectedFieldPreview();
+	} );
+
 	GFDropboxFolder = function( args ) {
 
 		for ( var prop in args ) {
@@ -30,7 +34,6 @@ window.GFDropboxFolder = null;
 
 			// Bind select folder event.
 			this.onSelectFolder();
-
 		}
 
 		this.initializeFolderTree = function() {
