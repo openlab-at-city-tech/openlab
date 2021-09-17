@@ -138,7 +138,9 @@ class GF_Field_Likert extends GF_Field {
 				$field_value = $multiple_rows ? $row_value . ':' . $choice['value'] : $choice['value'];
 				$input_id    = sprintf( 'choice_%d_%s_%d', $form_id, str_replace( '.', '_', $id ), $choice_id );
 
-				$content .= sprintf( "<td data-label='%s' class='%s'><input name='%s' type='radio' value='%s' %s id='%s' %s %s %s/></td>", esc_attr( wp_strip_all_tags( $choice['text'], true ) ), $cell_class, $input_name, esc_attr( $field_value ), $checked, $input_id, $disabled_text, $this->get_tabindex(), $this->get_conditional_logic_event( 'click' ) );
+				$logic_event = version_compare( GFForms::$version, '2.4-beta-1', '<' ) ? $this->get_conditional_logic_event( 'click' ) : '';
+
+				$content .= sprintf( "<td data-label='%s' class='%s'><input name='%s' type='radio' value='%s' %s id='%s' %s %s %s/></td>", esc_attr( wp_strip_all_tags( $choice['text'], true ) ), $cell_class, $input_name, esc_attr( $field_value ), $checked, $input_id, $disabled_text, $this->get_tabindex(), $logic_event );
 				$choice_id ++;
 			}
 			
@@ -219,9 +221,14 @@ class GF_Field_Likert extends GF_Field {
 	 * @return string
 	 */
 	public function get_value_merge_tag( $value, $input_id, $entry, $form, $modifier, $raw_value, $url_encode, $esc_html, $format, $nl2br ) {
-		$column_text = $this->get_column_text( $value, $entry, $input_id, true );
+
+		// Exclude row text if using value modifier.
+		$include_row_text = 'value' !== $modifier;
+
+		$column_text = $this->get_column_text( $value, $entry, $input_id, $include_row_text );
 
 		return $url_encode ? urlencode( $column_text ) : $column_text;
+
 	}
 
 	/**
@@ -476,6 +483,65 @@ class GF_Field_Likert extends GF_Field {
 			}
 		}
 	}
+
+	// # FIELD FILTER UI HELPERS ---------------------------------------------------------------------------------------
+
+	/**
+	 * Returns the filter operators for the current field.
+	 *
+	 * @since 3.3.1
+	 *
+	 * @return array
+	 */
+	public function get_filter_operators() {
+		return array( 'is', 'isnot' );
+	}
+
+	/**
+	 * Returns the filters values setting for the current field.
+	 *
+	 * @since 3.3.1
+	 *
+	 * @return array
+	 */
+	public function get_filter_values() {
+		if ( $this->gsurveyLikertEnableMultipleRows ) {
+			return array();
+		}
+
+		return parent::get_filter_values();
+	}
+
+	/**
+	 * Returns the sub-filters for the current field.
+	 *
+	 * @since 3.3.1
+	 *
+	 * @return array
+	 */
+	public function get_filter_sub_filters() {
+		$sub_filters = array();
+
+		if ( ! $this->gsurveyLikertEnableMultipleRows ) {
+			return $sub_filters;
+		}
+
+		$rows = $this->gsurveyLikertRows;
+
+		foreach ( $rows as $row ) {
+			$sub_filters[] = array(
+				'key'             => $this->id . '|' . rgar( $row, 'value' ),
+				'text'            => rgar( $row, 'text' ),
+				'type'            => 'field',
+				'preventMultiple' => false,
+				'operators'       => $this->get_filter_operators(),
+				'values'          => $this->choices,
+			);
+		}
+
+		return $sub_filters;
+	}
+
 }
 
 GF_Fields::register( new GF_Field_Likert() );

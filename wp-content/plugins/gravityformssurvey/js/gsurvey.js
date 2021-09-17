@@ -1,7 +1,5 @@
 function gsurveySetUpLikertFields(){
-
     if (jQuery('table.gsurvey-likert').length > 0) {
-
         jQuery( 'table.gsurvey-likert' ).find( 'td.gsurvey-likert-choice, input[type="radio"]' ).click(function(e) {
 
             var elem = jQuery( this ),
@@ -43,58 +41,62 @@ function gsurveySetUpLikertFields(){
     }
 }
 
-jQuery(document).ready(function() {
+ /*--------- Rank  ---------*/
+function gsurveyRankUpdateRank(ulElement){
+    var IDs = [];
+    jQuery(ulElement).find('li').each(function(){ IDs.push(this.id); });
+    gsurveyRankings[ulElement.id] = IDs;
+    jQuery(ulElement).parent().find('#' + ulElement.id + '-hidden').val(gsurveyRankings[ulElement.id])
+}
 
-	 /*--------- Rank  ---------*/
-	function gsurveyRankUpdateRank(ulElement){
-		var IDs = [];
-		jQuery(ulElement).find('li').each(function(){ IDs.push(this.id); });
-		gsurveyRankings[ulElement.id] = IDs;
-		jQuery(ulElement).parent().find('#' + ulElement.id + '-hidden').val(gsurveyRankings[ulElement.id])
-	}
-	function gsurveyRankMoveChoice(ulNode, fromIndex, toIndex){
-		var ulNodeId = jQuery(ulNode).attr('id');
-		var value = gsurveyRankings[ulNodeId][fromIndex];
+function gsurveyRankMoveChoice(ulNode, fromIndex, toIndex){
+    var ulNodeId = jQuery(ulNode).attr('id');
+    var value = gsurveyRankings[ulNodeId][fromIndex];
 
-		//deleting from old position
-		gsurveyRankings[ulNodeId].splice(fromIndex, 1);
+    //deleting from old position
+    gsurveyRankings[ulNodeId].splice(fromIndex, 1);
 
-		//inserting into new position
-		gsurveyRankings[ulNodeId].splice(toIndex, 0, value);
-		gsurveyRankUpdateRank(ulNode);
-	}
+    //inserting into new position
+    gsurveyRankings[ulNodeId].splice(toIndex, 0, value);
+    gsurveyRankUpdateRank(ulNode);
+}
 
-    function gsurveySetUpRankSortable(){
-        var $rankField= jQuery('.gsurvey-rank');
-        if ($rankField.length > 0) {
-            $rankField.sortable({
-                axis: 'y',
+function gsurveySetUpRankSortable(){
+    var $rankField= jQuery('.gsurvey-rank');
+    if ($rankField.length > 0) {
+        $rankField.sortable({
+            axis: 'y',
 
-                cursor: 'move',
-                update: function(event, ui){
-                    var fromIndex = ui.item.data('index');
-                    var toIndex = ui.item.index();
-                    gsurveyRankMoveChoice(this, fromIndex, toIndex);
-                }
-            });
+            cursor: 'move',
+            update: function(event, ui){
+                var fromIndex = ui.item.data('index');
+                var toIndex = ui.item.index();
+                gsurveyRankMoveChoice(this, fromIndex, toIndex);
+            }
+        });
 
-            gsurveyRankings = {};
+        gsurveyRankings = {};
 
-            jQuery('.gsurvey-rank').each(function(){
-                gsurveyRankUpdateRank(this);
+        jQuery('.gsurvey-rank').each(function(){
+            gsurveyRankUpdateRank(this);
 
-            });
-        }
+        });
     }
+}
 
-    jQuery(document).bind('gform_page_loaded', function(event, form_id, current_page){
-        gsurveySetUpRankSortable();
-        gsurveySetUpLikertFields();
-    });
-
+function init_fields() {
     gsurveySetUpRankSortable();
     gsurveySetUpLikertFields();
+}
 
-});
+// In frontend we need to initialize the fields every time after gform_post_render for ajax forms.
+jQuery(document).on( 'gform_post_render', function() {
+    init_fields();
+} );
 
-
+// In backend edit entry page, init fields once document is ready.
+jQuery( function( $ ) {
+	if ( $( '#gform_update_button' ).length ) {
+		init_fields();
+	}
+} );
