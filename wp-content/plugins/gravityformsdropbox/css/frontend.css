@@ -1,3 +1,36 @@
-.dropbox-dropin-btn, .dropbox-dropin-btn:link {
-	height: auto !important;
+.gdropbox.ginput_container .dropbox-dropin-btn, .gdropbox.ginput_container .dropbox-dropin-btn:link {
+	height: auto;
+	margin-bottom: 1rem;
+}
+
+.gdropbox.ginput_container .dropbox-dropin-btn:active,
+.gdropbox.ginput_container .dropbox-dropin-btn:focus {
+	outline: #0c0c0c solid 2px;
+}
+
+.gform_dropbox_fileupload_rules {
+	display: block;
+}
+
+.gdropbox_preview + .gfield_description {
+	margin: 0.5rem 0 0.5rem 0;
+}
+
+.gdropbox_preview .ginput_preview {
+	margin: 0.5rem 0 0.5rem 0;
+}
+
+.gdropbox_preview .gform_delete {
+	background-image: url(../images/delete-file.svg);
+	background-color: transparent;
+	background-repeat: no-repeat;
+	background-size: cover;
+	border: none;
+	height: 1rem;
+	vertical-align: baseline;
+	width: 0.8rem;
+}
+
+.gdropbox_preview .gform_delete + label {
+	margin-left: 5px;
 }

@@ -1,17 +1,17 @@
-# Copyright (C) 2019 rocketgenius
-# This file is distributed under the same license as the Gravity Forms Dropbox Add-On plugin.
+# Copyright (C) 2021 Gravity Forms
+# This file is distributed under the GPL-2.0+.
 msgid ""
 msgstr ""
-"Project-Id-Version: Gravity Forms Dropbox Add-On 2.5\n"
+"Project-Id-Version: Gravity Forms Dropbox Add-On 3.0\n"
 "Report-Msgid-Bugs-To: https://gravityforms.com/support\n"
 "Last-Translator: Gravity Forms <support@gravityforms.com>\n"
 "Language-Team: Gravity Forms <support@gravityforms.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2019-11-14T15:18:25+00:00\n"
+"POT-Creation-Date: 2021-09-02T16:46:18+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.2.0\n"
+"X-Generator: WP-CLI 2.4.0\n"
 "X-Domain: gravityformsdropbox\n"
 
 #. Plugin Name of the plugin
@@ -19,7 +19,8 @@ msgid "Gravity Forms Dropbox Add-On"
 msgstr ""
 
 #. Plugin URI of the plugin
-msgid "https://www.gravityforms.com"
+#. Author URI of the plugin
+msgid "https://gravityforms.com"
 msgstr ""
 
 #. Description of the plugin
@@ -27,149 +28,173 @@ msgid "Integrates Gravity Forms with Dropbox, enabling end users to upload files
 msgstr ""
 
 #. Author of the plugin
-msgid "rocketgenius"
+msgid "Gravity Forms"
 msgstr ""
 
-#. Author URI of the plugin
-msgid "https://www.rocketgenius.com"
+#: class-gf-dropbox.php:482
+msgid "Unable to connect to Dropbox due to mismatched state."
 msgstr ""
 
-#: class-gf-dropbox.php:511
-#: class-gf-dropbox.php:521
-#: class-gf-dropbox.php:750
-msgid "Unable to authenticate with Dropbox."
+#: class-gf-dropbox.php:557
+#: class-gf-dropbox.php:567
+#: class-gf-dropbox.php:933
+msgid "Unable to connect to Dropbox."
 msgstr ""
 
-#: class-gf-dropbox.php:592
-msgid "Authenticated with Dropbox as: "
+#. Translators: 1. Link to forms list page, 2. Closing </a> tag
+#: class-gf-dropbox.php:731
+msgid "To configure Dropbox with your form(s), choose a form you wish to use Dropbox with from the %sforms list page%s, and select Dropbox from the form settings menu."
 msgstr ""
 
-#: class-gf-dropbox.php:596
-msgid "De-Authorize Dropbox"
+#: class-gf-dropbox.php:742
+msgid "Connected to Dropbox as: "
 msgstr ""
 
-#: class-gf-dropbox.php:605
+#: class-gf-dropbox.php:745
+msgid "Connected to Dropbox."
+msgstr ""
+
+#: class-gf-dropbox.php:749
+msgid "Disconnect from Dropbox"
+msgstr ""
+
+#: class-gf-dropbox.php:758
 msgid "Unable to get account information."
 msgstr ""
 
-#: class-gf-dropbox.php:617
+#: class-gf-dropbox.php:770
 msgid "To use a custom Dropbox app, you must have an SSL certificate installed and enabled. Visit this page after configuring your SSL certificate to use a custom Dropbox app."
 msgstr ""
 
-#: class-gf-dropbox.php:623
+#: class-gf-dropbox.php:775
 msgid "%sI do not want to use a custom Dropbox app.%s"
 msgstr ""
 
-#: class-gf-dropbox.php:634
-#: class-gf-dropbox.php:718
-msgid "Click here to authenticate with Dropbox."
+#: class-gf-dropbox.php:797
+msgid "The Dropbox Add-On allows you to quickly integrate Gravity Forms with Dropbox, one of the industry leaders in file storage solutions in the cloud.  Allow users to upload files from their Dropbox account or send files uploaded via Gravity Forms to your own Dropbox account."
 msgstr ""
 
-#: class-gf-dropbox.php:641
-msgid "%sI want to use a custom Dropbox app.%s (Recommended for advanced users only.)"
-msgstr ""
-
-#: class-gf-dropbox.php:681
-msgid "OAuth Redirect URI"
-msgstr ""
-
-#: class-gf-dropbox.php:694
-msgid "App Key"
-msgstr ""
-
-#: class-gf-dropbox.php:705
-msgid "App Secret"
-msgstr ""
-
-#: class-gf-dropbox.php:740
-#: class-gf-dropbox.php:745
-#: class-gf-dropbox.php:2302
-#: class-gf-dropbox.php:2307
-msgid "Access denied."
+#. Translators: 1. Link to Dropbox, 2. Closing </a> tag.
+#: class-gf-dropbox.php:801
+msgid "If you don't have a Dropbox account, you can %ssign up for one here%s."
 msgstr ""
 
 #: class-gf-dropbox.php:809
-#: class-gf-dropbox.php:813
-#: class-gf-dropbox.php:955
-msgid "Name"
+msgid "%sI want to use a custom Dropbox app.%s (Recommended for advanced users only.)"
 msgstr ""
 
 #: class-gf-dropbox.php:814
+msgid "Connect to Dropbox"
+msgstr ""
+
+#: class-gf-dropbox.php:860
+msgid "OAuth Redirect URI"
+msgstr ""
+
+#: class-gf-dropbox.php:873
+msgid "App Key"
+msgstr ""
+
+#: class-gf-dropbox.php:884
+msgid "App Secret"
+msgstr ""
+
+#: class-gf-dropbox.php:900
+msgid "Click here to connect to Dropbox."
+msgstr ""
+
+#: class-gf-dropbox.php:923
+#: class-gf-dropbox.php:928
+#: class-gf-dropbox.php:2606
+#: class-gf-dropbox.php:2611
+msgid "Access denied."
+msgstr ""
+
+#: class-gf-dropbox.php:1002
+msgid "Dropbox Feed Settings"
+msgstr ""
+
+#: class-gf-dropbox.php:1009
+#: class-gf-dropbox.php:1013
+#: class-gf-dropbox.php:1159
+msgid "Name"
+msgstr ""
+
+#: class-gf-dropbox.php:1014
 msgid "Enter a feed name to uniquely identify this setup."
 msgstr ""
 
-#: class-gf-dropbox.php:821
-#: class-gf-dropbox.php:826
+#: class-gf-dropbox.php:1021
+#: class-gf-dropbox.php:1026
 msgid "File Upload Field"
 msgstr ""
 
-#: class-gf-dropbox.php:827
+#: class-gf-dropbox.php:1027
 msgid "Select the specific File Upload field that you want to be uploaded to Dropbox."
 msgstr ""
 
-#: class-gf-dropbox.php:834
-#: class-gf-dropbox.php:838
-#: class-gf-dropbox.php:956
+#: class-gf-dropbox.php:1034
+#: class-gf-dropbox.php:1160
 msgid "Destination Folder"
 msgstr ""
 
-#: class-gf-dropbox.php:839
-msgid "Select the folder in your Dropbox account where the files will be uploaded to."
+#: class-gf-dropbox.php:1036
+msgid "Select the folder in your Dropbox account where the files will be uploaded to.  By default, all files are stored in the \"Gravity Forms Add-On\" folder within the Dropbox Apps folder in your Dropbox account."
 msgstr ""
 
-#: class-gf-dropbox.php:840
-msgid "By default, all files are stored in the \"Gravity Forms Add-On\" folder within the Dropbox Apps folder in your Dropbox account."
-msgstr ""
-
-#: class-gf-dropbox.php:846
+#: class-gf-dropbox.php:1041
 msgid "Upload Condition"
 msgstr ""
 
-#: class-gf-dropbox.php:847
+#: class-gf-dropbox.php:1042
 msgid "Enable Condition"
 msgstr ""
 
-#: class-gf-dropbox.php:848
+#: class-gf-dropbox.php:1043
 msgid "Upload to Dropbox if"
 msgstr ""
 
-#: class-gf-dropbox.php:992
+#: class-gf-dropbox.php:1196
 msgid "You must add a File Upload field to your form before creating a feed. Let's go %sadd one%s!"
 msgstr ""
 
-#: class-gf-dropbox.php:1010
+#: class-gf-dropbox.php:1214
 msgid "All File Upload Fields"
 msgstr ""
 
-#: class-gf-dropbox.php:1296
+#: class-gf-dropbox.php:1500
 msgid "Link Type"
 msgstr ""
 
-#: class-gf-dropbox.php:1299
+#: class-gf-dropbox.php:1503
 msgid "Preview"
 msgstr ""
 
-#: class-gf-dropbox.php:1302
+#: class-gf-dropbox.php:1506
 msgid "Direct"
 msgstr ""
 
-#: class-gf-dropbox.php:1308
+#: class-gf-dropbox.php:1512
 msgid "Allow multiple files to be selected"
 msgstr ""
 
-#: class-gf-dropbox.php:1358
-#: class-gf-dropbox.php:1576
+#: class-gf-dropbox.php:1562
+#: class-gf-dropbox.php:1780
 msgid "Feed was not processed because API was not initialized."
 msgstr ""
 
-#: class-gf-dropbox.php:1687
-#: class-gf-dropbox.php:1905
+#: class-gf-dropbox.php:1891
+#: class-gf-dropbox.php:2109
 msgid "Unable to upload file: %s"
 msgstr ""
 
-#: class-gf-dropbox.php:1703
-#: class-gf-dropbox.php:1990
+#: class-gf-dropbox.php:1907
+#: class-gf-dropbox.php:2194
 msgid "Unable to create shareable link for file: %s"
+msgstr ""
+
+#: includes/class-gf-dropbox-api.php:206
+msgid "Something went wrong trying to retrieve an access token from Dropbox."
 msgstr ""
 
 #: includes/class-gf-field-dropbox-incompatible.php:44
@@ -177,26 +202,31 @@ msgid "Dropbox Upload field is unavailable because the Dropbox Add-On is not con
 msgstr ""
 
 #: includes/class-gf-field-dropbox-incompatible.php:92
-#: includes/class-gf-field-dropbox.php:131
+#: includes/class-gf-field-dropbox.php:141
 msgid "Dropbox Upload"
 msgstr ""
 
 #: includes/class-gf-field-dropbox-incompatible.php:143
-#: includes/class-gf-field-dropbox.php:252
+#: includes/class-gf-field-dropbox.php:275
 msgid "Click to view"
 msgstr ""
 
 #: includes/class-gf-field-dropbox-incompatible.php:339
-#: includes/class-gf-field-dropbox.php:448
+#: includes/class-gf-field-dropbox.php:471
 msgid "The uploaded file type is not allowed."
 msgstr ""
 
 #: includes/class-gf-field-dropbox-incompatible.php:344
-#: includes/class-gf-field-dropbox.php:453
+#: includes/class-gf-field-dropbox.php:476
 msgid "The uploaded file type is not allowed. Must be one of the following: %s"
 msgstr ""
 
-#: includes/class-gf-field-dropbox.php:57
-#: includes/class-gf-field-dropbox.php:58
+#. translators: %s: file extensions.
+#: includes/class-gf-field-dropbox.php:54
+msgid "Accepted file types: %s"
+msgstr ""
+
+#: includes/class-gf-field-dropbox.php:64
+#: includes/class-gf-field-dropbox.php:65
 msgid "Dropbox Button Preview"
 msgstr ""
