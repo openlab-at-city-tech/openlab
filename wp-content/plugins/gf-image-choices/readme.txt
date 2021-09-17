@@ -1,11 +1,14 @@
 === Gravity Forms Image Choices ===
-Contributors: jetsloth
-Tags: admin,gravityforms,forms
-Requires at least: 4.0
-Tested up to: 5.3.2
-Version: 1.2.22
+Version: 1.3.42
+Author: JetSloth
+Version: 1.3.42
+Requires at 3.5
+Tested up to: 5.7.2
+Author URI: https://jetsloth.com
 License: GPL2
 License URI: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+Tags: admin,gravityforms,forms,images
+Contributors: JetSloth
 
 Easily add images as choices for Radio Buttons or Checkboxes fields in your Gravity Forms, including Survey, Quiz, Product and Option fields that have their field type set to Radio Buttons or Checkboxes
 
@@ -13,6 +16,8 @@ Easily add images as choices for Radio Buttons or Checkboxes fields in your Grav
 **Gravity Forms Image Choices**
 
 Easily add images as choices for Radio Buttons or Checkboxes fields in your Gravity Forms, including Survey, Quiz, Product and Option fields that have their field type set to Radio Buttons or Checkboxes
+
+Check out our other plugins at https://jetsloth.com
 
 == Installation ==
 1. Install Gravity Forms Image Choices by uploading the files to your server

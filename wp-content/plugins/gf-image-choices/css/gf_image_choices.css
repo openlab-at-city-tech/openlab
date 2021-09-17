@@ -3,15 +3,24 @@ gf_image_choices.css
 Gravity Forms Image Choices Styles
 http://jetsloth.com/gravity-forms-image-choices/
 */
-.image-choices-admin-field.image-choices-use-images ul.gfield_radio,
-.image-choices-admin-field.image-choices-use-images ul.gfield_checkbox,
+.image-choices-field.has-jetsloth-lazy .jetsloth-lazy {
+  opacity: 0;
+  transition: opacity 0.3s; }
+
+.image-choices-field.has-jetsloth-lazy .jetsloth-lazy-loaded {
+  opacity: 1; }
+
 .image-choices-field ul.gfield_radio,
 .image-choices-field ul.gfield_checkbox {
   list-style: none;
   margin: 0;
   padding: 0; }
 
-.image-choices-admin-field.image-choices-use-images .image-choices-choice,
+.image-choices-field div.gfield_radio,
+.image-choices-field div.gfield_checkbox {
+  margin: 0;
+  padding: 0; }
+
 .image-choices-field .image-choices-choice {
   display: inline-block;
   margin: 0 10px 10px 0 !important;
@@ -19,32 +28,22 @@ http://jetsloth.com/gravity-forms-image-choices/
   border: 1px solid rgba(223, 223, 223, 0);
   vertical-align: top;
   text-align: center; }
-  .image-choices-admin-field.image-choices-use-images .image-choices-choice label,
   .image-choices-field .image-choices-choice label {
     cursor: pointer;
-    display: inline-block;
+    display: inline-block !important;
     line-height: 0;
     margin: 0 !important;
     max-width: none !important;
     padding: 10px !important;
     text-align: center;
-    width: 100%;
+    width: 100% !important;
     border: 1px solid transparent; }
-  .image-choices-admin-field.image-choices-use-images .image-choices-choice input[type="radio"],
-  .image-choices-admin-field.image-choices-use-images .image-choices-choice input[type="checkbox"],
   .image-choices-field .image-choices-choice input[type="radio"],
   .image-choices-field .image-choices-choice input[type="checkbox"] {
-    border: 0 !important;
-    clip: rect(0 0 0 0) !important;
-    height: 1px !important;
-    margin: -1px !important;
-    overflow: hidden !important;
-    padding: 0 !important;
-    position: absolute !important;
-    width: 1px !important; }
+    visibility: hidden;
+    position: absolute;
+    left: -9999px; }
 
-.image-choices-admin-field.image-choices-use-images .image-choices-choice-text,
-.image-choices-admin-field.image-choices-use-images .image-choices-choice-price,
 .image-choices-field .image-choices-choice-text,
 .image-choices-field .image-choices-choice-price {
   font-size: 12px;
@@ -53,17 +52,14 @@ http://jetsloth.com/gravity-forms-image-choices/
   padding-top: 6px;
   transition: all 0.3s; }
 
-.image-choices-admin-field.image-choices-use-images .image-choices-choice-price,
 .image-choices-field .image-choices-choice-price {
   display: block; }
 
-.image-choices-admin-field.image-choices-use-images .image-choices-choice-text,
 .image-choices-field .image-choices-choice-text {
   display: none; }
 
-.image-choices-admin-field.image-choices-use-images .image-choices-choice-image-wrap,
 .image-choices-field .image-choices-choice-image-wrap {
-  display: inline-block;
+  display: inline-block !important;
   background-repeat: no-repeat;
   background-position: 50%;
   background-size: cover;
@@ -73,30 +69,29 @@ http://jetsloth.com/gravity-forms-image-choices/
   text-align: center;
   transition: all 0.3s; }
 
-.image-choices-admin-field.image-choices-use-images .image-choices-choice-image,
 .image-choices-field .image-choices-choice-image {
   display: none; }
 
-.image-choices-admin-field.image-choices-use-images.image-choices-layout-vertical ul.gfield_radio,
-.image-choices-admin-field.image-choices-use-images.image-choices-layout-vertical ul.gfield_checkbox,
 .image-choices-field.image-choices-layout-vertical ul.gfield_radio,
 .image-choices-field.image-choices-layout-vertical ul.gfield_checkbox {
   display: inline-block; }
-  .image-choices-admin-field.image-choices-use-images.image-choices-layout-vertical ul.gfield_radio > li.image-choices-choice,
-  .image-choices-admin-field.image-choices-use-images.image-choices-layout-vertical ul.gfield_checkbox > li.image-choices-choice,
   .image-choices-field.image-choices-layout-vertical ul.gfield_radio > li.image-choices-choice,
   .image-choices-field.image-choices-layout-vertical ul.gfield_checkbox > li.image-choices-choice {
     display: block; }
 
-.image-choices-admin-field.image-choices-use-images.image-choices-show-labels .image-choices-choice-text,
+.image-choices-field.image-choices-layout-vertical div.gfield_radio,
+.image-choices-field.image-choices-layout-vertical div.gfield_checkbox {
+  display: inline-block; }
+  .image-choices-field.image-choices-layout-vertical div.gfield_radio > .image-choices-choice,
+  .image-choices-field.image-choices-layout-vertical div.gfield_checkbox > .image-choices-choice {
+    display: block; }
+
 .image-choices-field.image-choices-show-labels .image-choices-choice-text {
   display: block; }
 
-.image-choices-admin-field.image-choices-use-images .image-choices-choice-selected,
 .image-choices-field .image-choices-choice-selected {
   border-color: #000; }
 
-.image-choices-admin-field.image-choices-use-images .image-choices-choice-focus label,
 .image-choices-field .image-choices-choice-focus label {
   border-color: #000; }
 
@@ -114,76 +109,6 @@ http://jetsloth.com/gravity-forms-image-choices/
 
 .image-choices-field .image-choices-choice.image-choices-choice-other .image-choices-choice-image-wrap {
   background-color: #ECEFED; }
-
-.gf_entries .entry_row .image-choices-selected-image,
-.entry-detail-view .image-choices-selected-image {
-  display: inline-block;
-  max-width: 100%;
-  width: 100px;
-  height: 100px; }
-
-.gf_entries .entry_row .gf-image-choices-entry,
-.entry-detail-view .gf-image-choices-entry {
-  list-style: none;
-  display: block;
-  text-align: center; }
-
-.gf_entries .entry_row .gf-image-choices-entry > li,
-.gf_entries .entry_row .gf-image-choices-entry-choice,
-.entry-detail-view .gf-image-choices-entry > li,
-.entry-detail-view .gf-image-choices-entry-choice {
-  display: inline-block;
-  vertical-align: top;
-  margin: 0 10px 20px;
-  text-align: center; }
-
-.gf_entries .entry_row .gf-image-choices-entry-choice-image,
-.entry-detail-view .gf-image-choices-entry-choice-image {
-  display: inline-block;
-  width: 80px;
-  height: 80px;
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: 50%; }
-
-.gf_entries .entry_row .gf-image-choices-entry-choice-text,
-.entry-detail-view .gf-image-choices-entry-choice-text {
-  display: block;
-  font-size: 12px; }
-
-.gf_entries .entry_row .gquiz-field-choice .gf-image-choices-entry-choice-text + img,
-.gf_entries .entry_row .gquiz-field-choice .gf-image-choices-entry-choice-image + img,
-.entry-detail-view .gquiz-field-choice .gf-image-choices-entry-choice-text + img,
-.entry-detail-view .gquiz-field-choice .gf-image-choices-entry-choice-image + img {
-  display: block;
-  margin: 0 auto; }
-
-.gf_entries .entry_row .gquiz-field-choice .gf-image-choices-entry-choice-image + img,
-.entry-detail-view .gquiz-field-choice .gf-image-choices-entry-choice-image + img {
-  margin-top: 5px; }
-
-.gf_entries .entry_row .gpoll_choice_label,
-.entry-detail-view .gpoll_choice_label {
-  padding-left: 30px;
-  margin-top: 25px; }
-  .gf_entries .entry_row .gpoll_choice_label .gf-image-choices-entry-choice,
-  .entry-detail-view .gpoll_choice_label .gf-image-choices-entry-choice {
-    display: block;
-    text-align: left;
-    margin: 0 10px 10px 0; }
-  .gf_entries .entry_row .gpoll_choice_label .gf-image-choices-entry-choice-image,
-  .entry-detail-view .gpoll_choice_label .gf-image-choices-entry-choice-image {
-    margin-right: 10px; }
-  .gf_entries .entry_row .gpoll_choice_label .gf-image-choices-entry-choice-image,
-  .gf_entries .entry_row .gpoll_choice_label .gf-image-choices-entry-choice-text,
-  .entry-detail-view .gpoll_choice_label .gf-image-choices-entry-choice-image,
-  .entry-detail-view .gpoll_choice_label .gf-image-choices-entry-choice-text {
-    display: inline-block;
-    vertical-align: middle; }
-
-.gf_entries .entry_row .gpoll_field_label_container + .gpoll_choice_label,
-.entry-detail-view .gpoll_field_label_container + .gpoll_choice_label {
-  margin-top: 10px; }
 
 .gquiz-image-choices-field .gquiz-image-choices {
   list-style: none;
@@ -215,6 +140,9 @@ http://jetsloth.com/gravity-forms-image-choices/
 .gquiz-image-choices-field .gquiz-image-choices-choice-text {
   display: block;
   font-size: 12px; }
+
+.image-choices-field .image-choices-choice {
+  position: relative; }
 
 .image-choices-lightbox-btn {
   text-decoration: none;
@@ -410,67 +338,3 @@ body.hidden-scroll {
   100% {
     transform: scale(1.2);
     opacity: 0; } }
-
-.image-choices-field.gf_list_1col,
-.image-choices-field.gf_list_2col,
-.image-choices-field.gf_list_3col,
-.image-choices-field.gf_list_4col,
-.image-choices-field.gf_list_5col,
-.gform_wrapper .gfield.image-choices-field.gf_list_2col,
-.gform_wrapper .gfield.image-choices-field.gf_list_3col,
-.gform_wrapper .gfield.image-choices-field.gf_list_4col,
-.gform_wrapper .gfield.image-choices-field.gf_list_5col {
-  margin-right: -2% !important; }
-
-.image-choices-field.gf_list_1col .image-choices-choice,
-.image-choices-field.gf_list_2col .image-choices-choice,
-.image-choices-field.gf_list_3col .image-choices-choice,
-.image-choices-field.gf_list_4col .image-choices-choice,
-.image-choices-field.gf_list_5col .image-choices-choice,
-.gform_wrapper .gfield.image-choices-field.gf_list_2col li.image-choices-choice,
-.gform_wrapper .gfield.image-choices-field.gf_list_3col li.image-choices-choice,
-.gform_wrapper .gfield.image-choices-field.gf_list_4col li.image-choices-choice,
-.gform_wrapper .gfield.image-choices-field.gf_list_5col li.image-choices-choice {
-  margin-right: 2% !important; }
-
-.image-choices-field.gf_list_1col .image-choices-choice,
-.gform_wrapper .gfield.image-choices-field.gf_list_1col li.image-choices-choice {
-  width: 98% !important; }
-
-.image-choices-field.gf_list_2col .image-choices-choice,
-.gform_wrapper .gfield.image-choices-field.gf_list_2col li.image-choices-choice {
-  width: 48% !important; }
-
-.image-choices-field.gf_list_3col .image-choices-choice,
-.gform_wrapper .gfield.image-choices-field.gf_list_3col li.image-choices-choice {
-  width: 31% !important; }
-
-.image-choices-field.gf_list_4col .image-choices-choice,
-.gform_wrapper .gfield.image-choices-field.gf_list_4col li.image-choices-choice {
-  width: 23% !important; }
-
-.image-choices-field.gf_list_5col .image-choices-choice,
-.gform_wrapper .gfield.image-choices-field.gf_list_5col li.image-choices-choice {
-  width: 18% !important; }
-
-@media only screen and (max-width: 736px) {
-  .image-choices-field.gf_list_2col .image-choices-choice,
-  .image-choices-field.gf_list_3col .image-choices-choice,
-  .image-choices-field.gf_list_4col .image-choices-choice,
-  .image-choices-field.gf_list_5col .image-choices-choice,
-  .gform_wrapper .gfield.image-choices-field.gf_list_2col li.image-choices-choice,
-  .gform_wrapper .gfield.image-choices-field.gf_list_3col li.image-choices-choice,
-  .gform_wrapper .gfield.image-choices-field.gf_list_4col li.image-choices-choice,
-  .gform_wrapper .gfield.image-choices-field.gf_list_5col li.image-choices-choice {
-    width: 48% !important; } }
-
-@media only screen and (max-width: 480px) {
-  .image-choices-field.gf_list_2col .image-choices-choice,
-  .image-choices-field.gf_list_3col .image-choices-choice,
-  .image-choices-field.gf_list_4col .image-choices-choice,
-  .image-choices-field.gf_list_5col .image-choices-choice,
-  .gform_wrapper .gfield.image-choices-field.gf_list_2col li.image-choices-choice,
-  .gform_wrapper .gfield.image-choices-field.gf_list_3col li.image-choices-choice,
-  .gform_wrapper .gfield.image-choices-field.gf_list_4col li.image-choices-choice,
-  .gform_wrapper .gfield.image-choices-field.gf_list_5col li.image-choices-choice {
-    width: 98% !important; } }
