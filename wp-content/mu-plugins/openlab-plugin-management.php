@@ -330,3 +330,9 @@ add_action(
 		wp_enqueue_script( 'openlab-out-of-the-box-a11y', content_url( 'mu-plugins/js/openlab-out-of-the-box.js' ), [ 'jquery' ] );
 	}
 );
+
+/**
+ * Define wp-quicklatex cache directory location.
+ */
+define( 'WP_QUICKLATEX_CACHE_DIR', WP_CONTENT_DIR . '/uploads/ql-cache' );
+define( 'WP_QUICKLATEX_CACHE_URL', content_url() . '/uploads/ql-cache' );
