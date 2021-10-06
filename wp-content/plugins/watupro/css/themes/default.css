@@ -1,0 +1,138 @@
+/**
+ * Default theme
+ */
+
+.question-choices {
+	margin-top: 0;
+}
+
+.watupro-sortable {
+	margin: 0 auto;
+}
+.watupro-sortable li {
+	list-style: none;
+}
+
+.watupro-question-choice {
+	margin: 0.438em 0 !important; /* 7px */
+}
+
+/** Long text problem with inline-block elements
+  * (inline-block boxes not fitting in their container)
+*/
+.quiz-form label {
+	display: inline-block;
+	max-width: calc(100% - 2.25em);
+}
+
+.watupro-question-choice input[type='radio'], .watupro-question-choice input[type='checkbox'] {
+	margin-left: 0.25em;
+}
+
+.watupro-question-choice.watupro-ansnum label,
+.watupro-question-choice.watupro-ansnum label {
+	max-width: calc(100% - 3.792em - 0.25em);
+}
+
+.watupro-compact div.question-choices {
+	padding-left: 0;
+}
+
+.watupro-2-columns:nth-of-type(2n), .watupro-3-columns:nth-of-type(3n), .watupro-4-columns:nth-of-type(4n) {
+	padding-left: 0;
+}
+
+/* Progress bar */
+.watupro-progress-bar {
+	border-radius: 0.625em;
+	background: #eeeeee;
+	background: -moz-linear-gradient(left, #eeeeee 0%, #000000 100%); /* FF3.6-15 */
+	background: -webkit-linear-gradient(left, #eeeeee 0%, #000000 100%); /* Chrome10-25,Safari5.1-6 */
+	background: linear-gradient(to right, #eeeeee 0%, #000000 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a4b357', endColorstr='#75890c',GradientType=1 ); /* IE6-9 */
+}
+
+.watupro_buttons tr {
+    border-bottom: none;
+}
+
+/* Paginator */
+ul.watupro-paginator {
+    justify-content: center;
+}
+ul.watupro-category-paginator {
+    justify-content: center;
+}
+
+ul.watupro-paginator li {
+	color: #7a7a7a;
+	background-color: #d5d5d5;
+	background: -ms-linear-gradient(top, #fafafa, #d5d5d5);
+	background: -webkit-gradient(linear, 0 0, 0 100%, from(#fafafa), to(#d5d5d5));
+	background: -webkit-linear-gradient(top, #fafafa, #d5d5d5);
+	background: -o-linear-gradient(top, #fafafa, #d5d5d5);
+	background: -moz-linear-gradient(top, #fafafa, #d5d5d5);
+	background: linear-gradient(top, #fafafa, #d5d5d5);
+	background-repeat: repeat-x;
+	*zoom: 1;
+	border: 1px solid;
+	border-color: #eeeeee #cdcdcd #cdcdcd #eeeeee;
+	-webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+	-moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+ul.watupro-paginator li.answered {
+	color: #ffffff;
+	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+	background-color: #A4B357;
+	background: -ms-linear-gradient(top, #A4B357, #75890C);
+	background: -webkit-gradient(linear, 0 0, 0 100%, from(#A4B357), to(#75890C));
+	background: -webkit-linear-gradient(top, #A4B357, #75890C);
+	background: -o-linear-gradient(top, #A4B357, #75890C);
+	background: -moz-linear-gradient(top, #A4B357, #75890C);
+	background: linear-gradient(top, #A4B357, #75890C);
+	background-repeat: repeat-x;
+	border-color: #A4B357 #75890C #75890C #A4B357;
+	-webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+	-moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+ul.watupro-paginator li.unanswered {
+	background: #F89406;
+	background: -ms-linear-gradient(top, #ffe101, #F89406);
+	background: -webkit-gradient(linear, 0 0, 0 100%, from(#ffe101), to(#F89406));
+	background: -webkit-linear-gradient(top, #ffe101, #F89406);
+	background: -o-linear-gradient(top, #ffe101, #F89406);
+	background: -moz-linear-gradient(top, #ffe101, #F89406);
+	background: linear-gradient(top, #ffe101, #F89406);
+	background-repeat: repeat-x;
+	border-color: #ffe101 #F89406 #F89406 #ffe101;
+	color: #ffffff;
+	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+	-webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+	-moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+ul.watupro-paginator li.active {
+	box-shadow: 0 8px 5px -5px rgba(0,0,0,0.4), inset 0 0 5px 1px rgba(255,255,255,0.3);
+	-webkit-transform: scale(1.1);
+	-ms-transform: scale(1.1);
+	transform: scale(1.1);
+	border: none !important;
+}
+
+ul.watupro-category-paginator li.active {
+	-webkit-transform: scaleY(1.1) scaleX(1.02) translateY(-1px);
+	-ms-transform: scaleY(1.1) scaleX(1.02) translateY(-1px);
+	transform: scaleY(1.1) scaleX(1.02) translateY(-1px);
+}
+
+/* Question intros */
+.watupro-question-intro {
+	font-size: 110%;
+	background-color: #eee;
+	padding: 1em;
+}

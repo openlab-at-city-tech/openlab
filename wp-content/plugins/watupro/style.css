@@ -1,0 +1,770 @@
+/* Normalize */
+#watupro_quiz *, #watupro_quiz *::before, #watupro_quiz *::after,
+.watupro-paginator-wrap * {
+   box-sizing: border-box;
+}
+
+.watu-question {
+	display: none;
+	clear: both;
+	overflow: hidden;
+	/*float: left; commented in version 6.1.0.3, was causing new next/prev buttons to go next to the question on some themes */
+}
+
+.watu-question input[type=text], .watupro input[type=text], input.watupro-gap {
+	display: inline;
+}
+
+.watu-question-compact {
+	width: 100%;
+}
+
+#watupro_quiz input {
+   /*width: auto !important; */ /* Disabled 17.03.2021 */
+}
+
+.watupro-category-header {
+	margin: 0.75em 0 !important;
+	padding: 0 0;
+}
+
+/* distance between rows bug in gap exercise  */
+.watupro-gap {
+	margin-bottom: 0.313em;
+}
+
+input.watupro-gap {
+	max-width: 9.375em;
+}
+
+form.quiz-form {
+	text-align:left;
+}
+
+.single-page-quiz .watu-question, .single-page-quiz {
+	display:block;
+}
+.single-page-quiz .watu-question {
+	padding: 0 0 1em 0;
+}
+.single-page-quiz #next-question {
+	display:none;
+}
+.question-content {
+	margin: 0 auto 0.75em 0;
+}
+.question-content p {
+	/* fixes the added distance from the paragraph */
+	margin: 0 0;
+}
+
+/* Question grid */
+.watupro-question-choice {
+	width: 100%;
+	display: block;
+    line-height: 1 /*1.7em*/; /* 17.03.2021 */
+	margin: 0.438em 0; /* 7px */
+}
+
+/* Fake (pseudo) element, that enables vertical-align */
+.watupro-question-choice:before {
+    content: "";
+    display: inline-block;
+    vertical-align: middle;
+    height: 100%;
+}
+
+/* Select all elements in .watupro-question-choice class, including numbers without any tag */
+.watupro-question-choice > *, .watupro-question-choice1:not(input):not(label) {
+	display: inline-block;
+    margin: 0; /* clear theme margins */
+    padding: 0 0;
+}
+/* Possible Answers Number */
+.watupro-question-choice.watupro-ansnum i {
+	font-style: normal;
+	width: 1.75em;
+	text-align: right;
+	margin-right: 0.25em;
+	line-height: 1; /* 17.03.2021 */
+	vertical-align: top;/* 17.03.2021 */
+}
+
+.watupro-question-choice input[type=radio],
+.watupro-question-choice input[type=checkbox] {
+    margin-right: 0.25em;
+    /* vertical-align: -0.15em; */ /* 17.03.21 */
+}
+
+.watupro-question-choice input[type=checkbox] + label,
+.watupro-question-choice input[type=radio] + label {
+	font-size: inherit;
+}
+
+
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+	/* IE10+ CSS styles go here - for IE bug */
+	.watupro-question-choice input[type=radio],
+	.watupro-question-choice input[type=checkbox] {margin-top:  0.25em; width: 1rem;}
+	.quiz-form label {padding-top: 0; }
+}
+
+.quiz-form label {
+    cursor: pointer;
+	width: auto;
+    vertical-align: text-top;
+}
+
+/* Radio button problem */ /* Disabled 17.03.2021 for compatibility with new themes and WP */
+.watupro-question-choice input[type="radio"] {
+    /*border: none;
+    -moz-appearance: radio;
+    -webkit-appearance: radio;*/
+}
+
+
+/* Answers */
+.show-question {
+	display: block;
+	margin: 0;
+	padding: 0.5em 0;
+}
+
+.show-question-content {
+    margin: 0 0 0.5em 0;
+    padding: 0 0;
+}
+
+.show-question-choices ul {
+	margin: 0 0 0.5em 0;
+	padding: 0 1.25em; /* 06.05.2020 */
+    list-style: disc;
+}
+
+.show-question-choices ul li {
+	line-height: normal;
+	vertical-align: top;
+}
+
+.answer {
+   vertical-align: top; /* 06.05.2020 - long answers bug */
+}
+
+.watupro-question-choice .answer {
+	vertical-align: text-top; /*17.03.2021 */
+}
+
+/* comment after answer */
+.show-question-choices {
+	clear: both;
+    overflow: hidden;
+	margin-bottom: 1em;
+}
+
+.user-answer span.answer {
+	vertical-align: top;
+	font-weight:bold;
+	color:blue;
+	background:url(wrong.png) no-repeat right 0.15em;
+	padding-right: 1.5em;
+	display: inline-block; /* bullets problem? */
+   line-height: normal;
+}
+.user-answer-unrevealed {
+	font-weight:bold;
+	color:blue;
+	vertical-align: text-top;
+}
+.user-answer {
+	color: blue;
+    line-height: normal;
+}
+.user-answer img {
+	border: 2pt solid blue;
+}
+
+.correct-answer span.answer {
+	background:url(correct.png) no-repeat right 0.15em;
+	padding-right: 1.5em;
+	display: inline-block;
+	line-height: normal;
+}
+
+span.answer {
+	display: inline-block;
+}
+.show-question-content {
+   /* font-weight:bold;*/
+}
+
+.watupro-2-columns span.answer,
+.watupro-3-columns span.answer,
+.watupro-4-columns span.answer,
+.watupro-5-columns span.answer {
+	background-position: right 0.15em;
+}
+
+p.error {
+    clear:both !important;
+    color:red;
+}
+
+.watupro label {
+	display: block;
+	float: left;
+	width: 9.375em;
+}
+
+.watupro select {
+	min-width: 7.5em;
+}
+
+.watupro-alert, .watupro-success {
+	padding: 1.25em;
+	background-color: #EEE;
+	font-weight: bold;
+}
+
+.watupro-error {
+	padding: 1.250em;
+	font-weight: bold;
+	background:#EEE;
+	color:red;
+}
+
+.watupro-padded {
+	padding: 1.25em;
+}
+
+.watupro-warning {
+	font-weight:bold;
+	color:red;
+}
+
+.watupro-help {
+	font-style: italic;
+	font-size:11pt;
+	color:gray;
+}
+
+/* Old table buttons */
+table.watupro_buttons {
+	clear:both !important;
+	border-collapse: collapse;
+	width: auto;
+	margin: auto auto;
+}
+table.watupro_buttons td {
+	min-width: 5em;
+}
+.watupro_buttons, .watupro_buttons td {
+	border: none !important;
+}
+
+/* New watupro_buttons FLEX */
+.watupro_buttons.flex {
+     display: flex;
+     flex-flow: row wrap;
+     justify-content: center;
+     clear: both;
+}
+
+.watupro_buttons.flex div {
+     margin: 0.5rem;
+}
+
+/* Paginator */
+.watupro-paginator-wrap {
+	width: 100%;
+}
+ul.watupro-paginator {
+	list-style-type: none;
+    /*width: 100%;*/
+    margin: 1em auto;
+	padding: 0 0;
+	display: -webkit-box;   /* OLD - iOS 6-, Safari 3.1-6, BB7 */
+	display: -ms-flexbox;  /* TWEENER - IE 10 */
+	display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
+	display: flex;         /* NEW, Spec - Firefox, Chrome, Opera */
+	flex-flow: row wrap;
+}
+
+.watupro-paginator-vertical ul.watupro-paginator {
+    display: -webkit-box;   /* OLD - iOS 6-, Safari 3.1-6, BB7 */
+	display: -ms-flexbox;  /* TWEENER - IE 10 */
+	display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
+	display: flex;         /* NEW, Spec - Firefox, Chrome, Opera */
+    flex-flow: column wrap;
+    width: auto;
+}
+
+ul.watupro-paginator li {
+	text-align: center;
+	font-weight: bold;
+	cursor: pointer;
+
+    margin: 0.313em 0.125em;
+    padding: 0.25em 0.5em;
+    border-radius: 0.188em;
+    vertical-align: middle;
+
+    flex-grow: 0; /* 1 if you want the remaining space in the container will be distributed equally to all buttons */
+}
+
+.watupro-paginator-vertical .watupro-auto-hide li {
+    width: 3em;  /*limits the width of the button, without this value being 100% of the parent container
+    display: block;*/
+}
+
+.watupro-answers-paginator-wrap {
+    clear: both; /* fix paginator float problem (vertical near to answers) */
+}
+
+ul.watupro-question-paginator li, ul.watupro-answers-paginator li {
+    /* flex-basis: 2em; commented on May 6 2021 */
+	display: block;
+    width: 3em;
+}
+
+ul.watupro-paginator li.active {
+	margin: 0.313em 0.188em;
+    padding: 0.25em 0.5em;
+}
+
+ul.watupro-category-paginator li {
+    padding: 0.25em 0.75em;
+}
+
+ul.watupro-paginator li.answered {
+	background-color: #88FF88;
+}
+
+ul.watupro-paginator li.unanswered {
+	background-color: #FF6A6A;
+}
+
+ul.watupro-paginator li.marked {
+	border: 2pt dashed black !important;
+}
+
+.watupro-auto-hide-handler a, .watupro-auto-hide-handler-hide a {
+	border-bottom: none;
+	text-decoration: none !important;
+}
+
+/* The hide paginator button is initially always hidden */
+.watupro-auto-hide-handler-hide {
+	display: none !important;
+}
+
+/* Timer */
+#timerDiv {
+	margin-bottom: 1.250em;
+	color: green;
+}
+
+div#timerDiv {
+	z-index: 1000000; /* for fixed mode */
+}
+
+.watupro-textarea-medium {
+	width: 17.5em;
+	height: 5em;
+}
+
+.watupro-textarea-large {
+	width: 37.5em;
+	height: 18.75em;
+}
+
+.watupro-qnum-info {
+	font-style: italic;
+	padding-top: 1.563em;
+	clear: both;
+}
+
+/* Compact */
+.watupro-compact {
+	clear:both;
+	width:100%;
+	float:left;
+	margin-bottom: 1.25em;
+}
+
+.watupro-compact div.question-content, .watupro-compact div.show-question-content {
+	float:left;
+	width:50%;
+	margin-top:0 !important;
+	padding-right: 0.5em;
+}
+
+.watupro-compact div.question-choices, .watupro-compact div.show-question-choices {
+	float:right;
+	width:50%;
+	padding-left: 0.5em;
+	clear: none;
+}
+
+.watupro-compact .question-choices div.watupro-question-choice {
+	float: left;
+}
+
+.watupro-compact .show-question-choices li.answer {
+	margin-right: 0;
+	vertical-align: top; /*20.09.2019*/
+}
+
+/* Compact V2 */ 
+.watupro-compact2 div.question-content, .watupro-compact2 div.show-question-content {
+    width: 100% !important;
+}
+
+
+.watupro-compact2 div.question-choices, .watupro-compact2 div.show-question-choices {
+    width: 100% !important;
+}
+
+.watupro-compact2 .question-choices div.watupro-question-choice {
+    width: auto !important;
+    margin-right: 1.5em !important;    
+}
+
+.watupro-compact2 .show-question-choices li.answer {
+	width:auto !important;
+	display: inline-block;
+	margin-right: 1.5em !important;  
+}
+/* end Compact v 2*/
+
+/* Compact V3 */ 
+.watupro-compact3 .question-choices div.watupro-question-choice {
+    width: auto !important;
+    margin-right: 1.5em !important;    
+}
+
+.watupro-compact3 .show-question-choices li.answer {
+	width:auto !important;
+	display: inline-block;
+	margin-right: 1.5em !important;  
+}
+/* end Compact v 3*/
+
+.watupro-matrix-droppable tr td {
+   border: 1px dashed #DDD;
+   min-width: 9.375em;
+   min-height: 5em;
+   padding: 0.625em;
+} 
+
+/* Social sharing CSS */
+.watuproshare-facebook {
+	padding: 0.625em;
+	background-color: #4c66a4;
+	color:white !important;
+	font-weight:bold;
+	text-decoration:none;
+}
+a.watuproshare-facebook {	
+	color:white !important;	
+}
+.watupro-share {
+	margin: 1.25em;
+}
+.watupro-share a {
+	margin: 0.938em;
+}
+.watupro-twitter-share-button {
+	margin: 0 !important;
+}
+
+/* Progress bar */
+.watupro-progress-container {
+	width: 100%;
+	/*height: 1.875em;*/
+	float: left;
+	margin-bottom: 1.5em;
+}
+.watupro-progress-bar {
+	text-align:right;
+}
+.watupro-progress-percent {
+	padding: 0 0.313em;
+	background: white;
+	font-weight: bold;
+	border-radius: 0.625em;
+}
+
+/* Rating */
+.watupro-rating-wrap {
+	padding: 0.625em 0;
+	clear: both;
+}
+.watupro-rating ul {
+	list-style-type: none !important;
+}
+
+.watupro-paginated-hidden { display: none; }
+
+/* honeypot */
+.watupro-beehive { display:none !important; }
+
+span.watupro_num {
+ display: inline !important;
+}
+
+/* Chart */
+.watupro-basic-chart td, .watupro-basic-chart-points td, .watupro-basic-chart-percent td {
+	padding: 0.375em;
+}
+
+.watupro-basic-chart, .watupro-basic-chart table, table.watupro-basic-chart, .watupro-basic-chart-points, .watupro-basic-chart-points table, .watupro-basic-chart-percent, .watupro-basic-chart-percent table {
+	border: none !important;	
+}
+
+/* Columns */
+.watupro-2-columns, li.watupro-2-columns {
+	width: 50%;
+}
+.watupro-3-columns, li.watupro-3-columns {
+	width: 33%;
+}
+.watupro-4-columns, li.watupro-4-columns {
+	width: 25%;
+}
+.watupro-5-columns, li.watupro-5-columns {
+	width: 20%;
+}
+
+.watupro-2-columns, li.watupro-2-columns,
+.watupro-3-columns, li.watupro-3-columns,
+.watupro-4-columns, li.watupro-4-columns,
+.watupro-5-columns, li.watupro-5-columns {
+	float: left; /* fixes the problem with the vertical alignment at the top corner */
+	display: inline-block;
+	padding: 0 0.5em;
+}
+
+.watupro-2-columns > *, li.watupro-2-columns > *,
+.watupro-3-columns > *, li.watupro-3-columns > *,
+.watupro-4-columns > *, li.watupro-4-columns > *,
+.watupro-5-columns > *, li.watupro-5-columns > * {
+	display: inline-block; /* left space problem with inline elements*/
+}
+
+.watupro-2-columns:first-of-type,
+.watupro-3-columns:first-of-type,
+.watupro-4-columns:first-of-type,
+.watupro-5-columns:first-of-type,
+.watupro-2-columns:nth-of-type(2n+1),
+.watupro-3-columns:nth-of-type(3n+1),
+.watupro-4-columns:nth-of-type(4n+1),
+.watupro-5-columns:nth-of-type(5n+1) {
+	padding-right: 0.5em;
+	padding-left: 0;
+}
+
+.watupro-2-columns:nth-of-type(2n), .watupro-3-columns:nth-of-type(3n), .watupro-4-columns:nth-of-type(4n), .watupro-5-columns:nth-of-type(5n)  {
+	padding-left: 0.5em;
+	padding-right: 0;
+}
+
+.watupro-ansnum.watupro-2-columns, li.watupro-ansnum.watupro-2-columns,
+.watupro-ansnum.watupro-3-columns, li.watupro-ansnum.watupro-3-columns,
+.watupro-ansnum.watupro-4-columns, li.watupro-ansnum.watupro-4-columns,
+.watupro-ansnum.watupro-5-columns, li.watupro-ansnum.watupro-5-columns {
+	padding-left: 0; /*the numbering adds a blank space to the left */
+	padding-right: 0;
+}
+
+div.watupro-choices-columns {
+	clear:both;
+	float:left;
+	width:100%;
+}
+
+.watupro-main-feedback {
+	display:block;
+	clear:both;
+	margin-top: 1.25em;
+}
+
+.watupro-dashboard {
+	font-size: 120%;
+}
+
+.watupro-dashboard td {
+	border-bottom: 1pt solid #EEE;
+	padding-top: 0.625em;
+}
+
+.watupro-text-captcha {
+	clear:both;
+}
+
+/* Text meant only for screen readers. */
+.watupro-screen-reader {
+    border: 0;
+    clip: rect( 1px, 1px, 1px, 1px );
+    clip-path: inset( 50% );
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+    word-wrap: normal;
+}
+
+.watupro-unanswered {
+	clear:both;
+	width: 100%;
+	display:block;
+	float:left;
+}
+
+select.watupro-gap  {
+  width: auto !important;
+  max-width: 31.250em !important;
+}
+
+#ui-datepicker-div {
+   display: none;
+   position: absolute !important;
+   z-index: 999999999 !important;
+}
+
+.watupro-textarea {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+/* Handle RTL quizzes - the class watupro-rtl will be added to .question-content and .question-choices divs */
+.watupro-rtl {
+    direction: rtl !important;
+    text-align: right !important;
+}
+
+.watupro-flex {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.watupro-quiz-item {
+   width: 250px;
+   margin: 1rem;
+}
+
+.watupro-quiz-item img {
+   max-width:100%;
+}
+
+.watupro-answers-table-area {
+	padding: 1em;
+	background-color: #f8f8f8;
+	filter: drop-shadow(7px 7px 5px #aaa);
+	margin-bottom: 2em;
+}
+
+@media screen and (min-width: 1024px) {
+	.watupro-auto-hide {
+		display: flex !important;
+	}
+	.watupro-auto-hide-handler {
+		display: none !important;
+	}
+
+    /* The hide paginator button is initially always hidden */
+    .watupro-auto-hide-handler-hide {
+        display: none !important;
+    }
+
+}
+
+@media screen and (max-width: 1023px) {
+	.watupro-auto-hide {
+		display: none !important;
+	}
+
+	.watupro-auto-hide-handler {
+		display: flex !important;
+	}
+
+}
+
+@media
+only screen and (max-width: 600px)  {
+	/* More space to avoid clickable elements too close together */
+	.watupro-question-choice {
+		margin-top: 0.438em;
+		margin-bottom: 0.438em;
+	}
+
+	span.watupro-progress-percent {
+		font-size: 0.688em;
+	}
+
+	table.watupro_buttons {
+		font-size: 85%;
+	}
+
+	.watupro-2-columns, li.watupro-2-columns,
+	.watupro-3-columns, li.watupro-3-columns,
+	.watupro-4-columns, li.watupro-4-columns,
+	.watupro-5-columns, li.watupro-5-columns {
+		float: none !important;
+		width: 100% !important;
+		padding: 0 0 !important;
+	}
+	.watupro-2-columns:nth-of-type(2n), li.watupro-2-columns:nth-of-type(2n),
+	.watupro-3-columns:nth-of-type(3n), li.watupro-3-columns:nth-of-type(3n),
+	.watupro-4-columns:nth-of-type(4n), li.watupro-4-columns:nth-of-type(4n),
+	.watupro-5-columns:nth-of-type(5n), li.watupro-5-columns:nth-of-type(5n) {
+		padding-left: 0;
+		padding-right: 0;
+	}
+
+	.watupro-compact div.question-content, .watupro-compact div.show-question-content {
+		float:none;
+		width:100%;
+		padding-right: 0;
+	}
+	.watupro-compact div.question-choices, .watupro-compact div.show-question-choices {
+		float:none;
+		width:100%;
+		padding-left: 0;
+	}
+}
+
+@media
+only screen and (max-width: 375px)  {
+    /* thanks to https://css-tricks.com/responsive-data-tables/ */
+    /* Force table to not be like tables anymore */
+    table.watupro_buttons, table.watupro_buttons td, table.watupro_buttons tr {
+        display: block;
+    }
+
+    table.watupro_buttons td {
+        /* Behave  like a "row" */
+        border: none;
+        position: relative;
+    }
+
+    table.watupro_buttons td:before {
+        /* Now like a table header */
+        position: absolute;
+    }
+
+    .watupro-progress-percent {
+        font-size: 0.688em;
+    }
+
+}
+
+/*  for Flex in themes */
+@media (max-width: 921px) {
+.ast-left-sidebar #content > .ast-container {
+	display: block;
+	}
+}

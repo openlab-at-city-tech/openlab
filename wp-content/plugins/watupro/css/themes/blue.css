@@ -1,0 +1,220 @@
+/**
+ * Blue theme
+ */
+
+.watupro-sortable {
+	margin: 0 auto;
+}
+.watupro-sortable li {
+	list-style: none;
+}
+
+.watupro-nmatrix-selected {
+	border-color: #66b6fc;
+	border-radius: 4px;
+}
+
+.watupro-nmatrix-unselect {
+	color: #66b6fc;
+	font-size: 80%;
+}
+
+.watupro-question-choice {
+	padding-top: 0.25em !important;
+	padding-bottom: 0.25em !important;
+	margin: 0.438em 0 !important; /* 7px */
+}
+.watupro-question-choice:hover {
+	background-color: #EAF7FF;
+}
+
+.watupro-user-feedback, .watupro-textarea-medium, .watupro-text, .watupro-gap {
+	border: 1pt solid #66b6fc !important;
+	background-color : #EAF7FF;
+	color: #66b6fc !important;
+}
+
+/** Long text problem with inline-block elements
+  * (inline-block boxes not fitting in their container)
+*/
+.quiz-form label {
+	display: inline-block;
+	max-width: calc(100% - 2.25em);
+}
+
+.watupro-question-choice input[type='radio'], .watupro-question-choice input[type='checkbox'] {
+	margin-left: 0.25em;
+}
+
+.watupro-question-choice.watupro-ansnum label,
+.watupro-question-choice.watupro-ansnum label {
+	max-width: calc(100% - 3.792em - 0.25em);
+}
+
+.watupro-compact div.question-choices {
+	padding-left: 0;
+}
+
+.watupro-2-columns:nth-of-type(2n), .watupro-3-columns:nth-of-type(3n), .watupro-4-columns:nth-of-type(4n) {
+	padding-left: 0;
+}
+
+/* buttons */
+.watupro_buttons input[type=button],
+.watupro_buttons input[type=submit],
+.watupro-exam-description button,
+.watupro-start-quiz  {
+	display: inline-block;
+	margin-bottom: 0;
+	*margin-left: .3em;
+	text-align: center;
+	vertical-align: middle;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+	*zoom: 1;
+	cursor:pointer;
+	color: #ffffff;
+	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+	background-color: #66b6fc;
+	background: -moz-linear-gradient(top, #66b6fc 0%, #5998d3 100%); /* FF3.6-15 */
+	background: -webkit-linear-gradient(top, #66b6fc 0%,#5998d3 100%); /* Chrome10-25,Safari5.1-6 */
+	background: linear-gradient(to bottom, #66b6fc 0%,#5998d3 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a4b357', endColorstr='#75890c',GradientType=0 );
+	text-decoration: none;
+
+	background-repeat: repeat-x;
+	border: 1px solid;
+	border-color: #66b6fc #66b6fc #5998d3;
+	-webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+	-moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.watupro-start-quiz {
+	padding: 0.5em 1em !important;
+	line-height: 18px;
+	font-size: 1.1em;
+}
+
+.watupro_buttons input[type=button]:hover,
+.watupro_buttons input[type=submit]:hover,
+.watupro-exam-description button:hover,
+.watupro-start-quiz:hover {
+	background: #3cb0fd;
+	background: -moz-linear-gradient(top, #B2E1FF 0%, #66b6fc 100%); /* FF3.6-15 */
+	background: -webkit-linear-gradient(top, #B2E1FF 0%,#66b6fc 100%); /* Chrome10-25,Safari5.1-6 */
+	background: linear-gradient(to bottom, #B2E1FF 0%,#66b6fc 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a4b357', endColorstr='#75890c',GradientType=0 );
+	text-decoration: none;
+}
+
+.watupro_buttons input[type=button]:focus,
+.watupro_buttons input[type=submit]:focus,
+.watupro-start-quiz:focus {
+	outline: thin dotted #333;
+	outline-offset: -2px;
+	background-color: #256ea0 !important;
+}
+
+.watupro_buttons tr {
+	border-bottom: none;
+}
+
+/* progress bar */
+.watupro-progress-percent {
+	color: #66b6fc;
+}
+.watupro-progress-bar {
+	border-radius: 0.625em;
+	background: #B2E1FF;
+	background: -moz-linear-gradient(left, #B2E1FF 0%, #66b6fc 100%); /* FF3.6-15 */
+	background: -webkit-linear-gradient(left, #B2E1FF 0%,#66b6fc 100%); /* Chrome10-25,Safari5.1-6 */
+	background: linear-gradient(to right, #B2E1FF 0%,#66b6fc 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a4b357', endColorstr='#75890c',GradientType=1 ); /* IE6-9 */
+}
+
+/* Columns */
+.watupro-2-columns label,
+.watupro-3-columns label,
+.watupro-4-columns label {
+	width: auto;
+}
+
+/* Paginator */
+ul.watupro-paginator {
+	justify-content: center;
+}
+ul.watupro-category-paginator {
+	justify-content: center;
+}
+
+ul.watupro-paginator li {
+	color: #7a7a7a;
+	background-color: #d5d5d5;
+	background: -ms-linear-gradient(top, #fafafa, #d5d5d5);
+	background: -webkit-gradient(linear, 0 0, 0 100%, from(#fafafa), to(#d5d5d5));
+	background: -webkit-linear-gradient(top, #fafafa, #d5d5d5);
+	background: -o-linear-gradient(top, #fafafa, #d5d5d5);
+	background: -moz-linear-gradient(top, #fafafa, #d5d5d5);
+	background: linear-gradient(top, #fafafa, #d5d5d5);
+	background-repeat: repeat-x;
+	*zoom: 1;
+	border: 1px solid;
+	border-color: #eeeeee #cdcdcd #cdcdcd #eeeeee;
+	-webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+	-moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+
+	flex-grow: 0; /* 1 if you want the remaining space in the container will be distributed equally to all buttons */
+}
+
+ul.watupro-category-paginator li {
+	flex-grow: 0; /* 1 if you want the remaining space in the container will be distributed equally to all buttons */
+}
+
+ul.watupro-paginator li.answered {
+	color: #ffffff;
+	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+	background-color: #66b6fc;
+	background: -moz-linear-gradient(top, #66b6fc 0%, #5998d3 100%); /* FF3.6-15 */
+	background: -webkit-linear-gradient(top, #66b6fc 0%,#5998d3 100%); /* Chrome10-25,Safari5.1-6 */
+	background: linear-gradient(to bottom, #66b6fc 0%,#5998d3 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a4b357', endColorstr='#75890c',GradientType=0 );
+
+	background-repeat: repeat-x;
+	border-color: #66b6fc #5998d3 #5998d3 #66b6fc;
+	-webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+	-moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+ul.watupro-paginator li.unanswered {
+	background: #FF8459;
+	background: -moz-linear-gradient(top, #FF8459 0%, #FE4100 100%); /* FF3.6-15 */
+	background: -webkit-linear-gradient(top, #FF8459 0%,#FE4100 100%); /* Chrome10-25,Safari5.1-6 */
+	background: linear-gradient(to bottom, #FF8459 0%,#FE4100 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#FF8459', endColorstr='#FE4100',GradientType=0 );
+	background-repeat: repeat-x;
+	border-color: #FF8459 #FE4100 #FE4100 #FF8459;
+	color: #ffffff;
+	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+	-webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+	-moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+ul.watupro-paginator li.active {
+	padding: 0.25em 0.5em;
+	box-shadow: 0 8px 6px -6px rgba(0,0,0,0.6), inset 0 0 5px 1px rgba(255,255,255,0.5);
+	-webkit-transform: scale(1.1);
+	-ms-transform: scale(1.1);
+	transform: scale(1.1);
+	border: none !important;
+}
+
+ul.watupro-category-paginator li.active {
+	-webkit-transform: scaleY(1.1) scaleX(1.02) translateY(-1px);
+	-ms-transform: scaleY(1.1) scaleX(1.02) translateY(-1px);
+	transform: scaleY(1.1) scaleX(1.02) translateY(-1px);
+}
