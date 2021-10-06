@@ -1,6 +1,7 @@
 <?php
 
-
+    if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+    
     function TOPluginInterface()
         {
             global $wpdb, $wp_locale;
@@ -34,7 +35,6 @@
 
             ?>
             <div class="wrap">
-                <div class="icon32" id="icon-edit"><br></div>
                 <h2><?php _e( "Taxonomy Order", 'taxonomy-terms-order' ) ?></h2>
 
                 <?php tto_info_box() ?>
@@ -71,7 +71,7 @@
                     <input type="hidden" name="page" value="to-interface-<?php echo esc_attr($post_type) ?>" />
                     <?php
                 
-                     if (!in_array($post_type, array('post', 'attachment'))) 
+                    if (!in_array($post_type, array('post', 'attachment'))) 
                         echo '<input type="hidden" name="post_type" value="'. esc_attr($post_type) .'" />';
 
                     //output all available taxonomies for this post type
@@ -139,9 +139,7 @@
                             ?>
 
                 <div id="order-terms">
-                    
-      
-                    
+
                     <div id="post-body">                    
                         
                             <ul class="sortable" id="tto_sortable">
