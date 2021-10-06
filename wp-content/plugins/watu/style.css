@@ -127,6 +127,11 @@ li.answer span img {
 
 .watu-basic-chart td, .watu-basic-chart-points td, .watu-basic-chart-percent td {
 	padding: 6px;
+	border: none;
+}
+
+table.watu-basic-chart {
+	border: none;
 }
 
 .quiz-form input[type='checkbox'] {

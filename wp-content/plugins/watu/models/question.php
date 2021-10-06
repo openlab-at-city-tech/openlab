@@ -24,7 +24,7 @@ class WatuQuestion {
 			}			 
 		} // end working with textareas
 		
-		if($question->is_survey) $class = str_replace('user-answer', 'user-answer-survey');
+		if($question->is_survey) $class = str_replace('user-answer', 'user-answer-survey', $class);
 		
 		return array($points, $correct, $class);
 	}

@@ -3,7 +3,7 @@ Contributors: prasunsen, wakeop
 Tags: exam, test, quiz, survey, wpmu, multisite, touch, mobile
 Requires at least: 4.2
 Tested up to: 5.8
-Stable tag: trunk
+Stable tag: 3.3.2
 License: GPLv2 or later
 
 Creates exams, surveys, and quizzes with unlimited number of questions and answers. Assigns grade after the quiz is taken. Mobile / touch - friendly.
@@ -180,8 +180,9 @@ If the script defines new objects it might not work in Ajax mode. Try to switch 
 
 == Changelog ==
 
-= Changes in 3.3.1 =
+= Changes in 3.3.2 =
 - Added pagination and "per page" selector on the Manage Questions page.
+- Removed default table borders from the basic chart table.
 
 = Changes in 3.3 =
 - Added two more columns to the question import file: "Is required" and "Answer explanation".
