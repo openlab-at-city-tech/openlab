@@ -61,7 +61,6 @@
             
                     ?>
                         <div id="cpto" class="wrap"> 
-                            <div id="icon-settings" class="icon32"></div>
                             <h2><?php esc_html_e('General Settings', 'post-types-order') ?></h2>
                            
                             <?php $this->CPTO->functions->cpt_info_box(); ?>
