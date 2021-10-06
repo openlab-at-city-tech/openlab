@@ -691,7 +691,7 @@ else{
       var curZoom'.$MapCounter.' = '.$MapName.'.getView().getZoom();
 
       '.$MapName.'.getLayers().forEach(function(layer){
-         if(!layer.values_.id) {     
+         if(!layer.get("id")) {     
             layer.once("change", function(e){
                ol.extent.extend(extension'.$MapCounter.', (layer.getSource().getExtent()));
                '.$MapName.'.getView().fit(extension'. $MapCounter.', {padding: [50, 50, 50, 50]'.$Fitzoom.'});

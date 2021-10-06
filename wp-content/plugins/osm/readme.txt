@@ -2,8 +2,8 @@
 Contributors: MiKa
 Tags: map, OpenStreetMap, geo, KML, GPX, geotag, geolocation, OSM, travelogue, OpenLayers, marker, POI, geocode, geotagging, location, Tracks, WMS, OpenSeaMap, stamen, basemap, meta, thunderforest
 Requires at least: 3.0
-Tested up to: 5.7
-Stable tag: 5.8
+Tested up to: 5.8.1
+Stable tag: 5.8.1
 License: GPLv2
 Requires PHP: 5.3
 
@@ -17,7 +17,7 @@ Add a map with marker in less than 100 sec:
 If you want to get detailed information about the OSM-plugin visit these pages:
 
 * Homepage: [WP-OSM-Plugin](https://wp-osm-plugin.hyumika.com/ "OSM-plugin")
-* Forum: [EN|DE](https://wp-osm-plugin.hyumika.com/forums/forum/WordPress-OpenStreetMap/ "OSM-plugin forum EN|DE")
+* Forum: [EN|DE](https://wp-osm-plugin.hyumika.com/survey/ "OSM-plugin feedback / feature request EN|DE")
 * Twitter: [@WP_OSM_Plugin](https://twitter.com/wp_osm_plugin "@WP_OSM_Plugin")
 
 Features of the OSM-plugin:
