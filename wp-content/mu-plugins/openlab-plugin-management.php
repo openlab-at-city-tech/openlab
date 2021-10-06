@@ -62,7 +62,6 @@ function openlab_hide_plugins( $plugins ) {
 		'pdfembedder-premium/mobile_pdf_embedder.php',
 		'post-gallery-widget/post-gallery.php',
 		'query-monitor/query-monitor.php',
-		'quiz-master-next/mlw_quizmaster2.php',
 		'rederly.php',
 		'simple-drop-cap/simple-drop-cap.php',
 		'simple-pull-quote/simple-pull-quote.php',
