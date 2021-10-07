@@ -1323,6 +1323,16 @@ function ra_copy_blog_page( $group_id ) {
 				$tables = $wpdb->get_results( $query, ARRAY_A );
 				// phpcs:enable
 
+				$exclude_tables = [
+					$blogtables . 'oplb_gradebook_assignments',
+					$blogtables . 'oplb_gradebook_cells',
+					$blogtables . 'oplb_gradebook_courses',
+					$blogtables . 'oplb_gradebook_users',
+					$blogtables . 'options',
+					$blogtables . 'comments',
+					$blogtables . 'commentmeta',
+				];
+
 				if ( $tables ) {
 					reset( $tables );
 					$create     = array();
@@ -1340,13 +1350,16 @@ function ra_copy_blog_page( $group_id ) {
 					);
 					for ( $i = 0; $i < count( $tables ); $i++ ) {
 						$table = current( $tables[ $i ] );
+
+						if ( in_array( $table, $exclude_tables, true ) ) {
+							continue;
+						}
+
 						if ( substr( $table, 0, $len ) == $blogtables ) {
-							if ( ! ( $table == $blogtables . 'options' || $table == $blogtables . 'comments' || $table == $blogtables . 'commentmeta' ) ) {
-								// phpcs:disable
-								$create[ $table ] = $wpdb->get_row( "SHOW CREATE TABLE {$table}" );
-								$data[ $table ]   = $wpdb->get_results( "SELECT * FROM {$table}", ARRAY_A );
-								// phpcs:enable
-							}
+							// phpcs:disable
+							$create[ $table ] = $wpdb->get_row( "SHOW CREATE TABLE {$table}" );
+							$data[ $table ]   = $wpdb->get_results( "SELECT * FROM {$table}", ARRAY_A );
+							// phpcs:enable
 						}
 					}
 
