@@ -72,6 +72,9 @@ add_action(
 	}
 );
 
+/**
+ * Hide update notices on plugins.php from non-super-admins.
+ */
 add_action(
 	'admin_print_scripts',
 	function() {
