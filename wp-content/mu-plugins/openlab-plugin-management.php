@@ -46,6 +46,7 @@ function openlab_hide_plugins( $plugins ) {
 		'fix-simplepie-errors/_fix-simplepie-errors.php',
 		'google-document-embedder/gviewer.php',
 		'google-maps-embed/cets_EmbedGmaps.php',
+		'gp-media-library/gp-media-library.php',
 		'grader/grader.php',
 		'gravity-forms-addons/gravity-forms-addons.php',
 		'gravityperks/gravityperks.php',
