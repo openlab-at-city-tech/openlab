@@ -78,7 +78,6 @@ function openlab_hide_plugins( $plugins ) {
 		'tinymce-comment-field/tinymce-comment-field.php',
 		'titan-framework/titan-framework.php',
 		'ufhealth-require-image-alt-tags/ufhealth-require-image-alt-tags.php',
-		'watu/watu.php',
 		'webwork/webwork.php',
 		'webworkqa/webwork.php',
 		'_webwork/webwork.php',
