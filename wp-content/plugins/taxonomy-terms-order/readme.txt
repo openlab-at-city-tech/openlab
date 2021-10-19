@@ -3,8 +3,8 @@ Contributors: nsp-code
 Donate link: http://www.nsp-code.com/donate.php
 Tags: category order,terms order, taxonomy order, admin order, categories sort, order category
 Requires at least: 2.8
-Tested up to: 5.7
-Stable tag: 1.5.7.5
+Tested up to: 5.8.1
+Stable tag: 1.5.7.7
 
 Order Categories and all custom taxonomies terms (hierarchically) and child terms using a Drag and Drop Sortable javascript capability. 
 
@@ -58,6 +58,14 @@ All ideas are welcome and i put them on my list to be implemented into the new v
 Consider upgrading to our advanced version of this plugin at a very resonable price <a target="_blank" href="http://www.nsp-code.com/premium-plugins/wordpress-plugins/advanced-taxonomy-terms-order/">Advanced Taxonomy Terms Order Order</a>
 
 == Change Log ==
+
+= 1.5.7.7 =
+ - Minor code updates
+ - Code cleanup
+ - Compatibility tag update for WordPress 5.8.1
+
+= 1.5.7.6 =
+ - Clear the term cache to ensure the updated order reflect for certain caches
 
 = 1.5.7.5 =
  - Apply the order within admin if ignore_term_order argument is set and not true

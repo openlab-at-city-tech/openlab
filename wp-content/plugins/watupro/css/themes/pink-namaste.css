@@ -1,0 +1,192 @@
+/**
+ * Pink Namaste! LMS theme
+ */
+
+.watupro-sortable {
+    margin: 0 auto;
+}
+.watupro-sortable li {
+    list-style: none;
+}
+
+.watupro-nmatrix-selected {
+    border-color: #C986A3;
+    border-radius: 4px;
+}
+
+.watupro-nmatrix-unselect {
+    color: #C986A3;
+    font-size: 80%;
+}
+
+.watupro-question-choice {
+    margin: 0.438em 0 !important; /* 7px */
+}
+
+/* This theme displays single-choice and multiple-choice questions as buttons instead of visible radio buttons or checkboxes */
+.watupro-user-feedback, .watupro-textarea-medium, .watupro-text, .watupro-gap {
+    border: 1pt solid rgba(221, 173, 194, 0.35) !important;
+    background-color : rgba(221, 173, 194, 0.35) !important;
+    color: #99476B !important;
+}
+
+/* Buttons */
+.watupro_buttons input[type=button],
+.watupro_buttons input[type=submit],
+.watupro-exam-description button {
+    cursor:pointer;
+    padding: 0.6em 1em;
+    border: 1px solid #DDADC2;
+    background: #fff;
+    color: #C986A3;
+    margin-left: 5px;
+    border-radius: 0.188em;
+    font-size:1.1em;
+}
+
+.watupro_buttons input[type=button]:hover,
+.watupro_buttons input[type=submit]:hover,
+.watupro-exam-description button:hover {
+    background: #C986A3;
+    color: #fff;
+}
+
+.watupro_buttons input[type=button]:focus,
+.watupro_buttons input[type=submit]:focus {
+    background: #C986A3;
+    color: #fff;
+}
+
+.watupro_buttons tr {
+    border-bottom: none;
+}
+
+/* Radio and checkbox columns*/
+.watupro-2-columns > *, li.watupro-2-columns > *,
+.watupro-3-columns > *, li.watupro-3-columns > *,
+.watupro-4-columns > *, li.watupro-4-columns > * {
+    display: inline-block;
+}
+
+.watupro-question-choice.watupro-ansnum i {
+    width: 2em;
+    vertical-align: top;
+    padding-top: 0.55em;
+}
+
+.watupro-ansnum.watupro-2-columns, li.watupro-ansnum.watupro-2-columns,
+.watupro-ansnum.watupro-3-columns, li.watupro-ansnum.watupro-3-columns,
+.watupro-ansnum.watupro-4-columns, li.watupro-ansnum.watupro-4-columns {
+    padding-left: 0.5em;
+    padding-right: 0;
+}
+
+.watupro-ansnum.watupro-2-columns:first-of-type,
+.watupro-ansnum.watupro-3-columns:first-of-type,
+.watupro-ansnum.watupro-4-columns:first-of-type,
+.watupro-ansnum.watupro-2-columns:nth-of-type(2n+1),
+.watupro-ansnum.watupro-3-columns:nth-of-type(3n+1),
+.watupro-ansnum.watupro-4-columns:nth-of-type(4n+1) {
+    /*padding-right: 0.5em;*/
+    padding-left: 0;
+}
+
+/* thanks to http://viralpatel.net/blogs/css-radio-button-checkbox-background/ */
+.watupro-question-choice input[type=radio],
+.watupro-question-choice input[type=checkbox] {
+    display:none !important;
+}
+
+.watupro-question-choice input[type=radio] + label,
+.watupro-question-choice input[type=checkbox] + label {
+    margin: 0.25em 0 0 0;
+    padding: 0.25em 0.75em;
+    font-size: 1em;
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+    border: 1px solid #DDADC2;
+    background: #fff;
+    color: #C986A3;
+}
+
+.watupro-question-choice input[type=radio]:checked + label,
+.watupro-question-choice input[type=checkbox]:checked + label {
+    background-image: none;
+    outline: 0;
+    background: #C986A3;
+    color: #fff;
+}
+
+.watupro-question-choice.watupro-ansnum input[type=radio] + label,
+.watupro-question-choice.watupro-ansnum input[type=checkbox] + label {
+    max-width: calc(100% - 2.5em);
+}
+
+/* progress bar */
+.watupro-progress-percent {
+    color: #C986A3;
+}
+
+.watupro-progress-bar {
+    border-radius: 0.625em;
+    background: rgba(221, 173, 194, 0.35) !important;
+    background: -moz-linear-gradient(top,  rgba(221, 173, 194, 0.35) 0%, rgb(221, 173, 194) 100%) !important;
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(221, 173, 194, 0.35)), color-stop(100%, rgb(221, 173, 194))) !important;
+    background: -webkit-linear-gradient(top,  rgba(221, 173, 194, 0.35) 0%, rgb(221, 173, 194) 100%) !important;
+    background: -o-linear-gradient(top,  rgba(221, 173, 194, 0.35) 0%, rgb(221, 173, 194) 100%) !important;
+    background: -ms-linear-gradient(top,  rgba(221, 173, 194, 0.35) 0%, rgb(221, 173, 194) 100%) !important;
+    background: linear-gradient(to bottom,  rgba(221, 173, 194, 0.35) 0%, rgb(221, 173, 194) 100%) !important;
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#DDADC2', endColorstr='#DDADC2',GradientType=0 ) !important;
+}
+
+/* Answers */
+.user-answer span.answer, .user-answer {
+    color:#99476B !important;
+}
+
+.correct-answer span.answer {
+}
+
+
+/* Paginator */
+ul.watupro-paginator {
+    justify-content: center;
+}
+ul.watupro-category-paginator {
+    justify-content: center;
+}
+
+ul.watupro-paginator li {
+    border: 1px solid #C986A3;
+    color: #C986A3;
+    background-color: #fff;
+    flex-grow: 0; /* 1 if you want the remaining space in the container will be distributed equally to all buttons */
+}
+
+ul.watupro-paginator li.answered {
+    background-color: #C986A3 !important;
+    border-color: #C986A3 !important;
+    color: #fff;
+}
+
+ul.watupro-paginator li.unanswered {
+    background-color: #d5d5d5 !important;
+    border-color: #DDDDDD !important;
+    color: #fff;
+}
+
+ul.watupro-paginator li.active {
+    padding: 0.4em 1em;
+    box-shadow: 0 8px 6px -6px rgba(0,0,0,0.5), inset 0 0 5px 1px rgba(0,0,0,0.3);
+    -webkit-transform: scale(1.1);
+    -ms-transform: scale(1.1);
+    transform: scale(1.1);
+    border: none !important;
+}
+
+ul.watupro-category-paginator li.active {
+    -webkit-transform: scaleY(1.1) scaleX(1.02) translateY(-1px);
+    -ms-transform: scaleY(1.1) scaleX(1.02) translateY(-1px);
+    transform: scaleY(1.1) scaleX(1.02) translateY(-1px);
+}

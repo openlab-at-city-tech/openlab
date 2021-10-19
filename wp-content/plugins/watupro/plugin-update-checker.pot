@@ -1,0 +1,30 @@
+msgid ""
+msgstr ""
+"Language: en\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: makepot.js 0.3.0\n"
+
+#: lib/plugin-update-checker/Puc/v4p10/Plugin/Ui.php:128
+msgid "Check for updates"
+msgstr ""
+
+#: lib/plugin-update-checker/Puc/v4p10/Plugin/Ui.php:223
+msgid "Unknown update checker status \"%s\""
+msgstr ""
+
+#: lib/plugin-update-checker/Puc/v4p10/Plugin/Ui.php:213
+msgid "The %s plugin is up to date."
+msgstr ""
+
+#: lib/plugin-update-checker/Puc/v4p10/Plugin/Ui.php:215
+msgid "A new version of the %s plugin is available."
+msgstr ""
+
+#: lib/plugin-update-checker/Puc/v4p10/Plugin/Ui.php:217
+msgid "Could not determine if updates are available for %s."
+msgstr ""
+
+#: lib/plugin-update-checker/Puc/v4p10/Vcs/PluginUpdateChecker.php:98
+msgid "There is no changelog available."
+msgstr ""

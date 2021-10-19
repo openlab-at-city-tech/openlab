@@ -1,3 +1,7 @@
+/* global gsurveyLikertStrings, gsurveyVars */
+
+var isLegacy = gsurveyLikertStrings.isLegacy === 'true';
+
 /*----  Survey ----*/
 function SetDefaultValues_survey(field) {
     field.label = gsurveyVars.strings.untitledSurveyField;
@@ -49,6 +53,10 @@ function StartChangeSurveyType(type) {
             new Choice(gsurveyRankStrings.secondChoice, GenerateSurveyDefaultChoiceValue(field), false),
             new Choice(gsurveyRankStrings.thirdChoice, GenerateSurveyDefaultChoiceValue(field), false)
         );
+    }
+
+    if ( type !== 'text' ) {
+        field.inputMask = false;
     }
 
     return StartChangeInputType(type, field);
@@ -254,31 +262,50 @@ function gsurveyLikertMoveColumn(fromIndex, toIndex) {
     gsurveyLikertUpdatePreview(field);
 }
 
-function gsurveyLikertGetColumns(field) {
+function gsurveyLikertGetColumns( field ) {
+	var imagesUrl = gsurveyVars.imagesUrl;
+	var str = '';
+	var score;
+	var i;
 
-    var imagesUrl = gsurveyVars.imagesUrl;
-    var str = '', score;
-    for (var i = 0; i < field.choices.length; i++) {
+	for ( i = 0; i < field.choices.length; i++ ) {
+		var elements = {
+			handle: '<i class="field-choice-handle field-choice-handle--column"></i>',
+			add: '<button class="field-choice-button field-choice-button--insert gf_insert_field_choice" onclick="gsurveyLikertInsertColumn(' + ( i + 1 ) + ');"></button>',
+			remove: '<button class="field-choice-button field-choice-button--delete gf_delete_field_choice" onclick="gsurveyLikertDeleteColumn(' + i + ');"></button>',
+		};
 
-        str += "<li data-index='" + i + "'>";
-        str += "<img src='" + imagesUrl + "/arrow-handle.svg' width='14' height='14' class='gsurvey-liket-column-handle' alt='" + gsurveyLikertStrings.dragToReOrder + "' /> ";
-        str += "<input type='text' id='gsurvey-likert-column-text-" + i + "' value=\"" + field.choices[i].text.replace(/"/g, "&quot;") + "\"  class='gsurvey-column-input gsurvey-likert-column-text' onkeyup='gsurveyLikertUpdateColumnsObject();gsurveyLikertUpdatePreview()'/>";
-        if(typeof field.choices[i].score == 'undefined'){
-            field.choices[i].score = i+1;
-        }
-        score = field.choices[i].score;
-        str += "<input type='text' id='gsurvey-likert-column-score-" + i + "' value=\"" + score + "\"  class='gsurvey-column-input gsurvey-likert-column-score' onkeyup='gsurveyLikertUpdateColumnsObject();gsurveyLikertUpdatePreview()'/>";
-        str += "<input type='hidden' id='gsurvey-likert-column-value-" + i + "' value=\"" + field.choices[i].value + "\" class='gsurvey-likert-column-value' >";
-        str += "<img src='" + imagesUrl + "/add.svg' width='16' height='16' class='add_field_choice' title='" + gsurveyLikertStrings.addAnotherColumn + "' alt='" + gsurveyLikertStrings.addAnotherColumn + "' style='cursor:pointer; margin:0 3px;' onclick=\"gsurveyLikertInsertColumn(" + (i + 1) + ");\" />";
+		if ( isLegacy ) {
+			elements = {
+				handle: '<img src="' + imagesUrl + '/arrow-handle.svg" width="14" height="14" class="gsurvey-liket-column-handle gsurvey-likert-handle--legacy" alt="' + gsurveyLikertStrings.dragToReOrder + '" />',
+				add: '<img src="' + imagesUrl + '/add.svg" width="16" height="16" class="add_field_choice" title="' + gsurveyLikertStrings.addAnotherColumn + '" alt="' + gsurveyLikertStrings.addAnotherColumn + '" style="cursor:pointer; margin:0 3px;" onclick="gsurveyLikertInsertColumn(' + ( i + 1 ) + ');" />',
+				remove: '<img src="' + imagesUrl + '/remove.svg" width="16" height="16" title="' + gsurveyLikertStrings.removeThisColumn + '" alt="' + gsurveyLikertStrings.removeThisColumn + '" class="delete_field_choice" style="cursor:pointer;" onclick="gsurveyLikertDeleteColumn(' + i + ');" />',
+			};
+		}
 
-        if (field.choices.length > 1)
-            str += "<img src='" + imagesUrl + "/remove.svg' width='16' height='16' title='" + gsurveyLikertStrings.removeThisColumn + "' alt='" + gsurveyLikertStrings.removeThisColumn + "' class='delete_field_choice' style='cursor:pointer;' onclick=\"gsurveyLikertDeleteColumn(" + i + ");\" />";
+		str += isLegacy ? '<li data-index="' + i + '">' : '<li class="field-choice-row" data-index="' + i + '">';
+		str += elements.handle;
 
-        str += '</li>';
+		str += "<input type='text' id='gsurvey-likert-column-text-" + i + "' value=\"" + field.choices[i].text.replace(/"/g, "&quot;") + "\"  class='gsurvey-column-input gsurvey-likert-column-text field-choice-text field-choice-text--likert' onkeyup='gsurveyLikertUpdateColumnsObject();gsurveyLikertUpdatePreview()'/>";
 
-    }
+		if ( typeof field.choices[ i ].score == 'undefined' ) {
+			field.choices[ i ].score = i + 1;
+		}
 
-    return str;
+		score = field.choices[ i ].score;
+
+		str += "<input type='text' id='gsurvey-likert-column-score-" + i + "' value=\"" + score + "\"  class='gsurvey-column-input gsurvey-likert-column-score' onkeyup='gsurveyLikertUpdateColumnsObject();gsurveyLikertUpdatePreview()'/>";
+		str += "<input type='hidden' id='gsurvey-likert-column-value-" + i + "' value=\"" + field.choices[i].value + "\" class='gsurvey-likert-column-value' >";
+		str += elements.add;
+
+		if ( field.choices.length > 1 ) {
+			str += elements.remove;
+		}
+
+		str += '</li>';
+	}
+
+	return str;
 }
 
 // likert rows
@@ -347,26 +374,39 @@ function gsurveyLikertMoveRow(fromIndex, toIndex) {
     gsurveyLikertUpdatePreview(field);
 }
 
-function gsurveyLikertGetRows(field) {
+function gsurveyLikertGetRows( field ) {
+	var imagesUrl = gsurveyVars.imagesUrl;
+	var str = '';
 
-    var imagesUrl = gsurveyVars.imagesUrl;
-    var str = '';
-    for (var i = 0; i < field.gsurveyLikertRows.length; i++) {
+	for ( var i = 0; i < field.gsurveyLikertRows.length; i++ ) {
+		var elements = {
+			handle: '<i class="field-choice-handle field-choice-handle--row"></i>',
+			add: '<button class="field-choice-button field-choice-button--insert gf_insert_field_choice" onclick="gsurveyLikertInsertRow(' + ( i + 1 ) + ');"></button>',
+			remove: '<button class="field-choice-button field-choice-button--delete gf_delete_field_choice" onclick="gsurveyLikertDeleteRow(' + i + ');"></button>',
+		};
 
-        str += "<li data-index='" + i + "'>";
-        str += "<img src='" + imagesUrl + "/arrow-handle.svg' width='14' height='14' class='gsurvey-liket-row-handle' alt='" + gsurveyLikertStrings.dragToReOrder + "' /> ";
-        str += "<input type='text' id='gsurvey-likert-row-text-" + i + "' value=\"" + field.gsurveyLikertRows[i].text.replace(/"/g, "&quot;") + "\"  class='gsurvey-row-input gsurvey-likert-row-text' onkeyup='gsurveyLikertUpdateRowsObject(); gsurveyLikertUpdatePreview();' />";
-        str += "<input type='hidden' id='gsurvey-likert-row-id-" + i + "' value=\"" + field.gsurveyLikertRows[i].value + "\" class='gsurvey-likert-row-id' >";
-        str += "<img src='" + imagesUrl + "/add.svg' width='16' height='16' class='add_field_choice' title='" + gsurveyLikertStrings.addAnotherRow + "' alt='" + gsurveyLikertStrings.addAnotherRow + "' style='cursor:pointer; margin:0 3px;' onclick=\"gsurveyLikertInsertRow(" + (i + 1) + ");\" />";
+		if ( isLegacy ) {
+			elements = {
+				handle: '<img src=\'' + imagesUrl + '/arrow-handle.svg\' width=\'14\' height=\'14\' class=\'gsurvey-liket-row-handle gsurvey-likert-handle--legacy\' alt=\'' + gsurveyLikertStrings.dragToReOrder + '\' /> ',
+				add: '<img src=\'' + imagesUrl + '/add.svg\' width=\'16\' height=\'16\' class=\'add_field_choice\' title=\'' + gsurveyLikertStrings.addAnotherRow + '\' alt=\'' + gsurveyLikertStrings.addAnotherRow + '\' style=\'cursor:pointer; margin:0 3px;\' onclick="gsurveyLikertInsertRow(' + ( i + 1 ) + ');" />',
+				remove: '<img src=\'' + imagesUrl + '/remove.svg\' width=\'16\' height=\'16\' title=\'' + gsurveyLikertStrings.removeThisRow + '\' alt=\'' + gsurveyLikertStrings.removeThisRow + '\' class=\'delete_field_choice\' style=\'cursor:pointer;\' onclick="gsurveyLikertDeleteRow(' + i + ');" />',
+			};
+		}
 
-        if (field.gsurveyLikertRows.length > 1)
-            str += "<img src='" + imagesUrl + "/remove.svg' width='16' height='16' title='" + gsurveyLikertStrings.removeThisRow + "' alt='" + gsurveyLikertStrings.removeThisRow + "' class='delete_field_choice' style='cursor:pointer;' onclick=\"gsurveyLikertDeleteRow(" + i + ");\" />";
+		str += isLegacy ? '<li data-index="' + i + '">' : '<li class="field-choice-row" data-index="' + i + '">';
+		str += elements.handle;
+		str += '<input type=\'text\' id=\'gsurvey-likert-row-text-' + i + '\' value="' + field.gsurveyLikertRows[ i ].text.replace( /"/g, '&quot;' ) + '"  class=\'gsurvey-row-input gsurvey-likert-row-text field-choice-text field-choice-text--likert\' onkeyup=\'gsurveyLikertUpdateRowsObject(); gsurveyLikertUpdatePreview();\' />';
+		str += '<input type=\'hidden\' id=\'gsurvey-likert-row-id-' + i + '\' value="' + field.gsurveyLikertRows[ i ].value + '" class=\'gsurvey-likert-row-id\' >';
+		str += elements.add;
 
-        str += '</li>';
+		if ( field.gsurveyLikertRows.length > 1 ) {
+			str += elements.remove;
+		}
 
-    }
+		str += '</li>';
+	}
 
-    return str;
+	return str;
 }
 
 /*----  Rank ----*/
@@ -414,7 +454,7 @@ function gsurveyRankGetFieldPreviewMarkup(field) {
     for (var i = 0; i < field.choices.length; i++) {
         var id = 'choice_' + field.id + '_' + i;
         if (i < 5)
-            m += "<li class='gsurvey-rank-choice'><img src='" + gsurveyVars.imagesUrl + "/arrow-handle.svg' width='14' height='14' class='gsurvey-rank-handle' alt='' /><label for='" + id + "'>" + field.choices[i].text + "</label></li>";
+            m += "<li class='gsurvey-rank-choice'><label for='" + id + "'>" + field.choices[i].text + "</label></li>";
     }
     if (field.choices.length > 5)
         m += "<li class='gchoice_total'>" + gf_vars['editToViewAll'].replace('%d', field.choices.length) + '</li>';
@@ -496,7 +536,7 @@ jQuery(document).ready(function () {
 
     jQuery('#gsurvey-likert-columns').sortable({
         axis: 'y',
-        handle: '.gsurvey-liket-column-handle',
+        handle: isLegacy ? '.gsurvey-liket-column-handle' : '.field-choice-handle--column',
         update: function (event, ui) {
             var fromIndex = ui.item.data('index');
             var toIndex = ui.item.index();
@@ -506,7 +546,7 @@ jQuery(document).ready(function () {
 
     jQuery('#gsurvey-likert-rows').sortable({
         axis: 'y',
-        handle: '.gsurvey-liket-row-handle',
+        handle: isLegacy ? '.gsurvey-liket-row-handle' : '.field-choice-handle--row',
         update: function (event, ui) {
             var fromIndex = ui.item.data('index');
             var toIndex = ui.item.index();

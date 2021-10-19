@@ -28,6 +28,7 @@ class GF_Field_Survey extends GF_Field {
 		return array(
 			'group' => 'advanced_fields',
 			'text'  => $this->get_form_editor_field_title(),
+			'icon'  => 'gform-icon--survey',
 		);
 	}
 

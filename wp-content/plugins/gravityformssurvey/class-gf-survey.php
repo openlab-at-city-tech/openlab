@@ -2,6 +2,11 @@
 
 //------------------------------------------
 
+// don't load directly
+if ( ! defined( 'ABSPATH' ) ) {
+	die();
+}
+
 GFForms::include_addon_framework();
 
 class GFSurvey extends GFAddOn {
@@ -15,6 +20,15 @@ class GFSurvey extends GFAddOn {
 	protected $_title = 'Gravity Forms Survey Add-On';
 	protected $_short_title = 'Survey';
 	protected $_enable_rg_autoupgrade = true;
+
+	/**
+	 * Whether this add-on has access to the Gravity Forms settings renderer.
+	 *
+	 * @since 3.5
+	 *
+	 * @var bool
+	 */
+	protected $_has_settings_renderer;
 
 	/**
 	 * Members plugin integration
@@ -66,6 +80,7 @@ class GFSurvey extends GFAddOn {
 	 * Handles hooks and loading of language files.
 	 */
 	public function init() {
+		$this->_has_settings_renderer = $this->is_gravityforms_supported( '2.5-beta' );
 
 		// Integration with the feed add-ons as of GF 1.9.15.12; for add-ons which don't override get_field_value().
 		add_filter( 'gform_addon_field_value', array( $this, 'addon_field_value' ), 10, 5 );
@@ -110,9 +125,6 @@ class GFSurvey extends GFAddOn {
 		add_action( 'gform_field_standard_settings', array( $this, 'survey_field_settings' ), 10, 2 );
 		add_filter( 'gform_tooltips', array( $this, 'add_survey_tooltips' ) );
 
-		// merge tags
-		add_filter( 'gform_admin_pre_render', array( $this, 'add_merge_tags' ) );
-
 		// display results on entry list
 		add_filter( 'gform_entries_field_value', array( $this, 'export_field_value' ), 10, 4 );
 
@@ -149,6 +161,9 @@ class GFSurvey extends GFAddOn {
 	 * @return array
 	 */
 	public function scripts() {
+
+		$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG || isset( $_GET['gform_debug'] ) ? '' : '.min';
+
 		$gsurvey_js_deps = array( 'jquery', 'jquery-ui-sortable' );
 		if ( wp_is_mobile() ) {
 			$gsurvey_js_deps[] = 'jquery-touch-punch';
@@ -157,7 +172,7 @@ class GFSurvey extends GFAddOn {
 		$scripts = array(
 			array(
 				'handle'   => 'gsurvey_form_editor_js',
-				'src'      => $this->get_base_url() . '/js/gsurvey_form_editor.js',
+				'src'      => $this->get_base_url() . "/js/gsurvey_form_editor{$min}.js",
 				'version'  => $this->_version,
 				'deps'     => array( 'jquery' ),
 				'callback' => array( $this, 'localize_scripts' ),
@@ -167,7 +182,7 @@ class GFSurvey extends GFAddOn {
 			),
 			array(
 				'handle'  => 'gsurvey_js',
-				'src'     => $this->get_base_url() . '/js/gsurvey.js',
+				'src'     => $this->get_base_url() . "/js/gsurvey{$min}.js",
 				'version' => $this->_version,
 				'deps'    => $gsurvey_js_deps,
 				'enqueue' => array(
@@ -176,6 +191,23 @@ class GFSurvey extends GFAddOn {
 				),
 			),
 		);
+
+		$merge_tags = $this->get_merge_tags();
+
+		if ( ! empty( $merge_tags ) ) {
+			$scripts[] = array(
+				'handle'  => 'gform_survey_merge_tags',
+				'src'     => $this->get_base_url() . "/js/gsurvey_merge_tags{$min}.js",
+				'version' => $this->_version,
+				'deps'    => array( 'jquery' ),
+				'enqueue' => array(
+					array( 'admin_page' => array( 'form_settings' ) ),
+				),
+				'strings' => array(
+					'merge_tags' => $merge_tags,
+				),
+			);
+		}
 
 		return array_merge( parent::scripts(), $scripts );
 	}
@@ -187,10 +219,12 @@ class GFSurvey extends GFAddOn {
 	 */
 	public function styles() {
 
+		$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG || isset( $_GET['gform_debug'] ) ? '' : '.min';
+
 		$styles = array(
 			array(
 				'handle'  => 'gsurvey_form_editor_css',
-				'src'     => $this->get_base_url() . '/css/gsurvey_form_editor.css',
+				'src'     => $this->get_base_url() . "/css/gsurvey_form_editor{$min}.css",
 				'version' => $this->_version,
 				'enqueue' => array(
 					array( 'admin_page' => array( 'form_editor' ) ),
@@ -198,7 +232,7 @@ class GFSurvey extends GFAddOn {
 			),
 			array(
 				'handle'  => 'gsurvey_css',
-				'src'     => $this->get_base_url() . '/css/gsurvey.css',
+				'src'     => $this->get_base_url() . "/css/gsurvey{$min}.css",
 				'version' => $this->_version,
 				'media'   => 'screen',
 				'enqueue' => array(
@@ -225,49 +259,49 @@ class GFSurvey extends GFAddOn {
 			'ajaxurl'   => admin_url( 'admin-ajax.php', $protocol ),
 			'imagesUrl' => $this->get_base_url() . '/images',
 			'strings'   => array(
-				'untitledSurveyField' => esc_html__( 'Untitled Survey Field', 'gravityformssurvey' ),
+				'untitledSurveyField' => wp_strip_all_tags( __( 'Untitled Survey Field', 'gravityformssurvey' ) ),
 			),
 		);
 		wp_localize_script( 'gsurvey_form_editor_js', 'gsurveyVars', $params );
 
 		//localize strings for the js file
 		$strings = array(
-			'firstChoice'      => esc_html__( 'First row', 'gravityformssurvey' ),
-			'secondChoice'     => esc_html__( 'Second row', 'gravityformssurvey' ),
-			'thirdChoice'      => esc_html__( 'Third row', 'gravityformssurvey' ),
-			'fourthChoice'     => esc_html__( 'Fourth row', 'gravityformssurvey' ),
-			'fifthChoice'      => esc_html__( 'Fifth row', 'gravityformssurvey' ),
-			'dragToReOrder'    => esc_html__( 'Drag to re-order', 'gravityformssurvey' ),
-			'addAnotherRow'    => esc_html__( 'Add another row', 'gravityformssurvey' ),
-			'removeThisRow'    => esc_html__( 'Remove this row', 'gravityformssurvey' ),
-			'addAnotherColumn' => esc_html__( 'Add another column', 'gravityformssurvey' ),
-			'removeThisColumn' => esc_html__( 'Remove this column', 'gravityformssurvey' ),
-			'columnLabel1'     => esc_html__( 'Strongly disagree', 'gravityformssurvey' ),
-			'columnLabel2'     => esc_html__( 'Disagree', 'gravityformssurvey' ),
-			'columnLabel3'     => esc_html__( 'Neutral', 'gravityformssurvey' ),
-			'columnLabel4'     => esc_html__( 'Agree', 'gravityformssurvey' ),
-			'columnLabel5'     => esc_html__( 'Strongly agree', 'gravityformssurvey' ),
-
+			'isLegacy'         => ! $this->_has_settings_renderer ? 'true' : 'false',
+			'firstChoice'      => wp_strip_all_tags( __( 'First row', 'gravityformssurvey' ) ),
+			'secondChoice'     => wp_strip_all_tags( __( 'Second row', 'gravityformssurvey' ) ),
+			'thirdChoice'      => wp_strip_all_tags( __( 'Third row', 'gravityformssurvey' ) ),
+			'fourthChoice'     => wp_strip_all_tags( __( 'Fourth row', 'gravityformssurvey' ) ),
+			'fifthChoice'      => wp_strip_all_tags( __( 'Fifth row', 'gravityformssurvey' ) ),
+			'dragToReOrder'    => wp_strip_all_tags( __( 'Drag to re-order', 'gravityformssurvey' ) ),
+			'addAnotherRow'    => wp_strip_all_tags( __( 'Add another row', 'gravityformssurvey' ) ),
+			'removeThisRow'    => wp_strip_all_tags( __( 'Remove this row', 'gravityformssurvey' ) ),
+			'addAnotherColumn' => wp_strip_all_tags( __( 'Add another column', 'gravityformssurvey' ) ),
+			'removeThisColumn' => wp_strip_all_tags( __( 'Remove this column', 'gravityformssurvey' ) ),
+			'columnLabel1'     => wp_strip_all_tags( __( 'Strongly disagree', 'gravityformssurvey' ) ),
+			'columnLabel2'     => wp_strip_all_tags( __( 'Disagree', 'gravityformssurvey' ) ),
+			'columnLabel3'     => wp_strip_all_tags( __( 'Neutral', 'gravityformssurvey' ) ),
+			'columnLabel4'     => wp_strip_all_tags( __( 'Agree', 'gravityformssurvey' ) ),
+			'columnLabel5'     => wp_strip_all_tags( __( 'Strongly agree', 'gravityformssurvey' ) ),
 		);
 		wp_localize_script( 'gsurvey_form_editor_js', 'gsurveyLikertStrings', $strings );
 
 		//localize strings for the rank field
 		$rank_strings = array(
-			'firstChoice'  => esc_html__( 'First Choice', 'gravityformssurvey' ),
-			'secondChoice' => esc_html__( 'Second Choice', 'gravityformssurvey' ),
-			'thirdChoice'  => esc_html__( 'Third Choice', 'gravityformssurvey' ),
-			'fourthChoice' => esc_html__( 'Fourth Choice', 'gravityformssurvey' ),
-			'fifthChoice'  => esc_html__( 'Fifth Choice', 'gravityformssurvey' ),
+			'firstChoice'  => wp_strip_all_tags( __( 'First Choice', 'gravityformssurvey' ) ),
+			'secondChoice' => wp_strip_all_tags( __( 'Second Choice', 'gravityformssurvey' ) ),
+			'thirdChoice'  => wp_strip_all_tags( __( 'Third Choice', 'gravityformssurvey' ) ),
+			'fourthChoice' => wp_strip_all_tags( __( 'Fourth Choice', 'gravityformssurvey' ) ),
+			'fifthChoice'  => wp_strip_all_tags( __( 'Fifth Choice', 'gravityformssurvey' ) ),
 		);
 		wp_localize_script( 'gsurvey_form_editor_js', 'gsurveyRankStrings', $rank_strings );
 
 		//localize strings for the ratings field
 		$rating_strings = array(
-			'firstChoice'  => esc_html__( 'Terrible', 'gravityformssurvey' ),
-			'secondChoice' => esc_html__( 'Not so great', 'gravityformssurvey' ),
-			'thirdChoice'  => esc_html__( 'Neutral', 'gravityformssurvey' ),
-			'fourthChoice' => esc_html__( 'Pretty good', 'gravityformssurvey' ),
-			'fifthChoice'  => esc_html__( 'Excellent', 'gravityformssurvey' ),
+			'firstChoice'  => wp_strip_all_tags( __( 'Terrible', 'gravityformssurvey' ) ),
+			'secondChoice' => wp_strip_all_tags( __( 'Not so great', 'gravityformssurvey' ) ),
+			'thirdChoice'  => wp_strip_all_tags( __( 'Neutral', 'gravityformssurvey' ) ),
+			'fourthChoice' => wp_strip_all_tags( __( 'Pretty good', 'gravityformssurvey' ) ),
+			'fifthChoice'  => wp_strip_all_tags( __( 'Excellent', 'gravityformssurvey' ) ),
 		);
 		wp_localize_script( 'gsurvey_form_editor_js', 'gsurveyRatingStrings', $rating_strings );
 
@@ -296,10 +330,10 @@ class GFSurvey extends GFAddOn {
 		wp_localize_script( 'gsurvey_results_js', 'gresultsVars', $vars );
 
 		$strings = array(
-			'noFilters'         => esc_html__( 'No filters', 'gravityformspolls' ),
-			'addFieldFilter'    => esc_html__( 'Add a field filter', 'gravityformspolls' ),
-			'removeFieldFilter' => esc_html__( 'Remove a field filter', 'gravityformspolls' ),
-			'ajaxError'         => esc_html__( 'Error retrieving results. Please contact support.', 'gravityformspolls' ),
+			'noFilters'         => wp_strip_all_tags( __( 'No filters', 'gravityformspolls' ) ),
+			'addFieldFilter'    => wp_strip_all_tags( __( 'Add a field filter', 'gravityformspolls' ) ),
+			'removeFieldFilter' => wp_strip_all_tags( __( 'Remove a field filter', 'gravityformspolls' ) ),
+			'ajaxError'         => wp_strip_all_tags( __( 'Error retrieving results. Please contact support.', 'gravityformspolls' ) ),
 		);
 
 		wp_localize_script( 'gsurvey_results_js', 'gresultsStrings', $strings );
@@ -511,52 +545,61 @@ class GFSurvey extends GFAddOn {
 	/**
 	 * Add the score merge tags to the merge tag drop downs in the admin.
 	 *
+	 * @deprecated 3.7 Use GFSurvey::get_merge_tags().
+	 *
 	 * @param array $form The current form.
 	 *
 	 * @return array
 	 */
 	public function add_merge_tags( $form ) {
-		if ( ! $this->is_form_settings() ) {
-			return $form;
+		_deprecated_function( __METHOD__, '3.7', 'GFSurvey::get_merge_tags()' );
+		return $form;
+	}
+
+	/**
+	 * Gets the merge tags to add to the merge tag drop downs in the admin.
+	 *
+	 * @return array
+	 */
+	private function get_merge_tags() {
+		$merge_tags = array();
+		$form       = $this->get_current_form();
+
+		if ( ! $form ) {
+			return $merge_tags;
 		}
 
 		$survey_fields = GFAPI::get_fields_by_type( $form, array( 'survey' ) );
+
 		if ( empty( $survey_fields ) ) {
-			return $form;
+			return $merge_tags;
 		}
 
 		$scoring_enabled = false;
-		$merge_tags      = array();
+
 		foreach ( $form['fields'] as $field ) {
 			if ( $field->get_input_type() == 'likert' && $field->gsurveyLikertEnableScoring ) {
 				$scoring_enabled = true;
 				$field_id        = $field->id;
 				$field_label     = $field->label;
 				$group           = $field->isRequired ? 'required' : 'optional';
-				$merge_tags[]    = array( 'group' => $group, 'label' => esc_html__( 'Survey Field Score: ', 'gravityformssurvey' ) . $field_label, 'tag' => "{score:id={$field_id}}" );
+				$merge_tags[]    = array(
+					'group' => $group,
+					'label' => esc_html__( 'Survey Field Score: ', 'gravityformssurvey' ) . $field_label,
+					'tag'   => "{score:id={$field_id}}",
+				);
 			}
 		}
-		if ( $scoring_enabled ) {
-			$merge_tags[] = array( 'group' => 'other', 'label' => esc_html__( 'Survey Total Score', 'gravityformssurvey' ), 'tag' => '{survey_total_score}' );
-		}
-		?>
-		<script type="text/javascript">
-			if (window.gform)
-				gform.addFilter("gform_merge_tags", "gsurvey_add_merge_tags");
-			function gsurvey_add_merge_tags(mergeTags, elementId, hideAllFields, excludeFieldTypes, isPrepop, option) {
-				if (isPrepop)
-					return mergeTags;
-				var customMergeTags = <?php echo json_encode( $merge_tags ); ?>;
-				jQuery.each(customMergeTags, function (i, customMergeTag) {
-					mergeTags[customMergeTag.group].tags.push({ tag: customMergeTag.tag, label: customMergeTag.label });
-				});
 
-				return mergeTags;
-			}
-		</script>
-		<?php
-		//return the form object from the php hook
-		return $form;
+		if ( $scoring_enabled ) {
+			$merge_tags[] = array(
+				'group' => 'other',
+				'label' => esc_html__( 'Survey Total Score', 'gravityformssurvey' ),
+				'tag'   => '{survey_total_score}',
+			);
+		}
+
+		return $merge_tags;
 	}
 
 	/**
@@ -907,27 +950,32 @@ class GFSurvey extends GFAddOn {
 	 * Add the custom settings for the Survey fields to the fields general tab.
 	 *
 	 * @param int $position The position the settings should be located at.
-	 * @param int $form_id The ID of the form currently being edited.
+	 * @param int $form_id  The ID of the form currently being edited.
 	 */
 	public function survey_field_settings( $position, $form_id ) {
 		if ( $position == 25 ) {
 			?>
 			<li class="gsurvey-setting-question field_setting">
-				<label for="gsurvey-question">
+				<label for="gsurvey-question" class="section_label">
 					<?php esc_html_e( 'Survey Question', 'gravityformssurvey' ); ?>
 					<?php gform_tooltip( 'gsurvey_question' ); ?>
 				</label>
-				<textarea id="gsurvey-question" class="fieldwidth-3 fieldheight-2"
-						  onkeyup="SetFieldLabel(this.value)"
-						  size="35"></textarea>
+				<textarea
+					id="gsurvey-question"
+					class="fieldwidth-3 fieldheight-2"
+					onkeyup="SetFieldLabel(this.value)"
+					size="35">
+				</textarea>
 			</li>
 			<li class="gsurvey-setting-field-type field_setting">
-				<label for="gsurvey-field-type">
+				<label for="gsurvey-field-type" class="section_label">
 					<?php esc_html_e( 'Survey Field Type', 'gravityformssurvey' ); ?>
 					<?php gform_tooltip( 'gsurvey_field_type' ); ?>
 				</label>
-				<select id="gsurvey-field-type"
-						onchange="if(jQuery(this).val() == '') return; jQuery('#field_settings').slideUp(function(){StartChangeSurveyType(jQuery('#gsurvey-field-type').val());});">
+				<select
+					id="gsurvey-field-type"
+					onchange="if(jQuery(this).val() == '') return; jQuery('#field_settings').slideUp(function(){StartChangeSurveyType(jQuery('#gsurvey-field-type').val());});"
+				>
 					<option value="likert"><?php esc_html_e( 'Likert', 'gravityformssurvey' ); ?></option>
 					<option value="rank"><?php esc_html_e( 'Rank', 'gravityformssurvey' ); ?></option>
 					<option value="rating"><?php esc_html_e( 'Rating', 'gravityformssurvey' ); ?></option>
@@ -938,43 +986,54 @@ class GFSurvey extends GFAddOn {
 					<option value="select"><?php esc_html_e( 'Drop Down', 'gravityformssurvey' ); ?></option>
 				</select>
 			</li>
-		<?php
+			<?php
 		} elseif ( $position == 1362 ) {
 			?>
 			<li class="gsurvey-likert-setting-columns field_setting">
+				<div class="gsurvey-likert-setting-columns-header">
+					<label for="gsurvey-likert-columns" class="section_label">
+						<?php esc_html_e( 'Columns', 'gravityformssurvey' ); ?>
+						<?php gform_tooltip( 'gsurvey_likert_columns' ); ?>
+					</label>
 
-				<div style="float:right;">
-					<input id="gsurvey-likert-enable-scoring" type="checkbox"
-						   onclick="SetFieldProperty('gsurveyLikertEnableScoring', this.checked); jQuery('#gsurvey-likert-columns-container').toggleClass('gsurvey-likert-scoring-enabled');">
-					<label class="inline gfield_value_label" for="gsurvey-likert-enable-scoring"><?php esc_html_e( 'Enable Scoring', 'gravityformssurvey' ); ?></label> <?php gform_tooltip( 'gsurvey_likert_enable_scoring' ) ?>
+					<div class="gsurvey-likert-enable-scoring-container">
+						<input
+							id="gsurvey-likert-enable-scoring"
+							type="checkbox"
+							onclick="SetFieldProperty('gsurveyLikertEnableScoring', this.checked); jQuery('#gsurvey-likert-columns-container').toggleClass('gsurvey-likert-scoring-enabled');"
+						/>
+						<label class="inline gfield_value_label" for="gsurvey-likert-enable-scoring">
+							<?php esc_html_e( 'Enable Scoring', 'gravityformssurvey' ); ?>
+						</label> <?php gform_tooltip( 'gsurvey_likert_enable_scoring' ); ?>
+					</div>
 				</div>
-				<label for="gsurvey-likert-columns">
-					<?php esc_html_e( 'Columns', 'gravityformssurvey' ); ?>
-					<?php gform_tooltip( 'gsurvey_likert_columns' ); ?>
-				</label>
 
 				<div id="gsurvey-likert-columns-container">
-					<ul id="gsurvey-likert-columns">
-					</ul>
+					<ul id="gsurvey-likert-columns"></ul>
 				</div>
 			</li>
 			<li class="gsurvey-likert-setting-enable-multiple-rows field_setting">
-				<input type="checkbox" id="gsurvey-likert-enable-multiple-rows"
-					   onclick="field = GetSelectedField(); var value = jQuery(this).is(':checked'); SetFieldProperty('gsurveyLikertEnableMultipleRows', value); gsurveyLikertUpdateInputs(field); gsurveyLikertUpdatePreview(); jQuery('.gsurvey-likert-setting-rows').toggle('slow');" />
+				<input
+					type="checkbox"
+					id="gsurvey-likert-enable-multiple-rows"
+					onclick="field = GetSelectedField(); var value = jQuery(this).is(':checked'); SetFieldProperty('gsurveyLikertEnableMultipleRows', value); gsurveyLikertUpdateInputs(field); gsurveyLikertUpdatePreview(); jQuery('.gsurvey-likert-setting-rows').toggle();"
+				/>
 				<label for="gsurvey-likert-enable-multiple-rows" class="inline">
 					<?php esc_html_e( 'Enable Multiple Rows', 'gravityformssurvey' ); ?>
-					<?php gform_tooltip( 'gsurvey_likert_enable_multiple_rows' ) ?>
+					<?php gform_tooltip( 'gsurvey_likert_enable_multiple_rows' ); ?>
 				</label>
 
 			</li>
 			<li class="gsurvey-likert-setting-rows field_setting">
-				<?php esc_html_e( 'Rows', 'gravityformssurvey' ); ?>
-				<?php gform_tooltip( 'gsurvey_likert_rows' ) ?>
+				<label for="gsurvey-likert-rows" class="section_label">
+					<?php esc_html_e( 'Rows', 'gravityformssurvey' ); ?>
+					<?php gform_tooltip( 'gsurvey_likert_rows' ); ?>
+				</label>
 				<div id="gsurvey-likert-rows-container">
 					<ul id="gsurvey-likert-rows"></ul>
 				</div>
 			</li>
-		<?php
+			<?php
 		}
 	}
 

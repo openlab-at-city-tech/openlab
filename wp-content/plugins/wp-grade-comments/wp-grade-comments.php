@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: WP Grade Comments
-Version: 1.4.2
+Version: 1.4.4
 Description: Grades and private comments for WordPress blog posts. Built for the City Tech OpenLab.
 Author: Boone Gorges
 Author URI: http://boone.gorg.es

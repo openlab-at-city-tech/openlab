@@ -71,3 +71,45 @@ add_action(
 		TablePress::$model_options->add_access_capabilities();
 	}
 );
+
+/**
+ * Hide update notices on plugins.php from non-super-admins.
+ */
+add_action(
+	'admin_print_scripts',
+	function() {
+		if ( ! class_exists( 'GFCommon' ) ) {
+			return;
+		}
+
+		if ( is_super_admin() ) {
+			return;
+		}
+
+		?>
+<style type="text/css">
+.plugins tr[data-plugin="gravityforms/gravityforms.php"] td.plugin-update,
+.plugins tr[data-plugin="gravityformsdropbox/dropbox.php"] td.plugin-update,
+.plugins tr[data-plugin="gf-image-choices/gf-image-choices.php"] td.plugin-update,
+.plugins tr[data-plugin="gravityformsquiz/quiz.php"] td.plugin-update,
+.plugins tr[data-plugin="gravityformssurvey/survey.php"] td.plugin-update,
+.plugins tr[data-plugin="gravityformszapier/zapier.php"] td.plugin-update {
+	padding-bottom: 1px;
+}
+
+tr[data-plugin="gravityforms/gravityforms.php"] td.plugin-update .update-message,
+tr[data-plugin="gravityformsdropbox/dropbox.php"] td.plugin-update .update-message,
+tr[data-plugin="gf-image-choices/gf-image-choices.php"] td.plugin-update .update-message,
+tr[data-plugin="gravityformsquiz/quiz.php"] td.plugin-update .update-message,
+tr[data-plugin="gravityformssurvey/survey.php"] td.plugin-update .update-message,
+tr[data-plugin="gravityformszapier/zapier.php"] td.plugin-update .update-message {
+	display: none;
+}
+
+tr.plugin-update-tr .gf_image_choices-plugin-update {
+	display: none;
+}
+</style>
+		<?php
+	}
+);
