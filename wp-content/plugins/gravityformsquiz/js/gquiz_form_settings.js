@@ -10,28 +10,9 @@
             toggleGradingOptions(this.value);
         });
 
-        var grading = $("input[name='_gaddon_setting_grading']:checked").val();
-        toggleGradingOptions(grading);
+        toggleGradingOptions( $("input[name='_gform_setting_grading']:checked").val() );
 
-        $("#passfaildisplayconfirmation, #letterdisplayconfirmation").click(function(){
-            $(this).parent().siblings(".gquiz-quiz-confirmation").toggle();
-        });
-
-        var passfailDisplayConfirmation, letterDisplayConfirmation;
-        passfailDisplayConfirmation = $("#passfaildisplayconfirmation").prop("checked");
-        letterDisplayConfirmation = $("#letterdisplayconfirmation").prop("checked");
-
-        if(passfaildisplayconfirmation)
-            $("#gquiz-grading-pass-fail-container .gquiz-quiz-confirmation").show();
-        else
-            $("#gquiz-grading-pass-fail-container .gquiz-quiz-confirmation").hide();
-
-        if(letterDisplayConfirmation)
-            $("#gquiz-grading-letter-container .gquiz-quiz-confirmation").show();
-        else
-            $("#gquiz-grading-letter-container .gquiz-quiz-confirmation").hide();
-
-        toggleGradingOptions();
+		initializeQuizConfirmations();
 
         $('#gquiz-grades').html(getGrades());
 
@@ -58,8 +39,6 @@
 
         }));
 
-
-
         //enble sorting on the grades table
         $('#gquiz-grades').sortable({
             axis  : 'y',
@@ -79,23 +58,53 @@
     }
 
     function toggleGradingOptions(gradeOption) {
-
         switch (gradeOption) {
             case "none" :
-                $('#gquiz-grading-pass-fail-container').fadeOut('fast');
-                $('#gquiz-grading-letter-container').fadeOut('fast');
+                $('#passfail_grading_options').fadeOut('fast');
+                $('#letter_options_section').fadeOut('fast');
                 break;
             case "passfail" :
-                $('#gquiz-grading-letter-container').fadeOut('fast');
-                $('#gquiz-grading-pass-fail-container').fadeIn('fast');
+                $('#letter_options_section').fadeOut('fast');
+                $('#passfail_grading_options').fadeIn('fast');
                 break;
             case "letter" :
-                $('#gquiz-grading-pass-fail-container').fadeOut('fast');
-                $('#gquiz-grading-letter-container').fadeIn('fast');
+                $('#passfail_grading_options').fadeOut('fast');
+                $('#letter_options_section').fadeIn('fast');
                 break;
         }
     }
 
+	/**
+	 * Initializes the state and event handlers for the Quiz Confirmation sections.
+	 */
+	function initializeQuizConfirmations() {
+		var passFailConfirmationFields = [
+			$( '#gform_setting_passConfirmationMessage' ),
+			$( '#gform_setting_passConfirmationDisableAutoformat' ),
+			$( '#gform_setting_failConfirmationMessage' ),
+			$( '#gform_setting_failConfirmationDisableAutoformat' ),
+		];
+
+		var letterGradeConfirmationFields = [
+			$( '#gform_setting_letterConfirmationMessage' ),
+			$( '#gform_setting_letterConfirmationDisableAutoformat' ),
+		];
+
+		toggleQuizConfirmations( $( '#passfaildisplayconfirmation' ), passFailConfirmationFields );
+		toggleQuizConfirmations( $( '#letterdisplayconfirmation' ), letterGradeConfirmationFields );
+	}
+
+	/**
+	 * Loops through Quiz Confirmation fields and shows or hides depending on the value of the checkbox.
+	 *
+	 * @param {Object} $gradingOption The selected Grading Setting radio input.
+	 * @param {Array} $quizConfirmationFields Array of quiz confirmation inputs for a given Grading Setting.
+	 */
+	function toggleQuizConfirmations( $gradingOption, $quizConfirmationFields ) {
+		for ( var i = 0, length = $quizConfirmationFields.length; i < length; i++ ) {
+			$gradingOption.prop( 'checked' ) ? $quizConfirmationFields[ i ].show() : $quizConfirmationFields[ i ].hide();
+		}
+	}
 
     function Grade(text, value) {
         this.text = text;
@@ -143,16 +152,24 @@
         for (var i = 0; i < grades.length; i++) {
 
             str += "<li data-index='" + i + "'>";
-            str += "<i class='fa fa-sort field-choice-handle gquiz-grade-handle' title='" + gquiz_strings.dragToReOrder + "'></i>";
+            str += "<i class='field-choice-handle gquiz-grade-handle' title='" + gquiz_strings.dragToReOrder + "'></i>";
             //str += "<img src='" + imagesUrl + "/arrow-handle.png' class='gquiz-grade-handle' alt='" + gquiz_strings.dragToReOrder + "' /> ";
             str += "<input type='text' id='gquiz-grade-text-" + i + "' value=\"" + grades[i].text.replace(/"/g, "&quot;") + "\"  class='gquiz-grade-input gquiz-grade-text' />";
             str += " <span class='gquiz-greater-than-or-equal'>&gt;=</span> ";
-            str += "<input type='text' id='gquiz-grade-value-" + i + "' value=\"" + grades[i].value + "\" class='gquiz-grade-input gquiz-grade-value' >";
-            str += " <span class='gquiz-percentage'>&#37;</span> ";
-            str += "<img src='" + imagesUrl + "/add.png' class='gquiz-add-grade' title='" + gquiz_strings.addAnotherGrade + "' alt='" + gquiz_strings.addAnotherGrade + "' style='cursor:pointer; margin:0 3px;' onclick=\"gquiz.insertGrade(" + (i + 1) + ");\" />";
 
-            if (grades.length > 1)
-                str += "<img src='" + imagesUrl + "/remove.png' title='" + gquiz_strings.removeThisGrade + "' alt='" + gquiz_strings.removeThisGrade + "' class='gquiz-delete-grade' style='cursor:pointer;' onclick=\"gquiz.deleteGrade(" + i + ");\" />";
+            str += '<div class="gquiz-percentage-container">';
+            str += "<input type='text' id='gquiz-grade-value-" + i + "' value=\"" + grades[i].value + "\" class='gquiz-grade-input gquiz-grade-value percentage-input' >";
+            str += "<span class='gform-settings-field__text-append'>&#37;</span> ";
+            str += '</div><!-- .percentage-container -->';
+
+            str += '<div class="gquiz-grade-buttons">';
+            str += "<button class='gquiz-grade-row-button gquiz-add-grade' title='" + gquiz_strings.addAnotherGrade + "' alt='" + gquiz_strings.addAnotherGrade + "' onclick=\"gquiz.insertGrade(" + (i + 1) + ");\" />";
+
+            if (grades.length > 1) {
+                str += "<button class='gquiz-grade-row-button gquiz-delete-grade' title='" + gquiz_strings.removeThisGrade + "' alt='" + gquiz_strings.removeThisGrade + "' onclick=\"gquiz.deleteGrade(" + i + ");\" />";
+			}
+
+            str += '</div><!-- .gquiz-grade-buttons -->';
 
             str += "</li>";
 
@@ -165,8 +182,8 @@
 
         $('ul#gquiz-grades li').each(function (index) {
             var $this = $(this);
-            var gquizText = $this.children('input.gquiz-grade-text').val();
-            var gquizValue = $this.children('input.gquiz-grade-value').val();
+            var gquizText = $this.find('input.gquiz-grade-text').val();
+            var gquizValue = $this.find('input.gquiz-grade-value').val();
             var i = $this.data("index");
             var g = new Grade(gquizText, parseInt(gquizValue));
             grades[parseInt(i)] = g;

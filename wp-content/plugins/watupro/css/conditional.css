@@ -1,0 +1,63 @@
+/* This style is used only from some quiz types so we don't include these styles in all quizzes */
+.watupro-mark-review {
+	margin-right: 5px;
+	cursor: pointer;
+}
+
+ul.watupro-paginator li.marked {
+	background-color: yellow;
+}
+
+/* star rating
+    ---------------------------- */
+ .watupro-rating { float: left; }
+ .watupro-rating > ul { list-style: none; float: left; padding: 0; margin: 0;}
+ .watupro-rating > ul > li { float: left; margin-left: 2px; background: url(src/star-rating.gif) no-repeat; width: 25px; height: 25px; cursor: pointer; }
+ .watupro-rating > ul > li:first-child { margin-left: 0; }
+ .watupro-rating > ul > li.hover { background-position: -25px; }
+ .watupro-rating > ul > li.active { background-position: -50px; }
+ .watupro-rating > span.less { cursor: pointer; background: url(src/star-rating.gif) -75px no-repeat; display: block; float: left; height: 25px; width: 25px;}
+ 
+/* flash cards - thanks to Easy FlashCards plugin https://wordpress.org/plugins/easy-flashcards/ */
+.watupro_flashcard {
+	float: left;
+   margin: 10px;
+	box-shadow:5px 5px 15px #ccc;
+   position: relative;
+   display:inline;	
+}
+
+.watupro_flashcard .watupro_front_face {
+	overflow: hidden;
+   position: absolute;
+   height:100%;
+	width:100%;
+   text-align: center;	
+   vertical-align:middle;
+   padding:10%; 
+}
+
+.watupro_flashcard .watupro_back_face{
+	overflow: hidden;
+	height:100%;
+	width:100%;
+	text-align: center;
+	text-align:center;
+   padding:10%;
+}
+
+/* Likert table CSS */
+.watupro-stripped-columns thead th:nth-child(even),
+.watupro-stripped-columns tbody td:nth-child(even) {
+	background-color: #f8f8f8;  
+}
+
+table.watupro-border {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+table.watupro-border td,
+table.watupro-border th {
+    border: 1px solid grey;
+    padding: 3px;
+}

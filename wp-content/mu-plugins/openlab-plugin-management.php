@@ -46,8 +46,10 @@ function openlab_hide_plugins( $plugins ) {
 		'fix-simplepie-errors/_fix-simplepie-errors.php',
 		'google-document-embedder/gviewer.php',
 		'google-maps-embed/cets_EmbedGmaps.php',
+		'gp-media-library/gp-media-library.php',
 		'grader/grader.php',
 		'gravity-forms-addons/gravity-forms-addons.php',
+		'gravityperks/gravityperks.php',
 		'import-html-pages/html-import.php',
 		'kb-gradebook/kb-gradebook.php',
 		'link-manager/link-manager.php',
@@ -62,7 +64,6 @@ function openlab_hide_plugins( $plugins ) {
 		'pdfembedder-premium/mobile_pdf_embedder.php',
 		'post-gallery-widget/post-gallery.php',
 		'query-monitor/query-monitor.php',
-		'quiz-master-next/mlw_quizmaster2.php',
 		'rederly.php',
 		'simple-drop-cap/simple-drop-cap.php',
 		'simple-pull-quote/simple-pull-quote.php',
@@ -77,7 +78,6 @@ function openlab_hide_plugins( $plugins ) {
 		'tinymce-comment-field/tinymce-comment-field.php',
 		'titan-framework/titan-framework.php',
 		'ufhealth-require-image-alt-tags/ufhealth-require-image-alt-tags.php',
-		'watu/watu.php',
 		'webwork/webwork.php',
 		'webworkqa/webwork.php',
 		'_webwork/webwork.php',
@@ -330,3 +330,9 @@ add_action(
 		wp_enqueue_script( 'openlab-out-of-the-box-a11y', content_url( 'mu-plugins/js/openlab-out-of-the-box.js' ), [ 'jquery' ] );
 	}
 );
+
+/**
+ * Define wp-quicklatex cache directory location.
+ */
+define( 'WP_QUICKLATEX_CACHE_DIR', WP_CONTENT_DIR . '/uploads/ql-cache' );
+define( 'WP_QUICKLATEX_CACHE_URL', content_url() . '/uploads/ql-cache' );

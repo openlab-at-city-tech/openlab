@@ -49,26 +49,36 @@ class GF_Field_Dropbox extends GF_Field {
 		$is_entry_detail = $this->is_entry_detail();
 		$is_form_editor  = $this->is_form_editor();
 
+		$allowed_extensions_message = empty( $this->allowedExtensions ) ? '' : sprintf(
+			/* translators: %s: file extensions. */
+			__( 'Accepted file types: %s', 'gravityformsdropbox' ),
+			str_replace( ',', ', ', join( ',', $this->get_extensions() ) )
+		);
+
 		// If we are in the form editor, display a placeholder button.
 		if ( $is_form_editor ) {
 			return sprintf(
-				"<img src='%s' alt='%s' title='%s' />",
+				"<div class='gdropbox ginput-container'><img class='gform-dropbox-upload-button' src='%s' alt='%s' title='%s' /></div>
+				<span class='gform_dropbox_fileupload_rules'>{$allowed_extensions_message}</span>",
 				gf_dropbox()->get_base_url() . '/images/button-preview.png',
 				esc_html__( 'Dropbox Button Preview', 'gravityformsdropbox' ),
 				esc_html__( 'Dropbox Button Preview', 'gravityformsdropbox' )
 			);
 		}
 
-		$logic_event = version_compare( GFForms::$version, '2.4-beta-1', '<' ) ? $this->get_conditional_logic_event( 'keyup' ) : '';
-		$id          = (int) $this->id;
-		$field_id    = $is_entry_detail || $is_form_editor || 0 === $form_id ? "input_$id" : 'input_' . $form_id . "_$id";
-		$value       = esc_attr( $value );
-		$size        = $this->size;
+		$id       = (int) $this->id;
+		$field_id = $is_entry_detail || $is_form_editor || 0 === $form_id ? "input_$id" : 'input_' . $form_id . "_$id";
+		$value    = esc_attr( $value );
 
-		$html  = "<input name='input_{$id}' id='{$field_id}' type='hidden' value='{$value}'  {$logic_event}/>";
+		$rules_messages_id          = empty( $this->allowedExtensions ) ? '' : "gfield_dropbox_upload_rules_{$this->formId}_{$this->id}";
+		$live_validation_message_id = 'live_validation_message_' . $form_id . '_' . $id;
+		$logic_event                = version_compare( GFForms::$version, '2.4-beta-1', '<' ) ? $this->get_conditional_logic_event( 'keyup' ) : '';
+
+		$html  = "<input name='input_{$id}' id='{$field_id}' type='hidden' value='{$value}' {$logic_event} {$this->get_aria_describedby( array( $rules_messages_id ) )} />";
 		$html .= "<script type='text/javascript' src='//www.dropbox.com/static/api/2/dropins.js' id='dropboxjs' data-app-key='{$dropbox_app_key}'></script>";
-
-		return sprintf( "<div class='ginput_container'>%s</div><div id='gform_preview_%s_%s'></div>", $html, $form_id, $id );
+		$html .= $allowed_extensions_message ? "<span class='gform_dropbox_fileupload_rules' id='{$rules_messages_id}'>{$allowed_extensions_message}</span>" : '';
+		$html .= "<div class='validation_message validation_message--hidden-on-empty' id='{$live_validation_message_id}'></div>";
+		return sprintf( "<div class='gdropbox ginput_container'>%s</div><div id='gform_preview_%s_%s' class='gdropbox_preview'></div>", $html, $form_id, $id );
 
 	}
 
@@ -130,6 +140,19 @@ class GF_Field_Dropbox extends GF_Field {
 
 		return esc_attr__( 'Dropbox Upload', 'gravityformsdropbox' );
 
+	}
+
+	/**
+	 * Returns the field's form editor icon.
+	 *
+	 * This could be an icon url or a dashicons class.
+	 *
+	 * @since 2.7
+	 *
+	 * @return string
+	 */
+	public function get_form_editor_field_icon() {
+		return gf_dropbox()->get_base_url() . '/images/dropbox-icon.svg';
 	}
 
 	/**
@@ -199,7 +222,7 @@ class GF_Field_Dropbox extends GF_Field {
 			return array();
 		}
 
-		return array_map( 'trim', explode( ',', strtolower( $this->allowedExtensions ) ) );
+		return GFCommon::clean_extensions( array_map( 'trim', explode( ',', strtolower( $this->allowedExtensions ) ) ) );
 	}
 
 	/**
@@ -432,7 +455,7 @@ class GF_Field_Dropbox extends GF_Field {
 		$files = json_decode( $value, true );
 
 		// Get allowed extensions.
-		$allowed_extensions = ! empty( $this->allowedExtensions ) ? GFCommon::clean_extensions( explode( ',', strtolower( $this->allowedExtensions ) ) ) : array();
+		$allowed_extensions = ! empty( $this->allowedExtensions ) ? $this->get_extensions() : array();
 
 		// Loop through the files.
 		foreach ( $files as $file ) {
@@ -457,7 +480,6 @@ class GF_Field_Dropbox extends GF_Field {
 		}
 
 	}
-
 }
 
 // Register field with Gravity Forms.

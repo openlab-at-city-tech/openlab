@@ -1,4 +1,26 @@
-### 3.2.1
+### 4.1.1
+- Updated the *gform_zapier_request_body* filter to be called within GF_Zapier::get_body so that it can be applied both when processing feeds and responding to API requests.
+
+
+### 4.1 | 2021-05-04
+- Added support for displaying real entry data for the selected form when configuring a Zap.
+- Added support for using admin labels instead of front end labels for the entry data returned when configuring a Zap.
+- Fixed an issue where API instructions are not visible on the add-on settings page when using Gravity Forms 2.5.
+- Fixed an issue where feeds get deleted and recreated when the Zap is deactivated and reactivated.
+- Updated the Use Admin Labels setting on the feed configuration page to be disabled. The setting is now configured on zapier.com.
+- Removed the add new button from the feeds list page.
+
+
+### 4.0 | 2021-02-23
+- Added support for the Gravity Forms Integration App on Zapier v2.0.
+- Added an add-on setting to toggle the display of Zapier Feeds in the form settings. On sites with legacy feeds created for the Zapier v1.0 integration, this setting is enabled by default, displaying all the feeds. On sites with no legacy feeds, this setting is off by default so the feeds will not be displayed.
+- Fixed compatibility issues in PHP 8.
+- Updated the feed settings to restrict editing of feeds created in the Zapier v2.0 integration to Admin Labels and Conditional Logic.
+- Updated the add-on to use the Gravity Forms Add-On Framework.
+
+
+### 3.3 | 2020-05-20
+- Added translations for Hebrew, Hindi, Japanese, and Turkish.
 - Fixed an issue where the entry and payment dates were being formatted before being sent to Zapier.
 
 
@@ -8,7 +30,7 @@
 - Fixed notice in gform_zapier_use_stored_body filter processing.
 - Fixed the shipping line item being included in the request body when the shipping field is hidden by conditional logic.
 - Fixed PHP 7.3 warnings when the feed is populating the request body for a form with multiple product fields.
-      
+
 
 ### 3.1 | 2018-10-22
 - Added the *gform_zapier_products* filter.

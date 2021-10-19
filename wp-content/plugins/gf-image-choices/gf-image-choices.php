@@ -4,11 +4,12 @@ Plugin Name: Gravity Forms Image Choices
 Plugin URI: https://jetsloth.com/gravity-forms-image-choices/
 Description: Easily add images as choices for Radio Buttons or Checkboxes fields in your Gravity Forms, including Survey, Quiz, Product and Option fields that have their field type set to Radio Buttons or Checkboxes
 Author: JetSloth
-Version: 1.2.22
-Requires at least: 4.0
-Tested up to: 5.3.2
+Version: 1.3.42
+Requires at 3.5
+Tested up to: 5.7.2
 Author URI: https://jetsloth.com
 License: GPL2
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: gf_image_choices
 */
 
@@ -29,11 +30,10 @@ Text Domain: gf_image_choices
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-define('GFIC_VERSION', '1.2.22');
+define('GFIC_VERSION', '1.3.42');
 define('GFIC_HOME', 'https://jetsloth.com');
 define('GFIC_NAME', 'Gravity Forms Image Choices');
 define('GFIC_SLUG', 'gf-image-choices');
-define('GFIC_TEXT_DOMAIN', 'gf_image_choices');
 define('GFIC_AUTHOR', 'JetSloth');
 define('GFIC_TIMEOUT', 20);
 define('GFIC_SSL_VERIFY', true);
@@ -47,6 +47,9 @@ class GF_Image_Choices_Bootstrap {
 		if ( ! method_exists( 'GFForms', 'include_addon_framework' ) ) {
 			return;
 		}
+
+		// are we on GF 2.5+
+		define( 'GFIC_GF_MIN_2_5', version_compare( GFCommon::$version, '2.5-dev-1', '>=' ) );
 
 		require_once( 'class-gf-image-choices.php' );
 
@@ -72,7 +75,7 @@ function gf_image_choices_plugin_updater() {
 
 	if ( ! class_exists( 'EDD_SL_Plugin_Updater' ) ) {
 		// load our custom updater if it doesn't already exist
-		include( dirname( __FILE__ ) . '/inc/EDD_SL_Plugin_Updater.php' );
+		include_once( dirname( __FILE__ ) . '/inc/EDD_SL_Plugin_Updater.php' );
 	}
 
 	// retrieve the license key

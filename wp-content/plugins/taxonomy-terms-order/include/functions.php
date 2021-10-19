@@ -1,5 +1,6 @@
 <?php
     
+    if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
     
     /**
     * Return default plugin options
@@ -53,21 +54,7 @@
                      <div id="p_right"> 
                         
                         <div id="p_socialize">
-                            
-                            <div class="p_s_item s_f">
-                                <div id="fb-root"></div>
-                                <script>(function(d, s, id) {
-                                  var js, fjs = d.getElementsByTagName(s)[0];
-                                  if (d.getElementById(id)) return;
-                                  js = d.createElement(s); js.id = id;
-                                  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.5";
-                                  fjs.parentNode.insertBefore(js, fjs);
-                                }(document, 'script', 'facebook-jssdk'));</script>
-                                
-                                <div class="fb-like" data-href="https://www.facebook.com/Nsp-Code-190329887674484/" data-layout="button_count" data-action="like" data-show-faces="true" data-share="false"></div>
-                                
-                            </div>
-                            
+              
                             <div class="p_s_item s_t">
                                 <a href="https://twitter.com/share" class="twitter-share-button" data-url="https://www.nsp-code.com" data-text="Define custom order for your post types through an easy to use javascript AJAX drag and drop interface. No theme code updates are necessarily, this plugin will take care of query update." data-count="none">Tweet</a><script type="text/javascript" src="//platform.twitter.com/widgets.js"></script>
                             </div>

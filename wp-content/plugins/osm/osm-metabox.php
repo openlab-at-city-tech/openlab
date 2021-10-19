@@ -145,8 +145,11 @@ At the top of this panel / metabox you find tabs which allow you to generate a s
       <br/>
       <b>5. <?php _e('marker text','OSM') ?>  (<?php _e('optional','OSM') ?>)</b>: <br/>
         <?php _e('Use &lt;b&gt;&lt;/b&gt; for bold, &lt;i&gt;&lt;/i&gt; for kursiv and&lt;br&gt; for new line.','OSM') ?><br/>
-         <textarea id="osm_add_marker_text" name="marker_text" cols="35" rows="4"></textarea>
+         <textarea id="osm_add_marker_text" name="marker_text" cols="35" rows="4" placeholder="Use HTML Entities for special characters (eg HTML Tags)!"></textarea>
       <br/><br/>
+      
+
+      
       <b>5. <?php _e('Adjust the map and click into the map to place the marker.','OSM') ?></b>
 
 	  <?php $latlon = OSM_default_lat.','.OSM_default_lon; $zoom = OSM_default_zoom;
@@ -346,7 +349,7 @@ At the top of this panel / metabox you find tabs which allow you to generate a s
      <b><?php _e('Some usefull sites for this plugin:','OSM') ?></b>
      <ol>
        <li><?php _e('for advanced samples visit the ','OSM') ?><a target="_new" href="http://wp-osm-plugin.hyumika.com">osm-plugin page</a>.</li>
-       <li><?php _e('for questions, bugs and other feedback visit the','OSM') ?> <a target="_new" href="https://wp-osm-plugin.hyumika.com/forums/forum/WordPress-OpenStreetMap/">EN | DE forum</a></li>
+       <li><?php _e('for questions, bugs and other feedback visit the','OSM') ?> <a target="_new" href="https://wp-osm-plugin.hyumika.com/survey/">EN | DE feedback</a></li>
        <li><?php _e('Follow us on twitter: ','OSM') ?><a target="_new" href="https://twitter.com/wp_osm_plugin">wp-osm-plugin</a>.</li>
       <li><?php _e('download the last version at WordPress.org ','OSM') ?><a target="_new" href="http://wordpress.org/extend/plugins/osm/">osm-plugin download</a>.</li>
     </ol>

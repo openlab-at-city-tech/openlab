@@ -1323,6 +1323,16 @@ function ra_copy_blog_page( $group_id ) {
 				$tables = $wpdb->get_results( $query, ARRAY_A );
 				// phpcs:enable
 
+				$exclude_tables = [
+					$blogtables . 'oplb_gradebook_assignments',
+					$blogtables . 'oplb_gradebook_cells',
+					$blogtables . 'oplb_gradebook_courses',
+					$blogtables . 'oplb_gradebook_users',
+					$blogtables . 'options',
+					$blogtables . 'comments',
+					$blogtables . 'commentmeta',
+				];
+
 				if ( $tables ) {
 					reset( $tables );
 					$create     = array();
@@ -1340,13 +1350,16 @@ function ra_copy_blog_page( $group_id ) {
 					);
 					for ( $i = 0; $i < count( $tables ); $i++ ) {
 						$table = current( $tables[ $i ] );
+
+						if ( in_array( $table, $exclude_tables, true ) ) {
+							continue;
+						}
+
 						if ( substr( $table, 0, $len ) == $blogtables ) {
-							if ( ! ( $table == $blogtables . 'options' || $table == $blogtables . 'comments' || $table == $blogtables . 'commentmeta' ) ) {
-								// phpcs:disable
-								$create[ $table ] = $wpdb->get_row( "SHOW CREATE TABLE {$table}" );
-								$data[ $table ]   = $wpdb->get_results( "SELECT * FROM {$table}", ARRAY_A );
-								// phpcs:enable
-							}
+							// phpcs:disable
+							$create[ $table ] = $wpdb->get_row( "SHOW CREATE TABLE {$table}" );
+							$data[ $table ]   = $wpdb->get_results( "SELECT * FROM {$table}", ARRAY_A );
+							// phpcs:enable
 						}
 					}
 
@@ -1401,6 +1414,7 @@ function ra_copy_blog_page( $group_id ) {
 							'new_admin_email',
 							'nonce_salt',
 							'openlab_rewrite_rules_flushed',
+							'oplb_gradebook_db_version',
 							'random_seed',
 							'rewrite_rules',
 							'secret',
@@ -1766,41 +1780,32 @@ function openlab_launch_ajax_translator() {
 add_action( 'bp_setup_globals', 'openlab_launch_ajax_translator' );
 
 /**
- * Interfere in the comment posting process to allow for duplicates on the same post
- *
- * Borrowed from http://www.strangerstudios.com/blog/2010/10/duplicate-comment-detected-it-looks-as-though-you%E2%80%99ve-already-said-that/
- * See http://openlab.citytech.cuny.edu/redmine/issues/351
+ * Disable duplicate protection for logged-in users.
  */
-function openlab_enable_duplicate_comments_preprocess_comment( $comment_data ) {
-	if ( is_user_logged_in() ) {
-		//add some random content to comment to keep dupe checker from finding it
-		$random                           = md5( time() );
-		$comment_data['comment_content'] .= 'disabledupes{' . $random . '}disabledupes';
+function openlab_disable_duplicate_comment_protection( $dupe_id, $commentdata ) {
+	// If no dupe was found, no checking is required.
+	if ( ! $dupe_id ) {
+		return $dupe_id;
 	}
 
-	return $comment_data;
-}
-
-add_filter( 'preprocess_comment', 'openlab_enable_duplicate_comments_preprocess_comment' );
-
-/**
- * Strips disabledupes string from comments. See previous function.
- */
-function openlab_enable_duplicate_comments_comment_post( $comment_id ) {
-	global $wpdb;
-
-	if ( is_user_logged_in() ) {
-
-		// Remove the random content.
-		$comment_content = $wpdb->get_var( $wpdb->prepare( "SELECT comment_content FROM $wpdb->comments WHERE comment_ID = %d LIMIT 1", $comment_id ) );
-		$comment_content = preg_replace( '/disabledupes\{.*\}disabledupes/', '', $comment_content );
-		$wpdb->query( $wpdb->prepare( "UPDATE $wpdb->comments SET comment_content = %s WHERE comment_ID = %d LIMIT 1", $comment_content, $comment_id ) );
-
-		clean_comment_cache( array( $comment_id ) );
+	// Only verify for logged-in users.
+	if ( ! is_user_logged_in() ) {
+		return $dupe_id;
 	}
-}
 
-add_action( 'comment_post', 'openlab_enable_duplicate_comments_comment_post', 1 );
+	// If the duplicate is less than 60 seconds old, assume that it's an unintended duplicate.
+	$dupe = get_comment( $dupe_id );
+
+	$comment_timestamp = strtotime( $commentdata['comment_date_gmt'] );
+	$dupe_timestamp    = strtotime( $dupe->comment_date_gmt );
+	if ( $comment_timestamp < ( $dupe_timestamp + 60 ) ) {
+		return $dupe_id;
+	}
+
+	// In all other cases, allow the comment to go through.
+	return null;
+}
+add_filter( 'duplicate_comment_id', 'openlab_disable_duplicate_comment_protection', 10, 2 );
 
 /**
  * Removes IP addresses from comment notification messages.

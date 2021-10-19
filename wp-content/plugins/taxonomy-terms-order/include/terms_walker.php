@@ -1,6 +1,7 @@
 <?php
 
-
+    if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+    
     class TO_Terms_Walker extends Walker 
         {
 

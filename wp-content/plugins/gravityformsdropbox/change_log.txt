@@ -1,3 +1,35 @@
+### 3.0 | 2021-09-02
+- Added support for OAuth refresh tokens in accordance with changes to the Dropbox API.
+- Fixed the ability of custom apps with team permissions to authenticate.
+- Fixed an issue where it is not possible to disconnect a custom app if using an access token that has already been deauthorized.
+- Fixed the folder display so it is possible to select team folders when using a custom app with team permissions.
+- Fixed an issue where an empty space appears under the connect to dropbox button on the settings page.
+- Updated the user interface on the Dropbox settings page.
+- Updated the user interface of the authorization screen.
+
+
+### 2.9 | 2021-05-06
+- Added accessibility enhancements to the Dropbox upload field.
+- Fixed styling of the Dropbox Upload field description to correctly display above or below the input in the editor in Gravity Forms 2.5.
+- Fixed an issue where authentication may not complete after attempting a connection with Dropbox.
+
+
+### 2.8 | 2020-09-24
+- Updated support for Gravity Forms 2.5.
+
+
+### 2.7 | 2020-07-13
+- Added security enhancements.
+- Added support for Gravity Forms 2.5.
+
+
+### 2.6 | 2020-04-01
+- Added translations for Hebrew, Hindi, Japanese, and Turkish.
+- Updated a few labels on the settings page related to connecting and disconnecting the add-on with Dropbox.
+- Updated Gravity API domain.
+- Fixed an issue where the Dropbox Upload field can pass the required validation if a file is uploaded and then removed.
+
+
 ### 2.5 | 2019-11-13
 - Updated Javascript files, stylesheets to use minified versions.
 - Fixed an issue with files uploaded to Dropbox not attaching to notifications.

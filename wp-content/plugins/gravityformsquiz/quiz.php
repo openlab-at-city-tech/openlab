@@ -1,16 +1,17 @@
 <?php
 /*
 Plugin Name: Gravity Forms Quiz Add-On
-Plugin URI: http://www.gravityforms.com
-Description: Quiz Add-on for Gravity Forms
-Version: 2.4.1
-Author: Rocketgenius
-Author URI: http://www.rocketgenius.com
+Plugin URI: https://gravityforms.com
+Description: Allows you to create custom quizzes quickly using Gravity Forms.
+Version: 3.7.2
+Author: Gravity Forms
+Author URI: https://gravityforms.com
+License: GPL-2.0+
 Text Domain: gravityformsquiz
 Domain Path: /languages
 
 ------------------------------------------------------------------------
-Copyright 2012-2015 Rocketgenius Inc.
+Copyright 2012-2021 Rocketgenius, Inc.
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -27,7 +28,9 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 */
 
-define( 'GF_QUIZ_VERSION', '2.4.1' );
+defined( 'ABSPATH' ) || die();
+
+define( 'GF_QUIZ_VERSION', '3.7.2' );
 
 add_action( 'gform_loaded', array( 'GF_Quiz_Bootstrap', 'load' ), 5 );
 
