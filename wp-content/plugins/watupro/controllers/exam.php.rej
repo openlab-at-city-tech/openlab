@@ -1,0 +1,30 @@
+--- controllers/exam.php
++++ controllers/exam.php
+@@ -631,10 +631,9 @@ function watupro_exams() {
+ 	$low_memory_mode = get_option('watupro_low_memory_mode');
+ 	if($low_memory_mode == 1) $count_sqls = '';
+ 
+-	$exams = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS Q.*, tC.name as cat, tU.user_login as author
++	$exams = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS Q.*, tC.name as cat
+ 	$count_sqls
+ 	FROM ".WATUPRO_EXAMS." AS Q LEFT JOIN ".WATUPRO_CATS." as tC ON tC.id=Q.cat_id
+-	LEFT JOIN {$wpdb->users} tU ON tU.ID = Q.editor_id
+ 	WHERE Q.ID > 0 $filter_sql $editor_sql
+ 	ORDER BY $ob $dir $limit_sql");
+ 
+@@ -649,9 +648,15 @@ function watupro_exams() {
+ 
+ 	// match posts to exams
+ 	foreach($exams as $cnt=>$exam) {
++		$exam_author = new WP_User( $exam->editor_id );
++
+ 		foreach($posts as $post) {
+ 			if(stristr($post->post_content,"[watupro ".$exam->ID."]") or stristr($post->post_content,"[watupro ".$exam->ID." ")) {
+ 				$exams[$cnt]->post=$post;
++
++				if ( $exam_author ) {
++					$exams[ $cnt ]->author = $exam_author->user_login;
++				}
+ 				break;
+ 			}
+ 		}
