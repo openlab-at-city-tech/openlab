@@ -23,6 +23,26 @@ jQuery(document).ready( function( $ ) {
 			} else {
 				app.container.attr( 'aria-expanded', 'true' );
 			}
+
+			/*
+			 * If landing on a hash, navigate there.
+			 *
+			 * This is necessary because of some odd behavior where IntersectionObserver
+			 * invokes the callback twice during the initialization process, once in the correct
+			 * way and again in a way that incorrectly identifies an earlier element as
+			 * being inside the viewport.
+			 */
+			if ( document.location.hash.length > 0 ) {
+				setTimeout(
+					function() {
+						var hashEl = document.getElementById( document.location.hash.substr( 1 ) );
+						if ( hashEl ) {
+							hashEl.scrollIntoView();
+						}
+					},
+					100
+				);
+			}
 		},
 
 		cache: function() {
