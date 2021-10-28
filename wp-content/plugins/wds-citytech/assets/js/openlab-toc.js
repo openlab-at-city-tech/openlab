@@ -48,7 +48,7 @@ jQuery(document).ready( function( $ ) {
 		cache: function() {
 			app.window = $( window );
 			app.content = $('.hentry').length ? $('.hentry') : $('.entry');
-			app.container = $( '.ez-toc' ),
+			app.container = $( '.ez-toc' );
 			app.containerTop = app.container.offset().top;
 			app.previousSection = null;
 			app.offset = app.getTopNavOffeset();
