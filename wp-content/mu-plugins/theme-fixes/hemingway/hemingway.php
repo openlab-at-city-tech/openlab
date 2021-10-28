@@ -61,20 +61,6 @@ function openlab_fix_fallback_menu_for_hemingway( $output ) {
 }
 add_filter( 'wp_list_pages', 'openlab_fix_fallback_menu_for_hemingway' );
 
-/**
- * Hemingway: Add missing label element to comment form.
- */
-function openlab_add_missing_label_element_to_comment_form_for_hemingway( $fields ) {
-	if ( 'hemingway' !== get_template() ) {
-		return $fields;
-	}
-
-	$fields['comment'] .= '<label for="comment" class="sr-only">Comment Text</label>';
-
-	return $fields;
-}
-add_filter( 'comment_form_fields', 'openlab_add_missing_label_element_to_comment_form_for_hemingway' );
-
 add_action(
 	'wp_head',
 	function() {
