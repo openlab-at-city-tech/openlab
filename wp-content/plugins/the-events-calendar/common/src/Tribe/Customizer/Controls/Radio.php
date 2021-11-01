@@ -12,7 +12,7 @@ namespace Tribe\Customizer\Controls;
 use Tribe\Customizer\Control;
 
 /**
- * Class Heading
+ * Class Radio
  *
  * @since   4.13.3
  *
@@ -47,7 +47,9 @@ class Radio extends Control {
 			<span class="customize-control-title"><?php echo esc_html( $this->label ); ?></span>
 		<?php endif; ?>
 		<?php if ( ! empty( $this->description ) ) : ?>
-			<span id="<?php echo esc_attr( $description_id ); ?>" class="description customize-control-description"><?php echo $this->description; ?></span>
+			<span id="<?php echo esc_attr( $description_id ); ?>" class="description customize-control-description">
+				<?php echo wp_kses_post( $this->description ); ?>
+			</span>
 		<?php endif; ?>
 
 		<?php foreach ( $this->choices as $value => $label ) : ?>
@@ -62,10 +64,7 @@ class Radio extends Control {
 					<?php checked( $this->value(), $value ); ?>
 					/>
 				<label for="<?php echo esc_attr( $input_id . '-radio-' . $value ); ?>">
-					<?php
-					// intentionally not escaped - can contain HTML.
-					echo wp_kses_post( $label );
-					?>
+					<?php echo wp_kses_post( $label ); ?>
 				</label>
 			</span>
 		<?php endforeach; ?>

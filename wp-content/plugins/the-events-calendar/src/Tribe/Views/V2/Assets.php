@@ -33,6 +33,15 @@ class Assets extends \tad_DI52_ServiceProvider {
 	public static $group_key = 'events-views-v2';
 
 	/**
+	 * Key for this group of assets.
+	 *
+	 * @since 5.8.2
+	 *
+	 * @var string
+	 */
+	public static $single_group_key = 'events-views-v2-single';
+
+	/**
 	 * Key for the widget group of assets.
 	 *
 	 * @since 5.3.0
@@ -403,6 +412,7 @@ class Assets extends \tad_DI52_ServiceProvider {
 			'wp_enqueue_scripts',
 			[
 				'priority'     => 15,
+				'groups'       => [ static::$single_group_key ],
 				'conditionals' => [
 					[ $this, 'should_enqueue_single_event_styles' ],
 				],
@@ -419,10 +429,29 @@ class Assets extends \tad_DI52_ServiceProvider {
 			'wp_enqueue_scripts',
 			[
 				'priority'     => 15,
+				'groups'       => [ static::$single_group_key ],
 				'conditionals' => [
 					'operator' => 'AND',
 					[ $this, 'should_enqueue_single_event_styles' ],
 					[ $this, 'should_enqueue_full_styles' ],
+				],
+			]
+		);
+
+		tribe_asset(
+			$plugin,
+			'tribe-events-v2-single-blocks',
+			'tribe-events-single-blocks.css',
+			[
+				'tec-variables-full',
+				'tec-variables-skeleton',
+			],
+			'wp_enqueue_scripts',
+			[
+				'priority'     => 15,
+				'groups'       => [ static::$single_group_key ],
+				'conditionals' => [
+					[ $this, 'should_enqueue_single_event_block_editor_styles' ],
 				],
 			]
 		);
@@ -545,7 +574,36 @@ class Assets extends \tad_DI52_ServiceProvider {
 		}
 
 		// Bail if Block Editor.
-		if ( has_blocks( get_queried_object_id() ) ) {
+		if (
+			tribe( 'editor' )->is_events_using_blocks()
+			&& has_blocks( get_queried_object_id() )
+		) {
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
+	 * Checks if we are on V2, on Event Single and if we are using the Block Editor in order to enqueue the block editor reskin styles for Single Event.
+	 *
+	 * @since 5.10.0
+	 *
+	 * @return boolean
+	 */
+	public function should_enqueue_single_event_block_editor_styles() {
+		// Bail if not Single Event V2.
+		if ( ! tribe_events_single_view_v2_is_enabled() ) {
+			return false;
+		}
+
+		// Bail if not Single Event.
+		if ( ! tribe( Template_Bootstrap::class )->is_single_event() ) {
+			return false;
+		}
+
+		// Bail if not Block Editor.
+		if ( ! tribe( 'editor' )->is_events_using_blocks() && ! has_blocks( get_queried_object_id() ) ) {
 			return false;
 		}
 
