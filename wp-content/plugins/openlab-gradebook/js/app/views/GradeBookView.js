@@ -199,8 +199,7 @@ define([
 						this.scrollSize = currentScrollSize;
 						jsAPI.destroy();
 						this.scrollObj = $(".table-wrapper .scrollable")
-							.bind("jsp-initialised", this.calculateScrollBarPosition)
-							.jScrollPane();
+							.bind("jsp-initialised", this.calculateScrollBarPosition);
 					} else {
 						var scrollContainerElem = $("#an-gradebook-container").closest(
 							".jspContainer"
@@ -326,8 +325,7 @@ define([
 
 				//table scroll
 				this.scrollObj = $(".table-wrapper .scrollable")
-					.bind("jsp-initialised", this.calculateScrollBarPosition)
-					.jScrollPane();
+					.bind("jsp-initialised", this.calculateScrollBarPosition);
 
 				$('[data-toggle="tooltip"]').tooltip();
 
