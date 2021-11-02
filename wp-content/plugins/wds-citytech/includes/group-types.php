@@ -1263,6 +1263,8 @@ function openlab_get_credits( $group_id ) {
 				'items' => '',
 			];
 		}
+	} else {
+		$credits_chunks[0]['intro'] = 'Acknowledgements: ' . $credits_chunks[0]['intro'];
 	}
 
 	$retval = [
