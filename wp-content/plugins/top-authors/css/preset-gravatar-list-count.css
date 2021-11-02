@@ -1,0 +1,14 @@
+.ta-preset.ta-gravatar-list-count::after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.ta-preset.ta-gravatar-list-count li {
+    list-style-type:none;
+    margin-bottom:6px;
+}
+
+.ta-preset.ta-gravatar-list-count .avatar{
+    margin-right:6px;
+}
