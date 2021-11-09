@@ -1251,6 +1251,8 @@ function openlab_get_credits( $group_id ) {
 	if ( $additional_text ) {
 		$show_acknowledgements = true;
 		if ( $credits_chunks ) {
+			$credits_chunks[0]['intro'] = 'Acknowledgements: ' . $credits_chunks[0]['intro'];
+
 			$post_credits_markup = '<p>' . wp_kses( $additional_text, openlab_creators_additional_text_allowed_tags() ) . '</p>';
 		} else {
 			$credits_intro_text    = sprintf(
