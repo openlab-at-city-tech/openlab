@@ -162,7 +162,7 @@ body .blog-menu li:hover > a {
 	color: #333;
 }
 textarea::selection {
-	background: #bbb;
+	background: #ACCEF7;
 	color: #000;
 }
 .section.bg-dark a {
