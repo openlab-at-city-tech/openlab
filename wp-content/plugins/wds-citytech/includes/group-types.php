@@ -1226,7 +1226,7 @@ function openlab_get_credits( $group_id, $show_acknowledgements_prefix = true ) 
 
 			if ( $clone_history ) {
 				$clone_intro_text = sprintf(
-					'It is based on the following %s(s)',
+					'It is based on the following %s(s):',
 					esc_html( $group_type )
 				);
 
