@@ -434,7 +434,7 @@ class OpenLab_Clone_Credits_Widget extends WP_Widget {
 
 		$group_type_label = openlab_get_group_type_label( [ 'group_id' => $group_id ] );
 
-		$credits = openlab_get_credits( $group_id );
+		$credits = openlab_get_credits( $group_id, false );
 
 		if ( ! $credits['show_acknowledgements'] ) {
 			return;
