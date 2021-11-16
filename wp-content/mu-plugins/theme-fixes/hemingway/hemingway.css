@@ -161,6 +161,10 @@ body .blog-menu li:hover > a {
 	background: #eee;
 	color: #333;
 }
+textarea::selection {
+	background: #ACCEF7;
+	color: #000;
+}
 .section.bg-dark a {
 	color: #fff;
 }
@@ -170,3 +174,9 @@ body .blog-menu li:hover > a {
 @media print {
 }
 
+@media screen and (max-width:800px) {
+	.sidebar {
+		display: block;
+		margin-top: 96px;
+	}
+}

@@ -120,32 +120,6 @@ class Tribe__Events__Repositories__Event extends Tribe__Repository {
 				'timezone'           => '_EventTimezone',
 				'venue'              => '_EventVenueID',
 				'organizer'          => '_EventOrganizerID',
-				'category'           => Tribe__Events__Main::TAXONOMY,
-				'cost'               => '_EventCost',
-				'currency_symbol'    => '_EventCurrencySymbol',
-				'currency_position'  => '_EventCurrencyPosition',
-				'show_map'           => '_EventShowMap',
-				'show_map_link'      => '_EventShowMapLink',
-				'url'                => '_EventURL',
-				'hide_from_upcoming' => '_EventHideFromUpcoming',
-				// Where is "sticky"? It's handled in the meta filtering by setting `menu_order`.
-				'featured'           => '_tribe_featured',
-			]
-		);
-
-
-		$this->update_fields_aliases = array_merge(
-			$this->update_fields_aliases,
-			[
-				'start_date'         => '_EventStartDate',
-				'end_date'           => '_EventEndDate',
-				'start_date_utc'     => '_EventStartDateUTC',
-				'end_date_utc'       => '_EventEndDateUTC',
-				'duration'           => '_EventDuration',
-				'all_day'            => '_EventAllDay',
-				'timezone'           => '_EventTimezone',
-				'venue'              => '_EventVenueID',
-				'organizer'          => '_EventOrganizerID',
 				'category'           => $tribe_events_category,
 				'cost'               => '_EventCost',
 				'currency_symbol'    => '_EventCurrencySymbol',
@@ -893,7 +867,7 @@ class Tribe__Events__Repositories__Event extends Tribe__Repository {
 	 *
 	 * @param float|array $value       The cost to use for the comparison; in the case of `BETWEEN`, `NOT BETWEEN`,
 	 *                                 `IN` and `NOT IN` operators this value should be an array.
-	 * @param string      $operator    Teh comparison operator to use for the comparison, one of `<`, `<=`, `>`, `>=`,
+	 * @param string      $operator    The comparison operator to use for the comparison, one of `<`, `<=`, `>`, `>=`,
 	 *                                 `=`, `BETWEEN`, `NOT BETWEEN`, `IN`, `NOT IN`.
 	 * @param string      $symbol      The desired currency symbol or symbols; this symbol can be a currency ISO code,
 	 *                                 e.g. "USD" for U.S. dollars, or a currency symbol, e.g. "$".

@@ -1354,6 +1354,19 @@ function bpges_format_activity_action_bpges_notice( $action, $activity, $subject
  */
 function ass_default_block_group_activity_types( $retval, $type, $activity ) {
 
+	/*
+	 * Do not resend a previous bbPress forum item to the group.
+	 *
+	 * This can occur when unapproving a forum post and later, reapproving it.
+	 * We do this by checking the forum post's '_bbp_activity_id' meta entry.
+	 */
+	if ( 'bbp_topic_create' === $type || 'bbp_reply_create' === $type ) {
+		$prev_activity_id = get_post_meta( $activity->secondary_item_id, '_bbp_activity_id', true );
+		if ( ! empty( $prev_activity_id ) ) {
+			return false;
+		}
+	}
+
 	switch( $type ) {
 		/** ACTIVITY TYPES TO BLOCK **************************************/
 
@@ -1701,6 +1714,33 @@ function bpges_unsubscribe_on_membership_ban( BP_Groups_Member $membership ) {
 	bpges_delete_queued_items_for_user_group( $membership->user_id, $membership->group_id );
 }
 add_action( 'groups_member_before_save', 'bpges_unsubscribe_on_membership_ban' );
+
+/**
+ * Remove queued items for deleted user.
+ *
+ * @param int $user_id ID of the deleted user.
+ *
+ * @since 4.0.0
+ */
+function bpges_delete_queued_items_for_deleted_user( $user_id ) {
+	$query = new BPGES_Queued_Item_Query(
+		array(
+			'user_id' => $user_id,
+		)
+	);
+
+	$queued_items_to_delete = array_map(
+		function( $item ) {
+			return $item->id;
+		},
+		$query->get_results()
+	);
+
+	if ( ! empty( $queued_items_to_delete ) ) {
+		BPGES_Queued_Item::bulk_delete( $queued_items_to_delete );
+	}
+}
+add_action( 'delete_user', 'bpges_delete_queued_items_for_deleted_user' );
 
 /**
  * Deletes all queued items for a user + group combo.

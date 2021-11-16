@@ -1,0 +1,144 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Top Authors 1.0.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-04-28 18:22+0100\n"
+"PO-Revision-Date: 2015-04-28 18:22+0100\n"
+"Last-Translator: Daniel Pataki <contact@tastique.org>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-KeywordsList: __;_e\n"
+"X-Poedit-Basepath: ../\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: class-top-authors-widget.php:39
+msgid "A customizable top authors list widget"
+msgstr ""
+
+#: class-top-authors-widget.php:42
+msgid "Top Authors"
+msgstr ""
+
+#: class-top-authors-widget.php:76
+msgid "Custom Structure"
+msgstr ""
+
+#: class-top-authors-widget.php:77
+msgid "Gravatar Only"
+msgstr ""
+
+#: class-top-authors-widget.php:78
+msgid "Gravatar And Name"
+msgstr ""
+
+#: class-top-authors-widget.php:79
+msgid "List With Post Count"
+msgstr ""
+
+#: class-top-authors-widget.php:80
+msgid "List With Gravatar And Post Count"
+msgstr ""
+
+#: class-top-authors-widget.php:86
+msgid "Title:"
+msgstr ""
+
+#: class-top-authors-widget.php:91
+msgid "Authors To Show:"
+msgstr ""
+
+#: class-top-authors-widget.php:97
+msgid "Archive specific authors"
+msgstr ""
+
+#: class-top-authors-widget.php:97
+msgid "help"
+msgstr ""
+
+#: class-top-authors-widget.php:101
+msgid ""
+"Check the box to show most popular authors for the shown term on archive "
+"pages. This allows you to create \"most popular in category X\" widgets"
+msgstr ""
+
+#: class-top-authors-widget.php:108
+msgid "Exclude Roles:"
+msgstr ""
+
+#: class-top-authors-widget.php:122
+msgid "Include Post Types:"
+msgstr ""
+
+#: class-top-authors-widget.php:134
+msgid "Preset Display:"
+msgstr ""
+
+#: class-top-authors-widget.php:148
+msgid "Display Template:"
+msgstr ""
+
+#: class-top-authors-widget.php:153
+msgid ""
+"The following placeholders can be used and will be replaced by actual data "
+"from the listed author:"
+msgstr ""
+
+#: class-top-authors-widget.php:155
+msgid "The URL to the user's post archive page"
+msgstr ""
+
+#: class-top-authors-widget.php:156
+msgid "The URL to the user's website"
+msgstr ""
+
+#: class-top-authors-widget.php:157
+#, php-format
+msgid ""
+"The gravatar of the user at the given size. For example, to display a 50px "
+"Gravatar your would use %s"
+msgstr ""
+
+#: class-top-authors-widget.php:158
+msgid "The user's first name"
+msgstr ""
+
+#: class-top-authors-widget.php:159
+msgid "The user's last name"
+msgstr ""
+
+#: class-top-authors-widget.php:160
+msgid "The user's display name"
+msgstr ""
+
+#: class-top-authors-widget.php:161
+msgid "The user's username"
+msgstr ""
+
+#: class-top-authors-widget.php:162
+msgid "Number of posts"
+msgstr ""
+
+#: class-top-authors-widget.php:163
+#, php-format
+msgid ""
+"Displays the given meta field. If you store a user's Twitter name in the "
+"'twitter' meta field you could use %s to display it."
+msgstr ""
+
+#: class-top-authors-widget.php:169
+msgid "Before List:"
+msgstr ""
+
+#: class-top-authors-widget.php:175
+msgid "After List:"
+msgstr ""
+
+#: top_authors.php:56
+msgid "Select roles to exclude"
+msgstr ""
+
+#: top_authors.php:57
+msgid "Select post types to include"
+msgstr ""

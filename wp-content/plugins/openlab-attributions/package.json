@@ -30,9 +30,9 @@
     "@wordpress/eslint-plugin": "^8.0.2",
     "cross-env": "^7.0.3",
     "eslint": "^7.20.0",
-    "laravel-mix": "^6.0.11",
-    "postcss": "^8.2.6",
-    "resolve-url-loader": "^3.1.2",
+    "laravel-mix": "^6.0.34",
+    "postcss": "^8.3.9",
+    "resolve-url-loader": "^4.0.0",
     "sass": "^1.32.8",
     "sass-loader": "^8.0.2"
   }

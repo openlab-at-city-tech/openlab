@@ -1107,7 +1107,7 @@ add_action( 'groups_create_group', 'openlab_save_group_creators_on_creation' );
 /**
  * Gets the Credits data to be used in the Acknowledgements section.
  */
-function openlab_get_credits( $group_id ) {
+function openlab_get_credits( $group_id, $show_acknowledgements_prefix = true ) {
 	$post_credits_markup = '';
 
 	$group_type = openlab_get_group_type( $group_id );
@@ -1226,7 +1226,7 @@ function openlab_get_credits( $group_id ) {
 
 			if ( $clone_history ) {
 				$clone_intro_text = sprintf(
-					'It is based on the following %s(s)',
+					'It is based on the following %s(s):',
 					esc_html( $group_type )
 				);
 
@@ -1251,17 +1251,29 @@ function openlab_get_credits( $group_id ) {
 	if ( $additional_text ) {
 		$show_acknowledgements = true;
 		if ( $credits_chunks ) {
+			if ( $show_acknowledgements_prefix ) {
+				$credits_chunks[0]['intro'] = 'Acknowledgements: ' . $credits_chunks[0]['intro'];
+			}
+
 			$post_credits_markup = '<p>' . wp_kses( $additional_text, openlab_creators_additional_text_allowed_tags() ) . '</p>';
 		} else {
-			$credits_intro_text    = sprintf(
-				'Acknowledgements: %s',
-				wp_kses( $additional_text, openlab_creators_additional_text_allowed_tags() )
-			);
+			if ( $show_acknowledgements_prefix ) {
+				$credits_intro_text = sprintf(
+					'Acknowledgements: %s',
+					wp_kses( $additional_text, openlab_creators_additional_text_allowed_tags() )
+				);
+			} else {
+				$credits_intro_text = wp_kses( $additional_text, openlab_creators_additional_text_allowed_tags() );
+			}
 
 			$credits_chunks[] = [
 				'intro' => $credits_intro_text,
 				'items' => '',
 			];
+		}
+	} else {
+		if ( $show_acknowledgements_prefix ) {
+			$credits_chunks[0]['intro'] = 'Acknowledgements: ' . $credits_chunks[0]['intro'];
 		}
 	}
 
