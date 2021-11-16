@@ -4,8 +4,8 @@ Description: Allow users to receive email notifications of group activity. Weekl
 Tags: buddypress, bp, activities, activity, groups, group, emails, email, notifications, notification, subscribe, subscription, digest, summary
 Requires at least: 3.2
 Requires PHP: 5.3
-Tested up to: 5.5
-Stable tag: 4.0.0
+Tested up to: 5.8
+Stable tag: 4.0.1
 
 == Description ==
 
@@ -92,6 +92,15 @@ For bug reports or to add patches or translation files, please visit the [GES Gi
 7. Admin Settings
 
 == Changelog ==
+
+= 4.0.1 =
+* Improved cleanup when a WP user is deleted.
+* Avoid duplicate notifications when a bbPress topic or reply is reapproved by the admin.
+* Timezone improvements.
+* Improved compatibility with jQuery 3.x.
+* Fix bug that could cause certain translatable strings not to be loaded in time.
+* Improvements to avoid timeouts and other issues during async send batches.
+* Improved formatting for digest content.
 
 = 4.0.0 =
 * Overhaul markup for subscription settings panel, for better responsiveness and accessibility.

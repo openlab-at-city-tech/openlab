@@ -48,7 +48,7 @@ jQuery(document).ready( function( $ ) {
 		cache: function() {
 			app.window = $( window );
 			app.content = $('.hentry').length ? $('.hentry') : $('.entry');
-			app.container = $( '.ez-toc' ),
+			app.container = $( '.ez-toc' );
 			app.containerTop = app.container.offset().top;
 			app.previousSection = null;
 			app.offset = app.getTopNavOffeset();
@@ -90,7 +90,7 @@ jQuery(document).ready( function( $ ) {
 			entries.forEach( function( entry ) {
 				var id = entry.target.getAttribute( 'id' );
 				var element = document.querySelector( '.ez-toc li a[href="#' + id + '"]' );
-	
+
 				if ( entry.intersectionRatio > 0 ) {
 					element.classList.add( 'is-visible' );
 					app.previousSection = entry.target.getAttribute( 'id' );
@@ -165,7 +165,7 @@ jQuery(document).ready( function( $ ) {
 
 		handleToggle: function( event ) {
 			event.preventDefault();
-			
+
 			var isExpanded = app.container.attr( 'aria-expanded' );
 			app.container.attr( 'aria-expanded', ( isExpanded === 'true' ) ? 'false' : 'true' );
 			app.container.css( 'height', 'auto' );
@@ -212,7 +212,7 @@ jQuery(document).ready( function( $ ) {
 				// Set flag when collapse is triggered by footer.
 				app.footerCollapse = true;
 			}
-			
+
 			if ( containerOffset < contentOffset && app.footerCollapse ) {
 				app.container.attr( 'aria-expanded', 'true' );
 				app.container.css( 'height', containerHeight );

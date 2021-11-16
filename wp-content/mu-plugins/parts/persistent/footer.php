@@ -99,7 +99,7 @@
             });
 
         });
-        jQuery(window).scroll(function ($) {
+        jQuery(window).on( 'scroll', function ($) {
             getCurrentScroll();
         });
 

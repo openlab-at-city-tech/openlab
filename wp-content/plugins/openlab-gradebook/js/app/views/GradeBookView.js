@@ -327,7 +327,7 @@ define([
 				//table scroll
 				this.scrollObj = $(".table-wrapper .scrollable")
 					.bind("jsp-initialised", this.calculateScrollBarPosition)
-					.jScrollPane();
+							.jScrollPane();
 
 				$('[data-toggle="tooltip"]').tooltip();
 

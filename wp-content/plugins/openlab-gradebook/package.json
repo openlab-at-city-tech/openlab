@@ -9,7 +9,7 @@
   "author": "Joe Unander",
   "license": "ISC",
   "devDependencies": {
-    "chart.js": "^2.8.0",
+    "chart.js": "^2.9.4",
     "grunt": "^1.0.4",
     "grunt-contrib-concat": "^1.0.1",
     "grunt-contrib-copy": "^1.0.0",

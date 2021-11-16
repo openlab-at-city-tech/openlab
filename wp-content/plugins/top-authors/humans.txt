@@ -1,0 +1,28 @@
+/* TEAM */
+
+Name: Daniel Pataki
+Title: Project Developer
+Twitter: danielpataki
+
+/* THANKS */
+
+Name: Seb Van Dijk
+Website: https://twitter.com/sebvandijk
+For: Making the original version of the plugin and kindly donating it to me
+
+Name: WordPress
+Website: http://wordpress.org
+For: Making WordPress
+
+Name: Hemant Negi
+Website: https://github.com/HemantNegi
+For: Making jQuery.sumoselect
+
+Name: Dave Gandy
+Website: https://twitter.com/davegandy
+For: Making FontAwesome
+
+/* META */
+Updated: 2015/06/10
+Software: WordPress
+See: http://humanstxt.org/
