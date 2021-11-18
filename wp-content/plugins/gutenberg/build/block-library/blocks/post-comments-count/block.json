@@ -2,7 +2,7 @@
 	"apiVersion": 2,
 	"name": "core/post-comments-count",
 	"title": "Post Comments Count",
-	"category": "design",
+	"category": "theme",
 	"description": "Display a post's comments count.",
 	"textdomain": "default",
 	"attributes": {
@@ -18,7 +18,13 @@
 		},
 		"typography": {
 			"fontSize": true,
-			"lineHeight": true
+			"lineHeight": true,
+			"__experimentalFontStyle": true,
+			"__experimentalFontWeight": true,
+			"__experimentalLetterSpacing": true,
+			"__experimentalDefaultControls": {
+				"fontSize": true
+			}
 		}
 	}
 }
