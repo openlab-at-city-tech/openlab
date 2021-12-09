@@ -1,7 +1,7 @@
 <?php
 
 $h5p_hub_urls = [
-	'http://openlabdev.org',
+	'http://openlabdev.org/h5ptesting',
 ];
 
 add_action(
