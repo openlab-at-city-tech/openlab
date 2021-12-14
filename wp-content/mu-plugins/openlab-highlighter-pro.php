@@ -204,4 +204,12 @@ function enqueue_assets() {
 		[],
 		'1.0.0'
 	);
+
+	\wp_enqueue_script(
+		'openlab-highligter-pro',
+		\content_url( 'mu-plugins/js/highlighter-pro.js' ),
+		[ 'jquery' ],
+		OL_VERSION,
+		true
+	);
 }
