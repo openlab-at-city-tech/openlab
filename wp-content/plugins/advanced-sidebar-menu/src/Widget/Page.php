@@ -328,12 +328,12 @@ class Page extends Widget_Abstract {
 	 */
 	public function widget( $args, $instance ) {
 		$instance = (array) wp_parse_args( $instance, self::$defaults );
-		$asm = \Advanced_Sidebar_Menu\Menus\Page::factory( $instance, $args );
+		$menu = \Advanced_Sidebar_Menu\Menus\Page::factory( $instance, $args );
 
-		do_action( 'advanced-sidebar-menu/widget/before-render', $asm, $this );
+		do_action( 'advanced-sidebar-menu/widget/before-render', $menu, $this );
 
-		$asm->render();
+		$menu->render();
 
-		do_action( 'advanced-sidebar-menu/widget/after-render', $asm, $this );
+		do_action( 'advanced-sidebar-menu/widget/after-render', $menu, $this );
 	}
 }

@@ -99,7 +99,13 @@ class List_Pages {
 
 
 	/**
-	 * Add the custom classes to the list items
+	 * Add hierarchical level classes to menu items.
+	 *
+	 * Follow existing WP core pattern for `wp_list_pages`.
+	 *
+	 * WP core handles pages, but it doesn't handle custom custom post types.
+	 * We cover pages as well to handle edge cases where a site's theme
+	 * changes/removes default classes.
 	 *
 	 * @param array    $classes - Provided classes for item.
 	 * @param \WP_Post $post    - The item.
@@ -107,26 +113,25 @@ class List_Pages {
 	 * @return array
 	 */
 	public function add_list_item_classes( $classes, \WP_Post $post ) {
-		if ( $post->ID === $this->top_parent_id ) {
-			$children = $this->get_child_pages( $post->ID, true );
-		} else {
-			$children = $this->get_child_pages( $post->ID );
-		}
+		$children = $this->get_child_pages( $post->ID, $post->ID === $this->top_parent_id );
 		if ( ! empty( $children ) ) {
 			$classes[] = 'has_children';
 		}
-
-		// page posts are handled by wp core. This is for custom post types.
-		if ( 'page' !== $post->post_type ) {
-			$ancestors = get_post_ancestors( $post );
-			if ( ! empty( $ancestors ) && in_array( $this->get_current_page_id(), $ancestors, false ) ) { //phpcs:ignore
-				$classes[] = 'current_page_ancestor';
-			} elseif ( $this->get_current_page_id() === $post->post_parent ) {
+		if ( ! empty( $this->get_current_page_id() ) ) {
+			if ( $this->get_current_page_id() === $post->ID ) {
+				$classes[] = 'current_page_item';
+			} elseif ( $this->current_page->post_parent === $post->ID ) {
 				$classes[] = 'current_page_parent';
+				$classes[] = 'current_page_ancestor';
+			} else {
+				$ancestors = get_post_ancestors( $this->get_current_page_id() );
+				if ( ! empty( $ancestors ) && \in_array( $post->ID, $ancestors, true ) ) {
+					$classes[] = 'current_page_ancestor';
+				}
 			}
 		}
 
-		return array_unique( $classes );
+		return \array_unique( $classes );
 	}
 
 
@@ -277,10 +282,6 @@ class List_Pages {
 			$inside .= walk_page_tree( [ $page ], 1, $this->get_current_page_id(), $this->args );
 			$inside .= $this->list_grandchild_pages( $page->ID, $level + 1 );
 			$inside .= "</li>\n";
-		}
-
-		if ( '' === $inside ) {
-			return '';
 		}
 
 		return $content . $inside . "</ul>\n";
