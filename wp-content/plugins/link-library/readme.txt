@@ -4,7 +4,7 @@ Donate link: https://ylefebvre.github.io/wordpress-plugins/link-library/
 Tags: link, list, directory, page, library, AJAX, RSS, feeds, inline, search, paging, add, submit, import, batch, pop-up
 Requires at least: 4.4
 Tested up to: 5.8
-Stable tag: 7.2.4
+Stable tag: 7.2.7
 
 The purpose of this plugin is to add the ability to output a list of link categories and a complete list of links with notes and descriptions.
 
@@ -18,7 +18,7 @@ This plugin uses the filter method to add contents to the pages. It also contain
 
 For screenshots showing how to achieve these results, check out my [site](https://github.com/ylefebvre/link-library/wiki)
 
-All pages are generated using different configurations all managed by Link Library. Link Library is compatible with the [My Link Order](http://wordpress.org/extend/plugins/my-link-order/) plugin to define category and link ordering.
+All pages are generated using different configurations all managed by Link Library. Link Library is compatible with the [Simple Custom Post Order](https://en-ca.wordpress.org/plugins/simple-custom-post-order/) plugin to define category and link ordering.
 
 * [Changelog](http://wordpress.org/extend/plugins/link-library/other_notes/)
 * [Support Forum](https://wordpress.org/support/plugin/link-library/)
@@ -47,6 +47,15 @@ In addition to specifying a library, categories to be displayed can be specified
 Further configuration is available under the Link Library Settings panel.
 
 == Changelog ==
+
+= 7.2.7 =
+* Increased character limit for user form fields from 255 to 1024 characters
+
+= 7.2.6 =
+* Further fixes for hide donation and display of new feature box
+
+= 7.2.5 =
+* Fixes around Hide donation option and display of new feature box
 
 = 7.2.4 =
 * Added new option in search section to look for results in all categories even if library is configured to display from a subset of categories

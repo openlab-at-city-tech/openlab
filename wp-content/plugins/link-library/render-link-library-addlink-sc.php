@@ -305,7 +305,7 @@ function RenderLinkLibraryAddLinkForm( $LLPluginClass, $generaloptions, $library
 							$output .= 'class="lltooltip" title="' . $linknametooltip . '"';
 						}
 				
-						$output .= '><input data-validation="required length" data-validation-length="max255" data-validation-error-msg-required="' . __( 'Required field', 'link-library' ) . '" type="text" name="link_name" id="link_name" value="' . ( isset( $captureddata['link_name'] ) ? esc_html( stripslashes( $captureddata['link_name'] ), '1' ) : '') . "\" /></td></tr>\n";
+						$output .= '><input data-validation="required length" data-validation-length="max1024" data-validation-error-msg-required="' . __( 'Required field', 'link-library' ) . '" type="text" name="link_name" id="link_name" value="' . ( isset( $captureddata['link_name'] ) ? esc_html( stripslashes( $captureddata['link_name'] ), '1' ) : '') . "\" /></td></tr>\n";
 					break;
 					case 2: 	//------------------ Link Address --------------------
 						if ( $showaddlinkfile == 'hide' ) {
@@ -321,7 +321,7 @@ function RenderLinkLibraryAddLinkForm( $LLPluginClass, $generaloptions, $library
 				
 							$output .= '><input ';
 							if ( !$addlinknoaddress ) {
-								$output .= 'data-validation="required url length" data-validation-length="max255" data-validation-error-msg-required="' . __( 'Required field, URL', 'link-library' ) . '" ';
+								$output .= 'data-validation="required url length" data-validation-length="max1024" data-validation-error-msg-required="' . __( 'Required field, URL', 'link-library' ) . '" ';
 							}
 							$output .= 'type="text" name="link_url" id="link_url" value="' . ( isset( $captureddata['link_url'] ) ? esc_html( stripslashes( $captureddata['link_url'] ), '1') : $linkaddrdefvalue ) . "\" /></td></tr>\n";
 						}
@@ -364,7 +364,7 @@ function RenderLinkLibraryAddLinkForm( $LLPluginClass, $generaloptions, $library
 								$requiredtext = '';
 							}
 				
-							$output .= 'data-validation="length' . $requiredtext . '" data-validation-length="max255" data-validation-error-msg-required="' . __( 'Required field, 1-255 chars', 'link-library' ) . '" ';
+							$output .= 'data-validation="length' . $requiredtext . '" data-validation-length="max1024" data-validation-error-msg-required="' . __( 'Required field, 1-1024 chars', 'link-library' ) . '" ';
 				
 							$output .= ' type="text" name="link_rss" id="link_rss" value="' . ( isset( $captureddata['link_rss'] ) ? esc_html( stripslashes( $captureddata['link_rss'] ), '1') : '' ) . "\" /></td></tr>\n";
 						}
@@ -548,7 +548,7 @@ function RenderLinkLibraryAddLinkForm( $LLPluginClass, $generaloptions, $library
 								$requiredtext = '';
 							}
 				
-							$output .= 'data-validation="length' . $requiredtext . '" data-validation-length="max255" data-validation-error-msg-required="' . __( 'Required field, 1-255 chars', 'link-library' ) . '" ';
+							$output .= 'data-validation="length' . $requiredtext . '" data-validation-length="max1024" data-validation-error-msg-required="' . __( 'Required field, 1-1024 chars', 'link-library' ) . '" ';
 				
 							$output .= ' type="text" name="link_description" id="link_description" value="' . ( isset( $captureddata['link_description'] ) ? esc_html( stripslashes( $captureddata['link_description'] ), '1' ) : '' ) . "\" /></td></tr>\n";
 						}
@@ -655,7 +655,7 @@ function RenderLinkLibraryAddLinkForm( $LLPluginClass, $generaloptions, $library
 								$requiredtext = '';
 							}
 				
-							$output .= 'data-validation="length' . $requiredtext . '" data-validation-length="max255" data-validation-error-msg-required="' . __( 'Required field, 1-255 chars', 'link-library' ) . '" ';
+							$output .= 'data-validation="length' . $requiredtext . '" data-validation-length="max1024" data-validation-error-msg-required="' . __( 'Required field, 1-1024 chars', 'link-library' ) . '" ';
 				
 							$output .= 'type="text" name="ll_reciprocal" id="ll_reciprocal" value="' . ( isset( $captureddata['ll_reciprocal'] ) ? esc_html(stripslashes($captureddata['ll_reciprocal']), '1') : $linkaddrdefvalue ) . "\" /></td></tr>\n";
 						}
@@ -680,7 +680,7 @@ function RenderLinkLibraryAddLinkForm( $LLPluginClass, $generaloptions, $library
 								$requiredtext = '';
 							}
 				
-							$output .= 'data-validation="length' . $requiredtext . '" data-validation-length="max255" data-validation-error-msg-required="' . __( 'Required field', 'link-library' ) . '" ';
+							$output .= 'data-validation="length' . $requiredtext . '" data-validation-length="max1024" data-validation-error-msg-required="' . __( 'Required field', 'link-library' ) . '" ';
 				
 							$output .= 'type="text" name="ll_secondwebaddr" id="ll_secondwebaddr" value="' . ( isset( $captureddata['ll_secondwebaddr'] ) ? esc_html( stripslashes( $captureddata['ll_secondwebaddr'] ), '1' ) : $linkaddrdefvalue ) . "\" /></td></tr>\n";
 						}
@@ -1064,7 +1064,7 @@ function RenderLinkLibraryAddLinkForm( $LLPluginClass, $generaloptions, $library
 									$requiredtext = '';
 								}
 					
-								$output .= 'data-validation="length' . $requiredtext . '" data-validation-length="max255" data-validation-error-msg-required="' . __( 'Required field, 1-255 chars', 'link-library' ) . '" ';
+								$output .= 'data-validation="length' . $requiredtext . '" data-validation-length="max1024" data-validation-error-msg-required="' . __( 'Required field, 1-1024 chars', 'link-library' ) . '" ';
 					
 								$output .= 'type="text" name="ll_customurl' . $customurlfieldid . '" id="ll_customurl' . $customurlfieldid . '" value="' . ( isset( $captureddata['ll_customurl' . $customurlfieldid] ) ? esc_html(stripslashes($captureddata['ll_customurl' . $customurlfieldid]), '1') : $linkaddrdefvalue ) . "\" /></td></tr>\n";
 							}
@@ -1097,7 +1097,7 @@ function RenderLinkLibraryAddLinkForm( $LLPluginClass, $generaloptions, $library
 									$requiredtext = '';
 								}
 					
-								$output .= 'data-validation="length' . $requiredtext . '" data-validation-length="max255" data-validation-error-msg-required="' . __( 'Required field, 1-255 chars', 'link-library' ) . '" ';
+								$output .= 'data-validation="length' . $requiredtext . '" data-validation-length="max1024" data-validation-error-msg-required="' . __( 'Required field, 1-1024 chars', 'link-library' ) . '" ';
 					
 								$output .= 'type="text" name="ll_customtext' . $customtextfieldid . '" id="ll_customtext' . $customtextfieldid . '" value="' . ( isset( $captureddata['ll_customtext' . $customtextfieldid] ) ? sanitize_text_field(stripslashes($captureddata['ll_customtext' . $customtextfieldid])) : '' ) . "\" /></td></tr>\n";
 							}
