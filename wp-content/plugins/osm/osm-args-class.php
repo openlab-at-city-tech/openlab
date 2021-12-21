@@ -47,7 +47,8 @@ class cOsm_arguments
     private $post_markers = 'no';
     private $cntrl_fullscreen = 0;
     private $cntrl_mouseposition = 0;
-    private $cntrl_scaleline = 0;      
+    private $cntrl_scaleline = 0;
+    private $cntrl_overview = 0;     
     private $show_kml_marker_name  = "false";
     private $tagged_cluster = "false";
     private $tagged_border_color = "[0, 0, 255, 0.5]";
@@ -127,7 +128,12 @@ private function setMapSize($a_width,  $a_height){
      }
     else if($MapControl == 'scaleline'){
       $this->cntrl_scaleline = true;
-    }
+     }
+     else if($MapControl == 'overview'){
+      $this->cntrl_overview = true;
+     }    
+     
+     
 }
   return $this->mapControl_array;
 }
@@ -219,10 +225,10 @@ public function setTaxonomy($a_tagged_filter_type){
 
 public function setMapAttr($a_attribution){
   if ($a_attribution == "WARNING: Display attribution is not enabled. It may violate the license of data and map and have legal consequences!"){
-    $this->attribution = false;
+    $this->attribution = 0;
   }
   else {
-    $this->attribution = true;
+    $this->attribution = 1;
   }
 }
 
@@ -338,6 +344,10 @@ public function issetMouseposition(){
 public function issetScaleline(){
     return $this->cntrl_scaleline;
 }
+public function issetOverview(){
+    return $this->cntrl_overview;
+}
+
 
 public function showKmlMarkerName(){
     return $this->show_kml_marker_name;  
@@ -347,6 +357,66 @@ public function isclustered(){
 }
 public function getTaggedBorderColor(){
     return $this->tagged_border_color;  
+}
+
+public static function getBorderColor($a_color){
+  if ($a_color == "blue"){
+    return "[0, 0, 255, 0.5]";
+   }
+  elseif($a_color == "red"){
+    return "[255,0,0, 0.5]";
+  }
+  elseif($a_color == "yellow"){
+    return "[255,255,0, 0.5]";
+  }
+  elseif($a_color == "green"){
+    return "[0,255,0, 0.5]";
+  }
+  elseif($a_color == "black"){
+    return "[0,0,0, 0.5]";
+  }
+  elseif($a_color == "purple"){
+    return "[128,0,128, 0.5]";
+  }
+  elseif(($a_color == "grey") || ($a_tagged_color == "gray")) {
+    return "[128,128,128, 0.5]";
+  }
+  elseif($a_color == "orange") {
+    return "[255,128,64, 0.5]";
+  }
+  else {
+    return "[0, 0, 255, 0.5]";
+  }  
+}
+
+public static function getInnerColor($a_color){
+  if ($a_color == "blue"){
+    return "[0, 0, 255, 0.85]";
+   }
+  elseif($a_color == "red"){
+    return "[255,0,0, 0.85]";
+}
+  elseif($a_color == "yellow"){
+    return "[255,255,0, 0.85]";
+}
+  elseif($a_color == "green"){
+    return "[0,255,0, 0.85]";
+}
+  elseif($a_color == "black"){
+    return "[0,0,0, 0.85]";
+}
+elseif($a_color == "purple"){
+    return "[128,0,128, 0.85]";
+}
+  elseif(($a_color == "grey") || ($a_color == "gray")) {
+    return "[128,128,128, 0.85]";
+}
+  elseif($a_color == "orange") {
+    return "[255,128,64, 0.85]";
+}
+else {
+  return "[0, 0, 255, 0.85]";
+  }
 }
 
 public function getTaggedInnerColor(){

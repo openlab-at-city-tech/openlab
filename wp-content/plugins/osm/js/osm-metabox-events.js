@@ -322,6 +322,10 @@ jQuery( document ).ready( function( $ ) {
       if($('#file_mouseposition').prop('checked') == true) {
         Controls = Controls + "mouseposition,";
       }
+      
+      if($('#file_overviewmap').prop('checked') == true) {
+        Controls = Controls + "overview,";
+      }
            
       if($('#osm_file_show_attribution').prop('checked') == true) {
         Attribution ="";
@@ -439,6 +443,10 @@ jQuery( document ).ready( function( $ ) {
       if($('#osm_add_marker_mouseposition').prop('checked') == true) {
         Controls = Controls + "mouseposition,";
       }
+      
+      if($('#osm_add_marker_overviewmap').prop('checked') == true) {
+        Controls = Controls + "overview,";
+      }      
       
       if (Controls != ""){
         Controls = Controls.substr(0, Controls.length-1);
