@@ -3,8 +3,8 @@ Contributors: C. Johnson
 Donate link: http://feedwordpress.radgeek.com/donate/
 Tags: syndication, aggregation, feed, atom, rss
 Requires at least: 4.5
-Tested up to: 5.5
-Stable tag: 2020.0818
+Tested up to: 5.7.2
+Stable tag: 2021.0713
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -65,9 +65,24 @@ FeedWordPress has many options which can be accessed through the WordPress Dashb
 
 == Changelog ==
 
+= 2021.0713 =
+
+*	WORDPRESS 5.6, 5.7.x COMPATIBILITY FIXES. This release introduces fixes to annoying or worse warnings resulting from
+	the deprecation of WordPress's built-in WP_Feed_Cache class. This should resolve the problem if you are encountering
+	annoying, worrying, or breaking problems related to the PHP warnings: "Deprecated: class-wp-feed-cache.php is
+	<strong>deprecated</strong> since version 5.6.0", and/or "Message: ./cache is not writable. Make sure you've set the
+	correct relative or absolute path, and that the location is server-writable."
+
+*	Fixes PHP warning for "count(): Parameter must be an array or an object that implements Countable in 
+    .../wp-content/plugins/feedwordpress/feedwordpress.php on line 1566"
+	
+*	Miscellaneous fixes for other missing variable and global warnings.
+
+*	Code cleanup and reorganization to allow better modularization of error messages, warning dialogs, and extended text.
+
 = 2020.0818 =
 
-*	WORDPRESS 5.5 COMPATIBILITY FIXES, RESOLVES WARNING NOTICES OR WP-ADMIN LOCKOUT. WordPress 5.5 incorporated a newer release of SimplePie, version 1.5.5, which is pretty rad, but FeedWordPress classes that relied on SimplePie 1.3.1's method signatures would then produce PHP warning notices. That should be pretty innocuous, but depending on web server configurations, some users could get locked out of their own wp-admin interface by the display of error notices in the browser at inopportune times. In any case, I have 
+*	WORDPRESS 5.5 COMPATIBILITY FIXES, RESOLVES WARNING NOTICES OR WP-ADMIN LOCKOUT. WordPress 5.5 incorporated a newer release of SimplePie, version 1.5.5, which is pretty rad, but FeedWordPress classes that relied on SimplePie 1.3.1's method signatures would then produce PHP warning notices. That should be pretty innocuous, but depending on web server configurations, some users could get locked out of their own wp-admin interface by the display of error notices in the browser at inopportune times. In any case, I have added code to switch between backward-compatible modules for SimplePie 1.3.1 or updated modules compatible with SimplePie 1.5.5, based on the version available in your WordPress installation; so these notices and their untoward effects should be eliminated.
 
 *	PHP 7.4 COMPATIBILITY FIX: Magic quotes were deprecated and then removed back in PHP 5.x, and in PHP 7.4 the vestigial `get_magic_quotes_gpc()` function has been deprecated. We don't need to worry about it anymore for versions of PHP still supported by WordPress. The reference to the function in the MyPHP utility class caused PHP warnings in more recent versions of PHP; so it has now been removed.
 
