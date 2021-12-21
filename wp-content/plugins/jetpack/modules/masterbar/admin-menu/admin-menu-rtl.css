@@ -118,7 +118,6 @@
 	font-size: 12px;
 	line-height: 1.4;
 	-webkit-hyphens: none;
-	    -ms-hyphens: none;
 	        hyphens: none;
 }
 
@@ -242,8 +241,7 @@
 	position: absolute;
 	-webkit-touch-callout: none;
 	-webkit-user-select: none;
-	-ms-user-select: none;
-	    user-select: none;
+	user-select: none;
 	pointer-events: none;
 	top: 0;
 	bottom: 0;
@@ -332,6 +330,14 @@
 		padding-right: 42px;
 	}
 
+	.wp-responsive-open #wpbody {
+		left: inherit;
+	}
+
+	.wp-responsive-open #wpcontent {
+		margin-right: 272px;
+	}
+
 	.auto-fold #adminmenu, .auto-fold #adminmenuback, .auto-fold #adminmenuwrap {
 		width: 272px;
 	}
@@ -352,6 +358,10 @@
 	.auto-fold #adminmenuwrap {
 		width: 100%;
 		z-index: 171;
+	}
+
+	.wp-responsive-open #wpcontent {
+		margin-right: 0;
 	}
 
 	ul#adminmenu a.wp-has-current-submenu:after,
@@ -440,4 +450,35 @@
 	#wpadminbar #wp-toolbar.quicklinks li#wp-admin-bar-my-account.with-avatar > a img {
 		margin-top: 12px;
 	}
+}
+
+/* Fixes the order of screen options,
+ * showing the dashboard switcher button always first.
+*/
+#adv-settings {
+	display: flex;
+	flex-direction: column;
+}
+
+/* Switcher should always be in the top */
+#adv-settings #dashboard-switcher {
+	order: 0;
+}
+
+#adv-settings .dashboard-switcher-text {
+	margin-top: 0;
+}
+
+#adv-settings .dashboard-switcher-button {
+	padding: 3px 16px;
+}
+
+/* Core registered options should be after the switcher */
+#adv-settings fieldset {
+	order: 1;
+}
+
+/* Submit button should always be in the bottom */
+#adv-settings .submit {
+	order: 2;
 }

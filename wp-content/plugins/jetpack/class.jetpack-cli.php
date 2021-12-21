@@ -3,6 +3,7 @@
 use Automattic\Jetpack\Connection\Client;
 use Automattic\Jetpack\Connection\Manager as Connection_Manager;
 use Automattic\Jetpack\Connection\Tokens;
+use Automattic\Jetpack\Identity_Crisis;
 use Automattic\Jetpack\Status;
 use Automattic\Jetpack\Sync\Actions;
 use Automattic\Jetpack\Sync\Listener;
@@ -687,7 +688,7 @@ class Jetpack_CLI extends WP_CLI_Command {
 				WP_CLI::error(
 					__( 'No command found.', 'jetpack' ) . "\n" .
 					__( 'Please enter the IP address you want to always allow.', 'jetpack' ) . "\n" .
-					_x( 'You can save a range of IPs {low_range}-{high_range}. No spaces allowed.  (example: 1.1.1.1-2.2.2.2)', 'Instructions on how to add IP ranges - low_range/high_range should be translated.', 'jetpack' ) . "\n" .
+					_x( 'You can save a range of IPs {low_range}-{high_range}. No spaces allowed. (example: 1.1.1.1-2.2.2.2)', 'Instructions on how to add IP ranges - low_range/high_range should be translated.', 'jetpack' ) . "\n" .
 					_x( "You can also 'list' or 'clear' the always allowed list.", "'list' and 'clear' are commands and should not be translated", 'jetpack' ) . "\n"
 				);
 				break;
@@ -742,7 +743,7 @@ class Jetpack_CLI extends WP_CLI_Command {
 		// Bail if the option isn't found
 		$option = isset( $args[1] ) ? Jetpack_Options::get_option( $args[1] ) : false;
 		if ( isset( $args[1] ) && ! $option && 'update' !== $args[0] ) {
-			WP_CLI::error( __( 'Option not found or is empty.  Use "list" to list option names', 'jetpack' ) );
+			WP_CLI::error( __( 'Option not found or is empty. Use "list" to list option names', 'jetpack' ) );
 		}
 
 		// Let's print_r the option if it's an array
@@ -1123,7 +1124,7 @@ class Jetpack_CLI extends WP_CLI_Command {
 			$this->partner_provision_error( new WP_Error( 'missing_access_token', __( 'Missing or invalid access token', 'jetpack' ) ) );
 		}
 
-		if ( Jetpack::validate_sync_error_idc_option() ) {
+		if ( Identity_Crisis::validate_sync_error_idc_option() ) {
 			$this->partner_provision_error(
 				new WP_Error(
 					'site_in_safe_mode',
@@ -2022,7 +2023,7 @@ class Jetpack_CLI extends WP_CLI_Command {
 					"--------------------------------------------------------------------------------------------------------------------\n" .
 					/* translators: the placeholder is a directory path */
 					esc_html__( 'The files were created at %3$s', 'jetpack' ) . "\n" .
-					esc_html__( 'To start using the block, build the blocks with yarn run build-extensions', 'jetpack' ) . "\n" .
+					esc_html__( 'To start using the block, build the blocks with pnpm run build-extensions', 'jetpack' ) . "\n" .
 					/* translators: the placeholder is a file path */
 					esc_html__( 'The block slug has been added to the %4$s list at %5$s', 'jetpack' ) . "\n" .
 					'%6$s' . "\n" .
@@ -2078,7 +2079,7 @@ function jetpack_cli_are_you_sure( $flagged = false, $error_msg = false ) {
 	if ( ! $flagged ) {
 		$prompt_message = _x( 'Are you sure? This cannot be undone. Type "yes" to continue:', '"yes" is a command - do not translate.', 'jetpack' );
 	} else {
-		$prompt_message = _x( 'Are you sure? Modifying this option may disrupt your Jetpack connection.  Type "yes" to continue.', '"yes" is a command - do not translate.', 'jetpack' );
+		$prompt_message = _x( 'Are you sure? Modifying this option may disrupt your Jetpack connection. Type "yes" to continue.', '"yes" is a command - do not translate.', 'jetpack' );
 	}
 
 	WP_CLI::line( $prompt_message );
