@@ -91,6 +91,29 @@ class Text_Replace_Test extends WP_UnitTestCase {
 		return array_map( function($v) { return array( $v ); }, array_keys( self::$text_to_link ) );
 	}
 
+	public static function get_ending_punctuation() {
+		return array(
+			array( '.' ),
+			array( ',' ),
+			array( '!' ),
+			array( '?' ),
+			array( ';' ),
+			array( ':' ),
+		);
+	}
+
+	public static function get_special_chars() {
+		return array(
+			array( array( '>', '<' ) ),
+			array( array( '(', ')' ) ),
+			array( array( ')', '(' ) ),
+			array( array( '{', '}' ) ),
+			array( array( ']', '[' ) ),
+			array( array( '[', ']' ) ),
+			array( array( '<strong>', '</strong>' ) ),
+		);
+	}
+
 
 	//
 	//
@@ -177,15 +200,15 @@ class Text_Replace_Test extends WP_UnitTestCase {
 	}
 
 	public function test_plugin_framework_class_name() {
-		$this->assertTrue( class_exists( 'c2c_TextReplace_Plugin_050' ) );
+		$this->assertTrue( class_exists( 'c2c_Plugin_064' ) );
 	}
 
 	public function test_plugin_framework_version() {
-		$this->assertEquals( '050', $this->obj->c2c_plugin_version() );
+		$this->assertEquals( '064', $this->obj->c2c_plugin_version() );
 	}
 
 	public function test_version() {
-		$this->assertEquals( '3.9.1', $this->obj->version() );
+		$this->assertEquals( '4.0', $this->obj->version() );
 	}
 
 	public function test_instance_object_is_returned() {
@@ -245,6 +268,13 @@ class Text_Replace_Test extends WP_UnitTestCase {
 		$this->assertEquals( 'early', $options['when'] );
 	}
 
+	public function test_default_value_of_more_filters() {
+		$this->obj->reset_options();
+		$options = $this->obj->get_options();
+
+		$this->assertEmpty( $options['more_filters'] );
+	}
+
 	/*
 	 * Text replacements
 	 */
@@ -270,11 +300,38 @@ class Text_Replace_Test extends WP_UnitTestCase {
 		$this->assertEquals( $this->expected_text( 'Matt Mullenweg' ), $this->text_replace( 'Matt Mullenweg' ) );
 	}
 
+	public function test_replaces_partially_matching_text() {
+		$this->assertEquals( 'con' . $this->expected_text( 'test' ), $this->text_replace( 'contest' ) );
+	}
+
 	/**
 	 * @dataProvider get_text_to_link
 	 */
 	public function test_replaces_text_as_defined_in_setting( $text ) {
 		$this->assertEquals( $this->expected_text( $text ), $this->text_replace( $text ) );
+	}
+
+	/**
+	 * @dataProvider get_ending_punctuation
+	 */
+	public function test_replaces_text_adjacent_to_punctuation( $punctuation ) {
+		$this->assertEquals(
+			$this->text_replace( ':wp:' ) . $punctuation,
+			$this->text_replace( ':wp:' . $punctuation )
+		);
+	}
+
+	/**
+	 * @dataProvider get_special_chars
+	 */
+	public function test_replaces_text_adjacent_to_special_characters( $data ) {
+		list( $start_char, $end_char ) = $data;
+
+		$this->assertEquals(
+			$start_char . $this->text_replace( ':wp:' ) . ' & ' . $this->text_replace( ':coffee2code:' ) . $end_char,
+			$this->text_replace( $start_char . ':wp: & :coffee2code:' . $end_char ),
+			"Failed asserting text replace within special characters '{$start_char}' and '{$end_char}'."
+		);
 	}
 
 	public function test_replaces_text_with_html_encoded_amp_ampersand() {
@@ -403,8 +460,8 @@ class Text_Replace_Test extends WP_UnitTestCase {
 	// Note: This KNOWN FAILURE test presumes that replacement text should not
 	// be at risk of seeing a replacement itself. This may not be a valid
 	// presumption though.
-	public function test_does_not_replace_a_previous_replacement_KNOWN_FAILURE() {
-		$expected = 'this KNOWN FAILURE may not actually be considered a valid test';
+	public function test_does_not_replace_a_previous_replacement() {
+		$expected = 'this may not actually be considered a valid test';
 
 		$this->set_option( array(
 			'text_to_replace' => array(
@@ -413,25 +470,37 @@ class Text_Replace_Test extends WP_UnitTestCase {
 			)
 		) );
 
-		$this->assertEquals( $expected, $this->text_replace( 'test thing' ) );
+		$this->assertEquals(
+			$expected,
+			$this->text_replace( 'test thing' ),
+			'This is a KNOWN FAILURE that presumes replacement text should not themselves see replacements. The existing behavior could be considered a feature.'
+		);
+	}
+
+	// Note: This KNOWN FAILURE test presumes that shortcode tag should
+	// not be at risk of seeing a replacement itself. This may not be a valid
+	// presumption though.
+	public function test_does_not_replace_shortcode() {
+		$expected = '[test title="This may not actually be a valid test"]gibberish[/test]';
+
+		$this->assertEquals(
+			$expected,
+			$this->text_replace( $expected ),
+			'This is a KNOWN FAILURE that presumes shortcode tags should not get replaced. The existing behavior could be considered a feature.'
+		);
 	}
 
 	// Note: This KNOWN FAILURE test presumes that shortcode attributes should
 	// not be at risk of seeing a replacement itself. This may not be a valid
 	// presumption though.
-	public function test_does_not_replace_shortcode_KNOWN_FAILURE() {
-		$expected = '[test title="This KNOWN FAILURE may not actually be a valid test"]gibberish[/test]';
+	public function test_does_not_replace_within_shortcodes_attributes() {
+		$expected = '[caption title="This may not actually be a valid test"]gibberish[/caption]';
 
-		$this->assertEquals( $expected, $this->text_replace( $expected ) );
-	}
-
-	// Note: This KNOWN FAILURE test presumes that shortcode attributes should
-	// not be at risk of seeing a replacement itself. This may not be a valid
-	// presumption though.
-	public function test_does_not_replace_within_shortcodes_attributes_KNOWN_FAILURE() {
-		$expected = '[caption title="This KNOWN FAILURE may not actually be a valid test"]gibberish[/caption]';
-
-		$this->assertEquals( $expected, $this->text_replace( $expected ) );
+		$this->assertEquals(
+			$expected,
+			$this->text_replace( $expected ),
+			'This is a KNOWN FAILURE that presumes shortcode attributes should not get replacements. The existing behavior could be considered a feature.'
+		);
 	}
 
 	public function test_replaces_multibyte_text_once_via_setting() {
@@ -527,6 +596,16 @@ class Text_Replace_Test extends WP_UnitTestCase {
 		$this->assertEquals( $expected, $this->text_replace( 'bbPress' ) );
 	}
 
+	public function test_replaces_filter_added_via_more_filters() {
+		$this->assertEquals( 'Hello :wp:', apply_filters( 'the_title', 'Hello :wp:' ) );
+
+		$this->set_option( array( 'more_filters' => array( 'the_title' ) ) );
+		$this->obj->register_filters();
+
+		$this->assertEquals( 2, has_filter( 'the_title', array( $this->obj, 'text_replace' ) ) );
+		$this->assertEquals( 'Hello WordPress', apply_filters( 'the_title', 'Hello :wp:' ) );
+	}
+
 	public function test_replace_does_not_apply_to_comments_by_default() {
 		$this->assertEquals( ':coffee2code:', apply_filters( 'get_comment_text', ':coffee2code:' ) );
 		$this->assertEquals( ':coffee2code:', apply_filters( 'get_comment_excerpt', ':coffee2code:' ) );
@@ -605,7 +684,7 @@ class Text_Replace_Test extends WP_UnitTestCase {
 		$this->assertEquals( $this->expected_text( ':coffee2code:' ), apply_filters( 'custom_filter', ':coffee2code:' ) );
 	}
 
-	public function test_hover_applies_to_custom_third_party_filter_via_filter() {
+	public function test_replace_applies_to_custom_third_party_filter_via_filter() {
 		$this->assertEquals( ':coffee2code:', apply_filters( 'custom_filter', ':coffee2code:' ) );
 
 		add_filter( 'c2c_text_replace_third_party_filters', array( $this, 'add_custom_filter' ) );
@@ -651,6 +730,53 @@ class Text_Replace_Test extends WP_UnitTestCase {
 		$this->assertEquals( 1000, $this->captured_filter_value[ 'c2c_text_replace_filter_priority' ] );
 
 		$this->unhook_default_filters( 1000 );
+	}
+
+	/*
+	 * get_default_filters()
+	 */
+
+	public function test_get_default_filters_default() {
+		$this->assertEquals( array( 'the_content', 'the_excerpt', 'widget_text' ), $this->obj->get_default_filters() );
+	}
+
+	public function test_get_default_filters_core() {
+		$this->assertEquals( array( 'the_content', 'the_excerpt', 'widget_text' ), $this->obj->get_default_filters( 'core' ) );
+	}
+
+	public function test_get_default_filters_invalid() {
+		$this->assertEmpty( $this->obj->get_default_filters( 'invalid' ) );
+	}
+
+	public function test_get_default_filters_third_party() {
+		$filters = array(
+			'acf/format_value/type=text',
+			'acf/format_value/type=textarea',
+			'acf/format_value/type=url',
+			'acf_the_content',
+			// Support for Elementor plugin.
+			'elementor/frontend/the_content',
+			'elementor/widget/render_content',
+		);
+
+		$this->assertEquals( $filters, $this->obj->get_default_filters( 'third_party' ) );
+	}
+
+	public function test_get_default_filters_both() {
+		$filters = array(
+			'acf/format_value/type=text',
+			'acf/format_value/type=textarea',
+			'acf/format_value/type=url',
+			'acf_the_content',
+			// Support for Elementor plugin.
+			'elementor/frontend/the_content',
+			'elementor/widget/render_content',
+		);
+
+		$this->assertEquals(
+			array_merge( array( 'the_content', 'the_excerpt', 'widget_text' ), $filters ),
+			$this->obj->get_default_filters( 'both' )
+		);
 	}
 
 	/*

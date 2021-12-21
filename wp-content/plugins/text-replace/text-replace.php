@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: Text Replace
- * Version:     3.9.1
+ * Version:     4.0
  * Plugin URI:  https://coffee2code.com/wp-plugins/text-replace/
  * Author:      Scott Reilly
  * Author URI:  https://coffee2code.com/
@@ -10,7 +10,7 @@
  * Text Domain: text-replace
  * Description: Replace text with other text. Handy for creating shortcuts to common, lengthy, or frequently changing text/HTML, or for smilies.
  *
- * Compatible with WordPress 4.9+ through 5.4+.
+ * Compatible with WordPress 4.9+ through 5.7+.
  *
  * =>> Read the accompanying readme.txt file for instructions and documentation.
  * =>> Also, visit the plugin's homepage for additional information and updates.
@@ -18,11 +18,11 @@
  *
  * @package Text_Replace
  * @author  Scott Reilly
- * @version 3.9.1
+ * @version 4.0
  */
 
 /*
-	Copyright (c) 2004-2020 by Scott Reilly (aka coffee2code)
+	Copyright (c) 2004-2021 by Scott Reilly (aka coffee2code)
 
 	This program is free software; you can redistribute it and/or
 	modify it under the terms of the GNU General Public License
@@ -45,7 +45,7 @@ if ( ! class_exists( 'c2c_TextReplace' ) ) :
 
 require_once( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'c2c-plugin.php' );
 
-final class c2c_TextReplace extends c2c_TextReplace_Plugin_050 {
+final class c2c_TextReplace extends c2c_Plugin_064 {
 
 	/**
 	 * Name of plugin's setting.
@@ -79,7 +79,7 @@ final class c2c_TextReplace extends c2c_TextReplace_Plugin_050 {
 	 * Constructor.
 	 */
 	protected function __construct() {
-		parent::__construct( '3.9.1', 'text-replace', 'c2c', __FILE__, array() );
+		parent::__construct( '4.0', 'text-replace', 'c2c', __FILE__, array() );
 		register_activation_hook( __FILE__, array( __CLASS__, 'activation' ) );
 
 		return self::$instance = $this;
@@ -129,7 +129,7 @@ final class c2c_TextReplace extends c2c_TextReplace_Plugin_050 {
 
 		$this->config = array(
 			'text_to_replace' => array(
-				'input'            => 'textarea',
+				'input'            => 'inline_textarea',
 				'datatype'         => 'hash',
 				'default'          => array(
 					":wp:"          => "<a href='https://wordpress.org'>WordPress</a>",
@@ -138,15 +138,15 @@ final class c2c_TextReplace extends c2c_TextReplace_Plugin_050 {
 				),
 				'allow_html'       => true,
 				'no_wrap'          => true,
-				'input_attributes' => 'rows="15" cols="40"',
-				'label'            => '',
-				'help'             => '',
+				'input_attributes' => 'rows="15"',
+				'label'            => __( 'Text to replace', 'text-replace' ),
+				'help'             => __( 'One per line. A shortcut definition must not span multiple lines. HTML is allowed for shortcuts and their replacement strings. Only use quotes if they are an actual part of the shortcut or replacement strings.', 'text-replace' ),
 			),
 			'text_replace_comments' => array(
 				'input'            => 'checkbox',
 				'default'          => false,
 				'label'            => __( 'Enable text replacement in comments?', 'text-replace' ),
-				'help'             => '',
+				'help'             => __( 'If checked, then all comments, including those from visitors, will be processed for text replacements.', 'text-replace' ),
 			),
 			'replace_once' => array(
 				'input'            => 'checkbox',
@@ -158,16 +158,92 @@ final class c2c_TextReplace extends c2c_TextReplace_Plugin_050 {
 				'input'            => 'checkbox',
 				'default'          => true,
 				'label'            => __( 'Case sensitive text replacement?', 'text-replace' ),
-				'help'             => __( 'If unchecked, then a replacement for :wp: would also replace :WP:.', 'text-replace' ),
+				'help'             => __( 'If checked, then a replacement for :wp: would not replace :WP:.', 'text-replace' ),
+				'more_help'        => __( 'This setting applies to all shortcuts. If you want to selectively have case insensitive shortcuts, then leave this option checked and create separate entries for each variation.', 'text-replace' ),
 			),
 			'when' => array(
 				'input'            => 'select',
+				'datatype'         => 'hash',
 				'default'          => 'early',
-				'options'          => array( 'early', 'late' ),
+				'options'          => array(
+					'early' => __( 'early', 'text-replace' ),
+					'late'  => __( 'late', 'text-replace' )
+				),
 				'label'            => __( 'When to process text?', 'text-replace' ),
-				'help'             => sprintf( __( "Text replacements can happen 'early' (before most other text processing for posts) or 'late' (after most other text processing for posts). By default the plugin handles text early, but depending on the replacements you've defined and the plugins you're using, you can eliminate certain conflicts by switching to 'late'. Finer-grained control can be achieved via the <code>%s</code> filter.", 'text-replace' ), 'c2c_text_replace_filter_priority' ),
+				/* translators: %s: The name of a filter provided by the plugin. */
+				'help'             => sprintf(
+					__( "Text replacements can happen 'early' (before most other text processing for posts) or 'late' (after most other text processing for posts). By default the plugin handles text early, but depending on the replacements you've defined and the plugins you're using, you can eliminate certain conflicts by switching to 'late'. Finer-grained control can be achieved via the %s filter.", 'text-replace' ),
+					'<code>c2c_text_replace_filter_priority</code>'
+				),
+			),
+			'more_filters' => array(
+				'input'            => 'inline_textarea',
+				'datatype'         => 'array',
+				'no_wrap'          => true,
+				'input_attributes' => 'rows="6"',
+				'label'            => __( 'More filters', 'text-replace' ),
+				'help'             => sprintf(
+					/* translators: %s: List of default filters. */
+					__( 'List more filters that should get text replacements. One filter per line. These supplement the default filters: %s (and any others added via filters).', 'text-replace' ),
+					'<code>' . implode( '</code>, <code>', $this->get_default_filters() ) . '</code>'
+				),
 			),
 		);
+	}
+
+	/**
+	 * Returns the default filters processed by the plugin.
+	 *
+	 * The values do not take into account any user-specified filters from the
+	 * more_filters setting nor any filtering. A value returned here does not
+	 * necessarily mean it'll get text replaced.
+	 *
+	 * Currently supported third-party plugins:
+	 *
+	 * - Advanced Custom Fields
+	 *    'acf/format_value/type=text',
+	 *    'acf/format_value/type=textarea',
+	 *    'acf/format_value/type=url',
+	 *    'acf_the_content',
+	 * - Elementor
+	 *    'elementor/frontend/the_content',
+	 *    'elementor/widget/render_content',
+	 *
+	 * @since 4.0
+	 *
+	 * @param string $type The type of filters. One of 'core', 'third_party', 'both'.
+	 *                     Default 'core'.
+	 * @return array The filters associated with the specified type. Returns an
+	 *               empty array for an invalid type.
+	 */
+	public function get_default_filters( $type = 'core' ) {
+		$core        = array( 'the_content', 'the_excerpt', 'widget_text' );
+		$third_party = array(
+			// Support for Advanced Custom Fields plugin.
+			'acf/format_value/type=text',
+			'acf/format_value/type=textarea',
+			'acf/format_value/type=url',
+			'acf_the_content',
+			// Support for Elementor plugin.
+			'elementor/frontend/the_content',
+			'elementor/widget/render_content',
+		);
+
+		switch ( $type ) {
+			case 'both':
+				$filters = array_merge( $core, $third_party );
+				break;
+			case 'core':
+				$filters = $core;
+				break;
+			case 'third_party':
+				$filters = $third_party;
+				break;
+			default:
+				$filters = array();
+		}
+
+		return $filters;
 	}
 
 	/**
@@ -197,19 +273,10 @@ final class c2c_TextReplace extends c2c_TextReplace_Plugin_050 {
 		 * @param array $filters The third party filters that get processed for
 		 *                       hover text. See filter inline docs for defaults.
 		 */
-		$filters = (array) apply_filters( 'c2c_text_replace_third_party_filters', array(
-			// Support for Advanced Custom Fields plugin.
-			'acf/format_value/type=text',
-			'acf/format_value/type=textarea',
-			'acf/format_value/type=url',
-			'acf_the_content',
-			// Support for Elementor plugin.
-			'elementor/frontend/the_content',
-			'elementor/widget/render_content',
-		) );
+		$filters = (array) apply_filters( 'c2c_text_replace_third_party_filters', $this->get_default_filters( 'third_party' ) );
 
-		// Add in relevant stock WP filters.
-		$filters = array_merge( $filters, array( 'the_content', 'the_excerpt', 'widget_text' ) );
+		// Add in relevant stock WP filters and additional filters.
+		$filters = array_unique( array_merge( $filters, $this->get_default_filters(), $options['more_filters'] ) );
 
 		/**
 		 * Filters the hooks that get processed for hover text.
@@ -250,6 +317,85 @@ final class c2c_TextReplace extends c2c_TextReplace_Plugin_050 {
 	}
 
 	/**
+	 * Returns translated strings used by c2c_Plugin parent class.
+	 *
+	 * @since 4.0
+	 *
+	 * @param string $string Optional. The string whose translation should be
+	 *                       returned, or an empty string to return all strings.
+	 *                       Default ''.
+	 * @return string|string[] The translated string, or if a string was provided
+	 *                         but a translation was not found then the original
+	 *                         string, or an array of all strings if $string is ''.
+	 */
+	public function get_c2c_string( $string = '' ) {
+		$strings = array(
+			'%s cannot be cloned.'
+				/* translators: %s: Name of plugin class. */
+				=> __( '%s cannot be cloned.', 'text-replace' ),
+			'%s cannot be unserialized.'
+				/* translators: %s: Name of plugin class. */
+				=> __( '%s cannot be unserialized.', 'text-replace' ),
+			'A value is required for: "%s"'
+				/* translators: %s: Label for setting. */
+				=> __( 'A value is required for: "%s"', 'text-replace' ),
+			'Click for more help on this plugin'
+				=> __( 'Click for more help on this plugin', 'text-replace' ),
+			' (especially check out the "Other Notes" tab, if present)'
+				=> __( ' (especially check out the "Other Notes" tab, if present)', 'text-replace' ),
+			'Coffee fuels my coding.'
+				=> __( 'Coffee fuels my coding.', 'text-replace' ),
+			'Donate'
+				=> __( 'Donate', 'text-replace' ),
+			'Expected integer value for: %s'
+				=> __( 'Expected integer value for: %s', 'text-replace' ),
+			'If this plugin has been useful to you, please consider a donation'
+				=> __( 'If this plugin has been useful to you, please consider a donation', 'text-replace' ),
+			'Invalid file specified for C2C_Plugin: %s'
+				/* translators: %s: Path to the plugin file. */
+				=> __( 'Invalid file specified for C2C_Plugin: %s', 'text-replace' ),
+			'More information about %1$s %2$s'
+				/* translators: 1: plugin name 2: plugin version */
+				=> __( 'More information about %1$s %2$s', 'text-replace' ),
+			'More Help'
+				=> __( 'More Help', 'text-replace' ),
+			'More Plugin Help'
+				=> __( 'More Plugin Help', 'text-replace' ),
+			'Reset Settings'
+				=> __( 'Reset Settings', 'text-replace' ),
+			'Save Changes'
+				=> __( 'Save Changes', 'text-replace' ),
+			'See the "Help" link to the top-right of the page for more help.'
+				=> __( 'See the "Help" link to the top-right of the page for more help.', 'text-replace' ),
+			'Settings'
+				=> __( 'Settings', 'text-replace' ),
+			'Settings reset.'
+				=> __( 'Settings reset.', 'text-replace' ),
+			'Something went wrong.'
+				=> __( 'Something went wrong.', 'text-replace' ),
+			"Thanks for the consideration; it's much appreciated."
+				=> __( "Thanks for the consideration; it's much appreciated.", 'text-replace' ),
+			'The method %1$s should not be called until after the %2$s action.'
+				/* translators: 1: The name of a code function, 2: The name of a WordPress action. */
+				=> __( 'The method %1$s should not be called until after the %2$s action.', 'text-replace' ),
+			'The plugin author homepage.'
+				=> __( 'The plugin author homepage.', 'text-replace' ),
+			"The plugin configuration option '%s' must be supplied."
+				/* translators: %s: The setting configuration key name. */
+				=>__( "The plugin configuration option '%s' must be supplied.", 'text-replace' ),
+			'This plugin brought to you by %s.'
+				/* translators: %s: Link to plugin author's homepage. */
+				=> __( 'This plugin brought to you by %s.', 'text-replace' ),
+		);
+
+		if ( ! $string ) {
+			return array_values( $strings );
+		}
+
+		return ! empty( $strings[ $string ] ) ? $strings[ $string ] : $string;
+	}
+
+	/**
 	 * Outputs the text above the setting form.
 	 *
 	 * @param string $localized_heading_text Optional. Localized page heading text.
@@ -257,33 +403,26 @@ final class c2c_TextReplace extends c2c_TextReplace_Plugin_050 {
 	public function options_page_description( $localized_heading_text = '' ) {
 		parent::options_page_description( __( 'Text Replace Settings', 'text-replace' ) );
 
-		echo '<p>' . __( 'Text Replace is a plugin that allows you to replace text with other text in posts, etc. Very handy to create shortcuts to commonly-typed and/or lengthy text/HTML, or for smilies.', 'text-replace' ) . '</p>';
-		echo '<div class="c2c-hr">&nbsp;</div>';
-		echo '<h3>' . __( 'Shortcuts and text replacements', 'text-replace' ) . '</h3>';
-		echo '<p>' . __( 'Shortcuts and text replacement expansions defined below should be formatted like this:', 'text-replace' ) . '</p>';
-		echo "<blockquote><code>:wp: => &lt;a href='https://wordpress.org'>WordPress&lt;/a></code></blockquote>";
-		echo '<ul class="c2c-plugin-list">';
-		echo '<li>' . sprintf( __( "The %s represents the text in your existing posts that you want to get replaced. (The colons aren't necessary, but is a good technique to use to reduce unexpected replacements.)", 'text-replace' ), '<code>:wp:</code>' ) . "</li>\n";
-		echo '<li>' . sprintf( __( 'The %s is the separator between the text to replace and the text replacement.', 'text-replace' ), '<code> => </code>' ) . "</li>\n";
-		echo '<li>' . sprintf( __( 'The %s represents the replacement text.', 'text-replace' ), '<code>&lt;a href=\'https://wordpress.org\'&gt;WordPress&lt;/a&gt;</code>' ) . "</li>\n";
+		echo '<p>' . __( 'Text Replace is a plugin that allows you to replace text with other text in posts, etc. Very handy to create shortcuts to commonly-typed and/or lengthy text/HTML, or for smilies.', 'text-replace' ) . "</p>\n";
+		echo '<div class="c2c-hr">&nbsp;</div>' . "\n";
+		echo '<h3>' . __( 'Shortcuts and text replacements', 'text-replace' ) . "</h3>\n";
+		echo '<p>' . __( 'Shortcuts and text replacement expansions defined below should be formatted like this:', 'text-replace' ) . "</p>\n";
+		echo "<blockquote><code>:wp: => &lt;a href='https://wordpress.org'>WordPress&lt;/a></code></blockquote>\n";
+		echo '<ul class="c2c-plugin-list">' . "\n";
+		echo "\t<li>" . sprintf( __( "The %s represents the text in your existing posts that you want to get replaced. (The colons aren't necessary, but is a good technique to use to reduce unexpected replacements.)", 'text-replace' ), '<code>:wp:</code>' ) . "</li>\n";
+		echo "\t<li>" . sprintf( __( 'The %s is the separator between the text to replace and the text replacement.', 'text-replace' ), '<code> => </code>' ) . "</li>\n";
+		echo "\t<li>" . sprintf( __( 'The %s represents the replacement text.', 'text-replace' ), '<code>&lt;a href=\'https://wordpress.org\'&gt;WordPress&lt;/a&gt;</code>' ) . "</li>\n";
 		echo "</ul>\n";
-		printf( '<p>' . __( 'If you are solely interested in replacing words or phrases with links to the URLs of your choosing, then check out my <a href="%s">Linkify Text</a> plugin, which better facilitates that variety of replacements.', 'text-replace' ) . '</p>', 'https://wordpress.org/plugins/linkify-text/' );
-		echo '<p>' . __( 'Other considerations:', 'text-replace' ) . '</p>';
-		echo '<ul class="c2c-plugin-list"><li>';
-		echo __( 'Be careful not to define text that could match partially when you don\'t want it to:<br />i.e.  <code>Me => Scott</code> would also inadvertently change "Men" to be "Scottn"', 'text-replace' );
-		echo '</li><li>';
+		printf( '<p>' . __( 'If you are solely interested in replacing words or phrases with links to the URLs of your choosing, then check out my <a href="%s">Linkify Text</a> plugin, which better facilitates that variety of replacements.', 'text-replace' ) . "</p>\n", 'https://wordpress.org/plugins/linkify-text/' );
+		printf( '<p>' . __( 'If you are solely interested in adding help text as tooltips that appear when a visitor hovers over a word or phrase, then check out my <a href="%s">Text Hover</a> plugin, which better facilitates that variety of replacements.', 'text-replace' ) . "</p>\n", 'https://wordpress.org/plugins/text-hover/' );
+		echo '<p>' . __( 'Other considerations:', 'text-replace' ) . "</p>\n";
+		echo '<ul class="c2c-plugin-list">' . "\n\t" . '<li>';
+		_e( 'Be careful not to define text that could match partially when you don\'t want it to:<br />i.e.  <code>Me => Scott</code> would also inadvertently change "Men" to be "Scottn"', 'text-replace' );
+		echo "</li>\n\t<li>";
 		printf( __( 'If you intend to use this plugin to handle smilies, you should probably disable WordPress\'s default smilie/emoticon handler on the <a href="%s">Writing Settings</a> page.', 'text-replace' ), admin_url( 'options-writing.php' ) );
-		echo '</li><li>';
-		echo __( 'Text inside of HTML tags (such as tag names and attributes) will not be matched. So, for example, you can\'t expect a <code>:mycss:</code> shortcut to work in: <code>&lt;a href="" :mycss:&gt;text&lt;/a&gt;.</code>', 'text-replace' );
-		echo '</li><li>';
-		echo __( 'HTML is allowed for both text to replace and text replacements.', 'text-replace' );
-		echo '</li><li>';
-		echo __( 'Only use quotes if they are an actual part of the original or replacement strings.', 'text-replace' );
-		echo '</li><li><strong><em>';
-		echo __( 'Define only one shortcut per line.', 'text-replace' );
-		echo '</em></strong></li><li><strong><em>';
-		echo __( 'Define a shortcut fully on a single line without spanning onto multiple lines.', 'text-replace' );
-		echo '</em></strong></li></ul>';
+		echo "</li>\n\t<li>";
+		_e( 'Text inside of HTML tags (such as tag names and attributes) will not be matched. So, for example, you can\'t expect a <code>:mycss:</code> shortcut to work in: <code>&lt;a href="" :mycss:&gt;text&lt;/a&gt;.</code>', 'text-replace' );
+		echo "</li>\n</ul>\n";
 	}
 
 	/**

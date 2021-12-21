@@ -1,12 +1,12 @@
 === Text Replace ===
 Contributors: coffee2code
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=6ARCFJ9TX3522
-Tags: text, replace, shortcut, shortcuts, post, post content, coffee2code
+Tags: text, replace, shortcut, substitution, coffee2code
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Requires at least: 4.9
-Tested up to: 5.4
-Stable tag: 3.9.1
+Tested up to: 5.7
+Stable tag: 4.0
 
 Replace text with other text. Handy for creating shortcuts to common, lengthy, or frequently changing text/HTML, or for smilies.
 
@@ -20,6 +20,7 @@ Additional features of the plugin controlled both via settings and filters:
 * Text replacement can be made case insensitive (it is case sensitive by default)
 * Text replacement can be limited to doing only one replacement per term, per post (by default, all occurrences of a term are replaced)
 * Text replacement can be handled early or late in WordPress's text filtering process (it's early by default)
+* Text replacement can be expanded to affect other filters
 
 A few things to keep these things in mind:
 
@@ -39,11 +40,11 @@ Would have the effect of changing "His majesty" to "Hellos majesty".
 
 * If you intend to use this plugin to handle smilies, you should probably disable WordPress's default smilie handler on the Writing Settings admin page.
 
-* This plugin is set to filter the_content, the_excerpt, widget_text, and optionally, get_comment_text and get_comment_excerpt. Filters from popular plugins such as Advanced Custom Fields (ACF) and Elementor are also handled by default (see FAQ for specifics). The filter 'c2c_text_replace_filters' can be used to add or modify the list of filters affected.
+* This plugin is set to filter 'the_content', 'the_excerpt', 'widget_text', and optionally, 'get_comment_text' and 'get_comment_excerpt'. Filters from popular plugins such as Advanced Custom Fields (ACF) and Elementor are also handled by default (see FAQ for specifics). The "More filters" setting can be used to specify additional filters that should be handled by the plugin. The filter 'c2c_text_replace_filters' can also be used to add or modify the list of filters affected.
 
-* Text inside of HTML tags (such as tag names and attributes) will not be matched. So, for example, you can't expect the :mycss: shortcut to work in: &lt;a href="" :mycss:&gt;text&lt;/a&gt;.'.
+* Text inside of HTML tags (such as tag names and attributes) will not be matched. So, for example, you can't expect the :mycss: shortcut to work in `<a href="" style=":mycss:">text</a>`
 
-* **SPECIAL CONSIDERATION:** Be aware that the shortcut text that you use in your posts will be stored that way in the database (naturally). While calls to display the posts will see the filtered, text replaced version, anything that operates directly on the database will not see the expanded replacement text. So if you only ever referred to "America Online" as ":aol:" (where ":aol:" => "<a href='http://www.aol.com'>America Online</a>"), visitors to your site will see the linked, expanded text due to the text replace, but a database search would never turn up a match for "America Online".
+* **SPECIAL CONSIDERATION:** Be aware that the shortcut text that you use in your posts will be stored that way in the database. While calls to display the posts will see the filtered, text-replaced version, anything that operates directly on the database will not see the expanded replacement text. So if you only ever referred to "America Online" as ":aol:" (where `:aol: => <a href='http://www.aol.com'>America Online</a>`), visitors to your site will see the linked, expanded text due to the text replace, but a database search would never turn up a match for "America Online".
 
 * However, a benefit of the replacement text not being saved to the database and instead evaluated when the data is being loaded into a web page is that if the replacement text is modified, all pages making use of the shortcut will henceforth use the updated replacement text.
 
@@ -53,16 +54,22 @@ Links: [Plugin Homepage](https://coffee2code.com/wp-plugins/text-replace/) | [Pl
 == Installation ==
 
 1. Whether installing or updating, whether this plugin or any other, it is always advisable to back-up your data before starting
-1. Install via the built-in WordPress plugin installer. Or download and unzip `text-replace.zip` inside the plugins directory for your site (typically `wp-content/plugins/`)
+1. Install via the built-in WordPress plugin installer. Or install the plugin code inside the plugins directory for your site (typically `/wp-content/plugins/`).
 1. Activate the plugin through the 'Plugins' admin menu in WordPress
 1. Go to the `Settings` -> `Text Replace` admin options page and customize the options (notably to define the shortcuts and their replacements)
+1. Optional: Configure other plugin options as desired.
+1. Use the shortcuts in posts/pages. Shortcuts appearing in existing posts will also be affected by this plugin.
 
 
 == Frequently Asked Questions ==
 
-= Does this plugin modify the post content in the database? =
+= Does this plugin modify the post content before it gets saved to the database? =
 
-No. The plugin filters post content on-the-fly.
+No. The plugin filters post content on-the-fly as it is being output or displayed. The data saved to the database is as you typed it.
+
+= Does this plugin modify post content that already exists in the database? =
+
+No. The plugin filters post content on-the-fly as it is being output or displayed. The actual data stored in the database, whether it be pre-existing or new, is never affected by this plugin.
 
 = Will this work for posts I wrote prior to installing this plugin? =
 
@@ -70,23 +77,17 @@ Yes, if they include strings that you've now defined as shortcuts.
 
 = What post fields get handled by this plugin? =
 
-By default, the plugin filters the post content, post excerpt fields, widget text, and optionally comments and comment excerpts. You can use the 'c2c_text_replace_filters' filter to modify that behavior (see Hooks section).
+By default, the plugin filters the post content, post excerpt, widget text, and optionally comments and comment excerpts. You can use the "More filters" setting to specify additional filters to be processed for text replacement. You can also programmatically use the 'c2c_text_replace_filters' filter to modify the affected filters (see Developer Documentation section).
 
 = How can I get text replacements to apply for post titles (or something not text-replaced by default)? =
 
-You can add to the list of filters that get text replacements using something like this (added to your theme's functions.php file, for instance):
+The easiest way would be to add "the_title" (or some other filter's name) as a line in the "More filters" setting. That setting allows any additional specified filters to be processed for text replacement.
 
-`
-function more_text_replacements( $filters ) {
-	$filters[] = 'the_title'; // Here you could put in the name of any filter you want
-	return $filters;
-}
-add_filter( 'c2c_text_replace_filters', 'more_text_replacements' );
-`
+You can also programmatically add to the list of filters that get text replacements. See the Developer Documentation section for an example.
 
 = Is the plugin case sensitive? =
 
-By default, yes. There is a setting you can change to make it case insensitive. Or you can use the 'c2c_text_replace_case_sensitive' filter (see Hooks section).
+By default, yes. There is a setting you can change to make it case insensitive. Or you can use the 'c2c_text_replace_case_sensitive' filter (see Developer Documentation section).
 
 = I use :wp: all the time as a shortcut for WordPress, but when I search posts for the term "WordPress", I don't see posts where I used the shortcut; why not? =
 
@@ -94,11 +95,13 @@ Rest assured search engines will see those posts since they only ever see the po
 
 = Will all instances of a given term be replaced in a single post? =
 
-By default, yes. There is a setting you can change so that only the first occurrence of the term in the post gets replaced. Or if you are a coder, you can use the 'c2c_text_replace_once' filter (see Hooks section).
+By default, yes. There is a setting you can change so that only the first occurrence of the term in the post gets replaced. Or if you are a coder, you can use the 'c2c_text_replace_once' filter (see Developer Documentation section).
 
 = Does this plugin explicitly support any third-party plugins? =
 
-Yes. While this plugin is compatible with many other plugins that modify post and widget text, this plugin has explicit built-in support for Advanced Custom Fields and Elementor, which provide additional content areas. See documentation on the hook c2c_text_replace_third_party_filters for a complete list of default supported third-party filters and how to enable compatibility with other plugins and themes.
+Yes. While this plugin is compatible with many other plugins that modify post and widget text, this plugin has explicit built-in support for Advanced Custom Fields and Elementor, which provide additional content areas. See documentation on the hook 'c2c_text_replace_third_party_filters' for a complete list of default supported third-party filters and how to enable compatibility with other plugins and themes.
+
+If you know the name of the filter provided by a plugin, you can add it to the "More filters" setting to have its value processed for text replacement.
 
 = Does this plugin include unit tests? =
 
@@ -107,163 +110,111 @@ Yes.
 
 == Screenshots ==
 
-1. A screenshot of the admin options page for the plugin, where you define the terms/phrases/shortcuts and their related replacement text
+1. The admin options page for the plugin, where you define the terms/phrases/shortcuts and their related replacement text
 
 
-== Hooks ==
+== Developer Documentation ==
 
-The plugin exposes a number of filters for hooking. Typically, the code to utilize these hooks would go inside your active theme's functions.php file. Bear in mind that all of the features controlled by these filters are configurable via the plugin's settings page. These filters are likely only of interest to advanced users able to code.
+Developer documentation can be found in [DEVELOPER-DOCS.md](https://github.com/coffee2code/text-replace/blob/master/DEVELOPER-DOCS.md). That documentation covers the numerous hooks provided by the plugin. Those hooks are listed below to provide an overview of what's available.
 
-**c2c_text_replace_filters (filter)**
-
-The 'c2c_text_replace_filters' hook allows you to customize what hooks get text replacement applied to them.
-
-Arguments:
-
-* $hooks (array): Array of hooks that will be text replaced.
-
-Example:
-
-`
-/**
- * Enable text replacement for post/page titles.
- *
- * @param array $filters Filters handled by the Text Replace plugin.
- * @return array
- */
-function more_text_replacements( $filters ) {
-	$filters[] = 'the_title'; // Here you could put in the name of any filter you want
-	return $filters;
-}
-add_filter( 'c2c_text_replace_filters', 'more_text_replacements' );
-`
-
-**c2c_text_replace_third_party_filters (filter)**
-
-The 'c2c_text_replace_third_party_filters' hook allows you to customize what third-party hooks get text replacement applied to them. Note: the results of this filter are then passed through the `c2c_text_replace_filters` filter, so third-party filters can be modified using either hook.
-
-Arguments:
-
-* $filters (array): The third-party filters whose text should have text replacement applied. Default `array( 'acf/format_value/type=text', 'acf/format_value/type=textarea', 'acf/format_value/type=url', 'acf_the_content', 'elementor/frontend/the_content', 'elementor/widget/render_content' )`.
-
-Example:
-
-`
-/**
- * Stop text replacements for ACF text fields and add text replacements for a custom filter.
- *
- * @param array $filters
- * @return array
- */
-function my_c2c_text_replace_third_party_filters( $filters ) {
-	// Remove a filter already in the list.
-	unset( $filters[ 'acf/format_value/type=text' ] );
-	// Add a filter to the list.
-	$filters[] = 'my_plugin_filter';
-	return $filters;
-}
-add_filter( 'c2c_text_replace_third_party_filters', 'my_c2c_text_replace_third_party_filters' );
-`
-
-**c2c_text_replace_filter_priority (filter)**
-
-The 'c2c_text_replace_filter_priority' hook allows you to override the default priority for the 'c2c_text_replace' filter.
-
-Arguments:
-
-* $priority (int): The priority for the 'c2c_text_replace' filter. The default value is 2.
-* $filter (string): The filter name.
-
-Example:
-
-`
-/**
- * Change the default priority of the 'c2c_text_replace' filter to run after most other plugins.
- *
- * @param int $priority The priority for the 'c2c_text_replace' filter.
- * @return int
- */
-function my_change_priority_for_c2c_text_replace( $priority, $filter ) {
-	return 1000;
-}
-add_filter( 'c2c_text_replace_filter_priority', 'my_change_priority_for_c2c_text_replace', 10, 2 );
-`
-
-**c2c_text_replace (filter)**
-
-The 'c2c_text_replace' hook allows you to customize or override the setting defining all of the text replacement shortcuts and their replacements.
-
-Arguments:
-
-* $text_replacement_array (array): Array of text replacement shortcuts and their replacements. This will be the value set via the plugin's settings page.
-
-Example:
-
-`
-/**
- * Add dynamic shortcuts.
- *
- * @param array $replacements Array of replacement terms and their replacement text.
- * @return array
- */
-function my_text_replacements( $replacements ) {
-	// Add replacement
-	$replacements[':matt:'] => 'Matt Mullenweg';
-	// Unset a replacement that we never want defined
-	if ( isset( $replacements[':wp:'] ) )
-		unset( $replacements[':wp:'] );
-	// Important!
-	return $replacements;
-}
-add_filter( 'c2c_text_replace', 'my_text_replacements' );
-`
-
-**c2c_text_replace_comments (filter)**
-
-The 'c2c_text_replace_comments' hook allows you to customize or override the setting indicating if text replacement should be enabled in comments.
-
-Arguments:
-
-* $state (bool): Either true or false indicating if text replacement is enabled for comments. The default value will be the value set via the plugin's settings page.
-
-Example:
-
-`// Prevent text replacements from ever being enabled in comments.
-add_filter( 'c2c_text_replace_comments', '__return_false' );`
-
-**c2c_text_replace_case_sensitive (filter)**
-
-The 'c2c_text_replace_case_sensitive' hook allows you to customize or override the setting indicating if text replacement should be case sensitive.
-
-Arguments:
-
-* $state (bool): Either true or false indicating if text replacement is case sensitive. This will be the value set via the plugin's settings page.
-
-Example:
-
-`// Prevent text replacement from ever being case sensitive.
-add_filter( 'c2c_text_replace_case_sensitive', '__return_false' );`
-
-**c2c_text_replace_once (filter)**
-
-The 'c2c_text_replace_once' hook allows you to customize or override the setting indicating if text replacement should be limited to once per term per piece of text being processed regardless of how many times the term appears.
-
-Arguments:
-
-* $state (bool): Either true or false indicating if text replacement is to only occur once per term. The default value will be the value set via the plugin's settings page.
-
-Example:
-
-`// Only replace a term/shortcut once per post.
-add_filter( 'c2c_text_replace_once', '__return_true' );`
+* `c2c_text_replace_filters` : Customize what hooks get text replacement applied to them.
+* `c2c_text_replace_third_party_filters` : Customize what third-party hooks get text replacement applied to them.
+* `c2c_text_replace_filter_priority` : Override the default priority for the 'c2c_text_replace' filter.
+* `c2c_text_replace` Customize or override the setting defining all of the text replacement shortcuts and their replacements.
+* `c2c_text_replace_comments` : Customize or override the setting indicating if text replacement should be enabled in comments.
+* `c2c_text_replace_case_sensitive` : Customize or override the setting indicating if text replacement should be case sensitive.
+* `c2c_text_replace_once` : Customize or override the setting indicating if text replacement should be limited to once per term per piece of text being processed regardless of how many times the term appears.
 
 
 == Changelog ==
 
+= 4.0 (2021-07-04) =
+Highlights:
+
+This feature release adds a new setting to allow for user-specified filters to be processed, updates the plugin framework significantly, improves the plugin settings page, extracts developer docs from readme into new DEVELOPER-DOCS.md, restructures unit test files, notes compatibility through WP 5.7, and more.
+
+Details:
+
+* New: Add new setting "More filters" to allow for user-specified filters to be processed for text replacements
+* New: Add `get_default_filters()` to return the default core and/or third-party filters processed by the plugin
+* Change: Update plugin framework to 064
+    * 064:
+    * New: For checkbox settings, support a 'more_help' config option for defining help text to appear below checkbox and its label
+    * Fix: Fix URL for plugin listing donate link
+    * Change: Store donation URL as object variable
+    * Change: Update strings used for settings page donation link
+    * 063:
+    * Fix: Simplify settings initialization to prevent conflicts with other plugins
+    * Change: Remove ability to detect plugin settings page before current screen is set, as it is no longer needed
+    * Change: Enqueue thickbox during `'admin_enqueue_scripts'` action instead of during `'init'`
+    * Change: Use `is_plugin_admin_page()` in `help_tabs()` instead of reproducing its functionality
+    * Change: Trigger a debugging warning if `is_plugin_admin_page()` is used before `'admin_init'` action is fired
+    * 062:
+    * Change: Update `is_plugin_admin_page()` to use `get_current_screen()` when available
+    * Change: Actually prevent object cloning and unserialization by throwing an error
+    * Change: Check that there is a current screen before attempting to access its property
+    * Change: Remove 'type' attribute from `style` tag
+    * Change: Incorporate commonly defined styling for inline_textarea
+    * 061:
+    * Fix bug preventing settings from getting saved
+    * 060:
+    * Rename class from `c2c_{PluginName}_Plugin_051` to `c2c_Plugin_060`
+    * Move string translation handling into inheriting class making the plugin framework code plugin-agnostic
+        * Add abstract function `get_c2c_string()` as a getter for translated strings
+        * Replace all existing string usage with calls to `get_c2c_string()`
+    * Handle WordPress's deprecation of the use of the term "whitelist"
+        * Change: Rename `whitelist_options()` to `allowed_options()`
+        * Change: Use `add_allowed_options()` instead of deprecated `add_option_whitelist()` for WP 5.5+
+        * Change: Hook `allowed_options` filter instead of deprecated `whitelist_options` for WP 5.5+
+    * New: Add initial unit tests (currently just covering `is_wp_version_cmp()` and `get_c2c_string()`)
+    * Add `is_wp_version_cmp()` as a utility to compare current WP version against a given WP version
+    * Refactor `contextual_help()` to be easier to read, and correct function docblocks
+    * Don't translate urlencoded donation email body text
+    * Add inline comments for translators to clarify purpose of placeholders
+    * Change PHP package name (make it singular)
+    * Tweak inline function description
+    * Note compatibility through WP 5.7+
+    * Update copyright date (2021)
+    * 051:
+    * Allow setting integer input value to include commas
+    * Use `number_format_i18n()` to format integer value within input field
+    * Update link to coffee2code.com to be HTTPS
+    * Update `readme_url()` to refer to plugin's readme.txt on plugins.svn.wordpress.org
+    * Remove defunct line of code
+* Change: Allow displayed dropdown values for 'when' setting to be translated
+* Change: Improve settings page help text by adding, rephrasing, relocating, and tweaaking some formatting
+* Change: Change text_to_replace setting from being a textarea to inline textarea
+* Change: Move translation of all parent class strings into main plugin file
+* New: Add DEVELOPER-DOCS.md and move hooks documentation into it
+* New: Suggest Text Hover plugin as an option for those needing support for a specific subset use case
+* Change: Output newlines after block-level tags in settings page
+* Change: Omit 'cols' attribute for textarea since it is overridden
+* Change: Move 'code' tags out of translatable string for 'when' setting
+* Change: Note compatibility through WP 5.7+
+* Change: Update copyright date (2021)
+* Change: Improve documentation in readme.txt
+* Change: Tweak plugin's readme.txt tags
+* Change: Sync installation instructions in README.txt with what's in readme.txt
+* Change: Remove "A screenshot of" prefix from caption
+* Unit tests:
+    * Change: Restructure unit test file structure
+        * New: Create new subdirectory `tests/phpunit/` to house all files related to PHP unit testing
+        * Change: Move `bin/` to `tests/bin/`
+        * Change: Move `tests/bootstrap.php` into `tests/phpunit/`
+        * Change: In bootstrap, store path to plugin file constant so its value can be used within that file and in test file
+        * Change: Move tests from `tests/` to `tests/phpunit/tests/`
+        * Change: Remove 'test-' prefix from unit test files
+        * Change: Rename `phpunit.xml` to `phpunit.xml.dist` per best practices
+    * New: Add unit tests for shortcuts adjacent to punction and special characters
+    * Change: Output custom error message for known failing tests explaining the issues and why they may not actually be bugs
+    * Change: Rename improperly named unit test
+* New: Add a few more possible TODO items
+* Change: Updated screenshot for settings page
+
 = 3.9.1 (2020-07-11) =
 Highlights:
 
-* This minor release updates a bunch of documentation, updates a few URLs to be HTTPS, improves unit testing, and notes compatibility through WP 5.4+.
+This minor release updates a bunch of documentation, updates a few URLs to be HTTPS, improves unit testing, and notes compatibility through WP 5.4+.
 
 Details:
 
@@ -283,7 +234,7 @@ Details:
 = 3.9 (2020-01-15) =
 Highlights:
 
-* This feature release adds support for Advanced Custom Fields and Elementor, adds a new setting that can allow the plugin to run later to avoid potential conflicts with other plugins, adds a number of filters, updates compatibility to be WP 4.9-5.3+, and more.
+This feature release adds support for Advanced Custom Fields and Elementor, adds a new setting that can allow the plugin to run later to avoid potential conflicts with other plugins, adds a number of filters, updates compatibility to be WP 4.9-5.3+, and more.
 
 Details:
 
@@ -334,61 +285,13 @@ Details:
 * Change: Split paragraph in README.md's "Support" section into two
 * Fix: Correct typo in GitHub URL
 
-= 3.8 (2018-07-14) =
-Highlights:
-
-* This release adds a setting for links to open in a new window, adds support for linkable text spanning multiple lines in your post, adds a filter for customizing link attributes, improves performance, and makes numerous behind-the-scenes improvements and changes.
-
-Details:
-
-* New: Ensure longer, more precise link strings match before shorter strings that might also match, regardless of order defined
-* Fix: Honor setting to limit text replacements to just once a post for multibyte strings
-* New: Add support for finding text to replace that may span more than one line or whose internal spaces vary in number and type
-* Change: Update plugin framework to 048
-    * 048:
-    * When resetting options, delete the option rather than setting it with default values
-    * Prevent double "Settings reset" admin notice upon settings reset
-    * 047:
-    * Don't save default setting values to database on install
-    * Change "Cheatin', huh?" error messages to "Something went wrong.", consistent with WP core
-    * Note compatibility through WP 4.9+
-    * Drop compatibility with version of WP older than 4.7
-    * 046:
-    * Fix `reset_options()` to reference instance variable `$options`
-    * Note compatibility through WP 4.7+
-    * Update copyright date (2017)
-    * 045:
-    * Ensure `reset_options()` resets values saved in the database
-    * 044:
-    * Add `reset_caches()` to clear caches and memoized data. Use it in `reset_options()` and `verify_config()`
-    * Add `verify_options()` with logic extracted from `verify_config()` for initializing default option attributes
-    * Add `add_option()` to add a new option to the plugin's configuration
-    * Add filter 'sanitized_option_names' to allow modifying the list of whitelisted option names
-    * Change: Refactor `get_option_names()`
-* Change: Cast return values of hooks to expected data types
-* New: Add README.md
-* New: Add GitHub link to readme
-* Change: Store setting name in constant
-* Unit tests:
-    * Change: Improve test initialization
-    * Change: Improve tests for settings handling
-    * Change: Default `WP_TESTS_DIR` to `/tmp/wordpress-tests-lib` rather than erroring out if not defined via environment variable
-    * Change: Enable more error output for unit tests
-    * New: Add more tests
-    * New: Add header comments to bootstrap
-* Change: Note compatibility through WP 4.9+
-* Change: Drop compatibility with version of WP older than 4.7.
-* Change: Rename readme.txt section from 'Filters' to 'Hooks'
-* Change: Modify formatting of hook name in readme to prevent being uppercased when shown in the Plugin Directory
-* Change: Update installation instruction to prefer built-in installer over .zip file
-* Change: Update URLs used in examples and docs to be HTTPS where appropriate
-* Change: Update copyright date (2018)
-
 _Full changelog is available in [CHANGELOG.md](https://github.com/coffee2code/text-replace/blob/master/CHANGELOG.md)._
 
 
-
 == Upgrade Notice ==
+
+= 4.0 =
+Recommended release: added new setting to allow user-specified filters to be processed, updated plugin framework significantly, improved plugin settings page, extracted developer docs from readme into new DEVELOPER-DOCS.md, restructured unit test files, noted compatibility through WP 5.7, +more.
 
 = 3.9.1 =
 Minor update: updated a bunch of documentation, updated a few URLs to be HTTPS, improved unit testing, and noted compatibility through WP 5.4+.
