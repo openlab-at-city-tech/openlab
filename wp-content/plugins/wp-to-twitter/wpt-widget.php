@@ -42,7 +42,7 @@ function wpt_tweet_linkify( $text, $opts, $tweet ) {
 				foreach ( $media as $key => $image ) {
 					$media_urls[] = $image['url'];
 					$alt          = isset( $tweet['extended_entities']['media'][ $key ]['ext_alt_text'] ) ? $tweet['extended_entities']['media'][ $key ]['ext_alt_text'] : '';
-					$text        .= "<img src='$image[media_url_https]' alt='$alt' class='wpt-twitter-image' />";
+					$text        .= "<img src='" . esc_url( $image['media_url_https'] ) . "' alt='" . esc_attr( $alt ) . "' class='wpt-twitter-image' />";
 
 				}
 			}

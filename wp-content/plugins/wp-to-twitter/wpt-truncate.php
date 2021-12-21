@@ -19,47 +19,11 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @return array of URL lengths and params.
  */
 function wpt_max_length() {
-	$config        = get_transient( 'wpt_twitter_config' );
-	$set_transient = false;
-	if ( ! $config ) {
-		$set_transient = true;
-		$connection    = wpt_oauth_connection();
-		if ( $connection ) {
-			$config = $connection->get( 'https://api.twitter.com/1.1/help/configuration.json' );
-		} else {
-			$config = json_encode(
-				array(
-					'http_length'    => 23,
-					'https_length'   => 23,
-					'reserved_chars' => 24,
-				)
-			);
-		}
-	}
-	$decoded = ( is_string( $config ) ) ? json_decode( $config ) : $config;
-
-	if ( is_object( $decoded ) && isset( $decoded->short_url_length ) ) {
-		$short_url_length = $decoded->short_url_length;
-		$short_url_https  = $decoded->short_url_length_https;
-		$reserved_char    = $decoded->characters_reserved_per_media;
-		$values           = array(
-			'http_length'    => $short_url_length,
-			'https_length'   => $short_url_https,
-			'reserved_chars' => $reserved_char,
-		);
-
-	} else {
-		// if config query is invalid, use default values; these may become invalid.
-		$values = array(
-			'http_length'    => 23,
-			'https_length'   => 23,
-			'reserved_chars' => 24,
-		);
-	}
-	if ( $set_transient ) {
-		// Only set the transient after confirming valid values.
-		set_transient( 'wpt_twitter_config', $values, 60 * 60 * 24 );
-	}
+	$values = array(
+		'http_length'    => 23,
+		'https_length'   => 23,
+		'reserved_chars' => 24,
+	);
 
 	$values['base_length'] = intval( ( get_option( 'wpt_tweet_length' ) ) ? get_option( 'wpt_tweet_length' ) : 140 ) - 1;
 

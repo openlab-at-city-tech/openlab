@@ -290,7 +290,7 @@ button.time div {
 .toggle-btn-group:after {
     content: "";
     display: table;
-    clear: both;	
+    clear: both;
 }
 
 .toggle-btn-group label {
