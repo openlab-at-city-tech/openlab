@@ -313,7 +313,7 @@ class Elasticsearch {
 			(
 				Utils\is_epio() &&
 				! empty( $query_args['s'] ) &&
-				! is_admin() &&
+				Utils\is_integrated_request( 'search' ) &&
 				! isset( $_GET['post_type'] ) // phpcs:ignore WordPress.Security.NonceVerification
 			),
 			$query_args
@@ -323,6 +323,22 @@ class Elasticsearch {
 		if ( $send_ep_search_term_header ) {
 			$request_args['headers']['EP-Search-Term'] = rawurlencode( $query_args['s'] );
 		}
+
+		/**
+		 * Filter Elasticsearch query request arguments
+		 *
+		 * @hook ep_query_request_args
+		 * @since 3.6.4
+		 * @param {array}  $request_args Request arguments
+		 * @param {string} $path         Request path
+		 * @param {string} $index        Index name
+		 * @param {string} $type         Index type
+		 * @param {array}  $query        Prepared Elasticsearch query
+		 * @param {array}  $query_args   Query arguments
+		 * @param {mixed}  $query_object Could be WP_Query, WP_User_Query, etc.
+		 * @return {array} New request arguments
+		 */
+		$request_args = apply_filters( 'ep_query_request_args', $request_args, $path, $index, $type, $query, $query_args, $query_object );
 
 		$request = $this->remote_request( $path, $request_args, $query_args, 'query' );
 
@@ -651,6 +667,67 @@ class Elasticsearch {
 	}
 
 	/**
+	 * Get multiple documents from Elasticsearch given an array of ids
+	 *
+	 * @param  string $index Index name.
+	 * @param  string $type Index type. Previously this was used for index type. Now it's just passed to hooks for legacy reasons.
+	 * @param  array  $document_ids Array of document ids to get.
+	 * @since  3.6.0
+	 * @return boolean|array
+	 */
+	public function get_documents( $index, $type, $document_ids ) {
+		if ( version_compare( $this->get_elasticsearch_version(), '7.0', '<' ) ) {
+			$path = apply_filters( 'ep_index_' . $type . '_request_path', $index . '/' . $type . '/_mget', $document_ids, $type );
+		} else {
+			$path = apply_filters( 'ep_index_' . $type . '_request_path', $index . '/_mget', $document_ids, $type );
+		}
+
+		$request_args = [
+			'method' => 'POST',
+			'body'   => wp_json_encode(
+				array(
+					'ids' => $document_ids,
+				)
+			),
+		];
+
+		$request = $this->remote_request( $path, $request_args, [], 'post' );
+
+		if ( is_wp_error( $request ) ) {
+			return false;
+		}
+
+		$response_body = wp_remote_retrieve_body( $request );
+
+		$response = json_decode( $response_body, true );
+
+		$docs = [];
+
+		if ( isset( $response['docs'] ) && is_array( $response['docs'] ) ) {
+			foreach ( $response['docs'] as $doc ) {
+				if ( ! empty( $doc['exists'] ) || ! empty( $doc['found'] ) ) {
+					$docs[ $doc['_id'] ] = $doc['_source'];
+				}
+			}
+		}
+
+		/**
+		 * Filter documents found by Elasticsearch through the /_mget endpoint.
+		 *
+		 * @hook ep_get_documents
+		 * @since 3.6.0
+		 * @param {array} $docs Documents found indexed by ID
+		 * @param  {string} $index Index name
+		 * @param  {string} $type Index type
+		 * @param  {array} $document_ids Array of document ids
+		 * @return  {array} Documents to be returned
+		 */
+		$docs = apply_filters( 'ep_get_documents', $docs, $index, $type, $document_ids );
+
+		return $docs;
+	}
+
+	/**
 	 * Create the network alias.
 	 *
 	 * Network aliases are used to query documents across blogs in a network.
@@ -831,6 +908,7 @@ class Elasticsearch {
 			'timeout' => 30,
 		];
 
+		$closed = false;
 		if ( $close_first ) {
 			$closed = $this->close_index( $index );
 		}
@@ -1000,9 +1078,23 @@ class Elasticsearch {
 		$existing_headers = isset( $args['headers'] ) ? (array) $args['headers'] : [];
 
 		// Add the API Header.
+		// Note that the "User Agent" header will be changed via WordPress's `http_headers_useragent` filter later.
 		$new_headers = $this->format_request_headers();
 
 		$args['headers'] = array_merge( $existing_headers, $new_headers );
+
+		/**
+		 * Filter Elasticsearch args prior to remote request
+		 *
+		 * @hook ep_pre_request_args
+		 * @since 3.6.4
+		 * @param {array}       $args       Request args
+		 * @param {string}      $path       Site URL to retrieve
+		 * @param {array}       $query_args The query args originally passed to WP_Query.
+		 * @param {string|null} $type       Type of request, used for debugging.
+		 * @return {array} New request args
+		 */
+		$args = apply_filters( 'ep_pre_request_args', $args, $path, $query_args, $type );
 
 		$query = array(
 			'time_start'   => microtime( true ),
@@ -1017,6 +1109,8 @@ class Elasticsearch {
 
 		$request  = false;
 		$failures = 0;
+
+		add_filter( 'http_headers_useragent', [ $this, 'add_elasticpress_version_to_user_agent' ] );
 
 		// Optionally let us try back up hosts and account for failures.
 		while ( true ) {
@@ -1057,13 +1151,16 @@ class Elasticsearch {
 				 * Filter intercepted request
 				 *
 				 * @hook ep_do_intercept_request
+				 * @since 3.2.2
+				 * @since 3.6.5 added $type
 				 * @param {array} $request New remote request response
 				 * @param  {array} $query Remote request arguments
 				 * @param  {args} $args Request arguments
 				 * @param  {int} $failures Number of failures
+				 * @param  {string} $type Type of request
 				 * @return {array} New request
 				 */
-				$request = apply_filters( 'ep_do_intercept_request', new WP_Error( 400, 'No Request defined' ), $query, $args, $failures );
+				$request = apply_filters( 'ep_do_intercept_request', new WP_Error( 400, 'No Request defined' ), $query, $args, $failures, $type );
 			} else {
 				$request = wp_remote_request( $query['url'], $args ); // try the existing host to avoid unnecessary calls.
 			}
@@ -1092,6 +1189,8 @@ class Elasticsearch {
 				break;
 			}
 		}
+
+		remove_filter( 'http_headers_useragent', [ $this, 'add_elasticpress_version_to_user_agent' ] );
 
 		// Return now if we're not blocking, since we won't have a response yet.
 		if ( isset( $args['blocking'] ) && false === $args['blocking'] ) {
@@ -1409,6 +1508,33 @@ class Elasticsearch {
 		}
 
 		return true;
+	}
+
+	/**
+	 * Conditionally add the ElasticPress version to the User Agent string.
+	 *
+	 * @since 3.6.1
+	 * @param string $user_agent Original User Agent.
+	 * @return string
+	 */
+	public function add_elasticpress_version_to_user_agent( $user_agent ) {
+		/**
+		 * Filter the User Agent header when submitting requests to Elasticsearch.
+		 *
+		 * @hook ep_remote_request_add_ep_user_agent
+		 * @param  {bool} $should_add_ep_verion Whether the ElasticPress version should be added to the User Agent string.
+		 * @return {bool} New value
+		 * @since  3.6.1
+		 */
+		if ( apply_filters( 'ep_remote_request_add_ep_user_agent', Utils\is_epio() ) ) {
+			$end_part   = '; ' . get_bloginfo( 'url' );
+			$user_agent = str_replace(
+				$end_part,
+				' (ElasticPress/' . EP_VERSION . ')' . $end_part,
+				$user_agent
+			);
+		}
+		return $user_agent;
 	}
 
 	/**
