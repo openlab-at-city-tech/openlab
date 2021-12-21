@@ -91,6 +91,25 @@
 
         $content.show();
 
+        // Upgrade to Pro notice
+        //console.log($active[0].hash);
+        if( $active[0].hash == '#pro' ) {
+            // Hide top notice and remove margin-top for content below
+            $(".pp-version-notice-bold-purple").hide();
+            $(".ju-main-wrapper").css(
+                "marginTop", 0
+            );
+        } else {
+            // Show the top notice and calculate margin-top for the content below
+            $(".pp-version-notice-bold-purple").show();
+            $wpBarHeight  = $('#wpadminbar').outerHeight();
+            $headerHeight = $('.pp-version-notice-bold-purple').outerHeight();
+            $wrapper      = $('.ju-main-wrapper');
+            $wrapper.css(
+                'marginTop', ($wpBarHeight + $headerHeight - 32) + 'px'
+            );
+        }
+
         // Update indicator
         if (($index - $prev_index) >= 0) {
           $indicator.velocity({"right": $tabs_width - (($index + 1) * $tab_width)}, { duration: 300, queue: false, easing: 'easeOutQuad'});

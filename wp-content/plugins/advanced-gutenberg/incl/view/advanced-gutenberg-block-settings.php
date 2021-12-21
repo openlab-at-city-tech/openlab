@@ -94,7 +94,7 @@ if(defined('ADVANCED_GUTENBERG_PRO')) {
 
         <?php if (count($advgb_blocks) === 0) : ?>
             <div class="blocks-not-loaded" style="text-align: center">
-                <p><?php esc_html_e('No blocks available. Please edit a Profile (e.g. save changes without modifying anything). Then come back to Block Settings to see the blocks list.', 'advanced-gutenberg'); ?></p>
+                <p><?php esc_html_e('No blocks available. Please go to a post edit (without saving either modifying anything). Then come back to Block Settings to see the blocks list.', 'advanced-gutenberg'); ?></p>
             </div>
         <?php endif; ?>
     </div>

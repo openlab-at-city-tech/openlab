@@ -29,9 +29,25 @@ $blocks_icon_color                = isset($saved_settings['blocks_icon_color']) 
 $editor_width                     = isset($saved_settings['editor_width']) ? $saved_settings['editor_width'] : '0';
 $default_thumb                    = plugins_url('assets/blocks/recent-posts/recent-post-default.png', ADVANCED_GUTENBERG_PLUGIN);
 $rp_default_thumb                 = isset($saved_settings['rp_default_thumb']) ? $saved_settings['rp_default_thumb'] : array('url' => $default_thumb, 'id' => 0);
-$enable_columns_visual_guide      = isset($saved_settings['enable_columns_visual_guide']) && $saved_settings['enable_columns_visual_guide'] ? 'checked' : '';
+
+$enable_columns_visual_guide = isset($saved_settings['enable_columns_visual_guide']) && $saved_settings['enable_columns_visual_guide'] ? 'checked' : '';
 if (!isset($saved_settings['enable_columns_visual_guide'])) {
     $enable_columns_visual_guide = 'checked';
+}
+
+$enable_block_access = isset($saved_settings['enable_block_access']) && $saved_settings['enable_block_access'] ? 'checked' : '';
+if (!isset($saved_settings['enable_block_access'])) {
+    $enable_block_access  = 'checked';
+}
+
+$enable_custom_styles = isset($saved_settings['enable_custom_styles']) && $saved_settings['enable_custom_styles'] ? 'checked' : '';
+if (!isset($saved_settings['enable_custom_styles'])) {
+    $enable_custom_styles  = 'checked';
+}
+
+$enable_advgb_blocks = isset($saved_settings['enable_advgb_blocks']) && $saved_settings['enable_advgb_blocks'] ? 'checked' : '';
+if (!isset($saved_settings['enable_advgb_blocks'])) {
+    $enable_advgb_blocks  = 'checked';
 }
 ?>
 
@@ -51,6 +67,87 @@ if (!isset($saved_settings['enable_columns_visual_guide'])) {
         <form method="post">
             <?php wp_nonce_field('advgb_settings_nonce', 'advgb_settings_nonce_field') ?>
             <ul class="settings-list clearfix">
+                <li class="ju-settings-option clearfix">
+                    <div class="settings-option-wrapper clearfix">
+                        <label for="enable_block_access"
+                               class="advgb_qtip ju-setting-label"
+                               data-qtip="<?php esc_attr_e(
+                                   'Enable block access to deactivate blocks by user role',
+                                   'advanced-gutenberg'
+                               ) ?>"
+                        >
+                            <?php esc_html_e('Enable block access', 'advanced-gutenberg') ?>
+                        </label>
+                        <div class="ju-switch-button">
+                            <label class="switch">
+                                <input type="checkbox" name="enable_block_access"
+                                       id="enable_block_access"
+                                       value="1"
+                                    <?php echo esc_attr($enable_block_access) ?>
+                                />
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </li>
+                <li class="ju-settings-option clearfix">
+                    <div class="settings-option-wrapper clearfix">
+                        <label for="enable_custom_styles"
+                               class="advgb_qtip ju-setting-label"
+                               data-qtip="<?php esc_attr_e(
+                                   'Enable custom CSS classes to easily manage and apply to your blocks',
+                                   'advanced-gutenberg'
+                               ) ?>"
+                        >
+                            <?php esc_html_e('Enable custom styles', 'advanced-gutenberg') ?>
+                        </label>
+                        <div class="ju-switch-button">
+                            <label class="switch">
+                                <input type="checkbox" name="enable_custom_styles"
+                                       id="enable_custom_styles"
+                                       value="1"
+                                    <?php echo esc_attr($enable_custom_styles) ?>
+                                />
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </li>
+                <li class="ju-settings-option clearfix">
+                    <div class="settings-option-wrapper clearfix">
+                        <label for="enable_advgb_blocks"
+                               class="advgb_qtip ju-setting-label"
+                               data-qtip="<?php esc_attr_e(
+                                   'Enable PublishPress Blocks. If disabled, no PublishPress Blocks will be available',
+                                   'advanced-gutenberg'
+                               ) ?>"
+                        >
+                            <?php esc_html_e('Enable PublishPress Blocks', 'advanced-gutenberg') ?>
+                        </label>
+                        <div class="ju-switch-button">
+                            <label class="switch">
+                                <input type="checkbox" name="enable_advgb_blocks"
+                                       id="enable_advgb_blocks"
+                                       value="1"
+                                    <?php echo esc_attr($enable_advgb_blocks) ?>
+                                />
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </li>
+                <?php
+                // Pro
+                if(defined('ADVANCED_GUTENBERG_PRO')) {
+                    if ( method_exists( 'PPB_AdvancedGutenbergPro\Utils\Definitions', 'advgb_pro_setting' ) ) {
+                        echo PPB_AdvancedGutenbergPro\Utils\Definitions::advgb_pro_setting(
+                            'enable_pp_branding',
+                            __('Display PublishPress branding', 'advanced-gutenberg'),
+                            __('Display PublishPress logo and links in the footer of the admin pages', 'advanced-gutenberg')
+                        );
+                    }
+                }
+                ?>
                 <li class="ju-settings-option clearfix">
                     <div class="settings-option-wrapper clearfix">
                         <label for="gallery_lightbox"
