@@ -34,7 +34,7 @@ shutterReloaded = {
 		for ( i = 0; i < document.links.length; i++ ) {
 			L = document.links[i];
 			ext = ( L.href.indexOf('?') == -1 ) ? L.href.slice(-4).toLowerCase() : L.href.substring( 0, L.href.indexOf('?') ).slice(-4).toLowerCase();
-			if ( ext != '.jpg' && ext != '.png' && ext != '.gif' && ext != 'jpeg' ) continue;
+			if ( ext != '.jpg' && ext != '.png' && ext != '.gif' && ext != 'jpeg' && ext != 'webp') continue;
 			if ( a == 'sh' && L.className.toLowerCase().indexOf('shutter') == -1 ) continue;
 			if ( a == 'lb' && L.rel.toLowerCase().indexOf('lightbox') == -1 ) continue;
 

@@ -71,13 +71,13 @@ class A_Marketing_Display_Settings_Form extends Mixin_Display_Type_Form
         $footer = __('<strong>Bonus:</strong> NextGEN Gallery users get a discount of 20% off regular price.', 'nggallery');
         switch ($context) {
             case 'tile':
-                $card = new C_Marketing_Block_Large(__('Use the Pro Tiled Gallery in NextGEN Pro', 'nggallery'), __('With this stunning display type, you can present your images large with no trouble. Choose the maximum width of the gallery, or let it automate. It will adjust incredibly on all devices.', 'nggallery'), $footer, 'https://www.imagely.com/wp-content/uploads/2020/06/tile.jpg', 'https://www.imagely.com/wordpress-gallery-plugin/pro-tiled-gallery/?utm_source=ngg&utm_medium=gallerysettings&utm_campaign=tiledgallery-demo', __('View the Pro Tiled Demo', 'nggallery'), 'gallerysettings', 'tiledgallery');
+                $card = new C_Marketing_Block_Large(__('Use the Pro Tiled Gallery in NextGEN Pro', 'nggallery'), __('With this stunning display type, you can present your images large with no trouble. Choose the maximum width of the gallery, or let it automate. It will adjust incredibly on all devices.', 'nggallery'), $footer, 'https://www.imagely.com/wp-content/uploads/2020/06/tile.jpg', M_Marketing::get_utm_link('https://www.imagely.com/wordpress-gallery-plugin/pro-tiled-gallery/', 'gallerysettings', 'tiledgallery-demo'), __('View the Pro Tiled Demo', 'nggallery'), 'gallerysettings', 'tiledgallery');
                 break;
             case 'mosaic':
-                $card = new C_Marketing_Block_Large(__('Use the Mosaic Gallery in NextGEN Pro', 'nggallery'), __('With this stunning display type, you can present your images in a flexible grid. Choose the maximum height for your rows, and their margins, or use the default settings. It will adjust incredibly on all devices.', 'nggallery'), $footer, 'https://www.imagely.com/wp-content/uploads/2020/06/mosaic.jpg', 'https://www.imagely.com/wordpress-gallery-plugin/pro-mosaic-gallery/?utm_source=ngg&utm_medium=gallerysettings&utm_campaign=mosaicgallery-demo', __('View the Mosaic Demo', 'nggallery'), 'gallerysettings', 'mosaicgallery');
+                $card = new C_Marketing_Block_Large(__('Use the Mosaic Gallery in NextGEN Pro', 'nggallery'), __('With this stunning display type, you can present your images in a flexible grid. Choose the maximum height for your rows, and their margins, or use the default settings. It will adjust incredibly on all devices.', 'nggallery'), $footer, 'https://www.imagely.com/wp-content/uploads/2020/06/mosaic.jpg', M_Marketing::get_utm_link('https://www.imagely.com/wordpress-gallery-plugin/pro-mosaic-gallery/', 'gallerysettings', 'mosaicgallery-demo'), __('View the Mosaic Demo', 'nggallery'), 'gallerysettings', 'mosaicgallery');
                 break;
             case 'masonry':
-                $card = new C_Marketing_Block_Large(__('Use the Masonry Gallery in NextGEN Pro', 'nggallery'), __('With this stunning display type, you can present your images in a flexible grid. Choose the maximum width for your images, and their padding, or use the default settings. It will adjust incredibly on all devices.', 'nggallery'), $footer, 'https://www.imagely.com/wp-content/uploads/2020/06/masonry.jpg', 'https://www.imagely.com/wordpress-gallery-plugin/pro-masonry-gallery/?utm_source=ngg&utm_medium=gallerysettings&utm_campaign=masonrygallery-demo', __('View the Masonry Demo', 'nggallery'), 'gallerysettings', 'masonrygallery');
+                $card = new C_Marketing_Block_Large(__('Use the Masonry Gallery in NextGEN Pro', 'nggallery'), __('With this stunning display type, you can present your images in a flexible grid. Choose the maximum width for your images, and their padding, or use the default settings. It will adjust incredibly on all devices.', 'nggallery'), $footer, 'https://www.imagely.com/wp-content/uploads/2020/06/masonry.jpg', M_Marketing::get_utm_link('https://www.imagely.com/wordpress-gallery-plugin/pro-masonry-gallery/', 'gallerysettings', 'masonrygallery-demo'), __('View the Masonry Demo', 'nggallery'), 'gallerysettings', 'masonrygallery');
                 break;
             default:
                 return '';
@@ -171,7 +171,7 @@ class A_Marketing_Lightbox_Options_MVC extends Mixin
     {
         $root_element = $this->call_parent('render_object');
         M_Marketing::enqueue_blocks_style();
-        $block = new C_Marketing_Block_Large(__('Go big with the Pro Lightbox', 'nggallery'), __("The Pro Lightbox allows you to display images at full scale when opened. Your visitors will enjoy breathtaking views of your photos on any device. It's customizable, from colors to padding and more. Offer social sharing, deep linking, and individual image commenting. Turn your gallery lightbox view into a slideshow for your visitors. You can customize settings such as auto-playing and slideshow speed.", 'nggallery'), __('<strong>Bonus:</strong> NextGEN Gallery users get a discount of 20% off regular price', 'nggallery'), 'fa-expand', 'https://www.imagely.com/wordpress-gallery-plugin/pro-lightbox-demo/?utm_medium=ngg&utm_source=otheroptions&utm_campaign=prolightbox-demo', __('View the Pro Lightbox Demo', 'nggallery'), 'otheroptions', 'prolightbox');
+        $block = new C_Marketing_Block_Large(__('Go big with the Pro Lightbox', 'nggallery'), __("The Pro Lightbox allows you to display images at full scale when opened. Your visitors will enjoy breathtaking views of your photos on any device. It's customizable, from colors to padding and more. Offer social sharing, deep linking, and individual image commenting. Turn your gallery lightbox view into a slideshow for your visitors. You can customize settings such as auto-playing and slideshow speed.", 'nggallery'), __('<strong>Bonus:</strong> NextGEN Gallery users get a discount of 20% off regular price', 'nggallery'), 'fa-expand', M_Marketing::get_utm_link('https://www.imagely.com/wordpress-gallery-plugin/pro-lightbox-demo/', 'otheroptions', 'prolightbox-demo'), __('View the Pro Lightbox Demo', 'nggallery'), 'otheroptions', 'prolightbox');
         foreach ($root_element->find('admin_page.other_options_lightbox_libraries', TRUE) as $container) {
             $container->append($block->render());
         }
@@ -190,7 +190,7 @@ class A_Marketing_Other_Options_Form extends Mixin
     }
     function render()
     {
-        $card = new C_Marketing_Block_Large(__('Protect your images', 'nggallery'), __('Image protection disables the ability for visitors to right-click or drag to download your images in both the gallery display and Pro Lightbox views. It gives you complete freedom to display your work without worry. You can also choose to protect all images sitewide, even outside of NextGEN Gallery.', 'nggallery'), __('<strong>Bonus:</strong> NextGEN Gallery users get a discount of 20% off regular price.', 'nggallery'), 'fa-lock-open', 'https://www.imagely.com/docs/turn-image-protection/?utm_medium=ngg&utm_source=otheroptions&utm_campaign=imageprotection-learnmore', __('Learn more', 'nggallery'), 'otheroptions', 'imageprotection');
+        $card = new C_Marketing_Block_Large(__('Protect your images', 'nggallery'), __('Image protection disables the ability for visitors to right-click or drag to download your images in both the gallery display and Pro Lightbox views. It gives you complete freedom to display your work without worry. You can also choose to protect all images sitewide, even outside of NextGEN Gallery.', 'nggallery'), __('<strong>Bonus:</strong> NextGEN Gallery users get a discount of 20% off regular price.', 'nggallery'), 'fa-lock-open', M_Marketing::get_utm_link('https://www.imagely.com/docs/turn-image-protection/', 'otheroptions', 'imageprotection-learnmore'), __('Learn more', 'nggallery'), 'otheroptions', 'imageprotection');
         return $card->render();
     }
     function enqueue_static_resources()
@@ -229,10 +229,7 @@ abstract class C_Marketing_Block_Base
     }
     public function get_upgrade_link()
     {
-        $url = 'https://www.imagely.com/nextgen-gallery/?utm_source=' . $this->source;
-        $url .= '&utm_medium=' . $this->medium;
-        $url .= '&utm_campaign=' . $this->campaign;
-        return $url;
+        return M_Marketing::get_utm_link('https://www.imagely.com/nextgen-gallery/', $this->medium, $this->campaign, $this->source);
     }
 }
 class C_Marketing_Block_Card extends C_Marketing_Block_Base

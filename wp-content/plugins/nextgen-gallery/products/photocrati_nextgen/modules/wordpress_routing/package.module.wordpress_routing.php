@@ -172,7 +172,7 @@ class A_WordPress_Routing_App extends Mixin
             $generated_url = $base_url;
         }
         $original_url = $generated_url;
-        $generated_parts = explode($settings->router_param_slug, $generated_url);
+        $generated_parts = explode($settings->get('router_param_slug', 'nggallery'), $generated_url);
         $generated_url = $generated_parts[0];
         $ngg_parameters = '/';
         if (isset($generated_parts[1])) {
@@ -219,7 +219,7 @@ class A_WordPress_Routing_App extends Mixin
             // The post permalink differs from the generated url
             $post_permalink = str_replace(home_url(), $base_url, $post_permalink);
             $post_parts = $this->parse_url($post_permalink);
-            $post_parts['path'] = $this->object->join_paths($post_parts['path'], $settings->router_param_slug, $ngg_parameters);
+            $post_parts['path'] = $this->object->join_paths($post_parts['path'], $settings->get('router_param_slug', 'nggallery'), $ngg_parameters);
             $post_parts['path'] = str_replace('index.php/index.php', 'index.php', $post_parts['path']);
             // incase permalink_structure contains index.php
             if (!empty($generated_parts['query']) && empty($post_parts['query'])) {

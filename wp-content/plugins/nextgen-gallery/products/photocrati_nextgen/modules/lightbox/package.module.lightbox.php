@@ -87,7 +87,7 @@ class C_Lightbox_Library_Manager
         $thickbox->title = __('Thickbox', 'nggallery');
         $thickbox->code = "class='thickbox' rel='%GALLERY_NAME%'";
         $thickbox->styles = array('wordpress#thickbox');
-        $thickbox->scripts = array('photocrati-lightbox#thickbox/nextgen_thickbox_init.js', 'wordpress#thickbox');
+        $thickbox->scripts = array('photocrati-lightbox#thickbox/nextgen_thickbox_init.js', 'photocrati-lightbox#thickbox/thickbox.js');
         $thickbox->values = array('nextgen_thickbox_i18n' => array('next' => __('Next &gt;', 'nggallery'), 'prev' => __('&lt; Prev', 'nggallery'), 'image' => __('Image', 'nggallery'), 'of' => __('of', 'nggallery'), 'close' => __('Close', 'nggallery'), 'noiframes' => __('This feature requires inline frames. You have iframes disabled or your browser does not support them.', 'nggallery')));
         $this->register('thickbox', $thickbox);
         // Allow third parties to integrate
@@ -318,8 +318,7 @@ class C_Lightbox_Library_Manager
 }
 /**
  * Represents a lightbox available in NextGEN Gallery
- * Class C_NGG_Lightbox
- * @mixin Mixin_NGG_Lightbox_Instance_Methods
+ *
  * @implements I_Lightbox
  */
 class C_NGG_Lightbox extends C_Component
@@ -327,7 +326,6 @@ class C_NGG_Lightbox extends C_Component
     function define($context = FALSE, $properties = array())
     {
         parent::define($context);
-        $this->add_mixin('Mixin_NGG_Lightbox_Instance_Methods');
         $this->implement('I_Lightbox');
     }
     function initialize($name = '', $properties = array())
@@ -338,9 +336,6 @@ class C_NGG_Lightbox extends C_Component
             $this->{$k} = $v;
         }
     }
-}
-class Mixin_NGG_Lightbox_Instance_Methods extends Mixin
-{
     /**
      * Returns true/false whether or not the lightbox supports displaying entities from the displayed gallery object
      * @param $displayed_gallery. By default, lightboxes don't support albums

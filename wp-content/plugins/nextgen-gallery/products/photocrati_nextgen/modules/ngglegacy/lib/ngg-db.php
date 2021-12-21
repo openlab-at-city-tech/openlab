@@ -537,7 +537,7 @@ class nggdb
      * @param int $sortorder (optional)
      * @return int Result of the ID of the inserted image
      */
-    function add_image($id = false, $filename = false, $description = '', $alttext = '', $meta_data = false, $post_id = 0, $imagedate = '0000-00-00 00:00:00', $exclude = 0, $sortorder = 0)
+    public static function add_image($id = false, $filename = false, $description = '', $alttext = '', $meta_data = false, $post_id = 0, $imagedate = '0000-00-00 00:00:00', $exclude = 0, $sortorder = 0)
     {
         global $wpdb;
 

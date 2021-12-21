@@ -104,6 +104,11 @@ class M_Gallery_Display extends C_Base_Module
 
         // Find our content and process it
         global $wp_query;
+
+        // It's possible for the posts attribute to be empty or unset
+        if (!isset($wp_query->posts) || !is_array($wp_query->posts))
+            return;
+
         $posts = $wp_query->posts;
         foreach ($posts as $post) {
             if (empty($post->post_content))

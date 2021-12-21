@@ -177,7 +177,7 @@ class A_NextGen_Basic_Gallery_Urls extends Mixin
             $uri = explode('?', $retval);
             $uri = $uri[0];
             $settings = C_NextGen_Settings::get_instance();
-            $regex = '#/' . $settings->router_param_slug . '.*(/?(slideshow|thumbnails|imagebrowser)/?)#';
+            $regex = '#/' . $settings->get('router_param_slug', 'nggallery') . '.*(/?(slideshow|thumbnails|imagebrowser)/?)#';
             if (preg_match($regex, $retval, $matches)) {
                 $retval = str_replace($matches[1], '', $retval);
             }
@@ -189,7 +189,7 @@ class A_NextGen_Basic_Gallery_Urls extends Mixin
         // Get the settings manager
         $settings = C_NextGen_Settings::get_instance();
         // Create regex pattern
-        $param_slug = preg_quote($settings->router_param_slug, '#');
+        $param_slug = preg_quote($settings->get('router_param_slug', 'nggallery'), '#');
         if ($key == 'nggpage') {
             $regex = "#(/{$param_slug}/.*)(/?page/\\d+/?)(.*)#";
             if (preg_match($regex, $retval, $matches)) {

@@ -1,7 +1,7 @@
 <?php
 /**
  * Class C_Fs
- * @mixin Mixin_Fs_Instance_Methods
+ *
  * @implements I_Fs
  */
 class C_Fs extends C_Component
@@ -28,7 +28,6 @@ class C_Fs extends C_Component
     function define($context = FALSE)
     {
         parent::define($context);
-        $this->add_mixin('Mixin_Fs_Instance_Methods');
         $this->implement('I_Fs');
     }
     function initialize()
@@ -36,9 +35,84 @@ class C_Fs extends C_Component
         parent::initialize();
         $this->_document_root = $this->set_document_root(ABSPATH);
     }
-}
-class Mixin_Fs_Instance_Methods extends Mixin
-{
+    /**
+     * Gets the document root for this application
+     * @param string $type Must be one of plugins, plugins_mu, templates, styles, content, gallery, or root
+     * @return string
+     */
+    function get_document_root($type = 'root')
+    {
+        $retval = NULL;
+        switch ($type) {
+            case 'plugins':
+            case 'plugin':
+                $retval = WP_PLUGIN_DIR;
+                break;
+            case 'plugins_mu':
+            case 'plugin_mu':
+                $retval = WPMU_PLUGIN_DIR;
+                break;
+            case 'templates':
+            case 'template':
+            case 'themes':
+            case 'theme':
+                $retval = get_template_directory();
+                break;
+            case 'styles':
+            case 'style':
+            case 'stylesheets':
+            case 'stylesheet':
+                $retval = get_stylesheet_directory();
+                break;
+            case 'content':
+                $retval = WP_CONTENT_DIR;
+                break;
+            case 'gallery':
+            case 'galleries':
+                $root_type = NGG_GALLERY_ROOT_TYPE;
+                if ($root_type == 'content') {
+                    $retval = WP_CONTENT_DIR;
+                } else {
+                    $retval = $this->_document_root;
+                }
+                break;
+            default:
+                $retval = $this->_document_root;
+        }
+        return wp_normalize_path($retval);
+    }
+    function get_absolute_path($path)
+    {
+        $parts = array_filter(explode(DIRECTORY_SEPARATOR, $path), 'strlen');
+        $absolutes = array();
+        foreach ($parts as $part) {
+            if ('.' == $part) {
+                continue;
+            }
+            if ('..' == $part) {
+                array_pop($absolutes);
+            } else {
+                $absolutes[] = $part;
+            }
+        }
+        return wp_normalize_path(implode(DIRECTORY_SEPARATOR, $absolutes));
+    }
+    /**
+     * Sets the document root for this application
+     * @param string $value
+     * @return string
+     */
+    function set_document_root($value)
+    {
+        // some web servers like home.pl and PhpStorm put the document root in "/" or (even weirder) "//"
+        if ($value == DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR) {
+            $value = DIRECTORY_SEPARATOR;
+        }
+        if ($value !== DIRECTORY_SEPARATOR) {
+            $value = rtrim($value, "/\\");
+        }
+        return $this->_document_root = $value;
+    }
     function add_trailing_slash($path)
     {
         return rtrim($path, "/\\") . DIRECTORY_SEPARATOR;
@@ -257,83 +331,5 @@ class Mixin_Fs_Instance_Methods extends Mixin
             $path = array_shift($parts);
         }
         return array($path, $module);
-    }
-    /**
-     * Gets the document root for this application
-     * @param string $type Must be one of plugins, plugins_mu, templates, styles, content, gallery, or root
-     * @return string
-     */
-    function get_document_root($type = 'root')
-    {
-        $retval = NULL;
-        switch ($type) {
-            case 'plugins':
-            case 'plugin':
-                $retval = WP_PLUGIN_DIR;
-                break;
-            case 'plugins_mu':
-            case 'plugin_mu':
-                $retval = WPMU_PLUGIN_DIR;
-                break;
-            case 'templates':
-            case 'template':
-            case 'themes':
-            case 'theme':
-                $retval = get_template_directory();
-                break;
-            case 'styles':
-            case 'style':
-            case 'stylesheets':
-            case 'stylesheet':
-                $retval = get_stylesheet_directory();
-                break;
-            case 'content':
-                $retval = WP_CONTENT_DIR;
-                break;
-            case 'gallery':
-            case 'galleries':
-                $root_type = NGG_GALLERY_ROOT_TYPE;
-                if ($root_type == 'content') {
-                    $retval = WP_CONTENT_DIR;
-                } else {
-                    $retval = $this->_document_root;
-                }
-                break;
-            default:
-                $retval = $this->_document_root;
-        }
-        return wp_normalize_path($retval);
-    }
-    function get_absolute_path($path)
-    {
-        $parts = array_filter(explode(DIRECTORY_SEPARATOR, $path), 'strlen');
-        $absolutes = array();
-        foreach ($parts as $part) {
-            if ('.' == $part) {
-                continue;
-            }
-            if ('..' == $part) {
-                array_pop($absolutes);
-            } else {
-                $absolutes[] = $part;
-            }
-        }
-        return wp_normalize_path(implode(DIRECTORY_SEPARATOR, $absolutes));
-    }
-    /**
-     * Sets the document root for this application
-     * @param string $value
-     * @return string
-     */
-    function set_document_root($value)
-    {
-        // some web servers like home.pl and PhpStorm put the document root in "/" or (even weirder) "//"
-        if ($value == DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR) {
-            $value = DIRECTORY_SEPARATOR;
-        }
-        if ($value !== DIRECTORY_SEPARATOR) {
-            $value = rtrim($value, "/\\");
-        }
-        return $this->_document_root = $value;
     }
 }

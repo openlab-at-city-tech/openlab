@@ -1,7 +1,7 @@
 <?php
 /**
  * Class C_Widget
- * @mixin Mixin_Widget
+ *
  * @implements I_Widget
  */
 class C_Widget extends C_MVC_Controller
@@ -10,7 +10,6 @@ class C_Widget extends C_MVC_Controller
     function define($context = FALSE)
     {
         parent::define($context);
-        $this->add_mixin('Mixin_Widget');
         $this->implement('I_Widget');
     }
     /**
@@ -24,9 +23,6 @@ class C_Widget extends C_MVC_Controller
         }
         return self::$_instances[$context];
     }
-}
-class Mixin_Widget extends Mixin
-{
     /**
      * Function for templates without widget support
      *

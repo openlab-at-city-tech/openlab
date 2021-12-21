@@ -149,8 +149,13 @@ class ngg_Thumbnail {
 
     		$data = @getimagesize($this->fileName);
     		if (isset($data) && is_array($data)) {
-    		  $extensions = array('1' => 'GIF', '2' => 'JPG', '3' => 'PNG');
-    		  $extension = array_key_exists($data[2], $extensions) ?  $extensions[$data[2]] : '';
+                $extensions = [
+                    IMAGETYPE_GIF  => 'GIF',
+                    IMAGETYPE_JPEG => 'JPG',
+                    IMAGETYPE_PNG  => 'PNG',
+                    IMAGETYPE_WEBP => 'WEBP'
+                ];
+                $extension = array_key_exists($data[2], $extensions) ?  $extensions[$data[2]] : '';
                 if($extension) {
                     $this->format = $extension;
                 } else {
@@ -184,6 +189,8 @@ class ngg_Thumbnail {
                 case 'PNG':
                     $this->oldImage = ImageCreateFromPng($this->fileName);
 					break;
+                case 'WEBP':
+                    $this->oldImage = imagecreatefromwebp($this->fileName);
             }
 			if (!$this->oldImage) {
 				$this->errmsg = 'Create Image failed. Check memory limit';
@@ -223,6 +230,9 @@ class ngg_Thumbnail {
 					// didn't get the channel for png
                     $CHANNEL = 3;
 					break;
+                case 'WEBP':
+                    $channel = $imageInfo['bits'];
+                    break;
             }
 		    $MB = 1048576;  // number of bytes in 1M
 		    $K64 = 65536;    // number of bytes in 64K
@@ -259,12 +269,17 @@ class ngg_Thumbnail {
 
     /**
      * Must be called to free up allocated memory after all manipulations are done
-     *
      */
-    function destruct() {
-        if(is_resource($this->newImage)) @ImageDestroy($this->newImage);
-        if(is_resource($this->oldImage)) @ImageDestroy($this->oldImage);
-        if(is_resource($this->workingImage)) @ImageDestroy($this->workingImage);
+    function destruct()
+    {
+        if (is_resource($this->newImage) || $this->newImage instanceof GdImage)
+            @imagedestroy($this->newImage);
+
+        if (is_resource($this->oldImage) || $this->oldImage instanceof GdImage)
+            @imagedestroy($this->oldImage);
+
+        if (is_resource($this->workingImage) || $this->workingImage instanceof GdImage)
+            @imagedestroy($this->workingImage);
     }
 
     /**
@@ -615,6 +630,15 @@ class ngg_Thumbnail {
 	               ImagePng($this->newImage);
 	            }
 	            break;
+            case 'WEBP':
+                if ($name != '') {
+                    $this->error = !@imagewebp($this->newImage, $name);
+                }
+                else {
+                    header('Content-type: image/webp');
+                    imagewebp($this->newImage);
+                }
+                break;
 	    }
 	}
 
@@ -871,7 +895,7 @@ class ngg_Thumbnail {
     function watermarkImage( $relPOS = 'botRight', $xPOS = 0, $yPOS = 0) {
 
 		// if it's a resource ID take it as watermark text image
-    	if(is_resource($this->watermarkImgPath)) {
+    	if(is_resource($this->watermarkImgPath) || $this->watermarkImgPath instanceof GdImage) {
     		$this->workingImage = $this->watermarkImgPath;
     	} else {
 		// Would you really want to use anything other than a png?

@@ -13,7 +13,7 @@ function nextgen_lightbox_filter_selector($, selector)
 							var ext = href.substring(href.length - 3);
 							var ext2 = href.substring(href.length - 4);
 							
-							return (ext == 'jpg' || ext == 'gif' || ext == 'png' || ext2 == 'tiff' || ext2 == 'jpeg');
+							return (ext == 'jpg' || ext == 'gif' || ext == 'png' || ext2 == 'tiff' || ext2 == 'jpeg' || ext2 == 'webp');
 						}));
 			}
 			else if (context == 'nextgen_and_wp_images') {

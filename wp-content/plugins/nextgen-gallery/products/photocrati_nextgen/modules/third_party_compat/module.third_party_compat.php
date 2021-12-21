@@ -94,7 +94,6 @@ class M_Third_Party_Compat extends C_Base_Module
 
         add_filter('headway_gzip', array(&$this, 'headway_gzip'), (PHP_INT_MAX - 1));
         add_filter('ckeditor_external_plugins', array(&$this, 'ckeditor_plugins'), 11);
-        add_filter('bp_do_redirect_canonical', array(&$this, 'fix_buddypress_routing'));
         add_filter('the_content', array($this, 'check_weaverii'), -(PHP_INT_MAX-2));
         add_action('wp', array($this, 'check_for_jquery_lightbox'));
         add_filter('get_the_excerpt', array($this, 'disable_galleries_in_excerpts'), 1);
@@ -111,6 +110,13 @@ class M_Third_Party_Compat extends C_Base_Module
 
         if ($this->is_ngg_page())
             add_action('admin_enqueue_scripts', array(&$this, 'dequeue_spider_calendar_resources'));
+
+        // Like WPML, BuddyPress is incompatible with our routing hacks.
+        if (function_exists('buddypress'))
+        {
+            M_WordPress_Routing::$_use_canonical_redirect = FALSE;
+            M_WordPress_Routing::$_use_old_slugs = FALSE;
+        }
 
         // WPML fix
         if (class_exists('SitePress'))
@@ -143,8 +149,14 @@ class M_Third_Party_Compat extends C_Base_Module
         return $placeholder;
     }
 
+    /**
+     * @param array $collection
+     */
     public function nimble_find_content($collection)
     {
+        if (!is_array($collection))
+            return;
+
         foreach ($collection as $item) {
             if (isset($item['value']) && !empty($item['value']['text_content']))
                 M_Gallery_Display::enqueue_frontent_resources_for_content($item['value']['text_content']);
@@ -302,13 +314,6 @@ class M_Third_Party_Compat extends C_Base_Module
         }
 
         return $excerpt;
-    }
-
-    function fix_buddypress_routing()
-    {
-        M_WordPress_Routing::$_use_canonical_redirect = FALSE;
-
-        return FALSE;
     }
 
     function fix_wpml_canonical_redirect()

@@ -76,7 +76,7 @@ class A_Imagify_Admin_Page_Controller extends Mixin
             if ($client = M_Imagify::get_imagify_client()) {
                 $imagify_install_url = $client->get_post_install_url();
             }
-            print $this->render_view('photocrati-imagify#admin_page', array('i18n' => $this->get_i18n_strings(), 'is_imagify_activated' => Imagify_Partner::is_imagify_activated(), 'imagify_install_url' => $imagify_install_url, 'imagify_plugin_url' => 'https://wordpress.org/plugins/imagify/', 'imagify_website_url' => 'https://imagify.io/?utm_source=nextgen-gallery&utm_campaign=plugin_partner&utm_medium=partnership', 'imagify_review_url' => 'https://www.imagely.com/image-optimization-plugin-comparison/'), TRUE);
+            print $this->render_view('photocrati-imagify#admin_page', array('i18n' => $this->get_i18n_strings(), 'is_imagify_activated' => Imagify_Partner::is_imagify_activated(), 'imagify_install_url' => $imagify_install_url, 'imagify_plugin_url' => 'https://wordpress.org/plugins/imagify/', 'imagify_website_url' => M_Marketing::get_utm_link('https://imagify.io/', 'plugin_partner', 'partnership', 'nextgen-gallery'), 'imagify_review_url' => 'https://www.imagely.com/image-optimization-plugin-comparison/'), TRUE);
             C_Photocrati_Transient_Manager::update($key, $html);
         }
     }
