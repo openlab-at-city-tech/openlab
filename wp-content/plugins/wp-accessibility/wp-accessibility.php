@@ -17,7 +17,7 @@
  * Domain Path: /lang
  * License:     GPL-2.0+
  * License URI: http://www.gnu.org/license/gpl-2.0.txt
- * Version: 1.7.9
+ * Version: 1.7.11
  */
 
 /*
@@ -69,7 +69,7 @@ function wpa_admin_menu() {
  * Install on activation.
  */
 function wpa_install() {
-	$wpa_version = '1.7.9';
+	$wpa_version = '1.7.11';
 	if ( 'true' !== get_option( 'wpa_installed' ) ) {
 		add_option( 'rta_from_tag_clouds', 'on' );
 		add_option( 'asl_styles_focus', '' );
@@ -261,7 +261,7 @@ function wpa_jquery_asl() {
 	$output     = '';
 	if ( 'on' === get_option( 'asl_enable' ) ) {
 		$html = '';
-		// BUild skiplinks.
+		// Build skiplinks.
 		$extra = (string) get_option( 'asl_extra_target' );
 		$extra = ( wpa_is_url( $extra ) ) ? esc_url( $extra ) : str_replace( '#', '', esc_attr( $extra ) );
 		if ( '' !== $extra && ! wpa_is_url( $extra ) ) {
@@ -271,7 +271,7 @@ function wpa_jquery_asl() {
 		$content    = str_replace( '#', '', esc_attr( get_option( 'asl_content' ) ) );
 		$nav        = str_replace( '#', '', esc_attr( get_option( 'asl_navigation' ) ) );
 		$sitemap    = esc_url( get_option( 'asl_sitemap' ) );
-		$html      .= ( '' !== $content ) ? "<a href=\"#$content\">" . __( 'Skip to content', 'wp-accessibility' ) . '</a> ' : '';
+		$html      .= ( '' !== $content ) ? "<a href=\"#$content\">" . __( 'Skip to Content', 'wp-accessibility' ) . '</a> ' : '';
 		$html      .= ( '' !== $nav ) ? "<a href=\"#$nav\">" . __( 'Skip to navigation', 'wp-accessibility' ) . '</a> ' : '';
 		$html      .= ( '' !== $sitemap ) ? "<a href=\"$sitemap\">" . __( 'Site map', 'wp-accessibility' ) . '</a> ' : '';
 		$html      .= ( '' !== $extra && '' !== $extra_text ) ? "<a href=\"$extra\">$extra_text</a> " : '';
@@ -414,7 +414,7 @@ if ( 'on' === get_option( 'wpa_more' ) ) {
  * @return string HTML link & text.
  */
 function wpa_continue_reading( $id ) {
-	return '<a class="continue" href="' . get_permalink( $id ) . '">' . get_option( 'wpa_continue' ) . '<span> ' . get_the_title( $id ) . '</span></a>';
+	return '<a class="continue" href="' . esc_url( get_permalink( $id ) ) . '">' . get_option( 'wpa_continue' ) . '<span> ' . get_the_title( $id ) . '</span></a>';
 }
 
 /**
@@ -569,7 +569,7 @@ $plugins_string
 	$admin_url = admin_url( 'options-general.php?page=wp-accessibility/wp-accessibility.php' );
 
 	echo "
-	<form method='post' action='$admin_url'>
+	<form method='post' action='" . esc_url( $admin_url ) . "'>
 		<div><input type='hidden' name='_wpnonce' value='" . wp_create_nonce( 'wpa-nonce' ) . "' /></div>
 		<div>";
 	echo '
@@ -585,7 +585,7 @@ $plugins_string
 	echo sprintf( __( 'I <a href="%s">made a donation</a> to help support this plugin', 'wp-accessibility' ), 'https://www.joedolson.com/donate/' ) . "</label>
 		</p>
 		<p>
-		<label for='support_request'>" . __( 'Support Request:', 'wp-accessibility' ) . "</label><br /><textarea name='support_request' required id='support_request' cols='80' rows='10' class='widefat'>" . stripslashes( $request ) . "</textarea>
+		<label for='support_request'>" . __( 'Support Request:', 'wp-accessibility' ) . "</label><br /><textarea name='support_request' required id='support_request' cols='80' rows='10' class='widefat'>" . esc_textarea( stripslashes( $request ) ) . "</textarea>
 		</p>
 		<p>
 		<input type='submit' value='" . __( 'Send Support Request', 'wp-accessibility' ) . "' name='wpa_support' class='button-primary' />
@@ -611,3 +611,14 @@ function wpa_accessible_theme() {
 	}
 	return false;
 }
+
+/**
+ * Disable full screen block editor by default.
+ */
+function wpa_disable_editor_fullscreen_by_default() {
+	if ( 'on' === get_option( 'wpa_disable_fullscreen' ) ) {
+		$script = "window.onload = function() { const isFullscreenMode = wp.data.select( 'core/edit-post' ).isFeatureActive( 'fullscreenMode' ); if ( isFullscreenMode ) { wp.data.dispatch( 'core/edit-post' ).toggleFeature( 'fullscreenMode' ); } }";
+		wp_add_inline_script( 'wp-blocks', $script );
+	}
+}
+add_action( 'enqueue_block_editor_assets', 'wpa_disable_editor_fullscreen_by_default' );

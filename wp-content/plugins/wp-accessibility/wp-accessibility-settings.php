@@ -115,6 +115,7 @@ function wpa_update_settings() {
 			$wpa_focus_color             = ( isset( $_POST['wpa_focus_color'] ) ) ? str_replace( '#', '', $_POST['wpa_focus_color'] ) : '';
 			$wpa_continue                = ( isset( $_POST['wpa_continue'] ) ) ? $_POST['wpa_continue'] : 'Continue Reading';
 			$wpa_diagnostics             = ( isset( $_POST['wpa_diagnostics'] ) ) ? 'on' : '';
+			$wpa_disable_fullscreen      = ( isset( $_POST['wpa_disable_fullscreen'] ) ) ? 'on' : '';
 			$wpa_insert_roles            = ( isset( $_POST['wpa_insert_roles'] ) ) ? 'on' : '';
 			$wpa_complementary_container = ( isset( $_POST['wpa_complementary_container'] ) ) ? str_replace( '#', '', $_POST['wpa_complementary_container'] ) : '';
 			update_option( 'wpa_lang', $wpa_lang );
@@ -131,6 +132,7 @@ function wpa_update_settings() {
 			update_option( 'wpa_focus_color', $wpa_focus_color );
 			update_option( 'wpa_continue', $wpa_continue );
 			update_option( 'wpa_diagnostics', $wpa_diagnostics );
+			update_option( 'wpa_disable_fullscreen', $wpa_disable_fullscreen );
 			$message = __( 'Miscellaneous Accessibility Settings Updated', 'wp-accessibility' );
 
 			return "<div class='updated'><p>" . $message . '</p></div>';
@@ -251,7 +253,7 @@ function wpa_admin_settings() {
 									<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'wpa-nonce' ); ?>"/>
 									<input type="hidden" name="action" value="asl"/>
 								</p>
-								<p><input type="submit" name="wpa-settings" class="button-primary" value="<?php _e( 'Update Skiplink Settings', 'wp-accessibility' ); ?>"/></p>
+								<p><input type="submit" name="wpa-settings" class="button-primary" value="<?php esc_html_e( 'Update Skiplink Settings', 'wp-accessibility' ); ?>"/></p>
 							</form>
 								<?php
 							}
@@ -259,9 +261,9 @@ function wpa_admin_settings() {
 						</div>
 					</div>
 					<div class="postbox">
-						<h2 id="toolbar" class='hndle'><?php _e( 'Accessibility Toolbar Settings', 'wp-accessibility' ); ?></h2>
+						<h2 id="toolbar" class='hndle'><?php esc_html_e( 'Accessibility Toolbar Settings', 'wp-accessibility' ); ?></h2>
 						<div class="inside">
-							<form method="post" action="<?php echo admin_url( 'options-general.php?page=wp-accessibility/wp-accessibility.php' ); ?>">
+							<form method="post" action="<?php echo esc_url( admin_url( 'options-general.php?page=wp-accessibility/wp-accessibility.php' ) ); ?>">
 								<ul>
 									<li>
 										<input type="checkbox" id="wpa_toolbar" name="wpa_toolbar" <?php checked( get_option( 'wpa_toolbar' ), 'on' ); ?>/>
@@ -396,14 +398,18 @@ function wpa_admin_settings() {
 										<label for="wpa_diagnostics"><?php _e( 'Enable diagnostic CSS', 'wp-accessibility' ); ?></label>
 									</li>
 									<li>
+										<input type="checkbox" id="wpa_disable_fullscreen" name="wpa_disable_fullscreen" <?php checked( get_option( 'wpa_disable_fullscreen' ), 'on' ); ?>/>
+										<label for="wpa_disable_fullscreen"><?php _e( 'Disable fullscreen block editor by default', 'wp-accessibility' ); ?></label>
+									</li>
+									<li>
 										<input type="checkbox" id="wpa_focus" name="wpa_focus" <?php checked( get_option( 'wpa_focus' ), 'on' ); ?>/>
 										<label for="wpa_focus"><?php _e( 'Add outline to elements on keyboard focus', 'wp-accessibility' ); ?></label>
 										<label for="wpa_focus_color"><?php _e( 'Outline color (hexadecimal, optional)', 'wp-accessibility' ); ?></label>
 										<input type="text" id="wpa_focus_color" name="wpa_focus_color" value="#<?php echo esc_attr( get_option( 'wpa_focus_color' ) ); ?>"/></li>
 								</ul>
 								<p>
-									<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'wpa-nonce' ); ?>"/>
-									<input type="hidden" name="action" value="misc"/>
+									<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'wpa-nonce' ); ?>" />
+									<input type="hidden" name="action" value="misc" />
 								</p>
 
 								<p><input type="submit" name="wpa-settings" class="button-primary" value="<?php _e( 'Update Miscellaneous Settings', 'wp-accessibility' ); ?>"/></p>
@@ -425,8 +431,8 @@ function wpa_admin_settings() {
 									</ul>
 								</fieldset>
 								<p>
-									<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'wpa-nonce' ); ?>"/>
-									<input type="hidden" name="action" value="rta"/>
+									<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'wpa-nonce' ); ?>" />
+									<input type="hidden" name="action" value="rta" />
 								</p>
 
 								<p><input type="submit" name="wpa-settings" class="button-primary" value="<?php _e( 'Update Title Attribute Settings', 'wp-accessibility' ); ?>"/></p>
@@ -495,8 +501,8 @@ function wpa_admin_settings() {
 									</ul>
 								</fieldset>
 								<p>
-									<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'wpa-nonce' ); ?>"/>
-									<input type="hidden" name="action" value="contrast"/>
+									<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'wpa-nonce' ); ?>" />
+									<input type="hidden" name="action" value="contrast" />
 								</p>
 
 								<p><input type="submit" name="wpa-settings" class="button-primary" value="<?php _e( 'Check Color Contrast', 'wp-accessibility' ); ?>"/></p>
