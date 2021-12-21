@@ -81,6 +81,8 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 }
 
+/* Media Queries */
+
 /* -----------------------------------------------------------------------------
  *
  * Mixins
@@ -152,7 +154,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 */
 
 .gform_wrapper.gravity-theme .gfield textarea {
-			width: 100%;
+			width: 100%
 		}
 
 .gform_wrapper.gravity-theme .gfield textarea.small {
@@ -168,7 +170,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 			}
 
 .gform_wrapper.gravity-theme .gfield input, .gform_wrapper.gravity-theme .gfield select {
-			max-width: 100%;
+			max-width: 100%
 		}
 
 .gform_wrapper.gravity-theme .gfield input.small, .gform_wrapper.gravity-theme .gfield select.small {
@@ -199,8 +201,15 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 .gform_wrapper.gravity-theme .left_label .gfield_label, .gform_wrapper.gravity-theme .right_label .gfield_label {
 		width: 30%;
 		margin: 0;
-		padding: 0;
+		padding: 0
 	}
+
+@media (max-width: 640px) {
+
+	.gform_wrapper.gravity-theme .left_label .gfield_label, .gform_wrapper.gravity-theme .right_label .gfield_label {
+			width: 100%
+	}
+		}
 
 .gform_wrapper.gravity-theme .gform_fields.left_label fieldset, .gform_wrapper.gravity-theme .gform_fields.right_label fieldset {
 				clear: both;
@@ -208,23 +217,51 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gform_wrapper.gravity-theme .gform_fields.left_label fieldset .ginput_container, .gform_wrapper.gravity-theme .gform_fields.right_label fieldset .ginput_container {
 					float: left;
-					width: 70%;
+					width: 70%
 				}
+
+@media (max-width: 640px) {
+
+				.gform_wrapper.gravity-theme .gform_fields.left_label fieldset .ginput_container, .gform_wrapper.gravity-theme .gform_fields.right_label fieldset .ginput_container {
+						width: 100%
+				}
+					}
+
+@media (max-width: 640px) {
+
+				.gform_wrapper.gravity-theme .gform_fields.left_label fieldset > .ginput_complex, .gform_wrapper.gravity-theme .gform_fields.right_label fieldset > .ginput_complex {
+						width: 100%
+				}
+					}
 
 .gform_wrapper.gravity-theme .gform_fields.left_label legend.gfield_label, .gform_wrapper.gravity-theme .gform_fields.right_label legend.gfield_label {
 					display: block;
 					float: left;
 					padding-right: 1em;
-					width: 30%;
+					width: 30%
 				}
+
+@media (max-width: 640px) {
+
+				.gform_wrapper.gravity-theme .gform_fields.left_label legend.gfield_label, .gform_wrapper.gravity-theme .gform_fields.right_label legend.gfield_label {
+						width: 100%
+				}
+					}
 
 .gform_wrapper.gravity-theme .left_label .ginput_complex .ginput_container, .gform_wrapper.gravity-theme .right_label .ginput_complex .ginput_container {
 		width: auto;
 	}
 
 .gform_wrapper.gravity-theme .left_label div.gfield > div:not(.ui-resizable-handle):not(.gfield-admin-icons), .gform_wrapper.gravity-theme .right_label div.gfield > div:not(.ui-resizable-handle):not(.gfield-admin-icons) {
-		width: 70%;
+		width: 70%
 	}
+
+@media (max-width: 640px) {
+
+	.gform_wrapper.gravity-theme .left_label div.gfield > div:not(.ui-resizable-handle):not(.gfield-admin-icons), .gform_wrapper.gravity-theme .right_label div.gfield > div:not(.ui-resizable-handle):not(.gfield-admin-icons) {
+			width: 100%
+	}
+		}
 
 .gform_wrapper.gravity-theme .right_label .gfield_label {
 		text-align: right;
@@ -394,14 +431,7 @@ to no.
 */
 
 @media only screen and (min-width: 641px) {
-
-.gform_wrapper {
         /* horizontal list columns */
-
-        /* vertical list columns */
-
-        /* list item heights */
-}
             .gform_wrapper .gfield.gf_list_2col .gfield_checkbox, .gform_wrapper .gfield.gf_list_2col .gfield_radio {
                 display: -ms-grid;
                 display: grid;
@@ -446,6 +476,8 @@ to no.
                     .gform_wrapper .gfield.gf_list_inline .gfield_checkbox .gchoice label, .gform_wrapper .gfield.gf_list_inline .gfield_radio .gchoice label {
                         max-width: none;
                     }
+
+        /* vertical list columns */
             .gform_wrapper .gf_list_2col_vertical .gfield_checkbox, .gform_wrapper .gf_list_2col_vertical .gfield_radio {
                 -moz-column-count: 2;
                 column-count: 2;
@@ -466,6 +498,8 @@ to no.
                 column-count: 5;
                 grid-column-gap: 2rem;
             }
+
+        /* list item heights */
                 .gform_wrapper .gfield.gf_list_height_25 .gfield_checkbox .gchoice, .gform_wrapper .gfield.gf_list_height_25 .gfield_radio .gchoice {
                     height: 25px;
                 }
@@ -489,6 +523,11 @@ to no.
             /* need to figure out how to do this */
         }
     }
+
+.gform_wrapper {
+
+    /* simple horizontal form ready class - very simple implementation for up to 5 fields and a button */
+}
 
 .gform_wrapper .gf_hide_ampm .gfield_time_ampm {
         display: none !important;
@@ -549,8 +588,6 @@ to no.
             text-shadow: #E0F1FF 1px 1px;
             color: #314475;
         }
-
-/* simple horizontal form ready class - very simple implementation for up to 5 fields and a button */
 
 .gform_wrapper .gf_simple_horizontal {
         width: calc(100% - 16px);
@@ -894,7 +931,24 @@ to no.
 		margin-bottom: 0;
 	}
 
-.gform_wrapper.gravity-theme .gfield_header_item:last-child, .gform_wrapper.gravity-theme .gfield_list_icons {
+.gform_wrapper.gravity-theme .gfield_header_item {
+		word-break: break-word;
+	}
+
+.gform_wrapper.gravity-theme .gfield_header_item, .gform_wrapper.gravity-theme .gfield_list_group_item {
+		flex-grow: 1;
+		width: 0;
+	}
+
+.gform_wrapper.gravity-theme .gfield_header_item + .gfield_header_item:not(.gfield_header_item--icons), .gform_wrapper.gravity-theme .gfield_list_group_item + .gfield_list_group_item {
+		margin-left: 2%;
+	}
+
+.gform_wrapper.gravity-theme .gfield_list_group_item input, .gform_wrapper.gravity-theme .gfield_list_group_item select {
+		width: 100%;
+	}
+
+.gform_wrapper.gravity-theme .gfield_header_item--icons, .gform_wrapper.gravity-theme .gfield_list_icons {
 		width: 48px;
 		flex: none;
 		display: flex;
@@ -914,30 +968,13 @@ to no.
 	}
 
 .gform_wrapper.gravity-theme .gfield_list_icons button:hover, .gform_wrapper.gravity-theme .gfield_list_icons button:focus {
-		opacity: 1.0;
+		opacity: 1;
 		outline: none;
 	}
 
 .gform_wrapper.gravity-theme .gfield_list_icons button.delete_list_item {
 		margin-left: 5px;
 		background-image: url('../images/list-remove.svg');
-	}
-
-.gform_wrapper.gravity-theme .gfield_header_item {
-		word-break: break-word;
-	}
-
-.gform_wrapper.gravity-theme .gfield_header_item, .gform_wrapper.gravity-theme .gfield_list_group_item {
-		flex-grow: 1;
-		width: 0;
-	}
-
-.gform_wrapper.gravity-theme .gfield_header_item + .gfield_header_item:not(:last-child), .gform_wrapper.gravity-theme .gfield_list_group_item + .gfield_list_group_item {
-		margin-left: 2%;
-	}
-
-.gform_wrapper.gravity-theme .gfield_list_group_item input, .gform_wrapper.gravity-theme .gfield_list_group_item select {
-		width: 100%;
 	}
 
 @media (max-width: 640px) {
@@ -979,11 +1016,28 @@ to no.
 			text-align: left;
 		}
 
-		.gform_wrapper.gravity-theme .gfield_header_item + .gfield_header_item:not(:last-child), .gform_wrapper.gravity-theme .gfield_list_group_item + .gfield_list_group_item {
+		.gform_wrapper.gravity-theme .gfield_header_item + .gfield_header_item:not(.gfield_header_item--icons), .gform_wrapper.gravity-theme .gfield_list_group_item + .gfield_list_group_item {
 			margin-left: 0;
 		}
-
 	}
+
+html[dir=rtl] .gform_wrapper.gravity-theme .gfield_header_item + .gfield_header_item:not(.gfield_header_item--icons), html[dir=rtl] .gform_wrapper.gravity-theme .gfield_list_group_item + .gfield_list_group_item {
+		margin-left: 0;
+		margin-right: 1rem
+	}
+
+@media (max-width: 640px) {
+	html[dir=rtl] .gform_wrapper.gravity-theme .gfield_header_item + .gfield_header_item:not(.gfield_header_item--icons), html[dir=rtl] .gform_wrapper.gravity-theme .gfield_list_group_item + .gfield_list_group_item {
+			margin-right: 0
+	}
+		}
+
+html[dir=rtl] .gform_wrapper.gravity-theme .gfield_list_icons button.delete_list_item {
+		margin-left: 0;
+		margin-right: 5px;
+	}
+
+/* Legacy List Field Styles */
 
 .gform_wrapper.gform_legacy_markup table.gfield_list.gfield_list_container {
 
@@ -1014,7 +1068,7 @@ to no.
 				word-break: break-word;
 			}
 
-.gform_wrapper.gform_legacy_markup table.gfield_list.gfield_list_container tbody td:last-child {
+.gform_wrapper.gform_legacy_markup table.gfield_list.gfield_list_container tbody td.gfield_list_icons {
 				flex-grow: unset;
 				width: 48px;
 			}
@@ -1056,13 +1110,9 @@ to no.
 
 					.gform_wrapper.gform_legacy_markup table.gfield_list.gfield_list_container tbody tr .gfield_list_icons {
 						height: 35px;
+						width: auto;
 					}
 }
-
-html[dir=rtl] .gform_wrapper.gravity-theme .gfield_header_item + .gfield_header_item:not(:last-child), html[dir=rtl] .gform_wrapper.gravity-theme .gfield_list_group_item + .gfield_list_group_item {
-		margin-left: 0;
-		margin-right: 1rem;
-	}
 
 /*
 * Credit card field styles.
@@ -1175,7 +1225,7 @@ html[dir="rtl"] .gform_wrapper.gravity-theme .gfield_creditcard_warning .gfield_
 			height: 32px;
 			margin-right: 0.3rem;
 			text-indent: -9000px;
-			width: 40px;
+			width: 40px
 		}
 
 .gform_wrapper.gravity-theme .gform_card_icon_container div.gform_card_icon.gform_card_icon_amex {
@@ -1203,7 +1253,7 @@ html[dir="rtl"] .gform_wrapper.gravity-theme .gfield_creditcard_warning .gfield_
 			}
 
 .gform_wrapper.gravity-theme .gform_card_icon_container div.gform_card_icon.gform_card_icon_selected {
-				position: relative;
+				position: relative
 			}
 
 .gform_wrapper.gravity-theme .gform_card_icon_container div.gform_card_icon.gform_card_icon_selected:after {
@@ -1332,7 +1382,7 @@ html[dir=rtl] .gform_wrapper.gravity-theme .ginput_container_date[style*='displa
 			transition: color 300ms ease-in-out, background-color 300ms ease-in-out, border-color 300ms ease-in-out;
 			width: 1.875rem;
 			-webkit-font-smoothing: antialiased;
-			-moz-osx-font-smoothing: grayscale;
+			-moz-osx-font-smoothing: grayscale
 		}
 
 .gform-theme-datepicker:not(.gform-legacy-datepicker) .ui-datepicker-header .ui-datepicker-prev:focus, .gform-theme-datepicker:not(.gform-legacy-datepicker) .ui-datepicker-header .ui-datepicker-prev:hover, .gform-theme-datepicker:not(.gform-legacy-datepicker) .ui-datepicker-header .ui-datepicker-next:focus, .gform-theme-datepicker:not(.gform-legacy-datepicker) .ui-datepicker-header .ui-datepicker-next:hover {
@@ -1352,7 +1402,7 @@ html[dir=rtl] .gform_wrapper.gravity-theme .ginput_container_date[style*='displa
 			}
 
 .gform-theme-datepicker:not(.gform-legacy-datepicker) .ui-datepicker-header .ui-datepicker-prev {
-			left: 0;
+			left: 0
 		}
 
 .gform-theme-datepicker:not(.gform-legacy-datepicker) .ui-datepicker-header .ui-datepicker-prev:before {
@@ -1360,7 +1410,7 @@ html[dir=rtl] .gform_wrapper.gravity-theme .ginput_container_date[style*='displa
 			}
 
 .gform-theme-datepicker:not(.gform-legacy-datepicker) .ui-datepicker-header .ui-datepicker-next {
-			right: 0;
+			right: 0
 		}
 
 .gform-theme-datepicker:not(.gform-legacy-datepicker) .ui-datepicker-header .ui-datepicker-next:before {
@@ -1378,12 +1428,14 @@ html[dir=rtl] .gform_wrapper.gravity-theme .ginput_container_date[style*='displa
 			box-shadow: none;
 			color: #585E6A;
 			cursor: pointer;
+			display: inline-block;
 			font-size: 0.875rem;
 			font-weight: 500;
 			height: auto;
 			min-height: 0;
 			padding: 0 1.375rem 0 0;
 			-webkit-appearance: none;
+			width: auto
 		}
 
 .gform-theme-datepicker:not(.gform-legacy-datepicker) .ui-datepicker-header select.ui-datepicker-month {
@@ -1425,7 +1477,7 @@ html[dir=rtl] .gform_wrapper.gravity-theme .ginput_container_date[style*='displa
 			justify-content: center;
 			transition: color 300ms ease-in-out, background-color 300ms ease-in-out, border-color 300ms ease-in-out;
 			text-decoration: none;
-			width: 2.5rem;
+			width: 2.5rem
 		}
 
 .gform-theme-datepicker:not(.gform-legacy-datepicker) .ui-datepicker-calendar .ui-state-default:hover, .gform-theme-datepicker:not(.gform-legacy-datepicker) .ui-datepicker-calendar .ui-state-default:focus {
@@ -1443,7 +1495,7 @@ html[dir=rtl] .gform_wrapper.gravity-theme .ginput_container_date[style*='displa
 				background: #607382;
 				border-color: #607382;
 				box-shadow: 0 0.125rem 0.125rem rgba(58, 58, 87, 0.0596411);
-				color: #FFFFFF;
+				color: #FFFFFF
 			}
 
 .gform-theme-datepicker:not(.gform-legacy-datepicker) .ui-datepicker-calendar .ui-datepicker-current-day .ui-state-default:hover, .gform-theme-datepicker:not(.gform-legacy-datepicker) .ui-datepicker-calendar .ui-datepicker-current-day .ui-state-default:focus {
@@ -1470,7 +1522,7 @@ html[dir=rtl] .gform_wrapper.gravity-theme .ginput_container_date[style*='displa
 			}
 
 html[dir=rtl] #ui-datepicker-div.gform-theme-datepicker[style] {
-			left: auto !important;
+			right: auto !important;
 		}
 
 /*
@@ -1562,7 +1614,7 @@ html[dir=rtl] #ui-datepicker-div.gform-theme-datepicker[style] {
 		background: transparent;
 		height: 100%;
 		display: flex;
-		align-items: center;
+		align-items: center
 	}
 
 .gform_wrapper.gravity-theme .gform_show_password:hover, .gform_wrapper.gravity-theme .gform_show_password:focus {
@@ -1679,7 +1731,7 @@ html[dir=rtl] .gform_wrapper.gravity-theme .gfield_time_ampm {
 
 .gform_wrapper.gravity-theme .gform_footer, .gform_wrapper.gravity-theme .gform_page_footer {
 		margin: 0.375rem 0 0;
-		padding: 1rem 0;
+		padding: 1rem 0
 	}
 
 .gform_wrapper.gravity-theme .gform_footer.right_label, .gform_wrapper.gravity-theme .gform_footer.left_label, .gform_wrapper.gravity-theme .gform_page_footer.right_label, .gform_wrapper.gravity-theme .gform_page_footer.left_label {
@@ -1687,7 +1739,7 @@ html[dir=rtl] .gform_wrapper.gravity-theme .gfield_time_ampm {
 		}
 
 .gform_wrapper.gravity-theme .gform_footer input, .gform_wrapper.gravity-theme .gform_footer button, .gform_wrapper.gravity-theme .gform_page_footer input, .gform_wrapper.gravity-theme .gform_page_footer button {
-			margin-bottom: .5rem;
+			margin-bottom: .5rem
 		}
 
 .gform_wrapper.gravity-theme .gform_footer input.button:disabled, .gform_wrapper.gravity-theme .gform_footer button.button:disabled, .gform_wrapper.gravity-theme .gform_page_footer input.button:disabled, .gform_wrapper.gravity-theme .gform_page_footer button.button:disabled {

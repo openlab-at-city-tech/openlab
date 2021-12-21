@@ -815,7 +815,7 @@ class GF_Field_Date extends GF_Field {
 	 * @return string
 	 */
 	private function get_number_dropdown( $name, $id, $selected_value, $tabindex, $disabled_text, $placeholder, $start_number, $end_number, $aria_attributes = '' ) {
-		$str = "<select name='{$name}' id='{$id}' {$tabindex} {$disabled_text} {$aria_attributes} aria-label='{$placeholder}'>";
+		$str = "<select name='{$name}' id='{$id}' {$tabindex} {$disabled_text} {$aria_attributes}>";
 		if ( $placeholder !== false ) {
 			$str .= "<option value=''>{$placeholder}</option>";
 		}

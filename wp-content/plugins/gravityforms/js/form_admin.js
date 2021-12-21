@@ -4,13 +4,6 @@
 * Common JS functions for form settings and form editor pages.
 */
 
-var __, _x, _n, _nx;
-__  = wp.i18n.__;
-_x  = wp.i18n._x;
-_n  = wp.i18n._n;
-_nx = wp.i18n._nx;
-
-
 jQuery(document).ready(function($){
 
     gaddon.init();
@@ -838,10 +831,11 @@ function ConfirmationObj() {
     };
 
 	gaddon.toggleFeedSwitch = function( btn, is_active ) {
+	    var i18n = window.gform_admin_i18n;
 		if ( is_active ) {
-			jQuery( btn ).removeClass( 'gform-status--active' ).addClass( 'gform-status--inactive' ).find( '.gform-status-indicator-status' ).html( __( 'Inactive', 'gravityforms' ) );
+			jQuery( btn ).removeClass( 'gform-status--active' ).addClass( 'gform-status--inactive' ).find( '.gform-status-indicator-status' ).html( i18n.formAdmin.toggleFeedInactive );
 		} else {
-			jQuery( btn ).removeClass( 'gform-status--inactive' ).addClass( 'gform-status--active' ).find( '.gform-status-indicator-status' ).html( __( 'Active', 'gravityforms' ) );
+			jQuery( btn ).removeClass( 'gform-status--inactive' ).addClass( 'gform-status--active' ).find( '.gform-status-indicator-status' ).html( i18n.formAdmin.toggleFeedActive );
 		}
 	};
 

@@ -515,11 +515,12 @@ if ( ! class_exists( 'GFResults' ) ) {
 					}
 
 					$bar_height        = 40;
-					$chart_area_height = ( count( $choices ) * $bar_height );
+					$chart_area_height = ( count( $choices ) * ( $bar_height + 20 ) );
 
 					$chart_options = array(
 						'isStacked' => true,
 						'height'    => ( $chart_area_height + $bar_height ),
+						'fontSize'  => 14,
 						'chartArea' => array(
 							'top'    => 0,
 							'left'   => 200,
@@ -530,7 +531,7 @@ if ( ! class_exists( 'GFResults' ) ) {
 							'0' => array(
 								'color'           => 'silver',
 								'visibleInLegend' => 'false',
-							)
+							),
 						),
 						'hAxis'     => array(
 							'viewWindowMode' => 'explicit',

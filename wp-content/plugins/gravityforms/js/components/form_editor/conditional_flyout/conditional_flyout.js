@@ -150,7 +150,7 @@ function getCorrectDefaultFieldId( field ) {
 		return null;
 	}
 
-	if ( ! field.inputs || ! field.inputs.length ) {
+	if ( field.type === 'checkbox' || field.type === 'radio' || ! field.inputs || ! field.inputs.length ) {
 		return field.id;
 	}
 
@@ -600,7 +600,7 @@ GFConditionalLogic.prototype.renderValueOptions = function( rule, idx ) {
 
 	// Field is actually a sub-field (such as the First Name or Country field), get the correct field from its ID.
 	if ( rule.fieldId.toString().indexOf( '.' ) !== -1 ) {
-		var parts   = rule.fieldId.split( '.' );
+		var parts   = rule.fieldId.toString().split( '.' );
 		var fieldId = parts[ 0 ];
 		field       = getFieldById( fieldId );
 	}

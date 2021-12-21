@@ -404,7 +404,7 @@ class GF_Field_Address extends GF_Field {
 			$copy_values_is_checked = isset( $value[$this->id . '_copy_values_activated'] ) ? $value[$this->id . '_copy_values_activated'] == true : $this->copyValuesOptionDefault == true;
 			$copy_values_checked    = checked( true, $copy_values_is_checked, false );
 			$copy_values_option     = "<div id='{$field_id}_copy_values_option_container' class='copy_values_option_container' {$copy_values_style}>
-                                        <input type='checkbox' id='{$field_id}_copy_values_activated' class='copy_values_activated' value='1' name='input_{$id}_copy_values_activated' {$disabled_text} {$copy_values_checked}/>
+                                        <input type='checkbox' id='{$field_id}_copy_values_activated' class='copy_values_activated' value='1' data-source_field_id='" . absint( $this->copyValuesOptionField ) . "' name='input_{$id}_copy_values_activated' {$disabled_text} {$copy_values_checked}/>
                                         <label for='{$field_id}_copy_values_activated' id='{$field_id}_copy_values_option_label' class='copy_values_option_label inline'>{$copy_values_label}</label>
                                     </div>";
 			if ( $copy_values_is_checked ) {

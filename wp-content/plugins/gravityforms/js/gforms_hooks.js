@@ -61,8 +61,10 @@ if ( ! gform ) {
 				var hooks = gform.hooks[hookType][action], hook;
 				//sort by priority
 				hooks.sort(function(a,b){return a["priority"]-b["priority"]});
-				for( var i=0; i<hooks.length; i++) {
-					hook = hooks[i].callable;
+
+				hooks.forEach( function( hookItem ) {
+					hook = hookItem.callable;
+
 					if(typeof hook != 'function')
 						hook = window[hook];
 					if ( 'action' == hookType ) {
@@ -70,7 +72,7 @@ if ( ! gform ) {
 					} else {
 						args[0] = hook.apply(null, args);
 					}
-				}
+				} );
 			}
 			if ( 'filter'==hookType ) {
 				return args[0];
@@ -79,11 +81,11 @@ if ( ! gform ) {
 		removeHook: function( hookType, action, priority, tag ) {
 			if ( undefined != gform.hooks[hookType][action] ) {
 				var hooks = gform.hooks[hookType][action];
-				for( var i=hooks.length-1; i>=0; i--) {
-					if ((undefined==tag||tag==hooks[i].tag) && (undefined==priority||priority==hooks[i].priority)){
-						hooks.splice(i,1);
-					}
-				}
+				hooks = hooks.filter( function(hook, index, arr) {
+					var removeHook = (undefined==tag||tag==hook.tag) && (undefined==priority||priority==hook.priority);
+					return !removeHook;
+				} );
+				gform.hooks[hookType][action] = hooks;
 			}
 		}
 	};

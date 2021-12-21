@@ -11,9 +11,14 @@ class GF_Field_Checkbox extends GF_Field {
 	 */
 	public $type = 'checkbox';
 
-
-
-
+	/**
+	 * Indicates if this field supports state validation.
+	 *
+	 * @since 2.5.11
+	 *
+	 * @var bool
+	 */
+	protected $_supports_state_validation = true;
 
 	// # FORM EDITOR & FIELD MARKUP -------------------------------------------------------------------------------------
 

@@ -29,7 +29,6 @@ to no.
 */
 
 .ui-datepicker {
-	background: #d7d7d7;
 	height: auto;
 	margin: 5px auto 0;
 	font: 9pt Arial, sans-serif;
@@ -48,20 +47,21 @@ to no.
 	border-collapse: collapse;
 }
 
-.gform-admin-datepicker .ui-datepicker-header {
-	background-color: #000; /* set the header background color */
-	color: #e0e0e0;
-	font-weight: bold;
-	-webkit-box-shadow: inset 0px 1px 1px 0px rgba(250, 250, 250, .2);
-	-moz-box-shadow: inset 0px 1px 1px 0px rgba(250, 250, 250, .2);
-	box-shadow: inset 0px 1px 1px 0px rgba(250, 250, 250, .2);
-	text-shadow: 1px -1px 0px #000;
-	filter: dropshadow(color=#000, offx=1, offy=-1);
-	line-height: 30px;
-	min-height: 30px !important;
-	border-width: 1px 0 0 0;
-	border-style: solid;
+.ui-datepicker-header .ui-datepicker-header,
+.ui-datepicker-header {
+	background-color: #666; /* set the header background color */
 	border-color: #666;
+	border-style: solid;
+	border-width: 1px 0 0 0;
+	-moz-box-shadow: inset 0px 1px 1px 0px rgba(250, 250, 250, .2);
+	-webkit-box-shadow: inset 0px 1px 1px 0px rgba(250, 250, 250, .2);
+	box-shadow: inset 0px 1px 1px 0px rgba(250, 250, 250, .2);
+	color: #e0e0e0;
+	filter: dropshadow(color=#000, offx=1, offy=-1);
+	font-weight: bold;
+	line-height: 31px;
+	min-height: 31px !important;
+	text-shadow: 1px -1px 0px #000;
 }
 
 .ui-datepicker-header .ui-icon {
@@ -217,11 +217,23 @@ body div#ui-datepicker-div[style] {
 	z-index: 9999 !important;
 }
 
-.gform-legacy-datepicker.ui-datepicker .ui-datepicker-header .ui-datepicker-month,
-.gform-legacy-datepicker.ui-datepicker .ui-datepicker-header .ui-datepicker-year {
+.gform-legacy-datepicker.ui-datepicker:not(.gform-preview-datepicker) .ui-datepicker-header .ui-datepicker-month,
+.gform-legacy-datepicker.ui-datepicker:not(.gform-preview-datepicker) .ui-datepicker-header .ui-datepicker-year {
 	border-width: 1px;
+	display: inline-block;
+	font-size: 0.75rem;
 	line-height: 1;
 	padding-bottom: 3px;
 	padding-left: 3px;
 	padding-top: 3px;
+}
+
+.ui-datepicker .ui-datepicker-header .ui-datepicker-month {
+	max-height: 25px;
+	max-width: 40%;
+}
+
+.ui-datepicker .ui-datepicker-header .ui-datepicker-year {
+	max-height: 25px;
+	max-width: 30%;
 }

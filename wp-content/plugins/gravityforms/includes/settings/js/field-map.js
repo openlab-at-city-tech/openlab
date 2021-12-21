@@ -1058,7 +1058,7 @@ var Mapping = /*#__PURE__*/function (_Component) {
           choice = _this$props7.choice,
           valueField = _this$props7.valueField;
       var allow_custom = valueField.allow_custom;
-      var choiceName = choice.name || 'default'; // if no name is present, use default values.
+      var choiceName = choice.name && valueField.choices[choice.name] ? choice.name : 'default'; // if no name is present, use default values.
 
       var choices = choice.choices || valueField.choices[choiceName]; // Safety check to ensure choices are an array.
 

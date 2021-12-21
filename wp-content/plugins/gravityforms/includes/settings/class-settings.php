@@ -798,7 +798,7 @@ class Settings {
 		// Open section container.
 		printf(
 			'<fieldset id="%s" class="%s"%s>',
-			rgar( $section, 'id' ) ? esc_attr( $section['id'] ) : '',
+			esc_attr( $this->get_section_id( $section ) ),
 			implode(' ', $class ),
 			rgar( $section, 'style' ) ? sprintf( ' style="%s"', esc_attr( $section['style'] ) ) : ''
 		);
@@ -1035,10 +1035,7 @@ class Settings {
 			$dependency = array(
 				'prefix'   => $this->input_name_prefix,
 				'operator' => rgars( $group, 'dependency/operator' ) ? strtoupper( $group['dependency']['operator'] ) : 'ALL',
-				'target'   => array(
-					'type'  => rgar( $group, 'sections' ) ? 'tab' : ( rgar( $group, 'fields' ) ? 'section' : 'field' ),
-					'field' => rgar( $group, 'sections' ) || rgar( $group, 'fields' ) ? rgar( $group, 'id' ) : rgar( $group, 'name' ),
-				),
+				'target'   => $this->get_target_for_live_dependency( $group ),
 				'fields'   => rgars( $group, 'dependency/fields' ),
 			);
 
@@ -1104,6 +1101,10 @@ class Settings {
 		// Loop through fields, add dependencies.
 		foreach ( rgar( $group, $nested_key, array() ) as $item ) {
 
+			if ( ! rgar( $item, 'id' ) ) {
+				$item['id'] = $this->get_section_id( $item );
+			}
+
 			// If field has nested fields, add dependencies.
 			if ( rgar( $item, 'sections' ) || rgar( $item, 'fields' ) ) {
 				$dependencies = array_merge( $dependencies, $this->get_live_dependencies_for_group( $item ) );
@@ -1118,10 +1119,7 @@ class Settings {
 			$dependency = array(
 				'prefix'   => $this->input_name_prefix,
 				'operator' => rgars( $item, 'dependency/operator' ) ? strtoupper( $item['dependency']['operator'] ) : 'ALL',
-				'target'   => array(
-					'type'  => rgar( $item, 'sections' ) ? 'tab' : ( rgar( $item, 'fields' ) ? 'section' : 'field' ),
-					'field' => rgar( $item, 'sections' ) || rgar( $item, 'fields' ) ? rgar( $item, 'id' ) : rgar( $item, 'name' ),
-				),
+				'target'   => $this->get_target_for_live_dependency( $item ),
 				'fields'   => rgars( $item, 'dependency/fields' ),
 			);
 
@@ -1171,6 +1169,54 @@ class Settings {
 
 		return $dependencies;
 
+	}
+
+	/**
+	 * Returns the target type and field name/ID for live dependency.
+	 *
+	 * @since 2.5.13
+	 *
+	 * @param array $item Settings tab, section or field.
+	 *
+	 * @return array
+	 */
+	private function get_target_for_live_dependency( $item ) {
+
+		$target = array(
+			'type'  => 'field',
+			'field' => rgar( $item, 'name' ),
+		);
+
+		if ( rgar( $item, 'sections' ) ) {
+			$target['type']  = 'tab';
+			$target['field'] = rgar( $item, 'id' );
+		} elseif ( rgar( $item, 'fields' ) && ! rgar( $item, 'type' ) ) {
+			$target['type']  = 'section';
+			$target['field'] = $this->get_section_id( $item );
+		}
+
+		return $target;
+
+	}
+
+	/**
+	 * Get the section ID or a fallback if none is set.
+	 *
+	 * Dependencies rely on a section having an ID, so if a section ID isn't set, we need to generate one.
+	 *
+	 * @since 2.5.13
+	 *
+	 * @param array $section The settings section
+	 *
+	 * @return mixed|string
+	 */
+	private function get_section_id( $section ) {
+		$section_prefix = 'gform-settings-section-';
+		if ( rgar( $section, 'id' ) ) {
+			return $section_prefix . $section['id'];
+		} else {
+			return rgar( $section, 'title' ) ? $section_prefix . sanitize_title( $section['title'] ) : '';
+		}
 	}
 
 	/**
