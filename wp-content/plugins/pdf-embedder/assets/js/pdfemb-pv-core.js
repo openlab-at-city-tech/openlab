@@ -1,4 +1,4 @@
-;var PDFEMB_NS = {};
+;window.PDFEMB_NS = {};
 
 jQuery(document).ready(function($) {
 
@@ -415,7 +415,7 @@ jQuery(document).ready(function($) {
     };
 
     pdfembPagesViewer.prototype.deallocateFarAwayPages = function (pageNum) {
-        var pagedelta_forward = 50, pagedelta_backward = 50;
+        var pagedelta_forward = 2, pagedelta_backward = 2;
 
         if (this.zoom < 100) {
             var extra_pages = Math.min(Math.ceil(100 / this.zoom), 50);
@@ -427,6 +427,10 @@ jQuery(document).ready(function($) {
             var pageInnerDiv = pagesContainer.find('.pdfemb-page' + pn);
             var canvas = pageInnerDiv.find('.pdfemb-the-canvas');
             if (canvas.length) {
+                canvas.width = 1;
+                canvas.height = 1;
+                // const ctx = canvas.getContext('2d');
+                // ctx && ctx.clearRect(0, 0, 1, 1);
                 canvas.remove();
                 pageInnerDiv.data('invalidation-round', 0);
             }
@@ -745,12 +749,15 @@ jQuery(document).ready(function($) {
             // Render PDF page into canvas context
             var viewport = page.getViewport(canvasscale * zoom / 100);
 
+            // if ( typeof offscreenCanvas !== 'undefined' ) {
+            //     releaseCanvas( offscreenCanvas );
+            // }
             var offscreenCanvas = document.createElement('canvas');
             offscreenCanvas.width = wantCanvasWidth * PIXEL_RATIO * self.reducefactor * widthfactor;
             offscreenCanvas.height = wantCanvasHeight * PIXEL_RATIO * self.reducefactor * heightfactor;
 
-            var ctx = offscreenCanvas.getContext('2d');
-
+            var ctx = offscreenCanvas.getContext('2d'); /* memory exceeded Total canvas memory use exceeds the maximum limit (224 MB).
+            drawCallback — pdfemb-pv-core-4.6.2.js:776 */
             var renderContext = {
                 canvasContext: ctx,
                 viewport: viewport,
@@ -773,7 +780,8 @@ jQuery(document).ready(function($) {
 
                 // Copy from off screen canvas
                 var image = ctx.getImageData(0, 0, offscreenCanvas.width, offscreenCanvas.height);
-                canvas[0].getContext('2d').putImageData(image, 0, 0);
+                canvas[0].getContext('2d').putImageData(image, 0, 0);  /* memory exceeded Total canvas memory use exceeds the maximum limit (224 MB).
+                drawCallback — pdfemb-pv-core-4.6.2.js:776 */
 
 
                 // Do annotations layer
@@ -820,6 +828,8 @@ jQuery(document).ready(function($) {
                     self.renderPage(pageNum, false);
                 }
 
+
+
             }
 
 
@@ -828,11 +838,21 @@ jQuery(document).ready(function($) {
             renderTask.promise.then( function(){
                 if ('requestAnimationFrame' in window) {
                     window.requestAnimationFrame(drawCallback);
+                    // releaseCanvas(canvas);
                 }
                 else {
                     setTimeout(drawCallback, 1);
+                    // releaseCanvas(canvas);
                 }
             });
+
+            function releaseCanvas(canvas) {
+                canvas.width = 1;
+                canvas.height = 1;
+                const ctx = canvas.getContext('2d');
+                ctx && ctx.clearRect(0, 0, 1, 1);
+            }
+
 
         });
 
