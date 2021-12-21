@@ -1,5 +1,9 @@
 <?php
 class S2_Form_Widget extends WP_Widget {
+
+	// Display the widget’s instance in the REST API
+	public $show_instance_in_rest = true;
+
 	/**
 	 * Declares the Subscribe2 widget class.
 	 */
@@ -8,7 +12,11 @@ class S2_Form_Widget extends WP_Widget {
 			'classname'                   => 's2_form_widget',
 			'description'                 => esc_html__( 'Sidebar Widget for Subscribe2', 'subscribe2' ),
 			'customize_selective_refresh' => true,
+			'show_instance_in_rest' => true,
 		);
+
+		// add_filter( 'widget_text', 'shortcode_unautop' );
+		// add_filter( 'widget_text', 'do_shortcode' );
 
 		$control_ops = array(
 			'width'  => 250,
@@ -57,11 +65,13 @@ class S2_Form_Widget extends WP_Widget {
 		if ( ! empty( $title ) ) {
 			echo wp_kses_post( $args['before_title'] ) . esc_attr( $title ) . wp_kses_post( $args['after_title'] );
 		}
+		
 		echo '<div class="' . esc_attr( $div ) . '">';
 		if ( ! empty( $widgetprecontent ) ) {
 			echo wp_kses_post( $widgetprecontent );
 		}
 		echo do_shortcode( $shortcode );
+		
 		if ( ! empty( $widgetpostcontent ) ) {
 			echo wp_kses_post( $widgetpostcontent );
 		}
@@ -184,4 +194,5 @@ class S2_Form_Widget extends WP_Widget {
 		echo '</label></p>' . "\r\n";
 		echo '</div>' . "\r\n";
 	}
+
 } // End S2_Form_widget class

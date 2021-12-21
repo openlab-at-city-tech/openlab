@@ -23,6 +23,10 @@ if ( ! class_exists( 'Subscribe2_List_Table' ) ) {
 
 // was anything POSTed ?
 if ( isset( $_POST['s2_admin'] ) ) {
+	$s2_request_category = '';
+	if (isset($_REQUEST['category']) && $_REQUEST['category']) {
+		$s2_request_category = $_REQUEST['category'];
+	}
 	if ( false === wp_verify_nonce( $_REQUEST['_wpnonce'], 'bulk-' . $s2_list_table->_args['plural'] ) ) {
 		die( '<p>' . esc_html__( 'Security error! Your request cannot be completed.', 'subscribe2' ) . '</p>' );
 	}
@@ -79,18 +83,18 @@ if ( isset( $_POST['s2_admin'] ) ) {
 	} elseif ( isset( $_POST['remind'] ) ) {
 		$this->remind( $_POST['reminderemails'] );
 		echo '<div id="message" class="updated fade"><p><strong>' . esc_html__( 'Reminder Email(s) Sent!', 'subscribe2' ) . '</strong></p></div>';
-	} elseif ( isset( $_POST['sub_categories'] ) && 'subscribe' === $_POST['manage'] ) {
+	} elseif ( isset( $_POST['sub_categories'] ) && 'subscribe' === (isset($_POST['manage']) ? $_POST['manage'] : '') ) {
 		if ( isset( $_REQUEST['subscriber'] ) ) {
-			$this->subscribe_registered_users( implode( ",\r\n", $_REQUEST['subscriber'] ), $_POST['category'] );
+			$this->subscribe_registered_users( implode( ",\r\n", $_REQUEST['subscriber'] ), $s2_request_category );
 		} else {
-			$this->subscribe_registered_users( $_POST['exportcsv'], $_POST['category'] );
+			$this->subscribe_registered_users( $_POST['exportcsv'], $s2_request_category );
 		}
 		echo '<div id="message" class="updated fade"><p><strong>' . esc_html__( 'Registered Users Subscribed!', 'subscribe2' ) . '</strong></p></div>';
-	} elseif ( isset( $_POST['sub_categories'] ) && 'unsubscribe' === $_POST['manage'] ) {
+	} elseif ( isset( $_POST['sub_categories'] ) && 'unsubscribe' === (isset($_POST['manage']) ? $_POST['manage'] : '') ) {
 		if ( isset( $_REQUEST['subscriber'] ) ) {
-			$this->unsubscribe_registered_users( implode( ",\r\n", $_REQUEST['subscriber'] ), $_POST['category'] );
+			$this->unsubscribe_registered_users( implode( ",\r\n", $_REQUEST['subscriber'] ), $s2_request_category );
 		} else {
-			$this->unsubscribe_registered_users( $_POST['exportcsv'], $_POST['category'] );
+			$this->unsubscribe_registered_users( $_POST['exportcsv'], $s2_request_category );
 		}
 		echo '<div id="message" class="updated fade"><p><strong>' . esc_html__( 'Registered Users Unsubscribed!', 'subscribe2' ) . '</strong></p></div>';
 	} elseif ( isset( $_POST['sub_format'] ) ) {

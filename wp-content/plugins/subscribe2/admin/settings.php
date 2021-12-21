@@ -161,7 +161,13 @@ if ( 'blogname' === $this->subscribe2_options['sender'] ) {
 	$sender = $user->user_email;
 }
 list( $user, $sender_domain ) = explode( '@', $sender, 2 );
-if ( ! stristr( esc_html( $_SERVER['SERVER_NAME'] ), $sender_domain ) && 'author' !== $this->subscribe2_options['sender'] && '0' === $this->subscribe2_options['dismiss_sender_warning'] ) {
+
+$dismis_sender_worning = '';
+if(isset($this->subscribe2_options['dismiss_sender_warning'])) {
+	$dismis_sender_worning = $this->subscribe2_options['dismiss_sender_warning'];
+}
+
+if ( ! stristr( esc_html( $_SERVER['SERVER_NAME'] ), $sender_domain ) && 'author' !== $this->subscribe2_options['sender'] && '0' === (isset($this->subscribe2_options['dismiss_sender_warning']) ? $this->subscribe2_options['dismiss_sender_warning'] : '0') ) {
 	// Translators: Warning message
 	echo wp_kses_post( '<div id="sender_message" class="error notice is-dismissible"><p class="s2_error"><strong>' . sprintf( __( 'You appear to be sending notifications from %1$s, which has a different domain name than your blog server %2$s. This may result in failed emails.', 'subscribe2' ), $sender, $_SERVER['SERVER_NAME'] ) . '</strong></p></div>' );
 }

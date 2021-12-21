@@ -804,6 +804,9 @@ class S2_Admin extends S2_Core {
 		asort( $sort );
 		$schedule_sorted = array();
 		foreach ( $sort as $key => $value ) {
+			if (! preg_match('/never|weekly|monthly|twicedaily|hourly/', $key)) {
+				continue;
+			}
 			$schedule_sorted[ $key ] = $schedule[ $key ];
 		}
 		foreach ( $schedule_sorted as $key => $value ) {
@@ -1144,7 +1147,7 @@ class S2_Admin extends S2_Core {
 			return false;
 		}
 
-		if ( isset( $_POST['sub2-one-click-subscribe'] ) && 1 === $_POST['sub2-one-click-subscribe'] ) {
+		if ( isset( $_POST['sub2-one-click-subscribe'] ) && 1 === (int)$_POST['sub2-one-click-subscribe'] ) {
 			// Subscribe
 			$this->one_click_handler( $user_id, 'subscribe' );
 		} else {

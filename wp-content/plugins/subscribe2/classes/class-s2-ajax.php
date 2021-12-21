@@ -57,7 +57,7 @@ class S2_Ajax {
 		wp_parse_str( $response, $atts );
 
 		global $s2_frontend;
-		$content = $s2_frontend->shortcode( $atts );
+		$content = $s2_frontend->widget_shortcode( $atts );
 		$content = apply_filters( 's2_ajax_form', $content );
 
 		$allowed_tags = array(
