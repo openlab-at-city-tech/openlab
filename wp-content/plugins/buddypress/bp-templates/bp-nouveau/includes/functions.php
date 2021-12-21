@@ -3,7 +3,7 @@
  * Common functions
  *
  * @since 3.0.0
- * @version 8.0.0
+ * @version 9.0.0
  */
 
 // Exit if accessed directly.
@@ -375,7 +375,7 @@ function bp_nouveau_register_sidebars() {
  * @return bool
  */
 function bp_nouveau_is_object_nav_in_sidebar() {
-	return is_active_widget( false, false, 'bp_nouveau_sidebar_object_nav_widget', true );
+	return bp_is_widget_block_active( 'bp/primary-nav', 'bp_nouveau_sidebar_object_nav_widget' );
 }
 
 /**
@@ -638,7 +638,7 @@ function bp_nouveau_get_appearance_settings( $option = '' ) {
 	$default_args = array(
 		'avatar_style'       => 0,
 		'global_alignment'   => 'alignwide',
-		'user_front_page'    => 1,
+		'user_front_page'    => 0,
 		'user_front_bio'     => 0,
 		'user_nav_display'   => 0, // O is default (horizontally). 1 is vertically.
 		'user_nav_tabs'      => 0,
@@ -660,8 +660,8 @@ function bp_nouveau_get_appearance_settings( $option = '' ) {
 
 	if ( bp_is_active( 'groups' ) ) {
 		$default_args = array_merge( $default_args, array(
-			'group_front_page'        => 1,
-			'group_front_boxes'       => 1,
+			'group_front_page'        => 0,
+			'group_front_boxes'       => 0,
 			'group_front_description' => 0,
 			'group_nav_display'       => 0,       // O is default (horizontally). 1 is vertically.
 			'group_nav_order'         => array(),
@@ -1488,4 +1488,158 @@ function bp_nouveau_get_component_slug( $component_id = '' ) {
 	 * @param string $component_id The component ID.
 	 */
 	return apply_filters( 'bp_nouveau_get_component_slug', $slug, $component_id );
+}
+
+/**
+ * Registers the 'bp/primary-nav' Widget Block.
+ *
+ * @since 9.0.0
+ *
+ * @param array $blocks The Core Blocks list.
+ * @return array The Core Blocks list.
+ */
+function bp_nouveau_register_primary_nav_widget_block( $blocks = array() ) {
+	$editor_style = bp_locate_template_asset( 'css/primary-nav.css' );
+
+	$blocks['bp/primary-nav'] = array(
+		'name'               => 'bp/primary-nav',
+		'editor_script'      => 'bp-primary-nav-block',
+		'editor_script_url'  => trailingslashit( buddypress()->plugin_url . 'bp-core' ) . 'js/blocks/primary-nav.js',
+		'editor_script_deps' => array(
+			'wp-blocks',
+			'wp-element',
+			'wp-components',
+			'wp-i18n',
+			'wp-block-editor',
+			'bp-block-data',
+			'bp-block-components',
+		),
+		'editor_style'       => 'bp-primary-nav-block',
+		'editor_style_url'   => $editor_style['uri'],
+		'attributes'         => array(
+			'displayTitle' => array(
+				'type'    => 'boolean',
+				'default' => true,
+			),
+		),
+		'render_callback'    => 'bp_nouveau_render_primary_nav_block',
+	);
+
+	return $blocks;
+}
+add_filter( 'bp_core_register_blocks', 'bp_nouveau_register_primary_nav_widget_block', 20, 1 );
+
+/**
+ * Registers the 'bp/primary-nav' Widget Block classnames.
+ *
+ * @since 9.0.0
+ *
+ * @param array $block_globals The list of global properties for Core blocks.
+ * @return array               The list of global properties for Core blocks.
+ */
+function bp_nouveau_register_core_block_globals( $block_globals = array() ) {
+	$block_globals['bp/primary-nav'] = array(
+		'widget_classnames' => array( 'widget_nav_menu', 'buddypress_object_nav', 'buddypress' ),
+	);
+
+	return $block_globals;
+}
+add_filter( 'bp_core_block_globals', 'bp_nouveau_register_core_block_globals', 10, 1 );
+
+/**
+ * Unregister the 'bp/primary-nav' Block from the post context.
+ *
+ * @since 9.0.0
+ */
+function bp_nouveau_unregister_blocks_for_post_context() {
+	if ( ! function_exists( 'unregister_block_type' ) ) {
+		return;
+	}
+
+	$is_registered = WP_Block_Type_Registry::get_instance()->is_registered( 'bp/primary-nav' );
+
+	if ( $is_registered ) {
+		unregister_block_type( 'bp/primary-nav' );
+	}
+}
+add_action( 'load-post.php', 'bp_nouveau_unregister_blocks_for_post_context' );
+add_action( 'load-post-new.php', 'bp_nouveau_unregister_blocks_for_post_context' );
+
+/**
+ * Callback function to render the BP Primary Nav Block.
+ *
+ * @since 9.0.0
+ *
+ * @param array $attributes The block attributes.
+ * @return string           HTML output.
+ */
+function bp_nouveau_render_primary_nav_block( $attributes = array() ) {
+	$widget_content = '';
+	$widget_title   = '';
+	$block_args     = bp_parse_args(
+		$attributes,
+		array(
+			'displayTitle' => true,
+		),
+		'widget_object_nav'
+	);
+
+	// Previewing the Block inside the editor.
+	if ( defined( 'REST_REQUEST' ) && REST_REQUEST ) {
+		$widget_title = bp_get_loggedin_user_fullname();
+
+		ob_start();
+
+		// Temporary override the displayed user by the logged in one.
+		add_filter( 'bp_displayed_user_id', 'bp_loggedin_user_id' );
+
+		bp_get_template_part( 'members/single/parts/item-nav' );
+		$widget_content = ob_get_clean();
+
+		// Remove the temporary override.
+		remove_filter( 'bp_displayed_user_id', 'bp_loggedin_user_id' );
+	} else {
+		ob_start();
+
+		if ( bp_is_user() ) {
+			$widget_title = bp_get_displayed_user_fullname();
+			bp_get_template_part( 'members/single/parts/item-nav' );
+		} elseif ( bp_is_group() ) {
+			$widget_title = bp_get_current_group_name();
+			bp_get_template_part( 'groups/single/parts/item-nav' );
+		} elseif ( bp_is_directory() ) {
+			$widget_title = bp_get_directory_title( bp_current_component() );
+			bp_get_template_part( 'common/nav/directory-nav' );
+		}
+
+		$widget_content = ob_get_clean();
+	}
+
+	if ( ! $widget_content ) {
+		return '';
+	}
+
+	// Set the Block's title.
+	if ( true === $block_args['displayTitle'] ) {
+		$widget_content = sprintf(
+			'<h2 class="widget-title">%1$s</h2>
+			%2$s',
+			esc_html( $widget_title ),
+			$widget_content
+		);
+	}
+
+	// Only add a block wrapper if not loaded into a Widgets sidebar.
+	if ( ! did_action( 'dynamic_sidebar_before' ) ) {
+		$classnames         = 'widget_nav_menu buddypress_object_nav buddypress widget';
+		$wrapper_attributes = get_block_wrapper_attributes( array( 'class' => $classnames ) );
+
+		return sprintf(
+			'<div %1$s>%2$s</div>',
+			$wrapper_attributes,
+			$widget_content
+		);
+	}
+
+	return $widget_content;
 }

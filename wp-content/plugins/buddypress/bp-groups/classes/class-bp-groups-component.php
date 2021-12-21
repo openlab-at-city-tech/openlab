@@ -261,6 +261,11 @@ class BP_Groups_Component extends BP_Component {
 			'search_string'         => _x( 'Search Groups...', 'Component directory search', 'buddypress' ),
 			'global_tables'         => $global_tables,
 			'meta_tables'           => $meta_tables,
+			'block_globals'         => array(
+				'bp/dynamic-groups' => array(
+					'widget_classnames' => array( 'widget_bp_groups_widget', 'buddypress' ),
+				),
+			),
 		);
 
 		parent::setup_globals( $args );
@@ -978,11 +983,9 @@ class BP_Groups_Component extends BP_Component {
 						'wp-element',
 						'wp-components',
 						'wp-i18n',
-						'wp-editor',
-						'wp-compose',
-						'wp-data',
 						'wp-block-editor',
 						'bp-block-components',
+						'bp-block-data',
 					),
 					'style'              => 'bp-group-block',
 					'style_url'          => plugins_url( 'css/blocks/group.css', dirname( __FILE__ ) ),
@@ -1019,12 +1022,11 @@ class BP_Groups_Component extends BP_Component {
 						'wp-element',
 						'wp-components',
 						'wp-i18n',
-						'wp-compose',
-						'wp-data',
 						'wp-api-fetch',
 						'wp-url',
 						'wp-block-editor',
 						'bp-block-components',
+						'bp-block-data',
 						'lodash',
 					),
 					'style'              => 'bp-groups-block',
@@ -1060,6 +1062,40 @@ class BP_Groups_Component extends BP_Component {
 						),
 					),
 					'render_callback'    => 'bp_groups_render_groups_block',
+				),
+				'bp/dynamic-groups' => array(
+					'name'               => 'bp/dynamic-groups',
+					'editor_script'      => 'bp-dynamic-groups-block',
+					'editor_script_url'  => plugins_url( 'js/blocks/dynamic-groups.js', dirname( __FILE__ ) ),
+					'editor_script_deps' => array(
+						'wp-blocks',
+						'wp-element',
+						'wp-components',
+						'wp-i18n',
+						'wp-block-editor',
+						'bp-block-components',
+					),
+					'style'              => 'bp-dynamic-groups-block',
+					'style_url'          => plugins_url( 'css/blocks/dynamic-groups.css', dirname( __FILE__ ) ),
+					'attributes'         => array(
+						'title'        => array(
+							'type'    => 'string',
+							'default' => __( 'Groups', 'buddypress' ),
+						),
+						'maxGroups'    => array(
+							'type'    => 'number',
+							'default' => 5,
+						),
+						'groupDefault' => array(
+							'type'    => 'string',
+							'default' => 'active',
+						),
+						'linkTitle'    => array(
+							'type'    => 'boolean',
+							'default' => false,
+						),
+					),
+					'render_callback'    => 'bp_groups_render_dynamic_groups_block',
 				),
 			)
 		);

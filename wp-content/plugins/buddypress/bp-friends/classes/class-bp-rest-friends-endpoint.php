@@ -644,7 +644,7 @@ class BP_REST_Friends_Endpoint extends WP_REST_Controller {
 			'date_created' => bp_rest_prepare_date_response( $friendship->date_created ),
 		);
 
-		$context  = ! empty( $request['context'] ) ? $request['context'] : 'view';
+		$context  = ! empty( $request->get_param( 'context' ) ) ? $request->get_param( 'context' ) : 'view';
 		$data     = $this->add_additional_fields_to_object( $data, $request );
 		$data     = $this->filter_response_by_context( $data, $context );
 		$response = rest_ensure_response( $data );
@@ -684,11 +684,11 @@ class BP_REST_Friends_Endpoint extends WP_REST_Controller {
 				'href' => rest_url( $base ),
 			),
 			'initiator'       => array(
-				'href'       => rest_url( bp_rest_get_user_url( $friendship->initiator_user_id ) ),
+				'href'       => bp_rest_get_object_url( $friendship->initiator_user_id, 'members' ),
 				'embeddable' => true,
 			),
 			'friend'       => array(
-				'href'       => rest_url( bp_rest_get_user_url( $friendship->friend_user_id ) ),
+				'href'       => bp_rest_get_object_url( $friendship->friend_user_id, 'members' ),
 				'embeddable' => true,
 			),
 		);
