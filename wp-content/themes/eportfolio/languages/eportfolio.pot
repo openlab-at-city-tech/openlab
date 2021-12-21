@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ePortfolio\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-23 17:01+0000\n"
+"POT-Creation-Date: 2021-06-22 07:15+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -15,33 +15,83 @@ msgstr ""
 "X-Generator: Loco https://localise.biz/\n"
 "X-Loco-Version: 2.3.0; wp-5.2.2"
 
-#: functions.php:47 header.php:92
-msgid "Primary Menu"
-msgstr ""
-
-#: functions.php:48
-msgid "Social Menu"
-msgstr ""
-
 #: functions.php:137
 msgctxt "%s font: on or off"
 msgid "on"
 msgstr ""
 
-#: 404.php:19
-msgid "Oops! That page can&rsquo;t be found."
+#: inc/customize/theme-option.php:131
+msgid "2-Column Layout"
 msgstr ""
 
-#: 404.php:23
+#: inc/customize/theme-option.php:130
+msgid "3-Column Layout"
+msgstr ""
+
+#: inc/customize/core/default.php:23
+msgid "About Me"
+msgstr ""
+
+#: inc/widgets/widgets-init.php:11 inc/widgets/widgets-init.php:20
+msgid "Add widgets here."
+msgstr ""
+
+#: inc/customize/page-template.php:168
 msgid ""
-"It looks like nothing was found at this location. Maybe try one of the links "
-"below or a search?"
+"After enabling please visit your widget.php and add widget on Portfolio "
+"Template Widget"
 msgstr ""
 
-#. 1: title.
-#: comments.php:35
-#, php-format
-msgid "One thought on &ldquo;%1$s&rdquo;"
+#: inc/customize/page-template.php:186
+msgid "After enabling this masonry section will be shown on portfolio side"
+msgstr ""
+
+#: inc/template-tags.php:160
+msgid "ago"
+msgstr ""
+
+#: inc/widgets/widgets.php:61 inc/widgets/widgets.php:182
+msgid "All Categories"
+msgstr ""
+
+#: inc/customize/theme-option.php:73
+msgid "Archive Section Setting Options"
+msgstr ""
+
+#: inc/widgets/widgets.php:385
+msgid "Bio Image:"
+msgstr ""
+
+#: inc/customize/theme-option.php:45
+msgid "Button Text"
+msgstr ""
+
+#: inc/customize/theme-option.php:62
+msgid "Button URL Link"
+msgstr ""
+
+#: inc/customize/page-template.php:59
+msgid "Category For Blog Slider"
+msgstr ""
+
+#: inc/customize/page-template.php:286
+msgid "Category For Photography Page Template Slider"
+msgstr ""
+
+#: inc/customize/page-template.php:220
+msgid "Category For Portfolio Section"
+msgstr ""
+
+#: inc/single-meta.php:77
+msgid "Check To Enable Featured Image On Single Page"
+msgstr ""
+
+#: inc/widgets/widget-base-class.php:278
+msgid "Choose Image"
+msgstr ""
+
+#: comments.php:66
+msgid "Comments are closed."
 msgstr ""
 
 #. 1: comment count number, 2: title.
@@ -53,111 +103,12 @@ msgid_plural "%1$s thoughts on &ldquo;%2$s&rdquo;"
 msgstr[0] ""
 msgstr[1] ""
 
-#: comments.php:66
-msgid "Comments are closed."
-msgstr ""
-
-#. %s: search query.
-#: search.php:22
-#, php-format
-msgid "Search Results for: %s"
-msgstr ""
-
-#: header.php:29
-msgid "Skip to content"
-msgstr ""
-
-#. 1: Theme name, 2: Theme author.
-#: footer.php:25
-#, php-format
-msgid "Theme: %1$s by %2$s."
-msgstr ""
-
-#: inc/single-meta.php:22
-msgid "Single Page/Post Layout Settings"
-msgstr ""
-
-#: inc/single-meta.php:62
-msgid "Layout Settings"
-msgstr ""
-
-#: inc/single-meta.php:77
-msgid "Check To Enable Featured Image On Single Page"
-msgstr ""
-
-#: inc/single-meta.php:82
-msgid "Single Page/Post Layout"
-msgstr ""
-
-#: inc/single-meta.php:86 inc/customize/theme-option.php:184
-msgid "Content - Primary Sidebar"
-msgstr ""
-
-#: inc/single-meta.php:89 inc/customize/theme-option.php:183
-msgid "Primary Sidebar - Content"
-msgstr ""
-
-#: inc/single-meta.php:92 inc/customize/theme-option.php:185
-msgid "No Sidebar"
-msgstr ""
-
-#. %s: post date.
-#: inc/template-tags.php:29
-#, php-format
-msgctxt "post date"
-msgid "Posted on %s"
-msgstr ""
-
-#. %s: post author.
-#: inc/template-tags.php:45
-#, php-format
-msgctxt "post author"
-msgid "by %s"
-msgstr ""
-
-#. used between list items, there is a space after the comma
-#: inc/template-tags.php:63
-msgctxt "list item separator"
-msgid " "
-msgstr ""
-
-#. 1: list of tags.
-#: inc/template-tags.php:66
-#, php-format
-msgid "Tagged: %1$s"
-msgstr ""
-
-#. %s: post title
-#: inc/template-tags.php:76
-#, php-format
-msgid "Leave a Comment<span class=\"screen-reader-text\"> on %s</span>"
-msgstr ""
-
-#. %s: Name of current post. Only visible to screen readers
-#: inc/template-tags.php:93 template-parts/content-page.php:37
-#, php-format
-msgid "Edit <span class=\"screen-reader-text\">%s</span>"
-msgstr ""
-
-#: inc/template-tags.php:160
-msgid "ago"
-msgstr ""
-
-#: inc/template-tags.php:206
-#, php-format
-msgid "View all posts in %s"
-msgstr ""
-
-#: inc/template-functions.php:125
-msgid "Elementor Page Builder"
-msgstr ""
-
 #: inc/template-functions.php:130
 msgid "Contact Form 7"
 msgstr ""
 
-#: inc/template-functions.php:135
-msgid "One Click Demo Import"
+#: inc/single-meta.php:86 inc/customize/theme-option.php:184
+msgid "Content - Primary Sidebar"
 msgstr ""
 
 #. %s: Name of current post. Only visible to screen readers
@@ -166,55 +117,24 @@ msgstr ""
 msgid "Continue reading<span class=\"screen-reader-text\"> \"%s\"</span>"
 msgstr ""
 
-#: template-parts/content-none.php:18
-msgid "Nothing Found"
+#: inc/customize/core/default.php:54
+msgid "Copyright All right reserved"
 msgstr ""
 
-#. 1: link to WP admin new post page.
-#: template-parts/content-none.php:27
-#, php-format
-msgid ""
-"Ready to publish your first post? <a href=\"%1$s\">Get started here</a>."
+#: inc/customize/theme-option.php:216
+msgid "Default (Older / Newer Post)"
 msgstr ""
 
-#: template-parts/content-none.php:40
-msgid ""
-"Sorry, but nothing matched your search terms. Please try again with some "
-"different keywords."
+#: inc/template-functions.php:135
+msgid "Demo Import Kit"
 msgstr ""
 
-#: template-parts/content-none.php:47
-msgid ""
-"It seems we can&rsquo;t find what you&rsquo;re looking for. Perhaps "
-"searching can help."
-msgstr ""
-
-#. Name of the template
-msgid "Photography Page Template"
-msgstr ""
-
-#. Name of the template
-msgid "Portfolio Page Template"
+#: inc/widgets/widgets.php:360
+msgid "Displays bio details in post."
 msgstr ""
 
 #: inc/widgets/widgets.php:54
 msgid "Displays post form selected category as slider in any sidebars."
-msgstr ""
-
-#: inc/widgets/widgets.php:59 inc/widgets/widgets.php:180
-msgid "Select Category:"
-msgstr ""
-
-#: inc/widgets/widgets.php:61 inc/widgets/widgets.php:182
-msgid "All Categories"
-msgstr ""
-
-#: inc/widgets/widgets.php:64 inc/widgets/widgets.php:185
-msgid "Number of Posts:"
-msgstr ""
-
-#: inc/widgets/widgets.php:73
-msgid "ePortfolio :- Slider Post"
 msgstr ""
 
 #: inc/widgets/widgets.php:170
@@ -222,333 +142,74 @@ msgid ""
 "Displays post form selected category specific for popular post in sidebars."
 msgstr ""
 
-#: inc/widgets/widgets.php:175 inc/widgets/widgets.php:289
-#: inc/widgets/widgets.php:365
-msgid "Title:"
-msgstr ""
-
-#: inc/widgets/widgets.php:194
-msgid "ePortfolio :- Recent Post"
-msgstr ""
-
 #: inc/widgets/widgets.php:284
 msgid "Displays Social share."
 msgstr ""
 
-#: inc/widgets/widgets.php:295
-msgid "ePortfolio :- Social Widget"
+#. %s: Name of current post. Only visible to screen readers
+#: inc/template-tags.php:93 template-parts/content-page.php:37
+#, php-format
+msgid "Edit <span class=\"screen-reader-text\">%s</span>"
 msgstr ""
 
-#: inc/widgets/widgets.php:329
-msgid ""
-"Social menu is not set. You need to create menu and assign it to Social Menu "
-"on Menu Settings."
-msgstr ""
-
-#: inc/widgets/widgets.php:360
-msgid "Displays bio details in post."
-msgstr ""
-
-#: inc/widgets/widgets.php:370
-msgid "Name:"
-msgstr ""
-
-#: inc/widgets/widgets.php:375
-msgid "Position/Sub Title:"
-msgstr ""
-
-#: inc/widgets/widgets.php:380
-msgid "Quotation:"
-msgstr ""
-
-#: inc/widgets/widgets.php:385
-msgid "Bio Image:"
-msgstr ""
-
-#: inc/widgets/widgets.php:389
-msgid "Facebook URL:"
-msgstr ""
-
-#: inc/widgets/widgets.php:394
-msgid "Twitter URL:"
-msgstr ""
-
-#: inc/widgets/widgets.php:399
-msgid "Linkedin URL:"
-msgstr ""
-
-#: inc/widgets/widgets.php:404
-msgid "Instagram URL:"
-msgstr ""
-
-#: inc/widgets/widgets.php:410
-msgid "ePortfolio :- Bio Widget"
-msgstr ""
-
-#: inc/widgets/widgets-init.php:9
-msgid "Portfolio Template Widget Section"
-msgstr ""
-
-#: inc/widgets/widgets-init.php:11 inc/widgets/widgets-init.php:20
-msgid "Add widgets here."
-msgstr ""
-
-#: inc/widgets/widgets-init.php:18
-msgid "Single Page/Post Sidebar"
-msgstr ""
-
-#: inc/widgets/widget-base-class.php:278
-msgid "Upload"
-msgstr ""
-
-#: inc/widgets/widget-base-class.php:278
-msgid "Select Image"
-msgstr ""
-
-#: inc/widgets/widget-base-class.php:278
-msgid "Choose Image"
-msgstr ""
-
-#: inc/widgets/widget-base-class.php:289
-msgctxt "Remove"
-msgid "X"
-msgstr ""
-
-#: inc/customize/page-template.php:13
-msgid "Page-Template / Page Layout Options"
-msgstr ""
-
-#: inc/customize/page-template.php:23
-msgid "Latest Posts / Blog Page Settings"
-msgstr ""
-
-#: inc/customize/page-template.php:41
-msgid "Enable Slider On Blog"
-msgstr ""
-
-#: inc/customize/page-template.php:59
-msgid "Category For Blog Slider"
-msgstr ""
-
-#: inc/customize/page-template.php:60
-msgid "Select category to be shown on Blog Page or post Page slider section "
-msgstr ""
-
-#: inc/customize/page-template.php:78 inc/customize/page-template.php:304
-msgid "Select No Of Slider"
-msgstr ""
-
-#: inc/customize/page-template.php:79
-msgid "Number of Slider to be shown the allowed range is 1 - 4"
-msgstr ""
-
-#: inc/customize/page-template.php:97
-msgid "Enable Switch/toggle Option on Blog Layout"
-msgstr ""
-
-#: inc/customize/page-template.php:113
-msgid "Select Default Layout For Blog/Latest Post"
-msgstr ""
-
-#: inc/customize/page-template.php:116 inc/customize/theme-option.php:109
-msgid "List Post Layout"
-msgstr ""
-
-#: inc/customize/page-template.php:117 inc/customize/theme-option.php:110
-msgid "Grid/Masonry Layout"
-msgstr ""
-
-#: inc/customize/page-template.php:134
-msgid "Select Number of Column in Grid view"
-msgstr ""
-
-#: inc/customize/page-template.php:137
-msgid "Three Column Grid"
-msgstr ""
-
-#: inc/customize/page-template.php:138
-msgid "Two Column Grid"
-msgstr ""
-
-#: inc/customize/page-template.php:150
-msgid "Portfolio Page Template Settings"
-msgstr ""
-
-#: inc/customize/page-template.php:167
-msgid "Enable Portfolio Template Widget Section"
-msgstr ""
-
-#: inc/customize/page-template.php:168
-msgid ""
-"After enabling please visit your widget.php and add widget on Portfolio "
-"Template Widget"
+#: inc/template-functions.php:125
+msgid "Elementor Page Builder"
 msgstr ""
 
 #: inc/customize/page-template.php:185
 msgid "Enable Masonry Section On Portfolio"
 msgstr ""
 
-#: inc/customize/page-template.php:186
-msgid "After enabling this masonry section will be shown on portfolio side"
+#: inc/customize/page-template.php:269
+msgid "Enable Overlay on Slider"
+msgstr ""
+
+#: inc/customize/page-template.php:167
+msgid "Enable Portfolio Template Widget Section"
 msgstr ""
 
 #: inc/customize/page-template.php:203
 msgid "Enable Portfolio Title"
 msgstr ""
 
-#: inc/customize/page-template.php:220
-msgid "Category For Portfolio Section"
+#: inc/customize/theme-option.php:270
+msgid "Enable Preloader"
 msgstr ""
 
-#: inc/customize/page-template.php:221
-msgid ""
-"Select category to be shown on Portfolio Page template - post list section "
-msgstr ""
-
-#: inc/customize/page-template.php:238
-msgid "Select No Of Post /. portfolio to show"
-msgstr ""
-
-#: inc/customize/page-template.php:239
-msgid "Number of Slider to be shown the allowed range is 1 - 20"
-msgstr ""
-
-#: inc/customize/page-template.php:252
-msgid "Photography Page Template Settings"
-msgstr ""
-
-#: inc/customize/page-template.php:269
-msgid "Enable Overlay on Slider"
-msgstr ""
-
-#: inc/customize/page-template.php:286
-msgid "Category For Photography Page Template Slider"
-msgstr ""
-
-#: inc/customize/page-template.php:287
-msgid ""
-"Select category to be shown on photography Page template - post slider "
-"section "
-msgstr ""
-
-#: inc/customize/page-template.php:305
-msgid "Number of Slider to be shown the allowed range is 1 - 9"
+#: inc/customize/page-template.php:41
+msgid "Enable Slider On Blog"
 msgstr ""
 
 #: inc/customize/page-template.php:323
 msgid "Enable Slider Text Background"
 msgstr ""
 
-#: inc/customize/theme-option.php:13
-msgid "Theme Options"
-msgstr ""
-
-#: inc/customize/theme-option.php:28
-msgid "Short Description Details"
-msgstr ""
-
-#: inc/customize/theme-option.php:45
-msgid "Button Text"
-msgstr ""
-
-#: inc/customize/theme-option.php:62
-msgid "Button URL Link"
-msgstr ""
-
-#: inc/customize/theme-option.php:73
-msgid "Archive Section Setting Options"
-msgstr ""
-
 #: inc/customize/theme-option.php:90
 msgid "Enable Switch/toggle Option on Arcvhives"
 msgstr ""
 
-#: inc/customize/theme-option.php:106
-msgid "Select Default Layout For Archive Post"
-msgstr ""
-
-#: inc/customize/theme-option.php:127
-msgid "Select Number of Grid Column"
-msgstr ""
-
-#: inc/customize/theme-option.php:130
-msgid "3-Column Layout"
-msgstr ""
-
-#: inc/customize/theme-option.php:131
-msgid "2-Column Layout"
-msgstr ""
-
-#: inc/customize/theme-option.php:142
-msgid "Layout Management"
-msgstr ""
-
-#: inc/customize/theme-option.php:159
-msgid "Select Date Format"
-msgstr ""
-
-#: inc/customize/theme-option.php:162
-msgid "Time Span Format"
-msgstr ""
-
-#: inc/customize/theme-option.php:163
-msgid "Regular Format"
-msgstr ""
-
-#: inc/customize/theme-option.php:180
-msgid "Global Page/Post Sidebar Layout"
-msgstr ""
-
-#: inc/customize/theme-option.php:195
-msgid "Pagination Options"
-msgstr ""
-
-#: inc/customize/theme-option.php:212
-msgid "Pagination Type"
-msgstr ""
-
-#: inc/customize/theme-option.php:216
-msgid "Default (Older / Newer Post)"
-msgstr ""
-
-#: inc/customize/theme-option.php:217
-msgid "Numeric"
-msgstr ""
-
-#: inc/customize/theme-option.php:226
-msgid "Footer Options"
-msgstr ""
-
-#: inc/customize/theme-option.php:243
-msgid "Footer Copyright Text"
-msgstr ""
-
-#: inc/customize/theme-option.php:253
-msgid "Preloader Options"
-msgstr ""
-
-#: inc/customize/theme-option.php:270
-msgid "Enable Preloader"
-msgstr ""
-
-#: inc/customize/customizer.php:47
-msgid "ePortfolio Pro"
-msgstr ""
-
-#: inc/customize/customizer.php:48
-msgid "Upgrade To Pro"
-msgstr ""
-
-#: inc/customize/core/default.php:23
-msgid "About Me"
-msgstr ""
-
-#: inc/customize/core/default.php:54
-msgid "Copyright All right reserved"
+#: inc/customize/page-template.php:97
+msgid "Enable Switch/toggle Option on Blog Layout"
 msgstr ""
 
 #. Name of the theme
 msgid "ePortfolio"
+msgstr ""
+
+#: inc/widgets/widgets.php:410
+msgid "ePortfolio :- Bio Widget"
+msgstr ""
+
+#: inc/widgets/widgets.php:194
+msgid "ePortfolio :- Recent Post"
+msgstr ""
+
+#: inc/widgets/widgets.php:73
+msgid "ePortfolio :- Slider Post"
+msgstr ""
+
+#: inc/widgets/widgets.php:295
+msgid "ePortfolio :- Social Widget"
 msgstr ""
 
 #. Description of the theme
@@ -563,14 +224,357 @@ msgid ""
 "com/eportfolio/"
 msgstr ""
 
+#: inc/customize/customizer.php:47
+msgid "ePortfolio Pro"
+msgstr ""
+
+#: inc/widgets/widgets.php:389
+msgid "Facebook URL:"
+msgstr ""
+
+#: inc/customize/theme-option.php:243
+msgid "Footer Copyright Text"
+msgstr ""
+
+#: inc/customize/theme-option.php:226
+msgid "Footer Options"
+msgstr ""
+
+#: inc/customize/theme-option.php:180
+msgid "Global Page/Post Sidebar Layout"
+msgstr ""
+
+#: inc/customize/page-template.php:117 inc/customize/theme-option.php:110
+msgid "Grid/Masonry Layout"
+msgstr ""
+
+#. Author URI of the theme
+msgid "https://www.themeinwp.com"
+msgstr ""
+
 #. URI of the theme
 msgid "https://www.themeinwp.com/theme/eportfolio"
+msgstr ""
+
+#: inc/widgets/widgets.php:404
+msgid "Instagram URL:"
+msgstr ""
+
+#: 404.php:23
+msgid ""
+"It looks like nothing was found at this location. Maybe try one of the links "
+"below or a search?"
+msgstr ""
+
+#: template-parts/content-none.php:47
+msgid ""
+"It seems we can&rsquo;t find what you&rsquo;re looking for. Perhaps "
+"searching can help."
+msgstr ""
+
+#: inc/customize/page-template.php:23
+msgid "Latest Posts / Blog Page Settings"
+msgstr ""
+
+#: inc/customize/theme-option.php:142
+msgid "Layout Management"
+msgstr ""
+
+#: inc/single-meta.php:62
+msgid "Layout Settings"
+msgstr ""
+
+#. %s: post title
+#: inc/template-tags.php:76
+#, php-format
+msgid "Leave a Comment<span class=\"screen-reader-text\"> on %s</span>"
+msgstr ""
+
+#: inc/widgets/widgets.php:399
+msgid "Linkedin URL:"
+msgstr ""
+
+#. used between list items, there is a space after the comma
+#: inc/template-tags.php:63
+msgctxt "list item separator"
+msgid " "
+msgstr ""
+
+#: inc/customize/page-template.php:116 inc/customize/theme-option.php:109
+msgid "List Post Layout"
+msgstr ""
+
+#: inc/widgets/widgets.php:370
+msgid "Name:"
+msgstr ""
+
+#: inc/single-meta.php:92 inc/customize/theme-option.php:185
+msgid "No Sidebar"
+msgstr ""
+
+#: template-parts/content-none.php:18
+msgid "Nothing Found"
+msgstr ""
+
+#: inc/widgets/widgets.php:64 inc/widgets/widgets.php:185
+msgid "Number of Posts:"
+msgstr ""
+
+#: inc/customize/page-template.php:239
+msgid "Number of Slider to be shown the allowed range is 1 - 20"
+msgstr ""
+
+#: inc/customize/page-template.php:79
+msgid "Number of Slider to be shown the allowed range is 1 - 4"
+msgstr ""
+
+#: inc/customize/page-template.php:305
+msgid "Number of Slider to be shown the allowed range is 1 - 9"
+msgstr ""
+
+#: inc/customize/theme-option.php:217
+msgid "Numeric"
+msgstr ""
+
+#. 1: title.
+#: comments.php:35
+#, php-format
+msgid "One thought on &ldquo;%1$s&rdquo;"
+msgstr ""
+
+#: 404.php:19
+msgid "Oops! That page can&rsquo;t be found."
+msgstr ""
+
+#: inc/customize/page-template.php:13
+msgid "Page-Template / Page Layout Options"
+msgstr ""
+
+#: inc/customize/theme-option.php:195
+msgid "Pagination Options"
+msgstr ""
+
+#: inc/customize/theme-option.php:212
+msgid "Pagination Type"
+msgstr ""
+
+#. Name of the template
+msgid "Photography Page Template"
+msgstr ""
+
+#: inc/customize/page-template.php:252
+msgid "Photography Page Template Settings"
+msgstr ""
+
+#. Name of the template
+msgid "Portfolio Page Template"
+msgstr ""
+
+#: inc/customize/page-template.php:150
+msgid "Portfolio Page Template Settings"
+msgstr ""
+
+#: inc/widgets/widgets-init.php:9
+msgid "Portfolio Template Widget Section"
+msgstr ""
+
+#: inc/widgets/widgets.php:375
+msgid "Position/Sub Title:"
+msgstr ""
+
+#. %s: post author.
+#: inc/template-tags.php:45
+#, php-format
+msgctxt "post author"
+msgid "by %s"
+msgstr ""
+
+#. %s: post date.
+#: inc/template-tags.php:29
+#, php-format
+msgctxt "post date"
+msgid "Posted on %s"
+msgstr ""
+
+#: inc/customize/theme-option.php:253
+msgid "Preloader Options"
+msgstr ""
+
+#: functions.php:47 header.php:92
+msgid "Primary Menu"
+msgstr ""
+
+#: inc/single-meta.php:89 inc/customize/theme-option.php:183
+msgid "Primary Sidebar - Content"
+msgstr ""
+
+#: inc/widgets/widgets.php:380
+msgid "Quotation:"
+msgstr ""
+
+#. 1: link to WP admin new post page.
+#: template-parts/content-none.php:27
+#, php-format
+msgid ""
+"Ready to publish your first post? <a href=\"%1$s\">Get started here</a>."
+msgstr ""
+
+#: inc/customize/theme-option.php:163
+msgid "Regular Format"
+msgstr ""
+
+#: inc/widgets/widget-base-class.php:289
+msgctxt "Remove"
+msgid "X"
+msgstr ""
+
+#. %s: search query.
+#: search.php:22
+#, php-format
+msgid "Search Results for: %s"
+msgstr ""
+
+#: inc/customize/page-template.php:60
+msgid "Select category to be shown on Blog Page or post Page slider section "
+msgstr ""
+
+#: inc/customize/page-template.php:287
+msgid ""
+"Select category to be shown on photography Page template - post slider "
+"section "
+msgstr ""
+
+#: inc/customize/page-template.php:221
+msgid ""
+"Select category to be shown on Portfolio Page template - post list section "
+msgstr ""
+
+#: inc/widgets/widgets.php:59 inc/widgets/widgets.php:180
+msgid "Select Category:"
+msgstr ""
+
+#: inc/customize/theme-option.php:159
+msgid "Select Date Format"
+msgstr ""
+
+#: inc/customize/theme-option.php:106
+msgid "Select Default Layout For Archive Post"
+msgstr ""
+
+#: inc/customize/page-template.php:113
+msgid "Select Default Layout For Blog/Latest Post"
+msgstr ""
+
+#: inc/widgets/widget-base-class.php:278
+msgid "Select Image"
+msgstr ""
+
+#: inc/customize/page-template.php:238
+msgid "Select No Of Post /. portfolio to show"
+msgstr ""
+
+#: inc/customize/page-template.php:78 inc/customize/page-template.php:304
+msgid "Select No Of Slider"
+msgstr ""
+
+#: inc/customize/page-template.php:134
+msgid "Select Number of Column in Grid view"
+msgstr ""
+
+#: inc/customize/theme-option.php:127
+msgid "Select Number of Grid Column"
+msgstr ""
+
+#: inc/customize/theme-option.php:28
+msgid "Short Description Details"
+msgstr ""
+
+#: inc/single-meta.php:82
+msgid "Single Page/Post Layout"
+msgstr ""
+
+#: inc/single-meta.php:22
+msgid "Single Page/Post Layout Settings"
+msgstr ""
+
+#: inc/widgets/widgets-init.php:18
+msgid "Single Page/Post Sidebar"
+msgstr ""
+
+#: header.php:29
+msgid "Skip to content"
+msgstr ""
+
+#: functions.php:48
+msgid "Social Menu"
+msgstr ""
+
+#: inc/widgets/widgets.php:329
+msgid ""
+"Social menu is not set. You need to create menu and assign it to Social Menu "
+"on Menu Settings."
+msgstr ""
+
+#: template-parts/content-none.php:40
+msgid ""
+"Sorry, but nothing matched your search terms. Please try again with some "
+"different keywords."
+msgstr ""
+
+#. 1: list of tags.
+#: inc/template-tags.php:66
+#, php-format
+msgid "Tagged: %1$s"
+msgstr ""
+
+#: inc/customize/theme-option.php:13
+msgid "Theme Options"
+msgstr ""
+
+#. 1: Theme name, 2: Theme author.
+#: footer.php:45
+#, php-format
+msgid "Theme: %1$s by %2$s."
 msgstr ""
 
 #. Author of the theme
 msgid "ThemeInWP"
 msgstr ""
 
-#. Author URI of the theme
-msgid "https://www.themeinwp.com"
+#: inc/template-functions.php:140
+msgid "Themeinwp Import Companion"
+msgstr ""
+
+#: inc/customize/page-template.php:137
+msgid "Three Column Grid"
+msgstr ""
+
+#: inc/customize/theme-option.php:162
+msgid "Time Span Format"
+msgstr ""
+
+#: inc/widgets/widgets.php:175 inc/widgets/widgets.php:289
+#: inc/widgets/widgets.php:365
+msgid "Title:"
+msgstr ""
+
+#: inc/widgets/widgets.php:394
+msgid "Twitter URL:"
+msgstr ""
+
+#: inc/customize/page-template.php:138
+msgid "Two Column Grid"
+msgstr ""
+
+#: inc/customize/customizer.php:48
+msgid "Upgrade To Pro"
+msgstr ""
+
+#: inc/widgets/widget-base-class.php:278
+msgid "Upload"
+msgstr ""
+
+#: inc/template-tags.php:206
+#, php-format
+msgid "View all posts in %s"
 msgstr ""
