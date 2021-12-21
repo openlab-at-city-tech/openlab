@@ -26,7 +26,7 @@ class Meow_WPMC_Engine {
 		$q = <<<SQL
 SELECT p.ID FROM $wpdb->posts p
 WHERE p.post_status NOT IN ('inherit', 'trash', 'auto-draft')
-AND p.post_type NOT IN ('attachment', 'shop_order', 'shop_order_refund', 'nav_menu_item', 'revision', 'auto-draft', 'wphb_minify_group', 'customize_changeset', 'oembed_cache', 'nf_sub')
+AND p.post_type NOT IN ('attachment', 'shop_order', 'shop_order_refund', 'nav_menu_item', 'revision', 'auto-draft', 'wphb_minify_group', 'customize_changeset', 'oembed_cache', 'nf_sub', 'jp_img_sitemap')
 AND p.post_type NOT LIKE 'dlssus_%'
 AND p.post_type NOT LIKE 'ml-slide%'
 AND p.post_type NOT LIKE '%acf-%'
@@ -180,18 +180,21 @@ SQL;
 	 * @param int $size   Negative number means no limit
 	 * @return NULL|array
 	 */
-	function get_media_entries( $offset = -1, $size = -1 ) {
+	function get_media_entries( $offset = -1, $size = -1, $unattachedOnly = false ) {
 		global $wpdb;
 		$r = null;
+
+		$extraAnd = $unattachedOnly ? "AND p.post_parent = 0" : "";
 
 		$q = <<<SQL
 SELECT p.ID FROM $wpdb->posts p
 WHERE p.post_status = 'inherit'
+$extraAnd
 AND p.post_type = 'attachment'
 SQL;
 		if ( get_option( 'wpmc_images_only' ) ) {
 			// Get only media entries which are images
-			$q .= " AND p.post_mime_type IN ( 'image/jpeg' )";
+			$q .= " AND p.post_mime_type IN ( 'image/jpeg', 'image/gif', 'image/png', 'image/bmp', 'image/tiff', 'image/x-icon' )";
 		}
 
 		if ( $offset >= 0 && $size >= 0 ) {

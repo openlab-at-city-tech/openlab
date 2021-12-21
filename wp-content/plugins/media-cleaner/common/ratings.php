@@ -1,8 +1,8 @@
 <?php
 
-if ( !class_exists( 'MeowCommon_Classes_Ratings' ) ) {
+if ( !class_exists( 'MeowCommon_Ratings' ) ) {
 
-	class MeowCommon_Classes_Ratings {
+	class MeowCommon_Ratings {
 
 		public $mainfile; 	// plugin main file (media-file-renamer.php)
 		public $domain; 		// domain used for translation (media-file-renamer)
@@ -58,15 +58,15 @@ if ( !class_exists( 'MeowCommon_Classes_Ratings' ) ) {
 				return;
 			}
 			$rating_date = get_option( $this->prefix . '_rating_date' );
-			echo '<div class="notice notice-success" data-rating-date="' . date( 'Y-m-d', $rating_date ) . '">';
-				echo '<p style="font-size: 100%;">';
-				printf(
-					// translators: %1$s is a plugin nicename, %2$s is a short url (slug)
-					__( 'You have been using <b>%1$s</b> for some time now. Thank you! Could you kindly share your opinion with me, along with, maybe, features you would like to see implemented? Then, please <a style="font-weight: bold; color: #b926ff;" target="_blank" href="https://wordpress.org/support/plugin/%2$s/reviews/?rate=5#new-post">write a little review</a>. That will also bring me joy and motivation! I will get back to you :)', $this->domain ),
-					$this->nice_name_from_file( $this->mainfile ),
-					$this->nice_short_url_from_file( $this->mainfile )
-				);
-			echo '<p>
+			$html = '<div class="notice notice-success" data-rating-date="' . date( 'Y-m-d', $rating_date ) . '">';
+			$html .= '<p style="font-size: 100%;">';
+			$html .= sprintf(
+				// translators: %1$s is a plugin nicename, %2$s is a short url (slug)
+				__( 'You have been using <b>%1$s</b> for some time now. Thank you! Could you kindly share your opinion with me, along with, maybe, features you would like to see implemented? Then, please <a style="font-weight: bold; color: #b926ff;" target="_blank" href="https://wordpress.org/support/plugin/%2$s/reviews/?rate=5#new-post">write a little review</a>. That will also bring me joy and motivation! I will get back to you :)', $this->domain ),
+				$this->nice_name_from_file( $this->mainfile ),
+				$this->nice_short_url_from_file( $this->mainfile )
+			);
+			$html .= '<p>
 				<form method="post" action="" style="float: right;">
 					<input type="hidden" name="' . $this->prefix . '_never_remind_me" value="true">
 					<input type="submit" name="submit" id="submit" class="button button-red" value="'
@@ -83,9 +83,9 @@ if ( !class_exists( 'MeowCommon_Classes_Ratings' ) ) {
 					. __( 'Yes, I did it!', $this->domain ) . '">
 				</form>
 				<div style="clear: both;"></div>
-			</p>
-			';
-			echo '</div>';
+			</p>';
+			$html .= '</div>';
+			wp_kses_post( $html );
 		}
 
 		function nice_short_url_from_file( $file ) {

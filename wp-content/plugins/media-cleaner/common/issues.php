@@ -1,8 +1,8 @@
 <?php
 
-if ( !class_exists( 'MeowCommon_Classes_Issues' ) ) {
+if ( !class_exists( 'MeowCommon_Issues' ) ) {
 
-  class MeowCommon_Classes_Issues {
+  class MeowCommon_Issues {
 
     public function __construct( $prefix, $mainfile, $domain ) {
       $this->check_plugins();

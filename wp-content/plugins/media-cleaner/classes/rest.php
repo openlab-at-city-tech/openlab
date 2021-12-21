@@ -18,32 +18,42 @@ class Meow_WPMC_Rest
 			// SETTINGS
 			register_rest_route( $this->namespace, '/enable_trash_media', array(
 				'methods' => 'POST',
+				'permission_callback' => array( $this->core, 'can_access_settings' ),
 				'callback' => array( $this, 'rest_enable_trash_media' )
 			) );
 			register_rest_route( $this->namespace, '/update_option', array(
 				'methods' => 'POST',
+				'permission_callback' => array( $this->core, 'can_access_features' ),
 				'callback' => array( $this, 'rest_update_option' )
 			) );
 			register_rest_route( $this->namespace, '/all_settings', array(
 				'methods' => 'GET',
+				'permission_callback' => array( $this->core, 'can_access_features' ),
 				'callback' => array( $this, 'rest_all_settings' ),
 			) );
 
 			// STATS & LISTING
 			register_rest_route( $this->namespace, '/count', array(
 				'methods' => 'POST',
+				'permission_callback' => array( $this->core, 'can_access_features' ),
 				'callback' => array( $this, 'rest_count' )
 			) );
 			register_rest_route( $this->namespace, '/all_ids', array(
 				'methods' => 'POST',
+				'permission_callback' => array( $this->core, 'can_access_features' ),
 				'callback' => array( $this, 'rest_all_ids' ),
 			) );
 			register_rest_route( $this->namespace, '/stats', array(
 				'methods' => 'GET',
+				'permission_callback' => array( $this->core, 'can_access_features' ),
 				'callback' => array( $this, 'rest_get_stats' ),
+				'args' => array(
+					'search' => array( 'required' => false ),
+				)
 			) );
 			register_rest_route( $this->namespace, '/entries', array(
 				'methods' => 'GET',
+				'permission_callback' => array( $this->core, 'can_access_features' ),
 				'callback' => array( $this, 'rest_entries' ),
 				'args' => array(
 					'limit' => array( 'required' => false, 'default' => 10 ),
@@ -58,50 +68,61 @@ class Meow_WPMC_Rest
 			// ACTIONS
 			register_rest_route( $this->namespace, '/set_ignore', array(
 				'methods' => 'POST',
+				'permission_callback' => array( $this->core, 'can_access_features' ),
 				'callback' => array( $this, 'rest_set_ignore' )
 			) );
 			register_rest_route( $this->namespace, '/delete', array(
 				'methods' => 'POST',
+				'permission_callback' => array( $this->core, 'can_access_features' ),
 				'callback' => array( $this, 'rest_delete' )
 			) );
 			register_rest_route( $this->namespace, '/recover', array(
 				'methods' => 'POST',
+				'permission_callback' => array( $this->core, 'can_access_features' ),
 				'callback' => array( $this, 'rest_recover' )
 			) );
 			register_rest_route( $this->namespace, '/reset_db', array(
 				'methods' => 'POST',
+				'permission_callback' => array( $this->core, 'can_access_features' ),
 				'callback' => array( $this, 'rest_reset_db' )
 			) );
 
 			// SCAN
 			register_rest_route( $this->namespace, '/reset_issues', array(
 				'methods' => 'POST',
+				'permission_callback' => array( $this->core, 'can_access_features' ),
 				'callback' => array( $this, 'rest_reset_issues' )
 			) );
 			register_rest_route( $this->namespace, '/extract_references', array(
 				'methods' => 'POST',
+				'permission_callback' => array( $this->core, 'can_access_features' ),
 				'callback' => array( $this, 'rest_extract_references' )
 			) );
 			register_rest_route( $this->namespace, '/retrieve_medias', array(
 				'methods' => 'POST',
+				'permission_callback' => array( $this->core, 'can_access_features' ),
 				'callback' => array( $this, 'rest_retrieve_medias' )
 			) );
 			register_rest_route( $this->namespace, '/retrieve_files', array(
 				'methods' => 'POST',
+				'permission_callback' => array( $this->core, 'can_access_features' ),
 				'callback' => array( $this, 'rest_retrieve_files' )
 			) );
 			register_rest_route( $this->namespace, '/check_targets', array(
 				'methods' => 'POST',
+				'permission_callback' => array( $this->core, 'can_access_features' ),
 				'callback' => array( $this, 'rest_check_targets' )
 			) );
 
 			// LOGS
 			register_rest_route( $this->namespace, '/refresh_logs', array(
 				'methods' => 'POST',
+				'permission_callback' => array( $this->core, 'can_access_features' ),
 				'callback' => array( $this, 'refresh_logs' )
 			) );
 			register_rest_route( $this->namespace, '/clear_logs', array(
 				'methods' => 'POST',
+				'permission_callback' => array( $this->core, 'can_access_features' ),
 				'callback' => array( $this, 'clear_logs' )
 			) );
 		} 
@@ -170,15 +191,16 @@ class Meow_WPMC_Rest
 	function rest_all_ids( $request ) {
 		$params = $request->get_json_params();
 		$src = isset( $params['source'] ) ? $params['source'] : null;
+		$search = isset( $params['search'] ) ? $params['search'] : null;
 		$ids = [];
 		if ( $src === 'issues' ) {
-			$ids = $this->get_issues_ids();
+			$ids = $this->get_issues_ids($search);
 		}
 		else if ( $src === 'ignored' ) {
-			$ids = $this->get_ignored_ids();
+			$ids = $this->get_ignored_ids($search);
 		}
 		else if ( $src === 'trash' ) {
-			$ids = $this->get_trash_ids();
+			$ids = $this->get_trash_ids($search);
 		}
 		else {
 			return new WP_REST_Response( [ 
@@ -245,7 +267,8 @@ class Meow_WPMC_Rest
 		$params = $request->get_json_params();
 		$limit = isset( $params['limit'] ) ? $params['limit'] : 0;
 		$limitsize = get_option( 'wpmc_medias_buffer', 100 );
-		$results = $this->engine->get_media_entries( $limit, $limitsize );
+		$unattachedOnly = get_option( 'wpmc_attach_is_use', false );
+		$results = $this->engine->get_media_entries( $limit, $limitsize, $unattachedOnly );
 		$finished = count( $results ) < $limitsize;
 		$message = sprintf( __( "Retrieved %d targets.", 'media-cleaner' ), count( $results ) );
 		return new WP_REST_Response( [ 
@@ -418,6 +441,10 @@ class Meow_WPMC_Rest
 		$params = $request->get_json_params();
 		try {
 			$name = $params['name'];
+			$options = $this->admin->list_options();
+			if ( !array_key_exists( $name, $options ) ) {
+				return new WP_REST_Response([ 'success' => false, 'message' => 'This option does not exist.' ], 200 );
+			}
 			$value = is_bool( $params['value'] ) ? ( $params['value'] ? '1' : '' ) : $params['value'];
 			$success = update_option( $name, $value );
 			if ( $success ) {
@@ -455,15 +482,15 @@ class Meow_WPMC_Rest
 		$whereSql = '';
 		if ( $filterBy == 'issues' ) {
 			$whereSql = 'WHERE ignored = 0 AND deleted = 0';
-			$total = $this->count_issues();
+			$total = $this->count_issues($search);
 		}
 		else if ( $filterBy == 'ignored' ) {
 			$whereSql = 'WHERE ignored = 1';
-			$total = $this->count_ignored();
+			$total = $this->count_ignored($search);
 		}
 		else if ( $filterBy == 'trash' ) {
 			$whereSql = 'WHERE deleted = 1';
-			$total = $this->count_trash();
+			$total = $this->count_trash($search);
 		}
 		else {
 			$whereSql = 'WHERE deleted = 0';
@@ -608,51 +635,60 @@ class Meow_WPMC_Rest
 		return ['result' => $result, 'message' => $message];
 	}
 
-	function get_issues_ids() {
+	function get_issues_ids($search) {
 		global $wpdb;
+		$whereSql = empty($search) ? '' : $wpdb->prepare("AND path LIKE %s", ( '%' . $search . '%' ));
 		$table_scan = $wpdb->prefix . "mclean_scan";
-		return $wpdb->get_col( "SELECT ID FROM $table_scan WHERE ignored = 0 AND deleted = 0" );
+		return $wpdb->get_col( "SELECT ID FROM $table_scan WHERE ignored = 0 AND deleted = 0 $whereSql" );
 	}
 
-	function get_ignored_ids() {
+	function get_ignored_ids($search) {
 		global $wpdb;
+		$whereSql = empty($search) ? '' : $wpdb->prepare("AND path LIKE %s", ( '%' . $search . '%' ));
 		$table_scan = $wpdb->prefix . "mclean_scan";
-		return $wpdb->get_col( "SELECT ID FROM $table_scan WHERE ignored = 1" );
+		return $wpdb->get_col( "SELECT ID FROM $table_scan WHERE ignored = 1 $whereSql" );
 	}
 
-	function get_trash_ids() {
+	function get_trash_ids($search) {
 		global $wpdb;
+		$whereSql = empty($search) ? '' : $wpdb->prepare("AND path LIKE %s", ( '%' . $search . '%' ));
 		$table_scan = $wpdb->prefix . "mclean_scan";
-		return $wpdb->get_col( "SELECT ID FROM $table_scan WHERE deleted = 1" );
+		return $wpdb->get_col( "SELECT ID FROM $table_scan WHERE deleted = 1 $whereSql" );
 	}
 
-	function count_issues() {
+	function count_issues($search) {
 		global $wpdb;
+		$whereSql = empty($search) ? '' : $wpdb->prepare("AND path LIKE %s", ( '%' . $search . '%' ));
 		$table_scan = $wpdb->prefix . "mclean_scan";
-		return (int)$wpdb->get_var( "SELECT COUNT(*) FROM $table_scan WHERE ignored = 0 AND deleted = 0" );
+		return (int)$wpdb->get_var( "SELECT COUNT(*) FROM $table_scan WHERE ignored = 0 AND deleted = 0 $whereSql" );
 	}
 
-	function count_ignored() {
+	function count_ignored($search) {
 		global $wpdb;
+		$whereSql = empty($search) ? '' : $wpdb->prepare("AND path LIKE %s", ( '%' . $search . '%' ));
 		$table_scan = $wpdb->prefix . "mclean_scan";
-		return (int)$wpdb->get_var( "SELECT COUNT(*) FROM $table_scan WHERE ignored = 1" );
+		return (int)$wpdb->get_var( "SELECT COUNT(*) FROM $table_scan WHERE ignored = 1 $whereSql" );
 	}
 
-	function count_trash() {
+	function count_trash($search) {
 		global $wpdb;
+		$whereSql = empty($search) ? '' : $wpdb->prepare("AND path LIKE %s", ( '%' . $search . '%' ));
 		$table_scan = $wpdb->prefix . "mclean_scan";
-		return (int)$wpdb->get_var( "SELECT COUNT(*) FROM $table_scan WHERE deleted = 1" );
+		return (int)$wpdb->get_var( "SELECT COUNT(*) FROM $table_scan WHERE deleted = 1 $whereSql" );
 	}
 
-	function rest_get_stats() {
+	function rest_get_stats($request) {
+		$search = sanitize_text_field( $request->get_param('search') );
+
 		global $wpdb;
+		$whereSql = empty($search) ? '' : $wpdb->prepare("AND path LIKE %s", ( '%' . $search . '%' ));
 		$table_scan = $wpdb->prefix . "mclean_scan";
 		$issues = $wpdb->get_row( "SELECT COUNT(*) as entries, SUM(size) as size
-			FROM $table_scan WHERE ignored = 0 AND deleted = 0" );
+			FROM $table_scan WHERE ignored = 0 AND deleted = 0 $whereSql" );
 		$ignored = (int)$wpdb->get_var( "SELECT COUNT(*) 
-			FROM $table_scan WHERE ignored = 1" );
+			FROM $table_scan WHERE ignored = 1 $whereSql" );
 		$trash = $wpdb->get_row( "SELECT COUNT(*) as entries, SUM(size) as size
-			FROM $table_scan WHERE deleted = 1" );
+			FROM $table_scan WHERE deleted = 1 $whereSql" );
 
 		return new WP_REST_Response( [ 'success' => true, 'data' => array(
 			'issues' => $issues->entries,
