@@ -1,0 +1,105 @@
+/* External Dependancies */
+@import '../../node_modules/bootstrap/dist/css/bootstrap-grid.css';
+@import './about.css';
+
+.egf-font-control-property {
+  max-width: 500px;
+}
+
+.egf-settings__force-style .components-base-control__help {
+  margin-top: 8px;
+}
+
+.egf-settings__api-key .components-base-control__help {
+  margin: 0;
+}
+
+/* Manage Font Controls */
+.egf-manage-font-controls__font-control-name a {
+  color: #444;
+  text-decoration: none;
+}
+
+.egf-manage-font-controls__font-control .components-base-control__field {
+  margin: 0;
+}
+
+.egf-manage-font-controls__font-control .components-spinner {
+  margin: 0;
+}
+
+.egf-manage-font-controls__actions .components-spinner {
+  margin: 0;
+  margin-left: 0.5rem;
+}
+
+/* Font controls selector */
+.egf-font-control-selector .components-base-control__field {
+  margin: 0;
+}
+
+.egf-font-control-selector .components-select-control__input {
+  min-height: 36px;
+}
+
+/* Toast Component */
+.react-toast-notifications__toast {
+  border-radius: 2px !important;
+}
+
+.react-toast-notifications__toast__content {
+  padding: 10px 12px !important;
+  font-size: 13px !important;
+  line-height: 1.5 !important;
+}
+
+.react-toast-notifications__toast__icon-wrapper {
+  padding-top: 10px !important;
+  padding-bottom: 10px !important;
+  border-top-left-radius: 2px !important;
+  border-bottom-left-radius: 2px !important;
+}
+
+.react-toast-notifications__toast__dismiss-button {
+  padding-top: 10px !important;
+  padding-bottom: 10px !important;
+}
+
+/* Toast: Info */
+.react-toast-notifications__toast--info .react-toast-notifications__toast__icon-wrapper {
+  background-color: var(--wp-admin-theme-color);
+}
+
+.react-toast-notifications__toast--info .react-toast-notifications__toast__content {
+  color: #444;
+}
+
+/* Toast: Success */
+.react-toast-notifications__toast.react-toast-notifications__toast--success {
+  background-color: #eff9f1;
+  color: #1b5e20;
+}
+
+.react-toast-notifications__toast--success .react-toast-notifications__toast__icon-wrapper {
+  background-color: #4ab866;
+}
+
+/* Toast: Warning */
+.react-toast-notifications__toast.react-toast-notifications__toast--warning {
+  background-color: #fef8ee;
+  color: #ff9a00;
+}
+
+.react-toast-notifications__toast--warning .react-toast-notifications__toast__icon-wrapper {
+  background-color: #f0b849;
+}
+
+/* Toast: Error */
+.react-toast-notifications__toast.react-toast-notifications__toast--error {
+  background-color: #f9e2e2;
+  color: #c62828;
+}
+
+.react-toast-notifications__toast--error .react-toast-notifications__toast__icon-wrapper {
+  background-color: #d94f4f;
+}

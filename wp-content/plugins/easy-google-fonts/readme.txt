@@ -2,9 +2,10 @@
 Contributors: sunny_johal, amit_kayasth
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=28M8NWPHVQNYU
 Tags: WordPress Google Fonts Plugin, Google Webfonts, Google Fonts WordPress, Typography, Webfonts, WordPress Webfonts, Fonts, WordPress Fonts, Theme Fonts, Theme Fonts Plugin
-Requires at least: 5.0
-Tested up to: 5.0
-Stable tag: 1.4.4
+Requires PHP: 7.0.0
+Requires at least: 5.8
+Tested up to: 5.8
+Stable tag: 2.0.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -13,7 +14,9 @@ Adds google fonts to any theme without coding and integrates with the WordPress 
 == Description ==
 > **Our new WordPress theme is almost ready!** Want to know when we launch? Awesome! [Visit our website](http://www.titaniumthemes.com) and enter your details and we will e-mail you as soon as we are ready :)
 
-For a quick video demo please view the [vimeo screencast](https://vimeo.com/77878709).
+[View Plugin Demo Here](https://www.youtube.com/watch?v=Qk9z7S6J9Yo)
+
+https://www.youtube.com/watch?v=Qk9z7S6J9Yo
 
 [Follow us on twitter!](https://twitter.com/titaniumthemes)
 
@@ -58,17 +61,13 @@ It also allows you to create custom theme specific font controls in the admin se
 **Please note:** We are currently working on producing in-depth documentation for theme developers which will be available shortly. 
 
 * **Cross Browser and Backwards Browser Compatible** (Tested in all major browsers).
-* Already tested and works in WordPress 4.1.
 * **Uses Action Hooks and Filters:** For advanced integration.
 * **Seamless WordPress Integration:**  Live preview is integrated into the WordPress Customizer and the settings page follows core WordPress design guidelines.
 * Uses the WordPress **Options API** to store and retrieve options.
 * **Highly Secure:** Checks user permissions, uses nonces and the WordPress Security API.
-* Uses the Screen Options API and Ajax to allow you to easily show/hide metaboxes on the admin page.
-* **Rock solid, Robust Code:** handcoded, tested and beautifully formatted in Sublime Text.
-* **Uses WP Ajax** for an enhanced admin experience.
-* Fully Commented Source Code.
+* **Uses the REST API** for an enhanced admin experience.
 * Strong Usability Testing.
-* **Enhanced Performance:** Will only load a particular google font (using wp_enqueue_script()) once and uses the **Transients API** in the admin area.
+* **Enhanced Performance:** Will only make a single request to google to fetch all fonts.
 
 
 == Installation ==
@@ -85,17 +84,40 @@ e.g.
 
 == Screenshots ==
 
-1. Plugin Overview.
-2. Before and After.
-3. Live Customizer Font Control Preview - Font Styles Tab.
-4. Choose from over 600+ Google Fonts and preview them instantly without refreshing the page.
-5. Change font color in realtime.
-6. Create your own font controls for your theme.
-7. Manage any CSS Selector with your custom font controls.
+1. Before: The page before we have used the plugin to change the font.
+2. After: The page after we have used the plugin to change the heading 1 font.
+3. Live Customizer Font Control Preview: Choose from over 600+ Google Fonts and preview them instantly without refreshing the page.
+4. Font Style Tab: Customize all styles of the font including the color, background, font size, line height etc.
+5. Font Position Tab: Customize all position properties of the font including the margin, padding, border, display etc.
+6. Create Screen: Create your own font controls for your theme.
+7. Edit Screen: Manage any existing font controls for your theme.
 8. Your custom control is instantly available for real time preview in the customizer. No coding required!
 9. View and manage all of your custom controls in the admin area.
+10. Plugin Settings: If you enter a valid google fonts api key then this plugin will update itself with the latest fonts automatically.
 
 == Changelog ==
+= 2.0.4 JS API =
+* Added fallback for sanitization functions when no font key is selected.
+
+= 2.0.3 Bugfix and Backwards Compatibilty =
+* Bugfix: Tuples needed to be sorted in the google fonts url when the stylesheet url was being generated.
+* Added complete support for the old tabs based api.
+
+= 2.0.2 =
+* Backwards Compatibilty: Added backwards compatibility for old theme integrations.
+
+= 2.0.1 =
+* Bugfix: Google stylesheet url requires font weights to be sorted in ascending order.
+
+= 2.0.0 =
+* Complete plugin codebase rewrite.
+* Font controls/styles now support media queries.
+* New Admin UI.
+* New Customizer UI (now uses react js components).
+* Live customizer preview has been rewritten to be more performant (by handling subsettings for each font control individually).
+* Frontend query for font controls has been optimised for performance.
+* Removed unnessary WordPress filters.
+
 = 1.4.4 - WordPress 5.0 compatibility update =
 * Updated webfonts.json with the latest google fonts.
 * Last minor update before major rewrite.
@@ -191,12 +213,11 @@ e.g.
 Nothing to see here...
 
 == Frequently Asked Questions ==
-For a quick video demo please view the [vimeo screencast](https://vimeo.com/77878709).
+For a quick video demo please view the [youtube screencast](https://www.youtube.com/watch?v=Qk9z7S6J9Yo&t=36s).
 
 == Credits and Donation ==
 
-* [Tag-it jQuery plugin](http://aehlke.github.io/tag-it/) by Alex Ehlke. (Used in the admin settings page)
-* Chip Bennet's Oenology Theme. Alot of inspiration for best practices and WordPress Customizer integration taken from this theme.
-* Otherwise, this plugin has been entirely written from scratch in Sublime Text by Titanium Themes with some code taken solely from WordPress core.
+* [WordPress Components](https://developer.wordpress.org/block-editor/reference-guides/components/). (Used in the admin settings page)
+* Otherwise, this plugin has been entirely written from scratch by Titanium Themes.
 
 If you have found this plugin useful please [donate here](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=28M8NWPHVQNYU)
