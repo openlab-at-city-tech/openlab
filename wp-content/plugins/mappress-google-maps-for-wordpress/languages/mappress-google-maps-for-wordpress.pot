@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the MapPress Maps for WordPress plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: MapPress Maps for WordPress 2.64.2\n"
+"Project-Id-Version: MapPress Maps for WordPress 2.73.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/mappress-google-maps-for-wordpress\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2021-06-30T17:06:27+00:00\n"
+"POT-Creation-Date: 2021-12-18T01:55:29+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.4.0\n"
 
@@ -18,7 +18,8 @@ msgid "MapPress Maps for WordPress"
 msgstr ""
 
 #. Plugin URI of the plugin
-msgid "https://www.mappresspro.com/mappress"
+#. Author URI of the plugin
+msgid "https://www.mappresspro.com"
 msgstr ""
 
 #. Description of the plugin
@@ -29,267 +30,247 @@ msgstr ""
 msgid "Chris Richardson"
 msgstr ""
 
-#. Author URI of the plugin
-msgid "https://www.mappresspro.com/chris-contact"
-msgstr ""
-
-#: mappress.php:223
-#: mappress.php:791
+#: mappress.php:194
+#: mappress.php:794
 msgid "Settings"
 msgstr ""
 
-#: mappress.php:224
-msgid "Map Library"
+#: mappress.php:195
+msgid "Maps"
 msgstr ""
 
-#: mappress.php:225
+#: mappress.php:196
 msgid "Support"
 msgstr ""
 
-#: mappress.php:236
+#: mappress.php:207
 msgid "MapPress database tables are missing.  Please deactivate the plugin and activate it again to fix this."
 msgstr ""
 
-#: mappress.php:241
+#: mappress.php:212
 msgid "A Google Maps API key is required"
 msgstr ""
 
-#: mappress.php:241
+#: mappress.php:212
 msgid "Please update your"
 msgstr ""
 
-#: mappress.php:241
+#: mappress.php:212
 msgid "MapPress Settings"
 msgstr ""
 
-#: mappress.php:534
-msgid "renew your license"
+#: mappress.php:507
+msgid "Renew your license"
 msgstr ""
 
-#: mappress.php:535
-msgid "Your MapPress license has expired.  Please %s to get the latest updates and prevent errors."
+#: mappress.php:509
+msgid "Your MapPress license has expired.  %s to get the latest updates and prevent errors."
 msgstr ""
 
-#: mappress.php:544
+#: mappress.php:518
 msgid "Please enter your MapPress license key to enable plugin updates"
 msgstr ""
 
-#: mappress.php:548
+#: mappress.php:522
 msgid "MapPress Gutenberg blocks require WordPress 5.3 or the latest Gutenberg Plugin. Please update if using the block editor."
 msgstr ""
 
-#: mappress.php:552
+#: mappress.php:526
 msgid "MapPress has many new features!  %s."
 msgstr ""
 
-#: mappress.php:552
-#: mappress.php:556
-#: mappress.php:560
+#: mappress.php:526
+#: mappress.php:530
+#: mappress.php:534
 msgid "Learn more"
 msgstr ""
 
-#: mappress.php:556
+#: mappress.php:530
 msgid "MapPress popup templates have changed!  Please update custom templates to the new format. %s."
 msgstr ""
 
-#: mappress.php:560
+#: mappress.php:534
 msgid "MapPress templates and filters have changed.  Please update custom templates and filters. %s."
 msgstr ""
 
-#: mappress.php:625
+#: mappress.php:611
 msgid "Are you sure you want to delete?"
 msgstr ""
 
-#: mappress.php:626
-msgid "Permanently delete this map from the map library?"
+#: mappress.php:612
+msgid "Permanently delete this map?"
 msgstr ""
 
-#: mappress.php:627
+#: mappress.php:613
 msgid "Error reading KML file"
 msgstr ""
 
-#: mappress.php:628
+#: mappress.php:614
 msgid "URL for KML file"
 msgstr ""
 
-#: mappress.php:629
-msgid "Loading"
-msgstr ""
-
-#: mappress.php:630
+#: mappress.php:615
 msgid "Please select an editor to insert into."
 msgstr ""
 
-#: mappress.php:631
+#: mappress.php:616
 msgid "Unable to get your location"
 msgstr ""
 
-#: mappress.php:632
+#: mappress.php:617
 msgid "No results"
 msgstr ""
 
-#: mappress.php:633
+#: mappress.php:618
 msgid "Save changes?"
 msgstr ""
 
-#: mappress.php:634
+#: mappress.php:619
 msgid "Shape"
 msgstr ""
 
-#: mappress.php:664
-#: mappress.php:673
+#: mappress.php:651
+#: mappress.php:660
 msgid "Streets"
 msgstr ""
 
-#: mappress.php:665
+#: mappress.php:652
 msgid "Outdoors"
 msgstr ""
 
-#: mappress.php:666
+#: mappress.php:653
 msgid "Light"
 msgstr ""
 
-#: mappress.php:667
+#: mappress.php:654
 msgid "Dark"
 msgstr ""
 
+#: mappress.php:655
 #: mappress.php:668
-#: mappress.php:681
 msgid "Satellite"
 msgstr ""
 
-#: mappress.php:669
+#: mappress.php:656
 msgid "Satellite Streets"
 msgstr ""
 
-#: mappress.php:679
+#: mappress.php:666
 msgid "Roadmap"
 msgstr ""
 
-#: mappress.php:680
+#: mappress.php:667
 msgid "Terrain"
 msgstr ""
 
-#: mappress.php:682
+#: mappress.php:669
 msgid "Hybrid"
 msgstr ""
 
-#: mappress.php:792
-#: mappress_settings.php:380
-#: mappress_settings.php:406
+#: mappress.php:795
+#: mappress_settings.php:424
+#: mappress_settings.php:455
 msgid "What's new"
 msgstr ""
 
-#: mappress.php:1041
+#: mappress.php:1103
 msgid "Version"
 msgstr ""
 
 #: mappress_map.php:87
-#: mappress_settings.php:375
-#: mappress_settings.php:401
+#: mappress_settings.php:419
+#: mappress_settings.php:450
 msgid "MapPress"
 msgstr ""
 
-#: mappress_map.php:97
+#: mappress_map.php:96
 msgid "Untitled"
 msgstr ""
 
-#: mappress_map.php:98
+#: mappress_map.php:97
 msgid "Copy of %s"
 msgstr ""
 
-#: mappress_map.php:202
+#: mappress_map.php:199
 msgid "Map not found"
 msgstr ""
 
-#: mappress_map.php:245
+#: mappress_map.php:242
 msgid "Post not found"
 msgstr ""
 
-#: mappress_settings.php:182
+#: mappress_settings.php:255
 msgid "Default"
 msgstr ""
 
-#: mappress_settings.php:230
+#: mappress_settings.php:291
 msgid "Maps for WordPress"
 msgstr ""
 
-#: mappress_settings.php:254
-msgid "Active"
-msgstr ""
-
-#: mappress_settings.php:257
-msgid "Communication error, please try again later: %s"
-msgstr ""
-
-#: mappress_settings.php:259
-msgid "License is invalid or expired"
-msgstr ""
-
-#: mappress_settings.php:267
+#: mappress_settings.php:311
 msgid "Address line "
 msgstr ""
 
-#: mappress_settings.php:268
+#: mappress_settings.php:312
 msgid "Latitude"
 msgstr ""
 
-#: mappress_settings.php:268
+#: mappress_settings.php:312
 msgid "Longitude"
 msgstr ""
 
-#: mappress_settings.php:268
+#: mappress_settings.php:312
 #: mappress_template.php:37
 msgid "Title"
 msgstr ""
 
-#: mappress_settings.php:268
+#: mappress_settings.php:312
 #: mappress_template.php:34
 msgid "Body"
 msgstr ""
 
-#: mappress_settings.php:268
+#: mappress_settings.php:312
 #: mappress_template.php:35
 msgid "Icon"
 msgstr ""
 
-#: mappress_settings.php:268
+#: mappress_settings.php:312
 msgid "Zoom"
 msgstr ""
 
-#: mappress_settings.php:357
+#: mappress_settings.php:401
 msgid "OK, you deserve it!"
 msgstr ""
 
-#: mappress_settings.php:358
+#: mappress_settings.php:402
 msgid "Nope, maybe later"
 msgstr ""
 
-#: mappress_settings.php:359
+#: mappress_settings.php:403
 msgid "I need help using the plugin"
 msgstr ""
 
-#: mappress_settings.php:361
+#: mappress_settings.php:405
 msgid "Help Spread the Word"
 msgstr ""
 
-#: mappress_settings.php:362
+#: mappress_settings.php:406
 msgid "Hi, I hope you're enjoying MapPress.  Would you mind taking a moment to write a brief review?  It would mean a lot to me!"
 msgstr ""
 
-#: mappress_settings.php:379
-#: mappress_settings.php:405
-#: templates/map.php:62
+#: mappress_settings.php:423
+#: mappress_settings.php:454
+#: templates/map.php:72
 msgid "Get help"
 msgstr ""
 
-#: mappress_settings.php:382
-#: mappress_settings.php:408
+#: mappress_settings.php:426
+#: mappress_settings.php:457
 msgid "Your account"
 msgstr ""
 
-#: mappress_settings.php:384
-#: mappress_settings.php:410
+#: mappress_settings.php:428
+#: mappress_settings.php:459
 msgid "Upgrade to MapPress Pro"
 msgstr ""
 
@@ -306,21 +287,19 @@ msgid "Url"
 msgstr ""
 
 #: mappress_template.php:39
-#: pro/mappress_filter.php:192
 msgid "Custom Field"
 msgstr ""
 
-#: pro/mappress_filter.php:84
-#: pro/mappress_filter.php:205
+#: pro/mappress_filter.php:77
+msgid "All"
+msgstr ""
+
+#: pro/mappress_filter.php:119
 msgid "Post type"
 msgstr ""
 
-#: pro/mappress_filter.php:192
-msgid "Taxonomy"
-msgstr ""
-
-#: pro/mappress_filter.php:192
-msgid "Post field"
+#: pro/mappress_filter.php:123
+msgid "Text search"
 msgstr ""
 
 #: pro/mappress_geocoder.php:29
@@ -328,29 +307,29 @@ msgid "Invalid geocoder: %s"
 msgstr ""
 
 #: pro/mappress_geocoder.php:59
-#: pro/mappress_geocoder.php:110
-#: pro/mappress_geocoder.php:147
-#: pro/mappress_geocoder.php:192
+#: pro/mappress_geocoder.php:112
+#: pro/mappress_geocoder.php:149
+#: pro/mappress_geocoder.php:194
 msgid "No results for address: %s"
 msgstr ""
 
-#: pro/mappress_geocoder.php:82
-msgid "Server API Key is missing - see MapPress Settings"
+#: pro/mappress_geocoder.php:84
+msgid "API Key is missing - see MapPress Settings"
 msgstr ""
 
-#: pro/mappress_geocoder.php:100
+#: pro/mappress_geocoder.php:102
 msgid "Invalid status: %s, %s Address: %s"
 msgstr ""
 
-#: pro/mappress_geocoder.php:221
+#: pro/mappress_geocoder.php:223
 msgid "Error: %s %s"
 msgstr ""
 
-#: pro/mappress_geocoder.php:226
+#: pro/mappress_geocoder.php:228
 msgid "Invalid JSON from Geocoding service: %s"
 msgstr ""
 
-#: pro/mappress_icons.php:131
+#: pro/mappress_icons.php:146
 msgid "Files error: "
 msgstr ""
 
@@ -429,61 +408,68 @@ msgstr ""
 msgid "Get Directions"
 msgstr ""
 
-#: templates/map-filters.php:14
-msgid "Done"
+#: templates/map-filters.php:3
+msgid "Filter"
 msgstr ""
 
-#: templates/map-filters.php:15
+#: templates/map-filters.php:12
 msgid "Reset"
+msgstr ""
+
+#: templates/map-filters.php:14
+msgid "Done"
 msgstr ""
 
 #: templates/map-loop.php:3
 msgid "Results"
 msgstr ""
 
-#: templates/map-loop.php:36
+#: templates/map-loop.php:29
 msgid "%d of %d"
 msgstr ""
 
-#: templates/map.php:16
-#: templates/map.php:39
+#: templates/map.php:13
 msgid "Your Location"
 msgstr ""
 
-#: templates/map.php:37
+#: templates/map.php:33
 msgid "Search"
 msgstr ""
 
-#: templates/map.php:44
-msgid "Filter"
+#: templates/map.php:33
+msgid "Enter an address, place, KML file URL, or lat,lng"
 msgstr ""
 
-#: templates/map.php:53
+#: templates/map.php:36
+msgid "Add to map"
+msgstr ""
+
+#: templates/map.php:63
 msgid "Menu"
 msgstr ""
 
-#: templates/map.php:55
+#: templates/map.php:65
 msgid "Center map"
 msgstr ""
 
-#: templates/map.php:58
+#: templates/map.php:68
 msgid "Traffic"
 msgstr ""
 
-#: templates/map.php:59
+#: templates/map.php:69
 msgid "Bicycling"
 msgstr ""
 
-#: templates/map.php:60
+#: templates/map.php:70
 msgid "Transit"
 msgstr ""
 
-#: templates/map.php:71
-msgid "Show List"
+#: templates/map.php:81
+msgid "List"
 msgstr ""
 
-#: templates/map.php:72
-msgid "Show Map"
+#: templates/map.php:82
+msgid "Map"
 msgstr ""
 
 #: templates/mashup-modal.php:18
