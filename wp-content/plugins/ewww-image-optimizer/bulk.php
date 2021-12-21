@@ -33,7 +33,7 @@ function ewww_image_optimizer_display_tools() {
 		update_option( 'ewwwio_stop_scheduled_scan', true, false );
 	}
 	echo "<div class='wrap'>\n";
-	echo "<h1>EWWW Image Optimizer</h1>\n";
+	echo "<h1 id='ewwwio-tools-header'>EWWW Image Optimizer</h1>\n";
 
 	// Find out if the auxiliary image table has anything in it.
 	$already_optimized = ewww_image_optimizer_aux_images_table_count();
@@ -125,7 +125,7 @@ function ewww_image_optimizer_display_tools() {
 			$as3cf_remove = true;
 		}
 	}
-	if ( ! class_exists( 'S3_Uploads' ) && ! function_exists( 'ud_get_stateless_media' ) && ! $as3cf_remove ) {
+	if ( ! class_exists( 'S3_Uploads' ) && ! class_exists( 'S3_Uploads\Plugin' ) && ! function_exists( 'ud_get_stateless_media' ) && ! $as3cf_remove ) {
 		echo '<hr class="ewww-tool-divider">';
 		echo "<div>\n<p id='ewww-clean-table-info' class='ewww-tool-info'>" .
 			esc_html__( 'Older sites may have duplicate records or references to deleted files. Use the cleanup tool to remove such records.', 'ewww-image-optimizer' ) . '<br>' .
@@ -967,13 +967,11 @@ function ewww_image_optimizer_media_scan( $hook = '' ) {
 	$permissions = apply_filters( 'ewww_image_optimizer_bulk_permissions', '' );
 	if ( 'ewww-image-optimizer-cli' !== $hook && empty( $_REQUEST['ewww_scan'] ) ) {
 		ewwwio_debug_message( 'bailing no cli' );
-		ewww_image_optimizer_debug_log();
 		ewwwio_ob_clean();
 		die( wp_json_encode( array( 'error' => esc_html__( 'Access denied.', 'ewww-image-optimizer' ) ) ) );
 	}
 	if ( ! empty( $_REQUEST['ewww_scan'] ) && ( empty( $_REQUEST['ewww_wpnonce'] ) || ! wp_verify_nonce( sanitize_key( $_REQUEST['ewww_wpnonce'] ), 'ewww-image-optimizer-bulk' ) || ! current_user_can( $permissions ) ) ) {
 		ewwwio_debug_message( 'bailing no nonce' );
-		ewww_image_optimizer_debug_log();
 		ewwwio_ob_clean();
 		die( wp_json_encode( array( 'error' => esc_html__( 'Access token has expired, please reload the page.', 'ewww-image-optimizer' ) ) ) );
 	}
@@ -1187,6 +1185,7 @@ function ewww_image_optimizer_media_scan( $hook = '' ) {
 					class_exists( 'WindowsAzureStorageUtil' ) ||
 					class_exists( 'Amazon_S3_And_CloudFront' ) ||
 					class_exists( 'S3_Uploads' ) ||
+					class_exists( 'S3_Uploads\Plugin' ) ||
 					class_exists( 'wpCloud\StatelessMedia\EWWW' )
 				)
 			) {
@@ -1197,10 +1196,17 @@ function ewww_image_optimizer_media_scan( $hook = '' ) {
 					$s3_uploads = S3_Uploads::get_instance();
 					remove_filter( 'upload_dir', array( $s3_uploads, 'filter_upload_dir' ) );
 				}
+				if ( class_exists( 'S3_Uploads\Plugin' ) && method_exists( 'S3_Uploads\Plugin', 'filter_upload_dir' ) ) {
+					$s3_uploads = \S3_Uploads\Plugin::get_instance();
+					remove_filter( 'upload_dir', array( $s3_uploads, 'filter_upload_dir' ) );
+				}
 				if ( ewww_image_optimizer_stream_wrapped( $file_path ) || 0 === strpos( $file_path, 'http' ) ) {
 					$file_path = get_attached_file( $selected_id, true );
 				}
 				if ( class_exists( 'S3_Uploads' ) && method_exists( 'S3_Uploads', 'filter_upload_dir' ) ) {
+					add_filter( 'upload_dir', array( $s3_uploads, 'filter_upload_dir' ) );
+				}
+				if ( class_exists( 'S3_Uploads\Plugin' ) && method_exists( 'S3_Uploads\Plugin', 'filter_upload_dir' ) ) {
 					add_filter( 'upload_dir', array( $s3_uploads, 'filter_upload_dir' ) );
 				}
 				ewwwio_debug_message( "remote file possible: $file_path" );
@@ -1880,7 +1886,9 @@ function ewww_image_optimizer_bulk_loop( $hook = '', $delay = 0 ) {
 		$ewww_force_smart = false;
 		delete_transient( 'ewww_image_optimizer_smart_reopt' );
 	}
-	$ewww_webp_only = false;
+	if ( ! isset( $ewww_webp_only ) ) {
+		$ewww_webp_only = false;
+	}
 	if ( ! empty( $_REQUEST['ewww_webp_only'] ) ) {
 		$ewww_webp_only = true;
 	}
@@ -1893,7 +1901,7 @@ function ewww_image_optimizer_bulk_loop( $hook = '', $delay = 0 ) {
 			$output['new_nonce'] = '';
 		}
 	}
-	$batch_image_limit = ( empty( $_REQUEST['ewww_batch_limit'] ) && ! class_exists( 'S3_Uploads' ) ? 999 : 1 );
+	$batch_image_limit = ( empty( $_REQUEST['ewww_batch_limit'] ) && ! class_exists( 'S3_Uploads' ) && ! class_exists( 'S3_Uploads\Plugin' ) ? 999 : 1 );
 	// Get the 'bulk attachments' with a list of IDs remaining.
 	$attachments = ewww_image_optimizer_get_queued_attachments( 'media', $batch_image_limit );
 	if ( ! empty( $attachments ) && is_array( $attachments ) ) {
@@ -2011,11 +2019,14 @@ function ewww_image_optimizer_bulk_loop( $hook = '', $delay = 0 ) {
 
 		if ( defined( 'WP_CLI' ) && WP_CLI ) {
 			WP_CLI::line( __( 'Optimized', 'ewww-image-optimizer' ) . ' ' . $image->file );
-			WP_CLI::line( str_replace( '&nbsp;', '', $msg ) );
+			WP_CLI::line( str_replace( array( '&nbsp;', '<br>' ), array( '', "\n" ), $msg ) );
 		}
 		$output['results'] .= sprintf( '<p>' . esc_html__( 'Optimized', 'ewww-image-optimizer' ) . ' <strong>%s</strong><br>', esc_html( $image->file ) );
 		if ( ! empty( $ewwwio_resize_status ) ) {
 			$output['results'] .= esc_html( $ewwwio_resize_status ) . '<br>';
+			if ( defined( 'WP_CLI' ) && WP_CLI ) {
+				WP_CLI::line( $ewwwio_resize_status );
+			}
 		}
 		$output['results'] .= "$msg</p>";
 
@@ -2038,7 +2049,7 @@ function ewww_image_optimizer_bulk_loop( $hook = '', $delay = 0 ) {
 			if ( defined( 'WP_CLI' ) && WP_CLI ) {
 				ewwwio_debug_message( 'saving attachment meta' );
 				$meta = wp_get_attachment_metadata( $image->attachment_id );
-				if ( class_exists( 'S3_Uploads' ) ) {
+				if ( class_exists( 'S3_Uploads' ) || class_exists( 'S3_Uploads\Plugin' ) ) {
 					ewwwio_debug_message( 're-uploading to S3(_Uploads)' );
 					ewww_image_optimizer_remote_push( $meta, $image->attachment_id );
 				}
@@ -2143,7 +2154,7 @@ function ewww_image_optimizer_bulk_update_meta() {
 	$attachment_id = (int) $_REQUEST['attachment_id'];
 	ewwwio_debug_message( "saving attachment meta for $attachment_id" );
 	$meta = wp_get_attachment_metadata( $attachment_id );
-	if ( class_exists( 'S3_Uploads' ) ) {
+	if ( class_exists( 'S3_Uploads' ) || class_exists( 'S3_Uploads\Plugin' ) ) {
 		ewwwio_debug_message( 're-uploading to S3(_Uploads)' );
 		ewww_image_optimizer_remote_push( $meta, $attachment_id );
 	}
