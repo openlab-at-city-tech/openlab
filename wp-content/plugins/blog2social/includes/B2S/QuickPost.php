@@ -18,7 +18,7 @@ class B2S_QuickPost {
         if ((int) $networkId > 0 && (int) $networkAuthId > 0) {
             $postData = array('content' => '', 'custom_title' => '', 'tags' => array(), 'network_auth_id' => (int) $networkAuthId);
             //PostFormat
-            if (in_array($networkId, array(1, 2, 3, 12, 19))) {
+            if (in_array($networkId, array(1, 2, 3, 12, 19, 24))) {
                 $postData['post_format'] = $postFormat;
             }
             //Content

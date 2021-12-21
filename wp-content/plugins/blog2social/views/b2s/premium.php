@@ -32,8 +32,8 @@
                                 </p>
                                 <br>
                             <?php } ?>
-                            <p><?php esc_html_e('Upgrade to Blog2Social Premium and get even smarter with social media automation: Schedule your posts for the best time or recurringly with the Best Time Manager or the Social Media Calendar. Post to pages, groups and multiple accounts per network.', 'blog2social') ?>
-                                <a target="_blank" class="b2s-btn-link" href="<?php echo B2S_Tools::getSupportLink('affiliate'); ?>"><?php esc_html_e('Learn more', 'blog2social') ?></a></p>
+                            <p><?php esc_html_e('Use Blog2Social Premium for even smarter social media automation: schedule your posts automatically with the Best Time Manager, choose specific dates or schedule your posts recurringly. Keep track of your posts with the social media calendar. Publish posts to pages, groups and multiple accounts per network and much more.', 'blog2social') ?>
+                                <a target="_blank" class="b2s-btn-link" href="<?php echo B2S_Tools::getSupportLink('affiliate'); ?>"><?php esc_html_e('Get more information about the benefits of Blog2Social Premium', 'blog2social') ?></a></p>
                             <div class="clearfix"></div>
                             <br>
                             <div class="b2s-key-area">

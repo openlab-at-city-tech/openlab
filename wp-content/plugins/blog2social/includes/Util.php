@@ -38,9 +38,14 @@ class B2S_Util {
     }
 
     public static function getCustomDateFormat($dateTime = '0000-00-00 00:00:00', $lang = 'en', $time = true) {
-        if ($lang == 'de') {
+        $options = new B2S_Options(B2S_PLUGIN_BLOG_USER_ID);
+        $optionUserTimeFormat = $options->_getOption('user_time_format');
+        if ($optionUserTimeFormat == false) {
+            $optionUserTimeFormat = ($lang == 'de') ? 0 : 1;
+        }
+        if ($optionUserTimeFormat == 0) {
             $ident = 'd.m.Y ' . (($time) ? 'H:i' : '');
-            return date($ident, strtotime($dateTime)) . (($time) ? ' ' . __('Clock', 'blog2social') : '');
+            return date($ident, strtotime($dateTime)) . (($time && $lang == 'de') ? ' ' . __('clock', 'blog2social') : '');
         } else {
             $ident = 'Y/m/d ' . (($time) ? 'g:i a' : '');
             return date($ident, strtotime($dateTime));
@@ -67,7 +72,20 @@ class B2S_Util {
         if (!empty($url)) {
             $param = array();
             libxml_use_internal_errors(true); // Yeah if you are so worried about using @ with warnings
-            $url = $url . ((parse_url($url, PHP_URL_QUERY) ? '&' : '?') . 'no_cache=1');  //nocache
+            $hasHashtag = strpos($url, '#');
+            if ($hasHashtag == false || $hasHashtag <= 0) {
+                $url = $url . ((parse_url($url, PHP_URL_QUERY) ? '&' : '?') . 'no_cache=1');  //nocache
+            } else {
+                $subUrl = explode('#', $url);
+                if (isset($subUrl[0]) && isset($subUrl[1])) {
+                    $url = $subUrl[0] . ((parse_url($subUrl[0], PHP_URL_QUERY) ? '&' : '?') . 'no_cache=1');
+                    for ($i = 1; $i < count($subUrl); $i++) {
+                        $url .= '#' . $subUrl[$i];
+                    }
+                } else {
+                    $url = $url . ((parse_url($url, PHP_URL_QUERY) ? '&' : '?') . 'no_cache=1');  //nocache
+                }
+            }
             $html = self::b2sFileGetContents($url, true);
             if (!empty($html) && $html !== false) {
                 //Search rist Parameter
@@ -223,9 +241,11 @@ class B2S_Util {
         $matches = array();
         $homeUrl = get_site_url();
         $scheme = parse_url($homeUrl, PHP_URL_SCHEME);
-        $featuredImage = wp_get_attachment_url(get_post_thumbnail_id($postId));
+        $attachment_id = get_post_thumbnail_id($postId);
+        $featuredImage = wp_get_attachment_url($attachment_id);
+        $image_alt = get_post_meta($attachment_id, '_wp_attachment_image_alt', true);
         if ($forceFeaturedImage && $featuredImage != false && !empty($featuredImage)) {
-            return array(0 => array(0 => $featuredImage));
+            return array(0 => array(0 => $featuredImage, 1 => esc_attr($image_alt)));
         } else {
             $content = stripcslashes(self::getFullContent($postId, $postContent, $postUrl, $postLang));
             if (!preg_match_all('%<img.*?src=[\"\'](.*?)[\"\'].*?>%', $content, $matches) && !$featuredImage) {
@@ -267,7 +287,7 @@ class B2S_Util {
         }
         return $rtrnArray;
     }
-    
+
     public static function clean_html($text = '', $tags = array('style', 'script', 'noscript')) {
         if (!empty($text)) {
             if (!empty($tags)) {
@@ -277,12 +297,12 @@ class B2S_Util {
                     }
                 } else if (is_string($tags)) {
                     $text = preg_replace("/<\s*$tags\b[^>]*>(.*?)<\s*\/\s*$tags\s*>/is", '', $text);
-                }    
+                }
             }
         }
         return $text;
     }
-    
+
     public static function convertLiElements($postContent) {
         $postContent = preg_replace("/<([\s]*?)\/([\s]*?)li([\s]*?)>*?([^\n]?)*?<([\s]*?)li/", "</li>\n<li", $postContent);
         $postContent = preg_replace("/<([\s]*?)li*?([\s]*?)>/", "- ", $postContent);
@@ -300,8 +320,8 @@ class B2S_Util {
         $prepareContent = ($allowHtml !== false) ? self::cleanContent(self::cleanHtmlAttr(strip_shortcodes(self::cleanShortCodeByCaption($postContent)))) : self::cleanContent(strip_shortcodes($postContent));
         $prepareContent = ($allowEmoji !== false) ? $prepareContent : self::remove4byte($prepareContent);
         //$prepareContent = preg_replace('/(?:[ \t]*(?:\n|\r\n?)){3,}/', "\n\n", $prepareContent);
-        
-        
+
+
         if ($allowHtml !== false) {
             $prepareContent = preg_replace("/(<[\/]*)strong(>)/", "$1b$2", $prepareContent);
             $prepareContent = preg_replace("/(<[\/]*)em(>)/", "$1i$2", $prepareContent);
@@ -441,7 +461,7 @@ class B2S_Util {
             if ($max != false && mb_strlen($text, 'UTF-8') < $max) {
                 return trim($text);
             }
-            
+
             $stops = array('.', '?', '!', '#');
             $min = $count;
             $cleanTruncateWord = true;
@@ -449,7 +469,7 @@ class B2S_Util {
             if (mb_strlen($text, 'UTF-8') < $max) {
                 return trim($text);
             }
-            
+
             $sub = mb_substr($text, $min, $max, 'UTF-8');
             $stopAt = '';
             $stopAtPos = 0;
@@ -459,7 +479,7 @@ class B2S_Util {
                     $stopAtPos = mb_strripos($sub, $stops[$i]);
                 }
             }
-            
+
             if (!empty($stopAt)) {
                 if (count($subArray = explode($stopAt, $sub)) > 1) {
                     $cleanTruncateWord = false;
@@ -472,7 +492,7 @@ class B2S_Util {
                     $sub = implode($stopAt, $subArray);
                     $add = false;
                 }
-                if($stopAt == '#') {
+                if ($stopAt == '#') {
                     $sub = mb_substr($sub, 0, -1);
                 }
             }

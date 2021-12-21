@@ -2,6 +2,12 @@
 wp_nonce_field('b2s_security_nonce', 'b2s_security_nonce');
 require_once B2S_PLUGIN_DIR . 'includes/B2S/Network/Item.php';
 require_once B2S_PLUGIN_DIR . 'includes/Tools.php';
+require_once B2S_PLUGIN_DIR . 'includes/Options.php';
+$options = new B2S_Options(B2S_PLUGIN_BLOG_USER_ID);
+$optionUserTimeFormat = $options->_getOption('user_time_format');
+if($optionUserTimeFormat == false) {
+    $optionUserTimeFormat = (substr(B2S_LANGUAGE, 0, 2) == 'de') ? 0 : 1;
+}
 $b2sSiteUrl = get_option('siteurl') . ((substr(get_option('siteurl'), -1, 1) == '/') ? '' : '/');
 $displayName = stripslashes(get_user_by('id', B2S_PLUGIN_BLOG_USER_ID)->display_name);
 $displayName = ((empty($displayName) || $displayName == false) ? __("Unknown username", "blog2social") : $displayName);
@@ -28,10 +34,10 @@ $networkData = $networkItem->getData();
                                     <?php echo $networkItem->getSelectMandantHtml($networkData['mandanten']); ?>
                                     <div class="form-group b2s-network-mandant-area">
                                         <?php if (B2S_PLUGIN_USER_VERSION > 1) { ?>
-                                            <button href="#" class="btn btn-primary btn-sm b2s-network-add-mandant-btn">
+                                            <button href="#" class="btn btn-default btn-sm b2s-network-add-mandant-btn">
                                                 <span class="glyphicon glyphicon-plus"></span> <?php esc_html_e('Create new network collection', 'blog2social') ?> <span class="label label-success"></button>
                                         <?php } else { ?>
-                                            <button href="#" class="btn btn-primary btn-sm b2s-btn-disabled b2sProFeatureModalBtn" data-type="create-network-profile" data-title="<?php esc_html_e('You want to define a new combination of networks?', 'blog2social') ?>">
+                                            <button href="#" class="btn btn-default btn-sm b2s-btn-disabled b2sProFeatureModalBtn" data-type="create-network-profile" data-title="<?php esc_html_e('You want to define a new combination of networks?', 'blog2social') ?>">
                                                 <span class="glyphicon glyphicon-plus"></span> <?php esc_html_e('Create new network collection', 'blog2social') ?> <span class="label label-success"> <?php esc_html_e("PRO", "blog2social") ?></span></button>
                                         <?php } ?>
 
@@ -43,9 +49,9 @@ $networkData = $networkItem->getData();
                                     </div>
                                     <div class="form-group b2s-network-time-manager-area pull-right hidden-xs">
                                         <?php if (B2S_PLUGIN_USER_VERSION > 0) { ?>
-                                            <a href="#" class="btn btn-primary btn-sm b2s-get-settings-sched-time-default">
+                                            <a href="#" class="btn btn-default btn-sm b2s-get-settings-sched-time-default">
                                             <?php } else { ?>
-                                                <a href="#" class="btn btn-primary btn-sm b2s-btn-disabled" data-title = "<?php esc_html_e('You want to schedule your posts and use the Best Time Scheduler?', 'blog2social') ?>" data-toggle ="modal" data-target ="#b2sInfoSchedTimesModal">
+                                                <a href="#" class="btn btn-default btn-sm b2s-btn-disabled" data-title = "<?php esc_html_e('You want to schedule your posts and use the Best Time Scheduler?', 'blog2social') ?>" data-toggle ="modal" data-target ="#b2sInfoSchedTimesModal">
                                                 <?php } ?>  <span class="glyphicon glyphicon-time"></span> <?php esc_html_e('Load Best Times', 'blog2social'); ?></a>
                                     </div>
                                 </div>
@@ -227,6 +233,9 @@ $networkData = $networkItem->getData();
                 <img class="pull-left hidden-xs b2s-img-network b2s-edit-template-network-img" id="b2s-edit-template-network-img-18" alt="Google My Business" src="<?php echo plugins_url('/assets/images/portale/18_flat.png', B2S_PLUGIN_FILE); ?>" style="display: none;">
                 <img class="pull-left hidden-xs b2s-img-network b2s-edit-template-network-img" id="b2s-edit-template-network-img-19" alt="Xing" src="<?php echo plugins_url('/assets/images/portale/19_flat.png', B2S_PLUGIN_FILE); ?>" style="display: none;">
                 <img class="pull-left hidden-xs b2s-img-network b2s-edit-template-network-img" id="b2s-edit-template-network-img-24" alt="Telegram" src="<?php echo plugins_url('/assets/images/portale/24_flat.png', B2S_PLUGIN_FILE); ?>" style="display: none;">
+                <img class="pull-left hidden-xs b2s-img-network b2s-edit-template-network-img" id="b2s-edit-template-network-img-25" alt="Blogger" src="<?php echo plugins_url('/assets/images/portale/25_flat.png', B2S_PLUGIN_FILE); ?>" style="display: none;">
+                <img class="pull-left hidden-xs b2s-img-network b2s-edit-template-network-img" id="b2s-edit-template-network-img-26" alt="Ravelry" src="<?php echo plugins_url('/assets/images/portale/26_flat.png', B2S_PLUGIN_FILE); ?>" style="display: none;">
+                <img class="pull-left hidden-xs b2s-img-network b2s-edit-template-network-img" id="b2s-edit-template-network-img-27" alt="Instapaper" src="<?php echo plugins_url('/assets/images/portale/27_flat.png', B2S_PLUGIN_FILE); ?>" style="display: none;">
                 <h4 class="modal-title b2s-edit-template-title"><?php esc_html_e('Edit Post Template', 'blog2social') ?></h4> <?php echo ((B2S_PLUGIN_USER_VERSION == 0) ? '<span class="label label-success">' . esc_html__('SMART', 'blog2social') . '</span>' : '') ?>
             </div>
             <div class="row b2s-loading-area width-100">
@@ -303,6 +312,7 @@ $networkData = $networkItem->getData();
                         <span class="b2s-bold">{CONTENT}</span> - <?php esc_html_e('The content of your post', 'blog2social') ?> <br>
                         <span class="b2s-bold">{KEYWORDS}</span> - <?php esc_html_e('The tags you have set in your post.', 'blog2social') ?> <br>
                         <span class="b2s-bold">{AUTHOR}</span> - <?php esc_html_e('The name of the post author.', 'blog2social') ?> <br>
+                        <span class="b2s-bold">{PRICE}</span> - <?php esc_html_e('The price of your product, if you have installed WooCommerce on your website/ blog.', 'blog2social') ?> <br>
                     </p>
                 </div>
             </div>
@@ -527,6 +537,9 @@ $networkData = $networkItem->getData();
                                 <div class="col-md-12 b2s-assign-error" data-error-reason="network_auth_assign_exists" style="display: none;">
                                     <div class="alert alert-danger"><span class="glyphicon glyphicon-remove glyphicon-danger"></span> <?php esc_html_e("This connection has already been assigned to this user.", 'blog2social'); ?></div>
                                 </div>
+                                <div class="col-md-12 b2s-assign-error" data-error-reason="assign_user_auth_not_allow" style="display: none;">
+                                    <div class="alert alert-danger"><span class="glyphicon glyphicon-remove glyphicon-danger"></span> <?php esc_html_e("This user has reached the maximum number of connections.", 'blog2social'); ?></div>
+                                </div>
                                 <div class="col-md-12" id="b2s-assign-info">
                                     <div class="alert alert-warning"><span class="glyphicon glyphicon-warning-sign glyphicon-warning"></span> <?php esc_html_e('You can only share the connection with blog users who use the same license as you.', 'blog2social'); ?></div>
                                 </div>
@@ -719,6 +732,7 @@ $networkData = $networkItem->getData();
 </div>
 
 <input type="hidden" id="b2sUserLang" value="<?php echo substr(B2S_LANGUAGE, 0, 2); ?>">
+<input type="hidden" id="b2sUserTimeFormat" value="<?php echo $optionUserTimeFormat; ?>">
 <input type="hidden" id="b2sServerUrl" value="<?php echo B2S_PLUGIN_SERVER_URL; ?>">
 <input type="hidden" id="b2sUserVersion" value="<?php echo B2S_PLUGIN_USER_VERSION; ?>">
 <input type="hidden" id="b2s-redirect-url-sched-post" value="<?php echo $b2sSiteUrl . 'wp-admin/admin.php?page=blog2social-sched'; ?>"/>

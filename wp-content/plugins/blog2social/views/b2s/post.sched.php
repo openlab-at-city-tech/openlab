@@ -12,6 +12,10 @@ $options = new B2S_Options(B2S_PLUGIN_BLOG_USER_ID);
 $optionUserTimeZone = $options->_getOption('user_time_zone');
 $userTimeZone = ($optionUserTimeZone !== false) ? $optionUserTimeZone : get_option('timezone_string');
 $userTimeZoneOffset = (empty($userTimeZone)) ? get_option('gmt_offset') : B2S_Util::getOffsetToUtcByTimeZone($userTimeZone);
+$optionUserTimeFormat = $options->_getOption('user_time_format');
+if($optionUserTimeFormat == false) {
+    $optionUserTimeFormat = (substr(B2S_LANGUAGE, 0, 2) == 'de') ? 0 : 1;
+}
 $metaSettings = get_option('B2S_PLUGIN_GENERAL_OPTIONS');
 ?>
 
@@ -169,6 +173,7 @@ $metaSettings = get_option('B2S_PLUGIN_GENERAL_OPTIONS');
 
 
 <input type="hidden" id="b2sLang" value="<?php echo substr(B2S_LANGUAGE, 0, 2); ?>">
+<input type="hidden" id="b2sUserTimeFormat" value="<?php echo $optionUserTimeFormat; ?>">
 <input type="hidden" id="b2sJSTextAddPost" value="<?php echo esc_html_e("add post", "blog2social"); ?>">                    
 <input type="hidden" id="b2sUserLang" value="<?php echo strtolower(substr(get_locale(), 0, 2)); ?>">
 <input type='hidden' id="user_timezone" name="user_timezone" value="<?php echo $userTimeZoneOffset; ?>">

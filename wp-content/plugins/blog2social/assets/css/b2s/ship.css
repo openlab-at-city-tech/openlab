@@ -876,3 +876,7 @@ input[type="number"]{
 .b2s-bold {
     font-weight: 600;
 }
+
+.b2s-format-area-tumblr-image, .b2s-format-area-tumblr-link {
+    margin-top: 10px;
+}

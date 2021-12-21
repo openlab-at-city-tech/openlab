@@ -444,6 +444,13 @@ class B2S_Post_Item {
                 $countPublish = $this->getPostCount($var->ID);
                 $lastPublish = $this->getLastPost($var->ID);
                 $userInfoName = get_the_author_meta('display_name', $lastPublish['user']);
+                
+                $addCurationFormat = '';
+                if(strtolower($var->post_type) == 'b2s_ex_post') {
+                    $guid = get_the_guid($var->ID);
+                    $addCurationFormat = ((stripos($guid, 'b2s_ex_post') != false) ? '&b2sPostType=ex&postFormat=1' : '&b2sPostType=ex&postFormat=0');
+                }
+                
                 $this->postItem .= '<li class="list-group-item">
                                         <div class="media">
                                             <img class="post-img-10 pull-left hidden-xs" src="' . plugins_url('/assets/images/b2s/' . $postType . '-icon.png', B2S_PLUGIN_FILE) . '" alt="posttype">
@@ -451,7 +458,7 @@ class B2S_Post_Item {
                                                     <div class="pull-left media-nav">
                                                             <strong><a target="_blank" href="' . esc_url(get_permalink($var->ID)) . '">' . esc_html($postTitle) . '</a></strong>' . $curated . '
                                                         <span class="pull-right">
-                                                        <a class="btn btn-primary hidden-xs btn-sm" href="admin.php?page=blog2social-ship&postId=' . $var->ID . '">' . esc_html__('Re-share this post', 'blog2social') . '</a>
+                                                        <a class="btn btn-primary hidden-xs btn-sm'.(($this->type == 'notice') ? ' b2s-repost-multi' : '').'" href="admin.php?page=blog2social-ship&postId=' . $var->ID . $addCurationFormat . '" data-blog-post-id="' . esc_attr($var->ID) . '">' . esc_html__('Re-share this post', 'blog2social') . '</a>
                                                             <button type="button" class="btn btn-primary btn-sm b2sDetailsPublishPostBtn" data-search-date="' . esc_attr($this->searchShowByDate) . '" data-post-id="' . esc_attr($var->ID) . '"><i class="glyphicon glyphicon-chevron-down"></i> ' . esc_html__('Details', 'blog2social') . '</button>
                                                         </span>
                                                         <p class="info hidden-xs"><a class="b2sDetailsPublishPostTriggerLink" href="#"><span class="b2s-publish-count" data-post-id="' . esc_attr($var->ID) . '">' . esc_html($countPublish) . '</span> ' . esc_html__('shared social media posts', 'blog2social') . '</a> | ' . sprintf(esc_html__('latest share by %s', 'blog2social'), '<a href="' . esc_url(get_author_posts_url($lastPublish['user'])) . '">' . esc_html((!empty($userInfoName) ? $userInfoName : '-')) . '</a>') . ' ' . esc_html(B2S_Util::getCustomDateFormat($lastPublish['date'], substr(B2S_LANGUAGE, 0, 2))) . '</p>
@@ -725,7 +732,7 @@ class B2S_Post_Item {
             $addSharedByUser = ($sharedByUser > 0) ? (' AND blog_user_id =' . $sharedByUser) : '';
             $addSearchShowByDate = (!empty($showByDate)) ? " AND DATE_FORMAT(`{$wpdb->prefix}b2s_posts`.`publish_date`,'%%Y-%%m-%%d') = '" . $showByDate . "' " : '';
             $addWhere = ($type == 'notice') ? ' AND `' . $wpdb->prefix . 'b2s_posts`.`publish_error_code` != "" ' : ' AND `' . $wpdb->prefix . 'b2s_posts`.`publish_error_code` = "" ';
-            $sqlData = $wpdb->prepare("SELECT `{$wpdb->prefix}b2s_posts`.`id`,`blog_user_id`, `sched_date`,`publish_date`,`publish_link`,`sched_type`,`publish_error_code`,`{$wpdb->prefix}b2s_posts_network_details`.`network_id`,`{$wpdb->prefix}b2s_posts_network_details`.`network_type`, `{$wpdb->prefix}b2s_posts_network_details`.`network_auth_id`, `{$wpdb->prefix}b2s_posts_network_details`.`network_display_name` FROM `{$wpdb->prefix}b2s_posts` LEFT JOIN `{$wpdb->prefix}b2s_posts_network_details` ON `{$wpdb->prefix}b2s_posts`.`network_details_id` = `{$wpdb->prefix}b2s_posts_network_details`.`id` WHERE `{$wpdb->prefix}b2s_posts`.`hide` = 0 AND `{$wpdb->prefix}b2s_posts`.`post_for_approve`= 0  AND (`{$wpdb->prefix}b2s_posts`.`sched_date` = '0000-00-00 00:00:00' OR (`{$wpdb->prefix}b2s_posts`.`sched_type` = 3 AND `{$wpdb->prefix}b2s_posts`.`publish_date` != '0000-00-00 00:00:00')) $addWhere $addNotAdminPosts $addSharedByUser $addSearchShowByDate AND `{$wpdb->prefix}b2s_posts`.`post_id` = %d ORDER BY `{$wpdb->prefix}b2s_posts`.`publish_date` DESC", $post_id);
+            $sqlData = $wpdb->prepare("SELECT `{$wpdb->prefix}b2s_posts`.`id`,`blog_user_id`, `sched_date`,`publish_date`,`publish_link`,`sched_type`,`publish_error_code`,`sched_details_id`,`post_format`,`{$wpdb->prefix}b2s_posts_sched_details`.`sched_data`,`{$wpdb->prefix}b2s_posts_network_details`.`network_id`,`{$wpdb->prefix}b2s_posts_network_details`.`network_type`, `{$wpdb->prefix}b2s_posts_network_details`.`network_auth_id`, `{$wpdb->prefix}b2s_posts_network_details`.`network_display_name` FROM `{$wpdb->prefix}b2s_posts` LEFT JOIN `{$wpdb->prefix}b2s_posts_network_details` ON `{$wpdb->prefix}b2s_posts`.`network_details_id` = `{$wpdb->prefix}b2s_posts_network_details`.`id` LEFT JOIN `{$wpdb->prefix}b2s_posts_sched_details` ON `{$wpdb->prefix}b2s_posts`.`sched_details_id` = `{$wpdb->prefix}b2s_posts_sched_details`.`id` WHERE `{$wpdb->prefix}b2s_posts`.`hide` = 0 AND `{$wpdb->prefix}b2s_posts`.`post_for_approve`= 0  AND (`{$wpdb->prefix}b2s_posts`.`sched_date` = '0000-00-00 00:00:00' OR (`{$wpdb->prefix}b2s_posts`.`sched_type` = 3 AND `{$wpdb->prefix}b2s_posts`.`publish_date` != '0000-00-00 00:00:00')) $addWhere $addNotAdminPosts $addSharedByUser $addSearchShowByDate AND `{$wpdb->prefix}b2s_posts`.`post_id` = %d ORDER BY `{$wpdb->prefix}b2s_posts`.`publish_date` DESC", $post_id);
             $result = $wpdb->get_results($sqlData);
             $specialPostingData = array(3 => esc_html__('Auto-Posting', 'blog2social'), 4 => esc_html__('Retweet', 'blog2social'), 5 => esc_html__('Re-Share', 'blog2social'));
             if (!empty($result) && is_array($result)) {
@@ -745,8 +752,17 @@ class B2S_Post_Item {
                             $link = (strtolower(substr(B2S_LANGUAGE, 0, 2)) == 'de') ? 'https://www.blog2social.com/de/faq/content/9/115/de/reddit-du-hast-das-veroeffentlichungs_limit-mit-deinem-account-kurzzeitig-erreicht.html' : 'https://www.blog2social.com/en/faq/content/9/115/en/reddit-you-have-temporarily-reached-the-publication-limit-with-your-account.html';
                             $add = ' ' . esc_html__('Please see', 'blog2social') . ' <a target="_blank" href="' . esc_url($link) . '">' . esc_html__('FAQ', 'blog2social') . '</a>';
                         }
-                        $errorCode = isset($networkErrorCode[trim($var->publish_error_code)]) ? $var->publish_error_code : 'DEFAULT';
-                        $error = '<span class="network-text-info text-danger hidden-xs"> <i class="glyphicon glyphicon-remove-circle glyphicon-danger"></i> ' . $networkErrorCode[$errorCode] . $add . '</span>';
+                        if($var->network_id == 12 && $var->publish_error_code == 'DEFAULT') {
+                            if($var->network_type == 0) {
+                                $networkError12 = sprintf(__('The post cannot be published due to changes on the Instagram interface. More information in the <a href="%s" target="_blank">Instagram guide</a>.', 'blog2social'), B2S_Tools::getSupportLink('instagram_error_private'));
+                            } else {
+                                $networkError12 = sprintf(__('Your post could not be posted. More information in this <a href="%s" target="_blank">Instagram troubleshoot checklist</a>.', 'blog2social'), B2S_Tools::getSupportLink('instagram_error_business'));
+                            }
+                            $error = '<span class="network-text-info text-danger hidden-xs"> <i class="glyphicon glyphicon-remove-circle glyphicon-danger"></i> ' . $networkError12 . $add . '</span>';
+                        } else {
+                            $errorCode = isset($networkErrorCode[trim($var->publish_error_code)]) ? $var->publish_error_code : 'DEFAULT';
+                            $error = '<span class="network-text-info text-danger hidden-xs"> <i class="glyphicon glyphicon-remove-circle glyphicon-danger"></i> ' . $networkErrorCode[$errorCode] . $add . '</span>';
+                        }
                     }
                     $publishDate = ($var->sched_date == "0000-00-00 00:00:00") ? B2S_Util::getCustomDateFormat($var->publish_date, substr(B2S_LANGUAGE, 0, 2)) : '';
                     $publishText = (empty($publishDate)) ? __('sharing in progress by %s', 'blog2social') : __('shared by %s', 'blog2social');
@@ -755,7 +771,7 @@ class B2S_Post_Item {
                                     <div class="media">';
 
                     if (!empty($publishDate)) {
-                        $content .= '<input class="checkboxes pull-left checkbox-item" data-blog-post-id="' . esc_attr($post_id) . '" name="selected-checkbox-item" value="' . esc_attr($var->id) . '" type="checkbox">';
+                        $content .= '<input class="checkboxes pull-left checkbox-item" data-blog-post-id="' . esc_attr($post_id) . '" name="selected-checkbox-item" value="' . esc_attr($var->id) . '" type="checkbox"' . (($type == 'notice') ? ' data-network-auth-id="' . $var->network_auth_id . '"' : '') . '>';
                     } else {
                         $content .= '<div class="checbox-item-empty"></div>';
                     }
@@ -765,9 +781,21 @@ class B2S_Post_Item {
                     } else {
                         $content .= '<img class="pull-left hidden-xs" src="' . plugins_url('/assets/images/portale/' . $var->network_id . '_flat.png', B2S_PLUGIN_FILE) . '" alt="posttype">';
                     }
+                    
+                    $addPostFormat = '';
+                    if(isset($var->post_format) && $var->post_format != null && (int) $var->post_format >= 0) {
+                        $addPostFormat = esc_html__('post format', 'blog2social') . ': ';
+                        if((int) $var->post_format == 0) {
+                            $addPostFormat .= esc_html__('Link Post', 'blog2social');
+                        } else {
+                            $addPostFormat .= esc_html__('Image Post', 'blog2social');
+                        }
+                        $addPostFormat .= ' | ';
+                    }
+                    
                     $content .= '<div class="media-body">
-                                            <strong>' . esc_html($networkName[$var->network_id]) . '</strong> ' . $error . '
-                                            <p class="info">' . esc_html($networkType[$var->network_type]) . esc_html((!empty($var->network_display_name) ? (': ' . $var->network_display_name) : '')) . ' | ' . sprintf(esc_html($publishText), '<a href="' . esc_url(get_author_posts_url($var->blog_user_id)) . '">' . esc_html((!empty($userInfoName) ? $userInfoName : '-')) . '</a>') . ' ' . esc_html($publishDate) . $specialPosting . '</p>
+                                            <strong>' . esc_html($networkName[$var->network_id]) . '</strong> <span class="info">('.esc_html($networkType[$var->network_type]) . esc_html((!empty($var->network_display_name) ? (': ' . $var->network_display_name) : '')).')</span> ' . $error . '
+                                            <p class="info">' . $addPostFormat . sprintf(esc_html($publishText), '<a href="' . esc_url(get_author_posts_url($var->blog_user_id)) . '">' . esc_html((!empty($userInfoName) ? $userInfoName : '-')) . '</a>') . ' ' . esc_html($publishDate) . $specialPosting . '</p>
                                             <p class="info">' . $publishLink;
 
                     $content .= (B2S_PLUGIN_USER_VERSION > 0) ? '<a href="#" class="b2s-post-publish-area-drop-btn" data-post-id="' . esc_attr($var->id) . '">' : '<a href="#" class="b2sPreFeatureModalBtn" data-title="' . esc_attr__('You want to delete a publish post entry?', 'blog2social') . '">';
@@ -823,7 +851,8 @@ class B2S_Post_Item {
                         'internal_post_id' => $var->id,
                         'network_id' => $var->network_id,
                         'network_auth_id' => $var->network_auth_id,
-                        'network_type' => $var->network_type
+                        'network_type' => $var->network_type,
+                        'language' => substr(B2S_LANGUAGE, 0, 2)
                     );
 
                     if ($var->sched_data != null && !empty($var->sched_data)) {

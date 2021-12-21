@@ -82,7 +82,7 @@ class B2S_AutoPost {
             }
 
             //PostFormat
-            if (in_array($networkId, array(1, 2, 3, 12, 17, 19))) {
+            if (in_array($networkId, array(1, 2, 3, 12, 17, 19, 24))) {
                 //Get: client settings
                 if (isset($tempOptionPostFormat[$networkId][$networkType]['format']) && ((int) $tempOptionPostFormat[$networkId][$networkType]['format'] === 0 || (int) $tempOptionPostFormat[$networkId][$networkType]['format'] === 1)) {
                     $postData['post_format'] = (int) $tempOptionPostFormat[$networkId][$networkType]['format'];
@@ -96,6 +96,8 @@ class B2S_AutoPost {
                 if ($networkId == 12 && $this->imageUrl == false) {
                     return false;
                 }
+                $hook_filter = new B2S_Hook_Filter();
+                
                 $postData['content'] = $tempOptionPostFormat[$networkId][$networkType]['content'];
 
                 $preContent = addcslashes(B2S_Util::getExcerpt($this->content, (int) $content_min, (int) $content_max), "\\$");
@@ -120,11 +122,28 @@ class B2S_AutoPost {
 
                 $authorId = get_post_field('post_author', $this->postId);
                 if (isset($authorId) && !empty($authorId) && (int) $authorId > 0) {
-                    $hook_filter = new B2S_Hook_Filter();
                     $author_name = $hook_filter->get_wp_user_post_author_display_name((int) $authorId);
                     $postData['content'] = stripslashes(preg_replace("/\{AUTHOR\}/", addcslashes($author_name, "\\$"), $postData['content']));
                 } else {
                     $postData['content'] = preg_replace("/\{AUTHOR\}/", "", $postData['content']);
+                }
+                
+                if (class_exists('WooCommerce') && function_exists('wc_get_product')) {
+                    $wc_product = wc_get_product($this->postId);
+                    if($wc_product != false) {
+                        $price = $wc_product->get_price();
+                        if($price != false && !empty($price)) {
+                            $postData['content'] = stripslashes(preg_replace("/\{PRICE\}/", addcslashes($price, "\\$"), $postData['content']));
+                        }
+                    }
+                }
+                $postData['content'] = preg_replace("/\{PRICE\}/", "", $postData['content']);
+                
+                $taxonomieReplacements = $hook_filter->get_posting_template_set_taxonomies(array(), $this->postId);
+                if(is_array($taxonomieReplacements) && !empty($taxonomieReplacements)) {
+                    foreach ($taxonomieReplacements as $taxonomie => $replacement) {
+                        $postData['content'] = preg_replace("/\{".$taxonomie."\}/", $replacement, $postData['content']);
+                    }
                 }
 
                 if (in_array($networkId, $this->allowHtml)) {
@@ -378,7 +397,9 @@ class B2S_AutoPost {
                     'sched_date_utc' => $sched_date_utc,
                     'network_details_id' => $networkDetailsId,
                     'post_for_approve' => (int) $shareApprove,
-                    'hook_action' => (((int) $shareApprove == 0) ? 1 : 0)), array('%d', '%d', '%s', '%s', '%d', '%d', '%s', '%s', '%d', '%d', '%d'));
+                    'hook_action' => (((int) $shareApprove == 0) ? 1 : 0),
+                    'post_format' => (($shareData['post_format'] !== '') ? (((int) $shareData['post_format'] > 0) ? 1 : 0) : null)
+                        ), array('%d', '%d', '%s', '%s', '%d', '%d', '%s', '%s', '%d', '%d', '%d'));
                 $insertId = $wpdb->insert_id;
                 B2S_Rating::trigger();
                 return $insertId;

@@ -39,6 +39,10 @@ class B2S_Settings_Item {
         $isCheckedAllowShortcode = (get_option('B2S_PLUGIN_USER_ALLOW_SHORTCODE_' . B2S_PLUGIN_BLOG_USER_ID) !== false) ? 1 : 0;
 
         $optionUserTimeZone = $this->options->_getOption('user_time_zone');
+        $optionUserTimeFormat = $this->options->_getOption('user_time_format');
+        if($optionUserTimeFormat == false) {
+            $optionUserTimeFormat = (strtolower(substr(get_locale(), 0, 2)) == 'de') ? 0 : 1;
+        }
         $legacyMode = $this->generalOptions->_getOption('legacy_mode');
         $isCheckedLegacyMode = ($legacyMode !== false && $legacyMode == 1) ? 1 : 0;  //default not active , 1=active 0=not active
         $userTimeZone = ($optionUserTimeZone !== false) ? $optionUserTimeZone : get_option('timezone_string');
@@ -58,6 +62,15 @@ class B2S_Settings_Item {
         $content .='</div>';
         $content .='<br><div class="b2s-settings-time-zone-info">' . esc_html__('Timezone for Scheduling', 'blog2social') . ' (' . esc_html__('User', 'blog2social') . ': ' . esc_html((!empty($userInfoName) ? $userInfoName : '-')) . ') <code id="b2s-user-time">' . esc_html(B2S_Util::getLocalDate($userTimeZoneOffset, substr(B2S_LANGUAGE, 0, 2))) . '</code></span></div>';
         $content .='</div>';
+        
+        $content .='<h4 style="display: inline-block;">' . esc_html__('Set time format', 'blog2social') . '</h4> <a style="display: inline-block;" href="#" class="b2s-info-btn hidden-xs b2sInfoTimeZoneModalBtn">' . esc_html__('Info', 'Blog2Social') . '</a>';
+        $content .='<div class="form-inline">';
+        $content .='<div class="col-xs-12 del-padding-left">';
+        $content .='<p>' . esc_html__('Set the time format you like to use for your posts.', 'blog2social') . '</p>';
+        $content .='<input data-size="mini" data-toggle="toggle" data-width="90" data-height="22" data-onstyle="primary" data-on="12h (am/pm)" data-off="24h" ' . (($optionUserTimeFormat == 1) ? 'checked' : '') . '  name="b2s-time-format" class="b2s-time-format-toggle" data-area-type="manuell" value="1" type="checkbox">';
+        $content .='</div>';
+        $content .='</div>';
+        
         $content .='<div class="clearfix"></div>';
         $content .='<br>';
         $content .='<hr>';
@@ -99,7 +112,7 @@ class B2S_Settings_Item {
         $content .='<br>';
         $content .='<hr>';
         $content .='<h4>' . esc_html__('System', 'blog2social') . '</h4>';
-        $content .='<strong>' . esc_html__('This is a global feature for your blog, which can only be edited by users with admin rights.', 'blog2social') . '</strong><br>';
+        $content .='<strong>' . esc_html__('This is a global system setting  for your website / blog, which can be edited by users with admin rights only.', 'blog2social') . '</strong><br>';
         $content .= '<input type="checkbox" value="' . (($isCheckedLegacyMode == 1) ? 0 : 1) . '" id="b2s-general-settings-legacy-mode" ' . (($isCheckedLegacyMode == 1) ? 'checked="checked"' : '') . ' /><label for="b2s-general-settings-legacy-mode"> ' . esc_html__('activate Legacy mode', 'blog2social') . ' <a href="#" class="b2s-info-btn del-padding-left b2sInfoLegacyModeBtn">' . esc_html__('Info', 'Blog2Social') . '</a></label>';
         return $content;
     }
@@ -174,6 +187,34 @@ class B2S_Settings_Item {
         }
         $content .='<input type="text" ' . (($readonly) ? "readonly" : "") . ' value="' . esc_attr((($this->generalOptions->_getOption('og_default_image') !== false && !empty($this->generalOptions->_getOption('og_default_image'))) ? $this->generalOptions->_getOption('og_default_image') : '')) . '" name="b2s_og_default_image" class="form-control" id="b2s_og_default_image">';
         $content .='<span>' . esc_html__('Please note: Facebook supports images with a minimum dimension of 200x200 pixels and an aspect ratio of 1:1.', 'blog2social') . '</span>';
+        
+        $content .='<br><br>';
+        $content .= '<input type="checkbox" value="1" name="b2s_og_imagedata_active" ' . (($readonly) ? 'disabled="true"' : "") . '  id="b2s_og_imagedata_active" ' . (($this->generalOptions->_getOption('og_imagedata_active') == 1) ? 'checked="checked"' : '') . ' /><label for="b2s_og_imagedata_active"> ' . esc_html__('Add Open Graph Image Data.', 'blog2social', 'blog2social') . '</label>';
+        
+        $content .='<br><br>';
+        $content .= '<input type="checkbox" value="1" name="b2s_og_objecttype_active" ' . (($readonly) ? 'disabled="true"' : "") . '  id="b2s_og_objecttype_active" ' . (($this->generalOptions->_getOption('og_objecttype_active') == 1) ? 'checked="checked"' : '') . ' /><label for="b2s_og_objecttype_active"> ' . esc_html__('Add Open Graph Object Type.', 'blog2social', 'blog2social') . '</label>';
+        
+        $content .='<br><br>';
+        $content .= '<input type="checkbox" value="1" name="b2s_og_locale_active" ' . (($readonly) ? 'disabled="true"' : "") . '  id="b2s_og_locale_active" ' . (($this->generalOptions->_getOption('og_locale_active') == 1) ? 'checked="checked"' : '') . ' /><label for="b2s_og_locale_active"> ' . esc_html__('Add Open Graph Locale.', 'blog2social', 'blog2social') . '</label> ';
+        $content .=  '<select class="b2s_og_locale" name="b2s_og_locale">';
+        require_once( ABSPATH . 'wp-admin/includes/translation-install.php' );
+        $languages = wp_get_available_translations();
+        $b2sOgLocale = $this->generalOptions->_getOption('og_locale');
+        if($b2sOgLocale == false || empty($b2sOgLocale)) {
+            $b2sOgLocale = get_locale();
+        }
+        $addBlogLocale = true;
+        foreach ($languages as $key => $value) {
+            if(get_locale() == $key) {
+                $addBlogLocale = false;
+            }
+            $content .= '<option value="'.$key.'" ' . (($b2sOgLocale == $key) ? 'selected="selected"' : '') . '>'.$key.'</option>';
+        }
+        if($addBlogLocale) {
+            $content .= '<option value="'.get_locale().'" ' . (($b2sOgLocale == get_locale()) ? 'selected="selected"' : '') . '>'.get_locale().'</option>';
+        }
+        $content .= '</select>';
+        
         $content .='</div>';
         $content .='</div>';
         $content .='<div class="clearfix"></div>';
@@ -217,8 +258,8 @@ class B2S_Settings_Item {
             $content .='<hr></div>';
         }
 
-        foreach (array(1, 2, 3, 12, 19, 17) as $n => $networkId) { //FB,TW,LI,IN
-            $type = ($networkId == 1 || $networkId == 19 || $networkId == 17) ? array(0, 1, 2) : (($networkId == 3 || $networkId == 12) ? array(0, 1) : array(0));
+        foreach (array(1, 2, 3, 12, 19, 17, 24) as $n => $networkId) { //FB,TW,LI,IN
+            $type = ($networkId == 1 || $networkId == 19 || $networkId == 17) ? array(0, 1, 2) : (($networkId == 3) ? array(0, 1) : (($networkId == 12) ? array(1) : array(0)));
             foreach ($type as $t => $typeId) { //Profile,Page,Group
                 if($networkId == 17) {
                     $postFormat = 1;
@@ -274,7 +315,7 @@ class B2S_Settings_Item {
         }
         $optionPostFormat = $this->options->_getOption('post_template');
         $content = "<input type='hidden' class='b2sNetworkSettingsPostFormatText' value='" . json_encode(array('post' => array(__('Link Post', 'blog2social'), __('Image Post', 'blog2social')), 'image' => array(__('Image with frame'), __('Image cut out')))) . "'/>";
-        foreach (array(1, 2, 3, 12, 19, 15, 17) as $n => $networkId) { //FB,TW,LI,IN
+        foreach (array(1, 2, 3, 12, 19, 15, 17, 24) as $n => $networkId) { //FB,TW,LI,IN
             $postFormatType = ($networkId == 12) ? 'image' : 'post';
             $type = ($networkId == 1 || $networkId == 19 || $networkId == 17) ? array(0, 1, 2) : (($networkId == 3 || $networkId == 12) ? array(0, 1) : array(0));
             foreach ($type as $t => $typeId) { //Profile,Page,Group                

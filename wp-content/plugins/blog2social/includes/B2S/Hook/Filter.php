@@ -37,5 +37,21 @@ class B2S_Hook_Filter {
             return false;
         }
     }
+    
+    function get_posting_template_show_taxonomies($taxonomies = array()) {
+        if(B2S_PLUGIN_USER_VERSION < 3) {
+            return $taxonomies;
+        }
+        $taxonomies_data = apply_filters('b2s_filter_posting_template_show_taxonomies', $taxonomies);
+        return $taxonomies_data;
+    }
+    
+    function get_posting_template_set_taxonomies($taxonomies = array(), $postId = 0) {
+        if(B2S_PLUGIN_USER_VERSION < 3) {
+            return $taxonomies;
+        }
+        $taxonomies_data = apply_filters('b2s_filter_posting_template_set_taxonomies', $taxonomies, $postId);
+        return $taxonomies_data;
+    }
 
 }

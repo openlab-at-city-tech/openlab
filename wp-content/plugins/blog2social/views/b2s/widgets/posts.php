@@ -2,7 +2,7 @@
 /* Data */
 require_once (B2S_PLUGIN_DIR . 'includes/B2S/Post/Filter.php');
 require_once (B2S_PLUGIN_DIR . 'includes/Util.php');
-$b2sShowByDate = isset($_GET['b2sShowByDate']) ? trim($_GET['b2sShowByDate']) : "";
+$b2sShowByDate = isset($_GET['b2sShowByDate']) ? (preg_match("#^[0-9\-.\]]+$#", trim($_GET['b2sShowByDate'])) ? trim($_GET['b2sShowByDate']) : "") : ""; //YYYY-mm-dd
 ?>
 
 <div>
@@ -22,7 +22,7 @@ $b2sShowByDate = isset($_GET['b2sShowByDate']) ? trim($_GET['b2sShowByDate']) : 
                 <!-- Filter Post Start-->
                 <form class="b2sSortForm form-inline pull-left" action="#">
                     <input id="b2sType" type="hidden" value="all" name="b2sType">
-                    <input id="b2sShowByDate" type="hidden" value="<?php echo $b2sShowByDate; ?>" name="b2sShowByDate">
+                    <input id="b2sShowByDate" type="hidden" value="<?php echo esc_attr($b2sShowByDate); ?>" name="b2sShowByDate">
                     <input id="b2sPagination" type="hidden" value="0" name="b2sPagination">
                     <input id="b2sShowPagination" type="hidden" value="0" name="b2sShowPagination">
                     <input id="b2sPostsPerPage" type="hidden" value="3" name="b2sPostsPerPage">

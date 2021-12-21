@@ -2,7 +2,7 @@ jQuery.noConflict();
 jQuery(window).on("load", function () {
 
     var showMeridian = true;
-    if (jQuery('#b2sUserLang').val() == 'de') {
+    if (jQuery('#b2sUserTimeFormat').val() == 0) {
         showMeridian = false;
     }
     jQuery('.b2s-settings-sched-item-input-time').timepicker({
@@ -452,4 +452,47 @@ jQuery(document).on('click', '.b2sInfoAllowShortcodeModalBtn', function () {
 });
 jQuery(document).on('click', '.b2sInfoLegacyModeBtn', function () {
     jQuery('#b2sInfoLegacyMode').modal('show');
+});
+
+jQuery(document).on('change', '.b2s-time-format-toggle', function() {
+    var time_format = 1;
+    if(jQuery(this).is(':checked')) {
+        time_format = 1;
+    } else {
+        time_format = 0;
+    }
+    
+    jQuery('.b2s-settings-user-success').hide();
+    jQuery('.b2s-settings-user-error').hide();
+    jQuery(".b2s-loading-area").show();
+    jQuery(".b2s-user-settings-area").hide();
+    jQuery('.b2s-server-connection-fail').hide();
+    jQuery.ajax({
+        url: ajaxurl,
+        type: "POST",
+        dataType: "json",
+        cache: false,
+        data: {
+            'action': 'b2s_user_network_settings',
+            'user_time_format': time_format,
+            'b2s_security_nonce': jQuery('#b2s_security_nonce').val()
+        },
+        error: function () {
+            jQuery('.b2s-server-connection-fail').show();
+            return false;
+        },
+        success: function (data) {
+            jQuery(".b2s-loading-area").hide();
+            jQuery(".b2s-user-settings-area").show();
+            if (data.result == true) {
+                jQuery('.b2s-settings-user-success').show();
+            } else {
+                if(data.error == 'nonce') {
+                    jQuery('.b2s-nonce-check-fail').show();
+                }
+                jQuery('.b2s-settings-user-error').show();
+            }
+        }
+    });
+    return false;
 });
