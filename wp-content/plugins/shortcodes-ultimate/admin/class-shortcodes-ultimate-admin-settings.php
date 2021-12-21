@@ -273,10 +273,10 @@ final class Shortcodes_Ultimate_Admin_Settings extends Shortcodes_Ultimate_Admin
 		}
 
 		wp_enqueue_style(
-			'shortcodes-ultimate-admin-settings',
-			plugins_url( 'css/settings.css', __FILE__ ),
-			array( 'su-icons' ),
-			filemtime( plugin_dir_path( __FILE__ ) . 'css/settings.css' )
+			'shortcodes-ultimate-admin',
+			plugins_url( 'css/admin.css', __FILE__ ),
+			false,
+			filemtime( plugin_dir_path( __FILE__ ) . 'css/admin.css' )
 		);
 
 	}
@@ -323,6 +323,10 @@ final class Shortcodes_Ultimate_Admin_Settings extends Shortcodes_Ultimate_Admin
 
 		return array_merge( $plugin_links, $links );
 
+	}
+
+	protected function is_advanced_settings() {
+		return isset( $_GET['advanced'] );
 	}
 
 	public function maybe_disable_unsafe_features() {

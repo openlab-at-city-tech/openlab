@@ -112,7 +112,7 @@ abstract class Shortcodes_Ultimate_Notice {
 	 * @access protected
 	 * @param string  $status New status. Can be 'dismissed' or 'deferred'
 	 */
-	protected function update_notice_status( $status ) {
+	public function update_notice_status( $status ) {
 
 		$dismissed = $this->get_dismissed_notices();
 		$id        = $this->notice_id;

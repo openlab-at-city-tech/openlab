@@ -1,12 +1,12 @@
 <?php
 
-class Shortcodes_Ultimate_Admin_Extra_Shortcodes {
+class Shortcodes_Ultimate_Admin_Pro_Features {
 
 	public function __construct() {}
 
 	public function register_shortcodes() {
 
-		if ( $this->is_extra_active() ) {
+		if ( did_action( 'su/extra/ready' ) ) {
 			return;
 		}
 
@@ -23,7 +23,6 @@ class Shortcodes_Ultimate_Admin_Extra_Shortcodes {
 						'callback'           => '__return_empty_string',
 						'atts'               => array(),
 						'generator_callback' => array( $this, 'generator_callback' ),
-						'as_callback'        => array( $this, 'as_callback' ),
 					)
 				)
 			);
@@ -34,32 +33,28 @@ class Shortcodes_Ultimate_Admin_Extra_Shortcodes {
 
 	public function register_group( $groups ) {
 
-		if ( ! $this->is_extra_active() ) {
-			$groups['extra'] = _x( 'Extra Shortcodes', 'Custom shortcodes group name', 'shortcodes-ultimate' );
+		if ( did_action( 'su/extra/ready' ) ) {
+			return $groups;
 		}
+
+		$groups['extra'] = _x( 'PRO Shortcodes', 'Custom shortcodes group name', 'shortcodes-ultimate' );
 
 		return $groups;
 
 	}
 
 	public function generator_callback( $shortcode ) {
-		// phpcs:disable
-		echo $this->get_template( 'generator', $shortcode );
-		// phpcs:enable
+		su_partial(
+			'admin/partials/pro-features/generator.php',
+			array(
+				'shortcode' => $shortcode,
+				'image_url' => $this->get_image_url(),
+			)
+		);
 	}
 
-	public function as_callback( $shortcode ) {
-		// phpcs:disable
-		echo $this->get_template( 'available-shortcodes', $shortcode );
-		// phpcs:enable
-	}
-
-	public function get_image_url( $path ) {
-		return plugin_dir_url( __FILE__ ) . 'images/extra/' . $path;
-	}
-
-	private function is_extra_active() {
-		return did_action( 'su/extra/ready' );
+	public function get_image_url( $path = '' ) {
+		return plugin_dir_url( __FILE__ ) . 'images/pro-features/' . $path;
 	}
 
 	private function get_shortcodes() {
@@ -129,21 +124,31 @@ class Shortcodes_Ultimate_Admin_Extra_Shortcodes {
 
 	}
 
-	protected function get_template( $name = '', $data = array() ) {
+	public function add_generator_cta( $shortcodes ) {
 
-		if ( preg_match( '/^(?!-)[a-z0-9-_]+(?<!-)(\/(?!-)[a-z0-9-_]+(?<!-))*$/', $name ) !== 1 ) {
-			return '';
+		if ( did_action( 'su/skins/ready' ) ) {
+			return $shortcodes;
 		}
 
-		$file = plugin_dir_path( __FILE__ ) . 'partials/extra/' . $name . '.php';
+		$cta = sprintf(
+			'<span>%1$s</span><br><a href="%3$s" target="_blank" class="button">%2$s &rarr;</a>',
+			sprintf(
+				// translators: %s will be replaced with add-on name (Additional Skins)
+				__( 'Get more styles for this shortcode with the %s add-on', 'shortcodes-ultimate' ),
+				'<nobr>' . __( 'Additional Skins', 'shortcodes-ultimate' ) . '</nobr>'
+			),
+			__( 'Details & Pricing', 'shortcodes-ultimate' ),
+			'https://getshortcodes.com/add-ons/additional-skins/'
+		);
 
-		if ( ! file_exists( $file ) ) {
-			return '';
+		foreach ( array( 'heading', 'tabs', 'tab', 'accordion', 'spoiler', 'quote' ) as $shortcode ) {
+
+			unset( $shortcodes[ $shortcode ]['note'] );
+			$shortcodes[ $shortcode ]['generator_cta'] = $cta;
+
 		}
 
-		ob_start();
-		include $file;
-		return ob_get_clean();
+		return $shortcodes;
 
 	}
 

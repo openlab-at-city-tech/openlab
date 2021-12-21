@@ -2,68 +2,18 @@
 /**
  * Plugin Name: Shortcodes Ultimate
  * Plugin URI: https://getshortcodes.com/
- * Version: 5.10.2
  * Author: Vladimir Anokhin
  * Author URI: https://getshortcodes.com/
  * Description: A comprehensive collection of visual components for WordPress
  * Text Domain: shortcodes-ultimate
  * License: GPLv3
- * Requires PHP: 5.3
+ * Version: 5.11.1
+ * Requires PHP: 5.4
  * Requires at least: 4.6
  * Tested up to: 5.8
  */
 
-/**
- * Define plugin constants.
- */
 define( 'SU_PLUGIN_FILE', __FILE__ );
-define( 'SU_PLUGIN_VERSION', '5.10.2' );
+define( 'SU_PLUGIN_VERSION', '5.11.1' );
 
-/**
- * Load dependencies.
- */
-require_once 'inc/core/assets.php';
-require_once 'inc/core/tools.php';
-require_once 'inc/core/generator-views.php';
-require_once 'inc/core/generator.php';
-
-/**
- * The code that runs during plugin activation.
- *
- * @since  5.0.0
- */
-function activate_shortcodes_ultimate() {
-
-	require_once dirname( __FILE__ ) . '/includes/class-shortcodes-ultimate-activator.php';
-
-	Shortcodes_Ultimate_Activator::activate();
-
-}
-
-register_activation_hook( __FILE__, 'activate_shortcodes_ultimate' );
-
-/**
- * Begins execution of the plugin.
- *
- * @since 5.0.0
- */
-function run_shortcodes_ultimate() {
-
-	require_once dirname( __FILE__ ) . '/includes/class-shortcodes-ultimate.php';
-
-	$plugin = new Shortcodes_Ultimate( __FILE__, SU_PLUGIN_VERSION, 'shortcodes-ultimate-' );
-
-	do_action( 'su/ready', $plugin );
-
-}
-
-run_shortcodes_ultimate();
-
-/**
- * Retrieves instance of the main plugin class.
- *
- * @since  5.0.4
- */
-function shortcodes_ultimate() {
-	return Shortcodes_Ultimate::get_instance();
-}
+require_once dirname( __FILE__ ) . '/plugin.php';

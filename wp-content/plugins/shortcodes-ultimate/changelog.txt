@@ -1,3 +1,34 @@
+### 5.11.0
+
+**What's changed**
+
+- *Available shortcodes* admin page have been disabled. Now you can find the most actual info about every shortcode at the plugin website under [Docs → Shortcodes](https://getshortcodes.com/docs-category/shortcodes/). This change will help me to maintain a single version of the plugin documentation and make it better for you.
+- New admin page *Shortcodes → About* which contains some useful links and a getting started video
+
+**Fixed**
+
+- Fixed issue with `[su_box]`'s `title` attribute, now it supports nested HTML tags again
+- Fixed issue with `[su_tooltip]`'s `z-index` CSS property, now it must be compatible with more themes
+- Fixed issue where `[su_qrcode align="center"]` wasn't working
+- Fixed issue when `su_animate` content wasn't properly indexed by search engines
+
+
+### 5.10.2
+
+**What's new**
+
+- Plugin security have been improved. You may see a new notification in the admin area. [Learn more](https://getshortcodes.com/docs/unsafe-features/)
+- Added new setting `Unsafe features` under `Shortcodes → Settings → Advanced settings`. [Learn more](https://getshortcodes.com/docs/unsafe-features/)
+- Improved accessibility of the plugin settings page
+
+**Fixed**
+
+- Fixed *This video is unavailable* in `su_youtube_advanced` shortcode
+- Fixed compatibility issue with SiteOrigin Page Builder. You can now turn on or off the old widget under `Shortcodes -> Settings Advanced settings`
+- Fixed issue in `[su_note]` when it was displaying empty id attribute
+- Fixed PHP warning at the new Widgets screen
+
+
 ### 5.10.1
 
 **What's new**

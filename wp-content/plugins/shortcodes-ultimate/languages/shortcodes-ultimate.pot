@@ -13,73 +13,90 @@ msgstr ""
 "X-Poedit-SourceCharset: UTF-8\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: admin/class-shortcodes-ultimate-admin-addons.php:26, admin/class-shortcodes-ultimate-admin-addons.php:29, admin/class-shortcodes-ultimate-admin-addons.php:54, inc/core/generator.php:215, admin/partials/help/sidebar.php:6
+#: admin/class-shortcodes-ultimate-admin-about.php:13, admin/class-shortcodes-ultimate-admin-about.php:14, admin/class-shortcodes-ultimate-admin-about.php:64, admin/partials/pages/settings.php:46
+msgid "About"
+msgstr ""
+
+#: admin/class-shortcodes-ultimate-admin-addons.php:26, admin/class-shortcodes-ultimate-admin-addons.php:29, admin/class-shortcodes-ultimate-admin-addons.php:54, inc/core/generator.php:215, admin/partials/help/sidebar.php:7
 msgid "Add-ons"
 msgstr ""
 
-#: admin/class-shortcodes-ultimate-admin-extra-shortcodes.php:38
+#: admin/class-shortcodes-ultimate-admin-pro-features.php:40
 msgctxt "Custom shortcodes group name"
-msgid "Extra Shortcodes"
+msgid "PRO Shortcodes"
 msgstr ""
 
-#: admin/class-shortcodes-ultimate-admin-extra-shortcodes.php:70
+#: admin/class-shortcodes-ultimate-admin-pro-features.php:65
 msgid "Splash screen"
 msgstr ""
 
-#: admin/class-shortcodes-ultimate-admin-extra-shortcodes.php:74
+#: admin/class-shortcodes-ultimate-admin-pro-features.php:69
 msgid "Exit popup"
 msgstr ""
 
-#: admin/class-shortcodes-ultimate-admin-extra-shortcodes.php:78
+#: admin/class-shortcodes-ultimate-admin-pro-features.php:73
 msgid "Panel"
 msgstr ""
 
-#: admin/class-shortcodes-ultimate-admin-extra-shortcodes.php:82
+#: admin/class-shortcodes-ultimate-admin-pro-features.php:77
 msgid "Photo panel"
 msgstr ""
 
-#: admin/class-shortcodes-ultimate-admin-extra-shortcodes.php:86
+#: admin/class-shortcodes-ultimate-admin-pro-features.php:81
 msgid "Icon panel"
 msgstr ""
 
-#: admin/class-shortcodes-ultimate-admin-extra-shortcodes.php:90
+#: admin/class-shortcodes-ultimate-admin-pro-features.php:85
 msgid "Text with icon"
 msgstr ""
 
-#: admin/class-shortcodes-ultimate-admin-extra-shortcodes.php:94
+#: admin/class-shortcodes-ultimate-admin-pro-features.php:89
 msgid "Progress pie"
 msgstr ""
 
-#: admin/class-shortcodes-ultimate-admin-extra-shortcodes.php:98
+#: admin/class-shortcodes-ultimate-admin-pro-features.php:93
 msgid "Progress bar"
 msgstr ""
 
-#: admin/class-shortcodes-ultimate-admin-extra-shortcodes.php:102
+#: admin/class-shortcodes-ultimate-admin-pro-features.php:97
 msgid "Member"
 msgstr ""
 
-#: admin/class-shortcodes-ultimate-admin-extra-shortcodes.php:106
+#: admin/class-shortcodes-ultimate-admin-pro-features.php:101
 msgid "Section"
 msgstr ""
 
-#: admin/class-shortcodes-ultimate-admin-extra-shortcodes.php:110
+#: admin/class-shortcodes-ultimate-admin-pro-features.php:105
 msgid "Pricing table"
 msgstr ""
 
-#: admin/class-shortcodes-ultimate-admin-extra-shortcodes.php:114
+#: admin/class-shortcodes-ultimate-admin-pro-features.php:109
 msgid "Testimonial"
 msgstr ""
 
-#: admin/class-shortcodes-ultimate-admin-extra-shortcodes.php:118, includes/shortcodes/button.php:97, includes/shortcodes/list.php:15, includes/shortcodes/service.php:21, includes/shortcodes/spoiler.php:51
+#: admin/class-shortcodes-ultimate-admin-pro-features.php:113, includes/shortcodes/button.php:97, includes/shortcodes/list.php:15, includes/shortcodes/service.php:21, includes/shortcodes/spoiler.php:51
 msgid "Icon"
 msgstr ""
 
-#: admin/class-shortcodes-ultimate-admin-extra-shortcodes.php:122
+#: admin/class-shortcodes-ultimate-admin-pro-features.php:117
 msgid "Content slider"
 msgstr ""
 
-#: admin/class-shortcodes-ultimate-admin-extra-shortcodes.php:126, includes/shortcodes/lightbox-content.php:104
+#: admin/class-shortcodes-ultimate-admin-pro-features.php:121, includes/shortcodes/lightbox-content.php:104
 msgid "Shadow"
+msgstr ""
+
+#. translators: %s will be replaced with add-on name (Additional Skins)
+#: admin/class-shortcodes-ultimate-admin-pro-features.php:137
+msgid "Get more styles for this shortcode with the %s add-on"
+msgstr ""
+
+#: admin/class-shortcodes-ultimate-admin-pro-features.php:138, includes/config/addons.php:31
+msgid "Additional Skins"
+msgstr ""
+
+#: admin/class-shortcodes-ultimate-admin-pro-features.php:140, admin/partials/pro-features/generator.php:17
+msgid "Details & Pricing"
 msgstr ""
 
 #: admin/class-shortcodes-ultimate-admin-settings.php:76
@@ -182,95 +199,11 @@ msgstr ""
 msgid "General settings"
 msgstr ""
 
-#: admin/class-shortcodes-ultimate-admin-shortcodes.php:26, admin/class-shortcodes-ultimate-admin-shortcodes.php:27
-msgid "Available shortcodes"
-msgstr ""
-
-#: admin/class-shortcodes-ultimate-admin-shortcodes.php:88, admin/class-shortcodes-ultimate-admin-top-level.php:39, admin/class-shortcodes-ultimate-admin.php:267, admin/class-shortcodes-ultimate-widget.php:26, admin/class-shortcodes-ultimate-widget.php:77, includes/functions-galleries.php:297, includes/deprecated/class-su-widget.php:15, includes/deprecated/class-su-widget.php:43, admin/partials/help/sidebar.php:3
+#: admin/class-shortcodes-ultimate-admin-top-level.php:39, admin/class-shortcodes-ultimate-admin.php:267, admin/class-shortcodes-ultimate-widget.php:26, admin/class-shortcodes-ultimate-widget.php:77, includes/functions-galleries.php:297, includes/deprecated/class-su-widget.php:15, includes/deprecated/class-su-widget.php:43, admin/partials/help/sidebar.php:3
 msgid "Shortcodes Ultimate"
 msgstr ""
 
-#: admin/class-shortcodes-ultimate-admin-shortcodes.php:305, inc/core/generator.php:284, admin/partials/extra/generator.php:2
-msgid "All shortcodes"
-msgstr ""
-
-#: admin/class-shortcodes-ultimate-admin-shortcodes.php:392
-msgid "Media file IDs"
-msgstr ""
-
-#: admin/class-shortcodes-ultimate-admin-shortcodes.php:393, includes/shortcodes/display-posts.php:37
-msgid "Post IDs"
-msgstr ""
-
-#: admin/class-shortcodes-ultimate-admin-shortcodes.php:394, inc/core/generator-views.php:149, includes/shortcodes/image-carousel.php:20
-msgid "Recent posts"
-msgstr ""
-
-#: admin/class-shortcodes-ultimate-admin-shortcodes.php:395
-msgid "Taxonomy term slug / term IDs"
-msgstr ""
-
-#: admin/class-shortcodes-ultimate-admin-shortcodes.php:400
-msgid "#HEX color"
-msgstr ""
-
-#: admin/class-shortcodes-ultimate-admin-shortcodes.php:401
-msgid "Any text value"
-msgstr ""
-
-#: admin/class-shortcodes-ultimate-admin-shortcodes.php:402
-msgid "CSS border shorthand property"
-msgstr ""
-
-#: admin/class-shortcodes-ultimate-admin-shortcodes.php:403
-msgid "CSS box/text-shadow shorthand property"
-msgstr ""
-
-#: admin/class-shortcodes-ultimate-admin-shortcodes.php:404
-msgid "CSS class name(s) separated by space(s)"
-msgstr ""
-
-#: admin/class-shortcodes-ultimate-admin-shortcodes.php:405
-msgid "Post type slug(s) separated by comma(s)"
-msgstr ""
-
-#: admin/class-shortcodes-ultimate-admin-shortcodes.php:406
-msgid "Taxonomy slug(s) separated by comma(s)"
-msgstr ""
-
-#: admin/class-shortcodes-ultimate-admin-shortcodes.php:407
-msgid "Term slug(s) separated by comma(s)"
-msgstr ""
-
-#: admin/class-shortcodes-ultimate-admin-shortcodes.php:408
-msgid "The URL of uploaded file"
-msgstr ""
-
-#: admin/class-shortcodes-ultimate-admin-shortcodes.php:409
-msgid "%1$s or %2$s"
-msgstr ""
-
-#: admin/class-shortcodes-ultimate-admin-shortcodes.php:410, admin/class-shortcodes-ultimate-admin-shortcodes.php:411
-msgid "Number from %1$s to %2$s"
-msgstr ""
-
-#: admin/class-shortcodes-ultimate-admin-shortcodes.php:412
-msgid "Fork Awesome icon name (with \"icon:\" prefix) or image URL"
-msgstr ""
-
-#: admin/class-shortcodes-ultimate-admin-shortcodes.php:412, includes/shortcodes/lightbox-content.php:30, includes/shortcodes/lightbox-content.php:40, includes/shortcodes/lightbox-content.php:50
-msgid "Examples"
-msgstr ""
-
-#: admin/class-shortcodes-ultimate-admin-shortcodes.php:412
-msgid "See available Fork Awesome icons"
-msgstr ""
-
-#: admin/class-shortcodes-ultimate-admin-shortcodes.php:433
-msgid "none"
-msgstr ""
-
-#: admin/class-shortcodes-ultimate-admin-shortcodes.php:506, admin/class-shortcodes-ultimate-admin-top-level.php:40
+#: admin/class-shortcodes-ultimate-admin-top-level.php:40, admin/partials/pages/about.php:25
 msgid "Shortcodes"
 msgstr ""
 
@@ -410,6 +343,10 @@ msgstr ""
 msgid "Media library"
 msgstr ""
 
+#: inc/core/generator-views.php:149, includes/shortcodes/image-carousel.php:20
+msgid "Recent posts"
+msgstr ""
+
 #: inc/core/generator-views.php:150, includes/shortcodes/display-posts.php:61, includes/shortcodes/image-carousel.php:21, includes/shortcodes/posts.php:56
 msgid "Taxonomy"
 msgstr ""
@@ -450,7 +387,7 @@ msgstr ""
 msgid "Plugin homepage"
 msgstr ""
 
-#: inc/core/generator.php:215, admin/partials/pages/addons.php:14
+#: inc/core/generator.php:215, admin/partials/pages/about.php:45, admin/partials/pages/addons.php:14
 msgid "Premium Add-ons"
 msgstr ""
 
@@ -474,48 +411,40 @@ msgstr ""
 msgid "Live preview"
 msgstr ""
 
-#: inc/core/generator.php:284, admin/partials/extra/generator.php:2
+#: inc/core/generator.php:284, admin/partials/pro-features/generator.php:2
 msgid "Click to return to the shortcodes list"
 msgstr ""
 
-#: inc/core/generator.php:305
+#: inc/core/generator.php:284, admin/partials/pro-features/generator.php:2
+msgid "All shortcodes"
+msgstr ""
+
+#: inc/core/generator.php:308
 msgid "Click to set this value"
 msgstr ""
 
-#: inc/core/generator.php:323, includes/config/groups.php:7
+#: inc/core/generator.php:326, includes/config/groups.php:7
 msgid "Content"
 msgstr ""
 
-#: inc/core/generator.php:340, admin/partials/pages/shortcodes-single-content.php:20
+#: inc/core/generator.php:343
 msgid "Preview"
 msgstr ""
 
-#: inc/core/generator.php:348
+#: inc/core/generator.php:351
 msgid "Access denied"
 msgstr ""
 
-#: inc/core/generator.php:393
+#: inc/core/generator.php:396
 msgid "Presets"
 msgstr ""
 
-#: inc/core/generator.php:396
+#: inc/core/generator.php:399
 msgid "Save current settings as preset"
 msgstr ""
 
-#: inc/core/generator.php:428, inc/core/generator.php:425
+#: inc/core/generator.php:431, inc/core/generator.php:428
 msgid "Presets not found"
-msgstr ""
-
-#: inc/core/generator.php:644
-msgid "Get more styles"
-msgstr ""
-
-#: inc/core/generator.php:635
-msgid "Additional skins successfully installed"
-msgstr ""
-
-#: inc/core/generator.php:636
-msgid "Open dropdown to choose one of new styles"
 msgstr ""
 
 #: includes/config/addons.php:9
@@ -526,7 +455,7 @@ msgstr ""
 msgid "Three-in-one, best price, simple"
 msgstr ""
 
-#: includes/config/addons.php:17, admin/partials/extra/available-shortcodes.php:6, admin/partials/extra/generator.php:14
+#: includes/config/addons.php:17, admin/partials/pro-features/generator.php:14
 msgid "Extra Shortcodes"
 msgstr ""
 
@@ -540,10 +469,6 @@ msgstr ""
 
 #: includes/config/addons.php:25
 msgid "Create your own shortcodes"
-msgstr ""
-
-#: includes/config/addons.php:31
-msgid "Additional Skins"
 msgstr ""
 
 #: includes/config/addons.php:32
@@ -594,7 +519,7 @@ msgstr ""
 msgid "All"
 msgstr ""
 
-#: includes/config/groups.php:8, includes/shortcodes/box.php:8
+#: includes/config/groups.php:8, includes/config/popular-shortcodes.php:44, includes/shortcodes/box.php:8
 msgid "Box"
 msgstr ""
 
@@ -614,11 +539,71 @@ msgstr ""
 msgid "Other"
 msgstr ""
 
+#: includes/config/popular-shortcodes.php:8, includes/shortcodes/display-posts.php:9, includes/shortcodes/posts.php:8
+msgid "Posts"
+msgstr ""
+
+#: includes/config/popular-shortcodes.php:9
+msgid "Create your own posts query and display it where you want"
+msgstr ""
+
+#: includes/config/popular-shortcodes.php:14
+msgid "Accordion &amp; Spoiler"
+msgstr ""
+
+#: includes/config/popular-shortcodes.php:15
+msgid "Create a single toggle or an accordion with multiple items"
+msgstr ""
+
+#: includes/config/popular-shortcodes.php:20, includes/shortcodes/button.php:8, includes/shortcodes/expand.php:58
+msgid "Button"
+msgstr ""
+
+#: includes/config/popular-shortcodes.php:21
+msgid "Beautiful button with multiple styles and ton of options"
+msgstr ""
+
+#: includes/config/popular-shortcodes.php:26, includes/shortcodes/carousel.php:39, includes/shortcodes/custom-gallery.php:32, includes/shortcodes/image-carousel.php:132, includes/shortcodes/lightbox.php:8, includes/shortcodes/slider.php:39
+msgid "Lightbox"
+msgstr ""
+
+#: includes/config/popular-shortcodes.php:27
+msgid "A lightbox, that can display images and custom HTML"
+msgstr ""
+
+#: includes/config/popular-shortcodes.php:32, includes/shortcodes/image-carousel.php:69, includes/shortcodes/row.php:8
+msgid "Columns"
+msgstr ""
+
+#: includes/config/popular-shortcodes.php:33
+msgid "Two shortcodes for creating flexible multi-column layouts"
+msgstr ""
+
+#: includes/config/popular-shortcodes.php:38, includes/shortcodes/image-carousel.php:8
+msgid "Image carousel"
+msgstr ""
+
+#: includes/config/popular-shortcodes.php:39
+msgid "A powerful shortcode for creating both sliders and carousels"
+msgstr ""
+
+#: includes/config/popular-shortcodes.php:45
+msgid "Simple yet stylish colorful block with caption and content"
+msgstr ""
+
+#: includes/config/popular-shortcodes.php:50, includes/shortcodes/tabs.php:7
+msgid "Tabs"
+msgstr ""
+
+#: includes/config/popular-shortcodes.php:51
+msgid "Two shortcodes for breaking your content into tabs"
+msgstr ""
+
 #: includes/config/supported-blocks.php:6
 msgid "Paragraph"
 msgstr ""
 
-#: includes/config/supported-blocks.php:7, admin/partials/pages/shortcodes-single-content.php:29
+#: includes/config/supported-blocks.php:7
 msgid "Shortcode"
 msgstr ""
 
@@ -812,10 +797,6 @@ msgstr ""
 
 #: includes/shortcodes/box.php:76
 msgid "This is box title"
-msgstr ""
-
-#: includes/shortcodes/button.php:8, includes/shortcodes/expand.php:58
-msgid "Button"
 msgstr ""
 
 #: includes/shortcodes/button.php:15, includes/shortcodes/qrcode.php:59
@@ -1026,10 +1007,6 @@ msgstr ""
 
 #: includes/shortcodes/carousel.php:38, includes/shortcodes/custom-gallery.php:31, includes/shortcodes/image-carousel.php:131, includes/shortcodes/slider.php:38
 msgid "Full-size image"
-msgstr ""
-
-#: includes/shortcodes/carousel.php:39, includes/shortcodes/custom-gallery.php:32, includes/shortcodes/image-carousel.php:132, includes/shortcodes/lightbox.php:8, includes/shortcodes/slider.php:39
-msgid "Lightbox"
 msgstr ""
 
 #: includes/shortcodes/carousel.php:40, includes/shortcodes/custom-gallery.php:33, includes/shortcodes/slider.php:40
@@ -1412,10 +1389,6 @@ msgstr ""
 msgid "Dailymotion video"
 msgstr ""
 
-#: includes/shortcodes/display-posts.php:9, includes/shortcodes/posts.php:8
-msgid "Posts"
-msgstr ""
-
 #: includes/shortcodes/display-posts.php:16, includes/shortcodes/posts.php:15, includes/shortcodes/template.php:8
 msgid "Template"
 msgstr ""
@@ -1450,6 +1423,10 @@ msgstr ""
 
 #: includes/shortcodes/display-posts.php:32
 msgid "How to create/edit a template"
+msgstr ""
+
+#: includes/shortcodes/display-posts.php:37
+msgid "Post IDs"
 msgstr ""
 
 #: includes/shortcodes/display-posts.php:38
@@ -2226,10 +2203,6 @@ msgstr ""
 msgid "Highlighted text"
 msgstr ""
 
-#: includes/shortcodes/image-carousel.php:8
-msgid "Image carousel"
-msgstr ""
-
 #: includes/shortcodes/image-carousel.php:9
 msgid "Customizable image gallery (slider and carousel)"
 msgstr ""
@@ -2290,10 +2263,6 @@ msgstr ""
 msgid "This option allows to enable/disable image cropping and crop aspect ratio."
 msgstr ""
 
-#: includes/shortcodes/image-carousel.php:69, includes/shortcodes/row.php:8
-msgid "Columns"
-msgstr ""
-
 #: includes/shortcodes/image-carousel.php:70
 msgid "This option control the number of columns used in the carousel."
 msgstr ""
@@ -2338,7 +2307,7 @@ msgstr ""
 msgid "Example values"
 msgstr ""
 
-#: includes/shortcodes/image-carousel.php:104, admin/partials/pages/shortcodes-single-content.php:55
+#: includes/shortcodes/image-carousel.php:104
 msgid "Default value"
 msgstr ""
 
@@ -2488,6 +2457,10 @@ msgstr ""
 
 #: includes/shortcodes/lightbox-content.php:29
 msgid "The width of the element. CSS units are allowed."
+msgstr ""
+
+#: includes/shortcodes/lightbox-content.php:30, includes/shortcodes/lightbox-content.php:40, includes/shortcodes/lightbox-content.php:50
+msgid "Examples"
 msgstr ""
 
 #: includes/shortcodes/lightbox-content.php:36
@@ -3388,10 +3361,6 @@ msgstr ""
 msgid "The <b>url</b> attribute cannot be used while <b>Unsafe features</b> option is turned off"
 msgstr ""
 
-#: includes/shortcodes/tabs.php:7
-msgid "Tabs"
-msgstr ""
-
 #: includes/shortcodes/tabs.php:11
 msgid "Tabs container"
 msgstr ""
@@ -3862,23 +3831,19 @@ msgstr ""
 msgid "YouTube video"
 msgstr ""
 
-#: admin/partials/extra/available-shortcodes.php:4, admin/partials/extra/generator.php:11
-msgid "This shortcode is available with the Extra Shortcodes add-on"
-msgstr ""
-
-#: admin/partials/extra/available-shortcodes.php:7, admin/partials/extra/generator.php:15
-msgid "This add-on extends Shortcodes Ultimate with 15 new shortcodes. Parallax sections, responsive content slider, pricing tables and more"
-msgstr ""
-
-#: admin/partials/extra/available-shortcodes.php:9, admin/partials/extra/generator.php:17
-msgid "Details & Pricing"
-msgstr ""
-
 #: admin/partials/help/addons.php:4
-msgid "Full add-ons documentation"
+msgid "Extra Shortcodes user guide"
 msgstr ""
 
-#: admin/partials/help/settings.php:4, admin/partials/help/shortcodes.php:4
+#: admin/partials/help/addons.php:5
+msgid "Shortcode Creator user guide"
+msgstr ""
+
+#: admin/partials/help/addons.php:6
+msgid "Additional Skins user guide"
+msgstr ""
+
+#: admin/partials/help/settings.php:4
 msgid "Getting started"
 msgstr ""
 
@@ -3890,14 +3855,6 @@ msgstr ""
 msgid "How to use Custom CSS editor"
 msgstr ""
 
-#: admin/partials/help/shortcodes.php:5
-msgid "Full documentation"
-msgstr ""
-
-#: admin/partials/help/shortcodes.php:6
-msgid "FAQ & Support"
-msgstr ""
-
 #: admin/partials/help/sidebar.php:4
 msgid "Plugin website"
 msgstr ""
@@ -3906,12 +3863,12 @@ msgstr ""
 msgid "Documentation"
 msgstr ""
 
-#: admin/partials/help/sidebar.php:7
-msgid "WordPress.org"
+#: admin/partials/help/sidebar.php:6
+msgid "Available shortcodes"
 msgstr ""
 
 #: admin/partials/help/sidebar.php:8
-msgid "GitHub"
+msgid "WordPress.org"
 msgstr ""
 
 #: admin/partials/notices/rate.php:5
@@ -3946,52 +3903,121 @@ msgstr ""
 msgid "Some minor features of the plugin have been automatically disabled to improve the security."
 msgstr ""
 
+#. translators: %s will be replaced with "Shortcodes Ultimate"
+#: admin/partials/pages/about.php:9
+msgid "Welcome to %s"
+msgstr ""
+
+#: admin/partials/pages/about.php:18
+msgid "See the plugin in action"
+msgstr ""
+
+#: admin/partials/pages/about.php:26
+msgid "The plugin includes over 60 amazing shortcodes"
+msgstr ""
+
+#: admin/partials/pages/about.php:30
+msgid "Shortcode icon"
+msgstr ""
+
+#: admin/partials/pages/about.php:39
+msgid "View all shortcodes"
+msgstr ""
+
+#: admin/partials/pages/about.php:47
+msgid "Parallax Section shortcode"
+msgstr ""
+
+#: admin/partials/pages/about.php:48
+msgid "Custom PHP shortcodes"
+msgstr ""
+
+#: admin/partials/pages/about.php:49
+msgid "Content Slider shortcode"
+msgstr ""
+
+#: admin/partials/pages/about.php:50
+msgid "Personal email support"
+msgstr ""
+
+#: admin/partials/pages/about.php:51
+msgid "Testimonail shortcode"
+msgstr ""
+
+#: admin/partials/pages/about.php:52
+msgid "24 styles for Heading"
+msgstr ""
+
+#: admin/partials/pages/about.php:53
+msgid "Progress Bar shortcode"
+msgstr ""
+
+#: admin/partials/pages/about.php:54
+msgid "14 styles for Spoiler"
+msgstr ""
+
+#: admin/partials/pages/about.php:55
+msgid "Exit Popup shortcode"
+msgstr ""
+
+#: admin/partials/pages/about.php:56
+msgid "13 styles for Tabs"
+msgstr ""
+
+#: admin/partials/pages/about.php:60
+msgid "Browse Add-ons"
+msgstr ""
+
+#: admin/partials/pages/about.php:65
+msgid "Get help"
+msgstr ""
+
+#: admin/partials/pages/about.php:71
+msgid "Plugin documentation"
+msgstr ""
+
+#: admin/partials/pages/about.php:77
+msgid "Community support forum"
+msgstr ""
+
+#: admin/partials/pages/about.php:83
+msgid "Premium support"
+msgstr ""
+
 #: admin/partials/pages/addons.php:30
 msgid "Learn more about"
 msgstr ""
 
-#: admin/partials/pages/settings.php:15
+#: admin/partials/pages/settings.php:7
+msgid "Shortcodes Ultimate Settings"
+msgstr ""
+
+#: admin/partials/pages/settings.php:18
 msgid "Warning!"
 msgstr ""
 
-#: admin/partials/pages/settings.php:16
+#: admin/partials/pages/settings.php:19
 msgid "You are editing advanced settings. Do NOT modify anything in here unless you know what you are doing."
 msgstr ""
 
-#: admin/partials/pages/settings.php:19
-msgid "Return to main settings"
+#: admin/partials/pages/settings.php:22
+msgid "Go back to main settings"
 msgstr ""
 
-#: admin/partials/pages/settings.php:38
+#: admin/partials/pages/settings.php:44
+msgid "Main settings"
+msgstr ""
+
+#: admin/partials/pages/settings.php:42
 msgid "Advanced settings"
 msgstr ""
 
-#: admin/partials/pages/shortcodes-list.php:42
-msgid "No shortcodes found."
+#: admin/partials/pro-features/generator.php:11
+msgid "This shortcode is available with the Extra Shortcodes add-on"
 msgstr ""
 
-#: admin/partials/pages/shortcodes-single-content.php:12
-msgid "Shortcode documentation"
-msgstr ""
-
-#: admin/partials/pages/shortcodes-single-content.php:36
-msgid "Shortcode options"
-msgstr ""
-
-#: admin/partials/pages/shortcodes-single-content.php:53
-msgid "Option name"
-msgstr ""
-
-#: admin/partials/pages/shortcodes-single-content.php:54
-msgid "Possible values"
-msgstr ""
-
-#: admin/partials/pages/shortcodes-single-content.php:47
-msgid "This shortcode do not have options"
-msgstr ""
-
-#: admin/partials/pages/shortcodes-single.php:13, admin/partials/pages/shortcodes-single.php:24
-msgid "Back to shortcodes list"
+#: admin/partials/pro-features/generator.php:15
+msgid "This add-on extends Shortcodes Ultimate with 15 new shortcodes. Parallax sections, responsive content slider, pricing tables and more"
 msgstr ""
 
 #: admin/partials/settings/fields/checkbox.php:3
@@ -4030,7 +4056,7 @@ msgstr ""
 msgid "More information"
 msgstr ""
 
-#. translators: %s - link to the shortcodes.css file
+#. translators: %s - link to the shortcodes.full.css file
 #: admin/partials/settings/fields/css.php:61
 msgid "Open %s file to see default styles"
 msgstr ""
