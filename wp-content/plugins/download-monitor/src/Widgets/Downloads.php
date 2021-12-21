@@ -142,8 +142,8 @@ class DLM_Widget_Downloads extends WP_Widget {
 		$instance['format']         = sanitize_title( $new_instance['format'] );
 		$instance['orderby']        = sanitize_text_field( $new_instance['orderby'] );
 		$instance['order']          = sanitize_text_field( $new_instance['order'] );
-		$instance['featured']       = isset( $new_instance['featured'] ) ? 'yes' : 'no';
-		$instance['members_only']   = isset( $new_instance['members_only'] ) ? 'yes' : 'no';
+		$instance['featured']       = isset( $new_instance['featured'] ) ? $new_instance['featured'] : 'no';
+		$instance['members_only']   = isset( $new_instance['members_only'] ) ? $new_instance['members_only'] : 'no';
 
 		return $instance;
 	}
@@ -218,14 +218,14 @@ class DLM_Widget_Downloads extends WP_Widget {
         <p>
             <input id="<?php echo esc_attr( $this->get_field_id( 'featured' ) ); ?>"
                    name="<?php echo esc_attr( $this->get_field_name( 'featured' ) ); ?>"
-                   type="checkbox" <?php checked( $featured, 'yes' ); ?> />
+                   type="checkbox" <?php checked( $featured, 'yes' ); ?>  value="yes" />
             <label
                     for="<?php echo esc_attr( $this->get_field_id( 'featured' ) ); ?>"><?php echo esc_html__( 'Show only featured downloads', 'download-monitor' ); ?></label>
         </p>
         <p>
             <input id="<?php echo esc_attr( $this->get_field_id( 'members_only' ) ); ?>"
                    name="<?php echo esc_attr( $this->get_field_name( 'members_only' ) ); ?>"
-                   type="checkbox" <?php checked( $members_only, 'yes' ); ?> />
+                   type="checkbox" <?php checked( $members_only, 'yes' ); ?> value="yes" />
             <label
                     for="<?php echo esc_attr( $this->get_field_id( 'members_only' ) ); ?>"><?php echo esc_html__( 'Show only members only downloads', 'download-monitor' ); ?></label>
         </p>
