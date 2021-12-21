@@ -34,13 +34,13 @@ class TablePress_Import_View extends TablePress_View {
 		$this->admin_page->enqueue_script( 'import', array( 'jquery' ) );
 
 		$this->process_action_messages( array(
-			'error_import'                             => __( 'Error: The import failed.', 'tablepress' ),
-			'error_no_zip_import'                      => __( 'Error: Import of ZIP files is not available on this server.', 'tablepress' ),
-			'error_import_zip_open'                    => __( 'Error: The ZIP file could not be opened.', 'tablepress' ),
-			'error_import_zip_content'                 => __( 'Error: The data in the ZIP file is invalid.', 'tablepress' ),
-			'error_import_no_existing_id'              => __( 'Error: You selected to replace or append to an existing table, but did not select a table.', 'tablepress' ),
-			'error_import_source_invalid'              => __( 'Error: The source for the import is invalid or could not be accessed.', 'tablepress' ),
-			'error_import_data'                        => __( 'Error: The data for the import is invalid.', 'tablepress' ),
+			'error_import'                => __( 'Error: The import failed.', 'tablepress' ),
+			'error_no_zip_import'         => __( 'Error: Import of ZIP files is not available on this server.', 'tablepress' ),
+			'error_import_zip_open'       => __( 'Error: The ZIP file could not be opened.', 'tablepress' ),
+			'error_import_zip_content'    => __( 'Error: The data in the ZIP file is invalid.', 'tablepress' ),
+			'error_import_no_existing_id' => __( 'Error: You selected to replace or append to an existing table, but did not select a table.', 'tablepress' ),
+			'error_import_source_invalid' => __( 'Error: The source for the import is invalid or could not be accessed.', 'tablepress' ),
+			'error_import_data'           => __( 'Error: The data for the import is invalid.', 'tablepress' ),
 		) );
 
 		$this->add_text_box( 'head', array( $this, 'textbox_head' ), 'normal' );
@@ -63,9 +63,9 @@ class TablePress_Import_View extends TablePress_View {
 		<p>
 			<?php _e( 'To import a table, select and enter the import source in the following form.', 'tablepress' ); ?>
 			<?php
-				if ( 0 < $data['tables_count'] ) {
-					_e( 'You can also choose to import it as a new table, to replace an existing table, or to append the rows to an existing table.', 'tablepress' );
-				}
+			if ( 0 < $data['tables_count'] ) {
+				_e( 'You can also choose to import it as a new table, to replace an existing table, or to append the rows to an existing table.', 'tablepress' );
+			}
 			?>
 		</p>
 		<?php
@@ -80,7 +80,7 @@ class TablePress_Import_View extends TablePress_View {
 	 * @param array $box  Information about the meta box.
 	 */
 	public function postbox_import_form( array $data, array $box ) {
-?>
+		?>
 <table class="tablepress-postbox-table fixed">
 <tbody>
 	<tr id="row-import-source">
@@ -116,7 +116,7 @@ class TablePress_Import_View extends TablePress_View {
 			?>
 		</td>
 	</tr>
-	<?php if ( ( ! is_multisite() && current_user_can( 'manage_options' ) ) || is_super_admin() ) { ?>
+		<?php if ( ( ! is_multisite() && current_user_can( 'manage_options' ) ) || is_super_admin() ) { ?>
 	<tr id="row-import-source-server" class="bottom-border">
 		<th class="column-1 top-align" scope="row"><label for="tables-import-server"><?php _e( 'Server Path to file', 'tablepress' ); ?>:</label></th>
 		<td class="column-2">
@@ -189,7 +189,7 @@ class TablePress_Import_View extends TablePress_View {
 	</tr>
 </tbody>
 </table>
-<?php
+		<?php
 	}
 
 } // class TablePress_Import_View

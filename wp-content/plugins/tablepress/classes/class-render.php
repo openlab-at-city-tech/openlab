@@ -225,11 +225,11 @@ class TablePress_Render {
 
 		// Load information about hidden rows and columns.
 		// Get indexes of hidden rows (array value of 0).
-		$hidden_rows = array_keys( $this->table['visibility']['rows'], 0 );
+		$hidden_rows = array_keys( $this->table['visibility']['rows'], 0, true );
 		$hidden_rows = array_merge( $hidden_rows, $this->render_options['hide_rows'] );
 		$hidden_rows = array_diff( $hidden_rows, $this->render_options['show_rows'] );
 		// Get indexes of hidden columns (array value of 0).
-		$hidden_columns = array_keys( $this->table['visibility']['columns'], 0 );
+		$hidden_columns = array_keys( $this->table['visibility']['columns'], 0, true );
 		$hidden_columns = array_merge( $hidden_columns, $this->render_options['hide_columns'] );
 		$hidden_columns = array_merge( array_diff( $hidden_columns, $this->render_options['show_columns'] ) );
 
@@ -424,7 +424,8 @@ class TablePress_Render {
 		 * @param array  $table   The current table.
 		 */
 		$caption = apply_filters( 'tablepress_print_caption_text', '', $this->table );
-		$caption_style = $caption_class = '';
+		$caption_style = '';
+		$caption_class = '';
 		if ( ! empty( $caption ) ) {
 			/**
 			 * Filter the class attribute for the HTML caption element of the table.
@@ -443,7 +444,7 @@ class TablePress_Render {
 			} else {
 				$caption .= '<br />';
 			}
-			$caption .= "<a href=\"{$this->render_options['edit_table_url']}\">" . __( 'Edit', 'default' ) . '</a>';
+			$caption .= '<a href="' . esc_url( $this->render_options['edit_table_url'] ) . '" rel="nofollow">' . __( 'Edit', 'default' ) . '</a>';
 		}
 		if ( ! empty( $caption ) ) {
 			$caption = "<caption{$caption_class}{$caption_style}>{$caption}</caption>\n";

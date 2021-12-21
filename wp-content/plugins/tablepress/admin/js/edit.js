@@ -112,7 +112,7 @@ jQuery( function( $ ) {
 			$table_body.children().each( function( idx, row ) {
 				table_data[ idx ] = $( row ).find( 'textarea' )
 					.map( function() {
-						return $(this).val();
+						return this.value;
 					} )
 					.get();
 			} );
@@ -976,7 +976,7 @@ jQuery( function( $ ) {
 					var expressions = value.match( /{.+?}/g );
 					if ( null === expressions ) {
 						// Fill array so that it has the same structure as if it came from match().
-						expressions = new Array( value );
+						expressions = [ value ];
 					}
 
 					// Find the replacement value (with updated cell references) for each expression and replace the old one with it.
@@ -1169,13 +1169,14 @@ jQuery( function( $ ) {
 				'.show-preview-button': tp.table.preview.trigger,
 				'.save-changes-button': tp.save_changes.trigger,
 				'.show-help-box':		function() {
-					$(this).next().wpdialog( {
+					var helpbox_id = $(this).data( 'help-box' );
+					$( helpbox_id ).wpdialog( {
 						title: $(this).attr( 'title' ),
 						height: 470,
 						width: 320,
 						modal: true,
 						dialogClass: 'wp-dialog',
-						resizable: false
+						closeOnEscape: true
 					} );
 				}
 			},
@@ -1222,7 +1223,8 @@ jQuery( function( $ ) {
 				width: 600,
 				modal: true,
 				dialogClass: 'wp-dialog',
-				resizable: false
+				resizable: false,
+				closeOnEscape: true
 			} );
 			// Fix issue with input fields not being usable (they are immediately losing focus without this) in the wpLink dialog when called through the "Advanced Editor"
 			$id( 'wp-link' ).on( 'focus', 'input', function( event ) {

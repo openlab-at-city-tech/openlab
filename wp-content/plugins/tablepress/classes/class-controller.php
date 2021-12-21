@@ -89,6 +89,7 @@ abstract class TablePress_Controller {
 		$current_plugin_options_db_version = TablePress::$model_options->get( 'plugin_options_db_version' );
 		if ( $current_plugin_options_db_version < TablePress::db_version ) {
 			// Allow more PHP execution time for update process.
+			// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 			@set_time_limit( 300 );
 
 			// Add TablePress capabilities to the WP_Roles objects, for new installations and all versions below 12.
@@ -99,7 +100,7 @@ abstract class TablePress_Controller {
 			if ( 0 === TablePress::$model_options->get( 'first_activation' ) ) {
 				// Save initial set of plugin options, and time of first activation of the plugin, on first activation.
 				TablePress::$model_options->update( array(
-					'first_activation'          => current_time( 'timestamp' ),
+					'first_activation'          => time(),
 					'plugin_options_db_version' => TablePress::db_version,
 				) );
 			} else {

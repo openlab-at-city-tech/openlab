@@ -80,7 +80,7 @@ class TablePress_Frontend_Controller extends TablePress_Controller {
 		// Remove previously registered [table /] Shortcodes (e.g. from WP-Table Reloaded), as these would otherwise be used instead of TablePress's Shortcodes.
 		remove_shortcode( TablePress::$shortcode );
 		remove_shortcode( TablePress::$shortcode_info );
-		// Dequeue WP-Table Relaoded Default CSS, as it can influence TablePress table styling.
+		// Dequeue WP-Table Reloaded Default CSS, as it can influence TablePress table styling.
 		if ( isset( $GLOBALS['WP_Table_Reloaded_Frontend'] ) ) {
 			remove_action( 'wp_head', array( $GLOBALS['WP_Table_Reloaded_Frontend'], 'add_frontend_css' ) );
 		}
@@ -397,14 +397,24 @@ class TablePress_Frontend_Controller extends TablePress_Controller {
 			$datatables_strings = "var DataTables_language={};\n" . $datatables_strings;
 		}
 
-		// Echo DataTables strings and JS calls.
-		echo <<<JS
-<script type="text/javascript">
+		$script_type_attr = current_theme_supports( 'html5', 'script' ) ? '' : ' type="text/javascript"';
+
+		$js_wrapper = <<<'JS'
+<script%3$s>
 jQuery(function($){
-{$datatables_strings}{$commands}
+%1$s%2$s
 });
 </script>
 JS;
+		/**
+		 * Filter the script/jQuery wrapper code for the DataTables commands calls.
+		 *
+		 * @since 1.14.0
+		 *
+		 * @param string $js_wrapper Default script/jQuery wrapper code for the DataTables commands calls.
+		 */
+		$js_wrapper = apply_filters( 'tablepress_all_datatables_commands_wrapper', $js_wrapper );
+		printf( $js_wrapper, $datatables_strings, $commands, $script_type_attr );
 	}
 
 	/**
@@ -732,30 +742,29 @@ JS;
 			case 'last_modified':
 				switch ( $format ) {
 					case 'raw':
+					case 'mysql':
 						$output = $table['last_modified'];
 						break;
 					case 'human':
-						$modified_timestamp = strtotime( $table['last_modified'] );
-						$current_timestamp = current_time( 'timestamp' );
+						$modified_timestamp = date_create( $table['last_modified'], wp_timezone() );
+						$modified_timestamp = $modified_timestamp->getTimestamp();
+						$current_timestamp = time();
 						$time_diff = $current_timestamp - $modified_timestamp;
-						// Time difference is only shown up to one day.
-						if ( $time_diff >= 0 && $time_diff < DAY_IN_SECONDS ) {
+						// Time difference is only shown up to one week.
+						if ( $time_diff >= 0 && $time_diff < WEEK_IN_SECONDS ) {
 							$output = sprintf( __( '%s ago', 'default' ), human_time_diff( $modified_timestamp, $current_timestamp ) );
 						} else {
-							$output = TablePress::format_datetime( $table['last_modified'], 'mysql', '<br />' );
+							$output = TablePress::format_datetime( $table['last_modified'], '<br />' );
 						}
 						break;
 					case 'date':
-						$modified_timestamp = strtotime( $table['last_modified'] );
-						$output = date_i18n( get_option( 'date_format' ), $modified_timestamp );
+						$output = TablePress::format_datetime( $table['last_modified'], get_option( 'date_format' ) );
 						break;
 					case 'time':
-						$modified_timestamp = strtotime( $table['last_modified'] );
-						$output = date_i18n( get_option( 'time_format' ), $modified_timestamp );
+						$output = TablePress::format_datetime( $table['last_modified'], get_option( 'time_format' ) );
 						break;
-					case 'mysql':
 					default:
-						$output = TablePress::format_datetime( $table['last_modified'], 'mysql', ' ' );
+						$output = TablePress::format_datetime( $table['last_modified'] );
 						break;
 				}
 				break;
@@ -870,7 +879,7 @@ JS;
 						}
 						// @TODO: Cells are not evaluated here, so math formulas are searched.
 						if ( false !== stripos( $table_cell, $search_term ) ) {
-							// Found the  search term in the cell content.
+							// Found the search term in the cell content.
 							$query_result[ $search_term ][] = $table_id; // Add table ID to result list
 							// No need to continue searching this search term in this table.
 							continue 3;
