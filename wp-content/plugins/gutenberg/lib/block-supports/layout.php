@@ -148,8 +148,8 @@ function gutenberg_render_layout_support_flag( $block_content, $block ) {
 		return $block_content;
 	}
 
-	$block_gap             = gutenberg_get_global_settings( array( 'spacing', 'blockGap' ) );
-	$default_layout        = gutenberg_get_global_settings( array( 'layout' ) );
+	$block_gap             = wp_get_global_settings( array( 'spacing', 'blockGap' ) );
+	$default_layout        = wp_get_global_settings( array( 'layout' ) );
 	$has_block_gap_support = isset( $block_gap ) ? null !== $block_gap : false;
 	$default_block_layout  = _wp_array_get( $block_type->supports, array( '__experimentalLayout', 'default' ), array() );
 	$used_layout           = isset( $block['attrs']['layout'] ) ? $block['attrs']['layout'] : $default_block_layout;
@@ -208,7 +208,7 @@ add_filter( 'render_block', 'gutenberg_render_layout_support_flag', 10, 2 );
 function gutenberg_restore_group_inner_container( $block_content, $block ) {
 	$tag_name                         = isset( $block['attrs']['tagName'] ) ? $block['attrs']['tagName'] : 'div';
 	$group_with_inner_container_regex = sprintf(
-		'/(^\s*<%1$s\b[^>]*wp-block-group(\s|")[^>]*>)(\s*<div\b[^>]*wp-block-group__inner-container(\s|")[^>]*>)((.|\S|\s)*)/',
+		'/(^\s*<%1$s\b[^>]*wp-block-group(\s|")[^>]*>)(\s*<div\b[^>]*wp-block-group__inner-container(\s|")[^>]*>)((.|\S|\s)*)/U',
 		preg_quote( $tag_name, '/' )
 	);
 	if (

@@ -43,7 +43,7 @@ class Gutenberg_REST_Global_Styles_Controller extends WP_REST_Controller {
 			)
 		);
 
-		// Lists/updates a single gloval style variation based on the given id.
+		// Lists/updates a single global style variation based on the given id.
 		register_rest_route(
 			$this->namespace,
 			'/' . $this->rest_base . '/(?P<id>[\/\w-]+)',
@@ -54,7 +54,7 @@ class Gutenberg_REST_Global_Styles_Controller extends WP_REST_Controller {
 					'permission_callback' => array( $this, 'get_item_permissions_check' ),
 					'args'                => array(
 						'id' => array(
-							'description' => __( 'The id of a template', 'gutenberg' ),
+							'description' => __( 'The id of the global style variation', 'gutenberg' ),
 							'type'        => 'string',
 						),
 					),
@@ -216,8 +216,12 @@ class Gutenberg_REST_Global_Styles_Controller extends WP_REST_Controller {
 	 * @return WP_REST_Response $data
 	 */
 	public function prepare_item_for_response( $post, $request ) { // phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
-		$config                           = json_decode( $post->post_content, true );
-		$is_global_styles_user_theme_json = isset( $config['isGlobalStylesUserThemeJSON'] ) && true === $config['isGlobalStylesUserThemeJSON'];
+		$raw_config                       = json_decode( $post->post_content, true );
+		$is_global_styles_user_theme_json = isset( $raw_config['isGlobalStylesUserThemeJSON'] ) && true === $raw_config['isGlobalStylesUserThemeJSON'];
+		$config                           = array();
+		if ( $is_global_styles_user_theme_json ) {
+			$config = ( new WP_Theme_JSON_Gutenberg( $raw_config, 'custom' ) )->get_raw_data();
+		}
 
 		$fields = $this->get_fields_for_response( $request );
 
