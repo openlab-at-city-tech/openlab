@@ -44,6 +44,7 @@ class DCO_CA_Admin extends DCO_CA_Base {
 		add_action( 'wp_ajax_delete_attachment', array( $this, 'delete_attachment_ajax' ) );
 		add_action( 'add_meta_boxes_comment', array( $this, 'add_attachment_metabox' ) );
 		add_action( 'edit_comment', array( $this, 'update_attachment' ) );
+		add_action( 'rest_insert_comment', array( $this, 'update_rest_api_attachment' ), 10, 3 );
 		add_filter( 'plugin_action_links_' . DCO_CA_BASENAME, array( $this, 'add_plugin_links' ) );
 		add_filter( 'comment_notification_text', array( $this, 'add_attachments_to_new_comment_email' ), 10, 2 );
 		add_filter( 'comment_moderation_text', array( $this, 'add_attachments_to_new_comment_email' ), 10, 2 );
@@ -259,6 +260,10 @@ class DCO_CA_Admin extends DCO_CA_Base {
 	 * @param int $comment_id The comment ID.
 	 */
 	public function update_attachment( $comment_id ) {
+		if ( ! function_exists( 'get_current_screen' ) ) {
+			return false;
+		}
+
 		if ( 'comment' !== get_current_screen()->id ) {
 			return false;
 		}
@@ -275,6 +280,28 @@ class DCO_CA_Admin extends DCO_CA_Base {
 			$this->assign_attachment( $comment_id, $attachment_id );
 		} else {
 			$this->unassign_attachment( $comment_id );
+		}
+	}
+
+	/**
+	 * Updates attachments after comment is updated via REST API.
+	 *
+	 * @since 2.3.0
+	 *
+	 * @param WP_Comment      $comment Inserted or updated comment object.
+	 * @param WP_REST_Request $request Request object.
+	 * @param bool            $creating True when creating a comment, false when updating.
+	 */
+	public function update_rest_api_attachment( $comment, $request, $creating ) {
+		if ( $creating ) {
+			return;
+		}
+
+		$attachment_id = isset( $request['dco_attachment_id'] ) ? array_map( 'intval', (array) $request['dco_attachment_id'] ) : array();
+		if ( $attachment_id ) {
+			$this->assign_attachment( $comment->comment_ID, $attachment_id );
+		} else {
+			$this->unassign_attachment( $comment->comment_ID );
 		}
 	}
 
