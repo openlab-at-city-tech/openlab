@@ -8,12 +8,11 @@ if (!defined('ABSPATH')) {
 if (
   !(\TheLion\OutoftheBox\Helpers::check_user_role($this->settings['permissions_add_shortcodes']))
 ) {
-    die();
+    exit();
 }
 
 $this->load_scripts();
 $this->load_styles();
-
 
 function OutoftheBox_remove_all_scripts()
 {
@@ -33,7 +32,7 @@ function OutoftheBox_remove_all_styles()
     $wp_styles->queue = [];
     wp_enqueue_style('OutoftheBox.ShortcodeBuilder');
     wp_enqueue_style('OutoftheBox.CustomStyle');
-    wp_enqueue_style('Awesome-Font-5');
+    wp_enqueue_style('Eva-Icons');
 }
 
 add_action('wp_print_scripts', 'OutoftheBox_remove_all_scripts', 1000);
@@ -45,7 +44,7 @@ add_action('wp_print_styles', 'OutoftheBox_remove_all_styles', 1000);
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <title><?php esc_html_e('Shortcode Previewer','wpcloudplugins'); ?></title>
+  <title><?php esc_html_e('Shortcode Previewer', 'wpcloudplugins'); ?></title>
      <?php wp_print_scripts(); ?>
     <?php wp_print_styles(); ?>
 </head>

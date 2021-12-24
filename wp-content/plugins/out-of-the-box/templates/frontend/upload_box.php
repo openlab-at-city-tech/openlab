@@ -49,8 +49,8 @@ if ('1' === $this->options['upload_auto_start'] || false !== strpos($this->optio
       </div>
     </div>
     <div class="fileupload-header-button">
-      <button class='fileupload-text-button fileupload-requirements-button button secondary' type="button" title="<?php echo esc_html__('Upload requirements', 'wpcloudplugins'); ?>"><i
-          class="fas fa-tasks fa-stack-1x"></i></button>
+      <button class='fileupload-requirements-button button secondary' type="button" title="<?php echo esc_html__('Upload requirements', 'wpcloudplugins'); ?>"><i
+          class="eva eva-list eva-lg"></i></button>
       <div class='tippy-content-holder'>
         <div class='tippy-content'>
           <div class="upload-requirements-content-subtitle">
@@ -75,19 +75,19 @@ if ('1' === $this->options['upload_auto_start'] || false !== strpos($this->optio
       </div>
     </div>
     <div class="fileupload-header-button">
-      <button class='fileupload-add-button button' type="button" title="<?php echo ($this->options['maxnumberofuploads'] > 1 || '-1' === $this->options['maxnumberofuploads']) ? esc_html__('Add your files', 'wpcloudplugins') : esc_html__('Add your file', 'wpcloudplugins'); ?>"><i class="fas fa-plus fa-stack-1x"></i></button>
+      <button class='fileupload-add-button button' type="button" title="<?php echo ($this->options['maxnumberofuploads'] > 1 || '-1' === $this->options['maxnumberofuploads']) ? esc_html__('Add your files', 'wpcloudplugins') : esc_html__('Add your file', 'wpcloudplugins'); ?>"><i class="eva eva-plus-outline eva-lg"></i></button>
       <div class='tippy-content-holder'>
         <div class='tippy-content'>
           <ul>
             <li class="upload-add-file">
               <a title="<?php esc_html_e('Files', 'wpcloudplugins'); ?>">
-                <i class="fas fa-file-medical"></i> <?php echo ($this->options['maxnumberofuploads'] > 1 || '-1' === $this->options['maxnumberofuploads']) ? esc_html__('Files', 'wpcloudplugins') : esc_html__('File', 'wpcloudplugins'); ?>
+                <i class="eva eva-file-add-outline eva-lg"></i> <?php echo ($this->options['maxnumberofuploads'] > 1 || '-1' === $this->options['maxnumberofuploads']) ? esc_html__('Files', 'wpcloudplugins') : esc_html__('File', 'wpcloudplugins'); ?>
               </a>
             </li>
             <?php if ('1' === $this->options['upload_folder'] && ($this->options['maxnumberofuploads'] > 1 || '-1' === $this->options['maxnumberofuploads'])) { ?>
             <li class="upload-add-folder">
               <a title="<?php esc_html_e('Folders', 'wpcloudplugins'); ?>">
-                <i class="fas fa-folder"></i> <?php esc_html_e('Folders', 'wpcloudplugins'); ?>
+                <i class="eva eva-folder-add-outline eva-lg"></i> <?php esc_html_e('Folders', 'wpcloudplugins'); ?>
               </a>
             </li>
             <?php } ?>
@@ -97,6 +97,12 @@ if ('1' === $this->options['upload_auto_start'] || false !== strpos($this->optio
     </div>
   </div>
   <!-- END UPLOAD BOX HEADER -->
+
+  <!-- UPLOAD PROGRESS -->
+  <div class="fileupload-global-progress">
+    <div class="fileupload-global-progress-bar"></div>
+  </div>
+  <!-- END UPLOAD PROGRESS -->
 
   <!-- UPLOAD BOX LIST -->
   <div class="fileupload-list"
@@ -116,18 +122,18 @@ if ('1' === $this->options['upload_auto_start'] || false !== strpos($this->optio
 
           <td class="fileupload-table-cell fileupload-table-cell-action" role="cell" style="flex: 1 0 auto;">
             <?php if ($this->get_user()->can_edit_description()) {?>
-              <button type="button" title="<?php esc_html_e('Add description', 'wpcloudplugins'); ?>" class="upload-add-description"><i class="fas fa-pen"></i> <?php esc_html_e('Description', 'wpcloudplugins'); ?></button>
+              <button type="button" title="<?php esc_html_e('Add description', 'wpcloudplugins'); ?>" class="upload-add-description"><i class="eva eva-edit-2-outline"></i> <?php esc_html_e('Description', 'wpcloudplugins'); ?></button>
             <?php } ?>
-              <button type="button" title="<?php esc_html_e('Try to upload the file again', 'wpcloudplugins'); ?>" class="upload-redo"><i class="fas fa-redo"></i></button>
+              <button type="button" title="<?php esc_html_e('Try to upload the file again', 'wpcloudplugins'); ?>" class="upload-redo"><i class="eva eva-refresh"></i></button>
           </td>
 
           <td class="fileupload-table-cell fileupload-table-cell-result" role="cell" style="flex: 0 0 64px;">
-            <i title="<?php esc_html_e('Remove from queue', 'wpcloudplugins'); ?>" aria-label="<?php esc_html_e('Remove from queue', 'wpcloudplugins'); ?>" class="upload-remove fas fa-times"></i>
-            <i title="<?php esc_html_e('Abort upload', 'wpcloudplugins'); ?>" aria-label="<?php esc_html_e('Abort upload', 'wpcloudplugins'); ?>" class="upload-stop fas fa-stop-circle"></i>
-            <i class="upload-waiting fas fa-pause"></i>
-            <i class="upload-success fas fa-check"></i>
-            <i class="upload-fail fas fa-exclamation"></i>
-            <i class="upload-convert fas fa-cog fa-spin"></i>
+            <i title="<?php esc_html_e('Remove from queue', 'wpcloudplugins'); ?>" aria-label="<?php esc_html_e('Remove from queue', 'wpcloudplugins'); ?>" class="upload-remove eva eva-close eva-lg"></i>
+            <i title="<?php esc_html_e('Abort upload', 'wpcloudplugins'); ?>" aria-label="<?php esc_html_e('Abort upload', 'wpcloudplugins'); ?>" class="upload-stop eva eva-stop-circle eva-lg"></i>
+            <i class="upload-waiting eva eva-pause-circle-outline eva-lg"></i>
+            <i class="upload-success eva eva-checkmark eva-lg"></i>
+            <i class="upload-fail eva eva-alert-triangle-outline eva-lg"></i>
+            <i class="upload-convert eva eva-settings-outline eva-lg eva-spin"></i>
           </td>
 
           <td class="fileupload-table-cell fileupload-table-cell-progress" role="cell" style="flex: 0 0 80px;">

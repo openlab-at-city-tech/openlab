@@ -1,7 +1,7 @@
 <div class="list-container" style="width:<?php echo $this->options['maxwidth']; ?>;max-width:<?php echo $this->options['maxwidth']; ?>;">
   <div class="nav-header OutoftheBox" id="search-<?php echo $this->listtoken; ?>">
     <div class="search-div">
-      <a class="" href="#"><i class="fas fa-search submit-search"></i></a>
+      <a class="" href="#"><i class="eva eva-search submit-search"></i></a>
                     <input name="q" type="text" size="40" aria-label="<?php echo esc_html__('Search', 'wpcloudplugins'); ?>" placeholder="<?php echo esc_html__('Search filenames', 'wpcloudplugins').(('1' === $this->options['show_files'] /* $this->options['searchcontents'] === '1' Not yet supported */) ? ' '.esc_html__('and content', 'wpcloudplugins') : ''); ?>" class="search-input" />
     </div>
   </div>

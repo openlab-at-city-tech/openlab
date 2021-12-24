@@ -3,87 +3,98 @@
   if ('1' === $this->options['show_breadcrumb'] || '1' === $this->options['search'] || '1' === $this->options['show_refreshbutton']
           || $this->get_user()->can_add_folders() || $this->get_user()->can_download_zip() || $this->get_user()->can_delete_files() || $this->get_user()->can_delete_folders() || $this->get_user()->can_move_folders() || $this->get_user()->can_move_files()) {
       ?><div class="nav-header"><?php if ('1' === $this->options['show_breadcrumb']) { ?>
-            <a class="nav-home" title="<?php esc_html_e('Back to our first folder', 'wpcloudplugins'); ?>">
-              <i class="fas fa-home"></i>
+            <a class="nav-home entry-info-button" title="<?php esc_html_e('Back to our first folder', 'wpcloudplugins'); ?>">
+              <i class="eva eva-home-outline"></i>
             </a>
             <div class="nav-title"><?php esc_html_e('Loading...', 'wpcloudplugins'); ?></div>
             <?php
             if ('1' === $this->options['search']) {
                 ?>
-                <a class="nav-search">
-                  <i class="fas fa-search"></i>
+                <a class="nav-search entry-info-button">
+                  <i class="eva eva-search"></i>
                 </a>
 
                 <div class="tippy-content-holder search-div">
-                  <div class="search-remove"><i class="fas fa-times-circle "></i></div>
+                  <div class="search-icon"><i class="eva eva-search eva-lg"></i></div>
+                  <div class="search-remove"><i class="eva eva-close-circle "></i></div>
                   <input name="q" type="text" size="40" aria-label="<?php echo esc_html__('Search', 'wpcloudplugins'); ?>" placeholder="<?php echo esc_html__('Search filenames', 'wpcloudplugins').(('1' === $this->options['show_files'] /* $this->options['searchcontents'] === '1' Not yet supported */) ? ' '.esc_html__('and content', 'wpcloudplugins') : ''); ?>" class="search-input" />
                 </div>
                 <?php
             }
 
                 ?>
-                <a class="nav-gear" title="<?php esc_html_e('More actions', 'wpcloudplugins'); ?>">
-                  <i class="fas fa-ellipsis-v"></i>
+                <a class="nav-gear entry-info-button" title="<?php esc_html_e('More actions', 'wpcloudplugins'); ?>">
+                  <i class="eva eva-more-vertical-outline"></i>
                 </a>
-                <div class="tippy-content-holder" data-token="<?php echo $this->listtoken; ?>">
+                <div class="tippy-content-holder gear-div" data-token="<?php echo $this->listtoken; ?>">
                   <ul>
                     <?php
+                    $need_separator = false;
+
                     if ($this->get_user()->can_add_folders()) {
-                        ?>
-                        <li><a class="nav-new-folder newfolder" data-mimetype='' title="<?php esc_html_e('Add folder', 'wpcloudplugins'); ?>"><i class="fas fa-folder-plus "></i><?php esc_html_e('Add folder', 'wpcloudplugins'); ?></a></li>
+                        $need_separator = true; ?>
+                        <li><a class="nav-new-folder newfolder" data-mimetype='' title="<?php esc_html_e('Add folder', 'wpcloudplugins'); ?>"><i class="eva eva-folder-add-outline eva-lg "></i><?php esc_html_e('Add folder', 'wpcloudplugins'); ?></a></li>
                         <?php
                     }
 
                 if ($this->get_user()->can_upload()) {
-                    ?>
-                        <li><a class="nav-upload" title="<?php esc_html_e('Upload files', 'wpcloudplugins'); ?>"><i class="fas fa-upload "></i><?php esc_html_e('Upload files', 'wpcloudplugins'); ?></a></li>
+                    $need_separator = true; ?>
+                        <li><a class="nav-upload" title="<?php esc_html_e('Upload files', 'wpcloudplugins'); ?>"><i class="eva eva-upload-outline eva-lg "></i><?php esc_html_e('Upload files', 'wpcloudplugins'); ?></a></li>
                         <?php
                 }
 
                 if ($this->get_user()->can_move_folders() || $this->get_user()->can_move_files() || $this->get_user()->can_delete_files() || $this->get_user()->can_delete_folders() || $this->get_user()->can_download_zip()) {
-                    ?>
-                    <li><a class='select-all' title='" <?php esc_html_e('Select all', 'wpcloudplugins'); ?>"'><i class='fas fa-check-square'></i><?php esc_html_e('Select all', 'wpcloudplugins'); ?></a></li>
-                    <li style="display:none"><a class='deselect-all' title='" <?php esc_html_e('Deselect all', 'wpcloudplugins'); ?>"'><i class='fas fa-square'></i><?php esc_html_e('Deselect all', 'wpcloudplugins'); ?></a></li>
+                    if ($need_separator) {
+                        ?><li class='list-separator'></li><?php
+                    }
+
+                    $need_separator = true; ?>
+                    <li><a class='select-all' title='" <?php esc_html_e('Select all', 'wpcloudplugins'); ?>"'><i class='eva eva-radio-button-on eva-lg'></i><?php esc_html_e('Select all', 'wpcloudplugins'); ?></a></li>
+                    <li style="display:none"><a class='deselect-all' title='" <?php esc_html_e('Deselect all', 'wpcloudplugins'); ?>"'><i class='eva eva-radio-button-off eva-lg'></i><?php esc_html_e('Deselect all', 'wpcloudplugins'); ?></a></li>
                     <?php
                 }
 
                 if ($this->get_user()->can_download_zip()) {
-                    ?>
-                        <li><a class="all-files-to-zip" download><i class='fas fa-archive '></i><?php esc_html_e('Download folder', 'wpcloudplugins'); ?> (.zip)</a></li>
-                        <li><a class="selected-files-to-zip" download><i class='fas fa-archive '></i><?php esc_html_e('Download selected', 'wpcloudplugins'); ?> (.zip)</a></li>
+                    $need_separator = true; ?>
+                        <li><a class="all-files-to-zip" download><i class='eva eva-download eva-lg'></i><?php esc_html_e('Download folder', 'wpcloudplugins'); ?></a></li>
+                        <li><a class="selected-files-to-zip" download><i class='eva eva-download eva-lg'></i><?php esc_html_e('Download selected', 'wpcloudplugins'); ?></a></li>
                         <?php
                 }
 
                 if ($this->get_user()->can_move_folders() || $this->get_user()->can_move_files()) {
-                    ?>
-                        <li><a class='selected-files-move' title='" <?php esc_html_e('Move to', 'wpcloudplugins'); ?>"'><i class='fas fa-folder-open '></i><?php esc_html_e('Move to', 'wpcloudplugins'); ?></a></li>
+                    $need_separator = true; ?>
+                        <li><a class='selected-files-move' title='" <?php esc_html_e('Move to', 'wpcloudplugins'); ?>"'><i class='eva eva-corner-down-right eva-lg'></i><?php esc_html_e('Move to', 'wpcloudplugins'); ?></a></li>
                         <?php
                 }
 
                 if ($this->get_user()->can_delete_files() || $this->get_user()->can_delete_folders()) {
-                    ?>
-                        <li><a class="selected-files-delete" title="<?php esc_html_e('Delete', 'wpcloudplugins'); ?>"><i class="fas fa-trash "></i><?php esc_html_e('Delete', 'wpcloudplugins'); ?></a></li>
+                    $need_separator = true; ?>
+                        <li><a class="selected-files-delete" title="<?php esc_html_e('Delete', 'wpcloudplugins'); ?>"><i class="eva eva-trash-2-outline eva-lg "></i><?php esc_html_e('Delete', 'wpcloudplugins'); ?></a></li>
                         <?php
                 }
 
+                if ($need_separator && ($this->get_user()->can_deeplink() || $this->get_user()->can_share())) {
+                    ?><li class='list-separator'></li><?php
+                }
+
                 if ($this->get_user()->can_deeplink()) {
-                    ?>
-                        <li><a class='entry_action_deeplink_folder' title='<?php esc_html_e('Direct link', 'wpcloudplugins'); ?>'><i class='fas fa-link '></i><?php esc_html_e('Direct link', 'wpcloudplugins'); ?></a></li>
+                    $need_separator = true; ?>
+                        <li><a class='entry_action_deeplink_folder' title='<?php esc_html_e('Direct link', 'wpcloudplugins'); ?>'><i class='eva eva-link eva-lg'></i><?php esc_html_e('Direct link', 'wpcloudplugins'); ?></a></li>
                         <?php
                 }
                 if ($this->get_user()->can_share()) {
-                    ?>
-                        <li><a class='entry_action_shortlink_folder' title='<?php esc_html_e('Share folder', 'wpcloudplugins'); ?>'><i class='fas fa-share-alt '></i><?php esc_html_e('Share folder', 'wpcloudplugins'); ?></a></li>
+                    $need_separator = true; ?>
+                        <li><a class='entry_action_shortlink_folder' title='<?php esc_html_e('Share folder', 'wpcloudplugins'); ?>'><i class='eva eva-share-outline eva-lg'></i><?php esc_html_e('Share folder', 'wpcloudplugins'); ?></a></li>
                         <?php
                 } ?>
-                    <li class='gear-menu-no-options' style="display: none"><a><i class='fas fa-info-circle '></i><?php esc_html_e('No options...', 'wpcloudplugins'); ?></a></li>
+                    <li class='gear-menu-no-options' style="display: none"><a><i class='eva eva-info-outline eva-lg '></i><?php esc_html_e('No options...', 'wpcloudplugins'); ?></a></li>
                   </ul>
                 </div><?php
         }
       if ('1' === $this->options['show_refreshbutton']) {
           ?>
-            <a class="nav-refresh" title="<?php esc_html_e('Refresh', 'wpcloudplugins'); ?>">
-              <i class="fas fa-sync"></i>
+            <a class="nav-refresh entry-info-button" title="<?php esc_html_e('Refresh', 'wpcloudplugins'); ?>">
+              <i class="eva eva-sync"></i>
             </a>
             <?php
       }
@@ -134,6 +145,6 @@
         \TheLion\OutoftheBox\Skeleton::get_gallery_placeholders($target_height, 5);
         ?>
       </div></div>
-    <div class="scroll-to-top"><a><i class="fas fa-chevron-circle-up fa-2x"></i></a></div>
+    <div class="scroll-to-top"><a><i class="eva eva-arrow-circle-up eva-2x"></i></a></div>
   </div>
 </div>

@@ -25,7 +25,7 @@
 
         /* Build the  Dialog */
         var modalbuttons = '';
-        var modalheader = $('<a tabindex="0" class="close-button" title="" onclick="modal_action.close();"><i class="fas fa-times fa-lg" aria-hidden="true"></i></a></div>');
+        var modalheader = $('<a tabindex="0" class="close-button" title="" onclick="modal_action.close();"><i class="eva eva-close eva-lg" aria-hidden="true"></i></a></div>');
         var modalbody = $('<div class="outofthebox-modal-body" tabindex="0" style="display:none"></div>');
         var modalfooter = $('<div class="outofthebox-modal-footer" style="display:none"><div class="outofthebox-modal-buttons">' + '' + '</div></div>');
         var modaldialog = $('<div id="outofthebox-modal-action" class="OutoftheBox outofthebox-modal outofthebox-modal80 light"><div class="modal-dialog"><div class="modal-content"><div class="loading"><div class="loader-beat"></div></div></div></div></div>');
@@ -41,7 +41,7 @@
 
         $('#outofthebox-modal-action .modal-content').append(modalheader, modalbody, modalfooter);
 
-         $iframe.on('load', function () {
+        $iframe.on('load', function () {
             $('.outofthebox-modal-body').fadeIn();
             $('.outofthebox-modal-footer').fadeIn();
             $('.modal-content .loading:first').fadeOut();
@@ -62,7 +62,3 @@
     }
 
 })(jQuery);
-
-
-
-

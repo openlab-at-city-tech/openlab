@@ -80,8 +80,10 @@ class Zip
 
     public function do_zip()
     {
-        if (false === $this->is_shortcode_filtered()) {
-            $this->download_zip_via_url();
+        if (!isset($_REQUEST['files']) || (isset($_REQUEST['files']) && count($_REQUEST['files']) <= 1)) {
+            if (false === $this->is_shortcode_filtered()) {
+                $this->download_zip_via_url();
+            }
         }
 
         $this->download_zip_via_server();
@@ -98,10 +100,6 @@ class Zip
 
         if (isset($_REQUEST['files'])) {
             $requested_ids = $_REQUEST['files'];
-        }
-
-        if (1 !== count($requested_ids)) {
-            return false;
         }
 
         $entry = $this->get_client()->get_entry(reset($requested_ids));
@@ -180,11 +178,10 @@ class Zip
         $this->set_progress();
 
         // Stop WP from buffering
-        if (ob_get_level() > 0) {
-            ob_end_clean();
-        } else {
-            flush();
+        if (0 === ob_get_level()) {
+            ob_start();
         }
+        ob_end_clean();
     }
 
     /**
@@ -406,9 +403,28 @@ class Zip
         $exclude = $this->get_processor()->get_shortcode_option('exclude');
         $include = $this->get_processor()->get_shortcode_option('include');
 
+        $filtered_show_folders = false;
+        if ('1' !== $this->get_processor()->get_shortcode_option('show_folders')) {
+            $requested_ids = [$this->get_processor()->get_requested_complete_path()];
+
+            if (isset($_REQUEST['files'])) {
+                $requested_ids = $_REQUEST['files'];
+            }
+
+            $top_folder = $this->get_client()->get_folder(reset($requested_ids), false);
+            foreach ($top_folder->get_children() as $child) {
+                // Render folder div
+                if ($child->is_dir()) {
+                    $filtered_show_folders = true;
+
+                    break;
+                }
+            }
+        }
+
         return
         '1' !== $this->get_processor()->get_shortcode_option('show_files')
-         || ('1' !== $this->get_processor()->get_shortcode_option('show_folders'))
+         || ($filtered_show_folders)
           || ('*' !== $ext[0])
            || ('*' !== $exclude[0])
             || ('*' !== $include[0]);

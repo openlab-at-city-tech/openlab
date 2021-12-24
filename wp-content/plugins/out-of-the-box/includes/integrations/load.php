@@ -25,6 +25,7 @@ class Integrations
         // Load integrations
         $this->load_contactform7();
         $this->load_elementor();
+        $this->load_divipagebuilder();
         $this->load_gravityforms();
         $this->load_formidableforms();
         $this->load_fluentforms();
@@ -32,6 +33,8 @@ class Integrations
         $this->load_gutenberg();
         $this->load_woocommcerce();
         $this->load_wpforms();
+        $this->load_advancedcustomfields();
+        $this->load_beaverbuilder();
     }
 
     public function load_contactform7()
@@ -52,6 +55,11 @@ class Integrations
         }
 
         require_once 'elementor/init.php';
+    }
+
+    public function load_divipagebuilder()
+    {
+        require_once 'divipagebuilder/init.php';
     }
 
     public function load_gravityforms()
@@ -121,5 +129,23 @@ class Integrations
         }
 
         require_once 'wpforms/init.php';
+    }
+
+    public function load_advancedcustomfields()
+    {
+        if (!class_exists('ACF')) {
+            return false;
+        }
+
+        require_once 'advancedcustomfields/init.php';
+    }
+
+    public function load_beaverbuilder()
+    {
+        if (!class_exists('FLBuilder')) {
+            return;
+        }
+
+        require_once 'beaverbuilder/init.php';
     }
 }

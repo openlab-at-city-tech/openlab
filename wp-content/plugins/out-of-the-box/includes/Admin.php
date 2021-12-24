@@ -59,7 +59,15 @@ class Admin
         add_action('in_plugin_update_message-'.OUTOFTHEBOX_SLUG, [$this, 'in_plugin_update_message'], 10, 2);
 
         // Authorization call Back
-        if (isset($_REQUEST['action']) && 'outofthebox_authorization' === $_REQUEST['action']) {
+        add_action('admin_init', [$this, 'is_doing_oauth']);
+    }
+
+    public function is_doing_oauth()
+    {
+        if (!isset($_REQUEST['action']) || 'outofthebox_authorization' !== $_REQUEST['action']) {
+            return false;
+        }
+        if (Helpers::check_user_role($this->settings['permissions_edit_settings'])) {
             $this->get_app()->process_authorization();
         }
     }
@@ -110,8 +118,8 @@ class Admin
             wp_enqueue_script('WPCloudplugin.Libraries');
 
             wp_enqueue_style('OutoftheBox.ShortcodeBuilder');
-            wp_enqueue_style('Awesome-Font-5');
-                        wp_enqueue_style('OutoftheBox.CustomStyle');
+            wp_enqueue_style('Eva-Icons');
+            wp_enqueue_style('OutoftheBox.CustomStyle');
 
             // Build Whitelist for permission selection
             if ($hook !== $this->networksettingspage) {
@@ -144,7 +152,6 @@ class Admin
             wp_enqueue_style('OutoftheBox.Datatables');
             wp_dequeue_style('OutoftheBox');
             wp_dequeue_style('OutoftheBox.CustomStyle');
-
         }
     }
 
@@ -480,13 +487,13 @@ class Admin
             }
         }
 
-        $box_class = 'oftb-updated';
+        $box_class = 'wpcp-updated';
         $box_input = '<input type="hidden" name="out_of_the_box_settings[purcasecode]" id="purchase_code" value="'.esc_attr($purchase_code).'">';
 
         $box_text = wp_kses(__('Thanks for registering your product! The plugin is <strong>Activated</strong> and the <strong>Auto-Updater</strong> enabled', 'wpcloudplugins'), ['strong' => []]).'. '.esc_html__('Your purchase code', 'wpcloudplugins').":<br/><code style='user-select: initial;'>".esc_attr($purchase_code).'</code>';
 
         if (empty($purchase_code)) {
-            $box_class = 'oftb-error';
+            $box_class = 'wpcp-error';
             $box_text = wp_kses(__('The plugin is <strong>Not Activated</strong> and the <strong>Auto-Updater</strong> disabled', 'wpcloudplugins'), ['strong' => []]).'. '.esc_html__('Please activate your copy in order to use the plugin', 'wpcloudplugins').'. ';
             if (false === is_plugin_active_for_network(OUTOFTHEBOX_SLUG) || true === is_network_admin()) {
                 $box_text .= "</p><p><input id='wpcp-activate-button' type='button' class='simple-button blue' value='".esc_html__('Activate', 'wpcloudplugins')."' /><span><a href='#' onclick='jQuery(\".outofthebox_purchasecode_manual\").slideToggle()'>".esc_html__('Or insert your purchase code manually and press Activate', 'wpcloudplugins').'</a></span></p> ';
@@ -507,9 +514,9 @@ class Admin
     {
         $app = $this->get_app();
 
-        $revokebutton = "<div type='button' class='wpcp-revoke-account-button simple-button default small' data-account-id='{$account->get_id()}' data-force='false' title='".esc_html__('Revoke', 'wpcloudplugins')."'><i class='fas fa-trash' aria-hidden='true'></i><div class='wpcp-spinner'></div></div>";
-        $deletebutton = "<div type='button' class='wpc-delete-account-button simple-button default small' data-account-id='{$account->get_id()}' data-force='true' title='".esc_html__('Remove', 'wpcloudplugins')."'><i class='fas fa-trash' aria-hidden='true'></i><div class='wpcp-spinner'></div></div>";
-        $refreshbutton = "<div type='button' class='wpcp-refresh-account-button simple-button red small' data-account-id='{$account->get_id()}' data-url='{$app->get_auth_url(['force_reapprove' => 'true'])}' title='".esc_html__('Refresh', 'wpcloudplugins')."'><i class='fas fa-redo' aria-hidden='true'></i><div class='wpcp-spinner'></div></div>";
+        $revokebutton = "<div type='button' class='wpcp-revoke-account-button simple-button default small' data-account-id='{$account->get_id()}' data-force='false' title='".esc_html__('Revoke', 'wpcloudplugins')."'><i class='eva eva-trash-2-outline eva-lg' aria-hidden='true'></i><div class='wpcp-spinner'></div></div>";
+        $deletebutton = "<div type='button' class='wpc-delete-account-button simple-button default small' data-account-id='{$account->get_id()}' data-force='true' title='".esc_html__('Remove', 'wpcloudplugins')."'><i class='eva eva-trash-2-outline eva-lg' aria-hidden='true'></i><div class='wpcp-spinner'></div></div>";
+        $refreshbutton = "<div type='button' class='wpcp-refresh-account-button simple-button red small' data-account-id='{$account->get_id()}' data-url='{$app->get_auth_url(['force_reapprove' => 'true'])}' title='".esc_html__('Refresh', 'wpcloudplugins')."'><i class='eva eva-refresh' aria-hidden='true'></i><div class='wpcp-spinner'></div></div>";
 
         $account_info_html = "<div class='account-info-name'>{$account->get_name()} <code class='account-info-id'>ID: {$account->get_id()}</code></div><span class='account-info-email'>{$account->get_email()}</span>";
         $status_info_html = '';
@@ -517,7 +524,7 @@ class Admin
 
         // Check if plugin is still linked
         if (false === $account->get_authorization()->has_access_token()) {
-            $status_info_html = "<i class='fas fa-exclamation-triangle' aria-hidden='true'></i>&nbsp;".esc_html__("Account isn't linked to the plugin anymore.", 'wpcloudplugins').' '.esc_html__('Please re-authorize!', 'wpcloudplugins');
+            $status_info_html = "<i class='eva eva-alert-triangle-outline' aria-hidden='true'></i>&nbsp;".esc_html__("Account isn't linked to the plugin anymore.", 'wpcloudplugins').' '.esc_html__('Please re-authorize!', 'wpcloudplugins');
 
             return "<div class='account account-error'><img class='account-image' src='{$account->get_image()}' onerror='this.src=\"".OUTOFTHEBOX_ROOTPATH."/css/images/dropbox_logo.png\"'/><div class='account-info-container'><div class='account-actions'>{$refreshbutton} {$deletebutton}</div><div class='account-info'>{$account_info_html}</div><div class='account-info-status'>{$status_info_html}</div><div class='account-info-error'>{$errror_details_html}</div></div></div>";
         }
@@ -536,7 +543,7 @@ class Admin
             } catch (\Exception $ex) {
                 $this->get_processor()->get_current_account()->get_authorization()->set_is_valid(false);
                 set_transient($transient_name, false, 5 * MINUTE_IN_SECONDS);
-                $status_info_html = "<i class='fas fa-exclamation-triangle' aria-hidden='true'></i>&nbsp;".esc_html__("Account isn't linked to the plugin anymore.", 'wpcloudplugins').' '.esc_html__('Please re-authorize!', 'wpcloudplugins');
+                $status_info_html = "<i class='eva eva-alert-triangle-outline' aria-hidden='true'></i>&nbsp;".esc_html__("Account isn't linked to the plugin anymore.", 'wpcloudplugins').' '.esc_html__('Please re-authorize!', 'wpcloudplugins');
 
                 if ($app->has_plugin_own_app()) {
                     $status_info_html .= ' '.esc_html__('If the problem persists, fall back to the default App via the settings on the Advanced tab', 'wpcloudplugins').'.';
@@ -550,7 +557,7 @@ class Admin
 
         // Return information why authorization is invalid
         if (false === $is_authorized) {
-            $status_info_html = "<i class='fas fa-exclamation-triangle' aria-hidden='true'></i>&nbsp;".esc_html__("Account isn't linked to the plugin anymore.", 'wpcloudplugins').' '.esc_html__('Please re-authorize!', 'wpcloudplugins');
+            $status_info_html = "<i class='eva eva-alert-triangle-outline' aria-hidden='true'></i>&nbsp;".esc_html__("Account isn't linked to the plugin anymore.", 'wpcloudplugins').' '.esc_html__('Please re-authorize!', 'wpcloudplugins');
 
             return "<div class='account account-error'><img class='account-image' src='{$account->get_image()}' onerror='this.src=\"".OUTOFTHEBOX_ROOTPATH."/css/images/dropbox_logo.png\"'/><div class='account-info-container'><div class='account-actions'>{$refreshbutton} {$deletebutton}</div><div class='account-info'>{$account_info_html}</div><div class='account-info-status'>{$status_info_html}</div><div class='account-info-error'>{$errror_details_html}</div></div></div>";
         }
@@ -621,10 +628,19 @@ class Admin
             if (current_user_can('manage_options') || current_user_can('edit_theme_options')) {
                 $location = get_admin_url(null, 'admin.php?page=OutoftheBox_settings');
 
-                foreach ($this->get_main()->get_accounts()->list_accounts() as $account_id => $account) {
+                $accounts = $this->get_main()->get_accounts()->list_accounts();
+
+                if (empty($accounts)) {
+                    echo '<div id="message" class="error"><p><span class="dashicons dashicons-warning"></span>&nbsp;<strong>Out-of-the-Box: </strong>'.sprintf(esc_html__("The plugin isn't linked with a %s account. Authorize the plugin or disable it if is not used on the site.", 'wpcloudplugins'), 'Dropbox').'</p>'.
+                        "<p><a href='{$location}' class='button-primary'>❱❱❱ &nbsp;".esc_html__('Authorize the plugin!', 'wpcloudplugins').'</a></p></div>';
+
+                    return;
+                }
+
+                foreach ($accounts as $account_id => $account) {
                     if (false === $account->get_authorization()->has_access_token() || (false !== wp_next_scheduled('outofthebox_lost_authorisation_notification', ['account_id' => $account_id]))) {
                         echo '<div id="message" class="error"><p><span class="dashicons dashicons-warning"></span>&nbsp;<strong>Out-of-the-Box: </strong>'.sprintf(esc_html__("The plugin isn't longer linked to the %s account", 'wpcloudplugins'), '<strong>'.$account->get_email().'</strong>').'.</p>'.
-                        "<p><a href='{$location}' class='button-primary'>".esc_html__('Refresh the authorization!', 'wpcloudplugins').'</a></p></div>';
+                        "<p><a href='{$location}' class='button-primary'>❱❱❱ &nbsp;".esc_html__('Refresh the authorization!', 'wpcloudplugins').'</a></p></div>';
                     }
                 }
             }
@@ -714,6 +730,9 @@ class Admin
             'wpforms' => defined('WPFORMS_VERSION'),
             'fluentforms' => defined('FLUENTFORM_VERSION'),
             'contact_form_7' => defined('WPCF7_PLUGIN'),
+            'acf' => class_exists('ACF'),
+            'beaver_builder' => class_exists('FLBuilder'),
+            'divi_page_builder' => defined('ET_BUILDER_VERSION'),
             'woocommerce' => class_exists('WC_Integration'),
             'woocommerce_product_documents' => class_exists('WC_Product_Documents'),
         ];

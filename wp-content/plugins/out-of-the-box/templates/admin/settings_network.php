@@ -1,4 +1,13 @@
 <?php
+function help_button($name, $text)
+{
+    ?>
+  <a onclick="return false;" onkeypress="return false;" class="wpcp_help_tooltip" data-tippy-content="<strong><?php echo $name; ?></strong></br><?php echo $text; ?>">
+			<i class="eva eva-question-mark-circle-outline"></i>
+		</a>
+  <?php
+}
+
 $network_wide_authorization = $this->get_processor()->is_network_authorized();
 ?>
 <div class="outofthebox admin-settings">
@@ -29,9 +38,9 @@ $network_wide_authorization = $this->get_processor()->is_network_authorized();
 
         <div class="outofthebox-nav-header" style="margin-top: 50px;"><?php esc_html_e('Other Cloud Plugins', 'wpcloudplugins'); ?></div>
         <ul class="outofthebox-nav-tabs">
-          <li id="settings_help_tab" data-tab="settings_help"><a href="https://1.envato.market/L6yXj" target="_blank" style="color:#522058;">Google Drive <i class="fas fa-external-link-square-alt" aria-hidden="true"></i></a></li>
-          <li id="settings_help_tab" data-tab="settings_help"><a href="https://1.envato.market/yDbyv" target="_blank" style="color:#522058;">OneDrive <i class="fas fa-external-link-square-alt" aria-hidden="true"></i></a></li>
-          <li id="settings_help_tab" data-tab="settings_help"><a href="https://1.envato.market/M4B53" target="_blank" style="color:#522058;">Box <i class="fas fa-external-link-square-alt" aria-hidden="true"></i></a></li>
+          <li id="settings_help_tab" data-tab="settings_help"><a href="https://1.envato.market/L6yXj" target="_blank" style="color:#522058;">Google Drive <i class="eva eva-external-link" aria-hidden="true"></i></a></li>
+          <li id="settings_help_tab" data-tab="settings_help"><a href="https://1.envato.market/yDbyv" target="_blank" style="color:#522058;">OneDrive <i class="eva eva-external-link" aria-hidden="true"></i></a></li>
+          <li id="settings_help_tab" data-tab="settings_help"><a href="https://1.envato.market/M4B53" target="_blank" style="color:#522058;">Box <i class="eva eva-external-link" aria-hidden="true"></i></a></li>
         </ul> 
 
                             <div class="outofthebox-nav-footer">
@@ -75,12 +84,12 @@ $network_wide_authorization = $this->get_processor()->is_network_authorized();
                       <div class='account-info-container'>
                         <div class='account-info'>
                           <div class='account-actions'>
-                            <div id='wpcp-add-account-button' type='button' class='simple-button blue' data-url="<?php echo $app->get_auth_url(['force_reapprove' => 'true']); ?>" title="<?php esc_html_e('Add account', 'wpcloudplugins'); ?>"><i class='fas fa-plus-circle' aria-hidden='true'></i>&nbsp;<?php esc_html_e('Add account', 'wpcloudplugins'); ?></div>
+                            <div id='wpcp-add-account-button' type='button' class='simple-button blue' data-url="<?php echo $app->get_auth_url(['force_reapprove' => 'true']); ?>" title="<?php esc_html_e('Add account', 'wpcloudplugins'); ?>"><i class='eva eva-plus-circle eva-lg' aria-hidden='true'></i>&nbsp;<?php esc_html_e('Add account', 'wpcloudplugins'); ?></div>
                           </div>
                           <div class="account-info-name">
                             <?php esc_html_e('Link a new account to the plugin', 'wpcloudplugins'); ?>
                           </div>
-                          <span class="account-info-space"><a href="#" id="wpcp-read-privacy-policy"><i class="fas fa-shield-alt"></i> <?php esc_html_e('What happens with my data when I authorize the plugin?', 'wpcloudplugins'); ?></a></span>   
+                          <span class="account-info-space"><a href="#" id="wpcp-read-privacy-policy"><i class="eva eva-shield"></i> <?php esc_html_e('What happens with my data when I authorize the plugin?', 'wpcloudplugins'); ?></a></span>   
                         </div>
                       </div>
                     </div>
@@ -125,7 +134,7 @@ $network_wide_authorization = $this->get_processor()->is_network_authorized();
                 <div class="outofthebox-option-description">
                   <strong>Using your own Dropbox App is <u>optional</u></strong>. For an easy setup you can just use the default App of the plugin itself by leaving the Key and Secret empty. The advantage of using your own app is limited. If you decided to create your own Dropbox App anyway, please enter your settings. In the <a href="http://goo.gl/dsT71e" target="_blank">documentation</a> you can find how you can create a Dropbox App.
                   <br/><br/>
-                  <div class="oftb-warning">
+                  <div class="wpcp-warning">
                     <i><strong>NOTICE</strong>: If you encounter any issues when trying to use your own App, please fall back on the default App by disabling this setting.</i>
                   </div>
                 </div>
@@ -176,7 +185,7 @@ $network_wide_authorization = $this->get_processor()->is_network_authorized();
               </div>
               <div class="outofthebox-option-description"><?php esc_html_e('Allows you to access your Dropbox Team Folders', 'wpcloudplugins'); ?>.</div>
 
-              <div class="oftb-warning">
+              <div class="wpcp-warning">
                 <i><strong>NOTICE</strong>: <?php esc_html_e('Please check your existing Shortcodes and Manually linked Private Folders when changing this setting. Your root folder will not longer be your Personal Folder when Team Folders are enabled', 'wpcloudplugins'); ?>.</i>
               </div>
 
@@ -203,6 +212,8 @@ $network_wide_authorization = $this->get_processor()->is_network_authorized();
           <div id="message">
             <p><?php esc_html_e('Check the documentation of the plugin in case you encounter any problems or are looking for support.', 'wpcloudplugins'); ?></p>
             <div id='wpcp-open-docs-button' type='button' class='simple-button blue'><?php esc_html_e('Open Documentation', 'wpcloudplugins'); ?></div>
+            <br/><br/>
+            <div style='padding:56.25% 0 0 0;position:relative;'><iframe src='https://vimeo.com/showcase/9015621/embed' allowfullscreen loading="lazy" frameborder='0' style='position:absolute;top:0;left:0;width:100%;height:100%;'></iframe></div>            
           </div>
           <br/>
           <div class="outofthebox-option-title"><?php esc_html_e('Cache', 'wpcloudplugins'); ?></div>
@@ -253,7 +264,7 @@ $network_wide_authorization = $this->get_processor()->is_network_authorized();
       The authorization tokens will be stored, encrypted, on this server and is not accessible by the developer or any third party. When you use the Application, all communications are strictly between your server and the cloud storage service servers. The communication is encrypted and the communication will not go through WP Cloud Plugins servers. We do not collect and do not have access to your personal data.
       
       <br/><br/>
-      <i class="fas fa-shield-alt"></i> <?php echo sprintf(esc_html__('Read the full %sPrivacy Policy%s if you have any further privacy concerns.', 'wpcloudplugins'), '<a href="https://www.wpcloudplugins.com/privacy-policy/privacy-policy-out-of-the-box/">', '</a>'); ?></div>
+      <i class="eva eva-shield"></i> <?php echo sprintf(esc_html__('Read the full %sPrivacy Policy%s if you have any further privacy concerns.', 'wpcloudplugins'), '<a href="https://www.wpcloudplugins.com/privacy-policy/privacy-policy-out-of-the-box/">', '</a>'); ?></div>
     </div>
   </div>
   <!-- End Short Privacy Policy -->

@@ -222,12 +222,13 @@ class WooCommerce_Downloads
         // register scripts/styles
         add_thickbox();
 
-        wp_register_style('outofthebox-woocommerce', plugins_url('woocommerce.css', __FILE__), OUTOFTHEBOX_VERSION);
-        wp_register_script('outofthebox-woocommerce', plugins_url('woocommerce.js', __FILE__), ['jquery'], OUTOFTHEBOX_VERSION);
+        wp_register_style('outofthebox-woocommerce', plugins_url('backend.css', __FILE__), OUTOFTHEBOX_VERSION);
+        wp_register_script('outofthebox-woocommerce', plugins_url('backend.js', __FILE__), ['jquery'], OUTOFTHEBOX_VERSION);
 
         // enqueue scripts/styles
         wp_enqueue_style('OutoftheBox.ShortcodeBuilder');
-        wp_enqueue_style('Awesome-Font-5');
+        wp_enqueue_style('Eva-Icons');
+
         wp_enqueue_style('outofthebox-woocommerce');
         wp_enqueue_script('outofthebox-woocommerce');
         wp_enqueue_script('OutoftheBox');
@@ -586,15 +587,14 @@ class WooCommerce_Uploads
         add_filter('woocommerce_my_account_my_orders_actions', [$this, 'add_orders_column_actions'], 10, 2);
 
         // Add Upload Box to Order Page
-        //add_action('woocommerce_view_order', array($this, 'render_upload_field'), 11);
-        add_action('woocommerce_order_details_before_order_table', [$this, 'render_upload_field'], 11);
-        add_action('woocommerce_order_details_after_order_table', [$this, 'render_upload_field'], 11);
+        add_action('woocommerce_order_item_meta_end', [$this, 'render_upload_field'], 10, 4);
+
+        // Add Upload Box to Admin Order Page
+        add_action('woocommerce_admin_order_item_headers', [$this, 'admin_order_item_headers'], 10, 1);
+        add_action('woocommerce_admin_order_item_values', [$this, 'admin_order_item_values'], 10, 3);
 
         // Add link to upload box in the Thank You text
         add_filter('woocommerce_thankyou_order_received_text', [$this, 'change_order_received_text'], 10, 2);
-
-        // Add Upload Box to Admin Order Page
-        add_action('add_meta_boxes', [$this, 'add_meta_box'], 10, 2);
 
         // Add Order note when uploading files
         add_action('outofthebox_upload_post_process', [$this, 'add_order_note'], 10, 2);
@@ -648,27 +648,6 @@ class WooCommerce_Uploads
     }
 
     /**
-     *  Add a Meta Box to the Order Page where you can find all the uploaded files for the order.
-     *
-     * @param mixed $post_type
-     * @param mixed $post
-     */
-    public function add_meta_box($post_type, $post)
-    {
-        if (!in_array($post_type, ['shop_order'])) {
-            return;
-        }
-
-        $order = new \WC_Order($post->ID);
-
-        if (false === $this->requires_order_uploads($order)) {
-            return false;
-        }
-
-        add_meta_box('woocommerce-outofthebox-box-order-detail', esc_html__('Uploaded Files', 'wpcloudplugins'), [$this, 'render_meta_box'], 'shop_order', 'advanced', 'high');
-    }
-
-    /**
      * Add link to upload box in the Thank You text.
      *
      * @param string    $thank_you_text
@@ -682,7 +661,7 @@ class WooCommerce_Uploads
             return $thank_you_text;
         }
 
-        $order_url = '#uploads';
+        $order_url = $order->get_view_order_url().'#wpcp-uploads';
         $thank_you_text .= ' '.sprintf(esc_html__('You can now %sstart uploading your documents%s', 'wpcloudplugins'), '<a href="'.$order_url.'">', '</a>').'.';
 
         return $thank_you_text;
@@ -747,7 +726,7 @@ class WooCommerce_Uploads
             <div class="show_if_outofthebox_upload_box">
               <h4><?php echo 'Dropbox '.esc_html__('Upload Box Settings', 'wpcloudplugins'); ?></h4>
               <?php
-              $default_box_title = 'Uploads';
+              $default_box_title = esc_html__('Order #', 'woocommerce').' %wc_order_id% | %wc_product_name% -'.esc_html__('Upload documents', 'wpcloudplugins');
         $box_title = get_post_meta($post->ID, 'outofthebox_upload_box_title', true);
 
         woocommerce_wp_text_input(
@@ -778,20 +757,20 @@ class WooCommerce_Uploads
               <p class="form-field outofthebox_upload_folder ">
                 <label for="outofthebox_upload_folder">Upload Box</label>
                 <a href="#TB_inline?height=450&amp;width=800&amp;inlineId=oftb-embedded" class="button insert-outofthebox OutoftheBox-shortcodegenerator" style="float:none"><?php echo esc_html__('Build your Upload Box', 'wpcloudplugins'); ?></a>
-                <a href="#" class="" style="float:none" onclick="jQuery('#outofthebox_upload_box_shortcode').fadeToggle()"><?php echo esc_html__('Edit Shortcode Manually', 'wpcloudplugins'); ?></a>
+                <a href="javascript:void(0)" role="link" class="" style="float:none" onclick="jQuery('#outofthebox_upload_box_shortcode').fadeToggle()"><?php echo esc_html__('Edit Shortcode Manually', 'wpcloudplugins'); ?></a>
                 <br/><br/>
                 <textarea class="long" style="display:none" name="outofthebox_upload_box_shortcode" id="outofthebox_upload_box_shortcode" placeholder="<?php echo $default_shortcode; ?>"  rows="3" cols="20"><?php echo (empty($shortcode)) ? $default_shortcode : $shortcode; ?></textarea>
               </p>
 
               <?php
-              $default_folder_template = '%wc_order_id% - %wc_product_name% - %user_email%';
+              $default_folder_template = '%wc_order_id% (%user_email%)/%wc_product_name%';
         $folder_template = get_post_meta($post->ID, 'outofthebox_upload_box_folder_template', true);
 
         woocommerce_wp_text_input(
             [
                 'id' => 'outofthebox_upload_box_folder_template',
                 'label' => esc_html__('Upload Folder Name', 'wpcloudplugins'),
-                'description' => '<br><br>'.esc_html__('Unique folder name where the uploads should be stored. Make sure that Private Folder feature is enabled in the shortcode', 'wpcloudplugins').'. '.sprintf(esc_html__('Available placeholders: %s', 'wpcloudplugins'), '<code>%wc_order_id%</code>, <code>%wc_order_date_created%</code>, <code>%wc_order_quantity%</code>, <code>%wc_product_id%</code>, <code>%wc_product_id%</code>, <code>%wc_product_sku%</code>, <code>%wc_product_quantity%</code>, <code>%wc_product_name%</code>, <code>%user_login%</code>, <code>%user_email%</code>, <code>%display_name%</code>, <code>%ID%</code>, <code>%user_role%</code>, <code>%yyyy-mm-dd%</code>, <code>%directory_separator%</code>'),
+                'description' => '<br><br>'.esc_html__('Unique folder name where the uploads should be stored. Make sure that Private Folder feature is enabled in the shortcode', 'wpcloudplugins').'. '.sprintf(esc_html__('Available placeholders: %s', 'wpcloudplugins'), '<code>%wc_order_id%</code>, <code>%wc_order_date_created%</code>, <code>%wc_order_quantity%</code>, <code>%wc_product_id%</code>, <code>%wc_product_id%</code>, <code>%wc_product_sku%</code>, <code>%wc_product_quantity%</code>, <code>%wc_product_name%</code>, <code>%user_login%</code>, <code>%user_email%</code>, <code>%display_name%</code>, <code>%ID%</code>, <code>%user_role%</code>, <code>%usermeta_{key}%</code>, <code>%yyyy-mm-dd%</code>, <code>%directory_separator%</code>'),
                 'desc_tip' => false,
                 'placeholder' => $default_folder_template,
                 'value' => empty($folder_template) ? $default_folder_template : $folder_template,
@@ -866,8 +845,8 @@ class WooCommerce_Uploads
         if (!in_array($current_screen->id, ['product', 'shop_order'])) {
             return;
         }
-        wp_register_style('outofthebox-woocommerce', plugins_url('woocommerce.css', __FILE__), OUTOFTHEBOX_VERSION);
-        wp_register_script('outofthebox-woocommerce', plugins_url('woocommerce.js', __FILE__), ['jquery'], OUTOFTHEBOX_VERSION);
+        wp_register_style('outofthebox-woocommerce', plugins_url('backend.css', __FILE__), OUTOFTHEBOX_VERSION);
+        wp_register_script('outofthebox-woocommerce', plugins_url('backend.js', __FILE__), ['jquery'], OUTOFTHEBOX_VERSION);
 
         wp_enqueue_style('outofthebox-woocommerce');
         wp_enqueue_script('outofthebox-woocommerce');
@@ -938,8 +917,8 @@ class WooCommerce_Uploads
     {
         if ($this->requires_order_uploads($order)) {
             $actions['upload'] = [
-                'url' => $order->get_view_order_url().'#uploads',
-                'name' => esc_html__('Upload files', 'wpcloudplugins'),
+                'url' => $order->get_view_order_url().'#wpcp-uploads',
+                'name' => esc_html__('Upload documents', 'wpcloudplugins'),
             ];
         }
 
@@ -947,134 +926,152 @@ class WooCommerce_Uploads
     }
 
     /**
-     * Render the Upload Box on the Order View.
+     * Add a custom column on the Admin Order Page.
      *
-     * @param int $order_id
+     * @param mixed $order
      */
-    public function render_upload_field($order_id)
+    public function admin_order_item_headers($order)
     {
-        /* Only render the upload form once
-         * Preferably before the order table, but not all templates have this hook available */
-        if (doing_action('woocommerce_order_details_before_order_table')) {
-            remove_action('woocommerce_order_details_after_order_table', [$this, 'render_upload_field'], 11);
+        if (false === $this->requires_order_uploads($order)) {
+            return false;
         }
 
-        if (doing_action('woocommerce_order_details_after_order_table')) {
-            remove_action('woocommerce_order_details_before_order_table', [$this, 'render_upload_field'], 11);
-        }
+        // set the column name
+        $column_name = esc_html__('Uploaded documents', 'wpcloudplugins');
 
-        $order = new \WC_Order($order_id);
-
-        foreach ($order->get_items() as $order_item) {
-            $originial_product = $this->get_product($order_item);
-
-            if (false === $this->requires_product_uploads($originial_product, $order)) {
-                continue;
-            }
-
-            /** Select the product that contains the information * */
-            $meta_product = $originial_product;
-            if ($this->is_product_variation($originial_product)) {
-                $meta_product = wc_get_product($originial_product->get_parent_id());
-            }
-
-            $box_title = apply_filters('outofthebox_woocommerce_upload_box_title', get_post_meta($meta_product->get_id(), 'outofthebox_upload_box_title', true), $order, $order_item, $this);
-            $box_description = get_post_meta($meta_product->get_id(), 'outofthebox_upload_box_description', true);
-            $shortcode = get_post_meta($meta_product->get_id(), 'outofthebox_upload_box_shortcode', true);
-            $folder_template = get_post_meta($meta_product->get_id(), 'outofthebox_upload_box_folder_template', true);
-            $upload_active_on = get_post_meta($meta_product->get_id(), 'outofthebox_upload_box_active_on_status', true);
-            if (empty($upload_active_on)) {
-                $upload_active_on = ['wc-pending', 'wc-processing'];
-            }
-            $upload_active = in_array('wc-'.$order->get_status(), $upload_active_on);
-
-            $shortcode_params = shortcode_parse_atts($shortcode);
-            $shortcode_params['userfoldernametemplate'] = $this->set_placeholders($folder_template, $order, $originial_product);
-            $shortcode_params['wc_order_id'] = $order->get_id();
-            $shortcode_params['wc_product_id'] = $originial_product->get_id();
-
-            // When Upload box isn't active, change it to a view only file browser
-            if (false === $upload_active) {
-                $shortcode_params['mode'] = 'files';
-                $shortcode_params['upload'] = '0';
-                $shortcode_params['delete'] = '0';
-                $shortcode_params['rename'] = '0';
-                $shortcode_params['candownloadzip'] = '1';
-                $shortcode_params['editdescription'] = '0';
-            }
-
-            $show_box = apply_filters('outofthebox_woocommerce_show_upload_field', true, $order, $originial_product, $this);
-
-            if ($show_box) {
-                echo '<div class="woocommerce-order-upload-box">';
-
-                do_action('outofthebox_woocommerce_before_render_upload_field', $order, $originial_product, $this);
-
-                echo '<h2 id="uploads">'.$this->set_placeholders($box_title, $order, $originial_product).'</h2>';
-
-                if (!empty($box_description)) {
-                    echo '<p>'.$this->set_placeholders($box_description, $order, $originial_product).'</p>';
-                }
-
-                // Don't show the upload box when there isn't select a root folder
-                // IN THE DROPBOX VERSION DIR CAN BE EMPTY IN CASE THE ROOT FOLDER IS BEING USED
-                //if (empty($shortcode_params['dir']) && $shortcode_params['userfolder'] !== 'manual') {
-                //    echo sprintf(esc_html__('Please %sconfigure%s the upload location for this product', 'wpcloudplugins'), '', '') . '.';
-                //    continue;
-                //}
-
-                echo $this->get_woocommerce()->get_processor()->create_from_shortcode($shortcode_params);
-
-                do_action('outofthebox_woocommerce_after_render_upload_field', $order, $originial_product, $this);
-                echo '</div>';
-            }
-        }
+        // display the column name
+        echo '<th>'.$column_name.'</th>';
     }
 
     /**
-     * Render the Meta Box.
+     * Add the value for the custom column on the Admin Order Page.
+     *
+     * @param mixed      $_product
+     * @param mixed      $item
+     * @param null|mixed $item_id
      */
-    public function render_meta_box(\WP_Post $post)
+    public function admin_order_item_values($_product, $item, $item_id = null)
     {
-        $order = new \WC_Order($post->ID);
+        if (false === $this->requires_order_uploads($item->get_order())) {
+            return false;
+        }
 
-        foreach ($order->get_items() as $order_item) {
-            $originial_product = $this->get_product($order_item);
+        if (false === $this->requires_product_uploads($_product, $item->get_order())) {
+            echo '<td></td>';
 
-            if (false === $this->requires_product_uploads($originial_product, $order)) {
-                continue;
-            }
+            return;
+        }
 
-            /** Select the product that contains the information * */
-            $meta_product = $originial_product;
-            if ($this->is_product_variation($originial_product)) {
-                $meta_product = wc_get_product($originial_product->get_parent_id());
-            }
+        echo '<td>';
+        echo $this->render_upload_field($item->get_id(), $item, $item->get_order(), null);
+        echo '</td>';
+    }
 
-            $shortcode = get_post_meta($meta_product->get_id(), 'outofthebox_upload_box_shortcode', true);
-            $folder_template = get_post_meta($meta_product->get_id(), 'outofthebox_upload_box_folder_template', true);
+    /*
+     * Render the Upload Box on the Order View.
+     *
+     * @param mixed $item_id
+     * @param mixed $item
+     * @param mixed $order
+     * @param bool  $plain_text
+     */
 
-            $shortcode_params = shortcode_parse_atts($shortcode);
-            $shortcode_params['userfoldernametemplate'] = $this->set_placeholders($folder_template, $order, $originial_product);
-            $shortcode_params['wc_order_id'] = $order->get_id();
-            $shortcode_params['wc_product_id'] = $originial_product->get_id();
+    public function render_upload_field($item_id, $item, $order, $plain_text)
+    {
+        $originial_product = $this->get_product($item);
 
+        if (false === $this->requires_product_uploads($originial_product, $order)) {
+            return;
+        }
+
+        wp_register_style('outofthebox-woocommerce-frontend-css', plugins_url('frontend.css', __FILE__), [], OUTOFTHEBOX_VERSION);
+        wp_enqueue_style('outofthebox-woocommerce-frontend-css');
+
+        wp_register_script('outofthebox-woocommerce-frontend', plugins_url('frontend.js', __FILE__), ['jquery'], OUTOFTHEBOX_VERSION);
+        wp_enqueue_script('outofthebox-woocommerce-frontend');
+
+        /** Select the product that contains the information * */
+        $meta_product = $originial_product;
+        if ($this->is_product_variation($originial_product)) {
+            $meta_product = wc_get_product($originial_product->get_parent_id());
+        }
+
+        $box_title = apply_filters('outofthebox_woocommerce_upload_box_title', get_post_meta($meta_product->get_id(), 'outofthebox_upload_box_title', true), $order, $item, $this);
+        $box_description = get_post_meta($meta_product->get_id(), 'outofthebox_upload_box_description', true);
+        $shortcode = get_post_meta($meta_product->get_id(), 'outofthebox_upload_box_shortcode', true);
+        $folder_template = get_post_meta($meta_product->get_id(), 'outofthebox_upload_box_folder_template', true);
+        $upload_active_on = get_post_meta($meta_product->get_id(), 'outofthebox_upload_box_active_on_status', true);
+        if (empty($upload_active_on)) {
+            $upload_active_on = ['wc-pending', 'wc-processing'];
+        }
+        $upload_active = in_array('wc-'.$order->get_status(), $upload_active_on);
+
+        // Don't include upload box in email notifications
+        $is_sending_mail = doing_action('woocommerce_email_order_details');
+
+        if ($is_sending_mail || (!is_wc_endpoint_url() && !is_admin())) {
+            $order_url = $order->get_view_order_url()."#wpcp-uploads-{$item_id}";
+            echo '<br/><small>'.sprintf(esc_html__('You can uploading your documents on the %sorder page%s', 'wpcloudplugins'), '<a href="'.$order_url.'">', '</a>').'.</small>';
+
+            return;
+        }
+
+        $shortcode_params = shortcode_parse_atts($shortcode);
+        $shortcode_params['userfoldernametemplate'] = $this->set_placeholders($folder_template, $order, $originial_product);
+        $shortcode_params['wc_order_id'] = $order->get_id();
+        $shortcode_params['wc_product_id'] = $originial_product->get_id();
+        $shortcode_params['maxheight'] = '300px';
+
+        // When Upload box isn't active, change it to a view only file browser
+        if (false === $upload_active) {
+            $shortcode_params['mode'] = 'files';
+            $shortcode_params['upload'] = '0';
+            $shortcode_params['delete'] = '0';
+            $shortcode_params['rename'] = '0';
+            $shortcode_params['candownloadzip'] = '1';
+            $shortcode_params['editdescription'] = '0';
+        }
+
+        $show_box = apply_filters('outofthebox_woocommerce_show_upload_field', true, $order, $originial_product, $this);
+
+        $is_admin_page = is_admin();
+        if ($is_admin_page) {
             // Always show the File Browser mode in the Dashboard
+
+            $shortcode_params['showbreadcrumb'] = '1';
             $shortcode_params['mode'] = 'files';
             $shortcode_params['candownloadzip'] = '1';
 
             // Meta Box is located inside Form tag, so force the plugin to start the update
             $shortcode_params['class'] = (isset($shortcode_params['class']) ? $shortcode_params['class'].' auto_upload' : 'auto_upload');
 
-            // Don't show the upload box when there isn't select a root folder
-            if (empty($shortcode_params['dir']) && 'manual' !== $shortcode_params['userfolder']) {
-                $product_url = admin_url('post.php?post='.$originial_product->get_id().'&action=edit');
-                echo sprintf(esc_html__('Please %sconfigure%s the upload location for this product', 'wpcloudplugins'), '<a href="'.$product_url.'">', '</a>').'.';
+            $show_box = true;
+        }
 
-                continue;
+        if ($show_box) {
+            echo "<a id='wpcp-uploads-{$item_id}' class='woocommerce-button button wpcp-wc-open-box'><i class='eva eva-attach-2 eva-lg'></i> ".(($is_admin_page) ? esc_html__('View documents', 'wpcloudplugins') : esc_html__('Upload documents', 'wpcloudplugins')).'</a>';
+            echo '<div class="woocommerce-order-upload-box" style="display:none;">';
+
+            do_action('outofthebox_woocommerce_before_render_upload_field', $order, $originial_product, $this);
+
+            echo '<h2 id="uploads">'.$this->set_placeholders($box_title, $order, $originial_product).'</h2>';
+
+            if (!empty($box_description)) {
+                echo '<p>'.$this->set_placeholders($box_description, $order, $originial_product).'</p>';
             }
 
+            // Don't show the upload box when there isn't select a root folder
+            // IN THE DROPBOX VERSION DIR CAN BE EMPTY IN CASE THE ROOT FOLDER IS BEING USED
+            //if (empty($shortcode_params['dir']) && $shortcode_params['userfolder'] !== 'manual') {
+            //    echo sprintf(esc_html__('Please %sconfigure%s the upload location for this product', 'wpcloudplugins'), '', '') . '.';
+            //    echo '</div>';
+            //    return;
+            //}
+
             echo $this->get_woocommerce()->get_processor()->create_from_shortcode($shortcode_params);
+
+            do_action('outofthebox_woocommerce_after_render_upload_field', $order, $originial_product, $this);
+            echo '</div>';
         }
     }
 

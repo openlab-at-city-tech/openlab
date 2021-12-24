@@ -352,7 +352,7 @@ if (!function_exists('wpcp_help_tip')) {
   <tbody>
     <tr>
       <td>WooCommerce</td>
-      <td class="help"><?php echo wpcp_help_tip(esc_html__('You can use the plugin in WooCommerce for your Digital Products.', 'wpcloudplugins')); ?></td>
+      <td class="help"><?php echo wpcp_help_tip(sprintf(esc_html__('You can use the plugin in %s.', 'wpcloudplugins'), 'WooCommerce')); ?></td>
       <td>
         <?php
         if (!$environment['woocommerce']) {
@@ -365,7 +365,7 @@ if (!function_exists('wpcp_help_tip')) {
     </tr>
     <tr>
       <td>WooCommerce -> Product Documents</td>
-      <td class="help"><?php echo wpcp_help_tip(esc_html__('You can use the plugin in the Product Documents extension of WooCommerce.', 'wpcloudplugins')); ?></td>
+      <td class="help"><?php echo wpcp_help_tip(sprintf(esc_html__('You can use the plugin in %s.', 'wpcloudplugins'), 'WooCommerce Product Documents extension')); ?></td>
       <td>
         <?php
         if (!$environment['woocommerce_product_documents']) {
@@ -378,7 +378,7 @@ if (!function_exists('wpcp_help_tip')) {
     </tr>
     <tr>
       <td>Elementor</td>
-      <td class="help"><?php echo wpcp_help_tip(esc_html__('You can use the plugin in Elementor.', 'wpcloudplugins')); ?></td>
+      <td class="help"><?php echo wpcp_help_tip(sprintf(esc_html__('You can use the plugin in %s.', 'wpcloudplugins'), 'Elementor')); ?></td>
       <td>
         <?php
         if (!$environment['elementor']) {
@@ -388,10 +388,49 @@ if (!function_exists('wpcp_help_tip')) {
         }
         ?>
       </td>
-    </tr>     
+    </tr>
+        <tr>
+      <td>Divi Page Builder</td>
+      <td class="help"><?php echo wpcp_help_tip(sprintf(esc_html__('You can use the plugin in %s.', 'wpcloudplugins'), 'Divi Page Builder')); ?></td>
+      <td>
+        <?php
+        if (!$environment['divi_page_builder']) {
+            echo '<mark class="no"><span class="dashicons dashicons-no-alt"></span> '.esc_html__('Not active', 'wpcloudplugins').'</mark>';
+        } else {
+            echo '<mark class="yes"><span class="dashicons dashicons-yes"></span> '.ET_BUILDER_VERSION.'</mark>';
+        }
+        ?>
+      </td>
+    </tr> 
+    <tr>
+      <td>Beaver Builder</td>
+      <td class="help"><?php echo wpcp_help_tip(sprintf(esc_html__('You can use the plugin in %s.', 'wpcloudplugins'), 'Beaver Builder')); ?></td>
+      <td>
+        <?php
+        if (!$environment['beaver_builder']) {
+            echo '<mark class="no"><span class="dashicons dashicons-no-alt"></span> '.esc_html__('Not active', 'wpcloudplugins').'</mark>';
+        } else {
+            echo '<mark class="yes"><span class="dashicons dashicons-yes"></span> '.FL_BUILDER_VERSION.'</mark>';
+        }
+        ?>
+      </td>
+    </tr> 
+        <tr>
+      <td>Advanced Custom Fields</td>
+      <td class="help"><?php echo wpcp_help_tip(sprintf(esc_html__('You can use the plugin in %s.', 'wpcloudplugins'), 'Advanced Custom Fields')); ?></td>
+      <td>
+        <?php
+        if (!$environment['acf']) {
+            echo '<mark class="no"><span class="dashicons dashicons-no-alt"></span> '.esc_html__('Not active', 'wpcloudplugins').'</mark>';
+        } else {
+            echo '<mark class="yes"><span class="dashicons dashicons-yes"></span> '.ACF_VERSION.'</mark>';
+        }
+        ?>
+      </td>
+    </tr>          
     <tr>
       <td>Fluent Forms</td>
-      <td class="help"><?php echo wpcp_help_tip(esc_html__('You can use the plugin in Fluent Forms.', 'wpcloudplugins')); ?></td>
+      <td class="help"><?php echo wpcp_help_tip(sprintf(esc_html__('You can use the plugin in %s.', 'wpcloudplugins'), 'Fluent Forms')); ?></td>
 
       <td>
         <?php
@@ -405,7 +444,7 @@ if (!function_exists('wpcp_help_tip')) {
     </tr>      
     <tr>
       <td>Formidable Forms</td>
-      <td class="help"><?php echo wpcp_help_tip(esc_html__('You can use the plugin in Formidable Forms.', 'wpcloudplugins')); ?></td>
+      <td class="help"><?php echo wpcp_help_tip(sprintf(esc_html__('You can use the plugin in %s.', 'wpcloudplugins'), 'Formidable Forms')); ?></td>
 
       <td>
         <?php
@@ -416,10 +455,10 @@ if (!function_exists('wpcp_help_tip')) {
         }
         ?>
       </td>
-    </tr>    
+    </tr>
     <tr>
       <td>WPForms</td>
-      <td class="help"><?php echo wpcp_help_tip(esc_html__('You can use the plugin in WPForms.', 'wpcloudplugins')); ?></td>
+      <td class="help"><?php echo wpcp_help_tip(sprintf(esc_html__('You can use the plugin in %s.', 'wpcloudplugins'), 'WPForms')); ?></td>
 
       <td>
         <?php
@@ -433,7 +472,7 @@ if (!function_exists('wpcp_help_tip')) {
     </tr>
     <tr>
       <td>Gravity Forms</td>
-      <td class="help"><?php echo wpcp_help_tip(esc_html__('You can use the plugin in Gravity Forms.', 'wpcloudplugins')); ?></td>
+      <td class="help"><?php echo wpcp_help_tip(sprintf(esc_html__('You can use the plugin in %s.', 'wpcloudplugins'), 'Gravity Forms')); ?></td>
       <td>
         <?php
         if (!$environment['gravity_forms']) {
@@ -459,7 +498,7 @@ if (!function_exists('wpcp_help_tip')) {
     </tr>
     <tr>
       <td>Contact Form 7</td>
-      <td class="help"><?php echo wpcp_help_tip(esc_html__('You can use the plugin in Contact Form 7.', 'wpcloudplugins')); ?></td>
+      <td class="help"><?php echo wpcp_help_tip(sprintf(esc_html__('You can use the plugin in %s.', 'wpcloudplugins'), 'Contact Form 7')); ?></td>
 
       <td>
         <?php

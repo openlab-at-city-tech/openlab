@@ -555,13 +555,13 @@
   opacity: .5;
 }
 
-#OutoftheBox .media .jp-playlist-item-song-title i.fa-volume-up {
+#OutoftheBox .media .jp-playlist-item-song-title i.eva-volume-up-outline {
   transition: all .8s ease-in-out;
   opacity: 0;
   margin-left: 5px;
 }
 
-#OutoftheBox .media .jp-state-playing .jp-playlist-current .jp-playlist-item-song-title i.fa-volume-up {
+#OutoftheBox .media .jp-state-playing .jp-playlist-current .jp-playlist-item-song-title i.eva-volume-up-outline {
   opacity: 1;
 }
 

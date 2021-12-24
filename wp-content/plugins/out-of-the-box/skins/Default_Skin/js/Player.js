@@ -17,13 +17,33 @@ window.init_out_of_the_box_media_player = function (listtoken) {
     type: "POST",
     url: OutoftheBox_vars.ajax_url,
     data: data,
-    success: function (data) {
-      var playlist = create_playlistfrom_json(data);
+    success: function (json) {
+      var playlist = create_playlistfrom_json(json);
       init_mediaelement(container, listtoken, playlist);
+
+      const event = new CustomEvent('ajax-success', {
+        detail: {
+          json: json,
+          request: data
+        }
+      });
+
+      container.dispatchEvent(event);
+
     },
-    error: function () {
+    error: function (json) {
       container.querySelector('.loading.initialize').style.display = 'none';
       container.querySelector('.wpcp__main-container').classList.add('error');
+
+      const event = new CustomEvent('ajax-error', {
+        detail: {
+          json: json,
+          request: data
+        }
+      });
+
+      container.dispatchEvent(event);
+
     },
     dataType: 'json'
   });

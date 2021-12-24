@@ -23,7 +23,8 @@ class Helpers
             $path = '/'.$path;
         }
 
-        return $path;
+        return trim($path);
+
     }
 
     public static function get_pathinfo($path)
@@ -103,7 +104,7 @@ class Helpers
      * Checks if a particular user has a role.
      * Returns true if a match was found.
      *
-     * @param array    $roles_to_check roles array
+     * @param array $roles_to_check roles array
      * @param /WP_User $user           WP_User object
      *
      * @return bool
@@ -122,7 +123,7 @@ class Helpers
             return true;
         }
 
-        if (!is_user_logged_in()) {
+        if (!is_user_logged_in() && null === $user) {
             return false;
         }
 
@@ -471,7 +472,21 @@ class Helpers
                 '%display_name%' => isset($user_data->display_name) ? $user_data->display_name : '',
                 '%ID%' => isset($user_data->ID) ? $user_data->ID : '',
                 '%user_role%' => isset($user_data->roles) ? implode(',', $user_data->roles) : '',
+                '%user_registered%' => isset($user_data->user_registered) ? date('Y-m-d',strtotime($user_data->user_registered)) : ''
             ]);
+        }
+
+        // Custom User Meta Placeholders
+        preg_match_all('/%usermeta_(?<key>.+)%/U', $value, $usermeta_requests, PREG_SET_ORDER, 0);
+
+        if (!empty($usermeta_requests)) {
+            foreach ($usermeta_requests as $usermeta_request) {
+                $usermeta_placeholder = $usermeta_request[0];
+                $usermeta_value = get_user_meta($user_data->ID, $usermeta_request['key'], true);
+                $value = strtr($value, [
+                    $usermeta_placeholder => !empty($usermeta_value) ? $usermeta_value : '',
+                ]);
+            }
         }
 
         // Extra Placeholders
@@ -601,9 +616,25 @@ class Helpers
     public static function get_free_memory_available()
     {
         $memory_limit = self::return_bytes(ini_get('memory_limit'));
+
+        if ($memory_limit < 0) {
+            if (defined('WP_MEMORY_LIMIT')) {
+                $memory_limit = self::return_bytes(WP_MEMORY_LIMIT);
+            } else {
+                $memory_limit = 1024 * 1024 * 92; // Return 92MB if we can't get any reading on memory limits
+            }
+        }
+
         $memory_usage = memory_get_usage();
 
-        return $memory_limit - $memory_usage;
+        $free_memory = $memory_limit - $memory_usage;
+
+        if ($free_memory < (1024 * 1024 * 10)) {
+            // Return a minimum of 10MB available
+            return 1024 * 1024 * 10;
+        }
+
+        return $free_memory;
     }
 
     /**
