@@ -1,3 +1,10 @@
+### 3.0.1
+- Added the [gform_dropbox_should_upload_file](https://docs.gravityforms.com/gform_dropbox_should_upload_file/) filter.
+- Updated the minimum Gravity Forms version to 2.0.8.
+- Fixed an issue where the upload is attempted again for existing files, if the feed is reprocessed by other add-ons.
+- Fixed an issue where files with names that include Chinese characters aren't sent to Dropbox when uploaded via a multi-file enabled File Upload field.
+
+
 ### 3.0 | 2021-09-02
 - Added support for OAuth refresh tokens in accordance with changes to the Dropbox API.
 - Fixed the ability of custom apps with team permissions to authenticate.
