@@ -83,6 +83,11 @@
 .image-choices-admin-field.image-choices-use-images .image-choices-choice-focus label {
   border-color: #000; }
 
+html[dir="rtl"] .image-choices-admin-field.image-choices-use-images input[type="radio"],
+html[dir="rtl"] .image-choices-admin-field.image-choices-use-images input[type="checkbox"] {
+  left: unset;
+  right: -9999px; }
+
 /* GF 2.5 + */
 .media-modal {
   z-index: 1000001 !important; }
