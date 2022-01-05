@@ -81,6 +81,10 @@ class Generic_Map extends Base {
 		// Set Settings framework instance.
 		$this->settings = $settings;
 
+		// Prepare required and excluded field types.
+		$this->excluded_field_types = rgar( $props, 'exclude_field_types' );
+		$this->required_field_types = isset( $props['field_types'] ) ? $props['field_types'] : rgar( $props, 'field_type' );
+
 		// Merge Key Field properties.
 		if ( rgar( $props, 'key_field' ) ) {
 
@@ -133,7 +137,7 @@ class Generic_Map extends Base {
 		}
 
 		$this->value_field['choices']            = array();
-		$this->value_field['choices']['default'] = $this->get_value_choices();
+		$this->value_field['choices']['default'] = $passed_choices == 'form_fields' ? $this->get_value_choices( $this->required_field_types, $this->excluded_field_types ) : $this->get_prepopulated_choice( 'default', $passed_choices );
 
 		// Assign the correct value field choices per key field choice.
 		foreach ( $this->key_field['choices'] as $choice ) {
@@ -143,18 +147,14 @@ class Generic_Map extends Base {
 				continue;
 			}
 
-			$name = $choice['name'];
+			$required_types = isset( $choice['field_types'] ) ? rgar( $choice, 'field_types', array() ) : rgar( $choice, 'required_types', array() );
+			$excluded_types  = isset( $choice['exclude_field_types'] ) ? rgar( $choice, 'exclude_field_types', array() ) : rgar( $choice, 'excluded_types', array() );
 
-			// Specific choices were passed in from somewhere higher in the stack. Use those and continue.
-			if ( $passed_choices !== 'form_fields' ) {
-				$this->value_field['choices'][ $name ] = $passed_choices;
-				continue;
+			$key = 'filtered_choices_' . implode( '-', $required_types ) . '_' . implode( '-', $excluded_types );
+			if ( ! isset( $this->value_field['choices'][ $key ] ) ) {
+				$this->value_field['choices'][ $key ] = $passed_choices == 'form_fields' ? $this->get_value_choices( $required_types, $excluded_types ) : $this->get_prepopulated_choice( 'default', $passed_choices );
 			}
-
-			$required_types = rgar( $choice, 'required_types', array() );
-			$excluded_tyes  = rgar( $choice, 'excluded_types', array() );
-
-			$this->value_field['choices'][ $name ] = $this->get_value_choices( $required_types, $excluded_tyes );
+			$this->value_field['choice_keys'][ $choice['name'] ] = $key;
 		}
 
 		// Translate base strings.
@@ -175,6 +175,21 @@ class Generic_Map extends Base {
 
 		parent::__construct( $props, $settings );
 
+	}
+
+	/**
+	 * Looks into the $passed_choices for the specified $key. If $key is specified and mapped to an array, return the contents of that array. Otherwise return the entired $passed_choices array.
+	 *
+	 * @since 2.5.16
+	 *
+	 * @param string $key They filtered key to be used when looking for the child choices.
+	 * @param array  $passed_choices The choices array that will be used to pre-populate the value field.
+	 *
+	 * @return array List of choices to be prepopulated
+	 */
+	private function get_prepopulated_choice( $key, $passed_choices ) {
+		$is_filtered_choice_defined = isset( $passed_choices[ $key ] ) && is_array( $passed_choices[ $key ] );
+		return $is_filtered_choice_defined ? $passed_choices[ $key ] : $passed_choices;
 	}
 
 	/**

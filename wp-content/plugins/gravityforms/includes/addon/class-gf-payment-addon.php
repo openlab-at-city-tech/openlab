@@ -1441,7 +1441,6 @@ abstract class GFPaymentAddOn extends GFFeedAddOn {
 		$currency = RGCurrency::get_currency( $entry['currency'] );
 		$decimals = rgar( $currency, 'decimals', 0 );
 		$amount   = GFCommon::round_number( $amount, $decimals );
-
 		return array(
 			'payment_amount' => $amount,
 			'setup_fee'      => $fee_amount,

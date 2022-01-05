@@ -7,6 +7,8 @@ namespace Gravity_Forms\Gravity_Forms\License;
  *
  * Helper class to provide license statuse codes and messages. Should not be instantiated, but used statically.
  *
+ * @since 2.5.11
+ *
  * @package Gravity_Forms\Gravity_Forms\License
  */
 class GF_License_Statuses {
@@ -26,6 +28,8 @@ class GF_License_Statuses {
 
 	/**
 	 * Get the correct Message for the given code.
+	 *
+	 * @since 2.5.11
 	 *
 	 * @param $code
 	 *

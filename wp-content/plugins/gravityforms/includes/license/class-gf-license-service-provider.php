@@ -21,6 +21,13 @@ class GF_License_Service_Provider extends GF_Service_Provider {
 	const RESPONSE_FACTORY      = 'gf_license_response_factory';
 	const LICENSE_API_CONNECTOR = 'license_api_connector';
 
+	/**
+	 * Register the various classes for this service.
+	 *
+	 * @since 2.5.11
+	 *
+	 * @param GF_Service_Container $container
+	 */
 	public function register( GF_Service_Container $container ) {
 		\GFForms::include_gravity_api();
 

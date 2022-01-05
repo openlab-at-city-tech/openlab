@@ -1,5 +1,21 @@
+### 2.5.15.3
+- Fixed issue which caused multisites to experience a fatal error on plugin activation.
+
+### 2.5.15.2
+- Fixed issue with Dynamic Field Map on some add-ons including HubSpot Add-On and User Registration Add-On.
+- Fixed issue with form import not properly sanitizing JSON string in some cases.
+- Fixed an issue where uploaded files are not deleted on entry deletion if a custom upload path is used.
+
+
+### 2.5.15.1
+- Fixed performance issue with Generic Map settings field.
+- Fixed issue with Generic Map and Dynamic Field Map not being able to filter the value drop down to include or exclude field types.
+- Fixed issue with Generic Map settings field not being able to specify a custom list of choices for mapping.
+- Fixed an issue where files uploaded via the multi-file upload field are corrupted when chunking is enabled using [gform_plupload_settings](https://docs.gravityforms.com/gform_plupload_settings/).
+
 ### 2.5.15 | 2021-11-16
 - Added a prefix to section IDs in the Settings API to make it less likely that sections and fields will have the same ID.
+- Added new filter: *[gform_get_form_confirmation_filter](https://docs.gravityforms.com/gform_get_form_confirmation_filter/)*
 - Fixed an issue that prevents keyboard navigation from working in a form with multi-file upload and page fields.
 - Fixed an issue that caused Javascript errors when a form is added to the page via a custom Gutenberg block such as ACF.
 - Fixed an issue that caused sales results filters to show up on quiz, survey, and polls results pages.

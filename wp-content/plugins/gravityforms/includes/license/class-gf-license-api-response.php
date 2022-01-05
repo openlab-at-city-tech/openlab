@@ -10,7 +10,7 @@ use Gravity_Forms\Gravity_Forms\Transients\GF_Transient_Strategy;
  *
  * Concrete Response class for the GF License API.
  *
- * @since 2.5
+ * @since 2.5.11
  *
  * @package Gravity_Forms\Gravity_Forms\License
  */
@@ -23,6 +23,8 @@ class GF_License_API_Response extends GF_API_Response {
 
 	/**
 	 * GF_License_API_Response constructor.
+	 *
+	 * @since 2.5.11
 	 *
 	 * @param mixed $data The data from the API connector.
 	 * @param bool $validate Whether to validate the data passed.
@@ -83,6 +85,8 @@ class GF_License_API_Response extends GF_API_Response {
 	/**
 	 * Get the stored error for this site license.
 	 *
+	 * @since 2.5.11
+	 *
 	 * @return \WP_Error|false
 	 */
 	private function get_stored_error() {
@@ -91,6 +95,8 @@ class GF_License_API_Response extends GF_API_Response {
 
 	/**
 	 * Whether this license key is valid.
+	 *
+	 * @since 2.5.11
 	 *
 	 * @return bool
 	 */
@@ -109,6 +115,8 @@ class GF_License_API_Response extends GF_API_Response {
 	/**
 	 * Get the error message for the response, either the first one by default, or at a specific index.
 	 *
+	 * @since 2.5.11
+	 *
 	 * @param int $index The array index to use if mulitple errors exist.
 	 *
 	 * @return mixed|string
@@ -123,6 +131,8 @@ class GF_License_API_Response extends GF_API_Response {
 
 	/**
 	 * Get the human-readable display status for the response.
+	 *
+	 * @since 2.5.11
 	 *
 	 * @return string|void
 	 */
@@ -143,6 +153,8 @@ class GF_License_API_Response extends GF_API_Response {
 	/**
 	 * Licenses can be valid and usable, technically-invalid but still usable, or invalid and unusable.
 	 * This will return the correct usability value for this license key.
+	 *
+	 * @since 2.5.11
 	 *
 	 * @return string
 	 */
@@ -165,6 +177,8 @@ class GF_License_API_Response extends GF_API_Response {
 	/**
 	 * Whether this response has any errors stored as a transient.
 	 *
+	 * @since 2.5.11
+	 *
 	 * @return bool
 	 */
 	private function has_stored_error() {
@@ -173,6 +187,8 @@ class GF_License_API_Response extends GF_API_Response {
 
 	/**
 	 * Get a properly-formatted link to the Upgrade page for this license key.
+	 *
+	 * @since 2.5.11
 	 *
 	 * @return string
 	 */
@@ -185,6 +201,8 @@ class GF_License_API_Response extends GF_API_Response {
 
 	/**
 	 * Get the CTA information for this license key, if applicable.
+	 *
+	 * @since 2.5.11
 	 *
 	 * @return mixed
 	 */
@@ -211,6 +229,8 @@ class GF_License_API_Response extends GF_API_Response {
 	 * Some statuses are invalid, but get treated as usable. This determines if they should be displayed as
 	 * though they are valid.
 	 *
+	 * @since 2.5.11
+	 *
 	 * @return bool
 	 */
 	public function display_as_valid() {
@@ -228,6 +248,8 @@ class GF_License_API_Response extends GF_API_Response {
 	/**
 	 * Whether the license key can be used.
 	 *
+	 * @since 2.5.11
+	 *
 	 * @return bool
 	 */
 	public function can_be_used() {
@@ -236,6 +258,8 @@ class GF_License_API_Response extends GF_API_Response {
 
 	/**
 	 * Get the CTA type to display.
+	 *
+	 * @since 2.5.11
 	 *
 	 * @return string
 	 */
@@ -249,6 +273,8 @@ class GF_License_API_Response extends GF_API_Response {
 
 	/**
 	 * Determine if the contained License Key has an expiration date.
+	 *
+	 * @since 2.5.11
 	 *
 	 * @return bool
 	 */
@@ -265,6 +291,13 @@ class GF_License_API_Response extends GF_API_Response {
 		return $y < 2038;
 	}
 
+	/**
+	 * Get the text for the renewal message.
+	 *
+	 * @since 2.5.11
+	 *
+	 * @return string
+	 */
 	public function renewal_text() {
 		if (  $this->get_status() === GF_License_Statuses::EXPIRED_LICENSE_KEY ) {
 			return __( 'Expired On', 'gravityforms' );
@@ -282,6 +315,8 @@ class GF_License_API_Response extends GF_API_Response {
 	/**
 	 * Whether the license has max seats exceeded.
 	 *
+	 * @since 2.5.11
+	 *
 	 * @return bool
 	 */
 	public function max_seats_exceeded() {
@@ -294,6 +329,8 @@ class GF_License_API_Response extends GF_API_Response {
 
 	/**
 	 * Custom serialization method for this response type.
+	 *
+	 * @since 2.5.11
 	 *
 	 * @return string
 	 */
@@ -311,6 +348,8 @@ class GF_License_API_Response extends GF_API_Response {
 
 	/**
 	 * Custom unserialization method for this response type.
+	 *
+	 * @since 2.5.11
 	 *
 	 * @param string $serialized
 	 */

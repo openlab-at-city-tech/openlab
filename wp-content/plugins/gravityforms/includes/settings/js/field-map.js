@@ -160,7 +160,11 @@ var MappingValueField = /*#__PURE__*/function (_Component) {
       var _this = this;
 
       this.$input = jQuery(this.input);
-      this.mergeTagsObj = new gfMergeTagsObj(form, this.$input);
+
+      if (typeof form !== 'undefined') {
+        this.mergeTagsObj = new gfMergeTagsObj(form, this.$input);
+      }
+
       this.$input.on('propertychange', function (e) {
         _this.props.updateMapping(_objectSpread(_objectSpread({}, _this.props.mapping), {}, {
           custom_value: e.target.value
@@ -177,7 +181,10 @@ var MappingValueField = /*#__PURE__*/function (_Component) {
     key: "componentWillUnmount",
     value: function componentWillUnmount() {
       this.$input.off('propertychange');
-      this.mergeTagsObj.destroy();
+
+      if (typeof this.mergeTagsObj !== 'undefined') {
+        this.mergeTagsObj.destroy();
+      }
     }
   }, {
     key: "render",
@@ -1058,9 +1065,9 @@ var Mapping = /*#__PURE__*/function (_Component) {
           choice = _this$props7.choice,
           valueField = _this$props7.valueField;
       var allow_custom = valueField.allow_custom;
-      var choiceName = choice.name && valueField.choices[choice.name] ? choice.name : 'default'; // if no name is present, use default values.
+      var choiceKey = choice.name && valueField.choice_keys && valueField.choice_keys[choice.name] ? valueField.choice_keys[choice.name] : 'default'; // if no name is present, use default values.
 
-      var choices = choice.choices || valueField.choices[choiceName]; // Safety check to ensure choices are an array.
+      var choices = choice.choices || valueField.choices[choiceKey]; // Safety check to ensure choices are an array.
 
       if (!choices) {
         choices = [];

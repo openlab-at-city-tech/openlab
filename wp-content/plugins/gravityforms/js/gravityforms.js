@@ -2936,6 +2936,8 @@ function gformValidateFileSize( field, max_file_size ) {
 				up.removeFile(file);
 				addMessage(up.settings.gf_vars.message_id, file.name + " - " + response.error.message);
 				$('#' + file.id ).html('');
+			} else {
+				up.settings.multipart_params[file.target_name] = response.data;
 			}
 		});
 

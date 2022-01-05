@@ -1601,7 +1601,6 @@ class GFFormDisplay {
          */
 		do_action( 'gform_entry_created', $lead, $form );
 		$lead = gf_apply_filters( array( 'gform_entry_post_save', $form['id'] ), $lead, $form );
-
 		gf_feed_processor()->save()->dispatch();
 
 		RGFormsModel::set_current_lead( $lead );
