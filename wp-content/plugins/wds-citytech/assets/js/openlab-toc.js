@@ -7,6 +7,10 @@ jQuery(document).ready( function( $ ) {
 			$( '#ez-toc-container' ).attr( 'aria-expanded', ! options.hideByDefault );
 			$( '#ez-toc-container' ).on( 'click', '.ez-toc-toggle', app.handleInPageToggle );
 
+			var toggle = $( 'a.ez-toc-toggle' );
+
+			toggle.css( 'display', 'inline' );
+
 			// No need to continue if we don't have widget.
 			if ( ! app.hasWidget() ) {
 				return;
