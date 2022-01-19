@@ -428,7 +428,18 @@ OpenLab.nav = (function ($) {
 			return $( '.device-' + alias ).is( ':visible' );
 		},
 		fixHoverOnMobile: function (thisElem) {
-			thisElem.trigger( 'click' );
+			var anchorElem;
+			if ( 'A' === thisElem.prop( 'tagName' ) ) {
+				anchorElem = thisElem
+			} else {
+				anchorElem = thisElem.children( 'a' );
+			}
+
+			if ( anchorElem ) {
+				window.location.href = anchorElem.prop( 'href' );
+			}
+
+			anchorElem.trigger( 'click' );
 		},
 		isBreakpoint: function (alias) {
 			return $( '.device-' + alias ).is( ':visible' );
