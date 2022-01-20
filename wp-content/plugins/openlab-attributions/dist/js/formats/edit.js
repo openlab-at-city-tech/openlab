@@ -51,7 +51,6 @@ export default function Edit( { isActive, value, onChange } ) {
 		<>
 			<RichTextToolbarButton
 				icon={ icon }
-				name="text-color"
 				title="Add Attribution"
 				onClick={ () => setIsOpen( true ) }
 				isActive={ isActive }
