@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "classnames": "^2.2.6",
-    "nanoid": "^2.1.1",
+    "nanoid": "^3.1.31",
     "react-contenteditable": "^3.3.5",
     "react-tippy": "^1.2.3"
   },
