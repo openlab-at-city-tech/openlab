@@ -2,102 +2,114 @@
 /**
  * Plugin Name: Easy Google Fonts
  * Description: A simple and easy way to add google fonts to your WordPress theme.
- * Version: 1.4.4
+ * Version: 2.0.4
  * Author: Titanium Themes
- * Author URI: http://www.titaniumthemes.com
+ * Author URI: https://titaniumthemes.com
+ * Plugin URI: https://wordpress.org/plugins/easy-google-fonts/
+ * Text Domain: easy-google-fonts
  * License: GPL2
+ * License URI: http://www.gnu.org/licenses/gpl-2.0.txt
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, 
- * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A 
- * PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT 
- * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF 
- * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE 
- * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * @package     easy-google-fonts
+ * @author      Sunny Johal - Titanium Themes <support@titaniumthemes.com>
+ * @license     GPL-2.0+
+ * @copyright   Copyright (c) 2021, Titanium Themes
+ * @version     2.0.4
  */
 
-/**
- * Theme Font Generator
- *
- * This file is responsible for enabling custom google
- * fonts to be generated in the WordPress Admin Area. 
- * This plugin has been completely rewritten from the
- * ground up to boost performance.
- * 
- * @package   Easy_Google_Fonts
- * @author    Sunny Johal - Titanium Themes <support@titaniumthemes.com>
- * @license   GPL-2.0+
- * @link      http://wordpress.org/plugins/easy-google-fonts/
- * @copyright Copyright (c) 2016, Titanium Themes
- * @version   1.4.4
- * 
- */
+namespace EGF;
 
-// If this file is called directly, abort.
+// Prevent direct file access.
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-/**
- * Include Class Files
- *
- * Loads required classes for this plugin to function.
- *
- * @since 1.2
- * @version 1.4.4
- * 
- */
-require_once( plugin_dir_path( __FILE__ ) . 'class-easy-google-fonts.php' );
-require_once( plugin_dir_path( __FILE__ ) . 'includes/class-egf-font-utilities.php' );
-require_once( plugin_dir_path( __FILE__ ) . 'includes/class-egf-posttype.php' );
-require_once( plugin_dir_path( __FILE__ ) . 'includes/class-egf-register-options.php' );
-require_once( plugin_dir_path( __FILE__ ) . 'includes/class-easy-google-fonts-admin.php' );
-require_once( plugin_dir_path( __FILE__ ) . 'includes/customizer/class-egf-customize-manager.php' );
-require_once( plugin_dir_path( __FILE__ ) . 'includes/class-egf-admin-controller.php' );
-require_once( plugin_dir_path( __FILE__ ) . 'includes/class-egf-ajax.php' );
-require_once( plugin_dir_path( __FILE__ ) . 'includes/class-egf-frontend.php' );
+load_all_plugin_files();
+
+
 
 /**
- * Load Plugin Text Domain
+ * Load All Plugin Files
  *
- * Required in order to make this plugin translatable.
+ * Loads all of the required files for this
+ * plugin to function.
  *
- * @since 1.2
- * @version 1.4.4
- * 
+ * @throws WP_Error Error message if and file was not found.
+ * @return boolean True if all files were loaded, false if not.
+ *
+ * @since 2.0.0
  */
-function easy_google_fonts_text_domain() {
-	load_plugin_textdomain( 'easy-google-fonts', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
+function load_all_plugin_files() {
+	$files_loaded = array_map(
+		__NAMESPACE__ . '\\load_file',
+		[
+			'admin',
+			'api',
+			'customizer',
+			'data',
+			'deprecated',
+			'frontend',
+			'sanitization',
+			'settings',
+			'setup',
+			'utils',
+		]
+	);
+
+	return ! in_array(
+		true,
+		array_map( 'is_wp_error', $files_loaded ),
+		true
+	);
 }
-add_action( 'plugins_loaded', 'easy_google_fonts_text_domain' );
 
 /**
- * Create Easy_Google_Fonts Instance
+ * Load Single File
  *
- * Creates a new Easy_Google_Fonts class instance when
- * the 'plugins_loaded' action is fired.
+ * Attempts to locate a single php file
+ * from the src/includes directory.
  *
- * @since 1.2
- * @version 1.4.4
- * 
+ * @param string $file_name File name slug without the .php suffix.
+ * @return boolean|WP_Error True if file was located | Error if file not found.
+ *
+ * @since 2.0.0
  */
-add_action( 'plugins_loaded', array( 'Easy_Google_Fonts', 'get_instance' ) );
-add_action( 'plugins_loaded', array( 'EGF_Font_Utilities', 'get_instance' ) );
-add_action( 'plugins_loaded', array( 'EGF_Posttype', 'get_instance' ) );
-add_action( 'plugins_loaded', array( 'EGF_Register_Options', 'get_instance' ) );
-add_action( 'plugins_loaded', array( 'EGF_Customize_Manager', 'get_instance' ) );
-add_action( 'plugins_loaded', array( 'Easy_Google_Fonts_Admin', 'get_instance' ) );
-add_action( 'plugins_loaded', array( 'EGF_Ajax', 'get_instance' ) );
-add_action( 'plugins_loaded', array( 'EGF_Frontend', 'get_instance' ) );
+function load_file( $file_name ) {
+	$file = plugin_dir_path( __FILE__ ) . "src/includes/{$file_name}.php";
 
-/**
- * Register Activation/Deactivation Hooks
- * 
- * Register hooks that are fired when the plugin is activated or deactivated.
- * When the plugin is deleted, the uninstall.php file is loaded.
- * 
- * @since 1.2
- * @version 1.4.4
- * 
- */
-register_activation_hook( __FILE__, array( 'Easy_Google_Fonts', 'activate' ) );
-register_deactivation_hook( __FILE__, array( 'Easy_Google_Fonts', 'deactivate' ) );
+	if ( file_exists( $file ) ) {
+		include_once $file;
+		return true;
+	}
+
+	return new \WP_Error(
+		'file_not_found',
+		sprintf(
+			/* translators: file_not_found plugin error with file path. */
+			__( 'Could not locate the plugin file: %s', 'easy-google-fonts' ),
+			$file
+		)
+	);
+}
+
+// Refresh permalinks when plugin is
+// activated and deactivated.
+register_activation_hook(
+	__FILE__,
+	function() {
+		update_option( 'egf_version', '2.0.3' );
+		update_option( 'egf_force_user_redirect', get_current_user_id() );
+		update_option( 'egf_show_admin_pointer', true );
+		flush_rewrite_rules();
+	}
+);
+
+register_deactivation_hook(
+	__FILE__,
+	function() {
+		delete_option( 'egf_version' );
+		delete_option( 'egf_force_user_redirect' );
+		delete_option( 'egf_show_admin_pointer' );
+		flush_rewrite_rules();
+	}
+);

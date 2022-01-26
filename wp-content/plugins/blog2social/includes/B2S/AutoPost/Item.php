@@ -4,6 +4,7 @@ class B2S_AutoPost_Item {
     
     private $options;
     private $postTypesData;
+    private $postCategoriesData;
     private $networkAuthData = array();
     private $networkAutoPostData;
     private $networkAuthCount = false;
@@ -12,6 +13,7 @@ class B2S_AutoPost_Item {
         $this->getSettings();
         $this->options = new B2S_Options(B2S_PLUGIN_BLOG_USER_ID);
         $this->postTypesData = get_post_types(array('public' => true));
+        $this->postCategoriesData = get_categories(array('public' => true));
     }
     
     private function getSettings() {
@@ -282,15 +284,33 @@ class B2S_AutoPost_Item {
             $html .=' <input id="b2s-import-auto-post-type-state-include" name="b2s-import-auto-post-type-state" value="0" ' . (((isset($data['post_type_state']) && (int) $data['post_type_state'] == 0) || !isset($data['post_type_state'])) ? 'checked' : '') . ' type="radio"><label class="padding-bottom-3" for="b2s-import-auto-post-type-state-include">' . esc_html__('Include (Post only...)', 'blog2social') . '</label> ';
             $html .='<input id="b2s-import-auto-post-type-state-exclude" name="b2s-import-auto-post-type-state" value="1" ' . ((isset($data['post_type_state']) && (int) $data['post_type_state'] == 1) ? 'checked' : '') . ' type="radio"><label class="padding-bottom-3" for="b2s-import-auto-post-type-state-exclude">' . esc_html__('Exclude (Do no post ...)', 'blog2social') . '</label>';
             $html .='</p>';
-            $html .='<select name="b2s-import-auto-post-type-data[]" data-placeholder="Select Post Types" class="b2s-import-auto-post-type" multiple>';
+            $html .='<select name="b2s-import-auto-post-type-data[]" data-placeholder="' . esc_html__('Select Post Types', 'blog2social') . '" class="b2s-import-auto-post-type" multiple>';
 
-            $selected = (is_array($data['post_type']) && isset($data['post_type'])) ? $data['post_type'] : array();
+            $selected = (isset($data['post_type']) && is_array($data['post_type'])) ? $data['post_type'] : array();
 
             foreach ($this->postTypesData as $k => $v) {
                 if ($v != 'attachment' && $v != 'nav_menu_item' && $v != 'revision') {
                     $selItem = (in_array($v, $selected)) ? 'selected' : '';
                     $html .= '<option ' . $selItem . ' value="' . esc_attr($v) . '">' . esc_html($v) . '</option>';
                 }
+            }
+
+            $html .='</select>';
+            
+            //Categories
+            $html .='<br>';
+            $html .='<br>';
+            $html .='<p>' . esc_html__('Post Categories', 'blog2social');
+            $html .=' <input id="b2s-import-auto-post-categories-state-include" name="b2s-import-auto-post-categories-state" value="0" ' . (((isset($data['post_categories_state']) && (int) $data['post_categories_state'] == 0) || !isset($data['post_categories_state'])) ? 'checked' : '') . ' type="radio"><label class="padding-bottom-3" for="b2s-import-auto-post-categories-state-include">' . esc_html__('Include (Post only...)', 'blog2social') . '</label> ';
+            $html .='<input id="b2s-import-auto-post-categories-state-exclude" name="b2s-import-auto-post-categories-state" value="1" ' . ((isset($data['post_categories_state']) && (int) $data['post_categories_state'] == 1) ? 'checked' : '') . ' type="radio"><label class="padding-bottom-3" for="b2s-import-auto-post-categories-state-exclude">' . esc_html__('Exclude (Do no post ...)', 'blog2social') . '</label>';
+            $html .='</p>';
+            $html .='<select name="b2s-import-auto-post-categories-data[]" data-placeholder="' . esc_html__('Select Categories', 'blog2social') . '" class="b2s-import-auto-post-categories" multiple>';
+
+            $catSelected = (isset($data['post_categories']) && is_array($data['post_categories'])) ? $data['post_categories'] : array();
+
+            foreach ($this->postCategoriesData as $k => $v) {
+                $selItem = (in_array($v->term_id, $catSelected)) ? 'selected' : '';
+                $html .= '<option ' . $selItem . ' value="' . esc_attr($v->term_id) . '">' . esc_html($v->name) . '</option>';
             }
 
             $html .='</select>';

@@ -961,6 +961,7 @@ Reference: http://blog.rrwd.nl/2015/04/04/the-screen-reader-text-class-why-and-h
 
 #OutoftheBox .wpcp__main-container.wpcp__loading.wpcp__video {
   background-image: url(../assets/placeholder_video.png);
+  background-repeat: no-repeat;
   height: 0;
   padding-bottom: 75%;
   /* 4:3 ratio old school tv */
@@ -1180,14 +1181,14 @@ Reference: http://blog.rrwd.nl/2015/04/04/the-screen-reader-text-class-why-and-h
   margin-right: 5px;
 }
 
-#OutoftheBox .wpcp__playlist-item-content i.fa-volume-up {
+#OutoftheBox .wpcp__playlist-item-content i.eva-volume-up-outline {
   transition: all .8s ease-in-out;
   opacity: 0;
   margin-left: 5px;
 }
 
-#OutoftheBox .wpcp__container.wpcp__active .wpcp__playlist-selected i.fa-volume-up,
-#OutoftheBox .wpcp__container.wpcp__active+.wpcp__playlist-layer .wpcp__playlist-selected i.fa-volume-up {
+#OutoftheBox .wpcp__container.wpcp__active .wpcp__playlist-selected i.eva-volume-up-outline,
+#OutoftheBox .wpcp__container.wpcp__active+.wpcp__playlist-layer .wpcp__playlist-selected i.eva-volume-up-outline {
   opacity: 1;
 }
 

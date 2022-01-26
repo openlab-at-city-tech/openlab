@@ -32,6 +32,15 @@ function wp_roles_and_users_input($name, $selected = [])
     echo "<input class='outofthebox-option-input-large outofthebox-tagify outofthebox-permissions-placeholders' type='text' name='{$name}' value='{$value}' placeholder='' />";
 }
 
+function help_button($name, $text)
+{
+    ?>
+  <a onclick="return false;" onkeypress="return false;" class="wpcp_help_tooltip" data-tippy-content="<strong><?php echo $name; ?></strong></br><?php echo $text; ?>">
+			<i class="eva eva-question-mark-circle-outline"></i>
+		</a>
+  <?php
+}
+
 $this->load_scripts();
 $this->load_styles();
 
@@ -61,7 +70,7 @@ function OutoftheBox_remove_all_styles()
     $wp_styles->queue = [];
     wp_enqueue_style('OutoftheBox.ShortcodeBuilder');
     wp_enqueue_style('OutoftheBox.CustomStyle');
-    wp_enqueue_style('Awesome-Font-5');
+    wp_enqueue_style('Eva-Icons');
 }
 
 add_action('wp_print_scripts', 'OutoftheBox_remove_all_scripts', 1000);
@@ -98,9 +107,9 @@ $mode = (isset($_REQUEST['mode'])) ? $_REQUEST['mode'] : 'files';
       <div class="outofthebox-header">
         <div class="outofthebox-logo"><img src="<?php echo OUTOFTHEBOX_ROOTPATH; ?>/css/images/wpcp-logo-dark.svg" height="64" width="64" /></div>
         <div class="outofthebox-form-buttons">
-          <div id="get_raw_shortcode" class="simple-button default" title="<?php esc_html_e('Get raw Shortcode', 'wpcloudplugins'); ?>"><?php esc_html_e('Embed', 'wpcloudplugins'); ?><i class="fas fa-code" aria-hidden="true"></i></div>
+          <div id="get_raw_shortcode" class="simple-button default" title="<?php esc_html_e('Get raw Shortcode', 'wpcloudplugins'); ?>"><?php esc_html_e('Shortcode', 'wpcloudplugins'); ?><i class="eva eva-code-download eva-lg" aria-hidden="true"></i></div>
           <?php if (false === $standalone) { ?>
-            <div id="do_insert" class="simple-button default"><?php esc_html_e('Insert Shortcode', 'wpcloudplugins'); ?>&nbsp;<i class=" fas fa-chevron-circle-right" aria-hidden="true"></i></div>
+            <div id="do_insert" class="simple-button default"><?php esc_html_e('Update', 'wpcloudplugins'); ?>&nbsp;<i class="eva eva-play-circle-outline eva-lg" aria-hidden="true"></i></div>
           <?php } ?>
         </div>
 
@@ -108,7 +117,7 @@ $mode = (isset($_REQUEST['mode'])) ? $_REQUEST['mode'] : 'files';
 
       </div>
       <div id="" class="outofthebox-panel outofthebox-panel-left">
-        <div class="outofthebox-nav-header"><?php esc_html_e('Shortcode Options', 'wpcloudplugins'); ?></div>
+        <div class="outofthebox-nav-header"><?php esc_html_e('Module Configuration', 'wpcloudplugins'); ?></div>
         <ul class="outofthebox-nav-tabs">
           <li id="settings_general_tab" data-tab="settings_general" class="current"><a><span><?php esc_html_e('General', 'wpcloudplugins'); ?></span></a></li>
           <li id="settings_folder_tab" data-tab="settings_folders"><a><span><?php esc_html_e('Content', 'wpcloudplugins'); ?></span></a></li>
@@ -137,7 +146,7 @@ $mode = (isset($_REQUEST['mode'])) ? $_REQUEST['mode'] : 'files';
 
           <div class="outofthebox-tab-panel-header"><?php esc_html_e('General', 'wpcloudplugins'); ?></div>
 
-          <div class="outofthebox-option-title"><?php esc_html_e('Plugin Mode', 'wpcloudplugins'); ?></div>
+          <div class="outofthebox-option-title"><?php esc_html_e('Module', 'wpcloudplugins'); ?></div>
           <div class="outofthebox-option-description"><?php esc_html_e('Select how you want to display your content', 'wpcloudplugins'); ?>:</div>
           <div class="outofthebox-option-radio">
             <input type="radio" id="files" name="mode" <?php echo ('files' === $mode) ? 'checked="checked"' : ''; ?> value="files" class="mode" />
@@ -168,7 +177,7 @@ $mode = (isset($_REQUEST['mode'])) ? $_REQUEST['mode'] : 'files';
           } else {
               ?>
             <br />
-            <div class="oftb-updated">
+            <div class="wpcp-updated">
               <i><strong>TIP</strong>: <?php esc_html_e("Don't forget to check the Upload Permissions on the User Permissions tab", 'wpcloudplugins'); ?>. <?php esc_html_e('By default, only logged-in users can upload files', 'wpcloudplugins'); ?>.</i>
             </div>
           <?php
@@ -178,7 +187,7 @@ $mode = (isset($_REQUEST['mode'])) ? $_REQUEST['mode'] : 'files';
         <!-- End General Tab -->
         <!-- Content Tab -->
         <div id="settings_folders" class="outofthebox-tab-panel">
-          <div class="outofthebox-tab-panel-header"><?php esc_html_e('Folders', 'wpcloudplugins'); ?></div>
+          <div class="outofthebox-tab-panel-header"><?php esc_html_e('Content', 'wpcloudplugins'); ?></div>
 
           <div class="forfilebrowser forgallery">
             <div class="outofthebox-option-title"><?php esc_html_e('Use single cloud account', 'wpcloudplugins'); ?>
@@ -279,7 +288,7 @@ $mode = (isset($_REQUEST['mode'])) ? $_REQUEST['mode'] : 'files';
             <div class="outofthebox-suboptions option-userfolders forfilebrowser foruploadbox forgallery <?php echo (isset($_REQUEST['userfolders'])) ? '' : 'hidden'; ?>">
 
               <div class="outofthebox-option-title"><?php esc_html_e('Mode', 'wpcloudplugins'); ?></div>
-              <div class="outofthebox-option-description"><?php esc_html_e('Do you want to link your users manually to their Private Folder or should the plugin handle this automatically for you?', 'wpcloudplugins'); ?>.</div>
+              <div class="outofthebox-option-description"><?php esc_html_e('Do you want to link your users manually to their Private Folder or should the plugin handle this automatically for you?', 'wpcloudplugins'); ?></div>
 
               <?php
               $userfolders = 'auto';
@@ -299,38 +308,38 @@ $mode = (isset($_REQUEST['mode'])) ? $_REQUEST['mode'] : 'files';
                   <div class="outofthebox-option-title"><?php esc_html_e('Name Template', 'wpcloudplugins'); ?></div>
                   <input type="text" name="OutoftheBox_userfolders_name_template" id="OutoftheBox_userfolders_name_template" class="outofthebox-option-input-large" value="<?php echo (isset($_REQUEST['userfoldernametemplate'])) ? $_REQUEST['userfoldernametemplate'] : ''; ?>" autocomplete="off" placeholder="<?php echo $this->settings['userfolder_name']; ?>" data-global-value="<?php echo $this->settings['userfolder_name']; ?>"/>
                   <div class="outofthebox-option-description">
-                    <?php echo esc_html__('Template name for automatically created Private Folders.', 'wpcloudplugins').' '.esc_html__('Leave empty to use the value that is set globally.', 'wpcloudplugins').' '.sprintf(esc_html__('Available placeholders: %s', 'wpcloudplugins'), '').'<code>%user_login%</code>,  <code>%user_firstname%</code>, <code>%user_lastname%</code>, <code>%user_email%</code>, <code>%display_name%</code>, <code>%ID%</code>, <code>%user_role%</code>, <code>%yyyy-mm-dd%</code>, <code>%hh:mm%</code>, <code>%uniqueID%</code>, <code>%directory_separator% (/)</code>'; ?>                    
+                    <?php echo esc_html__('Template name for automatically created Private Folders.', 'wpcloudplugins').' '.esc_html__('Leave empty to use the value that is set globally.', 'wpcloudplugins').' '.sprintf(esc_html__('Available placeholders: %s', 'wpcloudplugins'), '').'<code>%user_login%</code>,  <code>%user_firstname%</code>, <code>%user_lastname%</code>, <code>%user_email%</code>, <code>%display_name%</code>, <code>%ID%</code>, <code>%user_role%</code>, <code>%usermeta_{key}%</code>, <code>%yyyy-mm-dd%</code>, <code>%hh:mm%</code>, <code>%uniqueID%</code>, <code>%directory_separator% (/)</code>'; ?>                    
                   </div>
               </div>
 
               <div class="outofthebox-option-title"><?php esc_html_e('Open Subfolder', 'wpcloudplugins'); ?>
+                  <?php help_button(esc_html__('Open Subfolder', 'wpcloudplugins'), esc_html__('Do you want to set a specific subfolder inside the Private Folder as start folder?', 'wpcloudplugins'));
+                  ?>                
                 <div class="outofthebox-onoffswitch">
                   <input type="checkbox" name="OutoftheBox_userfolders_use_subfolder" id="OutoftheBox_userfolders_use_subfolder" class="outofthebox-onoffswitch-checkbox" <?php echo (isset($_REQUEST['subfolder'])) ? 'checked="checked"' : ''; ?> data-div-toggle='userfolders-subfolder-option'/>
                   <label class="outofthebox-onoffswitch-label" for="OutoftheBox_userfolders_use_subfolder"></label>
-                </div>
-                <div class="outofthebox-option-description">
-                  <?php esc_html_e('Do you want to set a specific subfolder inside the Private Folder as start folder?', 'wpcloudplugins'); ?>
-                </div>                      
+                </div>                 
 
                 <div class="outofthebox-suboptions userfolders-subfolder-option <?php echo (isset($_REQUEST['subfolder'])) ? '' : 'hidden'; ?>">
                   <input type="text" name="OutoftheBox_subfolder" id="OutoftheBox_subfolder" class="outofthebox-option-input-large" value="<?php echo (isset($_REQUEST['subfolder'])) ? $_REQUEST['subfolder'] : ''; ?>" autocomplete="off" placeholder="e.g. /Documents"/>
                   <div class="outofthebox-option-description">
                     <?php esc_html_e('Set the subfolder name or path which should be set a start folder.', 'wpcloudplugins'); ?> <?php esc_html_e('The subfolder will be automatically created if it does not yet exists.', 'wpcloudplugins'); ?>
-                    <?php echo sprintf(esc_html__('Available placeholders: %s', 'wpcloudplugins'), '').'<code>%user_login%</code>,  <code>%user_firstname%</code>, <code>%user_lastname%</code>, <code>%user_email%</code>, <code>%display_name%</code>, <code>%ID%</code>, <code>%user_role%</code>, <code>%yyyy-mm-dd%</code>, <code>%hh:mm%</code>, <code>%uniqueID%</code>, <code>%directory_separator% (/)</code>'; ?>
+                    <?php echo sprintf(esc_html__('Available placeholders: %s', 'wpcloudplugins'), '').'<code>%user_login%</code>,  <code>%user_firstname%</code>, <code>%user_lastname%</code>, <code>%user_email%</code>, <code>%display_name%</code>, <code>%ID%</code>, <code>%user_role%</code>, <code>%usermeta_{key}%</code>, <code>%yyyy-mm-dd%</code>, <code>%hh:mm%</code>, <code>%uniqueID%</code>, <code>%directory_separator% (/)</code>'; ?>
                   </div>
                 </div>
               </div>
 
               <div class="option-userfolders_auto">
                 <div class="outofthebox-option-title"><?php esc_html_e('Template Folder', 'wpcloudplugins'); ?>
+                  <?php help_button(esc_html__('Template Folder', 'wpcloudplugins'), esc_html__('Newly created Private Folders can be prefilled with files from a template', 'wpcloudplugins').'. '.esc_html__('The content of the template folder selected will be copied to the user folder', 'wpcloudplugins').'.');
+                  ?>             
+
                   <div class="outofthebox-onoffswitch">
                     <input type="checkbox" name="OutoftheBox_userfolders_template" id="OutoftheBox_userfolders_template" class="outofthebox-onoffswitch-checkbox" <?php echo (isset($_REQUEST['usertemplatedir'])) ? 'checked="checked"' : ''; ?> data-div-toggle='userfolders-template-option' />
                     <label class="outofthebox-onoffswitch-label" for="OutoftheBox_userfolders_template"></label>
                   </div>
                 </div>
-                <div class="outofthebox-option-description">
-                  <?php esc_html_e('Newly created Private Folders can be prefilled with files from a template', 'wpcloudplugins'); ?>. <?php esc_html_e('The content of the template folder selected will be copied to the user folder', 'wpcloudplugins'); ?>.
-                </div>
+
 
                 <div class="outofthebox-suboptions userfolders-template-option <?php echo (isset($_REQUEST['usertemplatedir'])) ? '' : 'hidden'; ?>">
                   <div class="template-folder">
@@ -366,16 +375,20 @@ $mode = (isset($_REQUEST['mode'])) ? $_REQUEST['mode'] : 'files';
                   </div>
                 </div>
 
-                <div class="outofthebox-option-title"><?php esc_html_e('Full Access', 'wpcloudplugins'); ?></div>
-                <div class="outofthebox-option-description"><?php esc_html_e('By default only Administrator users will be able to navigate through all Private Folders', 'wpcloudplugins'); ?>. <?php esc_html_e('When you want other User Roles to be able do browse to the Private Folders as well, please check them below', 'wpcloudplugins'); ?>.</div>
+                <div class="outofthebox-option-title"><?php esc_html_e('Full Access', 'wpcloudplugins'); ?>
+                  <?php help_button(esc_html__('Full Access', 'wpcloudplugins'), esc_html__('By default only Administrator users will be able to navigate through all Private Folders', 'wpcloudplugins').'. '.esc_html__('When you want other User Roles to be able do browse trough all the Private Folders as well, please add them below', 'wpcloudplugins').'.');
+                  ?>                       
+                </div>
 
                 <?php
                 $selected = (isset($_REQUEST['viewuserfoldersrole'])) ? explode('|', $_REQUEST['viewuserfoldersrole']) : ['administrator'];
                 wp_roles_and_users_input('OutoftheBox_view_user_folders_role', $selected); ?>
 
 
-                <div class="outofthebox-option-title"><?php esc_html_e('Quota', 'wpcloudplugins'); ?></div>
-                <div class="outofthebox-option-description"><?php esc_html_e('Set maximum size of the User Folder (e.g. 10M, 100M, 1G). When the Upload function is enabled, the user will not be able to upload when the limit is reached', 'wpcloudplugins'); ?>. <?php esc_html_e('Leave this field empty or set it to -1 for unlimited disk space', 'wpcloudplugins'); ?>.</div>
+                <div class="outofthebox-option-title"><?php esc_html_e('Quota', 'wpcloudplugins'); ?>
+                  <?php help_button(esc_html__('Quota', 'wpcloudplugins'), esc_html__('Set maximum size of the User Folder (e.g. 10M, 100M, 1G). When the Upload function is enabled, the user will not be able to upload when the limit is reached', 'wpcloudplugins').'. '.esc_html__('Leave this field empty or set it to -1 for unlimited disk space', 'wpcloudplugins').'.');
+                  ?>                 
+                </div>
                 <input type="text" name="OutoftheBox_maxuserfoldersize" id="OutoftheBox_maxuserfoldersize" placeholder="e.g. 10M, 100M, 1G" value="<?php echo (isset($_REQUEST['maxuserfoldersize'])) ? $_REQUEST['maxuserfoldersize'] : ''; ?>" />
               </div>
             </div>
@@ -389,13 +402,13 @@ $mode = (isset($_REQUEST['mode'])) ? $_REQUEST['mode'] : 'files';
 
           <div class="outofthebox-tab-panel-header"><?php esc_html_e('Layout', 'wpcloudplugins'); ?></div>
 
-          <div class="outofthebox-option-title"><?php esc_html_e('Plugin container width', 'wpcloudplugins'); ?></div>
+          <div class="outofthebox-option-title"><?php esc_html_e('Module width', 'wpcloudplugins'); ?></div>
           <div class="outofthebox-option-description"><?php esc_html_e('Set max width for the plugin container', 'wpcloudplugins'); ?>. <?php esc_html_e("You can use pixels or percentages, eg '360px', '480px', '70%'", 'wpcloudplugins'); ?>. <?php echo esc_html__('Leave empty for default value.', 'wpcloudplugins'); ?></div>
           <input type="text" name="OutoftheBox_max_width" id="OutoftheBox_max_width" placeholder="100%" value="<?php echo (isset($_REQUEST['maxwidth'])) ? $_REQUEST['maxwidth'] : ''; ?>" />
 
 
           <div class="forfilebrowser forgallery forsearch foruploadbox">
-            <div class="outofthebox-option-title"><?php esc_html_e('Plugin container height', 'wpcloudplugins'); ?></div>
+            <div class="outofthebox-option-title"><?php esc_html_e('Module height', 'wpcloudplugins'); ?></div>
             <div class="outofthebox-option-description"><?php esc_html_e('Set max height for the plugin container', 'wpcloudplugins'); ?>. <?php esc_html_e("You can use pixels or percentages, eg '360px', '480px', '70%'", 'wpcloudplugins'); ?>. <?php esc_html_e('Leave empty for default value.', 'wpcloudplugins'); ?></div>
             <input type="text" name="OutoftheBox_max_height" id="OutoftheBox_max_height" placeholder="auto" value="<?php echo (isset($_REQUEST['maxheight'])) ? $_REQUEST['maxheight'] : ''; ?>" />
           </div>
@@ -403,7 +416,9 @@ $mode = (isset($_REQUEST['mode'])) ? $_REQUEST['mode'] : 'files';
           <div class="outofthebox-option-title"><?php esc_html_e('Custom CSS Class', 'wpcloudplugins'); ?></div>
           <div class="outofthebox-option-description"><?php esc_html_e('Add your own custom classes to the plugin container. Multiple classes can be added seperated by a whitespace', 'wpcloudplugins'); ?>.</div>
           <input type="text" name="OutoftheBox_class" id="OutoftheBox_class" value="<?php echo (isset($_REQUEST['class'])) ? $_REQUEST['class'] : ''; ?>" autocomplete="off" />
-
+          <div class="wpcp-warning">
+            <i><strong><?php esc_html_e('NOTICE', 'wpcloudplugins'); ?></strong>: <?php esc_html_e('Custom CSS rules need to be added on the Layout tab of the main plugin options page in the Custom CSS field.', 'wpcloudplugins'); ?></i>
+          </div>
 
           <div class="foraudio forvideo">
 
@@ -616,7 +631,7 @@ $mode = (isset($_REQUEST['mode'])) ? $_REQUEST['mode'] : 'files';
               </div>
             </div>
 
-            <div class="option forfilebrowser forgallery forsearch">
+            <div class="option forfilebrowser forsearch">
               <div class="outofthebox-option-title"><?php esc_html_e('Show file extension', 'wpcloudplugins'); ?>
                 <div class="outofthebox-onoffswitch">
                   <input type="checkbox" name="OutoftheBox_showext" id="OutoftheBox_showext" class="outofthebox-onoffswitch-checkbox" <?php echo (isset($_REQUEST['showext']) && '0' === $_REQUEST['showext']) ? '' : 'checked="checked"'; ?> />
@@ -624,7 +639,9 @@ $mode = (isset($_REQUEST['mode'])) ? $_REQUEST['mode'] : 'files';
                 </div>
               </div>
               <div class="outofthebox-option-description"><?php esc_html_e('Display or Hide the file extensions', 'wpcloudplugins'); ?></div>
+            </div>
 
+            <div class="option forfilebrowser forgallery forsearch">
               <div class="outofthebox-option-title"><?php esc_html_e('Show files', 'wpcloudplugins'); ?>
                 <div class="outofthebox-onoffswitch">
                   <input type="checkbox" name="OutoftheBox_showfiles" id="OutoftheBox_showfiles" class="outofthebox-onoffswitch-checkbox" <?php echo (isset($_REQUEST['showfiles']) && '0' === $_REQUEST['showfiles']) ? '' : 'checked="checked"'; ?> />
@@ -665,13 +682,13 @@ $mode = (isset($_REQUEST['mode'])) ? $_REQUEST['mode'] : 'files';
             <div class="outofthebox-option-description"><?php esc_html_e('Display or Hide the file names in the gallery', 'wpcloudplugins'); ?></div>
 
             <!-- Descriptions not implemented in Dropbox 
-            <div class="outofthebox-option-title"><?php esc_html_e('Show descriptions on top', 'wpcloudplugins'); ?>
+            <div class="outofthebox-option-title"><?php esc_html_e('Descriptions always visible', 'wpcloudplugins'); ?>
               <div class="outofthebox-onoffswitch">
                 <input type="checkbox" name="OutoftheBox_showdescriptionsontop" id="OutoftheBox_showdescriptionsontop" class="outofthebox-onoffswitch-checkbox" <?php echo (isset($_REQUEST['showdescriptionsontop']) && '1' === $_REQUEST['showdescriptionsontop']) ? 'checked="checked"' : ''; ?> />
                 <label class="outofthebox-onoffswitch-label" for="OutoftheBox_showdescriptionsontop"></label>
               </div>
             </div>
-            <div class="outofthebox-option-description"><?php esc_html_e('Display directly on top of the thumbnail', 'wpcloudplugins'); ?>. <?php esc_html_e('When disabled, the description can be shown by hovering over the image', 'wpcloudplugins'); ?>.</div>
+            <div class="outofthebox-option-description"><?php esc_html_e('The description will appear on hover by default. When this setting is enabled it will always be visible', 'wpcloudplugins'); ?>. </div>
             -->
 
             <div class="outofthebox-option-title"><?php esc_html_e('Gallery row height', 'wpcloudplugins'); ?></div>
@@ -759,7 +776,7 @@ $mode = (isset($_REQUEST['mode'])) ? $_REQUEST['mode'] : 'files';
         <div id="settings_advanced" class="outofthebox-tab-panel">
           <div class="outofthebox-tab-panel-header"><?php esc_html_e('Advanced', 'wpcloudplugins'); ?></div>
 
-          <div class="forfilebrowser forgallery forsearch">
+          <div class="forfilebrowser forsearch">
             <div class="outofthebox-option-title"><?php esc_html_e('Allow Preview', 'wpcloudplugins'); ?>
               <div class="outofthebox-onoffswitch">
                 <input type="checkbox" name="OutoftheBox_allow_preview" id="OutoftheBox_allow_preview" class="outofthebox-onoffswitch-checkbox" <?php echo (isset($_REQUEST['forcedownload']) && '1' === $_REQUEST['forcedownload']) ? '' : 'checked="checked"'; ?> data-div-toggle="preview-options" />
@@ -861,7 +878,7 @@ $mode = (isset($_REQUEST['mode'])) ? $_REQUEST['mode'] : 'files';
               <div class="outofthebox-option-title"><?php echo 'VAST XML Tag Url'; ?></div>
               <input type="text" name="OutoftheBox_media_ads" id="OutoftheBox_media_adstagurl" class="outofthebox-option-input-large" value="<?php echo (isset($_REQUEST['ads_tag_url'])) ? $_REQUEST['ads_tag_url'] : ''; ?>" placeholder="<?php echo $this->get_processor()->get_setting('mediaplayer_ads_tagurl'); ?>" />
 
-              <div class="oftb-warning">
+              <div class="wpcp-warning">
                 <i><strong><?php esc_html_e('NOTICE', 'wpcloudplugins'); ?></strong>: <?php esc_html_e('If you are unable to see the example VAST url below, please make sure you do not have an ad blocker enabled.', 'wpcloudplugins'); ?>.</i>
               </div>
 
@@ -933,48 +950,58 @@ $mode = (isset($_REQUEST['mode'])) ? $_REQUEST['mode'] : 'files';
           <div class="outofthebox-suboption upload-options <?php echo (isset($_REQUEST['upload']) && '1' === $_REQUEST['upload'] && in_array($mode, ['files', 'upload', 'gallery'])) ? '' : 'hidden'; ?>">
 
             <div class="outofthebox-option-title"><?php esc_html_e('Allow folder upload', 'wpcloudplugins'); ?>
+              <?php help_button(esc_html__('Allow folder upload', 'wpcloudplugins'), esc_html__('Adds an Add Folder button to the upload form if the browser supports it', 'wpcloudplugins'));
+              ?>    
+
               <div class="outofthebox-onoffswitch">
                 <input type="checkbox" name="OutoftheBox_upload_folder" id="OutoftheBox_upload_folder" class="outofthebox-onoffswitch-checkbox" <?php echo (isset($_REQUEST['upload_folder']) && '0' === $_REQUEST['upload_folder']) ? '' : 'checked="checked"'; ?> />
                 <label class="outofthebox-onoffswitch-label" for="OutoftheBox_upload_folder"></label>
               </div>
             </div>
-            <div class="outofthebox-option-description"><?php esc_html_e('Adds an Add Folder button to the upload form if the browser supports it', 'wpcloudplugins'); ?>. </div>
 
             <div class="outofthebox-option-title"><?php esc_html_e('Automatically starting upload', 'wpcloudplugins'); ?>
+              <?php help_button(esc_html__('Automatically starting upload', 'wpcloudplugins'), esc_html__('Start the upload directly once it is selected on the users device', 'wpcloudplugins'));
+              ?>                
               <div class="outofthebox-onoffswitch">
                 <input type="checkbox" name="OutoftheBox_upload_auto_start" id="OutoftheBox_upload_auto_start" class="outofthebox-onoffswitch-checkbox" <?php echo (isset($_REQUEST['upload_auto_start']) && '0' === $_REQUEST['upload_auto_start']) ? '' : 'checked="checked"'; ?> />
                 <label class="outofthebox-onoffswitch-label" for="OutoftheBox_upload_auto_start"></label>
               </div>
             </div>
-            <div class="outofthebox-option-description"><?php esc_html_e('Start the upload directly once it is selected on the users device', 'wpcloudplugins'); ?>. </div>
 
             <div class="outofthebox-option-title"><?php esc_html_e('Overwrite existing files', 'wpcloudplugins'); ?>
+              <?php help_button(esc_html__('Overwrite existing files', 'wpcloudplugins'), esc_html__('Overwrite already existing files or auto-rename the new uploaded files', 'wpcloudplugins'));
+              ?>                  
               <div class="outofthebox-onoffswitch">
                 <input type="checkbox" name="OutoftheBox_overwrite" id="OutoftheBox_overwrite" class="outofthebox-onoffswitch-checkbox" <?php echo (isset($_REQUEST['overwrite']) && '1' === $_REQUEST['overwrite']) ? 'checked="checked"' : ''; ?> />
                 <label class="outofthebox-onoffswitch-label" for="OutoftheBox_overwrite"></label>
               </div>
             </div>
-            <div class="outofthebox-option-description"><?php esc_html_e('Overwrite already existing files or auto-rename the new uploaded files', 'wpcloudplugins'); ?>. </div>
 
-            <div class="outofthebox-option-title"><?php esc_html_e('Restrict file extensions', 'wpcloudplugins'); ?></div>
-            <div class="outofthebox-option-description"><?php echo esc_html__('Add extensions separated with | e.g. (jpg|png|gif)', 'wpcloudplugins').' '.esc_html__('Leave empty for no restriction', 'outofthebox', 'wpcloudplugins'); ?>.</div>
+            <div class="outofthebox-option-title"><?php esc_html_e('Restrict file extensions', 'wpcloudplugins'); ?>
+              <?php help_button(esc_html__('Restrict file extensions', 'wpcloudplugins'), esc_html__('Add extensions separated with | e.g. (jpg|png|gif)', 'wpcloudplugins').'. '.esc_html__('Leave empty for no restriction', 'wpcloudplugins'));
+              ?>                         
+            </div>
             <input type="text" name="OutoftheBox_upload_ext" id="OutoftheBox_upload_ext" value="<?php echo (isset($_REQUEST['uploadext'])) ? $_REQUEST['uploadext'] : ''; ?>" />
 
-            <div class="outofthebox-option-title"><?php esc_html_e('Max uploads per session', 'wpcloudplugins'); ?></div>
-            <div class="outofthebox-option-description"><?php echo esc_html__('Number of maximum uploads per upload session', 'wpcloudplugins').' '.esc_html__('Leave empty for no restriction', 'wpcloudplugins'); ?>.</div>
+            <div class="outofthebox-option-title"><?php esc_html_e('Max uploads per session', 'wpcloudplugins'); ?>
+              <?php help_button(esc_html__('Restrict file extensions', 'wpcloudplugins'), esc_html__('Number of maximum uploads per upload session', 'wpcloudplugins').'. '.esc_html__('Leave empty for no restriction', 'wpcloudplugins'));
+              ?>   
+            </div>
+            
             <input type="text" name="OutoftheBox_maxnumberofuploads" id="OutoftheBox_maxnumberofuploads" placeholder="-1" value="<?php echo (isset($_REQUEST['maxnumberofuploads'])) ? $_REQUEST['maxnumberofuploads'] : ''; ?>" />
 
-            <div class="outofthebox-option-title"><?php esc_html_e('Minimum file size', 'wpcloudplugins'); ?></div>
+            <div class="outofthebox-option-title"><?php esc_html_e('Minimum file size', 'wpcloudplugins'); ?>
+              <?php help_button(esc_html__('Minimum file size', 'wpcloudplugins'), esc_html__('Min filesize (e.g. 1 MB) for uploading', 'wpcloudplugins').'. '.esc_html__('Leave empty for no restriction', 'wpcloudplugins'));
+              ?>  
+            </div>
             <?php
             // Convert bytes to MB when needed
             $min_size_value = (isset($_REQUEST['minfilesize']) ? $_REQUEST['minfilesize'] : '');
             if (!empty($min_size_value) && ctype_digit($min_size_value)) {
                 $min_size_value = \TheLion\OutoftheBox\Helpers::bytes_to_size_1024($min_size_value);
             } ?>
-            <div class="outofthebox-option-description"><?php esc_html_e('Min filesize (e.g. 1 MB) for uploading', 'wpcloudplugins'); ?>. <?php echo esc_html__('Leave empty for no restriction', 'wpcloudplugins'); ?>.</div>
             <input type="text" name="OutoftheBox_minfilesize" id="OutoftheBox_minfilesize" value="<?php echo $min_size_value; ?>" />
 
-            <div class="outofthebox-option-title"><?php esc_html_e('Maximum file size', 'wpcloudplugins'); ?></div>
             <?php
             $max_size_bytes = min(\TheLion\OutoftheBox\Helpers::return_bytes(ini_get('post_max_size')), \TheLion\OutoftheBox\Helpers::return_bytes(ini_get('upload_max_filesize')));
             $max_size_string = \TheLion\OutoftheBox\Helpers::bytes_to_size_1024($max_size_bytes);
@@ -984,7 +1011,11 @@ $mode = (isset($_REQUEST['mode'])) ? $_REQUEST['mode'] : 'files';
             if (!empty($max_size_value) && ctype_digit($max_size_value)) {
                 $max_size_value = \TheLion\OutoftheBox\Helpers::bytes_to_size_1024($max_size_value);
             } ?>
-            <div class="outofthebox-option-description"><?php esc_html_e('Max filesize for uploading', 'wpcloudplugins'); ?>. <?php esc_html_e('Leave empty for server maximum', 'wpcloudplugins'); ?> (<?php echo $max_size_string; ?>).</div>
+            
+            <div class="outofthebox-option-title"><?php esc_html_e('Maximum file size', 'wpcloudplugins'); ?>
+              <?php help_button(esc_html__('Maximum file size', 'wpcloudplugins'), esc_html__('Max filesize for uploading', 'wpcloudplugins').'. '.esc_html__('Leave empty for server maximum', 'wpcloudplugins')."({$max_size_string})");
+              ?>              
+            </div>
             <input type="text" name="OutoftheBox_maxfilesize" id="OutoftheBox_maxfilesize" placeholder="<?php echo $max_size_string; ?>" value="<?php echo $max_size_value; ?>" />
 
           </div>
@@ -1027,7 +1058,7 @@ $mode = (isset($_REQUEST['mode'])) ? $_REQUEST['mode'] : 'files';
           <div class="outofthebox-option-description"><?php echo esc_html__('On which email address would you like to receive the notification?', 'wpcloudplugins').' '.wp_kses(__('Add multiple email addresses by separating them with a comma (<code>,</code>)', 'wpcloudplugins'), ['code' => []]).'. '.sprintf(esc_html__('Available placeholders: %s', 'wpcloudplugins'), $placeholders); ?>.</div>
           <input type="text" name="OutoftheBox_notification_email" id="OutoftheBox_notification_email" class="outofthebox-option-input-large" placeholder="<?php echo get_option('admin_email'); ?>" value="<?php echo (isset($_REQUEST['notificationemail'])) ? $_REQUEST['notificationemail'] : ''; ?>" />
 
-          <div class="oftb-warning">
+          <div class="wpcp-warning">
             <i><strong><?php esc_html_e('NOTICE', 'wpcloudplugins'); ?></strong>: <?php echo sprintf(esc_html__('%s can be used to send notications to the owner(s) of the Private Folder', 'wpcloudplugins'), '<code>%linked_user_email%</code>'); ?>. <?php echo sprintf(esc_html__('When using this placeholder in combination with automatically linked Private Folders, the %sName Template%s should contain %s', 'wpcloudplugins'), '<a href="'.admin_url('admin.php?page=OutoftheBox_settings#settings_userfolders').'" target="_blank">', '</a>', '<code>%user_email%</code>'); ?>. <?php esc_html_e('I.e. the Private Folder name needs to contain the email address of the user', 'wpcloudplugins'); ?>.</i>
           </div>
 
@@ -1040,6 +1071,19 @@ $mode = (isset($_REQUEST['mode'])) ? $_REQUEST['mode'] : 'files';
             </div>
           </div>
 
+
+          <div class="outofthebox-option-title"><?php esc_html_e('From Name', 'wpcloudplugins'); ?>
+            <?php help_button(esc_html__('From Name', 'wpcloudplugins'), esc_html__('Enter the name you would like the notification email sent from, or use one of the available placeholders.', 'wpcloudplugins'));
+            ?>                        
+          </div>
+          <input class="outofthebox-option-input-large" type="text" name="OutoftheBox_notification_from_name" id="OutoftheBox_notification_from_name" placeholder=""<?php echo $this->settings['notification_from_name']; ?>" data-global-value="<?php echo $this->settings['notification_from_name']; ?>" value="<?php echo (isset($_REQUEST['notification_from_name'])) ? $_REQUEST['notification_from_name'] : ''; ?>">  
+
+          <div class="outofthebox-option-title"><?php esc_html_e('From Email', 'wpcloudplugins'); ?>
+                <?php help_button(esc_html__('From Email', 'wpcloudplugins'), esc_html__('Enter an authorized email address you would like the notification email sent from. To avoid deliverability issues, always use your site domain in the from email.', 'wpcloudplugins'));
+                ?>               
+          </div>
+          <input class="outofthebox-option-input-large" type="text" name="OutoftheBox_notification_from_email" id="OutoftheBox_notification_from_email" placeholder="<?php echo $this->settings['notification_from_email']; ?>" data-global-value="<?php echo $this->settings['notification_from_email']; ?>" value="<?php echo (isset($_REQUEST['notification_from_email'])) ? $_REQUEST['notification_from_email'] : ''; ?>">  
+
         </div>
         <!-- End Notifications Tab -->
 
@@ -1050,20 +1094,22 @@ $mode = (isset($_REQUEST['mode'])) ? $_REQUEST['mode'] : 'files';
           <div class="option forfilebrowser forgallery">
 
             <div class="outofthebox-option-title"><?php esc_html_e('Allow Direct Links', 'wpcloudplugins'); ?>
+              <?php help_button(esc_html__('Allow Direct Links', 'wpcloudplugins'), esc_html__('Allow users to generate a link to a folder/file on your website. Only users with access to the shortcode and content will be able to open the link', 'wpcloudplugins'));
+                ?>              
               <div class="outofthebox-onoffswitch">
                 <input type="checkbox" name="OutoftheBox_deeplink" id="OutoftheBox_deeplink" class="outofthebox-onoffswitch-checkbox" <?php echo (isset($_REQUEST['deeplink']) && '1' === $_REQUEST['deeplink']) ? 'checked="checked"' : ''; ?> data-div-toggle="deeplink-options" />
                 <label class="outofthebox-onoffswitch-label" for="OutoftheBox_deeplink"></label>
               </div>
             </div>
-            <div class="outofthebox-option-description"><?php esc_html_e('Allow users to generate a link to a folder/file on your website. Only users with access to the shortcode and content will be able to open the link', 'wpcloudplugins'); ?></div>
 
             <div class="outofthebox-option-title"><?php esc_html_e('Allow Sharing', 'wpcloudplugins'); ?>
+              <?php help_button(esc_html__('Allow Sharing', 'wpcloudplugins'), esc_html__('Allow users to generate permanent shared links to the files', 'wpcloudplugins'));
+                ?>              
               <div class="outofthebox-onoffswitch">
                 <input type="checkbox" name="OutoftheBox_showsharelink" id="OutoftheBox_showsharelink" class="outofthebox-onoffswitch-checkbox" <?php echo (isset($_REQUEST['showsharelink']) && '1' === $_REQUEST['showsharelink']) ? 'checked="checked"' : ''; ?> data-div-toggle="sharing-options" />
                 <label class="outofthebox-onoffswitch-label" for="OutoftheBox_showsharelink"></label>
               </div>
             </div>
-            <div class="outofthebox-option-description"><?php esc_html_e('Allow users to generate permanent shared links to the files', 'wpcloudplugins'); ?></div>
 
             <div class="outofthebox-option-title"><?php esc_html_e('Rename files and folders', 'wpcloudplugins'); ?>
               <div class="outofthebox-onoffswitch">

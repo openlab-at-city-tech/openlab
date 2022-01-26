@@ -504,10 +504,10 @@ define([
 		sortGradebookBy: function (ev) {
 			ev.stopPropagation();
 
-			var thisElem = $(ev.srcElement);
+			var thisElem = $(ev.target);
 			var thisParent = thisElem.closest("th");
 
-			if (ev.srcElement.nodeName === "TH") {
+			if (ev.target.nodeName === "TH") {
 				thisParent = thisElem;
 			}
 

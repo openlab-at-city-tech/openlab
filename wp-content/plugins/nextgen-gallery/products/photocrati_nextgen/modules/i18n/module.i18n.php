@@ -29,12 +29,6 @@ class M_I18N extends C_Base_Module
 
     function _register_adapters()
     {
-        // Provides translating the name & description of images, albums, and galleries
-        $this->get_registry()->add_adapter('I_Image_Mapper', 'A_I18N_Image_Translation');
-        $this->get_registry()->add_adapter('I_Album_Mapper', 'A_I18N_Album_Translation');
-        $this->get_registry()->add_adapter('I_Gallery_Mapper', 'A_I18N_Gallery_Translation');
-        $this->get_registry()->add_adapter('I_Displayed_Gallery', 'A_I18N_Displayed_Gallery_Translation');
-
         // qTranslate requires we disable "Hide Untranslated Content" during routed app requests like
         // photocrati-ajax, when uploading new images, or retrieving dynamically altered (watermarked) images
         $this->get_registry()->add_adapter('I_Routing_App', 'A_I18N_Routing_App');
@@ -360,10 +354,6 @@ class M_I18N extends C_Base_Module
     function get_type_list()
     {
         return array(
-            'A_I18N_Displayed_Gallery_Translation' => 'adapter.i18n_displayed_gallery_translation.php',
-            'A_I18N_Image_Translation' => 'adapter.i18n_image_translation.php',
-            'A_I18N_Album_Translation' => 'adapter.i18n_album_translation.php',
-            'A_I18N_Gallery_Translation' => 'adapter.i18n_gallery_translation.php',
             'A_I18N_Routing_App' => 'adapter.i18n_routing_app.php'
         );
     }

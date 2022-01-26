@@ -35,23 +35,23 @@ class TablePress_Options_View extends TablePress_View {
 		$codemirror_settings = wp_enqueue_code_editor( array( 'type' => 'text/css' ) );
 		if ( ! empty( $codemirror_settings ) ) {
 			// Load CSS adjustments for CodeMirror and the added vertical resizing.
-			$this->admin_page->enqueue_style( 'codemirror', array( 'code-editor' ) );
-			$this->admin_page->enqueue_script( 'codemirror', array( 'jquery', 'jquery-ui-resizable' ), array(
+			$this->admin_page->enqueue_style( 'codemirror', array( 'code-editor' ) ); // phpcs:ignore PEAR.Functions.FunctionCallSignature.MultipleArguments
+			$this->admin_page->enqueue_script( 'codemirror', array( 'jquery', 'jquery-ui-resizable' ), array( // phpcs:ignore PEAR.Functions.FunctionCallSignature.MultipleArguments
 				'codemirror_settings' => $codemirror_settings,
 			) );
 		}
 
-		$this->admin_page->enqueue_script( 'options', array( 'jquery' ), array(
+		$this->admin_page->enqueue_script( 'options', array( 'jquery' ), array( // phpcs:ignore PEAR.Functions.FunctionCallSignature.MultipleArguments
 			'strings' => array(
 				'uninstall_warning_1' => __( 'Do you really want to uninstall TablePress and delete ALL data?', 'tablepress' ),
 				'uninstall_warning_2' => __( 'Are you really sure?', 'tablepress' ),
-			)
+			),
 		) );
 
 		$this->process_action_messages( array(
-			'success_save'                     => __( 'Options saved successfully.', 'tablepress' ),
-			'success_save_error_custom_css'    => __( 'Options saved successfully, but &#8220;Custom CSS&#8221; was not saved to file.', 'tablepress' ),
-			'error_save'                       => __( 'Error: Options could not be saved.', 'tablepress' ),
+			'success_save'                  => __( 'Options saved successfully.', 'tablepress' ),
+			'success_save_error_custom_css' => __( 'Options saved successfully, but &#8220;Custom CSS&#8221; was not saved to file.', 'tablepress' ),
+			'error_save'                    => __( 'Error: Options could not be saved.', 'tablepress' ),
 		) );
 
 		$this->add_text_box( 'head', array( $this, 'textbox_head' ), 'normal' );
@@ -91,7 +91,7 @@ class TablePress_Options_View extends TablePress_View {
 	 * @param array $box  Information about the meta box.
 	 */
 	public function postbox_frontend_options( array $data, array $box ) {
-?>
+		?>
 <table class="tablepress-postbox-table fixed">
 <tbody>
 	<tr>
@@ -118,7 +118,7 @@ class TablePress_Options_View extends TablePress_View {
 	</tr>
 </tbody>
 </table>
-<?php
+		<?php
 	}
 
 	/**
@@ -168,7 +168,7 @@ class TablePress_Options_View extends TablePress_View {
 	</tr>
 </tbody>
 </table>
-<?php
+		<?php
 	}
 
 	/**

@@ -110,8 +110,8 @@ function wpt_twitter_save_profile() {
 		$edit_id = $user_ID;
 	}
 	if ( current_user_can( 'wpt_twitter_oauth' ) || current_user_can( 'manage_options' ) ) {
-		$enable     = ( isset( $_POST['wpt-enable-user'] ) ) ? $_POST['wpt-enable-user'] : '';
-		$username   = ( isset( $_POST['wpt-username'] ) ) ? $_POST['wpt-username'] : '';
+		$enable     = ( isset( $_POST['wpt-enable-user'] ) ) ? sanitize_text_field( $_POST['wpt-enable-user'] ) : '';
+		$username   = ( isset( $_POST['wpt-username'] ) ) ? sanitize_text_field( $_POST['wpt-username'] ) : '';
 		$wpt_remove = ( isset( $_POST['wpt-remove'] ) ) ? 'on' : '';
 		update_user_meta( $edit_id, 'wp-to-twitter-enable-user', $enable );
 		update_user_meta( $edit_id, 'wp-to-twitter-user-username', $username );

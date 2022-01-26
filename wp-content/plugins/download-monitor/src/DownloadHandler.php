@@ -314,7 +314,7 @@ class DLM_Download_Handler {
 			// Action on found download
 			if ( $download->exists() ) {
 				if ( post_password_required( $download_id ) ) {
-					wp_die( wp_kses_post( get_the_password_form( $download_id ) ), esc_html__( 'Password Required', 'download-monitor' ) );
+					wp_die( get_the_password_form( $download_id ) , esc_html__( 'Password Required', 'download-monitor' ) );
 				}
 
 				$this->trigger( $download );
@@ -497,6 +497,8 @@ class DLM_Download_Handler {
 		$file_path = apply_filters( 'dlm_file_path', $file_path, $remote_file, $download );
 
 		$this->download_headers( $file_path, $download, $version );
+		
+        do_action( 'dlm_start_download_process', $download, $version, $file_path, $remote_file );
 
 		if ( get_option( 'dlm_xsendfile_enabled' ) ) {
 			if ( function_exists( 'apache_get_modules' ) && in_array( 'mod_xsendfile', apache_get_modules() ) ) {

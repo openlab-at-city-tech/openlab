@@ -219,7 +219,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gform-jetpack-admin-menu .form_editor_fields_container {
-		max-width: calc(100% - 706px);
+		max-width: calc(100% - 706px)
 	}
 
 .gform-jetpack-admin-menu .form_editor_fields_container.droppable {
@@ -227,7 +227,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 		}
 
 .folded .form_editor_fields_container {
-		max-width: calc(100% - 470px);
+		max-width: calc(100% - 470px)
 	}
 
 .folded .form_editor_fields_container.droppable {
@@ -276,7 +276,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .dropzone__placeholder.hovering {
-		opacity: 0;
+		opacity: 0
 	}
 
 .dropzone__placeholder.hovering::after {
@@ -310,7 +310,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	opacity: 0;
 	position: relative;
 	transition: opacity 0.19s ease-out;
-	z-index: 1;
+	z-index: 1
 }
 
 .dropzone__target.hovering {
@@ -331,7 +331,7 @@ html[dir="rtl"] .folded .form_editor_fields_container.droppable {
 
 	.form_editor_fields_container {
 		max-width: calc(100% - 494px);
-		width: 100%;
+		width: 100%
 	}
 
 		.form_editor_fields_container.droppable {
@@ -340,7 +340,7 @@ html[dir="rtl"] .folded .form_editor_fields_container.droppable {
 		}
 
 	.gform-jetpack-admin-menu .form_editor_fields_container {
-		max-width: calc(100% - 605px);
+		max-width: calc(100% - 605px)
 	}
 
 		.gform-jetpack-admin-menu .form_editor_fields_container.droppable {
@@ -349,7 +349,7 @@ html[dir="rtl"] .folded .form_editor_fields_container.droppable {
 
 	.folded .form_editor_fields_container, .auto-fold .form_editor_fields_container {
 		max-width: calc(100% - 370px);
-		width: 100%;
+		width: 100%
 	}
 
 		.folded .form_editor_fields_container.droppable, .auto-fold .form_editor_fields_container.droppable {
@@ -359,7 +359,7 @@ html[dir="rtl"] .folded .form_editor_fields_container.droppable {
 
 		html[dir="rtl"] .form_editor_fields_container {
 			max-width: calc(100% - 494px);
-			padding-left: 2rem;
+			padding-left: 2rem
 		}
 
 			html[dir="rtl"] .form_editor_fields_container.droppable {
@@ -368,7 +368,7 @@ html[dir="rtl"] .folded .form_editor_fields_container.droppable {
 			}
 
 		html[dir="rtl"] .folded .form_editor_fields_container, html[dir="rtl"] .auto-fold .form_editor_fields_container {
-			max-width: calc(100% - 370px);
+			max-width: calc(100% - 370px)
 		}
 
 			html[dir="rtl"] .folded .form_editor_fields_container.droppable, html[dir="rtl"] .auto-fold .form_editor_fields_container.droppable {
@@ -382,7 +382,7 @@ html[dir="rtl"] .folded .form_editor_fields_container.droppable {
 	.form_editor_fields_container {
 		max-height: calc(100% - 42px);
 		max-width: calc(100% - 334px);
-		min-height: calc(100% - 42px);
+		min-height: calc(100% - 42px)
 	}
 
 		.form_editor_fields_container.droppable {
@@ -392,7 +392,7 @@ html[dir="rtl"] .folded .form_editor_fields_container.droppable {
 
 	.folded .form_editor_fields_container, .auto-fold .form_editor_fields_container {
 		max-width: calc(100% - 334px);
-		width: 100%;
+		width: 100%
 	}
 
 		.folded .form_editor_fields_container.droppable, .auto-fold .form_editor_fields_container.droppable {
@@ -401,7 +401,7 @@ html[dir="rtl"] .folded .form_editor_fields_container.droppable {
 		}
 
 		html[dir="rtl"] .folded .form_editor_fields_container, html[dir="rtl"] .auto-fold .form_editor_fields_container, html[dir="rtl"] .form_editor_fields_container {
-			max-width: calc(100% - 334px);
+			max-width: calc(100% - 334px)
 		}
 
 			html[dir="rtl"] .folded .form_editor_fields_container.droppable, html[dir="rtl"] .auto-fold .form_editor_fields_container.droppable, html[dir="rtl"] .form_editor_fields_container.droppable {
@@ -462,7 +462,7 @@ html[dir="rtl"] .add-buttons {
 			padding: 0.5rem 0 0 0;
 			transition: 0.1s all ease-in-out;
 			width: 6.1875rem;
-			word-break: break-word;
+			word-break: break-word
 
 		}
 
@@ -908,7 +908,7 @@ html[dir="rtl"] .gfield .ui-resizable-e {
 	}
 
 .gfield-admin-icons .gfield-duplicate {
-		border-radius: 0;
+		border-radius: 0
 	}
 
 .gfield-admin-icons .gfield-duplicate:hover .stroke, .gfield-admin-icons .gfield-duplicate:focus .stroke {
@@ -925,7 +925,7 @@ html[dir="rtl"] .gfield .ui-resizable-e {
 
 .gfield-admin-icons .gfield-drag {
 		cursor: -webkit-grab;
-		cursor: grab;
+		cursor: grab
 	}
 
 .gfield-admin-icons .gfield-drag:hover i::before, .gfield-admin-icons .gfield-drag:focus i::before {
@@ -1143,7 +1143,7 @@ html[dir="rtl"] #sidebar_field_label::after {
 
 .gform_wrapper.gravity-theme.gform_legacy_markup .gfield_time_hour input {
 			min-width: 92%;
-			width: 92%;
+			width: 92%
 		}
 
 .gform_wrapper.gravity-theme.gform_legacy_markup .gfield_time_hour input[type="number"] {
@@ -1247,7 +1247,7 @@ body.toplevel_page_gf_edit_forms .gforms_edit_form {
 	overscroll-behavior-y: none;
 	position: fixed;
 	top: 46px;
-	width: 100%;
+	width: 100%
 }
 
 @media (min-width: 783px) {
@@ -1467,7 +1467,7 @@ div.ui-widget-content {
 	position: fixed;
 	right: 0;
 	top: 110px;
-	z-index: 1;
+	z-index: 1
 }
 
 @media (min-width: 783px) {
@@ -1499,7 +1499,7 @@ html[dir="rtl"] .editor-sidebar {
 	padding: 0;
 	position: fixed;
 	width: 16.875rem;
-	z-index: 1000;
+	z-index: 1000
 }
 
 @media (min-width: 960px) {
@@ -1823,7 +1823,7 @@ html[dir="rtl"] .field-choice-row .field-choice-button--delete {
 
 .field-choice-button--insert, .field-choice-button--delete {
 	margin: 0;
-	padding: 0.65rem;
+	padding: 0.65rem
 }
 
 .field-choice-button--insert:focus, .field-choice-button--delete:focus {
@@ -1939,7 +1939,7 @@ html[dir="rtl"] .field-choice-handle {
 		height: auto;
 		line-height: 1.4;
 		margin-left: 2rem;
-		padding: 0;
+		padding: 0
 	}
 
 .gf_editor_status a:focus {
@@ -2063,7 +2063,7 @@ html[dir="rtl"] #gfield_settings_choices_container .gfield_choice_header_label +
 			}
 
 .gfield_rule_input, .gfield_rule_value_dropdown {
-	display: none;
+	display: none
 }
 
 .gfield_rule_input.active, .gfield_rule_value_dropdown.active {
@@ -2385,6 +2385,10 @@ html[dir="rtl"] .right ul#gf_merge_tag_list {
 
 .gform-admin .gform-c-warning-text {
 		color: #a16938;
+	}
+
+.gform-admin .gform-c-error-text {
+		color: #dd301d;
 	}
 
 .gform-admin .gform-c-red {

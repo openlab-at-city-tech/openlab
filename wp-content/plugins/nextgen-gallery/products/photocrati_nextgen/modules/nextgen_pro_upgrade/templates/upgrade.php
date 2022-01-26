@@ -17,7 +17,8 @@
     <h3><?php print __('Unlock More Features', 'nggallery'); ?></h3>
     <p>
         <strong><?php print __('Want even more features', 'nggallery'); ?></strong>
-        <a href="https://www.imagely.com/nextgen-gallery/?utm_medium=extensions&utm_source=ngg&utm_campaign=wantevenmorefeatures"
+        <?php $url = M_Marketing::get_utm_link('https://www.imagely.com/nextgen-gallery/', 'extensions', 'wantevenmorefeatures' ); ?>
+        <a href="<?php print esc_attr($url); ?>"
            target="_blank"
            rel="noreferrer noopener"><?php print __('Upgrade your NextGEN Gallery account', 'nggallery'); ?></a>
         <?php print __('and unlock the following awesome features.'); ?>

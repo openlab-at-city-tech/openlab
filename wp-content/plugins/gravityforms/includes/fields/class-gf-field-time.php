@@ -190,9 +190,9 @@ class GF_Field_Time extends GF_Field {
 
 		if ( ! empty( $error_inputs ) ) {
 			$field_list = implode( ', ', $error_inputs );
+
 			// Translators: comma-separated list of the labels of missing fields.
-			$message = sprintf( __( 'This field is required. Please complete the following fields: %s.', 'gravityforms' ), $field_list );
-			return $message;
+			return sprintf( __( 'Please complete the following fields: %s.', 'gravityforms' ), $field_list );
 		}
 
 		return false;
@@ -298,10 +298,9 @@ class GF_Field_Time extends GF_Field {
 		if ( $is_form_editor || $this->timeFormat != '24' ) {
 			$am_text = esc_html__( 'AM', 'gravityforms' );
 			$pm_text = esc_html__( 'PM', 'gravityforms' );
-			$aria_label = esc_attr( 'AM/PM', 'gravityforms' );
 			$ampm_field = "<div class='gfield_time_ampm ginput_container ginput_container_time {$colon_pmam_placement}' {$ampm_field_style}>
                                 " . ( $output_shim ? "<div class='gfield_time_ampm_shim' aria-hidden='true'>&nbsp;</div>" : "" ) . "
-                                <select name='input_{$id}[]' id='{$field_id}_3' $ampm_tabindex {$disabled_text} aria-label='{$aria_label}'>
+                                <select name='input_{$id}[]' id='{$field_id}_3' $ampm_tabindex {$disabled_text}>
                                     <option value='am' {$am_selected}>{$am_text}</option>
                                     <option value='pm' {$pm_selected}>{$pm_text}</option>
                                 </select> 

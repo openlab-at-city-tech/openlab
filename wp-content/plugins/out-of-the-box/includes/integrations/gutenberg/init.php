@@ -41,18 +41,18 @@ class Gutenberg
     {// phpcs:ignore
         wp_register_script(
             'wpcp-outofthebox-block-js',
-            plugins_url('blocks.build.js', __FILE__),
+            plugins_url('/dist/blocks.build.js', __FILE__),
             ['wp-blocks', 'wp-i18n', 'wp-element', 'wp-editor'],
-            OUTOFTHEBOX_VERSION,
+            defined('OUTOFTHEBOX_VERSION') ? OUTOFTHEBOX_VERSION : filemtime(plugin_dir_path(__DIR__).'dist/blocks.build.js'),
             true
         );
 
         // Register block editor styles for backend.
         wp_register_style(
             'wpcp-outofthebox-block-editor-css',
-            plugins_url('blocks.editor.build.css', __FILE__),
+            plugins_url('dist/blocks.editor.build.css', __FILE__),
             ['wp-edit-blocks'],
-            OUTOFTHEBOX_VERSION
+            defined('OUTOFTHEBOX_VERSION') ? OUTOFTHEBOX_VERSION : filemtime(plugin_dir_path(__DIR__).'dist/blocks.editor.build.css')
         );
 
         $i18n = [
@@ -61,6 +61,7 @@ class Gutenberg
             'form_keywords' => [
                 'cloud',
                 'dropbox',
+                'drive',
                 'documents',
                 'files',
                 'upload',
@@ -68,16 +69,14 @@ class Gutenberg
                 'audio',
                 'media',
             ],
-            'create_shortcode' => \esc_html__('Build your shortcode', 'wpcloudplugins'),
-            'open_shortcode_builder' => \esc_html__('Edit via Shortcode Builder', 'wpcloudplugins'),
-            'edit_shortcode' => \esc_html__('Edit this shortcode via the Shortcode Builder or manually via the raw code', 'wpcloudplugins'),
-            'updated_shortcode' => \esc_html__('Shortcode is succesfully updated!', 'wpcloudplugins'),
-            'block_settings' => \esc_html__('Shortcode', 'wpcloudplugins'),
+            'open_shortcode_builder' => \esc_html__('Configure Module', 'wpcloudplugins'),
+            'updated_shortcode' => \esc_html__('Module is succesfully updated!', 'wpcloudplugins'),
+            'block_settings' => \esc_html__('Module', 'wpcloudplugins'),
             'edit' => \esc_html__('Edit', 'wpcloudplugins'),
             'open_preview' => \esc_html__('Preview', 'wpcloudplugins'),
             'close_preview' => \esc_html__('Close Preview', 'wpcloudplugins'),
             'panel_notice_head' => \esc_html__('Heads up!', 'wpcloudplugins'),
-            'panel_notice_text' => \esc_html__('Do not forget to test your shortcode on your site.', 'wpcloudplugins'),
+            'panel_notice_text' => \esc_html__('Do not forget to test your module on the Front-End.', 'wpcloudplugins'),
         ];
 
         // WP Localized globals. Use dynamic PHP stuff in JavaScript via `wpcpOutoftheBoxGlobal` object.
@@ -136,7 +135,7 @@ class Gutenberg
         $shortcode = !empty($attr['shortcode']) ? $attr['shortcode'] : false;
 
         if (empty($shortcode)) {
-            return esc_html__('Please create your shortcode first', 'wpcloudplugins');
+            return esc_html__('Please configure the module first', 'wpcloudplugins');
         }
 
         \ob_start();

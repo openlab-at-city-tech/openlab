@@ -128,8 +128,8 @@ class TablePress_Options_Model extends TablePress_Model {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string|bool $name          Optional. Name of a single option to get, or false for all options.
-	 * @param mixed       $default_value Optional. Default value, if the option $name does not exist.
+	 * @param string|false $name          Optional. Name of a single option to get, or false for all options.
+	 * @param mixed        $default_value Optional. Default value, if the option $name does not exist.
 	 * @return mixed Value of the retrieved option $name, or $default_value if it does not exist, or array of all options.
 	 */
 	public function get( $name = false, $default_value = null ) {
@@ -273,7 +273,7 @@ class TablePress_Options_Model extends TablePress_Model {
 			$role->remove_cap( 'tablepress_export_tables' );
 			$role->remove_cap( 'tablepress_access_options_screen' );
 			$role->remove_cap( 'tablepress_access_about_screen' );
-            $role->remove_cap( 'tablepress_import_tables_wptr' ); // No longer used since 1.10, but might still be in the database.
+			$role->remove_cap( 'tablepress_import_tables_wptr' ); // No longer used since 1.10, but might still be in the database.
 			$role->remove_cap( 'tablepress_edit_options' );
 		}
 

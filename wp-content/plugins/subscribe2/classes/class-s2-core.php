@@ -1,5 +1,8 @@
 <?php
+require_once S2PATH . 'traits/ShortcodeTrait.php';
+
 class S2_Core {
+	use Shortcode;
 	// variables and constructor are declared at the end
 	/**
 	 * Load translations
@@ -2041,7 +2044,6 @@ class S2_Core {
 			}
 
 			// add the frontend filters
-			add_shortcode( 'subscribe2', array( &$this, 'shortcode' ) );
 			add_filter( 'the_content', array( &$this, 'filter' ), 10 );
 
 			// add actions for other plugins
@@ -2055,6 +2057,7 @@ class S2_Core {
 				add_action( 'wp_footer', array( &$this, 'js_ip_library_script' ), 20 );
 			}
 		}
+		add_shortcode( 'subscribe2', array( &$this, 'widget_shortcode' ) );
 	}
 
 	/* ===== define some variables ===== */

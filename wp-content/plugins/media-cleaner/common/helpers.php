@@ -4,7 +4,9 @@ if ( !class_exists( 'MeowCommon_Helpers' ) ) {
 
 	class MeowCommon_Helpers {
 	
-		public static $version = MeowCommon_Admin::version;
+		//public static $version = MeowCommon_Admin::version;
+		private static $startTimes = array();
+		private static $startQueries = array();
 
 		static function is_divi_builder() {
 			return isset( $_GET['et_fb'] ) && $_GET['et_fb'] === '1';
@@ -36,7 +38,7 @@ if ( !class_exists( 'MeowCommon_Helpers' ) ) {
 			// WP_REST_Request init.
 			$is_rest_request = defined('REST_REQUEST') && REST_REQUEST;
 			if ( $is_rest_request ) {
-				MeowCommon_Classes_Rest::init_once();
+				MeowCommon_Rest::init_once();
 				return true;
 			}
 
@@ -44,7 +46,7 @@ if ( !class_exists( 'MeowCommon_Helpers' ) ) {
 			$prefix = rest_get_url_prefix();
 			$request_contains_rest = isset( $_GET['rest_route'] ) && strpos( trim( $_GET['rest_route'], '\\/' ), $prefix , 0 ) === 0;
 			if ( $request_contains_rest) {
-				MeowCommon_Classes_Rest::init_once();
+				MeowCommon_Rest::init_once();
 				return true;
 			}		
 
@@ -62,7 +64,7 @@ if ( !class_exists( 'MeowCommon_Helpers' ) ) {
 			if ( !empty( $current_url['path'] ) && !empty( $rest_url['path'] ) ) {
 				$request_contains_rest = strpos( $current_url['path'], $rest_url['path'], 0 ) === 0;
 				if ( $request_contains_rest) {
-					MeowCommon_Classes_Rest::init_once();
+					MeowCommon_Rest::init_once();
 					return true;
 				}
 			}
@@ -169,11 +171,26 @@ if ( !class_exists( 'MeowCommon_Helpers' ) ) {
 			// 	return $html;
 			// }
 		}
+
+		static function timer_start( $timerName = 'default' ) {
+			MeowCommon_Helpers::$startQueries[ $timerName ] = get_num_queries();
+			MeowCommon_Helpers::$startTimes[ $timerName ] = microtime( true );
+		}
+
+		static function timer_elapsed( $timerName = 'default' ) {
+			return microtime( true ) - MeowCommon_Helpers::$startTimes[ $timerName ];
+		}
+
+		static function timer_log_elapsed( $timerName = 'default' ) {
+			$elapsed = MeowCommon_Helpers::timer_elapsed( $timerName );
+			$queries = get_num_queries() - MeowCommon_Helpers::$startQueries[ $timerName ];
+			error_log( $timerName . ": " . $elapsed . "ms (" . $queries . " queries)" );
+		}
 	}
 
-	if ( MeowCommon_Helpers::is_rest() ) {
-		ini_set( 'display_errors', 0 );
-	}
+	// Asked by WP Security Team to remove this.
+
+	// if ( MeowCommon_Helpers::is_rest() ) {
+	// 	ini_set( 'display_errors', 0 );
+	// }
 }
-
-?>

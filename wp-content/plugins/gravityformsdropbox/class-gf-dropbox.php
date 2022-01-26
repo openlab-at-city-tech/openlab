@@ -30,7 +30,7 @@ class GF_Dropbox extends GFFeedAddOn {
 	 * @access protected
 	 * @var    string $_min_gravityforms_version The minimum version required.
 	 */
-	protected $_min_gravityforms_version = '1.9.14.26';
+	protected $_min_gravityforms_version = '2.0.8';
 
 	/**
 	 * Defines the plugin slug.
@@ -1803,7 +1803,7 @@ class GF_Dropbox extends GFFeedAddOn {
 			}
 
 			// Log that we are processing this field.
-			$this->log_debug( __METHOD__ . '(): Processing field: ' . print_r( $field, true ) );
+			$this->log_debug( __METHOD__ . "(): Processing field: {$field->label}(#{$field->id} - {$field->type})." );
 
 			// Call the processing method for input type.
 			call_user_func_array( array( $this, 'process_' . $input_type . '_fields' ), array( $field, $feed, $entry, $form ) );
@@ -1829,21 +1829,25 @@ class GF_Dropbox extends GFFeedAddOn {
 
 		// If no files were uploaded, exit.
 		if ( rgblank( $field_value ) ) {
+			$this->log_debug( __METHOD__ . '(): Aborting; field value is empty.' );
 
-			// Log why we are skipping this field.
-			$this->log_debug( __METHOD__ . '(): Not uploading Dropbox Upload field #' . $field->id . ' because field value is empty.' );
 			return;
-
 		}
 
 		// Log beginning of file upload for field.
 		$this->log_debug( __METHOD__ . '(): Beginning upload of Dropbox Upload field #' . $field->id . '.' );
 
-		// Decode field value.
-		$files = json_decode( stripslashes_deep( $field_value ), true );
+		$meta_key     = $this->get_existing_files_meta_key( $field );
+		$existing     = gform_get_meta( $entry['id'], $meta_key );
+		$files        = json_decode( $field_value, true );
+		$update_entry = false;
 
 		// Copy files to Dropbox.
 		foreach ( $files as &$file ) {
+			if ( ! $this->should_upload_file( $file, $existing, $field, $form, $entry, $feed ) ) {
+				$this->log_debug( __METHOD__ . '(): Not uploading file: ' . $file );
+				continue;
+			}
 
 			// Get destination path.
 			$folder_path = rgars( $feed, 'meta/destinationFolder' );
@@ -1889,6 +1893,7 @@ class GF_Dropbox extends GFFeedAddOn {
 
 				// Log that file could not be saved to Dropbox.
 				$this->add_feed_error( sprintf( esc_html__( 'Unable to upload file: %s', 'gravityformsdropbox' ), $file ), $feed, $entry, $form );
+				$this->log_error( __METHOD__ . "(): code: {$e->getCode()}; message: {$e->getMessage()}" );
 				continue;
 
 			}
@@ -1905,17 +1910,22 @@ class GF_Dropbox extends GFFeedAddOn {
 
 				// Log that we could not create a public link.
 				$this->add_feed_error( sprintf( esc_html__( 'Unable to create shareable link for file: %s', 'gravityformsdropbox' ), $e->getMessage() ), $feed, $entry, $form );
+				$this->log_error( __METHOD__ . "(): code: {$e->getCode()}; message: {$e->getMessage()}" );
 				continue;
 
 			}
 
+			$update_entry = true;
 		}
 
-		// Encode the files string for entry detail.
-		$files = json_encode( $files );
+		if ( ! $update_entry ) {
+			return;
+		}
 
-		// Update entry detail.
-		GFAPI::update_entry_field( $entry['id'], $field->id, $files );
+		gform_update_meta( $entry['id'], $meta_key, $files, $form['id'] );
+		$entry_value = json_encode( $files );
+		$this->log_debug( __METHOD__ . '(): Updated field entry value: ' . $entry_value );
+		GFAPI::update_entry_field( $entry['id'], $field->id, $entry_value );
 
 	}
 
@@ -1931,74 +1941,116 @@ class GF_Dropbox extends GFFeedAddOn {
 	 */
 	public function process_fileupload_fields( $field, $feed, $entry, $form ) {
 
-		// Get field value.
 		$field_value = rgar( $entry, $field->id );
 
-		// If no files were uploaded, exit.
 		if ( rgblank( $field_value ) ) {
-
-			// Log why we are skipping this field.
-			$this->log_debug( __METHOD__ . '(): Not uploading File Upload field #' . $field->id . ' because field value is empty.' );
+			$this->log_debug( __METHOD__ . '(): Aborting; field value is empty.' );
 
 			return;
-
 		}
 
-		// Get upload path and URL.
-		$upload_dir = GFFormsModel::get_upload_root();
-		$upload_url = GFFormsModel::get_upload_url_root();
-
-		// Log beginning of file upload for field.
 		$this->log_debug( __METHOD__ . '(): Beginning upload of file upload field #' . $field->id . '.' );
 
-		// Handle multiple files separately.
-		if ( $field->multipleFiles ) {
+		$meta_key     = $this->get_existing_files_meta_key( $field );
+		$existing     = gform_get_meta( $entry['id'], $meta_key );
+		$urls         = $field->multipleFiles ? json_decode( $field_value, true ) : array( $field_value );
+		$update_entry = false;
 
-			// Decode the string of files.
-			$files = json_decode( stripslashes_deep( $field_value ), true );
-
-			// Process each file separately.
-			foreach ( $files as &$file ) {
-
-				// Prepare file info.
-				$file_info = array(
-					'name'        => basename( $file ),
-					'path'        => str_replace( $upload_url, $upload_dir, $file ),
-					'url'         => $file,
-					'destination' => rgars( $feed, 'meta/destinationFolder' ),
-				);
-
-				// Upload file.
-				$file = gf_dropbox()->upload_file( $file_info, $form, $field->id, $entry, $feed );
-
+		foreach ( $urls as &$url ) {
+			if ( ! $this->should_upload_file( $url, $existing, $field, $form, $entry, $feed ) ) {
+				$this->log_debug( __METHOD__ . '(): Not uploading file: ' . $url );
+				continue;
 			}
 
-			// Encode the files string for lead detail.
-			$file_for_lead = json_encode( $files );
+			$get_path_args = array( $url );
+			if ( $this->is_gravityforms_supported( '2.5.15.2' ) ) {
+				$get_path_args[] = $entry['id'];
+			}
 
-		} else {
-
-			// Prepare file info.
 			$file_info = array(
-				'name'        => basename( $field_value ),
-				'path'        => str_replace( $upload_url, $upload_dir, $field_value ),
-				'url'         => $field_value,
+				'name'        => basename( $url ),
+				'path'        => call_user_func_array( 'GFFormsModel::get_physical_file_path', $get_path_args ),
+				'url'         => $url,
 				'destination' => rgars( $feed, 'meta/destinationFolder' ),
 			);
 
-			$this->log_debug( __METHOD__ . '(): File info: ' . print_r( $file_info, true ) );
+			$this->log_debug( __METHOD__ . '(): File to upload: ' . print_r( $file_info, true ) );
+			$new_url = gf_dropbox()->upload_file( $file_info, $form, $field->id, $entry, $feed );
 
-			// Upload file.
-			$file_for_lead = gf_dropbox()->upload_file( $file_info, $form, $field->id, $entry, $feed );
+			if ( $new_url === $url ) {
+				continue;
+			}
 
+			$url          = $new_url;
+			$update_entry = true;
 		}
 
-		// Log the new file URLs.
-		$this->log_debug( __METHOD__ . '(): File for lead: ' . print_r( $file_for_lead, true ) );
+		if ( ! $update_entry ) {
+			return;
+		}
 
-		// Update lead detail.
-		GFAPI::update_entry_field( $entry['id'], $field->id, $file_for_lead );
+		gform_update_meta( $entry['id'], $meta_key, $urls, $form['id'] );
+		$entry_value = $field->multipleFiles ? json_encode( $urls ) : $urls[0];
+		$this->log_debug( __METHOD__ . '(): Updated field entry value: ' . $entry_value );
+		GFAPI::update_entry_field( $entry['id'], $field->id, $entry_value );
 
+	}
+
+	/**
+	 * Returns the entry meta key used to store the array of files previously uploaded to Dropbox.
+	 *
+	 * @since 3.1
+	 *
+	 * @param GF_Field $field The current fileupload or dropbox field object.
+	 *
+	 * @return string
+	 */
+	public function get_existing_files_meta_key( $field ) {
+		return $this->get_slug() . '_field_' . $field->id . '_files';
+	}
+
+	/**
+	 * Determines if the given file should be uploaded to Dropbox.
+	 *
+	 * @since 3.1
+	 *
+	 * @param string      $url      The file URL from the entry.
+	 * @param false|array $existing False or an array of files previously uploaded to Dropbox for the current field and entry.
+	 * @param GF_Field    $field    The current fileupload or dropbox field object.
+	 * @param array       $form     The current form object.
+	 * @param array       $entry    The current entry object.
+	 * @param array       $feed     The current feed object.
+	 *
+	 * @return bool
+	 */
+	public function should_upload_file( $url, $existing, $field, $form, $entry, $feed ) {
+		if ( ! empty( $existing ) ) {
+			$should_upload_file = ! in_array( $url, $existing );
+		} else {
+			// The preview link type uses www.dropbox.com.
+			$should_upload_file = $field instanceof GF_Field_Dropbox && $field->get_link_type( $form ) === 'preview' || stripos( $url, 'www.dropbox.com' ) === false;
+		}
+
+		$filter_args = array( 'gform_dropbox_should_upload_file', $form['id'], $field->id );
+
+		if ( function_exists( 'gf_has_filters' ) && gf_has_filters( $filter_args ) ) {
+			$this->log_debug( __METHOD__ . '(): Executing functions hooked to gform_dropbox_should_upload_file.' );
+		}
+
+		/**
+		 * Provides a way to prevent the uploading of a file to Dropbox.
+		 *
+		 * @since 3.1
+		 *
+		 * @param bool        $should_upload_file Indicates if the file should be uploaded to Dropbox.
+		 * @param string      $url                The URL of the file from the entry.
+		 * @param false|array $existing           False or an array of files previously uploaded to Dropbox for the current field and entry.
+		 * @param GF_Field    $field              The current fileupload or dropbox field object.
+		 * @param array       $form               The current form object.
+		 * @param array       $entry              The current entry object.
+		 * @param array       $feed               The current feed object.
+		 */
+		return (bool) gf_apply_filters( $filter_args, $should_upload_file, $url, $existing, $field, $form, $entry, $feed );
 	}
 
 	/**
@@ -2067,6 +2119,7 @@ class GF_Dropbox extends GFFeedAddOn {
 
 					// Log that folder could not be created.
 					$this->add_feed_error( esc_html__( 'Unable to upload file because destination folder could not be created.', 'gravityformsdropboox' ), $feed, $entry, $form );
+					$this->log_error( __METHOD__ . "(): code: {$e->getCode()}; message: {$e->getMessage()}" );
 
 					// Return file URL.
 					return rgar( $file, 'url' );
@@ -2191,7 +2244,7 @@ class GF_Dropbox extends GFFeedAddOn {
 			} catch ( Exception $f ) {
 
 				// Log that we could not create a public link.
-				$this->add_feed_error( sprintf( esc_html__( 'Unable to create shareable link for file: %s', 'gravityformsdropbox' ), $e->getMessage() ), $feed, $entry, $form );
+				$this->add_feed_error( sprintf( esc_html__( 'Unable to create shareable link for file: %s', 'gravityformsdropbox' ), $f->getMessage() ), $feed, $entry, $form );
 
 				// Return original file url.
 				return rgar( $file, 'url' );

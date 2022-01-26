@@ -38,6 +38,9 @@ class Dynamic_Field_Map extends Generic_Map {
 			$this->key_field['allow_custom'] = false;
 			unset( $props['enable_custom_key'] );
 		}
+		if ( isset( $props['allow_duplicates'] ) ) {
+			$this->key_field['allow_duplicates'] = $props['allow_duplicates'];
+		}
 
 		$this->value_field['allow_custom'] = false;
 

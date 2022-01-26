@@ -5837,13 +5837,13 @@ button.close {
     display: none;
     overflow: hidden;
     -webkit-overflow-scrolling: touch;
-	-webkit-box-shadow: 0 0 !important;
-	box-shadow: 0 0 !important;
+    -webkit-box-shadow: 0 0 !important;
+    box-shadow: 0 0 !important;
     outline: 0;
-	max-width: none !important;
-	width: 100% !important;
-	background: none !important;
-	padding: 0 !important;
+    max-width: none !important;
+    width: 100% !important;
+    background: none !important;
+    padding: 0 !important;
 }
 .modal.fade .modal-dialog {
     -webkit-transition: -webkit-transform .3s ease-out;
@@ -7653,4 +7653,183 @@ CSS CheckBOX
 
 .b2s-multi-image-info-text {
     display: none;
+}
+
+.btn-facebook {
+    background-color: #1877F2 !important;
+}
+
+.btn-twitter {
+    background-color: #55ACEE;
+}
+
+.btn-facebook {
+    background-color:  #1877F2 !important;
+    border-color:  #1877F2 !important;
+    color: #fff;
+}
+.btn-facebook:hover {
+    color: #fff;
+}
+
+.btn-twitter {
+    background-color:  #55ACEE !important;
+    border-color:  #55ACEE !important;
+    color: #fff;
+}
+.btn-twitter:hover {
+    color: #fff;
+}
+
+.btn-linkedin {
+    background-color:  #007bb6 !important;
+    border-color:  #007bb6 !important;
+    color: #fff;
+}
+.btn-linkedin:hover {
+    color: #fff;
+}
+
+.btn-tumblr {
+    background-color:  #1C2D3F !important;
+    border-color:  #1C2D3F !important;
+    color: #fff;
+}
+.btn-tumblr:hover {
+    color: #fff;
+}
+
+.btn-pinterest {
+    background-color:  #CB2027 !important;
+    border-color:  #CB2027 !important;
+    color: #fff;
+}
+.btn-pinterest:hover {
+    color: #fff;
+}
+
+.btn-flickr {
+    background-color:  #2BA9E1 !important;
+    border-color:  #2BA9E1 !important;
+    color: #fff;
+}
+.btn-flickr:hover {
+    color: #fff;
+}
+
+.btn-diigo {
+    background-color:  #4b8af9  !important;
+    border-color:  #4b8af9  !important;
+    color: #fff;
+}
+.btn-diigo:hover {
+    color: #fff;
+}
+
+.btn-medium {
+    background-color:  #000000  !important;
+    border-color:  #000000  !important;
+    color: #fff;
+}
+.btn-medium:hover {
+    color: #fff;
+}
+
+.btn-instagram {
+    background-color:  #1877F2  !important;
+    border-color:  #1877F2  !important;
+    color: #fff;
+}
+.btn-instagram:hover {
+    color: #fff;
+}
+
+.btn-torial {
+    background-color:  #fcb914  !important;
+    border-color:  #fcb914  !important;
+    color: #fff;
+}
+.btn-torial:hover {
+    color: #fff;
+}
+
+.btn-reddit {
+    background-color:  #ff4500  !important;
+    border-color:  #ff4500  !important;
+    color: #fff;
+}
+.btn-reddit:hover {
+    color: #fff;
+}
+
+.btn-bloglovin {
+    background-color:  #000000   !important;
+    border-color:  #000000   !important;
+    color: #fff;
+}
+.btn-bloglovin:hover {
+    color: #fff;
+}
+
+.btn-vkontakte {
+    background-color:  #4c75a3 !important;
+    border-color:  #4c75a3 !important;
+    color: #fff;
+}
+.btn-vkontakte:hover {
+    color: #fff;
+}
+
+.btn-googlemybusiness {
+    background-color:  #4285f4 !important;
+    border-color:  #4285f4 !important;
+    color: #fff;
+}
+.btn-googlemybusiness:hover {
+    color: #fff;
+}
+
+.btn-xing {
+    background-color:  #006567  !important;
+    border-color:  #006567  !important;
+    color: #fff;
+}
+.btn-xing:hover {
+    color: #fff;
+}
+
+.btn-telegram {
+    background-color:  #34abe0 !important;
+    border-color:  #34abe0 !important;
+    color: #fff;
+}
+.btn-telegram:hover {
+    color: #fff;
+}
+
+.btn-blogger {
+    background-color:  #f06a32 !important;
+    border-color:  #f06a32 !important;
+    color: #fff;
+}
+.btn-blogger:hover {
+    color: #fff;
+}
+
+.btn-ravelry {
+    background-color:  #ee6e62 !important;
+    border-color:  #ee6e62 !important;
+    color: #fff;
+}
+.btn-ravelry:hover {
+    color: #fff;
+}
+
+.btn-instapaper {
+    background-color:  #000000   !important;
+    border-color:  #000000   !important;
+    color: #fff;
+}
+.btn-instapaper:hover {
+    color: #fff;
 }

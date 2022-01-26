@@ -3,11 +3,8 @@
 		<div class='mapp-content'>
 			<# print(mapp.lib.template('map-header', { map : map })); #>
 			<div class='mapp-main'>
-				<# print(mapp.lib.template('map-filters', { map : map })); #>
-				<# if (layout != 'inline') { #>
-					<div class='mapp-list'></div>
-				<# } #>
-				<# print(mapp.lib.template('map-directions', { map : map })); #>
+				<# if (map.poiList && layout != 'inline') { print(mapp.lib.template('map-sidebar', { map : map })); } #>
+				<div class='mapp-directions'></div>
 				<div class='mapp-canvas-panel'>
 					<div class='mapp-canvas'></div>
 					<# print(mapp.lib.template('map-menu', { map : map })); #>
@@ -16,35 +13,48 @@
 							<div class='mapp-geolocate-control' data-mapp-action='geolocate' title='<?php _e('Your Location', 'mappress-google-maps-for-wordpress');?>'></div>
 						</div>
 					<# } #>
-					<div class='mapp-dialog'></div>
+					<div class='mapp-spinner-overlay'></div>
+					<div class='mapp-spinner'></div>
 				</div>
 			</div>
 			<# print(mapp.lib.template('map-footer', { map : map })); #>
 		</div>
 	</div>
-	<# if (layout == 'inline') { #>
-		<div class='mapp-list'></div>
-	<# } #>
+	<# if (map.poiList && layout == 'inline') { print(mapp.lib.template('map-sidebar', { map : map })); } #>
 </script>
 
 <script type='text/template' id='mapp-tmpl-map-header'>
-	<# var filter = !map.editable && map.query && mappl10n.options.filters && mappl10n.options.filters.length > 0; #>
-	<# var search = map.editable || (map.query && mappl10n.options.search); #>
-	<# if (search || filter) { #>
+	<# const isFilterable = map.isFilterable(); #>
+	<# const isSearchable = map.isSearchable(); #>
+	<# if (isSearchable || isFilterable) { #>
 		<div class='mapp-header'>
-			<# if (search) { #>
+			<# if (isSearchable) { #>
 				<div class='mapp-search'>
-					<input class='mapp-places' type='text' placeholder='<?php _e('Search', 'mappress-google-maps-for-wordpress'); ?>'/>
-					<# if (mappl10n.options.ssl) { #>
-						<div class='mapp-geolocate' data-mapp-action='geolocate' title='<?php _e('Your Location', 'mappress-google-maps-for-wordpress');?>'></div>
-					<# } #>
+					<input class='mapp-places' type='text' placeholder='<?php _e('Search', 'mappress-google-maps-for-wordpress'); ?>' title='<?php _e('Enter an address, place, KML file URL, or lat,lng', 'mappress-google-maps-for-wordpress');?>'/>
+					<div class='mapp-submit-button mapp-search-button'>
+						<# if (map.editable) { #>
+							+ <?php _e('Add to map', 'mappress-google-maps-for-wordpress'); ?>
+						<# } else { #>
+							<img src='<# print(mappl10n.options.baseurl + "/images/search.png"); #>'>
+						<# } #>
+					</div>
 				</div>
 			<# } #>
-			<# if (filter) { #>
-				<div class='mapp-caret mapp-header-button mapp-filters-toggle' data-mapp-action='filters-toggle'><?php _e('Filter', 'mappress-google-maps-for-wordpress');?></div>
+			<# if (isFilterable && mappl10n.options.filtersPos == 'top') { #>
+				<# print(mapp.lib.template('map-filters', { map : map })); #>
 			<# } #>
 		</div>
 	<# } #>
+</script>
+
+<script type='text/template' id='mapp-tmpl-map-sidebar'>
+	<div class='mapp-sidebar'>
+		<div class='mapp-sidebar-toggle' data-mapp-action='sidebar-toggle'></div>
+		<# if (map.isFilterable() && mappl10n.options.filtersPos == 'list') { #>
+			<# print(mapp.lib.template('map-filters', { map : map })); #>
+		<# } #>
+		<div class='mapp-list'></div>
+	</div>
 </script>
 
 <script type='text/template' id='mapp-tmpl-map-menu'>
@@ -68,8 +78,8 @@
 <script type='text/template' id='mapp-tmpl-map-footer'>
 	<# if ( (map.poiList || mappl10n.options.poiList) && map.layout != 'inline') { #>
 		<div class='mapp-footer'>
-			<div class='mapp-view-list' data-mapp-action='view-list'><?php _e('Show List', 'mappress-google-maps-for-wordpress'); ?></div>
-			<div class='mapp-view-map' data-mapp-action='view-map'><?php _e('Show Map', 'mappress-google-maps-for-wordpress'); ?></div>
+			<div class='mapp-button mapp-view-list' data-mapp-action='view-list'><img src='<# print(mappl10n.options.baseurl + "/images/outline_format_list_bulleted_black_18dp.png"); #>'><?php _e('List', 'mappress-google-maps-for-wordpress'); ?></div>
+			<div class='mapp-button mapp-view-map' data-mapp-action='view-map'><img src='<# print(mappl10n.options.baseurl + "/images/outline_map_black_18dp.png"); #>'><?php _e('Map', 'mappress-google-maps-for-wordpress'); ?></div>
 		</div>
 	<# } #>
 </script>

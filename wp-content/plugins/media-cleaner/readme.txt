@@ -1,13 +1,13 @@
 === Media Cleaner - Clean & Optimize Space ===
 Contributors: TigrouMeow
 Tags: clean, delete, file, files, images, image, media, library, upload, acf
-Donate link: https://commerce.coinbase.com/checkout/d047546a-77a8-41c8-9ea9-4a950f61832f
+Donate link: https://meowapps.com/donation/
 Requires at least: 5.0
-Tested up to: 5.7.2
+Tested up to: 5.8.2
 Requires PHP: 7.0
-Stable tag: 6.1.9
+Stable tag: 6.2.7
 
-Clean your WordPress Website from unused or broken media entries and files.
+Clean your WordPress from unused files, broken media entries. Powerful engine and beautiful UI!
 
 == Description ==
 
@@ -46,7 +46,7 @@ With the Filesystem Analysis, [Media Cleaner Pro](https://meowapps.com/plugin/me
 - Oxygen Builder
 - Slider Revolution
 - Avia Framework
-- And more (Theme X, YooTheme, WP Residence, WCFM MarketPlace, UberMenu, Justified Image Grid, ZipList Recipe, SmartSlider...)
+- And more (Theme X, YooTheme, WP Residence, WCFM MarketPlace, UberMenu, Justified Image Grid, ZipList Recipe, SmartSlider, Jet Engine, Cornerstone, etc...)
 
 The Live Site option will analyze the online version of your website, which might enhance the accuracy of the Cleaner in edge-cases.
 
@@ -75,11 +75,52 @@ Better to be safe than sorry. This plugin deletes files! Therefore, backup is no
 
 == Changelog ==
 
+= 6.2.7 (2021/12/11) =
+* Add: Support for Jet Engine and its metaboxes and fields.
+* Add: Support for CM Business Directory.
+* Add: Support for Sunshine Photo Cart.
+* Add: Support for Woodmart Theme.
+* Add: Support for HTML in Product Descriptions.
+* Info: I am working hard on Media Cleaner. If you want to give me some love and motivation, write a simple and nice review [here](https://wordpress.org/support/plugin/media-cleaner/reviews/?rate=5#new-post). Thank you so much! 💖
+
+= 6.2.6 (2021/11/15) =
+* Add: jp_img_sitemap to the ignored post types.
+* Add: Works even when original size image filename contains resolution.
+* Fix: Support for roles.
+* Add: Support for Download Monitor.
+
+= 6.2.5 (2021/10/19) =
+* Fix: Avoid JS issues with a certain version of React used by WP.
+* Fix: Avoid some notices and warnings.
+* Add: Support fort wysizyg ACF field.
+
+= 6.2.4 (2021/09/23) =
+* Add: Option to consider Attached Images as In Use.
+* Update: Sanitized output for admin.
+* Update: Admin 3.6.
+
+= 6.2.2 (2021/09/16) =
+* Add: Option to consider Attached Images as In Use.
+* Update: Sanitized output for admin.
+
+= 6.2.1 (2021/09/11) =
+* Fix: Images Only now includes PNG, GIF, ICO and BMP on top of the JPGs.
+* Add: Support for ACF Repeater with Array of Images ID.
+* Add: Support for ACF Blocks.
+* Add: Support for Jet Engine.
+* Add: Support for Social Warfare.
+* Add: Support for WP Job Manager.
+* Add: Support for wpDiscuz.
+* Fix: Better support for Salient Theme.
+* Update: More powerful CLI.
+
+= 6.2.0 (2021/08/28) =
+* Fix: Little UI glitches fixed.
+
 = 6.1.9 (2021/07/05) =
 * Add: Updated UI and libraries.
 * Add: Support for Simple 3D Carousel.
 * Update: Better codebase that will allow new features and enhancements (like Pause, Retry, etc).
-* Info: This plugin is a lot of work everyday. Please help me by giving it a nice review, [here](https://wordpress.org/support/plugin/media-cleaner/reviews/?rate=5#new-post). Thank you so much! Happy Summer Holidays :)
 
 = 6.1.8 (2021/06/14) =
 * Add: Support SVG.

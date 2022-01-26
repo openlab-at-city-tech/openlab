@@ -70,7 +70,7 @@ class Notice {
 	public function info_panel( array $instance, \WP_Widget $widget ) {
 		if ( $this->is_conflicting_pro_version() ) {
 			?>
-			<div class="advanced-sidebar-menu-column-box" style="border-color: red">
+			<div class="advanced-sidebar-menu-column-box" style="border-color: red; font-size: 13px !important;">
 				<?php static::instance()->pro_version_warning( true ); ?>
 			</div>
 			<?php
@@ -80,15 +80,13 @@ class Notice {
 		}
 
 		?>
-		<div class="advanced-sidebar-menu-column-box">
-			<h3 style="margin: 8px 0 0 3px;">
-				<a
-					href="https://onpointplugins.com/product/advanced-sidebar-menu-pro/"
-					style="text-decoration: none; color: inherit;">
+		<div class="advanced-sidebar-menu-column-box advanced-sidebar-info-panel">
+			<h3>
+				<a href="https://onpointplugins.com/product/advanced-sidebar-menu-pro/">
 					<?php esc_html_e( 'Advanced Sidebar Menu PRO', 'advanced-sidebar-menu' ); ?>
 				</a>
 			</h3>
-			<ol style="list-style: disc;">
+			<ol>
 				<li><?php esc_html_e( 'Styling options including borders, bullets, colors, backgrounds, size, and font weight.', 'advanced-sidebar-menu' ); ?></li>
 				<li><?php esc_html_e( 'Accordion menus.', 'advanced-sidebar-menu' ); ?></li>
 				<li><?php esc_html_e( 'Support for custom navigation menus from Appearance -> Menus.', 'advanced-sidebar-menu' ); ?></li>
@@ -115,25 +113,17 @@ class Notice {
 			</ol>
 			<a
 				class="button-primary"
-				style="width:100%; text-align: center; margin: 15px 0 15px 0;"
 				href="https://onpointplugins.com/product/advanced-sidebar-menu-pro/?trigger_buy_now=1"
-				target="_blank">
+				target="_blank"
+			>
 				<?php esc_html_e( 'Upgrade', 'advanced-sidebar-menu' ); ?>
 			</a>
 			<div
 				data-js="advanced-sidebar-menu/pro/preview/trigger"
 				data-target="advanced-sidebar-menu/pro/preview/<?php echo esc_attr( $widget->id ); ?>"
-				class="advanced-sidebar-desktop-only">
-				<?php
-				if ( Widget_Page::NAME === $widget->id_base ) {
-					$margin = '20px';
-				} else {
-					$margin = '11px';
-				}
-				?>
-				<button
-					class="button-secondary"
-					style="width:100%; text-align: center; margin: 0 0 <?php echo esc_attr( $margin ); ?> 0;">
+				class="advanced-sidebar-desktop-only"
+			>
+				<button class="button-secondary">
 					<?php esc_html_e( 'Preview', 'advanced-sidebar-menu' ); ?>
 				</button>
 			</div>

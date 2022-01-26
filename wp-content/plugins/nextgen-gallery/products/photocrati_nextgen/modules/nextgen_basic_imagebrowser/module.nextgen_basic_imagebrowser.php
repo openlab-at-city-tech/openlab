@@ -66,7 +66,7 @@ class M_NextGen_Basic_ImageBrowser extends C_Base_Module
 
     function define_routes($router)
     {
-        $slug = '/'.C_NextGen_Settings::get_instance()->router_param_slug;
+        $slug = '/' . C_NextGen_Settings::get_instance()->get('router_param_slug', 'nggallery');
         $router->rewrite("{*}{$slug}{*}/image/{\\w}", "{1}{$slug}{2}/pid--{3}");
     }
 

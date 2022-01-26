@@ -301,6 +301,10 @@ a .gform-icon {
 		color: #a16938;
 	}
 
+.gform-admin .gform-c-error-text {
+		color: #dd301d;
+	}
+
 .gform-admin .gform-c-red {
 		color: #dd301d;
 	}
@@ -419,7 +423,7 @@ a .gform-icon {
 		height: 2.125rem;
 		margin-left: 0;
 		transition: background 0.2s ease;
-		width: 2.125rem;
+		width: 2.125rem
 	}
 
 .all-merge-tags a.open-list:hover {
@@ -458,7 +462,7 @@ a .gform-icon {
 	}
 
 #gf_merge_tag_list li a {
-			cursor: pointer;
+			cursor: pointer
 		}
 
 #gf_merge_tag_list li a:hover {
@@ -611,7 +615,7 @@ table#gf_personal_data_field_settings td {
 	margin-right: 10px;
 	position: relative;
 	top: 4px;
-	width: 16px;
+	width: 16px
 }
 
 .gform-alert__icon::before {
@@ -713,7 +717,7 @@ html[dir="rtl"] .gform-alert__icon {
 	position: relative;
 	text-align: center;
 	top: -4px;
-	width: 20px;
+	width: 20px
 }
 
 .gform-alert__dismiss::before, .gform-alert__dismiss::after {
@@ -783,7 +787,7 @@ html[dir="rtl"] .gform-alert__dismiss {
 		text-decoration: none;
 		text-shadow: none;
 		transition: box-shadow 0.1s linear;
-		white-space: nowrap;
+		white-space: nowrap
 	}
 
 .gforms_edit_form .button:focus, .gforms_edit_form button.primary:focus {
@@ -796,7 +800,7 @@ html[dir="rtl"] .gform-alert__dismiss {
 		color: #3e7da6;
 		display: inline-block;
 		height: 2.3125rem;
-		padding: 0.5625rem 1.125rem;
+		padding: 0.5625rem 1.125rem
 	}
 
 .gforms_edit_form .button:hover {
@@ -824,7 +828,7 @@ html[dir="rtl"] .gform-alert__dismiss {
 		color: #fff;
 		cursor: pointer;
 		height: 2.3125rem;
-		padding: 0.5625rem 1.125rem;
+		padding: 0.5625rem 1.125rem
 
 	}
 
@@ -852,14 +856,31 @@ html[dir="rtl"] .gform-alert__dismiss {
 
 #gf_toolbar_buttons_container .update-form {
 		margin: 0 0.75rem 0 0.1875rem;
+		padding: 0.4065rem 1.125rem;
 	}
+
+#gf_toolbar_buttons_container .update-form .gform-button__icon {
+			font-size: 1.5rem;
+			line-height: 0;
+			top: unset;
+			width: 24px;
+		}
 
 #gf_toolbar_buttons_container .preview-form {
 		margin: 0 0.1875rem 0 0.75rem;
 	}
 
+.gforms_edit_form #gf_toolbar_buttons_container .preview-form {
+	padding: 0.4065rem 1.125rem;
+}
+
 html[dir="rtl"] #gf_toolbar_buttons_container .update-form {
 		margin: 0 0.1875rem 0 0.75rem;
+	}
+
+html[dir="rtl"] #gf_toolbar_buttons_container .update-form.gform-button--icon-leading .gform-button__icon {
+		margin-left: 0.5rem;
+		margin-right: unset;
 	}
 
 html[dir="rtl"] #gf_toolbar_buttons_container .preview-form {
@@ -915,7 +936,7 @@ input.button-primary.gfbutton, button.button-primary.gfbutton, a.button-primary.
 		padding: 0.5625rem 1.125rem;
 		text-decoration: none;
 		transition: transform 300ms ease, box-shadow 300ms ease, background-color 300ms ease;
-		white-space: nowrap;
+		white-space: nowrap
 	}
 
 .gform-admin .gform-button:focus {
@@ -940,7 +961,7 @@ input.button-primary.gfbutton, button.button-primary.gfbutton, a.button-primary.
 .gform-admin .gform-button--primary {
 		background: #3e7da6;
 		border-color: #3e7da6;
-		color: #fff;
+		color: #fff
 	}
 
 .gform-admin .gform-button--primary:hover, .gform-admin .gform-button--primary:active {
@@ -955,7 +976,7 @@ input.button-primary.gfbutton, button.button-primary.gfbutton, a.button-primary.
 .gform-admin .gform-button--secondary {
 		background: #fff;
 		border-color: #3e7da6;
-		color: #3e7da6;
+		color: #3e7da6
 	}
 
 .gform-admin .gform-button--secondary:hover, .gform-admin .gform-button--secondary:active {
@@ -971,7 +992,7 @@ input.button-primary.gfbutton, button.button-primary.gfbutton, a.button-primary.
 .gform-admin .gform-button--white {
 		background: #fff;
 		border-color: #d5d7e9;
-		color: #242748;
+		color: #242748
 	}
 
 .gform-admin .gform-button--white:hover, .gform-admin .gform-button--white:active {
@@ -1093,7 +1114,7 @@ input.button-primary.gfbutton, button.button-primary.gfbutton, a.button-primary.
 	 */
 
 .gform-admin .gform-button--round {
-		border-radius: 1.1875rem;
+		border-radius: 1.1875rem
 	}
 
 .gform-admin .gform-button--round.gform-button--size-xs {
@@ -1184,7 +1205,7 @@ input.button-primary.gfbutton, button.button-primary.gfbutton, a.button-primary.
 			font-size: 20px;
 			justify-content: center;
 			margin-right: 0.625rem;
-			width: 0.588rem;
+			width: 0.588rem
 		}
 
 .gform-admin .gform-choice .gform-choice__handle:hover {
@@ -1202,7 +1223,7 @@ input.button-primary.gfbutton, button.button-primary.gfbutton, a.button-primary.
 			overflow: hidden;
 			padding: 0;
 			position: absolute;
-			width: 0.0625rem;
+			width: 0.0625rem
 		}
 
 .gform-admin .gform-choice .gform-choice__selected:checked + .gform-choice__selected-label {
@@ -1223,7 +1244,7 @@ input.button-primary.gfbutton, button.button-primary.gfbutton, a.button-primary.
 			height: 1.625rem;
 			justify-content: center;
 			margin: 0;
-			width: 1.625rem;
+			width: 1.625rem
 		}
 
 .gform-admin .gform-choice .gform-choice__selected-label::before {
@@ -1329,7 +1350,7 @@ html[dir="rtl"] .gform-admin .gform-choice .gform-choice__selected-label::before
 	position: absolute;
 	top: 0;
 	width: calc(100vw - 270px);
-	z-index: -10;
+	z-index: -10
 }
 
 @media (min-width: 783px) {
@@ -1355,21 +1376,21 @@ html[dir="rtl"] .gform-admin .gform-choice .gform-choice__selected-label::before
 
 @media (min-width: 960px) {
 
-.folded.sticky-menu .conditional_logic_flyout {
+	.folded.sticky-menu .conditional_logic_flyout {
 			width: calc(100vw - 406px)
 	}
 		}
 
 @media (min-width: 1260px) {
 
-.folded.sticky-menu .conditional_logic_flyout {
+	.folded.sticky-menu .conditional_logic_flyout {
 			width: auto
 	}
 		}
 
 .conditional_logic_flyout__head {
 		padding: 0 1.5625rem 1.25rem;
-		position: relative;
+		position: relative
 	}
 
 .conditional_logic_flyout__head::after {
@@ -1399,7 +1420,7 @@ html[dir="rtl"] .gform-admin .gform-choice .gform-choice__selected-label::before
 	}
 
 .conditional_logic_flyout__action select {
-			margin: 0 0.5rem;
+			margin: 0 0.5rem
 		}
 
 .conditional_logic_flyout__action select:first-child {
@@ -1409,7 +1430,7 @@ html[dir="rtl"] .gform-admin .gform-choice .gform-choice__selected-label::before
 .conditional_logic_flyout__body {
 		font-size: 0.8125rem;
 		overflow-y: auto;
-		padding: 1.25rem 1.5625rem;
+		padding: 1.25rem 1.5625rem
 	}
 
 .conditional_logic_flyout__body.panel-block-tabs__body--settings .simplebar-wrapper {
@@ -1424,12 +1445,12 @@ html[dir="rtl"] .gform-admin .gform-choice .gform-choice__selected-label::before
 				overflow: hidden;
 				text-overflow: ellipsis;
 				white-space: nowrap;
-				width: 30%;
+				width: 30%
 			}
 
 @media (min-width: 1390px) {
 
-.conditional_logic_flyout__body.panel-block-tabs__body--settings .conditional_logic_flyout__rule select:first-child, .conditional_logic_flyout__body.panel-block-tabs__body--settings .gfield_rule_value_dropdown_cl {
+			.conditional_logic_flyout__body.panel-block-tabs__body--settings .conditional_logic_flyout__rule select:first-child, .conditional_logic_flyout__body.panel-block-tabs__body--settings .gfield_rule_value_dropdown_cl {
 					width: 40%
 			}
 				}
@@ -1448,12 +1469,12 @@ html[dir="rtl"] .gform-admin .gform-choice .gform-choice__selected-label::before
 		}
 
 .conditional_logic_flyout__rule input[type="text"].gfield_rule_input {
-			width: 30%;
+			width: 30%
 		}
 
 @media (min-width: 1260px) {
 
-.conditional_logic_flyout__rule input[type="text"].gfield_rule_input {
+		.conditional_logic_flyout__rule input[type="text"].gfield_rule_input {
 				flex: 1;
 				width: auto
 		}
@@ -1486,7 +1507,7 @@ html[dir="rtl"] .gform-admin .gform-choice .gform-choice__selected-label::before
 	}
 
 .conditional_logic_flyout .add_field_choice, .conditional_logic_flyout .delete_field_choice {
-		top: 0.5625rem;
+		top: 0.5625rem
 	}
 
 .gf_browser_chrome .conditional_logic_flyout .add_field_choice::after, .gf_browser_chrome .conditional_logic_flyout .delete_field_choice::after {
@@ -1500,7 +1521,7 @@ html[dir="rtl"] .gform-admin .gform-choice .gform-choice__selected-label::before
 .conditional_logic_flyout .delete_field_choice {
 		margin-left: 0.1875rem;
 		opacity: 0;
-		pointer-events: none;
+		pointer-events: none
 	}
 
 .conditional_logic_flyout .delete_field_choice.active {
@@ -1517,7 +1538,7 @@ html[dir="rtl"] .conditional_logic_flyout .delete_field_choice {
 }
 
 .conditional-flyout__main-fields {
-	display: none;
+	display: none
 }
 
 .conditional-flyout__main-fields.active {
@@ -1525,7 +1546,7 @@ html[dir="rtl"] .conditional_logic_flyout .delete_field_choice {
 	}
 
 .conditional_logic_flyout_container {
-	overflow: visible;
+	overflow: visible
 }
 
 .conditional_logic_flyout_container.anim-in-ready .conditional_logic_flyout {
@@ -1572,11 +1593,11 @@ html[dir="rtl"] .conditional_logic_flyout {
 		flex-wrap: wrap;
 		min-height: 3.375rem;
 		padding: 1.25rem 0;
-		position: relative;
+		position: relative
 	}
 
 .conditional_logic_wrapper .conditional_logic_accordion.active {
-			padding: 0;
+			padding: 0
 		}
 
 .conditional_logic_wrapper .conditional_logic_accordion.active:hover {
@@ -1612,7 +1633,7 @@ html[dir="rtl"] .conditional_logic_flyout {
 
 .conditional_logic_wrapper .conditional_logic_accordion__toggle {
 		display: none;
-		margin-left: auto;
+		margin-left: auto
 	}
 
 .conditional_logic_wrapper .conditional_logic_accordion__toggle.active {
@@ -1635,7 +1656,7 @@ html[dir="rtl"] .conditional_logic_flyout {
 			position: absolute;
 			top: 0;
 			width: 100%;
-			z-index: 1;
+			z-index: 1
 		}
 
 .conditional_logic_wrapper .conditional_logic_accordion__toggle button:hover .conditional_logic_accordion__toggle_button_icon::before, .conditional_logic_wrapper .conditional_logic_accordion__toggle button:focus .conditional_logic_accordion__toggle_button_icon::before {
@@ -1662,7 +1683,7 @@ html[dir="rtl"] .conditional_logic_flyout {
 
 .conditional_logic_wrapper .conditional_logic_accordion__desc {
 		display: none;
-		padding: 1rem 1.625rem 0.5rem 1rem;
+		padding: 1rem 1.625rem 0.5rem 1rem
 	}
 
 .conditional_logic_wrapper .conditional_logic_accordion__desc.active {
@@ -1724,7 +1745,7 @@ button.conditional_logic_flyout__close:hover_icon, button.conditional_logic_flyo
 		}
 
 html[dir="rtl"] .conditional_logic_flyout_container {
-	overflow: visible;
+	overflow: visible
 
 }
 
@@ -1822,7 +1843,7 @@ html[dir="rtl"] .conditional_logic_flyout_container .conditional_logic_flyout .a
 			speak: never;
 			top: -0.125rem;
 			transition: color 300ms ease-in-out, background-color 300ms ease-in-out, border-color 300ms ease-in-out;
-			width: 1.875rem;
+			width: 1.875rem
 		}
 
 .ui-datepicker:not(.gform-legacy-datepicker):not(.gform-theme-datepicker) .ui-datepicker-header .ui-datepicker-prev:focus, .ui-datepicker:not(.gform-legacy-datepicker):not(.gform-theme-datepicker) .ui-datepicker-header .ui-datepicker-prev:hover, .ui-datepicker:not(.gform-legacy-datepicker):not(.gform-theme-datepicker) .ui-datepicker-header .ui-datepicker-next:focus, .ui-datepicker:not(.gform-legacy-datepicker):not(.gform-theme-datepicker) .ui-datepicker-header .ui-datepicker-next:hover {
@@ -1830,7 +1851,7 @@ html[dir="rtl"] .conditional_logic_flyout_container .conditional_logic_flyout .a
 			}
 
 .ui-datepicker:not(.gform-legacy-datepicker):not(.gform-theme-datepicker) .ui-datepicker-header .ui-datepicker-prev {
-			left: -0.3125rem;
+			left: -0.3125rem
 		}
 
 .ui-datepicker:not(.gform-legacy-datepicker):not(.gform-theme-datepicker) .ui-datepicker-header .ui-datepicker-prev::before {
@@ -1839,7 +1860,7 @@ html[dir="rtl"] .conditional_logic_flyout_container .conditional_logic_flyout .a
 
 .ui-datepicker:not(.gform-legacy-datepicker):not(.gform-theme-datepicker) .ui-datepicker-header .ui-datepicker-next {
 			right: -0.3125rem;
-			transform: rotate(180deg);
+			transform: rotate(180deg)
 		}
 
 .ui-datepicker:not(.gform-legacy-datepicker):not(.gform-theme-datepicker) .ui-datepicker-header .ui-datepicker-next::before {
@@ -1856,7 +1877,7 @@ html[dir="rtl"] .conditional_logic_flyout_container .conditional_logic_flyout .a
 			font-size: 0.8125rem;
 			font-weight: 500;
 			min-height: 0;
-			padding: 0 1.25rem 0 0.5rem;
+			padding: 0 1.25rem 0 0.5rem
 		}
 
 .ui-datepicker:not(.gform-legacy-datepicker):not(.gform-theme-datepicker) .ui-datepicker-header select.ui-datepicker-month {
@@ -1907,7 +1928,7 @@ html[dir="rtl"] .conditional_logic_flyout_container .conditional_logic_flyout .a
 			justify-content: center;
 			text-decoration: none;
 			transition: color 300ms ease-in-out, background-color 300ms ease-in-out, border-color 300ms ease-in-out;
-			width: 1.875rem;
+			width: 1.875rem
 		}
 
 .ui-datepicker:not(.gform-legacy-datepicker):not(.gform-theme-datepicker) .ui-datepicker-calendar .ui-state-default:hover, .ui-datepicker:not(.gform-legacy-datepicker):not(.gform-theme-datepicker) .ui-datepicker-calendar .ui-state-default:focus {
@@ -1923,7 +1944,7 @@ html[dir="rtl"] .conditional_logic_flyout_container .conditional_logic_flyout .a
 .ui-datepicker:not(.gform-legacy-datepicker):not(.gform-theme-datepicker) .ui-datepicker-calendar .ui-datepicker-current-day .ui-state-default {
 				background: #3e7da6;
 				border-color: #3e7da6;
-				color: #fff;
+				color: #fff
 			}
 
 .ui-datepicker:not(.gform-legacy-datepicker):not(.gform-theme-datepicker) .ui-datepicker-calendar .ui-datepicker-current-day .ui-state-default:hover, .ui-datepicker:not(.gform-legacy-datepicker):not(.gform-theme-datepicker) .ui-datepicker-calendar .ui-datepicker-current-day .ui-state-default:focus {
@@ -1931,7 +1952,7 @@ html[dir="rtl"] .conditional_logic_flyout_container .conditional_logic_flyout .a
 				}
 
 .ui-datepicker:not(.gform-legacy-datepicker):not(.gform-theme-datepicker) .ui-datepicker-calendar .ui-state-disabled .ui-state-default {
-				color: #9092b2;
+				color: #9092b2
 			}
 
 .ui-datepicker:not(.gform-legacy-datepicker):not(.gform-theme-datepicker) .ui-datepicker-calendar .ui-state-disabled .ui-state-default:hover, .ui-datepicker:not(.gform-legacy-datepicker):not(.gform-theme-datepicker) .ui-datepicker-calendar .ui-state-disabled .ui-state-default:focus {
@@ -1962,7 +1983,7 @@ html[dir="rtl"] .conditional_logic_flyout_container .conditional_logic_flyout .a
 		padding: 0 2.25rem 0 1rem;
 		position: relative;
 		width: 100%;
-		z-index: 1;
+		z-index: 1
 	}
 
 .gform-admin .gform-dropdown__control:focus {
@@ -2013,7 +2034,7 @@ html[dir="rtl"] .conditional_logic_flyout_container .conditional_logic_flyout .a
 		top: 2.3125rem;
 		transition: opacity 0.15s ease;
 		width: 100%;
-		z-index: 2;
+		z-index: 2
 	}
 
 .gform-admin .gform-dropdown__container::before {
@@ -2084,7 +2105,7 @@ html[dir="rtl"] .conditional_logic_flyout_container .conditional_logic_flyout .a
 		padding: 0.6875rem 1rem 0.6875rem 0.875rem;
 		text-align: left;
 		transition: all 0.15s ease;
-		width: 100%;
+		width: 100%
 	}
 
 .gform-admin .gform-dropdown__trigger:hover, .gform-admin .gform-dropdown__trigger:focus {
@@ -2123,7 +2144,7 @@ html[dir="rtl"] .conditional_logic_flyout_container .conditional_logic_flyout .a
 		}
 
 .gform-admin .gform-dropdown--open .gform-dropdown__control {
-			box-shadow: 0 0.125rem 0.75rem rgba(28, 31, 63, 0.09);
+			box-shadow: 0 0.125rem 0.75rem rgba(28, 31, 63, 0.09)
 		}
 
 .gform-admin .gform-dropdown--open .gform-dropdown__control:focus {
@@ -2157,7 +2178,7 @@ html[dir="rtl"] .gform-admin .gform-dropdown__search-icon {
 html[dir="rtl"] .gform-admin .gform-dropdown__trigger {
 		border-left: 0;
 		border-right: 0.1875rem solid transparent;
-		text-align: right;
+		text-align: right
 	}
 
 html[dir="rtl"] .gform-admin .gform-dropdown__trigger:hover, html[dir="rtl"] .gform-admin .gform-dropdown__trigger:focus {
@@ -2202,7 +2223,7 @@ html[dir="rtl"] .gform-admin .gform-dropdown__trigger:hover, html[dir="rtl"] .gf
 
 .gform-settings-field__conditional-logic select:not([multiple]), .gform-settings-field__conditional-logic .select2-container .select2-selection__rendered {
 	max-width: 200px;
-	width: auto;
+	width: auto
 }
 
 @media (min-width: 960px) {
@@ -2291,7 +2312,7 @@ html[dir="rtl"] .gform-admin .gform-dropdown__trigger:hover, html[dir="rtl"] .gf
 		font-size: 0.875rem;
 		font-weight: 600;
 		margin: 0 0.625rem 0.3125rem 0;
-		padding: 0.3125rem 0.75rem;
+		padding: 0.3125rem 0.75rem
 	}
 
 .gform-settings-panel__content .select2-selection__choice:hover {
@@ -2360,12 +2381,12 @@ html[dir="rtl"] .gform-admin .gform-dropdown__trigger:hover, html[dir="rtl"] .gf
 		margin-bottom: 0;
 		max-height: 10rem;
 		overflow-y: scroll;
-		padding: 0;
+		padding: 0
 	}
 
 .gform-settings-field__select-enhanced-container .select2-results__options[aria-multiselectable="true"] .select2-results__option {
 				padding-left: 0.8125rem;
-				position: relative;
+				position: relative
 			}
 
 .gform-settings-field__select-enhanced-container .select2-results__options[aria-multiselectable="true"] .select2-results__option::before {
@@ -2382,7 +2403,7 @@ html[dir="rtl"] .gform-admin .gform-dropdown__trigger:hover, html[dir="rtl"] .gf
 
 .gform-settings-field__select-enhanced-container .select2-results__options[aria-multiselectable="true"] .select2-results__option[data-selected="true"] {
 				background-color: #fff;
-				border-right: 0;
+				border-right: 0
 			}
 
 .gform-settings-field__select-enhanced-container .select2-results__options[aria-multiselectable="true"] .select2-results__option[data-selected="true"]::before {
@@ -2396,7 +2417,7 @@ html[dir="rtl"] .gform-admin .gform-dropdown__trigger:hover, html[dir="rtl"] .gf
 				background-color: #f6f9fc;
 				border-left: 2px solid #3e7da6;
 				border-right: 0;
-				padding-left: 0.6875rem;
+				padding-left: 0.6875rem
 			}
 
 .gform-settings-field__select-enhanced-container .select2-results__options[aria-multiselectable="true"] .select2-results__option--highlighted::before {
@@ -2416,7 +2437,7 @@ html[dir="rtl"] .gform-admin .gform-dropdown__trigger:hover, html[dir="rtl"] .gf
 		line-height: 1.25rem;
 		margin: 0;
 		outline: none;
-		padding: 0.75rem 0.25rem 0.75rem 0.75rem;
+		padding: 0.75rem 0.25rem 0.75rem 0.75rem
 	}
 
 .gform-settings-field__select-enhanced-container .select2-results__option:hover, .gform-settings-field__select-enhanced-container .select2-results__option[data-selected="true"] {
@@ -2430,7 +2451,7 @@ html[dir="rtl"] .gf_browser_chrome .gform-settings-field__select--enhanced .sele
 
 html[dir="rtl"] .gform-settings-field__select-enhanced-container .select2-results__option {
 			border-left: 0;
-			border-right: 2px solid transparent;
+			border-right: 2px solid transparent
 		}
 
 html[dir="rtl"] .gform-settings-field__select-enhanced-container .select2-results__option:hover, html[dir="rtl"] .gform-settings-field__select-enhanced-container .select2-results__option[data-selected="true"] {
@@ -2492,7 +2513,7 @@ html[dir="rtl"] .gform-settings-field__select-enhanced-container .select2-result
 
 .field_setting.error input {
 	border: 1px solid #dd301d;
-	color: #dd301d;
+	color: #dd301d
 }
 
 .field_setting.error input:focus {
@@ -2531,7 +2552,7 @@ html[dir="rtl"] .gform-settings-field__select-enhanced-container .select2-result
 		border-radius: 3px;
 		box-sizing: border-box;
 		color: #242748;
-		transition: box-shadow 0.15s ease;
+		transition: box-shadow 0.15s ease
 
 	}
 
@@ -2552,7 +2573,7 @@ html[dir="rtl"] .gform-settings-field__select-enhanced-container .select2-result
 
 		max-height: 2.25rem;
 		min-height: 2.25rem;
-		width: 100%;
+		width: 100%
 	}
 
 .panel-block-tabs__body--settings input[type="text"]::-moz-placeholder {
@@ -2738,7 +2759,11 @@ html[dir="rtl"] .gform-settings-field__select-enhanced-container .select2-result
 
 /* container for styled checkbox + label */
 
-/* styled checkbox */
+.panel-block-tabs__body--settings input[type="checkbox"]:not(.gform-field__toggle-input):not(.field-choice-type) + label {
+
+				/* styled checkbox */
+
+			}
 
 .panel-block-tabs__body--settings input[type="checkbox"]:not(.gform-field__toggle-input):not(.field-choice-type) + label::before {
 					background-color: #fff;
@@ -2959,7 +2984,7 @@ html[dir="rtl"] .search-button .search-button__input {
 		line-height: 2;
 		outline: none;
 		padding: 0.25rem 0.75rem;
-		transition: box-shadow 0.15s ease, background-color 0.15s ease;
+		transition: box-shadow 0.15s ease, background-color 0.15s ease
 	}
 
 .gform-admin .gform-input:focus {
@@ -2985,7 +3010,7 @@ html[dir="rtl"] .search-button .search-button__input {
 		height: 1.375rem;
 		margin: 0 0.75rem 0 0;
 		padding: 0;
-		width: 1.375rem;
+		width: 1.375rem
 	}
 
 .gform-admin .gform-input--checkbox:hover {
@@ -3015,7 +3040,7 @@ html[dir="rtl"] .search-button .search-button__input {
 
 		padding: 0 2rem 0 0.8125rem;
 
-		width: 100%;
+		width: 100%
 	}
 
 .gform-admin .gform-input--select:hover {
@@ -3193,6 +3218,11 @@ div.push-alert-red {
 			position: relative;
 		}
 
+.gform-status-indicator.gform-status--no-icon {
+		padding-left: 0.65rem;
+		padding-right: 0.65rem;
+	}
+
 .gform-status-indicator:focus, .gform-status-indicator:hover, .gform-status-indicator:active {
 		border-color: #3e7da6;
 		box-shadow: 0 0 0 1px #bed8ed;
@@ -3204,14 +3234,18 @@ div.push-alert-red {
 }
 
 html[dir="rtl"] .gform-status-indicator {
-
-	padding-left: 0.75rem;
+	padding-left: 0.5rem;
 	padding-right: 1.5rem;
 }
 
 html[dir="rtl"] .gform-status-indicator svg {
 		left: auto;
 		right: 0.25rem;
+	}
+
+html[dir="rtl"] .gform-status-indicator.gform-status--no-icon {
+		padding-left: 0.65rem;
+		padding-right: 0.65rem;
 	}
 
 /*
@@ -3256,7 +3290,7 @@ html[dir="rtl"] .gform-status-indicator svg {
 
 @media (max-width: 960px) {
 
-.gform-admin .gform-table--responsive thead {
+		.gform-admin .gform-table--responsive thead {
 				border: 0;
 				clip: rect(1px, 1px, 1px, 1px);
 				height: 1px;
@@ -3269,7 +3303,7 @@ html[dir="rtl"] .gform-status-indicator svg {
 
 @media (max-width: 960px) {
 
-.gform-admin .gform-table--responsive tbody, .gform-admin .gform-table--responsive tr, .gform-admin .gform-table--responsive th, .gform-admin .gform-table--responsive td {
+		.gform-admin .gform-table--responsive tbody, .gform-admin .gform-table--responsive tr, .gform-admin .gform-table--responsive th, .gform-admin .gform-table--responsive td {
 				display: block;
 				padding: 0;
 				white-space: normal
@@ -3278,14 +3312,14 @@ html[dir="rtl"] .gform-status-indicator svg {
 
 @media (max-width: 960px) {
 
-.gform-admin .gform-table--responsive tr {
+		.gform-admin .gform-table--responsive tr {
 				border-bottom: 0
 		}
 			}
 
 @media (max-width: 960px) {
 
-.gform-admin .gform-table--responsive td, .gform-admin .gform-table--responsive th {
+		.gform-admin .gform-table--responsive td, .gform-admin .gform-table--responsive th {
 				border-bottom: 1px solid #ecedf8;
 				overflow: hidden;
 				padding: 1.25rem 1.125rem;
@@ -3298,14 +3332,14 @@ html[dir="rtl"] .gform-status-indicator svg {
 
 @media (max-width: 960px) {
 
-.gform-admin .gform-table--responsive td p {
+			.gform-admin .gform-table--responsive td p {
 					padding-left: 1.125rem
 			}
 				}
 
 @media (max-width: 960px) {
 
-.gform-admin .gform-table--responsive td[data-header]::before {
+				.gform-admin .gform-table--responsive td[data-header]::before {
 						content: attr(data-header);
 						display: block;
 						float: left;
@@ -3316,7 +3350,7 @@ html[dir="rtl"] .gform-status-indicator svg {
 
 @media (max-width: 960px) {
 
-.gform-admin .gform-table--responsive td[data-header] > * {
+				.gform-admin .gform-table--responsive td[data-header] > * {
 						clear: right;
 						display: block;
 						float: right;
@@ -3326,7 +3360,7 @@ html[dir="rtl"] .gform-status-indicator svg {
 
 @media (max-width: 960px) {
 
-.gform-admin .gform-table--responsive td[data-header]::after {
+				.gform-admin .gform-table--responsive td[data-header]::after {
 						border-right: 1px solid #ecedf8;
 						content: "";
 						display: block;
@@ -3473,7 +3507,7 @@ html[dir="rtl"] .gform-field__toggle input[type="checkbox"]:checked + .gform-fie
 	min-height: 4rem;
 	padding: 0 0.5rem 0 0;
 	width: 100%;
-	z-index: 99;
+	z-index: 99
 }
 
 .gform-form-toolbar > li {
@@ -3528,7 +3562,7 @@ html[dir="rtl"] .gform-field__toggle input[type="checkbox"]:checked + .gform-fie
 .gform-form-toolbar__menu > li {
 		display: inline-block;
 		margin: 0;
-		position: relative;
+		position: relative
 	}
 
 .gform-form-toolbar__menu > li::after {
@@ -3552,7 +3586,7 @@ html[dir="rtl"] .gform-field__toggle input[type="checkbox"]:checked + .gform-fie
 		padding: 0 0.8125rem 0 0.8125rem;
 		position: relative;
 		text-decoration: none;
-		transition: all 0.2s ease;
+		transition: all 0.2s ease
 	}
 
 .gform-form-toolbar__menu > li > a::after {
@@ -3567,7 +3601,7 @@ html[dir="rtl"] .gform-field__toggle input[type="checkbox"]:checked + .gform-fie
 		}
 
 .gform-form-toolbar__menu > li > a:hover, .gform-form-toolbar__menu > li > a:focus, .gform-form-toolbar__menu > li > a.submenu-open, .gform-form-toolbar__menu > li > a.gf_toolbar_active {
-			color: #242748;
+			color: #242748
 		}
 
 .gform-form-toolbar__menu > li > a:hover::after, .gform-form-toolbar__menu > li > a:focus::after, .gform-form-toolbar__menu > li > a.submenu-open::after, .gform-form-toolbar__menu > li > a.gf_toolbar_active::after {
@@ -3591,7 +3625,7 @@ html[dir="rtl"] .gform-field__toggle input[type="checkbox"]:checked + .gform-fie
 		position: absolute;
 		transition: 200ms all;
 		visibility: hidden;
-		z-index: 100;
+		z-index: 100
 	}
 
 .gform-form-toolbar__menu .gform-form-toolbar__submenu.open {
@@ -3657,7 +3691,7 @@ html[dir="rtl"] .gform-field__toggle input[type="checkbox"]:checked + .gform-fie
 		height: 3.813rem;
 		justify-content: center;
 		transition: all ease-in-out 190ms;
-		width: 3.813rem;
+		width: 3.813rem
 	}
 
 .gform-form-toolbar__logo a:hover {
@@ -3671,7 +3705,7 @@ html[dir="rtl"] .gform-field__toggle input[type="checkbox"]:checked + .gform-fie
 .gform-form-toolbar__form-title {
 	margin-right: 0;
 	padding: 0 0.9375rem 0 0.1875rem;
-	width: 13.75rem;
+	width: 13.75rem
 }
 
 @media (min-width: 900px) {
@@ -3689,7 +3723,7 @@ html[dir="rtl"] .gform-field__toggle input[type="checkbox"]:checked + .gform-fie
 		}
 
 .gform-form-toolbar__form-title.gform-form-toolbar__form-title--form-editor {
-		padding: 0 0.9375rem;
+		padding: 0 0.9375rem
 	}
 
 @media (min-width: 900px) {
@@ -3700,7 +3734,7 @@ html[dir="rtl"] .gform-field__toggle input[type="checkbox"]:checked + .gform-fie
 			}
 
 html[dir="rtl"] .gform-form-toolbar__form-title {
-	padding: 0 0 0 0.9375rem;
+	padding: 0 0 0 0.9375rem
 }
 
 html[dir="rtl"] .gform-form-toolbar__form-title.gform-form-toolbar__form-title--form-editor {
@@ -3749,7 +3783,7 @@ html[dir="rtl"] .gform-form-toolbar__form-title.gform-form-toolbar__form-title--
 	text-align: left;
 	text-decoration: none;
 	text-overflow: ellipsis;
-	transition: all 0.15s ease;
+	transition: all 0.15s ease
 }
 
 .gform-form-toolbar__submenu a:hover, .gform-form-toolbar__submenu a:focus, .row-actions .gform-form-toolbar__submenu a:hover, .row-actions .gform-form-toolbar__submenu a:focus {
@@ -3760,7 +3794,7 @@ html[dir="rtl"] .gform-form-toolbar__form-title.gform-form-toolbar__form-title--
 html[dir="rtl"] .gform-form-toolbar__submenu a, html[dir="rtl"] .row-actions .gform-form-toolbar__submenu a {
 		border-left: 0;
 		border-right: 0.1875rem solid transparent;
-		text-align: right;
+		text-align: right
 	}
 
 html[dir="rtl"] .gform-form-toolbar__submenu a:hover, html[dir="rtl"] .gform-form-toolbar__submenu a:focus, html[dir="rtl"] .row-actions .gform-form-toolbar__submenu a:hover, html[dir="rtl"] .row-actions .gform-form-toolbar__submenu a:focus {
@@ -3782,7 +3816,7 @@ html[dir="rtl"] .gform-form-toolbar__submenu a:hover, html[dir="rtl"] .gform-for
 	position: relative;
 	text-decoration: none;
 	vertical-align: middle;
-	width: 1rem;
+	width: 1rem
 }
 
 .gf_tooltip::before {
@@ -3804,7 +3838,7 @@ html[dir="rtl"] .gform-form-toolbar__submenu a:hover, html[dir="rtl"] .gform-for
 	}
 
 .gf_tooltip:hover, .gf_tooltip:active {
-		box-shadow: 0 2px 2px rgba(58, 58, 87, 0.0796);
+		box-shadow: 0 2px 2px rgba(58, 58, 87, 0.0796)
 	}
 
 .gf_tooltip:hover::before, .gf_tooltip:active::before {
@@ -4466,7 +4500,7 @@ to no.
 ----------------------------------------------------------------
 */
 
-html[dir="rtl"] .gform_wrapper *, html[dir="rtl"] .gform_wrapper form, html[dir="rtl"] .gform_wrapper .gform_body, html[dir="rtl"] .gform_wrapper ul li, html[dir="rtl"] .gform_wrapper ul li.gfield, html[dir="rtl"] .gform_wrapper ul li.gfield.gfield_html, html[dir="rtl"] .gform_wrapper ul li.gfield input, html[dir="rtl"] .gform_wrapper ul li.gfield textarea, html[dir="rtl"] .gform_wrapper textarea, html[dir="rtl"] .gform_wrapper ul li.gfield select, html[dir="rtl"] .gform_wrapper select, html[dir="rtl"] .gform_wrapper input[type="text"], html[dir="rtl"] .gform_wrapper input[type="email"], html[dir="rtl"] .gform_wrapper input[type="password"], html[dir="rtl"] .gform_wrapper input[type="url"], html[dir="rtl"] .gform_wrapper input[type="tel"], html[dir="rtl"] .gform_wrapper input[type="submit"], html[dir="rtl"] .gform_wrapper input[type="button"], html[dir="rtl"] .gform_wrapper button, html[dir="rtl"] .gform_wrapper table tr td.gfield_list_icons, html[dir="rtl"] .gform_wrapper div.validation_error, html[dir="rtl"] .gform_wrapper h3.gform_title, html[dir="rtl"] .gform_wrapper span.gform_description, html[dir="rtl"] .gform_wrapper .gform_footer {
+html[dir="rtl"] .gform_wrapper *, html[dir="rtl"] .gform_wrapper form, html[dir="rtl"] .gform_wrapper .gform_body, html[dir="rtl"] .gform_wrapper ul li, html[dir="rtl"] .gform_wrapper ul li.gfield, html[dir="rtl"] .gform_wrapper ul li.gfield.gfield_html, html[dir="rtl"] .gform_wrapper ul li.gfield input, html[dir="rtl"] .gform_wrapper ul li.gfield textarea, html[dir="rtl"] .gform_wrapper textarea, html[dir="rtl"] .gform_wrapper ul li.gfield select, html[dir="rtl"] .gform_wrapper select, html[dir="rtl"] .gform_wrapper input[type="text"], html[dir="rtl"] .gform_wrapper input[type="email"], html[dir="rtl"] .gform_wrapper input[type="password"], html[dir="rtl"] .gform_wrapper input[type="url"], html[dir="rtl"] .gform_wrapper input[type="tel"], html[dir="rtl"] .gform_wrapper input[type="submit"], html[dir="rtl"] .gform_wrapper input[type="button"], html[dir="rtl"] .gform_wrapper button, html[dir="rtl"] .gform_wrapper div.validation_error, html[dir="rtl"] .gform_wrapper h3.gform_title, html[dir="rtl"] .gform_wrapper span.gform_description, html[dir="rtl"] .gform_wrapper .gform_footer {
 	text-align: right;
 	direction: rtl;
 }
@@ -4490,7 +4524,7 @@ html[dir="rtl"] .gform_wrapper table.gfield_list th, html[dir="rtl"] .gform_wrap
 	padding-right: 0;
 }
 
-.gform_wrapper table.gfield_list tr td.gfield_list_icons, .gform_wrapper table.gfield_list tr td:last-child {
+.gform_legacy_markup_wrapper table.gfield_list tbody td.gfield_list_icons, .gform_legacy_markup_wrapper table.gfield_list thead tr td:last-child {
 	padding: 0 4px 0 0 !important;
 }
 
@@ -4512,7 +4546,7 @@ html[dir="rtl"] .gform_wrapper .chosen-container ul.chosen-choices li.search-fie
 	float: right !important;
 }
 
-body.rtl .gform_wrapper *, body.rtl .gform_wrapper form, body.rtl .gform_wrapper .gform_body, body.rtl .gform_wrapper ul li, body.rtl .gform_wrapper ul li.gfield, body.rtl .gform_wrapper ul li.gfield.gfield_html, body.rtl .gform_wrapper ul li.gfield input, body.rtl .gform_wrapper ul li.gfield textarea, body.rtl .gform_wrapper textarea, body.rtl .gform_wrapper ul li.gfield select, body.rtl .gform_wrapper select, body.rtl .gform_wrapper input[type="text"], body.rtl .gform_wrapper input[type="email"], body.rtl .gform_wrapper input[type="password"], body.rtl .gform_wrapper input[type="url"], body.rtl .gform_wrapper input[type="tel"], body.rtl .gform_wrapper input[type="submit"], body.rtl .gform_wrapper input[type="button"], body.rtl .gform_wrapper button, body.rtl .gform_wrapper table tr td.gfield_list_icons, body.rtl .gform_wrapper div.validation_error, body.rtl .gform_wrapper h3.gform_title, body.rtl .gform_wrapper span.gform_description, body.rtl .gform_wrapper .gform_footer, body .gform_wrapper.gf_rtl_wrapper ul li, body .gform_wrapper.gf_rtl_wrapper ul li.gfield, body .gform_wrapper.gf_rtl_wrapper ul li.gfield.gfield_html, body .gform_wrapper.gf_rtl_wrapper ul li.gfield input, body .gform_wrapper.gf_rtl_wrapper ul li.gfield textarea, body .gform_wrapper.gf_rtl_wrapper textarea, body .gform_wrapper.gf_rtl_wrapper ul li.gfield select, body .gform_wrapper.gf_rtl_wrapper select, body .gform_wrapper.gf_rtl_wrapper input[type="text"], body .gform_wrapper.gf_rtl_wrapper input[type="email"], body .gform_wrapper.gf_rtl_wrapper input[type="password"], body .gform_wrapper.gf_rtl_wrapper input[type="url"], body .gform_wrapper.gf_rtl_wrapper input[type="tel"], body .gform_wrapper.gf_rtl_wrapper input[type="submit"], body .gform_wrapper.gf_rtl_wrapper input[type="button"], body .gform_wrapper.gf_rtl_wrapper button, body .gform_wrapper.gf_rtl_wrapper table tr td.gfield_list_icons, body .gform_wrapper.gf_rtl_wrapper div.validation_error, body .gform_wrapper.gf_rtl_wrapper .gform_heading, body .gform_wrapper.gf_rtl_wrapper h3.gform_title, body .gform_wrapper.gf_rtl_wrapper span.gform_description, body .gform_wrapper.gf_rtl_wrapper .gform_footer {
+body.rtl .gform_wrapper *, body.rtl .gform_wrapper form, body.rtl .gform_wrapper .gform_body, body.rtl .gform_wrapper ul li, body.rtl .gform_wrapper ul li.gfield, body.rtl .gform_wrapper ul li.gfield.gfield_html, body.rtl .gform_wrapper ul li.gfield input, body.rtl .gform_wrapper ul li.gfield textarea, body.rtl .gform_wrapper textarea, body.rtl .gform_wrapper ul li.gfield select, body.rtl .gform_wrapper select, body.rtl .gform_wrapper input[type="text"], body.rtl .gform_wrapper input[type="email"], body.rtl .gform_wrapper input[type="password"], body.rtl .gform_wrapper input[type="url"], body.rtl .gform_wrapper input[type="tel"], body.rtl .gform_wrapper input[type="submit"], body.rtl .gform_wrapper input[type="button"], body.rtl .gform_wrapper button, body.rtl .gform_wrapper div.validation_error, body.rtl .gform_wrapper h3.gform_title, body.rtl .gform_wrapper span.gform_description, body.rtl .gform_wrapper .gform_footer, body .gform_wrapper.gf_rtl_wrapper ul li, body .gform_wrapper.gf_rtl_wrapper ul li.gfield, body .gform_wrapper.gf_rtl_wrapper ul li.gfield.gfield_html, body .gform_wrapper.gf_rtl_wrapper ul li.gfield input, body .gform_wrapper.gf_rtl_wrapper ul li.gfield textarea, body .gform_wrapper.gf_rtl_wrapper textarea, body .gform_wrapper.gf_rtl_wrapper ul li.gfield select, body .gform_wrapper.gf_rtl_wrapper select, body .gform_wrapper.gf_rtl_wrapper input[type="text"], body .gform_wrapper.gf_rtl_wrapper input[type="email"], body .gform_wrapper.gf_rtl_wrapper input[type="password"], body .gform_wrapper.gf_rtl_wrapper input[type="url"], body .gform_wrapper.gf_rtl_wrapper input[type="tel"], body .gform_wrapper.gf_rtl_wrapper input[type="submit"], body .gform_wrapper.gf_rtl_wrapper input[type="button"], body .gform_wrapper.gf_rtl_wrapper button, body .gform_wrapper.gf_rtl_wrapper div.validation_error, body .gform_wrapper.gf_rtl_wrapper .gform_heading, body .gform_wrapper.gf_rtl_wrapper h3.gform_title, body .gform_wrapper.gf_rtl_wrapper span.gform_description, body .gform_wrapper.gf_rtl_wrapper .gform_footer {
 	text-align: right !important;
 	direction: rtl !important;
 }
@@ -5346,12 +5380,12 @@ div.gforms_helpbox ul.resource_list li a:hover, div.gforms_helpbox ul.resource_l
 }
 
 body.forms_page_gf_entries.auto-fold .gforms_edit_form {
-		top: -0.625rem;
+		top: -0.625rem
 	}
 
 @media (min-width: 783px) {
 
-body.forms_page_gf_entries.auto-fold .gforms_edit_form {
+	body.forms_page_gf_entries.auto-fold .gforms_edit_form {
 			top: 0
 	}
 		}
@@ -5639,7 +5673,7 @@ div.settings_control_container div.gfield_admin_header_title {
 }
 
 .gform-icon--entries-edit {
-	font-size: 1.5rem;
+	font-size: 1.5rem
 }
 
 .gform-icon--entries-edit:hover, .gform-icon--entries-edit:active {
@@ -7758,7 +7792,7 @@ given our button styles don't account for a button as an input[type="submit"]. *
 #gform_update_button {
 	height: 2.3125rem;
 	line-height: 0.875rem;
-	padding: 0.625rem 12px;
+	padding: 0.625rem 12px
 }
 
 #gform_update_button:hover {
@@ -7810,6 +7844,15 @@ tr.gf-locking.wp-locked img.gform_active_icon {
 	font-size: 1.5rem;
 	text-decoration: none;
 }
+
+/* List field */
+
+@media (max-width: 640px) {
+
+	html[dir="rtl"] .gforms_edit_form .gform_wrapper.gravity-theme .ginput_list input {
+			float: none !important
+	}
+		}
 
 .gf-pagebreak {
 	align-items: center;
@@ -7944,18 +7987,29 @@ ul.gform_fields.left_label li.gfield.gfield_html .gfield_label, ul.gform_fields.
 	color: #444;
 }
 
-.wp-admin #TB_overlay {
+html[dir="rtl"] .gform-admin #TB_window, html[dir="rtl"] .gform-admin #TB_ajaxContent {
+		text-align: right;
+	}
+
+.gform-admin #TB_ajaxContent {
+	box-sizing: border-box;
+	padding: 0 2rem 80px;
+	position: relative;
+	width: auto !important;
+}
+
+.gform-admin #TB_overlay {
 	background: #1c1f3f;
 	opacity: 0.72;
 }
 
-.wp-admin #TB_window {
+.gform-admin #TB_window {
 	background: #fff;
 	border-radius: 6px;
 	box-shadow: 0 16px 80px rgba(5, 17, 50, 0.66);
 }
 
-.wp-admin #TB_title {
+.gform-admin #TB_title {
 	background: transparent;
 	border-bottom: none;
 	display: flex;
@@ -7964,7 +8018,7 @@ ul.gform_fields.left_label li.gfield.gfield_html .gfield_label, ul.gform_fields.
 	padding: 1.875rem 2rem 1.375rem;
 }
 
-.wp-admin #TB_ajaxWindowTitle {
+.gform-admin #TB_ajaxWindowTitle {
 	color: #242748;
 	font-size: 1rem;
 	font-weight: normal;
@@ -7973,7 +8027,7 @@ ul.gform_fields.left_label li.gfield.gfield_html .gfield_label, ul.gform_fields.
 	white-space: normal;
 }
 
-.wp-admin #TB_closeWindowButton {
+.gform-admin #TB_closeWindowButton {
 	position: relative;
 }
 
@@ -7993,6 +8047,11 @@ ul.gform_fields.left_label li.gfield.gfield_html .gfield_label, ul.gform_fields.
 	width: 2.6875rem;
 }
 
+html[dir="rtl"] .gform-admin .tb-title__logo::before {
+		margin-left: 0.74375rem;
+		margin-right: 0;
+	}
+
 .tb-title__main {
 	color: #242748;
 	font-size: 1rem;
@@ -8005,7 +8064,7 @@ ul.gform_fields.left_label li.gfield.gfield_html .gfield_label, ul.gform_fields.
 	font-weight: normal;
 }
 
-.wp-admin .tb-close-icon {
+.gform-admin .tb-close-icon {
 	background: #fff center no-repeat url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIiIGhlaWdodD0iMTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0xLjE4MyAxLjE4M2EuNjI1LjYyNSAwIDAwMCAuODg0TDUuMTE2IDYgMS4xODMgOS45MzNhLjYyNS42MjUgMCAxMC44ODQuODg0TDYgNi44ODRsMy45MzMgMy45MzNhLjYyNS42MjUgMCAxMC44ODQtLjg4NEw2Ljg4NCA2bDMuOTMzLTMuOTMzYS42MjUuNjI1IDAgMTAtLjg4NC0uODg0TDYgNS4xMTYgMi4wNjcgMS4xODNhLjYyNS42MjUgMCAwMC0uODg0IDB6IiBmaWxsPSIjM0U3REE2Ii8+PHBhdGggZD0iTTEuMTgzIDIuMDY3TC44MyAyLjQybC4zNTMtLjM1M3ptMC0uODg0TC44My44M2wuMzUzLjM1M3pNNS4xMTYgNmwuMzU0LjM1NEw1LjgyMyA2bC0uMzUzLS4zNTRMNS4xMTYgNnpNMS4xODMgOS45MzNMLjgzIDkuNThsLjM1My4zNTR6bTAgLjg4NGwtLjM1My4zNTQuMzUzLS4zNTR6TTYgNi44ODRsLjM1NC0uMzU0TDYgNi4xNzdsLS4zNTQuMzUzLjM1NC4zNTR6bTMuOTMzIDMuOTMzbC4zNTQtLjM1NC0uMzU0LjM1NHptLjg4NC0uODg0bC0uMzU0LjM1NC4zNTQtLjM1NHpNNi44ODQgNmwtLjM1NC0uMzU0TDYuMTc3IDZsLjM1My4zNTRMNi44ODQgNnptMy45MzMtNC44MTdMMTEuMTcuODNsLS4zNTQuMzUzem0tLjg4NCAwTDkuNTguODNsLjM1NC4zNTN6TTYgNS4xMTZsLS4zNTQuMzU0LjM1NC4zNTMuMzU0LS4zNTNMNiA1LjExNnpNMi4wNjcgMS4xODNMMi40Mi44M2wtLjM1My4zNTN6bS0uNTMuNTNhLjEyNS4xMjUgMCAwMTAtLjE3NkwuODMuODNjLS40NC40MzktLjQ0IDEuMTUxIDAgMS41OWwuNzA3LS43MDd6TTUuNDcgNS42NDZMMS41MzcgMS43MTNsLS43MDcuNzA4IDMuOTMzIDMuOTMzLjcwNy0uNzA4em0tMy45MzMgNC42NEw1LjQ3IDYuMzU1bC0uNzA3LS43MDhMLjgzIDkuNThsLjcwNy43MDh6bTAgLjE3N2EuMTI1LjEyNSAwIDAxMC0uMTc2TC44MyA5LjU3OWMtLjQ0LjQ0LS40NCAxLjE1MiAwIDEuNTkxbC43MDctLjcwN3ptLjE3NiAwYS4xMjUuMTI1IDAgMDEtLjE3NiAwbC0uNzA3LjcwOGMuNDM5LjQzOSAxLjE1MS40MzkgMS41OSAwbC0uNzA3LS43MDh6TTUuNjQ2IDYuNTNsLTMuOTMzIDMuOTMzLjcwOC43MDggMy45MzMtMy45MzQtLjcwOC0uNzA3em00LjY0IDMuOTMzTDYuMzU1IDYuNTNsLS43MDguNzA3IDMuOTMzIDMuOTM0LjcwOC0uNzA4em0uMTc3IDBhLjEyNS4xMjUgMCAwMS0uMTc2IDBsLS43MDguNzA4Yy40NC40MzkgMS4xNTIuNDM5IDEuNTkxIDBsLS43MDctLjcwOHptMC0uMTc2YS4xMjUuMTI1IDAgMDEwIC4xNzZsLjcwOC43MDhjLjQzOS0uNDQuNDM5LTEuMTUyIDAtMS41OTFsLS43MDguNzA3ek02LjUzIDYuMzU0bDMuOTMzIDMuOTMzLjcwOC0uNzA4LTMuOTM0LTMuOTMzLS43MDcuNzA4em0zLjkzMy00LjY0TDYuNTMgNS42NDVsLjcwNy43MDggMy45MzQtMy45MzMtLjcwOC0uNzA4em0wLS4xNzdhLjEyNS4xMjUgMCAwMTAgLjE3NmwuNzA4LjcwOGMuNDM5LS40NC40MzktMS4xNTIgMC0xLjU5MWwtLjcwOC43MDd6bS0uMTc2IDBhLjEyNS4xMjUgMCAwMS4xNzYgMGwuNzA4LS43MDdhMS4xMjUgMS4xMjUgMCAwMC0xLjU5MSAwbC43MDcuNzA3ek02LjM1NCA1LjQ3bDMuOTMzLTMuOTMzTDkuNTc5LjgzIDUuNjQ2IDQuNzYzbC43MDguNzA3em0tNC42NC0zLjkzM0w1LjY0NSA1LjQ3bC43MDgtLjcwN0wyLjQyLjgzbC0uNzA4LjcwN3ptLS4xNzcgMGEuMTI1LjEyNSAwIDAxLjE3NiAwTDIuNDIxLjgzQTEuMTI1IDEuMTI1IDAgMDAuODMuODNsLjcwNy43MDd6IiBmaWxsPSIjM0U3REE2Ii8+PC9zdmc+);
 	background-size: 0.625rem;
 	border: 1px solid #d5d7e9;
@@ -8016,15 +8075,8 @@ ul.gform_fields.left_label li.gfield.gfield_html .gfield_label, ul.gform_fields.
 	width: 1.625rem;
 }
 
-.wp-admin .tb-close-icon::before {
+.gform-admin .tb-close-icon::before {
 	content: none;
-}
-
-.wp-admin #TB_ajaxContent {
-	box-sizing: border-box;
-	padding: 0 2rem 80px;
-	position: relative;
-	width: auto !important;
 }
 
 #TB_window .modal_footer {
@@ -8036,10 +8088,6 @@ ul.gform_fields.left_label li.gfield.gfield_html .gfield_label, ul.gform_fields.
 	padding: 20px 32px;
 	position: absolute;
 	right: 0;
-}
-
-html[dir="rtl"] .modal_footer {
-	text-align: right;
 }
 
 .modal_footer .button, .modal_footer .button-primary {
@@ -8059,11 +8107,15 @@ html[dir="rtl"] .modal_footer {
 	min-height: 30px;
 	padding: 0.125rem 1.125rem;
 	transition: all 0.3s ease;
-	white-space: nowrap;
+	white-space: nowrap
 }
 
-.modal_footer .button-primary, .modal_footer .button.primary {
+.modal_footer .button:hover, .modal_footer .button-primary:hover {
+		box-shadow: 0 4px 6px rgba(28, 31, 63, 0.0837013);
+		transform: translate(0, -2px);
+	}
 
+.modal_footer .button-primary, .modal_footer .button.primary {
 	background: #3e7da6;
 	border: 1px solid transparent;
 	border-radius: 3px;
@@ -8075,21 +8127,13 @@ html[dir="rtl"] .modal_footer {
 	height: initial;
 	line-height: 1;
 	padding: 0.625rem 1.125rem;
-	transition: all 0.3s ease;
-
+	transition: all 0.3s ease
 }
 
 .modal_footer .button-primary:hover, .modal_footer .button.primary:hover {
-
-	box-shadow: 0 4px 6px rgba(28, 31, 63, 0.0837013);
-	transform: translate(0, -2px);
-
-}
-
-.modal_footer .button:hover, .modal_footer .button-primary:hover {
-	box-shadow: 0 4px 6px rgba(28, 31, 63, 0.0837013);
-	transform: translate(0, -2px);
-}
+		box-shadow: 0 4px 6px rgba(28, 31, 63, 0.0837013);
+		transform: translate(0, -2px);
+	}
 
 /* New form modal */
 
@@ -8148,6 +8192,7 @@ html[dir="rtl"] .modal_footer {
 
 .gform_new_form .gform_new_form_modal_container .setting-row textarea {
 	height: 110px;
+	max-height: 200px;
 }
 
 .gform_new_form .gform_new_form_modal_container #gf_new_form_error_message {
@@ -8355,7 +8400,7 @@ div.wrap.gf_browser_chrome .gfield_checkbox li input[type="checkbox"], div.wrap.
 .gform-rte-preview {
 	border: 1px solid #9092b2;
 	border-radius: 3px;
-	display: none;
+	display: none
 }
 
 .gform-rte-preview.small {
@@ -8793,7 +8838,7 @@ div .gfield_repeater_cell {
 				flex: none;
 				flex-direction: row;
 				height: 2.375rem;
-				text-align: right;
+				text-align: right
 			}
 
 .gform-settings-panel__content#entry_list_form .tablenav .tablenav-pages.no-pages, .gform-settings-panel__content#entry_list_form .tablenav .tablenav-pages.one-page .pagination-links, .gform-settings-panel__content #form_list_form .tablenav .tablenav-pages.no-pages, .gform-settings-panel__content #form_list_form .tablenav .tablenav-pages.one-page .pagination-links {
@@ -8910,16 +8955,16 @@ div .gfield_repeater_cell {
 
 #entry_list_form.gform-settings-panel__content .tablenav {
 	flex: 1 1 auto;
-	width: 100%;
+	width: 100%
 }
 
 #entry_list_form.gform-settings-panel__content .tablenav.bottom .tablenav-pages {
-			padding-top: 1.25rem;
+			padding-top: 1.25rem
 		}
 
 @media (min-width: 783px) {
 
-#entry_list_form.gform-settings-panel__content .tablenav.bottom .tablenav-pages {
+		#entry_list_form.gform-settings-panel__content .tablenav.bottom .tablenav-pages {
 				padding-top: 0
 		}
 			}
@@ -8947,7 +8992,7 @@ div .gfield_repeater_cell {
 	left: -0.625rem;
 	margin: 0;
 	position: relative;
-	width: 100%;
+	width: 100%
 }
 
 @media (min-width: 783px) {
@@ -9391,7 +9436,7 @@ div .gfield_repeater_cell {
 	font-size: 1.25rem;
 	outline: none;
 	position: relative;
-	text-decoration: none;
+	text-decoration: none
 }
 
 .ginput_preview_control.gform-icon--circle-arrow-down {

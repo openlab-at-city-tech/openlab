@@ -131,7 +131,7 @@ class WPT_Search_Tweets_Widget extends WP_Widget {
 
 		<p>
 			<label for="<?php echo $this->get_field_id( 'result_type' ); ?>"><?php _e( 'Type of Results', 'wp-to-twitter' ); ?></label>
-			<select name="<?php echo $this->get_field_name( 'result_type' ); ?>"  id="<?php echo $this->get_field_id( 'result_type' ); ?>"> <option 	value='recent'<?php echo ( 'recent' === $instance['result_type'] ) ? ' selected="selected"' : ''; ?>><?php _e( 'Recent Tweets', 'wp-to-twitter' ); ?></option> <option 	value='popular'<?php echo ( 'popular' === $instance['result_type'] ) ? ' selected="selected"' : ''; ?>><?php _e( 'Popular Tweets', 'wp-to-twitter' ); ?></option> <option 	value='mixed'<?php echo ( 'mixed' === $instance['result_type'] ) ? ' selected="selected"' : ''; ?>><?php _e( 'Mixed', 'wp-to-twitter' ); ?></option>
+			<select name="<?php echo $this->get_field_name( 'result_type' ); ?>"  id="<?php echo $this->get_field_id( 'result_type' ); ?>"> <option value='recent'<?php echo ( 'recent' === $instance['result_type'] ) ? ' selected="selected"' : ''; ?>><?php _e( 'Recent Tweets', 'wp-to-twitter' ); ?></option> <option value='popular'<?php echo ( 'popular' === $instance['result_type'] ) ? ' selected="selected"' : ''; ?>><?php _e( 'Popular Tweets', 'wp-to-twitter' ); ?></option> <option value='mixed'<?php echo ( 'mixed' === $instance['result_type'] ) ? ' selected="selected"' : ''; ?>><?php _e( 'Mixed', 'wp-to-twitter' ); ?></option>
 			</select>
 		</p>
 

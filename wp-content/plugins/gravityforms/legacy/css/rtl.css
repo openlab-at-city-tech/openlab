@@ -45,7 +45,6 @@ html[dir="rtl"] .gform_legacy_markup_wrapper input[type="tel"],
 html[dir="rtl"] .gform_legacy_markup_wrapper input[type="submit"],
 html[dir="rtl"] .gform_legacy_markup_wrapper input[type="button"],
 html[dir="rtl"] .gform_legacy_markup_wrapper button,
-html[dir="rtl"] .gform_legacy_markup_wrapper table tr td.gfield_list_icons,
 html[dir="rtl"] .gform_legacy_markup_wrapper div.validation_error,
 html[dir="rtl"] .gform_legacy_markup_wrapper h3.gform_title,
 html[dir="rtl"] .gform_legacy_markup_wrapper span.gform_description,
@@ -79,8 +78,8 @@ html[dir="rtl"] .gform_legacy_markup_wrapper table.gfield_list td {
 	padding-right: 0;
 }
 
-.gform_legacy_markup_wrapper table.gfield_list tr td.gfield_list_icons,
-.gform_legacy_markup_wrapper table.gfield_list tr td:last-child {
+.gform_legacy_markup_wrapper table.gfield_list tbody td.gfield_list_icons,
+.gform_legacy_markup_wrapper table.gfield_list thead tr td:last-child {
     padding: 0 4px 0 0 !important;
 }
 
@@ -127,7 +126,6 @@ body.rtl .gform_legacy_markup_wrapper input[type="tel"],
 body.rtl .gform_legacy_markup_wrapper input[type="submit"],
 body.rtl .gform_legacy_markup_wrapper input[type="button"],
 body.rtl .gform_legacy_markup_wrapper button,
-body.rtl .gform_legacy_markup_wrapper table tr td.gfield_list_icons,
 body.rtl .gform_legacy_markup_wrapper div.validation_error,
 body.rtl .gform_legacy_markup_wrapper h3.gform_title,
 body.rtl .gform_legacy_markup_wrapper span.gform_description,
@@ -148,7 +146,6 @@ body .gform_legacy_markup_wrapper.gf_rtl_wrapper input[type="tel"],
 body .gform_legacy_markup_wrapper.gf_rtl_wrapper input[type="submit"],
 body .gform_legacy_markup_wrapper.gf_rtl_wrapper input[type="button"],
 body .gform_legacy_markup_wrapper.gf_rtl_wrapper button,
-body .gform_legacy_markup_wrapper.gf_rtl_wrapper table tr td.gfield_list_icons,
 body .gform_legacy_markup_wrapper.gf_rtl_wrapper div.validation_error,
 body .gform_legacy_markup_wrapper.gf_rtl_wrapper .gform_heading,
 body .gform_legacy_markup_wrapper.gf_rtl_wrapper h3.gform_title,
@@ -198,13 +195,6 @@ body .gform_legacy_markup_wrapper.gf_rtl_wrapper div.gform_body ul.gform_fields 
 body .gform_legacy_markup_wrapper.gf_rtl_wrapper div.gform_body ul.gform_fields li.gfield.gfield_html blockquote {
 	text-align: right !important;
 	direction: rtl !important;
-}
-
-body.rtl .gform_legacy_markup_wrapper table.gfield_list th,
-body.rtl .gform_legacy_markup_wrapper table.gfield_list td,
-body .gform_legacy_markup_wrapper.gf_rtl_wrapper table.gfield_list th,
-body .gform_legacy_markup_wrapper.gf_rtl_wrapper table.gfield_list td {
-    padding: 0 !important;
 }
 
 body .gform_legacy_markup_wrapper.gf_rtl_wrapper table.gfield_list {
@@ -289,6 +279,12 @@ html[dir="rtl"] .gform_legacy_markup_wrapper img.ui-datepicker-trigger,
 body.rtl .gform_legacy_markup_wrapper img.ui-datepicker-trigger,
 body .gform_legacy_markup_wrapper.gf_rtl_wrapper img.ui-datepicker-trigger {
 	margin: 4px 2px 0 0;
+}
+
+html[dir="rtl"] .gform-legacy-datepicker.ui-datepicker:not(.gform-preview-datepicker) .ui-datepicker-header .ui-datepicker-year,
+html[dir="rtl"] .gform-legacy-datepicker.ui-datepicker:not(.gform-preview-datepicker) .ui-datepicker-header .ui-datepicker-month {
+	background-position: left 1px top 60%;
+	padding-left: 15px;
 }
 
 html[dir="rtl"] .gform_legacy_markup_wrapper .gf_progressbar_percentage span,
@@ -580,7 +576,7 @@ html[dir="rtl"] .gform_legacy_markup_wrapper span.ginput_price {
 	float: right;
 }
 
-@media only screen and (max-width: 761px), (min-device-width: 768px) and (max-device-width: 1024px)  {
+@media only screen and (max-width: 761px), (min-device-width: 768px) and (max-device-width: 1023px) {
 
     /* Force the list table to not be like tables anymore */
 
@@ -595,6 +591,7 @@ html[dir="rtl"] .gform_legacy_markup_wrapper span.ginput_price {
     html[dir="rtl"] .gform_legacy_markup_wrapper table.gfield_list td {
     	clear: both;
     }
+
     html[dir="rtl"] .gform_legacy_markup_wrapper table.gfield_list td:last-child(2) {
     	padding-bottom: 4px !important;
     }
@@ -602,6 +599,7 @@ html[dir="rtl"] .gform_legacy_markup_wrapper span.ginput_price {
 	html[dir="rtl"] .gform_legacy_markup_wrapper table.gfield_list td.gfield_list_icons {
 		vertical-align: middle;
 		padding: 0 4px 4px 0 !important;
+		text-align: center !important;
 	}
 
 }
@@ -696,7 +694,7 @@ html[dir="rtl"] .gform_legacy_markup_wrapper span.ginput_price {
 
 }
 
-@media only screen and (max-width: 641px)  {
+@media only screen and (max-width: 641px) {
 
 	html[dir="rtl"] body .gform_legacy_markup_wrapper .gform_page_footer .button.gform_previous_button,
 	html[dir="rtl"] body .gform_legacy_markup_wrapper .gform_page_footer .button.gform_next_button,
@@ -705,7 +703,8 @@ html[dir="rtl"] .gform_legacy_markup_wrapper span.ginput_price {
 	html[dir="rtl"] body .gform_legacy_markup_wrapper .gform_page_footer,
 	html[dir="rtl"] body .gform_legacy_markup_wrapper .gform_page_footer,
 	html[dir="rtl"] body .gform_legacy_markup_wrapper .gform_footer a.gform_save_link,
-	html[dir="rtl"] body .gform_legacy_markup_wrapper .gform_page_footer a.gform_save_link {
+	html[dir="rtl"] body .gform_legacy_markup_wrapper .gform_page_footer a.gform_save_link,
+	html[dir="rtl"] body .gform_legacy_markup_wrapper table.gfield_list td.gfield_list_icons {
     	text-align: center !important;
 	}
 

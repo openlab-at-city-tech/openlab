@@ -9,6 +9,15 @@ class GF_Field_Select extends GF_Field {
 
 	public $type = 'select';
 
+	/**
+	 * Indicates if this field supports state validation.
+	 *
+	 * @since 2.5.11
+	 *
+	 * @var bool
+	 */
+	protected $_supports_state_validation = true;
+
 	public function get_form_editor_field_title() {
 		return esc_attr__( 'Drop Down', 'gravityforms' );
 	}

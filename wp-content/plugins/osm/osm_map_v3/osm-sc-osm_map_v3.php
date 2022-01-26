@@ -47,7 +47,8 @@
     'display_marker_name' => 'false',
     'file_title' => 'no',
     'file_link' => 'no',
-	'hide_kml_sel_box' => 'no',
+    'file_param' => 'no',
+	 'hide_kml_sel_box' => 'no',
     'setup_zoom' => 'undefined',
     'setup_layer' => 'undefined',
     'setup_center' => 'undefined',
@@ -63,13 +64,13 @@
 
 
     $sc_args = new cOsm_arguments(
-    		$width,
-    		$height,
-    		$map_center,
-    		$zoom,
-                $map_api_key,
-    		$file_list,
-    		$file_color_list,
+    	$width,
+    	$height,
+    	$map_center,
+    	$zoom,
+      $map_api_key,
+    	$file_list,
+    	$file_color_list,
 		$type,
 		$jsname,
 		$marker_latlon,
@@ -85,8 +86,9 @@
 		$wms_attr_url,
 		$tagged_type,
 		$tagged_filter,
-                $tagged_filter_type,
-		$mwz,$post_markers,
+      $tagged_filter_type,
+		$mwz,
+		$post_markers,
 		$display_marker_name,
 		$tagged_param,
 		$tagged_color,
@@ -197,7 +199,6 @@ else{
 			';
 }
 
-
       if( $OL3_LIBS_LOADED == 0) {
 			  $OL3_LIBS_LOADED = 1;
 			  $output .= '
@@ -219,7 +220,8 @@ else{
 					translations[\'generatedShortCode\'] = "' . __('to get a text control link paste this code in your wordpress editor', 'OSM') . '";
 					translations[\'closeLayer\'] = "' . __('close layer', 'OSM_Plugin') . '";
 					translations[\'cantGenerateLink\'] = "' . __('put this string in the existing map short code to control this map', 'OSM_Plugin') . '";
-				</script>
+			  </script>
+
 
 			  ';
 			}
@@ -318,56 +320,21 @@ else{
 				}
 			}
 			*/
-			$output .= '<script type="text/javascript">';
-
-
-			/** vectorM is global */
-
-			$output .= 'vectorM[\''. $MapName .'\'] = [];';
 
 			$ov_map = "ov_map";
 			$theme = "theme";
-			$output .= Osm_OLJS3::addTileLayer($MapName, $type, $ov_map, $array_control, $wms_type, $wms_attr_name, $wms_attr_url, $wms_address, $wms_param, $theme, $api_key);
-
-			if ($type == "openseamap"){
-			  $output .= '
-			  '. $MapName .' = new ol.Map({
-				layers: [raster, Layer2],
-				interactions: ol.interaction.defaults({mouseWheelZoom:'.$mwz.'}),
-				target: "'. $MapName .'",
-				view: new ol.View({
-				  center: ol.proj.transform(['.$lon.','.$lat.'], "EPSG:4326", "EPSG:3857"),
-				  zoom: '.$zoom.'
-				})
-			  });';
-			}
-			else if ($type == "basemap_at"){
-			  $output .= '
-			 var '. $MapName .' = new ol.Map({
-			 layers: [
-			   new ol.layer.Tile({
-				 extent: [977844.377599999, 5837774.6617, 1915609.8654, 6295560.8122],
-				 source: source_basemap
-			   })
-			 ],
-			 interactions: ol.interaction.defaults({mouseWheelZoom:'.$mwz.'}),
-			 target: "'. $MapName .'",
-			 view: new ol.View({
-			 center: ol.proj.transform(['.$lon.','.$lat.'], "EPSG:4326", "EPSG:3857"),
-			 zoom: '.$zoom.'
-		   })
-			});';
-			}
-			else{
-			  $output .= '
-			  '. $MapName .' = new ol.Map({';
 
 
-			  $output .= '
-		controls: Controls,
-		';
 
-		$output .= '
+
+
+			/** vectorM is global */
+			$output .= '<script type="text/javascript">
+			  vectorM[\''. $MapName .'\'] = [];
+	        
+        var raster = getTileLayer("'.$type.'","'.$api_key.'");			
+
+			  var '. $MapName .' = new ol.Map({
 				interactions: ol.interaction.defaults({mouseWheelZoom:'.$mwz.'}),
 				layers: [raster],
 				target: "'. $MapName .'",
@@ -377,7 +344,24 @@ else{
 				})
 			  });
 			  ';
+
+			if ($type == "openseamap"){
+			  $output .= '
+
+          var Layer2 = new ol.layer.Tile({
+            source: new ol.source.OSM({
+              attributions: "Maps &copy; " +
+              "<a href=\"http://www.openseamap.org/\">OpenSeaMap</a>",
+              crossOrigin: null,
+              url: "'.Osm_OpenSeaMap_Tiles.'"
+            }),
+            className: "ol-openseamap",
+            zIndex: 91
+          });			  
+			  
+			  '. $MapName .'.addLayer(Layer2);';
 			}
+
 
 			if ($file_list != "NoFile"){
 			  $FileListArray   = explode( ',', $file_list );
@@ -403,7 +387,7 @@ else{
 						$Color = $FileColorListArray[$x];
 					}
 
-                                        if (sizeof($FileTitleArray) == 0){$FileTitle = 0;}
+               if (sizeof($FileTitleArray) == 0){$FileTitle = 0;}
 					else {$FileTitle = $FileTitleArray[$x];}
 
 					$gpx_marker_name = "mic_blue_pinother_02.png";
@@ -411,7 +395,7 @@ else{
 					else if ($Color == "red"){$gpx_marker_name = "mic_red_pinother_02.png";}
 					else if ($Color == "green"){$gpx_marker_name = "mic_green_pinother_02.png";}
 					else if ($Color == "black"){$gpx_marker_name = "mic_black_pinother_02.png";}
-					$output .= Osm_OLJS3::addVectorLayer($MapName, $FileListArray[$x], $Color, $FileType, $x, $gpx_marker_name, $showMarkerName, $FileTitle);
+					$output .= Osm_OLJS3::addVectorLayer($MapName, $FileListArray[$x], $Color, $FileType, $x, $gpx_marker_name, $showMarkerName, $FileTitle, $file_param);
 				  }
 				  else {
 					 Osm::traceText(DEBUG_ERROR, (sprintf(__('%s hast got wrong file extension (gpx, kml)!'), $FileName)));
@@ -421,99 +405,38 @@ else{
 			  }
 			} // $file_list != "NoFile" 
 		  
-                     $custom_post_types = array_values(get_post_types());
-                     $post_marked = in_array($tagged_type, $custom_post_types);
-                     if (($post_marked) && ($tagged_param == "cluster")) {	  
-		  
-		  
-			$tagged_icon = new cOsm_icon($default_icon->getIconName());
+        $custom_post_types = array_values(get_post_types());
+        $post_marked = in_array($tagged_type, $custom_post_types);
+        if (($post_marked) && ($tagged_param == "cluster")) {	  
+		    $tagged_icon = new cOsm_icon($default_icon->getIconName());
+			 $MarkerArray = OSM::OL3_createMarkerList('osm_l', $tagged_filter, 'Osm_None', $tagged_type, 'Osm_All', $tagged_filter_type);
+			 $NumOfMarker = count($MarkerArray);
+			 $Counter = 0;
+			 $output .= 'var vectorMarkerSource = new ol.source.Vector({});';
 
-			$MarkerArray = OSM::OL3_createMarkerList('osm_l', $tagged_filter, 'Osm_None', $tagged_type, 'Osm_All', $tagged_filter_type);
-
-			$NumOfMarker = count($MarkerArray);
-			$Counter = 0;
-			$output .= '
-			  var vectorMarkerSource = new ol.source.Vector({});
-			  ';
-
-
-			foreach( $MarkerArray as $Marker ) {
-			  $MarkerText = addslashes($MarkerArray[$Counter]['text']);
-           $output .= '
-				var iconFeature'.$Counter.' = new ol.Feature({
-				  geometry: new ol.geom.Point(
-				  ol.proj.transform(['.$MarkerArray[$Counter]['lon'].','.$MarkerArray[$Counter]['lat'].'], "EPSG:4326", "EPSG:3857")),
-				  name: "'.$MarkerText.'"
-				});
-				vectorMarkerSource.addFeature(iconFeature'.$Counter.');
+   		 foreach( $MarkerArray as $Marker ) {
+			   $MarkerText = addslashes($MarkerArray[$Counter]['text']);
+            $output .= '
+				  var iconFeature'.$Counter.' = new ol.Feature({
+				    geometry: new ol.geom.Point(
+				    ol.proj.transform(['.$MarkerArray[$Counter]['lon'].','.$MarkerArray[$Counter]['lat'].'], "EPSG:4326", "EPSG:3857")),
+				    name: "'.$MarkerText.'"
+				  });
+				  vectorMarkerSource.addFeature(iconFeature'.$Counter.');
 			   ';
 			   $Counter = $Counter +1;
-			} // foreach(MarkerArray)
+			 } // foreach(MarkerArray)
 
-				  $taggedborderColor = $sc_args->getTaggedBorderColor();
-				  $taggedinnerColor = $sc_args->getTaggedInnerColor();
-				  $output .= '
-
-			  var clusterSource = new ol.source.Cluster({
-				  distance: 30,
-				  source: vectorMarkerSource,
-				  zIndex: 92
-			   });
-			   var styleCache = {};
-			  var vectorMarkerLayer = new ol.layer.Vector({
-				source: clusterSource,
-				zIndex: 92,
-				style: function(feature, resolution) {
-			var size = feature.get("features").length;
-			var features = feature.get("features");
-
-			if (size > 1){
-			var style = styleCache[size];
-			if (!style) {
-			  style = [new ol.style.Style({
-				image: new ol.style.Circle({
-				  radius: 12,
-				  stroke: new ol.style.Stroke({
-					color: '.$taggedborderColor.',
-					width: 6,
-				  }),
-				  fill: new ol.style.Fill({
-					color: '.$taggedinnerColor.'
-				  })
-				}),
-				text: new ol.style.Text({
-				  text: size.toString(),
-				  fill: new ol.style.Fill({
-					color: "#fff"
-				  })
-				})
-			  })];
-			  styleCache[size] = style;
-			}
-			return style;
-			}
-			else {
-				  var style = styleCache[size];
-			if (!style) {
-			  style = [new ol.style.Style({
-				image: new ol.style.Icon(({
-					anchor: [('.$tagged_icon->getIconOffsetwidth().'*-1),('.$tagged_icon->getIconOffsetheight().'*-1)],
-					anchorXUnits: "pixels",
-					anchorYUnits: "pixels",
-					opacity: 0.9,
-					src: "'.$tagged_icon->getIconURL().'"}))
-			  })];
-			  styleCache[size] = style;
-			}
-			return style;
-			}
+          $output .= 'vectorMarkerLayer = getVectorClusterLayer(
+                                            vectorMarkerSource,
+                                            '.$sc_args->getTaggedBorderColor().',
+                                            '.$sc_args->getTaggedInnerColor().',
+                                            "'.$tagged_icon->getIconURL().'",
+                                            '.$tagged_icon->getIconOffsetwidth().',
+                                            '.$tagged_icon->getIconOffsetheight().');';	
+			
+			 $output .= $MapName.'.addLayer(vectorMarkerLayer);';
 		  }
-			   });
-			';
-			$output .= $MapName.'.addLayer(vectorMarkerLayer);';
-		   }
-
-	
 		  elseif (($post_marked) && ($tagged_param != "cluster")) {
 		
 		
@@ -639,7 +562,7 @@ else{
 
 			  list($temp_lat, $temp_lon) = Osm::checkLatLongRange('Marker',$temp_lat, $temp_lon,'no');
 			  if (($temp_lat != 0) || ($temp_lon != 0)){
-				$output .= 'osm_addMarkerLayer('. $MapName .','.$temp_lon.','.$temp_lat.',"'.$postmarker_icon->getIconURL().'",'.$postmarker_icon->getIconOffsetwidth().','.$postmarker_icon->getIconOffsetheight().',"'.$metapostmarker_text.'") ; ';
+				$output .= 'osm_addMarkerLayer('. $MapName .','.$temp_lon.','.$temp_lat.',"'.$postmarker_icon->getIconURL().'",'.$postmarker_icon->getIconOffsetwidth().','.$postmarker_icon->getIconOffsetheight().',"'.$metapostmarker_text.'") ; '. PHP_EOL;
 				$Counter = $Counter +1;
 			  }
 
@@ -650,36 +573,11 @@ else{
                       // no markers found
                     }
 		} //($postmarkers) != 'no'')
-		$output.= '
-		  var osm_controls = [
-			new ol.control.Attribution(),
-			new ol.control.MousePosition({
-			  undefinedHTML: "outside",
-			  projection: "EPSG:4326",
-			  coordinateFormat: function(coordinate) {
-				 return ol.coordinate.format(coordinate, "{y}, {x}", 5);
-			  }
-			}),
-			new ol.control.OverviewMap({
-			  collapsed: false
-			}),
-			new ol.control.Rotate({
-			  autoHide: false
-			}),
-			new ol.control.ScaleLine(),
-			new ol.control.Zoom(),
-			new ol.control.ZoomSlider(),
-			new ol.control.ZoomToExtent({
-      extent: [-11243808.051695308, 1.202710291, 9561377.290892059, 6852382.107835932]
-    }),
-			new ol.control.FullScreen()
-		  ]; '. PHP_EOL ;
 
     if (($map_autocenter == true) && (($file_list != "NoFile") || ($tagged_type != "no"))) {
 
     // maxZoom level for autocenter
     
-
     $Fitzoom = "";    
 
     if (!($sc_args->isAutozoom())){
@@ -704,24 +602,10 @@ else{
 
 		  //eventhanlder for metabox 
 		  include('osm-sc-osm_map_v3_backend.php');
-		  
-		if (!($sc_args->isMapAttr())){
-                   $output .= $MapName.'.removeControl(attribution);' . PHP_EOL;                   
-      }
-		  
-		  
+		  		                                 
+      $output .= 'addControls2Map('.$MapName.','.$sc_args->issetMouseposition().','.$sc_args->issetOverview().',3,'.$sc_args->issetScaleline().',5,6,7,'.$sc_args->issetFullScreen().','.$sc_args->isMapAttr().');' . PHP_EOL;
 
-		if ($sc_args->issetFullScreen()){
-
-		  $output .= $MapName.'.addControl(osm_controls[8]);' . PHP_EOL;
-		}
-		if ($sc_args->issetScaleline()){
-		  $output .= $MapName.'.addControl(osm_controls[4]);' . PHP_EOL;
-		}
-		if ($sc_args->issetMouseposition()){
-		  $output .= $MapName.'.addControl(osm_controls[1]);' . PHP_EOL;
-		}
-		if ($tagged_param == "cluster"){
+		if (($tagged_param == "cluster")||($file_param == "cluster")){
 		  $output .= 'osm_addClusterPopupClickhandler('. $MapName .',  "'. $MapName .'"); ' . PHP_EOL;
 		}
 		else{

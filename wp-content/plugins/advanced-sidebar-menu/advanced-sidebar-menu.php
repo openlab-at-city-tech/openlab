@@ -4,7 +4,7 @@
  * Plugin URI: https://onpointplugins.com/advanced-sidebar-menu/
  * Description: Creates dynamic menus based on parent/child relationship of your pages or categories.
  * Author: OnPoint Plugins
- * Version: 8.5.0
+ * Version: 8.6.4
  * Author URI: https://onpointplugins.com
  * Text Domain: advanced-sidebar-menu
  * Domain Path: /languages/
@@ -19,8 +19,8 @@ if ( defined( 'ADVANCED_SIDEBAR_BASIC_VERSION' ) ) {
 	return;
 }
 
-define( 'ADVANCED_SIDEBAR_BASIC_VERSION', '8.5.0' );
-define( 'ADVANCED_SIDEBAR_MENU_REQUIRED_PRO_VERSION', '8.2.0' );
+define( 'ADVANCED_SIDEBAR_BASIC_VERSION', '8.6.4' );
+define( 'ADVANCED_SIDEBAR_MENU_REQUIRED_PRO_VERSION', '8.3.1' );
 define( 'ADVANCED_SIDEBAR_DIR', plugin_dir_path( __FILE__ ) );
 define( 'ADVANCED_SIDEBAR_MENU_URL', plugin_dir_url( __FILE__ ) );
 
@@ -128,7 +128,7 @@ add_action( 'advanced-sidebar-menu/widget/category/after-form', 'advanced_sideba
 function advanced_sidebar_menu_widget_docs( $instance, WP_Widget $widget ) {
 	$anchor = Widget_Category::NAME === $widget->id_base ? 'categories-menu' : 'pages-menu';
 	?>
-	<p style="text-align: right">
+	<p class="advanced-sidebar-widget-documentation">
 		<a
 			href="https://onpointplugins.com/advanced-sidebar-menu/#advanced-sidebar-<?php echo esc_attr( $anchor ); ?>"
 			target="_blank"

@@ -1,3 +1,93 @@
+### 2.5.15.3
+- Fixed issue which caused multisites to experience a fatal error on plugin activation.
+
+### 2.5.15.2
+- Fixed issue with Dynamic Field Map on some add-ons including HubSpot Add-On and User Registration Add-On.
+- Fixed issue with form import not properly sanitizing JSON string in some cases.
+- Fixed an issue where uploaded files are not deleted on entry deletion if a custom upload path is used.
+
+
+### 2.5.15.1
+- Fixed performance issue with Generic Map settings field.
+- Fixed issue with Generic Map and Dynamic Field Map not being able to filter the value drop down to include or exclude field types.
+- Fixed issue with Generic Map settings field not being able to specify a custom list of choices for mapping.
+- Fixed an issue where files uploaded via the multi-file upload field are corrupted when chunking is enabled using [gform_plupload_settings](https://docs.gravityforms.com/gform_plupload_settings/).
+
+### 2.5.15 | 2021-11-16
+- Added a prefix to section IDs in the Settings API to make it less likely that sections and fields will have the same ID.
+- Added new filter: *[gform_get_form_confirmation_filter](https://docs.gravityforms.com/gform_get_form_confirmation_filter/)*
+- Fixed an issue that prevents keyboard navigation from working in a form with multi-file upload and page fields.
+- Fixed an issue that caused Javascript errors when a form is added to the page via a custom Gutenberg block such as ACF.
+- Fixed an issue that caused sales results filters to show up on quiz, survey, and polls results pages.
+- Fixed an issue where aria-labels for name field inputs are incorrect by removing aria-labels from fieldset inputs.
+- Fixed an issue with conditional logic when targeting checkbox fields and using "is not empty" as a rule.
+- Updated invisible CAPTCHA processing to reduce chances of multiple submit button clicks generating duplicate submissions.
+
+### 2.5.14 | 2021-10-21
+- Fixed an issue which causes No Conflict mode to break Media Uploads for some WYSIWYG editors.
+- Reverted required indicator for hidden labels change made in 2.5.13 which introduced UI issues.
+
+### 2.5.13 | 2021-10-19
+- Added security enhancements.
+- Added support for Visibility settings for the HTML Field.
+- Fixed an issue where the required indicator is not displayed if the field label is hidden.
+- Fixed a PHP notice on the WordPress 5.8+ Appearance > Widgets page.
+- Fixed an issue with the Radio Buttons field on the entry detail edit page where the other input is disabled resulting in the loss of the other value on entry update.
+- Fixed an issue that caused fields with float values for IDs to break the conditional logic flyout modal.
+- Fixed the display of left-aligned labels in order to allow them to stack on smaller screen sizes.
+- Fixed an issue with the sales page displaying duplicate months when viewed on the last days of the month.
+- Fixed an issue where the form switcher redirects the user to the entries list page instead of the results page.
+- Fixed an issue where the tooltip for a date/time settings field does not display correctly.
+- Fixed an issue that causes Unit Tests to fail to output any feedback due to output buffering.
+- Fixed two instances of an incorrect text domain for translatable strings.
+- API: Fixed issues in the Settings API that prevents dependencies from working on nested fields and sections without IDs.
+
+### 2.5.12 | 2021-10-01
+- Fixed an issue with the address field merge tag when selecting the option to use the values from a previous address field
+- Fixed an issue for the list field where multi-column headers are misaligned when max rows are set to 1.
+- Fixed an issue which causes calls to the License API to occur more often than necessary.
+
+### 2.5.11 | 2021-09-29
+- Added security enhancements.
+- Added a new UI for License Settings which shows more-thorough details about your License Key.
+- Updated logo to reflect new branding.
+- Fixed an issue which causes compatibility errors when third-party code extends the Gravity API class.
+- Fixed a PHP fatal error that occurs during translation installation when the hosting environment is configured to block external requests.
+- Fixed an issue for thickbox where RTL is not being respected, but only within the context of Gravity Forms admin pages.
+- API: Updated the logic that determines when to show custom form settings fields.
+
+### 2.5.10 | 2021-09-08
+- Added alt text and title attribute for accessibility to the date field datepicker field icon.
+- Fixed an issue where the form button text doesn't properly update for page conditional logic.
+- Fixed an issue where forms with pricing fields throw PHP notices if fields are removed before the form is rendered.
+- Fixed an issue with our block script loading that breaks the Gutenberg editor in WordPress 5.8.x and up.
+- Fixed an issue that causes some screens in the admin to have JavaScript errors in WordPress versions previous to 5.0.
+- Fixed an issue which causes field calculations with references to the calculated field to infinitely loop.
+- Fixed an issue that causes the Form Switcher to break on certain Admin views.
+- Fixed an issue which causes fields with multiple inputs to have incorrect aria-validate attributes.
+- Fixed an issue for the conditional flyout logic where checkbox and radio field based conditionals are not being respected.
+- Fixed an issue which causes fields with whitespace to break certain Add-on Feeds.
+- Fixed an issue where the border for the section field type is missing for the frontend form display when legacy markup mode is not enabled.
+- Fixed an issue for the generic map settings field not rendering when editing an existing feed where the setting was previously configured.
+- Fixed an issue that causes gfCalc events to be bound to the same listener multiple times.
+- Updated the reCAPTCHA settings link for the Captcha field "To use the reCAPTCHA field" message in the form editor.
+- Updated the UI of the update button in the form editor.
+- Updated the feed settings to run on admin_init instead of init to ensure they never trigger on the front end.
+- Updated some instances of strings not being translatable for the System Status view.
+- API: Fixed an issue where field map fields don't auto populate with default options.
+- AF: Added the ability to overwrite the uninstall message.
+
+### 2.5.9 | 2021-08-10
+- Added security enhancements.
+- Fixed an issue where the header of the datepicker in legacy forms has the wrong background color and the dropdowns are not aligned correctly.
+- Fixed an issue where "This field is required" appears twice in the time field validation message.
+- Fixed an issue in the submission time performance for hosting environments where the form has lots of directories in its uploads folder.
+- Fixed an issue when submitting form in form preview where the required JS hooks are not being included.
+- AF: Fixed a display issue with poll results where the text gets cut off if labels are long.
+- AF: Fixed the display of visual radio choices in settings.
+- AF: Fixed an issue for get_icon_markup where all style implementations of font awesome are getting an additional class of "fa" prefixed to the output icon classes.
+- AF: Fixed an issue with dynamic field map settings fields that prevents options from appearing in the value dropdown.
+
 ### 2.5.8 | 2021-07-28
 - Fixed an issue for inputs where Gravity Form styles are overriding and breaking WordPress admin styles for certain inputs, textareas, and selects.
 - Fixed an issue of incorrect styles for the tel input type when in the entry edit view.

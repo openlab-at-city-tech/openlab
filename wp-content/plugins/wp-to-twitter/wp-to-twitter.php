@@ -17,7 +17,7 @@
  * License:     GPL-2.0+
  * License URI: http://www.gnu.org/license/gpl-2.0.txt
  * Domain Path: lang
- * Version:     3.5.3
+ * Version:     3.5.4
  */
 
 /*
@@ -41,7 +41,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'WPT_DEBUG', false ); // Debugging only works with WP Tweets PRO.
+define( 'WPT_DEBUG', false );
 define( 'WPT_DEBUG_BY_EMAIL', false ); // Email debugging no longer default as of 3.3.0.
 define( 'WPT_DEBUG_ADDRESS', get_option( 'admin_email' ) );
 define( 'WPT_FROM', 'From: \"' . get_option( 'blogname' ) . '\" <' . get_option( 'admin_email' ) . '>' );
@@ -64,7 +64,7 @@ require_once( plugin_dir_path( __FILE__ ) . 'wpt-widget.php' );
 require_once( plugin_dir_path( __FILE__ ) . 'wpt-rate-limiting.php' );
 
 global $wpt_version;
-$wpt_version = '3.5.3';
+$wpt_version = '3.5.4';
 
 add_action( 'init', 'wpt_load_textdomain' );
 /**
@@ -161,7 +161,6 @@ function wptotwitter_activate() {
 			$contributor->add_cap( 'wpt_can_tweet' );
 		}
 
-		update_option( 'jd_twit_remote', '0' );
 		update_option( 'jd_post_excerpt', 30 );
 		// Use Google Analytics with Twitter.
 		update_option( 'twitter-analytics-campaign', 'twitter' );
@@ -514,6 +513,11 @@ function wpt_post_to_twitter( $twit, $auth = false, $id = false, $media = false 
 				wpt_set_log( 'wpt_status_message', $id, $error );
 			} else {
 				do_action( 'wpt_tweet_posted', $connection, $id );
+				// Log the Tweet ID of the first Tweet for this post.
+				$has_tweet_id = get_post_meta( $id, '_wpt_tweet_id', true );
+				if ( ! $has_tweet_id ) {
+					update_post_meta( $id, '_wpt_tweet_id', $connection->body->id );
+				}
 				wpt_set_log( 'wpt_status_message', $id, $notice . __( 'Tweet sent successfully.', 'wp-to-twitter' ) );
 			}
 
@@ -810,7 +814,7 @@ function wpt_tweet( $post_ID, $type = 'instant', $post = null, $updated = null, 
 			// create Tweet and ID whether current action is edit or new.
 			$ct = get_post_meta( $post_ID, '_jd_twitter', true );
 			if ( isset( $_POST['_jd_twitter'] ) && '' !== trim( $_POST['_jd_twitter'] ) ) {
-				$ct = $_POST['_jd_twitter'];
+				$ct = sanitize_textarea_field( $_POST['_jd_twitter'] );
 			}
 			$custom_tweet = ( '' !== $ct ) ? stripcslashes( trim( $ct ) ) : '';
 			// if ops is set and equals 'publish', this is being edited. Otherwise, it's a new post.
@@ -986,9 +990,9 @@ function wpt_twit_link( $link_id ) {
 	wpt_check_version();
 	$thislinkprivate = $_POST['link_visible'];
 	if ( 'N' !== $thislinkprivate ) {
-		$thislinkname        = stripslashes( $_POST['link_name'] );
-		$thispostlink        = $_POST['link_url'];
-		$thislinkdescription = stripcslashes( $_POST['link_description'] );
+		$thislinkname        = stripslashes( sanitize_text_field( $_POST['link_name'] ) );
+		$thispostlink        = sanitize_text_field( $_POST['link_url'] );
+		$thislinkdescription = stripcslashes( sanitize_textarea_field( $_POST['link_description'] ) );
 		$sentence            = stripcslashes( get_option( 'newlink-published-text' ) );
 		$sentence            = str_ireplace( '#title#', $thislinkname, $sentence );
 		$sentence            = str_ireplace( '#description#', $thislinkdescription, $sentence );
@@ -1570,17 +1574,17 @@ function wpt_save_post( $id, $post ) {
 		return $id;
 	}
 	if ( isset( $_POST['_yourls_keyword'] ) ) {
-		$yourls = $_POST['_yourls_keyword'];
+		$yourls = sanitize_text_field( $_POST['_yourls_keyword'] );
 		$update = update_post_meta( $id, '_yourls_keyword', $yourls );
 	}
 	if ( isset( $_POST['_jd_twitter'] ) && '' !== $_POST['_jd_twitter'] ) {
-		$twitter = $_POST['_jd_twitter'];
+		$twitter = sanitize_textarea_field( $_POST['_jd_twitter'] );
 		$update  = update_post_meta( $id, '_jd_twitter', $twitter );
 	} elseif ( isset( $_POST['_jd_twitter'] ) && '' === $_POST['_jd_twitter'] ) {
 		delete_post_meta( $id, '_jd_twitter' );
 	}
 	if ( isset( $_POST['_jd_wp_twitter'] ) && '' !== $_POST['_jd_wp_twitter'] ) {
-		$wp_twitter = $_POST['_jd_wp_twitter'];
+		$wp_twitter = sanitize_textarea_field( $_POST['_jd_wp_twitter'] );
 		$update     = update_post_meta( $id, '_jd_wp_twitter', $wp_twitter );
 	}
 	if ( isset( $_POST['_jd_tweet_this'] ) ) {
@@ -1602,7 +1606,7 @@ function wpt_save_post( $id, $post ) {
 	$update = apply_filters( 'wpt_insert_post', $_POST, $id );
 	// WPT PRO.
 	// only send debug data if post meta is updated.
-	wpt_mail( 'Post Meta Processed', 'WP to Twitter post meta was updated' . print_r( $_POST, 1 ), $id ); // DEBUG.
+	wpt_mail( 'Post Meta Processed', 'WP to Twitter post meta was updated' . print_r( map_deep( $_POST, 'sanitize_textarea_field' ), 1 ), $id ); // DEBUG.
 
 	if ( isset( $_POST['wpt-delete-debug'] ) && 'true' === $_POST['wpt-delete-debug'] ) {
 		delete_post_meta( $id, '_wpt_debug_log' );
@@ -1890,7 +1894,7 @@ function wpt_debugging_enabled() {
  * Display promotion notice to admin users who have not donated or purchased WP Tweets PRO.
  */
 function wpt_promotion_notice() {
-	if ( current_user_can( 'activate_plugins' ) && '2' === get_option( 'wpt_promotion_scheduled' ) && '1' !== get_option( 'jd_donations' ) ) {
+	if ( current_user_can( 'activate_plugins' ) && '2' === get_option( 'wpt_promotion_scheduled' ) ) {
 		$upgrade = 'http://www.wptweetspro.com/wp-tweets-pro/';
 		$dismiss = admin_url( 'admin.php?page=wp-tweets-pro&dismiss=promotion' );
 		// Translators: URL to upgrade.

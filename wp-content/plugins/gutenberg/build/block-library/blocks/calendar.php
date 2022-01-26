@@ -19,7 +19,7 @@ function gutenberg_render_block_core_calendar( $attributes ) {
 	// when there are no published posts on the site.
 	if ( ! gutenberg_block_core_calendar_has_published_posts() ) {
 		if ( is_user_logged_in() ) {
-			return '<div>' . __( 'The calendar block is hidden because there are no published posts.', 'gutenberg' ) . '</div>';
+			return '<div>' . __( 'The calendar block is hidden because there are no published posts.' ) . '</div>';
 		}
 		return '';
 	}
@@ -85,7 +85,7 @@ function gutenberg_block_core_calendar_has_published_posts() {
 	}
 
 	// On single sites we try our own cached option first.
-	$has_published_posts = get_option( 'gutenberg_calendar_block_has_published_posts', null );
+	$has_published_posts = get_option( 'wp_calendar_block_has_published_posts', null );
 	if ( null !== $has_published_posts ) {
 		return (bool) $has_published_posts;
 	}
@@ -103,7 +103,7 @@ function gutenberg_block_core_calendar_has_published_posts() {
 function gutenberg_block_core_calendar_update_has_published_posts() {
 	global $wpdb;
 	$has_published_posts = (bool) $wpdb->get_var( "SELECT 1 as test FROM {$wpdb->posts} WHERE post_type = 'post' AND post_status = 'publish' LIMIT 1" );
-	update_option( 'gutenberg_calendar_block_has_published_posts', $has_published_posts );
+	update_option( 'wp_calendar_block_has_published_posts', $has_published_posts );
 	return $has_published_posts;
 }
 
@@ -115,7 +115,7 @@ if ( ! is_multisite() ) {
 	 *
 	 * @param int $post_id Deleted post ID.
 	 */
-	function block_core_calendar_update_has_published_post_on_delete( $post_id ) {
+	function gutenberg_block_core_calendar_update_has_published_post_on_delete( $post_id ) {
 		$post = get_post( $post_id );
 
 		if ( ! $post || 'publish' !== $post->post_status || 'post' !== $post->post_type ) {
@@ -132,7 +132,7 @@ if ( ! is_multisite() ) {
 	 * @param string  $old_status The status the post is changing from.
 	 * @param WP_Post $post       Post object.
 	 */
-	function block_core_calendar_update_has_published_post_on_transition_post_status( $new_status, $old_status, $post ) {
+	function gutenberg_block_core_calendar_update_has_published_post_on_transition_post_status( $new_status, $old_status, $post ) {
 		if ( $new_status === $old_status ) {
 			return;
 		}
@@ -148,6 +148,6 @@ if ( ! is_multisite() ) {
 		gutenberg_block_core_calendar_update_has_published_posts();
 	}
 
-	add_action( 'delete_post', 'block_core_calendar_update_has_published_post_on_delete' );
-	add_action( 'transition_post_status', 'block_core_calendar_update_has_published_post_on_transition_post_status', 10, 3 );
+	add_action( 'delete_post', 'gutenberg_block_core_calendar_update_has_published_post_on_delete' );
+	add_action( 'transition_post_status', 'gutenberg_block_core_calendar_update_has_published_post_on_transition_post_status', 10, 3 );
 }

@@ -44,8 +44,10 @@ class Field_Map extends Generic_Map {
 		$this->key_field['choices'] = rgar( $props, 'field_map' ) ? array_values( $props['field_map'] ) : array();
 		foreach ( $this->key_field['choices'] as $i => $choice ) {
 
+			$field_types = isset( $choice['field_types'] ) ? $choice['field_types'] : rgar( $choice, 'field_type', false );
+
 			// Set required, excluded field types.
-			$this->key_field['choices'][ $i ]['required_types'] = rgar( $choice, 'field_type', false ) ? $choice['field_type'] : rgar( $choice, 'required_types', array() );
+			$this->key_field['choices'][ $i ]['required_types'] = $field_types ? $field_types : rgar( $choice, 'required_types', array() );
 			$this->key_field['choices'][ $i ]['excluded_types'] = rgar( $choice, 'exclude_field_types', false ) ? $choice['exclude_field_types'] : rgar( $choice, 'excluded_types', array() );
 
 			// Remove legacy properties.

@@ -188,7 +188,8 @@ class GFFormDetail {
 				);
 				echo GFCommon::get_preview_link( $preview_args );
 
-				$save_button = '<button aria-disabled="false" aria-expanded="false" class="button primary update-form" onclick="SaveForm();" onkeypress="SaveForm();" >' . esc_html__( 'Update', 'gravityforms' ) . '</button>';
+				$save_button = '<button aria-disabled="false" aria-expanded="false" class="update-form gform-button gform-button--primary gform-button--icon-leading " onclick="SaveForm();" onkeypress="SaveForm();"> <i class="gform-button__icon gform-icon gform-icon--floppy-disk"></i>' . esc_html__( 'Save Form', 'gravityforms' ) . '</button>';
+
 				/**
 				* A filter to allow you to modify the Form Save button.
 				*

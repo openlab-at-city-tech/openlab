@@ -134,6 +134,7 @@ At the top of this panel / metabox you find tabs which allow you to generate a s
         <input type="checkbox" name="osm_add_marker_fullscreen" id="osm_add_marker_fullscreen" value="fullscreen"> <?php _e('fullscreen button','OSM') ?>
         <input type="checkbox" name="osm_add_marker_scaleline" id="osm_add_marker_scaleline" value="scaleline"> <?php _e('scaleline','OSM') ?>
         <input type="checkbox" name="osm_add_marker_mouseposition" id="osm_add_marker_mouseposition" value="mouseposition"> <?php _e('mouse position','OSM') ?>
+        <input type="checkbox" name="osm_add_marker_overviewmap" id="osm_add_marker_overviewmap" value="overviewmap"> <?php _e('overviewmap','OSM') ?>
         <input type="checkbox" name="osm_add_marker_bckgrnd_img" id="osm_add_marker_bckgrnd_img" value="osm_add_marker_bckgrnd_img"> <?php _e('background image (GDPR)','OSM') ?> <br/> <br/>
         <input type="checkbox" name="osm_add_marker_show_attribution" id="osm_add_marker_show_attribution" value="osm_add_marker_show_attribution" checked> <?php _e('Display attribution (credit) in the map. ','OSM') ?>
         <span style="color:red"><?php _e('Warning: If you do not check this box, it may violate the license of data or map and have legal consequences!','OSM') ?></span> <!-- <br/>
@@ -178,6 +179,7 @@ At the top of this panel / metabox you find tabs which allow you to generate a s
         <input type="checkbox" name="file_fullscreen" id="file_fullscreen" value="file_fullscreen"> <?php _e('fullscreen button','OSM') ?>
         <input type="checkbox" name="file_scaleline" id="file_scaleline" value="file_scaleline"> <?php _e('scaleline','OSM') ?>
         <input type="checkbox" name="file_mouseposition" id="file_mouseposition" value="file_mouseposition"> <?php _e('mouse position','OSM') ?>
+        <input type="checkbox" name="file_overviewmap" id="file_overviewmap" value="file_overviewmap"> <?php _e('overviewmap','OSM') ?>        
         <input type="checkbox" name="file_bckgrnd_img" id="file_bckgrnd_img" value="file_bckgrnd_img"> <?php _e('background image (GDPR)','OSM') ?> <br/><br/>
         <input type="checkbox" name="osm_file_show_attribution" id="osm_file_show_attribution" value="osm_file_show_attribution" checked> <?php _e('Display attribution (credit) in the map. ','OSM') ?>
         <span style="color:red"><?php _e('Warning: If you do not check this box, it may violate the license of data or map and have legal consequences!','OSM') ?></span><!-- <br/>

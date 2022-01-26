@@ -104,6 +104,42 @@ class Meow_WPMC_Support {
       array_push( $unsupported, 'Simple 3D Carousel' );
     }
 
+    if ( class_exists( 'Jet_Engine' ) ) {
+      array_push( $unsupported, 'Jet Engine' );
+    }
+
+    if ( class_exists( 'Social_Warfare' ) ) {
+      array_push( $unsupported, 'Social Warfare' );
+    }
+
+		if ( class_exists( 'WP_Job_Manager' ) ) {
+			array_push( $unsupported, 'WP Job Manager' );
+    }
+
+    if ( class_exists( 'WpdiscuzCore' ) ) {
+			array_push( $unsupported, 'wpDiscuz' );
+    }
+
+		if ( class_exists( 'Cornerstone_Plugin' ) ) {
+			array_push( $unsupported, 'Cornerstone' );
+		}
+
+    if ( class_exists( 'WP_DLM' ) ) {
+      array_push( $unsupported, 'Download Monitor' );
+    }
+
+    if ( class_exists( 'CMBusinessDirectory' ) ) {
+      array_push( $unsupported, 'CM Business Directory' );
+    }
+
+    if ( class_exists( 'SunshineCart' ) ) {
+      array_push( $unsupported, 'Sunshine Photo Cart' );
+    }
+
+		if ( defined( 'WOODMART_CORE_VERSION' ) ) {
+      array_push( $unsupported, 'Woodmart Theme' );
+		}
+
     return $unsupported;
   }
 }

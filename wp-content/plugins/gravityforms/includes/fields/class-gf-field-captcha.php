@@ -349,7 +349,7 @@ class GF_Field_CAPTCHA extends GF_Field {
 					//for admin, show a thumbnail depending on chosen theme
 					if ( empty( $this->site_key ) || empty( $this->secret_key ) ) {
 
-						return "<div class='captcha_message'>" . __( 'To use the reCAPTCHA field you must do the following:', 'gravityforms' ) . "</div><div class='captcha_message'>1 - <a href='https://www.google.com/recaptcha/admin' target='_blank'>" . sprintf( __( 'Sign up%s for an API key pair for your site.', 'gravityforms' ), '</a>' ) . "</div><div class='captcha_message'>2 - " . sprintf( __( 'Enter your reCAPTCHA site and secret keys in the reCAPTCHA Settings section of the %sSettings page%s', 'gravityforms' ), "<a href='?page=gf_settings' target='_blank'>", '</a>' ) . '</div>';
+						return "<div class='captcha_message'>" . __( 'To use the reCAPTCHA field you must do the following:', 'gravityforms' ) . "</div><div class='captcha_message'>1 - <a href='https://www.google.com/recaptcha/admin' target='_blank'>" . sprintf( __( 'Sign up%s for an API key pair for your site.', 'gravityforms' ), '</a>' ) . "</div><div class='captcha_message'>2 - " . sprintf( __( 'Enter your reCAPTCHA site and secret keys in the %sreCAPTCHA Settings%s.', 'gravityforms' ), "<a href='?page=gf_settings&subview=recaptcha' target='_blank'>", '</a>' ) . '</div>';
 					}
 
 					$type_suffix = $type == 'invisible' ? 'invisible_' : '';

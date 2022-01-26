@@ -4,6 +4,10 @@ if ( ! class_exists( 'GFForms' ) ) {
 	die();
 }
 
+use Gravity_Forms\Gravity_Forms\License;
+use Gravity_Forms\Gravity_Forms\Query\Batch_Processing\GF_Entry_Meta_Batch_Processor;
+use Gravity_Forms\Gravity_Forms\Query\Batch_Processing\GF_Batch_Operations_Service_Provider;
+
 require_once( ABSPATH . WPINC . '/post.php' );
 require_once( 'includes/legacy/forms_model_legacy.php' );
 
@@ -57,6 +61,15 @@ class GFFormsModel {
 	private static $_current_forms = array();
 
 	/**
+	 * Handles batch operations for entry meta updates.
+	 *
+	 * @since 2.5.16
+	 *
+	 * @var GF_Entry_Meta_Batch_Processor
+	 */
+	private static $entry_meta_batch_processor;
+
+	/**
 	 * The entry data for the current site.
 	 *.
 	 * @access private
@@ -64,7 +77,6 @@ class GFFormsModel {
 	 * @var null Defaults to null.
 	 */
 	private static $_current_lead = null;
-
 	private static $_batch_field_updates = array();
 	private static $_batch_field_inserts = array();
 	private static $_batch_field_deletes = array();
@@ -2086,13 +2098,13 @@ class GFFormsModel {
 						$files = json_decode( $value_json, true );
 						if ( false === empty( $files ) && is_array( $files ) ) {
 							foreach ( $files as $file ) {
-								self::delete_physical_file( $file );
+								self::delete_physical_file( $file, $lead_id );
 							}
 						}
 					}
 				} else {
 					$value = self::get_lead_field_value( $lead, $field );
-					self::delete_physical_file( $value );
+					self::delete_physical_file( $value, $lead_id );
 				}
 			}
 		}
@@ -2149,6 +2161,8 @@ class GFFormsModel {
 	 *
 	 * @since 2.4.6.1
 	 *
+	 * @since 2.5.16 changed the query to return entry ID as well.
+	 *
 	 * @param int $form_id The current form ID.
 	 * @param int $field_id The ID of field being deleted.
 	 */
@@ -2161,25 +2175,24 @@ class GFFormsModel {
 
 		$entry_meta_table_name = self::get_entry_meta_table_name();
 
-		$values = $wpdb->get_col( $wpdb->prepare( "SELECT meta_value FROM {$entry_meta_table_name} WHERE form_id=%d AND meta_key=%s", $form_id, $field_id ) );
-
-		if ( is_array( $values ) ) {
-			foreach ( $values as $value ) {
-				if ( empty( $value ) ) {
+		$results = $wpdb->get_results( $wpdb->prepare( "SELECT entry_id, meta_value FROM {$entry_meta_table_name} WHERE form_id=%d AND meta_key=%s", $form_id, $field_id ), ARRAY_A );
+		if ( is_array( $results ) ) {
+			foreach ( $results as $result ) {
+				if ( ! is_array( $result ) || empty( rgar( $result, 'meta_value' ) ) ) {
 					continue;
 				}
-
-				if ( $value[0] == '[' ) {
+				if ( strpos( $result['meta_value'], '[' ) === 0 ) {
 					// Value from a multi-file enabled field.
-					$files = json_decode( $value );
+					$files = json_decode( $result['meta_value'], true );
+
 					if ( is_array( $files ) ) {
 						foreach ( $files as $file ) {
-							self::delete_physical_file( $file );
+							self::delete_physical_file( $file, $result['entry_id'] );
 						}
 					}
 				} else {
 					// Value from a single file or post image field.
-					self::delete_physical_file( $value );
+					self::delete_physical_file( $result['meta_value'], $result['entry_id'] );
 				}
 			}
 		}
@@ -2214,7 +2227,7 @@ class GFFormsModel {
 			$field_value = '';
 		}
 
-		self::delete_physical_file( $file_url );
+		self::delete_physical_file( $file_url, $entry_id );
 
 		// Update entry field value - simulate form submission.
 		$entry_meta_table_name = self::get_entry_meta_table_name();
@@ -2225,14 +2238,15 @@ class GFFormsModel {
 
 	}
 
-	private static function delete_physical_file( $file_url ) {
+	private static function delete_physical_file( $file_url, $entry_id ) {
+
 		$ary = explode( '|:|', $file_url );
 		$url = rgar( $ary, 0 );
 		if ( empty( $url ) ) {
 			return;
 		}
 
-		$file_path = self::get_physical_file_path( $url );
+		$file_path = self::get_physical_file_path( $url, $entry_id );
 
 		/**
 		 * Allow the file path to be overridden so files stored outside the /wp-content/uploads/gravity_forms/ directory can be deleted.
@@ -2246,16 +2260,33 @@ class GFFormsModel {
 
 		if ( file_exists( $file_path ) ) {
 			unlink( $file_path );
+			gform_delete_meta( $entry_id, GF_Field_FileUpload::get_file_upload_path_meta_key_hash( $url ) );
 		}
+
+
 	}
 
-	public static function get_physical_file_path( $url ) {
+	/**
+	 * Gets the physical path of a file.
+	 *
+	 * @since unknown
+	 *
+	 * @since 2.5.16  Added optional $entry_id parameter.
+	 *
+	 * @param string       $url
+	 * @param integer|null $entry_id
+	 *
+	 * @return string
+	 */
+	public static function get_physical_file_path( $url, $entry_id = null ) {
+
+		$path_info = GF_Field_FileUpload::get_file_upload_path_info( $url, $entry_id );
 
 		// convert from url to physical path
 		if ( is_multisite() && get_site_option( 'ms_files_rewriting' ) ) {
 			$file_path = preg_replace( "|^(.*?)/files/gravity_forms/|", BLOGUPLOADDIR . 'gravity_forms/', $url );
 		} else {
-			$file_path = str_replace( self::get_upload_url_root(), self::get_upload_root(), $url );
+			$file_path = str_replace( trailingslashit( $path_info['url'] ), trailingslashit( $path_info['path'] ), $url );
 		}
 
 		return $file_path;
@@ -2931,7 +2962,6 @@ class GFFormsModel {
 		}
 
 		$current_fields = $wpdb->get_results( $wpdb->prepare( "SELECT id, meta_key, item_index FROM $entry_meta_table WHERE entry_id=%d", $entry['id'] ) );
-
 		$total_fields = array();
 		/* @var $calculation_fields GF_Field[] */
 		$calculation_fields = array();
@@ -3051,6 +3081,9 @@ class GFFormsModel {
 			}
 		}
 
+		$processor = self::get_entry_meta_batch_processor();
+		$processor::begin_batch_entry_meta_operations();
+
 		foreach ( $form['fields'] as $field ) {
 			/* @var GF_Field $field */
 
@@ -3075,11 +3108,54 @@ class GFFormsModel {
 				$entry[ (string) $field->id ] = gf_apply_filters( array( 'gform_get_input_value', $form['id'], $field->id ), $value, $entry, $field, '' );
 
 			}
+
+			self::save_extra_field_meta( $field, $form, $entry );
+
 		}
+
+		$processor::commit_batch_entry_meta_operations();
 
 		self::hydrate_repeaters( $entry, $form );
 
 		GFCommon::log_debug( __METHOD__ . '(): Finished saving entry fields.' );
+	}
+
+
+	/**
+	 * Gets the extra meta data a field wants to save to the entry and updates the entry meta with the retrieved data.
+	 *
+	 * This method depends on batch operations, so begin_batch_entry_meta_operations should be called before this method is called
+	 * and commit_batch_entry_meta_operations should be called after.
+	 *
+	 * @since 2.5.16
+	 *
+	 * @param $field
+	 * @param $form
+	 * @param $entry
+	 */
+	public static function save_extra_field_meta( $field, $form, $entry ) {
+
+		$extra_meta = $field->get_extra_entry_metadata( $form, $entry );
+		foreach( $extra_meta as $key => $value ) {
+			$processor = self::get_entry_meta_batch_processor();
+			$processor::queue_batch_entry_meta_operation( $form, $entry, $key, $value );
+		}
+	}
+
+	/**
+	 * Creates a new instance of the entry meta batch operations handler if required and returns it.
+	 *
+	 * @since 2.5.16
+	 *
+	 * @return GF_Entry_Meta_Batch_Processor
+	 */
+	public static function get_entry_meta_batch_processor() {
+		if ( is_null( self::$entry_meta_batch_processor ) ) {
+			$processor = GFForms::get_service_container()->get( GF_Batch_Operations_Service_Provider::ENTRY_META_BATCH_PROCESSOR );
+			self::$entry_meta_batch_processor = $processor;
+		}
+
+		return self::$entry_meta_batch_processor;
 	}
 
 	/**
@@ -3144,7 +3220,7 @@ class GFFormsModel {
 		foreach ( $fields as $field ) {
 			if ( $field instanceof GF_Field_Repeater && isset( $field->fields ) && is_array( $field->fields ) ) {
 				/* @var GF_Field_Repeater $field */
-				$entry = $field->hydrate( $entry, $form, $apply_filters );
+				$entry = $field->hydrate( $entry, $form );
 			}
 		}
 	}
@@ -3482,8 +3558,12 @@ class GFFormsModel {
 					$match_count ++;
 				}
 			}
+
 			// If operation is Is Not, none of the values in the array can match the target value.
-			$is_match = $operation == 'isnot' ? $match_count == count( $field_value ) : $match_count > 0;
+			// Except when operation is Is Not Empty. In that case, one non-empty value is enough
+			$must_match_all = ( $operation == 'isnot' && ! rgblank( $target_value ) ) || ( $operation == 'is' && rgblank( $target_value ) );
+			$is_match = $must_match_all ? $match_count == count( $field_value ) : $match_count > 0;
+
 		} else if ( self::matches_operation( GFFormsModel::maybe_trim_input( GFCommon::get_selection_value( $field_value ), $form_id, $source_field ), $target_value, $operation ) ) {
 			$is_match = true;
 		}
@@ -4978,12 +5058,7 @@ class GFFormsModel {
 		$new_file = $upload_dir['path'] . "/$filename";
 
 		// the source path
-		$y                = substr( $time, 0, 4 );
-		$m                = substr( $time, 5, 2 );
-		$target_root      = self::get_upload_path( $form_id ) . "/$y/$m/";
-		$target_root_url  = self::get_upload_url( $form_id ) . "/$y/$m/";
-		$upload_root_info = array( 'path' => $target_root, 'url' => $target_root_url );
-		$upload_root_info = gf_apply_filters( 'gform_upload_path', $form_id, $upload_root_info, $form_id );
+		$upload_root_info = GF_Field_FileUpload::get_upload_root_info( $form_id );
 		$path             = str_replace( $upload_root_info['url'], $upload_root_info['path'], $url );
 
 		// copy the file to the destination path
@@ -5525,23 +5600,17 @@ class GFFormsModel {
 		if ( version_compare( phpversion(), '7.4', '<' ) && get_magic_quotes_gpc() ) {
 			$file_name = stripslashes( $file_name );
 		}
-
 		$form_id = absint( $form_id );
-
-		// Where the file is going to be placed
-		// Generate the yearly and monthly dirs
-		$time            = current_time( 'mysql' );
-		$y               = substr( $time, 0, 4 );
-		$m               = substr( $time, 5, 2 );
-		$default_target_root     = self::get_upload_path( $form_id ) . "/$y/$m/";
-		$default_target_root_url = self::get_upload_url( $form_id ) . "/$y/$m/";
-
 		//adding filter to upload root path and url
-		$upload_root_info = array( 'path' => $default_target_root, 'url' => $default_target_root_url );
-		$upload_root_info = gf_apply_filters( array( 'gform_upload_path', $form_id ), $upload_root_info, $form_id );
+		$upload_root_info    = GF_Field_FileUpload::get_upload_root_info( $form_id );
+		$target_root         = $upload_root_info['path'];
+		$target_root_url     = $upload_root_info['url'];
 
-		$target_root     = $upload_root_info['path'];
-		$target_root_url = $upload_root_info['url'];
+		$default_upload_root_info =  GF_Field_FileUpload::get_default_upload_roots( $form_id );
+		$default_target_root      = rgar( $default_upload_root_info, 'path' );
+		$y                        = rgar( $default_upload_root_info, 'y' );
+		$m                        = rgar( $default_upload_root_info, 'm' );
+
 
 		$target_root = trailingslashit( $target_root );
 
@@ -6100,31 +6169,39 @@ class GFFormsModel {
 	 */
 	public static function save_key( $new_key ) {
 
-		$new_key = trim( $new_key );
+		$new_key      = trim( $new_key );
+		$new_key_md5  = md5( $new_key );
 		$previous_key = get_option( 'rg_gforms_key' );
+
+		/**
+		 * @var License\GF_License_API_Connector $license_connector
+		 */
+		$license_connector = GFForms::get_service_container()->get( License\GF_License_Service_Provider::LICENSE_API_CONNECTOR );
+		$license_connector->clear_cache_for_key( $new_key_md5 );
+
+		// Delete gform_version_info so GF will ping version.php to send site record update.
+		delete_option( 'gform_version_info' );
 
 		if ( empty( $new_key ) ) {
 
 			delete_option( 'rg_gforms_key' );
 
-			GFCommon::update_site_registration( '' );
+			// Unlink the site with the license key on Gravity API.
+			$license_connector->update_site_registration( '' );
 
-		} else if ( $previous_key != $new_key ) {
+		} elseif ( $previous_key != $new_key ) {
+			update_option( 'rg_gforms_key', $new_key_md5 );
 
-			$key_md5 = md5( $new_key );
+			// Updating site registration with Gravity Server.
+			$result = $license_connector->update_site_registration( $new_key_md5, true );
 
-			// Saving new key
-			update_option( 'rg_gforms_key', $key_md5 );
-
-			// Updating site registration with Gravity Server
-			GFCommon::update_site_registration( $key_md5, true );
-
+			// New key is invalid, revert to old key.
+			if ( ! $result->can_be_used() ) {
+				update_option( 'rg_gforms_key', $previous_key );
+			}
 		} else {
-
-			// Updating site registration even if keys did not change.
-			// This will boost site registration from sites that already have a license key entered
-			GFCommon::update_site_registration( $new_key, true );
-
+			// Updating site registration with Gravity Server.
+			$license_connector->update_site_registration( $new_key_md5, true );
 		}
 
 	}

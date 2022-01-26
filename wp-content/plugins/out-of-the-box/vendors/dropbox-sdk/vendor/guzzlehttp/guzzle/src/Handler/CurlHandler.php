@@ -37,7 +37,19 @@ class CurlHandler
         }
 
         $easy = $this->factory->create($request, $options);
+
+        // DEBUG: Verbose
+        // curl_setopt($easy->handle, CURLOPT_VERBOSE, true);
+        // $verbose = fopen('php://temp', 'w+');
+        // curl_setopt($easy->handle, CURLOPT_STDERR, $verbose);
+
         curl_exec($easy->handle);
+
+        // DEBUG: Output Verbose
+        // rewind($verbose);
+        // $verboseLog = stream_get_contents($verbose);
+        // error_log($verboseLog);
+
         $easy->errno = curl_errno($easy->handle);
 
         return CurlFactory::finish($this, $easy, $this->factory);

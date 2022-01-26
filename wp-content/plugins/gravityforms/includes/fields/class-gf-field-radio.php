@@ -9,6 +9,15 @@ class GF_Field_Radio extends GF_Field {
 
 	public $type = 'radio';
 
+	/**
+	 * Indicates if this field supports state validation.
+	 *
+	 * @since 2.5.11
+	 *
+	 * @var bool
+	 */
+	protected $_supports_state_validation = true;
+
 	public function get_form_editor_field_title() {
 		return esc_attr__( 'Radio Buttons', 'gravityforms' );
 	}
@@ -57,6 +66,21 @@ class GF_Field_Radio extends GF_Field {
 
 	public function is_conditional_logic_supported() {
 		return true;
+	}
+
+	/**
+	 * Determines if this field will be processed by the state validation.
+	 *
+	 * @since 2.5.11
+	 *
+	 * @return bool
+	 */
+	public function is_state_validation_supported() {
+		if ( $this->enableOtherChoice && rgpost( "is_submit_{$this->formId}" ) && rgpost( "input_{$this->id}" ) == 'gf_other_choice' ) {
+			return false;
+		}
+
+		return parent::is_state_validation_supported();
 	}
 
 	public function validate( $value, $form ) {
@@ -244,19 +268,19 @@ class GF_Field_Radio extends GF_Field {
 
 		// Handle 'other' choice.
 		if ( $this->enableOtherChoice && rgar( $choice, 'isOtherChoice' ) ) {
-			$other_default_value = empty( $choice['text'] ) ? GFCommon::get_other_choice_value( $this ) : $choice['text'];
-			$input_disabled_text = $value === 'gf_other_choice' || rgpost( "input_{$this->id}" ) === 'gf_other_choice' ? '' : " disabled='disabled'";
-
-			$value_exists = GFFormsModel::choices_value_match( $this, $this->choices, $value );
+			$input_disabled_text = $disabled_text;
 
 			if ( $value == 'gf_other_choice' && rgpost( "input_{$this->id}_other" ) ) {
 				$other_value = rgpost( "input_{$this->id}_other" );
-			} elseif ( ! $value_exists && ! empty( $value ) ) {
+			} elseif ( ! empty( $value ) && ! GFFormsModel::choices_value_match( $this, $this->choices, $value ) ) {
 				$other_value = $value;
 				$value       = 'gf_other_choice';
 				$checked     = "checked='checked'";
 			} else {
-				$other_value = $other_default_value;
+				if ( ! $input_disabled_text ) {
+					$input_disabled_text = "disabled='disabled'";
+				}
+				$other_value = empty( $choice['text'] ) ? GFCommon::get_other_choice_value( $this ) : $choice['text'];
 			}
 
 			$label .= "<br /><input id='input_{$this->formId}_{$this->id}_other' name='input_{$this->id}_other' type='text' value='" . esc_attr( $other_value ) . "' aria-label='" . esc_attr__( 'Other Choice, please specify', 'gravityforms' ) . "' $tabindex $input_disabled_text />";
@@ -386,12 +410,11 @@ class GF_Field_Radio extends GF_Field {
 	}
 
 	public function get_value_entry_list( $value, $entry, $field_id, $columns, $form ) {
-		return wp_kses_post( GFCommon::selection_display( $value, $this, $entry['currency'] ) );
+		return $this->get_selected_choice_output( $value, rgar( $entry, 'currency' ) );
 	}
 
 	public function get_value_entry_detail( $value, $currency = '', $use_text = false, $format = 'html', $media = 'screen' ) {
-
-		return wp_kses_post( GFCommon::selection_display( $value, $this, $currency, $use_text ) );
+		return $this->get_selected_choice_output( $value, $currency, $use_text );
 	}
 
 	/**

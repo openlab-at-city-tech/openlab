@@ -9,6 +9,7 @@ namespace ElasticPress\Feature\Search;
 
 use ElasticPress\Features;
 use ElasticPress\Indexable\Post\Post;
+use ElasticPress\Utils as Utils;
 
 /**
  * Controls search weighting and search fields dashboard
@@ -125,12 +126,21 @@ class Weighting {
 			],
 		];
 
-		/*
+		$post_type_taxonomies = get_object_taxonomies( $post_type );
+
+		/**
+		 * Filter install status
+		 *
 		 * Previous behavior had post_tag and category enabled by default, so if this is supported on the post type
 		 * we add them as enabled by default
+		 *
+		 * @hook ep_weighting_default_enabled_taxonomies
+		 * @param  {array}  $enabled_taxonomies Taxonomies that should be enabled by default
+		 * @param  {string} $post_type          Post type slug
+		 * @return {array}  New taxonomies
+		 * @since  3.6.5
 		 */
-		$post_type_taxonomies = get_object_taxonomies( $post_type );
-		$enabled_by_default   = [ 'post_tag', 'category' ];
+		$enabled_by_default = apply_filters( 'ep_weighting_default_enabled_taxonomies', [ 'post_tag', 'category' ], $post_type );
 
 		foreach ( $enabled_by_default as $default_tax ) {
 			if ( in_array( $default_tax, $post_type_taxonomies, true ) ) {
@@ -564,7 +574,7 @@ class Weighting {
 		 */
 		$weight_config = apply_filters( 'ep_weighting_configuration_for_search', $weight_config, $args );
 
-		if ( ! is_admin() && ! empty( $args['s'] ) ) {
+		if ( Utils\is_integrated_request( 'weighting', [ 'public', 'rest' ] ) && ! empty( $args['s'] ) ) {
 			/*
 			 * This section splits up the single query clause for all post types into separate nested clauses (one for each post type)
 			 * which then get combined into one result set. By having separate clauses for each post type, we can then

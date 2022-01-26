@@ -11,6 +11,7 @@ class Mappress_Obj {
 		$obj_atts = get_object_vars($this);
 		$atts = (array) $atts;
 
+		// Only the object's attributes are updated
 		foreach ($obj_atts as $key => $value ) {
 			$newvalue = (isset($atts[$key])) ? $atts[$key] : null;
 

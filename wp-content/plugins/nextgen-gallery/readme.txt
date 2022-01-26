@@ -2,8 +2,8 @@
 Contributors: photocrati, imagely
 Tags: wordpress gallery plugin, gallery, nextgen, nextgen gallery, photo gallery, image gallery, photography, slideshow, images, photo, photo album, watermark
 Requires at least: 5.5.4
-Stable tag: 3.11
-Tested up to: 5.7.2
+Stable tag: 3.18
+Tested up to: 5.8
 License: GPLv3
 Requires PHP: 5.6
 
@@ -178,6 +178,38 @@ For more information, feel free to visit the official website for the NextGEN Ga
 
 
 == Changelog ==
+
+= V3.18  - 12.08.2021
+* NEW:     Added a constant "NGG_DISABLE_SHORTCODE_MANAGER" to disable content protection workarounds that can be a source of incompatibility itself.
+* NEW:     Added notice to users that ctypes methods are required by NextGEN Gallery.
+* Fixed:   Compatibility with EditorsKit invalidating NextGEN Gallery blocks.
+* Fixed:   In rare circumstances the "Open album images in Pro Lightbox" feature was not working.
+* Fixed:   PHP warnings about undefined array key access when using the XMLRPC API (Lightroom)
+* Fixed:   Searching for images on Manage Galleries could result in duplicates.
+
+= V3.17  - 09.15.2021
+* Fixed:   NGG 3.16 created a problem with the Manage Gallery page's Edit Thumbnail, Rotate Image, and View Meta popups
+
+= V3.16  - 09.08.2021
+* Fixed:   Links on "Extensions" page were incorrect
+* Fixed:   Incompatibility with WP User Manager caused Manage Gallery bulk actions to be unusable
+* Fixed:   Images that failed to upload would be treated as a success in the UI if the server HTTP response code is 200
+* Changed: Removed the "Ambassadors" tab from the Overview page
+
+= V3.15  - 08.23.2021
+* Fixed:   A warning was generated on every request for users of PHP 5.6
+
+= V3.14  - 08.18.2021
+* NEW:     Added support for unanimated WebP images
+* Fixed:   PHP warning was generated when enqueueing frontend resources
+* Fixed:   "Scan folder for new images" was failing with PHP 8+
+
+= V3.13  - 08.04.2021
+* Fixed:   All WP-Admin links had "/wp-admin/" removed for some users
+
+= V3.12  - 07.13.2021
+* Fixed:   PHP warning generated for some Nimble Builder users
+* Changed: Added 'ngg_marketing_parameters' filter
 
 = V3.11  - 05.26.2021
 * Fixed:   Now compatible with NimbleBuilder

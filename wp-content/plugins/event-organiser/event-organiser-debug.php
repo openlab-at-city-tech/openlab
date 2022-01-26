@@ -153,7 +153,6 @@ class EventOrganiser_Debug_Page extends EventOrganiser_Admin_Page {
 					<td>
 					<?php
 						global $wpdb;
-						// phpcs:ignore PHPCompatibility.Extensions.RemovedExtensions.mysql_DeprecatedRemoved
 						echo empty( $wpdb->use_mysqli ) ? esc_html( mysql_get_server_info() ) : esc_html( mysqli_get_server_info( $wpdb->dbh ) );
 					?></td>
 				</tr>
@@ -539,7 +538,6 @@ class EventOrganiser_Debugger {
 		echo 'WordPress' . "\t\t\t" . get_bloginfo( 'version' ) . "\n";
 		echo 'PHP Version' . "\t\t\t" . PHP_VERSION . "\n";
 		global $wpdb;
-		// phpcs:ignore PHPCompatibility.Extensions.RemovedExtensions.mysql_DeprecatedRemoved
 		$ver = empty( $wpdb->use_mysqli ) ? mysql_get_server_info() : mysqli_get_server_info( $wpdb->dbh );
 		echo 'MySQL Version' . "\t\t" . $ver . "\n";
 

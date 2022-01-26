@@ -24,13 +24,23 @@ function gutenberg_render_block_core_legacy_widget( $attributes ) {
 		return '';
 	}
 
-	if ( method_exists( $wp_widget_factory, 'get_widget_object' ) ) {
-		$widget_object = $wp_widget_factory->get_widget_object( $attributes['idBase'] );
+	$id_base = $attributes['idBase'];
+	if ( method_exists( $wp_widget_factory, 'get_widget_key' ) && method_exists( $wp_widget_factory, 'get_widget_object' ) ) {
+		$widget_key    = $wp_widget_factory->get_widget_key( $id_base );
+		$widget_object = $wp_widget_factory->get_widget_object( $id_base );
 	} else {
-		$widget_object = gutenberg_get_widget_object( $attributes['idBase'] );
+		/*
+		 * This file is copied from the published @wordpress/widgets package when WordPress
+		 * Core is built. Because the package is a dependency of both WordPress Core and the
+		 * Gutenberg plugin where the block editor is developed, this fallback condition is
+		 * required until the minimum required version of WordPress for the plugin is raised
+		 * to 5.8.
+		 */
+		$widget_key    = gutenberg_get_widget_key( $id_base );
+		$widget_object = gutenberg_get_widget_object( $id_base );
 	}
 
-	if ( ! $widget_object ) {
+	if ( ! $widget_key || ! $widget_object ) {
 		return '';
 	}
 
@@ -44,8 +54,13 @@ function gutenberg_render_block_core_legacy_widget( $attributes ) {
 		$instance = array();
 	}
 
+	$args = array(
+		'widget_id'   => $widget_object->id,
+		'widget_name' => $widget_object->name,
+	);
+
 	ob_start();
-	the_widget( get_class( $widget_object ), $instance );
+	the_widget( $widget_key, $instance, $args );
 	return ob_get_clean();
 }
 
@@ -90,9 +105,35 @@ function gutenberg_handle_legacy_widget_preview_iframe() {
 		<style>
 			/* Reset theme styles */
 			html, body, #page, #content {
-				background: #FFF !important;
 				padding: 0 !important;
 				margin: 0 !important;
+			}
+
+			/* Hide root level text nodes */
+			body {
+				font-size: 0 !important;
+			}
+
+			/* Hide non-widget elements */
+			body *:not(#page):not(#content):not(.widget):not(.widget *) {
+				display: none !important;
+				font-size: 0 !important;
+				height: 0 !important;
+				left: -9999px !important;
+				max-height: 0 !important;
+				max-width: 0 !important;
+				opacity: 0 !important;
+				pointer-events: none !important;
+				position: absolute !important;
+				top: -9999px !important;
+				transform: translate(-9999px, -9999px) !important;
+				visibility: hidden !important;
+				z-index: -999 !important;
+			}
+
+			/* Restore widget font-size */
+			.widget {
+				font-size: var(--global--font-size-base);
 			}
 		</style>
 	</head>
@@ -114,7 +155,7 @@ function gutenberg_handle_legacy_widget_preview_iframe() {
 	exit;
 }
 
-// Ensure gutenberg_handle_legacy_widget_preview_iframe() is called after Core's
-// gutenberg_register_block_core_legacy_widget() (priority = 10) and after Gutenberg's
-// gutenberg_register_block_core_legacy_widget() (priority = 20).
-add_action( 'init', 'gutenberg_handle_legacy_widget_preview_iframe', 21 );
+// Use admin_init instead of init to ensure get_current_screen function is already available.
+// This isn't strictly required, but enables better compatibility with existing plugins.
+// See: https://github.com/WordPress/gutenberg/issues/32624.
+add_action( 'admin_init', 'gutenberg_handle_legacy_widget_preview_iframe', 20 );

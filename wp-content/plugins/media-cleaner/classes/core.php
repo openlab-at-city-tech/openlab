@@ -20,8 +20,6 @@ class Meow_WPMC_Core {
 	private $debug_logs = null;
 	private $multilingual = false;
 	private $languages = array();
-	private $allow_usage = null;
-	private $allow_setup = null;
 
 	public function __construct() {
 		add_action( 'plugins_loaded', array( $this, 'plugins_loaded' ) );
@@ -47,25 +45,18 @@ class Meow_WPMC_Core {
 		global $wpmc;
 		$wpmc = $this;
 
-		// Check the roles
-		$this->allow_usage = apply_filters( 'wpmc_allow_usage', current_user_can( 'administrator' ) );
-		$this->allow_setup = apply_filters( 'wpmc_allow_setup', current_user_can( 'manage_options' ) );
-		if ( !$this->is_cli && !$this->allow_usage ) {
-			return;
-		}
-
 		// Language
 		load_plugin_textdomain( WPMC_DOMAIN, false, basename( WPMC_PATH ) . '/languages' );
 
 		// Admin
-		$this->admin = new Meow_WPMC_Admin( $this->allow_setup );
+		$this->admin = new Meow_WPMC_Admin( $this );
 
 		// Advanced core
 		if ( class_exists( 'MeowPro_WPMC_Core' ) ) {
 			new MeowPro_WPMC_Core( $this );
 		}
 
-		// Install hooks and engine on;y if they might be used
+		// Install hooks and engine only if they might be used
 		if ( is_admin() || $this->is_rest || $this->is_cli ) {
 			add_action( 'wpmc_initialize_parsers', array( $this, 'initialize_parsers' ), 10, 0 );
 			add_filter( 'wp_unique_filename', array( $this, 'wp_unique_filename' ), 10, 3 );
@@ -78,7 +69,7 @@ class Meow_WPMC_Core {
 		}
 
 		if ( is_admin() ) {
-			new Meow_WPMC_UI( $this, $this->admin );
+			new Meow_WPMC_UI( $this );
 		}
 	}
 
@@ -204,8 +195,9 @@ class Meow_WPMC_Core {
 	}
 
 	function get_urls_from_html( $html ) {
-		if ( empty( $html ) )
+		if ( empty( $html ) ) {
 			return array();
+		}
 
 		// Proposal/fix by @copytrans
 		// Discussion: https://wordpress.org/support/topic/bug-in-core-php/#post-11647775
@@ -218,16 +210,22 @@ class Meow_WPMC_Core {
 		}
 
 		// Resolve src-set and shortcodes
-		if ( !get_option( 'wpmc_shortcodes_disabled', false ) )
+		if ( !get_option( 'wpmc_shortcodes_disabled', false ) ) {
 			$html = do_shortcode( $html );
-			
+		}
+
 		// TODO: Since WP 5.5, wp_filter_content_tags should be used instead of wp_make_content_images_responsive.
-		$html = function_exists( 'wp_filter_content_tags' ) ? wp_filter_content_tags( $html ) : wp_make_content_images_responsive( $html );
+		$html = function_exists( 'wp_filter_content_tags' ) ? wp_filter_content_tags( $html ) :
+			wp_make_content_images_responsive( $html );
 
 		// Create the DOM Document
 		if ( !class_exists("DOMDocument") ) {
 			error_log( 'Media Cleaner: The DOM extension for PHP is not installed.' );
 			throw new Error( 'The DOM extension for PHP is not installed.' );
+		}
+
+		if ( empty( $html ) ) {
+			return array();
 		}
 
 		libxml_use_internal_errors(true);
@@ -361,13 +359,18 @@ class Meow_WPMC_Core {
 	}
 
 	// Parse a meta, visit all the arrays, look for the attributes, fill $ids and $urls arrays
-	function get_from_meta( $meta, $lookFor, &$ids, &$urls ) {
+	// If rawMode is enabled, it will not check if the value is an ID or an URL, it will just returns it in URLs
+	function get_from_meta( $meta, $lookFor, &$ids, &$urls, $rawMode = false ) {
 		foreach ( $meta as $key => $value ) {
 			if ( is_object( $value ) || is_array( $value ) )
-				$this->get_from_meta( $value, $lookFor, $ids, $urls );
+				$this->get_from_meta( $value, $lookFor, $ids, $urls, $rawMode );
 			else if ( in_array( $key, $lookFor ) ) {
-				if ( empty( $value ) )
+				if ( empty( $value ) ) {
 					continue;
+				}
+				else if ( $rawMode ) {
+					array_push( $urls, $value );
+				}
 				else if ( is_numeric( $value ) ) {
 					// It this an ID?
 					array_push( $ids, $value );
@@ -732,9 +735,17 @@ class Meow_WPMC_Core {
 			// With files, we need both filename without resolution and filename with resolution, it's important
 			// to make sure the original file is not deleted if a size exists for it.
 			// With media, all URLs should be without resolution to make sure it matches Media.
-			if ( $this->current_method == 'files' )
+			if ( $this->current_method == 'files' ) {
 				$this->add_reference( null, $url, $type, $origin );
-			$this->add_reference( 0, $this->clean_url_from_resolution( $url ), $type, $origin );
+				$this->add_reference( 0, $this->clean_url_from_resolution( $url ), $type, $origin );
+			}
+			else {
+				// 2021/11/08: I added this, the problem is that sometimes users create image filenames with the resolution
+				// in it, even though it is the original.
+				$this->add_reference( null, $url, $type, $origin );
+
+				$this->add_reference( 0, $this->clean_url_from_resolution( $url ), $type, $origin );
+			}
 		}
 	}
 
@@ -1106,6 +1117,19 @@ class Meow_WPMC_Core {
 			echo $issue;
 		}
 	}
+
+	/**
+	 *
+	 * Roles & Access Rights
+	 *
+	 */
+	public function can_access_settings() {
+		return apply_filters( 'wpmc_allow_setup', current_user_can( 'manage_options' ) );
+	}
+
+	public function can_access_features() {
+		return apply_filters( 'wpmc_allow_usage', current_user_can( 'administrator' ) );
+	}
 }
 
 /*
@@ -1128,8 +1152,11 @@ function wpmc_reset () {
 }
 
 function wpmc_uninstall () {
-	//wpmc_remove_options();
-	//wpmc_remove_database();
+	$cleanUninstall = get_option( 'wpmc_clean_uninstall', false );
+	if ($cleanUninstall) {
+		wpmc_remove_options();
+		wpmc_remove_database();
+	}
 }
 
 // Check the DB. If does not exist, let's create it.

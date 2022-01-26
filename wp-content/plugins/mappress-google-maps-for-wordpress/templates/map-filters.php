@@ -1,19 +1,18 @@
-<?php if (Mappress::$pro) { ?>
-<# if (map.query && mappl10n.options.filters && mappl10n.options.filters.length > 0) { #>
-	<div class='mapp-filters'>
-		<div class='mapp-filters-list'>
-			<?php foreach(Mappress::$options->filters as $atts) { ?>
-				<?php $filter = new Mappress_Filter($atts); ?>
-					<div class='mapp-filter mapp-<?php echo $filter->key; ?>'>
-						<div class='mapp-filter-label'><?php echo $filter->get_label(); ?></div>
-						<div class='mapp-filter-values'><?php echo $filter->get_html(); ?></div>
-					</div>
-			<?php } ?>
-		</div>
-		<div class='mapp-filters-toolbar'>
-			<span class='mapp-button-submit mapp-filters-done' data-mapp-action='filters-toggle'><?php _e('Done', 'mappress-google-maps-for-wordpress');?></span>
-			<span class='mapp-button mapp-filters-reset' data-mapp-action='filters-reset'><?php _e('Reset', 'mappress-google-maps-for-wordpress');?></span>
+<div class='mapp-filters'>
+	<div class='mapp-filter-wrapper'>
+		<div class='mapp-button mapp-caret mapp-filter-toggle' data-mapp-action='filter-toggle'><?php _e('Filter', 'mappress-google-maps-for-wordpress');?></div>
+		<div class='mapp-filter-body'>
+			<div class='mapp-filter-list'>
+				<?php foreach(Mappress::$options->filters as $atts) { ?>
+					<?php $filter = new Mappress_Filter($atts); ?>
+					<div class='mapp-filter-values'><?php echo $filter->get_html(); ?></div>
+				<?php } ?>
+			</div>
+			<div class='mapp-filter-toolbar'>
+				<div class='mapp-link-button mapp-filter-reset' data-mapp-action='filter-reset'><?php _e('Reset', 'mappress-google-maps-for-wordpress');?></div>
+				<div class='mapp-filter-count'></div>
+				<div class='mapp-submit-button mapp-filter-done' data-mapp-action='filter-toggle'><?php _e('Done', 'mappress-google-maps-for-wordpress');?></div>
+			</div>
 		</div>
 	</div>
-<# } #>
-<?php } ?>
+</div>

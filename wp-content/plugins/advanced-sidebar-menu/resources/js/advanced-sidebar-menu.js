@@ -14,8 +14,7 @@ function asm_reveal_element(this_element_id) {
 }
 
 /**
- * Proper handling of the show/hide of elements
- * for widgets
+ * Misc JS for the widget's screen.
  *
  * @since 7.4.5
  */
@@ -24,6 +23,8 @@ var advanced_sidebar_menu = {
 	/**
 	 * Called by PHP so this will run no matter where the widget is loaded.
 	 * This solves issues with page builders as well as widget updating.
+	 *
+	 * For WP 5.8+ this is called via the 'widget-added' event.
 	 *
 	 * @since 7.4.5
 	 */
@@ -109,3 +110,14 @@ var advanced_sidebar_menu = {
 		});
 	}
 };
+
+/**
+ * WP 5.8 no longer fires the <script> tag within the PHP because
+ * it loads the markup via the REST API. We must use the new
+ * event to init the JS.
+ *
+ * @link https://developer.wordpress.org/block-editor/how-to-guides/widgets/legacy-widget-block/
+ */
+jQuery( document ).on( 'widget-added', function() {
+	advanced_sidebar_menu.init();
+} );

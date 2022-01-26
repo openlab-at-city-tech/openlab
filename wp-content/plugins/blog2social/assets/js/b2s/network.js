@@ -48,7 +48,7 @@ jQuery(window).on("load", function () {
 
 function init() {
     var showMeridian = true;
-    if (jQuery('#b2sUserLang').val() == 'de') {
+    if (jQuery('#b2sUserTimeFormat').val() == 0) {
         showMeridian = false;
     }
     jQuery('.b2s-settings-sched-item-input-time').timepicker({
@@ -701,6 +701,11 @@ function loginSuccess(networkId, networkType, displayName, networkAuthId, mandan
     //Tumblr
     if (networkId == 4) {
         networkTypeName = 'Blog';
+    }
+    if(networkId == 11) {
+        if(networkType == 2) {
+            networkTypeName = 'Publication';
+        }
     }
     if(networkId == 12) {
         if(networkType == 0) {
@@ -1750,8 +1755,12 @@ function generateExamplePost(template, content_range, exerpt_range) {
         template = template.replace(/{KEYWORDS}/g, keywords);
     }
     if(typeof jQuery('.b2s-edit-template-limit').val() != 'undefined' && jQuery('.b2s-edit-template-limit').val() > 0) {
-        if(template.length > jQuery('.b2s-edit-template-limit').val()) {
-            template = template.substring(0, jQuery('.b2s-edit-template-limit').val());
+        if(template.length > jQuery('.b2s-edit-template-limit').val() || jQuery('#b2s-edit-template-network-id').val() == 2) {
+            if(jQuery('#b2s-edit-template-network-id').val() == 2 && jQuery('.b2s-edit-template-post-format').val() == 0) {
+                template = template.substring(0, (jQuery('.b2s-edit-template-limit').val() - 24));
+            } else {
+                template = template.substring(0, jQuery('.b2s-edit-template-limit').val());
+            }
             template = template.substring(0, template.lastIndexOf(' '));
         }
     }

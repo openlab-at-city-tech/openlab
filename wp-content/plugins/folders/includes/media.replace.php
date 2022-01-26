@@ -425,19 +425,30 @@ class folders_replace_media {
                     mkdir($upload_path, 755, true);
                 }
                 if (is_dir($upload_path)) {
-                    $file_name = $this->checkForFileName($file['name'], $upload_path.DIRECTORY_SEPARATOR);
+//                    $file_name = $this->checkForFileName($file['name'], $upload_path.DIRECTORY_SEPARATOR);
+
+                    $db_file_name = $file_parts['basename'];
+                    $db_file_array = explode(".", $db_file_name);
+                    array_pop($db_file_array);
+                    $db_file_name = implode(".", $db_file_array).".";
+                    $db_file_name .= $file_ext;
+
+                    $file_name = $db_file_name;
+
                     $upload_file = $upload_path . DIRECTORY_SEPARATOR . $file_name;
                     $status = move_uploaded_file($new_file, $upload_file);
 
-                    $this->new_file_path = $upload_dir['path'] . "/" . $file_name;
+                    $this->new_file_path = trim($upload_dir['path'], "/") . "/" . $file_name;
 
-                    $this->new_file_url = $upload_dir['url']."/".$file_name;
+                    $this->new_file_url = trim($upload_dir['url'], "/")."/".$file_name;
 
                     if ($status) {
 
-                        if(file_exists($this->upload_dir['path'].DIRECTORY_SEPARATOR.$file_parts['basename'])) {
-                            @unlink($this->upload_dir['path'].DIRECTORY_SEPARATOR.$file_parts['basename']);
-                        }
+//                        if(file_exists($this->upload_dir['path'].DIRECTORY_SEPARATOR.$file_parts['basename'])) {
+//                            @unlink($this->upload_dir['path'].DIRECTORY_SEPARATOR.$file_parts['basename']);
+//                        }
+
+                        $this->removeThumbImages();
 
                         update_attached_file($attachment->ID, $this->new_file_path);
 
@@ -452,8 +463,6 @@ class folders_replace_media {
                         // update post doesn't update GUID on updates.
                         $wpdb->update($wpdb->posts, array('guid' => $this->new_file_path), array('ID' => $attachment->ID));
 
-                        $this->removeThumbImages();
-
                         $metadata = wp_generate_attachment_metadata($attachment->ID, $this->new_file_path);
                         wp_update_attachment_metadata($attachment->ID, $metadata);
 
@@ -462,6 +471,8 @@ class folders_replace_media {
                         $this->searchAndReplace();
 
                         wp_redirect(admin_url("post.php?post=" . $attachment_id . "&action=edit&premio_message=success"));
+
+
                         exit;
                     } else {
                         wp_die("Error during uploading file");

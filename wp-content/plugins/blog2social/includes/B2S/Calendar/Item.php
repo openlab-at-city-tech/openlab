@@ -29,9 +29,13 @@ class B2S_Calendar_Item {
     private $relay_delay_min = null;
     private $publish_link = null;
     private $status = null;
+    private $errorCode = null;
+    private $errorText = null;
     private $multi_images = null;
+    private $errorTextList = null;
 
     public function __construct(\StdClass $data = null) {
+        $this->errorTextList = unserialize(B2S_PLUGIN_NETWORK_ERROR);
         if (isset($data)) {
             $this
                     ->setSchedData($data->sched_data)
@@ -54,7 +58,7 @@ class B2S_Calendar_Item {
                     ->setPostForApprove($data->post_for_approve)
                     ->setPublishLink($data->publish_link);
 
-            if ($data->network_id == 1 || $data->network_id == 2 || $data->network_id == 3 || $data->network_id == 12 || $data->network_id == 17 || $data->network_id == 19) {
+            if ($data->network_id == 1 || $data->network_id == 2 || $data->network_id == 3 || $data->network_id == 4 || $data->network_id == 12 || $data->network_id == 17 || $data->network_id == 19 || $data->network_id == 24) {
                 $this->setPostFormat();
             }
             if ($data->network_id == 2 && isset($data->relay_primary_sched_date)) {
@@ -66,6 +70,8 @@ class B2S_Calendar_Item {
             }
             if (isset($data->publish_error_code)) {
                 $this->setStatus($data->publish_error_code);
+                $this->setErrorCode($data->publish_error_code);
+                $this->setErrorText($data->publish_error_code);
             }
             if (isset($data->sched_data)) {
                 $this->setMultiImages($data->sched_data);
@@ -512,6 +518,36 @@ class B2S_Calendar_Item {
         return $this->status;
     }
     
+    public function setErrorCode($error = "") {
+        $this->errorCode = $error;
+        return $this;
+    }
+
+    public function getErrorCode() {
+        return $this->errorCode;
+    }
+    
+    public function setErrorText($error = "") {
+        if (!empty($error) && isset($this->errorTextList[$error])) {
+            if($this->network_id == 12 && $error == 'DEFAULT') {
+                if($this->network_type == 0) {
+                    $this->errorText = sprintf(__('The post cannot be published due to changes on the Instagram interface. More information in the <a href="%s" target="_blank">Instagram guide</a>.', 'blog2social'), B2S_Tools::getSupportLink('instagram_error_private'));
+                } else {
+                    $this->errorText = sprintf(__('Your post could not be posted. More information in this <a href="%s" target="_blank">Instagram troubleshoot checklist</a>.', 'blog2social'), B2S_Tools::getSupportLink('instagram_error_business'));
+                }
+            } else {
+                $this->errorText = $this->errorTextList[$error];
+            }
+        } else {
+            $this->errorText = "";
+        }
+        return $this;
+    }
+
+    public function getErrorText() {
+        return $this->errorText;
+    }
+    
     public function setMultiImages($sched_data = "") {
         $multi_images = array();
         if (!empty($sched_data)) {
@@ -571,6 +607,8 @@ class B2S_Calendar_Item {
             "user_timezone" => $this->getUserTimezone(),
             "profile" => $this->getNetworkDisplayName(),
             "status" => $this->getStaus(),
+            "errorCode" => $this->getErrorCode(),
+            "errorText" => $this->getErrorText(),
             "publish_link" => $this->getPublishLink()];
     }
 
@@ -608,10 +646,11 @@ class B2S_Calendar_Item {
             'relay_primary_post_id' => $this->getRelayPrimaryPostId(),
             'post_for_relay' => $this->getPostForRelay(),
             'post_for_approve' => $this->getPostForApprove(),
+            'post_format' => $this->getPostFormat(),
             'view' => $view,
             'networkTosGroupId' => '',
             'networkKind' => 0);
-
+        
         return $this->ship_item()->getItemHtml((object) $itemData, false);
     }
 

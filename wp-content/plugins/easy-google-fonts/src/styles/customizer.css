@@ -1,0 +1,185 @@
+/* External Dependancies */
+@import '../../node_modules/bootstrap/dist/css/bootstrap-grid.css';
+
+/* Notice */
+.customize-control-font .components-panel__body .notice {
+  display: none;
+}
+
+/* Font Tab Styles */
+.egf-font-settings__settings .components-base-control__field {
+  margin-bottom: 0;
+}
+
+.egf-font-settings__settings label {
+  display: block;
+  margin-bottom: 2px !important;
+}
+
+.egf-font-settings__settings {
+  padding-top: 16px;
+  padding-bottom: 8px;
+}
+
+.egf-style-settings__settings {
+  padding-top: 16px;
+  padding-bottom: 8px;
+}
+
+.egf-position-settings__settings {
+  padding-top: 16px;
+  padding-bottom: 8px;
+}
+/* Font Settings Tab */
+.egf-font-weight-control select {
+  text-transform: capitalize;
+}
+
+/* Style Settings Tab */
+.egf-font-color-control .components-circular-option-picker__dropdown-link-action {
+  margin-right: 0;
+}
+
+.egf-font-color-control .component-color-indicator {
+  border-radius: 2px;
+}
+
+.egf-background-color-control .components-circular-option-picker__dropdown-link-action {
+  margin-right: 0;
+}
+
+.egf-background-color-control .component-color-indicator {
+  border-radius: 2px;
+}
+
+.egf-font-size-control .components-range-control__wrapper {
+  margin-left: 0;
+}
+
+.egf-font-size-control .components-unit-control-wrapper {
+  min-width: 88px;
+  max-width: 88px;
+}
+
+.egf-line-height-control .components-range-control__wrapper {
+  margin-left: 0;
+}
+
+.egf-line-height-control .components-number-control {
+  min-width: 88px;
+  max-width: 88px;
+}
+
+.egf-line-height-control .components-number-control .components-input-control__input {
+  font-size: 16px;
+  height: 24px !important;
+  line-height: 1;
+  min-height: 24px !important;
+}
+
+@media (min-width: 600px) {
+  .egf-line-height-control .components-number-control .components-input-control__input {
+    font-size: 11px !important;
+  }
+}
+
+.egf-line-height-control .components-range-control__wrapper {
+  margin-left: 0;
+}
+
+.egf-line-height-control .components-unit-control-wrapper {
+  min-width: 88px;
+  max-width: 88px;
+}
+
+.egf-letter-spacing-control .components-range-control__wrapper {
+  margin-left: 0;
+}
+
+.egf-letter-spacing-control .components-unit-control-wrapper {
+  min-width: 88px;
+  max-width: 88px;
+}
+
+/* Position Settings Tab */
+.egf-position-settings__settings [id^='inspector-box-control'] {
+  max-width: 100%;
+}
+
+.egf-position-settings__settings
+  [id^='inspector-box-control']
+  .components-unit-control-wrapper
+  .components-input-control {
+  max-width: 100%;
+}
+
+.egf-position-settings__settings .component-box-control__header {
+  display: none;
+}
+
+.egf-margin-control__top .components-range-control__wrapper,
+.egf-margin-control__bottom .components-range-control__wrapper,
+.egf-margin-control__left .components-range-control__wrapper,
+.egf-margin-control__right .components-range-control__wrapper {
+  margin-left: 0;
+}
+
+.egf-margin-control__top .components-unit-control-wrapper,
+.egf-margin-control__bottom .components-unit-control-wrapper,
+.egf-margin-control__left .components-unit-control-wrapper,
+.egf-margin-control__right .components-unit-control-wrapper {
+  min-width: 88px;
+  max-width: 88px;
+}
+
+.egf-padding-control__top .components-range-control__wrapper,
+.egf-padding-control__bottom .components-range-control__wrapper,
+.egf-padding-control__left .components-range-control__wrapper,
+.egf-padding-control__right .components-range-control__wrapper {
+  margin-left: 0;
+}
+
+.egf-padding-control__top .components-unit-control-wrapper,
+.egf-padding-control__bottom .components-unit-control-wrapper,
+.egf-padding-control__left .components-unit-control-wrapper,
+.egf-padding-control__right .components-unit-control-wrapper {
+  min-width: 88px;
+  max-width: 88px;
+}
+
+.egf-border-radius-control__top-left .components-range-control__wrapper,
+.egf-border-radius-control__top-right .components-range-control__wrapper,
+.egf-border-radius-control__bottom-left .components-range-control__wrapper,
+.egf-border-radius-control__bottom-right .components-range-control__wrapper {
+  margin-left: 0;
+}
+
+.egf-border-radius-control__top-left .components-unit-control-wrapper,
+.egf-border-radius-control__top-right .components-unit-control-wrapper,
+.egf-border-radius-control__bottom-left .components-unit-control-wrapper,
+.egf-border-radius-control__bottom-right .components-unit-control-wrapper {
+  min-width: 88px;
+  max-width: 88px;
+}
+
+.egf-border-control__top .components-range-control__wrapper,
+.egf-border-control__bottom .components-range-control__wrapper,
+.egf-border-control__left .components-range-control__wrapper,
+.egf-border-control__right .components-range-control__wrapper {
+  margin-left: 0;
+}
+
+.egf-border-control__top .components-unit-control-wrapper,
+.egf-border-control__bottom .components-unit-control-wrapper,
+.egf-border-control__left .components-unit-control-wrapper,
+.egf-border-control__right .components-unit-control-wrapper {
+  min-width: 88px;
+  max-width: 88px;
+}
+
+.egf-border-control__top .components-circular-option-picker__dropdown-link-action,
+.egf-border-control__bottom .components-circular-option-picker__dropdown-link-action,
+.egf-border-control__left .components-circular-option-picker__dropdown-link-action,
+.egf-border-control__right .components-circular-option-picker__dropdown-link-action {
+  margin-right: 0;
+}

@@ -31,7 +31,7 @@ function OutoftheBox_remove_all_styles()
     $wp_styles->queue = [];
     wp_enqueue_style('OutoftheBox.ShortcodeBuilder');
     wp_enqueue_style('OutoftheBox.CustomStyle');
-    wp_enqueue_style('Awesome-Font-5');
+    wp_enqueue_style('Eva-Icons');
 }
 
 add_action('wp_print_scripts', 'OutoftheBox_remove_all_scripts', 1000);
@@ -49,7 +49,7 @@ add_action('wp_print_styles', 'OutoftheBox_remove_all_styles', 1000);
   <?php wp_print_styles(); ?>
 </head>
 
-<body class="outofthebox">
+<body class="OutoftheBox outofthebox">
   <form action=" #" data-callback="<?php echo isset($_REQUEST['callback']) ? $_REQUEST['callback'] : ''; ?>">
 
     <div class="wrap">
@@ -59,7 +59,7 @@ add_action('wp_print_styles', 'OutoftheBox_remove_all_styles', 1000);
 
         <div class="outofthebox-form-buttons">
           <div id="do_embed" class="simple-button default">
-            <?php esc_html_e('Embed Files', 'wpcloudplugins'); ?>&nbsp;<i class="fas fa-chevron-circle-right"
+            <?php esc_html_e('Embed Files', 'wpcloudplugins'); ?>&nbsp;<i class="eva eva-play-circle-outline eva-lg"
               aria-hidden="true"></i></div>
         </div>
 

@@ -600,9 +600,9 @@ class gradebook_upload_csv_API
                     $assignments_stored[$thisdex]['assign_grade_type'] = $type;
                 }
 
-                //if the visiblity is empty, default to 'Student'
+                //if the visiblity is empty, default to 'Students'
                 if (!$this->isStringNotEmpty($assignment['assign_visibility'])) {
-                    $to_update['assign_visibility'] = 'Student';
+                    $to_update['assign_visibility'] = 'Students';
                     array_push($to_update_type, '%s');
                 }
 
@@ -667,7 +667,7 @@ class gradebook_upload_csv_API
             'assign_date' => date('Y-m-d'),
             'assign_due' => date('Y-m-d', strtotime("+1 week")),
             'assign_category' => '',
-            'assign_visibility' => 'Student',
+            'assign_visibility' => 'Students',
             'assign_grade_type' => $assignment['type'],
             'gbid' => $gbid,
             'assign_order' => $assignOrder,

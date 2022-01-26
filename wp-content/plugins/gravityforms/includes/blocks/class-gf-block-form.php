@@ -87,15 +87,27 @@ class GF_Block_Form extends GF_Block {
 	 */
 	public function scripts() {
 
-		$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG || isset( $_GET['gform_debug'] ) ? '' : '.min';
+		$min  = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG || isset( $_GET['gform_debug'] ) ? '' : '.min';
+		$deps = array(
+			'wp-blocks',
+			'wp-element',
+			'wp-components',
+			'wp-i18n',
+		);
+
+		global $pagenow;
+		if ( $pagenow !== 'widgets.php' ) {
+			$deps[] = 'wp-editor';
+		}
 
 		return array(
 			array(
-				'handle'   => $this->script_handle,
-				'src'      => GFCommon::get_base_url() . "/js/blocks{$min}.js",
-				'deps'     => array( 'wp-blocks', 'wp-element', 'wp-components', 'wp-i18n', 'wp-editor' ),
-				'version'  => $min ? GFForms::$version : filemtime( GFCommon::get_base_path() . '/js/blocks.js' ),
-				'callback' => array( $this, 'localize_script' ),
+				'handle'    => $this->script_handle,
+				'in_footer' => true,
+				'src'       => GFCommon::get_base_url() . "/js/blocks{$min}.js",
+				'deps'      => $deps,
+				'version'   => $min ? GFForms::$version : filemtime( GFCommon::get_base_path() . '/js/blocks.js' ),
+				'callback'  => array( $this, 'localize_script' ),
 			),
 		);
 

@@ -27,9 +27,7 @@ jQuery( document ).ready(
 					var checkedStatus = true;
 					jQuery( 'input[class="' + this.className + '"]' ).each(
 						function() {
-							if ( ( true === this.checked ) && ( true === checkedStatus ) ) {
-								checkedStatus = true;
-							} else {
+							if ( ( ! this.checked ) ) {
 								checkedStatus = false;
 							}
 							jQuery( 'input[value="' + this.className + '"]' )
@@ -40,16 +38,14 @@ jQuery( document ).ready(
 			);
 
 			// function to check or uncheck 'checkall' box when page is loaded
-			jQuery( 'input[class^="checkall"]' ).each(
-				function() {
+			jQuery( 'input[name^="checkall"]' ).each(function(value, item) {
 					var checkedStatus = true;
-					if ( ( true === this.checked ) && ( true === checkedStatus ) ) {
-						checkedStatus = true;
-					} else {
-						checkedStatus = false;
-					}
-					jQuery( 'input[value="' + this.className + '"]' )
-					.prop( 'checked', checkedStatus );
+					jQuery('input[class='+item.value).each(function () {
+						if ( ( ! this.checked ) ) {
+							checkedStatus = false;
+						}
+					});
+					jQuery(this).prop( 'checked', checkedStatus );
 				}
 			);
 	}

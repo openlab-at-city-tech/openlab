@@ -150,7 +150,7 @@ function wpt_settings_tabs() {
 	$output   = '';
 	$username = get_option( 'wtt_twitter_username' );
 	$default  = ( '' === $username || false === $username ) ? 'connection' : 'basic';
-	$current  = ( isset( $_GET['tab'] ) ) ? $_GET['tab'] : $default;
+	$current  = ( isset( $_GET['tab'] ) ) ? sanitize_text_field( $_GET['tab'] ) : $default;
 	$pro_text = ( function_exists( 'wpt_pro_exists' ) ) ? __( 'Pro Settings', 'wp-to-twitter' ) : __( 'Get WP Tweets PRO', 'wp-to-twitter' );
 	$pages    = array(
 		'connection' => __( 'Twitter Connection', 'wp-to-twitter' ),
@@ -160,7 +160,7 @@ function wpt_settings_tabs() {
 		'support'    => __( 'Get Help', 'wp-to-twitter' ),
 		'pro'        => $pro_text,
 	);
-	if ( '1' === get_option( 'jd_donations' ) && ! function_exists( 'wpt_pro_exists' ) ) {
+	if ( ! function_exists( 'wpt_pro_exists' ) ) {
 		unset( $pages['pro'] );
 	}
 
@@ -189,11 +189,11 @@ function wpt_show_last_tweet() {
 			$post_ID = $log[0];
 			$post    = get_post( $post_ID );
 			if ( is_object( $post ) ) {
-				$title = "<a href='" . get_edit_post_link( $post_ID ) . "'>$post->post_title</a>";
+				$title = "<a href='" . esc_url( get_edit_post_link( $post_ID ) ) . "'>" . esc_html( $post->post_title ) . '</a>';
 			} else {
 				$title = '(' . __( 'No post', 'wp-to-twitter' ) . ')';
 			}
-			$notice = $log[1];
+			$notice = esc_html( $log[1] );
 			echo "<div class='updated'><p><strong>" . __( 'Last Tweet', 'wp-to-twitter' ) . "</strong>: $title &raquo; $notice</p></div>";
 		}
 	}
@@ -250,7 +250,7 @@ function wpt_check_caps( $role, $cap ) {
  * @return Checkbox HTML.
  */
 function wpt_cap_checkbox( $role, $cap, $name ) {
-	return "<li><input type='checkbox' id='wpt_caps_{$role}_$cap' name='wpt_caps[$role][$cap]' value='on'" . wpt_check_caps( $role, $cap ) . " /> <label for='wpt_caps_{$role}_$cap'>$name</label></li>";
+	return "<li><input type='checkbox' id='wpt_caps_{$role}_$cap' name='wpt_caps[$role][$cap]' value='on'" . wpt_check_caps( $role, $cap ) . " /> <label for='wpt_caps_{$role}_$cap'>" . esc_html( $name ) . '</label></li>';
 }
 
 /**
@@ -302,7 +302,7 @@ function wpt_show_debug() {
 				$date     = date_i18n( 'Y-m-d H:i:s', $entry[0] );
 				$subject  = $entry[1];
 				$body     = $entry[2];
-				$records .= "<li><button type='button' class='toggle-debug button-secondary' aria-expanded='false'><strong>$date</strong>:<br />$subject</button><pre class='wpt-debug-details'>" . esc_html( $body ) . '</pre></li>';
+				$records .= "<li><button type='button' class='toggle-debug button-secondary' aria-expanded='false'><strong>$date</strong>:<br />" . esc_html( $subject ) . "</button><pre class='wpt-debug-details'>" . esc_html( $body ) . '</pre></li>';
 			}
 		}
 		$script = "

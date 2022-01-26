@@ -16,7 +16,7 @@ su_add_shortcode(
 				),
 				'default' => 'default',
 				'name'    => __( 'Style', 'shortcodes-ultimate' ),
-				'desc'    => __( 'Choose style for this quote', 'shortcodes-ultimate' ) . '%su_skins_link%',
+				'desc'    => __( 'Choose style for this quote', 'shortcodes-ultimate' ),
 			),
 			'cite'  => array(
 				'default' => '',

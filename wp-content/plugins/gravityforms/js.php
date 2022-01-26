@@ -684,6 +684,7 @@ if ( ! class_exists( 'GFForms' ) ) {
 				if (!field.label)
 					field.label = "<?php _e( 'Untitled', 'gravityforms' ); ?>";
 
+				field.validateState = true;
 				field.inputs = null;
 				if (!field.choices) {
 					field.choices = field["enablePrice"] ? new Array(new Choice(<?php echo json_encode( esc_html__( 'First Choice', 'gravityforms' ) ); ?>, "", "0.00"), new Choice(<?php echo json_encode( esc_html__( 'Second Choice', 'gravityforms' ) ); ?>, "", "0.00"), new Choice(<?php echo json_encode( esc_html__( 'Third Choice', 'gravityforms' ) ); ?>, "", "0.00"))

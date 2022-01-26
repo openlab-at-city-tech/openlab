@@ -41,6 +41,9 @@ class Meow_WPMC_UI {
 	}
 
 	function admin_menu() {
+		if ( !$this->core->can_access_features() ) {
+      return;
+    }
 		add_media_page( 'Media Cleaner Dashboard', __( 'Cleaner', 'media-file-renamer' ), 'read', 
 			'wpmc_dashboard', array( $this, 'cleaner_dashboard' ), 1 );
 	}

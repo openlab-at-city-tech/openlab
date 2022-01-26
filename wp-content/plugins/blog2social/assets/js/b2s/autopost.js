@@ -6,6 +6,7 @@ jQuery(window).on("load", function () {
     }
     
     jQuery(".b2s-import-auto-post-type").chosen();
+    jQuery(".b2s-import-auto-post-categories").chosen();
     jQuery(".b2s-auto-post-assign-user").chosen();
 
     jQuery('.b2s-network-item-auth-list[data-network-count="true"]').each(function () {

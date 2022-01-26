@@ -3,7 +3,8 @@
 * Options
 */
 class Mappress_Options extends Mappress_Obj {
-	var $alignment,
+	var $acf,
+		$alignment,
 		$autoicons,
 		$autoupdate,
 		$apiKey,
@@ -11,20 +12,22 @@ class Mappress_Options extends Mappress_Obj {
 		$autodisplay,
 		$betas,
 		$clustering = false,
+		$clusteringOptions,
 		$country,
-		$css = true,
 		$defaultIcon,
-		$deregister,
+		$deregister = true,
 		$directions = 'google',
 		$directionsServer = 'https://maps.google.com',
 		$engine = 'leaflet',
 		$filter,					// deprecated
 		$filters = array(),
+		$filtersPos = 'top',
 		$footer = true,
-		$geocoder,
+		$geocoder = 'nominatim',
 		$highlight,
 		$highlightIcon,
 		$iconScale,
+		$iframes,
 		$initialOpenInfo,
 		$language,
 		$layout = 'left',
@@ -38,13 +41,17 @@ class Mappress_Options extends Mappress_Obj {
 		$metaSyncSave = true,
 		$mini = 400,
 		$poiList = true,
+		$poiListPageSize = 20,
+		$poiListOpen = true,
 		$poiZoom = 15,
 		$postTypes = array('post', 'page'),
 		$radius = 15,
+		$scrollWheel = true,
 		$search = true,
+		$searchBox,
 		$size = 0,
 		$sizes = array(
-			array('width' => '425', 'height' => '350'),
+			array('width' => '100%', 'height' => '350px'),
 			array('width' => '50%', 'height' => '50%'),
 			array('width' => '75%', 'height' => '50%'),
 			array('width' => '100%', 'height' => '50%'),
@@ -62,6 +69,7 @@ class Mappress_Options extends Mappress_Obj {
 		$thumbWidth,
 		$thumbHeight,
 		$tooltips = false,
+		$userLocation = false,
 		$wpml = true
 		;
 
@@ -72,6 +80,10 @@ class Mappress_Options extends Mappress_Obj {
 	// Options are saved as array because WP settings API is fussy about objects
 	static function get() {
 		$options = get_option('mappress_options');
+
+		// Iframes
+		if (isset($_REQUEST['mp_compat']))
+			$options['iframes'] = true;
 		return new Mappress_Options($options);
 	}
 
@@ -91,6 +103,8 @@ class Mappress_Settings {
 		add_action('wp_ajax_mapp_options_reset', array(__CLASS__, 'ajax_reset'));
 		add_action('wp_ajax_mapp_option_save', array(__CLASS__, 'ajax_option_save'));
 		add_action('wp_ajax_mapp_options_save', array(__CLASS__, 'ajax_options_save'));
+		add_action('wp_ajax_mapp_style_delete', array(__CLASS__, 'ajax_style_delete'));
+		add_action('wp_ajax_mapp_style_save', array(__CLASS__, 'ajax_style_save'));
 		add_action('load-toplevel_page_mappress', array(__CLASS__, 'review_admin_notice'));
 	}
 
@@ -100,14 +114,59 @@ class Mappress_Settings {
 		if (!current_user_can('manage_options'))
 			Mappress::ajax_response('Not authorized');
 
-		ob_start();
-		$settings = (isset($_POST['license'])) ? (object) $_POST['license'] : null;
-		if (!$settings)
+		$license = (isset($_POST['license'])) ? (object) $_POST['license'] : null;
+		if (!$license)
 			Mappress::ajax_response('Internal error, missing license!');
 
-		// For now, this just clears the cache because the page must still be reloaded to show (or clear) admin notices
-		$result = Mappress::$updater->clear_cache();
-		Mappress::ajax_response('OK');
+		ob_start();
+		$status = Mappress::$updater->check($license);
+		Mappress::ajax_response('OK', $status);
+	}
+
+	static function ajax_style_delete() {
+		check_ajax_referer('mappress', 'nonce');
+		if (!current_user_can('manage_options'))
+			Mappress::ajax_response('Not authorized');
+
+		$id = (isset($_POST['id'])) ? $_POST['id'] : null;
+		if (!$id)
+			Mappress::ajax_response('Missing style ID');
+
+		$options = Mappress_Options::get();
+		$setting = ($options->engine == 'google') ? 'stylesGoogle' : 'stylesMapbox';
+		$i = array_search($id, array_column($options->$setting, 'id'));
+
+		//unset($options->$setting[$key]);
+		array_splice($options->$setting, $i, 1);
+		$options->save();
+		Mappress::ajax_response('OK', $options->$setting);
+	}
+
+	// Save map style, for JSON styles will assign an ID if none exists
+	static function ajax_style_save() {
+		check_ajax_referer('mappress', 'nonce');
+		if (!current_user_can('manage_options'))
+			Mappress::ajax_response('Not authorized');
+
+		$style = (isset($_POST['style'])) ? wp_unslash($_POST['style']) : null;
+		if (!$style)
+			Mappress::ajax_response('Missing style');
+
+		$options = Mappress_Options::get();
+		$setting = ($options->engine == 'google') ? 'stylesGoogle' : 'stylesMapbox';
+
+		// Update if style has an ID, otherwise treat it as new.  New Snazzy styles have an ID, otherwise assign uniqid
+		$id = ($style['id']) ? $style['id'] : null;
+		$i = ($id) ? array_search($id, array_column($options->$setting, 'id')) : false;
+
+		if ($i === false) {
+			$style['id'] = ($id) ? $id : uniqid();
+			$options->$setting[] = $style;
+		} else {
+			$options->$setting[$i] = $style;
+		}
+		$options->save();
+		Mappress::ajax_response('OK', $options->$setting);
 	}
 
 	// Save one or more options
@@ -115,6 +174,7 @@ class Mappress_Settings {
 		check_ajax_referer('mappress', 'nonce');
 		if (!current_user_can('manage_options'))
 			Mappress::ajax_response('Not authorized');
+
 
 		$settings = (isset($_POST['settings'])) ? (object) wp_unslash($_POST['settings']) : array();
 		$options = Mappress_Options::get();
@@ -132,8 +192,9 @@ class Mappress_Settings {
 
 		ob_start();
 
-		// Note that WP adds extra slashes to post data, removed with wp_unslash()
-		$settings = (isset($_POST['settings'])) ? (object) wp_unslash($_POST['settings']) : null;
+		$settings = (isset($_POST['settings'])) ? wp_unslash($_POST['settings']) : null;
+		$settings = ($settings) ? (object) json_decode($settings, true) : null;
+
 		if (!$settings)
 			Mappress::ajax_response('Internal error, missing settings!');
 
@@ -141,9 +202,13 @@ class Mappress_Settings {
 		self::assoc($settings->autoicons['values'], true);
 		self::assoc($settings->metaKeys, true);
 
-		// If license changed, re-check it
+		// If license changed, clear cache so it re-checks on next load
 		if ($settings->license && $settings->license != Mappress::$options->license)
 			Mappress::$updater->clear_cache();
+
+		// Update() converts strings to booleans, but it's not recursive, so explicitly convert nested booleans inside arrays
+		if (isset($settings->clusteringOptions['spiderfyOnMaxZoom']))
+			$settings->clusteringOptions['spiderfyOnMaxZoom'] = ($settings->clusteringOptions['spiderfyOnMaxZoom'] == "true") ? true : false;
 
 		// Merge in old values so they're not lost, e.g. stylesMapbox and stylesGoogle
 		$options = Mappress_Options::get();
@@ -179,9 +244,6 @@ class Mappress_Settings {
 		self::assoc($state->metaKeys, false);
 
 		// Setup helpers
-		$languages = array('' => __('Default', 'mappress-google-maps-for-wordpress'), 'ab' => 'Abkhazian', 'aa' => 'Afar', 'af' => 'Afrikaans', 'ak' => 'Akan', 'sq' => 'Albanian', 'am' => 'Amharic', 'ar' => 'Arabic', 'an' => 'Aragonese', 'hy' => 'Armenian', 'as' => 'Assamese', 'av' => 'Avaric', 'ae' => 'Avestan', 'ay' => 'Aymara', 'az' => 'Azerbaijani', 'bm' => 'Bambara', 'ba' => 'Bashkir', 'eu' => 'Basque', 'be' => 'Belarusian', 'bn' => 'Bengali', 'bh' => 'Bihari languages', 'bi' => 'Bislama', 'bs' => 'Bosnian', 'br' => 'Breton', 'bg' => 'Bulgarian', 'my' => 'Burmese', 'ca' => 'Catalan, Valencian', 'km' => 'Central Khmer', 'ch' => 'Chamorro', 'ce' => 'Chechen', 'ny' => 'Chichewa, Chewa, Nyanja', 'zh' => 'Chinese', 'cv' => 'Chuvash', 'kw' => 'Cornish', 'co' => 'Corsican', 'cr' => 'Cree', 'hr' => 'Croatian', 'cs' => 'Czech', 'da' => 'Danish', 'dv' => 'Divehi, Dhivehi, Maldivian', 'nl' => 'Dutch, Flemish', 'dz' => 'Dzongkha', 'en' => 'English', 'eo' => 'Esperanto', 'et' => 'Estonian', 'ee' => 'Ewe', 'fo' => 'Faroese', 'fj' => 'Fijian', 'fi' => 'Finnish', 'fr' => 'French', 'ff' => 'Fulah', 'gd' => 'Gaelic, Scottish Gaelic', 'gl' => 'Galician', 'lg' => 'Ganda', 'ka' => 'Georgian', 'de' => 'German', 'ki' => 'Gikuyu, Kikuyu', 'el' => 'Greek (Modern)', 'kl' => 'Greenlandic, Kalaallisut', 'gn' => 'Guarani', 'gu' => 'Gujarati', 'ht' => 'Haitian, Haitian Creole', 'ha' => 'Hausa', 'he' => 'Hebrew', 'hz' => 'Herero', 'hi' => 'Hindi', 'ho' => 'Hiri Motu', 'hu' => 'Hungarian', 'is' => 'Icelandic', 'io' => 'Ido', 'ig' => 'Igbo', 'id' => 'Indonesian', 'iu' => 'Inuktitut', 'ik' => 'Inupiaq', 'ga' => 'Irish', 'it' => 'Italian', 'ja' => 'Japanese', 'jv' => 'Javanese', 'kn' => 'Kannada', 'kr' => 'Kanuri', 'ks' => 'Kashmiri', 'kk' => 'Kazakh', 'rw' => 'Kinyarwanda', 'kv' => 'Komi', 'kg' => 'Kongo', 'ko' => 'Korean', 'kj' => 'Kwanyama, Kuanyama', 'ku' => 'Kurdish', 'ky' => 'Kyrgyz', 'lo' => 'Lao', 'la' => 'Latin', 'lv' => 'Latvian', 'lb' => 'Letzeburgesch, Luxembourgish', 'li' => 'Limburgish, Limburgan, Limburger', 'ln' => 'Lingala', 'lt' => 'Lithuanian', 'lu' => 'Luba-Katanga', 'mk' => 'Macedonian', 'mg' => 'Malagasy', 'ms' => 'Malay', 'ml' => 'Malayalam', 'mt' => 'Maltese', 'gv' => 'Manx', 'mi' => 'Maori', 'mr' => 'Marathi', 'mh' => 'Marshallese', 'ro' => 'Moldovan, Moldavian, Romanian', 'mn' => 'Mongolian', 'na' => 'Nauru', 'nv' => 'Navajo, Navaho', 'nd' => 'Northern Ndebele', 'ng' => 'Ndonga', 'ne' => 'Nepali', 'se' => 'Northern Sami', 'no' => 'Norwegian', 'nb' => 'Norwegian Bokmål', 'nn' => 'Norwegian Nynorsk', 'ii' => 'Nuosu, Sichuan Yi', 'oc' => 'Occitan (post 1500)', 'oj' => 'Ojibwa', 'or' => 'Oriya', 'om' => 'Oromo', 'os' => 'Ossetian, Ossetic', 'pi' => 'Pali', 'pa' => 'Panjabi, Punjabi', 'ps' => 'Pashto, Pushto', 'fa' => 'Persian', 'pl' => 'Polish', 'pt' => 'Portuguese', 'qu' => 'Quechua', 'rm' => 'Romansh', 'rn' => 'Rundi', 'ru' => 'Russian', 'sm' => 'Samoan', 'sg' => 'Sango', 'sa' => 'Sanskrit', 'sc' => 'Sardinian', 'sr' => 'Serbian', 'sn' => 'Shona', 'sd' => 'Sindhi', 'si' => 'Sinhala, Sinhalese', 'sk' => 'Slovak', 'sl' => 'Slovenian', 'so' => 'Somali', 'st' => 'Sotho, Southern', 'nr' => 'South Ndebele', 'es' => 'Spanish, Castilian', 'su' => 'Sundanese', 'sw' => 'Swahili', 'ss' => 'Swati', 'sv' => 'Swedish', 'tl' => 'Tagalog', 'ty' => 'Tahitian', 'tg' => 'Tajik', 'ta' => 'Tamil', 'tt' => 'Tatar', 'te' => 'Telugu', 'th' => 'Thai', 'bo' => 'Tibetan', 'ti' => 'Tigrinya', 'to' => 'Tonga (Tonga Islands)', 'ts' => 'Tsonga', 'tn' => 'Tswana', 'tr' => 'Turkish', 'tk' => 'Turkmen', 'tw' => 'Twi', 'ug' => 'Uighur, Uyghur', 'uk' => 'Ukrainian', 'ur' => 'Urdu', 'uz' => 'Uzbek', 've' => 'Venda', 'vi' => 'Vietnamese', 'vo' => 'Volap_k', 'wa' => 'Walloon', 'cy' => 'Welsh', 'fy' => 'Western Frisian', 'wo' => 'Wolof', 'xh' => 'Xhosa', 'yi' => 'Yiddish', 'yo' => 'Yoruba', 'za' => 'Zhuang, Chuang', 'zu' => 'Zulu');
-		$license_status = self::get_license_status();
-
 		$helpers = (object) array(
 			'demo_map' => self::demo_map(),
 			'geocoding_errors' => self::geocoding_errors(),
@@ -190,9 +252,8 @@ class Mappress_Settings {
 			'is_super_admin' => is_super_admin(),
 			'is_main_site' => is_main_site(),
 			'jetpack' => (class_exists( 'Jetpack' ) && Jetpack::is_module_active( 'infinite-scroll' )),
-			'languages' => $languages,
-			'license_status' => $license_status->status,
-			'license_message' => $license_status->message,
+			'languages' => array('' => __('Default', 'mappress-google-maps-for-wordpress'), 'ab' => 'Abkhazian', 'aa' => 'Afar', 'af' => 'Afrikaans', 'ak' => 'Akan', 'sq' => 'Albanian', 'am' => 'Amharic', 'ar' => 'Arabic', 'an' => 'Aragonese', 'hy' => 'Armenian', 'as' => 'Assamese', 'av' => 'Avaric', 'ae' => 'Avestan', 'ay' => 'Aymara', 'az' => 'Azerbaijani', 'bm' => 'Bambara', 'ba' => 'Bashkir', 'eu' => 'Basque', 'be' => 'Belarusian', 'bn' => 'Bengali', 'bh' => 'Bihari languages', 'bi' => 'Bislama', 'bs' => 'Bosnian', 'br' => 'Breton', 'bg' => 'Bulgarian', 'my' => 'Burmese', 'ca' => 'Catalan, Valencian', 'km' => 'Central Khmer', 'ch' => 'Chamorro', 'ce' => 'Chechen', 'ny' => 'Chichewa, Chewa, Nyanja', 'zh' => 'Chinese', 'cv' => 'Chuvash', 'kw' => 'Cornish', 'co' => 'Corsican', 'cr' => 'Cree', 'hr' => 'Croatian', 'cs' => 'Czech', 'da' => 'Danish', 'dv' => 'Divehi, Dhivehi, Maldivian', 'nl' => 'Dutch, Flemish', 'dz' => 'Dzongkha', 'en' => 'English', 'eo' => 'Esperanto', 'et' => 'Estonian', 'ee' => 'Ewe', 'fo' => 'Faroese', 'fj' => 'Fijian', 'fi' => 'Finnish', 'fr' => 'French', 'ff' => 'Fulah', 'gd' => 'Gaelic, Scottish Gaelic', 'gl' => 'Galician', 'lg' => 'Ganda', 'ka' => 'Georgian', 'de' => 'German', 'ki' => 'Gikuyu, Kikuyu', 'el' => 'Greek (Modern)', 'kl' => 'Greenlandic, Kalaallisut', 'gn' => 'Guarani', 'gu' => 'Gujarati', 'ht' => 'Haitian, Haitian Creole', 'ha' => 'Hausa', 'he' => 'Hebrew', 'hz' => 'Herero', 'hi' => 'Hindi', 'ho' => 'Hiri Motu', 'hu' => 'Hungarian', 'is' => 'Icelandic', 'io' => 'Ido', 'ig' => 'Igbo', 'id' => 'Indonesian', 'iu' => 'Inuktitut', 'ik' => 'Inupiaq', 'ga' => 'Irish', 'it' => 'Italian', 'ja' => 'Japanese', 'jv' => 'Javanese', 'kn' => 'Kannada', 'kr' => 'Kanuri', 'ks' => 'Kashmiri', 'kk' => 'Kazakh', 'rw' => 'Kinyarwanda', 'kv' => 'Komi', 'kg' => 'Kongo', 'ko' => 'Korean', 'kj' => 'Kwanyama, Kuanyama', 'ku' => 'Kurdish', 'ky' => 'Kyrgyz', 'lo' => 'Lao', 'la' => 'Latin', 'lv' => 'Latvian', 'lb' => 'Letzeburgesch, Luxembourgish', 'li' => 'Limburgish, Limburgan, Limburger', 'ln' => 'Lingala', 'lt' => 'Lithuanian', 'lu' => 'Luba-Katanga', 'mk' => 'Macedonian', 'mg' => 'Malagasy', 'ms' => 'Malay', 'ml' => 'Malayalam', 'mt' => 'Maltese', 'gv' => 'Manx', 'mi' => 'Maori', 'mr' => 'Marathi', 'mh' => 'Marshallese', 'ro' => 'Moldovan, Moldavian, Romanian', 'mn' => 'Mongolian', 'na' => 'Nauru', 'nv' => 'Navajo, Navaho', 'nd' => 'Northern Ndebele', 'ng' => 'Ndonga', 'ne' => 'Nepali', 'se' => 'Northern Sami', 'no' => 'Norwegian', 'nb' => 'Norwegian Bokmål', 'nn' => 'Norwegian Nynorsk', 'ii' => 'Nuosu, Sichuan Yi', 'oc' => 'Occitan (post 1500)', 'oj' => 'Ojibwa', 'or' => 'Oriya', 'om' => 'Oromo', 'os' => 'Ossetian, Ossetic', 'pi' => 'Pali', 'pa' => 'Panjabi, Punjabi', 'ps' => 'Pashto, Pushto', 'fa' => 'Persian', 'pl' => 'Polish', 'pt' => 'Portuguese', 'qu' => 'Quechua', 'rm' => 'Romansh', 'rn' => 'Rundi', 'ru' => 'Russian', 'sm' => 'Samoan', 'sg' => 'Sango', 'sa' => 'Sanskrit', 'sc' => 'Sardinian', 'sr' => 'Serbian', 'sn' => 'Shona', 'sd' => 'Sindhi', 'si' => 'Sinhala, Sinhalese', 'sk' => 'Slovak', 'sl' => 'Slovenian', 'so' => 'Somali', 'st' => 'Sotho, Southern', 'nr' => 'South Ndebele', 'es' => 'Spanish, Castilian', 'su' => 'Sundanese', 'sw' => 'Swahili', 'ss' => 'Swati', 'sv' => 'Swedish', 'tl' => 'Tagalog', 'ty' => 'Tahitian', 'tg' => 'Tajik', 'ta' => 'Tamil', 'tt' => 'Tatar', 'te' => 'Telugu', 'th' => 'Thai', 'bo' => 'Tibetan', 'ti' => 'Tigrinya', 'to' => 'Tonga (Tonga Islands)', 'ts' => 'Tsonga', 'tn' => 'Tswana', 'tr' => 'Turkish', 'tk' => 'Turkmen', 'tw' => 'Twi', 'ug' => 'Uighur, Uyghur', 'uk' => 'Ukrainian', 'ur' => 'Urdu', 'uz' => 'Uzbek', 've' => 'Venda', 'vi' => 'Vietnamese', 'vo' => 'Volap_k', 'wa' => 'Walloon', 'cy' => 'Welsh', 'fy' => 'Western Frisian', 'wo' => 'Wolof', 'xh' => 'Xhosa', 'yi' => 'Yiddish', 'yo' => 'Yoruba', 'za' => 'Zhuang, Chuang', 'zu' => 'Zulu'),
+			'license_status' => (Mappress::$pro && Mappress::$options->license) ? Mappress::$updater->get_status() : null,
 			'meta_fields' => self::get_meta_fields(),
 			'meta_keys' => self::get_meta_keys(),
 			'post_types' => self::get_post_types(),
@@ -234,7 +295,7 @@ class Mappress_Settings {
 
 	static function geocoding_errors() {
 		$geocoding_errors = array();
-		$query = new WP_Query(array('meta_key' => 'mappress_error', 'posts_per_page' => 20, 'post_type' => Mappress::$options->postTypes));
+		$query = new WP_Query(array('meta_key' => 'mappress_error', 'posts_per_page' => 20));
 		foreach($query->posts as $post) {
 			$geocoding_errors[] = array(
 				'ID' => $post->ID,
@@ -243,23 +304,6 @@ class Mappress_Settings {
 			);
 		};
 		return $geocoding_errors;
-	}
-
-	static function get_license_status() {
-		$license = (object) array('status' => null, 'message' => null);
-
-		if (Mappress::$pro && Mappress::$options->license) {
-			$license->status = Mappress::$updater->get_status();
-			if ($license->status == 'active')
-				$license->message = __('Active', 'mappress-google-maps-for-wordpress');
-			else {
-				if (is_wp_error($license->status))
-					$license->message = sprintf(__('Communication error, please try again later: %s', 'mappress-google-maps-for-wordpress'), $license_status->get_error_message());
-				else
-					$license->message = __('License is invalid or expired', 'mappress-google-maps-for-wordpress');
-			}
-		}
-		return $license;
 	}
 
 	static function get_meta_fields() {
@@ -321,7 +365,7 @@ class Mappress_Settings {
 		$posts_table = $wpdb->prefix . 'mappress_posts';
 
 		$usage = new stdClass();
-		foreach(array('autodisplay', 'betas', 'engine', 'footer', 'geocoder', 'highlight', 'layout', 'language', 'poiList') as $key) {
+		foreach(array('alignment', 'autodisplay', 'betas', 'engine', 'footer', 'geocoder', 'highlight', 'layout', 'language', 'poiList') as $key) {
 			if (isset(Mappress::$options->$key))
 				$usage->$key = Mappress::$options->$key;
 		}
@@ -369,10 +413,10 @@ class Mappress_Settings {
 	static function options_page() {
 		?>
 		<script>var mappress_options_state=<?php echo self::get_initial_state();?>;</script>
-		<div class="wrap mapp-options">
+		<div class="mapp-options">
 			<div class='mapp-options-header'>
 				<div class='mapp-options-header-version'>
-				<h1><?php _e('MapPress', 'mappress-google-maps-for-wordpress'); ?></h1>
+					<h1><?php _e('MapPress', 'mappress-google-maps-for-wordpress'); ?></h1>
 					<?php echo Mappress::$version; ?>
 				</div>
 				<div class='mapp-options-header-links'>
@@ -392,13 +436,18 @@ class Mappress_Settings {
 
 	static function support_page() {
 		$options = Mappress::$options;
-		$initial_state = array('isOpen' => false, 'engine' => $options->engine, 'apiKey' => $options->apiKey, 'mapbox' => $options->mapbox);
+		$initial_state = array(
+			'apiKey' => $options->apiKey,
+			'engine' => $options->engine,
+			'isOpen' => (isset($_REQUEST['wizard']) && $_REQUEST['wizard']) ? true : false,
+			'mapbox' => $options->mapbox,
+		);
 		?>
 		<script>var mappress_support_state=<?php echo json_encode($initial_state); ?>;</script>
 		<div class='mapp-options'>
 			<div class='mapp-options-header'>
 				<div class='mapp-options-header-version'>
-				<h1><?php _e('MapPress', 'mappress-google-maps-for-wordpress'); ?></h1>
+					<h1><?php _e('MapPress', 'mappress-google-maps-for-wordpress'); ?></h1>
 					<?php echo Mappress::$version; ?>
 				</div>
 				<div class='mapp-options-header-links'>

@@ -824,6 +824,17 @@ function Currency(currency){
         }
         return d;
     };
+
+	/**
+	 * Returns the currency code if it exists.
+	 *
+	 * @since 2.5.13
+	 *
+	 * @return {string|false}
+	 */
+	this.getCode = function() {
+    	return 'code' in this.currency && this.currency.code !== '' ? this.currency.code : false;
+	}
 }
 
 /**
@@ -2004,6 +2015,15 @@ var GFMergeTag = function() {
 		modifier = modifier.replace(":", "");
 
 		var fieldId = parseInt(inputId,10);
+
+		// Check address field's copy value checkbox and reset fieldID to source field if checked
+		var isCopyPreviousAddressChecked = jQuery( '#input_' + formId + '_' + fieldId + '_copy_values_activated:checked' ).length > 0;
+		if ( isCopyPreviousAddressChecked ) {
+			var sourceFieldId = jQuery( '#input_' + formId + '_' + fieldId + '_copy_values_activated' ).data('source_field_id');
+			inputId = inputId == fieldId ? sourceFieldId : inputId.toString().replace( fieldId + '.', sourceFieldId + '.' );
+			fieldId = sourceFieldId;
+		}
+
 		var field = jQuery('#field_' + formId + '_' + fieldId);
 
 		var inputSelector = fieldId == inputId ? 'input[name^="input_' + fieldId + '"]' : 'input[name="input_' + inputId + '"]';
@@ -2043,6 +2063,8 @@ var GFMergeTag = function() {
 				break;
 
 		}
+
+
 
 		// Filter out unselected checkboxes and radio buttons
 		if ( input.prop('type') === 'checkbox' || input.prop('type') === 'radio' ) {
@@ -2162,6 +2184,10 @@ var GFMergeTag = function() {
 				val = gformToNumber( val );
 				return val === false ? 0 : val;
 				break;
+
+			default:
+				val = val.trim();
+				break;
 		}
 
 		return val;
@@ -2211,9 +2237,13 @@ var GFCalc = function(formId, formulaFields){
     this.init = function(formId, formulaFields) {
 
         var calc = this;
-        jQuery(document).bind("gform_post_conditional_logic", function(){
-            calc.runCalcs( formId, formulaFields );
-        } );
+
+        // @since 2.5.10 - namespace event to avoid multiple bindings.
+	    jQuery(document)
+		    .off("gform_post_conditional_logic.gfCalc_{0}".format(formId))
+		    .on("gform_post_conditional_logic.gfCalc_{0}".format(formId), function(){
+			    calc.runCalcs( formId, formulaFields );
+	    } );
 
         for(var i=0; i<formulaFields.length; i++) {
             var formulaField = jQuery.extend({}, formulaFields[i]);
@@ -2224,7 +2254,6 @@ var GFCalc = function(formId, formulaFields){
     }
 
     this.runCalc = function(formulaField, formId) {
-
         var calcObj      = this,
             field        = jQuery('#field_' + formId + '_' + formulaField.field_id),
             formulaInput = field.hasClass( 'gfield_price' ) ? jQuery( '#ginput_base_price_' + formId + '_' + formulaField.field_id ) : jQuery( '#input_' + formId + '_' + formulaField.field_id ),
@@ -2240,6 +2269,8 @@ var GFCalc = function(formId, formulaFields){
                 result = eval(expr);
 
             } catch( e ) { }
+        } else {
+        	return;
         }
 
         // if result is positive infinity, negative infinity or a NaN, defaults to 0
@@ -2380,6 +2411,10 @@ var GFCalc = function(formId, formulaFields){
 
             var inputId = matches[i][1];
             var fieldId = parseInt(inputId,10);
+
+            if ( fieldId == formulaField.field_id && fieldId == inputId ) {
+            	continue;
+            }
 
             var modifier = 'value';
 			if( matches[i][3] ){
@@ -2901,6 +2936,8 @@ function gformValidateFileSize( field, max_file_size ) {
 				up.removeFile(file);
 				addMessage(up.settings.gf_vars.message_id, file.name + " - " + response.error.message);
 				$('#' + file.id ).html('');
+			} else {
+				up.settings.multipart_params[file.target_name] = response.data;
 			}
 		});
 
@@ -3280,9 +3317,14 @@ jQuery( document ).on( 'submit.gravityforms', '.gform_wrapper form', function( e
             if ( ! token ) {
                 // Execute the invisible captcha.
                 grecaptcha.execute($reCaptcha.data('widget-id'));
-                // Once the reCaptcha is triggered, set gf_submitting to true, so the form could be submitted if the
+
+                // Once the reCaptcha is triggered, set gf_submitting to false, so the form could be submitted if the
                 // reCaptcha modal is closed (by clicking on the area out of the modal or the reCaptcha response expires)
-                window['gf_submitting_' + formID] = false;
+  				// do it after 4 seconds to reduce chance of multiple clicks when modal is not displayed
+                setTimeout( function() {
+                	window['gf_submitting_' + formID] = false;
+                }, 4000);
+
                 event.preventDefault();
             }
         }

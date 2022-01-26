@@ -140,6 +140,15 @@ class BP_Component {
 	 */
 	public $search_query_arg = 's';
 
+	/**
+	 * An array of globalized data for BP Blocks.
+	 *
+	 * @since 9.0.0
+	 *
+	 * @var array
+	 */
+	public $block_globals = array();
+
 	/** Methods ***************************************************************/
 
 	/**
@@ -205,7 +214,7 @@ class BP_Component {
 	 * Set up component global variables.
 	 *
 	 * @since 1.5.0
-	 *
+	 * @since 9.0.0 Adds the `$block_globals` argument to the `$args` parameter.
 	 *
 	 * @param array $args {
 	 *     All values are optional.
@@ -221,97 +230,123 @@ class BP_Component {
 	 *                                           'Search Groups...'.
 	 *     @type array    $global_tables         Optional. An array of database table names.
 	 *     @type array    $meta_tables           Optional. An array of metadata table names.
+	 *     @type array    $block_globals         Optional. An array of globalized data for BP Blocks.
 	 * }
 	 */
 	public function setup_globals( $args = array() ) {
-
-		/** Slugs ************************************************************
-		 */
-
-		// If a WP directory page exists for the component, it should
-		// be the default value of 'root_slug'.
-		$default_root_slug = isset( buddypress()->pages->{$this->id}->slug ) ? buddypress()->pages->{$this->id}->slug : '';
-
 		$r = wp_parse_args( $args, array(
 			'slug'                  => $this->id,
-			'root_slug'             => $default_root_slug,
+			'root_slug'             => '',
 			'has_directory'         => false,
 			'directory_title'       => '',
 			'notification_callback' => '',
 			'search_string'         => '',
 			'global_tables'         => '',
 			'meta_tables'           => '',
+			'block_globals'         => array(),
 		) );
 
-		/**
-		 * Filters the slug to be used for the permalink URI chunk after root.
-		 *
-		 * @since 1.5.0
-		 *
-		 * @param string $value Slug to use in permalink URI chunk.
+		/** Slugs ************************************************************
 		 */
-		$this->slug                  = apply_filters( 'bp_' . $this->id . '_slug',                  $r['slug']                  );
 
-		/**
-		 * Filters the slug used for root directory.
-		 *
-		 * @since 1.5.0
-		 *
-		 * @param string $value Root directory slug.
-		 */
-		$this->root_slug             = apply_filters( 'bp_' . $this->id . '_root_slug',             $r['root_slug']             );
+		// For all Components except Core.
+		if ( 'core' !== $this->id ) {
+			/**
+			 * If a WP directory page exists for the component, it should
+			 * be the default value of 'root_slug'.
+			 */
+			if ( isset( buddypress()->pages->{$this->id}->slug ) ) {
+				$r['root_slug'] = buddypress()->pages->{$this->id}->slug;
+			}
 
-		/**
-		 * Filters the component's top-level directory if available.
-		 *
-		 * @since 1.5.0
-		 *
-		 * @param bool $value Whether or not there is a top-level directory.
-		 */
-		$this->has_directory         = apply_filters( 'bp_' . $this->id . '_has_directory',         $r['has_directory']         );
+			/**
+			 * Filters the slug to be used for the permalink URI chunk after root.
+			 *
+			 * @since 1.5.0
+			 *
+			 * @param string $value Slug to use in permalink URI chunk.
+			 */
+			$this->slug = apply_filters( 'bp_' . $this->id . '_slug', $r['slug'] );
 
-		/**
-		 * Filters the component's directory title.
-		 *
-		 * @since 2.0.0
-		 *
-		 * @param string $value Title to use for the directory.
-		 */
-		$this->directory_title       = apply_filters( 'bp_' . $this->id . '_directory_title',       $r['directory_title']         );
+			/**
+			 * Filters the slug used for root directory.
+			 *
+			 * @since 1.5.0
+			 *
+			 * @param string $value Root directory slug.
+			 */
+			$this->root_slug = apply_filters( 'bp_' . $this->id . '_root_slug', $r['root_slug'] );
 
-		/**
-		 * Filters the placeholder text for search inputs for component.
-		 *
-		 * @since 1.5.0
-		 *
-		 * @param string $value Name to use in search input placeholders.
-		 */
-		$this->search_string         = apply_filters( 'bp_' . $this->id . '_search_string',         $r['search_string']         );
+			/**
+			 * Filters the component's top-level directory if available.
+			 *
+			 * @since 1.5.0
+			 *
+			 * @param bool $value Whether or not there is a top-level directory.
+			 */
+			$this->has_directory = apply_filters( 'bp_' . $this->id . '_has_directory', $r['has_directory'] );
 
-		/**
-		 * Filters the callable function that formats the component's notifications.
-		 *
-		 * @since 1.5.0
-		 *
-		 * @param string $value Function callback.
-		 */
-		$this->notification_callback = apply_filters( 'bp_' . $this->id . '_notification_callback', $r['notification_callback'] );
+			/**
+			 * Filters the component's directory title.
+			 *
+			 * @since 2.0.0
+			 *
+			 * @param string $value Title to use for the directory.
+			 */
+			$this->directory_title = apply_filters( 'bp_' . $this->id . '_directory_title', $r['directory_title'] );
 
-		// Set the global table names, if applicable.
-		if ( ! empty( $r['global_tables'] ) ) {
-			$this->register_global_tables( $r['global_tables'] );
+			/**
+			 * Filters the placeholder text for search inputs for component.
+			 *
+			 * @since 1.5.0
+			 *
+			 * @param string $value Name to use in search input placeholders.
+			 */
+			$this->search_string = apply_filters( 'bp_' . $this->id . '_search_string', $r['search_string'] );
+
+			/**
+			 * Filters the callable function that formats the component's notifications.
+			 *
+			 * @since 1.5.0
+			 *
+			 * @param string $value Function callback.
+			 */
+			$this->notification_callback = apply_filters( 'bp_' . $this->id . '_notification_callback', $r['notification_callback'] );
+
+			// Set the global table names, if applicable.
+			if ( ! empty( $r['global_tables'] ) ) {
+				$this->register_global_tables( $r['global_tables'] );
+			}
+
+			// Set the metadata table, if applicable.
+			if ( ! empty( $r['meta_tables'] ) ) {
+				$this->register_meta_tables( $r['meta_tables'] );
+			}
+
+			// Register this component in the loaded components array.
+			buddypress()->loaded_components[ $this->slug ] = $this->id;
 		}
 
-		// Set the metadata table, if applicable.
-		if ( ! empty( $r['meta_tables'] ) ) {
-			$this->register_meta_tables( $r['meta_tables'] );
-		}
-
-		/** BuddyPress *******************************************************
+		/**
+		 * Filters the $blocks global value.
+		 *
+		 * @since 9.0.0
+		 *
+		 * @param array $blocks a list of global properties for blocks keyed
+		 *                      by their corresponding block name.
 		 */
+		$block_globals = apply_filters( 'bp_' . $this->id . '_block_globals', $r['block_globals'] );
+		if ( is_array( $block_globals ) && array_filter( $block_globals ) ) {
+			foreach ( $block_globals as $block_name => $block_props ) {
+				$this->block_globals[ $block_name ] = new stdClass();
 
-		// Register this component in the loaded components array.
-		buddypress()->loaded_components[$this->slug] = $this->id;
+				// Initialize an `items` property for Widget Block occurrences.
+				$this->block_globals[ $block_name ]->items = array();
+
+				// Set the global properties for the Block.
+				$this->block_globals[ $block_name ]->props = (array) $block_props;
+			}
+		}
 
 		/**
 		 * Fires at the end of the setup_globals method inside BP_Component.
@@ -917,21 +952,24 @@ class BP_Component {
 	 *
 	 * @since 6.0.0
 	 *
+	 * @see `BP_Block->construct()` for a full description of a BP Block arguments.
+	 *
 	 * @param array $blocks The list of BP Blocks to register.
 	 */
 	public function blocks_init( $blocks = array() ) {
-		if ( is_array( $blocks ) && $blocks ) {
-			/**
-			 * Filter here to disable all or some BP Blocks for a component.
-			 *
-			 * This is a dynamic hook that is based on the component string ID.
-			 *
-			 * @since 6.0.0
-			 *
-			 * @param array $blocks The list of BP Blocks for the component.
-			 */
-			$blocks = (array) apply_filters( 'bp_' . $this->id . '_register_blocks', $blocks );
+		/**
+		 * Filter here to add new BP Blocks, disable some or all BP Blocks for a component.
+		 *
+		 * This is a dynamic hook that is based on the component string ID.
+		 *
+		 * @since 6.0.0
+		 *
+		 * @param array $blocks The list of BP Blocks for the component.
+		 */
+		$blocks = (array) apply_filters( 'bp_' . $this->id . '_register_blocks', $blocks );
+		$blocks = array_filter( $blocks );
 
+		if ( $blocks ) {
 			foreach ( $blocks as $block ) {
 				bp_register_block( $block );
 			}

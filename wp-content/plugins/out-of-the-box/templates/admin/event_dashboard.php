@@ -172,7 +172,7 @@
             <div class="outofthebox-box-inner">
               <div class="event-details-user-template" style="display:none;">
                 <div class="event-details-entry-img"></div>
-                <a target="_blank" class="event-visit-profile event-button simple-button blue"><i class="fas fa-external-link-square-alt"></i>&nbsp;<?php echo esc_html__('Visit Profile'); ?></a>
+                <a target="_blank" class="event-visit-profile event-button simple-button blue"><i class="eva eva-external-link"></i>&nbsp;<?php echo esc_html__('Visit Profile'); ?></a>
 
                 <div class="loading"><div class="loader-beat"></div></div>
               </div>
@@ -180,7 +180,7 @@
               <div class="event-details-entry-template" style="display:none;">
                 <div class="event-details-entry-img"></div>
                 <p class="event-details-description"></p>
-                <a target="_blank" class="event-download-entry event-button simple-button blue" download><i class="fas fa-arrow-down"></i>&nbsp;<?php echo esc_html__('Download'); ?></a>
+                <a target="_blank" class="event-download-entry event-button simple-button blue" download><i class="eva eva-download eva-lg"></i>&nbsp;<?php echo esc_html__('Download'); ?></a>
 
                 <div class="loading"><div class="loader-beat"></div></div>
               </div>

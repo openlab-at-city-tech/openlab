@@ -24,7 +24,7 @@ $b2sShowByDate = isset($_GET['b2sShowByDate']) ? (preg_match("#^[0-9\-.\]]+$#", 
                                 <!-- Filter Post Start-->
                                 <form class="b2sSortForm form-inline pull-left" action="#">
                                     <input id="b2sType" type="hidden" value="publish" name="b2sType">
-                                    <input id="b2sShowByDate" type="hidden" value="<?php echo $b2sShowByDate; ?>" name="b2sShowByDate">
+                                    <input id="b2sShowByDate" type="hidden" value="<?php echo esc_attr($b2sShowByDate); ?>" name="b2sShowByDate">
                                     <input id="b2sPagination" type="hidden" value="1" name="b2sPagination">
                                     <?php
                                     $postFilter = new B2S_Post_Filter('publish');

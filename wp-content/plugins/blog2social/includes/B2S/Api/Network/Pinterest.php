@@ -111,7 +111,7 @@ class B2S_Api_Network_Pinterest {
         }
         if (empty($csrfToken)) {
             $error_data = trim(str_replace(array("\r\n", "\r", "\n"), " | ", strip_tags($this->cutFromTo($content, '</head>', '</body>'))));
-            return array('error' => 1, 'error_pos' => 2, 'location' => $this->route . 'login/', 'error_data' => 'CSRF verification failed - RESPONSE: ' . serialize($error_data) . '  COOKIE: ' . serialize($cookie));
+            return array('error' => 1, 'error_pos' => 2, 'location' => $this->route . 'login/', 'error_data' => 'CSRF verification failed - RESPONSE: ' . serialize($error_data) . '  COOKIE: ' . serialize($cookie), 'error_code' => 'invalid');
         }
         $headerData = $this->setHeader($this->route . 'login/', $this->route, 'POST', true);
         $headerData['X-APP-VERSION'] = $appVersion;
@@ -137,7 +137,7 @@ class B2S_Api_Network_Pinterest {
             $content = $result['body'];
             $response = json_decode($content, true);
         } else {
-            return array('error' => 1, 'error_pos' => 5, 'error_data' => serialize($result));
+            return array('error' => 1, 'error_pos' => 5, 'error_data' => serialize($result), 'error_code' => 'invalid');
         }
         if (is_array($response) && empty($response['resource_response']['error'])) {
             $this->cookie = $result['cookies'];

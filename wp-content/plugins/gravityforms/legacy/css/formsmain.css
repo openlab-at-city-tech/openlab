@@ -859,6 +859,11 @@ li.gfield + li.gfield.gfield_creditcard_warning {
     vertical-align: middle !important;
 }
 
+.gform_legacy_markup_wrapper table.gfield_list tr td.gfield_list_icons a {
+    display: inline-block;
+    line-height: 0;
+}
+
 .gform_legacy_markup_wrapper li.gfield fieldset {
     margin: 0px;
     padding: 0px;
@@ -2514,7 +2519,7 @@ body .gform_legacy_markup_wrapper ul.chosen-results li {
       border: 0;
     }
 
-    .gform_legacy_markup_wrapper table.gfield_list thead  {
+    .gform_legacy_markup_wrapper table.gfield_list thead {
         position: absolute;
         top: -9999px;
         left: -9999px;
@@ -2579,15 +2584,16 @@ body .gform_legacy_markup_wrapper ul.chosen-results li {
 
     .gform_legacy_markup_wrapper table.gfield_list tr td.gfield_list_icons {
         width: 100% !important;
-        padding: 0 4px 4px 4px !important;
+        padding: 5px 4px 1px 4px !important;
         background-color: #EEE;
+        text-align: center;
     }
 
-    .gform_legacy_markup_wrapper table.gfield_list tr td.gfield_list_icons img.add_list_item  {
+    .gform_legacy_markup_wrapper table.gfield_list tr td.gfield_list_icons img.add_list_item {
         margin: 12px 0 0 16px !important;
     }
 
-    .gform_legacy_markup_wrapper table.gfield_list tr td.gfield_list_icons img.delete_list_item  {
+    .gform_legacy_markup_wrapper table.gfield_list tr td.gfield_list_icons img.delete_list_item {
         margin: 12px 0 0 8px !important;
     }
 

@@ -81,3 +81,41 @@ if (! function_exists('advg_language_domain_init')) {
     }
 }
 add_action( 'init', 'advg_language_domain_init' );
+
+if (! function_exists('advg_check_legacy_widget_block_init')) {
+    /**
+     * v2.11.0 - Check if core/legacy-widget exists in current user role through advgb_blocks_user_roles option,
+     * either in inactive_blocks or active_blocks array.
+     * https://github.com/publishpress/PublishPress-Blocks/issues/756#issuecomment-932358037
+     *
+     * This function can be used in future to add new blocks not available on widgets.php
+     *
+     * @return void
+     */
+    function advg_check_legacy_widget_block_init()
+    {
+        global $wp_version;
+        global $pagenow;
+        if( ( $pagenow === 'widgets.php' || $pagenow === 'customize.php' ) && $wp_version >= 5.8 ) {
+
+            $advgb_blocks_list          = !empty( get_option( 'advgb_blocks_list' ) ) ? get_option( 'advgb_blocks_list' ) : [];
+            $advgb_blocks_user_roles    = !empty( get_option( 'advgb_blocks_user_roles' ) ) ? get_option( 'advgb_blocks_user_roles' ) : [];
+            $current_user               = wp_get_current_user();
+            $current_user_role          = $current_user->roles[0];
+
+            if(
+                !in_array( 'core/legacy-widget', $advgb_blocks_user_roles[$current_user_role]['active_blocks'] )
+                && !in_array( 'core/legacy-widget', $advgb_blocks_user_roles[$current_user_role]['inactive_blocks'] )
+                && !empty( $current_user_role )
+            ) {
+
+                array_push(
+                    $advgb_blocks_user_roles[$current_user_role]['active_blocks'],
+                    'core/legacy-widget'
+                );
+                update_option( 'advgb_blocks_user_roles', $advgb_blocks_user_roles );
+            }
+        }
+    }
+}
+add_action( 'init', 'advg_check_legacy_widget_block_init' );

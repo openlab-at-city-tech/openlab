@@ -101,9 +101,9 @@ class WPForms_Field_Upload_Box extends \WPForms_Field
     /**
      * Format field value which is stored.
      *
-     * @param int   $field_id     Field ID.
-     * @param mixed $field_submit Field value that was submitted.
-     * @param array $form_data    Form data and settings.
+     * @param int   $field_id     field ID
+     * @param mixed $field_submit field value that was submitted
+     * @param array $form_data    form data and settings
      */
     public function format($field_id, $field_submit, $form_data)
     {
@@ -128,14 +128,11 @@ class WPForms_Field_Upload_Box extends \WPForms_Field
 
         $OutoftheBox->load_scripts();
         $OutoftheBox->load_styles();
-        
 
-        add_thickbox();
+        wp_enqueue_style('OutoftheBox.CustomStyle');
 
-
-        wp_enqueue_script('WPCP-'.$this->type.'-WPForms', plugins_url('WPForms.js', __FILE__), ['jquery'], false, true);
+        wp_enqueue_script('WPCP-'.$this->type.'-WPForms', plugins_url('WPForms.js', __FILE__), ['WPCloudplugin.Libraries'], false, true);
         wp_enqueue_style('WPCP-'.$this->type.'-WPForms', plugins_url('WPForms.css', __FILE__));
-
     }
 
     // Field options panel inside the builder

@@ -1,6 +1,8 @@
 <?php
 defined('ABSPATH') || die;
 
+wp_enqueue_script('advgb_custom_styles_js');
+
 $custom_styles_saved = get_option('advgb_custom_styles', $this::$default_custom_styles);
 
 if (isset($_GET['save_styles'])) : // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- display message, no action ?>

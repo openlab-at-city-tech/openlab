@@ -133,7 +133,7 @@ class Mediaplayer
 
                     $files[$path] = [
                         'title' => $basename,
-                        'name' => $basename,
+                        'name' => $path,
                         'path_display' => $child->get_path_display(),
                         'artist' => '',
                         'is_dir' => false,

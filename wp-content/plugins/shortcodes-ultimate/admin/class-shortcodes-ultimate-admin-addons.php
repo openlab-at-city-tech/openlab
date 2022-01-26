@@ -73,10 +73,10 @@ final class Shortcodes_Ultimate_Admin_Addons extends Shortcodes_Ultimate_Admin {
 		}
 
 		wp_enqueue_style(
-			'shortcodes-ultimate-admin-addons',
-			plugins_url( 'css/addons.css', __FILE__ ),
-			array(),
-			filemtime( plugin_dir_path( __FILE__ ) . 'css/addons.css' )
+			'shortcodes-ultimate-admin',
+			plugins_url( 'css/admin.css', __FILE__ ),
+			false,
+			filemtime( plugin_dir_path( __FILE__ ) . 'css/admin.css' )
 		);
 
 	}

@@ -1080,9 +1080,9 @@ class C_Routing_App extends C_Component
     {
         $settings = C_NextGen_Settings::get_instance();
         $object = new stdClass();
-        $object->router_param_separator = $settings->router_param_separator;
-        $object->router_param_slug = $settings->router_param_slug;
-        $object->router_param_prefix = $settings->router_param_prefix;
+        $object->router_param_separator = $settings->get('router_param_separator', '--');
+        $object->router_param_slug = $settings->get('router_param_slug', 'nggallery');
+        $object->router_param_prefix = $settings->get('router_param_prefix', '');
         return $object;
     }
     static function &get_instance($context = False)
@@ -1229,9 +1229,9 @@ class Mixin_Url_Manipulation extends Mixin
     {
         $retval = $request_uri ? $request_uri : '/';
         $settings = C_NextGen_Settings::get_instance();
-        $sep = preg_quote($settings->router_param_separator, '#');
+        $sep = preg_quote($settings->get('router_param_separator', '--'), '#');
         $param_regex = "#((?P<id>\\w+){$sep})?(?<key>\\w+){$sep}(?P<value>.+)/?\$#";
-        $slug = $settings->router_param_slug && $remove_slug ? '/' . preg_quote($settings->router_param_slug, '#') : '';
+        $slug = $settings->get('router_param_slug', 'nggallery') && $remove_slug ? '/' . preg_quote($settings->get('router_param_slug', 'nggallery'), '#') : '';
         $slug_regex = '#' . $slug . '/?$#';
         // Remove all parameters
         while (@preg_match($param_regex, $retval, $matches)) {

@@ -12,7 +12,7 @@ namespace TheLion\OutoftheBox;
 //                                                         ///
 //////////////////////////////////////////////////////////////
 
-if (!class_exists('phpthumb_functions')) {
+if (!class_exists('phpthumb_functions', false)) {
     ob_start();
     if (!include_once __DIR__.'/phpthumb.functions.php') {
         ob_end_flush();
@@ -219,7 +219,7 @@ class phpthumb
     public $issafemode;
     public $php_memory_limit;
 
-    public $phpthumb_version = '1.7.16-202012161640';
+    public $phpthumb_version = '1.7.17-202109221111';
 
     //////////////////////////////////////////////////////////////////////
 
@@ -581,7 +581,7 @@ class phpthumb
 
                     return false;
                 }
-                imagewebp($this->gdimg_output);
+                imagewebp($this->gdimg_output, null, $this->thumbnailQuality);
                 $this->outputImageData = ob_get_contents();
 
                 break;
@@ -710,15 +710,9 @@ class phpthumb
             imageinterlace($this->gdimg_output, (int) $this->config_output_interlace);
 
             switch ($this->thumbnailFormat) {
-                case 'jpeg':
-                    header('Content-Type: '.phpthumb_functions::ImageTypeToMIMEtype($this->thumbnailFormat));
-                    $ImageOutFunction = 'image'.$this->thumbnailFormat;
-                    @$ImageOutFunction($this->gdimg_output, null, $this->thumbnailQuality);
-
-                    break;
-
-                case 'png':
                 case 'gif':
+                case 'jpeg':
+                case 'png':
                 case 'webp':
                     $ImageOutFunction = 'image'.$this->thumbnailFormat;
                     if (!function_exists($ImageOutFunction)) {
@@ -727,7 +721,11 @@ class phpthumb
                         return false;
                     }
                     header('Content-Type: '.phpthumb_functions::ImageTypeToMIMEtype($this->thumbnailFormat));
-                    @$ImageOutFunction($this->gdimg_output);
+                    if ('gif' == $this->thumbnailFormat) {
+                        @$ImageOutFunction($this->gdimg_output);
+                    } else {
+                        @$ImageOutFunction($this->gdimg_output, null, $this->thumbnailQuality);
+                    }
 
                     break;
 
@@ -1268,7 +1266,7 @@ class phpthumb
             return null; // save us trouble
         }
 
-        do {
+        while (true) {
             $this->DebugMessage('resolvePath: iteration, path='.$path.', base path = '.$allowed_dirs[0], __FILE__, __LINE__);
 
             $parts = [];
@@ -1317,7 +1315,7 @@ class phpthumb
                 $allowed_dirs[0] = $path;
             }
             $path = $path.DIRECTORY_SEPARATOR.implode(DIRECTORY_SEPARATOR, array_slice($segments, $i + 1));
-        } while (true);
+        }
 
         return $path;
     }
@@ -1985,8 +1983,8 @@ class phpthumb
                                 }
                                 $commandline .= ' -extent '.phpthumb_functions::escapeshellarg_replacement($this->w.'x'.$this->h);
                             } else {
-                                $this->w = (($this->aoe && $this->w) ? $this->w : ($this->w ? phpthumb_functions::nonempty_min($this->w, $getimagesize[0]) : ''));
-                                $this->h = (($this->aoe && $this->h) ? $this->h : ($this->h ? phpthumb_functions::nonempty_min($this->h, $getimagesize[1]) : ''));
+                                $this->w = (($this->aoe && $this->w) ? $this->w : ($this->w ? phpthumb_functions::nonempty_min($this->w, $getimagesize[0]) : null));
+                                $this->h = (($this->aoe && $this->h) ? $this->h : ($this->h ? phpthumb_functions::nonempty_min($this->h, $getimagesize[1]) : null));
                                 if ($this->w || $this->h) {
                                     if ($IMuseExplicitImageOutputDimensions) {
                                         if ($this->w && !$this->h) {
@@ -3853,6 +3851,7 @@ class phpthumb
                     2 => 'imagecreatefromjpeg',
                     3 => 'imagecreatefrompng',
                     15 => 'imagecreatefromwbmp',
+                    18 => 'imagecreatefromwebp',
                 ];
                 $this->DebugMessage('ImageCreateFromFilename found ($getimagesizeinfo[2]=='.@$getimagesizeinfo[2].')', __FILE__, __LINE__);
 
@@ -3861,6 +3860,7 @@ class phpthumb
                     case 2:  // JPEG
                     case 3:  // PNG
                     case 15: // WBMP
+                    case 18: // WEBP
                         $ImageCreateFromFunctionName = $ImageCreateFromFunction[$getimagesizeinfo[2]];
                         if (function_exists($ImageCreateFromFunctionName)) {
                             $this->DebugMessage('Calling '.$ImageCreateFromFunctionName.'('.$filename.')', __FILE__, __LINE__);

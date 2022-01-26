@@ -26,7 +26,7 @@ abstract class TablePress {
 	 * @since 1.0.0
 	 * @const string
 	 */
-	const version = '1.13';
+	const version = '1.14'; // phpcs:ignore Generic.NamingConventions.UpperCaseConstantName.ClassConstantNotUpperCase
 
 	/**
 	 * TablePress internal plugin version ("options scheme" version).
@@ -36,7 +36,7 @@ abstract class TablePress {
 	 * @since 1.0.0
 	 * @const int
 	 */
-	const db_version = 42;
+	const db_version = 43; // phpcs:ignore Generic.NamingConventions.UpperCaseConstantName.ClassConstantNotUpperCase
 
 	/**
 	 * TablePress "table scheme" (data format structure) version.
@@ -47,7 +47,7 @@ abstract class TablePress {
 	 * @since 1.0.0
 	 * @const int
 	 */
-	const table_scheme_version = 3;
+	const table_scheme_version = 3; // phpcs:ignore Generic.NamingConventions.UpperCaseConstantName.ClassConstantNotUpperCase
 
 	/**
 	 * Instance of the Options Model.
@@ -342,18 +342,28 @@ abstract class TablePress {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $datetime  DateTime string in mySQL format or a Unix timestamp.
-	 * @param string $type      Optional. Type of $datetime, 'mysql' or 'timestamp'.
-	 * @param string $separator Optional. Separator between date and time.
+	 * @param string $datetime_string     DateTime string, often in mySQL format..
+	 * @param string $separator_or_format Optional. Separator between date and time, or format string.
 	 * @return string Nice looking string with the date and time.
 	 */
-	public static function format_datetime( $datetime, $type = 'mysql', $separator = ' ' ) {
-		// @TODO: Maybe change from using the stored WP Options to translated date/time schemes, like in https://core.trac.wordpress.org/changeset/35811.
-		if ( 'mysql' === $type ) {
-			return mysql2date( get_option( 'date_format' ), $datetime ) . $separator . mysql2date( get_option( 'time_format' ), $datetime );
-		} else {
-			return date_i18n( get_option( 'date_format' ), $datetime ) . $separator . date_i18n( get_option( 'time_format' ), $datetime );
+	public static function format_datetime( $datetime_string, $separator_or_format = ' ' ) {
+		$timezone = wp_timezone();
+		$datetime = date_create( $datetime_string, $timezone );
+		$timestamp = $datetime->getTimestamp();
+
+		switch ( $separator_or_format ) {
+			case ' ':
+			case '<br />':
+				$date = wp_date( get_option( 'date_format' ), $timestamp, $timezone );
+				$time = wp_date( get_option( 'time_format' ), $timestamp, $timezone );
+				$output = "{$date}{$separator_or_format}{$time}";
+				break;
+			default:
+				$output = wp_date( $separator_or_format, $timestamp, $timezone );
+				break;
 		}
+
+		return $output;
 	}
 
 	/**

@@ -363,7 +363,7 @@ class Client
         }
 
         // Preview for Image files
-        if (in_array($entry->get_extension(), ['txt', 'jpg', 'jpeg', 'gif', 'png'])) {
+        if (in_array($entry->get_extension(), ['txt', 'jpg', 'jpeg', 'gif', 'png', 'webp'])) {
             $shared_link = $this->get_shared_link($entry);
             $shared_link = str_replace('/s/', '/s/raw/', $this->get_shared_link($entry));
             header('Location: '.$shared_link);
@@ -421,14 +421,18 @@ class Client
         }
 
         // If there is a temporarily download url present for this file, just redirect the user
-        $stream = (isset($_REQUEST['action']) && 'outofthebox-stream' === $_REQUEST['action'] && !isset($_REQUEST['caption']));
-        $stored_url = ($stream) ? get_transient('outofthebox_stream_'.$entry->get_id().'_'.$entry->get_extension()) : get_transient('outofthebox_download_'.$entry->get_id().'_'.$entry->get_extension());
-        if (false !== $stored_url && filter_var($stored_url, FILTER_VALIDATE_URL)) {
-            do_action('outofthebox_download', $entry, $stored_url);
-            header('Location: '.$stored_url);
 
-            exit();
-        }
+        $stream = (isset($_REQUEST['action']) && 'outofthebox-stream' === $_REQUEST['action'] && !isset($_REQUEST['caption']));
+
+        // ISSUE: Dropbox API can return errors for temporarily download links
+        // When fixed, enable the following code:
+        // $stored_url = ($stream) ? get_transient('outofthebox_stream_'.$entry->get_id().'_'.$entry->get_extension()) : get_transient('outofthebox_download_'.$entry->get_id().'_'.$entry->get_extension());
+        // if (false !== $stored_url && filter_var($stored_url, FILTER_VALIDATE_URL)) {
+        //     do_action('outofthebox_download', $entry, $stored_url);
+        //     header('Location: '.$stored_url);
+
+        //     exit();
+        // }
 
         // Render file via browser
         //if (in_array($entry->get_extension(), array('csv', 'html'))) {
@@ -460,6 +464,15 @@ class Client
             if (isset($data->url)) {
                 $temporarily_link = $data->url;
             }
+        } elseif ($stream && in_array($entry->get_extension(), ['mp4', 'm4v', 'ogg', 'ogv', 'webmv', 'mp3', 'm4a', 'ogg', 'oga', 'wav'])) {
+            // Preview for Media files in HTML5 Player
+
+            $temporarily_link = str_replace('/s/', '/s/raw/', $this->get_shared_link($entry));
+
+            if (empty($temporarily_link)) {
+                // Backup, not working for iOS/OS
+                $temporarily_link = $this->get_temporarily_link($entry);
+            }
         } else {
             $temporarily_link = $this->get_temporarily_link($entry);
         }
@@ -467,7 +480,7 @@ class Client
         // Download Hook
         do_action('outofthebox_download', $entry, $temporarily_link);
 
-        $event_type = (isset($_REQUEST['action']) && 'outofthebox-stream' === $_REQUEST['action']) ? 'outofthebox_streamed_entry' : 'outofthebox_downloaded_entry';
+        $event_type = $stream ? 'outofthebox_streamed_entry' : 'outofthebox_downloaded_entry';
         do_action('outofthebox_log_event', $event_type, $entry);
 
         if ('redirect' === $this->get_processor()->get_setting('download_method') && !isset($_REQUEST['proxy'])) {
@@ -493,9 +506,13 @@ class Client
         // Get file
         $stream = fopen('php://temp', 'r+');
 
-        if (ob_get_level() > 0) {
-            ob_end_clean(); // Stop WP from buffering
+
+        // Stop WP from buffering
+        if (0 === ob_get_level()) {
+            ob_start();
         }
+        ob_end_clean();
+
 
         header('Content-Type: application/octet-stream');
         header('Content-Disposition: attachment; '.sprintf('filename="%s"; ', rawurlencode($filename)).sprintf("filename*=utf-8''%s", rawurlencode($filename)));
@@ -526,9 +543,11 @@ class Client
 
     public function download_via_proxy(Entry $entry, $url, $inline = false)
     {
-        if (ob_get_level() > 0) {
-            ob_end_clean(); // Stop WP from buffering
+        // Stop WP from buffering
+        if (0 === ob_get_level()) {
+            ob_start();
         }
+        ob_end_clean();
 
         set_time_limit(500);
 
@@ -536,17 +555,21 @@ class Client
         header('Content-Disposition: '.($inline ? 'inline' : 'attachment').'; filename="'.basename($entry->get_name()).'"');
         header("Content-length: {$entry->get_size()}");
 
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 500);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, false);
-        curl_setopt($ch, CURLOPT_WRITEFUNCTION, function ($curl, $data) {
-            echo $data;
+        $options = ['curl' => [
+            CURLOPT_RETURNTRANSFER => false,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_RANGE => null,
+            CURLOPT_NOBODY => null,
+            CURLOPT_HEADER => false,
+            CURLOPT_CONNECTTIMEOUT => null,
+            CURLOPT_TIMEOUT => null,
+            CURLOPT_WRITEFUNCTION => function ($curl, $data) {
+                echo $data;
 
-            return strlen($data);
-        });
-        curl_exec($ch);
-        curl_close($ch);
+                return strlen($data);
+            },
+        ]];
+        $this->_client->getClient()->getHttpClient()->send($url, 'GET', '', [], $options);
 
         exit();
     }
@@ -643,24 +666,25 @@ class Client
     {
         $cached_entry = $this->get_cache()->is_cached($entry->get_id());
 
-        if (false !== $cached_entry) {
-            if ($temporarily_link = $cached_entry->get_temporarily_link()) {
-                return true;
-            }
+        if (false === $cached_entry) {
+            return false;
         }
+        $temporarily_link = $cached_entry->get_temporarily_link();
 
-        return false;
+        return !empty($temporarily_link);
     }
 
     public function get_temporarily_link(Entry $entry)
     {
         $cached_entry = $this->get_cache()->is_cached($entry->get_id());
 
-        if (false !== $cached_entry) {
-            if ($temporarily_link = $cached_entry->get_temporarily_link()) {
-                return $temporarily_link;
-            }
-        }
+        // ISSUE: Dropbox API can return errors for temporarily download links
+        // When fixed, enable the following code:
+        // if (false !== $cached_entry) {
+        //     if ($temporarily_link = $cached_entry->get_temporarily_link()) {
+        //         return $temporarily_link;
+        //     }
+        // }
 
         try {
             $temporarily_link = $this->_client->getTemporaryLink($entry->get_path());

@@ -46,7 +46,8 @@ class ContactForm
 
         wp_enqueue_script('WPCloudplugin.Libraries');
         wp_enqueue_script('OutoftheBox.ShortcodeBuilder');
-        wp_enqueue_style('Awesome-Font-5');
+        wp_enqueue_style('Eva-Icons');
+
         wp_enqueue_style('OutoftheBox.ShortcodeBuilder');
     }
 

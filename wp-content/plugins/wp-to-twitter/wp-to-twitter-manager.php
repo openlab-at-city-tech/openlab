@@ -80,8 +80,10 @@ function wpt_updated_settings() {
 	}
 
 	if ( isset( $_POST['submit-type'] ) && 'advanced' === $_POST['submit-type'] ) {
-		update_option( 'jd_tweet_default', ( isset( $_POST['jd_tweet_default'] ) ) ? $_POST['jd_tweet_default'] : 0 );
-		update_option( 'jd_tweet_default_edit', ( isset( $_POST['jd_tweet_default_edit'] ) ) ? $_POST['jd_tweet_default_edit'] : 0 );
+		$default      = ( isset( $_POST['jd_tweet_default'] ) ) ? sanitize_textarea_field( $_POST['jd_tweet_default'] ) : 0;
+		$default_edit = ( isset( $_POST['jd_tweet_default_edit'] ) ) ? sanitize_textarea_field( $_POST['jd_tweet_default_edit'] ) : 0;
+		update_option( 'jd_tweet_default', $default );
+		update_option( 'jd_tweet_default_edit', $default_edit );
 
 		if ( isset( $_POST['wpt_rate_limiting'] ) && '1' !== get_option( 'wpt_rate_limiting' ) ) {
 			$extend = __( 'Rate Limiting is enabled. Default rate limits are set at 10 posts per category/term per hour. <a href="#special_cases">Edit global default</a> or edit individual terms to customize limits for each category or taxonomy term.', 'wp-to-twitter' );
@@ -92,22 +94,21 @@ function wpt_updated_settings() {
 		}
 
 		update_option( 'wpt_rate_limiting', ( isset( $_POST['wpt_rate_limiting'] ) ) ? 1 : 0 );
-		update_option( 'wpt_inline_edits', ( isset( $_POST['wpt_inline_edits'] ) ) ? $_POST['wpt_inline_edits'] : 0 );
-		update_option( 'jd_twit_remote', ( isset( $_POST['jd_twit_remote'] ) ) ? $_POST['jd_twit_remote'] : 0 );
-		update_option( 'jd_twit_custom_url', $_POST['jd_twit_custom_url'] );
+		update_option( 'wpt_inline_edits', ( isset( $_POST['wpt_inline_edits'] ) ) ? 1 : 0 );
+		update_option( 'jd_twit_custom_url', sanitize_text_field( $_POST['jd_twit_custom_url'] ) );
 		update_option( 'wpt_default_rate_limit', ( isset( $_POST['wpt_default_rate_limit'] ) ? intval( $_POST['wpt_default_rate_limit'] ) : false ) );
-		update_option( 'jd_strip_nonan', ( isset( $_POST['jd_strip_nonan'] ) ) ? $_POST['jd_strip_nonan'] : 0 );
-		update_option( 'jd_twit_prepend', $_POST['jd_twit_prepend'] );
-		update_option( 'jd_twit_append', $_POST['jd_twit_append'] );
-		update_option( 'jd_post_excerpt', $_POST['jd_post_excerpt'] );
-		update_option( 'jd_max_tags', $_POST['jd_max_tags'] );
-		$use_cats = ( isset( $_POST['wpt_use_cats'] ) ) ? $_POST['wpt_use_cats'] : 0;
+		update_option( 'jd_strip_nonan', ( isset( $_POST['jd_strip_nonan'] ) ) ? 1 : 0 );
+		update_option( 'jd_twit_prepend', sanitize_text_field( $_POST['jd_twit_prepend'] ) );
+		update_option( 'jd_twit_append', sanitize_text_field( $_POST['jd_twit_append'] ) );
+		update_option( 'jd_post_excerpt', (int) $_POST['jd_post_excerpt'] );
+		update_option( 'jd_max_tags', (int) $_POST['jd_max_tags'] );
+		$use_cats = ( isset( $_POST['wpt_use_cats'] ) ) ? 1 : 0;
 		update_option( 'wpt_use_cats', $use_cats );
 		update_option( 'wpt_tag_source', ( ( isset( $_POST['wpt_tag_source'] ) && 'slug' === $_POST['wpt_tag_source'] ) ? 'slug' : '' ) );
-		update_option( 'jd_max_characters', $_POST['jd_max_characters'] );
-		update_option( 'jd_replace_character', ( isset( $_POST['jd_replace_character'] ) ? $_POST['jd_replace_character'] : '' ) );
-		update_option( 'jd_date_format', $_POST['jd_date_format'] );
-		update_option( 'jd_dynamic_analytics', $_POST['jd-dynamic-analytics'] );
+		update_option( 'jd_max_characters', (int) $_POST['jd_max_characters'] );
+		update_option( 'jd_replace_character', ( isset( $_POST['jd_replace_character'] ) ? sanitize_text_field( $_POST['jd_replace_character'] ) : '' ) );
+		update_option( 'jd_date_format', sanitize_text_field( $_POST['jd_date_format'] ) );
+		update_option( 'jd_dynamic_analytics', sanitize_text_field( $_POST['jd-dynamic-analytics'] ) );
 
 		$twitter_analytics = ( isset( $_POST['twitter-analytics'] ) ) ? $_POST['twitter-analytics'] : 0;
 		if ( 1 === (int) $twitter_analytics ) {
@@ -124,8 +125,8 @@ function wpt_updated_settings() {
 			update_option( 'no-analytics', 1 );
 		}
 
-		update_option( 'twitter-analytics-campaign', $_POST['twitter-analytics-campaign'] );
-		update_option( 'jd_individual_twitter_users', ( isset( $_POST['jd_individual_twitter_users'] ) ? $_POST['jd_individual_twitter_users'] : 0 ) );
+		update_option( 'twitter-analytics-campaign', sanitize_text_field( $_POST['twitter-analytics-campaign'] ) );
+		update_option( 'jd_individual_twitter_users', ( isset( $_POST['jd_individual_twitter_users'] ) ? 1 : 0 ) );
 
 		if ( isset( $_POST['wpt_caps'] ) ) {
 			$perms = $_POST['wpt_caps'];
@@ -146,9 +147,8 @@ function wpt_updated_settings() {
 
 		update_option( 'wpt_permit_feed_styles', ( isset( $_POST['wpt_permit_feed_styles'] ) ) ? 1 : 0 );
 		update_option( 'wp_debug_oauth', ( isset( $_POST['wp_debug_oauth'] ) ) ? 1 : 0 );
-		update_option( 'jd_donations', ( isset( $_POST['jd_donations'] ) ) ? 1 : 0 );
 		$wpt_truncation_order = $_POST['wpt_truncation_order'];
-		update_option( 'wpt_truncation_order', $wpt_truncation_order );
+		update_option( 'wpt_truncation_order', map_deep( $wpt_truncation_order, 'sanitize_text_field' ) );
 		$message .= __( 'WP to Twitter Advanced Options Updated', 'wp-to-twitter' ) . '. ' . $extend;
 	}
 
@@ -162,6 +162,7 @@ function wpt_updated_settings() {
 		$keys   = array();
 		$values = array();
 		foreach ( $_POST['wpt_post_types'] as $key => $value ) {
+			$value = map_deep( $value, 'sanitize_textarea_field' );
 			// using wp_encode_emoji allows me to save emoji in templates.
 			// ...but I haven't found a way to convert the saved emoji *back* to unicode.
 			// sending the HTML entity just yields a broken character on Twitter.
@@ -177,8 +178,8 @@ function wpt_updated_settings() {
 
 		$wpt_settings = array_combine( $keys, $values );
 		update_option( 'wpt_post_types', $wpt_settings );
-		update_option( 'newlink-published-text', $_POST['newlink-published-text'] );
-		update_option( 'jd_twit_blogroll', ( isset( $_POST['jd_twit_blogroll'] ) ) ? $_POST['jd_twit_blogroll'] : '' );
+		update_option( 'newlink-published-text', sanitize_text_field( $_POST['newlink-published-text'] ) );
+		update_option( 'jd_twit_blogroll', ( isset( $_POST['jd_twit_blogroll'] ) ) ? 1 : '' );
 		$message  = wpt_select_shortener( $_POST );
 		$message .= __( 'WP to Twitter Options Updated', 'wp-to-twitter' );
 		$message  = apply_filters( 'wpt_settings', $message, $_POST );
@@ -224,7 +225,7 @@ function wpt_update_settings() {
 
 	<?php
 		$default = ( '' === get_option( 'wtt_twitter_username', '' ) ) ? 'connection' : 'basic';
-		$current = ( isset( $_GET['tab'] ) ) ? $_GET['tab'] : $default;
+		$current = ( isset( $_GET['tab'] ) ) ? sanitize_text_field( $_GET['tab'] ) : $default;
 	if ( 'connection' === $current ) {
 		if ( function_exists( 'wtt_connect_oauth' ) ) {
 			wtt_connect_oauth();
@@ -349,7 +350,7 @@ function wpt_update_settings() {
 								continue;
 							} else {
 								?>
-								<div class='wptab wpt_types wpt_<?php echo $slug; ?>' aria-labelledby='tab_wpt_<?php echo $slug; ?>' role="tabpanel" id='wpt_<?php echo $slug; ?>'>
+								<div class='wptab wpt_types wpt_<?php echo esc_attr( $slug ); ?>' aria-labelledby='tab_wpt_<?php echo esc_attr( $slug ); ?>' role="tabpanel" id='wpt_<?php echo esc_attr( $slug ); ?>'>
 								<?php
 								// share information about any usage of pre 2.8 category filters.
 								if ( ! function_exists( 'wpt_pro_exists' ) ) {
@@ -360,8 +361,8 @@ function wpt_update_settings() {
 								<fieldset>
 									<legend><?php _e( 'Tweet Templates', 'wp-to-twitter' ); ?></legend>
 									<p>
-										<input type="checkbox" name="wpt_post_types[<?php echo $slug; ?>][post-published-update]" id="<?php echo $slug; ?>-post-published-update" value="1" <?php echo wpt_checkbox( 'wpt_post_types', $slug, 'post-published-update' ); ?> />
-										<label for="<?php echo $slug; ?>-post-published-update"><strong>
+										<input type="checkbox" name="wpt_post_types[<?php echo esc_attr( $slug ); ?>][post-published-update]" id="<?php echo esc_attr( $slug ); ?>-post-published-update" value="1" <?php echo wpt_checkbox( 'wpt_post_types', $slug, 'post-published-update' ); ?> />
+										<label for="<?php echo esc_attr( $slug ); ?>-post-published-update"><strong>
 										<?php
 										// Translators: post type.
 										printf( __( 'Update when %s are published', 'wp-to-twitter' ), $name );
@@ -373,23 +374,23 @@ function wpt_update_settings() {
 										printf( __( 'Template for new %s', 'wp-to-twitter' ), $name );
 										?>
 										</label><br/>
-										<textarea class="wpt-template" name="wpt_post_types[<?php echo $slug; ?>][post-published-text]" id="<?php echo $slug; ?>-post-published-text" cols="60" rows="3"><?php echo ( isset( $wpt_settings[ $slug ] ) ) ? esc_attr( stripslashes( $wpt_settings[ $slug ]['post-published-text'] ) ) : ''; ?></textarea>
+										<textarea class="wpt-template" name="wpt_post_types[<?php echo esc_attr( $slug ); ?>][post-published-text]" id="<?php echo esc_attr( $slug ); ?>-post-published-text" cols="60" rows="3"><?php echo ( isset( $wpt_settings[ $slug ] ) ) ? esc_attr( stripslashes( $wpt_settings[ $slug ]['post-published-text'] ) ) : ''; ?></textarea>
 									</p>
 
 									<p>
-										<input type="checkbox" name="wpt_post_types[<?php echo $slug; ?>][post-edited-update]" id="<?php echo $slug; ?>-post-edited-update" value="1" <?php echo wpt_checkbox( 'wpt_post_types', $slug, 'post-edited-update' ); ?> />
-										<label for="<?php echo $slug; ?>-post-edited-update"><strong>
+										<input type="checkbox" name="wpt_post_types[<?php echo esc_attr( $slug ); ?>][post-edited-update]" id="<?php echo esc_attr( $slug ); ?>-post-edited-update" value="1" <?php echo wpt_checkbox( 'wpt_post_types', $slug, 'post-edited-update' ); ?> />
+										<label for="<?php echo esc_attr( $slug ); ?>-post-edited-update"><strong>
 										<?php
 										// Translators: post type name.
 										printf( __( 'Update when %s are edited', 'wp-to-twitter' ), $name );
 										?>
-										</strong></label><br/><label for="<?php echo $slug; ?>-post-edited-text">
+										</strong></label><br/><label for="<?php echo esc_attr( $slug ); ?>-post-edited-text">
 										<?php
 										// Translators: post type name.
 										printf( __( 'Template for %1$s edits', 'wp-to-twitter' ), $name );
 										?>
 										</label><br/>
-										<textarea class="wpt-template" name="wpt_post_types[<?php echo $slug; ?>][post-edited-text]" id="<?php echo $slug; ?>-post-edited-text" cols="60" rows="3"><?php echo ( isset( $wpt_settings[ $slug ] ) ) ? esc_attr( stripslashes( $wpt_settings[ $slug ]['post-edited-text'] ) ) : ''; ?></textarea>
+										<textarea class="wpt-template" name="wpt_post_types[<?php echo esc_attr( $slug ); ?>][post-edited-text]" id="<?php echo esc_attr( $slug ); ?>-post-edited-text" cols="60" rows="3"><?php echo ( isset( $wpt_settings[ $slug ] ) ) ? esc_attr( stripslashes( $wpt_settings[ $slug ]['post-edited-text'] ) ) : ''; ?></textarea>
 									</p>
 								</fieldset>
 								<?php
@@ -416,7 +417,7 @@ function wpt_update_settings() {
 						<div>
 							<input type="hidden" name="submit-type" value="options" />
 						</div>
-						<input type="submit" name="submit" value="<?php _e( 'Save WP to Twitter Options', 'wp-to-twitter' ); ?>" class="button-primary" />
+						<input type="submit" name="submit" value="<?php esc_attr_e( 'Save WP to Twitter Options', 'wp-to-twitter' ); ?>" class="button-primary" />
 					</div>
 				</form>
 			</div>
@@ -714,7 +715,7 @@ function wpt_update_settings() {
 							} else {
 								$label = '<code>#' . $k . '#</code>';
 							}
-							$inputs .= "<div class='wpt-truncate'><label for='$k-$v'>$label</label><br /><input type='number' size='3' value='$v' name='wpt_truncation_order[$k]' /></div> ";
+							$inputs .= "<div class='wpt-truncate'><label for='" . esc_attr( "$k-$v" ) . "'>$label</label><br /><input type='number' size='3' value='" . esc_attr( $v ) . "' name='wpt_truncation_order[" . esc_attr( $k ) . "]' /></div> ";
 						}
 						?>
 						<fieldset>
@@ -745,9 +746,6 @@ function wpt_update_settings() {
 								</li>
 								<li>
 									<input type="checkbox" name="wp_debug_oauth" id="wp_debug_oauth" value="1" <?php echo wpt_checkbox( 'wp_debug_oauth' ); ?> /> <label for="wp_debug_oauth"><?php _e( 'Get Debugging Data for OAuth Connection', 'wp-to-twitter' ); ?></label>
-								</li>
-								<li>
-									<input type="checkbox" name="jd_donations" id="jd_donations" value="1" <?php echo wpt_checkbox( 'jd_donations' ); ?> /> <label for="jd_donations"><strong><?php _e( 'I made a donation, so stop whinging at me, please.', 'wp-to-twitter' ); ?></strong></label>
 								</li>
 							</ul>
 						</fieldset>
@@ -819,7 +817,7 @@ function wpt_sidebar() {
 				?>
 				<div class="inside resources">
 					<?php
-					if ( '1' !== get_option( 'jd_donations' ) && ! function_exists( 'wpt_pro_exists' ) ) {
+					if ( ! function_exists( 'wpt_pro_exists' ) ) {
 						?>
 					<p class='cta'><?php _e( '<a href="http://www.wptweetspro.com/wp-tweets-pro">Get WP Tweets Pro</a>', 'wp-to-twitter' ); ?></p>
 						<?php
@@ -881,7 +879,7 @@ function wpt_sidebar() {
 					echo "<div>$nonce</div>";
 					?>
 					<p>
-						<input type="submit" name="submit" value="<?php _e( 'Test WP to Twitter', 'wp-to-twitter' ); ?>" class="button-secondary" />
+						<input type="submit" name="submit" value="<?php esc_attr_e( 'Test WP to Twitter', 'wp-to-twitter' ); ?>" class="button-secondary" />
 					</p>
 				</form>
 				</div>

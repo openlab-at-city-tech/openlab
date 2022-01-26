@@ -38,6 +38,7 @@
 				i18n.months.december,
 			],
 			firstDay: i18n.firstDay,
+			iconText: i18n.iconText,
 		};
 	}
 
@@ -112,6 +113,7 @@
 	 */
 
 	function initSingleDatepicker( $element ) {
+		var i18n = getDatepickerI18n();
 		var inputId = $element.attr( 'id' ) ? $element.attr( 'id' ) : '';
 		var optionsObj = getDatepickerBaseOptions( $element );
 
@@ -133,7 +135,7 @@
 			optionsObj.showOn = 'both';
 			optionsObj.buttonImage = $element.parent().siblings( "[id^='gforms_calendar_icon_input']" ).val();
 			optionsObj.buttonImageOnly = true;
-			optionsObj.buttonText = '';
+			optionsObj.buttonText = i18n.iconText;
 		}
 
 		inputId = inputId.split( '_' );

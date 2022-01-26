@@ -25,6 +25,10 @@ gform.addFilter( 'gform_datepicker_options_pre_init', function( optionsObj, form
 				var rightOffset = $( document ).outerWidth() - ( $inputContainer.offset().left + $inputContainer.outerWidth() );
 				inst.dpDiv[ 0 ].style.right = rightOffset + 'px';
 			}
+
+			if ( isPreview ) {
+				inst.dpDiv[0].classList.add( 'gform-preview-datepicker' );
+			}
 			return ! this.suppressDatePicker;
 		}
 	};

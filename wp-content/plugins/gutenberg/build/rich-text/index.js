@@ -1,117 +1,146 @@
-window["wp"] = window["wp"] || {}; window["wp"]["richText"] =
-/******/ (function(modules) { // webpackBootstrap
-/******/ 	// The module cache
-/******/ 	var installedModules = {};
-/******/
-/******/ 	// The require function
-/******/ 	function __webpack_require__(moduleId) {
-/******/
-/******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId]) {
-/******/ 			return installedModules[moduleId].exports;
-/******/ 		}
-/******/ 		// Create a new module (and put it into the cache)
-/******/ 		var module = installedModules[moduleId] = {
-/******/ 			i: moduleId,
-/******/ 			l: false,
-/******/ 			exports: {}
-/******/ 		};
-/******/
-/******/ 		// Execute the module function
-/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-/******/
-/******/ 		// Flag the module as loaded
-/******/ 		module.l = true;
-/******/
-/******/ 		// Return the exports of the module
-/******/ 		return module.exports;
-/******/ 	}
-/******/
-/******/
-/******/ 	// expose the modules object (__webpack_modules__)
-/******/ 	__webpack_require__.m = modules;
-/******/
-/******/ 	// expose the module cache
-/******/ 	__webpack_require__.c = installedModules;
-/******/
-/******/ 	// define getter function for harmony exports
-/******/ 	__webpack_require__.d = function(exports, name, getter) {
-/******/ 		if(!__webpack_require__.o(exports, name)) {
-/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
-/******/ 		}
-/******/ 	};
-/******/
-/******/ 	// define __esModule on exports
-/******/ 	__webpack_require__.r = function(exports) {
-/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
-/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
-/******/ 		}
-/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
-/******/ 	};
-/******/
-/******/ 	// create a fake namespace object
-/******/ 	// mode & 1: value is a module id, require it
-/******/ 	// mode & 2: merge all properties of value into the ns
-/******/ 	// mode & 4: return value when already ns object
-/******/ 	// mode & 8|1: behave like require
-/******/ 	__webpack_require__.t = function(value, mode) {
-/******/ 		if(mode & 1) value = __webpack_require__(value);
-/******/ 		if(mode & 8) return value;
-/******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
-/******/ 		var ns = Object.create(null);
-/******/ 		__webpack_require__.r(ns);
-/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
-/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
-/******/ 		return ns;
-/******/ 	};
-/******/
-/******/ 	// getDefaultExport function for compatibility with non-harmony modules
-/******/ 	__webpack_require__.n = function(module) {
-/******/ 		var getter = module && module.__esModule ?
-/******/ 			function getDefault() { return module['default']; } :
-/******/ 			function getModuleExports() { return module; };
-/******/ 		__webpack_require__.d(getter, 'a', getter);
-/******/ 		return getter;
-/******/ 	};
-/******/
-/******/ 	// Object.prototype.hasOwnProperty.call
-/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
-/******/
-/******/ 	// __webpack_public_path__
-/******/ 	__webpack_require__.p = "";
-/******/
-/******/
-/******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 400);
-/******/ })
+/******/ (function() { // webpackBootstrap
+/******/ 	"use strict";
+/******/ 	// The require scope
+/******/ 	var __webpack_require__ = {};
+/******/ 	
 /************************************************************************/
-/******/ ({
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	!function() {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__webpack_require__.d = function(exports, definition) {
+/******/ 			for(var key in definition) {
+/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	!function() {
+/******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	!function() {
+/******/ 		// define __esModule on exports
+/******/ 		__webpack_require__.r = function(exports) {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	}();
+/******/ 	
+/************************************************************************/
+var __webpack_exports__ = {};
+// ESM COMPAT FLAG
+__webpack_require__.r(__webpack_exports__);
 
-/***/ 0:
-/***/ (function(module, exports) {
+// EXPORTS
+__webpack_require__.d(__webpack_exports__, {
+  "__UNSTABLE_LINE_SEPARATOR": function() { return /* reexport */ LINE_SEPARATOR; },
+  "__experimentalRichText": function() { return /* reexport */ __experimentalRichText; },
+  "__unstableCanIndentListItems": function() { return /* reexport */ canIndentListItems; },
+  "__unstableCanOutdentListItems": function() { return /* reexport */ canOutdentListItems; },
+  "__unstableChangeListType": function() { return /* reexport */ changeListType; },
+  "__unstableCreateElement": function() { return /* reexport */ createElement; },
+  "__unstableFormatEdit": function() { return /* reexport */ FormatEdit; },
+  "__unstableIndentListItems": function() { return /* reexport */ indentListItems; },
+  "__unstableInsertLineSeparator": function() { return /* reexport */ insertLineSeparator; },
+  "__unstableIsActiveListType": function() { return /* reexport */ isActiveListType; },
+  "__unstableIsEmptyLine": function() { return /* reexport */ isEmptyLine; },
+  "__unstableIsListRootSelected": function() { return /* reexport */ isListRootSelected; },
+  "__unstableOutdentListItems": function() { return /* reexport */ outdentListItems; },
+  "__unstableRemoveLineSeparator": function() { return /* reexport */ removeLineSeparator; },
+  "__unstableToDom": function() { return /* reexport */ toDom; },
+  "__unstableUseRichText": function() { return /* reexport */ useRichText; },
+  "applyFormat": function() { return /* reexport */ applyFormat; },
+  "concat": function() { return /* reexport */ concat; },
+  "create": function() { return /* reexport */ create; },
+  "getActiveFormat": function() { return /* reexport */ getActiveFormat; },
+  "getActiveObject": function() { return /* reexport */ getActiveObject; },
+  "getTextContent": function() { return /* reexport */ getTextContent; },
+  "insert": function() { return /* reexport */ insert; },
+  "insertObject": function() { return /* reexport */ insertObject; },
+  "isCollapsed": function() { return /* reexport */ isCollapsed; },
+  "isEmpty": function() { return /* reexport */ isEmpty; },
+  "join": function() { return /* reexport */ join; },
+  "registerFormatType": function() { return /* reexport */ registerFormatType; },
+  "remove": function() { return /* reexport */ remove; },
+  "removeFormat": function() { return /* reexport */ removeFormat; },
+  "replace": function() { return /* reexport */ replace_replace; },
+  "slice": function() { return /* reexport */ slice; },
+  "split": function() { return /* reexport */ split; },
+  "store": function() { return /* reexport */ store; },
+  "toHTMLString": function() { return /* reexport */ toHTMLString; },
+  "toggleFormat": function() { return /* reexport */ toggleFormat; },
+  "unregisterFormatType": function() { return /* reexport */ unregisterFormatType; },
+  "useAnchorRef": function() { return /* reexport */ useAnchorRef; }
+});
 
-(function() { module.exports = window["wp"]["element"]; }());
+// NAMESPACE OBJECT: ./packages/rich-text/build-module/store/selectors.js
+var selectors_namespaceObject = {};
+__webpack_require__.r(selectors_namespaceObject);
+__webpack_require__.d(selectors_namespaceObject, {
+  "getFormatType": function() { return getFormatType; },
+  "getFormatTypeForBareElement": function() { return getFormatTypeForBareElement; },
+  "getFormatTypeForClassName": function() { return getFormatTypeForClassName; },
+  "getFormatTypes": function() { return getFormatTypes; }
+});
 
-/***/ }),
+// NAMESPACE OBJECT: ./packages/rich-text/build-module/store/actions.js
+var actions_namespaceObject = {};
+__webpack_require__.r(actions_namespaceObject);
+__webpack_require__.d(actions_namespaceObject, {
+  "addFormatTypes": function() { return addFormatTypes; },
+  "removeFormatTypes": function() { return removeFormatTypes; }
+});
 
-/***/ 13:
-/***/ (function(module, exports) {
+;// CONCATENATED MODULE: external ["wp","data"]
+var external_wp_data_namespaceObject = window["wp"]["data"];
+;// CONCATENATED MODULE: external "lodash"
+var external_lodash_namespaceObject = window["lodash"];
+;// CONCATENATED MODULE: ./packages/rich-text/build-module/store/reducer.js
+/**
+ * External dependencies
+ */
 
-(function() { module.exports = window["wp"]["keycodes"]; }());
+/**
+ * WordPress dependencies
+ */
 
-/***/ }),
 
-/***/ 2:
-/***/ (function(module, exports) {
+/**
+ * Reducer managing the format types
+ *
+ * @param {Object} state  Current state.
+ * @param {Object} action Dispatched action.
+ *
+ * @return {Object} Updated state.
+ */
 
-(function() { module.exports = window["lodash"]; }());
+function formatTypes() {
+  let state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  let action = arguments.length > 1 ? arguments[1] : undefined;
 
-/***/ }),
+  switch (action.type) {
+    case 'ADD_FORMAT_TYPES':
+      return { ...state,
+        ...(0,external_lodash_namespaceObject.keyBy)(action.formatTypes, 'name')
+      };
 
-/***/ 29:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+    case 'REMOVE_FORMAT_TYPES':
+      return (0,external_lodash_namespaceObject.omit)(state, action.names);
+  }
 
-"use strict";
+  return state;
+}
+/* harmony default export */ var reducer = ((0,external_wp_data_namespaceObject.combineReducers)({
+  formatTypes
+}));
+//# sourceMappingURL=reducer.js.map
+;// CONCATENATED MODULE: ./node_modules/rememo/es/rememo.js
 
 
 var LEAF_KEY, hasWeakMap;
@@ -209,7 +238,7 @@ function isShallowEqual( a, b, fromIndex ) {
  *
  * @return {Function} Memoized selector.
  */
-/* harmony default export */ __webpack_exports__["a"] = (function( selector, getDependants ) {
+/* harmony default export */ function rememo(selector, getDependants ) {
 	var rootCache, getCache;
 
 	// Use object source as dependant if getter not provided
@@ -385,125 +414,9 @@ function isShallowEqual( a, b, fromIndex ) {
 	clear();
 
 	return callSelector;
-});
-
-
-/***/ }),
-
-/***/ 4:
-/***/ (function(module, exports) {
-
-(function() { module.exports = window["wp"]["data"]; }());
-
-/***/ }),
-
-/***/ 400:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-// ESM COMPAT FLAG
-__webpack_require__.r(__webpack_exports__);
-
-// EXPORTS
-__webpack_require__.d(__webpack_exports__, "store", function() { return /* reexport */ store; });
-__webpack_require__.d(__webpack_exports__, "applyFormat", function() { return /* reexport */ applyFormat; });
-__webpack_require__.d(__webpack_exports__, "concat", function() { return /* reexport */ concat; });
-__webpack_require__.d(__webpack_exports__, "create", function() { return /* reexport */ create; });
-__webpack_require__.d(__webpack_exports__, "getActiveFormat", function() { return /* reexport */ getActiveFormat; });
-__webpack_require__.d(__webpack_exports__, "getActiveObject", function() { return /* reexport */ getActiveObject; });
-__webpack_require__.d(__webpack_exports__, "getTextContent", function() { return /* reexport */ getTextContent; });
-__webpack_require__.d(__webpack_exports__, "__unstableIsListRootSelected", function() { return /* reexport */ isListRootSelected; });
-__webpack_require__.d(__webpack_exports__, "__unstableIsActiveListType", function() { return /* reexport */ isActiveListType; });
-__webpack_require__.d(__webpack_exports__, "isCollapsed", function() { return /* reexport */ isCollapsed; });
-__webpack_require__.d(__webpack_exports__, "isEmpty", function() { return /* reexport */ isEmpty; });
-__webpack_require__.d(__webpack_exports__, "__unstableIsEmptyLine", function() { return /* reexport */ isEmptyLine; });
-__webpack_require__.d(__webpack_exports__, "join", function() { return /* reexport */ join; });
-__webpack_require__.d(__webpack_exports__, "registerFormatType", function() { return /* reexport */ registerFormatType; });
-__webpack_require__.d(__webpack_exports__, "removeFormat", function() { return /* reexport */ removeFormat; });
-__webpack_require__.d(__webpack_exports__, "remove", function() { return /* reexport */ remove_remove; });
-__webpack_require__.d(__webpack_exports__, "replace", function() { return /* reexport */ replace_replace; });
-__webpack_require__.d(__webpack_exports__, "insert", function() { return /* reexport */ insert; });
-__webpack_require__.d(__webpack_exports__, "__unstableInsertLineSeparator", function() { return /* reexport */ insertLineSeparator; });
-__webpack_require__.d(__webpack_exports__, "__unstableRemoveLineSeparator", function() { return /* reexport */ removeLineSeparator; });
-__webpack_require__.d(__webpack_exports__, "insertObject", function() { return /* reexport */ insertObject; });
-__webpack_require__.d(__webpack_exports__, "slice", function() { return /* reexport */ slice; });
-__webpack_require__.d(__webpack_exports__, "split", function() { return /* reexport */ split; });
-__webpack_require__.d(__webpack_exports__, "__unstableToDom", function() { return /* reexport */ toDom; });
-__webpack_require__.d(__webpack_exports__, "toHTMLString", function() { return /* reexport */ toHTMLString; });
-__webpack_require__.d(__webpack_exports__, "toggleFormat", function() { return /* reexport */ toggleFormat; });
-__webpack_require__.d(__webpack_exports__, "__UNSTABLE_LINE_SEPARATOR", function() { return /* reexport */ LINE_SEPARATOR; });
-__webpack_require__.d(__webpack_exports__, "unregisterFormatType", function() { return /* reexport */ unregisterFormatType; });
-__webpack_require__.d(__webpack_exports__, "__unstableCanIndentListItems", function() { return /* reexport */ canIndentListItems; });
-__webpack_require__.d(__webpack_exports__, "__unstableCanOutdentListItems", function() { return /* reexport */ canOutdentListItems; });
-__webpack_require__.d(__webpack_exports__, "__unstableIndentListItems", function() { return /* reexport */ indentListItems; });
-__webpack_require__.d(__webpack_exports__, "__unstableOutdentListItems", function() { return /* reexport */ outdentListItems; });
-__webpack_require__.d(__webpack_exports__, "__unstableChangeListType", function() { return /* reexport */ changeListType; });
-__webpack_require__.d(__webpack_exports__, "__unstableCreateElement", function() { return /* reexport */ createElement; });
-__webpack_require__.d(__webpack_exports__, "useAnchorRef", function() { return /* reexport */ useAnchorRef; });
-__webpack_require__.d(__webpack_exports__, "__experimentalRichText", function() { return /* reexport */ __experimentalRichText; });
-__webpack_require__.d(__webpack_exports__, "__unstableUseRichText", function() { return /* reexport */ useRichText; });
-__webpack_require__.d(__webpack_exports__, "__unstableFormatEdit", function() { return /* reexport */ FormatEdit; });
-
-// NAMESPACE OBJECT: ./packages/rich-text/build-module/store/selectors.js
-var selectors_namespaceObject = {};
-__webpack_require__.r(selectors_namespaceObject);
-__webpack_require__.d(selectors_namespaceObject, "getFormatTypes", function() { return getFormatTypes; });
-__webpack_require__.d(selectors_namespaceObject, "getFormatType", function() { return getFormatType; });
-__webpack_require__.d(selectors_namespaceObject, "getFormatTypeForBareElement", function() { return getFormatTypeForBareElement; });
-__webpack_require__.d(selectors_namespaceObject, "getFormatTypeForClassName", function() { return getFormatTypeForClassName; });
-
-// NAMESPACE OBJECT: ./packages/rich-text/build-module/store/actions.js
-var actions_namespaceObject = {};
-__webpack_require__.r(actions_namespaceObject);
-__webpack_require__.d(actions_namespaceObject, "addFormatTypes", function() { return addFormatTypes; });
-__webpack_require__.d(actions_namespaceObject, "removeFormatTypes", function() { return removeFormatTypes; });
-
-// EXTERNAL MODULE: external ["wp","data"]
-var external_wp_data_ = __webpack_require__(4);
-
-// EXTERNAL MODULE: external "lodash"
-var external_lodash_ = __webpack_require__(2);
-
-// CONCATENATED MODULE: ./packages/rich-text/build-module/store/reducer.js
-/**
- * External dependencies
- */
-
-/**
- * WordPress dependencies
- */
-
-
-/**
- * Reducer managing the format types
- *
- * @param {Object} state  Current state.
- * @param {Object} action Dispatched action.
- *
- * @return {Object} Updated state.
- */
-
-function reducer_formatTypes(state = {}, action) {
-  switch (action.type) {
-    case 'ADD_FORMAT_TYPES':
-      return { ...state,
-        ...Object(external_lodash_["keyBy"])(action.formatTypes, 'name')
-      };
-
-    case 'REMOVE_FORMAT_TYPES':
-      return Object(external_lodash_["omit"])(state, action.names);
-  }
-
-  return state;
 }
-/* harmony default export */ var reducer = (Object(external_wp_data_["combineReducers"])({
-  formatTypes: reducer_formatTypes
-}));
-//# sourceMappingURL=reducer.js.map
-// EXTERNAL MODULE: ./node_modules/rememo/es/rememo.js
-var rememo = __webpack_require__(29);
 
-// CONCATENATED MODULE: ./packages/rich-text/build-module/store/selectors.js
+;// CONCATENATED MODULE: ./packages/rich-text/build-module/store/selectors.js
 /**
  * External dependencies
  */
@@ -517,7 +430,7 @@ var rememo = __webpack_require__(29);
  * @return {Array} Format types.
  */
 
-const getFormatTypes = Object(rememo["a" /* default */])(state => Object.values(state.formatTypes), state => [state.formatTypes]);
+const getFormatTypes = rememo(state => Object.values(state.formatTypes), state => [state.formatTypes]);
 /**
  * Returns a format type by name.
  *
@@ -541,10 +454,11 @@ function getFormatType(state, name) {
  */
 
 function getFormatTypeForBareElement(state, bareElementTagName) {
-  return Object(external_lodash_["find"])(getFormatTypes(state), ({
-    className,
-    tagName
-  }) => {
+  return (0,external_lodash_namespaceObject.find)(getFormatTypes(state), _ref => {
+    let {
+      className,
+      tagName
+    } = _ref;
     return className === null && bareElementTagName === tagName;
   });
 }
@@ -558,9 +472,11 @@ function getFormatTypeForBareElement(state, bareElementTagName) {
  */
 
 function getFormatTypeForClassName(state, elementClassName) {
-  return Object(external_lodash_["find"])(getFormatTypes(state), ({
-    className
-  }) => {
+  return (0,external_lodash_namespaceObject.find)(getFormatTypes(state), _ref2 => {
+    let {
+      className
+    } = _ref2;
+
     if (className === null) {
       return false;
     }
@@ -569,7 +485,7 @@ function getFormatTypeForClassName(state, elementClassName) {
   });
 }
 //# sourceMappingURL=selectors.js.map
-// CONCATENATED MODULE: ./packages/rich-text/build-module/store/actions.js
+;// CONCATENATED MODULE: ./packages/rich-text/build-module/store/actions.js
 /**
  * External dependencies
  */
@@ -586,7 +502,7 @@ function getFormatTypeForClassName(state, elementClassName) {
 function addFormatTypes(formatTypes) {
   return {
     type: 'ADD_FORMAT_TYPES',
-    formatTypes: Object(external_lodash_["castArray"])(formatTypes)
+    formatTypes: (0,external_lodash_namespaceObject.castArray)(formatTypes)
   };
 }
 /**
@@ -600,11 +516,11 @@ function addFormatTypes(formatTypes) {
 function removeFormatTypes(names) {
   return {
     type: 'REMOVE_FORMAT_TYPES',
-    names: Object(external_lodash_["castArray"])(names)
+    names: (0,external_lodash_namespaceObject.castArray)(names)
   };
 }
 //# sourceMappingURL=actions.js.map
-// CONCATENATED MODULE: ./packages/rich-text/build-module/store/index.js
+;// CONCATENATED MODULE: ./packages/rich-text/build-module/store/index.js
 /**
  * WordPress dependencies
  */
@@ -625,14 +541,14 @@ const STORE_NAME = 'core/rich-text';
  * @type {Object}
  */
 
-const store = Object(external_wp_data_["createReduxStore"])(STORE_NAME, {
+const store = (0,external_wp_data_namespaceObject.createReduxStore)(STORE_NAME, {
   reducer: reducer,
   selectors: selectors_namespaceObject,
   actions: actions_namespaceObject
 });
-Object(external_wp_data_["register"])(store);
+(0,external_wp_data_namespaceObject.register)(store);
 //# sourceMappingURL=index.js.map
-// CONCATENATED MODULE: ./packages/rich-text/build-module/is-format-equal.js
+;// CONCATENATED MODULE: ./packages/rich-text/build-module/is-format-equal.js
 /** @typedef {import('./create').RichTextFormat} RichTextFormat */
 
 /**
@@ -690,7 +606,7 @@ function isFormatEqual(format1, format2) {
   return true;
 }
 //# sourceMappingURL=is-format-equal.js.map
-// CONCATENATED MODULE: ./packages/rich-text/build-module/normalise-formats.js
+;// CONCATENATED MODULE: ./packages/rich-text/build-module/normalise-formats.js
 /**
  * Internal dependencies
  */
@@ -728,7 +644,7 @@ function normaliseFormats(value) {
   };
 }
 //# sourceMappingURL=normalise-formats.js.map
-// CONCATENATED MODULE: ./packages/rich-text/build-module/apply-format.js
+;// CONCATENATED MODULE: ./packages/rich-text/build-module/apply-format.js
 /**
  * External dependencies
  */
@@ -761,7 +677,9 @@ function replace(array, index, value) {
  */
 
 
-function applyFormat(value, format, startIndex = value.start, endIndex = value.end) {
+function applyFormat(value, format) {
+  let startIndex = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : value.start;
+  let endIndex = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : value.end;
   const {
     formats,
     activeFormats
@@ -769,7 +687,7 @@ function applyFormat(value, format, startIndex = value.start, endIndex = value.e
   const newFormats = formats.slice(); // The selection is collapsed.
 
   if (startIndex === endIndex) {
-    const startFormat = Object(external_lodash_["find"])(newFormats[startIndex], {
+    const startFormat = (0,external_lodash_namespaceObject.find)(newFormats[startIndex], {
       type: format.type
     }); // If the caret is at a format of the same type, expand start and end to
     // the edges of the format. This is useful to apply new attributes.
@@ -795,9 +713,12 @@ function applyFormat(value, format, startIndex = value.start, endIndex = value.e
 
     for (let index = startIndex; index < endIndex; index++) {
       if (newFormats[index]) {
-        newFormats[index] = newFormats[index].filter(({
-          type
-        }) => type !== format.type);
+        newFormats[index] = newFormats[index].filter(_ref => {
+          let {
+            type
+          } = _ref;
+          return type !== format.type;
+        });
         const length = newFormats[index].length;
 
         if (length < position) {
@@ -819,13 +740,13 @@ function applyFormat(value, format, startIndex = value.start, endIndex = value.e
     // Always revise active formats. This serves as a placeholder for new
     // inputs with the format so new input appears with the format applied,
     // and ensures a format of the same type uses the latest values.
-    activeFormats: [...Object(external_lodash_["reject"])(activeFormats, {
+    activeFormats: [...(0,external_lodash_namespaceObject.reject)(activeFormats, {
       type: format.type
     }), format]
   });
 }
 //# sourceMappingURL=apply-format.js.map
-// CONCATENATED MODULE: ./packages/rich-text/build-module/create-element.js
+;// CONCATENATED MODULE: ./packages/rich-text/build-module/create-element.js
 /**
  * Parse the given HTML into a body element.
  *
@@ -838,9 +759,11 @@ function applyFormat(value, format, startIndex = value.start, endIndex = value.e
  *
  * @return {HTMLBodyElement} Body element with parsed HTML.
  */
-function createElement({
-  implementation
-}, html) {
+function createElement(_ref, html) {
+  let {
+    implementation
+  } = _ref;
+
   // Because `createHTMLDocument` is an expensive operation, and with this
   // function being internal to `rich-text` (full control in avoiding a risk
   // of asynchronous operations on the shared reference), a single document
@@ -853,7 +776,7 @@ function createElement({
   return createElement.body;
 }
 //# sourceMappingURL=create-element.js.map
-// CONCATENATED MODULE: ./packages/rich-text/build-module/special-characters.js
+;// CONCATENATED MODULE: ./packages/rich-text/build-module/special-characters.js
 /**
  * Line separator character, used for multiline text.
  */
@@ -870,7 +793,7 @@ const OBJECT_REPLACEMENT_CHARACTER = '\ufffc';
 
 const ZWNBSP = '\ufeff';
 //# sourceMappingURL=special-characters.js.map
-// CONCATENATED MODULE: ./packages/rich-text/build-module/create.js
+;// CONCATENATED MODULE: ./packages/rich-text/build-module/create.js
 /**
  * WordPress dependencies
  */
@@ -878,7 +801,6 @@ const ZWNBSP = '\ufeff';
 /**
  * Internal dependencies
  */
-
 
 
 
@@ -912,22 +834,15 @@ function createEmptyValue() {
   };
 }
 
-function simpleFindKey(object, value) {
-  for (const key in object) {
-    if (object[key] === value) {
-      return key;
-    }
-  }
-}
-
-function toFormat({
-  type,
-  attributes
-}) {
+function toFormat(_ref) {
+  let {
+    type,
+    attributes
+  } = _ref;
   let formatType;
 
   if (attributes && attributes.class) {
-    formatType = Object(external_wp_data_["select"])(store).getFormatTypeForClassName(attributes.class);
+    formatType = (0,external_wp_data_namespaceObject.select)(store).getFormatTypeForClassName(attributes.class);
 
     if (formatType) {
       // Preserve any additional classes.
@@ -940,7 +855,7 @@ function toFormat({
   }
 
   if (!formatType) {
-    formatType = Object(external_wp_data_["select"])(store).getFormatTypeForBareElement(type);
+    formatType = (0,external_wp_data_namespaceObject.select)(store).getFormatTypeForBareElement(type);
   }
 
   if (!formatType) {
@@ -964,15 +879,28 @@ function toFormat({
 
   const registeredAttributes = {};
   const unregisteredAttributes = {};
+  const _attributes = { ...attributes
+  };
 
-  for (const name in attributes) {
-    const key = simpleFindKey(formatType.attributes, name);
+  for (const key in formatType.attributes) {
+    const name = formatType.attributes[key];
+    registeredAttributes[key] = _attributes[name];
 
-    if (key) {
-      registeredAttributes[key] = attributes[name];
-    } else {
-      unregisteredAttributes[name] = attributes[name];
+    if (formatType.__unstableFilterAttributeValue) {
+      registeredAttributes[key] = formatType.__unstableFilterAttributeValue(key, registeredAttributes[key]);
+    } // delete the attribute and what's left is considered
+    // to be unregistered.
+
+
+    delete _attributes[name];
+
+    if (typeof registeredAttributes[key] === 'undefined') {
+      delete registeredAttributes[key];
     }
+  }
+
+  for (const name in _attributes) {
+    unregisteredAttributes[name] = attributes[name];
   }
 
   return {
@@ -1026,16 +954,18 @@ function toFormat({
  */
 
 
-function create({
-  element,
-  text,
-  html,
-  range,
-  multilineTag,
-  multilineWrapperTags,
-  __unstableIsEditableTree: isEditableTree,
-  preserveWhiteSpace
-} = {}) {
+function create() {
+  let {
+    element,
+    text,
+    html,
+    range,
+    multilineTag,
+    multilineWrapperTags,
+    __unstableIsEditableTree: isEditableTree,
+    preserveWhiteSpace
+  } = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
   if (typeof text === 'string' && text.length > 0) {
     return {
       formats: Array(text.length),
@@ -1174,16 +1104,16 @@ function filterRange(node, range, filter) {
 function collapseWhiteSpace(string) {
   return string.replace(/[\n\r\t]+/g, ' ');
 }
-
-const ZWNBSPRegExp = new RegExp(ZWNBSP, 'g');
 /**
- * Removes padding (zero width non breaking spaces) added by `toTree`.
+ * Removes reserved characters used by rich-text (zero width non breaking spaces added by `toTree` and object replacement characters).
  *
  * @param {string} string
  */
 
-function removePadding(string) {
-  return string.replace(ZWNBSPRegExp, '');
+
+function removeReservedCharacters(string) {
+  //with the global flag, note that we should create a new regex each time OR reset lastIndex state.
+  return string.replace(new RegExp(`[${ZWNBSP}${OBJECT_REPLACEMENT_CHARACTER}]`, 'gu'), '');
 }
 /**
  * Creates a Rich Text value from a DOM element and range.
@@ -1203,16 +1133,16 @@ function removePadding(string) {
  * @return {RichTextValue} A rich text value.
  */
 
-
-function createFromElement({
-  element,
-  range,
-  multilineTag,
-  multilineWrapperTags,
-  currentWrapperTags = [],
-  isEditableTree,
-  preserveWhiteSpace
-}) {
+function createFromElement(_ref2) {
+  let {
+    element,
+    range,
+    multilineTag,
+    multilineWrapperTags,
+    currentWrapperTags = [],
+    isEditableTree,
+    preserveWhiteSpace
+  } = _ref2;
   const accumulator = createEmptyValue();
 
   if (!element) {
@@ -1231,10 +1161,10 @@ function createFromElement({
     const type = node.nodeName.toLowerCase();
 
     if (node.nodeType === node.TEXT_NODE) {
-      let filter = removePadding;
+      let filter = removeReservedCharacters;
 
       if (!preserveWhiteSpace) {
-        filter = string => removePadding(collapseWhiteSpace(string));
+        filter = string => removeReservedCharacters(collapseWhiteSpace(string));
       }
 
       const text = filter(node.nodeValue);
@@ -1261,6 +1191,22 @@ function createFromElement({
       continue;
     }
 
+    if (type === 'script') {
+      const value = {
+        formats: [,],
+        replacements: [{
+          type,
+          attributes: {
+            'data-rich-text-script': node.getAttribute('data-rich-text-script') || encodeURIComponent(node.innerHTML)
+          }
+        }],
+        text: OBJECT_REPLACEMENT_CHARACTER
+      };
+      accumulateSelection(accumulator, node, range, value);
+      mergePair(accumulator, value);
+      continue;
+    }
+
     if (type === 'br') {
       accumulateSelection(accumulator, node, range, createEmptyValue());
       mergePair(accumulator, create({
@@ -1269,15 +1215,12 @@ function createFromElement({
       continue;
     }
 
-    const lastFormats = accumulator.formats[accumulator.formats.length - 1];
-    const lastFormat = lastFormats && lastFormats[lastFormats.length - 1];
-    const newFormat = toFormat({
+    const format = toFormat({
       type,
       attributes: getAttributes({
         element: node
       })
     });
-    const format = isFormatEqual(newFormat, lastFormat) ? lastFormat : newFormat;
 
     if (multilineWrapperTags && multilineWrapperTags.indexOf(type) !== -1) {
       const value = createFromMultilineElement({
@@ -1350,7 +1293,7 @@ function createFromElement({
  *                                            multiline.
  * @param {Array}   [$1.multilineWrapperTags] Tags where lines can be found if
  *                                            nesting is possible.
- * @param {boolean} [$1.currentWrapperTags]   Whether to prepend a line
+ * @param {Array}   [$1.currentWrapperTags]   Whether to prepend a line
  *                                            separator.
  * @param {boolean} [$1.preserveWhiteSpace]   Whether or not to collapse white
  *                                            space characters.
@@ -1360,15 +1303,16 @@ function createFromElement({
  */
 
 
-function createFromMultilineElement({
-  element,
-  range,
-  multilineTag,
-  multilineWrapperTags,
-  currentWrapperTags = [],
-  isEditableTree,
-  preserveWhiteSpace
-}) {
+function createFromMultilineElement(_ref3) {
+  let {
+    element,
+    range,
+    multilineTag,
+    multilineWrapperTags,
+    currentWrapperTags = [],
+    isEditableTree,
+    preserveWhiteSpace
+  } = _ref3;
   const accumulator = createEmptyValue();
 
   if (!element || !element.hasChildNodes()) {
@@ -1419,9 +1363,11 @@ function createFromMultilineElement({
  */
 
 
-function getAttributes({
-  element
-}) {
+function getAttributes(_ref4) {
+  let {
+    element
+  } = _ref4;
+
   if (!element.hasAttributes()) {
     return;
   }
@@ -1439,14 +1385,15 @@ function getAttributes({
       continue;
     }
 
+    const safeName = /^on/i.test(name) ? 'data-disable-rich-text-' + name : name;
     accumulator = accumulator || {};
-    accumulator[name] = value;
+    accumulator[safeName] = value;
   }
 
   return accumulator;
 }
 //# sourceMappingURL=create.js.map
-// CONCATENATED MODULE: ./packages/rich-text/build-module/concat.js
+;// CONCATENATED MODULE: ./packages/rich-text/build-module/concat.js
 /**
  * Internal dependencies
  */
@@ -1479,11 +1426,15 @@ function mergePair(a, b) {
  * @return {RichTextValue} A new value combining all given records.
  */
 
-function concat(...values) {
+function concat() {
+  for (var _len = arguments.length, values = new Array(_len), _key = 0; _key < _len; _key++) {
+    values[_key] = arguments[_key];
+  }
+
   return normaliseFormats(values.reduce(mergePair, create()));
 }
 //# sourceMappingURL=concat.js.map
-// CONCATENATED MODULE: ./packages/rich-text/build-module/get-active-formats.js
+;// CONCATENATED MODULE: ./packages/rich-text/build-module/get-active-formats.js
 /** @typedef {import('./create').RichTextValue} RichTextValue */
 
 /** @typedef {import('./create').RichTextFormatList} RichTextFormatList */
@@ -1497,12 +1448,15 @@ function concat(...values) {
  *
  * @return {RichTextFormatList} Active format objects.
  */
-function getActiveFormats({
-  formats,
-  start,
-  end,
-  activeFormats
-}, EMPTY_ACTIVE_FORMATS = []) {
+function getActiveFormats(_ref) {
+  let {
+    formats,
+    start,
+    end,
+    activeFormats
+  } = _ref;
+  let EMPTY_ACTIVE_FORMATS = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
+
   if (start === undefined) {
     return EMPTY_ACTIVE_FORMATS;
   }
@@ -1528,7 +1482,7 @@ function getActiveFormats({
   return formats[start] || EMPTY_ACTIVE_FORMATS;
 }
 //# sourceMappingURL=get-active-formats.js.map
-// CONCATENATED MODULE: ./packages/rich-text/build-module/get-active-format.js
+;// CONCATENATED MODULE: ./packages/rich-text/build-module/get-active-format.js
 /**
  * External dependencies
  */
@@ -1556,12 +1510,12 @@ function getActiveFormats({
  */
 
 function getActiveFormat(value, formatType) {
-  return Object(external_lodash_["find"])(getActiveFormats(value), {
+  return (0,external_lodash_namespaceObject.find)(getActiveFormats(value), {
     type: formatType
   });
 }
 //# sourceMappingURL=get-active-format.js.map
-// CONCATENATED MODULE: ./packages/rich-text/build-module/get-active-object.js
+;// CONCATENATED MODULE: ./packages/rich-text/build-module/get-active-object.js
 /**
  * Internal dependencies
  */
@@ -1578,12 +1532,14 @@ function getActiveFormat(value, formatType) {
  * @return {RichTextFormat|void} Active object, or undefined.
  */
 
-function getActiveObject({
-  start,
-  end,
-  replacements,
-  text
-}) {
+function getActiveObject(_ref) {
+  let {
+    start,
+    end,
+    replacements,
+    text
+  } = _ref;
+
   if (start + 1 !== end || text[start] !== OBJECT_REPLACEMENT_CHARACTER) {
     return;
   }
@@ -1591,7 +1547,7 @@ function getActiveObject({
   return replacements[start];
 }
 //# sourceMappingURL=get-active-object.js.map
-// CONCATENATED MODULE: ./packages/rich-text/build-module/get-text-content.js
+;// CONCATENATED MODULE: ./packages/rich-text/build-module/get-text-content.js
 /**
  * Internal dependencies
  */
@@ -1607,13 +1563,14 @@ function getActiveObject({
  * @return {string} The text content.
  */
 
-function getTextContent({
-  text
-}) {
+function getTextContent(_ref) {
+  let {
+    text
+  } = _ref;
   return text.replace(new RegExp(OBJECT_REPLACEMENT_CHARACTER, 'g'), '').replace(new RegExp(LINE_SEPARATOR, 'g'), '\n');
 }
 //# sourceMappingURL=get-text-content.js.map
-// CONCATENATED MODULE: ./packages/rich-text/build-module/get-line-index.js
+;// CONCATENATED MODULE: ./packages/rich-text/build-module/get-line-index.js
 /**
  * Internal dependencies
  */
@@ -1632,10 +1589,12 @@ function getTextContent({
  * @return {number|void} The line index. Undefined if not found.
  */
 
-function getLineIndex({
-  start,
-  text
-}, startIndex = start) {
+function getLineIndex(_ref) {
+  let {
+    start,
+    text
+  } = _ref;
+  let startIndex = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : start;
   let index = startIndex;
 
   while (index--) {
@@ -1645,7 +1604,7 @@ function getLineIndex({
   }
 }
 //# sourceMappingURL=get-line-index.js.map
-// CONCATENATED MODULE: ./packages/rich-text/build-module/is-list-root-selected.js
+;// CONCATENATED MODULE: ./packages/rich-text/build-module/is-list-root-selected.js
 /**
  * Internal dependencies
  */
@@ -1671,7 +1630,7 @@ function isListRootSelected(value) {
   return !replacement || replacement.length < 1;
 }
 //# sourceMappingURL=is-list-root-selected.js.map
-// CONCATENATED MODULE: ./packages/rich-text/build-module/is-active-list-type.js
+;// CONCATENATED MODULE: ./packages/rich-text/build-module/is-active-list-type.js
 /**
  * Internal dependencies
  */
@@ -1705,7 +1664,7 @@ function isActiveListType(value, type, rootType) {
   return lastFormat.type === type;
 }
 //# sourceMappingURL=is-active-list-type.js.map
-// CONCATENATED MODULE: ./packages/rich-text/build-module/is-collapsed.js
+;// CONCATENATED MODULE: ./packages/rich-text/build-module/is-collapsed.js
 /** @typedef {import('./create').RichTextValue} RichTextValue */
 
 /**
@@ -1719,10 +1678,12 @@ function isActiveListType(value, type, rootType) {
  * @return {boolean|undefined} True if the selection is collapsed, false if not,
  *                             undefined if there is no selection.
  */
-function isCollapsed({
-  start,
-  end
-}) {
+function isCollapsed(_ref) {
+  let {
+    start,
+    end
+  } = _ref;
+
   if (start === undefined || end === undefined) {
     return;
   }
@@ -1730,7 +1691,7 @@ function isCollapsed({
   return start === end;
 }
 //# sourceMappingURL=is-collapsed.js.map
-// CONCATENATED MODULE: ./packages/rich-text/build-module/is-empty.js
+;// CONCATENATED MODULE: ./packages/rich-text/build-module/is-empty.js
 /**
  * Internal dependencies
  */
@@ -1746,9 +1707,10 @@ function isCollapsed({
  * @return {boolean} True if the value is empty, false if not.
  */
 
-function isEmpty({
-  text
-}) {
+function isEmpty(_ref) {
+  let {
+    text
+  } = _ref;
   return text.length === 0;
 }
 /**
@@ -1760,11 +1722,13 @@ function isEmpty({
  * @return {boolean} True if the line is empty, false if not.
  */
 
-function isEmptyLine({
-  text,
-  start,
-  end
-}) {
+function isEmptyLine(_ref2) {
+  let {
+    text,
+    start,
+    end
+  } = _ref2;
+
   if (start !== end) {
     return false;
   }
@@ -1784,7 +1748,7 @@ function isEmptyLine({
   return text.slice(start - 1, end + 1) === `${LINE_SEPARATOR}${LINE_SEPARATOR}`;
 }
 //# sourceMappingURL=is-empty.js.map
-// CONCATENATED MODULE: ./packages/rich-text/build-module/join.js
+;// CONCATENATED MODULE: ./packages/rich-text/build-module/join.js
 /**
  * Internal dependencies
  */
@@ -1803,25 +1767,30 @@ function isEmptyLine({
  * @return {RichTextValue} A new combined value.
  */
 
-function join(values, separator = '') {
+function join(values) {
+  let separator = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
+
   if (typeof separator === 'string') {
     separator = create({
       text: separator
     });
   }
 
-  return normaliseFormats(values.reduce((accumlator, {
-    formats,
-    replacements,
-    text
-  }) => ({
-    formats: accumlator.formats.concat(separator.formats, formats),
-    replacements: accumlator.replacements.concat(separator.replacements, replacements),
-    text: accumlator.text + separator.text + text
-  })));
+  return normaliseFormats(values.reduce((accumlator, _ref) => {
+    let {
+      formats,
+      replacements,
+      text
+    } = _ref;
+    return {
+      formats: accumlator.formats.concat(separator.formats, formats),
+      replacements: accumlator.replacements.concat(separator.replacements, replacements),
+      text: accumlator.text + separator.text + text
+    };
+  }));
 }
 //# sourceMappingURL=join.js.map
-// CONCATENATED MODULE: ./packages/rich-text/build-module/register-format-type.js
+;// CONCATENATED MODULE: ./packages/rich-text/build-module/register-format-type.js
 /**
  * WordPress dependencies
  */
@@ -1871,7 +1840,7 @@ function registerFormatType(name, settings) {
     return;
   }
 
-  if (Object(external_wp_data_["select"])(store).getFormatType(settings.name)) {
+  if ((0,external_wp_data_namespaceObject.select)(store).getFormatType(settings.name)) {
     window.console.error('Format "' + settings.name + '" is already registered.');
     return;
   }
@@ -1892,14 +1861,14 @@ function registerFormatType(name, settings) {
   }
 
   if (settings.className === null) {
-    const formatTypeForBareElement = Object(external_wp_data_["select"])(store).getFormatTypeForBareElement(settings.tagName);
+    const formatTypeForBareElement = (0,external_wp_data_namespaceObject.select)(store).getFormatTypeForBareElement(settings.tagName);
 
     if (formatTypeForBareElement) {
       window.console.error(`Format "${formatTypeForBareElement.name}" is already registered to handle bare tag name "${settings.tagName}".`);
       return;
     }
   } else {
-    const formatTypeForClassName = Object(external_wp_data_["select"])(store).getFormatTypeForClassName(settings.className);
+    const formatTypeForClassName = (0,external_wp_data_namespaceObject.select)(store).getFormatTypeForClassName(settings.className);
 
     if (formatTypeForClassName) {
       window.console.error(`Format "${formatTypeForClassName.name}" is already registered to handle class name "${settings.className}".`);
@@ -1922,11 +1891,11 @@ function registerFormatType(name, settings) {
     return;
   }
 
-  Object(external_wp_data_["dispatch"])(store).addFormatTypes(settings);
+  (0,external_wp_data_namespaceObject.dispatch)(store).addFormatTypes(settings);
   return settings;
 }
 //# sourceMappingURL=register-format-type.js.map
-// CONCATENATED MODULE: ./packages/rich-text/build-module/remove-format.js
+;// CONCATENATED MODULE: ./packages/rich-text/build-module/remove-format.js
 /**
  * External dependencies
  */
@@ -1951,7 +1920,9 @@ function registerFormatType(name, settings) {
  * @return {RichTextValue} A new value with the format applied.
  */
 
-function removeFormat(value, formatType, startIndex = value.start, endIndex = value.end) {
+function removeFormat(value, formatType) {
+  let startIndex = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : value.start;
+  let endIndex = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : value.end;
   const {
     formats,
     activeFormats
@@ -1960,19 +1931,19 @@ function removeFormat(value, formatType, startIndex = value.start, endIndex = va
   // format.
 
   if (startIndex === endIndex) {
-    const format = Object(external_lodash_["find"])(newFormats[startIndex], {
+    const format = (0,external_lodash_namespaceObject.find)(newFormats[startIndex], {
       type: formatType
     });
 
     if (format) {
-      while (Object(external_lodash_["find"])(newFormats[startIndex], format)) {
+      while ((0,external_lodash_namespaceObject.find)(newFormats[startIndex], format)) {
         filterFormats(newFormats, startIndex, formatType);
         startIndex--;
       }
 
       endIndex++;
 
-      while (Object(external_lodash_["find"])(newFormats[endIndex], format)) {
+      while ((0,external_lodash_namespaceObject.find)(newFormats[endIndex], format)) {
         filterFormats(newFormats, endIndex, formatType);
         endIndex++;
       }
@@ -1987,16 +1958,19 @@ function removeFormat(value, formatType, startIndex = value.start, endIndex = va
 
   return normaliseFormats({ ...value,
     formats: newFormats,
-    activeFormats: Object(external_lodash_["reject"])(activeFormats, {
+    activeFormats: (0,external_lodash_namespaceObject.reject)(activeFormats, {
       type: formatType
     })
   });
 }
 
 function filterFormats(formats, index, formatType) {
-  const newFormats = formats[index].filter(({
-    type
-  }) => type !== formatType);
+  const newFormats = formats[index].filter(_ref => {
+    let {
+      type
+    } = _ref;
+    return type !== formatType;
+  });
 
   if (newFormats.length) {
     formats[index] = newFormats;
@@ -2005,7 +1979,7 @@ function filterFormats(formats, index, formatType) {
   }
 }
 //# sourceMappingURL=remove-format.js.map
-// CONCATENATED MODULE: ./packages/rich-text/build-module/insert.js
+;// CONCATENATED MODULE: ./packages/rich-text/build-module/insert.js
 /**
  * Internal dependencies
  */
@@ -2027,7 +2001,9 @@ function filterFormats(formats, index, formatType) {
  * @return {RichTextValue} A new value with the value inserted.
  */
 
-function insert(value, valueToInsert, startIndex = value.start, endIndex = value.end) {
+function insert(value, valueToInsert) {
+  let startIndex = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : value.start;
+  let endIndex = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : value.end;
   const {
     formats,
     replacements,
@@ -2050,7 +2026,7 @@ function insert(value, valueToInsert, startIndex = value.start, endIndex = value
   });
 }
 //# sourceMappingURL=insert.js.map
-// CONCATENATED MODULE: ./packages/rich-text/build-module/remove.js
+;// CONCATENATED MODULE: ./packages/rich-text/build-module/remove.js
 /**
  * Internal dependencies
  */
@@ -2069,11 +2045,11 @@ function insert(value, valueToInsert, startIndex = value.start, endIndex = value
  * @return {RichTextValue} A new value with the content removed.
  */
 
-function remove_remove(value, startIndex, endIndex) {
+function remove(value, startIndex, endIndex) {
   return insert(value, create(), startIndex, endIndex);
 }
 //# sourceMappingURL=remove.js.map
-// CONCATENATED MODULE: ./packages/rich-text/build-module/replace.js
+;// CONCATENATED MODULE: ./packages/rich-text/build-module/replace.js
 /**
  * Internal dependencies
  */
@@ -2097,14 +2073,19 @@ function remove_remove(value, startIndex, endIndex) {
  * @return {RichTextValue} A new value with replacements applied.
  */
 
-function replace_replace({
-  formats,
-  replacements,
-  text,
-  start,
-  end
-}, pattern, replacement) {
-  text = text.replace(pattern, (match, ...rest) => {
+function replace_replace(_ref, pattern, replacement) {
+  let {
+    formats,
+    replacements,
+    text,
+    start,
+    end
+  } = _ref;
+  text = text.replace(pattern, function (match) {
+    for (var _len = arguments.length, rest = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+      rest[_key - 1] = arguments[_key];
+    }
+
     const offset = rest[rest.length - 2];
     let newText = replacement;
     let newFormats;
@@ -2145,7 +2126,7 @@ function replace_replace({
   });
 }
 //# sourceMappingURL=replace.js.map
-// CONCATENATED MODULE: ./packages/rich-text/build-module/insert-line-separator.js
+;// CONCATENATED MODULE: ./packages/rich-text/build-module/insert-line-separator.js
 /**
  * Internal dependencies
  */
@@ -2165,7 +2146,9 @@ function replace_replace({
  * @return {RichTextValue} A new value with the value inserted.
  */
 
-function insertLineSeparator(value, startIndex = value.start, endIndex = value.end) {
+function insertLineSeparator(value) {
+  let startIndex = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : value.start;
+  let endIndex = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : value.end;
   const beforeText = value.text.slice(0, startIndex);
   const previousLineSeparatorIndex = beforeText.lastIndexOf(LINE_SEPARATOR);
   const previousLineSeparatorFormats = value.replacements[previousLineSeparatorIndex];
@@ -2183,7 +2166,7 @@ function insertLineSeparator(value, startIndex = value.start, endIndex = value.e
   return insert(value, valueToInsert, startIndex, endIndex);
 }
 //# sourceMappingURL=insert-line-separator.js.map
-// CONCATENATED MODULE: ./packages/rich-text/build-module/remove-line-separator.js
+;// CONCATENATED MODULE: ./packages/rich-text/build-module/remove-line-separator.js
 /**
  * Internal dependencies
  */
@@ -2206,7 +2189,8 @@ function insertLineSeparator(value, startIndex = value.start, endIndex = value.e
  *                                   is found on the position.
  */
 
-function removeLineSeparator(value, backward = true) {
+function removeLineSeparator(value) {
+  let backward = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
   const {
     replacements,
     text,
@@ -2238,13 +2222,13 @@ function removeLineSeparator(value, backward = true) {
       replacements: newReplacements
     };
   } else {
-    newValue = remove_remove(value, removeStart, removeEnd);
+    newValue = remove(value, removeStart, removeEnd);
   }
 
   return newValue;
 }
 //# sourceMappingURL=remove-line-separator.js.map
-// CONCATENATED MODULE: ./packages/rich-text/build-module/insert-object.js
+;// CONCATENATED MODULE: ./packages/rich-text/build-module/insert-object.js
 /**
  * Internal dependencies
  */
@@ -2276,7 +2260,7 @@ function insertObject(value, formatToInsert, startIndex, endIndex) {
   return insert(value, valueToInsert, startIndex, endIndex);
 }
 //# sourceMappingURL=insert-object.js.map
-// CONCATENATED MODULE: ./packages/rich-text/build-module/slice.js
+;// CONCATENATED MODULE: ./packages/rich-text/build-module/slice.js
 /** @typedef {import('./create').RichTextValue} RichTextValue */
 
 /**
@@ -2290,7 +2274,9 @@ function insertObject(value, formatToInsert, startIndex, endIndex) {
  *
  * @return {RichTextValue} A new extracted value.
  */
-function slice(value, startIndex = value.start, endIndex = value.end) {
+function slice(value) {
+  let startIndex = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : value.start;
+  let endIndex = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : value.end;
   const {
     formats,
     replacements,
@@ -2309,7 +2295,7 @@ function slice(value, startIndex = value.start, endIndex = value.end) {
   };
 }
 //# sourceMappingURL=slice.js.map
-// CONCATENATED MODULE: ./packages/rich-text/build-module/split.js
+;// CONCATENATED MODULE: ./packages/rich-text/build-module/split.js
 /**
  * Internal dependencies
  */
@@ -2327,13 +2313,15 @@ function slice(value, startIndex = value.start, endIndex = value.end) {
  * @return {Array<RichTextValue>|undefined} An array of new values.
  */
 
-function split({
-  formats,
-  replacements,
-  text,
-  start,
-  end
-}, string) {
+function split(_ref, string) {
+  let {
+    formats,
+    replacements,
+    text,
+    start,
+    end
+  } = _ref;
+
   if (typeof string !== 'string') {
     return splitAtSelection(...arguments);
   }
@@ -2366,13 +2354,17 @@ function split({
   });
 }
 
-function splitAtSelection({
-  formats,
-  replacements,
-  text,
-  start,
-  end
-}, startIndex = start, endIndex = end) {
+function splitAtSelection(_ref2) {
+  let {
+    formats,
+    replacements,
+    text,
+    start,
+    end
+  } = _ref2;
+  let startIndex = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : start;
+  let endIndex = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : end;
+
   if (start === undefined || end === undefined) {
     return;
   }
@@ -2393,7 +2385,7 @@ function splitAtSelection({
   replace_replace(before, /\u2028+$/, ''), replace_replace(after, /^\u2028+/, '')];
 }
 //# sourceMappingURL=split.js.map
-// CONCATENATED MODULE: ./packages/rich-text/build-module/get-format-type.js
+;// CONCATENATED MODULE: ./packages/rich-text/build-module/get-format-type.js
 /**
  * WordPress dependencies
  */
@@ -2414,16 +2406,36 @@ function splitAtSelection({
  */
 
 function get_format_type_getFormatType(name) {
-  return Object(external_wp_data_["select"])(store).getFormatType(name);
+  return (0,external_wp_data_namespaceObject.select)(store).getFormatType(name);
 }
 //# sourceMappingURL=get-format-type.js.map
-// CONCATENATED MODULE: ./packages/rich-text/build-module/to-tree.js
+;// CONCATENATED MODULE: ./packages/rich-text/build-module/to-tree.js
 /**
  * Internal dependencies
  */
 
 
 
+
+function restoreOnAttributes(attributes, isEditableTree) {
+  if (isEditableTree) {
+    return attributes;
+  }
+
+  const newAttributes = {};
+
+  for (const key in attributes) {
+    let newKey = key;
+
+    if (key.startsWith('data-disable-rich-text-')) {
+      newKey = key.slice('data-disable-rich-text-'.length);
+    }
+
+    newAttributes[newKey] = attributes[key];
+  }
+
+  return newAttributes;
+}
 /**
  * Converts a format object to information that can be used to create an element
  * from (type, attributes and object).
@@ -2437,17 +2449,21 @@ function get_format_type_getFormatType(name) {
  *                                            format.
  * @param {boolean} $1.boundaryClass          Whether or not to apply a boundary
  *                                            class.
+ * @param {boolean} $1.isEditableTree
  *
  * @return {Object} Information to be used for element creation.
  */
 
-function fromFormat({
-  type,
-  attributes,
-  unregisteredAttributes,
-  object,
-  boundaryClass
-}) {
+
+function fromFormat(_ref) {
+  let {
+    type,
+    attributes,
+    unregisteredAttributes,
+    object,
+    boundaryClass,
+    isEditableTree
+  } = _ref;
   const formatType = get_format_type_getFormatType(type);
   let elementAttributes = {};
 
@@ -2464,7 +2480,7 @@ function fromFormat({
 
     return {
       type,
-      attributes: elementAttributes,
+      attributes: restoreOnAttributes(elementAttributes, isEditableTree),
       object
     };
   }
@@ -2494,7 +2510,7 @@ function fromFormat({
   return {
     type: formatType.tagName,
     object: formatType.object,
-    attributes: elementAttributes
+    attributes: restoreOnAttributes(elementAttributes, isEditableTree)
   };
 }
 /**
@@ -2516,23 +2532,24 @@ function isEqualUntil(a, b, index) {
   return true;
 }
 
-function toTree({
-  value,
-  multilineTag,
-  preserveWhiteSpace,
-  createEmpty,
-  append,
-  getLastChild,
-  getParent,
-  isText,
-  getText,
-  remove,
-  appendText,
-  onStartIndex,
-  onEndIndex,
-  isEditableTree,
-  placeholder
-}) {
+function toTree(_ref2) {
+  let {
+    value,
+    multilineTag,
+    preserveWhiteSpace,
+    createEmpty,
+    append,
+    getLastChild,
+    getParent,
+    isText,
+    getText,
+    remove,
+    appendText,
+    onStartIndex,
+    onEndIndex,
+    isEditableTree,
+    placeholder
+  } = _ref2;
   const {
     formats,
     replacements,
@@ -2629,7 +2646,8 @@ function toTree({
           type,
           attributes,
           unregisteredAttributes,
-          boundaryClass
+          boundaryClass,
+          isEditableTree
         }));
 
         if (isText(pointer) && getText(pointer).length === 0) {
@@ -2659,9 +2677,23 @@ function toTree({
     }
 
     if (character === OBJECT_REPLACEMENT_CHARACTER) {
-      pointer = append(getParent(pointer), fromFormat({ ...replacements[i],
-        object: true
-      })); // Ensure pointer is text node.
+      var _replacements$i;
+
+      if (!isEditableTree && ((_replacements$i = replacements[i]) === null || _replacements$i === void 0 ? void 0 : _replacements$i.type) === 'script') {
+        pointer = append(getParent(pointer), fromFormat({
+          type: 'script',
+          isEditableTree
+        }));
+        append(pointer, {
+          html: decodeURIComponent(replacements[i].attributes['data-rich-text-script'])
+        });
+      } else {
+        pointer = append(getParent(pointer), fromFormat({ ...replacements[i],
+          object: true,
+          isEditableTree
+        }));
+      } // Ensure pointer is text node.
+
 
       pointer = append(getParent(pointer), '');
     } else if (!preserveWhiteSpace && character === '\n') {
@@ -2713,7 +2745,7 @@ function toTree({
   return tree;
 }
 //# sourceMappingURL=to-tree.js.map
-// CONCATENATED MODULE: ./packages/rich-text/build-module/to-dom.js
+;// CONCATENATED MODULE: ./packages/rich-text/build-module/to-dom.js
 /**
  * Internal dependencies
  */
@@ -2771,7 +2803,7 @@ function getNodeByPath(node, path) {
   };
 }
 
-function to_dom_append(element, child) {
+function append(element, child) {
   if (typeof child === 'string') {
     child = element.ownerDocument.createTextNode(child);
   }
@@ -2792,29 +2824,32 @@ function to_dom_append(element, child) {
   return element.appendChild(child);
 }
 
-function to_dom_appendText(node, text) {
+function appendText(node, text) {
   node.appendData(text);
 }
 
-function to_dom_getLastChild({
-  lastChild
-}) {
+function getLastChild(_ref) {
+  let {
+    lastChild
+  } = _ref;
   return lastChild;
 }
 
-function to_dom_getParent({
-  parentNode
-}) {
+function getParent(_ref2) {
+  let {
+    parentNode
+  } = _ref2;
   return parentNode;
 }
 
-function to_dom_isText(node) {
+function isText(node) {
   return node.nodeType === node.TEXT_NODE;
 }
 
-function to_dom_getText({
-  nodeValue
-}) {
+function getText(_ref3) {
+  let {
+    nodeValue
+  } = _ref3;
   return nodeValue;
 }
 
@@ -2822,14 +2857,15 @@ function to_dom_remove(node) {
   return node.parentNode.removeChild(node);
 }
 
-function toDom({
-  value,
-  multilineTag,
-  prepareEditableTree,
-  isEditableTree = true,
-  placeholder,
-  doc = document
-}) {
+function toDom(_ref4) {
+  let {
+    value,
+    multilineTag,
+    prepareEditableTree,
+    isEditableTree = true,
+    placeholder,
+    doc = document
+  } = _ref4;
   let startPath = [];
   let endPath = [];
 
@@ -2856,13 +2892,13 @@ function toDom({
     value,
     multilineTag,
     createEmpty,
-    append: to_dom_append,
-    getLastChild: to_dom_getLastChild,
-    getParent: to_dom_getParent,
-    isText: to_dom_isText,
-    getText: to_dom_getText,
+    append,
+    getLastChild,
+    getParent,
+    isText,
+    getText,
     remove: to_dom_remove,
-    appendText: to_dom_appendText,
+    appendText,
 
     onStartIndex(body, pointer) {
       startPath = createPathToNode(pointer, body, [pointer.nodeValue.length]);
@@ -2897,14 +2933,15 @@ function toDom({
  * @param {string}        [$1.placeholder]         Placeholder text.
  */
 
-function apply({
-  value,
-  current,
-  multilineTag,
-  prepareEditableTree,
-  __unstableDomOnly,
-  placeholder
-}) {
+function apply(_ref5) {
+  let {
+    value,
+    current,
+    multilineTag,
+    prepareEditableTree,
+    __unstableDomOnly,
+    placeholder
+  } = _ref5;
   // Construct a new element tree in memory.
   const {
     body,
@@ -2995,10 +3032,11 @@ function isRangeEqual(a, b) {
   return a.startContainer === b.startContainer && a.startOffset === b.startOffset && a.endContainer === b.endContainer && a.endOffset === b.endOffset;
 }
 
-function applySelection({
-  startPath,
-  endPath
-}, current) {
+function applySelection(_ref6, current) {
+  let {
+    startPath,
+    endPath
+  } = _ref6;
   const {
     node: startContainer,
     offset: startOffset
@@ -3047,10 +3085,9 @@ function applySelection({
   }
 }
 //# sourceMappingURL=to-dom.js.map
-// EXTERNAL MODULE: external ["wp","escapeHtml"]
-var external_wp_escapeHtml_ = __webpack_require__(90);
-
-// CONCATENATED MODULE: ./packages/rich-text/build-module/to-html-string.js
+;// CONCATENATED MODULE: external ["wp","escapeHtml"]
+var external_wp_escapeHtml_namespaceObject = window["wp"]["escapeHtml"];
+;// CONCATENATED MODULE: ./packages/rich-text/build-module/to-html-string.js
 /**
  * WordPress dependencies
  */
@@ -3075,16 +3112,17 @@ var external_wp_escapeHtml_ = __webpack_require__(90);
  * @return {string} HTML string.
  */
 
-function toHTMLString({
-  value,
-  multilineTag,
-  preserveWhiteSpace
-}) {
+function toHTMLString(_ref) {
+  let {
+    value,
+    multilineTag,
+    preserveWhiteSpace
+  } = _ref;
   const tree = toTree({
     value,
     multilineTag,
     preserveWhiteSpace,
-    createEmpty: to_html_string_createEmpty,
+    createEmpty,
     append: to_html_string_append,
     getLastChild: to_html_string_getLastChild,
     getParent: to_html_string_getParent,
@@ -3096,13 +3134,14 @@ function toHTMLString({
   return createChildrenHTML(tree.children);
 }
 
-function to_html_string_createEmpty() {
+function createEmpty() {
   return {};
 }
 
-function to_html_string_getLastChild({
-  children
-}) {
+function to_html_string_getLastChild(_ref2) {
+  let {
+    children
+  } = _ref2;
   return children && children[children.length - 1];
 }
 
@@ -3123,21 +3162,24 @@ function to_html_string_appendText(object, text) {
   object.text += text;
 }
 
-function to_html_string_getParent({
-  parent
-}) {
+function to_html_string_getParent(_ref3) {
+  let {
+    parent
+  } = _ref3;
   return parent;
 }
 
-function to_html_string_isText({
-  text
-}) {
+function to_html_string_isText(_ref4) {
+  let {
+    text
+  } = _ref4;
   return typeof text === 'string';
 }
 
-function to_html_string_getText({
-  text
-}) {
+function to_html_string_getText(_ref5) {
+  let {
+    text
+  } = _ref5;
   return text;
 }
 
@@ -3151,20 +3193,21 @@ function to_html_string_remove(object) {
   return object;
 }
 
-function createElementHTML({
-  type,
-  attributes,
-  object,
-  children
-}) {
+function createElementHTML(_ref6) {
+  let {
+    type,
+    attributes,
+    object,
+    children
+  } = _ref6;
   let attributeString = '';
 
   for (const key in attributes) {
-    if (!Object(external_wp_escapeHtml_["isValidAttributeName"])(key)) {
+    if (!(0,external_wp_escapeHtml_namespaceObject.isValidAttributeName)(key)) {
       continue;
     }
 
-    attributeString += ` ${key}="${Object(external_wp_escapeHtml_["escapeAttribute"])(attributes[key])}"`;
+    attributeString += ` ${key}="${(0,external_wp_escapeHtml_namespaceObject.escapeAttribute)(attributes[key])}"`;
   }
 
   if (object) {
@@ -3174,16 +3217,31 @@ function createElementHTML({
   return `<${type}${attributeString}>${createChildrenHTML(children)}</${type}>`;
 }
 
-function createChildrenHTML(children = []) {
+function createChildrenHTML() {
+  let children = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
   return children.map(child => {
-    return child.text === undefined ? createElementHTML(child) : Object(external_wp_escapeHtml_["escapeEditableHTML"])(child.text);
+    if (child.html !== undefined) {
+      return child.html;
+    }
+
+    return child.text === undefined ? createElementHTML(child) : (0,external_wp_escapeHtml_namespaceObject.escapeEditableHTML)(child.text);
   }).join('');
 }
 //# sourceMappingURL=to-html-string.js.map
-// CONCATENATED MODULE: ./packages/rich-text/build-module/toggle-format.js
+;// CONCATENATED MODULE: external ["wp","a11y"]
+var external_wp_a11y_namespaceObject = window["wp"]["a11y"];
+;// CONCATENATED MODULE: external ["wp","i18n"]
+var external_wp_i18n_namespaceObject = window["wp"]["i18n"];
+;// CONCATENATED MODULE: ./packages/rich-text/build-module/toggle-format.js
+/**
+ * WordPress dependencies
+ */
+
+
 /**
  * Internal dependencies
  */
+
 
 
 
@@ -3202,13 +3260,25 @@ function createChildrenHTML(children = []) {
 
 function toggleFormat(value, format) {
   if (getActiveFormat(value, format.type)) {
+    // For screen readers, will announce if formatting control is disabled.
+    if (format.title) {
+      // translators: %s: title of the formatting control
+      (0,external_wp_a11y_namespaceObject.speak)((0,external_wp_i18n_namespaceObject.sprintf)((0,external_wp_i18n_namespaceObject.__)('%s removed.'), format.title), 'assertive');
+    }
+
     return removeFormat(value, format.type);
+  } // For screen readers, will announce if formatting control is enabled.
+
+
+  if (format.title) {
+    // translators: %s: title of the formatting control
+    (0,external_wp_a11y_namespaceObject.speak)((0,external_wp_i18n_namespaceObject.sprintf)((0,external_wp_i18n_namespaceObject.__)('%s applied.'), format.title), 'assertive');
   }
 
   return applyFormat(value, format);
 }
 //# sourceMappingURL=toggle-format.js.map
-// CONCATENATED MODULE: ./packages/rich-text/build-module/unregister-format-type.js
+;// CONCATENATED MODULE: ./packages/rich-text/build-module/unregister-format-type.js
 /**
  * WordPress dependencies
  */
@@ -3231,18 +3301,18 @@ function toggleFormat(value, format) {
  */
 
 function unregisterFormatType(name) {
-  const oldFormat = Object(external_wp_data_["select"])(store).getFormatType(name);
+  const oldFormat = (0,external_wp_data_namespaceObject.select)(store).getFormatType(name);
 
   if (!oldFormat) {
     window.console.error(`Format ${name} is not registered.`);
     return;
   }
 
-  Object(external_wp_data_["dispatch"])(store).removeFormatTypes(name);
+  (0,external_wp_data_namespaceObject.dispatch)(store).removeFormatTypes(name);
   return oldFormat;
 }
 //# sourceMappingURL=unregister-format-type.js.map
-// CONCATENATED MODULE: ./packages/rich-text/build-module/can-indent-list-items.js
+;// CONCATENATED MODULE: ./packages/rich-text/build-module/can-indent-list-items.js
 /**
  * Internal dependencies
  */
@@ -3275,7 +3345,7 @@ function canIndentListItems(value) {
   return formatsAtLineIndex.length <= formatsAtPreviousLineIndex.length;
 }
 //# sourceMappingURL=can-indent-list-items.js.map
-// CONCATENATED MODULE: ./packages/rich-text/build-module/can-outdent-list-items.js
+;// CONCATENATED MODULE: ./packages/rich-text/build-module/can-outdent-list-items.js
 /**
  * Internal dependencies
  */
@@ -3299,7 +3369,7 @@ function canOutdentListItems(value) {
   return replacements[startingLineIndex] !== undefined;
 }
 //# sourceMappingURL=can-outdent-list-items.js.map
-// CONCATENATED MODULE: ./packages/rich-text/build-module/indent-list-items.js
+;// CONCATENATED MODULE: ./packages/rich-text/build-module/indent-list-items.js
 /**
  * Internal dependencies
  */
@@ -3320,10 +3390,11 @@ function canOutdentListItems(value) {
  * @return {number|void} The line index.
  */
 
-function getTargetLevelLineIndex({
-  text,
-  replacements
-}, lineIndex) {
+function getTargetLevelLineIndex(_ref, lineIndex) {
+  let {
+    text,
+    replacements
+  } = _ref;
   const startFormats = replacements[lineIndex] || [];
   let index = lineIndex;
 
@@ -3389,7 +3460,7 @@ function indentListItems(value, rootFormat) {
   };
 }
 //# sourceMappingURL=indent-list-items.js.map
-// CONCATENATED MODULE: ./packages/rich-text/build-module/get-parent-line-index.js
+;// CONCATENATED MODULE: ./packages/rich-text/build-module/get-parent-line-index.js
 /**
  * Internal dependencies
  */
@@ -3407,10 +3478,11 @@ function indentListItems(value, rootFormat) {
  * @return {number|void} The parent list line index.
  */
 
-function getParentLineIndex({
-  text,
-  replacements
-}, lineIndex) {
+function getParentLineIndex(_ref, lineIndex) {
+  let {
+    text,
+    replacements
+  } = _ref;
   const startFormats = replacements[lineIndex] || [];
   let index = lineIndex;
 
@@ -3427,7 +3499,7 @@ function getParentLineIndex({
   }
 }
 //# sourceMappingURL=get-parent-line-index.js.map
-// CONCATENATED MODULE: ./packages/rich-text/build-module/get-last-child-index.js
+;// CONCATENATED MODULE: ./packages/rich-text/build-module/get-last-child-index.js
 /**
  * Internal dependencies
  */
@@ -3443,10 +3515,11 @@ function getParentLineIndex({
  * @return {number} The index of the last child.
  */
 
-function getLastChildIndex({
-  text,
-  replacements
-}, lineIndex) {
+function getLastChildIndex(_ref, lineIndex) {
+  let {
+    text,
+    replacements
+  } = _ref;
   const lineFormats = replacements[lineIndex] || []; // Use the given line index in case there are no next children.
 
   let childIndex = lineIndex; // `lineIndex` could be `undefined` if it's the first line.
@@ -3471,7 +3544,7 @@ function getLastChildIndex({
   return childIndex;
 }
 //# sourceMappingURL=get-last-child-index.js.map
-// CONCATENATED MODULE: ./packages/rich-text/build-module/outdent-list-items.js
+;// CONCATENATED MODULE: ./packages/rich-text/build-module/outdent-list-items.js
 /**
  * Internal dependencies
  */
@@ -3530,7 +3603,7 @@ function outdentListItems(value) {
   };
 }
 //# sourceMappingURL=outdent-list-items.js.map
-// CONCATENATED MODULE: ./packages/rich-text/build-module/change-list-type.js
+;// CONCATENATED MODULE: ./packages/rich-text/build-module/change-list-type.js
 /**
  * Internal dependencies
  */
@@ -3598,10 +3671,9 @@ function changeListType(value, newFormat) {
   };
 }
 //# sourceMappingURL=change-list-type.js.map
-// EXTERNAL MODULE: external ["wp","element"]
-var external_wp_element_ = __webpack_require__(0);
-
-// CONCATENATED MODULE: ./packages/rich-text/build-module/component/use-anchor-ref.js
+;// CONCATENATED MODULE: external ["wp","element"]
+var external_wp_element_namespaceObject = window["wp"]["element"];
+;// CONCATENATED MODULE: ./packages/rich-text/build-module/component/use-anchor-ref.js
 /**
  * WordPress dependencies
  */
@@ -3632,18 +3704,19 @@ var external_wp_element_ = __webpack_require__(0);
  * @return {Element|Range} The active element or selection range.
  */
 
-function useAnchorRef({
-  ref,
-  value,
-  settings = {}
-}) {
+function useAnchorRef(_ref) {
+  let {
+    ref,
+    value,
+    settings = {}
+  } = _ref;
   const {
     tagName,
     className,
     name
   } = settings;
   const activeFormat = name ? getActiveFormat(value, name) : undefined;
-  return Object(external_wp_element_["useMemo"])(() => {
+  return (0,external_wp_element_namespaceObject.useMemo)(() => {
     if (!ref.current) return;
     const {
       ownerDocument: {
@@ -3674,10 +3747,9 @@ function useAnchorRef({
   }, [activeFormat, value.start, value.end, tagName, className]);
 }
 //# sourceMappingURL=use-anchor-ref.js.map
-// EXTERNAL MODULE: external ["wp","compose"]
-var external_wp_compose_ = __webpack_require__(9);
-
-// CONCATENATED MODULE: ./packages/rich-text/build-module/component/use-default-style.js
+;// CONCATENATED MODULE: external ["wp","compose"]
+var external_wp_compose_namespaceObject = window["wp"]["compose"];
+;// CONCATENATED MODULE: ./packages/rich-text/build-module/component/use-default-style.js
 /**
  * WordPress dependencies
  */
@@ -3711,14 +3783,14 @@ const whiteSpace = 'pre-wrap';
 
 const minWidth = '1px';
 function useDefaultStyle() {
-  return Object(external_wp_element_["useCallback"])(element => {
+  return (0,external_wp_element_namespaceObject.useCallback)(element => {
     if (!element) return;
     element.style.whiteSpace = whiteSpace;
     element.style.minWidth = minWidth;
   }, []);
 }
 //# sourceMappingURL=use-default-style.js.map
-// CONCATENATED MODULE: ./packages/rich-text/build-module/component/use-boundary-style.js
+;// CONCATENATED MODULE: ./packages/rich-text/build-module/component/use-boundary-style.js
 /**
  * WordPress dependencies
  */
@@ -3728,14 +3800,15 @@ function useDefaultStyle() {
  * change.
  */
 
-function useBoundaryStyle({
-  record
-}) {
-  const ref = Object(external_wp_element_["useRef"])();
+function useBoundaryStyle(_ref) {
+  let {
+    record
+  } = _ref;
+  const ref = (0,external_wp_element_namespaceObject.useRef)();
   const {
     activeFormats = []
   } = record.current;
-  Object(external_wp_element_["useEffect"])(() => {
+  (0,external_wp_element_namespaceObject.useEffect)(() => {
     // There's no need to recalculate the boundary styles if no formats are
     // active, because no boundary styles will be visible.
     if (!activeFormats || !activeFormats.length) {
@@ -3776,7 +3849,7 @@ function useBoundaryStyle({
   return ref;
 }
 //# sourceMappingURL=use-boundary-style.js.map
-// CONCATENATED MODULE: ./packages/rich-text/build-module/component/use-copy-handler.js
+;// CONCATENATED MODULE: ./packages/rich-text/build-module/component/use-copy-handler.js
 /**
  * WordPress dependencies
  */
@@ -3791,9 +3864,9 @@ function useBoundaryStyle({
 
 
 function useCopyHandler(props) {
-  const propsRef = Object(external_wp_element_["useRef"])(props);
+  const propsRef = (0,external_wp_element_namespaceObject.useRef)(props);
   propsRef.current = props;
-  return Object(external_wp_compose_["useRefEffect"])(element => {
+  return (0,external_wp_compose_namespaceObject.useRefEffect)(element => {
     function onCopy(event) {
       const {
         record,
@@ -3815,6 +3888,7 @@ function useCopyHandler(props) {
       event.clipboardData.setData('text/plain', plainText);
       event.clipboardData.setData('text/html', html);
       event.clipboardData.setData('rich-text', 'true');
+      event.clipboardData.setData('rich-text-multi-line-tag', multilineTag || '');
       event.preventDefault();
     }
 
@@ -3825,10 +3899,9 @@ function useCopyHandler(props) {
   }, []);
 }
 //# sourceMappingURL=use-copy-handler.js.map
-// EXTERNAL MODULE: external ["wp","keycodes"]
-var external_wp_keycodes_ = __webpack_require__(13);
-
-// CONCATENATED MODULE: ./packages/rich-text/build-module/component/use-format-boundaries.js
+;// CONCATENATED MODULE: external ["wp","keycodes"]
+var external_wp_keycodes_namespaceObject = window["wp"]["keycodes"];
+;// CONCATENATED MODULE: ./packages/rich-text/build-module/component/use-format-boundaries.js
 /**
  * WordPress dependencies
  */
@@ -3842,10 +3915,10 @@ var external_wp_keycodes_ = __webpack_require__(13);
 
 const EMPTY_ACTIVE_FORMATS = [];
 function useFormatBoundaries(props) {
-  const [, forceRender] = Object(external_wp_element_["useReducer"])(() => ({}));
-  const propsRef = Object(external_wp_element_["useRef"])(props);
+  const [, forceRender] = (0,external_wp_element_namespaceObject.useReducer)(() => ({}));
+  const propsRef = (0,external_wp_element_namespaceObject.useRef)(props);
   propsRef.current = props;
-  return Object(external_wp_compose_["useRefEffect"])(element => {
+  return (0,external_wp_compose_namespaceObject.useRefEffect)(element => {
     function onKeyDown(event) {
       const {
         keyCode,
@@ -3856,7 +3929,7 @@ function useFormatBoundaries(props) {
       } = event;
 
       if ( // Only override left and right keys without modifiers pressed.
-      shiftKey || altKey || metaKey || ctrlKey || keyCode !== external_wp_keycodes_["LEFT"] && keyCode !== external_wp_keycodes_["RIGHT"]) {
+      shiftKey || altKey || metaKey || ctrlKey || keyCode !== external_wp_keycodes_namespaceObject.LEFT && keyCode !== external_wp_keycodes_namespaceObject.RIGHT) {
         return;
       }
 
@@ -3882,7 +3955,7 @@ function useFormatBoundaries(props) {
       const {
         direction
       } = defaultView.getComputedStyle(element);
-      const reverseKey = direction === 'rtl' ? external_wp_keycodes_["RIGHT"] : external_wp_keycodes_["LEFT"];
+      const reverseKey = direction === 'rtl' ? external_wp_keycodes_namespaceObject.RIGHT : external_wp_keycodes_namespaceObject.LEFT;
       const isReverse = event.keyCode === reverseKey; // If the selection is collapsed and at the very start, do nothing if
       // navigating backward.
       // If the selection is collapsed and at the very end, do nothing if
@@ -3907,39 +3980,24 @@ function useFormatBoundaries(props) {
 
       const formatsBefore = formats[start - 1] || EMPTY_ACTIVE_FORMATS;
       const formatsAfter = formats[start] || EMPTY_ACTIVE_FORMATS;
+      const destination = isReverse ? formatsBefore : formatsAfter;
+      const isIncreasing = currentActiveFormats.every((format, index) => format === destination[index]);
       let newActiveFormatsLength = currentActiveFormats.length;
-      let source = formatsAfter;
 
-      if (formatsBefore.length > formatsAfter.length) {
-        source = formatsBefore;
-      } // If the amount of formats before the caret and after the caret is
-      // different, the caret is at a format boundary.
-
-
-      if (formatsBefore.length < formatsAfter.length) {
-        if (!isReverse && currentActiveFormats.length < formatsAfter.length) {
-          newActiveFormatsLength++;
-        }
-
-        if (isReverse && currentActiveFormats.length > formatsBefore.length) {
-          newActiveFormatsLength--;
-        }
-      } else if (formatsBefore.length > formatsAfter.length) {
-        if (!isReverse && currentActiveFormats.length > formatsAfter.length) {
-          newActiveFormatsLength--;
-        }
-
-        if (isReverse && currentActiveFormats.length < formatsBefore.length) {
-          newActiveFormatsLength++;
-        }
+      if (!isIncreasing) {
+        newActiveFormatsLength--;
+      } else if (newActiveFormatsLength < destination.length) {
+        newActiveFormatsLength++;
       }
 
       if (newActiveFormatsLength === currentActiveFormats.length) {
-        record.current._newActiveFormats = isReverse ? formatsBefore : formatsAfter;
+        record.current._newActiveFormats = destination;
         return;
       }
 
       event.preventDefault();
+      const origin = isReverse ? formatsAfter : formatsBefore;
+      const source = isIncreasing ? destination : origin;
       const newActiveFormats = source.slice(0, newActiveFormatsLength);
       const newValue = { ...record.current,
         activeFormats: newActiveFormats
@@ -3956,13 +4014,13 @@ function useFormatBoundaries(props) {
   }, []);
 }
 //# sourceMappingURL=use-format-boundaries.js.map
-// CONCATENATED MODULE: ./packages/rich-text/build-module/component/use-select-object.js
+;// CONCATENATED MODULE: ./packages/rich-text/build-module/component/use-select-object.js
 /**
  * WordPress dependencies
  */
 
 function useSelectObject() {
-  return Object(external_wp_compose_["useRefEffect"])(element => {
+  return (0,external_wp_compose_namespaceObject.useRefEffect)(element => {
     function onClick(event) {
       const {
         target
@@ -3992,7 +4050,7 @@ function useSelectObject() {
   }, []);
 }
 //# sourceMappingURL=use-select-object.js.map
-// CONCATENATED MODULE: ./packages/rich-text/build-module/component/use-indent-list-item-on-space.js
+;// CONCATENATED MODULE: ./packages/rich-text/build-module/component/use-indent-list-item-on-space.js
 /**
  * WordPress dependencies
  */
@@ -4007,9 +4065,9 @@ function useSelectObject() {
 
 
 function useIndentListItemOnSpace(props) {
-  const propsRef = Object(external_wp_element_["useRef"])(props);
+  const propsRef = (0,external_wp_element_namespaceObject.useRef)(props);
   propsRef.current = props;
-  return Object(external_wp_compose_["useRefEffect"])(element => {
+  return (0,external_wp_compose_namespaceObject.useRefEffect)(element => {
     function onKeyDown(event) {
       const {
         keyCode,
@@ -4025,7 +4083,7 @@ function useIndentListItemOnSpace(props) {
       } = propsRef.current;
 
       if ( // Only override when no modifiers are pressed.
-      shiftKey || altKey || metaKey || ctrlKey || keyCode !== external_wp_keycodes_["SPACE"] || multilineTag !== 'li') {
+      shiftKey || altKey || metaKey || ctrlKey || keyCode !== external_wp_keycodes_namespaceObject.SPACE || multilineTag !== 'li') {
         return;
       }
 
@@ -4058,7 +4116,7 @@ function useIndentListItemOnSpace(props) {
   }, []);
 }
 //# sourceMappingURL=use-indent-list-item-on-space.js.map
-// CONCATENATED MODULE: ./packages/rich-text/build-module/update-formats.js
+;// CONCATENATED MODULE: ./packages/rich-text/build-module/update-formats.js
 /**
  * Internal dependencies
  */
@@ -4078,14 +4136,18 @@ function useIndentListItemOnSpace(props) {
  * @return {RichTextValue} Mutated value.
  */
 
-function updateFormats({
-  value,
-  start,
-  end,
-  formats
-}) {
-  const formatsBefore = value.formats[start - 1] || [];
-  const formatsAfter = value.formats[end] || []; // First, fix the references. If any format right before or after are
+function updateFormats(_ref) {
+  let {
+    value,
+    start,
+    end,
+    formats
+  } = _ref;
+  // Start and end may be switched in case of delete.
+  const min = Math.min(start, end);
+  const max = Math.max(start, end);
+  const formatsBefore = value.formats[min - 1] || [];
+  const formatsAfter = value.formats[max] || []; // First, fix the references. If any format right before or after are
   // equal, the replacement format should use the same reference.
 
   value.activeFormats = formats.map((format, index) => {
@@ -4113,7 +4175,7 @@ function updateFormats({
   return value;
 }
 //# sourceMappingURL=update-formats.js.map
-// CONCATENATED MODULE: ./packages/rich-text/build-module/component/use-input-and-selection.js
+;// CONCATENATED MODULE: ./packages/rich-text/build-module/component/use-input-and-selection.js
 /**
  * WordPress dependencies
  */
@@ -4163,9 +4225,9 @@ function fixPlaceholderSelection(defaultView) {
 }
 
 function useInputAndSelection(props) {
-  const propsRef = Object(external_wp_element_["useRef"])(props);
+  const propsRef = (0,external_wp_element_namespaceObject.useRef)(props);
   propsRef.current = props;
-  return Object(external_wp_compose_["useRefEffect"])(element => {
+  return (0,external_wp_compose_namespaceObject.useRefEffect)(element => {
     const {
       ownerDocument
     } = element;
@@ -4326,7 +4388,8 @@ function useInputAndSelection(props) {
       const {
         record,
         isSelected,
-        onSelectionChange
+        onSelectionChange,
+        applyRecord
       } = propsRef.current;
 
       if (!isSelected) {
@@ -4341,6 +4404,7 @@ function useInputAndSelection(props) {
         };
         onSelectionChange(index, index);
       } else {
+        applyRecord(record.current);
         onSelectionChange(record.current.start, record.current.end);
       } // Update selection as soon as possible, which is at the next animation
       // frame. The event listener for selection changes may be added too late
@@ -4383,7 +4447,7 @@ function useInputAndSelection(props) {
   }, []);
 }
 //# sourceMappingURL=use-input-and-selection.js.map
-// CONCATENATED MODULE: ./packages/rich-text/build-module/component/use-delete.js
+;// CONCATENATED MODULE: ./packages/rich-text/build-module/component/use-delete.js
 /**
  * WordPress dependencies
  */
@@ -4398,9 +4462,9 @@ function useInputAndSelection(props) {
 
 
 function useDelete(props) {
-  const propsRef = Object(external_wp_element_["useRef"])(props);
+  const propsRef = (0,external_wp_element_namespaceObject.useRef)(props);
   propsRef.current = props;
-  return Object(external_wp_compose_["useRefEffect"])(element => {
+  return (0,external_wp_compose_namespaceObject.useRefEffect)(element => {
     function onKeyDown(event) {
       const {
         keyCode
@@ -4415,7 +4479,7 @@ function useDelete(props) {
         return;
       }
 
-      if (keyCode !== external_wp_keycodes_["DELETE"] && keyCode !== external_wp_keycodes_["BACKSPACE"]) {
+      if (keyCode !== external_wp_keycodes_namespaceObject.DELETE && keyCode !== external_wp_keycodes_namespaceObject.BACKSPACE) {
         return;
       }
 
@@ -4425,10 +4489,10 @@ function useDelete(props) {
         end,
         text
       } = currentValue;
-      const isReverse = keyCode === external_wp_keycodes_["BACKSPACE"]; // Always handle full content deletion ourselves.
+      const isReverse = keyCode === external_wp_keycodes_namespaceObject.BACKSPACE; // Always handle full content deletion ourselves.
 
       if (start === 0 && end !== 0 && end === text.length) {
-        handleChange(remove_remove(currentValue));
+        handleChange(remove(currentValue));
         event.preventDefault();
         return;
       }
@@ -4456,10 +4520,57 @@ function useDelete(props) {
   }, []);
 }
 //# sourceMappingURL=use-delete.js.map
-// CONCATENATED MODULE: ./packages/rich-text/build-module/component/index.js
+;// CONCATENATED MODULE: ./packages/rich-text/build-module/component/use-space.js
 /**
  * WordPress dependencies
  */
+
+
+/**
+ * For some elements like BUTTON and SUMMARY, the space key doesn't insert a
+ * space character in some browsers even though the element is editable. We have
+ * to manually insert a space and prevent default behaviour.
+ *
+ * DO NOT limit this behaviour to specific tag names! It would mean that this
+ * behaviour is not widely tested. If there's ever any problems, we should find
+ * a different solution entirely or remove it entirely.
+ */
+
+function useSpace() {
+  return (0,external_wp_compose_namespaceObject.useRefEffect)(element => {
+    function onKeyDown(event) {
+      // Don't insert a space if default behaviour is prevented.
+      if (event.defaultPrevented) {
+        return;
+      }
+
+      const {
+        keyCode,
+        altKey,
+        metaKey,
+        ctrlKey
+      } = event; // Only consider the space key without modifiers pressed.
+
+      if (keyCode !== external_wp_keycodes_namespaceObject.SPACE || altKey || metaKey || ctrlKey) {
+        return;
+      }
+
+      event.target.ownerDocument.execCommand('insertText', false, ' ');
+      event.preventDefault();
+    }
+
+    element.addEventListener('keydown', onKeyDown);
+    return () => {
+      element.removeEventListener('keydown', onKeyDown);
+    };
+  }, []);
+}
+//# sourceMappingURL=use-space.js.map
+;// CONCATENATED MODULE: ./packages/rich-text/build-module/component/index.js
+/**
+ * WordPress dependencies
+ */
+
 
 
 /**
@@ -4477,24 +4588,27 @@ function useDelete(props) {
 
 
 
-function useRichText({
-  value = '',
-  selectionStart,
-  selectionEnd,
-  placeholder,
-  preserveWhiteSpace,
-  onSelectionChange,
-  onChange,
-  __unstableMultilineTag: multilineTag,
-  __unstableDisableFormats: disableFormats,
-  __unstableIsSelected: isSelected,
-  __unstableDependencies,
-  __unstableAfterParse,
-  __unstableBeforeSerialize,
-  __unstableAddInvisibleFormats
-}) {
-  const [, forceRender] = Object(external_wp_element_["useReducer"])(() => ({}));
-  const ref = Object(external_wp_element_["useRef"])();
+
+function useRichText(_ref) {
+  let {
+    value = '',
+    selectionStart,
+    selectionEnd,
+    placeholder,
+    preserveWhiteSpace,
+    onSelectionChange,
+    onChange,
+    __unstableMultilineTag: multilineTag,
+    __unstableDisableFormats: disableFormats,
+    __unstableIsSelected: isSelected,
+    __unstableDependencies = [],
+    __unstableAfterParse,
+    __unstableBeforeSerialize,
+    __unstableAddInvisibleFormats
+  } = _ref;
+  const registry = (0,external_wp_data_namespaceObject.useRegistry)();
+  const [, forceRender] = (0,external_wp_element_namespaceObject.useReducer)(() => ({}));
+  const ref = (0,external_wp_element_namespaceObject.useRef)();
 
   function createRecord() {
     const {
@@ -4514,9 +4628,10 @@ function useRichText({
     });
   }
 
-  function applyRecord(newRecord, {
-    domOnly
-  } = {}) {
+  function applyRecord(newRecord) {
+    let {
+      domOnly
+    } = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
     apply({
       value: newRecord,
       current: ref.current,
@@ -4529,9 +4644,9 @@ function useRichText({
   } // Internal values are updated synchronously, unlike props and state.
 
 
-  const _value = Object(external_wp_element_["useRef"])(value);
+  const _value = (0,external_wp_element_namespaceObject.useRef)(value);
 
-  const record = Object(external_wp_element_["useRef"])();
+  const record = (0,external_wp_element_namespaceObject.useRef)();
 
   function setRecordFromProps() {
     _value.current = value;
@@ -4547,15 +4662,33 @@ function useRichText({
       record.current.replacements = Array(value.length);
     }
 
-    record.current.formats = __unstableAfterParse(record.current);
+    if (__unstableAfterParse) {
+      record.current.formats = __unstableAfterParse(record.current);
+    }
+
     record.current.start = selectionStart;
     record.current.end = selectionEnd;
   }
 
-  const hadSelectionUpdate = Object(external_wp_element_["useRef"])(false);
+  const hadSelectionUpdate = (0,external_wp_element_namespaceObject.useRef)(false);
 
   if (!record.current) {
-    setRecordFromProps();
+    var _record$current, _record$current$forma, _record$current$forma2;
+
+    setRecordFromProps(); // Sometimes formats are added programmatically and we need to make
+    // sure it's persisted to the block store / markup. If these formats
+    // are not applied, they could cause inconsistencies between the data
+    // in the visual editor and the frontend. Right now, it's only relevant
+    // to the `core/text-color` format, which is applied at runtime in
+    // certain circunstances. See the `__unstableFilterAttributeValue`
+    // function in `packages/format-library/src/text-color/index.js`.
+    // @todo find a less-hacky way of solving this.
+
+    const hasRelevantInitFormat = ((_record$current = record.current) === null || _record$current === void 0 ? void 0 : (_record$current$forma = _record$current.formats[0]) === null || _record$current$forma === void 0 ? void 0 : (_record$current$forma2 = _record$current$forma[0]) === null || _record$current$forma2 === void 0 ? void 0 : _record$current$forma2.type) === 'core/text-color';
+
+    if (hasRelevantInitFormat) {
+      handleChangesUponInit(record.current);
+    }
   } else if (selectionStart !== record.current.start || selectionEnd !== record.current.end) {
     hadSelectionUpdate.current = isSelected;
     record.current = { ...record.current,
@@ -4572,21 +4705,21 @@ function useRichText({
 
 
   function handleChange(newRecord) {
+    record.current = newRecord;
     applyRecord(newRecord);
 
     if (disableFormats) {
       _value.current = newRecord.text;
     } else {
       _value.current = toHTMLString({
-        value: { ...newRecord,
+        value: __unstableBeforeSerialize ? { ...newRecord,
           formats: __unstableBeforeSerialize(newRecord)
-        },
+        } : newRecord,
         multilineTag,
         preserveWhiteSpace
       });
     }
 
-    record.current = newRecord;
     const {
       start,
       end,
@@ -4594,11 +4727,36 @@ function useRichText({
       text
     } = newRecord; // Selection must be updated first, so it is recorded in history when
     // the content change happens.
+    // We batch both calls to only attempt to rerender once.
 
-    onSelectionChange(start, end);
-    onChange(_value.current, {
-      __unstableFormats: formats,
-      __unstableText: text
+    registry.batch(() => {
+      onSelectionChange(start, end);
+      onChange(_value.current, {
+        __unstableFormats: formats,
+        __unstableText: text
+      });
+    });
+    forceRender();
+  }
+
+  function handleChangesUponInit(newRecord) {
+    record.current = newRecord;
+    _value.current = toHTMLString({
+      value: __unstableBeforeSerialize ? { ...newRecord,
+        formats: __unstableBeforeSerialize(newRecord)
+      } : newRecord,
+      multilineTag,
+      preserveWhiteSpace
+    });
+    const {
+      formats,
+      text
+    } = newRecord;
+    registry.batch(() => {
+      onChange(_value.current, {
+        __unstableFormats: formats,
+        __unstableText: text
+      });
     });
     forceRender();
   }
@@ -4608,15 +4766,15 @@ function useRichText({
     applyRecord(record.current);
   }
 
-  const didMount = Object(external_wp_element_["useRef"])(false); // Value updates must happen synchonously to avoid overwriting newer values.
+  const didMount = (0,external_wp_element_namespaceObject.useRef)(false); // Value updates must happen synchonously to avoid overwriting newer values.
 
-  Object(external_wp_element_["useLayoutEffect"])(() => {
+  (0,external_wp_element_namespaceObject.useLayoutEffect)(() => {
     if (didMount.current && value !== _value.current) {
       applyFromProps();
     }
   }, [value]); // Value updates must happen synchonously to avoid overwriting newer values.
 
-  Object(external_wp_element_["useLayoutEffect"])(() => {
+  (0,external_wp_element_namespaceObject.useLayoutEffect)(() => {
     if (!hadSelectionUpdate.current) {
       return;
     }
@@ -4624,13 +4782,7 @@ function useRichText({
     applyFromProps();
     hadSelectionUpdate.current = false;
   }, [hadSelectionUpdate.current]);
-
-  function focus() {
-    ref.current.focus();
-    applyRecord(record.current);
-  }
-
-  const mergedRefs = Object(external_wp_compose_["useMergeRefs"])([ref, useDefaultStyle(), useBoundaryStyle({
+  const mergedRefs = (0,external_wp_compose_namespaceObject.useMergeRefs)([ref, useDefaultStyle(), useBoundaryStyle({
     record
   }), useCopyHandler({
     record,
@@ -4654,20 +4806,19 @@ function useRichText({
     handleChange,
     isSelected,
     onSelectionChange
-  }), Object(external_wp_compose_["useRefEffect"])(() => {
+  }), useSpace(), (0,external_wp_compose_namespaceObject.useRefEffect)(() => {
     applyFromProps();
     didMount.current = true;
   }, [placeholder, ...__unstableDependencies])]);
   return {
     value: record.current,
     onChange: handleChange,
-    onFocus: focus,
     ref: mergedRefs
   };
 }
 function __experimentalRichText() {}
 //# sourceMappingURL=index.js.map
-// CONCATENATED MODULE: ./packages/rich-text/build-module/component/format-edit.js
+;// CONCATENATED MODULE: ./packages/rich-text/build-module/component/format-edit.js
 
 
 /**
@@ -4675,13 +4826,14 @@ function __experimentalRichText() {}
  */
 
 
-function FormatEdit({
-  formatTypes,
-  onChange,
-  onFocus,
-  value,
-  forwardedRef
-}) {
+function FormatEdit(_ref) {
+  let {
+    formatTypes,
+    onChange,
+    onFocus,
+    value,
+    forwardedRef
+  } = _ref;
   return formatTypes.map(settings => {
     const {
       name,
@@ -4696,7 +4848,7 @@ function FormatEdit({
     const isActive = activeFormat !== undefined;
     const activeObject = getActiveObject(value);
     const isObjectActive = activeObject !== undefined && activeObject.type === name;
-    return Object(external_wp_element_["createElement"])(Edit, {
+    return (0,external_wp_element_namespaceObject.createElement)(Edit, {
       key: name,
       isActive: isActive,
       activeAttributes: isActive ? activeFormat.attributes || {} : {},
@@ -4710,7 +4862,7 @@ function FormatEdit({
   });
 }
 //# sourceMappingURL=format-edit.js.map
-// CONCATENATED MODULE: ./packages/rich-text/build-module/index.js
+;// CONCATENATED MODULE: ./packages/rich-text/build-module/index.js
 
 
 
@@ -4748,21 +4900,6 @@ function FormatEdit({
 
 
 //# sourceMappingURL=index.js.map
-
-/***/ }),
-
-/***/ 9:
-/***/ (function(module, exports) {
-
-(function() { module.exports = window["wp"]["compose"]; }());
-
-/***/ }),
-
-/***/ 90:
-/***/ (function(module, exports) {
-
-(function() { module.exports = window["wp"]["escapeHtml"]; }());
-
-/***/ })
-
-/******/ });
+(window.wp = window.wp || {}).richText = __webpack_exports__;
+/******/ })()
+;

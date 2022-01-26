@@ -1,4 +1,4 @@
-window.onload = function () {
+window.addEventListener('load', function () {
     if (typeof wp.blocks !== 'undefined') {
         if (wp.blockLibrary && typeof wp.blockLibrary.registerCoreBlocks === 'function') {
             wp.blockLibrary.registerCoreBlocks();
@@ -9,6 +9,26 @@ window.onload = function () {
         var allCategories = wp.blocks.getCategories();
         var listBlocks = [];
         var nonce = '';
+
+        // Add Widgets Legacy and Area blocks manually
+        if( advgbBlocks.blocks_widget_support ) {
+            allBlocks.push({
+              "name": "core/legacy-widget",
+              "icon": {
+                "src": "block-default",
+              },
+              "title": "Legacy Widget",
+              "category": "widgets",
+            },
+            {
+              "name": "core/widget-area",
+              "icon": {
+                "src": "block-default",
+              },
+              "category": "widgets",
+              "title": "Widget Area",
+            });
+        }
 
         allBlocks.forEach(function (block) {
             var blockItemIcon = '';
@@ -52,65 +72,6 @@ window.onload = function () {
             nonce = $('#advgb_nonce_field').val();
         }
 
-        // Update categories
-        allCategories.forEach(function (category) {
-            var categoryBlock = $('.category-block[data-category="'+ category.slug +'"]');
-            if (categoryBlock.length > 0) {
-                categoryBlock.find('h3.category-name').text(category.title);
-            } else {
-                var categoryHTML = '';
-                categoryHTML += '<div class="category-block clearfix" data-category='+ category.slug +'>';
-                categoryHTML +=     '<h3 class="category-name">';
-                categoryHTML +=         '<span>'+ category.title +'</span>';
-                categoryHTML +=         '<i class="mi"></i>';
-                categoryHTML +=     '</h3>';
-                categoryHTML +=     '<ul class="blocks-list"></ul>';
-                categoryHTML += '</div>';
-
-                $('.blocks-section').append(categoryHTML);
-            }
-        });
-
-        var list_blocks_names = [];
-
-        // Update blocks
-        listBlocks.forEach(function (block) {
-            list_blocks_names.push(block.name);
-
-            var blockHTML = '';
-            blockHTML += '<li class="block-item ju-settings-option" data-type="'+ block.name +'">';
-            blockHTML +=    '<label for="'+ block.name +'" class="ju-setting-label">';
-            blockHTML +=        '<span class="block-icon"';
-            if (block.iconColor) {
-                blockHTML += ' style="color:'+ block.iconColor +'"';
-            }
-            blockHTML += '>';
-            blockHTML +=  block.icon;
-            var checked = '';
-            if (typeof advgb_blocks_vars.blocks.inactive_blocks === 'object' && advgb_blocks_vars.blocks.inactive_blocks !== null) {
-                checked = advgb_blocks_vars.blocks.inactive_blocks.indexOf(block.name)===-1?'checked="checked"':'';
-            } else {
-                checked = 'checked="checked"';
-            }
-
-            blockHTML +=        '</span>';
-            blockHTML +=        '<span class="block-title">'+ block.title +'</span>';
-            blockHTML +=    '</label>';
-            blockHTML +=    '<div class="ju-switch-button">';
-            blockHTML +=        '<label class="switch">';
-            blockHTML +=            '<input id="'+ block.name +'" type="checkbox" name="active_blocks[]" value="'+ block.name +'" '+checked+'/>';
-            blockHTML +=            '<span class="slider"></span>';
-            blockHTML +=        '</label>';
-            blockHTML +=    '</div>';
-            blockHTML += '</li>';
-
-            var categoryBlock = $('.category-block[data-category="'+ block.category +'"]');
-            categoryBlock.find('.blocks-list').append(blockHTML);
-
-        });
-
-        $('#blocks_list').val(JSON.stringify(list_blocks_names));
-
         // Use this ajax query to update the block list in db
         $.ajax({
             url: ajaxurl,
@@ -122,4 +83,4 @@ window.onload = function () {
             }
         });
     }
-};
+});

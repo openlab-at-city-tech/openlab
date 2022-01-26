@@ -9,6 +9,102 @@ class GF_Field_FileUpload extends GF_Field {
 
 	public $type = 'fileupload';
 
+	/**
+	 * Stores the upload root dir for forms.
+	 *
+	 * @since 2.5.16
+	 *
+	 * @var string[]
+	 */
+	public static $forms_upload_roots;
+
+	/**
+	 * Stores the default upload root dir for forms.
+	 *
+	 * @since 2.5.16
+	 *
+	 * @var string[]
+	 */
+	public static $forms_default_upload_roots;
+
+	/**
+	 * Gets the file upload path information including the actual saved physical path from the entry meta if found.
+	 *
+	 * @since 2.5.16
+	 *
+	 * @param string       $file_url The file URL to look for.
+	 * @param integer|null $entry_id The entry ID.
+	 *
+	 * @return array
+	 */
+	public static function get_file_upload_path_info( $file_url, $entry_id = null ) {
+
+		$path_info = $entry_id ? gform_get_meta( $entry_id, self::get_file_upload_path_meta_key_hash( $file_url ) ) : null;
+
+		if ( empty( $path_info ) || ! is_array( $path_info ) ) {
+			return array(
+				'path' => GFFormsModel::get_upload_root(),
+				'url'  => GFFormsModel::get_upload_url_root(),
+			);
+		}
+
+		return $path_info;
+	}
+
+	/**
+	 * Gets the default upload roots using the form ID and current time.
+	 *
+	 * @since 2.5.16
+	 *
+	 * @param int $form_id  The form ID to create the root for,
+	 *
+	 * @return string[] The root path and url.
+	 */
+	public static function get_default_upload_roots( $form_id ) {
+
+		$cached_default_root = rgar( self::$forms_default_upload_roots, $form_id );
+		if ( $cached_default_root ) {
+			return $cached_default_root;
+		}
+
+		// Generate the yearly and monthly dirs
+		$time                    = current_time( 'mysql' );
+		$y                       = substr( $time, 0, 4 );
+		$m                       = substr( $time, 5, 2 );
+		$default_target_root     = GFFormsModel::get_upload_path( $form_id ) . "/$y/$m/";
+		$default_target_root_url = GFFormsModel::get_upload_url( $form_id ) . "/$y/$m/";
+
+		self::$forms_default_upload_roots[ $form_id ] = array(
+			'path' => $default_target_root,
+			'url'  => $default_target_root_url,
+			'y'    => $y,
+			'm'    => $m,
+		);
+
+		return self::$forms_default_upload_roots[ $form_id ];
+	}
+
+	/**
+	 * Returns the default file upload root and url for files stored by the provided form.
+	 *
+	 * @since 2.5.16
+	 *
+	 * @param integer $form_id The form ID of the form that will be used to generate the directory name.
+	 *
+	 * @return array
+	 */
+	public static function get_upload_root_info( $form_id ) {
+
+		$cached_root = rgar( self::$forms_upload_roots, $form_id );
+		if ( $cached_root ) {
+			return $cached_root;
+		}
+
+		$default_upload_root_info             = self::get_default_upload_roots( $form_id );
+		self::$forms_upload_roots[ $form_id ] = gf_apply_filters( array( 'gform_upload_path', $form_id ), $default_upload_root_info, $form_id );
+		return self::$forms_upload_roots[ $form_id ];
+	}
+
 	public function get_form_editor_field_title() {
 		return esc_attr__( 'File Upload', 'gravityforms' );
 	}
@@ -249,7 +345,7 @@ class GF_Field_FileUpload extends GF_Field {
 			$upload             = "<div id='{$container_id}' data-settings='{$plupload_init_json}' class='gform_fileupload_multifile'>
 										<div id='{$drag_drop_id}' class='gform_drop_area'>
 											<span class='gform_drop_instructions'>{$drop_files_here_text} </span>
-											<button id='{$browse_button_id}' class='button gform_button_select_files' {$describedby} {$tabindex} >{$select_files_text}</button>
+											<button type='button' id='{$browse_button_id}' class='button gform_button_select_files' {$describedby} {$tabindex} >{$select_files_text}</button>
 										</div>
 									</div>";
 
@@ -510,7 +606,6 @@ class GF_Field_FileUpload extends GF_Field {
 
 	public function upload_file( $form_id, $file ) {
 		GFCommon::log_debug( __METHOD__ . '(): Uploading file: ' . $file['name'] );
-
 		$target = GFFormsModel::get_file_upload_path( $form_id, $file['name'] );
 		if ( ! $target ) {
 			GFCommon::log_debug( __METHOD__ . '(): FAILED (Upload folder could not be created.)' );
@@ -787,6 +882,74 @@ class GF_Field_FileUpload extends GF_Field {
 		 * @param GF_Field_FileUpload $field        The field object for further context.
 		 */
 		return apply_filters( 'gform_secure_file_download_url', $download_url, $this );
+	}
+
+
+	/**
+	 * Stores the physical file paths as extra entry meta data.
+	 *
+	 * @since 2.5.16
+	 *
+	 * @param array $form  The form object being saved.
+	 * @param array $entry The entry object being saved.
+	 *
+	 * @return array The array that contains the file URLs and their corresponding physical paths.
+	 */
+	public function get_extra_entry_metadata( $form, $entry ) {
+
+		$value = $entry[ $this->id ];
+
+		if ( empty( $value ) ) {
+			return array();
+		}
+
+		$file_values = array();
+		$extra_meta  = array();
+		if ( $this->multipleFiles && ! empty( $value ) ) {
+			$file_values = json_decode( $value, true );
+		} else {
+			$file_values = array( $value );
+		}
+
+		foreach ( $file_values as $file_value ) {
+
+			// If file already has a stored path, skip it.
+			$stored_path_info = gform_get_meta( rgar( $entry, 'id' ), self::get_file_upload_path_meta_key_hash( $file_value ) );
+			if ( ! empty( $stored_path_info ) ) {
+				continue;
+			};
+
+			// Use the filtered path to get the actual file path.
+			$upload_root_info = self::get_upload_root_info( rgar( $form, 'id' ) );
+
+			// Default upload path to fall back to.
+			$default_upload_root_info = self::get_default_upload_roots( rgar( $form, 'id' ) );
+
+			$url            = rgar( $upload_root_info, 'url', $default_upload_root_info['url'] );
+			$path           = rgar( $upload_root_info, 'path', $default_upload_root_info['path'] );
+			$file_path_info = array(
+				'path'      => $path,
+				'url'       => $url,
+				'file_name' => wp_basename( $file_value ),
+			);
+
+			$file_url_hash                = self::get_file_upload_path_meta_key_hash( $file_value );
+			$extra_meta[ $file_url_hash ] = $file_path_info;
+		}
+		return $extra_meta;
+	}
+
+	/**
+	 * Gets a hash of the file URL to be used as the meta key when saving the file physical path to the entry meta.
+	 *
+	 * @since 2.5.16
+	 *
+	 * @param string $file_url The file URL to generate the hash for.
+	 *
+	 * @return string
+	 */
+	public static function get_file_upload_path_meta_key_hash( $file_url ) {
+		return substr( hash( 'sha512', $file_url ), 0, 254 );
 	}
 }
 

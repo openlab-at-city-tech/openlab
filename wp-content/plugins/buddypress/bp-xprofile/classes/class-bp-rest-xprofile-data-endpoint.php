@@ -429,7 +429,7 @@ class BP_REST_XProfile_Data_Endpoint extends WP_REST_Controller {
 			'last_updated' => bp_rest_prepare_date_response( $field_data->last_updated ),
 		);
 
-		$context  = ! empty( $request['context'] ) ? $request['context'] : 'view';
+		$context  = ! empty( $request->get_param( 'context' ) ) ? $request->get_param( 'context' ) : 'view';
 		$data     = $this->add_additional_fields_to_object( $data, $request );
 		$data     = $this->filter_response_by_context( $data, $context );
 		$response = rest_ensure_response( $data );
@@ -465,7 +465,7 @@ class BP_REST_XProfile_Data_Endpoint extends WP_REST_Controller {
 				'href' => rest_url( $base . $field_data->field_id ),
 			),
 			'user' => array(
-				'href'       => rest_url( bp_rest_get_user_url( $field_data->user_id ) ),
+				'href'       => bp_rest_get_object_url( $field_data->user_id, 'members' ),
 				'embeddable' => true,
 			),
 		);

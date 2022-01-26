@@ -27,7 +27,7 @@ add_action( 'wp_enqueue_scripts', 'wpa_register_scripts' );
  * Register jQuery scripts.
  */
 function wpa_register_scripts() {
-	wp_register_script( 'wpa-toolbar', plugins_url( 'wp-accessibility/js/wpa-toolbar.js' ), array( 'jquery' ), '1.0', true );
+	wp_register_script( 'wpa-toolbar', plugins_url( 'wp-accessibility/js/wpa-toolbar.js' ), array(), '1.1', true );
 	wp_register_script( 'ui-a11y', plugins_url( 'wp-accessibility/toolbar/js/a11y.js' ), array( 'jquery' ), '1.0', true );
 }
 
@@ -110,9 +110,9 @@ function wpa_toolbar_shortcode( $atts, $content ) {
  * @return string HTML.
  */
 function wpa_toolbar_html( $type = 'widget', $control = 'button' ) {
-	$contrast         = __( 'Toggle High Contrast', 'wp-accessibility' );
-	$grayscale        = __( 'Toggle Grayscale', 'wp-accessibility' );
-	$fontsize         = __( 'Toggle Font size', 'wp-accessibility' );
+	$contrast         = esc_html__( 'Toggle High Contrast', 'wp-accessibility' );
+	$grayscale        = esc_html__( 'Toggle Grayscale', 'wp-accessibility' );
+	$fontsize         = esc_html__( 'Toggle Font size', 'wp-accessibility' );
 	$enable_grayscale = ( 'on' === get_option( 'wpa_toolbar_gs' ) && current_user_can( 'manage_options' ) ) ? true : false;
 	$enable_contrast  = ( 'off' === get_option( 'wpa_toolbar_ct' ) ) ? false : true;
 	$enable_fontsize  = ( 'off' === get_option( 'wpa_toolbar_fs' ) ) ? false : true;
@@ -147,16 +147,15 @@ function wpa_toolbar_html( $type = 'widget', $control = 'button' ) {
  * Generate Toolbar variables for localization in JS.
  */
 function wpa_toolbar_js() {
-	// Toolbar does not work on Edge. Disable unless I solve the issue.
 	$default    = ( false !== (bool) get_option( 'wpa_toolbar_default' ) ) ? get_option( 'wpa_toolbar_default' ) : 'body';
 	$location   = apply_filters( 'wpa_move_toolbar', $default );
-	$is_rtl     = ( is_rtl() ) ? ' rtl' : ' ltr';
-	$is_right   = ( 'on' === get_option( 'wpa_toolbar_right' ) ) ? ' right' : ' left';
-	$responsive = ( 'on' === get_option( 'wpa_toolbar_mobile' ) ) ? 'a11y-responsive ' : 'a11y-non-responsive ';
+	$is_rtl     = ( is_rtl() ) ? 'rtl' : 'ltr';
+	$is_right   = ( 'on' === get_option( 'wpa_toolbar_right' ) ) ? 'right' : 'left';
+	$responsive = ( 'on' === get_option( 'wpa_toolbar_mobile' ) ) ? 'a11y-responsive' : 'a11y-non-responsive';
 
-	$contrast         = __( 'Toggle High Contrast', 'wp-accessibility' );
-	$grayscale        = __( 'Toggle Grayscale', 'wp-accessibility' );
-	$fontsize         = __( 'Toggle Font size', 'wp-accessibility' );
+	$contrast         = esc_html__( 'Toggle High Contrast', 'wp-accessibility' );
+	$grayscale        = esc_html__( 'Toggle Grayscale', 'wp-accessibility' );
+	$fontsize         = esc_html__( 'Toggle Font size', 'wp-accessibility' );
 	$enable_grayscale = ( 'on' === get_option( 'wpa_toolbar_gs' ) && current_user_can( 'manage_options' ) ) ? 'true' : 'false';
 	$enable_fontsize  = ( 'off' === get_option( 'wpa_toolbar_fs' ) ) ? 'false' : 'true';
 	$enable_contrast  = ( 'off' === get_option( 'wpa_toolbar_ct' ) ) ? 'false' : 'true';

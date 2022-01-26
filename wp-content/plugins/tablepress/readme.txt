@@ -4,8 +4,8 @@ Donate link: https://tablepress.org/donate/
 Tags: table,spreadsheet,data,csv,excel,html,tables
 Requires at least: 5.6
 Requires PHP: 5.6.20
-Tested up to: 5.7
-Stable tag: 1.13
+Tested up to: 5.8
+Stable tag: 1.14
 License: GPLv2
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -23,6 +23,8 @@ If you like TablePress, please rate and review it here in the WordPress Plugin D
 
 = TablePress Extensions =
 Additional features and useful enhancements are available as separate plugins, called [TablePress Extensions](https://tablepress.org/extensions/), on the plugin website.
+
+Do you have a lot of tables? You can organize them in folders! [Wicked Folders Pro supports TablePress](https://tablepress.org/extensions/wicked-folders-pro/) and might be the right solution for you.
 
 == Screenshots ==
 
@@ -97,6 +99,19 @@ You may use it free of charge for any purpose.
 
 Recent changes are shown below. For earlier changes, please see the [changelog history](https://tablepress.org/info/#changelog).
 
+= Version 1.14 =
+* Full compatibility with WordPress 5.8.
+* Enhancement: Make behavior of bulk action selectors on the "All tables" screen more user-friendly.
+* Enhancement: Apply and enforce more granular coding standards for better code maintainability.
+* Enhancement: Allow import files with an .xlsm file extension, in addition to .xlsx files.
+* Enhancement: Add more options (filter and action hooks) for external integration of custom code.
+* Bugfix: Fix handling of the help box on the "Edit" screen when it's opened again after closing it.
+* Bugfix: Properly return modified table data when external code integrates into TablePress.
+* Bugfix: Correctly localize dates in files names of downloaded export files.
+* Bugfix: Fix typos in the code for math formula parsing that could lead to error messages in rare cases.
+* Updated external libraries (DataTables, SimpleXLSX, Build tools).
+* Some internal changes for better stability, translations, and documentation.
+
 = Version 1.13 =
 * Full compatibility with WordPress 5.7.
 * Enhancement: Allow replacing/appending existing tables when importing a ZIP archive of files.
@@ -108,18 +123,10 @@ Recent changes are shown below. For earlier changes, please see the [changelog h
 * Some internal changes for better stability, translations, and documentation.
 * TablePress 1.13 requires WordPress 5.6!
 
-= Version 1.12 =
-* Full compatibility with WordPress 5.5.
-* Enhancement: Add placeholder variables with table and cell information for use in formulas.
-* Bugfix: Properly handle math formulas with numbers in their names in the math parser.
-* Bugfix: Restore proper highlighting of input fields with invalid values in the admin area.
-* Updated external libraries (DataTables, SimpleXLSX, Build tools).
-* Some internal changes for better stability, translations, and documentation.
-
 == Upgrade Notice ==
 
-= 1.13 =
+= 1.14 =
 This update is a stability, maintenance, and compatibility release. Updating is recommended.
 
-= 1.12 =
+= 1.13 =
 This update is a stability, maintenance, and compatibility release. Updating is recommended.

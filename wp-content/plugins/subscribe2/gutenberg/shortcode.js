@@ -388,7 +388,7 @@
 				];
 			},
 			save: function( props ) {
-				return el( element.RawHTML, null, '<p>' + props.attributes.shortcode + '</p>' );
+				return el( element.RawHTML, null, '<p>' + s2shortcode(props) + '</p>' );
 			}
 		}
 	);

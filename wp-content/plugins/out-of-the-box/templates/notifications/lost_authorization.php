@@ -230,7 +230,7 @@
                                     <tr>
                                       <td align="center" bgcolor="#5e6ebf" role="presentation" style="border:none;border-radius:3px;cursor:auto;padding:10px 25px;background:<?php echo $colors['accent']; ?>;" valign="middle">
                                         <a href="<?php echo get_admin_url(null, 'admin.php?page=OutoftheBox_settings_dashboard'); ?>" style="background:<?php echo $colors['accent']; ?>;color:#ffffff;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:17px;font-weight:bold;line-height:120%;Margin:0;text-decoration:none;text-transform:none;" target="_blank">
-                                          &#10144; 
+                                          ❱❱❱
                                           <?php esc_html_e('Authorize the plugin!','wpcloudplugins'); ?>
                                         </a>
                                       </td>

@@ -41,10 +41,9 @@ class CSS
 
         if ('custom' === $this->loaders['style']) {
             $css .= '#OutoftheBox .loading{  background-image: url('.$this->loaders['loading'].');}'."\n";
-            $css .= '#OutoftheBox .loading.upload{    background-image: url('.$this->loaders['upload'].');}'."\n";
-            $css .= '#OutoftheBox .loading.error{  background-image: url('.$this->loaders['error'].');}'."\n";
-            $css .= '#OutoftheBox .no_results{  background-image: url('.$this->loaders['no_results'].');}'."\n";
         }
+
+        $css .= '#OutoftheBox .wpcp-no-results .ajax-filelist { background-image: url('.$this->loaders['no_results'].');}'."\n";
 
         $css .= "
     iframe[src*='outofthebox'] {

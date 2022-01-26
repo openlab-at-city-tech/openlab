@@ -4,7 +4,7 @@ if(preg_match('#' . basename(__FILE__) . '#', $_SERVER['PHP_SELF'])) { die('You 
 /**
  * Plugin Name: NextGEN Gallery
  * Description: The most popular gallery plugin for WordPress and one of the most popular plugins of all time with over 30 million downloads.
- * Version: 3.11
+ * Version: 3.18
  * Author: Imagely
  * Plugin URI: https://www.imagely.com/wordpress-gallery-plugin/nextgen-gallery/
  * Author URI: https://www.imagely.com
@@ -712,7 +712,7 @@ class C_NextGEN_Bootstrap
 		define('NGG_PRODUCT_URL', path_join(str_replace("\\" , '/', NGG_PLUGIN_URL), 'products'));
 		define('NGG_MODULE_URL', path_join(str_replace("\\", '/', NGG_PRODUCT_URL), 'photocrati_nextgen/modules'));
 		define('NGG_PLUGIN_STARTED_AT', microtime());
-		define('NGG_PLUGIN_VERSION', '3.11');
+		define('NGG_PLUGIN_VERSION', '3.18');
 
 		define(
 			'NGG_SCRIPT_VERSION',
@@ -777,9 +777,32 @@ class C_NextGEN_Bootstrap
 		if (!defined('NGG_GALLERY_ROOT_TYPE')) {
 			define('NGG_GALLERY_ROOT_TYPE', 'site'); // "content" is the other possible value
 		}
+
+		// Define what file extensions and mime are accepted, with optional WebP
+        $default_extensions_list = 'jpeg,jpg,png,gif';
+		$default_mime_list = 'image/gif,image/jpg,image/jpeg,image/pjpeg,image/png';
+		if (function_exists('imagewebp'))
+        {
+            $default_extensions_list .= ',webp';
+            $default_mime_list .= ',image/webp';
+        }
+
+		if (!defined('NGG_DEFAULT_ALLOWED_FILE_TYPES'))
+            define('NGG_DEFAULT_ALLOWED_FILE_TYPES', $default_extensions_list);
+
+		if (!defined('NGG_DEFAULT_ALLOWED_MIME_TYPES'))
+            define('NGG_DEFAULT_ALLOWED_MIME_TYPES', $default_mime_list);
+
+		add_filter('ngg_allowed_file_types', function($string) {
+		    return explode(',', $string);
+        }, -10);
+
+        add_filter('ngg_allowed_mime_types', function($string) {
+            return explode(',', $string);
+        }, -10);
 	}
 
-	/**
+    /**
 	 * Defines the NextGEN Test Suite
 	 * @param array $suites
 	 * @return array

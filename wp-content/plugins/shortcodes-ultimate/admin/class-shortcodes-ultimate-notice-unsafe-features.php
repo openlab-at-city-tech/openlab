@@ -34,4 +34,16 @@ final class Shortcodes_Ultimate_Notice_Unsafe_Features extends Shortcodes_Ultima
 
 	}
 
+	public function hide_notice_on_option_change( $prev_value, $new_value, $option ) {
+
+		if ( ! get_option( 'su_option_unsafe_features_auto_off' ) ) {
+			return;
+		}
+
+		if ( '' === $prev_value && 'on' === $new_value ) {
+			$this->update_notice_status( 'dismissed' );
+		}
+
+	}
+
 }

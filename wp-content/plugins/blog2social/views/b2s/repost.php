@@ -9,6 +9,10 @@ $options = new B2S_Options(B2S_PLUGIN_BLOG_USER_ID);
 $optionUserTimeZone = $options->_getOption('user_time_zone');
 $userTimeZone = ($optionUserTimeZone !== false) ? $optionUserTimeZone : get_option('timezone_string');
 $userTimeZoneOffset = (empty($userTimeZone)) ? get_option('gmt_offset') : B2S_Util::getOffsetToUtcByTimeZone($userTimeZone);
+$optionUserTimeFormat = $options->_getOption('user_time_format');
+if($optionUserTimeFormat == false) {
+    $optionUserTimeFormat = (substr(B2S_LANGUAGE, 0, 2) == 'de') ? 0 : 1;
+}
 $metaSettings = get_option('B2S_PLUGIN_GENERAL_OPTIONS');
 ?>
 
@@ -37,6 +41,15 @@ $metaSettings = get_option('B2S_PLUGIN_GENERAL_OPTIONS');
                         <div class="row b2s-repost-queue-area">
                         <?php echo $rePostItem->getRePostQueueHtml(); ?>
                         </div>
+                        <script>
+                            var b2s_calendar_locale = '<?= strtolower(substr(get_locale(), 0, 2)); ?>';
+                            var b2s_calendar_date = '<?= B2S_Util::getbyIdentLocalDate($userTimeZoneOffset, "Y-m-d"); ?>';
+                            var b2s_calendar_datetime = '<?= B2S_Util::getbyIdentLocalDate($userTimeZoneOffset); ?>';
+                            var b2s_has_premium = <?= B2S_PLUGIN_USER_VERSION > 0 ? "true" : "false"; ?>;
+                            var b2s_plugin_url = '<?= B2S_PLUGIN_URL; ?>';
+                            var b2s_calendar_formats = <?= json_encode(array('post' => array(esc_html__('Link Post', 'blog2social'), esc_html__('Image Post', 'blog2social')), 'image' => array(esc_html__('Image with frame', 'blog2social'), esc_html__('Image cut out', 'blog2social')))); ?>;
+                            var b2s_is_calendar = true;
+                        </script>
                     </div>
                     <div class="col-md-12">
                         <?php
@@ -53,6 +66,7 @@ $metaSettings = get_option('B2S_PLUGIN_GENERAL_OPTIONS');
 
 <input type="hidden" id="b2sUserVersion" value="<?php echo B2S_PLUGIN_USER_VERSION; ?>" />
 <input type="hidden" id="b2sLang" value="<?php echo substr(B2S_LANGUAGE, 0, 2); ?>">
+<input type="hidden" id="b2sUserTimeFormat" value="<?php echo $optionUserTimeFormat; ?>">
 <input type="hidden" id="b2sJSTextAddPost" value="<?php echo esc_html_e("add post", "blog2social"); ?>">                    
 <input type="hidden" id="b2sUserLang" value="<?php echo strtolower(substr(get_locale(), 0, 2)); ?>">
 <input type='hidden' id="user_timezone" name="user_timezone" value="<?php echo $userTimeZoneOffset; ?>">

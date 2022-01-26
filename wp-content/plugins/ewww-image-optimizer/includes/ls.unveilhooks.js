@@ -53,10 +53,15 @@
 							console.log('also has-parallax with data-bg');
 							targetWidth  = Math.round(window.screen.width * dPR);
 							targetHeight = Math.round(window.screen.height * dPR);
+						} else if (targetHeight<300) {
+							targetHeight = 430;
 						}
 						bg = constrainSrc(bg,targetWidth,targetHeight,'bg-cover');
 					} else if (window.lazySizes.hC(e.target,'elementor-bg')){
 						console.log('found elementor-bg with data-bg');
+						bg = constrainSrc(bg,targetWidth,targetHeight,'bg-cover');
+					} else if (window.lazySizes.hC(e.target,'bg-image-crop')){
+						console.log('found bg-image-crop with data-bg');
 						bg = constrainSrc(bg,targetWidth,targetHeight,'bg-cover');
 					} else {
 						console.log('found other data-bg');

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "95428e682aeba320e034a477c1f68ebb",
+    "content-hash": "065f055ec7f42c14604615434d627a40",
     "packages": [
         {
             "name": "ezyang/htmlpurifier",
@@ -67,14 +67,13 @@
             "version": "v0.17",
             "source": {
                 "type": "git",
-                "url": "https://github.com/imagely/pope-framework.git",
+                "url": "https://github.com/LionSher-Technologies/pope-framework/",
                 "reference": "13da4d47779a91fbf07a68062e64974eb1427ef2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/imagely/pope-framework/zipball/13da4d47779a91fbf07a68062e64974eb1427ef2",
+                "url": "https://repo.packagist.com/imagely/dists/imagely/pope-framework/0.17.0.0/13da4d47779a91fbf07a68062e64974eb1427ef2.zip",
                 "reference": "13da4d47779a91fbf07a68062e64974eb1427ef2",
-                "shasum": "",
                 "mirrors": [
                     {
                         "url": "https://repo.packagist.com/imagely/dists/%package%/%version%/r%reference%.%type%",
@@ -99,26 +98,22 @@
                 }
             ],
             "description": "A component framework inspired by Zope 3. Pope is \"PHP's Zope\".",
-            "support": {
-                "source": "https://github.com/imagely/pope-framework/tree/v0.17",
-                "issues": "https://github.com/imagely/pope-framework/issues"
-            },
             "time": "2020-10-22T19:43:52+00:00"
         }
     ],
     "packages-dev": [
         {
             "name": "nikic/php-parser",
-            "version": "v4.10.5",
+            "version": "v4.13.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikic/PHP-Parser.git",
-                "reference": "4432ba399e47c66624bc73c8c0f811e5c109576f"
+                "reference": "210577fe3cf7badcc5814d99455df46564f3c077"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/4432ba399e47c66624bc73c8c0f811e5c109576f",
-                "reference": "4432ba399e47c66624bc73c8c0f811e5c109576f",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/210577fe3cf7badcc5814d99455df46564f3c077",
+                "reference": "210577fe3cf7badcc5814d99455df46564f3c077",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -165,9 +160,9 @@
             ],
             "support": {
                 "issues": "https://github.com/nikic/PHP-Parser/issues",
-                "source": "https://github.com/nikic/PHP-Parser/tree/v4.10.5"
+                "source": "https://github.com/nikic/PHP-Parser/tree/v4.13.2"
             },
-            "time": "2021-05-03T19:11:20+00:00"
+            "time": "2021-11-30T19:35:32+00:00"
         }
     ],
     "aliases": [],
@@ -177,5 +172,5 @@
     "prefer-lowest": false,
     "platform": [],
     "platform-dev": [],
-    "plugin-api-version": "2.0.0"
+    "plugin-api-version": "2.1.0"
 }

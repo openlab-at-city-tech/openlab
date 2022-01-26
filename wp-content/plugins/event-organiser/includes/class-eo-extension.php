@@ -280,7 +280,7 @@ if ( ! class_exists( 'EO_Extension' ) ) {
 			do_settings_sections( 'settings-network' );
 		}
 
-		public function save_ntw_settings() {
+		static function save_ntw_settings() {
 
 			if ( ! current_user_can( 'manage_network_options' ) ) {
 				return false;
@@ -289,7 +289,7 @@ if ( ! class_exists( 'EO_Extension' ) ) {
 				return false;
 			}
 			$value = wp_unslash($_POST[$this->id . '_license']);
-
+			
 			if (!empty($value)) {
 				update_site_option( $this->id . '_license', $value );
 			}

@@ -294,7 +294,6 @@ class Processor
                 $link = [];
 
                 if (isset($_REQUEST['entries'])) {
-                    $links = ['links'];
                     foreach ($_REQUEST['entries'] as $entry_id) {
                         $entry = stripslashes(rawurldecode($entry_id));
                         $link['links'][] = $this->get_client()->get_shared_link_for_output($entry);
@@ -646,6 +645,8 @@ class Processor
             'notificationdeletion' => '0',
             'notificationemail' => '%admin_email%',
             'notification_skipemailcurrentuser' => '0',
+                        'notification_from_name' => '',
+            'notification_from_email' => '',
             'upload' => '0',
             'upload_folder' => '1',
             'upload_auto_start' => '1',
@@ -687,8 +688,8 @@ class Processor
         if (false === $cached_shortcode) {
             switch ($mode) {
                 case 'gallery':
-                    $ext = ('*' == $ext) ? 'gif|jpg|jpeg|png|bmp' : $ext;
-                    $uploadext = ('.' == $uploadext) ? 'gif|jpg|jpeg|png|bmp' : $uploadext;
+                    $ext = ('*' == $ext) ? 'gif|jpg|jpeg|png|bmp|webp' : $ext;
+                    $uploadext = ('.' == $uploadext) ? 'gif|jpg|jpeg|png|bmp|webp' : $uploadext;
                     // no break
                 case 'search':
                     $searchfrom = 'root';
@@ -824,6 +825,8 @@ class Processor
                 'notificationdeletion' => $notificationdeletion,
                 'notificationemail' => $notificationemail,
                 'notification_skip_email_currentuser' => $notification_skipemailcurrentuser,
+                                'notification_from_name' => $notification_from_name,
+                'notification_from_email' => $notification_from_email,
                 'upload' => $upload,
                 'upload_folder' => $upload_folder,
                 'overwrite' => $overwrite,
@@ -932,7 +935,7 @@ class Processor
             } else {
                 $defaultuserfolder = get_site_option('out_of_the_box_guestlinkedto');
                 if (is_array($defaultuserfolder) && isset($defaultuserfolder['folderid'])) {
-                    $dataaccountid = $userfolder['accountid'];
+                    $dataaccountid = $defaultuserfolder['accountid'];
                 } else {
                     echo "<div id='OutoftheBox' class='{$colors['style']}'>";
                     $this->load_scripts('general');
@@ -1237,7 +1240,7 @@ class Processor
             }
 
             // Sort by dir desc and then by name asc
-            array_multisort($sort['is_dir'], SORT_DESC, SORT_REGULAR, $sort['sort'], $sort_order, SORT_NATURAL, $foldercontents, SORT_ASC);
+            array_multisort($sort['is_dir'], SORT_DESC, SORT_REGULAR, $sort['sort'], $sort_order, SORT_NATURAL | SORT_FLAG_CASE, $foldercontents, SORT_ASC);
         }
 
         $foldercontents = apply_filters('outofthebox_sort_filelist', $foldercontents, $sort_field, $sort_order, $this);
@@ -1764,13 +1767,8 @@ class Processor
 
         switch ($template) {
             case 'general':
-                if (false === defined('WPCP_DISABLE_FONTAWESOME')) {
-                    wp_enqueue_style('Awesome-Font-5');
-                    if ('Yes' === $this->get_setting('fontawesomev4_shim')) {
-                        wp_enqueue_style('Awesome-Font-4-shim');
-                    }
-                }
 
+                wp_enqueue_style('Eva-Icons');
                 wp_enqueue_style('OutoftheBox.CustomStyle');
                 wp_enqueue_script('OutoftheBox');
                 wp_enqueue_script('google-recaptcha');
@@ -1795,11 +1793,6 @@ class Processor
 
             case 'upload':
                 wp_enqueue_script('jquery-ui-droppable');
-                wp_enqueue_script('jquery-ui-button');
-                wp_enqueue_script('jquery-ui-progressbar');
-                wp_enqueue_script('jQuery.iframe-transport');
-                wp_enqueue_script('jQuery.fileupload-oftb');
-                wp_enqueue_script('jQuery.fileupload-process');
                 wp_enqueue_script('OutoftheBox.UploadBox');
 
                 Helpers::append_dependency('OutoftheBox', 'OutoftheBox.UploadBox');

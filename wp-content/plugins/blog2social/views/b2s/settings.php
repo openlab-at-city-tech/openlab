@@ -3,6 +3,11 @@ wp_nonce_field('b2s_security_nonce', 'b2s_security_nonce');
 require_once B2S_PLUGIN_DIR . 'includes/B2S/Settings/Item.php';
 require_once B2S_PLUGIN_DIR . 'includes/Options.php';
 $settingsItem = new B2S_Settings_Item();
+$options = new B2S_Options(B2S_PLUGIN_BLOG_USER_ID);
+$optionUserTimeFormat = $options->_getOption('user_time_format');
+if($optionUserTimeFormat == false) {
+    $optionUserTimeFormat = (substr(B2S_LANGUAGE, 0, 2) == 'de') ? 0 : 1;
+}
 ?>
 
 <div class="b2s-container">
@@ -111,6 +116,7 @@ $settingsItem = new B2S_Settings_Item();
                                         <li class="list-group-item"><?php esc_html_e('Excerpt: The summary of your post (you define it in the side menu of your post).', 'blog2social') ?></li>
                                         <li class="list-group-item"><?php esc_html_e('Keywords: The tags you have set in your post.', 'blog2social') ?></li>
                                         <li class="list-group-item"><?php esc_html_e('Author: The author of the post.', 'blog2social') ?></li>
+                                        <li class="list-group-item"><?php esc_html_e('Price: The price of your product, if you have installed WooCommerce on your website/ blog.', 'blog2social') ?></li>
                                     </ul>
                                     <p><?php echo sprintf(__('You will find more information on how to use post templates for your social media posts in this <a href="%s" target="_blank">post template guide</a>.', 'blog2social'), B2S_Tools::getSupportLink('template_faq')); ?></p>
                                     <br>
@@ -132,6 +138,7 @@ require_once (B2S_PLUGIN_DIR . 'views/b2s/html/footer.php');
 </div>
 
 <input type="hidden" id="b2sLang" value="<?php echo substr(B2S_LANGUAGE, 0, 2); ?>">
+<input type="hidden" id="b2sUserTimeFormat" value="<?php echo $optionUserTimeFormat; ?>">
 <input type="hidden" id="b2sUserLang" value="<?php echo strtolower(substr(get_locale(), 0, 2)); ?>">
 <input type="hidden" id="b2sShowSection" value="<?php echo (isset($_GET['show']) ? esc_attr($_GET['show']) : ''); ?>">
 <input type="hidden" id="b2s_wp_media_headline" value="<?php esc_html_e('Select or upload an image from media gallery', 'blog2social') ?>">
@@ -190,7 +197,7 @@ require_once (B2S_PLUGIN_DIR . 'views/b2s/html/footer.php');
                 <h4 class="modal-title"><?php esc_html_e('Personal Time Zone', 'blog2social') ?></h4>
             </div>
             <div class="modal-body">
-<?php esc_html_e('Blog2Social applies the scheduled time settings based on the time zone defined in the general settings of your WordPress. You can select a user-specific time zone that deviates from the Wordpress system time zone for your social media scheduling.<br><br>Select the desired time zone from the drop-down menu.', 'blog2social') ?>
+<?php esc_html_e('Blog2Social applies the scheduled time settings based on the time zone defined in the general settings of your WordPress. You can select a user-specific time zone that deviates from the Wordpress system time zone for your social media scheduling. To do this, select the desired time zone 24h or 12h (am/pm), by simply clicking on the button.', 'blog2social') ?>
             </div>
         </div>
     </div>

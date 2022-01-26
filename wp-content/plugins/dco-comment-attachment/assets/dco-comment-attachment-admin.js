@@ -202,16 +202,48 @@
 			}
 		);
 
-		$( '#dco-file-types' ).on( 'click', '.dco-file-type-name', function () {
+		$( '.dco-file-type' ).each( function () {
 			const $this = $( this );
-			const $type = $this.parent();
-			const $checks = $type.find( 'input' );
+			const $checks = $this.find( '.dco-file-type-item-checkbox' );
+			const $checkAll = $this.find( '.dco-file-type-name-checkbox' );
 
-			if ( $checks.not( ':checked' ).length ) {
-				$checks.prop( 'checked', true );
-			} else {
-				$checks.prop( 'checked', false );
+			if ( ! $checks.not( ':checked' ).length ) {
+				$checkAll.prop( 'checked', true );
 			}
 		} );
+
+		$( '#dco-file-types' ).on(
+			'click',
+			'.dco-file-type-name-checkbox',
+			function () {
+				const $this = $( this );
+				const $checks = $this
+					.closest( '.dco-file-type' )
+					.find( '.dco-file-type-item-checkbox' );
+
+				if ( $checks.not( ':checked' ).length ) {
+					$checks.prop( 'checked', true );
+				} else {
+					$checks.prop( 'checked', false );
+				}
+			}
+		);
+
+		$( '#dco-file-types' ).on(
+			'click',
+			'.dco-file-type-item-checkbox',
+			function () {
+				const $this = $( this );
+				const $type = $this.closest( '.dco-file-type' );
+				const $checks = $type.find( '.dco-file-type-item-checkbox' );
+				const $checkAll = $type.find( '.dco-file-type-name-checkbox' );
+
+				if ( $checks.not( ':checked' ).length ) {
+					$checkAll.prop( 'checked', false );
+				} else {
+					$checkAll.prop( 'checked', true );
+				}
+			}
+		);
 	} );
 } )( jQuery ); // eslint-disable-line no-undef

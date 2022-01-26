@@ -24,6 +24,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 class SyncManager extends SyncManagerAbstract {
 
 	/**
+	 * Indexable slug
+	 *
+	 * @since  3.0
+	 * @var    string
+	 */
+	public $indexable_slug = 'post';
+
+	/**
+	 * Delete all post meta from other posts associated with a deleted post. Useful for attachments.
+	 *
+	 * @var bool
+	 */
+	public $delete_all_meta = false;
+
+	/**
 	 * Setup actions and filters
 	 *
 	 * @since 0.1.2
@@ -41,15 +56,52 @@ class SyncManager extends SyncManagerAbstract {
 		add_action( 'add_attachment', array( $this, 'action_sync_on_update' ), 999, 3 );
 		add_action( 'edit_attachment', array( $this, 'action_sync_on_update' ), 999, 3 );
 		add_action( 'delete_post', array( $this, 'action_delete_post' ) );
-		add_action( 'delete_blog', array( $this, 'action_delete_blog_from_index' ) );
-		add_action( 'make_delete_blog', array( $this, 'action_delete_blog_from_index' ) );
-		add_action( 'make_spam_blog', array( $this, 'action_delete_blog_from_index' ) );
-		add_action( 'archive_blog', array( $this, 'action_delete_blog_from_index' ) );
-		add_action( 'deactivate_blog', array( $this, 'action_delete_blog_from_index' ) );
 		add_action( 'updated_post_meta', array( $this, 'action_queue_meta_sync' ), 10, 4 );
 		add_action( 'added_post_meta', array( $this, 'action_queue_meta_sync' ), 10, 4 );
+		// Called just because we need to know somehow if $delete_all is set before action_queue_meta_sync() runs.
+		add_filter( 'delete_post_metadata', array( $this, 'maybe_delete_meta_for_all' ), 10, 5 );
 		add_action( 'deleted_post_meta', array( $this, 'action_queue_meta_sync' ), 10, 4 );
 		add_action( 'wp_initialize_site', array( $this, 'action_create_blog_index' ) );
+
+		add_filter( 'ep_sync_insert_permissions_bypass', array( $this, 'filter_bypass_permission_checks_for_machines' ) );
+		add_filter( 'ep_sync_delete_permissions_bypass', array( $this, 'filter_bypass_permission_checks_for_machines' ) );
+	}
+
+	/**
+	 * Whether to delete all meta from other posts that is associated with the deleted post.
+	 *
+	 * @param bool   $check       Whether to allow metadata deletion of the given type.
+	 * @param int    $object_id    ID of the object metadata is for.
+	 * @param string $meta_key    Metadata key.
+	 * @param mixed  $meta_value  Metadata value. Must be serializable if non-scalar.
+	 * @param bool   $delete_all  Whether to delete the matching metadata entries
+	 *                             for all objects, ignoring the specified $object_id
+	 * @return bool
+	 */
+	public function maybe_delete_meta_for_all( $check, $object_id, $meta_key, $meta_value, $delete_all ) {
+		$this->delete_all_meta = $delete_all;
+		return $check;
+	}
+
+	/**
+	 * Filter to allow cron and WP CLI processes to index/delete documents
+	 *
+	 * @param  boolean $bypass The current filtered value
+	 * @return boolean Boolean indicating if permission checking should be bypased or not
+	 * @since  3.6.0
+	 */
+	public function filter_bypass_permission_checks_for_machines( $bypass ) {
+		// Allow index/delete during cron
+		if ( defined( 'DOING_CRON' ) && DOING_CRON ) {
+			return true;
+		}
+
+		// Allow index/delete during WP CLI commands
+		if ( defined( 'WP_CLI' ) && WP_CLI ) {
+			return true;
+		}
+
+		return $bypass;
 	}
 
 	/**
@@ -66,10 +118,7 @@ class SyncManager extends SyncManagerAbstract {
 			return;
 		}
 
-		$indexable = Indexables::factory()->get( 'post' );
-
-		$indexable_post_statuses = $indexable->get_indexable_post_status();
-		$post_type               = get_post_type( $object_id );
+		$indexable = Indexables::factory()->get( $this->indexable_slug );
 
 		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
 			// Bypass saving if doing autosave
@@ -95,54 +144,60 @@ class SyncManager extends SyncManagerAbstract {
 			return;
 		}
 
-		$allowed_meta_to_be_indexed = $indexable->prepare_meta( $post );
-		if ( ! in_array( $meta_key, array_keys( $allowed_meta_to_be_indexed ), true ) ) {
-			return;
-		}
+		if ( empty( $object_id ) && $this->delete_all_meta ) {
+			add_filter( 'ep_is_integrated_request', '__return_true' );
 
-		if ( in_array( $post->post_status, $indexable_post_statuses, true ) ) {
-			$indexable_post_types = $indexable->get_indexable_post_types();
+			$query = new \WP_Query(
+				[
+					'ep_integrate' => true,
+					'meta_key'     => $meta_key,
+					'meta_value'   => $meta_value,
+					'fields'       => 'ids',
+				]
+			);
 
-			if ( in_array( $post_type, $indexable_post_types, true ) ) {
-				/**
-				 * Filter to kill post sync
-				 *
-				 * @hook ep_post_sync_kill
-				 * @param {bool} $skip True meanas kill sync for post
-				 * @param  {int} $object_id ID of post
-				 * @param  {int} $object_id ID of post
-				 * @return {boolean} New value
-				 */
-				if ( apply_filters( 'ep_post_sync_kill', false, $object_id, $object_id ) ) {
-					return;
+			remove_filter( 'ep_is_integrated_request', '__return_true' );
+
+			if ( $query->have_posts() && $query->elasticsearch_success ) {
+				$posts_to_be_synced = array_filter(
+					$query->posts,
+					function( $object_id ) {
+						return ! apply_filters( 'ep_post_sync_kill', false, $object_id, $object_id );
+					}
+				);
+				if ( ! empty( $posts_to_be_synced ) ) {
+					$indexable->bulk_index( $posts_to_be_synced );
 				}
-
-				$this->add_to_queue( $object_id );
 			}
-		}
-	}
+		} else {
+			$indexable_post_statuses = $indexable->get_indexable_post_status();
+			$post_type               = get_post_type( $object_id );
 
-	/**
-	 * Remove blog from index when a site is deleted, archived, or deactivated
-	 *
-	 * @param int $blog_id WP Blog ID.
-	 */
-	public function action_delete_blog_from_index( $blog_id ) {
-		if ( $this->kill_sync() ) {
-			return;
-		}
+			$allowed_meta_to_be_indexed = $indexable->prepare_meta( $post );
+			if ( ! in_array( $meta_key, array_keys( $allowed_meta_to_be_indexed ), true ) ) {
+				return;
+			}
 
-		$indexable = Indexables::factory()->get( 'post' );
+			if ( in_array( $post->post_status, $indexable_post_statuses, true ) ) {
+				$indexable_post_types = $indexable->get_indexable_post_types();
 
-		/**
-		 * Filter to whether to keep index on site deletion
-		 *
-		 * @hook ep_keep_index
-		 * @param {bool} $keep True means don't delete index
-		 * @return {boolean} New value
-		 */
-		if ( $indexable->index_exists( $blog_id ) && ! apply_filters( 'ep_keep_index', false ) ) {
-			$indexable->delete_index( $blog_id );
+				if ( in_array( $post_type, $indexable_post_types, true ) ) {
+					/**
+					 * Filter to kill post sync
+					 *
+					 * @hook ep_post_sync_kill
+					 * @param {bool} $skip True meanas kill sync for post
+					 * @param  {int} $object_id ID of post
+					 * @param  {int} $object_id ID of post
+					 * @return {boolean} New value
+					 */
+					if ( apply_filters( 'ep_post_sync_kill', false, $object_id, $object_id ) ) {
+						return;
+					}
+
+					$this->add_to_queue( $object_id );
+				}
+			}
 		}
 	}
 
@@ -160,7 +215,7 @@ class SyncManager extends SyncManagerAbstract {
 		/**
 		 * Filter whether to skip the permissions check on deleting a post
 		 *
-		 * @hook ep_post_sync_kill
+		 * @hook ep_sync_delete_permissions_bypass
 		 * @param  {bool} $bypass True to bypass
 		 * @param  {int} $post_id ID of post
 		 * @return {boolean} New value
@@ -169,7 +224,7 @@ class SyncManager extends SyncManagerAbstract {
 			return;
 		}
 
-		$indexable = Indexables::factory()->get( 'post' );
+		$indexable = Indexables::factory()->get( $this->indexable_slug );
 		$post_type = get_post_type( $post_id );
 
 		$indexable_post_types = $indexable->get_indexable_post_types();
@@ -179,15 +234,7 @@ class SyncManager extends SyncManagerAbstract {
 			return;
 		}
 
-		/**
-		 * Fires before post deletion
-		 *
-		 * @hook ep_delete_post
-		 * @param  {int} $post_id ID of post
-		 */
-		do_action( 'ep_delete_post', $post_id );
-
-		Indexables::factory()->get( 'post' )->delete( $post_id, false );
+		Indexables::factory()->get( $this->indexable_slug )->delete( $post_id, false );
 
 		/**
 		 * Make sure to reset sync queue in case an shutdown happens before a redirect
@@ -207,7 +254,7 @@ class SyncManager extends SyncManagerAbstract {
 			return;
 		}
 
-		$indexable = Indexables::factory()->get( 'post' );
+		$indexable = Indexables::factory()->get( $this->indexable_slug );
 		$post_type = get_post_type( $post_id );
 
 		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
@@ -218,18 +265,15 @@ class SyncManager extends SyncManagerAbstract {
 		}
 
 		/**
-		 * Filter whether to skip the permissions check on deleting a post
+		 * Filter whether to skip the permissions check on updating a post
 		 *
-		 * @hook ep_post_sync_kill
+		 * @hook ep_sync_insert_permissions_bypass
 		 * @param  {bool} $bypass True to bypass
 		 * @param  {int} $post_id ID of post
 		 * @return {boolean} New value
 		 */
-		if ( ! apply_filters( 'ep_sync_insert_permissions_bypass', false, $post_id ) ) {
-			if ( ! current_user_can( 'edit_post', $post_id ) && ( ! defined( 'DOING_CRON' ) || ! DOING_CRON ) ) {
-				// Bypass saving if user does not have access to edit post and we're not in a cron process.
-				return;
-			}
+		if ( ! current_user_can( 'edit_post', $post_id ) && ! apply_filters( 'ep_sync_insert_permissions_bypass', false, $post_id ) ) {
+			return;
 		}
 
 		$post = get_post( $post_id );
@@ -244,7 +288,7 @@ class SyncManager extends SyncManagerAbstract {
 
 			if ( in_array( $post_type, $indexable_post_types, true ) ) {
 				/**
-				 * Fire before post is queued for synxing
+				 * Fire before post is queued for syncing
 				 *
 				 * @hook ep_sync_on_transition
 				 * @param  {int} $post_id ID of post
@@ -255,7 +299,7 @@ class SyncManager extends SyncManagerAbstract {
 				 * Filter to kill post sync
 				 *
 				 * @hook ep_post_sync_kill
-				 * @param {bool} $skip True meanas kill sync for post
+				 * @param {bool} $skip True means kill sync for post
 				 * @param  {int} $object_id ID of post
 				 * @param  {int} $object_id ID of post
 				 * @return {boolean} New value

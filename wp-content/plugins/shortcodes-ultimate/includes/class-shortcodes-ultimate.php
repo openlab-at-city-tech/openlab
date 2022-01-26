@@ -39,6 +39,11 @@ class Shortcodes_Ultimate {
 	private $plugin_path;
 
 	/**
+	 * The basename of the plugin.
+	 */
+	private $plugin_basename;
+
+	/**
 	 * The prefix of the plugin.
 	 *
 	 * @since    5.0.8
@@ -82,11 +87,11 @@ class Shortcodes_Ultimate {
 	public $rate_notice;
 
 	/**
-	 * Admin Extra Shortcodes instance.
+	 * Suggest Pro features.
 	 *
 	 * @since  5.6.0
 	 */
-	public $admin_extra_shortcodes;
+	public $admin_pro_features;
 
 	/**
 	 * Get class instance.
@@ -108,10 +113,11 @@ class Shortcodes_Ultimate {
 	 */
 	public function __construct( $plugin_file, $plugin_version, $plugin_prefix ) {
 
-		$this->plugin_file    = $plugin_file;
-		$this->plugin_version = $plugin_version;
-		$this->plugin_path    = plugin_dir_path( $plugin_file );
-		$this->plugin_prefix  = $plugin_prefix;
+		$this->plugin_file     = $plugin_file;
+		$this->plugin_version  = $plugin_version;
+		$this->plugin_path     = plugin_dir_path( $plugin_file );
+		$this->plugin_prefix   = $plugin_prefix;
+		$this->plugin_basename = plugin_basename( $this->plugin_file );
 
 		$this->load_dependencies();
 		$this->define_admin_hooks();
@@ -130,6 +136,14 @@ class Shortcodes_Ultimate {
 	private function load_dependencies() {
 
 		/**
+		 * Legacy dependencies.
+		 */
+		require_once $this->plugin_path . 'inc/core/assets.php';
+		require_once $this->plugin_path . 'inc/core/tools.php';
+		require_once $this->plugin_path . 'inc/core/generator-views.php';
+		require_once $this->plugin_path . 'inc/core/generator.php';
+
+		/**
 		 * The class responsible for adding, storing and accessing shortcodes data.
 		 */
 		require_once $this->plugin_path . 'includes/class-shortcodes-ultimate-shortcodes.php';
@@ -144,7 +158,7 @@ class Shortcodes_Ultimate {
 		 */
 		require_once $this->plugin_path . 'admin/class-shortcodes-ultimate-admin.php';
 		require_once $this->plugin_path . 'admin/class-shortcodes-ultimate-admin-top-level.php';
-		require_once $this->plugin_path . 'admin/class-shortcodes-ultimate-admin-shortcodes.php';
+		require_once $this->plugin_path . 'admin/class-shortcodes-ultimate-admin-about.php';
 		require_once $this->plugin_path . 'admin/class-shortcodes-ultimate-admin-settings.php';
 		require_once $this->plugin_path . 'admin/class-shortcodes-ultimate-admin-addons.php';
 
@@ -161,9 +175,9 @@ class Shortcodes_Ultimate {
 		require_once $this->plugin_path . 'admin/class-shortcodes-ultimate-widget.php';
 
 		/**
-		 * Add Extra Shortcodes
+		 * Suggest Pro features
 		 */
-		require_once $this->plugin_path . 'admin/class-shortcodes-ultimate-admin-extra-shortcodes.php';
+		require_once $this->plugin_path . 'admin/class-shortcodes-ultimate-admin-pro-features.php';
 
 		/**
 		 * Filters.
@@ -226,24 +240,23 @@ class Shortcodes_Ultimate {
 			$this->plugin_prefix
 		);
 
-		add_action( 'admin_menu', array( $this->top_level_menu, 'add_menu_pages' ), 5 );
+		add_action( 'admin_menu', array( $this->top_level_menu, 'add_menu_pages' ), 0 );
 
 		/**
-		 * Submenu: Available shortcodes
+		 * Submenu: About
 		 * admin.php?page=shortcodes-ultimate
 		 */
-		$this->shortcodes_menu = new Shortcodes_Ultimate_Admin_Shortcodes(
+		$this->about_menu = new Shortcodes_Ultimate_Admin_About(
 			$this->plugin_file,
 			$this->plugin_version,
 			$this->plugin_prefix
 		);
 
-		add_action( 'admin_menu', array( $this->shortcodes_menu, 'add_menu_pages' ), 5 );
-		add_action( 'current_screen', array( $this->shortcodes_menu, 'add_help_tabs' ) );
-		add_action( 'admin_enqueue_scripts', array( $this->shortcodes_menu, 'enqueue_scripts' ) );
+		add_action( 'admin_menu', array( $this->about_menu, 'add_menu_pages' ), 0 );
+		add_action( 'admin_enqueue_scripts', array( $this->about_menu, 'enqueue_scripts' ) );
 		add_filter(
-			'plugin_action_links_' . plugin_basename( $this->plugin_file ),
-			array( $this->shortcodes_menu, 'add_action_links' ),
+			'plugin_action_links_' . $this->plugin_basename,
+			array( $this->about_menu, 'plugin_action_links' ),
 			20,
 			1
 		);
@@ -260,10 +273,10 @@ class Shortcodes_Ultimate {
 
 		add_action( 'admin_menu', array( $this->settings_menu, 'add_menu_pages' ), 20 );
 		add_action( 'admin_init', array( $this->settings_menu, 'add_settings' ) );
-		add_action( 'current_screen', array( $this->settings_menu, 'add_help_tabs' ) );
+		// add_action( 'current_screen', array( $this->settings_menu, 'add_help_tabs' ) );
 		add_action( 'admin_enqueue_scripts', array( $this->settings_menu, 'enqueue_scripts' ) );
 		add_filter(
-			'plugin_action_links_' . plugin_basename( $this->plugin_file ),
+			'plugin_action_links_' . $this->plugin_basename,
 			array( $this->settings_menu, 'add_action_links' ),
 			10,
 			1
@@ -306,6 +319,12 @@ class Shortcodes_Ultimate {
 
 		add_action( 'admin_notices', array( $this->unsafe_features_notice, 'display_notice' ) );
 		add_action( 'admin_post_su_dismiss_notice', array( $this->unsafe_features_notice, 'dismiss_notice' ) );
+		add_action(
+			'update_option_su_option_unsafe_features',
+			array( $this->unsafe_features_notice, 'hide_notice_on_option_change' ),
+			10,
+			3
+		);
 
 		/**
 		 * Add/Save 'Slide link' field on attachment page.
@@ -321,12 +340,13 @@ class Shortcodes_Ultimate {
 		add_action( 'widgets_init', array( $this->widget, 'register' ) );
 
 		/**
-		 * Add Extra Shortcodes
+		 * Suggest PRO features
 		 */
-		$this->admin_extra_shortcodes = new Shortcodes_Ultimate_Admin_Extra_Shortcodes();
+		$this->admin_pro_features = new Shortcodes_Ultimate_Admin_Pro_Features();
 
-		add_action( 'admin_init', array( $this->admin_extra_shortcodes, 'register_shortcodes' ) );
-		add_filter( 'su/data/groups', array( $this->admin_extra_shortcodes, 'register_group' ) );
+		add_action( 'admin_init', array( $this->admin_pro_features, 'register_shortcodes' ) );
+		add_filter( 'su/data/groups', array( $this->admin_pro_features, 'register_group' ) );
+		add_filter( 'su/data/shortcodes', array( $this->admin_pro_features, 'add_generator_cta' ) );
 
 	}
 
