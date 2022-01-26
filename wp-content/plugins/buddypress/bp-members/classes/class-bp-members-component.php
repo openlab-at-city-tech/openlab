@@ -58,6 +58,7 @@ class BP_Members_Component extends BP_Component {
 
 		// Always include these files.
 		$includes = array(
+			'cssjs',
 			'filters',
 			'template',
 			'adminbar',
@@ -196,6 +197,17 @@ class BP_Members_Component extends BP_Component {
 				'table_name_signups'       => $wpdb->base_prefix . 'signups', // Signups is a global WordPress table.
 			),
 			'notification_callback' => 'members_format_notifications',
+			'block_globals'         => array(
+				'bp/dynamic-members' => array(
+					'widget_classnames' => array( 'widget_bp_core_members_widget', 'buddypress' ),
+				),
+				'bp/online-members' => array(
+					'widget_classnames' => array( 'widget_bp_core_whos_online_widget', 'buddypress' ),
+				),
+				'bp/active-members' => array(
+					'widget_classnames' => array( 'widget_bp_core_recently_active_widget', 'buddypress' ),
+				),
+			),
 		);
 
 		parent::setup_globals( $args );
@@ -695,17 +707,13 @@ class BP_Members_Component extends BP_Component {
 	 *
 	 * @since 5.0.0
 	 * @since 6.0.0 Adds the Member Cover and Signup REST endpoints.
+	 * @since 9.0.0 Moves the `BP_REST_Components_Endpoint` controller in `BP_Core` component.
 	 *
 	 * @param array $controllers Optional. See BP_Component::rest_api_init() for
 	 *                           description.
 	 */
 	public function rest_api_init( $controllers = array() ) {
 		$controllers = array(
-			/**
-			 * As the Members component is always loaded,
-			 * let's register the Components endpoint here.
-			 */
-			'BP_REST_Components_Endpoint',
 			'BP_REST_Members_Endpoint',
 			'BP_REST_Attachments_Member_Avatar_Endpoint',
 		);
@@ -741,11 +749,9 @@ class BP_Members_Component extends BP_Component {
 						'wp-element',
 						'wp-components',
 						'wp-i18n',
-						'wp-editor',
-						'wp-compose',
-						'wp-data',
 						'wp-block-editor',
 						'bp-block-components',
+						'bp-block-data',
 					),
 					'style'              => 'bp-member-block',
 					'style_url'          => plugins_url( 'css/blocks/member.css', dirname( __FILE__ ) ),
@@ -782,12 +788,11 @@ class BP_Members_Component extends BP_Component {
 						'wp-element',
 						'wp-components',
 						'wp-i18n',
-						'wp-compose',
-						'wp-data',
 						'wp-api-fetch',
 						'wp-url',
 						'wp-block-editor',
 						'bp-block-components',
+						'bp-block-data',
 						'lodash',
 					),
 					'style'              => 'bp-members-block',
@@ -827,6 +832,93 @@ class BP_Members_Component extends BP_Component {
 						),
 					),
 					'render_callback'    => 'bp_members_render_members_block',
+				),
+				'bp/dynamic-members' => array(
+					'name'               => 'bp/dynamic-members',
+					'editor_script'      => 'bp-dynamic-members-block',
+					'editor_script_url'  => plugins_url( 'js/blocks/dynamic-members.js', dirname( __FILE__ ) ),
+					'editor_script_deps' => array(
+						'wp-blocks',
+						'wp-element',
+						'wp-components',
+						'wp-i18n',
+						'wp-block-editor',
+						'bp-block-data',
+						'bp-block-components',
+					),
+					'style'              => 'bp-dynamic-members-block',
+					'style_url'          => plugins_url( 'css/blocks/dynamic-members.css', dirname( __FILE__ ) ),
+					'attributes'         => array(
+						'title'         => array(
+							'type'    => 'string',
+							'default' => __( 'Members', 'buddypress' ),
+						),
+						'maxMembers'    => array(
+							'type'    => 'number',
+							'default' => 5,
+						),
+						'memberDefault' => array(
+							'type'    => 'string',
+							'default' => 'active',
+						),
+						'linkTitle'     => array(
+							'type'    => 'boolean',
+							'default' => false,
+						),
+					),
+					'render_callback'    => 'bp_members_render_dynamic_members_block',
+				),
+				'bp/online-members'  => array(
+					'name'               => 'bp/online-members',
+					'editor_script'      => 'bp-online-members-block',
+					'editor_script_url'  => plugins_url( 'js/blocks/online-members.js', dirname( __FILE__ ) ),
+					'editor_script_deps' => array(
+						'wp-blocks',
+						'wp-element',
+						'wp-components',
+						'wp-i18n',
+						'wp-block-editor',
+						'bp-block-components',
+					),
+					'editor_style'       => 'bp-member-avatar-blocks',
+					'editor_style_url'   => plugins_url( 'css/blocks/member-avatar-blocks.css', dirname( __FILE__ ) ),
+					'attributes'         => array(
+						'title'      => array(
+							'type'    => 'string',
+							'default' => __( 'Who\'s Online', 'buddypress' ),
+						),
+						'maxMembers' => array(
+							'type'    => 'number',
+							'default' => 15,
+						),
+					),
+					'render_callback'    => 'bp_members_render_online_members_block',
+				),
+				'bp/active-members'  => array(
+					'name'               => 'bp/active-members',
+					'editor_script'      => 'bp-active-members-block',
+					'editor_script_url'  => plugins_url( 'js/blocks/active-members.js', dirname( __FILE__ ) ),
+					'editor_script_deps' => array(
+						'wp-blocks',
+						'wp-element',
+						'wp-components',
+						'wp-i18n',
+						'wp-block-editor',
+						'bp-block-components',
+					),
+					'editor_style'       => 'bp-member-avatar-blocks',
+					'editor_style_url'   => plugins_url( 'css/blocks/member-avatar-blocks.css', dirname( __FILE__ ) ),
+					'attributes'         => array(
+						'title'      => array(
+							'type'    => 'string',
+							'default' => __( 'Recently Active Members', 'buddypress' ),
+						),
+						'maxMembers' => array(
+							'type'    => 'number',
+							'default' => 15,
+						),
+					),
+					'render_callback'    => 'bp_members_render_active_members_block',
 				),
 			)
 		);

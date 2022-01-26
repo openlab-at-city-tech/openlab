@@ -300,6 +300,7 @@ class GFEntryDetail {
 
 				$lead = GFFormsModel::get_entry( $lead['id'] );
 				$lead = GFFormsModel::set_entry_meta( $lead, $form );
+
 				self::set_current_entry( $lead );
 
 				// Check if there's consent field, and values updated.

@@ -38,6 +38,8 @@ jQuery(window).on("load", function () {
     if (jQuery('#b2sUserLang').val() == "de") {
         dateFormat = "dd.mm.yyyy";
         language = "de";
+    }
+    if (jQuery('#b2sUserTimeFormat').val() == 0) {
         showMeridian = false;
     }
     jQuery('.b2s-re-post-input-time').timepicker({
@@ -55,6 +57,15 @@ jQuery(window).on("load", function () {
     jQuery('.b2s-re-post-settings-option').trigger('change');
     jQuery('#b2s-re-post-profil-dropdown').trigger('change');
 
+});
+
+var curSource = new Array();
+curSource[0] = ajaxurl + '?action=b2s_get_calendar_events&filter_network_auth=all&filter_network=all&filter_status=5&b2s_security_nonce=' + jQuery('#b2s_security_nonce').val();
+var newSource = new Array();
+
+jQuery(document).ready(function () {
+    renderCalender();
+    jQuery(".b2s-loading-area").hide();
 });
 
 jQuery(document).on('click', '.b2s-re-post-settings-header', function() {
@@ -130,6 +141,7 @@ jQuery(document).on('click', '.b2s-re-post-submit-btn', function() {
                         jQuery('.b2s-re-post-queue-delete-area').hide();
                     }
                 }
+                renderCalender();
             } else {
                 if (data.error == 'nonce') {
                     jQuery('.b2s-nonce-check-fail').show();
@@ -316,6 +328,7 @@ jQuery(document).on('click', '.b2s-sched-delete-confirm-multi-btn', function() {
                     jQuery('.b2s-re-post-queue-delete-area').hide();
                 }
                 jQuery('.b2s-re-post-queue-checkbox').trigger('change');
+                renderCalender();
             } else {
                 if (data.error == 'nonce') {
                     jQuery('.b2s-nonce-check-fail').show();
@@ -372,6 +385,7 @@ jQuery(document).on('click', '.b2s-sched-delete-confirm-btn', function () {
                     }
                 }
                 jQuery('.b2s-post-remove-success').show();
+                renderCalender();
             } else {
                 if (data.error == 'nonce') {
                     jQuery('.b2s-nonce-check-fail').show();
@@ -448,7 +462,7 @@ function showEditSchedPost(b2s_id, post_id, network_auth_id, network_type, netwo
         if (typeof network_id != 'undefined' && jQuery.inArray(network_id.toString(), ogMetaNetworks) != -1 && jQuery('#isOgMetaChecked').val() == "1") {
             isMetaChecked = true;
         }
-        if (network_id == "2" && jQuery('#isCardMetaChecked').val() == "1") {
+        if ((network_id == "2" || network_id == "24") && jQuery('#isCardMetaChecked').val() == "1") {
             isMetaChecked = true;
         }
         if (isMetaChecked && jQuery('.b2sNetworkSettingsPostFormatCurrent[data-network-type="' + network_type + '"][data-network-id="' + network_id + '"]').val() == "0") {
@@ -765,3 +779,295 @@ jQuery(document).on('click', '.b2s-network-info-modal-btn', function () {
     jQuery('#b2sInfoNetworkModal').modal('show');
     return false;
 });
+
+jQuery(document).on('click', '.b2s-re-post-show-calender-btn', function () {
+    jQuery('.b2s-re-post-queue-area').hide();
+    jQuery('.b2s-re-post-calender-area').show();
+    jQuery('.b2s-re-post-queue-delete-area').hide();
+    jQuery(".fc-today-button").trigger('click');
+    return false;
+});
+
+jQuery(document).on('click', '.b2s-re-post-show-list-btn', function () {
+    jQuery('.b2s-re-post-queue-area').show();
+    jQuery('.b2s-re-post-calender-area').hide();
+    if(jQuery('.b2s-re-post-queue-area .list-group-item[data-type="post"]').length == 0) {
+        jQuery('.b2s-re-post-queue-delete-area').hide();
+    } else {
+        jQuery('.b2s-re-post-queue-delete-area').show();
+    }
+    return false;
+});
+
+
+function showEditSchedCalendarPost(b2s_id, post_id, network_auth_id, network_type, network_id, post_format, relay_primary_post_id) {
+    if (jQuery('#b2s-edit-event-modal-' + b2s_id).length == 1)
+    {
+        jQuery('#b2s-edit-event-modal-' + b2s_id).remove();
+    }
+    b2s_current_post_id = post_id;
+    jQuery("#b2sPostId").val(post_id);
+    var $modal = jQuery("<div>");
+    jQuery.ajax({
+        url: ajaxurl,
+        type: "POST",
+        cache: false,
+        async: false,
+        data: {
+            'action': 'b2s_get_post_edit_modal',
+            'id': b2s_id,
+            'b2s_security_nonce': jQuery('#b2s_security_nonce').val()
+        },
+        success: function (data) {
+            if (data.error == 'nonce') {
+                jQuery('.b2s-nonce-check-fail').show();
+            } else {
+                $modal = $modal.html(data);
+            }
+        }
+    });
+    jQuery("body").append($modal);
+    jQuery('#b2sUserTimeZone').val(jQuery('#user_timezone').val());
+    jQuery('#b2s-edit-event-modal-' + b2s_id).modal('show');
+    activatePortal(network_auth_id);
+    initSceditor(network_auth_id);
+    if (jQuery('.b2s-post-ship-item-post-format-text[data-network-type="' + network_type + '"][data-network-id="' + network_id + '"]').length > 0) {
+        var postFormatText = b2s_calendar_formats;
+        var isSetPostFormat = false;
+        var postFormatType = jQuery('.b2sNetworkSettingsPostFormatCurrent[data-network-type="' + network_type + '"][data-network-id="' + network_id + '"]').attr('data-post-format-type');
+        //is set post format => override current condidtions by user settings for this post
+        if (post_format !== null) {
+            jQuery('.b2sNetworkSettingsPostFormatCurrent[data-network-type="' + network_type + '"][data-network-id="' + network_id + '"]').val(post_format);
+            jQuery('.b2s-post-ship-item-post-format-text[data-network-auth-id="' + network_auth_id + '"]').html(postFormatText[postFormatType][post_format]);
+            jQuery('.b2s-post-item-details-post-format[data-network-auth-id="' + network_auth_id + '"]').val(post_format);
+            //edit modal select post format
+            jQuery('.b2s-user-network-settings-post-format[data-network-type="' + network_type + '"][data-network-id="' + network_id + '"]').removeClass('b2s-settings-checked');
+            jQuery('.b2s-user-network-settings-post-format[data-network-type="' + network_type + '"][data-network-id="' + network_id + '"][data-post-format="' + post_format + '"]').addClass('b2s-settings-checked');
+        } else {
+            jQuery('.b2s-post-ship-item-post-format-text[data-network-auth-id="' + network_auth_id + '"]').html(postFormatText[postFormatType][jQuery('.b2sNetworkSettingsPostFormatCurrent[data-network-type="' + network_type + '"][data-network-id="' + network_id + '"]').val()]);
+            jQuery('.b2s-post-item-details-post-format[data-network-auth-id="' + network_auth_id + '"]').val(jQuery('.b2sNetworkSettingsPostFormatCurrent[data-network-type="' + network_type + '"][data-network-id="' + network_id + '"]').val());
+        }
+
+        //if linkpost then show btn meta tags
+        var isMetaChecked = false;
+        var ogMetaNetworks = jQuery('#ogMetaNetworks').val().split(";");
+        if (typeof network_id != 'undefined' && jQuery.inArray(network_id.toString(), ogMetaNetworks) != -1 && jQuery('#isOgMetaChecked').val() == "1") {
+            isMetaChecked = true;
+        }
+        if ((network_id == "2" || network_id == "24") && jQuery('#isCardMetaChecked').val() == "1") {
+            isMetaChecked = true;
+        }
+        if (isMetaChecked && jQuery('.b2sNetworkSettingsPostFormatCurrent[data-network-type="' + network_type + '"][data-network-id="' + network_id + '"]').val() == "0") {
+            jQuery('.b2s-post-item-details-preview-title[data-network-auth-id="' + network_auth_id + '"]').prop("readonly", false);
+            jQuery('.b2s-post-item-details-preview-desc[data-network-auth-id="' + network_auth_id + '"]').prop("readonly", false);
+            jQuery('.b2s-post-item-details-preview-url-reload[data-network-id="' + network_id + '"]').show();
+            //jQuery('.b2s-post-item-details-preview-url-reload[data-network-id="' + network_id + '"]').trigger("click");
+            var dataMetaType = jQuery('.b2s-post-item-details-preview-desc[data-network-auth-id="' + network_auth_id + '"]').attr("data-meta-type");
+            if (dataMetaType == "og") {
+                jQuery('.b2sChangeOgMeta[data-network-auth-id="' + network_auth_id + '"]').val("1");
+            } else {
+                jQuery('.b2sChangeCardMeta[data-network-auth-id="' + network_auth_id + '"]').val("1");
+            }
+        } else {
+            jQuery('.b2s-post-item-details-preview-title[data-network-auth-id="' + network_auth_id + '"]').prop("readonly", true);
+            jQuery('.b2s-post-item-details-preview-desc[data-network-auth-id="' + network_auth_id + '"]').prop("readonly", true);
+            jQuery('.b2s-post-item-details-preview-url-reload[data-network-id="' + network_id + '"]').hide();
+        }
+
+        //Content Curation
+        if (jQuery('.b2s-post-ship-item-post-format[data-network-auth-id="' + network_auth_id + '"]').attr('data-post-wp-type') == 'ex') {
+            jQuery('.b2s-post-item-details-preview-title[data-network-auth-id="' + network_auth_id + '"]').prop("readonly", true);
+            jQuery('.b2s-post-item-details-preview-desc[data-network-auth-id="' + network_auth_id + '"]').prop("readonly", true);
+            jQuery('.b2s-post-item-details-item-url-input[data-network-auth-id="' + network_auth_id + '"]').prop("readonly", true);
+            jQuery('.b2s-load-info-meta-tag-modal[data-network-auth-id="' + network_auth_id + '"]').attr("style", "display:none !important");
+            if (jQuery('.b2s-post-item-details-post-format[data-network-auth-id="' + network_auth_id + '"]').val() == 0) {
+                jQuery('.b2s-select-image-modal-open[data-network-auth-id="' + network_auth_id + '"]').hide();
+                jQuery('.b2s-image-remove-btn[data-network-auth-id="' + network_auth_id + '"]').hide();
+            } else {
+                jQuery('.b2s-select-image-modal-open[data-network-auth-id="' + network_auth_id + '"]').show();
+                jQuery('.b2s-image-remove-btn[data-network-auth-id="' + network_auth_id + '"]').show();
+            }
+        }
+    }
+    var textLimit = jQuery('.b2s-post-item-details-item-message-input[data-network-count="-1"][data-network-auth-id="' + network_auth_id + '"]').attr('data-network-text-limit');
+    if (textLimit != "0") {
+        networkLimitAll(network_auth_id, network_id, textLimit);
+    } else {
+        networkCount(network_auth_id);
+    }
+    var today = new Date();
+    var dateFormat = "yyyy-mm-dd";
+    var language = "en";
+    var showMeridian = true;
+    if (jQuery('#b2sUserLang').val() == "de") {
+        dateFormat = "dd.mm.yyyy";
+        language = "de";
+        showMeridian = false;
+    }
+
+    jQuery(".b2s-post-item-details-release-input-date").datepicker({
+        format: dateFormat,
+        language: language,
+        maxViewMode: 2,
+        todayHighlight: true,
+        startDate: today,
+        calendarWeeks: true,
+        autoclose: true
+    });
+    jQuery('.b2s-post-item-details-release-input-time').timepicker({
+        minuteStep: 15,
+        appendWidgetTo: 'body',
+        showSeconds: false,
+        showMeridian: showMeridian,
+        defaultTime: 'current',
+        snapToStep: true
+    });
+    jQuery(".b2s-post-item-details-release-input-date").datepicker().on('changeDate', function (e) {
+        checkSchedDateTime(network_auth_id);
+    });
+    jQuery('.b2s-post-item-details-release-input-time').timepicker().on('changeTime.timepicker', function (e) {
+        checkSchedDateTime(network_auth_id);
+    });
+    init();
+
+    //is relay post?
+    if (relay_primary_post_id > 0) {
+        jQuery('#b2s-edit-event-modal-' + b2s_id).find("input, textarea, button").each(function () {
+            if (!jQuery(this).hasClass('b2s-input-hidden') && !jQuery(this).hasClass('b2s-modal-close') && !jQuery(this).hasClass('b2s-post-item-details-relay-input-delay') && !jQuery(this).hasClass('b2s-edit-post-delete') && !jQuery(this).hasClass('b2s-edit-post-save-this')) {
+                jQuery(this).prop("disabled", true);
+            }
+        });
+    }
+
+    if (!b2s_has_premium)
+    {
+        jQuery('#b2s-edit-event-modal-' + b2s_id).find("input, textarea, button").each(function () {
+            if (!jQuery(this).hasClass('b2s-modal-close')) {
+                jQuery(this).prop("disabled", true);
+            }
+        });
+    }
+}
+
+function refreshCalender() {
+    jQuery('#b2s_calendar').fullCalendar('refetchEvents');
+}
+
+function renderCalender() {
+    jQuery('#b2s_calendar').fullCalendar({
+        header: {
+            left: 'title',
+            right: 'today month,basicWeek, prev,next'
+        },
+        views: {
+            month: {
+                eventLimit: 2
+            },
+            basicWeek: {
+                eventLimit: false
+            }
+        },
+        editable: b2s_has_premium,
+        locale: b2s_calendar_locale,
+        timeFormat: 'H:mm',
+        eventSources: [curSource[0]],
+        eventRender: function (event, element) {
+            show = true;
+            $header = jQuery("<div>").addClass("b2s-calendar-header").attr('data-b2s-id', event.b2s_id);
+            $isRelayPost = '';
+            $isCuratedPost = '';
+            $isRePost = '';
+            if (event.post_type == 'b2s_ex_post') {
+                $isCuratedPost = ' (Curated Post)';
+            }
+            if (event.relay_primary_post_id > 0) {
+                $isRelayPost = ' (Retweet)';
+            }
+            if (event.b2s_sched_type == 5) {
+                $isRePost = ' (Re-Share)';
+            }
+            $network_name = jQuery("<span>").text(event.author + $isRelayPost + $isCuratedPost + $isRePost).addClass("network-name").css("display", "block");
+            element.find(".fc-time").after($network_name);
+            element.html(element.html());
+            $parent = element.parent();
+            $header.append(element.find(".fc-content"));
+            element.append($header);
+            $body = jQuery("<div>").addClass("b2s-calendar-body");
+            $body.append(event.avatar);
+            if (event.status == "error") {
+                $body.append(jQuery('<i>').addClass('glyphicon glyphicon-warning-sign glyphicon-danger'));
+            }
+            $body.append(element.find(".fc-title"));
+            $body.append(jQuery("<br>"));
+            var $em = jQuery("<em>").css("padding-top", "5px").css("display", "block");
+            $em.append("<img src='" + b2s_plugin_url + "assets/images/portale/" + event.network_id + "_flat.png' style='height: 16px;width: 16px;display: inline-block;padding-right: 2px;padding-left: 2px;' />")
+            $em.append(event.network_name);
+            $em.append(jQuery("<span>").text(": " + event.profile));
+            $body.append($em);
+            element.append($body);
+            if (event.status != "scheduled") {
+                event.editable = false;
+            }
+        },
+        dayRender: function (date, element) {
+            var view = jQuery('#b2s_calendar').fullCalendar('getView');
+            if (!jQuery(element[0]).hasClass('fc-past')) {
+                var date = jQuery(element[0]).attr('data-date');
+                var sel_element = '';
+                if (view.type == 'month') {
+                    sel_element = jQuery(element[0]).closest('div').next('div').find('td[data-date="' + date + '"]');
+                } else {
+                    sel_element = jQuery('.fc-basicWeek-view').find('th[data-date="' + date + '"]');
+                }
+            }
+
+        },
+        eventDrop: function (event, delta, revertFunc) {
+            jQuery.ajax({
+                url: ajaxurl,
+                type: "POST",
+                dataType: "json",
+                cache: false,
+                data: {
+                    'action': 'b2s_calendar_move_post',
+                    'b2s_id': event.b2s_id,
+                    'user_timezone': event.user_timezone,
+                    'sched_date': event.start.format(),
+                    'post_for_relay': event.post_for_relay,
+                    'post_for_approve': event.post_for_approve,
+                    'network_type': event.network_type,
+                    'nework_id': event.network_id,
+                    'b2s_security_nonce': jQuery('#b2s_security_nonce').val()
+                },
+                success: function (data) {
+                    refreshCalender();
+                    wp.heartbeat.connectNow();
+                }
+            });
+        },
+        eventAllow: function (dropLocation, draggedEvent) {
+            return dropLocation.start.isAfter(b2s_calendar_date) && draggedEvent.start.isAfter(b2s_calendar_datetime);
+        },
+        eventClick: function (calEvent, jsEvent, view) {
+            if (calEvent.status == "scheduled") {
+                showEditSchedCalendarPost(calEvent.b2s_id, calEvent.post_id, calEvent.network_auth_id, calEvent.network_type, calEvent.network_id, calEvent.post_format, calEvent.relay_primary_post_id);
+            } else {
+                if (calEvent.publish_link != "") {
+                    window.open(calEvent.publish_link, '_blank');
+                }
+            }
+        },
+        loading: function (bool) {
+            if (!bool) {
+                //Routing from Dashboard - loading edit post preview
+                var rfd = jQuery('#b2s_rfd').val();
+                if (rfd == 1) {
+                    jQuery('#b2s_rfd').val("0");
+                    jQuery('.b2s-calendar-header[data-b2s-id="' + jQuery('#b2s_rfd_b2s_id').val() + '"]').parent().trigger('click');
+                }
+            }
+        }
+
+    });
+    refreshCalender();
+}

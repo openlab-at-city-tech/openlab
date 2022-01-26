@@ -2,7 +2,7 @@ jQuery.noConflict();
 
 
 jQuery(document).ready(function () {
-    getWidgetFaq();
+//    getWidgetFaq();
     if (window.location.href.match('b2s-support-check-system') != null) {
         jQuery('.b2s-support-check-sytem').trigger('click');
     }
@@ -21,37 +21,37 @@ jQuery(document).ready(function () {
     });
 });
 
-function getWidgetFaq() {
-    jQuery('.b2s-faq-area').show();
-    if (typeof wp.heartbeat == "undefined") {
-        jQuery('#b2s-heartbeat-fail').show();
-    }
-    jQuery.ajax({
-        url: ajaxurl,
-        type: "POST",
-        dataType: "json",
-        cache: false,
-        data: {
-            'action': 'b2s_get_faq_entries',
-            'b2s_security_nonce': jQuery('#b2s_security_nonce').val()
-        },
-        error: function () {
-            jQuery('.b2s-faq-area').hide();
-            return false;
-        },
-        success: function (data) {
-            if (data.result == true) {
-                jQuery('.b2s-loading-area-faq').hide();
-                jQuery('.b2s-faq-content').html(data.content);
-            } else {
-                if (data.error == 'nonce') {
-                    jQuery('.b2s-nonce-check-fail').show();
-                }
-                jQuery('.b2s-faq-area').hide();
-            }
-        }
-    });
-}
+//function getWidgetFaq() {
+//    jQuery('.b2s-faq-area').show();
+//    if (typeof wp.heartbeat == "undefined") {
+//        jQuery('#b2s-heartbeat-fail').show();
+//    }
+//    jQuery.ajax({
+//        url: ajaxurl,
+//        type: "POST",
+//        dataType: "json",
+//        cache: false,
+//        data: {
+//            'action': 'b2s_get_faq_entries',
+//            'b2s_security_nonce': jQuery('#b2s_security_nonce').val()
+//        },
+//        error: function () {
+//            jQuery('.b2s-faq-area').hide();
+//            return false;
+//        },
+//        success: function (data) {
+//            if (data.result == true) {
+//                jQuery('.b2s-loading-area-faq').hide();
+//                jQuery('.b2s-faq-content').html(data.content);
+//            } else {
+//                if (data.error == 'nonce') {
+//                    jQuery('.b2s-nonce-check-fail').show();
+//                }
+//                jQuery('.b2s-faq-area').hide();
+//            }
+//        }
+//    });
+//}
 
 
 function base64EncodeUnicode(str) {

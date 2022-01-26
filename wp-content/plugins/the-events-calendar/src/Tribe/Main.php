@@ -32,7 +32,7 @@ if ( ! class_exists( 'Tribe__Events__Main' ) ) {
 		const VENUE_POST_TYPE     = 'tribe_venue';
 		const ORGANIZER_POST_TYPE = 'tribe_organizer';
 
-		const VERSION             = '5.10.0';
+		const VERSION             = '5.12.2';
 
 		/**
 		 * Min Pro Addon
@@ -55,7 +55,7 @@ if ( ! class_exists( 'Tribe__Events__Main' ) ) {
 		 *
 		 * @since 4.8
 		 */
-		protected $min_wordpress = '4.7';
+		protected $min_wordpress = '5.6';
 
 		/**
 		 * Min Version of PHP
@@ -831,6 +831,7 @@ if ( ! class_exists( 'Tribe__Events__Main' ) ) {
 				10,
 				0
 			);
+
 			add_action( 'tribe_settings_after_save', [ $this, 'flushRewriteRules' ] );
 
 			add_action( 'update_option_' . Tribe__Main::OPTIONNAME, [ $this, 'fix_all_day_events' ], 10, 2 );
@@ -2795,7 +2796,11 @@ if ( ! class_exists( 'Tribe__Events__Main' ) ) {
 
 			// URL Arguments on home_url() pre-check
 			$url_query = @parse_url( $event_url, PHP_URL_QUERY );
-			$url_args = wp_parse_args( $url_query, [] );
+			if ( null === $url_query ) {
+				$url_args = [];
+			} else {
+				$url_args = wp_parse_args( $url_query, [] );
+			}
 
 			// Remove the "args"
 			if ( ! empty( $url_query ) ) {

@@ -199,8 +199,8 @@ class User_List_Table extends \WP_List_Table
 
                 $has_link = (!(empty($private_folder) || !is_array($private_folder) || !isset($private_folder['foldertext'])));
 
-                $buttons_html = '<a href="#" title="'.esc_html__('Create link with Private Folder', 'wpcloudplugins').'" class="linkbutton '.(($has_link) ? 'hidden' : '').'" data-user-id="'.$item['id'].'"><i class="fas fa-link" aria-hidden="true"></i> <span class="linkedto">'.esc_html__('Link to Private Folder', 'wpcloudplugins').'</span></a>';
-                $buttons_html .= '<a href="#" title="'.esc_html__('Break link with Private Folder', 'wpcloudplugins').'" class="unlinkbutton '.(($has_link) ? '' : 'hidden').'" data-user-id="'.$item['id'].'"><i class="fas fa-unlink" aria-hidden="true"></i> <span class="linkedto">'.esc_html__('Unlink', 'wpcloudplugins').'</span></a>';
+                $buttons_html = '<a href="#" title="'.esc_html__('Create link with Private Folder', 'wpcloudplugins').'" class="linkbutton '.(($has_link) ? 'hidden' : '').'" data-user-id="'.$item['id'].'"><i class="eva eva-folder eva-lg" aria-hidden="true"></i> <span class="linkedto">'.esc_html__('Select folder', 'wpcloudplugins').'</span></a>';
+                $buttons_html .= '<a href="#" title="'.esc_html__('Break link with Private Folder', 'wpcloudplugins').'" class="unlinkbutton '.(($has_link) ? '' : 'hidden').'" data-user-id="'.$item['id'].'"><i class="eva eva-close-circle eva-lg" aria-hidden="true"></i> <span class="linkedto">'.esc_html__('Unlink', 'wpcloudplugins').'</span></a>';
                 $buttons_html .= '<div class="wpcp-spinner"></div>';
 
                 return $buttons_html;

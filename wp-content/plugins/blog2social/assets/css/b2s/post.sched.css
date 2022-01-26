@@ -383,3 +383,12 @@ textarea.form-control {
 .b2s-margin-top-20 {
     margin-top: 20px;
 }
+
+.b2s-format-area-tumblr-image, .b2s-format-area-tumblr-link {
+    margin-top: 10px;
+}
+
+.b2s-post-item-message-info {
+    margin-left: 15px !important;
+    font-weight: 600;
+}

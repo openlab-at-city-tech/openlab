@@ -1,11 +1,8 @@
-### 3.7.2
-- Fixed display issue with the admin icons in the form editor when field choices are randomized.
-- Prevent PHP notices in PHP 8.
-- Fixed display issues in the quiz field choices UI.
-
-
-### 3.7.1
-- Fixed an issue where the quiz confirmation was displayed even when display quiz confirmation setting is disabled.
+### 3.8 | 2021-10-14
+- Fixed a display issue with the admin icons in the form editor when field choices are randomized.
+- Fixed a display issue in the quiz field choices UI.
+- Fixed PHP notices when using PHP 8.
+- Fixed an issue where the quiz confirmation is displayed even when the display quiz confirmation setting is disabled.
 
 
 ### 3.7 | 2021-04-28

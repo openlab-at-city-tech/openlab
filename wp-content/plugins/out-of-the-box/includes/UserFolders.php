@@ -151,6 +151,8 @@ class UserFolders
                 usleep($mswaitaftercreation);
             }
         } catch (\Exception $ex) {
+            error_log('[WP Cloud Plugin message]: '.sprintf('Failed to add user folder: %s', $ex->getMessage()));
+
             return false;
         }
 
@@ -287,7 +289,8 @@ class UserFolders
 
     public function get_user_name_template($user_data)
     {
-        $user_folder_name = Helpers::apply_placeholders($this->_user_name_template, $this->get_processor(),['user_data' => $user_data]);
+        $user_folder_name = Helpers::apply_placeholders($this->_user_name_template, $this->get_processor(), ['user_data' => $user_data]);
+
         return apply_filters('outofthebox_private_folder_name', $user_folder_name, $this->get_processor());
     }
 

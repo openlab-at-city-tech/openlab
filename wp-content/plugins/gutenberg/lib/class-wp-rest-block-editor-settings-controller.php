@@ -16,7 +16,7 @@ class WP_REST_Block_Editor_Settings_Controller extends WP_REST_Controller {
 	 * Constructs the controller.
 	 */
 	public function __construct() {
-		$this->namespace = '__experimental/wp-block-editor/v1';
+		$this->namespace = 'wp-block-editor/v1';
 		$this->rest_base = 'settings';
 	}
 
@@ -132,18 +132,6 @@ class WP_REST_Block_Editor_Settings_Controller extends WP_REST_Controller {
 					'description' => __( 'Settings consolidated from core, theme, and user origins.', 'gutenberg' ),
 					'type'        => 'object',
 					'context'     => array( 'post-editor', 'site-editor', 'widgets-editor', 'mobile' ),
-				),
-
-				'__experimentalGlobalStylesUserEntityId' => array(
-					'description' => __( 'Global styles user entity ID.', 'gutenberg' ),
-					'type'        => 'integer',
-					'context'     => array( 'site-editor' ),
-				),
-
-				'__experimentalGlobalStylesBaseStyles'   => array(
-					'description' => __( 'Global styles settings.', 'gutenberg' ),
-					'type'        => 'object',
-					'context'     => array( 'site-editor' ),
 				),
 
 				'__experimentalStyles'                   => array(

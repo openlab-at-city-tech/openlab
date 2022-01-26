@@ -42,6 +42,15 @@ class GF_Field_Consent extends GF_Field {
 	public $checked_indicator_markup = '';
 
 	/**
+	 * Indicates if this field supports state validation.
+	 *
+	 * @since 2.5.11
+	 *
+	 * @var bool
+	 */
+	protected $_supports_state_validation = true;
+
+	/**
 	 * GF_Field_Consent constructor.
 	 *
 	 * @since 2.4

@@ -3,16 +3,16 @@ Contributors: michaelwilliamson
 Donate link: https://liberapay.com/mwilliamson/donate
 Tags: docx, html, word, office, paste
 Requires at least: 4.0
-Tested up to: 5.5.1
-Stable tag: 1.17.0
+Tested up to: 5.8.0
+Stable tag: 1.19.0
 License: BSD 2-clause
 License URI: http://opensource.org/licenses/BSD-2-Clause
 
-Mammoth converts semantically marked up .docx documents to simple and clean HTML, allowing pasting from Word documents without the usual mess.
+Mammoth converts semantically marked up .docx documents to simple and clean HTML, allowing pasting from Word documents and Google Docs without the usual mess.
 
 == Description ==
 
-Mammoth is designed to convert .docx documents, such as those created by Microsoft Word, and convert them to HTML. Mammoth aims to produce simple and clean HTML by using semantic information in the document, and ignoring other details. For instance, Mammoth converts any paragraph with the style `Heading1` to `h1` elements, rather than attempting to exactly copy the styling (font, text size, colour, etc.) of the heading. This allows you to paste from Word documents without the usual mess.
+Mammoth is designed to convert .docx documents, such as those created by Microsoft Word, Google Docs and LibreOffice, and convert them to HTML. Mammoth aims to produce simple and clean HTML by using semantic information in the document, and ignoring other details. For instance, Mammoth converts any paragraph with the style `Heading1` to `h1` elements, rather than attempting to exactly copy the styling (font, text size, colour, etc.) of the heading. This allows you to paste from Word documents without the usual mess.
 
 There's a large mismatch between the structure used by .docx and the structure of HTML, meaning that the conversion is unlikely to be perfect for more complicated documents. Mammoth works best if you only use styles to semantically mark up your document.
 
@@ -42,12 +42,33 @@ By default, Mammoth maps some common .docx styles to HTML elements. For instance
 
 [An online tool](http://mike.zwobble.org/projects/mammoth/embed-style-map/) can be used to embed style maps into an existing document. Details of [how to write style maps can be found on the mammoth.js documentation](https://github.com/mwilliamson/mammoth.js#writing-style-maps).
 
+A style map to be used for all documents can be set by configuring Mammoth (see below).
+
+= Configuration =
+
+Mammoth can be configured by writing a separate plugin. For instance, [this example plugin](https://github.com/mwilliamson/mammoth-wordpress-plugin/tree/master/examples/options-plugin) adds a custom style map, and uses a document transform to detect paragraphs of monospace text and converts them to paragraphs with the style "Code Block".
+
+As a WordPress plugin, Mammoth uses the JavaScript library mammoth.js to convert documents. Mammoth will use the JavaScript global `MAMMOTH_OPTIONS` whenever calling mammoth.js, which allows for some customisation. `MAMMOTH_OPTIONS` should be defined as a function that returns an options object. This options object will then be passed in as the `options` argument to `convertToHtml`. The [mammoth.js docs](https://github.com/mwilliamson/mammoth.js) describe the various options available.
+
+`MAMMOTH_OPTIONS` will be called with `mammoth` as the first argument. This can be useful if you need to use a function from mammoth.js, such as `mammoth.transforms.getDescendantsOfType`.
+
+= FAQs =
+
+[Answers to some frequently asked questions about Mammoth](https://mike.zwobble.org/projects/mammoth/faqs/).
 
 == Installation ==
 
 Install the plugin in the usual way, and you should be able to use the Mammoth .docx converter when adding a post. If you can't see the meta box, make sure that it's selected by taking a look at the "Screen Options" for adding a post.
 
 == Changelog ==
+
+= 1.19.0 =
+
+* Update mammoth.js to 1.4.18. This includes better support for internal hyperlinks.
+
+= 1.18.0 =
+
+* Update mammoth.js to 1.4.17. This includes better support for numbering, and conversion of symbols to their corresponding Unicode characters.
 
 = 1.17.0 =
 

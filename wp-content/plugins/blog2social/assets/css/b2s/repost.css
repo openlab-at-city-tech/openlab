@@ -113,7 +113,7 @@
     margin-top: 44px;
 }
 
-.b2s-re-post-queue-delete-area {
+.b2s-re-post-queue-top-area {
     padding: 10px 0px;
     border-left: 1px solid lightgray;
     border-right: 1px solid lightgray;
@@ -572,4 +572,29 @@ textarea.form-control {
     margin-top: 10px;
     margin-bottom: 10px;
     display: inline-block;
+}
+
+.b2s-re-post-show-list-btn {
+    border-top-right-radius: 0px !important;
+    border-bottom-right-radius: 0px !important;
+}
+
+.b2s-re-post-show-calender-btn {
+    border-top-left-radius: 0px !important;
+    border-bottom-left-radius: 0px !important;
+}
+
+#b2s_calendar {
+    padding: 4px;
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+}
+
+.b2s-format-area-tumblr-image, .b2s-format-area-tumblr-link {
+    margin-top: 10px;
+}
+
+.b2s-post-item-message-info {
+    margin-left: 15px !important;
+    font-weight: 600;
 }

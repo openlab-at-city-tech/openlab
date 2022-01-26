@@ -163,7 +163,7 @@ $customizeArea = B2S_System::customizeArea();
                                 <span class="glyphicon glyphicon-star glyphicon-success"></span><span class="glyphicon glyphicon-star glyphicon-success"></span><span class="glyphicon glyphicon-star glyphicon-success"></span><span class="glyphicon glyphicon-star glyphicon-success"></span><span class="glyphicon glyphicon-star glyphicon-success"></span> 
                                 <?php esc_html_e("Rate it!", "blog2social"); ?> 
                             </div>
-                            <p><?php esc_html_e("If you like Blog2Social, we would be greatly delighted, if you could leave us a 5-star rating. If there's something you need assistance with, you can ask all your questions in the Blog2Social support community where you will receive help from our committed support team. You can easily access the Blog2Social Support Community via the Help & Support section in the Blog2Social menu on your WP dashboard.", "blog2social"); ?></p>
+                            <p><?php esc_html_e("If you like Blog2Social, we would be greatly delighted, if you could leave us a 5-star rating. If there's something you need assistance with, you can ask all your questions in the Blog2Social support community where you will receive help from our committed support team.", "blog2social"); ?></p>
                             <a target="_blank" href="https://wordpress.org/support/plugin/blog2social/reviews/" class="btn btn-success btn-block"><?php esc_html_e("RATE BLOG2SOCIAL", "blog2social") ?></a>
                         </div>
                     </div>

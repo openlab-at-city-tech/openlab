@@ -111,7 +111,7 @@ class B2S_Tools {
         }
         if ($type == 'affiliate') {
             $affiliateId = self::getAffiliateId();
-            return 'https://service.blog2social.com/' . (((int) $affiliateId != 0) ? '?aid=' . $affiliateId : '');
+            return 'https://b2s.li/wp-btn-premium/' . (((int) $affiliateId != 0) ? $affiliateId : '');
         }
         if ($type == 'feature') {
             return 'https://blog2social.com/' . (($lang == 'en') ? 'en/plugin/wordpress/premium-trial/' : 'de/plugin/wordpress/premium-testen/');
@@ -175,11 +175,20 @@ class B2S_Tools {
         if ($type == 'faq_scheduling') {
             return ($lang == 'en') ? 'https://www.blog2social.com/en/faq/index.php?action=show&cat=5' : 'https://www.blog2social.com/de/faq/index.php?action=show&cat=5';
         }
+        if ($type == 'faq_repoting') {
+            return ($lang == 'en') ? 'https://www.blog2social.com/en/faq/index.php?action=show&cat=6' : 'https://www.blog2social.com/de/faq/index.php?action=show&cat=6';
+        }
         if ($type == 'faq_licence') {
             return ($lang == 'en') ? 'https://www.blog2social.com/en/faq/index.php?action=show&cat=7' : 'https://www.blog2social.com/de/faq/index.php?action=show&cat=7';
         }
+        if ($type == 'faq_security') {
+            return ($lang == 'en') ? 'https://www.blog2social.com/en/faq/index.php?action=show&cat=8' : 'https://www.blog2social.com/de/faq/index.php?action=show&cat=8';
+        }
         if ($type == 'faq_troubleshooting') {
             return ($lang == 'en') ? 'https://www.blog2social.com/en/faq/index.php?action=show&cat=9' : 'https://www.blog2social.com/de/faq/index.php?action=show&cat=9';
+        }
+        if ($type == 'faq_affiliate') {
+            return ($lang == 'en') ? 'https://www.blog2social.com/en/faq/index.php?action=show&cat=10' : 'https://www.blog2social.com/de/faq/index.php?action=show&cat=10';
         }
         if ($type == 'faq_settings') {
             return ($lang == 'en') ? 'https://www.blog2social.com/en/faq/index.php?action=show&cat=11' : 'https://www.blog2social.com/de/faq/index.php?action=show&cat=11';
@@ -242,7 +251,7 @@ class B2S_Tools {
             return ($lang == 'en') ? 'https://www.blog2social.com/en/faq/index.php?action=artikel&cat=2&id=82&artlang=en' : 'https://www.blog2social.com/de/faq/index.php?action=artikel&cat=2&id=86&artlang=de';
         }
         if($type == 'network_grouping'){
-            return ($lang == 'en') ? 'https://www.blog2social.com/en/faq/index.php?action=artikel&cat=4&id=65&artlang=en&highlight=profile' : 'https://www.blog2social.com/de/faq/index.php?action=artikel&cat=4&id=73&artlang=de&highlight=profil';
+            return ($lang == 'en') ? 'https://www.blog2social.com/en/faq/index.php?action=artikel&cat=4&id=65&artlang=en' : 'https://www.blog2social.com/de/faq/index.php?action=artikel&cat=4&id=73&artlang=de';
         }
         if($type == 'community'){
             return 'https://community.blog2social.com/';
@@ -301,6 +310,73 @@ class B2S_Tools {
         if($type == 'network_addon_faq'){
             return ($lang == 'en') ? 'https://www.blog2social.com/en/faq/index.php?action=artikel&cat=7&id=168&artlang=en' : 'https://www.blog2social.com/de/faq/index.php?action=artikel&cat=7&id=165&artlang=de';
         }
+        if($type == 'connection_guide'){
+            return ($lang == 'en') ? 'https://www.blog2social.com/en/faq/index.php?action=artikel&cat=9&id=106&artlang=en' : 'https://www.blog2social.com/de/faq/index.php?action=artikel&cat=9&id=108&artlang=de';
+        }
+        if($type == 'instagram_error_private'){
+            return ($lang == 'en') ? 'https://www.blog2social.com/en/faq/index.php?action=artikel&cat=9&id=119&artlang=en' : 'https://www.blog2social.com/de/faq/index.php?action=artikel&cat=9&id=119&artlang=de';
+        }
+        if($type == 'instagram_error_business'){
+            return ($lang == 'en') ? 'https://www.blog2social.com/en/faq/index.php?action=artikel&cat=9&id=119&artlang=en' : 'https://www.blog2social.com/de/faq/index.php?action=artikel&cat=9&id=119&artlang=de';
+        }
+        if($type == 'network_guide_link_1'){
+            return ($lang == 'en') ? 'https://www.blog2social.com/en/faq/index.php?solution_id=1175' : 'https://www.blog2social.com/de/faq/index.php?solution_id=1174';
+        }
+        if($type == 'network_guide_link_2'){
+            return ($lang == 'en') ? 'https://www.blog2social.com/en/faq/index.php?solution_id=1177' : 'https://www.blog2social.com/de/faq/index.php?solution_id=1177';
+        }
+        if($type == 'network_guide_link_3'){
+            return ($lang == 'en') ? 'https://www.blog2social.com/en/faq/?action=search&search=linkedin' : 'https://www.blog2social.com/de/faq/?action=search&search=linkedin';
+        }
+        if($type == 'network_guide_link_4'){
+            return ($lang == 'en') ? 'https://www.blog2social.com/en/faq/content/2/16/en/how-do-i-connect-blog2social-with-tumblr.html' : 'https://www.blog2social.com/de/faq/content/2/19/de/wie-kann-ich-blog2social-mit-tumblr-verbinden.html';
+        }
+        if($type == 'network_guide_link_6'){
+            return ($lang == 'en') ? 'https://www.blog2social.com/en/faq/index.php?solution_id=1178' : 'https://www.blog2social.com/de/faq/index.php?solution_id=1179';
+        }
+        if($type == 'network_guide_link_7'){
+            return ($lang == 'en') ? 'https://www.blog2social.com/en/faq/content/2/21/en/how-do-i-connect-blog2social-with-flickr.html' : 'https://www.blog2social.com/de/faq/content/2/24/de/wie-kann-ich-blog2social-mit-flickr-verbinden.html';
+        }
+        if($type == 'network_guide_link_9'){
+            return ($lang == 'en') ? 'https://www.blog2social.com/en/faq/content/2/22/en/how-do-i-connect-blog2social-with-diigo.html' : 'https://www.blog2social.com/de/faq/content/2/25/de/wie-kann-ich-blog2social-mit-diigo-verbinden.html';
+        }
+        if($type == 'network_guide_link_11'){
+            return ($lang == 'en') ? 'https://www.blog2social.com/en/faq/?action=search&search=medium' : 'https://www.blog2social.com/de/faq/?action=search&search=medium';
+        }
+        if($type == 'network_guide_link_12'){
+            return ($lang == 'en') ? 'https://www.blog2social.com/en/faq/index.php?solution_id=1176' : 'https://www.blog2social.com/de/faq/index.php?solution_id=1173';
+        }
+        if($type == 'network_guide_link_14'){
+            return ($lang == 'en') ? 'https://www.blog2social.com/en/faq/content/2/18/en/how-do-i-connect-blog2social-with-torial.html' : 'https://www.blog2social.com/de/faq/content/2/21/de/wie-kann-ich-blog2social-mit-torial-verbinden.html';
+        }
+        if($type == 'network_guide_link_15'){
+            return ($lang == 'en') ? 'https://www.blog2social.com/en/faq/content/2/81/en/how-do-i-connect-blog2social-with-reddit.html' : 'https://www.blog2social.com/de/faq/content/2/85/de/wie-kann-ich-blog2social-mit-reddit-verbinden.html';
+        }
+        if($type == 'network_guide_link_16'){
+            return ($lang == 'en') ? 'https://www.blog2social.com/en/faq/content/2/110/en/how-to-automatically-re_publish-blog-posts-on-bloglovin%E2%80%99-.html' : 'https://www.blog2social.com/de/faq/content/2/113/de/blogbeitraege-auf-bloglovin%E2%80%99-veroeffentlichen-_-so-geht%E2%80%99s.html';
+        }
+        if($type == 'network_guide_link_17'){
+            return ($lang == 'en') ? 'https://www.blog2social.com/en/faq/index.php?action=artikel&cat=2&id=122&artlang=en' : 'https://www.blog2social.com/de/faq/index.php?action=artikel&cat=2&id=123&artlang=de';
+        }
+        if($type == 'network_guide_link_18'){
+            return ($lang == 'en') ? 'https://www.blog2social.com/en/faq/?action=search&search=google+my+business' : 'https://www.blog2social.com/de/faq/?action=search&search=google+my+business';
+        }
+        if($type == 'network_guide_link_19'){
+            return ($lang == 'en') ? 'https://www.blog2social.com/en/faq/index.php?action=artikel&cat=2&id=146&artlang=en' : 'https://www.blog2social.com/de/faq/index.php?action=artikel&cat=2&id=16&artlang=de';
+        }
+        if($type == 'network_guide_link_24'){
+            return ($lang == 'en') ? 'https://www.blog2social.com/en/faq/index.php?action=artikel&cat=2&id=173&artlang=en' : 'https://www.blog2social.com/de/faq/index.php?action=artikel&cat=2&id=169&artlang=de';
+        }
+        if($type == 'network_guide_link_25'){
+            return ($lang == 'en') ? 'https://www.blog2social.com/en/faq/index.php?action=artikel&cat=2&id=194&artlang=en' : 'https://www.blog2social.com/de/faq/index.php?action=artikel&cat=2&id=190&artlang=de&highlight=blogger';
+        }
+        if($type == 'network_guide_link_26'){
+            return ($lang == 'en') ? 'https://www.blog2social.com/en/faq/index.php?action=artikel&cat=2&id=196&artlang=en' : 'https://www.blog2social.com/de/faq/index.php?action=artikel&cat=2&id=192&artlang=de';
+        }
+        if($type == 'network_guide_link_27'){
+            return ($lang == 'en') ? 'https://www.blog2social.com/en/faq/index.php?action=artikel&cat=2&id=197&artlang=en' : 'https://www.blog2social.com/de/faq/index.php?action=artikel&cat=2&id=193&artlang=de';
+        }
+        return false;
     }
 
     public static function getAffiliateId() {

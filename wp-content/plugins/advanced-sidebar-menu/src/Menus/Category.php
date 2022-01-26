@@ -18,7 +18,7 @@ class Category extends Menu_Abstract {
 	const EACH_CATEGORY_DISPLAY = 'new_widget';
 
 	/**
-	 * Parents and grandparents fo current term.
+	 * Parents and grandparents of current term.
 	 *
 	 * @var array
 	 */
@@ -103,8 +103,8 @@ class Category extends Menu_Abstract {
 	 * @return \WP_Term[]
 	 */
 	public function get_child_terms() {
-		$terms = array_filter(
-			get_terms(
+		$terms = get_terms(
+			\array_filter(
 				[
 					'taxonomy' => $this->get_taxonomy(),
 					'parent'   => $this->get_top_parent_id(),
@@ -113,7 +113,8 @@ class Category extends Menu_Abstract {
 				]
 			)
 		);
-		return apply_filters( 'advanced-sidebar-menu/menus/category/get-child-terms', $terms, $this );
+
+		return apply_filters( 'advanced-sidebar-menu/menus/category/get-child-terms', \array_filter( $terms ), $this );
 	}
 
 
@@ -149,7 +150,7 @@ class Category extends Menu_Abstract {
 		if ( ! empty( $top_level_term_ids ) ) {
 			$terms = get_terms(
 				[
-					'include'    => array_unique( array_filter( $top_level_term_ids ) ),
+					'include'    => \array_unique( \array_filter( $top_level_term_ids ) ),
 					'hide_empty' => false,
 					'orderby'    => $this->get_order_by(),
 					'order'      => $this->get_order(),
@@ -319,29 +320,21 @@ class Category extends Menu_Abstract {
 
 	/**
 	 * Retrieve the highest level term_id based on the given
-	 * term's ancestors
+	 * term's ancestors.
+	 *
+	 * Track the latest call's ancestors on the class for use
+	 * on the single term's archive.
 	 *
 	 * @param int $term_id - Provided term's id.
 	 *
 	 * @return int
 	 */
 	public function get_highest_parent( $term_id ) {
-		$cat_ancestors = [];
-		$cat_ancestors[] = $term_id;
+		$this->ancestors = \array_reverse( get_ancestors( $term_id, $this->get_taxonomy(), 'taxonomy' ) );
+		// Store current term at the end ancestors for backward compatibility.
+		$this->ancestors[] = $term_id;
 
-		do {
-			$term = get_term( $term_id, $this->get_taxonomy() );
-			if ( is_a( $term, \WP_Term::class ) ) {
-				$term_id = $term->parent;
-				$cat_ancestors[] = $term_id;
-			} else {
-				$term = false;
-			}
-		} while ( $term );
-
-		// We only track the last calls ancestors because we only care about these when on a single term archive.
-		$this->ancestors = array_reverse( $cat_ancestors );
-		return $this->ancestors[1];
+		return reset( $this->ancestors );
 	}
 
 

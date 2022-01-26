@@ -156,6 +156,10 @@ class B2S_Calendar_Filter {
             $where = "WHERE {$wpdb->prefix}b2s_posts.sched_date != '0000-00-00 00:00:00' "
                     . "AND {$wpdb->prefix}b2s_posts.sched_date BETWEEN '" . date('Y-m-d H:i:s', strtotime($start)) . "' AND '" . date('Y-m-d H:i:s', strtotime($end)) . "' "
                     . "AND {$wpdb->prefix}b2s_posts.hide = 0 " . $addNotAdminPosts . $addNetwork . $addNetworkDetails . $approvePosts . " ORDER BY sched_date";
+        } elseif ($filter == 5) {//reposter
+            $where = "WHERE {$wpdb->prefix}b2s_posts.sched_date BETWEEN '" . date('Y-m-d H:i:s', strtotime($start)) . "' AND '" . date('Y-m-d H:i:s', strtotime($end)) . "' "
+                    . "AND {$wpdb->prefix}b2s_posts.sched_type = 5 "
+                    . "AND {$wpdb->prefix}b2s_posts.hide = 0 " . $addNotAdminPosts . $addNetwork . $addNetworkDetails . $approvePosts . " ORDER BY sched_date";
         } else {//all
             $where = "WHERE {$wpdb->prefix}b2s_posts.hide = 0 "
                     . "AND (({$wpdb->prefix}b2s_posts.sched_date BETWEEN '" . date('Y-m-d H:i:s', strtotime($start)) . "' AND '" . date('Y-m-d H:i:s', strtotime($end)) . "')  "

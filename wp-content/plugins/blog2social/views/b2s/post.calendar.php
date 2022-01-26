@@ -11,6 +11,10 @@ $options = new B2S_Options(B2S_PLUGIN_BLOG_USER_ID);
 $optionUserTimeZone = $options->_getOption('user_time_zone');
 $userTimeZone = ($optionUserTimeZone !== false) ? $optionUserTimeZone : get_option('timezone_string');
 $userTimeZoneOffset = (empty($userTimeZone)) ? get_option('gmt_offset') : B2S_Util::getOffsetToUtcByTimeZone($userTimeZone);
+$optionUserTimeFormat = $options->_getOption('user_time_format');
+if($optionUserTimeFormat == false) {
+    $optionUserTimeFormat = (substr(B2S_LANGUAGE, 0, 2) == 'de') ? 0 : 1;
+}
 $metaSettings = get_option('B2S_PLUGIN_GENERAL_OPTIONS');
 ?>
 
@@ -85,6 +89,7 @@ $metaSettings = get_option('B2S_PLUGIN_GENERAL_OPTIONS');
 </div>
 
 <input type="hidden" id="b2sLang" value="<?php echo substr(B2S_LANGUAGE, 0, 2); ?>">
+<input type="hidden" id="b2sUserTimeFormat" value="<?php echo $optionUserTimeFormat; ?>">
 <input type="hidden" id="b2sJSTextAddPost" value="<?php esc_html_e("add post", "blog2social"); ?>">                    
 <input type="hidden" id="b2sUserLang" value="<?php echo strtolower(substr(get_locale(), 0, 2)); ?>">
 <input type='hidden' id="user_timezone" name="user_timezone" value="<?php echo $userTimeZoneOffset; ?>">
@@ -181,7 +186,7 @@ $metaSettings = get_option('B2S_PLUGIN_GENERAL_OPTIONS');
                                 <img class="img-width-150" src="<?php echo plugins_url('/assets/images/b2s/blog-post-icon.png', B2S_PLUGIN_FILE); ?>" alt="blog post">
                             </div>
                             <div class="text">
-                                <?php esc_html_e("Share content from your blog", "blog2social") ?>
+                                <?php esc_html_e("Share your WordPress posts, pages or products", "blog2social") ?>
                             </div>
                             <div class="action">
                                 <button class="btn btn-primary" id="b2s-btn-select-blog-post"><?php esc_html_e("select", "blog2social"); ?></button>
@@ -194,7 +199,7 @@ $metaSettings = get_option('B2S_PLUGIN_GENERAL_OPTIONS');
                                 <img class="img-width-150" src="<?php echo plugins_url('/assets/images/b2s/content-curation-icon.png', B2S_PLUGIN_FILE); ?>" alt="content curation">
                             </div>
                             <div class="text">
-                                <?php esc_html_e("Share content from other sources", "blog2social") ?>
+                                <?php esc_html_e("Create or share content from other sources", "blog2social") ?>
                             </div>
                             <div class="action">
                                 <button class="btn btn-primary" id="b2s-btn-select-content-curation"><?php esc_html_e("select", "blog2social"); ?></button>
@@ -297,6 +302,24 @@ $metaSettings = get_option('B2S_PLUGIN_GENERAL_OPTIONS');
                     <br>
                     <center> <?php echo sprintf(__('or <a target="_blank" href="%s">start with free 30-days-trial of Blog2Social Premium</a> (no payment information needed)', 'blog2social'), esc_url('https://service.blog2social.com/trial')); ?> </center>
                 <?php } ?>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="b2s-show-error-modal" class="modal fade" role="dialog" aria-labelledby="b2s-show-error-modal" aria-hidden="true" data-backdrop="false" style="display:none;z-index: 1070;">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="b2s-modal-close close" data-modal-name="#b2s-show-error-modal">&times;</button>
+                <h4 class="modal-title"><?php esc_html_e('Notification', 'blog2social') ?></h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="alert alert-danger b2s-error-text"></div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

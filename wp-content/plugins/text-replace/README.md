@@ -10,6 +10,8 @@ This plugin is available in the WordPress Plugin Directory: https://wordpress.or
 1. Install via the built-in WordPress plugin installer. Or install the plugin code inside the plugins directory for your site (typically `/wp-content/plugins/`).
 2. Activate the plugin through the 'Plugins' admin menu in WordPress.
 3. Go to the `Settings` -> `Text Replace` admin options page and customize the options (notably to define the shortcuts and their replacements).
+4. Optional: Configure other plugin settings as desired.
+5. Use the shortcuts in posts/pages. Shortcuts appearing in existing posts will also be affected by this plugin.
 
 
 ## Additional Documentation

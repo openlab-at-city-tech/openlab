@@ -15,6 +15,6 @@
         "ezyang/htmlpurifier": "^4.13"
     },
     "require-dev": {
-        "nikic/php-parser": "^4.3"
+        "nikic/php-parser": "^4.12"
     }
 }

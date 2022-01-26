@@ -4,9 +4,9 @@ Contributors: Mat Lipe, onpointplugins
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=paypal%40onpointplugins%2ecom&lc=US&item_name=Advanced%20Sidebar%20Menu&no_note=0&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHostedGuest
 Tags: menus, sidebar menu, hierarchy, category menu, pages menu, dynamic
 Requires at least: 5.2.0
-Tested up to: 5.7.2
+Tested up to: 5.8.2
 Requires PHP: 5.6.0
-Stable tag: 8.5.0
+Stable tag: 8.6.4
 
 == Description ==
 
@@ -16,7 +16,7 @@ Keeps the menu clean and usable. Only related items display so you don't have to
 
 <strong>Check out <a href="https://onpointplugins.com/product/advanced-sidebar-menu-pro/">Advanced Sidebar Menu PRO</a> for more features including accordion menus, menu colors and styles, custom link text, excluding of pages, category ordering, custom post types, custom taxonomies, priority support, and so much more!</strong>
 
-<blockquote><a href="https://onpointplugins.com/product/advanced-sidebar-menu-pro/" target="_blank">PRO version 8.3.0</a> is now available with improved style targeting including hover styles and border widths!</blockquote>
+<blockquote><a href="https://onpointplugins.com/product/advanced-sidebar-menu-pro/" target="_blank">PRO version 8.4.0</a> is now available with accordion options to use links for open/close!</blockquote>
 
 <h3>Features</h3>
 * Page and Category widgets.
@@ -49,7 +49,7 @@ Keeps the menu clean and usable. Only related items display so you don't have to
 * Levels of Categories to display when always display child categories is checked
 
 <h3>PRO Features</h3>
-* Ability to customize each page or navigation menu item link’s text.
+* Ability to customize each page or navigation menu item link's text.
 * Click-and-drag styling for page, category, and navigation menu widgets.
 * Styling options for links including color, background color, size, hover, and font weight.
 * Styling options for different levels of links.
@@ -61,6 +61,7 @@ Keeps the menu clean and usable. Only related items display so you don't have to
 * Accordion icon style and color selection.
 * Accordion option to keep all sections closed until clicked.
 * Accordion option to include highest level parent in accordion.
+* Accordion option to use links for open/close. **NEW**
 * Ability to exclude a page from all menus using a simple checkbox.
 * Link ordering for the category widget.
 * Number of levels of pages to show when "always display child pages" is not checked.
@@ -118,22 +119,33 @@ Manual Installation
 The widgets in this plugin are smart enough to not show up on pages or categories where the only thing that would display is the title. While it may appear like the widget is broken, it is actually doing what it is intended to do.
 
 The most common causes for this confusion come from one of these reasons:
-1. The incorrect widget was selected (there are different widgets for categories or pages).
+1. The incorrect widget was selected. Categories have their own widget as pages have their own widget.
 2. "Display the highest level parent page" or "Display the highest level parent category" is not checked.
 3. The widget is currently not being viewed on a page (for the pages widget) or category (for the categories widget).
 
 = How do I change the styling of the current page? =
 
-You may add css to your theme's style.css to change the way the menu looks
+You may add CSS to your theme's style.css to change the way the menu looks.
 
-For Instance This would remove the dot and change the color
+For example the following CSS would:
+1. Remove the dot to the left of the menu item.
+2. Change the link color.
+3. Add a background on hover.
+
 <code>
+.advanced-sidebar-menu li.current-cat a,
 .advanced-sidebar-menu li.current_page_item a {
     color: black;
 }
 
+.advanced-sidebar-menu li.current-cat,
 .advanced-sidebar-menu li.current_page_item {
-    list-style-type:  none !important;
+    list-style-type: none !important;
+}
+
+.advanced-sidebar-menu li.current-cat > a:hover,
+.advanced-sidebar-menu li.current_page_item > a:hover {
+	background: teal;
 }
 </code>
 
@@ -141,20 +153,40 @@ To style your menu without using any code <a href="https://onpointplugins.com/pr
 
 = How do you get the categories to display on single post pages? =
 
-There is a checkbox in the widget options that will display the same structure for the categories the post is in.
-
-= How do you edit the output or built in css? =
-
-Create a folder in your child theme named "advanced-sidebar-menu" copy any of the files from the "views" folder into
-the folder you just created. You may edit the files to change the output or css. You must have the option checked to use the built in CSS (in the widget) to be able to edit the css file in this way.
-
+The Categories Menu widget contains a "Display categories on single posts" checkbox, which will display the category menus based on the categories the current post is assigned to.
 
 = Does the menu change for each page you are on? =
 
-Yes. Based on whatever page, post, or category you are on, the menu will change automatically to display the current parents and children.
+Yes. Based on whatever page, post or category you are on, the menu will change automatically to display the current parents and children.
 
 
 == Changelog ==
+= 8.6.4 = 
+* Introduced `advanced-sidebar-menu/debug/print-instance` filter.
+* Improved FAQ information.
+* Remove dangling reference to old built in styles from FAQ.
+
+= 8.6.3 =
+* Fix issue with CSS classnames on the current page's children.
+
+= 8.6.2 =
+* Assured consistency for levels of page menu's CSS classes.
+* Converted category get the highest parent logic to `get_ancestors`.
+* Gracefully handle invalid taxonomies in Category widgets.
+* Gracefully handle widgets without ids.
+* Fixed color pickers in Elementor.
+* Fixed color pickers in Beaver Builder.
+
+= 8.6.1 = 
+* Improved widget interaction handling.
+* Synced styles between block, classic and customizer widgets.
+* Fixed customizer widget buttons.
+
+= 8.6.0 =
+* Support WordPress version 5.8.
+* Support Gutenberg widgets screen.
+* Minimum required version for PRO 8.5.
+
 = 8.5.0 =
 * Introduce `Utils` class for shared non specific functionality.
 * Introduce `is_checked` method for determining checkbox state from anywhere.
@@ -247,7 +279,7 @@ Major version update. See <a href="https://onpointplugins.com/advanced-sidebar-m
 * Greatly improved widget styles and UI when using Elementor.
 * Overall third party page builder improvements.
 * Move scripts and styles into new Scripts class.
-* Introduced a new Singleton trait.
+* Introduced a Singleton trait.
 
 = 7.6.0 =
 * Elementor support for multiple widgets of the same type on the same page.
@@ -259,18 +291,8 @@ Major version update. See <a href="https://onpointplugins.com/advanced-sidebar-m
 * Bump required PHP version to 5.4.4.
 
 == Upgrade Notice ==
+= 8.6.0 = 
+Update to support WordPress version 5.8.
+
 = 8.5.0 =
 Update to support PRO version 8.4.0.
-
-= 8.2.0 =
-Update to support PRO version 8.2.0
-
-= 8.0.0 =
-Major version update. Not fully backward compatible with version 7 filters or code. Please see migration guide if you are extending the plugin via code.
-
-= 7.7.0 =
-Update to support PRO version 3.10.0
-
-= 7.6.6 =
-Update to support PRO version 3.9.3
-

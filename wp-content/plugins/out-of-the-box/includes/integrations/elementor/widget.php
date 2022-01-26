@@ -47,9 +47,8 @@ class Widget extends \Elementor\Widget_Base
         }
 
         global $OutoftheBox;
-        
 
-        return ['Awesome-Font-5', 'OutoftheBox.ShortcodeBuilder', 'OutoftheBox'];
+        return ['Eva-Icons', 'OutoftheBox.ShortcodeBuilder', 'OutoftheBox'];
     }
 
     public function is_reload_preview_required()
@@ -128,7 +127,7 @@ class Widget extends \Elementor\Widget_Base
     protected function get_render_html($shortcode)
     {
         if (empty($shortcode)) {
-            return esc_html__('Please create your shortcode first', 'wpcloudplugins');
+            return esc_html__('Please configure the module first', 'wpcloudplugins');
         }
 
         \ob_start();

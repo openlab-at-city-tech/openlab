@@ -11,8 +11,7 @@
 		</div>
 
 		<div class='mapp-dir-toolbar'>
-			<span class='mapp-button-submit' data-mapp-action='dir-get'><?php _e('Get Directions', 'mappress-google-maps-for-wordpress'); ?></span>
-			<span class='mapp-spinner'></span>
+			<span class='mapp-submit-button' data-mapp-action='dir-get'><?php _e('Get Directions', 'mappress-google-maps-for-wordpress'); ?></span>
 		</div>
 		<div class='mapp-dir-renderer'></div>
 	</div>

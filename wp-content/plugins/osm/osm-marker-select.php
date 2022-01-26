@@ -523,6 +523,16 @@
   <input type="radio" name="marker_icon" id="marker_icon" value="mic_black_cars_10.png"/>
   <?php  echo '<img src="'.OSM_PLUGIN_ICONS_URL.'/mic_black_cars_10.png" align="left" hspace="5" alt="mic_black_cars_10.png">'; ?>
 </label>
+
+<label class="metabox-label">
+  <input type="radio" name="marker_icon" id="marker_icon" value="mic_gold_stolperstein-L.png"/>
+  <?php  echo '<img src="'.OSM_PLUGIN_ICONS_URL.'/mic_gold_stolperstein-L.png" align="left" hspace="5" alt="mic_gold_stolperstein-L.png">'; ?>
+</label>
+<label class="metabox-label">
+  <input type="radio" name="marker_icon" id="marker_icon" value="mic_grey_stolperstein_L.png"/>
+  <?php  echo '<img src="'.OSM_PLUGIN_ICONS_URL.'/mic_grey_stolperstein_L.png" align="left" hspace="5" alt="mic_grey_stolperstein_L.png">'; ?>
+</label>
+
  </div> <!-- id="tab_urban" -->
 
 

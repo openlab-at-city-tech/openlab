@@ -64,6 +64,16 @@ function create_upload_button_for_custom_images($option)
 
     return $button_html;
 }
+
+function help_button($name, $text)
+{
+    ?>
+  <a onclick="return false;" onkeypress="return false;" class="wpcp_help_tooltip" data-tippy-content="<strong><?php echo $name; ?></strong></br><?php echo $text; ?>">
+			<i class="eva eva-question-mark-circle-outline"></i>
+		</a>
+  <?php
+}
+
 ?>
 
 <div class="outofthebox admin-settings">
@@ -105,9 +115,9 @@ function create_upload_button_for_custom_images($option)
 
         <div class="outofthebox-nav-header" style="margin-top: 50px;"><?php esc_html_e('Other Cloud Plugins', 'wpcloudplugins'); ?></div>
         <ul class="outofthebox-nav-tabs">
-          <li id="settings_help_tab" data-tab="settings_help"><a href="https://1.envato.market/L6yXj" target="_blank" style="color:#522058;">Google Drive <i class="fas fa-external-link-square-alt" aria-hidden="true"></i></a></li>
-          <li id="settings_help_tab" data-tab="settings_help"><a href="https://1.envato.market/yDbyv" target="_blank" style="color:#522058;">OneDrive <i class="fas fa-external-link-square-alt" aria-hidden="true"></i></a></li>
-          <li id="settings_help_tab" data-tab="settings_help"><a href="https://1.envato.market/M4B53" target="_blank" style="color:#522058;">Box <i class="fas fa-external-link-square-alt" aria-hidden="true"></i></a></li>
+          <li id="settings_help_tab" data-tab="settings_help"><a href="https://1.envato.market/L6yXj" target="_blank" style="color:#522058;">Google Drive <i class="eva eva-external-link" aria-hidden="true"></i></a></li>
+          <li id="settings_help_tab" data-tab="settings_help"><a href="https://1.envato.market/yDbyv" target="_blank" style="color:#522058;">OneDrive <i class="eva eva-external-link" aria-hidden="true"></i></a></li>
+          <li id="settings_help_tab" data-tab="settings_help"><a href="https://1.envato.market/M4B53" target="_blank" style="color:#522058;">Box <i class="eva eva-external-link" aria-hidden="true"></i></a></li>
         </ul> 
 
         <div class="outofthebox-nav-footer">          <a href="https://www.wpcloudplugins.com/" target="_blank">
@@ -134,12 +144,12 @@ function create_upload_button_for_custom_images($option)
                       <div class='account-info-container'>
                         <div class='account-info'>
                           <div class='account-actions'>
-                            <div id='wpcp-add-account-button' type='button' class='simple-button blue' data-url="<?php echo $app->get_auth_url(['force_reapprove' => 'true']); ?>" title="<?php esc_html_e('Add account', 'wpcloudplugins'); ?>"><i class='fas fa-plus-circle' aria-hidden='true'></i>&nbsp;<?php esc_html_e('Add account', 'wpcloudplugins'); ?></div>
+                            <div id='wpcp-add-account-button' type='button' class='simple-button blue' data-url="<?php echo $app->get_auth_url(['force_reapprove' => 'true']); ?>" title="<?php esc_html_e('Add account', 'wpcloudplugins'); ?>"><i class='eva eva-plus-circle eva-lg' aria-hidden='true'></i>&nbsp;<?php esc_html_e('Add account', 'wpcloudplugins'); ?></div>
                           </div>
                           <div class="account-info-name">
                             <?php esc_html_e('Link a new account to the plugin', 'wpcloudplugins'); ?>
                           </div>
-                          <span class="account-info-space"><a href="#" id="wpcp-read-privacy-policy"><i class="fas fa-shield-alt"></i> <?php esc_html_e('What happens with my data when I authorize the plugin?', 'wpcloudplugins'); ?></a></span>   
+                          <span class="account-info-space"><a href="#" id="wpcp-read-privacy-policy"><i class="eva eva-shield"></i> <?php esc_html_e('What happens with my data when I authorize the plugin?', 'wpcloudplugins'); ?></a></span>   
                         </div>
                       </div>
                     </div>
@@ -191,27 +201,17 @@ function create_upload_button_for_custom_images($option)
 
               <div class="outofthebox-option-title"><?php esc_html_e('General Loader', 'wpcloudplugins'); ?></div>
               <?php
-              $button = ['value' => $this->settings['loaders']['loading'], 'id' => 'loaders_loading', 'name' => 'out_of_the_box_settings[loaders][loading]', 'default' => OUTOFTHEBOX_ROOTPATH.'/css/images/loader_loading.gif'];
-              echo create_upload_button_for_custom_images($button);
-              ?>
-              <div class="outofthebox-option-title"><?php esc_html_e('Upload Loader', 'wpcloudplugins'); ?></div>
-              <?php
-              $button = ['value' => $this->settings['loaders']['upload'], 'id' => 'loaders_upload', 'name' => 'out_of_the_box_settings[loaders][upload]', 'default' => OUTOFTHEBOX_ROOTPATH.'/css/images/loader_upload.gif'];
+              $button = ['value' => $this->settings['loaders']['loading'], 'id' => 'loaders_loading', 'name' => 'out_of_the_box_settings[loaders][loading]', 'default' => OUTOFTHEBOX_ROOTPATH.'/css/images/wpcp-loader.svg'];
               echo create_upload_button_for_custom_images($button);
               ?>
               <div class="outofthebox-option-title"><?php esc_html_e('No Results', 'wpcloudplugins'); ?></div>
               <?php
-              $button = ['value' => $this->settings['loaders']['no_results'], 'id' => 'loaders_no_results', 'name' => 'out_of_the_box_settings[loaders][no_results]', 'default' => OUTOFTHEBOX_ROOTPATH.'/css/images/loader_no_results.png'];
+              $button = ['value' => $this->settings['loaders']['no_results'], 'id' => 'loaders_no_results', 'name' => 'out_of_the_box_settings[loaders][no_results]', 'default' => OUTOFTHEBOX_ROOTPATH.'/css/images/loader_no_results.svg'];
               echo create_upload_button_for_custom_images($button);
               ?>
               <div class="outofthebox-option-title"><?php esc_html_e('Access Forbidden', 'wpcloudplugins'); ?></div>
               <?php
-              $button = ['value' => $this->settings['loaders']['protected'], 'id' => 'loaders_protected', 'name' => 'out_of_the_box_settings[loaders][protected]', 'default' => OUTOFTHEBOX_ROOTPATH.'/css/images/loader_protected.png'];
-              echo create_upload_button_for_custom_images($button);
-              ?>
-              <div class="outofthebox-option-title"><?php esc_html_e('Error', 'wpcloudplugins'); ?></div>
-              <?php
-              $button = ['value' => $this->settings['loaders']['error'], 'id' => 'loaders_error', 'name' => 'out_of_the_box_settings[loaders][error]', 'default' => OUTOFTHEBOX_ROOTPATH.'/css/images/loader_error.png'];
+              $button = ['value' => $this->settings['loaders']['protected'], 'id' => 'loaders_protected', 'name' => 'out_of_the_box_settings[loaders][protected]', 'default' => OUTOFTHEBOX_ROOTPATH.'/css/images/loader_protected.svg'];
               echo create_upload_button_for_custom_images($button);
               ?>
               <div class="outofthebox-option-title"><?php esc_html_e('iFrame Loader', 'wpcloudplugins'); ?></div>
@@ -278,7 +278,7 @@ function create_upload_button_for_custom_images($option)
               <div class="outofthebox-option-title"><?php esc_html_e('Icon Set', 'wpcloudplugins'); ?></div>
               <div class="outofthebox-option-description"><?php _e(sprintf('Location to the icon set you want to use. When you want to use your own set, just make a copy of the default icon set folder (<code>%s</code>) and place it in the <code>wp-content/</code> folder', OUTOFTHEBOX_ROOTPATH.'/css/icons/'), 'wpcloudplugins'); ?>.</div>
 
-              <div class="oftb-warning">
+              <div class="wpcp-warning">
                 <i><strong><?php esc_html_e('NOTICE', 'wpcloudplugins'); ?></strong>: <?php esc_html_e('Modifications to the default icons set will be lost during an update.', 'wpcloudplugins'); ?>.</i>
               </div>
 
@@ -287,8 +287,10 @@ function create_upload_button_for_custom_images($option)
 
             <div class="outofthebox-accordion-title outofthebox-option-title"><?php esc_html_e('Lightbox', 'wpcloudplugins'); ?></div>
             <div>
-              <div class="outofthebox-option-title"><?php esc_html_e('Lightbox Skin', 'wpcloudplugins'); ?></div>
-              <div class="outofthebox-option-description"><?php esc_html_e('Select which skin you want to use for the Inline Preview', 'wpcloudplugins'); ?>.</div>
+              <div class="outofthebox-option-title"><?php esc_html_e('Lightbox Skin', 'wpcloudplugins'); ?>
+                <?php help_button(esc_html__('Lightbox Skin', 'wpcloudplugins'), esc_html__('Select which skin you want to use for the Inline Preview.', 'wpcloudplugins'));
+                ?>      
+              </div>
               <select name="wpcp_lightbox_skin_selectbox" id="wpcp_lightbox_skin_selectbox" class="ddslickbox">
                 <?php
                 foreach (new DirectoryIterator(OUTOFTHEBOX_ROOTDIR.'/vendors/iLightBox/') as $fileInfo) {
@@ -311,31 +313,39 @@ function create_upload_button_for_custom_images($option)
               <input type="hidden" name="out_of_the_box_settings[lightbox_skin]" id="wpcp_lightbox_skin" value="<?php echo esc_attr($this->settings['lightbox_skin']); ?>">
 
 
-              <div class="outofthebox-option-title">Lightbox Scroll</div>
-              <div class="outofthebox-option-description"><?php esc_html_e("Sets path for switching windows. Possible values are 'vertical' and 'horizontal' and the default is 'vertical", 'wpcloudplugins'); ?>.</div>
+              <div class="outofthebox-option-title">Lightbox Scroll
+                <?php help_button(esc_html__('Lightbox Scroll', 'wpcloudplugins'), esc_html__("Sets path for switching windows. Possible values are 'vertical' and 'horizontal' and the default is 'vertical'.", 'wpcloudplugins'));
+                ?>  
+              </div>
               <select type="text" name="out_of_the_box_settings[lightbox_path]" id="lightbox_path">
                 <option value="horizontal" <?php echo 'horizontal' === $this->settings['lightbox_path'] ? "selected='selected'" : ''; ?>>Horizontal</option>
                 <option value="vertical" <?php echo 'vertical' === $this->settings['lightbox_path'] ? "selected='selected'" : ''; ?>>Vertical</option>
               </select>
 
-              <div class="outofthebox-option-title">Lightbox <?php esc_html_e('Image Source', 'wpcloudplugins'); ?></div>
-              <div class="outofthebox-option-description"><?php esc_html_e('Select the source of the images. Large thumbnails will load fast once created on your server, (raw) original files can take some time to load', 'wpcloudplugins'); ?>.</div>
+              <div class="outofthebox-option-title">Lightbox <?php esc_html_e('Image Source', 'wpcloudplugins'); ?>
+                <?php help_button('Lightbox'.esc_html__('Image Source', 'wpcloudplugins'), esc_html__('Select the source of the images. Large thumbnails load fast, orignal files will take some time to load.', 'wpcloudplugins'));
+                ?>                       
+              </div>
               <select type="text" name="out_of_the_box_settings[loadimages]" id="loadimages">
                 <option value="thumbnail" <?php echo 'thumbnail' === $this->settings['loadimages'] ? "selected='selected'" : ''; ?>><?php esc_html_e('Fast - Large preview thumbnails', 'wpcloudplugins'); ?></option>
                 <option value="original" <?php echo 'original' === $this->settings['loadimages'] ? "selected='selected'" : ''; ?>><?php esc_html_e('Slow - Show original files', 'wpcloudplugins'); ?></option>
               </select>
 
               <div class="outofthebox-option-title"><?php esc_html_e('Allow Mouse Click on Image', 'wpcloudplugins'); ?>
+                <?php help_button(esc_html__('Allow Mouse Click on Image', 'wpcloudplugins'), esc_html__('Should people be able to access the right click context menu to e.g. save the image?', 'wpcloudplugins'));
+                ?>  
+
                 <div class="outofthebox-onoffswitch">
                   <input type='hidden' value='No' name='out_of_the_box_settings[lightbox_rightclick]'/>
                   <input type="checkbox" name="out_of_the_box_settings[lightbox_rightclick]" id="lightbox_rightclick" class="outofthebox-onoffswitch-checkbox" <?php echo ('Yes' === $this->settings['lightbox_rightclick']) ? 'checked="checked"' : ''; ?>/>
                   <label class="outofthebox-onoffswitch-label" for="lightbox_rightclick"></label>
                 </div>
               </div>
-              <div class="outofthebox-option-description"><?php esc_html_e('Should people be able to access the right click context menu to e.g. save the image?', 'wpcloudplugins'); ?>.</div>
 
-              <div class="outofthebox-option-title"><?php esc_html_e('Header', 'wpcloudplugins'); ?></div>
-              <div class="outofthebox-option-description"><?php esc_html_e('When should the header containing title and action-menu be shown', 'wpcloudplugins'); ?>.</div>
+              <div class="outofthebox-option-title"><?php esc_html_e('Header', 'wpcloudplugins'); ?>
+                <?php help_button(esc_html__('Header', 'wpcloudplugins'), esc_html__('When should the header containing title and action-menu be shown.', 'wpcloudplugins'));
+                ?>                         
+              </div>
               <select type="text" name="out_of_the_box_settings[lightbox_showheader]" id="lightbox_showheader">
                 <option value="true" <?php echo 'true' === $this->settings['lightbox_showheader'] ? "selected='selected'" : ''; ?>><?php esc_html_e('Always', 'wpcloudplugins'); ?></option>
                 <option value="click" <?php echo 'click' === $this->settings['lightbox_showheader'] ? "selected='selected'" : ''; ?>><?php esc_html_e('Show after clicking on the Lightbox', 'wpcloudplugins'); ?></option>
@@ -343,8 +353,10 @@ function create_upload_button_for_custom_images($option)
                 <option value="false" <?php echo 'false' === $this->settings['lightbox_showheader'] ? "selected='selected'" : ''; ?>><?php esc_html_e('Never', 'wpcloudplugins'); ?></option>
               </select>  
 
-              <div class="outofthebox-option-title"><?php esc_html_e('Caption / Description', 'wpcloudplugins'); ?></div>
-              <div class="outofthebox-option-description"><?php esc_html_e('When should the description be shown in the Gallery Lightbox', 'wpcloudplugins'); ?>.</div>
+              <div class="outofthebox-option-title"><?php esc_html_e('Caption / Description', 'wpcloudplugins'); ?>
+                <?php help_button(esc_html__('Caption / Description', 'wpcloudplugins'), esc_html__('When should the description be shown in the Gallery Lightbox.', 'wpcloudplugins'));
+                ?>                  
+              </div>
               <select type="text" name="out_of_the_box_settings[lightbox_showcaption]" id="lightbox_showcaption">
                 <option value="true" <?php echo 'true' === $this->settings['lightbox_showcaption'] ? "selected='selected'" : ''; ?>><?php esc_html_e('Always', 'wpcloudplugins'); ?></option>
                 <option value="click" <?php echo 'click' === $this->settings['lightbox_showcaption'] ? "selected='selected'" : ''; ?>><?php esc_html_e('Show after clicking on the Lightbox', 'wpcloudplugins'); ?></option>
@@ -378,13 +390,15 @@ function create_upload_button_for_custom_images($option)
               
               <br/><br/>
               <div class="outofthebox-option-title"><?php esc_html_e('Load native MediaElement.js library', 'wpcloudplugins'); ?>
+                <?php help_button(esc_html__('Load native MediaElement.js library', 'wpcloudplugins'), esc_html__('Is the layout of the Media Player all mixed up and is it not initiating properly? If that is the case, you might be encountering a conflict between media player libraries on your site. To resolve this, enable this setting to load the native MediaElement.js library.', 'wpcloudplugins'));
+                ?>    
+
                 <div class="outofthebox-onoffswitch">
                   <input type='hidden' value='No' name='out_of_the_box_settings[mediaplayer_load_native_mediaelement]'/>
                   <input type="checkbox" name="out_of_the_box_settings[mediaplayer_load_native_mediaelement]" id="mediaplayer_load_native_mediaelement" class="outofthebox-onoffswitch-checkbox" <?php echo ('Yes' === $this->settings['mediaplayer_load_native_mediaelement']) ? 'checked="checked"' : ''; ?>/>
                   <label class="outofthebox-onoffswitch-label" for="mediaplayer_load_native_mediaelement"></label>
                 </div>
               </div>
-              <div class="outofthebox-option-description"><?php esc_html_e('Is the layout of the Media Player all mixed up an does is not initiate properly? If that is the case, you might be encountering a conflict between media player librarieson your site. To resolve this, enable this setting to load the native MediaElement.js library.', 'wpcloudplugins'); ?></div>
             </div>
 
             <div class="outofthebox-accordion-title outofthebox-option-title"><?php esc_html_e('Custom CSS', 'wpcloudplugins'); ?></div>
@@ -406,53 +420,57 @@ function create_upload_button_for_custom_images($option)
             <div class="outofthebox-accordion-title outofthebox-option-title"><?php esc_html_e('Global settings Automatically linked Private Folders', 'wpcloudplugins'); ?> </div>
             <div>
 
-              <div class="oftb-warning">
-                <i><strong>NOTICE</strong>: <?php esc_html_e('The following settings are only used for all shortcodes with automatically linked Private Folders', 'wpcloudplugins'); ?>. </i>
+              <div class="wpcp-warning">
+                <i><strong>NOTICE</strong>: <?php esc_html_e('The following settings are only used for all shortcodes with automatically linked Private Folders,  unless specified otherwise in the shortcode configuration.', 'wpcloudplugins'); ?> </i>
               </div>
 
 
               <div class="outofthebox-option-title"><?php esc_html_e('Create Private Folders on registration', 'wpcloudplugins'); ?>
+                <?php help_button(esc_html__('Create Private Folders on registration', 'wpcloudplugins'), esc_html__('Automatically create the users Private Folders after it has been registered on the site.', 'wpcloudplugins'));
+                ?>                   
                 <div class="outofthebox-onoffswitch">
                   <input type='hidden' value='No' name='out_of_the_box_settings[userfolder_oncreation]'/>
                   <input type="checkbox" name="out_of_the_box_settings[userfolder_oncreation]" id="userfolder_oncreation" class="outofthebox-onoffswitch-checkbox" <?php echo ('Yes' === $this->settings['userfolder_oncreation']) ? 'checked="checked"' : ''; ?>/>
                   <label class="outofthebox-onoffswitch-label" for="userfolder_oncreation"></label>
                 </div>
               </div>
-              <div class="outofthebox-option-description"><?php esc_html_e('Create a new Private Folders automatically after a new user has been created', 'wpcloudplugins'); ?>.</div>
 
-              <div class="outofthebox-option-title"><?php esc_html_e('Create all Private Folders on first visit', 'wpcloudplugins'); ?>
+              <div class="outofthebox-option-title"><?php esc_html_e('Create all Private Folders the 1st time a module is used', 'wpcloudplugins'); ?>
+                <?php help_button(esc_html__('Create all Private Folders the 1st time a module is used', 'wpcloudplugins'), esc_html__('Create all the Private Folders for users with access to the modules that have this feature enabled.', 'wpcloudplugins'));
+                ?>                   
                 <div class="outofthebox-onoffswitch">
                   <input type='hidden' value='No' name='out_of_the_box_settings[userfolder_onfirstvisit]'/>
                   <input type="checkbox" name="out_of_the_box_settings[userfolder_onfirstvisit]" id="userfolder_onfirstvisit" class="outofthebox-onoffswitch-checkbox" <?php echo ('Yes' === $this->settings['userfolder_onfirstvisit']) ? 'checked="checked"' : ''; ?>/>
                   <label class="outofthebox-onoffswitch-label" for="userfolder_onfirstvisit"></label>
                 </div>
               </div>
-              <div class="outofthebox-option-description"><?php esc_html_e('Create all Private Folders on first visit', 'wpcloudplugins'); ?>.</div>
-              <div class="oftb-warning">
+              <div class="wpcp-warning">
                 <i><strong>NOTICE</strong>: Creating User Folders takes around 1 sec per user, so it isn't recommended to create those on first visit when you have tons of users.</i>
               </div>
 
 
               <div class="outofthebox-option-title"><?php esc_html_e('Update Private Folders after profile update', 'wpcloudplugins'); ?>
+                <?php help_button(esc_html__('Update Private Folders after profile update', 'wpcloudplugins'), esc_html__('If needed, update the name of the Private Folder for an user after they have updated their profile.', 'wpcloudplugins'));
+                ?>                        
                 <div class="outofthebox-onoffswitch">
                   <input type='hidden' value='No' name='out_of_the_box_settings[userfolder_update]'/>
                   <input type="checkbox" name="out_of_the_box_settings[userfolder_update]" id="userfolder_update" class="outofthebox-onoffswitch-checkbox" <?php echo ('Yes' === $this->settings['userfolder_update']) ? 'checked="checked"' : ''; ?>/>
                   <label class="outofthebox-onoffswitch-label" for="userfolder_update"></label>
                 </div>
               </div>
-              <div class="outofthebox-option-description"><?php esc_html_e('Update the folder name of the user after they have updated their profile', 'wpcloudplugins'); ?>.</div>
 
               <div class="outofthebox-option-title"><?php esc_html_e('Remove Private Folders after account removal', 'wpcloudplugins'); ?>
+                <?php help_button(esc_html__('Remove Private Folders after account removal', 'wpcloudplugins'), esc_html__('Try to remove Private Folders after they are deleted', 'wpcloudplugins'));
+                ?>                    
                 <div class="outofthebox-onoffswitch">
                   <input type='hidden' value='No' name='out_of_the_box_settings[userfolder_remove]'/>
                   <input type="checkbox" name="out_of_the_box_settings[userfolder_remove]" id="userfolder_remove" class="outofthebox-onoffswitch-checkbox" <?php echo ('Yes' === $this->settings['userfolder_remove']) ? 'checked="checked"' : ''; ?> />
                   <label class="outofthebox-onoffswitch-label" for="userfolder_remove"></label>
                 </div>
               </div>
-              <div class="outofthebox-option-description"><?php esc_html_e('Try to remove Private Folders after they are deleted', 'wpcloudplugins'); ?>.</div>
 
               <div class="outofthebox-option-title"><?php esc_html_e('Name Template', 'wpcloudplugins'); ?></div>
-              <div class="outofthebox-option-description"><?php echo esc_html__('Template name for automatically created Private Folders.', 'wpcloudplugins').' '.esc_html__('The naming template can also be set per shortcode individually.', 'wpcloudplugins').' '.sprintf(esc_html__('Available placeholders: %s', 'wpcloudplugins'), '').'<code>%user_login%</code>,  <code>%user_firstname%</code>, <code>%user_lastname%</code>, <code>%user_email%</code>, <code>%display_name%</code>, <code>%ID%</code>, <code>%user_role%</code>, <code>%yyyy-mm-dd%</code>, <code>%hh:mm%</code>, <code>%uniqueID%</code>, <code>%directory_separator% (/)</code>'; ?>.</div>
+              <div class="outofthebox-option-description"><?php echo esc_html__('Template name for automatically created Private Folders.', 'wpcloudplugins').' '.esc_html__('The naming template can also be set per shortcode individually.', 'wpcloudplugins').' '.sprintf(esc_html__('Available placeholders: %s', 'wpcloudplugins'), '').'<code>%user_login%</code>,  <code>%user_firstname%</code>, <code>%user_lastname%</code>, <code>%user_email%</code>, <code>%display_name%</code>, <code>%ID%</code>, <code>%user_role%</code>, <code>%usermeta_{key}%</code>, <code>%yyyy-mm-dd%</code>, <code>%hh:mm%</code>, <code>%uniqueID%</code>, <code>%directory_separator% (/)</code>'; ?>.</div>
               <input class="outofthebox-option-input-large" type="text" name="out_of_the_box_settings[userfolder_name]" id="userfolder_name" value="<?php echo esc_attr($this->settings['userfolder_name']); ?>">
 
                           </div>
@@ -460,12 +478,14 @@ function create_upload_button_for_custom_images($option)
             <div class="outofthebox-accordion-title outofthebox-option-title"><?php esc_html_e('Global settings Manually linked Private Folders', 'wpcloudplugins'); ?> </div>
             <div>
 
-              <div class="oftb-warning">
+              <div class="wpcp-warning">
                 <i><strong>NOTICE</strong>: <?php echo sprintf(esc_html__('You can manually link users to their Private Folder via the %s[Link Private Folders]%s menu page', 'wpcloudplugins'), '<a href="'.admin_url('admin.php?page=OutoftheBox_settings_linkusers').'" target="_blank">', '</a>'); ?>. </i>
               </div>
 
-              <div class="outofthebox-option-title"><?php esc_html_e('Access Forbidden notice', 'wpcloudplugins'); ?></div>
-              <div class="outofthebox-option-description"><?php esc_html_e("Message that is displayed when an user is visiting a shortcode with the Private Folders feature set to 'Manual' mode while it doesn't have Private Folder linked to its account", 'wpcloudplugins'); ?>.</div>
+              <div class="outofthebox-option-title"><?php esc_html_e('Access Forbidden notice', 'wpcloudplugins'); ?>
+                <?php help_button(esc_html__('Access Forbidden notice', 'wpcloudplugins'), esc_html__("Message that is displayed when an user is visiting a shortcode with the Private Folders feature set to 'Manual' mode while it doesn't have Private Folder linked to its account", 'wpcloudplugins'));
+                ?>    
+              </div>
 
               <?php
               ob_start();
@@ -489,7 +509,7 @@ function create_upload_button_for_custom_images($option)
                 <div class="outofthebox-accordion-title outofthebox-option-title"><?php esc_html_e('Private Folders in WP Admin Dashboard', 'wpcloudplugins'); ?> </div>
                 <div>
 
-                  <div class="oftb-warning">
+                  <div class="wpcp-warning">
                     <i><strong>NOTICE</strong>: <?php esc_html_e('This setting only restrict access of the File Browsers in the Admin Dashboard (e.g. the ones in the Shortcode Builder and the File Browser menu). To enable Private Folders for your own Shortcodes, use the Shortcode Builder', 'wpcloudplugins'); ?>. </i>
                   </div>
 
@@ -558,7 +578,7 @@ function create_upload_button_for_custom_images($option)
 
                     <br/><br/>
                     <div class="outofthebox-option-title"><?php esc_html_e('Full Access', 'wpcloudplugins'); ?></div>
-                    <div class="outofthebox-option-description"><?php esc_html_e('By default only Administrator users will be able to navigate through all Private Folders', 'wpcloudplugins'); ?>. <?php esc_html_e('When you want other User Roles to be able do browse to the Private Folders as well, please check them below', 'wpcloudplugins'); ?>.</div>
+                    <div class="outofthebox-option-description"><?php esc_html_e('By default only Administrator users will be able to navigate through all Private Folders', 'wpcloudplugins'); ?>. <?php esc_html_e('When you want other User Roles to be able do browse trough all the Private Folders as well, please add them below', 'wpcloudplugins'); ?>.</div>
 
                     <?php
                     $selected = (isset($private_auto_folder['view_roles'])) ? $private_auto_folder['view_roles'] : [];
@@ -578,10 +598,6 @@ function create_upload_button_for_custom_images($option)
           <div class="outofthebox-tab-panel-header"><?php esc_html_e('Advanced', 'wpcloudplugins'); ?></div>
 
           <?php if (false === $network_wide_authorization) { ?>
-              <div class="outofthebox-option-title"><?php esc_html_e('"Lost Authorization" notification', 'wpcloudplugins'); ?></div>
-              <div class="outofthebox-option-description"><?php esc_html_e('If the plugin somehow loses its authorization, a notification email will be send to the following email address', 'wpcloudplugins'); ?>:</div>
-              <input class="outofthebox-option-input-large" type="text" name="out_of_the_box_settings[lostauthorization_notification]" id="lostauthorization_notification" value="<?php echo esc_attr($this->settings['lostauthorization_notification']); ?>">
-
               <div class="outofthebox-option-title"><?php esc_html_e('Own App', 'wpcloudplugins'); ?>
                 <div class="outofthebox-onoffswitch">
                   <input type='hidden' value='No' name='out_of_the_box_settings[dropbox_app_own]'/>
@@ -592,25 +608,34 @@ function create_upload_button_for_custom_images($option)
 
               <div class="outofthebox-suboptions own-app <?php echo (empty($this->settings['dropbox_app_key']) || empty($this->settings['dropbox_app_secret'])) ? 'hidden' : ''; ?> ">
                 <div class="outofthebox-option-description">
+
                   <strong>Using your own Dropbox App is <u>optional</u></strong>. For an easy setup you can just use the default App of the plugin itself by leaving the Key and Secret empty. The advantage of using your own app is limited. If you decided to create your own Dropbox App anyway, please enter your settings. In the <a href="http://goo.gl/dsT71e" target="_blank">documentation</a> you can find how you can create a Dropbox App.
                   <br/><br/>
-                  <div class="oftb-warning">
+
+                  <div class="wpcp-warning">
                     <i><strong>NOTICE</strong>: If you encounter any issues when trying to use your own App, please fall back on the default App by disabling this setting.</i>
                   </div>
                 </div>
 
-                <div class="outofthebox-option-title">Dropbox App Key</div>
-                <div class="outofthebox-option-description"><?php esc_html_e('Only if you want to use your own App, insert your App Key here', 'wpcloudplugins'); ?>.</div>
+                <div class="outofthebox-option-title">Dropbox App Key
+                  <?php help_button('Dropbox App Key', esc_html__('Only if you want to use your own App, insert your App Key here', 'wpcloudplugins'));
+                  ?>        
+                </div>
                 <input class="outofthebox-option-input-large" type="text" name="out_of_the_box_settings[dropbox_app_key]" id="dropbox_app_key" value="<?php echo esc_attr($this->settings['dropbox_app_key']); ?>" placeholder="<--- <?php esc_html_e('Leave empty for easy setup', 'wpcloudplugins'); ?> --->" >
 
-                <div class="outofthebox-option-title">Dropbox App Secret</div>
-                <div class="outofthebox-option-description"><?php esc_html_e('If you want to use your own App, insert your App Secret here', 'wpcloudplugins'); ?>.</div>
+                <div class="outofthebox-option-title">Dropbox App Secret
+                  <?php help_button('Dropbox App Secret', esc_html__('If you want to use your own App, insert your App Secret here', 'wpcloudplugins'));
+                  ?>                    
+                </div>
+
                 <input class="outofthebox-option-input-large" type="text" name="out_of_the_box_settings[dropbox_app_secret]" id="dropbox_app_secret" value="<?php echo esc_attr($this->settings['dropbox_app_secret']); ?>" placeholder="<--- <?php esc_html_e('Leave empty for easy setup', 'wpcloudplugins'); ?> --->" >   
 
                 <div>
-                  <div class="outofthebox-option-title">OAuth 2.0 Redirect URI</div>
-                  <div class="outofthebox-option-description"><?php esc_html_e('Set the redirect URI in your application to the following', 'wpcloudplugins'); ?>:</div>
-                  <code style="user-select:initial">
+                  <div class="outofthebox-option-title">OAuth 2.0 Redirect URI
+                    <?php help_button('OAuth 2.0 Redirect URI', esc_html__('Set the redirect URI in your application to the following uri:', 'wpcloudplugins'));
+                    ?>     
+                  </div>
+                    <code style="user-select:initial">
                     <?php
                     if ($this->get_app()->has_plugin_own_app()) {
                         echo $this->get_app()->get_redirect_uri();
@@ -622,13 +647,14 @@ function create_upload_button_for_custom_images($option)
                 </div>
 
                 <div class="outofthebox-option-title"><?php esc_html_e('Use App Folder', 'wpcloudplugins'); ?>
+                  <?php help_button(esc_html__('Use App Folder', 'wpcloudplugins'), esc_html__('Is your App configured to only access the App specific folder?', 'wpcloudplugins'));
+                  ?>     
                   <div class="outofthebox-onoffswitch">
                     <input type='hidden' value='No' name='out_of_the_box_settings[use_app_folder]'/>
                     <input type="checkbox" name="out_of_the_box_settings[use_app_folder]" id="use_app_folder" class="outofthebox-onoffswitch-checkbox" <?php echo ('Yes' === $this->settings['use_app_folder']) ? 'checked="checked"' : ''; ?>/>
                     <label class="outofthebox-onoffswitch-label" for="use_app_folder"></label>
                   </div>
                 </div>
-                <div class="outofthebox-option-description"><?php esc_html_e('Is your App configured to only access the App specific folder', 'wpcloudplugins'); ?>?</div>
 
               </div>
 
@@ -637,15 +663,18 @@ function create_upload_button_for_custom_images($option)
               ?>
 
               <div class="outofthebox-option-title"><?php esc_html_e('Business Accounts', 'wpcloudplugins'); ?> | <?php esc_html_e('Dropbox Team Folders', 'wpcloudplugins'); ?>
+
+            <?php help_button(esc_html__('Dropbox Team Folders', 'wpcloudplugins'), esc_html__('Allows you to access your Dropbox Team Folders', 'wpcloudplugins'));
+            ?>  
+
                 <div class="outofthebox-onoffswitch">
                   <input type='hidden' value='No' name='out_of_the_box_settings[use_team_folders]'/>
                   <input type="checkbox" name="out_of_the_box_settings[use_team_folders]" id="use_team_folders" class="outofthebox-onoffswitch-checkbox" <?php echo ('Yes' === $this->settings['use_team_folders']) ? 'checked="checked"' : ''; ?>/>
                   <label class="outofthebox-onoffswitch-label" for="use_team_folders"></label>
                 </div>
               </div>
-              <div class="outofthebox-option-description"><?php esc_html_e('Allows you to access your Dropbox Team Folders', 'wpcloudplugins'); ?>.</div>
 
-              <div class="oftb-warning">
+              <div class="wpcp-warning">
                 <i><strong>NOTICE</strong>: <?php esc_html_e('Please check your existing Shortcodes and Manually linked Private Folders when changing this setting. Your root folder will not longer be your Personal Folder when Team Folders are enabled', 'wpcloudplugins'); ?>.</i>
               </div>
 
@@ -654,66 +683,67 @@ function create_upload_button_for_custom_images($option)
           }
           ?>
           <div class="outofthebox-option-title"><?php esc_html_e('Load Javascripts on all pages', 'wpcloudplugins'); ?>
+            <?php help_button(esc_html__('Load Javascripts on all pages', 'wpcloudplugins'), esc_html__('By default the plugin will only load it scripts when the shortcode is present on the page. If you are dynamically loading content via AJAX calls and the plugin does not show up, please enable this setting', 'wpcloudplugins'));
+            ?>               
             <div class="outofthebox-onoffswitch">
               <input type='hidden' value='No' name='out_of_the_box_settings[always_load_scripts]'/>
               <input type="checkbox" name="out_of_the_box_settings[always_load_scripts]" id="always_load_scripts" class="outofthebox-onoffswitch-checkbox" <?php echo ('Yes' === $this->settings['always_load_scripts']) ? 'checked="checked"' : ''; ?> />
               <label class="outofthebox-onoffswitch-label" for="always_load_scripts"></label>
             </div>
-            <div class="outofthebox-option-description"><?php esc_html_e('By default the plugin will only load it scripts when the shortcode is present on the page. If you are dynamically loading content via AJAX calls and the plugin does not show up, please enable this setting', 'wpcloudplugins'); ?>.</div>
           </div>
-
-          <div class="outofthebox-option-title"><?php esc_html_e('Enable Font Awesome Library v4 compatibility', 'wpcloudplugins'); ?>
-            <div class="outofthebox-onoffswitch">
-              <input type='hidden' value='No' name='out_of_the_box_settings[fontawesomev4_shim]'/>
-              <input type="checkbox" name="out_of_the_box_settings[fontawesomev4_shim]" id="fontawesomev4_shim" class="outofthebox-onoffswitch-checkbox" <?php echo ('Yes' === $this->settings['fontawesomev4_shim']) ? 'checked="checked"' : ''; ?> />
-              <label class="outofthebox-onoffswitch-label" for="fontawesomev4_shim"></label>
-            </div>
-            <div class="outofthebox-option-description"><?php esc_html_e('If your theme is loading the old Font Awesome icon library (v4), it can cause conflict with the (v5) icons of this plugin. If you are having trouble with the icons, please enable this setting for backwards compatibility', 'wpcloudplugins'); ?>. <?php esc_html_e('To disable the Font Awesome library of this plugin completely, add this to your wp-config.php file', 'wpcloudplugins'); ?>: <code>define('WPCP_DISABLE_FONTAWESOME', true);</code></div>
-          </div>               
+             
 
           <div class="outofthebox-option-title"><?php esc_html_e('Enable Gzip compression', 'wpcloudplugins'); ?>
+            <?php help_button(esc_html__('Enable Gzip compression', 'wpcloudplugins'), esc_html__("Enables gzip-compression if the visitor's browser can handle it. This will increase the performance of the plugin if you are displaying large amounts of files and it reduces bandwidth usage as well. It uses the PHP ob_gzhandler() callback. Please use this setting with caution. Always test if the plugin still works on the Front-End as some servers are already configured to gzip content!", 'wpcloudplugins'));
+            ?>     
             <div class="outofthebox-onoffswitch">
               <input type='hidden' value='No' name='out_of_the_box_settings[gzipcompression]'/>
               <input type="checkbox" name="out_of_the_box_settings[gzipcompression]" id="gzipcompression" class="outofthebox-onoffswitch-checkbox" <?php echo ('Yes' === $this->settings['gzipcompression']) ? 'checked="checked"' : ''; ?> />
               <label class="outofthebox-onoffswitch-label" for="gzipcompression"></label>
             </div>
           </div>
-          <div class="outofthebox-option-description">Enables gzip-compression if the visitor's browser can handle it. This will increase the performance of the plugin if you are displaying large amounts of files and it reduces bandwidth usage as well. It uses the PHP ob_gzhandler() callback.</div>
-          <div class="oftb-warning">
-            <i><strong>NOTICE</strong>: Please use this setting with caution. Always test if the plugin still works on the Front-End as some servers are already configured to gzip content!</i>
-          </div>
 
           <div class="outofthebox-option-title"><?php esc_html_e('Nonce Validation', 'wpcloudplugins'); ?>
+            <?php help_button(esc_html__('Nonce Validation', 'wpcloudplugins'), esc_html__('The plugin uses, among others, the WordPress Nonce system to protect you against several types of attacks including CSRF. Disable this in case you are encountering a conflict with a plugin that alters this system', 'wpcloudplugins'));
+            ?> 
+
             <div class="outofthebox-onoffswitch">
               <input type='hidden' value='No' name='out_of_the_box_settings[nonce_validation]'/>
               <input type="checkbox" name="out_of_the_box_settings[nonce_validation]" id="nonce_validation" class="outofthebox-onoffswitch-checkbox" <?php echo ('Yes' === $this->settings['nonce_validation']) ? 'checked="checked"' : ''; ?> />
               <label class="outofthebox-onoffswitch-label" for="nonce_validation"></label>
             </div></div>
-          <div class="outofthebox-option-description"><?php esc_html_e('The plugin uses, among others, the WordPress Nonce system to protect you against several types of attacks including CSRF. Disable this in case you are encountering a conflict with a plugin that alters this system', 'wpcloudplugins'); ?>. </div>
-          <div class="oftb-warning">
+
+          <div class="wpcp-warning">
             <i><strong>NOTICE</strong>: Please use this setting with caution! Only disable it when really necessary.</i>
           </div>
 
-          <div class="outofthebox-option-title"><?php esc_html_e('Max Age Cache Request', 'wpcloudplugins'); ?></div>
-          <div class="outofthebox-option-description"><?php esc_html_e('How long are the requests to view the plugin cached? Number is in minutes', 'wpcloudplugins'); ?>.</div>
+          <div class="outofthebox-option-title"><?php esc_html_e('Max Age Cache Request', 'wpcloudplugins'); ?>
+            <?php help_button(esc_html__('Max Age Cache Request', 'wpcloudplugins'), esc_html__('How long are the requests to view the plugin cached? Number is in minutes', 'wpcloudplugins'));
+            ?> 
+          </div>
           <input type="text" name="out_of_the_box_settings[request_cache_max_age]" id="request_cache_max_age" value="<?php echo esc_attr($this->settings['request_cache_max_age']); ?>" maxlength="3" size="3" >   <?php esc_html_e('Minutes'); ?>
 
-          <div class="outofthebox-option-title"><?php esc_html_e('Download method', 'wpcloudplugins'); ?></div>
-          <div class="outofthebox-option-description"><?php esc_html_e('Select the method that should be used to download your files. Default is to redirect the user to a temporarily url. If you want to use your server as a proxy just set it to Download via Server', 'wpcloudplugins'); ?>.</div>
+          <div class="outofthebox-option-title"><?php esc_html_e('Download method', 'wpcloudplugins'); ?>
+            <?php help_button(esc_html__('Download method', 'wpcloudplugins'), esc_html__('Select the method that should be used to download your files. Default is to redirect the user to a temporarily url. If you want to use your server as a proxy just set it to Download via Server', 'wpcloudplugins'));
+            ?>                      
+          </div>
+
           <select type="text" name="out_of_the_box_settings[download_method]" id="download_method">
             <option value="redirect" <?php echo 'redirect' === $this->settings['download_method'] ? "selected='selected'" : ''; ?>><?php esc_html_e('Redirect to download url (fast)', 'wpcloudplugins'); ?></option>
             <option value="proxy" <?php echo 'proxy' === $this->settings['download_method'] ? "selected='selected'" : ''; ?>><?php esc_html_e('Use your Server as proxy (slow)', 'wpcloudplugins'); ?></option>
           </select>   
 
           <div class="outofthebox-option-title"><?php esc_html_e('Delete settings on Uninstall', 'wpcloudplugins'); ?>
+            <?php help_button(esc_html__('Delete settings on Uninstall', 'wpcloudplugins'), esc_html__('When you uninstall the plugin, what do you want to do with your settings? You can save them for next time, or wipe them back to factory settings.', 'wpcloudplugins'));
+            ?>              
             <div class="outofthebox-onoffswitch">
               <input type='hidden' value='No' name='out_of_the_box_settings[uninstall_reset]'/>
               <input type="checkbox" name="out_of_the_box_settings[uninstall_reset]" id="uninstall_reset" class="outofthebox-onoffswitch-checkbox" <?php echo ('Yes' === $this->settings['uninstall_reset']) ? 'checked="checked"' : ''; ?> />
               <label class="outofthebox-onoffswitch-label" for="uninstall_reset"></label>
             </div>
             </div>
-          <div class="outofthebox-option-description"><?php esc_html_e('When you uninstall the plugin, what do you want to do with your settings? You can save them for next time, or wipe them back to factory settings.', 'wpcloudplugins'); ?>. </div>
-          <div class="oftb-warning">
+
+          <div class="wpcp-warning">
             <i><strong>NOTICE</strong>: <?php echo esc_html__('When you reset the settings, the plugin will not longer be linked to your accounts, but their authorization will not be revoked', 'wpcloudplugins').'. '.esc_html__('You can revoke the authorization via the General tab', 'wpcloudplugins').'.'; ?></a></i>
           </div>
 
@@ -731,10 +761,10 @@ function create_upload_button_for_custom_images($option)
 
               <div class="shareon shareon-settings">
                 <?php foreach ($this->settings['share_buttons'] as $button => $value) {
-              $title = ucfirst($button);
-              echo "<button type='button' class='wpcp-shareon-toggle-button {$button} shareon-{$value} ' title='{$title}'></button>";
-              echo "<input type='hidden' value='{$value}' name='out_of_the_box_settings[share_buttons][{$button}]'/>";
-          }
+                $title = ucfirst($button);
+                echo "<button type='button' class='wpcp-shareon-toggle-button {$button} shareon-{$value} ' title='{$title}'></button>";
+                echo "<input type='hidden' value='{$value}' name='out_of_the_box_settings[share_buttons][{$button}]'/>";
+            }
                 ?>
               </div>
             </div>
@@ -762,12 +792,12 @@ function create_upload_button_for_custom_images($option)
               </div>
 
               <div class="outofthebox-suboptions option bitly" <?php echo 'Bit.ly' !== $this->settings['shortlinks'] ? "style='display:none;'" : ''; ?>>
-                <div class="outofthebox-option-description"><a href="https://bitly.com/a/sign_up" target="_blank"><?php esc_html_e('Sign up for Bitly', 'wpcloudplugins'); ?></a> and <a href="http://bitly.com/a/your_api_key" target="_blank">generate an API key</a></div>
+                <div class="outofthebox-option-description"><a href="https://bitly.com/a/sign_up" target="_blank"><?php esc_html_e('Sign up for Bitly', 'wpcloudplugins'); ?></a> and <a href="http://bitly.com/a/your_api_key" target="_blank">generate an Access Token</a></div>
 
                 <div class="outofthebox-option-title">Bitly Login</div>
                 <input class="outofthebox-option-input-large" type="text" name="out_of_the_box_settings[bitly_login]" id="bitly_login" value="<?php echo esc_attr($this->settings['bitly_login']); ?>">
 
-                <div class="outofthebox-option-title">Bitly API key</div>
+                <div class="outofthebox-option-title">Bitly Access Token</div>
                 <input class="outofthebox-option-input-large" type="text" name="out_of_the_box_settings[bitly_apikey]" id="bitly_apikey" value="<?php echo esc_attr($this->settings['bitly_apikey']); ?>">
               </div> 
 
@@ -810,7 +840,7 @@ function create_upload_button_for_custom_images($option)
               <div class="outofthebox-option-title"><?php echo 'VAST XML Tag Url'; ?></div>
               <input class="outofthebox-option-input-large" type="text" name="out_of_the_box_settings[mediaplayer_ads_tagurl]" id="mediaplayer_ads_tagurl" value="<?php echo esc_attr($this->settings['mediaplayer_ads_tagurl']); ?>" placeholder="<?php echo esc_html__('Leave empty to disable Ads', 'wpcloudplugins'); ?>" />
 
-              <div class="oftb-warning">
+              <div class="wpcp-warning">
                 <i><strong><?php esc_html_e('NOTICE', 'wpcloudplugins'); ?></strong>: <?php esc_html_e('If you are unable to see the example VAST url below, please make sure you do not have an ad blocker enabled.', 'wpcloudplugins'); ?>.</i>
               </div>
 
@@ -825,9 +855,11 @@ function create_upload_button_for_custom_images($option)
               </div>
 
               <div class="outofthebox-suboptions ads_skipable <?php echo ('Yes' === $this->settings['mediaplayer_ads_skipable']) ? '' : 'hidden'; ?> ">
-                <div class="outofthebox-option-title"><?php esc_html_e('Skip button visible after (seconds)', 'wpcloudplugins'); ?></div>
+                <div class="outofthebox-option-title"><?php esc_html_e('Skip button visible after (seconds)', 'wpcloudplugins'); ?>
+                  <?php help_button(esc_html__('Skip button visible after (seconds)', 'wpcloudplugins'), esc_html__('Allow user to skip advertisment after after the following amount of seconds have elapsed', 'wpcloudplugins'));
+                  ?>                  
+                </div>
                 <input class="outofthebox-option-input-large" type="text" name="out_of_the_box_settings[mediaplayer_ads_skipable_after]" id="mediaplayer_ads_skipable_after" value="<?php echo esc_attr($this->settings['mediaplayer_ads_skipable_after']); ?>" placeholder="5">
-                <div class="outofthebox-option-description"><?php esc_html_e('Allow user to skip advertisment after after the following amount of seconds have elapsed', 'wpcloudplugins'); ?></div>
               </div>
             </div>
           </div>
@@ -839,6 +871,33 @@ function create_upload_button_for_custom_images($option)
         <div id="settings_notifications"  class="outofthebox-tab-panel">
 
           <div class="outofthebox-tab-panel-header"><?php esc_html_e('Notifications', 'wpcloudplugins'); ?></div>
+
+          <div class="outofthebox-accordion">
+            <div class="outofthebox-accordion-title outofthebox-option-title"><?php esc_html_e('Sender settings', 'wpcloudplugins'); ?>         </div>
+            <div>
+              <div class="outofthebox-option-title"><?php esc_html_e('From Name', 'wpcloudplugins'); ?>
+                <?php help_button(esc_html__('From Name', 'wpcloudplugins'), esc_html__('Enter the name you would like the notification email sent from, or use one of the available placeholders.', 'wpcloudplugins'));
+                ?>
+              </div>
+              <input class="outofthebox-option-input-large" type="text" name="out_of_the_box_settings[notification_from_name]" id="notification_from_name" value="<?php echo esc_attr($this->settings['notification_from_name']); ?>">  
+
+              <div class="outofthebox-option-title"><?php esc_html_e('From Email', 'wpcloudplugins'); ?>
+                <?php help_button(esc_html__('From Email', 'wpcloudplugins'), esc_html__('Enter an authorized email address you would like the notification email sent from. To avoid deliverability issues, always use your site domain in the from email.', 'wpcloudplugins'));
+                ?>               
+              </div>
+              <input class="outofthebox-option-input-large" type="text" name="out_of_the_box_settings[notification_from_email]" id="notification_from_email" value="<?php echo esc_attr($this->settings['notification_from_email']); ?>">  
+            </div>
+          </div>
+
+          <?php if (false === $network_wide_authorization) { ?>
+          <div class="outofthebox-accordion">
+            <div class="outofthebox-accordion-title outofthebox-option-title"><?php esc_html_e('Lost Authorization notification', 'wpcloudplugins'); ?>         </div>
+            <div>
+              <div class="outofthebox-option-description"><?php esc_html_e('If the plugin somehow loses its authorization, a notification email will be send to the following email address', 'wpcloudplugins'); ?>:</div>
+              <input class="outofthebox-option-input-large" type="text" name="out_of_the_box_settings[lostauthorization_notification]" id="lostauthorization_notification" value="<?php echo esc_attr($this->settings['lostauthorization_notification']); ?>">  
+            </div>
+          </div>
+          <?php } ?>
 
           <div class="outofthebox-accordion">
             <div class="outofthebox-accordion-title outofthebox-option-title"><?php esc_html_e('Download Notifications', 'wpcloudplugins'); ?>         </div>
@@ -1003,6 +1062,7 @@ function create_upload_button_for_custom_images($option)
               <div class="outofthebox-option-description"><?php echo sprintf(esc_html__('Available placeholders: %s', 'wpcloudplugins'), ''); ?>
                 <code>%file_name%</code>, 
                 <code>%file_size%</code>, 
+                <code>%file_lastedited%</code>,                
                 <code>%file_icon%</code>, 
                 <code>%file_cloud_preview_url%</code>, 
                 <code>%file_cloud_shared_url%</code>, 
@@ -1145,6 +1205,8 @@ function create_upload_button_for_custom_images($option)
           <div id="message">
             <p><?php esc_html_e('Check the documentation of the plugin in case you encounter any problems or are looking for support.', 'wpcloudplugins'); ?></p>
             <div id='wpcp-open-docs-button' type='button' class='simple-button blue'><?php esc_html_e('Open Documentation', 'wpcloudplugins'); ?></div>
+            <br/><br/>
+            <div style='padding:56.25% 0 0 0;position:relative;'><iframe src='https://vimeo.com/showcase/9015621/embed' allowfullscreen loading="lazy" frameborder='0' style='position:absolute;top:0;left:0;width:100%;height:100%;'></iframe></div>            
           </div>
         </div>  
       </div>
@@ -1192,7 +1254,7 @@ function create_upload_button_for_custom_images($option)
       The authorization tokens will be stored, encrypted, on this server and is not accessible by the developer or any third party. When you use the Application, all communications are strictly between your server and the cloud storage service servers. The communication is encrypted and the communication will not go through WP Cloud Plugins servers. We do not collect and do not have access to your personal data.
       
       <br/><br/>
-      <i class="fas fa-shield-alt"></i> <?php echo sprintf(esc_html__('Read the full %sPrivacy Policy%s if you have any further privacy concerns.', 'wpcloudplugins'), '<a href="https://www.wpcloudplugins.com/privacy-policy/privacy-policy-out-of-the-box/">', '</a>'); ?></div>
+      <i class="eva eva-shield"></i> <?php echo sprintf(esc_html__('Read the full %sPrivacy Policy%s if you have any further privacy concerns.', 'wpcloudplugins'), '<a href="https://www.wpcloudplugins.com/privacy-policy/privacy-policy-out-of-the-box/">', '</a>'); ?></div>
     </div>
   </div>
   <!-- End Short Privacy Policy -->

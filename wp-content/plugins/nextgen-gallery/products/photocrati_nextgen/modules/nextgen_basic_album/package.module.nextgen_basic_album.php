@@ -692,6 +692,10 @@ class A_NextGen_Basic_Album_Controller extends Mixin_NextGen_Basic_Pagination
             // Let plugins modify the gallery
             $gallery = apply_filters('ngg_album_galleryobject', $gallery);
         }
+        // In at least one rare and so far impossible to reproduce circumstance it's possible for this controller to run
+        // before the following adapter is constructed and thus allowed to register its hook on the following filter below.
+        // This breaks the 'open child galleries in pro lightbox' feature.
+        new A_NextGen_Album_Child_Entities();
         $params['galleries'] = apply_filters('ngg_album_prepared_child_entity', $params['galleries'], $params['displayed_gallery']);
         $params['album'] = reset($this->albums);
         $params['albums'] = $this->albums;
@@ -795,7 +799,7 @@ class A_NextGen_Basic_Album_Routes extends Mixin
             // Get router
             $router = C_Router::get_instance();
             $app = $router->get_routed_app();
-            $slug = '/' . C_NextGen_Settings::get_instance()->router_param_slug;
+            $slug = '/' . C_NextGen_Settings::get_instance()->get('router_param_slug', 'nggallery');
             $app->rewrite("{*}{$slug}/page/{\\d}{*}", "{1}{$slug}/nggpage--{2}{3}", FALSE, TRUE);
             $app->rewrite("{*}{$slug}/pid--{*}", "{1}{$slug}/pid--{2}", FALSE, TRUE);
             // avoid conflicts with imagebrowser
@@ -809,7 +813,7 @@ class A_NextGen_Basic_Album_Routes extends Mixin
             // Get router
             $router = C_Router::get_instance();
             $app = $router->get_routed_app();
-            $slug = '/' . C_NextGen_Settings::get_instance()->router_param_slug;
+            $slug = '/' . C_NextGen_Settings::get_instance()->get('router_param_slug', 'nggallery');
             $app->rewrite("{*}{$slug}/album--{\\w}", "{1}{$slug}/{2}");
             $app->rewrite("{*}{$slug}/album--{\\w}/gallery--{\\w}", "{1}{$slug}/{2}/{3}");
             $app->rewrite("{*}{$slug}/album--{\\w}/gallery--{\\w}/{*}", "{1}{$slug}/{2}/{3}/{4}");
@@ -848,7 +852,7 @@ class A_NextGen_Basic_Album_Urls extends Mixin
     {
         $retval = $this->call_parent('remove_parameter', $key, $id, $url);
         $settings = C_NextGen_Settings::get_instance();
-        $param_slug = preg_quote($settings->router_param_slug, '#');
+        $param_slug = preg_quote($settings->get('router_param_slug', 'nggallery'), '#');
         if (preg_match("#(/{$param_slug}/.*)album--#", $retval, $matches)) {
             $retval = str_replace($matches[0], $matches[1], $retval);
         }

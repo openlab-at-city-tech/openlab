@@ -124,15 +124,16 @@ abstract class Menu_Abstract {
 	 * @return void
 	 */
 	protected function increment_widget_id() {
+		// Block widgets loaded via the REST API don't have full widget args.
 		if ( ! isset( $this->args['widget_id'] ) ) {
-			return;
+			$this->args['widget_id'] = wp_hash( microtime() );
 		}
-		if ( in_array( $this->args['widget_id'], self::$unique_widget_ids, true ) ) {
+		if ( \in_array( $this->args['widget_id'], self::$unique_widget_ids, true ) ) {
 			$suffix = 2;
 			do {
 				$alt_widget_id = $this->args['widget_id'] . "-$suffix";
 				$suffix ++;
-			} while ( in_array( $alt_widget_id, self::$unique_widget_ids, true ) );
+			} while ( \in_array( $alt_widget_id, self::$unique_widget_ids, true ) );
 			$this->args['widget_id'] = $alt_widget_id;
 			self::$unique_widget_ids[] = $alt_widget_id;
 		} else {

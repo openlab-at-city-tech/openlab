@@ -1163,6 +1163,7 @@ class Dropbox
         //the chunk to the upload session.
         while ($remaining > $chunkSize) {
             //Append the next chunk to the Upload session
+            set_time_limit(60);
             $sessionId = $this->appendUploadSession($dropboxFile, $sessionId, $uploaded, $chunkSize);
 
             //Update remaining and uploaded

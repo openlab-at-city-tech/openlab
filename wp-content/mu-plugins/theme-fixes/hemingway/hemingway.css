@@ -171,6 +171,9 @@ textarea::selection {
 .section.bg-dark a:hover {
 	color: #9e9e9e;
 }
+.gform_wrapper.gravity-theme fieldset legend {
+	color: rgb(68, 68, 68);
+}
 @media print {
 }
 

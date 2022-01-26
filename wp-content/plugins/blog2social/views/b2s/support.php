@@ -46,127 +46,84 @@
                                         <div class="clearfix"></div>
                                         <br>
                                         <div class="col-md-6">
-                                            <div class="row">
-                                                <div class="col-md-4 text-center">
-                                                    <a href="<?php echo B2S_Tools::getSupportLink('faq_installation'); ?>" class="b2s-color-black" target="_blank">
-                                                        <i class="glyphicon glyphicon-play-circle b2s-support-icon"></i>
+                                            <div class="col-md-12 b2s-community-container">
+                                                <h4 class="b2s-bold"><?php esc_html_e('Couldn\'t find your answer?', 'blog2social') ?></h4>
+                                                <p class="b2s-gray-text"><?php echo sprintf(__('To get technical help, please create your account to access the Blog2Social support community to find more answers or to ask your question. (<a href="%s" target="_blank">Info</a>)', 'blog2social'), 'https://community.blog2social.com/register'); ?></p>
+                                                <br>
+                                                <?php 
+                                                    require_once B2S_PLUGIN_DIR . 'includes/Options.php';
+                                                    $options = new B2S_Options(B2S_PLUGIN_BLOG_USER_ID);
+                                                    $registerdCommunity = $options->_getOption('registered_community');
+                                                    if($registerdCommunity == false) {
+                                                ?>
+                                                    <div class="b2s-community-register-form">
+                                                        <h5 class="b2s-bold"><?php echo esc_html_e('Create your support account to ask questions and get help', 'blog2social'); ?></h5>
+                                                        <div class="alert alert-danger b2s-community-error" data-error-type="invalid_data" style="display: none;"><?php esc_html_e('Unknown error has occurred. Please try again.', 'blog2social') ?></div>
+                                                        <div class="alert alert-danger b2s-community-error" data-error-type="invalid_password" style="display: none;"><?php esc_html_e('Enter at least 8 characters', 'blog2social') ?></div>
+                                                        <div class="alert alert-danger b2s-community-error" data-error-type="invalid_email" style="display: none;"><?php esc_html_e('Invalid email address', 'blog2social') ?></div>
+                                                        <div class="alert alert-danger b2s-community-error" data-error-type="exists_email" style="display: none;"><?php esc_html_e('Email address is taken.', 'blog2social') ?> <a target="_blank" href="<?php echo B2S_Tools::getSupportLink('community_lostpw') ?>"><?php esc_html_e('Forgot Password?', 'blog2social') ?></a></div>
+                                                        <div class="alert alert-danger b2s-community-error" data-error-type="exists_username" style="display: none;"><?php esc_html_e('Username is taken.', 'blog2social') ?> <a target="_blank" href="<?php echo B2S_Tools::getSupportLink('community_lostpw') ?>"><?php esc_html_e('Forgot Password?', 'blog2social') ?></a></div>
+                                                        <div class="input-group form-group">
+                                                            <span class="input-group-addon btn-light"><i class="glyphicon glyphicon-user"></i></span>
+                                                            <input type="text" id="b2s-community-username" name="fullname" placeholder="<?php esc_html_e('User name', 'blog2social') ?>" class="form-control">
+                                                        </div>
+                                                        <div class="input-group form-group">
+                                                            <span class="input-group-addon btn-light"><i class="glyphicon glyphicon-envelope"></i></span>
+                                                            <input type="text" id="b2s-community-email" autocomplete="off" name="email" placeholder="<?php esc_html_e('Email address', 'blog2social') ?>" class="form-control">
+                                                        </div>
+                                                        <div class="input-group form-group">
+                                                            <span class="input-group-addon btn-light"><i class="glyphicon glyphicon-lock"></i></span>
+                                                            <input type="password" id="b2s-community-password" autocomplete="new-password" name="password" placeholder="<?php esc_html_e('Create password', 'blog2social') ?>" class="form-control">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <input type="checkbox" id="b2s-community-terms"><label for="b2s-community-terms"><?php echo sprintf(__('I agree to the <a href="%s" target="_blank">community rules</a>', 'blog2social'), 'https://community.blog2social.com/help#community_rules') ?></label>
+                                                        </div>
+                                                        <input class="btn btn-primary width-100" id="b2s-community-register" type="button" value="<?php esc_html_e('Create Account', 'blog2social') ?>" disabled="disabeld">
+                                                    </div>
+                                                    <div class="b2s-community-register-loading" style="display:none;">
+                                                        <div class="b2s-loader-impulse b2s-loader-impulse-md"></div>
+                                                        <div class="clearfix"></div>
+                                                        <div class="text-center b2s-loader-text"><?php esc_html_e("Loading...", "blog2social"); ?></div>
+                                                    </div>
+                                                    <div class="b2s-community-register-success text-center alert alert-success" style="display:none;">
+                                                        <p class="b2s-bold"><?php esc_html_e('Yay :) You successfully registered for the Blog2Social Community!', 'blog2social') ?></p>
                                                         <br>
-                                                        <?php esc_html_e('First Steps', 'blog2social') ?>
-                                                    </a>
-                                                </div>
-                                                <div class="col-md-4 text-center">
-                                                    <a href="<?php echo B2S_Tools::getSupportLink('faq_sharing'); ?>" class="b2s-color-black" target="_blank">
-                                                        <i class="glyphicon glyphicon-share b2s-support-icon"></i>
-                                                        <br>
-                                                        <?php esc_html_e('Sharing', 'blog2social') ?>
-                                                    </a>
-                                                </div>
-                                                <div class="col-md-4 text-center">
-                                                    <a href="<?php echo B2S_Tools::getSupportLink('faq_network'); ?>" class="b2s-color-black" target="_blank">
-                                                        <i class="glyphicon glyphicon-user b2s-support-icon"></i>
-                                                        <br>
-                                                        <?php esc_html_e('Social Networks', 'blog2social') ?>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <br>
-                                            <div class="row">
-                                                <div class="col-md-4 text-center">
-                                                    <a href="<?php echo B2S_Tools::getSupportLink('faq_licence'); ?>" class="b2s-color-black" target="_blank">
-                                                        <i class="glyphicon glyphicon-usd b2s-support-icon"></i>
-                                                        <br>
-                                                        <?php esc_html_e('Licensing', 'blog2social') ?>
-                                                    </a>
-                                                </div>
-                                                <div class="col-md-4 text-center">
-                                                    <a href="<?php echo B2S_Tools::getSupportLink('faq_troubleshooting'); ?>" class="b2s-color-black" target="_blank">
-                                                        <i class="glyphicon glyphicon-warning-sign b2s-support-icon"></i>
-                                                        <br>
-                                                        <?php esc_html_e('Troubleshooting for Error Messages', 'blog2social') ?>
-                                                    </a>
-                                                </div>
-                                                <div class="col-md-4 text-center">
-                                                    <a href="<?php echo B2S_Tools::getSupportLink('faq_direct'); ?>" class="b2s-color-black" target="_blank">
-                                                        <i class="glyphicon glyphicon-globe b2s-support-icon"></i>
-                                                        <br>
-                                                        <?php esc_html_e('Other topics', 'blog2social') ?>
-                                                    </a>
-                                                </div>
+                                                        <a target="_blank" href="<?php echo B2S_Tools::getSupportLink('community') ?>" class="btn btn-primary"><?php esc_html_e('Go to the Blog2Social Community', 'blog2social') ?></a>
+                                                    </div>
+                                                    <br>
+                                                <?php } ?>
+                                                <a target="_blank" href="<?php echo B2S_Tools::getSupportLink('community') ?>" class="btn btn-success b2s-community-btn"><?php esc_html_e('Browse the Blog2Social support community', 'blog2social') ?></a>
+                                                <?php if($registerdCommunity == false) { ?>
+                                                    <br><br>
+                                                    <p><?php echo sprintf(__('<b>Already registered?</b> <a href="%s" target="_blank">Login to your support account</a> to ask questions or join the discussion.', 'blog2social'), 'https://community.blog2social.com/'); ?></p>
+                                                    <br>
+                                                    <a target="_blank" href="<?php echo B2S_Tools::getSupportLink('community_lostpw') ?>"><?php esc_html_e('Forgot username or password?', 'blog2social') ?></a>
+                                                <?php } ?>
                                             </div>
                                         </div>
                                         <div class="col-md-6 b2s-border-left">
                                             <h4 class="b2s-bold"><?php esc_html_e('Frequently asked questions', 'blog2social') ?></h4>
                                             <div class="b2s-faq-area">
-                                                <div class="b2s-loading-area-faq" style="display:block">
-                                                    <br>
-                                                    <div class="b2s-loader-impulse b2s-loader-impulse-md"></div>
-                                                    <div class="clearfix"></div>
-                                                </div>
-                                                <div class="b2s-faq-content"></div>
-                                            </div>
-                                        </div>
-                                        <div class="clearfix"></div>
-                                        <br>
-                                        <div class="col-md-12">
-                                            <div class="b2s-community-container">
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <h4 class="b2s-bold"><?php esc_html_e('Couldn\'t find your answer?', 'blog2social') ?></h4>
-                                                        <p class="b2s-gray-text"><?php echo sprintf(__('To get technical help, please create your account to access the Blog2Social support community to find more answers or to ask your question. (<a href="%s" target="_blank">Info</a>)', 'blog2social'), 'https://community.blog2social.com/register'); ?></p>
-                                                        <br>
-                                                        <div class="b2s-community-register-form">
-                                                            <h5 class="b2s-bold"><?php echo esc_html_e('Create your support account to ask questions and get help', 'blog2social'); ?></h5>
-                                                            <div class="alert alert-danger b2s-community-error" data-error-type="invalid_data" style="display: none;"><?php esc_html_e('Unknown error has occurred. Please try again.', 'blog2social') ?></div>
-                                                            <div class="alert alert-danger b2s-community-error" data-error-type="invalid_password" style="display: none;"><?php esc_html_e('Enter at least 8 characters', 'blog2social') ?></div>
-                                                            <div class="alert alert-danger b2s-community-error" data-error-type="invalid_email" style="display: none;"><?php esc_html_e('Invalid email address', 'blog2social') ?></div>
-                                                            <div class="alert alert-danger b2s-community-error" data-error-type="exists_email" style="display: none;"><?php esc_html_e('Email address is taken.', 'blog2social') ?> <a target="_blank" href="<?php echo B2S_Tools::getSupportLink('community_lostpw') ?>"><?php esc_html_e('Forgot Password?', 'blog2social') ?></a></div>
-                                                            <div class="alert alert-danger b2s-community-error" data-error-type="exists_username" style="display: none;"><?php esc_html_e('Username is taken.', 'blog2social') ?> <a target="_blank" href="<?php echo B2S_Tools::getSupportLink('community_lostpw') ?>"><?php esc_html_e('Forgot Password?', 'blog2social') ?></a></div>
-                                                            <div class="input-group form-group">
-                                                                <span class="input-group-addon btn-light"><i class="glyphicon glyphicon-user"></i></span>
-                                                                <input type="text" id="b2s-community-username" name="fullname" placeholder="<?php esc_html_e('User name', 'blog2social') ?>" class="form-control">
-                                                            </div>
-                                                            <div class="input-group form-group">
-                                                                <span class="input-group-addon btn-light"><i class="glyphicon glyphicon-envelope"></i></span>
-                                                                <input type="text" id="b2s-community-email" autocomplete="off" name="email" placeholder="<?php esc_html_e('Email address', 'blog2social') ?>" class="form-control">
-                                                            </div>
-                                                            <div class="input-group form-group">
-                                                                <span class="input-group-addon btn-light"><i class="glyphicon glyphicon-lock"></i></span>
-                                                                <input type="password" id="b2s-community-password" autocomplete="new-password" name="password" placeholder="<?php esc_html_e('Create password', 'blog2social') ?>" class="form-control">
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <input type="checkbox" id="b2s-community-terms"><label for="b2s-community-terms"><?php echo sprintf(__('I agree to the <a href="%s" target="_blank">community rules</a>', 'blog2social'), 'https://community.blog2social.com/help#community_rules') ?></label>
-                                                            </div>
-                                                            <input class="btn btn-primary width-100" id="b2s-community-register" type="button" value="<?php esc_html_e('Create Account', 'blog2social') ?>" disabled="disabeld">
-                                                        </div>
-                                                        <div class="b2s-community-register-loading" style="display:none;">
-                                                            <div class="b2s-loader-impulse b2s-loader-impulse-md"></div>
-                                                            <div class="clearfix"></div>
-                                                            <div class="text-center b2s-loader-text"><?php esc_html_e("Loading...", "blog2social"); ?></div>
-                                                        </div>
-                                                        <div class="b2s-community-register-success text-center alert alert-success" style="display:none;">
-                                                            <p class="b2s-bold"><?php esc_html_e('Yay :) You successfully registered for the Blog2Social Community!', 'blog2social') ?></p>
-                                                            <br>
-                                                            <a target="_blank" href="<?php echo B2S_Tools::getSupportLink('community') ?>" class="btn btn-primary"><?php esc_html_e('Go to the Blog2Social Community', 'blog2social') ?></a>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6 padding-top-40">
-                                                        
-                                                        <a target="_blank" href="<?php echo B2S_Tools::getSupportLink('community') ?>" class="btn btn-success b2s-community-btn"><?php esc_html_e('Browse the Blog2Social support community', 'blog2social') ?></a>
-                                                        <br><br>
-                                                        <p><?php echo sprintf(__('<b>Already registered?</b> <a href="%s" target="_blank">Login to your support account</a> to ask questions or join the discussion.', 'blog2social'), 'https://community.blog2social.com/'); ?></p>
-
-                                                        <br>
-                                                        <a target="_blank" href="<?php echo B2S_Tools::getSupportLink('community_lostpw') ?>"><?php esc_html_e('Forgot username or password?', 'blog2social') ?></a>
-
-                                                    </div>
-                                                </div>
+                                                <ul class="b2s-faq-links-list">
+                                                    <li><a class="b2s-faq-link" target="_blank" href="<?php echo B2S_Tools::getSupportLink('faq_installation'); ?>"><?php esc_html_e('Installation', 'blog2social') ?></a></li>
+                                                    <li><a class="b2s-faq-link" target="_blank" href="<?php echo B2S_Tools::getSupportLink('faq_network'); ?>"><?php esc_html_e('Connecting Social Networks', 'blog2social') ?></a></li>
+                                                    <li><a class="b2s-faq-link" target="_blank" href="<?php echo B2S_Tools::getSupportLink('faq_sharing'); ?>"><?php esc_html_e('Autoposting, Sharing und Re-Sharing', 'blog2social') ?></a></li>
+                                                    <li><a class="b2s-faq-link" target="_blank" href="<?php echo B2S_Tools::getSupportLink('faq_customize'); ?>"><?php esc_html_e('Customizing Social Media Posts', 'blog2social') ?></a></li>
+                                                    <li><a class="b2s-faq-link" target="_blank" href="<?php echo B2S_Tools::getSupportLink('faq_scheduling'); ?>"><?php esc_html_e('Scheduling and Best Time Manager', 'blog2social') ?></a></li>
+                                                    <li><a class="b2s-faq-link" target="_blank" href="<?php echo B2S_Tools::getSupportLink('faq_repoting'); ?>"><?php esc_html_e('Reporting', 'blog2social') ?></a></li>
+                                                    <li><a class="b2s-faq-link" target="_blank" href="<?php echo B2S_Tools::getSupportLink('faq_licence'); ?>"><?php esc_html_e('Contracting and Licensing', 'blog2social') ?></a></li>
+                                                    <li><a class="b2s-faq-link" target="_blank" href="<?php echo B2S_Tools::getSupportLink('faq_security'); ?>"><?php esc_html_e('Security', 'blog2social') ?></a></li>
+                                                    <li><a class="b2s-faq-link" target="_blank" href="<?php echo B2S_Tools::getSupportLink('faq_troubleshooting'); ?>"><?php esc_html_e('Troubleshooting for Error Messages', 'blog2social') ?></a></li>
+                                                    <li><a class="b2s-faq-link" target="_blank" href="<?php echo B2S_Tools::getSupportLink('faq_affiliate'); ?>"><?php esc_html_e('Affiliate Program', 'blog2social') ?></a></li>
+                                                    <li><a class="b2s-faq-link" target="_blank" href="<?php echo B2S_Tools::getSupportLink('faq_settings'); ?>"><?php esc_html_e('Helpful Network Settings', 'blog2social') ?></a></li>
+                                                </ul>
                                             </div>
                                         </div>
                                         <div class="clearfix"></div>
                                         <br>
                                         <div class="col-md-12">
                                             <h4 class="b2s-text-bold"><?php esc_html_e('Sales Support', 'blog2social') ?></h4>
-                                            <a target="_blank" href="<?php echo B2S_Tools::getSupportLink('affiliate'); ?>">
+                                            <a target="_blank" href="<?php echo B2S_Tools::getSupportLink('faq'); ?>">
                                                 <p><?php esc_html_e('Click here to find the right license for your needs or to contact the sales team for any payment issues.', 'blog2social') ?></p>
                                             </a>
                                         </div>

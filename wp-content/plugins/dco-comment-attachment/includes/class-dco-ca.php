@@ -22,6 +22,15 @@ defined( 'ABSPATH' ) || die;
 class DCO_CA extends DCO_CA_Base {
 
 	/**
+	 * Flag showing that attachment checked on upload.
+	 *
+	 * @since 2.2.0
+	 *
+	 * @var bool $attachment_checked True if the attachment checked or false otherwise.
+	 */
+	private $attachment_checked = false;
+
+	/**
 	 * Constructor
 	 *
 	 * @since 1.0.0
@@ -40,15 +49,23 @@ class DCO_CA extends DCO_CA_Base {
 
 		if ( $this->is_attachment_field_enabled() ) {
 			add_action( 'comment_form_submit_field', array( $this, 'add_attachment_field' ) );
-			add_filter( 'preprocess_comment', array( $this, 'check_attachment' ) );
-			add_filter( 'pre_comment_approved', array( $this, 'approve_comment' ) );
+			add_filter( 'preprocess_comment', array( $this, 'display_attachment_error' ) );
 			add_action( 'comment_post', array( $this, 'save_attachment' ), 5, 3 );
+
+			if ( $this->get_option( 'manually_moderation' ) ) {
+				add_filter( 'pre_comment_approved', array( $this, 'approve_comment' ) );
+			}
+
+			add_filter( 'rest_preprocess_comment', array( $this, 'check_attachment' ) );
+			add_action( 'rest_insert_comment', array( $this, 'save_rest_api_attachment' ), 10, 3 );
 		}
+
+		add_filter( 'rest_prepare_comment', array( $this, 'add_rest_api_links' ), 10, 2 );
 
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 
 		if ( $this->is_attachment_displayed() ) {
-			add_filter( 'comment_text', array( $this, 'display_attachment' ) );
+			add_filter( 'comment_text', array( $this, 'display_attachment' ), 10, 2 );
 		}
 
 		if ( $this->get_option( 'autoembed_links' ) && ! is_admin() ) {
@@ -62,20 +79,22 @@ class DCO_CA extends DCO_CA_Base {
 	 * @since 1.0.0
 	 */
 	public function enqueue_scripts() {
-		if ( $this->is_comments_used() ) {
-			if ( $this->is_attachment_field_enabled() ) {
-				wp_enqueue_script( 'dco-comment-attachment', DCO_CA_URL . 'assets/dco-comment-attachment.js', array( 'jquery' ), DCO_CA_VERSION, true );
-				wp_localize_script(
-					'dco-comment-attachment',
-					'dco_ca',
-					array(
-						'commenting_form_not_found' => __( 'The commenting form not found.', 'dco-comment-attachment' ),
-					)
-				);
-			}
-
-			wp_enqueue_style( 'dco-comment-attachment', DCO_CA_URL . 'assets/dco-comment-attachment.css', array(), DCO_CA_VERSION );
+		if ( ! $this->is_comments_used() ) {
+			return;
 		}
+
+		if ( $this->is_attachment_field_enabled() ) {
+			wp_enqueue_script( 'dco-comment-attachment', DCO_CA_URL . 'assets/dco-comment-attachment.js', array( 'jquery' ), DCO_CA_VERSION, true );
+			wp_localize_script(
+				'dco-comment-attachment',
+				'dco_ca',
+				array(
+					'commenting_form_not_found' => __( 'The commenting form not found.', 'dco-comment-attachment' ),
+				)
+			);
+		}
+
+		wp_enqueue_style( 'dco-comment-attachment', DCO_CA_URL . 'assets/dco-comment-attachment.css', array(), DCO_CA_VERSION );
 	}
 
 	/**
@@ -96,6 +115,7 @@ class DCO_CA extends DCO_CA_Base {
 			$this->form_element( 'upload-size' );
 			$this->form_element( 'file-types' );
 			$this->form_element( 'autoembed-links' );
+			$this->form_element( 'drop-area' );
 			?>
 		</p>
 		<?php
@@ -154,8 +174,15 @@ class DCO_CA extends DCO_CA_Base {
 					$name    .= '[]';
 					$multiple = ' multiple';
 				}
+				$accept = '';
+				$this->enable_filter_upload();
+				$types = $this->get_allowed_file_types( 'array' );
+				$this->disable_filter_upload();
+				if ( $types ) {
+					$accept = '.' . implode( ',.', $types );
+				}
 				?>
-				<input class="comment-form-attachment__input" id="attachment" name="<?php echo esc_attr( $name ); ?>" type="file"<?php echo esc_attr( $multiple ); ?> />
+				<input class="comment-form-attachment__input" id="attachment" name="<?php echo esc_attr( $name ); ?>" type="file" accept="<?php echo esc_attr( $accept ); ?>"<?php echo esc_attr( $multiple ); ?> />
 				<?php
 				/**
 				 * Filters the input form element markup.
@@ -164,8 +191,9 @@ class DCO_CA extends DCO_CA_Base {
 				 *
 				 * @param string $markup HTML markup for the input form element.
 				 * @param string $name Name of the attachment input.
+				 * @param array $types Allowed upload file types.
 				 */
-				$markup = apply_filters( 'dco_ca_form_element_input', ob_get_clean(), $name );
+				$markup = apply_filters( 'dco_ca_form_element_input', ob_get_clean(), $name, $types );
 				break;
 			case 'upload-size':
 				ob_start();
@@ -242,6 +270,24 @@ class DCO_CA extends DCO_CA_Base {
 					$markup = apply_filters( 'dco_ca_form_element_autoembed_links', ob_get_clean(), $autoembed_links );
 				}
 				break;
+			case 'drop-area':
+				ob_start();
+				?>
+				<span class="comment-form-attachment__drop-area">
+					<span class="comment-form-attachment__drop-area-inner">
+						<?php echo $this->get_option( 'enable_multiple_upload' ) ? esc_html__( 'Drop files here', 'dco-comment-attachment' ) : esc_html__( 'Drop file here', 'dco-comment-attachment' ); ?>
+					</span>
+				</span>
+				<?php
+				/**
+				 * Filters the drop area form element markup.
+				 *
+				 * @since 2.2.0
+				 *
+				 * @param string $markup HTML markup for the drop area form element.
+				 */
+				$markup = apply_filters( 'dco_ca_form_element_drop_area', ob_get_clean() );
+				break;
 		}
 
 		/**
@@ -260,14 +306,14 @@ class DCO_CA extends DCO_CA_Base {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array $commentdata Comment data.
-	 * @return array Comment data on success.
+	 * @param array $prepared_comment The prepared comment data for `wp_insert_comment`.
+	 * @return array|WP_Error Comment data on success, or error object on failure.
 	 */
-	public function check_attachment( $commentdata ) {
+	public function check_attachment( $prepared_comment ) {
 		$field_name = $this->get_upload_field_name();
 
 		if ( ! isset( $_FILES[ $field_name ] ) ) {
-			return $commentdata;
+			return $prepared_comment;
 		}
 
 		// phpcs:disable WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
@@ -277,7 +323,11 @@ class DCO_CA extends DCO_CA_Base {
 		// If the feature to upload multiple files is disabled,
 		// but the user has uploaded multiple files.
 		if ( ! $this->get_option( 'enable_multiple_upload' ) && is_array( $attachments['name'] ) ) {
-			$this->display_error( __( 'Uploading multiple files is forbidden!', 'dco-comment-attachment' ) );
+			return new WP_Error(
+				'dco-comment-attachment',
+				__( 'Uploading multiple files is forbidden!', 'dco-comment-attachment' ),
+				array( 'status' => 403 )
+			);
 		}
 
 		$names       = (array) $attachments['name'];
@@ -288,16 +338,24 @@ class DCO_CA extends DCO_CA_Base {
 		foreach ( $error_codes as $error_code ) {
 			$upload_error = $this->get_upload_error( $error_code );
 			if ( $upload_error ) {
-				$this->display_error( $upload_error );
+				return new WP_Error(
+					"dco-comment-attachment-$error_code",
+					$upload_error,
+					array( 'status' => 500 )
+				);
 			}
 		}
 
 		// Check that the file has been uploaded.
 		if ( ! isset( $tmp_names[0] ) || ! is_uploaded_file( $tmp_names[0] ) ) {
 			if ( $this->get_option( 'required_attachment' ) ) {
-				$this->display_error( __( 'Attachment is required.', 'dco-comment-attachment' ) );
+				return new WP_Error(
+					'dco-comment-attachment',
+					__( 'Attachment is required.', 'dco-comment-attachment' ),
+					array( 'status' => 400 )
+				);
 			} else {
-				return $commentdata;
+				return $prepared_comment;
 			}
 		}
 
@@ -309,8 +367,13 @@ class DCO_CA extends DCO_CA_Base {
 		}
 
 		if ( $size > $this->get_max_upload_size() ) {
-			$upload_error = $this->get_upload_error( 1 );
-			$this->display_error( $upload_error );
+			$error_code   = 1;
+			$upload_error = $this->get_upload_error( $error_code );
+			return new WP_Error(
+				"dco-comment-attachment-$error_code",
+				$upload_error,
+				array( 'status' => 500 )
+			);
 		}
 
 		foreach ( $names as $name ) {
@@ -319,25 +382,37 @@ class DCO_CA extends DCO_CA_Base {
 			$this->disable_filter_upload();
 
 			if ( ! $filetype['ext'] ) {
-				$this->display_error( __( "WordPress doesn't allow this type of uploads.", 'dco-comment-attachment' ) );
+				return new WP_Error(
+					'dco-comment-attachment',
+					__( "WordPress doesn't allow this type of uploads.", 'dco-comment-attachment' ),
+					array( 'status' => 400 )
+				);
 			}
 		}
 
-		return $commentdata;
+		$this->attachment_checked = true;
+
+		return $prepared_comment;
 	}
 
 	/**
-	 * Displays the text of the error uploading attachment when sending a comment.
+	 * Checks the attachments and displays error.
 	 *
-	 * @since 1.0.0
+	 * @since 2.3.0
 	 *
-	 * @param string $error The text of error uploading attachment.
+	 * @param array $commentdata Comment data.
+	 * @return array Comment data on success.
 	 */
-	public function display_error( $error ) {
-		if ( $error ) {
+	public function display_attachment_error( $commentdata ) {
+		$commentdata = $this->check_attachment( $commentdata );
+
+		if ( is_wp_error( $commentdata ) ) {
+			$error     = $commentdata->get_error_message();
 			$err_title = __( 'ERROR', 'dco-comment-attachment' );
 			wp_die( '<p><strong>' . esc_html( $err_title ) . '</strong>: ' . esc_html( $error ) . '</p>', esc_html__( 'Comment Submission Failure', 'dco-comment-attachment' ), array( 'back_link' => true ) );
 		}
+
+		return $commentdata;
 	}
 
 	/**
@@ -380,7 +455,7 @@ class DCO_CA extends DCO_CA_Base {
 	public function approve_comment( $approved ) {
 		$field_name = $this->get_upload_field_name();
 
-		if ( isset( $_FILES[ $field_name ] ) && $this->get_option( 'manually_moderation' ) ) {
+		if ( $this->is_attachment_checked() ) {
 			$approved = 0;
 		}
 
@@ -409,8 +484,16 @@ class DCO_CA extends DCO_CA_Base {
 			require_once ABSPATH . 'wp-admin/includes/media.php';
 		}
 
-		$post_id        = 0;
-		$attach_to_post = $this->get_option( 'attach_to_post' );
+		$post_id = 0;
+
+		/**
+		 * Filters whether to attach the attachment to the commented post.
+		 *
+		 * @since 2.2.0
+		 *
+		 * @param bool $attach_to_post Whether to attach the attachment to the commented post.
+		 */
+		$attach_to_post = apply_filters( 'dco_ca_attach_to_post', true );
 		if ( $attach_to_post ) {
 			$post_id = $comment['comment_post_ID'];
 		}
@@ -452,19 +535,41 @@ class DCO_CA extends DCO_CA_Base {
 	}
 
 	/**
+	 * Saves attachments after comment is posted via REST API.
+	 *
+	 * @since 2.3.0
+	 *
+	 * @param WP_Comment      $comment Inserted or updated comment object.
+	 * @param WP_REST_Request $request Request object.
+	 * @param bool            $creating True when creating a comment, false when updating.
+	 */
+	public function save_rest_api_attachment( $comment, $request, $creating ) {
+		if ( ! $creating ) {
+			return;
+		}
+
+		$this->save_attachment( $comment->comment_ID, $comment->comment_approved, $comment->to_array() );
+	}
+
+	/**
 	 * Displays an assigned attachments.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $comment_content Optional. Text of the comment.
+	 * @param string          $comment_text Text of the current comment.
+	 * @param WP_Comment|null $comment      The comment object. Null if not found.
 	 * @return string Text of the comment with an assigned attachment.
 	 */
-	public function display_attachment( $comment_content = '' ) {
-		if ( ! $this->has_attachment() ) {
-			return $comment_content;
+	public function display_attachment( $comment_text = '', $comment = null ) {
+		if ( is_null( $comment ) ) {
+			$comment = get_comment();
 		}
 
-		$attachment_id = (array) $this->get_attachment_id();
+		if ( ! $comment instanceof WP_Comment || ! $this->has_attachment( $comment->comment_ID ) ) {
+			return $comment_text;
+		}
+
+		$attachment_id = (array) $this->get_attachment_id( $comment->comment_ID );
 		if ( count( $attachment_id ) > 1 ) {
 			$this->enable_gallery_image_size();
 			$attachments_content = array();
@@ -497,7 +602,37 @@ class DCO_CA extends DCO_CA_Base {
 			$attachment_content = $this->get_attachment_preview( current( $attachment_id ) );
 		}
 
-		return $comment_content . $attachment_content;
+		return $comment_text . $attachment_content;
+	}
+
+	/**
+	 * Adds attachment links into comment REST API response.
+	 *
+	 * @since 2.3.0
+	 *
+	 * @param WP_REST_Response $response The response object.
+	 * @param WP_Comment       $comment The original comment object.
+	 * @return WP_REST_Response The response object.
+	 */
+	public function add_rest_api_links( $response, $comment ) {
+		$attachment_id = (array) $this->get_attachment_id( $comment->comment_ID );
+		if ( ! $attachment_id ) {
+			return $response;
+		}
+
+		$rel = $this->get_attachment_meta_key();
+
+		foreach ( $attachment_id as $attach_id ) {
+			$response->add_link(
+				$rel,
+				rest_url( 'wp/v2/media/' . $attach_id ),
+				array(
+					'embeddable' => true,
+				)
+			);
+		}
+
+		return $response;
 	}
 
 	/**
@@ -505,11 +640,11 @@ class DCO_CA extends DCO_CA_Base {
 	 *
 	 * @since 1.2.0
 	 *
-	 * @param string $comment_content Text of the comment.
+	 * @param string $comment_text Text of the current comment.
 	 * @return string Text of the comment with embedded links.
 	 */
-	public function autoembed_links( $comment_content ) {
-		return $GLOBALS['wp_embed']->autoembed( $comment_content );
+	public function autoembed_links( $comment_text ) {
+		return $GLOBALS['wp_embed']->autoembed( $comment_text );
 	}
 
 	/**
@@ -629,6 +764,17 @@ class DCO_CA extends DCO_CA_Base {
 	}
 
 	/**
+	 * Checks that attachment checked on upload or not.
+	 *
+	 * @since 2.2.0
+	 *
+	 * @return bool True if the attachment checked or false otherwise.
+	 */
+	public function is_attachment_checked() {
+		return $this->attachment_checked;
+	}
+
+	/**
 	 * Checks that the current user can upload the attachment.
 	 *
 	 * @return bool True if the user can upload or false otherwise.
@@ -691,12 +837,12 @@ class DCO_CA extends DCO_CA_Base {
 	public function get_gallery_image_size( $size ) {
 		if ( 'dco_ca_admin_thumbnail_size' === current_filter() ) {
 			/**
-			* Filters the attachment image size in the gallery for the admin panel.
-			*
-			* @since 2.0.0
-			*
-			* @param string $size The thumbnail size of the attachment image.
-			*/
+			 * Filters the attachment image size in the gallery for the admin panel.
+			 *
+			 * @since 2.0.0
+			 *
+			 * @param string $size The thumbnail size of the attachment image.
+			 */
 			return apply_filters( 'dco_ca_admin_gallery_size', 'thumbnail' );
 		}
 

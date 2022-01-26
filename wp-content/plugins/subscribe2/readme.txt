@@ -3,8 +3,8 @@ Contributors: tareq1988, nizamuddinbabu, wemail
 Donate link: https://getwemail.io
 Tags: posts, subscription, email, subscribe, notify, notification, newsletter, post notification, email marketing, optin, form
 Requires at least: 4.0
-Tested up to: 5.7
-Stable tag: 10.35
+Tested up to: 5.8
+Stable tag: 10.37
 Requires PHP: 5.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -72,6 +72,20 @@ This token will automatically be replaced by dynamic subscription information an
 
 == Changelog ==
 
+= 10.37 (23rd November, 2021) =
+
+ * Fix HTML widgets issue
+ * Fix logged-in user can see subscription form
+
+= 10.36 (30th September, 2021) =
+
+ * WordPress 5.8 compatibility
+ * Fix form preview on widgets
+ * Fix pop up form
+ * Fix send schedule email options
+ * Fix one click subscription
+ * Fix some PHP warnings
+
 = 10.35 (15th March, 2021) =
 
  * Fix {UNSUBLINK} shortcode
@@ -86,4 +100,4 @@ This token will automatically be replaced by dynamic subscription information an
  * Bump tested upto version 4.4
  * Minimum PHP version set to 5.4
 
-See complete [changelog](https://github.com/weMail/Subscribe2/blob/develop/changeLog.txt).
+See complete [changelog](https://github.com/weMail/Subscribe2/blob/develop/changelog.txt).

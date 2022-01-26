@@ -116,14 +116,18 @@
                 ...NggXHRSettings,
                 endpoint: set_ngg_upload_url(0, ''),
                 getResponseError: (text, response) => {
-                    if ('string' === typeof text) {
-                        text = JSON.parse(text);
+                	try {
+						if ('string' === typeof text) {
+							text = JSON.parse(text);
+						}
+						return text.error;
+					} catch (error) {
+                		return error;
                     }
-                    return text.error;
-                }
-            }
+				}
+			}
 
-            const uppy = Uppy.Core(uppyCoreSettings)
+			const uppy = Uppy.Core(uppyCoreSettings)
                 .use(Uppy.Dashboard, NggUppyDashboardSettings)
                 .use(Uppy.XHRUpload, uppyXHRSettings)
                 .use(Uppy.DropTarget, {
@@ -148,9 +152,10 @@
                     }
                 })
                 .on('complete', (result) => {
-                    // There was at least one error: remove the successful images so users can find out what went wrong
-                    if (result.failed.length > 0) {
+					// There was at least one error: remove the successful images so users can find out what went wrong
+					if (result.failed.length > 0) {
                         uppy.getFiles().forEach((file) => {
+                        	console.log("FILE", file);
                             if ('undefined' === typeof file.error) {
                                 uppy.removeFile(file.id);
                             }
@@ -244,10 +249,22 @@
                 if (!chosen_name) {
                     chosen_name = parseInt(gallery_select.value) === 0 ? gallery_name.value : gallery_select.selectedOptions[0].dataset.originalValue;
                 }
+
                 const endpoint = set_ngg_upload_url(gallery_select.value, chosen_name)
+
                 uppy.getPlugin('XHRUpload').setOptions({
-                    endpoint: endpoint
-                });
+                    endpoint: endpoint,
+                    // It's possible that the server may fail to upload any images but still return an HTTP 200 code,
+                    // this method will ensure that the response contains a JSON object with the gallery_id attribute.
+                    validateStatus: (status, responseText, response) => {
+						try {
+							const result = JSON.parse(responseText);
+							return 'undefined' !== typeof result.gallery_id;
+						} catch (error) {
+							return false;
+						}
+					}
+				});
             }
 
             gallery_select.addEventListener('change', function() {

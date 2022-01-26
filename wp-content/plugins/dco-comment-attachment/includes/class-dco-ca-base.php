@@ -44,6 +44,9 @@ class DCO_CA_Base {
 	 */
 	public function init_hooks() {
 		$this->set_options();
+
+		// Compatibility with Loco Translate.
+		load_plugin_textdomain( 'dco-comment-attachment' );
 	}
 
 	/**
@@ -157,10 +160,30 @@ class DCO_CA_Base {
 				}
 
 				$img = wp_get_attachment_image( $attachment_id, $thumbnail_size );
-				if ( ! is_admin() && $this->get_option( 'link_thumbnail' ) ) {
-					$full_img_url = wp_get_attachment_image_url( $attachment_id, 'full' );
-					$img          = '<a href="' . esc_url( $full_img_url ) . '">' . $img . '</a>';
-					$img          = $this->activate_lightbox( $img );
+
+				/**
+				 * 0 — No link
+				 * 1 — Link to a full-size image with lightbox plugins support
+				 * 2 — Link to a full-size image in a new tab
+				 * 3 — Link to the attachment page
+				 */
+				$link_thumbnail = (int) $this->get_option( 'link_thumbnail' );
+				if ( ! is_admin() && $link_thumbnail ) {
+					$tab = '';
+					if ( 2 === $link_thumbnail ) {
+						$tab = ' target="_blank"';
+					}
+
+					if ( in_array( $link_thumbnail, array( 1, 2 ), true ) ) {
+						$link = wp_get_attachment_image_url( $attachment_id, 'full' );
+					} else {
+						$link = get_attachment_link( $attachment_id );
+					}
+
+					$img = '<a href="' . esc_url( $link ) . '" class="dco-attachment-link dco-image-attachment-link"' . $tab . '>' . $img . '</a>';
+					if ( 1 === $link_thumbnail ) {
+						$img = $this->activate_lightbox( $img );
+					}
 				}
 
 				$attachment_content = '<p class="dco-attachment dco-image-attachment">' . $img . '</p>';
@@ -184,8 +207,21 @@ class DCO_CA_Base {
 				$attachment_content = '<div class="dco-attachment dco-audio-attachment">' . do_shortcode( '[audio src="' . esc_url( $url ) . '"]' ) . '</div>';
 				break;
 			case 'misc':
+				$download = '';
+
+				/**
+				* Filters whether to force download misc attachments.
+				*
+				* @since 2.3.0
+				*
+				* @param bool $force_download Whether to force download misc attachments.
+				*/
+				if ( apply_filters( 'dco_ca_force_download_misc_attachments', false ) ) {
+					$download = ' download';
+				}
+
 				$title              = get_the_title( $attachment_id );
-				$attachment_content = '<p class="dco-attachment dco-misc-attachment"><a href="' . esc_url( $url ) . '">' . esc_html( $title ) . '</a></p>';
+				$attachment_content = '<p class="dco-attachment dco-misc-attachment"><a href="' . esc_url( $url ) . '"' . $download . '>' . esc_html( $title ) . '</a></p>';
 		}
 
 		/**

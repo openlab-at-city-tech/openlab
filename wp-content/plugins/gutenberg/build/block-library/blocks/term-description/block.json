@@ -1,8 +1,9 @@
 {
+	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 2,
 	"name": "core/term-description",
 	"title": "Term Description",
-	"category": "design",
+	"category": "theme",
 	"description": "Display the description of categories, tags and custom taxonomies when viewing an archive.",
 	"textdomain": "default",
 	"attributes": {
@@ -18,7 +19,10 @@
 		},
 		"typography": {
 			"fontSize": true,
-			"lineHeight": true
+			"lineHeight": true,
+			"__experimentalDefaultControls": {
+				"fontSize": true
+			}
 		}
 	},
 	"editorStyle": "wp-block-term-description-editor"

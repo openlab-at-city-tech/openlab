@@ -36,7 +36,6 @@ function setup() {
 
 	add_action( 'wp_ajax_ep_save_feature', __NAMESPACE__ . '\action_wp_ajax_ep_save_feature' );
 	add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\action_admin_enqueue_dashboard_scripts' );
-	add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\action_admin_enqueue_admin_scripts' );
 	add_action( 'admin_init', __NAMESPACE__ . '\action_admin_init' );
 	add_action( 'admin_init', __NAMESPACE__ . '\maybe_clear_es_info_cache' );
 	add_action( 'admin_init', __NAMESPACE__ . '\maybe_skip_install' );
@@ -51,12 +50,24 @@ function setup() {
 	add_action( 'ep_add_query_log', __NAMESPACE__ . '\log_version_query_error' );
 	add_filter( 'ep_analyzer_language', __NAMESPACE__ . '\use_language_in_setting', 10, 2 );
 	add_filter( 'wp_kses_allowed_html', __NAMESPACE__ . '\filter_allowed_html', 10, 2 );
-	add_filter( 'wpmu_blogs_columns', __NAMESPACE__ . '\filter_blogs_columns', 10, 1 );
-	add_action( 'manage_sites_custom_column', __NAMESPACE__ . '\add_blogs_column', 10, 2 );
 	add_action( 'manage_blogs_custom_column', __NAMESPACE__ . '\add_blogs_column', 10, 2 );
-	add_action( 'wp_ajax_ep_site_admin', __NAMESPACE__ . '\action_wp_ajax_ep_site_admin' );
-	add_action( 'wp_ajax_ep_site_admin', __NAMESPACE__ . '\action_wp_ajax_ep_site_admin' );
 	add_action( 'rest_api_init', __NAMESPACE__ . '\setup_endpoint' );
+
+	/**
+	 * Filter whether to show 'ElasticPress Indexing' option on Multisite in admin UI or not.
+	 *
+	 * @since  3.6.0
+	 * @hook ep_show_indexing_option_on_multisite
+	 * @param  {bool}  $show True to show.
+	 * @return {bool}  New value
+	 */
+	$show_indexing_option_on_multisite = apply_filters( 'ep_show_indexing_option_on_multisite', true );
+
+	if ( $show_indexing_option_on_multisite ) {
+		add_filter( 'wpmu_blogs_columns', __NAMESPACE__ . '\filter_blogs_columns', 10, 1 );
+		add_action( 'manage_sites_custom_column', __NAMESPACE__ . '\add_blogs_column', 10, 2 );
+		add_action( 'wp_ajax_ep_site_admin', __NAMESPACE__ . '\action_wp_ajax_ep_site_admin' );
+	}
 }
 
 /**
@@ -343,6 +354,8 @@ function maybe_notice( $force = false ) {
 		<?php
 	}
 
+	wp_enqueue_script( 'ep_notice_script' );
+
 	return $notices;
 }
 
@@ -594,6 +607,9 @@ function action_wp_ajax_ep_index() {
 		]
 	);
 
+	// Disable during dashboard indexing for now. Support would be possible if desired in the future.
+	$args['ep_indexing_advanced_pagination'] = false;
+
 	$query = $indexable->query_db( $args );
 
 	$index_meta['found_items'] = (int) $query['total_objects'];
@@ -768,15 +784,15 @@ function action_admin_enqueue_dashboard_scripts() {
 		wp_localize_script( 'ep_admin_sites_scripts', 'epsa', $data );
 	}
 
-	if ( in_array( Screen::factory()->get_current_screen(), [ 'dashboard', 'settings', 'install', 'health', 'highlighting', 'weighting', 'synonyms' ], true ) ) {
+	if ( in_array( Screen::factory()->get_current_screen(), [ 'dashboard', 'settings', 'install', 'health', 'weighting', 'synonyms' ], true ) ) {
 		wp_enqueue_style( 'ep_admin_styles', EP_URL . 'dist/css/dashboard-styles.min.css', [], EP_VERSION );
 	}
 
-	if ( in_array( Screen::factory()->get_current_screen(), [ 'highlighting' ], true ) ) {
-		wp_enqueue_script( 'ep_admin_sites_scripts', EP_URL . 'dist/js/admin-script.min.js', [ 'jquery' ], EP_VERSION, true );
+	if ( in_array( Screen::factory()->get_current_screen(), [ 'weighting', 'install' ], true ) ) {
+		wp_enqueue_script( 'ep_weighting_script', EP_URL . 'dist/js/weighting-script.min.js', [ 'jquery' ], EP_VERSION, true );
 	}
 
-	if ( in_array( Screen::factory()->get_current_screen(), [ 'dashboard', 'settings' ], true ) ) {
+	if ( in_array( Screen::factory()->get_current_screen(), [ 'dashboard', 'settings', 'health' ], true ) ) {
 		wp_enqueue_script( 'ep_dashboard_scripts', EP_URL . 'dist/js/dashboard-script.min.js', [ 'jquery', 'wp-color-picker' ], EP_VERSION, true );
 
 		$data = array( 'nonce' => wp_create_nonce( 'ep_dashboard_nonce' ) );
@@ -818,15 +834,19 @@ function action_admin_enqueue_dashboard_scripts() {
 		$data['sync_indexable_labels'] = apply_filters(
 			'ep_dashboard_indexable_labels',
 			[
-				'post' => [
+				'comment' => [
+					'singular' => esc_html__( 'Comment', 'elasticpress' ),
+					'plural'   => esc_html__( 'Comments', 'elasticpress' ),
+				],
+				'post'    => [
 					'singular' => esc_html__( 'Post', 'elasticpress' ),
 					'plural'   => esc_html__( 'Posts', 'elasticpress' ),
 				],
-				'term' => [
+				'term'    => [
 					'singular' => esc_html__( 'Term', 'elasticpress' ),
 					'plural'   => esc_html__( 'Terms', 'elasticpress' ),
 				],
-				'user' => [
+				'user'    => [
 					'singular' => esc_html__( 'User', 'elasticpress' ),
 					'plural'   => esc_html__( 'Users', 'elasticpress' ),
 				],
@@ -854,18 +874,11 @@ function action_admin_enqueue_dashboard_scripts() {
 		wp_enqueue_script( 'ep_stats', EP_URL . 'dist/js/stats-script.min.js', [], EP_VERSION, true );
 		wp_localize_script( 'ep_stats', 'epChartData', $data );
 	}
-}
 
-/**
- * Enqueue scripts to be used across all of WP admin
- *
- * @since 2.2
- */
-function action_admin_enqueue_admin_scripts() {
-	wp_enqueue_script( 'ep_admin_scripts', EP_URL . 'dist/js/admin-script.min.js', [ 'jquery' ], EP_VERSION, true );
+	wp_register_script( 'ep_notice_script', EP_URL . 'dist/js/notice-script.min.js', [ 'jquery' ], EP_VERSION, true );
 
 	wp_localize_script(
-		'ep_admin_scripts',
+		'ep_notice_script',
 		'epAdmin',
 		array(
 			'nonce' => wp_create_nonce( 'ep_admin_nonce' ),

@@ -148,12 +148,12 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 	box-shadow: 0 1px 4px rgba(18, 25, 97, 0.0779552);
 	overflow: hidden;
-	width: 100%;
+	width: 100%
 }
 
 .gform-settings__content table.gform_system_report > thead, .gform-settings__content table.plugins > thead {
 		font-weight: 700;
-		margin: 0;
+		margin: 0
 	}
 
 .gform-settings__content table.gform_system_report > thead > tr, .gform-settings__content table.plugins > thead > tr {
@@ -185,7 +185,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gform-settings__content table.plugins > thead > tr {
 		background: transparent none repeat 0 0 / auto auto padding-box border-box scroll;
-		background: initial;
+		background: initial
 	}
 
 .gform-settings__content table.plugins > thead > tr > #name, .gform-settings__content table.plugins > thead > tr > #description {
@@ -852,7 +852,7 @@ div.addon-logo.dashicons {
 
 .gform-settings-panel__content input[type="email"], .gform-settings-panel__content input[type="number"], .gform-settings-panel__content input[type="password"], .gform-settings-panel__content input[type="text"], .gform-settings-panel__content input[type="search"], .gform-settings-panel__content input[type="url"], .gform-settings-panel__content input[type="tel"], .gform-settings-panel__content select, .gform-settings-panel__content textarea {
 		max-width: 100%;
-		width: 100%;
+		width: 100%
 	}
 
 .gform-settings-panel__content input[type="email"][disabled], .gform-settings-panel__content input[type="email"][readonly], .gform-settings-panel__content input[type="number"][disabled], .gform-settings-panel__content input[type="number"][readonly], .gform-settings-panel__content input[type="password"][disabled], .gform-settings-panel__content input[type="password"][readonly], .gform-settings-panel__content input[type="text"][disabled], .gform-settings-panel__content input[type="text"][readonly], .gform-settings-panel__content input[type="search"][disabled], .gform-settings-panel__content input[type="search"][readonly], .gform-settings-panel__content input[type="url"][disabled], .gform-settings-panel__content input[type="url"][readonly], .gform-settings-panel__content input[type="tel"][disabled], .gform-settings-panel__content input[type="tel"][readonly], .gform-settings-panel__content select[disabled], .gform-settings-panel__content select[readonly], .gform-settings-panel__content textarea[disabled], .gform-settings-panel__content textarea[readonly] {
@@ -868,7 +868,7 @@ div.addon-logo.dashicons {
 		}
 
 .gform-settings-panel__content input[type="search"]#form-search-input {
-	height: 2.3125rem;
+	height: 2.3125rem
 }
 
 .gform-settings-panel__content input[type="search"]#form-search-input:focus {
@@ -969,7 +969,7 @@ html[dir="rtl"] .gform-settings-field__toggleable-inputs {
 	height: 1.375rem;
 	margin: 0 0.75rem 0 0;
 	transition: box-shadow 0.15s ease, background-color 0.15s ease;
-	width: 1.375rem;
+	width: 1.375rem
 
 }
 
@@ -1030,7 +1030,7 @@ html[dir="rtl"] .gform-settings-field__toggleable-inputs {
 	height: 1.375rem;
 	position: relative;
 	transition: box-shadow 0.15s ease, background-color 0.15s ease;
-	width: 1.375rem;
+	width: 1.375rem
 
 }
 
@@ -1171,7 +1171,7 @@ html[dir="rtl"] .gform-settings-field__toggleable-inputs {
 
 .gforms_edit_form .button.primary.gform-add-new-form {
 
-	border: 1px solid transparent;
+	border: 1px solid transparent
 
 }
 
@@ -1226,7 +1226,6 @@ html[dir="rtl"] .gform-settings-field .gform-settings-input__container + .gform-
 }
 
 .gform-settings-choice--visual {
-
 	display: flex;
 	margin-bottom: 1.25rem;
 
@@ -1238,27 +1237,29 @@ html[dir="rtl"] .gform-settings-field .gform-settings-input__container + .gform-
 
 .gform-settings-choice--visual label {
 		background: #fff;
-		border: 1px solid #9092b0;
+		border: 1px solid #9092b2;
 		border-radius: 3px;
 		box-sizing: border-box;
 		display: block;
 		padding: 1.625rem 1.5rem 1.75rem;
 		position: relative;
 		text-align: center;
-		width: 8.75rem;
+		width: 8.75rem
+
 	}
 
 .gform-settings-choice--visual label::before {
-		background: transparent;
-		border: 1px solid #d5d7e9;
-		border-radius: 50%;
-		content: "";
-		height: 1rem;
-		position: absolute;
-		right: 0.5rem;
-		top: 0.5625rem;
-		width: 1rem;
-	}
+
+			background: transparent;
+			border: 1px solid #d5d7e9;
+			border-radius: 50%;
+			content: "";
+			height: 1rem;
+			position: absolute;
+			right: 0.5rem;
+			top: 0.5625rem;
+			width: 1rem;
+		}
 
 .gform-settings-choice--visual input:disabled + label, .gform-settings-choice--visual input:disabled + label::before {
 		cursor: not-allowed;
@@ -1267,11 +1268,7 @@ html[dir="rtl"] .gform-settings-field .gform-settings-input__container + .gform-
 	}
 
 .gform-settings-choice--visual input:checked + label::before {
-		background: #22a753;
-		border-color: #22a753;
-	}
-
-.gform-settings-choice--visual input:checked + label::after {
+		background-color: #22a753;
 		color: #fff;
 		content: "\e983";
 		display: block;
@@ -1283,7 +1280,7 @@ html[dir="rtl"] .gform-settings-field .gform-settings-input__container + .gform-
 	}
 
 .gform-settings-choice--visual input:checked + label, .gform-settings-choice--visual label:hover {
-		border: 1px solid var(--c-snuf);
+		border: 1px solid #d5d7e9;
 		box-shadow: 0 4px 6px rgba(28, 31, 63, 0.0837013);
 	}
 
@@ -1306,10 +1303,10 @@ html[dir="rtl"] .gform-settings-field .gform-settings-input__container + .gform-
 		width: auto;
 	}
 
-.gform-settings-choice--visual .gform-settings-input__container {
-		display: flex;
-		flex-wrap: wrap;
-	}
+.gform-settings-choices--visual .gform-settings-input__container {
+	display: flex;
+	flex-wrap: wrap;
+}
 
 .gform-settings-panel--card {
 	background: none;
@@ -1335,7 +1332,7 @@ html[dir="rtl"] .gform-settings-field .gform-settings-input__container + .gform-
 		border-radius: 3px;
 
 		box-shadow: 0 1px 4px rgba(18, 25, 97, 0.0779552);
-		transition: all 0.2s ease;
+		transition: all 0.2s ease
 	}
 
 .gform-settings-panel--card .gform-settings-choice:hover {
@@ -1343,7 +1340,7 @@ html[dir="rtl"] .gform-settings-field .gform-settings-input__container + .gform-
 		}
 
 .gform-settings-panel--card .gform-settings-choice--visual {
-		display: block;
+		display: block
 	}
 
 .gform-settings-panel--card .gform-settings-choice--visual:last-child {
@@ -1376,7 +1373,7 @@ html[dir="rtl"] .gform-settings-field .gform-settings-input__container + .gform-
 		margin-top: 1.5rem;
 		padding: 0.812rem;
 		position: relative;
-		text-align: center;
+		text-align: center
 	}
 
 .gform-settings-panel--card .gform-settings-card-tag::before {
@@ -1782,7 +1779,7 @@ html[dir="rtl"] .gform-settings-field__text-append {
 
 }
 
-.gform-settings-field__date_time button {
+.gform-settings-field__date_time .ui-datepicker-trigger {
 
 	-webkit-appearance: none;
 	-moz-appearance: none;
@@ -2058,7 +2055,7 @@ html:not([dir="rtl"]) .gform-settings-input__container--with-merge-tag .wp-edito
 }
 
 #gf-admin-notices-wrapper .gf-notice {
-		margin-bottom: 0;
+		margin-bottom: 0
 	}
 
 #gf-admin-notices-wrapper .gf-notice ~ .gf-notice {
@@ -2200,6 +2197,10 @@ html:not([dir="rtl"]) .gform-settings-input__container--with-merge-tag .wp-edito
 
 }
 
+.gform-table.gform-table--license-ui .gform-icon--cog {
+		font-size: 1.125rem;
+	}
+
 .gform-results {
 
 	display: flex;
@@ -2299,7 +2300,7 @@ html:not([dir="rtl"]) .gform-settings-input__container--with-merge-tag .wp-edito
 }
 
 .sales th, .sales td {
-		padding: 0;
+		padding: 0
 	}
 
 .sales th:first-child, .sales td:first-child {

@@ -89,38 +89,6 @@ class Mixin_Security_Actor_Entity extends Mixin
         return null;
     }
 }
-// XXX not used yet
-class Mixin_Security_Entity_List extends Mixin
-{
-    var $_entity_list;
-    function add_entity($entity, $entity_props = null)
-    {
-        if (!$this->object->is_entity($entity)) {
-            $entity_props = array_merge((array) $entity_props, array('object' => $entity));
-            $this->object->_entity_list[] = $entity_props;
-        }
-    }
-    function remove_entity($entity)
-    {
-        if ($this->object->is_entity($entity)) {
-        }
-    }
-    function is_entity($entity)
-    {
-        return $this->object->get_entity_set($entity);
-    }
-    function get_entity_set($entity)
-    {
-        foreach ($this->_entity_list as $entity_set) {
-        }
-    }
-    function get_entity_id($entity)
-    {
-    }
-    function get_entity_type($entity)
-    {
-    }
-}
 /**
  * Class C_Security_Actor
  * @mixin Mixin_Security_Actor

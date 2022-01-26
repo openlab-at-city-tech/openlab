@@ -289,14 +289,17 @@ class BP_Core extends BP_Component {
 		bp_update_is_item_admin( bp_user_has_access(), 'core' );
 
 		// Is the logged in user is a mod for the current item?
-		bp_update_is_item_mod( false,                  'core' );
+		bp_update_is_item_mod( false, 'core' );
 
-		/**
-		 * Fires at the end of the setup of bp-core globals setting.
-		 *
-		 * @since 1.1.0
-		 */
-		do_action( 'bp_core_setup_globals' );
+		parent::setup_globals(
+			array(
+				'block_globals' => array(
+					'bp/login-form' => array(
+						'widget_classnames' => array( 'widget_bp_core_login_widget', 'buddypress' ),
+					),
+				),
+			)
+		);
 	}
 
 	/**
@@ -350,5 +353,58 @@ class BP_Core extends BP_Component {
 		}
 
 		parent::register_post_types();
+	}
+
+	/**
+	 * Init the Core controllers of the BP REST API.
+	 *
+	 * @since 9.0.0
+	 *
+	 * @param array $controllers Optional. See BP_Component::rest_api_init() for
+	 *                           description.
+	 */
+	public function rest_api_init( $controllers = array() ) {
+		$controllers = array(
+			'BP_REST_Components_Endpoint',
+		);
+
+		parent::rest_api_init( $controllers );
+	}
+
+	/**
+	 * Register the BP Core Blocks.
+	 *
+	 * @since 9.0.0
+	 *
+	 * @param array $blocks Optional. See BP_Component::blocks_init() for
+	 *                      description.
+	 */
+	public function blocks_init( $blocks = array() ) {
+		parent::blocks_init(
+			array(
+				'bp/login-form' => array(
+					'name'               => 'bp/login-form',
+					'editor_script'      => 'bp-login-form-block',
+					'editor_script_url'  => plugins_url( 'js/blocks/login-form.js', dirname( __FILE__ ) ),
+					'editor_script_deps' => array(
+						'wp-blocks',
+						'wp-element',
+						'wp-components',
+						'wp-i18n',
+						'wp-block-editor',
+						'bp-block-components',
+					),
+					'style'              => 'bp-login-form-block',
+					'style_url'          => plugins_url( 'css/blocks/login-form.css', dirname( __FILE__ ) ),
+					'attributes'         => array(
+						'title' => array(
+							'type'    => 'string',
+							'default' => '',
+						),
+					),
+					'render_callback'    => 'bp_block_render_login_form_block',
+				),
+			)
+		);
 	}
 }

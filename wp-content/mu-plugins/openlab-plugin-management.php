@@ -40,6 +40,7 @@ function openlab_hide_plugins( $plugins ) {
 		'elasticpress-buddypress/elasticpress-buddypress.php',
 		'elasticpress-buddypress/elasticpress-rest.php',
 		'embed-google-map/embed_google_map.php',
+		'enable-jquery-migrate-helper/enable-jquery-migrate-helper.php',
 		'enigma/enigma.php',
 		'ewww-image-optimizer/ewww-image-optimizer.php',
 		'featured-content-gallery/content-gallery.php',

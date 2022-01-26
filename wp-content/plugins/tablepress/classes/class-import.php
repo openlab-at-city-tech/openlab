@@ -56,7 +56,7 @@ class TablePress_Import {
 	 * Imported table.
 	 *
 	 * @since 1.0.0
-	 * @var array
+	 * @var array|false
 	 */
 	protected $imported_table = false;
 
@@ -93,12 +93,12 @@ class TablePress_Import {
 	 *
 	 * @param string $format Import format.
 	 * @param string $data   Data to import.
-	 * @return bool|array False on error, table array on success.
+	 * @return array|false Table array on success, false on error.
 	 */
 	public function import_table( $format, $data ) {
 		$this->import_data = apply_filters( 'tablepress_import_table_data', $data, $format );
 
-		if ( ! in_array( $format, array( 'xlsx', 'xls' ) ) ) {
+		if ( ! in_array( $format, array( 'xlsx', 'xls' ), true ) ) {
 			$this->fix_table_encoding();
 		}
 
@@ -155,15 +155,18 @@ class TablePress_Import {
 
 		// Prepend XML declaration, for better encoding support.
 		$full_html = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' . $this->import_data;
-		if ( PHP_VERSION_ID < 80000 && function_exists( 'libxml_disable_entity_loader' ) ) {
-			// Don't expand external entities, see https://websec.io/2012/08/27/Preventing-XXE-in-PHP.html.
-			libxml_disable_entity_loader( true );
+		if ( function_exists( 'libxml_disable_entity_loader' ) ) {
+			/*
+			 * Don't expand external entities, see https://websec.io/2012/08/27/Preventing-XXE-in-PHP.html.
+			 * Silence warnings as the function is deprecated in PHP 8, but can be necessary with LIBXML_NOENT being defined, see https://core.trac.wordpress.org/changeset/50714.
+			 */
+			@libxml_disable_entity_loader( true ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 		}
 		// No warnings/errors raised, but stored internally.
 		libxml_use_internal_errors( true );
 		$dom = new DOMDocument( '1.0', 'UTF-8' );
 		// No strict checking for invalid HTML.
-		$dom->strictErrorChecking = false;
+		$dom->strictErrorChecking = false; // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 		$dom->loadHTML( $full_html );
 		if ( false === $dom ) {
 			$this->imported_table = false;
@@ -279,10 +282,10 @@ class TablePress_Import {
 			}
 			$output = '<strong>' . __( 'The imported file contains errors:', 'tablepress' ) . "</strong><br /><br />JSON error: {$json_error}<br />";
 			wp_die( $output, 'Import Error', array( 'response' => 200, 'back_link' => true ) );
-		} else {
-			// Specifically cast to an array again.
-			$json_table = (array) $json_table;
 		}
+
+		// Specifically cast to an array again.
+		$json_table = (array) $json_table;
 
 		if ( isset( $json_table['data'] ) ) {
 			// JSON data contained a full export.
@@ -372,12 +375,12 @@ class TablePress_Import {
 		TablePress::load_file( 'simplexlsx.class.php', 'libraries' );
 		$xlsx_file = SimpleXLSX::parse( $this->import_data, true );
 
-		if ( $xlsx_file ) {
-			$this->imported_table = array( 'data' => $xlsx_file->rows() );
-		} else {
+		if ( ! $xlsx_file ) {
 			$output = '<strong>' . __( 'The imported file contains errors:', 'tablepress' ) . '</strong><br /><br />' . SimpleXLSX::parseError() . '<br />';
 			wp_die( $output, 'Import Error', array( 'response' => 200, 'back_link' => true ) );
 		}
+
+		$this->imported_table = array( 'data' => $xlsx_file->rows() );
 	}
 
 	/**
@@ -439,6 +442,7 @@ class TablePress_Import {
 
 		// Check for possible UTF-16 BOMs ("little endian" and "big endian") and try to convert the data to UTF-8.
 		if ( "\xFF\xFE" === substr( $this->import_data, 0, 2 ) || "\xFE\xFF" === substr( $this->import_data, 0, 2 ) ) {
+			// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 			$data = @iconv( 'UTF-16', 'UTF-8', $this->import_data );
 			if ( false !== $data ) {
 				$this->import_data = $data;
@@ -450,6 +454,7 @@ class TablePress_Import {
 		if ( function_exists( 'mb_detect_encoding' ) ) {
 			$current_encoding = mb_detect_encoding( $this->import_data, 'ASCII, UTF-8, ISO-8859-1' );
 			if ( 'UTF-8' !== $current_encoding ) {
+				// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 				$data = @iconv( $current_encoding, 'UTF-8', $this->import_data );
 				if ( false !== $data ) {
 					$this->import_data = $data;

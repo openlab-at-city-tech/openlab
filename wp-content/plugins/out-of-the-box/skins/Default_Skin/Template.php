@@ -34,5 +34,5 @@ $ads_skip_after_seconds = (empty($shortcode_ads_skip_after_seconds) ? $this->get
   data-ads-skip="<?php echo ($ads_can_skip && ((int) $ads_skip_after_seconds > -1)) ? $ads_skip_after_seconds : '-1'; ?>"
   >
   <div class="loading initialize"><svg class="loader-spinner" viewBox="25 25 50 50"><circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="3" stroke-miterlimit="10"></circle></svg></div>
-  <<?php echo $mode; ?> <?php echo ('1' === $autoplay) ? 'autoplay' : ''; ?> preload="metadata" playsinline webkit-playsinline crossorigin="anonymous"></<?php echo$mode; ?>>
+  <<?php echo $mode; ?> <?php echo ('1' === $autoplay) ? 'autoplay' : ''; ?> preload="metadata" playsinline webkit-playsinline></<?php echo$mode; ?>>
 </div>

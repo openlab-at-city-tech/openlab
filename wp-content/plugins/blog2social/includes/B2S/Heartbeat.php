@@ -96,7 +96,7 @@ class B2S_Heartbeat {
         $networkTypeData = array('profil' => 0, 'page' => 1, 'group' => 2);
         global $wpdb;
         $sql = "SELECT posts.id, posts.user_timezone, posts.sched_date, posts.sched_date_utc, posts.v2_id, user.token FROM {$wpdb->prefix}b2s_posts as posts "
-                . "LEFT JOIN {$wpdb->prefix}b2s_user AS user on posts.blog_user_id = user.blog_user_id WHERE posts.sched_date_utc != %s AND posts.sched_date_utc <= %s AND posts.hide=%d AND posts.post_for_approve = %d"; //AND posts.publish_date = %s
+                . "LEFT JOIN {$wpdb->prefix}b2s_user AS user on posts.blog_user_id = user.blog_user_id WHERE posts.sched_date_utc != %s AND posts.sched_date_utc <= %s AND posts.hide=%d AND posts.post_for_approve = %d LIMIT 500"; //AND posts.publish_date = %s
         $select = $wpdb->prepare($sql, '0000-00-00 00:00:00', gmdate('Y-m-d H:i:s'), 0, 0); //,'0000-00-00 00:00:00'
         $sendData = $wpdb->get_results($select, ARRAY_A);
 
@@ -220,7 +220,7 @@ class B2S_Heartbeat {
     private function updateUserSchedTimePost() {
         global $wpdb;
         $sql = "SELECT posts.id, posts.sched_date, posts.sched_date_utc, user.token FROM {$wpdb->prefix}b2s_posts as posts "
-                . "LEFT JOIN {$wpdb->prefix}b2s_user AS user on posts.blog_user_id = user.blog_user_id WHERE hook_action = %d";
+                . "LEFT JOIN {$wpdb->prefix}b2s_user AS user on posts.blog_user_id = user.blog_user_id WHERE hook_action = %d LIMIT 100";
         $sendData = $wpdb->get_results($wpdb->prepare($sql, 2), ARRAY_A);
 
         if (is_array($sendData) && !empty($sendData) && isset($sendData[0])) {
@@ -247,7 +247,7 @@ class B2S_Heartbeat {
         global $wpdb;
         $sql = "SELECT posts.id, posts.sched_date, posts.sched_date_utc,schedDetails.sched_data, schedDetails.image_url,user.token FROM {$wpdb->prefix}b2s_posts as posts "
                 . "LEFT JOIN {$wpdb->prefix}b2s_posts_sched_details AS schedDetails on posts.sched_details_id = schedDetails.id "
-                . "LEFT JOIN {$wpdb->prefix}b2s_user AS user on posts.blog_user_id = user.blog_user_id WHERE hook_action = %d AND post_for_approve = %d";
+                . "LEFT JOIN {$wpdb->prefix}b2s_user AS user on posts.blog_user_id = user.blog_user_id WHERE hook_action = %d AND post_for_approve = %d LIMIT 100";
         $sendData = $wpdb->get_results($wpdb->prepare($sql, 5, 0), ARRAY_A);
 
         if (is_array($sendData) && !empty($sendData) && isset($sendData[0])) {
@@ -272,7 +272,7 @@ class B2S_Heartbeat {
 
     private function deleteUserSchedPost() {
         global $wpdb;
-        $sql = "SELECT posts.id, posts.v2_id, user.token FROM {$wpdb->prefix}b2s_posts as posts LEFT JOIN {$wpdb->prefix}b2s_user AS user on posts.blog_user_id = user.blog_user_id WHERE hook_action = %d AND  post_for_approve = %d";
+        $sql = "SELECT posts.id, posts.v2_id, user.token FROM {$wpdb->prefix}b2s_posts as posts LEFT JOIN {$wpdb->prefix}b2s_user AS user on posts.blog_user_id = user.blog_user_id WHERE hook_action = %d AND  post_for_approve = %d LIMIT 500";
         $sendData = $wpdb->get_results($wpdb->prepare($sql, 3, 0), ARRAY_A);
         if (is_array($sendData) && !empty($sendData) && isset($sendData[0])) {
             foreach ($sendData as $k => $value) {
@@ -296,7 +296,7 @@ class B2S_Heartbeat {
 
     private function deleteUserPublishPost() {
         global $wpdb;
-        $sql = "SELECT posts.id, user.token FROM {$wpdb->prefix}b2s_posts as posts LEFT JOIN {$wpdb->prefix}b2s_user AS user on posts.blog_user_id = user.blog_user_id WHERE hook_action = %d AND post_for_approve = %d";
+        $sql = "SELECT posts.id, user.token FROM {$wpdb->prefix}b2s_posts as posts LEFT JOIN {$wpdb->prefix}b2s_user AS user on posts.blog_user_id = user.blog_user_id WHERE hook_action = %d AND post_for_approve = %d LIMIT 500";
         $sendData = $wpdb->get_results($wpdb->prepare($sql, 4, 0), ARRAY_A);
         if (is_array($sendData) && !empty($sendData) && isset($sendData[0])) {
             foreach ($sendData as $k => $value) {

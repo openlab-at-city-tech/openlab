@@ -194,6 +194,28 @@ require get_template_directory().'/assets/libraries/TGM-Plugin/class-tgm-plugin-
  * Enqueue admin scripts and styles.
  */
 function eportfolio_admin_scripts( $hook ) {
+	$current_screen = get_current_screen();
+	    if( $current_screen->id != "widgets" ) {
+
+			wp_enqueue_media();
+			wp_enqueue_style( 'wp-color-picker' );
+		    
+		    wp_enqueue_script('eportfolio-admin', get_template_directory_uri() . '/assets/twp/js/admin.js', array('jquery'), '', 1);
+
+		    $ajax_nonce = wp_create_nonce('eportfolio_ajax_nonce');
+					
+			wp_localize_script( 
+		        'eportfolio-admin',
+		        'eportfolio_admin',
+		        array(
+		            'ajax_url'   => esc_url( admin_url( 'admin-ajax.php' ) ),
+		            'ajax_nonce' => $ajax_nonce,
+		            'active' => esc_html__('Active','eportfolio'),
+			        'deactivate' => esc_html__('Deactivate','eportfolio'),
+		         )
+		    );
+
+		}
 	if ( 'widgets.php' === $hook ) {
 	    wp_enqueue_media();
 		wp_enqueue_script( 'eportfolio-custom-widgets', get_template_directory_uri() . '/assets/twp/js/widgets.js', array( 'jquery' ), '1.0.0', true );
@@ -211,6 +233,11 @@ require get_template_directory() . '/inc/widgets/widgets-init.php';
 require get_template_directory() . '/inc/custom-header.php';
 require get_template_directory() . '/inc/hooks/blog-banner-slider.php';
 require get_template_directory() . '/inc/localized-variables.php';
+
+require get_template_directory() . '/classes/admin-notice.php';
+require get_template_directory() . '/classes/plugin-classes.php';
+require get_template_directory() . '/classes/about.php';
+
 
 /**
  * Custom template tags for this theme.
@@ -286,3 +313,15 @@ function eportfolio_add_description( $item_output, $item ) {
         return $item_output;
     };
 }
+
+add_filter('themeinwp_enable_demo_import_compatiblity','eportfolio_demo_import_filter_apply');
+
+if( !function_exists('eportfolio_demo_import_filter_apply') ):
+
+	function eportfolio_demo_import_filter_apply(){
+
+		return true;
+
+	}
+
+endif;

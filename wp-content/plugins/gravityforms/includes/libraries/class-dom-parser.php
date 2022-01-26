@@ -91,12 +91,6 @@ class Dom_Parser {
 	 */
 	public function get_injected_html() {
 		require_once \GFCommon::get_base_path() . '/form_display.php';
-		if ( ! class_exists( 'GFFormDisplay' ) ) {
-			_b( 'get_injected_html' );
-			_b( get_current_blog_id() );
-			_b( $_SERVER );
-			_b( wp_debug_backtrace_summary() );
-		}
 
 		$has_printed = \GFFormDisplay::$hooks_js_printed;
 
@@ -278,10 +272,13 @@ class Dom_Parser {
 	 * Determine if the current server request is one which requires us to add our hooks scripts.
 	 *
 	 * @since 2.5.6
+	 * @since 2.5.13 - Added $check_empty param
+	 *
+	 * @param bool $check_empty Whether or not to validate that the DOM content isn't empty.
 	 *
 	 * @return bool
 	 */
-	public function is_parseable_request() {
+	public function is_parseable_request( $check_empty = true ) {
 		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
 			return false;
 		}
@@ -300,7 +297,7 @@ class Dom_Parser {
 			return false;
 		}
 
-		if ( empty( $this->content ) ) {
+		if ( $check_empty && empty( $this->content ) ) {
 			return false;
 		}
 

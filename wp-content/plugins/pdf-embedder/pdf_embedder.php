@@ -4,8 +4,8 @@
  * Plugin Name: PDF Embedder
  * Plugin URI: http://wp-pdf.com/
  * Description: Embed PDFs straight into your posts and pages, with flexible width and height. No third-party services required. Compatible with Gutenberg Editor WordPress
- * Version: 4.6.2
- * Author: Lever Technology LLC
+ * Version: 4.6.4
+ * Author: WP PDF Embedder Team
  * Author URI: http://wp-pdf.com/
  * License: GPL3
  * Text Domain: pdf-embedder
@@ -13,60 +13,80 @@
 
 require_once( plugin_dir_path(__FILE__).'/core/core_pdf_embedder.php' );
 
-class pdfemb_basic_pdf_embedder extends core_pdf_embedder {
+if ( !class_exists('PDF_Embedder_Basic') ) {
 
-	protected $PLUGIN_VERSION = '4.6.2';
-	
-	// Singleton
-	private static $instance = null;
-	
-	public static function get_instance() {
-		if (null == self::$instance) {
-			self::$instance = new self;
-		}
-		return self::$instance;
-	}
-	
-	// Basic specific
+	/**
+	 * Core Plugin Class
+	 *
+	 * @since 4.6.3
+	 */
+	final class PDF_Embedder_Basic extends core_pdf_embedder {
 
-    protected static $poweredby_optionname='poweredby';
+		/**
+		 * Singleton Instance
+		 *
+		 * @since 4.6.3
+		 *
+		 * @var PDF_Embedder_Basic
+		 */
+		public static $instance = null;
 
-    public function pdfemb_activation_hook($network_wide) {
-        parent::pdfemb_activation_hook($network_wide);
+		/**
+		 * Plugin Version
+		 *
+		 * @since 4.6.3
+		 *
+		 * @var string
+		 */
+		protected $PLUGIN_VERSION = '4.6.4';
 
-        // If installed previously, keep 'poweredby' to off since they were used to that
-        $old_options = get_site_option($this->get_options_name());
+		protected $file = __FILE__;
 
-        if (!$old_options) {
-            update_site_option(self::$poweredby_optionname, 'off');
-        }
-    }
+		/**
+		 * Powered By
+		 *
+		 * @since 1.0.0
+		 *
+		 * @var string
+		 */
+          protected static $poweredby_optionname='poweredby';
+
+          public function pdfemb_activation_hook($network_wide) {
+
+			parent::pdfemb_activation_hook($network_wide);
+			 // If installed previously, keep 'poweredby' to off since they were used to that
+               $old_options = get_site_option($this->get_options_name());
+
+               if (!$old_options) {
+                    update_site_option(self::$poweredby_optionname, 'off');
+               }
+          }
 
     public function pdfemb_wp_enqueue_scripts() {
 
-    			if (!$this->useminified()) {
-    				wp_register_script( 'pdfemb_grabtopan_js', $this->my_plugin_url().'js/grabtopan-basic-'.$this->PLUGIN_VERSION.'.js', array('jquery'), $this->PLUGIN_VERSION);
-    				wp_register_script( 'pdfemb_pv_core_js', $this->my_plugin_url().'js/pdfemb-pv-core-'.$this->PLUGIN_VERSION.'.js',
-    	                array('pdfemb_grabtopan_js', 'jquery'), $this->PLUGIN_VERSION );
-    				wp_register_script( 'pdfemb_versionspecific_pdf_js', $this->my_plugin_url().'js/pdfemb-basic-'.$this->PLUGIN_VERSION.'.js',
-    	                array('jquery', 'pdfemb_pv_core_js'), $this->PLUGIN_VERSION);
-    				wp_register_script( 'pdfemb_embed_pdf_js', $this->my_plugin_url().'js/pdfemb-embed-pdf-'.$this->PLUGIN_VERSION.'.js',
-    					array('pdfemb_pv_core_js', 'pdfemb_versionspecific_pdf_js'), $this->PLUGIN_VERSION );
-    			}
-    			else {
-    				wp_register_script( 'pdfemb_embed_pdf_js', $this->my_plugin_url().'js/all-pdfemb-basic-'.$this->PLUGIN_VERSION.'.min.js', array('jquery'), false);
-    			}
-    			
-    			wp_localize_script( 'pdfemb_embed_pdf_js', 'pdfemb_trans', $this->get_translation_array() );
-    		
-    			wp_register_script( 'pdfemb_pdf_js', $this->my_plugin_url().'js/pdfjs/pdf-'.$this->PLUGIN_VERSION.''.($this->useminified() ? '.min' : '').'.js', array('jquery'), $this->PLUGIN_VERSION);
-    		
+               if (!$this->useminified()) {
+                    wp_register_script( 'pdfemb_grabtopan_js', $this->my_plugin_url().'assets/js/grabtopan-basic.js', array('jquery'), $this->PLUGIN_VERSION);
+                    wp_register_script( 'pdfemb_pv_core_js', $this->my_plugin_url().'assets/js/pdfemb-pv-core.js',
+                     array('pdfemb_grabtopan_js', 'jquery'), time() );
+                    wp_register_script( 'pdfemb_versionspecific_pdf_js', $this->my_plugin_url().'assets/js/pdfemb-basic.js',
+                     array('jquery', 'pdfemb_pv_core_js'), $this->PLUGIN_VERSION);
+                    wp_register_script( 'pdfemb_embed_pdf_js', $this->my_plugin_url().'assets/js/pdfemb-embed-pdf.js',
+                         array('pdfemb_pv_core_js', 'pdfemb_versionspecific_pdf_js'), $this->PLUGIN_VERSION );
+               }
+               else {
+                    wp_register_script( 'pdfemb_embed_pdf_js', $this->my_plugin_url().'assets/js/min/all-pdfemb-min.js', array('jquery'), false);
+               }
+
+               wp_localize_script( 'pdfemb_embed_pdf_js', 'pdfemb_trans', $this->get_translation_array() );
+
+               wp_register_script( 'pdfemb_pdf_js', $this->my_plugin_url().'assets/js/pdfjs/pdf'.($this->useminified() ? '.min' : '').'.js', array('jquery'), $this->PLUGIN_VERSION);
+
     }
-	
+
 	protected function get_extra_js_name() {
 		return 'basic';
 	}
-	
+
 	// ADMIN
 
 	protected function pdfemb_mainsection_extra() {
@@ -109,8 +129,8 @@ class pdfemb_basic_pdf_embedder extends core_pdf_embedder {
 
         <?php
 	}
-	
-	protected function pdfemb_mobilesection_text()
+
+	protected function render_mobile_section()
     {
         ?>
 
@@ -173,6 +193,7 @@ class pdfemb_basic_pdf_embedder extends core_pdf_embedder {
     }
 
 	protected function extra_plugin_action_links( $links ) {
+
         $secure_link = '<a href="http://wp-pdf.com/secure/?utm_source=Plugins%20Secure&utm_medium=freemium&utm_campaign=Freemium" target="_blank">Secure</a>';
         $mobile_link = '<a href="http://wp-pdf.com/premium/?utm_source=Plugins%20Premium&utm_medium=freemium&utm_campaign=Freemium" target="_blank">Mobile</a>';
 
@@ -180,6 +201,7 @@ class pdfemb_basic_pdf_embedder extends core_pdf_embedder {
         array_unshift( $links, $mobile_link );
 
         return $links;
+
 	}
 
 	protected function get_translation_array() {
@@ -200,7 +222,7 @@ class pdfemb_basic_pdf_embedder extends core_pdf_embedder {
 	}
 
 	// AUX
-	
+
 	protected function my_plugin_basename() {
 		$basename = plugin_basename(__FILE__);
 		if ('/'.$basename == __FILE__) { // Maybe due to symlink
@@ -208,7 +230,7 @@ class pdfemb_basic_pdf_embedder extends core_pdf_embedder {
 		}
 		return $basename;
 	}
-	
+
 	protected function my_plugin_url() {
 		$basename = plugin_basename(__FILE__);
 		if ('/'.$basename == __FILE__) { // Maybe due to symlink
@@ -217,15 +239,51 @@ class pdfemb_basic_pdf_embedder extends core_pdf_embedder {
 		// Normal case (non symlink)
 		return plugin_dir_url( __FILE__ );
 	}
-	
+
+			/**
+		 * Autoload function.
+		 *
+		 * @access public
+		 * @static
+		 * @param mixed $class The class.
+		 * @return void
+		 */
+		public static function autoload( $class ) {
+
+			// Prepare variables.
+			$prefix   = 'PDE';
+			$base_dir = __DIR__ . '/core/';
+			$length   = mb_strlen( $prefix );
+
+			// If the class is not using the namespace prefix, return.
+			if ( 0 !== strncmp( $prefix, $class, $length ) ) {
+				return;
+			}
+
+			// Prepare classes to be autoloaded.
+			$relative_class = mb_substr( $class, 0, strlen( $class ) );
+			$relative_class = str_replace( 'PDE\\', '', $relative_class );
+			$file           = $base_dir . str_replace( '\\', '/', $relative_class ) . '.php';
+
+			// If the file exists, load it.
+			if ( file_exists( $file ) ) {
+				require $file;
+			}
+
+		}
+	public static function get_instance() {
+		if (null == self::$instance) {
+			self::$instance = new self;
+		}
+		return self::$instance;
+	}
+
 }
+
+}
+add_action( 'plugins_loaded', 'pdfembPDFEmbedder' );
 
 // Global accessor function to singleton
 function pdfembPDFEmbedder() {
-	return pdfemb_basic_pdf_embedder::get_instance();
+	return PDF_Embedder_Basic::get_instance();
 }
-
-// Initialise at least once
-pdfembPDFEmbedder();
-
-?>

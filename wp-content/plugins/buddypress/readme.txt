@@ -5,8 +5,8 @@ License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Requires at least: 4.9
 Requires PHP: 5.6
-Tested up to: 5.7
-Stable tag: 8.0.0
+Tested up to: 5.8
+Stable tag: 9.1.1
 
 BuddyPress helps site builders & developers add community features to their websites, with user profiles, activity streams, and more!
 
@@ -125,6 +125,12 @@ Try <a href="https://wordpress.org/plugins/bbpress/">bbPress</a>. It integrates 
 
 == Upgrade Notice ==
 
+= 9.1.1 =
+See: https://codex.buddypress.org/releases/version-9-1-1/
+
+= 9.0.0 =
+See: https://codex.buddypress.org/releases/version-9-0-0/
+
 = 8.0.0 =
 See: https://codex.buddypress.org/releases/version-8-0-0/
 
@@ -172,24 +178,15 @@ See: https://codex.buddypress.org/releases/version-5-1-0/
 
 = 5.0.0 =
 See: https://codex.buddypress.org/releases/version-5-0-0/
-
-= 4.4.0 =
-See: https://codex.buddypress.org/releases/version-4-4-0/
-
-= 4.3.0 =
-See: https://codex.buddypress.org/releases/version-4-3-0/
-
-= 4.2.0 =
-See: https://codex.buddypress.org/releases/version-4-2-0/
-
-= 4.1.0 =
-See: https://codex.buddypress.org/releases/version-4-1-0/
-
-= 4.0.0 =
-See: https://codex.buddypress.org/releases/version-4-0-0/
 
 == Changelog ==
 
+= 9.1.1 =
+See: https://codex.buddypress.org/releases/version-9-1-1/
+
+= 9.0.0 =
+See: https://codex.buddypress.org/releases/version-9-0-0/
+
 = 8.0.0 =
 See: https://codex.buddypress.org/releases/version-8-0-0/
 
@@ -237,18 +234,3 @@ See: https://codex.buddypress.org/releases/version-5-1-0/
 
 = 5.0.0 =
 See: https://codex.buddypress.org/releases/version-5-0-0/
-
-= 4.4.0 =
-See: https://codex.buddypress.org/releases/version-4-4-0/
-
-= 4.3.0 =
-See: https://codex.buddypress.org/releases/version-4-3-0/
-
-= 4.2.0 =
-See: https://codex.buddypress.org/releases/version-4-2-0/
-
-= 4.1.0 =
-See: https://codex.buddypress.org/releases/version-4-1-0/
-
-= 4.0.0 =
-See: https://codex.buddypress.org/releases/version-4-0-0/

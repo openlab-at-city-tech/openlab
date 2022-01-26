@@ -95,20 +95,53 @@ http://jetsloth.com/gravity-forms-image-choices/
 .image-choices-field .image-choices-choice-focus label {
   border-color: #000; }
 
+html[dir="rtl"] .image-choices-field .image-choices-choice input[type="radio"],
+html[dir="rtl"] .image-choices-field .image-choices-choice input[type="checkbox"] {
+  left: unset;
+  right: -9999px; }
+
 .image-choices-field .image-choices-choice.image-choices-choice-other input[type="text"] {
-  position: absolute;
-  width: calc(100% - 40px) !important;
-  margin: 0 0 0 0;
-  left: 20px;
-  top: 50%;
-  transform: translateY(-50%);
-  text-align: center;
-  border: none;
-  background-color: transparent;
-  z-index: 1; }
+  margin: 0 0 0 0; }
 
 .image-choices-field .image-choices-choice.image-choices-choice-other .image-choices-choice-image-wrap {
   background-color: #ECEFED; }
+
+.image-choices-field .gf_other_wrap {
+  position: absolute;
+  width: 150%;
+  max-width: 90vw;
+  margin: 0;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  padding: 36px 10px 20px 10px;
+  z-index: 99;
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2); }
+  .image-choices-field .gf_other_wrap:not(.active) {
+    pointer-events: none;
+    visibility: hidden; }
+    .image-choices-field .gf_other_wrap:not(.active) .gf_other_close {
+      display: none; }
+
+.image-choices-field .gf_other_close {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  width: 24px;
+  height: 24px;
+  opacity: 0.3; }
+  .image-choices-field .gf_other_close:before, .image-choices-field .gf_other_close:after {
+    position: absolute;
+    left: 10px;
+    content: ' ';
+    height: 24px;
+    width: 2px;
+    background-color: #000; }
+  .image-choices-field .gf_other_close:before {
+    transform: rotate(45deg); }
+  .image-choices-field .gf_other_close:after {
+    transform: rotate(-45deg); }
 
 .gquiz-image-choices-field .gquiz-image-choices {
   list-style: none;

@@ -60,23 +60,23 @@ class GFImageChoices extends GFAddOn {
 	public function add_inline_options_label_lookup( $form_string, $form, $current_page ) {
 		$option_labels_lookup = [];
 		foreach( $form['fields'] as $field ) {
-		    if ( !is_object($field) ) {
-		        continue;
-            }
-		    if ( property_exists($field, 'imageChoices_enableImages') && $field->imageChoices_enableImages && $field->type == "option" && ( $field->get_input_type() == "radio" || $field->get_input_type() == "checkbox" ) ) {
-			    $key = "field_" . $field->id;
-			    if ( !isset($option_labels_lookup[$key]) ) {
-				    $option_labels_lookup[$key] = [];
-                }
-		        foreach( $field->choices as $i => $choice ) {
-			        $option_labels_lookup[$key][] = $choice['text'];
-                }
-            }
+			if ( !is_object($field) ) {
+				continue;
+			}
+			if ( property_exists($field, 'imageChoices_enableImages') && $field->imageChoices_enableImages && $field->type == "option" && ( $field->get_input_type() == "radio" || $field->get_input_type() == "checkbox" ) ) {
+				$key = "field_" . $field->id;
+				if ( !isset($option_labels_lookup[$key]) ) {
+					$option_labels_lookup[$key] = [];
+				}
+				foreach( $field->choices as $i => $choice ) {
+					$option_labels_lookup[$key][] = $choice['text'];
+				}
+			}
 		}
 		$form_string .= "<script type=\"text/javascript\"> window.imageChoicesOptionLabels = window.imageChoicesOptionLabels || {}; window.imageChoicesOptionLabels[".$form['id']."] = " . json_encode($option_labels_lookup) . ";  </script>";
 
 		return $form_string;
-    }
+	}
 
 	/**
 	 * Handles hooks and loading of language files.
@@ -296,7 +296,7 @@ class GFImageChoices extends GFAddOn {
 
 		$output_responsive_list_css = apply_filters('gfic_responsive_list_css', false);
 
-		$form_markup_version = ( !empty( rgar( $form, 'markupVersion' ) ) ) ? rgar( $form, 'markupVersion' ) : 1;
+		$form_markup_version = ( GFCommon::is_legacy_markup_enabled( $form ) ) ? 1 : 2;
 		if ( $form_markup_version == 2 ):
 			ob_start();
 			?>
@@ -2309,9 +2309,36 @@ class GFImageChoices extends GFAddOn {
 
 
 	public function add_image_options_markup( $choice_markup, $choice, $field, $value ) {
+
+		$is_other_choice = ( $choice['value'] == "gf_other_choice" );
+		$is_select_all = ( ($field->type == 'checkbox' || $field->optionType == 'checkbox') && empty($choice) );
+
 		if (  property_exists($field, 'imageChoices_enableImages') && $field->imageChoices_enableImages ) {
-			$img = (isset($choice['imageChoices_image'])) ? $choice['imageChoices_image'] : '';
-			$imgID = (isset($choice['imageChoices_imageID'])) ? $choice['imageChoices_imageID'] : '';
+
+			if ( $is_select_all ) {
+				// if this condition is met, it's the checkbox field 'Select all' option
+				return $choice_markup;
+			}
+			else if ( $is_other_choice ) {
+				// if this condition is met, it's the radio field 'Other' option
+				$other_img_global = apply_filters("gfic_other_choice_image", "");
+				$other_imgID_global = apply_filters("gfic_other_choice_imageID", 0);
+				$other_img_form = apply_filters("gfic_other_choice_image_{$field->formId}", $other_img_global);
+				$other_imgID_form = apply_filters("gfic_other_choice_imageID_{$field->formId}", $other_imgID_global);
+				$img = apply_filters("gfic_other_choice_image_{$field->formId}_{$field->id}", $other_img_form);
+				$imgID = apply_filters("gfic_other_choice_imageID_{$field->formId}_{$field->id}", $other_imgID_form);
+			}
+			else {
+				$img = (isset($choice['imageChoices_image'])) ? $choice['imageChoices_image'] : '';
+				$imgID = (isset($choice['imageChoices_imageID'])) ? $choice['imageChoices_imageID'] : '';
+			}
+
+			if ( empty($img) ) {
+				$img = '';
+			}
+			else {
+				$img = str_replace('$', '\$', $img);
+			}
 
 			$form = GFAPI::get_form( $field->formId );
 			$form_settings = $this->get_form_settings($form);
@@ -2325,23 +2352,18 @@ class GFImageChoices extends GFAddOn {
 			$lazy_load = ( $form_lazy_load_value === '' ) ? $lazy_load_global_value : $form_lazy_load_value;
 
 
-			if (empty($img)) {
-				$img = '';
-			}
-			$img = str_replace('$', '\$', $img);
-
-			$lightboxImg = (!empty($imgID)) ? wp_get_attachment_image_src($imgID, $form_lightbox_size) : '';
-			if (!empty($lightboxImg)) {
+			$lightboxImg = ( !empty($imgID) ) ? wp_get_attachment_image_src($imgID, $form_lightbox_size) : '';
+			if ( !empty($lightboxImg) ) {
 				$lightboxImg = $lightboxImg[0];
-			}
-			$lightboxImg = str_replace('$', '\$', $lightboxImg);
-
-			if ( ($field->type == 'checkbox' || $field->optionType == 'checkbox') && empty($choice) ) {
-				// if this condition is met, it's the 'Select all' option
-				return $choice_markup;
+				$lightboxImg = str_replace('$', '\$', $lightboxImg);
 			}
 
-			if ( !empty($lazy_load ) && !is_admin() ) {
+			if ( empty($img) ) {
+				$img_markup = implode("", array(
+					'<span class="image-choices-choice-image-wrap" style="background-image:none;"></span>',
+				));
+			}
+			else if ( !empty($lazy_load ) && !is_admin() ) {
 				$img_markup = implode("", array(
 					'<span class="image-choices-choice-image-wrap jetsloth-lazy" data-lazy-bg="' . $img . '">',
 					'<img src="" data-lazy-src="' . $img . '" alt="" class="image-choices-choice-image jetsloth-lazy" data-lightbox-src="' . $lightboxImg . '" />',
@@ -2377,7 +2399,7 @@ class GFImageChoices extends GFAddOn {
 				)), $choice_markup);
 			}
 			else {
-			    // OPTION FIELD
+				// OPTION FIELD
 				$choice_markup = str_replace('<label', '<label data-img="'.$img.'" data-lightbox-src="'.$lightboxImg.'"', $choice_markup);
 			}
 

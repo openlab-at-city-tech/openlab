@@ -1,5 +1,89 @@
 # Changelog
 
+## 4.0 _(2021-07-04)_
+
+### Highlights:
+
+This feature release adds a new setting to allow for user-specified filters to be processed, updates the plugin framework significantly, improves the plugin settings page, extracts developer docs from readme into new DEVELOPER-DOCS.md, restructures unit test files, notes compatibility through WP 5.7, and more.
+
+### Details:
+
+* New: Add new setting "More filters" to allow for user-specified filters to be processed for text replacements
+* New: Add `get_default_filters()` to return the default core and/or third-party filters processed by the plugin
+* Change: Update plugin framework to 064
+    * 064:
+    * New: For checkbox settings, support a 'more_help' config option for defining help text to appear below checkbox and its label
+    * Fix: Fix URL for plugin listing donate link
+    * Change: Store donation URL as object variable
+    * Change: Update strings used for settings page donation link
+    * 063:
+    * Fix: Simplify settings initialization to prevent conflicts with other plugins
+    * Change: Remove ability to detect plugin settings page before current screen is set, as it is no longer needed
+    * Change: Enqueue thickbox during `'admin_enqueue_scripts'` action instead of during `'init'`
+    * Change: Use `is_plugin_admin_page()` in `help_tabs()` instead of reproducing its functionality
+    * Change: Trigger a debugging warning if `is_plugin_admin_page()` is used before `'admin_init'` action is fired
+    * 062:
+    * Change: Update `is_plugin_admin_page()` to use `get_current_screen()` when available
+    * Change: Actually prevent object cloning and unserialization by throwing an error
+    * Change: Check that there is a current screen before attempting to access its property
+    * Change: Remove 'type' attribute from `style` tag
+    * Change: Incorporate commonly defined styling for inline_textarea
+    * 061:
+    * Fix bug preventing settings from getting saved
+    * 060:
+    * Rename class from `c2c_{PluginName}_Plugin_051` to `c2c_Plugin_060`
+    * Move string translation handling into inheriting class making the plugin framework code plugin-agnostic
+        * Add abstract function `get_c2c_string()` as a getter for translated strings
+        * Replace all existing string usage with calls to `get_c2c_string()`
+    * Handle WordPress's deprecation of the use of the term "whitelist"
+        * Change: Rename `whitelist_options()` to `allowed_options()`
+        * Change: Use `add_allowed_options()` instead of deprecated `add_option_whitelist()` for WP 5.5+
+        * Change: Hook `allowed_options` filter instead of deprecated `whitelist_options` for WP 5.5+
+    * New: Add initial unit tests (currently just covering `is_wp_version_cmp()` and `get_c2c_string()`)
+    * Add `is_wp_version_cmp()` as a utility to compare current WP version against a given WP version
+    * Refactor `contextual_help()` to be easier to read, and correct function docblocks
+    * Don't translate urlencoded donation email body text
+    * Add inline comments for translators to clarify purpose of placeholders
+    * Change PHP package name (make it singular)
+    * Tweak inline function description
+    * Note compatibility through WP 5.7+
+    * Update copyright date (2021)
+    * 051:
+    * Allow setting integer input value to include commas
+    * Use `number_format_i18n()` to format integer value within input field
+    * Update link to coffee2code.com to be HTTPS
+    * Update `readme_url()` to refer to plugin's readme.txt on plugins.svn.wordpress.org
+    * Remove defunct line of code
+* Change: Allow displayed dropdown values for 'when' setting to be translated
+* Change: Improve settings page help text by adding, rephrasing, relocating, and tweaaking some formatting
+* Change: Change text_to_replace setting from being a textarea to inline textarea
+* Change: Move translation of all parent class strings into main plugin file
+* New: Add DEVELOPER-DOCS.md and move hooks documentation into it
+* New: Suggest Text Hover plugin as an option for those needing support for a specific subset use case
+* Change: Output newlines after block-level tags in settings page
+* Change: Omit 'cols' attribute for textarea since it is overridden
+* Change: Move 'code' tags out of translatable string for 'when' setting
+* Change: Note compatibility through WP 5.7+
+* Change: Update copyright date (2021)
+* Change: Improve documentation in readme.txt
+* Change: Tweak plugin's readme.txt tags
+* Change: Sync installation instructions in README.txt with what's in readme.txt
+* Change: Remove "A screenshot of" prefix from caption
+* Unit tests:
+    * Change: Restructure unit test file structure
+        * New: Create new subdirectory `tests/phpunit/` to house all files related to PHP unit testing
+        * Change: Move `bin/` to `tests/bin/`
+        * Change: Move `tests/bootstrap.php` into `tests/phpunit/`
+        * Change: In bootstrap, store path to plugin file constant so its value can be used within that file and in test file
+        * Change: Move tests from `tests/` to `tests/phpunit/tests/`
+        * Change: Remove 'test-' prefix from unit test files
+        * Change: Rename `phpunit.xml` to `phpunit.xml.dist` per best practices
+    * New: Add unit tests for shortcuts adjacent to punction and special characters
+    * Change: Output custom error message for known failing tests explaining the issues and why they may not actually be bugs
+    * Change: Rename improperly named unit test
+* New: Add a few more possible TODO items
+* Change: Updated screenshot for settings page
+
 ## 3.9.1 _(2020-07-11)_
 
 ### Highlights:

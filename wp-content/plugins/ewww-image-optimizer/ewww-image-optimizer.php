@@ -1,6 +1,6 @@
 <?php
 /**
- * Loader for Standard EWWW I.O. plugin.
+ * Loader for Standard EWWW IO plugin.
  *
  * This file bootstraps the rest of the EWWW IO plugin after some basic checks.
  *
@@ -13,7 +13,9 @@ Plugin Name: EWWW Image Optimizer
 Plugin URI: https://wordpress.org/plugins/ewww-image-optimizer/
 Description: Reduce file sizes for images within WordPress including NextGEN Gallery and GRAND FlAGallery. Uses jpegtran, optipng/pngout, and gifsicle.
 Author: Exactly WWW
-Version: 6.1.8
+Version: 6.3.0
+Requires at least: 5.5
+Requires PHP: 7.1
 Author URI: https://ewww.io/
 License: GPLv3
 */
@@ -103,6 +105,19 @@ if ( ! defined( 'PHP_VERSION_ID' ) || PHP_VERSION_ID < 50600 ) {
 	 * EWWWIO_Tracking class for reporting anonymous site data.
 	 */
 	require_once( EWWW_IMAGE_OPTIMIZER_PLUGIN_PATH . 'classes/class-ewwwio-tracking.php' );
+	/**
+	 * The main function to return a single EIO_Base object to functions elsewhere.
+	 *
+	 * @return object object|EIO_Base The one true EIO_Base instance.
+	 */
+	function eio_plugin() {
+		// TODO: create an intermediary EIO_Plugin class that inherits from EIO_Base. This
+		// can be used for things like defining constants, including other files, and adding hooks.
+		if ( method_exists( 'EIO_Base', 'instance' ) ) {
+			return EIO_Base::instance();
+		}
+		return new EIO_Base();
+	}
 } // End if().
 
 if ( ! function_exists( 'ewww_image_optimizer_unsupported_php' ) ) {

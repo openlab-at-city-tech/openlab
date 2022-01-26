@@ -61,6 +61,9 @@ class Scripts {
 	 * page builders or the backend by standard WordPress or
 	 * really anywhere.
 	 *
+	 * @notice Does not work in Gutenberg as widget's markup is loaded via REST API
+	 *         and React.
+	 *
 	 * @return void
 	 */
 	public function init_widget_js() {

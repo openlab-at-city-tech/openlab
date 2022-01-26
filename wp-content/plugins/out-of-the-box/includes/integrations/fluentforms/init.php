@@ -210,13 +210,11 @@ class FluentForms_Field extends \FluentForm\App\Services\FormBuilder\BaseFieldMa
 
         global $OutoftheBox;
 
+        $OutoftheBox->load_scripts();
         $OutoftheBox->load_styles();
 
-        add_thickbox();
-
         wp_enqueue_style('OutoftheBox.CustomStyle');
-
-        wp_enqueue_script('WPCP-'.$this->field_type.'-FluentForms', plugins_url('FluentForms.js', __FILE__), ['jquery'], OUTOFTHEBOX_VERSION, true);
+        wp_enqueue_script('WPCP-'.$this->field_type.'-FluentForms', plugins_url('FluentForms.js', __FILE__), ['WPCloudplugin.Libraries'], OUTOFTHEBOX_VERSION, true);
     }
 
     /**

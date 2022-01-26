@@ -21,8 +21,12 @@ $eportfolio_archive_classes = array(
 ?>
 <article id="post-<?php the_ID(); ?>" <?php post_class($eportfolio_archive_classes); ?>>
 	<?php if (has_post_thumbnail()) {
+		$url = '';
 	    $thumb = wp_get_attachment_image_src( get_post_thumbnail_id( get_the_ID() ), 'medium_large' );
-	    $url = $thumb['0']; ?>
+	    if (!empty($thumb['0'])) {
+	    	$url = $thumb['0'];
+	    }
+	     ?>
 	        <a class="post-thumbnail data-bg" href="<?php the_permalink(); ?>"  data-background="<?php echo esc_url($url); ?>">
         		<?php the_post_thumbnail('full'); ?>
         		<span class="twp-post-format-white">

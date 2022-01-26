@@ -419,7 +419,7 @@ class TablePress_Table_Model extends TablePress_Model {
 		 * @param bool $filter Whether to filter the content of table cells and other fields. Default true.
 		 */
 		if ( ! apply_filters( 'tablepress_filter_table_cell_content', true ) ) {
-			return;
+			return $table;
 		}
 
 		// Filter the table name and description.
@@ -682,7 +682,7 @@ class TablePress_Table_Model extends TablePress_Model {
 	 * @since 1.0.0
 	 *
 	 * @param bool $single_value Optional. Whether to return just the number of tables from the list, or also count in the database.
-	 * @return bool int|array Number of Tables (if $single_value), or array of Numbers from list/DB (if ! $single_value).
+	 * @return int|array Number of Tables (if $single_value), or array of Numbers from list/DB (if ! $single_value).
 	 */
 	public function count_tables( $single_value = true ) {
 		$count_list = count( $this->tables->get( 'table_post' ) );
@@ -760,7 +760,7 @@ class TablePress_Table_Model extends TablePress_Model {
 	 * @since 1.0.0
 	 *
 	 * @param string $table_id Table ID.
-	 * @return int|bool Post ID on success, false on error.
+	 * @return int|false Post ID on success, false on error.
 	 */
 	protected function _get_post_id( $table_id ) {
 		$table_post = $this->tables->get( 'table_post' );
@@ -872,8 +872,8 @@ class TablePress_Table_Model extends TablePress_Model {
 			'name'          => '',
 			'description'   => '',
 			'data'          => array( array( '' ) ), // one empty cell
-			// 'created' => current_time( 'mysql' ),
-			'last_modified' => current_time( 'mysql' ),
+			// 'created' => wp_date( 'Y-m-d H:i:s' ),
+			'last_modified' => wp_date( 'Y-m-d H:i:s' ),
 			'author'        => get_current_user_id(),
 			'options'       => array(
 				'last_editor'                 => get_current_user_id(),
@@ -980,8 +980,8 @@ class TablePress_Table_Model extends TablePress_Model {
 		$table['description'] = $new_table['description'];
 		$table['data'] = $new_table['data'];
 		// $table['author'] = get_current_user_id(); // We don't want this, as it would override the original author.
-		// $table['created'] = current_time( 'mysql' ); // We don't want this, as it would override the original datetime.
-		$table['last_modified'] = current_time( 'mysql' );
+		// $table['created'] = wp_date( 'Y-m-d H:i:s' ); // We don't want this, as it would override the original datetime.
+		$table['last_modified'] = wp_date( 'Y-m-d H:i:s' );
 		$table['options']['last_editor'] = get_current_user_id();
 		// Table Options.
 		if ( isset( $new_table['options'] ) ) { // is for example not set for newly added tables
@@ -1202,11 +1202,11 @@ class TablePress_Table_Model extends TablePress_Model {
 	 * @since 1.5.0
 	 *
 	 * @param int   $post_id          Post ID of the imported post.
-	 * @param int   $original_post_ID Original post ID that the post had on the site where it was exported from.
+	 * @param int   $original_post_id Original post ID that the post had on the site where it was exported from.
 	 * @param array $postdata         Post data that was imported into the database.
 	 * @param array $post             Original post data as it was exported.
 	 */
-	public function add_table_id_on_wp_import( $post_id, $original_post_ID, array $postdata, array $post ) {
+	public function add_table_id_on_wp_import( $post_id, $original_post_id, array $postdata, array $post ) {
 		// Bail if the post could not be imported or if the post is not a TablePress table.
 		if ( is_wp_error( $post_id ) || $this->model_post->get_post_type() !== $postdata['post_type'] ) {
 			return;

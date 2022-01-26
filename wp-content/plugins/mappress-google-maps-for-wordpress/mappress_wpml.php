@@ -13,10 +13,10 @@ class Mappress_WPML {
 		if (!$src_postid || !$postid)
 			return;
 
-		// Delete any existing maps in target post
-		$maps = Mappress_Map::get_list($postid, 'ids');
-		foreach($maps as $mapid)
-			Mappress_Map::delete($mapid);
+		// Trash any existing maps in target post
+		$mapids = Mappress_Map::get_list($postid, 'ids');
+		foreach($mapids as $mapid)
+			Mappress_Map::mutate($mapid, array('status' => 'trashed'));
 
 		// Copy maps
 		$maps = Mappress_Map::get_list($src_postid);

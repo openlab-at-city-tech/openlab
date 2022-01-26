@@ -116,10 +116,10 @@ function wpt_update_oauth_settings( $auth = false, $post = false ) {
 					&& ! empty( $post['wtt_oauth_token'] )
 					&& ! empty( $post['wtt_oauth_token_secret'] )
 				) {
-					$ack = trim( $post['wtt_app_consumer_key'] );
-					$acs = trim( $post['wtt_app_consumer_secret'] );
-					$ot  = trim( $post['wtt_oauth_token'] );
-					$ots = trim( $post['wtt_oauth_token_secret'] );
+					$ack = sanitize_text_field( trim( $post['wtt_app_consumer_key'] ) );
+					$acs = sanitize_text_field( trim( $post['wtt_app_consumer_secret'] ) );
+					$ot  = sanitize_text_field( trim( $post['wtt_oauth_token'] ) );
+					$ots = sanitize_text_field( trim( $post['wtt_oauth_token_secret'] ) );
 					if ( ! $auth ) {
 						// If values are filled with asterisks, do not update; these are masked values.
 						if ( stripos( $ack, '***' ) === false ) {
@@ -164,9 +164,9 @@ function wpt_update_oauth_settings( $auth = false, $post = false ) {
 							$error_information = '';
 							$decode            = json_decode( $data );
 							if ( ! $auth ) {
-								update_option( 'wtt_twitter_username', stripslashes( $decode->screen_name ) );
+								update_option( 'wtt_twitter_username', sanitize_text_field( stripslashes( $decode->screen_name ) ) );
 							} else {
-								update_user_meta( $auth, 'wtt_twitter_username', stripslashes( $decode->screen_name ) );
+								update_user_meta( $auth, 'wtt_twitter_username', sanitize_text_field( stripslashes( $decode->screen_name ) ) );
 							}
 							$oauth_hash = wtt_oauth_credentials_to_hash( $auth );
 							if ( ! $auth ) {
@@ -299,11 +299,11 @@ function wtt_connect_oauth( $auth = false ) {
 					<div class="tokens">
 					<p>
 						<label for="wtt_app_consumer_key">' . __( 'API Key', 'wp-to-twitter' ) . '</label>
-						<input type="text" size="45" name="wtt_app_consumer_key" id="wtt_app_consumer_key" value="' . wpt_mask_attr( $ack ) . '" />
+						<input type="text" size="45" name="wtt_app_consumer_key" id="wtt_app_consumer_key" value="' . esc_attr( wpt_mask_attr( $ack ) ) . '" />
 					</p>
 					<p>
 						<label for="wtt_app_consumer_secret">' . __( 'API Secret', 'wp-to-twitter' ) . '</label>
-						<input type="text" size="45" name="wtt_app_consumer_secret" id="wtt_app_consumer_secret" value="' . wpt_mask_attr( $acs ) . '" />
+						<input type="text" size="45" name="wtt_app_consumer_secret" id="wtt_app_consumer_secret" value="' . esc_attr( wpt_mask_attr( $acs ) ) . '" />
 					</p>
 					</div>
 					</li>
@@ -313,11 +313,11 @@ function wtt_connect_oauth( $auth = false ) {
 					<div class="tokens">
 					<p>
 						<label for="wtt_oauth_token">' . __( 'Access Token', 'wp-to-twitter' ) . '</label>
-						<input type="text" size="45" name="wtt_oauth_token" id="wtt_oauth_token" value="' . wpt_mask_attr( $ot ) . '" />
+						<input type="text" size="45" name="wtt_oauth_token" id="wtt_oauth_token" value="' . esc_attr( wpt_mask_attr( $ot ) ) . '" />
 					</p>
 					<p>
 						<label for="wtt_oauth_token_secret">' . __( 'Access Token Secret', 'wp-to-twitter' ) . '</label>
-						<input type="text" size="45" name="wtt_oauth_token_secret" id="wtt_oauth_token_secret" value="' . wpt_mask_attr( $ots ) . '" />
+						<input type="text" size="45" name="wtt_oauth_token_secret" id="wtt_oauth_token_secret" value="' . esc_attr( wpt_mask_attr( $ots ) ) . '" />
 					</p>
 					</div>
 				' . $submit . '
@@ -349,10 +349,10 @@ function wtt_connect_oauth( $auth = false ) {
 					<fieldset class="options">
 					<ul>
 						<li><strong class="auth_label">' . __( 'Twitter Username ', 'wp-to-twitter' ) . '</strong> <code class="auth_code"><a href="http://twitter.com/' . esc_attr( $uname ) . '">' . esc_attr( $uname ) . '</a></code></li>
-						<li><strong class="auth_label">' . __( 'API Key ', 'wp-to-twitter' ) . '</strong> <code class="auth_code">' . wpt_mask_attr( $ack ) . '</code></li>
-						<li><strong class="auth_label">' . __( 'API Secret ', 'wp-to-twitter' ) . '</strong> <code class="auth_code">' . wpt_mask_attr( $acs ) . '</code></li>
-						<li><strong class="auth_label">' . __( 'Access Token ', 'wp-to-twitter' ) . '</strong> <code class="auth_code">' . wpt_mask_attr( $ot ) . '</code></li>
-						<li><strong class="auth_label">' . __( 'Access Token Secret ', 'wp-to-twitter' ) . '</strong> <code class="auth_code">' . wpt_mask_attr( $ots ) . '</code></li>
+						<li><strong class="auth_label">' . __( 'API Key ', 'wp-to-twitter' ) . '</strong> <code class="auth_code">' . esc_attr( wpt_mask_attr( $ack ) ) . '</code></li>
+						<li><strong class="auth_label">' . __( 'API Secret ', 'wp-to-twitter' ) . '</strong> <code class="auth_code">' . esc_attr( wpt_mask_attr( $acs ) ) . '</code></li>
+						<li><strong class="auth_label">' . __( 'Access Token ', 'wp-to-twitter' ) . '</strong> <code class="auth_code">' . esc_attr( wpt_mask_attr( $ot ) ) . '</code></li>
+						<li><strong class="auth_label">' . __( 'Access Token Secret ', 'wp-to-twitter' ) . '</strong> <code class="auth_code">' . esc_attr( wpt_mask_attr( $ots ) ) . '</code></li>
 					</ul>
 					</fieldset>
 					<div>

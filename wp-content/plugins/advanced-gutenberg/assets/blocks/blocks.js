@@ -5151,7 +5151,8 @@ var IconListPopup = function (_Component) {
     }, {
         key: 'handleClick',
         value: function handleClick(e) {
-            if (this.node.contains(e.target)) {
+            // ignore clicks inside the popup and the click that launched the popup
+            if (this.node.contains(e.target) || e.target.className.includes('advgb-browse-image-btn') || e.target.className.includes('advgb-browse-icon-btn')) {
                 return;
             }
             this.props.closePopup();
@@ -6235,7 +6236,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                                 className: "advgb-accordion-header-title",
                                 placeholder: __('Enter header…', 'advanced-gutenberg'),
                                 style: { color: 'inherit' },
-                                allowedFormats: ['core/bold', 'core/italic', 'core/image', 'core/strikethrough']
+                                allowedFormats: ['core/bold', 'core/italic', 'core/image', 'core/strikethrough', 'core/text-color']
                             })
                         ),
                         React.createElement(
@@ -7072,7 +7073,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                         "div",
                         { className: "advgb-accordions-wrapper" },
                         React.createElement(InnerBlocks, {
-                            template: [['advgb/accordion-item'], ['advgb/accordion-item']],
+                            template: [['advgb/accordion-item']],
                             templateLock: false,
                             allowedBlocks: ['advgb/accordion-item']
                         })
@@ -12130,11 +12131,9 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                 } else {
                     advgbTabsUniqueIDs.push(this.props.attributes.uniqueID);
                 }
-                if (!this.props.attributes.pid) {
-                    this.props.setAttributes({
-                        pid: "advgb-tabs-" + this.props.clientId
-                    });
-                }
+                this.props.setAttributes({
+                    pid: "advgb-tabs-" + this.props.clientId
+                });
                 this.updateTabHeaders();
                 this.props.resetOrder();
             }
@@ -12743,11 +12742,10 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                                 { href: "#advgb-tabs-tab" + index,
                                     style: { color: headerTextColor }
                                 },
-                                React.createElement(
-                                    "span",
-                                    null,
-                                    header
-                                )
+                                React.createElement(RichText.Content, {
+                                    tagName: "span",
+                                    value: header
+                                })
                             )
                         );
                     })
@@ -13037,6 +13035,12 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                     uniqueID = attributes.uniqueID;
 
 
+                var ALLOWED_BLOCKS = wp.blocks.getBlockTypes().map(function (block) {
+                    return block.name;
+                }).filter(function (blockName) {
+                    return blockName !== 'advgb/adv-tabs' && blockName !== 'advgb/tab';
+                });
+
                 var tabClassName = ["advgb-tab-" + uniqueID, 'advgb-tab-body'].filter(Boolean).join(' ');
                 return React.createElement(
                     Fragment,
@@ -13050,7 +13054,8 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                         },
                         React.createElement(InnerBlocks, {
                             template: [['core/paragraph']],
-                            templateLock: false
+                            templateLock: false,
+                            allowedBlocks: ALLOWED_BLOCKS
                         })
                     )
                 );
@@ -14100,7 +14105,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
         select = _wp$data.select;
 
 
-    var COLUMNS_LAYOUTS = [{ columns: 1, layout: '100', icon: '100', title: __('One', 'advanced-gutenberg') }, { columns: 2, layout: '12-12', icon: '12-12', title: __('Two: 1/2 - 1/2', 'advanced-gutenberg') }, { columns: 2, layout: '23-13', icon: '23-13', title: __('Two: 2/3 - 1/3', 'advanced-gutenberg') }, { columns: 2, layout: '13-23', icon: '13-23', title: __('Two: 1/3 - 2/3', 'advanced-gutenberg') }, { columns: 2, layout: '14-34', icon: '14-34', title: __('Two: 1/4 - 3/4', 'advanced-gutenberg') }, { columns: 2, layout: '34-14', icon: '34-14', title: __('Two: 3/4 - 1/4', 'advanced-gutenberg') }, { columns: 2, layout: '15-45', icon: '15-45', title: __('Two: 1/5 - 4/5', 'advanced-gutenberg') }, { columns: 2, layout: '45-15', icon: '45-15', title: __('Two: 4/5 - 1/5', 'advanced-gutenberg') }, { columns: 3, layout: '13-13-13', icon: '13-13-13', title: __('Three: 1/3 - 1/3 - 1/3', 'advanced-gutenberg') }, { columns: 3, layout: '12-14-14', icon: '12-14-14', title: __('Three: 1/2 - 1/4 - 1/4', 'advanced-gutenberg') }, { columns: 3, layout: '14-14-12', icon: '14-14-12', title: __('Three: 1/4 - 1/4 - 1/2', 'advanced-gutenberg') }, { columns: 3, layout: '14-12-14', icon: '14-12-14', title: __('Three: 1/4 - 1/2 - 1/4', 'advanced-gutenberg') }, { columns: 3, layout: '15-35-15', icon: '15-35-15', title: __('Three: 1/5 - 3/5 - 1/5', 'advanced-gutenberg') }, { columns: 3, layout: '35-15-15', icon: '35-15-15', title: __('Three: 3/5 - 1/5 - 1/5', 'advanced-gutenberg') }, { columns: 3, layout: '15-15-35', icon: '15-15-35', title: __('Three: 1/5 - 1/5 - 3/5', 'advanced-gutenberg') }, { columns: 3, layout: '16-46-16', icon: '16-46-16', title: __('Three: 1/6 - 4/6 - 1/6', 'advanced-gutenberg') }, { columns: 4, layout: '14-14-14-14', icon: '14-14-14-14', title: __('Four: 1/4 - 1/4 - 1/4 - 1/4', 'advanced-gutenberg') }, { columns: 4, layout: '36-16-16-16', icon: '36-16-16-16', title: __('Four: 3/6 - 1/6 - 1/6 - 1/6', 'advanced-gutenberg') }, { columns: 4, layout: '16-16-16-36', icon: '16-16-16-36', title: __('Four: 1/6 - 1/6 - 1/6 - 3/6', 'advanced-gutenberg') }, { columns: 4, layout: '15-15-15-25', icon: '15-15-15-25', title: __('Four: 1/5 - 1/5 - 1/5 - 2/5', 'advanced-gutenberg') }, { columns: 4, layout: '25-15-15-15', icon: '25-15-15-15', title: __('Four: 2/5 - 1/5 - 1/5 - 1/5', 'advanced-gutenberg') }, { columns: 5, layout: 'five', icon: '15-15-15-15-15', title: __('Five', 'advanced-gutenberg') }, { columns: 6, layout: 'six', icon: '16-16-16-16-16-16', title: __('Six', 'advanced-gutenberg') }];
+    var COLUMNS_LAYOUTS = [{ columns: 1, layout: '100', icon: '100', title: __('One column', 'advanced-gutenberg'), description: __('100', 'advanced-gutenberg') }, { columns: 2, layout: '12-12', icon: '12-12', title: __('Two columns; equal split', 'advanced-gutenberg'), description: __('50 / 50', 'advanced-gutenberg') }, { columns: 2, layout: '23-13', icon: '23-13', title: __('Two columns; two-thirds, one-third split', 'advanced-gutenberg'), description: __('66 / 33', 'advanced-gutenberg') }, { columns: 2, layout: '13-23', icon: '13-23', title: __('Two columns; one-third, two-thirds split', 'advanced-gutenberg'), description: __('33 / 66', 'advanced-gutenberg') }, { columns: 2, layout: '14-34', icon: '14-34', title: __('Two columns; one-quarter, three-quarters split', 'advanced-gutenberg'), description: __('25 / 75', 'advanced-gutenberg') }, { columns: 2, layout: '34-14', icon: '34-14', title: __('Two columns; three-quarters, one-quarter split', 'advanced-gutenberg'), description: __('75 / 25', 'advanced-gutenberg') }, { columns: 2, layout: '15-45', icon: '15-45', title: __('Two columns; one-fifth, four-fifths split', 'advanced-gutenberg'), description: __('20 / 80', 'advanced-gutenberg') }, { columns: 2, layout: '45-15', icon: '45-15', title: __('Two columns; four-fifths, one-fifth split', 'advanced-gutenberg'), description: __('80 / 20', 'advanced-gutenberg') }, { columns: 3, layout: '13-13-13', icon: '13-13-13', title: __('Three columns; equal split', 'advanced-gutenberg'), description: __('33 / 33 / 33', 'advanced-gutenberg') }, { columns: 3, layout: '12-14-14', icon: '12-14-14', title: __('Three columns; wider one-half left column', 'advanced-gutenberg'), description: __('50 / 25 / 25', 'advanced-gutenberg') }, { columns: 3, layout: '14-14-12', icon: '14-14-12', title: __('Three columns; wider one-half right column', 'advanced-gutenberg'), description: __('25 / 25 / 50', 'advanced-gutenberg') }, { columns: 3, layout: '14-12-14', icon: '14-12-14', title: __('Three columns; wider one-half center column', 'advanced-gutenberg'), description: __('25 / 50 / 25', 'advanced-gutenberg') }, { columns: 3, layout: '15-35-15', icon: '15-35-15', title: __('Three columns; wider three-fifths center column', 'advanced-gutenberg'), description: __('20 / 60 / 20', 'advanced-gutenberg') }, { columns: 3, layout: '35-15-15', icon: '35-15-15', title: __('Three columns; wider three-fifths left column', 'advanced-gutenberg'), description: __('60 / 20 / 20', 'advanced-gutenberg') }, { columns: 3, layout: '15-15-35', icon: '15-15-35', title: __('Three columns; wider three-fifths right column', 'advanced-gutenberg'), description: __('20 / 20 / 60', 'advanced-gutenberg') }, { columns: 3, layout: '16-46-16', icon: '16-46-16', title: __('Three columns; wider four-sixths center column', 'advanced-gutenberg'), description: __('16.6 / 66.6 / 16.6', 'advanced-gutenberg') }, { columns: 4, layout: '14-14-14-14', icon: '14-14-14-14', title: __('Four columns; equal split', 'advanced-gutenberg'), description: __('25 / 25 / 25 / 25', 'advanced-gutenberg') }, { columns: 4, layout: '36-16-16-16', icon: '36-16-16-16', title: __('Four columns; wider one-half left column', 'advanced-gutenberg'), description: __('50 / 16.6 / 16.6 / 16.6', 'advanced-gutenberg') }, { columns: 4, layout: '16-16-16-36', icon: '16-16-16-36', title: __('Four columns; wider one-half right column', 'advanced-gutenberg'), description: __('16.6 / 16.6 / 16.6 / 50', 'advanced-gutenberg') }, { columns: 4, layout: '15-15-15-25', icon: '15-15-15-25', title: __('Four columns; wider two-fifths right column', 'advanced-gutenberg'), description: __('20 / 20 / 20 / 40', 'advanced-gutenberg') }, { columns: 4, layout: '25-15-15-15', icon: '25-15-15-15', title: __('Four columns; wider two-fifths left column', 'advanced-gutenberg'), description: __('40 / 20 / 20 / 20', 'advanced-gutenberg') }, { columns: 5, layout: 'five', icon: '15-15-15-15-15', title: __('Five columns; equal split', 'advanced-gutenberg'), description: __('20 / 20 / 20 / 20 / 20', 'advanced-gutenberg') }, { columns: 6, layout: 'six', icon: '16-16-16-16-16-16', title: __('Six columns; equal split', 'advanced-gutenberg'), description: __('16.6 / 16.6 / 16.6 / 16.6 / 16.6 / 16.6', 'advanced-gutenberg') }];
     var COLUMNS_LAYOUTS_RESPONSIVE = [{ columns: 3, layout: '1-12-12', icon: '100-12-12', title: __('Three: 100 - 1/2 - 1/2', 'advanced-gutenberg') }, { columns: 3, layout: '12-12-1', icon: '12-12-100', title: __('Three: 1/2 - 1/2 - 100', 'advanced-gutenberg') }, { columns: 4, layout: '12x4', icon: '12-12-12-12', title: __('Four: Two Columns', 'advanced-gutenberg') }, { columns: 6, layout: '12x6', icon: '12-12-12-12', title: __('Six: Two Columns', 'advanced-gutenberg') }, { columns: 6, layout: '13x6', icon: '13-13-13-13-13-13', title: __('Six: Three Columns', 'advanced-gutenberg') }];
     var COLUMNS_LAYOUTS_STACKED = {
         columns: 1, layout: 'stacked', icon: 'stacked', title: __('Stacked', 'advanced-gutenberg')
@@ -14286,7 +14291,12 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                                         },
                                         React.createElement('img', { src: advgbBlocks.pluginUrl + '/assets/blocks/columns/icons/' + layout.icon + '.png',
                                             alt: layout.layout
-                                        })
+                                        }),
+                                        React.createElement(
+                                            'div',
+                                            { className: 'advgb-columns-layout-description' },
+                                            layout.description
+                                        )
                                     )
                                 );
                             })
@@ -16998,360 +17008,6 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
         save: AdvCountUpSave
     });
 })(wp.i18n, wp.blocks, wp.element, wp.blockEditor, wp.components);
-
-/***/ }),
-
-/***/ "./src/assets/blocks/customstyles/custom-styles.jsx":
-/*!**********************************************************!*\
-  !*** ./src/assets/blocks/customstyles/custom-styles.jsx ***!
-  \**********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-(function (wpI18n, wpHooks, wpBlocks, wpBlockEditor, wpComponents, wpCompose) {
-    wpBlockEditor = wp.blockEditor || wp.editor;
-    var addFilter = wpHooks.addFilter;
-    var __ = wpI18n.__;
-    var hasBlockSupport = wpBlocks.hasBlockSupport;
-    var _wpBlockEditor = wpBlockEditor,
-        InspectorControls = _wpBlockEditor.InspectorControls;
-    var SelectControl = wpComponents.SelectControl;
-    var createHigherOrderComponent = wpCompose.createHigherOrderComponent;
-
-
-    var SUPPORTED_BLOCKS = ['core/paragraph', 'core/heading', 'core/list', 'core/code', 'core/preformatted', 'core/table', 'core/columns', 'core/column', 'core/group'];
-
-    // Register custom styles to blocks attributes
-    addFilter('blocks.registerBlockType', 'advgb/registerCustomStyleClass', function (settings) {
-        if (SUPPORTED_BLOCKS.includes(settings.name)) {
-            settings.attributes = _extends(settings.attributes, {
-                customStyle: {
-                    type: 'string'
-                },
-                identifyColor: {
-                    type: 'string'
-                }
-            });
-        }
-
-        return settings;
-    });
-
-    // Add option to return to default style
-    if (typeof advgbBlocks.customStyles !== 'undefined' && advgbBlocks.customStyles) {
-        advgbBlocks.customStyles.unshift({
-            id: 0,
-            label: __('Select a custom style', 'advanced-gutenberg'),
-            value: '',
-            identifyColor: ''
-        });
-    }
-
-    // Add option to select custom styles for supported blocks
-    addFilter('editor.BlockEdit', 'advgb/customStyles', function (BlockEdit) {
-        return function (props) {
-            return [React.createElement(BlockEdit, _extends({ key: 'block-edit-custom-class-name' }, props)), props.isSelected && SUPPORTED_BLOCKS.includes(props.name) && React.createElement(
-                InspectorControls,
-                { key: 'advgb-custom-controls' },
-                React.createElement(
-                    'div',
-                    { className: 'advgb-custom-styles-wrapper' },
-                    React.createElement(SelectControl, {
-                        label: [__('Custom styles', 'advanced-gutenberg'), React.createElement('span', { className: 'components-panel__color-area',
-                            key: 'customstyle-identify',
-                            style: {
-                                background: props.attributes.identifyColor,
-                                verticalAlign: 'text-bottom',
-                                borderRadius: '50%',
-                                border: 'none',
-                                width: '16px',
-                                height: '16px',
-                                display: 'inline-block',
-                                marginLeft: '10px'
-                            } })],
-                        help: __('This option let you add custom style for the current block', 'advanced-gutenberg'),
-                        value: props.attributes.customStyle,
-                        options: advgbBlocks.customStyles.map(function (cstyle, index) {
-                            if (cstyle.title) advgbBlocks.customStyles[index].label = cstyle.title;
-                            if (cstyle.name) advgbBlocks.customStyles[index].value = cstyle.name;
-
-                            return cstyle;
-                        }),
-                        onChange: function onChange(cstyle) {
-                            var identifyColor = advgbBlocks.customStyles.filter(function (style) {
-                                return style.value === cstyle;
-                            })[0].identifyColor;
-
-                            props.setAttributes({
-                                customStyle: cstyle,
-                                identifyColor: identifyColor,
-                                backgroundColor: undefined,
-                                textColor: undefined,
-                                fontSize: undefined
-                            });
-                        }
-                    })
-                )
-            )];
-        };
-    });
-
-    // Apply custom styles on front-end
-    addFilter('blocks.getSaveContent.extraProps', 'advgb/loadFrontendCustomStyles', function (extraProps, blockType, attributes) {
-        if (hasBlockSupport(blockType, 'customStyle', true) && attributes.customStyle) {
-            if (typeof extraProps.className === 'undefined') {
-                extraProps.className = attributes.customStyle;
-            } else {
-                extraProps.className += ' ' + attributes.customStyle;
-                extraProps.className = extraProps.className.trim();
-            }
-        }
-
-        return extraProps;
-    });
-
-    var withStyleClasses = createHigherOrderComponent(function (BlockListBlock) {
-        return function (props) {
-            if (!SUPPORTED_BLOCKS.includes(props.name) || !hasBlockSupport(props.name, 'customStyle', true)) {
-                return React.createElement(BlockListBlock, props);
-            }
-
-            var customStyle = props.attributes.customStyle;
-
-
-            return React.createElement(BlockListBlock, _extends({}, props, { className: '' + customStyle }));
-        };
-    }, 'withStyleClasses');
-
-    // Apply custom styles on back-end
-    wp.hooks.addFilter('editor.BlockListBlock', 'advgb/loadBackendCustomStyles', withStyleClasses);
-})(wp.i18n, wp.hooks, wp.blocks, wp.blockEditor, wp.components, wp.compose);
-
-/***/ }),
-
-/***/ "./src/assets/blocks/editor-sidebar/sidebar.jsx":
-/*!******************************************************!*\
-  !*** ./src/assets/blocks/editor-sidebar/sidebar.jsx ***!
-  \******************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-(function (wpI18n, wpPlugins, wpElement, wpData, wpComponents, wpEditPost) {
-    var __ = wpI18n.__;
-    var registerPlugin = wpPlugins.registerPlugin;
-    var Component = wpElement.Component,
-        Fragment = wpElement.Fragment;
-    var select = wpData.select,
-        withSelect = wpData.withSelect,
-        withDispatch = wpData.withDispatch;
-    var PanelBody = wpComponents.PanelBody,
-        ButtonGroup = wpComponents.ButtonGroup,
-        Button = wpComponents.Button;
-    var PluginSidebar = wpEditPost.PluginSidebar,
-        PluginSidebarMoreMenuItem = wpEditPost.PluginSidebarMoreMenuItem;
-    var compose = wp.compose.compose;
-
-
-    var sidebarName = "advgb-editor-sidebar";
-    var sidebarTitle = __('PublishPress Blocks Settings', 'advanced-gutenberg');
-    var sidebarIcon = "layout";
-    var VISUAL_GUIDE_SETTINGS = [{ label: __('Inherit from global settings', 'advanced-gutenberg'), value: '' }, { label: __('Enable', 'advanced-gutenberg'), value: 'enable' }, { label: __('Disable', 'advanced-gutenberg'), value: 'disable' }];
-    var EDITOR_WIDTH_SETTINGS = [{ label: __('Inherit from global settings', 'advanced-gutenberg'), value: '' }, { label: __('Original', 'advanced-gutenberg'), value: 'default' }, { label: __('Large', 'advanced-gutenberg'), value: 'large' }, { label: __('Full width', 'advanced-gutenberg'), value: 'full' }];
-
-    var updateBodyClass = function updateBodyClass() {
-        var postMetaData = select('core/editor').getEditedPostAttribute('meta');
-        if (!postMetaData) return null;
-        var advgb_blocks_editor_width = postMetaData.advgb_blocks_editor_width,
-            advgb_blocks_columns_visual_guide = postMetaData.advgb_blocks_columns_visual_guide;
-
-        var bodyClass = window.document.body.classList;
-
-        bodyClass.remove('advgb-editor-width-default', 'advgb-editor-width-large', 'advgb-editor-width-full', 'advgb-editor-col-guide-enable', 'advgb-editor-col-guide-disable');
-
-        // Editor width
-        if (!!advgb_blocks_editor_width) {
-            bodyClass.add('advgb-editor-width-' + advgb_blocks_editor_width);
-        } else {
-            // Global
-            bodyClass.add('advgb-editor-width-' + advg_settings.editor_width_global);
-        }
-
-        // Columns visual guide
-        if (!!advgb_blocks_columns_visual_guide) {
-            bodyClass.add('advgb-editor-col-guide-' + advgb_blocks_columns_visual_guide);
-        } else {
-            // Global
-            bodyClass.add('advgb-editor-col-guide-' + advg_settings.enable_columns_visual_guide_global);
-        }
-    };
-
-    // Line below stopped working - https://github.com/WordPress/gutenberg/issues/28032#issuecomment-759723289
-    // window.document.addEventListener("DOMContentLoaded", updateBodyClass);
-
-    var AdvSidebar = function (_Component) {
-        _inherits(AdvSidebar, _Component);
-
-        function AdvSidebar() {
-            _classCallCheck(this, AdvSidebar);
-
-            return _possibleConstructorReturn(this, (AdvSidebar.__proto__ || Object.getPrototypeOf(AdvSidebar)).apply(this, arguments));
-        }
-
-        _createClass(AdvSidebar, [{
-            key: 'onUpdateMeta',
-            value: function onUpdateMeta(metaData) {
-                var _props = this.props,
-                    metaValues = _props.metaValues,
-                    updateMetaField = _props.updateMetaField;
-
-                var meta = _extends({}, metaValues, metaData);
-
-                updateMetaField(meta);
-                updateBodyClass();
-            }
-        }, {
-            key: 'render',
-            value: function render() {
-                var _this2 = this;
-
-                var _props2 = this.props,
-                    columnsVisualGuide = _props2.columnsVisualGuide,
-                    editorWidth = _props2.editorWidth;
-
-
-                return React.createElement(
-                    Fragment,
-                    null,
-                    React.createElement(
-                        'div',
-                        { className: 'advgb-editor-sidebar-note' },
-                        __('These settings will override the PublishPress Blocks global settings.', 'advanced-gutenberg')
-                    ),
-                    React.createElement(
-                        PanelBody,
-                        { title: __('Editor width', 'advanced-gutenberg') },
-                        React.createElement(
-                            'div',
-                            { className: 'advgb-editor-sidebar-note' },
-                            __('Change your editor width', 'advanced-gutenberg')
-                        ),
-                        React.createElement(
-                            ButtonGroup,
-                            { className: 'advgb-button-group' },
-                            EDITOR_WIDTH_SETTINGS.map(function (setting, index) {
-                                return React.createElement(
-                                    Button,
-                                    { className: 'advgb-button',
-                                        key: index,
-                                        isSecondary: setting.value !== editorWidth,
-                                        isPrimary: setting.value === editorWidth,
-                                        onClick: function onClick() {
-                                            return _this2.onUpdateMeta({ advgb_blocks_editor_width: setting.value });
-                                        }
-                                    },
-                                    setting.label
-                                );
-                            })
-                        )
-                    ),
-                    React.createElement(
-                        PanelBody,
-                        { title: __('Columns Visual Guide', 'advanced-gutenberg'), initialOpen: false },
-                        React.createElement(
-                            'div',
-                            { className: 'advgb-editor-sidebar-note' },
-                            __('Border to materialize PublishPress Blocks Column block', 'advanced-gutenberg')
-                        ),
-                        React.createElement(
-                            ButtonGroup,
-                            { className: 'advgb-button-group' },
-                            VISUAL_GUIDE_SETTINGS.map(function (setting, index) {
-                                return React.createElement(
-                                    Button,
-                                    { className: 'advgb-button',
-                                        key: index,
-                                        isSecondary: setting.value !== columnsVisualGuide,
-                                        isPrimary: setting.value === columnsVisualGuide,
-                                        onClick: function onClick() {
-                                            return _this2.onUpdateMeta({ advgb_blocks_columns_visual_guide: setting.value });
-                                        }
-                                    },
-                                    setting.label
-                                );
-                            })
-                        )
-                    )
-                );
-            }
-        }]);
-
-        return AdvSidebar;
-    }(Component);
-
-    var AdvSidebarRender = compose(withDispatch(function (dispatch) {
-        return {
-            updateMetaField: function updateMetaField(data) {
-                dispatch('core/editor').editPost({ meta: data });
-            }
-        };
-    }), withSelect(function (select) {
-        var metaValues = select('core/editor').getEditedPostAttribute('meta');
-
-        return {
-            metaValues: metaValues,
-            columnsVisualGuide: metaValues.advgb_blocks_columns_visual_guide,
-            editorWidth: metaValues.advgb_blocks_editor_width
-        };
-    }))(AdvSidebar);
-
-    registerPlugin('advgb-editor-sidebar', {
-        render: function render() {
-            return React.createElement(
-                Fragment,
-                null,
-                React.createElement(
-                    PluginSidebarMoreMenuItem,
-                    {
-                        target: sidebarName,
-                        icon: sidebarIcon
-                    },
-                    sidebarTitle
-                ),
-                React.createElement(
-                    PluginSidebar,
-                    {
-                        name: sidebarName,
-                        title: sidebarTitle,
-                        icon: sidebarIcon
-                    },
-                    React.createElement(
-                        'div',
-                        { className: 'advgb-editor-sidebar-content' },
-                        React.createElement(AdvSidebarRender, null)
-                    )
-                )
-            );
-        }
-    });
-})(wp.i18n, wp.plugins, wp.element, wp.data, wp.components, wp.editPost);
 
 /***/ }),
 
@@ -23849,7 +23505,8 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                     sliderAutoplay = attributes.sliderAutoplay,
                     linkCustomTax = attributes.linkCustomTax,
                     showCustomTaxList = attributes.showCustomTaxList,
-                    imagePosition = attributes.imagePosition;
+                    imagePosition = attributes.imagePosition,
+                    onlyFromCurrentUser = attributes.onlyFromCurrentUser;
 
 
                 var recentPosts = this.props.recentPosts;
@@ -24102,7 +23759,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                                 label: __('Show content with these ', 'advanced-gutenberg') + decodeEntities('' + tax.name)
                             });
                         }),
-                        React.createElement(_queryControls.AuthorSelect, {
+                        !onlyFromCurrentUser && React.createElement(_queryControls.AuthorSelect, {
                             key: 'query-controls-author-select',
                             authorList: authorList,
                             label: __('Author', 'advanced-gutenberg'),
@@ -24110,6 +23767,13 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                             selectedAuthorId: selectedAuthorId,
                             onChange: function onChange(value) {
                                 return setAttributes({ author: value });
+                            }
+                        }),
+                        React.createElement(ToggleControl, {
+                            label: __('Only shows posts written by the user viewing the block', 'advanced-gutenberg'),
+                            checked: onlyFromCurrentUser,
+                            onChange: function onChange() {
+                                return setAttributes({ onlyFromCurrentUser: !onlyFromCurrentUser });
                             }
                         }),
                         isInPost && postType === 'post' && React.createElement(ToggleControl, {
@@ -25021,7 +24685,8 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                 excludeIds = _props$attributes3.excludeIds,
                 author = _props$attributes3.author,
                 taxonomies = _props$attributes3.taxonomies,
-                taxIds = _props$attributes3.taxIds;
+                taxIds = _props$attributes3.taxIds,
+                onlyFromCurrentUser = _props$attributes3.onlyFromCurrentUser;
 
 
             var catIds = categories && categories.length > 0 ? categories.map(function (cat) {
@@ -25037,7 +24702,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                 per_page: numberOfPosts,
                 token: myToken,
                 exclude: excludeCurrentPost ? excludeIds ? union(excludeIds, [postId]) : postId : excludeIds,
-                author: author
+                author: onlyFromCurrentUser ? wp.data.select('core').getCurrentUser().id : author
             }, function (value) {
                 return !isUndefined(value) && !(isArray(value) && (isNull(value) || value.length === 0));
             });
@@ -26022,15 +25687,6 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                 React.createElement("path", { d: "M0,25 C0,38.8071194 11.1928806,50 25,50 C38.8071194,50 50,38.8071194 50,25 C50,11.1928806 38.8071194,0 25,0 C11.1928806,0 0,11.1928806 0,25 Z M3,25 C3,37.1502651 12.8497349,47 25,47 C37.1502651,47 47,37.1502651 47,25 C47,12.8497349 37.1502651,3 25,3 C12.8497349,3 3,12.8497349 3,25 Z M11,24.3933898 C11,27.9245881 13.8664452,30.7868324 17.4026552,30.7868852 C20.9389182,30.7868852 23.8053634,27.9245881 23.8053634,24.3933898 C23.8053634,20.8622443 20.9389711,17.9999472 17.4026552,18 C13.8664452,18 11,20.8622443 11,24.3933898 Z M33.4026552,30.7868852 C36.9389711,30.7868852 39.8053634,27.9245881 39.8053634,24.3933898 C39.8053634,20.8622971 36.9389182,18 33.4026552,18 C29.8663923,18 27,20.8622971 27,24.3933898 C27,27.9245881 29.8664452,30.7868852 33.4026552,30.7868852 Z M33.394864,19.9672131 C35.8394032,19.9672131 37.8210935,21.9489034 37.8210935,24.3934426 C37.8210935,26.8379818 35.8394032,28.8196721 33.394864,28.8196721 C30.9503248,28.8196721 28.9686345,26.8379818 28.9686345,24.3934426 C28.9686345,21.9489034 30.9503248,19.9672131 33.394864,19.9672131 Z M33.394864,19.9672131" })
             )
         ),
-        google: React.createElement(
-            Fragment,
-            null,
-            React.createElement(
-                "g",
-                { fill: "currentColor", "fill-rule": "evenodd", stroke: "none", "stroke-width": "1" },
-                React.createElement("path", { d: "M25,0 C11.1928806,0 0,11.1928806 0,25 C0,38.8071194 11.1928806,50 25,50 C38.8071194,50 50,38.8071194 50,25 C50,11.1928806 38.8071194,0 25,0 Z M25,3 C12.8497349,3 3,12.8497349 3,25 C3,37.1502651 12.8497349,47 25,47 C37.1502651,47 47,37.1502651 47,25 C47,12.8497349 37.1502651,3 25,3 Z M38.2449877,22.1097512 L38.2449877,27.3881872 L36.0036768,27.3881872 L36.0036768,22.1097512 L30.7739796,22.1097512 L30.7739796,19.9128403 L36.0036768,19.9128403 L36.0036768,14.6807808 L38.2449877,14.6807808 L38.2449877,19.9128403 L42.2375586,19.9128403 C42.5324436,20.6254301 42.7875249,21.3586918 43,22.1097512 L38.2449877,22.1097512 Z M11.7255525,37.2757943 C14.6396541,35.4919506 18.5644269,35.2563486 20.6868362,35.1217189 C20.0299,34.2802832 19.2718967,33.3883614 19.2718967,31.9242632 C19.2718967,31.1333137 19.5077199,30.6621097 19.7435432,30.1067621 C19.2213631,30.1572483 18.7160276,30.2077344 18.2443811,30.2077344 C13.2752481,30.2077344 10.4622136,26.5054173 10.4622136,22.8535864 C10.4622136,20.699511 11.4560402,18.3064679 13.4605378,16.5747932 C16.1388163,14.3752803 19.3224302,14 21.849108,14 L31.501017,14 L28.5026927,15.6845543 L25.6054356,15.6845543 C26.6834848,16.5747932 28.9238057,18.4478291 28.9238057,22.0121507 C28.9238057,25.4788658 26.952997,27.1112511 24.9990329,28.6594927 C24.3757857,29.2653264 23.6851605,29.9216463 23.6851605,30.9481978 C23.6851605,31.9747494 24.3757857,32.5469257 24.8979658,32.9676435 L26.5824176,34.2802832 C28.6542934,35.996812 30.5240349,37.5955399 30.5240349,40.8266529 C30.5240349,42.9574523 29.5287217,45.0961123 27.5894278,46.7373863 C26.5459915,46.9073414 25.4755787,46.9970613 24.3847411,47 C26.3539444,46.1370063 27.37411,44.55802 27.37411,42.6609828 C27.37411,40.2713054 25.8412588,39.0091518 22.2702209,36.468016 C21.8996415,36.4343586 21.6638183,36.4343586 21.1921718,36.4343586 C20.7710588,36.4343586 18.2443811,36.5185022 16.2735724,37.174822 C15.2460568,37.5450537 12.2477325,38.6725775 12.2477325,42.0046629 C12.2477325,42.3667791 12.2863178,42.7178526 12.3616005,43.0559755 C7.42272978,39.3956824 9.56224074,39.9122538 9,39.9122529 C9.5622407,38.9676509 10.4340377,38.0389613 11.7255525,37.2757943 Z M18.9013173,15.5448759 C17.688512,15.5448759 16.3746395,16.1540754 15.6166362,17.0914348 C14.8249438,18.0742317 14.5891206,19.3363852 14.5891206,20.5480526 C14.5891206,23.6950221 16.4083286,28.8950947 20.451013,28.8950947 C21.6132847,28.8950947 22.8766236,28.3229185 23.6346269,27.582455 C24.7126761,26.5054173 24.7968987,25.0076618 24.7968987,24.1662261 C24.7968987,20.7836546 22.792401,15.5448759 18.9013173,15.5448759 Z M18.9013173,15.5448759" })
-            )
-        ),
         instagram: React.createElement(
             Fragment,
             null,
@@ -26658,7 +26314,9 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
             var _dispatch = dispatch('core/editor'),
                 insertBlock = _dispatch.insertBlock;
 
-            var summaryBlock = createBlock('advgb/summary');
+            if (select('core/blocks').getBlockType('advgb/summary')) {
+                var _summaryBlock = createBlock('advgb/summary');
+            }
 
             $('#editor').find('.table-of-contents').click(function () {
                 var allBlocks = select('core/block-editor').getBlocks();
@@ -26696,7 +26354,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                 React.createElement(
                     "p",
                     { style: { color: 'red', fontStyle: 'italic' } },
-                    __('After manually changing the anchor, remember to refresh summary block to make the links work!', 'advanced-gutenberg')
+                    __('After manually changing the anchor, remember to refresh Table of Contents block to make the links work!', 'advanced-gutenberg')
                 )
             )];
         };
@@ -26766,10 +26424,10 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                 var headingBlocks = [];
                 var allBlocks = select('core/block-editor').getBlocks();
                 var filteredBlocks = allBlocks.filter(function (block) {
-                    return block.name === 'core/heading' || block.name === 'core/columns';
+                    return block.name === 'core/heading' || block.name === 'core/columns' || block.name === 'core/cover' || block.name === 'core/group';
                 });
                 filteredBlocks.map(function (block) {
-                    if (block.name === 'core/columns') {
+                    if (block.name === 'core/columns' || block.name === 'core/cover' || block.name === 'core/group') {
                         SummaryBlock.getHeadingBlocksFromColumns(block, headingBlocks);
                     } else {
                         headingBlocks.push(block);
@@ -26942,7 +26600,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
              * @returns array   array Heading blocks from block given
              */
             value: function getHeadingBlocksFromColumns(block, storeData) {
-                if (block.name === 'core/columns' || block.name === 'core/column') {
+                if (block.name === 'core/columns' || block.name === 'core/column' || block.name === 'core/cover' || block.name === 'core/group') {
                     block.innerBlocks.map(function (bl) {
                         SummaryBlock.getHeadingBlocksFromColumns(bl, storeData);
                         return bl;
@@ -28034,6 +27692,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                 var pid = attributes.pid,
                     items = attributes.items,
                     sliderView = attributes.sliderView,
+                    enableAvatar = attributes.enableAvatar,
                     avatarColor = attributes.avatarColor,
                     avatarBorderRadius = attributes.avatarBorderRadius,
                     avatarBorderWidth = attributes.avatarBorderWidth,
@@ -28254,58 +27913,69 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                             React.createElement(
                                 PanelBody,
                                 { title: __('Avatar', 'advanced-gutenberg'), initialOpen: false },
-                                React.createElement(PanelColorSettings, {
-                                    title: __('Avatar Colors', 'advanced-gutenberg'),
-                                    initialOpen: false,
-                                    colorSettings: [{
-                                        label: __('Background Color', 'advanced-gutenberg'),
-                                        value: avatarColor,
+                                React.createElement(ToggleControl, {
+                                    label: __('Display Avatar', 'advanced-gutenberg'),
+                                    checked: enableAvatar,
+                                    onChange: function onChange() {
+                                        return setAttributes({ enableAvatar: !enableAvatar });
+                                    }
+                                }),
+                                enableAvatar && React.createElement(
+                                    Fragment,
+                                    null,
+                                    React.createElement(PanelColorSettings, {
+                                        title: __('Avatar Colors', 'advanced-gutenberg'),
+                                        initialOpen: false,
+                                        colorSettings: [{
+                                            label: __('Background Color', 'advanced-gutenberg'),
+                                            value: avatarColor,
+                                            onChange: function onChange(value) {
+                                                return setAttributes({ avatarColor: value });
+                                            }
+                                        }, {
+                                            label: __('Border Color', 'advanced-gutenberg'),
+                                            value: avatarBorderColor,
+                                            onChange: function onChange(value) {
+                                                return setAttributes({ avatarBorderColor: value });
+                                            }
+                                        }]
+                                    }),
+                                    React.createElement(RangeControl, {
+                                        label: __('Border Radius (%)', 'advanced-gutenberg'),
+                                        min: 0,
+                                        max: 50,
+                                        value: avatarBorderRadius,
                                         onChange: function onChange(value) {
-                                            return setAttributes({ avatarColor: value });
+                                            return setAttributes({ avatarBorderRadius: value });
                                         }
-                                    }, {
-                                        label: __('Border Color', 'advanced-gutenberg'),
-                                        value: avatarBorderColor,
+                                    }),
+                                    React.createElement(RangeControl, {
+                                        label: __('Border Width', 'advanced-gutenberg'),
+                                        min: 0,
+                                        max: 5,
+                                        value: avatarBorderWidth,
                                         onChange: function onChange(value) {
-                                            return setAttributes({ avatarBorderColor: value });
+                                            return setAttributes({ avatarBorderWidth: value });
                                         }
-                                    }]
-                                }),
-                                React.createElement(RangeControl, {
-                                    label: __('Border Radius (%)', 'advanced-gutenberg'),
-                                    min: 0,
-                                    max: 50,
-                                    value: avatarBorderRadius,
-                                    onChange: function onChange(value) {
-                                        return setAttributes({ avatarBorderRadius: value });
-                                    }
-                                }),
-                                React.createElement(RangeControl, {
-                                    label: __('Border Width', 'advanced-gutenberg'),
-                                    min: 0,
-                                    max: 5,
-                                    value: avatarBorderWidth,
-                                    onChange: function onChange(value) {
-                                        return setAttributes({ avatarBorderWidth: value });
-                                    }
-                                }),
-                                React.createElement(RangeControl, {
-                                    label: __('Avatar Size', 'advanced-gutenberg'),
-                                    min: 50,
-                                    max: 130,
-                                    value: avatarSize,
-                                    onChange: function onChange(value) {
-                                        return setAttributes({ avatarSize: value });
-                                    }
-                                }),
-                                React.createElement(SelectControl, {
-                                    label: __('Avatar Position', 'advanced-gutenberg'),
-                                    value: avatarPosition,
-                                    options: [{ label: __('Top', 'advanced-gutenberg'), value: 'top' }, { label: __('Bottom', 'advanced-gutenberg'), value: 'bottom' }, { label: __('Left', 'advanced-gutenberg'), value: 'left' }, { label: __('right', 'advanced-gutenberg'), value: 'right' }],
-                                    onChange: function onChange(value) {
-                                        return setAttributes({ avatarPosition: value });
-                                    }
-                                })
+                                    }),
+                                    React.createElement(RangeControl, {
+                                        label: __('Avatar Size', 'advanced-gutenberg'),
+                                        min: 50,
+                                        max: 130,
+                                        value: avatarSize,
+                                        onChange: function onChange(value) {
+                                            return setAttributes({ avatarSize: value });
+                                        }
+                                    }),
+                                    React.createElement(SelectControl, {
+                                        label: __('Avatar Position', 'advanced-gutenberg'),
+                                        value: avatarPosition,
+                                        options: [{ label: __('Top', 'advanced-gutenberg'), value: 'top' }, { label: __('Bottom', 'advanced-gutenberg'), value: 'bottom' }, { label: __('Left', 'advanced-gutenberg'), value: 'left' }, { label: __('right', 'advanced-gutenberg'), value: 'right' }],
+                                        onChange: function onChange(value) {
+                                            return setAttributes({ avatarPosition: value });
+                                        }
+                                    })
+                                )
                             ),
                             React.createElement(PanelColorSettings, {
                                 title: __('Text Colors', 'advanced-gutenberg'),
@@ -28344,7 +28014,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                                 return React.createElement(
                                     "div",
                                     { className: "advgb-testimonial-item", key: idx },
-                                    React.createElement(MediaUpload, {
+                                    enableAvatar && React.createElement(MediaUpload, {
                                         allowedTypes: ["image"],
                                         onSelect: function onSelect(media) {
                                             return _this2.updateItems(idx, {
@@ -28376,8 +28046,8 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                                                 ),
                                                 React.createElement(
                                                     Tooltip,
-                                                    { text: __('Remove avatar', 'advanced-gutenberg') },
-                                                    React.createElement("span", { className: "dashicons dashicons-no advgb-testimonial-avatar-clear",
+                                                    { text: __('Show default avatar', 'advanced-gutenberg') },
+                                                    React.createElement("span", { className: "dashicons dashicons-update-alt advgb-testimonial-avatar-clear",
                                                         onClick: function onClick() {
                                                             return _this2.updateItems(idx, { avatarUrl: undefined, avatarID: undefined });
                                                         }
@@ -28500,6 +28170,10 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
             type: 'boolean',
             default: false
         },
+        enableAvatar: {
+            type: 'boolean',
+            default: true
+        },
         avatarColor: {
             type: 'string'
         },
@@ -28621,6 +28295,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
             var pid = attributes.pid,
                 items = attributes.items,
                 sliderView = attributes.sliderView,
+                enableAvatar = attributes.enableAvatar,
                 avatarColor = attributes.avatarColor,
                 avatarBorderRadius = attributes.avatarBorderRadius,
                 avatarBorderWidth = attributes.avatarBorderWidth,
@@ -28692,7 +28367,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                         return React.createElement(
                             "div",
                             { className: "advgb-testimonial-item", key: idx },
-                            React.createElement(
+                            enableAvatar && React.createElement(
                                 "div",
                                 { className: "advgb-testimonial-avatar-group" },
                                 React.createElement("div", { className: "advgb-testimonial-avatar",
@@ -28710,27 +28385,24 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                             React.createElement(
                                 "div",
                                 { className: "advgb-testimonial-info" },
-                                React.createElement(
-                                    "h4",
-                                    { className: "advgb-testimonial-name",
-                                        style: { color: nameColor }
-                                    },
-                                    item.name
-                                ),
-                                React.createElement(
-                                    "p",
-                                    { className: "advgb-testimonial-position",
-                                        style: { color: positionColor }
-                                    },
-                                    item.position
-                                ),
-                                React.createElement(
-                                    "p",
-                                    { className: "advgb-testimonial-desc",
-                                        style: { color: descColor }
-                                    },
-                                    item.desc
-                                )
+                                React.createElement(RichText.Content, {
+                                    tagName: "h4",
+                                    className: "advgb-testimonial-name",
+                                    style: { color: nameColor },
+                                    value: item.name
+                                }),
+                                React.createElement(RichText.Content, {
+                                    tagName: "p",
+                                    className: "advgb-testimonial-position",
+                                    style: { color: positionColor },
+                                    value: item.position
+                                }),
+                                React.createElement(RichText.Content, {
+                                    tagName: "p",
+                                    className: "advgb-testimonial-desc",
+                                    style: { color: descColor },
+                                    value: item.desc
+                                })
                             )
                         );
                     })
@@ -29193,7 +28865,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                             React.createElement(SelectControl, {
                                 label: __('Order', 'advanced-gutenberg'),
                                 value: orderBy + "-" + order,
-                                options: [{ label: __('Newest to oldest', 'advanced-gutenberg'), value: 'date-desc' }, { label: __('Price: high to low', 'advanced-gutenberg'), value: 'price-desc' }, { label: __('Price: low to high', 'advanced-gutenberg'), value: 'price-asc' }, { label: __('Highest Rating first', 'advanced-gutenberg'), value: 'rating-desc' }, { label: __('Most sale first', 'advanced-gutenberg'), value: 'popularity-desc' }, { label: __('Title: Alphabetical', 'advanced-gutenberg'), value: 'title-asc' }, { label: __('Title: Alphabetical reversed', 'advanced-gutenberg'), value: 'title-desc' }],
+                                options: [{ label: __('Newest to oldest', 'advanced-gutenberg'), value: 'date-desc' }, { label: __('Oldest to newest', 'advanced-gutenberg'), value: 'date-asc' }, { label: __('Price: high to low', 'advanced-gutenberg'), value: 'price-desc' }, { label: __('Price: low to high', 'advanced-gutenberg'), value: 'price-asc' }, { label: __('Highest Rating first', 'advanced-gutenberg'), value: 'rating-desc' }, { label: __('Most sale first', 'advanced-gutenberg'), value: 'popularity-desc' }, { label: __('Title: Alphabetical', 'advanced-gutenberg'), value: 'title-asc' }, { label: __('Title: Alphabetical reversed', 'advanced-gutenberg'), value: 'title-desc' }],
                                 onChange: function onChange(value) {
                                     var splitedVal = value.split('-');
                                     return setAttributes({
@@ -29410,12 +29082,14 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 if (typeof wp !== 'undefined' && typeof wp.domReady !== 'undefined') {
     wp.domReady(function () {
+
+        if (advgb_blocks_vars.blocks.active_blocks === 'undefined' || advgb_blocks_vars.blocks.active_blocks.length === 0) {
+            // No Block Access defined for this role, so we stop the process here
+            return;
+        }
+
         var gutenberg_init_function = null;
-        if (typeof window._wpLoadGutenbergEditor !== 'undefined') {
-            // Using WP core Gutenberg
-            gutenberg_init_function = window._wpLoadGutenbergEditor;
-        } else if (typeof window._wpLoadBlockEditor !== 'undefined') {
-            // Using Gutenberg plugin
+        if (typeof window._wpLoadBlockEditor !== 'undefined') {
             gutenberg_init_function = window._wpLoadBlockEditor;
         }
 
@@ -29436,6 +29110,25 @@ if (typeof wp !== 'undefined' && typeof wp.domReady !== 'undefined') {
                     active_blocks: Object.values(advgb_blocks_vars.blocks.active_blocks),
                     inactive_blocks: Object.values(advgb_blocks_vars.blocks.inactive_blocks)
                 };
+
+                // Add Widgets Legacy and Area blocks manually
+                if (advgbBlocks.blocks_widget_support) {
+                    blocks.push({
+                        "name": "core/legacy-widget",
+                        "icon": {
+                            "src": "block-default"
+                        },
+                        "title": "Legacy Widget",
+                        "category": "widgets"
+                    }, {
+                        "name": "core/widget-area",
+                        "icon": {
+                            "src": "block-default"
+                        },
+                        "category": "widgets",
+                        "title": "Widget Area"
+                    });
+                }
 
                 for (var block in blocks) {
                     var blockItemIcon = '';
@@ -29487,11 +29180,21 @@ if (typeof wp !== 'undefined' && typeof wp.domReady !== 'undefined') {
 
                 if (missing_block) {
                     if (console !== undefined && console.error !== undefined) {
-                        //console.log('console: ' + console);
-                        console.error('Reloading editor by PublishPress Blocks plugin');
+                        // Let's output as log instead of error
+                        console.log('Reloading editor by PublishPress Blocks plugin');
                     }
                     // Replace original allowed block settings by our modified list
                     var new_settings = advgb_blocks_vars.original_settings;
+
+                    // Unregister core blocks to avoid registering twice later through wp.editPost.initializeEditor
+                    var core_blocks = ['core/paragraph', 'core/image', 'core/heading', 'core/list', 'core/quote', 'core/archives', 'core/audio', 'core/button', 'core/buttons', 'core/calendar', 'core/categories', 'core/code', 'core/columns', 'core/column', 'core/cover', 'core/embed', 'core/group', 'core/freeform', 'core/html', 'core/media-text', 'core/latest-comments', 'core/latest-posts', 'core/missing', 'core/more', 'core/nextpage', 'core/page-list', 'core/preformatted', 'core/pullquote', 'core/rss', 'core/search', 'core/separator', 'core/block', 'core/social-links', 'core/social-link', 'core/spacer', 'core/table', 'core/tag-cloud', 'core/text-columns', 'core/verse', 'core/video', 'core/site-logo', 'core/site-tagline', 'core/site-title', 'core/query', 'core/post-template', 'core/query-title', 'core/query-pagination', 'core/query-pagination-next', 'core/query-pagination-numbers', 'core/query-pagination-previous', 'core/post-title', 'core/post-content', 'core/post-date', 'core/post-excerpt', 'core/post-featured-image', 'core/post-terms', 'core/loginout', 'core/legacy-widget', 'core/widget-area', 'core/gallery', 'core/shortcode', 'core/file'];
+
+                    core_blocks.forEach(function (element) {
+                        if (wp.data.select('core/blocks').getBlockType(element)) {
+                            wp.blocks.unregisterBlockType(element);
+                        }
+                    });
+
                     new_settings.allowedBlockTypes = granted_blocks;
                     var target = document.getElementById('editor');
 
@@ -29527,9 +29230,9 @@ if (typeof wp !== 'undefined' && typeof wp.domReady !== 'undefined') {
 /***/ }),
 
 /***/ 0:
-/*!*********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** multi ./src/assets/blocks/0-adv-components/components.jsx ./src/assets/blocks/0-adv-components/icon-class.jsx ./src/assets/blocks/accordion/block.jsx ./src/assets/blocks/advaccordion/accordion.jsx ./src/assets/blocks/advaccordion/block.jsx ./src/assets/blocks/advbutton/block.jsx ./src/assets/blocks/advicon/block.jsx ./src/assets/blocks/advimage/block.jsx ./src/assets/blocks/advlist/block.jsx ./src/assets/blocks/advtable/block.jsx ./src/assets/blocks/advtabs/block.jsx ./src/assets/blocks/advtabs/tab.jsx ./src/assets/blocks/advvideo/block.jsx ./src/assets/blocks/columns/block.jsx ./src/assets/blocks/columns/column.jsx ./src/assets/blocks/contact-form/block.jsx ./src/assets/blocks/container/block.jsx ./src/assets/blocks/count-up/block.jsx ./src/assets/blocks/customstyles/custom-styles.jsx ./src/assets/blocks/editor-sidebar/sidebar.jsx ./src/assets/blocks/images-slider/block.jsx ./src/assets/blocks/infobox/block.jsx ./src/assets/blocks/login-form/block.jsx ./src/assets/blocks/map/block.jsx ./src/assets/blocks/newsletter/block.jsx ./src/assets/blocks/recent-posts/block.jsx ./src/assets/blocks/recent-posts/query-controls.jsx ./src/assets/blocks/search-bar/block.jsx ./src/assets/blocks/social-links/block.jsx ./src/assets/blocks/summary/block.jsx ./src/assets/blocks/tabs/block.jsx ./src/assets/blocks/testimonial/block.jsx ./src/assets/blocks/woo-products/block.jsx ./src/assets/js/editor.jsx ***!
-  \*********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*!*******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** multi ./src/assets/blocks/0-adv-components/components.jsx ./src/assets/blocks/0-adv-components/icon-class.jsx ./src/assets/blocks/accordion/block.jsx ./src/assets/blocks/advaccordion/accordion.jsx ./src/assets/blocks/advaccordion/block.jsx ./src/assets/blocks/advbutton/block.jsx ./src/assets/blocks/advicon/block.jsx ./src/assets/blocks/advimage/block.jsx ./src/assets/blocks/advlist/block.jsx ./src/assets/blocks/advtable/block.jsx ./src/assets/blocks/advtabs/block.jsx ./src/assets/blocks/advtabs/tab.jsx ./src/assets/blocks/advvideo/block.jsx ./src/assets/blocks/columns/block.jsx ./src/assets/blocks/columns/column.jsx ./src/assets/blocks/contact-form/block.jsx ./src/assets/blocks/container/block.jsx ./src/assets/blocks/count-up/block.jsx ./src/assets/blocks/images-slider/block.jsx ./src/assets/blocks/infobox/block.jsx ./src/assets/blocks/login-form/block.jsx ./src/assets/blocks/map/block.jsx ./src/assets/blocks/newsletter/block.jsx ./src/assets/blocks/recent-posts/block.jsx ./src/assets/blocks/recent-posts/query-controls.jsx ./src/assets/blocks/search-bar/block.jsx ./src/assets/blocks/social-links/block.jsx ./src/assets/blocks/summary/block.jsx ./src/assets/blocks/tabs/block.jsx ./src/assets/blocks/testimonial/block.jsx ./src/assets/blocks/woo-products/block.jsx ./src/assets/js/editor.jsx ***!
+  \*******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -29551,8 +29254,6 @@ __webpack_require__(/*! ./src/assets/blocks/columns/column.jsx */"./src/assets/b
 __webpack_require__(/*! ./src/assets/blocks/contact-form/block.jsx */"./src/assets/blocks/contact-form/block.jsx");
 __webpack_require__(/*! ./src/assets/blocks/container/block.jsx */"./src/assets/blocks/container/block.jsx");
 __webpack_require__(/*! ./src/assets/blocks/count-up/block.jsx */"./src/assets/blocks/count-up/block.jsx");
-__webpack_require__(/*! ./src/assets/blocks/customstyles/custom-styles.jsx */"./src/assets/blocks/customstyles/custom-styles.jsx");
-__webpack_require__(/*! ./src/assets/blocks/editor-sidebar/sidebar.jsx */"./src/assets/blocks/editor-sidebar/sidebar.jsx");
 __webpack_require__(/*! ./src/assets/blocks/images-slider/block.jsx */"./src/assets/blocks/images-slider/block.jsx");
 __webpack_require__(/*! ./src/assets/blocks/infobox/block.jsx */"./src/assets/blocks/infobox/block.jsx");
 __webpack_require__(/*! ./src/assets/blocks/login-form/block.jsx */"./src/assets/blocks/login-form/block.jsx");

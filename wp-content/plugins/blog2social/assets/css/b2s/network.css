@@ -71,7 +71,7 @@
 }
 
 .b2s-sched-manager-best-time-info{
-    padding-left: 15px;
+    padding-left: 5px;
     font-size: 12px;
 }
 
@@ -887,4 +887,16 @@ ul.b2s-network-item-auth-list li:last-child{
 
 .b2s-edit-template-preview-like-icons-4 {
     float: right;
+}
+
+.b2s-edit-template-btn {
+    background-color: #eee !important;
+}
+
+.b2s-edit-template-preview-like-icons-27 {
+    width: 120px;
+}
+
+.b2s-edit-template-preview-image-image-27 {
+    margin-top: 10px;
 }

@@ -1,7 +1,7 @@
 <?php
 /**
  * Class C_Cache
- * @mixin Mixin_Cache
+ *
  * @implements I_Cache
  */
 class C_Cache extends C_Component
@@ -10,7 +10,6 @@ class C_Cache extends C_Component
     function define($context = FALSE)
     {
         parent::define($context);
-        $this->add_mixin('Mixin_Cache');
         $this->implement('I_Cache');
     }
     /**
@@ -24,9 +23,6 @@ class C_Cache extends C_Component
         }
         return self::$_instances[$context];
     }
-}
-class Mixin_Cache extends Mixin
-{
     /**
      * Empties a directory of all of its content
      *

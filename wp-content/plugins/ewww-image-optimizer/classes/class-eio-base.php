@@ -99,11 +99,11 @@ if ( ! class_exists( 'EIO_Base' ) ) {
 			$this->home_domain       = $this->parse_url( $this->home_url, PHP_URL_HOST );
 			if ( strpos( $child_class_path, 'plugins/ewww' ) ) {
 				$this->content_url = content_url( 'ewww/' );
-				$this->content_dir = WP_CONTENT_DIR . '/ewww/';
+				$this->content_dir = $this->set_content_dir( '/ewww/' );
 				$this->version     = EWWW_IMAGE_OPTIMIZER_VERSION;
 			} elseif ( strpos( $child_class_path, 'plugins/easy' ) ) {
 				$this->content_url = content_url( 'easyio/' );
-				$this->content_dir = WP_CONTENT_DIR . '/easyio/';
+				$this->content_dir = $this->set_content_dir( '/easyio/' );
 				$this->version     = EASYIO_VERSION;
 				$this->prefix      = 'easyio_';
 			} else {
@@ -122,12 +122,36 @@ if ( ! class_exists( 'EIO_Base' ) ) {
 			 */
 			$this->content_url();
 			$this->debug_message( '<b>' . __METHOD__ . '()</b>' );
-			$this->debug_message( "plugin content_url: $this->content_url" );
+			$this->debug_message( "plugin (resource) content_url: $this->content_url" );
+			$this->debug_message( "plugin (resource) content_dir: $this->content_dir" );
 			$this->debug_message( "home url: $this->home_url" );
 			$this->debug_message( "relative home url: $this->relative_home_url" );
 			$this->debug_message( "home domain: $this->home_domain" );
 			$this->debug_message( "site/upload url: $this->site_url" );
 			$this->debug_message( "site/upload domain: $this->upload_domain" );
+		}
+
+		/**
+		 * Finds a writable location to store plugin resources.
+		 *
+		 * Checks to see if the wp-content/ directory is writable, and uses the upload dir
+		 * as fall-back. If neither location works, the original wp-content/ folder will be
+		 * used, and other functions will need to make sure the resource folder is writable.
+		 *
+		 * @param string $sub_folder The sub-folder to use for plugin resources, with slashes on both ends.
+		 * @return string The full path to a writable plugin resource folder.
+		 */
+		function set_content_dir( $sub_folder ) {
+			$content_dir = WP_CONTENT_DIR . $sub_folder;
+			if ( ! is_writable( WP_CONTENT_DIR ) || ! empty( $_ENV['PANTHEON_ENVIRONMENT'] ) ) {
+				$upload_dir = wp_get_upload_dir();
+				if ( false === strpos( $upload_dir['basedir'], '://' ) && is_writable( $upload_dir['basedir'] ) ) {
+					$content_dir = $upload_dir['basedir'] . $sub_folder;
+					// Also need to update the corresponding URL.
+					$this->content_url = $upload_dir['baseurl'] . $sub_folder;
+				}
+			}
+			return $content_dir;
 		}
 
 		/**
@@ -251,9 +275,28 @@ if ( ! class_exists( 'EIO_Base' ) ) {
 						$this->debug_message( "$supports: $supported" );
 					}
 					if ( ( ! empty( $gd_support['JPEG Support'] ) || ! empty( $gd_support['JPG Support'] ) ) && ! empty( $gd_support['PNG Support'] ) ) {
-						return true;
+						return ! empty( $gd_support['GD Version'] ) ? $gd_support['GD Version'] : '1';
 					}
 				}
+			}
+			return false;
+		}
+
+		/**
+		 * Check for IMagick support of both PNG and JPG.
+		 *
+		 * @return bool True if full Imagick support is detected.
+		 */
+		function imagick_support() {
+			$this->debug_message( '<b>' . __FUNCTION__ . '()</b>' );
+			if ( extension_loaded( 'imagick' ) && class_exists( 'Imagick' ) ) {
+				$imagick = new Imagick();
+				$formats = $imagick->queryFormats();
+				$this->debug_message( implode( ',', $formats ) );
+				if ( in_array( 'PNG', $formats, true ) && in_array( 'JPG', $formats, true ) ) {
+					return true;
+				}
+				$this->debug_message( 'imagick found, but PNG or JPG not supported' );
 			}
 			return false;
 		}
@@ -336,10 +379,35 @@ if ( ! class_exists( 'EIO_Base' ) ) {
 		 * @return bool True for an AMP endpoint, false otherwise.
 		 */
 		function is_amp() {
+			if ( ! did_action( 'wp' ) ) {
+				return false;
+			}
+			if ( function_exists( 'amp_is_request' ) && amp_is_request() ) {
+				return true;
+			}
 			if ( function_exists( 'is_amp_endpoint' ) && is_amp_endpoint() ) {
 				return true;
 			}
 			if ( function_exists( 'ampforwp_is_amp_endpoint' ) && ampforwp_is_amp_endpoint() ) {
+				return true;
+			}
+			return false;
+		}
+
+		/**
+		 * Checks to see if the current buffer/output is a JSON-encoded string.
+		 *
+		 * Specifically, we are looking for JSON objects/strings, not just ANY JSON value.
+		 * Thus, the check is rather "loose", only looking for {} or [] at the start/end.
+		 *
+		 * @param string $buffer The content to check for JSON.
+		 * @return bool True for JSON, false for everything else.
+		 */
+		function is_json( $buffer ) {
+			if ( '{' === substr( $buffer, 0, 1 ) && '}' === substr( $buffer, -1 ) ) {
+				return true;
+			}
+			if ( '[' === substr( $buffer, 0, 1 ) && ']' === substr( $buffer, -1 ) ) {
 				return true;
 			}
 			return false;
@@ -376,6 +444,28 @@ if ( ! class_exists( 'EIO_Base' ) ) {
 				return false;
 			}
 			return true;
+		}
+
+		/**
+		 * Checks if the image URL points to a lazy load placeholder.
+		 *
+		 * @param string $image The image URL (or an image element).
+		 * @return bool True if it matches a known placeholder pattern, false otherwise.
+		 */
+		function is_lazy_placeholder( $image ) {
+			$this->debug_message( '<b>' . __METHOD__ . '()</b>' );
+			if (
+				strpos( $image, 'base64,R0lGOD' ) ||
+				strpos( $image, 'lazy-load/images/1x1' ) ||
+				strpos( $image, '/assets/images/lazy' ) ||
+				strpos( $image, '/assets/images/dummy.png' ) ||
+				strpos( $image, '/assets/images/transparent.png' ) ||
+				strpos( $image, '/lazy/placeholder' )
+			) {
+				$this->debug_message( 'lazy load placeholder' );
+				return true;
+			}
+			return false;
 		}
 
 		/**
@@ -424,6 +514,26 @@ if ( ! class_exists( 'EIO_Base' ) ) {
 		 */
 		function is_iterable( $var ) {
 			return ! empty( $var ) && ( is_array( $var ) || $var instanceof Traversable );
+		}
+
+		/**
+		 * Checks if there is enough memory still available.
+		 *
+		 * Looks to see if the current usage + padding will fit within the memory_limit defined by PHP.
+		 *
+		 * @param int $padding Optional. The amount of memory needed to continue. Default 1050000.
+		 * @return True to proceed, false if there is not enough memory.
+		 */
+		function check_memory_available( $padding = 1050000 ) {
+			$memory_limit = $this->memory_limit();
+
+			$current_memory = memory_get_usage( true ) + $padding;
+			if ( $current_memory >= $memory_limit ) {
+				$this->debug_message( "detected memory limit is not enough: $memory_limit" );
+				return false;
+			}
+			$this->debug_message( "detected memory limit is: $memory_limit" );
+			return true;
 		}
 
 		/**
@@ -703,6 +813,20 @@ if ( ! class_exists( 'EIO_Base' ) ) {
 				$this->s3_active = $s3_domain;
 			}
 
+			if (
+				class_exists( 'S3_Uploads\Plugin' ) &&
+				function_exists( 's3_uploads_enabled' ) && s3_uploads_enabled() &&
+				method_exists( 'S3_Uploads\Plugin', 'get_instance' ) && method_exists( 'S3_Uploads', 'get_s3_url\Plugin' )
+			) {
+				$s3_uploads_instance  = \S3_Uploads\Plugin::get_instance();
+				$s3_uploads_url       = $s3_uploads_instance->get_s3_url();
+				$this->allowed_urls[] = $s3_uploads_url;
+				$this->debug_message( "found S3 URL from S3_Uploads: $s3_uploads_url" );
+				$s3_domain       = $this->parse_url( $s3_uploads_url, PHP_URL_HOST );
+				$s3_scheme       = $this->parse_url( $s3_uploads_url, PHP_URL_SCHEME );
+				$this->s3_active = $s3_domain;
+			}
+
 			if ( class_exists( 'wpCloud\StatelessMedia\EWWW' ) && function_exists( 'ud_get_stateless_media' ) ) {
 				$sm = ud_get_stateless_media();
 				if ( method_exists( $sm, 'get' ) && method_exists( $sm, 'get_gs_host' ) ) {
@@ -725,13 +849,13 @@ if ( ! class_exists( 'EIO_Base' ) ) {
 				$this->allowed_domains[] = $this->parse_url( swis()->settings->get_option( 'cdn_domain' ), PHP_URL_HOST );
 			}
 
+			$upload_dir = wp_get_upload_dir();
 			if ( $this->s3_active ) {
 				$this->site_url = defined( 'EXACTDN_LOCAL_DOMAIN' ) && EXACTDN_LOCAL_DOMAIN ? EXACTDN_LOCAL_DOMAIN : $s3_scheme . '://' . $s3_domain;
 			} else {
-				// Normally, we use this one, as it will be shorter for sub-directory installs.
+				// Normally, we use this one, as it will be shorter for sub-directory (not multi-site) installs.
 				$home_url    = get_home_url();
 				$site_url    = get_site_url();
-				$upload_dir  = wp_get_upload_dir();
 				$home_domain = $this->parse_url( $home_url, PHP_URL_HOST );
 				$site_domain = $this->parse_url( $site_url, PHP_URL_HOST );
 				// If the home domain does not match the upload url, and the site domain does match...
@@ -741,7 +865,11 @@ if ( ! class_exists( 'EIO_Base' ) ) {
 				}
 				$this->site_url = defined( 'EXACTDN_LOCAL_DOMAIN' ) && EXACTDN_LOCAL_DOMAIN ? EXACTDN_LOCAL_DOMAIN : $home_url;
 			}
-			$this->upload_url        = $this->site_url;
+			// This is used by the WebP parsers, and by the Lazy Load via get_image_dimensions_by_url().
+			$this->upload_url = trailingslashit( ! empty( $upload_dir['baseurl'] ) ? $upload_dir['baseurl'] : content_url( 'uploads' ) );
+			$this->debug_message( "upload_url: $this->upload_url" );
+
+			// But this is used by Easy IO, so it should be derived from the above logic instead, which already matches the site/home URLs against the upload URL.
 			$this->upload_domain     = $this->parse_url( $this->site_url, PHP_URL_HOST );
 			$this->allowed_domains[] = $this->upload_domain;
 			// Grab domain aliases that might point to the same place as the upload_domain.

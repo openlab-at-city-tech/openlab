@@ -3,9 +3,9 @@ Contributors: mtekk, hakre
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=FD5XEU783BR8U&lc=US&item_name=Breadcrumb%20NavXT%20Donation&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted
 Tags: breadcrumb, breadcrumbs, trail, navigation, menu, widget
 Requires at least: 4.9
-Tested up to: 5.5.3
-Stable tag: 6.6.0
-Requires PHP: 5.5
+Tested up to: 5.8
+Stable tag: 7.0.0
+Requires PHP: 7.0
 License: GPLv2 or later
 Adds breadcrumb navigation showing the visitor's path to their current location.
 
@@ -14,6 +14,7 @@ Adds breadcrumb navigation showing the visitor's path to their current location.
 Breadcrumb NavXT, the successor to the popular WordPress plugin Breadcrumb Navigation XT, was written from the ground up to be better than its ancestor. This plugin generates locational breadcrumb trails for your WordPress powered blog or website. These breadcrumb trails are highly customizable to suit the needs of just about any website running WordPress. The Administrative interface makes setting options easy, while a direct class access is available for theme developers and more adventurous users.
 
 = PHP Requirements =
+Breadcrumb NavXT 7.0 and newer require PHP7.0
 Breadcrumb NavXT 5.2 and newer require PHP5.3
 Breadcrumb NavXT 5.1.1 and older require PHP5.2
 
@@ -48,6 +49,19 @@ Please visit [Breadcrumb NavXT's Documentation](http://mtekk.us/code/breadcrumb-
 6. A screenshot of the Settings Import/Export/Reset form under the Help menu
 
 == Changelog ==
+
+= 7.0.0 =
+Release date: December, 17th 2021
+
+* Behavior change: Within the `bcn_breadcrumb_trail` object instead of passing term id and taxonomy, a WP_Term object is passed instead.
+* Behavior change: Attachments now use parent post type for post type argument.
+* New feature: Moved to adminKit 3.0
+* New feature: Core `bcn_breadcrumb_trail object` now supports multi dimensional trails.
+* New feature: Added `bcn_opts_update_to_save` filter.
+* Bug fix: Fixed parameter order issue in REST controller that resulted in PHP Deprecated message in PHP8.
+* Bug fix: Updated REST controller endpoint registration for better WordPress 5.5+ compatibility.
+* Bug fix: Fixed compatibility issue with Widget settings not saving properly in WordPress 5.8.
+* Bug fix: Fixed issue with the position count parameter within bcn_display when outputting a trail in reverse order.
 
 = 6.6.0 =
 Release date: October, 31st 2020

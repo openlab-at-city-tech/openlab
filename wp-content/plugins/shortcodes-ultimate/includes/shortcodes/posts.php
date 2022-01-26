@@ -386,7 +386,12 @@ function su_shortcode_posts( $atts = null, $content = null ) {
 	}
 
 	// Save original posts
-	global $posts;
+	if ( isset( $GLOBALS['posts'] ) ) {
+		$posts = $GLOBALS['posts'];
+	}
+	if ( ! isset( $GLOBALS['posts'] ) ) {
+		global $posts;
+	}
 	$original_posts = $posts;
 	// Filter args
 	$args = apply_filters( 'su/shortcode/posts/wp_query_args', $args, $atts );

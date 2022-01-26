@@ -1414,3 +1414,15 @@ select#media-attachment-dynamic-filter {
 .form-options a.expand-collapse span.icon {
     font-size: 8px;
 }
+
+.image-details .media-frame, .image-details .media-frame .attachments-browser, .image-details .media-frame-content {
+    overflow: hidden;
+}
+
+.image-details .media-frame.mode-select.hide-router .media-frame-content, .image-details .media-frame.mode-select.hide-router .media-frame-router, .image-details .media-frame.mode-select.hide-router .media-frame-title, .image-details .media-frame.mode-select.hide-router .media-frame-toolbar {
+    left: 0 !important;
+}
+
+.image-details .media-frame.mode-select.hide-router .media-frame-content {
+    overflow: auto;
+}

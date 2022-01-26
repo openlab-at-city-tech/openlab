@@ -2,8 +2,8 @@
 /*
 Plugin Name: OSM
 Plugin URI: https://wp-osm-plugin.hyumika.com
-Description: Embeds maps in your blog and adds geo data to your posts.  Find samples and a forum on the <a href="https://wp-osm-plugin.HanBlog.net">OSM plugin page</a>.
-Version: 5.8.1
+Description: Embeds maps in your blog and adds geo data to your posts.  Find samples and a forum on the <a href="https://wp-osm-plugin.hyumika.com">OSM plugin page</a>.
+Version: 5.9.3
 Author: MiKa
 Author URI: http://www.hyumika.com
 Minimum WordPress Version Required: 3.0
@@ -27,7 +27,7 @@ Minimum WordPress Version Required: 3.0
 */
 load_plugin_textdomain('OSM', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/');
 
-define ("PLUGIN_VER", "V5.8.1");
+define ("PLUGIN_VER", "V5.9.3");
 
 // modify anything about the marker for tagged posts here
 // instead of the coding.
@@ -138,7 +138,12 @@ function saveGeotagAndPic(){
     echo "Error: Bad ajax request";
   }
   else {
-    _e('Geotag saved, you can use it at [Map & geotags]!','OSM');
+    echo "<br>";
+    _e('Location (geotag) saved successfully, you can use it at [Map & Locations]!','OSM');
+    echo "<br><b>";
+    _e('TIPP: ','OSM');
+    echo "</b>";
+    _e('There is an OSM widget that shows a map with your location automatically on your post/page!','OSM');
     $CustomField =  get_option('osm_custom_field','OSM_geo_data');
     delete_post_meta($post_id, $CustomField);
     delete_post_meta($post_id, "OSM_geo_icon");
@@ -149,6 +154,15 @@ function saveGeotagAndPic(){
   }
   wp_die();
 }
+
+function osm_add_action_links ( $actions ) {
+   $mylinks = array(
+      '<a href="' . admin_url( 'options-general.php?page=osm' ) . '">Settings</a>',
+   );
+   $actions = array_merge( $actions, $mylinks );
+   return $actions;
+}    
+
 
 function savePostMarker(){
   $MarkerId = sanitize_text_field( $_POST['MarkerId'] );
@@ -234,6 +248,11 @@ class Osm
     add_shortcode('osm_map_v3',array(&$this, 'sc_OL3JS'));
     add_shortcode('osm_image',array(&$this, 'sc_showImage'));
     add_shortcode('osm_info',array(&$this, 'sc_info'));
+    
+    add_filter( 'plugin_action_links_' . plugin_basename(__FILE__), 'osm_add_action_links' );
+ 
+    
+    
   }
 
   public static function traceErrorMsg($e = '')

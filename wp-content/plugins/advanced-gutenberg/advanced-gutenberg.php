@@ -3,8 +3,8 @@
  * Plugin Name: PublishPress Blocks
  * Plugin URI: https://publishpress.com/blocks/
  * Description: PublishPress Blocks has everything you need to build professional websites with the Gutenberg editor.
- * Version: 2.8.1
- * Tested up to: 5.7.2
+ * Version: 2.11.1
+ * Tested up to: 5.8.1
  * Author: PublishPress
  * Author URI: https://publishpress.com/
  * License: GPL2
@@ -39,7 +39,7 @@
 defined('ABSPATH') || die;
 
 if (! defined('ADVANCED_GUTENBERG_VERSION')) {
-    define('ADVANCED_GUTENBERG_VERSION', '2.8.1');
+    define('ADVANCED_GUTENBERG_VERSION', '2.11.1');
 }
 
 if (! defined('ADVANCED_GUTENBERG_PLUGIN')) {
@@ -49,13 +49,8 @@ if (! defined('ADVANCED_GUTENBERG_PLUGIN')) {
 // Code shared with Pro version
 require_once __DIR__ . '/init.php';
 
-// Include jufeedback helpers
-require_once('jufeedback'. DIRECTORY_SEPARATOR . 'jufeedback.php');
-call_user_func(
-    '\Joomunited\ADVGB\Jufeedback\Jufeedback::init',
-    __FILE__,
-    'advgb',
-    'advanced-gutenberg',
-    'PublishPress Blocks',
-    'advanced-gutenberg'
-);
+// Vendor
+require_once __DIR__ . '/vendor/autoload.php';
+
+// Ask for review
+require_once __DIR__ . '/review/review-request.php';

@@ -13,13 +13,17 @@ $tosCrossPosting = unserialize(B2S_PLUGIN_NETWORK_CROSSPOSTING_LIMIT);
 $postData = get_post((int) $_GET['postId']);
 $selProfile = isset($_GET['profile']) ? (int) $_GET['profile'] : 0;
 $selImg = (isset($_GET['img']) && !empty($_GET['img'])) ? base64_decode($_GET['img']) : '';
-$exPostFormat = (isset($_GET['postFormat']) && $_GET['postFormat'] == '1') ? 1 : 0;
+$exPostFormat = (isset($_GET['postFormat']) && $_GET['postFormat'] == '1') ? 1 : ((isset($_GET['postFormat']) && $_GET['postFormat'] == '2') ? 2 : 0);
 $postUrl = (isset($_GET['b2sPostType']) && $_GET['b2sPostType'] == 'ex') ? (($exPostFormat == 0) ? $postData->guid : '') : (get_permalink($postData->ID) !== false ? get_permalink($postData->ID) : $postData->guid);
 $postStatus = array('publish' => esc_html__('published', 'blog2social'), 'pending' => esc_html__('draft', 'blog2social'), 'future' => esc_html__('scheduled', 'blog2social'));
 $options = new B2S_Options(B2S_PLUGIN_BLOG_USER_ID);
 $optionUserTimeZone = $options->_getOption('user_time_zone');
 $userTimeZone = ($optionUserTimeZone !== false) ? $optionUserTimeZone : get_option('timezone_string');
 $userTimeZoneOffset = (empty($userTimeZone)) ? get_option('gmt_offset') : B2S_Util::getOffsetToUtcByTimeZone($userTimeZone);
+$optionUserTimeFormat = $options->_getOption('user_time_format');
+if($optionUserTimeFormat == false) {
+    $optionUserTimeFormat = (substr(B2S_LANGUAGE, 0, 2) == 'de') ? 0 : 1;
+}
 $isPremium = (B2S_PLUGIN_USER_VERSION == 0) ? '<span class="label label-success">' . esc_html__("SMART", "blog2social") . '</span>' : '';
 $selSchedDate = (isset($_GET['schedDate']) && !empty($_GET['schedDate'])) ? date("Y-m-d", (strtotime($_GET['schedDate'] . ' ' . B2S_Util::getCustomLocaleDateTime($userTimeZoneOffset, 'H:i:s')) + 3600)) : ( (isset($_GET['schedDateTime']) && !empty($_GET['schedDateTime'])) ? date("Y-m-d H:i:s", strtotime(B2S_Util::getUTCForDate($_GET['schedDateTime'], $userTimeZoneOffset * (-1)))) : '' );    //routing from calendar or curated content
 $b2sGeneralOptions = get_option('B2S_PLUGIN_GENERAL_OPTIONS');
@@ -758,6 +762,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'draft' && isset($_GET['postId']) &
 
 
                             <input type="hidden" id="b2sLang" value="<?php echo substr(B2S_LANGUAGE, 0, 2); ?>">
+                            <input type="hidden" id="b2sUserTimeFormat" value="<?php echo $optionUserTimeFormat; ?>">
                             <input type="hidden" id="b2sJSTextAddSchedule" value="<?php esc_html_e("add Schedule", "blog2social"); ?>">
                             <input type="hidden" id="b2sInsertImageType" value="0">
                             <input type="hidden" id="b2sUserLang" value="<?php echo $userLang; ?>">
@@ -772,10 +777,11 @@ if (isset($_GET['type']) && $_GET['type'] == 'draft' && isset($_GET['postId']) &
                             <input type="hidden" id="b2sTwitterOrginalPost" value="">
                             <input type="hidden" id="b2sJsTextLoading" value="<?php esc_html_e('Loading...', 'blog2social') ?>">
                             <input type="hidden" id="b2sJsTextPublish" value="<?php esc_html_e('published', 'blog2social') ?>">
-                            <input type="hidden" id="b2sJsTextConnectionFail" value="<?php esc_html_e('The connection to the server failed. Try again!', 'blog2social') ?>">
+                            <input type="hidden" id="b2sJsTextConnectionFail" value="<?php esc_html_e('The connection to the server failed. Please try again! You can find more information and solutions in the guide for server connection', 'blog2social') ?>">
                             <input type="hidden" id="b2sJsTextConnectionFailLink" value="<?php echo ($userLang == 'de') ? 'https://www.blog2social.com/de/faq/content/9/108/de/die-verbindung-zum-server-ist-fehlgeschlagen-bitte-versuche-es-erneut.html' : 'https://www.blog2social.com/en/faq/content/9/106/en/the-connection-to-the-server-failed-please-try-again.html'; ?>"> 
                             <input type="hidden" id="b2sJsTextConnectionFailLinkText" value="<?php esc_html_e('Give me more information', 'blog2social') ?>"> 
                             <input type="hidden" id="b2sSelectedNetworkAuthId" value="<?php echo (isset($_GET['network_auth_id']) && (int) $_GET['network_auth_id'] > 0) ? (int) esc_attr($_GET['network_auth_id']) : ''; ?>">
+                            <input type="hidden" id="b2sMultiSelectedNetworkAuthId" value="<?php echo (isset($_GET['multi_network_auth_id']) && !empty($_GET['multi_network_auth_id'])) ? esc_attr($_GET['multi_network_auth_id']) : ''; ?>">
                             <input type="hidden" id="b2sDefaultNoImage" value="<?php echo plugins_url('/assets/images/no-image.png', B2S_PLUGIN_FILE); ?>">
                             <input type="hidden" id="isMetaChecked" value="<?php echo $postData->ID; ?>">
                             <input type="hidden" id="isOgMetaChecked" value="<?php echo (isset($b2sGeneralOptions['og_active']) ? (int) $b2sGeneralOptions['og_active'] : 0); ?>">
@@ -788,7 +794,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'draft' && isset($_GET['postId']) &
                             <?php echo $settingsItem->setNetworkSettingsHtml(); ?>
                             <?php
                             if (trim(strtolower($postData->post_status)) == 'future' || !empty($selSchedDate)) {
-                                $schedDate = (($postData->post_status) == 'future') ? $postData->post_date : $selSchedDate; // prio wp sched
+                                $schedDate = (($postData->post_status) == 'future') ? $postData->post_date_gmt : $selSchedDate; // prio wp sched
                                 ?>
                                 <input type="hidden" id="b2sBlogPostSchedDate" value="<?php echo strtotime($schedDate); ?>000"> <!--for milliseconds-->
                                 <input type="hidden" id="b2sSchedPostInfoIgnore" value="0">

@@ -195,11 +195,11 @@ class A_NextGen_Basic_TagCloud_Urls extends Mixin
         // Get the settings manager
         $settings = C_NextGen_Settings::get_instance();
         // Create the regex pattern
-        $sep = preg_quote($settings->router_param_separator, '#');
+        $sep = preg_quote($settings->get('router_param_separator', '--'), '#');
         if ($id) {
             $id = preg_quote($id, '#') . $sep;
         }
-        $prefix = preg_quote($settings->router_param_prefix, '#');
+        $prefix = preg_quote($settings->get('router_param_prefix', ''), '#');
         $regex = implode('', array('#//?', $id ? "({$id})?" : "(\\w+{$sep})?", "({$prefix})?gallerytag{$sep}([\\w\\-_]+)/?#"));
         // Replace any page parameters with the ngglegacy equivalent
         if (preg_match($regex, $retval, $matches)) {

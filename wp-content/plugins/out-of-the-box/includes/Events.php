@@ -919,7 +919,7 @@ class Events
         switch ($type) {
             case 'outofthebox_previewed_entry':
                 $text = esc_html__('Previewed', 'wpcloudplugins');
-                $icon = 'fa-eye';
+                $icon = 'eva-eye-outline';
                 $colors = [
                     'light' => '#9c27b050',
                     'normal' => '#9c27b0',
@@ -930,7 +930,7 @@ class Events
 
             case 'outofthebox_downloaded_entry':
                 $text = esc_html__('Downloaded', 'wpcloudplugins');
-                $icon = 'fa-download';
+                $icon = 'eva-download';
                 $colors = [
                     'light' => '#673ab750',
                     'normal' => '#673ab7',
@@ -941,7 +941,7 @@ class Events
 
             case 'outofthebox_streamed_entry':
                 $text = esc_html__('Streamed', 'wpcloudplugins');
-                $icon = 'fa-play-circle';
+                $icon = 'eva-play-circle-outline';
                 $colors = [
                     'light' => '#3f51b550',
                     'normal' => '#3f51b5',
@@ -952,7 +952,7 @@ class Events
 
             case 'outofthebox_created_link_to_entry':
                 $text = esc_html__('Shared', 'wpcloudplugins');
-                $icon = 'fa-share-alt';
+                $icon = 'eva-share-outline';
                 $colors = [
                     'light' => '#00bcd450',
                     'normal' => '#00bcd4',
@@ -963,7 +963,7 @@ class Events
 
             case 'outofthebox_renamed_entry':
                 $text = esc_html__('Renamed', 'wpcloudplugins');
-                $icon = 'fa-tag';
+                $icon = 'eva-edit-2-outline';
                 $colors = [
                     'light' => '#00968850',
                     'normal' => '#009688',
@@ -974,7 +974,7 @@ class Events
 
             case 'outofthebox_deleted_entry':
                 $text = esc_html__('Deleted', 'wpcloudplugins');
-                $icon = 'fa-trash';
+                $icon = 'eva-trash-2-outline';
                 $colors = [
                     'light' => '#f4433650',
                     'normal' => '#f44336',
@@ -985,7 +985,7 @@ class Events
 
             case 'outofthebox_created_entry':
                 $text = esc_html__('Created', 'wpcloudplugins');
-                $icon = 'fa-plus-circle';
+                $icon = 'eva-plus-circle-outline';
                 $colors = [
                     'light' => '#4caf5050',
                     'normal' => '#4caf50',
@@ -996,7 +996,7 @@ class Events
 
             case 'outofthebox_updated_metadata':
                 $text = esc_html__('Updated metadata', 'wpcloudplugins');
-                $icon = 'fa-wrench';
+                $icon = 'eva-hash';
                 $colors = [
                     'light' => '#ff572250',
                     'normal' => '#ff5722',
@@ -1007,7 +1007,7 @@ class Events
 
             case 'outofthebox_moved_entry':
                 $text = esc_html__('Moved', 'wpcloudplugins');
-                $icon = 'fa-arrows-alt-h';
+                $icon = 'eva-corner-down-right';
                 $colors = [
                     'light' => '#ffeb3b50',
                     'normal' => 'ffeb3b',
@@ -1018,7 +1018,7 @@ class Events
 
             case 'outofthebox_uploaded_entry':
                 $text = esc_html__('Uploaded', 'wpcloudplugins');
-                $icon = 'fa-upload';
+                $icon = 'eva-upload';
                 $colors = [
                     'light' => '#cddc3950',
                     'normal' => '#cddc39',
@@ -1029,7 +1029,7 @@ class Events
 
             case 'outofthebox_uploaded_failed':
                 $text = esc_html__('Upload failed', 'wpcloudplugins');
-                $icon = 'fa-exclamation-circle';
+                $icon = 'eva-alert-circle-outline';
                 $colors = [
                     'light' => '#f4433650',
                     'normal' => '#f44336',
@@ -1040,7 +1040,7 @@ class Events
 
             case 'outofthebox_searched':
                 $text = esc_html__('Searched', 'wpcloudplugins');
-                $icon = 'fa-search';
+                $icon = 'eva-search';
                 $colors = [
                     'light' => '#ffc10750',
                     'normal' => '#ffc107',
@@ -1051,7 +1051,7 @@ class Events
 
             case 'outofthebox_sent_notification':
                 $text = esc_html__('Notification', 'wpcloudplugins');
-                $icon = 'fa-envelope';
+                $icon = 'eva-email-outline';
                 $colors = [
                     'light' => '#ff572250',
                     'normal' => '#ff5722',
@@ -1062,7 +1062,7 @@ class Events
 
             case 'outofthebox_error':
                 $text = esc_html__('Warning', 'wpcloudplugins');
-                $icon = 'fa-exclamation-circle';
+                $icon = 'eva-alert-circle-outline';
                 $colors = [
                     'light' => '#f4433650',
                     'normal' => '#f44336',
@@ -1073,7 +1073,7 @@ class Events
 
             default:
                 $text = $type;
-                $icon = 'fa-star';
+                $icon = 'eva-star-outline';
                 $colors = [
                     'light' => '#9e9e9e50',
                     'normal' => '#9e9e9e',

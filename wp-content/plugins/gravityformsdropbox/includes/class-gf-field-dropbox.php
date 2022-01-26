@@ -191,16 +191,13 @@ class GF_Field_Dropbox extends GF_Field {
 	 */
 	public function get_form_inline_script_on_page_render( $form ) {
 
-		// Get link type.
-		$link_type = $this->linkType ? $this->linkType : 'preview';
-
 		$options = array(
 			'deleteImage' => GFCommon::get_base_url() . '/images/delete.png',
 			'deleteText'  => esc_attr__( 'Delete file', 'gravityforms' ),
 			'extensions'  => $this->get_extensions(),
 			'formId'      => $form['id'],
 			'inputId'     => $this->id,
-			'linkType'    => gf_apply_filters( array( 'gform_dropbox_link_type', $form['id'], $this->id ), $link_type, $form, $this->id ),
+			'linkType'    => $this->get_link_type( $form ),
 			'multiselect' => $this->multiselect,
 		);
 
@@ -208,6 +205,35 @@ class GF_Field_Dropbox extends GF_Field {
 
 		return $script;
 
+	}
+
+	/**
+	 * Returns the Dropbox link type the field will use.
+	 *
+	 * @since 3.1
+	 *
+	 * @param array $form The form containing the current field.
+	 *
+	 * @return string
+	 */
+	public function get_link_type( $form ) {
+		$link_type = $this->linkType ?: 'preview';
+
+		/**
+		 * Allows the link type to be overridden.
+		 *
+		 * @since unknown
+		 * @since 3.1 Moved from get_form_inline_script_on_page_render().
+		 *
+		 * @param string $link_type The Dropbox link type. Possible values: preview (a preview link to the document for sharing) or direct (an expiring link to download the contents of the file). Default: preview.
+		 * @param array  $form      The form containing the current field.
+		 * @param int    $field_id  The ID of the current field.
+		 */
+		return gf_apply_filters( array(
+			'gform_dropbox_link_type',
+			$form['id'],
+			$this->id
+		), $link_type, $form, $this->id );
 	}
 
 	/**

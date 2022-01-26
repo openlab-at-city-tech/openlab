@@ -4,6 +4,7 @@ import {
 	escapeDoubleQuotes,
 	replaceGlobally,
 	debounce,
+	domReady,
 } from './utils/helpers';
 import 'element-closest';
 import 'promise-polyfill/src/polyfill';
@@ -68,7 +69,7 @@ function selectAutosuggestItem(input, text) {
  * Fires events when autosuggest results are clicked,
  * and if GA tracking is activated
  *
- * @param {object} detail - value to pass on to the Custom Event
+ * @param {Object} detail - value to pass on to the Custom Event
  */
 function triggerAutosuggestEvent(detail) {
 	const event = new CustomEvent('ep-autosuggest-click', { detail });
@@ -113,7 +114,7 @@ function goToAutosuggestItem(searchTerm, url) {
  *
  * @param {Node} input - search input
  * @param {Node} element - search term result item
- * @returns {Function} calls the submitSearchForm function
+ * @return {Function} calls the submitSearchForm function
  */
 function selectItem(input, element) {
 	if (epas.action === 'navigate') {
@@ -128,7 +129,7 @@ function selectItem(input, element) {
  * Build the search query from the search text - the query is generated in PHP
  * and passed into the front end as window.epas = { "query...
  *
- * @returns {string} json string
+ * @return {string} json string
  */
 function getJsonQuery() {
 	if (typeof window.epas === 'undefined') {
@@ -147,9 +148,9 @@ function getJsonQuery() {
  *
  * @param {string} searchText - user search string
  * @param {string} placeholder - placeholder text to replace
- * @param {object} options - Autosuggest settings
+ * @param {Object} options - Autosuggest settings
  * @param {string} options.query - JSON query string to pass to ElasticSearch
- * @returns {string} json representation of search query
+ * @return {string} json representation of search query
  */
 function buildSearchQuery(searchText, placeholder, { query }) {
 	const newQuery = replaceGlobally(query, placeholder, searchText);
@@ -161,7 +162,7 @@ function buildSearchQuery(searchText, placeholder, { query }) {
  *
  * @param {string} query - json string
  * @param {string} searchTerm - user search term
- * @returns {object} AJAX object request
+ * @return {Object} AJAX object request
  */
 async function esSearch(query, searchTerm) {
 	const fetchConfig = {
@@ -181,7 +182,7 @@ async function esSearch(query, searchTerm) {
 
 	// only applies headers if using ep.io endpoint
 	if (epas.addSearchTermHeader) {
-		fetchConfig.headers['EP-Search-Term'] = searchTerm;
+		fetchConfig.headers['EP-Search-Term'] = encodeURI(searchTerm);
 	}
 
 	try {
@@ -209,9 +210,9 @@ async function esSearch(query, searchTerm) {
 /**
  * Update the auto suggest box with new options or hide if none
  *
- * @param {Array} options - formatted results
+ * @param {Array} options - search results
  * @param {string} input - search string
- * @returns {boolean} return true
+ * @return {boolean} return true
  */
 function updateAutosuggestBox(options, input) {
 	let i;
@@ -242,7 +243,8 @@ function updateAutosuggestBox(options, input) {
 	// create markup for list items
 	// eslint-disable-next-line
 	for ( i = 0; resultsLimit > i; ++i ) {
-		const { text, url } = options[i];
+		const text = options[i]._source.post_title;
+		const url = options[i]._source.permalink;
 		const escapedText = escapeDoubleQuotes(text);
 
 		const searchParts = value.trim().split(' ');
@@ -258,11 +260,17 @@ function updateAutosuggestBox(options, input) {
 			);
 		}
 
-		itemString += `<li class="autosuggest-item" role="option" aria-selected="false" id="autosuggest-option-${i}">
+		let itemHTML = `<li class="autosuggest-item" role="option" aria-selected="false" id="autosuggest-option-${i}">
 				<a href="${url}" class="autosuggest-link" data-search="${escapedText}" data-url="${url}"  tabindex="-1">
 					${resultsText}
 				</a>
 			</li>`;
+
+		if (typeof window.epAutosuggestItemHTMLFilter !== 'undefined') {
+			itemHTML = window.epAutosuggestItemHTMLFilter(itemHTML, options[i], i, value);
+		}
+
+		itemString += itemHTML;
 	}
 
 	// append list items to the list
@@ -288,7 +296,7 @@ function updateAutosuggestBox(options, input) {
 /**
  * Hide the auto suggest box
  *
- * @returns {boolean} returns true
+ * @return {boolean} returns true
  */
 function hideAutosuggestBox() {
 	const lists = document.querySelectorAll('.autosuggest-list');
@@ -315,7 +323,7 @@ function hideAutosuggestBox() {
  *
  * @param {Array} hits - ES results
  * @param {string} searchTerm - user search term
- * @returns {object} formatted hits
+ * @return {Object} formatted hits
  */
 function checkForOrderedPosts(hits, searchTerm) {
 	const toInsert = {};
@@ -355,7 +363,7 @@ function checkForOrderedPosts(hits, searchTerm) {
 		});
 	}
 
-	return hits;
+	return filteredHits;
 }
 
 /**
@@ -378,74 +386,14 @@ function setFormIsLoading(isLoading, input) {
  * init method called if the epas endpoint is defined
  */
 function init() {
-	const epInputNodes = document.querySelectorAll(
-		`.ep-autosuggest, input[type="search"], .search-field, ${epas.selector}`,
-	);
+	const selectors = [epas.defaultSelectors, epas.selector].filter(Boolean).join(',');
 
-	// build the container into which we place the search results.
-	// These will be cloned later for each instance
-	// of autosuggest inputs
-	const epAutosuggest = document.createElement('div');
-	epAutosuggest.classList.add('ep-autosuggest');
-	const autosuggestList = document.createElement('ul');
-	autosuggestList.classList.add('autosuggest-list');
-	autosuggestList.setAttribute('role', 'listbox');
-	epAutosuggest.appendChild(autosuggestList);
-
-	// Build the auto-suggest containers
-	// excluding the facet search field
-	const epInputs = Array.from(epInputNodes).filter(
-		(node) => !node.classList.contains('facet-search'),
-	);
-	epInputs.forEach((input) => {
-		const epContainer = document.createElement('div');
-		epContainer.classList.add('ep-autosuggest-container');
-
-		// Disable autocomplete
-		input.setAttribute('autocomplete', 'off');
-
-		// insert the container - later we will place
-		// the input inside this container
-		input.insertAdjacentElement('afterend', epContainer);
-
-		// move the input inside the container
-		const form = input.closest('form');
-		const container = form.querySelector('.ep-autosuggest-container');
-		container.appendChild(input);
-
-		const clonedContainer = epAutosuggest.cloneNode(true);
-		input.insertAdjacentElement('afterend', clonedContainer);
-
-		// announce that this is has been done
-		const event = new CustomEvent('elasticpress.input.moved');
-		input.dispatchEvent(event);
-	});
-
-	if (epInputs.length > 0) {
-		epAutosuggest.setAttribute(
-			'style',
-			`
-			top: ${epInputs[0].offsetHeight - 1};
-			background-color: ${getComputedStyle(epInputs[0], 'background-color')}
-		`,
-		);
+	if (!selectors) {
+		return;
 	}
 
-	/**
-	 * Helper function to format search results for consumption
-	 * by the updateAutosuggestBox function
-	 *
-	 * @param {object} hits - results from ES
-	 * @returns {Array} formatted hits
-	 */
-	const formatSearchResults = (hits) => {
-		return hits.map((hit) => {
-			const text = hit._source.post_title;
-			const url = hit._source.permalink;
-
-			return { text, url };
-		});
-	};
+	// For the Autosuggest element that will be cloned.
+	let autosuggestElement;
 
 	// to be used by the handleUpDown function
 	// to keep track of the currently selected result
@@ -477,7 +425,7 @@ function init() {
 		/**
 		 * helper function to get the currently selected result
 		 *
-		 * @returns {number} index of the selected search result
+		 * @return {number} index of the selected search result
 		 */
 		const getSelectedResultIndex = () => {
 			const resultsArr = Array.from(results);
@@ -488,7 +436,7 @@ function init() {
 		 * helper function to deselect results
 		 */
 		const deSelectResults = () => {
-			results.forEach((result) => {
+			Array.from(results).forEach((result) => {
 				result.classList.remove('selected');
 				result.setAttribute('aria-selected', 'false');
 			});
@@ -555,15 +503,33 @@ function init() {
 	};
 
 	/**
+	 * Get the searched post types from the search form.
+	 *
+	 * @param {HTMLFormElement} form - form containing the search input field
+	 * @return {Array} - post types
+	 * @since 3.6.0
+	 */
+	function getPostTypesFromForm(form) {
+		const data = new FormData(form);
+
+		if (data.has('post_type')) {
+			return data.getAll('post_type').slice(-1);
+		}
+
+		if (data.has('post_type[]')) {
+			return data.getAll('post_type[]');
+		}
+
+		return [];
+	}
+
+	/**
 	 * Calls the ajax request, and outputs the results.
 	 * Called by the handleKeyup callback, debounced.
 	 *
 	 * @param {Node} input - search input field
 	 */
 	const fetchResults = async (input) => {
-		const searchText = input.value;
-		const placeholder = 'ep_autosuggest_placeholder';
-
 		// retrieves the PHP-genereated query to pass to ElasticSearch
 		const queryJSON = getJsonQuery();
 
@@ -571,22 +537,39 @@ function init() {
 			return;
 		}
 
+		const searchText = input.value;
+		const placeholder = 'ep_autosuggest_placeholder';
+		const postTypes = getPostTypesFromForm(input.form);
+
 		if (searchText.length >= 2) {
 			setFormIsLoading(true, input);
 
-			const query = buildSearchQuery(searchText, placeholder, queryJSON);
+			let query = buildSearchQuery(searchText, placeholder, queryJSON);
+
+			if (postTypes.length > 0) {
+				query = JSON.parse(query);
+
+				if (typeof query.post_filter.bool.must !== 'undefined') {
+					query.post_filter.bool.must.push({
+						terms: {
+							'post_type.raw': postTypes,
+						},
+					});
+				}
+
+				query = JSON.stringify(query);
+			}
 
 			// fetch the results
 			const response = await esSearch(query, searchText);
 
 			if (response && response._shards && response._shards.successful > 0) {
 				const hits = checkForOrderedPosts(response.hits.hits, searchText);
-				const formattedResults = formatSearchResults(hits);
 
-				if (formattedResults.length === 0) {
+				if (hits.length === 0) {
 					hideAutosuggestBox();
 				} else {
-					updateAutosuggestBox(formattedResults, input);
+					updateAutosuggestBox(hits, input);
 				}
 			} else {
 				hideAutosuggestBox();
@@ -597,6 +580,8 @@ function init() {
 			hideAutosuggestBox();
 		}
 	};
+
+	const debounceFetchResults = debounce(fetchResults, 200);
 
 	/**
 	 * Callback for keyup in Autosuggest container.
@@ -623,24 +608,175 @@ function init() {
 		}
 
 		const input = event.target;
-		const debounceFetchResults = debounce(fetchResults, 200);
 		debounceFetchResults(input);
 	};
 
 	/**
-	 * Listen for any events:
+	 * Wrap an element with an autosuggest container.
 	 *
-	 * keyup
-	 * send them for a query to the Elasticsearch server
-	 * handle up and down keys to move between results
-	 *
-	 * blur
-	 * hide the autosuggest box
+	 * @param {Element} element Element to wrap.
+	 * @return {void}
 	 */
-	epInputs.forEach((input) => {
+	const wrapInAutosuggestContainer = (element) => {
+		const epContainer = document.createElement('div');
+
+		epContainer.classList.add('ep-autosuggest-container');
+
+		element.insertAdjacentElement('afterend', epContainer);
+
+		epContainer.appendChild(element);
+	};
+
+	/**
+	 * Insert an autosuggest list after an element.
+	 *
+	 * @param {Element} element Element to add the autosuggest list after.
+	 * @return {void}
+	 */
+	const insertAutosuggestElement = (element) => {
+		if (!autosuggestElement) {
+			autosuggestElement = document.createElement('div');
+			autosuggestElement.classList.add('ep-autosuggest');
+
+			const autosuggestList = document.createElement('ul');
+
+			autosuggestList.classList.add('autosuggest-list');
+			autosuggestList.setAttribute('role', 'listbox');
+
+			autosuggestElement.appendChild(autosuggestList);
+		}
+
+		const clonedElement = autosuggestElement.cloneNode(true);
+
+		element.insertAdjacentElement('afterend', clonedElement);
+	};
+
+	/**
+	 * Prepare an input for Autosuggest.
+	 *
+	 * @param {Element} input Input to prepare.
+	 * @return {void}
+	 */
+	const prepareInputForAutosuggest = (input) => {
+		/**
+		 * Skip facet widget search fields.
+		 */
+		if (input.classList.contains('facet-search')) {
+			return;
+		}
+
+		/**
+		 * Disable autocomplete.
+		 */
+		input.setAttribute('autocomplete', 'off');
+
+		/**
+		 * We know the markup of the Search block, so we don't need to add a
+		 * wrapper.
+		 */
+		if (input.classList.contains('wp-block-search__input')) {
+			input.form.classList.add('ep-autosuggest-container');
+			insertAutosuggestElement(input.parentElement);
+		} else {
+			wrapInAutosuggestContainer(input);
+			insertAutosuggestElement(input);
+		}
+
+		/**
+		 * Dispatch an event announcing the input has moved.
+		 */
+		const event = new CustomEvent('elasticpress.input.moved');
+
+		input.dispatchEvent(event);
+
+		/**
+		 * Listen for any events:
+		 *
+		 * keyup
+		 * send them for a query to the Elasticsearch server
+		 * handle up and down keys to move between results
+		 *
+		 * blur
+		 * hide the autosuggest box
+		 */
 		input.addEventListener('keyup', handleKeyup);
 		input.addEventListener('blur', function () {
 			window.setTimeout(hideAutosuggestBox, 200);
 		});
-	});
+	};
+
+	/**
+	 * Find inputs within an element and prepare them for Autosuggest.
+	 *
+	 * @param {Element} element Element to find inputs within.
+	 * @return {void}
+	 */
+	const findAndPrepareInputsForAutosuggest = (element) => {
+		const inputs = element.querySelectorAll(selectors);
+
+		if (inputs) {
+			Array.from(inputs).forEach(prepareInputForAutosuggest);
+		}
+	};
+
+	/**
+	 * Observe the document for new potential Autosuggest inputs, and add
+	 * Autosuggest to any found inputs.
+	 *
+	 * @return {void}
+	 */
+	const observeDocumentForInputs = () => {
+		const target = document.body;
+		const config = {
+			subtree: true,
+			childList: true,
+		};
+
+		const observer = new MutationObserver((mutations, observer) => {
+			mutations.forEach((mutation) => {
+				Array.from(mutation.addedNodes).forEach((node) => {
+					if (node.nodeType !== Node.ELEMENT_NODE) {
+						return;
+					}
+
+					/**
+					 * Adding autosuggest to an input moves it in the DOM,
+					 * which would trigger our observer, so we need to
+					 * stop observing until it's been prepared.
+					 */
+					observer.disconnect();
+
+					/**
+					 * If the node is an input, prepare it for Autosuggest if
+					 * it matches the selectors, otherwise search the node for
+					 * inputs.
+					 */
+					if (node.tagName === 'INPUT') {
+						if (node.matches(selectors)) {
+							prepareInputForAutosuggest(node);
+						}
+					} else {
+						findAndPrepareInputsForAutosuggest(node);
+					}
+
+					/**
+					 * Resume observing.
+					 */
+					observer.observe(target, config);
+				});
+			});
+		});
+
+		observer.observe(target, config);
+	};
+
+	/**
+	 * Add autosuggest to any inputs in the document.
+	 */
+	findAndPrepareInputsForAutosuggest(document.body);
+
+	/**
+	 * When the DOM is ready start observing for new inputs.
+	 */
+	domReady(observeDocumentForInputs);
 }

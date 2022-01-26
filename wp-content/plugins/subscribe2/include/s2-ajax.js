@@ -29,7 +29,8 @@ s2jQuery( document ).ready(
 							zIndex: 10000,
 							minWidth: 350,
 							minHeight: 300,
-							title: s2AjaxScriptStrings.title
+							title: s2AjaxScriptStrings.title,
+							closeText: ""
 						}
 					);
 					dialog.dialog( 'open' );

@@ -1,103 +1,103 @@
 === PDF Embedder ===
-Contributors: levertechadmin
-Tags: doc, pdf, pdf viewer, office, google, document, embed, intranet
-Requires at least: 3.5
-Tested up to: 5.7
-Stable tag: 4.6.2
+Contributors: lionsher, nathansingh, chrisakelley, dimensionmedia
+Tags: doc, pdf viewer, office, embed, document, intranet
+Requires at least: 5.2.0
+Tested up to: 5.8.2
+Stable tag: 4.6.4
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-Embed PDFs straight into your posts and pages, with intelligent resizing of width and height. No third-party services or iframes required. 
+Embed PDF files directly into your posts and pages, with intelligent responsive resizing, and no third-party services or iframes.
 
 == Description ==
 
-Upload PDFs and embed them straight into your site - just like adding images! PDFs will be automatically sized to their natural size and shape (or just fill the width available if they are too big). Optionally, you can specify a width and the correct height will be calculated automatically. The shape will be recalculated whenever the page is resized by the user.
+Upload PDF files and embed them directly into your site's posts and pages. It works as simple as adding images! Your PDF files will be automatically sized to their natural size and shape. You can also specify a width and the correct height will be calculated automatically. Our PDF Embedder plugin is fully responsive, so the embedded PDF will also look perfect, on any device. Additionally, the pdf embedder will automatically resize whenever the browser dimensions change.
 
-The plugin has a unique method for embedding PDFs, using Javascript only, and _not_ using iframes or third-party services. This gives a lot of flexibility over the appearance of your document.
+The plugin has a unique method for embedding PDF files, using Javascript only, and _not_ iframes or third-party services. This offers immense flexibility over the appearance of your document.
 
-The free viewer currently has Next/Prev buttons to page through the document, and zoom buttons.
+The PDF viewer has Next and Previous buttons to navigate the document, and zoom buttons if some areas of a PDF file are too small for your screen.
 
-PDFs are embedded within your existing WordPress pages so we have full control over appearance, and all Javascript and other files are served by your own server (not by Google or any other third-party who may not be able to guarantee their own reliability).
+Your PDF files are embedded within your existing WordPress pages so we have full control over appearance, and all Javascript and other files are served by your own server (not by Google or any other third-party who may not be able to guarantee their own reliability). This means your PDF files will load fast, without any speed penalty.
 
-Even if other plugins use similar technology, they will insert the PDF itself into an 'iframe' which means they do not get the flexibility over sizing.
+Other PDF embedder plugins insert the PDF into an 'iframe' which means they do not get the flexibility over sizing. Ours does not and that is a incredible benefit to the overall viewing experience across all devices.
 
-There is no button for users to download the PDF in the free version of the plugin, but this is available in the Premium versions along with other extra features.
-Hyperlinks in your PDF will only be clickable in the Premium versions.
+In the free plugin, there is no button for users to download the PDF, but download options are available in the Premium versions along with other awesome features.
+
+Another Premium feature are Hyperlinks in your PDF being clickable. Links in the free plugin cannot be clicked.
 
 
 = Usage =
 
-Once installed and Activated, click Add Media from any page or post, just like adding an image, but drag and drop a PDF file instead.
+1. Once installed and Activated, click Add Media from any page or post, just like adding an image, but drag and drop a PDF file instead.
 
-When you insert into your post, it will appear in the editor as a 'shortcode' as follows:
+1. When you insert into your post, it will appear in the editor as a 'shortcode' as follows:
 
-[pdf-embedder url='https://mysite.com/wp-content/uploads/2015/01/Plan-Summary.pdf']
+1. [pdf-embedder url='https://mysite.com/wp-content/uploads/2015/01/Plan-Summary.pdf']
 
-You can change the default appearance - e.g. width, and toolbar position/appearance through **Settings -> PDF Embedder**.
+1. You can change the default appearance - e.g. width, and toolbar position/appearance through **Settings -> PDF Embedder**.
 
 To override your site-wide defaults on an individual embed, see the [Plugin Instructions](http://wp-pdf.com/free-instructions/?utm_source=PDF%20Readme%20Instructions&utm_medium=freemium&utm_campaign=Freemium) for information about sizing options plus other ways to customize the shortcodes.
 
-= Extra Premium Features =
+= Premium Features =
 
-Features available in the Premium versions:
+Features available in the PDF Embedder Premium versions:
 
-* **Download button in the toolbar**
-* **Continuous scroll between pages**
-* **Hyperlinks are fully functional**
-* **Full screen mode**
-* **Edit page number to jump straight to page**
-* **Track number of downloads and views**
-* **Removes wp-pdf.com attribution from the toolbar**
-* **Mobile-friendly**
-* **Secure option - difficult to download original PDF**
+* Download button in the toolbar
+* Continuous scroll between pages
+* Hyperlinks are fully functional
+* Full screen mode
+* Edit page number to jump straight to page
+* Track number of downloads and views
+* Mobile-friendly
+* Secure option - difficult to download original PDF
+* Removes wp-pdf.com branding
 
 **See [wp-pdf.com](http://wp-pdf.com/?utm_source=PDF%20Readme%20Box&utm_medium=freemium&utm_campaign=Freemium) for details!**
 
 = Mobile-friendly embedding using PDF Embedder Premium =
 
-The free version of the plugin should work on most mobile browsers, but it will be cumbersome for users with small screens - it is difficult to position the document entirely within the screen, and your users' fingers may catch the entire browser page when they're trying only to move about the document...
+The free version will work on most mobile browsers, but cannot position the document entirely within the screen.
 
-Our **PDF Embedder Premium** plugin solves this problem with an intelligent 'full screen' mode. 
-When the document is smaller than a certain width, the document displays only as a 'thumbnail' with a large 'View in Full Screen' button for the user to click when they want to study your document. 
-This opens up the document so it has the full focus of the mobile browser, and the user can move about the document without hitting other parts of the web page by mistake. Click Exit to return to the regular web page.
+Our **PDF Embedder Premium** plugin solves this problem with an intelligent 'full screen' mode.
 
-The user can also touch and scroll continuously between all pages of the PDF which is much easier than clicking the next/prev buttons to navigate.
+When the document is smaller than a certain width, the document displays only as a 'thumbnail' with a large 'View in Full Screen' button for the user to click when they want to study your document.
 
-See our website [wp-pdf.com](http://wp-pdf.com/premium/?utm_source=PDF%20Readme%20Premium&utm_medium=freemium&utm_campaign=Freemium) for more details and purchase options.
+This opens up the document so it has the full focus of the mobile browser, and the user can move about the document without hitting other parts of the web page by mistake. Viewers can then Click Exit to return to the regular page.
 
-= Protect your PDFs with our secure premium version =
+The user can also swipe continuously between all pages of the PDF which is more natural than clicking the navigation buttons to navigate.
 
-Our **PDF Embedder Premium Secure** plugin provides the same simple but elegant viewer as the premium version, with the added protection that it is difficult for users to 
-download or print the original PDF document.
+See our site [wp-pdf.com](http://wp-pdf.com/premium/?utm_source=PDF%20Readme%20Premium&utm_medium=freemium&utm_campaign=Freemium) for more details and purchase options.
+
+= Protect your PDFs with our secure premium pdf embedder version =
+
+Our **PDF Embedder Premium Secure** plugin provides the same simple but elegant viewer as the premium version, with the added protection that it is difficult for users to download or print the original PDF document.
 
 This means that your PDF is unlikely to be shared outside your site where you have no control over who views, prints, or shares it.
 
-Optionally add a watermark containing the user's name or email address to discourage sharing of screenshots.
+Optionally, add a watermark containing the user's name or email address to discourage sharing of screenshots.
 
-See our website [wp-pdf.com](http://wp-pdf.com/secure/?utm_source=PDF%20Readme%20Secure&utm_medium=freemium&utm_campaign=Freemium) for more details and purchase options.
+See our site [wp-pdf.com](http://wp-pdf.com/secure/?utm_source=PDF%20Readme%20Secure&utm_medium=freemium&utm_campaign=Freemium) for more details and purchase options.
 
 = PDF Thumbnails =
 
-Our **PDF Thumbnails** plugin provides automatically generates fixed image versions of all PDF files in your Media Library, to use on your site as you wish.
+Our **PDF Thumbnails** plugin automatically generates fixed image versions of all PDF files in your Media Library, to use on your site as you wish.
 
 You can use them as featured images in posts containing an embedded version of the PDF, or as a visual clickable link to download the PDF directly.
-It also displays the thumbnail as the ‘icon’ for the PDF in the Media Library, making it easy for authors to locate the PDFs they need to insert in a post.
+It also displays the thumbnail as the â€˜iconâ€™ for the PDF in the Media Library, making it easy for authors to locate the PDFs they need to insert in a post.
 
-See our website [wp-pdf.com/thumbnails/](http://wp-pdf.com/thumbnails/?utm_source=PDF%20Readme%20Thumbnails&utm_medium=freemium&utm_campaign=Freemium) for more details and purchase options.
+See our site [wp-pdf.com/thumbnails/](http://wp-pdf.com/thumbnails/?utm_source=PDF%20Readme%20Thumbnails&utm_medium=freemium&utm_campaign=Freemium) for more details and purchase options.
 
 
 = Now translation-ready! =
 
 Please contribute your translations.
 
-Persian translation by Mostafa Safarian i of [سئو](http://www.greenseo.ir/)
-
-French translation by Thierry Gaillou of [JDFitForme](http://www.jdfitforme.fr/)
-
-Spanish translation by Armando Landois of [LANDOIS Diseño](https://landois.com/)
+* Persian translation by Mostafa Safarian i of [Ø³Ø¦Ùˆ](http://www.greenseo.ir/)
+* French translation by Thierry Gaillou of [JDFitForme](http://www.jdfitforme.fr/)
+* Spanish translation by Armando Landois of [LANDOIS DiseÃ±o](https://landois.com/)
 
 
-With thanks to the Mozilla team for developing the underlying [pdf.js](https://github.com/mozilla/pdf.js) technology used by this plugin.
+With thanks to the Mozilla team for developing the underlying [pdf.js](https://github.com/mozilla/pdf.js) technology used by this pdf embedder plugin.
 
 == Screenshots ==
 
@@ -113,7 +113,7 @@ We have [instructions](https://wp-pdf.com/free-instructions/) and a [Knowledge B
 
 Please feel free to email [contact@wp-pdf.com](mailto:contact@wp-pdf.com) with any questions.
 
-Always include your full shortcode, plus links to the relevant pages, and screenshots if they would be helpful too. 
+Always include your full shortcode, plus links to the relevant pages, and screenshots if they would be helpful too.
 
 We may occasionally be able to respond to support queries posted on the 'Support' forum here on the wordpress.org plugin page, but we recommend sending us an email instead if possible.
 
@@ -134,7 +134,7 @@ The Next/Prev toolbar can appear at the top or bottom of the document (or both),
 
 See the [Plugin Instructions](http://wp-pdf.com/free-instructions/?utm_source=PDF%20Readme%20FAQ&utm_medium=freemium&utm_campaign=Freemium) for more details about sizing and toolbar options.
 
-= Premium feature list =
+= PDF Embedder Premium feature list =
 
 Features available in the premium versions of the plugin:
 
@@ -153,16 +153,16 @@ See [wp-pdf.com](http://wp-pdf.com/?utm_source=PDF%20Readme%20Box&utm_medium=fre
 
 = Can I improve the viewing experience for mobile users? =
 
-Yes, our **PDF Embedder Premium** plugin has an intelligent 'full screen' mode. 
-When the document is smaller than a certain width, the document displays only as a 'thumbnail' with a large 'View in Full Screen' button for the user to click when they want to study your document. 
-This opens up the document so it has the full focus of the mobile browser, and the user can move about the document without hitting other parts of the web page by mistake. 
+Yes, our **PDF Embedder Premium** plugin has an intelligent 'full screen' mode.
+When the document is smaller than a certain width, the document displays only as a 'thumbnail' with a large 'View in Full Screen' button for the user to click when they want to study your document.
+This opens up the document so it has the full focus of the mobile browser, and the user can move about the document without hitting other parts of the web page by mistake.
 Click Exit to return to the regular web page.
 
 See our website [wp-pdf.com](http://wp-pdf.com/premium/?utm_source=PDF%20Readme%20FAQ%20Premium&utm_medium=freemium&utm_campaign=Freemium) for more details and purchase options.
 
 = Can I protect my PDFs so they are difficult for viewers to download directly? =
 
-Not with the free or (regular) premium versions - it is relatively easy to find the link to download the file directly.
+Not with the free or (regular) pdf embedder premium versions - it is relatively easy to find the link to download the file directly.
 
 A **secure premium** version is available that encrypts the PDF during transmission, so it is difficult for a casual user to save or print the file for use outside your site.
 
@@ -170,7 +170,7 @@ See our website [wp-pdf.com](http://wp-pdf.com/secure/?utm_source=PDF%20Readme%2
 
 = Can I add a Download button to the toolbar? =
 
-This is possible only in the Premium version. As a workaround in the free version, you could add a direct link to the PDF beneath the embedded version.
+This is possible only in the PDF Embedder Premium version. As a workaround in the free version, you could add a direct link to the PDF beneath the embedded version.
 
 To do this, copy the URL from the pdf-embedder shortcode and insert it into a link using HTML such as this:
 &lt;a href="(url of PDF)"&gt;Download Here&lt;/a&gt;
@@ -184,7 +184,7 @@ The Premium versions allow functioning hyperlinks - both internal links within t
 The easiest way is to upgrade to our Premium version, but if you know how to add entries to your database then you can add a line to the wp_options table
 with option_name 'pdfemb_poweredby' and option_value '1'.
 
-For more information on Premium versions visit [wp-pdf.com](http://wp-pdf.com/?utm_source=PDF%20Readme%20FAQ%20Bottom&utm_medium=freemium&utm_campaign=Freemium).
+For more information on PDF Embedder Premium versions visit [wp-pdf.com](http://wp-pdf.com/?utm_source=PDF%20Readme%20FAQ%20Bottom&utm_medium=freemium&utm_campaign=Freemium).
 
 == Installation ==
 
@@ -202,6 +202,16 @@ the Plugins section of your Wordpress admin
 1. Follow the instructions from step 4 above
 
 == Changelog ==
+
+= 4.6.4 =
+
+Resolved Javascript errors in minified JS
+
+= 4.6.3 =
+
+Added about tab
+Updated core PDF.js functionality
+Addressed mobile issue in Safari iOS
 
 = 4.6.2 =
 
@@ -269,7 +279,7 @@ When scrollbars are always visible, no longer cuts off edge of PDF underneath.
 
 Ready for compatibility with WordPress 4.8.
 
-New mouse wheel scrolling in Firefox wasn’t working with some themes.
+New mouse wheel scrolling in Firefox wasnâ€™t working with some themes.
 
 Latest version of pdf.js library, and newest code bringing the free version into line with the premium versions.
 

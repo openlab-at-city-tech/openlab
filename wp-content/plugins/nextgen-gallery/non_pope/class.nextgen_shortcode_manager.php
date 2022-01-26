@@ -78,18 +78,28 @@ class C_NextGen_Shortcode_Manager
 		$manager->remove_shortcode($name);
 	}
 
-	/**
-	 * Constructor
-	 */
+    /**
+     * Returns whether NGG_DISABLE_SHORTCODE_MANAGER is defined and TRUE.
+     *
+     * @return bool
+     */
+	public function is_disabled()
+    {
+        return defined('NGG_DISABLE_SHORTCODE_MANAGER') && NGG_DISABLE_SHORTCODE_MANAGER;
+    }
+
 	private function __construct()
 	{
         // For theme & plugin compatibility and to prevent the output of our shortcodes from being
         // altered we substitute our shortcodes with placeholders at the start of the the_content() filter
 		// queue and then at the end of the the_content() queue, we substitute the placeholders with our
-		// actual markup
-		add_filter('the_content', [$this, 'fix_nested_shortcodes'], -1);
-        add_filter('the_content', [$this, 'parse_content'], PHP_INT_MAX);
-		add_filter('widget_text', [$this, 'fix_nested_shortcodes'], -1);
+		// actual markup. Optionally this can be disabled by defining NGG_DISABLE_SHORTCODE_MANAGER to TRUE.
+        if (!$this->is_disabled())
+        {
+            add_filter('the_content', [$this, 'fix_nested_shortcodes'], -1);
+            add_filter('the_content', [$this, 'parse_content'], PHP_INT_MAX);
+            add_filter('widget_text', [$this, 'fix_nested_shortcodes'], -1);
+        }
 	}
 
 	/**
@@ -232,7 +242,14 @@ class C_NextGen_Shortcode_Manager
 	function add_shortcode($name, $callback, $transformer = NULL)
 	{
 		$this->_shortcodes[$name] = ['callback' => $callback, 'transformer' => $transformer];
-		add_shortcode($name, array($this, $name . '____wrapper'));
+
+		if ($this->is_disabled())
+		    // Because render_shortcode() is a wrapper to several shortcodes it requires the $name parameter and can't be passed directly to add_shortcode()
+            add_shortcode($name, function($params, $inner_content) use ($name) {
+                return $this->render_shortcode($name, $params, $inner_content);
+            });
+		else
+            add_shortcode($name, array($this, $name . '____wrapper'));
 	}
 
 	/**

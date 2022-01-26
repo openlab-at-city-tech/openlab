@@ -37,7 +37,6 @@ registerBlockType('imagely/nextgen-gallery', {
     },
 
     save({ attributes }) {
-        const { content } = attributes;
-        return <RawHTML>{ content }</RawHTML>
+        return attributes.content;
     }
 });

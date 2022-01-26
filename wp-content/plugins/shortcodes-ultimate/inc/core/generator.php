@@ -287,6 +287,10 @@ class Su_Generator {
 		if ( isset( $shortcode['note'] ) ) {
 			$return .= '<div class="su-generator-note"><i class="sui sui-info-circle"></i><div class="su-generator-note-content">' . wpautop( $shortcode['note'] ) . '</div></div>';
 		}
+		// Shortcode CTA
+		if ( isset( $shortcode['generator_cta'] ) ) {
+			$return .= '<div class="su-generator-cta"><div class="su-generator-cta-content">' . $shortcode['generator_cta'] . '</div></div>';
+		}
 		// Shortcode has atts
 		if ( isset( $shortcode['atts'] ) && count( $shortcode['atts'] ) ) {
 			// Loop through shortcode parameters
@@ -301,7 +305,6 @@ class Su_Generator {
 				elseif ( !isset( $attr_info['type'] ) ) $attr_info['type'] = 'text';
 				if ( is_callable( array( 'Su_Generator_Views', $attr_info['type'] ) ) ) $return .= call_user_func( array( 'Su_Generator_Views', $attr_info['type'] ), $attr_name, $attr_info );
 				elseif ( isset( $attr_info['callback'] ) && is_callable( $attr_info['callback'] ) ) $return .= call_user_func( $attr_info['callback'], $attr_name, $attr_info );
-				if ( isset( $attr_info['desc'] ) ) $attr_info['desc'] = str_replace( '%su_skins_link%', self::skins_link(), $attr_info['desc'] );
 				if ( isset( $attr_info['desc'] ) ) $return .= '<div class="su-generator-attr-desc">' . str_replace( array( '<b%value>', '<b_>' ), '<b class="su-generator-set-value" title="' . __( 'Click to set this value', 'shortcodes-ultimate' ) . '">', $attr_info['desc'] ) . '</div>';
 				$return .= '</div>';
 			}
@@ -617,34 +620,6 @@ class Su_Generator {
 		}
 
 		return true;
-
-	}
-
-	/**
-	 * Display "Install additional skins" link if add-on isn't installed.
-	 *
-	 * @since  5.0.5
-	 * @return string
-	 */
-	public static function skins_link() {
-
-		if ( did_action( 'su/skins/ready' ) ) {
-
-			return sprintf(
-				'<br><strong>%s</strong><br><strong>%s</strong>',
-				__( 'Additional skins successfully installed', 'shortcodes-ultimate' ),
-				__( 'Open dropdown to choose one of new styles', 'shortcodes-ultimate' )
-			);
-
-		}
-		else {
-
-			return sprintf(
-				'<br><a href="https://getshortcodes.com/add-ons/additional-skins/" target="_blank">%s &rarr;</a>',
-				__( 'Get more styles', 'shortcodes-ultimate' )
-			);
-
-		}
 
 	}
 

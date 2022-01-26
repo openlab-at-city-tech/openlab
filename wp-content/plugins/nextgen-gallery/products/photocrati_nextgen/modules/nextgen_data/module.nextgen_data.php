@@ -61,28 +61,44 @@ class M_NextGen_Data extends C_Base_Module
         return class_exists('DOMDocument');
     }
 
+    public static function check_ctypes_requirement()
+    {
+        return function_exists('ctype_lower');
+    }
+
     function _register_hooks()
 	{
-	    add_action('admin_init', array($this, 'register_requirements'));
+	    add_action('admin_init', [$this, 'register_requirements'], -20);
 		add_action('init', array(&$this, 'register_custom_post_types'));
 		add_filter('posts_orderby', array($this, 'wp_query_order_by'), 10, 2);
 	}
 
 	public function register_requirements()
     {
-        C_Admin_Requirements_Manager::get_instance()->add(
+        $manager = C_Admin_Requirements_Manager::get_instance();
+        $manager->add(
             'nextgen_data_sanitation',
             'phpext',
             array($this, 'check_domdocument_requirement'),
             array('message' => __('XML is strongly encouraged for safely editing image data', 'nggallery'))
         );
 
-        C_Admin_Requirements_Manager::get_instance()->add(
+        $manager->add(
             'nextgen_data_gd_requirement',
             'phpext',
             array($this, 'check_gd_requirement'),
             array('message'     => __('GD is required for generating image thumbnails, resizing images, and generating watermarks', 'nggallery'),
                 'dismissable' => FALSE)
+        );
+
+        $manager->add(
+            'nextgen_data_ctypes_requirement',
+            'phpext',
+            [$this, 'check_ctypes_requirement'],
+            [
+                'message'     => __('ctype methods are required for securing user submitted data', 'nggallery'),
+                'dismissable' => FALSE
+            ]
         );
     }
 
@@ -185,11 +201,9 @@ class M_NextGen_Data extends C_Base_Module
 			'C_Ngglegacy_Thumbnail'             => 'class.ngglegacy_thumbnail.php',
 			'C_Dynamic_Thumbnails_Manager' 			=> 'class.dynamic_thumbnails_manager.php',			
             'Mixin_NextGen_Table_Extras'        => 'mixin.nextgen_table_extras.php',
-            'Mixin_GalleryStorage_Base'              => 'mixin.gallerystorage_base.php',
             'Mixin_GalleryStorage_Base_Dynamic'      => 'mixin.gallerystorage_base_dynamic.php',
             'Mixin_GalleryStorage_Base_Getters'      => 'mixin.gallerystorage_base_getters.php',
             'Mixin_GalleryStorage_Base_Management'   => 'mixin.gallerystorage_base_management.php',
-            'Mixin_GalleryStorage_Base_MediaLibrary' => 'mixin.gallerystorage_base_medialibrary.php',
             'Mixin_GalleryStorage_Base_Upload'       => 'mixin.gallerystorage_base_upload.php'
 
         );

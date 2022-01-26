@@ -4,8 +4,8 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: maps, google maps, map, map markers, google map, leaflet maps, leaflet map plugin, google maps plugin, wp google maps, wp google map, map plugin, store locator, google map plugin, map widget,
 Requires at least: 5.3
 Requires PHP: 5.6
-Tested up to: 5.7
-Stable tag: 2.64.2
+Tested up to: 5.9
+Stable tag: 2.73.1
 
 == Description ==
 MapPress is the easiest way to add beautiful interactive Google and Leaflet maps to WordPress.
@@ -27,31 +27,37 @@ Upgrade to [MapPress Pro](https://mappresspro.com/mappress) for even more featur
 4. Creating a mashup
 
 = Key Features =
-* The only full-featured google map plugin and leaflet map plugin that is compatible with the Gutenberg editor
-* Add unlimited maps and markers to any post, page or custom post type
-* Maps are fully responsive, and can be sized by pixels, viewport units, percents or aspect ratios
-* Locations can be added by address, place, or latitude/longitude, or dragged into position
-* Markers support custom text and HTML including photos, images, and links
-* Google street view and overlays (traffic, bicycling and transit)
-* Markers link the Google map site for detailed turn-by-turn directins
-* Maps can be generated using PHP for use in themes and templates
+* Best Google Maps plugin for WordPress
+* Unlimited maps and markers
+* Leaflet maps, no API key needed
+* Gutenberg editor map blocks
+* Classic editor support
+* Styled maps
+* Marker clustering
+* Add maps to any post, page or custom post type
+* Responsive maps
+* Size maps by pixels, percent or viewport
+* Popups with custom text, photos, images, and links
+* Google overlays for traffic, bicycling and transit
+* Directions from Google Maps
+* Geocoders from Google, Nominatim, and Mapbox
+* KML map overlays
+* Draw polygons, circles, and lines
+* Generate maps using PHP
+* WPML compatible
+* MultiSite compatible
 
 = Pro Version Features =
 * Get [MapPress Pro](https://mappresspro.com/mappress) for additional functionality
-* Custom marker icons, or upload your own - 100 standard icons included
-* Use a Gutenberg "mashup" block to create a searchable map, great for a local directory site or store locator
-* Filter locations by by taxonomy, tag or category
-* Map widget and mashup widget are included
-* Marker clustering for both Leaflet and Google
-* Multiple geocoders including Google, Nominatim, Algolia and Mapbox
-* Customizable marker and list templates
-* Custom map colors and styles using Google styled maps and Mapbox Studio
+* Custom markers upload
+* Marker editor with thousands of icons, shapes and colors
+* Gutenberg "mashup" block for searchable maps and store locators
+* Filter locations by taxonomies, tags and categories
+* Map widget and mashup widget
+* Customizable templates for markers and lists
 * Generate maps automatically from custom fields
-* Automatically assign marker icons by taxonomy, tag, or category
-* KML support for Google Earth
-* Google drawing manager for drawing polygons, circles, and lines on your maps
-* MultiSite compatible
-* Compatible with WPML language settings
+* Assign marker icons by taxonomy, tag, or category
+* Advanced Custom Fields (ACF) integration
 
 = Localization =
 Please [Contact me](https://mappresspro.com/chris-contact) if you'd like to provide a translation or an update.  Many thanks to all the folks who have created and udpated translations.
@@ -82,6 +88,190 @@ Please see the plugin documentation pages:
 1. Follow the installation instructions to install the new version
 
 == Changelog ==
+
+= 2.73.1 =
+* Fixed: directions not displaying
+
+= 2.73 =
+* Important: filters CSS has been updated, please update any custom filter forms to match
+* Added: better popup panning and sizing
+* Added: new custom JSON styles can be created in the style editor
+* Added: setting for filter position (search box or POI list)
+* Added: new filter editor in MapPress settings
+* Added: post count in filter dropdown
+* Added: new filter types: post type and text box
+* Added: user-defined labels for filters
+* Added: filter display formats (select/checkbox/radio)
+* Added: include or exclude specific terms (tags, categories,...) for filters
+* Fixed: filters size better in mini mode
+* Fixed: POI body not showing in Firefox when thumbnails on left/right
+* Fixed: control for attaching posts to maps now shows the correct custom post type
+* Fixed: mashup block not updating when query parameters change
+* Fixed: Gutenberg boolean attributes defaulting to false when converting classic blocks
+* Fixed: settings screen not displaying on some wordpress hosted sites
+
+= 2.72.5 =
+* Fixed: list toggle not working
+
+= 2.72.4 =
+* Fixed: directions link not working if no POI list present
+
+= 2.72.3 =
+* Increment version
+
+= 2.72.2 =
+* Changed: allow DOM events to bubble out of the map container
+
+= 2.72.1 =
+* Fixed: POI drag and drop sorting not working in editor
+* Fixed: shortcodes in AJAX calls now include scripts with map/mashup output
+
+= 2.72 =
+* Changed: mashup queries now use a single SQL statement, for hosts that limit SQL size
+* Fixed: youtube videos inside popups did not play full screen
+* Fixed: [mashup query="current"] now displays current posts correctly
+
+= 2.71.1 =
+* Added: option for POI list page size
+* Added: option for POI list open/closed when map is loaded
+* Fixed: directions not working on Android
+
+= 2.71 =
+* Added: enable search for individual maps
+* Added: classic editor button updated for compatibility with Enfold theme
+* Changed: remove initialOpenDirections parameter
+* Changed: speed up Nominatim autocomplete
+* Changed: internal updates to ES6 JS for options and maps
+
+= 2.70.1 =
+* Changed: clearer highlighting in map list
+* Changed: remove beta version
+* Changed: remove IE11 support
+
+= 2.70 =
+* Added: maps can now be trashed or restored
+
+= 2.69.9 =
+* Fixed: spinner prevented map panning
+
+= 2.69.8 =
+* Added: improve license checking on settings screen
+
+= 2.69.7 =
+* Added: snackbar notifications instead of dialog boxes
+* Added: new spinner
+
+= 2.69.6 =
+* Fixed: automatic icons not showing in filters dropdown
+
+= 2.69.5 =
+* Fixed: allow map display if some map containers are missing
+* Fixed: use default style if current style does not exist
+
+= 2.69.4 =
+* Fixed: maps crash if center is set
+
+= 2.69.3 =
+* Added: iframes now support inline lists, modal popup POIs, and alignment options
+* Changed: remove Algolia geocoder
+* Fixed: mashup search button hidden by GT editor
+* Fixed: KML POIs not working
+
+= 2.69.2 =
+* Fixed: iframe does not display when height has no 'px' suffix
+
+= 2.69.1 =
+* Changed: improved error reporting
+* Changed: improved setup wizard
+* Changed: 'post types' setting moved to geocoding section (it only applies to geocoding)
+* Fixed: disabled radio buttons not visible in settings
+
+= 2.69 =
+* Added: console messages now display in map layout
+* Added: search/add button on search bar
+* Changed: default size changed to 100%/350px and fixed 425px/350px size removed
+* Changed: improved settings to prevent loading Google API twice
+* Fixed: make post date and post type available for mashup permalinks
+
+= 2.68.2 =
+* Changed: expand styled maps availability
+
+= 2.68.1 =
+* Fixed: custom icons missing white outline
+
+= 2.68 =
+* Added: icon editor now supports Google Material Icons, foreground color, and font sizes
+* Added: icon editor now supports bulk delete
+* Added: icon file name can be edited
+
+= 2.67.6 =
+* Fixed: error opening map editor when using classic editor and tinyMCE is disabled
+* Fixed: warning about block category in map library and classic editor
+
+= 2.67.5 =
+* Fixed: error when saving some custom icons with no symbol
+* Fixed: ACF integration option not appearing in settings
+* Fixed: error preventing saving empty geocoding keys
+
+= 2.67.4 =
+* Fixed: invalid image when when reverting to standard red pin icon
+
+= 2.67.3 =
+* Fixed: error when using mashup query="current"
+* Fixed: clustering max zoom not working for Leaflet when set to 'none'
+
+= 2.67.2 =
+* Fixed: unmounted component error from WP widgets screen unounting map
+* Fixed: warning about invalid block category on map library screen
+* Fixed: warning about toolbargroup vs toolbar
+* Fixed: empty mashup filters not saving, and warning about boolean count setting
+* Fixed: error from trimArray when saving settings
+
+= 2.67.1 =
+* Fixed: error on settings screen
+
+= 2.67 =
+* Added: ACF support for geocoding ACF map fields
+* Added: setting to include ACF map fields directly in mashups
+* Added: Leaflet scrollWheel setting to enable/disable mouse zooming on map
+* Added: settings to control sorting and term counts for mashup filters
+* Added: filter 'mappress_filter_label' to allow custom html for filter term labels
+* Changed: filter values displayed as flex; see mappress.css for info on changing to grid
+
+= 2.66.5 =
+* Fixed: console error in theme customizer
+
+= 2.66.4 =
+* Fixed: wrong mapid in Gutenberg sidebar
+
+= 2.66.3 =
+* Added: MapPress can now read Advanced Custom Fields (ACF) map fields, for use with front-end maps
+* Fixed: insert map not working from Gutenberg sidebar
+
+= 2.66.2 =
+* Fixed: error in 2.58 widgets screen
+
+= 2.66.1 =
+* Added: Gutenberg sidebar document panel listing maps attached to current post/page
+
+= 2.66 =
+* Added: settings for marker clustering, to control max zoon & spiderfy
+* Added: search bounding box
+* Added: warnings about geocoders, Algolia deprecation notice
+
+= 2.65.1 =
+* Fixed: mashups not displaying if "compatibility" setting was active
+
+= 2.65 =
+* Added: setting to display user location on mashup maps
+* Added: setting for mashup minimum search radius
+* Added: standard icons can now be overriden, just create an icon with the same name and any extension (gif/png/jpg)
+* Added: compatibility setting to output maps in iframes (and prevent theme/plugin compatibility issues)
+* Changed: mashup searches are now biased to viewport for all geocoders, not just Google
+* Changed: update filter dropdown CSS to use flexbox
+* Changed: add output class to term counts in filters dropdown
+* Changed: updated widgets for WP 5.8
+* Fixed: custom style json not saving
 
 = 2.64.2 =
 * Changed: mashup filters now hide terms that are not assigned to any posts

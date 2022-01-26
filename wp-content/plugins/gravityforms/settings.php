@@ -402,33 +402,59 @@ class GFSettings {
 						'class'               => 'gform-admin-input',
 						'validation_callback' => array( 'GFSettings', 'license_key_validation_callback' ),
 						'after_input'         => function () {
-							$version_info = GFCommon::get_version_info( false );
-							$license_key  = GFCommon::get_key();
+							/**
+							 * @var License\GF_License_API_Connector $license_connector
+							 */
+							$license_connector = GFForms::get_service_container()->get( License\GF_License_Service_Provider::LICENSE_API_CONNECTOR );
+							$is_save_postback  = self::get_settings_renderer()->is_save_postback();
+							$license_key       = $is_save_postback ? rgpost( '_gform_setting_license_key' ) : GFCommon::get_key();
 
-							$license_key_alert = '';
-							if ( $version_info['is_valid_key'] ) {
-								$license_key_alert = sprintf( '<div class="alert gforms_note_success">%s</div>', esc_html__( 'Your support license key has been successfully validated.', 'gravityforms' ) );
-							} else if ( ! $version_info['is_valid_key'] && ! empty( $license_key ) ) {
-								$license_key_alert = sprintf( '<div class="alert gforms_note_error">%s</div>', esc_html__( 'The provided license key is invalid.', 'gravityforms' ) );
+							if ( empty( $license_key ) ) {
+								delete_transient( 'rg_gforms_registration_error' );
+								return '';
 							}
+
+							$license_info      = $license_connector->check_license( trim( $license_key ), ! $is_save_postback );
+							$usability         = $license_info->get_usability();
+
+							$license_key_alert = sprintf(
+								'<div class="alert gforms_note_%s">%s %s</div>',
+								$usability,
+								$is_save_postback && ! $license_info->can_be_used() ? __( 'Your license key was not updated. ', 'gravityforms' ) : null,
+								License\GF_License_Statuses::get_message_for_code( $license_info->get_status() )
+							);
+
+							delete_transient( 'rg_gforms_registration_error' );
 
 							return $license_key_alert;
 						},
 						'feedback_callback' => function () {
-							$version_info = GFCommon::get_version_info( false );
-							$license_key  = GFCommon::get_key();
+							$license_key = GFCommon::get_key();
 
-							if ( ! rgempty( 'is_error', $version_info ) ) {
-								return false;
-							} else if ( rgar( $version_info, 'is_valid_key' ) ) {
-								return true;
-							} else if ( ! empty( $license_key ) ) {
-								return false;
+							if ( empty( $license_key ) ) {
+								return License\GF_License_Statuses::USABILITY_ALLOWED;
 							}
 
-							return null;
+							/**
+							 * @var License\GF_License_API_Connector $license_connector
+							 */
+							$license_connector = GFForms::get_service_container()->get( License\GF_License_Service_Provider::LICENSE_API_CONNECTOR );
+							$license_info      = $license_connector->check_license();
 
+							return $license_info->get_usability();
 						},
+					),
+				),
+			),
+			array(
+				'id'     => 'section_license_key_details',
+				'title'  => __( 'Your License Details', 'gravityforms' ),
+				'class'       => 'gform-settings-panel--no-padding gform-settings-panel--license-details',
+				'fields' => array(
+					array(
+						'name' => 'license_key_details',
+						'type' => 'html',
+						'html' => array( 'GFSettings', 'license_key_details_callback' ),
 					),
 				),
 			),
@@ -543,6 +569,99 @@ class GFSettings {
 			),
 		);
 
+	}
+
+	public static function license_key_details_callback() {
+		$key          = GFCommon::get_key();
+		$empty_string = '<div class="gform-p-16">' . __( 'Please enter a valid license key to see details.', 'gravityforms' ) . '</div>';
+
+		if ( empty( $key ) ) {
+			return $empty_string;
+		}
+
+		/**
+		 * @var License\GF_License_API_Connector $license_connector
+		 */
+		$license_connector = GFForms::get_service_container()->get( License\GF_License_Service_Provider::LICENSE_API_CONNECTOR );
+		$license_info      = $license_connector->check_license( $key );
+
+		if ( ! $license_info->can_be_used() ) {
+			return $empty_string;
+		}
+
+		ob_start();
+		?>
+		<table class="gform-table gform-table--responsive gform-table--no-outer-border gform-table--license-ui">
+			<thead>
+				<tr>
+					<th scope="col"><?php esc_html_e( 'License Type', 'gravityforms' ); ?></th>
+					<th scope="col"><?php esc_html_e( 'License Status', 'gravityforms' ); ?></th>
+					<th scope="col"><?php esc_html_e( 'Purchase Date', 'gravityforms' ); ?></th>
+					<th scope="col"><?php esc_html_e( 'License Activations', 'gravityforms' ); ?></th>
+					<th scope="col"><?php esc_html_e( $license_info->renewal_text() ); ?></th>
+					<th scope="col"><?php esc_html_e( 'Days Left', 'gravityforms' ); ?></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td data-header="<?php esc_html_e( 'License Type', 'gravityforms' ); ?>">
+						<p><?php echo $license_info->get_data_value( 'product_name' ); ?></p>
+					</td>
+					<td data-header="<?php esc_html_e( 'License Status', 'gravityforms' ); ?>">
+						<p>
+							<?php
+								$status_class = $license_info->display_as_valid() ? 'active' : 'error';
+								$status_label = $license_info->get_display_status();
+							?>
+							<span class="gform-status-indicator gform-status--<?php echo $status_class; ?> gform-status--static gform-status--no-icon">
+								<span class="gform-status-indicator-status"><?php echo esc_html( $status_label ); ?></span>
+							</span>
+						</p>
+					</td>
+					<td data-header="<?php _e( 'Purchase Date', 'gravityforms' ); ?>">
+						<p><?php echo gmdate( 'M d, Y', strtotime( $license_info->get_data_value('date_created' ) ) ); ?></p>
+					</td>
+					<td data-header="<?php _e( 'License Activations', 'gravityforms' ); ?>">
+						<p>
+							<?php $activation_class = $license_info->max_seats_exceeded() ? 'gform-c-error-text' : ''; ?>
+							<span class="<?php echo esc_attr( $activation_class ); ?>">
+								<?php printf( '%s of %s', $license_info->get_data_value('active_sites' ), $license_info->get_data_value( 'max_sites' ) ); ?>
+							</span>
+						</p>
+					</td>
+					<td data-header="<?php esc_html_e( $license_info->renewal_text() ); ?>">
+						<p>
+							<?php if ( $license_info->has_expiration() ) : ?>
+								<?php echo gmdate( 'M d, Y', strtotime( $license_info->get_data_value('date_expires' ) ) ); ?>
+							<?php else: ?>
+								<?php _e( 'Does not expire', 'gravityforms' ); ?>
+							<?php endif; ?>
+						</p>
+					</td>
+					<td data-header="<?php _e( 'Days Left', 'gravityforms' ); ?>">
+						<p>
+							<?php $cta = $license_info->get_cta(); ?>
+							<?php if ( $license_info->cta_type() === 'button' ): ?>
+								<a
+									class="gform-button gform-button--white gform-button--icon-leading gform-button--size-xs"
+									href="<?php echo esc_url( $cta['link'] ); ?>"
+									target="_blank"
+									rel="noopener"
+								>
+									<i class="gform-button__icon gform-icon gform-icon--<?php echo esc_attr( $cta['class'] ); ?>"></i>
+									<?php echo esc_html( $cta['label'] ); ?>
+								</a>
+							<?php else: ?>
+								<?php echo esc_html( $cta ); ?>
+							<?php endif; ?>
+						</p>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<?php
+
+		return ob_get_clean();
 	}
 
 	/**
@@ -682,34 +801,6 @@ class GFSettings {
 						GFSettings::disable_logging();
 					}
 
-
-				},
-				'after_fields'      => function() {
-
-					?>
-
-					<div id='gform_upgrade_license' style="display:none;"></div>
-					<script type="text/javascript">
-						jQuery( document ).ready( function () {
-							jQuery.ajax(
-								{
-									url:     ajaxurl,
-									method:  'POST',
-									data:    {
-										action:             'gf_upgrade_license',
-										gf_upgrade_license: "<?php echo wp_create_nonce( 'gf_upgrade_license' ) ?>",
-									},
-									success: function ( data ) {
-										if ( data.trim().length > 0 ) {
-											jQuery( "#gform_upgrade_license" ).replaceWith( data );
-										}
-									}
-								},
-							);
-						} );
-					</script>
-
-					<?php
 				},
 			)
 		);

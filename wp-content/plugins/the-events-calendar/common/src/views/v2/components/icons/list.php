@@ -3,7 +3,7 @@
  * View: List Icon
  *
  * Override this template in your own theme by creating a file at:
- * [your-theme]/tribe/v2/components/icons/list.php
+ * [your-theme]/tribe/events/v2/components/icons/list.php
  *
  * See more documentation about our views templating system.
  *
@@ -13,7 +13,7 @@
  *                             If not empty, the first is used for the clip path IDs.
  *
  * @version 4.12.14
- * @since   TBD     Prevent duplicate IDs.
+ * @since   4.14.7     Prevent duplicate IDs.
  *
  */
 $svg_classes = [ 'tribe-common-c-svgicon', 'tribe-common-c-svgicon--list' ];

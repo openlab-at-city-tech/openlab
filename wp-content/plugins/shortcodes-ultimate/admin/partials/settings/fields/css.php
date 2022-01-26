@@ -25,7 +25,7 @@ jQuery(function() {
 
 <p class="description"><?php echo esc_html( $data['description'] ); ?></p>
 
-<details class="su-admin-settings-details">
+<details>
 	<summary class="title"><?php esc_html_e( 'Available variables', 'shortcodes-ultimate' ); ?></summary>
 	<article>
 		<table class="widefat striped" style="width:auto">
@@ -53,11 +53,11 @@ jQuery(function() {
 	</article>
 </details>
 
-<details class="su-admin-settings-details">
+<details>
 	<summary><?php esc_html_e( 'More information', 'shortcodes-ultimate' ); ?></summary>
 	<article>
 		<ul class="ul-disc">
-			<?php // Translators: %s - link to the shortcodes.css file ?>
+			<?php // Translators: %s - link to the shortcodes.full.css file ?>
 			<li><?php printf( esc_html__( 'Open %s file to see default styles', 'shortcodes-ultimate' ), '<a href="https://plugins.trac.wordpress.org/browser/shortcodes-ultimate/trunk/includes/css/shortcodes.full.css" target="_blank">shortcodes.full.css</a>' ); ?></li>
 			<li><?php esc_html_e( 'Help article', 'shortcodes-ultimate' ); ?>: <a href="https://getshortcodes.com/docs/how-to-use-custom-css-editor/" target="_blank"><?php esc_html_e( 'How to use Custom CSS editor', 'shortcodes-ultimate' ); ?></a></li>
 		</ul>

@@ -1302,7 +1302,7 @@ function bp_xprofile_get_fields_by_visibility_levels( $user_id, $levels = array(
 		$levels = (array)$levels;
 	}
 
-	$user_visibility_levels = bp_get_user_meta( $user_id, 'bp_xprofile_visibility_levels', true );
+	$user_visibility_levels = (array) bp_get_user_meta( $user_id, 'bp_xprofile_visibility_levels', true );
 
 	// Parse the user-provided visibility levels with the default levels, which may take
 	// precedence.
@@ -1317,7 +1317,7 @@ function bp_xprofile_get_fields_by_visibility_levels( $user_id, $levels = array(
 	}
 
 	$field_ids = array();
-	foreach( (array) $user_visibility_levels as $field_id => $field_visibility ) {
+	foreach( $user_visibility_levels as $field_id => $field_visibility ) {
 		if ( in_array( $field_visibility, $levels ) ) {
 			$field_ids[] = $field_id;
 		}
@@ -1436,7 +1436,7 @@ function bp_xprofile_get_signup_field_ids() {
 		global $wpdb;
 		$bp = buddypress();
 
-		$signup_field_ids = $wpdb->get_col( "SELECT object_id FROM {$bp->profile->table_name_meta} WHERE object_type = 'field' AND meta_key = 'signup_position' ORDER BY meta_value ASC" );
+		$signup_field_ids = $wpdb->get_col( "SELECT object_id FROM {$bp->profile->table_name_meta} WHERE object_type = 'field' AND meta_key = 'signup_position' ORDER BY CONVERT(meta_value, SIGNED) ASC" );
 
 		wp_cache_set( 'signup_fields', $signup_field_ids, 'bp_xprofile' );
 	}

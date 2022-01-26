@@ -1,5 +1,5 @@
 <?php
-/*  (c) Copyright 2019  MiKa (wp-osm-plugin.HanBlog.Net)
+/*  (c) Copyright 2021  Michael Kang (wp-osm-plugin.Hyumika.com)
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -208,7 +208,14 @@ $a_IconName == "mic_black_wifi_10.png" || $a_IconName == "mic_black_wifino_10.pn
 $a_IconName == "mic_black_windsurf_10.png" || $a_IconName == "mic_black_wine_10.png" || 
 $a_IconName == "mic_black_xgames_10.png" || $a_IconName == "mic_black_xgames_11.png" || 
 $a_IconName == "mic_black_yoga_10.png" || $a_IconName == "mic_black_youthhostel_10.png" || 
-$a_IconName == "mic_black_zoo_10.png" || $a_IconName == "mic_black_soccer_10.png"
+$a_IconName == "mic_black_zoo_10.png" || $a_IconName == "mic_black_soccer_10.png" ||
+$a_IconName == "mic_gold_stolperstein-L.png" || $a_IconName == "mic_grey_stolperstein_L.png" ||
+$a_IconName == "mic_grey_stolperstein_M.png"
+
+
+
+
+
 ){
     return true;
    }

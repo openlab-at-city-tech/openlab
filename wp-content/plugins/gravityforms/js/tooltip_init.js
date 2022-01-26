@@ -21,7 +21,8 @@ function gform_initialize_tooltips() {
 		tooltipClass: 'arrow-bottom',
 		items: '[aria-label]',
 		content: function () {
-			return jQuery( this ).attr( 'aria-label' );
+			var content = jQuery( this ).attr( 'aria-label' );
+			return gform_strip_scripts( content );
 		},
 		open:         function ( event, ui ) {
 			if ( typeof ( event.originalEvent ) === 'undefined' ) {
@@ -49,6 +50,27 @@ function gform_initialize_tooltips() {
 				} );
 		}
 	} );
+}
+
+/**
+ * Sanitizes a given piece of HTML markup by removing script tags from it.
+ *
+ * @param {string} content The HTML content to sanitize.
+ *
+ * @return {string}
+ */
+function gform_strip_scripts( content ) {
+	var tempWrapper = document.createElement( 'div' );
+
+	tempWrapper.innerHTML = content;
+
+	var scripts = tempWrapper.getElementsByTagName( 'script' );
+
+	for ( var i = 0; i < scripts.length; i++ ) {
+		scripts[ i ].parentNode.removeChild( scripts[ i ] );
+	}
+
+	return tempWrapper.innerHTML;
 }
 
 function gform_system_shows_scrollbars() {

@@ -6,7 +6,7 @@ namespace TheLion\OutoftheBox;
  * Plugin Name: WP Cloud Plugin Out-of-the-Box (Dropbox)
  * Plugin URI: https://www.wpcloudplugins.com/plugins/out-of-the-box-wordpress-plugin-for-dropbox/
  * Description: Say hello to the most popular WordPress Dropbox plugin! Start using the Cloud even more efficiently by integrating it on your website.
- * Version: 1.19.10
+ * Version: 1.20.4
  * Author: WP Cloud Plugins
  * Author URI: https://www.wpcloudplugins.com
  * Text Domain: wpcloudplugins
@@ -16,7 +16,7 @@ namespace TheLion\OutoftheBox;
  */
 
 // SYSTEM SETTINGS
-define('OUTOFTHEBOX_VERSION', '1.19.10');
+define('OUTOFTHEBOX_VERSION', '1.20.4');
 define('OUTOFTHEBOX_ROOTPATH', plugins_url('', __FILE__));
 define('OUTOFTHEBOX_ROOTDIR', __DIR__);
 
@@ -236,6 +236,8 @@ class Main
             'userfolder_backend' => 'No',
             'userfolder_backend_auto_root' => '',
             'userfolder_noaccess' => '',
+            'notification_from_name' => '',
+            'notification_from_email' => '',
             'download_template_subject' => '',
             'download_template_subject_zip' => '',
             'download_template' => '',
@@ -273,7 +275,6 @@ class Main
             'use_app_folder' => 'No',
             'recaptcha_sitekey' => '',
             'recaptcha_secret' => '',
-            'fontawesomev4_shim' => 'No',
             'event_summary' => 'No',
             'event_summary_period' => 'daily',
             'event_summary_recipients' => get_site_option('admin_email'),
@@ -449,12 +450,25 @@ class Main
         if (empty($this->settings['loaders'])) {
             $this->settings['loaders'] = [
                 'style' => 'spinner',
-                'loading' => OUTOFTHEBOX_ROOTPATH.'/css/images/loader_loading.gif',
-                'no_results' => OUTOFTHEBOX_ROOTPATH.'/css/images/loader_no_results.png',
-                'error' => OUTOFTHEBOX_ROOTPATH.'/css/images/loader_error.png',
-                'upload' => OUTOFTHEBOX_ROOTPATH.'/css/images/loader_upload.gif',
-                'protected' => OUTOFTHEBOX_ROOTPATH.'/css/images/loader_protected.png',
+                'loading' => OUTOFTHEBOX_ROOTPATH.'/css/images/wpcp-loader.svg',
+                'no_results' => OUTOFTHEBOX_ROOTPATH.'/css/images/loader_no_results.svg',
+                'protected' => OUTOFTHEBOX_ROOTPATH.'/css/images/loader_protected.svg',
             ];
+            $updated = true;
+        }
+
+        if ($this->settings['loaders']['loading'] === OUTOFTHEBOX_ROOTPATH.'/css/images/loader_loading.gif') {
+            $this->settings['loaders']['loading'] = OUTOFTHEBOX_ROOTPATH.'/css/images/wpcp-loader.svg';
+            $updated = true;
+        }
+
+        if ($this->settings['loaders']['no_results'] === OUTOFTHEBOX_ROOTPATH.'/css/images/loader_no_results.png') {
+            $this->settings['loaders']['no_results'] = OUTOFTHEBOX_ROOTPATH.'/css/images/loader_no_results.svg';
+            $updated = true;
+        }
+
+        if ($this->settings['loaders']['protected'] === OUTOFTHEBOX_ROOTPATH.'/css/images/loader_protected.png') {
+            $this->settings['loaders']['protected'] = OUTOFTHEBOX_ROOTPATH.'/css/images/loader_protected.svg';
             $updated = true;
         }
 
@@ -540,18 +554,6 @@ class Main
             $updated = true;
         }
 
-        // disable_fontawesome is replace with fontawesomev4_shim
-        if (isset($this->settings['disable_fontawesome'])) {
-            $this->settings['fontawesomev4_shim'] = $this->settings['disable_fontawesome'];
-            unset($this->settings['disable_fontawesome']);
-            $updated = true;
-        }
-
-        if (empty($this->settings['fontawesomev4_shim'])) {
-            $this->settings['fontawesomev4_shim'] = 'No';
-            $updated = true;
-        }
-
         if ('default' === $this->settings['mediaplayer_skin']) {
             $this->settings['mediaplayer_skin'] = 'Default_Skin';
             $updated = true;
@@ -630,6 +632,12 @@ class Main
             $updated = true;
         }
 
+        if (!isset($this->settings['notification_from_name'])) {
+            $this->settings['notification_from_name'] = '';
+            $this->settings['notification_from_email'] = '';
+            $updated = true;
+        }
+
         $auth_key = get_site_option('wpcp-outofthebox-auth_key');
         if (false === $auth_key) {
             require_once ABSPATH.'wp-includes/pluggable.php';
@@ -678,6 +686,9 @@ class Main
         if (OUTOFTHEBOX_VERSION !== $version) {
             // Clear Cache
             $this->get_processor()->reset_complete_cache();
+
+            // Reset custom CSS
+            CSS::reset_custom_css();
 
             // Clear WordPress Cache
             Helpers::purge_cache_others();
@@ -867,12 +878,6 @@ class Main
                 $mediaplayer->load_styles();
             }
 
-            wp_enqueue_script('jquery-ui-droppable');
-            wp_enqueue_script('jquery-ui-button');
-            wp_enqueue_script('jquery-ui-progressbar');
-            wp_enqueue_script('jQuery.iframe-transport');
-            wp_enqueue_script('jQuery.fileupload-oftb');
-            wp_enqueue_script('jQuery.fileupload-process');
             wp_enqueue_script('jquery-effects-core');
             wp_enqueue_script('jquery-effects-fade');
             wp_enqueue_script('jquery-ui-droppable');
@@ -890,29 +895,21 @@ class Main
         wp_register_style('ilightbox', plugins_url('vendors/iLightBox/css/ilightbox.css', __FILE__), false);
         wp_register_style('ilightbox-skin-outofthebox', plugins_url('vendors/iLightBox/'.$skin.'-skin/skin.css', __FILE__), false);
 
-        wp_register_style('Awesome-Font-5', plugins_url('vendors/font-awesome/css/all.min.css', __FILE__), false, OUTOFTHEBOX_VERSION);
-        wp_register_style('Awesome-Font-4-shim', plugins_url('vendors/font-awesome/css/v4-shims.min.css', __FILE__), false, OUTOFTHEBOX_VERSION);
+        wp_register_style('Eva-Icons', plugins_url('vendors/eva-icons/eva-icons.min.css', __FILE__), false, OUTOFTHEBOX_VERSION);
 
         $custom_css = new CSS($this->settings);
         $custom_css->register_style();
 
-        wp_register_style('OutoftheBox', plugins_url("css/main.min{$is_rtl_css}.css", __FILE__), [], OUTOFTHEBOX_VERSION);
+        wp_register_style('OutoftheBox', plugins_url("css/main.min{$is_rtl_css}.css", __FILE__), ['Eva-Icons'], OUTOFTHEBOX_VERSION);
         wp_register_style('OutoftheBox.ShortcodeBuilder', plugins_url("css/tinymce.min{$is_rtl_css}.css", __FILE__), null, OUTOFTHEBOX_VERSION);
 
         // Scripts for the Admin Dashboard
-        wp_register_style('OutoftheBox.Datatables', plugins_url('vendors/datatables/datatables.min.css', __FILE__), null, OUTOFTHEBOX_VERSION);
+        wp_register_style('OutoftheBox.Datatables', plugins_url('vendors/datatables/datatables.min.css', __FILE__), ['OutoftheBox.ShortcodeBuilder'], OUTOFTHEBOX_VERSION);
 
         if ('Yes' === $this->settings['always_load_scripts']) {
             wp_enqueue_style('ilightbox');
             wp_enqueue_style('ilightbox-skin-outofthebox');
-
-            if (false === defined('WPCP_DISABLE_FONTAWESOME')) {
-                wp_enqueue_style('Awesome-Font-5');
-                if ('Yes' === $this->settings['fontawesomev4_shim']) {
-                    wp_enqueue_style('Awesome-Font-4-shim');
-                }
-            }
-
+            wp_enqueue_style('Eva-Icons');
             wp_enqueue_style('OutoftheBox.CustomStyle');
         }
     }
@@ -1445,12 +1442,10 @@ function outofthebox_activate()
             'rebrandly_workspace' => '',
             'log_events' => 'Yes',
             'icon_set' => '',
-            'disable_fontawesome' => 'No',
             'use_team_folders' => 'Yes',
             'use_app_folder', 'No',
             'recaptcha_sitekey' => '',
             'recaptcha_secret' => '',
-            'fontawesomev4_shim' => 'No',
             'event_summary' => 'No',
             'event_summary_period' => 'daily',
             'event_summary_recipients' => get_site_option('admin_email'),

@@ -189,7 +189,15 @@ class M_Marketing extends C_Base_Module
     {
         if (!empty($hash))
             $hash = '#' . $hash;
-        return 'https://www.imagely.com' . $path . '?utm_source=' . $src . '&utm_medium=' . $medium . '&utm_campaign=' . $campaign . $hash;
+
+        $url = M_Marketing::get_utm_link(
+            'https://www.imagely.com' . $path ,
+            $medium,
+            $campaign,
+            $src
+        );
+
+        return $url . $hash;
     }
 
     /**
@@ -272,6 +280,30 @@ class M_Marketing extends C_Base_Module
         self::$big_hitters_block_two_cache[$medium] = $block->render();
 
         return self::$big_hitters_block_two_cache[$medium];
+    }
+
+    /**
+     * Get UTM link filtered through the ngg_marketing_parameters filter
+     * @param string $url
+     * @param string $medium
+     * @param string $campaign
+     * @param string $source
+     * @return string
+     */
+    public static function get_utm_link($url, $medium = 'default', $campaign = 'default', $source = 'ngg')
+    {
+        $params = apply_filters('ngg_marketing_parameters', [
+            'url'      => $url,
+            'medium'   => $medium,
+            'campaign' => $campaign,
+            'source'   => $source
+        ]);
+
+        $url .=  '?utm_source='  . $params['source'];
+        $url .= '&utm_medium='   . $params['medium'];
+        $url .= '&utm_campaign=' . $params['campaign'];
+
+        return $url;
     }
 
     public static function enqueue_blocks_style()

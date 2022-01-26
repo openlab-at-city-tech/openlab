@@ -68,7 +68,7 @@ function su_shortcode_animate( $atts = null, $content = null ) {
 	);
 	$tag    = ( $atts['inline'] === 'yes' ) ? 'span' : 'div';
 	$time   = '-webkit-animation-duration:' . $atts['duration'] . 's;-webkit-animation-delay:' . $atts['delay'] . 's;animation-duration:' . $atts['duration'] . 's;animation-delay:' . $atts['delay'] . 's;';
-	$return = '<' . $tag . ' class="su-animate' . su_get_css_class( $atts ) . '" style="visibility:hidden;' . esc_attr( $time ) . '" data-animation="' . esc_attr( $atts['type'] ) . '" data-duration="' . esc_attr( $atts['duration'] ) . '" data-delay="' . esc_attr( $atts['delay'] ) . '">' . do_shortcode( $content ) . '</' . $tag . '>';
+	$return = '<' . $tag . ' class="su-animate' . su_get_css_class( $atts ) . '" style="opacity:0;' . esc_attr( $time ) . '" data-animation="' . esc_attr( $atts['type'] ) . '" data-duration="' . esc_attr( $atts['duration'] ) . '" data-delay="' . esc_attr( $atts['delay'] ) . '">' . do_shortcode( $content ) . '</' . $tag . '>';
 	su_query_asset( 'css', 'animate' );
 	su_query_asset( 'js', 'jquery' );
 	su_query_asset( 'js', 'jquery-inview' );

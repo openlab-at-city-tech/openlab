@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<ruleset name="TDP">
+  <description>TDP Coding Standards</description>
+
+	<!-- Ignore vendor files. -->
+	<exclude-pattern>*/vendor/*\.php$</exclude-pattern>
+
+	<!-- Limit scanning to php files (default is inc, php, js, and css; phpcs chokes on minified css/js). -->
+	<!-- See: https://github.com/PHPCompatibility/PHPCompatibilityWP/issues/5#issuecomment-418719249 -->
+	<arg name="extensions" value="php,inc"/>
+
+  <!-- Show colors in console -->
+  <arg value="-colors"/>
+
+  <!-- Show sniff codes in all reports -->
+  <arg value="s"/>
+
+	<!-- Use WordPress as a base -->
+	<rule ref="WordPress">
+		<!-- Allow: while ( have_posts() ) : the_post(); -->
+		<exclude name="Squiz.ControlStructures.ControlSignature.NewlineAfterOpenBrace"/>
+
+		<!-- Allow commented out code. -->
+		<exclude name="Squiz.PHP.CommentedOutCode.Found" />
+
+		<!-- Allow: function( array( ... ) ); -->
+		<exclude name="PEAR.Functions.FunctionCallSignature.ContentBeforeCloseBracket" />
+		<exclude name="PEAR.Functions.FunctionCallSignature.ContentAfterOpenBracket" />
+		<exclude name="PEAR.Functions.FunctionCallSignature.MultipleArguments" />
+		<exclude name="PEAR.Functions.FunctionCallSignature.CloseBracketLine" />
+
+		<!-- Allow $var = $var ?: 'default'; (shorthand ternary). -->
+		<exclude name="WordPress.PHP.DisallowShortTernary.Found" />
+
+		<!-- Don't yoda conditions force. -->
+		<!-- <exclude name="WordPress.PHP.YodaConditions.NotYoda" /> -->
+
+		<!-- Disable overly picky rules -->
+		<exclude name="WordPress.WP.CapitalPDangit"/>
+		<exclude name="WordPress.PHP.DiscouragedPHPFunctions.serialize_serialize"/>
+		<exclude name="WordPress.PHP.DiscouragedPHPFunctions.serialize_unserialize"/>
+
+		<!-- Allow camelCase. -->
+		<exclude name="WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase"/>
+		<exclude name="WordPress.NamingConventions.ValidVariableName.InterpolatedVariableNotSnakeCase"/>
+
+		<!-- Ignore class naming rules. -->
+		<exclude name="WordPress.Files.FileName.InvalidClassFileName"/>
+	</rule>
+</ruleset>

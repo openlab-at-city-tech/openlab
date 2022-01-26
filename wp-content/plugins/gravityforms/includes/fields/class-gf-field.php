@@ -44,6 +44,15 @@ class GF_Field extends stdClass implements ArrayAccess {
 	 */
 	private $_merge_tag_modifiers = array();
 
+	/**
+	 * Indicates if this field supports state validation.
+	 *
+	 * @since 2.5.11
+	 *
+	 * @var bool
+	 */
+	protected $_supports_state_validation = false;
+
 	public function __construct( $data = array() ) {
 		if ( empty( $data ) ) {
 			return;
@@ -172,12 +181,80 @@ class GF_Field extends stdClass implements ArrayAccess {
 		unset( $this->$key );
 	}
 
+	/**
+	 * Set a context property for this field.
+	 *
+	 * @since 2.3
+	 * @since 2.5.10 - Property key can be an array in order to set a nested value.
+	 *
+	 *
+	 * @param array|string $property_key
+	 * @param mixed $value
+	 *
+	 * @return void
+	 */
 	public function set_context_property( $property_key, $value ) {
+		if ( is_array( $property_key ) ) {
+			$temp = &$this->_context_properties;
+			foreach ( $property_key as $key ) {
+				if ( ! isset( $temp[ $key ] ) ) {
+					$temp[ $key ] = array();
+				}
+
+				$temp = &$temp[ $key ];
+			}
+
+			$temp = $value;
+
+			unset( $temp );
+
+			return;
+		}
+
 		$this->_context_properties[ $property_key ] = $value;
 	}
 
 	public function get_context_property( $property_key ) {
 		return isset( $this->_context_properties[ $property_key ] ) ? $this->_context_properties[ $property_key ] : null;
+	}
+
+	/**
+	 * Set the validation state for a single input within this field.
+	 *
+	 * @since 2.5.10
+	 *
+	 * @param string $input_id
+	 * @param bool   $is_valid
+	 *
+	 * @return void
+	 */
+	public function set_input_validation_state( $input_id, $is_valid ) {
+		$input_id = explode( '.', $input_id );
+		$input_id = end( $input_id );
+
+		$this->set_context_property( array( 'input_validation_states', $input_id ), $is_valid );
+	}
+
+	/**
+	 * Determine whether a single input has been marked as invalid via context properties.
+	 *
+	 * @since 2.5.10
+	 *
+	 * @param $input_id
+	 *
+	 * @return bool
+	 */
+	protected function is_input_valid( $input_id ) {
+		if ( empty( $this->get_entry_inputs() ) ) {
+			return true;
+		}
+
+		$input_id = explode( '.', $input_id );
+		$input_id = end( $input_id );
+
+		$validations = $this->get_context_property( 'input_validation_states' );
+
+		return isset( $validations[ $input_id ] ) ? $validations[ $input_id ] : true;
 	}
 
 
@@ -312,7 +389,7 @@ class GF_Field extends stdClass implements ArrayAccess {
 
 		$field_label = $this->get_field_label( $force_frontend_label, $value );
 		if ( ! in_array( $this->inputType, array( 'calculation', 'singleproduct' ), true ) ) {
-			// Calculation field put a screen reader text in the label so do not escape it.
+			// Calculation and Single Product field add a screen reader text to the label so do not escape it.
 			$field_label = esc_html( $field_label );
 		}
 
@@ -940,6 +1017,69 @@ class GF_Field extends stdClass implements ArrayAccess {
 		);
 	}
 
+	/**
+	 * Prepares the selected choice from the entry for output.
+	 *
+	 * @since 2.5.11
+	 *
+	 * @param string $value    The choice value from the entry.
+	 * @param string $currency The entry currency code.
+	 * @param bool   $use_text Indicates if the choice text should be returned instead of the choice value.
+	 *
+	 * @return string
+	 */
+	public function get_selected_choice_output( $value, $currency = '', $use_text = false ) {
+		if ( is_array( $value ) ) {
+			return '';
+		}
+
+		$price = '';
+
+		if ( $this->enablePrice ) {
+			$parts = explode( '|', $value );
+			$value = $parts[0];
+
+			if ( ! empty( $parts[1] ) ) {
+				$price = GFCommon::to_money( $parts[1], $currency );
+			}
+		}
+
+		$choice = $this->get_selected_choice( $value );
+
+		if ( $use_text && ! empty( $choice['text'] ) ) {
+			$value = $choice['text'];
+		}
+
+		if ( ! empty( $price ) ) {
+			$value .= ' (' . $price . ')';
+		}
+
+		return empty( $choice ) ? wp_strip_all_tags( $value ) : wp_kses_post( $value );
+	}
+
+	/**
+	 * Returns the choice array for the entry value.
+	 *
+	 * @since 2.5.11
+	 *
+	 * @param string $value The choice value from the entry.
+	 *
+	 * @return array
+	 */
+	public function get_selected_choice( $value ) {
+		if ( empty( $value ) || is_array( $value ) || empty( $this->choices ) ) {
+			return array();
+		}
+
+		foreach ( $this->choices as $choice ) {
+			if ( GFFormsModel::choice_value_match( $this, $choice, $value ) ) {
+				return $choice;
+			}
+		}
+
+		return array();
+	}
+
 
 	// # INPUT ATTRIBUTE HELPERS ----------------------------------------------------------------------------------------
 
@@ -1122,6 +1262,14 @@ class GF_Field extends stdClass implements ArrayAccess {
 		$type = $this->get_input_type();
 
 		if ( $type == 'number' ) {
+			if ( $this->calculationFormula ) {
+				$ids = GFCommon::get_field_ids_from_formula_tag( $this->calculationFormula );
+
+				if ( in_array( $this->id, $ids ) ) {
+					return false;
+				}
+			}
+
 			return $this->enableCalculation && $this->calculationFormula;
 		}
 
@@ -1608,6 +1756,16 @@ class GF_Field extends stdClass implements ArrayAccess {
 		return true;
 	}
 
+	/**
+	 * Determines if this field will be processed by the state validation.
+	 *
+	 * @since 2.5.11
+	 *
+	 * @return bool
+	 */
+	public function is_state_validation_supported() {
+		return $this->_supports_state_validation && $this->validateState && ! $this->allowsPrepopulate;
+	}
 
 	/**
 	 * Generates an array that contains aria-describedby attribute for each input.
@@ -1704,9 +1862,11 @@ class GF_Field extends stdClass implements ArrayAccess {
 		}
 
 		foreach ( $this->inputs as $input ) {
-			$input_id = str_replace( $this->id . '.', '', $input['id'] );
-			$input_value =  GFForms::get( $input['id'], $values );
-			if ( in_array( $input_id, $required_inputs_ids ) && empty( $input_value ) ) {
+			$input_id    = str_replace( $this->id . '.', '', $input['id'] );
+			$input_value = GFForms::get( $input['id'], $values );
+			$is_valid    = $this->is_input_valid( $input['id'] );
+
+			if ( ! $is_valid || ( in_array( $input_id, $required_inputs_ids ) && empty( $input_value ) ) ) {
 				$invalid_attributes[ $input_id ] = "aria-invalid='true'";
 			} else {
 				$invalid_attributes[ $input_id ] = "aria-invalid='false'";
@@ -1937,6 +2097,10 @@ class GF_Field extends stdClass implements ArrayAccess {
 		$this->description = $this->maybe_wp_kses( $this->description );
 
 		$this->isRequired = (bool) $this->isRequired;
+
+		if ( isset( $this->validateState ) ) {
+			$this->validateState = (bool) $this->validateState;
+		}
 
 		$this->allowsPrepopulate = (bool) $this->allowsPrepopulate;
 
@@ -2215,19 +2379,20 @@ class GF_Field extends stdClass implements ArrayAccess {
 	/**
 	 * Actions to be performed after the field has been converted to an object.
 	 *
-	 * @since  2.1.2.7
-	 * @access public
-	 *
-	 * @uses    GF_Field::failed_validation()
-	 * @uses    GF_Field::validation_message()
-	 * @used-by GFFormsModel::convert_field_objects()
-	 *
-	 * @return void
+	 * @since 2.1.3  Clear any field validation errors that have been saved to the form in the database.
+	 * @since 2.5.11 Set validateState property for back-compat.
 	 */
 	public function post_convert_field() {
-		// Fix an issue where fields can show up as invalid in the form editor if the form was updated using the form object returned after a validation failure.
 		unset( $this->failed_validation );
 		unset( $this->validation_message );
+
+		if (
+			! isset( $this->validateState )
+			&& $this->_supports_state_validation
+			&& ( in_array( $this->type, array( 'consent', 'donation' ) ) || GFCommon::is_product_field( $this->type ) )
+		) {
+			$this->validateState = true;
+		}
 	}
 
 	/**
@@ -2367,6 +2532,20 @@ class GF_Field extends stdClass implements ArrayAccess {
 			$form_id,
 			$this->id,
 		), esc_html__( 'Quantity:', 'gravityforms' ), $form_id );
+	}
+
+	/**
+	 * Returns an array of key value pairs to be saved to the entry meta after saving/updating the entry.
+	 *
+	 * @since 2.5.16
+	 *
+	 * @param array $form  The form object being saved.
+	 * @param array $entry The entry object being saved
+	 *
+	 * @return array The array that contains the key/value pairs to be stored as extra meta data.
+	 */
+	public function get_extra_entry_metadata( $form, $entry ) {
+		return array();
 	}
 
 }

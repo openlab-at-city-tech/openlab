@@ -42,6 +42,7 @@ class GF_WPCP_AddOn extends \GFAddOn
         // Custom Private Folder names
         add_filter('outofthebox_private_folder_name', [$this, 'new_private_folder_name'], 10, 2);
         add_filter('outofthebox_private_folder_name_guests', [$this, 'rename_private_folder_names_for_guests'], 10, 2);
+        add_action('gform_user_registered', [$this,'create_private_folder'], 10, 4);
 
         \GF_Fields::register(new GF_WPCP_Field());
     }
@@ -124,6 +125,13 @@ class GF_WPCP_AddOn extends \GFAddOn
         field.label = <?php echo json_encode(esc_html__('Attach your documents', 'wpcloudplugins')); ?>;
         break;
     <?php
+    }
+
+    public function create_private_folder($user_id, $feed, $entry, $password)
+    {
+        global $OutoftheBox;
+
+        $OutoftheBox->user_folder_create($user_id);
     }
 
     /**

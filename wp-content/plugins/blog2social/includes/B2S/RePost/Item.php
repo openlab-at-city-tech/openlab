@@ -55,6 +55,9 @@ class B2S_RePost_Item {
         $content .= '<br>';
         $content .='<input type="checkbox" name="b2s-re-post-images-active" id="b2s-re-post-images-active" value="1">';
         $content .='<label for="b2s-re-post-images-active"> ' . esc_html__('include posts with images only', 'blog2social') . ' </label>';
+        $content .= '<br>';
+        $content .='<input type="checkbox" name="b2s-re-post-already-planed-active" id="b2s-re-post-already-planed-active" value="1">';
+        $content .='<label for="b2s-re-post-already-planed-active"> ' . sprintf(esc_html__('only posts that have been shared no more than %s times', 'blog2social'), '<input type="number" name="b2s-re-post-already-planed-count" class="b2s-re-post-number-input" value="1" min="1" max="50">') . ' </label>';
         $content .= '</div>';
         $content .= '</div>';
         
@@ -126,12 +129,23 @@ class B2S_RePost_Item {
         $content .= '<i class="glyphicon glyphicon-random b2s-icon-size"></i><span class="b2s-re-post-headline"> ' . esc_html__('Queue', 'blog2social') . '</span>';
         $content .= '<span class="b2s-re-post-headline pull-right"><span class="b2s-re-post-queue-count"></span>/' . $limit[B2S_PLUGIN_USER_VERSION] . ' ' . esc_html__('Posts', 'blog2social') . ' '.$needMoreBtn.'</span>';
         $content .= '</div>';
-        $content .= '<div class="col-md-12 b2s-re-post-queue-delete-area">';
+        $content .= '<div class="col-md-12 b2s-re-post-queue-top-area">';
+        $content .= '<div class="col-md-5">';
+        $content .= '<div class="b2s-re-post-queue-delete-area">';
         $content .= '<button type="button" class="btn btn-primary btn-xs b2s-re-post-select-all">' . esc_html__('select all', 'blog2social') . '</button> ';
         $content .= '<button type="button" class="btn btn-danger btn-xs b2s-re-post-delete-checked" style="display:none;"><i class="glyphicon glyphicon-trash"></i> ' . esc_html__('delete selected posts', 'blog2social') . '</button>';
         $content .= '</div>';
+        $content .= '</div>';
+        $content .= '<div class="col-md-7">';
+        $content .= '<button type="button" class="btn btn-primary btn-xs b2s-re-post-show-list-btn">' . esc_html__('List', 'blog2social') . '</button>';
+        $content .= '<button type="button" class="btn btn-primary btn-xs b2s-re-post-show-calender-btn">' . esc_html__('Calendar', 'blog2social') . '</button>';
+        $content .= '</div>';
+        $content .= '</div>';
         $content .= '<div class="b2s-re-post-queue-area">';
         $content .= '<ul>'.$postItem->getItemHtml().'</ul>';
+        $content .= '</div>';
+        $content .= '<div class="b2s-re-post-calender-area" style="display:none;">';
+        $content .= '<div id="b2s_calendar"></div>';
         $content .= '</div>';
         return $content;
     }

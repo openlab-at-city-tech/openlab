@@ -3,7 +3,7 @@ Contributors: wpchill, silkalns, barrykooij, mikejolley
 Tags: download manager, document management, file manager, digital store, ecommerce, document management plugin,  download monitor, download counter, password protection, download protection, password, protect downloads, tracker, sell, shop, ecommerce, paypal
 Requires at least: 5.4
 Tested up to: 5.8
-Stable tag: 4.4.9
+Stable tag: 4.4.13
 License: GPLv3
 Text Domain: -
 Requires PHP: 5.6
@@ -121,6 +121,28 @@ More documentation can be found in our [Knowledge Base](https://www.download-mon
 4. The quick add panel can be opened via a link about the post editor. This lets you quickly add a file and insert it into a post.
 
 == Changelog ==
+
+= 4.4.13 - 16.11.2021 =
+Fixed: Fatal error because an extra semicolon
+
+= 4.4.12 - 16.11.2021 =
+Fixed: Dependencies in widgets screen cc @HardeepAsrani
+Removed: Custom webpack build and replaced with @wordpress/scripts cc @HardeepAsrani
+Fixed: Optimized block with React Hooks for readibility purposes cc @HardeepAsrani
+Fixed: Product not saving in downloads select ( https://github.com/WPChill/download-monitor/issues/770 )
+Fixed: Typo in file URLs
+Fixed: Widget options update - https://github.com/WPChill/download-monitor/issues/768
+Fixed: Downloads not working with shop enabled - https://github.com/WPChill/download-monitor/issues/769
+
+= 4.4.11 - 03.11.2021 =
+Fixed: Reports date changing ( https://github.com/WPChill/download-monitor/issues/755 )
+Fixed: Log page - Status Column width ( https://github.com/WPChill/download-monitor/issues/756 )
+Fixed: Password protection form, password field not being displayed ( https://github.com/WPChill/download-monitor/issues/757 )
+Fixed: Escaping problem in the No-Access page ( https://github.com/WPChill/download-monitor/issues/758 )
+
+= 4.4.10 - 02.11.2021 =
+Fixed: Escaping in admin "All Downloads" page. ( https://github.com/WPChill/download-monitor/issues/753 )
+Added: Review request in dashboard.
 
 = 4.4.9 - 01.11.2021 =
 Fixed: Escaping in admin column, displaying HTLM instead of correct form

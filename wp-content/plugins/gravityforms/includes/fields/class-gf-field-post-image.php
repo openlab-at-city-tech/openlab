@@ -289,6 +289,28 @@ class GF_Field_Post_Image extends GF_Field_Fileupload {
 				return str_replace( ' ', '%20', $url );
 		}
 	}
+
+	/**
+	 * Stores the physical file paths as extra entry meta data.
+	 *
+	 * @since 2.5.16
+	 *
+	 * @param array $form  The form object being saved.
+	 * @param array $entry The entry object being saved.
+	 *
+	 * @return array The array that contains the file URLs and their corresponding physical paths.
+	 */
+	public function get_extra_entry_metadata( $form, $entry ) {
+
+		// Leave only the file URL in the entry value so when parent saves the file path information the URL is a valid file URL.
+		$ary                = explode( '|:|', $entry[ $this->id ] );
+		$entry[ $this->id ] = rgar( $ary, 0 );
+
+		return parent::get_extra_entry_metadata( $form, $entry );
+
+	}
 }
+
+
 
 GF_Fields::register( new GF_Field_Post_Image() );

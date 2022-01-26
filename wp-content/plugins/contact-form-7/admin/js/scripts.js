@@ -22,6 +22,17 @@
 			event.preventDefault();
 			welcomePanel.addClass( 'hidden' );
 			updateWelcomePanel( 0 );
+			$( '#wpcf7-welcome-panel-show' ).prop( 'checked', false );
+		} );
+
+		$( '#wpcf7-welcome-panel-show' ).click( function( event ) {
+			if ( this.checked ) {
+				welcomePanel.removeClass( 'hidden' );
+				updateWelcomePanel( 1 );
+			} else {
+				welcomePanel.addClass( 'hidden' );
+				updateWelcomePanel( 0 );
+			}
 		} );
 
 		$( '#contact-form-editor' ).tabs( {
@@ -127,7 +138,7 @@
 			}
 		} );
 
-		$( '#wpcf7-sendinblue-enable-contact-list, #wpcf7-sendinblue-enable-transactional-email' ).on( 'change', function() {
+		$( '#wpcf7-ctct-enable-contact-list, #wpcf7-sendinblue-enable-contact-list, #wpcf7-sendinblue-enable-transactional-email' ).on( 'change', function() {
 			if ( $( this ).is( ':checked' ) ) {
 				$( this ).closest( 'tr' ).removeClass( 'inactive' );
 			} else {

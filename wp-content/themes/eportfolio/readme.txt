@@ -1,12 +1,10 @@
 === ePortfolio ===
-
-Contributors: ThemeInWP
-
-Requires at least: 4.5
-Tested up to: 5.7
-Requires PHP: 5.5
-Stable tag: 1.1.4
-License: GNU General Public License v2 or later
+Contributors: themeinwp
+Requires at least: 5.3
+Tested up to: 5.8
+Requires PHP: 5.6
+Stable tag: 1.1.6
+License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 A clean, elegant and professional WordPress Portfolio Theme.
@@ -87,6 +85,12 @@ License: Apache License, Version 2.0
 
 == Changelog ==
 
+= 1.1.6 - Dec 21 2021 =
+* Demo content importer change and managed
+
+= 1.1.5 - Jun 22 2021 =
+* Demo content rearrange and description added.
+
 = 1.1.4 - Mar 25 2021 =
 * Added Demo import Kit.
 * Added telegram on social menu icon set.
@@ -107,7 +111,7 @@ License: Apache License, Version 2.0
 * Change backend metabox option appearance.
 
 = 1.0.7 - Jan 06 2020 =
-* Update fixing gallery slider issuea.
+* Update fixing gallery slider issue.
 
 = 1.0.6 - Dec 14 2019 =
 * Update fixing scripts and some other issues.

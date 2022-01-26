@@ -33,6 +33,20 @@ class Notification
     public $message;
 
     /**
+     * From name for the email notification.
+     *
+     * @var string
+     */
+    public $from_name;
+
+    /**
+     * From email for the email notification.
+     *
+     * @var string
+     */
+    public $from_email;
+
+    /**
      * HTML list of entries for in message.
      *
      * @var string
@@ -88,6 +102,7 @@ class Notification
         $this->_process_message();
         $this->_process_entry_list();
         $this->_process_recipients();
+        $this->_process_from();
     }
 
     /**
@@ -123,6 +138,11 @@ class Notification
             $headers = [
                 'Content-Type: text/html; charset=UTF-8',
             ];
+
+            // Set From if needed
+            if (!empty($this->from_name) && !empty($this->from_email)) {
+                $headers[] = 'From: '.$this->from_name.' <'.$this->from_email.'>';
+            }
 
             $recipients = array_unique($this->get_recipients());
 
@@ -190,6 +210,26 @@ class Notification
     public function set_message($message)
     {
         $this->message = $message;
+    }
+
+    public function set_from_name($from_name)
+    {
+        $this->from_name = $from_name;
+    }
+
+    public function get_from_name()
+    {
+        return $this->from_name;
+    }
+
+    public function set_from_email($from_email)
+    {
+        $this->from_email = $from_email;
+    }
+
+    public function get_from_email()
+    {
+        return $this->from_email;
     }
 
     public function set_entries($entries)
@@ -384,6 +424,23 @@ class Notification
         $this->set_recipients($recipients);
     }
 
+    // Set the 'from' address of notification using the shortcode or global settings.
+
+    private function _process_from()
+    {
+        $from_name = $this->get_processor()->get_shortcode_option('notification_from_name');
+        if (empty($from_name)) {
+            $from_name = $this->get_processor()->get_setting('notification_from_name');
+        }
+        $this->set_from_name(sanitize_text_field($from_name));
+
+        $from_email = $this->get_processor()->get_shortcode_option('notification_from_email');
+        if (empty($from_email)) {
+            $from_email = $this->get_processor()->get_setting('notification_from_name');
+        }
+        $this->set_from_email(sanitize_email($from_email));
+    }
+
     /**
      * Create the placeholder which can be used in the different notification templates.
      */
@@ -408,7 +465,7 @@ class Notification
 
         // Account data
         $this->placeholders['%account_email%'] = $this->get_processor()->get_current_account()->get_email();
-        
+
         // Location data
         $location_data_required = $this->_is_placeholder_needed('%location%');
         if ($location_data_required) {
@@ -428,6 +485,7 @@ class Notification
 
             $fileline = strtr($this->_update_depricated_placeholders($this->entry_list), [
                 '%file_name%' => $entry->get_name(),
+                '%file_lastedited%' => $entry->get_last_edited_str(),
                 '%file_size%' => Helpers::bytes_to_size_1024($entry->get_size()),
                 '%file_cloud_preview_url%' => 'https://www.dropbox.com/home/'.$entry->get_path_display(),
                 '%file_cloud_shared_url%' => $file_cloud_shared_url,
@@ -545,6 +603,9 @@ class Notification
             $recipients[$key] = strtr($this->_update_depricated_placeholders($recipient), $this->placeholders);
         }
         $this->recipients = $recipients;
+
+        $this->from_name = strtr($this->_update_depricated_placeholders($this->from_name), $this->placeholders);
+        $this->from_email = strtr($this->_update_depricated_placeholders($this->from_email), $this->placeholders);
     }
 
     private function _get_user_roles()

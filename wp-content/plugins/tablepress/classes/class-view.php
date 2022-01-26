@@ -117,7 +117,7 @@ abstract class TablePress_View {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param int|bool Current value of the user option.
+	 * @param int|false $result Current value of the user option.
 	 * @return int New value for the user option.
 	 */
 	public function set_current_screen_layout_columns( $result ) {
@@ -153,11 +153,11 @@ abstract class TablePress_View {
 		if ( is_rtl() ) {
 			$this->admin_page->enqueue_style( 'common-rtl', array( 'tablepress-common' ) );
 		}
-		$this->admin_page->enqueue_script( 'common', array( 'jquery', 'postbox' ), array(
+		$this->admin_page->enqueue_script( 'common', array( 'jquery', 'postbox' ), array( // phpcs:ignore PEAR.Functions.FunctionCallSignature.MultipleArguments
 			'common' => array(
 				'ays_delete_single_table'    => _n( 'Do you really want to delete this table?', 'Do you really want to delete these tables?', 1, 'tablepress' ),
 				'ays_delete_multiple_tables' => _n( 'Do you really want to delete this table?', 'Do you really want to delete these tables?', 2, 'tablepress' ),
-			)
+			),
 		) );
 
 		$this->admin_page->add_admin_footer_text();
@@ -215,7 +215,7 @@ abstract class TablePress_View {
 	 * @param string   $id       Unique HTML ID for the text box container (only visible with $wrap = true).
 	 * @param callback $callback Callback that prints the contents of the text box.
 	 * @param string   $context  Optional. Context/position of the text box (normal, side, additional, header, submit).
-	 * @param bool $   wrap      Whether the content of the text box shall be wrapped in a <div> container.
+	 * @param bool     $wrap     Whether the content of the text box shall be wrapped in a <div> container.
 	 */
 	protected function add_text_box( $id, $callback, $context = 'normal', $wrap = false ) {
 		if ( ! isset( $this->textboxes[ $context ] ) ) {
@@ -241,7 +241,7 @@ abstract class TablePress_View {
 	 * @param callback $callback      Callback that prints the contents of the post meta box.
 	 * @param string   $context       Optional. Context/position of the post meta box (normal, side, additional).
 	 * @param string   $priority      Optional. Order of the post meta box for the $context position (high, default, low).
-	 * @param bool     $callback_args Optional. Additional data for the callback function (e.g. useful when in different class).
+	 * @param array    $callback_args Optional. Additional data for the callback function (e.g. useful when in different class).
 	 */
 	protected function add_meta_box( $id, $title, $callback, $context = 'normal', $priority = 'default', $callback_args = null ) {
 		$this->has_meta_boxes = true;
@@ -339,13 +339,13 @@ abstract class TablePress_View {
 		?>
 		<div id="tablepress-page" class="wrap">
 		<?php
-			$this->print_nav_tab_menu();
-			// Print all header messages.
-			foreach ( $this->header_messages as $message ) {
-				echo $message;
-			}
-			// "Import" screen has file upload.
-			$enctype = ( 'import' === $this->action ) ? ' enctype="multipart/form-data"' : '';
+		$this->print_nav_tab_menu();
+		// Print all header messages.
+		foreach ( $this->header_messages as $message ) {
+			echo $message;
+		}
+		// "Import" screen has file upload.
+		$enctype = ( 'import' === $this->action ) ? ' enctype="multipart/form-data"' : '';
 		?>
 		<form action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" method="post"<?php echo $enctype; ?>>
 			<?php

@@ -390,6 +390,19 @@ class Tribe__Events__Editor extends Tribe__Editor {
 	}
 
 	/**
+	 * Check whether the current page is an edit post type page.
+	 *
+	 * @since 5.12.0
+	 *
+	 * @return bool
+	 */
+	public function is_edit_screen() {
+		$current_screen = get_current_screen();
+
+		return 'post' === $current_screen->base;
+	}
+
+	/**
 	 * @todo   Move this into the Block PHP files
 	 *
 	 * @since 4.7
@@ -519,6 +532,79 @@ class Tribe__Events__Editor extends Tribe__Editor {
 
 		tribe_asset(
 			$plugin,
+			'tec-widget-blocks',
+			'app/widgets.js',
+			[
+				'react',
+				'react-dom',
+				'wp-components',
+				'wp-api',
+				'wp-api-request',
+				'wp-blocks',
+				'wp-widgets',
+				'wp-i18n',
+				'wp-element',
+				'wp-editor',
+				'tribe-common-gutenberg-data',
+				'tribe-common-gutenberg-utils',
+				'tribe-common-gutenberg-store',
+				'tribe-common-gutenberg-icons',
+				'tribe-common-gutenberg-hoc',
+				'tribe-common-gutenberg-elements',
+				'tribe-common-gutenberg-components',
+			],
+			'enqueue_block_editor_assets',
+			[
+				'in_footer'    => false,
+				'localize'     => [],
+				'priority'     => 106,
+				'conditionals' => [ $this, 'is_edit_screen' ],
+			]
+		);
+
+		tribe_asset(
+			$plugin,
+			'legacy-widget',
+			'legacy-widget.js',
+			[
+				'admin-widgets',
+				'wp-widgets',
+			],
+			'enqueue_block_editor_assets',
+			[
+				'in_footer'    => true,
+				'conditionals' => [ $this, 'is_edit_screen' ],
+			]
+		);
+
+		tribe_asset(
+			$plugin,
+			'tec-widget-blocks-styles',
+			'app/widgets.css',
+			[
+				'wp-widgets',
+			],
+			'enqueue_block_editor_assets',
+			[
+				'in_footer'    => false,
+				'conditionals' => [ $this, 'is_edit_screen' ],
+			]
+		);
+
+		tribe_asset(
+			$plugin,
+			'tec-blocks-category-icon-styles',
+			'tribe-admin-block-category-icons.css',
+			[],
+			'enqueue_block_editor_assets',
+			[
+				'in_footer'    => false,
+				'conditionals' => [ $this, 'is_edit_screen' ],
+			]
+		);
+
+		tribe_asset(
+			$plugin,
 			'tribe-block-editor',
 			'app/editor.css',
 			[],
@@ -582,6 +668,7 @@ class Tribe__Events__Editor extends Tribe__Editor {
 				[
 					'slug'  => 'tribe-events',
 					'title' => __( 'Event Blocks', 'the-events-calendar' ),
+					'icon'  => 'tec-horns',
 				],
 			]
 		);
@@ -609,17 +696,13 @@ class Tribe__Events__Editor extends Tribe__Editor {
 			return $categories;
 		}
 
-		// Make sure it's an event post.
-		if ( ! tribe_is_event( $context->post ) ) {
-			return $categories;
-		}
-
 		return array_merge(
 			$categories,
 			[
 				[
 					'slug'  => 'tribe-events',
 					'title' => __( 'Event Blocks', 'the-events-calendar' ),
+					'icon'  => 'tec-horns',
 				],
 			]
 		);

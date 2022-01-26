@@ -1,8 +1,8 @@
 jQuery(document).ready(function ($) {
-    $(".advgb-testimonial.slider-view").each(function () {
+    $(".advgb-testimonial.slider-view:not(.slick-initialized)").each(function () {
         var wrapper = $(this).closest('.advgb-testimonial-wrapper');
         if(wrapper.length === 0) {
-            jQuery(`.advgb-testimonial.slider-view`).slick({
+            jQuery(`.advgb-testimonial.slider-view:not(.slick-initialized)`).slick({
                 infinite: true,
                 centerMode: true,
                 centerPadding: '40px',

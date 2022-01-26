@@ -1,9 +1,9 @@
 === Gravity Forms Image Choices ===
-Version: 1.3.42
+Version: 1.3.45
 Author: JetSloth
-Version: 1.3.42
+Version: 1.3.45
 Requires at 3.5
-Tested up to: 5.7.2
+Tested up to: 5.8.2
 Author URI: https://jetsloth.com
 License: GPL2
 License URI: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html

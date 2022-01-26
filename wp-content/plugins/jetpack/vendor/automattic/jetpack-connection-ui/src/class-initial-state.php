@@ -7,29 +7,14 @@
 
 namespace Automattic\Jetpack\ConnectionUI;
 
-use Automattic\Jetpack\Connection\Manager;
-use Automattic\Jetpack\Connection\REST_Connector;
-use Automattic\Jetpack\Constants;
-use Automattic\Jetpack\Device_Detection\User_Agent_Info;
+use Automattic\Jetpack\Identity_Crisis;
 
 /**
  * The React initial state.
  */
 class Initial_State {
 
-	/**
-	 * The connection manager object.
-	 *
-	 * @var Manager
-	 */
-	private $manager;
-
-	/**
-	 * The constructor.
-	 */
-	public function __construct() {
-		$this->manager = new Manager();
-	}
+	const CONNECTION_MANAGER_URI = '/tools.php?page=wpcom-connection-manager';
 
 	/**
 	 * Get the initial state data.
@@ -38,44 +23,47 @@ class Initial_State {
 	 */
 	private function get_data() {
 		return array(
-			'connectionStatus' => REST_Connector::connection_status( false ),
-			'API'              => array(
+			'API'    => array(
 				'WP_API_root'       => esc_url_raw( rest_url() ),
 				'WP_API_nonce'      => wp_create_nonce( 'wp_rest' ),
 				'registrationNonce' => wp_create_nonce( 'jetpack-registration-nonce' ),
 			),
-			'connectionData'   => array(
-				'doNotUseConnectionIframe' => ! $this->can_use_connection_iframe(),
-				'authorizationUrl'         => ( $this->manager->is_connected() && ! $this->manager->is_user_connected() )
-					? $this->manager->get_authorization_url( null, admin_url( 'tools.php?page=wpcom-connection-manager' ) )
-					: null,
+			'assets' => array(
+				'buildUrl' => plugins_url( 'build/', __DIR__ ),
 			),
+			'IDC'    => $this->get_idc_data(),
 		);
 	}
 
 	/**
-	 * Whether we can the connection iframe.
+	 * Get the IDC data for initial state.
 	 *
-	 * @return bool
+	 * @return array
 	 */
-	private function can_use_connection_iframe() {
-		global $is_safari;
+	private function get_idc_data() {
+		$has_idc = Identity_Crisis::has_identity_crisis();
 
-		/**
-		 * Filters whether the connection manager should use the iframe authorization
-		 * flow instead of the regular redirect-based flow.
-		 *
-		 * @since 8.3.0
-		 *
-		 * @param Boolean $is_iframe_flow_used should the iframe flow be used, defaults to false.
-		 */
-		$iframe_flow = apply_filters( 'jetpack_use_iframe_authorization_flow', false );
+		$return_data = array(
+			'hasIDC' => $has_idc,
+		);
 
-		if ( ! $iframe_flow ) {
-			return false;
+		// TODO: replace the `jetpack_disconnect` check with a non-admin IDC screen.
+		if ( ! $has_idc || ! current_user_can( 'jetpack_disconnect' ) ) {
+			return $return_data;
 		}
 
-		return ! $is_safari && ! User_Agent_Info::is_opera_desktop() && ! Constants::is_true( 'JETPACK_SHOULD_NOT_USE_CONNECTION_IFRAME' );
+		$idc_data = Identity_Crisis::check_identity_crisis();
+		$idc_urls = Identity_Crisis::get_mismatched_urls();
+
+		if ( ! $idc_data || ! $idc_urls ) {
+			return $return_data;
+		}
+
+		$return_data['wpcomHomeUrl'] = $idc_urls['wpcom_url'];
+		$return_data['currentUrl']   = $idc_urls['current_url'];
+		$return_data['redirectUri']  = static::CONNECTION_MANAGER_URI;
+
+		return $return_data;
 	}
 
 	/**

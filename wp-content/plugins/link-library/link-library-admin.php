@@ -682,7 +682,7 @@ class link_library_plugin_admin {
 			if ( isset( $_GET['dismissll70update'] ) ) {
 				$genoptions['dismissll70update'] = true;
 				update_option( 'LinkLibraryGeneral', $genoptions );
-			} elseif ( !isset( $dismissll70update ) ) {
+			} elseif ( !isset( $genoptions['dismissll70update'] ) && ( !isset( $genoptions['hidedonation'] ) || ( isset( $genoptions['hidedonation'] ) && !$genoptions['hidedonation'] ) ) ) {
 				add_action( 'admin_notices', array( $this, 'll70update' ) );
 			}
 		}
@@ -754,7 +754,7 @@ wp_editor( $post->post_content, 'content', $editor_config );
 	}
 
 	function ll70update() {
-		echo "<div id='ll-warning' class='updated fade'><span style='float: left; margin-right: 20px; margin-top: 40px; margin-bottom: 40px'><img src='" . plugins_url( 'icons/new_icon.png', __FILE__ ) . "' /></span><p><strong>Link Library 7.0: Recent new features and supporting your humble developer</strong></p> <p>You may not have noticed, but Link Library keeps adding a steady stream of new features, along with bug fixes, with each new version. In recent months, new capabilities such as Link Library blocks in the WordPress Block Editor, <a href='" . add_query_arg( array( 'post_type' => 'link_library_links', 'currenttab' => 'll-userform', 'page' => 'link-library-settingssets'), admin_url( 'edit.php' )) . "'>the ability to re-order fields and add custom fields in user-submission forms</a>, <a href='" . add_query_arg( array( 'post_type' => 'link_library_links', 'currenttab' => 'll-globalsearchresultslayout', 'page' => 'link-library-general-options'), admin_url( 'edit.php' )) . "'>customization of link output in Global site search results</a>, an <a href='" . add_query_arg( array( 'post_type' => 'link_library_links', 'page' => 'link-library-stylesheet'), admin_url( 'edit.php' )) . "'>updated stylesheet editor with syntax highlighting and error checking</a> and many more have been added to Link Library. If you have ideas for new features, drop me a line in the <a href='https://wordpress.org/support/plugin/link-library/'>support forum</a>. I can't promise I'll put them all in, but all ideas are considered.<br /><br />If you use the plugin as a regular feature of your site and have never contributed to Link Library's development, <a href='https://ylefebvre.github.io/wordpress-plugins/link-library/'>please consider a donation</a>. Repeat donations are just as welcome :) Answering support questions and implementing new features for this free plugin takes time and effort and your support helps with this work and its associated costs. Thanks in advance!<br /><br /><a href='" . add_query_arg( array( 'post_type' => 'link_library_links', 'currenttab' => 'll-usage', 'page' => 'link-library-settingssets', 'dismissll70update' => 'true'), admin_url( 'edit.php' )) . "'>Dismiss</a></p></div>";
+		echo "<div id='ll-warning' class='updated fade'><span style='float: left; margin-right: 20px; margin-top: 40px; margin-bottom: 40px'><img src='" . plugins_url( 'icons/new_icon.png', __FILE__ ) . "' /></span><p><strong>Link Library 7.0: Recent new features and supporting your humble developer</strong></p> <p>You may not have noticed, but Link Library keeps adding a steady stream of new features, along with bug fixes, with each new version. In recent months, new capabilities such as Link Library blocks in the WordPress Block Editor, <a href='" . add_query_arg( array( 'post_type' => 'link_library_links', 'currenttab' => 'll-userform', 'page' => 'link-library-settingssets'), admin_url( 'edit.php' )) . "'>the ability to re-order fields and add custom fields in user-submission forms</a>, <a href='" . add_query_arg( array( 'post_type' => 'link_library_links', 'currenttab' => 'll-globalsearchresultslayout', 'page' => 'link-library-general-options'), admin_url( 'edit.php' )) . "'>customization of link output in Global site search results</a>, an <a href='" . add_query_arg( array( 'post_type' => 'link_library_links', 'page' => 'link-library-stylesheet'), admin_url( 'edit.php' )) . "'>updated stylesheet editor with syntax highlighting and error checking</a> and many more have been added to Link Library. If you have ideas for new features, drop me a line in the <a href='https://wordpress.org/support/plugin/link-library/'>support forum</a>. I can't promise I'll put them all in, but all ideas are considered.<br /><br />If you use the plugin as a regular feature of your site and have never contributed to Link Library's development, <a href='https://ylefebvre.github.io/wordpress-plugins/link-library/'>please consider a donation</a>. Repeat donations are just as welcome :) Answering support questions and implementing new features for this free plugin takes time and effort and your support helps with this work and its associated costs. Thanks in advance!<br /><br /><a href='" . add_query_arg( array( 'post_type' => 'link_library_links', 'dismissll70update' => 'true' ), admin_url( 'edit.php' )) . "'>Dismiss</a></p></div>";
 	}
 
 	function filter_mce_buttons( $buttons ) {
@@ -1536,8 +1536,8 @@ wp_editor( $post->post_content, 'content', $editor_config );
 			                    'll-importexport' => __( 'Import/Export Links', 'link-library' ),
 			);
 
-			if ( isset( $genoptions['ll-hidedonation'] ) && $genoptions['ll-hidedonation'] ) {
-				unset ( $tabitems['hidedonation'] );
+			if ( isset( $genoptions['hidedonation'] ) && $genoptions['hidedonation'] ) {
+				unset ( $tabitems['ll-hidedonation'] );
 			}
 		} elseif ( $menu_name == 'settingsset' ) {
 			$tabitems = array ( 'll-usage' => __( 'Usage', 'link-library' ),
@@ -3964,7 +3964,8 @@ function general_custom_fields_meta_box( $data ) {
 	<?php
 	}
 
-	function general_hide_donation_meta_box() {
+	function general_hide_donation_meta_box( $data ) {
+		$genoptions = $data['genoptions'];
 	?>
 	<div style='padding-top:15px' id="ll-hidedonation" class="content-section">
 		<p><?php _e( 'The following option allows you to hide the Donate button and Support the Author section in the Link Library Admin pages. If you enjoy this plugin and use it regularly, please consider making a donation to the author before turning off these messages. This menu section will disappear along with the other elements.', 'link-library' ); ?></p>

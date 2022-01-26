@@ -180,13 +180,11 @@ class GF_Field_List extends GF_Field {
 
 			$list .= '<div class="gfield_list_header">';
 			foreach ( $columns as $column ) {
-				// a11y: scope="col"
 				$list .= '<div class="gfield_header_item">' . esc_html( $column['text'] ) . '</div>';
 			}
 
 			if ( $this->maxRows != 1 ) {
-				// Using td instead of th because empty th tags break a11y.
-				$list .= '<div class="gfield_header_item">&nbsp;</div>';
+				$list .= '<div class="gfield_header_item gfield_header_item--icons">&nbsp;</div>';
 			}
 
 			$list .= '</div>';
@@ -314,8 +312,13 @@ class GF_Field_List extends GF_Field {
 					width: 100% !important;
 				}
 				
+				body .ginput_container_list table.gfield_list thead tr td {
+					padding: 0;
+				}
+				
 				body .ginput_container_list table.gfield_list tbody tr td.gfield_list_icons {
 					display: table-cell !important;
+					padding: 0;
 				}
 			' : '';
 			$list .= '<style type="text/css">'. $list_entry_edit .'

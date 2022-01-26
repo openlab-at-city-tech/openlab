@@ -93,9 +93,10 @@
 }
 
 .b2s-community-btn {
-    padding: 8px 65px !important;
+    padding: 8px !important;
     font-size: 16px !important;
     font-weight: bold !important;
+    width: 100%;
 }
 
 .b2s-community-register-success {
@@ -121,4 +122,17 @@
 
 #b2s-community-register {
     color: #fff !important;
+}
+
+.b2s-faq-links-list {
+    list-style: inside;
+}
+
+.b2s-faq-link {
+    color: black !important;
+    font-size: 16px;
+    line-height: 22px;
+}
+.b2s-faq-link:hover {
+    color: #79B331 !important;
 }

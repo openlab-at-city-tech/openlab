@@ -295,7 +295,7 @@ class GF_System_Report {
 
 					echo '<h2>' . esc_html__( 'Upgrading Gravity Forms', 'gravityforms' ) . '</h2>';
 
-					$warning = esc_html__( 'Do not close or navigate away from this page until the upgrade is 100% complete.', 'gravityfroms' );
+					$warning = esc_html__( 'Do not close or navigate away from this page until the upgrade is 100% complete.', 'gravityforms' );
 
 					printf( '<p>%s</p>', $warning );
 					printf( '<p>%s</p>', $message );
@@ -1284,9 +1284,19 @@ class GF_System_Report {
 
 			// Prepare plugin value.
 			if ( rgar( $plugin, 'AuthorURI' ) ) {
-				$value = 'by <a href="' . esc_url( $plugin['AuthorURI'] ) . '">' . esc_html( $plugin['Author'] ) . '</a>' . ' - ' . $plugin['Version'];
+				$value = sprintf(
+					'%s <a href="%s">%s</a> - %s',
+					__( 'by', 'gravityforms' ),
+					esc_url( $plugin['AuthorURI'] ),
+					esc_html( $plugin['Author'] ),
+					$plugin['Version']
+				);
 			} else {
-				$value = 'by ' . $plugin['Author'] . ' - ' . $plugin['Version'];
+				$value = sprintf( '%s %s - %s',
+					__( 'by', 'gravityforms' ),
+					$plugin['Author'],
+					$plugin['Version']
+			    );
 			}
 
 			// Add plugin to active plugins.
@@ -1294,7 +1304,12 @@ class GF_System_Report {
 				'label'                     => $label,
 				'label_export'              => strip_tags( $plugin_name ),
 				'value'                     => $value,
-				'value_export'              => 'by ' . strip_tags( $plugin['Author'] ) . ' - ' . $plugin['Version'],
+				'value_export'              => sprintf(
+				'%s %s - %s',
+					__( 'by', 'gravityforms' ),
+					strip_tags( $plugin['Author'] ),
+					$plugin['Version']
+				),
 				'is_valid'                  => $is_valid,
 				'validation_message'        => $validation_message,
 				'validation_message_export' => $validation_message_export,
@@ -1352,9 +1367,20 @@ class GF_System_Report {
 
 			// Prepare plugin value.
 			if ( rgar( $plugin_data, 'AuthorURI' ) ) {
-				$value = 'by <a href="' . esc_url( $plugin_data['AuthorURI'] ) . '">' . $plugin_data['Author'] . '</a>' . ' - ' . $plugin_data['Version'];
+				$value = sprintf(
+					'%s <a href="%s">%s</a> - %s',
+					__( 'by', 'gravityforms' ),
+					esc_url( $plugin_data['AuthorURI'] ),
+					$plugin_data['Author'],
+					$plugin_data['Version']
+				);
 			} else {
-				$value = 'by ' . $plugin_data['Author'] . ' - ' . $plugin_data['Version'];
+				$value = sprintf(
+					'%s %s - %s',
+					__( 'by', 'gravityforms' ),
+					$plugin_data['Author'],
+					$plugin_data['Version']
+				);
 			}
 
 			// Replace plugin.
@@ -1523,8 +1549,8 @@ class GF_System_Report {
 		$theme_details = array(
 			array(
 				'label'        => $theme_name,
-				'value'        => sprintf( 'by <a href="%s">%s</a> - %s', $theme_author_uri, $theme_author, $theme_version ),
-				'value_export' => sprintf( 'by %s (%s) - %s', $theme_author, $theme_author_uri, $theme_version ),
+				'value'        => sprintf( '%s <a href="%s">%s</a> - %s', __( 'by', 'gravityforms' ), $theme_author_uri, $theme_author, $theme_version ),
+				'value_export' => sprintf( '%s %s (%s) - %s', __( 'by', 'gravityforms' ), $theme_author, $theme_author_uri, $theme_version ),
 				'is_valid'     => version_compare( $theme_version, rgar( $update_themes_versions, $active_theme->get_stylesheet() ), '>=' )
 			),
 		);
@@ -1539,8 +1565,8 @@ class GF_System_Report {
 			$theme_details[] = array(
 				'label'        => sprintf( '%s (%s)', $parent_name, esc_html__( 'Parent', 'gravityforms' ) ),
 				'label_export' => $parent_name . ' (Parent)',
-				'value'        => sprintf( 'by <a href="%s">%s</a> - %s', $parent_author_uri, $parent_author, $parent_version ),
-				'value_export' => sprintf( 'by %s (%s) - %s', $parent_author, $parent_author_uri, $parent_version ),
+				'value'        => sprintf( '%s <a href="%s">%s</a> - %s', __( 'by', 'gravityforms' ), $parent_author_uri, $parent_author, $parent_version ),
+				'value_export' => sprintf( '%s %s (%s) - %s', __( 'by', 'gravityforms' ), $parent_author, $parent_author_uri, $parent_version ),
 				'is_valid'     => version_compare( $parent_version, rgar( $update_themes_versions, $parent_theme->get_stylesheet() ), '>=' )
 			);
 		}

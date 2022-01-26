@@ -1,9 +1,9 @@
 ﻿=== OSM - OpenStreetMap ===
 Contributors: MiKa
-Tags: map, OpenStreetMap, geo, KML, GPX, geotag, geolocation, OSM, travelogue, OpenLayers, marker, POI, geocode, geotagging, location, Tracks, WMS, OpenSeaMap, stamen, basemap, meta, thunderforest
+Tags: map, OpenStreetMap, geo, KML, GPX, geotag, geolocation, OSM, travelogue, OpenLayers, marker, POI, geocode, geotagging, location, Tracks, OpenSeaMap, stamen, basemap, meta, thunderforest
 Requires at least: 3.0
 Tested up to: 5.8.1
-Stable tag: 5.8.1
+Stable tag: 5.9.3
 License: GPLv2
 Requires PHP: 5.3
 
@@ -22,7 +22,7 @@ If you want to get detailed information about the OSM-plugin visit these pages:
 
 Features of the OSM-plugin:
 
-* OpenStreetMap, HOT, OpenSeaMap, OpenTopoMap, BaseMap (AT), Stamen, WMS in posts/pages
+* OpenStreetMap, HOT, OpenSeaMap, OpenTopoMap, BaseMap (AT), Stamen in posts/pages
 * Integration in post / page / widget
 * HTML Popup Marker
 * GPX and KML (incl. upload in Mediathek)
@@ -56,7 +56,7 @@ The WordPress Plugin Review Team required us to provide opt-in feature to displa
 * Stamen Maps: [Stamen License](http://maps.stamen.com)
 * BaseMap:  [BaseMap License](http://basemap.at)
 * Thunderforest (API key): [Thunderforest License](http://www.thunderforest.com/terms/)
-* WMS: Depends on the map you are including - check it before including it!
+* Others: Depends on the map you are including - check it before including it!
 
 == Installation ==
 

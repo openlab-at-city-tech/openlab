@@ -367,7 +367,6 @@ function gf_do_next_button_action(formId, action, fieldId, isInit){
 }
 
 function gf_do_action(action, targetId, useAnimation, defaultValues, isInit, callback, formId){
-
 	var $target = jQuery( targetId );
 
 	/**
@@ -406,9 +405,9 @@ function gf_do_action(action, targetId, useAnimation, defaultValues, isInit, cal
 
 			var display = $target.data('gf_display');
 
-			//defaults to list-item if previous (saved) display isn't set for any reason
+			// set display if previous (saved) display isn't set for any reason
 			if ( display == '' || display == 'none' ){
-				display = 'list-item';
+				display = '1' === gf_legacy.is_legacy ? 'list-item' : 'block';
 			}
 			$target.find(':input:hidden:not(.gf-default-disabled)').removeAttr( 'disabled' );
 

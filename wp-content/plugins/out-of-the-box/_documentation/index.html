@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8" />
   <link rel="apple-touch-icon" sizes="76x76" href="assets/img/apple-icon.png">
-  <link rel="icon" type="image/png" href="assets/img/favicon.png">
+  <link rel="icon" type="image/png" href="assets/img/favicon.svg">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 
   <title>Documentation Out-of-the-Box</title>
@@ -23,6 +23,8 @@
 
   <!-- CSS Just for demo purpose, don't include it in your project -->
   <link href="assets/css/documentation.css" rel="stylesheet" />
+
+  <script async src="https://player.vimeo.com/api/player.js"></script>
 
   <style>
     .table>thead>tr>th {
@@ -174,6 +176,7 @@
 
                     <ul class='sub'>
                       <li><a href="#woocommerce">WooCommerce</a></li>
+                      <li><a href="#acf">Advanced Custom Fields (ACF)</a></li>
                       <li><a href="#fluentforms">Fluent Forms</a></li>
                       <li><a href="#wpforms">WPForms</a></li>
                       <li><a href="#formidableforms">Formidable Forms</a></li>
@@ -195,7 +198,7 @@
                     </ul>
 
                   </li>
-                  <li><a href="#releasenotes">Release Notes (version 1.19.10)</a></li>
+                  <li><a href="#releasenotes">Release Notes (version 1.20.4)</a></li>
 
                 </ul>
               </div>
@@ -212,7 +215,7 @@
                     <legend></legend>
                     <ul>
                       <li>WordPress 5.0+</li>
-                      <li>At least PHP 7.0 with cURL extension</li>
+                      <li>At least PHP 7.0 with cURL extension. PHP 8.0 compatiable</li>
                     </ul>
 
                     <div class="alert alert-info">
@@ -390,27 +393,64 @@
                   <div class="tim-row" id="licensing">
                     <h3>Licensing</h3>
                     <legend></legend>
+                    <p>The Envato Marketplace which exclusively sells the WP Cloud Plugins offers <a
+                        href="https://codecanyon.net/licenses/terms/regular">Regular
+                        Licenses</a> and <a href="https://codecanyon.net/licenses/terms/extended">Extended
+                        Licenses</a> for
+                      the plugin.</p>
 
-                    <p>Regular License is the most common type of licensing for Out-of-the-Box. The regular license
+                    <p>The Regular License is the most common type of licensing. The regular license
                       allows you to use the item<b> in one single end product</b> which end user is not charged to
                       access or use. You can acquire regular license for your own website, or if you are a developer -
                       for one client by transferring the license to your client when the project is finished.
                     </p>
 
-                    <p>
-                      The Licenses only covers the usage in one end product, which means that you will need a separate
-                      license for each site when the sites contain a different end product.</p>
+                    <br />
+                    <div class="alert alert-success">
+                      <div class="container-fluid">
+                        <div class="alert-icon">
+                          <i class="material-icons">lightbulb_outline</i>
+                        </div>
+                        Both Licenses are a 1-time purchase, single domain and comes with unlimited updates & at least
+                        6 months
+                        of free support. 
+                        <br />
+                      </div>
+                    </div>
+
+                    <br />
+                    <h4>Regular License vs Extended License</h4>
+                    <p>You will need an Extended License when the plugin is used on a section of your site which is
+                      accessible by paying users (e.g. via memberships, subscriptions, product purchases, etc...). If
+                      the plugin is only used on a free accessible section on your site, a Regular License is the one
+                      you are looking for.</p>
+                    <br />
+                    <h4>Which license for Single site, multiple site, unlimited sites?</h4>
+                    <p>The Licenses only covers the usage in one End Product, which means that you will need a
+                      separate
+                      license for each site when the sites contain a different End Product.</p>
                     <br />
                     <strong>Example</strong>
                     <br /><br />
                     <ol>
                       <li>When the main site is a global site (.organization.com) for a organization and the subdomains
-                        are used by the local departments (newyork.organization.com, london.organization.com) you will
-                        need separate licenses.<br /><br /></li>
+                        are used by the local departments (newyork.organization.com, london.organization.com)
+                        <br /><b>-> Separate licenses</b><br /><br /></li>
                       <li>When the subdomain (shop.organization.com) is just part of the main domain (.organization.com)
-                        you only need 1 license.,</li>
+                        <br /><b>-> A single license</b><br /><br /></li>
+                      <li>When the plugin is used both on a live site (.organization.com) and its development/staging
+                        environment (localhost, dev.organization.com, etc)
+                        <br /><b>-> A single license</b><br /><br /></li>
+                      <li>When you want to use the plugin on multiple domains
+                        (a-organization.com and b-organization.com)
+                        <br /><b>-> Separate licenses</b><br /><br /></li>
+                      <li>The plugin is used on a section of your
+                        site which is only accessible after paying
+                        (memberships, subscriptions, product purchases, etc...)
+                        <br /><b>-> Extended License</b></li>
 
                     </ol>
+
                     <br />
                     <p>In order to read more about <a
                         href="https://1.envato.market/c/1260925/275988/4415?u=http%3A%2F%2Fcodecanyon.net%2Flicenses%2Fregular">Regular
@@ -423,6 +463,7 @@
 
                   </div>
                 </div>
+
                 <div class="row tim-row" id="usage">
                   <h2>Usage</h2>
                   <div class="tim-row" id="link-account">
@@ -524,32 +565,31 @@
 
                     <br />
                     <div class="row">
-                      <div class="col-sm-4">
-                        <a href="assets/img/instructions/open-shortcode-builder-1.png" data-title="Shortcode Builder"
-                          data-footer="Open the Shortcode Builder" data-gallery="shortcode-gallery"
-                          data-toggle="lightbox">
-                          <img src="assets/img/instructions/open-shortcode-builder-1.png"
-                            class="img-responsive img-raised">
-                        </a>
+                      <div style="padding:56.25% 0 0 0;position:relative;"><iframe
+                          src="https://player.vimeo.com/video/645169243?h=101772cf80&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479"
+                          frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen
+                          style="position:absolute;top:0;left:0;width:100%;height:100%;" loading="lazy"
+                          title="Basics - How do I add a module to my Gutenberg Page?"></iframe>
                       </div>
+                    </div>
+                    <br /><br />
 
-                      <div class="col-sm-4">
-                        <a href="assets/img/instructions/open-shortcode-builder-3.png" data-title="Shortcode Builder"
-                          data-footer="Configure Shortcode Settings, and insert Shortcode"
-                          data-gallery="shortcode-gallery" data-toggle="lightbox">
-                          <img src="assets/img/instructions/open-shortcode-builder-3.png"
-                            class="img-responsive img-raised">
-                        </a>
-                      </div>
+                    <h5>Add shortcode via <strong>Divi Page Builder</strong></h5>
+                    <ol>
+                      <li><b>Create</b> a new Page/Post or edit an existing one. </li>
+                      <li>Add the plugin block</li>
+                      <li><b>Adjust</b> the module in the configuration panel by pressing the 'Configure module' button
+                        or by editing the raw shortcode</li>
+                      <li><b>Publish</b> or <b>Update</b> the page and you are finished!</li>
+                    </ol>
 
-                      <div class="col-sm-4">
-                        <a href="assets/img/instructions/open-shortcode-builder-2.png" data-title="Shortcode Builder"
-                          data-footer="The Shortcode is added to your page" data-gallery="shortcode-gallery"
-                          data-toggle="lightbox">
-                          <img src="assets/img/instructions/open-shortcode-builder-2.png"
-                            class="img-responsive img-raised">
-                        </a>
-                      </div>
+                    <br />
+                    <div class="row">
+                      <div style="padding:56.25% 0 0 0;position:relative;"><iframe
+                          src="https://player.vimeo.com/video/645169082?h=b4c6a292dd&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479"
+                          frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen
+                          style="position:absolute;top:0;left:0;width:100%;height:100%;" loading="lazy"
+                          title="Basics - How do I add a module using the Divi Page Editor?"></iframe></div>
                     </div>
                     <br /><br />
 
@@ -564,29 +604,30 @@
 
                     <br />
                     <div class="row">
-                      <div class="col-sm-4">
-                        <a href="assets/img/instructions/elementor-1.png" data-title="Shortcode Builder"
-                          data-footer="Open the Shortcode Builder" data-gallery="shortcode-gallery"
-                          data-toggle="lightbox">
-                          <img src="assets/img/instructions/elementor-1.png" class="img-responsive img-raised">
-                        </a>
-                      </div>
+                      <div style="padding:56.25% 0 0 0;position:relative;"><iframe
+                          src="https://player.vimeo.com/video/645169145?h=ac1e8f4642&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479"
+                          frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen
+                          style="position:absolute;top:0;left:0;width:100%;height:100%;" loading="lazy"
+                          title="Basics - How do I add a module using the Elementor?"></iframe></div>
+                    </div>
+                    <br /><br />
 
-                      <div class="col-sm-4">
-                        <a href="assets/img/instructions/elementor-2.png" data-title="Shortcode Builder"
-                          data-footer="Configure Shortcode Settings, and insert Shortcode"
-                          data-gallery="shortcode-gallery" data-toggle="lightbox">
-                          <img src="assets/img/instructions/elementor-2.png" class="img-responsive img-raised">
-                        </a>
-                      </div>
+                    <h5>Add shortcode via <strong>Beaver Builder</strong></h5>
+                    <ol>
+                      <li><b>Create</b> a new Page/Post or edit an existing one. </li>
+                      <li>Open the WP Cloud Plugin section and add a the plugins block</li>
+                      <li><b>Adjust</b> the module configuration in the panel by pressing the 'Edit via Shortcode
+                        Builder' button</li>
+                      <li><b>Publish</b> or <b>Update</b> the page and you are finished!</li>
+                    </ol>
 
-                      <div class="col-sm-4">
-                        <a href="assets/img/instructions/elementor-3.png" data-title="Shortcode Builder"
-                          data-footer="The Shortcode is added to your page" data-gallery="shortcode-gallery"
-                          data-toggle="lightbox">
-                          <img src="assets/img/instructions/elementor-3.png" class="img-responsive img-raised">
-                        </a>
-                      </div>
+                    <br />
+                    <div class="row">
+                      <div style="padding:56.25% 0 0 0;position:relative;"><iframe
+                          src="https://player.vimeo.com/video/645169001?h=c49ce61506&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479"
+                          frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen
+                          style="position:absolute;top:0;left:0;width:100%;height:100%;" loading="lazy"
+                          title="Basics - How do I add a module using the Beaver Builder?"></iframe></div>
                     </div>
                     <br /><br />
 
@@ -604,7 +645,7 @@
                     <div class="row">
                       <div class="col-sm-4">
                         <a href="assets/img/instructions/open-shortcode-builder-classic-1.png"
-                          data-title="Shortcode Builder" data-footer="Open the Shortcode Builder"
+                          data-title="Classic Editor - WP Cloud Plugins module" data-footer="Open the Shortcode Builder"
                           data-gallery="shortcode-gallery" data-toggle="lightbox">
                           <img src="assets/img/instructions/open-shortcode-builder-classic-1.png"
                             class="img-responsive img-raised">
@@ -613,7 +654,7 @@
 
                       <div class="col-sm-4">
                         <a href="assets/img/instructions/open-shortcode-builder-classic-2.png"
-                          data-title="Shortcode Builder"
+                          data-title="Classic Editor - WP Cloud Plugins module"
                           data-footer="Configure Shortcode Settings, and insert Shortcode"
                           data-gallery="shortcode-gallery" data-toggle="lightbox">
                           <img src="assets/img/instructions/open-shortcode-builder-classic-2.png"
@@ -623,8 +664,9 @@
 
                       <div class="col-sm-4">
                         <a href="assets/img/instructions/open-shortcode-builder-classic-3.png"
-                          data-title="Shortcode Builder" data-footer="The Shortcode is added to your page"
-                          data-gallery="shortcode-gallery" data-toggle="lightbox">
+                          data-title="Classic Editor - WP Cloud Plugins module"
+                          data-footer="The Shortcode is added to your page" data-gallery="shortcode-gallery"
+                          data-toggle="lightbox">
                           <img src="assets/img/instructions/open-shortcode-builder-classic-3.png"
                             class="img-responsive img-raised">
                         </a>
@@ -779,14 +821,15 @@
                             shortcodes with the Private Folders feature enabled.</td>
                         </tr>
                         <tr>
-                          <th>Create all Private Folders on first visit</th>
+                          <th>Create all Private Folders the 1st time a module is used</th>
                           <td>Create a all Private Folders automatically the first time the page with the shortcode is
                             rendered. Creating folders takes around 1 sec per user, so it isn't recommended to enable
                             this when you have tons of users.</td>
                         </tr>
                         <tr>
                           <th>Update Private Folders after profile update</th>
-                          <td>Update the folder name of the user after they have updated their profile.</td>
+                          <td>If needed, update the name of the Private Folder for an user after they have updated their
+                            profile..</td>
                         </tr>
                         <tr>
                           <th>Remove Private Folders after account removal</th>
@@ -798,7 +841,14 @@
                             several placeholders like <code>%user_login%</code>, <code>%user_firstname%</code>,
                             <code>%user_lastname%</code>, <code>%user_email%</code>, <code>%display_name%</code>,
                             <code>%ID%</code>, <code>%user_role%</code>, <code>%yyyy-mm-dd%</code>,
-                            <code>%hh:mm%</code>, <code>%uniqueID%</code>, <code>%directory_separator% (/)</code>. If
+                            <code>%hh:mm%</code>, <code>%uniqueID%</code>, <code>%directory_separator% (/)</code>.
+
+                            <br /><br />
+                            Use <code>%usermeta_{key}%</code> to get your users custom meta value, where
+                            <code>{key}</code> is the meta key to retrieve.
+                            <br /><br />
+
+                            If
                             you want to be
                             able to send notifications to the owner of this
                             folder the template should contain <code>%user_email%</code>.</td>
@@ -859,11 +909,6 @@
                       </thead>
                       <tbody>
                         <tr>
-                          <th>"Lost Authorization" notification</th>
-                          <td>If the plugin somehow loses its authorization, a notification email will be send to this
-                            email address.</td>
-                        </tr>
-                        <tr>
                           <th>Own Dropbox App</th>
                           <td>For an easy setup, the plugin is using its own Dropbox App. If you want to use your own
                             Dropbox App, please read the extra instructions.
@@ -887,14 +932,6 @@
                             please enable this setting. It will force the plugin to loads its scripts on all your pages.
                             No worries about loading performances, as the files will automatically be cached by your
                             browser once loaded.</td>
-                        </tr>
-                        <tr>
-                          <th>Enable Font Awesome Library v4 compatibility</th>
-                          <td>If your theme is loading the old Font Awesome icon library (v4), it can cause conflict
-                            with the (v5) icons of this plugin. If you are having trouble with the icons, please enable
-                            this setting for backwards compatibility. To disable the Font Awesome library of this plugin
-                            completely, add this to your wp-config.php file: <code>define('WPCP_DISABLE_FONTAWESOME',
-                              true);</code></td>
                         </tr>
                         <tr>
                           <th>Enable Gzip compression</th>
@@ -1001,8 +1038,38 @@
                   <div class="tim-row" id="global-options-notifications">
                     <h3>Notifications</h3>
 
-                    <p>The plugin can send email notifications when files are downloaded, uploaded or deleted. The
-                      subject and (HTML) content of the emails can be controlled via this settings page.</p>
+                    <br />
+
+                    <p>The plugin can send email notifications when the plugin loses its authorization to one of the
+                      cloud accounts, and files are downloaded, uploaded or deleted. The
+                      email settings and (HTML) content of the emails can be controlled via this settings page.</p>
+
+                    <br />
+
+                    <h4>Sender settings</h4>
+                    <table class="table table-striped">
+                      <thead>
+                        <tr>
+                          <th style="width:200px">Setting</th>
+                          <th>Description</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <th>From Name</th>
+                          <td>Enter the name you would like the notification email sent from, or use one of the
+                            available placeholders.</td>
+                        </tr>
+                        <tr>
+                          <th>From Email</th>
+                          <td>Enter an authorized email address you would like the notification email sent from. To
+                            avoid deliverability issues, always use your site domain in the from email.</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <br />
+
+                    <h4>Notifications</h4>
                     <p>The following placeholders can be used inside the template fields:</p>
 
                     <br />
@@ -1416,7 +1483,8 @@ public function change_event_summary_email($template_location, $notification){
                             <br /><br> This template supports the placeholders <code>%user_login%</code>,
                             <code>%user_firstname%</code>,
                             <code>%user_lastname%</code>, <code>%user_email%</code>, <code>%display_name%</code>,
-                            <code>%ID%</code>, <code>%user_role%</code>, <code>%yyyy-mm-dd%</code>,
+                            <code>%ID%</code>, <code>%user_role%</code>, <code>%usermeta_{key}%</code>,
+                            <code>%yyyy-mm-dd%</code>,
                             <code>%hh:mm%</code>, <code>%uniqueID%</code>, <code>%directory_separator% (/)</code>. If
                             you want to be able to send notifications to the owner of this
                             folder the template should contain <code>%user_email%</code>. Leave empty to use the value
@@ -1436,7 +1504,8 @@ public function change_event_summary_email($template_location, $notification){
                             This template supports the placeholders <code>%user_login%</code>,
                             <code>%user_firstname%</code>,
                             <code>%user_lastname%</code>, <code>%user_email%</code>, <code>%display_name%</code>,
-                            <code>%ID%</code>, <code>%user_role%</code>, <code>%yyyy-mm-dd%</code>,
+                            <code>%ID%</code>, <code>%user_role%</code>, <code>%usermeta_{key}%</code>,
+                            <code>%yyyy-mm-dd%</code>,
                             <code>%hh:mm%</code>, <code>%uniqueID%</code>, <code>%directory_separator% (/)</code>
                             <br /><br /> <strong>Example:</strong> Set it to<code>/Documents/%yyyy-mm-dd%</code> if
                             you want the module to display the sub folder <code>{Start
@@ -1547,15 +1616,6 @@ public function change_event_summary_email($template_location, $notification){
                             once.
 
                             <br /><br />
-
-                            <div class="alert alert-warning">
-                              <div class="container-fluid">
-                                <div class="alert-icon">
-                                  <i class="material-icons">info_outline</i>
-                                </div>
-                                This setting is only available if the server supports the creation of ZIP packages.
-                              </div>
-                            </div>
 
                           </td>
                         </tr>
@@ -1832,7 +1892,7 @@ public function change_event_summary_email($template_location, $notification){
 
                             <ol>
                               <li>Go to <b>Out-of-the-Box -> Private Folders</b> in the WordPress Admin Dashboard</li>
-                              <li>Link your users to their folder on your Dropbox via the <b>Link to Private Folder</b>
+                              <li>Link your users to their folder on your Dropbox via the <b>Select folder</b>
                                 button</li>
                               <li><b>Go</b> to the Page Editor and <b>open</b> the Out-of-the-Box Shortcode Builder</li>
                               <li><b>Go</b> to Folders panel and <b>enable the Use Private Folders setting</b> in the
@@ -1845,31 +1905,11 @@ public function change_event_summary_email($template_location, $notification){
 
                             <br />
                             <div class="row">
-                              <div class="col-sm-4">
-                                <a href="assets/img/instructions/private-folders-manual-1.png"
-                                  data-title="Private Folders Manual Mode" data-gallery="manual-folders-gallery"
-                                  data-toggle="lightbox">
-                                  <img src="assets/img/instructions/private-folders-manual-1.png"
-                                    class="img-responsive">
-                                </a>
-                              </div>
-
-                              <div class="col-sm-4">
-                                <a href="assets/img/instructions/private-folders-manual-2.png"
-                                  data-title="Private Folders Manual Mode" data-gallery="manual-folders-gallery"
-                                  data-toggle="lightbox">
-                                  <img src="assets/img/instructions/private-folders-manual-2.png"
-                                    class="img-responsive">
-                                </a>
-                              </div>
-
-                              <div class="col-sm-4">
-                                <a href="assets/img/instructions/private-folders-manual-3.png"
-                                  data-title="Private Folders Manual Mode" data-gallery="manual-folders-gallery"
-                                  data-toggle="lightbox">
-                                  <img src="assets/img/instructions/private-folders-manual-3.png"
-                                    class="img-responsive">
-                                </a>
+                              <div style="padding:56.25% 0 0 0;position:relative;"><iframe
+                                  src="https://player.vimeo.com/video/643907454?h=5b65e8c448&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479"
+                                  frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen
+                                  style="position:absolute;top:0;left:0;width:100%;height:100%;" loading="lazy"
+                                  title="Private Folders - How to manually link users to their &amp;#039;own&amp;#039; folder?"></iframe>
                               </div>
                             </div>
                           </div>
@@ -1877,7 +1917,7 @@ public function change_event_summary_email($template_location, $notification){
                           <div class="tab-pane" id="auto-mode">
                             <p>In the Automatic mode, you let the plugin automatically manage the Private Folders. The
                               plugin will automatically link a user to its own Private Folder and it will create the
-                              Private Folder if needed in the by you seleted top-level folder. The advantage of this
+                              Private Folder if needed in the by you selected top-level folder. The advantage of this
                               method is that you don't have to manage the folders manually. In this mode you can even
                               select a template folder to fill the Private Folder with some starting material when it is
                               created.</p>
@@ -1898,28 +1938,11 @@ public function change_event_summary_email($template_location, $notification){
 
                             <br />
                             <div class="row">
-                              <div class="col-sm-4">
-                                <a href="assets/img/instructions/private-folders-auto-1.png"
-                                  data-title="Private Folders Auto Mode" data-gallery="auto-folders-gallery"
-                                  data-toggle="lightbox">
-                                  <img src="assets/img/instructions/private-folders-auto-1.png" class="img-responsive">
-                                </a>
-                              </div>
-
-                              <div class="col-sm-4">
-                                <a href="assets/img/instructions/private-folders-auto-2.png"
-                                  data-title="Private Folders Auto Mode" data-gallery="auto-folders-gallery"
-                                  data-toggle="lightbox">
-                                  <img src="assets/img/instructions/private-folders-auto-2.png" class="img-responsive">
-                                </a>
-                              </div>
-
-                              <div class="col-sm-4">
-                                <a href="assets/img/instructions/private-folders-auto-3.png"
-                                  data-title="Private Folders Auto Mode" data-gallery="auto-folders-gallery"
-                                  data-toggle="lightbox">
-                                  <img src="assets/img/instructions/private-folders-auto-3.png" class="img-responsive">
-                                </a>
+                              <div style="padding:56.25% 0 0 0;position:relative;"><iframe
+                                  src="https://player.vimeo.com/video/643916816?h=c43844414f&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479"
+                                  frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen
+                                  style="position:absolute;top:0;left:0;width:100%;height:100%;" loading="lazy"
+                                  title="Private Folders - How to automatically assign users to their &amp;#039;own&amp;#039; folder?"></iframe>
                               </div>
                             </div>
                             <br /><br />
@@ -2007,7 +2030,7 @@ public function change_event_summary_email($template_location, $notification){
 
                   <div class="tim-row">
 
-                    <h4>Digital Downloads</h4>
+                    <h4 id="woocommerce-downloads">Digital Downloads</h4>
                     <p>Out-of-the-Box integrates nicely into WooCommerce and it allows you to serve your Digital
                       Downloads directly from Dropbox! To add a Digital Product from your Dropbox, follow these
                       instructions:</p>
@@ -2024,10 +2047,12 @@ public function change_event_summary_email($template_location, $notification){
                     </ol>
 
                     <br /><br />
-                    <a href="assets/img/instructions/woocommerce.png"
-                      data-title="WooCommerce Digitial Downloads Integration" data-toggle="lightbox">
-                      <img src="assets/img/instructions/woocommerce.png" class="img-responsive img-raised">
-                    </a>
+                    <div style="padding:56.25% 0 0 0;position:relative;"><iframe
+                        src="https://player.vimeo.com/video/645168817?h=c515ed18bc&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479"
+                        frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen
+                        style="position:absolute;top:0;left:0;width:100%;height:100%;" loading="lazy"
+                        title="WooCommerce - How do I attach cloud files to my WooCommerce Digital Downloads?"></iframe>
+                    </div>
 
                     <br /><br />
 
@@ -2051,7 +2076,7 @@ public function change_event_summary_email($template_location, $notification){
 
                   <div class="tim-row">
 
-                    <h4>Upload integration</h4>
+                    <h4 id="woocommerce-uploads">Upload integration</h4>
                     <p>Out-of-the-Box allows you to create products where your customers can directly attach their
                       Documents after purchasing. The plugin can create a Order specific folder on the linked Cloud
                       Account and it will add a customizable Upload Box to the order page and the Thank You page.
@@ -2071,6 +2096,16 @@ public function change_event_summary_email($template_location, $notification){
                       <li>Save the product!</li>
                     </ol>
 
+
+                    <br /><br />
+
+                    <div style="padding:56.25% 0 0 0;position:relative;"><iframe
+                        src="https://player.vimeo.com/video/645168886?h=c210dad76c&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479"
+                        frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen
+                        style="position:absolute;top:0;left:0;width:100%;height:100%;" loading="lazy"
+                        title="WooCommerce - How do I let customers upload documents to their orders &amp;amp; store them in the cloud?"></iframe>
+                    </div>
+
                     <br /><br />
 
                     <div class="alert alert-warning">
@@ -2082,13 +2117,124 @@ public function change_event_summary_email($template_location, $notification){
                         enabled in the Shortcode. You can find this settings on the User Folders tab.
                       </div>
                     </div>
+                  </div>
 
-                    <br /><br />
+                  <div class="tim-row" id="acf">
+                    <h3>Advanced Custom Fields (ACF)</h3>
+                    <legend></legend>
 
-                    <a href="assets/img/instructions/woocommerce-upload-1.png"
-                      data-title="WooCommerce Uploads Integration" data-toggle="lightbox">
-                      <img src="assets/img/instructions/woocommerce-upload-1.png" class="img-responsive img-raised">
-                    </a>
+                    <p>Use the <a href="https://wordpress.org/plugins/advanced-custom-fields/">Advanced Custom
+                        Fields</a> plugin to take full control of your WordPress edit screens &
+                      custom field data. The ACF integration of the plugin allows you to select files and folders in the
+                      cloud to your pages and posts! Use the <code>get_field()</code> function to get access to the
+                      metadata of the items to display this in any theme template file.</p>
+
+                    <ol>
+                      <li><b>Create</b> a new Field Group (<b>[Custom Fields] -> [Add New]</b>) or <b>open</b> an
+                        existing
+                        one</li>
+                      <li><b>Add</b> a new field, and select the field type <b>[WP Cloud Plugins] -> [Google Drive
+                          items]</b></li>
+                      <li><b>Select</b> which data should be returned for the <code>get_field()</code> function</li>
+                      <li><b>Select</b> in the Location section where the Field Group should appear</li>
+                      <li><b>Save</b> the Field Group</li>
+                      <li>Done! You can now add file/folder information via the edit screens</li>
+                    </ol>
+
+
+                    <br />
+
+                    <div class="row">
+                      <div style="padding:56.25% 0 0 0;position:relative;"><iframe
+                          src="https://player.vimeo.com/video/645169317?h=7a4d9457b8&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479"
+                          frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen
+                          style="position:absolute;top:0;left:0;width:100%;height:100%;" loading="lazy"
+                          title="Integrations - How do I use the plugin in Advanced Custom Fields?"></iframe></div>
+                    </div>
+
+                    <br />
+
+                    <table class="table table-striped">
+                      <thead>
+                        <tr>
+                          <th style="width:200px">data</th>
+                          <th>Description</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <th><code>id</code></th>
+                          <td>The ID of the item.</td>
+                        </tr>
+                        <tr>
+                          <th><code>account_id</code></th>
+                          <td>The ID of the account the item is located.</td>
+                        </tr>
+                        <tr>
+                          <th><code>name</code></th>
+                          <td>The name of the item.</td>
+                        </tr>
+                        <tr>
+                          <th><code>path</code></th>
+                          <td>The absolute file path of the item.</td>
+                        </tr>
+                        <tr>
+                          <th><code>size</code></th>
+                          <td>The file size of the item.</td>
+                        </tr>
+                        <tr>
+                          <th><code>icon_url</code></th>
+                          <td>An URL to a generic icon representing the file format.</td>
+                        </tr>
+                        <tr>
+                          <th><code>thumbnail_url</code></th>
+                          <td>An URL to a thumbnail of the file. If no thumbnail is available an icon will be shown.
+                          </td>
+                        </tr>
+                        <tr>
+                          <th><code>direct_url</code></th>
+                          <td>A direct URL to the item in the cloud. Only accessible by the owners that have access to
+                            the item in the cloud or if the item is already shared.
+                          </td>
+                        </tr>
+                        <tr>
+                          <th><code>download_url</code></th>
+                          <td>A download URL that can be used by anyone to download the file.
+                          </td>
+                        </tr>
+                        <tr>
+                          <th><code>shortlived_download_url</code></th>
+                          <td>A direct, short-lived, download URL to the file in the cloud.
+                          </td>
+                        </tr>
+                        <tr>
+                          <th><code>shared_url</code></th>
+                          <td>A shared URL to the file is created, accessible by anyone with the link.
+                          </td>
+                        </tr>
+                        <tr>
+                          <th><code>embed_url</code></th>
+                          <td>A shared URL for embedding the file in an iFrame. Only available for supported formats.
+                          </td>
+                        </tr>
+
+                      </tbody>
+                    </table>
+
+                    <br />
+                    <br />
+
+                    <div class="alert alert-info">
+                      <div class="container-fluid">
+                        <div class="alert-icon">
+                          <i class="material-icons">info_outline</i>
+                        </div>
+                        You can select multiple items in this custom field. The <code>get_field()</code> will therefor
+                        return an array of items.
+                        <br />
+                      </div>
+                    </div>
+
                   </div>
 
                   <div class="tim-row" id="fluentforms">
@@ -2111,6 +2257,13 @@ public function change_event_summary_email($template_location, $notification){
                       <li>Done!</li>
                     </ol>
 
+                    <br /><br />
+                    <div style="padding:56.25% 0 0 0;position:relative;"><iframe
+                        src="https://player.vimeo.com/video/645169531?h=789a262460&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479"
+                        frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen
+                        style="position:absolute;top:0;left:0;width:100%;height:100%;" loading="lazy"
+                        title="Integrations - Fluent Forms - How do I store files in the cloud?"></iframe></div>
+
                     <div class="alert alert-info">
                       <div class="container-fluid">
                         <div class="alert-icon">
@@ -2122,12 +2275,6 @@ public function change_event_summary_email($template_location, $notification){
                         <br />
                       </div>
                     </div>
-
-                    <br /><br />
-                    <a href="assets/img/instructions/fluentforms.png" data-title="Fluent Forms Integration"
-                      data-toggle="lightbox">
-                      <img src="assets/img/instructions/fluentforms.png" class="img-responsive img-raised">
-                    </a>
                   </div>
 
                   <div class="tim-row" id="wpforms">
@@ -2151,6 +2298,14 @@ public function change_event_summary_email($template_location, $notification){
                       <li>Done!</li>
                     </ol>
 
+
+                    <br /><br />
+                    <div style="padding:56.25% 0 0 0;position:relative;"><iframe
+                        src="https://player.vimeo.com/video/645169764?h=2b15d91d1a&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479"
+                        frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen
+                        style="position:absolute;top:0;left:0;width:100%;height:100%;" loading="lazy"
+                        title="Integrations - WP Forms - How do I store files in the cloud?"></iframe></div>
+
                     <div class="alert alert-info">
                       <div class="container-fluid">
                         <div class="alert-icon">
@@ -2162,12 +2317,6 @@ public function change_event_summary_email($template_location, $notification){
                         <br />
                       </div>
                     </div>
-
-                    <br /><br />
-                    <a href="assets/img/instructions/wpforms.png" data-title="WPForms Integration"
-                      data-toggle="lightbox">
-                      <img src="assets/img/instructions/wpforms.png" class="img-responsive img-raised">
-                    </a>
                   </div>
 
                   <div class="tim-row" id="formidableforms">
@@ -2191,6 +2340,13 @@ public function change_event_summary_email($template_location, $notification){
                       <li>Done!</li>
                     </ol>
 
+                    <br /><br />
+                    <div style="padding:56.25% 0 0 0;position:relative;"><iframe
+                        src="https://player.vimeo.com/video/645169610?h=cee9eb27d4&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479"
+                        frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen
+                        style="position:absolute;top:0;left:0;width:100%;height:100%;" loading="lazy"
+                        title="Integrations - Formidable Forms - How do I store files in the cloud?"></iframe></div>
+
                     <div class="alert alert-info">
                       <div class="container-fluid">
                         <div class="alert-icon">
@@ -2202,12 +2358,6 @@ public function change_event_summary_email($template_location, $notification){
                         <br />
                       </div>
                     </div>
-
-                    <br /><br />
-                    <a href="assets/img/instructions/formidableforms.png" data-title="Formidable Forms Integration"
-                      data-toggle="lightbox">
-                      <img src="assets/img/instructions/formidableforms.png" class="img-responsive img-raised">
-                    </a>
                   </div>
 
                   <div class="tim-row" id="contact-form">
@@ -2228,6 +2378,13 @@ public function change_event_summary_email($template_location, $notification){
                       <li><b>Insert</b> the Form Field by pressing the <b>"Insert tag"</b> button</li>
                       <li>Done!</li>
                     </ol>
+
+                    <br /><br />
+                    <div style="padding:56.25% 0 0 0;position:relative;"><iframe
+                        src="https://player.vimeo.com/video/645169482?h=c87f1a1b69&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479"
+                        frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen
+                        style="position:absolute;top:0;left:0;width:100%;height:100%;" loading="lazy"
+                        title="Integrations - Contact Form 7 - How do I store files in the cloud?"></iframe></div>
 
                     <div class="alert alert-info">
                       <div class="container-fluid">
@@ -2251,15 +2408,8 @@ public function change_event_summary_email($template_location, $notification){
                         Want to hide the Upload Box before all required fields on the form are filled? Take a look at
                         the free <b><a href="https://wordpress.org/plugins/cf7-conditional-fields/">Contact Form 7 –
                             Conditional Fields</a></b> plugin.
-                        <br />
                       </div>
                     </div>
-
-                    <br /><br />
-                    <a href="assets/img/instructions/contact-form.png" data-title="Contact Form 7 Integration"
-                      data-toggle="lightbox">
-                      <img src="assets/img/instructions/contact-form.png" class="img-responsive img-raised">
-                    </a>
                   </div>
 
                   <div class="tim-row" id="gravity-forms">
@@ -2284,6 +2434,13 @@ public function change_event_summary_email($template_location, $notification){
                       <li>Done!</li>
                     </ol>
 
+                    <br /><br />
+                    <div style="padding:56.25% 0 0 0;position:relative;"><iframe
+                        src="https://player.vimeo.com/video/645169680?h=902bb527b0&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479"
+                        frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen
+                        style="position:absolute;top:0;left:0;width:100%;height:100%;" loading="lazy"
+                        title="Integrations - Gravity Forms - How do I store files in the cloud?"></iframe></div>
+
                     <div class="alert alert-info">
                       <div class="container-fluid">
                         <div class="alert-icon">
@@ -2295,12 +2452,6 @@ public function change_event_summary_email($template_location, $notification){
                         <br />
                       </div>
                     </div>
-
-                    <br /><br />
-                    <a href="assets/img/instructions/gravity-forms.png" data-title="Gravity Forms Integration"
-                      data-toggle="lightbox">
-                      <img src="assets/img/instructions/gravity-forms.png" class="img-responsive img-raised">
-                    </a>
 
                   </div>
 
@@ -2356,7 +2507,7 @@ public function change_event_summary_email($template_location, $notification){
                   <h2>Translations</h2>
                   <legend></legend>
 
-                  <p>The plugin is multi-language ready, and has a few translations in its package. If needed, you can
+                  <p>The plugin is multi-language ready and has over 15+ translations in its package. If needed, you can
                     quite easily translate the plugin by yourself. The plugin decides based on the language setting of
                     your WordPress site, which translation it will load.</p>
                   <p>An easy way to translate the plugin is by using special WordPress Plugin: <a
@@ -2492,6 +2643,136 @@ public function change_event_summary_email($template_location, $notification){
                       </tr>
                     </thead>
                     <tbody>
+                      <tr>
+                        <td>1.20.4</td>
+                        <td>24 December 2021</td>
+                        <td>
+                          <ul>
+                            <li>Added: Chinese (zn_CN) translation.</li>
+                            <li>Fix: The authorization process to link new accounts to the plugin could also be initated
+                              by users without access to the plugin settings.</li>
+                            <li>Fix: Opening Full Screen Lightbox while autoplay is enabled could leave previews hidden.
+                            </li>
+                          </ul>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>1.20.3</td>
+                        <td>6 December 2021</td>
+                        <td>
+                          <ul>
+                            <li><span class="label label-danger">VULNERABILITY: <a
+                                  href="https://www.cve.org/CVERecord?id=CVE-2021-42547"
+                                  style="color:white">CVE-2021-42547</a></span> Fixes
+                              an XSS
+                              vulnerability in
+                              the search functionality of the plugin. Thanks <em>Trainer Red</em> for discovering and
+                              responsibly disclosing this issue.
+                            </li>
+                            <li>Added: Portuguese (pt_PT) translation.</li>
+                            <li>Fix: When adding a new folder, the name will now be trimmed to strip whitespace from the
+                              beginning and end.</li>
+                            <li>Fix: outofthebox_woocommerce_upload_box_title hooks triggered with incorrect attributes.
+                            </li>
+                            <li>Fix: ZIP downloads not starting correctly if PHP output buffer contained data.</li>
+                            <li>Improved: Changed alphabetical sorting order to be case insensitive.</li>
+                            <li>Improved: Added placeholders for GravityPDF PDF upload location.</li>
+                            <li>Improved: Small layout tweaks and a few new assets.</li>
+
+                            <li>Updated: PHPThumb library to v1.7.17-202109221111</li>
+                          </ul>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>1.20.2</td>
+                        <td>11 November 2021</td>
+                        <td>
+                          <ul>
+                            <li>Added: New setting: 'From' for email notifications. Can be set globally or per module.
+                            </li>
+                            <li>Fix: Not reading available memory correctly on servers with memory_limit set to -1 which
+                              could cause issues with download streams</li>
+                            <li>Fix: New WooCommerce download urls not set correctly</li>
+                            <li>Fix: Shortcode Builder not showing up in the Form Field configuration for some WP Forms
+                              plugin versions</li>
+                            <li>Improved: Removed some unused javascript libraries</li>
+                          </ul>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>1.20.1</td>
+                        <td>4 November 2021</td>
+                        <td>
+                          <ul>
+                            <li>Added: Integration into Advanced Custom Fields (ACF). Field Type
+                              -> WP Cloud Plugins -> Dropbox items</li>
+                            <li>Added: Integration into Beaver Builder with own module</li>
+                            <li>Fix: Not reading available memory correctly on servers with memory_limit set to -1 which
+                              could cause issues with download streams</li>
+                            <li>Improved: Changed Drag/Drop event for move actions on mobile
+                              devices</li>
+                          </ul>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>1.20.0.1</td>
+                        <td>21 October 2021</td>
+                        <td>
+                          <ul>
+                            <li>Fix: Media Player might not stream on iOS and safari browsers due to changes in Dropbox
+                              temporarily download headers.</li>
+                          </ul>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>1.20</td>
+                        <td>18 October 2021</td>
+                        <td>
+                          <ul>
+                            <li>Added: Support for the Divi Page Builder added</li>
+                            <li>Added: <code>%usermeta_{key}%</code> placeholder for name templates, to get your users
+                              custom meta value. <code>{key}</code> is the meta key to retrieve.</li>
+                            <li>Fix: Temporarily download links could give 'Unauthorized' errors when links unexpectedly
+                              expire
+                            </li>
+                            <li>Fix: Move dialog not loading File Browser for selecting new location</li>
+                            <li>Fix: 'Allow Preview' setting incorrectly displayed for the Gallery module
+                              configuration</li>
+                            <li>Fix: Private Folders not generated when users are registered via the Gravity Forms User
+                              Registration Add-On</li>
+                            <li>Fix: Uploading multiple files at once with size below and over the 300MB direct upload
+                              limit could stall upload that need to be uploaded via the server.</li>
+                            <li>Improved: Added a global upload progress indicator for the Upload Box module</li>
+                            <li>Improved: Changed layout of the WooCommerce Upload integration on both Front-End and
+                              Back-End</li>
+                            <li>Improved: Layout and functionality of the Gutenberg block</li>
+                            <li>Improved: Various layout changes</li>
+                            <li>Improved: Replaced Font Awesome icons library with lightweight and fast<a
+                                href="https://akveo.github.io/eva-icons/#/">Eva Icons</a></li>
+                          </ul>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>1.19.11</td>
+                        <td>7 September 2021</td>
+                        <td>
+                          <ul>
+                            <li>Added: support for <code>%file_lastedited%</code> and <code>%file_created%</code>
+                              placeholders in email notifications</li>
+                            <li>Fix: Manually linked Private folders for guest users not setting account properly</li>
+                            <li>Fix: Automatic Private Folder creation not fired on user registration if the newly
+                              created isn't directly logged in</li>
+                            <li>Fix: Setting incorrect basename for files with extensions in capitals (e.g. .JPG)</li>
+                            <li>Fix: Reset scroll of File Browser container when navigating/searching</li>
+                            <li>Fix: Plugin not initiating when output of the plugin was modified by (e.g.)
+                              <code>apply_filters('the_content')</code> adding line breaks and paragraphs</li>
+                            <li>Updated: Chart.js library version to 3.5.1</li>
+                            <li>Updated: Datatables library version to 1.11.1</li>
+                            <li>Updated: Tagify library version to 4.7.2</li>
+                            <li>Updated: Font Awesome to version 5.15.4</li>
+                          </ul>
+                        </td>
+                      </tr>
                       <tr>
                         <td>1.19.10</td>
                         <td>19 July 2021</td>

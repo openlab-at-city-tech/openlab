@@ -293,11 +293,10 @@ class FormidableForms
 
         $OutoftheBox->load_scripts();
         $OutoftheBox->load_styles();
-        
 
-        add_thickbox();
+        wp_enqueue_style('OutoftheBox.CustomStyle');
 
-        wp_enqueue_script('WPCP-'.$this->field_type.'-FormidableForms', plugins_url('FormidableForms.js', __FILE__), ['jquery'], OUTOFTHEBOX_VERSION, true);
+        wp_enqueue_script('WPCP-'.$this->field_type.'-FormidableForms', plugins_url('FormidableForms.js', __FILE__), ['OutoftheBox.UploadBox', 'OutoftheBox'], OUTOFTHEBOX_VERSION, true);
     }
 
     public function enqueue_for_ajax($fields, $form)

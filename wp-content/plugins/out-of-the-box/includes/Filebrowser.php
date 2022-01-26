@@ -35,7 +35,12 @@ class Filebrowser
 
     public function search_files()
     {
+        if ('POST' !== $_SERVER['REQUEST_METHOD']) {
+            exit(-1);
+        }
+
         $this->_search = true;
+        $_REQUEST['query'] = esc_attr($_REQUEST['query']);
         $input = mb_strtolower($_REQUEST['query'], 'UTF-8');
         $this->_folder = $this->get_processor()->get_client()->search($input);
 
@@ -59,8 +64,10 @@ class Filebrowser
         $filelist_html = "<div class='files {$breadcrumb_class}'>";
         $filelist_html .= "<div class='folders-container'>";
 
-        // Add 'back to Previous folder' if needed
+        $filescount = 0;
+        $folderscount = 0;
 
+        // Add 'back to Previous folder' if needed
         if (
                 (false === $this->_search)
                 && ('' !== $this->_folder->get_path())
@@ -89,15 +96,13 @@ class Filebrowser
         }
 
         if ($this->_folder->has_children()) {
-            $hasfilesorfolders = false;
-
             foreach ($this->_folder->get_children() as $item) {
                 // Render folder div
                 if ($item->is_dir()) {
                     $filelist_html .= $this->renderDir($item);
 
                     if (!$item->is_parent_folder()) {
-                        $hasfilesorfolders = true;
+                        ++$folderscount;
                     }
                 }
             }
@@ -114,19 +119,8 @@ class Filebrowser
                 // Render files div
                 if ($item->is_file()) {
                     $filelist_html .= $this->renderFile($item);
-
-                    $hasfilesorfolders = true;
+                    ++$filescount;
                 }
-            }
-
-            if (false === $hasfilesorfolders) {
-                if ('1' === $this->get_processor()->get_shortcode_option('show_files')) {
-                    $filelist_html .= $this->renderNoResults();
-                }
-            }
-        } else {
-            if ('1' === $this->get_processor()->get_shortcode_option('show_files') || true === $this->_search) {
-                $filelist_html .= $this->renderNoResults();
             }
         }
 
@@ -181,6 +175,8 @@ class Filebrowser
             'accountId' => null,
             'virtual' => false,
             'breadcrumb' => $file_path,
+            'folderscount' => $folderscount,
+            'filescount' => $filescount,
             'html' => $filelist_html,
         ]);
 
@@ -190,30 +186,6 @@ class Filebrowser
         echo $response;
 
         exit();
-    }
-
-    public function renderNoResults()
-    {
-        $icon_set = $this->get_processor()->get_setting('loaders');
-
-        $html = "<div class='entry file no-entries'>\n";
-        $html .= "<div class='entry_block'>\n";
-        $html .= "<div class='entry_thumbnail'><div class='entry_thumbnail-view-bottom'><div class='entry_thumbnail-view-center'>\n";
-        $html .= "<a class='entry_link'><img class='preloading' src='".OUTOFTHEBOX_ROOTPATH."/css/images/transparant.png' data-src='".$icon_set['no_results']."' data-src-retina='".$icon_set['no_results']."'/></a>";
-        $html .= "</div></div></div>\n";
-
-        $html .= "<div class='entry-info'>";
-        $html .= "<div class='entry-info-name'>";
-        $html .= "<a class='entry_link' title='".esc_html__('This folder is empty', 'wpcloudplugins')."'><div class='entry-name-view'>";
-        $html .= '<span>'.esc_html__('This folder is empty', 'wpcloudplugins').'</span>';
-        $html .= '</div></a>';
-        $html .= "</div>\n";
-
-        $html .= "</div>\n";
-        $html .= "</div>\n";
-        $html .= "</div>\n";
-
-        return $html;
     }
 
     public function renderDir(Entry $item)
@@ -290,7 +262,7 @@ class Filebrowser
         $return .= "</div></div></div>\n";
 
         if ($duration = $item->get_media('duration')) {
-            $return .= "<div class='entry-duration'><i class='fas fa-play fa-xs' ></i> ".Helpers::convert_ms_to_time($duration).'</div>';
+            $return .= "<div class='entry-duration'><i class='eva eva-arrow-right ' ></i> ".Helpers::convert_ms_to_time($duration).'</div>';
         }
 
         $return .= "<div class='entry-info'>";
@@ -301,7 +273,7 @@ class Filebrowser
         $return .= '</a>';
 
         if (('shortcode' === $this->get_processor()->get_shortcode_option('mcepopup')) && (in_array($item->get_extension(), ['mp4', 'm4v', 'ogg', 'ogv', 'webmv', 'mp3', 'm4a', 'oga', 'wav', 'webm']))) {
-            $return .= "&nbsp;<a class='entry_media_shortcode'><i class='fas fa-code'></i></a>";
+            $return .= "&nbsp;<a class='entry_media_shortcode'><i class='eva eva-code'></i></a>";
         }
 
         $return .= '</div>';
@@ -388,7 +360,7 @@ class Filebrowser
             $url = OUTOFTHEBOX_ADMIN_URL.'?action=outofthebox-preview&OutoftheBoxpath='.rawurlencode($item->get_path()).'&lastpath='.rawurlencode($this->get_processor()->get_last_path()).'&account_id='.$this->get_processor()->get_current_account()->get_id().'&listtoken='.$this->get_processor()->get_listtoken();
 
             // Display Direct links for image and media files
-            if (in_array($item->get_extension(), ['jpg', 'jpeg', 'gif', 'png'])) {
+            if (in_array($item->get_extension(), ['jpg', 'jpeg', 'gif', 'png', 'webp'])) {
                 $datatype = 'image';
                 if ($this->get_processor()->get_client()->has_temporarily_link($item)) {
                     $url = $this->get_processor()->get_client()->get_temporarily_link($item);
@@ -397,11 +369,12 @@ class Filebrowser
                 }
 
                 // Use preview thumbnail or raw  file
-                if ('thumbnail' === $this->get_processor()->get_setting('loadimages')) {
+                if ('thumbnail' === $this->get_processor()->get_setting('loadimages') || false === $this->get_processor()->get_user()->can_download()) {
                     $url = $this->get_processor()->get_client()->get_thumbnail($item, true, 1024, 768);
                 }
             } elseif (in_array($item->get_extension(), ['mp4', 'm4v', 'ogg', 'ogv', 'webmv', 'mp3', 'm4a', 'ogg', 'oga', 'wav'])) {
                 $datatype = 'inline';
+
                 if ($this->get_processor()->get_client()->has_temporarily_link($item)) {
                     $url = $this->get_processor()->get_client()->get_temporarily_link($item);
                 }
@@ -423,6 +396,10 @@ class Filebrowser
                         break;
 
                     case 'inline':
+                        if (empty($url)) {
+                            $url = OUTOFTHEBOX_ADMIN_URL.'?action=outofthebox-preview&OutoftheBoxpath='.rawurlencode($item->get_path()).'&lastpath='.rawurlencode($this->get_processor()->get_last_path()).'&account_id='.$this->get_processor()->get_current_account()->get_id().'&listtoken='.$this->get_processor()->get_listtoken();
+                        }
+
                         $id = 'ilightbox_'.$this->get_processor()->get_listtoken().'_'.md5($item->get_id());
                         $html5_element = (false === strpos($item->get_mimetype(), 'video')) ? 'audio' : 'video';
                         $icon = ($item->has_own_thumbnail() ? $this->get_processor()->get_client()->get_thumbnail($item, true, 0, 256, 256) : $item->get_icon_large());
@@ -497,11 +474,11 @@ class Filebrowser
         $has_description = (false === empty($item->description));
 
         $metadata = [
-            'modified' => "<i class='fas fa-history'></i> ".$item->get_last_edited_str(),
+            'modified' => "<i class='eva eva-clock-outline'></i> ".$item->get_last_edited_str(),
             'size' => ($item->get_size() > 0) ? Helpers::bytes_to_size_1024($item->get_size()) : '',
         ];
 
-        $html .= "<div class='entry-info-button entry-description-button ".(($has_description) ? '-visible' : '')."' tabindex='0'><i class='fas fa-info-circle'></i>\n";
+        $html .= "<div class='entry-info-button entry-description-button ".(($has_description) ? '-visible' : '')."' tabindex='0'><i class='eva eva-info-outline eva-lg'></i>\n";
         $html .= "<div class='tippy-content-holder'>";
         $html .= "<div class='description-textbox'>";
         $html .= ($has_description) ? "<div class='description-text'>".nl2br($item->get_description()).'</div>' : '';
@@ -529,6 +506,7 @@ class Filebrowser
             $usercanpreview = false;
         }
 
+        $usercanread = $this->get_processor()->get_user()->can_download() && ($item->is_file() || '1' === $this->get_processor()->get_shortcode_option('can_download_zip'));
         $usercanshare = $this->get_processor()->get_user()->can_share() && true === $item->get_permission('canshare');
         $usercandeeplink = $this->get_processor()->get_user()->can_deeplink();
 
@@ -545,57 +523,65 @@ class Filebrowser
 
         if ($usercanpreview && '1' !== $this->get_processor()->get_shortcode_option('forcedownload')) {
             if ($item->get_can_preview_by_cloud() && '1' === $this->get_processor()->get_shortcode_option('previewinline')) {
-                $html .= "<li><a class='entry_action_view' title='".esc_html__('Preview', 'wpcloudplugins')."'><i class='fas fa-eye '></i>&nbsp;".esc_html__('Preview', 'wpcloudplugins').'</a></li>';
-                $html .= "<li><a href='{$previewurl}' target='_blank' class='entry_action_external_view' onclick=\"{$onclick}\" title='".esc_html__('Preview in new window', 'wpcloudplugins')."'><i class='fas fa-desktop '></i>&nbsp;".esc_html__('Preview in new window', 'wpcloudplugins').'</a></li>';
+                $html .= "<li><a class='entry_action_view' title='".esc_html__('Preview', 'wpcloudplugins')."'><i class='eva eva-eye-outline eva-lg'></i>&nbsp;".esc_html__('Preview', 'wpcloudplugins').'</a></li>';
+                $html .= "<li><a href='{$previewurl}' target='_blank' class='entry_action_external_view' onclick=\"{$onclick}\" title='".esc_html__('Preview in new window', 'wpcloudplugins')."'><i class='eva eva-monitor-outline eva-lg'></i>&nbsp;".esc_html__('Preview in new window', 'wpcloudplugins').'</a></li>';
             } elseif ($item->get_can_preview_by_cloud()) {
                 if ('1' === $this->get_processor()->get_shortcode_option('previewinline')) {
-                    $html .= "<li><a class='entry_action_view' title='".esc_html__('Preview', 'wpcloudplugins')."'><i class='fas fa-eye '></i>&nbsp;".esc_html__('Preview', 'wpcloudplugins').'</a></li>';
+                    $html .= "<li><a class='entry_action_view' title='".esc_html__('Preview', 'wpcloudplugins')."'><i class='eva eva-eye-outline eva-lg'></i>&nbsp;".esc_html__('Preview', 'wpcloudplugins').'</a></li>';
                 }
-                $html .= "<li><a href='{$previewurl}' target='_blank' class='entry_action_external_view' onclick=\"{$onclick}\" title='".esc_html__('Preview in new window', 'wpcloudplugins')."'><i class='fas fa-desktop '></i>&nbsp;".esc_html__('Preview in new window', 'wpcloudplugins').'</a></li>';
+                $html .= "<li><a href='{$previewurl}' target='_blank' class='entry_action_external_view' onclick=\"{$onclick}\" title='".esc_html__('Preview in new window', 'wpcloudplugins')."'><i class='eva eva-monitor-outline eva-lg'></i>&nbsp;".esc_html__('Preview in new window', 'wpcloudplugins').'</a></li>';
             }
         }
 
         // Deeplink
         if ($usercandeeplink) {
-            $html .= "<li><a class='entry_action_deeplink' title='".esc_html__('Direct link', 'wpcloudplugins')."'><i class='fas fa-link '></i>&nbsp;".esc_html__('Direct link', 'wpcloudplugins').'</a></li>';
+            $html .= "<li><a class='entry_action_deeplink' title='".esc_html__('Direct link', 'wpcloudplugins')."'><i class='eva eva-link eva-lg'></i>&nbsp;".esc_html__('Direct link', 'wpcloudplugins').'</a></li>';
         }
 
         // Shortlink
         if ($usercanshare) {
-            $html .= "<li><a class='entry_action_shortlink' title='".esc_html__('Share', 'wpcloudplugins')."'><i class='fas fa-share-alt '></i>&nbsp;".esc_html__('Share', 'wpcloudplugins').'</a></li>';
+            $html .= "<li><a class='entry_action_shortlink' title='".esc_html__('Share', 'wpcloudplugins')."'><i class='eva eva-share-outline eva-lg'></i>&nbsp;".esc_html__('Share', 'wpcloudplugins').'</a></li>';
         }
 
         // Download
-        if (($item->is_file()) && ($this->get_processor()->get_user()->can_download())) {
-            $target = ('url' === $item->get_extension() || 'web' === $item->get_extension()) ? 'target="_blank"' : '';
-            $html .= "<li><a href='".OUTOFTHEBOX_ADMIN_URL.'?action=outofthebox-download&OutoftheBoxpath='.rawurlencode($item->get_path()).'&lastpath='.rawurlencode($this->get_processor()->get_last_path()).'&account_id='.$this->get_processor()->get_current_account()->get_id().'&listtoken='.$this->get_processor()->get_listtoken()."&dl=1' {$target} data-filename='".$filename."' class='entry_action_download' title='".esc_html__('Download', 'wpcloudplugins')."'><i class='fas fa-arrow-down '></i>&nbsp;".esc_html__('Download', 'wpcloudplugins').'</a></li>';
-        }
-        if (($this->get_processor()->get_user()->can_download()) && $item->is_dir() && '1' === $this->get_processor()->get_shortcode_option('can_download_zip')) {
-            $html .= "<li><a class='entry_action_download' download='".$item->get_name()."' data-filename='".$filename."' title='".esc_html__('Download', 'wpcloudplugins')."'><i class='fas fa-arrow-down '></i>&nbsp;".esc_html__('Download', 'wpcloudplugins').'</a></li>';
-        }
-
-        // Move
-        if ($usercanmove) {
-            $html .= "<li><a class='entry_action_move' title='".esc_html__('Move to', 'wpcloudplugins')."'><i class='fas fa-folder-open '></i>&nbsp;".esc_html__('Move to', 'wpcloudplugins').'</a></li>';
+        if ($usercanread) {
+            if ($item->is_file()) {
+                $target = ('url' === $item->get_extension() || 'web' === $item->get_extension()) ? 'target="_blank"' : '';
+                $html .= "<li><a href='".OUTOFTHEBOX_ADMIN_URL.'?action=outofthebox-download&OutoftheBoxpath='.rawurlencode($item->get_path()).'&lastpath='.rawurlencode($this->get_processor()->get_last_path()).'&account_id='.$this->get_processor()->get_current_account()->get_id().'&listtoken='.$this->get_processor()->get_listtoken()."&dl=1' {$target} data-filename='".$filename."' class='entry_action_download' title='".esc_html__('Download', 'wpcloudplugins')."'><i class='eva eva-download eva-lg'></i>&nbsp;".esc_html__('Download', 'wpcloudplugins').'</a></li>';
+            } else {
+                $html .= "<li><a class='entry_action_download' download='".$item->get_name()."' data-filename='".$filename."' title='".esc_html__('Download', 'wpcloudplugins')."'><i class='eva eva-download eva-lg'></i>&nbsp;".esc_html__('Download', 'wpcloudplugins').'</a></li>';
+            }
         }
 
-        // Copy
-        if ($usercancopy) {
-            $html .= "<li><a class='entry_action_copy' title='".esc_html__('Make a copy', 'wpcloudplugins')."'><i class='fas fa-clone'></i>&nbsp;".esc_html__('Make a copy', 'wpcloudplugins').'</a></li>';
+        if (
+            ($usercanpreview | $usercanread | $usercandeeplink | $usercanshare)
+        && ($usercanrename || $usercanmove || $usercancopy)) {
+            $html .= "<li class='list-separator'></li>";
         }
 
         // Rename
         if ($usercanrename) {
-            $html .= "<li><a class='entry_action_rename' title='".esc_html__('Rename', 'wpcloudplugins')."'><i class='fas fa-tag '></i>&nbsp;".esc_html__('Rename', 'wpcloudplugins').'</a></li>';
+            $html .= "<li><a class='entry_action_rename' title='".esc_html__('Rename', 'wpcloudplugins')."'><i class='eva eva-edit-2-outline eva-lg'></i>&nbsp;".esc_html__('Rename', 'wpcloudplugins').'</a></li>';
+        }
+
+        // Move
+        if ($usercanmove) {
+            $html .= "<li><a class='entry_action_move' title='".esc_html__('Move to', 'wpcloudplugins')."'><i class='eva eva-corner-down-right eva-lg'></i>&nbsp;".esc_html__('Move to', 'wpcloudplugins').'</a></li>';
+        }
+
+        // Copy
+        if ($usercancopy) {
+            $html .= "<li><a class='entry_action_copy' title='".esc_html__('Make a copy', 'wpcloudplugins')."'><i class='eva eva-copy-outline eva-lg'></i>&nbsp;".esc_html__('Make a copy', 'wpcloudplugins').'</a></li>';
         }
 
         // Delete
         if ($usercandelete) {
-            $html .= "<li><a class='entry_action_delete' title='".esc_html__('Delete', 'wpcloudplugins')."'><i class='fas fa-trash '></i>&nbsp;".esc_html__('Delete', 'wpcloudplugins').'</a></li>';
+            $html .= "<li class='list-separator'></li>";
+            $html .= "<li><a class='entry_action_delete' title='".esc_html__('Delete', 'wpcloudplugins')."'><i class='eva eva-trash-2-outline eva-lg'></i>&nbsp;".esc_html__('Delete', 'wpcloudplugins').'</a></li>';
         }
 
         if ('' !== $html) {
-            return "<div class='entry-info-button entry-action-menu-button' title='".esc_html__('More actions', 'wpcloudplugins')."' tabindex='0'><i class='fas fa-ellipsis-v'></i><div id='menu-".$item->get_id()."' class='entry-action-menu-button-content tippy-content-holder'><ul data-id='".$item->get_id()."' data-name='".$item->get_basename()."'>".$html."</ul></div></div>\n";
+            return "<div class='entry-info-button entry-action-menu-button' title='".esc_html__('More actions', 'wpcloudplugins')."' tabindex='0'><i class='eva eva-more-vertical-outline'></i><div id='menu-".$item->get_id()."' class='entry-action-menu-button-content tippy-content-holder'><ul data-id='".$item->get_id()."' data-name='".$item->get_basename()."'>".$html."</ul></div></div>\n";
         }
 
         return $html;

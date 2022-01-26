@@ -1,8 +1,9 @@
+<?php $url = M_Marketing::get_utm_link('https://www.imagely.com/nextgen-gallery/', 'igw', 'wantmorelayouts' ); ?>
 <div class="ngg_igw_promo">
     <p><?php esc_html_e('Want More Layouts?', 'nggallery'); ?></p>
     <p>
         <a class="wp-block-button__link has-text-color has-background no-border-radius"
-           href="https://www.imagely.com/nextgen-gallery/?utm_source=ngg&utm_medium=igw&utm_campaign=wantmorelayouts"
+           href="<?php print esc_attr($url); ?>"
            target="_blank"
            rel="noreferrer noopener">
             <?php esc_html_e('Upgrade to NextGEN Pro', 'nggallery') ?>

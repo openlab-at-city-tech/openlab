@@ -1,3 +1,17 @@
+= 10.37 (23rd November, 2021) =
+
+ * Fix HTML widgets issue
+ * Fix logged-in user can see subscription form
+
+= 10.36 (30th September, 2021) =
+
+ * WordPress 5.8 compatibility
+ * Fix form preview on widgets
+ * Fix pop up form
+ * Fix send schedule email options
+ * Fix one click subscription
+ * Fix some PHP warnings
+
 = 10.35 (15th March, 2021) =
 
  * Fix {UNSUBLINK} shortcode

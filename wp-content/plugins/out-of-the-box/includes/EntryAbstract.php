@@ -148,7 +148,7 @@ abstract class EntryAbstract
 
     public function has_children()
     {
-        return count($this->children) > 0;
+        return null !== $this->children && count($this->children) > 0;
     }
 
     public function get_parent()

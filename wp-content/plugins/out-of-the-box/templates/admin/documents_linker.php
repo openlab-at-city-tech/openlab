@@ -32,7 +32,7 @@ function OutoftheBox_remove_all_styles()
     $wp_styles->queue = [];
     wp_enqueue_style('OutoftheBox.ShortcodeBuilder');
     wp_enqueue_style('OutoftheBox.CustomStyle');
-    wp_enqueue_style('Awesome-Font-5');
+    wp_enqueue_style('Eva-Icons');
 }
 
 add_action('wp_print_scripts', 'OutoftheBox_remove_all_scripts', 1000);
@@ -49,7 +49,7 @@ add_action('wp_print_styles', 'OutoftheBox_remove_all_styles', 1000);
   <?php wp_print_styles(); ?>
 </head>
 
-<body class="outofthebox">
+<body class="OutoftheBox outofthebox">
 
   <form action="#" data-callback="<?php echo isset($_REQUEST['callback']) ? $_REQUEST['callback'] : ''; ?>">
 
@@ -57,7 +57,7 @@ add_action('wp_print_styles', 'OutoftheBox_remove_all_styles', 1000);
       <div class="outofthebox-header">
         <div class="outofthebox-logo"><a href="https://www.wpcloudplugins.com" target="_blank"><img src="<?php echo OUTOFTHEBOX_ROOTPATH; ?>/css/images/wpcp-logo-dark.svg" height="64" width="64"/></a></div>
         <div class="outofthebox-form-buttons">
-          <div id="do_link" class="simple-button default" name="insert"><?php esc_html_e('Insert Links', 'wpcloudplugins'); ?>&nbsp;<i class="fas fa-chevron-circle-right" aria-hidden="true"></i></div>
+          <div id="do_link" class="simple-button default" name="insert"><?php esc_html_e('Insert Links', 'wpcloudplugins'); ?>&nbsp;<i class="eva eva-play-circle-outline eva-lg" aria-hidden="true"></i></div>
         </div>
 
         <div class="outofthebox-title"><?php esc_html_e('Insert Direct links', 'wpcloudplugins'); ?></div>

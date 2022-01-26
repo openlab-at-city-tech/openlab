@@ -93,7 +93,7 @@ abstract class GFFeedAddOn extends GFAddOn {
 		parent::bootstrap();
 
 		if ( $this->is_feed_edit_page() ) {
-			add_action( 'init', array( $this, 'feed_settings_init' ), 20 );
+			add_action( 'admin_init', array( $this, 'feed_settings_init' ), 20 );
 		}
 	}
 
