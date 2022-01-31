@@ -52,6 +52,7 @@ function openlab_hide_plugins( $plugins ) {
 		'grader/grader.php',
 		'gravity-forms-addons/gravity-forms-addons.php',
 		'gravityperks/gravityperks.php',
+		'highlight-text/highlight-text.php',
 		'import-html-pages/html-import.php',
 		'kb-gradebook/kb-gradebook.php',
 		'link-manager/link-manager.php',
