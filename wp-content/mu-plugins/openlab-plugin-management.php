@@ -16,6 +16,7 @@ function openlab_hide_plugins( $plugins ) {
 		'1-jquery-photo-gallery-slideshow-flash/wp-1pluginjquery.php',
 		'accordion-shortcodes/accordion-shortcodes.php',
 		'achievements/achievements.php',
+		'advanced-gutenberg/advanced-gutenberg.php',
 		'ajax-thumbnail-rebuild/ajax-thumbnail-rebuild.php',
 		'ambrosite-nextprevious-post-link-plus/ambrosite-post-link-plus.php',
 		'an-gradebook/GradeBook.php',
