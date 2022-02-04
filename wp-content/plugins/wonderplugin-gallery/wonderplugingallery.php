@@ -3,7 +3,7 @@
 Plugin Name: Wonder Gallery Pro
 Plugin URI: http://www.wonderplugin.com
 Description: WordPress Photo Video Gallery Plugin
-Version: 13.1C
+Version: 14.3C
 Author: Magic Hills Pty Ltd
 Author URI: http://www.wonderplugin.com
 License: Copyright 2019 Magic Hills Pty Ltd, All Rights Reserved
@@ -15,11 +15,11 @@ if ( ! defined( 'ABSPATH' ) )
 if (defined('WONDERPLUGIN_GALLERY_VERSION'))
 	return;
 
-define('WONDERPLUGIN_GALLERY_VERSION', '13.1C');
+define('WONDERPLUGIN_GALLERY_VERSION', '14.3C');
 define('WONDERPLUGIN_GALLERY_URL', plugin_dir_url( __FILE__ ));
 define('WONDERPLUGIN_GALLERY_PATH', plugin_dir_path( __FILE__ ));
 define('WONDERPLUGIN_GALLERY_PLUGIN', basename(dirname(__FILE__)) . '/' . basename(__FILE__));
-define('WONDERPLUGIN_GALLERY_PLUGIN_VERSION', '13.1');
+define('WONDERPLUGIN_GALLERY_PLUGIN_VERSION', '14.3');
 
 require_once 'app/class-wonderplugin-gallery-controller.php';
 
@@ -284,6 +284,11 @@ class WonderPlugin_Gallery_Plugin {
 		if ( !isset($atts['id']) )
 			return __('Please specify a gallery id', 'wonderplugin_gallery');
 		
+		foreach($atts as $key => $value)
+		{
+			$atts[$key] = esc_attr($value);
+		}
+
 		$contents = array();
 		if ( isset($atts['mediaids']) )
 		{

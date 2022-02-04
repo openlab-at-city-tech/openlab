@@ -37,7 +37,9 @@ class WonderPlugin_Gallery_Creator {
 		<div id="wonderplugin-gallery-servertime" style="display:none;"><?php echo current_time( 'Y-m-d H:i:s' ); ?></div>
 
 		<?php 
-			$cats = get_categories();
+			$cats = get_categories(array(
+				'hide_empty' => false,
+			));
 			$catlist = array();
 			foreach ( $cats as $cat )
 			{
@@ -86,16 +88,47 @@ class WonderPlugin_Gallery_Creator {
 		<div id="wonderplugin-gallery-langlist" style="display:none;"><?php echo json_encode($langlist); ?></div>
 		<div id="wonderplugin-gallery-defaultlang" style="display:none;"><?php echo $default_lang; ?></div>
 		<div id="wonderplugin-gallery-currentlang" style="display:none;"><?php echo $currentlang; ?></div>
+		<?php
+			$initd_option = 'wonderplugin_gallery_initd';
+			$initd = get_option($initd_option);
+			if ($initd == false)
+			{
+				update_option($initd_option, time());
+				$initd = time();
+			}	
+		?>
+		<div id="<?php echo $initd_option; ?>" style="display:none;"><?php echo $initd; ?></div>
 
 		<div style="margin:0 12px;">
 		<table class="wonderplugin-form-table">
 			<tr>
-				<th><?php _e( 'Name', 'wonderplugin_gallery' ); ?></th>
-				<td><input name="wonderplugin-gallery-name" type="text" id="wonderplugin-gallery-name" value="My Gallery" class="regular-text" /></td>
+				<td>
+					<label><?php _e( 'Width', 'wonderplugin_gallery' ); ?> / <?php _e( 'Height', 'wonderplugin_gallery' ); ?> (px) : </label>
+				</td>
+				<td>
+					<input name="wonderplugin-gallery-width" type="number" id="wonderplugin-gallery-width" value="960" style="width:80px;" /> / <input name="wonderplugin-gallery-height" type="number" id="wonderplugin-gallery-height" value="540" style="width:80px;" />
+				</td>
+				<td>
+					<label><?php _e( 'Name', 'wonderplugin_gallery' ); ?> : </label>
+					<input name="wonderplugin-gallery-name" type="text" id="wonderplugin-gallery-name" value="My Gallery" class="regular-text" />
+				</td>
 			</tr>
 			<tr>
-				<th><?php _e( 'Width', 'wonderplugin_gallery' ); ?> / <?php _e( 'Height', 'wonderplugin_gallery' ); ?></th>
-				<td><input name="wonderplugin-gallery-width" type="text" id="wonderplugin-gallery-width" value="960" class="small-text" /> / <input name="wonderplugin-gallery-height" type="text" id="wonderplugin-gallery-height" value="540" class="small-text" /></td>
+				<td>
+					<?php _e( 'Categories', 'wonderplugin_gallery' ); ?>
+					<?php
+						if (!empty($langlist))
+						{
+					?>
+							<div id="wonderplugin-gallery-category-langs" style="display:none;"></div>
+							<p style="font-weight:normal;"><input type="button" class="button button-primary" id="wonderplugin-gallery-category-multilingual" value="Multilingual Translation"></p>
+					<?php
+						}
+					?>
+				</td>
+				<td colspan="2">				
+				<div id="wonderplugin-gallery-categorylist"></div>
+				<p><i>* You can drag and drop a category to change the order. </i></p></td>
 			</tr>
 		</table>
 		</div>
@@ -115,6 +148,7 @@ class WonderPlugin_Gallery_Creator {
 			<li class="wonderplugin-tab wonderplugin-tab-selected">	
 			
 				<div class="wonderplugin-toolbar">	
+					<div class="wonderplugin-toolbar-buttons">
 					<input type="button" class="button" id="wonderplugin-add-image" value="<?php _e( 'Add Image', 'wonderplugin_gallery' ); ?>" />
 					<input type="button" class="button" id="wonderplugin-add-video" value="<?php _e( 'Add Video', 'wonderplugin_gallery' ); ?>" />
 					<input type="button" class="button" id="wonderplugin-add-youtube" value="<?php _e( 'Add YouTube', 'wonderplugin_gallery' ); ?>" />
@@ -124,9 +158,16 @@ class WonderPlugin_Gallery_Creator {
 					<input type="button" class="button" id="wonderplugin-add-iframevideo" value="<?php _e( 'Add Iframe Video', 'wonderplugin_gallery' ); ?>" />
 					<input type="button" class="button" id="wonderplugin-add-posts" value="<?php _e( 'Add WordPress Posts', 'wonderplugin_gallery' ); ?>" />
 					<input type="button" class="button" id="wonderplugin-add-folder" value="<?php _e( 'Import Folder', 'wonderplugin_gallery' ); ?>" />
-					<label style="float:right;"><input type="button" class="button" id="wonderplugin-deleteall" value="<?php _e( 'Delete All', 'wonderplugin_gallery' ); ?>" /></label>
-					<label style="float:right;margin-right:8px;"><input type="button" class="button" id="wonderplugin-reverselist" value="<?php _e( 'Reverse List', 'wonderplugin_gallery' ); ?>" /></label>
-					<label style="float:right;padding-top:4px;margin-right:8px;"><input type='checkbox' id='wonderplugin-newestfirst' value='' /> Add new item to the beginning</label>
+					</div>
+					<div class="wonderplugin-toolbar-options">
+					<label style="margin:4px;vertical-align:bottom;">Category: <select name='wonderplugin-gallery-selectcategorylist' id='wonderplugin-gallery-selectcategorylist'>
+						<option value="all">Show All</option>
+					</select></label>
+					<label style="margin:4px;vertical-align:bottom;"><input type="button" class="button" id="wonderplugin-deleteall" value="<?php _e( 'Delete All', 'wonderplugin_gallery' ); ?>" /></label>
+					<label style="margin:4px;vertical-align:bottom;"><input type="button" class="button" id="wonderplugin-reverselist" value="<?php _e( 'Reverse List', 'wonderplugin_gallery' ); ?>" /></label>
+					<label style="margin:4px;vertical-align:bottom;"><input type="button" class="button" id="wonderplugin-updatevimeothumb" value="<?php _e( 'Update Vimeo Thumbs', 'wonderplugin_gallery' ); ?>" /></label>
+					<label style="margin:4px;vertical-align:bottom;"><input type='checkbox' id='wonderplugin-newestfirst' value='' /> Add new item to the beginning</label>
+					</div>
 				</div>
         		
         		<ul class="wonderplugin-table" id="wonderplugin-gallery-media-table">
@@ -173,6 +214,14 @@ class WonderPlugin_Gallery_Creator {
 						<div class="wonderplugin-tab-skin">
 						<label><input type="radio" name="wonderplugin-gallery-skin" value="verticallight"> Vertical Light<br /><img style="width:300px;" src="<?php echo WONDERPLUGIN_GALLERY_URL; ?>images/skin-verticallight.jpg" /></label>
 						</div>
+
+						<div class="wonderplugin-tab-skin">
+						<label><input type="radio" name="wonderplugin-gallery-skin" value="verticalwithleft"> Vertical with Left Carousel <br /><img style="width:300px;" src="<?php echo WONDERPLUGIN_GALLERY_URL; ?>images/skin-verticalwithleft.jpg" /></label>
+						</div>
+						
+						<div class="wonderplugin-tab-skin">
+						<label><input type="radio" name="wonderplugin-gallery-skin" value="verticallightwithleft"> Vertical Light with Left Carousel<br /><img style="width:300px;" src="<?php echo WONDERPLUGIN_GALLERY_URL; ?>images/skin-verticallightwithleft.jpg" /></label>
+						</div>
 						
 						<div class="wonderplugin-tab-skin">
 						<label><input type="radio" name="wonderplugin-gallery-skin" value="showcase"> Showcase <br /><img style="width:300px;" src="<?php echo WONDERPLUGIN_GALLERY_URL; ?>images/skin-showcase.jpg" /></label>
@@ -191,6 +240,7 @@ class WonderPlugin_Gallery_Creator {
 					<div class="wonderplugin-gallery-options-menu" id="wonderplugin-gallery-options-menu">
 						<div class="wonderplugin-gallery-options-menu-item wonderplugin-gallery-options-menu-item-selected"><?php _e( 'Gallery options', 'wonderplugin_gallery' ); ?></div>
 						<div class="wonderplugin-gallery-options-menu-item"><?php _e( 'Skin options', 'wonderplugin_gallery' ); ?></div>
+						<div class="wonderplugin-gallery-options-menu-item"><?php _e( 'Categories', 'wonderplugin_gallery' ); ?></div>
 						<div class="wonderplugin-gallery-options-menu-item"><?php _e( 'Lightbox options', 'wonderplugin_gallery' ); ?></div>
 						<div class="wonderplugin-gallery-options-menu-item"><?php _e( 'Social Media options', 'wonderplugin_gallery' ); ?></div>
 						<div class="wonderplugin-gallery-options-menu-item"><?php _e( 'Advanced options', 'wonderplugin_gallery' ); ?></div>
@@ -203,7 +253,9 @@ class WonderPlugin_Gallery_Creator {
 									<th>Slideshow</th>
 									<td><label><input name='wonderplugin-gallery-autoslide' type='checkbox' id='wonderplugin-gallery-autoslide' value='' /> Auto slide</label>
 									<p><label><input name='wonderplugin-gallery-random' type='checkbox' id='wonderplugin-gallery-random' value='' /> Random</label></p>
-									<p>Loop count: <input name='wonderplugin-gallery-loop' type='number' id='wonderplugin-gallery-loop' value='0' min='0' class="small-text" /> (0 will make the slideshow loop endlessly, 1 will make it not loop)</p></td>
+									<p>Loop count: <input name='wonderplugin-gallery-loop' type='number' id='wonderplugin-gallery-loop' value='0' min='0' class="small-text" /> (0 will make the slideshow loop endlessly, 1 will make it not loop)</p>
+									<p><label><input name='wonderplugin-gallery-switchonmouseover' type='checkbox' id='wonderplugin-gallery-switchonmouseover' value='' /> Switch slideshow on mouse over thumbnails</label></p>
+									</td>
 								</tr>
 								<tr>
 									<th>Slideshow interval (ms)</th>
@@ -316,18 +368,18 @@ class WonderPlugin_Gallery_Creator {
 								</tr>
 								
 								<tr>
-									<th>Title CSS</th>
-									<td><label><textarea name="wonderplugin-gallery-titlecss" id="wonderplugin-gallery-titlecss" rows="3" class="large-text code"></textarea></label>
-									</td>
-								</tr>
-								
-								<tr>
-									<th>Title height (px)</th>
+									<th>Text area height (px)</th>
 									<td>
 									<input name="wonderplugin-gallery-titleheight" type="number" id="wonderplugin-gallery-titleheight" value="72" class="small-text" />
-									<br><label><input name='wonderplugin-gallery-titlesmallscreen' type='checkbox' id='wonderplugin-gallery-titlesmallscreen' value='' /> Specify a different title height (px) : </label>
+									<br><label><input name='wonderplugin-gallery-titlesmallscreen' type='checkbox' id='wonderplugin-gallery-titlesmallscreen' value='' /> Specify a different text height (px) : </label>
 									<input name="wonderplugin-gallery-titleheightsmallscreen" type="number" id="wonderplugin-gallery-titleheightsmallscreen" value="148" class="small-text" />
 									when the screen width is less than (px) :<input name="wonderplugin-gallery-titlesmallscreenwidth" type="number" id="wonderplugin-gallery-titlesmallscreenwidth" value="640" class="small-text" />
+									</td>
+								</tr>
+
+								<tr>
+									<th>Title CSS</th>
+									<td><label><textarea name="wonderplugin-gallery-titlecss" id="wonderplugin-gallery-titlecss" rows="3" class="large-text code"></textarea></label>
 									</td>
 								</tr>
 								
@@ -356,8 +408,11 @@ class WonderPlugin_Gallery_Creator {
 									<td><input name="wonderplugin-gallery-bgimage" type="text" id="wonderplugin-gallery-bgimage" value="" class="large-text" /></td>
 								</tr>
 								<tr>
-									<th>Thumbnail title</th>
-									<td><label><input name='wonderplugin-gallery-thumbshowtitle' type='checkbox' id='wonderplugin-gallery-thumbshowtitle'  /> Show title in thumbnail area - title height (px): </label> - <label><input name="wonderplugin-gallery-thumbtitleheight" type="number" id="wonderplugin-gallery-thumbtitleheight" value="24" class="small-text" /></label></td>
+									<th>Thumbnail title and image</th>
+									<td>
+									<label><input name='wonderplugin-gallery-thumbshowimage' type='checkbox' id='wonderplugin-gallery-thumbshowimage'  /> Show image in thumbnail area</label>
+									<p><label><input name='wonderplugin-gallery-thumbshowtitle' type='checkbox' id='wonderplugin-gallery-thumbshowtitle'  /> Show title in thumbnail area - title height (px): </label> - <label><input name="wonderplugin-gallery-thumbtitleheight" type="number" id="wonderplugin-gallery-thumbtitleheight" value="24" class="small-text" /></label></p>
+									</td>
 								</tr>
 								<tr>
 								<th><?php _e( 'Thumbnail width/ height', 'wonderplugin_gallery' ); ?></th>
@@ -366,6 +421,10 @@ class WonderPlugin_Gallery_Creator {
 									<ul style="list-style-type:square;margin-left:24px;"><li>Thumbnail size when the screen width is less than <input name="wonderplugin-gallery-thumbmediumsize" type="number" id="wonderplugin-gallery-thumbmediumsize" value="800" class="small-text" /> px:  <input name="wonderplugin-gallery-thumbmediumwidth" type="number" id="wonderplugin-gallery-thumbmediumwidth" value="64" class="small-text" /> / <input name="wonderplugin-gallery-thumbmediumheight" type="number" id="wonderplugin-gallery-thumbmediumheight" value="48" class="small-text" /> <label>title height (px): <input name="wonderplugin-gallery-thumbmediumtitleheight" type="number" id="wonderplugin-gallery-thumbmediumtitleheight" value="24" class="small-text" /></label></li>
 									<li>Thumbnail size when the screen width is less than <input name="wonderplugin-gallery-thumbsmallsize" type="number" id="wonderplugin-gallery-thumbsmallsize" value="480" class="small-text" /> px:  <input name="wonderplugin-gallery-thumbsmallwidth" type="number" id="wonderplugin-gallery-thumbsmallwidth" value="64" class="small-text" /> / <input name="wonderplugin-gallery-thumbsmallheight" type="number" id="wonderplugin-gallery-thumbsmallheight" value="48" class="small-text" /> <label>title height (px): <input name="wonderplugin-gallery-thumbsmalltitleheight" type="number" id="wonderplugin-gallery-thumbsmalltitleheight" value="24" class="small-text" /></label></li></ul>
 									</td>
+								</tr>
+								<tr>
+									<th></th>
+									<td><label><input name='wonderplugin-gallery-thumbverticalmiddle' type='checkbox' id='wonderplugin-gallery-thumbverticalmiddle'  /> Vertically align thumbnails in middle</label></td>
 								</tr>
 								<tr>
 									<th>Thumbnail gap</th>
@@ -378,6 +437,41 @@ class WonderPlugin_Gallery_Creator {
 							</table>
 						</div>
 						
+						<div class="wonderplugin-gallery-options-tab">
+							<table class="wonderplugin-form-table-noborder">
+								<tr>
+									<th>Category Options</th>
+									<td><label><input name="wonderplugin-gallery-showcategory" type="checkbox" id="wonderplugin-gallery-showcategory"/>Show categorey selection when categories are defined</label>
+									<p><label>Category area height: <input name="wonderplugin-gallery-categoryheight" type="number" id="wonderplugin-gallery-categoryheight" value="48" class="small-text" /></label></p>
+									</td>
+								</tr>
+								
+								<tr valign="top">
+									<th scope="row">Default category</th>
+									<td>
+									<select name='wonderplugin-gallery-categorydefault' id='wonderplugin-gallery-categorydefault'>
+										<option value="all">Show All</option>
+									</select>
+									</td>
+								</tr>
+
+								<tr valign="top">
+									<th scope="row">CSS style</th>
+									<td>
+										<select name='wonderplugin-gallery-categorycssstyle' id='wonderplugin-gallery-categorycssstyle'>
+											<option value="wonder-category-dropdown">wonder-category-dropdown</option>
+											<option value="wonder-category-dropdown-fullwidth">wonder-category-dropdown-fullwidth</option>
+											<option value="wonder-category-textlink">wonder-category-textlink</option>
+											<option value="wonder-category-textlink-lightcolor">wonder-category-textlink-lightcolor</option>
+											<option value="wonder-category-greybutton">wonder-category-greybutton</option>
+										</select>
+									<p><textarea name='wonderplugin-gallery-categorycss' id='wonderplugin-gallery-categorycss' value='' class='large-text' rows="20"></textarea></p>
+									</td>
+								</tr>
+
+							</table>
+						</div>
+
 						<div class="wonderplugin-gallery-options-tab">
 							<table class="wonderplugin-form-table-noborder">
 								<tr>
@@ -457,6 +551,7 @@ class WonderPlugin_Gallery_Creator {
 									<p><label><input name='wonderplugin-gallery-doshortcodeontext' type='checkbox' id='wonderplugin-gallery-doshortcodeontext'  /> Support shortcode in title and description</label></p>
 									<p><label><input name='wonderplugin-gallery-triggerresize' type='checkbox' id='wonderplugin-gallery-triggerresize'  /> Trigger window resize event after (ms): </label><input name="wonderplugin-gallery-triggerresizedelay" type="number" min=0 id="wonderplugin-gallery-triggerresizedelay" value="0" class="small-text" /></p>
 									<p><label><input name='wonderplugin-gallery-specifyid' type='checkbox' id='wonderplugin-gallery-specifyid' value='' /> Use gallery id in CSS class name</label></p>
+									<p><label><input name='wonderplugin-gallery-removeinlinecss' type='checkbox' id='wonderplugin-gallery-removeinlinecss'  /> Do not add CSS to HTML source code</label></p>
 									</td>
 								</tr>
 								<tr>
