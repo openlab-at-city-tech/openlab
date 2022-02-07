@@ -3,8 +3,8 @@ Contributors: badgeos, learningtimes, wooninjas
 Donate link: http://badgeos.org/contribute/donate/
 Tags: badge, badges, openbadges, learningtimes, OBI, mozilla, open badges, achievement, award, reward, engagement, submission, nomination, API, open credit, credit
 Requires at least: 4.0
-Tested up to: 5.8.2
-Stable tag: 3.6.13
+Tested up to: 5.8.3
+Stable tag: 3.6.14
 License: GNU AGPLv3
 License URI: http://www.gnu.org/licenses/agpl-3.0.html
 
@@ -243,6 +243,9 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 15. Ranks data
 
 == Changelog ==
+
+= 3.6.14 =
+* Fix: Content duplication issue in evidence shortcode 
 
 = 3.6.13 =
 * New: Option last earned added in achievement list shortcode filter 
