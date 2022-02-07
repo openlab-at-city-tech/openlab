@@ -50,20 +50,7 @@
     function tto_info_box()
         {
             ?>
-                <div id="cpt_info_box">
-                     <div id="p_right"> 
-                        
-                        <div id="p_socialize">
-              
-                            <div class="p_s_item s_t">
-                                <a href="https://twitter.com/share" class="twitter-share-button" data-url="https://www.nsp-code.com" data-text="Define custom order for your post types through an easy to use javascript AJAX drag and drop interface. No theme code updates are necessarily, this plugin will take care of query update." data-count="none">Tweet</a><script type="text/javascript" src="//platform.twitter.com/widgets.js"></script>
-                            </div>
-            
-                            <div class="clear"></div>
-                        </div>
-     
-                    </div>
-                    
+                <div id="cpt_info_box">                   
                     <p><?php _e( "Did you find this plugin useful? Please support our work with a donation or write an article about this plugin in your blog with a link to our site", 'taxonomy-terms-order' ) ?> <strong>https://www.nsp-code.com/</strong></p>
                     <h4><?php _e( "Did you know there is available an advanced version of this plug-in?", 'taxonomy-terms-order' ) ?> <a target="_blank" href="https://www.nsp-code.com/premium-plugins/wordpress-plugins/advanced-taxonomy-terms-order/"><?php _e( "Read more", 'taxonomy-terms-order' ) ?></a></h4>
                     <p><?php _e('Check our', 'taxonomy-terms-order') ?> <a target="_blank" href="https://wordpress.org/plugins/post-terms-order/">Post Terms Order</a> <?php _e('plugin which allow to custom sort categories and custom taxonomies terms per post basis', 'taxonomy-terms-order') ?> </p>
