@@ -4,7 +4,7 @@ Donate link: http://www.nsp-code.com/donate.php
 Tags: post order, posts order, sort, post sort, posts sort, post type order, custom order, admin posts order
 Requires at least: 2.8
 Tested up to: 5.8.1
-Stable tag: 1.9.5.7
+Stable tag: 1.9.7
 
 Post Order and custom Post Type Objects (custom post types) using a Drag and Drop Sortable JavaScript AJAX interface or default WordPress dashboard. 
 
@@ -94,6 +94,11 @@ Consider upgrading to our advanced version of this plugin at a very resonable pr
 
 == Change Log ==
 
+= 1.9.7 =
+  - Remove Twitter button
+  - Remove unused gif image
+  - HTPML and CSS cleanup
+  
 = 1.9.5.7 =
   - Code cleanup
   - WordPress 5.8.1 compatibility tag
