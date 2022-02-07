@@ -1574,7 +1574,7 @@ class SocialLogin {
     }
 
     public function userAvatar($avatar, $id_or_email, $size, $default, $alt, $args = []) {
-        if (strpos($avatar, "gravatar.com") === false) {
+        if (strpos($avatar, "gravatar.com") === false || !$this->generalOptions->social["displaySocialAvatar"]) {
             return $avatar;
         }
         $userID = false;

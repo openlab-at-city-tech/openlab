@@ -119,6 +119,7 @@ class WpdiscuzOptions implements WpDiscuzConstants {
         /* social */
         $this->social["socialLoginAgreementCheckbox"] = isset($options[self::TAB_SOCIAL]["socialLoginAgreementCheckbox"]) ? $options[self::TAB_SOCIAL]["socialLoginAgreementCheckbox"] : $defaultOptions[self::TAB_SOCIAL]["socialLoginAgreementCheckbox"];
         $this->social["socialLoginInSecondaryForm"] = isset($options[self::TAB_SOCIAL]["socialLoginInSecondaryForm"]) ? $options[self::TAB_SOCIAL]["socialLoginInSecondaryForm"] : $defaultOptions[self::TAB_SOCIAL]["socialLoginInSecondaryForm"];
+        $this->social["displaySocialAvatar"] = isset($options[self::TAB_SOCIAL]["displaySocialAvatar"]) ? $options[self::TAB_SOCIAL]["displaySocialAvatar"] : $defaultOptions[self::TAB_SOCIAL]["displaySocialAvatar"];
         $this->social["displayIconOnAvatar"] = isset($options[self::TAB_SOCIAL]["displayIconOnAvatar"]) ? $options[self::TAB_SOCIAL]["displayIconOnAvatar"] : $defaultOptions[self::TAB_SOCIAL]["displayIconOnAvatar"];
         $this->social["rememberLoggedinUser"] = isset($options[self::TAB_SOCIAL]["rememberLoggedinUser"]) ? $options[self::TAB_SOCIAL]["rememberLoggedinUser"] : $defaultOptions[self::TAB_SOCIAL]["rememberLoggedinUser"];
         // fb
@@ -587,6 +588,7 @@ class WpdiscuzOptions implements WpDiscuzConstants {
             self::TAB_SOCIAL => [
                 "socialLoginAgreementCheckbox" => $this->social["socialLoginAgreementCheckbox"],
                 "socialLoginInSecondaryForm" => $this->social["socialLoginInSecondaryForm"],
+                "displaySocialAvatar" => $this->social["displaySocialAvatar"],
                 "displayIconOnAvatar" => $this->social["displayIconOnAvatar"],
                 "rememberLoggedinUser" => $this->social["rememberLoggedinUser"],
                 // fb
@@ -849,6 +851,7 @@ class WpdiscuzOptions implements WpDiscuzConstants {
             self::TAB_SOCIAL => [
                 "socialLoginAgreementCheckbox" => 1,
                 "socialLoginInSecondaryForm" => 0,
+                "displaySocialAvatar" => 1,
                 "displayIconOnAvatar" => 1,
                 "rememberLoggedinUser" => 1,
                 "enableFbLogin" => 0,
@@ -1302,6 +1305,7 @@ class WpdiscuzOptions implements WpDiscuzConstants {
             } else if (self::TAB_SOCIAL === $_POST["wpd_tab"]) {
                 $this->social["socialLoginAgreementCheckbox"] = isset($_POST[self::TAB_SOCIAL]["socialLoginAgreementCheckbox"]) ? absint($_POST[self::TAB_SOCIAL]["socialLoginAgreementCheckbox"]) : 0;
                 $this->social["socialLoginInSecondaryForm"] = isset($_POST[self::TAB_SOCIAL]["socialLoginInSecondaryForm"]) ? absint($_POST[self::TAB_SOCIAL]["socialLoginInSecondaryForm"]) : 0;
+                $this->social["displaySocialAvatar"] = isset($_POST[self::TAB_SOCIAL]["displaySocialAvatar"]) ? absint($_POST[self::TAB_SOCIAL]["displaySocialAvatar"]) : 0;
                 $this->social["displayIconOnAvatar"] = isset($_POST[self::TAB_SOCIAL]["displayIconOnAvatar"]) ? absint($_POST[self::TAB_SOCIAL]["displayIconOnAvatar"]) : 0;
                 $this->social["rememberLoggedinUser"] = isset($_POST[self::TAB_SOCIAL]["rememberLoggedinUser"]) ? absint($_POST[self::TAB_SOCIAL]["rememberLoggedinUser"]) : 0;
                 // fb
@@ -2194,30 +2198,30 @@ class WpdiscuzOptions implements WpDiscuzConstants {
                         <?php esc_html_e("New wpDiscuz addon!"); ?>
                     </p>
                     <div style="font-size:14px;">
-                        <!--                        --><?php //if(!in_array("BuddyPress Integration", $lastHashArray)):        ?>
+                        <!--                        --><?php //if(!in_array("BuddyPress Integration", $lastHashArray)):         ?>
                         <!--                            <div style="display:inline-block; min-width:27%; padding-right:10px; margin-bottom:10px;">-->
-                        <!--                                <img src="--><?php //echo plugins_url(WPDISCUZ_DIR_NAME . "/assets/addons/buddypress/header.png");       ?><!--" style="height:50px; width:auto; vertical-align:middle; margin:0px 10px; text-decoration:none; float: left;"/>-->
-                        <!--                                <a href="https://gvectors.com/product/wpdiscuz-buddypress-integration/" target="_blank" style="color:#444; text-decoration:none;" title="--><?php //esc_attr_e("Go to the addon page", "wpdiscuz");        ?><!--">wpDiscuz - BuddyPress Integration <br><span style="margin: 0; font-size: 12px; line-height: 15px; display: block; padding-top: 5px;">This addon integrates wpDiscuz with BuddyPress plugin. Creates &laquoDiscussion&raquo; tab in the users profile page, intgartes notifications, activities, and more...</span></a>-->
+                        <!--                                <img src="--><?php //echo plugins_url(WPDISCUZ_DIR_NAME . "/assets/addons/buddypress/header.png");        ?><!--" style="height:50px; width:auto; vertical-align:middle; margin:0px 10px; text-decoration:none; float: left;"/>-->
+                        <!--                                <a href="https://gvectors.com/product/wpdiscuz-buddypress-integration/" target="_blank" style="color:#444; text-decoration:none;" title="--><?php //esc_attr_e("Go to the addon page", "wpdiscuz");         ?><!--">wpDiscuz - BuddyPress Integration <br><span style="margin: 0; font-size: 12px; line-height: 15px; display: block; padding-top: 5px;">This addon integrates wpDiscuz with BuddyPress plugin. Creates &laquoDiscussion&raquo; tab in the users profile page, intgartes notifications, activities, and more...</span></a>-->
                         <!--                            </div>-->
-                        <!--                        --><?php //endif;        ?>
+                        <!--                        --><?php //endif;         ?>
                         <?php if (!in_array("User Notifications", $lastHashArray)): ?>
                             <div style="display:inline-block; min-width:27%; padding-right:10px; margin-bottom:10px;">
                                 <img src="<?php echo plugins_url(WPDISCUZ_DIR_NAME . "/assets/addons/notifications/header.png"); ?>" style="height:50px; width:auto; vertical-align:middle; margin:0px 10px; text-decoration:none; float: left;"/>
                                 <a href="https://gvectors.com/product/wpdiscuz-user-notifications/" target="_blank" style="color:#444; text-decoration:none;" title="<?php esc_attr_e("Go to the addon page", "wpdiscuz"); ?>">wpDiscuz - User Notifications <br><span style="width: 60%; margin: 0; font-size: 12px; line-height: 15px; display: block; padding-top: 5px;">Adds a real-time user notification system to your site, so users can receive updates and notifications directly on your website as they happen (when someone likes your comment, rates your post, mentions you, replies to your comment).</span></a>
                             </div>
                         <?php endif; ?>
-                        <!--	                    --><?php //if(!in_array("GIPHY Integration", $lastHashArray)):       ?>
+                        <!--	                    --><?php //if(!in_array("GIPHY Integration", $lastHashArray)):        ?>
                         <!--                            <div style="display:inline-block; min-width:27%; padding-right:10px; margin-bottom:10px;">-->
-                        <!--                                <img src="--><?php //echo plugins_url(WPDISCUZ_DIR_NAME . "/assets/addons/giphy/header.png");        ?><!--" style="height:50px; width:auto; vertical-align:middle; margin:0px 10px; text-decoration:none; float: left;"/>-->
-                        <!--                                <a href="https://gvectors.com/product/wpdiscuz-giphy-integration/" target="_blank" style="color:#444; text-decoration:none;" title="--><?php //esc_attr_e("Go to the addon page", "wpdiscuz");        ?><!--">wpDiscuz - GIPHY Integration <br><span style="margin: 0; font-size: 12px; line-height: 15px; display: block; padding-top: 5px;">This adds GIPHY [GIF] button on the toolbar of comment editor. Clicking this will open a new popup where you can search for your favorite gifs and insert them in your comment content.</span></a>-->
+                        <!--                                <img src="--><?php //echo plugins_url(WPDISCUZ_DIR_NAME . "/assets/addons/giphy/header.png");         ?><!--" style="height:50px; width:auto; vertical-align:middle; margin:0px 10px; text-decoration:none; float: left;"/>-->
+                        <!--                                <a href="https://gvectors.com/product/wpdiscuz-giphy-integration/" target="_blank" style="color:#444; text-decoration:none;" title="--><?php //esc_attr_e("Go to the addon page", "wpdiscuz");         ?><!--">wpDiscuz - GIPHY Integration <br><span style="margin: 0; font-size: 12px; line-height: 15px; display: block; padding-top: 5px;">This adds GIPHY [GIF] button on the toolbar of comment editor. Clicking this will open a new popup where you can search for your favorite gifs and insert them in your comment content.</span></a>-->
                         <!--                            </div>-->
-                        <!--	                    --><?php //endif;        ?>
-                        <!--				        --><?php //if(!in_array("Tenor GIFs Integration", $lastHashArray)):        ?>
+                        <!--	                    --><?php //endif;         ?>
+                        <!--				        --><?php //if(!in_array("Tenor GIFs Integration", $lastHashArray)):         ?>
                         <!--                            <div style="display:inline-block; min-width:27%; padding-right:10px; margin-bottom:10px;">-->
-                        <!--                                <img src="--><?php //echo plugins_url(WPDISCUZ_DIR_NAME . "/assets/addons/tenor/header.png");        ?><!--" style="height:50px; width:auto; vertical-align:middle; margin:0px 10px; text-decoration:none; float: left;"/>-->
-                        <!--                                <a href="https://gvectors.com/product/wpdiscuz-tenor-integration/" target="_blank" style="color:#444; text-decoration:none;" title="--><?php //esc_attr_e("Go to the addon page", "wpdiscuz");        ?><!--">wpDiscuz - Tenor GIFs Integration <br><span style="margin: 0; font-size: 12px; line-height: 15px; display: block; padding-top: 5px;">This adds Tenor [GIF] button on the toolbar of comment editor. Clicking this will open a new popup where you can search for your favorite gifs and insert them in your comment content.</span></a>-->
+                        <!--                                <img src="--><?php //echo plugins_url(WPDISCUZ_DIR_NAME . "/assets/addons/tenor/header.png");         ?><!--" style="height:50px; width:auto; vertical-align:middle; margin:0px 10px; text-decoration:none; float: left;"/>-->
+                        <!--                                <a href="https://gvectors.com/product/wpdiscuz-tenor-integration/" target="_blank" style="color:#444; text-decoration:none;" title="--><?php //esc_attr_e("Go to the addon page", "wpdiscuz");         ?><!--">wpDiscuz - Tenor GIFs Integration <br><span style="margin: 0; font-size: 12px; line-height: 15px; display: block; padding-top: 5px;">This adds Tenor [GIF] button on the toolbar of comment editor. Clicking this will open a new popup where you can search for your favorite gifs and insert them in your comment content.</span></a>-->
                         <!--                            </div>-->
-                        <!--				        --><?php //endif;        ?>
+                        <!--				        --><?php //endif;         ?>
                         <div style="clear:both;"></div>
                     </div>
                     <p>&nbsp;&nbsp;&nbsp;<a href="<?php echo esc_url_raw(admin_url("admin.php?page=" . self::PAGE_ADDONS)); ?>"><?php esc_html_e("Go to wpDiscuz Addons subMenu"); ?> &raquo;</a></p>
@@ -3176,6 +3180,18 @@ class WpdiscuzOptions implements WpDiscuzConstants {
                 "name" => "wpDiscuz - Voice Commenting",
             ];
         }
+        if (is_plugin_active("wpdiscuz-user-notifications/wun-index.php")) {
+            global $wpdiscuzUserNotifications;
+            $instance = null;
+            if (!empty($wpdiscuzUserNotifications->apimanager)) {
+                $instance = $wpdiscuzUserNotifications->apimanager;
+            }
+            $plugins["wpdiscuz-user-notifications"] = [
+                "file" => "wpdiscuz-user-notifications/wun-index.php",
+                "instance" => $instance,
+                "name" => "wpDiscuz - User Notifications",
+            ];
+        }
         $checkedData = get_option("wpd_checked_data", []);
         $deactivatePlugins = [];
         $adminNotices = [];
@@ -3459,6 +3475,13 @@ class WpdiscuzOptions implements WpDiscuzConstants {
                             "description" => "",
                             "description_original" => "",
                             "docurl" => "https://wpdiscuz.com/docs/wpdiscuz-7/plugin-settings/social-login-and-share/#display-social-login-buttons-on-reply-forms",
+                        ],
+                        "displaySocialAvatar" => [
+                            "label" => esc_html__("Display Social Networks Avatars", "wpdiscuz"),
+                            "label_original" => "Display Social Networks Avatars",
+                            "description" => "",
+                            "description_original" => "",
+                            "docurl" => "",
                         ],
                         "displayIconOnAvatar" => [
                             "label" => esc_html__("Display Social Network Icon on User Avatars", "wpdiscuz"),
@@ -4422,8 +4445,8 @@ class WpdiscuzOptions implements WpDiscuzConstants {
                         "commentListUpdateType" => [
                             "label" => esc_html__("Live Update", "wpdiscuz"),
                             "label_original" => "Live Update",
-                            "description" => esc_html__("wpDiscuz live update is very light and doesn't overload your server. However we recommend to monitor your server resources if you're on a Shared hosting plan. There are some very weak hosting plans which may not be able to perform very frequently live update requests. If you found some issue you can set the option below 30 seconds or more.", "wpdiscuz"),
-                            "description_original" => "wpDiscuz live update is very light and doesn't overload your server. However we recommend to monitor your server resources if you're on a Shared hosting plan. There are some very weak hosting plans which may not be able to perform very frequently live update requests. If you found some issue you can set the option below 30 seconds or more.",
+                            "description" => esc_html__("wpDiscuz live update is very light and doesn't overload your server. However we recommend to monitor your server resources if you're on a Shared hosting plan. There are some very weak hosting plans which may not be able to perform very frequently live update requests. If you found some issue you can set the option below 1 minute or more.", "wpdiscuz"),
+                            "description_original" => "wpDiscuz live update is very light and doesn't overload your server. However we recommend to monitor your server resources if you're on a Shared hosting plan. There are some very weak hosting plans which may not be able to perform very frequently live update requests. If you found some issue you can set the option below 1 minute or more.",
                             "docurl" => "https://wpdiscuz.com/docs/wpdiscuz-7/plugin-settings/live-commenting-and-notifications/#live-update",
                         ],
                         "liveUpdateGuests" => [

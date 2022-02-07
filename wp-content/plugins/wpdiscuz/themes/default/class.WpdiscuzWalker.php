@@ -299,7 +299,7 @@ class WpdiscuzWalker extends Walker_Comment implements WpDiscuzConstants {
         $showVote = false;
         if ($this->options->thread_layouts["showVotingButtons"] && $isApproved) {
             if ($this->options->thread_layouts["votingButtonsStyle"]) {
-                $voteCount = isset($commentMetas[self::META_KEY_VOTES_SEPARATE]) ? unserialize($commentMetas[self::META_KEY_VOTES_SEPARATE][0]) : ["like" => 0, "dislike" => 0];
+                $voteCount = isset($commentMetas[self::META_KEY_VOTES_SEPARATE]) ? maybe_unserialize($commentMetas[self::META_KEY_VOTES_SEPARATE][0]) : ["like" => 0, "dislike" => 0];
                 $like = !empty($voteCount["like"]) ? intval($voteCount["like"]) : 0;
                 $voteResult = "<div class='wpd-vote-result wpd-vote-result-like" . ($like ? " wpd-up" : "") . "' title='" . esc_attr($like) . "'>" . esc_html($this->helper->getNumber($like)) . "</div>";
                 if ($this->options->thread_layouts["enableDislikeButton"]) {
