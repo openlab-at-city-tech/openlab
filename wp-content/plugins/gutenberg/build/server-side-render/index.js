@@ -252,6 +252,14 @@ function ServerSideRender(props) {
   const hasEmptyResponse = response === '';
   const hasError = response === null || response === void 0 ? void 0 : response.error;
 
+  if (isLoading) {
+    return (0,external_wp_element_namespaceObject.createElement)(LoadingResponsePlaceholder, _extends({}, props, {
+      showLoader: showLoader
+    }), hasResponse && (0,external_wp_element_namespaceObject.createElement)(external_wp_element_namespaceObject.RawHTML, {
+      className: className
+    }, response));
+  }
+
   if (hasEmptyResponse || !hasResponse) {
     return (0,external_wp_element_namespaceObject.createElement)(EmptyResponsePlaceholder, props);
   }
@@ -260,14 +268,6 @@ function ServerSideRender(props) {
     return (0,external_wp_element_namespaceObject.createElement)(ErrorResponsePlaceholder, _extends({
       response: response
     }, props));
-  }
-
-  if (isLoading) {
-    return (0,external_wp_element_namespaceObject.createElement)(LoadingResponsePlaceholder, _extends({}, props, {
-      showLoader: showLoader
-    }), hasResponse && (0,external_wp_element_namespaceObject.createElement)(external_wp_element_namespaceObject.RawHTML, {
-      className: className
-    }, response));
   }
 
   return (0,external_wp_element_namespaceObject.createElement)(external_wp_element_namespaceObject.RawHTML, {
@@ -339,6 +339,7 @@ const ExportedServerSideRender = (0,external_wp_data_namespaceObject.withSelect)
 if (window && window.wp && window.wp.components) {
   window.wp.components.ServerSideRender = (0,external_wp_element_namespaceObject.forwardRef)((props, ref) => {
     external_wp_deprecated_default()('wp.components.ServerSideRender', {
+      version: '6.2',
       since: '5.3',
       alternative: 'wp.serverSideRender'
     });
@@ -350,6 +351,6 @@ if (window && window.wp && window.wp.components) {
 
 /* harmony default export */ var build_module = (ExportedServerSideRender);
 //# sourceMappingURL=index.js.map
-(window.wp = window.wp || {}).serverSideRender = __webpack_exports__.default;
+(window.wp = window.wp || {}).serverSideRender = __webpack_exports__["default"];
 /******/ })()
 ;

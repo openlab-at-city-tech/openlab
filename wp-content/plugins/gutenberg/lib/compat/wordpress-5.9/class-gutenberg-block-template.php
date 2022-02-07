@@ -1,6 +1,6 @@
 <?php
 /**
- * Blocks API: WP_Block_Template class
+ * Blocks API: Gutenberg_Block_Template class
  *
  * @package WordPress
  * @since 5.5.0
@@ -9,7 +9,7 @@
 /**
  * Class representing a block template.
  */
-class WP_Block_Template {
+class Gutenberg_Block_Template {
 
 	/**
 	 * Type: wp_template or wp_template_part
@@ -112,4 +112,20 @@ class WP_Block_Template {
 	 * @var int
 	 */
 	public $author = 0;
+
+	/**
+	 * Post types.
+	 *
+	 * @since 5.9.0
+	 * @var array
+	 */
+	public $post_types;
+
+	/**
+	 * Area.
+	 *
+	 * @since 5.9.0
+	 * @var string
+	 */
+	public $area;
 }
