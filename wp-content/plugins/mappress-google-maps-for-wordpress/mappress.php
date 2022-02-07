@@ -4,7 +4,7 @@ Plugin Name: MapPress Maps for WordPress
 Plugin URI: https://www.mappresspro.com
 Author URI: https://www.mappresspro.com
 Description: MapPress makes it easy to add Google and Leaflet Maps to WordPress
-Version: 2.73.1
+Version: 2.73.10
 Author: Chris Richardson
 Text Domain: mappress-google-maps-for-wordpress
 Thanks to all the translators and to Scott DeJonge for his wonderful icons
@@ -36,7 +36,7 @@ if (is_dir(dirname( __FILE__ ) . '/pro')) {
 }
 
 class Mappress {
-	const VERSION = '2.73.1';
+	const VERSION = '2.73.10';
 
 	static
 		$baseurl,
@@ -109,13 +109,6 @@ class Mappress {
 		else
 			add_filter( 'block_categories', array(__CLASS__, 'block_categories'), 10, 2 );
 
-		// AO
-		add_filter('autoptimize_filter_js_exclude', array(__CLASS__, 'autoptimize_filter_js_exclude'), 10, 2);
-		add_filter('autoptimize_filter_css_exclude', array(__CLASS__, 'autoptimize_filter_css_exclude'), 10, 2);
-		add_filter('autoptimize_filter_css_minify_excluded', array(__CLASS__, 'autoptimize_filter_css_minify_excluded'));
-		add_filter('autoptimize_filter_js_minify_excluded', array(__CLASS__, 'autoptimize_filter_js_minify_excluded'));
-		add_filter('autoptimize_js_include_inline', array(__CLASS__, 'autoptimize_js_include_inline'));
-
 		add_filter('mime_types', array(__CLASS__, 'mime_types'));
 		add_action('deactivate_' . self::$basename, array(__CLASS__, 'deactivate'));
 
@@ -158,32 +151,24 @@ class Mappress {
 		if (empty($hook))
 			return;
 
-		else if (empty(self::$pages))				// Network admin has no pages
-			return;
+		$pages = (self::$pages) ? self::$pages : array();
+		$admin_pages = array(
+			'appearance_page_gutenberg-widgets',
+			'appearance_page_gutenberg-edit-site',
+			'customize.php',
+			'plugins.php',
+			'post.php',
+			'post-new.php',
+			'site-editor.php',
+			'widgets.php'
+		);
 
-		$page = null;
-		if (in_array($hook, array('post.php', 'post-new.php')))
-			$page = 'editor';
-		else if ($hook == self::$pages[0])
-			$page = 'settings';
-		else if ($hook == self::$pages[2])
-			$page = 'library';
-		else if ($hook == self::$pages[3])
-			$page = 'support';
-		else if (in_array($hook, array('customize.php', 'appearance_page_gutenberg-widgets', 'appearance_page_gutenberg-edit-site')))
-			$page = 'customizer';
-		else if (in_array($hook, array('plugins.php')))
-			$page = 'plugins';
-		else if ($hook == 'widgets.php')
-			$page = 'widgets';
-
-		if ($page) {
-			if ($page == 'settings') {
+		if ($hook) {
+			self::styles_enqueue('backend');
+			if (isset($pages[0]) && $hook == $pages[0]) {
 				self::scripts_enqueue('settings');
-				self::styles_enqueue('settings');
-			} else {
+			} else if (in_array($hook, $pages) || in_array($hook, $admin_pages)) {
 				self::scripts_enqueue('backend');
-				self::styles_enqueue('backend');
 			}
 		}
 	}
@@ -271,30 +256,6 @@ class Mappress {
 		$response = json_encode(array('status' => $status, 'output' => $output, 'data' => $data));
 		die ($response);
 	}
-
-	static function autoptimize_filter_css_exclude($exclude_css, $content) {
-		if ($exclude_css)
-			$exclude_css .= ',';
-		$exclude_css .= "mappress.css,mappress_admin.css,leaflet.css,MarkerCluster.Default.css,Leaflet.markercluster/MarkerCluster.css";
-		return $exclude_css;
-	}
-
-	// Exclude JS from AO
-	static function autoptimize_filter_js_exclude($exclude_js, $content) {
-		if ($exclude_js)
-			$exclude_js .= ',';
-		$exclude_js .= "underscore.js,underscore.min,js,index_mappress.js,index_mappress_admin.js";
-		return $exclude_js;
-	}
-
-	// Without this AO will still minify excluded CSS, causing display problems
-	static function autoptimize_filter_css_minify_excluded($excluded) { return false; }
-
-	// Without this AO will still minify excluded JS, causing JS errors
-	static function autoptimize_filter_js_minify_excluded($excluded) { return false; }
-
-	// Without this AO will remove the wp_head() output, causing JS errors
-	static function autoptimize_js_include_inline($include_inline) { return false; }
 
 	// 5.8 version of block_categories hook
 	// Older GT versions send ($categories, $post) instead of ($categories, $context)
@@ -451,12 +412,15 @@ class Mappress {
 			register_block_type('mappress/map', array(
 				'render_callback' => array(__CLASS__, 'shortcode_map'),
 				'editor_script' => array('mappress_admin'),
-
+				'style' => 'mappress',
+				'editor_style' => 'mappress-admin'
 			));
 			if (self::$pro) {
 				register_block_type('mappress/mashup', array(
 					'render_callback' => array(__CLASS__, 'shortcode_mashup'),
 					'editor_script' => array('mappress_admin'),
+					'style' => 'mappress',
+					'editor_style' => 'mappress-admin'
 				));
 			}
 		}
@@ -949,17 +913,22 @@ class Mappress {
 	}
 
 	static function styles_register() {
+		$deps = array();
+
 		// Leaflet CSS
 		if (self::$options->engine == 'leaflet') {
 			wp_register_style('mappress-leaflet', 'https://unpkg.com/leaflet@1.7.1/dist/leaflet.css', null, '1.7.1');
+			$deps[] = 'mappress-leaflet';
 			if (self::$options->clustering) {
 				wp_register_style('mappress-leaflet-markercluster-default', self::$baseurl . "/lib/Leaflet.markercluster/MarkerCluster.Default.css", null, '1.4.1');
+				$deps[] = 'mappress-leaflet-markercluster-default';
 				wp_register_style('mappress-leaflet-markercluster', self::$baseurl . "/lib/Leaflet.markercluster/MarkerCluster.css", null, '1.4.1');
+				$deps[] = 'mappress-leaflet-markercluster';
 			}
 		}
 
 		// Mappress CSS from plugin directory
-		wp_register_style('mappress', self::$baseurl . '/css/mappress.css', null, self::$version);
+		wp_register_style('mappress', self::$baseurl . '/css/mappress.css', $deps, self::$version);
 
 		// Mappress CSS from theme directory
 		if ( @file_exists( get_stylesheet_directory() . '/mappress.css' ) )
@@ -970,7 +939,7 @@ class Mappress {
 			wp_register_style('mappress-custom', $file, array('mappress'), self::$version);
 
 		// Admin CSS
-		wp_register_style('mappress-admin', self::$baseurl . '/css/mappress_admin.css', array('wp-edit-blocks'), self::$version);
+		wp_register_style('mappress-admin', self::$baseurl . '/css/mappress_admin.css', array('mappress', 'wp-edit-blocks'), self::$version);
 	}
 
 	static function template_redirect() {
@@ -990,7 +959,7 @@ class Mappress {
 			if ($map)
 				$map->update($atts);
 			else
-				die("<html><body><!-- Bad mapid: $mapid --></body></html>");
+				die("<html><body><!-- Bad mapid --></body></html>");
 		} else {
 			$map = new Mappress_Map($atts);
 		}

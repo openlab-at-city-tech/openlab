@@ -140,12 +140,11 @@ class Mappress_Map extends Mappress_Obj {
 
 		$items = array();
 		foreach($results as $result) {
-
 			// Only check if map is attached to a post (postid > 0)
 			if ($result->postid) {
 				if (!current_user_can('edit_post', $result->postid))
 					continue;
-				if (in_array($result->post_status, array('trash', 'auto-draft', 'inherit')))
+				if (in_array($result->post_status, array('auto-draft', 'inherit')))
 					continue;
 			}
 
@@ -158,7 +157,6 @@ class Mappress_Map extends Mappress_Obj {
 				'status' => $mapdata->status
 			);
 		}
-
 		return $items;
 	}
 
