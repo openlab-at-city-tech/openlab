@@ -197,6 +197,7 @@ if(!class_exists('AdvancedGutenbergMain')) {
                 // Front-end
                 add_filter('render_block_data', array($this, 'contentPreRender'));
                 add_filter('the_content', array($this, 'addFrontendContentAssets'), 9);
+                add_filter('the_content', array($this, 'addNonceToFormBlocks'), 99);
 
                 if($wp_version >= 5.8) {
                     add_filter('widget_block_content', array($this, 'addFrontendWidgetAssets'), 9);
@@ -394,17 +395,29 @@ if(!class_exists('AdvancedGutenbergMain')) {
          */
         public function enqueueEditorAssets()
         {
+            $currentScreen = get_current_screen();
+
             if( $this->settingIsEnabled( 'enable_advgb_blocks' ) ) {
+
+                if( $currentScreen->id === 'customize' ) {
+                    // Customizer > Widgets
+                    $wp_editor_dep = 'wp-customize-widgets';
+                } elseif( $currentScreen->id === 'widgets' ) {
+                    // Appearance > Widgets
+                    $wp_editor_dep = 'wp-edit-widgets';
+                } else {
+                    // Post edit
+                    $wp_editor_dep = 'wp-editor';
+                }
+
                 wp_enqueue_script(
                     'advgb_blocks',
                     plugins_url('assets/blocks/blocks.js', dirname(__FILE__)),
-                    array( 'wp-blocks', 'wp-i18n', 'wp-element', 'wp-data', 'wp-editor', 'wp-plugins', 'wp-compose' ),
+                    array( 'wp-blocks', 'wp-i18n', 'wp-element', 'wp-data', $wp_editor_dep, 'wp-plugins', 'wp-compose' ),
                     ADVANCED_GUTENBERG_VERSION,
                     true
                 );
             }
-
-            $currentScreen = get_current_screen();
 
             // Don't load custom-styles.js in widgets.php and Theme Customizer > Widgets
             if(
@@ -760,28 +773,33 @@ if(!class_exists('AdvancedGutenbergMain')) {
                 wp_send_json('', 400);
             }
 
-            if (!wp_verify_nonce($_POST['nonce'], 'advgb_update_blocks_list')
-                && !wp_verify_nonce($_POST['nonce'], 'advgb_nonce')
+            if (!wp_verify_nonce(sanitize_text_field($_POST['nonce']), 'advgb_update_blocks_list')
+                && !wp_verify_nonce(sanitize_text_field($_POST['nonce']), 'advgb_nonce')
             ) {
                 wp_send_json('', 400);
             }
 
             /**
-             * Remove slashes on svg icon
+             * Cleanup block list
              *
-             * @param array $block Block to remove slashes
+             * @param array $block Block
              *
              * @return mixed
              */
-            function removeSlashes(array $block)
+            function cleanupBlockList(array $block)
             {
-                $block['icon'] = htmlentities(stripslashes($block['icon']), ENT_QUOTES);
+                $block['icon']      = htmlentities(stripslashes($block['icon']), ENT_QUOTES);
+                $block['name']      = sanitize_text_field($block['name']);
+                $block['title']     = sanitize_text_field($block['title']);
+                $block['category']  = sanitize_text_field($block['category']);
                 return $block;
             }
 
             if (is_array($_POST['blocksList'])) {
-                $blocksList  = array_map('removeSlashes', $_POST['blocksList']);
+                // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+                $blocksList  = array_map('cleanupBlockList', $_POST['blocksList']);
             } else {
+                // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
                 $blocksList  = json_decode(stripslashes($_POST['blocksList']));
             }
 
@@ -862,8 +880,8 @@ if(!class_exists('AdvancedGutenbergMain')) {
             }
 
             // phpcs:disable WordPress.Security.NonceVerification.Recommended -- View request, no action
-            $usersearch     = isset($_REQUEST['search']) ? wp_unslash(trim($_REQUEST['search'])) : '';
-            $role           = isset($_REQUEST['role']) ? $_REQUEST['role'] : '';
+            $usersearch     = isset($_REQUEST['search']) ? wp_unslash(trim(sanitize_text_field($_REQUEST['search']))) : '';
+            $role           = isset($_REQUEST['role']) ? sanitize_text_field($_REQUEST['role']) : '';
             $users_per_page = 20;
             $pagenum        = 1;
             if ($role === 'none') {
@@ -1030,7 +1048,7 @@ if(!class_exists('AdvancedGutenbergMain')) {
             $regex = '/^[a-zA-Z0-9_\-]+$/';
             $regexWithSpaces = '/^[\p{L}\p{N}_\- ]+$/u';
 
-            if (!wp_verify_nonce($_POST['nonce'], 'advgb_settings_nonce')) {
+            if (!wp_verify_nonce(sanitize_text_field($_POST['nonce']), 'advgb_cstyles_nonce')) {
                 wp_send_json(__('Invalid nonce token!', 'advanced-gutenberg'), 400);
             }
 
@@ -1040,7 +1058,7 @@ if(!class_exists('AdvancedGutenbergMain')) {
             }
 
             $custom_style_data = get_option('advgb_custom_styles');
-            $task = isset($_POST['task']) ? $_POST['task'] : '';
+            $task = isset($_POST['task']) ? sanitize_text_field($_POST['task']) : '';
             if ($task === '') {
                 return false;
             } elseif ($task === 'new') {
@@ -1084,8 +1102,8 @@ if(!class_exists('AdvancedGutenbergMain')) {
                             'id' => $new_id['id'] + 1,
                             'title' => sanitize_text_field($data['title']),
                             'name' => sanitize_text_field($data['name']),
-                            'css' => $data['css'],
-                            'identifyColor' => $data['identifyColor'],
+                            'css' => wp_strip_all_tags($data['css']),
+                            'identifyColor' => sanitize_hex_color($data['identifyColor']),
                         );
 
                         array_push($new_style_copied_array, $copied_styles);
@@ -1113,8 +1131,8 @@ if(!class_exists('AdvancedGutenbergMain')) {
             } elseif ($task === 'style_save') {
                 $style_id = (int)$_POST['id'];
                 $new_classname = sanitize_text_field($_POST['name']);
-                $new_identify_color = sanitize_text_field($_POST['mycolor']);
-                $new_css = $_POST['mycss'];
+                $new_identify_color = sanitize_hex_color($_POST['mycolor']);
+                $new_css = wp_strip_all_tags($_POST['mycss']);
                 // Validate new name
                 if (!preg_match($regex, $new_classname)) {
                     wp_send_json('Invalid characters, please enter another!', 403);
@@ -1166,11 +1184,12 @@ if(!class_exists('AdvancedGutenbergMain')) {
                 return false;
             }
 
-            if (!wp_verify_nonce($_POST['pNonce'], 'advgb_profiles_nonce')) {
+            if (!wp_verify_nonce(sanitize_text_field($_POST['pNonce']), 'advgb_profiles_nonce')) {
                 wp_send_json(__('Fail to verify nonce!', 'advanced-gutenberg'), 400);
                 return false;
             };
 
+            // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
             $profiles_to_delete = $_POST['ids'];
             if (count($profiles_to_delete)) {
                 $deleted = array();
@@ -1197,7 +1216,7 @@ if(!class_exists('AdvancedGutenbergMain')) {
                 return false;
             }
 
-            if (!wp_verify_nonce($_POST['nonce'], 'advgb_block_config_nonce')) {
+            if (!wp_verify_nonce(sanitize_text_field($_POST['nonce']), 'advgb_block_config_nonce')) {
                 wp_send_json(__('Invalid nonce token!', 'advanced-gutenberg'), 400);
             }
 
@@ -1206,8 +1225,8 @@ if(!class_exists('AdvancedGutenbergMain')) {
                 $blocks_config_saved = array();
             }
 
-            $blockType = sanitize_text_field($_POST['blockType']);
-            $settings = $_POST['settings'];
+            $blockType  = sanitize_text_field($_POST['blockType']);
+            $settings   = $_POST['settings']; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 
             foreach ($settings as $key => $setting) {
                 foreach ($setting as $k => $option) {
@@ -1252,6 +1271,15 @@ if(!class_exists('AdvancedGutenbergMain')) {
          */
         public function saveContactFormData()
         {
+            // Don't save if Settings > PublishPress Blocks are disabled
+            if( !$this->settingIsEnabled( 'enable_advgb_blocks' ) ) {
+                return false;
+            }
+
+            if (!wp_verify_nonce(sanitize_text_field($_POST['nonce']), 'advgb_blockform_nonce_field')) {
+                wp_send_json(__('Invalid nonce token!', 'advanced-gutenberg'), 400);
+            }
+
             // phpcs:disable -- WordPress.Security.NonceVerification.Recommended - frontend form, no nonce
             if (!isset($_POST['action'])) {
                 wp_send_json(__('Bad Request!', 'advanced-gutenberg'), 400);
@@ -1326,6 +1354,15 @@ if(!class_exists('AdvancedGutenbergMain')) {
          */
         public function saveNewsletterData()
         {
+            // Don't save if Settings > PublishPress Blocks are disabled
+            if( !$this->settingIsEnabled( 'enable_advgb_blocks' ) ) {
+                return false;
+            }
+
+            if (!wp_verify_nonce(sanitize_text_field($_POST['nonce']), 'advgb_blockform_nonce_field')) {
+                wp_send_json(__('Invalid nonce token!', 'advanced-gutenberg'), 400);
+            }
+
             // phpcs:disable -- WordPress.Security.NonceVerification.Recommended - frontend form, no nonce
             if (!isset($_POST['action'])) {
                 wp_send_json(__('Bad Request!', 'advanced-gutenberg'), 400);
@@ -1417,7 +1454,7 @@ if(!class_exists('AdvancedGutenbergMain')) {
         {
             $from_advgb = isset($_POST['advgb_login_form']); // phpcs:ignore WordPress.Security.NonceVerification.Missing -- redirect
             if (!empty($_SERVER['HTTP_REFERER']) && $from_advgb) {
-                $redirect = add_query_arg('login', 'failed', $_SERVER['HTTP_REFERER']);
+                $redirect = add_query_arg('login', 'failed', $_SERVER['HTTP_REFERER']); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
                 wp_safe_redirect($redirect);
                 exit;
             }
@@ -1942,6 +1979,10 @@ if(!class_exists('AdvancedGutenbergMain')) {
          */
         public function saveAdvgbData()
         {
+            if (!current_user_can('activate_plugins')) {
+                return false;
+            }
+
             if( isset($_POST['advgb_block_access_save']) ) {
                 $this->saveAdvgbBlockAccess();
             }  elseif (isset($_POST['save_settings']) || isset($_POST['save_custom_styles'])) { // phpcs:ignore WordPress.Security.NonceVerification.Missing -- we check nonce below
@@ -1965,7 +2006,7 @@ if(!class_exists('AdvancedGutenbergMain')) {
         public function saveSettings()
         {
             if (isset($_POST['save_settings'])) {
-                if (!wp_verify_nonce($_POST['advgb_settings_nonce_field'], 'advgb_settings_nonce')) {
+                if (!wp_verify_nonce(sanitize_text_field($_POST['advgb_settings_nonce_field']), 'advgb_settings_nonce')) {
                     return false;
                 }
 
@@ -2020,14 +2061,14 @@ if(!class_exists('AdvancedGutenbergMain')) {
                     }
                 }
 
-                $save_config['gallery_lightbox_caption'] = $_POST['gallery_lightbox_caption'];
-                $save_config['google_api_key'] = $_POST['google_api_key'];
-                $save_config['blocks_spacing'] = $_POST['blocks_spacing'];
-                $save_config['blocks_icon_color'] = $_POST['blocks_icon_color'];
-                $save_config['editor_width'] = $_POST['editor_width'];
+                $save_config['gallery_lightbox_caption'] = (int) $_POST['gallery_lightbox_caption'];
+                $save_config['google_api_key'] = sanitize_text_field($_POST['google_api_key']);
+                $save_config['blocks_spacing'] = (int) $_POST['blocks_spacing'];
+                $save_config['blocks_icon_color'] = sanitize_hex_color($_POST['blocks_icon_color']);
+                $save_config['editor_width'] = sanitize_text_field($_POST['editor_width']);
                 $save_config['rp_default_thumb'] = array(
-                    'url' => $_POST['post_default_thumb'],
-                    'id'  => $_POST['post_default_thumb_id']
+                    'url' => esc_url_raw($_POST['post_default_thumb']),
+                    'id'  => (int) $_POST['post_default_thumb_id']
                 );
 
                 update_option('advgb_settings', $save_config);
@@ -2039,7 +2080,7 @@ if(!class_exists('AdvancedGutenbergMain')) {
             }
 
             if (isset($_POST['save_custom_styles'])) {
-                if (!wp_verify_nonce($_POST['advgb_cstyles_nonce_field'], 'advgb_cstyles_nonce')) {
+                if (!wp_verify_nonce(sanitize_text_field($_POST['advgb_cstyles_nonce_field']), 'advgb_cstyles_nonce')) {
                     return false;
                 }
 
@@ -2087,7 +2128,7 @@ if(!class_exists('AdvancedGutenbergMain')) {
                 }
 
                 if( !empty($css) ) {
-                    echo '<style type="text/css">' . $css . '</style>';
+                    echo '<style type="text/css">' . strip_tags($css) . '</style>';
                 }
             }
         }
@@ -2105,11 +2146,11 @@ if(!class_exists('AdvancedGutenbergMain')) {
 
                 $content = '';
                 foreach ($custom_styles as $styles) {
-                    $content .= '.block-editor-writing-flow .' .$styles['name'] . " {\n";
+                    $content .= '.block-editor-writing-flow .' . esc_html($styles['name']) . " {\n";
                     $content .= $styles['css'] . "\n} \n";
                 }
 
-                echo '<style type="text/css">' . $content . '</style>';
+                echo '<style type="text/css">' . strip_tags($content) . '</style>';
 
             }
         }
@@ -2124,7 +2165,7 @@ if(!class_exists('AdvancedGutenbergMain')) {
 
             if (isset($saved_settings['enable_blocks_spacing']) && $saved_settings['enable_blocks_spacing']) {
                 $blocks_spacing = isset($saved_settings['blocks_spacing']) ? $saved_settings['blocks_spacing'] : 0;
-                echo '<style type="text/css">.editor-styles-wrapper [data-block] { margin-bottom: ' . $blocks_spacing . 'px !important; }</style>';
+                echo '<style type="text/css">.editor-styles-wrapper [data-block] { margin-bottom: ' . esc_html($blocks_spacing) . 'px !important; }</style>';
             }
         }
 
@@ -2140,7 +2181,7 @@ if(!class_exists('AdvancedGutenbergMain')) {
                 return false;
             }
             // Verify nonce
-            if ( !wp_verify_nonce( $_POST['advgb_nonce_field'], 'advgb_nonce' ) ) {
+            if ( !wp_verify_nonce( sanitize_text_field($_POST['advgb_nonce_field']), 'advgb_nonce' ) ) {
                 return false;
             }
 
@@ -2148,8 +2189,18 @@ if(!class_exists('AdvancedGutenbergMain')) {
                 return false;
             }
 
-            $user_role         = $_POST['user_role'];
-            $blocks            = $_POST['blocks'];
+            /* Get blocks array.
+             * If 'blocks' doesn't exist (because advgb_blocks_list option is still not saved),
+             * redirect to error page and skip saving.
+             */
+            if( isset($_POST['blocks']) && is_array($_POST['blocks']) ) {
+                $blocks = array_map('sanitize_text_field', $_POST['blocks']);
+            } else {
+                wp_safe_redirect( admin_url( 'admin.php?page=advgb_main&view=block-access&user_role=' . $user_role . '&save_access=error' ) );
+                exit;
+            }
+
+            $user_role         = sanitize_text_field($_POST['user_role']);
             $active_blocks     = array();
             $inactive_blocks   = array();
 
@@ -2158,10 +2209,20 @@ if(!class_exists('AdvancedGutenbergMain')) {
                 /* Blocks saved in advgb_blocks_list but not listed in Block Access page
                  * due their categories are not detected
                  */
-                $blocks_list_undetected = ( !empty( $_POST['blocks_list_undetected'] ) ? $_POST['blocks_list_undetected'] : '' );
+                $blocks_list_undetected = (
+                    isset($_POST['blocks_list_undetected']) && is_array($_POST['blocks_list_undetected']) ? array_map('sanitize_text_field', $_POST['blocks_list_undetected']) : ''
+                );
 
-                // Get all the blocks we can manage (which category is detected)
-                $blocks_list = $_POST['blocks_list'];
+                /* Get all the blocks we can manage (which category is detected).
+                 * If 'blocks_list' doesn't exist (because advgb_blocks_list option is still not saved),
+                 * redirect to error page and skip saving.
+                 */
+                if( isset($_POST['blocks_list']) && is_array($_POST['blocks_list']) ) {
+                    $blocks_list = array_map('sanitize_text_field', $_POST['blocks_list']);
+                } else {
+                    wp_safe_redirect( admin_url( 'admin.php?page=advgb_main&view=block-access&user_role=' . $user_role . '&save_access=error' ) );
+                    exit;
+                }
 
                 if( $blocks_list_undetected && is_array( $blocks_list_undetected ) ) {
                     // Merge active blocks with the ones we can't manage
@@ -2194,11 +2255,11 @@ if(!class_exists('AdvancedGutenbergMain')) {
         private function downloadBlockFormData()
         {
             // Verify nonce
-            if (!wp_verify_nonce($_POST['advgb_export_data_nonce_field'], 'advgb_export_data_nonce')) {
+            if (!wp_verify_nonce(sanitize_text_field($_POST['advgb_export_data_nonce_field']), 'advgb_export_data_nonce')) {
                 return false;
             }
 
-            $postValue = $_POST['block_data_export'];
+            $postValue = sanitize_text_field($_POST['block_data_export']);
             $postValue = explode('.', $postValue);
             $dataExport = $postValue[0];
             $dataType = $postValue[1];
@@ -2296,15 +2357,15 @@ if(!class_exists('AdvancedGutenbergMain')) {
                 return false;
             }
 
-            if (!wp_verify_nonce($_POST['advgb_email_config_nonce_field'], 'advgb_email_config_nonce')) {
+            if (!wp_verify_nonce(sanitize_text_field($_POST['advgb_email_config_nonce_field']), 'advgb_email_config_nonce')) {
                 return false;
             }
 
             $save_config = array();
-            $save_config['contact_form_sender_name'] = $_POST['contact_form_sender_name'];
-            $save_config['contact_form_sender_email'] = $_POST['contact_form_sender_email'];
-            $save_config['contact_form_email_title'] = $_POST['contact_form_email_title'];
-            $save_config['contact_form_email_receiver'] = $_POST['contact_form_email_receiver'];
+            $save_config['contact_form_sender_name'] = sanitize_text_field($_POST['contact_form_sender_name']);
+            $save_config['contact_form_sender_email'] = sanitize_email($_POST['contact_form_sender_email']);
+            $save_config['contact_form_email_title'] = sanitize_text_field($_POST['contact_form_email_title']);
+            $save_config['contact_form_email_receiver'] = sanitize_email($_POST['contact_form_email_receiver']);
 
             update_option('advgb_email_sender', $save_config);
 
@@ -2325,7 +2386,7 @@ if(!class_exists('AdvancedGutenbergMain')) {
                 return false;
             }
 
-            if (!wp_verify_nonce($_POST['advgb_captcha_nonce_field'], 'advgb_captcha_nonce')) {
+            if (!wp_verify_nonce(sanitize_text_field($_POST['advgb_captcha_nonce_field']), 'advgb_captcha_nonce')) {
                 return false;
             }
 
@@ -2335,10 +2396,10 @@ if(!class_exists('AdvancedGutenbergMain')) {
             } else {
                 $save_config['recaptcha_enable'] = 0;
             }
-            $save_config['recaptcha_site_key'] = $_POST['recaptcha_site_key'];
-            $save_config['recaptcha_secret_key'] = $_POST['recaptcha_secret_key'];
-            $save_config['recaptcha_language'] = $_POST['recaptcha_language'];
-            $save_config['recaptcha_theme'] = $_POST['recaptcha_theme'];
+            $save_config['recaptcha_site_key'] = sanitize_text_field($_POST['recaptcha_site_key']);
+            $save_config['recaptcha_secret_key'] = sanitize_text_field($_POST['recaptcha_secret_key']);
+            $save_config['recaptcha_language'] = sanitize_text_field($_POST['recaptcha_language']);
+            $save_config['recaptcha_theme'] = sanitize_text_field($_POST['recaptcha_theme']);
 
             update_option('advgb_recaptcha_config', $save_config);
 
@@ -2426,7 +2487,7 @@ if(!class_exists('AdvancedGutenbergMain')) {
         public function loadBlockConfigView($block = '')
         {
             if (!$block) {
-                $block = $_GET['page']; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- view only
+                $block = sanitize_text_field($_GET['page']); // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- view only
             }
 
             wp_enqueue_style('roboto_font', 'https://fonts.googleapis.com/css?family=Roboto');
@@ -4692,6 +4753,24 @@ if(!class_exists('AdvancedGutenbergMain')) {
         }
 
         /**
+         * Add nonce to blocks with form tag
+         *
+         * @param string $content Post content
+         *
+         * @return string
+         */
+        public function addNonceToFormBlocks($content)
+        {
+            $content = str_replace(
+                '<div class="advgb-form-submit-wrapper"',
+                '<input type="hidden" name="advgb_blockform_nonce_field" value="' . wp_create_nonce('advgb_blockform_nonce_field') . '"><div class="advgb-form-submit-wrapper"',
+                $content
+            );
+
+            return $content;
+        }
+
+        /**
          * Load assets for post/page on front-end after gutenberg rendering
          *
          * @param string $content Post content
@@ -5175,40 +5254,40 @@ if(!class_exists('AdvancedGutenbergMain')) {
             $html = '';
             foreach ($fieldset as $category) {
                 $html .= '<div class="block-config-category">';
-                $html .= '<h3 class="block-config-category-title">' . $category['label'] . '</h3>';
+                $html .= '<h3 class="block-config-category-title">' . esc_html($category['label']) . '</h3>';
                 $html .= '<ul class="block-config-settings clearfix">';
 
                 foreach ($category['settings'] as $setting) {
                     $settingValue = $this->setConfigValue($data, $setting['name']);
 
                     if ($setting['type'] === 'hidden') {
-                        $html .= '<input type="hidden" class="block-config-input" name="'. $setting['name'] .'" value="'. $setting['value'] .'" />';
+                        $html .= '<input type="hidden" class="block-config-input" name="'. esc_attr($setting['name']) .'" value="'. esc_attr($setting['value']) .'" />';
                         continue;
                     }
 
                     $html .= '<li class="ju-settings-option full-width block-config-option clearfix">';
-                    $html .= '<label for="setting-'. $setting['name'] .'" class="ju-setting-label">' . $setting['title'] . '</label>';
+                    $html .= '<label for="setting-'. esc_attr($setting['name']) .'" class="ju-setting-label">' . esc_html($setting['title']) . '</label>';
                     $html .= '<div class="block-config-input-wrapper">';
 
                     switch ($setting['type']) {
                         case 'text':
                         case 'number':
-                            $html .= '<input type="' . $setting['type'] . '" class="ju-input block-config-input" id="setting-'. $setting['name'] .'" name="' . $setting['name'] . '" ';
+                            $html .= '<input type="' . esc_attr($setting['type']) . '" class="ju-input block-config-input" id="setting-'. esc_attr($setting['name']) .'" name="' . esc_attr($setting['name']) . '" ';
                             if ($setting['type'] === 'number' && (isset($setting['min']) || isset($setting['max']))) {
-                                $html .= ' min="' . $setting['min'] . '" max="' . $setting['max'] . '" ';
+                                $html .= ' min="' . esc_attr($setting['min']) . '" max="' . esc_attr($setting['max']) . '" ';
                             }
-                            $html .= ' value="'. $settingValue .'" />';
+                            $html .= ' value="'. esc_attr($settingValue) .'" />';
                             break;
                         case 'color':
-                            $html .= '<input type="text" class="minicolors minicolors-input ju-input block-config-input" id="setting-'. $setting['name'] .'" name="' . $setting['name'] . '" value="'. $settingValue .'" />';
+                            $html .= '<input type="text" class="minicolors minicolors-input ju-input block-config-input" id="setting-'. esc_attr($setting['name']) .'" name="' . esc_attr($setting['name']) . '" value="'. esc_attr($settingValue) .'" />';
                             break;
                         case 'select':
-                            $html .= '<select class="block-config-input ju-select" id="setting-'. $setting['name'] .'" name="' . $setting['name'] . '">';
+                            $html .= '<select class="block-config-input ju-select" id="setting-'. esc_attr($setting['name']) .'" name="' . esc_attr($setting['name']) . '">';
                             $html .= '<option value="">'. __('Default', 'advanced-gutenberg') .'</option>';
 
                             foreach ($setting['options'] as $option) {
                                 $selected = $option['value'] === $settingValue ? 'selected' : '';
-                                $html .= '<option value="' . $option['value'] . '" ' . $selected . '>' . $option['label'] . '</option>';
+                                $html .= '<option value="' . esc_attr($option['value']) . '" ' . $selected . '>' . esc_html($option['label']) . '</option>';
                             }
 
                             $html .= '</select>';
@@ -5217,7 +5296,7 @@ if(!class_exists('AdvancedGutenbergMain')) {
                             $checked = (int)$settingValue === 1 ? 'checked' : '';
                             $html .= '<div class="ju-switch-button">';
                             $html .= '<label class="switch">';
-                            $html .=    '<input type="checkbox" value="1" class="block-config-input" id="setting-'. $setting['name'] .'" name="' . $setting['name'] . '" ' . $checked . '/>';
+                            $html .=    '<input type="checkbox" value="1" class="block-config-input" id="setting-'. esc_attr($setting['name']) .'" name="' . esc_attr($setting['name']) . '" ' . $checked . '/>';
                             $html .=    '<span class="slider"></span>';
                             $html .= '</label>';
                             $html .= '</div>';
@@ -5489,12 +5568,12 @@ if(!class_exists('AdvancedGutenbergMain')) {
         public function advgb_AdvancedListStyles($blockAttrs)
         {
             $block_class    = $blockAttrs['id'];
-            $font_size      = isset($blockAttrs['fontSize']) ? intval($blockAttrs['fontSize']) : 16;
-            $icon_size      = isset($blockAttrs['iconSize']) ? intval($blockAttrs['iconSize']) : 16;
-            $icon_color     = isset($blockAttrs['iconColor']) ? $blockAttrs['iconColor'] : '#000';
-            $margin         = isset($blockAttrs['margin']) ? intval($blockAttrs['margin']) : 2;
-            $padding        = isset($blockAttrs['padding']) ? intval($blockAttrs['padding']) : 2;
-            $line_height    = isset($blockAttrs['lineHeight']) ? intval($blockAttrs['lineHeight']) : 18;
+            $font_size      = isset($blockAttrs['fontSize']) ? esc_html(intval($blockAttrs['fontSize'])) : 16;
+            $icon_size      = isset($blockAttrs['iconSize']) ? esc_html(intval($blockAttrs['iconSize'])) : 16;
+            $icon_color     = isset($blockAttrs['iconColor']) ? esc_html($blockAttrs['iconColor']) : '#000';
+            $margin         = isset($blockAttrs['margin']) ? esc_html(intval($blockAttrs['margin'])) : 2;
+            $padding        = isset($blockAttrs['padding']) ? esc_html(intval($blockAttrs['padding'])) : 2;
+            $line_height    = isset($blockAttrs['lineHeight']) ? esc_html(intval($blockAttrs['lineHeight'])) : 18;
 
             $style_html  = '.wp-block-advgb-list ul.' . $block_class . ' > li{';
             $style_html .= 'font-size:'.$font_size.'px;';
@@ -5525,31 +5604,31 @@ if(!class_exists('AdvancedGutenbergMain')) {
          */
         public function advgb_AdvancedButtonStyles($blockAttrs)
         {
-            $block_class    = $blockAttrs['id'];
-            $font_size      = isset($blockAttrs['textSize']) ? intval($blockAttrs['textSize']) : 18;
-            $color          = isset($blockAttrs['textColor']) ? $blockAttrs['textColor'] : '#fff';
-            $bg_color       = isset($blockAttrs['bgColor']) ? $blockAttrs['bgColor'] : '#2196f3';
-            $mg_top         = isset($blockAttrs['marginTop']) ? intval($blockAttrs['marginTop']) : 0;
-            $mg_right       = isset($blockAttrs['marginRight']) ? intval($blockAttrs['marginRight']) : 0;
-            $mg_bottom      = isset($blockAttrs['marginBottom']) ? intval($blockAttrs['marginBottom']) : 0;
-            $mg_left        = isset($blockAttrs['marginLeft']) ? intval($blockAttrs['marginLeft']) : 0;
-            $pd_top         = isset($blockAttrs['paddingTop']) ? intval($blockAttrs['paddingTop']) : 10;
-            $pd_right       = isset($blockAttrs['paddingRight']) ? intval($blockAttrs['paddingRight']) : 30;
-            $pd_bottom      = isset($blockAttrs['paddingBottom']) ? intval($blockAttrs['paddingBottom']) : 10;
-            $pd_left        = isset($blockAttrs['paddingLeft']) ? intval($blockAttrs['paddingLeft']) : 30;
-            $border_width   = isset($blockAttrs['borderWidth']) ? intval($blockAttrs['borderWidth']) : 1;
-            $border_color   = isset($blockAttrs['borderColor']) ? $blockAttrs['borderColor'] : '';
-            $border_style   = isset($blockAttrs['borderStyle']) ? $blockAttrs['borderStyle'] : 'none';
-            $border_radius  = isset($blockAttrs['borderRadius']) ? intval($blockAttrs['borderRadius']) : 50;
-            $hover_t_color  = isset($blockAttrs['hoverTextColor']) ? $blockAttrs['hoverTextColor'] : '';
-            $hover_bg_color = isset($blockAttrs['hoverBgColor']) ? $blockAttrs['hoverBgColor'] : '';
-            $hover_sh_color = isset($blockAttrs['hoverShadowColor']) ? $blockAttrs['hoverShadowColor'] : '#ccc';
-            $hover_sh_h     = isset($blockAttrs['hoverShadowH']) ? intval($blockAttrs['hoverShadowH']) : 1;
-            $hover_sh_v     = isset($blockAttrs['hoverShadowV']) ? intval($blockAttrs['hoverShadowV']) : 1;
-            $hover_sh_blur  = isset($blockAttrs['hoverShadowBlur']) ? intval($blockAttrs['hoverShadowBlur']) : 12;
-            $hover_sh_sprd  = isset($blockAttrs['hoverShadowSpread']) ? intval($blockAttrs['hoverShadowSpread']) : 0;
-            $hover_opacity  = isset($blockAttrs['hoverOpacity']) ? intval($blockAttrs['hoverOpacity'])/100 : 1;
-            $transition_spd = isset($blockAttrs['transitionSpeed']) ? floatval($blockAttrs['transitionSpeed'])/1000 : 0.2;
+            $block_class    = esc_html($blockAttrs['id']);
+            $font_size      = isset($blockAttrs['textSize']) ? esc_html(intval($blockAttrs['textSize'])) : 18;
+            $color          = isset($blockAttrs['textColor']) ? esc_html($blockAttrs['textColor']) : '#fff';
+            $bg_color       = isset($blockAttrs['bgColor']) ? esc_html($blockAttrs['bgColor']) : '#2196f3';
+            $mg_top         = isset($blockAttrs['marginTop']) ? esc_html(intval($blockAttrs['marginTop'])) : 0;
+            $mg_right       = isset($blockAttrs['marginRight']) ? esc_html(intval($blockAttrs['marginRight'])) : 0;
+            $mg_bottom      = isset($blockAttrs['marginBottom']) ? esc_html(intval($blockAttrs['marginBottom'])) : 0;
+            $mg_left        = isset($blockAttrs['marginLeft']) ? esc_html(intval($blockAttrs['marginLeft'])) : 0;
+            $pd_top         = isset($blockAttrs['paddingTop']) ? esc_html(intval($blockAttrs['paddingTop'])) : 10;
+            $pd_right       = isset($blockAttrs['paddingRight']) ? esc_html(intval($blockAttrs['paddingRight'])) : 30;
+            $pd_bottom      = isset($blockAttrs['paddingBottom']) ? esc_html(intval($blockAttrs['paddingBottom'])) : 10;
+            $pd_left        = isset($blockAttrs['paddingLeft']) ? esc_html(intval($blockAttrs['paddingLeft'])) : 30;
+            $border_width   = isset($blockAttrs['borderWidth']) ? esc_html(intval($blockAttrs['borderWidth'])) : 1;
+            $border_color   = isset($blockAttrs['borderColor']) ? esc_html($blockAttrs['borderColor']) : '';
+            $border_style   = isset($blockAttrs['borderStyle']) ? esc_html($blockAttrs['borderStyle']) : 'none';
+            $border_radius  = isset($blockAttrs['borderRadius']) ? esc_html(intval($blockAttrs['borderRadius'])) : 50;
+            $hover_t_color  = isset($blockAttrs['hoverTextColor']) ? esc_html($blockAttrs['hoverTextColor']) : '';
+            $hover_bg_color = isset($blockAttrs['hoverBgColor']) ? esc_html($blockAttrs['hoverBgColor']) : '';
+            $hover_sh_color = isset($blockAttrs['hoverShadowColor']) ? esc_html($blockAttrs['hoverShadowColor']) : '#ccc';
+            $hover_sh_h     = isset($blockAttrs['hoverShadowH']) ? esc_html(intval($blockAttrs['hoverShadowH'])) : 1;
+            $hover_sh_v     = isset($blockAttrs['hoverShadowV']) ? esc_html(intval($blockAttrs['hoverShadowV'])) : 1;
+            $hover_sh_blur  = isset($blockAttrs['hoverShadowBlur']) ? esc_html(intval($blockAttrs['hoverShadowBlur'])) : 12;
+            $hover_sh_sprd  = isset($blockAttrs['hoverShadowSpread']) ? esc_html(intval($blockAttrs['hoverShadowSpread'])) : 0;
+            $hover_opacity  = isset($blockAttrs['hoverOpacity']) ? esc_html(intval($blockAttrs['hoverOpacity'])/100) : 1;
+            $transition_spd = isset($blockAttrs['transitionSpeed']) ? esc_html(floatval($blockAttrs['transitionSpeed'])/1000) : 0.2;
 
             $style_html  = '.'. $block_class . '{';
             $style_html .= 'font-size:'.$font_size.'px;';
@@ -5558,14 +5637,14 @@ if(!class_exists('AdvancedGutenbergMain')) {
             $style_html .= 'margin:'.$mg_top.'px '.$mg_right.'px '.$mg_bottom.'px '.$mg_left.'px !important;';
             $style_html .= 'padding:'.$pd_top.'px '.$pd_right.'px '.$pd_bottom.'px '.$pd_left.'px;';
             $style_html .= 'border-width:'.$border_width.'px !important;';
-            $style_html .= 'border-color:'.$border_color.' !important;';
+            if(!empty($border_color)) $style_html .= 'border-color:'.$border_color.' !important;';
             $style_html .= 'border-style:'.$border_style. ($border_style === 'none' ? '' : ' !important') .';';
             $style_html .= 'border-radius:'.$border_radius.'px !important;';
             $style_html .= '}';
 
             $style_html .= '.'. $block_class . ':hover{';
-            $style_html .= 'color:'.$hover_t_color.' !important;';
-            $style_html .= 'background-color:'.$hover_bg_color.' !important;';
+            if(!empty($hover_t_color)) $style_html .= 'color:'.$hover_t_color.' !important;';
+            if(!empty($hover_bg_color)) $style_html .= 'background-color:'.$hover_bg_color.' !important;';
             $style_html .= 'box-shadow:'.$hover_sh_h.'px '.$hover_sh_v.'px '.$hover_sh_blur.'px '.$hover_sh_sprd.'px '.$hover_sh_color.';';
             $style_html .= 'opacity:'.$hover_opacity.';';
             $style_html .= 'transition:all '.$transition_spd.'s ease;';
@@ -5584,7 +5663,7 @@ if(!class_exists('AdvancedGutenbergMain')) {
          */
         public function advgb_AdvancedColumnsStyles($blockAttrs, $blockName)
         {
-            $colID      = $blockAttrs['colId'];
+            $colID      = esc_html($blockAttrs['colId']);
             $marginUnit = 'px';
             $paddingUnit = 'px';
             if ($blockName === 'advgb/column') {
@@ -5592,28 +5671,28 @@ if(!class_exists('AdvancedGutenbergMain')) {
             }
 
             if (isset($blockAttrs['marginUnit'])) {
-                $marginUnit = $blockAttrs['marginUnit'];
+                $marginUnit = esc_html($blockAttrs['marginUnit']);
             }
 
             if (isset($blockAttrs['paddingUnit'])) {
-                $paddingUnit = $blockAttrs['paddingUnit'];
+                $paddingUnit = esc_html($blockAttrs['paddingUnit']);
             }
 
             $style_html  = '#'. $colID . '{';
-            $style_html .= isset($blockAttrs['textAlign']) ? 'text-align:'.$blockAttrs['textAlign'].';' : '';
-            $style_html .= isset($blockAttrs['marginTop']) ? 'margin-top:'.$blockAttrs['marginTop'].$marginUnit.';' : '';
-            $style_html .= isset($blockAttrs['marginRight']) ? 'margin-right:'.$blockAttrs['marginRight'].$marginUnit.';' : '';
-            $style_html .= isset($blockAttrs['marginBottom']) ? 'margin-bottom:'.$blockAttrs['marginBottom'].$marginUnit.';' : '';
-            $style_html .= isset($blockAttrs['marginLeft']) ? 'margin-left:'.$blockAttrs['marginLeft'].$marginUnit.';' : '';
-            $style_html .= isset($blockAttrs['paddingTop']) ? 'padding-top:'.$blockAttrs['paddingTop'].$paddingUnit.';' : '';
-            $style_html .= isset($blockAttrs['paddingRight']) ? 'padding-right:'.$blockAttrs['paddingRight'].$paddingUnit.';' : '';
-            $style_html .= isset($blockAttrs['paddingBottom']) ? 'padding-bottom:'.$blockAttrs['paddingBottom'].$paddingUnit.';' : '';
-            $style_html .= isset($blockAttrs['paddingLeft']) ? 'padding-left:'.$blockAttrs['paddingLeft'].$paddingUnit.';' : '';
+            $style_html .= isset($blockAttrs['textAlign']) ? 'text-align:'.esc_html($blockAttrs['textAlign']).';' : '';
+            $style_html .= isset($blockAttrs['marginTop']) ? 'margin-top:'.esc_html($blockAttrs['marginTop']).$marginUnit.';' : '';
+            $style_html .= isset($blockAttrs['marginRight']) ? 'margin-right:'.esc_html($blockAttrs['marginRight']).$marginUnit.';' : '';
+            $style_html .= isset($blockAttrs['marginBottom']) ? 'margin-bottom:'.esc_html($blockAttrs['marginBottom']).$marginUnit.';' : '';
+            $style_html .= isset($blockAttrs['marginLeft']) ? 'margin-left:'.esc_html($blockAttrs['marginLeft']).$marginUnit.';' : '';
+            $style_html .= isset($blockAttrs['paddingTop']) ? 'padding-top:'.esc_html($blockAttrs['paddingTop']).$paddingUnit.';' : '';
+            $style_html .= isset($blockAttrs['paddingRight']) ? 'padding-right:'.esc_html($blockAttrs['paddingRight']).$paddingUnit.';' : '';
+            $style_html .= isset($blockAttrs['paddingBottom']) ? 'padding-bottom:'.esc_html($blockAttrs['paddingBottom']).$paddingUnit.';' : '';
+            $style_html .= isset($blockAttrs['paddingLeft']) ? 'padding-left:'.esc_html($blockAttrs['paddingLeft']).$paddingUnit.';' : '';
             $style_html .= '}';
 
             if ($blockName === 'advgb/column') {
-                $childColID = $blockAttrs['colId'];
-                $childColWidth = $blockAttrs['width'];
+                $childColID = esc_html($blockAttrs['colId']);
+                $childColWidth = esc_html($blockAttrs['width']);
                 if ($childColWidth !== 0) {
                     $style_html .= '#' . $childColID . '{width: ' . $childColWidth . '%;}';
                 }
@@ -5622,29 +5701,29 @@ if(!class_exists('AdvancedGutenbergMain')) {
             // Styles for tablet
             $style_html .= '@media screen and (max-width: 1023px) {';
             $style_html .=  '#'. $colID . '{';
-            $style_html .= isset($blockAttrs['marginTopT']) ? 'margin-top:'.$blockAttrs['marginTopT'].$marginUnit.';' : '';
-            $style_html .= isset($blockAttrs['marginRightT']) ? 'margin-right:'.$blockAttrs['marginRightT'].$marginUnit.';' : '';
-            $style_html .= isset($blockAttrs['marginBottomT']) ? 'margin-bottom:'.$blockAttrs['marginBottomT'].$marginUnit.';' : '';
-            $style_html .= isset($blockAttrs['marginLeftT']) ? 'margin-left:'.$blockAttrs['marginLeftT'].$marginUnit.';' : '';
-            $style_html .= isset($blockAttrs['paddingTopT']) ? 'padding-top:'.$blockAttrs['paddingTopT'].$paddingUnit.';' : '';
-            $style_html .= isset($blockAttrs['paddingRightT']) ? 'padding-right:'.$blockAttrs['paddingRightT'].$paddingUnit.';' : '';
-            $style_html .= isset($blockAttrs['paddingBottomT']) ? 'padding-bottom:'.$blockAttrs['paddingBottomT'].$paddingUnit.';' : '';
-            $style_html .= isset($blockAttrs['paddingLeftT']) ? 'padding-left:'.$blockAttrs['paddingLeftT'].$paddingUnit.';' : '';
+            $style_html .= isset($blockAttrs['marginTopT']) ? 'margin-top:'.esc_html($blockAttrs['marginTopT']).$marginUnit.';' : '';
+            $style_html .= isset($blockAttrs['marginRightT']) ? 'margin-right:'.esc_html($blockAttrs['marginRightT']).$marginUnit.';' : '';
+            $style_html .= isset($blockAttrs['marginBottomT']) ? 'margin-bottom:'.esc_html($blockAttrs['marginBottomT']).$marginUnit.';' : '';
+            $style_html .= isset($blockAttrs['marginLeftT']) ? 'margin-left:'.esc_html($blockAttrs['marginLeftT']).$marginUnit.';' : '';
+            $style_html .= isset($blockAttrs['paddingTopT']) ? 'padding-top:'.esc_html($blockAttrs['paddingTopT']).$paddingUnit.';' : '';
+            $style_html .= isset($blockAttrs['paddingRightT']) ? 'padding-right:'.esc_html($blockAttrs['paddingRightT']).$paddingUnit.';' : '';
+            $style_html .= isset($blockAttrs['paddingBottomT']) ? 'padding-bottom:'.esc_html($blockAttrs['paddingBottomT']).$paddingUnit.';' : '';
+            $style_html .= isset($blockAttrs['paddingLeftT']) ? 'padding-left:'.esc_html($blockAttrs['paddingLeftT']).$paddingUnit.';' : '';
             $style_html .=  '}';
             $style_html .= '}';
 
             // Styles for mobile
             $style_html .= '@media screen and (max-width: 767px) {';
             $style_html .=  '#'. $colID . '{';
-            $style_html .= isset($blockAttrs['textAlignM']) ? 'text-align:'.$blockAttrs['textAlignM'].';' : '';
-            $style_html .= isset($blockAttrs['marginTopM']) ? 'margin-top:'.$blockAttrs['marginTopM'].$marginUnit.';' : '';
-            $style_html .= isset($blockAttrs['marginRightM']) ? 'margin-right:'.$blockAttrs['marginRightM'].$marginUnit.';' : '';
-            $style_html .= isset($blockAttrs['marginBottomM']) ? 'margin-bottom:'.$blockAttrs['marginBottomM'].$marginUnit.';' : '';
-            $style_html .= isset($blockAttrs['marginLeftM']) ? 'margin-left:'.$blockAttrs['marginLeftM'].$marginUnit.';' : '';
-            $style_html .= isset($blockAttrs['paddingTopM']) ? 'padding-top:'.$blockAttrs['paddingTopM'].'px;' : '';
-            $style_html .= isset($blockAttrs['paddingRightM']) ? 'padding-right:'.$blockAttrs['paddingRightM'].'px;' : '';
-            $style_html .= isset($blockAttrs['paddingBottomM']) ? 'padding-bottom:'.$blockAttrs['paddingBottomM'].'px;' : '';
-            $style_html .= isset($blockAttrs['paddingLeftM']) ? 'padding-left:'.$blockAttrs['paddingLeftM'].'px;' : '';
+            $style_html .= isset($blockAttrs['textAlignM']) ? 'text-align:'.esc_html($blockAttrs['textAlignM']).';' : '';
+            $style_html .= isset($blockAttrs['marginTopM']) ? 'margin-top:'.esc_html($blockAttrs['marginTopM']).$marginUnit.';' : '';
+            $style_html .= isset($blockAttrs['marginRightM']) ? 'margin-right:'.esc_html($blockAttrs['marginRightM']).$marginUnit.';' : '';
+            $style_html .= isset($blockAttrs['marginBottomM']) ? 'margin-bottom:'.esc_html($blockAttrs['marginBottomM']).$marginUnit.';' : '';
+            $style_html .= isset($blockAttrs['marginLeftM']) ? 'margin-left:'.esc_html($blockAttrs['marginLeftM']).$marginUnit.';' : '';
+            $style_html .= isset($blockAttrs['paddingTopM']) ? 'padding-top:'.esc_html($blockAttrs['paddingTopM']).'px;' : '';
+            $style_html .= isset($blockAttrs['paddingRightM']) ? 'padding-right:'.esc_html($blockAttrs['paddingRightM']).'px;' : '';
+            $style_html .= isset($blockAttrs['paddingBottomM']) ? 'padding-bottom:'.esc_html($blockAttrs['paddingBottomM']).'px;' : '';
+            $style_html .= isset($blockAttrs['paddingLeftM']) ? 'padding-left:'.esc_html($blockAttrs['paddingLeftM']).'px;' : '';
             $style_html .=  '}';
             $style_html .= '}';
 
@@ -5660,20 +5739,20 @@ if(!class_exists('AdvancedGutenbergMain')) {
          */
         public function advgb_AdvancedLoginRegisterStyles($blockAttrs)
         {
-            $block_class    = $blockAttrs['submitButtonId'];
-            $hover_t_color  = isset($blockAttrs['submitHoverColor']) ? $blockAttrs['submitHoverColor'] : '';
-            $hover_bg_color = isset($blockAttrs['submitHoverBgColor']) ? $blockAttrs['submitHoverBgColor'] : '';
-            $hover_sh_color = isset($blockAttrs['submitHoverShadow']) ? $blockAttrs['submitHoverShadow'] : '#ccc';
-            $hover_sh_h     = isset($blockAttrs['submitHoverShadowH']) ? intval($blockAttrs['submitHoverShadowH']) : 1;
-            $hover_sh_v     = isset($blockAttrs['submitHoverShadowV']) ? intval($blockAttrs['submitHoverShadowV']) : 1;
-            $hover_sh_blur  = isset($blockAttrs['submitHoverShadowBlur']) ? intval($blockAttrs['submitHoverShadowBlur']) : 12;
-            $hover_sh_sprd  = isset($blockAttrs['submitHoverShadowSpread']) ? intval($blockAttrs['submitHoverShadowSpread']) : 0;
-            $hover_opacity  = isset($blockAttrs['submitHoverOpacity']) ? intval($blockAttrs['submitHoverOpacity'])/100 : 1;
-            $transition_spd = isset($blockAttrs['submitHoverTranSpeed']) ? floatval($blockAttrs['submitHoverTranSpeed'])/1000 : 0.2;
+            $block_class    = esc_html($blockAttrs['submitButtonId']);
+            $hover_t_color  = isset($blockAttrs['submitHoverColor']) ? esc_html($blockAttrs['submitHoverColor']) : '';
+            $hover_bg_color = isset($blockAttrs['submitHoverBgColor']) ? esc_html($blockAttrs['submitHoverBgColor']) : '';
+            $hover_sh_color = isset($blockAttrs['submitHoverShadow']) ? esc_html($blockAttrs['submitHoverShadow']) : '#ccc';
+            $hover_sh_h     = isset($blockAttrs['submitHoverShadowH']) ? esc_html(intval($blockAttrs['submitHoverShadowH'])) : 1;
+            $hover_sh_v     = isset($blockAttrs['submitHoverShadowV']) ? esc_html(intval($blockAttrs['submitHoverShadowV'])) : 1;
+            $hover_sh_blur  = isset($blockAttrs['submitHoverShadowBlur']) ? esc_html(intval($blockAttrs['submitHoverShadowBlur'])) : 12;
+            $hover_sh_sprd  = isset($blockAttrs['submitHoverShadowSpread']) ? esc_html(intval($blockAttrs['submitHoverShadowSpread'])) : 0;
+            $hover_opacity  = isset($blockAttrs['submitHoverOpacity']) ? esc_html(intval($blockAttrs['submitHoverOpacity'])/100) : 1;
+            $transition_spd = isset($blockAttrs['submitHoverTranSpeed']) ? esc_html(floatval($blockAttrs['submitHoverTranSpeed'])/1000) : 0.2;
 
             $style_html  = '.'. $block_class . ':hover{';
-            $style_html .= 'color:'.$hover_t_color.' !important;';
-            $style_html .= 'background-color:'.$hover_bg_color.' !important;';
+            if(!empty($hover_t_color)) $style_html .= 'color:'.$hover_t_color.' !important;';
+            if(!empty($hover_bg_color)) $style_html .= 'background-color:'.$hover_bg_color.' !important;';
             $style_html .= 'box-shadow:'.$hover_sh_h.'px '.$hover_sh_v.'px '.$hover_sh_blur.'px '.$hover_sh_sprd.'px '.$hover_sh_color.' !important;';
             $style_html .= 'opacity:'.$hover_opacity.';';
             $style_html .= 'transition:all '.$transition_spd.'s ease;';
@@ -5691,20 +5770,20 @@ if(!class_exists('AdvancedGutenbergMain')) {
          */
         public function advgb_AdvancedSearchBarStyles($blockAttrs)
         {
-            $block_class    = $blockAttrs['searchBtnId'];
-            $hover_t_color  = isset($blockAttrs['searchBtnHoverColor']) ? $blockAttrs['searchBtnHoverColor'] : '';
-            $hover_bg_color = isset($blockAttrs['searchBtnHoverBgColor']) ? $blockAttrs['searchBtnHoverBgColor'] : '';
-            $hover_sh_color = isset($blockAttrs['searchBtnHoverShadow']) ? $blockAttrs['searchBtnHoverShadow'] : '#ccc';
-            $hover_sh_h     = isset($blockAttrs['searchBtnHoverShadowH']) ? intval($blockAttrs['searchBtnHoverShadowH']) : 1;
-            $hover_sh_v     = isset($blockAttrs['searchBtnHoverShadowV']) ? intval($blockAttrs['searchBtnHoverShadowV']) : 1;
-            $hover_sh_blur  = isset($blockAttrs['searchBtnHoverShadowBlur']) ? intval($blockAttrs['searchBtnHoverShadowBlur']) : 12;
-            $hover_sh_sprd  = isset($blockAttrs['searchBtnHoverShadowSpread']) ? intval($blockAttrs['searchBtnHoverShadowSpread']) : 0;
-            $hover_opacity  = isset($blockAttrs['searchBtnHoverOpacity']) ? intval($blockAttrs['searchBtnHoverOpacity'])/100 : 1;
-            $transition_spd = isset($blockAttrs['searchBtnHoverTranSpeed']) ? floatval($blockAttrs['searchBtnHoverTranSpeed'])/1000 : 0.2;
+            $block_class    = esc_html($blockAttrs['searchBtnId']);
+            $hover_t_color  = isset($blockAttrs['searchBtnHoverColor']) ? esc_html($blockAttrs['searchBtnHoverColor']) : '';
+            $hover_bg_color = isset($blockAttrs['searchBtnHoverBgColor']) ? esc_html($blockAttrs['searchBtnHoverBgColor']) : '';
+            $hover_sh_color = isset($blockAttrs['searchBtnHoverShadow']) ? esc_html($blockAttrs['searchBtnHoverShadow']) : '#ccc';
+            $hover_sh_h     = isset($blockAttrs['searchBtnHoverShadowH']) ? esc_html(intval($blockAttrs['searchBtnHoverShadowH'])) : 1;
+            $hover_sh_v     = isset($blockAttrs['searchBtnHoverShadowV']) ? esc_html(intval($blockAttrs['searchBtnHoverShadowV'])) : 1;
+            $hover_sh_blur  = isset($blockAttrs['searchBtnHoverShadowBlur']) ? esc_html(intval($blockAttrs['searchBtnHoverShadowBlur'])) : 12;
+            $hover_sh_sprd  = isset($blockAttrs['searchBtnHoverShadowSpread']) ? esc_html(intval($blockAttrs['searchBtnHoverShadowSpread'])) : 0;
+            $hover_opacity  = isset($blockAttrs['searchBtnHoverOpacity']) ? esc_html(intval($blockAttrs['searchBtnHoverOpacity'])/100) : 1;
+            $transition_spd = isset($blockAttrs['searchBtnHoverTranSpeed']) ? esc_html(floatval($blockAttrs['searchBtnHoverTranSpeed'])/1000) : 0.2;
 
             $style_html  = '.'. $block_class . ':hover{';
-            $style_html .= 'color:'.$hover_t_color.' !important;';
-            $style_html .= 'background-color:'.$hover_bg_color.' !important;';
+            if(!empty($hover_t_color)) $style_html .= 'color:'.$hover_t_color.' !important;';
+            if(!empty($hover_bg_color)) $style_html .= 'background-color:'.$hover_bg_color.' !important;';
             $style_html .= 'box-shadow:'.$hover_sh_h.'px '.$hover_sh_v.'px '.$hover_sh_blur.'px '.$hover_sh_sprd.'px '.$hover_sh_color.' !important;';
             $style_html .= 'opacity:'.$hover_opacity.';';
             $style_html .= 'transition:all '.$transition_spd.'s ease;';
@@ -5723,9 +5802,9 @@ if(!class_exists('AdvancedGutenbergMain')) {
         public function advgb_AdvancedImageStyles($blockAttrs)
         {
             if (array_key_exists('blockIDX', $blockAttrs)) {
-                $block_class     = $blockAttrs['blockIDX'];
-                $default_opacity = isset($blockAttrs['defaultOpacity']) ? $blockAttrs['defaultOpacity'] : 40;
-                $hover_opacity   = isset($blockAttrs['overlayOpacity']) ? $blockAttrs['overlayOpacity'] : 20;
+                $block_class     = esc_html($blockAttrs['blockIDX']);
+                $default_opacity = isset($blockAttrs['defaultOpacity']) ? esc_html($blockAttrs['defaultOpacity']) : 40;
+                $hover_opacity   = isset($blockAttrs['overlayOpacity']) ? esc_html($blockAttrs['overlayOpacity']) : 20;
 
                 $style_html  = '.' . $block_class . '.advgb-image-block .advgb-image-overlay{';
                 $style_html .= 'opacity:' . ($default_opacity / 100) . ' !important;';
@@ -5769,9 +5848,9 @@ if(!class_exists('AdvancedGutenbergMain')) {
          */
         public function advgb_AdvancedTabsStyles($blockAttrs)
         {
-            $block_class    = isset($blockAttrs['pid']) ? $blockAttrs['pid'] : 'wp-block-advgb-adv-tabs';
-            $active_tab_bg_color  = isset($blockAttrs['activeTabBgColor']) ? $blockAttrs['activeTabBgColor'] : '#5954d6';
-            $active_tab_text_color  = isset($blockAttrs['activeTabTextColor']) ? $blockAttrs['activeTabTextColor'] : '#fff';
+            $block_class    = isset($blockAttrs['pid']) ? esc_html($blockAttrs['pid']) : 'wp-block-advgb-adv-tabs';
+            $active_tab_bg_color  = isset($blockAttrs['activeTabBgColor']) ? esc_html($blockAttrs['activeTabBgColor']) : '#5954d6';
+            $active_tab_text_color  = isset($blockAttrs['activeTabTextColor']) ? esc_html($blockAttrs['activeTabTextColor']) : '#fff';
 
             $style_html  = '.'. $block_class . ' ul.advgb-tabs-panel li.advgb-tab.advgb-tab-active {';
             $style_html .= 'background-color:'.$active_tab_bg_color.' !important;';
@@ -5796,7 +5875,7 @@ if(!class_exists('AdvancedGutenbergMain')) {
         public function advgb_AdvancedIconStyles($blockAttrs)
         {
             wp_enqueue_style('material_icon_font');
-            $block_id = $blockAttrs['blockIDX'];
+            $block_id = esc_html($blockAttrs['blockIDX']);
             $i = 0;
             $default_items = array();
             $item = array(
@@ -5827,8 +5906,8 @@ if(!class_exists('AdvancedGutenbergMain')) {
                 array_push($default_items, $item);
                 $i++;
             }
-            $items = !isset($blockAttrs['items']) ? $default_items : $blockAttrs['items'];
-            $text_align = !isset($blockAttrs['tAlign']) ? 'center' : $blockAttrs['tAlign'];
+            $items = !isset($blockAttrs['items']) ? $default_items : $blockAttrs['items']; // Escaped in the foreach loop
+            $text_align = !isset($blockAttrs['tAlign']) ? 'center' : esc_html($blockAttrs['tAlign']);
 
             $style_html = '#' . $block_id . ' .advgb-icons, .' . $block_id . ' .advgb-icons {';
             $style_html .= 'text-align: ' . $text_align . ';';
@@ -5839,22 +5918,22 @@ if(!class_exists('AdvancedGutenbergMain')) {
                 $style_html .= 'display: flex;';
                 $style_html .= 'align-items:center;';
 
-                $style_html .= 'margin-top: ' . $item['marginTop'] . $item['marginUnit'] . ';';
-                $style_html .= 'margin-bottom: ' . $item['marginBottom'] . $item['marginUnit'] . ';';
-                $style_html .= 'margin-left: ' . $item['marginLeft'] . $item['marginUnit'] . ';';
-                $style_html .= 'margin-right: ' . $item['marginRight'] . $item['marginUnit'] . ';';
+                $style_html .= 'margin-top: ' . esc_html($item['marginTop']) . esc_html($item['marginUnit']) . ';';
+                $style_html .= 'margin-bottom: ' . esc_html($item['marginBottom']) . esc_html($item['marginUnit']) . ';';
+                $style_html .= 'margin-left: ' . esc_html($item['marginLeft']) . esc_html($item['marginUnit']) . ';';
+                $style_html .= 'margin-right: ' . esc_html($item['marginRight']) . esc_html($item['marginUnit']) . ';';
 
-                $style_html .= $item['style'] === 'default' ? 'padding-top: 0;' : 'padding-top: ' . $item['paddingTop'] . $item['paddingUnit'] . ';';
-                $style_html .= $item['style'] === 'default' ? 'padding-bottom: 0;' : 'padding-bottom: ' . $item['paddingBottom'] . $item['paddingUnit'] . ';';
-                $style_html .= $item['style'] === 'default' ? 'padding-left: 0;' : 'padding-left: ' . $item['paddingLeft'] . $item['paddingUnit'] . ';';
-                $style_html .= $item['style'] === 'default' ? 'padding-right: 0;' : 'padding-right: ' . $item['paddingRight'] . $item['paddingUnit'] . ';';
+                $style_html .= $item['style'] === 'default' ? 'padding-top: 0;' : 'padding-top: ' . esc_html($item['paddingTop']) . esc_html($item['paddingUnit']) . ';';
+                $style_html .= $item['style'] === 'default' ? 'padding-bottom: 0;' : 'padding-bottom: ' . esc_html($item['paddingBottom']) . esc_html($item['paddingUnit']) . ';';
+                $style_html .= $item['style'] === 'default' ? 'padding-left: 0;' : 'padding-left: ' . esc_html($item['paddingLeft']) . esc_html($item['paddingUnit']) . ';';
+                $style_html .= $item['style'] === 'default' ? 'padding-right: 0;' : 'padding-right: ' . esc_html($item['paddingRight']) . esc_html($item['paddingUnit']) . ';';
 
-                $style_html .= $item['style'] === 'default' ? 'border-width: 0;' : 'border-width: ' . $item['borderSize'] . 'px;';
+                $style_html .= $item['style'] === 'default' ? 'border-width: 0;' : 'border-width: ' . esc_html($item['borderSize']) . 'px;';
                 $style_html .= 'border-style: solid;';
-                $style_html .= 'border-color: ' . $item['borderColor'] . ';';
-                $style_html .= 'border-radius: ' . $item['borderRadius'] . '%;';
+                $style_html .= 'border-color: ' . esc_html($item['borderColor']) . ';';
+                $style_html .= 'border-radius: ' . esc_html($item['borderRadius']) . '%;';
 
-                $style_html .= isset($item['bgColor']) ? 'background-color: ' . $item['bgColor'] . ';' : 'background-color: transparent;';
+                $style_html .= isset($item['bgColor']) ? 'background-color: ' . esc_html($item['bgColor']) . ';' : 'background-color: transparent;';
 
                 $style_html .= '}';
 
@@ -5877,24 +5956,24 @@ if(!class_exists('AdvancedGutenbergMain')) {
         public function advgb_AdvancedInfoBoxStyles($blockAttrs)
         {
             wp_enqueue_style('material_icon_font');
-            $block_id = $blockAttrs['blockIDX'];
+            $block_id = esc_html($blockAttrs['blockIDX']);
 
-            $container_bg = isset($blockAttrs['containerBackground']) ? $blockAttrs['containerBackground'] : '#f5f5f5';
+            $container_bg = isset($blockAttrs['containerBackground']) ? esc_html($blockAttrs['containerBackground']) : '#f5f5f5';
 
-            $container_padding_unit = isset($blockAttrs['containerPaddingUnit']) ? $blockAttrs['containerPaddingUnit'] : 'px';
+            $container_padding_unit = isset($blockAttrs['containerPaddingUnit']) ? esc_html($blockAttrs['containerPaddingUnit']) : 'px';
             $container_padding = '';
-            $container_padding .= isset($blockAttrs['containerPaddingTop']) ? $blockAttrs['containerPaddingTop'] . $container_padding_unit . ' ' : '20' . $container_padding_unit . ' ';
-            $container_padding .= isset($blockAttrs['containerPaddingRight']) ? $blockAttrs['containerPaddingRight'] . $container_padding_unit . ' ' : '20' . $container_padding_unit . ' ';
-            $container_padding .= isset($blockAttrs['containerPaddingBottom']) ? $blockAttrs['containerPaddingBottom'] . $container_padding_unit . ' ' : '20' . $container_padding_unit . ' ';
-            $container_padding .= isset($blockAttrs['containerPaddingLeft']) ? $blockAttrs['containerPaddingLeft'] . $container_padding_unit : '20' . $container_padding_unit;
+            $container_padding .= isset($blockAttrs['containerPaddingTop']) ? esc_html($blockAttrs['containerPaddingTop']) . $container_padding_unit . ' ' : '20' . $container_padding_unit . ' ';
+            $container_padding .= isset($blockAttrs['containerPaddingRight']) ? esc_html($blockAttrs['containerPaddingRight']) . $container_padding_unit . ' ' : '20' . $container_padding_unit . ' ';
+            $container_padding .= isset($blockAttrs['containerPaddingBottom']) ? esc_html($blockAttrs['containerPaddingBottom']) . $container_padding_unit . ' ' : '20' . $container_padding_unit . ' ';
+            $container_padding .= isset($blockAttrs['containerPaddingLeft']) ? esc_html($blockAttrs['containerPaddingLeft']) . $container_padding_unit : '20' . $container_padding_unit;
 
             $container_border = '';
-            $container_border .= isset($blockAttrs['containerBorderWidth']) ? $blockAttrs['containerBorderWidth'] . 'px ' : '0px ';
+            $container_border .= isset($blockAttrs['containerBorderWidth']) ? esc_html($blockAttrs['containerBorderWidth']) . 'px ' : '0px ';
             $container_border .= 'solid ';
-            $container_border .= isset($blockAttrs['containerBorderBackground']) ? $blockAttrs['containerBorderBackground'] : '#e8e8e8 ';
+            $container_border .= isset($blockAttrs['containerBorderBackground']) ? esc_html($blockAttrs['containerBorderBackground']) : '#e8e8e8 ';
 
             $container_border_radius = '';
-            $container_border_radius .= isset($blockAttrs['containerBorderRadius']) ? $blockAttrs['containerBorderRadius'] : 0;
+            $container_border_radius .= isset($blockAttrs['containerBorderRadius']) ? esc_html($blockAttrs['containerBorderRadius']) : 0;
 
             $style_html  = '#' . $block_id . ', .' . $block_id . ' {';
             $style_html .= 'background-color: ' . $container_bg . ';';
@@ -5903,35 +5982,35 @@ if(!class_exists('AdvancedGutenbergMain')) {
             $style_html .= 'border-radius: ' . $container_border_radius . 'px;';
             $style_html .= '}'; //end container css
 
-            $icon_background_color = isset($blockAttrs['iconBackground']) ? $blockAttrs['iconBackground'] : '#f5f5f5';
+            $icon_background_color = isset($blockAttrs['iconBackground']) ? esc_html($blockAttrs['iconBackground']) : '#f5f5f5';
 
             $icon_padding = '';
-            $icon_padding_unit = isset($blockAttrs['iconPaddingUnit']) ? $blockAttrs['iconPaddingUnit'] : 'px';
-            $icon_padding .= isset($blockAttrs['iconPaddingTop']) ? $blockAttrs['iconPaddingTop'] . $icon_padding_unit . ' ' : '0 ';
-            $icon_padding .= isset($blockAttrs['iconPaddingRight']) ? $blockAttrs['iconPaddingRight'] . $icon_padding_unit . ' ' : '0 ';
-            $icon_padding .= isset($blockAttrs['iconPaddingBottom']) ? $blockAttrs['iconPaddingBottom'] . $icon_padding_unit . ' ' : '0 ';
-            $icon_padding .= isset($blockAttrs['iconPaddingLeft']) ? $blockAttrs['iconPaddingLeft'] . $icon_padding_unit : '0';
+            $icon_padding_unit = isset($blockAttrs['iconPaddingUnit']) ? esc_html($blockAttrs['iconPaddingUnit']) : 'px';
+            $icon_padding .= isset($blockAttrs['iconPaddingTop']) ? esc_html($blockAttrs['iconPaddingTop']) . $icon_padding_unit . ' ' : '0 ';
+            $icon_padding .= isset($blockAttrs['iconPaddingRight']) ? esc_html($blockAttrs['iconPaddingRight']) . $icon_padding_unit . ' ' : '0 ';
+            $icon_padding .= isset($blockAttrs['iconPaddingBottom']) ? esc_html($blockAttrs['iconPaddingBottom']) . $icon_padding_unit . ' ' : '0 ';
+            $icon_padding .= isset($blockAttrs['iconPaddingLeft']) ? esc_html($blockAttrs['iconPaddingLeft']) . $icon_padding_unit : '0';
             if ($icon_padding === '0 0 0 0') {
                 $icon_padding = 0;
             }
 
             $icon_margin = '';
-            $icon_margin_unit = isset($blockAttrs['iconMarginUnit']) ? $blockAttrs['iconMarginUnit'] : 'px';
-            $icon_margin .= isset($blockAttrs['iconMarginTop']) ? $blockAttrs['iconMarginTop'] . $icon_margin_unit . ' ' : '0 ';
-            $icon_margin .= isset($blockAttrs['iconMarginRight']) ? $blockAttrs['iconMarginRight'] . $icon_margin_unit . ' ' : '0 ';
-            $icon_margin .= isset($blockAttrs['iconMarginBottom']) ? $blockAttrs['iconMarginBottom'] . $icon_margin_unit . ' ' : '0 ';
-            $icon_margin .= isset($blockAttrs['iconMarginLeft']) ? $blockAttrs['iconMarginLeft'] . $icon_margin_unit : '0';
+            $icon_margin_unit = isset($blockAttrs['iconMarginUnit']) ? esc_html($blockAttrs['iconMarginUnit']) : 'px';
+            $icon_margin .= isset($blockAttrs['iconMarginTop']) ? esc_html($blockAttrs['iconMarginTop']) . $icon_margin_unit . ' ' : '0 ';
+            $icon_margin .= isset($blockAttrs['iconMarginRight']) ? esc_html($blockAttrs['iconMarginRight']) . $icon_margin_unit . ' ' : '0 ';
+            $icon_margin .= isset($blockAttrs['iconMarginBottom']) ? esc_html($blockAttrs['iconMarginBottom']) . $icon_margin_unit . ' ' : '0 ';
+            $icon_margin .= isset($blockAttrs['iconMarginLeft']) ? esc_html($blockAttrs['iconMarginLeft']) . $icon_margin_unit : '0';
             if ($icon_margin === '0 0 0 0') {
                 $icon_margin = 0;
             }
 
             $icon_border = '';
-            $icon_border .= isset($blockAttrs['iconBorderWidth']) ? $blockAttrs['iconBorderWidth'] . 'px ' : '0px ';
+            $icon_border .= isset($blockAttrs['iconBorderWidth']) ? esc_html($blockAttrs['iconBorderWidth']) . 'px ' : '0px ';
             $icon_border .= 'solid ';
-            $icon_border .= isset($blockAttrs['iconBorderBackground']) ? $blockAttrs['iconBorderBackground'] : '#e8e8e8 ';
+            $icon_border .= isset($blockAttrs['iconBorderBackground']) ? esc_html($blockAttrs['iconBorderBackground']) : '#e8e8e8 ';
 
             $icon_border_radius = '';
-            $icon_border_radius .= isset($blockAttrs['iconBorderRadius']) ? $blockAttrs['iconBorderRadius'] : 0;
+            $icon_border_radius .= isset($blockAttrs['iconBorderRadius']) ? esc_html($blockAttrs['iconBorderRadius']) : 0;
 
             $style_html .= '#' . $block_id . ' .advgb-infobox-icon-container, .' . $block_id . ' .advgb-infobox-icon-container {';
             $style_html .= 'background-color: ' . $icon_background_color . ';';
@@ -5941,85 +6020,85 @@ if(!class_exists('AdvancedGutenbergMain')) {
             $style_html .= 'border-radius: ' . $icon_border_radius . 'px;';
             $style_html .= '}';
 
-            $icon_color = isset($blockAttrs['iconColor']) ? $blockAttrs['iconColor'] : '#333';
-            $icon_size = isset($blockAttrs['iconSize']) ? $blockAttrs['iconSize'] : '70';
-            $icon_size_unit = isset($blockAttrs['iconSizeUnit']) ? $blockAttrs['iconSizeUnit'] : 'px';
+            $icon_color = isset($blockAttrs['iconColor']) ? esc_html($blockAttrs['iconColor']) : '#333';
+            $icon_size = isset($blockAttrs['iconSize']) ? esc_html($blockAttrs['iconSize']) : '70';
+            $icon_size_unit = isset($blockAttrs['iconSizeUnit']) ? esc_html($blockAttrs['iconSizeUnit']) : 'px';
             $style_html .= '#' . $block_id . ' .advgb-infobox-icon-container i, .' . $block_id . ' .advgb-infobox-icon-container i {';
             $style_html .= 'color: ' . $icon_color . ';';
             $style_html .= 'font-size: ' . $icon_size . $icon_size_unit . ';';
             $style_html .= 'display: block;';
             $style_html .= '}'; //end icon style
 
-            $title_color = isset($blockAttrs['titleColor']) ? $blockAttrs['titleColor'] : '#333';
+            $title_color = isset($blockAttrs['titleColor']) ? esc_html($blockAttrs['titleColor']) : '#333';
 
             $title_padding = '';
-            $title_padding_unit = isset($blockAttrs['titlePaddingUnit']) ? $blockAttrs['titlePaddingUnit'] : 'px';
-            $title_padding .= isset($blockAttrs['titlePaddingTop']) ? $blockAttrs['titlePaddingTop'] . $title_padding_unit . ' ' : '0 ';
-            $title_padding .= isset($blockAttrs['titlePaddingRight']) ? $blockAttrs['titlePaddingRight'] . $title_padding_unit . ' ' : '0 ';
-            $title_padding .= isset($blockAttrs['titlePaddingBottom']) ? $blockAttrs['titlePaddingBottom'] . $title_padding_unit . ' ' : '0 ';
-            $title_padding .= isset($blockAttrs['titlePaddingLeft']) ? $blockAttrs['titlePaddingLeft'] . $title_padding_unit : '0';
+            $title_padding_unit = isset($blockAttrs['titlePaddingUnit']) ? esc_html($blockAttrs['titlePaddingUnit']) : 'px';
+            $title_padding .= isset($blockAttrs['titlePaddingTop']) ? esc_html($blockAttrs['titlePaddingTop']) . $title_padding_unit . ' ' : '0 ';
+            $title_padding .= isset($blockAttrs['titlePaddingRight']) ? esc_html($blockAttrs['titlePaddingRight']) . $title_padding_unit . ' ' : '0 ';
+            $title_padding .= isset($blockAttrs['titlePaddingBottom']) ? esc_html($blockAttrs['titlePaddingBottom']) . $title_padding_unit . ' ' : '0 ';
+            $title_padding .= isset($blockAttrs['titlePaddingLeft']) ? esc_html($blockAttrs['titlePaddingLeft']) . $title_padding_unit : '0';
             if ($title_padding === '0 0 0 0') {
                 $title_padding = 0;
             }
 
             $title_margin = '';
-            $title_margin_unit = isset($blockAttrs['titleMarginUnit']) ? $blockAttrs['titleMarginUnit'] : 'px';
-            $title_margin .= isset($blockAttrs['titleMarginTop']) ? $blockAttrs['titleMarginTop'] . $title_margin_unit . ' ' : '5' . $title_margin_unit . ' ';
-            $title_margin .= isset($blockAttrs['titleMarginRight']) ? $blockAttrs['titleMarginRight'] . $title_margin_unit . ' ' : '0 ';
-            $title_margin .= isset($blockAttrs['titleMarginBottom']) ? $blockAttrs['titleMarginBottom'] . $title_margin_unit . ' ' : '10' . $title_margin_unit . ' ';
-            $title_margin .= isset($blockAttrs['titleMarginLeft']) ? $blockAttrs['titleMarginLeft'] . $title_margin_unit : '0';
+            $title_margin_unit = isset($blockAttrs['titleMarginUnit']) ? esc_html($blockAttrs['titleMarginUnit']) : 'px';
+            $title_margin .= isset($blockAttrs['titleMarginTop']) ? esc_html($blockAttrs['titleMarginTop']) . $title_margin_unit . ' ' : '5' . $title_margin_unit . ' ';
+            $title_margin .= isset($blockAttrs['titleMarginRight']) ? esc_html($blockAttrs['titleMarginRight']) . $title_margin_unit . ' ' : '0 ';
+            $title_margin .= isset($blockAttrs['titleMarginBottom']) ? esc_html($blockAttrs['titleMarginBottom']) . $title_margin_unit . ' ' : '10' . $title_margin_unit . ' ';
+            $title_margin .= isset($blockAttrs['titleMarginLeft']) ? esc_html($blockAttrs['titleMarginLeft']) . $title_margin_unit : '0';
             if ($title_margin === '0 0 0 0') {
                 $title_margin = 0;
             }
 
-            $title_size_unit = isset($blockAttrs['titleSizeUnit']) ? $blockAttrs['titleSizeUnit'] : 'px';
-            $title_lh_unit = isset($blockAttrs['titleLineHeightUnit']) ? $blockAttrs['titleLineHeightUnit'] : 'px';
+            $title_size_unit = isset($blockAttrs['titleSizeUnit']) ? esc_html($blockAttrs['titleSizeUnit']) : 'px';
+            $title_lh_unit = isset($blockAttrs['titleLineHeightUnit']) ? esc_html($blockAttrs['titleLineHeightUnit']) : 'px';
             $style_html .= '#' . $block_id . ' .advgb-infobox-textcontent .advgb-infobox-title, .' . $block_id . ' .advgb-infobox-textcontent .advgb-infobox-title {';
             $style_html .= 'color: ' . $title_color . ';';
             $style_html .= 'padding: ' . $title_padding . ';';
             $style_html .= 'margin: ' . $title_margin . ';';
             if (isset($blockAttrs['titleSize'])) {
-                $style_html .= 'font-size: ' . $blockAttrs['titleSize'] . $title_size_unit . ';';
+                $style_html .= 'font-size: ' . esc_html($blockAttrs['titleSize']) . $title_size_unit . ';';
             }
             if (isset($blockAttrs['titleLineHeight'])) {
-                $style_html .= 'line-height: ' . $blockAttrs['titleLineHeight'] . $title_lh_unit . ';';
+                $style_html .= 'line-height: ' . esc_html($blockAttrs['titleLineHeight']) . $title_lh_unit . ';';
             }
             $style_html .= 'white-space: pre-wrap;';
             $style_html .= '}'; //end title style
 
-            $text_color = isset($blockAttrs['textColor']) ? $blockAttrs['textColor'] : '#333';
+            $text_color = isset($blockAttrs['textColor']) ? esc_html($blockAttrs['textColor']) : '#333';
 
             $text_padding = '';
-            $text_padding_unit = isset($blockAttrs['textPaddingUnit']) ? $blockAttrs['textPaddingUnit'] : 'px';
-            $text_padding .= isset($blockAttrs['textPaddingTop']) ? $blockAttrs['textPaddingTop'] . $text_padding_unit . ' ' : '0 ';
-            $text_padding .= isset($blockAttrs['textPaddingRight']) ? $blockAttrs['textPaddingRight'] . $text_padding_unit . ' ' : '0 ';
-            $text_padding .= isset($blockAttrs['textPaddingBottom']) ? $blockAttrs['textPaddingBottom'] . $text_padding_unit . ' ' : '0 ';
-            $text_padding .= isset($blockAttrs['textPaddingLeft']) ? $blockAttrs['textPaddingLeft'] . $text_padding_unit : '0';
+            $text_padding_unit = isset($blockAttrs['textPaddingUnit']) ? esc_html($blockAttrs['textPaddingUnit']) : 'px';
+            $text_padding .= isset($blockAttrs['textPaddingTop']) ? esc_html($blockAttrs['textPaddingTop']) . $text_padding_unit . ' ' : '0 ';
+            $text_padding .= isset($blockAttrs['textPaddingRight']) ? esc_html($blockAttrs['textPaddingRight']) . $text_padding_unit . ' ' : '0 ';
+            $text_padding .= isset($blockAttrs['textPaddingBottom']) ? esc_html($blockAttrs['textPaddingBottom']) . $text_padding_unit . ' ' : '0 ';
+            $text_padding .= isset($blockAttrs['textPaddingLeft']) ? esc_html($blockAttrs['textPaddingLeft']) . $text_padding_unit : '0';
             if ($text_padding === '0 0 0 0') {
                 $text_padding = 0;
             }
 
             $text_margin = '';
-            $text_margin_unit = isset($blockAttrs['textMarginUnit']) ? $blockAttrs['textMarginUnit'] : 'px';
-            $text_margin .= isset($blockAttrs['textMarginTop']) ? $blockAttrs['textMarginTop'] . $text_margin_unit . ' ' : '0 ';
-            $text_margin .= isset($blockAttrs['textMarginRight']) ? $blockAttrs['textMarginRight'] . $text_margin_unit . ' ' : '0 ';
-            $text_margin .= isset($blockAttrs['textMarginBottom']) ? $blockAttrs['textMarginBottom'] . $text_margin_unit . ' ' : '0 ';
-            $text_margin .= isset($blockAttrs['textMarginLeft']) ? $blockAttrs['textMarginLeft'] . $text_margin_unit : '0';
+            $text_margin_unit = isset($blockAttrs['textMarginUnit']) ? esc_html($blockAttrs['textMarginUnit']) : 'px';
+            $text_margin .= isset($blockAttrs['textMarginTop']) ? esc_html($blockAttrs['textMarginTop']) . $text_margin_unit . ' ' : '0 ';
+            $text_margin .= isset($blockAttrs['textMarginRight']) ? esc_html($blockAttrs['textMarginRight']) . $text_margin_unit . ' ' : '0 ';
+            $text_margin .= isset($blockAttrs['textMarginBottom']) ? esc_html($blockAttrs['textMarginBottom']) . $text_margin_unit . ' ' : '0 ';
+            $text_margin .= isset($blockAttrs['textMarginLeft']) ? esc_html($blockAttrs['textMarginLeft']) . $text_margin_unit : '0';
             if ($text_margin === '0 0 0 0') {
                 $text_margin = 0;
             }
 
-            $text_size_unit = isset($blockAttrs['textSizeUnit']) ? $blockAttrs['textSizeUnit'] : 'px';
-            $text_lh_unit = isset($blockAttrs['textLineHeightUnit']) ? $blockAttrs['textLineHeightUnit'] : 'px';
+            $text_size_unit = isset($blockAttrs['textSizeUnit']) ? esc_html($blockAttrs['textSizeUnit']) : 'px';
+            $text_lh_unit = isset($blockAttrs['textLineHeightUnit']) ? esc_html($blockAttrs['textLineHeightUnit']) : 'px';
             $style_html .= '#' . $block_id . ' .advgb-infobox-textcontent .advgb-infobox-text, .' . $block_id . ' .advgb-infobox-textcontent .advgb-infobox-text {';
             $style_html .= 'color: ' . $text_color . ';';
             $style_html .= 'padding: ' . $text_padding . ';';
             $style_html .= 'margin: ' . $text_margin . ';';
             if (isset($blockAttrs['textSize'])) {
-                $style_html .= 'font-size: ' . $blockAttrs['textSize'] . $text_size_unit . ';';
+                $style_html .= 'font-size: ' . esc_html($blockAttrs['textSize']) . $text_size_unit . ';';
             }
             if (isset($blockAttrs['textLineHeight'])) {
-                $style_html .= 'line-height: ' . $blockAttrs['textLineHeight'] . $text_lh_unit . ';';
+                $style_html .= 'line-height: ' . esc_html($blockAttrs['textLineHeight']) . $text_lh_unit . ';';
             }
             $style_html .= 'white-space: pre-wrap;';
             $style_html .= '}'; //end text style
@@ -6036,10 +6115,6 @@ if(!class_exists('AdvancedGutenbergMain')) {
         public function advgb_AdvancedCountUpStyles()
         {
             wp_enqueue_script('advgb_blocks_frontend_scripts');
-
-            $style_html = '';
-
-            return $style_html;
         }
     }
 }

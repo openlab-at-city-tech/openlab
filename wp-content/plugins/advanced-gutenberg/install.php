@@ -73,76 +73,85 @@ register_activation_hook(ADVANCED_GUTENBERG_PLUGIN, function () {
 
     $wp_roles->add_cap('contributor', 'read_advgb_profile');
     $wp_roles->add_cap('contributor', 'read_private_advgb_profiles');
+
+    // Delete deprecated options
+    delete_option( 'advgb_jureview_installation_time' );
+    delete_option( 'advgb_jufeedback_version' );
+    delete_option( 'ppb_reviews_installed_on' ); // Added in 2.10.4 and disabled in 2.10.5
+    delete_option( 'advgb_reviews_installed_on' ); // Added in 2.11.0 and disabled in 2.11.1
 });
 
-// Run the updates from here
-$advgb_current_version = get_option('advgb_version', '0.0.0');
-global $wpdb;
 
-// Migrate to Block Access by User Roles
-if( version_compare($advgb_current_version, '2.10.2', 'lt') && !get_option( 'advgb_blocks_user_roles') ) {
 
-    // Migrate Block Access Profiles to Block Access by Roles
-    global $wpdb;
-    $profiles = $wpdb->get_results(
-        'SELECT * FROM '. $wpdb->prefix. 'posts
-        WHERE post_type="advgb_profiles" AND post_status="publish" ORDER BY post_date_gmt DESC'
-    );
+if ( !function_exists('advgb_some_specific_updates') ) {
 
-    if( !empty( $profiles ) ) {
+    function advgb_some_specific_updates() {
 
-        // Let's extract the user roles associated to Block Access profiles (we can't get all the user roles with regular WP way)
-        $user_role_accesses = array();
-        foreach ($profiles as $profile) {
-            $postID                 = $profile->ID;
-            $user_role_accesses[]   = get_post_meta( $postID, 'roles_access', true );
-        }
+        // Run the updates from here
+        $advgb_current_version = get_option('advgb_version', '0.0.0');
+        global $wpdb;
 
-        $user_role_accesses = call_user_func_array( 'array_merge', $user_role_accesses );
-        $user_role_accesses = array_unique( $user_role_accesses );
+        // Migrate to Block Access by User Roles
+        if( version_compare($advgb_current_version, '2.10.2', 'lt') && !get_option('advgb_blocks_user_roles') ) {
 
-        // Find the most recent profile of each user role
-        $blocks_by_role_access = array();
-        foreach( $user_role_accesses as $user_role_access ) {
-
+            // Migrate Block Access Profiles to Block Access by Roles
+            global $wpdb;
             $profiles = $wpdb->get_results(
                 'SELECT * FROM '. $wpdb->prefix. 'posts
                 WHERE post_type="advgb_profiles" AND post_status="publish" ORDER BY post_date_gmt DESC'
             );
 
             if( !empty( $profiles ) ) {
-                $centinel[$user_role_access] = false; // A boolean to get the first profile (newest) and skip the rest
-                foreach ($profiles as $profile) {
-                    if( $centinel[$user_role_access] === false ) {
-                        $postID         = $profile->ID;
-                        $roles_access   = get_post_meta( $postID, 'roles_access', true );
-                        $blocks         = get_post_meta( $postID, 'blocks', true );
 
-                        if( in_array( $user_role_access, $roles_access ) ) {
-                            $blocks_by_role_access[$user_role_access] = $blocks;
-                            $centinel[$user_role_access] = true;
+                // Let's extract the user roles associated to Block Access profiles (we can't get all the user roles with regular WP way)
+                $user_role_accesses = array();
+                foreach ($profiles as $profile) {
+                    $postID                 = $profile->ID;
+                    $user_role_accesses[]   = get_post_meta( $postID, 'roles_access', true );
+                }
+
+                $user_role_accesses = call_user_func_array( 'array_merge', $user_role_accesses );
+                $user_role_accesses = array_unique( $user_role_accesses );
+
+                // Find the most recent profile of each user role
+                $blocks_by_role_access = array();
+                foreach( $user_role_accesses as $user_role_access ) {
+
+                    $profiles = $wpdb->get_results(
+                        'SELECT * FROM '. $wpdb->prefix. 'posts
+                        WHERE post_type="advgb_profiles" AND post_status="publish" ORDER BY post_date_gmt DESC'
+                    );
+
+                    if( !empty( $profiles ) ) {
+                        $centinel[$user_role_access] = false; // A boolean to get the first profile (newest) and skip the rest
+                        foreach ($profiles as $profile) {
+                            if( $centinel[$user_role_access] === false ) {
+                                $postID         = $profile->ID;
+                                $roles_access   = get_post_meta( $postID, 'roles_access', true );
+                                $blocks         = get_post_meta( $postID, 'blocks', true );
+
+                                if( in_array( $user_role_access, $roles_access ) ) {
+                                    $blocks_by_role_access[$user_role_access] = $blocks;
+                                    $centinel[$user_role_access] = true;
+                                }
+                            }
                         }
                     }
                 }
+
+                // Migrate Block Access by Profile to Block Access by Role
+                if( $blocks_by_role_access ) {
+                    update_option( 'advgb_blocks_user_roles', $blocks_by_role_access );
+                }
+
+                // Don't delete post type advgb_profile to keep a backup!
             }
         }
 
-        // Migrate Block Access by Profile to Block Access by Role
-        if( $blocks_by_role_access ) {
-            update_option( 'advgb_blocks_user_roles', $blocks_by_role_access );
+        // Set version if needed
+        if ($advgb_current_version !== ADVANCED_GUTENBERG_VERSION) {
+            update_option('advgb_version', ADVANCED_GUTENBERG_VERSION);
         }
-
-        // Don't delete post type advgb_profile to keep a backup!
     }
+    add_action('init', 'advgb_some_specific_updates');
 }
-
-// Set version if needed
-if ($advgb_current_version !== ADVANCED_GUTENBERG_VERSION) {
-    update_option('advgb_version', ADVANCED_GUTENBERG_VERSION);
-}
-
-// Delete deprecated options
-delete_option( 'advgb_jureview_installation_time' );
-delete_option( 'advgb_jufeedback_version' );
-delete_option( 'ppb_reviews_installed_on' ); // Added in 2.10.4 and disabled in 2.10.5
-delete_option( 'advgb_reviews_installed_on' ); // Added in 2.11.0 and disabled in 2.11.1

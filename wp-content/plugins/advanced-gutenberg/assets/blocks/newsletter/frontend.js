@@ -42,6 +42,8 @@ jQuery(document).ready(function ($) {
             return false;
         }
 
+        var nonce_val = $('[name="advgb_blockform_nonce_field"]').val();
+
         $.ajax( {
             url: advgbNewsletter.ajax_url,
             type: "POST",
@@ -51,7 +53,8 @@ jQuery(document).ready(function ($) {
                 l_name: lastName,
                 email: email,
                 submit_date: submitDate,
-                captcha: typeof grecaptcha !== "undefined" ? grecaptcha.getResponse(g_id) : undefined
+                captcha: typeof grecaptcha !== "undefined" ? grecaptcha.getResponse(g_id) : undefined,
+                nonce: nonce_val
             },
             beforeSend: function () {
                 $thisForm.find('.advgb-form-submit-wrapper').append('<div class="advgb-form-sending" />');
