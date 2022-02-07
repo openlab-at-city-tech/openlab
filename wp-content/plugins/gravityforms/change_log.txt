@@ -1,17 +1,19 @@
-### 2.5.15.3
-- Fixed issue which caused multisites to experience a fatal error on plugin activation.
-
-### 2.5.15.2
-- Fixed issue with Dynamic Field Map on some add-ons including HubSpot Add-On and User Registration Add-On.
-- Fixed issue with form import not properly sanitizing JSON string in some cases.
+### 2.5.16 | 2022-01-11
+- Fixed an issue where the select entry table columns in RTL are not displaying properly.
+- Fixed an issue where the credit card field expiration date fieldset label is not output as legend.
+- Fixed an issue where a PHP warning appears in the logs after running the daily cron.
+- Fixed an issue with total field not displaying correct amount under certain conditions.
+- Fixed an issue where the validation div on the legacy file uploads field is showing when empty.
+- Fixed an issue with gform_conditional_logic_operators filter passing the incorrect field ID.
+- Fixed an issue which causes multisites to experience a fatal error on plugin activation.
+- Fixed an issue with Dynamic Field Map on some add-ons including HubSpot Add-On and User Registration Add-On.
+- Fixed an issue with form import not properly sanitizing JSON string in some cases.
 - Fixed an issue where uploaded files are not deleted on entry deletion if a custom upload path is used.
-
-
-### 2.5.15.1
-- Fixed performance issue with Generic Map settings field.
-- Fixed issue with Generic Map and Dynamic Field Map not being able to filter the value drop down to include or exclude field types.
-- Fixed issue with Generic Map settings field not being able to specify a custom list of choices for mapping.
+- Fixed an issue with Generic Map and Dynamic Field Map not being able to filter the value drop down to include or exclude field types.
+- Fixed an issue with Generic Map settings field not being able to specify a custom list of choices for mapping.
 - Fixed an issue where files uploaded via the multi-file upload field are corrupted when chunking is enabled using [gform_plupload_settings](https://docs.gravityforms.com/gform_plupload_settings/).
+- Fixed performance issue with Generic Map settings field.
+- Fixed fatal error in Generic Map settings field that can happen under certain conditions.
 
 ### 2.5.15 | 2021-11-16
 - Added a prefix to section IDs in the Settings API to make it less likely that sections and fields will have the same ID.

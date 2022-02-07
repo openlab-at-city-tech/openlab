@@ -569,7 +569,7 @@ GFConditionalLogic.prototype.renderOperatorOptions = function( rule ) {
 		ends_with: gf_vars.endsWith,
 	};
 
-	operators = gform.applyFilters( 'gform_conditional_logic_operators', operators, this.objectType, this.fieldId );
+	operators = gform.applyFilters( 'gform_conditional_logic_operators', operators, this.objectType, rule.fieldId );
 
 	for ( key in operators ) {
 		var label  = operators[ key ];

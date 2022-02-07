@@ -321,8 +321,8 @@ class GF_Field_CreditCard extends GF_Field {
 
 		// Expiration Date Inputs
 		$expiration_wrapper_tag       = $this->get_field_container_tag( $form ) === 'fieldset' ? 'fieldset' : 'span';
-		$expiration_label_tag         = ( $expiration_wrapper_tag === 'fieldset' && $is_sub_label_above ) ? 'legend' : 'label';
-		$expiration_label_for         = $expiration_wrapper_tag === 'label' ? " for='{$field_id}_2_month'" : '';
+		$expiration_label_tag         = $expiration_wrapper_tag === 'fieldset' ? 'legend' : 'label';
+		$expiration_label_for         = $expiration_label_tag === 'label' ? " for='{$field_id}_2_month'" : '';
 		$expiration_month_input       = GFFormsModel::get_input( $this, $this->id . '.2_month' );
 
 		$expiration_label             = rgar( $expiration_month_input, 'customLabel' ) != '' ? esc_html( $expiration_month_input['customLabel'] ) : esc_html__( 'Expiration Date', 'gravityforms' );
@@ -347,7 +347,9 @@ class GF_Field_CreditCard extends GF_Field {
 			$expiration_year_label = '';
 		}
 
-		if ( $is_sub_label_above ) {
+		// legend tag should be the first child of fieldset, so we are putting out this markup for fieldset
+		// even if the sub-label is below or hidden.
+		if ( $expiration_wrapper_tag === 'fieldset' || $is_sub_label_above ) {
 			$expiration_field = "<span class='ginput_full{$class_suffix} ginput_cardextras' id='{$field_id}_2_container'>
                                             <{$expiration_wrapper_tag} class='ginput_cardinfo_left{$class_suffix}' id='{$field_id}_2_cardinfo_left'>
                                             <{$expiration_label_tag}{$expiration_label_for} {$sub_label_class_attribute}>{$expiration_label}</{$expiration_label_tag}>

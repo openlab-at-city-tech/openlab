@@ -890,15 +890,23 @@ to no.
 		.gform_wrapper.gravity-theme .ginput_full:not(:last-of-type), .gform_wrapper.gravity-theme .ginput_container_address span:not(.ginput_full):not(:last-of-type):not(:nth-last-of-type(2)) {
 			margin-bottom: 0.5rem;
 		}
+			html[dir=rtl] .gform_wrapper.gravity-theme .ginput_complex:not(.ginput_container_address) span:not([style*="display:none"]):not(.ginput_full), html[dir=rtl] .gform_wrapper.gravity-theme .ginput_complex:not(.ginput_container_address) fieldset:not([style*="display:none"]):not(.ginput_full) {
+				padding-left: 1%;
+				padding-right: 0;
+			}
+
 			html[dir=rtl] .gform_wrapper.gravity-theme .ginput_complex:not(.ginput_container_address) span:not([style*="display:none"]):not(.ginput_full) ~ span:not(.ginput_full), html[dir=rtl] .gform_wrapper.gravity-theme .ginput_complex:not(.ginput_container_address) fieldset:not([style*="display:none"]):not(.ginput_full) ~ span:not(.ginput_full) {
+				padding-left: 0;
 				padding-right: 1%;
 			}
 
 			html[dir=rtl] .gform_wrapper.gravity-theme .ginput_container_address .ginput_left {
 				padding-left: 1%;
+				padding-right: 0;
 			}
 
 			html[dir=rtl] .gform_wrapper.gravity-theme .ginput_container_address .ginput_right {
+				padding-left: 0;
 				padding-right: 1%;
 			}
 
@@ -1148,6 +1156,20 @@ html[dir=rtl] .gform_wrapper.gravity-theme .gfield_list_icons button.delete_list
 		flex: 1 1 100%;
 	}
 
+.gform_wrapper.gravity-theme fieldset.ginput_cardinfo_left {
+		display: flex;
+		flex-direction: column;
+	}
+
+.gform_wrapper.gravity-theme fieldset.ginput_cardinfo_left legend {
+			float: left;
+			padding-top: 5px;
+		}
+
+.gform_wrapper.gravity-theme .field_sublabel_below fieldset.ginput_cardinfo_left {
+		flex-direction: column-reverse;
+	}
+
 html[dir="rtl"] .gform_wrapper.gravity-theme .ginput_card_expiration_month {
 		margin-left: 1rem;
 		margin-right: 0;
@@ -1164,6 +1186,10 @@ html[dir="rtl"] .gform_wrapper.gravity-theme .gfield_creditcard_warning .gfield_
 		background-size: 1.5rem 1rem;
 		background-repeat: no-repeat;
 		background-position: right 0.2rem;
+	}
+
+html[dir="rtl"] .gform_wrapper.gravity-theme fieldset.ginput_cardinfo_left {
+		display: flex;
 	}
 
 @media (max-width: 640px) {
