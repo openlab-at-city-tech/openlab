@@ -410,78 +410,95 @@ class WCP_Folders
     }
 
 	public function get_terms_filter_without_trash($terms, $taxonomies, $args) {
-		global $wpdb;
-		if ( ! is_array($terms) && count($terms) < 1 ) {
-			return $terms;
-		}
 
-		$trash_folders = $initial_trash_folders = get_transient("premio_folders_without_trash");
-		if($trash_folders === false) {
-			$trash_folders = array();
-			$initial_trash_folders = array();
-		}
+        $isForFolders = 0;
+        if(!empty($taxonomies) && is_array($taxonomies) && count($taxonomies)){
+            foreach ($taxonomies as $taxonomy) {
+                if (in_array($taxonomy, array("media_folder", "folder", "post_folder"))) {
+                    $isForFolders = 1;
+                } else {
+                    $folder = substr($taxonomy, -7);
+                    if ($folder == "_folder") {
+                        $isForFolders = 1;
+                    }
+                }
+            }
+        }
 
-		$post_table = $wpdb->prefix."posts";
-		$term_table = $wpdb->prefix."term_relationships";
-		$options = get_option('folders_settings');
-		$option_array = array();
-		if(!empty($options)) {
-			foreach ($options as $option) {
-				$option_array[] = self::get_custom_post_type($option);
-			}
-		}
-		foreach ($terms as $key=>$term ) {
-			if(isset($term->term_taxonomy_id) && isset($term->taxonomy) && !empty($term->taxonomy) && in_array($term->taxonomy, $option_array)) {
-				$trash_count = null;
-				if(isset($trash_folders[$term->term_taxonomy_id])) {
-					$trash_count = $trash_folders[$term->term_taxonomy_id];
-				} else {
-					if (has_filter("premio_folder_item_in_taxonomy")) {
-						$post_type = "";
-						$taxonomy = $term->taxonomy;
+        if($isForFolders) {
+            global $wpdb;
+            if (!is_array($terms) && count($terms) < 1) {
+                return $terms;
+            }
 
-						if ($taxonomy == "post_folder") {
-							$post_type = "post";
-						} else if ($taxonomy == "folder") {
-							$post_type = "page";
-						} else if ($taxonomy == "media_folder") {
-							$post_type = "attachment";
-						} else {
-							$post_type = trim($taxonomy, "'_folder'");
-						}
-						$arg = array(
-							'post_type' => $post_type,
-							'taxonomy' => $taxonomy,
-						);
-						$trash_count = apply_filters("premio_folder_item_in_taxonomy", $term->term_id, $arg);
-					}
+            $trash_folders = $initial_trash_folders = get_transient("premio_folders_without_trash");
+            if ($trash_folders === false) {
+                $trash_folders = array();
+                $initial_trash_folders = array();
+            }
 
-					if ($trash_count === null) {
-						//$result = $wpdb->get_var("SELECT COUNT(*) FROM {$post_table} p JOIN {$term_table} rl ON p.ID = rl.object_id WHERE rl.term_taxonomy_id = '{$term->term_taxonomy_id}' AND p.post_status != 'trash' LIMIT 1");
-						$query = "SELECT COUNT(DISTINCT(p.ID)) 
-                        FROM {$post_table} p 
-                            JOIN {$term_table} rl ON p.ID = rl.object_id 
-                            WHERE rl.term_taxonomy_id = '{$term->term_taxonomy_id}' AND p.post_status != 'trash' LIMIT 1";
-						$result = $wpdb->get_var($query);
-						if (intval($result) > 0) {
-							$trash_count = intval($result);
-						} else {
-							$trash_count = 0;
-						}
-					}
-				}
-				if($trash_count === null) {
-					$trash_count = 0;
-				}
-				$terms[$key]->trash_count = $trash_count;
-				$trash_folders[$term->term_taxonomy_id] = $trash_count;
-			}
-		}
+            $post_table = $wpdb->prefix . "posts";
+            $term_table = $wpdb->prefix . "term_relationships";
+            $options = get_option('folders_settings');
+            $option_array = array();
+            if (!empty($options)) {
+                foreach ($options as $option) {
+                    $option_array[] = self::get_custom_post_type($option);
+                }
+            }
+            foreach ($terms as $key => $term) {
+                if (isset($term->term_taxonomy_id) && isset($term->taxonomy) && !empty($term->taxonomy) && in_array($term->taxonomy, $option_array)) {
+                    $trash_count = null;
+                    if (isset($trash_folders[$term->term_taxonomy_id])) {
+                        $trash_count = $trash_folders[$term->term_taxonomy_id];
+                    } else {
+                        if (has_filter("premio_folder_item_in_taxonomy")) {
+                            $post_type = "";
+                            $taxonomy = $term->taxonomy;
 
-		if(!empty($terms) && $initial_trash_folders != $trash_folders) {
-		    delete_transient("premio_folders_without_trash");
-			set_transient("premio_folders_without_trash", $trash_folders, 3*DAY_IN_SECONDS);
-		}
+                            if ($taxonomy == "post_folder") {
+                                $post_type = "post";
+                            } else if ($taxonomy == "folder") {
+                                $post_type = "page";
+                            } else if ($taxonomy == "media_folder") {
+                                $post_type = "attachment";
+                            } else {
+                                $post_type = trim($taxonomy, "'_folder'");
+                            }
+                            $arg = array(
+                                'post_type' => $post_type,
+                                'taxonomy' => $taxonomy,
+                            );
+                            $trash_count = apply_filters("premio_folder_item_in_taxonomy", $term->term_id, $arg);
+                        }
+
+                        if ($trash_count === null) {
+                            //$result = $wpdb->get_var("SELECT COUNT(*) FROM {$post_table} p JOIN {$term_table} rl ON p.ID = rl.object_id WHERE rl.term_taxonomy_id = '{$term->term_taxonomy_id}' AND p.post_status != 'trash' LIMIT 1");
+                            $query = "SELECT COUNT(DISTINCT(p.ID)) 
+                                FROM {$post_table} p 
+                                    JOIN {$term_table} rl ON p.ID = rl.object_id 
+                                    WHERE rl.term_taxonomy_id = '{$term->term_taxonomy_id}' AND p.post_status != 'trash' LIMIT 1";
+                            $result = $wpdb->get_var($query);
+                            if (intval($result) > 0) {
+                                $trash_count = intval($result);
+                            } else {
+                                $trash_count = 0;
+                            }
+                        }
+                    }
+                    if ($trash_count === null) {
+                        $trash_count = 0;
+                    }
+                    $terms[$key]->trash_count = $trash_count;
+                    $trash_folders[$term->term_taxonomy_id] = $trash_count;
+                }
+            }
+
+            if (!empty($terms) && $initial_trash_folders != $trash_folders) {
+                delete_transient("premio_folders_without_trash");
+                set_transient("premio_folders_without_trash", $trash_folders, 3 * DAY_IN_SECONDS);
+            }
+        }
 		return $terms;
 	}
 
@@ -1179,7 +1196,7 @@ class WCP_Folders
             return;
         }
 
-        if (($typenow == "attachment" || !is_admin()) && self::is_for_this_post_type('attachment')) {
+        if ($typenow == "attachment") {
             /* Free/Pro URL Change */
             global $typenow;
             $is_active = 1;
@@ -2821,7 +2838,7 @@ class WCP_Folders
         $post_types = get_option('folders_settings');
         $post_types = is_array($post_types)?$post_types:array();
 
-        if(empty($typenow) && 'upload' == $current_screen->base ) {
+        if(empty($typenow) && (isset($current_screen->base) && 'upload' == $current_screen->base)) {
             $typenow = "attachment";
             if (self::is_for_this_post_type($typenow)) {
                 return true;
@@ -4688,19 +4705,27 @@ class WCP_Folders
 
     public function set_default_values_if_not_exists()
     {
-        $options = get_option('folders_settings');
-        $options = empty($options) || !is_array($options) ? array() : $options;
-        foreach ($options as $option) {
-            $post_type = self::get_custom_post_type($option);
-            $terms = get_terms($post_type, array(
-                    'hide_empty' => false,
-                )
-            );
-            if (!empty($terms)) {
-                foreach ($terms as $term) {
-                    $order = get_term_meta($term->term_id, "wcp_custom_order", true);
-                    if (empty($order) || $order == null) {
-                        update_term_meta($term->term_id, "wcp_custom_order", "1");
+        if(is_admin() || (defined('DOING_AJAX') && DOING_AJAX)) {
+            $options = get_option('folders_settings');
+            $options = empty($options) || !is_array($options) ? array() : $options;
+            foreach ($options as $option) {
+                $post_type = self::get_custom_post_type($option);
+                $terms = get_terms($post_type, array(
+                        'hide_empty' => false,
+                        'meta_query' => array(
+                            array(
+                                'key'       => 'wcp_custom_order',
+                                'compare'   => 'NOT EXISTS'
+                            )
+                        )
+                    )
+                );
+                if (!empty($terms)) {
+                    foreach ($terms as $term) {
+                        $order = get_term_meta($term->term_id, "wcp_custom_order", true);
+                        if (empty($order) || $order == null) {
+                            update_term_meta($term->term_id, "wcp_custom_order", "1");
+                        }
                     }
                 }
             }
