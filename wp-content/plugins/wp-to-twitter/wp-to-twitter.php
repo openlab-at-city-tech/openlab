@@ -4,7 +4,7 @@
  *
  * @package     WP to Twitter
  * @author      Joe Dolson
- * @copyright   2008-2021 Joe Dolson
+ * @copyright   2008-2022 Joe Dolson
  * @license     GPL-2.0+
  *
  * @wordpress-plugin
@@ -17,11 +17,11 @@
  * License:     GPL-2.0+
  * License URI: http://www.gnu.org/license/gpl-2.0.txt
  * Domain Path: lang
- * Version:     3.5.4
+ * Version:     3.5.5
  */
 
 /*
-	Copyright 2008-2021  Joe Dolson (email : joe@joedolson.com)
+	Copyright 2008-2022  Joe Dolson (email : joe@joedolson.com)
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -64,7 +64,7 @@ require_once( plugin_dir_path( __FILE__ ) . 'wpt-widget.php' );
 require_once( plugin_dir_path( __FILE__ ) . 'wpt-rate-limiting.php' );
 
 global $wpt_version;
-$wpt_version = '3.5.4';
+$wpt_version = '3.5.5';
 
 add_action( 'init', 'wpt_load_textdomain' );
 /**

@@ -579,7 +579,7 @@ function wpt_post_attachment( $post_ID ) {
 		$args        = array(
 			'post_type'      => 'attachment',
 			'numberposts'    => 1,
-			'post_status'    => 'published',
+			'post_status'    => 'any',
 			'post_parent'    => $post_ID,
 			'post_mime_type' => 'image',
 			'order'          => 'ASC',
@@ -781,71 +781,6 @@ function wpt_is_writable( $file ) {
 	}
 
 	return $is_writable;
-}
-
-add_action( 'load-post.php', 'wpt_migrate_url_meta' );
-/**
- * Migrates post meta to new format when post is called in editor.
- *
- * Migration started 12/10/2015. This can probably be removed soon.
- */
-function wpt_migrate_url_meta() {
-	$post_id = isset( $_GET['post'] ) ? intval( $_GET['post'] ) : false;
-	if ( ! $post_id ) {
-		// if this is a new post screen, no migration.
-		return;
-	}
-
-	$post = get_post( $post_id );
-	if ( ! $post || strtotime( $post->post_date ) > 1449764285 ) {
-		// if this post was added after the migration function was added, it will not need to be migrated. Guaranteed.
-		return;
-	}
-
-	$short = wpt_short_url( $post_id );
-	if ( false !== $short ) {
-		return;
-	}
-	if ( false === $short ) {
-		$short = get_post_meta( $post_id, '_wp_jd_goo', true );
-		delete_post_meta( $post_id, '_wp_jd_goo' );
-	}
-	if ( false === $short || '' === $short ) {
-		$short = get_post_meta( $post_id, '_wp_jd_supr', true );
-		delete_post_meta( $post_id, '_wp_jd_supr' );
-	}
-	if ( false === $short || '' === $short ) {
-		$short = get_post_meta( $post_id, '_wp_jd_wp', true );
-		delete_post_meta( $post_id, '_wp_jd_wp' );
-	}
-	if ( false === $short || '' === $short ) {
-		$short = get_post_meta( $post_id, '_wp_jd_ind', true );
-		delete_post_meta( $post_id, '_wp_jd_ind' );
-	}
-	if ( false === $short || '' === $short ) {
-		$short = get_post_meta( $post_id, '_wp_jd_yourls', true );
-		delete_post_meta( $post_id, '_wp_jd_yourls' );
-	}
-	if ( false === $short || '' === $short ) {
-		$short = get_post_meta( $post_id, '_wp_jd_url', true );
-		delete_post_meta( $post_id, '_wp_jd_url' );
-	}
-	if ( false === $short || '' === $short ) {
-		$short = get_post_meta( $post_id, '_wp_jd_joturl', true );
-		delete_post_meta( $post_id, '_wp_jd_joturl' );
-	}
-	if ( false === $short || '' === $short ) {
-		// don't delete target link.
-		$short = get_post_meta( $post_id, '_wp_jd_target', true );
-	}
-	if ( false === $short || '' === $short ) {
-		$short = get_post_meta( $post_id, '_wp_jd_clig', true );
-		delete_post_meta( $post_id, '_wp_jd_clig' );
-	}
-
-	if ( false !== $short && '' !== $short ) {
-		update_post_meta( $post_id, '_wpt_short_url', $short );
-	}
 }
 
 /**
