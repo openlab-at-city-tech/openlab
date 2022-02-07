@@ -67,7 +67,7 @@ if(!class_exists('form'))
 }
 abstract class adminKit
 {
-	const version = '2.9.50';
+	const version = '3.0.2';
 	protected $full_name;
 	protected $short_name;
 	protected $plugin_basename;
@@ -116,7 +116,7 @@ abstract class adminKit
 	function add_cap()
 	{
 		$role = get_role('administrator');
-		if($role instanceof WP_Role && !$role->has_cap($this->access_level))
+		if($role instanceof \WP_Role && !$role->has_cap($this->access_level))
 		{
 			$role->add_cap($this->access_level);
 		}
@@ -430,7 +430,7 @@ abstract class adminKit
 					return false;
 				}
 			}
-			else if($setting->get_value() !== $setting->validate($setting->get_value()))
+			else if($setting instanceof setting && $setting->get_value() !== $setting->validate($setting->get_value()))
 			{
 				return false;
 			}
@@ -462,7 +462,7 @@ abstract class adminKit
 					$this->settings_update_loop($settings[$key], $input[$key]);
 				}
 			}
-			else
+			else if($setting instanceof setting)
 			{
 				$setting->maybe_update_from_form_input($input);
 			}
@@ -533,7 +533,7 @@ abstract class adminKit
 			{
 				$opts[$key] = adminKit::settings_to_opts($setting);
 			}
-			else
+			else if($setting instanceof setting)
 			{
 				$opts[$key] = $setting->get_value();
 			}
@@ -549,7 +549,7 @@ abstract class adminKit
 	{
 		foreach($opts as $key => $value)
 		{
-			if(isset($this->settings[$key]) && $this->settings[$key] instanceof setting\setting)
+			if(isset($this->settings[$key]) && $this->settings[$key] instanceof setting)
 			{
 				$this->settings[$key]->set_value($this->settings[$key]->validate($value));
 			}
@@ -579,18 +579,18 @@ abstract class adminKit
 			}
 			return -1;
 		}
-		if($a->get_name() === $b->get_name() && $a->get_value() === $b->get_value())
+		if($a instanceof setting && $b instanceof setting)
 		{
-			return 0;
+			if($a->get_name() === $b->get_name() && $a->get_value() === $b->get_value())
+			{
+				return 0;
+			}
+			else if($a->get_name() === $b->get_name() && $a->get_value() > $b->get_value())
+			{
+				return 1;
+			}
 		}
-		else if($a->get_name() === $b->get_name() && $a->get_value() > $b->get_value())
-		{
-			return 1;
-		}
-		else
-		{
-			return -1;
-		}
+		return -1;
 	}
 	static function setting_cloner($setting)
 	{
@@ -598,7 +598,10 @@ abstract class adminKit
 		{
 			return array_map('mtekk\adminKit\adminKit::setting_cloner', $setting);
 		}
-		return clone $setting;
+		if($setting instanceof setting)
+		{
+			return clone $setting;
+		}
 	}
 	/**
 	 * Updates the database settings from the webform

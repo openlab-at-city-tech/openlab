@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=FD5XE
 Tags: breadcrumb, breadcrumbs, trail, navigation, menu, widget
 Requires at least: 4.9
 Tested up to: 5.8
-Stable tag: 7.0.0
+Stable tag: 7.0.2
 Requires PHP: 7.0
 License: GPLv2 or later
 Adds breadcrumb navigation showing the visitor's path to their current location.
@@ -49,6 +49,22 @@ Please visit [Breadcrumb NavXT's Documentation](http://mtekk.us/code/breadcrumb-
 6. A screenshot of the Settings Import/Export/Reset form under the Help menu
 
 == Changelog ==
+
+= 7.0.2 =
+Release date: January, 4th 2022
+
+* Behavior change: Allow value of `Hhome_template`, `Hhome_template_unlinked`, `hseparator`, and `hseparator_higher_dim` to be overridden via `bcn_settings_init`.
+* Bug fix: Fixed cause of “Sorry, you are not allowed to access this page.” message when attempting to visit the settings page.
+
+= 7.0.1 =
+Release date: December, 27th 2021
+
+* Behavior change: Moved `bcn_settings_init` filter to before establishing default setting values. This filter is no longer capable of changing the default values of settings.
+* Behavior change: Moved setup of defaults to 9000 priority, intending to cover the majority of plugins that add CPTs.
+* Bug fix: Fixed compatibility issues with PHP5.6.
+* Bug fix: Fixed PHP error caused by some return value of page_ settings.
+* Bug fix: Fixed PHP error caused by non settings settings in array passed into `adminKit::settings_to_opts`.
+* Bug fix: Fixed issue with `bcn_allowed_html` not covering admin interface elements (mapped `bcn_allowed_html` to `mtekk_adminkit_allowed_html`).
 
 = 7.0.0 =
 Release date: December, 17th 2021
