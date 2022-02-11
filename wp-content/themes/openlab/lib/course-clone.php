@@ -921,6 +921,7 @@ class Openlab_Clone_Course_Site {
 			$wpdb->get_blog_prefix( $this->site_id ) . 'user_roles',
 			'fileupload_url',
 			'oplb_gradebook_db_version', // This will force reinstallation of tables.
+			'duplicate_post_version', // Forces duplicate-post to initialize roles
 		);
 
 		// now write them all back
