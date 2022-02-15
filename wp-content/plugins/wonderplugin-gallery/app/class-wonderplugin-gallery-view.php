@@ -279,21 +279,15 @@ class WonderPlugin_Gallery_View {
 		<div class="wrap">
 		<div id="icon-wonderplugin-gallery" class="icon32"><br /></div>
 			
-		<script>
+		<script>	
 		function validateLicenseForm() {
 			
-			if ($.trim($("#wonderplugin-gallery-key").val()).length <= 0)
+			if (jQuery.trim(jQuery("#wonderplugin-gallery-key").val()).length <= 0)
 			{
-				$("#license-form-message").html("<p>Please enter your license key</p>").show();
+				jQuery("#license-form-message").html("<p>Please enter your license key</p>").show();
 				return false;
 			}
-
-			if (!$("#accept-terms").is(":checked"))
-			{
-				$("#license-form-message").html("<p>Please accept the terms</p>").show();
-				return false;
-			}
-				
+			
 			return true;
 		}
 		</script>
@@ -367,7 +361,7 @@ class WonderPlugin_Gallery_View {
 				<tr>
 					<th></th>
 					<td>
-					<p><strong><label><input name="accept-terms" type="checkbox" id="accept-terms">By entering your license key and registering your website, you agree to the following terms:</label></strong></p>
+					<p><strong>By entering your license key and registering your website, you agree to the following terms:</strong></p>
 					<ul style="list-style-type:square;margin-left:20px;">
 						<li>The key is unique to your account. You may not distribute, give away, lend or re-sell it. We reserve the right to monitor levels of your key usage activity and take any necessary action in the event of abnormal usage being detected.</li>
 						<li>By entering your license key and clicking the button "Register", your domain name, the plugin name and the key will be sent to the plugin website <a href="https://www.wonderplugin.com" target="_blank">https://www.wonderplugin.com</a> for verification and registration.</li>

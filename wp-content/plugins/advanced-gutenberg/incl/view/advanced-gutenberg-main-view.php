@@ -96,7 +96,7 @@ if(!defined('ADVANCED_GUTENBERG_PRO')) {
         <div class="ju-menu-search">
             <i class="mi mi-search ju-menu-search-icon"></i>
             <input type="text" class="ju-menu-search-input"
-                   placeholder="<?php esc_html_e('Search settings', 'advanced-gutenberg') ?>"
+                   placeholder="<?php esc_attr_e('Search settings', 'advanced-gutenberg') ?>"
             >
         </div>
         <ul class="tabs ju-menu-tabs">
@@ -139,7 +139,7 @@ if(!defined('ADVANCED_GUTENBERG_PRO')) {
                  . esc_html__('and above', 'advanced-gutenberg') . '. '
                  . esc_html__('Your current version is', 'advanced-gutenberg')
                  . ' <b>' . esc_html(GUTENBERG_VERSION) . '</b>. '
-                 . '<a href="' . esc_attr($gutenbergUpdateUrl) . '">' . esc_html__('Update now', 'advanced-gutenberg') . '</a>'
+                 . '<a href="' . esc_url($gutenbergUpdateUrl) . '">' . esc_html__('Update now', 'advanced-gutenberg') . '</a>'
                  . '<i class="dashicons dashicons-dismiss ju-notice-close"></i>'
              . '</div>';
         } ?>
@@ -182,7 +182,7 @@ if(!defined('ADVANCED_GUTENBERG_PRO')) {
                 <div class="ppma-pressshack-logo">
                     <a href="https://publishpress.com" target="_blank" rel="noopener noreferrer">
                         <img src="<?php echo esc_url(plugins_url('assets/images/publishpress-logo.png', dirname(dirname(__FILE__)))) ?>"
-                         alt="<?php esc_html_e('PublishPress Blocks logo', 'advanced-gutenberg') ?>">
+                         alt="<?php esc_attr_e('PublishPress Blocks logo', 'advanced-gutenberg') ?>">
                     </a>
                 </div>
             </footer>

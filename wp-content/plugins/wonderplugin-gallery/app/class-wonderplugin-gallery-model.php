@@ -373,6 +373,12 @@ class WonderPlugin_Gallery_Model {
 		return $result;
 	}
 
+	function escape_css_for_js($str) {
+
+		$str = str_replace('\\', '\\\\', $str);
+		return str_replace('"', '\"', $str);
+	}
+
 	function generate_body_code($id, $contents, $data_attributes, $has_wrapper) {
 		
 		global $wpdb;
@@ -394,6 +400,9 @@ class WonderPlugin_Gallery_Model {
 				return '<p>The specified gallery is trashed.</p>';
 			}
 			
+			$cssjs = '';
+			$removeinlinecss = !(isset($data->removeinlinecss) && strtolower($data->removeinlinecss) === 'false');
+
 			$itemTime = $item_row->time;
 			
 			if (!empty($data_attributes))
@@ -418,7 +427,29 @@ class WonderPlugin_Gallery_Model {
 				$customcss = str_replace("\r", " ", $data->customcss);
 				$customcss = str_replace("\n", " ", $customcss);
 				$customcss = str_replace("GALLERYID", $id, $customcss);
-				$ret .= '<style type="text/css">' . $customcss . '</style>';
+				if ($removeinlinecss)
+				{
+					$cssjs .= 'wondergallery_' . $id . '_appendcss("' . $this->escape_css_for_js($customcss) . '");';
+				}
+				else
+				{
+					$ret .= '<style>' . $customcss . '</style>';
+				}
+			}
+
+			if (!empty($data->categorylist) && isset($data->categorycss) && strlen($data->categorycss) > 0)
+			{
+				$categorycss = str_replace("\r", " ", $data->categorycss);
+				$categorycss = str_replace("\n", " ", $categorycss);
+				$categorycss = str_replace("GALLERYID", $id, $categorycss);
+				if ($removeinlinecss)
+				{
+					$cssjs .= 'wondergallery_' . $id . '_appendcss("' . $this->escape_css_for_js($categorycss) . '");';
+				}
+				else
+				{
+					$ret .= '<style>' . $categorycss . '</style>';
+				}
 			}
 			
 			$ret .= '<div class="wonderplugingallery-container" id="wonderplugingallery-container-' . $id . '" style="';
@@ -448,7 +479,8 @@ class WonderPlugin_Gallery_Model {
 				$ret .= ' ' . stripslashes($data->dataoptions);
 			}
 			
-			$boolOptions = array('playsinline', 'mutevideo', 'random', 'autoslide', 'autoplayvideo', 'schemamarkup', 'stopallplaying', 'reloadonvideoend', 'donotuseposter', 'enabletabindex', 'loadnextonvideoend', 'hidetitlewhenvideoisplaying', 'disablehovereventontouch', 'autoslideandplayafterfirstplayed', 'html5player', 'responsive', 'fullwidth', 'showtitle', 'showdescription', 'showplaybutton', 'showfullscreenbutton', 'showtimer', 'showcarousel', 'galleryshadow', 'slideshadow', 'thumbshowtitle', 'thumbshadow', 'lightboxshowtitle', 'lightboxshowdescription', 'specifyid', 'donotinit', 'addinitscript', 'triggerresize', 'thumbcolumnsresponsive');
+			$boolOptions = array('playsinline', 'mutevideo', 'random', 'autoslide', 'autoplayvideo', 'schemamarkup', 'stopallplaying', 'reloadonvideoend', 'donotuseposter', 'enabletabindex', 'loadnextonvideoend', 'hidetitlewhenvideoisplaying', 'disablehovereventontouch', 'autoslideandplayafterfirstplayed', 'html5player', 'responsive', 'fullwidth', 'showtitle', 'showdescription', 'showplaybutton', 'showfullscreenbutton', 'showtimer', 'showcarousel', 'galleryshadow', 'slideshadow', 'thumbshowtitle', 'thumbshowimage', 'thumbshadow', 'lightboxshowtitle', 'lightboxshowdescription', 'specifyid', 'donotinit', 'addinitscript', 'triggerresize', 'thumbcolumnsresponsive',
+							'thumbverticalmiddle', 'removeinlinecss', 'switchonmouseover', 'showcategory');
 			foreach ( $boolOptions as $key )
 			{
 				if (isset($data->{$key}) )
@@ -461,21 +493,52 @@ class WonderPlugin_Gallery_Model {
 			
 			$valOptions = array('loop', 'src', 'duration', 'slideduration', 'slideshowinterval', 'googleanalyticsaccount', 'resizemode', 'imagetoolboxmode', 'effect', 'padding', 'bgcolor', 'bgimage', 'thumbwidth', 'thumbheight', 'thumbgap', 'thumbrowgap', 'lightboxtextheight', 'lightboxtitlecss', 'lightboxdescriptioncss', 'titlecss', 'descriptioncss', 'titleheight', 'titlesmallscreenwidth', 'titleheightsmallscreen',
 					'socialmode', 'socialposition', 'socialpositionlightbox', 'socialdirection', 'socialbuttonsize', 'socialbuttonfontsize', 'defaultvideovolume',
-					'thumbtitleheight', 'thumbmediumtitleheight', 'thumbsmalltitleheight',
+					'thumbtitleheight', 'thumbmediumtitleheight', 'thumbsmalltitleheight', 'categoryheight', 'categorydefault',
 					'triggerresizedelay', 'thumbmediumsize', 'thumbsmallsize', 'thumbmediumwidth', 'thumbmediumheight', 'thumbsmallwidth', 'thumbsmallheight', 'imgtitle');
 			foreach ( $valOptions as $key )
 			{
 				if (isset($data->{$key}) )
 					$ret .= ' data-' . $key . '="' . $data->{$key} . '"';
 			}
-				
+		
+			if (!empty($data->categorylist))
+			{
+				if (isset($data->categorycssstyle) && ($data->categorycssstyle == "wonder-category-dropdown" || $data->categorycssstyle == "wonder-category-dropdown-fullwidth"))
+				{
+					$ret .= ' data-categorystyle="dropdown"';
+				}
+				else
+				{
+					$ret .= ' data-categorystyle="buttons"';
+				}
+			}
+
+			$currentlang = $this->multilingual ? (!empty($data->lang) ? $data->lang : $this->currentlang) : null;
+
+			if (!empty($data->categorylist))
+			{
+				if (!empty($data->catlangs) && $this->multilingual && $currentlang != $this->defaultlang)
+				{
+					$categorylist = json_decode($data->categorylist);
+					$catlangs = json_decode($data->catlangs);
+
+					foreach($categorylist as &$category)
+					{
+						if ( array_key_exists($category->slug, $catlangs) && array_key_exists($currentlang, $catlangs->{$category->slug}) )
+						{
+							$category->caption = $catlangs->{$category->slug}->{$currentlang};
+						}
+					}
+					$data->categorylist = json_encode($categorylist);
+				}
+				$ret .= ' data-categorylist="' . esc_html($data->categorylist) . '"';
+			}
+
 			$ret .= ' data-jsfolder="' . WONDERPLUGIN_GALLERY_URL . 'engine/"'; 
 			$ret .= ' style="display:none;" >';
 			
 			$hasVideo = false;
 			
-			$currentlang = $this->multilingual ? (!empty($data->lang) ? $data->lang : $this->currentlang) : null;
-
 			// dynamic contents
 			if ( !empty($contents['mediaids']) )
 			{
@@ -550,7 +613,14 @@ class WonderPlugin_Gallery_Model {
 					
 					if ($slide->type == 10)
 					{
-						$ret .= '<a href="#" data-mediatype=13 data-youtubeapikey="' . $slide->youtubeapikey . '" data-youtubeplaylistid="' . $slide->youtubeplaylistid . '"';
+						$ret .= '<a class="html5galleryimglink"';
+
+						if (!empty($slide->category))
+						{
+							$ret .= ' data-category="' . $slide->category . '"';
+						}
+
+						$ret .= ' href="#" data-mediatype=13 data-youtubeapikey="' . $slide->youtubeapikey . '" data-youtubeplaylistid="' . $slide->youtubeplaylistid . '"';
 						if (isset($slide->youtubeplaylistmaxresults) && $slide->youtubeplaylistmaxresults)
 							$ret .= ' data-youtubeplaylistmaxresults="' . $slide->youtubeplaylistmaxresults . '"';
 						$ret .= '><img class="html5galleryimg html5gallery-tn-image"></a>';
@@ -576,7 +646,13 @@ class WonderPlugin_Gallery_Model {
 								$slide->alt = do_shortcode($slide->alt);
 						}
 						
-						$ret .= '<a';
+						$ret .= '<a class="html5galleryimglink"';
+
+						if (!empty($slide->category))
+						{
+							$ret .= ' data-category="' . $slide->category . '"';
+						}
+
 						if ($slide->type == 0)
 						{
 							$ret .=' href="' . $slide->image . '" data-mediatype=1';
@@ -635,6 +711,12 @@ class WonderPlugin_Gallery_Model {
 						if (isset($slide->description) && strlen($slide->description) > 0)
 							$ret .= ' data-description="' . $this->eacape_html_quotes($slide->description) . '"';
 						$ret .= '></a>';
+
+						$ret .= '<div class="html5gallery-info">';
+						$ret .= empty($slide->alt) ? '' : ('<div class="html5gallery-alt">' . esc_html(strip_tags($slide->alt)) . '</div>');
+						$ret .= empty($slide->title) ? '' : ('<div class="html5gallery-title">' . esc_html(strip_tags($slide->title)) . '</div>');
+						$ret .= empty($slide->description) ? '' : ('<div class="html5gallery-description">' . esc_html(strip_tags($slide->description)) . '</div>');
+						$ret .= '</div>';
 					}
 				}
 			}
@@ -644,6 +726,11 @@ class WonderPlugin_Gallery_Model {
 			
 			$ret .= '</div>';
 			
+			if (!empty($cssjs))
+			{
+				$ret .= '<script>function wondergallery_' . $id . '_appendcss(csscode) {var head=document.head || document.getElementsByTagName("head")[0];var style=document.createElement("style");head.appendChild(style);style.type="text/css";if (style.styleSheet){style.styleSheet.cssText=csscode;} else {style.appendChild(document.createTextNode(csscode));}};' . $cssjs . '</script>';
+			}
+
 			if (isset($data->addinitscript) && strtolower($data->addinitscript) === 'true')
 			{
 				$ret .= '<script>jQuery(document).ready(function(){jQuery(".wonderplugin-engine").css({display:"none"});jQuery(".wonderplugingallery").wonderplugingallery({forceinit:true});});</script>';				
@@ -671,7 +758,7 @@ class WonderPlugin_Gallery_Model {
 				$customjs = str_replace('&lt;',  '<', $customjs);
 				$customjs = str_replace('&gt;',  '>', $customjs);
 				$customjs = str_replace("GALLERYID", $id, $customjs);
-				$ret .= '<script language="JavaScript">' . $customjs . '</script>';
+				$ret .= '<script>' . $customjs . '</script>';
 			}
 		}
 		else
@@ -698,7 +785,8 @@ class WonderPlugin_Gallery_Model {
 					'title'			=> 'No permissions to browse the folder or the folder does not exist',
 					'description'	=> '',
 					'weblink'		=> '',
-					'linktarget'	=> ''
+					'linktarget'	=> '',
+					'category'		=> ''
 			);
 			
 			$items[] = (object) $item;
@@ -727,7 +815,8 @@ class WonderPlugin_Gallery_Model {
 								'title'			=> '',
 								'description'	=> '',
 								'weblink'		=> '',
-								'linktarget'	=> ''
+								'linktarget'	=> '',
+								'category'		=> (isset($slide->category) ? $slide->category : '')
 						);
 						
 						foreach ($xmlitem as $key => $value)
@@ -783,7 +872,8 @@ class WonderPlugin_Gallery_Model {
 							'title'			=> $usefilenameastitle ? $info['filename'] : '',
 							'description'	=> '',
 							'weblink'		=> '',
-							'linktarget'	=> ''
+							'linktarget'	=> '',
+							'category'		=> (isset($slide->category) ? $slide->category : '')
 					);
 				
 					$items[] = (object) $item;
@@ -825,7 +915,8 @@ class WonderPlugin_Gallery_Model {
 							'title'			=> $usefilenameastitle ? $info['filename'] : '',
 							'description'	=> '',
 							'weblink'		=> '',
-							'linktarget'	=> ''
+							'linktarget'	=> '',
+							'category'		=> (isset($slide->category) ? $slide->category : '')
 					);
 										
 					$items[] = (object) $item;
@@ -878,7 +969,8 @@ class WonderPlugin_Gallery_Model {
 								'title'			=> '',
 								'description'	=> '',
 								'weblink'		=> '',
-								'linktarget'	=> ''
+								'linktarget'	=> '',
+								'category'		=> (isset($slide->category) ? $slide->category : '')
 						);
 		
 						foreach ($xmlitem as $key => $value)
@@ -973,7 +1065,7 @@ class WonderPlugin_Gallery_Model {
 	function get_post_items($options) {
 	
 		$posts = array();
-	
+			
 		if ($options->postcategory == -1)
 		{
 			$posts = wp_get_recent_posts(array(
@@ -1024,7 +1116,8 @@ class WonderPlugin_Gallery_Model {
 					'title'			=> $post['post_title'],
 					'description'	=> $excerpt,
 					'weblink'		=> get_permalink($post['ID']),
-					'linktarget'	=> $options->postlinktarget
+					'linktarget'	=> $options->postlinktarget,
+					'category'		=> (isset($options->category) ?  $options->category : '')
 			);
 			
 			if (isset($options->posttitlelink) && strtolower($options->posttitlelink) === 'true')

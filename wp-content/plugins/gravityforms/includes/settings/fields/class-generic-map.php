@@ -150,6 +150,16 @@ class Generic_Map extends Base {
 			$required_types = isset( $choice['field_types'] ) ? rgar( $choice, 'field_types', array() ) : rgar( $choice, 'required_types', array() );
 			$excluded_types  = isset( $choice['exclude_field_types'] ) ? rgar( $choice, 'exclude_field_types', array() ) : rgar( $choice, 'excluded_types', array() );
 
+			// Convert to array if field type was configured as a string to require only one field type.
+			if ( ! is_array( $required_types ) ) {
+				$required_types = array( $required_types );
+			}
+
+			// Convert to array if excluded field type was configured as string to exclude only one field type.
+			if ( ! is_array( $excluded_types ) ) {
+				$excluded_types = array( $excluded_types );
+			}
+
 			$key = 'filtered_choices_' . implode( '-', $required_types ) . '_' . implode( '-', $excluded_types );
 			if ( ! isset( $this->value_field['choices'][ $key ] ) ) {
 				$this->value_field['choices'][ $key ] = $passed_choices == 'form_fields' ? $this->get_value_choices( $required_types, $excluded_types ) : $this->get_prepopulated_choice( 'default', $passed_choices );

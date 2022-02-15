@@ -30,13 +30,13 @@ class Mappress_Template extends Mappress_Obj {
 		add_action('admin_print_footer_scripts', array(__CLASS__, 'print_footer_templates'), -10);
 
 		self::$tokens = array(
-			'address' => __('Address', 'mappress-google-maps-for-wordpress'),
-			'body' => __('Body', 'mappress-google-maps-for-wordpress'),
-			'icon' => __('Icon', 'mappress-google-maps-for-wordpress'),
-			'thumbnail' => __('Thumbnail', 'mappress-google-maps-for-wordpress'),
-			'title' => __('Title', 'mappress-google-maps-for-wordpress'),
-			'url' => __('Url', 'mappress-google-maps-for-wordpress'),
-			'custom' => __('Custom Field', 'mappress-google-maps-for-wordpress')
+			'address' => array('label' => __('Address', 'mappress-google-maps-for-wordpress'), 'token' => 'address'),
+			'body' => array('label' => __('Body', 'mappress-google-maps-for-wordpress'), 'token' => 'body'),
+			'icon' => array('label' => __('Icon', 'mappress-google-maps-for-wordpress'), 'token' => 'icon'),
+			'thumbnail' => array('label' => __('Thumbnail', 'mappress-google-maps-for-wordpress'), 'token' => 'thumbnail'),
+			'title' => array('label' => __('Title', 'mappress-google-maps-for-wordpress'), 'token' => 'title'),
+			'url' => array('label' => __('Url', 'mappress-google-maps-for-wordpress'), 'token' => 'url'),
+			'custom' => array('label' => __('Custom Field', 'mappress-google-maps-for-wordpress'), 'token' => 'props.myfield')
 		);
 	}
 
@@ -163,8 +163,13 @@ class Mappress_Template extends Mappress_Obj {
 		$tokens = str_replace(array('{', 'poi.', 'props.'), '', $tokens);
 
 		// Remove standard tokens, make a unique list
-		$tokens = array_unique(array_diff($tokens, self::$tokens));
-		return $tokens;
+		$user_tokens = array();
+		foreach($tokens as $token) {
+			if (!array_key_exists($token, self::$tokens))
+				$user_tokens[] = $token;
+		}
+		$user_tokens = array_unique($user_tokens);
+		return $user_tokens;
 	}
 
 	static function enqueue_template($template_name, $footer) {

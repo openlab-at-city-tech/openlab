@@ -467,6 +467,19 @@ if (!post_password_required($post->ID) && $load) {
                             <div class="wpd-load-more-submit-wrap">
                                 <button name="submit" data-lastparentid="<?php echo esc_attr($commentData["last_parent_id"]); ?>" class="wpd-load-more-submit wpd-loaded wpd-prim-button">
                                     <?php esc_html_e($loadMoreButtonText); ?>
+                                    <?php
+                                    if (apply_filters("wpdiscuz_show_comments_left", false) && !empty($commentData["comments_left"])) {
+                                        $commentsLeft = $commentData["comments_left"];
+                                        $commentsLeftText = apply_filters(
+                                                "wpdiscuz_comments_left_text",
+                                                "({$commentsLeft})",
+                                                ["post" => $post, "user" => $currentUser, "comments_left" => $commentsLeft]
+                                        );
+                                        ?>
+                                        <span class="wpd-comments-left"><?php echo $commentsLeftText; ?></span>
+                                        <?php
+                                    }
+                                    ?>
                                 </button>
                             </div>
                             <input id="wpdiscuzHasMoreComments" type="hidden" value="<?php echo esc_attr($commentData["is_show_load_more"]); ?>" />

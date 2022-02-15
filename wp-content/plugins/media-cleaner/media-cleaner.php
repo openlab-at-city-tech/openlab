@@ -3,7 +3,7 @@
 Plugin Name: Media Cleaner
 Plugin URI: https://meowapps.com
 Description: Clean your WordPress from unused or broken media entries and files.
-Version: 6.2.7
+Version: 6.2.8
 Author: Jordy Meow
 Author URI: https://jordymeow.com
 Text Domain: media-cleaner
@@ -14,7 +14,7 @@ Originally developed for two of my websites:
 */
 
 if ( !defined( 'WPMC_VERSION' ) ) {
-  define( 'WPMC_VERSION', '6.2.7' );
+  define( 'WPMC_VERSION', '6.2.8' );
   define( 'WPMC_PREFIX', 'wpmc' );
   define( 'WPMC_DOMAIN', 'media-cleaner' );
   define( 'WPMC_ENTRY', __FILE__ );

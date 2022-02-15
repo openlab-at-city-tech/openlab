@@ -896,6 +896,10 @@ div.gf_page_steps+div.validation_error {
     letter-spacing: normal;
 }
 
+.gform_legacy_markup_wrapper .validation_message--hidden-on-empty:empty {
+    display: none;
+}
+
 .gform_legacy_markup_wrapper li.gfield_error input:not([type='radio']):not([type='checkbox']):not([type='submit']):not([type='button']):not([type='image']):not([type='file']),
 .gform_legacy_markup_wrapper li.gfield_error textarea {
     border: 1px solid #790000;

@@ -524,7 +524,7 @@ function bp_get_querystring( n ) {
 
 	if ( groupRow.find( 'div.ges-panel' ).length ) {
 		repositionGESPanel();
-		$( window ).resize(function() {
+		$( window ).on('resize', function() {
 			repositionGESPanel();
 		});
 	}

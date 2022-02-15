@@ -26,7 +26,7 @@
 	text-align: left;
 }
 
-.mapp-layout * {
+.mapp-layout, .mapp-layout * {
 	box-sizing: border-box;
 	font-size: 13px;
 }
@@ -516,46 +516,48 @@ only screen and (min-device-pixel-ratio: 2) {
 	-----------------------------------------------------------------------------------
 */
 
-.mapp-filter-toggle {
+.mapp-filters-toggle {
 	text-transform: uppercase;
 }
 
-.mapp-filter-wrapper {}
+.mapp-filters-wrapper {}
 
-.mapp-filter-body {
+.mapp-filters-body {
 	background-color: white;
 	display: none;
 	flex-direction: column;
 	z-index: 10003;
 }
 
-.mapp-filter-list {
+.mapp-filters-list {
 	flex: 1;
 	overflow: auto;
 	padding: 5px 10px 5px 10px;
 }
 
-/* Override styles from, theme */
-.mapp-filter-body input, .mapp-filter-body input[type="text"] {
+/* Try to override themes */
+.mapp-filters-body input, .mapp-filters-body input[type="text"] {
 	margin: initial;
 	max-width: none;
 	padding: 5px;
-	width: 100%;
 }
 
-.mapp-filter-body input[type="radio"], .mapp-filter-body input[type="checkbox"] {
+.mapp-filters-body input[type="radio"], .mapp-filters-body input[type="checkbox"] {
 	margin: initial;
 	margin-right: 10px;
 }
 
-.mapp-filter-body select {
+.mapp-filters-body input[type="radio"]:checked::before, .mapp-filters-body input[type="checkbox"]:checked::before {
+	content: reset;
+}
+
+.mapp-filters-body select {
 	margin: initial;
 	max-width: none;
 	width: 100%;
 }
 
-
-.mapp-filter-toolbar {
+.mapp-filters-toolbar {
 	align-items: center;
 	border-top: 1px solid lightgray;
 	display: flex;
@@ -563,7 +565,7 @@ only screen and (min-device-pixel-ratio: 2) {
 	padding: 10px;
 }
 
-.mapp-filter-count {
+.mapp-filters-count {
 	color: #777;
 	margin-right: 5px;
 	min-width: 100px;
@@ -608,18 +610,18 @@ only screen and (min-device-pixel-ratio: 2) {
 	------------------
 */
 
-.mapp-header .mapp-filter-wrapper {
+.mapp-header .mapp-filters-wrapper {
 	position: relative;
 }
 
-.mapp-header .mapp-filter-body {
+.mapp-header .mapp-filters-body {
 	border: 1px solid lightgray;
 	position: absolute;
 	top: 42px; right: -5px;
 }
 
 /* Filters open */
-.mapp-view-filters .mapp-filter-body {
+.mapp-view-filters .mapp-filters-body {
 	display: flex;
 }
 
@@ -627,17 +629,17 @@ only screen and (min-device-pixel-ratio: 2) {
 	Filters in sidebar
 	------------------
 */
-.mapp-list .mapp-filter-body {
+.mapp-list .mapp-filters-body {
 	flex: 1;
 	position: static;
 }
 
-.mapp-sidebar .mapp-filter-toggle {
+.mapp-sidebar .mapp-filters-toggle {
 	border: none;
 	border-bottom: 1px solid lightgray;
 }
 
-.mapp-view-filters .mapp-sidebar .mapp-filter-wrapper {
+.mapp-view-filters .mapp-sidebar .mapp-filters-wrapper {
 	background-color: white;
 	display: flex;
 	flex-direction: column;
@@ -646,7 +648,7 @@ only screen and (min-device-pixel-ratio: 2) {
 	z-index: 1;
 }
 
-.mapp-view-filters .mapp-sidebar .mapp-filter-body {
+.mapp-view-filters .mapp-sidebar .mapp-filters-body {
 	border: none;
 	display: flex;
 	flex-direction: column;
@@ -1171,6 +1173,7 @@ only screen and (min-device-pixel-ratio: 2) {
 }
 
 .mapp-view-mini .mapp-directions {
+	max-width: auto;
 	width: auto;
 }
 

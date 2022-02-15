@@ -4253,7 +4253,7 @@ const useWidgetLibraryInsertionPoint = () => {
 
     return {
       rootClientId,
-      insertionIndex: getBlockIndex(clientId, rootClientId) + 1
+      insertionIndex: getBlockIndex(clientId) + 1
     };
   }, [firstRootId]);
 };
@@ -4267,6 +4267,7 @@ const useWidgetLibraryInsertionPoint = () => {
 /**
  * WordPress dependencies
  */
+
 
 
 
@@ -4289,27 +4290,35 @@ function InserterSidebar() {
     setIsInserterOpened
   } = (0,external_wp_data_namespaceObject.useDispatch)(store_store);
   const closeInserter = (0,external_wp_element_namespaceObject.useCallback)(() => {
-    return () => setIsInserterOpened(false);
+    return setIsInserterOpened(false);
   }, [setIsInserterOpened]);
+  const TagName = !isMobileViewport ? external_wp_components_namespaceObject.VisuallyHidden : 'div';
   const [inserterDialogRef, inserterDialogProps] = (0,external_wp_compose_namespaceObject.__experimentalUseDialog)({
-    onClose: closeInserter
+    onClose: closeInserter,
+    focusOnMount: null
   });
+  const libraryRef = (0,external_wp_element_namespaceObject.useRef)();
+  (0,external_wp_element_namespaceObject.useEffect)(() => {
+    libraryRef.current.focusSearch();
+  }, []);
   return (0,external_wp_element_namespaceObject.createElement)("div", _extends({
     ref: inserterDialogRef
   }, inserterDialogProps, {
     className: "edit-widgets-layout__inserter-panel"
-  }), (0,external_wp_element_namespaceObject.createElement)("div", {
+  }), (0,external_wp_element_namespaceObject.createElement)(TagName, {
     className: "edit-widgets-layout__inserter-panel-header"
   }, (0,external_wp_element_namespaceObject.createElement)(external_wp_components_namespaceObject.Button, {
     icon: library_close,
-    onClick: closeInserter
+    onClick: closeInserter,
+    label: (0,external_wp_i18n_namespaceObject.__)('Close block inserter')
   })), (0,external_wp_element_namespaceObject.createElement)("div", {
     className: "edit-widgets-layout__inserter-panel-content"
   }, (0,external_wp_element_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.__experimentalLibrary, {
     showInserterHelpPanel: true,
     shouldFocusBlock: isMobileViewport,
     rootClientId: rootClientId,
-    __experimentalInsertionIndex: insertionIndex
+    __experimentalInsertionIndex: insertionIndex,
+    ref: libraryRef
   })));
 }
 //# sourceMappingURL=inserter-sidebar.js.map
@@ -4346,7 +4355,8 @@ function ListViewSidebar() {
   }
 
   const focusOnMountRef = (0,external_wp_compose_namespaceObject.useFocusOnMount)('firstElement');
-  const focusReturnRef = (0,external_wp_compose_namespaceObject.useFocusReturn)();
+  const headerFocusReturnRef = (0,external_wp_compose_namespaceObject.useFocusReturn)();
+  const contentFocusReturnRef = (0,external_wp_compose_namespaceObject.useFocusReturn)();
 
   function closeOnEscape(event) {
     if (event.keyCode === external_wp_keycodes_namespaceObject.ESCAPE && !event.defaultPrevented) {
@@ -4363,16 +4373,17 @@ function ListViewSidebar() {
       className: "edit-widgets-editor__list-view-panel",
       onKeyDown: closeOnEscape
     }, (0,external_wp_element_namespaceObject.createElement)("div", {
-      className: "edit-widgets-editor__list-view-panel-header"
+      className: "edit-widgets-editor__list-view-panel-header",
+      ref: headerFocusReturnRef
     }, (0,external_wp_element_namespaceObject.createElement)("strong", {
       id: labelId
-    }, (0,external_wp_i18n_namespaceObject.__)('List view')), (0,external_wp_element_namespaceObject.createElement)(external_wp_components_namespaceObject.Button, {
+    }, (0,external_wp_i18n_namespaceObject.__)('List View')), (0,external_wp_element_namespaceObject.createElement)(external_wp_components_namespaceObject.Button, {
       icon: close_small,
-      label: (0,external_wp_i18n_namespaceObject.__)('Close list view sidebar'),
+      label: (0,external_wp_i18n_namespaceObject.__)('Close List View Sidebar'),
       onClick: () => setIsListViewOpened(false)
     })), (0,external_wp_element_namespaceObject.createElement)("div", {
       className: "edit-widgets-editor__list-view-panel-content",
-      ref: (0,external_wp_compose_namespaceObject.useMergeRefs)([focusReturnRef, focusOnMountRef])
+      ref: (0,external_wp_compose_namespaceObject.useMergeRefs)([contentFocusReturnRef, focusOnMountRef])
     }, (0,external_wp_element_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.__experimentalListView, {
       onSelect: selectEditorBlock,
       showNestedBlocks: true,
@@ -4500,16 +4511,19 @@ function Interface(_ref) {
       closeGeneralSidebar();
     }
   }, [isInserterOpened, isListViewOpened, isHugeViewport]);
+  const hasSecondarySidebar = isListViewOpened || isInserterOpened;
   return (0,external_wp_element_namespaceObject.createElement)(interface_skeleton, {
     labels: interfaceLabels,
     header: (0,external_wp_element_namespaceObject.createElement)(header, null),
-    secondarySidebar: (0,external_wp_element_namespaceObject.createElement)(SecondarySidebar, null),
+    secondarySidebar: hasSecondarySidebar && (0,external_wp_element_namespaceObject.createElement)(SecondarySidebar, null),
     sidebar: hasSidebarEnabled && (0,external_wp_element_namespaceObject.createElement)(complementary_area.Slot, {
       scope: "core/edit-widgets"
     }),
-    content: (0,external_wp_element_namespaceObject.createElement)(WidgetAreasBlockEditorContent, {
+    content: (0,external_wp_element_namespaceObject.createElement)(external_wp_element_namespaceObject.Fragment, null, (0,external_wp_element_namespaceObject.createElement)(WidgetAreasBlockEditorContent, {
       blockEditorSettings: blockEditorSettings
-    }),
+    }), (0,external_wp_element_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.BlockStyles.Slot, {
+      scope: "core/block-inspector"
+    })),
     footer: hasBlockBreadCrumbsEnabled && !isMobileViewport && (0,external_wp_element_namespaceObject.createElement)("div", {
       className: "edit-widgets-layout__footer"
     }, (0,external_wp_element_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.BlockBreadcrumb, {

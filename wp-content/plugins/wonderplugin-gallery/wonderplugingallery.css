@@ -86,12 +86,18 @@ div.wonderplugin-toolbar .button {
 	line-height: 28px;
 	height: 30px;
 	background-color: #fff;
+	margin-top: 4px;
 } 
 
 div.wonderplugin-toolbar .button:hover {
 	background-color: #00a0d2;
 	color: #fff;
 	border:1px solid #00a0d2;
+}
+
+.wonderplugin-toolbar-options {
+	text-align: right;
+	margin-top: 8px;
 }
 
 .wonderplugin-table {
@@ -329,6 +335,7 @@ ul.wonderplugin-feature-list li{
 
 #wonderplugin-gallery-media-table {
 	overflow: auto;
+	clear: both;
 }
 
 #wonderplugin-gallery-media-table li {
@@ -401,6 +408,7 @@ ul.wonderplugin-feature-list li{
 	font-size: 12px;
 	width: 160px;
 	margin: 0;
+	min-height: 34px;
 }
 
 .select-editable input {
@@ -694,4 +702,58 @@ li.wonderplugin-dialog-tab-panel.wonderplugin-dialog-tab-panel-selected {
 .wonderplugin-form-table-general th,
 .wonderplugin-form-table-general td {
 	vertical-align: middle;
+}
+
+
+.wonderplugin-gallery-category {
+	display: inline-block;
+	position: relative;
+	background-color: transparent;	
+	padding: 8px;
+	border-radius: 8px;
+	margin: 0px 4px 8px 4px;
+}
+
+.wonderplugin-gallery-category-caption {
+	background-color: #fff;
+	padding: 8px 12px;
+	color: #333;
+	text-align: center;
+	border-radius: 8px;
+	border: 1px solid #ccc;
+}
+
+.wonderplugin-gallery-category-caption:hover {
+	background-color: #fbfbfb;	
+}
+
+.wonderplugin-gallery-category-buttons {
+	margin: 4px auto;	
+}
+
+.wonderplugin-gallery-category-edit,
+.wonderplugin-gallery-category-delete {
+	font-size: 12px;
+	cursor: pointer;
+	text-decoration: underline;
+	margin: 12px 4px 8px 4px;
+	color: #07c;
+}
+
+.wonderplugin-gallery-category-single .wonderplugin-gallery-category-caption {
+	cursor: move;
+}
+
+.wonderplugin-gallery-category-buttons {
+	text-align: center;
+}
+
+.wonderplugin-gallery-addcategory {
+	display: inline-block;
+	font-size: 12px;
+	text-decoration: underline;
+	color: #07c;
+	cursor: pointer;
+	margin: 12px 8px 8px 0px;
+	vertical-align: top;
 }

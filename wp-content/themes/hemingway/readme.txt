@@ -2,7 +2,7 @@
 Contributors: Anlino
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=anders%40andersnoren%2ese&lc=US&item_name=Free%20WordPress%20Themes%20from%20Anders%20Noren&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted
 Requires at least: 4.5
-Tested up to: 5.7.1
+Tested up to: 5.8
 Requires PHP: 5.6
 Stable tag: trunk
 License: GPLv2 or later
@@ -41,6 +41,11 @@ Source: http://www.unsplash.com
 
 
 == Changelog ==
+
+Version 2.1.3 (2022-01-11)
+-------------------------
+- Fixed CSS code having been overwritten with gibberish in 2.1.1 (thanks, Levente Huszko).
+- Bumped "Tested up to" to 5.8.
 
 Version 2.1.2 (2021-05-05)
 -------------------------

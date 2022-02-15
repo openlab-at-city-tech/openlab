@@ -188,6 +188,8 @@ _:-ms-lang(x), .wpd-social-login [wpd-tooltip]::before{top: -24px;}
 #wpdcom .wpd_label__checkbox:checked + .wpd_label__text .wpd_label__check .wpdicon-off{display:none; }
 #wpdcom .wpd_label__check i.wpdicon-off.fa-unlock-alt, #wpdcom .wpd_label__check i.wpdicon-on.fa-lock{ font-size: 15px; }
 #wpdcom .ql-editor > * { cursor: text;}
+#wpdcom .ql-editor li:not(.ql-direction-rtl)::before {margin-left: 0;}
+#wpdcom .ql-editor blockquote {padding-right: 6px;}
 #wpdcom .ql-container{height: 120px;}
 #wpdcom .ql-toolbar.wpd-toolbar-hidden{display:none;}
 #wpdcom .ql-toolbar .ql-stroke{stroke: #999999;}
@@ -202,6 +204,7 @@ _:-ms-lang(x), .wpd-social-login [wpd-tooltip]::before{top: -24px;}
 #wpdcom .ql-toolbar .wmu-upload-wrap .wmu-add i:hover{color: #0274be;}
 #wpdcom .wpd-editor-char-counter{font-size: 9px;padding: 3px 5px 2px;position: absolute;left: 0;}
 #wpdcom .wpd-editor-char-counter.error{color: red;}
+
 
 /* Comment Form | ROWS and COLS */
 

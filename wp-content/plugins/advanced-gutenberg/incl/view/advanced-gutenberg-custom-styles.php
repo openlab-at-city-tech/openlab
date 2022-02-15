@@ -23,11 +23,11 @@ if (isset($_GET['save_styles'])) : // phpcs:ignore WordPress.Security.NonceVerif
                 <?php
                 $content = '';
                 foreach ($custom_styles_saved as $customStyles) {
-                    $content .= '<li class="advgb-customstyles-items" data-id-customstyle="' . (int) $customStyles['id'] . '">';
-                    $content .= '<a><i class="title-icon" style="background-color: ' . $customStyles['identifyColor'] . '"></i><span class="advgb-customstyles-items-title">' . esc_html($customStyles['title']) . '</span></a>';
-                    $content .= '<a class="copy" title="' . __('Copy', 'advanced-gutenberg') . '"><i class="mi mi-content-copy"></i></a>';
-                    $content .= '<a class="trash" title="' . __('Delete', 'advanced-gutenberg') . '"><i class="mi mi-delete"></i></a>';
-                    $content .= '<a class="edit" title="' . __('Edit', 'advanced-gutenberg') . '"><i class="mi mi-edit"></i></a>';
+                    $content .= '<li class="advgb-customstyles-items" data-id-customstyle="' . esc_attr((int) $customStyles['id']) . '">';
+                    $content .= '<a><i class="title-icon" style="background-color: ' . esc_attr($customStyles['identifyColor']) . '"></i><span class="advgb-customstyles-items-title">' . esc_html($customStyles['title']) . '</span></a>';
+                    $content .= '<a class="copy" title="' . esc_attr__('Copy', 'advanced-gutenberg') . '"><i class="mi mi-content-copy"></i></a>';
+                    $content .= '<a class="trash" title="' . esc_attr__('Delete', 'advanced-gutenberg') . '"><i class="mi mi-delete"></i></a>';
+                    $content .= '<a class="edit" title="' . esc_attr__('Edit', 'advanced-gutenberg') . '"><i class="mi mi-edit"></i></a>';
                     $content .= '<ul style="margin-left: 30px"><li class="advgb-customstyles-items-class">(' . esc_html($customStyles['name']) . ')</li></ul>';
                     $content .= '</li>';
                 }
@@ -101,14 +101,14 @@ if (isset($_GET['save_styles'])) : // phpcs:ignore WordPress.Security.NonceVerif
                 <strong>
                     <?php esc_html_e('Previous Paragraph.', 'advanced-gutenberg'); ?>
                 </strong>
-                <?php echo ' Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam vitae condimentum augue. Nullam semper augue quis posuere lacinia. Praesent non lectus nunc.'; ?>
+                <?php echo esc_html('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam vitae condimentum augue. Nullam semper augue quis posuere lacinia. Praesent non lectus nunc.'); ?>
             </p>
             <div class="advgb-customstyles-target"><?php esc_html_e('Example text with this style', 'advanced-gutenberg') ?></div>
             <p class="follow-block" style="margin-bottom: 10px; margin-top: 20px; font-size: 16px; line-height: 24px;">
                 <strong>
                     <?php esc_html_e('Following Paragraph.', 'advanced-gutenberg'); ?>
                 </strong>
-                <?php echo ' Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam vitae condimentum augue. Nullam semper augue quis posuere lacinia. Praesent non lectus nunc.'; ?>
+                <?php echo esc_html('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam vitae condimentum augue. Nullam semper augue quis posuere lacinia. Praesent non lectus nunc.'); ?>
             </p>
         </div>
     </div>

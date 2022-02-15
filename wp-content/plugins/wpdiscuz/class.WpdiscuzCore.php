@@ -2,7 +2,7 @@
 /*
  * Plugin Name: wpDiscuz
  * Description: #1 WordPress Comment Plugin. Innovative, modern and feature-rich comment system to supercharge your website comment section.
- * Version: 7.3.9
+ * Version: 7.3.11
  * Author: gVectors Team
  * Author URI: https://gvectors.com/
  * Plugin URI: https://wpdiscuz.com/
@@ -679,7 +679,7 @@ class WpdiscuzCore implements WpDiscuzConstants {
             $this->form = $this->wpdiscuzForm->getForm($postId);
             if ($this->form->isUserCanSeeComments(WpdiscuzHelper::getCurrentUser(), $postId)) {
                 $this->isWpdiscuzLoaded = true;
-                $isFirstLoad = WpdiscuzHelper::sanitize(INPUT_POST, "isFirstLoad", FILTER_SANITIZE_NUMBER_INT, 1);
+                $isFirstLoad = WpdiscuzHelper::sanitize(INPUT_POST, "isFirstLoad", FILTER_SANITIZE_NUMBER_INT, 0);
                 // max value of php int for limit
                 $limit = ($isFirstLoad && $this->options->thread_display["commentListLoadType"] == 3) || (!$isFirstLoad && $this->options->thread_display["commentListLoadType"] == 1) ? PHP_INT_MAX - 1 : $this->options->wp["commentPerPage"];
                 $args = ["number" => $limit];
@@ -777,7 +777,7 @@ class WpdiscuzCore implements WpDiscuzConstants {
             $this->cache->setCommentsCache($this->commentsArgs, $commentList, $commentData);
         }
 
-        if ($count = count($commentList)) {
+        if (is_array($commentList) && ($count = count($commentList))) {
             $commentListArgs["lastCommentIdInList"] = $commentList[$count - 1]->comment_ID;
         }
 
@@ -815,7 +815,7 @@ class WpdiscuzCore implements WpDiscuzConstants {
             }
             $this->getStickyComments(true, $commentList, $commentListArgs);
             $this->commentsArgs["order"] = $oldOrder;
-        } else {
+        } else { // AJAX LOAD MORE
             $limitBefore = $this->commentsArgs["number"];
             if ($this->commentsArgs["number"]) {
                 $this->commentsArgs["number"] += 1;
@@ -840,6 +840,22 @@ class WpdiscuzCore implements WpDiscuzConstants {
             }
             if ($commentList) {
                 $commentData["last_parent_id"] = $commentList[$commentListCount - 1]->comment_ID;
+                // get count of left comments
+                if (apply_filters("wpdiscuz_show_comments_left", false)) {
+                    $lastId = $this->commentsArgs["last_parent_id"];
+                    $this->commentsArgs["last_parent_id"] = $commentData["last_parent_id"];
+                    $this->commentsArgs["count"] = true;
+                    $this->commentsArgs["caller"] = "wpdiscuz";
+                    $commentsLeft = get_comments($this->commentsArgs);
+                    $this->commentsArgs["last_parent_id"] = $lastId;
+                    $this->commentsArgs["count"] = false;
+                    $this->commentsArgs["caller"] = "";
+                    $commentData["comments_left"] = $commentsLeft; //send back to ajax comments left count
+                    $commentData["comments_left_text"] = apply_filters("wpdiscuz_comments_left_text",
+                            "({$commentsLeft})",
+                            ["post" => $this->commentsArgs["post_id"], "user" => $this->commentsArgs["user"], "comments_left" => $commentsLeft]
+                    );
+                }
                 if ($this->options->wp["threadComments"]) {
                     $commentList = $this->getChildren($commentList, $commentListArgs);
                 }
@@ -992,6 +1008,16 @@ class WpdiscuzCore implements WpDiscuzConstants {
             }
         }
 
+        $user = WpdiscuzHelper::getCurrentUser();
+
+        if (empty($user->ID) || empty($user->roles) || !is_array($user->roles)) {
+            $args["user"] = 0;
+            $args["user_roles"] = ["guest"];
+        } else {
+            $args["user"] = $user;
+            $args["user_roles"] = $user->roles;
+        }
+
         return apply_filters("wpdiscuz_comments_args", $args);
     }
 
@@ -1040,14 +1066,14 @@ class WpdiscuzCore implements WpDiscuzConstants {
         ]);
         wp_register_style("wpdiscuz-font-awesome", plugins_url(WPDISCUZ_DIR_NAME . "/assets/third-party/font-awesome-5.13.0/css/fontawesome-all.min.css"), null, $this->version);
 
-        if ((isset($_GET["page"]) && in_array($_GET["page"], $wpdiscuzPages) && in_array($pagenow, $wpdiscuzWpPages)) || ($typenow === "wpdiscuz_form") || ($pagenow === self::PAGE_COMMENTS)) {            
+        if ((isset($_GET["page"]) && in_array($_GET["page"], $wpdiscuzPages) && in_array($pagenow, $wpdiscuzWpPages)) || ($typenow === "wpdiscuz_form") || ($pagenow === self::PAGE_COMMENTS)) {
             $args = [
                 "msgConfirmResetOptions" => esc_html__("Do you really want to reset all options?", "wpdiscuz"),
                 "msgConfirmResetTabOptions" => esc_html__("Do you really want to reset tab options?", "wpdiscuz"),
                 "msgConfirmRemoveVotes" => esc_html__("Do you really want to remove voting data?", "wpdiscuz"),
                 "msgConfirmResetPhrases" => esc_html__("Do you really want to reset phrases?", "wpdiscuz"),
                 "wmuMsgConfirmAttachmentDelete" => esc_html__("Do you really want to delet this attachment?", "wpdiscuz"),
-                "msgConfirmPurgeCache" => esc_html__("Do you really want to delete comments and users cache?", "wpdiscuz"),                
+                "msgConfirmPurgeCache" => esc_html__("Do you really want to delete comments and users cache?", "wpdiscuz"),
                 "wpdiscuz_nonce" => $this->helper->generateNonce(),
             ];
             // Media Upload Lightbox
@@ -2121,7 +2147,7 @@ class WpdiscuzCore implements WpDiscuzConstants {
                                 <div class="wpd-inline-type">
                                     <label>
                                         <input type="radio" name="wpd-inline-type" value="0" checked="checked"/>
-            <?php esc_html_e("CLOSED", "wpdiscuz") ?>
+                                        <?php esc_html_e("CLOSED", "wpdiscuz") ?>
                                     </label>
                                 </div>
                                 <img src="<?php echo esc_url_raw(plugins_url(WPDISCUZ_DIR_NAME . "/assets/img/dashboard/inline-feedback-closed.png")) ?>"
@@ -2131,7 +2157,7 @@ class WpdiscuzCore implements WpDiscuzConstants {
                                 <div class="wpd-inline-type">
                                     <label>
                                         <input type="radio" name="wpd-inline-type" value="1"/>
-            <?php esc_html_e("OPENED", "wpdiscuz") ?>
+                                        <?php esc_html_e("OPENED", "wpdiscuz") ?>
                                     </label>
                                 </div>
                                 <img src="<?php echo esc_url_raw(plugins_url(WPDISCUZ_DIR_NAME . "/assets/img/dashboard/inline-feedback-opened.png")) ?>"

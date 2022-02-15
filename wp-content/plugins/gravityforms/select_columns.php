@@ -154,9 +154,9 @@ class GFSelectColumns {
 					transform: translate( 0, -2px );
 				}
 
-
-
-
+				.rtl {
+					direction: rtl;
+				}
 			</style>
 
 			<script type="text/javascript">
@@ -185,7 +185,10 @@ class GFSelectColumns {
 			</script>
 
 		</head>
-		<body>
+		<?php
+		$body_class_attr = is_rtl() ? 'class="' . esc_attr( 'rtl' ) . '"' : '';
+		?>
+		<body <?php echo $body_class_attr; ?>>
 		<?php
 		$columns = RGFormsModel::get_grid_columns( $form_id );
 		$field_ids = array_keys( $columns );

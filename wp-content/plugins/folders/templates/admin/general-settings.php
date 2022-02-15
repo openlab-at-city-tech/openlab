@@ -451,6 +451,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
     $customize_folders = get_option('customize_folders');
     $default_folders = (empty($default_folders) || !is_array($default_folders))?array():$default_folders;
     do_settings_sections( __FILE__ );
+    delete_transient("premio_folders_without_trash");
     ?>
     <?php if(isset($_GET['note']) && $_GET['note'] == 1) { ?>
         <div class="folder-notification notice notice-success is-dismissible">

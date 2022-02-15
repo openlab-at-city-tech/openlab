@@ -7150,6 +7150,10 @@ div#notifications_container .inside div.message.error {
 	width: 50%;
 }
 
+.gfield .ginput_complex .ginput_cardinfo_left legend:not(.hidden_sub_label) {
+		position: static;
+	}
+
 .ginput_complex .ginput_cardinfo_right {
 	min-width: 85px !important;
 }

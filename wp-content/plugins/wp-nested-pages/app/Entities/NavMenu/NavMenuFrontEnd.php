@@ -17,7 +17,6 @@ class NavMenuFrontEnd
 	{
 		$this->nav_menu_repo = new NavMenuRepository;
 		add_filter('nav_menu_link_attributes', [$this, 'attributeFilter'], 10, 3);
-		add_filter('nav_menu_item_args', [$this, 'removePrivateItems'], 10, 3);
 	}
 
 	/**
@@ -25,6 +24,9 @@ class NavMenuFrontEnd
 	*/
 	public function attributeFilter($atts, $item, $args)
 	{
+		if ( get_option('nestedpages_menusync') !== 'sync' ) return $atts;
+		if ( get_option('nestedpages_disable_menu') == 'true' ) return $atts;
+
 		if ( $this->nav_menu_repo->getMenuID() == null ) return $atts;
 		if ( !isset($args->menu->term_id) ) return $atts;
 		if ( $args->menu->term_id !== $this->nav_menu_repo->getMenuID() ) return $atts;
@@ -37,15 +39,5 @@ class NavMenuFrontEnd
 		}
 		
 		return $atts;
-	}
-
-	/**
-	* Remove Private Items from the menu
-	*/
-	public function removePrivateItems($args, $item, $depth)
-	{
-		// $status = get_post_status($item->object_id);
-		// if ( $status && $status == 'private' ) $item->post_status = 'private';
-		return $args;
 	}
 }

@@ -4,7 +4,7 @@
  *
  * @package     WP Accessibility
  * @author      Joe Dolson
- * @copyright   2012-2021 Joe Dolson
+ * @copyright   2012-2022 Joe Dolson
  * @license     GPL-2.0+
  *
  * @wordpress-plugin
@@ -17,11 +17,11 @@
  * Domain Path: /lang
  * License:     GPL-2.0+
  * License URI: http://www.gnu.org/license/gpl-2.0.txt
- * Version: 1.7.11
+ * Version: 1.7.14
  */
 
 /*
-	Copyright 2012-2021  Joe Dolson (email : joe@joedolson.com)
+	Copyright 2012-2022  Joe Dolson (email : joe@joedolson.com)
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -69,7 +69,7 @@ function wpa_admin_menu() {
  * Install on activation.
  */
 function wpa_install() {
-	$wpa_version = '1.7.11';
+	$wpa_version = '1.7.14';
 	if ( 'true' !== get_option( 'wpa_installed' ) ) {
 		add_option( 'rta_from_tag_clouds', 'on' );
 		add_option( 'asl_styles_focus', '' );
@@ -271,13 +271,13 @@ function wpa_jquery_asl() {
 		$content    = str_replace( '#', '', esc_attr( get_option( 'asl_content' ) ) );
 		$nav        = str_replace( '#', '', esc_attr( get_option( 'asl_navigation' ) ) );
 		$sitemap    = esc_url( get_option( 'asl_sitemap' ) );
-		$html      .= ( '' !== $content ) ? "<a href=\"#$content\">" . __( 'Skip to Content', 'wp-accessibility' ) . '</a> ' : '';
-		$html      .= ( '' !== $nav ) ? "<a href=\"#$nav\">" . __( 'Skip to navigation', 'wp-accessibility' ) . '</a> ' : '';
-		$html      .= ( '' !== $sitemap ) ? "<a href=\"$sitemap\">" . __( 'Site map', 'wp-accessibility' ) . '</a> ' : '';
-		$html      .= ( '' !== $extra && '' !== $extra_text ) ? "<a href=\"$extra\">$extra_text</a> " : '';
+		$html      .= ( '' !== $content ) ? "<a href=\"#$content\" class='no-scroll'>" . __( 'Skip to Content', 'wp-accessibility' ) . '</a> ' : '';
+		$html      .= ( '' !== $nav ) ? "<a href=\"#$nav\" class='no-scroll'>" . __( 'Skip to navigation', 'wp-accessibility' ) . '</a> ' : '';
+		$html      .= ( '' !== $sitemap ) ? "<a href=\"$sitemap\" class='no-scroll'>" . __( 'Site map', 'wp-accessibility' ) . '</a> ' : '';
+		$html      .= ( '' !== $extra && '' !== $extra_text ) ? "<a href=\"$extra\" class='no-scroll'>$extra_text</a> " : '';
 		$is_rtl     = ( is_rtl() ) ? '-rtl' : '-ltr';
 		$skiplinks  = __( 'Skip links', 'wp-accessibility' );
-		$output     = ( '' !== $html ) ? "<div class=\"$visibility$is_rtl\" id=\"skiplinks\" role=\"navigation\" aria-label=\"$skiplinks\">$html</div>" : '';
+		$output     = ( '' !== $html ) ? "<div class=\"$visibility$is_rtl\" id=\"skiplinks\" role=\"navigation\" aria-label=\"" . esc_attr( $skiplinks ) . "\">$html</div>" : '';
 	}
 
 	wp_enqueue_script( 'wp-accessibility', plugins_url( 'js/wp-accessibility.js', __FILE__ ), array( 'jquery' ), '1.0', true );
@@ -320,6 +320,26 @@ function wpa_logout_item( $admin_bar ) {
 		'href'  => wp_logout_url(),
 	);
 	$admin_bar->add_node( $args );
+}
+
+add_filter( 'posts_clauses', 'wpa_search_attachment_alt', 20, 2 );
+/**
+ * Allow users to search alt attributes in the media library.
+ *
+ * @param array  $clauses WordPress post query clauses.
+ * @param object $query WordPress query object.
+ *
+ * @return array
+ */
+function wpa_search_attachment_alt( $clauses, $query ) {
+	if ( is_admin() && 'on' === get_option( 'wpa_search_alt' ) ) {
+		global $wpdb;
+		if ( 'attachment' === $query->query['post_type'] && '' !== $query->query_vars['s'] ) {
+			$clauses['join'] = " LEFT JOIN {$wpdb->postmeta} AS sq1 ON ( {$wpdb->posts}.ID = sq1.post_id AND ( sq1.meta_key = '_wp_attached_file' OR sq1.meta_key = '_wp_attachment_image_alt' ) )";
+		}
+	}
+
+	return $clauses;
 }
 
 add_filter( 'mce_css', 'wpa_diagnostic_css' );
@@ -540,13 +560,13 @@ $plugins_string
 		if ( ! wp_verify_nonce( $nonce, 'wpa-nonce' ) ) {
 			die( 'Security check failed' );
 		}
-		$request      = ( ! empty( $_POST['support_request'] ) ) ? stripslashes( $_POST['support_request'] ) : false;
+		$request      = ( ! empty( $_POST['support_request'] ) ) ? sanitize_textarea_field( stripslashes( $_POST['support_request'] ) ) : false;
 		$has_donated  = ( 'on' === $_POST['has_donated'] ) ? 'Donor' : 'No donation';
 		$has_read_faq = ( 'on' === $_POST['has_read_faq'] ) ? 'Read FAQ' : false;
 		$subject      = "WP Accessibility support request. $has_donated";
 		$message      = $request . "\n\n" . $data;
 		// Get the site domain and get rid of www. from pluggable.php.
-		$sitename = strtolower( $_SERVER['SERVER_NAME'] );
+		$sitename = sanitize_text_field( strtolower( $_SERVER['SERVER_NAME'] ) );
 		if ( 'www.' === substr( $sitename, 0, 4 ) ) {
 			$sitename = substr( $sitename, 4 );
 		}

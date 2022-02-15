@@ -122,6 +122,12 @@ class Listing
 	private $sticky_posts;
 
 	/**
+	* User status preference
+	* @var array
+	*/
+	private $status_preference;
+
+	/**
 	* Enabled Custom Fields
 	*/
 	private $enabled_custom_fields;
@@ -143,6 +149,7 @@ class Listing
 		$this->setTaxonomies();
 		$this->setPostTypeSettings();
 		$this->setStandardFields();
+		$this->setStatusPreference();
 	}
 
 	/**
@@ -283,6 +290,14 @@ class Listing
 	}
 
 	/**
+	* Set the user status preference
+	*/
+	private function setStatusPreference()
+	{
+		$this->status_preference = $this->user->getStatusPreference($this->post_type->name);
+	}
+
+	/**
 	* Opening list tag <ol>
 	* @param array $pages - array of page objects from current query
 	* @param int $count - current count in loop
@@ -393,25 +408,28 @@ class Listing
 
 			if ( $this->post->status !== 'trash' ) :
 
-				echo '<li id="menuItem_' . esc_attr($this->post->id) . '" class="page-row';
-
+				$row_parent_classes = 'page-row';
 				// Post Type
-				echo ' post-type-' . esc_attr($this->post->post_type);
+				$row_parent_classes .= ' post-type-' . esc_attr($this->post->post_type);
 
-				// Assigned to manage a post type?
-				if ( $this->listing_repo->isAssignedPostType($this->post->id, $this->assigned_pt_pages) ) echo ' is-page-assignment';
+				// Managed Post Type page?
+				if ( $this->listing_repo->isAssignedPostType($this->post->id, $this->assigned_pt_pages) ) $row_parent_classes .= ' is-page-assignment';
 
 				// Published?
-				if ( $this->post->status == 'publish' ) echo ' published';
-				if ( $this->post->status == 'draft' ) echo ' draft';
-				
+				if ( $this->post->status == 'publish' ) $row_parent_classes .= ' published';
+				if ( $this->post->status == 'draft' ) $row_parent_classes .=  ' draft';
+
 				// Hidden in Nested Pages?
-				if ( $this->post->np_status == 'hide' ) echo ' np-hide';
+				if ( $this->post->np_status == 'hide' ) $row_parent_classes .= ' np-hide';
+
+				// User Status Preference
+				if ( $this->status_preference == 'published' && $this->post->status == 'draft' ) $row_parent_classes .= ' np-hide';
+				if ( $this->status_preference == 'draft' && $this->post->status !== 'draft' ) $row_parent_classes .= ' np-hide';
 
 				// Taxonomies
-				echo ' ' . $this->post_repo->getTaxonomyCSS($this->post, $this->h_taxonomies, $this->f_taxonomies);
-				
-				echo '">';
+				$row_parent_classes .= ' ' . $this->post_repo->getTaxonomyCSS($this->post, $this->h_taxonomies, $this->f_taxonomies);
+
+				echo '<li id="menuItem_' . esc_attr($this->post->id) . '" class="' . apply_filters('nestedpages_row_parent_css_classes', $row_parent_classes, $this->post, $this->post_type) . '">';
 				
 				$count++;
 

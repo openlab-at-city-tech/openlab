@@ -408,6 +408,7 @@ __webpack_require__.d(build_module_actions_namespaceObject, {
   "__experimentalBatch": function() { return __experimentalBatch; },
   "__experimentalReceiveCurrentGlobalStylesId": function() { return __experimentalReceiveCurrentGlobalStylesId; },
   "__experimentalReceiveThemeBaseGlobalStyles": function() { return __experimentalReceiveThemeBaseGlobalStyles; },
+  "__experimentalReceiveThemeGlobalStyleVariations": function() { return __experimentalReceiveThemeGlobalStyleVariations; },
   "__experimentalSaveSpecifiedEntityEdits": function() { return __experimentalSaveSpecifiedEntityEdits; },
   "__unstableCreateUndoLevel": function() { return __unstableCreateUndoLevel; },
   "addEntities": function() { return addEntities; },
@@ -434,6 +435,7 @@ __webpack_require__.r(build_module_selectors_namespaceObject);
 __webpack_require__.d(build_module_selectors_namespaceObject, {
   "__experimentalGetCurrentGlobalStylesId": function() { return __experimentalGetCurrentGlobalStylesId; },
   "__experimentalGetCurrentThemeBaseGlobalStyles": function() { return __experimentalGetCurrentThemeBaseGlobalStyles; },
+  "__experimentalGetCurrentThemeGlobalStylesVariations": function() { return __experimentalGetCurrentThemeGlobalStylesVariations; },
   "__experimentalGetDirtyEntityRecords": function() { return __experimentalGetDirtyEntityRecords; },
   "__experimentalGetEntitiesBeingSaved": function() { return __experimentalGetEntitiesBeingSaved; },
   "__experimentalGetEntityRecordNoResolver": function() { return __experimentalGetEntityRecordNoResolver; },
@@ -479,6 +481,7 @@ __webpack_require__.r(resolvers_namespaceObject);
 __webpack_require__.d(resolvers_namespaceObject, {
   "__experimentalGetCurrentGlobalStylesId": function() { return resolvers_experimentalGetCurrentGlobalStylesId; },
   "__experimentalGetCurrentThemeBaseGlobalStyles": function() { return resolvers_experimentalGetCurrentThemeBaseGlobalStyles; },
+  "__experimentalGetCurrentThemeGlobalStylesVariations": function() { return resolvers_experimentalGetCurrentThemeGlobalStylesVariations; },
   "__experimentalGetTemplateForLink": function() { return resolvers_experimentalGetTemplateForLink; },
   "canUser": function() { return resolvers_canUser; },
   "canUserEditEntityRecord": function() { return resolvers_canUserEditEntityRecord; },
@@ -1208,6 +1211,22 @@ function __experimentalReceiveThemeBaseGlobalStyles(stylesheet, globalStyles) {
   };
 }
 /**
+ * Returns an action object used in signalling that the theme global styles variations have been received.
+ *
+ * @param {string} stylesheet The theme's identifier
+ * @param {Array}  variations The global styles variations.
+ *
+ * @return {Object} Action object.
+ */
+
+function __experimentalReceiveThemeGlobalStyleVariations(stylesheet, variations) {
+  return {
+    type: 'RECEIVE_THEME_GLOBAL_STYLE_VARIATIONS',
+    stylesheet,
+    variations
+  };
+}
+/**
  * Returns an action object used in signalling that the index has been received.
  *
  * @deprecated since WP 5.9, this is not useful anymore, use the selector direclty.
@@ -1726,17 +1745,19 @@ const __experimentalSaveSpecifiedEntityEdits = (kind, name, recordId, itemsToSav
 /**
  * Returns an action object used in signalling that Upload permissions have been received.
  *
+ * @deprecated since WP 5.9, use receiveUserPermission instead.
+ *
  * @param {boolean} hasUploadPermissions Does the user have permission to upload files?
  *
  * @return {Object} Action object.
  */
 
 function receiveUploadPermissions(hasUploadPermissions) {
-  return {
-    type: 'RECEIVE_USER_PERMISSION',
-    key: 'create/media',
-    isAllowed: hasUploadPermissions
-  };
+  external_wp_deprecated_default()("wp.data.dispatch( 'core' ).receiveUploadPermissions", {
+    since: '5.9',
+    alternative: 'receiveUserPermission'
+  });
+  return receiveUserPermission('create/media', hasUploadPermissions);
 }
 /**
  * Returns an action object used in signalling that the current user has
@@ -1995,7 +2016,7 @@ const prePersistPostType = (persistedRecord, edits) => {
 
 async function loadPostTypeEntities() {
   const postTypes = await external_wp_apiFetch_default()({
-    path: '/wp/v2/types?context=edit'
+    path: '/wp/v2/types?context=view'
   });
   return (0,external_lodash_namespaceObject.map)(postTypes, (postType, name) => {
     var _postType$rest_namesp;
@@ -2009,7 +2030,7 @@ async function loadPostTypeEntities() {
         context: 'edit'
       },
       name,
-      label: postType.labels.singular_name,
+      label: postType.name,
       transientEdits: {
         blocks: true,
         selection: true
@@ -2037,7 +2058,7 @@ async function loadPostTypeEntities() {
 
 async function loadTaxonomyEntities() {
   const taxonomies = await external_wp_apiFetch_default()({
-    path: '/wp/v2/taxonomies?context=edit'
+    path: '/wp/v2/taxonomies?context=view'
   });
   return (0,external_lodash_namespaceObject.map)(taxonomies, (taxonomy, name) => {
     var _taxonomy$rest_namesp;
@@ -2050,7 +2071,7 @@ async function loadTaxonomyEntities() {
         context: 'edit'
       },
       name,
-      label: taxonomy.labels.singular_name
+      label: taxonomy.name
     };
   });
 }
@@ -2690,6 +2711,28 @@ function themeBaseGlobalStyles() {
   return state;
 }
 /**
+ * Reducer managing the theme global styles variations.
+ *
+ * @param {string} state  Current state.
+ * @param {Object} action Dispatched action.
+ *
+ * @return {string} Updated state.
+ */
+
+function themeGlobalStyleVariations() {
+  let state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  let action = arguments.length > 1 ? arguments[1] : undefined;
+
+  switch (action.type) {
+    case 'RECEIVE_THEME_GLOBAL_STYLE_VARIATIONS':
+      return { ...state,
+        [action.stylesheet]: action.variations
+      };
+  }
+
+  return state;
+}
+/**
  * Higher Order Reducer for a given entity config. It supports:
  *
  *  - Fetching
@@ -2927,7 +2970,18 @@ function reducer_undo() {
           // to continue as if we were creating an explicit undo level. This
           // will result in an extra undo level being appended with the flattened
           // undo values.
+          // We also have to take into account if the `lastEditAction` had opted out
+          // of being tracked in undo history, like the action that persists the latest
+          // content right before saving. In that case we have to update the `lastEditAction`
+          // to avoid returning early before applying the existing flattened undos.
           isCreateUndoLevel = true;
+
+          if (!lastEditAction.meta.undo) {
+            lastEditAction.meta.undo = {
+              edits: {}
+            };
+          }
+
           action = lastEditAction;
         } else {
           return nextState;
@@ -3068,6 +3122,7 @@ function autosaves() {
   currentTheme,
   currentGlobalStylesId,
   currentUser,
+  themeGlobalStyleVariations,
   themeBaseGlobalStyles,
   taxonomies,
   entities,
@@ -3532,17 +3587,6 @@ function isRawAttribute(entity, attribute) {
 
 const EMPTY_OBJECT = {};
 /**
- * Shared reference to an empty array for cases where it is important to avoid
- * returning a new array reference on every invocation, as in a connected or
- * other pure component which performs `shouldComponentUpdate` check on props.
- * This should be used as a last resort, since the normalized data should be
- * maintained by the reducer result in state.
- *
- * @type {Array}
- */
-
-const EMPTY_ARRAY = [];
-/**
  * Returns true if a request is in progress for embed preview data, or false
  * otherwise.
  *
@@ -3760,13 +3804,11 @@ function hasEntityRecords(state, kind, name, query) {
 
 function getEntityRecords(state, kind, name, query) {
   // Queried data state is prepopulated for all known entities. If this is not
-  // assigned for the given parameters, then it is known to not exist. Thus, a
-  // return value of an empty array is used instead of `null` (where `null` is
-  // otherwise used to represent an unknown state).
+  // assigned for the given parameters, then it is known to not exist.
   const queriedState = (0,external_lodash_namespaceObject.get)(state.entities.data, [kind, name, 'queriedData']);
 
   if (!queriedState) {
-    return EMPTY_ARRAY;
+    return null;
   }
 
   return getQueriedItems(queriedState, query);
@@ -4296,6 +4338,23 @@ function __experimentalGetCurrentThemeBaseGlobalStyles(state) {
 
   return state.themeBaseGlobalStyles[currentTheme.stylesheet];
 }
+/**
+ * Return the ID of the current global styles object.
+ *
+ * @param {Object} state Data state.
+ *
+ * @return {string} The current global styles ID.
+ */
+
+function __experimentalGetCurrentThemeGlobalStylesVariations(state) {
+  const currentTheme = getCurrentTheme(state);
+
+  if (!currentTheme) {
+    return null;
+  }
+
+  return state.themeGlobalStyleVariations[currentTheme.stylesheet];
+}
 //# sourceMappingURL=selectors.js.map
 ;// CONCATENATED MODULE: ./packages/core-data/build-module/utils/forward-resolver.js
 /**
@@ -4788,7 +4847,20 @@ const resolvers_experimentalGetCurrentThemeBaseGlobalStyles = () => async _ref14
   const themeGlobalStyles = await external_wp_apiFetch_default()({
     path: `/wp/v2/global-styles/themes/${currentTheme.stylesheet}`
   });
-  await dispatch.__experimentalReceiveThemeBaseGlobalStyles(currentTheme.stylesheet, themeGlobalStyles);
+
+  dispatch.__experimentalReceiveThemeBaseGlobalStyles(currentTheme.stylesheet, themeGlobalStyles);
+};
+const resolvers_experimentalGetCurrentThemeGlobalStylesVariations = () => async _ref15 => {
+  let {
+    resolveSelect,
+    dispatch
+  } = _ref15;
+  const currentTheme = await resolveSelect.getCurrentTheme();
+  const variations = await external_wp_apiFetch_default()({
+    path: `/wp/v2/global-styles/themes/${currentTheme.stylesheet}/variations`
+  });
+
+  dispatch.__experimentalReceiveThemeGlobalStyleVariations(currentTheme.stylesheet, variations);
 };
 //# sourceMappingURL=resolvers.js.map
 ;// CONCATENATED MODULE: ./packages/core-data/build-module/locks/utils.js
@@ -5092,7 +5164,7 @@ var external_wp_blocks_namespaceObject = window["wp"]["blocks"];
  */
 
 
-const entity_provider_EMPTY_ARRAY = [];
+const EMPTY_ARRAY = [];
 /**
  * Internal dependencies
  */
@@ -5303,7 +5375,7 @@ function useEntityBlockEditor(kind, type) {
     };
     editEntityRecord(kind, type, id, edits);
   }, [kind, type, id]);
-  return [blocks !== null && blocks !== void 0 ? blocks : entity_provider_EMPTY_ARRAY, onInput, onChange];
+  return [blocks !== null && blocks !== void 0 ? blocks : EMPTY_ARRAY, onInput, onChange];
 }
 //# sourceMappingURL=entity-provider.js.map
 ;// CONCATENATED MODULE: external ["wp","htmlEntities"]

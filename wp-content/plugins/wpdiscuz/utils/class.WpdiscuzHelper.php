@@ -406,7 +406,7 @@ class WpdiscuzHelper implements WpDiscuzConstants {
     }
 
     public function userNicename($html, $comment, $user) {
-        if (apply_filters("wpdiscuz_show_nicename", $this->options->subscription["enableUserMentioning"]) && isset($user->user_nicename)) {
+        if (apply_filters("wpdiscuz_show_nicename", false) && $this->options->subscription["enableUserMentioning"] && isset($user->user_nicename)) {
             $html .= "<span class='wpd-user-nicename' data-wpd-clipboard='@" . esc_attr($user->user_nicename) . "'>(@" . esc_html($user->user_nicename) . ")</span>";
         }
         return $html;

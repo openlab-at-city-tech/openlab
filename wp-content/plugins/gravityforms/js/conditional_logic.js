@@ -12,15 +12,13 @@ gform.addAction( 'gform_input_change', function( elem, formId, fieldId ) {
 }, 10 );
 
 function gf_apply_rules(formId, fields, isInit){
-	var rule_applied = 0;
+
 	jQuery(document).trigger( 'gform_pre_conditional_logic', [ formId, fields, isInit ] );
 	for(var i=0; i < fields.length; i++){
 		gf_apply_field_rule(formId, fields[i], isInit, function(){
-			rule_applied++;
-			if(rule_applied == fields.length){
-				jQuery(document).trigger('gform_post_conditional_logic', [formId, fields, isInit]);
-				if(window["gformCalculateTotalPrice"])
-					window["gformCalculateTotalPrice"](formId);
+			jQuery(document).trigger('gform_post_conditional_logic', [formId, fields, isInit]);
+			if(window["gformCalculateTotalPrice"]){
+				window["gformCalculateTotalPrice"](formId);
 			}
 		});
 	}
