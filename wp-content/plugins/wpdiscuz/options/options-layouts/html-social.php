@@ -52,6 +52,24 @@ if (!defined("ABSPATH")) {
 <!-- Option end -->
 
 <!-- Option start -->
+<div class="wpd-opt-row" data-wpd-opt="displaySocialAvatar">
+    <div class="wpd-opt-name">
+        <label for="displaySocialAvatar"><?php echo esc_html($setting["options"]["displaySocialAvatar"]["label"]) ?></label>
+        <p class="wpd-desc"><?php echo esc_html($setting["options"]["displaySocialAvatar"]["description"]) ?></p>
+    </div>
+    <div class="wpd-opt-input">
+        <div class="wpd-switcher">
+            <input type="checkbox" <?php checked($this->social["displaySocialAvatar"] == 1) ?> value="1" name="<?php echo esc_attr(WpdiscuzCore::TAB_SOCIAL); ?>[displaySocialAvatar]" id="displaySocialAvatar">
+            <label for="displaySocialAvatar"></label>
+        </div>
+    </div>
+    <div class="wpd-opt-doc">
+        <?php $this->printDocLink($setting["options"]["displaySocialAvatar"]["docurl"]) ?>
+    </div>
+</div>
+<!-- Option end -->
+
+<!-- Option start -->
 <div class="wpd-opt-row" data-wpd-opt="displayIconOnAvatar">
     <div class="wpd-opt-name">
         <label for="displayIconOnAvatar"><?php echo esc_html($setting["options"]["displayIconOnAvatar"]["label"]) ?></label>

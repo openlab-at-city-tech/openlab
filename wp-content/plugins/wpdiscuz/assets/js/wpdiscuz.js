@@ -234,7 +234,7 @@ jQuery(document).ready(function ($) {
         el.remove();
         wpdiscuzAjaxObj.setCommentMessage(val + '<br/>' + wpdiscuzAjaxObj.wc_copied_to_clipboard, 'success', 5000);
     });
-    
+
 
     $(document).on('click', '.wpdiscuz-nofollow,.wc_captcha_refresh_img,.wpd-load-more-submit', function (e) {
         e.preventDefault();
@@ -964,6 +964,14 @@ jQuery(document).ready(function ($) {
             $('#wpdiscuzHasMoreComments').val(1);
             if (showPagination) {
                 $('.wpd-load-more-submit').parents('.wpdiscuz-comment-pagination').show();
+            }
+            if (r.data.comments_left > 0) {
+                if (!($('.wpd-load-more-submit .wpd-comments-left').length)) {
+                    const commentsLeftSpan = $("<span>");
+                    commentsLeftSpan.addClass("wpd-comments-left");
+                    $('.wpd-load-more-submit').append(commentsLeftSpan);
+                }
+                $('.wpd-load-more-submit .wpd-comments-left').text(r.data.comments_left_text);
             }
         }
 

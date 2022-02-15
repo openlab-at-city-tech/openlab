@@ -161,9 +161,9 @@ class Mappress_Settings {
 
 		if ($i === false) {
 			$style['id'] = ($id) ? $id : uniqid();
-			$options->$setting[] = $style;
+			$options->{$setting}[] = $style;
 		} else {
-			$options->$setting[$i] = $style;
+			$options->{$setting}[$i] = $style;
 		}
 		$options->save();
 		Mappress::ajax_response('OK', $options->$setting);

@@ -8,7 +8,7 @@ jQuery(document).ready(function ($) {
         (initCustomStyleNew = function () {
             $('#mybootstrap a.advgb-customstyles-new').unbind('click').click(function (e) {
                 that = this;
-                var nonce_val = $('#advgb_settings_nonce_field').val();
+                var nonce_val = $('#advgb_cstyles_nonce_field').val();
 
                 $.ajax({
                     url: ajaxurl,
@@ -42,7 +42,7 @@ jQuery(document).ready(function ($) {
                 var cf = confirm('Do you really want to delete "' + $(this).prev().prev().text().trim() + '"?');
                 if (cf === true) {
                     var id = $(that).parent().data('id-customstyle');
-                    var nonce_val = $('#advgb_settings_nonce_field').val();
+                    var nonce_val = $('#advgb_cstyles_nonce_field').val();
 
                     $.ajax({
                         url: ajaxurl,
@@ -80,7 +80,7 @@ jQuery(document).ready(function ($) {
             $('#mybootstrap .advgb-customstyles-items a.copy').unbind('click').click(function (e) {
                 that = this;
                 var id = $(that).parent().data('id-customstyle');
-                var nonce_val = $('#advgb_settings_nonce_field').val();
+                var nonce_val = $('#advgb_cstyles_nonce_field').val();
 
                 $.ajax({
                     url: ajaxurl,
@@ -164,7 +164,7 @@ jQuery(document).ready(function ($) {
                 }
 
                 function updateName(title) {
-                    var nonce_val = $('#advgb_settings_nonce_field').val();
+                    var nonce_val = $('#advgb_cstyles_nonce_field').val();
                     var id = $(link).parents('li').data('id-customstyle');
                     title = title.trim();
                     if (title !== '') {
@@ -279,7 +279,7 @@ jQuery(document).ready(function ($) {
         $('#mybootstrap .advgb-customstyles-list li[data-id-customstyle='+id_element+']').addClass('active');
 
         document.cookie = 'advgbCustomStyleID=' + id_element;
-        var nonce_val = $('#advgb_settings_nonce_field').val();
+        var nonce_val = $('#advgb_cstyles_nonce_field').val();
         $.ajax({
             url: ajaxurl,
             type: 'POST',
@@ -394,7 +394,7 @@ jQuery(document).ready(function ($) {
     function saveCustomStyleChanges() {
         var myClassname =  $('#advgb-customstyles-classname').val().trim();
         var myIdentifyColor =  $('#advgb-customstyles-identify-color').val().trim();
-        var nonce_val = $('#advgb_settings_nonce_field').val();
+        var nonce_val = $('#advgb_cstyles_nonce_field').val();
         parseCustomStyleCss();
 
         $.ajax({

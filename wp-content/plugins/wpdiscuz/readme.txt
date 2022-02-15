@@ -2,8 +2,8 @@
 Contributors: gVectors Team
 Tags: comment, comments, ajax comments, comment form, comment fields
 Requires at least: 5.0
-Tested up to: 5.8
-Stable tag: 7.3.9
+Tested up to: 5.9
+Stable tag: 7.3.11
 Requires PHP: 5.6 and higher
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -184,6 +184,22 @@ Nothing will be lost!  **Comments - wpDiscuz** will show all old comments.
 
 
 == Changelog ==
+
+= Comments - wpDiscuz v7.3.11 - 25.01.2022 =
+
+* Added: WordPress v5.9 compatibility
+* Changed: The users @nicename for mentions hidden by default
+
+= Comments - wpDiscuz v7.3.10 - 13.01.2022 =
+
+* Added: Option to display Social Networks Avatars
+* Added: Comments left text on load more button by hooks
+* Added: A new hook wpdiscuz_show_comments_left for displaying the count of the parent comments left on the "Load more" button.
+* Added: A new hook wpdiscuz_comments_left_text for changing the text, that displays the number of the parent comments that are not displayed yet on the "Load more" button.
+* Fixed Bug: Small issue with load rest of comments option
+* Fixed Bug: Caching issue with user roles
+* Fixed Bug: Conflict with Redis or Memcached
+* Fixed Bug: Fatal error on unserializing votes data
 
 = Comments - wpDiscuz v7.3.9 =
 

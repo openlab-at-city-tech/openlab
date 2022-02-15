@@ -1409,6 +1409,7 @@ function ra_copy_blog_page( $group_id ) {
 							'cron',
 							'db_version',
 							'doing_cron',
+							'duplicate_post_version',
 							'fileupload_url',
 							'home',
 							'new_admin_email',

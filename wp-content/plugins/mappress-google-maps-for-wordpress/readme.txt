@@ -5,7 +5,7 @@ Tags: maps, google maps, map, map markers, google map, leaflet maps, leaflet map
 Requires at least: 5.3
 Requires PHP: 5.6
 Tested up to: 5.9
-Stable tag: 2.73.1
+Stable tag: 2.73.10
 
 == Description ==
 MapPress is the easiest way to add beautiful interactive Google and Leaflet maps to WordPress.
@@ -88,6 +88,41 @@ Please see the plugin documentation pages:
 1. Follow the installation instructions to install the new version
 
 == Changelog ==
+
+= 2.73.10 =
+* Fixed: notice on widget screen
+* Fixed: errors on beta theme editor screen
+* Changed: Remove jQuery version check and jQuery tabs control
+
+= 2.73.9 =
+* Fixed: map doesn't display if google directions used
+* Changed: filter CSS updated
+
+= 2.73.8 =
+* Fixed: allow autoptimize to process scripts
+* Fixed: underscore functions and templates broken by woocommerce lodash
+
+= 2.73.7 =
+* Fixed: notice in wp_query groupby
+
+= 2.73.6 =
+* Fixed: exclude wp JS from autoptimize
+
+= 2.73.5 =
+* Fixed: error resizing maps in jQuery tabs
+
+= 2.73.4 =
+* Added: base code for mashups by users
+* Fixed: maps attached to a trashed post now appear in the map library
+* Fixed: template editor now inserts properly-formatted tokens for custom fields
+* Fixed: mashup query filtes could interfere with queries from POI oembeds
+
+= 2.73.3 =
+* Fixed: PHP error when loading filters template
+
+= 2.73.2 =
+* Fixed: possible PHP error on settings screen
+* Fixed: box-sizing added to layout CSS, directions made max width in mini view
 
 = 2.73.1 =
 * Fixed: directions not displaying

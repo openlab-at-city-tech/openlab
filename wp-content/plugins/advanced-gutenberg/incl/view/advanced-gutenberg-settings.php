@@ -236,7 +236,7 @@ if (!isset($saved_settings['enable_advgb_blocks'])) {
                                    id="google_api_key"
                                    class="ju-input"
                                    style="margin-left: 10px; width: 370px; display: block; max-width: 100%"
-                                   value="<?php echo esc_html($google_api_key_saved) ?>"
+                                   value="<?php echo esc_attr($google_api_key_saved) ?>"
                             >
                             <a target="_blank"
                                href="https://developers.google.com/maps/documentation/javascript/get-api-key"
@@ -295,7 +295,7 @@ if (!isset($saved_settings['enable_advgb_blocks'])) {
                                    id="blocks_spacing"
                                    class="ju-input"
                                    style="margin-left: 10px; width: 80px"
-                                   value="<?php echo esc_html($blocks_spacing) ?>"
+                                   value="<?php echo esc_attr($blocks_spacing) ?>"
                             >
                         </span>
                     </div>
@@ -316,7 +316,7 @@ if (!isset($saved_settings['enable_advgb_blocks'])) {
                                    name="blocks_icon_color"
                                    id="blocks_icon_color"
                                    class="ju-input minicolors minicolors-input"
-                                   value="<?php echo esc_html($blocks_icon_color) ?>"/>
+                                   value="<?php echo esc_attr($blocks_icon_color) ?>"/>
                         </span>
                     </div>
                 </li>
@@ -333,9 +333,15 @@ if (!isset($saved_settings['enable_advgb_blocks'])) {
                         </label>
                         <div>
                             <select class="ju-select" name="editor_width" id="editor_width">
-                                <option value="" <?php echo $editor_width === '' ? 'selected' : '' ?>>Original</option>
-                                <option value="75" <?php echo $editor_width === '75' ? 'selected' : '' ?>>Large</option>
-                                <option value="95" <?php echo $editor_width === '95' ? 'selected' : '' ?>>Full width</option>
+                                <option value="" <?php echo $editor_width === '' ? 'selected' : '' ?>>
+                                    <?php esc_html_e('Original', 'advanced-gutenberg'); ?>
+                                </option>
+                                <option value="75" <?php echo $editor_width === '75' ? 'selected' : '' ?>>
+                                    <?php esc_html_e('Large', 'advanced-gutenberg'); ?>
+                                </option>
+                                <option value="95" <?php echo $editor_width === '95' ? 'selected' : '' ?>>
+                                    <?php esc_html_e('Full width', 'advanced-gutenberg'); ?>
+                                </option>
                             </select>
                         </div>
                     </div>
@@ -356,12 +362,12 @@ if (!isset($saved_settings['enable_advgb_blocks'])) {
                             <input type="hidden" id="post_default_thumb_id" name="post_default_thumb_id" value="<?php echo esc_attr($rp_default_thumb['id']); ?>" />
                             <div class="setting-actions" id="post_default_thumb_actions">
                                 <img class="thumb-selected"
-                                     src="<?php echo esc_attr($rp_default_thumb['url']); ?>"
+                                     src="<?php echo esc_url($rp_default_thumb['url']); ?>"
                                      alt="thumb"
-                                     data-default="<?php echo esc_attr($default_thumb); ?>"
+                                     data-default="<?php echo esc_url($default_thumb); ?>"
                                 />
-                                <i class="dashicons dashicons-edit ju-button" id="thumb_edit" title="<?php esc_html_e('Edit', 'advanced-gutenberg'); ?>"></i>
-                                <i class="dashicons dashicons-no ju-button orange-button" id="thumb_remove" title="<?php esc_html_e('Reset to default', 'advanced-gutenberg'); ?>"></i>
+                                <i class="dashicons dashicons-edit ju-button" id="thumb_edit" title="<?php esc_attr_e('Edit', 'advanced-gutenberg'); ?>"></i>
+                                <i class="dashicons dashicons-no ju-button orange-button" id="thumb_remove" title="<?php esc_attr_e('Reset to default', 'advanced-gutenberg'); ?>"></i>
                             </div>
                         </div>
                     </div>

@@ -276,25 +276,17 @@ function wtt_connect_oauth( $auth = false ) {
 			<h3><span>' . __( 'Connect to Twitter', 'wp-to-twitter' ) . '</span></h3>
 			<div class="inside ' . $class . '">
 				<ol class="wpt-oauth-settings">
-					<li>' . __( 'Apply for a <a href="https://developer.twitter.com/en/apply-for-access">Developer Account with Twitter</a>', 'wp-to-twitter' ) . '</li>
-					<li>' . __( 'Add a new application in <a href="https://developer.twitter.com/en/portal/projects/new">Twitter\'s project and app portal</a>', 'wp-to-twitter' ) . '
+					<li>' . __( 'Apply for a <a href="https://developer.twitter.com/en/apply-for-access">Developer Account with Twitter</a>', 'wp-to-twitter' ) . '<ul>
+						<li><a href="https://developer.twitter.com/en/developer-terms/policy">' . __( 'Review the Terms of Service for use of the Twitter API', 'wp-to-twitter' ) . '</a></li>
+						<li>' . __( 'If your app is suspended by Twitter, contact <a href="https://help.twitter.com/forms/platform">their API Policy Support</a>.', 'wp-to-twitter' ) . '</li>
+					</ul></li>
+					<li>' . __( 'Add a new application in <a href="https://developer.twitter.com/en/portal/apps/new">Twitter\'s project and app portal</a>', 'wp-to-twitter' ) . '
 						<ul>
-							<li>' . __( 'If you\'re not currently logged in to Twitter, log-in to the account you want associated with this site', 'wp-to-twitter' ) . '</li>
-							<li>' . __( 'Your app name cannot include the word "Twitter."', 'wp-to-twitter' ) . '</li>
-							<li>' . __( 'Your Application Description can be anything.', 'wp-to-twitter' ) . '</li>
+							<li>' . __( 'Name your application.', 'wp-to-twitter' ) . '(' . __( 'Your app name cannot include the word "Twitter."', 'wp-to-twitter' ) . ')</li>
+							<li>' . __( 'Click "Next" to move to the Keys & Tokens step.', 'wp-to-twitter' ) . '</li>
 						</ul>
 					</li>
-					<li>' . __( 'Scroll to the "App Permissions" section', 'wp-to-twitter' ) . '
-						<ul>
-							<li>' . __( 'Edit, and select "Read and Write" for your app\'s Access Permissions', 'wp-to-twitter' ) . '</li>
-							<li>' . __( 'Save the application settings', 'wp-to-twitter' ) . '</li>
-						</ul>
-					</li>
-					<li>' . __( 'Switch to the Keys and Tokens tab at the top of the screen.', 'wp-to-twitter' ) . '
-						<ul>
-						<li>' . __( 'Regenerate your API key and secret from the "Consumer Keys" section.', 'wp-to-twitter' ) . '</li>
-						</ul>
-	
+					<li>' . __( 'Copy your API Key and API Key secret.', 'wp-to-twitter' ) . '
 			' . $form . '
 					<div class="tokens">
 					<p>
@@ -302,14 +294,22 @@ function wtt_connect_oauth( $auth = false ) {
 						<input type="text" size="45" name="wtt_app_consumer_key" id="wtt_app_consumer_key" value="' . esc_attr( wpt_mask_attr( $ack ) ) . '" />
 					</p>
 					<p>
-						<label for="wtt_app_consumer_secret">' . __( 'API Secret', 'wp-to-twitter' ) . '</label>
+						<label for="wtt_app_consumer_secret">' . __( 'API Key Secret', 'wp-to-twitter' ) . '</label>
 						<input type="text" size="45" name="wtt_app_consumer_secret" id="wtt_app_consumer_secret" value="' . esc_attr( wpt_mask_attr( $acs ) ) . '" />
 					</p>
 					</div>
 					</li>
-					<li>' . __( 'Regenerate your Access token and secret from the "Authentication Tokens" section.', 'wp-to-twitter' ) . '</li>
-					<li>' . __( 'Paste your Access Token and Secret into the fields below', 'wp-to-twitter' ) . '
-					<ul><li>' . __( 'If the Access Level for your Access Token is not "<em>Read and write</em>", return to step 3, change your permissions, and generate a new Access Token.', 'wp-to-twitter' ) . '</li></ul>
+					<li>' . __( 'Click "App Settings" to configure your app', 'wp-to-twitter' ) . '</li>
+					<li>' . __( 'Click "Set up" to configure User authentication settings', 'wp-to-twitter' ) . '</li>
+					<li>' . __( 'Enable OAuth 1.0a', 'wp-to-twitter' ) . '</li>
+					<li>' . __( 'Set "App Permissions" to "Read and write".', 'wp-to-twitter' ) . '</li>' .
+					// Translators: Site URL.
+					'<li>' . sprintf( __( 'Add your website as the Website URL and the Callback URI: %s', 'wp-to-twitter' ), '<code>' . home_url() . '</code>' ) . '</li>
+					<li>' . __( 'Click "Save" to save settings.', 'wp-to-twitter' ) . '</li>
+					<li>' . __( 'Click "Edit" at top of Settings screen to edit your App', 'wp-to-twitter' ) . '</li>
+					<li>' . __( 'Change to the "Keys and Tokens" tab', 'wp-to-twitter' ) . '</li>
+					<li>' . __( 'Generate your Access Token and Secret from the "Authentication Tokens" section.', 'wp-to-twitter' ) . '</li>
+					<li>' . __( 'Paste your Access Token and Secret into the fields below', 'wp-to-twitter' ) . ' (' . __( 'If the Access Level for your Access Token is not "<em>Read and write</em>", return to step 7, change your permissions, and generate new Tokens.', 'wp-to-twitter' ) . ')
 					<div class="tokens">
 					<p>
 						<label for="wtt_oauth_token">' . __( 'Access Token', 'wp-to-twitter' ) . '</label>

@@ -251,7 +251,8 @@ _:-ms-lang(x), .wpd-social-login [wpd-tooltip]::before{top: -24px;}
 #wpdcom .ql-editor{min-height: 65px; border-bottom-color: #fff; word-break: break-word;}
 #wpdcom .ql-editor::before{ font-size: 16px; color: #aaa; letter-spacing: 1px;}
 #wpdcom .ql-editor > * { cursor: text; font-size: 15px; letter-spacing: 0.5px; font-family: Arial; font-weight: normal; color: #666666;}
-#wpdcom .ql-editor blockquote {margin-top: 0 !important; margin-bottom: 0 !important;}
+#wpdcom .ql-editor blockquote {margin-top: 0 !important; margin-bottom: 0 !important; padding-right: 6px;}
+#wpdcom .ql-editor li:not(.ql-direction-rtl)::before {margin-left: 0;}
 #wpdcom .ql-container{border-radius: 3px 3px 0 0; background: #fff; border-bottom: none; border-color: #dddddd;}
 #wpdcom .ql-toolbar {padding: 8px 5px 3px 8px; background-color: #fafafa; border-top: none; border-radius: 0 0 3px 3px; border-color: #dddddd;}
 #wpdcom .ql-toolbar.wpd-toolbar-hidden{display:none;}

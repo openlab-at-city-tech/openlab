@@ -10950,9 +10950,22 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                                         lastValue = value;
                                         willSetContent = setTimeout(function () {
                                             return _this3.updateCellContent(value, selectedCell);
-                                        }, 1000);
+                                        }, 10);
                                     },
                                     unstableOnFocus: function unstableOnFocus() {
+                                        if (willSetContent) {
+                                            _this3.updateCellContent(lastValue, selectedCell);
+                                            clearTimeout(willSetContent);
+                                            willSetContent = null;
+                                        }
+                                        _this3.setState({
+                                            selectedCell: cell,
+                                            sectionSelected: section
+                                        });
+                                    }
+                                    /* onClick jump to the rescue in case unstableOnFocus
+                                     * doesn't work due the cell is not focused */
+                                    , onClick: function onClick() {
                                         if (willSetContent) {
                                             _this3.updateCellContent(lastValue, selectedCell);
                                             clearTimeout(willSetContent);
@@ -23511,7 +23524,8 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
                 var recentPosts = this.props.recentPosts;
 
-                var isInPost = wp.data.select('core/editor').getCurrentPostType() === 'post';
+                // We need to check if we're in post edit or widgets screen
+                var isInPost = wp.data.select('core/editor') && wp.data.select('core/editor').getCurrentPostType() === 'post';
 
                 var postType = attributes.postType;
                 if (postType === undefined) {
@@ -24693,7 +24707,8 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                 return cat.id;
             }) : [];
 
-            var postId = wp.data.select('core/editor').getCurrentPostId();
+            // We need to check if we're in post edit or widgets screen
+            var postId = wp.data.select('core/editor') && wp.data.select('core/editor').getCurrentPostId();
             var recentPostsQuery = pickBy({
                 categories: catIds,
                 tags: tagIds,
@@ -26305,7 +26320,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
     // Add button to insert summary inside table of contents component
     (function () {
         jQuery(window).on('load', function () {
-            if (typeof dispatch('core/editor') === 'undefined') {
+            if (!dispatch('core/editor') || typeof dispatch('core/editor') === 'undefined') {
                 return false;
             }
 
@@ -29145,14 +29160,14 @@ if (typeof wp !== 'undefined' && typeof wp.domReady !== 'undefined') {
                     if (blocks[block].icon.foreground !== undefined) blockItem.iconColor = blocks[block].icon.foreground;
 
                     if (typeof savedIcon === 'function') {
-                        if (!!savedIcon.prototype.render) {
+                        if (typeof savedIcon.prototype !== 'undefined') {
                             blockItem.icon = wp.element.renderToString(wp.element.createElement(savedIcon));
+                            blockItem.icon = blockItem.icon.replace(/stopcolor/g, 'stop-color');
+                            blockItem.icon = blockItem.icon.replace(/stopopacity/g, 'stop-opacity');
                         } else {
-                            blockItem.icon = wp.element.renderToString(savedIcon);
+                            blockItemIcon = wp.element.createElement(wp.components.Dashicon, { icon: 'block-default' });
+                            blockItem.icon = wp.element.renderToString(blockItemIcon);
                         }
-
-                        blockItem.icon = blockItem.icon.replace(/stopcolor/g, 'stop-color');
-                        blockItem.icon = blockItem.icon.replace(/stopopacity/g, 'stop-opacity');
                     } else if ((typeof savedIcon === 'undefined' ? 'undefined' : _typeof(savedIcon)) === 'object') {
                         blockItem.icon = wp.element.renderToString(savedIcon);
                         blockItem.icon = blockItem.icon.replace(/stopcolor/g, 'stop-color');

@@ -31,6 +31,10 @@ class WpdiscuzHelperOptimization implements WpDiscuzConstants {
         add_action("deactivate_plugin", [&$this, "pluginDeactivated"]);
         add_action("wpdiscuz_clean_post_cache", [&$this, "cleanPostCache"]);
         add_action("wpdiscuz_clean_all_caches", [&$this, "cleanAllCaches"]);
+        if ($this->isApplicableToRequest()) {
+            add_filter('comments_pre_query', [&$this, "addCustomVariables"], PHP_INT_MAX, 2);
+            add_filter('the_comments', [&$this, "deleteCustomVariable"], PHP_INT_MIN, 2);
+        }
     }
 
     /**
@@ -280,4 +284,35 @@ class WpdiscuzHelperOptimization implements WpDiscuzConstants {
         }
     }
 
+    //Integration with Redis or Memcached
+    
+    private function isApplicableToRequest(){
+        if(!wp_doing_ajax()) {
+            return false;
+        }
+        if(!isset($_REQUEST["action"]) || sanitize_text_field($_REQUEST["action"]) !== "wpdLoadMoreComments") {
+            return false;
+        }
+        return true;
+    }
+    
+    public function addCustomVariables($comment_data, $query) {
+        $query->query_var_defaults["wpdiscuz"] = "temporary_from_" . __CLASS__ . "::" . __METHOD__;
+        $this->addWpDiscuzParams($query);
+        return $comment_data;
+    }
+
+    public function deleteCustomVariable($_comments, $query) {
+        unset($query->query_var_defaults["wpdiscuz"]);
+        return $_comments;
+    }
+
+    
+    private function addWpDiscuzParams($query){
+        $query->query_vars["wpdiscuz"] = wp_array_slice_assoc(sanitize_text_field($_REQUEST["action"]), $this->getWpDiscuzSpecificArgs());
+    }
+
+    private function getWpDiscuzSpecificArgs(){
+        return ["lastParentId", "isFirstLoad", "offset", "sorting"];
+    }
 }

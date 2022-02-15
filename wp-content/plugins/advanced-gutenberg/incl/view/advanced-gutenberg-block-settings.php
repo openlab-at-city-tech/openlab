@@ -66,7 +66,7 @@ if(defined('ADVANCED_GUTENBERG_PRO')) {
         <div class="advgb-search-wrapper">
             <input type="text"
                    class="advgb-search-input blocks-config-search"
-                   placeholder="<?php esc_html_e('Search blocks', 'advanced-gutenberg') ?>"
+                   placeholder="<?php esc_attr_e('Search blocks', 'advanced-gutenberg') ?>"
             >
             <i class="mi mi-search"></i>
         </div>
@@ -77,15 +77,15 @@ if(defined('ADVANCED_GUTENBERG_PRO')) {
                     continue;
                 }
                 if (isset($block['iconColor'])) :
-                    $iconColor = 'style=color:' . $block['iconColor'];
+                    $iconColor = 'style="color:' . esc_attr($block['iconColor']) . '"';
                 endif; ?>
             <li class="block-config-item ju-settings-option" title="<?php echo esc_attr( __($block['title'], 'advanced-gutenberg') ); ?>">
-                <span class="block-icon" <?php echo esc_attr($iconColor) ?>>
+                <span class="block-icon" <?php echo $iconColor ?>>
                     <?php echo html_entity_decode(html_entity_decode(stripslashes($block['icon']))); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- already escaped ?>
                 </span>
                 <span class="block-title"><?php echo esc_html( __($block['title'], 'advanced-gutenberg') ); ?></span>
                 <i class="mi mi-settings block-config-button"
-                   title="<?php esc_html_e('Edit', 'advanced-gutenberg') ?>"
+                   title="<?php esc_attr_e('Edit', 'advanced-gutenberg') ?>"
                    data-block="<?php echo esc_attr($block['name']); ?>"
                 ></i>
             </li>

@@ -180,7 +180,7 @@ class WpdiscuzCache implements WpDiscuzConstants {
     private function getCommentsCacheFileinfo($commentsArgs) {
         $dirs = $this->getCacheDirectories();
         $fileDir = $dirs["comments"] . $commentsArgs["post_id"] . "/";
-        $fileName = md5($commentsArgs["wpdType"] . $commentsArgs["last_parent_id"] . $commentsArgs["page"] . $commentsArgs["order"] . $commentsArgs["orderby"]) . "_" . $commentsArgs["last_parent_id"];        
+        $fileName = md5(implode(",", $commentsArgs["user_roles"]) . $commentsArgs["wpdType"] . $commentsArgs["last_parent_id"] . $commentsArgs["page"] . $commentsArgs["order"] . $commentsArgs["orderby"]) . "_" . $commentsArgs["last_parent_id"];        
         return [
             "basedir" => $dirs["comments"],
             "name" => $fileName,
@@ -192,7 +192,7 @@ class WpdiscuzCache implements WpDiscuzConstants {
     private function getExtraCacheFileinfo($commentsArgs) {
         $dirs = $this->getCacheDirectories();
         $fileDir = $dirs["comments"] . $commentsArgs["post_id"] . "/" . $dirs["extra"] . "/";
-        $fileName = md5($commentsArgs["wpdType"] . $commentsArgs["last_parent_id"] . $commentsArgs["page"] . $commentsArgs["order"] . $commentsArgs["orderby"]) . "_" . $commentsArgs["last_parent_id"];
+        $fileName = md5(implode(",", $commentsArgs["user_roles"]) . $commentsArgs["wpdType"] . $commentsArgs["last_parent_id"] . $commentsArgs["page"] . $commentsArgs["order"] . $commentsArgs["orderby"]) . "_" . $commentsArgs["last_parent_id"];
         return [
             "basedir" => $dirs["extra"],
             "name" => $fileName,

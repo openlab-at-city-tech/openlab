@@ -1,6 +1,6 @@
 <?php
 /*
-	Copyright 2015-2021  John Havlik  (email : john.havlik@mtekk.us)
+	Copyright 2015-2022  John Havlik  (email : john.havlik@mtekk.us)
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -17,13 +17,13 @@
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 require_once(dirname(__FILE__) . '/includes/block_direct_access.php');
-//Do a PHP version check, require 5.3 or newer
-if(version_compare(phpversion(), '5.3.0', '<'))
+//Do a PHP version check, require 5.6.0 or newer
+if(version_compare(phpversion(), '5.6.0', '<'))
 {
 	//Only purpose of this function is to echo out the PHP version error
 	function bcn_phpold()
 	{
-		printf('<div class="notice notice-error"><p>' . __('Your PHP version is too old, please upgrade to a newer version. Your version is %1$s, Breadcrumb NavXT requires %2$s', 'breadcrumb-navxt') . '</p></div>', phpversion(), '5.3.0');
+		printf('<div class="notice notice-error"><p>' . __('Your PHP version is too old, please upgrade to a newer version. Your version is %1$s, Breadcrumb NavXT requires %2$s', 'breadcrumb-navxt') . '</p></div>', phpversion(), '5.6.0');
 	}
 	//If we are in the admin, let's print a warning then return
 	if(is_admin())
@@ -44,7 +44,7 @@ use mtekk\adminKit\{adminKit, form, message, setting};
  */
 class bcn_admin extends adminKit
 {
-	const version = '7.0.0';
+	const version = '7.0.2';
 	protected $full_name = 'Breadcrumb NavXT Settings';
 	protected $short_name = 'Breadcrumb NavXT';
 	protected $access_level = 'bcn_manage_options';
@@ -135,9 +135,8 @@ class bcn_admin extends adminKit
 			require_once(dirname(__FILE__) . '/options_upgrade.php');
 			bcn_options_upgrade_handler($opts, $version, $this->opt);
 		}
-		//Save the passed in opts to the object's option array
-		//FIXME: Why do we do this?
-		$this->opt = adminKit::parse_args($opts, $this->opt);
+		//Merge in the defaults
+		$this->opt = adminKit::parse_args($opts, adminKit::settings_to_opts($this->settings));
 	}
 	/**
 	 * help action hook function

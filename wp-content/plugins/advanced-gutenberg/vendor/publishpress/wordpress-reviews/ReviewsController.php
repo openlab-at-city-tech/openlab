@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package PublishPress
  * @author  PublishPress
@@ -36,7 +37,6 @@
 
 namespace PublishPress\WordPressReviews;
 
-
 use Exception;
 
 /**
@@ -55,11 +55,6 @@ class ReviewsController
      * @var string
      */
     private $pluginName;
-
-    /**
-     * @var string
-     */
-    private $apiUrl = '';
 
     /**
      * @var array
@@ -82,17 +77,37 @@ class ReviewsController
         $this->pluginName = $pluginName;
         $this->iconUrl = esc_url_raw($iconUrl);
 
+        /**
+         * Filter to replace the meta map with options, filters and actions names.
+         *
+         * @param array
+         *
+         * @return array
+         */
         $this->metaMap = apply_filters(
-            'publishpress_wp_reviews_meta_map_' . $pluginSlug,
+            "{$pluginSlug}_wp_reviews_meta_map",
             [
-                'action_ajax_handler' => $this->pluginSlug . '_action',
-                'option_installed_on' => $this->pluginSlug . '_wp_reviews_installed_on',
-                'nonce_action' => $this->pluginSlug . '_wp_reviews_action',
-                'user_meta_dismissed_triggers' => '_' . $this->pluginSlug . '_wp_reviews_dismissed_triggers',
-                'user_meta_last_dismissed' => '_' . $this->pluginSlug . '_wp_reviews_last_dismissed',
-                'user_meta_already_did' => '_' . $this->pluginSlug . '_wp_reviews_already_did',
-                'filter_triggers' => $this->pluginSlug . '_wp_reviews_triggers',
+                'action_ajax_handler' => "{$this->pluginSlug}_action",
+                'option_installed_on' => "{$this->pluginSlug}_wp_reviews_installed_on",
+                'nonce_action' => "{$this->pluginSlug}_wp_reviews_action",
+                'user_meta_dismissed_triggers' => "_{$this->pluginSlug}_wp_reviews_dismissed_triggers",
+                'user_meta_last_dismissed' => "_{$this->pluginSlug}_wp_reviews_last_dismissed",
+                'user_meta_already_did' => "_{$this->pluginSlug}_wp_reviews_already_did",
+                'filter_triggers' => "{$this->pluginSlug}_wp_reviews_triggers",
             ]
+        );
+
+        /**
+         * Legacy filter to replace the meta map with options, filters and actions names.
+         *
+         * @param array
+         * @return array
+         * @deprecated 1.1.9
+         *
+         */
+        $this->metaMap = apply_filters(
+            "publishpress_wp_reviews_meta_map_{$this->pluginSlug}",
+            $this->metaMap
         );
 
         add_action('admin_enqueue_scripts', [$this, 'enqueueStyle']);
@@ -112,10 +127,10 @@ class ReviewsController
     private function addHooks()
     {
         if (defined('DOING_AJAX') && DOING_AJAX) {
-            add_action('wp_ajax_' . $this->metaMap['action_ajax_handler'], [$this, 'ajaxHandler']);
+            add_action("wp_ajax_{$this->metaMap['action_ajax_handler']}", [$this, 'ajaxHandler']);
         }
 
-        if ($this->displayBanner()) {
+        if ($this->screenIsAllowedToDisplayNotice()) {
             $this->installationPath();
             add_action('admin_notices', [$this, 'renderAdminNotices']);
             add_action('network_admin_notices', [$this, 'renderAdminNotices']);
@@ -126,11 +141,49 @@ class ReviewsController
     /**
      * @return bool
      */
-    private function displayBanner()
+    private function screenIsAllowedToDisplayNotice()
     {
-        $displayBanner = is_admin() && current_user_can('edit_posts');
+        $displayNotice = is_admin();
 
-        return apply_filters('publishpress_wp_reviews_display_banner_' . $this->pluginSlug, $displayBanner);
+        /**
+         * Deprecated filter to specify a custom conditional to display or not the notice.
+         *
+         * @param bool
+         * @return bool
+         * @deprecated 1.1.9
+         *
+         */
+        $displayNotice = apply_filters(
+            "publishpress_wp_reviews_display_banner_{$this->pluginSlug}",
+            $displayNotice
+        );
+
+        /**
+         * Filter to specify a custom conditional to display or not the notice.
+         *
+         * @param bool
+         *
+         * @return bool
+         */
+        $displayNotice = apply_filters("{$this->pluginSlug}_wp_reviews_allow_display_notice", $displayNotice);
+
+        if (! $this->currentUserIsAdministrator()) {
+            $displayNotice = false;
+        }
+
+        return $displayNotice;
+    }
+
+    private function currentUserIsAdministrator()
+    {
+        $currentUser = get_current_user_id();
+        $currentUser = get_user_by('ID', $currentUser);
+
+        if (empty($currentUser) || ! is_object($currentUser) && is_wp_error($currentUser)) {
+            return false;
+        }
+
+        return in_array('administrator', $currentUser->roles);
     }
 
     /**
@@ -204,28 +257,34 @@ class ReviewsController
         static $selected;
 
         if (! isset($selected)) {
+            $selected = [];
+        }
+
+        if (! array_key_exists($this->pluginSlug, $selected)) {
             $dismissedTriggers = $this->getDismissedTriggerGroups();
 
             $triggers = $this->getTriggers();
 
             foreach ($triggers as $g => $group) {
                 foreach ($group['triggers'] as $trigger) {
-                    if (! in_array(
+                    if (
+                        ! in_array(
                             false,
                             $trigger['conditions']
-                        ) && (empty($dismissedTriggers[$g]) || $dismissedTriggers[$g] < $trigger['priority'])) {
-                        $selected = $g;
+                        ) && (empty($dismissedTriggers[$g]) || $dismissedTriggers[$g] < $trigger['priority'])
+                    ) {
+                        $selected[$this->pluginSlug] = $g;
                         break;
                     }
                 }
 
-                if (isset($selected)) {
+                if (array_key_exists($this->pluginSlug, $selected)) {
                     break;
                 }
             }
         }
 
-        return $selected;
+        return $selected[$this->pluginSlug];
     }
 
     /**
@@ -265,12 +324,16 @@ class ReviewsController
         static $triggers;
 
         if (! isset($triggers)) {
+            $triggers = [];
+        }
+
+        if (! array_key_exists($this->pluginSlug, $triggers)) {
             $timeMessage = __(
                 'Hey, you\'ve been using %1$s for %2$s on your site. We hope the plugin has been useful. Please could you quickly leave a 5-star rating on WordPress.org? It really does help to keep %1$s growing.',
                 $this->pluginSlug
             );
 
-            $triggers = apply_filters(
+            $triggers[$this->pluginSlug] = apply_filters(
                 $this->metaMap['filter_triggers'],
                 [
                     'time_installed' => [
@@ -280,7 +343,7 @@ class ReviewsController
                                 'conditions' => [
                                     strtotime($this->installationPath() . ' +1 week') < time(),
                                 ],
-                                'link' => 'https://wordpress.org/support/plugin/' . $this->pluginSlug . '/reviews/?rate=5#rate-response',
+                                'link' => "https://wordpress.org/support/plugin/{$this->pluginSlug}/reviews/?rate=5#rate-response",
                                 'priority' => 10,
                             ],
                             'one_month' => [
@@ -288,7 +351,7 @@ class ReviewsController
                                 'conditions' => [
                                     strtotime($this->installationPath() . ' +1 month') < time(),
                                 ],
-                                'link' => 'https://wordpress.org/support/plugin/' . $this->pluginSlug . '/reviews/?rate=5#rate-response',
+                                'link' => "https://wordpress.org/support/plugin/{$this->pluginSlug}/reviews/?rate=5#rate-response",
                                 'priority' => 20,
                             ],
                             'three_months' => [
@@ -300,7 +363,7 @@ class ReviewsController
                                 'conditions' => [
                                     strtotime($this->installationPath() . ' +3 months') < time(),
                                 ],
-                                'link' => 'https://wordpress.org/support/plugin/' . $this->pluginSlug . '/reviews/?rate=5#rate-response',
+                                'link' => "https://wordpress.org/support/plugin/{$this->pluginSlug}/reviews/?rate=5#rate-response",
                                 'priority' => 30,
                             ],
                         ],
@@ -310,23 +373,24 @@ class ReviewsController
             );
 
             // Sort Groups
-            uasort($triggers, [$this, 'rsortByPriority']);
+            uasort($triggers[$this->pluginSlug], [$this, 'rsortByPriority']);
 
             // Sort each groups triggers.
-            foreach ($triggers as $v) {
+            foreach ($triggers[$this->pluginSlug] as $v) {
                 uasort($v['triggers'], [$this, 'rsortByPriority']);
             }
         }
 
         if (isset($group)) {
-            if (! isset($triggers[$group])) {
+            if (! array_key_exists($this->pluginSlug, $triggers)
+                || ! array_key_exists($group, $triggers[$this->pluginSlug])) {
                 return false;
             }
 
             if (! isset($code)) {
-                $return = $triggers[$group];
-            } elseif (isset($triggers[$group]['triggers'][$code])) {
-                $return = $triggers[$group]['triggers'][$code];
+                $return = $triggers[$this->pluginSlug][$group];
+            } elseif (array_key_exists($code, $triggers[$this->pluginSlug][$group]['triggers'])) {
+                $return = $triggers[$this->pluginSlug][$group]['triggers'][$code];
             } else {
                 $return = false;
             }
@@ -334,7 +398,7 @@ class ReviewsController
             return $return;
         }
 
-        return $triggers;
+        return $triggers[$this->pluginSlug];
     }
 
     /**
@@ -345,26 +409,36 @@ class ReviewsController
         static $selected;
 
         if (! isset($selected)) {
+            $selected = [];
+        }
+
+        if (! array_key_exists($this->pluginSlug, $selected)) {
             $dismissedTriggers = $this->getDismissedTriggerGroups();
 
             foreach ($this->getTriggers() as $g => $group) {
                 foreach ($group['triggers'] as $t => $trigger) {
-                    if (! in_array(
+                    if (
+                        ! in_array(
                             false,
                             $trigger['conditions']
-                        ) && (empty($dismissedTriggers[$g]) || $dismissedTriggers[$g] < $trigger['priority'])) {
-                        $selected = $t;
+                        ) && (empty($dismissedTriggers[$g]) || $dismissedTriggers[$g] < $trigger['priority'])
+                    ) {
+                        $selected[$this->pluginSlug] = $t;
                         break;
                     }
                 }
 
-                if (isset($selected)) {
+                if (array_key_exists($this->pluginSlug, $selected)) {
                     break;
                 }
             }
         }
 
-        return $selected;
+        if (! array_key_exists($this->pluginSlug, $selected)) {
+            return false;
+        }
+
+        return $selected[$this->pluginSlug];
     }
 
     /**
@@ -385,7 +459,7 @@ class ReviewsController
 
         if (empty($key)) {
             $return = $trigger;
-        } elseif (isset($trigger[$key])) {
+        } elseif (array_key_exists($key, $trigger)) {
             $return = $trigger[$key];
         } else {
             $return = false;
@@ -404,7 +478,7 @@ class ReviewsController
 
     public function enqueueStyle()
     {
-        if (! $this->displayBanner()) {
+        if (! $this->screenIsAllowedToDisplayNotice()) {
             return;
         }
 
@@ -491,24 +565,10 @@ class ReviewsController
                             reason: reason
                         }
                     });
-
-                    <?php if ( ! empty($this->apiUrl) ) : ?>
-                    $.ajax({
-                        method: "POST",
-                        dataType: "json",
-                        url: '<?php echo $this->apiUrl; ?>',
-                        data: {
-                            trigger_group: trigger.group,
-                            trigger_code: trigger.code,
-                            reason: reason,
-                            uuid: '<?php echo $uuid; ?>'
-                        }
-                    });
-                    <?php endif; ?>
                 }
 
                 $(document)
-                    .on('click', '.<?php echo $this->pluginSlug; ?>-wp-reviews-notice .<?php echo "{$this->pluginSlug}-dismiss"; ?>', function (event) {
+                    .on('click', '.<?php echo $this->pluginSlug; ?>-wp-reviews-notice .<?php echo "$this->pluginSlug-dismiss"; ?>', function (event) {
                         var $this = $(this),
                             reason = $this.data('reason'),
                             notice = $this.parents('.<?php echo $this->pluginSlug; ?>-wp-reviews-notice');
@@ -531,21 +591,39 @@ class ReviewsController
             }(jQuery));
         </script>
 
-        <div class="notice notice-success is-dismissible <?php echo "{$this->pluginSlug}-wp-reviews-notice"; ?>">
-            <?php if (! empty($this->iconUrl)) : ?>
-                <img src="<?php echo $this->iconUrl; ?>" class="notice-icon"/>
-            <?php endif; ?>
+        <div class="notice notice-success is-dismissible <?php
+        echo "$this->pluginSlug-wp-reviews-notice"; ?>">
+            <?php
+            if (! empty($this->iconUrl)) : ?>
+                <img src="<?php
+                echo $this->iconUrl; ?>" class="notice-icon" alt="<?php
+                echo $this->pluginName; ?> logo"/>
+            <?php
+            endif; ?>
 
-            <p><?php echo $trigger['message']; ?></p>
+            <p><?php
+                echo $trigger['message']; ?></p>
             <p>
-                <a class="button button-primary <?php echo "{$this->pluginSlug}-dismiss"; ?>" target="_blank"
-                   href="<?php echo $trigger['link']; ?>"
-                   data-reason="am_now">
-                    <strong><?php echo sprintf(__('Click here to add your rating for %s', $this->pluginSlug), $this->pluginName); ?></strong>
-                </a> <a href="#" class="button <?php echo "{$this->pluginSlug}-dismiss"; ?>" data-reason="maybe_later">
-                    <?php _e('Maybe later', $this->pluginSlug); ?>
-                </a> <a href="#" class="button <?php echo "{$this->pluginSlug}-dismiss"; ?>" data-reason="already_did">
-                    <?php _e('I already did', $this->pluginSlug); ?>
+                <a class="button button-primary <?php
+                echo "$this->pluginSlug-dismiss"; ?>"
+                   target="_blank"
+                   href="<?php
+                   echo $trigger['link']; ?>"
+                   data-reason="am_now"
+                >
+                    <strong><?php
+                        $message = __('Click here to add your rating for %s', $this->pluginSlug);
+                        echo sprintf($message, $this->pluginName); ?></strong>
+                </a>
+                <a href="#" class="button <?php
+                echo "$this->pluginSlug-dismiss"; ?>" data-reason="maybe_later">
+                    <?php
+                    _e('Maybe later', $this->pluginSlug); ?>
+                </a>
+                <a href="#" class="button <?php
+                echo "$this->pluginSlug-dismiss"; ?>" data-reason="already_did">
+                    <?php
+                    _e('I already did', $this->pluginSlug); ?>
                 </a>
             </p>
         </div>

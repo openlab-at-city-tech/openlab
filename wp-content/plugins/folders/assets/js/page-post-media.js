@@ -1246,6 +1246,10 @@
             },
             drop: function( event, ui ) {
                 folderID = $(this).closest("li.jstree-node").attr('id');
+                if($(this).closest("ul.jstree-container-ul").find(".jstree-clicked").length) {
+                    var $selectedNode = $(this).closest("ul.jstree-container-ul").find(".jstree-clicked");
+                    activeRecordID = $selectedNode.closest("li.jstree-node").attr('id');
+                }
                 if ( ui.draggable.hasClass( 'wcp-move-multiple')) {
                     if($(".wp-list-table input:checked").length) {
                         chkStr = "";
@@ -1396,6 +1400,10 @@
             drop: function( event, ui ) {
                 $("body").removeClass("no-hover-css");
                 folderID = $(this).data('id');
+                if($(this).closest("ul.jstree-container-ul").find(".jstree-clicked").length) {
+                    var $selectedNode = $(this).closest("ul.jstree-container-ul").find(".jstree-clicked");
+                    activeRecordID = $selectedNode.closest("li.jstree-node").attr('id');
+                }
                 if ( ui.draggable.hasClass( 'wcp-move-multiple' ) ) {
                     nonce = getSettingForPost(folderID, 'nonce');
                     if($(".wp-list-table input:checked").length) {

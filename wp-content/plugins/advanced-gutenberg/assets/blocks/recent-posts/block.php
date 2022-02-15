@@ -155,7 +155,7 @@ function advgbRenderBlockRecentPosts($attributes)
             $postHtml .= '<article class="advgb-recent-post' . ( $outputImage ? '' : ' advgb-recent-post--no-image' ) . '">';
 
             if ( $outputImage ) {
-                $postThumb = '<img src="' . $rp_default_thumb['url'] . '" />';
+                $postThumb = '<img src="' . esc_url($rp_default_thumb['url']) . '" />';
                 $postThumbCaption = '';
                 if ($postThumbID) {
                     $postThumb = wp_get_attachment_image($postThumbID, 'large');
@@ -235,16 +235,16 @@ function advgbRenderBlockRecentPosts($attributes)
 
                 if ( $postDateFormat === 'absolute' ) {
                     if ( $postDate === 'created' ) {
-                        $postDateDisplay = __( 'Posted on', 'advanced-gutenberg') . ' ' . get_the_date( $format, $post->ID);
+                        $postDateDisplay = esc_html__( 'Posted on', 'advanced-gutenberg') . ' ' . get_the_date( $format, $post->ID);
                     } else {
-                        $postDateDisplay = __( 'Updated on', 'advanced-gutenberg') . ' ' . get_the_modified_date( $format, $post->ID);
+                        $postDateDisplay = esc_html__( 'Updated on', 'advanced-gutenberg') . ' ' . get_the_modified_date( $format, $post->ID);
                     }
                 } else {
                     // Relative date format
                     if ( $postDate === 'created' ) {
-                        $postDateDisplay = __( 'Posted', 'advanced-gutenberg') . ' ' . human_time_diff( get_the_date( 'U', $post->ID ) ) . ' ' . __( 'ago', 'advanced-gutenberg');
+                        $postDateDisplay = esc_html__( 'Posted', 'advanced-gutenberg') . ' ' . human_time_diff( get_the_date( 'U', $post->ID ) ) . ' ' . esc_html__( 'ago', 'advanced-gutenberg');
                     } else {
-                        $postDateDisplay = __( 'Updated', 'advanced-gutenberg') . ' ' .human_time_diff( get_the_modified_date( 'U', $post->ID ) ) . ' ' . __( 'ago', 'advanced-gutenberg');
+                        $postDateDisplay = esc_html__( 'Updated', 'advanced-gutenberg') . ' ' .human_time_diff( get_the_modified_date( 'U', $post->ID ) ) . ' ' . esc_html__( 'ago', 'advanced-gutenberg');
                     }
                 }
             }
@@ -346,9 +346,9 @@ function advgbRenderBlockRecentPosts($attributes)
 			}
 
             if (isset($attributes['displayReadMore']) && $attributes['displayReadMore']) {
-                $readMoreText = __('Read More', 'advanced-gutenberg');
+                $readMoreText = esc_html__('Read More', 'advanced-gutenberg');
                 if (isset($attributes['readMoreLbl']) && $attributes['readMoreLbl']) {
-                    $readMoreText = $attributes['readMoreLbl'];
+                    $readMoreText = esc_html($attributes['readMoreLbl']);
                 }
 
                 $postHtml .= sprintf(
@@ -369,34 +369,34 @@ function advgbRenderBlockRecentPosts($attributes)
     $blockClass = '';
 
     if ($attributes['postView'] === 'grid') {
-        $blockClass = 'grid-view columns-' . $attributes['columns'];
+        $blockClass = 'grid-view columns-' . esc_html($attributes['columns']);
     } elseif ($attributes['postView'] === 'list') {
         $blockClass = 'list-view';
         if($attributes['imagePosition'] !== 'left'){
-            $blockClass .= ' image-' . $attributes['imagePosition'];
+            $blockClass .= ' image-' . esc_html($attributes['imagePosition']);
         }
     } elseif ($attributes['postView'] === 'slider') {
         $blockClass = 'slider-view';
-        $blockClass .= ' style-' . $attributes['sliderStyle'];
+        $blockClass .= ' style-' . esc_html($attributes['sliderStyle']);
 		if ( isset( $attributes['sliderAutoplay'] ) && $attributes['sliderAutoplay'] ) {
 	        $blockClass .= ' slider-autoplay';
 		}
     } elseif ($attributes['postView'] === 'frontpage') {
         $blockClass = 'frontpage-view';
-        $blockClass .= ' layout-' . $attributes['frontpageLayout'];
-        $blockClass .= ' gap-' . $attributes['gap'];
-        $blockClass .= ' style-' . $attributes['frontpageStyle'];
-        (isset($attributes['frontpageLayoutT']) && $attributes['frontpageLayoutT']) ? $blockClass .= ' tbl-layout-' . $attributes['frontpageLayoutT'] : '';
-        (isset($attributes['frontpageLayoutM']) && $attributes['frontpageLayoutM']) ? $blockClass .= ' mbl-layout-' . $attributes['frontpageLayoutM'] : '';
+        $blockClass .= ' layout-' . esc_html($attributes['frontpageLayout']);
+        $blockClass .= ' gap-' . esc_html($attributes['gap']);
+        $blockClass .= ' style-' . esc_html($attributes['frontpageStyle']);
+        (isset($attributes['frontpageLayoutT']) && $attributes['frontpageLayoutT']) ? $blockClass .= ' tbl-layout-' . esc_html($attributes['frontpageLayoutT']) : '';
+        (isset($attributes['frontpageLayoutM']) && $attributes['frontpageLayoutM']) ? $blockClass .= ' mbl-layout-' . esc_html($attributes['frontpageLayoutM']) : '';
     } elseif ($attributes['postView'] === 'newspaper') {
         $blockClass = 'newspaper-view';
-        $blockClass .= ' layout-' . $attributes['newspaperLayout'];
+        $blockClass .= ' layout-' . esc_html($attributes['newspaperLayout']);
     } elseif ($attributes['postView'] === 'masonry') {
-        $blockClass = 'masonry-view columns-' . $attributes['columns'] . ' tbl-columns-' . $attributes['columnsT'] . ' mbl-columns-' . $attributes['columnsM'] . ' gap-' . $attributes['gap'];
+        $blockClass = 'masonry-view columns-' . esc_html($attributes['columns']) . ' tbl-columns-' . esc_html($attributes['columnsT']) . ' mbl-columns-' . esc_html($attributes['columnsM']) . ' gap-' . esc_html($attributes['gap']);
     }
 
     if (isset($attributes['className'])) {
-        $blockClass .= ' ' . $attributes['className'];
+        $blockClass .= ' ' . esc_html($attributes['className']);
     }
 
     $blockHtml = sprintf(
@@ -912,8 +912,8 @@ function advgbGetRelativeDates( $post ) {
 function advgbGetAbsoluteDates( $post ) {
     $format = get_option( 'date_format' );
     return array(
-        'created' => __( 'Posted on', 'advanced-gutenberg') . ' ' . get_the_date( $format, $post['id']),
-        'modified' => __( 'Updated on', 'advanced-gutenberg') . ' ' . get_the_modified_date( $format, $post['id'])
+        'created' => esc_html__( 'Posted on', 'advanced-gutenberg') . ' ' . get_the_date( $format, $post['id']),
+        'modified' => esc_html__( 'Updated on', 'advanced-gutenberg') . ' ' . get_the_modified_date( $format, $post['id'])
     );
 }
 
@@ -925,8 +925,8 @@ function advgbGetAbsoluteDates( $post ) {
 function advgbGetAbsoluteDatesTime( $post ) {
     $format = get_option( 'date_format' ) . ' ' . get_option( 'time_format' );
     return array(
-        'created' => __( 'Posted on', 'advanced-gutenberg') . ' ' . get_the_date( $format, $post['id']),
-        'modified' => __( 'Updated on', 'advanced-gutenberg') . ' ' . get_the_modified_date( $format, $post['id'])
+        'created' => esc_html__( 'Posted on', 'advanced-gutenberg') . ' ' . get_the_date( $format, $post['id']),
+        'modified' => esc_html__( 'Updated on', 'advanced-gutenberg') . ' ' . get_the_modified_date( $format, $post['id'])
     );
 }
 

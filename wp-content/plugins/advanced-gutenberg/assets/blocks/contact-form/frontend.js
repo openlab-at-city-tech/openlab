@@ -23,6 +23,8 @@ jQuery(document).ready(function ($) {
             return false;
         }
 
+        var nonce_val = $('[name="advgb_blockform_nonce_field"]').val();
+
         $.ajax( {
             url: advgbContactForm.ajax_url,
             type: "POST",
@@ -32,7 +34,8 @@ jQuery(document).ready(function ($) {
                 contact_email: contactEmail,
                 contact_msg: contactMsg,
                 submit_date: submitDate,
-                captcha: typeof grecaptcha !== "undefined" ? grecaptcha.getResponse(g_id) : undefined
+                captcha: typeof grecaptcha !== "undefined" ? grecaptcha.getResponse(g_id) : undefined,
+                nonce: nonce_val
             },
             beforeSend: function () {
                 $thisForm.find('.advgb-form-submit-wrapper').append('<div class="advgb-form-sending" />');

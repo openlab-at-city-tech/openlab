@@ -3,9 +3,9 @@ Contributors: TigrouMeow
 Tags: clean, delete, file, files, images, image, media, library, upload, acf
 Donate link: https://meowapps.com/donation/
 Requires at least: 5.0
-Tested up to: 5.8.2
+Tested up to: 5.9
 Requires PHP: 7.0
-Stable tag: 6.2.7
+Stable tag: 6.2.8
 
 Clean your WordPress from unused files, broken media entries. Powerful engine and beautiful UI!
 
@@ -75,13 +75,16 @@ Better to be safe than sorry. This plugin deletes files! Therefore, backup is no
 
 == Changelog ==
 
+= 6.2.8 (2022/01/28) =
+* Update: Support for WordPress 5.9.
+* Info: I am working hard on Media Cleaner. If you want to give me some love and motivation, write a simple and nice review [here](https://wordpress.org/support/plugin/media-cleaner/reviews/?rate=5#new-post). Thank you so much! 💖
+
 = 6.2.7 (2021/12/11) =
 * Add: Support for Jet Engine and its metaboxes and fields.
 * Add: Support for CM Business Directory.
 * Add: Support for Sunshine Photo Cart.
 * Add: Support for Woodmart Theme.
 * Add: Support for HTML in Product Descriptions.
-* Info: I am working hard on Media Cleaner. If you want to give me some love and motivation, write a simple and nice review [here](https://wordpress.org/support/plugin/media-cleaner/reviews/?rate=5#new-post). Thank you so much! 💖
 
 = 6.2.6 (2021/11/15) =
 * Add: jp_img_sitemap to the ignored post types.

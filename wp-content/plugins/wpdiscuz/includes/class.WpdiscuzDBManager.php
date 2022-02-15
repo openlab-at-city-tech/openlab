@@ -1041,7 +1041,7 @@ class WpdiscuzDBManager implements WpDiscuzConstants {
 
     public function rebuildRatings($data) {
         foreach ($data as $key => $value) {
-            $val = unserialize($value["meta_value"]);
+            $val = maybe_unserialize($value["meta_value"]);
             if ($val) {
                 $newValues = [];
                 foreach ($val as $k => $v) {

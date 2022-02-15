@@ -74,7 +74,7 @@ $recaptcha_theme      = isset($recaptcha_config['recaptcha_theme']) ? $recaptcha
                                    name="contact_form_sender_name"
                                    id="contact_form_sender_name"
                                    class="ju-input full-width"
-                                   value="<?php echo esc_html($contact_form_sender_name) ?>"/>
+                                   value="<?php echo esc_attr($contact_form_sender_name) ?>"/>
                         </div>
                     </div>
                 </li>
@@ -90,7 +90,7 @@ $recaptcha_theme      = isset($recaptcha_config['recaptcha_theme']) ? $recaptcha
                                    name="contact_form_sender_email"
                                    id="contact_form_sender_email"
                                    class="ju-input full-width"
-                                   value="<?php echo esc_html($contact_form_sender_email) ?>"/>
+                                   value="<?php echo esc_attr($contact_form_sender_email) ?>"/>
                         </div>
                     </div>
                 </li>
@@ -113,7 +113,7 @@ $recaptcha_theme      = isset($recaptcha_config['recaptcha_theme']) ? $recaptcha
                                    name="contact_form_email_title"
                                    id="contact_form_email_title"
                                    class="ju-input full-width"
-                                   value="<?php echo esc_html($contact_form_email_title) ?>"/>
+                                   value="<?php echo esc_attr($contact_form_email_title) ?>"/>
                         </div>
                     </div>
                 </li>
@@ -130,7 +130,7 @@ $recaptcha_theme      = isset($recaptcha_config['recaptcha_theme']) ? $recaptcha
                                    name="contact_form_email_receiver"
                                    id="contact_form_email_receiver"
                                    class="ju-input full-width"
-                                   value="<?php echo esc_html($contact_form_email_receiver) ?>"/>
+                                   value="<?php echo esc_attr($contact_form_email_receiver) ?>"/>
                         </div>
                     </div>
                 </li>
@@ -193,7 +193,7 @@ $recaptcha_theme      = isset($recaptcha_config['recaptcha_theme']) ? $recaptcha
                                    name="recaptcha_site_key"
                                    id="recaptcha_site_key"
                                    class="ju-input full-width"
-                                   value="<?php echo esc_html($recaptcha_site_key) ?>"/>
+                                   value="<?php echo esc_attr($recaptcha_site_key) ?>"/>
                         </div>
                     </div>
                 </li>
@@ -210,7 +210,7 @@ $recaptcha_theme      = isset($recaptcha_config['recaptcha_theme']) ? $recaptcha
                                    name="recaptcha_secret_key"
                                    id="recaptcha_secret_key"
                                    class="ju-input full-width"
-                                   value="<?php echo esc_html($recaptcha_secret_key) ?>"/>
+                                   value="<?php echo esc_attr($recaptcha_secret_key) ?>"/>
                         </div>
                     </div>
                 </li>
@@ -227,8 +227,8 @@ $recaptcha_theme      = isset($recaptcha_config['recaptcha_theme']) ? $recaptcha
                                    name="recaptcha_language"
                                    id="recaptcha_language"
                                    class="ju-input full-width"
-                                   placeholder="<?php esc_html_e('Auto detect', 'advanced-gutenberg'); ?>"
-                                   value="<?php echo esc_html($recaptcha_language) ?>"/>
+                                   placeholder="<?php esc_attr_e('Auto detect', 'advanced-gutenberg'); ?>"
+                                   value="<?php echo esc_attr($recaptcha_language) ?>"/>
                         </div>
                     </div>
                 </li>
@@ -245,9 +245,15 @@ $recaptcha_theme      = isset($recaptcha_config['recaptcha_theme']) ? $recaptcha
                         </label>
                         <div>
                             <select class="ju-select full-width" name="recaptcha_theme" id="recaptcha_theme">
-                                <option value="light" <?php echo $recaptcha_theme === 'light' ? 'selected' : '' ?>>Light</option>
-                                <option value="dark" <?php echo $recaptcha_theme === 'dark' ? 'selected' : '' ?>>Dark</option>
-                                <option value="invisible" <?php echo $recaptcha_theme === 'invisible' ? 'selected' : '' ?>>Invisible</option>
+                                <option value="light" <?php echo $recaptcha_theme === 'light' ? 'selected' : '' ?>>
+                                    <?php esc_html_e('Light', 'advanced-gutenberg'); ?>
+                                </option>
+                                <option value="dark" <?php echo $recaptcha_theme === 'dark' ? 'selected' : '' ?>>
+                                    <?php esc_html_e('Dark', 'advanced-gutenberg'); ?>
+                                </option>
+                                <option value="invisible" <?php echo $recaptcha_theme === 'invisible' ? 'selected' : '' ?>>
+                                    <?php esc_html_e('Invisible', 'advanced-gutenberg'); ?>
+                                </option>
                             </select>
                         </div>
                     </div>

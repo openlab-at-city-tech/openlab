@@ -47,7 +47,7 @@ if ( ! function_exists( 'wp_should_load_separate_core_block_assets' ) ) {
 add_filter(
 	'separate_core_block_assets',
 	function( $load_separate_styles ) {
-		if ( function_exists( 'gutenberg_is_fse_theme' ) && gutenberg_is_fse_theme() ) {
+		if ( function_exists( 'wp_is_block_theme' ) && wp_is_block_theme() ) {
 			return true;
 		}
 		return $load_separate_styles;
@@ -197,7 +197,7 @@ add_filter( 'safe_style_css', 'gutenberg_safe_style_attrs' );
  * in WP versions <= 5.8 https://core.trac.wordpress.org/ticket/54130.
  * This method adds a variable to the wp namespace to indicate if the new gallery block
  * format can be enabled or not. It needs to be added this early and to the wp namespace
- * as it needs to be available when the intial block parsing runs on editor load, and most of
+ * as it needs to be available when the initial block parsing runs on editor load, and most of
  * the editor store and standard flags are not loaded yet at that point
  *
  * @since 12.1.0
