@@ -1227,36 +1227,39 @@ class Openlab_Clone_Course_Site {
 	 * @return      bool     Returns TRUE on success, FALSE on failure
 	 */
 	public static function copyr( $source, $dest ) {
-		// Check for symlinks
-		if ( is_link( $source ) ) {
-			return symlink( readlink( $source ), $dest );
-		}
-
-		// Simple copy for a file
-		if ( is_file( $source ) ) {
-			return copy( $source, $dest );
-		}
-
-		// Make destination directory
-		if ( ! is_dir( $dest ) ) {
-			wp_mkdir_p( $dest );
-		}
-
-		// Loop through the folder
-		$dir = dir( $source );
-		while ( false !== $entry = $dir->read() ) {
-			// Skip pointers
-			if ( '.' === $entry || '..' === $entry ) {
-				continue;
+		// Don't copy files under the gravity_forms directory
+		if( strpos( $source, 'gravity_forms' ) !== false ) {
+			// Check for symlinks
+			if ( is_link( $source ) ) {
+				return symlink( readlink( $source ), $dest );
 			}
 
-			// Deep copy directories
-			self::copyr( "$source/$entry", "$dest/$entry" );
-		}
+			// Simple copy for a file
+			if ( is_file( $source ) ) {
+				return copy( $source, $dest );
+			}
 
-		// Clean up
-		$dir->close();
-		return true;
+			// Make destination directory
+			if ( ! is_dir( $dest ) ) {
+				wp_mkdir_p( $dest );
+			}
+
+			// Loop through the folder
+			$dir = dir( $source );
+			while ( false !== $entry = $dir->read() ) {
+				// Skip pointers
+				if ( '.' === $entry || '..' === $entry ) {
+					continue;
+				}
+
+				// Deep copy directories
+				self::copyr( "$source/$entry", "$dest/$entry" );
+			}
+
+			// Clean up
+			$dir->close();
+			return true;
+		}
 	}
 }
 
