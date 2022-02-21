@@ -1013,7 +1013,11 @@ class Openlab_Clone_Course_Site {
 
 		// Copy over attachments. Whee!
 		$upload_dir = wp_upload_dir();
-		self::copyr( str_replace( $this->site_id, $this->source_site_id, $upload_dir['basedir'] ), $upload_dir['basedir'] );
+		$source_dir = str_replace( $this->site_id, $this->source_site_id, $upload_dir['basedir'] );
+		$skip_dirs = [
+			$source_dir . '/gravity_forms'
+		];
+		self::copyr( $source_dir, $upload_dir['basedir'], $skip_dirs );
 
 		$site_posts          = $wpdb->get_results( "SELECT ID, guid, post_author, post_status, post_title, post_type FROM {$wpdb->posts}" );
 		$source_group_admins = $this->get_source_group_admins();
@@ -1224,28 +1228,28 @@ class Openlab_Clone_Course_Site {
 	 * @link        http://aidanlister.com/2004/04/recursively-copying-directories-in-php/
 	 * @param       string   $source    Source path
 	 * @param       string   $dest      Destination path
+	 * @param		array	 $skip      Paths to skip
 	 * @return      bool     Returns TRUE on success, FALSE on failure
 	 */
-	public static function copyr( $source, $dest ) {
-		// Don't copy files under the gravity_forms directory
-		if( strpos( $source, 'gravity_forms' ) !== false ) {
-			// Check for symlinks
-			if ( is_link( $source ) ) {
-				return symlink( readlink( $source ), $dest );
-			}
+	public static function copyr( $source, $dest, $skip = array() ) {
+		// Check for symlinks
+		if ( is_link( $source ) ) {
+			return symlink( readlink( $source ), $dest );
+		}
 
-			// Simple copy for a file
-			if ( is_file( $source ) ) {
-				return copy( $source, $dest );
-			}
+		// Simple copy for a file
+		if ( is_file( $source ) ) {
+			return copy( $source, $dest );
+		}
 
-			// Make destination directory
-			if ( ! is_dir( $dest ) ) {
-				wp_mkdir_p( $dest );
-			}
+		// Make destination directory if it's not in the skip list
+		if ( ! is_dir( $dest ) && ! in_array( $source, $skip, true ) ) {
+			wp_mkdir_p( $dest );
+		}
 
-			// Loop through the folder
-			$dir = dir( $source );
+		// Loop through the folder if it's not in the skip list
+		$dir = dir( $source );
+		if( ! in_array( $source, $skip, true ) ) {
 			while ( false !== $entry = $dir->read() ) {
 				// Skip pointers
 				if ( '.' === $entry || '..' === $entry ) {
@@ -1253,13 +1257,13 @@ class Openlab_Clone_Course_Site {
 				}
 
 				// Deep copy directories
-				self::copyr( "$source/$entry", "$dest/$entry" );
+				self::copyr( "$source/$entry", "$dest/$entry", $skip );
 			}
-
-			// Clean up
-			$dir->close();
-			return true;
 		}
+
+		// Clean up
+		$dir->close();
+		return true;
 	}
 }
 
