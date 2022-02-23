@@ -3,7 +3,7 @@
 Plugin Name: TablePress Extension: Responsive Tables
 Plugin URI: https://tablepress.org/extensions/responsive-tables/
 Description: Extension for TablePress that adds several modes for responsiveness of tables
-Version: 1.5
+Version: 1.8
 Author: Tobias Bäthge
 Author URI: https://tobias.baethge.com/
 */
@@ -14,14 +14,11 @@ Author URI: https://tobias.baethge.com/
  * /
 
 /*
- * Modern use:
+ * Possible modes:
  * Shortcode: [table id=1 responsive="scroll" /]
  * Shortcode: [table id=1 responsive="collapse" /]
  * Shortcode: [table id=1 responsive="flip" responsive_breakpoint="phone" /] (from 'phone', 'tablet', 'desktop', 'all')
- *
- * Legacy use:
- * Shortcode: [table id=1 responsive="tablet" /]
- * The parameter "responsive" (from 'phone', 'tablet', 'desktop', 'all') determines the largest device that shall show the responsive version of the table.
+ * Shortcode: [table id=1 responsive="stack" responsive_breakpoint="phone" /] (from 'phone', 'tablet', 'desktop', 'all')
  */
 
 // Prohibit direct script loading.
@@ -52,7 +49,7 @@ class TablePress_Responsive_Tables {
 	 * @var string
 	 * @since 1.3
 	 */
-	protected static $version = '1.5';
+	protected static $version = '1.8';
 
 	/**
 	 * Instance of the Plugin Update Checker class.
@@ -75,7 +72,6 @@ class TablePress_Responsive_Tables {
 		add_filter( 'tablepress_table_output', array( __CLASS__, 'table_output' ), 10, 3 );
 		if ( ! is_admin() ) {
 			add_action( 'wp_enqueue_scripts', array( __CLASS__, 'enqueue_css_files' ) );
-			add_action( 'wp_print_scripts', array( __CLASS__, 'enqueue_css_files_flip' ) );
 		}
 	}
 
@@ -108,7 +104,7 @@ class TablePress_Responsive_Tables {
 	}
 
 	/**
-	 * Enqueue CSS files with the responsive CSS for the scroll and collapse modes.
+	 * Enqueue CSS files with the responsive CSS for all modes.
 	 *
 	 * @since 1.3
 	 */
@@ -118,27 +114,8 @@ class TablePress_Responsive_Tables {
 		}
 
 		$suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
-		$url = plugins_url( "css/responsive.dataTables{$suffix}.css", __FILE__ );
-		wp_enqueue_style( self::$slug, $url, array(), self::$version );
-	}
-
-	/**
-	 * Enqueue the CSS file with the responsive CSS for the flip mode.
-	 *
-	 * @since 1.3
-	 */
-	public static function enqueue_css_files_flip() {
-		if ( ! apply_filters( 'tablepress_responsive_tables_enqueue_flip_css_file', true ) ) {
-			return;
-		}
-
-		$suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
-		$url = plugins_url( "css/tablepress-responsive-flip{$suffix}.css", __FILE__ );
-		wp_enqueue_style( self::$slug . '-flip', $url, array( 'tablepress-default' ), self::$version );
-		// Wrap the <link> tag in a conditional comment to only use the CSS in non-IE browsers.
-		echo "<!--[if !IE]><!-->\n";
-		wp_print_styles( self::$slug . '-flip' );
-		echo "<!--<![endif]-->\n";
+		$url = plugins_url( "css/tablepress-responsive{$suffix}.css", __FILE__ );
+		wp_enqueue_style( self::$slug, $url, array( 'tablepress-default' ), self::$version );
 	}
 
 	/**
@@ -160,6 +137,12 @@ class TablePress_Responsive_Tables {
 			$render_options['responsive'] = 'flip';
 		}
 
+		// Add "Extra CSS class".
+		if ( '' !== $render_options['extra_css_classes'] ) {
+			$render_options['extra_css_classes'] .= ' ';
+		}
+		$render_options['extra_css_classes'] .= 'tablepress-responsive';
+
 		// Scroll mode.
 		if ( 'scroll' === $render_options['responsive'] ) {
 			// Horizontal Scrolling from DataTables has to be turned off.
@@ -170,12 +153,16 @@ class TablePress_Responsive_Tables {
 		if ( 'flip' === $render_options['responsive'] && in_array( $render_options['responsive_breakpoint'], array( 'phone', 'tablet', 'desktop', 'all' ), true ) ) {
 			// Horizontal Scrolling from DataTables has to be turned off.
 			$render_options['datatables_scrollx'] = false;
-
 			// Add "Extra CSS class".
-			if ( '' !== $render_options['extra_css_classes'] ) {
-				$render_options['extra_css_classes'] .= ' ';
-			}
-			$render_options['extra_css_classes'] .= "tablepress-responsive-{$render_options['responsive_breakpoint']}";
+			$render_options['extra_css_classes'] .= " tablepress-responsive-{$render_options['responsive_breakpoint']}";
+		}
+
+		// Stack mode.
+		if ( 'stack' === $render_options['responsive'] && in_array( $render_options['responsive_breakpoint'], array( 'phone', 'tablet', 'desktop', 'all' ), true ) ) {
+			// Horizontal Scrolling from DataTables has to be turned off.
+			$render_options['datatables_scrollx'] = false;
+			// Add "Extra CSS class".
+			$render_options['extra_css_classes'] .= " tablepress-responsive-stack-{$render_options['responsive_breakpoint']}";
 		}
 
 		// DataTables Responsive Collapse/Row Details mode.

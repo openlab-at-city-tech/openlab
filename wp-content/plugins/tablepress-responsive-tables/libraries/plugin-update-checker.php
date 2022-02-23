@@ -844,11 +844,14 @@ class PluginUpdateChecker_3_2 {
 		static $cachedResult = null;
 
 		if ( $cachedResult === null ) {
-			//Convert both paths to the canonical form before comparison.
-			$muPluginDir = realpath(WPMU_PLUGIN_DIR);
-			$pluginPath  = realpath($this->pluginAbsolutePath);
-
-			$cachedResult = (strpos($pluginPath, $muPluginDir) === 0);
+			if ( defined( WPMU_PLUGIN_DIR ) ) {
+				//Convert both paths to the canonical form before comparison.
+				$muPluginDir = realpath(WPMU_PLUGIN_DIR);
+				$pluginPath  = realpath($this->pluginAbsolutePath);
+				$cachedResult = (strpos($pluginPath, $muPluginDir) === 0);
+			} else {
+				$cachedResult = false;
+			}
 		}
 
 		return $cachedResult;
