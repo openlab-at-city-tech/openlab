@@ -517,8 +517,8 @@ add_action( 'bp_core_activated_user', 'openlab_process_member_type_at_activation
  */
 function openlab_user_activated_send_group_invites( $user_id ) {
 	$group_id      = 22629;
-	$account_types = [ 'Faculty', 'Staff' ];
-	$account_type  = bp_get_profile_field_data( 'field=Account Type&user_id=' . $user_id );
+	$account_types = [ 'faculty', 'staff' ];
+	$account_type  = openlab_get_user_member_type( $user_id );
 
 	if ( ! in_array( $account_type, $account_types ) ) {
 		return;

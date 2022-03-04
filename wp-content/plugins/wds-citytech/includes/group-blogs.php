@@ -1546,7 +1546,7 @@ function openlab_get_groupblog_template( $user_id, $group_id ) {
 
 	switch ( $group_type ) {
 		case 'portfolio':
-			$account_type = strtolower( xprofile_get_field_data( 'Account Type', $user_id ) );
+			$account_type = openlab_get_user_member_type( 'Account Type' );
 
 			switch ( $account_type ) {
 				case 'faculty':
@@ -1625,7 +1625,7 @@ class OpenLab_GroupBlog_Template_Picker {
 
 	public function get_user_type() {
 		if ( ! $this->account_type ) {
-			$account_type       = strtolower( xprofile_get_field_data( 'Account Type', $this->user_id ) );
+			$account_type       = openlab_get_user_member_type( $this->user_id );
 			$this->account_type = $account_type;
 		}
 
