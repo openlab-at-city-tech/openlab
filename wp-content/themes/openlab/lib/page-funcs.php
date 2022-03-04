@@ -214,7 +214,7 @@ function cuny_whos_online() {
 						<a href="<?php bp_member_permalink(); ?>"><?php bp_member_name(); ?></a><br />
 						<?php
 						do_action( 'bp_directory_members_item' );
-						bp_member_profile_data( 'field=Account Type' );
+						echo openlab_get_user_member_type_label( bp_get_member_user_id() );
 						?>
 						,
 						<?php bp_member_last_active(); ?>
