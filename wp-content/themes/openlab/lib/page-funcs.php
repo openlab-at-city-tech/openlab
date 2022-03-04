@@ -433,13 +433,21 @@ function openlab_registration_page() {
 
 	$first_name_field_id   = openlab_get_xprofile_field_id( 'First Name' );
 	$last_name_field_id    = openlab_get_xprofile_field_id( 'Last Name' );
-	$account_type_field_id = openlab_get_xprofile_field_id( 'Account Type' );
-
-	$account_type_field = xprofile_get_field( $account_type_field_id );
 
 	$first_name_submitted   = isset( $_POST[ 'field_' . $first_name_field_id ] ) ? $_POST[ 'field_' . $first_name_field_id ] : '';
 	$last_name_submitted    = isset( $_POST[ 'field_' . $last_name_field_id ] ) ? $_POST[ 'field_' . $last_name_field_id ] : '';
-	$account_type_submitted = isset( $_POST[ 'field_' . $account_type_field_id ] ) ? $_POST[ 'field_' . $account_type_field_id ] : '';
+	$account_type_submitted = isset( $_POST['openlab-account-type'] ) ? $_POST['openlab-account-type'] : '';
+
+	$account_type_options = array_map(
+		function( $type ) {
+			return [
+				'label' => $type->name,
+				'slug'  => $type->slug,
+				'id'    => $type->term_id
+			];
+		},
+		openlab_get_member_types()
+	);
 	?>
 
 	<div class="page" id="register-page">
@@ -499,21 +507,21 @@ function openlab_registration_page() {
 							</div>
 
 							<div class="form-group">
-								<label class="control-label" for="field_<?php echo intval( $account_type_field_id ); ?>">Account Type <span class="label-gloss">(required)</span></label>
-								<div id="field_<?php echo esc_attr( $account_type_field_id ); ?>_error" class="error-container"></div>
-								<?php do_action( 'bp_field_' . $account_type_field_id . '_errors' ); ?>
+								<label class="control-label" for="openlab-account-type">Account Type <span class="label-gloss">(required)</span></label>
+								<div id="openlab-account-type-error" class="error-container"></div>
+								<?php do_action( 'bp_field_account_type_errors' ); ?>
 								<select
 									class="form-control"
 									type="text"
-									name="field_<?php echo esc_attr( $account_type_field_id ); ?>"
-									id="field_<?php echo esc_attr( $account_type_field_id ); ?>"
+									name="openlab-account-type"
+									id="openlab-account-type"
 									data-parsley-required
 									data-parsley-required-message="Account type is required."
-									data-parsley-errors-container="#field_<?php echo esc_attr( $account_type_field_id ); ?>_error"
+									data-parsley-errors-container="openlab-account-type-error"
 								/>
 									<option value="">----</option>
-									<?php foreach ( $account_type_field->get_children() as $account_type_child ) : ?>
-										<option value="<?php echo esc_attr( $account_type_child->name ); ?>" <?php selected( $account_type_submitted, $account_type_child->name ); ?>><?php echo esc_html( $account_type_child->name ); ?></option>
+									<?php foreach ( $account_type_options as $account_type_option ) : ?>
+										<option value="<?php echo esc_attr( $account_type_option['slug'] ); ?>" <?php selected( $account_type_submitted, $account_type_option['slug'] ); ?>><?php echo esc_html( $account_type_option['label'] ); ?></option>
 									<?php endforeach; ?>
 								</select>
 							</div>

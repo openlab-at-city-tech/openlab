@@ -305,7 +305,7 @@ add_action( 'bp_after_registration_submit_buttons', 'wds_load_default_account_ty
 function wds_load_account_type() {
 	$return = '';
 
-	$account_type = $_POST['account_type'];
+	$account_type = isset( $_POST['account_type'] ) ? wp_unslash( $_POST['account_type'] ) : '';
 	$post_data    = isset( $_POST['post_data'] ) ? wp_unslash( $_POST['post_data'] ) : array();
 
 	if ( $account_type ) {
@@ -2446,13 +2446,18 @@ function openlab_get_exclude_groups_for_account_type( $type ) {
 
 	$exclude_groups = array();
 	foreach ( $gs as $gname => $gid ) {
+		// special case for Base
+		if ( 'Base' === $gname && 'Base' === $type ) {
+			continue;
+		}
+
 		// special case for alumni
 		if ( 'alumni' === $type && 'Student' === $gname ) {
 			continue;
 		}
 
 		// otherwise, non-matches are excluded
-		if ( $gname !== $member_type_object->name ) {
+		if ( ! $member_type_object || $gname !== $member_type_object->name ) {
 			$exclude_groups[] = $gid;
 		}
 	}

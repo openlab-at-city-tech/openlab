@@ -115,25 +115,25 @@ function wds_email_validate() {
 	$email        = $_POST['signup_email'];
 	$email_parts  = explode( '@', $email );
 	$domain       = isset( $email_parts[1] ) ? stripslashes( $email_parts[1] ): '';
-	$account_type = isset( $_POST['field_7'] ) ? stripslashes( $_POST['field_7'] ) : 'Student';
+	$account_type = isset( $_POST['openlab-account-type'] ) ? stripslashes( $_POST['openlab-account-type'] ) : 'student';
 
 	switch ( $account_type ) {
-		case 'Student':
-		case 'Alumni':
+		case 'student':
+		case 'alumni':
 			if ( 'mail.citytech.cuny.edu' !== $domain ) {
 				$bp->signup->errors['signup_email'] = 'Students must register with an @mail.citytech.cuny.edu e-mail address!';
 			}
 			break;
 
-		case 'Faculty':
-		case 'Staff':
+		case 'faculty':
+		case 'staff':
 			if ( 'citytech.cuny.edu' !== $domain ) {
 				$bp->signup->errors['signup_email'] = 'You must register with an @citytech.cuny.edu e-mail address!';
 			}
 
 			break;
 
-		case 'Non-City Tech':
+		case 'non-city-tech':
 			$code = isset( $_POST['signup_validation_code'] ) ? $_POST['signup_validation_code'] : null;
 			if ( ! cac_ncs_validate_code( $code ) ) {
 				$bp->signup->errors['signup_email'] = 'Non-City Tech addresses need a valid registration code to sign up for the OpenLab.';
@@ -451,9 +451,11 @@ function openlab_unload_activation_key() {
 add_action( 'bp_init', 'openlab_unload_activation_key' );
 
 /**
- * Saves academic unit data on registration.
+ * Saves "meta" data on registration.
+ *
+ * Includes academic units and member type.
  */
-function openlab_save_academic_unit_data_at_registration( $usermeta ) {
+function openlab_save_meta_data_at_registration( $usermeta ) {
 	$to_save = [];
 	if ( isset( $_POST['openlab-academic-unit-selector-nonce'] ) ) {
 		check_admin_referer( 'openlab_academic_unit_selector', 'openlab-academic-unit-selector-nonce' );
@@ -468,9 +470,17 @@ function openlab_save_academic_unit_data_at_registration( $usermeta ) {
 		$usermeta['academic_units'] = $to_save;
 	}
 
+	$account_type = isset( $_POST['openlab-account-type'] ) ? $_POST['openlab-account-type'] : 'student';
+	if ( ! openlab_get_member_type_object( $account_type ) ) {
+		$account_type = 'student';
+	}
+
+	$usermeta['account_type'] = $account_type;
+	_b( $usermeta );
+
 	return $usermeta;
 }
-add_filter( 'bp_signup_usermeta', 'openlab_save_academic_unit_data_at_registration' );
+add_filter( 'bp_signup_usermeta', 'openlab_save_meta_data_at_registration' );
 
 /**
  * Processes academic unit data on account activation.
@@ -483,6 +493,21 @@ function openlab_process_academic_unit_data_at_activation( $user_id, $key, $data
 	openlab_set_user_academic_units( $user_id, $data['meta']['academic_units'] );
 }
 add_action( 'bp_core_activated_user', 'openlab_process_academic_unit_data_at_activation', 10, 3 );
+
+/**
+ * Processes member type on account activation.
+ */
+function openlab_process_member_type_at_activation( $user_id, $key, $data ) {
+	if ( ! isset( $data['meta']['account_type'] ) ) {
+		return;
+	}
+
+	$member_type = openlab_get_member_type_object( $data['meta']['account_type'] );
+	if ( $member_type ) {
+		bp_set_member_type( $user_id, $member_type->name );
+	}
+}
+add_action( 'bp_core_activated_user', 'openlab_process_member_type_at_activation', 10, 3 );
 
 /**
  * Send "Office of the Provost" group invites to "Faculty" and "Staff" members.

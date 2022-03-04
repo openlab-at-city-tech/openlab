@@ -68,7 +68,6 @@ function openlab_enqueue_frontend_scripts() {
 
 		wp_localize_script('openlab-registration', 'OLReg', array(
 			'post_data' => $_POST,
-			'account_type_field' => xprofile_get_field_id_from_name('Account Type'),
 		));
     }
 
