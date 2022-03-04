@@ -1066,16 +1066,6 @@ HTML;
     return $markup;
 }
 
-add_filter('bp_get_options_nav_nav-invite-anyone', 'cuny_send_invite_fac_only');
-
-function cuny_send_invite_fac_only($subnav_item) {
-    global $bp;
-    $account_type = xprofile_get_field_data('Account Type', $bp->loggedin_user->id);
-
-    if ($account_type != 'Student')
-        return $subnav_item;
-}
-
 /**
  * Add the group type to the Previous Step button during group creation
  *
@@ -1613,10 +1603,6 @@ function openlab_bp_group_site_pages( $mobile = false ) {
             <?php $displayed_user_id = bp_is_user() ? bp_displayed_user_id() : bp_loggedin_user_id(); ?>
 
             <div class="sidebar-block group-site-links <?php echo esc_html( $responsive_class ); ?>">
-
-                <?php
-                $account_type = xprofile_get_field_data('Account Type', $displayed_user_id);
-                ?>
 
                 <?php if (openlab_is_my_portfolio() || is_super_admin()) : ?>
                     <ul class="sidebar-sublinks portfolio-sublinks inline-element-list">
