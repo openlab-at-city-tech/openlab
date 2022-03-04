@@ -8,8 +8,8 @@ class Group implements Counter {
 	public function query( $query ) {
 		global $wpdb;
 
-		$group_type = $query['type'];
-                $group_status = $query['status'];
+		$group_type   = $query['type'];
+		$group_status = $query['status'];
 
 		$counts = array(
 			'start'   => '',

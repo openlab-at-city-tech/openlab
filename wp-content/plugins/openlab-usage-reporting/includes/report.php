@@ -16,7 +16,7 @@ function olur_report_callbacks() {
 			'Other'    => array( 'label' => 'Other', 'type' => 'other' ),
 			'Total'    => array( 'label' => 'Total', 'type' => 'total' ),
 		),
-
+/*
 		// Groups.
 		'Group' => array(
 			array( 'label' => 'Courses (Public)', 'type' => 'course', 'status' => 'public' ),
@@ -107,6 +107,7 @@ function olur_report_callbacks() {
 			array( 'label' => 'Other', 'type' => 'other' ),
 			array( 'label' => 'Total', 'type' => 'total' ),
 		),
+		*/
 	);
 
 	return $callbacks;
@@ -120,6 +121,7 @@ function olur_report_callbacks() {
  */
 function olur_generate_report( $start, $end ) {
 	$data = olur_generate_report_data( $start, $end );
+	var_dump( $data ); return;
 
 	$start_formatted = date( 'Y-m-d', strtotime( $start ) );
 	$end_formatted   = date( 'Y-m-d', strtotime( $end ) );
