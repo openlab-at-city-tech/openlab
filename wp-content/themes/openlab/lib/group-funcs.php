@@ -718,9 +718,9 @@ function cuny_group_single() {
                             $show_school = 'project' === $group_type || 'club' === $group_type;
                             if ( 'portfolio' === $group_type ) {
                                 $user_id   = openlab_get_user_id_from_portfolio_group_id( $group_id );
-                                $user_type = xprofile_get_field_data( 'Account Type', $user_id );
+                                $user_type = openlab_get_user_member_type( $user_id );
 
-                                $show_school = 'Staff' === $user_type;
+                                $show_school = 'staff' === $user_type;
                             }
                             ?>
 
