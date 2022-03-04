@@ -1551,11 +1551,9 @@ class OpenLab_Change_User_Type {
 	}
 
 	function markup( $user ) {
-		$account_type = xprofile_get_field_data( 'Account Type', $user->ID );
+		$account_type = openlab_get_user_member_type( $user->ID );
 
-		$field_id = xprofile_get_field_id_from_name( 'Account Type' );
-		$field    = new BP_XProfile_Field( $field_id );
-		$options  = $field->get_children();
+		$options = openlab_get_member_types();
 		?>
 
 		<h3>OpenLab Account Type</h3>
@@ -1568,7 +1566,7 @@ class OpenLab_Change_User_Type {
 
 				<td>
 					<?php foreach ( $options as $option ) : ?>
-						<label><input type="radio" name="openlab_account_type" value="<?php echo $option->name; ?>" <?php checked( $account_type, $option->name ); ?>> <?php echo $option->name; ?><br /></label>
+						<label><input type="radio" name="openlab_account_type" value="<?php echo esc_attr( $option->name ); ?>" <?php checked( $account_type, $option->slug ); ?>> <?php echo esc_html( $option->name ); ?><br /></label>
 						<?php endforeach ?>
 				</td>
 			</tr>
@@ -1579,7 +1577,7 @@ class OpenLab_Change_User_Type {
 
 	function save( $user_id ) {
 		if ( isset( $_POST['openlab_account_type'] ) ) {
-			xprofile_set_field_data( 'Account Type', $user_id, $_POST['openlab_account_type'] );
+			openlab_set_user_member_type( $user_id, $_POST['openlab_account_type'] );
 		}
 	}
 
