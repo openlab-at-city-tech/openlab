@@ -2432,6 +2432,8 @@ add_action( 'widgets_init', 'openlab_register_portfolios_widget' );
 function openlab_get_exclude_groups_for_account_type( $type ) {
 	global $wpdb, $bp;
 
+	$member_type_object = openlab_get_member_type_object( $type );
+
 	// phpcs:disable
 	$groups = $wpdb->get_results( "SELECT id, name FROM {$bp->profile->table_name_groups}" );
 	// phpcs:enable
@@ -2445,12 +2447,12 @@ function openlab_get_exclude_groups_for_account_type( $type ) {
 	$exclude_groups = array();
 	foreach ( $gs as $gname => $gid ) {
 		// special case for alumni
-		if ( 'Alumni' === $type && 'Student' === $gname ) {
+		if ( 'alumni' === $type && 'Student' === $gname ) {
 			continue;
 		}
 
 		// otherwise, non-matches are excluded
-		if ( $gname !== $type ) {
+		if ( $gname !== $member_type_object->name ) {
 			$exclude_groups[] = $gid;
 		}
 	}
