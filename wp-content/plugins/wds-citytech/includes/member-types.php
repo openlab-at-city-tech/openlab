@@ -66,6 +66,21 @@ function openlab_get_user_member_type_label( $user_id ) {
 }
 
 /**
+ * Sets a user's member type.
+ *
+ * @param int    $user_id
+ * @param string $member_type Slug.
+ */
+function openlab_set_user_member_type( $user_id, $member_type ) {
+	$obj = openlab_get_member_type_object( $member_type );
+	if ( ! $obj ) {
+		return false;
+	}
+
+	return bp_set_member_type( $user_id, $obj->name );
+}
+
+/**
  * Gets a list of all member types.
  *
  * @return string
