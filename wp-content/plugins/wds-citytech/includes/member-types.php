@@ -73,3 +73,13 @@ function openlab_get_user_member_type_label( $user_id ) {
 function openlab_get_member_types() {
 	return bp_get_member_types( [], 'objects' );
 }
+
+/**
+ * Gets a member type term object by slug.
+ *
+ * @param string $slug
+ * @return WP_Term
+ */
+function openlab_get_member_type_object( $slug ) {
+	return get_term_by( 'slug', $slug, bp_get_member_type_tax_name() );
+}
