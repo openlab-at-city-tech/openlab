@@ -71,7 +71,38 @@ function openlab_get_user_member_type_label( $user_id ) {
  * @return string
  */
 function openlab_get_member_types() {
-	return bp_get_member_types( [], 'objects' );
+	$bp_types = bp_get_member_types( [], 'objects' );
+
+	$types = array_map(
+		function( $bp_type ) {
+			return get_term( $bp_type->db_id, bp_get_member_type_tax_name() );
+		},
+		bp_get_member_types( [], 'objects' )
+	);
+
+	$sort_order = [
+		0 => 'student',
+		1 => 'faculty',
+		2 => 'staff',
+		3 => 'alumni',
+		4 => 'non-city-tech',
+	];
+
+	usort(
+		$types,
+		function( $a, $b ) use ( $sort_order ) {
+			$a_index = array_search( $a->slug, $sort_order, true );
+			$b_index = array_search( $b->slug, $sort_order, true );
+
+			if ( $a_index === $b_index ) {
+				return 0;
+			}
+
+			return $a_index > $b_index ? 1 : -1;
+		}
+	);
+
+	return $types;
 }
 
 /**
