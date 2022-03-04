@@ -5,12 +5,15 @@
  */
 
 /**
- * Gets a user's member type.
+ * Gets a user's member type term object.
+ *
+ * We fetch like this in order to have the term object, which BP hides in its
+ * own API functions.
  *
  * @param int $user_id ID of the user.
- * @return string
+ * @return WP_Term
  */
-function openlab_get_user_member_type( $user_id ) {
+function openlab_get_user_member_type_object( $user_id ) {
 	$type = bp_get_member_type( $user_id );
 	if ( ! $type ) {
 		return null;
@@ -27,7 +30,39 @@ function openlab_get_user_member_type( $user_id ) {
 		return null;
 	}
 
+	return $term;
+}
+
+/**
+ * Gets a user's member type.
+ *
+ * @param int $user_id ID of the user.
+ * @return string
+ */
+function openlab_get_user_member_type( $user_id ) {
+	$term = openlab_get_user_member_type_object( $user_id );
+
+	if ( ! $term ) {
+		return '';
+	}
+
 	return $term->slug;
+}
+
+/**
+ * Gets a user's member type label.
+ *
+ * @param int $user_id ID of the user.
+ * @return string
+ */
+function openlab_get_user_member_type_label( $user_id ) {
+	$term = openlab_get_user_member_type_object( $user_id );
+
+	if ( ! $term ) {
+		return '';
+	}
+
+	return $term->name;
 }
 
 /**
