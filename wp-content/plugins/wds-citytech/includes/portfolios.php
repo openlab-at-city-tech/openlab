@@ -153,15 +153,13 @@ function openlab_get_portfolio_label( $args = array() ) {
 	}
 
 	if ( empty( $r['user_type'] ) ) {
-		$r['user_type'] = xprofile_get_field_data( 'Account Type', $r['user_id'] );
+		$r['user_type'] = openlab_get_user_member_type( $r['user_id'] );
 	}
 
 	// Sanitize
 	if ( ! in_array( strtolower( $r['user_type'] ), array( 'student', 'staff', 'faculty' ) ) ) {
 		$r['user_type'] = 'student';
 	}
-
-	$r['user_type'] = strtolower( $r['user_type'] );
 
 	if ( 'student' == $r['user_type'] ) {
 		$label = 'ePortfolio';
