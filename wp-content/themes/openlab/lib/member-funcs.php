@@ -342,7 +342,7 @@ function openlab_displayed_user_account_type() {
 }
 
 function openlab_get_displayed_user_account_type() {
-	return xprofile_get_field_data( 'Account Type', bp_displayed_user_id() );
+	return openlab_get_user_member_type( bp_displayed_user_id() );
 }
 
 /**

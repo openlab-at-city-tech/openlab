@@ -2024,7 +2024,7 @@ function openlab_addl_settings_fields() {
 
 	$fname        = isset( $_POST['fname'] ) ? $_POST['fname'] : '';
 	$lname        = isset( $_POST['lname'] ) ? $_POST['lname'] : '';
-	$account_type = isset( $_POST['account_type'] ) ? $_POST['account_type'] : '';
+	$account_type = isset( $_POST['openlab-account-type'] ) ? $_POST['openlab-account-type'] : '';
 
 	// Don't let this continue if a password error was recorded
 	if ( isset( $bp->template_message_type ) && 'error' == $bp->template_message_type && 'No changes were made to your account.' != $bp->template_message ) {
@@ -2041,15 +2041,18 @@ function openlab_addl_settings_fields() {
 	}
 
 	if ( ! empty( $account_type ) ) {
-		//saving account type for students or alumni
-		$types        = array( 'Student', 'Alumni' );
-		$account_type = in_array( $_POST['account_type'], $types ) ? $_POST['account_type'] : 'Student';
+		// Saving account type for students or alumni.
+		$types = array( 'student', 'alumni' );
+		if ( ! in_array( $account_type, $types, true ) ) {
+			$account_type = 'student';
+		}
+
 		$user_id      = bp_displayed_user_id();
 		$current_type = openlab_get_displayed_user_account_type();
 
 		// Only students and alums can do this
 		if ( in_array( $current_type, $types ) ) {
-			xprofile_set_field_data( 'Account Type', bp_displayed_user_id(), $account_type );
+			openlab_set_user_member_type( bp_displayed_user_id(), $account_type );
 		}
 	}
 

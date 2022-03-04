@@ -39,7 +39,7 @@ do_action('bp_before_member_settings_template');
 
             <?php
             $account_type = openlab_get_displayed_user_account_type();
-            $include_acct_type = in_array($account_type, array('Student', 'Alumni')) ? ' account type, ' : ' ';
+            $include_acct_type = in_array( $account_type, array( 'student', 'alumni' ) ) ? ' account type, ' : ' ';
             ?>
 
             <p class="description">Required to change<?php echo $include_acct_type ?>current password, first name, or last name. <a class="underline" href="<?php echo site_url(add_query_arg(array('action' => 'lostpassword'), 'wp-login.php'), 'login'); ?>" title="<?php _e('Password Lost and Found', 'buddypress'); ?>"><?php _e('Lost your password?', 'buddypress'); ?></a></p>
@@ -63,12 +63,12 @@ do_action('bp_before_member_settings_template');
             <input class="form-control" type="text" name="lname" id="lname" value="<?php echo bp_get_profile_field_data(array('field' => 'Last Name')) ?>" />
         </div>
 
-        <?php if (in_array($account_type, array('Student', 'Alumni'))) : ?>
+        <?php if ( in_array( $account_type, array('student', 'alumni') ) ) : ?>
             <div class="form-group settings-section account-type-section">
-                <label for="account_type">Account Type</label>
-                <select class="form-control" name="account_type" id="account_type">
-                    <option value="Student" <?php selected('Student', $account_type) ?>>Student</option>
-                    <option value="Alumni" <?php selected('Alumni', $account_type) ?>>Alumni</option>
+                <label for="openlab-account-type">Account Type</label>
+                <select class="form-control" name="openlab-account-type" id="openlab-account-type">
+                    <option value="student" <?php selected( 'student', $account_type ) ?>>Student</option>
+                    <option value="alumni" <?php selected( 'alumni', $account_type ) ?>>Alumni</option>
                 </select>
             </div>
         <?php endif ?>
