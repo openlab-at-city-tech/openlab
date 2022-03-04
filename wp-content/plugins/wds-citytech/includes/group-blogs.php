@@ -1546,7 +1546,7 @@ function openlab_get_groupblog_template( $user_id, $group_id ) {
 
 	switch ( $group_type ) {
 		case 'portfolio':
-			$account_type = openlab_get_user_member_type( 'Account Type' );
+			$account_type = openlab_get_user_member_type( $user_id );
 
 			switch ( $account_type ) {
 				case 'faculty':
