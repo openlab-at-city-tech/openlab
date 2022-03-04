@@ -1598,8 +1598,8 @@ function openlab_hide_fn_ln( $check, $object, $meta_key, $single ) {
 	if ( is_admin() && in_array( $meta_key, array( 'first_name', 'last_name' ) ) ) {
 
 		// Faculty only
-		$account_type = xprofile_get_field_data( 'Account Type', get_current_user_id() );
-		if ( 'faculty' != strtolower( $account_type ) ) {
+		$account_type = openlab_get_user_member_type( get_current_user_id() );
+		if ( 'faculty' !== $account_type ) {
 			return '';
 		}
 
