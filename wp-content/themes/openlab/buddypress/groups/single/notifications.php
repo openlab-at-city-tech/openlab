@@ -12,6 +12,9 @@
                     <?php openlab_group_membership_tabs(); ?>
                 </ul>
             </div>
+
+			<?php do_action( 'template_notices' ); ?>
+
             <?php openlab_ass_group_subscribe_settings(); ?>
         </div>
     </div>
