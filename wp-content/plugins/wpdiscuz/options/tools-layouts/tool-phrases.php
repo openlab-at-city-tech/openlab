@@ -16,13 +16,6 @@ if (!defined("ABSPATH")) {
             <form action="" method="post" class="wc-tools-settings-form wc-form">
                 <?php wp_nonce_field("wc_tools_form", "wpd-phrases-export"); ?>
                 <div class="wpdtool-block">
-                    <?php if (file_exists($wpdiscuzOptionsDir . self::PHRASES_FILENAME . ".txt")) { ?>
-                        <div class="wpdtool-left">
-                            <a href="<?php echo esc_url_raw($wpdiscuzOptionsUrl . self::PHRASES_FILENAME . ".txt"); ?>" download="<?php echo esc_attr(self::PHRASES_FILENAME . ".txt"); ?>" class="button button-secondary">
-                                <?php esc_html_e("Download Phrases", "wpdiscuz"); ?>
-                            </a>
-                        </div>
-                    <?php } ?>
                     <div class="wpdtool-right">
                         <input type="submit" name="wpdiscuz-export-submit" class="button button-primary" value="<?php esc_attr_e("Backup Phrases", "wpdiscuz"); ?>">
                     </div>
