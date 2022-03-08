@@ -12031,7 +12031,8 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
         PanelBody = wpComponents.PanelBody,
         RangeControl = wpComponents.RangeControl,
         SelectControl = wpComponents.SelectControl,
-        Button = wpComponents.Button;
+        Button = wpComponents.Button,
+        TextControl = wpComponents.TextControl;
     var _wp$data = wp.data,
         withDispatch = _wp$data.withDispatch,
         select = _wp$data.select,
@@ -12148,6 +12149,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                     pid: "advgb-tabs-" + this.props.clientId
                 });
                 this.updateTabHeaders();
+                this.updateTabAnchors();
                 this.props.resetOrder();
             }
         }, {
@@ -12220,43 +12222,95 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                 });
             }
         }, {
-            key: "addTab",
-            value: function addTab() {
+            key: "updateTabsAnchor",
+            value: function updateTabsAnchor(anchor, index) {
                 var _props6 = this.props,
                     attributes = _props6.attributes,
                     setAttributes = _props6.setAttributes,
                     clientId = _props6.clientId;
+                var tabAnchors = attributes.tabAnchors;
 
                 var _ref7 = !wp.blockEditor ? dispatch('core/editor') : dispatch('core/block-editor'),
-                    insertBlock = _ref7.insertBlock;
+                    updateBlockAttributes = _ref7.updateBlockAttributes;
+
+                var _ref8 = !wp.blockEditor ? select('core/editor') : select('core/block-editor'),
+                    getBlockOrder = _ref8.getBlockOrder;
+
+                var childBlocks = getBlockOrder(clientId);
+
+                var newAnchors = tabAnchors.map(function (item, idx) {
+                    if (index === idx) {
+                        item = anchor;
+                    }
+                    return item;
+                });
+
+                setAttributes({ tabAnchors: newAnchors });
+                updateBlockAttributes(childBlocks[index], { anchor: anchor });
+                this.updateTabAnchors();
+            }
+        }, {
+            key: "updateTabAnchors",
+            value: function updateTabAnchors() {
+                var _props7 = this.props,
+                    attributes = _props7.attributes,
+                    clientId = _props7.clientId;
+                var tabAnchors = attributes.tabAnchors;
+
+                var _ref9 = !wp.blockEditor ? dispatch('core/editor') : dispatch('core/block-editor'),
+                    updateBlockAttributes = _ref9.updateBlockAttributes;
+
+                var _ref10 = !wp.blockEditor ? select('core/editor') : select('core/block-editor'),
+                    getBlockOrder = _ref10.getBlockOrder;
+
+                var childBlocks = getBlockOrder(clientId);
+
+                childBlocks.forEach(function (childBlockId) {
+                    return updateBlockAttributes(childBlockId, { tabAnchors: tabAnchors });
+                });
+            }
+        }, {
+            key: "addTab",
+            value: function addTab() {
+                var _props8 = this.props,
+                    attributes = _props8.attributes,
+                    setAttributes = _props8.setAttributes,
+                    clientId = _props8.clientId;
+
+                var _ref11 = !wp.blockEditor ? dispatch('core/editor') : dispatch('core/block-editor'),
+                    insertBlock = _ref11.insertBlock;
 
                 var tabItemBlock = createBlock('advgb/tab');
 
                 insertBlock(tabItemBlock, attributes.tabHeaders.length, clientId);
                 setAttributes({
-                    tabHeaders: [].concat(_toConsumableArray(attributes.tabHeaders), ['Tab header'])
+                    tabHeaders: [].concat(_toConsumableArray(attributes.tabHeaders), ['Tab header']),
+                    tabAnchors: [].concat(_toConsumableArray(attributes.tabAnchors), [''])
                 });
                 this.props.resetOrder();
             }
         }, {
             key: "removeTab",
             value: function removeTab(index) {
-                var _props7 = this.props,
-                    attributes = _props7.attributes,
-                    setAttributes = _props7.setAttributes,
-                    clientId = _props7.clientId;
+                var _props9 = this.props,
+                    attributes = _props9.attributes,
+                    setAttributes = _props9.setAttributes,
+                    clientId = _props9.clientId;
 
-                var _ref8 = !wp.blockEditor ? dispatch('core/editor') : dispatch('core/block-editor'),
-                    removeBlock = _ref8.removeBlock;
+                var _ref12 = !wp.blockEditor ? dispatch('core/editor') : dispatch('core/block-editor'),
+                    removeBlock = _ref12.removeBlock;
 
-                var _ref9 = !wp.blockEditor ? select('core/editor') : select('core/block-editor'),
-                    getBlockOrder = _ref9.getBlockOrder;
+                var _ref13 = !wp.blockEditor ? select('core/editor') : select('core/block-editor'),
+                    getBlockOrder = _ref13.getBlockOrder;
 
                 var childBlocks = getBlockOrder(clientId);
 
                 removeBlock(childBlocks[index], false);
                 setAttributes({
                     tabHeaders: attributes.tabHeaders.filter(function (vl, idx) {
+                        return idx !== index;
+                    }),
+                    tabAnchors: attributes.tabAnchors.filter(function (vl, idx) {
                         return idx !== index;
                     })
                 });
@@ -12268,12 +12322,13 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
             value: function render() {
                 var _this2 = this;
 
-                var _props8 = this.props,
-                    attributes = _props8.attributes,
-                    setAttributes = _props8.setAttributes,
-                    clientId = _props8.clientId;
+                var _props10 = this.props,
+                    attributes = _props10.attributes,
+                    setAttributes = _props10.setAttributes,
+                    clientId = _props10.clientId;
                 var viewport = this.state.viewport;
                 var tabHeaders = attributes.tabHeaders,
+                    tabAnchors = attributes.tabAnchors,
                     tabActive = attributes.tabActive,
                     tabActiveFrontend = attributes.tabActiveFrontend,
                     tabsStyleD = attributes.tabsStyleD,
@@ -12334,7 +12389,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                                         { key: index, text: style.label },
                                         React.createElement(
                                             Button,
-                                            { className: "advgb-tabs-style",
+                                            { className: 'advgb-tabs-style' + (style.name === attributes["tabsStyle" + deviceLetter] ? ' is-style-selected' : ''),
                                                 isToggled: style.name === attributes["tabsStyle" + deviceLetter],
                                                 onClick: function onClick() {
                                                     return setAttributes(_defineProperty({}, "tabsStyle" + deviceLetter, style.name));
@@ -12489,7 +12544,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                                     },
                                     React.createElement(
                                         "a",
-                                        { style: { color: headerTextColor },
+                                        { id: tabAnchors[index], style: { color: headerTextColor },
                                             onClick: function onClick() {
                                                 _this2.props.updateTabActive(index);
                                             }
@@ -12518,7 +12573,15 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                                             },
                                             React.createElement(Dashicon, { icon: "no" })
                                         )
-                                    )
+                                    ),
+                                    advgbBlocks.advgb_pro === '1' && React.createElement(TextControl, {
+                                        placeholder: __('HTML Anchor', 'advanced-gutenberg'),
+                                        value: tabAnchors[index],
+                                        onChange: function onChange(value) {
+                                            return _this2.updateTabsAnchor(value, index);
+                                        },
+                                        className: "advgb-floating-anchor-field"
+                                    })
                                 );
                             }),
                             React.createElement(
@@ -12660,6 +12723,10 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
         isTransform: {
             type: 'boolean',
             default: false
+        },
+        tabAnchors: {
+            type: 'array',
+            default: ['', '', '']
         }
     };
 
@@ -12681,9 +12748,9 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
         supports: {
             anchor: true
         },
-        edit: compose(withDispatch(function (dispatch, _ref10, _ref11) {
-            var clientId = _ref10.clientId;
-            var select = _ref11.select;
+        edit: compose(withDispatch(function (dispatch, _ref14, _ref15) {
+            var clientId = _ref14.clientId;
+            var select = _ref15.select;
 
             var _select = select('core/block-editor'),
                 getBlock = _select.getBlock;
@@ -12713,9 +12780,10 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                 }
             };
         }))(AdvTabsWrapper),
-        save: function save(_ref12) {
-            var attributes = _ref12.attributes;
+        save: function save(_ref16) {
+            var attributes = _ref16.attributes;
             var tabHeaders = attributes.tabHeaders,
+                tabAnchors = attributes.tabAnchors,
                 tabActiveFrontend = attributes.tabActiveFrontend,
                 tabsStyleD = attributes.tabsStyleD,
                 tabsStyleT = attributes.tabsStyleT,
@@ -12752,7 +12820,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                             },
                             React.createElement(
                                 "a",
-                                { href: "#advgb-tabs-tab" + index,
+                                { id: tabAnchors[index], href: "#advgb-tabs-tab" + index,
                                     style: { color: headerTextColor }
                                 },
                                 React.createElement(RichText.Content, {
@@ -12780,14 +12848,82 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
             );
         },
         deprecated: [{
+            attributes: _extends({}, tabBlockAttrs),
+            save: function save(_ref17) {
+                var attributes = _ref17.attributes;
+                var tabHeaders = attributes.tabHeaders,
+                    tabActiveFrontend = attributes.tabActiveFrontend,
+                    tabsStyleD = attributes.tabsStyleD,
+                    tabsStyleT = attributes.tabsStyleT,
+                    tabsStyleM = attributes.tabsStyleM,
+                    headerBgColor = attributes.headerBgColor,
+                    headerTextColor = attributes.headerTextColor,
+                    bodyBgColor = attributes.bodyBgColor,
+                    bodyTextColor = attributes.bodyTextColor,
+                    borderStyle = attributes.borderStyle,
+                    borderWidth = attributes.borderWidth,
+                    borderColor = attributes.borderColor,
+                    borderRadius = attributes.borderRadius,
+                    pid = attributes.pid;
+
+                var blockClass = ["advgb-tabs-wrapper", "advgb-tab-" + tabsStyleD + "-desktop", "advgb-tab-" + tabsStyleT + "-tablet", "advgb-tab-" + tabsStyleM + "-mobile", pid].filter(Boolean).join(' ');
+
+                return React.createElement(
+                    "div",
+                    { className: blockClass, "data-tab-active": tabActiveFrontend },
+                    React.createElement(
+                        "ul",
+                        { className: "advgb-tabs-panel" },
+                        tabHeaders.map(function (header, index) {
+                            return React.createElement(
+                                "li",
+                                { key: index, className: "advgb-tab",
+                                    style: {
+                                        backgroundColor: headerBgColor,
+                                        borderStyle: borderStyle,
+                                        borderWidth: borderWidth + 'px',
+                                        borderColor: borderColor,
+                                        borderRadius: borderRadius + 'px'
+                                    }
+                                },
+                                React.createElement(
+                                    "a",
+                                    { href: "#advgb-tabs-tab" + index,
+                                        style: { color: headerTextColor }
+                                    },
+                                    React.createElement(RichText.Content, {
+                                        tagName: "span",
+                                        value: header
+                                    })
+                                )
+                            );
+                        })
+                    ),
+                    React.createElement(
+                        "div",
+                        { className: "advgb-tab-body-wrapper",
+                            style: {
+                                backgroundColor: bodyBgColor,
+                                color: bodyTextColor,
+                                borderStyle: borderStyle,
+                                borderWidth: borderWidth + 'px',
+                                borderColor: borderColor,
+                                borderRadius: borderRadius + 'px'
+                            }
+                        },
+                        React.createElement(InnerBlocks.Content, null)
+                    )
+                );
+            }
+        }, {
             attributes: _extends({}, tabBlockAttrs, {
                 isTransform: {
                     type: 'boolean',
                     default: false
                 }
             }),
-            save: function save(_ref13) {
-                var attributes = _ref13.attributes;
+            save: function save(_ref18) {
+                var attributes = _ref18.attributes;
                 var tabHeaders = attributes.tabHeaders,
                     tabActiveFrontend = attributes.tabActiveFrontend,
                     tabsStyleD = attributes.tabsStyleD,
@@ -12860,8 +12996,8 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                     default: ''
                 }
             }),
-            save: function save(_ref14) {
-                var attributes = _ref14.attributes;
+            save: function save(_ref19) {
+                var attributes = _ref19.attributes;
                 var tabHeaders = attributes.tabHeaders,
                     tabActiveFrontend = attributes.tabActiveFrontend,
                     tabsStyleD = attributes.tabsStyleD,
@@ -13018,7 +13154,8 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                     attributes = _props2.attributes,
                     setAttributes = _props2.setAttributes;
                 var id = attributes.id,
-                    tabHeaders = attributes.tabHeaders;
+                    tabHeaders = attributes.tabHeaders,
+                    tabAnchors = attributes.tabAnchors;
 
 
                 if (!this.props.attributes.uniqueID) {
@@ -13038,6 +13175,12 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                 setAttributes({
                     header: tabHeaders[id]
                 });
+
+                if (typeof tabAnchors !== 'undefined') {
+                    setAttributes({
+                        anchor: tabAnchors[id]
+                    });
+                }
             }
         }, {
             key: "render",
@@ -13097,6 +13240,9 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
             header: {
                 type: 'html'
             },
+            anchor: {
+                type: 'string'
+            },
             tabActive: {
                 type: 'number',
                 default: 0
@@ -13108,6 +13254,10 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
             tabHeaders: {
                 type: 'array',
                 default: [__('Tab 1', 'advanced-gutenberg'), __('Tab 2', 'advanced-gutenberg'), __('Tab 3', 'advanced-gutenberg')]
+            },
+            tabAnchors: {
+                type: 'array',
+                default: ['', '', '']
             },
             uniqueID: {
                 type: 'string',
@@ -13123,7 +13273,8 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
             var attributes = _ref2.attributes;
             var id = attributes.id,
                 uniqueID = attributes.uniqueID,
-                header = attributes.header;
+                header = attributes.header,
+                anchor = attributes.anchor;
 
 
             var tabClassName = ["advgb-tab-" + uniqueID, 'advgb-tab-body'].filter(Boolean).join(' ');
@@ -13133,7 +13284,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                 { className: "advgb-tab-body-container" },
                 React.createElement(
                     "div",
-                    { className: "advgb-tab-body-header" },
+                    { className: "advgb-tab-body-header advgb-tab-class-" + anchor },
                     header
                 ),
                 React.createElement(
@@ -13144,6 +13295,62 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
             );
         },
         deprecated: [{
+            attributes: {
+                id: {
+                    type: 'number',
+                    default: 0
+                },
+                pid: {
+                    type: 'string'
+                },
+                header: {
+                    type: 'html'
+                },
+                tabActive: {
+                    type: 'number',
+                    default: 0
+                },
+                changed: {
+                    type: 'boolean',
+                    default: false
+                },
+                tabHeaders: {
+                    type: 'array',
+                    default: [__('Tab 1', 'advanced-gutenberg'), __('Tab 2', 'advanced-gutenberg'), __('Tab 3', 'advanced-gutenberg')]
+                },
+                uniqueID: {
+                    type: 'string',
+                    default: ''
+                }
+            },
+            supports: {
+                reusable: false
+            },
+            save: function save(_ref3) {
+                var attributes = _ref3.attributes;
+                var id = attributes.id,
+                    uniqueID = attributes.uniqueID,
+                    header = attributes.header;
+
+
+                var tabClassName = ["advgb-tab-" + uniqueID, 'advgb-tab-body'].filter(Boolean).join(' ');
+
+                return React.createElement(
+                    "div",
+                    { className: "advgb-tab-body-container" },
+                    React.createElement(
+                        "div",
+                        { className: "advgb-tab-body-header" },
+                        header
+                    ),
+                    React.createElement(
+                        "div",
+                        { className: tabClassName, "aria-labelledby": "advgb-tabs-tab" + id },
+                        React.createElement(InnerBlocks.Content, null)
+                    )
+                );
+            }
+        }, {
             attributes: {
                 pid: {
                     type: 'string'
@@ -13168,8 +13375,8 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                     default: ''
                 }
             },
-            save: function save(_ref3) {
-                var attributes = _ref3.attributes;
+            save: function save(_ref4) {
+                var attributes = _ref4.attributes;
                 var pid = attributes.pid,
                     header = attributes.header;
 
@@ -18219,9 +18426,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                 var blockIDX = attributes.blockIDX;
 
 
-                if (!blockIDX) {
-                    setAttributes({ blockIDX: "advgb-infobox-" + clientId });
-                }
+                setAttributes({ blockIDX: "advgb-infobox-" + clientId });
             }
         }, {
             key: "componentDidUpdate",
@@ -23231,6 +23436,8 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
     var NEWSPAPER_LAYOUTS = [{ layout: 'np-1-1', icon: 'np-1-1', items: 2, title: __('The leading post in the left, 1 post in the right', 'advanced-gutenberg') }, { layout: 'np-1-2', icon: 'np-1-2', items: 3, title: __('The leading post in the left, 2 posts in the right', 'advanced-gutenberg') }, { layout: 'np-1-3', icon: 'np-1-3', items: 4, title: __('The leading post in the left, 3 posts in the right', 'advanced-gutenberg') }, { layout: 'np-1-4', icon: 'np-1-4', items: 5, title: __('The leading post in the left, 4 posts in the right', 'advanced-gutenberg') }, { layout: 'np-1-5', icon: 'np-1-5', items: 6, title: __('The leading post in the left, 5 posts in the right', 'advanced-gutenberg') }, { layout: 'np-1-1-r', icon: 'np-1-1-r', items: 2, title: __('The leading post in the right, 1 post in the left', 'advanced-gutenberg') }, { layout: 'np-1-2-r', icon: 'np-1-2-r', items: 3, title: __('The leading post in the right, 2 posts in the left', 'advanced-gutenberg') }, { layout: 'np-1-3-r', icon: 'np-1-3-r', items: 4, title: __('The leading post in the right, 3 posts in the left', 'advanced-gutenberg') }, { layout: 'np-1-4-r', icon: 'np-1-4-r', items: 5, title: __('The leading post in the right, 4 posts in the left', 'advanced-gutenberg') }, { layout: 'np-1-5-r', icon: 'np-1-5-r', items: 6, title: __('The leading post in the right, 5 posts in the left', 'advanced-gutenberg') }, { layout: 'np-2', icon: 'np-2', items: 3, title: __('The leading post on top, the rest of posts below', 'advanced-gutenberg') }, { layout: 'np-3-1', icon: 'np-3-1', items: 3, title: __('The leading post on top, below 2 columns with 1 post in the left and 1 post in the right', 'advanced-gutenberg') }, { layout: 'np-3-2', icon: 'np-3-2', items: 4, title: __('The leading post on top, below 2 columns with 1 post in the left and 2 posts in the right', 'advanced-gutenberg') }, { layout: 'np-3-3', icon: 'np-3-3', items: 5, title: __('The leading post on top, below 2 columns with 1 post in the left and 3 posts in the right', 'advanced-gutenberg') }];
 
+    var ORDER_SECTIONS = [{ label: 'Default', value: 'default' }, { label: 'Title, Image, Info, Text', value: 'title-image-info-text' }, { label: 'Image, Title, Text, Info', value: 'image-title-text-info' }, { label: 'Title, Image, Text, Info', value: 'title-image-text-info' }, { label: 'Title, Info, Text, Image', value: 'title-info-text-image' }, { label: 'Title, Text, Info, Image', value: 'title-text-info-image' }, { label: 'Title, Text, Image, Info', value: 'title-text-image-info' }];
+
     var CUSTOM_TAX_PREFIX = 'custom-tax-';
 
     var initSlider = null;
@@ -23519,7 +23726,8 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                     linkCustomTax = attributes.linkCustomTax,
                     showCustomTaxList = attributes.showCustomTaxList,
                     imagePosition = attributes.imagePosition,
-                    onlyFromCurrentUser = attributes.onlyFromCurrentUser;
+                    onlyFromCurrentUser = attributes.onlyFromCurrentUser,
+                    orderSections = attributes.orderSections;
 
 
                 var recentPosts = this.props.recentPosts;
@@ -24025,6 +24233,19 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                                 return setAttributes({ textBeforeReadmore: value });
                             }
                         })
+                    ),
+                    advgbBlocks.advgb_pro === '1' && React.createElement(
+                        PanelBody,
+                        { title: __('Order Settings', 'advanced-gutenberg') },
+                        React.createElement(SelectControl, {
+                            label: __('Sections order', 'advanced-gutenberg'),
+                            help: __('When the image in desktop floats next to the content, or is displayed as background, the image order is ignored. Also the image order in mobile can be ignored for some views.', 'advanced-gutenberg'),
+                            value: orderSections,
+                            options: ORDER_SECTIONS,
+                            onChange: function onChange(value) {
+                                return setAttributes({ orderSections: value });
+                            }
+                        })
                     )
                 );
 
@@ -24092,7 +24313,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                     isActive: postView === 'masonry'
                 }];
 
-                var blockClassName = ['advgb-recent-posts-block', this.state.updating && 'loading', postView && postView + '-view', postView === 'list' && imagePosition !== 'left' && 'image-' + imagePosition, (postView === 'grid' || postView === 'masonry') && 'columns-' + columns, postView === 'masonry' && 'tbl-columns-' + columnsT + ' ' + 'mbl-columns-' + columnsM, postView === 'slider' && sliderStyle && 'style-' + sliderStyle, postView === 'frontpage' && frontpageLayout && 'layout-' + frontpageLayout, postView === 'frontpage' && frontpageLayoutT && 'tbl-layout-' + frontpageLayoutT, postView === 'frontpage' && frontpageLayoutM && 'mbl-layout-' + frontpageLayoutM, (postView === 'frontpage' || postView === 'masonry') && gap && 'gap-' + gap, postView === 'frontpage' && frontpageStyle && 'style-' + frontpageStyle, postView === 'newspaper' && newspaperLayout && 'layout-' + newspaperLayout].filter(Boolean).join(' ');
+                var blockClassName = ['advgb-recent-posts-block', this.state.updating && 'loading', postView && postView + '-view', postView === 'list' && imagePosition !== 'left' && 'image-' + imagePosition, (postView === 'grid' || postView === 'masonry') && 'columns-' + columns, postView === 'masonry' && 'tbl-columns-' + columnsT + ' ' + 'mbl-columns-' + columnsM, postView === 'slider' && sliderStyle && 'style-' + sliderStyle, postView === 'frontpage' && frontpageLayout && 'layout-' + frontpageLayout, postView === 'frontpage' && frontpageLayoutT && 'tbl-layout-' + frontpageLayoutT, postView === 'frontpage' && frontpageLayoutM && 'mbl-layout-' + frontpageLayoutM, (postView === 'frontpage' || postView === 'masonry') && gap && 'gap-' + gap, postView === 'frontpage' && frontpageStyle && 'style-' + frontpageStyle, postView === 'newspaper' && newspaperLayout && 'layout-' + newspaperLayout, advgbBlocks.advgb_pro === '1' && orderSections && 'sections-' + orderSections].filter(Boolean).join(' ');
 
                 return isPreview ? React.createElement('img', { alt: __('Content Display', 'advanced-gutenberg'), width: '100%', src: previewImageData }) : React.createElement(
                     Fragment,
@@ -24128,7 +24349,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                                         className: 'advgb-recent-post ' + (_this3.getDisplayImageStatus(attributes, index) && (post.featured_img || enablePlaceholderImage) ? "" : "advgb-recent-post--no-image")
                                     },
                                     function () {
-                                        if (_this3.getDisplayImageStatus(attributes, index) && (post.featured_img || enablePlaceholderImage)) {
+                                        if (_this3.getDisplayImageStatus(attributes, index) && (post.featured_img || enablePlaceholderImage) && _this3.getDisplayImageVsOrder(attributes, index) === 'ignore-order') {
                                             return React.createElement(
                                                 'div',
                                                 { className: 'advgb-post-thumbnail' },
@@ -24143,7 +24364,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                                                     )
                                                 )
                                             );
-                                        } else if (postView === 'frontpage' && frontpageStyle === 'headline' || postView === 'slider' && sliderStyle === 'headline') {
+                                        } else if (postView === 'frontpage' && frontpageStyle === 'headline' || postView === 'slider' && sliderStyle === 'headline' && _this3.getDisplayImageVsOrder(attributes, index) === 'ignore-order') {
                                             return React.createElement(
                                                 'div',
                                                 { className: 'advgb-post-thumbnail advgb-post-thumbnail-no-image' },
@@ -24156,6 +24377,24 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                                     React.createElement(
                                         'div',
                                         { className: 'advgb-post-wrapper' },
+                                        function () {
+                                            if (_this3.getDisplayImageStatus(attributes, index) && (post.featured_img || enablePlaceholderImage) && _this3.getDisplayImageVsOrder(attributes, index) === 'apply-order') {
+                                                return React.createElement(
+                                                    'div',
+                                                    { className: 'advgb-post-thumbnail' },
+                                                    React.createElement(
+                                                        'a',
+                                                        { href: post.link, target: '_blank' },
+                                                        React.createElement('img', { src: post.featured_img ? post.featured_img : advgbBlocks.post_thumb, alt: __('Post Image', 'advanced-gutenberg') }),
+                                                        displayFeaturedImageCaption && post.featured_img_caption.length > 0 && React.createElement(
+                                                            'span',
+                                                            { 'class': 'advgb-post-caption' },
+                                                            post.featured_img_caption
+                                                        )
+                                                    )
+                                                );
+                                            }
+                                        }(),
                                         React.createElement(
                                             'h2',
                                             { className: 'advgb-post-title' },
@@ -24584,6 +24823,18 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
             key: 'getDisplayImageStatus',
             value: function getDisplayImageStatus(attributes, index) {
                 return attributes.displayFeaturedImage && (attributes.displayFeaturedImageFor === 'all' || index < attributes.displayFeaturedImageFor);
+            }
+
+            // Skip images floating on left or right, and with headline style
+
+        }, {
+            key: 'getDisplayImageVsOrder',
+            value: function getDisplayImageVsOrder(attributes, index) {
+                if (attributes.orderSections === 'default' || attributes.orderSections === 'image-title-info-text' || attributes.postView === 'frontpage' && attributes.frontpageStyle === 'headline' || attributes.postView === 'slider' && attributes.sliderStyle === 'headline' || attributes.postView === 'list' || attributes.postView === 'newspaper' && (['np-2', 'np-3-1', 'np-3-2', 'np-3-3'].indexOf(attributes.newspaperLayout) > -1 || index > 0) || advgbBlocks.advgb_pro === '0') {
+                    return 'ignore-order';
+                } else {
+                    return 'apply-order';
+                }
             }
         }, {
             key: 'refreshOnChangeItems',
@@ -29202,7 +29453,7 @@ if (typeof wp !== 'undefined' && typeof wp.domReady !== 'undefined') {
                     var new_settings = advgb_blocks_vars.original_settings;
 
                     // Unregister core blocks to avoid registering twice later through wp.editPost.initializeEditor
-                    var core_blocks = ['core/paragraph', 'core/image', 'core/heading', 'core/list', 'core/quote', 'core/archives', 'core/audio', 'core/button', 'core/buttons', 'core/calendar', 'core/categories', 'core/code', 'core/columns', 'core/column', 'core/cover', 'core/embed', 'core/group', 'core/freeform', 'core/html', 'core/media-text', 'core/latest-comments', 'core/latest-posts', 'core/missing', 'core/more', 'core/nextpage', 'core/page-list', 'core/preformatted', 'core/pullquote', 'core/rss', 'core/search', 'core/separator', 'core/block', 'core/social-links', 'core/social-link', 'core/spacer', 'core/table', 'core/tag-cloud', 'core/text-columns', 'core/verse', 'core/video', 'core/site-logo', 'core/site-tagline', 'core/site-title', 'core/query', 'core/post-template', 'core/query-title', 'core/query-pagination', 'core/query-pagination-next', 'core/query-pagination-numbers', 'core/query-pagination-previous', 'core/post-title', 'core/post-content', 'core/post-date', 'core/post-excerpt', 'core/post-featured-image', 'core/post-terms', 'core/loginout', 'core/legacy-widget', 'core/widget-area', 'core/gallery', 'core/shortcode', 'core/file'];
+                    var core_blocks = ['core/paragraph', 'core/image', 'core/heading', 'core/list', 'core/quote', 'core/archives', 'core/audio', 'core/button', 'core/buttons', 'core/calendar', 'core/categories', 'core/code', 'core/columns', 'core/column', 'core/cover', 'core/embed', 'core/group', 'core/freeform', 'core/html', 'core/media-text', 'core/latest-comments', 'core/latest-posts', 'core/missing', 'core/more', 'core/nextpage', 'core/page-list', 'core/preformatted', 'core/pullquote', 'core/rss', 'core/search', 'core/separator', 'core/block', 'core/social-links', 'core/social-link', 'core/spacer', 'core/table', 'core/tag-cloud', 'core/text-columns', 'core/verse', 'core/video', 'core/site-logo', 'core/site-tagline', 'core/site-title', 'core/query', 'core/post-template', 'core/query-title', 'core/query-pagination', 'core/query-pagination-next', 'core/query-pagination-numbers', 'core/query-pagination-previous', 'core/post-title', 'core/post-content', 'core/post-date', 'core/post-excerpt', 'core/post-featured-image', 'core/post-terms', 'core/loginout', 'core/gallery', 'core/shortcode', 'core/file', 'core/pattern', 'core/navigation', 'core/navigation-link', 'core/navigation-submenu', 'core/template-part', 'core/post-author', 'core/post-navigation-link', 'core/post-comments', 'core/term-description'];
 
                     core_blocks.forEach(function (element) {
                         if (wp.data.select('core/blocks').getBlockType(element)) {
