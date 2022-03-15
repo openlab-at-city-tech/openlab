@@ -92,6 +92,16 @@ function openlab_use_full_text_for_blog_related_bpges_notifications( $content, $
 }
 add_action( 'bp_ass_activity_notification_content', 'openlab_use_full_text_for_blog_related_bpges_notifications', 10, 2 );
 
+// Don't allow BPGES to convert links in HTML email.
+add_filter(
+	'ass_clean_content',
+	function( $content ) {
+		remove_filter( 'ass_clean_content', 'ass_convert_links', 6 );
+		return $content;
+	},
+	0
+);
+
 /**
  * Respect 'Hidden' site setting when BPGES sends blog-related notifications.
  *

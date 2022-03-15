@@ -15,13 +15,6 @@ if (!defined("ABSPATH")) {
             <form action="" method="post" class="wc-tools-settings-form wc-form">
                 <?php wp_nonce_field("wc_tools_form", "wpd-options-export"); ?>
                 <div class="wpdtool-block">
-                    <?php if (file_exists($wpdiscuzOptionsDir . self::OPTIONS_FILENAME . ".txt")) { ?>
-                        <div class="wpdtool-left">
-                            <a href="<?php echo esc_url_raw($wpdiscuzOptionsUrl . self::OPTIONS_FILENAME . ".txt"); ?>" download="<?php echo esc_attr(self::OPTIONS_FILENAME . ".txt"); ?>" class="button button-secondary">
-                                <?php esc_html_e("Download Options", "wpdiscuz"); ?>
-                            </a>
-                        </div>
-                    <?php } ?>
                     <div class="wpdtool-right">
                         <input type="submit" name="wpdiscuz-export-submit" class="button button-primary" value="<?php esc_attr_e("Backup Options", "wpdiscuz"); ?>">
                     </div>

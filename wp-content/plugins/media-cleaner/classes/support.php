@@ -140,6 +140,10 @@ class Meow_WPMC_Support {
       array_push( $unsupported, 'Woodmart Theme' );
 		}
 
+    if ( class_exists( 'BWG' ) ) {
+      array_push( $unsupported, 'Photo Gallery (10Web)' );
+		}
+
     return $unsupported;
   }
 }

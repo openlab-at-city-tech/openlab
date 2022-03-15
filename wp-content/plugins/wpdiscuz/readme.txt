@@ -3,7 +3,7 @@ Contributors: gVectors Team
 Tags: comment, comments, ajax comments, comment form, comment fields
 Requires at least: 5.0
 Tested up to: 5.9
-Stable tag: 7.3.11
+Stable tag: 7.3.12
 Requires PHP: 5.6 and higher
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -184,6 +184,14 @@ Nothing will be lost!  **Comments - wpDiscuz** will show all old comments.
 
 
 == Changelog ==
+
+= Comments - wpDiscuz v7.3.12 - 10.02.2022 =
+
+* Fixed Bug: Issues with the validation of the 'wmuMaxFileSize' variable
+* Fixed Bug: Compatibility with the Twenty Twenty Two theme
+* Fixed Bug: Issues on cache files removing
+* Fixed Bug: More secure way of backup for options and phrases
+* Fixed Bug: Error when submitting the import options/phrases form without a file
 
 = Comments - wpDiscuz v7.3.11 - 25.01.2022 =
 

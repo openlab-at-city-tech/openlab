@@ -155,7 +155,7 @@ function openlab_group_privacy_membership_settings() {
 		<div class="panel-heading semibold">Privacy Settings: Membership</div>
 		<div class="panel-body">
 			<div class="privacy-membership-settings-public">
-				<p>By default, a public <?php echo esc_html( $group_type_label ); ?> may be joined by any OpenLab member. Uncheck the box below to remove the 'Join <?php echo esc_html( $group_type_label ); ?>' button from the <?php echo esc_html( $group_type_label ); ?> Profile. When the box is unchecked, [Group] membership will be by invitation only.</p>
+				<p>By default, a public <?php echo esc_html( $group_type_label ); ?> may be joined by any OpenLab member. Uncheck the box below to remove the 'Join <?php echo esc_html( $group_type_label ); ?>' button from the <?php echo esc_html( $group_type_label ); ?> Profile. When the box is unchecked, membership will be by invitation only.</p>
 
 				<p><input type="checkbox" id="allow-joining-public" name="allow-joining-public" value="1" <?php checked( $allow_joining_public ); ?> /> <label for="allow-joining-public">Allow any OpenLab member to join this public <?php echo esc_html( $group_type_label ); ?></label></p>
 			</div>

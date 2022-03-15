@@ -24,7 +24,7 @@
 }
 
 .component-attributions-modal {
-  min-width: 700px;
+  width: 900px;
 }
 .component-attributions-modal .form-row {
   display: flex;

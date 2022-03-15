@@ -2,7 +2,7 @@
 /*
  * Plugin Name: wpDiscuz
  * Description: #1 WordPress Comment Plugin. Innovative, modern and feature-rich comment system to supercharge your website comment section.
- * Version: 7.3.11
+ * Version: 7.3.12
  * Author: gVectors Team
  * Author URI: https://gvectors.com/
  * Plugin URI: https://wpdiscuz.com/
@@ -81,7 +81,7 @@ class WpdiscuzCore implements WpDiscuzConstants {
         /* /CRON JOBS */
         add_action("wp_insert_site", [&$this, "addNewBlog"]);
         add_action("delete_blog", [&$this, "deleteBlog"]);
-        add_action("wp_head", [&$this, "initCurrentPostType"]);
+        add_action("wp", [&$this, "initCurrentPostType"]);
 
         add_action("admin_init", [&$this, "uninstall"], 1);
         add_action("init", [&$this, "wpdiscuzTextDomain"]);
@@ -1163,7 +1163,6 @@ class WpdiscuzCore implements WpDiscuzConstants {
      */
     public function frontendFiles() {
         global $post;
-        $this->isWpdiscuzLoaded = $this->helper->isLoadWpdiscuz($post);
         $suf = $this->options->general["loadMinVersion"] ? ".min" : "";
         wp_register_style("wpdiscuz-font-awesome", plugins_url(WPDISCUZ_DIR_NAME . "/assets/third-party/font-awesome-5.13.0/css/fontawesome-all.min.css"), null, $this->version);
         wp_register_style("wpdiscuz-ratings", plugins_url(WPDISCUZ_DIR_NAME . "/assets/css/wpdiscuz-ratings$suf.css"), null, $this->version);
@@ -1615,6 +1614,7 @@ class WpdiscuzCore implements WpDiscuzConstants {
 
     public function initCurrentPostType() {
         global $post;
+        $this->isWpdiscuzLoaded = $this->helper->isLoadWpdiscuz($post);
         if ($this->isWpdiscuzLoaded) {
             $this->form = $this->wpdiscuzForm->getForm($post->ID);
             add_filter("comments_template", [&$this, "addCommentForm"], 9999999);
