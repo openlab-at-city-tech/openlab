@@ -94,6 +94,10 @@ if (! function_exists('advg_check_legacy_widget_block_init')) {
      */
     function advg_check_legacy_widget_block_init()
     {
+        if(!current_user_can('edit_theme_options')) {
+            return false;
+        }
+
         global $wp_version;
         global $pagenow;
         if( ( $pagenow === 'widgets.php' || $pagenow === 'customize.php' ) && $wp_version >= 5.8 ) {
@@ -106,7 +110,9 @@ if (! function_exists('advg_check_legacy_widget_block_init')) {
             if( count( $advgb_blocks_list ) && count( $advgb_blocks_user_roles ) ) {
 
                 if(
-                    !in_array( 'core/legacy-widget', $advgb_blocks_user_roles[$current_user_role]['active_blocks'] )
+                    is_array($advgb_blocks_user_roles[$current_user_role]['active_blocks'])
+                    && is_array($advgb_blocks_user_roles[$current_user_role]['inactive_blocks'])
+                    && !in_array( 'core/legacy-widget', $advgb_blocks_user_roles[$current_user_role]['active_blocks'] )
                     && !in_array( 'core/legacy-widget', $advgb_blocks_user_roles[$current_user_role]['inactive_blocks'] )
                     && !empty( $current_user_role )
                 ) {

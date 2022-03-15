@@ -149,37 +149,42 @@ function advgbRenderBlockRecentPosts($attributes)
 
     if (!empty($recent_posts)) {
         foreach ($recent_posts as $key=>$post) {
-            $postThumbID = get_post_thumbnail_id($post->ID);
-            $outputImage = advgbCheckImageStatus( $attributes, $key ) && ( $postThumbID || $attributes['enablePlaceholderImage'] );
+            $postThumbID         = get_post_thumbnail_id($post->ID);
+            $outputImage         = advgbCheckImageStatus( $attributes, $key ) && ( $postThumbID || $attributes['enablePlaceholderImage'] );
+            $displayImageVsOrder = getDisplayImageVsOrder( $attributes, $key );
+            $postThumb           = '<img src="' . esc_url($rp_default_thumb['url']) . '" />';
+            $postThumbCaption    = '';
+
+            if ($postThumbID) {
+                $postThumb = wp_get_attachment_image($postThumbID, 'large');
+                if( get_the_post_thumbnail_caption( $post->ID ) && $attributes['displayFeaturedImageCaption']) {
+                    $postThumbCaption = sprintf(
+                        '<span class="advgb-post-caption">%1$s</span>',
+                        get_the_post_thumbnail_caption( $post->ID )
+                    );
+                } else {
+                    $postThumbCaption = '';
+                }
+            } else {
+                if ($rp_default_thumb['id']) {
+                    $postThumb = wp_get_attachment_image($rp_default_thumb['id'], 'large');
+                }
+            }
 
             $postHtml .= '<article class="advgb-recent-post' . ( $outputImage ? '' : ' advgb-recent-post--no-image' ) . '">';
 
-            if ( $outputImage ) {
-                $postThumb = '<img src="' . esc_url($rp_default_thumb['url']) . '" />';
-                $postThumbCaption = '';
-                if ($postThumbID) {
-                    $postThumb = wp_get_attachment_image($postThumbID, 'large');
-                    if( get_the_post_thumbnail_caption( $post->ID ) && $attributes['displayFeaturedImageCaption']) {
-                        $postThumbCaption = sprintf(
-                            '<span class="advgb-post-caption">%1$s</span>',
-                            get_the_post_thumbnail_caption( $post->ID )
-                        );
-                    } else {
-                        $postThumbCaption = '';
-                    }
-                } else {
-                    if ($rp_default_thumb['id']) {
-                        $postThumb = wp_get_attachment_image($rp_default_thumb['id'], 'large');
-                    }
-                }
-
+            if ( $outputImage && $displayImageVsOrder === 'ignore-order' ) {
                 $postHtml .= sprintf(
                     '<div class="advgb-post-thumbnail"><a href="%1$s">%2$s%3$s</a></div>',
                     get_permalink($post->ID),
                     $postThumb,
                     $postThumbCaption
                 );
-            } elseif ( ($attributes['postView'] === 'frontpage' && $attributes['frontpageStyle'] === 'headline') || ($attributes['postView'] === 'slider' && $attributes['sliderStyle'] === 'headline') ) {
+            } elseif (
+                ($attributes['postView'] === 'frontpage' && $attributes['frontpageStyle'] === 'headline')
+                || ($attributes['postView'] === 'slider' && $attributes['sliderStyle'] === 'headline')
+                 && $displayImageVsOrder === 'ignore-order'
+            ) {
                 $postHtml .= sprintf(
                     '<div class="advgb-post-thumbnail advgb-post-thumbnail-no-image"><a href="%1$s"></a></div>',
                     get_permalink($post->ID)
@@ -189,6 +194,15 @@ function advgbRenderBlockRecentPosts($attributes)
             }
 
             $postHtml .= '<div class="advgb-post-wrapper">';
+
+            if ( $outputImage && $displayImageVsOrder === 'apply-order' ) {
+                $postHtml .= sprintf(
+                    '<div class="advgb-post-thumbnail"><a href="%1$s">%2$s%3$s</a></div>',
+                    get_permalink($post->ID),
+                    $postThumb,
+                    $postThumbCaption
+                );
+            }
 
             $postHtml .= sprintf(
                 '<h2 class="advgb-post-title"><a href="%1$s">%2$s</a></h2>',
@@ -393,6 +407,10 @@ function advgbRenderBlockRecentPosts($attributes)
         $blockClass .= ' layout-' . esc_html($attributes['newspaperLayout']);
     } elseif ($attributes['postView'] === 'masonry') {
         $blockClass = 'masonry-view columns-' . esc_html($attributes['columns']) . ' tbl-columns-' . esc_html($attributes['columnsT']) . ' mbl-columns-' . esc_html($attributes['columnsM']) . ' gap-' . esc_html($attributes['gap']);
+    }
+
+    if (defined('ADVANCED_GUTENBERG_PRO') && isset($attributes['orderSections'])) {
+        $blockClass .= ' sections-' . esc_html($attributes['orderSections']);
     }
 
     if (isset($attributes['className'])) {
@@ -603,6 +621,10 @@ function advgbRegisterBlockRecentPosts()
             'onlyFromCurrentUser' => array(
                 'type' => 'boolean',
                 'default' => false,
+            ),
+            'orderSections' => array(
+                'type' => 'string',
+                'default' => 'image-title-info-text',
             ),
 			// deprecrated attributes...
             'displayDate' => array(
@@ -1166,6 +1188,41 @@ function advgbCheckImageStatus( $attributes, $key )  {
         return true;
     } else {
         return false;
+    }
+}
+
+/**
+ * Skip images floating on left or right, and with headline style for each post
+ *
+ * @return boolean
+ */
+function getDisplayImageVsOrder( $attributes, $key )  {
+    if(
+        (
+            (
+                isset($attributes['orderSections']) && $attributes['orderSections']
+                && (in_array($attributes['orderSections'], array('default', 'image-title-info-text')))
+            ) || (
+                (
+                    $attributes['postView'] === 'frontpage' && $attributes['frontpageStyle'] === 'headline'
+                ) || (
+                    $attributes['postView'] === 'slider' && $attributes['sliderStyle'] === 'headline'
+                ) || (
+                    $attributes['postView'] === 'list'
+                ) || (
+                    (
+                        $attributes['postView'] === 'newspaper'
+                    ) && (
+                        in_array($attributes['newspaperLayout'], array('np-2','np-3-1','np-3-2','np-3-3'))
+                        || $key > 0
+                    )
+                )
+            )
+        ) || !defined('ADVANCED_GUTENBERG_PRO')
+    ) {
+        return 'ignore-order';
+    } else {
+        return 'apply-order';
     }
 }
 

@@ -24,6 +24,8 @@ class Meow_WPMC_Core {
 	public function __construct() {
 		add_action( 'plugins_loaded', array( $this, 'plugins_loaded' ) );
 		add_action( 'init', array( $this, 'init' ) );
+		add_action( 'delete_attachment', array( $this, 'delete_or_trash_attachment' ), 10, 1 );
+		add_action( 'trashed_post', array( $this, 'delete_or_trash_attachment' ), 10, 1 );
 	}
 
 	function plugins_loaded() {
@@ -139,6 +141,12 @@ class Meow_WPMC_Core {
 		}
 	}
 
+	function delete_or_trash_attachment( $post_id ) {
+		global $wpdb;
+		$table_name = $wpdb->prefix . "mclean_scan";
+		$wpdb->query( $wpdb->prepare( "DELETE FROM $table_name WHERE postId = %d", $post_id ) );
+	}
+
 	function timeout_check_additem() {
 		$this->items_checked++;
 		$this->time_elapsed = time() - $this->start_time;
@@ -191,6 +199,45 @@ class Meow_WPMC_Core {
 			$url = $vals['company_logo'];
 			if ( $this->is_url( $url ) )
 				return $this->clean_url( $url );
+		}
+	}
+
+	function get_shortcode_attributes( $shortcode_tag, $post ) {
+		if ( has_shortcode( $post->post_content, $shortcode_tag ) ) {
+			$output = array();
+			//get shortcode regex pattern wordpress function
+			$pattern = get_shortcode_regex( [ $shortcode_tag ] );
+			if (   preg_match_all( '/'. $pattern .'/s', $post->post_content, $matches ) )
+			{
+					$keys = array();
+					$output = array();
+					foreach( $matches[0] as $key => $value) {
+							// $matches[3] return the shortcode attribute as string
+							// replace space with '&' for parse_str() function
+							$get = str_replace(" ", "&" , trim( $matches[3][$key] ) );
+							$get = str_replace('"', '' , $get );
+							parse_str( $get, $sub_output );
+
+							//get all shortcode attribute keys
+							$keys = array_unique( array_merge(  $keys, array_keys( $sub_output )) );
+							$output[] = $sub_output;
+					}
+					if ( $keys && $output ) {
+							// Loop the output array and add the missing shortcode attribute key
+							foreach ($output as $key => $value) {
+									// Loop the shortcode attribute key
+									foreach ($keys as $attr_key) {
+											$output[$key][$attr_key] = isset( $output[$key] )  && isset( $output[$key] ) ? $output[$key][$attr_key] : NULL;
+									}
+									//sort the array key
+									ksort( $output[$key]);
+							}
+					}
+			}
+			return $output;
+		}
+		else {
+				return false;
 		}
 	}
 
@@ -259,7 +306,7 @@ class Meow_WPMC_Core {
 				$iframe_doc = new DOMDocument();
 				// Load the url's contents into the DOM
 				libxml_use_internal_errors( true ); // ignore html formatting problems
-				$rslt = $iframe_doc->loadHTMLFile( $iframe_src );
+				$rslt = @$iframe_doc->loadHTMLFile( $iframe_src );
 				libxml_clear_errors();
 				libxml_use_internal_errors( false );
 				if ( $rslt ) {
@@ -713,8 +760,9 @@ class Meow_WPMC_Core {
 			else {
 				// Trash Media definitely by recovering it (to be like a normal Media) and remove it through the
 				// standard WordPress workflow
-				if ( MEDIA_TRASH )
+				if ( MEDIA_TRASH ) {
 					$this->recover( $id );
+				}
 				wp_delete_attachment( $issue->postId, true );
 				$wpdb->query( $wpdb->prepare( "DELETE FROM $table_name WHERE id = %d", $id ) );
 				return true;

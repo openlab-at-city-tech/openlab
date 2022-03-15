@@ -67,6 +67,7 @@ class WpdiscuzOptions implements WpDiscuzConstants {
         $this->initGoodbyeCaptchaField();
         add_action("init", [&$this, "initPhrasesOnLoad"], 2126);
         add_action("admin_init", [&$this, "saveAndResetOptionsAndPhrases"], 1);
+        add_action("admin_init", [&$this, "exportOptionsOrPhrases"], 1);
         add_action("wp_ajax_dismiss_wpdiscuz_addon_note", [&$this, "dismissAddonNote"]);
         add_action("admin_notices", [&$this, "adminNotices"]);
     }
@@ -1471,7 +1472,7 @@ class WpdiscuzOptions implements WpDiscuzConstants {
                 $this->content["wmuIsGuestAllowed"] = isset($_POST[self::TAB_CONTENT]["wmuIsGuestAllowed"]) ? absint($_POST[self::TAB_CONTENT]["wmuIsGuestAllowed"]) : 0;
                 $this->content["wmuIsLightbox"] = isset($_POST[self::TAB_CONTENT]["wmuIsLightbox"]) ? absint($_POST[self::TAB_CONTENT]["wmuIsLightbox"]) : 0;
                 $this->content["wmuMimeTypes"] = isset($_POST[self::TAB_CONTENT]["wmuMimeTypes"]) ? $_POST[self::TAB_CONTENT]["wmuMimeTypes"] : [];
-                $this->content["wmuMaxFileSize"] = isset($_POST[self::TAB_CONTENT]["wmuMaxFileSize"]) ? sanitize_text_field($_POST[self::TAB_CONTENT]["wmuMaxFileSize"]) : $this->wmuUploadMaxFileSize / (1024 * 1024);
+                $this->content["wmuMaxFileSize"] = isset($_POST[self::TAB_CONTENT]["wmuMaxFileSize"]) ? absint($_POST[self::TAB_CONTENT]["wmuMaxFileSize"]) : $this->wmuUploadMaxFileSize / (1024 * 1024);
                 $this->content["wmuIsShowFilesDashboard"] = isset($_POST[self::TAB_CONTENT]["wmuIsShowFilesDashboard"]) ? absint($_POST[self::TAB_CONTENT]["wmuIsShowFilesDashboard"]) : 0;
                 $this->content["wmuSingleImageWidth"] = isset($_POST[self::TAB_CONTENT]["wmuSingleImageWidth"]) && ($v = trim(sanitize_text_field($_POST[self::TAB_CONTENT]["wmuSingleImageWidth"]))) && ($v === "auto" || ($v = absint($v))) ? $v : 320;
                 $this->content["wmuSingleImageHeight"] = isset($_POST[self::TAB_CONTENT]["wmuSingleImageHeight"]) && ($v = trim(sanitize_text_field($_POST[self::TAB_CONTENT]["wmuSingleImageHeight"]))) && ($v === "auto" || ($v = absint($v))) ? $v : 200;
@@ -1807,33 +1808,46 @@ class WpdiscuzOptions implements WpDiscuzConstants {
         include_once WPDISCUZ_DIR_PATH . "/options/html-phrases.php";
     }
 
-    public function tools() {
+    public function exportOptionsOrPhrases() {
         if (current_user_can("manage_options")) {
-
-            $wpUploadsDir = wp_upload_dir();
-            $wpdiscuzOptionsDir = $wpUploadsDir["basedir"] . self::OPTIONS_DIR;
-            $wpdiscuzOptionsUrl = $wpUploadsDir["baseurl"] . self::OPTIONS_DIR;
-
             if (isset($_POST["tools-action"])) {
-
                 $action = $_POST["tools-action"];
-
+                $data = [];
                 if ($action === "export-options") {
                     check_admin_referer("wc_tools_form", "wpd-options-export");
-                    wp_mkdir_p($wpdiscuzOptionsDir);
                     $options = @maybe_unserialize(get_option(self::OPTION_SLUG_OPTIONS));
                     if ($options) {
-                        $json = json_encode($options);
-                        if (file_put_contents($wpdiscuzOptionsDir . self::OPTIONS_FILENAME . ".txt", $json)) {
-                            add_settings_error("wpdiscuz", "settings_updated", esc_html__("Options were backed up!", "wpdiscuz"), "updated");
-                        } else {
-                            add_settings_error("wpdiscuz", "settings_updated", esc_html__("Cannot back up the options!", "wpdiscuz"), "error");
-                        }
+                        $file_name = "wpdiscuz-options-";
+                        $data = $options;
                     }
-                } else if ($action === "import-options") {
+                } else if ($action === "export-phrases") {
+                    check_admin_referer("wc_tools_form", "wpd-phrases-export");
+                    $phrases = $this->dbManager->getPhrases();
+                    if ($phrases) {
+                        $file_name = "wpdiscuz-phrases-";
+                        $data = $phrases;
+                    }
+                }
+                if($data) {
+                    $file_name .= date('Y-m-d') . '.txt';
+                    header('Content-Description: File Transfer');
+                    header("Content-Disposition: attachment; filename={$file_name}");
+                    header('Content-Type: text/plain; charset=utf-8');
+                    echo json_encode($data);
+                    die;
+                }
+            }
+        }
+    }
+
+    public function tools() {
+        if (current_user_can("manage_options")) {
+            if (isset($_POST["tools-action"])) {
+                $action = $_POST["tools-action"];
+                if ($action === "import-options") {
                     check_admin_referer("wc_tools_form", "wpd-options-import");
                     $file = isset($_FILES["wpdiscuz-options-file"]) ? $_FILES["wpdiscuz-options-file"] : "";
-                    if ($file && is_array($file) && isset($file["tmp_name"])) {
+                    if ($file && is_array($file) && !empty($file["tmp_name"])) {
                         if ($data = file_get_contents($file["tmp_name"])) {
                             $options = json_decode($data, true);
                             if ($options && is_array($options)) {
@@ -1848,22 +1862,10 @@ class WpdiscuzOptions implements WpDiscuzConstants {
                     } else {
                         add_settings_error("wpdiscuz", "settings_error", esc_html__("Error occured! Please choose file!", "wpdiscuz"), "error");
                     }
-                } else if ($action === "export-phrases") {
-                    check_admin_referer("wc_tools_form", "wpd-phrases-export");
-                    wp_mkdir_p($wpdiscuzOptionsDir);
-                    $phrases = $this->dbManager->getPhrases();
-                    if ($phrases) {
-                        $json = json_encode($phrases);
-                        if (file_put_contents($wpdiscuzOptionsDir . self::PHRASES_FILENAME . ".txt", $json)) {
-                            add_settings_error("wpdiscuz", "settings_updated", esc_html__("Phrases were backed up!", "wpdiscuz"), "updated");
-                        } else {
-                            add_settings_error("wpdiscuz", "settings_updated", esc_html__("Cannot back up the phrases!", "wpdiscuz"), "error");
-                        }
-                    }
                 } else if ($action === "import-phrases") {
                     check_admin_referer("wc_tools_form", "wpd-phrases-import");
                     $file = isset($_FILES["wpdiscuz-phrases-file"]) ? $_FILES["wpdiscuz-phrases-file"] : "";
-                    if ($file && is_array($file) && isset($file["tmp_name"])) {
+                    if ($file && is_array($file) && !empty($file["tmp_name"])) {
                         if ($data = file_get_contents($file["tmp_name"])) {
                             $phrases = json_decode($data, true);
                             if ($phrases && is_array($phrases)) {
@@ -2198,30 +2200,30 @@ class WpdiscuzOptions implements WpDiscuzConstants {
                         <?php esc_html_e("New wpDiscuz addon!"); ?>
                     </p>
                     <div style="font-size:14px;">
-                        <!--                        --><?php //if(!in_array("BuddyPress Integration", $lastHashArray)):         ?>
+                        <!--                        --><?php //if(!in_array("BuddyPress Integration", $lastHashArray)):           ?>
                         <!--                            <div style="display:inline-block; min-width:27%; padding-right:10px; margin-bottom:10px;">-->
-                        <!--                                <img src="--><?php //echo plugins_url(WPDISCUZ_DIR_NAME . "/assets/addons/buddypress/header.png");        ?><!--" style="height:50px; width:auto; vertical-align:middle; margin:0px 10px; text-decoration:none; float: left;"/>-->
-                        <!--                                <a href="https://gvectors.com/product/wpdiscuz-buddypress-integration/" target="_blank" style="color:#444; text-decoration:none;" title="--><?php //esc_attr_e("Go to the addon page", "wpdiscuz");         ?><!--">wpDiscuz - BuddyPress Integration <br><span style="margin: 0; font-size: 12px; line-height: 15px; display: block; padding-top: 5px;">This addon integrates wpDiscuz with BuddyPress plugin. Creates &laquoDiscussion&raquo; tab in the users profile page, intgartes notifications, activities, and more...</span></a>-->
+                        <!--                                <img src="--><?php //echo plugins_url(WPDISCUZ_DIR_NAME . "/assets/addons/buddypress/header.png");          ?><!--" style="height:50px; width:auto; vertical-align:middle; margin:0px 10px; text-decoration:none; float: left;"/>-->
+                        <!--                                <a href="https://gvectors.com/product/wpdiscuz-buddypress-integration/" target="_blank" style="color:#444; text-decoration:none;" title="--><?php //esc_attr_e("Go to the addon page", "wpdiscuz");           ?><!--">wpDiscuz - BuddyPress Integration <br><span style="margin: 0; font-size: 12px; line-height: 15px; display: block; padding-top: 5px;">This addon integrates wpDiscuz with BuddyPress plugin. Creates &laquoDiscussion&raquo; tab in the users profile page, intgartes notifications, activities, and more...</span></a>-->
                         <!--                            </div>-->
-                        <!--                        --><?php //endif;         ?>
+                        <!--                        --><?php //endif;           ?>
                         <?php if (!in_array("User Notifications", $lastHashArray)): ?>
                             <div style="display:inline-block; min-width:27%; padding-right:10px; margin-bottom:10px;">
                                 <img src="<?php echo plugins_url(WPDISCUZ_DIR_NAME . "/assets/addons/notifications/header.png"); ?>" style="height:50px; width:auto; vertical-align:middle; margin:0px 10px; text-decoration:none; float: left;"/>
                                 <a href="https://gvectors.com/product/wpdiscuz-user-notifications/" target="_blank" style="color:#444; text-decoration:none;" title="<?php esc_attr_e("Go to the addon page", "wpdiscuz"); ?>">wpDiscuz - User Notifications <br><span style="width: 60%; margin: 0; font-size: 12px; line-height: 15px; display: block; padding-top: 5px;">Adds a real-time user notification system to your site, so users can receive updates and notifications directly on your website as they happen (when someone likes your comment, rates your post, mentions you, replies to your comment).</span></a>
                             </div>
                         <?php endif; ?>
-                        <!--	                    --><?php //if(!in_array("GIPHY Integration", $lastHashArray)):        ?>
+                        <!--	                    --><?php //if(!in_array("GIPHY Integration", $lastHashArray)):          ?>
                         <!--                            <div style="display:inline-block; min-width:27%; padding-right:10px; margin-bottom:10px;">-->
-                        <!--                                <img src="--><?php //echo plugins_url(WPDISCUZ_DIR_NAME . "/assets/addons/giphy/header.png");         ?><!--" style="height:50px; width:auto; vertical-align:middle; margin:0px 10px; text-decoration:none; float: left;"/>-->
-                        <!--                                <a href="https://gvectors.com/product/wpdiscuz-giphy-integration/" target="_blank" style="color:#444; text-decoration:none;" title="--><?php //esc_attr_e("Go to the addon page", "wpdiscuz");         ?><!--">wpDiscuz - GIPHY Integration <br><span style="margin: 0; font-size: 12px; line-height: 15px; display: block; padding-top: 5px;">This adds GIPHY [GIF] button on the toolbar of comment editor. Clicking this will open a new popup where you can search for your favorite gifs and insert them in your comment content.</span></a>-->
+                        <!--                                <img src="--><?php //echo plugins_url(WPDISCUZ_DIR_NAME . "/assets/addons/giphy/header.png");           ?><!--" style="height:50px; width:auto; vertical-align:middle; margin:0px 10px; text-decoration:none; float: left;"/>-->
+                        <!--                                <a href="https://gvectors.com/product/wpdiscuz-giphy-integration/" target="_blank" style="color:#444; text-decoration:none;" title="--><?php //esc_attr_e("Go to the addon page", "wpdiscuz");           ?><!--">wpDiscuz - GIPHY Integration <br><span style="margin: 0; font-size: 12px; line-height: 15px; display: block; padding-top: 5px;">This adds GIPHY [GIF] button on the toolbar of comment editor. Clicking this will open a new popup where you can search for your favorite gifs and insert them in your comment content.</span></a>-->
                         <!--                            </div>-->
-                        <!--	                    --><?php //endif;         ?>
-                        <!--				        --><?php //if(!in_array("Tenor GIFs Integration", $lastHashArray)):         ?>
+                        <!--	                    --><?php //endif;           ?>
+                        <!--				        --><?php //if(!in_array("Tenor GIFs Integration", $lastHashArray)):           ?>
                         <!--                            <div style="display:inline-block; min-width:27%; padding-right:10px; margin-bottom:10px;">-->
-                        <!--                                <img src="--><?php //echo plugins_url(WPDISCUZ_DIR_NAME . "/assets/addons/tenor/header.png");         ?><!--" style="height:50px; width:auto; vertical-align:middle; margin:0px 10px; text-decoration:none; float: left;"/>-->
-                        <!--                                <a href="https://gvectors.com/product/wpdiscuz-tenor-integration/" target="_blank" style="color:#444; text-decoration:none;" title="--><?php //esc_attr_e("Go to the addon page", "wpdiscuz");         ?><!--">wpDiscuz - Tenor GIFs Integration <br><span style="margin: 0; font-size: 12px; line-height: 15px; display: block; padding-top: 5px;">This adds Tenor [GIF] button on the toolbar of comment editor. Clicking this will open a new popup where you can search for your favorite gifs and insert them in your comment content.</span></a>-->
+                        <!--                                <img src="--><?php //echo plugins_url(WPDISCUZ_DIR_NAME . "/assets/addons/tenor/header.png");           ?><!--" style="height:50px; width:auto; vertical-align:middle; margin:0px 10px; text-decoration:none; float: left;"/>-->
+                        <!--                                <a href="https://gvectors.com/product/wpdiscuz-tenor-integration/" target="_blank" style="color:#444; text-decoration:none;" title="--><?php //esc_attr_e("Go to the addon page", "wpdiscuz");           ?><!--">wpDiscuz - Tenor GIFs Integration <br><span style="margin: 0; font-size: 12px; line-height: 15px; display: block; padding-top: 5px;">This adds Tenor [GIF] button on the toolbar of comment editor. Clicking this will open a new popup where you can search for your favorite gifs and insert them in your comment content.</span></a>-->
                         <!--                            </div>-->
-                        <!--				        --><?php //endif;         ?>
+                        <!--				        --><?php //endif;           ?>
                         <div style="clear:both;"></div>
                     </div>
                     <p>&nbsp;&nbsp;&nbsp;<a href="<?php echo esc_url_raw(admin_url("admin.php?page=" . self::PAGE_ADDONS)); ?>"><?php esc_html_e("Go to wpDiscuz Addons subMenu"); ?> &raquo;</a></p>

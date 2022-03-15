@@ -5,7 +5,7 @@ Donate link: https://meowapps.com/donation/
 Requires at least: 5.0
 Tested up to: 5.9
 Requires PHP: 7.0
-Stable tag: 6.2.8
+Stable tag: 6.3.0
 
 Clean your WordPress from unused files, broken media entries. Powerful engine and beautiful UI!
 
@@ -74,6 +74,12 @@ Better to be safe than sorry. This plugin deletes files! Therefore, backup is no
 1. Media -> Media Cleaner
 
 == Changelog ==
+
+= 6.3.0 (2022/02/20) =
+* Fix: When a Media entry is removed from Media Library, also remove it from the Issues in the Cleaner Dashboard.
+
+= 6.2.9 (2022/02/14) =
+* Update: Consider SVGs as images.
 
 = 6.2.8 (2022/01/28) =
 * Update: Support for WordPress 5.9.

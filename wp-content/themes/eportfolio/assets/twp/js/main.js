@@ -1,4 +1,3 @@
-
 (function (e) {
     "use strict";
     var n = window.TWP_JS || {};

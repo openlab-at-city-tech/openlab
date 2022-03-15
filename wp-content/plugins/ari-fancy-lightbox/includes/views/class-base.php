@@ -50,7 +50,7 @@ class Base extends View {
             return ;
 
         $message_type = Request::get_var( 'msg_type', ARIFANCYLIGHTBOX_MESSAGETYPE_NOTICE, 'alpha' );
-        $message = Request::get_var( 'msg' );
+        $message = esc_html( Request::get_var( 'msg' ) );
 
         printf(
             '<div class="notice notice-%2$s is-dismissible"><p>%1$s</p></div>',

@@ -90,11 +90,18 @@ class Mappress_Template extends Mappress_Obj {
 
 	static function ajax_save() {
 		check_ajax_referer('mappress', 'nonce');
-
+		
 		if (!current_user_can('manage_options'))
 			Mappress::ajax_response('Not authorized');
+		
+		if ((defined('DISALLOW_FILE_EDIT') && DISALLOW_FILE_EDIT) || defined('DISALLOW_FILE_MODS') && DISALLOW_FILE_MODS)
+			Mappress::ajax_response('Unable to save, DISALLOW_FILE_EDIT or DISALLOW_FILE_MODS has been set in wp-config');
 
-		$name = (isset($_POST['name'])) ? $_POST['name'] : null;
+		if (!current_user_can('unfiltered_html'))
+			Mappress::ajax_response('Not authorized: DISALLOW_UNFILTERED_HTML is set in wp-config.php');
+
+		$name = (isset($_POST['name'])) ? basename($_POST['name']) : null;
+
 		$content = (isset($_POST['content'])) ? stripslashes($_POST['content']) : null;
 		$filepath = get_stylesheet_directory() . '/' . $name . '.php';
 
