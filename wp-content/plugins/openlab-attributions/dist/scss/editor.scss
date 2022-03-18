@@ -188,6 +188,11 @@
 	transform: translateX(-50%);
 	max-width: 100%;
 
+	@media(max-width: 991px) {
+		top: 172px !important;
+		height: 100% !important;
+	}
+
 	&-drag-area {
 		position: absolute;
 		height: 60px;
@@ -257,8 +262,16 @@
 		overflow-y: auto;
 		overflow-x: hidden;
 
+		@media(max-width: 991px) {
+			height: calc(100% - 60px - 172px);
+		}
+
 		&-add {
 			height: 400px;
+
+			@media(max-width: 991px) {
+				height: calc(100% - 60px - 172px);
+			}
 		}
 	}
 }
