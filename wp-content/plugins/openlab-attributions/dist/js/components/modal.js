@@ -113,7 +113,7 @@ class AttributionModal extends Component {
 
 		return (
 			<ReactModal
-				initWidth={ 700 }
+				initWidth={ 500 }
 				initHeight={ 460 }
 				left="50%"
 				minWidth={ 340 }
@@ -142,7 +142,7 @@ class AttributionModal extends Component {
 				<div className={ 'body body-' + modalType }>
 					<form onSubmit={ this.handleSubmit }>
 						<div className="form-row">
-							<div className="col">
+							<div className="col mb15">
 								<TextControl
 									label="Title"
 									id="title"
@@ -176,7 +176,7 @@ class AttributionModal extends Component {
 							</div>
 						</div>
 						<div className="form-row">
-							<div className="col">
+							<div className="col mb15">
 								<TextControl
 									label="Author Name"
 									id="authorName"
@@ -197,7 +197,7 @@ class AttributionModal extends Component {
 									isInline
 								/>
 							</div>
-							<div className="col adapted-from">
+							<div className="col adapted-from mb15">
 								<TextControl
 									label="Adapted From"
 									id="derivative"

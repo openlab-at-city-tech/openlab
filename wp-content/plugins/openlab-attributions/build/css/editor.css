@@ -28,6 +28,7 @@
   flex-wrap: wrap;
   margin-right: -5px;
   margin-left: -5px;
+  margin-bottom: 15px;
 }
 .component-attributions-modal .form-row > .col {
   flex: 0 0 100%;
@@ -35,6 +36,9 @@
   padding-right: 5px;
   padding-left: 5px;
   box-sizing: border-box;
+}
+.component-attributions-modal .form-row > .col.mb15 {
+  margin-bottom: 15px;
 }
 .component-attributions-modal .form-group {
   display: flex;
@@ -49,14 +53,9 @@
   align-items: center;
   margin-bottom: 0.5rem;
 }
-.component-attributions-modal .inline {
-  flex-direction: row;
-  flex-wrap: nowrap;
-  align-items: center;
-}
 .component-attributions-modal .inline label {
   font-weight: 400;
-  margin-right: 0.5rem;
+  margin-bottom: 0.5rem;
 }
 .component-attributions-modal .inline input {
   width: 100%;
@@ -135,21 +134,6 @@
   border: none;
 }
 
-.adapted-from .inline {
-  flex-wrap: wrap;
-}
-.adapted-from .inline label {
-  margin-right: auto;
-}
-.adapted-from .inline input,
-.adapted-from .inline select {
-  width: 250px;
-}
-.adapted-from .form-control__help {
-  flex-basis: 100%;
-  text-align: right;
-}
-
 .flexible-modal {
   position: fixed;
   border: 1px solid #ddd;
@@ -213,6 +197,7 @@
   border: 0;
   padding: 0;
   color: #1e1e1e;
+  cursor: pointer;
 }
 .flexible-modal-resizer, .flexible-modal-mask {
   display: none;
