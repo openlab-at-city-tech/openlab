@@ -113,7 +113,7 @@ class AttributionModal extends Component {
 
 		return (
 			<ReactModal
-				initWidth={ 500 }
+				initWidth={ 600 }
 				initHeight={ 460 }
 				left="50%"
 				minWidth={ 340 }
@@ -143,6 +143,7 @@ class AttributionModal extends Component {
 					<form onSubmit={ this.handleSubmit }>
 						<div className="form-row">
 							<div className="col mb15">
+								<p><strong>Title</strong></p>
 								<TextControl
 									label="Title"
 									id="title"
@@ -164,6 +165,7 @@ class AttributionModal extends Component {
 								/>
 							</div>
 							<div className="col">
+								<p><strong>License</strong></p>
 								<SelectControl
 									label="License"
 									id="license"
@@ -177,6 +179,7 @@ class AttributionModal extends Component {
 						</div>
 						<div className="form-row">
 							<div className="col mb15">
+								<p><strong>Author</strong></p>
 								<TextControl
 									label="Author Name"
 									id="authorName"
@@ -198,8 +201,9 @@ class AttributionModal extends Component {
 								/>
 							</div>
 							<div className="col adapted-from mb15">
+								<p><strong>Adapted Form</strong></p>
 								<TextControl
-									label="Adapted From"
+									label="URL"
 									id="derivative"
 									name="derivative"
 									value={ this.state.derivative }
@@ -243,6 +247,7 @@ class AttributionModal extends Component {
 						</div>
 						<div className="form-row">
 							<div className="col">
+								<p><strong>Organization / Publisher</strong></p>
 								<TextControl
 									label="Organization / Publisher"
 									id="publisher"
@@ -266,8 +271,9 @@ class AttributionModal extends Component {
 						</div>
 						<div className="form-row">
 							<div className="col">
+								<p><strong>Project</strong></p>
 								<TextControl
-									label="Project"
+									label="Project Name"
 									id="project"
 									name="project"
 									value={ this.state.project }
@@ -289,6 +295,7 @@ class AttributionModal extends Component {
 						</div>
 						<div className="form-row">
 							<div className="col">
+								<p><strong>Date</strong></p>
 								<TextControl
 									label="Date Published"
 									id="datePublished"

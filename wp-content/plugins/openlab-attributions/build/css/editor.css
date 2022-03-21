@@ -40,6 +40,9 @@
 .component-attributions-modal .form-row > .col.mb15 {
   margin-bottom: 15px;
 }
+.component-attributions-modal .form-row > .col p {
+  margin: 0 0 5px 0;
+}
 .component-attributions-modal .form-group {
   display: flex;
   flex: 0 0 auto;
@@ -48,7 +51,7 @@
   margin-bottom: 1rem;
 }
 .component-attributions-modal .form-group label {
-  font-weight: 600;
+  font-weight: 400;
   display: inline-flex;
   align-items: center;
   margin-bottom: 0.5rem;
