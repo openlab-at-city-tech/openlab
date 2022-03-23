@@ -21,8 +21,13 @@
          * 
          */
         quillEditor.on( 'text-change', function( delta, oldDelta, source ) {
-            let contentHtml = quillEditor.root.innerHTML;
-            $('textarea#comment').val(contentHtml);
+            if( quillEditor.getText().trim() ) {
+                let contentHtml = quillEditor.root.innerHTML;
+                $('textarea#comment').val(contentHtml);
+                $('#response-notice').remove();
+            } else {
+                $('textarea#comment').val('');
+            }
         });
 
     } );
