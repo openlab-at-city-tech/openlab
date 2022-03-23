@@ -64,6 +64,8 @@ add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\\register_assets' );
  * Modify the HTML of the comment field to include the div element
  * needed for the Quill editor.
  * 
+ * @param  array $args
+ * @return array $args
  */
 function rich_text_comment_form( $args ) {
 	$args['comment_field'] = str_replace( '<textarea', '<div id="ol-rich-editor" style="height: 150px;"></div><textarea style="display: none;"', $args['comment_field'] );
@@ -71,3 +73,34 @@ function rich_text_comment_form( $args ) {
 	return $args;
 }
 add_filter( 'comment_form_defaults', __NAMESPACE__ . '\\rich_text_comment_form' );
+
+/**
+ * Modify the list of allowed HTML tags for the comments
+ * 
+ * @return void
+ */
+function wpb_allowedtags_comments() {
+  	global $allowedtags;
+  
+	$allowedtags = array(
+		'p'			=> array(),
+		'b'			=> array(),
+		'strong'	=> array(),
+		'i'			=> array(),
+		'em'		=> array(),
+		'u'			=> array(),
+		'a'			=> array(
+			'href'	=> array(),
+			'title'	=> array(),
+		),
+		'ol'		=> array(),
+		'ul'		=> array(),
+		'li'		=> array(),
+	);
+}
+add_action('init', __NAMESPACE__ . '\\wpb_allowedtags_comments', 10);
+
+/**
+ * Sanitize comment content with allowed HTML tags
+ */
+add_filter( 'pre_comment_content', 'wp_kses_data', 10 );
