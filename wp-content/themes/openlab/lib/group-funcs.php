@@ -1461,7 +1461,7 @@ function openlab_show_site_posts_and_comments() {
 
                 $comments[] = array(
                     'content' => strip_tags(bp_create_excerpt($wp_comment->comment_content, 110, array('html' => false))),
-                    'permalink' => get_permalink($post_id)
+                    'permalink' => get_comment_link( $wp_comment ),
                 );
             }
 
