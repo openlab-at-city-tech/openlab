@@ -2114,6 +2114,7 @@ body form{
             margin: 0 auto;
         }
     }
+
     #sidebar-menu-wrapper{
         .sidebar-block{
             margin: 15px 0;
@@ -2121,8 +2122,14 @@ body form{
             @media (max-width: @screen-xs-max){
                 margin: 0;
             }
+
+			&.profile-nav {
+				border-top: 1px solid #bbb;
+				margin-top: 0;
+			}
         }
     }
+
     h2{
         &.sidebar-title,
         &.sidebar-header{
@@ -2304,6 +2311,14 @@ body form{
             font-weight: bold;
         }
     }
+}
+.sidebar .group-has-site {
+	#sidebar-menu-wrapper {
+		.profile-nav {
+			border-top: 0;
+			margin-top: 15px;
+		}
+	}
 }
 .sidebar-filter-search {
 	margin-top: 16px;

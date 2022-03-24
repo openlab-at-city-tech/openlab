@@ -85,8 +85,15 @@ function openlab_bp_mobile_sidebar($type) {
 function openlab_group_sidebar($mobile = false) {
 
     if (bp_has_groups()) : while (bp_groups()) : bp_the_group();
+		$group_has_site = (bool) openlab_get_site_id_by_group_id( bp_get_group_id() );
+
+		$widget_wrapper_class = 'sidebar-widget sidebar-widget-wrapper';
+		if ( $group_has_site ) {
+			$widget_wrapper_class .= ' group-has-site';
+		}
+
             ?>
-            <div class="sidebar-widget sidebar-widget-wrapper" id="portfolio-sidebar-widget">
+            <div class="<?php echo esc_attr( $widget_wrapper_class ); ?>" id="portfolio-sidebar-widget">
                 <h2 class="sidebar-header group-single top-sidebar-header">
                     <?php echo ucwords(groups_get_groupmeta(bp_get_group_id(), "wds_group_type")) . ' Materials'; ?>
                 </h2>

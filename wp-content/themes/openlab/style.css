@@ -9222,6 +9222,10 @@ body form .checkbox-list-container {
     margin: 0;
   }
 }
+.sidebar #sidebar-menu-wrapper .sidebar-block.profile-nav {
+  border-top: 1px solid #bbb;
+  margin-top: 0;
+}
 .sidebar h2.sidebar-title,
 .sidebar h2.sidebar-header {
   font-weight: 700;
@@ -9440,6 +9444,10 @@ body form .checkbox-list-container {
 }
 .sidebar .learn-more-sidebar a {
   font-weight: bold;
+}
+.sidebar .group-has-site #sidebar-menu-wrapper .profile-nav {
+  border-top: 0;
+  margin-top: 15px;
 }
 .sidebar-filter-search {
   margin-top: 16px;
