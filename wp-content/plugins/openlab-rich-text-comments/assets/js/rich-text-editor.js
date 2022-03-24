@@ -57,6 +57,19 @@
             $(this).attr( 'aria-pressed', $(this).hasClass('ql-active') );
         });
 
+        /**
+         * Validate if the comment textarea is empty and show an error message.
+         */
+        $(document).on( 'click', 'form#commentform input#submit', function(e) {
+            let commentText = $('textarea#comment').val();
+            if( ! commentText ) {
+                $('form#commentform').append('<div id="response-notice"><p>The comment field is required.</p></div>');
+                return;
+            }
+
+            $('#response-notice').remove();
+        });
+
     } );
 
 })(jQuery);
