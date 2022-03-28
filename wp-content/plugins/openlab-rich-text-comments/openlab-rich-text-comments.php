@@ -68,21 +68,20 @@ add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\\register_assets' );
  * @return array $args
  */
 function rich_text_comment_form( $args ) {
-	$args['comment_field'] = str_replace( '<textarea', '<div id="ol-rich-editor" style="height: 150px;"></div><textarea style="display: none;"', $args['comment_field'] );
+	$args['comment_field'] = str_replace( '<textarea', '<div id="ol-rich-editor" style="height: 150px;"></div><textarea ', $args['comment_field'] );
 
 	return $args;
 }
 add_filter( 'comment_form_defaults', __NAMESPACE__ . '\\rich_text_comment_form' );
 
 /**
- * Modify the list of allowed HTML tags for the comments
+ * Sanitize comment content with allowed HTML KSES rules. 
  * 
- * @return void
+ * @param  string $content Content to filter
+ * @return string Filtered content.
  */
-function wpb_allowedtags_comments() {
-  	global $allowedtags;
-  
-	$allowedtags = array(
+function kses_filter_comment( $content ) {
+	$allowedTags = array(
 		'p'			=> array(),
 		'b'			=> array(),
 		'strong'	=> array(),
@@ -97,10 +96,7 @@ function wpb_allowedtags_comments() {
 		'ul'		=> array(),
 		'li'		=> array(),
 	);
-}
-add_action('init', __NAMESPACE__ . '\\wpb_allowedtags_comments', 10);
 
-/**
- * Sanitize comment content with allowed HTML tags
- */
-add_filter( 'pre_comment_content', 'wp_kses_data', 10 );
+	return wp_kses( $content, $allowedTags );
+}
+add_filter( 'pre_comment_content', __NAMESPACE__ . '\\kses_filter_comment' );
