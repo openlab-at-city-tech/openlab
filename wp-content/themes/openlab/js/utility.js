@@ -33,6 +33,10 @@ OpenLab.utility = (function ($) {
 
 			// Accessibility mods for Settings > Email Notifications
 			OpenLab.utility.EmailSettingsA11y();
+
+			// Modify wplink template.
+			jQuery('#link-selector #wplink-link-existing-content, #link-selector #search-panel').remove();
+			jQuery('#wp-link-wrap').css('height','300px');
 		},
 		detectZoom: function () {
 
