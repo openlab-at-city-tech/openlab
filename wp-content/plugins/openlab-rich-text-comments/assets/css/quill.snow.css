@@ -107,11 +107,11 @@
   }
   .ql-editor ol li:not(.ql-direction-rtl),
   .ql-editor ul li:not(.ql-direction-rtl) {
-    padding-left: 2.5em;
+    padding-left: 0
   }
   .ql-editor ol li.ql-direction-rtl,
   .ql-editor ul li.ql-direction-rtl {
-    padding-right: 2.5em;
+    padding-right: 0;
   }
   .ql-editor ol li {
     counter-reset: list-1 list-2 list-3 list-4 list-5 list-6 list-7 list-8 list-9;
