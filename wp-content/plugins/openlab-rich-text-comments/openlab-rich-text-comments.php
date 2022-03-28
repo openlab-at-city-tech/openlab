@@ -75,8 +75,21 @@ function rich_text_comment_form( $args ) {
 add_filter( 'comment_form_defaults', __NAMESPACE__ . '\\rich_text_comment_form' );
 
 /**
- * Sanitize comment content with allowed HTML KSES rules. 
- * 
+ * Remove WP's default kses filters from comment content.
+ *
+ * Hooked to 'preprocess_comment' to avoid race conditions with core add_filter calls.
+ */
+function remove_default_comment_content_filters( $comment ) {
+	remove_filter( 'pre_comment_content', 'wp_filter_kses' );
+	remove_filter( 'pre_comment_content', 'wp_filter_post_kses' );
+
+	return $comment;
+}
+add_filter( 'preprocess_comment', __NAMESPACE__ . '\\remove_default_comment_content_filters' );
+
+/**
+ * Sanitize comment content with allowed HTML KSES rules.
+ *
  * @param  string $content Content to filter
  * @return string Filtered content.
  */
