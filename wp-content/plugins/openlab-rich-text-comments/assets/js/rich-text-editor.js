@@ -61,8 +61,10 @@
          * Validate if the comment textarea is empty and show an error message.
          */
         $(document).on( 'click', 'form#commentform input#submit', function(e) {
+            $('#response-notice').remove();
+            
             let commentElement = $('textarea#comment');
-            let isRequired = ( commentElement.attr('required') != undefined || commentElement.attr('required') === false ) ? true : false;
+            let isRequired = ( typeof commentElement.attr('required') != 'undefined' && commentElement.attr('required') !== false ) ? true : false;
             let commentText = commentElement.val();
 
             if( ! commentText && isRequired ) {
@@ -70,8 +72,6 @@
                 $('form#commentform').append('<div id="response-notice"><p>The comment field is required.</p></div>');
                 return;
             }
-
-            $('#response-notice').remove();
         });
 
     } );
