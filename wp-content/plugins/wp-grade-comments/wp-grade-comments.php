@@ -73,7 +73,7 @@ function olgc_leave_comment_after_comment_fields( $args ) {
 	if ( ! olgc_is_instructor() ) {
 		return $args;
 	}
-	
+
 	$args['comment_notes_after'] .= '
 	<div class="olgc-grade-entry">
 		<label for="olgc-grade">' . __( 'Grade:', 'wp-grade-comments' ) . '</label> <input type="text" maxlength="5" name="olgc-grade" id="olgc-grade" />
@@ -175,9 +175,9 @@ function olgc_add_private_info_to_comment_text( $text, $comment ) {
 			'</div>',
 			esc_html__( 'Comment (Private):', 'wp-grade-comments' ),
 			esc_html__( '(show)', 'wp-grade-comments' ),
-			esc_html( $text ),
+			wp_kses_post( $text ),
 			esc_html__( '(hide)', 'wp-grade-comments' ),
-			esc_html( $text )
+			wp_kses_post( $text )
 		);
 	}
 

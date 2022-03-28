@@ -68,7 +68,7 @@ add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\\register_assets' );
  * @return array $args
  */
 function rich_text_comment_form( $args ) {
-	$args['comment_field'] = str_replace( '<textarea', '<div id="ol-rich-editor" style="height: 150px;"></div><textarea ', $args['comment_field'] );
+	$args['comment_field'] = str_replace( '<textarea', '<div id="ol-rich-editor" style="height: 150px;"></div><textarea style="display:none;"', $args['comment_field'] );
 
 	return $args;
 }
