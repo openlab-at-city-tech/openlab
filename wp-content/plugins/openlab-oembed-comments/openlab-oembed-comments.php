@@ -31,8 +31,9 @@ class Openlab_Oembed_Comments {
 		add_filter( 'get_comment_text', array( $this, 'autoembed' ), 8 );
 		// Run [embed] shortcode
 		add_filter( 'get_comment_text', array( $this, 'run_shortcode' ), 7 );
-		// Allow iframe in KSES HTML
-		add_filter( 'wp_kses_allowed_html', array( $this, 'wp_kses_post_tags' ), 10, 2 );
+
+		// Allow iframe in wp-grade-comments
+		add_filter( 'olgc_private_comment_text', array( $this, 'set_up_olgc_sanitization' ), 5 );
 	}
 
 	/**
@@ -123,6 +124,21 @@ class Openlab_Oembed_Comments {
 		return $tags;
 	}
 
+	/**
+	 * A custom sanitization routine for wp-grade-comments private comment data.
+	 *
+	 * We remove the default sanitization and add our own, which allows iframes.
+	 */
+	public function set_up_olgc_sanitization( $text ) {
+		// Apply kses filters with iframes whitelisted.
+		add_filter( 'wp_kses_allowed_html', array( $this, 'wp_kses_post_tags' ), 10, 2 );
+		$text = wp_kses_post( $text );
+		remove_filter( 'wp_kses_allowed_html', array( $this, 'wp_kses_post_tags' ), 10, 2 );
+
+		// Remove original filter so that data is not double-sanitized.
+		remove_filter( 'olgc_private_comment_text', 'wp_kses_post' );
+		return $text;
+	}
 }
 
 $oloc = new Openlab_Oembed_Comments();
