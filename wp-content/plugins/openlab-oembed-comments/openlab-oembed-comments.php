@@ -122,6 +122,28 @@ class Openlab_Oembed_Comments extends WP_Embed {
         return $content;
     }
 
+    /**
+     * Add iFrame to allowed wp_kses_post tags
+     *
+     * @param array  $tags Allowed tags and attributes.
+     * @param string $context Context for which to retrieve the tags (post, strip, data and entities).
+     *
+     * @return array
+     */
+    public function wp_kses_post_tags( $tags, $context ) {
+        if( $context === 'post' ) {
+            $tags['iframe'] = array(
+                'src'               => true,
+                'height'            => true,
+                'width'             => true,
+                'frameborder'       => true,
+                'allowfullscreen'   => true,
+            );
+        }
+
+        return $tags;
+    }
+
 }
 
 $oloc = new Openlab_Oembed_Comments();
