@@ -94,9 +94,6 @@ function openlab_group_sidebar($mobile = false) {
 
             ?>
             <div class="<?php echo esc_attr( $widget_wrapper_class ); ?>" id="portfolio-sidebar-widget">
-                <h2 class="sidebar-header group-single top-sidebar-header">
-                    <?php echo ucwords(groups_get_groupmeta(bp_get_group_id(), "wds_group_type")) . ' Materials'; ?>
-                </h2>
                 <div class="wrapper-block">
                     <?php openlab_bp_group_site_pages(); ?>
                 </div>
@@ -281,7 +278,7 @@ function openlab_members_sidebar_blocks($mobile_hide = false) {
             <ul class="sidebar-sublinks portfolio-sublinks inline-element-list">
 
                 <li class="portfolio-site-link bold">
-                    <a class="bold no-deco" href="<?php openlab_user_portfolio_url() ?>">
+                    <a class="bold no-deco test" href="<?php openlab_user_portfolio_url() ?>">
                         <?php echo (is_user_logged_in() && openlab_is_my_profile() ? 'My ' : 'Visit '); ?>
                         <?php openlab_portfolio_label('user_id=' . $displayed_user_id . '&case=upper'); ?> Site <span class="fa fa-chevron-circle-right" aria-hidden="true"></span>
                     </a>
