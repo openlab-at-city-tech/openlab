@@ -94,9 +94,6 @@ function openlab_group_sidebar($mobile = false) {
 
             ?>
             <div class="<?php echo esc_attr( $widget_wrapper_class ); ?>" id="portfolio-sidebar-widget">
-                <h2 class="sidebar-header group-single top-sidebar-header">
-                    <?php echo ucwords(groups_get_groupmeta(bp_get_group_id(), "wds_group_type")) . ' Materials'; ?>
-                </h2>
                 <div class="wrapper-block">
                     <?php openlab_bp_group_site_pages(); ?>
                 </div>

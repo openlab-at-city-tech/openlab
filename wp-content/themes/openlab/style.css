@@ -9191,6 +9191,10 @@ body form .checkbox-list-container {
 .portfolio-site-link a {
   display: block;
 }
+.portfolio-site-link a.a-grey {
+  color: #fff;
+  background-color: #444;
+}
 .portfolio-site-link:hover > a,
 .portfolio-site-link:focus > a {
   background: #63dfd2;
@@ -9448,6 +9452,9 @@ body form .checkbox-list-container {
 .sidebar .group-has-site #sidebar-menu-wrapper .profile-nav {
   border-top: 0;
   margin-top: 15px;
+}
+.sidebar-widget-wrapper {
+  margin-top: 46px;
 }
 .sidebar-filter-search {
   margin-top: 16px;
