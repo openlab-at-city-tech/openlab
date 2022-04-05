@@ -85,10 +85,10 @@ function openlab_bp_mobile_sidebar($type) {
 function openlab_group_sidebar($mobile = false) {
 
     if (bp_has_groups()) : while (bp_groups()) : bp_the_group();
-		$group_has_site = (bool) openlab_get_site_id_by_group_id( bp_get_group_id() );
+		$group_site_settings = openlab_get_group_site_settings( bp_get_group_id() );
 
 		$widget_wrapper_class = 'sidebar-widget sidebar-widget-wrapper';
-		if ( $group_has_site ) {
+		if ( ! empty( $group_site_settings['site_url'] ) && $group_site_settings['is_visible'] ) {
 			$widget_wrapper_class .= ' group-has-site';
 		}
 
