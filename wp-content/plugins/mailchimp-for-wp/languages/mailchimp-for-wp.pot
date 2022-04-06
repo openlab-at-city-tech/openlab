@@ -1,4 +1,4 @@
-# Copyright (C) 2021 mailchimp-for-wp
+# Copyright (C) 2022 mailchimp-for-wp
 # This file is distributed under the same license as the mailchimp-for-wp package.
 msgid ""
 msgstr ""
@@ -405,23 +405,23 @@ msgstr ""
 msgid "Form"
 msgstr ""
 
-#: includes/forms/class-admin.php:161, includes/forms/class-admin.php:280
+#: includes/forms/class-admin.php:161, includes/forms/class-admin.php:368
 msgid "Form saved."
 msgstr ""
 
-#: includes/forms/class-admin.php:389
+#: includes/forms/class-admin.php:477
 msgid "Form not found."
 msgstr ""
 
-#: includes/forms/class-admin.php:391
+#: includes/forms/class-admin.php:479
 msgid "Go back"
 msgstr ""
 
-#: includes/forms/class-admin.php:454, includes/forms/class-widget.php:31
+#: includes/forms/class-admin.php:542, includes/forms/class-widget.php:31
 msgid "Mailchimp Sign-Up Form"
 msgstr ""
 
-#: includes/forms/class-admin.php:458
+#: includes/forms/class-admin.php:546
 msgid "Select the form to show"
 msgstr ""
 
