@@ -433,8 +433,11 @@ if(!class_exists('AdvancedGutenbergMain')) {
         {
             $currentScreen = get_current_screen();
 
-            if( $this->settingIsEnabled( 'enable_advgb_blocks' ) ) {
-
+            if(
+                $this->settingIsEnabled('enable_advgb_blocks')
+                || $this->settingIsEnabled('enable_block_access')
+            ) {
+                // Define the dependency for the editor based on current screen
                 if( $currentScreen->id === 'customize' ) {
                     // Customizer > Widgets
                     $wp_editor_dep = 'wp-customize-widgets';
@@ -446,28 +449,41 @@ if(!class_exists('AdvancedGutenbergMain')) {
                     $wp_editor_dep = 'wp-editor';
                 }
 
-                wp_enqueue_script(
-                    'advgb_blocks',
-                    plugins_url('assets/blocks/blocks.js', dirname(__FILE__)),
-                    array( 'wp-blocks', 'wp-i18n', 'wp-element', 'wp-data', $wp_editor_dep, 'wp-plugins', 'wp-compose' ),
-                    ADVANCED_GUTENBERG_VERSION,
-                    true
-                );
+                if( $this->settingIsEnabled( 'enable_advgb_blocks' ) ) {
 
-                // Pro Ads in some blocks for free version
-                if( !defined('ADVANCED_GUTENBERG_PRO') ){
                     wp_enqueue_script(
-                        'advgb_pro_ad_js',
-                        plugins_url('assets/blocks/pro-ad.js', dirname(__FILE__)),
-                        array( 'advgb_blocks' ),
+                        'advgb_blocks',
+                        plugins_url('assets/blocks/blocks.js', dirname(__FILE__)),
+                        array( 'wp-blocks', 'wp-i18n', 'wp-element', 'wp-data', $wp_editor_dep, 'wp-plugins', 'wp-compose' ),
                         ADVANCED_GUTENBERG_VERSION,
                         true
                     );
-                    wp_enqueue_style(
-                        'advgb_pro_ad_css',
-                        plugins_url('assets/css/pro-ad.css', dirname(__FILE__)),
-                        array(),
-                        ADVANCED_GUTENBERG_VERSION
+
+                    // Pro Ads in some blocks for free version
+                    if( !defined('ADVANCED_GUTENBERG_PRO') ){
+                        wp_enqueue_script(
+                            'advgb_pro_ad_js',
+                            plugins_url('assets/blocks/pro-ad.js', dirname(__FILE__)),
+                            array( 'advgb_blocks' ),
+                            ADVANCED_GUTENBERG_VERSION,
+                            true
+                        );
+                        wp_enqueue_style(
+                            'advgb_pro_ad_css',
+                            plugins_url('assets/css/pro-ad.css', dirname(__FILE__)),
+                            array(),
+                            ADVANCED_GUTENBERG_VERSION
+                        );
+                    }
+                }
+
+                if( $this->settingIsEnabled( 'enable_block_access' ) ) {
+                    wp_enqueue_script(
+                        'advgb_blocks_editor',
+                        plugins_url('assets/blocks/editor.js', dirname(__FILE__)),
+                        array( 'wp-blocks', 'wp-i18n', 'wp-element', 'wp-data', $wp_editor_dep, 'wp-plugins', 'wp-compose' ),
+                        ADVANCED_GUTENBERG_VERSION,
+                        true
                     );
                 }
             }
@@ -2489,17 +2505,41 @@ if(!class_exists('AdvancedGutenbergMain')) {
             $all_blocks = get_option( 'advgb_blocks_list' );
 
             // Get the array from advgb_blocks_user_roles option that match current user role
-            if( get_option('advgb_blocks_user_roles') ) {
-                $advgb_blocks_user_roles = !empty( get_option('advgb_blocks_user_roles') ) ? get_option( 'advgb_blocks_user_roles' ) : [];
-                $advgb_blocks_user_roles = array_key_exists( $current_user_role, $advgb_blocks_user_roles ) ? (array)$advgb_blocks_user_roles[$current_user_role] : [];
+            $advgb_blocks_user_roles = !empty( get_option('advgb_blocks_user_roles') ) ? get_option( 'advgb_blocks_user_roles' ) : [];
+            $advgb_blocks_user_roles = array_key_exists( $current_user_role, $advgb_blocks_user_roles ) ? (array)$advgb_blocks_user_roles[$current_user_role] : [];
 
-                // Include the blocks stored in advgb_blocks_list option but not detected by Block Access
-                foreach($all_blocks as $one_block) {
-                    if(
-                        !in_array($one_block['name'], $advgb_blocks_user_roles['active_blocks']) &&
-                        !in_array($one_block['name'], $advgb_blocks_user_roles['inactive_blocks'])
-                    ) {
-                        array_push($advgb_blocks_user_roles['active_blocks'], $one_block['name']);
+            if(is_array($advgb_blocks_user_roles) && count($advgb_blocks_user_roles) > 0) {
+
+                if(
+                    is_array($advgb_blocks_user_roles['active_blocks']) &&
+                    is_array($advgb_blocks_user_roles['inactive_blocks'])
+                ) {
+
+                    // Include the blocks stored in advgb_blocks_list option but not detected by Block Access
+                    foreach($all_blocks as $one_block) {
+                        if(
+                            !in_array($one_block['name'], $advgb_blocks_user_roles['active_blocks']) &&
+                            !in_array($one_block['name'], $advgb_blocks_user_roles['inactive_blocks'])
+                        ) {
+                            array_push($advgb_blocks_user_roles['active_blocks'], $one_block['name']);
+                        }
+                    }
+
+                    // Make sure core/legacy-widget is included as active - Since 2.11.6
+                    if(!in_array('core/legacy-widget', $advgb_blocks_user_roles['active_blocks'])) {
+                        /* Remove from inactive blocks if is saved for the current user role.
+                         * The lines below won't save nothing in db, is just for execution on editor. */
+                        foreach ($advgb_blocks_user_roles['inactive_blocks'] as $key => $type) {
+                            if (in_array('core/legacy-widget', $advgb_blocks_user_roles['inactive_blocks'])) {
+                                unset($advgb_blocks_user_roles['inactive_blocks'][$key]);
+                            }
+                        }
+                        /* Add to active blocks.
+                         * The lines below won't save nothing in db, is just for execution on editor. */
+                        array_push(
+                            $advgb_blocks_user_roles['active_blocks'],
+                            'core/legacy-widget'
+                        );
                     }
                 }
 
@@ -2514,6 +2554,15 @@ if(!class_exists('AdvancedGutenbergMain')) {
                     $all_blocks[$block_key] = $all_blocks[$block_key]['name'];
                 }
             }
+
+            // Make sure core/legacy-widget is included as active - Since 2.11.6
+            if(!in_array('core/legacy-widget', $all_blocks)) {
+                array_push(
+                    $all_blocks,
+                    'core/legacy-widget'
+                );
+            }
+
             return array(
                 'active_blocks' => $all_blocks,
                 'inactive_blocks' => array()
@@ -5322,6 +5371,7 @@ if(!class_exists('AdvancedGutenbergMain')) {
 
                 case 'advgb/button':
                     $html_style = $this->advgb_AdvancedButtonStyles($blockAttrs);
+                    $this->advgb_AdvancedButtonAssets($blockAttrs);
                     break;
 
                 case 'advgb/column':
@@ -5471,6 +5521,20 @@ if(!class_exists('AdvancedGutenbergMain')) {
          */
         public function advgb_AdvancedButtonStyles($blockAttrs)
         {
+            // Decide to include or not CSS color property for outlined styles
+            if(
+                !isset($blockAttrs['textColor'])
+                && isset($blockAttrs['className'])
+                && (
+                    strpos($blockAttrs['className'], 'is-style-squared-outline') !== false
+                    || strpos($blockAttrs['className'], 'is-style-outlined') !== false
+                )
+            ){
+                $enable_text_color = false;
+            } else {
+                $enable_text_color = true;
+            }
+
             $block_class    = esc_html($blockAttrs['id']);
             $font_size      = isset($blockAttrs['textSize']) ? esc_html(intval($blockAttrs['textSize'])) : 18;
             $color          = isset($blockAttrs['textColor']) ? esc_html($blockAttrs['textColor']) : '#fff';
@@ -5499,7 +5563,7 @@ if(!class_exists('AdvancedGutenbergMain')) {
 
             $style_html  = '.'. $block_class . '{';
             $style_html .= 'font-size:'.$font_size.'px;';
-            $style_html .= 'color:'.$color.' !important;';
+            if($enable_text_color == true) $style_html .= 'color:'.$color.' !important;';
             $style_html .= 'background-color:'.$bg_color.' !important;';
             $style_html .= 'margin:'.$mg_top.'px '.$mg_right.'px '.$mg_bottom.'px '.$mg_left.'px !important;';
             $style_html .= 'padding:'.$pd_top.'px '.$pd_right.'px '.$pd_bottom.'px '.$pd_left.'px;';
@@ -5516,6 +5580,12 @@ if(!class_exists('AdvancedGutenbergMain')) {
             $style_html .= 'opacity:'.$hover_opacity.';';
             $style_html .= 'transition:all '.$transition_spd.'s ease;';
             $style_html .= '}';
+
+            if(!defined('ADVANCED_GUTENBERG_PRO')) {
+                $style_html  .= '.'. $block_class . ' > i {';
+                $style_html .= 'display: none !important;';
+                $style_html .= '}';
+            }
 
             return $style_html;
         }
@@ -5987,7 +6057,7 @@ if(!class_exists('AdvancedGutenbergMain')) {
         /**
          * Assets for Adv. Image Block
          *
-         * @since    2.11.4
+         * @since   2.11.4
          * @param   $blockAttrs The block attributes
          * @return  void
          */
@@ -6009,7 +6079,7 @@ if(!class_exists('AdvancedGutenbergMain')) {
         /**
          * Assets for Adv. Video Block
          *
-         * @since    2.11.4
+         * @since   2.11.4
          * @param   $blockAttrs The block attributes
          * @return  void
          */
@@ -6032,7 +6102,7 @@ if(!class_exists('AdvancedGutenbergMain')) {
         /**
          * Assets for Map Block
          *
-         * @since    2.11.4
+         * @since   2.11.4
          * @param   $blockAttrs The block attributes
          * @return  void
          */
@@ -6050,7 +6120,7 @@ if(!class_exists('AdvancedGutenbergMain')) {
         /**
          * Assets for Gallery Block
          *
-         * @since    2.11.4
+         * @since   2.11.4
          * @param   $blockAttrs The block attributes
          * @return  void
          */
@@ -6078,7 +6148,7 @@ if(!class_exists('AdvancedGutenbergMain')) {
         /**
          * Assets for Summary Block
          *
-         * @since    2.11.4
+         * @since   2.11.4
          * @param   $blockAttrs The block attributes
          * @return  void
          */
@@ -6094,7 +6164,7 @@ if(!class_exists('AdvancedGutenbergMain')) {
         /**
          * Assets for Advanced Accordion Block
          *
-         * @since    2.11.4
+         * @since   2.11.4
          * @param   $blockAttrs The block attributes
          * @return  void
          */
@@ -6117,7 +6187,7 @@ if(!class_exists('AdvancedGutenbergMain')) {
         /**
          * Assets for Advanced Tabs Block
          *
-         * @since    2.11.4
+         * @since   2.11.4
          * @param   $blockAttrs The block attributes
          * @return  void
          */
@@ -6141,7 +6211,7 @@ if(!class_exists('AdvancedGutenbergMain')) {
         /**
          * Assets for Woo Products Block
          *
-         * @since    2.11.4
+         * @since   2.11.4
          * @param   $blockAttrs The block attributes
          * @return  void
          */
@@ -6167,7 +6237,7 @@ if(!class_exists('AdvancedGutenbergMain')) {
         /**
          * Assets for Images Slider Block
          *
-         * @since    2.11.4
+         * @since   2.11.4
          * @param   $blockAttrs The block attributes
          * @return  void
          */
@@ -6179,9 +6249,20 @@ if(!class_exists('AdvancedGutenbergMain')) {
             wp_enqueue_script(
                 'advgbImageSliderLightbox_frontent_js',
                 plugins_url('assets/blocks/images-slider/frontend.js', dirname(__FILE__)),
-                array(),
+                array('jquery'),
                 ADVANCED_GUTENBERG_VERSION
             );
+
+            if (
+                defined( 'ADVANCED_GUTENBERG_PRO' )
+                && method_exists( 'PPB_AdvancedGutenbergPro\Utils\Definitions', 'advgb_pro_inline_scripts_frontend' )
+            ) {
+                $script = PPB_AdvancedGutenbergPro\Utils\Definitions::advgb_pro_inline_scripts_frontend('advgb/images-slider', $blockAttrs);
+                wp_add_inline_script(
+                    'advgbImageSliderLightbox_frontent_js',
+                    $script
+                );
+            }
 
             // When lightbox is enabled
             if (array_key_exists('actionOnClick', $blockAttrs) && $blockAttrs['actionOnClick'] == 'lightbox') {
@@ -6202,7 +6283,7 @@ if(!class_exists('AdvancedGutenbergMain')) {
         /**
          * Assets for Contact Form Block
          *
-         * @since    2.11.4
+         * @since   2.11.4
          * @param   $blockAttrs The block attributes
          * @return  void
          */
@@ -6221,7 +6302,7 @@ if(!class_exists('AdvancedGutenbergMain')) {
         /**
          * Assets for Newsletter Block
          *
-         * @since    2.11.4
+         * @since   2.11.4
          * @param   $blockAttrs The block attributes
          * @return  void
          */
@@ -6240,7 +6321,7 @@ if(!class_exists('AdvancedGutenbergMain')) {
         /**
          * Assets for Testimonial Block
          *
-         * @since    2.11.4
+         * @since   2.11.4
          * @param   $blockAttrs The block attributes
          * @return  void
          */
@@ -6266,7 +6347,7 @@ if(!class_exists('AdvancedGutenbergMain')) {
         /**
          * Assets for Columns Manager Block
          *
-         * @since    2.11.4
+         * @since   2.11.4
          * @param   $blockAttrs The block attributes
          * @return  void
          */
@@ -6278,7 +6359,7 @@ if(!class_exists('AdvancedGutenbergMain')) {
         /**
          * Assets for Login / Register Form Block
          *
-         * @since    2.11.4
+         * @since   2.11.4
          * @param   $blockAttrs The block attributes
          * @return  void
          */
@@ -6309,7 +6390,7 @@ if(!class_exists('AdvancedGutenbergMain')) {
         /**
          * Assets for Recent Posts Block
          *
-         * @since    2.11.4
+         * @since   2.11.4
          * @param   $blockAttrs The block attributes
          * @return  void
          */
@@ -6347,7 +6428,7 @@ if(!class_exists('AdvancedGutenbergMain')) {
         /**
          * Assets for Countdown Block
          *
-         * @since    2.11.4
+         * @since   2.11.4
          * @param   $blockAttrs The block attributes
          * @return  void
          */
@@ -6357,6 +6438,27 @@ if(!class_exists('AdvancedGutenbergMain')) {
             if( defined( 'ADVANCED_GUTENBERG_PRO' ) && $this->settingIsEnabled( 'enable_advgb_blocks' ) ) {
                 if ( method_exists( 'PPB_AdvancedGutenbergPro\Utils\Definitions', 'advgb_pro_enqueue_scripts_frontend_countdown' ) ) {
                     PPB_AdvancedGutenbergPro\Utils\Definitions::advgb_pro_enqueue_scripts_frontend_countdown();
+                }
+            }
+        }
+
+        /**
+         * Assets for Advanced Button Block
+         *
+         * @since   2.11.6
+         * @param   $blockAttrs The block attributes
+         * @return  void
+         */
+        public function advgb_AdvancedButtonAssets($blockAttrs)
+        {
+            // Pro
+            if(
+                defined( 'ADVANCED_GUTENBERG_PRO' ) &&
+                $this->settingIsEnabled( 'enable_advgb_blocks' ) &&
+                isset($blockAttrs['iconDisplay'])
+            ) {
+                if ( method_exists( 'PPB_AdvancedGutenbergPro\Utils\Definitions', 'advgb_pro_enqueue_styles_frontend_advbutton' ) ) {
+                    PPB_AdvancedGutenbergPro\Utils\Definitions::advgb_pro_enqueue_styles_frontend_advbutton();
                 }
             }
         }
