@@ -2,7 +2,7 @@
 
 //mimic the actuall admin-ajax
 define("DOING_AJAX", true);
-$wpdiscuz_ajax_action = filter_input(INPUT_POST, 'action', FILTER_SANITIZE_STRING);
+$wpdiscuz_ajax_action = filter_input(INPUT_POST, 'action', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 if (!$wpdiscuz_ajax_action) {
     die('-1');
 }

@@ -520,6 +520,7 @@ class WpdiscuzOptions implements WpDiscuzConstants {
             "wmuPhraseMaxFileCount" => esc_html__("Maximum number of uploaded files is", "wpdiscuz"),
             "wmuPhraseMaxFileSize" => esc_html__("Maximum upload file size is", "wpdiscuz"),
             "wmuPhrasePostMaxSize" => esc_html__("Maximum post size is", "wpdiscuz"),
+            "wmuPhraseDoingUpload" => esc_html__("Uploading in progress! Please wait.", "wpdiscuz"),
             "wmuAttachImage" => esc_html__("Attach an image to this comment", "wpdiscuz"),
             "wmuChangeImage" => esc_html__("Change the attached image", "wpdiscuz"),
         ];
@@ -1162,6 +1163,7 @@ class WpdiscuzOptions implements WpDiscuzConstants {
         $jsArgs["wmuPhraseMaxFileCount"] = esc_html(preg_replace("#(\d+$)#is", "", $this->phrases["wmuPhraseMaxFileCount"]) . " " . apply_filters("wpdiscuz_mu_file_count", 1));
         $jsArgs["wmuPhraseMaxFileSize"] = esc_html($this->phrases["wmuPhraseMaxFileSize"] . " " . $this->content["wmuMaxFileSize"] . "MB");
         $jsArgs["wmuPhrasePostMaxSize"] = esc_html($this->phrases["wmuPhrasePostMaxSize"] . " " . ($this->wmuPostMaxSize / (1024 * 1024)) . "MB");
+        $jsArgs["wmuPhraseDoingUpload"] = esc_html($this->phrases["wmuPhraseDoingUpload"]);
         $jsArgs["msgEmptyFile"] = esc_html__("File is empty. Please upload something more substantial. This error could also be caused by uploads being disabled in your php.ini or by post_max_size being defined as smaller than upload_max_filesize in php.ini.");
         $jsArgs["msgPostIdNotExists"] = esc_html__("Post ID not exists", "wpdiscuz");
         $jsArgs["msgUploadingNotAllowed"] = esc_html__("Sorry, uploading not allowed for this post", "wpdiscuz");
@@ -1220,12 +1222,12 @@ class WpdiscuzOptions implements WpDiscuzConstants {
                     $formMeta["layout"] = isset($_POST["layout"]) ? absint($_POST["layout"]) : 1;
                     update_post_meta($form->ID, "wpdiscuz_form_general_options", $formMeta);
                 }
-                $this->thread_styles["theme"] = trim(WpdiscuzHelper::sanitize(INPUT_POST, "theme", FILTER_SANITIZE_STRING, "wpd-default"));
+                $this->thread_styles["theme"] = trim(WpdiscuzHelper::sanitize(INPUT_POST, "theme", "FILTER_SANITIZE_STRING", "wpd-default"));
                 $this->updateOptions();
             } else if ($wizard === 3) {
                 $this->live["enableBubble"] = isset($_POST["enableBubble"]) ? absint($_POST["enableBubble"]) : 0;
                 $this->live["bubbleLiveUpdate"] = isset($_POST["bubbleLiveUpdate"]) ? absint($_POST["bubbleLiveUpdate"]) : 0;
-                $this->live["bubbleLocation"] = trim(WpdiscuzHelper::sanitize(INPUT_POST, "bubbleLocation", FILTER_SANITIZE_STRING, "content_left"));
+                $this->live["bubbleLocation"] = trim(WpdiscuzHelper::sanitize(INPUT_POST, "bubbleLocation", "FILTER_SANITIZE_STRING", "content_left"));
                 $this->updateOptions();
             } else if ($wizard === 4) {
                 $forms = get_posts([
@@ -1716,6 +1718,7 @@ class WpdiscuzOptions implements WpDiscuzConstants {
             $this->phrases["wmuPhraseMaxFileCount"] = sanitize_text_field($_POST["wmuPhraseMaxFileCount"]);
             $this->phrases["wmuPhraseMaxFileSize"] = sanitize_text_field($_POST["wmuPhraseMaxFileSize"]);
             $this->phrases["wmuPhrasePostMaxSize"] = sanitize_text_field($_POST["wmuPhrasePostMaxSize"]);
+            $this->phrases["wmuPhraseDoingUpload"] = sanitize_text_field($_POST["wmuPhraseDoingUpload"]);
             $this->phrases["wmuAttachImage"] = sanitize_text_field($_POST["wmuAttachImage"]);
             $this->phrases["wmuChangeImage"] = sanitize_text_field($_POST["wmuChangeImage"]);
 
@@ -1730,10 +1733,10 @@ class WpdiscuzOptions implements WpDiscuzConstants {
     }
 
     public function resetOptions() {
-        $nonce = filter_input(INPUT_GET, "_wpnonce", FILTER_SANITIZE_STRING);
-        $page = filter_input(INPUT_GET, "page", FILTER_SANITIZE_STRING);
-        $tab = filter_input(INPUT_GET, "wpd_tab", FILTER_SANITIZE_STRING);
-        $redirect_to = filter_input(INPUT_GET, "redirect_to", FILTER_SANITIZE_URL);
+        $nonce = WpdiscuzHelper::sanitize(INPUT_GET, "_wpnonce", "FILTER_SANITIZE_STRING");
+        $page = WpdiscuzHelper::sanitize(INPUT_GET, "page", "FILTER_SANITIZE_STRING");
+        $tab = WpdiscuzHelper::sanitize(INPUT_GET, "wpd_tab", "FILTER_SANITIZE_STRING");
+        $redirect_to = WpdiscuzHelper::sanitize(INPUT_GET, "redirect_to", FILTER_SANITIZE_URL);
 
         if (!current_user_can("manage_options") || empty($nonce) || empty($page) || empty($tab) || empty($redirect_to)) {
             return;

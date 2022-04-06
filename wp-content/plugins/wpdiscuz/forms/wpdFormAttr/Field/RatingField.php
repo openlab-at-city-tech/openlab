@@ -2,6 +2,8 @@
 
 namespace wpdFormAttr\Field;
 
+use wpdFormAttr\Tools\Sanitizer;
+
 class RatingField extends Field {
 
     protected function dashboardForm() {
@@ -89,7 +91,7 @@ class RatingField extends Field {
                 <?php esc_html_e($args["name"], "wpdiscuz"); ?>
                 <?php if ($args["desc"]) { ?>
                     <div class="wpd-field-desc"><i class="far fa-question-circle"></i><span><?php echo esc_html($args["desc"]); ?></span></div>
-                <?php } ?>
+        <?php } ?>
             </div>
             <div class="wpd-item-wrap">
                 <fieldset class="wpdiscuz-rating">
@@ -121,7 +123,7 @@ class RatingField extends Field {
     }
 
     public function validateFieldData($fieldName, $args, $options, $currentUser) {
-        $value = filter_input(INPUT_POST, $fieldName, FILTER_SANITIZE_NUMBER_INT);
+        $value = Sanitizer::sanitize(INPUT_POST, $fieldName, FILTER_SANITIZE_NUMBER_INT);
         if (!$this->isCommentParentZero()) {
             return 0;
         }

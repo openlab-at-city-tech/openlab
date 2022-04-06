@@ -233,7 +233,14 @@ class WpdiscuzDBManager implements WpDiscuzConstants {
         $activationKey = md5($email . uniqid() . time());
         $sql = $this->db->prepare("INSERT INTO `{$this->emailNotification}` (`email`, `subscribtion_id`, `post_id`, `subscribtion_type`, `activation_key`,`confirm`) VALUES(%s, %d, %d, %s, %s, %d);", $email, $subsriptionId, $postId, $subscriptionType, $activationKey, $confirm);
         $this->db->query($sql);
-        return $this->db->insert_id ? ["id" => $this->db->insert_id, "activation_key" => $activationKey] : false;
+        if ($this->db->insert_id) {
+            $result = ["id" => $this->db->insert_id, "activation_key" => $activationKey];
+            do_action("wpdiscuz_add_email_notification_success", $subsriptionId, $postId, $email, $subscriptionType, $confirm);
+        } else {
+            $result = false;
+            do_action("wpdiscuz_add_email_notification_fail", $subsriptionId, $postId, $email, $subscriptionType, $confirm);
+        }
+        return $result;
     }
 
     public function getPostNewCommentNotification($post_id, $email) {
@@ -521,7 +528,20 @@ class WpdiscuzDBManager implements WpDiscuzConstants {
     /* === STATISTICS === */
 
     public function getCommentsCount() {
-        $sql = "SELECT COUNT(*) FROM `{$this->db->comments}` WHERE `comment_approved` = '1';";
+        $default_types = ["order_note"];
+        $excludeTypes = apply_filters('wpdiscuz_statistics_comments_count_exclude', $default_types);
+        $sql = "SELECT COUNT(*) FROM `{$this->db->comments}` WHERE `comment_approved` = '1'";
+        $notIn = "";
+        if ($excludeTypes && is_array($excludeTypes)) {
+            foreach ($excludeTypes as $excludeType) {
+                $notIn .= "'" . trim(esc_sql(sanitize_text_field($excludeType))) . "',";
+            }
+            $notIn = rtrim($notIn, ",");
+        }
+
+        if ($notIn) {
+            $sql .= " AND `comment_type` NOT IN($notIn)";
+        }
         return number_format(intval($this->db->get_var($sql)));
     }
 

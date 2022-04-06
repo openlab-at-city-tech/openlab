@@ -4,6 +4,7 @@ namespace wpdFormAttr\Field\DefaultField;
 
 use wpdFormAttr\FormConst\wpdFormConst;
 use wpdFormAttr\Field\Field;
+use wpdFormAttr\Tools\Sanitizer;
 
 class Website extends Field {
 
@@ -89,7 +90,7 @@ class Website extends Field {
     }
 
     public function validateFieldData($fieldName, $args, $options, $currentUser) {
-        $website_url = trim(filter_input(INPUT_POST, $fieldName, FILTER_SANITIZE_STRING));
+        $website_url = Sanitizer::sanitize(INPUT_POST, $fieldName, "FILTER_SANITIZE_STRING");
         if ($website_url !== "") {
             if (strpos($website_url, "http://") !== 0 && strpos($website_url, "https://") !== 0) {
                 $website_url = "http://" . $website_url;

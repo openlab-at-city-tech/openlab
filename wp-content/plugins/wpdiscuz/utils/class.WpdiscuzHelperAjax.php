@@ -319,8 +319,8 @@ class WpdiscuzHelperAjax implements WpDiscuzConstants {
         global $wp_rewrite;
         $this->helper->validateNonce();
         $guestEmail = isset($_COOKIE["comment_author_email_" . COOKIEHASH]) ? $_COOKIE["comment_author_email_" . COOKIEHASH] : "";
-        $guestAction = filter_input(INPUT_POST, "guestAction", FILTER_SANITIZE_STRING);
-        $postId = filter_input(INPUT_POST, "postId", FILTER_SANITIZE_NUMBER_INT);
+        $guestAction = WpdiscuzHelper::sanitize(INPUT_POST, "guestAction", "FILTER_SANITIZE_STRING");
+        $postId = WpdiscuzHelper::sanitize(INPUT_POST, "postId", FILTER_SANITIZE_NUMBER_INT);
         $post = get_post($postId);
         $response = [
             "code" => 0,
@@ -936,7 +936,7 @@ class WpdiscuzHelperAjax implements WpDiscuzConstants {
     public function unsubscribe() {
         $this->helper->validateNonce();
         $sid = WpdiscuzHelper::sanitize(INPUT_POST, "sid", FILTER_SANITIZE_NUMBER_INT, 0);
-        $skey = WpdiscuzHelper::sanitize(INPUT_POST, "skey", FILTER_SANITIZE_STRING, "");
+        $skey = WpdiscuzHelper::sanitize(INPUT_POST, "skey", "FILTER_SANITIZE_STRING");
         if ($sid && $skey) {
             $this->dbManager->unsubscribe($sid, $skey);
             wp_send_json_success(esc_html($this->options->getPhrase("wc_unsubscribe_message")));
@@ -964,7 +964,7 @@ class WpdiscuzHelperAjax implements WpDiscuzConstants {
     }
 
     public function wpd_stat_graph() {
-        $interval = trim(WpdiscuzHelper::sanitize(INPUT_POST, "interval", FILTER_SANITIZE_STRING, ""));
+        $interval = WpdiscuzHelper::sanitize(INPUT_POST, "interval", "FILTER_SANITIZE_STRING");
         if ($interval) {
             $all = $this->dbManager->getGraphAllComments($interval);
             $inline = $this->dbManager->getGraphInlineComments($interval);
@@ -994,9 +994,9 @@ class WpdiscuzHelperAjax implements WpDiscuzConstants {
     }
 
     public function wpd_stat_user() {
-        $orderby = WpdiscuzHelper::sanitize(INPUT_POST, "orderby", FILTER_SANITIZE_STRING, "");
-        $order = WpdiscuzHelper::sanitize(INPUT_POST, "order", FILTER_SANITIZE_STRING, "");
-        $page = WpdiscuzHelper::sanitize(INPUT_POST, "page", FILTER_SANITIZE_STRING, "");
+        $orderby = WpdiscuzHelper::sanitize(INPUT_POST, "orderby", "FILTER_SANITIZE_STRING");
+        $order = WpdiscuzHelper::sanitize(INPUT_POST, "order", "FILTER_SANITIZE_STRING");
+        $page = WpdiscuzHelper::sanitize(INPUT_POST, "page", "FILTER_SANITIZE_STRING");
         if ($orderby && $order && $page) {
             ob_start();
             ?>
@@ -1060,7 +1060,7 @@ class WpdiscuzHelperAjax implements WpDiscuzConstants {
     }
 
     public function searchOption() {
-        $search = WpdiscuzHelper::sanitize(INPUT_POST, "s", FILTER_SANITIZE_STRING, "");
+        $search = WpdiscuzHelper::sanitize(INPUT_POST, "s", "FILTER_SANITIZE_STRING");
         if ($search) {
             $optionsObject = $this->options;
             $settings = $this->options->settingsArray();

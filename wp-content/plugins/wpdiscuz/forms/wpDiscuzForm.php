@@ -5,6 +5,7 @@ use wpdFormAttr\FormConst\wpdFormConst;
 use wpdFormAttr\Form;
 use wpdFormAttr\Login\SocialLogin;
 use wpdFormAttr\Tools\PersonalDataExporter;
+use wpdFormAttr\Tools\Sanitizer;
 
 class wpDiscuzForm implements wpdFormConst {
 
@@ -60,8 +61,8 @@ class wpDiscuzForm implements wpdFormConst {
     }
 
     public function validateMetaCommentSavePre($commentContent) {
-        if (filter_input(INPUT_POST, "action", FILTER_SANITIZE_STRING) === "editedcomment") {
-            $postID = filter_input(INPUT_POST, "comment_post_ID", FILTER_SANITIZE_NUMBER_INT);
+        if (Sanitizer::sanitize(INPUT_POST, "action", "FILTER_SANITIZE_STRING") === "editedcomment") {
+            $postID = Sanitizer::sanitize(INPUT_POST, "comment_post_ID", FILTER_SANITIZE_NUMBER_INT);
             $this->getForm($postID);
             if ($this->form) {
                 $currentUser = WpdiscuzHelper::getCurrentUser();
@@ -73,8 +74,8 @@ class wpDiscuzForm implements wpdFormConst {
     }
 
     public function updateCommentMeta($commentID) {
-        if (filter_input(INPUT_POST, "action", FILTER_SANITIZE_STRING) === "editedcomment") {
-            $postID = filter_input(INPUT_POST, "comment_post_ID", FILTER_SANITIZE_NUMBER_INT);
+        if (Sanitizer::sanitize(INPUT_POST, "action", "FILTER_SANITIZE_STRING") === "editedcomment") {
+            $postID = Sanitizer::sanitize(INPUT_POST, "comment_post_ID", FILTER_SANITIZE_NUMBER_INT);
             $this->getForm($postID);
             if ($this->form) {
                 $this->form->saveCommentMeta($commentID);
@@ -84,10 +85,10 @@ class wpDiscuzForm implements wpdFormConst {
 
     public function adminFieldForm() {
         $this->canManageOptions();
-        $field = filter_input(INPUT_POST, "fieldType", FILTER_SANITIZE_STRING);
-        $isDefault = filter_input(INPUT_POST, "defaultField", FILTER_SANITIZE_NUMBER_INT);
-        $row = filter_input(INPUT_POST, "row", FILTER_SANITIZE_STRING);
-        $col = filter_input(INPUT_POST, "col", FILTER_SANITIZE_STRING);
+        $field = Sanitizer::sanitize(INPUT_POST, "fieldType", "FILTER_SANITIZE_STRING");
+        $isDefault = Sanitizer::sanitize(INPUT_POST, "defaultField", FILTER_SANITIZE_NUMBER_INT);
+        $row = Sanitizer::sanitize(INPUT_POST, "row", "FILTER_SANITIZE_STRING");
+        $col = Sanitizer::sanitize(INPUT_POST, "col", "FILTER_SANITIZE_STRING");
         if ($field && $row && $col) {
             if ($isDefault) {
                 $field = "wpdFormAttr\Field\\$field";
@@ -149,7 +150,7 @@ class wpDiscuzForm implements wpdFormConst {
         }
         $this->canManageOptions();
         $this->form->saveFormData($postId);
-        $css = filter_input(INPUT_POST, self::WPDISCUZ_META_FORMS_CSS, FILTER_SANITIZE_STRING);
+        $css = Sanitizer::sanitize(INPUT_POST, self::WPDISCUZ_META_FORMS_CSS, FILTER_DEFAULT);
         update_post_meta($postId, self::WPDISCUZ_META_FORMS_CSS, $css);
     }
 
@@ -455,8 +456,8 @@ class wpDiscuzForm implements wpdFormConst {
     }
 
     public function cloneForm() {
-        $formID = filter_input(INPUT_GET, "form_id", FILTER_SANITIZE_NUMBER_INT);
-        $nonce = filter_input(INPUT_GET, "clone_form_nonce", FILTER_SANITIZE_STRING);
+        $formID = Sanitizer::sanitize(INPUT_GET, "form_id", FILTER_SANITIZE_NUMBER_INT);
+        $nonce = Sanitizer::sanitize(INPUT_GET, "clone_form_nonce", "FILTER_SANITIZE_STRING");
         if ($formID && $nonce && wp_verify_nonce($nonce, "clone-form_" . $formID)) {
             $form = get_post($formID);
             if ($form && $form->post_type === self::WPDISCUZ_FORMS_CONTENT_TYPE) {

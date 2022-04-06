@@ -2,6 +2,8 @@
 
 namespace wpdFormAttr\Field;
 
+use wpdFormAttr\Tools\Sanitizer;
+
 class SelectField extends Field {
 
     protected function dashboardForm() {
@@ -92,11 +94,11 @@ class SelectField extends Field {
                 <option value=""><?php echo htmlentities($args["name"]); ?></option>
                 <?php foreach ($args["values"] as $index => $val) { ?>
                     <option value="<?php echo esc_attr($index + 1); ?>"><?php echo htmlentities($val); ?></option>
-                <?php } ?>
-            </select>
-            <?php if ($args["desc"]) { ?>
-                <div class="wpd-field-desc"><i class="far fa-question-circle"></i><span><?php echo esc_html($args["desc"]); ?></span></div>
             <?php } ?>
+            </select>
+                    <?php if ($args["desc"]) { ?>
+                <div class="wpd-field-desc"><i class="far fa-question-circle"></i><span><?php echo esc_html($args["desc"]); ?></span></div>
+        <?php } ?>
         </div>
         <?php
     }
@@ -112,7 +114,7 @@ class SelectField extends Field {
         if (!$this->isCommentParentZero() && !$args["is_show_sform"]) {
             return "";
         }
-        $value = filter_input(INPUT_POST, $fieldName, FILTER_VALIDATE_INT);
+        $value = Sanitizer::sanitize(INPUT_POST, $fieldName, FILTER_VALIDATE_INT);
         if (is_int($value) && $value > 0 && key_exists($value - 1, $args["values"])) {
             $value = $args["values"][$value - 1];
         } else {

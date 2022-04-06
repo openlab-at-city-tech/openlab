@@ -309,7 +309,7 @@ class WpdiscuzHelperOptimization implements WpDiscuzConstants {
 
     
     private function addWpDiscuzParams($query){
-        $query->query_vars["wpdiscuz"] = wp_array_slice_assoc(sanitize_text_field($_REQUEST["action"]), $this->getWpDiscuzSpecificArgs());
+        $query->query_vars["wpdiscuz"] = wp_array_slice_assoc($_REQUEST , $this->getWpDiscuzSpecificArgs());
     }
 
     private function getWpDiscuzSpecificArgs(){

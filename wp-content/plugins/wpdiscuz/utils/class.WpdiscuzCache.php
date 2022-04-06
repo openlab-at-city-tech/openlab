@@ -115,14 +115,12 @@ class WpdiscuzCache implements WpDiscuzConstants {
         // removing stat caches to avoid unexpected results
         clearstatcache();
         if ($this->options->general["isCacheEnabled"] && file_exists($fileInfo["path"])) {
-            $fileCreateTime = filemtime($fileInfo["path"]);
-
             /**
              * delete old cached file
              * !!!IMPORTANT
              * do not use current_time here as it returns WP time
              */
-            if (time() > $fileCreateTime + ($this->options->general["cacheTimeout"] * DAY_IN_SECONDS)) {
+            if (is_file($fileInfo["path"]) && time() > @filemtime($fileInfo["path"]) + ($this->options->general["cacheTimeout"] * DAY_IN_SECONDS)) {
                 @unlink($fileInfo["path"]);
                 return [];
             }
