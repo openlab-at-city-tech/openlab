@@ -186,8 +186,6 @@ class oplb_gradebook_api
             $students = $wpdb->get_results($query, ARRAY_A);
             $usernames = array();
 
-            // print_r( $students );
-
             foreach ($students as $index => &$student_id) {
                 $student = get_userdata($student_id['uid']);
                 $current_grade_average = $this->oplb_gradebook_get_current_grade_average($student_id['uid'], $gbid);
