@@ -35,7 +35,7 @@ define([
 			}
 
 			var compiled = template({
-				comments: this.comment.replaceAll("<br />", ""),
+				comments: this.comment,
 				gradebook: self.gradebook,
 				username: this.username,
 				name: this.name

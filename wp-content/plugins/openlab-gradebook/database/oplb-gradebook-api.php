@@ -186,7 +186,9 @@ class oplb_gradebook_api
             $students = $wpdb->get_results($query, ARRAY_A);
             $usernames = array();
 
-            foreach ($students as &$student_id) {
+            // print_r( $students );
+
+            foreach ($students as $index => &$student_id) {
                 $student = get_userdata($student_id['uid']);
                 $current_grade_average = $this->oplb_gradebook_get_current_grade_average($student_id['uid'], $gbid);
 
@@ -206,6 +208,9 @@ class oplb_gradebook_api
                 );
 
                 $student_id = array_merge($student_extras, $student_id);
+
+                $students[$index]['mid_semester_comments'] = wp_strip_all_tags( $students[$index]['mid_semester_comments'] );
+                $students[$index]['final_comments'] = wp_strip_all_tags( $students[$index]['final_comments'] );
             }
 
             usort($cells, $this->build_sorter('assign_order'));
