@@ -9456,6 +9456,9 @@ body form .checkbox-list-container {
 .sidebar-widget-wrapper {
   margin-top: 46px;
 }
+.sidebar.type-members {
+  margin-top: 48px;
+}
 .sidebar-filter-search {
   margin-top: 16px;
 }
