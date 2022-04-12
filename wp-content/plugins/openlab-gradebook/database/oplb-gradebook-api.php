@@ -177,8 +177,11 @@ class oplb_gradebook_api
             $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_cells WHERE gbid = %d", $gbid);
             $cells = $wpdb->get_results($query, ARRAY_A);
 
-            foreach ($cells as &$cell) {
+            foreach ($cells as $index => &$cell) {
                 $cell['gbid'] = intval($cell['gbid']);
+
+                // Strip all HTML tags from the comments
+                $cells[$index]['comments'] = wp_strip_all_tags( $cells[$index]['comments'] );
             }
 
             $query = $wpdb->prepare("SELECT uid, mid_semester_grade, final_grade, mid_semester_comments, final_comments FROM {$wpdb->prefix}oplb_gradebook_users WHERE gbid = %d AND role = '%s'", $gbid, 'student');
@@ -207,6 +210,7 @@ class oplb_gradebook_api
 
                 $student_id = array_merge($student_extras, $student_id);
 
+                // Strip all HTML tags from the comments
                 $students[$index]['mid_semester_comments'] = wp_strip_all_tags( $students[$index]['mid_semester_comments'] );
                 $students[$index]['final_comments'] = wp_strip_all_tags( $students[$index]['final_comments'] );
             }
