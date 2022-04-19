@@ -116,6 +116,7 @@ function openlab_hide_plugins( $plugins ) {
 			'bp-system-report/bp-system-report.php',
 			'buddypress/bp-loader.php',
 			'buddypress-docs/loader.php',
+			'buddypress-docs-in-group/loader.php',
 			'buddypress-group-email-subscription/bp-activity-subscription.php',
 			'bp-template-pack/loader.php',
 			'staticpress/plugin.php',
