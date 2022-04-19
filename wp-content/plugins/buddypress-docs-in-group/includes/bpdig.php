@@ -1,6 +1,6 @@
 <?php
 
-function bpdig_filter_group_extension_class() {
+function bpdig_filter_group_extension_class( $class ) {
 	require BPDIG_PLUGIN_DIR . 'includes/bpdig-group-extension.php';
 	return 'BPDIG_Group_Extension';
 }
