@@ -17,6 +17,9 @@ if ( is_admin() ) {
 	require OLGC_PLUGIN_DIR . '/includes/admin.php';
 }
 
+// Sanization callback for private comment text.
+add_filter( 'olgc_private_comment_text', 'wp_kses_post' );
+
 /**
  * Load textdomain.
  *
@@ -161,6 +164,17 @@ function olgc_add_private_info_to_comment_text( $text, $comment ) {
 
 	$is_private = get_comment_meta( $comment->comment_ID, 'olgc_is_private', true );
 	$comment_text = $text;
+
+	/**
+	 * Filters the text of the comment to be shown in the expandable 'private' area.
+	 *
+	 * Sanitization callbacks, such as kses, are attached to this filter so that
+	 * they can be modified as necessary by third-party plugins.
+	 *
+	 * @param string $text Comment text.
+	 */
+	$text = apply_filters( 'olgc_private_comment_text', $text );
+
 	if ( $is_private ) {
 		$comment_text = sprintf(
 			'<div class="olgc-grade-display olgc-grade-hidden">' .
@@ -174,9 +188,9 @@ function olgc_add_private_info_to_comment_text( $text, $comment ) {
 			'</div>',
 			esc_html__( 'Comment (Private):', 'wp-grade-comments' ),
 			esc_html__( '(show)', 'wp-grade-comments' ),
-			esc_html( $text ),
+			$text,
 			esc_html__( '(hide)', 'wp-grade-comments' ),
-			esc_html( $text )
+			$text
 		);
 	}
 
