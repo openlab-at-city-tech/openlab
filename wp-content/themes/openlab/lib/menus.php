@@ -768,36 +768,25 @@ function openlab_filter_subnav_docs($subnav_item) {
 
     $group_slug = bp_get_group_slug();
 
-    $docs_arg = Array("posts_per_page" => "3",
-        "post_type" => "bp_doc",
-        "tax_query" =>
-        Array(Array("taxonomy" => "bp_docs_associated_item",
-                "field" => "slug",
-                "terms" => $group_slug)));
-    $query = new WP_Query($docs_arg);
+	$query_builder = new BP_Docs_Query(
+		[
+			'group_id' => bp_get_current_group_id(),
+		]
+	);
+	$wp_query      = $query_builder->get_wp_query();
 
-    $total_doc_count = !empty($query->found_posts) ? $query->found_posts : 0;
+    $total_doc_count = ! empty( $wp_query->found_posts ) ? $wp_query->found_posts : 0;
 
-    //legacy issue - some DB entries list doc_count as greater than 0 when in fact it is 0
-    //if that's the case, the search replace below will not work properly
-    $doc_count = groups_get_groupmeta($bp->groups->current_group->id, 'bp-docs-count');
-
-    if ($doc_count == $total_doc_count) {
-        $span_count = $total_doc_count;
-    } else {
-        $span_count = $doc_count;
-    }
-
-    wp_reset_query();
-
-    if ($total_doc_count > 0) {
-        $new_item = str_replace('<span>' . $span_count . '</span>', '<span class="mol-count pull-right count-' . $total_doc_count . ' gray">' . $total_doc_count . '</span>', $subnav_item);
-    } else {
-        $new_item = str_replace('<span>' . $span_count . '</span>', '', $subnav_item);
+    if ( $total_doc_count > 0 ) {
+        $new_item = str_replace(
+			'</a></li>',
+			'<span class="mol-count pull-right count-' . esc_attr( $total_doc_count ) . ' gray">' . esc_html( $total_doc_count ) . '</span></a></li>',
+			$subnav_item
+		);
     }
 
     //update "current" class to "current-menu-item" to unify site identification of current menu page
-    $new_item = str_replace("current selected", "current-menu-item", $new_item);
+    $new_item = str_replace( "current selected", "current-menu-item", $new_item );
 
     return $new_item;
 }
