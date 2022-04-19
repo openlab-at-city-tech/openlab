@@ -410,3 +410,19 @@ function bpdig_comments_open( $open, $post_id ) {
 	return true;
 }
 add_filter( 'comments_open', 'bpdig_comments_open', 10, 2 );
+
+/**
+ * Don't show an 'Unlink from group' link in Docs directories.
+ */
+add_action(
+	'bp_screens',
+	function() {
+		$bp = buddypress();
+		if ( empty( $bp->bp_docs ) || empty( $bp->bp_docs->groups_integration ) ) {
+			return;
+		}
+
+		remove_filter( 'bp_docs_doc_action_links', [ buddypress()->bp_docs->groups_integration, 'add_doc_action_unlink_from_group_link' ], 10, 2 );
+	},
+	5
+);

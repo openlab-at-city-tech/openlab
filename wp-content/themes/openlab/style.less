@@ -3053,6 +3053,29 @@ body.membership-requests {
 		}
     }
 }
+/* BuddyPress Docs toggleable panels */
+.toggleable {
+	.plus-or-minus {
+		background-image: none;
+		position: relative;
+
+		&:before {
+			content: '+';
+			position: absolute;
+			left: -10px;
+			top: -11px;
+			font-size: 24px;
+		}
+	}
+
+	&.toggle-open {
+		.plus-or-minus:before {
+			content: '-';
+			font-size: 28px;
+			top: -17px;
+		}
+	}
+}
 .docs-info-header{
     #tags-toggle{
         padding: 6px 16px;
