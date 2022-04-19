@@ -861,7 +861,7 @@ if (!defined("ABSPATH")) {
     <img src="<?php echo esc_url_raw(plugins_url(WPDISCUZ_DIR_NAME . "/assets/img/social-icons/wechat.png")); ?>" style="vertical-align:bottom; height: 24px; margin-bottom: -2px; position: relative; border-radius: 50%;">&nbsp; WeChat
 </div>
 <p style="font-size: 14px; font-style: italic; margin-top: 5px;">
-    <?php esc_html_e("To start using WeChat Login Button you should get AppID and Secret. Please follow to this ", "wpdiscuz"); ?> <a href="https://learn.akamai.com/en-us/webhelp/identity-cloud/technical-library/GUID-E1F062CD-BC57-45C3-9F0E-4B84470D1B57.html" target="_blank" style="font-weight: 600;"><?php esc_html_e("instruction &raquo;", "wpdiscuz"); ?></a> &nbsp;
+    <?php esc_html_e("To start using WeChat Login Button you should get AppID and Secret. Please follow to this ", "wpdiscuz"); ?> <a href="https://janrain-education-center.knowledgeowl.com/home/wechat-social-login-configuration-guide" target="_blank" style="font-weight: 600;"><?php esc_html_e("instruction &raquo;", "wpdiscuz"); ?></a> &nbsp;
     <?php echo esc_html__("Redirect URI", "wpdiscuz") . " : <code>" . esc_url_raw(admin_url("admin-ajax.php?action=wpd_login_callback&provider=wechat")) . "</code>"; ?>
 </p>
 
@@ -917,7 +917,7 @@ if (!defined("ABSPATH")) {
     <img src="<?php echo esc_url_raw(plugins_url(WPDISCUZ_DIR_NAME . "/assets/img/social-icons/weibo.png")); ?>" style="vertical-align:bottom; height: 24px; margin-bottom: -2px; position: relative; border-radius: 50%;">&nbsp; Sina Weibo
 </div>
 <p style="font-size: 14px; font-style: italic; margin-top: 5px;">
-    <?php esc_html_e("To start using Weibo Login Button you should get App Key and App Secret. Please follow to this ", "wpdiscuz"); ?> <a href="https://learn.akamai.com/en-us/webhelp/identity-cloud/technical-library/GUID-8B0552FD-A5AE-49D2-9888-C4652FECF33D.html" target="_blank" style="font-weight: 600;"><?php esc_html_e("instruction &raquo;", "wpdiscuz"); ?></a> &nbsp;
+    <?php esc_html_e("To start using Weibo Login Button you should get App Key and App Secret. Please follow to this ", "wpdiscuz"); ?> <a href="https://janrain-education-center.knowledgeowl.com/home/sina-weibo-social-login-configuration-guide" target="_blank" style="font-weight: 600;"><?php esc_html_e("instruction &raquo;", "wpdiscuz"); ?></a> &nbsp;
     <?php echo esc_html__("Redirect URI", "wpdiscuz") . " : <code>" . esc_url_raw(admin_url("admin-ajax.php?action=wpd_login_callback&provider=weibo")) . "</code>"; ?>
 </p>
 
@@ -973,7 +973,7 @@ if (!defined("ABSPATH")) {
     <img src="<?php echo esc_url_raw(plugins_url(WPDISCUZ_DIR_NAME . "/assets/img/social-icons/qq.png")); ?>" style="vertical-align:bottom; height: 24px; margin-bottom: -2px; position: relative; border-radius: 50%;">&nbsp; Tencent QQ
 </div>
 <p style="font-size: 14px; font-style: italic; margin-top: 5px;">
-    <?php esc_html_e("To start using Tencent QQ Login Button you should get AppID and AppKey. Please follow to this ", "wpdiscuz"); ?> <a href="https://learn.akamai.com/en-us/webhelp/identity-cloud/technical-library/GUID-2B5EC7CA-3EEE-47DC-BC21-D200AED25E22.html" target="_blank" style="font-weight: 600;"><?php esc_html_e("instruction &raquo;", "wpdiscuz"); ?></a> &nbsp;
+    <?php esc_html_e("To start using Tencent QQ Login Button you should get AppID and AppKey. Please follow to this ", "wpdiscuz"); ?> <a href="https://janrain-education-center.knowledgeowl.com/home/qq-social-login-configuration-guide" target="_blank" style="font-weight: 600;"><?php esc_html_e("instruction &raquo;", "wpdiscuz"); ?></a> &nbsp;
     <?php echo esc_html__("Redirect URI", "wpdiscuz") . " : <code>" . esc_url_raw(admin_url("admin-ajax.php?action=wpd_login_callback&provider=qq")) . "</code>"; ?>
 </p>
 

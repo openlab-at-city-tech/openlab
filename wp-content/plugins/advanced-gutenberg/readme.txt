@@ -2,8 +2,8 @@
 Contributors: publishpress, stevejburge, htmgarcia
 Tags: gutenberg, gutenberg blocks, gutenberg block, block editor, blocks
 Requires at least: 5.0
-Tested up to: 5.9
-Stable tag: 2.11.5
+Tested up to: 5.9.1
+Stable tag: 2.11.6
 Requires PHP: 5.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -256,6 +256,19 @@ Yes, we use the phrase "publishpress-advg-install" to share install links. You w
 16. Custom Styles for Blocks: You create custom CSS styles and make them available to end users.
 
 == Changelog ==
+
+= 2.11.6 - 10 Mar 2022 =
+  * Add: Improved design for Advanced Tabs remove and add settings
+  * Add: Ad to upgrade to Pro for Images Slider block
+  * Add: Missing Spanish translations
+  * Remove: Manual block registration for Legacy Widget and Widget Area
+  * Fix: Legacy Widget is always activated and can't be disabled
+  * Fix: Local video cropped in mobile for Advanced Video block
+  * Fix: Default text color for outlined styles in frontend for Advanced Button block
+  * Fix: Check current user role exists as array in advgb_blocks_user_roles option
+  * Fix: Get all the taxonomy values for CPT filters in Content Display block
+  * Fix: Text format displayed as raw HTML in frontend for Count Up block
+  * Fix: Handle editor javascript as separate file to load when Block Access is enabled
 
 = 2.11.5 - 14 Feb 2022 =
   * Add: Ad to upgrade to Pro for Advanced Tabs, Advanced Accordions and Content Display blocks

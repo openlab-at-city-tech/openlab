@@ -2,7 +2,7 @@
 /*
  * Plugin Name: wpDiscuz
  * Description: #1 WordPress Comment Plugin. Innovative, modern and feature-rich comment system to supercharge your website comment section.
- * Version: 7.3.12
+ * Version: 7.3.17
  * Author: gVectors Team
  * Author URI: https://gvectors.com/
  * Plugin URI: https://wpdiscuz.com/
@@ -249,7 +249,7 @@ class WpdiscuzCore implements WpDiscuzConstants {
         $loadLastCommentId = WpdiscuzHelper::sanitize(INPUT_POST, "loadLastCommentId", FILTER_SANITIZE_NUMBER_INT, 0);
         if ($postId) {
             $this->isWpdiscuzLoaded = true;
-            $visibleCommentIds = rtrim(WpdiscuzHelper::sanitize(INPUT_POST, "visibleCommentIds", FILTER_SANITIZE_STRING, ""), ",");
+            $visibleCommentIds = rtrim(WpdiscuzHelper::sanitize(INPUT_POST, "visibleCommentIds", "FILTER_SANITIZE_STRING"), ",");
             $this->commentsArgs = $this->getDefaultCommentsArgs($postId);
             $commentListArgs = $this->getCommentListArgs($postId);
             if ($this->form->isUserCanSeeComments($commentListArgs["current_user"], $postId)) {
@@ -289,7 +289,7 @@ class WpdiscuzCore implements WpDiscuzConstants {
 
     public function bubbleUpdate() {
         $postId = WpdiscuzHelper::sanitize(INPUT_POST, "postId", FILTER_SANITIZE_NUMBER_INT, 0);
-        $newCommentIds = WpdiscuzHelper::sanitize(INPUT_POST, "newCommentIds", FILTER_SANITIZE_STRING, "");
+        $newCommentIds = WpdiscuzHelper::sanitize(INPUT_POST, "newCommentIds", "FILTER_SANITIZE_STRING");
         if ($postId && $newCommentIds) {
             $this->isWpdiscuzLoaded = true;
             $commentListArgs = $this->getCommentListArgs($postId);
@@ -315,7 +315,7 @@ class WpdiscuzCore implements WpDiscuzConstants {
     public function addComment() {
         $this->helper->validateNonce();
         $isAnonymous = false;
-        $uniqueId = trim(WpdiscuzHelper::sanitize(INPUT_POST, "wpdiscuz_unique_id", FILTER_SANITIZE_STRING, ""));
+        $uniqueId = WpdiscuzHelper::sanitize(INPUT_POST, "wpdiscuz_unique_id", "FILTER_SANITIZE_STRING");
         $postId = WpdiscuzHelper::sanitize(INPUT_POST, "postId", FILTER_SANITIZE_NUMBER_INT, 0);
         // $comment_content is filtered in function "$this->helper->filterCommentText" by WP's native function wp_kses
         $comment_content = isset($_POST["wc_comment"]) ? $_POST["wc_comment"] : "";
@@ -331,7 +331,7 @@ class WpdiscuzCore implements WpDiscuzConstants {
                     wp_die(esc_html($this->options->getPhrase("wc_commenting_is_closed")));
                 }
 
-                if (function_exists("zerospam_get_key") && $wpdiscuzZS = WpdiscuzHelper::sanitize(INPUT_POST, "wpdiscuz_zs", FILTER_SANITIZE_STRING, "")) {
+                if (function_exists("zerospam_get_key") && $wpdiscuzZS = WpdiscuzHelper::sanitize(INPUT_POST, "wpdiscuz_zs", "FILTER_SANITIZE_STRING")) {
                     $_POST["zerospam_key"] = $wpdiscuzZS === md5(zerospam_get_key()) ? zerospam_get_key() : "";
                 }
                 $commentDepth = WpdiscuzHelper::sanitize(INPUT_POST, "wpd_comment_depth", FILTER_SANITIZE_NUMBER_INT, 1);
@@ -346,7 +346,7 @@ class WpdiscuzCore implements WpDiscuzConstants {
                 } else if (!$this->options->wp["threadComments"]) {
                     $isInSameContainer = "0";
                 }
-                $notificationType = WpdiscuzHelper::sanitize(INPUT_POST, "wpdiscuz_notification_type", FILTER_SANITIZE_STRING, "");
+                $notificationType = WpdiscuzHelper::sanitize(INPUT_POST, "wpdiscuz_notification_type", "FILTER_SANITIZE_STRING");
 
                 $this->form->validateFields($currentUser);
 
@@ -683,11 +683,11 @@ class WpdiscuzCore implements WpDiscuzConstants {
                 // max value of php int for limit
                 $limit = ($isFirstLoad && $this->options->thread_display["commentListLoadType"] == 3) || (!$isFirstLoad && $this->options->thread_display["commentListLoadType"] == 1) ? PHP_INT_MAX - 1 : $this->options->wp["commentPerPage"];
                 $args = ["number" => $limit];
-                $args["wpdType"] = trim(WpdiscuzHelper::sanitize(INPUT_POST, "wpdType", FILTER_SANITIZE_STRING, ""));
+                $args["wpdType"] = WpdiscuzHelper::sanitize(INPUT_POST, "wpdType", "FILTER_SANITIZE_STRING");
                 if ($isFirstLoad) {
                     $args["first_load"] = true;
                 }
-                $sorting = trim(WpdiscuzHelper::sanitize(INPUT_POST, "sorting", FILTER_SANITIZE_STRING, ""));
+                $sorting = WpdiscuzHelper::sanitize(INPUT_POST, "sorting", "FILTER_SANITIZE_STRING");
                 if ($sorting === "newest") {
                     $args["orderby"] = $this->options->thread_display["orderCommentsBy"];
                     $args["order"] = "desc";
@@ -717,7 +717,7 @@ class WpdiscuzCore implements WpDiscuzConstants {
 
     public function sorting() {
         $postId = WpdiscuzHelper::sanitize(INPUT_POST, "postId", FILTER_SANITIZE_NUMBER_INT, 0);
-        $sorting = trim(WpdiscuzHelper::sanitize(INPUT_POST, "sorting", FILTER_SANITIZE_STRING, ""));
+        $sorting = WpdiscuzHelper::sanitize(INPUT_POST, "sorting", "FILTER_SANITIZE_STRING");
         if ($postId && $sorting) {
             $this->form = $this->wpdiscuzForm->getForm($postId);
             if ($this->form->isUserCanSeeComments(WpdiscuzHelper::getCurrentUser(), $postId)) {
@@ -734,7 +734,7 @@ class WpdiscuzCore implements WpDiscuzConstants {
                     $args["order"] = $this->options->wp["commentOrder"];
                 }
                 $args["first_load"] = 1;
-                $args["wpdType"] = WpdiscuzHelper::sanitize(INPUT_POST, "wpdType", FILTER_SANITIZE_STRING, "");
+                $args["wpdType"] = WpdiscuzHelper::sanitize(INPUT_POST, "wpdType", "FILTER_SANITIZE_STRING");
                 $args = apply_filters("wpdiscuz_filter_args", $args);
                 $commentData = $this->getWPComments($args);
                 $response = [
@@ -2215,7 +2215,7 @@ class WpdiscuzCore implements WpDiscuzConstants {
     public function addInlineComment() {
         $inline_form_id = WpdiscuzHelper::sanitize(INPUT_POST, "inline_form_id", FILTER_SANITIZE_NUMBER_INT, 0);
         if ($inline_form_id && apply_filters("wpdiscuz_enable_feedback_shortcode_button", true) && ($inline_form = $this->dbManager->getFeedbackForm($inline_form_id))) {
-            if (wp_verify_nonce(WpdiscuzHelper::sanitize(INPUT_POST, "_wpd_inline_nonce", FILTER_SANITIZE_STRING, ""), "wpd_inline_nonce_" . $inline_form->post_id)) {
+            if (wp_verify_nonce(WpdiscuzHelper::sanitize(INPUT_POST, "_wpd_inline_nonce", "FILTER_SANITIZE_STRING"), "wpd_inline_nonce_" . $inline_form->post_id)) {
                 if (!comments_open($inline_form->post_id)) {
                     wp_die(esc_html($this->options->getPhrase("wc_commenting_is_closed")));
                 }
@@ -2346,7 +2346,7 @@ class WpdiscuzCore implements WpDiscuzConstants {
                 if ($form->getFormID()) {
                     $currentUser = WpdiscuzHelper::getCurrentUser();
                     if (empty($currentUser->ID) || (!empty($currentUser->ID) && $currentUser->ID != $post->post_author)) {
-                        $inlineVerified = wp_verify_nonce(WpdiscuzHelper::sanitize(INPUT_POST, "_wpd_inline_nonce", FILTER_SANITIZE_STRING, ""), "wpd_inline_nonce_" . $postId);
+                        $inlineVerified = wp_verify_nonce(WpdiscuzHelper::sanitize(INPUT_POST, "_wpd_inline_nonce", "FILTER_SANITIZE_STRING"), "wpd_inline_nonce_" . $postId);
                         if (!$inlineVerified) {
                             if (apply_filters("wpdiscuz_verify_recaptcha", true, $commentdata)) {
                                 $typesExclude = ["pingback", "trackback"];

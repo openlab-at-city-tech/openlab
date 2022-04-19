@@ -2,6 +2,8 @@
 
 namespace wpdFormAttr\Field;
 
+use wpdFormAttr\Tools\Sanitizer;
+
 class ColorField extends Field {
 
     protected function dashboardForm() {
@@ -79,17 +81,17 @@ class ColorField extends Field {
         ?>
         <div class="wpdiscuz-item wpd-field-color <?php echo esc_attr($name) . "-wrapper" . ($hasIcon ? " wpd-has-icon" : "") . ($hasDesc ? " wpd-has-desc" : ""); ?>">
             <div class="wpd-field-title">
-                <?php echo esc_html($args["name"]); ?>
+            <?php echo esc_html($args["name"]); ?>
             </div>
             <?php if ($hasIcon) { ?>
                 <div class="wpd-field-icon"><i style="opacity: 0.8;" class="<?php echo strpos(trim($args["icon"]), " ") ? esc_attr($args["icon"]) : "fas " . esc_attr($args["icon"]); ?>"></i></div>
-            <?php } ?>
+        <?php } ?>
             <?php $required = $args["required"] ? "required='required' aria-required='true'" : ""; ?>
             <input id="<?php echo esc_attr($name) . "-" . $uniqueId; ?>" <?php echo $required; ?> class="<?php echo esc_attr($name); ?> wpd-field wpd-field-color" type="color" name="<?php echo esc_attr($name); ?>" value="#000000" placeholder="#ff8040"  pattern="^\#[A-Za-z0-9]{6}$" title="#ff8040">
             <label for="<?php echo esc_attr($name) . "-" . $uniqueId; ?>" class="wpdlb"><?php echo esc_attr($args["name"]) . (!empty($args["required"]) ? "*" : ""); ?></label>
-            <?php if ($args["desc"]) { ?>
+                    <?php if ($args["desc"]) { ?>
                 <div class="wpd-field-desc"><i class="far fa-question-circle"></i><span><?php echo esc_html($args["desc"]); ?></span></div>
-                    <?php } ?>
+        <?php } ?>
         </div>
         <?php
     }
@@ -105,7 +107,7 @@ class ColorField extends Field {
         if (!$this->isCommentParentZero() && !$args["is_show_sform"]) {
             return "";
         }
-        $value = trim(filter_input(INPUT_POST, $fieldName, FILTER_SANITIZE_STRING));
+        $value = Sanitizer::sanitize(INPUT_POST, $fieldName, "FILTER_SANITIZE_STRING");
         if ($value && !preg_match("@^\#[A-Za-z0-9]{6}$@is", $value)) {
             $value = "";
         }

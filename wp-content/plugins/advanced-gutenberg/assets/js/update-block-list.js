@@ -10,26 +10,6 @@ window.addEventListener('load', function () {
         var listBlocks = [];
         var nonce = '';
 
-        // Add Widgets Legacy and Area blocks manually
-        if( advgbBlocks.blocks_widget_support ) {
-            allBlocks.push({
-              "name": "core/legacy-widget",
-              "icon": {
-                "src": "block-default",
-              },
-              "title": "Legacy Widget",
-              "category": "widgets",
-            },
-            {
-              "name": "core/widget-area",
-              "icon": {
-                "src": "block-default",
-              },
-              "category": "widgets",
-              "title": "Widget Area",
-            });
-        }
-
         allBlocks.forEach(function (block) {
             var blockItemIcon = '';
             var blockItem = {

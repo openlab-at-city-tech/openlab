@@ -791,7 +791,7 @@ class Form {
             <?php
             if ($this->isUserCanComment($currentUser, $message)) {
                 ?>
-                <form class="wpd_comm_form <?php echo $isMain ? "wpd_main_comm_form" : "wpd-secondary-form-wrapper"; ?>" method="post" enctype="multipart/form-data">
+                <form class="wpd_comm_form <?php echo $isMain ? "wpd_main_comm_form" : "wpd-secondary-form-wrapper"; ?>" method="post" enctype="multipart/form-data" data-uploading="false">
                     <div class="wpd-field-comment">
                         <div class="wpdiscuz-item wc-field-textarea">
                             <div class="wpdiscuz-textarea-wrap <?php echo $this->wpdOptions->form["richEditor"] === "both" || (!wp_is_mobile() && $this->wpdOptions->form["richEditor"] === "desktop") ? "" : "wpd-txt"; ?>">
@@ -880,37 +880,37 @@ class Form {
     private function renderTextEditorButtons($uniqueId) {
         $editorButtons = [];
         if ($this->wpdOptions->form["boldButton"]) {
-            $editorButtons[] = ["class" => "ql-bold", "value" => "", "name" => "", "title" => "Bold", "svg" => ""];
+            $editorButtons[] = ["class" => "ql-bold", "value" => "", "name" => "", "title" => __("Bold", "wpdiscuz"), "svg" => ""];
         }
         if ($this->wpdOptions->form["italicButton"]) {
-            $editorButtons[] = ["class" => "ql-italic", "value" => "", "name" => "", "title" => "Italic", "svg" => ""];
+            $editorButtons[] = ["class" => "ql-italic", "value" => "", "name" => "", "title" => __("Italic", "wpdiscuz"), "svg" => ""];
         }
         if ($this->wpdOptions->form["underlineButton"]) {
-            $editorButtons[] = ["class" => "ql-underline", "value" => "", "name" => "", "title" => "Underline", "svg" => ""];
+            $editorButtons[] = ["class" => "ql-underline", "value" => "", "name" => "", "title" => __("Underline", "wpdiscuz"), "svg" => ""];
         }
         if ($this->wpdOptions->form["strikeButton"]) {
-            $editorButtons[] = ["class" => "ql-strike", "value" => "", "name" => "", "title" => "Strike", "svg" => ""];
+            $editorButtons[] = ["class" => "ql-strike", "value" => "", "name" => "", "title" => __("Strike", "wpdiscuz"), "svg" => ""];
         }
         if ($this->wpdOptions->form["olButton"]) {
-            $editorButtons[] = ["class" => "ql-list", "value" => "ordered", "name" => "", "title" => "Ordered List", "svg" => ""];
+            $editorButtons[] = ["class" => "ql-list", "value" => "ordered", "name" => "", "title" => __("Ordered List", "wpdiscuz"), "svg" => ""];
         }
         if ($this->wpdOptions->form["ulButton"]) {
-            $editorButtons[] = ["class" => "ql-list", "value" => "bullet", "name" => "", "title" => "Unordered List", "svg" => ""];
+            $editorButtons[] = ["class" => "ql-list", "value" => "bullet", "name" => "", "title" => __("Unordered List", "wpdiscuz"), "svg" => ""];
         }
         if ($this->wpdOptions->form["blockquoteButton"]) {
-            $editorButtons[] = ["class" => "ql-blockquote", "value" => "", "name" => "", "title" => "Blockquote", "svg" => ""];
+            $editorButtons[] = ["class" => "ql-blockquote", "value" => "", "name" => "", "title" => __("Blockquote", "wpdiscuz"), "svg" => ""];
         }
         if ($this->wpdOptions->form["codeblockButton"]) {
-            $editorButtons[] = ["class" => "ql-code-block", "value" => "", "name" => "", "title" => "Code Block", "svg" => ""];
+            $editorButtons[] = ["class" => "ql-code-block", "value" => "", "name" => "", "title" => __("Code Block", "wpdiscuz"), "svg" => ""];
         }
         if ($this->wpdOptions->form["linkButton"]) {
-            $editorButtons[] = ["class" => "ql-link", "value" => "", "name" => "", "title" => "Link", "svg" => ""];
+            $editorButtons[] = ["class" => "ql-link", "value" => "", "name" => "", "title" => __("Link", "wpdiscuz"), "svg" => ""];
         }
         if ($this->wpdOptions->form["sourcecodeButton"]) {
-            $editorButtons[] = ["class" => "ql-sourcecode", "value" => "", "name" => "sourcecode", "title" => "Source Code", "svg" => "{}"];
+            $editorButtons[] = ["class" => "ql-sourcecode", "value" => "", "name" => "sourcecode", "title" => __("Source Code", "wpdiscuz"), "svg" => "{}"];
         }
         if ($this->wpdOptions->form["spoilerButton"]) {
-            $editorButtons[] = ["class" => "ql-spoiler", "value" => "", "name" => "spoiler", "title" => "Spoiler", "svg" => "[+]"];
+            $editorButtons[] = ["class" => "ql-spoiler", "value" => "", "name" => "spoiler", "title" => __("Spoiler", "wpdiscuz"), "svg" => "[+]"];
         }
         $editorButtons = apply_filters("wpdiscuz_editor_buttons", $editorButtons, $uniqueId);
         $editorButtonsHtml = apply_filters("wpdiscuz_editor_buttons_html", "", $uniqueId);
@@ -1474,7 +1474,7 @@ class Form {
 
     public function transferJSData($data) {
         $this->initFormFields();
-        $data["is_email_field_required"] = $this->formFields[wpdFormConst::WPDISCUZ_FORMS_EMAIL_FIELD]["required"];
+        $data["is_email_field_required"] = empty($this->formFields[wpdFormConst::WPDISCUZ_FORMS_EMAIL_FIELD]["required"]) ? 0 : $this->formFields[wpdFormConst::WPDISCUZ_FORMS_EMAIL_FIELD]["required"];
         return $data;
     }
 

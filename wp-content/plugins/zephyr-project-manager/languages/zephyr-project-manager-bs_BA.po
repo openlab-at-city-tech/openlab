@@ -1,0 +1,4815 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: 2019-06-26 11:52+0200\n"
+"PO-Revision-Date: 2019-06-26 11:52+0200\n"
+"Last-Translator: Adnan Kurtović <adnan.kurtovic@gmail.com>\n"
+"Language-Team: \n"
+"Language: bs_BA@latin\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.2.1\n"
+"X-Poedit-Basepath: ../..\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
+"X-Poedit-KeywordsList: __;_e;esc_attr_e\n"
+"X-Poedit-SearchPath-0: zephyr-project-manager\n"
+"X-Poedit-SearchPath-1: zephyr-project-manager-pro\n"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Ajax.php:223
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:596
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Frontend.php:137
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:405
+#: zephyr-project-manager/includes/Core/Projects.php:684
+#: zephyr-project-manager/templates/parts/project-single.php:355
+msgid "No description"
+msgstr "Nema opisa"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Ajax.php:228
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Ajax.php:229
+#: zephyr-project-manager-pro/templates/frontend/task-single.php:40
+#: zephyr-project-manager-pro/templates/frontend/task-single.php:41
+#: zephyr-project-manager/includes/Base/AjaxHandler.php:583
+#: zephyr-project-manager/includes/Base/AjaxHandler.php:584
+#: zephyr-project-manager/includes/Base/AjaxHandler.php:1708
+#: zephyr-project-manager/includes/Base/AjaxHandler.php:1709
+#: zephyr-project-manager/includes/Core/Projects.php:1674
+#: zephyr-project-manager/includes/Core/Projects.php:1675
+#: zephyr-project-manager/includes/Core/Tasks.php:97
+#: zephyr-project-manager/includes/Core/Tasks.php:98
+msgid "Not set"
+msgstr "Nije postavljeno"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Ajax.php:242
+#, php-format
+msgid "Project created by %s on %s"
+msgstr "Projekat kreirao %s dana %s"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Ajax.php:244
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Ajax.php:405
+msgid "Report"
+msgstr "Izvještaj"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Ajax.php:255
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:489
+#: zephyr-project-manager/includes/strings.php:39
+#: zephyr-project-manager/templates/parts/project-single.php:89
+#: zephyr-project-manager/templates/parts/project-single.php:90
+msgid "Project Name"
+msgstr "Naziv projekta"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Ajax.php:262
+#: zephyr-project-manager/includes/Core/Projects.php:1065
+#: zephyr-project-manager/templates/parts/project-single.php:94
+#: zephyr-project-manager/templates/parts/project-single.php:95
+msgid "Project Description"
+msgstr "Opis projekta"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Ajax.php:269
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Ajax.php:1647
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:485
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Report.php:439
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Report.php:488
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:178
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:231
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:232
+#: zephyr-project-manager-pro/templates/frontend/task-single.php:140
+#: zephyr-project-manager-pro/templates/frontend/task-single.php:141
+#: zephyr-project-manager-pro/templates/frontend/task-single.php:286
+#: zephyr-project-manager-pro/templates/frontend/tasks.php:42
+#: zephyr-project-manager-pro/templates/project-page-template.php:78
+#: zephyr-project-manager-pro/templates/project-page-template.php:153
+#: zephyr-project-manager-pro/templates/project-page-template.php:391
+#: zephyr-project-manager-pro/views/reports.php:77
+#: zephyr-project-manager/includes/Base/AjaxHandler.php:946
+#: zephyr-project-manager/includes/strings.php:35
+#: zephyr-project-manager/templates/parts/new_task.php:80
+#: zephyr-project-manager/templates/parts/new_task.php:81
+#: zephyr-project-manager/templates/parts/project-single.php:99
+#: zephyr-project-manager/templates/parts/project-single.php:100
+#: zephyr-project-manager/templates/parts/project-view.php:108
+#: zephyr-project-manager/templates/parts/task-edit-modal.php:83
+#: zephyr-project-manager/templates/parts/task-edit-modal.php:84
+#: zephyr-project-manager/templates/parts/task-single.php:92
+#: zephyr-project-manager/templates/parts/task-single.php:93
+#: zephyr-project-manager/templates/parts/task_view.php:133
+msgid "Start Date"
+msgstr "Datum početka"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Ajax.php:276
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:486
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Frontend.php:118
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Milestones.php:166
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Milestones.php:167
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Milestones.php:215
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Milestones.php:216
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:183
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:236
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:237
+#: zephyr-project-manager-pro/templates/frontend/task-single.php:146
+#: zephyr-project-manager-pro/templates/frontend/task-single.php:147
+#: zephyr-project-manager-pro/templates/frontend/task-single.php:291
+#: zephyr-project-manager-pro/templates/project-page-template.php:81
+#: zephyr-project-manager-pro/templates/project-page-template.php:156
+#: zephyr-project-manager-pro/templates/project-page-template.php:392
+#: zephyr-project-manager-pro/views/asana-project.php:73
+#: zephyr-project-manager-pro/views/reports.php:78
+#: zephyr-project-manager/includes/Base/AjaxHandler.php:951
+#: zephyr-project-manager/includes/Core/Projects.php:667
+#: zephyr-project-manager/includes/strings.php:36
+#: zephyr-project-manager/templates/email_templates/task_email.php:149
+#: zephyr-project-manager/templates/parts/new_task.php:86
+#: zephyr-project-manager/templates/parts/new_task.php:87
+#: zephyr-project-manager/templates/parts/project-single.php:104
+#: zephyr-project-manager/templates/parts/project-single.php:105
+#: zephyr-project-manager/templates/parts/project-view.php:83
+#: zephyr-project-manager/templates/parts/project-view.php:113
+#: zephyr-project-manager/templates/parts/task-edit-modal.php:89
+#: zephyr-project-manager/templates/parts/task-edit-modal.php:90
+#: zephyr-project-manager/templates/parts/task-single.php:98
+#: zephyr-project-manager/templates/parts/task-single.php:99
+#: zephyr-project-manager/templates/parts/task_view.php:137
+msgid "Due Date"
+msgstr "Datum završetka"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Ajax.php:289
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Ajax.php:1484
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:533
+#: zephyr-project-manager-pro/templates/frontend/dashboard.php:97
+#: zephyr-project-manager-pro/templates/frontend/dashboard.php:128
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:555
+#: zephyr-project-manager-pro/templates/frontend/users.php:79
+#: zephyr-project-manager/includes/Base/AjaxHandler.php:959
+#: zephyr-project-manager/includes/Base/AjaxHandler.php:2516
+#: zephyr-project-manager/includes/Base/AjaxHandler.php:2568
+#: zephyr-project-manager/includes/Core/Projects.php:533
+#: zephyr-project-manager/includes/Pages/Admin.php:396
+#: zephyr-project-manager/includes/Pages/Admin.php:484
+#: zephyr-project-manager/includes/strings.php:87
+#: zephyr-project-manager/templates/dashboard.php:90
+#: zephyr-project-manager/templates/dashboard.php:133
+#: zephyr-project-manager/templates/dashboard.php:161
+#: zephyr-project-manager/templates/parts/project-single.php:442
+#: zephyr-project-manager/templates/parts/project-view.php:121
+msgid "Completed Tasks"
+msgstr "Završenih zadataka"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Ajax.php:292
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:532
+#: zephyr-project-manager-pro/templates/frontend/dashboard.php:123
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:558
+#: zephyr-project-manager/includes/Base/AjaxHandler.php:2569
+#: zephyr-project-manager/includes/strings.php:85
+#: zephyr-project-manager/templates/dashboard.php:156
+#: zephyr-project-manager/templates/parts/project-single.php:445
+msgid "Pending Tasks"
+msgstr "Zadataka u toku"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Ajax.php:295
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:608
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:561
+#: zephyr-project-manager/includes/strings.php:86
+#: zephyr-project-manager/templates/parts/project-single.php:448
+msgid "Overdue Tasks"
+msgstr "Zadataka u kašnjenju"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Ajax.php:298
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:564
+msgid "% Complete"
+msgstr "% završen"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Ajax.php:323
+#: zephyr-project-manager-pro/templates/frontend/task-single.php:86
+#: zephyr-project-manager/includes/Api/Emails.php:148
+msgid "Complete"
+msgstr "Završen"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Ajax.php:323
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Ajax.php:454
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:537
+#: zephyr-project-manager/templates/parts/project-single.php:430
+msgid "Incomplete"
+msgstr "Nezavršen"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Ajax.php:330
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Ajax.php:461
+msgid "There are no tasks for this"
+msgstr "Nema zadataka"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Ajax.php:337
+#: zephyr-project-manager-pro/templates/project-page-template.php:399
+#: zephyr-project-manager-pro/views/reports.php:85
+#: zephyr-project-manager/includes/Api/Emails.php:216
+msgid "Tasks due this week"
+msgstr "Zadaci ove sedmice"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Ajax.php:361
+msgid "There are no tasks due this week."
+msgstr "Nema zadataka za ovu sedmicu."
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Ajax.php:370
+#: zephyr-project-manager-pro/templates/project-page-template.php:402
+#: zephyr-project-manager-pro/views/reports.php:88
+msgid "Issues"
+msgstr "Problemi"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Ajax.php:377
+#: zephyr-project-manager-pro/templates/project-page-template.php:401
+#: zephyr-project-manager-pro/views/reports.php:87
+msgid "Risks"
+msgstr "Rizici"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Ajax.php:386
+msgid "Extra Information"
+msgstr "Dodatne informacije"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Ajax.php:392
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Ajax.php:463
+#, php-format
+msgid "Report created on %s"
+msgstr "Izvještaj kreiran na %s"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Ajax.php:426
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:527
+#: zephyr-project-manager-pro/templates/frontend/calendar.php:58
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:515
+#: zephyr-project-manager-pro/templates/frontend/tasks.php:32
+#: zephyr-project-manager/includes/Api/Emails.php:140
+#: zephyr-project-manager/includes/Core/Utillities.php:821
+#: zephyr-project-manager/includes/Pages/Admin.php:693
+#: zephyr-project-manager/includes/Pages/Admin.php:1071
+#: zephyr-project-manager/includes/strings.php:183
+#: zephyr-project-manager/templates/calendar.php:63
+#: zephyr-project-manager/templates/parts/project-single.php:408
+msgid "Completed"
+msgstr "Završeno"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Ajax.php:429
+#, php-format
+msgid "Completed on %s"
+msgstr "Završeno na %s"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Ajax.php:442
+msgid " assigned to"
+msgstr " dodijeljen"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Ajax.php:447
+msgid " in team"
+msgstr " u timu"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Ajax.php:898
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Ajax.php:910
+msgid "in category"
+msgstr "u kategoriji"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Ajax.php:940
+#, php-format
+msgid "%s created a new column"
+msgstr "%s je kreirao novu kolonu"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Ajax.php:941
+msgid "created a new column called"
+msgstr "kreirao novu kolonu nazvanu"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Ajax.php:968
+msgid "copied the column"
+msgstr "kopirao kolonu"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Ajax.php:991
+#, php-format
+msgid "changed the name of the column %s to %s"
+msgstr "promijenio ime kolone %s u %s"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Ajax.php:994
+#, php-format
+msgid "%s renamed the column %s to %s"
+msgstr "%s promijenio ime kolone %s u %s"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Ajax.php:1073
+#, php-format
+msgid "moved the task %s from %s to %s"
+msgstr "pomjerio zadatak %s iz %s u %s"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Ajax.php:1085
+#, php-format
+msgid "%s moved the task %s to %s"
+msgstr "%s pomjerio zadatak iz %s u %s"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Ajax.php:1107
+msgid "deleted the column"
+msgstr "izbrisao kolonu"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Ajax.php:1266
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Ajax.php:1303
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/CustomFields.php:213
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/CustomFields.php:498
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/CustomFields.php:591
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/CustomFields.php:682
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/CustomFields.php:769
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/CustomFields.php:806
+msgid "Untitled"
+msgstr "Bez naslova"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Ajax.php:1267
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Ajax.php:1304
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Milestones.php:85
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Milestones.php:258
+msgid "Untitled Milestone"
+msgstr "Tačka napretka bez naziva"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Ajax.php:1397
+#: zephyr-project-manager-pro/templates/frontend/milestones.php:40
+#: zephyr-project-manager-pro/views/milestones.php:43
+msgid "No milestones found"
+msgstr "Nema pronađenih tački napretka"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Ajax.php:1480
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:496
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:529
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Milestones.php:285
+#: zephyr-project-manager-pro/templates/frontend/dashboard.php:118
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:147
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:313
+#: zephyr-project-manager-pro/templates/frontend/tasks.php:24
+#: zephyr-project-manager-pro/templates/project-page-template.php:188
+#: zephyr-project-manager-pro/templates/project-page-template.php:393
+#: zephyr-project-manager-pro/templates/themes/default.php:81
+#: zephyr-project-manager-pro/templates/themes/modern.php:31
+#: zephyr-project-manager-pro/templates/themes/ultimate.php:84
+#: zephyr-project-manager-pro/views/asana-project.php:26
+#: zephyr-project-manager-pro/views/reports.php:79
+#: zephyr-project-manager-pro/views/settings-frontend.php:229
+#: zephyr-project-manager/includes/Api/Emails.php:136
+#: zephyr-project-manager/includes/Base/AjaxHandler.php:2567
+#: zephyr-project-manager/includes/Pages/Admin.php:910
+#: zephyr-project-manager/includes/Pages/Admin.php:911
+#: zephyr-project-manager/includes/strings.php:46
+#: zephyr-project-manager/includes/strings.php:77
+#: zephyr-project-manager/templates/dashboard.php:151
+#: zephyr-project-manager/templates/parts/project-single.php:72
+#: zephyr-project-manager/templates/parts/project-view.php:71
+msgid "Tasks"
+msgstr "Zadaci"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Ajax.php:1641
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Report.php:44
+#, fuzzy
+#| msgid "Report"
+msgid "New Report"
+msgstr "Izvještaj"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Ajax.php:1643
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:336
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:494
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Milestones.php:156
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Milestones.php:157
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Milestones.php:205
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Milestones.php:206
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Report.php:403
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:168
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:221
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:222
+#: zephyr-project-manager-pro/templates/frontend/settings.php:69
+#: zephyr-project-manager-pro/templates/frontend/settings.php:70
+#: zephyr-project-manager-pro/templates/frontend/task-single.php:128
+#: zephyr-project-manager-pro/templates/frontend/task-single.php:259
+#: zephyr-project-manager-pro/templates/project-page-template.php:65
+#: zephyr-project-manager-pro/templates/project-page-template.php:147
+#: zephyr-project-manager-pro/templates/project-page-template.php:389
+#: zephyr-project-manager-pro/templates/themes/modern.php:132
+#: zephyr-project-manager-pro/views/custom_fields.php:65
+#: zephyr-project-manager-pro/views/custom_fields.php:87
+#: zephyr-project-manager-pro/views/custom_fields.php:111
+#: zephyr-project-manager-pro/views/custom_fields.php:113
+#: zephyr-project-manager-pro/views/custom_fields.php:174
+#: zephyr-project-manager-pro/views/custom_fields.php:175
+#: zephyr-project-manager-pro/views/reports.php:75
+#: zephyr-project-manager/includes/Core/Categories.php:165
+#: zephyr-project-manager/includes/Core/Categories.php:166
+#: zephyr-project-manager/includes/Core/Categories.php:190
+#: zephyr-project-manager/includes/Core/Categories.php:191
+#: zephyr-project-manager/includes/Core/Categories.php:212
+#: zephyr-project-manager/includes/Core/Categories.php:213
+#: zephyr-project-manager/includes/strings.php:44
+#: zephyr-project-manager/templates/categories.php:72
+#: zephyr-project-manager/templates/categories.php:73
+#: zephyr-project-manager/templates/edit_members.php:103
+#: zephyr-project-manager/templates/edit_members.php:104
+#: zephyr-project-manager/templates/parts/project-view.php:81
+#: zephyr-project-manager/templates/settings.php:113
+#: zephyr-project-manager/templates/settings.php:114
+msgid "Name"
+msgstr "Naziv"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Ajax.php:1644
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:495
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Milestones.php:161
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Milestones.php:162
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Milestones.php:210
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Milestones.php:211
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Report.php:404
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:173
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:226
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:227
+#: zephyr-project-manager-pro/templates/frontend/settings.php:72
+#: zephyr-project-manager-pro/templates/frontend/settings.php:73
+#: zephyr-project-manager-pro/templates/frontend/task-single.php:134
+#: zephyr-project-manager-pro/templates/frontend/task-single.php:135
+#: zephyr-project-manager-pro/templates/frontend/task-single.php:264
+#: zephyr-project-manager-pro/templates/project-page-template.php:72
+#: zephyr-project-manager-pro/templates/project-page-template.php:150
+#: zephyr-project-manager-pro/templates/project-page-template.php:390
+#: zephyr-project-manager-pro/views/asana-project.php:61
+#: zephyr-project-manager-pro/views/reports.php:76
+#: zephyr-project-manager/includes/Base/AjaxHandler.php:972
+#: zephyr-project-manager/includes/Core/Categories.php:170
+#: zephyr-project-manager/includes/Core/Categories.php:171
+#: zephyr-project-manager/includes/strings.php:45
+#: zephyr-project-manager/templates/categories.php:79
+#: zephyr-project-manager/templates/categories.php:80
+#: zephyr-project-manager/templates/edit_members.php:108
+#: zephyr-project-manager/templates/edit_members.php:109
+#: zephyr-project-manager/templates/email_templates/task_email.php:154
+#: zephyr-project-manager/templates/parts/project-view.php:82
+#: zephyr-project-manager/templates/parts/project-view.php:134
+#: zephyr-project-manager/templates/parts/task_view.php:169
+#: zephyr-project-manager/templates/settings.php:118
+#: zephyr-project-manager/templates/settings.php:119
+msgid "Description"
+msgstr "Opis"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Ajax.php:1650
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Report.php:442
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Report.php:491
+#, fuzzy
+#| msgid "Date"
+msgid "End Date"
+msgstr "Datum"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Ajax.php:1654
+#: zephyr-project-manager-pro/views/custom_fields.php:115
+#: zephyr-project-manager-pro/views/custom_fields.php:177
+msgid "Type"
+msgstr "Tip"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Ajax.php:1661
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:497
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Report.php:407
+#: zephyr-project-manager-pro/templates/frontend/calendar.php:24
+#: zephyr-project-manager-pro/templates/project-page-template.php:347
+#: zephyr-project-manager-pro/templates/project-page-template.php:382
+#: zephyr-project-manager-pro/templates/themes/default.php:287
+#: zephyr-project-manager-pro/templates/themes/modern.php:154
+#: zephyr-project-manager-pro/templates/themes/ultimate.php:332
+#: zephyr-project-manager-pro/views/reports.php:68
+#: zephyr-project-manager/includes/Pages/Admin.php:387
+#: zephyr-project-manager/includes/Pages/Admin.php:475
+#: zephyr-project-manager/includes/strings.php:47
+#: zephyr-project-manager/templates/calendar.php:29
+#: zephyr-project-manager/templates/email_templates/task_email.php:144
+#: zephyr-project-manager/templates/parts/new_task.php:47
+#: zephyr-project-manager/templates/parts/page_footer.php:21
+#: zephyr-project-manager/templates/parts/task-edit-modal.php:52
+#: zephyr-project-manager/templates/parts/task-single.php:116
+msgid "Project"
+msgstr "Projekat"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Ajax.php:1670
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:475
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Report.php:419
+#: zephyr-project-manager-pro/templates/project-page-template.php:349
+#: zephyr-project-manager/includes/Pages/Admin.php:602
+#: zephyr-project-manager/includes/Pages/Admin.php:684
+#: zephyr-project-manager/includes/strings.php:25
+msgid "Task"
+msgstr "Zadatak"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Ajax.php:1672
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:602
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Frontend.php:97
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Frontend.php:98
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Frontend.php:99
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Kanban.php:493
+#: zephyr-project-manager-pro/templates/frontend/files.php:56
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:174
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:179
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:184
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:293
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:512
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:534
+#: zephyr-project-manager-pro/templates/frontend/task-single.php:184
+#: zephyr-project-manager-pro/templates/frontend/task-single.php:242
+#: zephyr-project-manager-pro/templates/frontend/task-single.php:265
+#: zephyr-project-manager-pro/templates/frontend/users.php:75
+#: zephyr-project-manager-pro/templates/frontend/users.php:85
+#: zephyr-project-manager-pro/templates/frontend/users.php:95
+#: zephyr-project-manager-pro/templates/project-page-template.php:247
+#: zephyr-project-manager-pro/templates/project-page-template.php:351
+#: zephyr-project-manager/includes/Base/AjaxHandler.php:921
+#: zephyr-project-manager/includes/Base/AjaxHandler.php:922
+#: zephyr-project-manager/includes/Base/AjaxHandler.php:975
+#: zephyr-project-manager/includes/Base/AjaxHandler.php:1718
+#: zephyr-project-manager/includes/Core/Projects.php:646
+#: zephyr-project-manager/includes/Core/Projects.php:647
+#: zephyr-project-manager/includes/Core/Projects.php:648
+#: zephyr-project-manager/includes/Core/Projects.php:713
+#: zephyr-project-manager/includes/Core/Projects.php:1105
+#: zephyr-project-manager/includes/Core/Projects.php:1109
+#: zephyr-project-manager/includes/Core/Projects.php:1542
+#: zephyr-project-manager/includes/Core/Utillities.php:448
+#: zephyr-project-manager/includes/Core/Utillities.php:927
+#: zephyr-project-manager/includes/Pages/Admin.php:219
+#: zephyr-project-manager/includes/strings.php:166
+#: zephyr-project-manager/templates/files.php:57
+#: zephyr-project-manager/templates/parts/new_task.php:108
+#: zephyr-project-manager/templates/parts/new_task.php:166
+#: zephyr-project-manager/templates/parts/project-single.php:166
+#: zephyr-project-manager/templates/parts/project-single.php:405
+#: zephyr-project-manager/templates/parts/project-single.php:427
+#: zephyr-project-manager/templates/parts/project-view.php:37
+#: zephyr-project-manager/templates/parts/project-view.php:38
+#: zephyr-project-manager/templates/parts/project-view.php:137
+#: zephyr-project-manager/templates/parts/task-edit-modal.php:112
+#: zephyr-project-manager/templates/parts/task-single.php:139
+#: zephyr-project-manager/templates/parts/task-single.php:211
+#: zephyr-project-manager/templates/parts/task_view.php:33
+#: zephyr-project-manager/templates/parts/task_view.php:40
+msgid "None"
+msgstr "Nema"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Ajax.php:1687
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:615
+#: zephyr-project-manager-pro/templates/project-page-template.php:366
+#: zephyr-project-manager/includes/strings.php:160
+msgid "Cancel"
+msgstr "Odbij"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Ajax.php:1688
+#: zephyr-project-manager-pro/templates/project-page-template.php:409
+#: zephyr-project-manager-pro/views/reports.php:95
+msgid "Create Report"
+msgstr "Kreiraj Izvještaj"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Asana.php:227
+msgid "Connected to Asana"
+msgstr "Povezano na Asanu"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Asana.php:229
+msgid "Connect to Asana"
+msgstr "Poveži na Asanu"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Asana.php:232
+msgid "Go to Asana"
+msgstr "Idi na Asanu"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Asana.php:233
+msgid "Import data to Zephyr"
+msgstr "Uvoz podataka u Zephyr"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Asana.php:234
+msgid "Export data to Asana"
+msgstr "Izvoz podataka u Asanu"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Asana.php:235
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:156
+#: zephyr-project-manager-pro/templates/themes/default.php:137
+#: zephyr-project-manager-pro/templates/themes/modern.php:45
+#: zephyr-project-manager-pro/templates/themes/ultimate.php:140
+#: zephyr-project-manager-pro/views/custom_fields.php:156
+#: zephyr-project-manager-pro/views/custom_fields.php:209
+#: zephyr-project-manager-pro/views/settings-frontend.php:253
+#: zephyr-project-manager/includes/Core/Utillities.php:1511
+#: zephyr-project-manager/includes/Pages/Admin.php:958
+#: zephyr-project-manager/includes/Pages/Admin.php:959
+#: zephyr-project-manager/templates/parts/page_header.php:69
+#: zephyr-project-manager/templates/parts/project-single.php:79
+msgid "Settings"
+msgstr "Postavke"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Asana.php:245
+msgid "Sign In with Asana"
+msgstr "Loguj se sa Asanom"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:50
+#: zephyr-project-manager-pro/templates/themes/modern.php:111
+#: zephyr-project-manager-pro/templates/themes/ultimate.php:286
+#: zephyr-project-manager/includes/Core/Utillities.php:1500
+#: zephyr-project-manager/templates/parts/page_header.php:60
+#: zephyr-project-manager/templates/projects.php:49
+#: zephyr-project-manager/templates/projects.php:118
+msgid "New Project"
+msgstr "Novi projekat"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:54
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:316
+#: zephyr-project-manager-pro/templates/themes/modern.php:115
+#: zephyr-project-manager-pro/templates/themes/ultimate.php:290
+#: zephyr-project-manager/includes/Api/Emails.php:295
+#: zephyr-project-manager/includes/Api/Emails.php:321
+#: zephyr-project-manager/includes/Core/Utillities.php:1504
+#: zephyr-project-manager/includes/Pages/Admin.php:764
+#: zephyr-project-manager/templates/email_templates/task_email.php:26
+#: zephyr-project-manager/templates/parts/new_task.php:31
+#: zephyr-project-manager/templates/parts/page_header.php:64
+#: zephyr-project-manager/templates/parts/project-single.php:229
+msgid "New Task"
+msgstr "Novi zadatak"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:58
+msgid "New User"
+msgstr "Novi korisnik"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:62
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:616
+#: zephyr-project-manager-pro/templates/themes/ultimate.php:296
+#: zephyr-project-manager/templates/teams_and_members.php:43
+#: zephyr-project-manager/templates/teams_and_members.php:78
+msgid "New Team"
+msgstr "Novi Tim"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:66
+#: zephyr-project-manager-pro/templates/themes/default.php:281
+#: zephyr-project-manager-pro/templates/themes/modern.php:120
+#: zephyr-project-manager-pro/templates/themes/modern.php:148
+#: zephyr-project-manager-pro/templates/themes/ultimate.php:300
+#: zephyr-project-manager-pro/templates/themes/ultimate.php:326
+#: zephyr-project-manager/includes/Core/Utillities.php:1509
+#: zephyr-project-manager/templates/parts/page_header.php:68
+msgid "New File"
+msgstr "Nova datoteka"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:72
+#: zephyr-project-manager-pro/templates/themes/ultimate.php:311
+msgid "Logout"
+msgstr "Odjava"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:203
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:374
+msgid "Zephyr"
+msgstr "Zephyr"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:204
+msgid "Thanks for applying. We will get back to you soon"
+msgstr "Hvala na prijavi. Uskoro cemo vam se javiti"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:259
+msgid "New Task Application"
+msgstr "Prijava novog zadatka"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:294
+msgid "Task Application Approved"
+msgstr "Odobren novi zadatak"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:326
+msgid "White label company name"
+msgstr "Nebrendirana kompanija"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:328
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:329
+msgid "Company Name"
+msgstr "Ime kompanije"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:332
+msgid "Milestone Settings"
+msgstr "Postavke tačaka napretka"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:333
+msgid "Order milestones by"
+msgstr "Poredaj po tačkama napretka"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:335
+msgid "ID"
+msgstr "ID"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:337
+msgid "Date Due (Newest to Oldest)"
+msgstr "Datum (Novije ka starijem)"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:338
+msgid "Date Due (Oldest to Newest)"
+msgstr "Datum (Starije ka novijem)"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:342
+msgid "Kanban Settings"
+msgstr "Podešavanja Kanban"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:344
+msgid "Kanban Priority Highlight"
+msgstr "Isticanje Kanban prioriteta"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:348
+msgid "Enable Kanban Priority Highlight"
+msgstr "Omogući isticanje Kanban prioriteta"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:352
+msgid "Custom Field Settings"
+msgstr "Podešavanje dodatnih polja"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:353
+msgid "Hide Default Fields in New Task Popup"
+msgstr "Sakrij standardna polja u Popup prozoru"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:357
+msgid "Hide Default Fields in New Task"
+msgstr "Sakrij standardna polja u zadatku"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:360
+msgid "Show Custom Fields in Task List"
+msgstr "Pokaži dodatna polja u Task listi"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:364
+msgid "Show Custom Fields"
+msgstr "Pokaži dodatna polja"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:454
+#: zephyr-project-manager/includes/strings.php:3
+msgid "Choose Image"
+msgstr "Odaberi sliku"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:455
+#: zephyr-project-manager/includes/strings.php:4
+msgid ""
+"Are you sure you want to delete this team? This action cannot be undone."
+msgstr ""
+"Da li si siguran da želiš obrisati ovaj tim? Ova se akcija ne može povratiti."
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:456
+#: zephyr-project-manager/includes/strings.php:6
+msgid "Loading progress..."
+msgstr "Učitavanje napretka..."
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:457
+#: zephyr-project-manager-pro/templates/frontend/dashboard.php:92
+#: zephyr-project-manager/includes/strings.php:7
+#: zephyr-project-manager/templates/dashboard.php:73
+#: zephyr-project-manager/templates/dashboard.php:128
+#: zephyr-project-manager/templates/email_templates/project_email.php:145
+#: zephyr-project-manager/templates/projects.php:103
+msgid "Completed Projects"
+msgstr "Završeni projekti"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:458
+#: zephyr-project-manager/includes/strings.php:8
+#: zephyr-project-manager/templates/email_templates/project_email.php:149
+msgid "Pending Projects"
+msgstr "Projekti na čekanju"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:459
+#: zephyr-project-manager/includes/strings.php:9
+msgid "Saving changes..."
+msgstr "Spašavanje promjena..."
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:460
+#: zephyr-project-manager/includes/strings.php:10
+msgid "Select a CSV File"
+msgstr "Odaberi CSV datoteku"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:461
+#: zephyr-project-manager/includes/strings.php:11
+msgid "Select a JSON File"
+msgstr "Odaberi JSON datoteku"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:462
+#: zephyr-project-manager/includes/strings.php:12
+msgid "Choose File"
+msgstr "Odaberi datoteku"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:463
+#: zephyr-project-manager/includes/strings.php:13
+msgid "Tasks Completed"
+msgstr "Zadaci izvršeni"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:464
+#: zephyr-project-manager/includes/strings.php:14
+msgid "Tasks Remaining"
+msgstr "Preostali zadaci"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:465
+#: zephyr-project-manager/includes/strings.php:15
+msgid "Oops, no projects found."
+msgstr "Ups, nije pronađen projekat."
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:466
+#: zephyr-project-manager/includes/strings.php:16
+msgid "Oops, no users found."
+msgstr "Ups, nisu pronađeni korisnici."
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:467
+#: zephyr-project-manager/includes/strings.php:17
+msgid "Oops, no teams found."
+msgstr "Ups, nisu pronađeni timovi."
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:468
+#: zephyr-project-manager/includes/strings.php:18
+msgid "Please enter a task name"
+msgstr "Molimo unesite ime zadatka"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:469
+#: zephyr-project-manager/includes/strings.php:19
+msgid "Please enter a project name"
+msgstr "Molimo unesite ime projekta"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:470
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:619
+#: zephyr-project-manager/includes/strings.php:20
+msgid "Saving..."
+msgstr "Snimanje..."
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:471
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Milestones.php:244
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:284
+#: zephyr-project-manager-pro/templates/frontend/task-single.php:233
+#: zephyr-project-manager-pro/views/custom_fields.php:100
+#: zephyr-project-manager/includes/Core/Categories.php:220
+#: zephyr-project-manager/includes/Core/Tasks.php:1554
+#: zephyr-project-manager/includes/strings.php:21
+#: zephyr-project-manager/templates/categories.php:86
+#: zephyr-project-manager/templates/parts/project-single.php:153
+#: zephyr-project-manager/templates/parts/task-edit-modal.php:163
+#: zephyr-project-manager/templates/parts/task-single.php:198
+#: zephyr-project-manager/templates/tasks.php:106
+#: zephyr-project-manager/templates/teams_and_members.php:144
+msgid "Save Changes"
+msgstr "Spasi promjene"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:472
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Milestones.php:190
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Milestones.php:240
+#: zephyr-project-manager/includes/strings.php:22
+#: zephyr-project-manager/templates/parts/project-view.php:78
+msgid "Add Task"
+msgstr "Dodaj zadatak"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:473
+#: zephyr-project-manager/includes/strings.php:23
+msgid "File Link"
+msgstr "Link datoteke"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:474
+#: zephyr-project-manager/includes/strings.php:24
+msgid "File Info"
+msgstr "Informacije o podatku"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:476
+#: zephyr-project-manager/includes/strings.php:26
+msgid "Date Uploaded"
+msgstr "Datum uploada"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:477
+#: zephyr-project-manager/includes/strings.php:27
+msgid "Are you sure you want to delete this file?"
+msgstr "Da li ste sigurni da želite obrisati ovu datoteku?"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:478
+#: zephyr-project-manager/includes/strings.php:28
+msgid "File Removed"
+msgstr "Datoteka uklonjena"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:479
+#: zephyr-project-manager-pro/templates/frontend/task-single.php:309
+#: zephyr-project-manager/includes/Api/Emails.php:356
+#: zephyr-project-manager/includes/strings.php:29
+#: zephyr-project-manager/templates/parts/task-single.php:251
+msgid "New Subtask"
+msgstr "Novi podzadatak"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:480
+#: zephyr-project-manager/includes/strings.php:30
+msgid "Create New Task"
+msgstr "Kreiraj novi zadatak"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:481
+#: zephyr-project-manager/includes/strings.php:31
+#: zephyr-project-manager/templates/parts/new_task.php:41
+#: zephyr-project-manager/templates/parts/new_task.php:42
+#: zephyr-project-manager/templates/parts/task-edit-modal.php:46
+#: zephyr-project-manager/templates/parts/task-edit-modal.php:47
+#: zephyr-project-manager/templates/parts/task-single.php:86
+#: zephyr-project-manager/templates/parts/task-single.php:87
+msgid "Task Description"
+msgstr "Opis zadatka"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:482
+#: zephyr-project-manager-pro/templates/frontend/calendar.php:44
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:492
+#: zephyr-project-manager-pro/templates/frontend/task-single.php:152
+#: zephyr-project-manager-pro/templates/frontend/tasks.php:45
+#: zephyr-project-manager-pro/views/asana-project.php:65
+#: zephyr-project-manager/includes/strings.php:32
+#: zephyr-project-manager/templates/calendar.php:49
+#: zephyr-project-manager/templates/email_templates/task_email.php:139
+#: zephyr-project-manager/templates/parts/new_task.php:62
+#: zephyr-project-manager/templates/parts/project-single.php:385
+#: zephyr-project-manager/templates/parts/task-edit-modal.php:66
+#: zephyr-project-manager/templates/parts/task-single.php:103
+msgid "Assignee"
+msgstr "Izvršilac"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:483
+#: zephyr-project-manager-pro/templates/frontend/task-single.php:111
+#: zephyr-project-manager-pro/templates/frontend/task-single.php:306
+#: zephyr-project-manager-pro/templates/project-page-template.php:113
+#: zephyr-project-manager/includes/strings.php:33
+#: zephyr-project-manager/templates/parts/task-single.php:239
+#: zephyr-project-manager/templates/parts/task_view.php:174
+msgid "Subtasks"
+msgstr "Podzadaci"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:484
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Kanban.php:360
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Kanban.php:468
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Kanban.php:633
+#: zephyr-project-manager/includes/Core/Message.php:138
+#: zephyr-project-manager/includes/strings.php:34
+msgid "Attachments"
+msgstr "Prilozi"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:487
+#: zephyr-project-manager-pro/templates/project-page-template.php:385
+#: zephyr-project-manager-pro/views/reports.php:71
+#: zephyr-project-manager/includes/strings.php:37
+msgid "Include"
+msgstr "Uključi"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:488
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Kanban.php:344
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Kanban.php:452
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Kanban.php:617
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:491
+#: zephyr-project-manager-pro/templates/frontend/task-single.php:129
+#: zephyr-project-manager/includes/strings.php:38
+#: zephyr-project-manager/templates/parts/new_task.php:36
+#: zephyr-project-manager/templates/parts/new_task.php:37
+#: zephyr-project-manager/templates/parts/project-single.php:384
+#: zephyr-project-manager/templates/parts/task-edit-modal.php:41
+#: zephyr-project-manager/templates/parts/task-edit-modal.php:42
+#: zephyr-project-manager/templates/parts/task-single.php:80
+#: zephyr-project-manager/templates/parts/task-single.php:81
+msgid "Task Name"
+msgstr "Ime zadatka"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:490
+#: zephyr-project-manager/includes/strings.php:40
+msgid "Copy of"
+msgstr "Kopija od"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:491
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Kanban.php:355
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Kanban.php:463
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Kanban.php:628
+#: zephyr-project-manager-pro/templates/frontend/task-single.php:94
+#: zephyr-project-manager-pro/templates/project-page-template.php:223
+#: zephyr-project-manager/includes/strings.php:41
+#: zephyr-project-manager/templates/parts/page_footer.php:50
+#: zephyr-project-manager/templates/parts/task_view.php:106
+msgid "Copy Task"
+msgstr "Kopiraj zadatak"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:492
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:132
+#: zephyr-project-manager/includes/Core/Projects.php:513
+#: zephyr-project-manager/includes/strings.php:42
+msgid "Copy Project"
+msgstr "Kopiraj projekat"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:493
+#: zephyr-project-manager/includes/strings.php:43
+msgid "Create New Project"
+msgstr "Kreiraj novi projekat"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:498
+#: zephyr-project-manager/includes/strings.php:48
+msgid "Convert Tasks"
+msgstr "Pretvori zadatke"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:499
+#: zephyr-project-manager/includes/strings.php:49
+msgid "Assignee as Project creator"
+msgstr "Izvršilac kao Kreator projekta"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:500
+#: zephyr-project-manager/includes/strings.php:50
+msgid "Subtasks as Tasks"
+msgstr "Podzadaci kao zadaci"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:501
+#: zephyr-project-manager/includes/strings.php:51
+msgid "Task Description as Project Description"
+msgstr "Opis zadatka kao Opis projekta"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:502
+#: zephyr-project-manager/includes/strings.php:52
+msgid "Convert Task to Project"
+msgstr "Pretvori zadatak u projekat"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:503
+#: zephyr-project-manager/includes/strings.php:53
+msgid "Loading tasks..."
+msgstr "Učitavanje zadataka..."
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:504
+#: zephyr-project-manager-pro/templates/project-page-template.php:325
+#: zephyr-project-manager-pro/templates/project-page-template.php:337
+#: zephyr-project-manager-pro/views/custom_fields.php:98
+#: zephyr-project-manager/includes/strings.php:54
+#: zephyr-project-manager/templates/parts/page_footer.php:78
+msgid "Close"
+msgstr "Zatvori"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:505
+#: zephyr-project-manager-pro/templates/project-page-template.php:104
+#: zephyr-project-manager-pro/templates/project-page-template.php:179
+#: zephyr-project-manager-pro/templates/themes/default.php:99
+#: zephyr-project-manager-pro/templates/themes/ultimate.php:102
+#: zephyr-project-manager-pro/views/settings-frontend.php:237
+#: zephyr-project-manager/includes/Pages/Admin.php:919
+#: zephyr-project-manager/includes/strings.php:55
+#: zephyr-project-manager/templates/files.php:33
+msgid "Files"
+msgstr "Datoteke"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:506
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Kanban.php:357
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Kanban.php:465
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Kanban.php:630
+#: zephyr-project-manager-pro/templates/themes/default.php:293
+#: zephyr-project-manager-pro/templates/themes/modern.php:160
+#: zephyr-project-manager-pro/templates/themes/ultimate.php:338
+#: zephyr-project-manager/includes/Pages/Admin.php:321
+#: zephyr-project-manager/includes/strings.php:56
+msgid "Upload File"
+msgstr "Upload datoteke"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:507
+#: zephyr-project-manager-pro/views/asana-project.php:105
+#: zephyr-project-manager/includes/strings.php:57
+#: zephyr-project-manager/templates/tasks.php:55
+msgid "Import Tasks"
+msgstr "Uvezi zadatke"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:508
+#: zephyr-project-manager/includes/strings.php:58
+msgid "Importing via CSV"
+msgstr "Uvoz CSV"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:509
+#: zephyr-project-manager/includes/strings.php:59
+msgid "Importing via JSON"
+msgstr "Uvoz JSON"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:510
+#: zephyr-project-manager/includes/strings.php:60
+msgid "Importing"
+msgstr "Uvozim"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:511
+#: zephyr-project-manager/includes/strings.php:61
+msgid "Sending..."
+msgstr "Šaljem..."
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:512
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:370
+#: zephyr-project-manager-pro/templates/frontend/task-single.php:350
+#: zephyr-project-manager/includes/strings.php:62
+#: zephyr-project-manager/templates/parts/project-single.php:265
+#: zephyr-project-manager/templates/parts/task-single.php:281
+msgid "Comment"
+msgstr "Komentar"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:513
+#: zephyr-project-manager/includes/Core/Tasks.php:1555
+#: zephyr-project-manager/includes/strings.php:63
+msgid "Delete"
+msgstr "Obriši"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:514
+#: zephyr-project-manager/includes/strings.php:64
+msgid "deleted"
+msgstr "obrisano"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:515
+#: zephyr-project-manager/includes/strings.php:161
+msgid "Create"
+msgstr "Kreiraj"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:516
+#: zephyr-project-manager/includes/strings.php:65
+msgid "Subtask Saved"
+msgstr "Podzadatak snimljen"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:517
+#: zephyr-project-manager/includes/strings.php:66
+msgid "Subtask Deleted"
+msgstr "Podzadatak obrisan"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:518
+#: zephyr-project-manager/includes/strings.php:67
+msgid "Creating Subtask"
+msgstr "Kreiranje podzadatka"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:519
+#: zephyr-project-manager/includes/strings.php:68
+msgid "Changes Saved Successfully"
+msgstr "Promjene snimljene uspješno"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:520
+#: zephyr-project-manager/includes/strings.php:69
+msgid "Message Removed"
+msgstr "Poruka uklonjena"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:521
+#: zephyr-project-manager/includes/strings.php:70
+msgid "Uploading File"
+msgstr "Upload datoteke"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:522
+#: zephyr-project-manager/includes/strings.php:71
+msgid "Uploading Files..."
+msgstr "Uploadovanje datoteke…"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:523
+#: zephyr-project-manager/includes/strings.php:72
+msgid "File Uploaded"
+msgstr "Datoteka Uploadovana"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:524
+#: zephyr-project-manager/includes/strings.php:73
+msgid "Task already exists"
+msgstr "Zadatak već postoji"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:525
+#: zephyr-project-manager/includes/strings.php:74
+msgid "Deleting Category..."
+msgstr "Brisanje kategorije…"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:526
+#: zephyr-project-manager/includes/strings.php:75
+msgid "Creating Category..."
+msgstr "Stvaranje kategorije..."
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:528
+#: zephyr-project-manager-pro/templates/frontend/dashboard.php:82
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:145
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:162
+#: zephyr-project-manager-pro/templates/frontend/task-single.php:110
+#: zephyr-project-manager-pro/templates/frontend/task-single.php:121
+#: zephyr-project-manager/includes/strings.php:76
+#: zephyr-project-manager/templates/dashboard.php:118
+#: zephyr-project-manager/templates/parts/project-single.php:71
+#: zephyr-project-manager/templates/parts/project-view.php:70
+#: zephyr-project-manager/templates/parts/task_view.php:123
+msgid "Overview"
+msgstr "Pregled"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:530
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:150
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:345
+#: zephyr-project-manager-pro/templates/frontend/task-single.php:112
+#: zephyr-project-manager-pro/templates/frontend/task-single.php:324
+#: zephyr-project-manager/includes/strings.php:78
+#: zephyr-project-manager/templates/parts/project-single.php:73
+#: zephyr-project-manager/templates/parts/project-view.php:72
+#: zephyr-project-manager/templates/parts/task-single.php:257
+#: zephyr-project-manager/templates/parts/task_view.php:124
+msgid "Discussion"
+msgstr "Diskusija"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:531
+#: zephyr-project-manager/includes/strings.php:79
+#: zephyr-project-manager/templates/email_templates/task_notifications_email.php:129
+msgid "Due Tasks"
+msgstr "Rok zadatka"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:534
+#: zephyr-project-manager/includes/strings.php:90
+msgid "Are you sure you want to permanently delete this category?"
+msgstr "Da li ste sigurni da želite trajno izbrisati ovu kategoriju?"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:535
+#: zephyr-project-manager/includes/strings.php:91
+msgid ""
+"It appears that you have not uploaded a CSV file or a JSON file. Please make "
+"sure that the file format is correct and try again."
+msgstr ""
+"Izgleda na niste uploadovali CSV ili JSON datoteku. Molimo provjerite da li "
+"je format datoteke ispravan i pokušajte opet."
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:536
+#: zephyr-project-manager/includes/strings.php:92
+msgid "Are you sure you want to delete this project and all of its tasks?"
+msgstr ""
+"Da li ste sigurni da želite obrisati ovaj projekat i sve zadatke u projektu?"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:537
+#: zephyr-project-manager/includes/strings.php:93
+#: zephyr-project-manager/templates/projects.php:126
+#, php-format
+msgid ""
+"No projects created yet. To create a project, click on the 'Add' button at "
+"the top right of the screen or click %s here %s"
+msgstr ""
+"Nema kreiranih projekata. Da kreirate projekat, pritisnite 'Dodaj' dugme u "
+"gornjem desnom uglu prozora ili pritisnite %s ovdje %s"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:538
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:584
+#: zephyr-project-manager/includes/strings.php:94
+#: zephyr-project-manager/includes/strings.php:143
+msgid "There was a problem loading the tasks for this project."
+msgstr "Problem u učitavanju zadatka za ovaj projekat."
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:539
+#: zephyr-project-manager/includes/strings.php:95
+msgid "There was a problem creating the task"
+msgstr "Problem u kreiranju zadataka"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:540
+#: zephyr-project-manager/includes/strings.php:96
+msgid "There was a problem saving the task."
+msgstr "Problem u spašavanju zadatka."
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:541
+#: zephyr-project-manager/includes/strings.php:97
+msgid "There was a problem adding the project."
+msgstr "Problem u dodavanju projekta."
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:542
+#: zephyr-project-manager/includes/strings.php:98
+msgid "Problem removing message."
+msgstr "Problem brisanja poruke."
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:543
+#: zephyr-project-manager/includes/strings.php:99
+msgid "There was a problem copying the task. Please try again."
+msgstr "Problem u kopiranju zadatka. Molimo pokušajte opet."
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:544
+#: zephyr-project-manager/includes/strings.php:100
+msgid "There was a problem converting the task"
+msgstr "Problem u pretvaranju zadatka"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:545
+#: zephyr-project-manager/includes/strings.php:101
+msgid "There was a problem exporting the task. Please try again."
+msgstr "Problem u izvozu zadatka. Molimo pokušajte opet."
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:546
+#: zephyr-project-manager/includes/strings.php:102
+msgid "There was a problem exporting the tasks. Please try again."
+msgstr "Problem u izvozu zadataka. Molimo pokušajte opet."
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:547
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Milestones.php:302
+#: zephyr-project-manager-pro/templates/frontend/dashboard.php:87
+#: zephyr-project-manager-pro/templates/frontend/dashboard.php:113
+#: zephyr-project-manager-pro/templates/frontend/projects.php:49
+#: zephyr-project-manager-pro/templates/themes/default.php:72
+#: zephyr-project-manager-pro/templates/themes/modern.php:24
+#: zephyr-project-manager-pro/templates/themes/ultimate.php:75
+#: zephyr-project-manager-pro/views/settings-frontend.php:225
+#: zephyr-project-manager/includes/Base/AjaxHandler.php:2512
+#: zephyr-project-manager/includes/Pages/Admin.php:902
+#: zephyr-project-manager/includes/Pages/Admin.php:903
+#: zephyr-project-manager/includes/Pages/Admin.php:1067
+#: zephyr-project-manager/includes/strings.php:80
+#: zephyr-project-manager/templates/dashboard.php:69
+#: zephyr-project-manager/templates/dashboard.php:123
+#: zephyr-project-manager/templates/dashboard.php:146
+#: zephyr-project-manager/templates/email_templates/project_email.php:141
+msgid "Projects"
+msgstr "Projekti"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:548
+#: zephyr-project-manager/includes/strings.php:83
+msgid "Page"
+msgstr "Stranica"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:549
+#: zephyr-project-manager/includes/strings.php:103
+msgid "Task successfully created"
+msgstr "Zadatak uspješno kreiran"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:550
+#: zephyr-project-manager/includes/strings.php:104
+msgid "Task updated successfully."
+msgstr "Zadatak uspješno osvježen."
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:551
+#: zephyr-project-manager/includes/strings.php:105
+msgid "There was a problem loading the task"
+msgstr "Problem u učitavanju zadatka"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:552
+#: zephyr-project-manager/includes/strings.php:106
+msgid "Copying project..."
+msgstr "Kopiranje projekta..."
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:553
+#: zephyr-project-manager/includes/strings.php:107
+msgid "There was an unexpected problem while copying the project"
+msgstr "Neočekivan problem se pojavio prilikom kopiranja projekta"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:554
+#: zephyr-project-manager/includes/strings.php:108
+msgid "Project successfully copied"
+msgstr "Projekat uspješno kopiran"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:555
+#: zephyr-project-manager/includes/strings.php:109
+msgid "You have a task that is due today"
+msgstr "Imate zadatak kome je krajni rok danas"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:556
+#: zephyr-project-manager/includes/strings.php:110
+msgid "You have a task that is due tomorrow"
+msgstr "Imate zadatak kome je krajni rok sutra"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:557
+#: zephyr-project-manager/includes/strings.php:111
+#: zephyr-project-manager/templates/dashboard.php:251
+#: zephyr-project-manager/templates/help.php:116
+msgid "Dismiss Notice"
+msgstr "Odbaci obavijest"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:558
+#: zephyr-project-manager-pro/views/asana-project.php:67
+#: zephyr-project-manager/includes/strings.php:112
+#: zephyr-project-manager/templates/parts/project-view.php:87
+msgid "Select Assignee"
+msgstr "Odaberi izvršioca"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:559
+#: zephyr-project-manager/includes/strings.php:117
+#: zephyr-project-manager/templates/parts/project-view.php:94
+msgid "Save Task"
+msgstr "Spasi zadatak"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:560
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:467
+#: zephyr-project-manager/includes/strings.php:118
+#: zephyr-project-manager/templates/parts/project-single.php:329
+msgid "Loading..."
+msgstr "Učitavanje..."
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:561
+#: zephyr-project-manager/includes/strings.php:119
+msgid "Creating Project..."
+msgstr "Kreiranje projekta..."
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:562
+#: zephyr-project-manager/includes/strings.php:120
+msgid "Project created successfully"
+msgstr "Projekat kreiran uspješno"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:563
+#: zephyr-project-manager/includes/strings.php:121
+msgid "Converting task to project..."
+msgstr "Pretvaranje zadatka u projekat..."
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:564
+#: zephyr-project-manager/includes/strings.php:122
+msgid "New project created"
+msgstr "Novi projekat kreiran"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:565
+#: zephyr-project-manager/includes/strings.php:123
+#: zephyr-project-manager/templates/parts/project-view.php:172
+msgid "Go to Project"
+msgstr "Idi na Projekte"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:566
+#: zephyr-project-manager/includes/Api/Emails.php:226
+#: zephyr-project-manager/includes/strings.php:124
+msgid "No date set"
+msgstr "Datum nije postavljen"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:567
+#: zephyr-project-manager/includes/strings.php:125
+msgid "Printed from Zephyr Project Manager"
+msgstr "Printan iz Zephyr Projekt Menađer"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:568
+#: zephyr-project-manager/includes/strings.php:126
+msgid "There was a problem printing the project."
+msgstr "Problem u printanju projekta."
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:569
+#: zephyr-project-manager/includes/strings.php:127
+msgid "There was a problem. Please reload and try again."
+msgstr "Pojavio se problem. Molimo pokušajte opet."
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:570
+#: zephyr-project-manager/includes/strings.php:128
+msgid "There was a problem sending your message. Please try again."
+msgstr "Problem u slanju poruka. Molimo pokušajte opet."
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:571
+#: zephyr-project-manager/includes/strings.php:129
+msgid "There was a problem exporting the project to CSV."
+msgstr "Problem pri izvozu projekta u CSV."
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:572
+#: zephyr-project-manager/includes/strings.php:130
+msgid "Category created."
+msgstr "Kategorija kreirana."
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:573
+#: zephyr-project-manager/includes/strings.php:131
+msgid "There was a problem adding the category. Please try again."
+msgstr "Problem u dodavanju kategorije . Molimo pokušajte opet."
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:574
+#: zephyr-project-manager/includes/strings.php:132
+msgid "There was a problem with the filtering."
+msgstr "Problem prilikom filtriranja."
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:575
+#: zephyr-project-manager/includes/strings.php:133
+msgid "There was a problem deleting the project."
+msgstr "Problem prilikom brisanja projekta."
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:576
+#: zephyr-project-manager/includes/strings.php:134
+msgid "There was a problem importing the file. Please try again."
+msgstr "Problem prilikom uvoza datoteke. Molimo pokušajte opet."
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:577
+#: zephyr-project-manager/includes/strings.php:135
+msgid "Category deleted."
+msgstr "Kategorija obrisana."
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:579
+#: zephyr-project-manager/includes/strings.php:138
+msgid "There was a problem removing the category. Please try again."
+msgstr "Problem prilikom uklanjanja kategorije. Molimo pokušajte opet."
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:580
+#: zephyr-project-manager/includes/strings.php:139
+msgid "Category changes saved."
+msgstr "Promjene kategorije spašene."
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:581
+#: zephyr-project-manager/includes/strings.php:140
+msgid "There was a problem updating the category. Please try again."
+msgstr "Problem prilikom ažuriranja kategorije. Molimo pokušajte opet."
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:582
+#: zephyr-project-manager/includes/strings.php:141
+msgid "Task deleted"
+msgstr "Zadatak izbrisan"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:583
+#: zephyr-project-manager/includes/strings.php:142
+msgid "Problem deleting task"
+msgstr "Problem prilikom brisanja zadatka"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:585
+#: zephyr-project-manager/includes/strings.php:144
+msgid "Project removed from the dashboard."
+msgstr "Projekat uklonjen iz kontrolne ploče."
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:586
+#: zephyr-project-manager/includes/strings.php:145
+msgid "Added to the dashboard."
+msgstr "Dodan u kontrolnu ploču."
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:587
+#: zephyr-project-manager/includes/strings.php:146
+msgid "There was a problem adding the project to the dashboard."
+msgstr "Problem prilikom dodavanja projekta u kontrolnu ploču."
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:588
+#: zephyr-project-manager/includes/strings.php:147
+msgid "Removing project from dashboard."
+msgstr "Brisanje projekta iz kontrolne ploče."
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:589
+#: zephyr-project-manager/includes/strings.php:148
+msgid "Creating task..."
+msgstr "Kreiranje zadatka..."
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:590
+#: zephyr-project-manager/includes/strings.php:149
+msgid "Members saved"
+msgstr "Članovi snimljeni"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:591
+#: zephyr-project-manager/includes/strings.php:150
+msgid "Project status saved"
+msgstr "Stanje projekta spašeno"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:592
+#: zephyr-project-manager/includes/strings.php:151
+msgid "There was a problem updating the status."
+msgstr "Problem prilikom ažuriranja stanja."
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:593
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Kanban.php:209
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Kanban.php:399
+#: zephyr-project-manager-pro/views/kanban.php:90
+#: zephyr-project-manager-pro/views/kanban.php:109
+#: zephyr-project-manager/includes/strings.php:170
+msgid "New Column"
+msgstr "Nova kolona"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:594
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Kanban.php:395
+#: zephyr-project-manager-pro/views/kanban.php:105
+#: zephyr-project-manager/includes/strings.php:171
+msgid "Add new task"
+msgstr "Dodaj novi zadatak"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:595
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:289
+#: zephyr-project-manager-pro/templates/frontend/task-single.php:238
+#: zephyr-project-manager-pro/templates/project-page-template.php:87
+#: zephyr-project-manager-pro/templates/project-page-template.php:167
+#: zephyr-project-manager/includes/Core/Projects.php:1105
+#: zephyr-project-manager/includes/strings.php:169
+#: zephyr-project-manager/templates/parts/project-single.php:162
+#: zephyr-project-manager/templates/parts/task-single.php:207
+msgid "Priority"
+msgstr "Prioritet"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:597
+#: zephyr-project-manager/includes/strings.php:172
+msgid "Task Copied"
+msgstr "Zadatak kopiran"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:598
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Kanban.php:392
+#: zephyr-project-manager-pro/templates/project-page-template.php:239
+#: zephyr-project-manager-pro/views/kanban.php:102
+#: zephyr-project-manager/includes/strings.php:173
+#: zephyr-project-manager/templates/parts/page_footer.php:66
+msgid "Copy Column"
+msgstr "Kopiraj kolonu"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:599
+#: zephyr-project-manager-pro/templates/project-page-template.php:228
+#: zephyr-project-manager/includes/strings.php:174
+#: zephyr-project-manager/templates/parts/page_footer.php:55
+msgid "Copy Column to Project"
+msgstr "Kopiraj kolonu u Projekat"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:600
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Kanban.php:394
+#: zephyr-project-manager-pro/views/kanban.php:104
+#: zephyr-project-manager/includes/strings.php:177
+msgid "Delete Column"
+msgstr "Izbriši kolonu"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:601
+#: zephyr-project-manager/includes/strings.php:178
+msgid "Column Copied"
+msgstr "Kolona kopirana"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:603
+msgid "Please enter username for this user."
+msgstr "Molimo unesite korisničko ime ovog korisnika."
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:604
+msgid "Please enter an email address for this user."
+msgstr "Molimo unesite email adresu ovog korisnika."
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:605
+#: zephyr-project-manager/includes/strings.php:175
+msgid "Milestone"
+msgstr "Tačka napretka"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:606
+#: zephyr-project-manager/includes/strings.php:176
+msgid "achieved"
+msgstr "postignuto"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:607
+msgid "Please enter a password for this user."
+msgstr "Molimo unesite lozinku ovog korisnika."
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:609
+msgid "Please select a file."
+msgstr "Molimo odaberite datoteku."
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:610
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Kanban.php:529
+msgid "View Attachment"
+msgstr "Vidi prilog"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:611
+#: zephyr-project-manager/includes/strings.php:179
+msgid "No attachments"
+msgstr "Nema priloga"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:612
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Kanban.php:534
+msgid "Download File"
+msgstr "Preuzmi datoteku"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:613
+#: zephyr-project-manager-pro/templates/project-page-template.php:123
+msgid "Apply for Task"
+msgstr "Primjeni na Zadatak"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:614
+msgid "Are you sure that you want to delete this task?"
+msgstr "Da li ste sigurni da želite obrisati ovaj zadatak?"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:617
+#: zephyr-project-manager/templates/teams_and_members.php:106
+msgid "Create Team"
+msgstr "Kreiraj Tim"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:618
+#, fuzzy
+#| msgid "Team Name"
+msgid "Team saved"
+msgstr "Ime Tima"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:620
+msgid "No tasks"
+msgstr "Nema zadataka"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:621
+msgid "No subtasks"
+msgstr "Nema podzadataka"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:623
+#: zephyr-project-manager-pro/templates/frontend/dashboard.php:145
+#: zephyr-project-manager/includes/Core/Tasks.php:802
+#: zephyr-project-manager/includes/strings.php:185
+#: zephyr-project-manager/templates/dashboard.php:177
+msgid "Today"
+msgstr "Danas"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:624
+#: zephyr-project-manager/includes/strings.php:186
+msgid "Month"
+msgstr "Mjesec"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:625
+#: zephyr-project-manager/includes/strings.php:187
+msgid "Week"
+msgstr "Sedmica"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:626
+#: zephyr-project-manager/includes/strings.php:188
+msgid "Day"
+msgstr "Dan"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:627
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:97
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:106
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:112
+#: zephyr-project-manager-pro/templates/frontend/projects.php:71
+#: zephyr-project-manager/includes/Core/Projects.php:1090
+#: zephyr-project-manager/includes/strings.php:189
+#: zephyr-project-manager/templates/parts/project-single.php:185
+#: zephyr-project-manager/templates/parts/project-single.php:194
+#: zephyr-project-manager/templates/parts/project-single.php:200
+#: zephyr-project-manager/templates/projects.php:89
+msgid "List"
+msgstr "Lista"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:630
+#: zephyr-project-manager/includes/strings.php:192
+msgid "January"
+msgstr "Januar"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:631
+#: zephyr-project-manager/includes/strings.php:193
+msgid "February"
+msgstr "Februar"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:632
+#: zephyr-project-manager/includes/strings.php:194
+msgid "March"
+msgstr "Mart"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:633
+#: zephyr-project-manager/includes/strings.php:195
+msgid "April"
+msgstr "April"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:634
+#: zephyr-project-manager/includes/strings.php:196
+msgid "May"
+msgstr "Maj"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:635
+#: zephyr-project-manager/includes/strings.php:197
+msgid "June"
+msgstr "Juni"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:636
+#: zephyr-project-manager/includes/strings.php:198
+msgid "July"
+msgstr "Juli"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:637
+#: zephyr-project-manager/includes/strings.php:199
+msgid "August"
+msgstr "August"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:638
+#: zephyr-project-manager/includes/strings.php:200
+msgid "September"
+msgstr "Septembar"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:639
+#: zephyr-project-manager/includes/strings.php:201
+msgid "October"
+msgstr "Oktobar"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:640
+#: zephyr-project-manager/includes/strings.php:202
+msgid "November"
+msgstr "Novembar"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:641
+#: zephyr-project-manager/includes/strings.php:203
+msgid "December"
+msgstr "Decembar"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:644
+#: zephyr-project-manager-pro/templates/frontend/task-single.php:202
+#: zephyr-project-manager/includes/Core/Tasks.php:1472
+#: zephyr-project-manager/includes/Core/Utillities.php:1451
+#: zephyr-project-manager/includes/strings.php:206
+#: zephyr-project-manager/templates/parts/new_task.php:126
+#: zephyr-project-manager/templates/parts/task-edit-modal.php:130
+#: zephyr-project-manager/templates/parts/task-single.php:157
+msgid "Sunday"
+msgstr "Nedelja"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:645
+#: zephyr-project-manager-pro/templates/frontend/task-single.php:196
+#: zephyr-project-manager/includes/Core/Tasks.php:1466
+#: zephyr-project-manager/includes/Core/Utillities.php:1452
+#: zephyr-project-manager/includes/strings.php:207
+#: zephyr-project-manager/templates/parts/new_task.php:120
+#: zephyr-project-manager/templates/parts/task-edit-modal.php:124
+#: zephyr-project-manager/templates/parts/task-single.php:151
+msgid "Monday"
+msgstr "Ponedeljak"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:646
+#: zephyr-project-manager-pro/templates/frontend/task-single.php:197
+#: zephyr-project-manager/includes/Core/Tasks.php:1467
+#: zephyr-project-manager/includes/Core/Utillities.php:1453
+#: zephyr-project-manager/includes/strings.php:208
+#: zephyr-project-manager/templates/parts/new_task.php:121
+#: zephyr-project-manager/templates/parts/task-edit-modal.php:125
+#: zephyr-project-manager/templates/parts/task-single.php:152
+msgid "Tuesday"
+msgstr "Utorak"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:647
+#: zephyr-project-manager-pro/templates/frontend/task-single.php:198
+#: zephyr-project-manager/includes/Core/Tasks.php:1468
+#: zephyr-project-manager/includes/Core/Utillities.php:1454
+#: zephyr-project-manager/includes/strings.php:209
+#: zephyr-project-manager/templates/parts/new_task.php:122
+#: zephyr-project-manager/templates/parts/task-edit-modal.php:126
+#: zephyr-project-manager/templates/parts/task-single.php:153
+msgid "Wednesday"
+msgstr "Srijeda"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:648
+#: zephyr-project-manager-pro/templates/frontend/task-single.php:199
+#: zephyr-project-manager/includes/Core/Tasks.php:1469
+#: zephyr-project-manager/includes/Core/Utillities.php:1455
+#: zephyr-project-manager/includes/strings.php:210
+#: zephyr-project-manager/templates/parts/new_task.php:123
+#: zephyr-project-manager/templates/parts/task-edit-modal.php:127
+#: zephyr-project-manager/templates/parts/task-single.php:154
+msgid "Thursday"
+msgstr "Četvrtak"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:649
+#: zephyr-project-manager-pro/templates/frontend/task-single.php:200
+#: zephyr-project-manager/includes/Core/Tasks.php:1470
+#: zephyr-project-manager/includes/Core/Utillities.php:1456
+#: zephyr-project-manager/includes/strings.php:211
+#: zephyr-project-manager/templates/parts/new_task.php:124
+#: zephyr-project-manager/templates/parts/task-edit-modal.php:128
+#: zephyr-project-manager/templates/parts/task-single.php:155
+msgid "Friday"
+msgstr "Petak"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:650
+#: zephyr-project-manager-pro/templates/frontend/task-single.php:201
+#: zephyr-project-manager/includes/Core/Tasks.php:1471
+#: zephyr-project-manager/includes/Core/Utillities.php:1457
+#: zephyr-project-manager/includes/strings.php:212
+#: zephyr-project-manager/templates/parts/new_task.php:125
+#: zephyr-project-manager/templates/parts/task-edit-modal.php:129
+#: zephyr-project-manager/templates/parts/task-single.php:156
+msgid "Saturday"
+msgstr "Subota"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:653
+#: zephyr-project-manager/includes/strings.php:215
+msgid "Sun"
+msgstr "Ned"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:654
+#: zephyr-project-manager/includes/strings.php:216
+msgid "Mon"
+msgstr "Pon"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:655
+#: zephyr-project-manager/includes/strings.php:217
+msgid "Tue"
+msgstr "Uto"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:656
+#: zephyr-project-manager/includes/strings.php:218
+msgid "Wed"
+msgstr "Sri"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:657
+#: zephyr-project-manager/includes/strings.php:219
+msgid "Thu"
+msgstr "Čet"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:658
+#: zephyr-project-manager/includes/strings.php:220
+msgid "Fri"
+msgstr "Pet"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Core.php:659
+#: zephyr-project-manager/includes/strings.php:221
+msgid "Sat"
+msgstr "Sub"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/CustomFields.php:76
+#: zephyr-project-manager/includes/strings.php:113
+msgid "Text Field"
+msgstr "Tekstualno polje"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/CustomFields.php:81
+#: zephyr-project-manager/includes/strings.php:114
+msgid "Number Field"
+msgstr "Brojevno polje"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/CustomFields.php:86
+#: zephyr-project-manager/includes/strings.php:115
+msgid "Date Field"
+msgstr "Datumsko polje"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/CustomFields.php:91
+#: zephyr-project-manager/includes/strings.php:116
+msgid "Select Field"
+msgstr "Izborno polje"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/CustomFields.php:96
+#: zephyr-project-manager/includes/strings.php:168
+msgid "Textarea"
+msgstr "Tekstualna površina"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/CustomFields.php:101
+msgid "Checkbox (True / False)"
+msgstr "Da / ne polje"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/CustomFields.php:139
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/CustomFields.php:145
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/CustomFields.php:148
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/CustomFields.php:154
+#: zephyr-project-manager-pro/views/custom_fields.php:125
+#: zephyr-project-manager-pro/views/custom_fields.php:186
+#: zephyr-project-manager/includes/strings.php:158
+msgid "Default Value"
+msgstr "Zadana vrijednost"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/CustomFields.php:142
+msgid "Min Range"
+msgstr "Minimalni opseg"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/CustomFields.php:142
+msgid "Max Range"
+msgstr "Maksimalni opseg"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/CustomFields.php:157
+msgid "Checked by Default"
+msgstr "Standardno izabrano"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/CustomFields.php:323
+#: zephyr-project-manager-pro/views/custom_fields.php:160
+#: zephyr-project-manager-pro/views/custom_fields.php:213
+#: zephyr-project-manager/includes/strings.php:156
+msgid "Required"
+msgstr "Obavezno"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/CustomFields.php:355
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/CustomFields.php:391
+msgid "Select Custom Field"
+msgstr "Izaberi dodatna polja"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/CustomFields.php:410
+msgid "Text"
+msgstr "Tekst"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/CustomFields.php:413
+msgid "Number"
+msgstr "Broj"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/CustomFields.php:416
+msgid "Date"
+msgstr "Datum"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/CustomFields.php:419
+msgid "Select"
+msgstr "Odaberi"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/CustomFields.php:445
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/CustomFields.php:454
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/CustomFields.php:463
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/CustomFields.php:472
+#: zephyr-project-manager-pro/templates/frontend/task-single.php:234
+#: zephyr-project-manager-pro/views/custom_fields.php:71
+#: zephyr-project-manager-pro/views/custom_fields.php:99
+#: zephyr-project-manager/templates/parts/new_task.php:183
+#: zephyr-project-manager/templates/parts/task-single.php:188
+msgid "Add Custom Field"
+msgstr "Dodaj dodatno polje"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/CustomFields.php:764
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/CustomFields.php:801
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/CustomFields.php:913
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/CustomFields.php:925
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Pages.php:668
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Pages.php:679
+msgid "No value"
+msgstr "Nema vrijednosti"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/CustomFields.php:772
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/CustomFields.php:811
+msgid "Yes"
+msgstr "Da"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/CustomFields.php:772
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/CustomFields.php:811
+msgid "No"
+msgstr "No"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Frontend.php:80
+msgid ""
+"The template file you have selected does not exist. Please navigate to "
+"Zephyr > Settings > Frontend Settings and choose a different \"Login Theme\" "
+"to fix this."
+msgstr ""
+"Template datoteka koju ste izabrali ne postoji. Molim idite na Zephyr > "
+"Podešavanja > Podešavanje Frontend-a i izaberi drugu \"Login temu\" da bi "
+"ste popravili."
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Frontend.php:212
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Pages.php:251
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Pages.php:252
+#: zephyr-project-manager-pro/views/asana-main.php:24
+#: zephyr-project-manager-pro/views/asana-main.php:37
+#: zephyr-project-manager-pro/views/welcome.php:19
+#: zephyr-project-manager/templates/premium.php:19
+msgid "Asana Integration"
+msgstr "Asana integracija"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Kanban.php:331
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Kanban.php:443
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Kanban.php:600
+#: zephyr-project-manager-pro/templates/frontend/task-single.php:275
+msgid "Unassigned"
+msgstr "Odjavljen"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Kanban.php:354
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Kanban.php:462
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Kanban.php:627
+#: zephyr-project-manager-pro/templates/frontend/task-single.php:103
+#: zephyr-project-manager/templates/parts/task_view.php:105
+msgid "Delete Task"
+msgstr "Obriši zadatak"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Kanban.php:356
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Kanban.php:464
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Kanban.php:629
+#: zephyr-project-manager-pro/templates/project-page-template.php:214
+#: zephyr-project-manager/templates/parts/page_footer.php:41
+msgid "Copy to Project"
+msgstr "Kopiraj u projekat"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Kanban.php:358
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Kanban.php:466
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Kanban.php:631
+msgid "View Task"
+msgstr "Vidi zadatak"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Kanban.php:393
+#: zephyr-project-manager-pro/views/kanban.php:103
+msgid "Copy Column To Project"
+msgstr "Kopiraj kolonu u projekat"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Milestones.php:181
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Pages.php:1504
+#: zephyr-project-manager-pro/templates/frontend/milestones.php:31
+#: zephyr-project-manager-pro/views/milestones.php:23
+msgid "New Milestone"
+msgstr "Nova tačka napretka"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Milestones.php:186
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Milestones.php:236
+msgid "Add Project"
+msgstr "Dodaj projekat"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Milestones.php:194
+msgid "Create New Milestone"
+msgstr "Kreiraj novu tačku napretka"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Milestones.php:231
+msgid "Edit Milestone"
+msgstr "Izmjeni tačku napretka"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Milestones.php:372
+msgid "Date not set."
+msgstr "Datum nije postavljen."
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Milestones.php:378
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Milestones.php:389
+msgid "Due today."
+msgstr "Danas prispjeva."
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Milestones.php:383
+#, php-format
+msgid "Due %s months and %s days ago."
+msgstr "Do %s mjeseci i %s dana."
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Milestones.php:399
+#, php-format
+msgid "%s months and %s days from now."
+msgstr "%s mjeseci i %s dana od sad."
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Pages.php:242
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Pages.php:243
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Pages.php:1484
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Pages.php:1487
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Pages.php:1501
+#: zephyr-project-manager-pro/templates/frontend/milestones.php:19
+#: zephyr-project-manager-pro/templates/themes/default.php:90
+#: zephyr-project-manager-pro/templates/themes/ultimate.php:93
+#: zephyr-project-manager-pro/views/milestones.php:26
+#: zephyr-project-manager-pro/views/settings-frontend.php:233
+msgid "Milestones"
+msgstr "Tačke napretka"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Pages.php:260
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Pages.php:261
+msgid "Custom Fields & Templates"
+msgstr "Dodatna polja & Templejti"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Pages.php:269
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Pages.php:270
+#: zephyr-project-manager-pro/templates/frontend/reports.php:19
+msgid "Reports"
+msgstr "Izvještaji"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Pages.php:336
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Pages.php:459
+msgid "Clear"
+msgstr "Obriši"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Pages.php:337
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Pages.php:460
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Pages.php:647
+#: zephyr-project-manager-pro/views/custom_fields.php:48
+#: zephyr-project-manager-pro/views/settings-frontend.php:191
+#: zephyr-project-manager/includes/Core/Tasks.php:1105
+msgid "Default"
+msgstr "Standarno"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Pages.php:338
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Pages.php:461
+msgid "Select Color"
+msgstr "Odaberi boju"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Pages.php:339
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Pages.php:462
+msgid "Current Color"
+msgstr "Trenutna boja"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Pages.php:588
+msgid "Frontend Settings"
+msgstr "Frontend postavke"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Pages.php:589
+msgid "Asana Settings"
+msgstr "Asana postavke"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Pages.php:609
+msgid "Board (Kanban)"
+msgstr "Tabla (Kanban)"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Pages.php:610
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:117
+#: zephyr-project-manager/templates/parts/project-single.php:207
+msgid "Organize your work like sticky notes on a board."
+msgstr "Uredi svoj rad kao poruke na table."
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Pages.php:617
+msgid "Gantt Chart (Timeline)"
+msgstr ""
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Pages.php:618
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:121
+#: zephyr-project-manager/templates/parts/project-single.php:213
+#, fuzzy
+#| msgid "Organize your work in an itemized list."
+msgid "Organize your work with a visual Gantt timeline chart."
+msgstr "Uredi svoj rad na listi sa detaljima."
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Pages.php:628
+#: zephyr-project-manager-pro/templates/themes/default.php:272
+#: zephyr-project-manager-pro/templates/themes/modern.php:140
+#: zephyr-project-manager-pro/templates/themes/ultimate.php:44
+#: zephyr-project-manager-pro/templates/themes/ultimate.php:165
+#: zephyr-project-manager-pro/templates/themes/ultimate.php:317
+msgid "Search..."
+msgstr "Traži..."
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Pages.php:628
+#: zephyr-project-manager-pro/templates/themes/ultimate.php:45
+msgid "Enter a search term..."
+msgstr "Unesi traženu riječ..."
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Pages.php:635
+msgid "Go to Frontend"
+msgstr "Idi na Frontend"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Pages.php:645
+msgid "Select Template"
+msgstr "Odaberi Template"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Pages.php:1471
+msgid "Delete Milestone?"
+msgstr "Izbriši tačku napretka?"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Pages.php:1472
+msgid "Are you sure you would like to permanently delete this milestone?"
+msgstr "Da li ste sigurni da želite izbrisati ovu tačku napretka?"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Pages.php:1473
+msgid "Added"
+msgstr "Dodano"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Pages.php:1514
+msgid "No milestones added for this project"
+msgstr "Tačke napretka nisu dodane ovom projektu"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Report.php:89
+#, fuzzy
+#| msgid "Untitled Project"
+msgid "Untitled Report"
+msgstr "Projekat bez naslova"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Report.php:409
+#: zephyr-project-manager-pro/templates/frontend/files.php:64
+#: zephyr-project-manager/includes/Pages/Admin.php:249
+#: zephyr-project-manager/templates/files.php:65
+msgid "No Project"
+msgstr "Nema projekta"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Report.php:410
+#: zephyr-project-manager-pro/templates/frontend/projects.php:81
+#: zephyr-project-manager/includes/strings.php:81
+#: zephyr-project-manager/templates/projects.php:91
+#: zephyr-project-manager/templates/projects.php:101
+#: zephyr-project-manager/templates/projects.php:115
+msgid "All Projects"
+msgstr "Svi projekti"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Report.php:445
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Report.php:500
+#, fuzzy
+#| msgid "New File"
+msgid "New Line"
+msgstr "Nova datoteka"
+
+#: zephyr-project-manager-pro/includes/ZephyrProjectManager/Report.php:456
+#, fuzzy
+#| msgid "Copy Shortcode"
+msgid "Shortcode"
+msgstr "Kopiraj Kratki kod"
+
+#: zephyr-project-manager-pro/templates/frontend/calendar.php:19
+#: zephyr-project-manager-pro/templates/themes/default.php:108
+#: zephyr-project-manager-pro/templates/themes/ultimate.php:111
+#: zephyr-project-manager-pro/views/settings-frontend.php:241
+#: zephyr-project-manager/includes/Pages/Admin.php:934
+#: zephyr-project-manager/includes/Pages/Admin.php:935
+#: zephyr-project-manager/templates/calendar.php:24
+msgid "Calendar"
+msgstr "Kalendar"
+
+#: zephyr-project-manager-pro/templates/frontend/calendar.php:26
+#: zephyr-project-manager-pro/templates/frontend/calendar.php:36
+#: zephyr-project-manager-pro/templates/frontend/calendar.php:46
+#: zephyr-project-manager-pro/templates/frontend/calendar.php:56
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:478
+#: zephyr-project-manager-pro/templates/frontend/projects.php:29
+#: zephyr-project-manager-pro/views/custom_fields.php:149
+#: zephyr-project-manager-pro/views/custom_fields.php:203
+#: zephyr-project-manager/templates/calendar.php:31
+#: zephyr-project-manager/templates/calendar.php:41
+#: zephyr-project-manager/templates/calendar.php:51
+#: zephyr-project-manager/templates/calendar.php:61
+#: zephyr-project-manager/templates/parts/project-single.php:340
+#: zephyr-project-manager/templates/projects.php:27
+msgid "All"
+msgstr "Sve"
+
+#: zephyr-project-manager-pro/templates/frontend/calendar.php:34
+#: zephyr-project-manager-pro/templates/frontend/task-single.php:161
+#: zephyr-project-manager-pro/templates/frontend/task-single.php:281
+#: zephyr-project-manager/templates/calendar.php:39
+#: zephyr-project-manager/templates/parts/new_task.php:71
+#: zephyr-project-manager/templates/parts/task-edit-modal.php:76
+#: zephyr-project-manager/templates/parts/task-single.php:112
+msgid "Team"
+msgstr "Tim"
+
+#: zephyr-project-manager-pro/templates/frontend/calendar.php:54
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:192
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:243
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:493
+#: zephyr-project-manager-pro/templates/frontend/task-single.php:166
+#: zephyr-project-manager-pro/templates/project-page-template.php:160
+#: zephyr-project-manager/templates/calendar.php:59
+#: zephyr-project-manager/templates/parts/new_task.php:94
+#: zephyr-project-manager/templates/parts/project-single.php:109
+#: zephyr-project-manager/templates/parts/project-single.php:386
+#: zephyr-project-manager/templates/parts/project-view.php:145
+#: zephyr-project-manager/templates/parts/task-edit-modal.php:97
+#: zephyr-project-manager/templates/parts/task-single.php:125
+msgid "Status"
+msgstr "Stanje"
+
+#: zephyr-project-manager-pro/templates/frontend/calendar.php:57
+#: zephyr-project-manager/templates/calendar.php:62
+msgid "Incompleted"
+msgstr "Nezavršen"
+
+#: zephyr-project-manager-pro/templates/frontend/dashboard.php:49
+#: zephyr-project-manager-pro/templates/themes/default.php:63
+#: zephyr-project-manager-pro/templates/themes/modern.php:17
+#: zephyr-project-manager-pro/templates/themes/ultimate.php:66
+#: zephyr-project-manager-pro/views/settings-frontend.php:221
+#: zephyr-project-manager/includes/Pages/Admin.php:63
+#: zephyr-project-manager/includes/Pages/Admin.php:894
+#: zephyr-project-manager/includes/Pages/Admin.php:895
+#: zephyr-project-manager/templates/dashboard.php:59
+msgid "Dashboard"
+msgstr "Nadzorna tabla"
+
+#: zephyr-project-manager-pro/templates/frontend/dashboard.php:63
+msgid "New User Task Applications"
+msgstr "Nove aplikacije korisničkih zadataka"
+
+#: zephyr-project-manager-pro/templates/frontend/dashboard.php:88
+#: zephyr-project-manager-pro/templates/frontend/dashboard.php:93
+#: zephyr-project-manager-pro/templates/frontend/dashboard.php:98
+#: zephyr-project-manager-pro/templates/frontend/dashboard.php:114
+#: zephyr-project-manager-pro/templates/frontend/dashboard.php:119
+#: zephyr-project-manager-pro/templates/frontend/dashboard.php:124
+#: zephyr-project-manager-pro/templates/frontend/dashboard.php:129
+#: zephyr-project-manager/templates/dashboard.php:124
+#: zephyr-project-manager/templates/dashboard.php:129
+#: zephyr-project-manager/templates/dashboard.php:134
+#: zephyr-project-manager/templates/dashboard.php:147
+#: zephyr-project-manager/templates/dashboard.php:152
+#: zephyr-project-manager/templates/dashboard.php:157
+#: zephyr-project-manager/templates/dashboard.php:162
+msgid "View All"
+msgstr "Pregledaj sve"
+
+#: zephyr-project-manager-pro/templates/frontend/dashboard.php:107
+#: zephyr-project-manager/templates/dashboard.php:141
+msgid "User Overview"
+msgstr "Korisnički pregled"
+
+#: zephyr-project-manager-pro/templates/frontend/dashboard.php:137
+#: zephyr-project-manager/templates/dashboard.php:169
+msgid "Daily Tasks"
+msgstr "Dnevni zadaci"
+
+#: zephyr-project-manager-pro/templates/frontend/dashboard.php:200
+msgid ""
+"Welcome to your Dashboard. To add projects to the dashboard and keep track "
+"of important projects, navigate to the Projects page and click on the "
+"options button for the project and select the option \"Add to Dashboard\"."
+msgstr ""
+"Dobrodošli na kontrolnu ploču. Da bi ste dodali projekte na kontrolnu ploču "
+"i pratili bitne projekte, otiđite do Projekti  stranice i pritisnite opcije "
+"za projekat i odaberite \"Dodaj na kontrolnu ploču\"."
+
+#: zephyr-project-manager-pro/templates/frontend/files.php:31
+#: zephyr-project-manager/includes/Pages/Admin.php:918
+msgid "File Manager"
+msgstr "Menadžer datoteka"
+
+#: zephyr-project-manager-pro/templates/frontend/files.php:36
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:367
+#: zephyr-project-manager-pro/templates/frontend/task-single.php:347
+#: zephyr-project-manager/templates/files.php:35
+#: zephyr-project-manager/templates/parts/project-single.php:263
+#: zephyr-project-manager/templates/parts/task-single.php:279
+msgid "Upload Files"
+msgstr "Upload datoteka"
+
+#: zephyr-project-manager-pro/templates/frontend/files.php:40
+#: zephyr-project-manager/templates/files.php:40
+msgid "All Files"
+msgstr "Sve datoteke"
+
+#: zephyr-project-manager-pro/templates/frontend/files.php:60
+#: zephyr-project-manager/includes/Pages/Admin.php:231
+#: zephyr-project-manager/templates/files.php:61
+msgid "No Task"
+msgstr "Nema zadatka"
+
+#: zephyr-project-manager-pro/templates/frontend/files.php:99
+#: zephyr-project-manager/templates/files.php:101
+msgid "No Files"
+msgstr "Nema datoteka"
+
+#: zephyr-project-manager-pro/templates/frontend/login.php:45
+msgid "Login Required"
+msgstr "Login obavezan"
+
+#: zephyr-project-manager-pro/templates/frontend/login.php:46
+msgid "Please log in to view this page."
+msgstr "Molimo logujte se da bi ste pregledali ovu stranicu."
+
+#: zephyr-project-manager-pro/templates/frontend/login.php:49
+msgid "Incorrect login details. Please try again."
+msgstr "Netačni podaci za prijavu. Molimo pokušajte opet."
+
+#: zephyr-project-manager-pro/templates/frontend/login.php:55
+#: zephyr-project-manager-pro/templates/frontend/login.php:56
+#: zephyr-project-manager-pro/templates/project-page-template.php:272
+#: zephyr-project-manager-pro/templates/project-page-template.php:273
+msgid "Username"
+msgstr "Korisničko ime"
+
+#: zephyr-project-manager-pro/templates/frontend/login.php:60
+#: zephyr-project-manager-pro/templates/frontend/login.php:61
+#: zephyr-project-manager-pro/templates/project-page-template.php:282
+#: zephyr-project-manager-pro/templates/project-page-template.php:283
+msgid "Password"
+msgstr "Lozinka"
+
+#: zephyr-project-manager-pro/templates/frontend/login.php:65
+msgid "OR"
+msgstr "OR"
+
+#: zephyr-project-manager-pro/templates/frontend/login.php:67
+#: zephyr-project-manager-pro/templates/frontend/login.php:68
+#: zephyr-project-manager-pro/templates/project-page-template.php:290
+#: zephyr-project-manager-pro/templates/project-page-template.php:291
+#: zephyr-project-manager/templates/edit_members.php:119
+#: zephyr-project-manager/templates/edit_members.php:120
+msgid "Unique ID"
+msgstr "Jedinstveni ID"
+
+#: zephyr-project-manager-pro/templates/frontend/login.php:74
+msgid "Log In"
+msgstr "Loguj se"
+
+#: zephyr-project-manager-pro/templates/frontend/login.php:77
+msgid "Back to Home"
+msgstr "Nazad na početak"
+
+#: zephyr-project-manager-pro/templates/frontend/login.php:80
+msgid "You do not have access to this page"
+msgstr "Nemate pristup ovoj stranici"
+
+#: zephyr-project-manager-pro/templates/frontend/milestones.php:24
+#: zephyr-project-manager-pro/views/milestones.php:31
+msgid "All Milestones"
+msgstr "Sve tačke napretka"
+
+#: zephyr-project-manager-pro/templates/frontend/milestones.php:25
+#: zephyr-project-manager-pro/views/milestones.php:32
+msgid "Active Milestones"
+msgstr "Aktivne tačke napretka"
+
+#: zephyr-project-manager-pro/templates/frontend/milestones.php:26
+#: zephyr-project-manager-pro/views/milestones.php:33
+msgid "Completed Milestones"
+msgstr "Završene tačke napretka"
+
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:28
+msgid "This project does not exist or has been deleted."
+msgstr "Ovaj projekat ne postoji ili je izbrisan."
+
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:64
+#: zephyr-project-manager/templates/parts/project-single.php:46
+msgid "Sorry, you do not have access to this project."
+msgstr "Žao mi je, nemaš pristup ovom projektu."
+
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:94
+#: zephyr-project-manager/templates/parts/project-single.php:182
+#, fuzzy
+#| msgid "Type"
+msgid "Type: "
+msgstr "Tip"
+
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:100
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:116
+#: zephyr-project-manager/templates/parts/project-single.php:188
+#: zephyr-project-manager/templates/parts/project-single.php:204
+#, fuzzy
+#| msgid "Kanban Boards"
+msgid "Kanban (Board)"
+msgstr "Kanban Table"
+
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:103
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:120
+#: zephyr-project-manager/templates/parts/project-single.php:191
+#: zephyr-project-manager/templates/parts/project-single.php:210
+msgid "Gantt (Timeline)"
+msgstr ""
+
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:113
+#: zephyr-project-manager/includes/Core/Projects.php:1091
+#: zephyr-project-manager/templates/parts/project-single.php:201
+msgid "Organize your work in an itemized list."
+msgstr "Uredi svoj rad na listi sa detaljima."
+
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:126
+#: zephyr-project-manager-pro/templates/frontend/task-single.php:89
+msgid "Copy Link"
+msgstr "Kopiraj link"
+
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:127
+#: zephyr-project-manager-pro/templates/frontend/task-single.php:88
+msgid "Like"
+msgstr "Kao"
+
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:128
+#: zephyr-project-manager-pro/templates/frontend/task-single.php:90
+msgid "More Options"
+msgstr "Više opcija"
+
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:134
+#: zephyr-project-manager/includes/Core/Projects.php:514
+msgid "Export Project"
+msgstr "Izvezi projekat"
+
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:137
+#: zephyr-project-manager/includes/Core/Projects.php:522
+msgid "Add to Dashboard"
+msgstr "Dodaj na kontrolnu ploču"
+
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:138
+#: zephyr-project-manager/includes/Core/Projects.php:505
+msgid "Delete Project"
+msgstr "Izbrišite projekat"
+
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:151
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:380
+#: zephyr-project-manager/includes/Core/Members.php:164
+#: zephyr-project-manager/templates/parts/project-single.php:74
+#: zephyr-project-manager/templates/parts/project-single.php:275
+#: zephyr-project-manager/templates/teams_and_members.php:40
+msgid "Members"
+msgstr "Članovi"
+
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:152
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:436
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:548
+#: zephyr-project-manager/templates/parts/project-single.php:75
+#: zephyr-project-manager/templates/parts/project-single.php:435
+#: zephyr-project-manager/templates/progress.php:17
+msgid "Progress"
+msgstr "Napredak"
+
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:198
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:263
+#: zephyr-project-manager-pro/templates/project-page-template.php:174
+#: zephyr-project-manager/includes/Base/AjaxHandler.php:982
+#: zephyr-project-manager/includes/Core/Projects.php:1068
+#: zephyr-project-manager/templates/categories.php:24
+#: zephyr-project-manager/templates/parts/project-single.php:131
+#: zephyr-project-manager/templates/parts/project-view.php:150
+#: zephyr-project-manager/templates/projects.php:105
+msgid "Categories"
+msgstr "Kategorije"
+
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:209
+#: zephyr-project-manager/includes/Base/AjaxHandler.php:990
+#: zephyr-project-manager/templates/parts/project-view.php:158
+msgid "No categories assigned"
+msgstr "Nema dodijeljenih kategorija"
+
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:245
+#: zephyr-project-manager-pro/templates/frontend/task-single.php:168
+#: zephyr-project-manager/templates/parts/new_task.php:96
+#: zephyr-project-manager/templates/parts/project-single.php:111
+#: zephyr-project-manager/templates/parts/task-edit-modal.php:99
+#: zephyr-project-manager/templates/parts/task-single.php:127
+msgid "Select Status"
+msgstr "Odaberi stanje"
+
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:252
+#: zephyr-project-manager/templates/parts/project-single.php:118
+#, fuzzy
+#| msgid "Select Assignees"
+msgid "Project Assignees"
+msgstr "Odaberi izvršioce"
+
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:254
+#: zephyr-project-manager/templates/parts/project-single.php:120
+#, fuzzy
+#| msgid "Select Assignees"
+msgid "Select Project Assignees"
+msgstr "Odaberi izvršioce"
+
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:270
+#, php-format
+msgid "There are no categories yet. You can create categories %s here %s"
+msgstr "Nema kategorija trenutno. Možete kreirati kategorije %s ovdje %s"
+
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:275
+#: zephyr-project-manager/includes/Core/Projects.php:1069
+#: zephyr-project-manager/templates/parts/project-single.php:142
+msgid "Select Categories"
+msgstr "Odaberi kategorije"
+
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:327
+#: zephyr-project-manager/templates/parts/task-list.php:60
+msgid "There are no tasks yet."
+msgstr "Nema zadataka zasad."
+
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:357
+#: zephyr-project-manager-pro/templates/frontend/task-single.php:338
+#: zephyr-project-manager/templates/parts/project-single.php:254
+#: zephyr-project-manager/templates/parts/task-single.php:269
+#: zephyr-project-manager/templates/parts/task_view.php:226
+msgid "Write comment..."
+msgstr "Napiši komentar..."
+
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:393
+#: zephyr-project-manager/templates/parts/project-single.php:287
+msgid "Save Members"
+msgstr "Sačuvaj članove"
+
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:439
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:449
+#: zephyr-project-manager-pro/templates/project-page-template.php:380
+#: zephyr-project-manager-pro/views/reports.php:66
+#: zephyr-project-manager/templates/parts/project-single.php:300
+#: zephyr-project-manager/templates/parts/project-single.php:310
+msgid "Project Status"
+msgstr "Stanje projekta"
+
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:453
+#: zephyr-project-manager/templates/parts/project-single.php:314
+msgid "Update Status"
+msgstr "Ažuriraj stanje"
+
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:475
+#: zephyr-project-manager/templates/parts/project-single.php:337
+msgid "Filter by member"
+msgstr "Filtriraj po članovima"
+
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:494
+#: zephyr-project-manager/templates/parts/project-single.php:387
+msgid "Date Completed"
+msgstr "Datum završavanja"
+
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:572
+msgid "Project Settings"
+msgstr "Postavke projekta"
+
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:581
+#: zephyr-project-manager/templates/parts/project-single.php:467
+#: zephyr-project-manager/templates/settings.php:145
+msgid "New Tasks"
+msgstr "Novi zadaci"
+
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:588
+#: zephyr-project-manager/includes/Api/Emails.php:171
+#: zephyr-project-manager/includes/Api/Emails.php:172
+#: zephyr-project-manager/templates/parts/project-single.php:474
+msgid "Task Completed"
+msgstr "Zadatak završen"
+
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:595
+#: zephyr-project-manager/templates/parts/project-single.php:481
+msgid "Project Comments"
+msgstr "Komentari projekta"
+
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:602
+#: zephyr-project-manager/templates/parts/project-single.php:488
+msgid "Task Comments"
+msgstr "Komentari zadatka"
+
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:609
+#: zephyr-project-manager/templates/parts/project-single.php:495
+msgid "Assigned Task Comments"
+msgstr "Dodijeljeni komentari zadatka"
+
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:616
+#: zephyr-project-manager/templates/parts/project-single.php:502
+msgid "New Subtasks"
+msgstr "Novi podzadaci"
+
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:623
+#: zephyr-project-manager/templates/parts/project-single.php:509
+msgid "Weekly Update"
+msgstr "Sedmično ažuriranje"
+
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:626
+#: zephyr-project-manager-pro/templates/frontend/settings.php:117
+#: zephyr-project-manager-pro/views/settings-asana.php:46
+#: zephyr-project-manager-pro/views/settings-frontend.php:278
+#: zephyr-project-manager/templates/edit_members.php:169
+#: zephyr-project-manager/templates/parts/project-single.php:515
+#: zephyr-project-manager/templates/settings.php:183
+#: zephyr-project-manager/templates/settings.php:319
+#: zephyr-project-manager/templates/settings.php:334
+msgid "Save Settings"
+msgstr "Spasi postavke"
+
+#: zephyr-project-manager-pro/templates/frontend/project-single.php:633
+msgid "You do not currently have access to view this project."
+msgstr "Trenutno nemate pristup pregledu ovog projekta."
+
+#: zephyr-project-manager-pro/templates/frontend/projects.php:30
+#: zephyr-project-manager/templates/projects.php:28
+msgid "All projects"
+msgstr "Svi projekti"
+
+#: zephyr-project-manager-pro/templates/frontend/projects.php:69
+#: zephyr-project-manager/templates/projects.php:87
+#, fuzzy
+#| msgid "View All Projects"
+msgid "View Archived Projects"
+msgstr "Pregledaj sve projekte"
+
+#: zephyr-project-manager-pro/templates/frontend/projects.php:70
+#: zephyr-project-manager/templates/projects.php:88
+msgid "Grid"
+msgstr "Mreža"
+
+#: zephyr-project-manager-pro/templates/frontend/projects.php:88
+#: zephyr-project-manager/templates/projects.php:83
+msgid "Showing"
+msgstr "Prikazivanje"
+
+#: zephyr-project-manager-pro/templates/frontend/projects.php:88
+#: zephyr-project-manager/templates/projects.php:83
+msgid "of"
+msgstr "od"
+
+#: zephyr-project-manager-pro/templates/frontend/projects.php:88
+#: zephyr-project-manager/templates/projects.php:83
+msgid "pages"
+msgstr "stranice"
+
+#: zephyr-project-manager-pro/templates/frontend/projects.php:101
+#: zephyr-project-manager/includes/Base/AjaxHandler.php:2128
+msgid "No projects found..."
+msgstr "Nema pronađenih projekata..."
+
+#: zephyr-project-manager-pro/templates/frontend/projects.php:107
+#: zephyr-project-manager/templates/projects.php:137
+#: zephyr-project-manager/templates/teams_and_members.php:52
+msgid "Previous"
+msgstr "Prethodno"
+
+#: zephyr-project-manager-pro/templates/frontend/projects.php:108
+#: zephyr-project-manager/templates/projects.php:138
+#: zephyr-project-manager/templates/teams_and_members.php:53
+msgid "Next"
+msgstr "Iduće"
+
+#: zephyr-project-manager-pro/templates/frontend/projects.php:123
+#: zephyr-project-manager/templates/projects.php:157
+msgid "Choose a category"
+msgstr "Odaberi Kategoriju"
+
+#: zephyr-project-manager-pro/templates/frontend/reports.php:21
+#: zephyr-project-manager-pro/views/reports.php:26
+#: zephyr-project-manager-pro/views/reports.php:29
+msgid "Project Report"
+msgstr "Izvještaj Projekta"
+
+#: zephyr-project-manager-pro/templates/frontend/reports.php:25
+#: zephyr-project-manager-pro/views/reports.php:35
+msgid ""
+"Generate a detailed project report by clicking on the 'Generate Report' "
+"button above."
+msgstr ""
+"Generiši detaljan izvještaj projekta klikom na 'Generiši Izvještaj' iznad."
+
+#: zephyr-project-manager-pro/templates/frontend/reports.php:36
+#: zephyr-project-manager-pro/views/reports.php:46
+#, fuzzy
+#| msgid "Create Custom Field"
+msgid "Create Customized Chart"
+msgstr "Kreiraj Dodatno Polje"
+
+#: zephyr-project-manager-pro/templates/frontend/settings.php:55
+#: zephyr-project-manager-pro/templates/frontend/settings.php:60
+#: zephyr-project-manager/templates/settings.php:86
+msgid "Profile Settings"
+msgstr "Postavke Profila"
+
+#: zephyr-project-manager-pro/templates/frontend/settings.php:75
+#: zephyr-project-manager-pro/templates/frontend/users.php:65
+#: zephyr-project-manager/templates/edit_members.php:113
+#: zephyr-project-manager/templates/edit_members.php:114
+#: zephyr-project-manager/templates/settings.php:123
+#: zephyr-project-manager/templates/settings.php:124
+msgid "Email Address"
+msgstr "Email Adresa"
+
+#: zephyr-project-manager-pro/templates/frontend/settings.php:77
+#: zephyr-project-manager/templates/edit_members.php:124
+#: zephyr-project-manager/templates/settings.php:136
+msgid "Email Notifications"
+msgstr "Email Notifikacije"
+
+#: zephyr-project-manager-pro/templates/frontend/settings.php:87
+#: zephyr-project-manager/templates/edit_members.php:128
+#: zephyr-project-manager/templates/settings.php:140
+msgid "All Activity"
+msgstr "Sve Aktivnosti"
+
+#: zephyr-project-manager-pro/templates/frontend/settings.php:100
+#: zephyr-project-manager/templates/edit_members.php:133
+msgid "Task Reminders"
+msgstr "Napomene zadataka"
+
+#: zephyr-project-manager-pro/templates/frontend/settings.php:113
+#: zephyr-project-manager/includes/Api/Emails.php:163
+#: zephyr-project-manager/templates/edit_members.php:143
+#: zephyr-project-manager/templates/settings.php:155
+msgid "Weekly Updates"
+msgstr "Sedmična ažuriranja"
+
+#: zephyr-project-manager-pro/templates/frontend/task-single.php:27
+#: zephyr-project-manager/templates/parts/task-single.php:25
+msgid "This task does not exist or has been deleted."
+msgstr "Ovaj zadatak ne postoji ili je izbrisan."
+
+#: zephyr-project-manager-pro/templates/frontend/task-single.php:97
+#: zephyr-project-manager/templates/parts/task_view.php:115
+msgid "Convert to Project"
+msgstr "Pretvori u Projekat"
+
+#: zephyr-project-manager-pro/templates/frontend/task-single.php:100
+#: zephyr-project-manager/templates/parts/task_view.php:107
+msgid "Export Task"
+msgstr "Izvezi Zadatak"
+
+#: zephyr-project-manager-pro/templates/frontend/task-single.php:153
+#: zephyr-project-manager/templates/parts/new_task.php:63
+#: zephyr-project-manager/templates/parts/task-edit-modal.php:67
+#: zephyr-project-manager/templates/parts/task-single.php:104
+msgid "Select Assignees"
+msgstr "Odaberi izvršioce"
+
+#: zephyr-project-manager-pro/templates/frontend/task-single.php:177
+msgid "Recurring/Daily Task"
+msgstr "Ponavljajući/Dnevni Zadatak"
+
+#: zephyr-project-manager-pro/templates/frontend/task-single.php:182
+#: zephyr-project-manager/templates/parts/new_task.php:106
+#: zephyr-project-manager/templates/parts/task-edit-modal.php:110
+#: zephyr-project-manager/templates/parts/task-single.php:137
+msgid "Set Recurrence"
+msgstr "Postavi ponavljanje"
+
+#: zephyr-project-manager-pro/templates/frontend/task-single.php:185
+#: zephyr-project-manager/includes/Core/Tasks.php:876
+#: zephyr-project-manager/templates/parts/new_task.php:109
+#: zephyr-project-manager/templates/parts/task-edit-modal.php:113
+#: zephyr-project-manager/templates/parts/task-single.php:140
+#: zephyr-project-manager/templates/parts/task_view.php:96
+msgid "Daily"
+msgstr "Dnevno"
+
+#: zephyr-project-manager-pro/templates/frontend/task-single.php:186
+#: zephyr-project-manager/templates/parts/new_task.php:110
+#: zephyr-project-manager/templates/parts/task-edit-modal.php:114
+#: zephyr-project-manager/templates/parts/task-single.php:141
+msgid "Weekly"
+msgstr "Sedmično"
+
+#: zephyr-project-manager-pro/templates/frontend/task-single.php:187
+#: zephyr-project-manager/templates/parts/new_task.php:111
+#: zephyr-project-manager/templates/parts/task-edit-modal.php:115
+#: zephyr-project-manager/templates/parts/task-single.php:142
+msgid "Monthly"
+msgstr "Mjesečno"
+
+#: zephyr-project-manager-pro/templates/frontend/task-single.php:188
+#: zephyr-project-manager/templates/parts/new_task.php:112
+#: zephyr-project-manager/templates/parts/task-edit-modal.php:116
+#: zephyr-project-manager/templates/parts/task-single.php:143
+msgid "Annually"
+msgstr "Godišnje"
+
+#: zephyr-project-manager-pro/templates/frontend/task-single.php:193
+#: zephyr-project-manager/templates/parts/new_task.php:117
+#: zephyr-project-manager/templates/parts/task-edit-modal.php:121
+#: zephyr-project-manager/templates/parts/task-single.php:148
+msgid "Repeat Every"
+msgstr "Ponavljaj svaki"
+
+#: zephyr-project-manager-pro/templates/frontend/task-single.php:195
+#: zephyr-project-manager/templates/parts/new_task.php:119
+#: zephyr-project-manager/templates/parts/task-edit-modal.php:123
+#: zephyr-project-manager/templates/parts/task-single.php:150
+msgid "Days to Repeat"
+msgstr "Dana do ponavljanja"
+
+#: zephyr-project-manager-pro/templates/frontend/task-single.php:206
+#: zephyr-project-manager-pro/templates/frontend/task-single.php:212
+#: zephyr-project-manager-pro/templates/frontend/task-single.php:218
+#: zephyr-project-manager-pro/templates/frontend/task-single.php:224
+#: zephyr-project-manager/templates/parts/new_task.php:130
+#: zephyr-project-manager/templates/parts/new_task.php:136
+#: zephyr-project-manager/templates/parts/new_task.php:142
+#: zephyr-project-manager/templates/parts/new_task.php:148
+#: zephyr-project-manager/templates/parts/task-edit-modal.php:134
+#: zephyr-project-manager/templates/parts/task-edit-modal.php:140
+#: zephyr-project-manager/templates/parts/task-edit-modal.php:146
+#: zephyr-project-manager/templates/parts/task-edit-modal.php:152
+#: zephyr-project-manager/templates/parts/task-single.php:161
+#: zephyr-project-manager/templates/parts/task-single.php:167
+#: zephyr-project-manager/templates/parts/task-single.php:173
+#: zephyr-project-manager/templates/parts/task-single.php:179
+msgid "Expires On (leave empty for no expiration):"
+msgstr "Ističe na (ostavi prazno ako nema isteka):"
+
+#: zephyr-project-manager-pro/templates/frontend/task-single.php:235
+#: zephyr-project-manager/templates/parts/task-single.php:202
+msgid "Add Files"
+msgstr "Dodaj Datoteku"
+
+#: zephyr-project-manager-pro/templates/frontend/task-single.php:269
+#: zephyr-project-manager-pro/templates/project-page-template.php:75
+#: zephyr-project-manager/templates/parts/task_view.php:143
+msgid "Assigned To"
+msgstr "Dodijeljeno"
+
+#: zephyr-project-manager-pro/templates/frontend/task-single.php:314
+msgid ""
+"No subtasks. Create a subtask by clicking on the \"New Subtask\" button "
+"above."
+msgstr ""
+"Nema podzadataka. Kreiraj podzadatak klikom na \"Novi Podzadatak\" iznad."
+
+#: zephyr-project-manager-pro/templates/frontend/task-single.php:366
+msgid "You do not currently have access to view this task."
+msgstr "Trenutno nemate pristup ovom zadataku."
+
+#: zephyr-project-manager-pro/templates/frontend/tasks.php:29
+#: zephyr-project-manager/templates/tasks.php:71
+msgid "My Tasks"
+msgstr "Moji zadaci"
+
+#: zephyr-project-manager-pro/templates/frontend/tasks.php:30
+#: zephyr-project-manager/templates/tasks.php:72
+msgid "All Tasks"
+msgstr "Svi zadaci"
+
+#: zephyr-project-manager-pro/templates/frontend/tasks.php:31
+#: zephyr-project-manager/includes/Api/Emails.php:144
+#: zephyr-project-manager/includes/Pages/Admin.php:1075
+msgid "Pending"
+msgstr "Na čekanju"
+
+#: zephyr-project-manager-pro/templates/frontend/tasks.php:39
+msgid "Filter By"
+msgstr "Filtriraj po"
+
+#: zephyr-project-manager-pro/templates/frontend/tasks.php:41
+msgid "Date Created"
+msgstr "Datum kreiranja"
+
+#: zephyr-project-manager-pro/templates/frontend/tasks.php:43
+msgid "Due Date (Decending)"
+msgstr ""
+
+#: zephyr-project-manager-pro/templates/frontend/tasks.php:44
+msgid "Due Date (Ascending)"
+msgstr ""
+
+#: zephyr-project-manager-pro/templates/frontend/tasks.php:46
+msgid "Alphabetical"
+msgstr "Abecedno"
+
+#: zephyr-project-manager-pro/templates/frontend/users.php:33
+#: zephyr-project-manager-pro/templates/themes/default.php:118
+#: zephyr-project-manager-pro/templates/themes/modern.php:52
+#: zephyr-project-manager-pro/templates/themes/ultimate.php:121
+msgid "Members & Users"
+msgstr "Članovi & Korisnici"
+
+#: zephyr-project-manager-pro/templates/frontend/users.php:38
+#: zephyr-project-manager-pro/templates/project-page-template.php:306
+msgid "Create New User"
+msgstr "Kreiraj novog Korisnika"
+
+#: zephyr-project-manager-pro/templates/frontend/users.php:57
+msgid "Edit"
+msgstr "Uredi"
+
+#: zephyr-project-manager-pro/templates/frontend/users.php:63
+msgid "Information"
+msgstr "Informacije"
+
+#: zephyr-project-manager-pro/templates/frontend/users.php:69
+#: zephyr-project-manager/includes/Base/AjaxHandler.php:963
+#: zephyr-project-manager/includes/Core/Projects.php:537
+#: zephyr-project-manager/includes/Pages/Admin.php:400
+#: zephyr-project-manager/includes/Pages/Admin.php:488
+#: zephyr-project-manager/templates/dashboard.php:94
+#: zephyr-project-manager/templates/parts/project-view.php:125
+msgid "Active Tasks"
+msgstr "Aktivni zadaci"
+
+#: zephyr-project-manager-pro/templates/frontend/users.php:89
+msgid "All Assigned Tasks"
+msgstr "Svi dodijeljeni zadaci"
+
+#: zephyr-project-manager-pro/templates/project-page-template.php:64
+msgid "About this task"
+msgstr "O ovom zadatku"
+
+#: zephyr-project-manager-pro/templates/project-page-template.php:95
+msgid "Recurrence"
+msgstr "Ponavljanje"
+
+#: zephyr-project-manager-pro/templates/project-page-template.php:126
+msgid "Go To Task"
+msgstr "Idi na Zadatak"
+
+#: zephyr-project-manager-pro/templates/project-page-template.php:146
+msgid "About this project"
+msgstr "O ovom Projektu"
+
+#: zephyr-project-manager-pro/templates/project-page-template.php:197
+msgid "Go To Project"
+msgstr "Idi na Projekat"
+
+#: zephyr-project-manager-pro/templates/project-page-template.php:277
+#: zephyr-project-manager-pro/templates/project-page-template.php:278
+msgid "Email"
+msgstr "Email"
+
+#: zephyr-project-manager-pro/templates/project-page-template.php:301
+msgid "New Zephyr User"
+msgstr "Novi Zephyr Korisnik"
+
+#: zephyr-project-manager-pro/templates/project-page-template.php:320
+#: zephyr-project-manager/templates/parts/page_footer.php:73
+msgid "Task Attachments"
+msgstr "Dodaci Zadacima"
+
+#: zephyr-project-manager-pro/templates/project-page-template.php:332
+#: zephyr-project-manager/templates/parts/task-edit-modal.php:35
+msgid "Edit Task"
+msgstr "Uredi Zadatak"
+
+#: zephyr-project-manager-pro/templates/project-page-template.php:361
+#, fuzzy
+#| msgid "Select Project"
+msgid "Select Project or Task"
+msgstr "Odaberi Projekat"
+
+#: zephyr-project-manager-pro/templates/project-page-template.php:370
+msgid "Upload"
+msgstr "Upload"
+
+#: zephyr-project-manager-pro/templates/project-page-template.php:378
+#: zephyr-project-manager-pro/views/reports.php:64
+msgid "New Project Status Report"
+msgstr "Novi Izvještaj Stanja Projekta"
+
+#: zephyr-project-manager-pro/templates/project-page-template.php:379
+#: zephyr-project-manager-pro/templates/project-page-template.php:380
+#: zephyr-project-manager-pro/views/asana-project.php:59
+#: zephyr-project-manager-pro/views/reports.php:65
+#: zephyr-project-manager-pro/views/reports.php:66
+msgid "Title"
+msgstr "Naslov"
+
+#: zephyr-project-manager-pro/templates/project-page-template.php:400
+#: zephyr-project-manager-pro/views/reports.php:86
+msgid "Chart"
+msgstr "Grafikon"
+
+#: zephyr-project-manager-pro/templates/project-page-template.php:403
+#: zephyr-project-manager-pro/views/reports.php:89
+msgid "Extra Info"
+msgstr "Dodatne informacije"
+
+#: zephyr-project-manager-pro/templates/themes/default.php:40
+#: zephyr-project-manager-pro/templates/themes/ultimate.php:53
+msgid "Home"
+msgstr "Početna"
+
+#: zephyr-project-manager-pro/templates/themes/default.php:128
+#: zephyr-project-manager-pro/templates/themes/ultimate.php:131
+#: zephyr-project-manager-pro/views/settings-frontend.php:249
+msgid "Reporting"
+msgstr "Izvještavanje"
+
+#: zephyr-project-manager-pro/templates/themes/default.php:258
+#: zephyr-project-manager-pro/templates/themes/modern.php:102
+#: zephyr-project-manager-pro/templates/themes/ultimate.php:274
+msgid "Page not found"
+msgstr "Stranica nije pronađena"
+
+#: zephyr-project-manager-pro/templates/themes/default.php:275
+#: zephyr-project-manager-pro/templates/themes/modern.php:143
+#: zephyr-project-manager-pro/templates/themes/ultimate.php:320
+msgid "Enter a search term above to search for related projects and tasks."
+msgstr ""
+"Unesite traženu riječ iznad da bi ste pretražili povezane Projekte i Zadatke."
+
+#: zephyr-project-manager-pro/templates/themes/default.php:292
+#: zephyr-project-manager-pro/templates/themes/modern.php:159
+#: zephyr-project-manager-pro/templates/themes/ultimate.php:337
+#: zephyr-project-manager/templates/parts/page_footer.php:24
+msgid "Select File"
+msgstr "Odaberi Datoteku"
+
+#: zephyr-project-manager-pro/templates/themes/modern.php:38
+msgid "Calender"
+msgstr "Kalendar"
+
+#: zephyr-project-manager-pro/templates/themes/modern.php:123
+#: zephyr-project-manager-pro/templates/themes/ultimate.php:304
+msgid "Go to Backend"
+msgstr "Idi na Backend"
+
+#: zephyr-project-manager-pro/templates/themes/modern.php:134
+#: zephyr-project-manager/includes/Core/Tasks.php:1591
+msgid "Create Subtask"
+msgstr "Kreiraj podzadatak"
+
+#: zephyr-project-manager-pro/templates/themes/ultimate.php:157
+msgid "Search"
+msgstr "Pretraži"
+
+#: zephyr-project-manager-pro/views/asana-main.php:27
+#, php-format
+msgid ""
+"You need to add your Asana Personal Access Token to get started with the "
+"Asana Integration. You can get an Asana token by clicking on the button "
+"below and then pasting the code you receive in the text field %s here. %s"
+msgstr ""
+"Morate dodati vaš Asana Osobni Token Pristupa da bi ste započeli sa Asana "
+"Integracijom. Asana Token možete dobiti klikom na dugme ispod i kopiranjem "
+"koda kojeg ste dobili u tekstualno polje %s ovdje .%s"
+
+#: zephyr-project-manager-pro/views/asana-main.php:39
+#, php-format
+msgid ""
+"The Personal Access Token provided does not seem to be correct. Please make "
+"sure that you have entered the token correctly %s here. %s"
+msgstr ""
+"Dostavljeni Osobni Pristupni Token nije ispravan. Molimo provjerite da se "
+"unijeli ispravan Token %s ovdje. %s"
+
+#: zephyr-project-manager-pro/views/asana-main.php:45
+msgid "Asana Workspaces"
+msgstr "Asana Radna Mjesta"
+
+#: zephyr-project-manager-pro/views/asana-project.php:53
+msgid "Back to Asana Projects"
+msgstr "Natrag u Asana Projekte"
+
+#: zephyr-project-manager-pro/views/asana-project.php:57
+msgid "Import Asana Task"
+msgstr "Uvezi Asana Zadatke"
+
+#: zephyr-project-manager-pro/views/asana-project.php:63
+msgid "Select project to import the task to"
+msgstr "Odaberi projekat da unesete podatke iz odabranog"
+
+#: zephyr-project-manager-pro/views/asana-project.php:76
+msgid "Import Task"
+msgstr "Uvezi Zadatak"
+
+#: zephyr-project-manager-pro/views/asana-project.php:80
+msgid "Export Asana Tasks"
+msgstr "Izvezi Asana Zadatke"
+
+#: zephyr-project-manager-pro/views/asana-project.php:90
+#: zephyr-project-manager/templates/tasks.php:46
+msgid "Export Tasks"
+msgstr "Izvezi Zadatke"
+
+#: zephyr-project-manager-pro/views/asana-project.php:94
+msgid "Import Asana Tasks"
+msgstr "Uvezi Asana Zadatke"
+
+#: zephyr-project-manager-pro/views/custom_fields.php:26
+#: zephyr-project-manager-pro/views/custom_fields.php:171
+#: zephyr-project-manager/includes/strings.php:154
+msgid "New Custom Field"
+msgstr "Novo dodatno polje"
+
+#: zephyr-project-manager-pro/views/custom_fields.php:27
+#: zephyr-project-manager/templates/premium.php:28
+msgid "Custom Fields"
+msgstr "Dodatna polja"
+
+#: zephyr-project-manager-pro/views/custom_fields.php:27
+msgid ""
+"Allows you to create custom fields to provide more information for your "
+"tasks and suite your projects needs"
+msgstr ""
+"Dozvoljava da kreirate dodatna polja da prikažete više informacija o "
+"zadatcima, odnosno kako odgovara vašim uslovima projekta"
+
+#: zephyr-project-manager-pro/views/custom_fields.php:36
+#: zephyr-project-manager-pro/views/custom_fields.php:62
+msgid "New Task Template"
+msgstr "Novi Predložak Zadatka"
+
+#: zephyr-project-manager-pro/views/custom_fields.php:39
+#: zephyr-project-manager/templates/premium.php:67
+msgid "Task Templates"
+msgstr "Predlošci Zadataka"
+
+#: zephyr-project-manager-pro/views/custom_fields.php:39
+msgid ""
+"Allows you to create reusable templates with custom field configurations for "
+"your tasks"
+msgstr ""
+"Dozvoljava vam kreirati višekratne templejte sa dodatnim konfiguracijama "
+"polja za vaš zadatak"
+
+#: zephyr-project-manager-pro/views/custom_fields.php:64
+#: zephyr-project-manager-pro/views/custom_fields.php:86
+msgid "Template Name"
+msgstr "Naziv Predloška"
+
+#: zephyr-project-manager-pro/views/custom_fields.php:67
+#: zephyr-project-manager-pro/views/custom_fields.php:89
+msgid "Template Fields"
+msgstr "Polja Predloška"
+
+#: zephyr-project-manager-pro/views/custom_fields.php:67
+#: zephyr-project-manager-pro/views/custom_fields.php:89
+msgid "Drag fields up or down to change the order"
+msgstr "Povuci polja na gore ili dole da bi promijenio raspored"
+
+#: zephyr-project-manager-pro/views/custom_fields.php:69
+#: zephyr-project-manager-pro/views/custom_fields.php:94
+msgid "Add custom fields here"
+msgstr "Dodaj dodatna polja ovdje"
+
+#: zephyr-project-manager-pro/views/custom_fields.php:72
+msgid "Create Task Template"
+msgstr "Kreiraj Predložak Zadatka"
+
+#: zephyr-project-manager-pro/views/custom_fields.php:84
+msgid "Edit Task Template"
+msgstr "Uredi Predložak Zadatka"
+
+#: zephyr-project-manager-pro/views/custom_fields.php:91
+msgid ""
+"This is the default task template and has no additional custom fields and "
+"cannot be edited."
+msgstr ""
+"Ovo je zadani predložak zadatka i nema dodatna polja i ne može biti uređen."
+
+#: zephyr-project-manager-pro/views/custom_fields.php:109
+msgid "Edit Custom Field"
+msgstr "Uredi Dodano polje"
+
+#: zephyr-project-manager-pro/views/custom_fields.php:135
+#: zephyr-project-manager-pro/views/custom_fields.php:194
+msgid "Select Field Values"
+msgstr "Odaberi Vrijednosti Polja"
+
+#: zephyr-project-manager-pro/views/custom_fields.php:139
+#: zephyr-project-manager-pro/views/custom_fields.php:198
+#: zephyr-project-manager/includes/strings.php:157
+msgid "Add Option"
+msgstr "Dodaj Opciju"
+
+#: zephyr-project-manager-pro/views/custom_fields.php:147
+#: zephyr-project-manager-pro/views/custom_fields.php:201
+msgid "Only Visible To"
+msgstr "Vidljivo samo"
+
+#: zephyr-project-manager-pro/views/custom_fields.php:165
+msgid "Update Custom Field"
+msgstr "Ažuriraj Dodatna Polja"
+
+#: zephyr-project-manager-pro/views/custom_fields.php:218
+#: zephyr-project-manager/includes/strings.php:155
+msgid "Create Custom Field"
+msgstr "Kreiraj Dodatno Polje"
+
+#: zephyr-project-manager-pro/views/kanban.php:123
+msgid "Add Column"
+msgstr "Dodaj Kolonu"
+
+#: zephyr-project-manager-pro/views/milestones.php:26
+msgid ""
+"Use milestones to mark specific points along a project timeline or group "
+"multiple projects into a larger, long-term project."
+msgstr ""
+"Koristi Tačke napretka za označavanje specifičnih tačaka na vremenskoj "
+"liniji projekata ili da bi grupisao više projekata u veći dugoročni projekat."
+
+#: zephyr-project-manager-pro/views/settings-asana.php:31
+msgid "Asana Personal Access Token"
+msgstr "Asana Osobni Pristupni Token"
+
+#: zephyr-project-manager-pro/views/settings-asana.php:32
+msgid "Personal Access Token"
+msgstr "Osobni Pristupni Token"
+
+#: zephyr-project-manager-pro/views/settings-asana.php:35
+msgid "Workspaces"
+msgstr "Radna Mjesta"
+
+#: zephyr-project-manager-pro/views/settings-asana.php:47
+msgid "Get personal token for Asana"
+msgstr "Uzmi osobni token od Asana"
+
+#: zephyr-project-manager-pro/views/settings-frontend.php:110
+#: zephyr-project-manager-pro/views/settings-frontend.php:119
+msgid "Enable Frontend Project Manager"
+msgstr "Omogući Frontend Projekt Menadžer"
+
+#: zephyr-project-manager-pro/views/settings-frontend.php:121
+msgid "Frontend Project Manager Page"
+msgstr "Stranica Frontend Projekt Menadžera"
+
+#: zephyr-project-manager-pro/views/settings-frontend.php:128
+#, fuzzy
+#| msgid "Frontend Page Options"
+msgid "Custom Frontend Pages"
+msgstr "Opcije stranice prednjeg sučelja"
+
+#: zephyr-project-manager-pro/views/settings-frontend.php:135
+msgid "Site Logo"
+msgstr "Logo Stranice"
+
+#: zephyr-project-manager-pro/views/settings-frontend.php:140
+msgid "Reset"
+msgstr "Resetuj"
+
+#: zephyr-project-manager-pro/views/settings-frontend.php:144
+#: zephyr-project-manager-pro/views/settings-frontend.php:145
+msgid "Logo Link"
+msgstr "Link Logo-a"
+
+#: zephyr-project-manager-pro/views/settings-frontend.php:149
+#: zephyr-project-manager-pro/views/settings-frontend.php:150
+msgid "Logout Link"
+msgstr "Link za odjavu"
+
+#: zephyr-project-manager-pro/views/settings-frontend.php:153
+#: zephyr-project-manager/templates/settings.php:282
+msgid "Primary Color"
+msgstr "Glavna Boja"
+
+#: zephyr-project-manager-pro/views/settings-frontend.php:156
+msgid "Secondary Color"
+msgstr "Sekundarna Boja"
+
+#: zephyr-project-manager-pro/views/settings-frontend.php:159
+msgid "Login Page"
+msgstr "Stranica za prijavu"
+
+#: zephyr-project-manager-pro/views/settings-frontend.php:165
+msgid "Normal"
+msgstr "Normalno"
+
+#: zephyr-project-manager-pro/views/settings-frontend.php:171
+msgid "Zephyr Features"
+msgstr "Zephyr Karakteristike"
+
+#: zephyr-project-manager-pro/views/settings-frontend.php:178
+msgid "Custom Template"
+msgstr "Dodatni Predložak"
+
+#: zephyr-project-manager-pro/views/settings-frontend.php:186
+msgid "Frontend Theme"
+msgstr "Teme za prednje sučelje (frontend)"
+
+#: zephyr-project-manager-pro/views/settings-frontend.php:197
+msgid "Ultimate"
+msgstr "Ultimativni"
+
+#: zephyr-project-manager-pro/views/settings-frontend.php:203
+msgid "Modern"
+msgstr "Moderni"
+
+#: zephyr-project-manager-pro/views/settings-frontend.php:211
+#, fuzzy
+#| msgid "Frontend Page Options"
+msgid "Default Frontend Page"
+msgstr "Opcije stranice prednjeg sučelja"
+
+#: zephyr-project-manager-pro/views/settings-frontend.php:218
+msgid "Frontend Page Options"
+msgstr "Opcije stranice prednjeg sučelja"
+
+#: zephyr-project-manager-pro/views/settings-frontend.php:245
+msgid "Users & Members"
+msgstr "Korisnici i Članovi"
+
+#: zephyr-project-manager-pro/views/settings-frontend.php:256
+msgid "Other Settings"
+msgstr "Druge Postavke"
+
+#: zephyr-project-manager-pro/views/settings-frontend.php:259
+msgid "Allow users to apply for tasks that require approval"
+msgstr "Dozvoli korisnicima da primjene zadakte kojima je potrebno odobravanje"
+
+#: zephyr-project-manager-pro/views/settings-frontend.php:264
+msgid "Do not show tasks that have already been applied for"
+msgstr "Ne prikazuj zadatke koji su već podneseni"
+
+#: zephyr-project-manager-pro/views/settings-frontend.php:268
+#: zephyr-project-manager-pro/views/settings-frontend.php:269
+msgid "Task Application User Message"
+msgstr "Poruka Aplikacije Korisničkih Zadataka"
+
+#: zephyr-project-manager-pro/views/settings-frontend.php:273
+#: zephyr-project-manager-pro/views/settings-frontend.php:274
+msgid "Approval Notifications Email Address"
+msgstr "Email adresa za Obavijesti o odobrenju"
+
+#: zephyr-project-manager-pro/zephyr-project-manager-pro.php:133
+#: zephyr-project-manager/includes/Pages/Admin.php:150
+msgid "logged in"
+msgstr "prijavljen"
+
+#: zephyr-project-manager-pro/zephyr-project-manager-pro.php:150
+msgid ""
+"Please install Zephyr Project Manager (Basic) from the WordPress plugin "
+"repository to use the Pro version and the Extensions."
+msgstr ""
+"Molimo instalirajte Zephyr Projekt Menađer (Osnovni) iz WordPress Plugin "
+"spremišta da bi koristili Pro verziju i njegove ekstenzije."
+
+#: zephyr-project-manager-pro/zephyr-project-manager-pro.php:158
+msgid ""
+"Zephyr Project Manager Pro requires you to have the latest basic version "
+"installed and it seems like you are currently using a slightly outdated "
+"version. Please update the basic version to use the pro features."
+msgstr ""
+"Zephyr Project Menađer Pro zahtijeva zadnju osnovnu verziju instaliranu i "
+"čini se da vi trenutno koristite stariju verziju. Molimo ažurirajte osnovnu "
+"verziju da bi ste koristili Pro mogućnosti."
+
+#: zephyr-project-manager/includes/Api/Emails.php:157
+msgid "View in WordPress"
+msgstr "Pregledaj u WordPress-u"
+
+#: zephyr-project-manager/includes/Api/Emails.php:173
+#, php-format
+msgid "The task %s has been completed."
+msgstr "Zadatak %s je završen."
+
+#: zephyr-project-manager/includes/Api/Emails.php:177
+#: zephyr-project-manager/includes/Api/Emails.php:299
+#: zephyr-project-manager/includes/Api/Emails.php:360
+#: zephyr-project-manager/templates/email_templates/task_email.php:169
+msgid "View Task in WordPress"
+msgstr "Pregledaj zadatak u WordPress-u"
+
+#: zephyr-project-manager/includes/Api/Emails.php:217
+msgid "You have the following due tasks this week"
+msgstr "Ove sedmice imate sljedeće zadatke"
+
+#: zephyr-project-manager/includes/Api/Emails.php:240
+#: zephyr-project-manager/templates/email_templates/task_notifications_email.php:141
+msgid "View Tasks in WordPress"
+msgstr "Pregledaj zadatke u WordPress-u"
+
+#: zephyr-project-manager/includes/Api/Emails.php:294
+msgid "New task created by"
+msgstr "Novi zadatak kreiran od strane"
+
+#: zephyr-project-manager/includes/Api/Emails.php:296
+msgid "has created a new task"
+msgstr "je kreirao novi zadatak"
+
+#: zephyr-project-manager/includes/Api/Emails.php:317
+#: zephyr-project-manager/includes/Api/Emails.php:318
+msgid "New Task Assigned to You"
+msgstr "Novi Zadatak dodijeljen vama"
+
+#: zephyr-project-manager/includes/Api/Emails.php:319
+msgid "has assigned a new task to you"
+msgstr "je dodijelio novi zadatak vama"
+
+#: zephyr-project-manager/includes/Api/Emails.php:322
+msgid "New Task Created"
+msgstr "Novi Zadatak kreiran"
+
+#: zephyr-project-manager/includes/Api/Emails.php:323
+msgid "A new task has been created"
+msgstr "Novi zadatak je kreiran"
+
+#: zephyr-project-manager/includes/Api/Emails.php:332
+#: zephyr-project-manager/includes/Api/Emails.php:368
+msgid "Assigned to Team:"
+msgstr "Dodijeljeno Timu:"
+
+#: zephyr-project-manager/includes/Api/Emails.php:355
+#, php-format
+msgid "New subtask in %s: %s"
+msgstr "Novi podzadatak u %s: %s"
+
+#: zephyr-project-manager/includes/Api/Emails.php:357
+#, php-format
+msgid "A new subtask has been created for the task %s called %s"
+msgstr "Novi podzadatak je kreiran za zadatak %s nazvan %s"
+
+#: zephyr-project-manager/includes/Api/Emails.php:512
+#: zephyr-project-manager/includes/Api/Emails.php:513
+#: zephyr-project-manager/includes/Api/Emails.php:517
+#: zephyr-project-manager/includes/Api/Emails.php:522
+msgid "New Comment"
+msgstr "Novi Komentar"
+
+#: zephyr-project-manager/includes/Api/Emails.php:518
+msgid "New Task Comment"
+msgstr "Novi Komentar Zadatka"
+
+#: zephyr-project-manager/includes/Api/Emails.php:519
+#, php-format
+msgid "%s has commented on the task %s"
+msgstr "%s je komentirao na zadatak %s"
+
+#: zephyr-project-manager/includes/Api/Emails.php:523
+msgid "New Project Comment"
+msgstr "Novi Komentar Projekta"
+
+#: zephyr-project-manager/includes/Api/Emails.php:524
+#, php-format
+msgid "%s has commented on the project %s"
+msgstr "%s je komentirao na projekat %s"
+
+#: zephyr-project-manager/includes/Base/AjaxHandler.php:648
+#, php-format
+msgid "%s updated the priority of %s to %s"
+msgstr "%s ažurirao priroritet sa %s na %s"
+
+#: zephyr-project-manager/includes/Base/AjaxHandler.php:967
+#: zephyr-project-manager/templates/parts/project-view.php:129
+msgid "Message"
+msgstr "Poruka"
+
+#: zephyr-project-manager/includes/Base/AjaxHandler.php:1310
+#, php-format
+msgid "%s copied the task %s"
+msgstr "%s je kopirao zadatak %s"
+
+#: zephyr-project-manager/includes/Base/AjaxHandler.php:2023
+#: zephyr-project-manager/includes/Base/AjaxHandler.php:2074
+#: zephyr-project-manager/includes/strings.php:152
+msgid "No results found..."
+msgstr "Nema pronađenih rezultata..."
+
+#: zephyr-project-manager/includes/Base/AjaxHandler.php:2504
+#: zephyr-project-manager/includes/Core/Members.php:290
+#: zephyr-project-manager/templates/edit_members.php:162
+msgid "Allow Access"
+msgstr "Dozvoli pristup"
+
+#: zephyr-project-manager/includes/Base/AjaxHandler.php:2520
+msgid "Remaining Tasks"
+msgstr "Preostali Zadaci"
+
+#: zephyr-project-manager/includes/Base/AjaxHandler.php:2570
+msgid "Percentage Complete"
+msgstr "Procentualno Završeno"
+
+#: zephyr-project-manager/includes/Base/AjaxHandler.php:2748
+#, fuzzy
+#| msgid "Edit Task"
+msgid "Edit Subtask"
+msgstr "Uredi Zadatak"
+
+#: zephyr-project-manager/includes/Base/AjaxHandler.php:2752
+#: zephyr-project-manager/includes/Base/AjaxHandler.php:2753
+#: zephyr-project-manager/includes/Core/Tasks.php:1567
+#: zephyr-project-manager/includes/Core/Tasks.php:1568
+#: zephyr-project-manager/templates/tasks.php:102
+#: zephyr-project-manager/templates/tasks.php:103
+msgid "Subtask Name"
+msgstr "Ime Podzadatka"
+
+#: zephyr-project-manager/includes/Base/AjaxHandler.php:2756
+#: zephyr-project-manager/includes/Base/AjaxHandler.php:2757
+#: zephyr-project-manager/includes/Core/Tasks.php:1572
+#: zephyr-project-manager/includes/Core/Tasks.php:1573
+#, fuzzy
+#| msgid "Task Description"
+msgid "Subtask Description"
+msgstr "Opis zadatka"
+
+#: zephyr-project-manager/includes/Base/AjaxHandler.php:2763
+#: zephyr-project-manager/includes/Base/AjaxHandler.php:2764
+#: zephyr-project-manager/includes/Core/Tasks.php:1579
+#: zephyr-project-manager/includes/Core/Tasks.php:1580
+#, fuzzy
+#| msgid "Start Date"
+msgid "Start"
+msgstr "Datum početka"
+
+#: zephyr-project-manager/includes/Base/AjaxHandler.php:2769
+#: zephyr-project-manager/includes/Base/AjaxHandler.php:2770
+#: zephyr-project-manager/includes/Core/Tasks.php:1585
+#: zephyr-project-manager/includes/Core/Tasks.php:1586
+#, fuzzy
+#| msgid "Tue"
+msgid "Due"
+msgstr "Uto"
+
+#: zephyr-project-manager/includes/Base/SettingsLinks.php:22
+#, php-format
+msgid "%s Settings %s"
+msgstr "%s Postavke %s"
+
+#: zephyr-project-manager/includes/Base/SettingsLinks.php:23
+#, php-format
+msgid "%s Purchase Premium %s"
+msgstr "%s Kupi Premium %s"
+
+#: zephyr-project-manager/includes/Core/Activity.php:97
+#, php-format
+msgid "%s created a new project called %s"
+msgstr "%s kreirao novi projekat nazvan %s"
+
+#: zephyr-project-manager/includes/Core/Activity.php:102
+#, php-format
+msgid "%s deleted the project %s"
+msgstr "%s izbrisao projekat %s"
+
+#: zephyr-project-manager/includes/Core/Activity.php:110
+#, php-format
+msgid "%s changed the name of the project %s to %s"
+msgstr "%s promijenio ime projekta %s u %s"
+
+#: zephyr-project-manager/includes/Core/Activity.php:119
+#, php-format
+msgid "%s changed the name of the task %s to %s"
+msgstr "%s promijenio ime zadatka %s u %s"
+
+#: zephyr-project-manager/includes/Core/Activity.php:133
+#, php-format
+msgid "%s changed the due date of the task %s to %s"
+msgstr "%s promijenio rok zadatka  %s u %s"
+
+#: zephyr-project-manager/includes/Core/Activity.php:142
+#, php-format
+msgid "%s changed the description of the project %s"
+msgstr "%s promijenio opis projekta %s"
+
+#: zephyr-project-manager/includes/Core/Activity.php:148
+#, php-format
+msgid "%s created a new task called %s"
+msgstr "%s kreirao novi zadatak nazvan %s"
+
+#: zephyr-project-manager/includes/Core/Activity.php:158
+#, php-format
+msgid "%s assigned the task %s to %s"
+msgstr "%s dodijelio zadatak %s korisniku %s"
+
+#: zephyr-project-manager/includes/Core/Activity.php:164
+#, php-format
+msgid "%s deleted the task %s"
+msgstr "%s izbrisao zadatak %s"
+
+#: zephyr-project-manager/includes/Core/Categories.php:162
+#: zephyr-project-manager/includes/Core/Utillities.php:1507
+#: zephyr-project-manager/templates/categories.php:23
+#: zephyr-project-manager/templates/parts/page_header.php:67
+msgid "New Category"
+msgstr "Nova Kategorija"
+
+#: zephyr-project-manager/includes/Core/Categories.php:174
+#: zephyr-project-manager/includes/Core/Categories.php:194
+#: zephyr-project-manager/includes/Core/Categories.php:216
+#: zephyr-project-manager/templates/categories.php:83
+msgid "Color"
+msgstr "Boja"
+
+#: zephyr-project-manager/includes/Core/Categories.php:177
+msgid "Create Category"
+msgstr "Kreiraj Kategoriju"
+
+#: zephyr-project-manager/includes/Core/Categories.php:187
+msgid "New Priority / Status"
+msgstr "Novi Prioritet / Stanje"
+
+#: zephyr-project-manager/includes/Core/Categories.php:198
+msgid "Create Priority"
+msgstr "Kreiraj Prioritet"
+
+#: zephyr-project-manager/includes/Core/Categories.php:208
+msgid "Edit Priority / Status"
+msgstr "Uredi Prioritet / Stanje"
+
+#: zephyr-project-manager/includes/Core/Members.php:176
+msgid "No members have been added to this team"
+msgstr "Nema korisnika koji su dodani u ovaj tim"
+
+#: zephyr-project-manager/includes/Core/Members.php:181
+#: zephyr-project-manager/templates/teams_and_members.php:116
+msgid "Edit Team"
+msgstr "Uredi Tim"
+
+#: zephyr-project-manager/includes/Core/Members.php:198
+msgid "Select Team"
+msgstr "Odaberi Tim"
+
+#: zephyr-project-manager/includes/Core/Message.php:91
+#: zephyr-project-manager/includes/Core/Utillities.php:182
+msgid "You have been mentioned in a comment"
+msgstr "Spomenti ste u komentaru"
+
+#: zephyr-project-manager/includes/Core/Message.php:95
+#, php-format
+msgid "You have been mentioned in a comment: %s"
+msgstr "Spomenti ste u komentaru: %s"
+
+#: zephyr-project-manager/includes/Core/Project.php:27
+msgid "Untitled Project"
+msgstr "Projekat bez naslova"
+
+#: zephyr-project-manager/includes/Core/Projects.php:437
+#: zephyr-project-manager/includes/Core/Tasks.php:613
+#, php-format
+msgid "Created by %s at %s today"
+msgstr "Kreiran od strane %s u %s danas"
+
+#: zephyr-project-manager/includes/Core/Projects.php:438
+#: zephyr-project-manager/includes/Core/Tasks.php:614
+#, php-format
+msgid "Created by %s on %s at %s"
+msgstr "Kreiran od strane %s na %s u %s"
+
+#: zephyr-project-manager/includes/Core/Projects.php:441
+#, php-format
+msgid "Created at %s today"
+msgstr "Kreiran u %s danas"
+
+#: zephyr-project-manager/includes/Core/Projects.php:442
+#, php-format
+msgid "Created on %s at %s"
+msgstr "Kreiran na %s u %s"
+
+#: zephyr-project-manager/includes/Core/Projects.php:507
+#, fuzzy
+#| msgid "Active Projects"
+msgid "Unarchive Project"
+msgstr "Aktivni projekti"
+
+#: zephyr-project-manager/includes/Core/Projects.php:509
+#, fuzzy
+#| msgid "Active Projects"
+msgid "Archive Project"
+msgstr "Aktivni projekti"
+
+#: zephyr-project-manager/includes/Core/Projects.php:517
+#: zephyr-project-manager/templates/parts/task_view.php:110
+#: zephyr-project-manager/templates/tasks.php:49
+msgid "Export to CSV"
+msgstr "Izvezi u CSV"
+
+#: zephyr-project-manager/includes/Core/Projects.php:518
+#: zephyr-project-manager/templates/parts/task_view.php:111
+#: zephyr-project-manager/templates/tasks.php:50
+msgid "Export to JSON"
+msgstr "Izvezi u JSON"
+
+#: zephyr-project-manager/includes/Core/Projects.php:541
+#: zephyr-project-manager/includes/Pages/Admin.php:404
+#: zephyr-project-manager/includes/Pages/Admin.php:492
+msgid "Messages"
+msgstr "Poruke"
+
+#: zephyr-project-manager/includes/Core/Projects.php:559
+msgid "There are no members assigned to this project."
+msgstr "Nema korisnika koji su dodijeljeni ovom projektu."
+
+#: zephyr-project-manager/includes/Core/Projects.php:728
+msgid "There are no projects yet."
+msgstr "Nema projekata trenutno."
+
+#: zephyr-project-manager/includes/Core/Projects.php:1062
+msgid "Create a new project"
+msgstr "Kreiraj novi projekat"
+
+#: zephyr-project-manager/includes/Core/Projects.php:1063
+msgid "Add a project name"
+msgstr "Dodaj ime projekta"
+
+#: zephyr-project-manager/includes/Core/Projects.php:1121
+msgid "Create Project"
+msgstr "Kreiraj Projekat"
+
+#: zephyr-project-manager/includes/Core/Projects.php:1124
+#, fuzzy
+#| msgid "Create Kanban-style board projects with the "
+msgid "Create Kanban-style board projects and Gantt chart projects with the "
+msgstr "Kreiraj tablu Kanban stila sa "
+
+#: zephyr-project-manager/includes/Core/Projects.php:1124
+msgid "Pro Version"
+msgstr "Pro Verzija"
+
+#: zephyr-project-manager/includes/Core/Projects.php:1543
+msgid "zpm-default-color"
+msgstr "zpm-zadana-boja"
+
+#: zephyr-project-manager/includes/Core/Task.php:36
+msgid "Untitled Task"
+msgstr "Neimenovan Zadatak"
+
+#: zephyr-project-manager/includes/Core/Tasks.php:1000
+msgid "results found in comments"
+msgstr "rezultati pronađeni u komentarima"
+
+#: zephyr-project-manager/includes/Core/Tasks.php:1477
+msgid "Repeats Daily"
+msgstr "Dnevno ponavljanje"
+
+#: zephyr-project-manager/includes/Core/Tasks.php:1496
+msgid "Repeats Weekly"
+msgstr "Sedmično ponavljanje"
+
+#: zephyr-project-manager/includes/Core/Tasks.php:1499
+msgid "Repeats Monthly"
+msgstr "Ponavljanje mjesečno"
+
+#: zephyr-project-manager/includes/Core/Tasks.php:1502
+msgid "Repeats Annually"
+msgstr "Ponavljanje godišnje"
+
+#: zephyr-project-manager/includes/Core/Utillities.php:183
+msgid "You have been mentioned in a comment: {messageText}"
+msgstr "Spomenuti ste u komentaru: {messageText}"
+
+#: zephyr-project-manager/includes/Core/Utillities.php:436
+msgid "No Priority"
+msgstr "Nema Prioriteta"
+
+#: zephyr-project-manager/includes/Core/Utillities.php:437
+#: zephyr-project-manager/includes/Core/Utillities.php:828
+msgid "Low"
+msgstr "Nisko"
+
+#: zephyr-project-manager/includes/Core/Utillities.php:438
+#: zephyr-project-manager/includes/Core/Utillities.php:833
+msgid "Medium"
+msgstr "Srednje"
+
+#: zephyr-project-manager/includes/Core/Utillities.php:439
+#: zephyr-project-manager/includes/Core/Utillities.php:838
+msgid "High"
+msgstr "Visoko"
+
+#: zephyr-project-manager/includes/Core/Utillities.php:440
+#: zephyr-project-manager/includes/Core/Utillities.php:843
+msgid "Critical"
+msgstr "Kritično"
+
+#: zephyr-project-manager/includes/Core/Utillities.php:690
+msgid "Coming Soon..."
+msgstr "Stiže uskoro..."
+
+#: zephyr-project-manager/includes/Core/Utillities.php:811
+msgid "Not Started"
+msgstr "Nije započeto"
+
+#: zephyr-project-manager/includes/Core/Utillities.php:816
+msgid "In Progress"
+msgstr "U toku"
+
+#: zephyr-project-manager/includes/Core/Utillities.php:1513
+#: zephyr-project-manager/templates/parts/page_header.php:71
+msgid "Premium"
+msgstr "Premium"
+
+#: zephyr-project-manager/includes/Core/Utillities.php:1513
+#: zephyr-project-manager/includes/Pages/Admin.php:993
+#: zephyr-project-manager/templates/parts/page_header.php:71
+msgid "Get Premium"
+msgstr "Uzmi Premium"
+
+#: zephyr-project-manager/includes/Pages/Admin.php:109
+msgid "Sorry, you do not have access to this page"
+msgstr "Žao nam je, ali nemate pristup ovoj stranici"
+
+#: zephyr-project-manager/includes/Pages/Admin.php:155
+msgid "logged out"
+msgstr "odjavljen"
+
+#: zephyr-project-manager/includes/Pages/Admin.php:747
+#: zephyr-project-manager/templates/activity.php:28
+msgid ""
+"There is no activity yet. Once there is, the activities will be displayed "
+"here."
+msgstr ""
+"Trenutno nema aktivnosti. Kada se pojave, vaše aktivnosti će biti prikazane "
+"ovdje."
+
+#: zephyr-project-manager/includes/Pages/Admin.php:867
+#: zephyr-project-manager/includes/Pages/Admin.php:868
+#, php-format
+msgid "%s Project Manager"
+msgstr "%s Projekt menadžer"
+
+#: zephyr-project-manager/includes/Pages/Admin.php:926
+#: zephyr-project-manager/includes/Pages/Admin.php:927
+msgid "Activity"
+msgstr "Aktivnosti"
+
+#: zephyr-project-manager/includes/Pages/Admin.php:942
+#: zephyr-project-manager/includes/Pages/Admin.php:943
+msgid "Categories, Priorities & Statuses"
+msgstr "Kategorije, Prioriteti i Statusi"
+
+#: zephyr-project-manager/includes/Pages/Admin.php:966
+#: zephyr-project-manager/includes/Pages/Admin.php:967
+msgid "Teams & Members"
+msgstr "Timovi i Članovi"
+
+#: zephyr-project-manager/includes/Pages/Admin.php:974
+#: zephyr-project-manager/includes/Pages/Admin.php:975
+#: zephyr-project-manager/templates/extensions.php:19
+msgid "Extensions"
+msgstr ""
+
+#: zephyr-project-manager/includes/Pages/Admin.php:982
+#: zephyr-project-manager/includes/Pages/Admin.php:983
+#: zephyr-project-manager/templates/help.php:46
+msgid "Help"
+msgstr "Pomoć"
+
+#: zephyr-project-manager/includes/Pages/Admin.php:992
+msgid "Zephyr Pro"
+msgstr "Zephyr Pro"
+
+#: zephyr-project-manager/includes/Pages/Admin.php:1033
+msgid "Zephyr Latest Projects"
+msgstr "Zephyr Najnoviji Projekti"
+
+#: zephyr-project-manager/includes/Pages/Admin.php:1041
+msgid "Zephyr Tasks"
+msgstr "Zephyr Zadaci"
+
+#: zephyr-project-manager/includes/Pages/Admin.php:1100
+msgid "View All Projects"
+msgstr "Pregledaj sve projekte"
+
+#: zephyr-project-manager/includes/Pages/Admin.php:1120
+msgid "There are no tasks to view at the moment."
+msgstr "Nema zadataka za pregledati u ovom trenutku."
+
+#: zephyr-project-manager/includes/Pages/Admin.php:1123
+msgid "My Tasks Due This Weeks"
+msgstr "Moji zadaci za ovu sedmicu"
+
+#: zephyr-project-manager/includes/Pages/Admin.php:1131
+#: zephyr-project-manager/templates/dashboard.php:109
+msgid "You have no tasks due this week"
+msgstr "Nemate zadataka za ovu sedmicu"
+
+#: zephyr-project-manager/includes/Pages/Admin.php:1134
+msgid "My Overdue Tasks"
+msgstr "Moji Zadaci preko roka"
+
+#: zephyr-project-manager/includes/Pages/Admin.php:1144
+msgid "You have no overdue tasks."
+msgstr "Nemate zadataka koji su prešli rok."
+
+#: zephyr-project-manager/includes/Pages/Admin.php:1148
+msgid "See All Tasks"
+msgstr "Pregledaj sve zadatke"
+
+#: zephyr-project-manager/includes/Pages/Admin.php:1183
+#, php-format
+msgid "Get started with Zephyr Project Manager now from %s here %s"
+msgstr "Krenite sa Zephyr Projekt Menadžerom od %s ovdje %s"
+
+#: zephyr-project-manager/includes/Pages/Admin.php:1195
+msgid ""
+"Thanks for using Zephyr Project Manager. If you enjoy it, could you please "
+"consider leaving a review? It would really mean the world to me!"
+msgstr ""
+"Hvala vam što ste koristili Zephyr Projekt Menadžer. Ako ste zadovoljni "
+"uslugom, da li bi ste ostavili recenziju? To bi mi stvarno značilo!"
+
+#: zephyr-project-manager/includes/Pages/Admin.php:1196
+#: zephyr-project-manager/templates/help.php:88
+msgid "Leave a Review"
+msgstr "Ostavite Recenziju"
+
+#: zephyr-project-manager/includes/Pages/Admin.php:1208
+#: zephyr-project-manager/templates/welcome.php:23
+msgid "Welcome to Zephyr Project Manager"
+msgstr "Dobrodošli u Zephyr Projekt Menadžer"
+
+#: zephyr-project-manager/includes/Pages/Admin.php:1210
+msgid ""
+"Thanks for using Zephyr Project Manager. If you experience any problems or "
+"have any feature requests, I would be more than happy to add them. Please "
+"contact me at dylanjkotze@gmail.com for any queries."
+msgstr ""
+"Hvala vam što ste koristili Zephyr Projekt Menadžer. Ako ste imali problema "
+"ili imate zahtjeve za unapređivanje, bio bih više nego zadovoljan da ih "
+"ostvarim. Molim kontaktirajte me na dylanjkotze@gmail.com za sve upite."
+
+#: zephyr-project-manager/includes/Zephyr.php:74
+#, fuzzy
+#| msgid "Project"
+msgid "Pro"
+msgstr "Projekat"
+
+#: zephyr-project-manager/includes/strings.php:5
+msgid ""
+"Are you sure you want to delete this task? This action cannot be undone."
+msgstr ""
+"Da li ste sigurni da želite obrisati ovaj zadatak? Ova akcija se ne može "
+"povratiti."
+
+#: zephyr-project-manager/includes/strings.php:82
+#, fuzzy
+#| msgid "Active Projects"
+msgid "Archived Projects"
+msgstr "Aktivni projekti"
+
+#: zephyr-project-manager/includes/strings.php:84
+msgid "Access updated"
+msgstr "Pristup osvježen"
+
+#: zephyr-project-manager/includes/strings.php:88
+#: zephyr-project-manager/includes/strings.php:89
+msgid "Deselect All"
+msgstr "Deselektuj sve"
+
+#: zephyr-project-manager/includes/strings.php:136
+#, fuzzy
+#| msgid "Projects Overview"
+msgid "Project Archived"
+msgstr "Pregled projekata"
+
+#: zephyr-project-manager/includes/strings.php:137
+#, fuzzy
+#| msgid "Project Name"
+msgid "Project Unarchived"
+msgstr "Naziv projekta"
+
+#: zephyr-project-manager/includes/strings.php:153
+msgid "No templates found..."
+msgstr "Nema pronađenih Templejta..."
+
+#: zephyr-project-manager/includes/strings.php:159
+msgid "Option Value"
+msgstr "Vrijednost opcije"
+
+#: zephyr-project-manager/includes/strings.php:162
+msgid "There is no chart data to show."
+msgstr "Nema grafikona za prikazati."
+
+#: zephyr-project-manager/includes/strings.php:163
+msgid "Are you sure you want to permanently delete this custom field?"
+msgstr "Da li ste sigurni da želite trajno izbrisati ovo dodatno polje?"
+
+#: zephyr-project-manager/includes/strings.php:164
+msgid "Are you sure you want to permanently delete this template?"
+msgstr "Da li ste sigurni da želite trajno izbrisati ovaj templejt?"
+
+#: zephyr-project-manager/includes/strings.php:165
+msgid "Shortcode copied to clipboard"
+msgstr "Kratki kod je kopiran u spremnik"
+
+#: zephyr-project-manager/includes/strings.php:167
+#, fuzzy
+#| msgid "Message"
+msgid "Edit Message"
+msgstr "Poruka"
+
+#: zephyr-project-manager/includes/strings.php:180
+msgid "Category"
+msgstr "Kategorija"
+
+#: zephyr-project-manager/includes/strings.php:181
+#, fuzzy
+#| msgid "Are you sure you want to delete this file?"
+msgid "Are you sure you want to delete this message?"
+msgstr "Da li ste sigurni da želite obrisati ovu datoteku?"
+
+#: zephyr-project-manager/includes/strings.php:182
+msgid ""
+"Are you sure you want to delete this priority / status? This action cannot "
+"be undone."
+msgstr ""
+"Da li ste sigurni da želite obrisati ovaj prioritet / stanje? Ova akcija se "
+"ne može povratiti."
+
+#: zephyr-project-manager/templates/activity.php:34
+msgid "Load More"
+msgstr "Učitaj više"
+
+#: zephyr-project-manager/templates/categories.php:33
+msgid "New Priority"
+msgstr "Novi Prioritet"
+
+#: zephyr-project-manager/templates/categories.php:34
+msgid "Priorities"
+msgstr "Prioriteti"
+
+#: zephyr-project-manager/templates/categories.php:50
+msgid "New Status"
+msgstr "Novo Stanje"
+
+#: zephyr-project-manager/templates/categories.php:51
+msgid "Statuses"
+msgstr "Statusi"
+
+#: zephyr-project-manager/templates/dashboard.php:66
+msgid "Projects Overview"
+msgstr "Pregled projekata"
+
+#: zephyr-project-manager/templates/dashboard.php:77
+msgid "Active Projects"
+msgstr "Aktivni projekti"
+
+#: zephyr-project-manager/templates/dashboard.php:83
+msgid "Tasks Overview"
+msgstr "Pregled zadataka"
+
+#: zephyr-project-manager/templates/dashboard.php:86
+msgid "Tasks Total"
+msgstr "Ukupno zadataka"
+
+#: zephyr-project-manager/templates/dashboard.php:100
+msgid "Tasks Due This Week"
+msgstr "Zadaci za ovu sedmicu"
+
+#: zephyr-project-manager/templates/dashboard.php:238
+#, php-format
+msgid ""
+"Welcome to the Dashboard. To add projects to the dashboard and keep track of "
+"important projects, navigate to the %s Projects %s page and click on the "
+"options button for the project, then select the option %s Add to Dashboard "
+"%s."
+msgstr ""
+"Dobrodošli u Kontrolnu ploču. Da bi dodali projekte i pratili bitne "
+"projekte, otiđite u %s Projekti %s i pritisnite na dugme za opcije , i "
+"izaberite opciju %s Dodaj u Kontrolnu Ploču %s."
+
+#: zephyr-project-manager/templates/dashboard.php:247
+#: zephyr-project-manager/templates/dashboard.php:252
+#: zephyr-project-manager/templates/help.php:112
+#: zephyr-project-manager/templates/help.php:117
+msgid "Support me on Patreon"
+msgstr "Podržite me na Patreon-u"
+
+#: zephyr-project-manager/templates/dashboard.php:248
+#: zephyr-project-manager/templates/help.php:113
+msgid ""
+"If you like the plugin and what I do and would like to help me improve the "
+"plugin more, please consider supporting me on Patreon. This would help a lot "
+"in being able to work on the plugin full-time and focus more on it to make "
+"it better and add new features. Thank you so much."
+msgstr ""
+"Ako vam se sviđa plugin i ono što radim i voljeli bi da unaprijedim plugin "
+"još više, molim vas podržite me na Patreon-u. Ovo bi mi pomoglo da radim na "
+"pluginu puno vrijeme i dopustilo bi mi da se više fokusiram na dodavanje "
+"novih mogućnosti u samom pluginu. Hvala vam puno."
+
+#: zephyr-project-manager/templates/devices.php:21
+msgid "Linked Devices"
+msgstr "Spojeni uređaji"
+
+#: zephyr-project-manager/templates/devices.php:21
+msgid ""
+"Displays all your linked mobile devices using the Zephyr Project Manager "
+"mobile app"
+msgstr ""
+"Prikazuje sve spojene mobilne uređaje koristeći Zephyr Projekt Menadžer na "
+"mobitelu"
+
+#: zephyr-project-manager/templates/devices.php:25
+#, php-format
+msgid ""
+"There are no devices linked to your website. You can download the Android "
+"app from the Play Store %s here to start managing your projects from your "
+"device and get more done. %s"
+msgstr ""
+"Nema uređaja povezanih na vašu stranicu. Možete preuzeti Android aplikaciju "
+"sa Play Trgovine %s ovdje da bi započeli upravljati vašim projektima sa "
+"mobitela %s"
+
+#: zephyr-project-manager/templates/edit_members.php:16
+msgid "Can't edit administrators"
+msgstr "Ne možete uređivati administratore"
+
+#: zephyr-project-manager/templates/edit_members.php:89
+msgid "Edit Member"
+msgstr "Uredi Člana"
+
+#: zephyr-project-manager/templates/edit_members.php:93
+#: zephyr-project-manager/templates/settings.php:103
+msgid "Profile Picture"
+msgstr "Slika Profila"
+
+#: zephyr-project-manager/templates/edit_members.php:138
+#: zephyr-project-manager/templates/settings.php:150
+msgid "Task Assigned"
+msgstr "Zadatak Dodjeljen"
+
+#: zephyr-project-manager/templates/edit_members.php:149
+msgid "Role"
+msgstr "Uloga"
+
+#: zephyr-project-manager/templates/edit_members.php:159
+msgid "Allow access to Zephyr"
+msgstr "Dozvoli pristup u Zephyr"
+
+#: zephyr-project-manager/templates/email_templates/email_template.php:141
+#: zephyr-project-manager/templates/email_templates/project_email.php:163
+#: zephyr-project-manager/templates/email_templates/task_email.php:170
+#: zephyr-project-manager/templates/email_templates/task_notifications_email.php:142
+msgid "Unfollow"
+msgstr "Prestani pratiti"
+
+#: zephyr-project-manager/templates/email_templates/project_email.php:135
+msgid "Weekly Progress Update"
+msgstr "Sedmični Izveštaj Napretka"
+
+#: zephyr-project-manager/templates/email_templates/project_email.php:156
+msgid "View Projects"
+msgstr "Pregledaj Projekte"
+
+#: zephyr-project-manager/templates/email_templates/project_email.php:162
+msgid "View Projects in WordPress"
+msgstr "Pregledaj Projekte u WordPress-u"
+
+#: zephyr-project-manager/templates/email_templates/task_email.php:163
+#: zephyr-project-manager/templates/parts/task_view.php:249
+msgid "Go to Task"
+msgstr "Idi na Zadatak"
+
+#: zephyr-project-manager/templates/email_templates/task_email.php:173
+#, php-format
+msgid "Reply with %s to mark as complete | %s to comment"
+msgstr "Odgovori sa %s da bi označio sa Izvršeno | %s da bi komentirao"
+
+#: zephyr-project-manager/templates/extensions.php:19
+msgid ""
+"Zephyr Project Manager add-ons to increase productivity and integrate with "
+"your favourite tools"
+msgstr ""
+
+#: zephyr-project-manager/templates/extensions.php:28
+msgid "Get Now"
+msgstr ""
+
+#: zephyr-project-manager/templates/extensions.php:31
+msgid "Installed"
+msgstr ""
+
+#: zephyr-project-manager/templates/help.php:53
+msgid "Documentation"
+msgstr "Dokumentacija"
+
+#: zephyr-project-manager/templates/help.php:54
+msgid ""
+"Click here to view the in-depth documentation on all the features and how to "
+"use and make the best out of Zephyr Project Manager."
+msgstr ""
+"Klikni ovdje da pregledaš detaljnu dokumentaciju svih mogućnosti i kako "
+"najbolje iskoristiti Zephyr Projekt Menadžer."
+
+#: zephyr-project-manager/templates/help.php:60
+msgid "Support / Contact"
+msgstr "Podrška / Kontakt"
+
+#: zephyr-project-manager/templates/help.php:61
+msgid ""
+"Click here to go to the website where you can contact me and ask any "
+"questions or requests that you might have. You can also contact me at "
+"dylanjkotze@gmail.com at any time and I will respond as soon as possible to "
+"help as best I can :)"
+msgstr ""
+"Klikni ovdje da odete na stranicu gdje me možete kontaktirati i postaviti "
+"pitanja ili upite za nove mogućnosti. Također me možete kontaktirati na "
+"dylanjkotze@gmail.com u bilo koje vrijeme i ja ću odgovoriti u što kraćem "
+"roku."
+
+#: zephyr-project-manager/templates/help.php:66
+msgid "Feature Requests & Bugs"
+msgstr "Zahtjevi za Funkcije & Bugove"
+
+#: zephyr-project-manager/templates/help.php:67
+msgid ""
+"Have any great ideas for new features to add or are there features you would "
+"like me to implement for you? I am always happy to help with this and you "
+"can contact me dylanjkotze@gmail.com at any time and I will respond as soon "
+"as possible to assist you further :)"
+msgstr ""
+"Imate odlične ideje za nove mogućnosti koje mogu dodati da bih unaprijedio "
+"zadovoljsto korištenja? Uvijek sam spreman pomoći i možete me kontaktirati "
+"na dylanjkotze@gmail.com u bilo koje vrijeme i odgovoriti ću u što kraćem "
+"roku. :)"
+
+#: zephyr-project-manager/templates/help.php:75
+msgid "Get Zephyr Project Manager Premium"
+msgstr "Uzmi Zephyr Projekt Menadžer Premium"
+
+#: zephyr-project-manager/templates/help.php:76
+msgid ""
+"Click here to look at what the Premium add-on has to offer. Including many "
+"new features such as a fully customizable Frontend Project Manager, Custom "
+"Fields, Kanban Editor, Asana Integration and more!"
+msgstr ""
+"Kliknite ovde da pogledate šta Premium dodatak može da ponudi. Uključujući "
+"mnoge nove mogućnosti kao što je potpuno prilagodljiv Frontend Projekt "
+"Menadžer, Dodatna Polja, Kanban Uređivač, Asana Integracija i još mnogo toga!"
+
+#: zephyr-project-manager/templates/help.php:82
+msgid "Donate and Support Me"
+msgstr "Donirajte i Podržite me"
+
+#: zephyr-project-manager/templates/help.php:83
+msgid ""
+"If you like the plugin and would like to support me to continue adding great "
+"new features and improvements, please consider supporting me on Patreon. It "
+"would truly mean so much to me!"
+msgstr ""
+"Ako vam se dopada plugin i želite da me podržite da nastavim sa dodavanjem "
+"novih mogućnosti i poboljšanja, razmislite o podršci za Patreon. To bi mi "
+"zaista značilo!"
+
+#: zephyr-project-manager/templates/help.php:89
+msgid ""
+"If you enjoy using the plugin and have two minutes to spare, please consider "
+"leaving a review here - it would truly mean the world to me!"
+msgstr ""
+"Ako uživate u korišćenju dodatka, razmislite o tome da ostavite recenziju "
+"ovde - to bi mi zaista značilo!"
+
+#: zephyr-project-manager/templates/help.php:95
+msgid "More Zephyr Plugins"
+msgstr "Više Zephyr Pluginova"
+
+#: zephyr-project-manager/templates/help.php:99
+msgid "Zephyr Modern Admin Theme"
+msgstr "Zephyr Moderna Admin Tema"
+
+#: zephyr-project-manager/templates/help.php:101
+msgid ""
+"Zephyr Admin Theme allows you to visually transform and reimagine your "
+"WordPress dashboard into a completely modernized version. It also includes "
+"custom colors selection, beautiful predefined themes, a dark and light mode, "
+"login screen customization and much more! Click here to view the WordPress "
+"page and give it a try :)"
+msgstr ""
+"Zephyr Admin Tema vam omogućava da vizuelno transformišete svoju WordPress "
+"tablu u potpuno modernizovanu verziju. Takođe uključuje i izbor boja, "
+"predefinisane teme, tamni i svetli režim, prilagođavanje ekrana za "
+"prijavljivanje i još mnogo toga! Kliknite ovdje da biste vidjeli WordPress "
+"stranicu i pokušajte :)"
+
+#: zephyr-project-manager/templates/parts/new_task.php:49
+#: zephyr-project-manager/templates/parts/task-edit-modal.php:54
+#: zephyr-project-manager/templates/parts/task-single.php:118
+msgid "Select Project"
+msgstr "Odaberi Projekat"
+
+#: zephyr-project-manager/templates/parts/new_task.php:163
+#: zephyr-project-manager/templates/parts/project-single.php:162
+#: zephyr-project-manager/templates/parts/task-single.php:207
+msgid "Set Priority"
+msgstr "Odredi prioritet"
+
+#: zephyr-project-manager/templates/parts/new_task.php:181
+#: zephyr-project-manager/templates/parts/task-single.php:191
+msgid "This option is only available in the Pro version."
+msgstr "Ova opcija je dostupna samo u Pro verziji."
+
+#: zephyr-project-manager/templates/parts/new_task.php:181
+#: zephyr-project-manager/templates/parts/task-single.php:191
+msgid "Purchase the Pro Add-On Now"
+msgstr "Kupi Pro Add-On Odmah"
+
+#: zephyr-project-manager/templates/parts/new_task.php:188
+msgid "Add File"
+msgstr "Dodaj Datoteku"
+
+#: zephyr-project-manager/templates/parts/new_task.php:189
+msgid "Create Task"
+msgstr "Kreiraj Zadatak"
+
+#: zephyr-project-manager/templates/parts/page_footer.php:19
+msgid "New Attachment"
+msgstr "Novi Dodatak"
+
+#: zephyr-project-manager/templates/parts/page_footer.php:25
+msgid "Upload Attachment"
+msgstr "Uploaduj Dodatak"
+
+#: zephyr-project-manager/templates/parts/page_header.php:38
+msgid "Whats new in Zephyr Project Manager"
+msgstr "Šta je novo u Zephyr Projekt Menadžeru"
+
+#: zephyr-project-manager/templates/parts/project-single.php:140
+#, php-format
+msgid "There are no categories yet. You can create categories %s here %s."
+msgstr "Nema novih kategorija trenutno. Možete ih kreirati %s ovdje %s."
+
+#: zephyr-project-manager/templates/parts/project-single.php:156
+msgid "Back to Projects"
+msgstr "Nazad u Projekte"
+
+#: zephyr-project-manager/templates/parts/project-single.php:217
+#: zephyr-project-manager/templates/parts/task-single.php:225
+msgid "Copy Shortcode"
+msgstr "Kopiraj Kratki kod"
+
+#: zephyr-project-manager/templates/parts/project-single.php:243
+msgid "Comments"
+msgstr "Komentari"
+
+#: zephyr-project-manager/templates/parts/project-single.php:288
+msgid "Select All"
+msgstr "Odabeni Sve"
+
+#: zephyr-project-manager/templates/parts/project-single.php:451
+msgid "Percent Complete"
+msgstr "Procentualno Završeno"
+
+#: zephyr-project-manager/templates/parts/project-single.php:462
+msgid "My Notifications"
+msgstr "Moje Notifikacije"
+
+#: zephyr-project-manager/templates/parts/project-view.php:166
+msgid "No discussion yet"
+msgstr "Nema razgovora"
+
+#: zephyr-project-manager/templates/parts/task-single.php:201
+msgid "Back to Tasks"
+msgstr "Nazad u Zadatke"
+
+#: zephyr-project-manager/templates/parts/task-single.php:229
+msgid "Like Task"
+msgstr "Sviđa mi se zadatak"
+
+#: zephyr-project-manager/templates/parts/task-single.php:242
+#: zephyr-project-manager/templates/parts/task_view.php:181
+msgid "No subtasks created."
+msgstr "Nema kreiranih podataka."
+
+#: zephyr-project-manager/templates/parts/task_view.php:116
+msgid "Print"
+msgstr "Printaj"
+
+#: zephyr-project-manager/templates/parts/task_view.php:154
+msgid "Not assigned to any members"
+msgstr "Nije dodijeljeno članovima"
+
+#: zephyr-project-manager/templates/parts/task_view.php:159
+msgid "Assigned Team"
+msgstr "Dodijeljen Tim"
+
+#: zephyr-project-manager/templates/parts/task_view.php:164
+msgid "Not assigned to any teams"
+msgstr "Nije dodijeljeno timu"
+
+#: zephyr-project-manager/templates/parts/task_view.php:171
+msgid "No description added"
+msgstr "Opis nije dodan"
+
+#: zephyr-project-manager/templates/premium.php:12
+msgid "Zephyr Project Manager Pro"
+msgstr "Zephyr Projekt Menadžer Pro"
+
+#: zephyr-project-manager/templates/premium.php:20
+msgid ""
+"View your Asana projects and tasks in WordPress and import them into Zephyr "
+"to manage all your projects and tasks in one place."
+msgstr ""
+"Pregledajte svoje Asana projekte i zadatke u WordPress-u i uvezite ih u "
+"Zephyr kako biste upravljali svim vašim projektima i zadacima na jednom "
+"mjestu."
+
+#: zephyr-project-manager/templates/premium.php:29
+msgid ""
+"Create more detailed and personalized tasks by creating your own custom "
+"fields and assiging them to any tasks."
+msgstr ""
+"Kreirajte detaljnije i personalizovane zadatke kreirajući dodatna polja i "
+"dodjeljivanjem ih odabranim zadacima."
+
+#: zephyr-project-manager/templates/premium.php:37
+msgid "Kanban Boards"
+msgstr "Kanban Table"
+
+#: zephyr-project-manager/templates/premium.php:38
+msgid ""
+"View your tasks in a Kanban board style and drag and drop them into "
+"different columns to keep them organized."
+msgstr ""
+"Pregledajte zadatke u Kanban stilu i povucite i spustite ih u različite "
+"kolone da bi ih lakše organizirali."
+
+#: zephyr-project-manager/templates/premium.php:47
+msgid "Beautiful & Customizable Frontend"
+msgstr "Prilagodljivi Frontend"
+
+#: zephyr-project-manager/templates/premium.php:48
+msgid ""
+"Includes a beautiful Frontend Project Manager that is customizable and easy "
+"to use to allow users or yourself to manage projects from the frontend with "
+"the dedicated user interface."
+msgstr ""
+"Uključuje Frontend Projekt Menadžer koji je prilagodljiv i jednostavan za "
+"korištenje kako bi se omogućilo korisnicima da upravljaju projektima sa "
+"Frontenda namjenskim korisničkim interfejsom."
+
+#: zephyr-project-manager/templates/premium.php:57
+msgid "Reporting and Advanced Search"
+msgstr "Izveštavanje i napredno pretraživanje"
+
+#: zephyr-project-manager/templates/premium.php:58
+msgid ""
+"Create detailed project progress reports for any project and customize which "
+"data should be shown in the report. You can then print or save the reports."
+msgstr ""
+"Kreirajte detaljne izvještaje o napretku projekta za svaki projekt i "
+"prilagodite koje podatke treba prikazati u izvještaju. Zatim ih možete "
+"odštampati ili sačuvati."
+
+#: zephyr-project-manager/templates/premium.php:68
+msgid ""
+"Create reusable and useful templates for your tasks with your custom fields, "
+"to add to your tasks in a single click and customize your projects and tasks "
+"to your needs."
+msgstr ""
+"Kreirajte ponovo upotrebljive i korisne templejte za zadatke sa svojim "
+"dodatnim poljima,da bi kreirali zadatke jednim klikom i uređivali projekte "
+"izadatke po potrebi."
+
+#: zephyr-project-manager/templates/premium.php:77
+msgid "Mobile App"
+msgstr "Mobilna Aplikacija"
+
+#: zephyr-project-manager/templates/premium.php:78
+msgid ""
+"Manage your projects and tasks on the go and stay up to date from anywhere. "
+"Increase your productivity now with this beautifully designed Android app "
+"and get more work done, wherever you are."
+msgstr ""
+"Upravljajte svojim projektima i zadacima u pokretu i budite u toku s bilo "
+"kojeg mjesta. Povećajte svoju produktivnost sada s ovom Android aplikacijom "
+"i ostvarite više posla, gdje god se nalazili."
+
+#: zephyr-project-manager/templates/premium.php:93
+msgid "And much more..."
+msgstr "I mnogo više..."
+
+#: zephyr-project-manager/templates/premium.php:94
+msgid ""
+"Plus many more features. If you have any feature suggestions I would be more "
+"than happy to hear them. You can contact me at dylanjkotze@gmail.com."
+msgstr ""
+"Plus još mnogo mogućnosti. Ako imate bilo kakve sugestije o funkcijama, rado "
+"ću ih čuti. Možete me kontaktirati na dylanjkotze@gmail.com."
+
+#: zephyr-project-manager/templates/premium.php:98
+msgid "Get Zephyr Pro Now"
+msgstr "Uzmi Zephyr Pro Odmah"
+
+#: zephyr-project-manager/templates/progress.php:21
+msgid "Select a project to display the progress for."
+msgstr "Odaberi projekat za prikazivanje napretka."
+
+#: zephyr-project-manager/templates/projects.php:98
+msgid "Filter Projects"
+msgstr "Filtriraj Projekte"
+
+#: zephyr-project-manager/templates/projects.php:102
+msgid "Incomplete Projects"
+msgstr "Nedovršeni Projekti"
+
+#: zephyr-project-manager/templates/settings.php:86
+#: zephyr-project-manager/templates/settings.php:194
+msgid "General Settings"
+msgstr "Generalne Postavke"
+
+#: zephyr-project-manager/templates/settings.php:89
+msgid "Advanced"
+msgstr "Napredno"
+
+#: zephyr-project-manager/templates/settings.php:129
+msgid "Hide WordPress Dashboard Widgets"
+msgstr "Sakrij Dodatke WordPress Kontrolne Ploče"
+
+#: zephyr-project-manager/templates/settings.php:133
+msgid "Hidden"
+msgstr "Sakriveno"
+
+#: zephyr-project-manager/templates/settings.php:161
+msgid "Lowest Level of Access to Zephyr Project Manager"
+msgstr "Najniži Nivo Pristupa Zephyr Projekt Menadžeru"
+
+#: zephyr-project-manager/templates/settings.php:163
+msgid "Administrator"
+msgstr "Administrator"
+
+#: zephyr-project-manager/templates/settings.php:164
+msgid "Editor"
+msgstr "Uređivač"
+
+#: zephyr-project-manager/templates/settings.php:165
+msgid "Author"
+msgstr "Autor"
+
+#: zephyr-project-manager/templates/settings.php:166
+msgid "Contributor"
+msgstr "Saradnik"
+
+#: zephyr-project-manager/templates/settings.php:168
+msgid "ZPM Administrator"
+msgstr "ZPM Administrator"
+
+#: zephyr-project-manager/templates/settings.php:169
+msgid "ZPM Manager"
+msgstr "ZPM Menadžer"
+
+#: zephyr-project-manager/templates/settings.php:171
+msgid "ZPM User"
+msgstr "ZPM Korisnik"
+
+#: zephyr-project-manager/templates/settings.php:173
+msgid "Subscriber"
+msgstr "Pretplatnik"
+
+#: zephyr-project-manager/templates/settings.php:197
+#: zephyr-project-manager/templates/settings.php:198
+msgid "Projects Per Page"
+msgstr "Projekata po Stranici"
+
+#: zephyr-project-manager/templates/settings.php:202
+#: zephyr-project-manager/templates/settings.php:203
+msgid "Tasks Per Page"
+msgstr "Zadataka po Stranici"
+
+#: zephyr-project-manager/templates/settings.php:206
+msgid "Group Projects by Category"
+msgstr "Grupnih Projekata po Kategoriji"
+
+#: zephyr-project-manager/templates/settings.php:210
+msgid "Enable grouping of projects by category"
+msgstr "Dozvoli grupiranje projekata po kategoriji"
+
+#: zephyr-project-manager/templates/settings.php:213
+msgid "Display Project ID"
+msgstr "Prikaži ID Projekta"
+
+#: zephyr-project-manager/templates/settings.php:217
+msgid "Display Unique Project ID"
+msgstr "Prikaži Jedinstveni ID Projekta"
+
+#: zephyr-project-manager/templates/settings.php:222
+msgid "Display Auto Increment Project ID"
+msgstr "Prikaži Automatsko Povećanje ID Projekta"
+
+#: zephyr-project-manager/templates/settings.php:228
+#, fuzzy
+#| msgid "Daily Tasks"
+msgid "Display Task ID"
+msgstr "Dnevni zadaci"
+
+#: zephyr-project-manager/templates/settings.php:232
+#: zephyr-project-manager/templates/settings.php:309
+msgid "Email Settings"
+msgstr "Email Postavke"
+
+#: zephyr-project-manager/templates/settings.php:235
+#: zephyr-project-manager/templates/settings.php:236
+msgid "From Name"
+msgstr "Od Imena"
+
+#: zephyr-project-manager/templates/settings.php:240
+#: zephyr-project-manager/templates/settings.php:241
+msgid "From Email"
+msgstr "Od Email-a"
+
+#: zephyr-project-manager/templates/settings.php:244
+msgid "Permissions & Capabilities"
+msgstr "Dozvole & Mogućnosti"
+
+#: zephyr-project-manager/templates/settings.php:262
+msgid "Who can complete tasks"
+msgstr "Ko može završiti zadatke"
+
+#: zephyr-project-manager/templates/settings.php:264
+msgid "Everyone"
+msgstr "Svako"
+
+#: zephyr-project-manager/templates/settings.php:265
+msgid "Only Assigned Users"
+msgstr "Samo dodijeljeni Korisnici"
+
+#: zephyr-project-manager/templates/settings.php:266
+msgid "Only Administrators & Managers"
+msgstr "Samo Administratori & Menadžeri"
+
+#: zephyr-project-manager/templates/settings.php:267
+msgid "Nobody"
+msgstr "Niko"
+
+#: zephyr-project-manager/templates/settings.php:274
+msgid "Allow users to only view own files"
+msgstr ""
+
+#: zephyr-project-manager/templates/settings.php:280
+msgid "Customization"
+msgstr "Prilagođavanje"
+
+#: zephyr-project-manager/templates/settings.php:285
+msgid "Primary Dark Color"
+msgstr "Glavna Tamna Boja"
+
+#: zephyr-project-manager/templates/settings.php:287
+msgid "Primary Light Color"
+msgstr "Glavna Svijetla Boja"
+
+#: zephyr-project-manager/templates/settings.php:290
+msgid "Dates & Calendar Settings"
+msgstr "Postavke Datuma & Kalendara"
+
+#: zephyr-project-manager/templates/settings.php:293
+msgid "Calendar First Day"
+msgstr "Prvi Dan Kalendara"
+
+#: zephyr-project-manager/templates/settings.php:301
+msgid "Date Format"
+msgstr "Format Datuma"
+
+#: zephyr-project-manager/templates/settings.php:311
+#: zephyr-project-manager/templates/settings.php:312
+msgid "Mentions Email"
+msgstr "Spominje Email"
+
+#: zephyr-project-manager/templates/settings.php:330
+#: zephyr-project-manager/templates/settings.php:331
+msgid "Custom CSS"
+msgstr "Prilagođeni CSS"
+
+#: zephyr-project-manager/templates/tasks.php:36
+#, php-format
+msgid ""
+"No tasks created yet. To create a task, click on the 'Add' button at the top "
+"right of the screen or click %s here %s"
+msgstr ""
+"Nema kreiranih zadataka. Da kreirate zadatak, kliknite na 'Dodaj' dugme u "
+"gornjem desnom uglu ili kliknite %s ovdje %s"
+
+#: zephyr-project-manager/templates/tasks.php:58
+msgid "Import from CSV"
+msgstr "Uvezi iz CSV"
+
+#: zephyr-project-manager/templates/tasks.php:59
+msgid "Import from JSON"
+msgstr "Uvezi iz JSON"
+
+#: zephyr-project-manager/templates/tasks.php:73
+msgid "Incomplete Tasks"
+msgstr "Nedovršeni Zadaci"
+
+#: zephyr-project-manager/templates/tasks.php:74
+msgid "Complete Tasks"
+msgstr "Završeni Zadaci"
+
+#: zephyr-project-manager/templates/tasks.php:78
+msgid "Add New"
+msgstr "Dodaj Novi"
+
+#: zephyr-project-manager/templates/teams_and_members.php:56
+msgid "Teams"
+msgstr "Timovi"
+
+#: zephyr-project-manager/templates/teams_and_members.php:67
+msgid "There are no teams yet..."
+msgstr "Nema timova trenutno..."
+
+#: zephyr-project-manager/templates/teams_and_members.php:82
+#: zephyr-project-manager/templates/teams_and_members.php:83
+#: zephyr-project-manager/templates/teams_and_members.php:119
+#: zephyr-project-manager/templates/teams_and_members.php:120
+msgid "Team Name"
+msgstr "Ime Tima"
+
+#: zephyr-project-manager/templates/teams_and_members.php:87
+#: zephyr-project-manager/templates/teams_and_members.php:88
+#: zephyr-project-manager/templates/teams_and_members.php:124
+#: zephyr-project-manager/templates/teams_and_members.php:125
+msgid "Team Description"
+msgstr "Opis Tima"
+
+#: zephyr-project-manager/templates/welcome.php:30
+msgid "Get Things Done"
+msgstr "Uradi stvari"
+
+#: zephyr-project-manager/templates/welcome.php:31
+msgid ""
+"Create unlimited projects, tasks and subtasks and manage them easily and get "
+"work done all inside WordPress."
+msgstr ""
+"Kreiraj beskonačan broj projekata, zadataka i podzadataka i upravljaj njima "
+"unutar WordPress-a."
+
+#: zephyr-project-manager/templates/welcome.php:39
+msgid "Communicate and collaborate"
+msgstr "Komuniciraj i Surađuj"
+
+#: zephyr-project-manager/templates/welcome.php:40
+msgid ""
+"Manage user roles, receive updates and notifications via email and add "
+"comments and discussions to tasks and projects."
+msgstr ""
+"Upravljaj ulogama korisnika, primaj ažuriranja i notifikacije putem email-a "
+"i dodaj komentare zadacima i projektima."
+
+#~ msgid "Switch to the List project style"
+#~ msgstr "Prebacite se na Lista stil projekta"
+
+#~ msgid "Switch to the Board (Kanban) project style"
+#~ msgstr "Prebacite se na Tabla (Kanban) stil projekta"
+
+#~ msgid ""
+#~ "Upgrade to the Pro Version to create a Kanban and Board type project."
+#~ msgstr "Nadogradite na Pro verziju za Kanban i Board tip projekta."
+
+#~ msgid "Switch Project Type"
+#~ msgstr "Promijeni tip projekta"
+
+#~ msgid "Board"
+#~ msgstr "Tabla"
+
+#~ msgid "Generate Report"
+#~ msgstr "Generiši Izvještaj"
+
+#~ msgid "Subtask name"
+#~ msgstr "Naziv podzadatka"
+
+#~ msgid "Who can create projects"
+#~ msgstr "Ko može kreirati projekte"
+
+#~ msgid "Project Manager"
+#~ msgstr "Menadžer Projekta"
+
+#~ msgid "Project Managers & Users"
+#~ msgstr "Menadžeri & Korisnici Projekta"
+
+#~ msgid "Frontend Users"
+#~ msgstr "Frontend Korisnici"
+
+#~ msgid "Who can view projects"
+#~ msgstr "Ko može pregledati projekat"
+
+#~ msgid "Author Only"
+#~ msgstr "Samo Autor"
+
+#~ msgid "Who can edit tasks"
+#~ msgstr "Ko može urediti zadatke"
+
+#~ msgid "Who can create new tasks"
+#~ msgstr "Ko može kreirati nove zadatke"
+
+#~ msgid "Who can view tasks"
+#~ msgstr "Ko može pregledati zadatke"
+
+#~ msgid "Devices"
+#~ msgstr "Uređaji"
+
+#~ msgid "Link New Device"
+#~ msgstr "Spoji Novi Uređaj"
+
+#~ msgid "Scan the QR code below from the app, to link your device"
+#~ msgstr "Skeniraj QR kod iz aplikacije, da bi se spojio sa uređajem"

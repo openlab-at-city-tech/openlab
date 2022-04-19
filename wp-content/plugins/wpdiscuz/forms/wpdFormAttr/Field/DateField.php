@@ -2,6 +2,8 @@
 
 namespace wpdFormAttr\Field;
 
+use wpdFormAttr\Tools\Sanitizer;
+
 class DateField extends Field {
 
     protected function dashboardForm() {
@@ -79,17 +81,17 @@ class DateField extends Field {
         ?>
         <div class="wpdiscuz-item wpd-field-date <?php echo esc_attr($name) . "-wrapper" . ($hasIcon ? " wpd-has-icon" : "") . ($hasDesc ? " wpd-has-desc" : ""); ?>">
             <div class="wpd-field-title">
-                <?php echo esc_html($args["name"]); ?>
+            <?php echo esc_html($args["name"]); ?>
             </div>
             <?php if ($hasIcon) { ?>
                 <div class="wpd-field-icon"><i style="opacity: 0.8;" class="<?php echo strpos(trim($args["icon"]), " ") ? esc_attr($args["icon"]) : "fas " . esc_attr($args["icon"]); ?>"></i></div>
             <?php } ?>
-            <?php $required = $args["required"] ? "required='required' aria-required='true'" : ""; ?>
+        <?php $required = $args["required"] ? "required='required' aria-required='true'" : ""; ?>
             <input id="<?php echo esc_attr($name) . "-" . $uniqueId; ?>" <?php echo $required; ?> class="<?php echo esc_attr($name); ?> wpd-field wpd-field-date" type="date" name="<?php echo esc_attr($name); ?>" value="" placeholder="03/28/2016<?php echo!empty($args["required"]) ? "*" : "" ?>"  pattern="^(1[0-2]|0[1-9])/(3[01]|[12][0-9]|0[1-9])/[0-9]{4}$" title="03/28/2016">
             <label for="<?php echo esc_attr($name) . "-" . $uniqueId; ?>" class="wpdlb"><?php echo esc_attr($args["name"]) . (!empty($args["required"]) ? "*" : ""); ?></label>
-            <?php if ($args["desc"]) { ?>
+                    <?php if ($args["desc"]) { ?>
                 <div class="wpd-field-desc"><i class="far fa-question-circle"></i><span><?php echo esc_html($args["desc"]); ?></span></div>
-                    <?php } ?>
+        <?php } ?>
         </div>
         <?php
     }
@@ -105,7 +107,7 @@ class DateField extends Field {
         if (!$this->isCommentParentZero() && !$args["is_show_sform"]) {
             return "";
         }
-        $value = trim(filter_input(INPUT_POST, $fieldName, FILTER_SANITIZE_STRING));
+        $value = Sanitizer::sanitize(INPUT_POST, $fieldName, "FILTER_SANITIZE_STRING");
         if ($value && !preg_match("@^[0-9]{4}-[0-9]{2}-[0-9]{2}$@is", $value)) {
             $value = "";
         }

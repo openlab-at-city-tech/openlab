@@ -25,7 +25,7 @@ jQuery(document).ready(function ( $ ) {
             let videoAttributesStr = $(this).data('video-attr');
             let videoPreload = $(this).data('video-preload');
             let videoAttributes = videoAttributesStr.replace(/,/g, ' ');
-            return '<video src="'+ $(this).data('video') +'" '+videoAttributes+' preload="'+videoPreload+'" style="height: 99%; display: block; margin: auto"></video>';
+            return '<video src="'+ $(this).data('video') +'" '+videoAttributes+' preload="'+videoPreload+'" style="height: 99%; width: 100%; display: block; margin: auto"></video>';
         }
     })
 });

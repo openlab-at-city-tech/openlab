@@ -529,6 +529,12 @@ jQuery(document).ready(function ($) {
         var currentSubmitBtn = $(this);
         var depth = 1;
         var wcForm = $(this).parents('form');
+
+        if (wcForm.attr('data-uploading') === 'true') {
+            wpdiscuzAjaxObj.setCommentMessage(wpdiscuzAjaxObj.applyFilterOnPhrase(wpdiscuzAjaxObj.wmuPhraseDoingUpload, 'wmuPhraseDoingUpload', wcForm), 'warning');
+            return;
+        }
+
         if (!wcForm.hasClass('wpd_main_comm_form')) {
             depth = getCommentDepth($(this).parents('.wpd-comment'));
         }

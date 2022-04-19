@@ -52,7 +52,12 @@ $advgb_blocks_list = !empty( get_option( 'advgb_blocks_list' ) ) ? get_option( '
 $advgb_blocks_deactivate_force = array(
     'advgb/container'
 );
-$advgb_block_status_ = null;
+// Activate these blocks
+$advgb_blocks_activate_force = array(
+    'core/legacy-widget' // Randomly visible in Block Access screen!
+);
+$advgb_block_status_    = null;
+$advgb_block_readonly_  = null;
 ?>
 
 <form method="post">
@@ -138,14 +143,20 @@ $advgb_block_status_ = null;
                                     // Convert object to array
                                     $block = (array)$block;
 
-                                    // Disable some blocks such as Container
                                     if( in_array($block['name'], $advgb_blocks_deactivate_force) ) {
-                                        $advgb_block_status_ = false;
+                                        // Disable some blocks such as Container and can't be edited
+                                        $advgb_block_status_    = false;
+                                        $advgb_block_readonly_  = true;
+                                    } elseif( in_array($block['name'], $advgb_blocks_activate_force) ) {
+                                        // Enable some blocks such as Legacy Widget and can't be edited
+                                        $advgb_block_status_    = true;
+                                        $advgb_block_readonly_  = true;
                                     } else {
-                                        $advgb_block_status_ = empty( $advgb_blocks_user_roles['active_blocks'] ) || ( in_array($block['name'], $advgb_blocks_user_roles['active_blocks']) || !in_array($block['name'], $advgb_blocks_user_roles['inactive_blocks']) );
+                                        $advgb_block_status_    = empty( $advgb_blocks_user_roles['active_blocks'] ) || ( in_array($block['name'], $advgb_blocks_user_roles['active_blocks']) || !in_array($block['name'], $advgb_blocks_user_roles['inactive_blocks']) );
+                                        $advgb_block_readonly_  = false;
                                     }
                                     ?>
-                                    <li class="block-item block-access-item ju-settings-option">
+                                    <li class="block-item block-access-item ju-settings-option<?php echo ($advgb_block_readonly_) ? ' block-item-readonly' : '' ?>">
                                         <label class="ju-setting-label">
                                             <span class="block-icon"<?php echo isset( $block['iconColor'] ) && !empty( $block['iconColor'] ) ? ' style="color:' . esc_attr($block['iconColor']) . ';"' : ''; ?>>
                                                 <?php
@@ -158,7 +169,11 @@ $advgb_block_status_ = null;
                                         </label>
                                         <div class="ju-switch-button">
                                             <label class="switch">
-                                                <input type="checkbox" name="blocks[]" value="<?php echo esc_attr( $block['name'] ); ?>"<?php echo ( $advgb_block_status_ ) ? ' checked="checked"' : '' ?>>
+                                                <input
+                                                    type="checkbox"
+                                                    name="blocks[]"
+                                                    value="<?php echo esc_attr( $block['name'] ); ?>"<?php echo ( $advgb_block_status_ ) ? ' checked="checked"' : '' ?>
+                                                    <?php echo ($advgb_block_readonly_) ? ' onclick="return false;"' : '' ?>>
                                                 <span class="slider"></span>
                                             </label>
                                         </div>

@@ -2,6 +2,8 @@
 
 namespace wpdFormAttr\Field;
 
+use wpdFormAttr\Tools\Sanitizer;
+
 class NumberField extends Field {
 
     protected function dashboardForm() {
@@ -100,9 +102,9 @@ class NumberField extends Field {
             ?>
             <input id="<?php echo esc_attr($name) . "-" . $uniqueId; ?>" <?php echo $required; ?> class="<?php echo esc_attr($name); ?> wpd-field wpd-field-number" type="number" name="<?php echo esc_attr($name); ?>" value="" placeholder="<?php echo esc_html__($args["name"], "wpdiscuz") . (!empty($args["required"]) ? "*" : ""); ?>" <?php echo $min . " " . $max; ?>>
             <label for="<?php echo esc_attr($name) . "-" . $uniqueId; ?>" class="wpdlb"><?php echo esc_html__($args["name"], "wpdiscuz") . (!empty($args["required"]) ? "*" : ""); ?></label>
-            <?php if ($args["desc"]) { ?>
+                    <?php if ($args["desc"]) { ?>
                 <div class="wpd-field-desc"><i class="far fa-question-circle"></i><span><?php echo $args["desc"]; ?></span></div>
-                    <?php } ?>
+        <?php } ?>
         </div>
         <?php
     }
@@ -118,7 +120,7 @@ class NumberField extends Field {
         if (!$this->isCommentParentZero() && !$args["is_show_sform"]) {
             return "";
         }
-        $value = filter_input(INPUT_POST, $fieldName, FILTER_SANITIZE_NUMBER_INT);
+        $value = Sanitizer::sanitize(INPUT_POST, $fieldName, FILTER_SANITIZE_NUMBER_INT);
         if (!$value && $args["required"]) {
             wp_die(esc_html__($args["name"], "wpdiscuz") . " : " . esc_html__("field is required!", "wpdiscuz"));
         }

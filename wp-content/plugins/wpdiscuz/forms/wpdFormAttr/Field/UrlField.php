@@ -2,6 +2,8 @@
 
 namespace wpdFormAttr\Field;
 
+use wpdFormAttr\Tools\Sanitizer;
+
 class UrlField extends Field {
 
     protected function dashboardForm() {
@@ -86,7 +88,7 @@ class UrlField extends Field {
                 <?php
             }
             ?>
-            <?php $required = $args["required"] ? "required='required' aria-required='true'" : ""; ?>
+        <?php $required = $args["required"] ? "required='required' aria-required='true'" : ""; ?>
             <input id="<?php echo esc_attr($name) . "-" . $uniqueId; ?>" <?php echo $required; ?> class="<?php echo esc_attr($name); ?> wpd-field" type="url" name="<?php echo esc_attr($name); ?>" value="" placeholder="<?php echo esc_attr__($args["name"], "wpdiscuz") . (!empty($args["required"]) ? "*" : ""); ?>">
             <label for="<?php echo esc_attr($name) . "-" . $uniqueId; ?>" class="wpdlb"><?php echo esc_attr($args["name"]) . (!empty($args["required"]) ? "*" : ""); ?></label>
             <?php
@@ -112,7 +114,7 @@ class UrlField extends Field {
         if (!$this->isCommentParentZero() && !$args["is_show_sform"]) {
             return "";
         }
-        $value = filter_input(INPUT_POST, $fieldName, FILTER_SANITIZE_STRING);
+        $value = Sanitizer::sanitize(INPUT_POST, $fieldName, "FILTER_SANITIZE_STRING");
         if (!$value && $args["required"]) {
             wp_die(esc_html__($args["name"], "wpdiscuz") . " : " . esc_html__("field is required!", "wpdiscuz"));
         }

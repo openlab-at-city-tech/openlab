@@ -2,6 +2,8 @@
 
 namespace wpdFormAttr\Field;
 
+use wpdFormAttr\Tools\Sanitizer;
+
 class CookiesConsent extends Field {
 
     private $cookiesConsent;
@@ -47,11 +49,11 @@ class CookiesConsent extends Field {
                     <label class="wpd-field-label wpd-cursor-pointer" for="<?php echo esc_attr($name) . "-1_" . esc_attr($uniqueId); ?>"><?php echo $args["label"]; ?></label>
                 </div>
             </div>
-            <?php if ($args["desc"]) { ?>
+        <?php if ($args["desc"]) { ?>
                 <div class="wpd-field-desc">
                     <i class="far fa-question-circle"></i><span><?php echo esc_html($args["desc"]); ?></span>
                 </div>
-            <?php } ?>
+        <?php } ?>
         </div>
         <?php
     }
@@ -62,7 +64,7 @@ class CookiesConsent extends Field {
 
     public function validateFieldData($fieldName, $args, $options, $currentUser) {
         $this->cookiesConsent = filter_input(INPUT_POST, $fieldName, FILTER_VALIDATE_INT, FILTER_NULL_ON_FAILURE);
-        $action = filter_input(INPUT_POST, "action", FILTER_SANITIZE_STRING);
+        $action = Sanitizer::sanitize(INPUT_POST, "action", "FILTER_SANITIZE_STRING");
         if ($this->cookiesConsent === false && $action !== "wpdSaveEditedComment") {
             $past = time() - YEAR_IN_SECONDS;
             setcookie("comment_author_" . COOKIEHASH, " ", $past, "/", COOKIE_DOMAIN);
