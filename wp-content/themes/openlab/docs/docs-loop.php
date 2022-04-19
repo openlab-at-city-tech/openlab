@@ -6,7 +6,10 @@
 		<?php bp_docs_locate_template( 'manage-folders.php', true ); ?>
 	<?php else : ?>
 
-		<?php if (have_posts()) : ?>
+	<?php $has_docs = false; ?>
+	<?php if ( bp_docs_has_docs( array( 'update_attachment_cache' => true ) ) ) : ?>
+		<?php $has_docs = true; ?>
+
 		<div class="docs-info-header img-rounded">
 		<div class="row">
 			<div class="col-sm-24">
@@ -50,8 +53,8 @@
 			</thead>
 
 			<tbody>
-				<?php while (have_posts()) : the_post() ?>
-					<tr>
+				<?php while ( bp_docs_has_docs() ) : bp_docs_the_doc() ?>
+					<tr<?php bp_docs_doc_row_classes(); ?> data-doc-id="<?php echo get_the_ID() ?>">
 						<td class="title-cell">
 							<span class="title-wrapper">
 								<a class="hyphenate truncate-on-the-fly" href="<?php bp_docs_group_doc_permalink() ?>" data-basevalue="80" data-minvalue="55" data-basewidth="376"><?php the_title() ?></a>

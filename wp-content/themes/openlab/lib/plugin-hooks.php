@@ -68,37 +68,14 @@ function openlab_is_docs_enabled_for_group( $group_id = null ) {
 }
 
 /**
- * Plugin: BuddyPress Docs
- * Overriding the BP Docs header file to clean up sub menus
- * @param type $menu_template
- * @return string
+ * Closes Docs settings toggle panels by default.
  */
-function openlab_hide_docs_native_menu() {
-	$path = STYLESHEETPATH . '/buddypress/groups/single/docs/docs-header.php';
-	return $path;
-}
-add_filter( 'bp_docs_header_template', 'openlab_hide_docs_native_menu' );
-
-/**
- * Plugin: BuddyPress Docs
- * Custom templates for BP Docs pages
- * Allows for layout control and Bootstrap injection
- * @param type $path
- * @param type $template
- * @return type
- */
-function openlab_custom_docs_templates( $path, $template ) {
-	if ( 'list' === $template->current_view ) {
-		$path = bp_locate_template( 'groups/single/docs/docs-loop.php', false );
-	} elseif ( 'create' === $template->current_view || 'edit' === $template->current_view ) {
-		$path = bp_locate_template( 'groups/single/docs/edit-doc.php', false );
-	} elseif ( 'single' === $template->current_view ) {
-		$path = bp_locate_template( 'groups/single/docs/single-doc.php', false );
+add_filter(
+	'bp_docs_toggleable_open_or_closed_class',
+	function() {
+		return 'toggle-closed';
 	}
-
-	return $path;
-}
-add_filter( 'bp_docs_template', 'openlab_custom_docs_templates', 10, 2 );
+);
 
 /**
  * Allow super admins to edit any BuddyPress Doc

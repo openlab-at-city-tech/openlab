@@ -3357,3 +3357,11 @@ function openlab_load_google_analytics() {
 
 	return true;
 }
+
+/**
+ * Disable Attachments in buddypress-docs.
+ *
+ * In this file so that it's loaded in time to prevent Docs from setting up
+ * its Attachments component.
+ */
+add_filter( 'bp_docs_enable_attachments', '__return_false' );
