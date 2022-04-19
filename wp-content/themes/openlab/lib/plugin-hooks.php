@@ -69,12 +69,6 @@ function openlab_is_docs_enabled_for_group( $group_id = null ) {
 
 /**
  * Plugin: BuddyPress Docs
- * Don't allow BuddyPress Docs to use its own theme compatibility layer
- */
-add_filter( 'bp_docs_do_theme_compat', '__return_false' );
-
-/**
- * Plugin: BuddyPress Docs
  * Overriding the BP Docs header file to clean up sub menus
  * @param type $menu_template
  * @return string
