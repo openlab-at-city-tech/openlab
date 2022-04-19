@@ -76,7 +76,7 @@ function olgc_leave_comment_after_comment_fields( $args ) {
 	if ( ! olgc_is_instructor() ) {
 		return $args;
 	}
-
+	
 	$args['comment_notes_after'] .= '
 	<div class="olgc-grade-entry">
 		<label for="olgc-grade">' . __( 'Grade:', 'wp-grade-comments' ) . '</label> <input type="text" maxlength="5" name="olgc-grade" id="olgc-grade" />
@@ -89,6 +89,7 @@ function olgc_leave_comment_after_comment_fields( $args ) {
 	return $args;
 }
 add_filter( 'comment_form_defaults', 'olgc_leave_comment_after_comment_fields', 1000 );
+
 
 /**
  * Catch and save values after comment submit.
