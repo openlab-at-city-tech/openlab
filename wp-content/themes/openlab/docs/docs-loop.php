@@ -6,8 +6,17 @@
 		<?php bp_docs_locate_template( 'manage-folders.php', true ); ?>
 	<?php else : ?>
 
-	<?php $has_docs = false; ?>
-	<?php if ( bp_docs_has_docs( array( 'update_attachment_cache' => true ) ) ) : ?>
+	<?php
+	$has_docs = false;
+
+	$doc_query_args = [
+		'update_attachment_cache' => false,
+		'posts_per_page'          => 20,
+
+	];
+	?>
+
+	<?php if ( bp_docs_has_docs( $doc_query_args ) ) : ?>
 		<?php $has_docs = true; ?>
 
 		<div class="docs-info-header img-rounded">
