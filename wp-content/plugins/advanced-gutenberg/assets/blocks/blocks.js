@@ -7261,6 +7261,8 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _components = __webpack_require__(/*! ../0-adv-components/components.jsx */ "./src/assets/blocks/0-adv-components/components.jsx");
 
+var _iconClass = __webpack_require__(/*! ../0-adv-components/icon-class.jsx */ "./src/assets/blocks/0-adv-components/icon-class.jsx");
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -7283,7 +7285,8 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
         RangeControl = wpComponents.RangeControl,
         PanelBody = wpComponents.PanelBody,
         ToggleControl = wpComponents.ToggleControl,
-        SelectControl = wpComponents.SelectControl;
+        SelectControl = wpComponents.SelectControl,
+        Button = wpComponents.Button;
 
     // Preview style images
 
@@ -7299,11 +7302,23 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
         function AdvButton() {
             _classCallCheck(this, AdvButton);
 
-            return _possibleConstructorReturn(this, (AdvButton.__proto__ || Object.getPrototypeOf(AdvButton)).apply(this, arguments));
+            var _this = _possibleConstructorReturn(this, (AdvButton.__proto__ || Object.getPrototypeOf(AdvButton)).apply(this, arguments));
+
+            _this.state = {
+                showPopup: false,
+                iconSelected: '',
+                selectedIcon: false,
+                iconThemeSelected: 'outlined',
+                selectedIconTheme: false
+            };
+            _this.togglePopup = _this.togglePopup.bind(_this);
+            _this.handleIcon = _this.handleIcon.bind(_this);
+            _this.handleIconTheme = _this.handleIconTheme.bind(_this);
+            return _this;
         }
 
         _createClass(AdvButton, [{
-            key: 'componentWillMount',
+            key: "componentWillMount",
             value: function componentWillMount() {
                 var _props = this.props,
                     attributes = _props.attributes,
@@ -7313,7 +7328,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
                 // No override attributes of blocks inserted before
                 if (attributes.changed !== true) {
-                    if ((typeof currentBlockConfig === 'undefined' ? 'undefined' : _typeof(currentBlockConfig)) === 'object' && currentBlockConfig !== null) {
+                    if ((typeof currentBlockConfig === "undefined" ? "undefined" : _typeof(currentBlockConfig)) === 'object' && currentBlockConfig !== null) {
                         Object.keys(currentBlockConfig).map(function (attribute) {
                             if (typeof attributes[attribute] === 'boolean') {
                                 attributes[attribute] = !!currentBlockConfig[attribute];
@@ -7328,7 +7343,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                 }
             }
         }, {
-            key: 'componentDidMount',
+            key: "componentDidMount",
             value: function componentDidMount() {
                 var _props2 = this.props,
                     attributes = _props2.attributes,
@@ -7338,15 +7353,76 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                 setAttributes({ id: 'advgbbtn-' + clientId });
             }
         }, {
-            key: 'render',
-            value: function render() {
-                var listBorderStyles = [{ label: __('None', 'advanced-gutenberg'), value: 'none' }, { label: __('Solid', 'advanced-gutenberg'), value: 'solid' }, { label: __('Dotted', 'advanced-gutenberg'), value: 'dotted' }, { label: __('Dashed', 'advanced-gutenberg'), value: 'dashed' }, { label: __('Double', 'advanced-gutenberg'), value: 'double' }, { label: __('Groove', 'advanced-gutenberg'), value: 'groove' }, { label: __('Ridge', 'advanced-gutenberg'), value: 'ridge' }, { label: __('Inset', 'advanced-gutenberg'), value: 'inset' }, { label: __('Outset', 'advanced-gutenberg'), value: 'outset' }];
+            key: "componentDidUpdate",
+            value: function componentDidUpdate() {
+                var _state = this.state,
+                    iconSelected = _state.iconSelected,
+                    selectedIcon = _state.selectedIcon,
+                    iconThemeSelected = _state.iconThemeSelected,
+                    selectedIconTheme = _state.selectedIconTheme;
                 var _props3 = this.props,
                     attributes = _props3.attributes,
-                    setAttributes = _props3.setAttributes,
-                    isSelected = _props3.isSelected,
-                    className = _props3.className,
-                    blockID = _props3.clientId;
+                    setAttributes = _props3.setAttributes;
+
+                if (selectedIcon) {
+
+                    this.setState({
+                        selectedIcon: false
+                    });
+                    setAttributes({
+                        icon: iconSelected,
+                        iconTheme: iconThemeSelected
+                    });
+                }
+
+                if (selectedIconTheme) {
+                    this.setState({
+                        selectedIconTheme: false
+                    });
+                    setAttributes({
+                        iconTheme: iconThemeSelected
+                    });
+                }
+            }
+        }, {
+            key: "togglePopup",
+            value: function togglePopup() {
+                var showPopup = this.state.showPopup;
+
+
+                this.setState({
+                    showPopup: !showPopup
+                });
+            }
+        }, {
+            key: "handleIcon",
+            value: function handleIcon(iconValue) {
+                this.setState({
+                    iconSelected: iconValue,
+                    selectedIcon: true
+                });
+            }
+        }, {
+            key: "handleIconTheme",
+            value: function handleIconTheme(iconThemeValue) {
+                this.setState({
+                    iconThemeSelected: iconThemeValue,
+                    selectedIconTheme: true
+                });
+            }
+        }, {
+            key: "render",
+            value: function render() {
+                var _this2 = this;
+
+                var listBorderStyles = [{ label: __('None', 'advanced-gutenberg'), value: 'none' }, { label: __('Solid', 'advanced-gutenberg'), value: 'solid' }, { label: __('Dotted', 'advanced-gutenberg'), value: 'dotted' }, { label: __('Dashed', 'advanced-gutenberg'), value: 'dashed' }, { label: __('Double', 'advanced-gutenberg'), value: 'double' }, { label: __('Groove', 'advanced-gutenberg'), value: 'groove' }, { label: __('Ridge', 'advanced-gutenberg'), value: 'ridge' }, { label: __('Inset', 'advanced-gutenberg'), value: 'inset' }, { label: __('Outset', 'advanced-gutenberg'), value: 'outset' }];
+                var _props4 = this.props,
+                    attributes = _props4.attributes,
+                    setAttributes = _props4.setAttributes,
+                    isSelected = _props4.isSelected,
+                    className = _props4.className,
+                    blockID = _props4.clientId;
+                var showPopup = this.state.showPopup;
                 var id = attributes.id,
                     align = attributes.align,
                     url = attributes.url,
@@ -7377,6 +7453,13 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                     hoverShadowSpread = attributes.hoverShadowSpread,
                     hoverOpacity = attributes.hoverOpacity,
                     transitionSpeed = attributes.transitionSpeed,
+                    iconDisplay = attributes.iconDisplay,
+                    icon = attributes.icon,
+                    iconSize = attributes.iconSize,
+                    iconColor = attributes.iconColor,
+                    iconTheme = attributes.iconTheme,
+                    iconPosition = attributes.iconPosition,
+                    iconSpacing = attributes.iconSpacing,
                     isPreview = attributes.isPreview;
 
 
@@ -7415,32 +7498,58 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                     previewImageData = previewImageDataDefault;
                 }
 
-                return isPreview ? React.createElement('img', { alt: __('Advanced Button', 'advanced-gutenberg'), width: '100%', src: previewImageData }) : React.createElement(
+                var iconClass = ['material-icons', iconTheme !== '' && "-" + iconTheme].filter(Boolean).join('');
+
+                return isPreview ? React.createElement("img", { alt: __('Advanced Button', 'advanced-gutenberg'), width: "100%", src: previewImageData }) : React.createElement(
                     Fragment,
                     null,
                     React.createElement(
-                        'span',
-                        { className: className + ' align' + align,
+                        "span",
+                        { className: className + " align" + align,
                             style: { display: 'inline-block' }
                         },
-                        React.createElement(RichText, {
-                            tagName: 'span',
-                            placeholder: __('Add text…', 'advanced-gutenberg'),
-                            value: text,
-                            onChange: function onChange(value) {
-                                return setAttributes({ text: value });
-                            },
-                            allowedFormats: ['core/bold', 'core/italic', 'core/strikethrough'],
-                            isSelected: isSelected,
-                            className: 'wp-block-advgb-button_link ' + id,
-                            keepPlaceholderOnFocus: true
-                        })
+                        React.createElement(
+                            "span",
+                            { className: "wp-block-advgb-button_link " + id },
+                            iconDisplay && React.createElement(
+                                "i",
+                                { className: iconClass },
+                                icon
+                            ),
+                            React.createElement(RichText, {
+                                tagName: "span",
+                                placeholder: __('Add text…', 'advanced-gutenberg'),
+                                value: text,
+                                onChange: function onChange(value) {
+                                    return setAttributes({ text: value });
+                                },
+                                allowedFormats: ['core/bold', 'core/italic', 'core/strikethrough'],
+                                isSelected: isSelected,
+                                keepPlaceholderOnFocus: true
+                            })
+                        )
                     ),
                     React.createElement(
-                        'style',
+                        "style",
                         null,
-                        '.' + id + ' {\n                        font-size: ' + textSize + 'px;\n                        color: ' + textColor + ' !important;\n                        background-color: ' + bgColor + ' !important;\n                        margin: ' + marginTop + 'px ' + marginRight + 'px ' + marginBottom + 'px ' + marginLeft + 'px;\n                        padding: ' + paddingTop + 'px ' + paddingRight + 'px ' + paddingBottom + 'px ' + paddingLeft + 'px;\n                        border-width: ' + borderWidth + 'px !important;\n                        border-color: ' + borderColor + ' !important;\n                        border-radius: ' + borderRadius + 'px !important;\n                        border-style: ' + borderStyle + ' ' + (borderStyle !== 'none' && '!important') + ';\n                    }\n                    .' + id + ':hover {\n                        color: ' + hoverTextColor + ' !important;\n                        background-color: ' + hoverBgColor + ' !important;\n                        box-shadow: ' + hoverShadowH + 'px ' + hoverShadowV + 'px ' + hoverShadowBlur + 'px ' + hoverShadowSpread + 'px ' + hoverShadowColor + ';\n                        transition: all ' + transitionSpeed + 's ease;\n                        opacity: ' + hoverOpacity / 100 + '\n                    }'
+                        "." + id + " {\n                        font-size: " + textSize + "px;\n                        color: " + textColor + " !important;\n                        background-color: " + bgColor + " !important;\n                        margin: " + marginTop + "px " + marginRight + "px " + marginBottom + "px " + marginLeft + "px;\n                        padding: " + paddingTop + "px " + paddingRight + "px " + paddingBottom + "px " + paddingLeft + "px;\n                        border-width: " + borderWidth + "px !important;\n                        border-color: " + borderColor + " !important;\n                        border-radius: " + borderRadius + "px !important;\n                        border-style: " + borderStyle + " " + (borderStyle !== 'none' && '!important') + ";\n                    }\n                    ." + id + ":hover {\n                        color: " + hoverTextColor + " !important;\n                        background-color: " + hoverBgColor + " !important;\n                        box-shadow: " + hoverShadowH + "px " + hoverShadowV + "px " + hoverShadowBlur + "px " + hoverShadowSpread + "px " + hoverShadowColor + ";\n                        transition: all " + transitionSpeed + "s ease;\n                        opacity: " + hoverOpacity / 100 + "\n                    }\n                    ." + id + " i {\n                        font-size: " + iconSize + "px;\n                        float: " + iconPosition + ";\n                    }",
+                        iconColor && "." + id + " i {\n                            color: " + iconColor + ";\n                        }",
+                        iconPosition === 'left' && "." + id + " i {\n                            margin-right: " + iconSpacing + "px;\n                        }",
+                        iconPosition === 'right' && "." + id + " i {\n                            margin-left: " + iconSpacing + "px;\n                        }",
+                        advgbBlocks.advgb_pro !== '1' && "." + id + " i {\n                            display: none !important;\n                        }"
                     ),
+                    showPopup ? React.createElement(_iconClass.IconListPopupHook, {
+                        content: "iconpopup",
+                        closePopup: function closePopup() {
+                            if (showPopup) {
+                                _this2.togglePopup();
+                            }
+                        },
+                        onSelectIcon: this.handleIcon,
+                        onSelectIconTheme: this.handleIconTheme,
+                        selectedIcon: icon,
+                        selectedIconTheme: iconTheme
+                    }) : null,
                     React.createElement(
                         InspectorControls,
                         null,
@@ -7451,8 +7560,8 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                                 BaseControl,
                                 {
                                     label: [__('Link URL', 'advanced-gutenberg'), url && React.createElement(
-                                        'a',
-                                        { href: url || '#', key: 'link_url', target: '_blank', style: { float: 'right' } },
+                                        "a",
+                                        { href: url || '#', key: "link_url", target: "_blank", style: { float: 'right' } },
                                         __('Preview', 'advanced-gutenberg')
                                     )]
                                 },
@@ -7485,7 +7594,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                                 },
                                 min: 10,
                                 max: 100,
-                                beforeIcon: 'editor-textcolor',
+                                beforeIcon: "editor-textcolor",
                                 allowReset: true
                             }),
                             !isStyleOutlined && React.createElement(_components.AdvColorControl, {
@@ -7694,6 +7803,78 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                                     max: 50
                                 })
                             )
+                        ),
+                        advgbBlocks.advgb_pro === '1' && React.createElement(
+                            Fragment,
+                            null,
+                            React.createElement(
+                                PanelBody,
+                                { title: __('Icon', 'advanced-gutenberg'), initialOpen: false },
+                                React.createElement(ToggleControl, {
+                                    label: __('Display icon', 'advanced-gutenberg'),
+                                    checked: iconDisplay,
+                                    onChange: function onChange() {
+                                        return setAttributes({ iconDisplay: !iconDisplay });
+                                    },
+                                    className: "advgb-child-toggle"
+                                }),
+                                iconDisplay && React.createElement(
+                                    Fragment,
+                                    null,
+                                    React.createElement(
+                                        BaseControl,
+                                        {
+                                            label: __('Icon Library (Material Icon)', 'advanced-gutenberg')
+                                        },
+                                        React.createElement(
+                                            Button,
+                                            {
+                                                className: "button button-large advgb-browse-icon-btn",
+                                                onClick: function onClick() {
+                                                    if (!showPopup) {
+                                                        _this2.togglePopup();
+                                                    }
+                                                }
+                                            },
+                                            __('Icon Selection', 'advanced-gutenberg')
+                                        )
+                                    ),
+                                    React.createElement(RangeControl, {
+                                        label: __('Icon Size (px)', 'advanced-gutenberg'),
+                                        value: iconSize,
+                                        min: 1,
+                                        max: 200,
+                                        onChange: function onChange(value) {
+                                            return setAttributes({ iconSize: value });
+                                        }
+                                    }),
+                                    React.createElement(_components.AdvColorControl, {
+                                        label: __('Icon Color', 'advanced-gutenberg'),
+                                        value: iconColor,
+                                        onChange: function onChange(value) {
+                                            return setAttributes({ iconColor: value });
+                                        }
+                                    }),
+                                    React.createElement(SelectControl, {
+                                        label: __('Icon Position', 'advanced-gutenberg'),
+                                        value: iconPosition,
+                                        options: [{ label: __('Left', 'advanced-gutenberg'), value: 'left' }, { label: __('Right', 'advanced-gutenberg'), value: 'right' }],
+                                        onChange: function onChange(value) {
+                                            return setAttributes({ iconPosition: value });
+                                        }
+                                    }),
+                                    React.createElement(RangeControl, {
+                                        label: __('Icon Spacing (px)', 'advanced-gutenberg'),
+                                        value: iconSpacing,
+                                        min: 0,
+                                        max: 100,
+                                        help: __('Spacing between icon and text', 'advanced-gutenberg'),
+                                        onChange: function onChange(value) {
+                                            return setAttributes({ iconSpacing: value });
+                                        }
+                                    })
+                                )
+                            )
                         )
                     )
                 );
@@ -7704,10 +7885,10 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
     }(Component);
 
     var buttonBlockIcon = React.createElement(
-        'svg',
-        { xmlns: 'http://www.w3.org/2000/svg', width: '20', height: '20', viewBox: '2 2 22 22' },
-        React.createElement('path', { fill: 'none', d: 'M0 0h24v24H0V0z' }),
-        React.createElement('path', { d: 'M19 7H5c-1.1 0-2 .9-2 2v6c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2zm0 8H5V9h14v6z' })
+        "svg",
+        { xmlns: "http://www.w3.org/2000/svg", width: "20", height: "20", viewBox: "2 2 22 22" },
+        React.createElement("path", { fill: "none", d: "M0 0h24v24H0V0z" }),
+        React.createElement("path", { d: "M19 7H5c-1.1 0-2 .9-2 2v6c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2zm0 8H5V9h14v6z" })
     );
     var blockAttrs = {
         id: {
@@ -7724,7 +7905,6 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
             type: 'string'
         },
         text: {
-            source: 'children',
             selector: 'a',
             default: 'PUSH THE BUTTON'
         },
@@ -7823,6 +8003,33 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
             type: 'string',
             default: 'none'
         },
+        iconDisplay: {
+            type: 'boolean',
+            default: false
+        },
+        icon: {
+            type: 'string',
+            default: 'insert_link'
+        },
+        iconSize: {
+            type: 'number',
+            default: 30
+        },
+        iconColor: {
+            type: 'string'
+        },
+        iconTheme: {
+            type: 'string',
+            default: 'outlined'
+        },
+        iconPosition: {
+            type: 'string',
+            default: 'left'
+        },
+        iconSpacing: {
+            type: 'number',
+            default: 7
+        },
         changed: {
             type: 'boolean',
             default: false
@@ -7881,21 +8088,38 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                 url = attributes.url,
                 urlOpenNewTab = attributes.urlOpenNewTab,
                 title = attributes.title,
-                text = attributes.text;
+                text = attributes.text,
+                iconDisplay = attributes.iconDisplay,
+                icon = attributes.icon,
+                iconSize = attributes.iconSize,
+                iconColor = attributes.iconColor,
+                iconTheme = attributes.iconTheme,
+                iconPosition = attributes.iconPosition,
+                iconSpacing = attributes.iconSpacing;
 
+
+            var iconClass = ['material-icons', iconTheme !== '' && "-" + iconTheme].filter(Boolean).join('');
 
             return React.createElement(
-                'div',
-                { className: 'align' + align },
-                React.createElement(RichText.Content, {
-                    tagName: 'a',
-                    className: 'wp-block-advgb-button_link ' + id,
-                    href: url || '#',
-                    title: title,
-                    target: !urlOpenNewTab ? '_self' : '_blank',
-                    value: text,
-                    rel: 'noopener noreferrer'
-                })
+                "div",
+                { className: "align" + align },
+                React.createElement(
+                    "a",
+                    { className: "wp-block-advgb-button_link " + id,
+                        href: url || '#',
+                        title: title,
+                        target: !urlOpenNewTab ? '_self' : '_blank',
+                        rel: "noopener noreferrer" },
+                    iconDisplay && React.createElement(
+                        "i",
+                        { className: iconClass },
+                        icon
+                    ),
+                    React.createElement(RichText.Content, {
+                        tagName: "span",
+                        value: text
+                    })
+                )
             );
         },
         getEditWrapperProps: function getEditWrapperProps(attributes) {
@@ -7912,6 +8136,46 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
         deprecated: [{
             attributes: _extends({}, blockAttrs, {
+                text: {
+                    source: 'children',
+                    selector: 'a',
+                    default: 'PUSH THE BUTTON'
+                }
+            }),
+            supports: {
+                anchor: true,
+                align: ['right', 'left', 'center', 'full']
+            },
+            save: function save(_ref2) {
+                var attributes = _ref2.attributes;
+                var id = attributes.id,
+                    align = attributes.align,
+                    url = attributes.url,
+                    urlOpenNewTab = attributes.urlOpenNewTab,
+                    title = attributes.title,
+                    text = attributes.text,
+                    icon = attributes.icon,
+                    iconSize = attributes.iconSize,
+                    iconColor = attributes.iconColor,
+                    iconTheme = attributes.iconTheme;
+
+
+                return React.createElement(
+                    "div",
+                    { className: "align" + align },
+                    React.createElement(RichText.Content, {
+                        tagName: "a",
+                        className: "wp-block-advgb-button_link " + id,
+                        href: url || '#',
+                        title: title,
+                        target: !urlOpenNewTab ? '_self' : '_blank',
+                        value: text,
+                        rel: "noopener noreferrer"
+                    })
+                );
+            }
+        }, {
+            attributes: _extends({}, blockAttrs, {
                 transitionSpeed: {
                     type: 'number',
                     default: 0.2
@@ -7923,8 +8187,8 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                     transitionSpeed: transitionSpeed
                 });
             },
-            save: function save(_ref2) {
-                var attributes = _ref2.attributes;
+            save: function save(_ref3) {
+                var attributes = _ref3.attributes;
                 var id = attributes.id,
                     align = attributes.align,
                     url = attributes.url,
@@ -7934,16 +8198,16 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
                 return React.createElement(
-                    'div',
-                    { className: 'align' + align },
+                    "div",
+                    { className: "align" + align },
                     React.createElement(RichText.Content, {
-                        tagName: 'a',
-                        className: 'wp-block-advgb-button_link ' + id,
+                        tagName: "a",
+                        className: "wp-block-advgb-button_link " + id,
                         href: url || '#',
                         title: title,
                         target: !urlOpenNewTab ? '_self' : '_blank',
                         value: text,
-                        rel: 'noopener noreferrer'
+                        rel: "noopener noreferrer"
                     })
                 );
             }
@@ -12318,14 +12582,66 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                 this.props.resetOrder();
             }
         }, {
-            key: "render",
-            value: function render() {
-                var _this2 = this;
+            key: "moveTab",
+            value: function moveTab(index, direction) {
+                var attributes = this.props.attributes;
 
+                var headers = attributes.tabHeaders;
+                var header = headers.splice(index, 1);
+                var anchors = attributes.tabAnchors;
+                var anchor = anchors.splice(index, 1);
+
+                switch (direction) {
+                    case 'back':
+                        if (index === 0) {
+                            return;
+                        }
+                        this.onMove(index, index - 1, headers, header, anchors, anchor);
+                        break;
+                    case 'forward':
+                        if (index === headers.length) {
+                            return;
+                        }
+                        this.onMove(index, index + 1, headers, header, anchors, anchor);
+                        break;
+                }
+            }
+        }, {
+            key: "onMove",
+            value: function onMove(index, newIndex, headers, header, anchors, anchor) {
                 var _props10 = this.props,
                     attributes = _props10.attributes,
                     setAttributes = _props10.setAttributes,
                     clientId = _props10.clientId;
+
+                var _ref14 = !wp.blockEditor ? dispatch('core/editor') : dispatch('core/block-editor'),
+                    moveBlockToPosition = _ref14.moveBlockToPosition;
+
+                var _ref15 = !wp.blockEditor ? select('core/editor') : select('core/block-editor'),
+                    getBlockOrder = _ref15.getBlockOrder;
+
+                var childBlocks = getBlockOrder(clientId);
+
+                headers.splice(newIndex, 0, header[0]);
+                this.updateTabsHeader(attributes.tabHeaders[index], newIndex);
+                this.updateTabsHeader(attributes.tabHeaders[newIndex], newIndex);
+                anchors.splice(newIndex, 0, anchor[0]);
+                moveBlockToPosition(childBlocks[index], clientId, clientId, newIndex);
+
+                this.updateTabHeaders();
+                this.updateTabAnchors();
+                this.props.resetOrder();
+                this.props.updateTabActive(newIndex);
+            }
+        }, {
+            key: "render",
+            value: function render() {
+                var _this2 = this;
+
+                var _props11 = this.props,
+                    attributes = _props11.attributes,
+                    setAttributes = _props11.setAttributes,
+                    clientId = _props11.clientId;
                 var viewport = this.state.viewport;
                 var tabHeaders = attributes.tabHeaders,
                     tabAnchors = attributes.tabAnchors,
@@ -12561,6 +12877,47 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                                             placeholder: __('Title…', 'advanced-gutenberg')
                                         })
                                     ),
+                                    advgbBlocks.advgb_pro === '1' && React.createElement(
+                                        Fragment,
+                                        null,
+                                        React.createElement(TextControl, {
+                                            placeholder: __('HTML Anchor', 'advanced-gutenberg'),
+                                            value: tabAnchors[index],
+                                            onChange: function onChange(value) {
+                                                return _this2.updateTabsAnchor(value, index);
+                                            },
+                                            className: "advgb-floating-anchor-field",
+                                            style: { display: tabActive === index ? 'block' : 'none' }
+                                        }),
+                                        index > 0 && React.createElement(
+                                            Tooltip,
+                                            { text: __('Move back', 'advanced-gutenberg') },
+                                            React.createElement(
+                                                "span",
+                                                { className: "advgb-tab-move-back",
+                                                    onClick: function onClick() {
+                                                        return _this2.moveTab(index, 'back');
+                                                    },
+                                                    style: { display: tabActive === index ? 'block' : 'none' }
+                                                },
+                                                React.createElement(Dashicon, { icon: "arrow-left-alt2" })
+                                            )
+                                        ),
+                                        index < tabHeaders.length - 1 && React.createElement(
+                                            Tooltip,
+                                            { text: __('Move forward', 'advanced-gutenberg') },
+                                            React.createElement(
+                                                "span",
+                                                { className: "advgb-tab-move-forward",
+                                                    onClick: function onClick() {
+                                                        return _this2.moveTab(index, 'forward');
+                                                    },
+                                                    style: { display: tabActive === index ? 'block' : 'none' }
+                                                },
+                                                React.createElement(Dashicon, { icon: "arrow-right-alt2" })
+                                            )
+                                        )
+                                    ),
                                     tabHeaders.length > 1 && React.createElement(
                                         Tooltip,
                                         { text: __('Remove tab', 'advanced-gutenberg') },
@@ -12569,19 +12926,12 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                                             { className: "advgb-tab-remove",
                                                 onClick: function onClick() {
                                                     return _this2.removeTab(index);
-                                                }
+                                                },
+                                                style: { display: tabActive === index ? 'block' : 'none' }
                                             },
                                             React.createElement(Dashicon, { icon: "no" })
                                         )
-                                    ),
-                                    advgbBlocks.advgb_pro === '1' && React.createElement(TextControl, {
-                                        placeholder: __('HTML Anchor', 'advanced-gutenberg'),
-                                        value: tabAnchors[index],
-                                        onChange: function onChange(value) {
-                                            return _this2.updateTabsAnchor(value, index);
-                                        },
-                                        className: "advgb-floating-anchor-field"
-                                    })
+                                    )
                                 );
                             }),
                             React.createElement(
@@ -12748,9 +13098,9 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
         supports: {
             anchor: true
         },
-        edit: compose(withDispatch(function (dispatch, _ref14, _ref15) {
-            var clientId = _ref14.clientId;
-            var select = _ref15.select;
+        edit: compose(withDispatch(function (dispatch, _ref16, _ref17) {
+            var clientId = _ref16.clientId;
+            var select = _ref17.select;
 
             var _select = select('core/block-editor'),
                 getBlock = _select.getBlock;
@@ -12780,8 +13130,8 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                 }
             };
         }))(AdvTabsWrapper),
-        save: function save(_ref16) {
-            var attributes = _ref16.attributes;
+        save: function save(_ref18) {
+            var attributes = _ref18.attributes;
             var tabHeaders = attributes.tabHeaders,
                 tabAnchors = attributes.tabAnchors,
                 tabActiveFrontend = attributes.tabActiveFrontend,
@@ -12849,8 +13199,8 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
         },
         deprecated: [{
             attributes: _extends({}, tabBlockAttrs),
-            save: function save(_ref17) {
-                var attributes = _ref17.attributes;
+            save: function save(_ref19) {
+                var attributes = _ref19.attributes;
                 var tabHeaders = attributes.tabHeaders,
                     tabActiveFrontend = attributes.tabActiveFrontend,
                     tabsStyleD = attributes.tabsStyleD,
@@ -12922,8 +13272,8 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                     default: false
                 }
             }),
-            save: function save(_ref18) {
-                var attributes = _ref18.attributes;
+            save: function save(_ref20) {
+                var attributes = _ref20.attributes;
                 var tabHeaders = attributes.tabHeaders,
                     tabActiveFrontend = attributes.tabActiveFrontend,
                     tabsStyleD = attributes.tabsStyleD,
@@ -12996,8 +13346,8 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                     default: ''
                 }
             }),
-            save: function save(_ref19) {
-                var attributes = _ref19.attributes;
+            save: function save(_ref21) {
+                var attributes = _ref21.attributes;
                 var tabHeaders = attributes.tabHeaders,
                     tabActiveFrontend = attributes.tabActiveFrontend,
                     tabsStyleD = attributes.tabsStyleD,
@@ -17035,11 +17385,12 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
             React.createElement(
                 'div',
                 { className: 'advgb-count-up-columns-one', style: { textAlign: 'center' } },
-                React.createElement(
-                    'h4',
-                    { className: 'advgb-count-up-header', style: { color: headerTextColor } },
-                    headerText
-                ),
+                React.createElement(RichText.Content, {
+                    tagName: 'h4',
+                    value: headerText,
+                    style: { color: headerTextColor },
+                    className: 'advgb-count-up-header'
+                }),
                 React.createElement(
                     'div',
                     { className: 'advgb-counter',
@@ -17053,20 +17404,22 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                     ),
                     !!countUpSymbolAfter && countSymbolElm
                 ),
-                React.createElement(
-                    'p',
-                    { className: 'advgb-count-up-desc', style: { color: descTextColor } },
-                    descText
-                )
+                React.createElement(RichText.Content, {
+                    tagName: 'p',
+                    value: descText,
+                    style: { color: descTextColor },
+                    className: 'advgb-count-up-desc'
+                })
             ),
             parseInt(columns) > 1 && React.createElement(
                 'div',
                 { className: 'advgb-count-up-columns-two', style: { textAlign: 'center' } },
-                React.createElement(
-                    'h4',
-                    { className: 'advgb-count-up-header', style: { color: headerTextColor } },
-                    headerText2
-                ),
+                React.createElement(RichText.Content, {
+                    tagName: 'h4',
+                    value: headerText2,
+                    style: { color: headerTextColor },
+                    className: 'advgb-count-up-header'
+                }),
                 React.createElement(
                     'div',
                     { className: 'advgb-counter',
@@ -17080,20 +17433,22 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                     ),
                     !!countUpSymbolAfter2 && countSymbolElm2
                 ),
-                React.createElement(
-                    'p',
-                    { className: 'advgb-count-up-desc', style: { color: descTextColor } },
-                    descText2
-                )
+                React.createElement(RichText.Content, {
+                    tagName: 'p',
+                    value: descText2,
+                    style: { color: descTextColor },
+                    className: 'advgb-count-up-desc'
+                })
             ),
             parseInt(columns) > 2 && React.createElement(
                 'div',
                 { className: 'advgb-count-up-columns-three', style: { textAlign: 'center' } },
-                React.createElement(
-                    'h4',
-                    { className: 'advgb-count-up-header', style: { color: headerTextColor } },
-                    headerText3
-                ),
+                React.createElement(RichText.Content, {
+                    tagName: 'h4',
+                    value: headerText3,
+                    style: { color: headerTextColor },
+                    className: 'advgb-count-up-header'
+                }),
                 React.createElement(
                     'div',
                     { className: 'advgb-counter',
@@ -17107,11 +17462,12 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                     ),
                     !!countUpSymbolAfter3 && countSymbolElm3
                 ),
-                React.createElement(
-                    'p',
-                    { className: 'advgb-count-up-desc', style: { color: descTextColor } },
-                    descText3
-                )
+                React.createElement(RichText.Content, {
+                    tagName: 'p',
+                    value: descText3,
+                    style: { color: descTextColor },
+                    className: 'advgb-count-up-desc'
+                })
             )
         );
     }
@@ -17333,8 +17689,13 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
         }, {
             key: "componentDidMount",
             value: function componentDidMount() {
-                var attributes = this.props.attributes;
+                var _props2 = this.props,
+                    attributes = _props2.attributes,
+                    setAttributes = _props2.setAttributes,
+                    clientId = _props2.clientId;
 
+
+                setAttributes({ id: 'advg-images-slider-' + clientId });
 
                 if (attributes.images.length) {
                     this.initSlider();
@@ -17343,9 +17704,9 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
         }, {
             key: "componentWillUpdate",
             value: function componentWillUpdate(nextProps) {
-                var _props2 = this.props,
-                    clientId = _props2.clientId,
-                    attributes = _props2.attributes;
+                var _props3 = this.props,
+                    clientId = _props3.clientId,
+                    attributes = _props3.attributes;
                 var images = attributes.images;
                 var nextImages = nextProps.attributes.images;
 
@@ -17358,10 +17719,12 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
         }, {
             key: "componentDidUpdate",
             value: function componentDidUpdate(prevProps) {
-                var _props3 = this.props,
-                    attributes = _props3.attributes,
-                    clientId = _props3.clientId;
-                var images = attributes.images;
+                var _props4 = this.props,
+                    attributes = _props4.attributes,
+                    clientId = _props4.clientId;
+                var images = attributes.images,
+                    autoplay = attributes.autoplay,
+                    autoplaySpeed = attributes.autoplaySpeed;
                 var prevImages = prevProps.attributes.images;
 
 
@@ -17369,6 +17732,20 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                     if (images.length) {
                         this.initSlider();
                     }
+                }
+
+                // Autoplay
+                if (autoplay && advgbBlocks.advgb_pro === '1') {
+                    $("#block-" + clientId + " .advgb-images-slider.slick-initialized").slick('slickSetOption', 'autoplay', true, true);
+                } else {
+                    $("#block-" + clientId + " .advgb-images-slider.slick-initialized").slick('slickSetOption', 'autoplay', false, true);
+                }
+
+                // Autoplay speed
+                if (autoplay && autoplaySpeed && advgbBlocks.advgb_pro === '1') {
+                    $("#block-" + clientId + " .advgb-images-slider.slick-initialized").slick('slickSetOption', 'autoplaySpeed', autoplaySpeed, true);
+                } else {
+                    $("#block-" + clientId + " .advgb-images-slider.slick-initialized").slick('slickSetOption', 'autoplaySpeed', 3000, true);
                 }
 
                 if (this.state.imageLoaded) {
@@ -17399,9 +17776,9 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
         }, {
             key: "moveImage",
             value: function moveImage(currentIndex, newIndex) {
-                var _props4 = this.props,
-                    setAttributes = _props4.setAttributes,
-                    attributes = _props4.attributes;
+                var _props5 = this.props,
+                    setAttributes = _props5.setAttributes,
+                    attributes = _props5.attributes;
                 var images = attributes.images;
 
 
@@ -17423,9 +17800,9 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                     return null;
                 }
 
-                var _props5 = this.props,
-                    attributes = _props5.attributes,
-                    setAttributes = _props5.setAttributes;
+                var _props6 = this.props,
+                    attributes = _props6.attributes,
+                    setAttributes = _props6.setAttributes;
                 var images = attributes.images;
 
 
@@ -17444,11 +17821,11 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
             value: function render() {
                 var _this3 = this;
 
-                var _props6 = this.props,
-                    attributes = _props6.attributes,
-                    setAttributes = _props6.setAttributes,
-                    isSelected = _props6.isSelected,
-                    clientId = _props6.clientId;
+                var _props7 = this.props,
+                    attributes = _props7.attributes,
+                    setAttributes = _props7.setAttributes,
+                    isSelected = _props7.isSelected,
+                    clientId = _props7.clientId;
                 var _state = this.state,
                     currentSelected = _state.currentSelected,
                     imageLoaded = _state.imageLoaded;
@@ -17465,7 +17842,10 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                     textColor = attributes.textColor,
                     hAlign = attributes.hAlign,
                     vAlign = attributes.vAlign,
-                    isPreview = attributes.isPreview;
+                    isPreview = attributes.isPreview,
+                    autoplay = attributes.autoplay,
+                    autoplaySpeed = attributes.autoplaySpeed,
+                    id = attributes.id;
 
                 if (images.length === 0) {
                     return isPreview ? React.createElement("img", { alt: __('Images Slider', 'advanced-gutenberg'), width: "100%", src: previewImageData }) : React.createElement(
@@ -17503,7 +17883,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                     );
                 }
 
-                var blockClass = ['advgb-images-slider-block', imageLoaded === false && 'advgb-ajax-loading'].filter(Boolean).join(' ');
+                var blockClass = ['advgb-images-slider-block', imageLoaded === false && 'advgb-ajax-loading', id].filter(Boolean).join(' ');
 
                 return isPreview ? React.createElement("img", { alt: __('Images Slider', 'advanced-gutenberg'), width: "100%", src: previewImageData }) : React.createElement(
                     Fragment,
@@ -17522,6 +17902,27 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                                     return setAttributes({ actionOnClick: value });
                                 }
                             }),
+                            advgbBlocks.advgb_pro === '1' && React.createElement(
+                                Fragment,
+                                null,
+                                React.createElement(ToggleControl, {
+                                    label: __('Autoplay', 'advanced-gutenberg'),
+                                    checked: autoplay,
+                                    onChange: function onChange() {
+                                        return setAttributes({ autoplay: !autoplay });
+                                    }
+                                }),
+                                autoplay && React.createElement(RangeControl, {
+                                    label: __('Autoplay Speed', 'advanced-gutenberg'),
+                                    help: __('Change interval between slides in miliseconds.', 'advanced-gutenberg'),
+                                    min: 1000,
+                                    max: 20000,
+                                    value: autoplaySpeed,
+                                    onChange: function onChange(value) {
+                                        return setAttributes({ autoplaySpeed: value });
+                                    }
+                                })
+                            ),
                             React.createElement(ToggleControl, {
                                 label: __('Full width', 'advanced-gutenberg'),
                                 checked: fullWidth,
@@ -17867,9 +18268,20 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
             type: 'string',
             default: 'center'
         },
+        autoplay: {
+            type: 'boolean',
+            default: false
+        },
+        autoplaySpeed: {
+            type: 'number',
+            default: 3000
+        },
         changed: {
             type: 'boolean',
             default: false
+        },
+        id: {
+            type: 'string'
         },
         isPreview: {
             type: 'boolean',
@@ -17910,9 +18322,10 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                 titleColor = attributes.titleColor,
                 textColor = attributes.textColor,
                 hAlign = attributes.hAlign,
-                vAlign = attributes.vAlign;
+                vAlign = attributes.vAlign,
+                id = attributes.id;
 
-            var blockClassName = ['advgb-images-slider-block', actionOnClick === 'lightbox' && 'advgb-images-slider-lightbox'].filter(Boolean).join(' ');
+            var blockClassName = ['advgb-images-slider-block', actionOnClick === 'lightbox' && 'advgb-images-slider-lightbox', id].filter(Boolean).join(' ');
 
             return React.createElement(
                 "div",
@@ -24676,7 +25089,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                         }).then(function (taxAttributes) {
                             // fetch all terms
                             wp.apiFetch({
-                                path: wp.url.addQueryArgs('wp/v2/' + taxAttributes.rest_base, { context: 'edit' })
+                                path: wp.url.addQueryArgs('wp/v2/' + taxAttributes.rest_base + '?per_page=-1&hide_empty=true', { context: 'edit' })
                             }).then(function (terms) {
                                 var suggestions = [];
                                 var map = [];
@@ -29334,171 +29747,10 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 /***/ }),
 
-/***/ "./src/assets/js/editor.jsx":
-/*!**********************************!*\
-  !*** ./src/assets/js/editor.jsx ***!
-  \**********************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-if (typeof wp !== 'undefined' && typeof wp.domReady !== 'undefined') {
-    wp.domReady(function () {
-
-        if (advgb_blocks_vars.blocks.active_blocks === 'undefined' || advgb_blocks_vars.blocks.active_blocks.length === 0) {
-            // No Block Access defined for this role, so we stop the process here
-            return;
-        }
-
-        var gutenberg_init_function = null;
-        if (typeof window._wpLoadBlockEditor !== 'undefined') {
-            gutenberg_init_function = window._wpLoadBlockEditor;
-        }
-
-        if (gutenberg_init_function !== null) {
-            // Wait for Gutenberg editor to be ready
-            gutenberg_init_function.then(function () {
-                if (advgb_blocks_vars.original_settings.allowedBlockTypes !== true) {
-                    // allowed_block_types filter has been used, in this case we do nothing as we don't know why blocks have been filtered
-                    return;
-                }
-
-                var list_blocks = [];
-                var granted_blocks = [];
-                var missing_block = false;
-                // Retrieve all registered blocks
-                var blocks = wp.blocks.getBlockTypes();
-                var savedBlocks = {
-                    active_blocks: Object.values(advgb_blocks_vars.blocks.active_blocks),
-                    inactive_blocks: Object.values(advgb_blocks_vars.blocks.inactive_blocks)
-                };
-
-                // Add Widgets Legacy and Area blocks manually
-                if (advgbBlocks.blocks_widget_support) {
-                    blocks.push({
-                        "name": "core/legacy-widget",
-                        "icon": {
-                            "src": "block-default"
-                        },
-                        "title": "Legacy Widget",
-                        "category": "widgets"
-                    }, {
-                        "name": "core/widget-area",
-                        "icon": {
-                            "src": "block-default"
-                        },
-                        "category": "widgets",
-                        "title": "Widget Area"
-                    });
-                }
-
-                for (var block in blocks) {
-                    var blockItemIcon = '';
-                    var blockItem = {
-                        name: blocks[block].name,
-                        icon: blocks[block].icon.src,
-                        title: blocks[block].title,
-                        category: blocks[block].category,
-                        parent: blocks[block].parent
-                    };
-
-                    var savedIcon = !!blocks[block].icon.src ? blocks[block].icon.src : blocks[block].icon;
-
-                    if (blocks[block].icon.foreground !== undefined) blockItem.iconColor = blocks[block].icon.foreground;
-
-                    if (typeof savedIcon === 'function') {
-                        if (typeof savedIcon.prototype !== 'undefined') {
-                            blockItem.icon = wp.element.renderToString(wp.element.createElement(savedIcon));
-                            blockItem.icon = blockItem.icon.replace(/stopcolor/g, 'stop-color');
-                            blockItem.icon = blockItem.icon.replace(/stopopacity/g, 'stop-opacity');
-                        } else {
-                            blockItemIcon = wp.element.createElement(wp.components.Dashicon, { icon: 'block-default' });
-                            blockItem.icon = wp.element.renderToString(blockItemIcon);
-                        }
-                    } else if ((typeof savedIcon === 'undefined' ? 'undefined' : _typeof(savedIcon)) === 'object') {
-                        blockItem.icon = wp.element.renderToString(savedIcon);
-                        blockItem.icon = blockItem.icon.replace(/stopcolor/g, 'stop-color');
-                        blockItem.icon = blockItem.icon.replace(/stopopacity/g, 'stop-opacity');
-                    } else if (typeof savedIcon === 'string') {
-                        blockItemIcon = wp.element.createElement(wp.components.Dashicon, { icon: savedIcon });
-                        blockItem.icon = wp.element.renderToString(blockItemIcon);
-                    }
-                    list_blocks.push(blockItem);
-
-                    // Compare current block with the list of blocks we have
-                    if (savedBlocks.active_blocks.indexOf(blocks[block].name) >= 0) {
-                        // Block is active
-                        granted_blocks.push(blocks[block].name);
-                    } else if (savedBlocks.inactive_blocks.indexOf(blocks[block].name) >= 0) {
-                        // Block is inactive
-                    } else {
-                        // This block is not in our database yet, but by default we allow the usage
-                        granted_blocks.push(blocks[block].name);
-                        missing_block = true;
-                    }
-                }
-
-                //console.log('missing_block: ' + missing_block);
-
-                if (missing_block) {
-                    if (console !== undefined && console.error !== undefined) {
-                        // Let's output as log instead of error
-                        console.log('Reloading editor by PublishPress Blocks plugin');
-                    }
-                    // Replace original allowed block settings by our modified list
-                    var new_settings = advgb_blocks_vars.original_settings;
-
-                    // Unregister core blocks to avoid registering twice later through wp.editPost.initializeEditor
-                    var core_blocks = ['core/paragraph', 'core/image', 'core/heading', 'core/list', 'core/quote', 'core/archives', 'core/audio', 'core/button', 'core/buttons', 'core/calendar', 'core/categories', 'core/code', 'core/columns', 'core/column', 'core/cover', 'core/embed', 'core/group', 'core/freeform', 'core/html', 'core/media-text', 'core/latest-comments', 'core/latest-posts', 'core/missing', 'core/more', 'core/nextpage', 'core/page-list', 'core/preformatted', 'core/pullquote', 'core/rss', 'core/search', 'core/separator', 'core/block', 'core/social-links', 'core/social-link', 'core/spacer', 'core/table', 'core/tag-cloud', 'core/text-columns', 'core/verse', 'core/video', 'core/site-logo', 'core/site-tagline', 'core/site-title', 'core/query', 'core/post-template', 'core/query-title', 'core/query-pagination', 'core/query-pagination-next', 'core/query-pagination-numbers', 'core/query-pagination-previous', 'core/post-title', 'core/post-content', 'core/post-date', 'core/post-excerpt', 'core/post-featured-image', 'core/post-terms', 'core/loginout', 'core/gallery', 'core/shortcode', 'core/file', 'core/pattern', 'core/navigation', 'core/navigation-link', 'core/navigation-submenu', 'core/template-part', 'core/post-author', 'core/post-navigation-link', 'core/post-comments', 'core/term-description'];
-
-                    core_blocks.forEach(function (element) {
-                        if (wp.data.select('core/blocks').getBlockType(element)) {
-                            wp.blocks.unregisterBlockType(element);
-                        }
-                    });
-
-                    new_settings.allowedBlockTypes = granted_blocks;
-                    var target = document.getElementById('editor');
-
-                    // Initialize again the editor
-                    wp.editPost.initializeEditor('editor', advgb_blocks_vars.post_type, advgb_blocks_vars.post_id, new_settings, window._wpGutenbergDefaultPost);
-
-                    var list_categories = wp.blocks.getCategories();
-
-                    try {
-                        // Use this ajax query to update the block list in db
-                        jQuery.ajax({
-                            url: advgb_blocks_vars.ajaxurl,
-                            method: 'POST',
-                            data: {
-                                action: 'advgb_update_blocks_list',
-                                blocksList: JSON.stringify(list_blocks),
-                                categoriesList: JSON.stringify(list_categories),
-                                nonce: advgb_blocks_vars.nonce
-                            },
-                            success: function success(data) {
-                                //console.log(data);
-                            }
-                        });
-                    } catch (e) {
-                        //console.log(e);
-                    }
-                }
-            });
-        }
-    });
-}
-
-/***/ }),
-
 /***/ 0:
-/*!*******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** multi ./src/assets/blocks/0-adv-components/components.jsx ./src/assets/blocks/0-adv-components/icon-class.jsx ./src/assets/blocks/accordion/block.jsx ./src/assets/blocks/advaccordion/accordion.jsx ./src/assets/blocks/advaccordion/block.jsx ./src/assets/blocks/advbutton/block.jsx ./src/assets/blocks/advicon/block.jsx ./src/assets/blocks/advimage/block.jsx ./src/assets/blocks/advlist/block.jsx ./src/assets/blocks/advtable/block.jsx ./src/assets/blocks/advtabs/block.jsx ./src/assets/blocks/advtabs/tab.jsx ./src/assets/blocks/advvideo/block.jsx ./src/assets/blocks/columns/block.jsx ./src/assets/blocks/columns/column.jsx ./src/assets/blocks/contact-form/block.jsx ./src/assets/blocks/container/block.jsx ./src/assets/blocks/count-up/block.jsx ./src/assets/blocks/images-slider/block.jsx ./src/assets/blocks/infobox/block.jsx ./src/assets/blocks/login-form/block.jsx ./src/assets/blocks/map/block.jsx ./src/assets/blocks/newsletter/block.jsx ./src/assets/blocks/recent-posts/block.jsx ./src/assets/blocks/recent-posts/query-controls.jsx ./src/assets/blocks/search-bar/block.jsx ./src/assets/blocks/social-links/block.jsx ./src/assets/blocks/summary/block.jsx ./src/assets/blocks/tabs/block.jsx ./src/assets/blocks/testimonial/block.jsx ./src/assets/blocks/woo-products/block.jsx ./src/assets/js/editor.jsx ***!
-  \*******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*!****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** multi ./src/assets/blocks/0-adv-components/components.jsx ./src/assets/blocks/0-adv-components/icon-class.jsx ./src/assets/blocks/accordion/block.jsx ./src/assets/blocks/advaccordion/accordion.jsx ./src/assets/blocks/advaccordion/block.jsx ./src/assets/blocks/advbutton/block.jsx ./src/assets/blocks/advicon/block.jsx ./src/assets/blocks/advimage/block.jsx ./src/assets/blocks/advlist/block.jsx ./src/assets/blocks/advtable/block.jsx ./src/assets/blocks/advtabs/block.jsx ./src/assets/blocks/advtabs/tab.jsx ./src/assets/blocks/advvideo/block.jsx ./src/assets/blocks/columns/block.jsx ./src/assets/blocks/columns/column.jsx ./src/assets/blocks/contact-form/block.jsx ./src/assets/blocks/container/block.jsx ./src/assets/blocks/count-up/block.jsx ./src/assets/blocks/images-slider/block.jsx ./src/assets/blocks/infobox/block.jsx ./src/assets/blocks/login-form/block.jsx ./src/assets/blocks/map/block.jsx ./src/assets/blocks/newsletter/block.jsx ./src/assets/blocks/recent-posts/block.jsx ./src/assets/blocks/recent-posts/query-controls.jsx ./src/assets/blocks/search-bar/block.jsx ./src/assets/blocks/social-links/block.jsx ./src/assets/blocks/summary/block.jsx ./src/assets/blocks/tabs/block.jsx ./src/assets/blocks/testimonial/block.jsx ./src/assets/blocks/woo-products/block.jsx ***!
+  \****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -29532,8 +29784,7 @@ __webpack_require__(/*! ./src/assets/blocks/social-links/block.jsx */"./src/asse
 __webpack_require__(/*! ./src/assets/blocks/summary/block.jsx */"./src/assets/blocks/summary/block.jsx");
 __webpack_require__(/*! ./src/assets/blocks/tabs/block.jsx */"./src/assets/blocks/tabs/block.jsx");
 __webpack_require__(/*! ./src/assets/blocks/testimonial/block.jsx */"./src/assets/blocks/testimonial/block.jsx");
-__webpack_require__(/*! ./src/assets/blocks/woo-products/block.jsx */"./src/assets/blocks/woo-products/block.jsx");
-module.exports = __webpack_require__(/*! ./src/assets/js/editor.jsx */"./src/assets/js/editor.jsx");
+module.exports = __webpack_require__(/*! ./src/assets/blocks/woo-products/block.jsx */"./src/assets/blocks/woo-products/block.jsx");
 
 
 /***/ })

@@ -28,6 +28,10 @@ if (!defined("ABSPATH")) {
                 <td><input type="text" value="<?php echo esc_attr($this->phrases["wmuPhrasePostMaxSize"]); ?>" name="wmuPhrasePostMaxSize" id="wmuPhrasePostMaxSize"/></td>
             </tr>
             <tr scope="row">
+                <th><label for="wmuPhraseDoingUpload"><?php esc_html_e("Message if submitting comment while uploading", "wpdiscuz"); ?></label></th>
+                <td><input type="text" value="<?php echo esc_attr($this->phrases["wmuPhraseDoingUpload"]); ?>" name="wmuPhraseDoingUpload" id="wmuPhraseDoingUpload"/></td>
+            </tr>
+            <tr scope="row">
                 <th><label for="wmuAttachImage"><?php esc_html_e("Attach an image to this comment", "wpdiscuz"); ?></label></th>
                 <td><input type="text" value="<?php echo esc_attr($this->phrases["wmuAttachImage"]); ?>" name="wmuAttachImage" id="wmuAttachImage"/></td>
             </tr>

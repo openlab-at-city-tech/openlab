@@ -5,7 +5,7 @@
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '78da14ece881a769ec05fe2aa38d5437c383036e',
+        'reference' => '0ba1b8bf4031111f4a5443a1d187b00c89abddab',
         'name' => '__root__',
         'dev' => true,
     ),
@@ -16,7 +16,7 @@
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '78da14ece881a769ec05fe2aa38d5437c383036e',
+            'reference' => '0ba1b8bf4031111f4a5443a1d187b00c89abddab',
             'dev_requirement' => false,
         ),
         'publishpress/wordpress-reviews' => array(

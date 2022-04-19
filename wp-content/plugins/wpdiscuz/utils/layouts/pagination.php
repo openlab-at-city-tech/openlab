@@ -25,7 +25,7 @@ if ($pageCount && $pageCount > 1) {
         }
         if ($page > 0) {
             ?>
-            <a href='#<?php echo esc_url_raw($page - 1); ?>' class='wpd-page-link wpd-not-clicked' data-wpd-page='<?php echo esc_attr($page - 1); ?>'><?php esc_html_e("&lsaquo;", "wpdiscuz"); ?></a>
+            <a href='#<?php esc_attr_e($page - 1); ?>' class='wpd-page-link wpd-not-clicked' data-wpd-page='<?php echo esc_attr($page - 1); ?>'><?php esc_html_e("&lsaquo;", "wpdiscuz"); ?></a>
             <?php
         }
         for ($i = $start; $i <= $end; $i++) {
@@ -35,19 +35,19 @@ if ($pageCount && $pageCount > 1) {
                     ?>
                     <span style="background: <?php echo esc_attr($this->options->thread_styles["primaryColor"]); ?>;" class='wpd-page-link wpd-current-page' data-wpd-page='<?php echo esc_attr($i); ?>'><?php echo esc_html($pageText); ?></span>
                 <?php } else { ?>
-                    <a href='#<?php echo esc_url_raw($i); ?>' class='wpd-page-link wpd-not-clicked' data-wpd-page='<?php echo esc_attr($i); ?>'><?php echo esc_html($pageText); ?></a>
+                    <a href='#<?php esc_attr_e($i); ?>' class='wpd-page-link wpd-not-clicked' data-wpd-page='<?php echo esc_attr($i); ?>'><?php echo esc_html($pageText); ?></a>
                     <?php
                 }
             }
         }
         if ($page < $pageCount - 1) {
             ?>
-            <a href='#<?php echo esc_url_raw($page + 1); ?>' class='wpd-page-link wpd-not-clicked' data-wpd-page='<?php echo esc_attr($page + 1); ?>'><?php esc_html_e("&rsaquo;", "wpdiscuz"); ?></a>
+            <a href='#<?php esc_attr_e($page + 1); ?>' class='wpd-page-link wpd-not-clicked' data-wpd-page='<?php echo esc_attr($page + 1); ?>'><?php esc_html_e("&rsaquo;", "wpdiscuz"); ?></a>
             <?php
         }
         if ($page + $lrItemsCount < $pageCount - 1) {
             ?>
-            <a href='#<?php echo esc_url_raw(intval($pageCount) - 1); ?>' class='wpd-page-link wpd-not-clicked' data-wpd-page='<?php echo esc_attr(intval($pageCount) - 1); ?>'><?php esc_html_e("&raquo;", "wpdiscuz"); ?></a>
+            <a href='#<?php esc_attr_e(intval($pageCount) - 1); ?>' class='wpd-page-link wpd-not-clicked' data-wpd-page='<?php echo esc_attr(intval($pageCount) - 1); ?>'><?php esc_html_e("&raquo;", "wpdiscuz"); ?></a>
             <?php
         }
         ?>                    

@@ -43,6 +43,7 @@ function openlab_hide_plugins( $plugins ) {
 		'enable-jquery-migrate-helper/enable-jquery-migrate-helper.php',
 		'enigma/enigma.php',
 		'ewww-image-optimizer/ewww-image-optimizer.php',
+		'expire-sticky-posts/expire-sticky-posts.php',
 		'featured-content-gallery/content-gallery.php',
 		'fix-simplepie-errors/_fix-simplepie-errors.php',
 		'google-document-embedder/gviewer.php',
