@@ -21,7 +21,7 @@
     "classnames": "^2.2.6",
     "nanoid": "^2.1.1",
     "react-contenteditable": "^3.3.5",
-    "react-modal-resizable-draggable": "^0.1.4",
+    "react-modal-resizable-draggable": "^0.1.6",
     "react-tippy": "^1.2.3"
   },
   "devDependencies": {
