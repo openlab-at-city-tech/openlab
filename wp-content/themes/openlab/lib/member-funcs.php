@@ -1296,3 +1296,31 @@ function openlab_set_user_academic_units( $user_id, $units ) {
 		}
 	}
 }
+
+/**
+ * Register the My Activity nav item with BuddyPress.
+ */
+function openlab_register_my_activity() {
+	bp_core_new_nav_item(
+		[
+			'name'                    => 'My Activity',
+			'slug'                    => 'my-activity',
+			'component_id'            => 'my-activity',
+			'show_for_displayed_user' => false,
+			'position'                => 5,
+			'screen_function'         => 'openlab_load_my_activity',
+		]
+	);
+}
+add_action( 'bp_setup_nav', 'openlab_register_my_activity' );
+
+/**
+ * Load the My Activity template.
+ */
+function openlab_load_my_activity() {
+	if ( ! bp_is_my_profile() ) {
+		return false;
+	}
+
+	bp_core_load_template( 'members/single/plugins' );
+}

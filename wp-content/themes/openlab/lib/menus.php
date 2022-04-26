@@ -307,6 +307,12 @@ function openlab_submenu_markup($type = '', $opt_var = NULL, $row_wrapper = true
             $submenu_text = 'My Messages<span aria-hidden="true">:</span> ';
             $menu = openlab_my_messages_submenu();
             break;
+
+        case 'my-activity':
+            $submenu_text = 'My Activity<span aria-hidden="true">:</span> ';
+            $menu = openlab_my_activity_submenu();
+            break;
+
         case 'groups':
             $group_menu = openlab_my_groups_submenu($opt_var);
             $menu = $group_menu['menu'];
@@ -519,6 +525,26 @@ function openlab_my_messages_submenu() {
     return openlab_submenu_gen($menu_list);
 }
 
+function openlab_my_activity_submenu() {
+	$base_url = bp_loggedin_user_domain() . 'my-activity';
+
+	$current_item = $base_url;
+	if ( ! empty( $_GET['type'] ) && in_array( $_GET['type'], [ 'mine', 'favorites', 'mentions', 'pins' ], true ) ) {
+		$current_item .= '?type=' . $_GET['type'];
+
+	}
+
+	$menu_list = [
+		$base_url                     => 'All',
+		$base_url . '?type=mine'      => 'Mine',
+		$base_url . '?type=favorites' => 'Favorites',
+		$base_url . '?type=mentions'  => '@Mentions',
+		$base_url . '?type=pins'      => 'Pins',
+	];
+
+	return openlab_submenu_gen( $menu_list, false, $current_item  );
+}
+
 //sub-menus for my-invites pages
 function openlab_my_invitations_submenu() {
     global $bp;
@@ -534,7 +560,7 @@ function openlab_my_invitations_submenu() {
     return openlab_submenu_gen($menu_list);
 }
 
-function openlab_submenu_gen($items, $timestamp = false) {
+function openlab_submenu_gen( $items, $timestamp = false, $current_item = null ) {
     global $bp, $post;
 
     if (empty($items)) {
@@ -573,9 +599,11 @@ function openlab_submenu_gen($items, $timestamp = false) {
         //now search the slug for this item to see if the page identifier is there - if it is, this is the current page
         $current_check = false;
 
-        if ($page_identify) {
-            $current_check = strpos($item, $page_identify);
-        }
+		if ( $current_item ) {
+			$current_check = $current_item === $item;
+		} elseif ( $page_identify ) {
+			$current_check = strpos($item, $page_identify);
+		}
 
         //special case for send invitations page hitting the same time as invitations received
         if ($page_identify == "invites" && $title == "Sent Invitations") {

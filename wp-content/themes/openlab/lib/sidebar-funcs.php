@@ -150,6 +150,8 @@ function openlab_member_sidebar_menu($mobile = false) {
 
                 <li class="sq-bullet <?php if (bp_is_user_activity()) : ?>selected-page<?php endif ?> mol-profile my-profile"><a href="<?php echo $dud ?>">My Profile</a></li>
 
+                <li class="sq-bullet <?php if ( bp_is_current_component( 'my-activity' ) ) : ?>selected-page<?php endif ?> mol-profile my-activity"><a href="<?php echo $dud ?>my-activity">My Activity</a></li>
+
                 <li class="sq-bullet <?php if ( bp_is_user_settings() || bp_is_user_change_avatar() || bp_is_user_profile_edit() ) : ?>selected-page<?php endif ?> mol-settings my-settings"><a href="<?php echo $dud . bp_get_settings_slug() ?>/">My Settings</a></li>
 
                 <?php if (openlab_user_has_portfolio(bp_displayed_user_id()) && (!openlab_group_is_hidden(openlab_get_user_portfolio_id()) || openlab_is_my_profile() || groups_is_user_member(bp_loggedin_user_id(), openlab_get_user_portfolio_id()) )) : ?>
