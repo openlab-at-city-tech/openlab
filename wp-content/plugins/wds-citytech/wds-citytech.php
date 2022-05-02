@@ -13,11 +13,13 @@ define( 'WDS_CITYTECH_URL', plugin_dir_url( __FILE__ ) );
 
 require 'wds-register.php';
 require 'wds-docs.php';
+require 'includes/block-editor.php';
 require 'includes/oembed.php';
 require 'includes/library-widget.php';
 require 'includes/clone.php';
 require 'includes/print-this-page.php';
 require 'includes/license-widget.php';
+require 'includes/openlab-support-widget.php';
 require 'includes/user-moderation.php';
 
 // Conditionally load Easy TOC modifications.
