@@ -7,6 +7,7 @@
  */
 function openlab_register_blocks() {
 	$block_types = [
+		'openlab-help',
 		'openlab-support',
 	];
 

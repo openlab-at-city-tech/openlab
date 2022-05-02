@@ -1,13 +1,6 @@
 <?php
 
-add_action(
-	'widgets_init',
-	function() {
-		register_widget( 'OpenLab_Support_Widget' );
-	}
-);
-
-class OpenLab_Support_Widget extends WP_Widget {
+class OpenLab_Help_Widget extends WP_Widget {
 	public function __construct() {
 		parent::__construct(
 			'openlab_support',
@@ -25,7 +18,7 @@ class OpenLab_Support_Widget extends WP_Widget {
 		echo esc_html( $instance['title'] );
 		echo $args['after_title'];
 
-		echo openlab_render_block( 'openlab-support', $atts );
+		echo openlab_render_block( 'openlab-help' );
 
 		echo $args['after_widget'];
 	}
@@ -33,7 +26,7 @@ class OpenLab_Support_Widget extends WP_Widget {
 	public function form( $instance ) {
 		$r = array_merge(
 			[
-				'title' => 'OpenLab Support',
+				'title' => 'OpenLab Help',
 			],
 			$instance
 		);
