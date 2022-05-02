@@ -19,8 +19,8 @@ require 'includes/library-widget.php';
 require 'includes/clone.php';
 require 'includes/print-this-page.php';
 require 'includes/license-widget.php';
-require 'includes/openlab-support-widget.php';
 require 'includes/user-moderation.php';
+require 'includes/block-widgets.php';
 
 // Conditionally load Easy TOC modifications.
 add_action( 'plugins_loaded', function() {
