@@ -9814,6 +9814,12 @@ input#group-request-send {
     border-top: none;
   }
 }
+.group-home-activity-title a {
+  text-decoration: none;
+}
+.group-home-activity-title a:hover {
+  text-decoration: underline;
+}
 .academic-unit-selector {
   border: 2px solid #ddd;
   border-radius: 4px;
