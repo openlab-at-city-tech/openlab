@@ -5,7 +5,7 @@
  */
 function cuny_local_env_flag() {
 	// Don't load on widgets or other API requests.
-	if ( defined( 'REST_REQUEST' ) || ! REST_REQUEST ) {
+	if ( ! defined( 'REST_REQUEST' ) || ! REST_REQUEST ) {
 		return;
 	}
 
@@ -106,7 +106,7 @@ function cuny_site_wide_footer() {
     global $blog_id;
 
 	// Don't load on widgets or other API requests.
-	if ( defined( 'REST_REQUEST' ) || ! REST_REQUEST ) {
+	if ( ! defined( 'REST_REQUEST' ) || ! REST_REQUEST ) {
 		return;
 	}
 
