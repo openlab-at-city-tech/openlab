@@ -4,6 +4,11 @@
  * Adds 'local environment' tab
  */
 function cuny_local_env_flag() {
+	// Don't load on widgets or other API requests.
+	if ( defined( 'REST_REQUEST' ) || ! REST_REQUEST ) {
+		return;
+	}
+
     if (defined('IS_LOCAL_ENV') && IS_LOCAL_ENV) {
         $env_type = 'local';
         if (defined('ENV_TYPE')) {
@@ -99,6 +104,12 @@ add_action('wp_footer', 'cuny_site_wide_footer');
 
 function cuny_site_wide_footer() {
     global $blog_id;
+
+	// Don't load on widgets or other API requests.
+	if ( defined( 'REST_REQUEST' ) || ! REST_REQUEST ) {
+		return;
+	}
+
     switch_to_blog(1);
     $site = site_url();
     restore_current_blog();
