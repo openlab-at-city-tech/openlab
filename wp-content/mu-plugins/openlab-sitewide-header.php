@@ -31,7 +31,7 @@ function openlab_sitewide_header($location = 'header') {
 
 function openlab_sitewide_header_to_admin_and_group_sites() {
 	// Don't load on widgets or other API requests.
-	if ( ! defined( 'REST_REQUEST' ) || ! REST_REQUEST ) {
+	if ( defined( 'REST_REQUEST' ) && REST_REQUEST ) {
 		return;
 	}
 
