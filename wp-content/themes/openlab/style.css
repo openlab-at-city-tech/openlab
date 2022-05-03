@@ -11204,6 +11204,45 @@ body.single-help .entry-content h6 {
 .wpcf7 .wpcf7-form-control-wrap textarea {
   max-width: 100%;
 }
+/** Activity **/
+.activity-list .group-item-wrapper {
+  padding: 1.2%;
+}
+.activity-list .activity-header {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+}
+.activity-list .activity-header-title {
+  flex: 0 0 calc(100% - 45px);
+  max-width: calc(100% - 45px);
+  padding-right: 15px;
+}
+.activity-list .activity-header-meta {
+  flex: 0 0 45px;
+  max-width: 45px;
+  padding-left: 15px;
+}
+.activity-list .activity-header-meta {
+  margin-bottom: 15px;
+  text-align: right;
+}
+.activity-list .activity-header-meta span {
+  font-size: 20px;
+  transition: all 350ms ease-in-out;
+}
+.activity-list .activity-header-meta .fav span {
+  color: #888;
+}
+.activity-list .activity-header-meta .fav:hover span {
+  color: #ff5959;
+}
+.activity-list .activity-header-meta .unfav span {
+  color: #ff5959;
+}
+.activity-list .activity-header-meta .unfav:hover span {
+  color: #888;
+}
 /**Custom media query items**/
 @media (max-width: 767px) {
   .group-subscription-div {
