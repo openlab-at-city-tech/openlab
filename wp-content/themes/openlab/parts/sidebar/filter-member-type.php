@@ -1,12 +1,20 @@
 <?php
 $current_member_type = urldecode( openlab_get_current_filter( 'member_type' ) );
 
-$member_types = [
-	'student' => 'Student',
-	'faculty' => 'Faculty',
-	'staff'   => 'Staff',
-	'alumni'  => 'Alumni',
+$type_slugs = [
+	'student',
+	'faculty',
+	'staff',
+	'alumni',
 ];
+
+$member_types = [];
+foreach ( $type_slugs as $type_slug ) {
+	$member_type_obj = openlab_get_member_type_object( $type_slug );
+	if ( $member_type_obj ) {
+		$member_types[ $type_slug ] = $member_type_obj->name;
+	}
+}
 
 ?>
 

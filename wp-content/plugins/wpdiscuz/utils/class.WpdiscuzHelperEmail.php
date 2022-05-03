@@ -24,15 +24,15 @@ class WpdiscuzHelperEmail implements WpDiscuzConstants {
     public function addSubscription() {
         $success = 0;
         $currentUser = WpdiscuzHelper::getCurrentUser();
-        $subscribeFormNonce = filter_input(INPUT_POST, "wpdiscuz_subscribe_form_nonce");
-        $subscriptionType = filter_input(INPUT_POST, "wpdiscuzSubscriptionType");
-        $postId = filter_input(INPUT_POST, "postId");
-        $showSubscriptionBarAgreement = filter_input(INPUT_POST, "show_subscription_agreement", FILTER_SANITIZE_NUMBER_INT);
+        $subscribeFormNonce = WpdiscuzHelper::sanitize(INPUT_POST, "wpdiscuz_subscribe_form_nonce","FILTER_SANITIZE_STRING");
+        $subscriptionType = WpdiscuzHelper::sanitize(INPUT_POST, "wpdiscuzSubscriptionType", "FILTER_SANITIZE_STRING");
+        $postId = WpdiscuzHelper::sanitize(INPUT_POST, "postId", FILTER_SANITIZE_NUMBER_INT);
+        $showSubscriptionBarAgreement = WpdiscuzHelper::sanitize(INPUT_POST, "show_subscription_agreement", FILTER_SANITIZE_NUMBER_INT);
         $form = wpDiscuz()->wpdiscuzForm->getForm($postId);
         if ($currentUser && $currentUser->ID) {
             $email = $currentUser->user_email;
         } else {
-            $email = filter_input(INPUT_POST, "wpdiscuzSubscriptionEmail");
+            $email = WpdiscuzHelper::sanitize(INPUT_POST, "wpdiscuzSubscriptionEmail", "FILTER_SANITIZE_STRING");
         }
         if (!$currentUser->exists() && $form->isShowSubscriptionBarAgreement() && !$showSubscriptionBarAgreement && ($subscriptionType === WpdiscuzCore::SUBSCRIPTION_POST || $subscriptionType === WpdiscuzCore::SUBSCRIPTION_ALL_COMMENT)) {
             $email = "";
@@ -175,7 +175,7 @@ class WpdiscuzHelperEmail implements WpDiscuzConstants {
         $postId = WpdiscuzHelper::sanitize(INPUT_POST, "postId", FILTER_SANITIZE_NUMBER_INT, 0);;
         $commentId = WpdiscuzHelper::sanitize(INPUT_POST, "comment_id", FILTER_SANITIZE_NUMBER_INT, 0);
         $email = isset($_POST["email"]) ? sanitize_email(trim($_POST["email"])) : "";
-        $isParent = WpdiscuzHelper::sanitize(INPUT_POST, "isParent", FILTER_SANITIZE_STRING, "");
+        $isParent = WpdiscuzHelper::sanitize(INPUT_POST, "isParent", "FILTER_SANITIZE_STRING");
         $currentUser = WpdiscuzHelper::getCurrentUser();
         if ($currentUser && $currentUser->user_email) {
             $email = $currentUser->user_email;

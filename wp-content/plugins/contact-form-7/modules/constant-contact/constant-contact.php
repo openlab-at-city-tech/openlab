@@ -1,4 +1,9 @@
 <?php
+/**
+ * Constant Contact module main file
+ *
+ * @link https://contactform7.com/constant-contact-integration/
+ */
 
 wpcf7_include_module_file( 'constant-contact/service.php' );
 wpcf7_include_module_file( 'constant-contact/contact-post-request.php' );
@@ -17,10 +22,6 @@ add_action(
  */
 function wpcf7_constant_contact_register_service() {
 	$integration = WPCF7_Integration::get_instance();
-
-	$integration->add_category( 'email_marketing',
-		__( 'Email marketing', 'contact-form-7' )
-	);
 
 	$service = WPCF7_ConstantContact::get_instance();
 	$integration->add_service( 'constant_contact', $service );

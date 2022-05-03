@@ -79,11 +79,11 @@ class AgreementCheckbox extends Field {
                     <label class="wpd-field-label wpd-cursor-pointer" for="<?php echo esc_attr($name) . "-1_" . esc_attr($uniqueId); ?>"><?php echo $args["label"]; ?></label>
                 </div>
             </div>
-            <?php if ($args["desc"]) { ?>
+        <?php if ($args["desc"]) { ?>
                 <div class="wpd-field-desc">
                     <i class="far fa-question-circle"></i><span><?php echo esc_html($args["desc"]); ?></span>
                 </div>
-            <?php } ?>
+        <?php } ?>
         </div>
         <?php
     }

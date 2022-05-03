@@ -287,9 +287,9 @@ function openlab_user_can_clone_group( $user_id = null, $group_id = null ) {
 	$group_id = $group_id ?: bp_get_current_group_id();
 
 	$group_type = openlab_get_group_type( $group_id );
-	$user_type = xprofile_get_field_data( 'Account Type', $user_id );
+	$user_type  = openlab_get_user_member_type( $user_id );
 
-	if ( 'course' === $group_type && 'Faculty' === $user_type ) {
+	if ( 'course' === $group_type && 'faculty' === $user_type ) {
 		return true;
 	}
 
@@ -544,8 +544,8 @@ class OpenLab_Shareable_Content_Widget extends WP_Widget {
 		$can_clone = false;
 		if ( is_user_logged_in() ) {
 			if ( 'course' === $group_type ) {
-				$user_type = xprofile_get_field_data( 'Account Type', get_current_user_id() );
-				$can_clone = 'faculty' === strtolower( $user_type );
+				$user_type = openlab_get_user_member_type( get_current_user_id() );
+				$can_clone = 'faculty' === $user_type;
 			} else {
 				$can_clone = true;
 			}

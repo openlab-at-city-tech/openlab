@@ -397,7 +397,7 @@ function openlab_my_groups_submenu($group) {
     $span_end = '</span>';
 
     //get account type to see if they're faculty
-    $faculty = xprofile_get_field_data('Account Type', get_current_user_id());
+    $member_type = openlab_get_user_member_type( get_current_user_id() );
 
     $submenu_text = 'My ' . ucfirst($group) . 's';
 
@@ -407,7 +407,7 @@ function openlab_my_groups_submenu($group) {
         // determines if there are any courses - if not, only show "create"
         $filters['wds_group_type'] = openlab_page_slug_to_grouptype();
 
-        if ( is_super_admin( get_current_user_id() ) || $faculty == "Faculty" ) {
+        if ( is_super_admin( get_current_user_id() ) || 'faculty' === $account_type ) {
 			$can_create = true;
 		} else {
 			$can_create = false;
@@ -768,36 +768,25 @@ function openlab_filter_subnav_docs($subnav_item) {
 
     $group_slug = bp_get_group_slug();
 
-    $docs_arg = Array("posts_per_page" => "3",
-        "post_type" => "bp_doc",
-        "tax_query" =>
-        Array(Array("taxonomy" => "bp_docs_associated_item",
-                "field" => "slug",
-                "terms" => $group_slug)));
-    $query = new WP_Query($docs_arg);
+	$query_builder = new BP_Docs_Query(
+		[
+			'group_id' => bp_get_current_group_id(),
+		]
+	);
+	$wp_query      = $query_builder->get_wp_query();
 
-    $total_doc_count = !empty($query->found_posts) ? $query->found_posts : 0;
+    $total_doc_count = ! empty( $wp_query->found_posts ) ? $wp_query->found_posts : 0;
 
-    //legacy issue - some DB entries list doc_count as greater than 0 when in fact it is 0
-    //if that's the case, the search replace below will not work properly
-    $doc_count = groups_get_groupmeta($bp->groups->current_group->id, 'bp-docs-count');
-
-    if ($doc_count == $total_doc_count) {
-        $span_count = $total_doc_count;
-    } else {
-        $span_count = $doc_count;
-    }
-
-    wp_reset_query();
-
-    if ($total_doc_count > 0) {
-        $new_item = str_replace('<span>' . $span_count . '</span>', '<span class="mol-count pull-right count-' . $total_doc_count . ' gray">' . $total_doc_count . '</span>', $subnav_item);
-    } else {
-        $new_item = str_replace('<span>' . $span_count . '</span>', '', $subnav_item);
+    if ( $total_doc_count > 0 ) {
+        $new_item = str_replace(
+			'</a></li>',
+			'<span class="mol-count pull-right count-' . esc_attr( $total_doc_count ) . ' gray">' . esc_html( $total_doc_count ) . '</span></a></li>',
+			$subnav_item
+		);
     }
 
     //update "current" class to "current-menu-item" to unify site identification of current menu page
-    $new_item = str_replace("current selected", "current-menu-item", $new_item);
+    $new_item = str_replace( "current selected", "current-menu-item", $new_item );
 
     return $new_item;
 }
@@ -986,12 +975,11 @@ function openlab_group_admin_tabs($group = false) {
 		<li <?php if ('group-settings' == $current_tab) : ?> class="current-menu-item"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/group-settings">Settings</a></li>
 
 		<?php
-		$account_type = xprofile_get_field_data('Account Type', $bp->loggedin_user->id);
-		if ($account_type == "Student") {
-			$profile = "ePortfolio";
-		} else {
-			$profile = "Portfolio";
-		}
+		$profile = openlab_get_portfolio_label(
+			[
+				'user_id' => bp_loggedin_user_id(),
+			]
+		);
 		?>
 
 		<li class="delete-button <?php if ('delete-group' == $current_tab) : ?> current-menu-item<?php endif; ?>" ><span class="fa fa-minus-circle"></span><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/delete-group">Delete <?php echo $profile; ?></a></li>

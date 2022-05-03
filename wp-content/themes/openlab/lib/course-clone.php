@@ -896,9 +896,9 @@ class Openlab_Clone_Course_Site {
 		switch_to_blog( $this->source_site_id );
 
 		// get all old options
-		$all_options = wp_load_alloptions();
+		$all_options = $wpdb->get_col( "SELECT option_name FROM {$wpdb->options}" );
 		$options     = array();
-		foreach ( array_keys( $all_options ) as $key ) {
+		foreach ( $all_options as $key ) {
 			$options[ $key ] = get_option( $key );  // have to do this to deal with arrays
 		}
 

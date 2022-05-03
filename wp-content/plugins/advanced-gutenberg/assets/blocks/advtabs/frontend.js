@@ -1,4 +1,7 @@
 jQuery(document).ready(function ($) {
+    $(".advgb-tab a:not(.ui-tabs-anchor)").unbind("click");
+    $(".advgb-tabs-block").tabs();
+
     $('.advgb-tabs-wrapper').each(function () {
         var activeTab = $(this).data('tab-active');
         var tabPanel = $(this).find('.advgb-tab-panel');
@@ -53,5 +56,5 @@ jQuery(document).ready(function ($) {
         bodyWrapper.find('.advgb-tab-body-header').removeClass('header-active');
         $(this).addClass('header-active');
         tabsPanel.find('.advgb-tab').eq(idx).find('a').trigger('click');
-    })
+    });
 });

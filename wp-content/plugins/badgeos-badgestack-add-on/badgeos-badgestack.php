@@ -1,16 +1,16 @@
 <?php
 /**
  * Plugin Name: BadgeOS BadgeStack Add-On
- * Plugin URI: http://www.learningtimes.com/
+ * Plugin URI: https://badgeos.org/downloads/badgestack/
  * Description: This BadgeOS add-on automatically creates achievement types, pages and sample content to jumpstart your own badging system.
- * Author: Credly
- * Version: 1.0.1
- * Author URI: https://credly.com/
+ * Author: BadgeOS
+ * Version: 1.0.2
+ * Author URI: https://www.badgeos.com/
  * License: GNU AGPL
  */
 
 /*
- * Copyright © 2012-2013 Credly, LLC
+ * Copyright © 2012-2013 LearningTimes, LLC
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License, version 3,
@@ -25,7 +25,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>;.
 */
 
-class BadgeOS_BadgeStack {
+final class BadgeOS_BadgeStack {
 
 	function __construct() {
 		// Define plugin constants
@@ -162,12 +162,13 @@ class BadgeOS_BadgeStack {
 	private function register_achievement_type( $singular_name = '', $plural_name = '' ) {
 
 		// Only create the achievement type post if it doesn't already exist
-		if ( ! get_page_by_title( $singular_name, 'OBJECT', 'achievement-type' ) ) {
+		$badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array(); 
+		if ( ! get_page_by_title( $singular_name, 'OBJECT', trim( $badgeos_settings['achievement_main_post_type'] ) ) ) {
 			$achievement_post_id = wp_insert_post( array(
 				'post_title'  => $singular_name,
 				'post_status' => 'publish',
 				'post_author' => 1,
-				'post_type'   => 'achievement-type',
+				'post_type'   => trim( $badgeos_settings['achievement_main_post_type'] ),
 			) );
 			update_post_meta( $achievement_post_id, '_badgeos_singular_name', $singular_name );
 			update_post_meta( $achievement_post_id, '_badgeos_plural_name', $plural_name );
@@ -244,7 +245,7 @@ class BadgeOS_BadgeStack {
 						if ( ! is_wp_error( $thumbnail_id ) )
 							set_post_thumbnail( $achievement_post_id, $thumbnail_id );
 					}
-					@unlink($tmp);
+					// @unlink($tmp);
 				}
 
 				// Insert our meta
@@ -290,8 +291,9 @@ class BadgeOS_BadgeStack {
 		$args = wp_parse_args( $args, $defaults );
 
 		// Create our step
+		$badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
 		$step_id = wp_insert_post( array(
-			'post_type'   => 'step',
+			'post_type'   => trim( $badgeos_settings['achievement_step_post_type'] ),
 			'post_status' => 'publish',
 			'post_author' => 1,
 			'post_title'  => $args['post_title'],
@@ -301,8 +303,9 @@ class BadgeOS_BadgeStack {
 		if ( ! is_wp_error( $step_id ) ) {
 
 			// Create the P2P connection from the step to the achievement
+			$badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array(); 
 			$p2p_id = p2p_create_connection(
-				'step-to-' . get_post_type( $achievement_id ),
+				trim( $badgeos_settings['achievement_step_post_type'] ).'-to-' . get_post_type( $achievement_id ),
 				array(
 					'from' => $step_id,
 					'to'   => $achievement_id,
@@ -352,10 +355,11 @@ class BadgeOS_BadgeStack {
 		if ( isset( $this->steps_awaiting_connection ) && !empty( $this->steps_awaiting_connection ) ) {
 
 			// Loop through our steps awaiting connection and setup each connection
+			$badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
 			foreach ( $this->steps_awaiting_connection as $step_id => $args ) {
 				$achievement = get_page_by_title( $args['post_title'], 'OBJECT', $args['post_type'] );
 				p2p_create_connection(
-					$args['post_type'] . '-to-step',
+					$args['post_type'] . '-to-'.trim( $badgeos_settings['achievement_step_post_type'] ),
 					array(
 						'from' => $achievement->ID,
 						'to'   => $step_id,
@@ -521,24 +525,24 @@ class BadgeOS_BadgeStack {
 				'post_status'  => 'publish',
 				'post_author'  => 1,
 				'post_title'   => __( 'Begin Earning & Issuing Badges', 'badgeos-badgestack' ),
-				'post_content' => __( "In this Level you’ll set-up a profile on Credly so you can earn, store, and share badges. You'll also issue a badge to one or more people who demonstrate skills, values or behaviors you have witnessed first-hand.", 'badgeos-badgestack' ),
-				'post_excerpt' => __( "In this Level you’ll set-up a profile on Credly so you can earn, store, and share badges. You'll also issue a badge to one or more people who demonstrate skills, values or behaviors you have witnesses first-hand.", 'badgeos-badgestack' ),
+				'post_content' => __( "In this Level you’ll set-up a profile on BadgeOS so you can earn, store, and share badges. You'll also issue a badge to one or more people who demonstrate skills, values or behaviors you have witnessed first-hand.", 'badgeos-badgestack' ),
+				'post_excerpt' => __( "In this Level you’ll set-up a profile on BadgeOS so you can earn, store, and share badges. You'll also issue a badge to one or more people who demonstrate skills, values or behaviors you have witnesses first-hand.", 'badgeos-badgestack' ),
 				'thumbnail'    => 'level-default.png',
 				'post_meta'    => array(
 					'_badgeos_points'               => 0,
 					'_badgeos_earned_by'            => 'triggers',
 					'_badgeos_sequential'           => false,
-					'_badgeos_congratulations_text' => __( 'Congratulations! You have completed the Level "Start Your Badge Profile" and now have a way to curate all of your achievements, and to recognize the skills and behaviors you value in the world! Add your Credly profile link to your resume or email footer and share your achievements with the world.', 'badgeos-badgestack' ),
+					'_badgeos_congratulations_text' => __( 'Congratulations! You have completed the Level "Start Your Badge Profile" and now have a way to curate all of your achievements, and to recognize the skills and behaviors you value in the world! Add your BadgeOS profile link to your resume or email footer and share your achievements with the world.', 'badgeos-badgestack' ),
 					'_badgeos_maximum_earnings'     => 1,
 					'_badgeos_hidden'               => 'show',
 				),
 				'steps' => array(
 					array(
-						'post_title'       => __( 'Earn the Badge: “Credly Member”', 'badgeos-badgestack' ),
+						'post_title'       => __( 'Earn the Badge: “BadgeOS Member”', 'badgeos-badgestack' ),
 						'count'            => 1,
 						'trigger_type'     => 'specific-achievement',
 						'achievement_type' => $this->type['quest-badge'],
-						'achievement_post' => __( 'Credly Member', 'badgeos-badgestack' ),
+						'achievement_post' => __( 'BadgeOS Member', 'badgeos-badgestack' ),
 						'order'            => 0,
 					),
 					array(
@@ -558,26 +562,26 @@ class BadgeOS_BadgeStack {
 				'post_status'  => 'publish',
 				'post_author'  => 1,
 				'post_title'   => __( 'Customize Your Profile', 'badgeos-badgestack' ),
-				'post_content' => __( 'Your Credly profile is like a dynamic resume that helps others appreciate your skills and accomplishments. Each badge is validated by a person or organization that has observed your achievements first hand.
+				'post_content' => __( 'Your BadgeOS profile is like a dynamic resume that helps others appreciate your skills and accomplishments. Each badge is validated by a person or organization that has observed your achievements first hand.
 
-					In this Quest, you\'ll complete your Credly profile and explore the various options for sharing your badges so that you can curate how you showcase your achievements to others.
+					In this Quest, you\'ll complete your BadgeOS profile and explore the various options for sharing your badges so that you can curate how you showcase your achievements to others.
 
-					Now that you have a <a href="https://credly.com" target="_blank">Credly</a> account, login and visit the "Account Settings" area from the top right menu:
+					Now that you have a <a href="https://badgeos.org" target="_blank">BadgeOS</a> account, login and visit the "Account Settings" area from the top right menu:
 					<ol>
 						<li>Hover your mouse over the "About Me" section and click the pencil to add some about information about yourself.</span></li>
-						<li>Click the pencil next to "Email" and add any email addresses you use. This will allow you to automatically consolidate achievements you receive from any person or organization in your Credly account, regardless of what email address they use when they issue you badges.</li>
+						<li>Click the pencil next to "Email" and add any email addresses you use. This will allow you to automatically consolidate achievements you receive from any person or organization in your BadgeOS account, regardless of what email address they use when they issue you badges.</li>
 						<li>Use the "Social Settings and Auto Share" area to link your social networks. This makes sharing your badges wherever you want them super easy.</li>
 						<li>Hover over the avatar area and add an image of yourself.</li>
 						<li>Click "<strong>Save Changes</strong>".</li>
-						<li>Then visit the "My Credit" area of Credly to explore how to manage your badges, share them on social networks and create Categories.</li>
+						<li>Then visit the "My Credit" area of BadgeOS to explore how to manage your badges, share them on social networks and create Categories.</li>
 					</ol>
 					When you are done, use the submission area to list at least one group or person who might issue you badges to recognize your achievements.', 'badgeos-badgestack' ),
-				'post_excerpt' => __( "In this Quest, you'll complete your Credly profile and explore the various options for sharing your badges so that you can curate how you showcase your achievements to others.", 'badgeos-badgestack' ),
+				'post_excerpt' => __( "In this Quest, you'll complete your BadgeOS profile and explore the various options for sharing your badges so that you can curate how you showcase your achievements to others.", 'badgeos-badgestack' ),
 				'thumbnail'    => 'quest-default.png',
 				'post_meta'    => array(
 					'_badgeos_points'               => 150,
 					'_badgeos_earned_by'            => 'submission_auto',
-					'_badgeos_congratulations_text' => __( 'You have set-up and customized your Credly.com profile, so you are ready to begin earning and sharing credit you receive for your achievements.', 'badgeos-badgestack' ),
+					'_badgeos_congratulations_text' => __( 'You have set-up and customized your BadgeOS.com profile, so you are ready to begin earning and sharing credit you receive for your achievements.', 'badgeos-badgestack' ),
 					'_badgeos_hidden'               => 'show',
 				),
 				'steps' => array(),
@@ -593,52 +597,29 @@ class BadgeOS_BadgeStack {
 
 					In this Quest, you will define a badge that represents the achievement of something you value. For example, it could be the demonstration of a skill, an important behavior or attitude, or the reaching of a milestone that matters. You will create a badge for this achievement, and then you will issue it someone who deserves it. Here\'s how:
 					<ol>
-						<li><span style="line-height: 15px;">Sign into your <a href="https://credly.com" target="_blank">Credly</a> account.</span></li>
+						<li><span style="line-height: 15px;">Sign into your <a href="https://badgeos.org" target="_blank">BadgeOS</a> account.</span></li>
 						<li>Click "Give" at the top of the page.</li>
 						<li>Design and define a badge that acknowledges something important to you or your work. Follow the steps to save and then give the badge to one or more people who deserves it.</li>
 					</ol>
 
-					After you give a badge, describe in the submission here the name of the badge and the criteria, or link to the badge on Credly.
+					After you give a badge, describe in the submission here the name of the badge and the criteria, or link to the badge on BadgeOS.
 					', 'badgeos-badgestack' ),
 				'post_excerpt' => __( 'In this Quest you will define a badge that represents the achievement of something you value. You will create a badge for this achievement, and then you will issue it someone who deserves it.', 'badgeos-badgestack' ),
 				'thumbnail'    => 'quest-default.png',
 				'post_meta'    => array(
 					'_badgeos_points'               => 150,
 					'_badgeos_earned_by'            => 'submission_auto',
-					'_badgeos_congratulations_text' => __( 'You have considered what you value and have defined, designed and issued a badge on Credly.com that acknowledges these values in practice in the world. ', 'badgeos-badgestack' ),
+					'_badgeos_congratulations_text' => __( 'You have considered what you value and have defined, designed and issued a badge on BadgeOS.com that acknowledges these values in practice in the world. ', 'badgeos-badgestack' ),
 					'_badgeos_hidden'               => 'show',
 				),
 				'steps' => array(),
-			),
-			array(
-				'post_type'    => $this->type['quest'],
-				'post_status'  => 'publish',
-				'post_author'  => 1,
-				'post_title'   => __( 'Join Credly', 'badgeos-badgestack' ),
-				'post_content' => __( '<a href="https://credly.com">Credly</a> is universal way for you to earn, store and showcase achievements throughout your life.  Achievements are represented by badges, which you can earn in virtually every aspect of your life, from school to the workplace to museums and fitness activities.
-
-					Badges you earn for the learning you do right here on this site will be sent to Credly, where you can make them visible on social networks you use, on your blog, or your own web site. Every person on Credly also has a public "profile." You can curate what achievements you\'d like to showcase at any time on your Credly Profile.
-
-					In this Quest, you\'ll visit <strong><a href="https://credly.com" target="_blank">Credly.com</a></strong> and join, creating a free account.
-
-					Once you have created your account, visit the "View Profile" page from the user menu at the top right of the page and then copy the web address for your Profile page into the submission box here. (It will look something like "https://credly.com/u/jonathan".)', 'badgeos-badgestack' ),
-				'post_excerpt' => __( 'Visit Credly.com and create a free account where you can receive, showcase and curate your achievements -- including those you earn while on this site.', 'badgeos-badgestack' ),
-				'thumbnail'    => 'quest-default.png',
-				'post_meta'    => array(
-					'_badgeos_points'               => 150,
-					'_badgeos_earned_by'            => 'submission_auto',
-					'_badgeos_congratulations_text' => __( 'Credly empowers people to earn and give credit wherever it is due -- empowering everyone to acknowledge, share and reward achievement. Today, we give you credit for being a pioneer and a part of this growing movement by joining the Credly community.', 'badgeos-badgestack' ),
-					'_badgeos_maximum_earnings'     => 1,
-					'_badgeos_hidden'               => 'show',
-				),
-				'steps' => array(),
-			),
+			),				
 			array(
 				'post_type'    => $this->type['quest'],
 				'post_status'  => 'publish',
 				'post_author'  => 1,
 				'post_title'   => __( 'Watch a Video: Learn about Badges', 'badgeos-badgestack' ),
-				'post_content' => __( 'In this Quest, you\'ll watch a video presentation entitled, "Giving Credit Where Credit is Due: Adventures in Digital Credentials and Badges". The talk was led by Jonathan Finkelstein, Founder of <a href="https://credly.com" target="_blank">Credly</a> and director of the BadgeStack Project, at an annual meeting about transforming education through technology.
+				'post_content' => __( 'In this Quest, you\'ll watch a video presentation entitled, "Giving Credit Where Credit is Due: Adventures in Digital Credentials and Badges". The talk was led by Jonathan Finkelstein, Founder of <a href="https://badgeos.org" target="_blank">BadgeOS</a> and director of the BadgeStack Project, at an annual meeting about transforming education through technology.
 
 					Watch the video below, and then in the submission box, share a brief comment or reflection about one action, milestone, behavior, or skill that people should get credit for achieving. Focus on something that people don\'t currently get properly acknowledged for having done.
 
@@ -718,14 +699,13 @@ class BadgeOS_BadgeStack {
 					'_badgeos_sequential'                 => false,
 					'_badgeos_congratulations_text'       => __( 'You have taken the time to consider what you value in the world, you have defined a badge that represents those values, and you have identified and issued the badge to someone deserving of recognition.', 'badgeos-badgestack' ),
 					'_badgeos_hidden'                     => 'show',
-					'_badgeos_send_to_credly'             => 1,
-					'_badgeos_credly_include_testimonial' => 1,
-					'_badgeos_credly_categories'          => array(
-						'e-learning'            => 2985,
-						'e-learning (pedagogy)' => 3109,
-						'web based training'    => 2987
-					)
-
+					// '_badgeos_send_to_credly'             => 1,
+					// '_badgeos_credly_include_testimonial' => 1,
+					// '_badgeos_credly_categories'          => array(
+					// 	'e-learning'            => 2985,
+					// 	'e-learning (pedagogy)' => 3109,
+					// 	'web based training'    => 2987
+					// )
 				),
 				'steps' => array(
 					array(
@@ -742,37 +722,37 @@ class BadgeOS_BadgeStack {
 				'post_type'    => $this->type['quest-badge'],
 				'post_status'  => 'publish',
 				'post_author'  => 1,
-				'post_title'   => __( 'Credly Member', 'badgeos-badgestack' ),
-				'post_content' => __( 'To receive this badge, the earner needs to create a free profile on Credly to receive, manage and share their lifelong achievements, and they need to issue a badge to someone else for a valued accomplishment or contribution that they have observed first-hand.', 'badgeos-badgestack' ),
-				'post_excerpt' => __( "This badge is earned by creating a profile on Credly to receive, manage and share one's lifelong credentials and achievements, and by issuing a badge to someone else for a valued accomplishment or contribution.", 'badgeos-badgestack' ),
+				'post_title'   => __( 'BadgeOS Member', 'badgeos-badgestack' ),
+				'post_content' => __( 'To receive this badge, the earner needs to create a free profile on BadgeOS to receive, manage and share their lifelong achievements, and they need to issue a badge to someone else for a valued accomplishment or contribution that they have observed first-hand.', 'badgeos-badgestack' ),
+				'post_excerpt' => __( "This badge is earned by creating a profile on BadgeOS to receive, manage and share one's lifelong credentials and achievements, and by issuing a badge to someone else for a valued accomplishment or contribution.", 'badgeos-badgestack' ),
 				'thumbnail'    => 'badge-credly-member-grey.png',
 				'post_meta'    => array(
 					'_badgeos_points'                     => 500,
 					'_badgeos_earned_by'                  => 'triggers',
 					'_badgeos_sequential'                 => false,
-					'_badgeos_congratulations_text'       => __( 'Credly empowers people to earn and give credit wherever it is due -- empowering everyone to acknowledge, share and reward achievement. Today, we give you credit for being a pioneer and a part of this growing movement by joining the Credly community.', 'badgeos-badgestack' ),
+					'_badgeos_congratulations_text'       => __( 'BadgeOS empowers people to earn and give credit wherever it is due -- empowering everyone to acknowledge, share and reward achievement. Today, we give you credit for being a pioneer and a part of this growing movement by joining the BadgeOS community.', 'badgeos-badgestack' ),
 					'_badgeos_maximum_earnings'           => 1,
 					'_badgeos_hidden'                     => 'show',
-					'_badgeos_send_to_credly'             => 1,
-					'_badgeos_credly_include_testimonial' => 1,
-					'_badgeos_credly_categories'          => array(
-						'e-learning'            => 2985,
-						'e-learning (pedagogy)' => 3109,
-						'adult education'       => 3095,
-						'development of educational opportunities' => 3059
-					)
+					// '_badgeos_send_to_credly'             => 1,
+					// '_badgeos_credly_include_testimonial' => 1,
+					// '_badgeos_credly_categories'          => array(
+					// 	'e-learning'            => 2985,
+					// 	'e-learning (pedagogy)' => 3109,
+					// 	'adult education'       => 3095,
+					// 	'development of educational opportunities' => 3059
+					// )
 				),
 				'steps' => array(
 					array(
-						'post_title'       => __( 'Quest: Create a free account on Credly.com', 'badgeos-badgestack' ),
+						'post_title'       => __( 'Quest: Create a free account on BadgeOS.com', 'badgeos-badgestack' ),
 						'count'            => 1,
 						'trigger_type'     => 'specific-achievement',
 						'achievement_type' => $this->type['quest'],
-						'achievement_post' => __( 'Join Credly', 'badgeos-badgestack' ),
+						'achievement_post' => __( 'Join BadgeOS', 'badgeos-badgestack' ),
 						'order'            => 0,
 					),
 					array(
-						'post_title'       => __( 'Quest: Customize Your Credly Profile', 'badgeos-badgestack' ),
+						'post_title'       => __( 'Quest: Customize Your BadgeOS Profile', 'badgeos-badgestack' ),
 						'count'            => 1,
 						'trigger_type'     => 'specific-achievement',
 						'achievement_type' => $this->type['quest'],

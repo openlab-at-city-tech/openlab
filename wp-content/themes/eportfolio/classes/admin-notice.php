@@ -75,7 +75,7 @@ if ( !class_exists('ePortfolio_Dashboard_Notice') ):
             $theme_info      = wp_get_theme();
             $theme_name            = $theme_info->__get( 'Name' );
             ?>
-           <div class="updated notice is-dismissible welcome-panel twp-eportfolio-notice">
+           <div class="updated notice is-dismissible twp-eportfolio-notice">
 
                 <h3><?php esc_html_e('Quick Setup','eportfolio'); ?></h3>
 

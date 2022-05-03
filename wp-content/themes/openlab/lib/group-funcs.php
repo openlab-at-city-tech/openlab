@@ -155,7 +155,7 @@ function openlab_group_privacy_membership_settings() {
 		<div class="panel-heading semibold">Privacy Settings: Membership</div>
 		<div class="panel-body">
 			<div class="privacy-membership-settings-public">
-				<p>By default, a public <?php echo esc_html( $group_type_label ); ?> may be joined by any OpenLab member. Uncheck the box below to remove the 'Join <?php echo esc_html( $group_type_label ); ?>' button from the <?php echo esc_html( $group_type_label ); ?> Profile. When the box is unchecked, [Group] membership will be by invitation only.</p>
+				<p>By default, a public <?php echo esc_html( $group_type_label ); ?> may be joined by any OpenLab member. Uncheck the box below to remove the 'Join <?php echo esc_html( $group_type_label ); ?>' button from the <?php echo esc_html( $group_type_label ); ?> Profile. When the box is unchecked, membership will be by invitation only.</p>
 
 				<p><input type="checkbox" id="allow-joining-public" name="allow-joining-public" value="1" <?php checked( $allow_joining_public ); ?> /> <label for="allow-joining-public">Allow any OpenLab member to join this public <?php echo esc_html( $group_type_label ); ?></label></p>
 			</div>
@@ -718,9 +718,9 @@ function cuny_group_single() {
                             $show_school = 'project' === $group_type || 'club' === $group_type;
                             if ( 'portfolio' === $group_type ) {
                                 $user_id   = openlab_get_user_id_from_portfolio_group_id( $group_id );
-                                $user_type = xprofile_get_field_data( 'Account Type', $user_id );
+                                $user_type = openlab_get_user_member_type( $user_id );
 
-                                $show_school = 'Staff' === $user_type;
+                                $show_school = 'staff' === $user_type;
                             }
                             ?>
 
@@ -1047,12 +1047,17 @@ function openlab_get_group_activity_content($title, $content, $link) {
     $markup = '';
 
     if ($title !== '') {
-        $markup = <<<HTML
-                <p class="semibold h6">
-                    <span class="hyphenate truncate-on-the-fly" data-basevalue="80" data-minvalue="55" data-basewidth="376">{$title}</span>
-                    <span class="original-copy hidden">{$title}</span>
-                </p>
-HTML;
+        $markup = sprintf(
+			'<p class="semibold h6 group-home-activity-title">
+				<a href="%s">
+					<span class="hyphenate truncate-on-the-fly" data-basevalue="80" data-minvalue="55" data-basewidth="376">%s</span>
+					<span class="original-copy hidden">%s</span>
+				</a>
+			</p>',
+			esc_attr( $link ),
+			esc_html( $title ),
+			esc_html( $title )
+		);
     }
 
     $markup .= <<<HTML
@@ -1064,16 +1069,6 @@ HTML;
 HTML;
 
     return $markup;
-}
-
-add_filter('bp_get_options_nav_nav-invite-anyone', 'cuny_send_invite_fac_only');
-
-function cuny_send_invite_fac_only($subnav_item) {
-    global $bp;
-    $account_type = xprofile_get_field_data('Account Type', $bp->loggedin_user->id);
-
-    if ($account_type != 'Student')
-        return $subnav_item;
 }
 
 /**
@@ -1460,8 +1455,9 @@ function openlab_show_site_posts_and_comments() {
                 $post_id = $wp_comment->comment_post_ID;
 
                 $comments[] = array(
-                    'content' => strip_tags(bp_create_excerpt($wp_comment->comment_content, 110, array('html' => false))),
-                    'permalink' => get_permalink($post_id)
+					'content'   => strip_tags(bp_create_excerpt($wp_comment->comment_content, 110, array('html' => false))),
+					'title'     => sprintf( 'Comment on "%s"', get_the_title( $post_id ) ),
+					'permalink' => get_comment_link( $wp_comment ),
                 );
             }
 
@@ -1512,7 +1508,7 @@ function openlab_show_site_posts_and_comments() {
                             <?php foreach ($comments as $comment) : ?>
                                 <div class="panel panel-default">
                                     <div class="panel-body">
-                                        <?php echo openlab_get_group_activity_content('', $comment['content'], $comment['permalink']) ?>
+                                        <?php echo openlab_get_group_activity_content($comment['title'], $comment['content'], $comment['permalink']) ?>
                                     </div></div>
                             <?php endforeach ?>
                         <?php else : ?>
@@ -1614,14 +1610,10 @@ function openlab_bp_group_site_pages( $mobile = false ) {
 
             <div class="sidebar-block group-site-links <?php echo esc_html( $responsive_class ); ?>">
 
-                <?php
-                $account_type = xprofile_get_field_data('Account Type', $displayed_user_id);
-                ?>
-
                 <?php if (openlab_is_my_portfolio() || is_super_admin()) : ?>
                     <ul class="sidebar-sublinks portfolio-sublinks inline-element-list">
                         <li class="portfolio-site-link bold">
-                            <a class="bold no-deco" href="<?php echo esc_url($group_site_settings['site_url']) ?>">Visit <?php echo openlab_get_group_type_label('group_id=' . $group_id . '&case=upper'); ?> Site <span class="fa fa-chevron-circle-right" aria-hidden="true"></span></a>
+                            <a class="bold no-deco a-grey" href="<?php echo esc_url($group_site_settings['site_url']) ?>">Visit <?php echo openlab_get_group_type_label('group_id=' . $group_id . '&case=upper'); ?> Site <span class="fa fa-chevron-circle-right" aria-hidden="true"></span></a>
                         </li>
 
                         <?php if (openlab_user_portfolio_site_is_local($displayed_user_id)) : ?>
@@ -1645,7 +1637,7 @@ function openlab_bp_group_site_pages( $mobile = false ) {
             <div class="sidebar-block group-site-links <?php echo esc_html( $responsive_class ); ?>">
                 <ul class="sidebar-sublinks portfolio-sublinks inline-element-list">
                     <li class="portfolio-site-link">
-                        <?php echo '<a class="bold no-deco" href="' . trailingslashit(esc_attr($group_site_settings['site_url'])) . '">Visit ' . ucwords(groups_get_groupmeta(bp_get_group_id(), "wds_group_type")) . ' Site <span class="fa fa-chevron-circle-right" aria-hidden="true"></span></a>'; ?>
+                        <?php echo '<a class="bold no-deco a-grey" href="' . trailingslashit(esc_attr($group_site_settings['site_url'])) . '">Visit ' . ucwords(groups_get_groupmeta(bp_get_group_id(), "wds_group_type")) . ' Site <span class="fa fa-chevron-circle-right" aria-hidden="true"></span></a>'; ?>
                     </li>
                     <?php if ( $group_site_settings['is_local'] && ( $bp->is_item_admin || is_super_admin() || ( groups_is_user_member( bp_loggedin_user_id(), bp_get_current_group_id() ) && current_user_can_for_blog( $group_site_settings['site_id'], 'edit_posts' ) ) ) ) : ?>
                         <li class="portfolio-dashboard-link">

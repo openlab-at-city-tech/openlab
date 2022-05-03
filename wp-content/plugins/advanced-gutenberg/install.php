@@ -44,7 +44,7 @@ register_activation_hook(ADVANCED_GUTENBERG_PLUGIN, function () {
             'blocks_icon_color' => '#5952de',
             'disable_wpautop' => 0,
             'enable_columns_visual_guide' => 1,
-            'enable_block_access' => 1,
+            'enable_block_access' => 0,
             'enable_custom_styles' => 1,
             'enable_advgb_blocks' => 1,
             'enable_pp_branding' => 1,

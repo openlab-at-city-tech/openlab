@@ -291,7 +291,6 @@ function openlab_profile_field_input_attributes() {
             $attributes[] = "data-parsley-errors-container='#{$field_name}_confirm_error'";
             break;
 
-        case 'Account Type' :
         case 'Major Program of Study':
         case 'Department':
 

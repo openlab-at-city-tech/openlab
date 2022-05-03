@@ -243,7 +243,7 @@ class WpdiscuzHelperUpload implements WpDiscuzConstants {
         $this->helper->validateNonce();
         $response = ["errorCode" => "", "error" => "", "errors" => [], "attachmentsHtml" => "", "previewsData" => ""];
         $postId = WpdiscuzHelper::sanitize(INPUT_POST, "postId", FILTER_SANITIZE_NUMBER_INT, 0);
-        $uniqueId = trim(WpdiscuzHelper::sanitize(INPUT_POST, "uniqueId", FILTER_SANITIZE_STRING, ""));
+        $uniqueId = WpdiscuzHelper::sanitize(INPUT_POST, "uniqueId", "FILTER_SANITIZE_STRING");
 
         if (!$postId) {
             $response["errorCode"] = "msgPostIdNotExists";
@@ -417,7 +417,7 @@ class WpdiscuzHelperUpload implements WpDiscuzConstants {
         $this->helper->validateNonce();
         $response = ["errorCode" => "", "error" => "", "attachmentsHtml" => ""];
         $attachmentId = WpdiscuzHelper::sanitize(INPUT_POST, "attachmentId", FILTER_SANITIZE_NUMBER_INT, 0);
-        $uniqueId = WpdiscuzHelper::sanitize(INPUT_POST, "uniqueId", FILTER_SANITIZE_STRING, "");
+        $uniqueId = WpdiscuzHelper::sanitize(INPUT_POST, "uniqueId", "FILTER_SANITIZE_STRING");
         $attachment = get_post($attachmentId);
 
         // add attachment not exists message in wpdoptions > jsargs
@@ -825,7 +825,7 @@ class WpdiscuzHelperUpload implements WpDiscuzConstants {
             return;
         }
 
-        $source = filter_input(INPUT_GET, "media_source", FILTER_SANITIZE_STRING);
+        $source = WpdiscuzHelper::sanitize(INPUT_GET, "media_source", "FILTER_SANITIZE_STRING");
         $selected = $source === "wpdiscuz" ? " selected='selected'" : "";
 
         $dropdown = "<select name='media_source' id='wpdiscuz_media' class='postform'>";
@@ -837,8 +837,8 @@ class WpdiscuzHelperUpload implements WpDiscuzConstants {
 
     function getWpdiscuzMedia($query) {
         global $pagenow;
-        $mode = filter_input(INPUT_GET, "mode", FILTER_SANITIZE_STRING);
-        $source = filter_input(INPUT_GET, "media_source", FILTER_SANITIZE_STRING);
+        $mode = WpdiscuzHelper::sanitize(INPUT_GET, "mode", "FILTER_SANITIZE_STRING");
+        $source = WpdiscuzHelper::sanitize(INPUT_GET, "media_source", "FILTER_SANITIZE_STRING");
 
         if (is_admin() && "upload.php" === $pagenow && $mode === "list" && $source === "wpdiscuz") {            
             $query->query_vars["meta_key"] = "_wmu_comment_id";

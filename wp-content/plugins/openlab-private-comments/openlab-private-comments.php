@@ -200,9 +200,9 @@ function comment_notice( $text, $comment ) {
 		'</div>',
 		esc_html__( 'Comment (Private):', 'openlab-private-comments' ),
 		esc_html__( '(show)', 'openlab-private-comments' ),
-		esc_html( $text ),
+		wp_kses_post( $text ),
 		esc_html__( '(hide)', 'openlab-private-comments' ),
-		esc_html( $text )
+		wp_kses_post( $text ),
 	);
 
 	return $comment_text;

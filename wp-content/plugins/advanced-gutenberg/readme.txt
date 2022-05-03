@@ -2,8 +2,8 @@
 Contributors: publishpress, stevejburge, htmgarcia
 Tags: gutenberg, gutenberg blocks, gutenberg block, block editor, blocks
 Requires at least: 5.0
-Tested up to: 5.8.3
-Stable tag: 2.11.3
+Tested up to: 5.9.1
+Stable tag: 2.11.6
 Requires PHP: 5.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -256,6 +256,41 @@ Yes, we use the phrase "publishpress-advg-install" to share install links. You w
 16. Custom Styles for Blocks: You create custom CSS styles and make them available to end users.
 
 == Changelog ==
+
+= 2.11.6 - 10 Mar 2022 =
+  * Add: Improved design for Advanced Tabs remove and add settings
+  * Add: Ad to upgrade to Pro for Images Slider block
+  * Add: Missing Spanish translations
+  * Remove: Manual block registration for Legacy Widget and Widget Area
+  * Fix: Legacy Widget is always activated and can't be disabled
+  * Fix: Local video cropped in mobile for Advanced Video block
+  * Fix: Default text color for outlined styles in frontend for Advanced Button block
+  * Fix: Check current user role exists as array in advgb_blocks_user_roles option
+  * Fix: Get all the taxonomy values for CPT filters in Content Display block
+  * Fix: Text format displayed as raw HTML in frontend for Count Up block
+  * Fix: Handle editor javascript as separate file to load when Block Access is enabled
+
+= 2.11.5 - 14 Feb 2022 =
+  * Add: Ad to upgrade to Pro for Advanced Tabs, Advanced Accordions and Content Display blocks
+
+= 2.11.4 - 8 Feb 2022 =
+  * Add: Set Block Access as disabled for new installations
+  * Add: Disable Table of Contents in Site Editor
+  * Fix: Include 0 on the left when hours or minutes are 0-9 for Newsletter and Contact Form blocks
+  * Fix: Don't unregister widget blocks
+  * Fix: Warning when missing Legacy widget in Block Access
+  * Fix: Add a visual indicator the Tabs style is selected for Advanced Tabs block
+  * Fix: Don't load post-sidebar.js in Site Editor screen
+  * Fix: Load assets in frontend for pages generated through Site Editor
+  * Fix: Load CSS in Site Editor
+  * Fix: Adapt scripts enqueue from Pro to make it compatible with Site Editor
+  * Fix: New block types already registered error in console
+  * Fix: Login / Register Form design in Site Editor
+  * Fix: Duplicated id for Info Box block
+  * Fix: UI settings in Site Editor
+  * Fix: Load Dashicons in Site Editor iframe
+  * Fix: Padding Unit for Mobile in frontend for Columns Manager block
+  * Fix: Include in Gutenberg Site Editor the blocks stored in advgb_blocks_list option but not detected by Block Access
 
 = 2.11.3 - 17 Jan 2022 =
   * Add: Sanitization cleanup

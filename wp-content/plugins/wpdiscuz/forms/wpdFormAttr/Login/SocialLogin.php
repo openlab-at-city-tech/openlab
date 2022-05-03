@@ -6,6 +6,7 @@ use wpdFormAttr\FormConst\wpdFormConst;
 use wpdFormAttr\Login\twitter\TwitterOAuthException;
 use wpdFormAttr\Login\twitter\TwitterOAuth;
 use wpdFormAttr\Login\Utils;
+use wpdFormAttr\Tools\Sanitizer;
 
 class SocialLogin {
 
@@ -37,10 +38,10 @@ class SocialLogin {
     }
 
     public function login() {
-        $postID = filter_input(INPUT_POST, "postID", FILTER_SANITIZE_NUMBER_INT);
-        $provider = filter_input(INPUT_POST, "provider", FILTER_SANITIZE_STRING);
-        $token = filter_input(INPUT_POST, "token", FILTER_SANITIZE_STRING);
-        $userID = filter_input(INPUT_POST, "userID", FILTER_SANITIZE_NUMBER_INT);
+        $postID = Sanitizer::sanitize(INPUT_POST, "postID", FILTER_SANITIZE_NUMBER_INT);
+        $provider = Sanitizer::sanitize(INPUT_POST, "provider", "FILTER_SANITIZE_STRING");
+        $token = Sanitizer::sanitize(INPUT_POST, "token", "FILTER_SANITIZE_STRING");
+        $userID = Sanitizer::sanitize(INPUT_POST, "userID", FILTER_SANITIZE_NUMBER_INT);
         $response = ["code" => "error", "message" => esc_html__("Authentication failed.", "wpdiscuz"), "url" => ""];
         if ($provider === "facebook") {
             if ($this->generalOptions->social["fbUseOAuth2"]) {
@@ -85,7 +86,7 @@ class SocialLogin {
 
     public function loginCallBack() {
         $this->deleteCookie();
-        $provider = filter_input(INPUT_GET, "provider", FILTER_SANITIZE_STRING);
+        $provider = Sanitizer::sanitize(INPUT_GET, "provider", "FILTER_SANITIZE_STRING");
         if ($provider === "facebook") {
             $response = $this->facebookLoginPHPCallBack();
         } else if ($provider === "google") {
@@ -185,8 +186,8 @@ class SocialLogin {
     }
 
     public function facebookLoginPHPCallBack() {
-        $code = filter_input(INPUT_GET, "code", FILTER_SANITIZE_STRING);
-        $state = filter_input(INPUT_GET, "state", FILTER_SANITIZE_STRING);
+        $code = Sanitizer::sanitize(INPUT_GET, "code", "FILTER_SANITIZE_STRING");
+        $state = Sanitizer::sanitize(INPUT_GET, "state", "FILTER_SANITIZE_STRING");
         $providerData = Utils::getProviderByState($state);
         $provider = $providerData[wpdFormConst::WPDISCUZ_OAUTH_STATE_PROVIDER];
         $postID = $providerData[wpdFormConst::WPDISCUZ_OAUTH_CURRENT_POSTID];
@@ -259,8 +260,8 @@ class SocialLogin {
     }
 
     public function instagramLoginCallBack() {
-        $code = filter_input(INPUT_GET, "code", FILTER_SANITIZE_STRING);
-        $state = filter_input(INPUT_GET, "state", FILTER_SANITIZE_STRING);
+        $code = Sanitizer::sanitize(INPUT_GET, "code", "FILTER_SANITIZE_STRING");
+        $state = Sanitizer::sanitize(INPUT_GET, "state", "FILTER_SANITIZE_STRING");
         $providerData = Utils::getProviderByState($state);
         $provider = $providerData[wpdFormConst::WPDISCUZ_OAUTH_STATE_PROVIDER];
         $postID = $providerData[wpdFormConst::WPDISCUZ_OAUTH_CURRENT_POSTID];
@@ -337,8 +338,8 @@ class SocialLogin {
     }
 
     public function googleLoginCallBack() {
-        $code = filter_input(INPUT_GET, "code", FILTER_SANITIZE_STRING);
-        $state = filter_input(INPUT_GET, "state", FILTER_SANITIZE_STRING);
+        $code = Sanitizer::sanitize(INPUT_GET, "code", "FILTER_SANITIZE_STRING");
+        $state = Sanitizer::sanitize(INPUT_GET, "state", "FILTER_SANITIZE_STRING");
         $providerData = Utils::getProviderByState($state);
         $provider = $providerData[wpdFormConst::WPDISCUZ_OAUTH_STATE_PROVIDER];
         $postID = $providerData[wpdFormConst::WPDISCUZ_OAUTH_CURRENT_POSTID];
@@ -406,8 +407,8 @@ class SocialLogin {
     }
 
     public function linkedinLoginCallBack() {
-        $code = filter_input(INPUT_GET, "code", FILTER_SANITIZE_STRING);
-        $state = filter_input(INPUT_GET, "state", FILTER_SANITIZE_STRING);
+        $code = Sanitizer::sanitize(INPUT_GET, "code", "FILTER_SANITIZE_STRING");
+        $state = Sanitizer::sanitize(INPUT_GET, "state", "FILTER_SANITIZE_STRING");
         $providerData = Utils::getProviderByState($state);
         $provider = $providerData[wpdFormConst::WPDISCUZ_OAUTH_STATE_PROVIDER];
         $postID = $providerData[wpdFormConst::WPDISCUZ_OAUTH_CURRENT_POSTID];
@@ -516,8 +517,8 @@ class SocialLogin {
     }
 
     public function disqusLoginCallBack() {
-        $code = filter_input(INPUT_GET, "code", FILTER_SANITIZE_STRING);
-        $state = filter_input(INPUT_GET, "state", FILTER_SANITIZE_STRING);
+        $code = Sanitizer::sanitize(INPUT_GET, "code", "FILTER_SANITIZE_STRING");
+        $state = Sanitizer::sanitize(INPUT_GET, "state", "FILTER_SANITIZE_STRING");
         $providerData = Utils::getProviderByState($state);
         $provider = $providerData[wpdFormConst::WPDISCUZ_OAUTH_STATE_PROVIDER];
         $postID = $providerData[wpdFormConst::WPDISCUZ_OAUTH_CURRENT_POSTID];
@@ -602,8 +603,8 @@ class SocialLogin {
     }
 
     public function wordpressLoginCallBack() {
-        $code = filter_input(INPUT_GET, "code", FILTER_SANITIZE_STRING);
-        $state = filter_input(INPUT_GET, "state", FILTER_SANITIZE_STRING);
+        $code = Sanitizer::sanitize(INPUT_GET, "code", "FILTER_SANITIZE_STRING");
+        $state = Sanitizer::sanitize(INPUT_GET, "state", "FILTER_SANITIZE_STRING");
         $providerData = Utils::getProviderByState($state);
         $provider = $providerData[wpdFormConst::WPDISCUZ_OAUTH_STATE_PROVIDER];
         $postID = $providerData[wpdFormConst::WPDISCUZ_OAUTH_CURRENT_POSTID];
@@ -689,8 +690,8 @@ class SocialLogin {
     }
 
     public function twitterLoginCallBack() {
-        $oauthToken = filter_input(INPUT_GET, "oauth_token", FILTER_SANITIZE_STRING);
-        $oauthVerifier = filter_input(INPUT_GET, "oauth_verifier", FILTER_SANITIZE_STRING);
+        $oauthToken = Sanitizer::sanitize(INPUT_GET, "oauth_token", "FILTER_SANITIZE_STRING");
+        $oauthVerifier = Sanitizer::sanitize(INPUT_GET, "oauth_verifier", "FILTER_SANITIZE_STRING");
         $oauthSecretData = Utils::getProviderByState($oauthToken);
         $oauthSecret = $oauthSecretData[wpdFormConst::WPDISCUZ_OAUTH_STATE_PROVIDER];
         $postID = $oauthSecretData[wpdFormConst::WPDISCUZ_OAUTH_CURRENT_POSTID];
@@ -742,8 +743,8 @@ class SocialLogin {
     }
 
     public function vkLoginCallBack() {
-        $code = filter_input(INPUT_GET, "code", FILTER_SANITIZE_STRING);
-        $state = filter_input(INPUT_GET, "state", FILTER_SANITIZE_STRING);
+        $code = Sanitizer::sanitize(INPUT_GET, "code", "FILTER_SANITIZE_STRING");
+        $state = Sanitizer::sanitize(INPUT_GET, "state", "FILTER_SANITIZE_STRING");
         $providerData = Utils::getProviderByState($state);
         $provider = $providerData[wpdFormConst::WPDISCUZ_OAUTH_STATE_PROVIDER];
         $postID = $providerData[wpdFormConst::WPDISCUZ_OAUTH_CURRENT_POSTID];
@@ -819,8 +820,8 @@ class SocialLogin {
     }
 
     public function okLoginCallBack() {
-        $code = filter_input(INPUT_GET, "code", FILTER_SANITIZE_STRING);
-        $state = filter_input(INPUT_GET, "state", FILTER_SANITIZE_STRING);
+        $code = Sanitizer::sanitize(INPUT_GET, "code", "FILTER_SANITIZE_STRING");
+        $state = Sanitizer::sanitize(INPUT_GET, "state", "FILTER_SANITIZE_STRING");
         $providerData = Utils::getProviderByState($state);
         $provider = $providerData[wpdFormConst::WPDISCUZ_OAUTH_STATE_PROVIDER];
         $postID = $providerData[wpdFormConst::WPDISCUZ_OAUTH_CURRENT_POSTID];
@@ -896,10 +897,10 @@ class SocialLogin {
     }
 
     public function yandexLoginCallBack() {
-        $error = filter_input(INPUT_GET, "error", FILTER_SANITIZE_STRING);
-        $errorDesc = filter_input(INPUT_GET, "error_description", FILTER_SANITIZE_STRING);
-        $code = filter_input(INPUT_GET, "code", FILTER_SANITIZE_STRING);
-        $state = filter_input(INPUT_GET, "state", FILTER_SANITIZE_STRING);
+        $error = Sanitizer::sanitize(INPUT_GET, "error", "FILTER_SANITIZE_STRING");
+        $errorDesc = Sanitizer::sanitize(INPUT_GET, "error_description", "FILTER_SANITIZE_STRING");
+        $code = Sanitizer::sanitize(INPUT_GET, "code", "FILTER_SANITIZE_STRING");
+        $state = Sanitizer::sanitize(INPUT_GET, "state", "FILTER_SANITIZE_STRING");
         $providerData = Utils::getProviderByState($state);
         $provider = $providerData[wpdFormConst::WPDISCUZ_OAUTH_STATE_PROVIDER];
         $postID = $providerData[wpdFormConst::WPDISCUZ_OAUTH_CURRENT_POSTID];
@@ -985,10 +986,10 @@ class SocialLogin {
     }
 
     public function mailruLoginCallBack() {
-        $error = filter_input(INPUT_GET, "error", FILTER_SANITIZE_STRING);
-        $errorDesc = filter_input(INPUT_GET, "error_description", FILTER_SANITIZE_STRING);
-        $code = filter_input(INPUT_GET, "code", FILTER_SANITIZE_STRING);
-        $state = filter_input(INPUT_GET, "state", FILTER_SANITIZE_STRING);
+        $error = Sanitizer::sanitize(INPUT_GET, "error", "FILTER_SANITIZE_STRING");
+        $errorDesc = Sanitizer::sanitize(INPUT_GET, "error_description", "FILTER_SANITIZE_STRING");
+        $code = Sanitizer::sanitize(INPUT_GET, "code", "FILTER_SANITIZE_STRING");
+        $state = Sanitizer::sanitize(INPUT_GET, "state", "FILTER_SANITIZE_STRING");
         $providerData = Utils::getProviderByState($state);
         $provider = $providerData[wpdFormConst::WPDISCUZ_OAUTH_STATE_PROVIDER];
         $postID = $providerData[wpdFormConst::WPDISCUZ_OAUTH_CURRENT_POSTID];
@@ -1075,10 +1076,10 @@ class SocialLogin {
     }
 
     public function wechatLoginCallBack() {
-        $error = filter_input(INPUT_GET, "errcode", FILTER_SANITIZE_STRING);
-        $errorDesc = filter_input(INPUT_GET, "errmsg", FILTER_SANITIZE_STRING);
-        $code = filter_input(INPUT_GET, "code", FILTER_SANITIZE_STRING);
-        $state = filter_input(INPUT_GET, "state", FILTER_SANITIZE_STRING);
+        $error = Sanitizer::sanitize(INPUT_GET, "errcode", "FILTER_SANITIZE_STRING");
+        $errorDesc = Sanitizer::sanitize(INPUT_GET, "errmsg", "FILTER_SANITIZE_STRING");
+        $code = Sanitizer::sanitize(INPUT_GET, "code", "FILTER_SANITIZE_STRING");
+        $state = Sanitizer::sanitize(INPUT_GET, "state", "FILTER_SANITIZE_STRING");
         $providerData = Utils::getProviderByState($state);
         $provider = $providerData[wpdFormConst::WPDISCUZ_OAUTH_STATE_PROVIDER];
         $postID = $providerData[wpdFormConst::WPDISCUZ_OAUTH_CURRENT_POSTID];
@@ -1160,10 +1161,10 @@ class SocialLogin {
     }
 
     public function qqLoginCallBack() {
-        $error = filter_input(INPUT_GET, "error", FILTER_SANITIZE_STRING);
-        $errorDesc = filter_input(INPUT_GET, "error_description", FILTER_SANITIZE_STRING);
-        $code = filter_input(INPUT_GET, "code", FILTER_SANITIZE_STRING);
-        $state = filter_input(INPUT_GET, "state", FILTER_SANITIZE_STRING);
+        $error = Sanitizer::sanitize(INPUT_GET, "error", "FILTER_SANITIZE_STRING");
+        $errorDesc = Sanitizer::sanitize(INPUT_GET, "error_description", "FILTER_SANITIZE_STRING");
+        $code = Sanitizer::sanitize(INPUT_GET, "code", "FILTER_SANITIZE_STRING");
+        $state = Sanitizer::sanitize(INPUT_GET, "state", "FILTER_SANITIZE_STRING");
         $providerData = Utils::getProviderByState($state);
         $provider = $providerData[wpdFormConst::WPDISCUZ_OAUTH_STATE_PROVIDER];
         $postID = $providerData[wpdFormConst::WPDISCUZ_OAUTH_CURRENT_POSTID];
@@ -1266,10 +1267,10 @@ class SocialLogin {
     }
 
     public function weiboLoginCallBack() {
-        $error = filter_input(INPUT_GET, "error", FILTER_SANITIZE_STRING);
-        $errorDesc = filter_input(INPUT_GET, "error_description", FILTER_SANITIZE_STRING);
-        $code = filter_input(INPUT_GET, "code", FILTER_SANITIZE_STRING);
-        $state = filter_input(INPUT_GET, "state", FILTER_SANITIZE_STRING);
+        $error = Sanitizer::sanitize(INPUT_GET, "error", "FILTER_SANITIZE_STRING");
+        $errorDesc = Sanitizer::sanitize(INPUT_GET, "error_description", "FILTER_SANITIZE_STRING");
+        $code = Sanitizer::sanitize(INPUT_GET, "code", "FILTER_SANITIZE_STRING");
+        $state = Sanitizer::sanitize(INPUT_GET, "state", "FILTER_SANITIZE_STRING");
         $providerData = Utils::getProviderByState($state);
         $provider = $providerData[wpdFormConst::WPDISCUZ_OAUTH_STATE_PROVIDER];
         $postID = $providerData[wpdFormConst::WPDISCUZ_OAUTH_CURRENT_POSTID];
@@ -1355,10 +1356,10 @@ class SocialLogin {
     }
 
     public function baiduLoginCallBack() {
-        $error = filter_input(INPUT_GET, "error", FILTER_SANITIZE_STRING);
-        $errorDesc = filter_input(INPUT_GET, "error_description", FILTER_SANITIZE_STRING);
-        $code = filter_input(INPUT_GET, "code", FILTER_SANITIZE_STRING);
-        $state = filter_input(INPUT_GET, "state", FILTER_SANITIZE_STRING);
+        $error = Sanitizer::sanitize(INPUT_GET, "error", "FILTER_SANITIZE_STRING");
+        $errorDesc = Sanitizer::sanitize(INPUT_GET, "error_description", "FILTER_SANITIZE_STRING");
+        $code = Sanitizer::sanitize(INPUT_GET, "code", "FILTER_SANITIZE_STRING");
+        $state = Sanitizer::sanitize(INPUT_GET, "state", "FILTER_SANITIZE_STRING");
         $providerData = Utils::getProviderByState($state);
         $provider = $providerData[wpdFormConst::WPDISCUZ_OAUTH_STATE_PROVIDER];
         $postID = $providerData[wpdFormConst::WPDISCUZ_OAUTH_CURRENT_POSTID];

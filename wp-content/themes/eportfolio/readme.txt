@@ -1,9 +1,9 @@
 === ePortfolio ===
 Contributors: themeinwp
 Requires at least: 5.3
-Tested up to: 5.8
+Tested up to: 5.9
 Requires PHP: 5.6
-Stable tag: 1.1.6
+Stable tag: 1.1.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -84,6 +84,10 @@ License: Apache License, Version 2.0
 
 
 == Changelog ==
+
+= 1.1.7 - Feb 17 2022 =
+* Minor fixing
+* Language file regenerated
 
 = 1.1.6 - Dec 21 2021 =
 * Demo content importer change and managed

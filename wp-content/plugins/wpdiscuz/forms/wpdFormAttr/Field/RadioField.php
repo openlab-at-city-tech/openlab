@@ -2,6 +2,8 @@
 
 namespace wpdFormAttr\Field;
 
+use wpdFormAttr\Tools\Sanitizer;
+
 class RadioField extends Field {
 
     protected function dashboardForm() {
@@ -119,7 +121,7 @@ class RadioField extends Field {
         if (!$this->isCommentParentZero() && !$args["is_show_sform"]) {
             return "";
         }
-        $value = filter_input(INPUT_POST, $fieldName, FILTER_VALIDATE_INT);
+        $value = Sanitizer::sanitize(INPUT_POST, $fieldName, FILTER_VALIDATE_INT);
         if (is_int($value) && $value > 0 && key_exists($value - 1, $args["values"])) {
             $value = $args["values"][$value - 1];
         } else {

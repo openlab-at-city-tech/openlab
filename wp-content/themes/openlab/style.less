@@ -503,8 +503,6 @@ input[type="submit"]{
 .invite-new-members-link {
 	font-weight: @bold;
 }
-.import-results-section {
-}
 .import-results-section-success {
 	border-bottom: 1px solid #dddddd;
 	margin-bottom: 15px;
@@ -2087,6 +2085,11 @@ body form{
   font-size: 1.1em;
   a {
     display: block;
+
+    &.a-grey {
+        color: #fff;
+        background-color: #444;
+    }
   }
 
   &:hover, &:focus{
@@ -2114,6 +2117,7 @@ body form{
             margin: 0 auto;
         }
     }
+
     #sidebar-menu-wrapper{
         .sidebar-block{
             margin: 15px 0;
@@ -2121,8 +2125,14 @@ body form{
             @media (max-width: @screen-xs-max){
                 margin: 0;
             }
+
+			&.profile-nav {
+				border-top: 1px solid #bbb;
+				margin-top: 0;
+			}
         }
     }
+
     h2{
         &.sidebar-title,
         &.sidebar-header{
@@ -2304,6 +2314,20 @@ body form{
             font-weight: bold;
         }
     }
+}
+.sidebar .group-has-site {
+	#sidebar-menu-wrapper {
+		.profile-nav {
+			border-top: 0;
+			margin-top: 15px;
+		}
+	}
+}
+.sidebar-widget-wrapper {
+    margin-top: 46px;
+}
+.sidebar.type-members {
+    margin-top: 49px;
 }
 .sidebar-filter-search {
 	margin-top: 16px;
@@ -2652,6 +2676,15 @@ input#group-request-send {
             }
         }
     }
+}
+.group-home-activity-title {
+	a {
+		text-decoration: none;
+	}
+
+	a:hover {
+		text-decoration: underline;
+	}
 }
 .academic-unit-selector {
     border: 2px solid #ddd;
@@ -3026,6 +3059,29 @@ body.membership-requests {
 			text-decoration: none;
 		}
     }
+}
+/* BuddyPress Docs toggleable panels */
+.toggleable {
+	.plus-or-minus {
+		background-image: none;
+		position: relative;
+
+		&:before {
+			content: '+';
+			position: absolute;
+			left: -10px;
+			top: -11px;
+			font-size: 24px;
+		}
+	}
+
+	&.toggle-open {
+		.plus-or-minus:before {
+			content: '-';
+			font-size: 28px;
+			top: -17px;
+		}
+	}
 }
 .docs-info-header{
     #tags-toggle{

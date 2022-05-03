@@ -16,9 +16,12 @@
 		}
 	}
 
+	var $account_type_field;
+
 	jQuery(document).ready(function () {
 		var $signup_form = $('#signup_form');
-		var $account_type_field = $('#field_' + OLReg.account_type_field);
+
+		$account_type_field = $('#openlab-account-type');
 
 		var registrationFormValidation = $signup_form.parsley({
 			errorsWrapper: '<ul class="parsley-errors-list"></ul>'
@@ -81,10 +84,13 @@
 		$('body').on('keyup', '#signup_password', function (e) {
 			var blacklistValues = [];
 			for (var i = 0; i < inputBlacklist.length; i++) {
-				var fieldValue = document.getElementById(inputBlacklist[ i ]).value;
-				if (4 <= fieldValue.length) {
-					// Exclude short items. See password-strength-meter.js.
-					blacklistValues.push(fieldValue);
+				var blacklistField = document.getElementById( inputBlacklist[i] );
+				if ( blacklistField ) {
+					var fieldValue = document.getElementById(inputBlacklist[ i ]).value;
+					if (4 <= fieldValue.length) {
+						// Exclude short items. See password-strength-meter.js.
+						blacklistValues.push(fieldValue);
+					}
 				}
 			}
 
@@ -142,12 +148,12 @@
 							var beforeAt = this.value.substr( 0, atPosition )
 
 							var emailDomain = 'citytech.cuny.edu';
-							if ( 'Student' === selectedAccountType || 'Alumni' === selectedAccountType ) {
+							if ( 'student' === selectedAccountType || 'alumni' === selectedAccountType ) {
 								emailDomain = 'mail.citytech.cuny.edu';
 							}
 
 							// Show nothing if user has selected Student but account format doesn't match.
-							if ( 'Student' === selectedAccountType || 'Alumni' === selectedAccountType ) {
+							if ( 'student' === selectedAccountType || 'alumni' === selectedAccountType ) {
 								var studentRegExp = /^[a-z0-9]+\.[a-z0-9]+$/i
 								if ( ! studentRegExp.exec( beforeAt ) ) {
 									return;
@@ -323,9 +329,9 @@
 		});
 
 		// Ensure that the account type field is set properly from the post
-		$account_type_field.val(OLReg.post_data.field_7);
+		$account_type_field.val(OLReg.post_data['openlab-account-type']);
 		$account_type_field.children('option').each(function () {
-			if (OLReg.post_data.field_7 == $(this).val()) {
+			if (OLReg.post_data['openlab-account-type'] == $(this).val()) {
 				$(this).attr('selected', 'selected');
 			}
 		});
@@ -363,9 +369,9 @@
 		function set_email_helper( accountType ) {
 			var helper = '';
 
-			if ( 'Student' === accountType ) {
+			if ( 'student' === accountType ) {
 				helper = 'Example: first.lastname@mail.citytech.cuny.edu or first.lastname1@mail.citytech.cuny.edu.';
-			} else if ( 'Faculty' === accountType ) {
+			} else if ( 'faculty' === accountType ) {
 				helper = 'Example: jdoe@citytech.cuny.edu.';
 			}
 
@@ -390,42 +396,41 @@
 			var newtypes = '';
 			var emailtype = getEnteredEmailType();
 
-			var $typedrop = $('#field_7');
-			var typeSelected = $typedrop.children('option:selected').val();
+			var typeSelected = $account_type_field.children('option:selected').val();
 
 			if ('fs' == emailtype || 'empty' === emailtype ) {
 				newtypes += get_account_type_option_markup( '', '----', typeSelected );
-				newtypes += get_account_type_option_markup( 'Faculty', 'Faculty', typeSelected );
-				newtypes += get_account_type_option_markup( 'Staff', 'Staff', typeSelected );
+				newtypes += get_account_type_option_markup( 'faculty', 'Faculty', typeSelected );
+				newtypes += get_account_type_option_markup( 'staff', 'Staff', typeSelected );
 			}
 
 			if ('student' == emailtype || 'empty' === emailtype ) {
-				newtypes += get_account_type_option_markup( 'Student', 'Student', typeSelected );
-				newtypes += get_account_type_option_markup( 'Alumni', 'Alumni', typeSelected );
+				newtypes += get_account_type_option_markup( 'student', 'Student', typeSelected );
+				newtypes += get_account_type_option_markup( 'alumni', 'Alumni', typeSelected );
 			}
 
 			if ('nonct' == emailtype || 'empty' === emailtype ) {
-				newtypes += get_account_type_option_markup( 'Non-City Tech', 'Non-City Tech', typeSelected );
+				newtypes += get_account_type_option_markup( 'non-city-tech', 'Non-City Tech', typeSelected );
 			}
 
 			if ( accountType ) {
 				newtypes = get_account_type_option_markup( accountType, accountType, typeSelected );
 			}
 
-			$typedrop.html(newtypes);
+			$account_type_field.html(newtypes);
 
 			/*
 			 * Because there is no alternative in the dropdown, the 'change' event never
 			 * fires. So we trigger it manually.
 			 */
 			load_account_type_fields();
-			$typedrop.parsley().validate();
+			$account_type_field.parsley().validate();
 		}
 
 		//load register account type
 		function load_account_type_fields() {
 			var default_type = '';
-			var selected_account_type = $account_type_field.val();
+			var selected_account_type = $account_type_field.children('option:selected').val();
 
 			if (document.getElementById('signup_submit')) {
 

@@ -342,7 +342,7 @@ function openlab_displayed_user_account_type() {
 }
 
 function openlab_get_displayed_user_account_type() {
-	return xprofile_get_field_data( 'Account Type', bp_displayed_user_id() );
+	return openlab_get_user_member_type( bp_displayed_user_id() );
 }
 
 /**
@@ -785,7 +785,7 @@ function cuny_member_profile_header() {
 
 	$this_user_id = isset( $site_members_template->member->id ) ? $site_members_template->member->id : bp_displayed_user_id();
 
-	$account_type = xprofile_get_field_data( 'Account Type', $this_user_id );
+	$account_type = openlab_get_user_member_type( $this_user_id );
 
 	//
 	//     whenever profile is viewed, update user meta for first name and last name so this shows up
@@ -814,7 +814,6 @@ function cuny_member_profile_header() {
 		$this_user_id = isset( $site_members_template->member->id ) ? $site_members_template->member->id : bp_displayed_user_id();
 		do_action( 'bp_before_member_home_content' );
 		?>
-		<?php $account_type = xprofile_get_field_data( 'Account Type', $this_user_id ); ?>
 
 		<div id="member-header-avatar" class="alignleft group-header-avatar col-sm-8 col-xs-12">
 			<div id="avatar-wrapper">
@@ -893,11 +892,11 @@ function cuny_member_profile_header() {
 						);
 
 						// This field is shown first for Student, Alumni; after Title for others.
-						$show_dept_field_next = in_array( $account_type, array( 'Student', 'Alumni' ) );
+						$show_dept_field_next = in_array( $account_type, array( 'student', 'alumni' ) );
 
 						// Special case: faculty/staff doesn't have Title data.
 						if ( ! $show_dept_field_next ) {
-							$title_field_id = 'Faculty' === $account_type ? 16 : 206;
+							$title_field_id = 'faculty' === $account_type ? 16 : 206;
 							$user_title     = xprofile_get_field_data( $title_field_id, bp_displayed_user_id() );
 							if ( ! $user_title ) {
 								$show_dept_field_next = true;
@@ -906,7 +905,7 @@ function cuny_member_profile_header() {
 
 						$user_units = openlab_get_user_academic_units( bp_displayed_user_id() );
 						$department = openlab_generate_department_name( $user_units );
-						$dept_label = in_array( $account_type, array( 'Student', 'Alumni' ), true ) ? 'Major Program of Study' : 'Department';
+						$dept_label = in_array( $account_type, array( 'student', 'alumni' ), true ) ? 'Major Program of Study' : 'Department';
 
 						?>
 
@@ -1037,11 +1036,11 @@ add_filter( 'bp_get_add_friend_button', 'openlab_custom_add_friend_button' );
 function openlab_member_header() {
 	$this_user_id = isset( $site_members_template->member->id ) ? $site_members_template->member->id : bp_displayed_user_id();
 	?>
-	<?php $account_type = xprofile_get_field_data( 'Account Type', $this_user_id ); ?>
+	<?php $account_type = openlab_get_user_member_type_label( $this_user_id ); ?>
 
 	<h1 class="entry-title profile-title clearfix">
 		<span class="profile-name"><?php bp_displayed_user_fullname(); ?>&rsquo;s Profile</span>
-		<span class="profile-type pull-right hidden-xs"><?php echo $account_type; ?></span>
+		<span class="profile-type pull-right hidden-xs"><?php echo esc_html( $account_type ); ?></span>
 		<button data-target="#sidebar-mobile" class="mobile-toggle direct-toggle pull-right visible-xs" type="button">
 			<span class="sr-only">Toggle navigation</span>
 			<span class="icon-bar"></span>
@@ -1055,7 +1054,7 @@ function openlab_member_header() {
 		</div>
 	<?php endif; ?>
 	<div class="clearfix visible-xs">
-		<span class="profile-type pull-left"><?php echo $account_type; ?></span>
+		<span class="profile-type pull-left"><?php echo esc_html( $account_type ); ?></span>
 		<div class="info-line pull-right"><span class="timestamp info-line-timestamp"><span class="fa fa-undo" aria-hidden="true"></span> <?php bp_last_activity( bp_displayed_user_id() ); ?></span></div>
 	</div>
 	<?php

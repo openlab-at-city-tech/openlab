@@ -224,14 +224,14 @@ add_filter( 'messages_send_notice', 'openlab_send_notice_email', 10, 2 );
 function openlab_redirect_to_profile_edit_group() {
 	if ( bp_is_user_profile_edit() ) {
 		if ( ! bp_action_variables( 1 ) ) {
-			 $account_type = bp_get_profile_field_data( 'field=Account Type&user_id=' . bp_displayed_user_id() );
-			if ( $account_type == 'Student' ) {
+			 $account_type = openlab_get_user_member_type( bp_displayed_user_id() );
+			if ( $account_type === 'student' ) {
 				$pgroup = '2';
-			} elseif ( $account_type == 'Faculty' ) {
+			} elseif ( $account_type === 'faculty' ) {
 				$pgroup = '3';
-			} elseif ( $account_type == 'Alumni' ) {
+			} elseif ( $account_type === 'alumni' ) {
 				$pgroup = '4';
-			} elseif ( $account_type == 'Staff' ) {
+			} elseif ( $account_type === 'staff' ) {
 				$pgroup = '5';
 			} else {
 				$pgroup = '1';

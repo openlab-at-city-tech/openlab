@@ -175,3 +175,22 @@ add_action(
 		add_action( 'bp_notification_settings', 'openlab_ass_add_notice_to_notifications_page', 9000 );
 	}
 );
+
+/**
+ * Swap out notice language.
+ */
+add_action(
+	'bp_actions',
+	function() {
+		$bp = buddypress();
+
+		if ( empty( $bp->template_message ) ) {
+			return;
+		}
+
+		if ( 0 === strpos( $bp->template_message, 'Your email notifications are set to' ) ) {
+			$bp->template_message = 'Your email subscription options were successfully updated.';
+		}
+	},
+	6
+);

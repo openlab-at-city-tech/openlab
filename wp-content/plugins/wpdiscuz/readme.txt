@@ -3,7 +3,7 @@ Contributors: gVectors Team
 Tags: comment, comments, ajax comments, comment form, comment fields
 Requires at least: 5.0
 Tested up to: 5.9
-Stable tag: 7.3.11
+Stable tag: 7.3.17
 Requires PHP: 5.6 and higher
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -185,6 +185,46 @@ Nothing will be lost!  **Comments - wpDiscuz** will show all old comments.
 
 == Changelog ==
 
+= Comments - wpDiscuz v7.3.17 - 30.03.2022 =
+
+* Fixed Bug: Conflict with Redis based cache plugins
+* Fixed Bug: Conflict with Memcached based cache plugins
+
+**IMPORTANT!**
+
+* Please don't forget delete all caches and purge CDN after the update.
+
+
+
+= Comments - wpDiscuz v7.3.16 - 19.03.2022 =
+
+* Fixed Bug: Deactivation issues
+
+
+= Comments - wpDiscuz v7.3.14 / v7.3.15 - 19.03.2022 =
+
+* Fixed Bug: wpdiscuz-ajax not found
+
+
+= Comments - wpDiscuz v7.3.13 - 19.03.2022 =
+
+* Modified: Exclude WooCommerce "order_note" comment type from statistics
+* Fixed Bug: PHP Warning:  filemtime(): stat failed
+* Fixed Bug: Trying to access array offset on value of type null
+* Fixed Phrase: Change word "Subscrption" to "Subscription" in translations files(.po,.mo)
+* Added: New hooks for controlling new subscriptions
+* Added: `do_action("wpdiscuz_add_email_notification_success", $subsriptionId, $postId, $email, $subscriptionType, $confirm);`
+* Added: `do_action("wpdiscuz_add_email_notification_fail", $subsriptionId, $postId, $email, $subscriptionType, $confirm);`
+
+
+= Comments - wpDiscuz v7.3.12 - 10.02.2022 =
+
+* Fixed Bug: Issues with the validation of the 'wmuMaxFileSize' variable
+* Fixed Bug: Compatibility with the Twenty Twenty Two theme
+* Fixed Bug: Issues on cache files removing
+* Fixed Bug: More secure way of backup for options and phrases
+* Fixed Bug: Error when submitting the import options/phrases form without a file
+
 = Comments - wpDiscuz v7.3.11 - 25.01.2022 =
 
 * Added: WordPress v5.9 compatibility
@@ -209,10 +249,6 @@ Nothing will be lost!  **Comments - wpDiscuz** will show all old comments.
 * Fixed bug: Redirect to the same page after clicking the reset option button
 * Fixed bug: Comment filtering issue in widgets, changed wp_trim_words() to get_comment_excerpt().
 * Fixed bug: Display mentioned user name without a link to profile page when the Profile URL option is disabled.
-
-**IMPORTANT!**
-
-* Please don't forget delete all caches and purge CDN after the update.
 
 
 = Comments - wpDiscuz v7.3.8 =

@@ -9191,6 +9191,10 @@ body form .checkbox-list-container {
 .portfolio-site-link a {
   display: block;
 }
+.portfolio-site-link a.a-grey {
+  color: #fff;
+  background-color: #444;
+}
 .portfolio-site-link:hover > a,
 .portfolio-site-link:focus > a {
   background: #63dfd2;
@@ -9221,6 +9225,10 @@ body form .checkbox-list-container {
   .sidebar #sidebar-menu-wrapper .sidebar-block {
     margin: 0;
   }
+}
+.sidebar #sidebar-menu-wrapper .sidebar-block.profile-nav {
+  border-top: 1px solid #bbb;
+  margin-top: 0;
 }
 .sidebar h2.sidebar-title,
 .sidebar h2.sidebar-header {
@@ -9440,6 +9448,16 @@ body form .checkbox-list-container {
 }
 .sidebar .learn-more-sidebar a {
   font-weight: bold;
+}
+.sidebar .group-has-site #sidebar-menu-wrapper .profile-nav {
+  border-top: 0;
+  margin-top: 15px;
+}
+.sidebar-widget-wrapper {
+  margin-top: 46px;
+}
+.sidebar.type-members {
+  margin-top: 49px;
 }
 .sidebar-filter-search {
   margin-top: 16px;
@@ -9796,6 +9814,12 @@ input#group-request-send {
     border-top: none;
   }
 }
+.group-home-activity-title a {
+  text-decoration: none;
+}
+.group-home-activity-title a:hover {
+  text-decoration: underline;
+}
 .academic-unit-selector {
   border: 2px solid #ddd;
   border-radius: 4px;
@@ -10095,6 +10119,23 @@ body.membership-requests .group-list {
 #bp-group-documents .group-file-folder-nav .current-category a {
   font-weight: bold;
   text-decoration: none;
+}
+/* BuddyPress Docs toggleable panels */
+.toggleable .plus-or-minus {
+  background-image: none;
+  position: relative;
+}
+.toggleable .plus-or-minus:before {
+  content: '+';
+  position: absolute;
+  left: -10px;
+  top: -11px;
+  font-size: 24px;
+}
+.toggleable.toggle-open .plus-or-minus:before {
+  content: '-';
+  font-size: 28px;
+  top: -17px;
 }
 .docs-info-header #tags-toggle {
   padding: 6px 16px;

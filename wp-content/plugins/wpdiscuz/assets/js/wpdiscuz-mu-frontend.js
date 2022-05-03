@@ -14,6 +14,7 @@ jQuery(document).ready(function ($) {
     });
 
     function wmuUploadFiles(btn, form, files) {
+        form.attr('data-uploading', 'true');
         var data = new FormData();
         data.append('action', 'wmuUploadFiles');        
         data.append('wmuAttachmentsData', $('.wmu-attachments-data', form).val());
@@ -49,10 +50,12 @@ jQuery(document).ready(function ($) {
                             }
                         }
                         $('#wpdiscuz-loading-bar').fadeOut(250);
+                        form.attr('data-uploading', 'false');
                     })
                     .fail(function (jqXHR, textStatus, errorThrown) {
                         console.log(errorThrown);
                         $('#wpdiscuz-loading-bar').fadeOut(250);
+                        form.attr('data-uploading', 'false');
                     });
         }
     }

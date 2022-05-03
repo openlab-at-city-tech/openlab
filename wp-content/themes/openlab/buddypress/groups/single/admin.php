@@ -613,8 +613,8 @@ $portfolio_sharing = groups_get_groupmeta( bp_get_current_group_id(), 'enable_po
 			<?php do_action( 'bp_after_group_delete_admin' ); ?>
 
 			<?php
-			$account_type = xprofile_get_field_data( 'Account Type', $bp->loggedin_user->id );
-			if ( $account_type == 'Student' && openlab_get_group_type() == 'portfolio' ) {
+			$account_type = openlab_get_user_member_type( bp_loggedin_user_id() );
+			if ( $account_type == 'student' && openlab_get_group_type() === 'portfolio' ) {
 				$group_type = 'ePortfolio';
 			} else {
 				$group_type = openlab_get_group_type();

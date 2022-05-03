@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ePortfolio\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-22 07:15+0000\n"
+"POT-Creation-Date: 2022-02-17 08:39+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -14,6 +14,17 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Loco https://localise.biz/\n"
 "X-Loco-Version: 2.3.0; wp-5.2.2"
+
+#: classes/about-render.php:289
+msgid "$"
+msgstr ""
+
+#: classes/admin-notice.php:82
+#, php-format
+msgid ""
+"%1$s is now installed and ready to use. Are you looking for a better "
+"experience to set up your site?"
+msgstr ""
 
 #: functions.php:137
 msgctxt "%s font: on or off"
@@ -28,8 +39,28 @@ msgstr ""
 msgid "3-Column Layout"
 msgstr ""
 
+#: classes/about-render.php:290
+msgid "49"
+msgstr ""
+
+#: classes/about-render.php:273
+msgid "800+ Font Families"
+msgstr ""
+
 #: inc/customize/core/default.php:23
 msgid "About Me"
+msgstr ""
+
+#: classes/plugin-classes.php:31
+msgid "Activate"
+msgstr ""
+
+#: classes/plugin-classes.php:139
+msgid "Activated"
+msgstr ""
+
+#: functions.php:213
+msgid "Active"
 msgstr ""
 
 #: inc/widgets/widgets-init.php:11 inc/widgets/widgets-init.php:20
@@ -56,6 +87,20 @@ msgstr ""
 
 #: inc/customize/theme-option.php:73
 msgid "Archive Section Setting Options"
+msgstr ""
+
+#: classes/about-render.php:91
+msgid "Article Meta Settings"
+msgstr ""
+
+#: classes/about-render.php:29
+msgid "Background Image"
+msgstr ""
+
+#: classes/about-render.php:256
+msgid ""
+"Behind every single customer support question stands a real person ready to "
+"fix the problem in real-time and guide you through."
 msgstr ""
 
 #: inc/widgets/widgets.php:385
@@ -90,6 +135,18 @@ msgstr ""
 msgid "Choose Image"
 msgstr ""
 
+#: classes/about-render.php:48 classes/about-render.php:272
+msgid "Color Options"
+msgstr ""
+
+#: classes/about-render.php:53
+msgid "Color Scheme"
+msgstr ""
+
+#: classes/about-render.php:44
+msgid "Color Settings"
+msgstr ""
+
 #: comments.php:66
 msgid "Comments are closed."
 msgstr ""
@@ -121,12 +178,28 @@ msgstr ""
 msgid "Copyright All right reserved"
 msgstr ""
 
+#: classes/about-render.php:247
+msgid "Create a Ticket"
+msgstr ""
+
+#: functions.php:214 classes/plugin-classes.php:23
+msgid "Deactivate"
+msgstr ""
+
+#: classes/plugin-classes.php:130
+msgid "Deactivated"
+msgstr ""
+
 #: inc/customize/theme-option.php:216
 msgid "Default (Older / Newer Post)"
 msgstr ""
 
 #: inc/template-functions.php:135
 msgid "Demo Import Kit"
+msgstr ""
+
+#: classes/admin-notice.php:92
+msgid "Dismiss this notice."
 msgstr ""
 
 #: inc/widgets/widgets.php:360
@@ -224,12 +297,28 @@ msgid ""
 "com/eportfolio/"
 msgstr ""
 
+#: classes/about.php:22
+msgid "ePortfolio Options"
+msgstr ""
+
 #: inc/customize/customizer.php:47
 msgid "ePortfolio Pro"
 msgstr ""
 
+#: classes/plugin-classes.php:79
+msgid "Error - unable to verify nonce, please try again."
+msgstr ""
+
+#: classes/about-render.php:137
+msgid "Eye-catching, Lightweight, and Highly Customizable WordPress Theme"
+msgstr ""
+
 #: inc/widgets/widgets.php:389
 msgid "Facebook URL:"
+msgstr ""
+
+#: classes/plugin-classes.php:176 classes/plugin-classes.php:185
+msgid "Failed"
 msgstr ""
 
 #: inc/customize/theme-option.php:243
@@ -240,12 +329,36 @@ msgstr ""
 msgid "Footer Options"
 msgstr ""
 
+#: classes/about-render.php:106
+msgid "Footer Setting"
+msgstr ""
+
+#: classes/about-render.php:15
+msgid "General Settings"
+msgstr ""
+
+#: classes/admin-notice.php:84
+msgid "Getting started"
+msgstr ""
+
 #: inc/customize/theme-option.php:180
 msgid "Global Page/Post Sidebar Layout"
 msgstr ""
 
 #: inc/customize/page-template.php:117 inc/customize/theme-option.php:110
 msgid "Grid/Masonry Layout"
+msgstr ""
+
+#: classes/about-render.php:24
+msgid "Header Media"
+msgstr ""
+
+#: classes/about-render.php:81
+msgid "Header Settings"
+msgstr ""
+
+#: classes/about-render.php:63 classes/about-render.php:67
+msgid "Homepage Content Section"
 msgstr ""
 
 #. Author URI of the theme
@@ -260,6 +373,18 @@ msgstr ""
 msgid "Instagram URL:"
 msgstr ""
 
+#: classes/plugin-classes.php:34
+msgid "Install & Active"
+msgstr ""
+
+#: classes/admin-notice.php:87
+msgid "Install and activate recommended plugins"
+msgstr ""
+
+#: classes/plugin-classes.php:168
+msgid "Installed & Activated"
+msgstr ""
+
 #: 404.php:23
 msgid ""
 "It looks like nothing was found at this location. Maybe try one of the links "
@@ -272,6 +397,10 @@ msgid ""
 "searching can help."
 msgstr ""
 
+#: classes/about-render.php:250
+msgid "Knowledge Base"
+msgstr ""
+
 #: inc/customize/page-template.php:23
 msgid "Latest Posts / Blog Page Settings"
 msgstr ""
@@ -280,7 +409,7 @@ msgstr ""
 msgid "Layout Management"
 msgstr ""
 
-#: inc/single-meta.php:62
+#: inc/single-meta.php:62 classes/about-render.php:101
 msgid "Layout Settings"
 msgstr ""
 
@@ -302,6 +431,34 @@ msgstr ""
 
 #: inc/customize/page-template.php:116 inc/customize/theme-option.php:109
 msgid "List Post Layout"
+msgstr ""
+
+#: classes/about-render.php:19
+msgid "Logo & Site Identity"
+msgstr ""
+
+#: classes/about-render.php:242
+msgid "Looking for help?"
+msgstr ""
+
+#: classes/about-render.php:34
+msgid "Menu Settings"
+msgstr ""
+
+#: classes/about-render.php:274
+msgid "More Custom Widgets"
+msgstr ""
+
+#: classes/about-render.php:275
+msgid "More Customizer controls"
+msgstr ""
+
+#: classes/about-render.php:276
+msgid "More page/post meta options"
+msgstr ""
+
+#: classes/about-render.php:280
+msgid "much more stuff..."
 msgstr ""
 
 #: inc/widgets/widgets.php:370
@@ -350,8 +507,18 @@ msgstr ""
 msgid "Page-Template / Page Layout Options"
 msgstr ""
 
+#: classes/admin-notice.php:84
+msgid ""
+"page. It helps you get started and configure your upcoming website with ease."
+" Let's make it shine!"
+msgstr ""
+
 #: inc/customize/theme-option.php:195
 msgid "Pagination Options"
+msgstr ""
+
+#: classes/about-render.php:86
+msgid "Pagination Settings"
 msgstr ""
 
 #: inc/customize/theme-option.php:212
@@ -408,6 +575,10 @@ msgstr ""
 msgid "Primary Sidebar - Content"
 msgstr ""
 
+#: classes/admin-notice.php:80
+msgid "Quick Setup"
+msgstr ""
+
 #: inc/widgets/widgets.php:380
 msgid "Quotation:"
 msgstr ""
@@ -419,6 +590,10 @@ msgid ""
 "Ready to publish your first post? <a href=\"%1$s\">Get started here</a>."
 msgstr ""
 
+#: classes/about-render.php:190
+msgid "Recommended Plugins"
+msgstr ""
+
 #: inc/customize/theme-option.php:163
 msgid "Regular Format"
 msgstr ""
@@ -426,6 +601,10 @@ msgstr ""
 #: inc/widgets/widget-base-class.php:289
 msgctxt "Remove"
 msgid "X"
+msgstr ""
+
+#: classes/about-render.php:278
+msgid "Remove Footer Attribution (copyright)"
 msgstr ""
 
 #. %s: search query.
@@ -501,6 +680,10 @@ msgstr ""
 msgid "Single Page/Post Sidebar"
 msgstr ""
 
+#: classes/about-render.php:96
+msgid "Single Post Settings"
+msgstr ""
+
 #: header.php:29
 msgid "Skip to content"
 msgstr ""
@@ -521,13 +704,21 @@ msgid ""
 "different keywords."
 msgstr ""
 
+#: classes/plugin-classes.php:73
+msgid "Sorry, you are not allowed to install plugins on this site."
+msgstr ""
+
 #. 1: list of tags.
 #: inc/template-tags.php:66
 #, php-format
 msgid "Tagged: %1$s"
 msgstr ""
 
-#: inc/customize/theme-option.php:13
+#: classes/about-render.php:253
+msgid "Theme Documentation"
+msgstr ""
+
+#: classes/about-render.php:77 inc/customize/theme-option.php:13
 msgid "Theme Options"
 msgstr ""
 
@@ -566,8 +757,18 @@ msgstr ""
 msgid "Two Column Grid"
 msgstr ""
 
+#: classes/about-render.php:269
+#, php-format
+msgid "Unlock all the Features with %1$s Pro"
+msgstr ""
+
 #: inc/customize/customizer.php:48
 msgid "Upgrade To Pro"
+msgstr ""
+
+#: classes/admin-notice.php:91 classes/about-render.php:286
+#: classes/about-render.php:293
+msgid "Upgrade to Pro"
 msgstr ""
 
 #: inc/widgets/widget-base-class.php:278
@@ -577,4 +778,24 @@ msgstr ""
 #: inc/template-tags.php:206
 #, php-format
 msgid "View all posts in %s"
+msgstr ""
+
+#: classes/admin-notice.php:90
+msgid "View Demo"
+msgstr ""
+
+#: classes/about-render.php:279
+msgid "VIP priority Support"
+msgstr ""
+
+#: classes/about-render.php:244
+msgid "We have some resources available to help you in the right direction."
+msgstr ""
+
+#: classes/admin-notice.php:84
+msgid "We've prepared a unique onboarding process through our"
+msgstr ""
+
+#: classes/about-render.php:277
+msgid "Webmaster Tools"
 msgstr ""

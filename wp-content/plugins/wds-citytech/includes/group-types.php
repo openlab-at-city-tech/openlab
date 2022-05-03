@@ -464,11 +464,11 @@ function openlab_additional_faculty_autocomplete_cb() {
 		$term = urldecode( $_GET['term'] );
 	}
 
+	$faculty_term = openlab_get_member_type_object( 'faculty' );
+
 	// Direct query for speed.
-	$bp          = buddypress();
-	$at_field_id = xprofile_get_field_id_from_name( 'Account Type' );
-	$like        = $wpdb->esc_like( $term );
-	$found       = $wpdb->get_results( $wpdb->prepare( "SELECT u.display_name, u.user_nicename FROM $wpdb->users u LEFT JOIN {$bp->profile->table_name_data} x ON (u.ID = x.user_id) WHERE ( u.display_name LIKE '%%{$like}%%' OR u.user_nicename LIKE '%%{$like}%%' ) AND x.field_id = %d AND x.value = 'Faculty'", $at_field_id ) );
+	$like  = $wpdb->esc_like( $term );
+	$found = $wpdb->get_results( $wpdb->prepare( "SELECT u.display_name, u.user_nicename FROM $wpdb->users u LEFT JOIN {$wpdb->term_relationships} tr ON (u.ID = tr.object_id) WHERE ( u.display_name LIKE '%%{$like}%%' OR u.user_nicename LIKE '%%{$like}%%' ) AND tr.term_taxonomy_id = %d", $faculty_term->term_taxonomy_id ) );
 
 	$retval = array();
 	foreach ( (array) $found as $u ) {

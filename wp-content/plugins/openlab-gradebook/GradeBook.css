@@ -587,6 +587,7 @@ span.twitter-typeahead {
 #gradebookWrapper .table-wrapper .table .cell-wrapper .grade-numeric,
 #gradebookWrapper .table-wrapper .table .cell-wrapper .checkbox,
 #gradebookWrapper .table-wrapper .table .cell-wrapper .grade-selector {
+  position: relative;
   margin-right: 48px;
   height: 28px;
   width: 60px;
@@ -598,6 +599,9 @@ span.twitter-typeahead {
 }
 #gradebookWrapper .table-wrapper .table .cell-wrapper .comment-icon.inactive button {
   color: #8f8f8f;
+}
+#gradebookWrapper .table-wrapper .table .cell-wrapper .add-comment.button-link {
+  position: relative;
 }
 #gradebookWrapper .table-wrapper .table .cell-wrapper .checkbox input {
   opacity: 1;

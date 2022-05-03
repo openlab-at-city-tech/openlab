@@ -296,6 +296,10 @@ function admin_bar_padding_in_admin() {
 add_action('admin_footer', 'admin_bar_padding_in_admin');
 
 function admin_bar_device_width_detection() {
+	// Don't load on widgets or other API requests.
+	if ( defined( 'REST_REQUEST' ) && REST_REQUEST ) {
+		return;
+	}
 
     /**
      * Adds divs that can be used for client-side detection of bootstrap breakpoints

@@ -5,6 +5,7 @@ namespace wpdFormAttr\Field\DefaultField;
 use wpdFormAttr\FormConst\wpdFormConst;
 use wpdFormAttr\Field\Field;
 use wpdFormAttr\Field\DefaultField\ReCaptcha;
+use wpdFormAttr\Tools\Sanitizer;
 
 class Captcha extends Field {
 
@@ -87,7 +88,7 @@ class Captcha extends Field {
     public function validateFieldData($fieldName, $args, $options, $currentUser) {
         if ($currentUser && $this->isShowCaptcha($currentUser->ID, $options)) {
             $this->initRecaptcha($options);
-            $recaptchaResponse = filter_input(INPUT_POST, "g-recaptcha-response", FILTER_SANITIZE_STRING);
+            $recaptchaResponse = Sanitizer::sanitize(INPUT_POST, "g-recaptcha-response", "FILTER_SANITIZE_STRING");
             $resp = $this->reCaptchaVerify($recaptchaResponse, $options, "wpdiscuz/addComment");
             if (!$resp->isSuccess()) {
                 $errorMesage = esc_html__("reCAPTCHA  verification failed.", "wpdiscuz");
@@ -138,7 +139,7 @@ class Captcha extends Field {
 
     public function reCaptchaValidate($options) {
         $valid = true;
-        $recaptchaResponse = filter_input(INPUT_POST, "g-recaptcha-response", FILTER_SANITIZE_STRING);
+        $recaptchaResponse = Sanitizer::sanitize(INPUT_POST, "g-recaptcha-response", "FILTER_SANITIZE_STRING");
         $this->initRecaptcha($options);
         if ($recaptchaResponse) {
             $resp = $this->reCaptchaVerify($recaptchaResponse, $options, "wpdiscuz/wpdAddSubscription");

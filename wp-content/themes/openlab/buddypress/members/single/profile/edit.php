@@ -2,12 +2,13 @@
 
 <?php
 global $bp, $user_ID, $profile_template;
+
+$account_type = openlab_get_user_member_type( bp_displayed_user_id() );
+
 if (is_super_admin($user_ID)) {
     $pgroup = bp_get_current_profile_group_id();
-    $account_type = bp_get_profile_field_data('field=Account Type&user_id=' . bp_displayed_user_id());
 } else {
-    $account_type = bp_get_profile_field_data('field=Account Type');
-    $exclude_groups = openlab_get_exclude_groups_for_account_type($account_type);
+    $exclude_groups = openlab_get_exclude_groups_for_account_type( $account_type );
 }
 
 $display_name = bp_get_profile_field_data('field=Name');
@@ -60,7 +61,7 @@ $field_ids = array(1);
                     <?php $display_name_shown = true ?>
                 <?php } ?>
 
-                <?php if ( 'Staff' !== $account_type && 'Faculty' !== $account_type ) : ?>
+                <?php if ( 'staff' !== $account_type && 'faculty' !== $account_type ) : ?>
                     <?php
                     $depts   = [];
                     $checked = openlab_get_user_academic_units( $user_ID );
@@ -155,14 +156,10 @@ $field_ids = array(1);
 
                             <?php
                             if ('selectbox' == bp_get_the_profile_field_type()) :
-                                $style = "";
-                                if (bp_get_the_profile_field_name() == "Account Type" && !is_super_admin($user_ID) || $account_type) {
-                                    //$style="style='display:none;'";
-                                }
                                 ?>
 
                                 <label <?php echo $style; ?> for="<?php bp_the_profile_field_input_name() ?>"><?php bp_the_profile_field_name() ?> <?php if (bp_get_the_profile_field_is_required()) : ?><?php _e('(required)', 'buddypress') ?><?php endif; ?></label>
-                                <select class="form-control" <?php echo $style; ?> name="<?php bp_the_profile_field_input_name() ?>" id="<?php bp_the_profile_field_input_name() ?>">
+                                <select class="form-control" name="<?php bp_the_profile_field_input_name() ?>" id="<?php bp_the_profile_field_input_name() ?>">
                                     <?php bp_the_profile_field_options() ?>
                                 </select>
 
