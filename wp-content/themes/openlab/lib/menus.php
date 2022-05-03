@@ -397,7 +397,7 @@ function openlab_my_groups_submenu($group) {
     $span_end = '</span>';
 
     //get account type to see if they're faculty
-    $faculty = xprofile_get_field_data('Account Type', get_current_user_id());
+    $member_type = openlab_get_user_member_type( get_current_user_id() );
 
     $submenu_text = 'My ' . ucfirst($group) . 's';
 
@@ -407,7 +407,7 @@ function openlab_my_groups_submenu($group) {
         // determines if there are any courses - if not, only show "create"
         $filters['wds_group_type'] = openlab_page_slug_to_grouptype();
 
-        if ( is_super_admin( get_current_user_id() ) || $faculty == "Faculty" ) {
+        if ( is_super_admin( get_current_user_id() ) || 'faculty' === $account_type ) {
 			$can_create = true;
 		} else {
 			$can_create = false;
@@ -975,12 +975,11 @@ function openlab_group_admin_tabs($group = false) {
 		<li <?php if ('group-settings' == $current_tab) : ?> class="current-menu-item"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/group-settings">Settings</a></li>
 
 		<?php
-		$account_type = xprofile_get_field_data('Account Type', $bp->loggedin_user->id);
-		if ($account_type == "Student") {
-			$profile = "ePortfolio";
-		} else {
-			$profile = "Portfolio";
-		}
+		$profile = openlab_get_portfolio_label(
+			[
+				'user_id' => bp_loggedin_user_id(),
+			]
+		);
 		?>
 
 		<li class="delete-button <?php if ('delete-group' == $current_tab) : ?> current-menu-item<?php endif; ?>" ><span class="fa fa-minus-circle"></span><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/delete-group">Delete <?php echo $profile; ?></a></li>

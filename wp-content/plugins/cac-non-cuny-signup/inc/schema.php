@@ -106,13 +106,11 @@ class Schema {
 	 * @return void
 	 */
 	public static function account_type_meta_box_render( $post ) {
-		$type     = get_post_meta( $post->ID, 'olsc_account_type', true );
-		$field_id = xprofile_get_field_id_from_name( 'Account Type' );
-		$field    = new \BP_XProfile_Field( $field_id );
+		$type = get_post_meta( $post->ID, 'olsc_account_type', true );
 
 		static::view( 'account-type', [
 			'account_type' => ! empty( $type ) ? $type : 'Non-City Tech',
-			'options'      => $field->get_children(),
+			'options'      => openlab_get_member_types(),
 		] );
 	}
 
@@ -140,11 +138,9 @@ class Schema {
 
 		// Validate and save account type.
 		if ( ! empty( $_POST['olsc_account_type'] ) ) {
-			$field_id = xprofile_get_field_id_from_name( 'Account Type' );
-			$field    = new \BP_XProfile_Field( $field_id );
-			$options  = wp_list_pluck( $field->get_children(), 'name' );
+			$member_types = wp_list_pluck( openlab_get_member_types(), 'name' );
 
-			if ( in_array( $_POST['olsc_account_type'], $options, true ) ) {
+			if ( in_array( $_POST['olsc_account_type'], $member_types, true ) ) {
 				update_post_meta( $post_id, 'olsc_account_type', $_POST['olsc_account_type'] );
 			}
 		}

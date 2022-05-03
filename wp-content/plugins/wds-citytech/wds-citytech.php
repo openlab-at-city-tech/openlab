@@ -63,6 +63,7 @@ function openlab_load_custom_bp_functions() {
 	require( dirname( __FILE__ ) . '/includes/group-blogs.php' );
 	require( dirname( __FILE__ ) . '/includes/group-types.php' );
 	require( dirname( __FILE__ ) . '/includes/group-activity.php' );
+	require( dirname( __FILE__ ) . '/includes/member-types.php' );
 	require( dirname( __FILE__ ) . '/includes/portfolios.php' );
 	require( dirname( __FILE__ ) . '/includes/related-links.php' );
 	require( dirname( __FILE__ ) . '/includes/search.php' );
@@ -272,41 +273,10 @@ function wds_registration_ajax() {
 }
 add_action( 'wp_head', 'wds_registration_ajax' );
 
-function wds_load_default_account_type() {
-	$return = '<script type="text/javascript">';
-
-	$account_type   = isset( $_POST['field_7'] ) ? $_POST['field_7'] : '';
-	$type           = '';
-	$selected_index = '';
-
-	if ( 'Student' === $account_type ) {
-		$type           = 'Student';
-		$selected_index = 1;
-	}
-
-	if ( 'Faculty' === $account_type ) {
-		$type           = 'Faculty';
-		$selected_index = 2;
-	}
-
-	if ( 'Staff' === $account_type ) {
-		$type           = 'Staff';
-		$selected_index = 3;
-	}
-
-	if ( $type && $selected_index ) {
-		$return .= 'var select_box=document.getElementById( \'field_7\' );';
-		$return .= 'select_box.selectedIndex = ' . $selected_index . ';';
-	}
-	$return .= '</script>';
-	echo $return;
-}
-add_action( 'bp_after_registration_submit_buttons', 'wds_load_default_account_type' );
-
 function wds_load_account_type() {
 	$return = '';
 
-	$account_type = $_POST['account_type'];
+	$account_type = isset( $_POST['account_type'] ) ? wp_unslash( $_POST['account_type'] ) : '';
 	$post_data    = isset( $_POST['post_data'] ) ? wp_unslash( $_POST['post_data'] ) : array();
 
 	if ( $account_type ) {
@@ -342,7 +312,6 @@ function wds_bp_profile_group_tabs() {
 			$selected = '';
 		}
 
-		$account_type = bp_get_profile_field_data( 'field=Account Type' );
 		if ( $groups[ $i ]->fields ) {
 			echo '<li' . $selected . '><a href="' . $bp->displayed_user->domain . $bp->profile->slug . '/edit/group/' . $groups[ $i ]->id . '">' . esc_attr( $groups[ $i ]->name ) . '</a></li>';
 		}
@@ -377,14 +346,7 @@ function wds_load_group_departments() {
 	// We want to prefill the School and Dept fields, which means we have
 	// to prefetch the dept field and figure out School backward
 	if ( 'portfolio' == strtolower( $group_type ) && $is_group_create ) {
-		$account_type = strtolower(
-			bp_get_profile_field_data(
-				array(
-					'field'   => 'Account Type',
-					'user_id' => bp_loggedin_user_id(),
-				)
-			)
-		);
+		$account_type = openlab_get_user_member_type( bp_loggedin_user_id() );
 		$dept_field   = 'student' == $account_type ? 'Major Program of Study' : 'Department';
 
 		$wds_departments = (array) bp_get_profile_field_data(
@@ -848,7 +810,7 @@ function wds_load_group_type( $group_type ) {
 	$wds_group_school = groups_get_groupmeta( bp_get_current_group_id(), 'wds_group_school' );
 	$wds_group_school = explode( ',', $wds_group_school );
 
-	$account_type = xprofile_get_field_data( 'Account Type', bp_loggedin_user_id() );
+	$account_type = openlab_get_user_member_type( bp_loggedin_user_id() );
 
 	$return = '<div class="panel panel-default">';
 
@@ -888,15 +850,7 @@ function wds_load_group_type( $group_type ) {
 	);
 
 	if ( 'portfolio' == $group_type && bp_is_group_create() ) {
-		$account_type = strtolower(
-			bp_get_profile_field_data(
-				array(
-					'field'   => 'Account Type',
-					'user_id' => bp_loggedin_user_id(),
-				)
-			)
-		);
-		$dept_field   = 'student' == $account_type ? 'Major Program of Study' : 'Department';
+		$dept_field = 'student' == $account_type ? 'Major Program of Study' : 'Department';
 
 		$user_department = bp_get_profile_field_data(
 			array(
@@ -930,7 +884,7 @@ function wds_load_group_type( $group_type ) {
 	}
 
 	// Special case: student/alumni portfolio creation doesn't see Office.
-	if ( 'portfolio' === $group_type && in_array( strtolower( $account_type ), [ 'student', 'alumni' ], true ) ) {
+	if ( 'portfolio' === $group_type && in_array( $account_type, [ 'student', 'alumni' ], true ) ) {
 		$selector_args['entities'] = [ 'school' ];
 	}
 
@@ -1552,11 +1506,9 @@ class OpenLab_Change_User_Type {
 	}
 
 	function markup( $user ) {
-		$account_type = xprofile_get_field_data( 'Account Type', $user->ID );
+		$account_type = openlab_get_user_member_type( $user->ID );
 
-		$field_id = xprofile_get_field_id_from_name( 'Account Type' );
-		$field    = new BP_XProfile_Field( $field_id );
-		$options  = $field->get_children();
+		$options = openlab_get_member_types();
 		?>
 
 		<h3>OpenLab Account Type</h3>
@@ -1569,7 +1521,7 @@ class OpenLab_Change_User_Type {
 
 				<td>
 					<?php foreach ( $options as $option ) : ?>
-						<label><input type="radio" name="openlab_account_type" value="<?php echo $option->name; ?>" <?php checked( $account_type, $option->name ); ?>> <?php echo $option->name; ?><br /></label>
+						<label><input type="radio" name="openlab_account_type" value="<?php echo esc_attr( $option->name ); ?>" <?php checked( $account_type, $option->slug ); ?>> <?php echo esc_html( $option->name ); ?><br /></label>
 						<?php endforeach ?>
 				</td>
 			</tr>
@@ -1580,7 +1532,7 @@ class OpenLab_Change_User_Type {
 
 	function save( $user_id ) {
 		if ( isset( $_POST['openlab_account_type'] ) ) {
-			xprofile_set_field_data( 'Account Type', $user_id, $_POST['openlab_account_type'] );
+			openlab_set_user_member_type( $user_id, $_POST['openlab_account_type'] );
 		}
 	}
 
@@ -1599,8 +1551,8 @@ function openlab_hide_fn_ln( $check, $object, $meta_key, $single ) {
 	if ( is_admin() && in_array( $meta_key, array( 'first_name', 'last_name' ) ) ) {
 
 		// Faculty only
-		$account_type = xprofile_get_field_data( 'Account Type', get_current_user_id() );
-		if ( 'faculty' != strtolower( $account_type ) ) {
+		$account_type = openlab_get_user_member_type( get_current_user_id() );
+		if ( 'faculty' !== $account_type ) {
 			return '';
 		}
 
@@ -2025,7 +1977,7 @@ function openlab_addl_settings_fields() {
 
 	$fname        = isset( $_POST['fname'] ) ? $_POST['fname'] : '';
 	$lname        = isset( $_POST['lname'] ) ? $_POST['lname'] : '';
-	$account_type = isset( $_POST['account_type'] ) ? $_POST['account_type'] : '';
+	$account_type = isset( $_POST['openlab-account-type'] ) ? $_POST['openlab-account-type'] : '';
 
 	// Don't let this continue if a password error was recorded
 	if ( isset( $bp->template_message_type ) && 'error' == $bp->template_message_type && 'No changes were made to your account.' != $bp->template_message ) {
@@ -2042,15 +1994,18 @@ function openlab_addl_settings_fields() {
 	}
 
 	if ( ! empty( $account_type ) ) {
-		//saving account type for students or alumni
-		$types        = array( 'Student', 'Alumni' );
-		$account_type = in_array( $_POST['account_type'], $types ) ? $_POST['account_type'] : 'Student';
+		// Saving account type for students or alumni.
+		$types = array( 'student', 'alumni' );
+		if ( ! in_array( $account_type, $types, true ) ) {
+			$account_type = 'student';
+		}
+
 		$user_id      = bp_displayed_user_id();
 		$current_type = openlab_get_displayed_user_account_type();
 
 		// Only students and alums can do this
 		if ( in_array( $current_type, $types ) ) {
-			xprofile_set_field_data( 'Account Type', bp_displayed_user_id(), $account_type );
+			openlab_set_user_member_type( bp_displayed_user_id(), $account_type );
 		}
 	}
 
@@ -2433,6 +2388,8 @@ add_action( 'widgets_init', 'openlab_register_portfolios_widget' );
 function openlab_get_exclude_groups_for_account_type( $type ) {
 	global $wpdb, $bp;
 
+	$member_type_object = openlab_get_member_type_object( $type );
+
 	// phpcs:disable
 	$groups = $wpdb->get_results( "SELECT id, name FROM {$bp->profile->table_name_groups}" );
 	// phpcs:enable
@@ -2445,13 +2402,18 @@ function openlab_get_exclude_groups_for_account_type( $type ) {
 
 	$exclude_groups = array();
 	foreach ( $gs as $gname => $gid ) {
+		// special case for Base
+		if ( 'Base' === $gname && 'Base' === $type ) {
+			continue;
+		}
+
 		// special case for alumni
-		if ( 'Alumni' === $type && 'Student' === $gname ) {
+		if ( 'alumni' === $type && 'Student' === $gname ) {
 			continue;
 		}
 
 		// otherwise, non-matches are excluded
-		if ( $gname !== $type ) {
+		if ( ! $member_type_object || $gname !== $member_type_object->name ) {
 			$exclude_groups[] = $gid;
 		}
 	}

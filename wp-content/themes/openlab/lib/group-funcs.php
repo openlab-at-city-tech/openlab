@@ -718,9 +718,9 @@ function cuny_group_single() {
                             $show_school = 'project' === $group_type || 'club' === $group_type;
                             if ( 'portfolio' === $group_type ) {
                                 $user_id   = openlab_get_user_id_from_portfolio_group_id( $group_id );
-                                $user_type = xprofile_get_field_data( 'Account Type', $user_id );
+                                $user_type = openlab_get_user_member_type( $user_id );
 
-                                $show_school = 'Staff' === $user_type;
+                                $show_school = 'staff' === $user_type;
                             }
                             ?>
 
@@ -1069,16 +1069,6 @@ function openlab_get_group_activity_content($title, $content, $link) {
 HTML;
 
     return $markup;
-}
-
-add_filter('bp_get_options_nav_nav-invite-anyone', 'cuny_send_invite_fac_only');
-
-function cuny_send_invite_fac_only($subnav_item) {
-    global $bp;
-    $account_type = xprofile_get_field_data('Account Type', $bp->loggedin_user->id);
-
-    if ($account_type != 'Student')
-        return $subnav_item;
 }
 
 /**
@@ -1619,10 +1609,6 @@ function openlab_bp_group_site_pages( $mobile = false ) {
             <?php $displayed_user_id = bp_is_user() ? bp_displayed_user_id() : bp_loggedin_user_id(); ?>
 
             <div class="sidebar-block group-site-links <?php echo esc_html( $responsive_class ); ?>">
-
-                <?php
-                $account_type = xprofile_get_field_data('Account Type', $displayed_user_id);
-                ?>
 
                 <?php if (openlab_is_my_portfolio() || is_super_admin()) : ?>
                     <ul class="sidebar-sublinks portfolio-sublinks inline-element-list">

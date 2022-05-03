@@ -459,9 +459,9 @@ add_filter(
 add_filter(
 	'webwork_author_type_label',
 	function ( $label, $user_id ) {
-		$account_type = xprofile_get_field_data( 'Account Type', $user_id );
-		if ( $account_type ) {
-			$label = $account_type;
+		$account_type_label = openlab_get_user_member_type_label( $user_id );
+		if ( $account_type_label ) {
+			$label = $account_type_label;
 		}
 		return $label;
 	},
@@ -475,8 +475,8 @@ add_filter(
 add_filter(
 	'webwork_user_is_admin',
 	function( $is_admin ) {
-		$account_type = xprofile_get_field_data( 'Account Type', get_current_user_id() );
-		if ( $account_type && 'Faculty' === $account_type ) {
+		$account_type = openlab_get_user_member_type( get_current_user_id() );
+		if ( $account_type && 'faculty' === $account_type ) {
 			$is_admin = true;
 		}
 
