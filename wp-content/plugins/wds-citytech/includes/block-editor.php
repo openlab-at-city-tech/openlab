@@ -26,7 +26,7 @@ function openlab_register_blocks() {
 		);
 	}
 }
-add_action( 'init', 'openlab_register_blocks' );
+//add_action( 'init', 'openlab_register_blocks' );
 
 /**
  * Enqueues block assets for the Dashboard.
@@ -52,12 +52,12 @@ function openlab_enqueue_block_assets() {
 		true
 	);
 }
-add_action( 'enqueue_block_editor_assets', 'openlab_enqueue_block_assets' );
+//add_action( 'enqueue_block_editor_assets', 'openlab_enqueue_block_assets' );
 
 /**
  * Renders a block template.
  */
-function openlab_render_block( $block_name, $raw_atts, $content = '', $block = null ) {
+function openlab_render_block( $block_name, $raw_atts = [], $content = '', $block = null ) {
 	$atts = is_array( $raw_atts ) ? $raw_atts : [];
 
 	$template_args = array_merge(
