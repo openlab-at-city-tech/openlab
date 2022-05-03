@@ -167,13 +167,16 @@ function olur_batch_ajax_callback() {
 
 	fputcsv( $fh, $row );
 
-	fclose( $fh );
-
 	unset( $report_status[ $class ][ $callback_index ] );
 
 	if ( empty( $report_status[ $class ] ) ) {
 		unset( $report_status[ $class ] );
+
+		// Print an empty row after a section.
+		fputcsv( $fh, [] );
 	}
+
+	fclose( $fh );
 
 	$all_callback_count       = olur_count_steps( $all_callbacks );
 	$remaining_callback_count = olur_count_steps( $report_status );
