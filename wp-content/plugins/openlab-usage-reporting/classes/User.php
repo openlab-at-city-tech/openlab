@@ -22,7 +22,12 @@ class User implements Counter {
 
 		// Start
 		$ut_term = get_term_by( 'slug', $user_type, 'bp_member_type' );
-		$ut_clause = $wpdb->prepare( "AND term_taxonomy_id = %d", $ut_term->term_taxonomy_id );
+		if ( $ut_term ) {
+			$ut_clause = $wpdb->prepare( "AND term_taxonomy_id = %d", $ut_term->term_taxonomy_id );
+		} else {
+			$ut_clause = '';
+		}
+
 		$counts['start'] = (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$wpdb->users} u JOIN {$wpdb->term_relationships} tr ON ( u.ID = tr.object_id ) WHERE u.deleted != 1 AND u.spam != 1 {$ut_clause} AND u.user_registered < %s", $this->start ) );
 
 		// End
