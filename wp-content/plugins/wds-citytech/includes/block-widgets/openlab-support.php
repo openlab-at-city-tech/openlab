@@ -3,8 +3,8 @@
 class OpenLab_Support_Widget extends WP_Widget {
 	public function __construct() {
 		parent::__construct(
-			'openlab_support',
-			'OpenLab Support',
+			'openlab_help',
+			'OpenLab Help',
 			array(
 				'description' => '',
 			)
@@ -26,7 +26,7 @@ class OpenLab_Support_Widget extends WP_Widget {
 	public function form( $instance ) {
 		$r = array_merge(
 			[
-				'title' => 'OpenLab Support',
+				'title' => 'OpenLab Help',
 			],
 			$instance
 		);
