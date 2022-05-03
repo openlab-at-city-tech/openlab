@@ -20,10 +20,12 @@ class Portfolio implements Counter {
 		);
 
 		$bp = buddypress();
-		$gt_subquery = "SELECT group_id FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_group_type' AND meta_value = 'portfolio'";
-		$ut_subquery = $wpdb->prepare( "SELECT p.user_id FROM {$bp->profile->table_name_data} p WHERE p.field_id = 7 AND p.value = %s", ucwords( $user_type ) );
 
-		$portfolios_of_user_type_subquery = "SELECT meta_value FROM {$wpdb->usermeta} WHERE meta_key = 'portfolio_group_id' AND a.user_id IN (" . $ut_subquery . ")";
+		$gt_subquery = "SELECT group_id FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_group_type' AND meta_value = 'portfolio'";
+
+		$ut_term = get_term_by( 'slug', $user_type, 'bp_member_type' );
+
+		$portfolios_of_user_type_subquery = $wpdb->prepare( "SELECT meta_value FROM {$wpdb->usermeta} um JOIN {$wpdb->term_relationships} tr ON (um.meta_key = 'portfolio_group_id' AND um.user_id = tr.object_id) WHERE tr.term_taxonomy_id = %d", $ut_term->term_taxonomy_id );
 
 		$status_join  = '';
 		$status_where = '';
@@ -47,11 +49,6 @@ class Portfolio implements Counter {
 
 		// Active
 		$counts['activea'] = (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(DISTINCT a.item_id) FROM {$bp->activity->table_name} a WHERE a.component = 'groups' AND a.item_id IN ({$gt_subquery}) AND a.item_id IN ({$portfolios_of_user_type_subquery}) {$status_where} AND a.date_recorded >= %s AND a.date_recorded < %s", $this->start, $this->end ) );
-
-		_b( $wpdb->prepare( "SELECT COUNT(DISTINCT a.item_id) FROM {$bp->activity->table_name} a WHERE a.component = 'groups' AND a.item_id IN ({$gt_subquery}) AND a.item_id IN ({$portfolios_of_user_type_subquery}) {$status_where} AND a.date_recorded >= %s AND a.date_recorded < %s", $this->start, $this->end ) );
-
-
-
 
 		$this->counts = $counts;
 		return $this->counts;
