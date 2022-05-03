@@ -21,13 +21,17 @@ add_action( 'network_admin_menu', 'olur_add_menu_item' );
  */
 function olur_admin_assets() {
 	wp_enqueue_style( 'openlab-usage-reporting', OLUR_PLUGIN_URL . 'assets/css/openlab-usage-reporting.css' );
-	wp_enqueue_script( 'openlab-usage-reporting', OLUR_PLUGIN_URL . 'assets/js/openlab-usage-reporting.js', array( 'jquery-ui-datepicker' ) );
+	wp_enqueue_script( 'openlab-usage-reporting', OLUR_PLUGIN_URL . 'assets/js/openlab-usage-reporting.js', array( 'jquery-ui-datepicker', 'jquery-ui-progressbar' ) );
 }
 
 /**
  * Markup for the admin panel.
  */
 function olur_admin_panel() {
+	$now = time();
+
+	$default_start = date( 'm/d/Y', $now - YEAR_IN_SECONDS );
+	$default_end   = date( 'm/d/Y', $now );
 
 	?>
 	<div class="wrap">
@@ -38,11 +42,13 @@ function olur_admin_panel() {
 		<div class="olur-dates">
 
 		<form method="post" action="">
-			<label for="olur-start"><?php _e( 'Start: ', 'openlab-usage-reporting' ) ?></label> <input type="text" class="olur-datepicker" name="olur-start" id="olur-start"><br />
-			<label for="olur-end"><?php _e( 'End: ', 'openlab-usage-reporting' ) ?></label> <input type="text" class="olur-datepicker" name="olur-end" id="olur-end">
+			<label for="olur-start"><?php _e( 'Start: ', 'openlab-usage-reporting' ) ?></label> <input type="text" class="olur-datepicker" name="olur-start" id="olur-start" value="<?php echo esc_attr( $default_start ); ?>"><br />
+			<label for="olur-end"><?php _e( 'End: ', 'openlab-usage-reporting' ) ?></label> <input type="text" class="olur-datepicker" name="olur-end" id="olur-end" value="<?php echo esc_attr( $default_end ); ?>">
 
 			<?php wp_nonce_field( 'olur-generate' ) ?>
 			<?php submit_button( 'Generate Report' ) ?>
+			<div id="progressbar"></div>
+			<div id="progress-message">Generating report...</div>
 		</form>
 
 		</div>
@@ -98,3 +104,125 @@ function olur_catch_generate_requests() {
 	olur_generate_report( $start, $end );
 }
 add_action( 'admin_init', 'olur_catch_generate_requests', 0 );
+
+/**
+ * AJAX callback for report batches.
+ */
+function olur_batch_ajax_callback() {
+	if ( empty( $_POST['currentReportId'] ) || empty( $_POST['startDate'] ) || empty( $_POST['endDate'] ) ) {
+		return;
+	}
+
+	$report_id  = wp_unslash( $_POST['currentReportId'] );
+	$status_key = 'olur_report_status_' . $report_id;
+
+	$all_callbacks = olur_report_callbacks();
+
+	$report_status = get_option( $status_key );
+	if ( ! $report_status ) {
+		$report_status = $all_callbacks;
+	}
+
+	// Take the first available callback.
+	foreach ( $report_status as $class => $callbacks ) {
+		foreach ( $callbacks as $callback_index => $callback ) {
+			$the_callback = $callback;
+			break;
+		}
+		$the_class = $class;
+		break;
+	}
+
+	$file_name   = 'openlab-usage-' . date( 'Y-m-d:H:i:s', $report_id ) . '.csv';
+	$report_dir  = olur_report_directory();
+	$report_path = $report_dir['dir'] . $file_name;
+
+	$is_file_new = ! file_exists( $report_path );
+
+	$fh = fopen( $report_path, 'a+' );
+
+	if ( $is_file_new ) {
+		fprintf( $fh, chr(0xEF) . chr(0xBB) . chr(0xBF) );
+
+		$header_row = array(
+			0 => '',
+			1 => 'Start #',
+			2 => '# Created',
+			4 => 'End #',
+			5 => 'Actively Active',
+			6 => 'Passively Active',
+		);
+
+		fputcsv( $fh, $header_row );
+	}
+
+	$start = date( 'Y-m-d H:i:s', strtotime( wp_unslash( $_POST['startDate'] ) ) );
+	$end   = date( 'Y-m-d H:i:s', strtotime( wp_unslash( $_POST['endDate'] ) ) + ( 60 * 60 * 24 ) - 1 ); // Bump to remain inclusive
+
+	$row = olur_generate_report_data_row( $the_class, $the_callback, $start, $end );
+
+	if ( ! is_array( $row ) ) {
+		$row = [];
+	}
+
+	fputcsv( $fh, $row );
+
+	fclose( $fh );
+
+	unset( $report_status[ $class ][ $callback_index ] );
+
+	if ( empty( $report_status[ $class ] ) ) {
+		unset( $report_status[ $class ] );
+	}
+
+	$all_callback_count       = olur_count_steps( $all_callbacks );
+	$remaining_callback_count = olur_count_steps( $report_status );
+
+	$data = [
+		'file' => $report_dir['url'] . $file_name,
+		'pct'  => 100 * ( ( $all_callback_count - $remaining_callback_count ) / $all_callback_count ),
+		'more' => $remaining_callback_count > 0,
+	];
+
+	if ( ! $remaining_callback_count ) {
+		delete_option( $status_key );
+	} else {
+		update_option( $status_key, $report_status );
+	}
+
+	wp_send_json_success( $data );
+}
+add_action( 'wp_ajax_olur_batch', 'olur_batch_ajax_callback' );
+
+/**
+ * Count the steps in a status array.
+ */
+function olur_count_steps( $status ) {
+	$count = 0;
+
+	foreach ( $status as $class => $callbacks ) {
+		$count += count( $callbacks );
+	}
+
+	return $count;
+}
+
+/**
+ * Gets the usage-reports directory path and URL.
+ *
+ * Creates if necessary.
+ */
+function olur_report_directory() {
+	$upload_dir = wp_upload_dir();
+	$report_dir = $upload_dir['basedir'] . '/usage-reports/';
+	$report_url = $upload_dir['baseurl'] . '/usage-reports/';
+
+	if ( ! file_exists( $report_dir ) ) {
+		wp_mkdir_p( $report_dir );
+	}
+
+	return [
+		'dir' => $report_dir,
+		'url' => $report_url,
+	];
+}

@@ -16,7 +16,7 @@ function olur_report_callbacks() {
 			'Other'    => array( 'label' => 'Other', 'type' => 'other' ),
 			'Total'    => array( 'label' => 'Total', 'type' => 'total' ),
 		),
-/*
+
 		// Groups.
 		'Group' => array(
 			array( 'label' => 'Courses (Public)', 'type' => 'course', 'status' => 'public' ),
@@ -107,7 +107,6 @@ function olur_report_callbacks() {
 			array( 'label' => 'Other', 'type' => 'other' ),
 			array( 'label' => 'Total', 'type' => 'total' ),
 		),
-		*/
 	);
 
 	return $callbacks;
@@ -121,7 +120,6 @@ function olur_report_callbacks() {
  */
 function olur_generate_report( $start, $end ) {
 	$data = olur_generate_report_data( $start, $end );
-	var_dump( $data ); return;
 
 	$start_formatted = date( 'Y-m-d', strtotime( $start ) );
 	$end_formatted   = date( 'Y-m-d', strtotime( $end ) );
@@ -197,6 +195,36 @@ function olur_generate_report_data( $start, $end ) {
 
 		// Insert an empty row after each section.
 		$data[] = array();
+	}
+
+	return $data;
+}
+
+/**
+ * Generate report data.
+ *
+ * @param string $start MySQL-formatted start date.
+ * @param string $end MySQL-formatted end date.
+ * @return array
+ */
+function olur_generate_report_data_row( $class, $callback, $start, $end ) {
+	$class_name = '\OLUR\\' . $class;
+	$counter    = new $class_name;
+
+	$counter->set_start( $start );
+	$counter->set_end( $end );
+
+	// If the query doesn't have a label, it's a literal.
+	// Used for blank rows and other labels.
+	if ( ! isset( $callback['label'] ) ) {
+		$data = $callback;
+	} else {
+		$counter->set_label( $callback['label'] );
+		unset( $callback['label'] );
+
+		$counter->query( $callback );
+
+		$data = $counter->format_results_for_csv();
 	}
 
 	return $data;
