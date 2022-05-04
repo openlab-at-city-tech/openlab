@@ -11210,6 +11210,7 @@ body.single-help .entry-content h6 {
 }
 .activity-list .group-item-wrapper {
   padding: 1.2%;
+  height: auto;
 }
 .activity-list .activity-header {
   display: flex;
@@ -11245,6 +11246,9 @@ body.single-help .entry-content h6 {
 }
 .activity-list .activity-header-meta .unfav:hover span {
   color: #888;
+}
+.activity-list .activity-body img {
+  display: none;
 }
 .activity-pagination .pagination-links {
   margin: 0;

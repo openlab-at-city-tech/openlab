@@ -1,21 +1,8 @@
 <?php 
-global $wpdb;
+// Group ID
+$group_id = openlab_get_group_id_by_activity_id( bp_get_activity_id() );
 
-// Activity id
-$activity_id = bp_get_activity_id();
-
-// BuddyPress activity table
-$activity_table = $wpdb->prefix . 'bp_activity';
-
-// Get group id based on the activity id
-$group_id = $wpdb->get_var(
-	$wpdb->prepare(
-		"SELECT item_id FROM $activity_table WHERE id = %s",
-		$activity_id
-	)
-);
-
-// Get group by id
+// Get group by ID
 $group = groups_get_group( $group_id );
 
 // Get group data
@@ -26,14 +13,14 @@ $group_avatar_url = bp_get_group_avatar_url( $group, 'medium' );
 <div class="group-item">
 	<div class="group-item-wrapper">
 		<div class="row">
-			<div class="item-avatar alignleft col-xs-6">
+			<div class="item-avatar alignleft col-xs-3">
 				<div class="activity-avatar">
 					<a href="<?php echo $group_url; ?>" title="<?php echo $group_name; ?>">
 						<img src="<?php echo $group_avatar_url; ?>" class="img-responsive" alt="<?php echo $group_name; ?>" />
 					</a>
 				</div>
 			</div>
-			<div class="item col-xs-18">
+			<div class="item col-xs-21">
 				<div class="activity-header">
 					<div class="activity-header-title">
 						<p class="item-title h2">
@@ -57,7 +44,7 @@ $group_avatar_url = bp_get_group_avatar_url( $group, 'medium' );
 					<?php endif; ?>
 				</div>
 				<div class="activity-body">
-					<?php bp_activity_action(); ?>
+					<?php echo openlab_format_activity_data(); ?>
 				</div>
 			</div>
 		</div>

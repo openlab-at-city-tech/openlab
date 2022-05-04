@@ -4129,7 +4129,9 @@ body.single-help {
     
     .group-item-wrapper {
         padding: 1.2%;
+        height: auto;
     }
+
     .activity-header {
         display: flex;
         flex-flow: row wrap;
@@ -4147,6 +4149,7 @@ body.single-help {
             padding-left: 15px;
         }
     }
+
     .activity-header-meta {
         margin-bottom: 15px;
         text-align: right;
@@ -4167,6 +4170,7 @@ body.single-help {
                 }
             }
         }
+
         .unfav {
             span {
                 color: @magenta;
@@ -4177,6 +4181,12 @@ body.single-help {
                     color: #888;
                 }
             }
+        }
+    }
+
+    .activity-body {
+        img {
+            display: none;
         }
     }
 }
