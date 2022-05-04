@@ -44,6 +44,7 @@ require_once( STYLESHEETPATH . '/lib/page-funcs.php' );
 require_once( STYLESHEETPATH . '/lib/sidebar-funcs.php' );
 require_once( STYLESHEETPATH . '/lib/plugin-hooks.php' );
 require_once( STYLESHEETPATH . '/lib/theme-hooks.php' );
+require_once( STYLESHEETPATH . '/lib/activities-funcs.php' );
 
 // Initialize async cloning.
 openlab_clone_async_process();

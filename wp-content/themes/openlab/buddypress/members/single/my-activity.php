@@ -1,66 +1,9 @@
 <?php
-
-use OpenLab\Favorites\Favorite\Query;
-
 $type = ( isset( $_GET['type'] ) ) ? $_GET['type'] : '';
-
-switch( $type ) {
-	case 'mine':
-		$args = [
-			'scope' => 'just-me'
-		];
-		break;
-	case 'favorites':
-		$favorites = Query::get_results(
-			[
-				'user_id' => bp_loggedin_user_id(),
-			]
-		);
-
-		$group_ids = '';
-
-		if( $favorites ) {
-			$group_ids = [];
-			foreach( $favorites as $favorite ) {
-				array_push( $group_ids, $favorite->get_group_id() );
-			}
-		}
-
-		$args = [
-			'filter_query'	=> [
-				'relation'	=> 'AND',
-				'component'	=> [
-					'column'	=> 'component',
-					'value'		=> 'groups',
-				],
-				'group_id'	=> [
-					'column'	=> 'item_id',
-					'value'		=> $group_ids,
-					'compare'	=> 'IN',
-				],
-			],
-		];
-		
-		break;
-	case 'mentions':
-		$args = [
-			'scope' => 'mentions'
-		];
-		break;
-	case 'pins':
-		$args = [
-			'scope' => 'favorites'
-		];
-		break;
-	default:
-		$args = [
-			'scope' => 'groups',
-		];
-}
+$args = openlab_activities_loop_args( $type );
 ?>
 
 <?php echo openlab_submenu_markup( 'my-activity' ); ?>
-
 <div id="item-body" role="main">
 	<?php do_action( 'bp_before_activity_loop' ); ?>
 
@@ -73,11 +16,8 @@ switch( $type ) {
 			<?php bp_get_template_part( 'activity/entry' ); ?>
 		<?php endwhile; ?>
 	
-
 		<?php if ( bp_activity_has_more_items() ) : ?>
-			<div class="load-more">
-				<p><strong>TODO: Standard pagination</strong></p>
-			</div>
+			<?php echo openlab_activities_pagination_links(); ?>
 		<?php endif; ?>
 	
 		<?php if ( empty( $_POST['page'] ) ) : ?>
