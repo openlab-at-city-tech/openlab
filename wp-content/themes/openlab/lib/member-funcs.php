@@ -1448,7 +1448,6 @@ function openlab_get_group_id_by_activity_id( $activity_id ) {
  * the "My Activity" page.
  * 
  */
-add_filter( 'bp_activity_time_since', 'openlab_change_activity_date_format', 10, 1);
 function openlab_change_activity_date_format() {
 	$activity_date = bp_get_activity_date_recorded();
 	return date('F n, Y \a\t g:i a', strtotime( $activity_date ) );
