@@ -1331,8 +1331,12 @@ function openlab_load_my_activity() {
  * Construct the array of arguments for the activities loop.
  * 
  */
-function openlab_activities_loop_args( $activity_type = '' ) {
+function openlab_activities_loop_args( $activity_type = '', $filter = '' ) {
     $args['count_total'] = true;
+
+	if( ! empty( $filter ) ) {
+		$args['action'] = $filter;
+	}
     
     switch( $activity_type ) {
         case 'mine':
