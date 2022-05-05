@@ -113,6 +113,9 @@ function openlab_load_scripts() {
 
     if( bp_is_user() ) {
         wp_enqueue_script( 'openlab-activity', $stylesheet_dir_uri . '/js/activity.js', [ 'jquery' ] );
+        wp_localize_script( 'openlab-activity', 'activityVars', array(
+            'ajax_url' => admin_url( 'admin-ajax.php' )
+        ) );
     }
 }
 

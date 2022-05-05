@@ -1,6 +1,9 @@
-<?php 
+<?php
+// Activity ID
+$activity_id = bp_get_activity_id();
+
 // Group ID
-$group_id = openlab_get_group_id_by_activity_id( bp_get_activity_id() );
+$group_id = openlab_get_group_id_by_activity_id( $activity_id );
 
 // Get group by ID
 $group = groups_get_group( $group_id );
@@ -31,11 +34,11 @@ $group_avatar_url = bp_get_group_avatar_url( $group, 'medium' );
 					<div class="activity-header-meta">
 						<?php if ( bp_activity_can_favorite() ) : ?>
 							<?php if ( !bp_get_activity_is_favorite() ) : ?>
-								<a href="<?php bp_activity_favorite_link(); ?>" title="Pin activity" class="button fav bp-secondary-action">
+								<a href="<?php bp_activity_favorite_link(); ?>" title="Pin activity" class="button fav bp-secondary-action" data-activity_id="<?php echo $activity_id; ?>">
 									<span class="fa fa-thumb-tack"></span>
 								</a>
 							<?php else : ?>
-								<a href="<?php bp_activity_unfavorite_link(); ?>" title="Unpin activity" class="button unfav bp-secondary-action">
+								<a href="<?php bp_activity_unfavorite_link(); ?>" title="Unpin activity" class="button unfav bp-secondary-action" data-activity_id="<?php echo $activity_id; ?>">
 									<span class="fa fa-thumb-tack"></span>
 								</a>
 							<?php endif; ?>

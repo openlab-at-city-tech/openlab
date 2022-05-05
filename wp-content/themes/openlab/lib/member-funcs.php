@@ -1453,3 +1453,53 @@ function openlab_change_activity_date_format() {
 	$activity_date = bp_get_activity_date_recorded();
 	return date('F n, Y \a\t g:i a', strtotime( $activity_date ) );
 }
+
+/**
+ * Ajax fav/unfav activity item
+ * 
+ */
+add_action( 'wp_ajax_openlab_fav_activity', 'openlab_fav_activity' );
+function openlab_fav_activity() {
+
+	if( isset( $_POST['activity_id'] ) && isset( $_POST['user_action'] ) ) {
+		$activity_id = intval( $_POST['activity_id'] );
+		$action = $_POST['user_action'];
+		$user_id = bp_loggedin_user_id();
+
+		if( $action === 'fav' ) {
+			if( bp_activity_add_user_favorite( $activity_id ) ) {
+				echo json_encode( array(
+					'success'	=> true,
+					'activity'	=> $activity_id,
+					'action'	=> $action,
+					'user_id'	=> $user_id,
+					'message'	=> __( 'Activity added to favorite list.', 'openlab' ),
+				) );
+				wp_die();
+			}
+		} else {
+			if( bp_activity_remove_user_favorite( $activity_id ) ) {
+				echo json_encode( array(
+					'success'	=> true,
+					'activity'	=> $activity_id,
+					'action'	=> $action,
+					'user_id'	=> $user_id,
+					'message'	=> __( 'Activity removed from favorite list.', 'openlab' ),
+				) );
+				wp_die();
+			}
+		}
+
+		echo json_encode( array(
+			'success'	=> false,
+			'message'	=> 'Something went wrong.',
+		) );
+		wp_die();
+	}
+
+	echo json_encode( array(
+		'success'	=> false,
+		'message'	=> 'Missing activity id and action.',
+	) );
+	wp_die();
+}
