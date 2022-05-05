@@ -6,7 +6,7 @@
 jQuery( document ).ready(
 	function($) {
         
-        $(document).on( 'change', '#activity-loop-filter-form select', function(e) {
+        $(document).on( 'change', '#activity-filter-form select', function(e) {
             $(this).parent('form').submit();
         });
 
