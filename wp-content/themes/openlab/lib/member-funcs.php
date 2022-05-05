@@ -1444,27 +1444,8 @@ function openlab_get_group_id_by_activity_id( $activity_id ) {
  * the "My Activity" page.
  * 
  */
-function openlab_format_activity_data( $activity = null ) {
-	global $activities_template;
-
-	if ( null === $activity ) {
-		$activity = $activities_template->activity;
-	}
-
-	//the things we do...
-	$action_output     = '';
-	$action_output_raw = $activity->action;
-	$action_output_ary = explode( '<a', $action_output_raw );
-	$count             = 0;
-	foreach ( $action_output_ary as $action_redraw ) {
-		if ( ! ctype_space( $action_redraw ) ) {
-			$class          = ( $count == 0 ? 'activity-user' : 'activity-action' );
-			$action_output .= '<a class="' . $class . '"' . $action_redraw;
-			$count++;
-		}
-	}
-
-	$title  = '<p>' . $action_output . ' on <a href="' . $activity->primary_link . '">' . date('F n, Y') . ' at ' . date('g:i a') . '</a></p>';
-
-	return $title;
+add_filter( 'bp_activity_time_since', 'openlab_change_activity_date_format', 10, 1);
+function openlab_change_activity_date_format() {
+	$activity_date = bp_get_activity_date_recorded();
+	return date('F n, Y \a\t g:i a', strtotime( $activity_date ) );
 }
