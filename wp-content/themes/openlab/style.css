@@ -11205,6 +11205,9 @@ body.single-help .entry-content h6 {
   max-width: 100%;
 }
 /** Activity **/
+.my-account.my-activity #item-body .info {
+  margin-top: 50px;
+}
 .activity-list {
   margin-left: 0;
 }
