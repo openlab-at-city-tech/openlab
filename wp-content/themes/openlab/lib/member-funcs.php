@@ -1,9 +1,10 @@
 <?php
-
 /**
  *  Member related functions
  *
  */
+use OpenLab\Favorites\Favorite\Query;
+
 function openlab_is_admin_truly_member( $group = false ) {
 	global $groups_template;
 
@@ -1294,4 +1295,209 @@ function openlab_set_user_academic_units( $user_id, $units ) {
 			add_user_meta( $user_id, $meta_key, $to_add_value );
 		}
 	}
+}
+
+/**
+ * Register the My Activity nav item with BuddyPress.
+ */
+function openlab_register_my_activity() {
+	bp_core_new_nav_item(
+		[
+			'name'                    => 'My Activity',
+			'slug'                    => 'my-activity',
+			'component_id'            => 'my-activity',
+			'show_for_displayed_user' => false,
+			'position'                => 5,
+			'screen_function'         => 'openlab_load_my_activity',
+		]
+	);
+}
+add_action( 'bp_setup_nav', 'openlab_register_my_activity' );
+
+/**
+ * Load the My Activity template.
+ */
+function openlab_load_my_activity() {
+	if ( ! bp_is_my_profile() ) {
+		return false;
+	}
+
+	bp_core_load_template( 'members/single/plugins' );
+}
+
+
+/**
+ * Construct the array of arguments for the activities loop.
+ * 
+ */
+function openlab_activities_loop_args( $activity_type = '', $filter = '' ) {
+    $args['count_total'] = true;
+
+	if( ! empty( $filter ) ) {
+		$args['action'] = $filter;
+	}
+    
+    switch( $activity_type ) {
+        case 'mine':
+            $args += [
+                'scope' => 'just-me',
+            ];
+            break;
+        case 'favorites':
+            $favorites = Query::get_results(
+                [
+                    'user_id' => bp_loggedin_user_id(),
+                ]
+            );
+    
+            $group_ids = '';
+    
+            if( $favorites ) {
+                $group_ids = [];
+                foreach( $favorites as $favorite ) {
+                    array_push( $group_ids, $favorite->get_group_id() );
+                }
+            }
+    
+            $args += [
+                'filter_query'	=> [
+                    'relation'	=> 'AND',
+                    'component'	=> [
+                        'column'	=> 'component',
+                        'value'		=> 'groups',
+                    ],
+                    'group_id'	=> [
+                        'column'	=> 'item_id',
+                        'value'		=> $group_ids,
+                        'compare'	=> 'IN',
+                    ],
+                ],
+            ];
+            
+            break;
+        case 'mentions':
+            $args += [
+                'scope' => 'mentions'
+            ];
+            break;
+        case 'pins':
+            $args += [
+                'scope' => 'favorites'
+            ];
+            break;
+        default:
+            $args += [
+                'scope' => 'groups',
+            ];
+    }
+
+    return $args;
+}
+
+/**
+ * User's activity stream pagination.
+ * 
+ */
+function openlab_activities_pagination_links() {
+    global $activities_template;
+
+    $pagination = paginate_links(array(
+        'base' => add_query_arg(array('acpage' => '%#%') ),
+        'format' => '',
+        'total' => ceil((int) $activities_template->total_activity_count / (int) $activities_template->pag_num),
+        'current' => $activities_template->pag_page,
+        'prev_text' => _x('<i class="fa fa-angle-left" aria-hidden="true"></i><span class="sr-only">Previous</span>', 'Group pagination previous text', 'buddypress'),
+        'next_text' => _x('<i class="fa fa-angle-right" aria-hidden="true"></i><span class="sr-only">Next</span>', 'Group pagination next text', 'buddypress'),
+        'mid_size' => 3,
+        'type' => 'list',
+        'before_page_number' => '<span class="sr-only">Page</span>',
+    ));
+
+    $pagination = str_replace('page-numbers', 'page-numbers pagination', $pagination);
+
+    //for screen reader only text - current page
+    $pagination = str_replace('current\'><span class="sr-only">Page', 'current\'><span class="sr-only">Current Page', $pagination);
+
+    return $pagination;
+}
+
+/**
+ * Get group id based on the activity id
+ * 
+ */
+function openlab_get_group_id_by_activity_id( $activity_id ) {
+    if( ! empty( $activity_id ) ) {
+        global $wpdb;
+
+        // BuddyPress activity table
+        $activity_table = $wpdb->prefix . 'bp_activity';
+
+        // Get group id based on the activity id
+        return $wpdb->get_var(
+            $wpdb->prepare(
+                "SELECT item_id FROM $activity_table WHERE id = %s",
+                $activity_id
+            )
+        );
+    }
+}
+
+/**
+ * Change the date format in the activity text displayed on 
+ * the "My Activity" page.
+ * 
+ */
+function openlab_change_activity_date_format() {
+	$activity_date = bp_get_activity_date_recorded();
+	return date('F n, Y \a\t g:i a', strtotime( $activity_date ) );
+}
+
+/**
+ * Ajax fav/unfav activity item
+ * 
+ */
+add_action( 'wp_ajax_openlab_fav_activity', 'openlab_fav_activity' );
+function openlab_fav_activity() {
+
+	if( isset( $_POST['activity_id'] ) && isset( $_POST['user_action'] ) ) {
+		$activity_id = intval( $_POST['activity_id'] );
+		$action = $_POST['user_action'];
+		$user_id = bp_loggedin_user_id();
+
+		if( $action === 'fav' ) {
+			if( bp_activity_add_user_favorite( $activity_id ) ) {
+				echo json_encode( array(
+					'success'	=> true,
+					'activity'	=> $activity_id,
+					'action'	=> $action,
+					'user_id'	=> $user_id,
+					'message'	=> __( 'Activity added to favorite list.', 'openlab' ),
+				) );
+				wp_die();
+			}
+		} else {
+			if( bp_activity_remove_user_favorite( $activity_id ) ) {
+				echo json_encode( array(
+					'success'	=> true,
+					'activity'	=> $activity_id,
+					'action'	=> $action,
+					'user_id'	=> $user_id,
+					'message'	=> __( 'Activity removed from favorite list.', 'openlab' ),
+				) );
+				wp_die();
+			}
+		}
+
+		echo json_encode( array(
+			'success'	=> false,
+			'message'	=> 'Something went wrong.',
+		) );
+		wp_die();
+	}
+
+	echo json_encode( array(
+		'success'	=> false,
+		'message'	=> 'Missing activity id and action.',
+	) );
+	wp_die();
 }
