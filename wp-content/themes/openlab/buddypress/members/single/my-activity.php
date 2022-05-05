@@ -46,9 +46,7 @@ add_filter( 'bp_activity_time_since', 'openlab_change_activity_date_format' );
 			<?php bp_get_template_part( 'activity/entry' ); ?>
 		<?php endwhile; ?>
 	
-		<?php if ( bp_activity_has_more_items() ) : ?>
-			<?php echo openlab_activities_pagination_links(); ?>
-		<?php endif; ?>
+		<?php echo openlab_activities_pagination_links(); ?>
 	
 		<?php if ( empty( $_POST['page'] ) ) : ?>
 			</div>	
