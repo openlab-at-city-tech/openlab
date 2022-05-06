@@ -139,3 +139,10 @@ function openlab_add_delete_to_bp_docs_doc_action_links( $links, $doc_id ) {
 	return $links;
 }
 add_filter( 'bp_docs_doc_action_links', 'openlab_add_delete_to_bp_docs_doc_action_links', 10, 2 );
+
+/**
+ * Don't allow any of budypress-docs's native directory filters.
+ *
+ * Instead, we have a Search filter in the theme.
+ */
+add_filter( 'bp_docs_filter_types', '__return_empty_array', 999 );
