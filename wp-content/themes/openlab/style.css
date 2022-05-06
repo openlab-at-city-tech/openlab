@@ -10146,6 +10146,10 @@ body.membership-requests .group-list {
 .docs-info-header #tags-list {
   margin-top: 0;
 }
+.docs-info-header p.currently-viewing {
+  font-size: 1.1em;
+  margin-top: 8px;
+}
 @media (max-width: 767px) {
   .created-date-cell {
     display: none;
