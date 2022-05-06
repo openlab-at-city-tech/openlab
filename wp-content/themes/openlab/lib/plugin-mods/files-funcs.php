@@ -92,6 +92,8 @@ function openlab_bp_group_documents_display_content() {
 
 	$sort_form_action = $template->action_link;
 
+	$header_text = 'add' === $template->operation ? 'Add a New File' : 'Edit a File';
+
 	?>
 
 	<div id="bp-group-documents" class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>">
@@ -285,11 +287,34 @@ function openlab_bp_group_documents_display_content() {
 					<form method="post" id="bp-group-documents-form" class="standard-form form-panel" action="<?php echo esc_attr( $template->action_link ); ?>" enctype="multipart/form-data">
 
 						<div class="panel panel-default">
-							<div class="panel-heading"><?php echo esc_html( $template->header ); ?></div>
+							<div class="panel-heading"><?php echo esc_html( $header_text ); ?></div>
 							<div class="panel-body">
+								<p>You can link to an external file, such as a Google Doc or a Dropbox file, or you can upload a file from your computer.</p>
 
 								<input type="hidden" name="bp_group_documents_operation" value="<?php echo esc_attr( $template->operation ); ?>" />
 								<input type="hidden" name="bp_group_documents_id" value="<?php echo esc_attr( $template->id ); ?>" />
+
+								<div class="bp-group-documents-fields">
+									<div class="bp-group-documents-fields-for-file-type" id="bp-group-documents-fields-for-file-type-link">
+										<div class="bp-group-documents-file-type-selector">
+											<input type="radio" checked="checked" name="bp-group-documents-file-type" class="bp-group-documents-file-type" id="bp-group-documents-file-type-link" value="link" /> <label for="bp-group-documents-file-type-link">Link to external file</label>
+										</div>
+
+										<label for="bp-group-documents-link-url"><?php esc_html_e( 'File URL:', 'bp-group-documents' ); ?></label>
+										<input type="text" name="bp-group-documents-link-url" id="bp-group-documents-link-url" class="form-control" value="<?php echo esc_attr( stripslashes( $template->file ) ); ?>" />
+
+										<label for="bp-group-documents-link-name"><?php esc_html_e( 'Display Name:', 'bp-group-documents' ); ?></label>
+										<input type="text" name="bp-group-documents-link-name" id="bp-group-documents-link-name" class="form-control" value="<?php echo esc_attr( stripslashes( $template->name ) ); ?>" />
+
+									</div>
+
+									<div class="bp-group-documents-fields-for-file-type" id="bp-group-documents-fields-for-file-type-link">
+										<div class="bp-group-documents-file-type-selector">
+											<input type="radio" name="bp-group-documents-file-type" class="bp-group-documents-file-type" id="bp-group-documents-file-type-upload" value="upload" /> <label for="bp-group-documents-file-type-upload">Upload a file</label>
+										</div>
+
+									</div>
+								</div>
 
 								<?php if ( 'add' === $template->operation ) { ?>
 
@@ -348,6 +373,58 @@ function openlab_bp_group_documents_display_content() {
 	</div><!--end #group-documents-->
 	<?php
 }
+
+/**
+ * Catch POST request for link create/edit.
+ */
+add_action(
+	'bp_group_documents_template_do_post_action',
+	function() {
+		$request_type = ! empty( $_POST['bp-group-documents-file-type'] ) ? wp_unslash( $_POST['bp-group-documents-file-type'] ) : 'upload';
+
+		// If request is not of type 'link', let buddypress-group-documents handle it.
+		if ( 'link' !== $request_type ) {
+			return;
+		}
+
+		// For 'link' requests, we do not want buddypress-group-documents to process the
+		// form. So we unset the 'bp_group_documents_operation' flag, which short-circuits
+		// BP_Group_Documents_Template::do_post_logic().
+		if ( ! empty( $_POST['bp_group_documents_operation'] ) && 'edit' === $_POST['bp_group_documents_operation'] ) {
+			$operation_type = 'edit';
+		} else {
+			$operation_type = 'add';
+		}
+
+		unset( $_POST['bp_group_documents_operation'] );
+
+		switch ( $operation_type ) {
+			case 'add' :
+				$document = new BP_Group_Documents();
+
+				$document->user_id  = get_current_user_id();
+				$document->group_id = bp_get_current_group_id();
+				$document->name     = wp_unslash( $_POST['bp-group-documents-link-name'] );
+
+				// etc
+
+				// Store the URL in the 'file' field.
+				$document->file = wp_unslash( $_POST['bp-group-documents-link-url'] );
+
+				// false means "don't check for a file upload".
+				if ( $document->save( false ) ) {
+					// self::update_categories( $document );
+					do_action( 'bp_group_documents_add_success', $document );
+					bp_core_add_message( __( 'External link successfully added.','bp-group-documents' ) );
+				}
+			break;
+
+			case 'edit' :
+
+			break;
+		}
+	}
+);
 
 /**
  * Catch folder delete request.
