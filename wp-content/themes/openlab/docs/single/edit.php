@@ -146,6 +146,9 @@ if ( $current_doc ) {
 
 							<?php wp_nonce_field('bp_docs_save') ?>
 
+							<?php /* Very important! Saving existing docs will not work without this */ ?>
+							<input type="hidden" id="doc_id" name="doc_id" value="<?php echo esc_attr( $doc_id ); ?>" />
+
 							<input class="btn btn-primary" type="submit" name="doc-edit-submit" id="doc-edit-submit" value="<?php _e('Save', 'bp-docs') ?>"> <a href="<?php bp_docs_cancel_edit_link() ?>" class="action safe btn btn-default no-deco"><?php _e('Cancel', 'bp-docs'); ?></a>
 
 							<?php if (bp_docs_current_user_can('manage')) : ?><a class="delete-doc-button confirm" href="<?php bp_docs_delete_doc_link() ?>">Delete</a><?php endif ?>
