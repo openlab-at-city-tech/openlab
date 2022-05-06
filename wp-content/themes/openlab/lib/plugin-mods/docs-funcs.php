@@ -127,3 +127,15 @@ function openlab_docs_activity_notification_control( $send_it, $activity, $user_
 }
 add_action( 'bp_ass_send_activity_notification_for_user', 'openlab_docs_activity_notification_control', 100, 4 );
 add_action( 'bp_ges_add_to_digest_queue_for_user', 'openlab_docs_activity_notification_control', 100, 4 );
+
+/**
+ * Adds a Delete link to the "action links" in the doc loop.
+ */
+function openlab_add_delete_to_bp_docs_doc_action_links( $links, $doc_id ) {
+	if ( current_user_can( 'manage', $doc_id ) && ! bp_docs_is_doc_trashed( $doc_id ) ) {
+		$links[] = '<a href="' . bp_docs_get_delete_doc_link( false ) . '" class="delete confirm">' . __( 'Delete', 'buddypress-docs' ) . '</a>';
+	}
+
+	return $links;
+}
+add_filter( 'bp_docs_doc_action_links', 'openlab_add_delete_to_bp_docs_doc_action_links', 10, 2 );
