@@ -3,8 +3,8 @@
 class OpenLab_Help_Widget extends WP_Widget {
 	public function __construct() {
 		parent::__construct(
-			'openlab_support',
-			'OpenLab Support',
+			'openlab_help',
+			'OpenLab Help',
 			array(
 				'description' => '',
 			)
