@@ -143,6 +143,21 @@ if ( $descendant_of ) {
 	);
 }
 
+$ancestor_of = openlab_get_current_filter( 'ancestor-of' );
+if ( $ancestor_of ) {
+	$ancestor_of_group = groups_get_group( $ancestor_of );
+
+	$ancestor_of_admin_ids   = openlab_get_all_group_contact_ids( $ancestor_of );
+	$ancestor_of_admin_links = array_map( 'bp_core_get_userlink', $ancestor_of_admin_ids );
+
+	$ancestor_of_string = sprintf(
+		'Displaying ancestors of <a href="%s">%s</a> by %s.',
+		esc_attr( bp_get_group_permalink( $ancestor_of_group ) ),
+		esc_html( $ancestor_of_group->name ),
+		implode( ', ', $ancestor_of_admin_links )
+	);
+}
+
 ?>
 
 <?php if ( bp_has_groups( $group_args ) ) : ?>
@@ -156,6 +171,8 @@ if ( $descendant_of ) {
 				Narrow down your results using the search filters.
 			<?php elseif ( $descendant_of ) : ?>
 				<?php echo $descendant_of_string; ?>
+			<?php elseif ( $ancestor_of ) : ?>
+				<?php echo $ancestor_of_string; ?>
 			<?php else : ?>
 				Use the search and filters to find a <?php echo esc_html( ucwords( $group_type ) ); ?>.
 			<?php endif; ?>

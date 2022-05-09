@@ -558,15 +558,7 @@ function cuny_group_single() {
     $section = groups_get_groupmeta($group_id, 'wds_section_code');
     $html = groups_get_groupmeta($group_id, 'wds_course_html');
 
-	if ( 'portfolio' === $group_type ) {
-		$show_acknowledgements = false;
-	} else {
-		$credits = openlab_get_credits( $group_id );
-
-		$show_acknowledgements = $credits['show_acknowledgements'];
-		$credits_chunks        = $credits['credits_chunks'];
-		$post_credits_markup   = $credits['post_credits_markup'];
-	}
+	$acknowledgements = openlab_get_acknowledgements( $group_id );
 
     ?>
 
@@ -650,49 +642,13 @@ function cuny_group_single() {
                                 <div class="col-sm-17 row-content"><?php echo apply_filters('the_content', $group_description); ?></div>
                             </div>
 
-							<?php if ( openlab_group_can_be_cloned( bp_get_current_group_id() ) ) : ?>
+							<?php if ( $acknowledgements ) : ?>
 								<div class="table-row row">
-                                    <div class="col-xs-24 status-message italics">
-										This <?php echo esc_html( $group_type ); ?> may be cloned by logged-in faculty.
-
-										<?php
-										$exclude_hidden   = ! current_user_can( 'bp_moderate' );
-										$descendant_count = openlab_get_clone_descendant_count_of_group( $group_id, $exclude_hidden );
-										?>
-
-										<?php if ( $descendant_count > 0 ) : ?>
-											<?php
-											$view_clones_link = trailingslashit( home_url( $group_type . 's' ) );
-											$view_clones_link = add_query_arg( 'descendant-of', $group_id, $view_clones_link );
-											$count_message    = _n( 'It has been cloned or re-cloned %s time', 'It has been cloned or re-cloned %s times', $descendant_count, 'commons-in-a-box' );
-											?>
-											<?php echo esc_html( sprintf( $count_message, number_format_i18n( $descendant_count ) ) ); ?>; <a href="<?php echo esc_attr( $view_clones_link ); ?>">view clones</a>.
-										<?php endif; ?>
+									<div class="col-xs-24 status-message group-acknowledgements">
+										<?php echo $acknowledgements; ?>
 									</div>
 								</div>
 							<?php endif; ?>
-
-                            <?php if ( $show_acknowledgements ) : ?>
-                                <div class="table-row row">
-                                    <div class="col-xs-24 status-message clone-acknowledgements">
-										<?php foreach ( $credits_chunks as $credits_chunk ) : ?>
-											<?php if ( ! empty( $credits_chunk['intro'] ) ) : ?>
-												<p><?php echo $credits_chunk['intro']; ?></p>
-											<?php endif; ?>
-
-											<?php if ( ! empty( $credits_chunk['items'] ) ) : ?>
-												<ul class="group-credits">
-													<?php echo $credits_chunk['items']; ?>
-												</ul>
-											<?php endif; ?>
-										<?php endforeach; ?>
-
-										<?php if ( ! empty( $post_credits_markup ) ) : ?>
-											<?php echo $post_credits_markup; ?>
-										<?php endif; ?>
-                                    </div>
-                                </div>
-                            <?php endif; ?>
 
                         </div>
 
@@ -756,21 +712,6 @@ function cuny_group_single() {
                                 <div class="col-sm-17 row-content"><?php bp_group_description() ?></div>
                             </div>
 
-                            <?php if ( $group_contacts ): ?>
-                                <div class="table-row row">
-                                    <?php /* This won't work at all for l10n */ ?>
-                                    <?php
-                                    if ( 1 === count( $group_contacts ) ) {
-                                        $gc_label = sprintf( '%s Contact', ucwords( $group_type ) );
-                                    } else {
-                                        $gc_label = sprintf( '%s Contacts', ucwords( $group_type ) );
-                                    }
-                                    ?>
-                                    <div class="bold col-sm-7"><?php echo esc_html( $gc_label ); ?></div>
-                                    <div class="col-sm-17 row-content"><?php echo implode( ', ', array_map( 'bp_core_get_userlink', $group_contacts ) ); ?></div>
-                                </div>
-                            <?php endif; ?>
-
                             <?php if ($group_type == "portfolio"): ?>
 
                                 <div class="table-row row">
@@ -780,49 +721,13 @@ function cuny_group_single() {
 
 							<?php endif; ?>
 
-							<?php if ( openlab_group_can_be_cloned( bp_get_current_group_id() ) ) : ?>
+							<?php if ( $acknowledgements ) : ?>
 								<div class="table-row row">
-									<div class="col-xs-24 status-message italics">
-										This <?php echo esc_html( $group_type ); ?> may be cloned by logged-in OpenLab members.
-
-										<?php
-										$exclude_hidden   = ! current_user_can( 'bp_moderate' );
-										$descendant_count = openlab_get_clone_descendant_count_of_group( $group_id, $exclude_hidden );
-										?>
-
-										<?php if ( $descendant_count > 0 ) : ?>
-											<?php
-											$view_clones_link = trailingslashit( home_url( $group_type . 's' ) );
-											$view_clones_link = add_query_arg( 'descendant-of', $group_id, $view_clones_link );
-											$count_message    = _n( 'It has been cloned or re-cloned %s time', 'It has been cloned or re-cloned %s times', $descendant_count, 'commons-in-a-box' );
-											?>
-											<?php echo esc_html( sprintf( $count_message, number_format_i18n( $descendant_count ) ) ); ?>; <a href="<?php echo esc_attr( $view_clones_link ); ?>">view clones</a>.
-										<?php endif; ?>
+									<div class="col-xs-24 status-message group-acknowledgements">
+										<?php echo $acknowledgements; ?>
 									</div>
 								</div>
 							<?php endif; ?>
-
-                            <?php if ( $show_acknowledgements ) : ?>
-                                <div class="table-row row">
-                                    <div class="col-xs-24 status-message clone-acknowledgements">
-										<?php foreach ( $credits_chunks as $credits_chunk ) : ?>
-											<?php if ( ! empty( $credits_chunk['intro'] ) ) : ?>
-												<p><?php echo $credits_chunk['intro']; ?></p>
-											<?php endif; ?>
-
-											<?php if ( ! empty( $credits_chunk['items'] ) ) : ?>
-												<ul class="group-credits">
-													<?php echo $credits_chunk['items']; ?>
-												</ul>
-											<?php endif; ?>
-										<?php endforeach; ?>
-
-										<?php if ( ! empty( $post_credits_markup ) ) : ?>
-											<?php echo $post_credits_markup; ?>
-										<?php endif; ?>
-                                    </div>
-                                </div>
-                            <?php endif; ?>
 
                         </div>
                     </div>

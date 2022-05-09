@@ -8349,12 +8349,15 @@ body .group-header .bp-template-notice {
   padding: 6px 12px;
   text-align: left;
 }
-body .clone-acknowledgements p {
-  margin-bottom: 0.5em;
-  margin-top: 0.5em;
+body .group-acknowledgements {
+  font-style: italic;
 }
-body .clone-acknowledgements p:first-child {
-  margin-top: 0;
+body .group-acknowledgements .acknowledgements-intro {
+  font-weight: 700;
+  margin-top: 4px;
+}
+body .group-acknowledgements p {
+  margin-bottom: 8px;
 }
 body .group-credits {
   list-style-type: none;
