@@ -8075,14 +8075,14 @@ body .group-creators-section {
   margin-bottom: 20px;
   margin-top: 20px;
 }
+body .panel-acknowledgements .description {
+  font-style: italic;
+}
 body ul.group-creator-edit-list {
   list-style-type: none;
   padding-left: 0;
 }
-body ul.group-creator-edit-list > li {
-  padding: 5px 10px;
-}
-body ul.group-creator-edit-list > li:nth-of-type(even) {
+body ul.group-creator-edit-list > li:nth-of-type(odd) .group-creator-form-entry > div {
   background: #efefef;
 }
 body .group-creator-form-entry {
@@ -8098,6 +8098,7 @@ body .group-creator-form-entry > div {
   flex: 0 1 auto;
   margin-right: 20px;
   width: 50%;
+  padding: 5px 5px;
 }
 body .group-creator-form-entry > div.creator-fields-member-login {
   width: 100%;
@@ -8109,8 +8110,8 @@ body .group-creator-form-entry input {
   width: 100%;
 }
 body .group-creator-form-entry .entry-actions {
-  flex-grow: 0;
-  flex-shrink: 1;
+  flex: 0 0 100px;
+  margin-right: 10px;
   width: 100px;
 }
 body .group-creator-form-entry .entry-actions button {
@@ -8120,6 +8121,11 @@ body .group-creator-form-entry .entry-actions button {
 }
 body .group-creator-form-entry .creator-preview {
   display: none;
+  padding-left: 30px;
+}
+body .group-creator-form-entry .creator-form-fields {
+  flex-grow: 1;
+  padding-left: 30px;
 }
 body .group-creator-form-entry .edit-entry {
   display: none;

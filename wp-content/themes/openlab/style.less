@@ -922,16 +922,18 @@ body{
 		margin-top: 20px;
 	}
 
+	.panel-acknowledgements {
+		.description {
+			font-style: italic;
+		}
+	}
+
 	ul.group-creator-edit-list {
 		list-style-type: none;
 		padding-left: 0;
 
-		& > li {
-			padding: 5px 10px;
-
-			&:nth-of-type(even) {
-				background: #efefef;
-			}
+		& > li:nth-of-type(odd) .group-creator-form-entry > div {
+			background: #efefef;
 		}
 	}
 
@@ -954,6 +956,7 @@ body{
 			flex: 0 1 auto;
 			margin-right: 20px;
 			width: 50%;
+			padding: 5px 5px;
 
 			&.creator-fields-member-login {
 				width: 100%;
@@ -969,8 +972,8 @@ body{
 		}
 
 		.entry-actions {
-			flex-grow: 0;
-			flex-shrink: 1;
+			flex: 0 0 100px;
+			margin-right: 10px;
 			width: 100px;
 
 			button {
@@ -982,6 +985,12 @@ body{
 
 		.creator-preview {
 			display: none;
+			padding-left: 30px;
+		}
+
+		.creator-form-fields {
+			flex-grow: 1;
+			padding-left: 30px;
 		}
 
 		.edit-entry {

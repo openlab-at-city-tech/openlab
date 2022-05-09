@@ -802,18 +802,24 @@ function openlab_group_creators_metabox() {
 	$non_member_icon = '<span class="fa fa-globe"></span>';
 
 	?>
-	<div id="" class="panel panel-default">
+	<div id="" class="panel panel-default panel-acknowledgements">
 		<fieldset>
-			<legend class="panel-heading">Creator(s)</legend>
+			<legend class="panel-heading">Acknowledgements</legend>
 
 			<div class="panel-body">
-				<p>Creators will be listed in the acknowledgements on the <?php echo esc_html( $group_type_label ); ?> Profile. For more information, see <a href="https://openlab.citytech.cuny.edu/blog/help/editing-a-course-project-or-club-profile/" target="_blank">Editing a Course, Project, or Club Profile</a> in Help.</p>
+				<p>The names below will be listed under Acknowledgements on the <?php echo esc_html( $group_type_label ); ?> Profile. You can add additioal acknowledgements by typing an OpenLab member's nam in the box below and selecting it from the dropdown list. You may also enter the names of non-members and press return.
 
 				<div class="group-creators-section">
-					<fieldset>
-						<legend><?php echo esc_html( $group_type_label ); ?> Creator(s)</legend>
+					<div class="group-creator-edit-list-add-new">
+						<button type="button" id="group-creator-add-new-member"><?php echo $member_icon; ?> Select an OpenLab member</button> <button type="button" id="group-creator-add-new-non-member"><?php echo $non_member_icon; ?> Enter the name of a non-member</button>
+					</div>
 
-						<p>The people listed below will be acknowledged as the <?php echo esc_html( $group_type_label ); ?> Creators. You can add additional creators by typing their name in the box below and selecting it from the dropdown list.</p>
+					<div id="group-creator-empty-row" class="group-creator-empty-row">
+						<?php openlab_creator_form_entry( [] ); ?>
+					</div>
+
+					<fieldset>
+						<legend class="screen-reader-text"><?php echo esc_html( $group_type_label ); ?> Creator(s)</legend>
 
 						<ul id="group-creator-edit-list" class="group-creator-edit-list">
 							<?php foreach ( $creators as $creator ) : ?>
@@ -822,14 +828,6 @@ function openlab_group_creators_metabox() {
 								</li>
 							<?php endforeach; ?>
 						</ul>
-
-						<div class="group-creator-edit-list-add-new">
-							Add a creator: <button type="button" id="group-creator-add-new-member"><?php echo $member_icon; ?> Select an OpenLab member</button> <button type="button" id="group-creator-add-new-non-member"><?php echo $non_member_icon; ?> Enter the name of a non-member</button>
-						</div>
-
-						<div id="group-creator-empty-row" class="group-creator-empty-row">
-							<?php openlab_creator_form_entry( [] ); ?>
-						</div>
 					</fieldset>
 				</div>
 
@@ -870,6 +868,8 @@ function openlab_group_creators_metabox() {
 					remove_filter( 'mce_buttons_2', '__return_empty_array' );
 					?>
 				</div>
+
+				<p class="description">For more information, see <a href="https://openlab.citytech.cuny.edu/blog/help/editing-a-course-project-or-club-profile/" target="_blank">Editing a Course, Project, or Club Profile</a> in Help.</p>
 			</div>
 		</fieldset>
 	</div>
