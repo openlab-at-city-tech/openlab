@@ -77,9 +77,9 @@ class AttributionModal extends Component {
 		const blockEditorArea = document.getElementsByClassName( 'edit-post-visual-editor__content-area' );
 		const blockEditorHeader = document.getElementsByClassName( 'interface-interface-skeleton__header' );
 		const blockEditorSidebar = document.getElementsByClassName( 'interface-interface-skeleton__sidebar' );
+		const blockEditorMenu = document.getElementById( 'adminmenumain' );
 
 		if ( ! this.props.isOpen ) {
-
 			if ( blockEditorArea.length > 0 ) {
 				blockEditorArea[ 0 ].style.overflow = null;
 			}
@@ -88,6 +88,10 @@ class AttributionModal extends Component {
 			}
 			if ( blockEditorSidebar.length > 0 ) {
 				blockEditorSidebar[ 0 ].style.zIndex = '90';
+			}
+			if ( blockEditorMenu ) {
+				blockEditorMenu.style.zIndex = null;
+				blockEditorMenu.style.position = null;
 			}
 
 			return null;
@@ -101,6 +105,10 @@ class AttributionModal extends Component {
 		}
 		if ( blockEditorSidebar.length > 0 ) {
 			blockEditorSidebar[ 0 ].style.zIndex = '10';
+		}
+		if ( blockEditorMenu ) {
+			blockEditorMenu.style.zIndex = '0';
+			blockEditorMenu.style.position = 'relative';
 		}
 
 		const { onClose, modalType } = this.props;
