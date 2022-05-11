@@ -113,9 +113,9 @@ $portfolio_sharing = groups_get_groupmeta( bp_get_current_group_id(), 'enable_po
 
 			?>
 			<div class="panel panel-default">
-				<div class="panel-heading">Discussion, Docs, and Files Settings</div>
+				<div class="panel-heading">Discussion, Docs, and File Library Settings</div>
 				<div class="panel-body">
-					<p id="discussion-settings-tag">These settings enable or disable Discussions, Docs, and Files on your <?php echo $group_label_uc; ?> profile.</p>
+					<p id="discussion-settings-tag">These settings enable or disable Discussions, Docs, and File Library on your <?php echo $group_label_uc; ?> profile.</p>
 					<div class="checkbox checkbox-float">
 						<label><input type="checkbox" name="openlab-edit-group-forum" id="group-show-forum" value="1"<?php checked( $forum_enabled ); ?> /> Enable Discussion</label>
 					</div>
@@ -123,7 +123,7 @@ $portfolio_sharing = groups_get_groupmeta( bp_get_current_group_id(), 'enable_po
 						<label><input type="checkbox" name="openlab-edit-group-docs" id="group-show-docs" value="1"<?php checked( $docs_enabled ); ?> /> Enable Docs</label>
 					</div>
 					<div class="checkbox checkbox-float">
-						<label><input type="checkbox" name="openlab-edit-group-files" id="group-show-files" value="1"<?php checked( $files_enabled ); ?> /> Enable Files</label>
+						<label><input type="checkbox" name="openlab-edit-group-files" id="group-show-files" value="1"<?php checked( $files_enabled ); ?> /> Enable File Library</label>
 					</div>
 				</div>
 			</div>
