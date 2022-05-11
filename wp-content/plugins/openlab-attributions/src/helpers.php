@@ -205,7 +205,7 @@ function get_the_attribution( $item ) {
 	if ( ! empty( $item['adaptedTitle'] ) || ! empty( $item['derivative'] ) ) {
 		$attribution .= sprintf(
 			'%1$s%2$s',
-			empty( $parts ) ? '' : ' / ',
+			empty( $parts ) ? '' : ' ',
 			format_adapted_from( $item )
 		);
 	}
