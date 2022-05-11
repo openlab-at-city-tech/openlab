@@ -117,6 +117,8 @@ function openlab_load_scripts() {
             'ajax_url' => admin_url( 'admin-ajax.php' )
         ) );
     }
+
+    wp_enqueue_script( 'openlab-group-documents', $stylesheet_dir_uri . '/js/group-documents.js', [ 'jquery' ] );
 }
 
 add_action('wp_enqueue_scripts', 'openlab_load_scripts');

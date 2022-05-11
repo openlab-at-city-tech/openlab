@@ -294,65 +294,85 @@ function openlab_bp_group_documents_display_content() {
 								<input type="hidden" name="bp_group_documents_operation" value="<?php echo esc_attr( $template->operation ); ?>" />
 								<input type="hidden" name="bp_group_documents_id" value="<?php echo esc_attr( $template->id ); ?>" />
 
-								<div class="bp-group-documents-fields">
+								<div class="bp-group-documents-fields show-link">
+									<!-- Link -->
+									<div class="bp-group-documents-file-type-selector">
+										<input type="radio" checked="checked" name="bp_group_documents_file_type" class="bp-group-documents-file-type" id="bp-group-documents-file-type-link" value="link" />
+										<label for="bp-group-documents-file-type-link">Link to external file</label>
+									</div>
 									<div class="bp-group-documents-fields-for-file-type" id="bp-group-documents-fields-for-file-type-link">
-										<div class="bp-group-documents-file-type-selector">
-											<input type="radio" checked="checked" name="bp-group-documents-file-type" class="bp-group-documents-file-type" id="bp-group-documents-file-type-link" value="link" /> <label for="bp-group-documents-file-type-link">Link to external file</label>
-										</div>
-
 										<label for="bp-group-documents-link-url"><?php esc_html_e( 'File URL:', 'bp-group-documents' ); ?></label>
-										<input type="text" name="bp-group-documents-link-url" id="bp-group-documents-link-url" class="form-control" value="<?php echo esc_attr( stripslashes( $template->file ) ); ?>" />
+										<input type="text" name="bp_group_documents_link_url" id="bp-group-documents-link-url" class="form-control" value="<?php echo esc_attr( stripslashes( $template->file ) ); ?>" />
 
 										<label for="bp-group-documents-link-name"><?php esc_html_e( 'Display Name:', 'bp-group-documents' ); ?></label>
-										<input type="text" name="bp-group-documents-link-name" id="bp-group-documents-link-name" class="form-control" value="<?php echo esc_attr( stripslashes( $template->name ) ); ?>" />
+										<input type="text" name="bp_group_documents_link_name" id="bp-group-documents-link-name" class="form-control" value="<?php echo esc_attr( stripslashes( $template->name ) ); ?>" />
 
+										<?php if ( BP_GROUP_DOCUMENTS_SHOW_DESCRIPTIONS ) { ?>
+										<label for="bp-group-documents-link-description"><?php esc_html_e( 'Description:', 'bp-group-documents' ); ?></label>
+										<textarea name="bp_group_documents_link_description" id="bp-group-documents-link-description" class="form-control"><?php echo esc_html( stripslashes( $template->description ) ); ?></textarea>
+										<?php } ?>
+
+										<div id="document-detail-clear" class="clear"></div>
+										<fieldset class="group-file-folders">
+											<legend>Folders</legend>
+											<div class="checkbox-list-container group-file-folders-container">
+												<input type="hidden" name="bp_group_documents_link_categories[]" value="0" />
+												<ul>
+												<?php foreach( $folders as $category ) { ?>
+													<li><input type="checkbox" name="bp_group_documents_link_categories[]" value="<?php echo esc_attr( $category->term_id ); ?>" id="group-folder-<?php echo esc_attr( $category->term_id ); ?>" <?php if( $template->doc_in_category($category->term_id)) echo 'checked="checked"'; ?> /> <label class="passive" for="group-folder-<?php echo esc_attr( $category->term_id ); ?>"><?php echo $category->name; ?></label></li>
+												<?php } ?>
+												</ul>
+											</div>
+											<label for="bp-group-documents-new-category" class="sr-only">Add new folder</label>
+											<input type="text" name="bp_group_documents_link_new_category" class="bp-group-documents-new-folder form-control" placeholder="Add new folder" id="bp-group-documents-new-category" />
+										</fieldset>
 									</div>
 
-									<div class="bp-group-documents-fields-for-file-type" id="bp-group-documents-fields-for-file-type-link">
-										<div class="bp-group-documents-file-type-selector">
-											<input type="radio" name="bp-group-documents-file-type" class="bp-group-documents-file-type" id="bp-group-documents-file-type-upload" value="upload" /> <label for="bp-group-documents-file-type-upload">Upload a file</label>
+									<!-- Upload -->
+									<div class="bp-group-documents-file-type-selector">
+										<input type="radio" name="bp_group_documents_file_type" class="bp-group-documents-file-type" id="bp-group-documents-file-type-upload" value="upload" />
+										<label for="bp-group-documents-file-type-upload">Upload a file</label>
+									</div>
+									<div class="bp-group-documents-fields-for-file-type" id="bp-group-documents-fields-for-file-type-upload">
+										<?php if ( 'add' === $template->operation ) { ?>
+										<input type="hidden" name="MAX_FILE_SIZE" value="<?php echo esc_attr( return_bytes( ini_get( 'post_max_size' ) ) ); ?>" />
+										<label for="bp-group-documents-file"><?php esc_html_e( 'Choose File:', 'bp-group-documents' ); ?></label>
+										<div class="form-control type-file-wrapper">
+											<input type="file" id="bp-group-documents-file" name="bp_group_documents_file" class="bp-group-documents-file" />
 										</div>
+										<?php } ?>
 
-									</div>
-								</div>
+										<?php if ( BP_GROUP_DOCUMENTS_FEATURED ) { ?>
+										<div class="checkbox">
+											<label for="bp-group-documents-featured-label"><input id="bp-group-documents-featured" type="checkbox" name="bp_group_documents_featured" class="bp-group-documents-featured" value="1" <?php checked( $template->featured ); ?> /> <?php esc_html_e( 'Featured Document', 'bp-group-documents' ); ?></label>
+										</div>
+										<?php } ?>
 
-								<?php if ( 'add' === $template->operation ) { ?>
-
-									<input type="hidden" name="MAX_FILE_SIZE" value="<?php echo esc_attr( return_bytes( ini_get( 'post_max_size' ) ) ); ?>" />
-									<label for="bp-group-documents-file"><?php esc_html_e( 'Choose File:', 'bp-group-documents' ); ?></label>
-									<div class="form-control type-file-wrapper">
-										<input type="file" id="bp-group-documents-file" name="bp_group_documents_file" class="bp-group-documents-file" />
-									</div>
-								<?php } ?>
-
-								<?php if ( BP_GROUP_DOCUMENTS_FEATURED ) { ?>
-									<div class="checkbox">
-										<label for="bp-group-documents-featured-label"><input id="bp-group-documents-featured" type="checkbox" name="bp_group_documents_featured" class="bp-group-documents-featured" value="1" <?php checked( $template->featured ); ?> /> <?php esc_html_e( 'Featured Document', 'bp-group-documents' ); ?></label>
-									</div>
-								<?php } ?>
-
-								<div id="document-detail-clear" class="clear"></div>
-								<div class="document-info">
-									<label for="bp-group-documents-name"><?php esc_html_e( 'Display Name:', 'bp-group-documents' ); ?></label>
-									<input type="text" name="bp_group_documents_name" id="bp-group-documents-name" class="form-control" value="<?php echo esc_attr( stripslashes( $template->name ) ); ?>" />
-									<?php if ( BP_GROUP_DOCUMENTS_SHOW_DESCRIPTIONS ) { ?>
-										<label for="bp-group-documents-description"><?php esc_html_e( 'Description:', 'bp-group-documents' ); ?></label>
-										<textarea name="bp_group_documents_description" id="bp-group-documents-description" class="form-control"><?php echo esc_html( stripslashes( $template->description ) ); ?></textarea>
-									<?php } ?>
-
-									<fieldset class="group-file-folders">
-										<legend>Folders</legend>
-										<div class="checkbox-list-container group-file-folders-container">
-											<input type="hidden" name="bp_group_documents_categories[]" value="0" />
-											<ul>
-											<?php foreach( $folders as $category ) { ?>
-												<li><input type="checkbox" name="bp_group_documents_categories[]" value="<?php echo esc_attr( $category->term_id ); ?>" id="group-folder-<?php echo esc_attr( $category->term_id ); ?>" <?php if( $template->doc_in_category($category->term_id)) echo 'checked="checked"'; ?> /> <label class="passive" for="group-folder-<?php echo esc_attr( $category->term_id ); ?>"><?php echo $category->name; ?></label></li>
+										<div id="document-detail-clear" class="clear"></div>
+										<div class="document-info">
+											<label for="bp-group-documents-name"><?php esc_html_e( 'Display Name:', 'bp-group-documents' ); ?></label>
+											<input type="text" name="bp_group_documents_name" id="bp-group-documents-name" class="form-control" value="<?php echo esc_attr( stripslashes( $template->name ) ); ?>" />
+											
+											<?php if ( BP_GROUP_DOCUMENTS_SHOW_DESCRIPTIONS ) { ?>
+												<label for="bp-group-documents-description"><?php esc_html_e( 'Description:', 'bp-group-documents' ); ?></label>
+												<textarea name="bp_group_documents_description" id="bp-group-documents-description" class="form-control"><?php echo esc_html( stripslashes( $template->description ) ); ?></textarea>
 											<?php } ?>
-											</ul>
+
+											<fieldset class="group-file-folders">
+												<legend>Folders</legend>
+												<div class="checkbox-list-container group-file-folders-container">
+													<input type="hidden" name="bp_group_documents_categories[]" value="0" />
+													<ul>
+													<?php foreach( $folders as $category ) { ?>
+														<li><input type="checkbox" name="bp_group_documents_categories[]" value="<?php echo esc_attr( $category->term_id ); ?>" id="group-folder-<?php echo esc_attr( $category->term_id ); ?>" <?php if( $template->doc_in_category($category->term_id)) echo 'checked="checked"'; ?> /> <label class="passive" for="group-folder-<?php echo esc_attr( $category->term_id ); ?>"><?php echo $category->name; ?></label></li>
+													<?php } ?>
+													</ul>
+												</div>
+												<label for="bp-group-documents-new-category" class="sr-only">Add new folder</label>
+												<input type="text" name="bp_group_documents_new_category" class="bp-group-documents-new-folder form-control" placeholder="Add new folder" id="bp-group-documents-new-category" />
+											</fieldset>
 										</div>
-										<label for="bp-group-documents-new-category" class="sr-only">Add new folder</label>
-										<input type="text" name="bp_group_documents_new_category" class="bp-group-documents-new-folder form-control" placeholder="Add new folder" id="bp-group-documents-new-category" />
-									</fieldset>
+									</div>
 								</div>
 							</div>
 						</div>
