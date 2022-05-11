@@ -125,9 +125,13 @@ add_action(
  */
 function openlab_forum_tabs_output() {
 	?>
-	<ul class="nav nav-inline">
-		<?php openlab_forum_tabs(); ?>
-	</ul>
+	<div class="forum-nav">
+		<ul class="nav nav-inline">
+			<?php openlab_forum_tabs(); ?>
+		</ul>
+
+		<?php bbp_get_template_part( 'form', 'search' ); ?>
+	</div>
 	<?php
 }
 
@@ -518,6 +522,68 @@ function openlab_remove_bbpress_forum_title( $title ) {
 }
 add_filter( 'bbp_get_forum_title', 'openlab_remove_bbpress_forum_title' );
 add_filter( 'bbp_get_topic_title', 'openlab_remove_bbpress_forum_title' );
+
+/**
+ * Filters bbPress's default search parameters.
+ *
+ * @param array $r
+ * @return array
+ */
+function openlab_filter_bbpress_search_parameters( $r ) {
+	if ( ! bp_is_group() ) {
+		return $r;
+	}
+
+	unset( $r['post_type']['forum'] );
+
+	if ( ! isset( $r['meta_query'] ) ) {
+		$r['meta_query'] = [];
+	}
+
+	$forum_ids = bbp_get_group_forum_ids( bp_get_current_group_id() );
+	if ( ! $forum_ids ) {
+		$forum_ids = [ 0 ];
+	}
+
+	$r['meta_query'][] = [
+		'key'     => '_bbp_forum_id',
+		'value'   => $forum_ids,
+		'compare' => 'IN',
+	];
+
+	$r['paged'] = ! empty( $_GET['search_paged'] ) ? (int) $_GET['search_paged'] : 1;
+
+	// for testing
+	$r['posts_per_page'] = 3;
+
+	return $r;
+}
+add_filter( 'bbp_after_has_search_results_parse_args', 'openlab_filter_bbpress_search_parameters' );
+
+/**
+ * Filters bbPress's default search pagination parameters.
+ *
+ * @param array $r
+ * @return array
+ */
+function openlab_filter_bbpress_search_pagination_parameters( $r ) {
+	if ( ! bp_is_group() ) {
+		return $r;
+	}
+
+	if ( empty( $_GET['bbp_search'] ) ) {
+		return $r;
+	}
+
+	$search_term  = wp_unslash( $_GET['bbp_search'] );
+	$search_paged = ! empty( $_GET['search_paged'] ) ? (int) $_GET['search_paged'] : 1;
+
+	$r['base']    = add_query_arg( 'bbp_search', $search_term, bp_get_group_permalink( groups_get_current_group() ) . 'forum/' ) . '&search_paged=%#%';
+	$r['current'] = $search_paged;
+
+	return $r;
+}
+add_filter( 'bbp_search_results_pagination', 'openlab_filter_bbpress_search_pagination_parameters' );
 
 /**
  * Email notification management.

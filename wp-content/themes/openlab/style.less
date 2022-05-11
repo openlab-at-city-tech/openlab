@@ -3396,6 +3396,22 @@ a.delete-doc-button {
         }
     }
 }
+.forum-nav {
+	display: flex;
+	margin-bottom: 40px;
+
+	@media (max-width:@screen-xs-max){
+		flex-direction: column;
+		gap: 20px;
+	}
+
+	.bbp-search-form {
+		margin-left: auto;
+		@media (max-width:@screen-xs-max){
+			margin-left: 0;
+		}
+	}
+}
 /**invite-anyone specific**/
 #invite-anyone-invite-list{
     li{

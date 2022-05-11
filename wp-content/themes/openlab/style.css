@@ -10400,6 +10400,24 @@ a.delete-doc-button {
     display: none;
   }
 }
+.forum-nav {
+  display: flex;
+  margin-bottom: 40px;
+}
+@media (max-width: 767px) {
+  .forum-nav {
+    flex-direction: column;
+    gap: 20px;
+  }
+}
+.forum-nav .bbp-search-form {
+  margin-left: auto;
+}
+@media (max-width: 767px) {
+  .forum-nav .bbp-search-form {
+    margin-left: 0;
+  }
+}
 /**invite-anyone specific**/
 #invite-anyone-invite-list li {
   border: 1px solid #dddddd;
