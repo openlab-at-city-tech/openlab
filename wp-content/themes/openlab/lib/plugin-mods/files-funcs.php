@@ -93,7 +93,6 @@ function openlab_bp_group_documents_display_content() {
 	$sort_form_action = $template->action_link;
 
 	$header_text = 'add' === $template->operation ? 'Add a New File' : 'Edit a File';
-
 	?>
 
 	<div id="bp-group-documents" class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>">
@@ -420,7 +419,7 @@ add_action(
 
 		switch ( $operation_type ) {
 			case 'add' :
-				$document = new BP_Group_Documents();
+				$document 				= new BP_Group_Documents();
 				$document->user_id  	= get_current_user_id();
 				$document->group_id 	= bp_get_current_group_id();
 				$document->name     	= wp_unslash( $_POST['bp_group_documents_link_name'] );
@@ -433,12 +432,55 @@ add_action(
 					do_action( 'bp_group_documents_add_success', $document );
 					bp_core_add_message( __( 'External link successfully added.','bp-group-documents' ) );
 				}
-
-				break;
+			break;
 			case 'edit' :
+				$document 				= new BP_Group_Documents( $_POST['bp_group_documents_id'] );
+				$document->name 		= wp_unslash( $_POST['bp_group_documents_link_name'] );
+				$document->description 	= $_POST['bp_group_documents_link_description'];
 
+				if( $document->save( false ) ) {
+					do_action( 'bp_group_documents_edit_success', $document );
+					bp_core_add_message( __('External link successfully edited', 'bp-group-documents') );
+				}
 			break;
 		}
+	}
+);
+
+/**
+ * Update `file` column for the external links saved 
+ * in the documents table.
+ * 
+ * BP_Group_Documents::save()
+ */
+add_action(
+	'bp_group_documents_data_after_save',
+	function( $document ) {
+		$request_type = ! empty( $_POST['bp_group_documents_file_type'] ) ? wp_unslash( $_POST['bp_group_documents_file_type'] ) : 'upload';
+
+		// If request is not of type 'link', let buddypress-group-documents handle it.
+		if( 'link' !== $request_type ) {
+			return;
+		}
+
+		if( $document->id ) {
+			global $wpdb, $bp;
+
+			$result = $wpdb->query( $wpdb->prepare(
+				"UPDATE {$bp->group_documents->table_name} 
+				SET
+					file = %s
+				WHERE id = %d",
+					$_POST['bp_group_documents_link_url'],
+					$document->id
+				) );
+		}
+		
+		if ( ! $result ) {
+			return false;
+		}
+
+		return $result;
 	}
 );
 
