@@ -278,6 +278,11 @@ function openlab_bp_group_documents_display_content() {
 					$this_id = 'bp-group-documents-upload-new';
 				} else {
 					$this_id = 'bp-group-documents-edit';
+
+					// Get current document by ID
+					$document = new BP_Group_Documents( $template->id );
+					$template->file = $document->file;
+					$template->doc_type = openlab_get_document_type( $template->file );
 				}
 				?>
 
@@ -288,17 +293,26 @@ function openlab_bp_group_documents_display_content() {
 						<div class="panel panel-default">
 							<div class="panel-heading"><?php echo esc_html( $header_text ); ?></div>
 							<div class="panel-body">
+								<?php if( 'add' === $template->operation ) { ?>
 								<p>You can link to an external file, such as a Google Doc or a Dropbox file, or you can upload a file from your computer.</p>
+								<?php } ?>
 
 								<input type="hidden" name="bp_group_documents_operation" value="<?php echo esc_attr( $template->operation ); ?>" />
 								<input type="hidden" name="bp_group_documents_id" value="<?php echo esc_attr( $template->id ); ?>" />
 
-								<div class="bp-group-documents-fields show-link">
+								<?php if( 'edit' === $template->operation ) { ?>
+								<input type="hidden" name="bp_group_documents_file_type" value="<?php echo $template->doc_type; ?>" />
+								<?php } ?>
+
+								<div class="bp-group-documents-fields <?php echo ( $template->operation === 'add' ) ? 'show-link' : 'show-' . $template->doc_type; ?>">
 									<!-- Link -->
+									<?php if( 'add' === $template->operation ) { ?>
 									<div class="bp-group-documents-file-type-selector">
 										<input type="radio" checked="checked" name="bp_group_documents_file_type" class="bp-group-documents-file-type" id="bp-group-documents-file-type-link" value="link" />
 										<label for="bp-group-documents-file-type-link">Link to external file</label>
 									</div>
+									<?php } ?>
+									<?php if( 'add' === $template->operation || ( 'edit' === $template->operation && 'link' === $template->doc_type ) ) { ?>
 									<div class="bp-group-documents-fields-for-file-type" id="bp-group-documents-fields-for-file-type-link">
 										<label for="bp-group-documents-link-url"><?php esc_html_e( 'File URL:', 'bp-group-documents' ); ?></label>
 										<input type="text" name="bp_group_documents_link_url" id="bp-group-documents-link-url" class="form-control" value="<?php echo esc_attr( stripslashes( $template->file ) ); ?>" />
@@ -326,12 +340,16 @@ function openlab_bp_group_documents_display_content() {
 											<input type="text" name="bp_group_documents_link_new_category" class="bp-group-documents-new-folder form-control" placeholder="Add new folder" id="bp-group-documents-new-category" />
 										</fieldset>
 									</div>
+									<?php } ?>
 
 									<!-- Upload -->
+									<?php if( 'add' === $template->operation ) { ?>
 									<div class="bp-group-documents-file-type-selector">
 										<input type="radio" name="bp_group_documents_file_type" class="bp-group-documents-file-type" id="bp-group-documents-file-type-upload" value="upload" />
 										<label for="bp-group-documents-file-type-upload">Upload a file</label>
 									</div>
+									<?php } ?>
+									<?php if( 'add' === $template->operation || ( 'edit' === $template->operation && 'upload' === $template->doc_type ) ) { ?>
 									<div class="bp-group-documents-fields-for-file-type" id="bp-group-documents-fields-for-file-type-upload">
 										<?php if ( 'add' === $template->operation ) { ?>
 										<input type="hidden" name="MAX_FILE_SIZE" value="<?php echo esc_attr( return_bytes( ini_get( 'post_max_size' ) ) ); ?>" />
@@ -372,6 +390,7 @@ function openlab_bp_group_documents_display_content() {
 											</fieldset>
 										</div>
 									</div>
+									<?php } ?>
 								</div>
 							</div>
 						</div>
@@ -684,3 +703,10 @@ function openlab_group_documents_activity_notification_control( $send_it, $activ
 }
 add_action( 'bp_ass_send_activity_notification_for_user', 'openlab_group_documents_activity_notification_control', 100, 4 );
 add_action( 'bp_ges_add_to_digest_queue_for_user', 'openlab_group_documents_activity_notification_control', 100, 4 );
+
+/**
+ * 
+ */
+function openlab_get_document_type( $file_name ) {
+	return filter_var( $file_name, FILTER_VALIDATE_URL ) ? 'link' : 'upload';
+}
