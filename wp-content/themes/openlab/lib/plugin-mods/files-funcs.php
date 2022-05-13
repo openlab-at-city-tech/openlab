@@ -400,7 +400,7 @@ function openlab_bp_group_documents_display_content() {
 add_action(
 	'bp_group_documents_template_do_post_action',
 	function() {
-		$request_type = ! empty( $_POST['bp-group-documents-file-type'] ) ? wp_unslash( $_POST['bp-group-documents-file-type'] ) : 'upload';
+		$request_type = ! empty( $_POST['bp_group_documents_file_type'] ) ? wp_unslash( $_POST['bp_group_documents_file_type'] ) : 'upload';
 
 		// If request is not of type 'link', let buddypress-group-documents handle it.
 		if ( 'link' !== $request_type ) {
@@ -421,30 +421,49 @@ add_action(
 		switch ( $operation_type ) {
 			case 'add' :
 				$document = new BP_Group_Documents();
-
-				$document->user_id  = get_current_user_id();
-				$document->group_id = bp_get_current_group_id();
-				$document->name     = wp_unslash( $_POST['bp-group-documents-link-name'] );
-
-				// etc
-
-				// Store the URL in the 'file' field.
-				$document->file = wp_unslash( $_POST['bp-group-documents-link-url'] );
+				$document->user_id  	= get_current_user_id();
+				$document->group_id 	= bp_get_current_group_id();
+				$document->name     	= wp_unslash( $_POST['bp_group_documents_link_name'] );
+				$document->description 	= $_POST['bp_group_documents_link_description'];
+				$document->file 		= $_POST['bp_group_documents_link_url'];
 
 				// false means "don't check for a file upload".
 				if ( $document->save( false ) ) {
-					// self::update_categories( $document );
+					openlab_update_external_link_category( $document );
 					do_action( 'bp_group_documents_add_success', $document );
 					bp_core_add_message( __( 'External link successfully added.','bp-group-documents' ) );
 				}
-			break;
 
+				break;
 			case 'edit' :
 
 			break;
 		}
 	}
 );
+
+/**
+ * Set categories for the external link submitted from the
+ * group documents form.
+ *  
+ */
+function openlab_update_external_link_category( $document ) {
+	//update categories from checkbox list
+	if ( isset( $_POST['bp_group_documents_categories'] ) )
+		$category_ids = apply_filters( 'bp_group_documents_category_ids_in', $_POST['bp_group_documents_link_categories'] );
+
+	if ( isset( $category_ids ) )
+		wp_set_object_terms( $document->id,$category_ids, 'group-documents-category' );
+
+	//check if new category was added, if so, append to current list
+	if( isset( $_POST['bp_group_documents_link_new_category'] ) && $_POST['bp_group_documents_link_new_category'] ) {
+
+		if( !term_exists( $_POST['bp_group_documents_link_new_category'], 'group-documents-category',$this->parent_id ) ) {
+			$term_info = wp_insert_term( $_POST['bp_group_documents_link_new_category'],'group-documents-category',array('parent'=>$this->parent_id));
+			wp_set_object_terms($document->id, $term_info['term_id'], 'group-documents-category', true);
+		}
+	}
+}
 
 /**
  * Catch folder delete request.
