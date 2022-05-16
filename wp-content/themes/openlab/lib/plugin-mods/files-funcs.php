@@ -381,7 +381,7 @@ function openlab_bp_group_documents_display_content() {
 										<div class="document-info">
 											<label for="bp-group-documents-name"><?php esc_html_e( 'Display Name:', 'bp-group-documents' ); ?></label>
 											<input type="text" name="bp_group_documents_name" id="bp-group-documents-name" class="form-control" value="<?php echo esc_attr( stripslashes( $template->name ) ); ?>" />
-											
+
 											<?php if ( BP_GROUP_DOCUMENTS_SHOW_DESCRIPTIONS ) { ?>
 												<label for="bp-group-documents-description"><?php esc_html_e( 'Description:', 'bp-group-documents' ); ?></label>
 												<textarea name="bp_group_documents_description" id="bp-group-documents-description" class="form-control"><?php echo esc_html( stripslashes( $template->description ) ); ?></textarea>
@@ -480,9 +480,9 @@ add_action(
 );
 
 /**
- * Update `file` column for the external links saved 
+ * Update `file` column for the external links saved
  * in the documents table.
- * 
+ *
  * BP_Group_Documents::save()
  */
 add_action(
@@ -499,7 +499,7 @@ add_action(
 			global $wpdb, $bp;
 
 			$result = $wpdb->query( $wpdb->prepare(
-				"UPDATE {$bp->group_documents->table_name} 
+				"UPDATE {$bp->group_documents->table_name}
 				SET
 					file = %s
 				WHERE id = %d",
@@ -507,7 +507,7 @@ add_action(
 					$document->id
 				) );
 		}
-		
+
 		if ( ! $result ) {
 			return false;
 		}
@@ -519,7 +519,7 @@ add_action(
 /**
  * Set categories for the external link submitted from the
  * group documents form.
- *  
+ *
  */
 function openlab_update_external_link_category( $document ) {
 	//update categories from checkbox list
@@ -726,7 +726,7 @@ function openlab_get_document_type( $file_name ) {
 
 /**
  * Render external link icon
- * 
+ *
  */
 function openlab_external_link_icon( $url ) {
 	$url = parse_url( $url );
@@ -744,7 +744,7 @@ function openlab_external_link_icon( $url ) {
 
 /**
  * Get service name from host
- * 
+ *
  */
 function openlab_get_service_from_url( $host ) {
 	switch( $host ) {
