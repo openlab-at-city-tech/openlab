@@ -532,9 +532,11 @@ function openlab_update_external_link_category( $document ) {
 	//check if new category was added, if so, append to current list
 	if( isset( $_POST['bp_group_documents_link_new_category'] ) && $_POST['bp_group_documents_link_new_category'] ) {
 
-		if( !term_exists( $_POST['bp_group_documents_link_new_category'], 'group-documents-category',$this->parent_id ) ) {
-			$term_info = wp_insert_term( $_POST['bp_group_documents_link_new_category'],'group-documents-category',array('parent'=>$this->parent_id));
-			wp_set_object_terms($document->id, $term_info['term_id'], 'group-documents-category', true);
+		$parent_id = \BP_Group_Documents_Template::get_parent_category_id();
+
+		if( ! term_exists( $_POST['bp_group_documents_link_new_category'], 'group-documents-category', $parent_id ) ) {
+			$term_info = wp_insert_term( $_POST['bp_group_documents_link_new_category'], 'group-documents-category', array( 'parent' => $parent_id ) );
+			wp_set_object_terms( $document->id, $term_info['term_id'], 'group-documents-category', true );
 		}
 	}
 }
