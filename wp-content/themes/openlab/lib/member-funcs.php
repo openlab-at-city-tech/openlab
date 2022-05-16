@@ -1501,3 +1501,16 @@ function openlab_fav_activity() {
 	) );
 	wp_die();
 }
+
+/**
+ * Change the date format of the member joined since text
+ * 
+ */
+function openlab_member_joined_since() {	
+	global $members_template;
+
+	return printf(
+		__( 'joined %s', 'buddypress' ),
+		date( 'F j, Y', strtotime( $members_template->member->date_modified ) )
+	);
+}
