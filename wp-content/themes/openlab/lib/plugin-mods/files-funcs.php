@@ -466,6 +466,7 @@ add_action(
 				$document->description 	= $_POST['bp_group_documents_link_description'];
 
 				if( $document->save( false ) ) {
+					openlab_update_external_link_category( $document );
 					do_action( 'bp_group_documents_edit_success', $document );
 					bp_core_add_message( __('External link successfully edited', 'bp-group-documents') );
 				}
@@ -518,7 +519,7 @@ add_action(
  */
 function openlab_update_external_link_category( $document ) {
 	//update categories from checkbox list
-	if ( isset( $_POST['bp_group_documents_categories'] ) )
+	if ( isset( $_POST['bp_group_documents_link_categories'] ) )
 		$category_ids = apply_filters( 'bp_group_documents_category_ids_in', $_POST['bp_group_documents_link_categories'] );
 
 	if ( isset( $category_ids ) )
