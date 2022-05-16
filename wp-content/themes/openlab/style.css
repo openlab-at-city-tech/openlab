@@ -10072,6 +10072,9 @@ body.membership-requests .group-list {
 #bp-group-documents .group-documents-title {
   font-weight: 600;
 }
+#bp-group-documents .group-documents-icon {
+  text-decoration: none;
+}
 #bp-group-documents .show-all-files {
   margin-top: 0.5em;
 }
@@ -10131,6 +10134,15 @@ body.membership-requests .group-list {
 #bp-group-documents .group-file-folder-nav .current-category a {
   font-weight: bold;
   text-decoration: none;
+}
+.bp-group-documents-fields .bp-group-documents-fields-for-file-type {
+  margin: 15px;
+}
+.bp-group-documents-fields.show-link #bp-group-documents-fields-for-file-type-upload {
+  display: none;
+}
+.bp-group-documents-fields.show-upload #bp-group-documents-fields-for-file-type-link {
+  display: none;
 }
 /* BuddyPress Docs toggleable panels */
 .toggleable .plus-or-minus {
