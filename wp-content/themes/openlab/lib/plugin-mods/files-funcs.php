@@ -196,7 +196,11 @@ function openlab_bp_group_documents_display_content() {
 
 							<?php
 							if ( get_option( 'bp_group_documents_display_icons' ) ) {
-								$document->icon();
+								if( $document->doc_type === 'upload' ) {
+									$document->icon();
+								} else {
+									openlab_external_link_icon( $document->file );
+								}
 							}
 							?>
 
@@ -713,9 +717,51 @@ function openlab_group_documents_activity_notification_control( $send_it, $activ
 add_action( 'bp_ass_send_activity_notification_for_user', 'openlab_group_documents_activity_notification_control', 100, 4 );
 add_action( 'bp_ges_add_to_digest_queue_for_user', 'openlab_group_documents_activity_notification_control', 100, 4 );
 
-/**
- * 
- */
+
 function openlab_get_document_type( $file_name ) {
 	return filter_var( $file_name, FILTER_VALIDATE_URL ) ? 'link' : 'upload';
+}
+
+/**
+ * Render external link icon
+ * 
+ */
+function openlab_external_link_icon( $url ) {
+	$url = parse_url( $url );
+
+	if( ! isset( $url['host'] ) ) {
+		return;
+	}
+	?>
+	<a role="presentation" class="group-documents-icon" href="<?php echo $file_name; ?>" target="_blank">
+		<img class="bp-group-documents-icon" src="<?php echo get_template_directory_uri(); ?>/images/doc-icons/<?php echo openlab_get_service_from_url( $url['host'] ); ?>.png" alt="">
+		<span class="sr-only">View document</span>
+	</a>
+	<?php
+}
+
+/**
+ * Get service name from host
+ * 
+ */
+function openlab_get_service_from_url( $host ) {
+	switch( $host ) {
+		case 'dropbox.com':
+			return 'dropbox';
+			break;
+		case 'docs.google.com':
+		case 'drive.google.com':
+			return 'drive';
+			break;
+		case 'zoom.com':
+		case 'zoom.us':
+			return 'zoom';
+			break;
+		case '1drv.ms':
+		case 'onedrive.live.com':
+			return 'onedrive';
+			break;
+		default;
+			return 'external';
+	}
 }

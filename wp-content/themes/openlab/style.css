@@ -10060,6 +10060,9 @@ body.membership-requests .group-list {
 #bp-group-documents .group-documents-title {
   font-weight: 600;
 }
+#bp-group-documents .group-documents-icon {
+  text-decoration: none;
+}
 #bp-group-documents .show-all-files {
   margin-top: 0.5em;
 }
