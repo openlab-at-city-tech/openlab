@@ -838,6 +838,7 @@ function openlab_filter_subnav_nav_group_documents($subnav_item) {
     }
 
 	$subnav_item = str_replace( 'Documents', 'File Library', $subnav_item );
+	$subnav_item = str_replace( 'Files', 'File Library', $subnav_item );
 
     return $subnav_item;
 }
