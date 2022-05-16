@@ -173,6 +173,9 @@ function openlab_bp_group_documents_display_content() {
 						$document = new BP_Group_Documents( $document_params['id'], $document_params );
 						$count++;
 						$alt_class = ( $count % 2 ) ? 'alt' : '';
+
+						$document->doc_type = openlab_get_document_type( $document->file );
+						$document->doc_url = ( $document->doc_type === 'upload' ) ? $document->get_url() : $document->file;
 						?>
 
 						<li class="list-group-item <?php echo esc_attr( $alt_class ); ?>">
@@ -193,10 +196,11 @@ function openlab_bp_group_documents_display_content() {
 
 							<?php
 							if ( get_option( 'bp_group_documents_display_icons' ) ) {
-								$document->icon();}
+								$document->icon();
+							}
 							?>
 
-							<a class="group-documents-title" id="group-document-link-<?php echo esc_attr( $document->id ); ?>" href="<?php $document->url(); ?>" target="_blank"><?php echo esc_html( stripslashes( $document->name ) ); ?>
+							<a class="group-documents-title" id="group-document-link-<?php echo esc_attr( $document->id ); ?>" href="<?php echo $document->doc_url; ?>" target="_blank"><?php echo esc_html( stripslashes( $document->name ) ); ?>
 
 								<?php
 								if ( get_option( 'bp_group_documents_display_file_size' ) ) {
@@ -205,7 +209,11 @@ function openlab_bp_group_documents_display_content() {
 								?>
 								</a> &nbsp;
 
+							<?php if( $document->doc_type === 'upload' ) { ?>
 							<span class="group-documents-meta"><?php printf( esc_html__( 'Uploaded by %1$s on %2$s', 'bp-group-documents' ), bp_core_get_userlink( $document->user_id ), esc_html( date( get_option( 'date_format' ), $document->created_ts ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
+							<?php } else { ?>
+								<span class="group-documents-meta"><?php printf( esc_html__( 'Added by %1$s on %2$s', 'openlab' ), bp_core_get_userlink( $document->user_id ), esc_html( date( get_option( 'date_format' ), $document->created_ts ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
+							<?php } ?>
 
 							<?php
 							if ( BP_GROUP_DOCUMENTS_SHOW_DESCRIPTIONS && $document->description ) {
