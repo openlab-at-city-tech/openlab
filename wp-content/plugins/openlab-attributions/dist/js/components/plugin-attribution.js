@@ -6,8 +6,8 @@ export default function PluginAttribution() {
 			is licensed under{ ' ' }
 			<a href="https://creativecommons.org/licenses/by-nc-sa/3.0">
 				CC BY-NC-SA
-			</a>{ ' ' }
-			/ A derivative from{ ' ' }
+			</a>{ '. ' }
+			A derivative from{ ' ' }
 			<a href="https://www.openwa.org/attrib-builder">original work</a> by{ ' ' }
 			<a href="https://www.openwa.org">Open Washington</a>.
 		</div>

@@ -134,7 +134,7 @@ export function formatAttribution( data ) {
 	let attribution = parts.join( '. ' );
 
 	if ( data.adaptedTitle || data.derivative ) {
-		const separator = parts.length > 0 ? ' / ' : '';
+		const separator = parts.length > 0 ? '. ' : '';
 		attribution += `${ separator }${ formatAdaptedFrom( data ) }`;
 	}
 
