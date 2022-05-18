@@ -1,5 +1,36 @@
 'use strict';
 (function($) {
+
+    const Embed = Quill.import('blots/embed');
+
+    class MentionBlot extends Embed {
+        static create(data) {
+            const node = super.create(data.value);
+            node.setAttribute('data-value', data.value);
+    
+            const denotationChar = document.createElement('span');
+            denotationChar.className = 'ql-mention-denotation-char';
+            denotationChar.innerHTML = data.denotationChar;
+            node.appendChild(denotationChar);
+    
+            node.innerHTML += data.value;
+            return node;
+        }
+    
+        static value(domNode) {
+            return domNode.getAttribute('data-value');
+        }
+      
+        deleteAt() {
+            return false;
+        }
+    }
+
+    MentionBlot.blotName = 'Mention';
+    MentionBlot.tagName = 'span';
+    MentionBlot.className = 'mention';
+
+    Quill.register(MentionBlot, true);
     
     $(document).ready( function() {
         /**
@@ -74,6 +105,61 @@
             }
         });
 
+        /**
+         * Prepend at-mention tag when replying to a private comment.
+         */
+        $( document ).on( 'touchstart click', '.comment-reply-link', function() {
+            var privateCheckbox = $( '#ol-private-comment' );
+            let username = getCommentUsernameByClass( $(this).closest('.comment.byuser').attr('class') );
+
+            setTimeout( function() {
+                if( privateCheckbox.prop( 'checked') ) {
+                    quillEditor.insertEmbed(
+                        0,
+                        'Mention',
+                        {
+                            denotationChar: '@',
+                            index: 0,
+                            id: 'id',
+                            value: username + ' ',
+                        },
+                        'api',
+                    );
+                    quillEditor.setSelection(6);
+                }
+            }, 100)
+        });
+
+        /**
+         * Empty editor's content on canceling the comment reply or
+         * clicking the reply link again.
+         */
+        $( document ).on( 'touchstart click', '#cancel-comment-reply-link, .comment-reply-link', function() {
+            quillEditor.setText('');
+        });
+
     } );
+
+    /**
+     * Extract parent comment username from the comment classes.
+     * A bit hacky workaround to get the username.
+     * 
+     * @param {String} classes 
+     * @returns 
+     */
+    function getCommentUsernameByClass( classes ) {
+        let arr = classes.split(' ');
+        let classIndex = 0;
+
+        $.each( arr, function( index, value ) {
+            if( value.indexOf('comment-author-' ) >= 0 ) {
+                classIndex = index;
+                return false;
+            }
+        } );
+
+        let commentAuthorClass = arr[classIndex];
+        return commentAuthorClass.replace('comment-author-', '' );
+    }
 
 })(jQuery);

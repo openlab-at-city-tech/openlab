@@ -55,6 +55,10 @@
   .ql-editor ul {
     margin: 0 0 20px !important;
   }
+  .ql-editor span.mention {
+    color: #21759b;
+    font-weight: 700;
+  }
   .ql-editor > * {
     cursor: text;
   }
