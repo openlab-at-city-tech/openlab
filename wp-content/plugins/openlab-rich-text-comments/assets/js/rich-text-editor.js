@@ -110,7 +110,7 @@
          */
         $( document ).on( 'touchstart click', '.comment-reply-link', function() {
             var privateCheckbox = $( '#ol-private-comment' );
-            let username = getCommentUsernameByClass( $(this).closest('.comment.byuser').attr('class') );
+            let username = $(this).attr('data-username');
 
             setTimeout( function() {
                 if( privateCheckbox.prop( 'checked') ) {
@@ -125,7 +125,7 @@
                         },
                         'api',
                     );
-                    quillEditor.setSelection(6);
+                    quillEditor.setSelection(username.length);
                 }
             }, 100)
         });
@@ -139,27 +139,5 @@
         });
 
     } );
-
-    /**
-     * Extract parent comment username from the comment classes.
-     * A bit hacky workaround to get the username.
-     * 
-     * @param {String} classes 
-     * @returns 
-     */
-    function getCommentUsernameByClass( classes ) {
-        let arr = classes.split(' ');
-        let classIndex = 0;
-
-        $.each( arr, function( index, value ) {
-            if( value.indexOf('comment-author-' ) >= 0 ) {
-                classIndex = index;
-                return false;
-            }
-        } );
-
-        let commentAuthorClass = arr[classIndex];
-        return commentAuthorClass.replace('comment-author-', '' );
-    }
 
 })(jQuery);

@@ -113,3 +113,20 @@ function kses_filter_comment( $content ) {
 	return wp_kses( $content, $allowedTags );
 }
 add_filter( 'pre_comment_content', __NAMESPACE__ . '\\kses_filter_comment' );
+
+/**
+ * Add username data attribute to the reply link in the comments.
+ * 
+ */
+function add_username_attr_to_reply_link( $link, $args, $comment ) {
+	$wp_comment = get_comment( $comment->commentID );
+	$user_id = $wp_comment->user_id;
+
+	if( $wp_comment->user_id != 0 ) {
+		$user = get_userdata( $wp_comment->user_id );
+		return str_replace( '<a ', '<a data-username="' . $user->user_login .'" ', $link );
+	}
+
+	return $link;
+}
+add_filter( 'comment_reply_link', __NAMESPACE__ . '\\add_username_attr_to_reply_link', 10, 3 );
