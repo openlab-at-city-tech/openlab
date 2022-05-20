@@ -21,8 +21,6 @@
 
 		<?php bbp_topic_tag_list(); ?>
 
-		<?php bbp_single_topic_description(); ?>
-
 		<?php if ( bbp_show_lead_topic() ) : ?>
 
 			<?php bbp_get_template_part( 'content', 'single-topic-lead' ); ?>
