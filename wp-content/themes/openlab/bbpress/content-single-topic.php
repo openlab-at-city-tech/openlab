@@ -65,46 +65,9 @@
 
 		<?php endif; ?>
 
-		<?php /* Prev/next - this is not beautiful */ ?>
-		<?php
-		$group_topics = new WP_Query(
-			array(
-				'post_type'              => bbp_get_topic_post_type(),
-				'post_parent'            => bbp_get_forum_id(),
-				'meta_key'               => '_bbp_last_active_time',
-				'orderby'                => 'meta_value',
-				'order'                  => 'DESC',
-				'posts_per_page'         => -1,
-				'update_post_meta_cache' => false,
-				'update_post_term_cache' => false,
-				'fields'                 => 'ids',
-			)
-		);
-
-		$this_topic_index = array_search( bbp_get_topic_id(), $group_topics->posts );
-		$last_topic_index = end( $group_topics->posts );
-
-		$prev_url = $next_url = $prev_link = $next_link = '';
-
-		// Previous is +1.
-		if ( $this_topic_index < $last_topic_index && isset( $group_topics->posts[ $this_topic_index + 1 ] ) ) {
-			$prev_topic_id = $group_topics->posts[ $this_topic_index + 1 ];
-			$prev_url      = get_permalink( $prev_topic_id );
-			$prev_link     = '<a class="btn btn-primary link-btn" href="' . $prev_url . '"><span class="fa fa-chevron-circle-left"></span> Previous Topic</a>';
-		}
-
-		// Next is -1.
-		if ( $this_topic_index > 0 ) {
-			$next_topic_id = $group_topics->posts[ $this_topic_index - 1 ];
-			$next_url      = get_permalink( $next_topic_id );
-			$next_link     = '<a class="btn btn-primary link-btn"  href="' . $next_url . '">Next Topic <span class="fa fa-chevron-circle-right"></span></a>';
-		}
-		?>
-
-		<div class="bbp-prev-next">
-			<p>
-				<?php echo implode( '&nbsp;&nbsp;&nbsp;', array( $prev_link, $next_link ) ); ?>
-			</p>
+		<div class="bbp-back-to-course-discussion">
+			<?php /* Trick: use the buddypress string so it gets translated */ ?>
+			<p><a class="btn btn-primary link-btn" href="<?php bp_group_permalink(); ?>forum/"><span class="fa fa-chevron-circle-left"></span> <?php _e( 'Group Forum', 'buddypress' ); ?></a></p>
 		</div>
 
 		<?php bbp_get_template_part( 'form', 'reply' ); ?>
