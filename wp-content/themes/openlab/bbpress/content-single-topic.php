@@ -56,11 +56,6 @@
 
 		<?php if ( bbp_has_replies() ) : ?>
 
-			<div class="bbp-back-to-course-discussion">
-				<?php /* Trick: use the buddypress string so it gets translated */ ?>
-				<p><a class="btn btn-primary link-btn" href="<?php bp_group_permalink(); ?>forum/"><span class="fa fa-chevron-circle-left"></span> <?php _e( 'Group Forum', 'buddypress' ); ?></a></p>
-			</div>
-
 			<div class="panel panel-default">
 
 				<?php bbp_get_template_part( 'loop', 'replies' ); ?>
