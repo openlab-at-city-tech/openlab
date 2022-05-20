@@ -13,11 +13,6 @@ defined( 'ABSPATH' ) || exit;
 ?>
 
 <div class="bbp-topic-header">
-	<div class="bbp-meta">
-		<span class="bbp-topic-post-date"><?php bbp_topic_post_date( bbp_get_topic_id() ); ?></span>
-		<a href="<?php bbp_topic_permalink(); ?>" class="bbp-topic-permalink">#<?php bbp_topic_id(); ?></a>
-	</div><!-- .bbp-meta -->
-
 	<div class="bbp-topic-title">
 
 		<?php do_action( 'bbp_theme_before_topic_title' ); ?>
@@ -29,6 +24,10 @@ defined( 'ABSPATH' ) || exit;
 
 	</div><!-- .bbp-topic-title -->
 
+	<div class="bbp-meta">
+		<span class="bbp-topic-post-date"><?php bbp_topic_post_date( bbp_get_topic_id() ); ?></span>
+		<a href="<?php bbp_topic_permalink(); ?>" class="bbp-topic-permalink">#<?php bbp_topic_id(); ?></a>
+	</div><!-- .bbp-meta -->
 </div><!-- .bbp-topic-header -->
 
 <div id="post-<?php bbp_topic_id(); ?>" <?php bbp_topic_class(); ?>>
