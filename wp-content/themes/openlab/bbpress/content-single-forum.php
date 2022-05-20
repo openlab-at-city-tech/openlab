@@ -16,8 +16,6 @@ defined( 'ABSPATH' ) || exit;
 
 	<?php bbp_breadcrumb(); ?>
 
-	<?php bbp_forum_subscription_link(); ?>
-
 	<?php do_action( 'bbp_template_before_single_forum' ); ?>
 
 	<?php if ( post_password_required() ) : ?>
