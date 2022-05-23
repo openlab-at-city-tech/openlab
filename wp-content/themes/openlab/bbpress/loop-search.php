@@ -24,18 +24,6 @@ do_action( 'bbp_template_before_search_results_loop' ); ?>
 
 	</li><!-- .bbp-body -->
 
-	<li class="bbp-footer">
-
-		<div class="bbp-search-author"><?php esc_html_e( 'Author',  'bbpress' ); ?></div>
-
-		<div class="bbp-search-content">
-
-			<?php esc_html_e( 'Search Results', 'bbpress' ); ?>
-
-		</div><!-- .bbp-search-content -->
-
-	</li><!-- .bbp-footer -->
-
 </ul><!-- #bbp-search-results -->
 
 <?php do_action( 'bbp_template_after_search_results_loop' );
