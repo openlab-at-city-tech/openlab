@@ -225,3 +225,14 @@
     height: calc(100% - 60px - 172px);
   }
 }
+
+#adaptedFromHeading {
+  margin-top: 0;
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  line-height: 1;
+}
+#adaptedFromHeading:hover {
+  cursor: pointer;
+}

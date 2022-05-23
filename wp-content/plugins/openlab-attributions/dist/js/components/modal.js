@@ -38,6 +38,7 @@ class AttributionModal extends Component {
 			adaptedLicense: '',
 			content: '',
 			...props.item,
+			isAdaptedFromDisplayed: false
 		};
 	}
 
@@ -72,6 +73,14 @@ class AttributionModal extends Component {
 			editedContent: false,
 			content: '',
 		} );
+	}
+
+	toggleAdaptedFrom() {
+		const adaptedFromEl = document.getElementById('adaptedFrom');
+		adaptedFromEl.classList.toggle('hidden');
+		this.setState( {
+			isAdaptedFromDisplayed: ! adaptedFromEl.classList.contains('hidden')
+		});
 	}
 
 	render() {
@@ -118,7 +127,7 @@ class AttributionModal extends Component {
 			modalType === 'add' ? 'Add Attribution' : 'Update Attribution';
 
 		const isEdited = this.state.editedContent || this.state.content;
-		const preview = formatAttribution( { ...this.state } );
+		const preview = formatAttribution( { ...this.state } )
 
 		return (
 			<ReactModal
@@ -151,7 +160,7 @@ class AttributionModal extends Component {
 				<div className={ 'body body-' + modalType }>
 					<form onSubmit={ this.handleSubmit }>
 						<div className="form-row">
-							<div className="col mb15">
+							<div className="col">
 								<p><strong>Work</strong></p>
 								<TextControl
 									label="Title"
@@ -250,20 +259,18 @@ class AttributionModal extends Component {
 							</div>
 						</div>
 						<div className="form-row">
-							<div className="col adapted-from mb15">
-								<p>
+							<div class="col">
+								<p id="adaptedFromHeading"
+									onClick={ () => this.toggleAdaptedFrom() }>
+									{ this.state.isAdaptedFromDisplayed
+										? <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false"><path d="M7 11.5h10V13H7z"></path></svg>
+										: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false"><path d="M18 11.2h-5.2V6h-1.6v5.2H6v1.6h5.2V18h1.6v-5.2H18z"></path></svg>
+									}
 									<strong>Adapted From</strong>
 									<Help text={ help.derivative } />
 								</p>
-								<TextControl
-									label="URL"
-									id="derivative"
-									name="derivative"
-									value={ this.state.derivative }
-									onChange={ this.handleChange }
-									placeholder="URL of original work"
-									isInline
-								/>
+							</div>
+							<div id="adaptedFrom" className="col hidden adapted-from mb15">
 								<TextControl
 									label="Title"
 									id="adaptedTitle"
@@ -272,6 +279,15 @@ class AttributionModal extends Component {
 									onChange={ this.handleChange }
 									placeholder="Item Title"
 									required={ !! this.state.derivative }
+									isInline
+								/>
+								<TextControl
+									label="URL"
+									id="derivative"
+									name="derivative"
+									value={ this.state.derivative }
+									onChange={ this.handleChange }
+									placeholder="URL of original work"
 									isInline
 								/>
 								<TextControl
@@ -298,7 +314,6 @@ class AttributionModal extends Component {
 								/>
 							</div>
 						</div>
-
 						<span className="attribution-preview__title">
 							Attribution Preview
 						</span>
