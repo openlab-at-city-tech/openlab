@@ -14,6 +14,7 @@ import SelectControl from './select-control';
 import PluginAttribution from './plugin-attribution';
 import { formatAttribution } from '../utils/format';
 import help from '../utils/help';
+import Help from './help';
 
 /**
  * React depdendencies
@@ -122,7 +123,7 @@ class AttributionModal extends Component {
 		return (
 			<ReactModal
 				initWidth={ 600 }
-				initHeight={ 460 }
+				initHeight={ 660 }
 				left="50%"
 				minWidth={ 340 }
 				minHeight={ 460 }
@@ -151,7 +152,7 @@ class AttributionModal extends Component {
 					<form onSubmit={ this.handleSubmit }>
 						<div className="form-row">
 							<div className="col mb15">
-								<p><strong>Title</strong></p>
+								<p><strong>Work</strong></p>
 								<TextControl
 									label="Title"
 									id="title"
@@ -171,23 +172,6 @@ class AttributionModal extends Component {
 									placeholder="URL of the item"
 									isInline
 								/>
-							</div>
-							<div className="col">
-								<p><strong>License</strong></p>
-								<SelectControl
-									label="License"
-									id="license"
-									name="license"
-									value={ this.state.license }
-									help={ help.license }
-									options={ licenses }
-									onChange={ this.handleChange }
-								/>
-							</div>
-						</div>
-						<div className="form-row">
-							<div className="col mb15">
-								<p><strong>Author</strong></p>
 								<TextControl
 									label="Author Name"
 									id="authorName"
@@ -199,7 +183,7 @@ class AttributionModal extends Component {
 									required={ !! this.state.authorUrl }
 								/>
 								<TextControl
-									label="URL"
+									label="Author URL"
 									id="authorUrl"
 									name="authorUrl"
 									value={ this.state.authorUrl }
@@ -207,17 +191,78 @@ class AttributionModal extends Component {
 									placeholder="URL of the author"
 									isInline
 								/>
+								<SelectControl
+									label="License"
+									id="license"
+									name="license"
+									value={ this.state.license }
+									help={ help.license }
+									options={ licenses }
+									onChange={ this.handleChange }
+								/>
+								<TextControl
+									label="Organization / Publisher"
+									id="publisher"
+									name="publisher"
+									value={ this.state.publisher }
+									help={ help.publisher }
+									onChange={ this.handleChange }
+									placeholder="Name of organization or publisher"
+									required={ !! this.state.publisherUrl }
+								/>
+								<TextControl
+									label="Organization/Publisher URL"
+									id="publisherUrl"
+									name="publisherUrl"
+									value={ this.state.publisherUrl }
+									onChange={ this.handleChange }
+									placeholder="URL of the organization or publisher"
+									isInline
+								/>
+								<TextControl
+									label="Project Name"
+									id="project"
+									name="project"
+									value={ this.state.project }
+									help={ help.project }
+									onChange={ this.handleChange }
+									placeholder="Name of project"
+									required={ !! this.state.projectUrl }
+								/>
+								<TextControl
+									label="Project URL"
+									id="projectUrl"
+									name="projectUrl"
+									value={ this.state.projectUrl }
+									onChange={ this.handleChange }
+									placeholder="URL of the project"
+									isInline
+								/>
+								<TextControl
+									label="Date Published"
+									id="datePublished"
+									name="datePublished"
+									value={ this.state.datePublished }
+									help={ help.datePublished }
+									onChange={ this.handleChange }
+									placeholder="Date item was published"
+								/>
 							</div>
+						</div>
+						<div className="form-row">
 							<div className="col adapted-from mb15">
-								<p><strong>Adapted Form</strong></p>
+								<p>
+									<strong>Adapted From</strong>
+									<Help text={ help.derivative } />
+								</p>
 								<TextControl
 									label="URL"
 									id="derivative"
 									name="derivative"
 									value={ this.state.derivative }
-									help={ help.derivative }
 									onChange={ this.handleChange }
 									placeholder="URL of original work"
+									isInline
 								/>
 								<TextControl
 									label="Title"
@@ -250,68 +295,6 @@ class AttributionModal extends Component {
 										this.state.adaptedTitle
 									}
 									isInline
-								/>
-							</div>
-						</div>
-						<div className="form-row">
-							<div className="col">
-								<p><strong>Organization / Publisher</strong></p>
-								<TextControl
-									label="Organization / Publisher"
-									id="publisher"
-									name="publisher"
-									value={ this.state.publisher }
-									help={ help.publisher }
-									onChange={ this.handleChange }
-									placeholder="Name of organization or publisher"
-									required={ !! this.state.publisherUrl }
-								/>
-								<TextControl
-									label="URL"
-									id="publisherUrl"
-									name="publisherUrl"
-									value={ this.state.publisherUrl }
-									onChange={ this.handleChange }
-									placeholder="URL of the organization or publisher"
-									isInline
-								/>
-							</div>
-						</div>
-						<div className="form-row">
-							<div className="col">
-								<p><strong>Project</strong></p>
-								<TextControl
-									label="Project Name"
-									id="project"
-									name="project"
-									value={ this.state.project }
-									help={ help.project }
-									onChange={ this.handleChange }
-									placeholder="Name of project"
-									required={ !! this.state.projectUrl }
-								/>
-								<TextControl
-									label="URL"
-									id="projectUrl"
-									name="projectUrl"
-									value={ this.state.projectUrl }
-									onChange={ this.handleChange }
-									placeholder="URL of the project"
-									isInline
-								/>
-							</div>
-						</div>
-						<div className="form-row">
-							<div className="col">
-								<p><strong>Date</strong></p>
-								<TextControl
-									label="Date Published"
-									id="datePublished"
-									name="datePublished"
-									value={ this.state.datePublished }
-									help={ help.datePublished }
-									onChange={ this.handleChange }
-									placeholder="Date item was published"
 								/>
 							</div>
 						</div>
