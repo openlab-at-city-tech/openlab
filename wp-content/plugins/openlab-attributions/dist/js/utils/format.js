@@ -42,11 +42,11 @@ function formatLicense( value ) {
 			break;
 
 		case 'u':
-			text = 'License unknown.';
+			text = 'License unknown';
 			break;
 
 		default:
-			text = `Licensed under ${ format( license.label, license.url ) }.`;
+			text = `Licensed under ${ format( license.label, license.url ) }`;
 			break;
 	}
 
