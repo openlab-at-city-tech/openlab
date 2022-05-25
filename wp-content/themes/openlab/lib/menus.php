@@ -811,7 +811,9 @@ function openlab_filter_subnav_docs($subnav_item) {
 			'<span class="mol-count pull-right count-' . esc_attr( $total_doc_count ) . ' gray">' . esc_html( $total_doc_count ) . '</span></a></li>',
 			$subnav_item
 		);
-    }
+    } else {
+		$new_item = $subnav_item;
+	}
 
     //update "current" class to "current-menu-item" to unify site identification of current menu page
     $new_item = str_replace( "current selected", "current-menu-item", $new_item );
