@@ -244,7 +244,7 @@
 	.body {
 		padding: 32px;
 		background-color: #fff;
-		height: 336px;
+		height: 536px;
 		overflow-y: auto;
 		overflow-x: hidden;
 
@@ -253,11 +253,23 @@
 		}
 
 		&-add {
-			height: 400px;
+			height: 600px;
 
 			@media(max-width: 991px) {
 				height: calc(100% - 60px - 172px);
 			}
 		}
+	}
+}
+
+#adaptedFromHeading {
+	margin-top: 0;
+	display: flex;
+	flex-flow: row wrap;
+	align-items: center;
+	line-height: 1;
+	
+	&:hover {
+		cursor: pointer;
 	}
 }
