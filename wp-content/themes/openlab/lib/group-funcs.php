@@ -2073,3 +2073,15 @@ function openlab_group_type_disabled_filters() {
 
 	return $disabled;
 }
+
+/**
+ * Change the default group extension to 'home'.
+ *
+ * This allows us to use 'activity' as a proper nav item.
+ */
+add_filter(
+	'bp_groups_default_extension',
+	function() {
+		return 'home';
+	}
+);
