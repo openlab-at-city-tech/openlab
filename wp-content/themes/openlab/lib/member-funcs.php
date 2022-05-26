@@ -1514,3 +1514,12 @@ function openlab_member_joined_since() {
 		date( 'F j, Y', strtotime( $members_template->member->date_modified ) )
 	);
 }
+
+/**
+ * Update user's list of private group membership.
+ * 
+ */
+add_action( 'wp_ajax_openlab_update_member_group_privacy', 'openlab_update_member_group_privacy' );
+function openlab_update_member_group_privacy() {
+	// TODO
+}

@@ -29,6 +29,16 @@
                                                 <a class="no-deco truncate-on-the-fly hyphenate" href="<?php bp_member_permalink() ?>" data-basevalue="28" data-minvalue="20" data-basewidth="152"><?php bp_member_name(); ?></a><span class="original-copy hidden"><?php bp_member_name(); ?></span>
                                             </p>
 				<span class="activity"><?php openlab_member_joined_since() ?></span>
+				
+				<?php 
+				// Show "Hide my membership" checkbox for the current user
+				if( bp_get_member_user_id() === bp_loggedin_user_id() ) { ?>
+				<div class="group-item-membership-privacy">
+					<label>
+						<input type="checkbox" name="membership_privacy" id="membership_privacy" data-group_id="<?php echo bp_get_current_group_id(); ?>" value="<?php echo bp_loggedin_user_id(); ?>" /> Hide my membership
+					</label>
+				</div>
+				<?php } ?>
 
 				<?php do_action( 'bp_group_members_list_item' ) ?>
 

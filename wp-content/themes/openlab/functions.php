@@ -119,6 +119,13 @@ function openlab_load_scripts() {
     }
 
     wp_enqueue_script( 'openlab-group-documents', $stylesheet_dir_uri . '/js/group-documents.js', [ 'jquery' ] );
+
+    if( bp_is_group() ) {
+        wp_enqueue_script( 'openlab-group-membership', $stylesheet_dir_uri . '/js/membership-privacy.js', [ 'jquery' ] );
+        wp_localize_script( 'openlab-group-membership', 'membershipVars', array(
+            'ajax_url'  => admin_url( 'admin-ajax.php' )
+        ) );
+    }
 }
 
 add_action('wp_enqueue_scripts', 'openlab_load_scripts');
