@@ -962,13 +962,15 @@ function openlab_group_submenu_nav() {
         return;
     }
 
-    $positions = array(
-        'home' => 10,
-        'admin' => 11,
-        'nav-forum' => 25,
-        'members' => 35,
-        'files' => 60,
-    );
+	$positions = array(
+		'home'      => 10,
+		'nav-forum' => 25,
+		'docs'      => 60,
+		'files'     => 70,
+		'events'    => 80,
+		'members'   => 90,
+		'admin'     => 100,
+	);
 
     foreach ($positions as $slug => $position) {
         buddypress()->groups->nav->edit_nav(array(
