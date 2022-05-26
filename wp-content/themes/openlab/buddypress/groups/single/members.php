@@ -31,11 +31,14 @@
 				<span class="activity"><?php openlab_member_joined_since() ?></span>
 				
 				<?php 
-				// Show "Hide my membership" checkbox for the current user
+				// Check if current user's membership is private for this group.
+				$isPrivate = openlab_is_my_membership_private( bp_get_current_group_id() );
+
+				// Show "Hide my membership" checkbox for the logged in user only
 				if( bp_get_member_user_id() === bp_loggedin_user_id() ) { ?>
 				<div class="group-item-membership-privacy">
 					<label>
-						<input type="checkbox" name="membership_privacy" id="membership_privacy" data-group_id="<?php echo bp_get_current_group_id(); ?>" value="<?php echo bp_loggedin_user_id(); ?>" /> Hide my membership
+						<input type="checkbox" name="membership_privacy" id="membership_privacy" data-group_id="<?php echo bp_get_current_group_id(); ?>" value="<?php echo bp_loggedin_user_id(); ?>" <?php echo ( $isPrivate ) ? 'checked' : ''; ?> /> Hide my membership
 					</label>
 				</div>
 				<?php } ?>

@@ -23,11 +23,8 @@
                     // Disable checkbox 
                     $('input#membership_privacy').attr('disabled', true );
                 },
-                success: function( response ) {
-                    console.log( response );
-                    $('input#membership_privacy').attr('disabled', false );
-                },
                 complete: function() {
+                    // Enable checkbox
                     $('input#membership_privacy').attr('disabled', false );
                 }
             });

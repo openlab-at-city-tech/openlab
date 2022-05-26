@@ -1516,10 +1516,100 @@ function openlab_member_joined_since() {
 }
 
 /**
- * Update user's list of private group membership.
- * 
+ * Update private membership table with the user's
+ * group privacy data.
  */
 add_action( 'wp_ajax_openlab_update_member_group_privacy', 'openlab_update_member_group_privacy' );
 function openlab_update_member_group_privacy() {
-	// TODO
+	global $wpdb;
+
+	// Get private membership table
+	$table_name = $wpdb->prefix . 'private_membership';
+
+	// Get current user id
+	$user_id = bp_loggedin_user_id();
+
+	// Check if group id is provded in the request
+	if( ! isset( $_POST['group_id'] ) ) {
+		echo json_encode( array(
+			'success'	=> false,
+			'message'	=> 'Group ID is missing.'
+		) );
+		die();
+	}
+
+	$group_id = $_POST['group_id'];
+	$is_private = ( $_POST['is_private'] ) ? filter_var($_POST['is_private'], FILTER_VALIDATE_BOOLEAN) : false;
+
+	if( $is_private ) {
+		if( $wpdb->insert( $table_name, array( 'user_id' => $user_id, 'group_id' => $group_id ) ) ) {
+			echo json_encode( array(
+				'success'	=> true,
+				'message'	=> 'User membership is set to private'
+			) );
+			die();
+		}
+	} else {
+		if( $wpdb->delete( $table_name, array( 'user_id' => $user_id, 'group_id' => $group_id ) ) ) {
+			echo json_encode( array(
+				'success'	=> true,
+				'message'	=> 'User membership is set to public.'
+			) );
+			die();
+		}
+	}
+
+	echo json_encode( array(
+		'success'	=> false,
+		'message'	=> 'Something went wrong'
+	) );
+	die();
+}
+
+/**
+ * Check if the membership for the specified group is private
+ * for the logged user.
+ * 
+ */
+function openlab_is_my_membership_private( $group_id ) {
+	// Skip if group id is missing
+	if( empty( $group_id ) ) {
+		return false;
+	}
+
+	global $wpdb;
+
+	// Get private membership table
+	$table_name = $wpdb->prefix . 'private_membership';
+	
+	// Get current user id
+	$user_id = bp_loggedin_user_id();
+
+	// Check if the membership is private based on user id and group id
+	$query = $wpdb->get_results( "SELECT `id` FROM $table_name WHERE `user_id` = $user_id AND `group_id` = $group_id" );
+
+	// If there is a record, return true. Otherwise, return false
+	if( $query ) {
+		return true;
+	}
+
+	return false;
+}
+
+/**
+ * Create table for storing the private membership
+ * TODO: Create WP CLI command for this?
+ */
+function openlab_create_private_membership_table() {
+	global $wpdb;
+	$charset = $wpdb->get_charset_collate();
+
+	$query = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}private_membership` (
+		`id` bigint(20) NOT NULL AUTO_INCREMENT,
+		`user_id` bigint(20) UNSIGNED NOT NULL,
+		`group_id` bigint(20) UNSIGNED NOT NULL,
+		PRIMARY KEY (id)
+	) $charset;";
+
+	$wpdb->query( $query );
 }
