@@ -4240,24 +4240,28 @@ body.single-help {
 
         .fav {
             span {
-                color: #888;
+                color: #333;
             }
 
             &:hover {
                 span {
-                    color: @magenta;
+                    &:before {
+                        content: "\f005";
+                    }
                 }
             }
         }
 
         .unfav {
             span {
-                color: @magenta;
+                color: #333;
             }
 
             &:hover {
                 span {
-                    color: #888;
+                    &:before {
+                        content: "\f006";
+                    }
                 }
             }
         }

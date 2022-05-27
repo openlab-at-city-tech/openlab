@@ -11302,16 +11302,16 @@ body.single-help .entry-content h6 {
   transition: all 350ms ease-in-out;
 }
 .activity-list .activity-header-meta .fav span {
-  color: #888;
+  color: #333;
 }
-.activity-list .activity-header-meta .fav:hover span {
-  color: #ff5959;
+.activity-list .activity-header-meta .fav:hover span:before {
+  content: "\f005";
 }
 .activity-list .activity-header-meta .unfav span {
-  color: #ff5959;
+  color: #333;
 }
-.activity-list .activity-header-meta .unfav:hover span {
-  color: #888;
+.activity-list .activity-header-meta .unfav:hover span:before {
+  content: "\f006";
 }
 .activity-list .activity-body img {
   display: none;

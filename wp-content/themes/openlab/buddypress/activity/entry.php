@@ -35,11 +35,11 @@ $group_avatar_url = bp_get_group_avatar_url( $group, 'medium' );
 						<?php if ( bp_activity_can_favorite() ) : ?>
 							<?php if ( !bp_get_activity_is_favorite() ) : ?>
 								<a href="<?php bp_activity_favorite_link(); ?>" title="Pin activity" class="button fav bp-secondary-action" data-activity_id="<?php echo $activity_id; ?>">
-									<span class="fa fa-thumb-tack"></span>
+									<span class="fa fa-star-o"></span>
 								</a>
 							<?php else : ?>
 								<a href="<?php bp_activity_unfavorite_link(); ?>" title="Unpin activity" class="button unfav bp-secondary-action" data-activity_id="<?php echo $activity_id; ?>">
-									<span class="fa fa-thumb-tack"></span>
+									<span class="fa fa-star"></span>
 								</a>
 							<?php endif; ?>
 						<?php endif; ?>
