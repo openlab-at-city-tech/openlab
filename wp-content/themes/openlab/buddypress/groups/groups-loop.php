@@ -10,6 +10,8 @@ $group_args = array(
 	'type'         => $group_sort,
 );
 
+$user_id = bp_displayed_user_id();
+
 $filters = array();
 if ( bp_is_user_groups() ) {
 	if ( isset( $_GET['type'] ) && in_array( $_GET['type'], openlab_group_types(), true ) ) {
@@ -18,7 +20,7 @@ if ( bp_is_user_groups() ) {
 		$group_type = 'course';
 	}
 
-	$group_args['user_id'] = bp_displayed_user_id();
+	$group_args['user_id'] = $user_id;
 } elseif ( openlab_is_search_results_page() ) {
 	$group_type = openlab_get_current_filter( 'group-types' );
 	if ( ! $group_type ) {
@@ -158,6 +160,13 @@ if ( $ancestor_of ) {
 	);
 }
 
+// Get private groups of the user
+$private_groups = openlab_get_user_private_membership( $user_id );
+
+// Exclude private groups if not current user's profile or don't have moderate access.
+if( ! bp_is_my_profile() && ! current_user_can( 'moderate' ) ) {
+	$group_args['exclude'] = $private_groups;
+}
 ?>
 
 <?php if ( bp_has_groups( $group_args ) ) : ?>
@@ -262,6 +271,10 @@ if ( $ancestor_of ) {
 							<div class="description-line">
 								<p class="truncate-on-the-fly" data-basevalue="105" data-basewidth="250"><?php echo bp_get_group_description_excerpt() ?></p>
 							</div>
+
+							<?php if( current_user_can( 'moderate' ) && in_array( $group_id, $private_groups ) ) { ?>
+							<p class="private-membership-indicator"><span class="fa fa-eye-slash"></span> Membership hidden</p>
+							<?php } ?>
 						</div>
 					</div><!--item-->
 

@@ -626,10 +626,20 @@ function cuny_profile_activty_block( $type, $title, $last, $desc_length = 135 ) 
 			'group_type'    => $type,
 			'get_activity'  => false,
 		);
+
+		// Get private groups of the user
+		$private_groups = openlab_get_user_private_membership( bp_displayed_user_id() );
+		$exclude_groups = '';
+
+		// Exclude private groups if not current user's profile or don't have moderate access.
+		if( ! bp_is_my_profile() && ! current_user_can( 'moderate' ) ) {
+			$exclude_groups = '&exclude=' . implode(',', $private_groups);
+		}
+
 		$groups         = openlab_get_groups_of_user( $get_group_args );
 
 		//echo $ids;
-		if ( ! empty( $groups['group_ids_sql'] ) && bp_has_groups( 'include=' . $groups['group_ids_sql'] . '&per_page=20' ) ) :
+		if ( ! empty( $groups['group_ids_sql'] ) && bp_has_groups( 'include=' . $groups['group_ids_sql'] . '&per_page=20' . $exclude_groups ) ) :
 			//    if ( bp_has_groups( 'include='.$ids.'&per_page=3&max=3' ) ) :
 			?>
 			<div id="<?php echo $type; ?>-activity-stream" class="<?php echo $type; ?>-list activity-list item-list<?php echo $last; ?> col-sm-8 col-xs-12">
@@ -678,6 +688,10 @@ function cuny_profile_activty_block( $type, $title, $last, $desc_length = 135 ) 
 										<p class="truncate-on-the-fly hyphenate" data-link="<?php echo bp_get_group_permalink(); ?>" data-includename="<?php echo bp_get_group_name(); ?>" data-basevalue="65" data-basewidth="143"><?php echo $activity; ?></p>
 										<p class="original-copy hidden"><?php echo $activity; ?></p>
 									</div>
+
+									<?php if( current_user_can( 'moderate' ) && in_array( bp_get_group_id(), $private_groups ) ) { ?>
+									<p class="private-membership-indicator"><span class="fa fa-eye-slash"></span> Membership hidden</p>
+									<?php } ?>
 
 								</div>
 
@@ -1586,7 +1600,7 @@ function openlab_is_my_membership_private( $group_id ) {
 	$user_id = bp_loggedin_user_id();
 
 	// Check if the membership is private based on user id and group id
-	$query = $wpdb->get_results( "SELECT `id` FROM $table_name WHERE `user_id` = $user_id AND `group_id` = $group_id" );
+	$query = $wpdb->get_results( "SELECT * FROM $table_name WHERE `user_id` = $user_id AND `group_id` = $group_id" );
 
 	// If there is a record, return true. Otherwise, return false
 	if( $query ) {
@@ -1594,4 +1608,29 @@ function openlab_is_my_membership_private( $group_id ) {
 	}
 
 	return false;
+}
+
+/**
+ * Get user private membership group
+ *  
+ */
+function openlab_get_user_private_membership( $user_id ) {
+	// Skip if user id is missing
+	if( empty( $user_id ) ) {
+		return;
+	}
+
+	global $wpdb;
+	$table_name = $wpdb->prefix . 'private_membership';
+	$query = $wpdb->get_results( "SELECT `group_id` FROM $table_name WHERE `user_id` = $user_id", OBJECT_K);
+
+	$private_groups = array();
+
+	if( $query ) {
+		foreach( $query as $item ) {
+			$private_groups[] = $item->group_id;
+		}
+	}
+
+	return $private_groups;
 }

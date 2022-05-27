@@ -11380,3 +11380,10 @@ body.single-help .entry-content h6 {
     width: 100%;
   }
 }
+/* Private membership indicator */
+p.private-membership-indicator {
+  margin-top: 15px;
+  font-size: 12px;
+  font-weight: 400;
+  color: #666 !important;
+}
