@@ -1595,21 +1595,3 @@ function openlab_is_my_membership_private( $group_id ) {
 
 	return false;
 }
-
-/**
- * Create table for storing the private membership
- * TODO: Create WP CLI command for this?
- */
-function openlab_create_private_membership_table() {
-	global $wpdb;
-	$charset = $wpdb->get_charset_collate();
-
-	$query = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}private_membership` (
-		`id` bigint(20) NOT NULL AUTO_INCREMENT,
-		`user_id` bigint(20) UNSIGNED NOT NULL,
-		`group_id` bigint(20) UNSIGNED NOT NULL,
-		PRIMARY KEY (id)
-	) $charset;";
-
-	$wpdb->query( $query );
-}
