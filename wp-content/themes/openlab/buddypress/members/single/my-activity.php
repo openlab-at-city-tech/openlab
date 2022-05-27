@@ -16,8 +16,6 @@ $filter_options = [
 	'bbp_topic_creat'		=> __( 'New Discussion Topics', 'openlab' ),
 	'bbp_reply_create'		=> __( 'Discussion Replies', 'openlab' )
 ];
-
-add_filter( 'bp_activity_time_since', 'openlab_change_activity_date_format' );
 ?>
 
 <?php echo openlab_submenu_markup( 'my-activity' ); ?>
@@ -66,4 +64,3 @@ add_filter( 'bp_activity_time_since', 'openlab_change_activity_date_format' );
 		</form>
 	<?php endif; ?>
 </div>
-<?php remove_filter( 'bp_activity_time_since', 'openlab_change_activity_date_format' ); ?>

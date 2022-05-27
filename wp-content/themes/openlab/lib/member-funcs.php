@@ -1443,13 +1443,17 @@ function openlab_get_group_id_by_activity_id( $activity_id ) {
 }
 
 /**
- * Change the date format in the activity text displayed on 
- * the "My Activity" page.
+ * Change the date format of the activity, add "on" before it
+ * and remove the link.
  * 
  */
-function openlab_change_activity_date_format() {
-	$activity_date = bp_get_activity_date_recorded();
-	return date('F n, Y \a\t g:i a', strtotime( $activity_date ) );
+add_filter( 'bp_activity_permalink', 'openlab_modify_activity_date_and_permalink', 10, 2 );
+function openlab_modify_activity_date_and_permalink( $date, $activity ){
+	$action = $activity->action;
+	$date = 'on ' . date('F n, Y \a\t g:i a', strtotime( $activity->date_recorded ) );
+	$content = sprintf( '%1$s %2$s', $action,  $date );
+
+	return $content;
 }
 
 /**
