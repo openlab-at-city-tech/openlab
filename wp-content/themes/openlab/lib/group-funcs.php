@@ -2073,3 +2073,29 @@ function openlab_group_type_disabled_filters() {
 
 	return $disabled;
 }
+
+/**
+ * Get group's private users
+ * 
+ */
+function openlab_get_group_private_users( $group_id ) {
+    // Skip if group id is missing
+    if( empty( $group_id ) ) {
+        return;
+    }
+
+	global $wpdb;
+	$table_name = $wpdb->prefix . 'private_membership';
+    $current_user_id = get_current_user_id();
+	$query = $wpdb->get_results( "SELECT `user_id` FROM $table_name WHERE `group_id` = $group_id AND `user_id` != $current_user_id", OBJECT_K);
+
+	$private_users = array();
+
+	if( $query ) {
+		foreach( $query as $item ) {
+			$private_users[] = $item->user_id;
+		}
+	}
+
+	return $private_users;
+}
