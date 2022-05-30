@@ -47,7 +47,7 @@ $group_avatar_url = bp_get_group_avatar_url( $group, 'medium' );
 					<?php endif; ?>
 				</div>
 				<div class="activity-body">
-					<?php bp_activity_action(); ?>
+					<?php echo openlab_get_user_activity_action(); ?>
 				</div>
 			</div>
 		</div>
