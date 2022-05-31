@@ -10171,8 +10171,11 @@ body.membership-requests .group-list {
   margin-top: 0;
 }
 .docs-info-header p.currently-viewing {
-  font-size: 1.1em;
+  font-size: 0.8em;
   margin-top: 8px;
+}
+.doc-tabs {
+  margin-top: 15px;
 }
 @media (max-width: 767px) {
   .created-date-cell {
@@ -10250,8 +10253,10 @@ body.docs .notify-group-members-ui {
   font-weight: normal;
 }
 .doc-content.edit-doc {
-  border: none;
-  padding: 0;
+  padding: 8px;
+}
+.doc-content.edit-doc .form-panel .panel:first-child {
+  margin-top: 0;
 }
 .doc-content .wp-switch-editor {
   padding: 0 8px;
