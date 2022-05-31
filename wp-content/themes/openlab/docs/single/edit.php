@@ -118,7 +118,7 @@ if ( $current_doc ) {
 								</div>
 							</div>
 
-							<?php if (bp_docs_current_user_can('manage')) : ?>
+							<?php if ( bp_docs_current_user_can( 'manage' ) && apply_filters( 'bp_docs_allow_access_settings', true ) ) : ?>
 								<div id="doc-settings" class="doc-meta-box">
 									<div class="toggleable <?php bp_docs_toggleable_open_or_closed_class( 'parent-meta-box' ) ?>">
 										<p id="settings-toggle-edit" class="toggle-switch">
