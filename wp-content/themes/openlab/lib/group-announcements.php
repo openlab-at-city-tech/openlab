@@ -249,15 +249,12 @@ function openlab_handle_announcement_post_ajax() {
 		wp_send_json_error( 'Could not post announcement' );
 	}
 
-	/*
-	if ( bp_has_activities ( 'include=' . $activity_id ) ) {
-		while ( bp_activities() ) {
-			bp_the_activity();
-			locate_template( array( 'groups/single/announcements/entry.php' ), true );
-		}
-	}
-	*/
+	ob_start();
 
-	exit;
+	bp_get_template_part( 'groups/single/announcements/entry', '', [ 'announcement_id' => $announcement_id ] );
+
+	$contents = ob_get_clean();
+
+	wp_send_json_success( $contents );
 }
 add_action( 'wp_ajax_openlab_post_announcement', 'openlab_handle_announcement_post_ajax' );

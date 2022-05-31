@@ -50,7 +50,28 @@
 			},
 			function(response) {
 				quillEditor.enable( true )
-				console.log(response)
+
+				if ( response.success ) {
+					$( '#no-announcement-message' ).hide()
+					$( '.announcement-list' ).prepend( response.data )
+
+					const $newAnnouncement = $( '.announcement-list > article:first-child' );
+					$newAnnouncement.addClass( 'new-update' );
+					setTimeout(
+						() => {
+							$newAnnouncement.removeClass( 'new-update' );
+						},
+						2000
+					);
+
+					$textarea.val( '' )
+					quillEditor.setText( '' )
+
+					$submitButton.removeClass('loading');
+					$submitButton.prop('disabled', false);
+				} else {
+
+				}
 
 
 			});

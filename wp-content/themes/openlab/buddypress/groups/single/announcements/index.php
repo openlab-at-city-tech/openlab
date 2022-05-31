@@ -35,7 +35,7 @@ $announcements = get_posts(
 
 <?php else: ?>
 
-	<div id="message" class="info">
+	<div id="no-announcement-message" class="info">
 		<p class="bold">No announcements.</p>
 	</div>
 
