@@ -1,7 +1,18 @@
 <?php
 
-$announcement_id = $args['announcement_id'];
+$reply_id = $args['reply_id'];
+$reply    = get_comment( $reply_id );
+
+if ( ! $reply ) {
+	return;
+}
+
+$announcement_id = $reply->comment_post_ID;
 $announcement    = get_post( $announcement_id );
+
+if ( ! $announcement ) {
+	return;
+}
 
 // Group ID
 $group_id = (int) get_post_meta( $announcement_id, 'openlab_announcement_group_id', true );
@@ -10,11 +21,11 @@ $group_id = (int) get_post_meta( $announcement_id, 'openlab_announcement_group_i
 $group = groups_get_group( $group_id );
 
 // Get author info.
-$author_name   = bp_core_get_user_displayname( $announcement->post_author );
-$author_url    = bp_core_get_user_domain( $announcement->post_author );
+$author_name   = bp_core_get_user_displayname( $reply->user_id );
+$author_url    = bp_core_get_user_domain( $reply->user_id );
 $author_avatar = bp_core_fetch_avatar(
 	[
-		'item_id' => $announcement->post_author,
+		'item_id' => $reply->user_id,
 		'type'    => 'full',
 		'width'   => 75,
 		'height'  => 75,
@@ -26,16 +37,12 @@ $author_avatar = bp_core_fetch_avatar(
 $group_name = bp_get_group_name( $group );
 $group_url = bp_get_group_permalink( $group );
 
-$top_level_comments = get_comments(
-	[
-		'post_id'    => $announcement_id,
-		'parent__in' => [ 0 ],
-	]
-);
+// @todo This probably will not stay.
+$reply_title = 'RE: ' . $announcement->post_title;
 
 ?>
 
-<article class="group-item updateable-item announcement-item" id="announcement-item-<?php echo esc_attr( $announcement_id ); ?>" data-announcement-id="<?php echo esc_attr( $announcement_id ); ?>">
+<div class="group-item updateable-item announcement-reply-item" id="announcement-reply-item-<?php echo esc_attr( $reply_id ); ?>" data-reply-id="<?php echo esc_attr( $reply_id ); ?>">
 	<div class="group-item-wrapper">
 		<header class="row announcement-header">
 			<div class="item-avatar alignleft col-xs-3">
@@ -45,18 +52,18 @@ $top_level_comments = get_comments(
 			</div>
 
 			<div class="col-xs-21">
-				<h1 class="announcement-title"><?php echo esc_html( $announcement->post_title ); ?></h1>
+				<h1 class="announcement-title"><?php echo esc_html( $reply_title ); ?></h1>
 				<div class="announcement-info">
 					<?php printf( 'Posted by: %s', esc_html( $author_name ) ); ?>
 					<br />
-					<?php printf( 'Posted on: %1$s at %2$s', esc_html( get_the_date( 'F j, Y', $announcement ) ), esc_html( get_the_date( 'g:i a', $announcement ) ) ); ?>
+					<?php printf( 'Posted on: %1$s at %2$s', esc_html( gmdate( 'F j, Y', strtotime( $reply->comment_date ) ) ), esc_html( gmdate( 'g:i a', strtotime( $reply->comment_date ) ) ) ); ?>
 				</div>
 			</div>
 		</header>
 
 		<div class="row announcement-body">
 			<div class="item col-xs-21">
-				<?php echo wp_kses_post( $announcement->post_content ); ?>
+				<?php echo wp_kses_post( $reply->comment_content ); ?>
 			</div>
 		</div>
 
@@ -68,7 +75,7 @@ $top_level_comments = get_comments(
 					</div>
 				<?php endif; ?>
 
-				<?php if ( current_user_can( 'edit_post', $announcement_id ) ) : ?>
+				<?php if ( current_user_can( 'edit_comment', $reply_id ) ) : ?>
 					<div class="announcement-action">
 						<a class="" href="">Edit</a>
 					</div>
@@ -80,14 +87,9 @@ $top_level_comments = get_comments(
 			</div>
 
 			<div class="row announcement-reply-container">
-				<?php bp_get_template_part( 'groups/single/announcements/reply-form', '', [ 'announcement_id' => $announcement_id, 'parent_id' => $announcement_id ] ); ?>
+				<?php bp_get_template_part( 'groups/single/announcements/reply-form', '', [ 'announcement_id' => $announcement_id, 'parent_id' => $reply_id ] ); ?>
 			</div>
-		<?php endif; ?>
 
-		<div class="announcement-replies">
-			<?php foreach ( $top_level_comments as $top_level_comment ) : ?>
-				<?php bp_get_template_part( 'groups/single/announcements/reply', '', [ 'reply_id' => $top_level_comment->comment_ID ] ); ?>
-			<?php endforeach; ?>
-		</div>
+		<?php endif; ?>
 	</div>
-</article>
+</div>

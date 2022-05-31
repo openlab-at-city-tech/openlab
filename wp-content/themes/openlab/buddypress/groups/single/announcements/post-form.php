@@ -1,4 +1,4 @@
-<form action="<?php echo esc_url( bp_get_group_permalink( groups_get_current_group() ) . 'announcements/post/' ); ?>" method="post" id="announcement-form" name="announcement-form" class="announcement-form">
+<form action="<?php echo esc_url( bp_get_group_permalink( groups_get_current_group() ) . 'announcements/post/' ); ?>" method="post" id="primary-announcement-form" name="announcement-form" class="announcement-form primary-announcement-form">
 
 	<?php do_action( 'bp_before_activity_post_form' ) ?>
 
@@ -28,7 +28,7 @@
 		<div class="announcement-options">
 			<div class="announcement-submit-container">
 				<span class="ajax-loader"></span> &nbsp;
-				<button id="announcement-submit" type="submit" class="btn btn-primary">Post <i class="fa fa-long-arrow-right"></i></button>
+				<button id="announcement-submit" type="submit" class="btn btn-primary"><span class="button-text">Post</span> <i class="fa fa-long-arrow-right"></i></button>
 			</div>
 
 			<input type="hidden" id="whats-new-post-in" name="whats-new-post-in" value="<?php bp_group_id() ?>" />

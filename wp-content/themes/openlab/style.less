@@ -87,6 +87,11 @@ body{
     }
 }
 
+body.no-js .hide-if-no-js {
+	display: none !important;
+	visibility: hidden !important;
+}
+
 // Lists
 // -------------------------
 
@@ -708,14 +713,16 @@ button.related-link-action.related-link-add {
 	margin-top: 30px;
 }
 
-.announcement-item {
+.updateable-item {
 	box-shadow: 0px 0px 5px 5px transparent;
 	transition: box-shadow 0.5s ease-in-out;
 
 	&.new-update {
 		box-shadow: 0px 0px 5px 5px #69FF54;
 	}
+}
 
+.announcement-item {
 	.group-item-wrapper {
 		border-radius: 4px;
 		border: 1px solid #dddddd;
@@ -760,6 +767,36 @@ button.related-link-action.related-link-add {
 		a {
 			font-weight: @bold;
 		}
+	}
+}
+
+.announcement-reply-container {
+	display: none;
+
+	margin-top: 20px;
+	padding-top: 20px;
+	border-top: 2px solid @10gray;
+
+	.announcement-options {
+		margin-top: 10px;
+	}
+
+	textarea {
+		display: none;
+		visibility: hidden;
+	}
+}
+
+.show-reply-form .announcement-reply-container {
+	display: block;
+}
+
+.announcement-replies {
+	.group-item-wrapper {
+		border: none;
+		border-top: 2px solid @10gray;
+		padding-left: 0;
+		padding-right: 0;
 	}
 }
 

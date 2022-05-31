@@ -59,6 +59,14 @@ add_action(
 			true
 		);
 
+		wp_localize_script(
+			'openlab-group-announcements',
+			'OpenLabGroupAnnouncements',
+			[
+				'reply' => 'Reply',
+			]
+		);
+
 		wp_register_style(
 			'openlab-quill-style',
 			get_stylesheet_directory_uri() . '/css/quill.snow.css',
@@ -149,7 +157,7 @@ function openlab_create_announcement( $args = [] ) {
 		true
 	);
 
-	if ( ! $post_id ) {
+	if ( ! $post_id || is_wp_error( $post_id ) ) {
 		return false;
 	}
 
@@ -158,6 +166,50 @@ function openlab_create_announcement( $args = [] ) {
 	// @todo generate activity item
 
 	return $post_id;
+}
+
+/**
+ * Create an announcement reply.
+ *
+ * @param array $args {
+ *   @type int    $group_id  ID of the group.
+ *   @type int    $parent_id ID of the immediate parent item.
+ *   @type string $content   Content of the reply.
+ * }
+ * @return int ID of reply object.
+ */
+function openlab_create_announcement_reply( $args = [] ) {
+	$r = array_merge(
+		[
+			'group_id'  => 0,
+			'parent_id' => 0,
+			'content'   => ''
+		],
+		$args
+	);
+
+	$user      = get_userdata( $r['user_id'] );
+	$parent_id = (int) $r['parent_id'];
+
+	if ( ! $user || ! $parent_id ) {
+		return false;
+	}
+
+	$comment_id = wp_insert_comment(
+		[
+			'comment_post_ID' => $parent_id,
+			'user_id'         => $r['user_id'],
+			'comment_content' => $r['content'],
+		]
+	);
+
+	if ( ! $comment_id ) {
+		return false;
+	}
+
+	// @todo generate activity item
+
+	return $comment_id;
 }
 
 /**
@@ -221,6 +273,7 @@ add_action( 'bp_actions', 'openlab_handle_announcement_post' );
  * Process announcement posts via AJAX.
  */
 function openlab_handle_announcement_post_ajax() {
+//	@todo permission check
 	// Bail if not a POST action
 	if ( 'POST' !== strtoupper( $_SERVER['REQUEST_METHOD'] ) ) {
 		return;
@@ -258,3 +311,51 @@ function openlab_handle_announcement_post_ajax() {
 	wp_send_json_success( $contents );
 }
 add_action( 'wp_ajax_openlab_post_announcement', 'openlab_handle_announcement_post_ajax' );
+
+/**
+ * Process announcement replies via AJAX.
+ */
+function openlab_handle_announcement_reply_ajax() {
+	// Bail if not a POST action
+	if ( 'POST' !== strtoupper( $_SERVER['REQUEST_METHOD'] ) ) {
+		return;
+	}
+
+	if ( empty( $_POST['parentId'] ) ) {
+		return;
+	}
+
+	$parent_id = (int) $_POST['parentId'];
+
+	// Check the nonce
+	check_admin_referer( 'announcement_reply', 'announcement-reply-nonce' );
+
+	if ( ! is_user_logged_in() ) {
+		wp_send_json_error( 'Could not post announcement' );
+	}
+
+	if ( empty( $_POST['content'] ) ) {
+		wp_send_json_error( 'Please enter some content to post.' );
+	}
+
+	$reply_id = openlab_create_announcement_reply(
+		[
+			'content'   => $_POST['content'],
+			'parent_id' => $parent_id,
+			'user_id'   => bp_loggedin_user_id(),
+		]
+	);
+
+	if ( false === $reply_id ) {
+		wp_send_json_error( 'Could not post reply' );
+	}
+
+	ob_start();
+
+	bp_get_template_part( 'groups/single/announcements/reply', '', [ 'reply_id' => $reply_id ] );
+
+	$contents = ob_get_clean();
+
+	wp_send_json_success( $contents );
+}
+add_action( 'wp_ajax_openlab_post_announcement_reply', 'openlab_handle_announcement_reply_ajax' );
