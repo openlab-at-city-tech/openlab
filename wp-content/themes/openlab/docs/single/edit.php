@@ -26,7 +26,7 @@ if ( $current_doc ) {
 		<form action="" method="post" class="form-group form-panel" id="doc-form">
 
 			<div class="panel panel-default">
-				<div class="panel-heading">New Doc</div>
+				<div class="panel-heading"><?php echo ( $current_doc ) ? 'Edit Doc' : 'New Doc'; ?></div>
 				<div class="panel-body">
 
 					<?php do_action('template_notices') ?>
