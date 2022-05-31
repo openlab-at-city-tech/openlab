@@ -145,4 +145,29 @@ add_filter( 'bp_docs_doc_action_links', 'openlab_add_delete_to_bp_docs_doc_actio
  *
  * Instead, we have a Search filter in the theme.
  */
-add_filter( 'bp_docs_filter_types', '__return_empty_array', 999 );
+add_filter(
+	'bp_docs_filter_types',
+	function( $types ) {
+		// We only return an empty aray when getting filter titles.
+		$dbs              = debug_backtrace();
+		$is_filter_titles = false;
+		foreach ( $dbs as $db ) {
+			if ( ! empty( $db['function'] ) && 'bp_docs_filter_titles' === $db['function'] ) {
+				$is_filter_titles = true;
+				break;
+			}
+		}
+
+		if ( $is_filter_titles ) {
+			return [];
+		}
+
+		return array_filter(
+			$types,
+			function( $type ) {
+				return 'search' === $type['slug'];
+			}
+		);
+	},
+	999
+);
