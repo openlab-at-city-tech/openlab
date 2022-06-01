@@ -67,6 +67,8 @@
 						2000
 					);
 
+					initAnnouncementEditor( $newAnnouncement[0] )
+
 					$textarea.val( '' )
 					quillEditor.setText( '' )
 
@@ -145,6 +147,11 @@
 		})
 
 		$( '.announcement-item' ).each( ( key, announcement ) => {
+			initAnnouncementEditor( announcement )
+		})
+	})
+
+	const initAnnouncementEditor = ( announcement ) => {
 			const announcementId = announcement.dataset.announcementId
 
 			$( announcement ).find( '.announcement-textarea' ).append( '<div class="announcement-rich-text-editor"></div>' );
@@ -155,6 +162,5 @@
 					},
 					theme: 'snow'
 			});
-		})
-	})
+	}
 })(jQuery)
