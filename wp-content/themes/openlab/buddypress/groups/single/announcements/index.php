@@ -35,8 +35,10 @@ $announcements = get_posts(
 
 <?php else: ?>
 
-	<div id="no-announcement-message" class="info">
-		<p class="bold">No announcements.</p>
+	<div class="item-list announcement-list clearfix"></div>
+
+	<div id="no-announcement-message" class="info no-announcement-message">
+		<p>This group has no announcements.</p>
 	</div>
 
 <?php endif; ?>
