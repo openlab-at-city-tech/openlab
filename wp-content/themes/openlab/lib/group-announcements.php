@@ -110,7 +110,37 @@ function openlab_user_can_post_announcements( $user_id = null, $group_id = null 
 function openlab_user_can_reply_to_announcement( $user_id = null, $announcement_id = null ) {
 	$announcement_group_id = (int) get_post_meta( $announcement_id, 'openlab_announcement_group_id', true );
 
-	return groups_is_user_member( $user_id, $announcement_group_id ) || user_can( $user_id, 'bp_moderate' );
+	$can_reply = groups_is_user_member( $user_id, $announcement_group_id ) || user_can( $user_id, 'bp_moderate' );
+
+	return $can_reply;
+}
+
+/**
+ * Returns whether a user can reply to a given reply.
+ *
+ * @param int $user_id
+ * @param int $reply_id
+ * @return bool
+ */
+function openlab_user_can_reply_to_reply( $user_id = null, $reply_id = null ) {
+	$reply = get_comment( $reply_id );
+	if ( ! $reply ) {
+		return false;
+	}
+
+	$parent_id       = $reply->comment_parent;
+	$announcement_id = $reply->comment_post_ID;
+
+	// Must be able to reply to announcement to reply to its reply.
+	$can_reply = openlab_user_can_reply_to_announcement( $user_id, $announcement_id );
+
+	// Further restriction: Replies can only be nested one level.
+	if ( $can_reply && $parent_id ) {
+		$parent_reply = get_comment( $reply_id );
+		$can_reply    = $parent_reply && 0 === $parent_reply->comment_parent;
+	}
+
+	return $can_reply;
 }
 
 /**
@@ -172,32 +202,36 @@ function openlab_create_announcement( $args = [] ) {
  * Create an announcement reply.
  *
  * @param array $args {
- *   @type int    $group_id  ID of the group.
- *   @type int    $parent_id ID of the immediate parent item.
- *   @type string $content   Content of the reply.
+ *   @type int    $group_id        ID of the group.
+ *   @type int    $announcement_id ID of the immediate parent item.
+ *   @type int    $parent_id       ID of the parent reply, if any.
+ *   @type string $content         Content of the reply.
  * }
  * @return int ID of reply object.
  */
 function openlab_create_announcement_reply( $args = [] ) {
 	$r = array_merge(
 		[
-			'group_id'  => 0,
-			'parent_id' => 0,
-			'content'   => ''
+			'group_id'        => 0,
+			'announcement_id' => 0,
+			'parent_id'       => 0,
+			'content'         => ''
 		],
 		$args
 	);
 
-	$user      = get_userdata( $r['user_id'] );
-	$parent_id = (int) $r['parent_id'];
+	$user            = get_userdata( $r['user_id'] );
+	$parent_id       = (int) $r['parent_id'];
+	$announcement_id = (int) $r['announcement_id'];
 
-	if ( ! $user || ! $parent_id ) {
+	if ( ! $user || ! $announcement_id ) {
 		return false;
 	}
 
 	$comment_id = wp_insert_comment(
 		[
-			'comment_post_ID' => $parent_id,
+			'comment_post_ID' => $announcement_id,
+			'comment_parent'  => $parent_id,
 			'user_id'         => $r['user_id'],
 			'comment_content' => $r['content'],
 		]
@@ -321,11 +355,12 @@ function openlab_handle_announcement_reply_ajax() {
 		return;
 	}
 
-	if ( empty( $_POST['parentId'] ) ) {
+	if ( empty( $_POST['announcementId'] ) ) {
 		return;
 	}
 
-	$parent_id = (int) $_POST['parentId'];
+	$announcement_id = (int) $_POST['announcementId'];
+	$parent_id       = ! empty( $_POST['parentReplyId'] ) ? (int) $_POST['parentReplyId'] : 0;
 
 	// Check the nonce
 	check_admin_referer( 'announcement_reply', 'announcement-reply-nonce' );
@@ -340,9 +375,10 @@ function openlab_handle_announcement_reply_ajax() {
 
 	$reply_id = openlab_create_announcement_reply(
 		[
-			'content'   => $_POST['content'],
-			'parent_id' => $parent_id,
-			'user_id'   => bp_loggedin_user_id(),
+			'content'         => $_POST['content'],
+			'parent_id'       => $parent_id,
+			'announcement_id' => $announcement_id,
+			'user_id'         => bp_loggedin_user_id(),
 		]
 	);
 

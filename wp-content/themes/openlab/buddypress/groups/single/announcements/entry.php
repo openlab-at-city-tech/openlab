@@ -33,9 +33,11 @@ $top_level_comments = get_comments(
 	]
 );
 
+$can_reply_class = openlab_user_can_reply_to_announcement( bp_loggedin_user_id(), $announcement_id ) ? 'user-can-reply' : '';
+
 ?>
 
-<article class="group-item updateable-item announcement-item" id="announcement-item-<?php echo esc_attr( $announcement_id ); ?>" data-announcement-id="<?php echo esc_attr( $announcement_id ); ?>">
+<article class="group-item updateable-item announcement-item <?php echo esc_attr( $can_reply_class ); ?>" id="announcement-item-<?php echo esc_attr( $announcement_id ); ?>" data-announcement-id="<?php echo esc_attr( $announcement_id ); ?>" data-editor-id="announcement-<?php echo esc_attr( $announcement_id ); ?>">
 	<div class="group-item-wrapper">
 		<header class="row announcement-header">
 			<div class="item-avatar alignleft col-xs-3">
@@ -80,7 +82,7 @@ $top_level_comments = get_comments(
 			</div>
 
 			<div class="row announcement-reply-container">
-				<?php bp_get_template_part( 'groups/single/announcements/reply-form', '', [ 'announcement_id' => $announcement_id, 'parent_id' => $announcement_id ] ); ?>
+				<?php bp_get_template_part( 'groups/single/announcements/reply-form', '', [ 'announcement_id' => $announcement_id, 'parent_id' => 0 ] ); ?>
 			</div>
 		<?php endif; ?>
 

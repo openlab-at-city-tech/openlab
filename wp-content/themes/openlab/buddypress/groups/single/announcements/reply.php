@@ -38,11 +38,21 @@ $group_name = bp_get_group_name( $group );
 $group_url = bp_get_group_permalink( $group );
 
 // @todo This probably will not stay.
-$reply_title = 'RE: ' . $announcement->post_title;
+$reply_title_prefix = ! empty( $reply->comment_parent ) ? 'RE: RE: ' : 'RE: ';
+$reply_title        = $reply_title_prefix . $announcement->post_title;
+
+$reply_replies = get_comments(
+	[
+		'parent' => $reply_id,
+	]
+);
+
+$user_can_reply  = openlab_user_can_reply_to_reply( bp_loggedin_user_id(), $reply_id );
+$can_reply_class = $user_can_reply ? 'user-can-reply' : '';
 
 ?>
 
-<div class="group-item updateable-item announcement-reply-item" id="announcement-reply-item-<?php echo esc_attr( $reply_id ); ?>" data-reply-id="<?php echo esc_attr( $reply_id ); ?>">
+<div class="group-item updateable-item announcement-reply-item <?php echo esc_attr( $can_reply_class ); ?>" id="announcement-reply-item-<?php echo esc_attr( $reply_id ); ?>" data-reply-id="<?php echo esc_attr( $reply_id ); ?>" data-announcement-id="<?php echo esc_attr( $announcement_id ); ?>" data-editor-id="reply-<?php echo esc_attr( $reply_id ); ?>">
 	<div class="group-item-wrapper">
 		<header class="row announcement-header">
 			<div class="item-avatar alignleft col-xs-3">
@@ -69,7 +79,7 @@ $reply_title = 'RE: ' . $announcement->post_title;
 
 		<?php if ( is_user_logged_in() ) : ?>
 			<div class="row announcement-actions">
-				<?php if ( openlab_user_can_reply_to_announcement( bp_loggedin_user_id(), $announcement_id ) ) : ?>
+				<?php if ( $user_can_reply ) : ?>
 					<div class="hide-if-no-js announcement-action">
 						<a class="announcement-reply-link" href="">Reply</a>
 					</div>
@@ -86,10 +96,18 @@ $reply_title = 'RE: ' . $announcement->post_title;
 				<?php endif; ?>
 			</div>
 
-			<div class="row announcement-reply-container">
-				<?php bp_get_template_part( 'groups/single/announcements/reply-form', '', [ 'announcement_id' => $announcement_id, 'parent_id' => $reply_id ] ); ?>
-			</div>
+			<?php if ( $user_can_reply ) : ?>
+				<div class="row announcement-reply-container">
+					<?php bp_get_template_part( 'groups/single/announcements/reply-form', '', [ 'announcement_id' => $announcement_id, 'parent_id' => $reply_id ] ); ?>
+				</div>
+			<?php endif; ?>
 
 		<?php endif; ?>
+
+		<div class="row announcement-reply-replies">
+			<?php foreach ( $reply_replies as $reply_reply ) : ?>
+				<?php bp_get_template_part( 'groups/single/announcements/reply', '', [ 'reply_id' => $reply_reply->comment_ID ] ); ?>
+			<?php endforeach; ?>
+		</div>
 	</div>
 </div>

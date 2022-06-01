@@ -2,12 +2,14 @@
 $parent_id       = $args['parent_id'];
 $announcement_id = $args['announcement_id'];
 
+$editor_id = $parent_id ? 'reply-' . $parent_id : 'announcement-' . $announcement_id;
+
 $group_id = (int) get_post_meta( $announcement_id, 'openlab_announcement_group_id', true );
 ?>
 
-<form action="<?php echo esc_url( bp_get_group_permalink( groups_get_current_group() ) . 'announcements/post/' ); ?>" method="post" id="announcement-form-<?php echo esc_attr( $parent_id ); ?>" class="announcement-form announcement-reply-form">
+<form action="<?php echo esc_url( bp_get_group_permalink( groups_get_current_group() ) . 'announcements/post/' ); ?>" method="post" id="announcement-form-<?php echo esc_attr( $editor_id ); ?>" class="announcement-form announcement-reply-form">
 
-	<div id="quill-toolbar-<?php echo esc_attr( $parent_id ); ?>" class="quill-toolbar hide-if-no-js">
+	<div id="quill-toolbar-<?php echo esc_attr( $editor_id ); ?>" class="quill-toolbar hide-if-no-js">
 	  <div class="quill-toolbar-buttons">
 		  <button class="ql-bold"></button>
 		  <button class="ql-italic"></button>
@@ -37,10 +39,9 @@ $group_id = (int) get_post_meta( $announcement_id, 'openlab_announcement_group_i
 			</div>
 
 			<input type="hidden" id="whats-new-post-in" name="whats-new-post-in" value="<?php echo esc_attr( $group_id ); ?>" />
-
 		</div>
 	</div>
 
-	<?php wp_nonce_field( 'announcement_reply', 'announcement-reply-nonce-' . $parent_id ); ?>
+	<?php wp_nonce_field( 'announcement_reply', 'announcement-reply-nonce-' . $editor_id ); ?>
 
 </form>

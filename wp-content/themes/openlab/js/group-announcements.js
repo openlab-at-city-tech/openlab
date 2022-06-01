@@ -84,11 +84,17 @@
 		$announcementList.on( 'click', '.reply-submit', (e) => {
 			e.preventDefault()
 
-			const $parentItem = $( e.target ).closest( '.announcement-item' )
+			const $parentReply = $( e.target ).closest( '.announcement-reply-item' )
+			const $parentAnnouncement = $( e.target ).closest( '.announcement-item' )
 
-			const parentId = $parentItem.data( 'announcementId' )
+			const $parentItem = $parentReply.length > 0 ? $parentReply : $parentAnnouncement
 
-			const replyEditor = quillEditors[ parentId ] || null
+			const announcementId = $parentItem.data( 'announcementId' )
+			const parentReplyId = $parentItem.data( 'replyId' )
+
+			const editorId = $parentItem.data( 'editorId' )
+
+			const replyEditor = quillEditors[ editorId ] || null
 
 			if ( replyEditor ) {
 				replyEditor.enable( false )
@@ -98,16 +104,17 @@
 
 			$.post( ajaxurl, {
 					action: 'openlab_post_announcement_reply',
-					'cookie': bp_get_cookies(),
-					'announcement-reply-nonce': $( '#announcement-reply-nonce-' + parentId ).val(),
-					'content': replyContent,
-					'parentId': parentId
+					cookie: bp_get_cookies(),
+					'announcement-reply-nonce': $( '#announcement-reply-nonce-' + editorId ).val(),
+					content: replyContent,
+					announcementId: announcementId,
+					parentReplyId: parentReplyId
 				},
 				function(response) {
 					if ( response.success ) {
 						$parentItem.removeClass( 'show-reply-form' )
 
-						const $parentReplies = $parentItem.find( '.announcement-replies' )
+						const $parentReplies = parentReplyId ? $parentItem.find( '> .group-item-wrapper > .announcement-reply-replies' ) : $parentItem.find( '.announcement-replies' )
 						$parentReplies.prepend( response.data )
 
 						if ( replyEditor ) {
@@ -124,6 +131,8 @@
 							2000
 						);
 
+						initAnnouncementEditor( $newReply[0] )
+
 					} else {
 					}
 				}
@@ -134,33 +143,49 @@
 		$announcementList.on( 'click', '.announcement-reply-link', (e) => {
 			e.preventDefault()
 
-			// Create a new div and set up Quill.
-			const $parentItem = $( e.target ).closest( '.announcement-item' )
+			const $parentReply = $( e.target ).closest( '.announcement-reply-item' )
+			const $parentAnnouncement = $( e.target ).closest( '.announcement-item' )
+
+			const $parentItem = $parentReply.length > 0 ? $parentReply : $parentAnnouncement
 
 			const formIsShown = $parentItem.hasClass( 'show-reply-form' )
 			if ( formIsShown ) {
 				$parentItem.removeClass( 'show-reply-form' )
 			} else {
 				$parentItem.addClass( 'show-reply-form' )
-				quillEditors[ $parentItem.data( 'announcementId' ) ].focus()
+
+				const editorId = $parentItem.data( 'editorId' )
+				quillEditors[ editorId ].focus()
 			}
 		})
 
-		$( '.announcement-item' ).each( ( key, announcement ) => {
+		$( '.announcement-item, .announcement-reply-item' ).each( ( key, announcement ) => {
 			initAnnouncementEditor( announcement )
 		})
 	})
 
 	const initAnnouncementEditor = ( announcement ) => {
-			const announcementId = announcement.dataset.announcementId
+		if ( ! announcement.classList.contains( 'user-can-reply' ) ) {
+			return
+		}
 
-			$( announcement ).find( '.announcement-textarea' ).append( '<div class="announcement-rich-text-editor"></div>' );
+		const editorId = announcement.dataset.editorId
 
-			quillEditors[ announcementId ] = new Quill( announcement.querySelector( '.announcement-rich-text-editor' ), {
-					modules: {
-							toolbar: '#quill-toolbar-' + announcementId
-					},
-					theme: 'snow'
-			});
+		const toolbarId = 'quill-toolbar-' + editorId
+		const toolbarEl = document.getElementById( toolbarId )
+
+		// Sanity check.
+		if ( ! toolbarEl ) {
+			return
+		}
+
+		$( announcement ).find( '.announcement-textarea' ).append( '<div class="announcement-rich-text-editor"></div>' );
+
+		quillEditors[ editorId ] = new Quill( announcement.querySelector( '.announcement-rich-text-editor' ), {
+				modules: {
+						toolbar: toolbarEl
+				},
+				theme: 'snow'
+		});
 	}
 })(jQuery)

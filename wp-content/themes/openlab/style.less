@@ -791,7 +791,7 @@ button.related-link-action.related-link-add {
 	}
 }
 
-.show-reply-form .announcement-reply-container {
+.show-reply-form > .group-item-wrapper > .announcement-reply-container {
 	display: block;
 }
 
@@ -801,6 +801,18 @@ button.related-link-action.related-link-add {
 		border-top: 2px solid @10gray;
 		padding-left: 0;
 		padding-right: 0;
+	}
+}
+
+.announcement-reply-replies {
+	& > .group-item > .group-item-wrapper {
+		padding-left: 40px;
+	}
+}
+
+.announcement-reply-item {
+	.announcement-reply-container {
+		padding-left: 40px;
 	}
 }
 

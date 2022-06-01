@@ -7941,7 +7941,7 @@ button.related-link-action.related-link-add .fa {
   display: none;
   visibility: hidden;
 }
-.show-reply-form .announcement-reply-container {
+.show-reply-form > .group-item-wrapper > .announcement-reply-container {
   display: block;
 }
 .announcement-replies .group-item-wrapper {
@@ -7949,6 +7949,12 @@ button.related-link-action.related-link-add .fa {
   border-top: 2px solid #dddddd;
   padding-left: 0;
   padding-right: 0;
+}
+.announcement-reply-replies > .group-item > .group-item-wrapper {
+  padding-left: 40px;
+}
+.announcement-reply-item .announcement-reply-container {
+  padding-left: 40px;
 }
 /**page**/
 h1.entry-title {
