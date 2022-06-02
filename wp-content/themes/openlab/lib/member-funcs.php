@@ -689,7 +689,7 @@ function cuny_profile_activty_block( $type, $title, $last, $desc_length = 135 ) 
 										<p class="original-copy hidden"><?php echo $activity; ?></p>
 									</div>
 
-									<?php if( current_user_can( 'bp_moderate' ) && in_array( bp_get_group_id(), $private_groups ) ) { ?>
+									<?php if( current_user_can( 'bp_moderate' ) && in_array( bp_get_group_id(), $private_groups, true ) ) { ?>
 									<p class="private-membership-indicator"><span class="fa fa-eye-slash"></span> Membership hidden</p>
 									<?php } ?>
 
@@ -1616,7 +1616,7 @@ function openlab_get_user_private_membership( $user_id ) {
 
 	if( $query ) {
 		foreach( $query as $item ) {
-			$private_groups[] = $item->group_id;
+			$private_groups[] = (int)$item->group_id;
 		}
 	}
 

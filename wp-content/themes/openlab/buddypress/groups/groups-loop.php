@@ -272,7 +272,7 @@ if( ! bp_is_my_profile() && ! current_user_can( 'bp_moderate' ) ) {
 								<p class="truncate-on-the-fly" data-basevalue="105" data-basewidth="250"><?php echo bp_get_group_description_excerpt() ?></p>
 							</div>
 
-							<?php if( current_user_can( 'bp_moderate' ) && in_array( $group_id, $private_groups ) ) { ?>
+							<?php if( current_user_can( 'bp_moderate' ) && in_array( $group_id, $private_groups, true ) ) { ?>
 							<p class="private-membership-indicator"><span class="fa fa-eye-slash"></span> Membership hidden</p>
 							<?php } ?>
 						</div>

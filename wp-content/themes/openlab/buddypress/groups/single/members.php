@@ -57,7 +57,7 @@ if ( bp_group_has_members( $members_args ) ) : ?>
 				<?php } ?>
 				<?php 
 				// Show hidden membership label for the mods
-				if( current_user_can( 'bp_moderate' ) && in_array( bp_get_member_user_id(), $private_users ) ) { ?>
+				if( current_user_can( 'bp_moderate' ) && in_array( bp_get_member_user_id(), $private_users, true ) ) { ?>
 				<p class="private-membership-indicator"><span class="fa fa-eye-slash"></span> Membership hidden</p>
 				<?php } ?>
 

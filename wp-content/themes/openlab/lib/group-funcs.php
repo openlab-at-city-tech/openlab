@@ -2093,7 +2093,7 @@ function openlab_get_group_private_users( $group_id ) {
 
 	if( $query ) {
 		foreach( $query as $item ) {
-			$private_users[] = $item->user_id;
+			$private_users[] = (int)$item->user_id;
 		}
 	}
 
