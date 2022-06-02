@@ -1,39 +1,58 @@
+<?php
+/**
+ * BuddyPress - Activity Loop
+ *
+ * @package BuddyPress
+ * @subpackage bp-legacy
+ * @version 3.0.0
+ */
 
-<div class="item-list-tabs no-ajax" id="subnav">
-    <ul>
-        <li class="feed"><a href="<?php bp_group_activity_feed_link() ?>" title="<?php _e('RSS Feed', 'buddypress'); ?>"><?php _e('RSS', 'buddypress') ?></a></li>
+?>
+<?php echo openlab_submenu_markup( 'group-activity' ); ?>
+<div id="item-body" role="main">
+    <?php do_action( 'bp_before_activity_loop' ); ?>
 
-        <?php do_action('bp_group_activity_syndication_options') ?>
+    <?php if ( bp_has_activities() ) : ?>
+        <div class="activity-filter">
+			<form action="" id="activity-filter-form" class="activity-filter-form" method="GET">
+				<?php if( ! empty( $type ) ) { ?>
+				<input type="hidden" name="type" value="<?php echo $type; ?>" />
+				<?php } ?>
+				<select id="activity-filter-by" class="form-control">
+					<option value="-1"><?php _e( 'All Activity', 'openlab' ); ?></option>
+					<?php 
+						bp_activity_show_filters( 'group' );
+						do_action( 'bp_group_activity_filter_options' ); 
+					?>
+				</select>
+			</form>
+		</div>
+        
+        <?php if ( empty( $_POST['page'] ) ) : ?>
+			<div id="activity-stream" class="activity-list item-list group-list">
+		<?php endif; ?>
+	
+		<?php while ( bp_activities() ) : bp_the_activity(); ?>
+			<?php bp_get_template_part( 'activity/entry' ); ?>
+		<?php endwhile; ?>
+	
+		<?php // echo openlab_activities_pagination_links(); ?>
+	
+		<?php if ( empty( $_POST['page'] ) ) : ?>
+			</div>	
+		<?php endif; ?>
 
-        <li id="activity-filter-select" class="last">
-            <select>
-                <option value="-1"><?php _e('No Filter', 'buddypress') ?></option>
-                <option value="activity_update"><?php _e('Show Updates', 'buddypress') ?></option>
+    <?php else : ?>
+        <div id="message" class="info">
+			<p><?php _e( 'Sorry, there was no activity found. Please try a different filter.', 'buddypress' ); ?></p>
+		</div>
+    <?php endif; ?>
 
-                <?php if (bp_is_active('forums')) : ?>
-                    <option value="new_forum_topic"><?php _e('Show New Forum Topics', 'buddypress') ?></option>
-                    <option value="new_forum_post"><?php _e('Show Forum Replies', 'buddypress') ?></option>
-                <?php endif; ?>
+    <?php do_action( 'bp_after_activity_loop' ); ?>
 
-                <option value="joined_group"><?php _e('Show New Group Memberships', 'buddypress') ?></option>
-
-                <?php do_action('bp_group_activity_filter_options') ?>
-            </select>
-        </li>
-    </ul>
-</div><!-- .item-list-tabs -->
-
-<?php do_action('bp_before_group_activity_post_form') ?>
-
-<?php if (is_user_logged_in() && bp_group_is_member()) : ?>
-    <?php bp_get_template_part('activity/post-form.php'); ?>
-<?php endif; ?>
-
-<?php do_action('bp_after_group_activity_post_form') ?>
-<?php do_action('bp_before_group_activity_content') ?>
-
-<div class="activity single-group">
-    <?php bp_get_template_part('activity/activity-loop.php'); ?>
-</div><!-- .activity.single-group -->
-
-<?php do_action('bp_after_group_activity_content') ?>
+    <?php if ( empty( $_POST['page'] ) ) : ?>
+        <form action="" name="activity-loop-form" id="activity-loop-form" method="post">
+            <?php wp_nonce_field( 'activity_filter', '_wpnonce_activity_filter' ); ?>
+        </form>
+    <?php endif; ?>
+</div>
