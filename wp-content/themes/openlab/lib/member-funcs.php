@@ -1576,7 +1576,8 @@ function openlab_get_activity_button_link( $activity ) {
 	switch( $activity->type ) {
 		case 'edited_group_document':
 		case 'added_group_document':
-			return openlab_get_activity_file_link( $activity );
+			$document = new BP_Group_Documents( (string)$activity->secondary_item_id );
+			return $document->get_url( false );
 		case 'bp_doc_created':
 		case 'bp_doc_edited':
 			return $activity->primary_link;
@@ -1585,24 +1586,4 @@ function openlab_get_activity_button_link( $activity ) {
 	}
 
 	return $activity->primary_link;
-}
-
-/**
- * Construct the permalink for the group documents based on the 
- * activity group and document ids
- */
-function openlab_get_activity_file_link( $activity ) {
-	$group_id = $activity->item_id;
-	$doc_id = $activity->secondary_item_id;
-
-	global $wpdb;
-	$sql = $wpdb->get_results( $wpdb->prepare(
-		"SELECT `file`, `group_id` FROM wp_bp_group_documents WHERE `id` = $doc_id AND `group_id` = $group_id"
-	), ARRAY_A );
-
-	if( $sql[0] ) {
-		return site_url() . '?get_group_doc=' . $sql[0]['group_id'] . '/' . $sql[0]['file'];
-	}
-
-	return;
 }
