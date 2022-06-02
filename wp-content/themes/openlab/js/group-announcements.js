@@ -271,7 +271,11 @@
 				}
 
 				setBodyText( $parentItem, response.data.content )
-				setTitle( $parentItem, response.data.title )
+
+				if ( response.data.hasOwnProperty( 'title' ) ) {
+					setTitle( $parentItem, response.data.title )
+				}
+
 				closeEditMode( $parentItem )
 			} )
 		} )

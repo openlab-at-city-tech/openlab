@@ -440,6 +440,53 @@ function openlab_handle_announcement_edit_ajax() {
 add_action( 'wp_ajax_openlab_edit_announcement', 'openlab_handle_announcement_edit_ajax' );
 
 /**
+ * Process AJAX announcement reply edit.
+ */
+function openlab_handle_announcement_reply_edit_ajax() {
+	// Bail if not a POST action
+	if ( 'POST' !== strtoupper( $_SERVER['REQUEST_METHOD'] ) ) {
+		return;
+	}
+
+	if ( empty( $_POST['editorId'] ) || empty( $_POST['replyId'] ) ) {
+		return;
+	}
+
+	$editor_id = wp_unslash( $_POST['editorId'] );
+
+	check_admin_referer( 'announcement_' . $editor_id, 'nonce' );
+
+	$reply_id = intval( $_POST['replyId'] );
+
+	if ( ! current_user_can( 'edit_comment', $reply_id ) ) {
+		wp_send_json_error();
+	}
+
+	// wp_update_post() expects slashed content.
+	$content = $_POST['content'];
+
+	$saved = wp_update_comment(
+		[
+			'comment_ID'      => $reply_id,
+			'comment_content' => $content,
+		]
+	);
+
+	if ( ! $saved ) {
+		wp_send_json_error();
+	}
+
+	$reply = get_comment( $reply_id );
+
+	wp_send_json_success(
+		[
+			'content' => $reply->comment_content,
+		]
+	);
+}
+add_action( 'wp_ajax_openlab_edit_announcement_reply', 'openlab_handle_announcement_reply_edit_ajax' );
+
+/**
  * Handles announcement delete request.
  */
 function openlab_handle_announcement_delete_request() {
