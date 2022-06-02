@@ -49,7 +49,7 @@ if ( $read_only ) {
 		$announcement_content = str_replace(
 			'**readmore**',
 			sprintf(
-				'&hellip; <a href="%s">%s</a>',
+				'&hellip; <a class="announcement-read-more" href="%s">%s</a>',
 				esc_url( bp_get_group_permalink( $group ) . 'announcements/' ),
 				'See More'
 			),

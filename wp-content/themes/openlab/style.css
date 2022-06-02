@@ -7881,6 +7881,9 @@ a.disabled-link {
   text-decoration: none;
   pointer-events: none;
 }
+.announcement-read-more {
+  font-weight: 700;
+}
 .no-announcement-message {
   padding-top: 30px;
 }
