@@ -37,6 +37,8 @@ $can_reply_class = openlab_user_can_reply_to_announcement( bp_loggedin_user_id()
 
 $editor_id = 'announcement-' . $announcement_id;
 
+$delete_url = wp_nonce_url( $group_url . 'announcements/?delete-announcement=' . $announcement_id, 'announcement_delete_' . $announcement_id );
+
 ?>
 
 <article class="group-item updateable-item announcement-item <?php echo esc_attr( $can_reply_class ); ?>" id="announcement-item-<?php echo esc_attr( $announcement_id ); ?>" data-announcement-id="<?php echo esc_attr( $announcement_id ); ?>" data-editor-id="<?php echo esc_attr( $editor_id ); ?>" data-nonce="<?php echo esc_attr( wp_create_nonce( 'announcement_' . $editor_id ) ); ?>" data-item-type="announcement">
@@ -76,7 +78,7 @@ $editor_id = 'announcement-' . $announcement_id;
 					</div>
 
 					<div class="announcement-action">
-						<a class="" href="">Delete</a>
+						<a class="announcement-delete-link" href="<?php echo esc_url( $delete_url ); ?>">Delete</a>
 					</div>
 				<?php endif; ?>
 			</div>

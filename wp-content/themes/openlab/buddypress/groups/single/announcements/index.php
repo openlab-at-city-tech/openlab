@@ -43,6 +43,8 @@ $pagination = str_replace( 'current\'><span class="sr-only">Page', 'current\'><s
 
 ?>
 
+<?php do_action( 'template_notices' ); ?>
+
 <?php if ( $announcement_query->posts ) : ?>
 
 	<div class="item-list announcement-list clearfix">

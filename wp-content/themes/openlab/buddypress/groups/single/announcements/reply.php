@@ -52,6 +52,8 @@ $can_reply_class = $user_can_reply ? 'user-can-reply' : '';
 
 $editor_id = 'reply-' . $reply_id;
 
+$delete_url = wp_nonce_url( $group_url . 'announcements/?delete-announcement-reply=' . $reply_id, 'announcement_delete_' . $reply_id );
+
 ?>
 
 <div class="group-item updateable-item announcement-reply-item <?php echo esc_attr( $can_reply_class ); ?>" id="announcement-reply-item-<?php echo esc_attr( $reply_id ); ?>" data-reply-id="<?php echo esc_attr( $reply_id ); ?>" data-announcement-id="<?php echo esc_attr( $announcement_id ); ?>" data-nonce="<?php echo esc_attr( wp_create_nonce( 'announcement_' . $editor_id ) ); ?>" data-item-type="reply" data-editor-id="<?php echo esc_attr( $editor_id ); ?>">
@@ -93,7 +95,7 @@ $editor_id = 'reply-' . $reply_id;
 					</div>
 
 					<div class="announcement-action">
-						<a class="" href="">Delete</a>
+						<a class="announcement-delete-link" href="<?php echo esc_url( $delete_url ); ?>">Delete</a>
 					</div>
 				<?php endif; ?>
 			</div>

@@ -438,3 +438,61 @@ function openlab_handle_announcement_edit_ajax() {
 	);
 }
 add_action( 'wp_ajax_openlab_edit_announcement', 'openlab_handle_announcement_edit_ajax' );
+
+/**
+ * Handles announcement delete request.
+ */
+function openlab_handle_announcement_delete_request() {
+	if ( ! bp_is_group() || ! bp_is_current_action( 'announcements' ) || empty( $_GET['delete-announcement'] ) ) {
+		return;
+	}
+
+	$announcement_id = (int) $_GET['delete-announcement'];
+
+	check_admin_referer( 'announcement_delete_' . $announcement_id );
+
+	if ( ! current_user_can( 'delete_post', $announcement_id ) ) {
+		return;
+	}
+
+	$deleted = wp_delete_post( $announcement_id, true );
+
+	if ( $deleted ) {
+		bp_core_add_message( 'Announcement successfully deleted.' );
+	} else {
+		bp_core_add_message( 'Could not delete announcement.', 'error' );
+	}
+
+	bp_core_redirect( bp_get_group_permalink( groups_get_current_group() ) . 'announcements/' );
+	die;
+}
+add_action( 'bp_actions', 'openlab_handle_announcement_delete_request' );
+
+/**
+ * Handles announcement reply delete request.
+ */
+function openlab_handle_announcement_reply_delete_request() {
+	if ( ! bp_is_group() || ! bp_is_current_action( 'announcements' ) || empty( $_GET['delete-announcement-reply'] ) ) {
+		return;
+	}
+
+	$reply_id = (int) $_GET['delete-announcement-reply'];
+
+	check_admin_referer( 'announcement_delete_' . $reply_id );
+
+	if ( ! current_user_can( 'delete_comment', $reply_id ) ) {
+		return;
+	}
+
+	$deleted = wp_delete_comment( $reply_id, true );
+
+	if ( $deleted ) {
+		bp_core_add_message( 'Reply successfully deleted.' );
+	} else {
+		bp_core_add_message( 'Could not delete reply.', 'error' );
+	}
+
+	bp_core_redirect( bp_get_group_permalink( groups_get_current_group() ) . 'announcements/' );
+	die;
+}
+add_action( 'bp_actions', 'openlab_handle_announcement_reply_delete_request' );

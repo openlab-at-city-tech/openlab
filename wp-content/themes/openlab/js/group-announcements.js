@@ -287,6 +287,11 @@
 			e.preventDefault()
 			closeReplyMode( getParentItem( e.target ) )
 		} )
+
+		// Delete confirmation.
+		$announcementList.on( 'click', '.announcement-delete-link', (e) => {
+			return window.confirm( 'Are you sure you want to delete this item?' ) ? true : e.preventDefault()
+		} )
 	})
 
 	/**
