@@ -35,8 +35,8 @@
 				const $form = $submitButton.closest( 'form' )
 
 				$('div.error').remove();
-				$submitButton.addClass('loading');
-				$submitButton.prop('disabled', true);
+				$submitButton.addClass( 'ajax-loading' );
+				$submitButton.prop( 'disabled', true );
 				$form.addClass("submitted");
 
 				const object = 'groups';
@@ -71,7 +71,7 @@
 						thisEditor.setText( '' )
 						$title.val( '' )
 
-						$submitButton.removeClass( 'loading' );
+						$submitButton.removeClass( 'ajax-loading' );
 						$submitButton.prop( 'disabled', false );
 					} else {
 
@@ -105,6 +105,9 @@
 
 			const replyContent = replyEditor ? replyEditor.getText() : ''
 
+			e.target.classList.add( 'ajax-loading' )
+			e.target.disabled = true
+
 			$.post( ajaxurl, {
 					action: 'openlab_post_announcement_reply',
 					cookie: bp_get_cookies(),
@@ -134,6 +137,9 @@
 							},
 							2000
 						);
+
+						e.target.classList.remove( 'ajax-loading' )
+						e.target.disabled = false
 
 						closeReplyMode( $parentItem )
 
@@ -239,6 +245,9 @@
 			const thisEditor = quillEditors[ editorId ] || null
 			const editorContent = thisEditor ? thisEditor.root.innerHTML : ''
 
+			e.target.classList.add( 'ajax-loading' )
+			e.target.disabled = true
+
 			const postParams = 'announcement' === itemType ?
 				{
 					action: 'openlab_edit_announcement',
@@ -271,6 +280,9 @@
 				}
 
 				setBodyText( $parentItem, response.data.content )
+
+				e.target.classList.remove( 'ajax-loading' )
+				e.target.disabled = false
 
 				if ( response.data.hasOwnProperty( 'title' ) ) {
 					setTitle( $parentItem, response.data.title )
