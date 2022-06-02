@@ -9939,6 +9939,16 @@ input#group-request-send {
 .group-members.group-list .group-item-wrapper .activity {
   font-size: 12px;
 }
+.group-members.group-list .group-item-membership-privacy {
+  margin-top: 15px;
+}
+.group-members.group-list .group-item-membership-privacy label {
+  font-size: 12px;
+  font-weight: 400;
+}
+.group-members.group-list .group-item-membership-privacy label:hover {
+  cursor: pointer;
+}
 .group-manage-members.group-list.group-manage-requests .group-item .group-item-wrapper ul.group-member-actions {
   font-weight: normal;
 }
@@ -11275,26 +11285,44 @@ body.single-help .entry-content h6 {
   margin-left: 0;
 }
 .activity-list .group-item-wrapper {
-  padding: 1.2%;
+  padding: 15px;
   height: auto;
+}
+.activity-list .group-item-wrapper p {
+  margin-top: 0;
+  margin-bottom: 15px;
+}
+.activity-list .activity-entry-row {
+  display: flex;
+  flex-flow: row wrap;
+}
+.activity-list .activity-entry-avatar {
+  flex: 0 0 120px;
+  max-width: 120px;
+}
+.activity-list .activity-entry-data {
+  flex: 0 0 calc(100% - 120px);
+  max-width: calc(100% - 120px);
+  padding-left: 15px;
 }
 .activity-list .activity-header {
   display: flex;
   flex-flow: row wrap;
   justify-content: space-between;
+  margin-bottom: 10px;
 }
 .activity-list .activity-header-title {
   flex: 0 0 calc(100% - 45px);
   max-width: calc(100% - 45px);
   padding-right: 15px;
 }
+.activity-list .activity-header-title .item-title {
+  margin: 0 !important;
+}
 .activity-list .activity-header-meta {
   flex: 0 0 45px;
   max-width: 45px;
   padding-left: 15px;
-}
-.activity-list .activity-header-meta {
-  margin-bottom: 15px;
   text-align: right;
 }
 .activity-list .activity-header-meta span {
@@ -11302,19 +11330,25 @@ body.single-help .entry-content h6 {
   transition: all 350ms ease-in-out;
 }
 .activity-list .activity-header-meta .fav span {
-  color: #333;
+  color: #888;
 }
-.activity-list .activity-header-meta .fav:hover span:before {
-  content: "\f005";
+.activity-list .activity-header-meta .fav:hover span {
+  color: #ff5959;
 }
 .activity-list .activity-header-meta .unfav span {
-  color: #333;
+  color: #ff5959;
 }
-.activity-list .activity-header-meta .unfav:hover span:before {
-  content: "\f006";
+.activity-list .activity-header-meta .unfav:hover span {
+  color: #888;
+}
+.activity-list .activity-body {
+  padding-right: 30px;
 }
 .activity-list .activity-body img {
   display: none;
+}
+.activity-list .activity-body .btn {
+  text-decoration: none;
 }
 .activity-pagination .pagination-links {
   margin: 0;
@@ -11369,4 +11403,11 @@ body.single-help .entry-content h6 {
     float: none !important;
     width: 100%;
   }
+}
+/* Private membership indicator */
+p.private-membership-indicator {
+  margin-top: 15px;
+  font-size: 12px;
+  font-weight: 400;
+  color: #666 !important;
 }

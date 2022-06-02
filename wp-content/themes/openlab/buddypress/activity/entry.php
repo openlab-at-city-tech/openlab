@@ -15,15 +15,15 @@ $group_avatar_url = bp_get_group_avatar_url( $group, 'medium' );
 ?>
 <div class="group-item">
 	<div class="group-item-wrapper">
-		<div class="row">
-			<div class="item-avatar alignleft col-xs-3">
+		<div class="activity-entry-row">
+			<div class="activity-entry-avatar">
 				<div class="activity-avatar">
 					<a href="<?php echo $group_url; ?>" title="<?php echo $group_name; ?>">
 						<img src="<?php echo $group_avatar_url; ?>" class="img-responsive" alt="<?php echo $group_name; ?>" />
 					</a>
 				</div>
 			</div>
-			<div class="item col-xs-21">
+			<div class="activity-entry-data">
 				<div class="activity-header">
 					<div class="activity-header-title">
 						<p class="item-title h2">
