@@ -234,8 +234,6 @@ function openlab_create_announcement_reply( $args = [] ) {
 		return false;
 	}
 
-	// @todo generate activity item
-
 	return $comment_id;
 }
 
@@ -301,7 +299,6 @@ add_action( 'bp_actions', 'openlab_handle_announcement_post' );
  * Process announcement posts via AJAX.
  */
 function openlab_handle_announcement_post_ajax() {
-//	@todo permission check
 	// Bail if not a POST action
 	if ( 'POST' !== strtoupper( $_SERVER['REQUEST_METHOD'] ) ) {
 		return;
@@ -312,6 +309,12 @@ function openlab_handle_announcement_post_ajax() {
 
 	if ( ! is_user_logged_in() || empty( $_POST['group_id'] ) ) {
 		wp_send_json_error( 'Could not post announcement' );
+	}
+
+	$group_id = (int) $_POST['group_id'];
+	$user_id  = bp_loggedin_user_id();
+	if ( ! openlab_user_can_post_announcements( $user_id, $group_id ) ) {
+		return;
 	}
 
 	if ( empty( $_POST['content'] ) ) {
@@ -326,8 +329,8 @@ function openlab_handle_announcement_post_ajax() {
 		[
 			'content'  => $_POST['content'],
 			'title'    => $_POST['title'],
-			'group_id' => (int) $_POST['group_id'],
-			'user_id'  => bp_loggedin_user_id(),
+			'group_id' => $group_id,
+			'user_id'  => $user_id,
 		]
 	);
 
