@@ -2,81 +2,86 @@
 	let quillEditors = {}
 
 	$(document).ready( () => {
-		const $textarea = $( '#announcement-text' );
-		const $submitButton = $( '#announcement-submit' );
 		const $announcementList = $( '.announcement-list' );
+		const $newAnnouncementItem = $( '.announcement-item-new' )
 
-		// Add the div needed by Quill.
-		$textarea.parent().append( '<div id="announcement-rich-text-editor" class="announcement-rich-text-editor"></div>' );
+		// Main 'new announcement' form setup.
+		if ( $newAnnouncementItem.length > 0 ) {
+			const $textarea = $( '#announcement-text' );
+			const $submitButton = $( '#announcement-submit' );
 
-		$textarea.hide();
+			initQuillEditor( $newAnnouncementItem )
+			setUpTextLabelClick( $newAnnouncementItem )
+			$textarea.hide();
 
-		var quillEditor = new Quill( '#announcement-rich-text-editor', {
-				modules: {
-						toolbar: '#quill-toolbar'
-				},
-				theme: 'snow'
-		});
-
-		/**
-		 * Get content of the Quill editor and put its content in the textarea.
-		 */
-		quillEditor.on( 'text-change', function( delta, oldDelta, source ) {
-				if( quillEditor.getText().trim() ) {
-						let contentHtml = quillEditor.root.innerHTML;
-						$textarea.val(contentHtml);
-				} else {
-						$textarea.val('');
-				}
-		});
-
-		$submitButton.on( 'click', () => {
-			const $form = $submitButton.closest( 'form' )
-
-			$('div.error').remove();
-			$submitButton.addClass('loading');
-			$submitButton.prop('disabled', true);
-			$form.addClass("submitted");
-
-			const object = 'groups';
-			const group_id = $("#whats-new-post-in").val();
-			const content = $textarea.val();
-
-			quillEditor.enable( false )
-
-			$.post( ajaxurl, {
-				action: 'openlab_post_announcement',
-				'cookie': bp_get_cookies(),
-				'_wpnonce_post_update': $("input#_wpnonce_post_update").val(),
-				'content': content,
-				'group_id': group_id
-			},
-			function(response) {
-				quillEditor.enable( true )
-
-				if ( response.success ) {
-					$( '#no-announcement-message' ).hide()
-					$( '.announcement-list' ).prepend( response.data )
-
-					const $newAnnouncement = $( '.announcement-list > article:first-child' );
-					$newAnnouncement.addClass( 'new-update' );
-					setTimeout(
-						() => {
-							$newAnnouncement.removeClass( 'new-update' );
-						},
-						2000
-					);
-
-					$textarea.val( '' )
-					quillEditor.setText( '' )
-
-					$submitButton.removeClass('loading');
-					$submitButton.prop('disabled', false);
-				} else {
-
-				}
+			/**
+			 * Get content of the Quill editor and put its content in the textarea.
+			 */
+			quillEditors[ 'new-announcement' ].on( 'text-change', function( delta, oldDelta, source ) {
+					if( quillEditor.getText().trim() ) {
+							let contentHtml = quillEditor.root.innerHTML;
+							$textarea.val(contentHtml);
+					} else {
+							$textarea.val( '' );
+					}
 			});
-		})
+
+			setUpTextLabelClick( $newAnnouncementItem )
+
+			$submitButton.on( 'click', () => {
+				const $form = $submitButton.closest( 'form' )
+
+				$('div.error').remove();
+				$submitButton.addClass('loading');
+				$submitButton.prop('disabled', true);
+				$form.addClass("submitted");
+
+				const object = 'groups';
+				const group_id = $("#whats-new-post-in").val();
+				const content = $textarea.val();
+
+				quillEditor.enable( false )
+
+				$.post( ajaxurl, {
+					action: 'openlab_post_announcement',
+					'cookie': bp_get_cookies(),
+					'_wpnonce_post_update': $("input#_wpnonce_post_update").val(),
+					'content': content,
+					'group_id': group_id
+				},
+				function(response) {
+					quillEditor.enable( true )
+
+					if ( response.success ) {
+						$( '#no-announcement-message' ).hide()
+						$( '.announcement-list' ).prepend( response.data )
+
+						const $newAnnouncement = $( '.announcement-list > article:first-child' );
+						$newAnnouncement.addClass( 'new-update' );
+						setTimeout(
+							() => {
+								$newAnnouncement.removeClass( 'new-update' );
+							},
+							2000
+						);
+
+						$textarea.val( '' )
+						quillEditor.setText( '' )
+
+						$submitButton.removeClass('loading');
+						$submitButton.prop('disabled', false);
+					} else {
+
+					}
+				});
+			})
+		}
+
+		// Clicking the 'announcement-text' label should put focus into Quill editor.
+		$announcementList.on( 'click', '.announcement-text-label', (e) => {
+			const $parentItem = getParentItem( e.target )
+			setUpTextLabelClick( $parentItem )
+		} )
 
 		// Handle Reply submission.
 		$announcementList.on( 'click', '.announcement-reply-submit', (e) => {
@@ -164,7 +169,7 @@
 
 				const $replyForm = $parentItem.find( '.announcement-reply-form' )
 
-				initQuillEditor( $replyForm[0].querySelector( '.announcement-rich-text-editor' ), editorId )
+				initQuillEditor( $parentItem )
 
 				quillEditors[ editorId ].focus()
 			}
@@ -202,7 +207,7 @@
 
 				const $editForm = $parentItem.find( '.announcement-edit-form' )
 
-				initQuillEditor( $editForm[0].querySelector( '.announcement-rich-text-editor' ), editorId )
+				initQuillEditor( $parentItem )
 
 				const thisEditor = quillEditors[ editorId ]
 
@@ -304,7 +309,7 @@
 
 		$( announcement ).find( '.announcement-textarea' ).append( '<div class="announcement-rich-text-editor"></div>' );
 
-		initQuillEditor( announcement.querySelector( '.announcement-rich-text-editor' ), editorId )
+		initQuillEditor( $( announcement ) )
 	}
 
 	const closeEditMode = ( $parentItem ) => {
@@ -320,14 +325,35 @@
 		$parentItem.find( '> .group-item-wrapper > .announcement-actions .announcement-reply-link' ).removeClass( 'disabled-link' )
 	}
 
+	const setUpTextLabelClick = ( $parentItem ) => {
+		$parentItem.find( '.announcement-text-label' ).on( 'click', () => {
+			const editorId = $parentItem.data( 'editorId' )
+			const theEditor = quillEditors[ editorId ]
+
+			if ( theEditor ) {
+				theEditor.setSelection( theEditor.getLength() )
+			}
+		} )
+	}
+
 	const setBodyText = ( $parentItem, text ) => {
 		$parentItem.find( '> .group-item-wrapper > .announcement-body' ).html( text )
 	}
 
-	const initQuillEditor = ( editorDiv, editorId ) => {
-		quillEditors[ editorId ] = new Quill( editorDiv, {
+	const initQuillEditor = ( $parentItem ) => {
+		const toolbarTemplate = wp.template( 'openlab-announcement-quill-toolbar' )
+
+		const editorId = $parentItem.data( 'editorId' )
+		const toolbarId = editorId + '-toolbar'
+		const toolbarMarkup = toolbarTemplate( { toolbarId } )
+
+		const $editorDiv = $parentItem.find( '.announcement-rich-text-editor' )
+
+		$editorDiv.before( toolbarMarkup )
+
+		quillEditors[ editorId ] = new Quill( $editorDiv[0], {
 				modules: {
-						toolbar: '#quill-toolbar-edit-' + editorId,
+						toolbar: '#' + toolbarId,
 						clipboard: {
 							matchVisual: false
 						}

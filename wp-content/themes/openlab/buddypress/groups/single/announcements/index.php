@@ -67,24 +67,6 @@ $pagination = str_replace( 'current\'><span class="sr-only">Page', 'current\'><s
 
 <script type="text/html" id="tmpl-openlab-announcement-edit-form">
 	<div class="row announcement-form announcement-edit-form" id="edit-form-{{ data.editorId }}" data-announcement-id="{{ data.announcementId }}" data-reply-id="{{ data.replyId }}" data-editor-id="{{ data.editorId }}">
-		<div id="quill-toolbar-edit-{{ data.editorId }}" class="quill-toolbar hide-if-no-js">
-		  <div class="quill-toolbar-buttons">
-			  <button class="ql-bold"></button>
-			  <button class="ql-italic"></button>
-			  <button class="ql-underline"></button>
-			  <button class="ql-link"></button>
-
-			  <button class="ql-list" value="ordered"></button>
-			  <button class="ql-list" value="bullet"></button>
-		  </div>
-
-		  <div class="quill-toolbar-avatar">
-			<a href="<?php echo bp_loggedin_user_domain() ?>">
-				<?php bp_loggedin_user_avatar( 'width=40&height=40' ) ?>
-			</a>
-		  </div>
-		</div>
-
 		<div class="announcement-textarea">
 			<div class="announcement-rich-text-editor"></div>
 		</div>
@@ -101,34 +83,39 @@ $pagination = str_replace( 'current\'><span class="sr-only">Page', 'current\'><s
 
 <script type="text/html" id="tmpl-openlab-announcement-reply-form">
 	<div class="announcement-form announcement-reply-form" id="reply-form-{{ data.editorId }}" data-announcement-id="{{ data.announcementId }}" data-reply-id="{{ data.replyId }}" data-editor-id="{{ data.editorId }}">
-		<div id="quill-toolbar-edit-{{ data.editorId }}" class="quill-toolbar hide-if-no-js">
-		  <div class="quill-toolbar-buttons">
-			  <button class="ql-bold"></button>
-			  <button class="ql-italic"></button>
-			  <button class="ql-underline"></button>
-			  <button class="ql-link"></button>
 
-			  <button class="ql-list" value="ordered"></button>
-			  <button class="ql-list" value="bullet"></button>
-		  </div>
+		<div class="announcement-textarea announcement-form-section">
+			<div class="announcement-editor-wrapper">
+				<div class="announcement-rich-text-editor"></div>
 
-		  <div class="quill-toolbar-avatar">
-			<a href="<?php echo bp_loggedin_user_domain() ?>">
-				<?php bp_loggedin_user_avatar( 'width=40&height=40' ) ?>
-			</a>
-		  </div>
-		</div>
+				<div class="announcement-options">
+					<div class="announcement-submit-container">
+						<button class="announcement-reply-submit btn btn-primary"><span class="button-text">Reply</span> <i class="fa fa-long-arrow-right"></i></button>
 
-		<div class="announcement-textarea">
-			<div class="announcement-rich-text-editor"></div>
-		</div>
-
-		<div class="announcement-options">
-			<div class="announcement-submit-container">
-				<button class="announcement-reply-submit btn btn-primary"><span class="button-text">Reply</span> <i class="fa fa-long-arrow-right"></i></button>
-
-				<button class="edit-cancel">Cancel</button>
+						<button class="edit-cancel">Cancel</button>
+					</div>
+				</div>
 			</div>
 		</div>
+	</div>
+</script>
+
+<script type="text/html" id="tmpl-openlab-announcement-quill-toolbar">
+	<div id="{{ data.toolbarId }}" class="quill-toolbar hide-if-no-js">
+	  <div class="quill-toolbar-buttons">
+		  <button class="ql-bold"></button>
+		  <button class="ql-italic"></button>
+		  <button class="ql-underline"></button>
+		  <button class="ql-link"></button>
+
+		  <button class="ql-list" value="ordered"></button>
+		  <button class="ql-list" value="bullet"></button>
+	  </div>
+
+	  <div class="quill-toolbar-avatar">
+		<a href="<?php echo bp_loggedin_user_domain() ?>">
+			<?php bp_loggedin_user_avatar( 'width=40&height=40' ) ?>
+		</a>
+	  </div>
 	</div>
 </script>

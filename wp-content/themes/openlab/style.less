@@ -673,9 +673,21 @@ a.disabled-link {
 	padding-top: 30px;
 }
 
-.announcement-form {
+.announcement-editor-wrapper {
 	border: 1px solid #ccc;
 	border-radius: 4px;
+}
+
+.announcement-rich-text-editor.ql-container {
+	border-top: 1px solid #ccc !important;
+	margin: 10px;
+}
+
+.announcement-options {
+	margin: 10px;
+}
+
+.announcement-form {
 	padding-bottom: 10px;
 
 	.quill-toolbar {
@@ -780,8 +792,12 @@ a.disabled-link {
 	}
 }
 
-.announcement-options {
+.announcement-form-section {
 	padding: 0 10px;
+
+	&.announcement-title {
+		margin-top: 15px;
+	}
 }
 
 .announcement-reply-container {
@@ -790,10 +806,6 @@ a.disabled-link {
 	margin-top: 20px;
 	padding-top: 20px;
 	border-top: 2px solid @10gray;
-
-	.announcement-options {
-		margin-top: 10px;
-	}
 
 	textarea {
 		display: none;

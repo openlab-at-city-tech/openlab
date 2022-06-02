@@ -7855,9 +7855,18 @@ a.disabled-link {
 .no-announcement-message {
   padding-top: 30px;
 }
-.announcement-form {
+.announcement-editor-wrapper {
   border: 1px solid #ccc;
   border-radius: 4px;
+}
+.announcement-rich-text-editor.ql-container {
+  border-top: 1px solid #ccc !important;
+  margin: 10px;
+}
+.announcement-options {
+  margin: 10px;
+}
+.announcement-form {
   padding-bottom: 10px;
 }
 .announcement-form .quill-toolbar {
@@ -7932,17 +7941,17 @@ a.disabled-link {
 .announcement-item .announcement-actions a {
   font-weight: 700;
 }
-.announcement-options {
+.announcement-form-section {
   padding: 0 10px;
+}
+.announcement-form-section.announcement-title {
+  margin-top: 15px;
 }
 .announcement-reply-container {
   display: none;
   margin-top: 20px;
   padding-top: 20px;
   border-top: 2px solid #dddddd;
-}
-.announcement-reply-container .announcement-options {
-  margin-top: 10px;
 }
 .announcement-reply-container textarea {
   display: none;
