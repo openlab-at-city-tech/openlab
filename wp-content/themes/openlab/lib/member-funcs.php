@@ -1545,11 +1545,8 @@ function openlab_update_member_group_privacy() {
 
 	// Check if group id is provded in the request
 	if( ! isset( $_POST['group_id'] ) ) {
-		echo json_encode( array(
-			'success'	=> false,
-			'message'	=> 'Group ID is missing.'
-		) );
-		die();
+		wp_send_json_error( 'Group ID is missing.' );
+		wp_die();
 	}
 
 	$group_id = $_POST['group_id'];
@@ -1557,27 +1554,18 @@ function openlab_update_member_group_privacy() {
 
 	if( $is_private ) {
 		if( $wpdb->insert( $table_name, array( 'user_id' => $user_id, 'group_id' => $group_id ) ) ) {
-			echo json_encode( array(
-				'success'	=> true,
-				'message'	=> 'User membership is set to private'
-			) );
-			die();
+			wp_send_json_success( 'User membership set to private.' );
+			wp_die();
 		}
 	} else {
 		if( $wpdb->delete( $table_name, array( 'user_id' => $user_id, 'group_id' => $group_id ) ) ) {
-			echo json_encode( array(
-				'success'	=> true,
-				'message'	=> 'User membership is set to public.'
-			) );
-			die();
+			wp_send_json_success( 'User membership set to public.' );
+			wp_die();
 		}
 	}
 
-	echo json_encode( array(
-		'success'	=> false,
-		'message'	=> 'Something went wrong'
-	) );
-	die();
+	wp_send_json_error( 'Something went wrong.' );
+	wp_die();
 }
 
 /**
