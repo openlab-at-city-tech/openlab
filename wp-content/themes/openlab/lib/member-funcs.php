@@ -632,7 +632,7 @@ function cuny_profile_activty_block( $type, $title, $last, $desc_length = 135 ) 
 		$exclude_groups = '';
 
 		// Exclude private groups if not current user's profile or don't have moderate access.
-		if( ! bp_is_my_profile() && ! current_user_can( 'moderate' ) ) {
+		if( ! bp_is_my_profile() && ! current_user_can( 'bp_moderate' ) ) {
 			$exclude_groups = '&exclude=' . implode(',', $private_groups);
 		}
 
@@ -689,7 +689,7 @@ function cuny_profile_activty_block( $type, $title, $last, $desc_length = 135 ) 
 										<p class="original-copy hidden"><?php echo $activity; ?></p>
 									</div>
 
-									<?php if( current_user_can( 'moderate' ) && in_array( bp_get_group_id(), $private_groups ) ) { ?>
+									<?php if( current_user_can( 'bp_moderate' ) && in_array( bp_get_group_id(), $private_groups ) ) { ?>
 									<p class="private-membership-indicator"><span class="fa fa-eye-slash"></span> Membership hidden</p>
 									<?php } ?>
 

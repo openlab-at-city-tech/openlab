@@ -164,7 +164,7 @@ if ( $ancestor_of ) {
 $private_groups = openlab_get_user_private_membership( $user_id );
 
 // Exclude private groups if not current user's profile or don't have moderate access.
-if( ! bp_is_my_profile() && ! current_user_can( 'moderate' ) ) {
+if( ! bp_is_my_profile() && ! current_user_can( 'bp_moderate' ) ) {
 	$group_args['exclude'] = $private_groups;
 }
 ?>
@@ -272,7 +272,7 @@ if( ! bp_is_my_profile() && ! current_user_can( 'moderate' ) ) {
 								<p class="truncate-on-the-fly" data-basevalue="105" data-basewidth="250"><?php echo bp_get_group_description_excerpt() ?></p>
 							</div>
 
-							<?php if( current_user_can( 'moderate' ) && in_array( $group_id, $private_groups ) ) { ?>
+							<?php if( current_user_can( 'bp_moderate' ) && in_array( $group_id, $private_groups ) ) { ?>
 							<p class="private-membership-indicator"><span class="fa fa-eye-slash"></span> Membership hidden</p>
 							<?php } ?>
 						</div>
