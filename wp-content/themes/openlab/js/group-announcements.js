@@ -8,18 +8,21 @@
 		// Main 'new announcement' form setup.
 		if ( $newAnnouncementItem.length > 0 ) {
 			const $textarea = $( '#announcement-text' );
+			const $title = $( '#title-new-announcement' )
 			const $submitButton = $( '#announcement-submit' );
 
 			initQuillEditor( $newAnnouncementItem )
 			setUpTextLabelClick( $newAnnouncementItem )
 			$textarea.hide();
 
+			const thisEditor = quillEditors[ 'new-announcement' ]
+
 			/**
 			 * Get content of the Quill editor and put its content in the textarea.
 			 */
-			quillEditors[ 'new-announcement' ].on( 'text-change', function( delta, oldDelta, source ) {
-					if( quillEditor.getText().trim() ) {
-							let contentHtml = quillEditor.root.innerHTML;
+			thisEditor.on( 'text-change', function( delta, oldDelta, source ) {
+					if( thisEditor.getText().trim() ) {
+							let contentHtml = thisEditor.root.innerHTML;
 							$textarea.val(contentHtml);
 					} else {
 							$textarea.val( '' );
@@ -40,17 +43,16 @@
 				const group_id = $("#whats-new-post-in").val();
 				const content = $textarea.val();
 
-				quillEditor.enable( false )
-
 				$.post( ajaxurl, {
 					action: 'openlab_post_announcement',
 					'cookie': bp_get_cookies(),
 					'_wpnonce_post_update': $("input#_wpnonce_post_update").val(),
 					'content': content,
-					'group_id': group_id
+					'group_id': group_id,
+					title: $title.val()
 				},
 				function(response) {
-					quillEditor.enable( true )
+					thisEditor.enable( true )
 
 					if ( response.success ) {
 						$( '#no-announcement-message' ).hide()
@@ -66,10 +68,11 @@
 						);
 
 						$textarea.val( '' )
-						quillEditor.setText( '' )
+						thisEditor.setText( '' )
+						$title.val( '' )
 
-						$submitButton.removeClass('loading');
-						$submitButton.prop('disabled', false);
+						$submitButton.removeClass( 'loading' );
+						$submitButton.prop( 'disabled', false );
 					} else {
 
 					}

@@ -141,6 +141,7 @@ function openlab_user_can_reply_to_reply( $user_id = null, $reply_id = null ) {
  * @param array $args {
  *   @type int    $group_id ID of the group.
  *   @type int    $user_id  ID of the author.
+ *   @type string $title    Title of the announcement.
  *   @type string $content  Content of the announcement.
  * }
  * @return int ID of announcement object.
@@ -150,6 +151,7 @@ function openlab_create_announcement( $args = [] ) {
 		[
 			'group_id' => 0,
 			'user_id'  => 0,
+			'title'    => '',
 			'content'  => ''
 		],
 		$args
@@ -162,19 +164,13 @@ function openlab_create_announcement( $args = [] ) {
 		return false;
 	}
 
-	$post_title = sprintf(
-		'New announcement by %1$s in %2$s',
-		bp_core_get_user_displayname( $r['user_id'] ),
-		$group->name
-	);
-
 	$post_id = wp_insert_post(
 		[
 			'post_type'    => 'openlab_announcement',
 			'post_status'  => 'publish',
 			'post_author'  => $r['user_id'],
 			'post_content' => $r['content'],
-			'post_title'   => $post_title,
+			'post_title'   => $r['title'],
 		],
 		true
 	);
@@ -278,6 +274,7 @@ function openlab_handle_announcement_post() {
 	$announcement_id = openlab_create_announcement(
 		[
 			'content'  => $content,
+			'title'    => $_POST['title'],
 			'group_id' => $group_id,
 			'user_id'  => bp_loggedin_user_id(),
 		]
@@ -316,9 +313,14 @@ function openlab_handle_announcement_post_ajax() {
 		wp_send_json_error( 'Please enter some content to post.' );
 	}
 
+	if ( empty( $_POST['title'] ) ) {
+		wp_send_json_error( 'Please enter a title.' );
+	}
+
 	$announcement_id = openlab_create_announcement(
 		[
 			'content'  => $_POST['content'],
+			'title'    => $_POST['title'],
 			'group_id' => (int) $_POST['group_id'],
 			'user_id'  => bp_loggedin_user_id(),
 		]

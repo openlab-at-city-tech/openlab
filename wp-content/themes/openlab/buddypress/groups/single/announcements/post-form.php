@@ -3,7 +3,7 @@
 
 		<div class="announcement-title announcement-form-section">
 			<label for="announcement-title">Title:</label>
-			<input type="text" class="form-control" name="announcement-title" id="announcement-title" />
+			<input type="text" class="form-control announcement-title" name="announcement-title" id="title-new-announcement" />
 		</div>
 
 		<div class="announcement-textarea announcement-form-section">
