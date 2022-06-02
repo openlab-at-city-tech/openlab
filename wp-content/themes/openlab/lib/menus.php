@@ -942,6 +942,15 @@ function openlab_filter_subnav_nav_upcoming($subnav_item) {
 
 add_filter('bp_get_options_nav_new-event', 'openlab_filter_subnav_nav_new_event');
 
+/**
+ * Modify 'Announcements' nav item.
+ */
+function openlab_filter_subnav_announcements( $subnav_item ) {
+    $subnav_item = str_replace( 'current selected', 'current-menu-item', $subnav_item );
+	return $subnav_item;
+}
+add_filter( 'bp_get_options_nav_nav-announcements', 'openlab_filter_subnav_announcements' );
+
 function openlab_filter_subnav_nav_new_event($subnav_item) {
 
     $subnav_item = str_replace("current selected", "current-menu-item", $subnav_item);
