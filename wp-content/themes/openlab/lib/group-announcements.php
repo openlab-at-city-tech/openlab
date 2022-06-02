@@ -30,7 +30,7 @@ add_action(
 			'show_ui'             => false,
 			'publicly_queryable'  => false,
 			'exclude_from_search' => true,
-			'show_in_rest'        => true,
+			'show_in_rest'        => false,
 		];
 
 		register_post_type( 'openlab_announcement', $args );
@@ -54,17 +54,9 @@ add_action(
 		wp_register_script(
 			'openlab-group-announcements',
 			get_stylesheet_directory_uri() . '/js/group-announcements.js',
-			[ 'openlab-quill-script' ],
+			[ 'openlab-quill-script', 'wp-backbone' ],
 			OL_VERSION,
 			true
-		);
-
-		wp_localize_script(
-			'openlab-group-announcements',
-			'OpenLabGroupAnnouncements',
-			[
-				'reply' => 'Reply',
-			]
 		);
 
 		wp_register_style(
@@ -395,3 +387,50 @@ function openlab_handle_announcement_reply_ajax() {
 	wp_send_json_success( $contents );
 }
 add_action( 'wp_ajax_openlab_post_announcement_reply', 'openlab_handle_announcement_reply_ajax' );
+
+/**
+ * Process AJAX announcement edit.
+ */
+function openlab_handle_announcement_edit_ajax() {
+	// Bail if not a POST action
+	if ( 'POST' !== strtoupper( $_SERVER['REQUEST_METHOD'] ) ) {
+		return;
+	}
+
+	if ( empty( $_POST['editorId'] ) || empty( $_POST['announcementId'] ) ) {
+		return;
+	}
+
+	$editor_id = wp_unslash( $_POST['editorId'] );
+
+	check_admin_referer( 'announcement_' . $editor_id, 'nonce' );
+
+	$announcement_id = wp_unslash( $_POST['announcementId'] );
+
+	if ( ! current_user_can( 'edit_post', $announcement_id ) ) {
+		wp_send_json_error();
+	}
+
+	// wp_update_post() expects slashed content.
+	$content = $_POST['content'];
+
+	$saved = wp_update_post(
+		[
+			'ID'           => $announcement_id,
+			'post_content' => $content,
+		]
+	);
+
+	if ( ! $saved ) {
+		wp_send_json_error();
+	}
+
+	$announcement = get_post( $announcement_id );
+
+	wp_send_json_success(
+		[
+			'content' => $announcement->post_content,
+		]
+	);
+}
+add_action( 'wp_ajax_openlab_edit_announcement', 'openlab_handle_announcement_edit_ajax' );

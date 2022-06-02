@@ -663,6 +663,12 @@ button.related-link-action.related-link-add {
 }
 
 /** Group Announcements **/
+
+a.disabled-link {
+	text-decoration: none;
+	pointer-events: none;
+}
+
 .no-announcement-message {
 	padding-top: 30px;
 }
@@ -774,6 +780,10 @@ button.related-link-action.related-link-add {
 	}
 }
 
+.announcement-options {
+	padding: 0 10px;
+}
+
 .announcement-reply-container {
 	display: none;
 
@@ -813,6 +823,14 @@ button.related-link-action.related-link-add {
 .announcement-reply-item {
 	.announcement-reply-container {
 		padding-left: 40px;
+	}
+}
+
+.announcement-edit-form {
+	.edit-cancel {
+		border: 0;
+		background: transparent;
+		color: @80gray;
 	}
 }
 

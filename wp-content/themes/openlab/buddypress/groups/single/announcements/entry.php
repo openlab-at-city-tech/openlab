@@ -35,9 +35,11 @@ $top_level_comments = get_comments(
 
 $can_reply_class = openlab_user_can_reply_to_announcement( bp_loggedin_user_id(), $announcement_id ) ? 'user-can-reply' : '';
 
+$editor_id = 'announcement-' . $announcement_id;
+
 ?>
 
-<article class="group-item updateable-item announcement-item <?php echo esc_attr( $can_reply_class ); ?>" id="announcement-item-<?php echo esc_attr( $announcement_id ); ?>" data-announcement-id="<?php echo esc_attr( $announcement_id ); ?>" data-editor-id="announcement-<?php echo esc_attr( $announcement_id ); ?>">
+<article class="group-item updateable-item announcement-item <?php echo esc_attr( $can_reply_class ); ?>" id="announcement-item-<?php echo esc_attr( $announcement_id ); ?>" data-announcement-id="<?php echo esc_attr( $announcement_id ); ?>" data-editor-id="<?php echo esc_attr( $editor_id ); ?>" data-nonce="<?php echo esc_attr( wp_create_nonce( 'announcement_' . $editor_id ) ); ?>" data-item-type="announcement">
 	<div class="group-item-wrapper">
 		<header class="row announcement-header">
 			<div class="item-avatar alignleft col-xs-3">
@@ -57,9 +59,7 @@ $can_reply_class = openlab_user_can_reply_to_announcement( bp_loggedin_user_id()
 		</header>
 
 		<div class="row announcement-body">
-			<div class="item col-xs-21">
-				<?php echo wp_kses_post( $announcement->post_content ); ?>
-			</div>
+			<?php echo wp_kses_post( $announcement->post_content ); ?>
 		</div>
 
 		<?php if ( is_user_logged_in() ) : ?>
@@ -71,8 +71,8 @@ $can_reply_class = openlab_user_can_reply_to_announcement( bp_loggedin_user_id()
 				<?php endif; ?>
 
 				<?php if ( current_user_can( 'edit_post', $announcement_id ) ) : ?>
-					<div class="announcement-action">
-						<a class="" href="">Edit</a>
+					<div class="hide-if-no-js announcement-action">
+						<a class="announcement-edit-link" href="">Edit</a>
 					</div>
 
 					<div class="announcement-action">
