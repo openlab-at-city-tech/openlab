@@ -9939,6 +9939,16 @@ input#group-request-send {
 .group-members.group-list .group-item-wrapper .activity {
   font-size: 12px;
 }
+.group-members.group-list .group-item-membership-privacy {
+  margin-top: 15px;
+}
+.group-members.group-list .group-item-membership-privacy label {
+  font-size: 12px;
+  font-weight: 400;
+}
+.group-members.group-list .group-item-membership-privacy label:hover {
+  cursor: pointer;
+}
 .group-manage-members.group-list.group-manage-requests .group-item .group-item-wrapper ul.group-member-actions {
   font-weight: normal;
 }
@@ -11374,4 +11384,11 @@ body.single-help .entry-content h6 {
     float: none !important;
     width: 100%;
   }
+}
+/* Private membership indicator */
+p.private-membership-indicator {
+  margin-top: 15px;
+  font-size: 12px;
+  font-weight: 400;
+  color: #666 !important;
 }
