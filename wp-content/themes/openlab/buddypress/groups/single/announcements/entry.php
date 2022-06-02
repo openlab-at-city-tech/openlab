@@ -3,6 +3,8 @@
 $announcement_id = $args['announcement_id'];
 $announcement    = get_post( $announcement_id );
 
+$read_only = ! empty( $args['read_only'] );
+
 // Group ID
 $group_id = (int) get_post_meta( $announcement_id, 'openlab_announcement_group_id', true );
 
@@ -39,6 +41,23 @@ $editor_id = 'announcement-' . $announcement_id;
 
 $delete_url = wp_nonce_url( $group_url . 'announcements/?delete-announcement=' . $announcement_id, 'announcement_delete_' . $announcement_id );
 
+$announcement_content = $announcement->post_content;
+if ( $read_only ) {
+	$truncated = bp_create_excerpt( $announcement_content, 800, [ 'ending' => '**readmore**' ] );
+
+	if ( $truncated !== $announcement_content ) {
+		$announcement_content = str_replace(
+			'**readmore**',
+			sprintf(
+				'&hellip; <a href="%s">%s</a>',
+				esc_url( bp_get_group_permalink( $group ) . 'announcements/' ),
+				'See More'
+			),
+			$truncated
+		);
+	}
+}
+
 ?>
 
 <article class="group-item updateable-item announcement-item <?php echo esc_attr( $can_reply_class ); ?>" id="announcement-item-<?php echo esc_attr( $announcement_id ); ?>" data-announcement-id="<?php echo esc_attr( $announcement_id ); ?>" data-editor-id="<?php echo esc_attr( $editor_id ); ?>" data-nonce="<?php echo esc_attr( wp_create_nonce( 'announcement_' . $editor_id ) ); ?>" data-item-type="announcement">
@@ -61,10 +80,10 @@ $delete_url = wp_nonce_url( $group_url . 'announcements/?delete-announcement=' .
 		</header>
 
 		<div class="row announcement-body">
-			<?php echo wp_kses_post( $announcement->post_content ); ?>
+			<?php echo wp_kses_post( $announcement_content ); ?>
 		</div>
 
-		<?php if ( is_user_logged_in() ) : ?>
+		<?php if ( is_user_logged_in() && ! $read_only ) : ?>
 			<div class="row announcement-actions">
 				<?php if ( openlab_user_can_reply_to_announcement( bp_loggedin_user_id(), $announcement_id ) ) : ?>
 					<div class="hide-if-no-js announcement-action">
@@ -86,10 +105,12 @@ $delete_url = wp_nonce_url( $group_url . 'announcements/?delete-announcement=' .
 			<div class="row announcement-reply-container"></div>
 		<?php endif; ?>
 
-		<div class="announcement-replies">
-			<?php foreach ( $top_level_comments as $top_level_comment ) : ?>
-				<?php bp_get_template_part( 'groups/single/announcements/reply', '', [ 'reply_id' => $top_level_comment->comment_ID ] ); ?>
-			<?php endforeach; ?>
-		</div>
+		<?php if ( ! $read_only ) : ?>
+			<div class="announcement-replies">
+				<?php foreach ( $top_level_comments as $top_level_comment ) : ?>
+					<?php bp_get_template_part( 'groups/single/announcements/reply', '', [ 'reply_id' => $top_level_comment->comment_ID ] ); ?>
+				<?php endforeach; ?>
+			</div>
+		<?php endif; ?>
 	</div>
 </article>
