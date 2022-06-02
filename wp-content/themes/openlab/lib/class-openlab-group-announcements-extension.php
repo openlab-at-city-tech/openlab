@@ -2,11 +2,13 @@
 
 class OpenLab_Group_Announcements_Extension extends BP_Group_Extension {
 	public function __construct() {
+		$enabled = bp_is_group() ? openlab_is_announcements_enabled_for_group( bp_get_current_group_id() ) : false;
+
 		parent::init(
 			[
 				'slug' => 'announcements',
 				'name' => 'Announcements',
-				'visibility' => 'public',
+				'access' => $enabled ? 'anyone' : 'noone',
 				'nav_item_position' => 30,
 			]
 		);

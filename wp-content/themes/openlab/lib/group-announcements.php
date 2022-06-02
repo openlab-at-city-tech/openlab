@@ -587,3 +587,29 @@ function openlab_generate_announcement_activity( $announcement_id ) {
 	bp_activity_add( $args );
 }
 add_action( 'openlab_create_announcement', 'openlab_generate_announcement_activity' );
+
+/**
+ * Checks whether Announcements tab is enabled for a group.
+ *
+ * @param int $group_id Group id.
+ * @return bool
+ */
+function openlab_is_announcements_enabled_for_group( $group_id = null ) {
+	if ( null === $group_id ) {
+		$group_id = bp_get_current_group_id();
+	}
+
+	// Default to true in case no value is found, except for portfolios.
+	if ( ! $group_id ) {
+		return true;
+	}
+
+	$is_disabled = groups_get_groupmeta( $group_id, 'openlab_announcements_disabled' );
+
+	// Empty value should default to disabled for portfolios.
+	if ( '' === $is_disabled && openlab_is_portfolio( $group_id ) ) {
+		$is_disabled = true;
+	}
+
+	return empty( $is_disabled );
+}
