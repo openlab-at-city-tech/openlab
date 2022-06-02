@@ -7888,9 +7888,6 @@ a.disabled-link {
 .announcement-form .quill-toolbar .quill-toolbar-avatar {
   flex: 0 0 40px;
 }
-.announcement-form .announcement-textarea {
-  padding: 10px;
-}
 .announcement-form .ql-container.ql-snow {
   border-radius: 4px;
 }
@@ -7940,9 +7937,6 @@ a.disabled-link {
 }
 .announcement-item .announcement-actions a {
   font-weight: 700;
-}
-.announcement-form-section {
-  padding: 0 10px;
 }
 .announcement-form-section.announcement-title {
   margin-top: 15px;
