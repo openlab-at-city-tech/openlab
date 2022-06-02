@@ -2,7 +2,7 @@
 	<form action="<?php echo esc_url( bp_get_group_permalink( groups_get_current_group() ) . 'announcements/post/' ); ?>" method="post" id="primary-announcement-form" name="announcement-form" class="announcement-form primary-announcement-form">
 
 		<div class="announcement-title announcement-form-section">
-			<label for="announcement-title">Title:</label>
+			<label for="title-new-announcement">Title:</label>
 			<input type="text" class="form-control announcement-title" name="announcement-title" id="title-new-announcement" />
 		</div>
 

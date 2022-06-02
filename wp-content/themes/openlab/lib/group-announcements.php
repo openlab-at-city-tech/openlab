@@ -420,6 +420,7 @@ function openlab_handle_announcement_edit_ajax() {
 		[
 			'ID'           => $announcement_id,
 			'post_content' => $content,
+			'post_title'   => $_POST['title'],
 		]
 	);
 
@@ -432,6 +433,7 @@ function openlab_handle_announcement_edit_ajax() {
 	wp_send_json_success(
 		[
 			'content' => $announcement->post_content,
+			'title'   => $announcement->post_title,
 		]
 	);
 }

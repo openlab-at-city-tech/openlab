@@ -189,6 +189,8 @@
 
 			$parentItem.find( '> .group-item-wrapper > .announcement-actions .announcement-edit-link' ).addClass( 'disabled-link' )
 
+			const itemType = $parentItem.data( 'itemType' )
+
 			if ( isEditMode ) {
 				// Do nothing?
 			} else {
@@ -196,13 +198,18 @@
 
 				const editorId = $parentItem.data( 'editorId' )
 
+				const templateName = 'reply' === itemType ? 'openlab-announcement-reply-edit-form' : 'openlab-announcement-edit-form'
+
+				const title = 'reply' === itemType ? '' : $parentItem.find( '.announcement-title-rendered' ).html()
+
 				// Build the edit interface.
-				const editTemplate = wp.template( 'openlab-announcement-edit-form' )
+				const editTemplate = wp.template( templateName )
 				const editMarkup = editTemplate(
 					{
 						announcementId: $parentItem.data( 'announcementId' ),
 						editorId: editorId,
-						replyId: $parentItem.data( 'replyId' )
+						replyId: $parentItem.data( 'replyId' ),
+						title
 					}
 				)
 
@@ -239,7 +246,8 @@
 					nonce: $parentItem.data( 'nonce' ),
 					announcementId: $parentItem.data( 'announcementId' ),
 					editorId: editorId,
-					content: editorContent
+					content: editorContent,
+					title: $parentItem.find( 'input.announcement-title' ).val()
 				} :
 				{
 					action: 'openlab_edit_announcement_reply',
@@ -263,6 +271,7 @@
 				}
 
 				setBodyText( $parentItem, response.data.content )
+				setTitle( $parentItem, response.data.title )
 				closeEditMode( $parentItem )
 			} )
 		} )
@@ -341,6 +350,11 @@
 
 	const setBodyText = ( $parentItem, text ) => {
 		$parentItem.find( '> .group-item-wrapper > .announcement-body' ).html( text )
+	}
+
+	const setTitle = ( $parentItem, text ) => {
+		const editorId = $parentItem.data( 'editorId' )
+		document.getElementById( 'title-rendered-' + editorId ).innerHTML = text
 	}
 
 	const initQuillEditor = ( $parentItem ) => {

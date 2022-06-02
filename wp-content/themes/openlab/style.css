@@ -7918,7 +7918,7 @@ a.disabled-link {
 .announcement-item .group-item-wrapper > .row:last-child {
   margin-bottom: 0;
 }
-.announcement-item h1.announcement-title {
+.announcement-item h1.announcement-title-rendered {
   font-size: 16px;
   margin-top: 0;
 }

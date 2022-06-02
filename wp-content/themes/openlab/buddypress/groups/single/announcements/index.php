@@ -67,6 +67,27 @@ $pagination = str_replace( 'current\'><span class="sr-only">Page', 'current\'><s
 
 <script type="text/html" id="tmpl-openlab-announcement-edit-form">
 	<div class="row announcement-form announcement-edit-form" id="edit-form-{{ data.editorId }}" data-announcement-id="{{ data.announcementId }}" data-reply-id="{{ data.replyId }}" data-editor-id="{{ data.editorId }}">
+		<div class="announcement-title announcement-form-section">
+			<label for="title-{{ data.editorId }}">Title:</label>
+			<input type="text" class="form-control announcement-title" id="title-{{ data.editorId }}" value="{{ data.title }}" />
+		</div>
+
+		<div class="announcement-textarea">
+			<div class="announcement-rich-text-editor"></div>
+		</div>
+
+		<div class="announcement-options">
+			<div class="announcement-submit-container">
+				<button class="announcement-edit-submit btn btn-primary"><span class="button-text">Edit</span> <i class="fa fa-long-arrow-right"></i></button>
+
+				<button class="edit-cancel">Cancel</button>
+			</div>
+		</div>
+	</div>
+</script>
+
+<script type="text/html" id="tmpl-openlab-announcement-reply-edit-form">
+	<div class="row announcement-form announcement-edit-form" id="edit-form-{{ data.editorId }}" data-announcement-id="{{ data.announcementId }}" data-reply-id="{{ data.replyId }}" data-editor-id="{{ data.editorId }}">
 		<div class="announcement-textarea">
 			<div class="announcement-rich-text-editor"></div>
 		</div>

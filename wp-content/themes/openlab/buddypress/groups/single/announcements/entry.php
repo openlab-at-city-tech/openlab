@@ -49,7 +49,7 @@ $editor_id = 'announcement-' . $announcement_id;
 			</div>
 
 			<div class="col-xs-21">
-				<h1 class="announcement-title"><?php echo esc_html( $announcement->post_title ); ?></h1>
+				<h1 id="title-rendered-<?php echo esc_attr( $editor_id ); ?>" class="announcement-title-rendered"><?php echo esc_html( $announcement->post_title ); ?></h1>
 				<div class="announcement-info">
 					<?php printf( 'Posted by: %s', esc_html( $author_name ) ); ?>
 					<br />
