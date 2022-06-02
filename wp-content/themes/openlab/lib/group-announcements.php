@@ -580,7 +580,7 @@ function openlab_generate_announcement_activity( $announcement_id ) {
 		'content'       => get_the_content( null, false, $announcement_id ),
 		'component'     => 'groups',
 		'action'        => $action,
-		'primary_link'  => $item['permalink'],
+		'primary_link'  => bp_get_group_permalink( $group ) . 'announcements/',
 		'user_id'       => $post->post_author,
 		'item_id'       => $group_id,
 		'recorded_time' => $post->post_date,
