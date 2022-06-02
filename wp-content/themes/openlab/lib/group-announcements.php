@@ -347,15 +347,15 @@ function openlab_handle_announcement_reply_ajax() {
 		return;
 	}
 
-	if ( empty( $_POST['announcementId'] ) ) {
+	if ( empty( $_POST['announcementId'] ) || empty( $_POST['editorId'] ) ) {
 		return;
 	}
 
 	$announcement_id = (int) $_POST['announcementId'];
 	$parent_id       = ! empty( $_POST['parentReplyId'] ) ? (int) $_POST['parentReplyId'] : 0;
 
-	// Check the nonce
-	check_admin_referer( 'announcement_reply', 'announcement-reply-nonce' );
+	$editor_id = wp_unslash( $_POST['editorId'] );
+	check_admin_referer( 'announcement_' . $editor_id, 'nonce' );
 
 	if ( ! is_user_logged_in() ) {
 		wp_send_json_error( 'Could not post announcement' );

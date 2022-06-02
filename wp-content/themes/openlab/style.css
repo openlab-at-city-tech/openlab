@@ -7963,7 +7963,7 @@ a.disabled-link {
 .announcement-reply-item .announcement-reply-container {
   padding-left: 40px;
 }
-.announcement-edit-form .edit-cancel {
+.announcement-form .edit-cancel {
   border: 0;
   background: transparent;
   color: #333333;

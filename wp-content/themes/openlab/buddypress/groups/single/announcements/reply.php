@@ -50,9 +50,11 @@ $reply_replies = get_comments(
 $user_can_reply  = openlab_user_can_reply_to_reply( bp_loggedin_user_id(), $reply_id );
 $can_reply_class = $user_can_reply ? 'user-can-reply' : '';
 
+$editor_id = 'reply-' . $reply_id;
+
 ?>
 
-<div class="group-item updateable-item announcement-reply-item <?php echo esc_attr( $can_reply_class ); ?>" id="announcement-reply-item-<?php echo esc_attr( $reply_id ); ?>" data-reply-id="<?php echo esc_attr( $reply_id ); ?>" data-announcement-id="<?php echo esc_attr( $announcement_id ); ?>" data-editor-id="reply-<?php echo esc_attr( $reply_id ); ?>">
+<div class="group-item updateable-item announcement-reply-item <?php echo esc_attr( $can_reply_class ); ?>" id="announcement-reply-item-<?php echo esc_attr( $reply_id ); ?>" data-reply-id="<?php echo esc_attr( $reply_id ); ?>" data-announcement-id="<?php echo esc_attr( $announcement_id ); ?>" data-nonce="<?php echo esc_attr( wp_create_nonce( 'announcement_' . $editor_id ) ); ?>" data-item-type="reply" data-editor-id="<?php echo esc_attr( $editor_id ); ?>">
 	<div class="group-item-wrapper">
 		<header class="row announcement-header">
 			<div class="item-avatar alignleft col-xs-3">
@@ -97,9 +99,7 @@ $can_reply_class = $user_can_reply ? 'user-can-reply' : '';
 			</div>
 
 			<?php if ( $user_can_reply ) : ?>
-				<div class="row announcement-reply-container">
-					<?php bp_get_template_part( 'groups/single/announcements/reply-form', '', [ 'announcement_id' => $announcement_id, 'parent_id' => $reply_id ] ); ?>
-				</div>
+				<div class="row announcement-reply-container"></div>
 			<?php endif; ?>
 
 		<?php endif; ?>

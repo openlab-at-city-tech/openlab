@@ -67,8 +67,6 @@
 						2000
 					);
 
-					initAnnouncementEditor( $newAnnouncement[0] )
-
 					$textarea.val( '' )
 					quillEditor.setText( '' )
 
@@ -81,7 +79,7 @@
 		})
 
 		// Handle Reply submission.
-		$announcementList.on( 'click', '.reply-submit', (e) => {
+		$announcementList.on( 'click', '.announcement-reply-submit', (e) => {
 			e.preventDefault()
 
 			const $parentItem = getParentItem( e.target )
@@ -102,7 +100,8 @@
 			$.post( ajaxurl, {
 					action: 'openlab_post_announcement_reply',
 					cookie: bp_get_cookies(),
-					'announcement-reply-nonce': $( '#announcement-reply-nonce-' + editorId ).val(),
+					nonce: $parentItem.data( 'nonce' ),
+					editorId: editorId,
 					content: replyContent,
 					announcementId: announcementId,
 					parentReplyId: parentReplyId
@@ -128,7 +127,7 @@
 							2000
 						);
 
-						initAnnouncementEditor( $newReply[0] )
+						closeReplyMode( $parentItem )
 
 					} else {
 					}
@@ -136,11 +135,14 @@
 		  )
 		})
 
-		// Clicking 'Reply' link should toggle Reply fields.
+		// Generate Reply form when clicking 'Reply'.
 		$announcementList.on( 'click', '.announcement-reply-link', (e) => {
 			e.preventDefault()
 
 			const $parentItem = getParentItem( e.target )
+			const $parentItemBody = $parentItem.find( '> .group-item-wrapper > .announcement-body' )
+
+			const editorId = $parentItem.data( 'editorId' )
 
 			const formIsShown = $parentItem.hasClass( 'show-reply-form' )
 			if ( formIsShown ) {
@@ -148,7 +150,22 @@
 			} else {
 				$parentItem.addClass( 'show-reply-form' )
 
-				const editorId = $parentItem.data( 'editorId' )
+				const replyTemplate = wp.template( 'openlab-announcement-reply-form' )
+				const replyMarkup = replyTemplate(
+					{
+						announcementId: $parentItem.data( 'announcementId' ),
+						editorId: editorId,
+						replyId: $parentItem.data( 'replyId' )
+					}
+				)
+
+				$parentItemBody.after( replyMarkup )
+				$parentItem.find( '> .group-item-wrapper > .announcement-actions .announcement-reply-link' ).addClass( 'disabled-link' )
+
+				const $replyForm = $parentItem.find( '.announcement-reply-form' )
+
+				initQuillEditor( $replyForm[0].querySelector( '.announcement-rich-text-editor' ), editorId )
+
 				quillEditors[ editorId ].focus()
 			}
 		})
@@ -185,15 +202,7 @@
 
 				const $editForm = $parentItem.find( '.announcement-edit-form' )
 
-				quillEditors[ editorId ] = new Quill( $editForm[0].querySelector( '.announcement-rich-text-editor' ), {
-						modules: {
-								toolbar: '#quill-toolbar-edit-' + editorId,
-								clipboard: {
-									matchVisual: false
-								}
-						},
-						theme: 'snow'
-				});
+				initQuillEditor( $editForm[0].querySelector( '.announcement-rich-text-editor' ), editorId )
 
 				const thisEditor = quillEditors[ editorId ]
 
@@ -251,14 +260,16 @@
 		} )
 
 		// Cancelling edit mode.
-		$announcementList.on( 'click', '.edit-cancel', (e) => {
+		$announcementList.on( 'click', '.announcement-edit-form .edit-cancel', (e) => {
 			e.preventDefault()
 			closeEditMode( getParentItem( e.target ) )
 		} )
 
-		$( '.announcement-item, .announcement-reply-item' ).each( ( key, announcement ) => {
-			initAnnouncementEditor( announcement )
-		})
+		// Cancelling reply mode.
+		$announcementList.on( 'click', '.announcement-reply-form .edit-cancel', (e) => {
+			e.preventDefault()
+			closeReplyMode( getParentItem( e.target ) )
+		} )
 	})
 
 	/**
@@ -293,12 +304,7 @@
 
 		$( announcement ).find( '.announcement-textarea' ).append( '<div class="announcement-rich-text-editor"></div>' );
 
-		quillEditors[ editorId ] = new Quill( announcement.querySelector( '.announcement-rich-text-editor' ), {
-				modules: {
-						toolbar: toolbarEl
-				},
-				theme: 'snow'
-		});
+		initQuillEditor( announcement.querySelector( '.announcement-rich-text-editor' ), editorId )
 	}
 
 	const closeEditMode = ( $parentItem ) => {
@@ -308,7 +314,25 @@
 		$parentItem.find( '> .group-item-wrapper > .announcement-actions .announcement-edit-link' ).removeClass( 'disabled-link' )
 	}
 
+	const closeReplyMode = ( $parentItem ) => {
+		$parentItem.find( '> .group-item-wrapper > .announcement-reply-form' ).remove()
+		$parentItem.removeClass( 'show-reply-form' )
+		$parentItem.find( '> .group-item-wrapper > .announcement-actions .announcement-reply-link' ).removeClass( 'disabled-link' )
+	}
+
 	const setBodyText = ( $parentItem, text ) => {
 		$parentItem.find( '> .group-item-wrapper > .announcement-body' ).html( text )
+	}
+
+	const initQuillEditor = ( editorDiv, editorId ) => {
+		quillEditors[ editorId ] = new Quill( editorDiv, {
+				modules: {
+						toolbar: '#quill-toolbar-edit-' + editorId,
+						clipboard: {
+							matchVisual: false
+						}
+				},
+				theme: 'snow'
+		});
 	}
 })(jQuery)

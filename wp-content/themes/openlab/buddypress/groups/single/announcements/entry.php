@@ -81,9 +81,7 @@ $editor_id = 'announcement-' . $announcement_id;
 				<?php endif; ?>
 			</div>
 
-			<div class="row announcement-reply-container">
-				<?php bp_get_template_part( 'groups/single/announcements/reply-form', '', [ 'announcement_id' => $announcement_id, 'parent_id' => 0 ] ); ?>
-			</div>
+			<div class="row announcement-reply-container"></div>
 		<?php endif; ?>
 
 		<div class="announcement-replies">
