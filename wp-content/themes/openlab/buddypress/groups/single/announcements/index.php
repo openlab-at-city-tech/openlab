@@ -3,34 +3,56 @@
 <?php endif; ?>
 
 <?php
-$announcements = get_posts(
+
+$per_page = 3;
+$paged    = isset( $_GET['apage'] ) ? (int) $_GET['apage'] : 1;
+
+$announcement_query = new WP_Query(
 	[
-		'post_type'   => 'openlab_announcement',
-		'post_status' => 'publish',
-		'meta_query'  => [
+		'post_type'      => 'openlab_announcement',
+		'post_status'    => 'publish',
+		'posts_per_page' => $per_page,
+		'paged'          => $paged,
+		'meta_query'     => [
 			[
 				'key'   => 'openlab_announcement_group_id',
 				'value' => bp_get_current_group_id(),
 			]
 		],
-		// @todo pagination
 	]
 );
+
+$pagination = paginate_links(
+	[
+		'base'               => add_query_arg( [ 'apage' => '%#%' ] ),
+		'format'             => '',
+		'total'              => ceil( $announcement_query->found_posts / (int) $per_page ),
+		'current'            => $paged,
+		'prev_text'          => '<i class="fa fa-angle-left" aria-hidden="true"></i><span class="sr-only">Previous</span>',
+		'next_text'          => '<i class="fa fa-angle-right" aria-hidden="true"></i><span class="sr-only">Next</span>',
+		'mid_size'           => 3,
+		'type'               => 'list',
+		'before_page_number' => '<span class="sr-only">Page</span>',
+	]
+);
+
+$pagination = str_replace( 'page-numbers', 'page-numbers pagination', $pagination );
+
+//for screen reader only text - current page
+$pagination = str_replace( 'current\'><span class="sr-only">Page', 'current\'><span class="sr-only">Current Page', $pagination );
+
 ?>
 
-<?php if ( $announcements ) : ?>
+<?php if ( $announcement_query->posts ) : ?>
 
 	<div class="item-list announcement-list clearfix">
-		<?php foreach ( $announcements as $announcement ) : ?>
+		<?php foreach ( $announcement_query->posts as $announcement ) : ?>
 			<?php bp_get_template_part( 'groups/single/announcements/entry', '', [ 'announcement_id' => $announcement->ID ] ); ?>
 		<?php endforeach; ?>
 	</div>
 
-	<div id="pag-top" class="pagination clearfix">
-		<div class="pagination-links" id="member-dir-pag-top">
-			pagination links
-		</div>
-
+	<div class="pagination-links">
+		<?php echo $pagination; ?>
 	</div>
 
 <?php else: ?>
