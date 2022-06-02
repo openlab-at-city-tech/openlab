@@ -181,7 +181,12 @@ function openlab_create_announcement( $args = [] ) {
 
 	update_post_meta( $post_id, 'openlab_announcement_group_id', $r['group_id'] );
 
-	// @todo generate activity item
+	/**
+	 * Fires after an announcement has been created.
+	 *
+	 * @param int $post_id ID of the announcement object.
+	 */
+	do_action( 'openlab_create_announcement', $post_id );
 
 	return $post_id;
 }
@@ -543,3 +548,42 @@ function openlab_handle_announcement_reply_delete_request() {
 	die;
 }
 add_action( 'bp_actions', 'openlab_handle_announcement_reply_delete_request' );
+
+/**
+ * Generates an activity item after an announcement is posted.
+ *
+ * @param int $announcement_id
+ */
+function openlab_generate_announcement_activity( $announcement_id ) {
+	$post = get_post( $announcement_id );
+	if ( ! $post ) {
+		return;
+	}
+
+	$group_id = (int) get_post_meta( $announcement_id, 'openlab_announcement_group_id', true );
+	$group    = groups_get_group( $group_id );
+
+	$hide_sitewide = ! empty( $group ) && isset( $group->status ) && 'public' !== $group->status;
+
+	$action = sprintf(
+		'%1$s added a new announcement %2$s in the group %3$s',
+		bp_core_get_user_displayname( $post->post_author ),
+		get_the_title( $post ),
+		bp_get_group_name( $group )
+	);
+
+	$args = array(
+		'type'          => 'created_announcement',
+		'content'       => get_the_content( null, false, $announcement_id ),
+		'component'     => 'groups',
+		'action'        => $action,
+		'primary_link'  => $item['permalink'],
+		'user_id'       => $post->post_author,
+		'item_id'       => $group_id,
+		'recorded_time' => $post->post_date,
+		'hide_sitewide' => $hide_sitewide,
+	);
+
+	bp_activity_add( $args );
+}
+add_action( 'openlab_create_announcement', 'openlab_generate_announcement_activity' );
