@@ -8013,6 +8013,7 @@ a.disabled-link {
   border-top: 2px solid #dddddd;
   padding-left: 0;
   padding-right: 0;
+  margin-bottom: 0;
 }
 .announcement-reply-replies > .group-item > .group-item-wrapper {
   padding-left: 40px;
