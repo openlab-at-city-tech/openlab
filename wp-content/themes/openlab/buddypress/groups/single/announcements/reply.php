@@ -59,14 +59,14 @@ $delete_url = wp_nonce_url( $group_url . 'announcements/?delete-announcement-rep
 <div class="group-item updateable-item announcement-reply-item <?php echo esc_attr( $can_reply_class ); ?>" id="announcement-reply-item-<?php echo esc_attr( $reply_id ); ?>" data-reply-id="<?php echo esc_attr( $reply_id ); ?>" data-announcement-id="<?php echo esc_attr( $announcement_id ); ?>" data-nonce="<?php echo esc_attr( wp_create_nonce( 'announcement_' . $editor_id ) ); ?>" data-item-type="reply" data-editor-id="<?php echo esc_attr( $editor_id ); ?>">
 	<div class="group-item-wrapper">
 		<header class="row announcement-header">
-			<div class="item-avatar alignleft col-xs-3">
+			<div class="item-avatar">
 				<div class="activity-avatar">
 					<a href="<?php echo esc_attr( $author_url ) ?>" title="<?php echo esc_attr( $author_name ) ?>"><?php echo $author_avatar; ?></a>
 				</div>
 			</div>
 
-			<div class="col-xs-21">
-				<h1 class="announcement-title"><?php echo esc_html( $reply_title ); ?></h1>
+			<div>
+				<h2 class="announcement-title-rendered"><?php echo esc_html( $reply_title ); ?></h2>
 				<div class="announcement-info">
 					<?php printf( 'Posted by: %s', esc_html( $author_name ) ); ?>
 					<br />

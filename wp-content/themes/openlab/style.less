@@ -799,7 +799,21 @@ a.disabled-link {
 		}
 	}
 
-	h1.announcement-title-rendered {
+	.row.announcement-header {
+		display: flex;
+		gap: 15px;
+
+		&:before {
+			display: none;
+		}
+
+		.item-avatar {
+			flex: 0 0 75px;
+		}
+	}
+
+	h1.announcement-title-rendered,
+	h2.announcement-title-rendered {
 		font-size: 16px;
 		margin-top: 0;
 	}

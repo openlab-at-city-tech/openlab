@@ -7954,7 +7954,18 @@ a.disabled-link {
 .announcement-item .group-item-wrapper > .row:last-child {
   margin-bottom: 0;
 }
-.announcement-item h1.announcement-title-rendered {
+.announcement-item .row.announcement-header {
+  display: flex;
+  gap: 15px;
+}
+.announcement-item .row.announcement-header:before {
+  display: none;
+}
+.announcement-item .row.announcement-header .item-avatar {
+  flex: 0 0 75px;
+}
+.announcement-item h1.announcement-title-rendered,
+.announcement-item h2.announcement-title-rendered {
   font-size: 16px;
   margin-top: 0;
 }

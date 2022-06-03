@@ -65,13 +65,13 @@ if ( $read_only ) {
 <article class="group-item updateable-item announcement-item <?php echo esc_attr( $can_reply_class ); ?>" id="announcement-item-<?php echo esc_attr( $announcement_id ); ?>" data-announcement-id="<?php echo esc_attr( $announcement_id ); ?>" data-editor-id="<?php echo esc_attr( $editor_id ); ?>" data-nonce="<?php echo esc_attr( wp_create_nonce( 'announcement_' . $editor_id ) ); ?>" data-item-type="announcement">
 	<div class="group-item-wrapper">
 		<header class="row announcement-header">
-			<div class="item-avatar alignleft col-xs-3">
+			<div class="item-avatar">
 				<div class="activity-avatar">
 					<a href="<?php echo esc_attr( $author_url ) ?>" title="<?php echo esc_attr( $author_name ) ?>"><?php echo $author_avatar; ?></a>
 				</div>
 			</div>
 
-			<div class="col-xs-21">
+			<div>
 				<?php if ( $read_only ) : ?>
 					<a href="<?php echo esc_url( $announcement_url ); ?>">
 				<?php endif; ?>
