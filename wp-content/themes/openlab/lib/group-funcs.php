@@ -768,6 +768,21 @@ function openlab_render_message() {
 
 function openlab_group_profile_activity_list() {
     global $wpdb, $bp;
+
+	$recent_announcements = get_posts(
+		[
+			'post_type'      => 'openlab_announcement',
+			'post_status'    => 'publish',
+			'posts_per_page' => 3,
+			'meta_query'     => [
+				[
+					'key'   => 'openlab_announcement_group_id',
+					'value' => bp_get_current_group_id(),
+				]
+			],
+		]
+	);
+
     ?>
     <div id="single-course-body">
         <?php
@@ -778,17 +793,28 @@ function openlab_group_profile_activity_list() {
 //     Initialize it to left side to start with
 //
         $first_class = "first";
-        ?>
-        <?php $group_slug = bp_get_group_slug(); ?>
-        <?php $group_type = openlab_get_group_type(bp_get_current_group_id()); ?>
+        $group_slug  = bp_get_group_slug();
+        $group_type  = openlab_get_group_type( bp_get_current_group_id() );
 
-        <?php
-        $group = groups_get_current_group();
+        $group     = groups_get_current_group();
+		$group_url = bp_get_group_permalink( $group );
         ?>
 
         <?php if (bp_is_group_home()) { ?>
 
             <?php if (bp_get_group_status() == 'public' || ((bp_get_group_status() == 'hidden' || bp_get_group_status() == 'private') && (bp_is_item_admin() || bp_group_is_member()))) : ?>
+				<?php if ( $recent_announcements ) : ?>
+					<div class="row group-announcements-overview">
+						<div class="col-sm-24">
+							<h2 class="title activity-title"><a class="no-deco" href="<?php echo esc_url( $group_url ); ?>announcements/">Recent Announcements<span class="fa fa-chevron-circle-right" aria-hidden="true"></span></a></h2>
+
+							<?php foreach ( $recent_announcements as $announcement ) : ?>
+								<?php bp_get_template_part( 'groups/single/announcements/entry', '', [ 'announcement_id' => $announcement->ID, 'read_only' => true ] ); ?>
+							<?php endforeach; ?>
+						</div>
+					</div>
+				<?php endif; ?>
+
                 <?php
                 if (wds_site_can_be_viewed()) {
                     openlab_show_site_posts_and_comments();

@@ -107,15 +107,19 @@ $portfolio_sharing = groups_get_groupmeta( bp_get_current_group_id(), 'enable_po
 			<?php endif; ?>
 
 			<?php
-			$forum_enabled = openlab_is_forum_enabled_for_group();
-			$docs_enabled  = openlab_is_docs_enabled_for_group();
-			$files_enabled = openlab_is_files_enabled_for_group();
+			$announcements_enabled = openlab_is_announcements_enabled_for_group();
+			$forum_enabled         = openlab_is_forum_enabled_for_group();
+			$docs_enabled          = openlab_is_docs_enabled_for_group();
+			$files_enabled         = openlab_is_files_enabled_for_group();
 
 			?>
 			<div class="panel panel-default">
 				<div class="panel-heading">Discussion, Docs, and File Library Settings</div>
 				<div class="panel-body">
-					<p id="discussion-settings-tag">These settings enable or disable Discussions, Docs, and File Library on your <?php echo $group_label_uc; ?> profile.</p>
+					<p id="discussion-settings-tag">These settings enable or disable Announcements, Discussions, Docs, and File Library on your <?php echo $group_label_uc; ?> profile.</p>
+					<div class="checkbox checkbox-float">
+						<label><input type="checkbox" name="openlab-edit-group-announcements" id="group-show-announcements" value="1"<?php checked( $announcements_enabled ); ?> /> Enable Announcements</label>
+					</div>
 					<div class="checkbox checkbox-float">
 						<label><input type="checkbox" name="openlab-edit-group-forum" id="group-show-forum" value="1"<?php checked( $forum_enabled ); ?> /> Enable Discussion</label>
 					</div>

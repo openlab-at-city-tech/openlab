@@ -847,9 +847,6 @@ function openlab_filter_subnav_nav_group_documents($subnav_item) {
 
 add_filter('bp_get_options_nav_group-documents', 'openlab_filter_subnav_nav_group_documents');
 
-
-add_filter('bp_get_options_nav_nav-forum', 'openlab_filter_subnav_forums');
-
 /**
  * Modify the Discussion subnav item in group contexts.
  */
@@ -879,6 +876,8 @@ function openlab_filter_subnav_forums($subnav_item) {
 
     return $subnav_item;
 }
+add_filter( 'bp_get_options_nav_nav-forum', 'openlab_filter_subnav_forums' );
+
 
 add_filter('bp_get_options_nav_nav-invite-anyone', 'openlab_filter_subnav_nav_invite_anyone');
 
@@ -942,6 +941,15 @@ function openlab_filter_subnav_nav_upcoming($subnav_item) {
 
 add_filter('bp_get_options_nav_new-event', 'openlab_filter_subnav_nav_new_event');
 
+/**
+ * Modify 'Announcements' nav item.
+ */
+function openlab_filter_subnav_announcements( $subnav_item ) {
+    $subnav_item = str_replace( 'current selected', 'current-menu-item', $subnav_item );
+	return $subnav_item;
+}
+add_filter( 'bp_get_options_nav_nav-announcements', 'openlab_filter_subnav_announcements' );
+
 function openlab_filter_subnav_nav_new_event($subnav_item) {
 
     $subnav_item = str_replace("current selected", "current-menu-item", $subnav_item);
@@ -963,23 +971,29 @@ function openlab_group_submenu_nav() {
     }
 
 	$positions = array(
-		'home'      => 10,
-		'nav-forum' => 25,
-		'docs'      => 60,
-		'files'     => 70,
-		'events'    => 80,
-		'members'   => 90,
-		'admin'     => 100,
+		'home'          => 10,
+		'announcements' => 20,
+		'forum'         => 50,
+		'docs'          => 60,
+		'files'         => 70,
+		'events'        => 80,
+		'members'       => 90,
+		'admin'         => 100,
 	);
 
-    foreach ($positions as $slug => $position) {
-        buddypress()->groups->nav->edit_nav(array(
-            'position' => $position,
-                ), $slug, bp_get_current_group_slug());
+    foreach ( $positions as $slug => $position ) {
+        buddypress()->groups->nav->edit_nav(
+			[
+				'position' => $position,
+			],
+			$slug,
+			bp_get_current_group_slug()
+		);
     }
-}
 
-add_action('bp_screens', 'openlab_group_submenu_nav', 1);
+//	var_dump( buddypress()->groups->nav ); die;
+}
+add_action( 'bp_screens', 'openlab_group_submenu_nav', 1 );
 
 /**
  * Markup for group admin tabs

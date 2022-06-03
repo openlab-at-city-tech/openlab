@@ -310,9 +310,18 @@ add_filter( 'bbp_is_site_public', 'openlab_bbp_force_site_public_to_1', 10, 2 );
  * Handle feature toggling for groups.
  */
 function openlab_group_feature_toggle( $group_id ) {
+	$group = groups_get_group( $group_id );
+
+	// Announcements.
+	$enable_announcements = ! empty( $_POST['openlab-edit-group-announcements'] );
+	if ( $enable_announcements ) {
+		groups_delete_groupmeta( $group_id, 'openlab_announcements_disabled' );
+	} else {
+		groups_update_groupmeta( $group_id, 'openlab_announcements_disabled', '1' );
+	}
+
 	// Discussion.
 	$enable_forum        = ! empty( $_POST['openlab-edit-group-forum'] );
-	$group               = groups_get_group( $group_id );
 	$group->enable_forum = $enable_forum;
 	$group->save();
 
