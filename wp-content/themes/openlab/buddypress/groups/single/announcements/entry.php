@@ -41,6 +41,8 @@ $editor_id = 'announcement-' . $announcement_id;
 
 $delete_url = wp_nonce_url( $group_url . 'announcements/?delete-announcement=' . $announcement_id, 'announcement_delete_' . $announcement_id );
 
+$announcement_url = bp_get_group_permalink( $group ) . 'announcements/#announcement-item-' . $announcement_id;
+
 $announcement_content = $announcement->post_content;
 if ( $read_only ) {
 	$truncated = bp_create_excerpt( $announcement_content, 400, [ 'ending' => '**readmore**' ] );
@@ -50,7 +52,7 @@ if ( $read_only ) {
 			'**readmore**',
 			sprintf(
 				'&hellip; <a class="announcement-read-more" href="%s">%s</a>',
-				esc_url( bp_get_group_permalink( $group ) . 'announcements/' ),
+				esc_url( $announcement_url ),
 				'See More'
 			),
 			$truncated
@@ -70,7 +72,16 @@ if ( $read_only ) {
 			</div>
 
 			<div class="col-xs-21">
+				<?php if ( $read_only ) : ?>
+					<a href="<?php echo esc_url( $announcement_url ); ?>">
+				<?php endif; ?>
+
 				<h1 id="title-rendered-<?php echo esc_attr( $editor_id ); ?>" class="announcement-title-rendered"><?php echo esc_html( $announcement->post_title ); ?></h1>
+
+				<?php if ( $read_only ) : ?>
+					</a>
+				<?php endif; ?>
+
 				<div class="announcement-info">
 					<?php printf( 'Posted by: %s', esc_html( $author_name ) ); ?>
 					<br />
