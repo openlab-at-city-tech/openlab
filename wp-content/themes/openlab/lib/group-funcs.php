@@ -2085,3 +2085,31 @@ add_filter(
 		return 'home';
 	}
 );
+
+function openlab_group_activities_loop_args( $type = '', $filter = '' ) {
+    $args['count_total'] = true;
+
+	if( ! empty( $filter ) ) {
+		$args['action'] = $filter;
+	}
+
+    switch( $type ) {
+        case 'mine':
+            $args += [
+                'scope' => 'just-me',
+            ];
+            break;
+        case 'mentions':
+            $args += [
+                'scope' => 'mentions'
+            ];
+            break;
+        case 'starred':
+            $args += [
+                'scope' => 'favorites'
+            ];
+            break;
+    }
+
+    return $args;
+}
