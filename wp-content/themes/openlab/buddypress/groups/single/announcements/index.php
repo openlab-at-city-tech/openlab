@@ -4,7 +4,7 @@
 
 <?php
 
-$per_page = 3;
+$per_page = 5;
 $paged    = isset( $_GET['apage'] ) ? (int) $_GET['apage'] : 1;
 
 $announcement_query = new WP_Query(
