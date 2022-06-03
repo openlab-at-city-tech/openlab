@@ -43,7 +43,7 @@ $delete_url = wp_nonce_url( $group_url . 'announcements/?delete-announcement=' .
 
 $announcement_content = $announcement->post_content;
 if ( $read_only ) {
-	$truncated = bp_create_excerpt( $announcement_content, 800, [ 'ending' => '**readmore**' ] );
+	$truncated = bp_create_excerpt( $announcement_content, 400, [ 'ending' => '**readmore**' ] );
 
 	if ( $truncated !== $announcement_content ) {
 		$announcement_content = str_replace(
