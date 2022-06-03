@@ -18,7 +18,7 @@ class OpenLab_Group_Announcements_Extension extends BP_Group_Extension {
 				'slug'              => 'announcements',
 				'name'              => 'Announcements',
 				'access'            => $access,
-				'nav_item_position' => 15,
+				'nav_item_position' => 20,
 			]
 		);
 	}
