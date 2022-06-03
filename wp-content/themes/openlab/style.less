@@ -768,12 +768,17 @@ a.disabled-link {
 	margin-top: 30px;
 }
 
-.updateable-item {
+.announcement-item .updateable-item {
 	box-shadow: 0px 0px 5px 5px transparent;
 	transition: box-shadow 0.5s ease-in-out;
 
 	&.new-update {
-		box-shadow: 0px 0px 5px 5px #69FF54;
+		box-shadow: 0px 0px 6px 2px #63dfd2;
+	}
+
+	& > .group-item-wrapper {
+		padding-left: 10px;
+		padding-right: 10px;
 	}
 }
 

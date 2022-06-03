@@ -121,7 +121,7 @@
 					if ( response.success ) {
 						$parentItem.removeClass( 'show-reply-form' )
 
-						const $parentReplies = parentReplyId ? $parentItem.find( '> .group-item-wrapper > .announcement-reply-replies' ) : $parentItem.find( '.announcement-replies' )
+						const $parentReplies = parentReplyId ? $parentItem.find( '> .group-item-wrapper > .announcement-reply-replies' ) : $parentItem.find( '> .group-item-wrapper > .announcement-replies' )
 						$parentReplies.prepend( response.data )
 
 						if ( replyEditor ) {
@@ -129,7 +129,7 @@
 							replyEditor.setText( '' )
 						}
 
-						const $newReply = $parentReplies.find( '.announcement-reply-item:first-child' );
+						const $newReply = $parentReplies.find( '> .announcement-reply-item:first-child' );
 						$newReply.addClass( 'new-update' );
 						setTimeout(
 							() => {
