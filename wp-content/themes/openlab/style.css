@@ -7969,6 +7969,13 @@ a.disabled-link {
   font-size: 16px;
   margin-top: 0;
 }
+.announcement-item .announcement-textarea label {
+  display: block;
+}
+.announcement-item .announcement-textarea textarea {
+  height: 133px;
+  width: 100%;
+}
 .announcement-item .announcement-body p:last-child {
   margin-bottom: 0;
 }
