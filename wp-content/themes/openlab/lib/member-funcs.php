@@ -1552,16 +1552,16 @@ function openlab_get_user_activity_action( $activity = null ) {
 
 /**
  * Create button label based on the activity type
- * 
+ *
  */
 function openlab_get_activity_view_button_label( $activity_type = '' ) {
 	$labels = array(
-		'edited_group_document'	=> 'Doc',
-		'added_group_document'	=> 'Doc',
-		'bp_doc_created'		=> 'Doc',
-		'bp_doc_edited'			=> 'Doc',
-		'new_blog_comment'		=> 'Reply',
-		'bbp_reply_create'		=> 'Reply'
+		'edited_group_document' => 'File',
+		'added_group_document'  => 'File',
+		'bp_doc_created'        => 'Doc',
+		'bp_doc_edited'	        => 'Doc',
+		'new_blog_comment'      => 'Reply',
+		'bbp_reply_create'      => 'Reply',
 	);
 
 	if( $labels[$activity_type] ) {
