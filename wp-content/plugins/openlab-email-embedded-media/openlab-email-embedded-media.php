@@ -12,123 +12,20 @@
  */
 add_filter( 'bp_ass_activity_notification_content', 'oleem_bpges_notification_content', 300, 4 );
 function oleem_bpges_notification_content( $content, $activity, $action, $group ) {
-    $post_url = esc_url( $activity->primary_link );
+    if( $activity->type === 'new_blog_post' ) {
+        $post_url = esc_url( $activity->primary_link );
 
-    if( $activity->type === 'new_blog_post' && $group->status !== 'public' ) {
-        // Load the HTML of the email content
-        $document = new DOMDocument();
-        $document->loadHTML($content);
-
-        // Get all images in the content
-        $images = $document->getElementsByTagName('img');
-        $images_length = $images->length;
-
-        // DOMNodeList is getting reseted after removing an element,
-        // so we always need to point to the next first item
-        for( $i = 0; $i < $images_length; $i++ ) {
-            $image = $images->item(0);
-
-            // Skip this step if the image is from external source
-            if( ! oleem_is_external_link( $image->getAttribute('src') ) ) {
-                if( $image->parentNode->tagName === 'a' ) {
-                    // Get <a> element
-                    $link = $image->parentNode;
-
-                    // Get <figure> element
-                    $figure = $image->parentNode->parentNode;
-                    
-                    // Make sure it's <figure>
-                    if( $figure->tagName === 'figure' ) {
-                        // Move image to <figure>
-                        $figure->appendChild($image);
-
-                        // Remove <a> from within <figure>
-                        $figure->removeChild($link);
-
-                        // Remove <figcaption> if it's present within <figure>
-                        if( $figure->hasChildNodes() ) {
-                            foreach( $figure->childNodes as $figure_child ) {
-                                if( $figure_child->tagName == 'figcaption' ) {
-                                    $figure->removeChild( $figure_child );
-                                }
-                            }
-                        }
-                    }
-                }
-
-                // Change <img> with a preview text
-                $private_link = $document->createElement( 'a', 'View this image by visiting the original post.' );
-                $private_link->setAttribute( 'href', $post_url );
-                $image->parentNode->replaceChild( $private_link, $image );
-            }
+        // Remove images only for the posts of a non-public groups
+        if( $group->status !== 'public' ) {
+            $content = oleem_remove_private_images( $content, $post_url );
         }
 
-        // Update email's content with the latest changes
-        $content = $document->saveHTML();
+        // Remove audio multimedia embeds from the email
+        $content = oleem_remove_multimedia_embeds( $content, 'audio', $post_url );
+
+        // Remove video multimedia embeds from the email
+        $content = oleem_remove_multimedia_embeds( $content, 'video', $post_url );
     }
-
-    // Change audio elements with a preview link for all type of groups
-    $document = new DOMDocument();
-    $document->loadHTML($content);
-
-    // Get all audio embeds
-    $audios = $document->getElementsByTagName('audio');
-    $audios_length = $audios->length;
-
-    for( $i = 0; $i < $audios_length; $i++ ) {
-        $audio = $audios->item(0);
-
-        // If has <figure> as a parent, check for captions
-        if( $audio->parentNode->tagName === 'figure' ) {
-            // Get <figure> element
-            $figure = $audio->parentNode;
-
-            // Remove <figcaption> if it's present within <figure>
-            if( $figure->hasChildNodes() ) {
-                foreach( $figure->childNodes as $figure_child ) {
-                    if( $figure_child->tagName == 'figcaption' ) {
-                        $figure->removeChild( $figure_child );
-                    }
-                }
-            }
-        }
-
-        // Change <audio> with a preview text
-        $private_link = $document->createElement( 'a', 'View this audio by visiting the original post.' );
-        $private_link->setAttribute( 'href', $post_url );
-        $audio->parentNode->replaceChild( $private_link, $audio );
-    }
-
-    // Change video elements with a preview link for all type of groups
-    $videos = $document->getElementsByTagName('video');
-    $videos_length = $videos->length;
-
-    for( $i = 0; $i < $videos_length; $i++ ) {
-        $video = $videos->item(0);
-
-        // If has <figure> as a parent, check for captions
-        if( $video->parentNode->tagName === 'figure' ) {
-            // Get <figure> element
-            $figure = $video->parentNode;
-
-            // Remove <figcaption> if it's present within <figure>
-            if( $figure->hasChildNodes() ) {
-                foreach( $figure->childNodes as $figure_child ) {
-                    if( $figure_child->tagName == 'figcaption' ) {
-                        $figure->removeChild( $figure_child );
-                    }
-                }
-            }
-        }
-
-        // Change <audio> with a preview text
-        $private_link = $document->createElement( 'a', 'View this audio by visiting the original post.' );
-        $private_link->setAttribute( 'href', $post_url );
-        $video->parentNode->replaceChild( $private_link, $video );
-    }
-
-    // Update email's content with the latest changes
-    $content = $document->saveHTML();
 
     return $content;
 }
@@ -147,4 +44,115 @@ function oleem_is_external_link( $url ) {
 
     // Check if the host of the provided link is same as the current website
     return ! empty( $components['host'] ) && strcasecmp( $components['host'], $site_url['host'] );
+}
+
+/**
+ * Remove private images from the content and change them
+ * with a preview text and a link to the original blog post.
+ * 
+ */
+function oleem_remove_private_images( $content, $post_link = '#' ) {
+    // Skip if content is missing
+    if( empty( $content ) ) {
+        return;
+    }
+
+    // Create new DOM document and load the content
+    $document = new DOMDocument();
+    $document->loadHTML($content, LIBXML_NOERROR);
+
+    // Get all images in the content
+    $images = $document->getElementsByTagName('img');
+
+    // DOMNodeList is getting reseted after removing an element,
+    // so we always need to point to the next first item
+    for( $i = 0; $i < $images->length; $i++ ) {
+        $image = $images->item(0);
+
+        // Skip this step if the image is from external source
+        if( ! oleem_is_external_link( $image->getAttribute('src') ) ) {
+            if( $image->parentNode->tagName === 'a' ) {
+                // Get <a> element
+                $link = $image->parentNode;
+
+                // Get <figure> element
+                $figure = $image->parentNode->parentNode;
+                
+                // Make sure it's <figure>
+                if( $figure->tagName === 'figure' ) {
+                    // Move image to <figure>
+                    $figure->appendChild($image);
+
+                    // Remove <a> from within <figure>
+                    $figure->removeChild($link);
+
+                    // Remove <figcaption> if it's present within <figure>
+                    if( $figure->hasChildNodes() ) {
+                        foreach( $figure->childNodes as $figure_child ) {
+                            if( $figure_child->tagName == 'figcaption' ) {
+                                $figure->removeChild( $figure_child );
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Change <img> with a preview text
+            $private_link = $document->createElement( 'a', 'View this image by visiting the original post.' );
+            $private_link->setAttribute( 'href', $post_link );
+            $image->parentNode->replaceChild( $private_link, $image );
+        }
+    }
+
+    // Return modified HTML
+    return $document->saveHTML();
+}
+
+/**
+ * Remove multimedia embeds (audio/video) from the content and change
+ * it with a preview text with a link to the original blog post.
+ * 
+ */
+function oleem_remove_multimedia_embeds( $content, $media_type = '', $post_link = '#' ) {
+    // Skip if media type and content is missing
+    if( empty( $content ) || empty( $media_type ) ) {
+        return;
+    }
+
+    // Create new DOM document and load the content
+    $document = new DOMDocument();
+    $document->loadHTML($content, LIBXML_NOERROR);
+
+    // Find all elements with the specified tag name <media_type>
+    $elements = $document->getElementsByTagName($media_type);
+
+    // DOMNodeList is getting reseted after removing an element,
+    // so we always need to point to the next first item
+    for( $i = 0; $i < $elements->length; $i++ ) {
+        $element = $elements->item(0);
+
+        // If has <figure> as a parent
+        if( $element->parentNode->tagName === 'figure' ) {
+
+            // Get <figure> element
+            $figure = $element->parentNode;
+
+            // Remove <figcaption> if it's present within <figure>
+            if( $figure->hasChildNodes() ) {
+                foreach( $figure->childNodes as $figure_child ) {
+                    if( $figure_child->tagName == 'figcaption' ) {
+                        $figure->removeChild( $figure_child );
+                    }
+                }
+            }
+        }
+
+        // Change <audio> with a preview text
+        $private_link = $document->createElement( 'a', 'View this ' . $media_type . ' by visiting the original post.' );
+        $private_link->setAttribute( 'href', $post_link );
+        $element->parentNode->replaceChild( $private_link, $element );
+    }
+
+    // Return modified HTML
+    return $document->saveHTML();
 }
