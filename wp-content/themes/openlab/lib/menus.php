@@ -965,6 +965,14 @@ function openlab_filter_subnav_nav_upcoming($subnav_item) {
 
 add_filter('bp_get_options_nav_new-event', 'openlab_filter_subnav_nav_new_event');
 
+/**
+ * Filters the 'Activity' option nav item.
+ */
+function openlab_filter_subnav_nav_activity( $subnav_item ) {
+    return str_replace( 'current selected', 'current-menu-item', $subnav_item );
+}
+add_filter( 'bp_get_options_nav_activity', 'openlab_filter_subnav_nav_activity' );
+
 function openlab_filter_subnav_nav_new_event($subnav_item) {
 
     $subnav_item = str_replace("current selected", "current-menu-item", $subnav_item);
