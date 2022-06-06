@@ -1514,3 +1514,86 @@ function openlab_member_joined_since() {
 		date( 'F j, Y', strtotime( $members_template->member->date_modified ) )
 	);
 }
+
+/**
+ * Modify the output of the activity items in the "My Activity" page
+ * 
+ */
+function openlab_get_user_activity_action( $activity = null ) {
+	global $activities_template;
+
+	if ( null === $activity ) {
+		$activity = $activities_template->activity;
+	}
+
+	// Get activity body content
+	$output = $activity->action;
+	
+	// Add "commented on the post [title] on comment activity type
+	if( $activity->type === 'new_blog_comment' ) {
+		$output = str_replace( 'commented on', 'commented on the post', $output );
+	}
+
+	// Modify activity date format, remove link and add "on" before the date
+	$output .= ' on ' . date('F n, Y \a\t g:i a', strtotime( $activity->date_recorded ) );
+	$output = wpautop( $output );
+
+	// Activity view button
+	$view_button_label = openlab_get_activity_view_button_label( $activity->type );
+	$view_button_link = openlab_get_activity_button_link( $activity );
+
+	// Append activity view button
+	if( $view_button_label ) {
+		$output .= '<a href="' . $view_button_link . '" class="btn btn-primary">' . $view_button_label . '</a>';
+	}
+
+	return $output;
+}
+
+/**
+ * Create button label based on the activity type
+ * 
+ */
+function openlab_get_activity_view_button_label( $activity_type = '' ) {
+	$labels = array(
+		'edited_group_document'	=> 'Doc',
+		'added_group_document'	=> 'Doc',
+		'bp_doc_created'		=> 'Doc',
+		'bp_doc_edited'			=> 'Doc',
+		'new_blog_comment'		=> 'Reply',
+		'bbp_reply_create'		=> 'Reply'
+	);
+
+	if( $labels[$activity_type] ) {
+		$label = 'View ' . $labels[$activity_type];
+		return $label;
+	}
+
+	return;
+}
+
+/**
+ * Get link for the button, based on the activity
+ * 
+ */
+function openlab_get_activity_button_link( $activity ) {
+	global $activities_template;
+
+	if( null === $activity ) {
+		$activity = $activities_template->activity;
+	}
+
+	switch( $activity->type ) {
+		case 'edited_group_document':
+		case 'added_group_document':
+			$document = new BP_Group_Documents( (string)$activity->secondary_item_id );
+			return $document->get_url( false );
+		case 'bp_doc_created':
+		case 'bp_doc_edited':
+			return $activity->primary_link;
+		case 'default':
+			return $activity->primary_link;
+	}
+
+	return $activity->primary_link;
+}

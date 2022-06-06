@@ -14,7 +14,7 @@
 			<div class="item col-xs-21">
                 <div class="group-activity-content">
                     <div class="activity-body">
-                        <?php bp_activity_action(); ?>
+                        <?php echo openlab_get_user_activity_action(); ?>
                     </div>
                     <?php if( is_user_logged_in() ) : ?>
                     <div class="activity-action">
