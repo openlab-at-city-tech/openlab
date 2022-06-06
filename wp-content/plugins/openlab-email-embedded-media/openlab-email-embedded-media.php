@@ -12,9 +12,9 @@
  */
 add_filter( 'bp_ass_activity_notification_content', 'oleem_bpges_notification_content', 300, 4 );
 function oleem_bpges_notification_content( $content, $activity, $action, $group ) {
-    if( $activity->type === 'new_blog_post' && $group->status !== 'public' ) {
-        $post_id = $activity->secondary_item_id;
+    $post_url = esc_url( $activity->primary_link );
 
+    if( $activity->type === 'new_blog_post' && $group->status !== 'public' ) {
         // Load the HTML of the email content
         $document = new DOMDocument();
         $document->loadHTML($content);
@@ -58,7 +58,7 @@ function oleem_bpges_notification_content( $content, $activity, $action, $group 
 
                 // Change <img> with a preview text
                 $private_link = $document->createElement( 'a', 'View this image by visiting the original post.' );
-                $private_link->setAttribute( 'href', '#' );
+                $private_link->setAttribute( 'href', $post_url );
                 $image->parentNode->replaceChild( $private_link, $image );
             }
         }
@@ -66,6 +66,69 @@ function oleem_bpges_notification_content( $content, $activity, $action, $group 
         // Update email's content with the latest changes
         $content = $document->saveHTML();
     }
+
+    // Change audio elements with a preview link for all type of groups
+    $document = new DOMDocument();
+    $document->loadHTML($content);
+
+    // Get all audio embeds
+    $audios = $document->getElementsByTagName('audio');
+    $audios_length = $audios->length;
+
+    for( $i = 0; $i < $audios_length; $i++ ) {
+        $audio = $audios->item(0);
+
+        // If has <figure> as a parent, check for captions
+        if( $audio->parentNode->tagName === 'figure' ) {
+            // Get <figure> element
+            $figure = $audio->parentNode;
+
+            // Remove <figcaption> if it's present within <figure>
+            if( $figure->hasChildNodes() ) {
+                foreach( $figure->childNodes as $figure_child ) {
+                    if( $figure_child->tagName == 'figcaption' ) {
+                        $figure->removeChild( $figure_child );
+                    }
+                }
+            }
+        }
+
+        // Change <audio> with a preview text
+        $private_link = $document->createElement( 'a', 'View this audio by visiting the original post.' );
+        $private_link->setAttribute( 'href', $post_url );
+        $audio->parentNode->replaceChild( $private_link, $audio );
+    }
+
+    // Change video elements with a preview link for all type of groups
+    $videos = $document->getElementsByTagName('video');
+    $videos_length = $videos->length;
+
+    for( $i = 0; $i < $videos_length; $i++ ) {
+        $video = $videos->item(0);
+
+        // If has <figure> as a parent, check for captions
+        if( $video->parentNode->tagName === 'figure' ) {
+            // Get <figure> element
+            $figure = $video->parentNode;
+
+            // Remove <figcaption> if it's present within <figure>
+            if( $figure->hasChildNodes() ) {
+                foreach( $figure->childNodes as $figure_child ) {
+                    if( $figure_child->tagName == 'figcaption' ) {
+                        $figure->removeChild( $figure_child );
+                    }
+                }
+            }
+        }
+
+        // Change <audio> with a preview text
+        $private_link = $document->createElement( 'a', 'View this audio by visiting the original post.' );
+        $private_link->setAttribute( 'href', $post_url );
+        $video->parentNode->replaceChild( $private_link, $video );
+    }
+
+    // Update email's content with the latest changes
+    $content = $document->saveHTML();
 
     return $content;
 }
