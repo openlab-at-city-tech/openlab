@@ -39,7 +39,7 @@ $filter_options = [
 		<?php endif; ?>
 	
 		<?php while ( bp_activities() ) : bp_the_activity(); ?>
-			<?php bp_get_template_part( 'activity/entry' ); ?>
+			<?php bp_get_template_part( 'parts/activity/entry-group' ); ?>
 		<?php endwhile; ?>
 	
 		<?php echo openlab_activities_pagination_links(); ?>
