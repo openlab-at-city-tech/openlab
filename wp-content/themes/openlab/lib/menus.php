@@ -551,7 +551,7 @@ function openlab_my_activity_submenu() {
 
 function openlab_group_activity_submenu() {
     $base_url = bp_get_group_permalink( groups_get_current_group() ) . 'activity';
-    
+
     $current_item = $base_url;
 	if ( ! empty( $_GET['type'] ) && in_array( $_GET['type'], [ 'mine', 'mentions', 'starred' ], true ) ) {
 		$current_item .= '?type=' . $_GET['type'];
