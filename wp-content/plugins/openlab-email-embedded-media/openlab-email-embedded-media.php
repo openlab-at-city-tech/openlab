@@ -13,10 +13,17 @@
 add_filter( 'bp_ass_activity_notification_content', 'oleem_bpges_notification_content', 300, 4 );
 function oleem_bpges_notification_content( $content, $activity, $action, $group ) {
     if( $activity->type === 'new_blog_post' ) {
+        // Get post url
         $post_url = esc_url( $activity->primary_link );
+        
+        // Get site id by group id
+        $site_id = openlab_get_site_id_by_group_id( $group->id );
+
+        // Check if site is public
+        $is_public = ( get_blog_option( $site_id, 'blog_public' ) >= 0 ) ? true : false; // 0 or 1 is public, negative is private
 
         // Remove images only for the posts of a non-public groups
-        if( $group->status !== 'public' ) {
+        if( ! $is_public ) {
             $content = oleem_remove_private_images( $content, $post_url );
         }
 
