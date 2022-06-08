@@ -1023,7 +1023,6 @@ function openlab_previous_step_type($url) {
 add_filter('bp_get_group_creation_previous_link', 'openlab_previous_step_type');
 
 /**
-  >>>>>>> 1.3.x
  * Remove the 'hidden' class from hidden group leave buttons
  *
  * A crummy conflict with wp-ajax-edit-comments causes these items to be
