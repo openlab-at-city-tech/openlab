@@ -8,7 +8,7 @@
 
 /**
  * Exclude images from the BPGES emails if they are coming from a private group.
- * 
+ *
  */
 add_filter( 'bp_ass_activity_notification_content', 'oleem_bpges_notification_content', 300, 4 );
 function oleem_bpges_notification_content( $content, $activity, $action, $group ) {
@@ -38,25 +38,33 @@ function oleem_bpges_notification_content( $content, $activity, $action, $group 
 }
 
 /**
- * Utility function to check if the link is external
- * or coming from the same host
- * 
+ * Utility function to check if the link is from the
+ * local WP network or an external
+ *
  */
-function oleem_is_external_link( $url ) {
-    // Get site URL
-    $site_url = parse_url( get_site_url() );
+function oleem_is_network_link( $url ) {
+    // Parse current site's url
+    $site = parse_url( get_site_url() );
 
-    // Parse url
-    $components = parse_url($url);
+    // Parse provided url
+    $url = parse_url( $url );
+    print_r( $url );
 
-    // Check if the host of the provided link is same as the current website
-    return ! empty( $components['host'] ) && strcasecmp( $components['host'], $site_url['host'] );
+    // WP Site object
+    $site_object = get_site_by_path( $site['host'], '/' );
+
+    // Compare hosts if site object exists
+    if( $site_object ) {
+        return $url['host'] === $site_object->domain;
+    }
+
+    return false;
 }
 
 /**
  * Remove private images from the content and change them
  * with a preview text and a link to the original blog post.
- * 
+ *
  */
 function oleem_remove_private_images( $content, $post_link = '#' ) {
     // Skip if content is missing
@@ -76,8 +84,8 @@ function oleem_remove_private_images( $content, $post_link = '#' ) {
     for( $i = 0; $i < $images->length; $i++ ) {
         $image = $images->item(0);
 
-        // Skip this step if the image is from external source
-        if( ! oleem_is_external_link( $image->getAttribute('src') ) ) {
+        // If image is hosted on local WP network site
+        if( oleem_is_network_link( $image->getAttribute('src') ) ) {
             if( $image->parentNode->tagName === 'a' ) {
                 // Get <a> element
                 $link = $image->parentNode;
@@ -118,7 +126,7 @@ function oleem_remove_private_images( $content, $post_link = '#' ) {
 /**
  * Remove multimedia embeds (audio/video) from the content and change
  * it with a preview text with a link to the original blog post.
- * 
+ *
  */
 function oleem_remove_multimedia_embeds( $content, $media_type = '', $post_link = '#' ) {
     // Skip if media type and content is missing
