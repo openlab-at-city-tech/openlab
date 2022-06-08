@@ -1328,7 +1328,7 @@ function openlab_load_my_activity() {
 
 /**
  * Construct the array of arguments for the activities loop.
- * 
+ *
  */
 function openlab_activities_loop_args( $activity_type = '', $filter = '' ) {
     $args['count_total'] = true;
@@ -1336,7 +1336,7 @@ function openlab_activities_loop_args( $activity_type = '', $filter = '' ) {
 	if( ! empty( $filter ) ) {
 		$args['action'] = $filter;
 	}
-    
+
     switch( $activity_type ) {
         case 'mine':
             $args += [
@@ -1349,16 +1349,16 @@ function openlab_activities_loop_args( $activity_type = '', $filter = '' ) {
                     'user_id' => bp_loggedin_user_id(),
                 ]
             );
-    
+
             $group_ids = '';
-    
+
             if( $favorites ) {
                 $group_ids = [];
                 foreach( $favorites as $favorite ) {
                     array_push( $group_ids, $favorite->get_group_id() );
                 }
             }
-    
+
             $args += [
                 'filter_query'	=> [
                     'relation'	=> 'AND',
@@ -1373,14 +1373,14 @@ function openlab_activities_loop_args( $activity_type = '', $filter = '' ) {
                     ],
                 ],
             ];
-            
+
             break;
         case 'mentions':
             $args += [
                 'scope' => 'mentions'
             ];
             break;
-        case 'stars':
+        case 'pins':
             $args += [
                 'scope' => 'favorites'
             ];
@@ -1396,7 +1396,7 @@ function openlab_activities_loop_args( $activity_type = '', $filter = '' ) {
 
 /**
  * User's activity stream pagination.
- * 
+ *
  */
 function openlab_activities_pagination_links() {
     global $activities_template;
@@ -1423,7 +1423,7 @@ function openlab_activities_pagination_links() {
 
 /**
  * Get group id based on the activity id
- * 
+ *
  */
 function openlab_get_group_id_by_activity_id( $activity_id ) {
     if( ! empty( $activity_id ) ) {
@@ -1443,8 +1443,18 @@ function openlab_get_group_id_by_activity_id( $activity_id ) {
 }
 
 /**
+ * Change the date format in the activity text displayed on
+ * the "My Activity" page.
+ *
+ */
+function openlab_change_activity_date_format() {
+	$activity_date = bp_get_activity_date_recorded();
+	return date('F n, Y \a\t g:i a', strtotime( $activity_date ) );
+}
+
+/**
  * Ajax fav/unfav activity item
- * 
+ *
  */
 add_action( 'wp_ajax_openlab_fav_activity', 'openlab_fav_activity' );
 function openlab_fav_activity() {
@@ -1494,9 +1504,9 @@ function openlab_fav_activity() {
 
 /**
  * Change the date format of the member joined since text
- * 
+ *
  */
-function openlab_member_joined_since() {	
+function openlab_member_joined_since() {
 	global $members_template;
 
 	return printf(
@@ -1507,7 +1517,7 @@ function openlab_member_joined_since() {
 
 /**
  * Modify the output of the activity items in the "My Activity" page
- * 
+ *
  */
 function openlab_get_user_activity_action( $activity = null ) {
 	global $activities_template;
@@ -1518,7 +1528,7 @@ function openlab_get_user_activity_action( $activity = null ) {
 
 	// Get activity body content
 	$output = $activity->action;
-	
+
 	// Add "commented on the post [title] on comment activity type
 	if( $activity->type === 'new_blog_comment' ) {
 		$output = str_replace( 'commented on', 'commented on the post', $output );
@@ -1542,16 +1552,16 @@ function openlab_get_user_activity_action( $activity = null ) {
 
 /**
  * Create button label based on the activity type
- * 
+ *
  */
 function openlab_get_activity_view_button_label( $activity_type = '' ) {
 	$labels = array(
-		'edited_group_document'	=> 'Doc',
-		'added_group_document'	=> 'Doc',
-		'bp_doc_created'		=> 'Doc',
-		'bp_doc_edited'			=> 'Doc',
-		'new_blog_comment'		=> 'Reply',
-		'bbp_reply_create'		=> 'Reply'
+		'edited_group_document' => 'File',
+		'added_group_document'  => 'File',
+		'bp_doc_created'        => 'Doc',
+		'bp_doc_edited'	        => 'Doc',
+		'new_blog_comment'      => 'Reply',
+		'bbp_reply_create'      => 'Reply',
 	);
 
 	if( $labels[$activity_type] ) {
@@ -1564,7 +1574,7 @@ function openlab_get_activity_view_button_label( $activity_type = '' ) {
 
 /**
  * Get link for the button, based on the activity
- * 
+ *
  */
 function openlab_get_activity_button_link( $activity ) {
 	global $activities_template;
