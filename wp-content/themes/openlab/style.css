@@ -11316,6 +11316,9 @@ body.single-help .entry-content h6 {
 .activity-list .activity-body img {
   display: none;
 }
+.activity-list .activity-body .btn {
+  text-decoration: none;
+}
 .activity-pagination .pagination-links {
   margin: 0;
   display: inline-block;
