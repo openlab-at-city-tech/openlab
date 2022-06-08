@@ -495,6 +495,12 @@ function openlab_get_library_subject_guides() {
 			'type' => 'subject',
 		],
 
+		'gender' => [
+			'url'  => 'https://libguides.citytech.cuny.edu/gender',
+			'name' => 'Gender & Sexuality Studies',
+			'type' => 'subject',
+		],
+
 		'health-services-administration' => [
 			'url'  => 'https://libguides.citytech.cuny.edu/healthservicesadmin',
 			'name' => 'Health Services Administration',
