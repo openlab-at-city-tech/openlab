@@ -2106,27 +2106,41 @@ function openlab_group_type_disabled_filters() {
 }
 
 /**
- * Get group's private users
- * 
+ * Change the default group extension to 'home'.
+ *
+ * This allows us to use 'activity' as a proper nav item.
  */
-function openlab_get_group_private_users( $group_id ) {
-    // Skip if group id is missing
-    if( empty( $group_id ) ) {
-        return;
-    }
+add_filter(
+	'bp_groups_default_extension',
+	function() {
+		return 'home';
+	}
+);
 
-	global $wpdb;
-	$table_name = $wpdb->prefix . 'private_membership';
-    $current_user_id = get_current_user_id();
-	$query = $wpdb->get_results( "SELECT `user_id` FROM $table_name WHERE `group_id` = $group_id AND `user_id` != $current_user_id", OBJECT_K);
+function openlab_group_activities_loop_args( $type = '', $filter = '' ) {
+    $args['count_total'] = true;
 
-	$private_users = array();
-
-	if( $query ) {
-		foreach( $query as $item ) {
-			$private_users[] = (int)$item->user_id;
-		}
+	if( ! empty( $filter ) ) {
+		$args['action'] = $filter;
 	}
 
-	return $private_users;
+    switch( $type ) {
+        case 'mine':
+            $args += [
+                'scope' => 'just-me',
+            ];
+            break;
+        case 'mentions':
+            $args += [
+                'scope' => 'mentions'
+            ];
+            break;
+        case 'starred':
+            $args += [
+                'scope' => 'favorites'
+            ];
+            break;
+    }
+
+    return $args;
 }

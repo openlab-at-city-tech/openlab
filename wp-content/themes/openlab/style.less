@@ -4538,6 +4538,10 @@ body.single-help {
         img {
             display: none;
         }
+
+        .btn {
+            text-decoration: none;
+        }
     }
 }
 
@@ -4586,6 +4590,57 @@ body.single-help {
             background-color: #eeeeee;
             border-color: #ddd;
             text-decoration: underline;
+        }
+    }
+}
+
+/* Group Activity */
+.group-activity-content {
+    display: flex;
+    flex-flow: row wrap;
+
+    .activity-body {
+        flex: 0 0 calc(100% - 45px);
+        max-width: calc(100% - 45px);
+        padding-right: 30px;
+
+        p {
+            margin-top: 0;
+        }
+    }
+
+    .activity-action {
+        flex: 0 0 45px;
+        max-width: 45x;
+        text-align: right;
+
+        span {
+            font-size: 20px;
+            transition: all 350ms ease-in-out;
+        }
+
+        .fav {
+            span {
+                color: #888;
+            }
+
+            &:hover {
+                span {
+                    color: @magenta;
+                }
+            }
+        }
+
+        .unfav {
+            span {
+                color: @magenta;
+            }
+
+            &:hover {
+                span {
+                    color: #888;
+                }
+            }
         }
     }
 }

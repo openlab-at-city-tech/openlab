@@ -11515,6 +11515,9 @@ body.single-help .entry-content h6 {
 .activity-list .activity-body img {
   display: none;
 }
+.activity-list .activity-body .btn {
+  text-decoration: none;
+}
 .activity-pagination .pagination-links {
   margin: 0;
   display: inline-block;
@@ -11556,6 +11559,40 @@ body.single-help .entry-content h6 {
   background-color: #eeeeee;
   border-color: #ddd;
   text-decoration: underline;
+}
+/* Group Activity */
+.group-activity-content {
+  display: flex;
+  flex-flow: row wrap;
+}
+.group-activity-content .activity-body {
+  flex: 0 0 calc(100% - 45px);
+  max-width: calc(100% - 45px);
+  padding-right: 30px;
+}
+.group-activity-content .activity-body p {
+  margin-top: 0;
+}
+.group-activity-content .activity-action {
+  flex: 0 0 45px;
+  max-width: 45x;
+  text-align: right;
+}
+.group-activity-content .activity-action span {
+  font-size: 20px;
+  transition: all 350ms ease-in-out;
+}
+.group-activity-content .activity-action .fav span {
+  color: #888;
+}
+.group-activity-content .activity-action .fav:hover span {
+  color: #ff5959;
+}
+.group-activity-content .activity-action .unfav span {
+  color: #ff5959;
+}
+.group-activity-content .activity-action .unfav:hover span {
+  color: #888;
 }
 /**Custom media query items**/
 @media (max-width: 767px) {
