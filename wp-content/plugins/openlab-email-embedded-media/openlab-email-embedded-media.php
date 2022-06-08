@@ -112,7 +112,7 @@ function oleem_remove_private_images( $content, $post_link = '#' ) {
             }
 
             // Change <img> with a preview text
-            $private_link = $document->createElement( 'a', 'View this image by visiting the original post.' );
+            $private_link = $document->createElement( 'a', __( 'View this image by visiting the original post.', 'openlab' ) );
             $private_link->setAttribute( 'href', $post_link );
             $image->parentNode->replaceChild( $private_link, $image );
         }
@@ -162,7 +162,7 @@ function oleem_remove_multimedia_embeds( $content, $media_type = '', $post_link 
         }
 
         // Change <audio> with a preview text
-        $private_link = $document->createElement( 'a', 'View this ' . $media_type . ' by visiting the original post.' );
+        $private_link = $document->createElement( 'a', sprintf( __( 'View this %s by visiting the original post.', 'openlab' ), $media_type ) );
         $private_link->setAttribute( 'href', $post_link );
         $element->parentNode->replaceChild( $private_link, $element );
     }
