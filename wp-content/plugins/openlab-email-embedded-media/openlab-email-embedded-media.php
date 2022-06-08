@@ -15,17 +15,12 @@ function oleem_bpges_notification_content( $content, $activity, $action, $group 
     if( $activity->type === 'new_blog_post' ) {
         // Get post url
         $post_url = esc_url( $activity->primary_link );
-        
+
         // Get site id by group id
         $site_id = openlab_get_site_id_by_group_id( $group->id );
 
-        // Check if site is public
-        $is_public = ( get_blog_option( $site_id, 'blog_public' ) >= 0 ) ? true : false; // 0 or 1 is public, negative is private
-
         // Remove images only for the posts of a non-public groups
-        if( ! $is_public ) {
-            $content = oleem_remove_private_images( $content, $post_url );
-        }
+        $content = oleem_remove_private_images( $content, $post_url );
 
         // Remove audio multimedia embeds from the email
         $content = oleem_remove_multimedia_embeds( $content, 'audio', $post_url );
@@ -38,26 +33,23 @@ function oleem_bpges_notification_content( $content, $activity, $action, $group 
 }
 
 /**
- * Utility function to check if the link is from the
- * local WP network or an external
+ * Utility function to check if a URL belongs to a local private site.
  *
+ * @param string $url
+ * @return bool
  */
-function oleem_is_network_link( $url ) {
-    // Parse current site's url
-    $site = parse_url( get_site_url() );
-
+function oleem_is_private_network_link( $url ) {
     // Parse provided url
     $url = parse_url( $url );
 
     // WP Site object
-    $site_object = get_site_by_path( $site['host'], '/' );
+    $site_object = get_site_by_path( $url['host'], $url['path'] );
 
-    // Compare hosts if site object exists
-    if( $site_object ) {
-        return $url['host'] === $site_object->domain;
+    if ( ! $site_object ) {
+      return false;
     }
 
-    return false;
+    return $site_object->public < 0;
 }
 
 /**
@@ -84,7 +76,7 @@ function oleem_remove_private_images( $content, $post_link = '#' ) {
         $image = $images->item(0);
 
         // If image is hosted on local WP network site
-        if( oleem_is_network_link( $image->getAttribute('src') ) ) {
+        if( oleem_is_private_network_link( $image->getAttribute('src') ) ) {
             if( $image->parentNode->tagName === 'a' ) {
                 // Get <a> element
                 $link = $image->parentNode;
