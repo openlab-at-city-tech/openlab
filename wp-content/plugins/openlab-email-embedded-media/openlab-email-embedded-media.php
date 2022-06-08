@@ -48,7 +48,6 @@ function oleem_is_network_link( $url ) {
 
     // Parse provided url
     $url = parse_url( $url );
-    print_r( $url );
 
     // WP Site object
     $site_object = get_site_by_path( $site['host'], '/' );
