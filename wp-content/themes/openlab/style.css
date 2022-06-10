@@ -10508,6 +10508,10 @@ body.docs .notify-group-members-ui {
 #doc-meta #toggle-table-settings tr:first-child td {
   padding-top: 0;
 }
+body.docs #comments {
+  border-top: 0;
+  padding-top: 0;
+}
 a.delete-doc-button {
   color: #a20000 !important;
 }
