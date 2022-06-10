@@ -1,4 +1,3 @@
-shrchosreuhsrhsrhu
 <?php if ( 'comments.php' == basename($_SERVER['SCRIPT_FILENAME']) ) return; ?>
 <section id="comments">
 <?php
