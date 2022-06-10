@@ -4,7 +4,7 @@
  *
  * @since 3.0.0
  */
-(function( $, bp ) {
+(function( $, wp ) {
 	// Bail if not set
 	if ( typeof bpHelloStrings === 'undefined' ) {
 		return;
@@ -19,32 +19,7 @@
 		}
 
 		window.tb_show( 'BuddyPress', '#TB_inline?inlineId=bp-hello-container' );
-
-		$( '#TB_window' ).attr( {
-							'role': 'dialog',
-							'aria-label': bpHelloStrings.modalLabel
-						} )
-						.addClass( 'plugin-details-modal' )
-						.removeClass( 'thickbox-loading' );
-
-		$( '#TB_ajaxContent' ).prop( 'style', 'height: 100%; width: auto; padding: 0; border: none;' );
-
-		var tabbables = $( ':tabbable', '#TB_ajaxContent' ), lastTabbable = tabbables.last();
-
-		// Move the focus to the Modal's close button once the last Hello link was tabbed out.
-		$( '#TB_window' ).on( 'keydown', function( event ) {
-			if ( 9 === event.keyCode && ! event.shiftKey && $( lastTabbable ).prop( 'classList' ).value === $( event.target ).prop( 'classList' ).value ) {
-				event.preventDefault();
-
-				$( '#TB_closeWindowButton' ).focus();
-			}
-
-			if ( 9 === event.keyCode && event.shiftKey && 'TB_closeWindowButton' === $( event.target ).prop( 'id' ) ) {
-				event.preventDefault();
-
-				$( lastTabbable ).focus();
-			}
-		} );
+		window.bpAdjustThickbox( bpHelloStrings.modalLabel );
 	};
 
 	/**
@@ -79,7 +54,7 @@
 
 			$( '#TB_window' ).addClass( 'thickbox-loading' );
 
-			bp.apiRequest( {
+			wp.apiRequest( {
 				url: anchor.data( 'endpoint' ),
 				type: 'GET',
 				beforeSend: function( xhr, settings ) {
@@ -118,8 +93,8 @@
 	} );
 
 	// Init modal after the screen's loaded.
-	$( document ).ready( function() {
+	$( function() {
 		bpHelloOpenModal();
 	} );
 
-}( jQuery, window.bp || {} ) );
+}( jQuery, window.wp || {} ) );

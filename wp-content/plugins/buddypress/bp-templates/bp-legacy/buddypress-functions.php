@@ -6,7 +6,7 @@
  *
  * @package BuddyPress
  * @subpackage BP_Theme_Compat
- * @version 3.1.0
+ * @version 10.0.0
  */
 
 // Exit if accessed directly.
@@ -337,7 +337,15 @@ class BP_Legacy extends BP_Theme_Compat {
 			) );
 
 			// Enqueue script.
-			wp_enqueue_script( $asset['handle'] . '-password-verify', $asset['location'], $dependencies, $this->version);
+			wp_enqueue_script( $asset['handle'] . '-password-verify', $asset['location'], $dependencies, $this->version );
+			wp_localize_script(
+				$asset['handle'] . '-password-verify',
+				'bpPasswordVerify',
+				array(
+					'tooWeakPasswordWarning' => __( 'Your password is too weak, please use a stronger password.', 'buddypress' ),
+					'requiredPassStrength'   => bp_members_user_pass_required_strength(),
+				)
+			);
 		}
 
 		// Star private messages.
@@ -700,7 +708,9 @@ function bp_legacy_theme_ajax_querystring( $query_string, $object ) {
 
 	// Set up the cookies passed on this AJAX request. Store a local var to avoid conflicts.
 	if ( ! empty( $_POST['cookie'] ) ) {
-		$_BP_COOKIE = wp_parse_args( str_replace( '; ', '&', urldecode( $_POST['cookie'] ) ) );
+		$_BP_COOKIE = bp_parse_args(
+			str_replace( '; ', '&', urldecode( $_POST['cookie'] ) )
+		);
 	} else {
 		$_BP_COOKIE = &$_COOKIE;
 	}
@@ -1534,16 +1544,25 @@ function bp_legacy_theme_ajax_joinleave_group() {
 	// Cast gid as integer.
 	$group_id = (int) $_POST['gid'];
 
-	if ( groups_is_user_banned( bp_loggedin_user_id(), $group_id ) )
+	if ( groups_is_user_banned( bp_loggedin_user_id(), $group_id ) ) {
 		return;
+	}
 
-	if ( ! $group = groups_get_group( $group_id ) )
+	$group = groups_get_group( $group_id );
+
+	if ( ! $group ) {
 		return;
+	}
+
+	$action = '';
+	if ( isset( $_POST['action'] ) ) {
+		$action = sanitize_key( wp_unslash( $_POST['action'] ) );
+	}
 
 	// Client doesn't distinguish between different request types, so we infer from user status.
 	if ( groups_is_user_member( bp_loggedin_user_id(), $group->id ) ) {
 		$request_type = 'leave_group';
-	} elseif ( groups_check_user_has_invite( bp_loggedin_user_id(), $group->id ) ) {
+	} elseif ( groups_check_user_has_invite( bp_loggedin_user_id(), $group->id ) && 'joinleave_group' !== $action ) {
 		$request_type = 'accept_invite';
 	} elseif ( 'private' === $group->status ) {
 		$request_type = 'request_membership';

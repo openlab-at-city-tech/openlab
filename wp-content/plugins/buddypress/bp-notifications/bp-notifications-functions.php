@@ -29,21 +29,24 @@ defined( 'ABSPATH' ) || exit;
  *                                     notification with.
  *     @type string $date_notified     Timestamp for the notification.
  * }
- * @return int|bool ID of the newly created notification on success, false
- *                  on failure.
+ * @return int|bool ID of the newly created notification on success, false on failure.
  */
 function bp_notifications_add_notification( $args = array() ) {
 
-	$r = bp_parse_args( $args, array(
-		'user_id'           => 0,
-		'item_id'           => 0,
-		'secondary_item_id' => 0,
-		'component_name'    => '',
-		'component_action'  => '',
-		'date_notified'     => bp_core_current_time(),
-		'is_new'            => 1,
-		'allow_duplicate'   => false,
-	), 'notifications_add_notification' );
+	$r = bp_parse_args(
+		$args,
+		array(
+			'user_id'           => 0,
+			'item_id'           => 0,
+			'secondary_item_id' => 0,
+			'component_name'    => '',
+			'component_action'  => '',
+			'date_notified'     => bp_core_current_time(),
+			'is_new'            => 1,
+			'allow_duplicate'   => false,
+		),
+		'notifications_add_notification'
+	);
 
 	// Check for existing duplicate notifications.
 	if ( ! $r['allow_duplicate'] ) {
@@ -95,7 +98,7 @@ function bp_notifications_get_notification( $id ) {
  * @since 1.9.0
  *
  * @param int $id ID of the notification to delete.
- * @return false|int True on success, false on failure.
+ * @return false|int Integer on success, false on failure.
  */
 function bp_notifications_delete_notification( $id ) {
 	if ( ! bp_notifications_check_notification_access( bp_displayed_user_id(), $id ) ) {
@@ -114,7 +117,7 @@ function bp_notifications_delete_notification( $id ) {
  *
  * @param int      $id     ID of the notification.
  * @param int|bool $is_new 0 for read, 1 for unread.
- * @return false|int True on success, false on failure.
+ * @return false|int Number of rows updated on success, false on failure.
  */
 function bp_notifications_mark_notification( $id, $is_new = false ) {
 	if ( ! bp_notifications_check_notification_access( bp_displayed_user_id(), $id ) ) {
@@ -146,7 +149,7 @@ function bp_notifications_get_all_notifications_for_user( $user_id = 0 ) {
 	$notifications = wp_cache_get( 'all_for_user_' . $user_id, 'bp_notifications' );
 	if ( false === $notifications ) {
 		$notifications = BP_Notifications_Notification::get( array(
-			'user_id' => $user_id
+			'user_id' => $user_id,
 		) );
 		wp_cache_set( 'all_for_user_' . $user_id, $notifications, 'bp_notifications' );
 	}
@@ -382,6 +385,41 @@ function bp_notifications_delete_notifications_by_item_id( $user_id, $item_id, $
 }
 
 /**
+ * Delete notifications by notification ids.
+ *
+ * @since 10.0.0
+ *
+ * @param  int[]     $ids IDs of the associated notifications.
+ * @return int|false      The number of rows updated. False on error.
+ */
+function bp_notifications_delete_notifications_by_ids( $ids ) {
+	return BP_Notifications_Notification::delete_by_id_list( 'id', $ids );
+}
+
+/**
+ * Delete notifications by item ids and user.
+ *
+ * @since 10.0.0
+ *
+ * @param  int       $user_id          ID of the user whose notifications are being deleted.
+ * @param  int[]     $item_ids         IDs of the associated items.
+ * @param  string    $component_name   Name of the associated component.
+ * @param  string    $component_action Name of the associated action.
+ * @return int|false                   The number of rows updated. False on error.
+ */
+function bp_notifications_delete_notifications_by_item_ids( $user_id, $item_ids, $component_name, $component_action ) {
+	return BP_Notifications_Notification::delete_by_id_list(
+		'item_id',
+		$item_ids,
+		array(
+			'user_id'          => $user_id,
+			'component_name'   => $component_name,
+			'component_action' => $component_action
+		)
+	);
+}
+
+/**
  * Delete all notifications by type.
  *
  * Used when clearing out notifications for an entire component.
@@ -482,12 +520,12 @@ add_action( 'delete_user', 'bp_notifications_delete_notifications_on_delete_user
 function bp_notifications_mark_notifications_by_type( $user_id, $component_name, $component_action, $is_new = false ) {
 	return BP_Notifications_Notification::update(
 		array(
-			'is_new' => $is_new
+			'is_new' => $is_new,
 		),
 		array(
 			'user_id'          => $user_id,
 			'component_name'   => $component_name,
-			'component_action' => $component_action
+			'component_action' => $component_action,
 		)
 	);
 }
@@ -511,14 +549,14 @@ function bp_notifications_mark_notifications_by_type( $user_id, $component_name,
 function bp_notifications_mark_notifications_by_item_id( $user_id, $item_id, $component_name, $component_action, $secondary_item_id = false, $is_new = false ) {
 	return BP_Notifications_Notification::update(
 		array(
-			'is_new' => $is_new
+			'is_new' => $is_new,
 		),
 		array(
 			'user_id'           => $user_id,
 			'item_id'           => $item_id,
 			'secondary_item_id' => $secondary_item_id,
 			'component_name'    => $component_name,
-			'component_action'  => $component_action
+			'component_action'  => $component_action,
 		)
 	);
 }
@@ -540,13 +578,13 @@ function bp_notifications_mark_notifications_by_item_id( $user_id, $item_id, $co
 function bp_notifications_mark_all_notifications_by_type( $item_id, $component_name, $component_action = false, $secondary_item_id = false, $is_new = false ) {
 	return BP_Notifications_Notification::update(
 		array(
-			'is_new' => $is_new
+			'is_new' => $is_new,
 		),
 		array(
 			'item_id'           => $item_id,
 			'secondary_item_id' => $secondary_item_id,
 			'component_name'    => $component_name,
-			'component_action'  => $component_action
+			'component_action'  => $component_action,
 		)
 	);
 }
@@ -571,12 +609,58 @@ function bp_notifications_mark_all_notifications_by_type( $item_id, $component_n
 function bp_notifications_mark_notifications_from_user( $user_id, $component_name, $component_action, $is_new = false ) {
 	return BP_Notifications_Notification::update(
 		array(
-			'is_new' => $is_new
+			'is_new' => $is_new,
 		),
 		array(
 			'item_id'          => $user_id,
 			'component_name'   => $component_name,
+			'component_action' => $component_action,
+		)
+	);
+}
+
+/**
+ * Mark notifications read/unread by item ids and user.
+ *
+ * @since 10.0.0
+ *
+ * @param  int       $user_id          ID of the user whose notifications are being deleted.
+ * @param  int[]     $item_ids         IDs of the associated items.
+ * @param  string    $component_name   Name of the associated component.
+ * @param  string    $component_action Name of the associated action.
+ * @param  int|false $is_new           0 for read, 1 for unread.
+ * @return int|false                   The number of rows updated. False on error.
+ */
+function bp_notifications_mark_notifications_by_item_ids( $user_id, $item_ids, $component_name, $component_action, $is_new = false ) {
+	return BP_Notifications_Notification::update_id_list(
+		'item_id',
+		$item_ids,
+		array(
+			'is_new' => $is_new,
+		),
+		array(
+			'user_id'          => $user_id,
+			'component_name'   => $component_name,
 			'component_action' => $component_action
+		)
+	);
+}
+
+/**
+ * Mark notifications read/unread by notification ids.
+ *
+ * @since 10.0.0
+ *
+ * @param  int[]     $ids     IDs of the associated notification items.
+ * @param  int|false $is_new  0 for read, 1 for unread.
+ * @return int|false          The number of rows updated. False on error.
+ */
+function bp_notifications_mark_notifications_by_ids( $ids, $is_new = false ) {
+	return BP_Notifications_Notification::update_id_list(
+		'id',
+		$ids,
+		array(
+			'is_new' => $is_new,
 		)
 	);
 }

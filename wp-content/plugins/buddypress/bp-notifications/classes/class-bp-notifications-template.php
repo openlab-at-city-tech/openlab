@@ -142,8 +142,6 @@ class BP_Notifications_Template {
 	/**
 	 * Constructor method.
 	 *
-	 * @see bp_has_notifications() For information on the array format.
-	 *
 	 * @since 1.9.0
 	 *
 	 * @param array $args {
@@ -154,42 +152,42 @@ class BP_Notifications_Template {
 	public function __construct( $args = array() ) {
 
 		// Parse arguments.
-		$r = wp_parse_args( $args, array(
-			'id'                => false,
-			'user_id'           => 0,
-			'item_id'           => false,
-			'secondary_item_id' => false,
-			'component_name'    => bp_notifications_get_registered_components(),
-			'component_action'  => false,
-			'is_new'            => true,
-			'search_terms'      => '',
-			'order_by'          => 'date_notified',
-			'sort_order'        => 'DESC',
-			'page_arg'          => 'npage',
-			'page'              => 1,
-			'per_page'          => 25,
-			'max'               => null,
-			'meta_query'        => false,
-			'date_query'        => false
-		) );
+		$r = bp_parse_args(
+			$args,
+			array(
+				'id'                => false,
+				'user_id'           => 0,
+				'item_id'           => false,
+				'secondary_item_id' => false,
+				'component_name'    => bp_notifications_get_registered_components(),
+				'component_action'  => false,
+				'is_new'            => true,
+				'search_terms'      => '',
+				'order_by'          => 'date_notified',
+				'sort_order'        => 'DESC',
+				'page_arg'          => 'npage',
+				'page'              => 1,
+				'per_page'          => 25,
+				'max'               => null,
+				'meta_query'        => false,
+				'date_query'        => false,
+			)
+		);
 
 		// Sort order direction.
-		$orders = array( 'ASC', 'DESC' );
-		if ( ! empty( $_GET['sort_order'] ) && in_array( $_GET['sort_order'], $orders ) ) {
+		if ( ! empty( $_GET['sort_order'] ) ) {
 			$r['sort_order'] = $_GET['sort_order'];
-		} else {
-			$r['sort_order'] = in_array( $r['sort_order'], $orders ) ? $r['sort_order'] : 'DESC';
 		}
 
 		// Setup variables.
 		$this->pag_arg      = sanitize_key( $r['page_arg'] );
-		$this->pag_page     = bp_sanitize_pagination_arg( $this->pag_arg, $r['page']     );
-		$this->pag_num      = bp_sanitize_pagination_arg( 'num',          $r['per_page'] );
+		$this->pag_page     = bp_sanitize_pagination_arg( $this->pag_arg, $r['page'] );
+		$this->pag_num      = bp_sanitize_pagination_arg( 'num', $r['per_page'] );
+		$this->sort_order   = bp_esc_sql_order( $r['sort_order'] );
 		$this->user_id      = $r['user_id'];
 		$this->is_new       = $r['is_new'];
 		$this->search_terms = $r['search_terms'];
 		$this->order_by     = $r['order_by'];
-		$this->sort_order   = $r['sort_order'];
 		$this->query_vars   = array(
 			'id'                => $r['id'],
 			'user_id'           => $this->user_id,
@@ -238,7 +236,7 @@ class BP_Notifications_Template {
 				'total'     => ceil( (int) $this->total_notification_count / (int) $this->pag_num ),
 				'current'   => $this->pag_page,
 				'prev_text' => _x( '&larr;', 'Notifications pagination previous text', 'buddypress' ),
-				'next_text' => _x( '&rarr;', 'Notifications pagination next text',     'buddypress' ),
+				'next_text' => _x( '&rarr;', 'Notifications pagination next text', 'buddypress' ),
 				'mid_size'  => 1,
 				'add_args'  => $add_args,
 			) );
@@ -255,11 +253,7 @@ class BP_Notifications_Template {
 	 * @return bool True if there are items in the loop, otherwise false.
 	 */
 	public function has_notifications() {
-		if ( $this->notification_count ) {
-			return true;
-		}
-
-		return false;
+		return ! empty( $this->notification_count );
 	}
 
 	/**
@@ -267,7 +261,7 @@ class BP_Notifications_Template {
 	 *
 	 * @since 1.9.0
 	 *
-	 * @return object The next notification to iterate over.
+	 * @return BP_Notifications_Notification The next notification to iterate over.
 	 */
 	public function next_notification() {
 
@@ -311,14 +305,14 @@ class BP_Notifications_Template {
 		if ( $this->current_notification + 1 < $this->notification_count ) {
 			return true;
 
-		} elseif ( $this->current_notification + 1 == $this->notification_count ) {
+		} elseif ( $this->current_notification + 1 === $this->notification_count ) {
 
 			/**
 			 * Fires right before the rewinding of notification posts.
 			 *
 			 * @since 1.9.0
 			 */
-			do_action( 'notifications_loop_end');
+			do_action( 'notifications_loop_end' );
 
 			$this->rewind_notifications();
 		}
