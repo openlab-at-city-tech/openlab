@@ -19,22 +19,7 @@
 	<?php if ( bp_docs_has_docs( $doc_query_args ) ) : ?>
 		<?php $has_docs = true; ?>
 
-		<div class="docs-info-header img-rounded">
-		<div class="row">
-			<div class="col-sm-24">
-				<div class="doc-search-element pull-right align-right">
-					<form action="" method="get" class="form-inline">
-						<div class="form-group">
-							<label class="sr-only" for="docSearch">Search Docs</label>
-							<input id="docSearch" class="form-control" name="s" value="<?php the_search_query() ?>">
-							<input class="btn btn-primary top-align" name="search_submit" type="submit" value="<?php _e('Search', 'bp-docs') ?>" />
-						</div>
-					</form>
-				</div>
-				<?php bp_docs_info_header() ?>
-			</div>
-		</div>
-		</div>
+		<?php bp_get_template_part( 'docs/info-header' ); ?>
 
 		<div class="info-panel panel panel-default doctable-panel">
 		<table class="doctable table table-striped">
@@ -125,11 +110,15 @@
 			</div>
 		</div>
 
+	<?php else: ?>
+		<?php if ( ! empty( $_GET['s'] ) ) : ?>
+			<?php bp_get_template_part( 'docs/info-header' ); ?>
+		<?php endif; ?>
+
+		<?php if ( groups_is_user_member( get_current_user_id(), bp_get_group_id() ) ): ?>
+			<p class="no-docs bold"><?php printf( __( 'There are no docs for this view. Why not <a href="%s">create one</a>?', 'bp-docs' ), bp_docs_get_item_docs_link() . BP_DOCS_CREATE_SLUG ) ?></p>
 		<?php else: ?>
-		<?php if (groups_is_user_member(get_current_user_id(),bp_get_group_id())): ?>
-			<p class="no-docs bold"><?php printf(__('There are no docs for this view. Why not <a href="%s">create one</a>?', 'bp-docs'), bp_docs_get_item_docs_link() . BP_DOCS_CREATE_SLUG) ?></p>
-		<?php else: ?>
-			<p class="no-docs bold"><?php printf(__('There are no docs for this view.', 'bp-docs')) ?></p>
+			<p class="no-docs bold"><?php printf( __( 'There are no docs for this view.', 'bp-docs' ) ) ?></p>
 		<?php endif; ?>
 
 		<?php endif ?>
