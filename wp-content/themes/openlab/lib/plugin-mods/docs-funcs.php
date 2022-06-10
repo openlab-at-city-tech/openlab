@@ -171,3 +171,20 @@ add_filter(
 	},
 	999
 );
+
+/**
+ * Don't show openlab-private-comments or wp-grade-comments Private checkbox on Docs comments.
+ */
+add_action(
+	'comment_form_logged_in_after',
+	function() {
+		if ( ! bp_docs_get_current_doc() ) {
+			return;
+		}
+
+		remove_action( 'comment_form_logged_in_after', 'OpenLab\\PrivateComments\\render_checkbox' );
+		remove_action( 'comment_form_logged_in_after', 'olgc_leave_comment_checkboxes' );
+
+	},
+	5
+);
