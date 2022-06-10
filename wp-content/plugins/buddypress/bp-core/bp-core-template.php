@@ -880,14 +880,18 @@ function bp_create_excerpt( $text, $length = 225, $options = array() ) {
 	// Backward compatibility. The third argument used to be a boolean $filter_shortcodes.
 	$filter_shortcodes_default = is_bool( $options ) ? $options : true;
 
-	$r = bp_parse_args( $options, array(
-		'ending'            => __( ' [&hellip;]', 'buddypress' ),
-		'exact'             => false,
-		'html'              => true,
-		'filter_shortcodes' => $filter_shortcodes_default,
-		'strip_tags'        => false,
-		'remove_links'      => false,
-	), 'create_excerpt' );
+	$r = bp_parse_args(
+		$options,
+		array(
+			'ending'            => __( ' [&hellip;]', 'buddypress' ),
+			'exact'             => false,
+			'html'              => true,
+			'filter_shortcodes' => $filter_shortcodes_default,
+			'strip_tags'        => false,
+			'remove_links'      => false,
+		),
+		'create_excerpt'
+	);
 
 	// Save the original text, to be passed along to the filter.
 	$original_text = $text;
@@ -1214,12 +1218,16 @@ function bp_registration_needs_activation() {
  */
 function bp_get_email_subject( $args = array() ) {
 
-	$r = bp_parse_args( $args, array(
-		'before'  => '[',
-		'after'   => ']',
-		'default' => __( 'Community', 'buddypress' ),
-		'text'    => ''
-	), 'get_email_subject' );
+	$r = bp_parse_args(
+		$args,
+		array(
+			'before'  => '[',
+			'after'   => ']',
+			'default' => __( 'Community', 'buddypress' ),
+			'text'    => '',
+		),
+		'get_email_subject'
+	);
 
 	$subject = $r['before'] . wp_specialchars_decode( bp_get_option( 'blogname', $r['default'] ), ENT_QUOTES ) . $r['after'] . ' ' . $r['text'];
 
@@ -3184,7 +3192,11 @@ function bp_get_title_parts( $seplocation = 'right' ) {
 
 	// Sign up page.
 	} elseif ( bp_is_register_page() ) {
-		$bp_title_parts = array( __( 'Create an Account', 'buddypress' ) );
+		if ( bp_get_membership_requests_required() ) {
+			$bp_title_parts = array( __( 'Request Membership', 'buddypress' ) );
+		} else {
+			$bp_title_parts = array( __( 'Create an Account', 'buddypress' ) );
+		}
 
 	// Activation page.
 	} elseif ( bp_is_activation_page() ) {
@@ -3671,7 +3683,11 @@ function bp_nav_menu( $args = array() ) {
 		'menu_id'         => '',
 		'walker'          => '',
 	);
-	$args = wp_parse_args( $args, $defaults );
+
+	$args = bp_parse_args(
+		$args,
+		$defaults
+	);
 
 	/**
 	 * Filters the parsed bp_nav_menu arguments.
@@ -3872,7 +3888,7 @@ function bp_is_widget_block_active( $block_name = '', $widget_id_base = '' ) {
 		'block'  => false,
 	);
 
-	if ( $block_name && bp_is_running_wp( '5.0.0', '>=' ) ) {
+	if ( $block_name && bp_is_running_wp( '5.8.0', '>=' ) ) {
 		$widget_blocks = get_option( 'widget_block', array() );
 		$sidebars      = wp_get_sidebars_widgets();
 

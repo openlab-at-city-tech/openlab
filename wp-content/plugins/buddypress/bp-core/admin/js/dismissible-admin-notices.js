@@ -1,16 +1,4 @@
-(function($){
-	$(document).ready(function() {
-		$( '.bp-is-dismissible .notice-dismiss' ).click( function() {
-			var $notice = $( this ).closest( '.notice' );
-			var notice_id = $notice.data( 'noticeid' );
-			$.post( {
-				url: ajaxurl,
-				data: {
-					action: 'bp_dismiss_notice',
-					nonce: $( '#bp-dismissible-nonce-' + notice_id ).val(),
-					notice_id: $notice.data( 'noticeid' )
-				}
-			} );
-		} );
-	});
-}(jQuery));
+parcelRequire=function(e,r,t,n){var i,o="function"==typeof parcelRequire&&parcelRequire,u="function"==typeof require&&require;function f(t,n){if(!r[t]){if(!e[t]){var i="function"==typeof parcelRequire&&parcelRequire;if(!n&&i)return i(t,!0);if(o)return o(t,!0);if(u&&"string"==typeof t)return u(t);var c=new Error("Cannot find module '"+t+"'");throw c.code="MODULE_NOT_FOUND",c}p.resolve=function(r){return e[t][1][r]||r},p.cache={};var l=r[t]=new f.Module(t);e[t][0].call(l.exports,p,l,l.exports,this)}return r[t].exports;function p(e){return f(p.resolve(e))}}f.isParcelRequire=!0,f.Module=function(e){this.id=e,this.bundle=f,this.exports={}},f.modules=e,f.cache=r,f.parent=o,f.register=function(r,t){e[r]=[function(e,r){r.exports=t},{}]};for(var c=0;c<t.length;c++)try{f(t[c])}catch(e){i||(i=e)}if(t.length){var l=f(t[t.length-1]);"object"==typeof exports&&"undefined"!=typeof module?module.exports=l:"function"==typeof define&&define.amd?define(function(){return l}):n&&(this[n]=l)}if(parcelRequire=f,i)throw i;return f}({"XBG5":[function(require,module,exports) {
+window.bp=window.bp||{},bp.DismissibleAdminNotices=class{constructor(t){this.settings=t||{}}start(){const{url:t,nonce:e}=this.settings;t&&e&&document.querySelectorAll(".bp-is-dismissible").forEach(s=>{s.addEventListener("click",s=>{s.preventDefault();const n=s.target;if(n.classList.contains("loading"))return;n.classList.add("loading");const{notice_id:i}=n.dataset,o=n.closest(".bp-notice-container"),c=new Headers({"X-BP-Nonce":e}),d=new FormData;d.append("action","bp_dismiss_notice"),d.append("notice_id",i),fetch(t,{method:"POST",headers:c,body:d}).then(t=>t.json()).then(t=>{const{success:e}=t;e?o.remove():n.classList.remove("loading")})})})}};const t=window.bpDismissibleAdminNoticesSettings||{},e=new bp.DismissibleAdminNotices(t);"loading"===document.readyState?document.addEventListener("DOMContentLoaded",e.start()):e.start();
+},{}]},{},["XBG5"], null)
+//# sourceMappingURL=/bp-core/admin/js/dismissible-admin-notices.js.map

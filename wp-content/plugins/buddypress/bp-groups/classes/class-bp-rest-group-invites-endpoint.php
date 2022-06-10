@@ -779,20 +779,21 @@ class BP_REST_Group_Invites_Endpoint extends WP_REST_Controller {
 	 *
 	 * @since 5.0.0
 	 *
-	 * @param BP_Invitation   $invite  Invite object.
+	 * @param BP_Invitation   $invite  The invitation object.
 	 * @param WP_REST_Request $request Full details about the request.
 	 * @return WP_REST_Response
 	 */
 	public function prepare_item_for_response( $invite, $request ) {
 		$data = array(
-			'id'            => $invite->id,
-			'user_id'       => $invite->user_id,
-			'invite_sent'   => $invite->invite_sent,
-			'inviter_id'    => $invite->inviter_id,
-			'group_id'      => $invite->item_id,
-			'date_modified' => bp_rest_prepare_date_response( $invite->date_modified ),
-			'type'          => $invite->type,
-			'message'       => array(
+			'id'                => (int) $invite->id,
+			'user_id'           => (int) $invite->user_id,
+			'invite_sent'       => (int) $invite->invite_sent,
+			'inviter_id'        => (int) $invite->inviter_id,
+			'group_id'          => (int) $invite->item_id,
+			'date_modified'     => bp_rest_prepare_date_response( $invite->date_modified, get_date_from_gmt( $invite->date_modified ) ),
+			'date_modified_gmt' => bp_rest_prepare_date_response( $invite->date_modified ),
+			'type'              => (string) $invite->type,
+			'message'           => array(
 				'raw'      => $invite->content,
 				'rendered' => apply_filters( 'the_content', $invite->content ),
 			),
@@ -803,6 +804,7 @@ class BP_REST_Group_Invites_Endpoint extends WP_REST_Controller {
 		$data     = $this->filter_response_by_context( $data, $context );
 		$response = rest_ensure_response( $data );
 
+		// Add prepare links.
 		$response->add_links( $this->prepare_links( $invite ) );
 
 		/**
@@ -812,7 +814,7 @@ class BP_REST_Group_Invites_Endpoint extends WP_REST_Controller {
 		 *
 		 * @param WP_REST_Response $response The response data.
 		 * @param WP_REST_Request  $request  Request used to generate the response.
-		 * @param BP_Invitation    $invite   The invite object.
+		 * @param BP_Invitation    $invite   The invitation object.
 		 */
 		return apply_filters( 'bp_rest_group_invites_prepare_value', $response, $request, $invite );
 	}
@@ -946,46 +948,54 @@ class BP_REST_Group_Invites_Endpoint extends WP_REST_Controller {
 				'title'      => 'bp_group_invites',
 				'type'       => 'object',
 				'properties' => array(
-					'id'            => array(
+					'id'                => array(
 						'context'     => array( 'view', 'edit' ),
 						'description' => __( 'A unique numeric ID for the BP Invitation object.', 'buddypress' ),
 						'type'        => 'integer',
 						'readonly'    => true,
 					),
-					'user_id'       => array(
+					'user_id'           => array(
 						'context'     => array( 'view', 'edit' ),
 						'description' => __( 'The ID of the user who is invited to join the Group.', 'buddypress' ),
 						'type'        => 'integer',
 					),
-					'invite_sent'   => array(
+					'invite_sent'       => array(
 						'context'     => array( 'view', 'edit' ),
 						'description' => __( 'Whether the invite has been sent to the invitee.', 'buddypress' ),
 						'type'        => 'boolean',
 					),
-					'inviter_id'    => array(
+					'inviter_id'        => array(
 						'context'     => array( 'view', 'edit' ),
 						'description' => __( 'The ID of the user who made the invite.', 'buddypress' ),
 						'type'        => 'integer',
 					),
-					'group_id'      => array(
+					'group_id'          => array(
 						'context'     => array( 'view', 'edit' ),
 						'description' => __( 'The ID of the group to which the user has been invited.', 'buddypress' ),
 						'type'        => 'integer',
 					),
-					'date_modified' => array(
+					'date_modified'     => array(
 						'context'     => array( 'view', 'edit' ),
-						'description' => __( "The date the object was created or last updated, in the site's timezone.", 'buddypress' ),
-						'type'        => 'string',
+						'description' => __( 'The date the object was created or last updated, in the site\'s timezone.', 'buddypress' ),
+						'readonly'    => true,
+						'type'        => array( 'string', 'null' ),
 						'format'      => 'date-time',
 					),
-					'type'          => array(
+					'date_modified_gmt' => array(
+						'context'     => array( 'view', 'edit' ),
+						'description' => __( 'The date the object was created or last updated, as GMT.', 'buddypress' ),
+						'readonly'    => true,
+						'type'        => array( 'string', 'null' ),
+						'format'      => 'date-time',
+					),
+					'type'              => array(
 						'context'     => array( 'view', 'edit' ),
 						'description' => __( 'Invitation or request.', 'buddypress' ),
 						'type'        => 'string',
 						'enum'        => array( 'invite', 'request' ),
 						'default'     => 'invite',
 					),
-					'message'       => array(
+					'message'           => array(
 						'context'     => array( 'view', 'edit' ),
 						'description' => __( 'The raw and rendered versions for the content of the message.', 'buddypress' ),
 						'type'        => 'object',

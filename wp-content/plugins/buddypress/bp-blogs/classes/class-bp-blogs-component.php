@@ -296,7 +296,7 @@ class BP_Blogs_Component extends BP_Component {
 				'parent'   => 'my-account-' . $this->id,
 				'id'       => 'my-account-' . $this->id . '-my-sites',
 				'title'    => __( 'My Sites', 'buddypress' ),
-				'href'     => $blogs_link,
+				'href'     => trailingslashit( $blogs_link . 'my-sites' ),
 				'position' => 10
 			);
 
@@ -408,7 +408,7 @@ class BP_Blogs_Component extends BP_Component {
 					'wp-components',
 					'wp-i18n',
 					'wp-block-editor',
-					'bp-block-components',
+					'wp-server-side-render',
 				),
 				'style'              => 'bp-recent-posts-block',
 				'style_url'          => plugins_url( 'css/blocks/recent-posts.css', dirname( __FILE__ ) ),
@@ -431,5 +431,24 @@ class BP_Blogs_Component extends BP_Component {
 		}
 
 		parent::blocks_init( $blocks );
+	}
+
+	/**
+	 * Add the Sites directory states.
+	 *
+	 * @since 10.0.0
+	 *
+	 * @param array   $states Optional. See BP_Component::admin_directory_states() for description.
+	 * @param WP_Post $post   Optional. See BP_Component::admin_directory_states() for description.
+	 * @return array          See BP_Component::admin_directory_states() for description.
+	 */
+	public function admin_directory_states( $states = array(), $post = null ) {
+		$bp = buddypress();
+
+		if ( isset( $bp->pages->blogs->id ) && (int) $bp->pages->blogs->id === (int) $post->ID ) {
+			$states['page_for_sites_directory'] = _x( 'BP Sites Page', 'page label', 'buddypress' );
+		}
+
+		return parent::admin_directory_states( $states, $post );
 	}
 }

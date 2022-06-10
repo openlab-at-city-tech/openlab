@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 function bp_groups_render_group_block( $attributes = array() ) {
 	$bp = buddypress();
 
-	$block_args = wp_parse_args(
+	$block_args = bp_parse_args(
 		$attributes,
 		array(
 			'itemID'              => 0,
@@ -190,7 +190,7 @@ function bp_groups_render_group_block( $attributes = array() ) {
 function bp_groups_render_groups_block( $attributes = array() ) {
 	$bp = buddypress();
 
-	$block_args = wp_parse_args(
+	$block_args = bp_parse_args(
 		$attributes,
 		array(
 			'itemIDs'          => array(),
@@ -325,6 +325,23 @@ function bp_groups_blocks_add_script_data() {
 		return;
 	}
 
+	$path = sprintf(
+		'/%1$s/%2$s/%3$s',
+		bp_rest_namespace(),
+		bp_rest_version(),
+		buddypress()->groups->id
+	);
+
+	wp_localize_script(
+		'bp-dynamic-groups-script',
+		'bpDynamicGroupsSettings',
+		array(
+			'path'  => ltrim( $path, '/' ),
+			'root'  => esc_url_raw( get_rest_url() ),
+			'nonce' => wp_create_nonce( 'wp_rest' ),
+		)
+	);
+
 	// Include the common JS template.
 	echo bp_get_dynamic_template_part( 'assets/widgets/dynamic-groups.php' );
 
@@ -345,7 +362,7 @@ function bp_groups_blocks_add_script_data() {
  * @return string           HTML output.
  */
 function bp_groups_render_dynamic_groups_block( $attributes = array() ) {
-	$block_args = wp_parse_args(
+	$block_args = bp_parse_args(
 		$attributes,
 		array(
 			'title'        => __( 'Groups', 'buddypress' ),
@@ -439,7 +456,7 @@ function bp_groups_render_dynamic_groups_block( $attributes = array() ) {
 					/* translators: %s is the number of Group members */
 					$extra = sprintf( _n( '%s member', '%s members', $count, 'buddypress' ), bp_core_number_format( $count ) );
 				} else {
-					/* translators: %s: a human time diff. */
+					/* translators: %s: last activity timestamp (e.g. "Active 1 hour ago") */
 					$extra = sprintf( __( 'Active %s', 'buddypress' ), bp_get_group_last_active( $group ) );
 				}
 
@@ -469,7 +486,7 @@ function bp_groups_render_dynamic_groups_block( $attributes = array() ) {
 				);
 			}
 		}
-	} else {
+	} elseif ( defined( 'WP_USE_THEMES' ) ) {
 		// Get corresponding members.
 		$path = sprintf(
 			'/%1$s/%2$s/%3$s',
@@ -483,10 +500,7 @@ function bp_groups_render_dynamic_groups_block( $attributes = array() ) {
 			$path
 		);
 
-		$preloaded_groups = array();
-		if ( bp_is_running_wp( '5.0.0' ) ) {
-			$preloaded_groups = rest_preload_api_request( '', $default_path );
-		}
+		$preloaded_groups = rest_preload_api_request( '', $default_path );
 
 		buddypress()->groups->block_globals['bp/dynamic-groups']->items[ $widget_id ] = (object) array(
 			'selector'   => $widget_id,
@@ -498,15 +512,6 @@ function bp_groups_render_dynamic_groups_block( $attributes = array() ) {
 		if ( ! has_action( 'wp_footer', 'bp_groups_blocks_add_script_data', 1 ) ) {
 			wp_set_script_translations( 'bp-dynamic-groups-script', 'buddypress' );
 			wp_enqueue_script( 'bp-dynamic-groups-script' );
-			wp_localize_script(
-				'bp-dynamic-groups-script',
-				'bpDynamicGroupsSettings',
-				array(
-					'path'  => ltrim( $path, '/' ),
-					'root'  => esc_url_raw( get_rest_url() ),
-					'nonce' => wp_create_nonce( 'wp_rest' ),
-				)
-			);
 
 			add_action( 'wp_footer', 'bp_groups_blocks_add_script_data', 1 );
 		}

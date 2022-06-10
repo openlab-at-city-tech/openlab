@@ -905,7 +905,8 @@ class BP_REST_Activity_Endpoint extends WP_REST_Controller {
 				'raw'      => $activity->content,
 				'rendered' => $this->render_item( $activity ),
 			),
-			'date'              => bp_rest_prepare_date_response( $activity->date_recorded ),
+			'date'              => bp_rest_prepare_date_response( $activity->date_recorded, get_date_from_gmt( $activity->date_recorded ) ),
+			'date_gmt'          => bp_rest_prepare_date_response( $activity->date_recorded ),
 			'id'                => $activity->id,
 			'link'              => bp_activity_get_permalink( $activity->id ),
 			'primary_item_id'   => $activity->item_id,
@@ -1039,13 +1040,12 @@ class BP_REST_Activity_Endpoint extends WP_REST_Controller {
 		if ( ! empty( $schema['properties']['primary_item_id'] ) && ! empty( $request->get_param( 'primary_item_id' ) ) ) {
 			$item_id = (int) $request->get_param( 'primary_item_id' );
 
-			// Set the group ID of the activity.
+			// Use a generic item ID.
+			$prepared_activity->item_id = $item_id;
+
+			// Set the group ID, used in the `groups_post_update` helper function only.
 			if ( bp_is_active( 'groups' ) && isset( $prepared_activity->component ) && buddypress()->groups->id === $prepared_activity->component ) {
 				$prepared_activity->group_id = $item_id;
-
-				// Use a generic item ID for other components.
-			} else {
-				$prepared_activity->item_id = $item_id;
 			}
 		}
 
@@ -1370,8 +1370,16 @@ class BP_REST_Activity_Endpoint extends WP_REST_Controller {
 					),
 					'date'              => array(
 						'context'     => array( 'view', 'edit', 'embed' ),
-						'description' => __( "The date the activity was published, in the site's timezone.", 'buddypress' ),
-						'type'        => 'string',
+						'description' => __( 'The date the activity was published, in the site\'s timezone.', 'buddypress' ),
+						'readonly'    => true,
+						'type'        => array( 'string', 'null' ),
+						'format'      => 'date-time',
+					),
+					'date_gmt'          => array(
+						'context'     => array( 'view', 'edit' ),
+						'description' => __( 'The date the activity was published, as GMT.', 'buddypress' ),
+						'readonly'    => true,
+						'type'        => array( 'string', 'null' ),
 						'format'      => 'date-time',
 					),
 					'status'            => array(

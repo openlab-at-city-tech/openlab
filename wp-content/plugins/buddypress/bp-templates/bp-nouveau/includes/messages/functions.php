@@ -3,7 +3,7 @@
  * Messages functions
  *
  * @since 3.0.0
- * @version 3.1.0
+ * @version 10.3.0
  */
 
 // Exit if accessed directly.
@@ -90,33 +90,75 @@ function bp_nouveau_messages_localize_scripts( $params = array() ) {
 		return $params;
 	}
 
+	$bp   = buddypress();
+	$slug = bp_nouveau_get_component_slug( 'messages' );
+
+	// Use the primary nav to get potential custom slugs.
+	$primary_nav = $bp->members->nav->get( $slug );
+	if ( isset( $primary_nav->link ) && $primary_nav->link ) {
+		$root_url = $primary_nav->link;
+
+		// Make sure to use the displayed user domain.
+		if ( bp_loggedin_user_domain() ) {
+			$root_url = str_replace( bp_loggedin_user_domain(), bp_displayed_user_domain(), $root_url );
+		}
+	} else {
+		$root_url = trailingslashit( bp_displayed_user_domain() . $slug );
+	}
+
+	// Build default routes list.
+	$routes = array(
+		'inbox'   => 'inbox',
+		'sentbox' => 'sentbox',
+		'compose' => 'compose',
+	);
+
+	if ( bp_is_active( 'messages', 'star' ) ) {
+		$routes['starred'] = 'starred';
+	}
+
+	// Use the secondary nav to get potential custom slugs.
+	$secondary_nav = $bp->members->nav->get_secondary( array( 'parent_slug' => $slug ), false );
+
+	// Resets the routes list using link slugs.
+	if ( $secondary_nav ) {
+		foreach ( $secondary_nav as $subnav_item ) {
+			$routes[ $subnav_item->slug ] = trim( str_replace( $root_url, '', $subnav_item->link ), '/' );
+
+			if ( ! $routes[ $subnav_item->slug ] ) {
+				$routes[ $subnav_item->slug ] = $subnav_item->slug;
+			}
+		}
+	}
+
 	$params['messages'] = array(
-		'errors' => array(
+		'errors'            => array(
 			'send_to'         => __( 'Please add at least one recipient.', 'buddypress' ),
 			'subject'         => __( 'Please add a subject to your message.', 'buddypress' ),
 			'message_content' => __( 'Please add some content to your message.', 'buddypress' ),
 		),
-		'nonces' => array(
+		'nonces'            => array(
 			'send' => wp_create_nonce( 'messages_send_message' ),
 		),
-		'loading'       => __( 'Loading messages. Please wait.', 'buddypress' ),
-		'doingAction'   => array(
+		'loading'           => __( 'Loading messages. Please wait.', 'buddypress' ),
+		'doingAction'       => array(
 			'read'   => __( 'Marking messages as read. Please wait.', 'buddypress' ),
 			'unread' => __( 'Marking messages as unread. Please wait.', 'buddypress' ),
 			'delete' => __( 'Deleting messages. Please wait.', 'buddypress' ),
 			'star'   => __( 'Starring messages. Please wait.', 'buddypress' ),
 			'unstar' => __( 'Unstarring messages. Please wait.', 'buddypress' ),
 		),
-		'bulk_actions'  => bp_nouveau_messages_get_bulk_actions(),
-		'howto'         => __( 'Click on the message title to preview it in the Active conversation box below.', 'buddypress' ),
-		'howtoBulk'     => __( 'Use the select box to define your bulk action and click on the &#10003; button to apply.', 'buddypress' ),
-		'toOthers'      => array(
+		'bulk_actions'      => bp_nouveau_messages_get_bulk_actions(),
+		'howto'             => __( 'Click on the message title to preview it in the Active conversation box below.', 'buddypress' ),
+		'howtoBulk'         => __( 'Use the select box to define your bulk action and click on the &#10003; button to apply.', 'buddypress' ),
+		'toOthers'          => array(
 			'one'  => __( '(and 1 other)', 'buddypress' ),
 
 			/* translators: %s: number of message recipients */
 			'more' => __( '(and %d others)', 'buddypress' ),
 		),
-		'rootUrl' => parse_url( trailingslashit( bp_displayed_user_domain() . bp_nouveau_get_component_slug( 'messages' ) ), PHP_URL_PATH ),
+		'rootUrl'           => parse_url( $root_url, PHP_URL_PATH ),
+		'supportedRoutes'   => $routes,
 	);
 
 	// Star private messages.
@@ -190,7 +232,13 @@ function bp_nouveau_messages_adjust_admin_nav( $admin_nav ) {
 }
 
 /**
+ * Prepend a notification about the active Sitewide notice.
+ *
  * @since 3.0.0
+ *
+ * @param false|array $notifications False if there are no items, an array of notification items otherwise.
+ * @param int         $user_id       The user ID.
+ * @return false|array               False if there are no items, an array of notification items otherwise.
  */
 function bp_nouveau_add_notice_notification_for_user( $notifications, $user_id ) {
 	if ( ! bp_is_active( 'messages' ) || ! doing_action( 'admin_bar_menu' ) ) {
@@ -211,31 +259,39 @@ function bp_nouveau_add_notice_notification_for_user( $notifications, $user_id )
 		return $notifications;
 	}
 
-	$notice_notification                    = new stdClass;
-	$notice_notification->id                = 0;
-	$notice_notification->user_id           = $user_id;
-	$notice_notification->item_id           = $notice->id;
-	$notice_notification->secondary_item_id = '';
-	$notice_notification->component_name    = 'messages';
-	$notice_notification->component_action  = 'new_notice';
-	$notice_notification->date_notified     = $notice->date_sent;
-	$notice_notification->is_new            = '1';
+	$notice_notification = (object) array(
+		'id'                => 0,
+		'user_id'           => $user_id,
+		'item_id'           => $notice->id,
+		'secondary_item_id' => 0,
+		'component_name'    => 'messages',
+		'component_action'  => 'new_notice',
+		'date_notified'     => $notice->date_sent,
+		'is_new'            => 1,
+		'total_count'       => 1,
+		'content'           => __( 'New sitewide notice', 'buddypress' ),
+		'href'              => bp_loggedin_user_domain(),
+	);
 
-	return array_merge( $notifications, array( $notice_notification ) );
+	if ( ! is_array( $notifications ) ) {
+		$notifications = array( $notice_notification );
+	} else {
+		array_unshift( $notifications, $notice_notification );
+	}
+
+	return $notifications;
 }
 
 /**
+ * Format the notice notifications.
+ *
  * @since 3.0.0
+ * @deprecated 10.0.0
+ *
+ * @param array $array.
  */
 function bp_nouveau_format_notice_notification_for_user( $array ) {
-	if ( ! empty( $array['text'] ) || ! doing_action( 'admin_bar_menu' ) ) {
-		return $array;
-	}
-
-	return array(
-		'text' => __( 'New sitewide notice', 'buddypress' ),
-		'link' => bp_loggedin_user_domain(),
-	);
+	_deprecated_function( __FUNCTION__, '10.0.0' );
 }
 
 /**
