@@ -69,12 +69,10 @@ function oleem_remove_private_images( $content, $post_link = '#' ) {
 
     // Get all images in the content
     $images = $document->getElementsByTagName('img');
-    $images_length = $images->length;
 
-    // DOMNodeList is getting reseted after removing an element,
-    // so we always need to point to the next first item
-    for( $i = 0; $i < $images_length; $i++ ) {
-        $image = $images->item(0);
+    // Loop the DOMNodeList in reverse order
+    for( $i = $images->length; --$i >= 0; ) {
+        $image = $images->item($i);
 
         // If image is hosted on local WP network site
         if( oleem_is_private_network_link( $image->getAttribute('src') ) ) {
@@ -132,12 +130,10 @@ function oleem_remove_multimedia_embeds( $content, $media_type = '', $post_link 
 
     // Find all elements with the specified tag name <media_type>
     $elements = $document->getElementsByTagName($media_type);
-    $elements_length = $elements->length;
 
-    // DOMNodeList is getting reseted after removing an element,
-    // so we always need to point to the next first item
-    for( $i = 0; $i < $elements_length; $i++ ) {
-        $element = $elements->item(0);
+    // Loop the DOMNodeList in reverse order
+    for( $i = $elements->length; --$i >= 0; ) {
+        $element = $elements->item($i);
 
         // If has <figure> as a parent
         if( $element->parentNode->tagName === 'figure' ) {
