@@ -1665,3 +1665,54 @@ function openlab_get_user_private_membership( $user_id ) {
 
 	return $private_groups;
 }
+
+/**
+ * Update private membership table with the user's
+ * group privacy data.
+ */
+add_action( 'wp_ajax_openlab_update_member_group_privacy', 'openlab_update_member_group_privacy' );
+function openlab_update_member_group_privacy() {
+	global $wpdb;
+
+	// Get private membership table
+	$table_name = $wpdb->prefix . 'private_membership';
+
+	// Get current user id
+	$user_id = bp_loggedin_user_id();
+
+	// Check if group id is provded in the request
+	if( ! isset( $_POST['group_id'] ) ) {
+		echo json_encode( array(
+			'success'	=> false,
+			'message'	=> 'Group ID is missing.'
+		) );
+		die();
+	}
+
+	$group_id = $_POST['group_id'];
+	$is_private = ( $_POST['is_private'] ) ? filter_var($_POST['is_private'], FILTER_VALIDATE_BOOLEAN) : false;
+
+	if( $is_private ) {
+		if( $wpdb->insert( $table_name, array( 'user_id' => $user_id, 'group_id' => $group_id ) ) ) {
+			echo json_encode( array(
+				'success'	=> true,
+				'message'	=> 'User membership is set to private'
+			) );
+			die();
+		}
+	} else {
+		if( $wpdb->delete( $table_name, array( 'user_id' => $user_id, 'group_id' => $group_id ) ) ) {
+			echo json_encode( array(
+				'success'	=> true,
+				'message'	=> 'User membership is set to public.'
+			) );
+			die();
+		}
+	}
+
+	echo json_encode( array(
+		'success'	=> false,
+		'message'	=> 'Something went wrong'
+	) );
+	die();
+}
