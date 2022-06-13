@@ -16,9 +16,15 @@
         });
 
         /**
+         * Change link input placeholder
+         */
+        var tooltip = quillEditor.theme.tooltip;
+        var input = tooltip.root.querySelector('input[data-link]');
+        input.dataset.link = 'https://example.com';
+
+        /**
          * Get content of the Quill editor and put it's content
          * in the comment text field.
-         * 
          */
         quillEditor.on( 'text-change', function( delta, oldDelta, source ) {
             if( quillEditor.getText().trim() ) {
