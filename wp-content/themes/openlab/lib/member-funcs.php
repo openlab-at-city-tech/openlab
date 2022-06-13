@@ -1613,6 +1613,36 @@ function openlab_get_activity_button_link( $activity ) {
 }
 
 /**
+ * Check if the membership for the specified group is private
+ * for the logged user.
+ *
+ */
+function openlab_is_my_membership_private( $group_id ) {
+	// Skip if group id is missing
+	if( empty( $group_id ) ) {
+		return false;
+	}
+
+	global $wpdb;
+
+	// Get private membership table
+	$table_name = $wpdb->prefix . 'private_membership';
+
+	// Get current user id
+	$user_id = bp_loggedin_user_id();
+
+	// Check if the membership is private based on user id and group id
+	$query = $wpdb->get_results( "SELECT * FROM $table_name WHERE `user_id` = $user_id AND `group_id` = $group_id" );
+
+	// If there is a record, return true. Otherwise, return false
+	if( $query ) {
+		return true;
+	}
+
+	return false;
+}
+
+/**
  * Get user private membership group
  */
 function openlab_get_user_private_membership( $user_id ) {
