@@ -202,8 +202,11 @@
   color: #1e1e1e;
   cursor: pointer;
 }
-.flexible-modal-resizer, .flexible-modal-mask {
+.flexible-modal-resizer {
   display: none;
+}
+.flexible-modal-mask {
+  z-index: 999;
 }
 .flexible-modal .body {
   padding: 32px;
@@ -214,14 +217,6 @@
 }
 @media (max-width: 991px) {
   .flexible-modal .body {
-    height: calc(100% - 60px - 172px);
-  }
-}
-.flexible-modal .body-add {
-  height: 600px;
-}
-@media (max-width: 991px) {
-  .flexible-modal .body-add {
     height: calc(100% - 60px - 172px);
   }
 }
