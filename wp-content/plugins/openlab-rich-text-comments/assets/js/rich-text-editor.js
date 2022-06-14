@@ -79,6 +79,7 @@
         $('button.ql-link').attr( 'aria-label', 'Toggle link modal' );
         $('button.ql-list[value="ordered"]').attr('aria-label', 'Toggle ordered list');
         $('button.ql-list[value="bullet"]').attr('aria-label', 'Toggle bulleted list');
+        $('button.ql-image').attr( 'aria-label', 'Toggle multimedia modal' );
         $('.ql-formats button').attr('aria-pressed', false );
         $('.ql-formats button > svg').attr('aria-hidden', true );
         $('#ol-rich-editor .ql-editor').attr( {
