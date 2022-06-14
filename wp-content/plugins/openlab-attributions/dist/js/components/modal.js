@@ -42,6 +42,16 @@ class AttributionModal extends Component {
 		};
 	}
 
+	componentDidMount() {
+		const modalMask = document.querySelector('.flexible-modal-mask');
+		if( modalMask ) {
+			modalMask.addEventListener( 'click', function(e) {
+				e.preventDefault();
+				e.stopImmediatePropagation();
+			} );
+		}
+	}
+
 	handleChange( event ) {
 		const target = event.target;
 		const value = target.value;
