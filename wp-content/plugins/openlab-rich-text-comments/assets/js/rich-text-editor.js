@@ -7,18 +7,55 @@
          */
         var quillEditor = new Quill('#ol-rich-editor', {
             modules: {
-                toolbar: [
-                    [ 'bold', 'italic', 'underline', 'link' ],
-                    [ { 'list': 'ordered'}, { 'list': 'bullet' } ]
-                ]
+                toolbar: {
+                    container: [ 'bold', 'italic', 'underline', 'link', 'image', { 'list': 'ordered'}, { 'list': 'bullet' } ],
+                    handlers: {
+                        image: imageHandler
+                    }
+                }
             },
             theme: 'snow'
         });
 
         /**
+         * Change link input placeholder
+         */
+        var tooltip = quillEditor.theme.tooltip;
+        var input = tooltip.root.querySelector('input[data-link]');
+        input.dataset.link = 'https://example.com';
+
+        /**
+         * Implement custom handler for the image button.
+         * Show tooltip for entering URL, instead of uploading an image.
+         */
+        function imageHandler() {
+            const tooltip = quillEditor.theme.tooltip;
+            const originalSave = tooltip.save;
+            const originalHide = tooltip.hide;
+
+            // Called on save
+            tooltip.save = function() {
+                const range = quillEditor.getSelection(true);
+                const value = tooltip.textbox.value;
+                if (value) {
+                    quillEditor.insertText(range.index, value, true);
+                }
+            };
+
+            // Called on hide and save.
+            tooltip.hide = function () {
+                tooltip.save = originalSave;
+                tooltip.hide = originalHide;
+                tooltip.hide();
+            };
+
+            tooltip.edit('image');
+            tooltip.textbox.placeholder = 'Enter media URL';
+        }
+
+        /**
          * Get content of the Quill editor and put it's content
          * in the comment text field.
-         * 
          */
         quillEditor.on( 'text-change', function( delta, oldDelta, source ) {
             if( quillEditor.getText().trim() ) {
@@ -42,6 +79,7 @@
         $('button.ql-link').attr( 'aria-label', 'Toggle link modal' );
         $('button.ql-list[value="ordered"]').attr('aria-label', 'Toggle ordered list');
         $('button.ql-list[value="bullet"]').attr('aria-label', 'Toggle bulleted list');
+        $('button.ql-image').attr( 'aria-label', 'Toggle multimedia modal' );
         $('.ql-formats button').attr('aria-pressed', false );
         $('.ql-formats button > svg').attr('aria-hidden', true );
         $('#ol-rich-editor .ql-editor').attr( {
