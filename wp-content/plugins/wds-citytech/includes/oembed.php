@@ -68,6 +68,8 @@ function openlab_register_embed_handlers() {
 		. '#',
 		'openlab_pinterest_embed_handler'
 	);
+
+	wp_embed_register_handler( 'desmos', '#https?://([^\.]+)\.desmos\.com/#i', 'openlab_embed_handler_desmos' );
 }
 add_action( 'init', 'openlab_register_embed_handlers' );
 
@@ -147,4 +149,24 @@ function openlab_pinterest_embed_handler( $matches, $attr, $url ) {
 	}
 
 	return $return;
+}
+
+/**
+ * Desmos.com embed callback
+ */
+function openlab_embed_handler_desmos( $matches, $attr, $url, $rawattr ) {
+	$path = parse_url( $url, PHP_URL_PATH );
+	
+	// Create array and remove empty values
+	$path = array_filter( explode( '/', $path ) );
+
+	// ID is always last in the array
+	$id = end($path);
+
+	$embed = sprintf(
+		'<iframe src="https://www.desmos.com/calculator/%s?embed" height="500" style="width:100%%" frameborder=0></iframe>',
+		esc_attr( $id )
+	);
+
+	return $embed;
 }
