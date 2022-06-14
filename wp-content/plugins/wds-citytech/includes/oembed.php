@@ -70,6 +70,7 @@ function openlab_register_embed_handlers() {
 	);
 
 	wp_embed_register_handler( 'desmos', '#https?://([^\.]+)\.desmos\.com/#i', 'openlab_embed_handler_desmos' );
+	wp_embed_register_handler( 'geogebra', '#https?://([^\.]+)\.geogebra\.org/#i', 'openlab_embed_handler_geogebra' );
 }
 add_action( 'init', 'openlab_register_embed_handlers' );
 
@@ -164,7 +165,38 @@ function openlab_embed_handler_desmos( $matches, $attr, $url, $rawattr ) {
 	$id = end($path);
 
 	$embed = sprintf(
-		'<iframe src="https://www.desmos.com/calculator/%s?embed" height="500" style="width:100%%" frameborder=0></iframe>',
+		'<div class="desmos-iframe-container" style="position: relative; width: 100%%; height: 0; padding-bottom: 56.25%%;">
+		<iframe 
+			src="https://www.desmos.com/calculator/%s?embed"
+			style="position: absolute; top: 0; left: 0; width:100%%; height:100%%; border: 0;" frameborder=0>
+		</iframe>
+		</div>',
+		esc_attr( $id )
+	);
+
+	return $embed;
+}
+
+/**
+ * Geogebra.org embed callback
+ */
+function openlab_embed_handler_geogebra( $matches, $attr, $url ) {
+	$path = parse_url( $url, PHP_URL_PATH );
+	
+	// Create array and remove empty values
+	$path = array_filter( explode( '/', $path ) );
+
+	// ID is always last in the array
+	$id = end($path);
+
+	$embed = sprintf(
+		'<div class="geogebra-iframe-container" style="position: relative; width: 100%%; height: 0; padding-bottom: 56.25%%;">
+		<iframe 
+			scrolling="no" 
+			src="https://www.geogebra.org/material/iframe/id/%s/rc/false/ai/false/sdz/false/smb/false/stb/false/stbh/true/ld/false/sri/false/sfsb/true"
+			style="position: absolute; top: 0; left: 0; width:100%%; height:100%%; border: 0;" allowfullscreen>
+		</iframe>
+		</div>',
 		esc_attr( $id )
 	);
 
