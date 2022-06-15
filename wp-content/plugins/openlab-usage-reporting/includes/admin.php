@@ -133,7 +133,13 @@ function olur_batch_ajax_callback() {
 		break;
 	}
 
-	$file_name   = 'openlab-usage-' . date( 'Y-m-d:H:i:s', $report_id ) . '.csv';
+	$start = date( 'Y-m-d H:i:s', strtotime( wp_unslash( $_POST['startDate'] ) ) );
+	$end   = date( 'Y-m-d H:i:s', strtotime( wp_unslash( $_POST['endDate'] ) ) + ( 60 * 60 * 24 ) - 1 ); // Bump to remain inclusive
+
+	$start_date = date( 'Y-m-d', strtotime( wp_unslash( $_POST['startDate'] ) ) );
+	$end_date   = date( 'Y-m-d', strtotime( wp_unslash( $_POST['endDate'] ) ) + ( 60 * 60 * 24 ) - 1 ); // Bump to remain inclusive
+
+	$file_name   = sprintf( 'openlab-usage-%s-through-%s.csv', $start_date, $end_date );
 	$report_dir  = olur_report_directory();
 	$report_path = $report_dir['dir'] . $file_name;
 
@@ -155,9 +161,6 @@ function olur_batch_ajax_callback() {
 
 		fputcsv( $fh, $header_row );
 	}
-
-	$start = date( 'Y-m-d H:i:s', strtotime( wp_unslash( $_POST['startDate'] ) ) );
-	$end   = date( 'Y-m-d H:i:s', strtotime( wp_unslash( $_POST['endDate'] ) ) + ( 60 * 60 * 24 ) - 1 ); // Bump to remain inclusive
 
 	$row = olur_generate_report_data_row( $the_class, $the_callback, $start, $end );
 
