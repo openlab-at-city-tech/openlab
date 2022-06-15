@@ -24,6 +24,17 @@ class User implements Counter {
 		$ut_term = get_term_by( 'slug', $user_type, 'bp_member_type' );
 		if ( $ut_term ) {
 			$ut_clause = $wpdb->prepare( "AND term_taxonomy_id = %d", $ut_term->term_taxonomy_id );
+		} elseif ( $user_type === 'other' ) {
+			$known_terms = [
+				'student' => get_term_by( 'slug', 'student', 'bp_member_type' ),
+				'faculty' => get_term_by( 'slug', 'faculty', 'bp_member_type' ),
+				'staff'   => get_term_by( 'slug', 'staff', 'bp_member_type' ),
+				'alumni'  => get_term_by( 'slug', 'alumni', 'bp_member_type' ),
+			];
+
+			$known_term_ids = wp_list_pluck( $known_terms, 'term_taxonomy_id' );
+
+			$ut_clause = "AND term_taxonomy_id NOT IN (" . implode( ',', array_map( 'intval', $known_term_ids ) ) . ")";
 		} else {
 			$ut_clause = '';
 		}
