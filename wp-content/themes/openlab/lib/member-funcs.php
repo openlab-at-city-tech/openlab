@@ -397,15 +397,15 @@ function openlab_group_status_message( $group = null ) {
 				// this is the case, and the group is not
 				// public, don't mention anything about the Site.
 				if ( $private_group_has_disabled_requests ) {
-					$message = 'This ' . $group_label . ' is PRIVATE and membership is by invitation only.';
+					$message = 'private' === $group->status ? 'This ' . $group_label . ' is PRIVATE and membership is by invitation only.' : 'This ' . $group_label . ' is HIDDEN and membership is by invitation only.';
 				} else {
-					$message = 'This ' . $group_label . ' is PRIVATE.';
+					$message = 'private' === $group->status ? 'This ' . $group_label . ' is PRIVATE.' : 'This ' . $group_label . ' is HIDDEN';
 				}
 			} else {
 				if ( $private_group_has_disabled_requests ) {
-					$message = 'This ' . $group_label . ' Profile is PRIVATE and membership is by invitation only, but the ' . $group_label . ' Site is OPEN to all visitors.';
+					$message = 'private' === $group->status ? 'This ' . $group_label . ' Profile is PRIVATE and membership is by invitation only, but the ' . $group_label . ' Site is OPEN to all visitors.' : 'This ' . $group_label . ' Profile is HIDDEN and membership is by invitation only, but the ' . $group_label . ' Site is OPEN to all visitors.';
 				} else {
-					$message = 'This ' . $group_label . ' Profile is PRIVATE, but the ' . $group_label . ' Site is OPEN to all visitors.';
+					$message = 'private' === $group->status ? 'This ' . $group_label . ' Profile is PRIVATE, but the ' . $group_label . ' Site is OPEN to all visitors.' : 'This ' . $group_label . ' Profile is HIDDEN, but the ' . $group_label . ' Site is OPEN to all visitors.';
 				}
 			}
 
@@ -420,9 +420,9 @@ function openlab_group_status_message( $group = null ) {
 				}
 			} else {
 				if ( $private_group_has_disabled_requests ) {
-					$message = 'This ' . $group_label . ' Profile is PRIVATE and is by invitation only, but all logged-in OpenLab members may view the ' . $group_label . ' Site.';
+					$message = 'private' === $group->status ? 'This ' . $group_label . ' Profile is PRIVATE and is by invitation only, but all logged-in OpenLab members may view the ' . $group_label . ' Site.' : 'This ' . $group_label . ' Profile is HIDDEN and is by invitation only, but all logged-in OpenLab members may view the ' . $group_label . ' Site.';
 				} else {
-					$message = 'This ' . $group_label . ' Profile is PRIVATE, but all logged-in OpenLab members may view the ' . $group_label . ' Site.';
+					$message = 'private' === $group->status ? 'This ' . $group_label . ' Profile is PRIVATE, but all logged-in OpenLab members may view the ' . $group_label . ' Site.' : 'This ' . $group_label . ' Profile is HIDDEN, but all logged-in OpenLab members may view the ' . $group_label . ' Site.';
 				}
 			}
 
@@ -437,9 +437,9 @@ function openlab_group_status_message( $group = null ) {
 				}
 			} else {
 				if ( $private_group_has_disabled_requests ) {
-					$message = 'This ' . $group_label . ' is PRIVATE and membership is by invitation only. You must be a member of the ' . $group_label . ' to view the ' . $group_label . ' Site.';
+					$message = 'private' === $group->status ? 'This ' . $group_label . ' is PRIVATE and membership is by invitation only. You must be a member of the ' . $group_label . ' to view the ' . $group_label . ' Site.' : 'This ' . $group_label . ' is HIDDEN and membership is by invitation only. You must be a member of the ' . $group_label . ' to view the ' . $group_label . ' Site.';
 				} else {
-					$message = 'This ' . $group_label . ' is PRIVATE. You must be a member of the ' . $group_label . ' to view the ' . $group_label . ' Site.';
+					$message = 'private' === $group->status ? 'This ' . $group_label . ' is PRIVATE. You must be a member of the ' . $group_label . ' to view the ' . $group_label . ' Site.' : 'This ' . $group_label . ' is HIDDEN. You must be a member of the ' . $group_label . ' to view the ' . $group_label . ' Site.';
 				}
 			}
 
@@ -454,9 +454,9 @@ function openlab_group_status_message( $group = null ) {
 				}
 			} else {
 				if ( $private_group_has_disabled_requests ) {
-					$message = 'This ' . $group_label . ' is PRIVATE and membership is by invitation only. You must be an administrator to view the ' . $group_label . ' Site.';
+					$message = 'private' === $group->status ? 'This ' . $group_label . ' is PRIVATE and membership is by invitation only. You must be an administrator to view the ' . $group_label . ' Site.' : 'This ' . $group_label . ' is HIDDEN and membership is by invitation only. You must be an administrator to view the ' . $group_label . ' Site.';
 				} else {
-					$message = 'This ' . $group_label . ' is PRIVATE. You must be an administrator to view the ' . $group_label . ' Site.';
+					$message = 'private' === $group->status ? 'This ' . $group_label . ' is PRIVATE. You must be an administrator to view the ' . $group_label . ' Site.' : 'This ' . $group_label . ' is HIDDEN. You must be an administrator to view the ' . $group_label . ' Site.';
 				}
 			}
 
