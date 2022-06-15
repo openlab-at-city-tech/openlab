@@ -54,7 +54,7 @@ class User implements Counter {
 		$end_day = date( 'Y-m-d', strtotime( $this->end ) );
 		$today   = date( 'Y-m-d' );
 		if ( $end_day === $today ) {
-			$counts['activep'] = (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(DISTINCT u.ID) FROM {$wpdb->users} u JOIN {$bp->activity->table_name} a ON a.user_id = u.ID JOIN {$wpdb->term_relationships} tr ON ( u.ID = tr.object_id ) WHERE u.deleted != 1 AND u.spam != 1 {$ut_clause} AND a.date_recorded >= %s", $this->start, $this->end ) );
+			$counts['activep'] = (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(DISTINCT u.ID) FROM {$wpdb->users} u JOIN {$bp->activity->table_name} a ON a.user_id = u.ID JOIN {$wpdb->term_relationships} tr ON ( u.ID = tr.object_id ) WHERE u.deleted != 1 AND u.spam != 1 {$ut_clause} AND a.date_recorded >= %s", $this->start ) );
 		}
 
 		$this->counts = $counts;
