@@ -1367,7 +1367,8 @@ function openlab_get_acknowledgements( $group_id ) {
 			$view_clones_link = add_query_arg( 'descendant-of', $group_id, $group_directory_url );
 
 			$clone_info_parts['descendants'] = sprintf(
-				_n( 'It has been cloned or re-cloned %s time; %s', 'It has been cloned or re-cloned %s times; %s', $descendant_count, 'openlab' ),
+				_n( 'This %s has been cloned or re-cloned %s time; %s', 'This %s has been cloned or re-cloned %s times; %s', $descendant_count, 'openlab' ),
+				esc_html( $group_type_label ),
 				esc_html( number_format_i18n( $descendant_count ) ),
 				sprintf( '<a href="%s">%s</a>', esc_html( $view_clones_link ), 'view clone(s).' )
 			);
