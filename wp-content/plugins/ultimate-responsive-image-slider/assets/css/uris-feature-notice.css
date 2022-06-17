@@ -1,0 +1,181 @@
+a.linkbtn {
+     background-color: #286888;
+     padding: 7px;
+     color: #fff;
+     font-weight: 600;
+     border-radius: 5px;
+     text-decoration: none;
+}
+.btn-right {
+     text-align: right;
+     margin-top: 20px;
+}
+.mt-3.imsdiv {
+     background-color: #f1f1f1;
+     padding-bottom: 20px;
+}
+ .imsdiv img {
+     width: 100%;
+}
+@media(min-width:1200px) {
+     .imsdiv img {
+         height: 600px;
+    }
+}
+.row.col-md-12.banner {
+     margin-top: 10px;
+     margin-bottom: 50px;
+}
+.row.col-md-12.wpfrank_banner {
+     border: 0;
+     -webkit-box-shadow: 0px 2px 20px #818181;
+     box-shadow: 0px 2px 20px #818181;
+}
+.wpfrank_banner_img img {
+     max-width: 100%;
+     height: auto;
+}
+.wpfrank_banner .button-primary {
+     background: #d06b2e;
+     border-color: #0073aa #006799 #006799;
+     -webkit-box-shadow: 0 4px 6px #0000002e;
+     box-shadow: 0 4px 6px #0000002e;
+     color: #fff;
+     border-radius: 4px;
+     text-decoration: none;
+     border: 0;
+     text-shadow: none;
+     width: 42%;
+     text-align: center;
+     font-size: 1.55rem;
+     /* height: 47px; */
+     /* padding: 10px; */
+     margin-right: 15px;
+     margin-top: 10px;
+     -webkit-transition: 0.4s;
+     -o-transition: 0.4s;
+     transition: 0.4s;
+}
+.wpfrank_banner .button-primary:focus, .wpfrank_banner .button-primary:hover {
+     background-color: #4caf50 !important;
+     border:0 !important;
+     -webkit-box-shadow:none;
+     box-shadow:none;
+     -webkit-transition: 0.4s;
+     -o-transition: 0.4s;
+     transition: 0.4s;
+}
+.wpfrank_banner {
+     padding: 20px;
+     margin: 10px 0px;
+     background: -webkit-linear-gradient(157deg, #144984 57%, rgba(4, 4, 4, 0.74) 39%), url(../img/ultimate.png);
+     background: -o-linear-gradient(157deg, #144984 57%, rgba(4, 4, 4, 0.74) 39%), url(../img/ultimate.png);
+     background: linear-gradient(-67deg, #144984 57%, rgba(4, 4, 4, 0.74) 39%), url(../img/ultimate.png);
+     border: 1px solid #ccc;
+}
+.wpfrank_banner_features {
+     color: #fff;
+}
+.wpfrank_banner_features h3 {
+     margin-bottom: 2.2rem;
+     margin-left: 1rem;
+}
+.wpfrank_banner_actions {
+     margin-top: 2rem;
+}
+.wpfrank_banner_features ul li {
+     font-size: 1.5rem;
+     font-weight: 600;
+}
+.plugin_version span {
+     -ms-transform: rotate(20deg);
+     -webkit-transform: rotate(20deg);
+     transform: rotate(50deg);
+     display: block;
+}
+.wpfrank_banner_img h2 {
+     color: #fff;
+     text-align: center;
+     padding: 18px;
+}
+.wpfrank_banner_features h2{
+     padding: 20px;
+}
+.wpfrank_banner_features ul {
+     list-style: unset;
+}
+.plugin_version {
+     position: absolute;
+     right: -15px;
+     background: -webkit-linear-gradient(226deg, #d06c2e 50%, rgba(27, 26, 26, 0) 50%);
+     background: -o-linear-gradient(226deg, #d06c2e 50%, rgba(27, 26, 26, 0) 50%);
+     background: linear-gradient(-136deg, #d06c2e 50%, rgba(27, 26, 26, 0) 50%);
+     padding: 6px 7px 60px 60px;
+     top: -20px;
+     text-align: center;
+}
+.plugin_version span b {
+     display: block;
+}
+@media(min-width:901px) {
+     .wpfrank_banner .wpfrank_banner_features ul li {
+         float: left;
+         margin: 5px 20px;
+         width: 80%;
+         font-size: 1.5rem;
+    }
+}
+@media(max-width:900px) {
+     .wpfrank_banner_features h3 {
+         margin-left: -1.2rem;
+         font-size: 1.6rem;
+         width: 90%;
+         line-height: 1.4;
+    }
+    .wpfrank_banner_features ul li {
+         font-size: 1.3rem;
+    }
+    .wpfrank_banner {
+         background: transparent;
+    }
+    .wpfrank_banner_img.col-sm-12 {
+         padding: 0 !important;
+         background: -webkit-gradient( linear, left top, left bottom, from(rgba(0, 0, 0, 0.7)), to(rgba(0, 0, 0, 0.7)) ), url(../img/ultimate.png);
+         background: -webkit-linear-gradient( rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7) ), url(../img/ultimate.png);
+         background: -o-linear-gradient( rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7) ), url(../img/ultimate.png);
+         background: linear-gradient( rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7) ), url(../img/ultimate.png);
+         text-align: center;
+    }
+    .container-fluid.wl_im_container {
+         padding: 0;
+    }
+    .plugin_version {
+         top: 0;
+         right: 0px;
+    }
+    .row.col-md-12.wpfrank_banner {
+         margin: 0px;
+         padding:40px 0px;
+    }
+    .auto-fold #wpcontent {
+         margin-left: 0 !important;
+         padding-left:0px;
+    }
+    .wpfrank_banner .button-primary {
+         margin: 4px;
+         font-size: 1.5rem;
+         width: 100%;
+    }
+    .col-md-6.wpfrank_banner_features {
+         background: #144984;
+         padding: 5px 40px;
+         width: 100%;
+    }
+}
+ @media(max-width:768px) {
+    .wpfrank_banner .button-primary {
+         margin: 4px;
+         font-size: 1.25rem;
+         width: 44%;
+    }
+ }
