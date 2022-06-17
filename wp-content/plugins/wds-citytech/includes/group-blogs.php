@@ -1776,6 +1776,9 @@ Comment URL: %s',
 
 		wp_mail( $admin_user->user_email, $subject, $message );
 	}
+
+	// Don't allow core notification to be sent.
+	remove_action( 'comment_post', 'wp_new_comment_notify_postauthor' );
 }
 add_action( 'wp_insert_comment', 'openlab_olgc_notify_instructor', 20, 2 );
 
