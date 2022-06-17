@@ -101,7 +101,7 @@ function openlab_get_clone_descendants_of_group( $group_id, $exclude_creator_ids
 function openlab_get_clone_descendant_count_of_group( $group_id, $exclude_hidden = false ) {
 	$group = groups_get_group( $group_id );
 
-	$descendants = openlab_get_clone_descendants_of_group( $group_id, [ $group->creator_id ], $exclude_hidden );
+	$descendants = openlab_get_clone_descendants_of_group( $group_id, [], $exclude_hidden );
 
 	return count( $descendants );
 }
