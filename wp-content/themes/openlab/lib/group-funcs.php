@@ -664,6 +664,22 @@ function cuny_group_single() {
                             <div class="col-sm-17 row-content"><?php bp_group_description(); ?></div>
                         </div>
 
+						<?php $group_contacts  = openlab_get_group_contacts( $group_id ); ?>
+						<?php if ( $group_contacts && ( $group_type === 'project' || $group_type === 'club' ) ): ?>
+							<div class="table-row row">
+								<?php /* This won't work at all for l10n */ ?>
+								<?php
+								if ( 1 === count( $group_contacts ) ) {
+									$gc_label = sprintf( '%s Contact', ucwords( $group_type ) );
+								} else {
+									$gc_label = sprintf( '%s Contacts', ucwords( $group_type ) );
+								}
+								?>
+								<div class="bold col-sm-7"><?php echo esc_html( $gc_label ); ?></div>
+								<div class="col-sm-17 row-content"><?php echo implode( ', ', array_map( 'bp_core_get_userlink', $group_contacts ) ); ?></div>
+							</div>
+						<?php endif; ?>
+
                         <?php if ( $group_type === 'portfolio' ) : ?>
                         <div class="table-row row">
                             <div class="bold col-sm-7">Member Profile</div>
