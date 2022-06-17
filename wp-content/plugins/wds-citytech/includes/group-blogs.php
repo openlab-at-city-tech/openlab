@@ -1765,16 +1765,18 @@ Comment URL: %s',
 
 	$comment_user = get_userdata( $comment->user_id );
 
-	if ( $comment_user ) {
-		$from = "From: \"$blogname\" <$wp_email>";
+	$wp_email = 'wordpress@' . preg_replace( '#^www\.#', '', wp_parse_url( network_home_url(), PHP_URL_HOST ) );
+
+	if ( ! $comment_user ) {
+		$blogname = wp_specialchars_decode( get_option( 'blogname' ), ENT_QUOTES );
+		$from     = "From: \"$blogname\" <$wp_email>";
 		if ( '' !== $comment->comment_author_email ) {
 			$reply_to = "Reply-To: $comment->comment_author_email";
 		}
 	} else {
-		$comment_user_name = bp_core_get_user_displayname( $comment->user_id );
-		$from = "From: \"$comment_user_name\" <$wp_email>";
+		$from = "From: \"$comment_user->display_name\" <$wp_email>";
 		if ( '' !== $comment_user->user_email ) {
-			$reply_to = "Reply-To: \"$comment->user_email\" <$comment->user_email>";
+			$reply_to = "Reply-To: \"$comment_user->user_email\" <$comment_user->user_email>";
 		}
 	}
 
