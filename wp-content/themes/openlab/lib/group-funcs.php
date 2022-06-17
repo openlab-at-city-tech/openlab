@@ -585,7 +585,7 @@ function cuny_group_single() {
 
             <!-- Right Column -->
             <div id="<?php echo esc_attr( $group_type ); ?>-header-content" class="col-sm-16 col-xs-24 alignleft group-header-content group-<?php echo esc_attr( $group_id ); ?>">
-                <?php 
+                <?php
                     do_action('bp_before_group_header_meta');
 
                     $status_message = openlab_group_status_message();
@@ -610,16 +610,16 @@ function cuny_group_single() {
                 ?>
                 <div class="info-panel panel panel-default no-margin no-margin-top">
                     <div class="table-div">
-                        <?php if( ! empty( $status_message ) ) : 
-                            do_action('bp_before_group_status_message');    
+                        <?php if( ! empty( $status_message ) ) :
+                            do_action('bp_before_group_status_message');
                         ?>
                         <div class="table-row row">
                             <div class="col-xs-24 status-message italics"><?php echo openlab_group_status_message() ?></div>
                         </div>
-                        <?php 
+                        <?php
                             do_action('bp_after_group_status_message');
                         endif; ?>
-                        
+
                         <?php if( $group_type === 'course' ) : ?>
                         <div class="table-row row">
                             <div class="bold col-sm-7">Professor(s)</div>
@@ -687,7 +687,7 @@ function cuny_group_single() {
         <!--<?php echo esc_html( $group_type ); ?>-header -->
 
     <?php endif;
-    
+
     openlab_group_profile_activity_list();
 }
 
