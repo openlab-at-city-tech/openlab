@@ -1763,6 +1763,27 @@ Comment URL: %s',
 		get_comment_link( $comment )
 	);
 
+	$comment_user = get_userdata( $comment->user_id );
+
+	if ( $comment_user ) {
+		$from = "From: \"$blogname\" <$wp_email>";
+		if ( '' !== $comment->comment_author_email ) {
+			$reply_to = "Reply-To: $comment->comment_author_email";
+		}
+	} else {
+		$comment_user_name = bp_core_get_user_displayname( $comment->user_id );
+		$from = "From: \"$comment_user_name\" <$wp_email>";
+		if ( '' !== $comment_user->user_email ) {
+			$reply_to = "Reply-To: \"$comment->user_email\" <$comment->user_email>";
+		}
+	}
+
+	$message_headers = "$from\n";
+
+	if ( isset( $reply_to ) ) {
+		$message_headers .= $reply_to . "\n";
+	}
+
 	foreach ( $admins as $admin ) {
 		// Don't send notification to instructor of her own comment.
 		if ( (int) $admin->user_id === (int) $comment_author_user->ID ) {
@@ -1774,7 +1795,7 @@ Comment URL: %s',
 			continue;
 		}
 
-		wp_mail( $admin_user->user_email, $subject, $message );
+		wp_mail( $admin_user->user_email, $subject, $message, $message_headers );
 	}
 
 	// Don't allow core notification to be sent.
