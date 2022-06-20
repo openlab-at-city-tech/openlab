@@ -795,13 +795,16 @@ function openlab_filter_subnav_members($subnav_item) {
     }
 
     //get total member count
-    $total_mem = bp_core_number_format(groups_get_groupmeta(bp_get_current_group_id(), 'total_member_count'));
+    $total_mem = (int) bp_core_number_format(groups_get_groupmeta(bp_get_current_group_id(), 'total_member_count'));
+    if( ! current_user_can( 'bp_moderate' ) ) {
+        $private_users = openlab_get_group_private_users( bp_get_current_group_id() );
+        $total_mem -= count( $private_users );
+    }
 
-    //added classes to span
     if ($total_mem > 0) {
-        $new_item = str_replace('<span>' . $total_mem . '</span>', '<span class="mol-count pull-right count-' . $total_mem . ' gray">' . $total_mem . '</span>', $new_item);
+        $new_item = preg_replace('/<span[^>]*>.*?<\/span>/is', '<span class="mol-count pull-right count-' . $total_mem . ' gray">' . $total_mem . '</span>', $new_item);
     } else {
-        $new_item = str_replace('<span>' . $total_mem . '</span>', '', $new_item);
+        $new_item = preg_replace('/<span[^>]*>.*?<\/span>/is', '', $new_item);
     }
 
     return $new_item;
