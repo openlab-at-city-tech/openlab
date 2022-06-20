@@ -44,6 +44,7 @@ require_once( STYLESHEETPATH . '/lib/page-funcs.php' );
 require_once( STYLESHEETPATH . '/lib/sidebar-funcs.php' );
 require_once( STYLESHEETPATH . '/lib/plugin-hooks.php' );
 require_once( STYLESHEETPATH . '/lib/theme-hooks.php' );
+require_once( STYLESHEETPATH . '/lib/group-announcements.php' );
 
 // Initialize async cloning.
 openlab_clone_async_process();
@@ -111,7 +112,7 @@ function openlab_load_scripts() {
         wp_enqueue_script('password-strength-meter');
     }
 
-    if( bp_is_user() ) {
+    if( bp_is_user() || bp_is_group() ) {
         wp_enqueue_script( 'openlab-activity', $stylesheet_dir_uri . '/js/activity.js', [ 'jquery' ] );
         wp_localize_script( 'openlab-activity', 'activityVars', array(
             'ajax_url' => admin_url( 'admin-ajax.php' )

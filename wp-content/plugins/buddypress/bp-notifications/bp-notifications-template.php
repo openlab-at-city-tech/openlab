@@ -157,7 +157,7 @@ function bp_notifications_read_permalink( $user_id = 0 ) {
 		 * @param string $retval  Permalink for the read notifications.
 		 * @param int    $user_id The user ID.
 		 */
-		return apply_filters( 'bp_get_notifications_unread_permalink', $retval, $user_id );
+		return apply_filters( 'bp_get_notifications_read_permalink', $retval, $user_id );
 	}
 
 /** The Loop ******************************************************************/
@@ -219,26 +219,30 @@ function bp_has_notifications( $args = '' ) {
 	}
 
 	// Parse the args.
-	$r = bp_parse_args( $args, array(
-		'id'                => false,
-		'user_id'           => $user_id,
-		'secondary_item_id' => false,
-		'component_name'    => bp_notifications_get_registered_components(),
-		'component_action'  => $component_action,
-		'is_new'            => $is_new,
-		'search_terms'      => $search_terms,
-		'order_by'          => 'date_notified',
-		'sort_order'        => 'DESC',
-		'meta_query'        => false,
-		'date_query'        => false,
-		'page'              => 1,
-		'per_page'          => 25,
+	$r = bp_parse_args(
+		$args,
+		array(
+			'id'                => false,
+			'user_id'           => $user_id,
+			'secondary_item_id' => false,
+			'component_name'    => bp_notifications_get_registered_components(),
+			'component_action'  => $component_action,
+			'is_new'            => $is_new,
+			'search_terms'      => $search_terms,
+			'order_by'          => 'date_notified',
+			'sort_order'        => 'DESC',
+			'meta_query'        => false,
+			'date_query'        => false,
+			'page'              => 1,
+			'per_page'          => 25,
 
-		// These are additional arguments that are not available in
-		// BP_Notifications_Notification::get().
-		'max'               => false,
-		'page_arg'          => 'npage',
-	), 'has_notifications' );
+			// These are additional arguments that are not available in
+			// BP_Notifications_Notification::get().
+			'max'               => false,
+			'page_arg'          => 'npage',
+		),
+		'has_notifications'
+	);
 
 	// Get the notifications.
 	$query_loop = new BP_Notifications_Template( $r );
@@ -492,7 +496,6 @@ function bp_the_notification_time_since() {
 function bp_the_notification_description() {
 	echo bp_get_the_notification_description();
 }
-
 	/**
 	 * Get full-text description for a specific notification.
 	 *
@@ -525,8 +528,8 @@ function bp_the_notification_description() {
 		 * @since 1.9.0
 		 * @since 2.3.0 Added the `$notification` parameter.
 		 *
-		 * @param string $description  Full-text description for a specific notification.
-		 * @param object $notification Notification object.
+		 * @param string                        $description  Full-text description for a specific notification.
+		 * @param BP_Notifications_Notification $notification Notification object.
 		 */
 		return apply_filters( 'bp_get_the_notification_description', $description, $notification );
 	}
@@ -599,7 +602,7 @@ function bp_the_notification_mark_read_url( $user_id = 0 ) {
 		// Get the args to add to the URL.
 		$args = array(
 			'action'          => 'read',
-			'notification_id' => $id
+			'notification_id' => $id,
 		);
 
 		// Set default user ID to use.
@@ -691,7 +694,7 @@ function bp_the_notification_mark_unread_url( $user_id = 0 ) {
 		// Get the args to add to the URL.
 		$args = array(
 			'action'          => 'unread',
-			'notification_id' => $id
+			'notification_id' => $id,
 		);
 
 		// Set default user ID to use.
@@ -834,7 +837,7 @@ function bp_the_notification_delete_url( $user_id = 0 ) {
 		// Get the args to add to the URL.
 		$args = array(
 			'action'          => 'delete',
-			'notification_id' => $id
+			'notification_id' => $id,
 		);
 
 		// Add the args.
@@ -886,15 +889,18 @@ function bp_the_notification_action_links( $args = '' ) {
 		$user_id = isset( $args['user_id'] ) ? $args['user_id'] : bp_displayed_user_id();
 
 		// Parse.
-		$r = wp_parse_args( $args, array(
-			'before' => '',
-			'after'  => '',
-			'sep'    => ' | ',
-			'links'  => array(
-				bp_get_the_notification_mark_link( $user_id ),
-				bp_get_the_notification_delete_link( $user_id )
+		$r = bp_parse_args(
+			$args,
+			array(
+				'before' => '',
+				'after'  => '',
+				'sep'    => ' | ',
+				'links'  => array(
+					bp_get_the_notification_mark_link( $user_id ),
+					bp_get_the_notification_delete_link( $user_id ),
+				),
 			)
-		) );
+		);
 
 		// Build the links.
 		$retval = $r['before'] . implode( $r['sep'], $r['links'] ) . $r['after'];
@@ -991,8 +997,8 @@ function bp_notifications_sort_order_form() {
 	$selected = 'DESC';
 
 	// Check for a custom sort_order.
-	if ( !empty( $_REQUEST['sort_order'] ) ) {
-		if ( in_array( $_REQUEST['sort_order'], $orders ) ) {
+	if ( ! empty( $_REQUEST['sort_order'] ) ) {
+		if ( in_array( $_REQUEST['sort_order'], $orders, true ) ) {
 			$selected = $_REQUEST['sort_order'];
 		}
 	} ?>

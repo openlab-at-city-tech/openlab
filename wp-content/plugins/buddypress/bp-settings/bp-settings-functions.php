@@ -221,8 +221,8 @@ function bp_settings_personal_data_exporter( $email_address, $page ) {
  *
  * @since 4.0.0
  *
- * @param int WP user ID.
- * @return WP_User_Request|false WP_User_Request object on success, boolean false on failure.
+ * @param int $user_id WP user ID.
+ * @return WP_User_Request|bool WP_User_Request object on success, bool false on failure.
  */
 function bp_settings_get_personal_data_request( $user_id = 0 ) {
 	if ( empty( $user_id ) ) {
@@ -248,9 +248,7 @@ function bp_settings_get_personal_data_request( $user_id = 0 ) {
 	) );
 
 	if ( ! empty( $query->post ) ) {
-		// WP 5.4 changed the user request function name to wp_get_user_request()
-		$user_request = bp_is_running_wp( '4.9.6' ) ? 'wp_get_user_request' : 'wp_get_user_request_data';
-		return $user_request( $query->post->ID );
+		return wp_get_user_request( $query->post->ID );
 	} else {
 		return false;
 	}
@@ -305,11 +303,7 @@ function bp_settings_get_personal_data_export_url( WP_User_Request $request ) {
  */
 function bp_settings_personal_data_export_exists( WP_User_Request $request ) {
 	$file = get_post_meta( $request->ID, '_export_file_path', true );
-	if ( file_exists( $file ) ) {
-		return true;
-	} else {
-		return false;
-	}
+	return file_exists( $file );
 }
 
 /**

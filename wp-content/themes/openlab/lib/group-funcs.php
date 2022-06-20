@@ -541,34 +541,20 @@ function openlab_get_privacy_icon() {
 }
 
 function cuny_group_single() {
-    ?>
-    <?php
     $group_type = openlab_get_group_type(bp_get_current_group_id());
-    ?>
 
-    <?php $group_slug = bp_get_group_slug(); ?>
-
-    <?php
     //group page vars
-    global $bp, $wpdb;
+    global $bp;
     $group_id = $bp->groups->current_group->id;
     $group_name = $bp->groups->current_group->name;
-    $group_description = $bp->groups->current_group->description;
     $group_type = openlab_get_group_type(bp_get_current_group_id());
-    $section = groups_get_groupmeta($group_id, 'wds_section_code');
-    $html = groups_get_groupmeta($group_id, 'wds_course_html');
-
-	$acknowledgements = openlab_get_acknowledgements( $group_id );
-
     ?>
-
 	<div class="wrapper-block visible-xs sidebar mobile-group-site-links">
 		<?php openlab_bp_group_site_pages( true ); ?>
 	</div>
-
-    <?php if (bp_is_group_home()): ?>
+    <?php if ( bp_is_group_home() ) : ?>
         <div id="<?php echo esc_attr( $group_type ); ?>-header" class="group-header row">
-
+            <!-- Left Column -->
             <div id="<?php echo esc_attr( $group_type ); ?>-header-avatar" class="alignleft group-header-avatar col-sm-8 col-xs-12">
                 <div class="padded-img darker">
                     <img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => $group_id, 'object' => 'group', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo esc_attr($group_name); ?>"/>
@@ -578,170 +564,146 @@ function cuny_group_single() {
 					<?php do_action( 'bp_group_header_after_avatar' ); ?>
                 </div>
 
-                <?php if (is_user_logged_in() && $bp->is_item_admin): ?>
+                <?php if ( is_user_logged_in() && $bp->is_item_admin ) : ?>
                     <div id="group-action-wrapper">
-                        <a class="btn btn-default btn-block btn-primary link-btn" href="<?php echo bp_group_permalink() . 'admin/edit-details/'; ?>"><i class="fa fa-pencil" aria-hidden="true"></i> Edit Profile</a>
-                        <a class="btn btn-default btn-block btn-primary link-btn" href="<?php echo bp_group_permalink() . 'admin/group-avatar/'; ?>"><i class="fa fa-camera" aria-hidden="true"></i> Change Avatar</a>
+                        <a class="btn btn-default btn-block btn-primary link-btn" href="<?php echo bp_group_permalink() . 'admin/edit-details/'; ?>">
+                            <i class="fa fa-pencil" aria-hidden="true"></i> Edit Profile
+                        </a>
+                        <a class="btn btn-default btn-block btn-primary link-btn" href="<?php echo bp_group_permalink() . 'admin/group-avatar/'; ?>">
+                            <i class="fa fa-camera" aria-hidden="true"></i> Change Avatar
+                        </a>
                         <?php do_action( 'bp_group_header_actions' ); ?>
                     </div>
-                <?php elseif (is_user_logged_in()) : ?>
+                <?php elseif ( is_user_logged_in() ) : ?>
                     <div id="group-action-wrapper">
                         <?php do_action('bp_group_header_actions'); ?>
                     </div>
                 <?php endif; ?>
                 <?php openlab_render_message(); ?>
-            </div><!-- #<?php echo esc_html( $group_type ); ?>-header-avatar -->
+            </div>
+            <!-- #<?php echo esc_html( $group_type ); ?>-header-avatar -->
 
+            <!-- Right Column -->
             <div id="<?php echo esc_attr( $group_type ); ?>-header-content" class="col-sm-16 col-xs-24 alignleft group-header-content group-<?php echo esc_attr( $group_id ); ?>">
+                <?php
+                    do_action('bp_before_group_header_meta');
 
-                <?php do_action('bp_before_group_header_meta') ?>
+                    $status_message = openlab_group_status_message();
+                    $group_units = openlab_get_group_academic_units( $group_id );
+                    $departments = openlab_generate_department_name( $group_units );
 
-                <?php if ($group_type == "course"): ?>
-                    <div class="info-panel panel panel-default no-margin no-margin-top">
-                        <?php
-                        $wds_course_code = groups_get_groupmeta($group_id, 'wds_course_code');
-                        $wds_semester = groups_get_groupmeta($group_id, 'wds_semester');
-                        $wds_year = groups_get_groupmeta($group_id, 'wds_year');
+                    $wds_course_code = groups_get_groupmeta( $group_id, 'wds_course_code' );
+                    $wds_semester = groups_get_groupmeta( $group_id, 'wds_semester' );
+                    $wds_year = groups_get_groupmeta( $group_id, 'wds_year' );
+                    $wds_school = openlab_generate_school_office_name( $group_units );
 
-                        $group_units        = openlab_get_group_academic_units( $group_id );
-                        $departments_string = openlab_generate_department_name( $group_units );
+                    $isStaffPortfolio = false;
+                    if( $group_type === 'portfolio' ) {
+                        $user_id   = openlab_get_user_id_from_portfolio_group_id( $group_id );
+                        $user_type = openlab_get_user_member_type( $user_id );
+
+                        $isStaffPortfolio = $user_type === 'staff';
+                    }
+
+                    $group_terms = function_exists( 'bpcgc_get_group_selected_terms' ) ? bpcgc_get_group_selected_terms( $group_id, true ) : '';
+                    $acknowledgements = openlab_get_acknowledgements( $group_id );
+                ?>
+                <div class="info-panel panel panel-default no-margin no-margin-top">
+                    <div class="table-div">
+                        <?php if( ! empty( $status_message ) ) :
+                            do_action('bp_before_group_status_message');
                         ?>
-                        <div class="table-div">
-                            <?php
-                            if (bp_is_group_home() && openlab_group_status_message() != '') {
+                        <div class="table-row row">
+                            <div class="col-xs-24 status-message italics"><?php echo openlab_group_status_message() ?></div>
+                        </div>
+                        <?php
+                            do_action('bp_after_group_status_message');
+                        endif; ?>
 
-                                do_action('bp_before_group_status_message')
-                                ?>
+                        <?php if( $group_type === 'course' ) : ?>
+                        <div class="table-row row">
+                            <div class="bold col-sm-7">Professor(s)</div>
+                            <div class="col-sm-17 row-content"><?php echo openlab_get_faculty_list() ?></div>
+                        </div>
+                        <?php endif; ?>
 
-                                <div class="table-row row">
-                                    <div class="col-xs-24 status-message italics"><?php echo openlab_group_status_message() ?></div>
-                                </div>
+                        <?php if( ( $group_type === 'project' || $group_type === 'club' || $isStaffPortfolio ) && ! empty( $wds_school ) ) : ?>
+                        <div class="table-row row">
+                            <div class="bold col-sm-7">School / Office</div>
+                            <div class="col-sm-17 row-content"><?php echo $wds_school; ?></div>
+                        </div>
+                        <?php endif; ?>
 
-                                <?php
-                                do_action('bp_after_group_status_message');
-                            }
-                            ?>
-                            <div class="table-row row">
-                                <div class="bold col-sm-7">Professor(s)</div>
-                                <div class="col-sm-17 row-content"><?php echo openlab_get_faculty_list() ?></div>
-                            </div>
-                            <div class="table-row row">
-                                <div class="bold col-sm-7">Department</div>
-                                <div class="col-sm-17 row-content"><?php echo esc_html( $departments_string ); ?></div>
-                            </div>
-                            <div class="table-row row">
-                                <div class="bold col-sm-7">Course Code</div>
-                                <div class="col-sm-17 row-content"><?php echo $wds_course_code; ?></div>
-                            </div>
-                            <div class="table-row row">
-                                <div class="bold col-sm-7">Semester / Year</div>
-                                <div class="col-sm-17 row-content"><?php echo $wds_semester; ?> <?php echo $wds_year; ?></div>
-                            </div>
-                            <div class="table-row row">
-                                <div class="bold col-sm-7">Course Description</div>
-                                <div class="col-sm-17 row-content"><?php echo apply_filters('the_content', $group_description); ?></div>
-                            </div>
+                        <?php if( ! empty( $departments ) ) : ?>
+                        <div class="table-row row">
+                            <div class="bold col-sm-7">Department</div>
+                            <div class="col-sm-17 row-content"><?php echo esc_html( $departments ); ?></div>
+                        </div>
+                        <?php endif; ?>
 
-							<?php if ( $acknowledgements ) : ?>
-								<div class="table-row row">
-									<div class="col-xs-24 status-message group-acknowledgements">
-										<?php echo $acknowledgements; ?>
-									</div>
-								</div>
-							<?php endif; ?>
+                        <?php if( $group_type === 'course' ) : ?>
+                        <div class="table-row row">
+                            <div class="bold col-sm-7">Course Code</div>
+                            <div class="col-sm-17 row-content"><?php echo $wds_course_code; ?></div>
+                        </div>
+                        <div class="table-row row">
+                            <div class="bold col-sm-7">Semester / Year</div>
+                            <div class="col-sm-17 row-content"><?php echo $wds_semester; ?> <?php echo $wds_year; ?></div>
+                        </div>
+                        <?php endif; ?>
 
+                        <?php if( $group_terms ) : ?>
+                        <div class="table-row row">
+                            <div class="bold col-sm-7">Category</div>
+                            <div class="col-sm-17 row-content"><?php echo implode(', ', wp_list_pluck( $group_terms, 'name' ) ); ?></div>
+                        </div>
+                        <?php endif; ?>
+
+                        <div class="table-row row">
+                            <div class="bold col-sm-7"><?php echo esc_html( ucfirst( $group_type ) ); ?> Description</div>
+                            <div class="col-sm-17 row-content"><?php bp_group_description(); ?></div>
                         </div>
 
-                    </div>
+						<?php $group_contacts  = openlab_get_group_contacts( $group_id ); ?>
+						<?php if ( $group_contacts && ( $group_type === 'project' || $group_type === 'club' ) ): ?>
+							<div class="table-row row">
+								<?php /* This won't work at all for l10n */ ?>
+								<?php
+								if ( 1 === count( $group_contacts ) ) {
+									$gc_label = sprintf( '%s Contact', ucwords( $group_type ) );
+								} else {
+									$gc_label = sprintf( '%s Contacts', ucwords( $group_type ) );
+								}
+								?>
+								<div class="bold col-sm-7"><?php echo esc_html( $gc_label ); ?></div>
+								<div class="col-sm-17 row-content"><?php echo implode( ', ', array_map( 'bp_core_get_userlink', $group_contacts ) ); ?></div>
+							</div>
+						<?php endif; ?>
 
-                    <?php do_action('bp_group_header_meta') ?>
-
-                <?php else : ?>
-
-                    <div class="info-panel panel panel-default no-margin no-margin-top">
-                        <div class="table-div">
-                            <div class="table-row row">
-                                <div class="col-xs-24 status-message italics"><?php echo openlab_group_status_message() ?></div>
-                            </div>
-
-                            <?php
-                            $group_units     = openlab_get_group_academic_units( $group_id );
-                            $wds_school      = openlab_generate_school_office_name( $group_units );
-                            $wds_departments = openlab_generate_department_name( $group_units );
-                            $group_contacts  = openlab_get_group_contacts( $group_id );
-
-                            // Show 'School' field for Projects, Clubs, or staff Portfolios.
-                            $show_school = 'project' === $group_type || 'club' === $group_type;
-                            if ( 'portfolio' === $group_type ) {
-                                $user_id   = openlab_get_user_id_from_portfolio_group_id( $group_id );
-                                $user_type = openlab_get_user_member_type( $user_id );
-
-                                $show_school = 'staff' === $user_type;
-                            }
-                            ?>
-
-                            <?php if ( $show_school && $wds_school && ! empty( $wds_school ) ): ?>
-
-                                <div class="table-row row">
-                                    <div class="bold col-sm-7">School / Office</div>
-                                    <div class="col-sm-17 row-content"><?php echo $wds_school; ?></div>
-                                </div>
-
-                            <?php endif; ?>
-
-                            <?php if ($wds_departments && !empty($wds_departments)): ?>
-
-                                <div class="table-row row">
-                                    <div class="bold col-sm-7">Department</div>
-                                    <div class="col-sm-17 row-content"><?php echo esc_html( $wds_departments ); ?></div>
-                                </div>
-
-                            <?php endif; ?>
-
-                            <?php if (function_exists('bpcgc_get_group_selected_terms')): ?>
-                                <?php if ($group_terms = bpcgc_get_group_selected_terms($group_id, true)): ?>
-                                    <div class="table-row row">
-                                        <div class="bold col-sm-7">Category</div>
-                                        <div class="col-sm-17 row-content"><?php echo implode(', ', wp_list_pluck($group_terms, 'name')); ?></div>
-                                    </div>
-                                <?php endif; ?>
-                            <?php endif; ?>
-
-                            <div class="table-row row">
-                                <div class="bold col-sm-7"><?php echo esc_html( ucfirst( $group_type ) ); ?> Description</div>
-                                <div class="col-sm-17 row-content"><?php bp_group_description() ?></div>
-                            </div>
-
-                            <?php if ($group_type == "portfolio"): ?>
-
-                                <div class="table-row row">
-                                    <div class="bold col-sm-7">Member Profile</div>
-                                    <div class="col-sm-17 row-content"><?php echo bp_core_get_userlink(openlab_get_user_id_from_portfolio_group_id(bp_get_group_id())); ?></div>
-                                </div>
-
-							<?php endif; ?>
-
-							<?php if ( $acknowledgements ) : ?>
-								<div class="table-row row">
-									<div class="col-xs-24 status-message group-acknowledgements">
-										<?php echo $acknowledgements; ?>
-									</div>
-								</div>
-							<?php endif; ?>
-
+                        <?php if ( $group_type === 'portfolio' ) : ?>
+                        <div class="table-row row">
+                            <div class="bold col-sm-7">Member Profile</div>
+                            <div class="col-sm-17 row-content"><?php echo bp_core_get_userlink( openlab_get_user_id_from_portfolio_group_id( bp_get_group_id() ) ); ?></div>
                         </div>
-                    </div>
+                        <?php endif; ?>
 
-                <?php endif; ?>
-            </div><!-- .header-content -->
+                        <?php if ( $acknowledgements ) : ?>
+                        <div class="table-row row">
+                            <div class="col-xs-24 status-message group-acknowledgements">
+                                <?php echo $acknowledgements; ?>
+                            </div>
+                        </div>
+                        <?php endif; ?>
+                    </div>
+                </div>
+            </div>
 
             <?php do_action('bp_after_group_header') ?>
+		</div>
+        <!--<?php echo esc_html( $group_type ); ?>-header -->
 
-		</div><!--<?php echo esc_html( $group_type ); ?>-header -->
+    <?php endif;
 
-    <?php endif; ?>
-
-    <?php
     openlab_group_profile_activity_list();
 }
 
@@ -768,6 +730,21 @@ function openlab_render_message() {
 
 function openlab_group_profile_activity_list() {
     global $wpdb, $bp;
+
+	$recent_announcements = get_posts(
+		[
+			'post_type'      => 'openlab_announcement',
+			'post_status'    => 'publish',
+			'posts_per_page' => 3,
+			'meta_query'     => [
+				[
+					'key'   => 'openlab_announcement_group_id',
+					'value' => bp_get_current_group_id(),
+				]
+			],
+		]
+	);
+
     ?>
     <div id="single-course-body">
         <?php
@@ -778,17 +755,28 @@ function openlab_group_profile_activity_list() {
 //     Initialize it to left side to start with
 //
         $first_class = "first";
-        ?>
-        <?php $group_slug = bp_get_group_slug(); ?>
-        <?php $group_type = openlab_get_group_type(bp_get_current_group_id()); ?>
+        $group_slug  = bp_get_group_slug();
+        $group_type  = openlab_get_group_type( bp_get_current_group_id() );
 
-        <?php
-        $group = groups_get_current_group();
+        $group     = groups_get_current_group();
+		$group_url = bp_get_group_permalink( $group );
         ?>
 
         <?php if (bp_is_group_home()) { ?>
 
             <?php if (bp_get_group_status() == 'public' || ((bp_get_group_status() == 'hidden' || bp_get_group_status() == 'private') && (bp_is_item_admin() || bp_group_is_member()))) : ?>
+				<?php if ( $recent_announcements ) : ?>
+					<div class="row group-announcements-overview">
+						<div class="col-sm-24">
+							<h2 class="title activity-title"><a class="no-deco" href="<?php echo esc_url( $group_url ); ?>announcements/">Recent Announcements<span class="fa fa-chevron-circle-right" aria-hidden="true"></span></a></h2>
+
+							<?php foreach ( $recent_announcements as $announcement ) : ?>
+								<?php bp_get_template_part( 'groups/single/announcements/entry', '', [ 'announcement_id' => $announcement->ID, 'read_only' => true ] ); ?>
+							<?php endforeach; ?>
+						</div>
+					</div>
+				<?php endif; ?>
+
                 <?php
                 if (wds_site_can_be_viewed()) {
                     openlab_show_site_posts_and_comments();
@@ -849,22 +837,27 @@ function openlab_group_profile_activity_list() {
 									<div class="recent-posts">
 										<h2 class="title activity-title"><a class="no-deco" href="<?php site_url(); ?>/groups/<?php echo $group_slug; ?>/docs/">Recent Docs<span class="fa fa-chevron-circle-right" aria-hidden="true"></span></a></h2>
 										<?php
-										$docs_arg = Array("posts_per_page" => "3",
-											"post_type" => "bp_doc",
-											"tax_query" =>
-											Array(Array("taxonomy" => "bp_docs_associated_item",
-													"field" => "slug",
-													"terms" => $group_slug)));
-										$query = new WP_Query($docs_arg);
-										//				$query = new WP_Query( "posts_per_page=3&post_type=bp_doc&category_name=$group_slug" );
-										//				$query = new WP_Query( "posts_per_page=3&post_type=bp_doc&category_name=$group_id" );
-										global $post;
-										if ($query->have_posts()) {
-											while ($query->have_posts()) : $query->the_post();
+										$docs_query = new BP_Docs_Query(
+											array(
+												'group_id' => bp_get_current_group_id(),
+												'orderby'  => 'created',
+												'order'    => 'DESC',
+												'posts_per_page' => 3,
+											)
+										);
+										$query      = $docs_query->get_wp_query();
+
+										if ( $query->have_posts() ) {
+											while ( $query->have_posts() ) :
+												$query->the_post();
+												$doc_url = bp_docs_get_doc_link( get_the_ID() );
 												?>
-												<div class="panel panel-default"><div class="panel-body">
-														<?php echo openlab_get_group_activity_content(get_the_title(), wds_content_excerpt(strip_tags($post->post_content), 250), site_url() . '/groups/' . $group_slug . '/docs/' . $post->post_name); ?>
-													</div></div>
+												<div class="panel panel-default">
+													<div class="panel-body">
+														<?php // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+														<?php echo openlab_get_group_activity_content( get_the_title( get_the_ID() ), bp_create_excerpt( wp_strip_all_tags( get_the_content( null, null, get_the_ID() ) ), 250, array( 'ending' => '' ) ), $doc_url ); ?>
+													</div>
+												</div>
 												<?php
 											endwhile;
 										} else {
@@ -992,7 +985,6 @@ function openlab_previous_step_type($url) {
 add_filter('bp_get_group_creation_previous_link', 'openlab_previous_step_type');
 
 /**
-  >>>>>>> 1.3.x
  * Remove the 'hidden' class from hidden group leave buttons
  *
  * A crummy conflict with wp-ajax-edit-comments causes these items to be
@@ -2075,25 +2067,64 @@ function openlab_group_type_disabled_filters() {
 }
 
 /**
+ * Change the default group extension to 'home'.
+ *
+ * This allows us to use 'activity' as a proper nav item.
+ */
+add_filter(
+	'bp_groups_default_extension',
+	function() {
+		return 'home';
+	}
+);
+
+function openlab_group_activities_loop_args( $type = '', $filter = '' ) {
+    $args['count_total'] = true;
+
+	if( ! empty( $filter ) ) {
+		$args['action'] = $filter;
+	}
+
+    switch( $type ) {
+        case 'mine':
+            $args += [
+                'scope' => 'just-me',
+            ];
+            break;
+        case 'mentions':
+            $args += [
+                'scope' => 'mentions'
+            ];
+            break;
+        case 'starred':
+            $args += [
+                'scope' => 'favorites'
+            ];
+            break;
+    }
+
+    return $args;
+}
+
+/**
  * Get group's private users
- * 
  */
 function openlab_get_group_private_users( $group_id ) {
-    // Skip if group id is missing
-    if( empty( $group_id ) ) {
-        return;
-    }
+	// Skip if group id is missing
+	if ( empty( $group_id ) ) {
+		return;
+	}
 
 	global $wpdb;
 	$table_name = $wpdb->prefix . 'private_membership';
-    $current_user_id = get_current_user_id();
-	$query = $wpdb->get_results( "SELECT `user_id` FROM $table_name WHERE `group_id` = $group_id AND `user_id` != $current_user_id", OBJECT_K);
+	$current_user_id = get_current_user_id();
+	$query = $wpdb->get_results( $wpdb->prepare( "SELECT `user_id` FROM $table_name WHERE `group_id` = %d AND `user_id` != %d", $group_id, $current_user_id ), OBJECT_K );
 
 	$private_users = array();
 
-	if( $query ) {
-		foreach( $query as $item ) {
-			$private_users[] = (int)$item->user_id;
+	if ( $query ) {
+		foreach ( $query as $item ) {
+			$private_users[] = (int) $item->user_id;
 		}
 	}
 

@@ -91,11 +91,14 @@ function bp_attachments_cover_image_upload_dir( $args = array() ) {
 		$object_directory = 'groups';
 	}
 
-	$r = bp_parse_args( $args, array(
-		'object_id' => $object_id,
-		'object_directory' => $object_directory,
-	), 'cover_image_upload_dir' );
-
+	$r = bp_parse_args(
+		$args,
+		array(
+			'object_id'        => $object_id,
+			'object_directory' => $object_directory,
+		),
+		'cover_image_upload_dir'
+	);
 
 	// Set the subdir.
 	$subdir  = '/' . $r['object_directory'] . '/' . $r['object_id'] . '/cover-image';
@@ -160,7 +163,8 @@ function bp_attachments_get_max_upload_file_size( $type = '' ) {
  */
 function bp_attachments_get_allowed_types( $type = 'avatar' ) {
 	// Defaults to BuddyPress supported image extensions.
-	$exts = array( 'jpeg', 'gif', 'png' );
+	$exts    = array( 'jpeg', 'gif', 'png' );
+	$wp_exts = wp_get_ext_types();
 
 	/**
 	 * It's not a BuddyPress feature, get the allowed extensions
@@ -170,37 +174,33 @@ function bp_attachments_get_allowed_types( $type = 'avatar' ) {
 		// Reset the default exts.
 		$exts = array();
 
-		switch ( $type ) {
-			case 'video' :
-				$exts = wp_get_video_extensions();
-			break;
+		if ( 'video' === $type ) {
+			$exts = wp_get_video_extensions();
+		} elseif ( 'audio' === $type ) {
+			$exts = wp_get_audio_extensions();
+		} elseif ( isset( $wp_exts[ $type ] ) ) {
+			$exts = $wp_exts[ $type ];
+		} else {
+			$allowed_mimes = get_allowed_mime_types();
 
-			case 'audio' :
-				$exts = wp_get_video_extensions();
-			break;
+			/**
+			 * Search for allowed mimes matching the type.
+			 *
+			 * Eg: using 'application/vnd.oasis' as the $type
+			 * parameter will get all OpenOffice extensions supported
+			 * by WordPress and allowed for the current user.
+			 */
+			if ( '' !== $type ) {
+				$allowed_mimes = preg_grep( '/' . addcslashes( $type, '/.+-' ) . '/', $allowed_mimes );
+			}
 
-			default:
-				$allowed_mimes = get_allowed_mime_types();
+			$allowed_types = array_keys( $allowed_mimes );
 
-				/**
-				 * Search for allowed mimes matching the type.
-				 *
-				 * Eg: using 'application/vnd.oasis' as the $type
-				 * parameter will get all OpenOffice extensions supported
-				 * by WordPress and allowed for the current user.
-				 */
-				if ( '' !== $type ) {
-					$allowed_mimes = preg_grep( '/' . addcslashes( $type, '/.+-' ) . '/', $allowed_mimes );
-				}
-
-				$allowed_types = array_keys( $allowed_mimes );
-
-				// Loop to explode keys using '|'.
-				foreach ( $allowed_types as $allowed_type ) {
-					$t = explode( '|', $allowed_type );
-					$exts = array_merge( $exts, (array) $t );
-				}
-			break;
+			// Loop to explode keys using '|'.
+			foreach ( $allowed_types as $allowed_type ) {
+				$t = explode( '|', $allowed_type );
+				$exts = array_merge( $exts, (array) $t );
+			}
 		}
 	}
 
@@ -229,8 +229,18 @@ function bp_attachments_get_allowed_mimes( $type = '', $allowed_types = array() 
 		$allowed_types = bp_attachments_get_allowed_types( $type );
 	}
 
-	$validate_mimes = wp_match_mime_types( join( ',', $allowed_types ), wp_get_mime_types() );
-	$allowed_mimes  = array_map( 'implode', $validate_mimes );
+	$wp_mimes      = wp_get_mime_types();
+	$allowed_mimes = array();
+
+	foreach ( $allowed_types as $allowed_type ) {
+		$filetype = wp_check_filetype( '.' . $allowed_type, $wp_mimes );
+
+		if ( false === $filetype['ext'] || false === $filetype['type'] ) {
+			continue;
+		}
+
+		$allowed_mimes[ $filetype['ext'] ] = $filetype['type'];
+	}
 
 	/**
 	 * Include jpg type if jpeg is set
@@ -286,16 +296,20 @@ function bp_attachments_create_item_type( $type = 'avatar', $args = array() ) {
 		return false;
 	}
 
-	$r = bp_parse_args( $args, array(
-		'item_id'   => 0,
-		'object'    => 'user',
-		'component' => '',
-		'image'     => '',
-		'crop_w'    => 0,
-		'crop_h'    => 0,
-		'crop_x'    => 0,
-		'crop_y'    => 0
-	), 'create_item_' . $type );
+	$r = bp_parse_args(
+		$args,
+		array(
+			'item_id'   => 0,
+			'object'    => 'user',
+			'component' => '',
+			'image'     => '',
+			'crop_w'    => 0,
+			'crop_h'    => 0,
+			'crop_x'    => 0,
+			'crop_y'    => 0,
+		),
+		'create_item_' . $type
+	);
 
 	if ( empty( $r['item_id'] ) || empty( $r['object'] ) || ! file_exists( $r['image'] ) || ! @getimagesize( $r['image'] ) ) {
 		return false;
@@ -395,24 +409,28 @@ function bp_attachments_create_item_type( $type = 'avatar', $args = array() ) {
 
 	// It's an avatar, we need to crop it.
 	if ( 'avatar' === $type ) {
-		$created = bp_core_avatar_handle_crop( array(
-			'object'        => $r['object'],
-			'avatar_dir'    => trim( dirname( $attachment_data['subdir'] ), '/' ),
-			'item_id'       => (int) $r['item_id'],
-			'original_file' => trailingslashit( $attachment_data['subdir'] ) . $image_file_name,
-			'crop_w'        => $r['crop_w'],
-			'crop_h'        => $r['crop_h'],
-			'crop_x'        => $r['crop_x'],
-			'crop_y'        => $r['crop_y']
-		) );
+		$created = bp_core_avatar_handle_crop(
+			array(
+				'object'        => $r['object'],
+				'avatar_dir'    => trim( dirname( $attachment_data['subdir'] ), '/' ),
+				'item_id'       => (int) $r['item_id'],
+				'original_file' => trailingslashit( $attachment_data['subdir'] ) . $image_file_name,
+				'crop_w'        => $r['crop_w'],
+				'crop_h'        => $r['crop_h'],
+				'crop_x'        => $r['crop_x'],
+				'crop_y'        => $r['crop_y']
+			)
+		);
 
 	// It's a cover image we need to fit it to feature's dimensions.
 	} elseif ( 'cover_image' === $type ) {
-		$cover_image = bp_attachments_cover_image_generate_file( array(
-			'file'            => $image_file_path,
-			'component'       => $r['component'],
-			'cover_image_dir' => $attachment_data['path']
-		) );
+		$cover_image = bp_attachments_cover_image_generate_file(
+			array(
+				'file'            => $image_file_path,
+				'component'       => $r['component'],
+				'cover_image_dir' => $attachment_data['path']
+			)
+		);
 
 		$created = ! empty( $cover_image['cover_file'] );
 	}
@@ -445,12 +463,16 @@ function bp_attachments_get_attachment( $data = 'url', $args = array() ) {
 	// Default value.
 	$attachment_data = false;
 
-	$r = bp_parse_args( $args, array(
-		'object_dir' => 'members',
-		'item_id'    => bp_loggedin_user_id(),
-		'type'       => 'cover-image',
-		'file'       => '',
-	), 'attachments_get_attachment_src' );
+	$r = bp_parse_args(
+		$args,
+		array(
+			'object_dir' => 'members',
+			'item_id'    => bp_loggedin_user_id(),
+			'type'       => 'cover-image',
+			'file'       => '',
+		),
+		'attachments_get_attachment_src'
+	);
 
 	/**
 	 * Filters whether or not to handle fetching a BuddyPress image attachment.
@@ -697,21 +719,25 @@ function bp_attachments_enqueue_scripts( $class = '' ) {
 	}
 
 	// Get an instance of the class and get the script data.
-	$attachment = new $class;
-	$script_data  = $attachment->script_data();
+	$attachment  = new $class;
+	$script_data = $attachment->script_data();
 
-	$args = bp_parse_args( $script_data, array(
-		'action'            => '',
-		'file_data_name'    => '',
-		'max_file_size'     => 0,
-		'browse_button'     => 'bp-browse-button',
-		'container'         => 'bp-upload-ui',
-		'drop_element'      => 'drag-drop-area',
-		'bp_params'         => array(),
-		'extra_css'         => array(),
-		'extra_js'          => array(),
-		'feedback_messages' => array(),
-	), 'attachments_enqueue_scripts' );
+	$args = bp_parse_args(
+		$script_data,
+		array(
+			'action'            => '',
+			'file_data_name'    => '',
+			'max_file_size'     => 0,
+			'browse_button'     => 'bp-browse-button',
+			'container'         => 'bp-upload-ui',
+			'drop_element'      => 'drag-drop-area',
+			'bp_params'         => array(),
+			'extra_css'         => array(),
+			'extra_js'          => array(),
+			'feedback_messages' => array(),
+		),
+		'attachments_enqueue_scripts'
+	);
 
 	if ( empty( $args['action'] ) || empty( $args['file_data_name'] ) ) {
 		return new WP_Error( 'missing_parameter' );
@@ -765,23 +791,59 @@ function bp_attachments_enqueue_scripts( $class = '' ) {
 		// Avatar only need 1 file and 1 only!
 		$defaults['multi_selection'] = false;
 
-		// Does the object already has an avatar set.
+		// Does the object already has an avatar set?
 		$has_avatar = $defaults['multipart_params']['bp_params']['has_avatar'];
 
-		// What is the object the avatar belongs to.
+		// What is the object the avatar belongs to?
 		$object = $defaults['multipart_params']['bp_params']['object'];
+
+		// Get The item id.
+		$item_id = $defaults['multipart_params']['bp_params']['item_id'];
 
 		// Init the Avatar nav.
 		$avatar_nav = array(
-			'upload' => array( 'id' => 'upload', 'caption' => __( 'Upload', 'buddypress' ), 'order' => 0  ),
-
-			// The delete view will only show if the object has an avatar.
-			'delete' => array( 'id' => 'delete', 'caption' => __( 'Delete', 'buddypress' ), 'order' => 100, 'hide' => (int) ! $has_avatar ),
+			'upload'  => array(
+				'id'      => 'upload',
+				'caption' => __( 'Upload', 'buddypress' ),
+				'order'   => 0
+			),
+			'delete'  => array(
+				'id'      => 'delete',
+				'caption' => __( 'Delete', 'buddypress' ),
+				'order'   => 100,
+				'hide'    => (int) ! $has_avatar
+			),
 		);
+
+		// Add the recycle view if avatar history is enabled.
+		if ( 'user' === $object && ! bp_avatar_history_is_disabled() ) {
+			// Look inside history to see if the user previously uploaded avatars.
+			$avatars_history = bp_avatar_get_avatars_history( $item_id, $object );
+
+			if ( $avatars_history ) {
+				ksort( $avatars_history );
+				$settings['history']       = array_values( $avatars_history );
+				$settings['historyNonces'] = array(
+					'recylePrevious' => wp_create_nonce( 'bp_avatar_recycle_previous' ),
+					'deletePrevious' => wp_create_nonce( 'bp_avatar_delete_previous' ),
+				);
+
+				$avatar_nav['recycle'] = array(
+					'id'      => 'recycle',
+					'caption' => __( 'Recycle', 'buddypress' ),
+					'order'   => 20,
+					'hide'    => (int) empty( $avatars_history ),
+				);
+			}
+		}
 
 		// Create the Camera Nav if the WebCam capture feature is enabled.
 		if ( bp_avatar_use_webcam() && 'user' === $object ) {
-			$avatar_nav['camera'] = array( 'id' => 'camera', 'caption' => __( 'Take Photo', 'buddypress' ), 'order' => 10 );
+			$avatar_nav['camera'] = array(
+				'id'      => 'camera',
+				'caption' => __( 'Take Photo', 'buddypress' ),
+				'order'   => 10
+			);
 
 			// Set warning messages.
 			$strings['camera_warnings'] = array(
@@ -1021,7 +1083,7 @@ function bp_attachments_get_cover_image_settings( $component = 'members' ) {
 	}
 
 	// Set default args.
-	$default_args = wp_parse_args(
+	$default_args = bp_parse_args(
 		$args,
 		array(
 			'components'    => array(),
@@ -1049,7 +1111,11 @@ function bp_attachments_get_cover_image_settings( $component = 'members' ) {
 	 *
 	 * @param array $settings The cover image settings
 	 */
-	$settings = bp_parse_args( $args, $default_args, $component . '_cover_image_settings' );
+	$settings = bp_parse_args(
+		$args,
+		$default_args,
+		$component . '_cover_image_settings'
+	);
 
 	// Handle deprecated xProfile fitler.
 	if ( 'members' === $component ) {
@@ -1281,10 +1347,14 @@ function bp_attachments_cover_image_ajax_upload() {
 		bp_attachments_json_response( false, $is_html4 );
 	}
 
-	$bp_params = bp_parse_args( $_POST['bp_params'], array(
-		'object'  => 'user',
-		'item_id' => bp_loggedin_user_id(),
-	), 'attachments_cover_image_ajax_upload' );
+	$bp_params = bp_parse_args(
+		$_POST['bp_params'],
+		array(
+			'object'  => 'user',
+			'item_id' => bp_loggedin_user_id(),
+		),
+		'attachments_cover_image_ajax_upload'
+	);
 
 	$bp_params['item_id'] = (int) $bp_params['item_id'];
 	$bp_params['object']  = sanitize_text_field( $bp_params['object'] );
@@ -1567,3 +1637,134 @@ function bp_attachments_cover_image_ajax_delete() {
 	}
 }
 add_action( 'wp_ajax_bp_cover_image_delete', 'bp_attachments_cover_image_ajax_delete' );
+
+/**
+ * Returns a file's mime type.
+ *
+ * @since 10.2.0
+ *
+ * @param string $file Absolute path of a file or directory.
+ * @return false|string False if the mime type is not supported by WordPress.
+ *                      The mime type of a file or 'directory' for a directory.
+ */
+function bp_attachements_get_mime_type( $file = '' ) {
+	$file_type = wp_check_filetype( $file, wp_get_mime_types() );
+	$file_mime = $file_type['type'];
+
+	if ( false === $file_mime && is_dir( $file ) ) {
+		$file_mime = 'directory';
+	}
+
+	return $file_mime;
+}
+
+/**
+ * Returns a BP Attachments file object.
+ *
+ * @since 10.2.0
+ *
+ * @param SplFileInfo $file The SplFileInfo file object.
+ * @return null|object      Null if the file is not supported by WordPress.
+ *                          A BP Attachments file object otherwise.
+ */
+function bp_attachments_get_file_object( SplFileInfo $file ) {
+	$path      = $file->getPathname();
+	$mime_type = bp_attachements_get_mime_type( $path );
+
+	// Mime type not supported by WordPress.
+	if ( false === $mime_type ) {
+		return null;
+	}
+
+	$_file = new stdClass();
+
+	$_file->name               = $file->getfilename();
+	$_file->path               = $path;
+	$_file->size               = $file->getSize();
+	$_file->type               = $file->getType();
+	$_file->mime_type          = bp_attachements_get_mime_type( $_file->path );
+	$_file->last_modified      = $file->getMTime();
+	$_file->latest_access_date = $file->getATime();
+	$_file->id                 = pathinfo( $_file->name, PATHINFO_FILENAME );
+
+	return $_file;
+}
+
+/**
+ * List the files of a directory.
+ *
+ * @since 10.0.0
+ *
+ * @param string $directory_path Absolute path of a directory.
+ * @return array                 The file objects list of the directory.
+ */
+function bp_attachments_list_directory_files( $directory_path = '' ) {
+	if ( ! is_dir( $directory_path ) ) {
+		return array();
+	}
+
+	$files    = array();
+	$iterator = new FilesystemIterator( $directory_path, FilesystemIterator::SKIP_DOTS );
+
+	foreach ( $iterator as $file ) {
+		$supported_file = bp_attachments_get_file_object( $file );
+
+		if ( is_null( $supported_file) ) {
+			continue;
+		}
+
+		$files[ $supported_file->id ] = $supported_file;
+	}
+
+	return $files;
+}
+
+/**
+ * List the files of a directory recursively and eventually find a file using its ID.
+ *
+ * @since 10.0.0
+ *
+ * @param string $directory_path Absolute path of a directory.
+ * @param string $find           The file ID to find into the directory or its children.
+ * @return array                 The file objects list of the directory and subdirectories.
+ */
+function bp_attachments_list_directory_files_recursively( $directory_path = '', $find = '' ) {
+	if ( ! is_dir( $directory_path ) ) {
+		return array();
+	}
+
+	$files     = array();
+	$directory = new RecursiveDirectoryIterator( $directory_path, FilesystemIterator::SKIP_DOTS );
+	$iterator  = new RecursiveIteratorIterator( $directory, RecursiveIteratorIterator::CHILD_FIRST );
+	$bp_upload = bp_upload_dir();
+	$basedir   = str_replace( '\\', '/', $bp_upload['basedir'] );
+
+	foreach ( $iterator as $file ) {
+		$supported_file = bp_attachments_get_file_object( $file );
+
+		if ( is_null( $supported_file) ) {
+			continue;
+		}
+
+		$supported_file->parent_dir_path = str_replace( '\\', '/', dirname( $supported_file->path ) );
+		$supported_file->parent_dir_url  = str_replace( $basedir, $bp_upload['baseurl'], $supported_file->parent_dir_path );
+
+		// Ensure URL is https if SSL is set/forced.
+		if ( is_ssl() ) {
+			$supported_file->parent_dir_url = str_replace( 'http://', 'https://', $supported_file->parent_dir_url );
+		}
+
+		$file_id = $supported_file->id;
+		if ( $supported_file->parent_dir_path !== $directory_path ) {
+			$file_id = trailingslashit( str_replace( trailingslashit( $directory_path ), '', $supported_file->parent_dir_path ) ) . $file_id;
+		}
+
+		$files[ $file_id ] = $supported_file;
+	}
+
+	if ( $find ) {
+		return wp_filter_object_list( $files, array( 'id' => $find ) );
+	}
+
+	return $files;
+}

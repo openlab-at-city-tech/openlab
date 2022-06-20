@@ -3,7 +3,7 @@
  * Activity Ajax functions
  *
  * @since 3.0.0
- * @version 8.1.0
+ * @version 10.0.0
  */
 
 // Exit if accessed directly.
@@ -232,22 +232,38 @@ function bp_nouveau_ajax_delete_activity() {
 
 	// Deleting an activity comment.
 	if ( ! empty( $_POST['is_comment'] ) ) {
+		// Get replies before they are deleted.
+		$replies   = (array) BP_Activity_Activity::get_child_comments( $activity->id );
+		$reply_ids = wp_list_pluck( $replies, 'id' );
+
 		if ( ! bp_activity_delete_comment( $activity->item_id, $activity->id ) ) {
 			wp_send_json_error( $response );
+
+			// The comment and its replies has been deleted successfully.
+		} else {
+			$response = array(
+				'deleted' => array_merge(
+					array( $activity->id ),
+					$reply_ids
+				),
+			);
 		}
 
 	// Deleting an activity.
 	} else {
 		if ( ! bp_activity_delete( array( 'id' => $activity->id, 'user_id' => $activity->user_id ) ) ) {
 			wp_send_json_error( $response );
+
+			// The activity has been deleted successfully.
+		} else {
+			$response = array(
+				'deleted' => array( $activity->id ),
+			);
 		}
 	}
 
 	/** This action is documented in bp-activity/bp-activity-actions.php */
 	do_action( 'bp_activity_action_delete_activity', $activity->id, $activity->user_id );
-
-	// The activity has been deleted successfully
-	$response = array( 'deleted' => $activity->id );
 
 	// If on a single activity redirect to user's home.
 	if ( ! empty( $_POST['is_single'] ) ) {
@@ -536,7 +552,7 @@ function bp_nouveau_ajax_post_update() {
 				if ( ! empty( $bp->groups->current_group->status ) ) {
 					$status = $bp->groups->current_group->status;
 				} else {
-					$group  = groups_get_group( array( 'group_id' => $group_id ) );
+					$group  = groups_get_group( array( 'group_id' => $item_id ) );
 					$status = $group->status;
 				}
 
@@ -564,13 +580,13 @@ function bp_nouveau_ajax_post_update() {
 			bp_get_template_part( 'activity/entry' );
 		}
 	}
-	$acivity = ob_get_contents();
+	$activity = ob_get_contents();
 	ob_end_clean();
 
 	wp_send_json_success( array(
 		'id'           => $activity_id,
 		'message'      => esc_html__( 'Update posted.', 'buddypress' ) . ' ' . sprintf( '<a href="%s" class="just-posted">%s</a>', esc_url( bp_activity_get_permalink( $activity_id ) ), esc_html__( 'View activity.', 'buddypress' ) ),
-		'activity'     => $acivity,
+		'activity'     => $activity,
 
 		/**
 		 * Filters whether or not an AJAX post update is private.

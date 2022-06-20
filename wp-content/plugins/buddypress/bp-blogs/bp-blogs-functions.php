@@ -26,6 +26,10 @@ function bp_blogs_has_directory() {
 /**
  * Retrieve a set of blogs.
  *
+ * @since 1.2.0
+ * @since 2.0.0 Added $include_blog_ids, $update_meta_cache parameters
+ * @since 10.0.0 Added $date_query parameter
+ *
  * @see BP_Blogs_Blog::get() for a description of arguments and return value.
  *
  * @param array|string $args {
@@ -37,6 +41,7 @@ function bp_blogs_has_directory() {
  *     @type string|bool $search_terms      Default: false.
  *     @type int         $per_page          Default: 20.
  *     @type int         $page              Default: 1.
+ *     @type array       $date_query        Default: false.
  *     @type bool        $update_meta_cache Whether to pre-fetch blogmeta. Default: true.
  * }
  * @return array See {@link BP_Blogs_Blog::get()}.
@@ -44,26 +49,23 @@ function bp_blogs_has_directory() {
 function bp_blogs_get_blogs( $args = '' ) {
 
 	// Parse query arguments.
-	$r = bp_parse_args( $args, array(
-		'type'              => 'active', // 'active', 'alphabetical', 'newest', or 'random'.
-		'include_blog_ids'  => false,    // Array of blog IDs to include.
-		'user_id'           => false,    // Limit to blogs this user can post to.
-		'search_terms'      => false,    // Limit to blogs matching these search terms.
-		'per_page'          => 20,       // The number of results to return per page.
-		'page'              => 1,        // The page to return if limiting per page.
-		'update_meta_cache' => true      // Whether to pre-fetch blogmeta.
-	), 'blogs_get_blogs' );
+	$r = bp_parse_args(
+		$args,
+		array(
+			'type'              => 'active', // 'active', 'alphabetical', 'newest', or 'random'.
+			'include_blog_ids'  => false,    // Array of blog IDs to include.
+			'user_id'           => false,    // Limit to blogs this user can post to.
+			'search_terms'      => false,    // Limit to blogs matching these search terms.
+			'per_page'          => 20,       // The number of results to return per page.
+			'page'              => 1,        // The page to return if limiting per page.
+			'date_query'        => false,    // Filter blogs by date query.
+			'update_meta_cache' => true,     // Whether to pre-fetch blogmeta.
+		),
+		'blogs_get_blogs'
+	);
 
 	// Get the blogs.
-	$blogs = BP_Blogs_Blog::get(
-		$r['type'],
-		$r['per_page'],
-		$r['page'],
-		$r['user_id'],
-		$r['search_terms'],
-		$r['update_meta_cache'],
-		$r['include_blog_ids']
-	);
+	$blogs = BP_Blogs_Blog::get( $r );
 
 	/**
 	 * Filters a set of blogs.
@@ -87,24 +89,27 @@ function bp_blogs_get_blogs( $args = '' ) {
  *
  * @param array $args {
  *     Array of arguments.
- *     @type int   $offset   The offset to use.
- *     @type int   $limit    The number of blogs to record at one time.
- *     @type array $blog_ids Blog IDs to record. If empty, all blogs will be recorded.
- *     @type array $site_id  The network site ID to use.
+ *     @type int    $offset   The offset to use.
+ *     @type int    $limit    The number of blogs to record at one time.
+ *     @type array  $blog_ids Blog IDs to record. If empty, all blogs will be recorded.
+ *     @type array  $site_id  The network site ID to use.
  * }
- *
  * @return bool
  */
 function bp_blogs_record_existing_blogs( $args = array() ) {
 	global $wpdb;
 
 	// Query for all sites in network.
-	$r = bp_parse_args( $args, array(
-		'offset'   => (int) bp_get_option( '_bp_record_blogs_offset' ),
-		'limit'    => 50,
-		'blog_ids' => array(),
-		'site_id'  => $wpdb->siteid
-	), 'record_existing_blogs' );
+	$r = bp_parse_args(
+		$args,
+		array(
+			'offset'   => (int) bp_get_option( '_bp_record_blogs_offset' ),
+			'limit'    => 50,
+			'blog_ids' => array(),
+			'site_id'  => $wpdb->siteid,
+		),
+		'record_existing_blogs'
+	);
 
 	// Truncate all BP blogs tables if starting fresh.
 	if ( empty( $r['offset'] ) && empty( $r['blog_ids'] ) ) {
@@ -566,8 +571,7 @@ add_action( 'update_option_site_icon', 'bp_blogs_update_option_site_icon', 10, 2
  * Deletes the 'url' blogmeta for a site.
  *
  * Fires when a site's details are updated, which generally happens when
- * editing a site under "Network Admin > Sites". Prior to WP 4.9, the
- * correct hook was 'refresh_blog_details'; afterward, 'clean_site_cache'.
+ * editing a site under "Network Admin > Sites".
  *
  * @since 2.3.0
  *
@@ -576,12 +580,7 @@ add_action( 'update_option_site_icon', 'bp_blogs_update_option_site_icon', 10, 2
 function bp_blogs_delete_url_blogmeta( $site_id = 0 ) {
 	bp_blogs_delete_blogmeta( (int) $site_id, 'url' );
 }
-
-if ( bp_is_running_wp( '4.9.0' ) ) {
-	add_action( 'clean_site_cache', 'bp_blogs_delete_url_blogmeta' );
-} else {
-	add_action( 'refresh_blog_details', 'bp_blogs_delete_url_blogmeta' );
-}
+add_action( 'clean_site_cache', 'bp_blogs_delete_url_blogmeta' );
 
 /**
  * Record activity metadata about a published blog post.
@@ -1254,12 +1253,18 @@ function bp_blogs_get_all_blogs( $limit = null, $page = null ) {
  *
  * @see BP_Blogs_Blog::get() for a description of parameters and return values.
  *
- * @param int|null $limit See {@BP_Blogs_Blog::get()}.
+ * @param int|null $per_page See {@BP_Blogs_Blog::get()}.
  * @param int|null $page  See {@BP_Blogs_Blog::get()}.
  * @return array See {@BP_Blogs_Blog::get()}.
  */
-function bp_blogs_get_random_blogs( $limit = null, $page = null ) {
-	return BP_Blogs_Blog::get( 'random', $limit, $page );
+function bp_blogs_get_random_blogs( $per_page = null, $page = null ) {
+	return BP_Blogs_Blog::get(
+		array(
+			'type'     => 'random',
+			'per_page' => $per_page,
+			'page'     => $page
+		)
+	);
 }
 
 /**
@@ -1531,7 +1536,10 @@ function bp_blogs_get_signup_form_submitted_vars() {
 		'blog_public' => 0,
 	);
 
-	$submitted_vars = wp_parse_args( $_POST, $exprected_vars );
+	$submitted_vars = bp_parse_args(
+		$_POST,
+		$exprected_vars
+	);
 
 	return array_map( 'wp_unslash', array_intersect_key( $submitted_vars, $exprected_vars ) );
 }

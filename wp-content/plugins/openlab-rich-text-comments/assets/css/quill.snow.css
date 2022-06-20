@@ -45,8 +45,8 @@
   .ql-editor p,
   .ql-editor ol li,
   .ql-editor ul li {
-    font-size: 14px;
-    line-height: 21px;
+    font-size: 16px;
+    line-height: 24px;
   }
   .ql-editor p {
     margin: 0 0 20px !important;
@@ -896,9 +896,7 @@
     white-space: nowrap;
   }
   .ql-snow .ql-tooltip::before {
-    content: "Visit URL:";
-    line-height: 26px;
-    margin-right: 8px;
+    display: none;
   }
   .ql-snow .ql-tooltip input[type=text] {
     display: none;

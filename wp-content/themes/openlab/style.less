@@ -87,6 +87,11 @@ body{
     }
 }
 
+body.no-js .hide-if-no-js {
+	display: none !important;
+	visibility: hidden !important;
+}
+
 // Lists
 // -------------------------
 
@@ -128,6 +133,10 @@ blockquote {
         color: @magenta;
         margin-top: 0;
     }
+}
+
+.btn {
+	position: relative;
 }
 
 // Base class
@@ -656,6 +665,250 @@ button.related-link-action.related-link-add {
         margin-top: 1px;
     }
 }
+
+/** Group Announcements **/
+
+.ajax-loading {
+	padding-left: 40px;
+}
+
+@keyframes spinner {
+	0% {
+	  transform: translate3d(-50%, -50%, 0) rotate(0deg);
+	}
+	100% {
+	  transform: translate3d(-50%, -50%, 0) rotate(360deg);
+	}
+}
+
+.ajax-loading::before {
+	animation: 1.5s linear infinite spinner;
+	animation-play-state: inherit;
+	border: solid 5px #cfd0d1;
+	border-bottom-color: #1c87c9;
+	border-radius: 50%;
+	content: "";
+	height: 24px;
+	width: 24px;
+	position: absolute;
+	top: 15px;
+	left: 15px;
+	transform: translate3d(-50%, -50%, 0);
+	will-change: transform;
+}
+
+a.disabled-link {
+	text-decoration: none;
+	pointer-events: none;
+}
+
+.announcement-read-more {
+	font-weight: @bold;
+}
+
+.no-announcement-message {
+	padding-top: 30px;
+}
+
+.announcement-editor-wrapper {
+	border: 1px solid #ccc;
+	border-radius: 4px;
+}
+
+.announcement-rich-text-editor.ql-container {
+	border-top: 1px solid #ccc !important;
+	margin: 10px;
+}
+
+.announcement-options {
+	margin: 10px;
+}
+
+.announcement-form {
+	padding-bottom: 10px;
+
+	.quill-toolbar {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+
+		&.ql-snow.ql-toolbar {
+			background: #f5f5f5;
+			border: none;
+
+			button {
+				height: 30px;
+				width: 34px;
+			}
+		}
+
+		.quill-toolbar-buttons {
+			flex: 1;
+		}
+
+		.quill-toolbar-avatar {
+			flex: 0 0 40px;
+		}
+	}
+
+	.ql-container.ql-snow {
+		border-radius: 4px;
+	}
+
+	.announcement-submit {
+		&::after {
+			content: "\f178";
+			font-family: fontawesome;
+		}
+
+	}
+}
+
+.announcement-list {
+	margin-top: 30px;
+}
+
+.announcement-item .updateable-item {
+	box-shadow: 0px 0px 5px 5px transparent;
+	transition: box-shadow 0.5s ease-in-out;
+
+	&.new-update {
+		box-shadow: 0px 0px 6px 2px #63dfd2;
+	}
+
+	& > .group-item-wrapper {
+		padding-left: 10px;
+		padding-right: 10px;
+	}
+}
+
+.announcement-item {
+	.group-item-wrapper {
+		border-radius: 4px;
+		border: 1px solid #dddddd;
+		padding: 20px;
+		margin-bottom: 15px;
+		position: relative;
+
+		& > .row {
+			margin-bottom: 18px;
+
+			&:last-child {
+				margin-bottom: 0;
+			}
+		}
+	}
+
+	.row.announcement-header {
+		display: flex;
+		gap: 15px;
+
+		&:before {
+			display: none;
+		}
+
+		.item-avatar {
+			flex: 0 0 75px;
+		}
+	}
+
+	h1.announcement-title-rendered,
+	h2.announcement-title-rendered {
+		font-size: 16px;
+		margin-top: 0;
+	}
+
+	.announcement-textarea {
+		label {
+			display: block;
+		}
+
+		textarea {
+			height: 133px;
+			width: 100%;
+		}
+	}
+
+	.announcement-body {
+		p:last-child {
+			margin-bottom: 0;
+		}
+	}
+
+	.announcement-actions {
+		display: flex;
+		gap: 4px;
+
+		.announcement-action {
+			&::after {
+				content: '|';
+			}
+
+			&:last-child::after {
+				content: '';
+			}
+		}
+
+		a {
+			font-weight: @bold;
+		}
+	}
+}
+
+.announcement-form-section {
+	&.announcement-title {
+		margin-top: 15px;
+	}
+}
+
+.announcement-reply-container {
+	display: none;
+
+	margin-top: 20px;
+	padding-top: 20px;
+	border-top: 2px solid @10gray;
+
+	textarea {
+		display: none;
+		visibility: hidden;
+	}
+}
+
+.show-reply-form > .group-item-wrapper > .announcement-reply-container {
+	display: block;
+}
+
+.announcement-replies {
+	.group-item-wrapper {
+		border: none;
+		border-top: 2px solid @10gray;
+		padding-left: 0;
+		padding-right: 0;
+		padding-bottom: 0;
+		margin-bottom: 0;
+	}
+}
+
+.announcement-reply-replies {
+	& > .group-item > .group-item-wrapper {
+		padding-left: 40px;
+	}
+}
+
+.announcement-reply-item {
+	.announcement-reply-container {
+		padding-left: 40px;
+	}
+}
+
+.announcement-form {
+	.edit-cancel {
+		border: 0;
+		background: transparent;
+		color: @80gray;
+	}
+}
+
 /**page**/
 h1.entry-title{
     border-bottom: 1px solid @30gray;
@@ -3138,9 +3391,12 @@ body.membership-requests {
         margin-top: 0;
     }
 	p.currently-viewing {
-		font-size: 1.1em;
+		font-size: .8em;
 		margin-top: 8px;
 	}
+}
+.doc-tabs {
+	margin-top: 15px;
 }
 @media (max-width: @screen-xs-max){
     .created-date-cell {
@@ -3232,8 +3488,11 @@ body.docs{
 }
 .doc-content{
     &.edit-doc{
-        border: none;
-        padding: 0;
+        padding: 8px;
+
+		.form-panel .panel:first-child {
+			margin-top: 0;
+		}
     }
     .wp-switch-editor{
         padding: 0 8px;
@@ -3304,6 +3563,10 @@ body.docs{
             }
         }
     }
+}
+body.docs #comments, body.docs .doc-meta {
+	border-top: 0;
+	padding-top: 0;
 }
 a.delete-doc-button {
 	color: #a20000 !important;
@@ -4279,6 +4542,10 @@ body.single-help {
         img {
             display: none;
         }
+
+        .btn {
+            text-decoration: none;
+        }
     }
 }
 
@@ -4327,6 +4594,57 @@ body.single-help {
             background-color: #eeeeee;
             border-color: #ddd;
             text-decoration: underline;
+        }
+    }
+}
+
+/* Group Activity */
+.group-activity-content {
+    display: flex;
+    flex-flow: row wrap;
+
+    .activity-body {
+        flex: 0 0 calc(100% - 45px);
+        max-width: calc(100% - 45px);
+        padding-right: 30px;
+
+        p {
+            margin-top: 0;
+        }
+    }
+
+    .activity-action {
+        flex: 0 0 45px;
+        max-width: 45x;
+        text-align: right;
+
+        span {
+            font-size: 20px;
+            transition: all 350ms ease-in-out;
+        }
+
+        .fav {
+            span {
+                color: #888;
+            }
+
+            &:hover {
+                span {
+                    color: @magenta;
+                }
+            }
+        }
+
+        .unfav {
+            span {
+                color: @magenta;
+            }
+
+            &:hover {
+                span {
+                    color: #888;
+                }
+            }
         }
     }
 }

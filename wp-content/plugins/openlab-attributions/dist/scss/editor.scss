@@ -236,9 +236,12 @@
 		}
 	}
 
-	&-resizer,
-	&-mask {
+	&-resizer {
 		display: none;
+	}
+
+	&-mask {
+		z-index: 999;
 	}
 	
 	.body {
@@ -250,14 +253,6 @@
 
 		@media(max-width: 991px) {
 			height: calc(100% - 60px - 172px);
-		}
-
-		&-add {
-			height: 600px;
-
-			@media(max-width: 991px) {
-				height: calc(100% - 60px - 172px);
-			}
 		}
 	}
 }

@@ -231,25 +231,28 @@ function bp_core_fetch_avatar( $args = '' ) {
 	}
 
 	// Set the default variables array and parse it against incoming $args array.
-	$params = wp_parse_args( $args, array(
-		'item_id'       => false,
-		'object'        => 'user',
-		'type'          => 'thumb',
-		'avatar_dir'    => false,
-		'width'         => false,
-		'height'        => false,
-		'class'         => 'avatar',
-		'css_id'        => false,
-		'alt'           => '',
-		'email'         => false,
-		'no_grav'       => null,
-		'html'          => true,
-		'title'         => '',
-		'extra_attr'    => '',
-		'scheme'        => null,
-		'rating'        => get_option( 'avatar_rating' ),
-		'force_default' => false,
-	) );
+	$params = bp_parse_args(
+		$args,
+		array(
+			'item_id'       => false,
+			'object'        => 'user',
+			'type'          => 'thumb',
+			'avatar_dir'    => false,
+			'width'         => false,
+			'height'        => false,
+			'class'         => 'avatar',
+			'css_id'        => false,
+			'alt'           => '',
+			'email'         => false,
+			'no_grav'       => null,
+			'html'          => true,
+			'title'         => '',
+			'extra_attr'    => '',
+			'scheme'        => null,
+			'rating'        => get_option( 'avatar_rating' ),
+			'force_default' => false,
+		)
+	);
 
 	/* Set item_id ***********************************************************/
 
@@ -765,7 +768,10 @@ function bp_core_delete_existing_avatar( $args = '' ) {
 		'avatar_dir' => false
 	);
 
-	$args = wp_parse_args( $args, $defaults );
+	$args = bp_parse_args(
+		$args,
+		$defaults
+	);
 
 	/**
 	 * Filters whether or not to handle deleting an existing avatar.
@@ -975,6 +981,7 @@ function bp_core_avatar_handle_upload( $file, $upload_dir_filter ) {
 	}
 
 	// Maybe resize.
+	$original_file_size        = $avatar_attachment->get_image_data( $bp->avatar_admin->original['file'] );
 	$bp->avatar_admin->resized = $avatar_attachment->shrink( $bp->avatar_admin->original['file'], $ui_available_width );
 	$bp->avatar_admin->image   = new stdClass();
 
@@ -997,8 +1004,16 @@ function bp_core_avatar_handle_upload( $file, $upload_dir_filter ) {
 
 	// If the uploaded image is smaller than the "full" dimensions, throw a warning.
 	if ( $avatar_attachment->is_too_small( $bp->avatar_admin->image->file ) ) {
-		/* translators: 1: the advised width size in pixels. 2: the advised height size in pixels. */
-		bp_core_add_message( sprintf( __( 'You have selected an image that is smaller than recommended. For best results, upload a picture larger than %1$d x %2$d pixels.', 'buddypress' ), bp_core_avatar_full_width(), bp_core_avatar_full_height() ), 'error' );
+		if ( isset( $original_file_size['width'] ) && $original_file_size['width'] > bp_core_avatar_full_width() ) {
+			$aspect_ratio = number_format_i18n( bp_core_avatar_full_width() / bp_core_avatar_full_height(), 2 );
+
+			/* translators: %s: the value of the aspect ratio. */
+			bp_core_add_message( sprintf( __( 'The aspect ratio of the image you selected is too great compared to the profile photo one. For best results, upload a picture having an aspect ratio closer to %s.', 'buddypress' ), $aspect_ratio ), 'error' );
+		} else {
+
+			/* translators: 1: the advised width size in pixels. 2: the advised height size in pixels. */
+			bp_core_add_message( sprintf( __( 'You have selected an image that is smaller than recommended. For best results, upload a picture larger than %1$d x %2$d pixels.', 'buddypress' ), bp_core_avatar_full_width(), bp_core_avatar_full_height() ), 'error' );
+		}
 	}
 
 	// Set the url value for the image.
@@ -1161,12 +1176,14 @@ add_action( 'wp_ajax_bp_avatar_upload', 'bp_avatar_ajax_upload' );
  * Handle avatar webcam capture.
  *
  * @since 2.3.0
+ * @since 10.0.0 Adds the `$return` param to eventually return the crop result.
  *
  * @param string $data    Base64 encoded image.
  * @param int    $item_id Item to associate.
- * @return bool True on success, false on failure.
+ * @param string $return  Whether to get the crop `array` or a `boolean`. Defaults to `boolean`.
+ * @return array|bool True on success, false on failure.
  */
-function bp_avatar_handle_capture( $data = '', $item_id = 0 ) {
+function bp_avatar_handle_capture( $data = '', $item_id = 0, $return = 'boolean' ) {
 	if ( empty( $data ) || empty( $item_id ) ) {
 		return false;
 	}
@@ -1222,6 +1239,10 @@ function bp_avatar_handle_capture( $data = '', $item_id = 0 ) {
 		// Crop to default values.
 		$crop_args = array( 'item_id' => $item_id, 'original_file' => $avatar_to_crop, 'crop_x' => 0, 'crop_y' => 0 );
 
+		if ( 'array' === $return ) {
+			return bp_core_avatar_handle_crop( $crop_args, 'array' );
+		}
+
 		return bp_core_avatar_handle_crop( $crop_args );
 	} else {
 		return false;
@@ -1232,6 +1253,7 @@ function bp_avatar_handle_capture( $data = '', $item_id = 0 ) {
  * Crop an uploaded avatar.
  *
  * @since 1.1.0
+ * @since 10.0.0 Adds the `$return` param to eventually return the crop result.
  *
  * @param array|string $args {
  *     Array of function parameters.
@@ -1250,20 +1272,24 @@ function bp_avatar_handle_capture( $data = '', $item_id = 0 ) {
  *     @type int         $crop_x        The horizontal starting point of the crop. Default: 0.
  *     @type int         $crop_y        The vertical starting point of the crop. Default: 0.
  * }
- * @return bool True on success, false on failure.
+ * @param string       $return Whether to get the crop `array` or a `boolean`. Defaults to `boolean`.
+ * @return array|bool True or the crop result on success, false on failure.
  */
-function bp_core_avatar_handle_crop( $args = '' ) {
+function bp_core_avatar_handle_crop( $args = '', $return = 'boolean' ) {
 
-	$r = wp_parse_args( $args, array(
-		'object'        => 'user',
-		'avatar_dir'    => 'avatars',
-		'item_id'       => false,
-		'original_file' => false,
-		'crop_w'        => bp_core_avatar_full_width(),
-		'crop_h'        => bp_core_avatar_full_height(),
-		'crop_x'        => 0,
-		'crop_y'        => 0
-	) );
+	$r = bp_parse_args(
+		$args,
+		array(
+			'object'        => 'user',
+			'avatar_dir'    => 'avatars',
+			'item_id'       => false,
+			'original_file' => false,
+			'crop_w'        => bp_core_avatar_full_width(),
+			'crop_h'        => bp_core_avatar_full_height(),
+			'crop_x'        => 0,
+			'crop_y'        => 0,
+		)
+	);
 
 	/**
 	 * Filters whether or not to handle cropping.
@@ -1288,6 +1314,10 @@ function bp_core_avatar_handle_crop( $args = '' ) {
 		return false;
 	}
 
+	if ( 'array' === $return ) {
+		return $cropped;
+	}
+
 	return true;
 }
 
@@ -1307,12 +1337,15 @@ function bp_avatar_ajax_set() {
 	// Check the nonce.
 	check_admin_referer( 'bp_avatar_cropstore', 'nonce' );
 
-	$avatar_data = wp_parse_args( $_POST, array(
-		'crop_w' => bp_core_avatar_full_width(),
-		'crop_h' => bp_core_avatar_full_height(),
-		'crop_x' => 0,
-		'crop_y' => 0
-	) );
+	$avatar_data = bp_parse_args(
+		$_POST,
+		array(
+			'crop_w' => bp_core_avatar_full_width(),
+			'crop_h' => bp_core_avatar_full_height(),
+			'crop_x' => 0,
+			'crop_y' => 0,
+		)
+	);
 
 	if ( empty( $avatar_data['object'] ) || empty( $avatar_data['item_id'] ) || empty( $avatar_data['original_file'] ) ) {
 		wp_send_json_error();
@@ -1331,19 +1364,25 @@ function bp_avatar_ajax_set() {
 			$webcam_avatar = base64_decode( $webcam_avatar );
 		}
 
-		if ( ! bp_avatar_handle_capture( $webcam_avatar, $avatar_data['item_id'] ) ) {
+		$cropped_webcam_avatar = bp_avatar_handle_capture( $webcam_avatar, $avatar_data['item_id'], 'array' );
+
+		if ( ! $cropped_webcam_avatar ) {
 			wp_send_json_error( array(
 				'feedback_code' => 1
 			) );
 
 		} else {
 			$return = array(
-				'avatar' => esc_url( bp_core_fetch_avatar( array(
-					'object'  => $avatar_data['object'],
-					'item_id' => $avatar_data['item_id'],
-					'html'    => false,
-					'type'    => 'full',
-				) ) ),
+				'avatar' => esc_url(
+					bp_core_fetch_avatar(
+						array(
+							'object'  => $avatar_data['object'],
+							'item_id' => $avatar_data['item_id'],
+							'html'    => false,
+							'type'    => 'full',
+						)
+					)
+				),
 				'feedback_code' => 2,
 				'item_id'       => $avatar_data['item_id'],
 			);
@@ -1355,12 +1394,14 @@ function bp_avatar_ajax_set() {
 			 * Fires if the new avatar was successfully captured.
 			 *
 			 * @since 6.0.0
+			 * @since 10.0.0 Adds a new param: an array containing the full, thumb avatar and the timestamp.
 			 *
-			 * @param string $item_id     Inform about the user id the avatar was set for.
-			 * @param string $type        Inform about the way the avatar was set ('camera').
-			 * @param array  $avatar_data Array of parameters passed to the avatar handler.
+			 * @param string $item_id               Inform about the user id the avatar was set for.
+			 * @param string $type                  Inform about the way the avatar was set ('camera').
+			 * @param array  $avatar_data           Array of parameters passed to the crop handler.
+			 * @param array  $cropped_webcam_avatar Array containing the full, thumb avatar and the timestamp.
 			 */
-			do_action( 'bp_members_avatar_uploaded', (int) $avatar_data['item_id'], $avatar_data['type'], $avatar_data );
+			do_action( 'bp_members_avatar_uploaded', (int) $avatar_data['item_id'], $avatar_data['type'], $avatar_data, $cropped_webcam_avatar );
 
 			wp_send_json_success( $return );
 		}
@@ -1392,14 +1433,20 @@ function bp_avatar_ajax_set() {
 	);
 
 	// Handle crop.
-	if ( bp_core_avatar_handle_crop( $r ) ) {
+	$cropped_avatar = bp_core_avatar_handle_crop( $r, 'array' );
+
+	if ( $cropped_avatar ) {
 		$return = array(
-			'avatar' => esc_url( bp_core_fetch_avatar( array(
-				'object'  => $avatar_data['object'],
-				'item_id' => $avatar_data['item_id'],
-				'html'    => false,
-				'type'    => 'full',
-			) ) ),
+			'avatar' => esc_url(
+				bp_core_fetch_avatar(
+					array(
+						'object'  => $avatar_data['object'],
+						'item_id' => $avatar_data['item_id'],
+						'html'    => false,
+						'type'    => 'full',
+					)
+				)
+			),
 			'feedback_code' => 2,
 			'item_id'       => $avatar_data['item_id'],
 		);
@@ -1409,10 +1456,10 @@ function bp_avatar_ajax_set() {
 			do_action_deprecated( 'xprofile_avatar_uploaded', array( (int) $avatar_data['item_id'], $avatar_data['type'], $r ), '6.0.0', 'bp_members_avatar_uploaded' );
 
 			/** This action is documented in bp-core/bp-core-avatars.php */
-			do_action( 'bp_members_avatar_uploaded', (int) $avatar_data['item_id'], $avatar_data['type'], $r );
+			do_action( 'bp_members_avatar_uploaded', (int) $avatar_data['item_id'], $avatar_data['type'], $r, $cropped_avatar );
 		} elseif ( 'group' === $avatar_data['object'] ) {
 			/** This action is documented in bp-groups/bp-groups-screens.php */
-			do_action( 'groups_avatar_uploaded', (int) $avatar_data['item_id'], $avatar_data['type'], $r );
+			do_action( 'groups_avatar_uploaded', (int) $avatar_data['item_id'], $avatar_data['type'], $r, $cropped_avatar );
 		}
 
 		wp_send_json_success( $return );
@@ -2101,3 +2148,455 @@ function bp_avatar_template_check() {
 		bp_attachments_get_template_part( 'avatars/index' );
 	}
 }
+
+/**
+ * Informs about whether avatar history is disabled or not.
+ *
+ * @since 10.0.0
+ *
+ * @return bool True if avatar history is disabled. False otherwise.
+ *              Default: `false`.
+ */
+function bp_avatar_history_is_disabled() {
+	/**
+	 * Filter here returning `true` to disable avatar history.
+	 *
+	 * @since 10.0.0
+	 *
+	 * @param bool $value True to disable avatar history. False otherwise.
+	 *                    Default: `false`.
+	 */
+	return apply_filters( 'bp_disable_avatar_history', false );
+}
+
+/**
+ * Get a specific version of an avatar from its history.
+ *
+ * @since 10.0.0
+ *
+ * @param int        $item_id   The item ID we need the avatar version for.
+ * @param string     $object    The object the item ID relates to.
+ * @param int|string $timestamp An integer Unix timestamp or a date string of the format 'Y-m-d h:i:s'.
+ * @param string     $type      The type of avatar we need. Possible values are `thumb` and `full`.
+ * @return array                A list of matching results, an empty array if no avatars were found.
+ */
+function bp_avatar_get_version( $item_id = 0, $object = 'user', $timestamp = '', $type = 'full' ) {
+	if ( ! $item_id || ! $timestamp ) {
+		return array();
+	}
+
+	if ( ! is_numeric( $timestamp ) ) {
+		$timestamp = strtotime( $timestamp );
+	}
+
+	$avatar_id = $timestamp . '-bpfull';
+	if ( 'full' !== $type ) {
+		$avatar_id = $timestamp . '-bpthumb';
+	}
+
+	$avatar_dir = 'avatars';
+	if ( 'user' !== $object ) {
+		$avatar_dir = sanitize_key( $object ) . '-avatars';
+	}
+
+	// The object avatar directory we are looking into to get the avatar url.
+	$object_avatar_dir = trailingslashit( bp_core_avatar_upload_path() ) . $avatar_dir . '/' . $item_id;
+
+	return bp_attachments_list_directory_files_recursively( $object_avatar_dir, $avatar_id );
+}
+
+/**
+ * Get the list of previous avatars in history
+ *
+ * @since 10.0.0
+ *
+ * @param int    $item_id The item ID we need the avatar version for.
+ * @param string $object  The object the item ID relates to.
+ * @param string $type    Get the `full`, `thumb` or `both` versions.
+ * @return array          The list of previous uploaded avatars.
+ */
+function bp_avatar_get_avatars_history( $item_id = 0, $object = 'user', $type = 'full' ) {
+	if ( ! $item_id ) {
+		return array();
+	}
+
+	$avatar_dir = 'avatars';
+	if ( 'user' !== $object ) {
+		$avatar_dir = sanitize_key( $object ) . '-avatars';
+	}
+
+	// The user avatar directory we are looking into to get the avatar url.
+	$history_dir      = trailingslashit( bp_core_avatar_upload_path() ) . $avatar_dir . '/' . $item_id . '/history';
+	$historic_avatars = bp_attachments_list_directory_files( $history_dir );
+
+	if ( ! $historic_avatars ) {
+		return array();
+	}
+
+	$avatars     = array();
+	$history_url = trailingslashit( bp_core_avatar_url() ) .  $avatar_dir . '/' . $item_id . '/history';
+
+	foreach ( $historic_avatars as $historic_avatar ) {
+		$prefix = str_replace( array( '-bpfull', '-bpthumb' ), '', $historic_avatar->id );
+		$gmdate = gmdate( 'Y-m-d H:i:s', $historic_avatar->last_modified );
+		$date   = strtotime( get_date_from_gmt( $gmdate ) );
+
+		$avatars[ $historic_avatar->id ] = (object) array(
+			'id'   => $historic_avatar->id,
+			'name' => $historic_avatar->name,
+			'date' => sprintf(
+				'%1$s (%2$s)',
+				date_i18n( get_option( 'date_format' ), $date ),
+				date_i18n( get_option( 'time_format' ), $date )
+			),
+			'type' => str_replace( $prefix . '-bp', '', $historic_avatar->id ),
+			'url'  => $history_url . '/' . $historic_avatar->name,
+		);
+	}
+
+	if ( 'both' === $type ) {
+		return $avatars;
+	}
+
+	return wp_filter_object_list( $avatars, array( 'type' => $type ) );
+}
+
+/**
+ * Recycle a previously uploaded avatar as the current avatar.
+ *
+ * @since 10.0.0
+ */
+function bp_avatar_ajax_recycle_previous_avatar() {
+	if ( ! bp_is_post_request() ) {
+		wp_send_json_error();
+	}
+
+	$avatar_data = bp_parse_args(
+		$_POST,
+		array(
+			'object'    => '',
+			'item_id'   => 0,
+			'avatar_id' => '',
+		)
+	);
+
+	if ( ! $avatar_data['object'] || ! $avatar_data['item_id'] || ! $avatar_data['avatar_id'] ) {
+		wp_send_json_error();
+	}
+
+	// Check the nonce.
+	check_admin_referer( 'bp_avatar_recycle_previous', 'nonce' );
+
+	// Capability check.
+	if ( ! bp_attachments_current_user_can( 'edit_avatar', $avatar_data ) ) {
+		wp_send_json_error();
+	}
+
+	// Set the Avatar Attachment Instance.
+	$avatar_attachment = new BP_Attachment_Avatar();
+	$object            = sanitize_key( $avatar_data['object'] );
+
+	if ( 'user' === $object ) {
+		$avatar_dir = 'avatars';
+	} else {
+		$avatar_dir = $object . '-avatars';
+	}
+
+	$item_id         = (int) $avatar_data['item_id'];
+	$avatar_dir_path = $avatar_attachment->upload_path . '/' . $avatar_dir . '/' . $item_id;
+	$current_avatars = bp_attachments_list_directory_files( $avatar_dir_path );
+	$revision_errors = array();
+
+	// This path will be needed to get the avatar revision object.
+	$avatar_full_revision_path = '';
+
+	// Add a revision of the current avatar if it's not a mystery man!
+	if ( $current_avatars ) {
+		foreach( $current_avatars as $current_avatar ) {
+			if ( ! isset( $current_avatar->name, $current_avatar->id, $current_avatar->path ) ) {
+				continue;
+			}
+
+			$is_full  = preg_match( "/-bpfull/", $current_avatar->name );
+			$is_thumb = preg_match( "/-bpthumb/", $current_avatar->name );
+
+			if ( $is_full || $is_thumb ) {
+				// Add a revision of the current avatar.
+				$revision = $avatar_attachment->add_revision(
+					'avatar',
+					array(
+						'file_abspath' => $current_avatar->path,
+						'file_id'      => $current_avatar->id,
+					)
+				);
+
+				if ( is_wp_error( $revision ) ) {
+					$revision_errors[] = $revision->get_error_message();
+				} elseif ( $is_full ) {
+					$avatar_full_revision_path = $revision->path;
+				}
+			}
+		}
+	}
+
+	// No errors, let's recycle the previous avatar.
+	if ( ! $revision_errors ) {
+		$avatar_id   = sanitize_file_name( $avatar_data['avatar_id'] );
+		$suffix      = '-bpfull';
+		$history_dir = trailingslashit( bp_core_avatar_upload_path() ) . $avatar_dir . '/' . $item_id . '/history';
+		$avatars     = bp_attachments_list_directory_files( $history_dir );
+
+		if ( ! isset( $avatars[ $avatar_id ] ) ) {
+			wp_send_json_error(
+				array(
+					'message' => __( 'The profile photo you want to recycle cannot be found.', 'buddypress' ),
+				)
+			);
+		}
+
+		// Init recycle vars.
+		$recycle_timestamp = bp_core_current_time( true, 'timestamp' );
+		$recycle_errors    = array();
+		$avatar_types      = array(
+			'full'  => '',
+			'thumb' => '',
+		);
+
+		// Use the found previous avatar.
+		$avatar                = $avatars[ $avatar_id ];
+		$avatar_types['full']  = $avatar->path;
+		$avatar_types['thumb'] = str_replace( $suffix, '-bpthumb', $avatar->path );
+		$historical_types      = $avatar_types;
+
+		// It's a legacy avatar, we need to crop it again and remove the thumb file that is not using a timestamp in its name.
+		if ( ! file_exists( $avatar_types['thumb'] ) ) {
+			$full_avatar_path = $avatar_dir_path . '/' . str_replace( 'bpfull', 'original-file', wp_basename( $avatar->path ) );
+
+			// Move the full version back to avatar dir.
+			rename( $avatar->path, $full_avatar_path );
+
+			$avatar_types = $avatar_attachment->crop(
+				array(
+					'original_file' => $full_avatar_path,
+					'avatar_dir'    => $avatar_dir,
+					'object'        => $object,
+					'item_id'       => $item_id,
+				)
+			);
+
+			// loop into the history directory to delete the legacy thumb version file.
+			foreach ( $avatars as $avatar_object ) {
+				$timestamp = str_replace( array( '-bpthumb', '-bpfull' ), '', $avatar_object->id );
+
+				if ( ! is_numeric( $timestamp ) && false !== strpos( $avatar_object->id, '-bpthumb' ) ) {
+					@unlink( $avatar_object->path );
+				}
+			}
+		} else {
+			foreach( $avatar_types as $type_key => $avatar_path ) {
+				$filename  = wp_basename( $avatar_path );
+				$avatar_id = pathinfo( $filename, PATHINFO_FILENAME );
+				$recycle_path = $avatar_dir_path . '/' . str_replace( $avatar_id, $recycle_timestamp . '-bp' . $type_key, $filename );
+
+				if ( ! rename( $avatar_path, $recycle_path ) ) {
+					$recycle_errors[] = __( 'An unexpected error occured while recycling the previous profile photo.', 'buddypress' );
+				} else {
+					$avatar_types[ $type_key ] = $recycle_path;
+				}
+			}
+
+			$avatar_types = array_merge(
+				$avatar_types,
+				array(
+					'timestamp' => $recycle_timestamp,
+				)
+			);
+		}
+
+		// No errors, fire the hook used when an avatar is set.
+		if ( ! $recycle_errors && $historical_types['full'] !== $avatar_types['full'] ) {
+			$r = array(
+				'item_id'    => $item_id,
+				'object'     => $object,
+				'avatar_dir' => $avatar_dir,
+			);
+
+			$action_hook = 'bp_members_avatar_uploaded';
+			if ( 'group' === $object ) {
+				$action_hook = 'groups_avatar_uploaded';
+			}
+
+			/** This action is documented in bp-core/bp-core-avatars.php */
+			do_action( $action_hook, $item_id, 'recycle', $r, $avatar_types );
+		} else {
+			$recycle_error = reset( $recycle_errors );
+
+			wp_send_json_error(
+				array(
+					'message' => join( "\n", $recycle_error ),
+				)
+			);
+		}
+	} else {
+		wp_send_json_error(
+			array(
+				'message' => join( "\n", $revision_errors ),
+			)
+		);
+	}
+
+	$return = array(
+		'avatar'        => esc_url(
+			bp_core_fetch_avatar(
+				array(
+					'object'  => $object,
+					'item_id' => $item_id,
+					'html'    => false,
+					'type'    => 'full',
+				)
+			)
+		),
+		'feedback_code' => 5,
+		'item_id'       => $item_id,
+	);
+
+	// Get the created revision object if it exists.
+	if ( $avatar_full_revision_path ) {
+		$history_dir     = dirname( $avatar_full_revision_path );
+		$avatars_history = bp_attachments_list_directory_files( $history_dir );
+		$latest_id       = pathinfo( wp_basename( $avatar_full_revision_path ), PATHINFO_FILENAME );
+
+		if ( isset( $avatars_history[ $latest_id ] ) ) {
+			$gmdate      = gmdate( 'Y-m-d H:i:s', $avatars_history[ $latest_id ]->last_modified );
+			$date        = strtotime( get_date_from_gmt( $gmdate ) );
+			$history_url = trailingslashit( bp_core_avatar_url() ) .  $avatar_dir . '/' . $item_id . '/history';
+
+			// Prepare the avatar object for JavaScript.
+			$avatars_history[ $latest_id ]->date = sprintf(
+				'%1$s (%2$s)',
+				date_i18n( get_option( 'date_format' ), $date ),
+				date_i18n( get_option( 'time_format' ), $date )
+			);
+			$avatars_history[ $latest_id ]->type = 'full';
+			$avatars_history[ $latest_id ]->url  = $history_url . '/' . $avatars_history[ $latest_id ]->name;
+
+			// Remove the path.
+			unset( $avatars_history[ $latest_id ]->path );
+
+			// Set the new object to add to the revision list.
+			$return['historicalAvatar'] = $avatars_history[ $latest_id ];
+		}
+	}
+
+	wp_send_json_success( $return );
+}
+add_action( 'wp_ajax_bp_avatar_recycle_previous', 'bp_avatar_ajax_recycle_previous_avatar' );
+
+/**
+ * Delete a previously uploaded avatar from avatars history.
+ *
+ * @since 10.0.0
+ */
+function bp_avatar_ajax_delete_previous_avatar() {
+	if ( ! bp_is_post_request() ) {
+		wp_send_json_error();
+	}
+
+	$avatar_data = bp_parse_args(
+		$_POST,
+		array(
+			'object'    => '',
+			'item_id'   => 0,
+			'avatar_id' => '',
+		)
+	);
+
+	if ( ! $avatar_data['object'] || ! $avatar_data['item_id'] || ! $avatar_data['avatar_id'] ) {
+		wp_send_json_error();
+	}
+
+	// Check the nonce.
+	check_admin_referer( 'bp_avatar_delete_previous', 'nonce' );
+
+	// Capability check.
+	if ( ! bp_attachments_current_user_can( 'edit_avatar', $avatar_data ) ) {
+		wp_send_json_error();
+	}
+
+	$object = sanitize_key( $avatar_data['object'] );
+	if ( 'user' === $object ) {
+		$avatar_dir = 'avatars';
+	} else {
+		$avatar_dir = $object . '-avatars';
+	}
+
+	$item_id     = (int) $avatar_data['item_id'];
+	$avatar_id   = sanitize_file_name( $avatar_data['avatar_id'] );
+	$suffix      = '-bpfull';
+	$history_dir = trailingslashit( bp_core_avatar_upload_path() ) . $avatar_dir . '/' . $item_id . '/history';
+	$avatars     = bp_attachments_list_directory_files( $history_dir );
+
+	if ( ! isset( $avatars[ $avatar_id ] ) ) {
+		wp_send_json_error(
+			array(
+				'message' => __( 'The profile photo you want to delete cannot be found.', 'buddypress' ),
+			)
+		);
+	}
+
+	$avatar_types = array(
+		'full'  => '',
+		'thumb' => '',
+	);
+
+	// Use the found previous avatar.
+	$avatar                = $avatars[ $avatar_id ];
+	$avatar_types['full']  = $avatar->path;
+	$avatar_types['thumb'] = str_replace( $suffix, '-bpthumb', $avatar->path );
+
+	// It's a legacy avatar, we need to find the thumb version using file last modified date.
+	if ( ! file_exists( $avatar_types['thumb'] ) ) {
+		$avatar_types['thumb']  = '';
+		$possible_thumb_avatars = wp_list_pluck( $avatars, 'last_modified', 'id' );
+
+		foreach ( $possible_thumb_avatars as $type_id => $modified_date ) {
+			$timediff = $avatar->last_modified - $modified_date;
+			if ( 1000 >= absint( $timediff ) && $avatar_id !== $type_id ) {
+				$avatar_types['thumb'] = $avatars[ $type_id ]->path;
+				break;
+			}
+		}
+	}
+
+	// Remove the files.
+	foreach ( $avatar_types as $avatar_path ) {
+		if ( ! $avatar_path ) {
+			continue;
+		}
+
+		@unlink( $avatar_path );
+	}
+
+	$timestamp = str_replace( '-bpfull', '', $avatar_id );
+	if ( ! is_numeric( $timestamp ) ) {
+		$timestamp = $avatar->last_modified;
+	}
+
+	/**
+	 * Hook here to run custom code once the previous avatar has been deleted.
+	 *
+	 * @since 10.0.0
+	 *
+	 * @param int $item_id   The object ID.
+	 * @param int $timestamp The avatar timestamp.
+	 */
+	do_action( "bp_previous_{$object}_avatar_deleted", $item_id, $timestamp );
+
+	// Finally inform about the deletion success.
+	wp_send_json_success(
+		array(
+			'feedback_code' => 6,
+		)
+	);
+}
+add_action( 'wp_ajax_bp_avatar_delete_previous', 'bp_avatar_ajax_delete_previous_avatar' );

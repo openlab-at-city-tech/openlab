@@ -3,7 +3,7 @@
  * BuddyPress Messages Thread Template Class.
  *
  * @package BuddyPress
- * @subpackage MessagesTemplate
+ * @subpackage MessagesClasses
  * @since 1.5.0
  */
 
@@ -84,7 +84,8 @@ class BP_Messages_Thread_Template {
 	 * @see BP_Messages_Thread::populate() for full parameter info.
 	 *
 	 * @param int    $thread_id ID of the message thread to display.
-	 * @param string $order     Order to show the thread's messages in.
+	 * @param string $order     Optional. Order to show the thread's messages in.
+	 *                          Default: 'ASC'.
 	 * @param array  $args      Array of arguments for the query.
 	 */
 	public function __construct( $thread_id = 0, $order = 'ASC', $args = array() ) {
@@ -100,17 +101,13 @@ class BP_Messages_Thread_Template {
 	 * @return bool True if there are items in the loop, otherwise false.
 	 */
 	public function has_messages() {
-		if ( ! empty( $this->message_count ) ) {
-			return true;
-		}
-
-		return false;
+		return ( ! empty( $this->message_count ) );
 	}
 
 	/**
-	 * Set up the next member and iterate index.
+	 * Set up the next message and iterate index.
 	 *
-	 * @return object The next member to iterate over.
+	 * @return BP_Messages_Message The next message to iterate over.
 	 */
 	public function next_message() {
 		$this->current_message++;

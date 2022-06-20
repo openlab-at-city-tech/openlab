@@ -26,7 +26,7 @@ if ( $current_doc ) {
 		<form action="" method="post" class="form-group form-panel" id="doc-form">
 
 			<div class="panel panel-default">
-				<div class="panel-heading">New Doc</div>
+				<div class="panel-heading"><?php echo ( $current_doc ) ? 'Edit Doc' : 'New Doc'; ?></div>
 				<div class="panel-body">
 
 					<?php do_action('template_notices') ?>
@@ -118,7 +118,7 @@ if ( $current_doc ) {
 								</div>
 							</div>
 
-							<?php if (bp_docs_current_user_can('manage')) : ?>
+							<?php if ( bp_docs_current_user_can( 'manage' ) && apply_filters( 'bp_docs_allow_access_settings', true ) ) : ?>
 								<div id="doc-settings" class="doc-meta-box">
 									<div class="toggleable <?php bp_docs_toggleable_open_or_closed_class( 'parent-meta-box' ) ?>">
 										<p id="settings-toggle-edit" class="toggle-switch">

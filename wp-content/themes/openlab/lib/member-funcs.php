@@ -397,15 +397,15 @@ function openlab_group_status_message( $group = null ) {
 				// this is the case, and the group is not
 				// public, don't mention anything about the Site.
 				if ( $private_group_has_disabled_requests ) {
-					$message = 'This ' . $group_label . ' is PRIVATE and membership is by invitation only.';
+					$message = 'private' === $group->status ? 'This ' . $group_label . ' is PRIVATE and membership is by invitation only.' : 'This ' . $group_label . ' is HIDDEN and membership is by invitation only.';
 				} else {
-					$message = 'This ' . $group_label . ' is PRIVATE.';
+					$message = 'private' === $group->status ? 'This ' . $group_label . ' is PRIVATE.' : 'This ' . $group_label . ' is HIDDEN';
 				}
 			} else {
 				if ( $private_group_has_disabled_requests ) {
-					$message = 'This ' . $group_label . ' Profile is PRIVATE and membership is by invitation only, but the ' . $group_label . ' Site is OPEN to all visitors.';
+					$message = 'private' === $group->status ? 'This ' . $group_label . ' Profile is PRIVATE and membership is by invitation only, but the ' . $group_label . ' Site is OPEN to all visitors.' : 'This ' . $group_label . ' Profile is HIDDEN and membership is by invitation only, but the ' . $group_label . ' Site is OPEN to all visitors.';
 				} else {
-					$message = 'This ' . $group_label . ' Profile is PRIVATE, but the ' . $group_label . ' Site is OPEN to all visitors.';
+					$message = 'private' === $group->status ? 'This ' . $group_label . ' Profile is PRIVATE, but the ' . $group_label . ' Site is OPEN to all visitors.' : 'This ' . $group_label . ' Profile is HIDDEN, but the ' . $group_label . ' Site is OPEN to all visitors.';
 				}
 			}
 
@@ -420,9 +420,9 @@ function openlab_group_status_message( $group = null ) {
 				}
 			} else {
 				if ( $private_group_has_disabled_requests ) {
-					$message = 'This ' . $group_label . ' Profile is PRIVATE and is by invitation only, but all logged-in OpenLab members may view the ' . $group_label . ' Site.';
+					$message = 'private' === $group->status ? 'This ' . $group_label . ' Profile is PRIVATE and is by invitation only, but all logged-in OpenLab members may view the ' . $group_label . ' Site.' : 'This ' . $group_label . ' Profile is HIDDEN and is by invitation only, but all logged-in OpenLab members may view the ' . $group_label . ' Site.';
 				} else {
-					$message = 'This ' . $group_label . ' Profile is PRIVATE, but all logged-in OpenLab members may view the ' . $group_label . ' Site.';
+					$message = 'private' === $group->status ? 'This ' . $group_label . ' Profile is PRIVATE, but all logged-in OpenLab members may view the ' . $group_label . ' Site.' : 'This ' . $group_label . ' Profile is HIDDEN, but all logged-in OpenLab members may view the ' . $group_label . ' Site.';
 				}
 			}
 
@@ -437,9 +437,9 @@ function openlab_group_status_message( $group = null ) {
 				}
 			} else {
 				if ( $private_group_has_disabled_requests ) {
-					$message = 'This ' . $group_label . ' is PRIVATE and membership is by invitation only. You must be a member of the ' . $group_label . ' to view the ' . $group_label . ' Site.';
+					$message = 'private' === $group->status ? 'This ' . $group_label . ' is PRIVATE and membership is by invitation only. You must be a member of the ' . $group_label . ' to view the ' . $group_label . ' Site.' : 'This ' . $group_label . ' is HIDDEN and membership is by invitation only. You must be a member of the ' . $group_label . ' to view the ' . $group_label . ' Site.';
 				} else {
-					$message = 'This ' . $group_label . ' is PRIVATE. You must be a member of the ' . $group_label . ' to view the ' . $group_label . ' Site.';
+					$message = 'private' === $group->status ? 'This ' . $group_label . ' is PRIVATE. You must be a member of the ' . $group_label . ' to view the ' . $group_label . ' Site.' : 'This ' . $group_label . ' is HIDDEN. You must be a member of the ' . $group_label . ' to view the ' . $group_label . ' Site.';
 				}
 			}
 
@@ -454,9 +454,9 @@ function openlab_group_status_message( $group = null ) {
 				}
 			} else {
 				if ( $private_group_has_disabled_requests ) {
-					$message = 'This ' . $group_label . ' is PRIVATE and membership is by invitation only. You must be an administrator to view the ' . $group_label . ' Site.';
+					$message = 'private' === $group->status ? 'This ' . $group_label . ' is PRIVATE and membership is by invitation only. You must be an administrator to view the ' . $group_label . ' Site.' : 'This ' . $group_label . ' is HIDDEN and membership is by invitation only. You must be an administrator to view the ' . $group_label . ' Site.';
 				} else {
-					$message = 'This ' . $group_label . ' is PRIVATE. You must be an administrator to view the ' . $group_label . ' Site.';
+					$message = 'private' === $group->status ? 'This ' . $group_label . ' is PRIVATE. You must be an administrator to view the ' . $group_label . ' Site.' : 'This ' . $group_label . ' is HIDDEN. You must be an administrator to view the ' . $group_label . ' Site.';
 				}
 			}
 
@@ -1342,7 +1342,7 @@ function openlab_load_my_activity() {
 
 /**
  * Construct the array of arguments for the activities loop.
- * 
+ *
  */
 function openlab_activities_loop_args( $activity_type = '', $filter = '' ) {
     $args['count_total'] = true;
@@ -1350,7 +1350,7 @@ function openlab_activities_loop_args( $activity_type = '', $filter = '' ) {
 	if( ! empty( $filter ) ) {
 		$args['action'] = $filter;
 	}
-    
+
     switch( $activity_type ) {
         case 'mine':
             $args += [
@@ -1363,16 +1363,16 @@ function openlab_activities_loop_args( $activity_type = '', $filter = '' ) {
                     'user_id' => bp_loggedin_user_id(),
                 ]
             );
-    
+
             $group_ids = '';
-    
+
             if( $favorites ) {
                 $group_ids = [];
                 foreach( $favorites as $favorite ) {
                     array_push( $group_ids, $favorite->get_group_id() );
                 }
             }
-    
+
             $args += [
                 'filter_query'	=> [
                     'relation'	=> 'AND',
@@ -1387,7 +1387,7 @@ function openlab_activities_loop_args( $activity_type = '', $filter = '' ) {
                     ],
                 ],
             ];
-            
+
             break;
         case 'mentions':
             $args += [
@@ -1410,7 +1410,7 @@ function openlab_activities_loop_args( $activity_type = '', $filter = '' ) {
 
 /**
  * User's activity stream pagination.
- * 
+ *
  */
 function openlab_activities_pagination_links() {
     global $activities_template;
@@ -1437,7 +1437,7 @@ function openlab_activities_pagination_links() {
 
 /**
  * Get group id based on the activity id
- * 
+ *
  */
 function openlab_get_group_id_by_activity_id( $activity_id ) {
     if( ! empty( $activity_id ) ) {
@@ -1457,9 +1457,9 @@ function openlab_get_group_id_by_activity_id( $activity_id ) {
 }
 
 /**
- * Change the date format in the activity text displayed on 
+ * Change the date format in the activity text displayed on
  * the "My Activity" page.
- * 
+ *
  */
 function openlab_change_activity_date_format() {
 	$activity_date = bp_get_activity_date_recorded();
@@ -1468,7 +1468,7 @@ function openlab_change_activity_date_format() {
 
 /**
  * Ajax fav/unfav activity item
- * 
+ *
  */
 add_action( 'wp_ajax_openlab_fav_activity', 'openlab_fav_activity' );
 function openlab_fav_activity() {
@@ -1518,15 +1518,152 @@ function openlab_fav_activity() {
 
 /**
  * Change the date format of the member joined since text
- * 
+ *
  */
-function openlab_member_joined_since() {	
+function openlab_member_joined_since() {
 	global $members_template;
 
 	return printf(
 		__( 'joined %s', 'buddypress' ),
 		date( 'F j, Y', strtotime( $members_template->member->date_modified ) )
 	);
+}
+
+/**
+ * Modify the output of the activity items in the "My Activity" page
+ *
+ */
+function openlab_get_user_activity_action( $activity = null ) {
+	global $activities_template;
+
+	if ( null === $activity ) {
+		$activity = $activities_template->activity;
+	}
+
+	// Get activity body content
+	$output = $activity->action;
+
+	// Add "commented on the post [title] on comment activity type
+	if( $activity->type === 'new_blog_comment' ) {
+		$output = str_replace( 'commented on', 'commented on the post', $output );
+	}
+
+	// Modify activity date format, remove link and add "on" before the date
+	$output .= ' on ' . date('F n, Y \a\t g:i a', strtotime( $activity->date_recorded ) );
+	$output = wpautop( $output );
+
+	// Activity view button
+	$view_button_label = openlab_get_activity_view_button_label( $activity->type );
+	$view_button_link = openlab_get_activity_button_link( $activity );
+
+	// Append activity view button
+	if( $view_button_label ) {
+		$output .= '<a href="' . $view_button_link . '" class="btn btn-primary">' . $view_button_label . '</a>';
+	}
+
+	return $output;
+}
+
+/**
+ * Create button label based on the activity type
+ *
+ */
+function openlab_get_activity_view_button_label( $activity_type = '' ) {
+	$labels = array(
+		'edited_group_document' => 'File',
+		'added_group_document'  => 'File',
+		'bp_doc_created'        => 'Doc',
+		'bp_doc_edited'	        => 'Doc',
+		'new_blog_comment'      => 'Reply',
+		'bbp_reply_create'      => 'Reply',
+	);
+
+	if( $labels[$activity_type] ) {
+		$label = 'View ' . $labels[$activity_type];
+		return $label;
+	}
+
+	return;
+}
+
+/**
+ * Get link for the button, based on the activity
+ *
+ */
+function openlab_get_activity_button_link( $activity ) {
+	global $activities_template;
+
+	if( null === $activity ) {
+		$activity = $activities_template->activity;
+	}
+
+	switch( $activity->type ) {
+		case 'edited_group_document':
+		case 'added_group_document':
+			$document = new BP_Group_Documents( (string)$activity->secondary_item_id );
+			return $document->get_url( false );
+		case 'bp_doc_created':
+		case 'bp_doc_edited':
+			return $activity->primary_link;
+		case 'default':
+			return $activity->primary_link;
+	}
+
+	return $activity->primary_link;
+}
+
+/**
+ * Check if the membership for the specified group is private
+ * for the logged user.
+ *
+ */
+function openlab_is_my_membership_private( $group_id ) {
+	// Skip if group id is missing
+	if ( empty( $group_id ) ) {
+		return false;
+	}
+
+	global $wpdb;
+
+	// Get private membership table
+	$table_name = $wpdb->prefix . 'private_membership';
+
+	// Get current user id
+	$user_id = bp_loggedin_user_id();
+
+	// Check if the membership is private based on user id and group id
+	$query = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $table_name WHERE `user_id` = %d AND `group_id` = %d", $user_id, $group_id ) );
+
+	// If there is a record, return true. Otherwise, return false
+	if ( $query ) {
+		return true;
+	}
+
+	return false;
+}
+
+/**
+ * Get user private membership group
+ */
+function openlab_get_user_private_membership( $user_id ) {
+	// Skip if user id is missing
+	if ( empty( $user_id ) ) {
+		return;
+	}
+
+	global $wpdb;
+	$table_name = $wpdb->prefix . 'private_membership';
+	$query = $wpdb->get_results( $wpdb->prepare( "SELECT `group_id` FROM $table_name WHERE `user_id` = %d", $user_id ), OBJECT_K );
+
+	$private_groups = array();
+
+	if ( $query ) {
+		foreach ( $query as $item ) {
+			$private_groups[] = (int) $item->group_id;
+		}
+	}
+
+	return $private_groups;
 }
 
 /**
@@ -1545,8 +1682,11 @@ function openlab_update_member_group_privacy() {
 
 	// Check if group id is provded in the request
 	if( ! isset( $_POST['group_id'] ) ) {
-		wp_send_json_error( 'Group ID is missing.' );
-		wp_die();
+		echo json_encode( array(
+			'success'	=> false,
+			'message'	=> 'Group ID is missing.'
+		) );
+		die();
 	}
 
 	$group_id = $_POST['group_id'];
@@ -1554,71 +1694,25 @@ function openlab_update_member_group_privacy() {
 
 	if( $is_private ) {
 		if( $wpdb->insert( $table_name, array( 'user_id' => $user_id, 'group_id' => $group_id ) ) ) {
-			wp_send_json_success( 'User membership set to private.' );
-			wp_die();
+			echo json_encode( array(
+				'success'	=> true,
+				'message'	=> 'User membership is set to private'
+			) );
+			die();
 		}
 	} else {
 		if( $wpdb->delete( $table_name, array( 'user_id' => $user_id, 'group_id' => $group_id ) ) ) {
-			wp_send_json_success( 'User membership set to public.' );
-			wp_die();
+			echo json_encode( array(
+				'success'	=> true,
+				'message'	=> 'User membership is set to public.'
+			) );
+			die();
 		}
 	}
 
-	wp_send_json_error( 'Something went wrong.' );
-	wp_die();
-}
-
-/**
- * Check if the membership for the specified group is private
- * for the logged user.
- * 
- */
-function openlab_is_my_membership_private( $group_id ) {
-	// Skip if group id is missing
-	if( empty( $group_id ) ) {
-		return false;
-	}
-
-	global $wpdb;
-
-	// Get private membership table
-	$table_name = $wpdb->prefix . 'private_membership';
-	
-	// Get current user id
-	$user_id = bp_loggedin_user_id();
-
-	// Check if the membership is private based on user id and group id
-	$query = $wpdb->get_results( "SELECT * FROM $table_name WHERE `user_id` = $user_id AND `group_id` = $group_id" );
-
-	// If there is a record, return true. Otherwise, return false
-	if( $query ) {
-		return true;
-	}
-
-	return false;
-}
-
-/**
- * Get user private membership group
- *  
- */
-function openlab_get_user_private_membership( $user_id ) {
-	// Skip if user id is missing
-	if( empty( $user_id ) ) {
-		return;
-	}
-
-	global $wpdb;
-	$table_name = $wpdb->prefix . 'private_membership';
-	$query = $wpdb->get_results( "SELECT `group_id` FROM $table_name WHERE `user_id` = $user_id", OBJECT_K);
-
-	$private_groups = array();
-
-	if( $query ) {
-		foreach( $query as $item ) {
-			$private_groups[] = (int)$item->group_id;
-		}
-	}
-
-	return $private_groups;
+	echo json_encode( array(
+		'success'	=> false,
+		'message'	=> 'Something went wrong'
+	) );
+	die();
 }

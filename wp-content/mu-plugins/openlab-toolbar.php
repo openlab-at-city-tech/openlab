@@ -559,6 +559,18 @@ HTML;
 
 		$wp_admin_bar->add_node(
 			array(
+				'parent'	=> 'my-openlab',
+				'id'		=> 'my-activity',
+				'title'		=> 'My Activity',
+				'href'		=> trailingslashit( bp_loggedin_user_domain() . 'my-activity' ),
+				'meta'		=> array(
+					'class'	=> 'admin-bar-menu-item mobile-no-hover'
+				)
+			)
+		);
+
+		$wp_admin_bar->add_node(
+			array(
 				'parent' => 'my-openlab',
 				'id'     => 'my-settings',
 				'title'  => 'My Settings',
