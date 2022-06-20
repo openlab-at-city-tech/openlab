@@ -444,7 +444,10 @@ $portfolio_sharing = groups_get_groupmeta( bp_get_current_group_id(), 'enable_po
 			<div class="bp-widget">
 				<h4><?php _e( 'Members', 'buddypress' ); ?></h4>
 
-				<?php if ( bp_group_has_members( 'per_page=15&exclude_banned=0' ) ) : ?>
+				<?php if ( bp_group_has_members( 'per_page=15&exclude_banned=0' ) ) : 
+					// Get private users of the group
+					$private_users = openlab_get_group_private_users( bp_get_group_id() );	
+				?>
 
 					<?php if ( bp_group_member_needs_pagination() ) : ?>
 
@@ -512,6 +515,10 @@ $portfolio_sharing = groups_get_groupmeta( bp_get_current_group_id(), 'enable_po
 											</ul>
 
 											<?php do_action( 'bp_group_manage_members_admin_item' ); ?>
+											
+											<?php if( in_array( bp_get_member_user_id(), $private_users, true ) ) { ?>
+											<p class="private-membership-indicator"><span class="fa fa-eye-slash"></span> Membership hidden</p>
+											<?php } ?>
 										</div>
 									</div>
 								</div>
