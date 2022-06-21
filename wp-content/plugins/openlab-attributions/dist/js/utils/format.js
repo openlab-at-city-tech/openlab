@@ -42,11 +42,11 @@ function formatLicense( value ) {
 			break;
 
 		case 'u':
-			text = 'License unknown.';
+			text = 'License unknown';
 			break;
 
 		default:
-			text = `Licensed under ${ format( license.label, license.url ) }.`;
+			text = `Licensed under ${ format( license.label, license.url ) }`;
 			break;
 	}
 
@@ -134,7 +134,7 @@ export function formatAttribution( data ) {
 	let attribution = parts.join( '. ' );
 
 	if ( data.adaptedTitle || data.derivative ) {
-		const separator = parts.length > 0 ? ' / ' : '';
+		const separator = parts.length > 0 ? '. ' : '';
 		attribution += `${ separator }${ formatAdaptedFrom( data ) }`;
 	}
 

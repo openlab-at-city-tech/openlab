@@ -132,7 +132,7 @@ add_action( 'bp_ges_add_to_digest_queue_for_user', 'openlab_docs_activity_notifi
  * Adds a Delete link to the "action links" in the doc loop.
  */
 function openlab_add_delete_to_bp_docs_doc_action_links( $links, $doc_id ) {
-	if ( current_user_can( 'manage', $doc_id ) && ! bp_docs_is_doc_trashed( $doc_id ) ) {
+	if ( current_user_can( 'bp_docs_manage', $doc_id ) && ! bp_docs_is_doc_trashed( $doc_id ) ) {
 		$links[] = '<a href="' . bp_docs_get_delete_doc_link( false ) . '" class="delete confirm">' . __( 'Delete', 'buddypress-docs' ) . '</a>';
 	}
 
@@ -145,4 +145,46 @@ add_filter( 'bp_docs_doc_action_links', 'openlab_add_delete_to_bp_docs_doc_actio
  *
  * Instead, we have a Search filter in the theme.
  */
-add_filter( 'bp_docs_filter_types', '__return_empty_array', 999 );
+add_filter(
+	'bp_docs_filter_types',
+	function( $types ) {
+		// We only return an empty aray when getting filter titles.
+		$dbs              = debug_backtrace();
+		$is_filter_titles = false;
+		foreach ( $dbs as $db ) {
+			if ( ! empty( $db['function'] ) && 'bp_docs_filter_titles' === $db['function'] ) {
+				$is_filter_titles = true;
+				break;
+			}
+		}
+
+		if ( $is_filter_titles ) {
+			return [];
+		}
+
+		return array_filter(
+			$types,
+			function( $type ) {
+				return 'search' === $type['slug'];
+			}
+		);
+	},
+	999
+);
+
+/**
+ * Don't show openlab-private-comments or wp-grade-comments Private checkbox on Docs comments.
+ */
+add_action(
+	'comment_form_logged_in_after',
+	function() {
+		if ( ! bp_docs_get_current_doc() ) {
+			return;
+		}
+
+		remove_action( 'comment_form_logged_in_after', 'OpenLab\\PrivateComments\\render_checkbox' );
+		remove_action( 'comment_form_logged_in_after', 'olgc_leave_comment_checkboxes' );
+
+	},
+	5
+);

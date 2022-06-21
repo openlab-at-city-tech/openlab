@@ -25,7 +25,7 @@ global $bp, $wp_query;
                     <div class="row">
                         <div class="submenu col-sm-17">
                             <ul class="nav nav-inline">
-                                <li class="current-menu-item"><a href=""><?php _e('Files', 'bp-group-documents'); ?></a></li>
+                                <li class="current-menu-item"><a href="">File Library</a></li>
                             </ul>
                         </div>
                     </div>
@@ -33,6 +33,12 @@ global $bp, $wp_query;
                 <?php elseif ($bp->current_component === 'events' || $bp->current_action === 'events'): ?>
 
                     <?php //do nothing - event sub nav is handled via template override in buddypress/groups/single/subnav-events.php ?>
+
+				<?php elseif ( bp_is_current_action( 'announcements' ) ) : ?>
+
+					<ul class="nav nav-inline">
+						<li class="current-menu-item">Announcements</li>
+					</ul>
 
                 <?php else: ?>
 

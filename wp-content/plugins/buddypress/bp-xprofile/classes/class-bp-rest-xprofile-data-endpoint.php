@@ -70,12 +70,10 @@ class BP_REST_XProfile_Data_Endpoint extends WP_REST_Controller {
 					'permission_callback' => array( $this, 'update_item_permissions_check' ),
 					'args'                => array(
 						'value' => array(
-							'description' => __( 'The value(s) for the field data.', 'buddypress' ),
-							'required'    => true,
-							'type'        => 'array',
-							'items'       => array(
-								'type' => 'string',
-							),
+							'description'       => __( 'The value(s) (comma separated list of values needs to be used in case of multiple values) for the field data.', 'buddypress' ),
+							'required'          => true,
+							'type'              => 'string',
+							'validate_callback' => 'rest_validate_request_arg',
 						),
 					),
 				),
@@ -214,9 +212,9 @@ class BP_REST_XProfile_Data_Endpoint extends WP_REST_Controller {
 		 * For field types not supporting multiple values, join values in case
 		 * the submitted value was not an array.
 		 */
-		if ( ! $field->type_obj->supports_multiple_defaults ) {
+		if ( false === (bool) $field->type_obj->supports_multiple_defaults ) {
 			$value = implode( ' ', (array) $value );
-		} else {
+		} elseif ( ! empty( $value ) && is_string( $value ) ) {
 			$value = preg_split( '/[,]+/', $value );
 		}
 
@@ -230,10 +228,10 @@ class BP_REST_XProfile_Data_Endpoint extends WP_REST_Controller {
 			);
 		}
 
-		// Get Field data.
+		// Get field data.
 		$field_data = $this->get_xprofile_field_data_object( $field->id, $user->ID );
 
-		// Create Additional fields.
+		// Add additional fields.
 		$fields_update = $this->update_additional_fields_for_object( $field_data, $request );
 
 		if ( is_wp_error( $fields_update ) ) {
@@ -255,9 +253,9 @@ class BP_REST_XProfile_Data_Endpoint extends WP_REST_Controller {
 		 *
 		 * @param BP_XProfile_Field       $field      The field object.
 		 * @param BP_XProfile_ProfileData $field_data The field data object.
-		 * @param WP_User                 $user      The user object.
-		 * @param WP_REST_Response        $response  The response data.
-		 * @param WP_REST_Request         $request   The request sent to the API.
+		 * @param WP_User                 $user       The user object.
+		 * @param WP_REST_Response        $response   The response data.
+		 * @param WP_REST_Request         $request    The request sent to the API.
 		 */
 		do_action( 'bp_rest_xprofile_data_save_item', $field, $field_data, $user, $response, $request );
 
@@ -375,10 +373,10 @@ class BP_REST_XProfile_Data_Endpoint extends WP_REST_Controller {
 		 * @since 5.0.0
 		 *
 		 * @param BP_XProfile_Field       $field       Deleted field object.
-		 * @param BP_XProfile_ProfileData  $field_data  Deleted field data object.
-		 * @param WP_User                $user       User object.
-		 * @param WP_REST_Response       $response   The response data.
-		 * @param WP_REST_Request        $request    The request sent to the API.
+		 * @param BP_XProfile_ProfileData $field_data  Deleted field data object.
+		 * @param WP_User                 $user        User object.
+		 * @param WP_REST_Response        $response    The response data.
+		 * @param WP_REST_Request         $request     The request sent to the API.
 		 */
 		do_action( 'bp_rest_xprofile_data_delete_item', $field, $field_data, $user, $response, $request );
 
@@ -413,20 +411,21 @@ class BP_REST_XProfile_Data_Endpoint extends WP_REST_Controller {
 	 * @since 5.0.0
 	 *
 	 * @param  BP_XProfile_ProfileData $field_data XProfile field data object.
-	 * @param  WP_REST_Request         $request   Full data about the request.
+	 * @param  WP_REST_Request         $request    Full data about the request.
 	 * @return WP_REST_Response
 	 */
 	public function prepare_item_for_response( $field_data, $request ) {
 		$data = array(
-			'id'           => $field_data->id,
-			'field_id'     => $field_data->field_id,
-			'user_id'      => $field_data->user_id,
-			'value'        => array(
+			'id'               => (int) $field_data->id,
+			'field_id'         => (int) $field_data->field_id,
+			'user_id'          => (int) $field_data->user_id,
+			'last_updated'     => bp_rest_prepare_date_response( $field_data->last_updated, get_date_from_gmt( $field_data->last_updated ) ),
+			'last_updated_gmt' => bp_rest_prepare_date_response( $field_data->last_updated ),
+			'value'            => array(
 				'raw'          => $field_data->value,
 				'unserialized' => $this->fields_endpoint->get_profile_field_unserialized_value( $field_data->value ),
 				'rendered'     => $this->fields_endpoint->get_profile_field_rendered_value( $field_data->value, $field_data->field_id ),
 			),
-			'last_updated' => bp_rest_prepare_date_response( $field_data->last_updated ),
 		);
 
 		$context  = ! empty( $request->get_param( 'context' ) ) ? $request->get_param( 'context' ) : 'view';
@@ -434,6 +433,7 @@ class BP_REST_XProfile_Data_Endpoint extends WP_REST_Controller {
 		$data     = $this->filter_response_by_context( $data, $context );
 		$response = rest_ensure_response( $data );
 
+		// Add prepare links.
 		$response->add_links( $this->prepare_links( $field_data ) );
 
 		/**
@@ -441,8 +441,8 @@ class BP_REST_XProfile_Data_Endpoint extends WP_REST_Controller {
 		 *
 		 * @since 5.0.0
 		 *
-		 * @param WP_REST_Response      $response  The response data.
-		 * @param WP_REST_Request       $request   Request used to generate the response.
+		 * @param WP_REST_Response        $response   The response data.
+		 * @param WP_REST_Request         $request    Request used to generate the response.
 		 * @param BP_XProfile_ProfileData $field_data XProfile field data object.
 		 */
 		return apply_filters( 'bp_rest_xprofile_data_prepare_value', $response, $request, $field_data );
@@ -464,11 +464,14 @@ class BP_REST_XProfile_Data_Endpoint extends WP_REST_Controller {
 			'self' => array(
 				'href' => rest_url( $base . $field_data->field_id ),
 			),
-			'user' => array(
+		);
+
+		if ( ! empty( $field_data->user_id ) ) {
+			$links['user'] = array(
 				'href'       => bp_rest_get_object_url( $field_data->user_id, 'members' ),
 				'embeddable' => true,
-			),
-		);
+			);
+		}
 
 		/**
 		 * Filter links prepared for the REST response.
@@ -532,25 +535,25 @@ class BP_REST_XProfile_Data_Endpoint extends WP_REST_Controller {
 				'title'      => 'bp_xprofile_data',
 				'type'       => 'object',
 				'properties' => array(
-					'id'           => array(
+					'id'               => array(
 						'context'     => array( 'view', 'edit' ),
 						'description' => __( 'A unique numeric ID for the profile data.', 'buddypress' ),
 						'readonly'    => true,
 						'type'        => 'integer',
 					),
-					'field_id'     => array(
+					'field_id'         => array(
 						'context'     => array( 'view', 'edit' ),
 						'description' => __( 'The ID of the field the data is from.', 'buddypress' ),
 						'readonly'    => true,
 						'type'        => 'integer',
 					),
-					'user_id'      => array(
+					'user_id'          => array(
 						'context'     => array( 'view', 'edit' ),
 						'description' => __( 'The ID of the user the field data is from.', 'buddypress' ),
 						'readonly'    => true,
 						'type'        => 'integer',
 					),
-					'value'        => array(
+					'value'            => array(
 						'context'     => array( 'view', 'edit' ),
 						'description' => __( 'The value of the field data.', 'buddypress' ),
 						'type'        => 'object',
@@ -581,10 +584,18 @@ class BP_REST_XProfile_Data_Endpoint extends WP_REST_Controller {
 							),
 						),
 					),
-					'last_updated' => array(
+					'last_updated'     => array(
 						'context'     => array( 'view', 'edit' ),
 						'description' => __( 'The date the field data was last updated, in the site\'s timezone.', 'buddypress' ),
-						'type'        => 'string',
+						'readonly'    => true,
+						'type'        => array( 'string', 'null' ),
+						'format'      => 'date-time',
+					),
+					'last_updated_gmt' => array(
+						'context'     => array( 'view', 'edit' ),
+						'description' => __( 'The date the field data was last updated, as GMT.', 'buddypress' ),
+						'readonly'    => true,
+						'type'        => array( 'string', 'null' ),
 						'format'      => 'date-time',
 					),
 				),

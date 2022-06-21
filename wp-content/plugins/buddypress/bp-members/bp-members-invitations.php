@@ -69,19 +69,17 @@ add_action( 'bp_setup_nav', 'bp_members_invitations_setup_nav' );
  *
  * @since 8.0.0
  *
- * @param bool   $send           Whether or not to send the activation key.
- * @param int    $user_id        User ID to send activation key to.
- * @param string $user_email     User email to send activation key to.
- * @param string $activation_key Activation key to be sent.
- * @param array  $usermeta       Miscellaneous metadata about the user (blog-specific
- *                               signup data, xprofile data, etc).
+ * @param bool   $send       Whether or not to send the activation key.
+ * @param int    $user_id    User ID to send activation key to.
+ * @param string $user_email User email to send activation key to.
+ *
  * @return bool Whether or not to send the activation key.
  */
-function bp_members_invitations_cancel_activation_email( $send, $user_id = 0, $user_email = '', $activation_key = '', $usermeta = array() ) {
+function bp_members_invitations_cancel_activation_email( $send, $user_id = 0, $user_email = '' ) {
 	$invite = bp_members_invitations_get_invites(
 		array(
 			'invitee_email' => $user_email,
-			'invite_sent'   => 'sent'
+			'invite_sent'   => 'sent',
 		)
 	);
 
@@ -91,7 +89,7 @@ function bp_members_invitations_cancel_activation_email( $send, $user_id = 0, $u
 
 	return $send;
 }
-add_filter( 'bp_core_signup_send_activation_key', 'bp_members_invitations_cancel_activation_email', 10, 5 );
+add_filter( 'bp_core_signup_send_activation_key', 'bp_members_invitations_cancel_activation_email', 10, 3 );
 
 /**
  * When a user joins the network via an invitation:
@@ -100,12 +98,13 @@ add_filter( 'bp_core_signup_send_activation_key', 'bp_members_invitations_cancel
  *
  * @since 8.0.0
  *
- * @param bool|WP_Error   $user_id       True on success, WP_Error on failure.
- * @param string          $user_login    Login name requested by the user.
- * @param string          $user_password Password requested by the user.
- * @param string          $user_email    Email address requested by the user.
+ * @global BuddyPress $bp The one true BuddyPress instance.
+ *
+ * @param bool|WP_Error $user_id True on success, WP_Error on failure.
  */
-function bp_members_invitations_complete_signup( $user_id, $user_login = '', $user_password = '', $user_email = '' ) {
+function bp_members_invitations_complete_signup( $user_id ) {
+	$bp = buddypress();
+
 	if ( ! $user_id ) {
 		return;
 	}
@@ -126,6 +125,8 @@ function bp_members_invitations_complete_signup( $user_id, $user_login = '', $us
 	// User has already verified their email by responding to the invitation, so we can activate.
 	$key = bp_get_user_meta( $user_id, 'activation_key', true );
 	if ( $key ) {
+		$redirect = bp_get_activation_page();
+
 		/**
 		 * Filters the activation signup.
 		 *
@@ -138,15 +139,34 @@ function bp_members_invitations_complete_signup( $user_id, $user_login = '', $us
 
 		// If there were errors, add a message and redirect.
 		if ( ! empty( $user->errors ) ) {
+			/**
+			 * Filter here to redirect the User to a different URL than the activation page.
+			 *
+			 * @since 10.0.0
+			 *
+			 * @param string   $redirect The URL to use to redirect the user.
+			 * @param WP_Error $user     The WP Error object.
+			 */
+			$redirect = apply_filters( 'bp_members_invitations_activation_errored_redirect', $redirect, $user );
+
 			bp_core_add_message( $user->get_error_message(), 'error' );
-			bp_core_redirect( trailingslashit( bp_get_root_domain() . '/' . $bp->pages->activate->slug ) );
+			bp_core_redirect( $redirect );
 		}
 
+		/**
+		 * Filter here to redirect the User to a different URL than the activation page.
+		 *
+		 * @since 10.0.0
+		 *
+		 * @param string $redirect The URL to use to redirect the user.
+		 */
+		$redirect = apply_filters( 'bp_members_invitations_activation_successed_redirect', $redirect );
+
 		bp_core_add_message( __( 'Your account is now active!', 'buddypress' ) );
-		bp_core_redirect( add_query_arg( 'activated', '1', bp_get_activation_page() ) );
+		bp_core_redirect( add_query_arg( 'activated', '1', $redirect ) );
 	}
 }
-add_action( 'bp_core_signup_user', 'bp_members_invitations_complete_signup', 10, 4 );
+add_action( 'bp_core_signup_user', 'bp_members_invitations_complete_signup' );
 
 /**
  * Delete site membership invitations when an opt-out request is saved.
@@ -156,10 +176,49 @@ add_action( 'bp_core_signup_user', 'bp_members_invitations_complete_signup', 10,
  * @param BP_Optout $optout Characteristics of the opt-out just saved.
  */
 function bp_members_invitations_delete_optedout_invites( $optout ) {
-
-	$args = array(
-		'invitee_email' => $optout->email_address,
+	bp_members_invitations_delete_invites(
+		array(
+			'invitee_email' => $optout->email_address,
+		)
 	);
-	bp_members_invitations_delete_invites( $args );
 }
 add_action( 'bp_optout_after_save', 'bp_members_invitations_delete_optedout_invites' );
+
+/**
+ * If a user submits a site membership request, but there's a
+ * sent invitation to her, bypass the manual approval of the request.
+ *
+ * @since 10.0.0
+ *
+ * @param bool  $send    Whether or not this membership request should be approved
+ *                       immediately and the activation email sent.
+ *                       Default is `false` meaning that the request should be
+ *                       manually approved by a site admin.
+ * @param array $details The details of the request.
+ */
+function bp_members_invitations_maybe_bypass_request_approval( $send, $details ) {
+	if ( ! bp_get_members_invitations_allowed() ) {
+		return $send;
+	}
+
+	// We'll need the prospective user's email address.
+	if ( empty( $details['user_email'] ) ) {
+		return $send;
+	}
+
+	$invites = bp_members_invitations_get_invites(
+		array(
+			'invitee_email' => $details['user_email'],
+			'invite_sent'   => 'sent'
+		)
+	);
+
+	// If pending invitations exist, send the verification mail.
+	if ( $invites ) {
+		$send = true;
+	}
+
+	return $send;
+}
+add_filter( 'bp_members_membership_requests_bypass_manual_approval', 'bp_members_invitations_maybe_bypass_request_approval', 10, 2 );
+add_filter( 'bp_members_membership_requests_bypass_manual_approval_multisite', 'bp_members_invitations_maybe_bypass_request_approval', 10, 2 );

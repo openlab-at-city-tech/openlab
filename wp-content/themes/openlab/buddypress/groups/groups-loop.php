@@ -10,6 +10,8 @@ $group_args = array(
 	'type'         => $group_sort,
 );
 
+$user_id = bp_displayed_user_id();
+
 $filters = array();
 if ( bp_is_user_groups() ) {
 	if ( isset( $_GET['type'] ) && in_array( $_GET['type'], openlab_group_types(), true ) ) {
@@ -18,7 +20,7 @@ if ( bp_is_user_groups() ) {
 		$group_type = 'course';
 	}
 
-	$group_args['user_id'] = bp_displayed_user_id();
+	$group_args['user_id'] = $user_id;
 } elseif ( openlab_is_search_results_page() ) {
 	$group_type = openlab_get_current_filter( 'group-types' );
 	if ( ! $group_type ) {
@@ -143,6 +145,28 @@ if ( $descendant_of ) {
 	);
 }
 
+$ancestor_of = openlab_get_current_filter( 'ancestor-of' );
+if ( $ancestor_of ) {
+	$ancestor_of_group = groups_get_group( $ancestor_of );
+
+	$ancestor_of_admin_ids   = openlab_get_all_group_contact_ids( $ancestor_of );
+	$ancestor_of_admin_links = array_map( 'bp_core_get_userlink', $ancestor_of_admin_ids );
+
+	$ancestor_of_string = sprintf(
+		'Displaying ancestors of <a href="%s">%s</a> by %s.',
+		esc_attr( bp_get_group_permalink( $ancestor_of_group ) ),
+		esc_html( $ancestor_of_group->name ),
+		implode( ', ', $ancestor_of_admin_links )
+	);
+}
+
+// Get private groups of the user
+$private_groups = openlab_get_user_private_membership( $user_id );
+
+// Exclude private groups if not current user's profile or don't have moderate access.
+if( ! bp_is_my_profile() && ! current_user_can( 'bp_moderate' ) ) {
+	$group_args['exclude'] = $private_groups;
+}
 ?>
 
 <?php if ( bp_has_groups( $group_args ) ) : ?>
@@ -156,6 +180,8 @@ if ( $descendant_of ) {
 				Narrow down your results using the search filters.
 			<?php elseif ( $descendant_of ) : ?>
 				<?php echo $descendant_of_string; ?>
+			<?php elseif ( $ancestor_of ) : ?>
+				<?php echo $ancestor_of_string; ?>
 			<?php else : ?>
 				Use the search and filters to find a <?php echo esc_html( ucwords( $group_type ) ); ?>.
 			<?php endif; ?>
@@ -245,6 +271,10 @@ if ( $descendant_of ) {
 							<div class="description-line">
 								<p class="truncate-on-the-fly" data-basevalue="105" data-basewidth="250"><?php echo bp_get_group_description_excerpt() ?></p>
 							</div>
+
+							<?php if( current_user_can( 'bp_moderate' ) && in_array( $group_id, $private_groups, true ) ) { ?>
+							<p class="private-membership-indicator"><span class="fa fa-eye-slash"></span> Membership hidden</p>
+							<?php } ?>
 						</div>
 					</div><!--item-->
 

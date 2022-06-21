@@ -1763,6 +1763,29 @@ Comment URL: %s',
 		get_comment_link( $comment )
 	);
 
+	$comment_user = get_userdata( $comment->user_id );
+
+	$wp_email = 'wordpress@' . preg_replace( '#^www\.#', '', wp_parse_url( network_home_url(), PHP_URL_HOST ) );
+
+	if ( ! $comment_user ) {
+		$blogname = wp_specialchars_decode( get_option( 'blogname' ), ENT_QUOTES );
+		$from     = "From: \"$blogname\" <$wp_email>";
+		if ( '' !== $comment->comment_author_email ) {
+			$reply_to = "Reply-To: $comment->comment_author_email";
+		}
+	} else {
+		$from = "From: \"$comment_user->display_name\" <$wp_email>";
+		if ( '' !== $comment_user->user_email ) {
+			$reply_to = "Reply-To: \"$comment_user->user_email\" <$comment_user->user_email>";
+		}
+	}
+
+	$message_headers = "$from\n";
+
+	if ( isset( $reply_to ) ) {
+		$message_headers .= $reply_to . "\n";
+	}
+
 	foreach ( $admins as $admin ) {
 		// Don't send notification to instructor of her own comment.
 		if ( (int) $admin->user_id === (int) $comment_author_user->ID ) {
@@ -1774,10 +1797,63 @@ Comment URL: %s',
 			continue;
 		}
 
-		wp_mail( $admin_user->user_email, $subject, $message );
+		wp_mail( $admin_user->user_email, $subject, $message, $message_headers );
 	}
+
+	// Don't allow core notification to be sent.
+	remove_action( 'comment_post', 'wp_new_comment_notify_postauthor' );
 }
 add_action( 'wp_insert_comment', 'openlab_olgc_notify_instructor', 20, 2 );
+
+/**
+ * Email authors of private comments when they receive replies.
+ *
+ * @param int        $comment_id ID of the comment.
+ * @param WP_Comment $comment    Comment object.
+ */
+function openlab_olpc_notify_comment_author_of_reply( $comment_id, $comment ) {
+	$olpc_is_private = get_comment_meta( $comment_id, 'ol_is_private', true );
+	if ( ! $olpc_is_private ) {
+		return;
+	}
+
+	$parent_comment = get_comment( $comment->comment_parent );
+	if ( ! $parent_comment ) {
+		return;
+	}
+
+	$comment_post = get_post( $comment->comment_post_ID );
+	if ( ! $comment_post ) {
+		return;
+	}
+
+	// Post authors receive notification separately.
+	if ( $comment->user_id === $comment_post->user_id ) {
+		return;
+	}
+
+	$recipient = get_user_by( 'id', $parent_comment->user_id );
+	if ( ! $recipient ) {
+		return;
+	}
+
+	$subject = sprintf( 'New reply to your private comment on %s', get_option( 'blogname' ) );
+
+	$message = sprintf(
+		'There is a new reply to your private comment on the site %s.
+
+Post name: %s
+Comment author: %s
+Comment URL: %s',
+		get_option( 'blogname' ),
+		$comment_post->post_title,
+		bp_core_get_user_displayname( $comment->user_id ),
+		get_comment_link( $comment )
+	);
+
+	wp_mail( $recipient->user_email, $subject, $message );
+}
+add_action( 'wp_insert_comment', 'openlab_olpc_notify_comment_author_of_reply', 20, 2 );
 
 /**
  * Show a notice on the dashboard of cloned course sites.

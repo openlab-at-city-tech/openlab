@@ -7276,6 +7276,10 @@ body .hover-darken-for-accessibility a:hover,
 body .hover-darken-for-accessibility a:active {
   color: #3ba49b;
 }
+body.no-js .hide-if-no-js {
+  display: none !important;
+  visibility: hidden !important;
+}
 ul,
 ol {
   margin: 10px 0 15px 0;
@@ -7317,6 +7321,9 @@ blockquote h6,
 blockquote .h6 {
   color: #ff5959;
   margin-top: 0;
+}
+.btn {
+  position: relative;
 }
 .nav.nav-inline {
   margin-top: 0;
@@ -7843,6 +7850,183 @@ button.related-link-action.related-link-add .fa {
 .checkbox input[type="checkbox"] {
   margin-top: 1px;
 }
+/** Group Announcements **/
+.ajax-loading {
+  padding-left: 40px;
+}
+@keyframes spinner {
+  0% {
+    transform: translate3d(-50%, -50%, 0) rotate(0deg);
+  }
+  100% {
+    transform: translate3d(-50%, -50%, 0) rotate(360deg);
+  }
+}
+.ajax-loading::before {
+  animation: 1.5s linear infinite spinner;
+  animation-play-state: inherit;
+  border: solid 5px #cfd0d1;
+  border-bottom-color: #1c87c9;
+  border-radius: 50%;
+  content: "";
+  height: 24px;
+  width: 24px;
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  transform: translate3d(-50%, -50%, 0);
+  will-change: transform;
+}
+a.disabled-link {
+  text-decoration: none;
+  pointer-events: none;
+}
+.announcement-read-more {
+  font-weight: 700;
+}
+.no-announcement-message {
+  padding-top: 30px;
+}
+.announcement-editor-wrapper {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+.announcement-rich-text-editor.ql-container {
+  border-top: 1px solid #ccc !important;
+  margin: 10px;
+}
+.announcement-options {
+  margin: 10px;
+}
+.announcement-form {
+  padding-bottom: 10px;
+}
+.announcement-form .quill-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.announcement-form .quill-toolbar.ql-snow.ql-toolbar {
+  background: #f5f5f5;
+  border: none;
+}
+.announcement-form .quill-toolbar.ql-snow.ql-toolbar button {
+  height: 30px;
+  width: 34px;
+}
+.announcement-form .quill-toolbar .quill-toolbar-buttons {
+  flex: 1;
+}
+.announcement-form .quill-toolbar .quill-toolbar-avatar {
+  flex: 0 0 40px;
+}
+.announcement-form .ql-container.ql-snow {
+  border-radius: 4px;
+}
+.announcement-form .announcement-submit::after {
+  content: "\f178";
+  font-family: fontawesome;
+}
+.announcement-list {
+  margin-top: 30px;
+}
+.announcement-item .updateable-item {
+  box-shadow: 0px 0px 5px 5px transparent;
+  transition: box-shadow 0.5s ease-in-out;
+}
+.announcement-item .updateable-item.new-update {
+  box-shadow: 0px 0px 6px 2px #63dfd2;
+}
+.announcement-item .updateable-item > .group-item-wrapper {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+.announcement-item .group-item-wrapper {
+  border-radius: 4px;
+  border: 1px solid #dddddd;
+  padding: 20px;
+  margin-bottom: 15px;
+  position: relative;
+}
+.announcement-item .group-item-wrapper > .row {
+  margin-bottom: 18px;
+}
+.announcement-item .group-item-wrapper > .row:last-child {
+  margin-bottom: 0;
+}
+.announcement-item .row.announcement-header {
+  display: flex;
+  gap: 15px;
+}
+.announcement-item .row.announcement-header:before {
+  display: none;
+}
+.announcement-item .row.announcement-header .item-avatar {
+  flex: 0 0 75px;
+}
+.announcement-item h1.announcement-title-rendered,
+.announcement-item h2.announcement-title-rendered {
+  font-size: 16px;
+  margin-top: 0;
+}
+.announcement-item .announcement-textarea label {
+  display: block;
+}
+.announcement-item .announcement-textarea textarea {
+  height: 133px;
+  width: 100%;
+}
+.announcement-item .announcement-body p:last-child {
+  margin-bottom: 0;
+}
+.announcement-item .announcement-actions {
+  display: flex;
+  gap: 4px;
+}
+.announcement-item .announcement-actions .announcement-action::after {
+  content: '|';
+}
+.announcement-item .announcement-actions .announcement-action:last-child::after {
+  content: '';
+}
+.announcement-item .announcement-actions a {
+  font-weight: 700;
+}
+.announcement-form-section.announcement-title {
+  margin-top: 15px;
+}
+.announcement-reply-container {
+  display: none;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 2px solid #dddddd;
+}
+.announcement-reply-container textarea {
+  display: none;
+  visibility: hidden;
+}
+.show-reply-form > .group-item-wrapper > .announcement-reply-container {
+  display: block;
+}
+.announcement-replies .group-item-wrapper {
+  border: none;
+  border-top: 2px solid #dddddd;
+  padding-left: 0;
+  padding-right: 0;
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+.announcement-reply-replies > .group-item > .group-item-wrapper {
+  padding-left: 40px;
+}
+.announcement-reply-item .announcement-reply-container {
+  padding-left: 40px;
+}
+.announcement-form .edit-cancel {
+  border: 0;
+  background: transparent;
+  color: #333333;
+}
 /**page**/
 h1.entry-title {
   border-bottom: 1px solid #bbbbbb;
@@ -8075,14 +8259,14 @@ body .group-creators-section {
   margin-bottom: 20px;
   margin-top: 20px;
 }
+body .panel-acknowledgements .description {
+  font-style: italic;
+}
 body ul.group-creator-edit-list {
   list-style-type: none;
   padding-left: 0;
 }
-body ul.group-creator-edit-list > li {
-  padding: 5px 10px;
-}
-body ul.group-creator-edit-list > li:nth-of-type(even) {
+body ul.group-creator-edit-list > li:nth-of-type(odd) .group-creator-form-entry > div {
   background: #efefef;
 }
 body .group-creator-form-entry {
@@ -8098,6 +8282,7 @@ body .group-creator-form-entry > div {
   flex: 0 1 auto;
   margin-right: 20px;
   width: 50%;
+  padding: 5px 5px;
 }
 body .group-creator-form-entry > div.creator-fields-member-login {
   width: 100%;
@@ -8109,8 +8294,8 @@ body .group-creator-form-entry input {
   width: 100%;
 }
 body .group-creator-form-entry .entry-actions {
-  flex-grow: 0;
-  flex-shrink: 1;
+  flex: 0 0 100px;
+  margin-right: 10px;
   width: 100px;
 }
 body .group-creator-form-entry .entry-actions button {
@@ -8120,6 +8305,11 @@ body .group-creator-form-entry .entry-actions button {
 }
 body .group-creator-form-entry .creator-preview {
   display: none;
+  padding-left: 30px;
+}
+body .group-creator-form-entry .creator-form-fields {
+  flex-grow: 1;
+  padding-left: 30px;
 }
 body .group-creator-form-entry .edit-entry {
   display: none;
@@ -8349,12 +8539,15 @@ body .group-header .bp-template-notice {
   padding: 6px 12px;
   text-align: left;
 }
-body .clone-acknowledgements p {
-  margin-bottom: 0.5em;
-  margin-top: 0.5em;
+body .group-acknowledgements {
+  font-style: italic;
 }
-body .clone-acknowledgements p:first-child {
-  margin-top: 0;
+body .group-acknowledgements .acknowledgements-intro {
+  font-weight: 700;
+  margin-top: 4px;
+}
+body .group-acknowledgements p {
+  margin-bottom: 8px;
 }
 body .group-credits {
   list-style-type: none;
@@ -9927,6 +10120,19 @@ input#group-request-send {
 .group-members.group-list .group-item-wrapper p {
   margin: 10px 0 7px;
 }
+.group-members.group-list .group-item-wrapper .activity {
+  font-size: 12px;
+}
+.group-members.group-list .group-item-membership-privacy {
+  margin-top: 15px;
+}
+.group-members.group-list .group-item-membership-privacy label {
+  font-size: 12px;
+  font-weight: 400;
+}
+.group-members.group-list .group-item-membership-privacy label:hover {
+  cursor: pointer;
+}
 .group-manage-members.group-list.group-manage-requests .group-item .group-item-wrapper ul.group-member-actions {
   font-weight: normal;
 }
@@ -10159,8 +10365,11 @@ body.membership-requests .group-list {
   margin-top: 0;
 }
 .docs-info-header p.currently-viewing {
-  font-size: 1.1em;
+  font-size: 0.8em;
   margin-top: 8px;
+}
+.doc-tabs {
+  margin-top: 15px;
 }
 @media (max-width: 767px) {
   .created-date-cell {
@@ -10238,8 +10447,10 @@ body.docs .notify-group-members-ui {
   font-weight: normal;
 }
 .doc-content.edit-doc {
-  border: none;
-  padding: 0;
+  padding: 8px;
+}
+.doc-content.edit-doc .form-panel .panel:first-child {
+  margin-top: 0;
 }
 .doc-content .wp-switch-editor {
   padding: 0 8px;
@@ -10295,6 +10506,11 @@ body.docs .notify-group-members-ui {
   padding-top: 12px;
 }
 #doc-meta #toggle-table-settings tr:first-child td {
+  padding-top: 0;
+}
+body.docs #comments,
+body.docs .doc-meta {
+  border-top: 0;
   padding-top: 0;
 }
 a.delete-doc-button {
@@ -10383,6 +10599,9 @@ a.delete-doc-button {
   padding-bottom: 15px;
   padding-left: 15px;
 }
+#content #bbpress-forums .bbp-topic-tags {
+  padding: 12px 8px 0 0;
+}
 @media (max-width: 767px) {
   #content #bbpress-forums .forum-titles .bbp-topic-title,
   #content #bbpress-forums .bp_group .bbp-topic-title {
@@ -10401,6 +10620,24 @@ a.delete-doc-button {
   #content #bbpress-forums #subscription-toggle,
   #content #bbpress-forums #favorite-toggle {
     display: none;
+  }
+}
+.forum-nav {
+  display: flex;
+  margin-bottom: 40px;
+}
+@media (max-width: 767px) {
+  .forum-nav {
+    flex-direction: column;
+    gap: 20px;
+  }
+}
+.forum-nav .bbp-search-form {
+  margin-left: auto;
+}
+@media (max-width: 767px) {
+  .forum-nav .bbp-search-form {
+    margin-left: 0;
   }
 }
 /**invite-anyone specific**/
@@ -11283,6 +11520,9 @@ body.single-help .entry-content h6 {
 .activity-list .activity-body img {
   display: none;
 }
+.activity-list .activity-body .btn {
+  text-decoration: none;
+}
 .activity-pagination .pagination-links {
   margin: 0;
   display: inline-block;
@@ -11325,6 +11565,40 @@ body.single-help .entry-content h6 {
   border-color: #ddd;
   text-decoration: underline;
 }
+/* Group Activity */
+.group-activity-content {
+  display: flex;
+  flex-flow: row wrap;
+}
+.group-activity-content .activity-body {
+  flex: 0 0 calc(100% - 45px);
+  max-width: calc(100% - 45px);
+  padding-right: 30px;
+}
+.group-activity-content .activity-body p {
+  margin-top: 0;
+}
+.group-activity-content .activity-action {
+  flex: 0 0 45px;
+  max-width: 45x;
+  text-align: right;
+}
+.group-activity-content .activity-action span {
+  font-size: 20px;
+  transition: all 350ms ease-in-out;
+}
+.group-activity-content .activity-action .fav span {
+  color: #888;
+}
+.group-activity-content .activity-action .fav:hover span {
+  color: #ff5959;
+}
+.group-activity-content .activity-action .unfav span {
+  color: #ff5959;
+}
+.group-activity-content .activity-action .unfav:hover span {
+  color: #888;
+}
 /**Custom media query items**/
 @media (max-width: 767px) {
   .group-subscription-div {
@@ -11336,4 +11610,11 @@ body.single-help .entry-content h6 {
     float: none !important;
     width: 100%;
   }
+}
+/* Private membership indicator */
+p.private-membership-indicator {
+  margin-top: 15px;
+  font-size: 12px;
+  font-weight: 400;
+  color: #666 !important;
 }

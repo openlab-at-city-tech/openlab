@@ -802,18 +802,24 @@ function openlab_group_creators_metabox() {
 	$non_member_icon = '<span class="fa fa-globe"></span>';
 
 	?>
-	<div id="" class="panel panel-default">
+	<div id="" class="panel panel-default panel-acknowledgements">
 		<fieldset>
-			<legend class="panel-heading">Creator(s)</legend>
+			<legend class="panel-heading">Acknowledgements</legend>
 
 			<div class="panel-body">
-				<p>Creators will be listed in the acknowledgements on the <?php echo esc_html( $group_type_label ); ?> Profile. For more information, see <a href="https://openlab.citytech.cuny.edu/blog/help/editing-a-course-project-or-club-profile/" target="_blank">Editing a Course, Project, or Club Profile</a> in Help.</p>
+				<p>The names below will be listed under Acknowledgements on the <?php echo esc_html( $group_type_label ); ?> Profile. You can add additioal acknowledgements by typing an OpenLab member's nam in the box below and selecting it from the dropdown list. You may also enter the names of non-members and press return.
 
 				<div class="group-creators-section">
-					<fieldset>
-						<legend><?php echo esc_html( $group_type_label ); ?> Creator(s)</legend>
+					<div class="group-creator-edit-list-add-new">
+						<button type="button" id="group-creator-add-new-member"><?php echo $member_icon; ?> Select an OpenLab member</button> <button type="button" id="group-creator-add-new-non-member"><?php echo $non_member_icon; ?> Enter the name of a non-member</button>
+					</div>
 
-						<p>The people listed below will be acknowledged as the <?php echo esc_html( $group_type_label ); ?> Creators. You can add additional creators by typing their name in the box below and selecting it from the dropdown list.</p>
+					<div id="group-creator-empty-row" class="group-creator-empty-row">
+						<?php openlab_creator_form_entry( [] ); ?>
+					</div>
+
+					<fieldset>
+						<legend class="screen-reader-text"><?php echo esc_html( $group_type_label ); ?> Creator(s)</legend>
 
 						<ul id="group-creator-edit-list" class="group-creator-edit-list">
 							<?php foreach ( $creators as $creator ) : ?>
@@ -822,14 +828,6 @@ function openlab_group_creators_metabox() {
 								</li>
 							<?php endforeach; ?>
 						</ul>
-
-						<div class="group-creator-edit-list-add-new">
-							Add a creator: <button type="button" id="group-creator-add-new-member"><?php echo $member_icon; ?> Select an OpenLab member</button> <button type="button" id="group-creator-add-new-non-member"><?php echo $non_member_icon; ?> Enter the name of a non-member</button>
-						</div>
-
-						<div id="group-creator-empty-row" class="group-creator-empty-row">
-							<?php openlab_creator_form_entry( [] ); ?>
-						</div>
 					</fieldset>
 				</div>
 
@@ -870,6 +868,8 @@ function openlab_group_creators_metabox() {
 					remove_filter( 'mce_buttons_2', '__return_empty_array' );
 					?>
 				</div>
+
+				<p class="description">For more information, see <a href="https://openlab.citytech.cuny.edu/blog/help/editing-a-course-project-or-club-profile/" target="_blank">Editing a Course, Project, or Club Profile</a> in Help.</p>
 			</div>
 		</fieldset>
 	</div>
@@ -1284,4 +1284,117 @@ function openlab_get_credits( $group_id, $show_acknowledgements_prefix = true ) 
 	];
 
 	return $retval;
+}
+
+/**
+ * Gets the acknowledgements text for a group.
+ *
+ * @param int $group_id
+ * @return string
+ */
+function openlab_get_acknowledgements( $group_id ) {
+	$parts = [
+		'creators'        => '',
+		'clone_info'      => '',
+		'additional_text' => openlab_get_group_creators_additional_text( $group_id ),
+	];
+
+	$group_type       = openlab_get_group_type( $group_id );
+	$group_type_label = openlab_get_group_type_label( [ 'group_id' => $group_id ] );
+
+	$creator_ids = openlab_get_group_creators( $group_id );
+	if ( $creator_ids ) {
+		$creator_items = array_map(
+			function( $creator ) {
+				switch ( $creator['type'] ) {
+					case 'member' :
+						$user = get_user_by( 'slug', $creator['member-login'] );
+
+						if ( ! $user ) {
+							return null;
+						}
+
+						return sprintf(
+							'<a href="%s">%s</a>',
+							esc_attr( bp_core_get_user_domain( $user->ID ) ),
+							esc_html( bp_core_get_user_displayname( $user->ID ) )
+						);
+					break;
+
+					case 'non-member' :
+						return esc_html( $creator['non-member-name'] );
+					break;
+				}
+			},
+			$creator_ids
+		);
+
+		$creator_items = array_filter( $creator_items );
+
+		if ( $creator_items ) {
+			$parts['creators'] = sprintf(
+				'This %s was created by: %s',
+				esc_attr( $group_type_label ),
+				implode( ', ', $creator_items )
+			);
+		}
+	}
+
+	$exclude_hidden   = ! current_user_can( 'bp_moderate' );
+	$descendant_count = openlab_get_clone_descendant_count_of_group( $group_id, $exclude_hidden );
+	$clone_history    = openlab_get_group_clone_history_data( $group_id );
+
+	if ( $descendant_count || $clone_history ) {
+		$clone_info_parts = [
+			'ancestors'   => '',
+			'descendants' => '',
+		];
+
+		$group_directory_url = trailingslashit( home_url( $group_type . 's' ) );
+
+		if ( $clone_history ) {
+			$view_ancestors_link = add_query_arg( 'ancestor-of', $group_id, $group_directory_url );
+
+			$clone_info_parts['descendants'] = sprintf(
+				'<a href="%s">View the %s(s)</a> that this %s is based on.',
+				esc_html( $view_ancestors_link ),
+				$group_type_label,
+				$group_type_label
+			);
+		}
+
+		if ( $descendant_count ) {
+			$view_clones_link = add_query_arg( 'descendant-of', $group_id, $group_directory_url );
+
+			$clone_info_parts['descendants'] = sprintf(
+				_n( 'This %s has been cloned or re-cloned %s time; %s', 'This %s has been cloned or re-cloned %s times; %s', $descendant_count, 'openlab' ),
+				esc_html( $group_type_label ),
+				esc_html( number_format_i18n( $descendant_count ) ),
+				sprintf( '<a href="%s">%s</a>', esc_html( $view_clones_link ), 'view clone(s).' )
+			);
+		}
+
+		$clone_info_parts = array_filter( $clone_info_parts );
+
+		if ( $clone_info_parts ) {
+			$parts['clone_info'] = implode( ' ', $clone_info_parts );
+		}
+	}
+
+	$parts = array_filter( $parts );
+
+	if ( ! $parts ) {
+		return '';
+	}
+
+	$part_paragraphs = array_map(
+		function( $part ) {
+			return '<p>' . $part . '</p>';
+		},
+		$parts
+	);
+
+	array_unshift( $part_paragraphs, '<p class="acknowledgements-intro">Acknowledgements</p>' );
+
+	return implode( "\n\r", $part_paragraphs );
 }

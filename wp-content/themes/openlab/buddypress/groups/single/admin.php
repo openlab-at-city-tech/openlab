@@ -107,15 +107,19 @@ $portfolio_sharing = groups_get_groupmeta( bp_get_current_group_id(), 'enable_po
 			<?php endif; ?>
 
 			<?php
-			$forum_enabled = openlab_is_forum_enabled_for_group();
-			$docs_enabled  = openlab_is_docs_enabled_for_group();
-			$files_enabled = openlab_is_files_enabled_for_group();
+			$announcements_enabled = openlab_is_announcements_enabled_for_group();
+			$forum_enabled         = openlab_is_forum_enabled_for_group();
+			$docs_enabled          = openlab_is_docs_enabled_for_group();
+			$files_enabled         = openlab_is_files_enabled_for_group();
 
 			?>
 			<div class="panel panel-default">
-				<div class="panel-heading">Discussion, Docs, and Files Settings</div>
+				<div class="panel-heading">Discussion, Docs, and File Library Settings</div>
 				<div class="panel-body">
-					<p id="discussion-settings-tag">These settings enable or disable Discussions, Docs, and Files on your <?php echo $group_label_uc; ?> profile.</p>
+					<p id="discussion-settings-tag">These settings enable or disable Announcements, Discussions, Docs, and File Library on your <?php echo $group_label_uc; ?> profile.</p>
+					<div class="checkbox checkbox-float">
+						<label><input type="checkbox" name="openlab-edit-group-announcements" id="group-show-announcements" value="1"<?php checked( $announcements_enabled ); ?> /> Enable Announcements</label>
+					</div>
 					<div class="checkbox checkbox-float">
 						<label><input type="checkbox" name="openlab-edit-group-forum" id="group-show-forum" value="1"<?php checked( $forum_enabled ); ?> /> Enable Discussion</label>
 					</div>
@@ -123,7 +127,7 @@ $portfolio_sharing = groups_get_groupmeta( bp_get_current_group_id(), 'enable_po
 						<label><input type="checkbox" name="openlab-edit-group-docs" id="group-show-docs" value="1"<?php checked( $docs_enabled ); ?> /> Enable Docs</label>
 					</div>
 					<div class="checkbox checkbox-float">
-						<label><input type="checkbox" name="openlab-edit-group-files" id="group-show-files" value="1"<?php checked( $files_enabled ); ?> /> Enable Files</label>
+						<label><input type="checkbox" name="openlab-edit-group-files" id="group-show-files" value="1"<?php checked( $files_enabled ); ?> /> Enable File Library</label>
 					</div>
 				</div>
 			</div>
@@ -440,7 +444,10 @@ $portfolio_sharing = groups_get_groupmeta( bp_get_current_group_id(), 'enable_po
 			<div class="bp-widget">
 				<h4><?php _e( 'Members', 'buddypress' ); ?></h4>
 
-				<?php if ( bp_group_has_members( 'per_page=15&exclude_banned=0' ) ) : ?>
+				<?php if ( bp_group_has_members( 'per_page=15&exclude_banned=0' ) ) : 
+					// Get private users of the group
+					$private_users = openlab_get_group_private_users( bp_get_group_id() );	
+				?>
 
 					<?php if ( bp_group_member_needs_pagination() ) : ?>
 
@@ -508,6 +515,10 @@ $portfolio_sharing = groups_get_groupmeta( bp_get_current_group_id(), 'enable_po
 											</ul>
 
 											<?php do_action( 'bp_group_manage_members_admin_item' ); ?>
+											
+											<?php if( in_array( bp_get_member_user_id(), $private_users, true ) ) { ?>
+											<p class="private-membership-indicator"><span class="fa fa-eye-slash"></span> Membership hidden</p>
+											<?php } ?>
 										</div>
 									</div>
 								</div>

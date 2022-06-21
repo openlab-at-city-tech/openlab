@@ -11,7 +11,7 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * BuddyPress blocks require WordPress >= 5.0.0 & the BP REST API.
+ * BuddyPress blocks require the BP REST API.
  *
  * @since 6.0.0
  *
@@ -19,7 +19,14 @@ defined( 'ABSPATH' ) || exit;
  *              False otherwise.
  */
 function bp_support_blocks() {
-	return bp_is_running_wp( '5.0.0' ) && bp_rest_api_is_available();
+	/**
+	 * Filter here, returning `false`, to completely disable BuddyPress blocks.
+	 *
+	 * @since 10.0.0
+	 *
+	 * @param bool $value True if the BP REST API is available. False otherwise.
+	 */
+	return apply_filters( 'bp_support_blocks', bp_rest_api_is_available() );
 }
 
 /**
@@ -30,11 +37,6 @@ function bp_support_blocks() {
  *              Uses a dependency to `wp-editor` otherwise.
  */
 function bp_register_block_components() {
-	$server_side_renderer_dep = 'wp-server-side-render';
-	if ( bp_is_running_wp( '5.3.0', '<' ) ) {
-		$server_side_renderer_dep = 'wp-editor';
-	}
-
 	wp_register_script(
 		'bp-block-components',
 		plugins_url( 'js/block-components.js', __FILE__ ),
@@ -44,7 +46,6 @@ function bp_register_block_components() {
 			'wp-i18n',
 			'wp-api-fetch',
 			'wp-url',
-			$server_side_renderer_dep,
 		),
 		bp_get_version(),
 		false
@@ -221,12 +222,22 @@ add_filter( 'widget_block_dynamic_classname', 'bp_widget_block_dynamic_classname
  * @return string         HTML output.
  */
 function bp_blocks_get_login_widget_registration_link( $content = '', $args = array() ) {
-	if ( isset( $args['form_id'] ) && 'bp-login-widget-form' === $args['form_id'] && bp_get_signup_allowed() ) {
-		$content .= sprintf(
-			'<p class="bp-login-widget-register-link"><a href="%1$s">%2$s</a></p>',
-			esc_url( bp_get_signup_page() ),
-			esc_html__( 'Register', 'buddypress' )
-		);
+	if ( isset( $args['form_id'] ) && 'bp-login-widget-form' === $args['form_id'] ) {
+		if ( bp_get_signup_allowed() ) {
+			$content .= sprintf(
+				'<p class="bp-login-widget-register-link"><a href="%1$s">%2$s</a></p>',
+				esc_url( bp_get_signup_page() ),
+				esc_html__( 'Register', 'buddypress' )
+			);
+		}
+
+		if ( isset( $args['include_pwd_link'] ) && true === $args['include_pwd_link'] ) {
+			$content .= sprintf(
+				'<p class="bp-login-widget-pwd-link"><a href="%1$s">%2$s</a></p>',
+				esc_url( wp_lostpassword_url( bp_get_root_domain() ) ),
+				esc_html__( 'Lost your password?', 'buddypress' )
+			);
+		}
 	}
 
 	$action_output = '';
@@ -257,10 +268,11 @@ function bp_blocks_get_login_widget_registration_link( $content = '', $args = ar
  * @return string           HTML output.
  */
 function bp_block_render_login_form_block( $attributes = array() ) {
-	$block_args = wp_parse_args(
+	$block_args = bp_parse_args(
 		$attributes,
 		array(
-			'title' => '',
+			'title'         => '',
+			'forgotPwdLink' => false,
 		)
 	);
 
@@ -338,6 +350,8 @@ function bp_block_render_login_form_block( $attributes = array() ) {
 		}
 	} else {
 		$action_output = '';
+		$pwd_link      = (bool) $block_args['forgotPwdLink'];
+
 		if ( has_action( 'bp_before_login_widget_loggedout' ) ) {
 			ob_start();
 			/**
@@ -357,14 +371,15 @@ function bp_block_render_login_form_block( $attributes = array() ) {
 
 		$widget_content .= wp_login_form(
 			array(
-				'echo'           => false,
-				'form_id'        => 'bp-login-widget-form',
-				'id_username'    => 'bp-login-widget-user-login',
-				'label_username' => __( 'Username', 'buddypress' ),
-				'id_password'    => 'bp-login-widget-user-pass',
-				'label_password' => __( 'Password', 'buddypress' ),
-				'id_remember'    => 'bp-login-widget-rememberme',
-				'id_submit'      => 'bp-login-widget-submit',
+				'echo'             => false,
+				'form_id'          => 'bp-login-widget-form',
+				'id_username'      => 'bp-login-widget-user-login',
+				'label_username'   => __( 'Username', 'buddypress' ),
+				'id_password'      => 'bp-login-widget-user-pass',
+				'label_password'   => __( 'Password', 'buddypress' ),
+				'id_remember'      => 'bp-login-widget-rememberme',
+				'id_submit'        => 'bp-login-widget-submit',
+				'include_pwd_link' => $pwd_link,
 			)
 		);
 

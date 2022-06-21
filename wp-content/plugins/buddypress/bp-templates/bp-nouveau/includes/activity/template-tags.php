@@ -3,7 +3,7 @@
  * Activity Template tags
  *
  * @since 3.0.0
- * @version 8.1.0
+ * @version 10.0.0
  */
 
 // Exit if accessed directly.
@@ -64,6 +64,15 @@ function bp_nouveau_after_activity_directory_content() {
 }
 
 /**
+ * Prints the JS Templates used to render the Activity Post Form.
+ *
+ * @since 10.0.0
+ */
+function bp_nouveau_activity_print_post_form_templates() {
+	bp_get_template_part( 'common/js-templates/activity/form' );
+}
+
+/**
  * Enqueue needed scripts for the Activity Post Form
  *
  * @since 3.0.0
@@ -72,6 +81,13 @@ function bp_nouveau_after_activity_directory_content() {
 function bp_nouveau_before_activity_post_form() {
 	if ( bp_nouveau_current_user_can( 'publish_activity' ) ) {
 		wp_enqueue_script( 'bp-nouveau-activity-post-form' );
+
+		/**
+		 * Get the templates to manage Group Members using the BP REST API.
+		 *
+		 * @since 10.0.0 Hook to the `wp_footer` action to print the JS templates.
+		 */
+		add_action( 'wp_footer', 'bp_nouveau_activity_print_post_form_templates' );
 	}
 }
 
@@ -81,10 +97,6 @@ function bp_nouveau_before_activity_post_form() {
  * @since 3.0.0
  */
 function bp_nouveau_after_activity_post_form() {
-	if ( bp_nouveau_current_user_can( 'publish_activity' ) ) {
-		bp_get_template_part( 'common/js-templates/activity/form' );
-	}
-
 	/**
 	 * Fires after the activity post form.
 	 *
@@ -144,6 +156,30 @@ function bp_nouveau_activity_hook( $when = '', $suffix = '' ) {
 	}
 
 	bp_nouveau_hook( $hook );
+}
+
+/**
+ * Output the `data-bp-activity-id` or `data-bp-activity-comment-id` attribute
+ * according to the activity type.
+ *
+ * @since 10.0.0
+ */
+function bp_nouveau_activity_data_attribute_id() {
+	$attribute  = 'data-bp-%1$s-id="%2$s"';
+	$type       = 'activity';
+	$id         = (int) bp_get_activity_id();
+	$comment_id = (int) bp_get_activity_comment_id();
+
+	if ( 'activity_comment' === bp_get_activity_type() || $comment_id ) {
+		$type = 'activity-comment';
+
+
+		if ( $comment_id ) {
+			$id = $comment_id;
+		}
+	}
+
+	printf( $attribute, $type, $id );
 }
 
 /**

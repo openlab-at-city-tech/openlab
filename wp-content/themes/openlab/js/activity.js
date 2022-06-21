@@ -10,7 +10,7 @@ jQuery( document ).ready(
             $(this).parent('form').submit();
         });
 
-        $(document).on( 'click', '.activity-header-meta .button', function(e) {
+        $(document).on( 'click', '.activity-header-meta .button, .activity-action .button', function(e) {
             e.preventDefault();
 
             let button = $(this);

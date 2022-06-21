@@ -345,6 +345,30 @@ add_filter(
 	}
 );
 
+/**
+ * 'ancestor-of' parameter support for group directories.
+ */
+add_filter(
+	'bp_before_groups_get_groups_parse_args',
+	function( $args ) {
+		$group_id = openlab_get_current_filter( 'ancestor-of' );
+		if ( ! $group_id ) {
+			return $args;
+		}
+
+		$group = groups_get_group( $group_id );
+
+		$clone_history = openlab_get_group_clone_history_data( $group_id );
+		if ( ! $clone_history ) {
+			$ancestor_ids = [ 0 ];
+		}
+
+		$args['include'] = wp_list_pluck( $clone_history, 'group_id' );
+
+		return $args;
+	}
+);
+
 /** CLASSES ******************************************************************/
 
 class Openlab_Clone_Course_Group {

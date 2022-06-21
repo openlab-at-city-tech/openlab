@@ -41,7 +41,7 @@ class BP_Notifications_Notification {
 	 * The ID of the secondary item associated with the notification.
 	 *
 	 * @since 1.9.0
-	 * @var int
+	 * @var int|null
 	 */
 	public $secondary_item_id = null;
 
@@ -89,7 +89,6 @@ class BP_Notifications_Notification {
 	 * Columns in the notifications table.
 	 *
 	 * @since 9.1.0
-	 * @access public
 	 * @var array
 	 */
 	public static $columns = array(
@@ -100,7 +99,7 @@ class BP_Notifications_Notification {
 		'component_name',
 		'component_action',
 		'date_notified',
-		'is_new'
+		'is_new',
 	);
 
 	/** Public Methods ********************************************************/
@@ -220,6 +219,10 @@ class BP_Notifications_Notification {
 	 *
 	 * @since 1.9.0
 	 *
+	 * @global wpdb $wpdb WordPress database object.
+	 *
+	 * @see wpdb::insert() for further description of paramater formats.
+	 *
 	 * @param array $data {
 	 *     Array of notification data, passed to {@link wpdb::insert()}.
 	 *     @type int    $user_id           ID of the associated user.
@@ -244,6 +247,8 @@ class BP_Notifications_Notification {
 	 *
 	 * @since 1.9.0
 	 *
+	 * @global wpdb $wpdb WordPress database object.
+	 *
 	 * @see wpdb::update() for further description of paramater formats.
 	 *
 	 * @param array $data         Array of notification data to update, passed to
@@ -266,7 +271,9 @@ class BP_Notifications_Notification {
 	 *
 	 * @since 1.9.0
 	 *
-	 * @see wpdb::update() for further description of paramater formats.
+	 * @global wpdb $wpdb WordPress database object.
+	 *
+	 * @see wpdb::delete() for further description of paramater formats.
 	 *
 	 * @param array $where        Array of WHERE clauses to filter by, passed to
 	 *                            {@link wpdb::delete()}. Accepts any property of a
@@ -286,6 +293,8 @@ class BP_Notifications_Notification {
 	 * clause.
 	 *
 	 * @since 1.9.0
+	 *
+	 * @global wpdb $wpdb WordPress database object.
 	 *
 	 * @param array  $args           See {@link BP_Notifications_Notification::get()}
 	 *                               for more details.
@@ -437,8 +446,8 @@ class BP_Notifications_Notification {
 		}
 
 		// Sort order direction.
-		if ( ! empty( $args['sort_order'] ) && in_array( $args['sort_order'], array( 'ASC', 'DESC' ) ) ) {
-			$sort_order               = $args['sort_order'];
+		if ( ! empty( $args['sort_order'] ) ) {
+			$sort_order               = bp_esc_sql_order( $args['sort_order'] );
 			$conditions['sort_order'] = "{$sort_order}";
 		}
 
@@ -456,6 +465,8 @@ class BP_Notifications_Notification {
 	 * Used by BP_Notifications_Notification::get() to create its LIMIT clause.
 	 *
 	 * @since 1.9.0
+	 *
+	 * @global wpdb $wpdb WordPress database object.
 	 *
 	 * @param array $args See {@link BP_Notifications_Notification::get()}
 	 *                    for more details.
@@ -577,10 +588,12 @@ class BP_Notifications_Notification {
 	 *
 	 * @since 1.9.0
 	 *
+	 * @global BuddyPress $bp The one true BuddyPress instance.
+	 * @global wpdb $wpdb WordPress database object.
+	 *
 	 * @param int $user_id         ID of the user being checked.
 	 * @param int $notification_id ID of the notification being checked.
-	 * @return bool True if the notification belongs to the user, otherwise
-	 *              false.
+	 * @return bool True if the notification belongs to the user, otherwise false.
 	 */
 	public static function check_access( $user_id = 0, $notification_id = 0 ) {
 		global $wpdb;
@@ -599,33 +612,39 @@ class BP_Notifications_Notification {
 	 *
 	 * @since 2.3.0
 	 *
-	 * @param mixed $args Args to parse.
+	 * @param array|string $args Args to parse.
 	 * @return array
 	 */
 	public static function parse_args( $args = '' ) {
-		return wp_parse_args( $args, array(
-			'id'                => false,
-			'user_id'           => false,
-			'item_id'           => false,
-			'secondary_item_id' => false,
-			'component_name'    => bp_notifications_get_registered_components(),
-			'component_action'  => false,
-			'is_new'            => true,
-			'search_terms'      => '',
-			'order_by'          => false,
-			'sort_order'        => false,
-			'page'              => false,
-			'per_page'          => false,
-			'meta_query'        => false,
-			'date_query'        => false,
-			'update_meta_cache' => true
-		) );
+		return bp_parse_args(
+			$args,
+			array(
+				'id'                => false,
+				'user_id'           => false,
+				'item_id'           => false,
+				'secondary_item_id' => false,
+				'component_name'    => bp_notifications_get_registered_components(),
+				'component_action'  => false,
+				'is_new'            => true,
+				'search_terms'      => '',
+				'order_by'          => false,
+				'sort_order'        => false,
+				'page'              => false,
+				'per_page'          => false,
+				'meta_query'        => false,
+				'date_query'        => false,
+				'update_meta_cache' => true,
+			)
+		);
 	}
 
 	/**
 	 * Get notifications, based on provided filter parameters.
 	 *
 	 * @since 1.9.0
+	 *
+	 * @global BuddyPress $bp The one true BuddyPress instance.
+	 * @global wpdb $wpdb WordPress database object.
 	 *
 	 * @param array $args {
 	 *     Associative array of arguments. All arguments but $page and
@@ -736,9 +755,10 @@ class BP_Notifications_Notification {
 	 *
 	 * @since 1.9.0
 	 *
-	 * @see BP_Notifications_Notification::get() for a description of arguments.
+	 * @global BuddyPress $bp The one true BuddyPress instance.
+	 * @global wpdb $wpdb WordPress database object.
 	 *
-	 * @param array $args See {@link BP_Notifications_Notification::get()}.
+	 * @param array|string $args See {@link BP_Notifications_Notification::get()}.
 	 * @return int Count of located items.
 	 */
 	public static function get_total_count( $args ) {
@@ -828,9 +848,6 @@ class BP_Notifications_Notification {
 	 *
 	 * We use BP_Date_Query, which extends WP_Date_Query, to do the heavy lifting
 	 * of parsing the date_query array and creating the necessary SQL clauses.
-	 * However, since BP_Notifications_Notification::get() builds its SQL
-	 * differently than WP_Query, we have to alter the return value (stripping
-	 * the leading AND keyword from the query).
 	 *
 	 * @since 2.3.0
 	 *
@@ -839,17 +856,7 @@ class BP_Notifications_Notification {
 	 * @return string
 	 */
 	public static function get_date_query_sql( $date_query = array() ) {
-
-		// Bail if not a proper date query format.
-		if ( empty( $date_query ) || ! is_array( $date_query ) ) {
-			return '';
-		}
-
-		// Date query.
-		$date_query = new BP_Date_Query( $date_query, 'date_notified' );
-
-		// Strip the leading AND - it's handled in get().
-		return preg_replace( '/^\sAND/', '', $date_query->get_sql() );
+		return BP_Date_Query::get_where_sql( $date_query, 'n.date_notified' );
 	}
 
 	/**
@@ -870,7 +877,7 @@ class BP_Notifications_Notification {
 	 */
 	public static function update( $update_args = array(), $where_args = array() ) {
 		$update = self::get_query_clauses( $update_args );
-		$where  = self::get_query_clauses( $where_args  );
+		$where  = self::get_query_clauses( $where_args );
 
 		/**
 		 * Fires before the update of a notification item.
@@ -891,12 +898,80 @@ class BP_Notifications_Notification {
 	}
 
 	/**
+	 * Update notifications using a list of ids/items_ids.
+	 *
+	 * @since 10.0.0
+	 *
+	 * @param string $field The name of the db field of the items to update.
+	 *                      Possible values are `id` or `item_id`.
+	 * @param int[]  $items The list of items to update.
+	 * @param array  $data  Array of notification data to update.
+	 * @param array  $where The WHERE params to use to specify the item IDs to update.
+	 * @return int|false    The number of updated rows. False on error.
+	 */
+	public static function update_id_list( $field, $items = array(), $data = array(), $where = array() ) {
+		global $wpdb;
+		$bp = buddypress();
+
+		$supported_fields = array( 'id', 'item_id' );
+
+		if ( false === in_array( $field, $supported_fields, true ) ) {
+			return false;
+		}
+
+		if ( ! is_array( $items ) || ! is_array( $data ) || ! is_array( $where ) ) {
+			return false;
+		}
+
+		$update_args = self::get_query_clauses( $data );
+		$where_args  = self::get_query_clauses( $where );
+
+		$fields     = array();
+		$conditions = array();
+		$values     = array();
+
+		$_items       = implode( ',', wp_parse_id_list( $items ) );
+		$conditions[] = "{$field} IN ({$_items})";
+
+		foreach ( $update_args['data'] as $update_field => $value ) {
+			$index  = array_search( $update_field, array_keys( $update_args['data'] ) );
+			$format = $update_args['format'][ $index ];
+
+			$fields[] = "{$update_field} = {$format}";
+			$values[] = $value;
+		}
+
+		foreach ( $where_args['data'] as $where_field => $value ) {
+			$index  = array_search( $where_field, array_keys( $where_args['data'] ) );
+			$format = $where_args['format'][ $index ];
+
+			$conditions[] = "{$where_field} = {$format}";
+			$values[]     = $value;
+		}
+
+		$fields     = implode( ', ', $fields );
+		$conditions = implode( ' AND ', $conditions );
+
+		if ( 'item_id' === $field && isset( $where_args['data']['user_id'] ) ) {
+			$where_args['item_ids'] = $items;
+			$where_args['user_id']  = $where_args['data']['user_id'];
+		} elseif ( 'id' === $field ) {
+			$where_args['ids'] = $items;
+		}
+
+		/** This action is documented in bp-notifications/classes/class-bp-notifications-notification.php */
+		do_action( 'bp_notification_before_update', $update_args, $where_args );
+
+		return $wpdb->query( $wpdb->prepare( "UPDATE {$bp->notifications->table_name} SET {$fields} WHERE {$conditions}", $values ) );
+	}
+
+	/**
 	 * Delete notifications.
 	 *
 	 * @since 1.9.0
 	 *
 	 * @see BP_Notifications_Notification::get() for a description of
-	 *      accepted update/where arguments.
+	 *      accepted where arguments.
 	 *
 	 * @param array $args Associative array of columns/values, to determine
 	 *                    which rows should be deleted.  Of the format
@@ -918,6 +993,63 @@ class BP_Notifications_Notification {
 		do_action( 'bp_notification_before_delete', $args );
 
 		return self::_delete( $where['data'], $where['format'] );
+	}
+
+	/**
+	 * Delete notifications using a list of ids/items_ids.
+	 *
+	 * @since 10.0.0
+	 *
+	 * @param string $field The name of the db field of the items to delete.
+	 *                      Possible values are `id` or `item_id`.
+	 * @param int[]  $items The list of items to delete.
+	 * @param array  $args  The WHERE arguments to use to specify the item IDs to delete.
+	 * @return int|false    The number of deleted rows. False on error.
+	 */
+	public static function delete_by_id_list( $field, $items = array(), $args = array() ) {
+		global $wpdb;
+		$bp = buddypress();
+
+		$supported_fields = array( 'id', 'item_id' );
+
+		if ( false === in_array( $field, $supported_fields, true ) ) {
+			return false;
+		}
+
+		if ( ! is_array( $items ) || ! is_array( $args ) ) {
+			return false;
+		}
+
+		$where = self::get_query_clauses( $args );
+
+		$conditions = array();
+		$values     = array();
+
+		$_items       = implode( ',', wp_parse_id_list( $items ) );
+		$conditions[] = "{$field} IN ({$_items})";
+
+		foreach ( $where['data'] as $where_field => $value ) {
+			$index  = array_search( $where_field, array_keys( $where['data'] ) );
+			$format = $where['format'][ $index ];
+
+			$conditions[] = "{$where_field} = {$format}";
+			$values[]     = $value;
+		}
+
+		$conditions = implode( ' AND ', $conditions );
+
+		if ( 'id' === $field ) {
+			$args['id'] = $items;
+		}
+
+		/** This action is documented in bp-notifications/classes/class-bp-notifications-notification.php */
+		do_action( 'bp_notification_before_delete', $args );
+
+		if ( ! $values ) {
+			return $wpdb->query( "DELETE FROM {$bp->notifications->table_name} WHERE {$conditions}" );
+		}
+
+		return $wpdb->query( $wpdb->prepare( "DELETE FROM {$bp->notifications->table_name} WHERE {$conditions}", $values ) );
 	}
 
 	/** Convenience methods ***************************************************/
@@ -1013,13 +1145,16 @@ class BP_Notifications_Notification {
 	 * }
 	 */
 	public static function get_current_notifications_for_user( $args = array() ) {
-		$r = wp_parse_args( $args, array(
-			'user_id'      => bp_loggedin_user_id(),
-			'is_new'       => true,
-			'page'         => 1,
-			'per_page'     => 25,
-			'search_terms' => '',
-		) );
+		$r = bp_parse_args(
+			$args,
+			array(
+				'user_id'      => bp_loggedin_user_id(),
+				'is_new'       => true,
+				'page'         => 1,
+				'per_page'     => 25,
+				'search_terms' => '',
+			)
+		);
 
 		$notifications = self::get( $r );
 
@@ -1172,6 +1307,9 @@ class BP_Notifications_Notification {
 	 * bp_notifications_get_all_notifications_for_user().
 	 *
 	 * @since 3.0.0
+	 *
+	 * @global BuddyPress $bp The one true BuddyPress instance.
+	 * @global wpdb $wpdb WordPress database object.
 	 *
 	 * @param int $user_id ID of the user whose notifications are being fetched.
 	 * @return array Notifications items for formatting into a list.

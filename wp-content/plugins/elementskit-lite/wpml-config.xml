@@ -1,0 +1,181 @@
+<wpml-config>
+	<custom-types>
+		<custom-type translate="1">elementskit_template</custom-type>
+	</custom-types>
+	<elementor-widgets>
+		<widget name="elementskit-image-accordion">
+			<conditions>
+				<condition key="widgetType">elementskit-image-accordion</condition>
+			</conditions>
+			<fields-in-item items_of="ekit_img_accordion_items">
+				<field type="Title (Image Accordion)" editor_type="LINE">ekit_img_accordion_title</field>
+				<field type="Button Label (Image Accordion)" editor_type="LINE">ekit_img_accordion_button_label</field>
+			</fields-in-item>
+		</widget>
+		<widget name="elementskit-accordion">
+			<conditions>
+				<condition key="widgetType">elementskit-accordion</condition>
+			</conditions>
+			<fields-in-item items_of="ekit_accordion_items">
+				<field type="Title (Accordion)" editor_type="LINE">acc_title</field>
+				<field type="Description (Accordion)" editor_type="VISUAL">acc_content</field>
+			</fields-in-item>
+		</widget>
+		<widget name="elementskit-faq">
+			<conditions>
+				<condition key="widgetType">elementskit-faq</condition>
+			</conditions>
+			<fields-in-item items_of="ekit_accordion_items">
+				<field type="Title (FAQ)" editor_type="LINE">ekit_faq_title</field>
+				<field type="Content (FAQ)" editor_type="VISUAL">ekit_faq_content</field>
+			</fields-in-item>
+		</widget>
+		<widget name="elementskit-testimonial">
+			<conditions>
+				<condition key="widgetType">elementskit-testimonial</condition>
+			</conditions>
+			<fields-in-item items_of="ekit_testimonial_data">
+				<field type="Client Name (Testimonial)" editor_type="LINE">client_name</field>
+				<field type="Designation (Testimonial)" editor_type="LINE">designation</field>
+				<field type="Testimonial Review (Testimonial)" editor_type="AREA">review</field>
+			</fields-in-item>
+		</widget>
+		<widget name="elementskit-pricing">
+			<conditions>
+				<condition key="widgetType">elementskit-pricing</condition>
+			</conditions>
+			<fields-in-item items_of="ekit_pricing_table_content_repeater">
+				<field type="List text (Pricing Table)" editor_type="LINE">ekit_pricing_list</field>
+				<field type="Info Text (Pricing Table)" editor_type="LINE">ekit_pricing_list_info</field>
+			</fields-in-item>
+		</widget>
+		<widget name="elementskit-social-media">
+			<conditions>
+				<condition key="widgetType">elementskit-social-media</condition>
+			</conditions>
+			<fields-in-item items_of="ekit_socialmedia_add_icons">
+				<field type="Label (Social Media)" editor_type="LINE">ekit_socialmedia_label</field>
+			</fields-in-item>
+		</widget>
+		<widget name="elementskit-simple-tab">
+			<conditions>
+				<condition key="widgetType">elementskit-simple-tab</condition>
+			</conditions>
+			<fields-in-item items_of="ekit_tab_items">
+				<field type="Title (Tab)" editor_type="LINE">ekit_tab_title</field>
+				<field type="Content (Tab)" editor_type="VISUAL">ekit_tab_content</field>
+			</fields-in-item>
+		</widget>
+		<widget name="elementskit-business-hours">
+			<conditions>
+				<condition key="widgetType">elementskit-business-hours</condition>
+			</conditions>
+			<fields-in-item items_of="ekit_business_openday_list">
+				<field type="Day (Business Hours)" editor_type="LINE">ekit_business_day</field>
+				<field type="Day (Business Hours)" editor_type="LINE">ekit_business_time</field>
+			</fields-in-item>
+		</widget>
+		<widget name="elementskit-social-share">
+			<conditions>
+				<condition key="widgetType">elementskit-social-share</condition>
+			</conditions>
+			<fields-in-item items_of="ekit_socialshare_add_icons">
+				<field type="Label (Social Share)" editor_type="LINE">ekit_socialshare_label</field>
+			</fields-in-item>
+		</widget>
+		<widget name="elementskit-advance-accordion">
+			<conditions>
+				<condition key="widgetType">elementskit-advance-accordion</condition>
+			</conditions>
+			<fields-in-item items_of="ekit_accordion_items">
+				<field type="Title (Advanced Accordion)" editor_type="LINE">acc_title</field>
+			</fields-in-item>
+		</widget>
+		<widget name="elementskit-tab">
+			<conditions>
+				<condition key="widgetType">elementskit-tab</condition>
+			</conditions>
+			<fields-in-item items_of="ekit_tab_items">
+				<field type="Title (Advanced Tab)" editor_type="LINE">ekit_tab_title</field>
+				<field type="Sub-Title (Advanced Tab)" editor_type="LINE">ekit_tab_sub_title</field>
+			</fields-in-item>
+		</widget>
+		<widget name="elementskit-hotspot">
+			<conditions>
+				<condition key="widgetType">elementskit-hotspot</condition>
+			</conditions>
+			<fields-in-item items_of="ekit_location_repeater">
+				<field type="Title (Hotspot)" editor_type="LINE">ekit_hotspot_title</field>
+			</fields-in-item>
+		</widget>
+		<widget name="elementskit-gallery">
+			<conditions>
+				<condition key="widgetType">elementskit-gallery</condition>
+			</conditions>
+			<fields-in-item items_of="ekit_gallery_items">
+				<field type="Title (Gallery)" editor_type="LINE">ekit_gallery_filter_label</field>
+			</fields-in-item>
+		</widget>
+		<widget name="elementskit-chart">
+			<conditions>
+				<condition key="widgetType">elementskit-chart</condition>
+			</conditions>
+			<fields-in-item items_of="ekit_charts_labels_data">
+				<field type="Name (Chart)" editor_type="LINE">ekit_chart_label</field>
+			</fields-in-item>
+		</widget>
+		<widget name="elementskit-table">
+			<conditions>
+				<condition key="widgetType">elementskit-table</condition>
+			</conditions>
+			<fields-in-item items_of="ekit_table_build_header">
+				<field type="Text (Table)" editor_type="LINE">table_header_content</field>
+			</fields-in-item>
+		</widget>
+		<widget name="elementskit-timeline">
+			<conditions>
+				<condition key="widgetType">elementskit-timeline</condition>
+			</conditions>
+			<fields-in-item items_of="ekit_timelinehr_content_repeater">
+				<field type="Title (Timeline)" editor_type="LINE">ekit_timeline_line_title</field>
+				<field type="Sub Title (Timeline)" editor_type="LINE">ekit_timeline_line_subtitle</field>
+				<field type="Description (Timeline)" editor_type="AREA">ekit_timeline_line_content</field>
+				<field type="Date (Timeline)" editor_type="LINE">ekit_timeline_content_date</field>
+				<field type="Address (Timeline)" editor_type="LINE">ekit_timelinehr_content_address</field>
+			</fields-in-item>
+		</widget>
+		<widget name="elementskit-category-list">
+			<conditions>
+				<condition key="widgetType">elementskit-category-list</condition>
+			</conditions>
+			<fields-in-item items_of="ekit_timelinehr_content_repeater">
+				<field type="Test (Category List)" editor_type="LINE">text</field>
+			</fields-in-item>
+		</widget>
+		<widget name="elementskit-page-list">
+			<conditions>
+				<condition key="widgetType">elementskit-page-list</condition>
+			</conditions>
+			<fields-in-item items_of="icon_list">
+				<field type="Title (Page List)" editor_type="LINE">text</field>
+				<field type="Sub-Title (Page List)" editor_type="LINE">ekit_menu_widget_sub_title</field>
+			</fields-in-item>
+		</widget>
+		<widget name="elementskit-post-list">
+			<conditions>
+				<condition key="widgetType">elementskit-post-list</condition>
+			</conditions>
+			<fields-in-item items_of="icon_list">
+				<field type="Title (Post List)" editor_type="LINE">text</field>
+			</fields-in-item>
+		</widget>
+		<widget name="elementskit-header-info">
+			<conditions>
+				<condition key="widgetType">elementskit-header-info</condition>
+			</conditions>
+			<fields-in-item items_of="ekit_headerinfo_group">
+				<field type="Text (Header Info)" editor_type="LINE">ekit_headerinfo_text</field>
+			</fields-in-item>
+		</widget>
+	</elementor-widgets>
+</wpml-config>

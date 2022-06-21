@@ -26,6 +26,7 @@
 
 #bp-login-widget-form .login-submit,
 #bp-login-widget-form .bp-login-widget-register-link {
+	width: -moz-fit-content;
 	width: fit-content;
 	display: inline;
 }
@@ -33,4 +34,8 @@
 #bp-login-widget-form .bp-login-widget-register-link {
 	margin-right: 1em;
 	vertical-align: super;
+}
+
+#bp-login-widget-form .bp-login-widget-pwd-link {
+	font-size: 80%;
 }

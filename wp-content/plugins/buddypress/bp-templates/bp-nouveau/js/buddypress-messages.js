@@ -1,7 +1,7 @@
 /* global wp, BP_Nouveau, _, Backbone, tinymce, tinyMCE */
 /* jshint devel: true */
 /* @since 3.0.0 */
-/* @version 8.0.0 */
+/* @version 10.3.0 */
 window.wp = window.wp || {};
 window.bp = window.bp || {};
 
@@ -36,6 +36,9 @@ window.bp = window.bp || {};
 			this.router   = new bp.Nouveau.Messages.Router();
 			this.box      = 'inbox';
 
+			// Set up supported routes.
+			this.supportedRoutes = BP_Nouveau.messages.supportedRoutes;
+
 			this.setupNav();
 
 			Backbone.history.start( {
@@ -53,7 +56,7 @@ window.bp = window.bp || {};
 			// Then listen to nav click and load the appropriate view.
 			$( '#subnav a' ).on( 'click', function( event ) {
 				var view_id = $( event.target ).prop( 'id' ),
-				    supportedView = [ 'inbox', 'starred', 'sentbox', 'compose' ];
+				    supportedView = _.keys( self.supportedRoutes );
 
 				if ( -1 === _.indexOf( supportedView, view_id ) || 'unsupported' === self.box ) {
 					return event;
@@ -78,11 +81,11 @@ window.bp = window.bp || {};
 						}
 
 						// Navigate back to current box.
-						self.router.navigate( self.box + '/', { trigger: true } );
+						self.router.navigate( self.supportedRoutes[ self.box ] + '/', { trigger: true } );
 
 					// Otherwise load it.
 					} else {
-						self.router.navigate( 'compose/', { trigger: true } );
+						self.router.navigate( self.supportedRoutes.compose + '/', { trigger: true } );
 					}
 
 				// Other views are classic.
@@ -91,10 +94,25 @@ window.bp = window.bp || {};
 					if ( self.box !== view_id || ! _.isUndefined( self.views.get( 'compose' ) ) ) {
 						self.clearViews();
 
-						self.router.navigate( view_id + '/', { trigger: true } );
+						self.router.navigate( self.supportedRoutes[ view_id ] + '/', { trigger: true } );
 					}
 				}
 			} );
+		},
+
+		updateNav: function( view ) {
+			var currentView = this.box;
+
+			if ( view ) {
+				currentView = view;
+			}
+
+			// Activate the appropriate nav.
+			$( '#subnav ul li' ).each( function( l, li ) {
+				$( li ).removeClass( 'current selected' );
+			} );
+
+			$( '#subnav a#' + currentView ).closest( 'li' ).addClass( 'current selected' );
 		},
 
 		removeTinyMCE: function() {
@@ -169,6 +187,7 @@ window.bp = window.bp || {};
 		composeView: function() {
 			// Remove all existing views.
 			this.clearViews();
+			this.updateNav( 'compose' );
 
 			// Create the loop view.
 			var form = new bp.Views.messageForm( {
@@ -181,11 +200,7 @@ window.bp = window.bp || {};
 		},
 
 		threadsView: function() {
-			// Activate the appropriate nav.
-			$( '#subnav ul li' ).each( function( l, li ) {
-				$( li ).removeClass( 'current selected' );
-			} );
-			$( '#subnav a#' + this.box ).closest( 'li' ).addClass( 'current selected' );
+			this.updateNav();
 
 			// Create the loop view.
 			var threads_list = new bp.Views.userThreads( { collection: this.threads, box: this.box } );
@@ -241,20 +256,13 @@ window.bp = window.bp || {};
 		},
 
 		sendMessage: function() {
-			if ( true === this.get( 'sending' ) ) {
-				return;
-			}
-
-			this.set( 'sending', true, { silent: true } );
-
-			var sent = bp.ajax.post( 'messages_send_message', _.extend(
-				{
-					nonce: BP_Nouveau.messages.nonces.send
-				},
-				this.attributes
-			) );
-
-			this.set( 'sending', false, { silent: true } );
+			var sent = bp.ajax.post(
+				'messages_send_message',
+				_.extend(
+					{ nonce: BP_Nouveau.messages.nonces.send },
+					this.attributes
+				)
+			);
 
 			return sent;
 		}
@@ -553,7 +561,7 @@ window.bp = window.bp || {};
 			// Check for mention.
 			if ( ! _.isNull( mention ) ) {
 				sendToInput.val( '@' + _.escape( mention ) + ' ' );
-				sendToInput.focus();
+				sendToInput.trigger( 'focus' );
 			}
 		},
 
@@ -577,10 +585,13 @@ window.bp = window.bp || {};
 		},
 
 		sendMessage: function( event ) {
-			var meta = {}, errors = [], self = this;
+			var meta = {}, errors = [], self = this,
+			    button = event.currentTarget;
+
 			event.preventDefault();
 
 			bp.Nouveau.Messages.removeFeedback();
+			$( button ).addClass( 'disabled' ).prop( 'disabled', true );
 
 			// Set the content and meta.
 			_.each( this.$el.serializeArray(), function( pair ) {
@@ -646,8 +657,21 @@ window.bp = window.bp || {};
 				return;
 			}
 
+			// Prevents multiple frenetic clicks!
+			if ( true === this.model.get( 'sending' ) ) {
+				return;
+			}
+
 			// Set meta.
-			this.model.set( 'meta', meta, { silent: true } );
+			this.model.set(
+				{
+					sending: true,
+					meta: meta
+				},
+				{
+					silent: true
+				}
+			);
 
 			// Send the message.
 			this.model.sendMessage().done( function( response ) {
@@ -664,11 +688,14 @@ window.bp = window.bp || {};
 				form.get( 'view' ).remove();
 				bp.Nouveau.Messages.views.remove( { id: 'compose', view: form } );
 
-				bp.Nouveau.Messages.router.navigate( 'sentbox/', { trigger: true } );
+				bp.Nouveau.Messages.router.navigate( bp.Nouveau.Messages.supportedRoutes.sentbox + '/', { trigger: true } );
 			} ).fail( function( response ) {
 				if ( response.feedback ) {
 					bp.Nouveau.Messages.displayFeedback( response.feedback, response.type );
 				}
+			} ).always( function() {
+				self.model.set( 'sending', false, { silent: true } );
+				$( button ).removeClass( 'disabled' ).prop( 'disabled', false );
 			} );
 		},
 
@@ -978,7 +1005,7 @@ window.bp = window.bp || {};
 
 				bp.Nouveau.Messages.displayFeedback( response.feedback, response.type );
 
-				if ( 'delete' === action || ( 'starred' === self.collection.options.box && 'unstar' === action ) ) {
+				if ( 'delete' === action || 'exit' === action || ( 'starred' === self.collection.options.box && 'unstar' === action ) ) {
 					// Remove from the list of messages.
 					self.collection.remove( model.get( 'id' ) );
 
@@ -1089,7 +1116,7 @@ window.bp = window.bp || {};
 
 				bp.Nouveau.Messages.displayFeedback( response.feedback, response.type );
 
-				if ( 'delete' === action || ( 'starred' === self.collection.options.box && 'unstar' === action ) ) {
+				if ( 'delete' === action || 'exit' === action || ( 'starred' === self.collection.options.box && 'unstar' === action ) ) {
 					// Remove from the list of messages.
 					self.collection.remove( thread_ids );
 
@@ -1241,7 +1268,7 @@ window.bp = window.bp || {};
 
 			bp.Nouveau.Messages.threads.doAction( action, this.model.get( 'id' ), options ).done( function( response ) {
 				// Remove all views
-				if ( 'delete' === action ) {
+				if ( 'delete' === action || 'exit' === action ) {
 					bp.Nouveau.Messages.clearViews();
 				} else if ( response.messages ) {
 					self.model.set( _.first( response.messages ) );
@@ -1388,13 +1415,27 @@ window.bp = window.bp || {};
 
 	bp.Nouveau.Messages.Router = Backbone.Router.extend( {
 		routes: {
-			'compose/'    : 'composeMessage',
 			'view/:id/'   : 'viewMessage',
-			'sentbox/'    : 'sentboxView',
-			'starred/'    : 'starredView',
-			'inbox/'      : 'inboxView',
 			''            : 'inboxView',
 			'*unSupported': 'unSupported'
+		},
+
+		initialize: function() {
+			var self = this;
+
+			_.each( BP_Nouveau.messages.supportedRoutes, function( route, slug ) {
+				self.route( route + '/', slug + 'Route', function() {
+					if ( 'compose' === slug ) {
+						self.composeMessage();
+					} else if ( 'sentbox' === slug ) {
+						self.sentboxView();
+					} else if ( 'starred' === slug ) {
+						self.starredView();
+					} else if ( 'inbox' === slug ) {
+						self.inboxView();
+					}
+				} );
+			} );
 		},
 
 		composeMessage: function() {

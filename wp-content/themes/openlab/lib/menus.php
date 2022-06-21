@@ -325,6 +325,10 @@ function openlab_submenu_markup($type = '', $opt_var = NULL, $row_wrapper = true
             }
 
             break;
+        case 'group-activity':
+            $submenu_text = 'Activity<span aria-hideen="true">:</span> ';
+            $menu = openlab_group_activity_submenu();
+            break;
         default:
             $submenu_text = 'My Settings<span aria-hidden="true">:</span> ';
             $menu = openlab_profile_settings_submenu();
@@ -543,6 +547,25 @@ function openlab_my_activity_submenu() {
 	];
 
 	return openlab_submenu_gen( $menu_list, false, $current_item  );
+}
+
+function openlab_group_activity_submenu() {
+    $base_url = bp_get_group_permalink( groups_get_current_group() ) . 'activity';
+
+    $current_item = $base_url;
+	if ( ! empty( $_GET['type'] ) && in_array( $_GET['type'], [ 'mine', 'mentions', 'starred' ], true ) ) {
+		$current_item .= '?type=' . $_GET['type'];
+
+	}
+
+    $menu_list = [
+        $base_url                       => 'All',
+        $base_url . '?type=mine'        => 'Mine',
+        $base_url . '?type=mentions'    => '@Mentions',
+        $base_url . '?type=starred'     => 'Starred'
+    ];
+
+    return openlab_submenu_gen( $menu_list, false, $current_item );
 }
 
 //sub-menus for my-invites pages
@@ -772,13 +795,16 @@ function openlab_filter_subnav_members($subnav_item) {
     }
 
     //get total member count
-    $total_mem = bp_core_number_format(groups_get_groupmeta(bp_get_current_group_id(), 'total_member_count'));
+    $total_mem = (int) bp_core_number_format(groups_get_groupmeta(bp_get_current_group_id(), 'total_member_count'));
+    if( ! current_user_can( 'bp_moderate' ) ) {
+        $private_users = openlab_get_group_private_users( bp_get_current_group_id() );
+        $total_mem -= count( $private_users );
+    }
 
-    //added classes to span
     if ($total_mem > 0) {
-        $new_item = str_replace('<span>' . $total_mem . '</span>', '<span class="mol-count pull-right count-' . $total_mem . ' gray">' . $total_mem . '</span>', $new_item);
+        $new_item = preg_replace('/<span[^>]*>.*?<\/span>/is', '<span class="mol-count pull-right count-' . $total_mem . ' gray">' . $total_mem . '</span>', $new_item);
     } else {
-        $new_item = str_replace('<span>' . $total_mem . '</span>', '', $new_item);
+        $new_item = preg_replace('/<span[^>]*>.*?<\/span>/is', '', $new_item);
     }
 
     return $new_item;
@@ -811,7 +837,9 @@ function openlab_filter_subnav_docs($subnav_item) {
 			'<span class="mol-count pull-right count-' . esc_attr( $total_doc_count ) . ' gray">' . esc_html( $total_doc_count ) . '</span></a></li>',
 			$subnav_item
 		);
-    }
+    } else {
+		$new_item = $subnav_item;
+	}
 
     //update "current" class to "current-menu-item" to unify site identification of current menu page
     $new_item = str_replace( "current selected", "current-menu-item", $new_item );
@@ -837,13 +865,13 @@ function openlab_filter_subnav_nav_group_documents($subnav_item) {
         $subnav_item = str_replace('</a>', ' ' . $span . '</a>', $subnav_item);
     }
 
+	$subnav_item = str_replace( 'Documents', 'File Library', $subnav_item );
+	$subnav_item = str_replace( 'Files', 'File Library', $subnav_item );
+
     return $subnav_item;
 }
 
 add_filter('bp_get_options_nav_group-documents', 'openlab_filter_subnav_nav_group_documents');
-
-
-add_filter('bp_get_options_nav_nav-forum', 'openlab_filter_subnav_forums');
 
 /**
  * Modify the Discussion subnav item in group contexts.
@@ -874,6 +902,8 @@ function openlab_filter_subnav_forums($subnav_item) {
 
     return $subnav_item;
 }
+add_filter( 'bp_get_options_nav_nav-forum', 'openlab_filter_subnav_forums' );
+
 
 add_filter('bp_get_options_nav_nav-invite-anyone', 'openlab_filter_subnav_nav_invite_anyone');
 
@@ -937,6 +967,14 @@ function openlab_filter_subnav_nav_upcoming($subnav_item) {
 
 add_filter('bp_get_options_nav_new-event', 'openlab_filter_subnav_nav_new_event');
 
+/**
+ * Filters the 'Activity' option nav item.
+ */
+function openlab_filter_subnav_nav_activity( $subnav_item ) {
+    return str_replace( 'current selected', 'current-menu-item', $subnav_item );
+}
+add_filter( 'bp_get_options_nav_activity', 'openlab_filter_subnav_nav_activity' );
+
 function openlab_filter_subnav_nav_new_event($subnav_item) {
 
     $subnav_item = str_replace("current selected", "current-menu-item", $subnav_item);
@@ -957,22 +995,30 @@ function openlab_group_submenu_nav() {
         return;
     }
 
-    $positions = array(
-        'home' => 10,
-        'admin' => 11,
-        'nav-forum' => 25,
-        'members' => 35,
-        'files' => 60,
-    );
+	$positions = array(
+		'home'          => 10,
+		'announcements' => 20,
+		'forum'         => 50,
+		'docs'          => 60,
+		'files'         => 70,
+		'events'        => 80,
+		'members'       => 90,
+		'admin'         => 100,
+	);
 
-    foreach ($positions as $slug => $position) {
-        buddypress()->groups->nav->edit_nav(array(
-            'position' => $position,
-                ), $slug, bp_get_current_group_slug());
+    foreach ( $positions as $slug => $position ) {
+        buddypress()->groups->nav->edit_nav(
+			[
+				'position' => $position,
+			],
+			$slug,
+			bp_get_current_group_slug()
+		);
     }
-}
 
-add_action('bp_screens', 'openlab_group_submenu_nav', 1);
+//	var_dump( buddypress()->groups->nav ); die;
+}
+add_action( 'bp_screens', 'openlab_group_submenu_nav', 1 );
 
 /**
  * Markup for group admin tabs

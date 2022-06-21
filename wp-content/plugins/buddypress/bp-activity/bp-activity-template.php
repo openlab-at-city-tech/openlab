@@ -245,41 +245,45 @@ function bp_has_activities( $args = '' ) {
 
 	// Note: any params used for filtering can be a single value, or multiple
 	// values comma separated.
-	$r = bp_parse_args( $args, array(
-		'display_comments'  => 'threaded',   // False for none, stream/threaded - show comments in the stream or threaded under items.
-		'include'           => $include,     // Pass an activity_id or string of IDs comma-separated.
-		'exclude'           => false,        // Pass an activity_id or string of IDs comma-separated.
-		'in'                => false,        // Comma-separated list or array of activity IDs among which to search.
-		'sort'              => 'DESC',       // Sort DESC or ASC.
-		'page'              => 1,            // Which page to load.
-		'per_page'          => 20,           // Number of items per page.
-		'page_arg'          => 'acpage',     // See https://buddypress.trac.wordpress.org/ticket/3679.
-		'max'               => false,        // Max number to return.
-		'fields'            => 'all',
-		'count_total'       => false,
-		'show_hidden'       => $show_hidden, // Show activity items that are hidden site-wide?
-		'spam'              => 'ham_only',   // Hide spammed items.
+	$r = bp_parse_args(
+		$args,
+		array(
+			'display_comments'  => 'threaded',   // False for none, stream/threaded - show comments in the stream or threaded under items.
+			'include'           => $include,     // Pass an activity_id or string of IDs comma-separated.
+			'exclude'           => false,        // Pass an activity_id or string of IDs comma-separated.
+			'in'                => false,        // Comma-separated list or array of activity IDs among which to search.
+			'sort'              => 'DESC',       // Sort DESC or ASC.
+			'page'              => 1,            // Which page to load.
+			'per_page'          => 20,           // Number of items per page.
+			'page_arg'          => 'acpage',     // See https://buddypress.trac.wordpress.org/ticket/3679.
+			'max'               => false,        // Max number to return.
+			'fields'            => 'all',
+			'count_total'       => false,
+			'show_hidden'       => $show_hidden, // Show activity items that are hidden site-wide?
+			'spam'              => 'ham_only',   // Hide spammed items.
 
-		// Scope - pre-built activity filters for a user (friends/groups/favorites/mentions).
-		'scope'             => $scope,
+			// Scope - pre-built activity filters for a user (friends/groups/favorites/mentions).
+			'scope'             => $scope,
 
-		// Filtering
-		'user_id'           => $user_id,     // user_id to filter on.
-		'object'            => $object,      // Object to filter on e.g. groups, profile, status, friends.
-		'action'            => false,        // Action to filter on e.g. activity_update, profile_updated.
-		'primary_id'        => $primary_id,  // Object ID to filter on e.g. a group_id or blog_id etc.
-		'secondary_id'      => false,        // Secondary object ID to filter on e.g. a post_id.
-		'offset'            => false,        // Return only items >= this ID.
-		'since'             => false,        // Return only items recorded since this Y-m-d H:i:s date.
+			// Filtering.
+			'user_id'           => $user_id,     // user_id to filter on.
+			'object'            => $object,      // Object to filter on e.g. groups, profile, status, friends.
+			'action'            => false,        // Action to filter on e.g. activity_update, profile_updated.
+			'primary_id'        => $primary_id,  // Object ID to filter on e.g. a group_id or blog_id etc.
+			'secondary_id'      => false,        // Secondary object ID to filter on e.g. a post_id.
+			'offset'            => false,        // Return only items >= this ID.
+			'since'             => false,        // Return only items recorded since this Y-m-d H:i:s date.
 
-		'meta_query'        => false,        // Filter on activity meta. See WP_Meta_Query for format.
-		'date_query'        => false,        // Filter by date. See first parameter of WP_Date_Query for format.
-		'filter_query'      => false,        // Advanced filtering.  See BP_Activity_Query for format.
+			'meta_query'        => false,        // Filter on activity meta. See WP_Meta_Query for format.
+			'date_query'        => false,        // Filter by date. See first parameter of WP_Date_Query for format.
+			'filter_query'      => false,        // Advanced filtering.  See BP_Activity_Query for format.
 
-		// Searching.
-		'search_terms'      => $search_terms_default,
-		'update_meta_cache' => true,
-	), 'has_activities' );
+			// Searching.
+			'search_terms'      => $search_terms_default,
+			'update_meta_cache' => true,
+		),
+		'has_activities'
+	);
 
 	/*
 	 * Smart Overrides.
@@ -885,6 +889,26 @@ function bp_activity_type() {
 		return apply_filters( 'bp_get_activity_type', $activities_template->activity->type );
 	}
 
+/**
+ * Return the activity type template part name.
+ *
+ * @since 10.0.0
+ *
+ * @global object $activities_template {@link BP_Activity_Template}
+ *
+ * @return string The activity type template part name.
+ */
+function bp_activity_type_part() {
+	global $activities_template;
+
+	$name = '';
+	if ( isset( $activities_template->activity->type ) && $activities_template->activity->type ) {
+		$name = str_replace( '_', '-', $activities_template->activity->type );
+	}
+
+	return $name;
+}
+
 	/**
 	 * Output the activity action name.
 	 *
@@ -1049,7 +1073,11 @@ function bp_activity_avatar( $args = '' ) {
 			'user_id' => false
 		);
 
-		$r = wp_parse_args( $args, $defaults );
+		$r = bp_parse_args(
+			$args,
+			$defaults
+		);
+
 		extract( $r, EXTR_SKIP );
 
 		if ( !isset( $height ) && !isset( $width ) ) {
@@ -1152,16 +1180,20 @@ function bp_activity_secondary_avatar( $args = '' ) {
 	function bp_get_activity_secondary_avatar( $args = '' ) {
 		global $activities_template;
 
-		$r = wp_parse_args( $args, array(
-			'alt'        => '',
-			'type'       => 'thumb',
-			'width'      => 20,
-			'height'     => 20,
-			'class'      => 'avatar',
-			'link_class' => '',
-			'linked'     => true,
-			'email'      => false
-		) );
+		$r = bp_parse_args(
+			$args,
+			array(
+				'alt'        => '',
+				'type'       => 'thumb',
+				'width'      => 20,
+				'height'     => 20,
+				'class'      => 'avatar',
+				'link_class' => '',
+				'linked'     => true,
+				'email'      => false,
+			)
+		);
+
 		extract( $r, EXTR_SKIP );
 
 		// Set item_id and object (default to user).
@@ -1328,9 +1360,12 @@ function bp_activity_action( $args = array() ) {
 	function bp_get_activity_action( $args = array() ) {
 		global $activities_template;
 
-		$r = wp_parse_args( $args, array(
-			'no_timestamp' => false,
-		) );
+		$r = bp_parse_args(
+			$args,
+			array(
+				'no_timestamp' => false,
+			)
+		);
 
 		/**
 		 * Filters the activity action before the action is inserted as meta.
@@ -1369,7 +1404,6 @@ function bp_activity_action( $args = array() ) {
  * Output the activity content body.
  *
  * @since 1.2.0
- *
  */
 function bp_activity_content_body() {
 	echo bp_get_activity_content_body();
@@ -1407,6 +1441,7 @@ function bp_activity_content_body() {
  * Does the activity have content?
  *
  * @since 1.2.0
+ * @since 10.0.0 Generate a richer content for activity types supporting the feature.
  *
  * @global object $activities_template {@link BP_Activity_Template}
  *
@@ -1415,12 +1450,240 @@ function bp_activity_content_body() {
 function bp_activity_has_content() {
 	global $activities_template;
 
-	if ( ! empty( $activities_template->activity->content ) ) {
-		return true;
+	$has_content = ! empty( $activities_template->activity->content );
+	if ( ! $has_content ) {
+		$activity_type = bp_get_activity_type();
+
+		if ( bp_activity_type_supports( $activity_type, 'generated-content' ) ) {
+			$bp                = buddypress();
+			$generated_content = new stdClass();
+			$activity          = $activities_template->activity;
+			$user_id           = $activity->user_id;
+
+			// Set generated content properties.
+			if ( 'new_avatar' === $activity_type ) {
+				$avatars = array();
+
+				// Use the avatar history to display the avatar that was in use at the time the activity was posted.
+				if ( ! bp_avatar_history_is_disabled() ) {
+					$avatars = bp_avatar_get_version( $user_id, 'user', bp_get_activity_date_recorded() );
+
+					if ( $avatars && 1 === count( $avatars ) ) {
+						$avatar            = reset( $avatars );
+						$historical_avatar = trailingslashit( $avatar->parent_dir_url ) . $avatar->name;
+
+						// Add historical avatar to the current activity.
+						$generated_content->user_profile_photo = array(
+							'value'             => $historical_avatar,
+							'sanitize_callback' => 'esc_url',
+						);
+					}
+
+					// Otherwise use the current/latest avatar.
+				} else {
+					$generated_content->user_profile_photo = array(
+						'value'             => bp_core_fetch_avatar(
+							array(
+								'item_id' => $user_id,
+								'object'  => 'user',
+								'type'    => 'full',
+								'width'   => bp_core_avatar_full_width(),
+								'height'  => bp_core_avatar_full_height(),
+								'html'    => false,
+							)
+						),
+						'sanitize_callback' => 'esc_url',
+					);
+				}
+			}
+
+			if ( in_array( $activity_type, array( 'new_member', 'friendship_created', 'updated_profile' ), true ) ) {
+				if ( 'friendship_created' === $activity_type ) {
+					$user_id = $activity->secondary_item_id;
+				}
+
+				if ( isset( $bp->avatar->show_avatars ) && $bp->avatar->show_avatars ) {
+					$generated_content->user_profile_photo = array(
+						'value'             => bp_core_fetch_avatar(
+							array(
+								'item_id' => $user_id,
+								'object'  => 'user',
+								'type'    => 'full',
+								'width'   => bp_core_avatar_full_width(),
+								'height'  => bp_core_avatar_full_height(),
+								'html'    => false,
+							)
+						),
+						'sanitize_callback' => 'esc_url',
+					);
+				}
+			}
+
+			// Set common generated content properties.
+			if ( in_array( $activity_type, array( 'new_avatar', 'new_member', 'friendship_created', 'updated_profile' ), true ) ) {
+				$generated_content->user_url = array(
+					'value'             => bp_core_get_user_domain( $user_id ),
+					'sanitize_callback' => 'esc_url',
+				);
+
+				$generated_content->user_display_name = array(
+					'value'             => bp_core_get_user_displayname( $user_id ),
+					'sanitize_callback' => 'esc_html',
+				);
+
+				$generated_content->user_mention_name = array(
+					'value'             => bp_activity_get_user_mentionname( $user_id ),
+					'sanitize_callback' => 'esc_html',
+				);
+
+				$generated_content->user_mention_url = array(
+					'value'             => wp_nonce_url(
+						add_query_arg(
+							array(
+								'r' => $generated_content->user_mention_name['value'],
+							),
+							bp_get_activity_directory_permalink()
+						)
+					),
+					'sanitize_callback' => 'esc_url',
+				);
+
+				if ( bp_displayed_user_use_cover_image_header() ) {
+					$generated_content->user_cover_image = array(
+						'value'             => bp_attachments_get_attachment(
+							'url',
+							array(
+								'object_dir' => 'members',
+								'item_id'    => $user_id,
+							)
+						),
+						'sanitize_callback' => 'esc_url',
+					);
+				}
+			}
+
+			if ( 'created_group' === $activity_type || 'joined_group' === $activity_type ) {
+				$group = bp_get_group( $activity->item_id );
+
+				if ( isset( $bp->avatar->show_avatars ) && $bp->avatar->show_avatars && ! bp_disable_group_avatar_uploads() ) {
+					$generated_content->group_profile_photo = array(
+						'value'             => bp_core_fetch_avatar(
+							array(
+								'item_id' => $group->id,
+								'object'  => 'group',
+								'type'    => 'full',
+								'width'   => bp_core_avatar_full_width(),
+								'height'  => bp_core_avatar_full_height(),
+								'html'    => false,
+							)
+						),
+						'sanitize_callback' => 'esc_url',
+					);
+				}
+
+				$generated_content->group_url = array(
+					'value'             => bp_get_group_permalink( $group ),
+					'sanitize_callback' => 'esc_url',
+				);
+
+				$generated_content->group_name = array(
+					'value'             => bp_get_group_name( $group ),
+					'sanitize_callback' => 'esc_html',
+				);
+
+				if ( bp_group_use_cover_image_header() ) {
+					$generated_content->group_cover_image = array(
+						'value'             => bp_get_group_cover_url( $group ),
+						'sanitize_callback' => 'esc_url',
+					);
+				}
+			}
+
+			// Update the corresponding entry into the activities template global.
+			if ( get_object_vars( $generated_content ) ) {
+				$activity_id    = $activities_template->activity->id;
+				$activity_index = 0;
+
+				// Find the activity index.
+				while ( (int) $activities_template->activities[ $activity_index ]->id !== (int) $activity_id ) {
+					$activity_index++;
+				}
+
+				// Add the generated content object.
+				$activities_template->activities[ $activity_index ]->generated_content = $generated_content;
+				$has_content = true;
+			}
+		}
 	}
 
-	return false;
+	return $has_content;
 }
+
+/**
+ * Does this property has been generated?
+ *
+ * @since 10.0.0
+ *
+ * @param string $property The name of the property to check into the generated content.
+ * @return bool            True if the property is not empty. False otherwise.
+ */
+function bp_activity_has_generated_content_part( $property = '' ) {
+	return bp_activity_get_generated_content_part( $property, 'boolean' );
+}
+
+/**
+ * Outputs a property of the activity generated content.
+ *
+ * @since 10.0.0
+ *
+ * @param string $property The name of the property to check into the generated content.
+ */
+function bp_activity_generated_content_part( $property = '' ) {
+	echo bp_activity_get_generated_content_part( $property );
+}
+
+	/**
+	 * Returns the property of the activity generated content.
+	 *
+	 * @since 10.0.0
+	 *
+	 * @param string $property The name of the property to check into the generated content.
+	 * @param string $return   Whether to return the property value or a boolean to check it exists.
+	 * @return bool|string     A boolean when requested, false if there is no value, the HTML output otherwise.
+	 */
+	function bp_activity_get_generated_content_part( $property = '', $return = '' ) {
+		global $activities_template;
+
+		if ( ! isset( $activities_template->activity->generated_content->{$property} ) ) {
+			return false;
+		}
+
+		$content_part = $activities_template->activity->generated_content->{$property};
+
+		if ( ! isset( $content_part['value'] ) || ! $content_part['value'] ) {
+			return false;
+		}
+
+		if ( 'boolean' === $return ) {
+			return true;
+		}
+
+		/**
+		 * Filter here to edit the generated content part.
+		 *
+		 * @since 10.0.0
+		 *
+		 * @param string $value    The generated content part.
+		 * @param string $property The property the content part is attached to.
+		 */
+		$value = apply_filters( 'bp_activity_get_generated_content_part', $content_part['value'], $property );
+
+		if ( isset( $content_part['sanitize_callback'] ) && $content_part['sanitize_callback'] ) {
+			return call_user_func( $content_part['sanitize_callback'], $value );
+		}
+
+		return $value;
+	}
 
 /**
  * Output the activity content.
@@ -2662,6 +2925,8 @@ function bp_activity_delete_link() {
 		// Determine if we're on a single activity page, and customize accordingly.
 		if ( bp_is_activity_component() && is_numeric( bp_current_action() ) ) {
 			$class = 'delete-activity-single';
+		} elseif ( 'activity_comment' === bp_get_activity_type() ) {
+			$class = 'acomment-delete';
 		}
 
 		$link = '<a href="' . esc_url( $url ) . '" class="button item-button bp-secondary-action ' . $class . ' confirm" rel="nofollow">' . __( 'Delete', 'buddypress' ) . '</a>';
@@ -2698,11 +2963,18 @@ function bp_activity_delete_url() {
 	function bp_get_activity_delete_url() {
 		global $activities_template;
 
-		$url = trailingslashit( bp_get_root_domain() . '/' . bp_get_activity_root_slug() . '/delete/' . $activities_template->activity->id );
+		$activity_id = 0;
+		if ( isset( $activities_template->activity->id ) ) {
+			$activity_id = (int) $activities_template->activity->id;
+		}
+
+		$url = trailingslashit( bp_get_root_domain() . '/' . bp_get_activity_root_slug() . '/delete/' . $activity_id );
 
 		// Determine if we're on a single activity page, and customize accordingly.
 		if ( bp_is_activity_component() && is_numeric( bp_current_action() ) ) {
 			$url = add_query_arg( array( 'redirect_to' => wp_get_referer() ), $url );
+		} elseif ( 'activity_comment' === bp_get_activity_type() ) {
+			$url = add_query_arg( 'cid', $activity_id, $url );
 		}
 
 		$url = wp_nonce_url( $url, 'bp_activity_delete_link' );
@@ -2812,9 +3084,12 @@ function bp_activity_filter_links( $args = false ) {
 	 */
 	function bp_get_activity_filter_links( $args = false ) {
 
-		$r = wp_parse_args( $args, array(
-			'style' => 'list'
-		) );
+		$r = bp_parse_args(
+			$args,
+			array(
+				'style' => 'list',
+			)
+		);
 
 		// Define local variable.
 		$component_links = array();
@@ -3238,16 +3513,19 @@ function bp_send_public_message_button( $args = '' ) {
 	 */
 	function bp_get_send_public_message_button( $args = '' ) {
 
-		$r = bp_parse_args( $args, array(
-			'id'                => 'public_message',
-			'component'         => 'activity',
-			'must_be_logged_in' => true,
-			'block_self'        => true,
-			'wrapper_id'        => 'post-mention',
-			'link_href'         => bp_get_send_public_message_link(),
-			'link_text'         => __( 'Public Message', 'buddypress' ),
-			'link_class'        => 'activity-button mention'
-		) );
+		$r = bp_parse_args(
+			$args,
+			array(
+				'id'                => 'public_message',
+				'component'         => 'activity',
+				'must_be_logged_in' => true,
+				'block_self'        => true,
+				'wrapper_id'        => 'post-mention',
+				'link_href'         => bp_get_send_public_message_link(),
+				'link_text'         => __( 'Public Message', 'buddypress' ),
+				'link_class'        => 'activity-button mention',
+			)
+		);
 
 		/**
 		 * Filters the public message button HTML.
@@ -3305,12 +3583,15 @@ function bp_activity_post_form_action() {
  */
 function bp_activity_comments_user_avatars( $args = array() ) {
 
-	$r = bp_parse_args( $args, array(
-		'height' => false,
-		'html'   => true,
-		'type'   => 'thumb',
-		'width'  => false,
-	) );
+	$r = bp_parse_args(
+		$args,
+		array(
+			'height' => false,
+			'html'   => true,
+			'type'   => 'thumb',
+			'width'  => false,
+		)
+	);
 
 	// Get the user IDs of everyone who has left a comment to the current activity item.
 	$user_ids = bp_activity_get_comments_user_ids();
@@ -3472,10 +3753,13 @@ function bp_displayed_user_mentionname() {
  */
 function bp_activity_types_list( $output = 'select', $args = '' ) {
 
-	$args = bp_parse_args( $args, array(
-		'checkbox_name' => 'bp_activity_types',
-		'selected'      => array(),
-	) );
+	$args = bp_parse_args(
+		$args,
+		array(
+			'checkbox_name' => 'bp_activity_types',
+			'selected'      => array(),
+		)
+	);
 
 	$activities = bp_activity_get_types();
 	natsort( $activities );
