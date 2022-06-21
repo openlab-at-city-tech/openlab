@@ -316,11 +316,11 @@ function openlab_bp_group_documents_display_content() {
 								<input type="hidden" name="bp_group_documents_file_type" value="<?php echo $template->doc_type; ?>" />
 								<?php } ?>
 
-								<div class="bp-group-documents-fields <?php echo ( $template->operation === 'add' ) ? 'show-link' : 'show-' . $template->doc_type; ?>">
+								<div class="bp-group-documents-fields <?php echo ( $template->operation === 'add' ) ? 'show-upload' : 'show-' . $template->doc_type; ?>">
 									<!-- Link -->
 									<?php if( 'add' === $template->operation ) { ?>
 									<div class="bp-group-documents-file-type-selector">
-										<input type="radio" checked="checked" name="bp_group_documents_file_type" class="bp-group-documents-file-type" id="bp-group-documents-file-type-link" value="link" />
+										<input type="radio" name="bp_group_documents_file_type" class="bp-group-documents-file-type" id="bp-group-documents-file-type-link" value="link" />
 										<label for="bp-group-documents-file-type-link">Link to external file</label>
 									</div>
 									<?php } ?>
@@ -357,7 +357,7 @@ function openlab_bp_group_documents_display_content() {
 									<!-- Upload -->
 									<?php if( 'add' === $template->operation ) { ?>
 									<div class="bp-group-documents-file-type-selector">
-										<input type="radio" name="bp_group_documents_file_type" class="bp-group-documents-file-type" id="bp-group-documents-file-type-upload" value="upload" />
+										<input type="radio" checked="checked" name="bp_group_documents_file_type" class="bp-group-documents-file-type" id="bp-group-documents-file-type-upload" value="upload" />
 										<label for="bp-group-documents-file-type-upload">Upload a file</label>
 									</div>
 									<?php } ?>
@@ -404,15 +404,17 @@ function openlab_bp_group_documents_display_content() {
 									</div>
 									<?php } ?>
 								</div>
+
+								<hr />
+								<div class="notify-group-members-ui">
+									<?php /* Default to checked for 'add' only, not 'edit' */ ?>
+									<?php openlab_notify_group_members_ui( 'add' === $template->operation ); ?>
+								</div>
+
+								<input type="submit" class="btn btn-primary bp-group-documents-submit" value="<?php esc_attr_e( 'Submit', 'bp-group-documents' ); ?>" />
+								<a href="<?php echo esc_attr( $template->action_link ); ?>" class="btn btn-default" <?php echo ( 'add' === $template->operation ) ? 'id="btn-group-documents-cancel"' : ''; ?>>Cancel</a>
 							</div>
 						</div>
-
-						<div class="notify-group-members-ui">
-							<?php /* Default to checked for 'add' only, not 'edit' */ ?>
-							<?php openlab_notify_group_members_ui( 'add' === $template->operation ); ?>
-						</div>
-
-						<input type="submit" class="btn btn-primary btn-margin bp-group-documents-submit" value="<?php esc_attr_e( 'Submit', 'bp-group-documents' ); ?>" />
 
 					</form>
 

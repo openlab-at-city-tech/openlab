@@ -33,6 +33,12 @@
             }
         });
 
+        // Show files on cancel on add new file form
+        $(document).on( 'click', '#btn-group-documents-cancel', function(e) {
+            e.preventDefault();
+            $('#bp-group-documents').removeClass('is-edit-mode');
+        });
+
 	});
 
 }(jQuery));

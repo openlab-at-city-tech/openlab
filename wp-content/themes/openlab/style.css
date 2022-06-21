@@ -10289,11 +10289,11 @@ body.membership-requests .group-list {
   margin-bottom: 19px;
   margin-top: 3px;
 }
-#bp-group-documents .bp-group-documents-submit {
-  margin-top: 10px;
+#bp-group-documents .btn-default {
+  text-decoration: none;
 }
 #bp-group-documents .notify-group-members-ui {
-  padding-top: 10px;
+  margin: 15px 0;
 }
 #bp-group-documents .group-file-folders legend {
   border-bottom: 0;
