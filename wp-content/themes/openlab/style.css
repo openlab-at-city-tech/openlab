@@ -10269,6 +10269,10 @@ body.membership-requests .group-list {
 #bp-group-documents .group-documents-icon {
   text-decoration: none;
 }
+#bp-group-documents .group-documents-meta,
+#bp-group-documents .group-documents-description {
+  margin: 0;
+}
 #bp-group-documents .show-all-files {
   margin-top: 0.5em;
 }
@@ -10289,11 +10293,11 @@ body.membership-requests .group-list {
   margin-bottom: 19px;
   margin-top: 3px;
 }
-#bp-group-documents .bp-group-documents-submit {
-  margin-top: 10px;
+#bp-group-documents .btn-default {
+  text-decoration: none;
 }
 #bp-group-documents .notify-group-members-ui {
-  padding-top: 10px;
+  margin: 15px 0;
 }
 #bp-group-documents .group-file-folders legend {
   border-bottom: 0;

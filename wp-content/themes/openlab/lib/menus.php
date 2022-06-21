@@ -329,6 +329,10 @@ function openlab_submenu_markup($type = '', $opt_var = NULL, $row_wrapper = true
             $submenu_text = 'Activity<span aria-hideen="true">:</span> ';
             $menu = openlab_group_activity_submenu();
             break;
+        case 'group-files':
+            $submenu_text = 'File Library<span aria-hidden="true">:</span> ';
+            $menu = openlab_group_files_submenu();
+            break;
         default:
             $submenu_text = 'My Settings<span aria-hidden="true">:</span> ';
             $menu = openlab_profile_settings_submenu();
@@ -581,6 +585,18 @@ function openlab_my_invitations_submenu() {
         $dud . 'invite-anyone/sent-invites/' => 'Sent Invitations',
     );
     return openlab_submenu_gen($menu_list);
+}
+
+function openlab_group_files_submenu() {
+    $base_url = bp_get_group_permalink( groups_get_current_group() ) . 'files';
+    $current_item = $base_url;
+
+    $menu_list = [
+        $base_url                           => 'All Files',
+        $base_url . '?action=add_new_file'  => 'Add New File'
+    ];
+
+    return openlab_submenu_gen( $menu_list, false, $current_item );
 }
 
 function openlab_submenu_gen( $items, $timestamp = false, $current_item = null ) {

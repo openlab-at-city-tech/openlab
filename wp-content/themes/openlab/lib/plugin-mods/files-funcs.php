@@ -214,14 +214,14 @@ function openlab_bp_group_documents_display_content() {
 								</a> &nbsp;
 
 							<?php if( $document->doc_type === 'upload' ) { ?>
-							<span class="group-documents-meta"><?php printf( esc_html__( 'Uploaded by %1$s on %2$s', 'bp-group-documents' ), bp_core_get_userlink( $document->user_id ), esc_html( date( get_option( 'date_format' ), $document->created_ts ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
+							<p class="group-documents-meta"><?php printf( esc_html__( 'Uploaded by %1$s on %2$s', 'bp-group-documents' ), bp_core_get_userlink( $document->user_id ), esc_html( date( get_option( 'date_format' ), $document->created_ts ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></p>
 							<?php } else { ?>
-								<span class="group-documents-meta"><?php printf( esc_html__( 'Added by %1$s on %2$s', 'openlab' ), bp_core_get_userlink( $document->user_id ), esc_html( date( get_option( 'date_format' ), $document->created_ts ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
+							<p class="group-documents-meta"><?php printf( esc_html__( 'Added by %1$s on %2$s', 'openlab' ), bp_core_get_userlink( $document->user_id ), esc_html( date( get_option( 'date_format' ), $document->created_ts ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></p>
 							<?php } ?>
 
 							<?php
 							if ( BP_GROUP_DOCUMENTS_SHOW_DESCRIPTIONS && $document->description ) {
-								echo '<br /><span class="group-documents-description"><em>Description:</em> ' . esc_html( nl2br( stripslashes( $document->description ) ) ) . '</span>';
+								echo '<p class="group-documents-description">Description: ' . esc_html( nl2br( stripslashes( $document->description ) ) ) . '</p>';
 							}
 
 							echo '</li>';
@@ -316,11 +316,11 @@ function openlab_bp_group_documents_display_content() {
 								<input type="hidden" name="bp_group_documents_file_type" value="<?php echo $template->doc_type; ?>" />
 								<?php } ?>
 
-								<div class="bp-group-documents-fields <?php echo ( $template->operation === 'add' ) ? 'show-link' : 'show-' . $template->doc_type; ?>">
+								<div class="bp-group-documents-fields <?php echo ( $template->operation === 'add' ) ? 'show-upload' : 'show-' . $template->doc_type; ?>">
 									<!-- Link -->
 									<?php if( 'add' === $template->operation ) { ?>
 									<div class="bp-group-documents-file-type-selector">
-										<input type="radio" checked="checked" name="bp_group_documents_file_type" class="bp-group-documents-file-type" id="bp-group-documents-file-type-link" value="link" />
+										<input type="radio" name="bp_group_documents_file_type" class="bp-group-documents-file-type" id="bp-group-documents-file-type-link" value="link" />
 										<label for="bp-group-documents-file-type-link">Link to external file</label>
 									</div>
 									<?php } ?>
@@ -344,7 +344,7 @@ function openlab_bp_group_documents_display_content() {
 												<input type="hidden" name="bp_group_documents_link_categories[]" value="0" />
 												<ul>
 												<?php foreach( $folders as $category ) { ?>
-													<li><input type="checkbox" name="bp_group_documents_link_categories[]" value="<?php echo esc_attr( $category->term_id ); ?>" id="group-folder-<?php echo esc_attr( $category->term_id ); ?>" <?php if( $template->doc_in_category($category->term_id)) echo 'checked="checked"'; ?> /> <label class="passive" for="group-folder-<?php echo esc_attr( $category->term_id ); ?>"><?php echo $category->name; ?></label></li>
+													<li><input type="checkbox" name="bp_group_documents_link_categories[]" value="<?php echo esc_attr( $category->term_id ); ?>" id="link-group-folder-<?php echo esc_attr( $category->term_id ); ?>" <?php if( $template->doc_in_category($category->term_id)) echo 'checked="checked"'; ?> /> <label class="passive" for="link-group-folder-<?php echo esc_attr( $category->term_id ); ?>"><?php echo $category->name; ?></label></li>
 												<?php } ?>
 												</ul>
 											</div>
@@ -357,7 +357,7 @@ function openlab_bp_group_documents_display_content() {
 									<!-- Upload -->
 									<?php if( 'add' === $template->operation ) { ?>
 									<div class="bp-group-documents-file-type-selector">
-										<input type="radio" name="bp_group_documents_file_type" class="bp-group-documents-file-type" id="bp-group-documents-file-type-upload" value="upload" />
+										<input type="radio" checked="checked" name="bp_group_documents_file_type" class="bp-group-documents-file-type" id="bp-group-documents-file-type-upload" value="upload" />
 										<label for="bp-group-documents-file-type-upload">Upload a file</label>
 									</div>
 									<?php } ?>
@@ -404,15 +404,17 @@ function openlab_bp_group_documents_display_content() {
 									</div>
 									<?php } ?>
 								</div>
+
+								<hr />
+								<div class="notify-group-members-ui">
+									<?php /* Default to checked for 'add' only, not 'edit' */ ?>
+									<?php openlab_notify_group_members_ui( 'add' === $template->operation ); ?>
+								</div>
+
+								<input type="submit" class="btn btn-primary bp-group-documents-submit" value="<?php esc_attr_e( 'Submit', 'bp-group-documents' ); ?>" />
+								<a href="<?php echo esc_attr( $template->action_link ); ?>" class="btn btn-default" <?php echo ( 'add' === $template->operation ) ? 'id="btn-group-documents-cancel"' : ''; ?>>Cancel</a>
 							</div>
 						</div>
-
-						<div class="notify-group-members-ui">
-							<?php /* Default to checked for 'add' only, not 'edit' */ ?>
-							<?php openlab_notify_group_members_ui( 'add' === $template->operation ); ?>
-						</div>
-
-						<input type="submit" class="btn btn-primary btn-margin bp-group-documents-submit" value="<?php esc_attr_e( 'Submit', 'bp-group-documents' ); ?>" />
 
 					</form>
 
