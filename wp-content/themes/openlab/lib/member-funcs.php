@@ -925,6 +925,18 @@ function cuny_member_profile_header() {
 						?>
 
 						<?php if ( bp_has_profile( $has_profile_args ) ) : ?>
+							<div class="table-row row">
+								<div class="bold col-sm-7 profile-field-label">
+									Name
+								</div>
+
+								<div class="col-sm-17 profile-field-value">
+									<?php echo bp_get_displayed_user_fullname(); ?>
+									<button type="button">
+										<span class="fa fa-volume-up"></span>
+									</button>
+								</div>
+							</div>
 
 							<?php
 							while ( bp_profile_groups() ) :
