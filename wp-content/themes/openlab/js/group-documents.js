@@ -33,10 +33,33 @@
             }
         });
 
+        // Remove the original click handler on the "Add new file" button
+        $('#bp-group-documents-upload-button').off();
+
+        // Add custom click handler on the "Add new file" button
+        $(document).on( 'click', '#bp-group-documents-upload-button', function(e) {
+            e.preventDefault();
+            $('.submenu-item').removeClass('current-menu-item');
+            $('.submenu-item.item-add-new-file').addClass('current-menu-item');
+            $('#bp-group-documents').addClass('is-edit-mode');
+        });
+
+        // Toggle current menu item when clicking 
+        $(document).on( 'click', '.submenu-item.item-add-new-file a', function(e) {
+            e.preventDefault();
+            if( ! $(this).hasClass('current-menu-item') ) {
+                $('.submenu-item').removeClass('current-menu-item');
+                $(this).parent('li').addClass('current-menu-item');
+                $('#bp-group-documents').addClass('is-edit-mode');
+            }
+        })
+
         // Show files on cancel on add new file form
         $(document).on( 'click', '#btn-group-documents-cancel', function(e) {
             e.preventDefault();
             $('#bp-group-documents').removeClass('is-edit-mode');
+            $('.submenu-item').removeClass('current-menu-item');
+            $('.submenu-item.item-all-files').addClass('current-menu-item');
         });
 
 	});

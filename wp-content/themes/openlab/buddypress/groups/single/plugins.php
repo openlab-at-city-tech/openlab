@@ -22,13 +22,7 @@ global $bp, $wp_query;
 
                 <?php elseif ($bp->current_action == 'files'): ?>
 
-                    <div class="row">
-                        <div class="submenu col-sm-17">
-                            <ul class="nav nav-inline">
-                                <li class="current-menu-item"><a href="">File Library</a></li>
-                            </ul>
-                        </div>
-                    </div>
+                    <?php echo openlab_submenu_markup( 'group-files' ); ?>
 
                 <?php elseif ($bp->current_component === 'events' || $bp->current_action === 'events'): ?>
 
