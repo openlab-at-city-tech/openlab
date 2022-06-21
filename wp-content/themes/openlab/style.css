@@ -10269,6 +10269,10 @@ body.membership-requests .group-list {
 #bp-group-documents .group-documents-icon {
   text-decoration: none;
 }
+#bp-group-documents .group-documents-meta,
+#bp-group-documents .group-documents-description {
+  margin: 0;
+}
 #bp-group-documents .show-all-files {
   margin-top: 0.5em;
 }
