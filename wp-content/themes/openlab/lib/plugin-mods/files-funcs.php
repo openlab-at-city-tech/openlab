@@ -234,9 +234,9 @@ function openlab_bp_group_documents_display_content() {
 			<div id="message" class="info">
 				<p class="bold">
 					<?php if ( $current_category ) : ?>
-						There are no files in this folder.
+						No files have been added yet. Add a new file below.
 					<?php else : ?>
-						There have been no files uploaded to this group.
+						No files have been added yet. Add a new file below.
 					<?php endif; ?>
 
 					<?php if ( $user_can_upload ) : ?>
