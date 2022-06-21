@@ -59,38 +59,14 @@ $field_ids = array(1);
                         <p class="description"></p>
                     </div>
                     <?php $display_name_shown = true ?>
-                <?php } ?>
-
-                <?php if ( 'staff' !== $account_type && 'faculty' !== $account_type ) : ?>
-                    <?php
-                    $depts   = [];
-                    $checked = openlab_get_user_academic_units( $user_ID );
-
-                    $schools = openlab_get_school_list();
-                    foreach ( $schools as $school => $_ ) {
-                        $depts += openlab_get_entity_departments( $school );
-                    }
-                    ?>
-                    <div class="editfield field_name alt">
-                        <label for="ol-offices">Major Program of Study (required)</label>
-                        <div class="error-container" id="academic-unit-selector-error"></div>
-                        <select
-                            name="departments-dropdown"
-                            class="form-control"
-                            data-parsley-required
-                            data-parsley-errors-container=".error-container"
-                            data-parsley-error-message="You must select at least one Department."
-                        >
-                            <option value="" <?php selected( empty( $checked['departments'] ) ); ?>>----</option>
-                            <option value="undecided" <?php selected( in_array( 'undecided', $checked['departments'], true ) ); ?>>Undecided</option>
-                            <?php foreach ( $depts as $dept_value => $dept ) : ?>
-                                <option value="<?php echo esc_attr( $dept_value ); ?>" <?php selected( in_array( $dept_value, $checked['departments'], true ) ); ?>><?php echo esc_html( $dept['label'] ); ?></option>
-                            <?php endforeach; ?>
-                        </select>
-
-                        <?php wp_nonce_field( 'openlab_academic_unit_selector_legacy', 'openlab-academic-unit-selector-legacy-nonce', false ); ?>
+                    <?php if( 'student' === $account_type || 'staff' === $account_type || 'faculty' === $account_type ) : ?>
+                    <div class="editfield field_name_pronunciation_recording alt form-group">
+                        <label for="field_name_pronunciation_recording">Name Pronunciation Recording</label>
+                        <p>SWOW RECORD CONTROLS HERE</p>
+                        <p class="description"></p>
                     </div>
-                <?php endif; ?>
+                    <?php endif; ?>
+                <?php } ?>
 
                 <?php /* Oy. Vey. */ ?>
                 <?php $just_did_title = false; ?>
@@ -100,6 +76,39 @@ $field_ids = array(1);
                     <?php while (bp_profile_fields()) : bp_the_profile_field(); ?>
                         <?php
                         if ( 'Major Program of Study' === bp_get_the_profile_field_name() || 'Department' === bp_get_the_profile_field_name() ) {
+                            if ( 'staff' !== $account_type && 'faculty' !== $account_type ) {
+                            
+                                $depts   = [];
+                                $checked = openlab_get_user_academic_units( $user_ID );
+            
+                                $schools = openlab_get_school_list();
+                                foreach ( $schools as $school => $_ ) {
+                                    $depts += openlab_get_entity_departments( $school );
+                                }
+                                ?>
+                                <div class="editfield field_name alt">
+                                    <label for="ol-offices">Major Program of Study (required)</label>
+                                    <div class="error-container" id="academic-unit-selector-error"></div>
+                                    <select
+                                        name="departments-dropdown"
+                                        class="form-control"
+                                        data-parsley-required
+                                        data-parsley-errors-container=".error-container"
+                                        data-parsley-error-message="You must select at least one Department."
+                                    >
+                                        <option value="" <?php selected( empty( $checked['departments'] ) ); ?>>----</option>
+                                        <option value="undecided" <?php selected( in_array( 'undecided', $checked['departments'], true ) ); ?>>Undecided</option>
+                                        <?php foreach ( $depts as $dept_value => $dept ) : ?>
+                                            <option value="<?php echo esc_attr( $dept_value ); ?>" <?php selected( in_array( $dept_value, $checked['departments'], true ) ); ?>><?php echo esc_html( $dept['label'] ); ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+            
+                                    <?php wp_nonce_field( 'openlab_academic_unit_selector_legacy', 'openlab-academic-unit-selector-legacy-nonce', false ); ?>
+                                </div>
+
+                                <?php
+                            }
+
                             continue;
                         }
                         ?>
