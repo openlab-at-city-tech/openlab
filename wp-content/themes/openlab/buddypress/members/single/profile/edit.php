@@ -62,8 +62,20 @@ $field_ids = array(1);
                     <?php if( 'student' === $account_type || 'staff' === $account_type || 'faculty' === $account_type ) : ?>
                     <div class="editfield field_name_pronunciation_recording alt form-group">
                         <label for="field_name_pronunciation_recording">Name Pronunciation Recording</label>
-                        <p>SWOW RECORD CONTROLS HERE</p>
-                        <p class="description"></p>
+                        <input id="field_name_pronunciation_recording" type="text" name="field_name_pronunciation_recording" />
+
+                        <br />
+                        <button type="button" id="recordPronunciation" class="btn btn-primary">
+                            Record
+                        </button>
+                        <button type="button" id="stopPronunciation" class="btn btn-default">
+                            Stop
+                        </button>
+                        <br />
+                        <p><strong>Recordings:</strong></p>
+                        <ol id="recordingsList"></ol>
+                        
+
                     </div>
                     <?php endif; ?>
                 <?php } ?>

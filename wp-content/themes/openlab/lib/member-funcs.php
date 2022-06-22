@@ -1728,3 +1728,14 @@ function openlab_update_member_group_privacy() {
 	) );
 	die();
 }
+
+/**
+ * Save the member S/O/D settings after save.
+ *
+ * @param int $user_id
+ */
+function openlab_user_name_pronunciation_save( $user_id ) {
+	print_r( $_POST );
+	die();
+}
+add_action( 'xprofile_updated_profile', 'openlab_user_name_pronunciation_save' );
