@@ -71,6 +71,7 @@ function openlab_register_embed_handlers() {
 
 	wp_embed_register_handler( 'desmos', '#https?://([^\.]+)\.desmos\.com/#i', 'openlab_embed_handler_desmos' );
 	wp_embed_register_handler( 'geogebra', '#https?://([^\.]+)\.geogebra\.org/#i', 'openlab_embed_handler_geogebra' );
+	wp_embed_register_handler( 'miro', '#https?://(?:[a-z]{2}\.)?miro\.com/#i', 'openlab_embed_handler_miro' );
 }
 add_action( 'init', 'openlab_register_embed_handlers' );
 
@@ -195,6 +196,34 @@ function openlab_embed_handler_geogebra( $matches, $attr, $url ) {
 			scrolling="no" 
 			src="https://www.geogebra.org/material/iframe/id/%s/rc/false/ai/false/sdz/false/smb/false/stb/false/stbh/true/ld/false/sri/false/sfsb/true"
 			style="position: absolute; top: 0; left: 0; width:100%%; height:100%%; border: 0;" allowfullscreen>
+		</iframe>
+		</div>',
+		esc_attr( $id )
+	);
+
+	return $embed;
+}
+
+/**
+ * Miro.com embed callback
+ */
+function openlab_embed_handler_miro( $matches, $attr, $url ) {
+	$path = parse_url( $url, PHP_URL_PATH );
+	
+	// Create array and remove empty values
+	$path = array_filter( explode( '/', $path ) );
+
+	// ID is always last in the array
+	$id = end($path);
+
+	$embed = sprintf(
+		'<div class="miro-iframe-container" style="position: relative; width: 100%%; height: 0; padding-bottom: 56.25%%;">
+		<iframe 
+			src="https://miro.com/app/live-embed/%s?embedAutoplay=true"
+			style="position: absolute; top: 0; left: 0; width:100%%; height:100%%; border: 0;" 
+			frameborder=0
+			scrolling="no"
+			allowFullScreen>
 		</iframe>
 		</div>',
 		esc_attr( $id )
