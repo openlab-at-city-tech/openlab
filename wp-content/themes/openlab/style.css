@@ -10238,6 +10238,9 @@ body.membership-requests .group-list {
 #bp-group-documents.is-edit-mode #bp-group-documents-upload-new {
   display: block;
 }
+#bp-group-documents.is-edit-mode #message.info {
+  display: none;
+}
 #bp-group-documents .bp-group-documents-list-folder-header {
   background-color: #f5f5f5;
   border: 1px solid #ddd;
