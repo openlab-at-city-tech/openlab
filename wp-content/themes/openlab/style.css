@@ -11297,12 +11297,12 @@ body.single-help .entry-content h6 {
   flex-flow: row wrap;
 }
 .activity-list .activity-entry-avatar {
-  flex: 0 0 120px;
-  max-width: 120px;
+  flex: 0 0 75px;
+  max-width: 75px;
 }
 .activity-list .activity-entry-data {
-  flex: 0 0 calc(100% - 120px);
-  max-width: calc(100% - 120px);
+  flex: 0 0 calc(100% - 75px);
+  max-width: calc(100% - 75px);
   padding-left: 15px;
 }
 .activity-list .activity-header {
@@ -11318,6 +11318,7 @@ body.single-help .entry-content h6 {
 }
 .activity-list .activity-header-title .item-title {
   margin: 0 !important;
+  font-size: 16px;
 }
 .activity-list .activity-header-meta {
   flex: 0 0 45px;
@@ -11330,7 +11331,7 @@ body.single-help .entry-content h6 {
   transition: all 350ms ease-in-out;
 }
 .activity-list .activity-header-meta .fav span {
-  color: #888;
+  color: #444;
 }
 .activity-list .activity-header-meta .fav:hover span {
   color: #ff5959;
@@ -11339,10 +11340,10 @@ body.single-help .entry-content h6 {
   color: #ff5959;
 }
 .activity-list .activity-header-meta .unfav:hover span {
-  color: #888;
+  color: #444;
 }
-.activity-list .activity-body {
-  padding-right: 30px;
+.activity-list .activity-body p {
+  font-size: 14px;
 }
 .activity-list .activity-body img {
   display: none;
