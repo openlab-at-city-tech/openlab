@@ -1535,7 +1535,7 @@ function openlab_get_user_activity_action( $activity = null ) {
 	}
 
 	// Modify activity date format, remove link and add "on" before the date
-	$output .= ' on ' . date('F n, Y \a\t g:i a', strtotime( $activity->date_recorded ) );
+	$output .= ' on ' . date('F d, Y \a\t g:i a', strtotime( $activity->date_recorded ) );
 	$output = wpautop( $output );
 
 	// Activity view button
