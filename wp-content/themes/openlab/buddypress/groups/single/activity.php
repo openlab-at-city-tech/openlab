@@ -12,7 +12,7 @@ $filter_options = [
 	'bp_doc_created'		=> __( 'New Docs', 'buddypress' ),
 	'bp_doc_edited'			=> __( 'Doc Edits', 'buddypress' ),
 	'bp_doc_comment'		=> __( 'Doc Comments', 'buddypress' ),
-	'bbp_topic_creat'		=> __( 'New Discussion Topics', 'openlab' ),
+	'bbp_topic_create'		=> __( 'New Discussion Topics', 'openlab' ),
 	'bbp_reply_create'		=> __( 'Discussion Replies', 'openlab' )
 ];
 ?>
