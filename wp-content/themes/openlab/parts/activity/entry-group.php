@@ -1,8 +1,8 @@
 <div class="group-item">
 	<div class="group-item-wrapper">
-		<div class="row">
-			<div class="item-avatar alignleft col-xs-3">
-				<div class="group-activity-avatar">
+		<div class="activity-entry-row">
+			<div class="activity-entry-avatar">
+				<div class="activity-avatar">
                     <a href="<?php bp_activity_user_link(); ?>">
                         <?php bp_activity_avatar( array(
                             'type'  => 'full',
@@ -11,7 +11,7 @@
                     </a>
 				</div>
 			</div>
-			<div class="item col-xs-21">
+			<div class="activity-entry-data">
                 <div class="group-activity-content">
                     <div class="activity-body">
                         <?php echo openlab_get_user_activity_action(); ?>

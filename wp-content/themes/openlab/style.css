@@ -11600,16 +11600,16 @@ body.single-help .entry-content h6 {
   flex-flow: row wrap;
 }
 .group-activity-content .activity-body {
-  flex: 0 0 calc(100% - 45px);
-  max-width: calc(100% - 45px);
-  padding-right: 30px;
+  flex: 0 0 calc(100% - 30px);
+  max-width: calc(100% - 30px);
+  padding-right: 15px;
 }
 .group-activity-content .activity-body p {
   margin-top: 0;
 }
 .group-activity-content .activity-action {
-  flex: 0 0 45px;
-  max-width: 45x;
+  flex: 0 0 30px;
+  max-width: 30px;
   text-align: right;
 }
 .group-activity-content .activity-action span {
@@ -11617,7 +11617,7 @@ body.single-help .entry-content h6 {
   transition: all 350ms ease-in-out;
 }
 .group-activity-content .activity-action .fav span {
-  color: #888;
+  color: #444;
 }
 .group-activity-content .activity-action .fav:hover span {
   color: #ff5959;
@@ -11626,7 +11626,7 @@ body.single-help .entry-content h6 {
   color: #ff5959;
 }
 .group-activity-content .activity-action .unfav:hover span {
-  color: #888;
+  color: #444;
 }
 /**Custom media query items**/
 @media (max-width: 767px) {
