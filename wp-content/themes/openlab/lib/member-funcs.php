@@ -1549,7 +1549,7 @@ function openlab_get_user_activity_action( $activity = null ) {
 	}
 
 	// Modify activity date format, remove link and add "on" before the date
-	$output .= ' on ' . date('F n, Y \a\t g:i a', strtotime( $activity->date_recorded ) );
+	$output .= ' on ' . date('F d, Y \a\t g:i a', strtotime( $activity->date_recorded ) );
 	$output = wpautop( $output );
 
 	// Activity view button
@@ -1558,7 +1558,7 @@ function openlab_get_user_activity_action( $activity = null ) {
 
 	// Append activity view button
 	if( $view_button_label ) {
-		$output .= '<a href="' . $view_button_link . '" class="btn btn-primary">' . $view_button_label . '</a>';
+		$output .= '<a href="' . $view_button_link . '" class="btn btn-xs btn-primary">' . $view_button_label . '</a>';
 	}
 
 	return $output;
@@ -1574,8 +1574,14 @@ function openlab_get_activity_view_button_label( $activity_type = '' ) {
 		'added_group_document'  => 'File',
 		'bp_doc_created'        => 'Doc',
 		'bp_doc_edited'	        => 'Doc',
+		'bp_doc_comment'		=> 'Comment',
 		'new_blog_comment'      => 'Reply',
+		'bbp_topic_create'		=> 'Topic',
 		'bbp_reply_create'      => 'Reply',
+		'new_blog_post'			=> 'Post',
+		'new_blog_comment'		=> 'Comment',
+		'created_group'			=> 'Group',
+		'joined_group'			=> 'Group'
 	);
 
 	if( $labels[$activity_type] ) {

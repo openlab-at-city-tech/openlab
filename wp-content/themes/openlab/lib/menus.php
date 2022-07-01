@@ -537,7 +537,7 @@ function openlab_my_activity_submenu() {
 	$base_url = bp_loggedin_user_domain() . 'my-activity';
 
 	$current_item = $base_url;
-	if ( ! empty( $_GET['type'] ) && in_array( $_GET['type'], [ 'mine', 'favorites', 'mentions', 'pins' ], true ) ) {
+	if ( ! empty( $_GET['type'] ) && in_array( $_GET['type'], [ 'mine', 'favorites', 'mentions', 'stars' ], true ) ) {
 		$current_item .= '?type=' . $_GET['type'];
 
 	}
@@ -547,7 +547,7 @@ function openlab_my_activity_submenu() {
 		$base_url . '?type=mine'      => 'Mine',
 		$base_url . '?type=favorites' => 'Favorites',
 		$base_url . '?type=mentions'  => '@Mentions',
-		$base_url . '?type=pins'      => 'Pins',
+		$base_url . '?type=stars'      => 'Stars',
 	];
 
 	return openlab_submenu_gen( $menu_list, false, $current_item  );

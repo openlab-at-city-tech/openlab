@@ -11486,26 +11486,45 @@ body.single-help .entry-content h6 {
   margin-left: 0;
 }
 .activity-list .group-item-wrapper {
-  padding: 1.2%;
+  padding: 15px;
   height: auto;
+}
+.activity-list .group-item-wrapper p {
+  margin-top: 0;
+  margin-bottom: 15px;
+}
+.activity-list .activity-entry-row {
+  display: flex;
+  flex-flow: row wrap;
+}
+.activity-list .activity-entry-avatar {
+  flex: 0 0 75px;
+  max-width: 75px;
+}
+.activity-list .activity-entry-data {
+  flex: 0 0 calc(100% - 75px);
+  max-width: calc(100% - 75px);
+  padding-left: 15px;
 }
 .activity-list .activity-header {
   display: flex;
   flex-flow: row wrap;
   justify-content: space-between;
+  margin-bottom: 10px;
 }
 .activity-list .activity-header-title {
   flex: 0 0 calc(100% - 45px);
   max-width: calc(100% - 45px);
   padding-right: 15px;
 }
+.activity-list .activity-header-title .item-title {
+  margin: 0 !important;
+  font-size: 16px;
+}
 .activity-list .activity-header-meta {
   flex: 0 0 45px;
   max-width: 45px;
   padding-left: 15px;
-}
-.activity-list .activity-header-meta {
-  margin-bottom: 15px;
   text-align: right;
 }
 .activity-list .activity-header-meta span {
@@ -11513,7 +11532,7 @@ body.single-help .entry-content h6 {
   transition: all 350ms ease-in-out;
 }
 .activity-list .activity-header-meta .fav span {
-  color: #888;
+  color: #444;
 }
 .activity-list .activity-header-meta .fav:hover span {
   color: #ff5959;
@@ -11522,7 +11541,10 @@ body.single-help .entry-content h6 {
   color: #ff5959;
 }
 .activity-list .activity-header-meta .unfav:hover span {
-  color: #888;
+  color: #444;
+}
+.activity-list .activity-body p {
+  font-size: 14px;
 }
 .activity-list .activity-body img {
   display: none;

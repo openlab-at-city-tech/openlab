@@ -13,31 +13,29 @@ $filter_options = [
 	'bp_doc_created'		=> __( 'New Docs', 'buddypress' ),
 	'bp_doc_edited'			=> __( 'Doc Edits', 'buddypress' ),
 	'bp_doc_comment'		=> __( 'Doc Comments', 'buddypress' ),
-	'bbp_topic_creat'		=> __( 'New Discussion Topics', 'openlab' ),
+	'bbp_topic_create'		=> __( 'New Discussion Topics', 'openlab' ),
 	'bbp_reply_create'		=> __( 'Discussion Replies', 'openlab' )
 ];
-
-add_filter( 'bp_activity_time_since', 'openlab_change_activity_date_format' );
 ?>
 
 <?php echo openlab_submenu_markup( 'my-activity' ); ?>
 <div id="item-body" role="main">
 	<?php do_action( 'bp_before_activity_loop' ); ?>
 
-	<?php if ( bp_has_activities( $args ) ) : ?>
-		<div class="activity-filter">
-			<form action="" id="activity-filter-form" class="activity-filter-form" method="GET">
-				<?php if( ! empty( $type ) ) { ?>
-				<input type="hidden" name="type" value="<?php echo $type; ?>" />
+	<div class="activity-filter">
+		<form action="" id="activity-filter-form" class="activity-filter-form" method="GET">
+			<?php if( ! empty( $type ) ) { ?>
+			<input type="hidden" name="type" value="<?php echo $type; ?>" />
+			<?php } ?>
+			<select id="activity-filter-by" name="filter" class="form-control">
+				<?php foreach( $filter_options as $key => $label ) { ?>
+				<option value="<?php echo $key; ?>" <?php echo ( $filter === $key ) ? 'selected' : ''; ?>><?php echo $label; ?></option>
 				<?php } ?>
-				<select id="activity-filter-by" name="filter" class="form-control">
-					<?php foreach( $filter_options as $key => $label ) { ?>
-					<option value="<?php echo $key; ?>" <?php echo ( $filter === $key ) ? 'selected' : ''; ?>><?php echo $label; ?></option>
-					<?php } ?>
-				</select>
-			</form>
-		</div>
-		
+			</select>
+		</form>
+	</div>
+
+	<?php if ( bp_has_activities( $args ) ) : ?>
 		<?php if ( empty( $_POST['page'] ) ) : ?>
 			<div id="activity-stream" class="activity-list item-list group-list">
 		<?php endif; ?>
@@ -66,4 +64,3 @@ add_filter( 'bp_activity_time_since', 'openlab_change_activity_date_format' );
 		</form>
 	<?php endif; ?>
 </div>
-<?php remove_filter( 'bp_activity_time_since', 'openlab_change_activity_date_format' ); ?>
