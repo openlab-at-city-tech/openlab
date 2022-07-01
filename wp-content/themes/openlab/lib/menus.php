@@ -591,10 +591,17 @@ function openlab_group_files_submenu() {
     $base_url = bp_get_group_permalink( groups_get_current_group() ) . 'files';
     $current_item = $base_url;
 
+    $user_can_upload = current_user_can( 'bp_moderate' ) || groups_is_user_member( bp_loggedin_user_id(), bp_get_current_group_id() );
+
     $menu_list = [
-        $base_url                           => 'All Files',
-        $base_url . '?action=add_new_file'  => 'Add New File'
+        $base_url                           => 'All Files'
     ];
+
+    if( $user_can_upload ) {
+        $menu_list += [
+            $base_url . '?action=add_new_file'  => 'Add New File'
+        ];
+    }
 
     return openlab_submenu_gen( $menu_list, false, $current_item );
 }
