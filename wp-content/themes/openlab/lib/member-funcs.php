@@ -1548,6 +1548,14 @@ function openlab_get_user_activity_action( $activity = null ) {
 		$output = str_replace( 'commented on', 'commented on the post', $output );
 	}
 
+	// Remove "in the group/forum" text from the activity on the group activity stream
+	if( bp_is_group() ) {
+		$group = bp_get_group( bp_get_current_group_id() );
+		$group_link = bp_get_group_permalink( $group );
+		$output = str_replace( 'in the group <a href="' . $group_link . '">' . bp_get_group_name() . '</a>', '', $output );
+		$output = str_replace( 'in the forum <a href="' . $group_link . 'forum/">' . bp_get_group_name() . '</a>', '', $output );
+	}
+
 	// Modify activity date format, remove link and add "on" before the date
 	$output .= ' on ' . date('F d, Y \a\t g:i a', strtotime( $activity->date_recorded ) );
 	$output = wpautop( $output );
