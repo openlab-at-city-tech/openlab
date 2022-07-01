@@ -1394,7 +1394,7 @@ function openlab_activities_loop_args( $activity_type = '', $filter = '' ) {
                 'scope' => 'mentions'
             ];
             break;
-        case 'pins':
+        case 'starred':
             $args += [
                 'scope' => 'favorites'
             ];
