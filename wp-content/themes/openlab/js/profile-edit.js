@@ -32,13 +32,13 @@ jQuery(document).ready(function($) {
     var gumStream;
     var recorder;
     var chunks = [];
+    var recordingTimeout;
 
     $(document).on( 'click', 'button#recordPronunciation', function() {
         recordButton.prop('disabled', true);
         stopButton.prop('disabled', false);
         recordingStatus.text('Recording...');
         recordedAudio.html('');
-
 
         navigator.mediaDevices.getUserMedia(constraints).then(function(stream) {
             console.log("getUserMedia() success, stream created, initializing MediaRecorder");
@@ -64,6 +64,7 @@ jQuery(document).ready(function($) {
             }
 
             recorder.start();
+            recordingTimeout = setTimeout( stopRecording, 11000 );
         }).catch(function(err) {
             console.log( err );
             
@@ -74,10 +75,10 @@ jQuery(document).ready(function($) {
         
     });
 
+
     function showRecordedAudio(blob) {
         const blobUrl = URL.createObjectURL(blob);
         
-
         var fileReader = new FileReader();
         fileReader.onload = function(e) {
             console.log('executing this');
@@ -93,12 +94,16 @@ jQuery(document).ready(function($) {
         recordingStatus.text('You can listen to your recording below. If you want to record new audio, just click Record.')
     }
 
-    $(document).on( 'click', 'button#stopPronunciation', function() {
+    function stopRecording() {
         console.log('stop recording');
         recorder.stop();
         gumStream.getAudioTracks()[0].stop();
         recordButton.prop('disabled', false);
         stopButton.prop('disabled', true);
+    }
+
+    $(document).on( 'click', 'button#stopPronunciation', function() {
+        stopRecording();
     });
 
 });
