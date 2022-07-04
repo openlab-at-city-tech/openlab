@@ -25,6 +25,7 @@ if (isset($exclude_groups)) {
 
 $display_name_shown = isset($pgroup) && 1 == $pgroup;
 $field_ids = array(1);
+$recording = openlab_get_user_name_pronunciation_url( $user_ID );
 ?>
 <?php echo openlab_submenu_markup(); ?>
 
@@ -62,20 +63,20 @@ $field_ids = array(1);
                     <?php if( 'student' === $account_type || 'staff' === $account_type || 'faculty' === $account_type ) : ?>
                     <div class="editfield field_name_pronunciation_recording alt form-group">
                         <label for="field_name_pronunciation_recording">Name Pronunciation Recording</label>
-                        <input id="field_name_pronunciation_recording" type="text" name="field_name_pronunciation_recording" />
-
+                        <input type="hidden" id="name_pronunciation_blob" name="name_pronunciation_blob" />
                         <br />
                         <button type="button" id="recordPronunciation" class="btn btn-primary">
                             Record
                         </button>
-                        <button type="button" id="stopPronunciation" class="btn btn-default">
+                        <button type="button" id="stopPronunciation" class="btn btn-default" disabled>
                             Stop
                         </button>
-                        <br />
-                        <p><strong>Recordings:</strong></p>
-                        <ol id="recordingsList"></ol>
-                        
-
+                        <p class="recordingStatus">Press the Record button to record your name pronunciation...</p>
+                        <div id="recordedAudio">
+                            <?php if( $recording ) : ?>
+                            <audio src="<?php echo $recording; ?>" controls></audio>
+                            <?php endif; ?>
+                        </div>
                     </div>
                     <?php endif; ?>
                 <?php } ?>

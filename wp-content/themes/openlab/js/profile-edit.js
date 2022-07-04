@@ -23,7 +23,8 @@ jQuery(document).ready(function($) {
     // Name pronunciation recording
     var recordButton = $('button#recordPronunciation');
     var stopButton = $('button#stopPronunciation');
-    var list = document.getElementById('recordingsList');
+    var recordingStatus = $('p.recordingStatus');
+    var recordedAudio = $('#recordedAudio')
     const constraints = {
         audio: true
     };
@@ -33,8 +34,11 @@ jQuery(document).ready(function($) {
     var chunks = [];
 
     $(document).on( 'click', 'button#recordPronunciation', function() {
-        console.log('start recording');
         recordButton.prop('disabled', true);
+        stopButton.prop('disabled', false);
+        recordingStatus.text('Recording...');
+        recordedAudio.html('');
+
 
         navigator.mediaDevices.getUserMedia(constraints).then(function(stream) {
             console.log("getUserMedia() success, stream created, initializing MediaRecorder");
@@ -49,7 +53,7 @@ jQuery(document).ready(function($) {
                 if ( recorder.state == 'inactive' ) {
                     // convert stream data chunks to a 'webm' audio format as a blob
                     const blob = new Blob(chunks, { type: mimeType } );
-                    createDownloadLink(blob);
+                    showRecordedAudio(blob);
                     chunks = [];
                 }
             }
@@ -59,45 +63,34 @@ jQuery(document).ready(function($) {
                 console.log(e.error);
             }
 
-            //start recording using 1 second chunks
-            //Chrome and Firefox will record one long chunk if you do not specify the chunck length
-            // recorder.start(1000);
             recorder.start();
         }).catch(function(err) {
-            console.log( 'ERROR' );
             console.log( err );
-            //enable the record button if getUserMedia() fails
-            // recordButton.disabled = false;
-            // stopButton.disabled = true;
-            // pauseButton.disabled = true
+            
+            recordButton.prop('disabled', false);
+            stopButton.prop('disabled', true);
+            recordingStatus.innerHTML = 'Show error message...';
         });
         
     });
 
-    function createDownloadLink(blob) {
+    function showRecordedAudio(blob) {
         const blobUrl = URL.createObjectURL(blob);
-        $('input#field_name_pronunciation_recording').val(blobUrl);
-        const li = document.createElement('li');
+        
+
+        var fileReader = new FileReader();
+        fileReader.onload = function(e) {
+            console.log('executing this');
+            $('input#name_pronunciation_blob').val(e.target.result);
+        }
+
+        fileReader.readAsDataURL(blob);
+
         const audio = document.createElement('audio');
-        const anchor = document.createElement('a');
-        anchor.setAttribute('href', blobUrl);
-        const now = new Date();
-        var fileName = `recording-${now.getFullYear()}-${(now.getMonth() + 1).toString().padStart(2, '0')}-${now.getDay().toString().padStart(2, '0')}--${now.getHours().toString().padStart(2, '0')}-${now.getMinutes().toString().padStart(2, '0')}-${now.getSeconds().toString().padStart(2, '0')}.webm`;
-        anchor.setAttribute(
-            'download',
-            fileName
-        );
-        anchor.innerText = 'Download';
         audio.setAttribute('src', blobUrl);
         audio.setAttribute('controls', 'controls');
-        li.appendChild(audio);
-        li.appendChild(anchor);
-        list.appendChild(li);
-        
-        // createFileFromBlob(blob, fileName);
-    }
-
-    function createFileFromBlob(blob, filename) {
+        recordedAudio.append(audio);
+        recordingStatus.text('You can listen to your recording below. If you want to record new audio, just click Record.')
     }
 
     $(document).on( 'click', 'button#stopPronunciation', function() {
@@ -105,6 +98,7 @@ jQuery(document).ready(function($) {
         recorder.stop();
         gumStream.getAudioTracks()[0].stop();
         recordButton.prop('disabled', false);
+        stopButton.prop('disabled', true);
     });
 
 });

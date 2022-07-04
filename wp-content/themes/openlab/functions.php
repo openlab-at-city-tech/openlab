@@ -119,6 +119,10 @@ function openlab_load_scripts() {
         ) );
     }
 
+    if( bp_is_user() ) {
+        wp_enqueue_script( 'openlab-profile', $stylesheet_dir_uri . '/js/profile.js', [ 'jquery' ] );
+    }
+
     wp_enqueue_script( 'openlab-group-documents', $stylesheet_dir_uri . '/js/group-documents.js', [ 'jquery' ] );
 
     if( bp_is_group() ) {

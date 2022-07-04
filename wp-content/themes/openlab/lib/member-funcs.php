@@ -921,7 +921,7 @@ function cuny_member_profile_header() {
 						$user_units = openlab_get_user_academic_units( bp_displayed_user_id() );
 						$department = openlab_generate_department_name( $user_units );
 						$dept_label = in_array( $account_type, array( 'student', 'alumni' ), true ) ? 'Major Program of Study' : 'Department';
-
+						$recording = openlab_get_user_name_pronunciation_url( bp_displayed_user_id() );
 						?>
 
 						<?php if ( bp_has_profile( $has_profile_args ) ) : ?>
@@ -932,9 +932,12 @@ function cuny_member_profile_header() {
 
 								<div class="col-sm-17 profile-field-value">
 									<?php echo bp_get_displayed_user_fullname(); ?>
-									<button type="button">
+									<?php if( $recording ) : ?>
+									<button type="button" id="playNamePronunciation">
 										<span class="fa fa-volume-up"></span>
 									</button>
+									<audio hidden id="userNamePronunciation" src="<?php echo $recording; ?>" controls></audio>
+									<?php endif; ?>
 								</div>
 							</div>
 
@@ -1730,12 +1733,43 @@ function openlab_update_member_group_privacy() {
 }
 
 /**
- * Save the member S/O/D settings after save.
+ * Save the member name pronunciation audio.
  *
  * @param int $user_id
  */
 function openlab_user_name_pronunciation_save( $user_id ) {
-	print_r( $_POST );
-	die();
+	if( ! empty( $_POST['name_pronunciation_blob'] ) ) {
+		$base64_string = str_replace('data:audio/webm;base64,', '', $_POST['name_pronunciation_blob'] );
+		$audio = base64_decode( $base64_string, true );
+
+		$wp_upload_dir = wp_upload_dir();
+		$pronunciations_dir_name = '/name-pronunciations';
+		$full_dir_path = $wp_upload_dir['basedir'] . $pronunciations_dir_name;
+
+		if( ! is_dir( $full_dir_path ) ) {
+			wp_mkdir_p( $full_dir_path );
+		}
+
+		$user_id = bp_loggedin_user_id();
+
+		$full_file_path = $full_dir_path . '/user-' . $user_id . '.webm';
+		if( file_put_contents( $full_file_path, $audio ) ) {
+			$file_path = $pronunciations_dir_name . '/user-' . $user_id . '.webm';
+			bp_update_user_meta( $user_id, 'name_pronunciation_path', $file_path );
+		}
+	}
 }
 add_action( 'xprofile_updated_profile', 'openlab_user_name_pronunciation_save' );
+
+function openlab_get_user_name_pronunciation_url( $user_id ) {
+	$path = bp_get_user_meta( $user_id, 'name_pronunciation_path', true );
+
+	if( $path ) {
+		$wp_upload_dir = wp_upload_dir();
+		$url = $wp_upload_dir['baseurl'] . $path;
+
+		return $url;
+	}
+
+	return;
+}
