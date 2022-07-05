@@ -63,14 +63,13 @@ $recording = openlab_get_user_name_pronunciation_url( $user_ID );
                     <?php if( 'student' === $account_type || 'staff' === $account_type || 'faculty' === $account_type ) : ?>
                     <div class="editfield field_name_pronunciation_recording alt form-group">
                         <label for="field_name_pronunciation_recording">Name Pronunciation Recording</label>
-                        <input type="hidden" id="name_pronunciation_blob" name="name_pronunciation_blob" />
                         <br />
                         <button type="button" id="recordPronunciation" class="btn btn-primary">Start recording</button>
                         <button type="button" id="stopPronunciation" class="btn btn-danger" disabled>Stop</button>
-                        <p class="recordingStatus"></p>
+                        <p id="recordingStatus"></p>
                         <div id="recordedAudio">
                             <?php if( $recording ) : ?>
-                            <p><strong>Your current recorded name pronunciation</strong></p>
+                            <input type="hidden" id="has_recording" name="has_recording" value="true" />
                             <audio src="<?php echo $recording; ?>" controls></audio>
                             <a href="#" id="removeAudio" class="remove-audio">Remove</a>
                             <?php endif; ?>

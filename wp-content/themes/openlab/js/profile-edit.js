@@ -23,7 +23,7 @@ jQuery(document).ready(function($) {
     
     var startButton = $('button#recordPronunciation');
     var stopButton = $('button#stopPronunciation');
-    var recordingStatus = $('p.recordingStatus');
+    var recordingStatus = $('#recordingStatus');
     var recordedAudio = $('#recordedAudio')
     const mediaRequestType = {
         audio: true
@@ -121,8 +121,6 @@ jQuery(document).ready(function($) {
     function deleteRecording() {
         // Empty audio wrapper
         $('#recordedAudio').html('');
-        // Empty blob data
-        $('input#name_pronunciation_blob').val('');
     }
 
     /**
@@ -150,7 +148,13 @@ jQuery(document).ready(function($) {
         // Read the content of the Blob and store the base64 in field
         var fileReader = new FileReader();
         fileReader.onload = function(e) {
-            $('input#name_pronunciation_blob').val(e.target.result);
+            // Create field for storing blob's data
+            var audioBlob = document.createElement('input');
+            audioBlob.setAttribute('type', 'text');
+            audioBlob.setAttribute('id', 'name_pronunciation_blob');
+            audioBlob.setAttribute('name', 'name_pronunciation_blob');
+            audioBlob.setAttribute('value', e.target.result);
+            recordedAudio.append(audioBlob);
         }
         fileReader.readAsDataURL(blob);
 
@@ -159,6 +163,7 @@ jQuery(document).ready(function($) {
         audio.setAttribute('src', blobUrl);
         audio.setAttribute('controls', 'controls');
 
+        // Create remove audio link
         var removeAudio = document.createElement('a');
         removeAudio.setAttribute('href', '#');
         removeAudio.setAttribute('class', 'remove-audio');

@@ -1738,7 +1738,7 @@ function openlab_update_member_group_privacy() {
  * @param int $user_id
  */
 function openlab_user_name_pronunciation_save( $user_id ) {
-	if( ! empty( $_POST['name_pronunciation_blob'] ) ) {
+	if( $_POST['name_pronunciation_blob'] && ! empty( $_POST['name_pronunciation_blob'] ) ) {
 		$base64_string = str_replace('data:audio/webm;base64,', '', $_POST['name_pronunciation_blob'] );
 		$audio = base64_decode( $base64_string, true );
 
@@ -1750,12 +1750,19 @@ function openlab_user_name_pronunciation_save( $user_id ) {
 			wp_mkdir_p( $full_dir_path );
 		}
 
-		$user_id = bp_loggedin_user_id();
-
 		$full_file_path = $full_dir_path . '/user-' . $user_id . '.webm';
 		if( file_put_contents( $full_file_path, $audio ) ) {
 			$file_path = $pronunciations_dir_name . '/user-' . $user_id . '.webm';
 			bp_update_user_meta( $user_id, 'name_pronunciation_path', $file_path );
+		}
+	} else {
+		if( ! isset( $_POST['has_recording'] ) ) {
+			$path = bp_get_user_meta( $user_id, 'name_pronunciation_path', true );
+			$wp_upload_dir = wp_upload_dir();
+			$full_dir_path = $wp_upload_dir['basedir'] . $path;
+
+			bp_delete_user_meta( $user_id, 'name_pronunciation_path' );
+			unlink($full_dir_path);
 		}
 	}
 }
