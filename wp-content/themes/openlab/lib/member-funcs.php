@@ -933,7 +933,7 @@ function cuny_member_profile_header() {
 								<div class="col-sm-17 profile-field-value">
 									<?php echo bp_get_displayed_user_fullname(); ?>
 									<?php if( $recording ) : ?>
-									<button type="button" id="playNamePronunciation">
+									<button type="button" class="profile-play-button" id="playNamePronunciation">
 										<span class="fa fa-volume-up"></span>
 									</button>
 									<audio hidden id="userNamePronunciation" src="<?php echo $recording; ?>" controls></audio>
