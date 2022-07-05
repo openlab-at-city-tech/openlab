@@ -150,7 +150,7 @@ jQuery(document).ready(function($) {
         fileReader.onload = function(e) {
             // Create field for storing blob's data
             var audioBlob = document.createElement('input');
-            audioBlob.setAttribute('type', 'text');
+            audioBlob.setAttribute('type', 'hidden');
             audioBlob.setAttribute('id', 'name_pronunciation_blob');
             audioBlob.setAttribute('name', 'name_pronunciation_blob');
             audioBlob.setAttribute('value', e.target.result);
