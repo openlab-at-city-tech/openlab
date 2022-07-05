@@ -11531,17 +11531,24 @@ body.single-help .entry-content h6 {
   font-size: 20px;
   transition: all 350ms ease-in-out;
 }
-.activity-list .activity-header-meta .fav span {
-  color: #444;
-}
-.activity-list .activity-header-meta .fav:hover span {
-  color: #ff5959;
-}
+.activity-list .activity-header-meta .fav span,
 .activity-list .activity-header-meta .unfav span {
-  color: #ff5959;
-}
-.activity-list .activity-header-meta .unfav:hover span {
   color: #444;
+}
+.activity-list .activity-header-meta .fav:focus,
+.activity-list .activity-header-meta .unfav:focus,
+.activity-list .activity-header-meta .fav:active,
+.activity-list .activity-header-meta .unfav:active {
+  outline: none;
+}
+.activity-list .activity-header-meta .fav span:before {
+  content: "\f006";
+}
+.activity-list .activity-header-meta .fav:hover span:before {
+  content: "\f005";
+}
+.activity-list .activity-header-meta .unfav span:before {
+  content: "\f005";
 }
 .activity-list .activity-body p {
   font-size: 14px;
@@ -11616,17 +11623,24 @@ body.single-help .entry-content h6 {
   font-size: 20px;
   transition: all 350ms ease-in-out;
 }
-.group-activity-content .activity-action .fav span {
-  color: #444;
-}
-.group-activity-content .activity-action .fav:hover span {
-  color: #ff5959;
-}
+.group-activity-content .activity-action .fav span,
 .group-activity-content .activity-action .unfav span {
-  color: #ff5959;
-}
-.group-activity-content .activity-action .unfav:hover span {
   color: #444;
+}
+.group-activity-content .activity-action .fav:focus,
+.group-activity-content .activity-action .unfav:focus,
+.group-activity-content .activity-action .fav:active,
+.group-activity-content .activity-action .unfav:active {
+  outline: none;
+}
+.group-activity-content .activity-action .fav span:before {
+  content: "\f006";
+}
+.group-activity-content .activity-action .fav:hover span:before {
+  content: "\f005";
+}
+.group-activity-content .activity-action .unfav span:before {
+  content: "\f005";
 }
 /**Custom media query items**/
 @media (max-width: 767px) {

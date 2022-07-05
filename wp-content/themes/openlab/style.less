@@ -4542,27 +4542,39 @@ body.single-help {
                 font-size: 20px;
                 transition: all 350ms ease-in-out;
             }
-    
-            .fav {
+
+            .fav,
+            .unfav {
                 span {
                     color: #444;
                 }
-    
+
+                &:focus,
+                &:active {
+                    outline: none;
+                }
+            }
+
+            .fav {
+                span {
+                    &:before {
+                        content: "\f006";
+                    }
+                }
+
                 &:hover {
                     span {
-                        color: @magenta;
+                        &:before {
+                            content: "\f005";
+                        }
                     }
                 }
             }
-    
+
             .unfav {
                 span {
-                    color: @magenta;
-                }
-    
-                &:hover {
-                    span {
-                        color: #444;
+                    &:before {
+                        content: "\f005";
                     }
                 }
             }
@@ -4658,26 +4670,38 @@ body.single-help {
             transition: all 350ms ease-in-out;
         }
 
-        .fav {
+        .fav,
+        .unfav {
             span {
                 color: #444;
             }
 
+            &:focus,
+            &:active {
+                outline: none;
+            }
+        }
+
+        .fav {
+            span {
+                &:before {
+                    content: "\f006";
+                }
+            }
+
             &:hover {
                 span {
-                    color: @magenta;
+                    &:before {
+                        content: "\f005";
+                    }
                 }
             }
         }
 
         .unfav {
             span {
-                color: @magenta;
-            }
-
-            &:hover {
-                span {
-                    color: #444;
+                &:before {
+                    content: "\f005";
                 }
             }
         }
