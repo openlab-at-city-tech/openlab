@@ -72,6 +72,7 @@ $recording = openlab_get_user_name_pronunciation_url( $user_ID );
                             <?php if( $recording ) : ?>
                             <p><strong>Your current recorded name pronunciation</strong></p>
                             <audio src="<?php echo $recording; ?>" controls></audio>
+                            <a href="#" id="removeAudio" class="remove-audio">Remove</a>
                             <?php endif; ?>
                         </div>
                     </div>

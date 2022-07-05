@@ -90,6 +90,11 @@ jQuery(document).ready(function($) {
         stopRecording();
     });
 
+    $(document).on( 'click', '#removeAudio', function(e) {
+        e.preventDefault();
+        deleteRecording();
+    });
+
     /**
      * Stop media recording.
      */
@@ -108,6 +113,16 @@ jQuery(document).ready(function($) {
 
         // Remove the recording status message
         recordingStatus.text('');
+    }
+
+    /**
+     * Remove existing audio recording
+     */
+    function deleteRecording() {
+        // Empty audio wrapper
+        $('#recordedAudio').html('');
+        // Empty blob data
+        $('input#name_pronunciation_blob').val('');
     }
 
     /**
@@ -144,8 +159,15 @@ jQuery(document).ready(function($) {
         audio.setAttribute('src', blobUrl);
         audio.setAttribute('controls', 'controls');
 
+        var removeAudio = document.createElement('a');
+        removeAudio.setAttribute('href', '#');
+        removeAudio.setAttribute('class', 'remove-audio');
+        removeAudio.setAttribute('id', 'removeAudio');
+        removeAudio.innerText = 'Remove';
+
         // Append the audio element
         recordedAudio.append(audio);
+        recordedAudio.append(removeAudio);
     }
 
     /**
