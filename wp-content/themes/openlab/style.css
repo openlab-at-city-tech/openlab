@@ -7899,7 +7899,7 @@ a.disabled-link {
   margin: 10px;
 }
 .announcement-form {
-  padding-bottom: 10px;
+  padding-bottom: 20px;
 }
 .announcement-form .quill-toolbar {
   display: flex;
@@ -7999,14 +7999,22 @@ a.disabled-link {
   display: none;
   margin-top: 20px;
   padding-top: 20px;
+  margin-left: 20px;
   border-top: 2px solid #dddddd;
 }
 .announcement-reply-container textarea {
   display: none;
   visibility: hidden;
 }
+.announcement-reply-form {
+  padding-left: 20px;
+}
 .show-reply-form > .group-item-wrapper > .announcement-reply-container {
   display: block;
+  margin-bottom: 8px;
+}
+.announcement-replies {
+  padding-left: 20px;
 }
 .announcement-replies .group-item-wrapper {
   border: none;

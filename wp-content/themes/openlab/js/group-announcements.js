@@ -173,8 +173,11 @@
 					}
 				)
 
-				$parentItemBody.after( replyMarkup )
-				$parentItem.find( '> .group-item-wrapper > .announcement-actions .announcement-reply-link' ).addClass( 'disabled-link' )
+				var $announcementReplyContainer = $parentItem.find( '> .group-item-wrapper > .announcement-reply-container' );
+				$announcementReplyContainer.after( replyMarkup )
+
+				var $announcementActions = $parentItem.find( '> .group-item-wrapper > .announcement-actions' );
+				$announcementActions.find( '.announcement-reply-link' ).addClass( 'disabled-link' )
 
 				const $replyForm = $parentItem.find( '.announcement-reply-form' )
 
