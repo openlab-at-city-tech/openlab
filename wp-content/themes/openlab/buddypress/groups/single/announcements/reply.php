@@ -27,8 +27,8 @@ $author_avatar = bp_core_fetch_avatar(
 	[
 		'item_id' => $reply->user_id,
 		'type'    => 'full',
-		'width'   => 75,
-		'height'  => 75,
+		'width'   => 60,
+		'height'  => 60,
 		'html'    => true,
 		'alt'     => sprintf( __( 'Profile picture of %s', 'buddypress' ), $author_name )
 	]
@@ -65,7 +65,7 @@ $delete_url = wp_nonce_url( $group_url . 'announcements/?delete-announcement-rep
 				</div>
 			</div>
 
-			<div>
+			<div class="item-header-info">
 				<h2 class="announcement-title-rendered"><?php echo esc_html( $reply_title ); ?></h2>
 				<div class="announcement-info">
 					<?php printf( 'Posted by: %s', esc_html( $author_name ) ); ?>
@@ -76,9 +76,7 @@ $delete_url = wp_nonce_url( $group_url . 'announcements/?delete-announcement-rep
 		</header>
 
 		<div class="row announcement-body">
-			<div class="item col-xs-21">
-				<?php echo wp_kses_post( $reply->comment_content ); ?>
-			</div>
+			<?php echo wp_kses_post( $reply->comment_content ); ?>
 		</div>
 
 		<?php if ( is_user_logged_in() ) : ?>

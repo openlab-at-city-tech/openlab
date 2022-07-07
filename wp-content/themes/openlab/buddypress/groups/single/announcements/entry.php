@@ -18,8 +18,8 @@ $author_avatar = bp_core_fetch_avatar(
 	[
 		'item_id' => $announcement->post_author,
 		'type'    => 'full',
-		'width'   => 75,
-		'height'  => 75,
+		'width'   => 60,
+		'height'  => 60,
 		'html'    => true,
 		'alt'     => sprintf( __( 'Profile picture of %s', 'buddypress' ), $author_name )
 	]
@@ -71,7 +71,7 @@ if ( $read_only ) {
 				</div>
 			</div>
 
-			<div>
+			<div class="item-header-info">
 				<?php if ( $read_only ) : ?>
 					<a href="<?php echo esc_url( $announcement_url ); ?>">
 				<?php endif; ?>

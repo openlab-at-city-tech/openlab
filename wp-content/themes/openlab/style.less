@@ -798,14 +798,26 @@ a.disabled-link {
 		}
 
 		.item-avatar {
-			flex: 0 0 75px;
+			flex: 0 0 60px;
+		}
+
+		.item-header-info {
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
+			height: 64px;
 		}
 	}
 
 	h1.announcement-title-rendered,
 	h2.announcement-title-rendered {
-		font-size: 16px;
+		font-size: 14px;
+		margin-bottom: 0;
 		margin-top: 0;
+	}
+
+	.announcement-info {
+		font-size: 12px;
 	}
 
 	.announcement-textarea {
@@ -828,6 +840,10 @@ a.disabled-link {
 	.announcement-actions {
 		display: flex;
 		gap: 4px;
+
+		&.row:before {
+			display: none;
+		}
 
 		.announcement-action {
 			&::after {

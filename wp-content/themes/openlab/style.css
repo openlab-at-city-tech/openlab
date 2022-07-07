@@ -7954,12 +7954,22 @@ a.disabled-link {
   display: none;
 }
 .announcement-item .row.announcement-header .item-avatar {
-  flex: 0 0 75px;
+  flex: 0 0 60px;
+}
+.announcement-item .row.announcement-header .item-header-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 64px;
 }
 .announcement-item h1.announcement-title-rendered,
 .announcement-item h2.announcement-title-rendered {
-  font-size: 16px;
+  font-size: 14px;
+  margin-bottom: 0;
   margin-top: 0;
+}
+.announcement-item .announcement-info {
+  font-size: 12px;
 }
 .announcement-item .announcement-textarea label {
   display: block;
@@ -7974,6 +7984,9 @@ a.disabled-link {
 .announcement-item .announcement-actions {
   display: flex;
   gap: 4px;
+}
+.announcement-item .announcement-actions.row:before {
+  display: none;
 }
 .announcement-item .announcement-actions .announcement-action::after {
   content: '|';
