@@ -736,7 +736,7 @@ function openlab_filter_subnav_home($subnav_item) {
 
     $displayed_user_id = bp_is_user() ? bp_displayed_user_id() : bp_loggedin_user_id();
     $group_label = openlab_get_group_type_label('case=upper');
-    $new_label = '<span class="inline-visible-xs">' . $group_label . '</span> Profile';
+    $new_label = $group_label . ' Profile';
 
     $new_item = str_replace("Home", $new_label, $subnav_item);
 
