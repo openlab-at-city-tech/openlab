@@ -10389,6 +10389,9 @@ body.membership-requests .group-list {
 .doc-tabs {
   margin-top: 15px;
 }
+.tmce-active .quicktags-toolbar {
+  display: none !important;
+}
 @media (max-width: 767px) {
   .created-date-cell {
     display: none;
