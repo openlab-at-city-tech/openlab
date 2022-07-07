@@ -998,6 +998,37 @@ function openlab_filter_subnav_nav_activity( $subnav_item ) {
 }
 add_filter( 'bp_get_options_nav_activity', 'openlab_filter_subnav_nav_activity' );
 
+/**
+ * Filters the 'Announcements' option nav item.
+ */
+function openlab_filter_subnav_nav_announcements( $subnav_item ) {
+	$count_query = new WP_Query(
+		[
+			'post_type'      => 'openlab_announcement',
+			'post_status'    => 'publish',
+			'posts_per_page' => $per_page,
+			'paged'          => $paged,
+			'meta_query'     => [
+				[
+					'key'   => 'openlab_announcement_group_id',
+					'value' => bp_get_current_group_id(),
+				]
+			],
+			'fields'         => 'ids',
+		]
+	);
+
+	$count = $count_query->found_posts;
+
+	if ( $count ) {
+        $span        = sprintf( '<span class="mol-count pull-right count-%s gray">%s</span>', intval( $count ), esc_html( number_format_i18n( $count ) ) );
+        $subnav_item = str_replace('</a>', ' ' . $span . '</a>', $subnav_item);
+	}
+
+    return str_replace( 'current selected', 'current-menu-item', $subnav_item );
+}
+add_filter( 'bp_get_options_nav_nav-announcements', 'openlab_filter_subnav_nav_announcements' );
+
 function openlab_filter_subnav_nav_new_event($subnav_item) {
 
     $subnav_item = str_replace("current selected", "current-menu-item", $subnav_item);
