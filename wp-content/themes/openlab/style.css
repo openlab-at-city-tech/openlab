@@ -7906,14 +7906,6 @@ a.disabled-link {
   align-items: center;
   justify-content: space-between;
 }
-.announcement-form .quill-toolbar.ql-snow.ql-toolbar {
-  background: #f5f5f5;
-  border: none;
-}
-.announcement-form .quill-toolbar.ql-snow.ql-toolbar button {
-  height: 30px;
-  width: 34px;
-}
 .announcement-form .quill-toolbar .quill-toolbar-buttons {
   flex: 1;
 }
@@ -11668,4 +11660,12 @@ p.private-membership-indicator {
   font-size: 12px;
   font-weight: 400;
   color: #666 !important;
+}
+.quill-toolbar.ql-snow.ql-toolbar {
+  background: #f5f5f5;
+  border: none;
+}
+.quill-toolbar.ql-snow.ql-toolbar button {
+  height: 24px;
+  width: 28px;
 }
