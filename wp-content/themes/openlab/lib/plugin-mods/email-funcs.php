@@ -194,3 +194,69 @@ add_action(
 	},
 	6
 );
+
+/**
+ * Force GES emails to look in a standardized location for templates.
+ */
+add_filter(
+	'bp_email_get_template',
+	function( $paths, $object ) {
+		if ( ! ( $object instanceof WP_Post ) ) {
+			return $paths;
+		}
+
+		$situations = get_the_terms( $object->ID, bp_get_email_tax_type() );
+
+		$is_bp_ges_single = false;
+		foreach ( $situations as $situation ) {
+			if ( 'bp-ges-single' === $situation->slug ) {
+				$is_bp_ges_single = true;
+				break;
+			}
+		}
+
+		if ( ! $is_bp_ges_single ) {
+			return $paths;
+		}
+
+		array_unshift( $paths, 'assets/emails/single-bp-email-bp-ges-single.php' );
+
+		return $paths;
+	},
+	10,
+	2
+);
+
+/**
+ * Provide additional email args for BPGES single emails.
+ */
+add_filter(
+	'ass_send_email_args',
+	function( $args, $email_type ) {
+		if ( 'bp-ges-single' !== $email_type ) {
+			return $args;
+		}
+
+		// Text for the View button.
+		$view_text = openlab_get_activity_view_button_label( $args['activity']->type );
+		if ( ! $view_text ) {
+			$view_text = 'View';
+		}
+
+		$args['tokens']['ges.view-text'] = $view_text;
+
+		// Modified 'email setting' text.
+		$args['tokens']['ges.email-setting-description'] = str_replace( ' for this group', '', $args['tokens']['ges.email-setting-description'] );
+
+		// Group type label.
+		$args['tokens']['ges.group-type'] = openlab_get_group_type_label(
+			[
+				'group_id' => $args['activity']->item_id,
+			]
+		);
+
+		return $args;
+	},
+	10,
+	2
+);
