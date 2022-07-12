@@ -124,15 +124,7 @@ add_action(
  * Adding the forums submenu into the BBPress layout
  */
 function openlab_forum_tabs_output() {
-	?>
-	<div class="forum-nav">
-		<ul class="nav nav-inline">
-			<?php openlab_forum_tabs(); ?>
-		</ul>
-
-		<?php bbp_get_template_part( 'form', 'search' ); ?>
-	</div>
-	<?php
+	echo openlab_submenu_markup( 'group-forum' );
 }
 
 add_action( 'bbp_before_group_forum_display', 'openlab_forum_tabs_output' );
@@ -518,7 +510,7 @@ function openlab_remove_bbpress_forum_title( $title ) {
 			$is_single_forum_template = true;
 		}
 
-		if ( ! empty( $db['function'] ) && 'openlab_forum_tabs' === $db['function'] ) {
+		if ( ! empty( $db['function'] ) && 'openlab_group_forum_submenu' === $db['function'] ) {
 			$is_forum_nav = true;
 		}
 	}

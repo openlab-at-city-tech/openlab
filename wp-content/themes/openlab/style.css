@@ -10661,6 +10661,9 @@ a.delete-doc-button {
     margin-left: 0;
   }
 }
+.entry-content #bbpress-forums:first-of-type {
+  margin-top: 35px;
+}
 /**invite-anyone specific**/
 #invite-anyone-invite-list li {
   border: 1px solid #dddddd;

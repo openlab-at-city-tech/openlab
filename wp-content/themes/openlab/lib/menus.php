@@ -333,6 +333,10 @@ function openlab_submenu_markup($type = '', $opt_var = NULL, $row_wrapper = true
             $submenu_text = 'File Library<span aria-hidden="true">:</span> ';
             $menu = openlab_group_files_submenu();
             break;
+        case 'group-forum':
+            $submenu_text = 'Discussion<span aria-hidden="true">:</span> ';
+            $menu = openlab_group_forum_submenu();
+            break;
         default:
             $submenu_text = 'My Settings<span aria-hidden="true">:</span> ';
             $menu = openlab_profile_settings_submenu();
@@ -551,6 +555,55 @@ function openlab_my_activity_submenu() {
 	];
 
 	return openlab_submenu_gen( $menu_list, false, $current_item  );
+}
+
+// Submenus for group discussion pages
+function openlab_group_forum_submenu() {
+    $base_url = bp_get_group_permalink( groups_get_current_group() ) . 'forum';
+
+    $menu_list = [
+        $base_url                   => 'All Topics'
+    ];
+
+    $current_item = $base_url;
+    if( bp_action_variable() == 'topic' ) {
+        $menu_list += [
+            $base_url . '#new-post' => 'New Topic'
+        ];
+
+        $bbp = bbpress();
+        
+        // Forum data
+        $offset = 0;
+        $forum_ids = bbp_get_group_forum_ids(bp_get_current_group_id());
+        $forum_id = array_shift($forum_ids);
+        $bbp->current_forum_id = $forum_id;
+
+        bbp_set_query_name('bbp_single_forum');
+
+        // Get the topic
+        bbp_has_topics(array(
+            'name' => bp_action_variable($offset + 1),
+            'posts_per_page' => 1,
+            'show_stickies' => false
+        ));
+
+        if( bbp_topics() ) {
+            bbp_the_topic();
+
+            $menu_list += [
+                bbp_get_topic_permalink() => bbp_get_topic_title()
+            ];
+
+            $current_item = bbp_get_topic_permalink();
+        }
+    } else {
+        $menu_list += [
+            '#new-post' => 'New Topic'
+        ];
+    }
+
+    return openlab_submenu_gen( $menu_list, true, $current_item );
 }
 
 function openlab_group_activity_submenu() {
@@ -1203,41 +1256,6 @@ function openlab_docs_tabs() {
         <?php $doc_obj = bp_docs_get_current_doc(); ?>
         --><li class="current-menu-item"><?php echo $doc_obj->post_title; ?></li><!--
     <?php endif; ?>
-    -->
-    <?php
-}
-
-function openlab_forum_tabs() {
-    global $bp, $groups_template, $wp_query;
-    $group = ( $groups_template->group ) ? $groups_template->group : $bp->groups->current_group;
-    // Load up bbPress once
-    $bbp = bbpress();
-
-    /** Query Resets ***************************************************** */
-    // Forum data
-    $forum_ids = bbp_get_group_forum_ids(bp_get_current_group_id());
-    $forum_id = array_shift($forum_ids);
-    $offset = 0;
-
-    $bbp->current_forum_id = $forum_id;
-
-    bbp_set_query_name('bbp_single_forum');
-
-    // Get the topic
-    bbp_has_topics(array(
-        'name' => bp_action_variable($offset + 1),
-        'posts_per_page' => 1,
-        'show_stickies' => false
-    ));
-
-    // Setup the topic
-    bbp_the_topic();
-    ?>
-
-    <li <?php echo (!bp_action_variable() ? 'class="current-menu-item"' : ''); ?> ><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/forum/">Discussion</a></li><!--
-    <?php if (bp_action_variable() == 'topic'): ?>
-        --><li class="current-menu-item hyphenate"><span><?php bbp_topic_title() ?></span></li><!--
-            <?php endif; ?>
     -->
     <?php
 }
