@@ -10731,7 +10731,8 @@ a.delete-doc-button {
 #bbpress-forums .bbp-pagination:nth-of-type(2) .bbp-search-form {
   display: none;
 }
-#bbpress-forums .bbp-topics {
+#bbpress-forums .bbp-topics,
+#bbpress-forums .bbp-search-results {
   margin-bottom: 0;
   margin: 15px 0 !important;
 }
