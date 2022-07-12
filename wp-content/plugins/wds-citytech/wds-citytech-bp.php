@@ -848,3 +848,11 @@ remove_filter( 'ass_clean_content', 'strip_tags', 4 );
 add_action( 'admin_head', function() {
 	remove_action( 'admin_head', 'bpges_39_migration_admin_notice' );
 }, 5 );
+
+/**
+ * Get a link to a group.
+ */
+function openlab_get_group_link( $group_id ) {
+	$group = groups_get_group( $group_id );
+	return sprintf( '<a href="%s">%s</a>', esc_attr( bp_get_group_permalink( $group ) ), esc_html( $group->name ) );
+}
