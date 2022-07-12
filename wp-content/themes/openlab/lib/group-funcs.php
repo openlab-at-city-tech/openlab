@@ -883,7 +883,7 @@ function openlab_group_profile_activity_list() {
                         <?php $member_arg = array(
                             'exclude_admins_mods'   => false,
                             'exclude'               => ! current_user_can( 'bp_moderate' ) ? openlab_get_group_private_users( bp_get_current_group_id() ) : array()
-                        ); 
+                        );
                         ?>
                         <?php if (bp_group_has_members($member_arg)) : ?>
 

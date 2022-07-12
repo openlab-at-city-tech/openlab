@@ -37,15 +37,15 @@ $filter_options = [
         <?php if ( empty( $_POST['page'] ) ) : ?>
 			<div id="activity-stream" class="activity-list item-list group-list">
 		<?php endif; ?>
-	
+
 		<?php while ( bp_activities() ) : bp_the_activity(); ?>
 			<?php bp_get_template_part( 'parts/activity/entry-group' ); ?>
 		<?php endwhile; ?>
-	
+
 		<?php echo openlab_activities_pagination_links(); ?>
-	
+
 		<?php if ( empty( $_POST['page'] ) ) : ?>
-			</div>	
+			</div>
 		<?php endif; ?>
 
     <?php else : ?>
