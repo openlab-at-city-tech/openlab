@@ -669,3 +669,55 @@ function openlab_refresh_term_cache_after_ordering_update() {
 }
 
 add_action( 'tto/update-order', 'openlab_refresh_term_cache_after_ordering_update' );
+
+function openlab_forum_pagination_count( $html ) {
+	$bbp = bbpress();
+
+	// Define local variable(s)
+	$retstr = '';
+
+	// Topic query exists
+	if ( ! empty( $bbp->topic_query ) ) {
+
+		// Set pagination values
+		$count_int = intval( $bbp->topic_query->post_count );
+		$start_num = intval( ( $bbp->topic_query->paged - 1 ) * $bbp->topic_query->posts_per_page ) + 1;
+		$total_int = ! empty( $bbp->topic_query->found_posts )
+			? (int) $bbp->topic_query->found_posts
+			: $count_int;
+
+		// Format numbers for display
+		$count_num = bbp_number_format( $count_int );
+		$from_num  = bbp_number_format( $start_num );
+		$total     = bbp_number_format( $total_int );
+		$to_num    = bbp_number_format( ( $start_num + ( $bbp->topic_query->posts_per_page - 1 ) > $bbp->topic_query->found_posts )
+			? $bbp->topic_query->found_posts
+			: $start_num + ( $bbp->topic_query->posts_per_page - 1 ) );
+
+		// Several topics in a forum with a single page
+		if ( empty( $to_num ) ) {
+			$retstr = sprintf( _n( 'Viewing %1$s', 'Viewing %1$s', $total_int, 'bbpress' ), $total );
+
+		// Several topics in a forum with several pages
+		} else {
+			$retstr = sprintf( _n( 'Viewing topic %2$s (of %4$s total)', 'Viewing %2$s to %3$s (of %4$s total)', $total_int, 'bbpress' ), $count_num, $from_num, $to_num, $total );
+		}
+
+		// Escape results of _n()
+		$retstr = esc_html( $retstr );
+	}
+
+	return $retstr;
+}
+add_filter( 'bbp_get_forum_pagination_count', 'openlab_forum_pagination_count' );
+
+/**
+ * Change icons on the prev/next buttons in bbp topics pagination
+ */
+function openlab_bbp_topic_pagination($arr) {
+    $arr['next_text'] = '<span class="fa fa-long-arrow-right"></span>';
+	$arr['prev_text'] = '<span class="fa fa-long-arrow-left"></span>';
+	
+    return $arr;
+}
+add_filter( 'bbp_topic_pagination', 'openlab_bbp_topic_pagination' );

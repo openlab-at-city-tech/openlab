@@ -10664,6 +10664,80 @@ a.delete-doc-button {
 .entry-content #bbpress-forums:first-of-type {
   margin-top: 35px;
 }
+.bbp-pagination {
+  margin: 0;
+  float: none;
+}
+.bbp-pagination-row-flex {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: flex-end;
+}
+.bbp-pagination-row-flex .pagination-links {
+  padding-right: 8px;
+}
+.bbp-pagination-row-flex .pagination-links .pagination {
+  display: flex;
+}
+.bbp-pagination-row-flex .pagination-links .pagination li {
+  display: inline-block;
+}
+.bbp-pagination-row-flex .pagination-links .pagination li:not(:last-child) {
+  margin-right: 6px !important;
+}
+.bbp-pagination-row-flex .pagination-links .pagination li > span,
+.bbp-pagination-row-flex .pagination-links .pagination li a {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  justify-content: center;
+  height: 24px;
+  padding: 0 7px;
+  font-size: 14px !important;
+  border-color: #ccc !important;
+  text-decoration: none;
+}
+.bbp-pagination-row-flex .pagination-links .pagination li > span.current,
+.bbp-pagination-row-flex .pagination-links .pagination li a.current {
+  background-color: #f1f1f1;
+  color: rgba(68, 68, 68, 0.8);
+}
+.bbp-pagination-row-flex .pagination-links .pagination li > span:hover,
+.bbp-pagination-row-flex .pagination-links .pagination li a:hover {
+  text-decoration: none;
+}
+.bbp-pagination-row-flex .pagination-links .pagination li a {
+  color: #444;
+}
+.bbp-pagination-row-flex .pagination-links .pagination li:first-child > span,
+.bbp-pagination-row-flex .pagination-links .pagination li:first-child a {
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
+}
+.bbp-pagination-row-flex .pagination-links .pagination li:last-child > span,
+.bbp-pagination-row-flex .pagination-links .pagination li:last-child a {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.bbp-pagination-row-flex .bbp-pagination-count {
+  padding-left: 8px;
+}
+.bbp-search-form {
+  height: 24px;
+}
+.bbp-search-form input {
+  height: 24px;
+}
+#bbpress-forums .bbp-pagination:nth-of-type(2) .bbp-search-form {
+  display: none;
+}
+#bbpress-forums .bbp-topics {
+  margin-bottom: 0;
+  margin: 15px 0 !important;
+}
+#bbpress-forums .bbp-topic-form {
+  margin-top: 60px;
+}
 /**invite-anyone specific**/
 #invite-anyone-invite-list li {
   border: 1px solid #dddddd;

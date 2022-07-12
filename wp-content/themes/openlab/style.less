@@ -3738,6 +3738,102 @@ a.delete-doc-button {
         }
     }
 }
+.bbp-pagination {
+    margin: 0;
+    float: none;
+
+    &-row-flex {
+        display: flex;
+        flex-flow: row wrap;
+        align-items: flex-end;
+
+        .pagination-links {
+            padding-right: 8px;
+
+            .pagination {
+                display: flex;
+                li {
+                    display: inline-block;
+
+                    &:not(:last-child) {
+                        margin-right: 6px !important;
+                    }
+
+                    > span,
+                    a {
+                        display: flex;
+                        flex-flow: row wrap;
+                        align-items: center;
+                        justify-content: center;
+                        height: 24px;
+                        padding: 0 7px;
+                        font-size: 14px !important;
+                        border-color: #ccc !important;
+                        text-decoration: none;
+
+                        &.current {
+                            background-color: #f1f1f1;
+                            color: rgba(68,68,68,.8);
+                        }
+
+                        &:hover {
+                            text-decoration: none;
+                        }
+                    }
+
+                    a {
+                        color: #444;
+                    }
+
+                    &:first-child {
+                        > span, a {
+                            border-bottom-left-radius: 0;
+                            border-top-left-radius: 0;
+                        }
+                    }
+
+                    &:last-child {
+                        > span, a {
+                            border-top-right-radius: 0;
+                            border-bottom-right-radius: 0;
+                        }
+                    }
+                }
+            }
+        }
+        .bbp-pagination-count {
+            padding-left: 8px;
+        }
+    }
+}
+
+.bbp-search-form {
+    height: 24px;
+
+    input {
+        height: 24px;
+    }
+}
+
+#bbpress-forums {
+    .bbp-pagination {
+        &:nth-of-type(2) {
+            .bbp-search-form {
+                display: none;
+            }
+        }
+    }
+
+    .bbp-topics {
+        margin-bottom: 0;
+        margin: 15px 0 !important;
+    }
+
+    .bbp-topic-form {
+        margin-top: 60px;
+    }
+}
+
 /**invite-anyone specific**/
 #invite-anyone-invite-list{
     li{
