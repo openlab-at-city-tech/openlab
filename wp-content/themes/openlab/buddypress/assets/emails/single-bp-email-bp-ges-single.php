@@ -175,7 +175,7 @@ $settings = bp_email_get_appearance_settings();
 						<table cellspacing="0" cellpadding="0" border="0" width="100%">
 						  <tr>
 								<td style="padding: 20px; font-family: sans-serif; mso-height-rule: exactly; line-height: <?php echo esc_attr( floor( $settings['body_text_size'] * 1.618 ) . 'px' ) ?>; color: #222; font-size: <?php echo esc_attr( $settings['body_text_size'] . 'px' ); ?>" class="body_text_size">
-									<span style="font-weight: bold; font-size: <?php echo esc_attr( floor( $settings['body_text_size'] * 1.35 ) . 'px' ); ?>" class="welcome"><?php bp_email_the_salutation( $settings ); ?></span>
+									<span style="font-weight: bold; font-size: 16px;" class="welcome"><?php bp_email_the_salutation( $settings ); ?></span>
 
 									<table cellspacing="0" cellpadding="0" border="0" width="100%">
 										<tr>
