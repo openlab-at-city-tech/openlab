@@ -568,11 +568,14 @@ function openlab_generate_announcement_activity( $announcement_id ) {
 
 	$hide_sitewide = ! empty( $group ) && isset( $group->status ) && 'public' !== $group->status;
 
+	$announcement_url  = bp_get_group_permalink( $group ) . 'announcements/#announcement-item-' . $announcement_id;
+	$announcement_link = sprintf( '<a href="%s">%s</a>', esc_url( $announcement_url ), get_the_title( $post ) );
+
 	$action = sprintf(
-		'%1$s added a new announcement %2$s in the group %3$s',
-		bp_core_get_user_displayname( $post->post_author ),
-		get_the_title( $post ),
-		bp_get_group_name( $group )
+		'%1$s posted the announcement %2$s in the group %3$s',
+		bp_core_get_userlink( $post->post_author ),
+		$announcement_link,
+		openlab_get_group_link( $group_id )
 	);
 
 	$args = array(
