@@ -606,6 +606,14 @@ function bpges_generate_notification( BPGES_Queued_Item $queued_item ) {
 		$action = ass_clean_subject( $activity->action );
 	}
 
+	/**
+	 * Filters the activity action used when generating notifications.
+	 *
+	 * @param string $action
+	 * @param object $activity
+	 */
+	$action = apply_filters( 'bpges_activity_action', $action, $activity );
+
 	/* Subject & Content */
 	$blogname    = '[' . get_blog_option( BP_ROOT_BLOG, 'blogname' ) . ']';
 	$subject     = apply_filters( 'bp_ass_activity_notification_subject', $action . ' ' . $blogname, $action, $blogname );
@@ -620,6 +628,16 @@ function bpges_generate_notification( BPGES_Queued_Item $queued_item ) {
 	if ( $activity->primary_link && $activity->primary_link !== bp_core_get_user_domain( $activity->user_id ) ) {
 		$link = $activity->primary_link;
 	}
+
+	/**
+	 * Filters the activity link used to build the notification email.
+	 *
+	 * @since 4.0.2
+	 *
+	 * @param string               $link
+	 * @param BP_Activity_Activity $activity
+	 */
+	$link = apply_filters( 'bpges_notification_link', $link, $activity );
 
 	// If message has no content (as in the case of group joins, etc), we'll use a different
 	// $message template
@@ -708,7 +726,7 @@ To view or reply, log in and go to:
 	$group_name = bp_get_group_name( $group );
 	$group_link = bp_get_group_permalink( $group );
 
-	$subject = strip_tags( stripslashes( $activity->action ) );
+	$subject = strip_tags( stripslashes( $action ) );
 
 	// bpges_notice is a special activity type and gets some overrides.
 	if ( 'bpges_notice' === $activity->type ) {
@@ -750,7 +768,7 @@ If you feel this service is being misused please speak to the website administra
 	// Send the email
 	if ( $user->user_email ) {
 		// Custom GES email tokens.
-		$user_message_args['ges.action']  = stripslashes( $activity->action ); // Unfiltered.
+		$user_message_args['ges.action']  = stripslashes( $action ); // Unfiltered.
 		$user_message_args['ges.subject'] = $subject; // Unfiltered.
 		$user_message_args['ges.email-setting-description'] = $email_setting_desc;
 		$user_message_args['ges.email-setting-links']       = $email_setting_links;
@@ -813,6 +831,44 @@ If you feel this service is being misused please speak to the website administra
  *                       on the email delivery class you are using.
  */
 function ass_send_email( $email_type, $to, $args ) {
+	/**
+	 * Filters the 'from' name on outgoing emails.
+	 *
+	 * @since 4.0.2
+	 *
+	 * @param string $from_name  Default is null, which will use WP defaults.
+	 * @param string $email_type
+	 * @param string $to
+	 * @param array  $args
+	 */
+	$from_name  = apply_filters( 'bpges_email_from_name', null, $email_type, $to, $args );
+
+	/**
+	 * Filters the 'from' email address on outgoing emails.
+	 *
+	 * @since 4.0.2
+	 *
+	 * @param string $from_email  Default is null, which will use WP defaults.
+	 * @param string $email_type
+	 * @param string $to
+	 * @param array  $args
+	 */
+	$from_email = apply_filters( 'bpges_email_from_email', null, $email_type, $to, $args );
+
+	if ( ! empty( $from_name ) || ! empty( $from_email ) ) {
+		if ( ! isset( $args[ 'from' ] ) ) {
+			$args['from'] = [];
+		}
+
+		if ( ! empty( $from_name ) ) {
+			$args['from' ]['name'] = $from_name;
+		}
+
+		if ( ! empty( $from_email ) ) {
+			$args['from']['email'] = $from_email;
+		}
+	}
+
 	// BP 2.5+
 	if ( true === function_exists( 'bp_send_email' ) && true === ! apply_filters( 'bp_email_use_wp_mail', false ) ) {
 		// Unset array keys used for older BP installs.
@@ -2477,10 +2533,6 @@ function ass_weekly_digest_week() {
  * @since 3.8.0
  */
 function bpges_register_template_stack() {
-	if ( ! bp_is_group_admin_page() ) {
-		return;
-	}
-
 	bp_register_template_stack( function() {
 		return plugin_dir_path( __FILE__ ) . '/templates/';
 	}, 20 );
