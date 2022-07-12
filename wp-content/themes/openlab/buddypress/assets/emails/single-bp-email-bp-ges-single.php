@@ -215,7 +215,7 @@ $settings = bp_email_get_appearance_settings();
 						<p><span class="footer_text">{{{ges.email-setting-description}}}</span><br>
 						Go to <a href="{{{group.url}}}notifications/">Membership > Your Email Options</a> to change your email settings for this {{{ges.group-type}}}.</p>
 
-						<p><strong>Please note</strong>: You cannot reply by email to this notification. <a href="{{{thread.url}}}">Go to the post</a> to read or reply.</p>
+						<p><b>Please note</b>: You cannot reply by email to this notification. <a href="{{{thread.url}}}">Go to the post</a> to read or reply.</p>
 					</td>
 				</tr>
 			</table>
@@ -223,7 +223,7 @@ $settings = bp_email_get_appearance_settings();
 			<table cellspacing="0" cellpadding="10" border="0" align="left" width="100%" style="max-width: 600px; color: #222;" bgcolor="#f0f0f0" class="footer_bg">
 				<tr>
 					<td style="padding: 10px; width: 100%%; font-size: <?php echo esc_attr( $settings['footer_text_size'] . 'px' ); ?>; font-family: sans-serif; mso-height-rule: exactly; line-height: <?php echo esc_attr( floor( $settings['footer_text_size'] * 1.618 ) . 'px' ) ?>; text-align: left; color: <?php echo esc_attr( $settings['footer_text_color'] ); ?>;" class="footer_text_color footer_text_size">
-						<p style="font-size: 14px;"><strong>The OpenLab at City Tech: A place to learn, work, and share</strong></p>
+						<p style="font-size: 14px;"><b>The OpenLab at City Tech: A place to learn, work, and share</b></p>
 
 						<table cellspacing="0" cellpadding="0" border="0" align="left" width="100%">
 							<tr>
