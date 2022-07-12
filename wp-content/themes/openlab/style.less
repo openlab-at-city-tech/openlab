@@ -3748,7 +3748,7 @@ a.delete-doc-button {
         align-items: flex-end;
 
         .pagination-links {
-            padding-right: 8px;
+            padding-right: 16px;
 
             .pagination {
                 display: flex;
@@ -3801,8 +3801,14 @@ a.delete-doc-button {
                 }
             }
         }
-        .bbp-pagination-count {
-            padding-left: 8px;
+    }
+
+    &-replies {
+        margin-bottom: 15px;
+
+        .pagination-links,
+        .pagination-count {
+            padding: 0;
         }
     }
 }
@@ -3826,8 +3832,16 @@ a.delete-doc-button {
 
     .bbp-topics,
     .bbp-search-results {
-        margin-bottom: 0;
+        margin-bottom: 0 !important;
         margin: 15px 0 !important;
+    }
+
+    .bbp-replies {
+        margin-bottom: 0 !important;
+    }
+
+    li.bbp-header {
+        text-align: left;
     }
 
     .bbp-topic-form {
