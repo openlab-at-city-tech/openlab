@@ -260,3 +260,26 @@ add_filter(
 	10,
 	2
 );
+
+/**
+ * Replace 'in the group' with group-type-specific string in outgoing emails.
+ */
+add_filter(
+	'bpges_activity_action',
+	function( $action, $activity ) {
+		return openlab_replace_group_type_in_activity_action( $action, $activity->item_id );
+	},
+	10,
+	2
+);
+
+add_action(
+	'bp_email_set_tokens',
+	function( $retval, $tokens, BP_Email $email ) {
+		$sender = $email->get_from();
+		$email->set_from( $sender->get_address(), get_option( 'blogname' ) );
+		return $retval;
+	},
+	20,
+	3
+);

@@ -1692,6 +1692,14 @@ add_action( 'bp_group_options_nav', function() {
 }, 50 );
 
 /**
+ * Replaces 'in the group' in an activity action with the group-specific language.
+ */
+function openlab_replace_group_type_in_activity_action( $action, $group_id ) {
+	$group_type_label = openlab_get_group_type_label( [ 'group_id' => $group_id ] );
+	return str_replace( 'in the group ', 'in the ' . $group_type_label . ' ', $action );
+}
+
+/**
  * Group membership request link.
  */
 function openlab_group_request_user_link() {
