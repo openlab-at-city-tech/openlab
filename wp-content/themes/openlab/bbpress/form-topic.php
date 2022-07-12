@@ -195,30 +195,30 @@
 							<?php endif; ?>
 
 						</div>
+
+						<?php do_action( 'bbp_theme_before_topic_form_submit_wrapper' ); ?>
+
+						<div class="bbp-submit-wrapper">
+
+							<?php do_action( 'bbp_theme_before_topic_form_submit_button' ); ?>
+
+							<?php if ( ! bbp_is_topic_edit() ) : ?>
+								<div class="notify-group-members-ui">
+									<?php openlab_notify_group_members_ui( true ); ?>
+								</div>
+							<?php endif; ?>
+
+							<button type="submit" tabindex="<?php bbp_tab_index(); ?>" id="bbp_topic_submit" name="bbp_topic_submit" class="btn btn-primary submit"><?php esc_html_e( 'Submit', 'bbpress' ); ?></button>
+
+							<?php do_action( 'bbp_theme_after_topic_form_submit_button' ); ?>
+
+						</div>
+
+						<?php do_action( 'bbp_theme_after_topic_form_submit_wrapper' ); ?>
+
+						<?php bbp_topic_form_fields(); ?>
 					</div>
 				</div>
-
-				<?php do_action( 'bbp_theme_before_topic_form_submit_wrapper' ); ?>
-
-				<div class="bbp-submit-wrapper">
-
-					<?php do_action( 'bbp_theme_before_topic_form_submit_button' ); ?>
-
-					<?php if ( ! bbp_is_topic_edit() ) : ?>
-						<div class="notify-group-members-ui">
-							<?php openlab_notify_group_members_ui( true ); ?>
-						</div>
-					<?php endif; ?>
-
-					<button type="submit" tabindex="<?php bbp_tab_index(); ?>" id="bbp_topic_submit" name="bbp_topic_submit" class="btn btn-primary submit"><?php esc_html_e( 'Submit', 'bbpress' ); ?></button>
-
-					<?php do_action( 'bbp_theme_after_topic_form_submit_button' ); ?>
-
-				</div>
-
-				<?php do_action( 'bbp_theme_after_topic_form_submit_wrapper' ); ?>
-
-				<?php bbp_topic_form_fields(); ?>
 
 				<?php do_action( 'bbp_theme_after_topic_form' ); ?>
 
