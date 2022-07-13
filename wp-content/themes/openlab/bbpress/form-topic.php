@@ -35,9 +35,9 @@
 					<div class="panel-heading">
 						<?php
 						if ( bbp_is_topic_edit() ) {
-							printf( __( 'Now Editing &ldquo;%s&rdquo;', 'bbpress' ), bbp_get_topic_title() );
+							printf( __( 'Editing &ldquo;%s&rdquo;', 'bbpress' ), get_the_title( bbp_get_topic_id() ) );
 						} else {
-							bbp_is_single_forum() ? printf( __( 'Create New Topic in &ldquo;%s&rdquo;', 'bbpress' ), bbp_get_forum_title() ) : _e( 'Create New Topic', 'bbpress' );
+							_e( 'Create New Topic', 'bbpress' );
 						}
 						?>
 					</div>
