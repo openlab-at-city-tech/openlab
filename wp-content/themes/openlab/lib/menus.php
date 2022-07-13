@@ -640,6 +640,14 @@ function openlab_group_docs_submenu() {
         $current_item = $base_url . '?s=' . $_GET['s'];
     }
 
+    if( isset( $_GET['bpd_tag'] ) ) {
+        $menu_list += [
+            $base_url . '?bpd_tag=' . $_GET['bpd_tag']  => 'Tag Results'
+        ];
+
+        $current_item = $base_url . '?bpd_tag=' . $_GET['bpd_tag'];
+    }
+
     return openlab_submenu_gen( $menu_list, false, $current_item );
 }
 
