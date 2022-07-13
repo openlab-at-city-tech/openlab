@@ -337,6 +337,10 @@ function openlab_submenu_markup($type = '', $opt_var = NULL, $row_wrapper = true
             $submenu_text = 'Discussion<span aria-hidden="true">:</span> ';
             $menu = openlab_group_forum_submenu();
             break;
+        case 'group-docs':
+            $submenu_text = 'Docs<span aria-hidden="true">:</span> ';
+            $menu = openlab_group_docs_submenu();
+            break;
         default:
             $submenu_text = 'My Settings<span aria-hidden="true">:</span> ';
             $menu = openlab_profile_settings_submenu();
@@ -604,6 +608,39 @@ function openlab_group_forum_submenu() {
     }
 
     return openlab_submenu_gen( $menu_list, true, $current_item );
+}
+
+function openlab_group_docs_submenu() {
+    global $bp, $groups_template;
+
+    $group_id = null;
+    if( bp_is_group() ) {
+        $group_id = groups_get_current_group();
+    } elseif (!empty($groups_template->group)) {
+        $group_id = $groups_template->group;
+    }
+
+    $base_url = bp_get_group_permalink( $group_id ) . 'docs';
+
+    $current_item = $base_url;
+    if( bp_docs_current_view() == 'create' ) {
+        $current_item = $base_url . '/create';
+    }
+
+    $menu_list = [
+        $base_url                   => 'All Docs',
+        $base_url . '/create'       => 'New Doc'
+    ];
+
+    if( isset( $_GET['s'] ) ) {
+        $menu_list += [
+            $base_url . '?s=' . $_GET['s']  => 'Search Results'
+        ];
+
+        $current_item = $base_url . '?s=' . $_GET['s'];
+    }
+
+    return openlab_submenu_gen( $menu_list, false, $current_item );
 }
 
 function openlab_group_activity_submenu() {

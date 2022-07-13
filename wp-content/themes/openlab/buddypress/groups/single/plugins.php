@@ -17,7 +17,7 @@ global $bp, $wp_query;
                 <?php elseif ($bp->current_action == 'docs'): ?>
 
                     <ul class="nav nav-inline">
-                        <?php openlab_docs_tabs(); ?>
+                        <?php echo openlab_submenu_markup( 'group-docs' ); ?>
                     </ul>
 
                 <?php elseif ($bp->current_action == 'files'): ?>
