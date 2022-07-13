@@ -38,13 +38,6 @@ do_action( 'bbp_template_before_replies_loop' ); ?>
 
 	</li><!-- .bbp-body -->
 
-	<li class="bbp-footer">
-		<div class="bbp-reply-author"><?php esc_html_e( 'Author',  'bbpress' ); ?></div>
-		<div class="bbp-reply-content"><?php bbp_show_lead_topic()
-			? esc_html_e( 'Replies', 'bbpress' )
-			: esc_html_e( 'Posts',   'bbpress' );
-		?></div><!-- .bbp-reply-content -->
-	</li><!-- .bbp-footer -->
 </ul><!-- #topic-<?php bbp_topic_id(); ?>-replies -->
 
 <?php do_action( 'bbp_template_after_replies_loop' );
