@@ -721,3 +721,23 @@ function openlab_bbp_topic_pagination($arr) {
     return $arr;
 }
 add_filter( 'bbp_topic_pagination', 'openlab_bbp_topic_pagination' );
+
+function openlab_bbp_topic_pagination_count( $string ) {
+	$bbp = bbpress();
+
+	// We are threading replies
+	if ( bbp_thread_replies() ) {
+		$walker  = new BBP_Walker_Reply();
+		$threads = absint( $walker->get_number_of_root_elements( $bbp->reply_query->posts ) - 1 );
+		$string  = sprintf( _n( 'Viewing %1$s replies', 'Viewing %1$s replies', $threads, 'bbpress' ), bbp_number_format( $threads ) );
+	}
+
+	return $string;
+}
+add_filter( 'bbp_get_topic_pagination_count', 'openlab_bbp_topic_pagination_count' );
+
+
+function openlab_bbp_single_topic_description() {
+	return '';
+}
+add_filter( 'bbp_get_single_topic_description', 'openlab_bbp_single_topic_description' );
