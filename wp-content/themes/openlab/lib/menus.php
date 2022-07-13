@@ -848,11 +848,12 @@ function openlab_filter_subnav_docs($subnav_item) {
 	$query_builder = new BP_Docs_Query(
 		[
 			'group_id' => bp_get_current_group_id(),
+			'doc_slug' => '',
 		]
 	);
-	$wp_query      = $query_builder->get_wp_query();
+	$the_wp_query  = $query_builder->get_wp_query();
 
-    $total_doc_count = ! empty( $wp_query->found_posts ) ? $wp_query->found_posts : 0;
+    $total_doc_count = ! empty( $the_wp_query->found_posts ) ? $the_wp_query->found_posts : 0;
 
     if ( $total_doc_count > 0 ) {
         $new_item = str_replace(
