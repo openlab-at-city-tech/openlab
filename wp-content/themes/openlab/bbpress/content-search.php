@@ -12,8 +12,6 @@ defined( 'ABSPATH' ) || exit;
 
 ?>
 
-<div id="bbpress-forums" class="bbpress-wrapper">
-
 	<?php bbp_breadcrumb(); ?>
 
 	<?php bbp_set_query_name( bbp_get_search_rewrite_id() ); ?>
@@ -43,6 +41,3 @@ defined( 'ABSPATH' ) || exit;
 	<?php endif; ?>
 
 	<?php do_action( 'bbp_template_after_search_results' ); ?>
-
-</div>
-

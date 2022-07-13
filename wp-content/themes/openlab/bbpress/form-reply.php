@@ -9,8 +9,6 @@
 
 <?php if ( bbp_is_reply_edit() ) : ?>
 
-	<div id="bbpress-forums">
-
 		<?php bbp_breadcrumb(); ?>
 
 	<?php endif; ?>
@@ -205,6 +203,5 @@
 
 	<?php if ( bbp_is_reply_edit() ) : ?>
 
-	</div>
 
 <?php endif; ?>

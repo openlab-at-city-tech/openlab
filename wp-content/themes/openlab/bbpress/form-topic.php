@@ -9,8 +9,6 @@
 
 <?php if ( ! bbp_is_single_forum() ) : ?>
 
-	<div id="bbpress-forums">
-
 	<?php bbp_breadcrumb(); ?>
 
 	<?php endif; ?>
@@ -245,7 +243,5 @@
 	<?php endif; ?>
 
 	<?php if ( ! bbp_is_single_forum() ) : ?>
-
-	</div>
 
 <?php endif; ?>
