@@ -151,7 +151,9 @@ $settings = bp_email_get_appearance_settings();
 						 */
 						do_action( 'bp_before_email_header' );
 						?>
-						<img style="max-width: 400px;" src="<?php echo esc_attr( home_url( 'wp-content/themes/openlab/images/OpenLab_logo.svg' ) ); ?>" alt="<?php echo esc_attr( bp_get_option( 'blogname' ) ); ?>" width="100%" />
+
+						<?php /* Note that image path is hardcoded to production site to avoid HTTP auth issues */ ?>
+						<img style="max-width: 400px;" src="<?php echo esc_attr( 'https://openlab.citytech.cuny.edu/wp-content/themes/openlab/images/openlab-logo-full.svg' ) ); ?>" alt="<?php echo esc_attr( bp_get_option( 'blogname' ) ); ?>" width="100%" />
 
 						<?php
 						/**
