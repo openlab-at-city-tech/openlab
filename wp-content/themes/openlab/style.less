@@ -3804,8 +3804,6 @@ a.delete-doc-button {
     }
 
     &-replies {
-        margin-bottom: 15px;
-
         .pagination-links,
         .pagination-count {
             padding: 0;
@@ -3846,6 +3844,34 @@ a.delete-doc-button {
 
     .bbp-topic-form {
         margin-top: 60px;
+    }
+
+    div.bbp-reply-title {
+        h3 {
+            font-size: 14px;
+        }
+    }
+
+    .bbp-back-to-course-discussion {
+        margin-top: 15px;
+    }
+
+    #bbp-cancel-reply-to-link {
+        &:extend(.btn);
+        &:extend(.btn-default);
+        text-decoration: none;
+        border: 1px solid #eee !important;
+
+        &:hover {
+            background-color: #e6e6e6;
+        }
+    }
+
+    .bbp-meta {
+        .bbp-reply-to-link {
+            font-weight: 700;
+            color: #444;
+        }
     }
 }
 
