@@ -318,7 +318,7 @@ add_filter(
 
 		$args['tokens']['ges.summary_body'] = $bp_ges_tokens['summary_body'];
 
-		if ( 'dig' === $args['tokens']['ges.subscription_type'] ) {
+		if ( 'dig' === $args['tokens']['subscription_type'] ) {
 			$args['tokens']['ges.digest_intro'] = 'Here is the activity for your <b>OpenLab daily digest</b> subscriptions:';
 		} else {
 			$args['tokens']['ges.digest_intro'] = 'Here is the activity for your <b>OpenLab weekly digest</b> subscriptions:';
@@ -409,6 +409,9 @@ add_filter(
 			$time_posted      = get_date_from_gmt( $item->date_recorded, get_option( 'time_format' ) );
 			$date_posted      = get_date_from_gmt( $item->date_recorded, get_option( 'date_format' ) );
 			$activity_action .= sprintf( ' at %s, %s:', $time_posted, $date_posted );
+
+			// Links should be bold.
+			$activity_action = preg_replace( '|(<a [^>]+>.*?</a>)|', '<b>\1</b>', $activity_action );
 
 			$markup .= '<table cellspacing="0" cellpadding="0" border="0" width="100%">';
 			$markup .= '<tr>';

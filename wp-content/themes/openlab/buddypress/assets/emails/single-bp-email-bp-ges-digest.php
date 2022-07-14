@@ -122,20 +122,7 @@ $settings = bp_email_get_appearance_settings();
 
 									<ul>{{{ges.summary_body}}}</ul>
 
-									<table cellspacing="0" cellpadding="0" border="0" width="100%">
-										<tr>
-											<td style="border-top: 10px solid transparent;">&nbsp;</td>
-										</tr>
-
-										<tr>
-											<td style="border: 1px solid #ddd; padding: 20px; font-family: sans-serif; mso-height-rule: exactly; line-height: <?php echo esc_attr( floor( $settings['body_text_size'] * 1.618 ) . 'px' ) ?>; color: #222; font-size: <?php echo esc_attr( $settings['body_text_size'] . 'px' ); ?>" class="body_text_size">
-												<p>{{{ges.action}}}</p>
-												<p>{{{usermessage}}}</p>
-
-												<p><a style="display: inline-block; background-color: #2b2b2b; color: #fff; padding: 6px 12px; border-radius: 3px; text-decoration: none;" href="{{{thread.url}}}">{{{ges.view-text}}}</a></p>
-											</td>
-										</tr>
-									</table>
+									{{{usermessage}}}
 								</td>
 						  </tr>
 						</table>
