@@ -289,3 +289,151 @@ add_action(
 	20,
 	3
 );
+
+/**
+ * Stash the digest summary markup in a parameter that can be converted to an email token.
+ */
+add_filter(
+	'ass_digest_summary_full',
+	function( $summary, $summary_ul, $summary_body ) {
+		global $bp_ges_tokens;
+		$bp_ges_tokens['summary_body'] = $summary_body;
+		return $summary;
+	},
+	10,
+	3
+);
+
+/**
+ * Provide additional email args for BPGES digest emails.
+ */
+add_filter(
+	'ass_send_email_args',
+	function( $args, $email_type ) {
+		if ( 'bp-ges-digest' !== $email_type ) {
+			return $args;
+		}
+
+		global $bp_ges_tokens;
+
+		$args['tokens']['ges.summary_body'] = $bp_ges_tokens['summary_body'];
+
+		if ( 'dig' === $args['tokens']['ges.subscription_type'] ) {
+			$args['tokens']['ges.digest_intro'] = 'Here is the activity for your <b>OpenLab daily digest</b> subscriptions:';
+		} else {
+			$args['tokens']['ges.digest_intro'] = 'Here is the activity for your <b>OpenLab weekly digest</b> subscriptions:';
+		}
+
+		return $args;
+
+		// Text for the View button.
+		$view_text = openlab_get_activity_view_button_label( $args['activity']->type );
+		if ( ! $view_text ) {
+			$view_text = 'View';
+		}
+
+		$args['tokens']['ges.view-text'] = $view_text;
+
+		// Modified 'email setting' text.
+		$args['tokens']['ges.email-setting-description'] = str_replace( ' for this group', '', $args['tokens']['ges.email-setting-description'] );
+
+		// Group type label.
+		$args['tokens']['ges.group-type'] = openlab_get_group_type_label(
+			[
+				'group_id' => $args['activity']->item_id,
+			]
+		);
+
+		return $args;
+	},
+	10,
+	2
+);
+
+/**
+ * Don't allow BPGES to swap out the "Hi" salutation.
+ */
+add_filter(
+	'bp_email_get_salutation',
+	function( $salutation ) {
+		remove_filter( 'bp_email_get_salutation', 'ass_digest_filter_salutation' );
+		return $salutation;
+	},
+	5
+);
+
+/**
+ * Reformat the title section of digests.
+ */
+add_filter(
+	'ass_digest_group_message_title',
+	function( $message, $group_id, $subscription_type ) {
+		return '';
+		return $message;
+	},
+	10,
+	3
+);
+
+/**
+ * Reformat the group section of digests.
+ */
+add_filter(
+	'ass_digest_format_item_group',
+	function( $markup, $group_id, $type, $activity_ids, $user_id ) {
+		$group = groups_get_group( $group_id );
+		$group_permalink = bp_get_group_permalink( groups_get_group( $group_id ) );
+
+		$markup = '<table cellpadding="0" cellspacing="0" width="100%" style="border: 1px solid #ddd; border-radius: 3px;">';
+
+		$markup .= '<tr>';
+		$markup .= '<td bgcolor="#efefef" style="padding: 10px 20px; font-family: sans-serif;">';
+		$markup .= '<b>' . esc_html( $group->name ) . '</b>';
+		$markup .= '</td>';
+		$markup .= '</tr>';
+
+		$markup .= '<tr>';
+		$markup .= '<td style="padding: 10px 20px; font-family: sans-serif; border-top: 1px solid #ddd;">';
+
+		$activity_count = count( $activity_ids );
+		$activity_index = 0;
+		foreach ( $activity_ids as $activity_id ) {
+			$activity_index++;
+
+			$activity = new BP_Activity_Activity( $activity_id );
+
+			// No need for the 'in [group]' in this context.
+			$activity_action = preg_replace( '| in <a[^>]+>.*?</a>$|', '', $activity->action );
+
+			$timestamp        = strtotime( $item->date_recorded );
+			$time_posted      = get_date_from_gmt( $item->date_recorded, get_option( 'time_format' ) );
+			$date_posted      = get_date_from_gmt( $item->date_recorded, get_option( 'date_format' ) );
+			$activity_action .= sprintf( ' at %s, %s:', $time_posted, $date_posted );
+
+			$markup .= '<table cellspacing="0" cellpadding="0" border="0" width="100%">';
+			$markup .= '<tr>';
+			$markup .= '<td style="padding: 20px 0; font-family: sans-serif; mso-height-rule: exactly;" class="body_text_size">';
+
+			$markup .= '<p>' . $activity_action . '</p>';
+			$markup .= '<p>' . bp_create_excerpt( $activity->content ) . '</p>';
+			$markup .= '<p><a style="display: inline-block; background-color: #2b2b2b; color: #fff; padding: 6px 12px; border-radius: 3px; text-decoration: none;" href="' . esc_url( $activity->primary_link ) . '">' . esc_html( openlab_get_activity_view_button_label( $activity->type ) ) . '</a></p>';
+
+			$markup .= '</td>';
+			$markup .= '</tr>';
+			$markup .= '</table>';
+
+			if ( $activity_index < $activity_count ) {
+				$markup .= '<hr color="#ddd" height="1" style="border-width: 1px 0 0 0;" />';
+			}
+		}
+
+		$markup .= '</td>';
+		$markup .= '</tr>';
+
+		$markup .= '</table>';
+
+		return $markup;
+	},
+	10,
+	5
+);
