@@ -10664,8 +10664,8 @@ a.delete-doc-button {
     margin-left: 0;
   }
 }
-.entry-content #bbpress-forums:first-of-type {
-  margin-top: 35px;
+.entry-content #bbpress-forums {
+  margin-top: 40px;
 }
 .bbp-pagination {
   margin: 0;
@@ -10676,9 +10676,6 @@ a.delete-doc-button {
   flex-flow: row wrap;
   align-items: flex-end;
 }
-.bbp-pagination-row-flex .pagination-links {
-  padding-right: 16px;
-}
 .bbp-pagination-row-flex .pagination-links .pagination {
   display: flex;
 }
@@ -10687,6 +10684,9 @@ a.delete-doc-button {
 }
 .bbp-pagination-row-flex .pagination-links .pagination li:not(:last-child) {
   margin-right: 6px !important;
+}
+.bbp-pagination-row-flex .pagination-links .pagination li:last-child {
+  margin-right: 16px;
 }
 .bbp-pagination-row-flex .pagination-links .pagination li > span,
 .bbp-pagination-row-flex .pagination-links .pagination li a {

@@ -3733,9 +3733,7 @@ a.delete-doc-button {
 }
 .entry-content {
     #bbpress-forums {
-        &:first-of-type {
-            margin-top: 35px;
-        }
+        margin-top: 40px;
     }
 }
 .bbp-pagination {
@@ -3748,8 +3746,6 @@ a.delete-doc-button {
         align-items: flex-end;
 
         .pagination-links {
-            padding-right: 16px;
-
             .pagination {
                 display: flex;
 
@@ -3758,6 +3754,10 @@ a.delete-doc-button {
 
                     &:not(:last-child) {
                         margin-right: 6px !important;
+                    }
+
+                    &:last-child {
+                        margin-right: 16px;
                     }
 
                     > span,
