@@ -11788,3 +11788,68 @@ p.private-membership-indicator {
   height: 24px;
   width: 28px;
 }
+/** Group Docs **/
+.bp-docs .doctable-panel {
+  padding-bottom: 0;
+}
+.bp-docs .docs-info-header {
+  background: transparent !important;
+  padding: 0 !important;
+  margin-bottom: 0 !important;
+}
+.bp-docs .docs-info-header p.currently-viewing {
+  font-size: 14px;
+  margin: 0;
+}
+.bp-docs #bp-docs-pagination {
+  height: auto;
+  display: flex;
+  flex-flow: row wrap;
+  align-items: flex-end;
+}
+.bp-docs #bp-docs-pagination #bp-docs-paginate-links,
+.bp-docs #bp-docs-pagination #bp-docs-pagination-count {
+  position: relative;
+  left: auto;
+  top: auto;
+  right: auto;
+  flex: 0 0 auto;
+}
+.bp-docs #bp-docs-pagination #bp-docs-paginate-links {
+  display: flex;
+}
+.bp-docs #bp-docs-pagination #bp-docs-paginate-links > span,
+.bp-docs #bp-docs-pagination #bp-docs-paginate-links > a {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  justify-content: center;
+  height: 24px;
+  padding: 0 7px;
+  font-size: 14px !important;
+  border: 1px solid #ccc !important;
+  text-decoration: none;
+  margin-right: 6px;
+}
+.bp-docs #bp-docs-pagination #bp-docs-paginate-links > span.current,
+.bp-docs #bp-docs-pagination #bp-docs-paginate-links > a.current {
+  background-color: #f1f1f1;
+  color: rgba(68, 68, 68, 0.8);
+}
+.bp-docs #bp-docs-pagination #bp-docs-paginate-links > span:hover,
+.bp-docs #bp-docs-pagination #bp-docs-paginate-links > a:hover {
+  text-decoration: none;
+}
+.bp-docs #bp-docs-pagination #bp-docs-paginate-links > span:last-child,
+.bp-docs #bp-docs-pagination #bp-docs-paginate-links > a:last-child {
+  margin-right: 15px;
+}
+.bp-docs #bp-docs-pagination #bp-docs-paginate-links > a {
+  color: #444;
+}
+.bp-docs #bp-docs-pagination #bp-docs-paginate-links > a:hover {
+  background-color: #eee;
+}
+.bp-docs #bp-docs-pagination #bp-docs-pagination-count {
+  font-size: 14px;
+}

@@ -741,3 +741,57 @@ function openlab_bbp_single_topic_description() {
 	return '';
 }
 add_filter( 'bbp_get_single_topic_description', 'openlab_bbp_single_topic_description' );
+
+function openlab_bp_docs_info_header_message() {
+	$filters = bp_docs_get_current_filters();
+	$message = '';
+
+	// All docs
+	if ( empty( $filters ) ) {
+		$message = __( 'Viewing <strong>All</strong> Docs', 'openlab' );	
+	} else {
+		
+		// Search
+		if ( ! empty( $filters['search_terms'] ) ) {
+			$message = sprintf( __( 'Viewing docs containing the term: %s', 'bp-docs' ), esc_html( $filters['search_terms'] ) );
+		}
+		
+		// Tag
+		if ( ! empty( $filters['tags'] ) ) {
+			$tagtext = array();
+	
+			foreach ( $filters['tags'] as $tag ) {
+				$tagtext[] = bp_docs_get_tag_link( array( 'tag' => $tag ) );
+			}
+	
+			$message = sprintf( __( 'Viewing docs with the tag: %s', 'buddypress-docs' ), implode( ', ', $tagtext ) );
+		}
+	}
+	?>
+	<p class="currently-viewing"><?php echo $message ?></p>	
+	<?php
+}
+
+add_filter( 'bp_docs_paginate_links', 'openlab_bp_docs_paginate_links' );
+function openlab_bp_docs_paginate_links() {
+	global $bp, $wp_query, $wp_rewrite;
+
+	$page_links_total = $bp->bp_docs->doc_query->max_num_pages;
+
+	$pagination_args = array(
+		'base' 		=> add_query_arg( 'paged', '%#%' ),
+		'format' 	=> '',
+		'prev_text' 	=> '<span class="fa fa-long-arrow-left">',
+		'next_text' 	=> '<span class="fa fa-long-arrow-right"></span>',
+		'total' 	=> $page_links_total,
+		'end_size'  => 2,
+	);
+
+	if ( $wp_rewrite->using_permalinks() ) {
+		$pagination_args['base'] = apply_filters( 'bp_docs_page_links_base_url', user_trailingslashit( trailingslashit( bp_docs_get_archive_link() ) . $wp_rewrite->pagination_base . '/%#%/', 'bp-docs-directory' ), $wp_rewrite->pagination_base );
+	}
+
+	$page_links = paginate_links( $pagination_args );
+
+	echo $page_links;
+}
