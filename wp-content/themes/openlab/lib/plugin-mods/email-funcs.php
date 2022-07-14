@@ -208,18 +208,24 @@ add_filter(
 		$situations = get_the_terms( $object->ID, bp_get_email_tax_type() );
 
 		$is_bp_ges_single = false;
+		$is_bp_ges_digest = false;
 		foreach ( $situations as $situation ) {
 			if ( 'bp-ges-single' === $situation->slug ) {
 				$is_bp_ges_single = true;
 				break;
 			}
+
+			if ( 'bp-ges-digest' === $situation->slug ) {
+				$is_bp_ges_digest = true;
+				break;
+			}
 		}
 
-		if ( ! $is_bp_ges_single ) {
-			return $paths;
+		if ( $is_bp_ges_single ) {
+			array_unshift( $paths, 'assets/emails/single-bp-email-bp-ges-single.php' );
+		} elseif ( $is_bp_ges_digest ) {
+			array_unshift( $paths, 'assets/emails/single-bp-email-bp-ges-digest.php' );
 		}
-
-		array_unshift( $paths, 'assets/emails/single-bp-email-bp-ges-single.php' );
 
 		return $paths;
 	},
