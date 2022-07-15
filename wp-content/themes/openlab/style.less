@@ -3542,6 +3542,9 @@ body.docs{
     #doc-submit-options {
         margin-top: 10px;
     }
+    .doc-content-permalink {
+        margin-bottom: 15px;
+    }
 }
 #doc-meta{
     .toggle-switch{
@@ -3565,8 +3568,36 @@ body.docs{
     }
     .toggle-content{
         border-color: @panel-default-border;
-        padding-top: 12px;
+        padding: 15px;
         width: 100%;
+
+        .desc-column {
+            margin-bottom: 15px;
+        }
+
+        textarea,
+        select {
+            width: 50%;
+
+            @media(max-width: 767px) {
+                width: 100%;
+            }
+        }
+
+        .doc-meta-label,
+        .doc-meta-desc {
+            margin: 0;
+            font-size: 14px;
+        }
+
+        .doc-meta-label {
+            margin-bottom: 5px;
+            font-weight: 700;
+
+            em {
+                font-weight: 400;
+            }
+        }
     }
     #toggle-table-settings{
         .desc-column{
