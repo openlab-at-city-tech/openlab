@@ -122,6 +122,8 @@ $settings = bp_email_get_appearance_settings();
 
 									<ul>{{{ges.summary_body}}}</ul>
 
+									<br />
+
 									{{{usermessage}}}
 								</td>
 						  </tr>

@@ -453,3 +453,19 @@ add_filter(
  */
 add_filter( 'ass_digest_footer', '__return_empty_string' );
 add_filter( 'ass_digest_disable_notifications', '__return_empty_string' );
+
+/**
+ * Customize subject line of BPGES digests.
+ */
+add_filter(
+	'ass_digest_title',
+	function( $title, $type ) {
+		if ( 'dig' === $type ) {
+			return 'Your City Tech OpenLab Daily Digest';
+		} else {
+			return 'Your City Tech OpenLab Weekly Digest';
+		}
+	},
+	10,
+	2
+);
