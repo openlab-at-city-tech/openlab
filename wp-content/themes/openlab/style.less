@@ -5051,10 +5051,55 @@ p.private-membership-indicator {
                 background-color: #fff;
 
                 &-comment {
+                    border: 1px solid #dcdcde;
+
                     textarea {
                         width: 100%;
                         &:extend(.form-control);
                         height: auto;
+                        margin-bottom: 0;
+                    }
+                    
+                    .quicktags-toolbar {
+                        padding: 5px;
+                        font-size: 14px;
+                        min-height: 26px;
+                        border-bottom: 1px solid #dcdcde;
+                        background-color: #f7f7f7;
+
+                        input {
+                            padding: 4px 7px;
+                            margin: 0 -1px 0 0;
+                            min-height: 26px;
+                            line-height: 0;
+                            border: 1px solid transparent;
+                            background-color: transparent;
+                            box-shadow: none;
+                            text-shadow: none;
+                            text-transform: uppercase;
+                            font-size: 11px;
+                            font-weight: 400;
+                            border-radius: 3px;
+                            min-width: 25px;
+                            color: #555;
+
+                            &[value="link"] {
+                                text-decoration: underline;
+                            }
+
+                            &[value="i"] {
+                                font-style: italic;
+                            }
+
+                            &[value="del"] {
+                                text-decoration: line-through;
+                            }
+
+                            &:hover {
+                                border-color: rgba(0, 0, 0, 0.1);
+                                background-color: rgba(255, 255, 255, 0.5);
+                            }
+                        }
                     }
                 }
 

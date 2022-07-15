@@ -26,6 +26,7 @@ if ( comments_open() ) {
 
 	$required_attribute = ( $html5 ? ' required' : ' required="required"' );
 
+    add_filter( 'comment_form_defaults', 'openlab_docs_comment_form' );
 	comment_form(
 		[
 			'comment_field'             => sprintf(
@@ -51,6 +52,7 @@ if ( comments_open() ) {
             )
 		]
 	);
+    remove_filter( 'comment_form_defaults', 'openlab_docs_comment_form' );
 }
 ?>
 </section>

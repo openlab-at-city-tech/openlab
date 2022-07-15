@@ -2175,3 +2175,17 @@ function openlab_doc_list_comments_render( $comment, $args, $depth ) {
     </li>
     <?php
 }
+
+// TinyMCE with quicktags only
+function openlab_docs_comment_form( $args ) {
+	ob_start();
+	wp_editor( '', 'comment', array(
+		'media_buttons' => false,
+		'textarea_rows' => '10',
+		'quicktags'     => array(
+ 	        'buttons'   => 'strong,em,link,block,del,img,ul,ol,li,code,close'
+	    )
+	) );
+	$args['comment_field'] = ob_get_clean();
+	return $args;
+}
