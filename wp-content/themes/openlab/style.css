@@ -11888,6 +11888,9 @@ p.private-membership-indicator {
 .bp-docs #bp-docs-pagination #bp-docs-pagination-count {
   font-size: 14px;
 }
+.bp-docs .doc-meta {
+  margin-top: 20px;
+}
 .bp-docs #comments {
   margin-top: 40px;
 }
