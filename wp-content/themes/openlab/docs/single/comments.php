@@ -16,15 +16,10 @@ if ( have_comments() ) :
             <?php wp_list_comments( 'type=comment&callback=openlab_doc_list_comments_render' ); ?>
         </ul>
     </div>
-    <?php if ( get_comment_pages_count() > 1 ) : ?>
-    <nav id="comments-nav-below" class="comments-navigation" role="navigation">
-        <div class="paginated-comments-links"><?php paginate_comments_links(); ?></div>
-    </nav>
-    <?php endif; ?>
 </section>
-<?php endif; ?>
+    <?php endif;
+endif;
 
-<?php
 if ( comments_open() ) {
 	$user          = wp_get_current_user();
 	$user_identity = $user->exists() ? $user->display_name : '';
@@ -58,6 +53,4 @@ if ( comments_open() ) {
 	);
 }
 ?>
-
-<?php endif; ?>
 </section>
