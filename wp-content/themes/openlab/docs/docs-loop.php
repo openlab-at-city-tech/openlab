@@ -115,9 +115,9 @@
 				<p class="no-docs bold">There were no search results found.</p>
 			<?php else : ?>
 				<?php if ( groups_is_user_member( get_current_user_id(), bp_get_group_id() ) ): ?>
-					<p class="no-docs bold"><?php printf( __( 'There are no docs for this view. Why not <a href="%s">create one</a>?', 'bp-docs' ), bp_docs_get_item_docs_link() . BP_DOCS_CREATE_SLUG ) ?></p>
+					<p class="no-docs bold"><?php printf( __( 'There are no docs to view. <a href="%s">Create a new doc</a>.', 'bp-docs' ), bp_docs_get_item_docs_link() . BP_DOCS_CREATE_SLUG ) ?></p>
 				<?php else: ?>
-					<p class="no-docs bold"><?php printf( __( 'There are no docs for this view.', 'bp-docs' ) ) ?></p>
+					<p class="no-docs bold"><?php printf( __( 'There are no docs to view.', 'bp-docs' ) ) ?></p>
 				<?php endif; ?>
 			<?php endif; ?>
 		<?php endif; ?>
