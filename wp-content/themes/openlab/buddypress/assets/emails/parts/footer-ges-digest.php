@@ -9,9 +9,8 @@
 		<td style="color: #222; padding: 20px 10px; width: 100%; font-size: 12px; font-family: sans-serif; mso-height-rule: exactly; line-height: 19px; text-align: left;" class="footer_text_size">
 
 			<p><span class="footer_text">{{{ges.email-setting-description}}}</span><br>
-			Go to <a href="{{{group.url}}}notifications/">Membership > Your Email Options</a> to change your email settings for this {{{ges.group-type}}}.</p>
 
-			<p><b>Please note</b>: You cannot reply by email to this notification. <a href="{{{thread.url}}}">Go to the post</a> to read or reply.</p>
+			<p><b>Please note</b>: You cannot reply by email to this notification.</p>
 		</td>
 	</tr>
 </table>

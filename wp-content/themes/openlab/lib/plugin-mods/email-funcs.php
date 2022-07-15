@@ -395,11 +395,7 @@ add_filter(
 		$markup .= '<tr>';
 		$markup .= '<td style="padding: 10px 20px; font-family: sans-serif; border-top: 1px solid #ddd;">';
 
-		$activity_count = count( $activity_ids );
-		$activity_index = 0;
 		foreach ( $activity_ids as $activity_id ) {
-			$activity_index++;
-
 			$activity = new BP_Activity_Activity( $activity_id );
 
 			// No need for the 'in [group]' in this context.
@@ -425,18 +421,33 @@ add_filter(
 			$markup .= '</tr>';
 			$markup .= '</table>';
 
-			if ( $activity_index < $activity_count ) {
-				$markup .= '<hr color="#ddd" height="1" style="border-width: 1px 0 0 0;" />';
-			}
+			$markup .= '<hr color="#ddd" height="1" style="border-width: 1px 0 0 0;" />';
 		}
 
 		$markup .= '</td>';
 		$markup .= '</tr>';
 
+		$markup .= '<tr>';
+		$markup .= '<td style="padding: 0 20px 20px 20px; font-family: sans-serif; mso-height-rule: exactly; font-size: 14px;">';
+		$markup .= sprintf( '<p>Go to <a href="%s">Membership &gt; Your Email Options</a> to change your email settings for this %s.', esc_url( bp_get_group_permalink( $group ) . 'notifications/' ), esc_html( openlab_get_group_type_label( [ 'group_id' => $group_id ] ) ) );
+		$markup .= '</td>';
+		$markup .= '</tr>';
+
 		$markup .= '</table>';
+
+		// Empty row for spacing.
+		$markup .= '<table><tr><td height="30">&nbsp;</td></tr></table>';
 
 		return $markup;
 	},
 	10,
 	5
 );
+
+/**
+ * Don't allow BPGES to append digest footer messages.
+ *
+ * We add them ourselves, as part of the template.
+ */
+add_filter( 'ass_digest_footer', '__return_empty_string' );
+add_filter( 'ass_digest_disable_notifications', '__return_empty_string' );
