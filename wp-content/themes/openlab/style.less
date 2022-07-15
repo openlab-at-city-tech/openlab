@@ -5003,5 +5003,170 @@ p.private-membership-indicator {
         #bp-docs-pagination-count {
             font-size: 14px;
         }
-    }    
+    }
+
+    // Comments
+    #comments {
+        margin-top: 40px;
+
+        // Reply Form
+        .comment-respond {
+            &:extend(.panel);
+            &:extend(.panel-default);
+
+            .comment-reply-title {
+                display: flex;
+                flex-flow: row wrap;
+                justify-content: space-between;
+                margin: 0;
+                padding: 10px 15px;
+                font-size: 14px;
+                color: #333;
+                background-color: #f5f5f5;
+                border-top-left-radius: 3px;
+                border-top-right-radius: 3px;
+
+                p {
+                    margin: 0;
+                    flex: 0 0 50%;
+                    max-width: 50%;
+
+                    &.logged-in-as {
+                        font-weight: 400;
+                        text-align: right;
+                    }
+                }
+
+                small {
+                    display: none !important;
+                }
+            }
+
+            .comment-form {
+                padding: 15px;
+                background-color: #fff;
+
+                &-comment {
+                    textarea {
+                        width: 100%;
+                        &:extend(.form-control);
+                        height: auto;
+                    }
+                }
+
+                #openlab-cancel-doc-reply {
+                    display: none;
+                }
+            }
+
+            #submit {
+                &:extend(.btn);
+                &:extend(.btn-primary);
+            }
+        }
+    }
+
+    .comments {
+        &-title {
+            margin: 0;
+            font-size: 14px;
+            font-weight: 700;
+            color: #333;
+        }
+
+        &-list {
+            &-header {
+                padding: 8px;
+                border-top: 1px solid #eee;
+                background-color: #eaeaea;
+            }
+
+            // Main comments list
+            &-body {
+                padding: 0;
+                margin: 0;
+                list-style: none;
+
+                > ul.children {
+                    padding: 0;
+                    margin-left: 50px;
+                    list-style: none;
+                }
+
+                .comment-respond {
+                    margin: 15px 15px 30px 15px;
+
+                    #openlab-cancel-doc-reply {
+                        display: inline-block !important;
+                    }
+                }
+            }
+
+            // Single comment
+            &-item {
+                &-header {
+                    display: flex;
+                    flex-flow: row wrap;
+                    justify-content: space-between;
+                    padding: 8px;
+                    font-size: 14px;
+                    border-top: 1px solid #ddd;
+                    background-color: #f4f4f4;
+
+                    a {
+                        text-decoration: none;
+                    }
+
+                    &-date {
+                        a {
+                            color: #333;
+                        }
+                    }
+
+                    &-actions {
+                        color: #ddd;
+
+                        a {
+                            color: #707070;
+                            text-transform: uppercase;
+                        }
+                    }
+                }
+
+                &-body {
+                    display: flex;
+                    flex-flow: row wrap;
+                    padding: 12px;
+
+                    &-author {
+                        flex: 0 0 115px;
+                        max-width: 115px;
+                        display: flex;
+                        flex-flow: column wrap;
+                        align-items: center;
+                        text-align: center;
+
+                        a {
+                            font-size: 14px;
+                            margin: 0 12px;
+                            word-wrap: break-word;
+                            color: #333;
+                        }
+                    }
+
+                    &-content {
+                        flex: 0 0 calc(100% - 115px);
+                        max-width: calc(100% - 115px);
+                        padding: 8px;
+
+                        p {
+                            margin: 0 0 15px;
+                            font-size: 14px;
+                            color: #333;
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

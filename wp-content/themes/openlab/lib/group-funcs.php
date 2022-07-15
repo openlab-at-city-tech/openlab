@@ -2134,3 +2134,44 @@ function openlab_get_group_private_users( $group_id ) {
 
 	return $private_users;
 }
+
+/**
+ * Group Docs comments template
+ */
+function openlab_doc_list_comments_render( $comment, $args, $depth ) {
+    ?>
+    <li id="comment-<?php comment_ID(); ?>" class="comments-list-item">
+        <div class="comments-list-item-header">
+            <div class="comments-list-item-header-date">
+                <a href="<?php echo htmlspecialchars( get_comment_link( $comment->comment_ID ) ); ?>"><?php
+                    /* translators: 1: date, 2: time */
+                    printf( 
+                        __('%1$s at %2$s'), 
+                        get_comment_date(),  
+                        get_comment_time() 
+                    ); ?>
+                </a>
+            </div>
+            <div class="comments-list-item-header-actions">
+                <?php edit_comment_link( 'Edit', '', '' ); ?> | 
+                <?php comment_reply_link( array_merge(
+                    $args,
+                    array(
+                        'depth'     => $depth,
+                        'max_depth' => $args['max_depth']
+                    )
+                ) ); ?>
+            </div>
+        </div>
+        <div class="comments-list-item-body">
+            <div class="comments-list-item-body-author">
+                <?php echo get_avatar( $comment, 80 ); ?>
+                <?php echo get_comment_author_link(); ?>
+            </div>
+            <div class="comments-list-item-body-content">
+                <?php comment_text(); ?>
+            </div>
+        </div>
+    </li>
+    <?php
+}
