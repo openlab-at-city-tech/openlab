@@ -319,9 +319,11 @@ add_filter(
 		$args['tokens']['ges.summary_body'] = $bp_ges_tokens['summary_body'];
 
 		if ( 'dig' === $args['tokens']['subscription_type'] ) {
-			$args['tokens']['ges.digest_intro'] = 'Here is the activity for your <b>OpenLab daily digest</b> subscriptions:';
+			$args['tokens']['ges.digest_intro']              = 'Here is the activity for your <b>OpenLab daily digest</b> subscriptions:';
+			$args['tokens']['ges.email-setting-description'] = 'You have received this message because you are subscribed to a daily digest of activity in some of your groups on City Tech OpenLab.';
 		} else {
-			$args['tokens']['ges.digest_intro'] = 'Here is the activity for your <b>OpenLab weekly digest</b> subscriptions:';
+			$args['tokens']['ges.digest_intro']              = 'Here is the activity for your <b>OpenLab weekly digest</b> subscriptions:';
+			$args['tokens']['ges.email-setting-description'] = 'You have received this message because you are subscribed to a weekly digest of activity in some of your groups on City Tech OpenLab.';
 		}
 
 		return $args;
