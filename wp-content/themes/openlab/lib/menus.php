@@ -648,6 +648,15 @@ function openlab_group_docs_submenu() {
         $current_item = $base_url . '?bpd_tag=' . $_GET['bpd_tag'];
     }
 
+    $current_doc = bp_docs_get_current_doc();
+    if ( $current_doc ) {
+        $doc_url = trailingslashit( bp_get_group_permalink() ) . BP_DOCS_SLUG . '/' . $current_doc->post_name;
+        $current_item = $doc_url;
+        $menu_list += [
+            $doc_url => $current_doc->post_title
+        ];
+    }
+
     return openlab_submenu_gen( $menu_list, false, $current_item );
 }
 
