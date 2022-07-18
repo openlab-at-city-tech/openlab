@@ -1543,11 +1543,6 @@ function openlab_get_user_activity_action( $activity = null ) {
 	// Get activity body content
 	$output = $activity->action;
 
-	// Add "commented on the post [title] on comment activity type
-	if( $activity->type === 'new_blog_comment' ) {
-		$output = str_replace( 'commented on', 'commented on the post', $output );
-	}
-
 	// Remove "in the group/forum" text from the activity on the group activity stream
 	if( bp_is_group() ) {
 		$group = bp_get_group( bp_get_current_group_id() );

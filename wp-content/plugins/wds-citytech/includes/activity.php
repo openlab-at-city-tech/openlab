@@ -57,6 +57,12 @@ function openlab_modify_activity_action_on_save( BP_Activity_Activity $activity 
 		case 'new_blog_post' :
 			$activity->action = str_replace( 'wrote a new blog post', 'posted', $activity->action );
 		break;
+
+		case 'new_blog_comment' :
+			$comment_link = get_comment_link( $activity->secondary_item_id );
+
+			$activity->action = str_replace( 'commented on <', 'left a <a href="' . esc_url( $comment_link ) . '">comment</a> on the post <', $activity->action );
+		break;
 	}
 
 	// Always remove 'in the group'.
