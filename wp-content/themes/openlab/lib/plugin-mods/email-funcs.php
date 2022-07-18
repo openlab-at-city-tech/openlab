@@ -469,3 +469,19 @@ add_filter(
 	10,
 	2
 );
+
+/**
+ * Modifies the subject line for outgoing emails.
+ */
+add_filter(
+	'bp_email_set_tokens',
+	function( $formatted_tokens, $tokens, $email ) {
+		if ( isset( $tokens['group'] ) && $tokens['group'] instanceof BP_Groups_Group ) {
+			$formatted_tokens['openlab.group_type'] = openlab_get_group_type_label( [ 'group_id' => $tokens['group']->id ] );
+		}
+
+		return $formatted_tokens;
+	},
+	10,
+	3
+);
