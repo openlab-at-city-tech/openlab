@@ -1,70 +1,535 @@
-/******/ (function() { // webpackBootstrap
-/******/ 	"use strict";
-/******/ 	// The require scope
-/******/ 	var __webpack_require__ = {};
+/******/ (() => { // webpackBootstrap
+/******/ 	var __webpack_modules__ = ({
+
+/***/ 4793:
+/***/ ((module) => {
+
+var characterMap = {
+	"À": "A",
+	"Á": "A",
+	"Â": "A",
+	"Ã": "A",
+	"Ä": "A",
+	"Å": "A",
+	"Ấ": "A",
+	"Ắ": "A",
+	"Ẳ": "A",
+	"Ẵ": "A",
+	"Ặ": "A",
+	"Æ": "AE",
+	"Ầ": "A",
+	"Ằ": "A",
+	"Ȃ": "A",
+	"Ç": "C",
+	"Ḉ": "C",
+	"È": "E",
+	"É": "E",
+	"Ê": "E",
+	"Ë": "E",
+	"Ế": "E",
+	"Ḗ": "E",
+	"Ề": "E",
+	"Ḕ": "E",
+	"Ḝ": "E",
+	"Ȇ": "E",
+	"Ì": "I",
+	"Í": "I",
+	"Î": "I",
+	"Ï": "I",
+	"Ḯ": "I",
+	"Ȋ": "I",
+	"Ð": "D",
+	"Ñ": "N",
+	"Ò": "O",
+	"Ó": "O",
+	"Ô": "O",
+	"Õ": "O",
+	"Ö": "O",
+	"Ø": "O",
+	"Ố": "O",
+	"Ṍ": "O",
+	"Ṓ": "O",
+	"Ȏ": "O",
+	"Ù": "U",
+	"Ú": "U",
+	"Û": "U",
+	"Ü": "U",
+	"Ý": "Y",
+	"à": "a",
+	"á": "a",
+	"â": "a",
+	"ã": "a",
+	"ä": "a",
+	"å": "a",
+	"ấ": "a",
+	"ắ": "a",
+	"ẳ": "a",
+	"ẵ": "a",
+	"ặ": "a",
+	"æ": "ae",
+	"ầ": "a",
+	"ằ": "a",
+	"ȃ": "a",
+	"ç": "c",
+	"ḉ": "c",
+	"è": "e",
+	"é": "e",
+	"ê": "e",
+	"ë": "e",
+	"ế": "e",
+	"ḗ": "e",
+	"ề": "e",
+	"ḕ": "e",
+	"ḝ": "e",
+	"ȇ": "e",
+	"ì": "i",
+	"í": "i",
+	"î": "i",
+	"ï": "i",
+	"ḯ": "i",
+	"ȋ": "i",
+	"ð": "d",
+	"ñ": "n",
+	"ò": "o",
+	"ó": "o",
+	"ô": "o",
+	"õ": "o",
+	"ö": "o",
+	"ø": "o",
+	"ố": "o",
+	"ṍ": "o",
+	"ṓ": "o",
+	"ȏ": "o",
+	"ù": "u",
+	"ú": "u",
+	"û": "u",
+	"ü": "u",
+	"ý": "y",
+	"ÿ": "y",
+	"Ā": "A",
+	"ā": "a",
+	"Ă": "A",
+	"ă": "a",
+	"Ą": "A",
+	"ą": "a",
+	"Ć": "C",
+	"ć": "c",
+	"Ĉ": "C",
+	"ĉ": "c",
+	"Ċ": "C",
+	"ċ": "c",
+	"Č": "C",
+	"č": "c",
+	"C̆": "C",
+	"c̆": "c",
+	"Ď": "D",
+	"ď": "d",
+	"Đ": "D",
+	"đ": "d",
+	"Ē": "E",
+	"ē": "e",
+	"Ĕ": "E",
+	"ĕ": "e",
+	"Ė": "E",
+	"ė": "e",
+	"Ę": "E",
+	"ę": "e",
+	"Ě": "E",
+	"ě": "e",
+	"Ĝ": "G",
+	"Ǵ": "G",
+	"ĝ": "g",
+	"ǵ": "g",
+	"Ğ": "G",
+	"ğ": "g",
+	"Ġ": "G",
+	"ġ": "g",
+	"Ģ": "G",
+	"ģ": "g",
+	"Ĥ": "H",
+	"ĥ": "h",
+	"Ħ": "H",
+	"ħ": "h",
+	"Ḫ": "H",
+	"ḫ": "h",
+	"Ĩ": "I",
+	"ĩ": "i",
+	"Ī": "I",
+	"ī": "i",
+	"Ĭ": "I",
+	"ĭ": "i",
+	"Į": "I",
+	"į": "i",
+	"İ": "I",
+	"ı": "i",
+	"Ĳ": "IJ",
+	"ĳ": "ij",
+	"Ĵ": "J",
+	"ĵ": "j",
+	"Ķ": "K",
+	"ķ": "k",
+	"Ḱ": "K",
+	"ḱ": "k",
+	"K̆": "K",
+	"k̆": "k",
+	"Ĺ": "L",
+	"ĺ": "l",
+	"Ļ": "L",
+	"ļ": "l",
+	"Ľ": "L",
+	"ľ": "l",
+	"Ŀ": "L",
+	"ŀ": "l",
+	"Ł": "l",
+	"ł": "l",
+	"Ḿ": "M",
+	"ḿ": "m",
+	"M̆": "M",
+	"m̆": "m",
+	"Ń": "N",
+	"ń": "n",
+	"Ņ": "N",
+	"ņ": "n",
+	"Ň": "N",
+	"ň": "n",
+	"ŉ": "n",
+	"N̆": "N",
+	"n̆": "n",
+	"Ō": "O",
+	"ō": "o",
+	"Ŏ": "O",
+	"ŏ": "o",
+	"Ő": "O",
+	"ő": "o",
+	"Œ": "OE",
+	"œ": "oe",
+	"P̆": "P",
+	"p̆": "p",
+	"Ŕ": "R",
+	"ŕ": "r",
+	"Ŗ": "R",
+	"ŗ": "r",
+	"Ř": "R",
+	"ř": "r",
+	"R̆": "R",
+	"r̆": "r",
+	"Ȓ": "R",
+	"ȓ": "r",
+	"Ś": "S",
+	"ś": "s",
+	"Ŝ": "S",
+	"ŝ": "s",
+	"Ş": "S",
+	"Ș": "S",
+	"ș": "s",
+	"ş": "s",
+	"Š": "S",
+	"š": "s",
+	"Ţ": "T",
+	"ţ": "t",
+	"ț": "t",
+	"Ț": "T",
+	"Ť": "T",
+	"ť": "t",
+	"Ŧ": "T",
+	"ŧ": "t",
+	"T̆": "T",
+	"t̆": "t",
+	"Ũ": "U",
+	"ũ": "u",
+	"Ū": "U",
+	"ū": "u",
+	"Ŭ": "U",
+	"ŭ": "u",
+	"Ů": "U",
+	"ů": "u",
+	"Ű": "U",
+	"ű": "u",
+	"Ų": "U",
+	"ų": "u",
+	"Ȗ": "U",
+	"ȗ": "u",
+	"V̆": "V",
+	"v̆": "v",
+	"Ŵ": "W",
+	"ŵ": "w",
+	"Ẃ": "W",
+	"ẃ": "w",
+	"X̆": "X",
+	"x̆": "x",
+	"Ŷ": "Y",
+	"ŷ": "y",
+	"Ÿ": "Y",
+	"Y̆": "Y",
+	"y̆": "y",
+	"Ź": "Z",
+	"ź": "z",
+	"Ż": "Z",
+	"ż": "z",
+	"Ž": "Z",
+	"ž": "z",
+	"ſ": "s",
+	"ƒ": "f",
+	"Ơ": "O",
+	"ơ": "o",
+	"Ư": "U",
+	"ư": "u",
+	"Ǎ": "A",
+	"ǎ": "a",
+	"Ǐ": "I",
+	"ǐ": "i",
+	"Ǒ": "O",
+	"ǒ": "o",
+	"Ǔ": "U",
+	"ǔ": "u",
+	"Ǖ": "U",
+	"ǖ": "u",
+	"Ǘ": "U",
+	"ǘ": "u",
+	"Ǚ": "U",
+	"ǚ": "u",
+	"Ǜ": "U",
+	"ǜ": "u",
+	"Ứ": "U",
+	"ứ": "u",
+	"Ṹ": "U",
+	"ṹ": "u",
+	"Ǻ": "A",
+	"ǻ": "a",
+	"Ǽ": "AE",
+	"ǽ": "ae",
+	"Ǿ": "O",
+	"ǿ": "o",
+	"Þ": "TH",
+	"þ": "th",
+	"Ṕ": "P",
+	"ṕ": "p",
+	"Ṥ": "S",
+	"ṥ": "s",
+	"X́": "X",
+	"x́": "x",
+	"Ѓ": "Г",
+	"ѓ": "г",
+	"Ќ": "К",
+	"ќ": "к",
+	"A̋": "A",
+	"a̋": "a",
+	"E̋": "E",
+	"e̋": "e",
+	"I̋": "I",
+	"i̋": "i",
+	"Ǹ": "N",
+	"ǹ": "n",
+	"Ồ": "O",
+	"ồ": "o",
+	"Ṑ": "O",
+	"ṑ": "o",
+	"Ừ": "U",
+	"ừ": "u",
+	"Ẁ": "W",
+	"ẁ": "w",
+	"Ỳ": "Y",
+	"ỳ": "y",
+	"Ȁ": "A",
+	"ȁ": "a",
+	"Ȅ": "E",
+	"ȅ": "e",
+	"Ȉ": "I",
+	"ȉ": "i",
+	"Ȍ": "O",
+	"ȍ": "o",
+	"Ȑ": "R",
+	"ȑ": "r",
+	"Ȕ": "U",
+	"ȕ": "u",
+	"B̌": "B",
+	"b̌": "b",
+	"Č̣": "C",
+	"č̣": "c",
+	"Ê̌": "E",
+	"ê̌": "e",
+	"F̌": "F",
+	"f̌": "f",
+	"Ǧ": "G",
+	"ǧ": "g",
+	"Ȟ": "H",
+	"ȟ": "h",
+	"J̌": "J",
+	"ǰ": "j",
+	"Ǩ": "K",
+	"ǩ": "k",
+	"M̌": "M",
+	"m̌": "m",
+	"P̌": "P",
+	"p̌": "p",
+	"Q̌": "Q",
+	"q̌": "q",
+	"Ř̩": "R",
+	"ř̩": "r",
+	"Ṧ": "S",
+	"ṧ": "s",
+	"V̌": "V",
+	"v̌": "v",
+	"W̌": "W",
+	"w̌": "w",
+	"X̌": "X",
+	"x̌": "x",
+	"Y̌": "Y",
+	"y̌": "y",
+	"A̧": "A",
+	"a̧": "a",
+	"B̧": "B",
+	"b̧": "b",
+	"Ḑ": "D",
+	"ḑ": "d",
+	"Ȩ": "E",
+	"ȩ": "e",
+	"Ɛ̧": "E",
+	"ɛ̧": "e",
+	"Ḩ": "H",
+	"ḩ": "h",
+	"I̧": "I",
+	"i̧": "i",
+	"Ɨ̧": "I",
+	"ɨ̧": "i",
+	"M̧": "M",
+	"m̧": "m",
+	"O̧": "O",
+	"o̧": "o",
+	"Q̧": "Q",
+	"q̧": "q",
+	"U̧": "U",
+	"u̧": "u",
+	"X̧": "X",
+	"x̧": "x",
+	"Z̧": "Z",
+	"z̧": "z",
+};
+
+var chars = Object.keys(characterMap).join('|');
+var allAccents = new RegExp(chars, 'g');
+var firstAccent = new RegExp(chars, '');
+
+var removeAccents = function(string) {	
+	return string.replace(allAccents, function(match) {
+		return characterMap[match];
+	});
+};
+
+var hasAccents = function(string) {
+	return !!string.match(firstAccent);
+};
+
+module.exports = removeAccents;
+module.exports.has = hasAccents;
+module.exports.remove = removeAccents;
+
+
+/***/ })
+
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
 /******/ 	
 /************************************************************************/
+/******/ 	/* webpack/runtime/compat get default export */
+/******/ 	(() => {
+/******/ 		// getDefaultExport function for compatibility with non-harmony modules
+/******/ 		__webpack_require__.n = (module) => {
+/******/ 			var getter = module && module.__esModule ?
+/******/ 				() => (module['default']) :
+/******/ 				() => (module);
+/******/ 			__webpack_require__.d(getter, { a: getter });
+/******/ 			return getter;
+/******/ 		};
+/******/ 	})();
+/******/ 	
 /******/ 	/* webpack/runtime/define property getters */
-/******/ 	!function() {
+/******/ 	(() => {
 /******/ 		// define getter functions for harmony exports
-/******/ 		__webpack_require__.d = function(exports, definition) {
+/******/ 		__webpack_require__.d = (exports, definition) => {
 /******/ 			for(var key in definition) {
 /******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
 /******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
 /******/ 				}
 /******/ 			}
 /******/ 		};
-/******/ 	}();
+/******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
-/******/ 	!function() {
-/******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
-/******/ 	}();
+/******/ 	(() => {
+/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/make namespace object */
-/******/ 	!function() {
+/******/ 	(() => {
 /******/ 		// define __esModule on exports
-/******/ 		__webpack_require__.r = function(exports) {
+/******/ 		__webpack_require__.r = (exports) => {
 /******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
 /******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 /******/ 			}
 /******/ 			Object.defineProperty(exports, '__esModule', { value: true });
 /******/ 		};
-/******/ 	}();
+/******/ 	})();
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
+// This entry need to be wrapped in an IIFE because it need to be in strict mode.
+(() => {
+"use strict";
 // ESM COMPAT FLAG
 __webpack_require__.r(__webpack_exports__);
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
-  "addQueryArgs": function() { return /* reexport */ addQueryArgs; },
-  "buildQueryString": function() { return /* reexport */ buildQueryString; },
-  "cleanForSlug": function() { return /* reexport */ cleanForSlug; },
-  "filterURLForDisplay": function() { return /* reexport */ filterURLForDisplay; },
-  "getAuthority": function() { return /* reexport */ getAuthority; },
-  "getFilename": function() { return /* reexport */ getFilename; },
-  "getFragment": function() { return /* reexport */ getFragment; },
-  "getPath": function() { return /* reexport */ getPath; },
-  "getPathAndQueryString": function() { return /* reexport */ getPathAndQueryString; },
-  "getProtocol": function() { return /* reexport */ getProtocol; },
-  "getQueryArg": function() { return /* reexport */ getQueryArg; },
-  "getQueryArgs": function() { return /* reexport */ getQueryArgs; },
-  "getQueryString": function() { return /* reexport */ getQueryString; },
-  "hasQueryArg": function() { return /* reexport */ hasQueryArg; },
-  "isEmail": function() { return /* reexport */ isEmail; },
-  "isURL": function() { return /* reexport */ isURL; },
-  "isValidAuthority": function() { return /* reexport */ isValidAuthority; },
-  "isValidFragment": function() { return /* reexport */ isValidFragment; },
-  "isValidPath": function() { return /* reexport */ isValidPath; },
-  "isValidProtocol": function() { return /* reexport */ isValidProtocol; },
-  "isValidQueryString": function() { return /* reexport */ isValidQueryString; },
-  "normalizePath": function() { return /* reexport */ normalizePath; },
-  "prependHTTP": function() { return /* reexport */ prependHTTP; },
-  "removeQueryArgs": function() { return /* reexport */ removeQueryArgs; },
-  "safeDecodeURI": function() { return /* reexport */ safeDecodeURI; },
-  "safeDecodeURIComponent": function() { return /* reexport */ safeDecodeURIComponent; }
+  "addQueryArgs": () => (/* reexport */ addQueryArgs),
+  "buildQueryString": () => (/* reexport */ buildQueryString),
+  "cleanForSlug": () => (/* reexport */ cleanForSlug),
+  "filterURLForDisplay": () => (/* reexport */ filterURLForDisplay),
+  "getAuthority": () => (/* reexport */ getAuthority),
+  "getFilename": () => (/* reexport */ getFilename),
+  "getFragment": () => (/* reexport */ getFragment),
+  "getPath": () => (/* reexport */ getPath),
+  "getPathAndQueryString": () => (/* reexport */ getPathAndQueryString),
+  "getProtocol": () => (/* reexport */ getProtocol),
+  "getQueryArg": () => (/* reexport */ getQueryArg),
+  "getQueryArgs": () => (/* reexport */ getQueryArgs),
+  "getQueryString": () => (/* reexport */ getQueryString),
+  "hasQueryArg": () => (/* reexport */ hasQueryArg),
+  "isEmail": () => (/* reexport */ isEmail),
+  "isURL": () => (/* reexport */ isURL),
+  "isValidAuthority": () => (/* reexport */ isValidAuthority),
+  "isValidFragment": () => (/* reexport */ isValidFragment),
+  "isValidPath": () => (/* reexport */ isValidPath),
+  "isValidProtocol": () => (/* reexport */ isValidProtocol),
+  "isValidQueryString": () => (/* reexport */ isValidQueryString),
+  "normalizePath": () => (/* reexport */ normalizePath),
+  "prependHTTP": () => (/* reexport */ prependHTTP),
+  "removeQueryArgs": () => (/* reexport */ removeQueryArgs),
+  "safeDecodeURI": () => (/* reexport */ safeDecodeURI),
+  "safeDecodeURIComponent": () => (/* reexport */ safeDecodeURIComponent)
 });
 
 ;// CONCATENATED MODULE: ./packages/url/build-module/is-url.js
@@ -93,7 +558,7 @@ function isURL(url) {
     return false;
   }
 }
-//# sourceMappingURL=is-url.js.map
+
 ;// CONCATENATED MODULE: ./packages/url/build-module/is-email.js
 const EMAIL_REGEXP = /^(mailto:)?[a-z0-9._%+-]+@[a-z0-9][a-z0-9.-]*\.[a-z]{2,63}$/i;
 /**
@@ -112,7 +577,7 @@ const EMAIL_REGEXP = /^(mailto:)?[a-z0-9._%+-]+@[a-z0-9][a-z0-9.-]*\.[a-z]{2,63}
 function isEmail(email) {
   return EMAIL_REGEXP.test(email);
 }
-//# sourceMappingURL=is-email.js.map
+
 ;// CONCATENATED MODULE: ./packages/url/build-module/get-protocol.js
 /**
  * Returns the protocol part of the URL.
@@ -134,7 +599,7 @@ function getProtocol(url) {
     return matches[1];
   }
 }
-//# sourceMappingURL=get-protocol.js.map
+
 ;// CONCATENATED MODULE: ./packages/url/build-module/is-valid-protocol.js
 /**
  * Tests if a url protocol is valid.
@@ -156,7 +621,7 @@ function isValidProtocol(protocol) {
 
   return /^[a-z\-.\+]+[0-9]*:$/i.test(protocol);
 }
-//# sourceMappingURL=is-valid-protocol.js.map
+
 ;// CONCATENATED MODULE: ./packages/url/build-module/get-authority.js
 /**
  * Returns the authority part of the URL.
@@ -178,7 +643,7 @@ function getAuthority(url) {
     return matches[1];
   }
 }
-//# sourceMappingURL=get-authority.js.map
+
 ;// CONCATENATED MODULE: ./packages/url/build-module/is-valid-authority.js
 /**
  * Checks for invalid characters within the provided authority.
@@ -200,7 +665,7 @@ function isValidAuthority(authority) {
 
   return /^[^\s#?]+$/.test(authority);
 }
-//# sourceMappingURL=is-valid-authority.js.map
+
 ;// CONCATENATED MODULE: ./packages/url/build-module/get-path.js
 /**
  * Returns the path part of the URL.
@@ -222,7 +687,7 @@ function getPath(url) {
     return matches[1];
   }
 }
-//# sourceMappingURL=get-path.js.map
+
 ;// CONCATENATED MODULE: ./packages/url/build-module/is-valid-path.js
 /**
  * Checks for invalid characters within the provided path.
@@ -244,7 +709,7 @@ function isValidPath(path) {
 
   return /^[^\s#?]+$/.test(path);
 }
-//# sourceMappingURL=is-valid-path.js.map
+
 ;// CONCATENATED MODULE: ./packages/url/build-module/get-query-string.js
 /**
  * Returns the query string part of the URL.
@@ -269,7 +734,7 @@ function getQueryString(url) {
     return query;
   }
 }
-//# sourceMappingURL=get-query-string.js.map
+
 ;// CONCATENATED MODULE: ./packages/url/build-module/build-query-string.js
 /**
  * Generates URL-encoded query string using input query data.
@@ -329,7 +794,7 @@ function buildQueryString(data) {
 
   return string.substr(1);
 }
-//# sourceMappingURL=build-query-string.js.map
+
 ;// CONCATENATED MODULE: ./packages/url/build-module/is-valid-query-string.js
 /**
  * Checks for invalid characters within the provided query string.
@@ -351,7 +816,7 @@ function isValidQueryString(queryString) {
 
   return /^[^\s#?\/]+$/.test(queryString);
 }
-//# sourceMappingURL=is-valid-query-string.js.map
+
 ;// CONCATENATED MODULE: ./packages/url/build-module/get-path-and-query-string.js
 /**
  * Internal dependencies
@@ -379,7 +844,7 @@ function getPathAndQueryString(url) {
   if (queryString) value += `?${queryString}`;
   return value;
 }
-//# sourceMappingURL=get-path-and-query-string.js.map
+
 ;// CONCATENATED MODULE: ./packages/url/build-module/get-fragment.js
 /**
  * Returns the fragment part of the URL.
@@ -401,7 +866,7 @@ function getFragment(url) {
     return matches[1];
   }
 }
-//# sourceMappingURL=get-fragment.js.map
+
 ;// CONCATENATED MODULE: ./packages/url/build-module/is-valid-fragment.js
 /**
  * Checks for invalid characters within the provided fragment.
@@ -423,7 +888,7 @@ function isValidFragment(fragment) {
 
   return /^#[^\s#?\/]*$/.test(fragment);
 }
-//# sourceMappingURL=is-valid-fragment.js.map
+
 ;// CONCATENATED MODULE: ./packages/url/build-module/get-query-args.js
 /**
  * Internal dependencies
@@ -455,9 +920,10 @@ function setPath(object, path, value) {
       // If key is empty string and next value is array, derive key from
       // the current length of the array.
       key = object.length.toString();
-    } // If the next key in the path is numeric (or empty string), it will be
-    // created as an array. Otherwise, it will be created as an object.
+    }
 
+    key = ['__proto__', 'constructor', 'prototype'].includes(key) ? key.toUpperCase() : key; // If the next key in the path is numeric (or empty string), it will be
+    // created as an array. Otherwise, it will be created as an object.
 
     const isNextKeyArrayIndex = !isNaN(Number(path[i + 1]));
     object[key] = i === lastIndex ? // If at end of path, assign the intended value.
@@ -508,9 +974,9 @@ function getQueryArgs(url) {
     }
 
     return accumulator;
-  }, {});
+  }, Object.create(null));
 }
-//# sourceMappingURL=get-query-args.js.map
+
 ;// CONCATENATED MODULE: ./packages/url/build-module/add-query-args.js
 /**
  * Internal dependencies
@@ -556,7 +1022,7 @@ function addQueryArgs() {
 
   return baseUrl + '?' + buildQueryString(args);
 }
-//# sourceMappingURL=add-query-args.js.map
+
 ;// CONCATENATED MODULE: ./packages/url/build-module/get-query-arg.js
 /**
  * Internal dependencies
@@ -587,7 +1053,7 @@ function addQueryArgs() {
 function getQueryArg(url, arg) {
   return getQueryArgs(url)[arg];
 }
-//# sourceMappingURL=get-query-arg.js.map
+
 ;// CONCATENATED MODULE: ./packages/url/build-module/has-query-arg.js
 /**
  * Internal dependencies
@@ -610,7 +1076,7 @@ function getQueryArg(url, arg) {
 function hasQueryArg(url, arg) {
   return getQueryArg(url, arg) !== undefined;
 }
-//# sourceMappingURL=has-query-arg.js.map
+
 ;// CONCATENATED MODULE: ./packages/url/build-module/remove-query-args.js
 /**
  * Internal dependencies
@@ -649,7 +1115,7 @@ function removeQueryArgs(url) {
   const queryString = buildQueryString(query);
   return queryString ? baseURL + '?' + queryString : baseURL;
 }
-//# sourceMappingURL=remove-query-args.js.map
+
 ;// CONCATENATED MODULE: ./packages/url/build-module/prepend-http.js
 /**
  * Internal dependencies
@@ -682,7 +1148,7 @@ function prependHTTP(url) {
 
   return url;
 }
-//# sourceMappingURL=prepend-http.js.map
+
 ;// CONCATENATED MODULE: ./packages/url/build-module/safe-decode-uri.js
 /**
  * Safely decodes a URI with `decodeURI`. Returns the URI unmodified if
@@ -704,7 +1170,7 @@ function safeDecodeURI(uri) {
     return uri;
   }
 }
-//# sourceMappingURL=safe-decode-uri.js.map
+
 ;// CONCATENATED MODULE: ./packages/url/build-module/safe-decode-uri-component.js
 /**
  * Safely decodes a URI component with `decodeURIComponent`. Returns the URI component unmodified if
@@ -721,7 +1187,7 @@ function safeDecodeURIComponent(uriComponent) {
     return uriComponent;
   }
 }
-//# sourceMappingURL=safe-decode-uri-component.js.map
+
 ;// CONCATENATED MODULE: ./packages/url/build-module/filter-url-for-display.js
 /**
  * Returns a URL for display.
@@ -767,9 +1233,10 @@ function filterURLForDisplay(url) {
   const truncatedFile = fileName.slice(-3) + '.' + extension;
   return file.slice(0, maxLength - truncatedFile.length - 1) + '…' + truncatedFile;
 }
-//# sourceMappingURL=filter-url-for-display.js.map
-;// CONCATENATED MODULE: external "lodash"
-var external_lodash_namespaceObject = window["lodash"];
+
+// EXTERNAL MODULE: ./node_modules/remove-accents/index.js
+var remove_accents = __webpack_require__(4793);
+var remove_accents_default = /*#__PURE__*/__webpack_require__.n(remove_accents);
 ;// CONCATENATED MODULE: ./packages/url/build-module/clean-for-slug.js
 /**
  * External dependencies
@@ -797,9 +1264,13 @@ function cleanForSlug(string) {
     return '';
   }
 
-  return (0,external_lodash_namespaceObject.trim)((0,external_lodash_namespaceObject.deburr)(string).replace(/[\s\./]+/g, '-').replace(/[^\w-]+/g, '').toLowerCase(), '-');
+  return remove_accents_default()(string) // Convert each group of whitespace, periods, and forward slashes to a hyphen.
+  .replace(/[\s\./]+/g, '-') // Remove anything that's not a letter, number, underscore or hyphen.
+  .replace(/[^\p{L}\p{N}_-]+/gu, '') // Convert to lowercase
+  .toLowerCase() // Remove any remaining leading or trailing hyphens.
+  .replace(/(^-+)|(-+$)/g, '');
 }
-//# sourceMappingURL=clean-for-slug.js.map
+
 ;// CONCATENATED MODULE: ./packages/url/build-module/get-filename.js
 /**
  * Returns the filename part of the URL.
@@ -825,7 +1296,7 @@ function getFilename(url) {
     return filename;
   }
 }
-//# sourceMappingURL=get-filename.js.map
+
 ;// CONCATENATED MODULE: ./packages/url/build-module/normalize-path.js
 /**
  * Given a path, returns a normalized path where equal query parameter values
@@ -843,17 +1314,19 @@ function normalizePath(path) {
 
   if (!query) {
     return base;
-  } // 'b=1&c=2&a=5'
+  } // 'b=1%2C2&c=2&a=5'
 
 
-  return base + '?' + query // [ 'b=1', 'c=2', 'a=5' ]
-  .split('&') // [ [ 'b, '1' ], [ 'c', '2' ], [ 'a', '5' ] ]
-  .map(entry => entry.split('=')) // [ [ 'a', '5' ], [ 'b, '1' ], [ 'c', '2' ] ]
-  .sort((a, b) => a[0].localeCompare(b[0])) // [ 'a=5', 'b=1', 'c=2' ]
-  .map(pair => pair.join('=')) // 'a=5&b=1&c=2'
+  return base + '?' + query // [ 'b=1%2C2', 'c=2', 'a=5' ]
+  .split('&') // [ [ 'b, '1%2C2' ], [ 'c', '2' ], [ 'a', '5' ] ]
+  .map(entry => entry.split('=')) // [ [ 'b', '1,2' ], [ 'c', '2' ], [ 'a', '5' ] ]
+  .map(pair => pair.map(decodeURIComponent)) // [ [ 'a', '5' ], [ 'b, '1,2' ], [ 'c', '2' ] ]
+  .sort((a, b) => a[0].localeCompare(b[0])) // [ [ 'a', '5' ], [ 'b, '1%2C2' ], [ 'c', '2' ] ]
+  .map(pair => pair.map(encodeURIComponent)) // [ 'a=5', 'b=1%2C2', 'c=2' ]
+  .map(pair => pair.join('=')) // 'a=5&b=1%2C2&c=2'
   .join('&');
 }
-//# sourceMappingURL=normalize-path.js.map
+
 ;// CONCATENATED MODULE: ./packages/url/build-module/index.js
 
 
@@ -881,7 +1354,9 @@ function normalizePath(path) {
 
 
 
-//# sourceMappingURL=index.js.map
+
+})();
+
 (window.wp = window.wp || {}).url = __webpack_exports__;
 /******/ })()
 ;

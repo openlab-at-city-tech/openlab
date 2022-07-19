@@ -13,11 +13,17 @@
  * @return string Returns the tag cloud for selected taxonomy.
  */
 function gutenberg_render_block_core_tag_cloud( $attributes ) {
+	$smallest_font_size = $attributes['smallestFontSize'];
+	$unit               = ( preg_match( '/^[0-9.]+(?P<unit>[a-z%]+)$/i', $smallest_font_size, $m ) ? $m['unit'] : 'pt' );
+
 	$args      = array(
 		'echo'       => false,
+		'unit'       => $unit,
 		'taxonomy'   => $attributes['taxonomy'],
 		'show_count' => $attributes['showTagCounts'],
 		'number'     => $attributes['numberOfTags'],
+		'smallest'   => floatVal( $attributes['smallestFontSize'] ),
+		'largest'    => floatVal( $attributes['largestFontSize'] ),
 	);
 	$tag_cloud = wp_tag_cloud( $args );
 
@@ -49,15 +55,6 @@ function gutenberg_register_block_core_tag_cloud() {
 		__DIR__ . '/tag-cloud',
 		array(
 			'render_callback' => 'gutenberg_render_block_core_tag_cloud',
-		)
-	);
-
-	register_block_style(
-		'core/tag-cloud',
-		array(
-			'name'         => 'outline',
-			'label'        => __( 'Outline', 'gutenberg' ),
-			'style_handle' => 'outline',
 		)
 	);
 }

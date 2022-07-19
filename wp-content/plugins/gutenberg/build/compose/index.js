@@ -1,7 +1,7 @@
-/******/ (function() { // webpackBootstrap
+/******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 2152:
+/***/ 5188:
 /***/ (function(module) {
 
 /*!
@@ -956,8 +956,8 @@ module.exports.TinyEmitter = E;
 
 /***/ }),
 
-/***/ 2441:
-/***/ (function(module, exports, __webpack_require__) {
+/***/ 7973:
+/***/ ((module, exports, __webpack_require__) => {
 
 var __WEBPACK_AMD_DEFINE_RESULT__;/*global define:false */
 /**
@@ -2022,8 +2022,8 @@ var __WEBPACK_AMD_DEFINE_RESULT__;/*global define:false */
 
 /***/ }),
 
-/***/ 3956:
-/***/ (function() {
+/***/ 5538:
+/***/ (() => {
 
 /**
  * adds a bindGlobal method to Mousetrap that allows you to
@@ -2073,23 +2073,6 @@ var __WEBPACK_AMD_DEFINE_RESULT__;/*global define:false */
 }) (typeof Mousetrap !== "undefined" ? Mousetrap : undefined);
 
 
-/***/ }),
-
-/***/ 5464:
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
-
-var e=__webpack_require__(9196),n={display:"block",opacity:0,position:"absolute",top:0,left:0,height:"100%",width:"100%",overflow:"hidden",pointerEvents:"none",zIndex:-1},t=function(t){var r=t.onResize,u=e.useRef();return function(n,t){var r=function(){return n.current&&n.current.contentDocument&&n.current.contentDocument.defaultView};function u(){t();var e=r();e&&e.addEventListener("resize",t)}e.useEffect((function(){return r()?u():n.current&&n.current.addEventListener&&n.current.addEventListener("load",u),function(){var e=r();e&&"function"==typeof e.removeEventListener&&e.removeEventListener("resize",t)}}),[])}(u,(function(){return r(u)})),e.createElement("iframe",{style:n,src:"about:blank",ref:u,"aria-hidden":!0,tabIndex:-1,frameBorder:0})},r=function(e){return{width:null!=e?e.offsetWidth:null,height:null!=e?e.offsetHeight:null}};module.exports=function(n){void 0===n&&(n=r);var u=e.useState(n(null)),o=u[0],i=u[1],c=e.useCallback((function(e){return i(n(e.current))}),[n]);return[e.useMemo((function(){return e.createElement(t,{onResize:c})}),[c]),o]};
-//# sourceMappingURL=index.js.map
-
-
-/***/ }),
-
-/***/ 9196:
-/***/ (function(module) {
-
-"use strict";
-module.exports = window["React"];
-
 /***/ })
 
 /******/ 	});
@@ -2120,93 +2103,93 @@ module.exports = window["React"];
 /******/ 	
 /************************************************************************/
 /******/ 	/* webpack/runtime/compat get default export */
-/******/ 	!function() {
+/******/ 	(() => {
 /******/ 		// getDefaultExport function for compatibility with non-harmony modules
-/******/ 		__webpack_require__.n = function(module) {
+/******/ 		__webpack_require__.n = (module) => {
 /******/ 			var getter = module && module.__esModule ?
-/******/ 				function() { return module['default']; } :
-/******/ 				function() { return module; };
+/******/ 				() => (module['default']) :
+/******/ 				() => (module);
 /******/ 			__webpack_require__.d(getter, { a: getter });
 /******/ 			return getter;
 /******/ 		};
-/******/ 	}();
+/******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/define property getters */
-/******/ 	!function() {
+/******/ 	(() => {
 /******/ 		// define getter functions for harmony exports
-/******/ 		__webpack_require__.d = function(exports, definition) {
+/******/ 		__webpack_require__.d = (exports, definition) => {
 /******/ 			for(var key in definition) {
 /******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
 /******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
 /******/ 				}
 /******/ 			}
 /******/ 		};
-/******/ 	}();
+/******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
-/******/ 	!function() {
-/******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
-/******/ 	}();
+/******/ 	(() => {
+/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/make namespace object */
-/******/ 	!function() {
+/******/ 	(() => {
 /******/ 		// define __esModule on exports
-/******/ 		__webpack_require__.r = function(exports) {
+/******/ 		__webpack_require__.r = (exports) => {
 /******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
 /******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 /******/ 			}
 /******/ 			Object.defineProperty(exports, '__esModule', { value: true });
 /******/ 		};
-/******/ 	}();
+/******/ 	})();
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be in strict mode.
-!function() {
+(() => {
 "use strict";
 // ESM COMPAT FLAG
 __webpack_require__.r(__webpack_exports__);
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
-  "__experimentalUseDialog": function() { return /* reexport */ use_dialog; },
-  "__experimentalUseDisabled": function() { return /* reexport */ useDisabled; },
-  "__experimentalUseDragging": function() { return /* reexport */ useDragging; },
-  "__experimentalUseDropZone": function() { return /* reexport */ useDropZone; },
-  "__experimentalUseFixedWindowList": function() { return /* reexport */ useFixedWindowList; },
-  "__experimentalUseFocusOutside": function() { return /* reexport */ useFocusOutside; },
-  "compose": function() { return /* reexport */ compose; },
-  "createHigherOrderComponent": function() { return /* reexport */ create_higher_order_component; },
-  "ifCondition": function() { return /* reexport */ if_condition; },
-  "pure": function() { return /* reexport */ higher_order_pure; },
-  "useAsyncList": function() { return /* reexport */ use_async_list; },
-  "useConstrainedTabbing": function() { return /* reexport */ use_constrained_tabbing; },
-  "useCopyOnClick": function() { return /* reexport */ useCopyOnClick; },
-  "useCopyToClipboard": function() { return /* reexport */ useCopyToClipboard; },
-  "useDebounce": function() { return /* reexport */ useDebounce; },
-  "useFocusOnMount": function() { return /* reexport */ useFocusOnMount; },
-  "useFocusReturn": function() { return /* reexport */ use_focus_return; },
-  "useFocusableIframe": function() { return /* reexport */ useFocusableIframe; },
-  "useInstanceId": function() { return /* reexport */ useInstanceId; },
-  "useIsomorphicLayoutEffect": function() { return /* reexport */ use_isomorphic_layout_effect; },
-  "useKeyboardShortcut": function() { return /* reexport */ use_keyboard_shortcut; },
-  "useMediaQuery": function() { return /* reexport */ useMediaQuery; },
-  "useMergeRefs": function() { return /* reexport */ useMergeRefs; },
-  "usePrevious": function() { return /* reexport */ usePrevious; },
-  "useReducedMotion": function() { return /* reexport */ use_reduced_motion; },
-  "useRefEffect": function() { return /* reexport */ useRefEffect; },
-  "useResizeObserver": function() { return /* reexport */ use_resize_observer; },
-  "useThrottle": function() { return /* reexport */ useThrottle; },
-  "useViewportMatch": function() { return /* reexport */ use_viewport_match; },
-  "useWarnOnChange": function() { return /* reexport */ use_warn_on_change; },
-  "withGlobalEvents": function() { return /* reexport */ withGlobalEvents; },
-  "withInstanceId": function() { return /* reexport */ with_instance_id; },
-  "withSafeTimeout": function() { return /* reexport */ with_safe_timeout; },
-  "withState": function() { return /* reexport */ withState; }
+  "__experimentalUseDialog": () => (/* reexport */ use_dialog),
+  "__experimentalUseDragging": () => (/* reexport */ useDragging),
+  "__experimentalUseDropZone": () => (/* reexport */ useDropZone),
+  "__experimentalUseFixedWindowList": () => (/* reexport */ useFixedWindowList),
+  "__experimentalUseFocusOutside": () => (/* reexport */ useFocusOutside),
+  "compose": () => (/* reexport */ compose),
+  "createHigherOrderComponent": () => (/* reexport */ createHigherOrderComponent),
+  "ifCondition": () => (/* reexport */ if_condition),
+  "pure": () => (/* reexport */ higher_order_pure),
+  "useAsyncList": () => (/* reexport */ use_async_list),
+  "useConstrainedTabbing": () => (/* reexport */ use_constrained_tabbing),
+  "useCopyOnClick": () => (/* reexport */ useCopyOnClick),
+  "useCopyToClipboard": () => (/* reexport */ useCopyToClipboard),
+  "useDebounce": () => (/* reexport */ useDebounce),
+  "useDisabled": () => (/* reexport */ useDisabled),
+  "useFocusOnMount": () => (/* reexport */ useFocusOnMount),
+  "useFocusReturn": () => (/* reexport */ use_focus_return),
+  "useFocusableIframe": () => (/* reexport */ useFocusableIframe),
+  "useInstanceId": () => (/* reexport */ useInstanceId),
+  "useIsomorphicLayoutEffect": () => (/* reexport */ use_isomorphic_layout_effect),
+  "useKeyboardShortcut": () => (/* reexport */ use_keyboard_shortcut),
+  "useMediaQuery": () => (/* reexport */ useMediaQuery),
+  "useMergeRefs": () => (/* reexport */ useMergeRefs),
+  "usePrevious": () => (/* reexport */ usePrevious),
+  "useReducedMotion": () => (/* reexport */ use_reduced_motion),
+  "useRefEffect": () => (/* reexport */ useRefEffect),
+  "useResizeObserver": () => (/* reexport */ useResizeAware),
+  "useThrottle": () => (/* reexport */ useThrottle),
+  "useViewportMatch": () => (/* reexport */ use_viewport_match),
+  "useWarnOnChange": () => (/* reexport */ use_warn_on_change),
+  "withGlobalEvents": () => (/* reexport */ withGlobalEvents),
+  "withInstanceId": () => (/* reexport */ with_instance_id),
+  "withSafeTimeout": () => (/* reexport */ with_safe_timeout),
+  "withState": () => (/* reexport */ withState)
 });
 
 ;// CONCATENATED MODULE: external "lodash"
-var external_lodash_namespaceObject = window["lodash"];
+const external_lodash_namespaceObject = window["lodash"];
 ;// CONCATENATED MODULE: ./packages/compose/build-module/utils/create-higher-order-component/index.js
 /**
  * External dependencies
@@ -2217,22 +2200,36 @@ var external_lodash_namespaceObject = window["lodash"];
  * Given a function mapping a component to an enhanced component and modifier
  * name, returns the enhanced component augmented with a generated displayName.
  *
- * @param mapComponent Function mapping component to enhanced component.
- * @param modifierName Seed name from which to generated display name.
+ * @param  mapComponent Function mapping component to enhanced component.
+ * @param  modifierName Seed name from which to generated display name.
  *
  * @return Component class with generated display name assigned.
  */
 function createHigherOrderComponent(mapComponent, modifierName) {
   return Inner => {
     const Outer = mapComponent(Inner);
-    const displayName = Inner.displayName || Inner.name || 'Component';
-    Outer.displayName = `${(0,external_lodash_namespaceObject.upperFirst)((0,external_lodash_namespaceObject.camelCase)(modifierName))}(${displayName})`;
+    Outer.displayName = hocName(modifierName, Inner);
     return Outer;
   };
 }
+/**
+ * Returns a displayName for a higher-order component, given a wrapper name.
+ *
+ * @example
+ *     hocName( 'MyMemo', Widget ) === 'MyMemo(Widget)';
+ *     hocName( 'MyMemo', <div /> ) === 'MyMemo(Component)';
+ *
+ * @param  name  Name assigned to higher-order component's wrapper component.
+ * @param  Inner Wrapped component inside higher-order component.
+ * @return       Wrapped name of higher-order component.
+ */
 
-/* harmony default export */ var create_higher_order_component = (createHigherOrderComponent);
-//# sourceMappingURL=index.js.map
+const hocName = (name, Inner) => {
+  const inner = Inner.displayName || Inner.name || 'Component';
+  const outer = (0,external_lodash_namespaceObject.upperFirst)((0,external_lodash_namespaceObject.camelCase)(name));
+  return `${outer}(${inner})`;
+};
+
 ;// CONCATENATED MODULE: ./packages/compose/build-module/higher-order/compose.js
 /**
  * External dependencies
@@ -2247,12 +2244,16 @@ function createHigherOrderComponent(mapComponent, modifierName) {
  * @see https://docs-lodash.com/v4/flow-right/
  */
 
-/* harmony default export */ var compose = (external_lodash_namespaceObject.flowRight);
-//# sourceMappingURL=compose.js.map
+/* harmony default export */ const compose = (external_lodash_namespaceObject.flowRight);
+
 ;// CONCATENATED MODULE: external ["wp","element"]
-var external_wp_element_namespaceObject = window["wp"]["element"];
+const external_wp_element_namespaceObject = window["wp"]["element"];
 ;// CONCATENATED MODULE: ./packages/compose/build-module/higher-order/if-condition/index.js
 
+
+/**
+ * External dependencies
+ */
 
 /**
  * Internal dependencies
@@ -2276,21 +2277,27 @@ var external_wp_element_namespaceObject = window["wp"]["element"];
  * @return Higher-order component.
  */
 
-const ifCondition = predicate => create_higher_order_component(WrappedComponent => props => {
-  if (!predicate(props)) {
-    return null;
-  }
+function ifCondition(predicate) {
+  return createHigherOrderComponent(WrappedComponent => props => {
+    if (!predicate(props)) {
+      return null;
+    }
 
-  return (0,external_wp_element_namespaceObject.createElement)(WrappedComponent, props);
-}, 'ifCondition');
+    return (0,external_wp_element_namespaceObject.createElement)(WrappedComponent, props);
+  }, 'ifCondition');
+}
 
-/* harmony default export */ var if_condition = (ifCondition);
-//# sourceMappingURL=index.js.map
+/* harmony default export */ const if_condition = (ifCondition);
+
 ;// CONCATENATED MODULE: external ["wp","isShallowEqual"]
-var external_wp_isShallowEqual_namespaceObject = window["wp"]["isShallowEqual"];
+const external_wp_isShallowEqual_namespaceObject = window["wp"]["isShallowEqual"];
 var external_wp_isShallowEqual_default = /*#__PURE__*/__webpack_require__.n(external_wp_isShallowEqual_namespaceObject);
 ;// CONCATENATED MODULE: ./packages/compose/build-module/higher-order/pure/index.js
 
+
+/**
+ * External dependencies
+ */
 
 /**
  * WordPress dependencies
@@ -2303,16 +2310,13 @@ var external_wp_isShallowEqual_default = /*#__PURE__*/__webpack_require__.n(exte
 
 
 /**
- * External dependencies
- */
-
-/**
  * Given a component returns the enhanced component augmented with a component
  * only re-rendering when its props/state change
  */
-const pure = create_higher_order_component(Wrapped => {
-  if (Wrapped.prototype instanceof external_wp_element_namespaceObject.Component) {
-    return class extends Wrapped {
+
+const pure = createHigherOrderComponent(function (WrappedComponent) {
+  if (WrappedComponent.prototype instanceof external_wp_element_namespaceObject.Component) {
+    return class extends WrappedComponent {
       shouldComponentUpdate(nextProps, nextState) {
         return !external_wp_isShallowEqual_default()(nextProps, this.props) || !external_wp_isShallowEqual_default()(nextState, this.state);
       }
@@ -2326,13 +2330,13 @@ const pure = create_higher_order_component(Wrapped => {
     }
 
     render() {
-      return (0,external_wp_element_namespaceObject.createElement)(Wrapped, this.props);
+      return (0,external_wp_element_namespaceObject.createElement)(WrappedComponent, this.props);
     }
 
   };
 }, 'pure');
-/* harmony default export */ var higher_order_pure = (pure);
-//# sourceMappingURL=index.js.map
+/* harmony default export */ const higher_order_pure = (pure);
+
 ;// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/extends.js
 function _extends() {
   _extends = Object.assign || function (target) {
@@ -2352,7 +2356,7 @@ function _extends() {
   return _extends.apply(this, arguments);
 }
 ;// CONCATENATED MODULE: external ["wp","deprecated"]
-var external_wp_deprecated_namespaceObject = window["wp"]["deprecated"];
+const external_wp_deprecated_namespaceObject = window["wp"]["deprecated"];
 var external_wp_deprecated_default = /*#__PURE__*/__webpack_require__.n(external_wp_deprecated_namespaceObject);
 ;// CONCATENATED MODULE: ./packages/compose/build-module/higher-order/with-global-events/listener.js
 /**
@@ -2410,8 +2414,8 @@ class Listener {
 
 }
 
-/* harmony default export */ var listener = (Listener);
-//# sourceMappingURL=listener.js.map
+/* harmony default export */ const listener = (Listener);
+
 ;// CONCATENATED MODULE: ./packages/compose/build-module/higher-order/with-global-events/index.js
 
 
@@ -2465,7 +2469,7 @@ function withGlobalEvents(eventTypesToHandlers) {
     alternative: 'useEffect'
   }); // @ts-ignore We don't need to fix the type-related issues because this is deprecated.
 
-  return create_higher_order_component(WrappedComponent => {
+  return createHigherOrderComponent(WrappedComponent => {
     class Wrapper extends external_wp_element_namespaceObject.Component {
       constructor(
       /** @type {any} */
@@ -2529,7 +2533,7 @@ function withGlobalEvents(eventTypesToHandlers) {
     });
   }, 'withGlobalEvents');
 }
-//# sourceMappingURL=index.js.map
+
 ;// CONCATENATED MODULE: ./packages/compose/build-module/hooks/use-instance-id/index.js
 // Disable reason: Object and object are distinctly different types in TypeScript and we mean the lowercase object in thise case
 // but eslint wants to force us to use `Object`. See https://stackoverflow.com/questions/49464634/difference-between-object-and-object-in-typescript
@@ -2576,7 +2580,7 @@ function useInstanceId(object, prefix) {
   }, [object]);
 }
 /* eslint-enable jsdoc/check-types */
-//# sourceMappingURL=index.js.map
+
 ;// CONCATENATED MODULE: ./packages/compose/build-module/higher-order/with-instance-id/index.js
 
 
@@ -2586,12 +2590,12 @@ function useInstanceId(object, prefix) {
  */
 
 
+
 /**
  * A Higher Order Component used to be provide a unique instance ID by
  * component.
  */
-
-const withInstanceId = create_higher_order_component(WrappedComponent => {
+const withInstanceId = createHigherOrderComponent(WrappedComponent => {
   return props => {
     const instanceId = useInstanceId(WrappedComponent); // @ts-ignore
 
@@ -2599,20 +2603,21 @@ const withInstanceId = create_higher_order_component(WrappedComponent => {
       instanceId: instanceId
     }));
   };
-}, 'withInstanceId');
-/* harmony default export */ var with_instance_id = (withInstanceId);
-//# sourceMappingURL=index.js.map
+}, 'instanceId');
+/* harmony default export */ const with_instance_id = (withInstanceId);
+
 ;// CONCATENATED MODULE: ./packages/compose/build-module/higher-order/with-safe-timeout/index.js
+
 
 
 /**
  * External dependencies
  */
 
-
 /**
  * WordPress dependencies
  */
+
 
 /**
  * Internal dependencies
@@ -2632,7 +2637,7 @@ const withInstanceId = create_higher_order_component(WrappedComponent => {
  * A higher-order component used to provide and manage delayed function calls
  * that ought to be bound to a component's lifecycle.
  */
-const withSafeTimeout = create_higher_order_component(OriginalComponent => {
+const withSafeTimeout = createHigherOrderComponent(OriginalComponent => {
   return class WrappedComponent extends external_wp_element_namespaceObject.Component {
     constructor(props) {
       super(props);
@@ -2660,17 +2665,18 @@ const withSafeTimeout = create_higher_order_component(OriginalComponent => {
     }
 
     render() {
-      const props = { ...this.props,
-        setTimeout: this.setTimeout,
-        clearTimeout: this.clearTimeout
-      };
-      return (0,external_wp_element_namespaceObject.createElement)(OriginalComponent, props);
+      return (// @ts-ignore
+        (0,external_wp_element_namespaceObject.createElement)(OriginalComponent, _extends({}, this.props, {
+          setTimeout: this.setTimeout,
+          clearTimeout: this.clearTimeout
+        }))
+      );
     }
 
   };
 }, 'withSafeTimeout');
-/* harmony default export */ var with_safe_timeout = (withSafeTimeout);
-//# sourceMappingURL=index.js.map
+/* harmony default export */ const with_safe_timeout = (withSafeTimeout);
+
 ;// CONCATENATED MODULE: ./packages/compose/build-module/higher-order/with-state/index.js
 
 
@@ -2702,7 +2708,7 @@ function withState() {
     since: '5.8',
     alternative: 'wp.element.useState'
   });
-  return create_higher_order_component(OriginalComponent => {
+  return createHigherOrderComponent(OriginalComponent => {
     return class WrappedComponent extends external_wp_element_namespaceObject.Component {
       constructor(
       /** @type {any} */
@@ -2721,11 +2727,11 @@ function withState() {
     };
   }, 'withState');
 }
-//# sourceMappingURL=index.js.map
+
 ;// CONCATENATED MODULE: external ["wp","keycodes"]
-var external_wp_keycodes_namespaceObject = window["wp"]["keycodes"];
+const external_wp_keycodes_namespaceObject = window["wp"]["keycodes"];
 ;// CONCATENATED MODULE: external ["wp","dom"]
-var external_wp_dom_namespaceObject = window["wp"]["dom"];
+const external_wp_dom_namespaceObject = window["wp"]["dom"];
 ;// CONCATENATED MODULE: ./packages/compose/build-module/hooks/use-ref-effect/index.js
 /**
  * External dependencies
@@ -2765,7 +2771,7 @@ function useRefEffect(callback, dependencies) {
     }
   }, dependencies);
 }
-//# sourceMappingURL=index.js.map
+
 ;// CONCATENATED MODULE: ./packages/compose/build-module/hooks/use-constrained-tabbing/index.js
 /**
  * WordPress dependencies
@@ -2851,10 +2857,10 @@ function useConstrainedTabbing() {
   }, []);
 }
 
-/* harmony default export */ var use_constrained_tabbing = (useConstrainedTabbing);
-//# sourceMappingURL=index.js.map
+/* harmony default export */ const use_constrained_tabbing = (useConstrainedTabbing);
+
 // EXTERNAL MODULE: ./node_modules/clipboard/dist/clipboard.js
-var dist_clipboard = __webpack_require__(2152);
+var dist_clipboard = __webpack_require__(5188);
 var clipboard_default = /*#__PURE__*/__webpack_require__.n(dist_clipboard);
 ;// CONCATENATED MODULE: ./packages/compose/build-module/hooks/use-copy-on-click/index.js
 /**
@@ -2938,7 +2944,7 @@ function useCopyOnClick(ref, text) {
   }, [text, timeout, setHasCopied]);
   return hasCopied;
 }
-//# sourceMappingURL=index.js.map
+
 ;// CONCATENATED MODULE: ./packages/compose/build-module/hooks/use-copy-to-clipboard/index.js
 /**
  * External dependencies
@@ -2978,7 +2984,7 @@ function useUpdatedRef(value) {
 
 
 function useCopyToClipboard(text, onSuccess) {
-  // Store the dependencies as refs and continuesly update them so they're
+  // Store the dependencies as refs and continuously update them so they're
   // fresh when the callback is called.
   const textRef = useUpdatedRef(text);
   const onSuccessRef = useUpdatedRef(onSuccess);
@@ -3011,7 +3017,7 @@ function useCopyToClipboard(text, onSuccess) {
     };
   }, []);
 }
-//# sourceMappingURL=index.js.map
+
 ;// CONCATENATED MODULE: ./packages/compose/build-module/hooks/use-focus-on-mount/index.js
 /**
  * WordPress dependencies
@@ -3069,10 +3075,15 @@ function useFocusOnMount() {
       }
     }
 
-    target.focus();
+    target.focus({
+      // When focusing newly mounted dialogs,
+      // the position of the popover is often not right on the first render
+      // This prevents the layout shifts when focusing the dialogs.
+      preventScroll: true
+    });
   }, []);
 }
-//# sourceMappingURL=index.js.map
+
 ;// CONCATENATED MODULE: ./packages/compose/build-module/hooks/use-focus-return/index.js
 /**
  * WordPress dependencies
@@ -3148,8 +3159,8 @@ function useFocusReturn(onFocusReturn) {
   }, []);
 }
 
-/* harmony default export */ var use_focus_return = (useFocusReturn);
-//# sourceMappingURL=index.js.map
+/* harmony default export */ const use_focus_return = (useFocusReturn);
+
 ;// CONCATENATED MODULE: ./packages/compose/build-module/hooks/use-focus-outside/index.js
 /**
  * External dependencies
@@ -3171,7 +3182,7 @@ const INPUT_BUTTON_TYPES = ['button', 'submit'];
 /**
  * @typedef {HTMLButtonElement | HTMLLinkElement | HTMLInputElement} FocusNormalizedButton
  */
-// Disable reason: Rule doesn't support predicate return types
+// Disable reason: Rule doesn't support predicate return types.
 
 /* eslint-disable jsdoc/valid-types */
 
@@ -3343,7 +3354,7 @@ function useFocusOutside(onFocusOutside) {
     onBlur: queueBlurCheck
   };
 }
-//# sourceMappingURL=index.js.map
+
 ;// CONCATENATED MODULE: ./packages/compose/build-module/hooks/use-merge-refs/index.js
 /**
  * WordPress dependencies
@@ -3472,7 +3483,7 @@ function useMergeRefs(refs) {
     }
   }, []);
 }
-//# sourceMappingURL=index.js.map
+
 ;// CONCATENATED MODULE: ./packages/compose/build-module/hooks/use-dialog/index.js
 /**
  * WordPress dependencies
@@ -3542,7 +3553,7 @@ function useDialog(options) {
     event) => {
       var _currentOptions$curre3;
 
-      // Close on escape
+      // Close on escape.
       if (event.keyCode === external_wp_keycodes_namespaceObject.ESCAPE && !event.defaultPrevented && (_currentOptions$curre3 = currentOptions.current) !== null && _currentOptions$curre3 !== void 0 && _currentOptions$curre3.onClose) {
         event.preventDefault();
         currentOptions.current.onClose();
@@ -3554,8 +3565,8 @@ function useDialog(options) {
   }];
 }
 
-/* harmony default export */ var use_dialog = (useDialog);
-//# sourceMappingURL=index.js.map
+/* harmony default export */ const use_dialog = (useDialog);
+
 ;// CONCATENATED MODULE: ./packages/compose/build-module/hooks/use-disabled/index.js
 /**
  * External dependencies
@@ -3565,6 +3576,10 @@ function useDialog(options) {
  * WordPress dependencies
  */
 
+
+/**
+ * Internal dependencies
+ */
 
 
 /**
@@ -3583,11 +3598,13 @@ const DISABLED_ELIGIBLE_NODE_NAMES = ['BUTTON', 'FIELDSET', 'INPUT', 'OPTGROUP',
  * (input fields, links, buttons, etc.) need to be disabled. This hook adds the
  * behavior to disable nested DOM elements to the returned ref.
  *
- * @return {import('react').RefObject<HTMLElement>} Element Ref.
+ * @param {Object}   config            Configuration object.
+ * @param {boolean=} config.isDisabled Whether the element should be disabled.
+ * @return {import('react').RefCallback<HTMLElement>} Element Ref.
  *
  * @example
  * ```js
- * import { __experimentalUseDisabled as useDisabled } from '@wordpress/compose';
+ * import { useDisabled } from '@wordpress/compose';
  * const DisabledExample = () => {
  * 	const disabledRef = useDisabled();
  *	return (
@@ -3601,66 +3618,130 @@ const DISABLED_ELIGIBLE_NODE_NAMES = ['BUTTON', 'FIELDSET', 'INPUT', 'OPTGROUP',
  */
 
 function useDisabled() {
-  /** @type {import('react').RefObject<HTMLElement>} */
-  const node = (0,external_wp_element_namespaceObject.useRef)(null);
-
-  const disable = () => {
-    if (!node.current) {
+  let {
+    isDisabled: isDisabledProp = false
+  } = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  return useRefEffect(node => {
+    if (isDisabledProp) {
       return;
     }
+    /** A variable keeping track of the previous updates in order to restore them. */
 
-    external_wp_dom_namespaceObject.focus.focusable.find(node.current).forEach(focusable => {
-      if ((0,external_lodash_namespaceObject.includes)(DISABLED_ELIGIBLE_NODE_NAMES, focusable.nodeName)) {
-        focusable.setAttribute('disabled', '');
+    /** @type {Function[]} */
+
+
+    const updates = [];
+
+    const disable = () => {
+      if (node.style.getPropertyValue('user-select') !== 'none') {
+        const previousValue = node.style.getPropertyValue('user-select');
+        node.style.setProperty('user-select', 'none');
+        node.style.setProperty('-webkit-user-select', 'none');
+        updates.push(() => {
+          if (!node.isConnected) {
+            return;
+          }
+
+          node.style.setProperty('user-select', previousValue);
+          node.style.setProperty('-webkit-user-select', previousValue);
+        });
       }
 
-      if (focusable.nodeName === 'A') {
-        focusable.setAttribute('tabindex', '-1');
-      }
+      external_wp_dom_namespaceObject.focus.focusable.find(node).forEach(focusable => {
+        var _node$ownerDocument$d;
 
-      const tabIndex = focusable.getAttribute('tabindex');
+        if ((0,external_lodash_namespaceObject.includes)(DISABLED_ELIGIBLE_NODE_NAMES, focusable.nodeName) && // @ts-ignore
+        !focusable.disabled) {
+          focusable.setAttribute('disabled', '');
+          updates.push(() => {
+            if (!focusable.isConnected) {
+              return;
+            } // @ts-ignore
 
-      if (tabIndex !== null && tabIndex !== '-1') {
-        focusable.removeAttribute('tabindex');
-      }
 
-      if (focusable.hasAttribute('contenteditable')) {
-        focusable.setAttribute('contenteditable', 'false');
-      }
+            focusable.disabled = false;
+          });
+        }
+
+        if (focusable.nodeName === 'A' && focusable.getAttribute('tabindex') !== '-1') {
+          const previousValue = focusable.getAttribute('tabindex');
+          focusable.setAttribute('tabindex', '-1');
+          updates.push(() => {
+            if (!focusable.isConnected) {
+              return;
+            }
+
+            if (!previousValue) {
+              focusable.removeAttribute('tabindex');
+            } else {
+              focusable.setAttribute('tabindex', previousValue);
+            }
+          });
+        }
+
+        const tabIndex = focusable.getAttribute('tabindex');
+
+        if (tabIndex !== null && tabIndex !== '-1') {
+          focusable.removeAttribute('tabindex');
+          updates.push(() => {
+            if (!focusable.isConnected) {
+              return;
+            }
+
+            focusable.setAttribute('tabindex', tabIndex);
+          });
+        }
+
+        if (focusable.hasAttribute('contenteditable') && focusable.getAttribute('contenteditable') !== 'false') {
+          focusable.setAttribute('contenteditable', 'false');
+          updates.push(() => {
+            if (!focusable.isConnected) {
+              return;
+            }
+
+            focusable.setAttribute('contenteditable', 'true');
+          });
+        }
+
+        if ((_node$ownerDocument$d = node.ownerDocument.defaultView) !== null && _node$ownerDocument$d !== void 0 && _node$ownerDocument$d.HTMLElement && focusable instanceof node.ownerDocument.defaultView.HTMLElement) {
+          const previousValue = focusable.style.getPropertyValue('pointer-events');
+          focusable.style.setProperty('pointer-events', 'none');
+          updates.push(() => {
+            if (!focusable.isConnected) {
+              return;
+            }
+
+            focusable.style.setProperty('pointer-events', previousValue);
+          });
+        }
+      });
+    }; // Debounce re-disable since disabling process itself will incur
+    // additional mutations which should be ignored.
+
+
+    const debouncedDisable = (0,external_lodash_namespaceObject.debounce)(disable, undefined, {
+      leading: true
     });
-  }; // Debounce re-disable since disabling process itself will incur
-  // additional mutations which should be ignored.
-
-
-  const debouncedDisable = (0,external_wp_element_namespaceObject.useCallback)((0,external_lodash_namespaceObject.debounce)(disable, undefined, {
-    leading: true
-  }), []);
-  (0,external_wp_element_namespaceObject.useLayoutEffect)(() => {
     disable();
     /** @type {MutationObserver | undefined} */
 
-    let observer;
-
-    if (node.current) {
-      observer = new window.MutationObserver(debouncedDisable);
-      observer.observe(node.current, {
-        childList: true,
-        attributes: true,
-        subtree: true
-      });
-    }
-
+    const observer = new window.MutationObserver(debouncedDisable);
+    observer.observe(node, {
+      childList: true,
+      attributes: true,
+      subtree: true
+    });
     return () => {
       if (observer) {
         observer.disconnect();
       }
 
       debouncedDisable.cancel();
+      updates.forEach(update => update());
     };
-  }, []);
-  return node;
+  }, [isDisabledProp]);
 }
-//# sourceMappingURL=index.js.map
+
 ;// CONCATENATED MODULE: ./packages/compose/build-module/hooks/use-isomorphic-layout-effect/index.js
 /**
  * WordPress dependencies
@@ -3673,8 +3754,8 @@ function useDisabled() {
  */
 
 const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? external_wp_element_namespaceObject.useLayoutEffect : external_wp_element_namespaceObject.useEffect;
-/* harmony default export */ var use_isomorphic_layout_effect = (useIsomorphicLayoutEffect);
-//# sourceMappingURL=index.js.map
+/* harmony default export */ const use_isomorphic_layout_effect = (useIsomorphicLayoutEffect);
+
 ;// CONCATENATED MODULE: ./packages/compose/build-module/hooks/use-dragging/index.js
 /**
  * WordPress dependencies
@@ -3749,12 +3830,12 @@ function useDragging(_ref) {
     isDragging
   };
 }
-//# sourceMappingURL=index.js.map
+
 // EXTERNAL MODULE: ./node_modules/mousetrap/mousetrap.js
-var mousetrap_mousetrap = __webpack_require__(2441);
+var mousetrap_mousetrap = __webpack_require__(7973);
 var mousetrap_default = /*#__PURE__*/__webpack_require__.n(mousetrap_mousetrap);
 // EXTERNAL MODULE: ./node_modules/mousetrap/plugins/global-bind/mousetrap-global-bind.js
-var mousetrap_global_bind = __webpack_require__(3956);
+var mousetrap_global_bind = __webpack_require__(5538);
 ;// CONCATENATED MODULE: ./packages/compose/build-module/hooks/use-keyboard-shortcut/index.js
 /**
  * External dependencies
@@ -3828,7 +3909,7 @@ shortcuts, callback) {
 
     const mousetrap = new (mousetrap_default())(target && target.current ? target.current : // We were passing `document` here previously, so to successfully cast it to Element we must cast it first to `unknown`.
     // Not sure if this is a mistake but it was the behavior previous to the addition of types so we're just doing what's
-    // necessary to maintain the existing behavior
+    // necessary to maintain the existing behavior.
 
     /** @type {Element} */
 
@@ -3862,8 +3943,8 @@ shortcuts, callback) {
   }, [shortcuts, bindGlobal, eventName, target, isDisabled]);
 }
 
-/* harmony default export */ var use_keyboard_shortcut = (useKeyboardShortcut);
-//# sourceMappingURL=index.js.map
+/* harmony default export */ const use_keyboard_shortcut = (useKeyboardShortcut);
+
 ;// CONCATENATED MODULE: ./packages/compose/build-module/hooks/use-media-query/index.js
 /**
  * WordPress dependencies
@@ -3894,7 +3975,7 @@ function useMediaQuery(query) {
   }, [query]);
   return !!query && match;
 }
-//# sourceMappingURL=index.js.map
+
 ;// CONCATENATED MODULE: ./packages/compose/build-module/hooks/use-previous/index.js
 /**
  * WordPress dependencies
@@ -3919,7 +4000,7 @@ function usePrevious(value) {
 
   return ref.current;
 }
-//# sourceMappingURL=index.js.map
+
 ;// CONCATENATED MODULE: ./packages/compose/build-module/hooks/use-reduced-motion/index.js
 /**
  * Internal dependencies
@@ -3933,8 +4014,8 @@ function usePrevious(value) {
 
 const useReducedMotion = () => useMediaQuery('(prefers-reduced-motion: reduce)');
 
-/* harmony default export */ var use_reduced_motion = (useReducedMotion);
-//# sourceMappingURL=index.js.map
+/* harmony default export */ const use_reduced_motion = (useReducedMotion);
+
 ;// CONCATENATED MODULE: ./packages/compose/build-module/hooks/use-viewport-match/index.js
 /**
  * WordPress dependencies
@@ -4022,24 +4103,210 @@ const useViewportMatch = function (breakpoint) {
 };
 
 useViewportMatch.__experimentalWidthProvider = ViewportMatchWidthContext.Provider;
-/* harmony default export */ var use_viewport_match = (useViewportMatch);
-//# sourceMappingURL=index.js.map
-// EXTERNAL MODULE: ./node_modules/react-resize-aware/dist/index.js
-var dist = __webpack_require__(5464);
-var dist_default = /*#__PURE__*/__webpack_require__.n(dist);
+/* harmony default export */ const use_viewport_match = (useViewportMatch);
+
 ;// CONCATENATED MODULE: ./packages/compose/build-module/hooks/use-resize-observer/index.js
+
+
 /**
  * External dependencies
  */
 
 /**
+ * WordPress dependencies
+ */
+
+
+// This of course could've been more streamlined with internal state instead of
+// refs, but then host hooks / components could not opt out of renders.
+// This could've been exported to its own module, but the current build doesn't
+// seem to work with module imports and I had no more time to spend on this...
+function useResolvedElement(subscriber, refOrElement) {
+  const callbackRefElement = (0,external_wp_element_namespaceObject.useRef)(null);
+  const lastReportRef = (0,external_wp_element_namespaceObject.useRef)(null);
+  const cleanupRef = (0,external_wp_element_namespaceObject.useRef)();
+  const callSubscriber = (0,external_wp_element_namespaceObject.useCallback)(() => {
+    let element = null;
+
+    if (callbackRefElement.current) {
+      element = callbackRefElement.current;
+    } else if (refOrElement) {
+      if (refOrElement instanceof HTMLElement) {
+        element = refOrElement;
+      } else {
+        element = refOrElement.current;
+      }
+    }
+
+    if (lastReportRef.current && lastReportRef.current.element === element && lastReportRef.current.reporter === callSubscriber) {
+      return;
+    }
+
+    if (cleanupRef.current) {
+      cleanupRef.current(); // Making sure the cleanup is not called accidentally multiple times.
+
+      cleanupRef.current = null;
+    }
+
+    lastReportRef.current = {
+      reporter: callSubscriber,
+      element
+    }; // Only calling the subscriber, if there's an actual element to report.
+
+    if (element) {
+      cleanupRef.current = subscriber(element);
+    }
+  }, [refOrElement, subscriber]); // On each render, we check whether a ref changed, or if we got a new raw
+  // element.
+
+  (0,external_wp_element_namespaceObject.useEffect)(() => {
+    // With this we're *technically* supporting cases where ref objects' current value changes, but only if there's a
+    // render accompanying that change as well.
+    // To guarantee we always have the right element, one must use the ref callback provided instead, but we support
+    // RefObjects to make the hook API more convenient in certain cases.
+    callSubscriber();
+  }, [callSubscriber]);
+  return (0,external_wp_element_namespaceObject.useCallback)(element => {
+    callbackRefElement.current = element;
+    callSubscriber();
+  }, [callSubscriber]);
+}
+
+// We're only using the first element of the size sequences, until future versions of the spec solidify on how
+// exactly it'll be used for fragments in multi-column scenarios:
+// From the spec:
+// > The box size properties are exposed as FrozenArray in order to support elements that have multiple fragments,
+// > which occur in multi-column scenarios. However the current definitions of content rect and border box do not
+// > mention how those boxes are affected by multi-column layout. In this spec, there will only be a single
+// > ResizeObserverSize returned in the FrozenArray, which will correspond to the dimensions of the first column.
+// > A future version of this spec will extend the returned FrozenArray to contain the per-fragment size information.
+// (https://drafts.csswg.org/resize-observer/#resize-observer-entry-interface)
+//
+// Also, testing these new box options revealed that in both Chrome and FF everything is returned in the callback,
+// regardless of the "box" option.
+// The spec states the following on this:
+// > This does not have any impact on which box dimensions are returned to the defined callback when the event
+// > is fired, it solely defines which box the author wishes to observe layout changes on.
+// (https://drafts.csswg.org/resize-observer/#resize-observer-interface)
+// I'm not exactly clear on what this means, especially when you consider a later section stating the following:
+// > This section is non-normative. An author may desire to observe more than one CSS box.
+// > In this case, author will need to use multiple ResizeObservers.
+// (https://drafts.csswg.org/resize-observer/#resize-observer-interface)
+// Which is clearly not how current browser implementations behave, and seems to contradict the previous quote.
+// For this reason I decided to only return the requested size,
+// even though it seems we have access to results for all box types.
+// This also means that we get to keep the current api, being able to return a simple { width, height } pair,
+// regardless of box option.
+const extractSize = (entry, boxProp, sizeType) => {
+  if (!entry[boxProp]) {
+    if (boxProp === 'contentBoxSize') {
+      // The dimensions in `contentBoxSize` and `contentRect` are equivalent according to the spec.
+      // See the 6th step in the description for the RO algorithm:
+      // https://drafts.csswg.org/resize-observer/#create-and-populate-resizeobserverentry-h
+      // > Set this.contentRect to logical this.contentBoxSize given target and observedBox of "content-box".
+      // In real browser implementations of course these objects differ, but the width/height values should be equivalent.
+      return entry.contentRect[sizeType === 'inlineSize' ? 'width' : 'height'];
+    }
+
+    return undefined;
+  } // A couple bytes smaller than calling Array.isArray() and just as effective here.
+
+
+  return entry[boxProp][0] ? entry[boxProp][0][sizeType] : // TS complains about this, because the RO entry type follows the spec and does not reflect Firefox's current
+  // behaviour of returning objects instead of arrays for `borderBoxSize` and `contentBoxSize`.
+  // @ts-ignore
+  entry[boxProp][sizeType];
+};
+
+function useResizeObserver() {
+  let opts = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  // Saving the callback as a ref. With this, I don't need to put onResize in the
+  // effect dep array, and just passing in an anonymous function without memoising
+  // will not reinstantiate the hook's ResizeObserver.
+  const onResize = opts.onResize;
+  const onResizeRef = (0,external_wp_element_namespaceObject.useRef)(undefined);
+  onResizeRef.current = onResize;
+  const round = opts.round || Math.round; // Using a single instance throughout the hook's lifetime
+
+  const resizeObserverRef = (0,external_wp_element_namespaceObject.useRef)();
+  const [size, setSize] = (0,external_wp_element_namespaceObject.useState)({
+    width: undefined,
+    height: undefined
+  }); // In certain edge cases the RO might want to report a size change just after
+  // the component unmounted.
+
+  const didUnmount = (0,external_wp_element_namespaceObject.useRef)(false);
+  (0,external_wp_element_namespaceObject.useEffect)(() => {
+    return () => {
+      didUnmount.current = true;
+    };
+  }, []); // Using a ref to track the previous width / height to avoid unnecessary renders.
+
+  const previous = (0,external_wp_element_namespaceObject.useRef)({
+    width: undefined,
+    height: undefined
+  }); // This block is kinda like a useEffect, only it's called whenever a new
+  // element could be resolved based on the ref option. It also has a cleanup
+  // function.
+
+  const refCallback = useResolvedElement((0,external_wp_element_namespaceObject.useCallback)(element => {
+    // We only use a single Resize Observer instance, and we're instantiating it on demand, only once there's something to observe.
+    // This instance is also recreated when the `box` option changes, so that a new observation is fired if there was a previously observed element with a different box option.
+    if (!resizeObserverRef.current || resizeObserverRef.current.box !== opts.box || resizeObserverRef.current.round !== round) {
+      resizeObserverRef.current = {
+        box: opts.box,
+        round,
+        instance: new ResizeObserver(entries => {
+          const entry = entries[0];
+          let boxProp = 'borderBoxSize';
+
+          if (opts.box === 'border-box') {
+            boxProp = 'borderBoxSize';
+          } else {
+            boxProp = opts.box === 'device-pixel-content-box' ? 'devicePixelContentBoxSize' : 'contentBoxSize';
+          }
+
+          const reportedWidth = extractSize(entry, boxProp, 'inlineSize');
+          const reportedHeight = extractSize(entry, boxProp, 'blockSize');
+          const newWidth = reportedWidth ? round(reportedWidth) : undefined;
+          const newHeight = reportedHeight ? round(reportedHeight) : undefined;
+
+          if (previous.current.width !== newWidth || previous.current.height !== newHeight) {
+            const newSize = {
+              width: newWidth,
+              height: newHeight
+            };
+            previous.current.width = newWidth;
+            previous.current.height = newHeight;
+
+            if (onResizeRef.current) {
+              onResizeRef.current(newSize);
+            } else if (!didUnmount.current) {
+              setSize(newSize);
+            }
+          }
+        })
+      };
+    }
+
+    resizeObserverRef.current.instance.observe(element, {
+      box: opts.box
+    });
+    return () => {
+      if (resizeObserverRef.current) {
+        resizeObserverRef.current.instance.unobserve(element);
+      }
+    };
+  }, [opts.box, round]), opts.ref);
+  return (0,external_wp_element_namespaceObject.useMemo)(() => ({
+    ref: refCallback,
+    width: size.width,
+    height: size.height
+  }), [refCallback, size ? size.width : null, size ? size.height : null]);
+}
+/**
  * Hook which allows to listen the resize event of any target element when it changes sizes.
- * _Note: `useResizeObserver` will report `null` until after first render_
- *
- * Simply a re-export of `react-resize-aware` so refer to its documentation <https://github.com/FezVrasta/react-resize-aware>
- * for more details.
- *
- * @see https://github.com/FezVrasta/react-resize-aware
+ * _Note: `useResizeObserver` will report `null` until after first render.
  *
  * @example
  *
@@ -4055,13 +4322,41 @@ var dist_default = /*#__PURE__*/__webpack_require__.n(dist);
  * 	);
  * };
  * ```
- *
  */
 
-/* harmony default export */ var use_resize_observer = ((dist_default()));
-//# sourceMappingURL=index.js.map
+
+function useResizeAware() {
+  const {
+    ref,
+    width,
+    height
+  } = useResizeObserver();
+  const sizes = (0,external_wp_element_namespaceObject.useMemo)(() => {
+    return {
+      width: width !== null && width !== void 0 ? width : null,
+      height: height !== null && height !== void 0 ? height : null
+    };
+  }, [width, height]);
+  const resizeListener = (0,external_wp_element_namespaceObject.createElement)("div", {
+    style: {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      pointerEvents: 'none',
+      opacity: 0,
+      overflow: 'hidden',
+      zIndex: -1
+    },
+    "aria-hidden": "true",
+    ref: ref
+  });
+  return [resizeListener, sizes];
+}
+
 ;// CONCATENATED MODULE: external ["wp","priorityQueue"]
-var external_wp_priorityQueue_namespaceObject = window["wp"]["priorityQueue"];
+const external_wp_priorityQueue_namespaceObject = window["wp"]["priorityQueue"];
 ;// CONCATENATED MODULE: ./packages/compose/build-module/hooks/use-async-list/index.js
 /**
  * WordPress dependencies
@@ -4138,8 +4433,8 @@ function useAsyncList(list) {
   return current;
 }
 
-/* harmony default export */ var use_async_list = (useAsyncList);
-//# sourceMappingURL=index.js.map
+/* harmony default export */ const use_async_list = (useAsyncList);
+
 ;// CONCATENATED MODULE: ./packages/compose/build-module/hooks/use-warn-on-change/index.js
 /**
  * Internal dependencies
@@ -4187,10 +4482,10 @@ function useWarnOnChange(object) {
   });
 }
 
-/* harmony default export */ var use_warn_on_change = (useWarnOnChange);
-//# sourceMappingURL=index.js.map
-// EXTERNAL MODULE: external "React"
-var external_React_ = __webpack_require__(9196);
+/* harmony default export */ const use_warn_on_change = (useWarnOnChange);
+
+;// CONCATENATED MODULE: external "React"
+const external_React_namespaceObject = window["React"];
 ;// CONCATENATED MODULE: ./node_modules/use-memo-one/dist/use-memo-one.esm.js
 
 
@@ -4209,19 +4504,19 @@ function areInputsEqual(newInputs, lastInputs) {
 }
 
 function useMemoOne(getResult, inputs) {
-  var initial = (0,external_React_.useState)(function () {
+  var initial = (0,external_React_namespaceObject.useState)(function () {
     return {
       inputs: inputs,
       result: getResult()
     };
   })[0];
-  var committed = (0,external_React_.useRef)(initial);
+  var committed = (0,external_React_namespaceObject.useRef)(initial);
   var isInputMatch = Boolean(inputs && committed.current.inputs && areInputsEqual(inputs, committed.current.inputs));
   var cache = isInputMatch ? committed.current : {
     inputs: inputs,
     result: getResult()
   };
-  (0,external_React_.useEffect)(function () {
+  (0,external_React_namespaceObject.useEffect)(function () {
     committed.current = cache;
   }, [cache]);
   return cache.result;
@@ -4271,7 +4566,7 @@ function useDebounce(fn, wait, options) {
   (0,external_wp_element_namespaceObject.useEffect)(() => () => debounced.cancel(), [debounced]);
   return debounced;
 }
-//# sourceMappingURL=index.js.map
+
 ;// CONCATENATED MODULE: ./packages/compose/build-module/hooks/use-throttle/index.js
 /**
  * External dependencies
@@ -4304,7 +4599,7 @@ function useThrottle(fn, wait, options) {
   (0,external_wp_element_namespaceObject.useEffect)(() => () => throttled.cancel(), [throttled]);
   return throttled;
 }
-//# sourceMappingURL=index.js.map
+
 ;// CONCATENATED MODULE: ./packages/compose/build-module/hooks/use-drop-zone/index.js
 /**
  * WordPress dependencies
@@ -4320,7 +4615,7 @@ function useThrottle(fn, wait, options) {
 /**
  * @template T
  * @param {T} value
- * @return {import('react').MutableRefObject<T>} A ref with the value.
+ * @return {import('react').MutableRefObject<T|null>} A ref with the value.
  */
 
 function useFreshRef(value) {
@@ -4532,6 +4827,12 @@ function useDropZone(_ref) {
 
     ownerDocument.addEventListener('dragenter', maybeDragStart);
     return () => {
+      onDropRef.current = null;
+      onDragStartRef.current = null;
+      onDragEnterRef.current = null;
+      onDragLeaveRef.current = null;
+      onDragEndRef.current = null;
+      onDragOverRef.current = null;
       delete element.dataset.isDropZone;
       element.removeEventListener('drop', onDrop);
       element.removeEventListener('dragenter', onDragEnter);
@@ -4543,7 +4844,7 @@ function useDropZone(_ref) {
     };
   }, [isDisabled]);
 }
-//# sourceMappingURL=index.js.map
+
 ;// CONCATENATED MODULE: ./packages/compose/build-module/hooks/use-focusable-iframe/index.js
 /**
  * Internal dependencies
@@ -4584,7 +4885,7 @@ function useFocusableIframe() {
     };
   }, []);
 }
-//# sourceMappingURL=index.js.map
+
 ;// CONCATENATED MODULE: ./packages/compose/build-module/hooks/use-fixed-window-list/index.js
 /**
  * External dependencies
@@ -4657,7 +4958,7 @@ function useFixedWindowList(elementRef, itemHeight, totalItems, options) {
         return;
       }
 
-      const visibleItems = Math.ceil(scrollContainer.clientHeight / itemHeight); // Aim to keep opening list view fast, afterward we can optimize for scrolling
+      const visibleItems = Math.ceil(scrollContainer.clientHeight / itemHeight); // Aim to keep opening list view fast, afterward we can optimize for scrolling.
 
       const windowOverscan = initRender ? visibleItems : (_options$windowOversc = options === null || options === void 0 ? void 0 : options.windowOverscan) !== null && _options$windowOversc !== void 0 ? _options$windowOversc : visibleItems;
       const firstViewableIndex = Math.floor(scrollContainer.scrollTop / itemHeight);
@@ -4749,26 +5050,19 @@ function useFixedWindowList(elementRef, itemHeight, totalItems, options) {
   }, [totalItems, itemHeight, elementRef, fixedListWindow.visibleItems]);
   return [fixedListWindow, setFixedListWindow];
 }
-//# sourceMappingURL=index.js.map
+
 ;// CONCATENATED MODULE: ./packages/compose/build-module/index.js
-// Utils
+// The `createHigherOrderComponent` helper and helper types.
  // Compose helper (aliased flowRight from Lodash)
 
- // Higher-order components
+ // Higher-order components.
 
 
 
 
 
 
- // Hooks
-
-
-
-
-
-
-
+ // Hooks.
 
 
 
@@ -4789,8 +5083,16 @@ function useFixedWindowList(elementRef, itemHeight, totalItems, options) {
 
 
 
-//# sourceMappingURL=index.js.map
-}();
+
+
+
+
+
+
+
+
+})();
+
 (window.wp = window.wp || {}).compose = __webpack_exports__;
 /******/ })()
 ;

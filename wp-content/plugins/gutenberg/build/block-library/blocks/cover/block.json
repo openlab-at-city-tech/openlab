@@ -10,6 +10,10 @@
 		"url": {
 			"type": "string"
 		},
+		"useFeaturedImage": {
+			"type": "boolean",
+			"default": false
+		},
 		"id": {
 			"type": "number"
 		},
@@ -72,12 +76,14 @@
 			"enum": [ "all", "insert", false ]
 		}
 	},
+	"usesContext": [ "postId", "postType" ],
 	"supports": {
 		"anchor": true,
 		"align": true,
 		"html": false,
 		"spacing": {
 			"padding": true,
+			"margin": [ "top", "bottom" ],
 			"__experimentalDefaultControls": {
 				"padding": true
 			}
