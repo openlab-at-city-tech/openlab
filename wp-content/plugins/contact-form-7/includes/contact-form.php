@@ -2,6 +2,8 @@
 
 class WPCF7_ContactForm {
 
+	use WPCF7_SWV_SchemaHolder;
+
 	const post_type = 'wpcf7_contact_form';
 
 	private static $found_items = 0;
@@ -319,7 +321,7 @@ class WPCF7_ContactForm {
 	 * Retrieves contact form property of the specified name from the database.
 	 *
 	 * @param string $name Property name.
-	 * @return array|string|null Property value. Null if property doesn't exist.
+	 * @return array|string|null Property value. Null if property does not exist.
 	 */
 	private function retrieve_property( $name ) {
 		$property = null;
@@ -342,7 +344,7 @@ class WPCF7_ContactForm {
 	 * Returns the value for the given property name.
 	 *
 	 * @param string $name Property name.
-	 * @return array|string|null Property value. Null if property doesn't exist.
+	 * @return array|string|null Property value. Null if property does not exist.
 	 */
 	public function prop( $name ) {
 		$props = $this->get_properties();
@@ -466,7 +468,7 @@ class WPCF7_ContactForm {
 	 * Returns the specified shortcode attribute value.
 	 *
 	 * @param string $name Shortcode attribute name.
-	 * @return string|null Attribute value. Null if the attribute doesn't exist.
+	 * @return string|null Attribute value. Null if the attribute does not exist.
 	 */
 	public function shortcode_attr( $name ) {
 		if ( isset( $this->shortcode_atts[$name] ) ) {
@@ -773,19 +775,20 @@ class WPCF7_ContactForm {
 						);
 					}
 
-					$validation_error_id = sprintf(
-						'%1$s-ve-%2$s',
-						$this->unit_tag(),
-						$name
+					$validation_error_id = wpcf7_get_validation_error_reference(
+						$name,
+						$this->unit_tag()
 					);
 
-					$list_item = sprintf(
-						'<li id="%1$s">%2$s</li>',
-						$validation_error_id,
-						$list_item
-					);
+					if ( $validation_error_id ) {
+						$list_item = sprintf(
+							'<li id="%1$s">%2$s</li>',
+							esc_attr( $validation_error_id ),
+							$list_item
+						);
 
-					$validation_errors[] = $list_item;
+						$validation_errors[] = $list_item;
+					}
 				}
 			}
 		}
@@ -965,7 +968,9 @@ class WPCF7_ContactForm {
 			$mailtags[] = $tag->name;
 		}
 
-		$mailtags = array_unique( array_filter( $mailtags ) );
+		$mailtags = array_unique( $mailtags );
+		$mailtags = array_filter( $mailtags );
+		$mailtags = array_values( $mailtags );
 
 		return apply_filters( 'wpcf7_collect_mail_tags', $mailtags, $args, $this );
 	}
@@ -974,10 +979,10 @@ class WPCF7_ContactForm {
 	/**
 	 * Prints a mail-tag suggestion list.
 	 *
-	 * @param string $for Optional. Mail template name. Default 'mail'.
+	 * @param string $template_name Optional. Mail template name. Default 'mail'.
 	 */
-	public function suggest_mail_tags( $for = 'mail' ) {
-		$mail = wp_parse_args( $this->prop( $for ),
+	public function suggest_mail_tags( $template_name = 'mail' ) {
+		$mail = wp_parse_args( $this->prop( $template_name ),
 			array(
 				'active' => false,
 				'recipient' => '',
@@ -1173,6 +1178,21 @@ class WPCF7_ContactForm {
 		}
 
 		return (bool) apply_filters( 'wpcf7_verify_nonce', $is_active, $this );
+	}
+
+
+	/**
+	 * Returns true if the specified setting has a falsey string value.
+	 *
+	 * @param string $name Name of setting.
+	 * @return bool True if the setting value is 'off', 'false', or '0'.
+	 */
+	public function is_false( $name ) {
+		return in_array(
+			$this->pref( $name ),
+			array( 'off', 'false', '0' ),
+			true
+		);
 	}
 
 
