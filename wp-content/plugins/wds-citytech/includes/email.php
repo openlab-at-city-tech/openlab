@@ -173,3 +173,94 @@ add_filter(
 	10,
 	4
 );
+
+/**
+ * Filters the subject line of comment notification emails.
+ */
+add_filter(
+	'comment_notification_subject',
+	function( $subject, $comment_id ) {
+		$group_id = openlab_get_group_id_by_blog_id( get_current_blog_id() );
+		if ( ! $group_id ) {
+			return $subject;
+		}
+
+		$group = groups_get_group( $group_id );
+
+		$comment = get_comment( $comment_id );
+
+		if ( $comment->user_id ) {
+			$comment_author = bp_core_get_user_displayname( $comment->user_id );
+		} else {
+			$comment_author = $comment->comment_author;
+		}
+
+		$post = get_post( $comment->comment_post_ID );
+
+		switch ( $comment->comment_type ) {
+			case 'trackback' :
+				$base = 'A new trackback from %s on %s in %s';
+			break;
+
+			case 'pingback' :
+				$base = 'A new pingback from %s on %s in %s';
+			break;
+
+			case 'comment' :
+			default :
+				$base = 'A new comment from %s on %s in %s';
+			break;
+		}
+
+		return sprintf(
+			$base,
+			$comment_author,
+			$post->post_title,
+			$group->name
+		);
+	},
+	10,
+	2
+);
+
+/**
+ * Filters the subject line of comment moderation emails.
+ */
+add_filter(
+	'comment_moderation_subject',
+	function( $subject, $comment_id ) {
+		$group_id = openlab_get_group_id_by_blog_id( get_current_blog_id() );
+		if ( ! $group_id ) {
+			return $subject;
+		}
+
+		$group = groups_get_group( $group_id );
+
+		$comment = get_comment( $comment_id );
+
+		$post = get_post( $comment->comment_post_ID );
+
+		switch ( $comment->comment_type ) {
+			case 'trackback' :
+				$base = 'Please moderate a trackback on %s in %s';
+			break;
+
+			case 'pingback' :
+				$base = 'Please moderate a pingback on %s in %s';
+			break;
+
+			case 'comment' :
+			default :
+				$base = 'Please moderate a comment on %s in %s';
+			break;
+		}
+
+		return sprintf(
+			$base,
+			$post->post_title,
+			$group->name
+		);
+	},
+	10,
+	2
+);
