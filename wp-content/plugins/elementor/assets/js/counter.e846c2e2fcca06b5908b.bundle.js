@@ -1,4 +1,4 @@
-/*! elementor - v3.6.6 - 08-06-2022 */
+/*! elementor - v3.6.7 - 03-07-2022 */
 "use strict";
 (self["webpackChunkelementor"] = self["webpackChunkelementor"] || []).push([["counter"],{
 
@@ -58,4 +58,4 @@ exports["default"] = Counter;
 /***/ })
 
 }]);
-//# sourceMappingURL=counter.c75eea9549b9f8026ad8.bundle.js.map
+//# sourceMappingURL=counter.e846c2e2fcca06b5908b.bundle.js.map

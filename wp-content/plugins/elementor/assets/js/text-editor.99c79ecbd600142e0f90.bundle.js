@@ -1,4 +1,4 @@
-/*! elementor - v3.6.6 - 08-06-2022 */
+/*! elementor - v3.6.7 - 03-07-2022 */
 "use strict";
 (self["webpackChunkelementor"] = self["webpackChunkelementor"] || []).push([["text-editor"],{
 
@@ -40,8 +40,8 @@ class TextEditor extends elementorModules.frontend.handlers.Base {
     $dropCap.append($dropCapLetter);
     return {
       $paragraph: this.$element.find(selectors.paragraph),
-      $dropCap: $dropCap,
-      $dropCapLetter: $dropCapLetter
+      $dropCap,
+      $dropCapLetter
     };
   }
 
@@ -87,8 +87,8 @@ class TextEditor extends elementorModules.frontend.handlers.Base {
     $paragraph.html(restoredParagraphContent).prepend(this.elements.$dropCap);
   }
 
-  onInit(...args) {
-    super.onInit(...args);
+  onInit() {
+    super.onInit(...arguments);
     this.wrapDropCap();
   }
 
@@ -105,4 +105,4 @@ exports["default"] = TextEditor;
 /***/ })
 
 }]);
-//# sourceMappingURL=text-editor.533215eb763ebfb3a70c.bundle.js.map
+//# sourceMappingURL=text-editor.99c79ecbd600142e0f90.bundle.js.map

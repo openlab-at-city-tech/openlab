@@ -1,4 +1,4 @@
-/*! elementor - v3.6.6 - 08-06-2022 */
+/*! elementor - v3.6.7 - 03-07-2022 */
 "use strict";
 (self["webpackChunkelementor"] = self["webpackChunkelementor"] || []).push([["image-carousel"],{
 
@@ -112,9 +112,8 @@ class ImageCarousel extends elementorModules.frontend.handlers.SwiperBase {
     return swiperOptions;
   }
 
-  async onInit(...args) {
-    super.onInit(...args);
-    const elementSettings = this.getElementSettings();
+  async onInit() {
+    super.onInit(...arguments);
 
     if (!this.elements.$swiperContainer.length || 2 > this.elements.$slides.length) {
       return;
@@ -124,6 +123,7 @@ class ImageCarousel extends elementorModules.frontend.handlers.SwiperBase {
     this.swiper = await new Swiper(this.elements.$swiperContainer, this.getSwiperSettings()); // Expose the swiper instance in the frontend
 
     this.elements.$swiperContainer.data('swiper', this.swiper);
+    const elementSettings = this.getElementSettings();
 
     if ('yes' === elementSettings.pause_on_hover) {
       this.togglePauseOnHover(true);
@@ -188,4 +188,4 @@ exports["default"] = ImageCarousel;
 /***/ })
 
 }]);
-//# sourceMappingURL=image-carousel.b69ea9450ea7e942e017.bundle.js.map
+//# sourceMappingURL=image-carousel.6fe677529cc17d56624d.bundle.js.map

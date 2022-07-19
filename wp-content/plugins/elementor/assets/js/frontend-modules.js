@@ -1,4 +1,4 @@
-/*! elementor - v3.6.6 - 08-06-2022 */
+/*! elementor - v3.6.7 - 03-07-2022 */
 (self["webpackChunkelementor"] = self["webpackChunkelementor"] || []).push([["frontend-modules"],{
 
 /***/ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js":
@@ -13,8 +13,7 @@ function _interopRequireDefault(obj) {
   };
 }
 
-module.exports = _interopRequireDefault;
-module.exports["default"] = module.exports, module.exports.__esModule = true;
+module.exports = _interopRequireDefault, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ }),
 
@@ -37,9 +36,9 @@ exports["default"] = void 0;
  * object (from events, etc.) and the actual JavaScript object so a regular instanceof doesn't work. This function can
  * check whether it's instanceof by using the objects constructor and prototype names.
  *
- * @param object
- * @param constructors
- * @returns {boolean}
+ * @param  object
+ * @param  constructors
+ * @return {boolean}
  */
 var _default = (object, constructors) => {
   constructors = Array.isArray(constructors) ? constructors : [constructors];
@@ -217,7 +216,8 @@ module.exports = elementorModules.ViewModule.extend({
   onEditSettingsChange: null,
   onPageSettingsChange: null,
   isEdit: null,
-  __construct: function (settings) {
+
+  __construct(settings) {
     if (!this.isActive(settings)) {
       return;
     }
@@ -229,16 +229,19 @@ module.exports = elementorModules.ViewModule.extend({
       this.addEditorListeners();
     }
   },
-  isActive: function () {
+
+  isActive() {
     return true;
   },
-  findElement: function (selector) {
+
+  findElement(selector) {
     var $mainElement = this.$element;
     return $mainElement.find(selector).filter(function () {
       return jQuery(this).closest('.elementor-element').is($mainElement);
     });
   },
-  getUniqueHandlerID: function (cid, $element) {
+
+  getUniqueHandlerID(cid, $element) {
     if (!cid) {
       cid = this.getModelCID();
     }
@@ -249,18 +252,21 @@ module.exports = elementorModules.ViewModule.extend({
 
     return cid + $element.attr('data-element_type') + this.getConstructorID();
   },
-  initEditorListeners: function () {
+
+  initEditorListeners() {
     var self = this;
     self.editorListeners = [{
       event: 'element:destroy',
       to: elementor.channels.data,
-      callback: function (removedModel) {
+
+      callback(removedModel) {
         if (removedModel.cid !== self.getModelCID()) {
           return;
         }
 
         self.onDestroy();
       }
+
     }];
 
     if (self.onElementChange) {
@@ -274,7 +280,8 @@ module.exports = elementorModules.ViewModule.extend({
       self.editorListeners.push({
         event: eventName,
         to: elementor.channels.editor,
-        callback: function (controlView, elementView) {
+
+        callback(controlView, elementView) {
           var elementViewHandlerID = self.getUniqueHandlerID(elementView.model.cid, elementView.$el);
 
           if (elementViewHandlerID !== self.getUniqueHandlerID()) {
@@ -283,6 +290,7 @@ module.exports = elementorModules.ViewModule.extend({
 
           self.onElementChange(controlView.model.get('name'), controlView, elementView);
         }
+
       });
     }
 
@@ -290,13 +298,15 @@ module.exports = elementorModules.ViewModule.extend({
       self.editorListeners.push({
         event: 'change:editSettings',
         to: elementor.channels.editor,
-        callback: function (changedModel, view) {
+
+        callback(changedModel, view) {
           if (view.model.cid !== self.getModelCID()) {
             return;
           }
 
           self.onEditSettingsChange(Object.keys(changedModel.changed)[0]);
         }
+
       });
     }
 
@@ -307,36 +317,43 @@ module.exports = elementorModules.ViewModule.extend({
         self.editorListeners.push({
           event: 'change',
           to: elementor.settings[settingsType].model,
-          callback: function (model) {
+
+          callback(model) {
             self[listenerMethodName](model.changed);
           }
+
         });
       }
     });
   },
-  getEditorListeners: function () {
+
+  getEditorListeners() {
     if (!this.editorListeners) {
       this.initEditorListeners();
     }
 
     return this.editorListeners;
   },
-  addEditorListeners: function () {
+
+  addEditorListeners() {
     var uniqueHandlerID = this.getUniqueHandlerID();
     this.getEditorListeners().forEach(function (listener) {
       elementorFrontend.addListenerOnce(uniqueHandlerID, listener.event, listener.callback, listener.to);
     });
   },
-  removeEditorListeners: function () {
+
+  removeEditorListeners() {
     var uniqueHandlerID = this.getUniqueHandlerID();
     this.getEditorListeners().forEach(function (listener) {
       elementorFrontend.removeListeners(uniqueHandlerID, listener.event, null, listener.to);
     });
   },
-  getElementType: function () {
+
+  getElementType() {
     return this.$element.data('element_type');
   },
-  getWidgetType: function () {
+
+  getWidgetType() {
     const widgetType = this.$element.data('widget_type');
 
     if (!widgetType) {
@@ -345,13 +362,16 @@ module.exports = elementorModules.ViewModule.extend({
 
     return widgetType.split('.')[0];
   },
-  getID: function () {
+
+  getID() {
     return this.$element.data('id');
   },
-  getModelCID: function () {
+
+  getModelCID() {
     return this.$element.data('model-cid');
   },
-  getElementSettings: function (setting) {
+
+  getElementSettings(setting) {
     let elementSettings = {};
     const modelCID = this.getModelCID();
 
@@ -392,7 +412,8 @@ module.exports = elementorModules.ViewModule.extend({
 
     return this.getItems(elementSettings, setting);
   },
-  getEditSettings: function (setting) {
+
+  getEditSettings(setting) {
     var attributes = {};
 
     if (this.isEdit) {
@@ -401,15 +422,18 @@ module.exports = elementorModules.ViewModule.extend({
 
     return this.getItems(attributes, setting);
   },
-  getCurrentDeviceSetting: function (settingKey) {
+
+  getCurrentDeviceSetting(settingKey) {
     return elementorFrontend.getCurrentDeviceSetting(this.getElementSettings(), settingKey);
   },
-  onInit: function () {
+
+  onInit() {
     if (this.isActive(this.getSettings())) {
       elementorModules.ViewModule.prototype.onInit.apply(this, arguments);
     }
   },
-  onDestroy: function () {
+
+  onDestroy() {
     if (this.isEdit) {
       this.removeEditorListeners();
     }
@@ -418,6 +442,7 @@ module.exports = elementorModules.ViewModule.extend({
       this.unbindEvents();
     }
   }
+
 });
 
 /***/ }),
@@ -466,7 +491,7 @@ _modules.default.frontend = {
 
 
 module.exports = elementorModules.ViewModule.extend({
-  getDefaultSettings: function () {
+  getDefaultSettings() {
     return {
       element: null,
       direction: elementorFrontend.config.is_rtl ? 'right' : 'left',
@@ -475,12 +500,14 @@ module.exports = elementorModules.ViewModule.extend({
       }
     };
   },
-  getDefaultElements: function () {
+
+  getDefaultElements() {
     return {
       $element: jQuery(this.getSettings('element'))
     };
   },
-  stretch: function () {
+
+  stretch() {
     var containerSelector = this.getSettings('selectors.container'),
         $container;
 
@@ -524,12 +551,14 @@ module.exports = elementorModules.ViewModule.extend({
     css[this.getSettings('direction')] = correctOffset + 'px';
     $element.css(css);
   },
-  reset: function () {
+
+  reset() {
     var css = {};
     css.width = '';
     css[this.getSettings('direction')] = '';
     this.elements.$element.css(css);
   }
+
 });
 
 /***/ }),
@@ -577,14 +606,16 @@ class ArgsObject extends _instanceType.default {
    * Validate property in args.
    *
    * @param {string} property
-   * @param {{}} args
+   * @param {{}}     args
    *
    * @throws {Error}
    *
    */
 
 
-  requireArgument(property, args = this.args) {
+  requireArgument(property) {
+    let args = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : this.args;
+
     if (!args.hasOwnProperty(property)) {
       throw Error(`${property} is required.`);
     }
@@ -596,14 +627,15 @@ class ArgsObject extends _instanceType.default {
    *
    * @param {string} property
    * @param {string} type
-   * @param {{}} args
+   * @param {{}}     args
    *
    * @throws {Error}
    *
    */
 
 
-  requireArgumentType(property, type, args = this.args) {
+  requireArgumentType(property, type) {
+    let args = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : this.args;
     this.requireArgument(property, args);
 
     if (typeof args[property] !== type) {
@@ -616,15 +648,16 @@ class ArgsObject extends _instanceType.default {
    * Validate property in args using `args.whatever instanceof instance`.
    *
    * @param {string} property
-   * @param {instanceof} instance
-   * @param {{}} args
+   * @param {*}      instance
+   * @param {{}}     args
    *
    * @throws {Error}
    *
    */
 
 
-  requireArgumentInstance(property, instance, args = this.args) {
+  requireArgumentInstance(property, instance) {
+    let args = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : this.args;
     this.requireArgument(property, args);
 
     if (!(args[property] instanceof instance) && !(0, _isInstanceof.default)(args[property], instance)) {
@@ -637,15 +670,16 @@ class ArgsObject extends _instanceType.default {
    * Validate property in args using `type === args.whatever.constructor`.
    *
    * @param {string} property
-   * @param {*} type
-   * @param {{}} args
+   * @param {*}      type
+   * @param {{}}     args
    *
    * @throws {Error}
    *
    */
 
 
-  requireArgumentConstructor(property, type, args = this.args) {
+  requireArgumentConstructor(property, type) {
+    let args = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : this.args;
     this.requireArgument(property, args); // Note: Converting the constructor to string in order to avoid equation issues
     // due to different memory addresses between iframes (window.Object !== window.top.Object).
 
@@ -676,7 +710,8 @@ exports["default"] = exports.ForceMethodImplementation = void 0;
 
 // TODO: Wrong location used as `elementorModules.ForceMethodImplementation(); should be` `elementorUtils.forceMethodImplementation()`;
 class ForceMethodImplementation extends Error {
-  constructor(info = {}) {
+  constructor() {
+    let info = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
     super(`${info.isStatic ? 'static ' : ''}${info.fullName}() should be implemented, please provide '${info.functionName || info.fullName}' functionality.`);
     Error.captureStackTrace(this, ForceMethodImplementation);
   }
@@ -1007,7 +1042,7 @@ var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/inte
 var _viewModule = _interopRequireDefault(__webpack_require__(/*! ../view-module */ "../assets/dev/js/modules/imports/view-module.js"));
 
 module.exports = _viewModule.default.extend({
-  getDefaultSettings: function () {
+  getDefaultSettings() {
     return {
       container: null,
       items: null,
@@ -1015,13 +1050,15 @@ module.exports = _viewModule.default.extend({
       verticalSpaceBetween: 30
     };
   },
-  getDefaultElements: function () {
+
+  getDefaultElements() {
     return {
       $container: jQuery(this.getSettings('container')),
       $items: jQuery(this.getSettings('items'))
     };
   },
-  run: function () {
+
+  run() {
     var heights = [],
         distanceFromTop = this.elements.$container.position().top,
         settings = this.getSettings(),
@@ -1045,6 +1082,7 @@ module.exports = _viewModule.default.extend({
       }
     });
   }
+
 });
 
 /***/ }),
@@ -1066,17 +1104,18 @@ exports["default"] = void 0;
 // Moved from elementor pro: 'assets/dev/js/frontend/utils'
 class Scroll {
   /**
-   * @param {object} obj
-   * @param {number} obj.sensitivity - Value between 0-100 - Will determine the intersection trigger points on the element
-   * @param {function} obj.callback - Will be triggered on each intersection point between the element and the viewport top/bottom
-   * @param {string} obj.offset - Offset between the element intersection points and the viewport, written like in CSS: '-50% 0 -25%'
-   * @param {HTMLElement} obj.root - The element that the events will be relative to, if 'null' will be relative to the viewport
+   * @param {Object}      obj
+   * @param {number}      obj.sensitivity - Value between 0-100 - Will determine the intersection trigger points on the element
+   * @param {Function}    obj.callback    - Will be triggered on each intersection point between the element and the viewport top/bottom
+   * @param {string}      obj.offset      - Offset between the element intersection points and the viewport, written like in CSS: '-50% 0 -25%'
+   * @param {HTMLElement} obj.root        - The element that the events will be relative to, if 'null' will be relative to the viewport
    */
   static scrollObserver(obj) {
     let lastScrollY = 0; // Generating threshholds points along the animation height
     // More threshholds points = more trigger points of the callback
 
-    const buildThreshholds = (sensitivityPercentage = 0) => {
+    const buildThreshholds = function () {
+      let sensitivityPercentage = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
       const threshholds = [];
 
       if (sensitivityPercentage > 0 && sensitivityPercentage <= 100) {
@@ -1115,14 +1154,15 @@ class Scroll {
     return new IntersectionObserver(handleIntersect, options);
   }
   /**
-   * @param {jQuery Element} $element
-   * @param {object} offsetObj
-   * @param {number} offsetObj.start - Offset start value in percentages
-   * @param {number} offsetObj.end - Offset end value in percentages
+   * @param {jQuery.Element} $element
+   * @param {Object}         offsetObj
+   * @param {number}         offsetObj.start - Offset start value in percentages
+   * @param {number}         offsetObj.end   - Offset end value in percentages
    */
 
 
-  static getElementViewportPercentage($element, offsetObj = {}) {
+  static getElementViewportPercentage($element) {
+    let offsetObj = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
     const elementOffset = $element[0].getBoundingClientRect(),
           offsetStart = offsetObj.start || 0,
           offsetEnd = offsetObj.end || 0,
@@ -1136,14 +1176,16 @@ class Scroll {
     return parseFloat((percent * 100).toFixed(2));
   }
   /**
-   * @param {object} offsetObj
+   * @param {Object} offsetObj
    * @param {number} offsetObj.start - Offset start value in percentages
-   * @param {number} offsetObj.end - Offset end value in percentages
+   * @param {number} offsetObj.end   - Offset end value in percentages
    * @param {number} limitPageHeight - Will limit the page height calculation
    */
 
 
-  static getPageScrollPercentage(offsetObj = {}, limitPageHeight) {
+  static getPageScrollPercentage() {
+    let offsetObj = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    let limitPageHeight = arguments.length > 1 ? arguments[1] : undefined;
     const offsetStart = offsetObj.start || 0,
           offsetEnd = offsetObj.end || 0,
           initialPageHeight = limitPageHeight || document.documentElement.scrollHeight - document.documentElement.clientHeight,
@@ -1174,17 +1216,22 @@ var _module = _interopRequireDefault(__webpack_require__(/*! ./module */ "../ass
 
 module.exports = _module.default.extend({
   elements: null,
-  getDefaultElements: function () {
+
+  getDefaultElements() {
     return {};
   },
-  bindEvents: function () {},
-  onInit: function () {
+
+  bindEvents() {},
+
+  onInit() {
     this.initElements();
     this.bindEvents();
   },
-  initElements: function () {
+
+  initElements() {
     this.elements = this.getDefaultElements();
   }
+
 });
 
 /***/ }),

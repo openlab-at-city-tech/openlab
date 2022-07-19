@@ -1,4 +1,4 @@
-/*! elementor - v3.6.6 - 08-06-2022 */
+/*! elementor - v3.6.7 - 03-07-2022 */
 "use strict";
 (self["webpackChunkelementor"] = self["webpackChunkelementor"] || []).push([["video"],{
 
@@ -186,7 +186,7 @@ class Video extends elementorModules.frontend.handlers.Base {
     // initialization of the Youtube API object.
 
 
-    if (!elementorFrontend.config.experimentalFeatures['e_optimized_assets_loading']) {
+    if (!elementorFrontend.config.experimentalFeatures.e_optimized_assets_loading) {
       setTimeout(() => {
         this.apiProvider.onApiReady(apiObject => this.prepareYTVideo(apiObject));
       }, 0);
@@ -220,4 +220,4 @@ exports["default"] = Video;
 /***/ })
 
 }]);
-//# sourceMappingURL=video.255c225d20f04576d1bf.bundle.js.map
+//# sourceMappingURL=video.13d70463bc0ae039a644.bundle.js.map
