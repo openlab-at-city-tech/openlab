@@ -3,8 +3,8 @@ Contributors: badgeos, learningtimes
 Donate link: http://badgeos.org/contribute/donate/
 Tags: badge, badges, openbadges, learningtimes, credly, OBI, mozilla, open badges, achievement, award, reward, engagement, submission, nomination, API, open credit, credit, badgeOS
 Requires at least: 3.5
-Tested up to: 5.9.1
-Stable tag: 1.0.2
+Tested up to: 5.9.3
+Stable tag: 1.0.3
 License: GNU AGPLv3
 License URI: http://www.gnu.org/licenses/agpl-3.0.html
 
@@ -101,6 +101,10 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 
 
 == Changelog ==
+
+= 1.0.3 =
+* Fix - Conflict with Paid Membership Pro
+* Update - Updated badge content
 
 = 1.0.2 =
 * Fix - Remove credly content
