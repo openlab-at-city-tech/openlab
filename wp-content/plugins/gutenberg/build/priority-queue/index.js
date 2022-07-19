@@ -1,36 +1,36 @@
-/******/ (function() { // webpackBootstrap
+/******/ (() => { // webpackBootstrap
 /******/ 	"use strict";
 /******/ 	// The require scope
 /******/ 	var __webpack_require__ = {};
 /******/ 	
 /************************************************************************/
 /******/ 	/* webpack/runtime/define property getters */
-/******/ 	!function() {
+/******/ 	(() => {
 /******/ 		// define getter functions for harmony exports
-/******/ 		__webpack_require__.d = function(exports, definition) {
+/******/ 		__webpack_require__.d = (exports, definition) => {
 /******/ 			for(var key in definition) {
 /******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
 /******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
 /******/ 				}
 /******/ 			}
 /******/ 		};
-/******/ 	}();
+/******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
-/******/ 	!function() {
-/******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
-/******/ 	}();
+/******/ 	(() => {
+/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/make namespace object */
-/******/ 	!function() {
+/******/ 	(() => {
 /******/ 		// define __esModule on exports
-/******/ 		__webpack_require__.r = function(exports) {
+/******/ 		__webpack_require__.r = (exports) => {
 /******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
 /******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 /******/ 			}
 /******/ 			Object.defineProperty(exports, '__esModule', { value: true });
 /******/ 		};
-/******/ 	}();
+/******/ 	})();
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
@@ -39,7 +39,7 @@ __webpack_require__.r(__webpack_exports__);
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
-  "createQueue": function() { return /* binding */ createQueue; }
+  "createQueue": () => (/* binding */ createQueue)
 });
 
 ;// CONCATENATED MODULE: ./packages/priority-queue/build-module/request-idle-callback.js
@@ -59,8 +59,8 @@ function createRequestIdleCallback() {
 
   return window.requestIdleCallback || window.requestAnimationFrame;
 }
-/* harmony default export */ var request_idle_callback = (createRequestIdleCallback());
-//# sourceMappingURL=request-idle-callback.js.map
+/* harmony default export */ const request_idle_callback = (createRequestIdleCallback());
+
 ;// CONCATENATED MODULE: ./packages/priority-queue/build-module/index.js
 /**
  * Internal dependencies
@@ -101,9 +101,10 @@ function createRequestIdleCallback() {
  *
  * @typedef {Object} WPPriorityQueue
  *
- * @property {WPPriorityQueueAdd}   add   Add callback to queue for context.
- * @property {WPPriorityQueueFlush} flush Flush queue for context.
- * @property {WPPriorityQueueReset} reset Reset queue.
+ * @property {WPPriorityQueueAdd}   add    Add callback to queue for context.
+ * @property {WPPriorityQueueFlush} flush  Flush queue for context.
+ * @property {WPPriorityQueueFlush} cancel Clear queue for context.
+ * @property {WPPriorityQueueReset} reset  Reset queue.
  */
 
 /**
@@ -216,6 +217,29 @@ const createQueue = () => {
     return true;
   };
   /**
+   * Clears the queue for a given context, cancelling the callbacks without
+   * executing them. Returns `true` if there were scheduled callbacks to cancel,
+   * or `false` if there was is no queue for the given context.
+   *
+   * @type {WPPriorityQueueFlush}
+   *
+   * @param {WPPriorityQueueContext} element Context object.
+   *
+   * @return {boolean} Whether any callbacks got cancelled.
+   */
+
+
+  const cancel = element => {
+    if (!elementsMap.has(element)) {
+      return false;
+    }
+
+    const index = waitingList.indexOf(element);
+    waitingList.splice(index, 1);
+    elementsMap.delete(element);
+    return true;
+  };
+  /**
    * Reset the queue without running the pending callbacks.
    *
    * @type {WPPriorityQueueReset}
@@ -231,10 +255,11 @@ const createQueue = () => {
   return {
     add,
     flush,
+    cancel,
     reset
   };
 };
-//# sourceMappingURL=index.js.map
+
 (window.wp = window.wp || {}).priorityQueue = __webpack_exports__;
 /******/ })()
 ;

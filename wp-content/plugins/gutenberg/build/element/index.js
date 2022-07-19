@@ -1,36 +1,36 @@
-/******/ (function() { // webpackBootstrap
+/******/ (() => { // webpackBootstrap
 /******/ 	"use strict";
 /******/ 	// The require scope
 /******/ 	var __webpack_require__ = {};
 /******/ 	
 /************************************************************************/
 /******/ 	/* webpack/runtime/define property getters */
-/******/ 	!function() {
+/******/ 	(() => {
 /******/ 		// define getter functions for harmony exports
-/******/ 		__webpack_require__.d = function(exports, definition) {
+/******/ 		__webpack_require__.d = (exports, definition) => {
 /******/ 			for(var key in definition) {
 /******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
 /******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
 /******/ 				}
 /******/ 			}
 /******/ 		};
-/******/ 	}();
+/******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
-/******/ 	!function() {
-/******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
-/******/ 	}();
+/******/ 	(() => {
+/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/make namespace object */
-/******/ 	!function() {
+/******/ 	(() => {
 /******/ 		// define __esModule on exports
-/******/ 		__webpack_require__.r = function(exports) {
+/******/ 		__webpack_require__.r = (exports) => {
 /******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
 /******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 /******/ 			}
 /******/ 			Object.defineProperty(exports, '__esModule', { value: true });
 /******/ 		};
-/******/ 	}();
+/******/ 	})();
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
@@ -39,44 +39,45 @@ __webpack_require__.r(__webpack_exports__);
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
-  "Children": function() { return /* reexport */ external_React_namespaceObject.Children; },
-  "Component": function() { return /* reexport */ external_React_namespaceObject.Component; },
-  "Fragment": function() { return /* reexport */ external_React_namespaceObject.Fragment; },
-  "Platform": function() { return /* reexport */ platform; },
-  "RawHTML": function() { return /* reexport */ RawHTML; },
-  "StrictMode": function() { return /* reexport */ external_React_namespaceObject.StrictMode; },
-  "Suspense": function() { return /* reexport */ external_React_namespaceObject.Suspense; },
-  "cloneElement": function() { return /* reexport */ external_React_namespaceObject.cloneElement; },
-  "concatChildren": function() { return /* reexport */ concatChildren; },
-  "createContext": function() { return /* reexport */ external_React_namespaceObject.createContext; },
-  "createElement": function() { return /* reexport */ external_React_namespaceObject.createElement; },
-  "createInterpolateElement": function() { return /* reexport */ create_interpolate_element; },
-  "createPortal": function() { return /* reexport */ external_ReactDOM_namespaceObject.createPortal; },
-  "createRef": function() { return /* reexport */ external_React_namespaceObject.createRef; },
-  "findDOMNode": function() { return /* reexport */ external_ReactDOM_namespaceObject.findDOMNode; },
-  "forwardRef": function() { return /* reexport */ external_React_namespaceObject.forwardRef; },
-  "isEmptyElement": function() { return /* reexport */ isEmptyElement; },
-  "isValidElement": function() { return /* reexport */ external_React_namespaceObject.isValidElement; },
-  "lazy": function() { return /* reexport */ external_React_namespaceObject.lazy; },
-  "memo": function() { return /* reexport */ external_React_namespaceObject.memo; },
-  "render": function() { return /* reexport */ external_ReactDOM_namespaceObject.render; },
-  "renderToString": function() { return /* reexport */ serialize; },
-  "switchChildrenNodeName": function() { return /* reexport */ switchChildrenNodeName; },
-  "unmountComponentAtNode": function() { return /* reexport */ external_ReactDOM_namespaceObject.unmountComponentAtNode; },
-  "useCallback": function() { return /* reexport */ external_React_namespaceObject.useCallback; },
-  "useContext": function() { return /* reexport */ external_React_namespaceObject.useContext; },
-  "useDebugValue": function() { return /* reexport */ external_React_namespaceObject.useDebugValue; },
-  "useEffect": function() { return /* reexport */ external_React_namespaceObject.useEffect; },
-  "useImperativeHandle": function() { return /* reexport */ external_React_namespaceObject.useImperativeHandle; },
-  "useLayoutEffect": function() { return /* reexport */ external_React_namespaceObject.useLayoutEffect; },
-  "useMemo": function() { return /* reexport */ external_React_namespaceObject.useMemo; },
-  "useReducer": function() { return /* reexport */ external_React_namespaceObject.useReducer; },
-  "useRef": function() { return /* reexport */ external_React_namespaceObject.useRef; },
-  "useState": function() { return /* reexport */ external_React_namespaceObject.useState; }
+  "Children": () => (/* reexport */ external_React_namespaceObject.Children),
+  "Component": () => (/* reexport */ external_React_namespaceObject.Component),
+  "Fragment": () => (/* reexport */ external_React_namespaceObject.Fragment),
+  "Platform": () => (/* reexport */ platform),
+  "RawHTML": () => (/* reexport */ RawHTML),
+  "StrictMode": () => (/* reexport */ external_React_namespaceObject.StrictMode),
+  "Suspense": () => (/* reexport */ external_React_namespaceObject.Suspense),
+  "cloneElement": () => (/* reexport */ external_React_namespaceObject.cloneElement),
+  "concatChildren": () => (/* reexport */ concatChildren),
+  "createContext": () => (/* reexport */ external_React_namespaceObject.createContext),
+  "createElement": () => (/* reexport */ external_React_namespaceObject.createElement),
+  "createInterpolateElement": () => (/* reexport */ create_interpolate_element),
+  "createPortal": () => (/* reexport */ external_ReactDOM_namespaceObject.createPortal),
+  "createRef": () => (/* reexport */ external_React_namespaceObject.createRef),
+  "findDOMNode": () => (/* reexport */ external_ReactDOM_namespaceObject.findDOMNode),
+  "forwardRef": () => (/* reexport */ external_React_namespaceObject.forwardRef),
+  "hydrate": () => (/* reexport */ external_ReactDOM_namespaceObject.hydrate),
+  "isEmptyElement": () => (/* reexport */ isEmptyElement),
+  "isValidElement": () => (/* reexport */ external_React_namespaceObject.isValidElement),
+  "lazy": () => (/* reexport */ external_React_namespaceObject.lazy),
+  "memo": () => (/* reexport */ external_React_namespaceObject.memo),
+  "render": () => (/* reexport */ external_ReactDOM_namespaceObject.render),
+  "renderToString": () => (/* reexport */ serialize),
+  "switchChildrenNodeName": () => (/* reexport */ switchChildrenNodeName),
+  "unmountComponentAtNode": () => (/* reexport */ external_ReactDOM_namespaceObject.unmountComponentAtNode),
+  "useCallback": () => (/* reexport */ external_React_namespaceObject.useCallback),
+  "useContext": () => (/* reexport */ external_React_namespaceObject.useContext),
+  "useDebugValue": () => (/* reexport */ external_React_namespaceObject.useDebugValue),
+  "useEffect": () => (/* reexport */ external_React_namespaceObject.useEffect),
+  "useImperativeHandle": () => (/* reexport */ external_React_namespaceObject.useImperativeHandle),
+  "useLayoutEffect": () => (/* reexport */ external_React_namespaceObject.useLayoutEffect),
+  "useMemo": () => (/* reexport */ external_React_namespaceObject.useMemo),
+  "useReducer": () => (/* reexport */ external_React_namespaceObject.useReducer),
+  "useRef": () => (/* reexport */ external_React_namespaceObject.useRef),
+  "useState": () => (/* reexport */ external_React_namespaceObject.useState)
 });
 
 ;// CONCATENATED MODULE: external "React"
-var external_React_namespaceObject = window["React"];
+const external_React_namespaceObject = window["React"];
 ;// CONCATENATED MODULE: ./packages/element/build-module/create-interpolate-element.js
 /**
  * Internal dependencies
@@ -260,7 +261,7 @@ function proceed(conversionMap) {
         output.push(conversionMap[name]);
         offset = startOffset + tokenLength;
         return true;
-      } // otherwise we found an inner element
+      } // Otherwise we found an inner element.
 
 
       addChild(createFrame(conversionMap[name], startOffset, tokenLength));
@@ -273,13 +274,13 @@ function proceed(conversionMap) {
       return true;
 
     case 'closer':
-      // if we're not nesting then this is easy - close the block
+      // If we're not nesting then this is easy - close the block.
       if (1 === stackDepth) {
         closeOuterElement(startOffset);
         offset = startOffset + tokenLength;
         return true;
-      } // otherwise we're nested and we have to close out the current
-      // block and add it as a innerBlock to the parent
+      } // Otherwise we're nested and we have to close out the current
+      // block and add it as a innerBlock to the parent.
 
 
       const stackTop = stack.pop();
@@ -307,7 +308,7 @@ function proceed(conversionMap) {
 
 
 function nextToken() {
-  const matches = tokenizer.exec(indoc); // we have no more tokens
+  const matches = tokenizer.exec(indoc); // We have no more tokens.
 
   if (null === matches) {
     return ['no-more-tokens'];
@@ -409,16 +410,13 @@ function closeOuterElement(endOffset) {
   output.push((0,external_React_namespaceObject.cloneElement)(element, null, ...children));
 }
 
-/* harmony default export */ var create_interpolate_element = (createInterpolateElement);
-//# sourceMappingURL=create-interpolate-element.js.map
-;// CONCATENATED MODULE: external "lodash"
-var external_lodash_namespaceObject = window["lodash"];
+/* harmony default export */ const create_interpolate_element = (createInterpolateElement);
+
 ;// CONCATENATED MODULE: ./packages/element/build-module/react.js
 /**
  * External dependencies
  */
 // eslint-disable-next-line @typescript-eslint/no-restricted-imports
-
 
 /**
  * Object containing a React element.
@@ -624,7 +622,7 @@ function concatChildren() {
 
 function switchChildrenNodeName(children, nodeName) {
   return children && external_React_namespaceObject.Children.map(children, (elt, index) => {
-    if ((0,external_lodash_namespaceObject.isString)(elt)) {
+    if (typeof (elt === null || elt === void 0 ? void 0 : elt.valueOf()) === 'string') {
       return (0,external_React_namespaceObject.createElement)(nodeName, {
         key: index
       }, elt);
@@ -640,9 +638,9 @@ function switchChildrenNodeName(children, nodeName) {
     }, childrenProp);
   });
 }
-//# sourceMappingURL=react.js.map
+
 ;// CONCATENATED MODULE: external "ReactDOM"
-var external_ReactDOM_namespaceObject = window["ReactDOM"];
+const external_ReactDOM_namespaceObject = window["ReactDOM"];
 ;// CONCATENATED MODULE: ./packages/element/build-module/react-platform.js
 /**
  * External dependencies
@@ -675,37 +673,40 @@ var external_ReactDOM_namespaceObject = window["ReactDOM"];
 
 
 /**
+ * Hydrates a given element into the target DOM node.
+ *
+ * @param {import('./react').WPElement} element Element to hydrate.
+ * @param {HTMLElement}                 target  DOM node into which element should be hydrated.
+ */
+
+
+/**
  * Removes any mounted element from the target DOM node.
  *
  * @param {Element} target DOM node in which element is to be removed
  */
 
 
-//# sourceMappingURL=react-platform.js.map
-;// CONCATENATED MODULE: ./packages/element/build-module/utils.js
-/**
- * External dependencies
- */
 
+;// CONCATENATED MODULE: ./packages/element/build-module/utils.js
 /**
  * Checks if the provided WP element is empty.
  *
  * @param {*} element WP element to check.
  * @return {boolean} True when an element is considered empty.
  */
-
 const isEmptyElement = element => {
-  if ((0,external_lodash_namespaceObject.isNumber)(element)) {
+  if (typeof element === 'number') {
     return false;
   }
 
-  if ((0,external_lodash_namespaceObject.isString)(element) || (0,external_lodash_namespaceObject.isArray)(element)) {
+  if (typeof (element === null || element === void 0 ? void 0 : element.valueOf()) === 'string' || Array.isArray(element)) {
     return !element.length;
   }
 
   return !element;
 };
-//# sourceMappingURL=utils.js.map
+
 ;// CONCATENATED MODULE: ./packages/element/build-module/platform.js
 /**
  * Parts of this source were derived and modified from react-native-web,
@@ -740,10 +741,12 @@ const Platform = {
  * ```
  */
 
-/* harmony default export */ var platform = (Platform);
-//# sourceMappingURL=platform.js.map
+/* harmony default export */ const platform = (Platform);
+
+;// CONCATENATED MODULE: external "lodash"
+const external_lodash_namespaceObject = window["lodash"];
 ;// CONCATENATED MODULE: external ["wp","escapeHtml"]
-var external_wp_escapeHtml_namespaceObject = window["wp"]["escapeHtml"];
+const external_wp_escapeHtml_namespaceObject = window["wp"]["escapeHtml"];
 ;// CONCATENATED MODULE: ./packages/element/build-module/raw-html.js
 /**
  * Internal dependencies
@@ -786,7 +789,7 @@ function RawHTML(_ref) {
     ...props
   });
 }
-//# sourceMappingURL=raw-html.js.map
+
 ;// CONCATENATED MODULE: ./packages/element/build-module/serialize.js
 /**
  * Parts of this source were derived and modified from fast-react-render,
@@ -956,13 +959,46 @@ function getNormalAttributeValue(attribute, value) {
   return value;
 }
 /**
+ * This is a map of all SVG attributes that have dashes. Map(lower case prop => dashed lower case attribute).
+ * We need this to render e.g strokeWidth as stroke-width.
+ *
+ * List from: https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute.
+ */
+
+
+const SVG_ATTRIBUTE_WITH_DASHES_LIST = ['accentHeight', 'alignmentBaseline', 'arabicForm', 'baselineShift', 'capHeight', 'clipPath', 'clipRule', 'colorInterpolation', 'colorInterpolationFilters', 'colorProfile', 'colorRendering', 'dominantBaseline', 'enableBackground', 'fillOpacity', 'fillRule', 'floodColor', 'floodOpacity', 'fontFamily', 'fontSize', 'fontSizeAdjust', 'fontStretch', 'fontStyle', 'fontVariant', 'fontWeight', 'glyphName', 'glyphOrientationHorizontal', 'glyphOrientationVertical', 'horizAdvX', 'horizOriginX', 'imageRendering', 'letterSpacing', 'lightingColor', 'markerEnd', 'markerMid', 'markerStart', 'overlinePosition', 'overlineThickness', 'paintOrder', 'panose1', 'pointerEvents', 'renderingIntent', 'shapeRendering', 'stopColor', 'stopOpacity', 'strikethroughPosition', 'strikethroughThickness', 'strokeDasharray', 'strokeDashoffset', 'strokeLinecap', 'strokeLinejoin', 'strokeMiterlimit', 'strokeOpacity', 'strokeWidth', 'textAnchor', 'textDecoration', 'textRendering', 'underlinePosition', 'underlineThickness', 'unicodeBidi', 'unicodeRange', 'unitsPerEm', 'vAlphabetic', 'vHanging', 'vIdeographic', 'vMathematical', 'vectorEffect', 'vertAdvY', 'vertOriginX', 'vertOriginY', 'wordSpacing', 'writingMode', 'xmlnsXlink', 'xHeight'].reduce((map, attribute) => {
+  // The keys are lower-cased for more robust lookup.
+  map[attribute.toLowerCase()] = attribute;
+  return map;
+}, {});
+/**
+ * This is a map of all case-sensitive SVG attributes. Map(lowercase key => proper case attribute).
+ * The keys are lower-cased for more robust lookup.
+ * Note that this list only contains attributes that contain at least one capital letter.
+ * Lowercase attributes don't need mapping, since we lowercase all attributes by default.
+ */
+
+const CASE_SENSITIVE_SVG_ATTRIBUTES = ['allowReorder', 'attributeName', 'attributeType', 'autoReverse', 'baseFrequency', 'baseProfile', 'calcMode', 'clipPathUnits', 'contentScriptType', 'contentStyleType', 'diffuseConstant', 'edgeMode', 'externalResourcesRequired', 'filterRes', 'filterUnits', 'glyphRef', 'gradientTransform', 'gradientUnits', 'kernelMatrix', 'kernelUnitLength', 'keyPoints', 'keySplines', 'keyTimes', 'lengthAdjust', 'limitingConeAngle', 'markerHeight', 'markerUnits', 'markerWidth', 'maskContentUnits', 'maskUnits', 'numOctaves', 'pathLength', 'patternContentUnits', 'patternTransform', 'patternUnits', 'pointsAtX', 'pointsAtY', 'pointsAtZ', 'preserveAlpha', 'preserveAspectRatio', 'primitiveUnits', 'refX', 'refY', 'repeatCount', 'repeatDur', 'requiredExtensions', 'requiredFeatures', 'specularConstant', 'specularExponent', 'spreadMethod', 'startOffset', 'stdDeviation', 'stitchTiles', 'suppressContentEditableWarning', 'suppressHydrationWarning', 'surfaceScale', 'systemLanguage', 'tableValues', 'targetX', 'targetY', 'textLength', 'viewBox', 'viewTarget', 'xChannelSelector', 'yChannelSelector'].reduce((map, attribute) => {
+  // The keys are lower-cased for more robust lookup.
+  map[attribute.toLowerCase()] = attribute;
+  return map;
+}, {});
+/**
+ * This is a map of all SVG attributes that have colons.
+ * Keys are lower-cased and stripped of their colons for more robust lookup.
+ */
+
+const SVG_ATTRIBUTES_WITH_COLONS = ['xlink:actuate', 'xlink:arcrole', 'xlink:href', 'xlink:role', 'xlink:show', 'xlink:title', 'xlink:type', 'xml:base', 'xml:lang', 'xml:space', 'xmlns:xlink'].reduce((map, attribute) => {
+  map[attribute.replace(':', '').toLowerCase()] = attribute;
+  return map;
+}, {});
+/**
  * Returns the normal form of the element's attribute name for HTML.
  *
  * @param {string} attribute Non-normalized attribute name.
  *
  * @return {string} Normalized attribute name.
  */
-
 
 function getNormalAttributeName(attribute) {
   switch (attribute) {
@@ -973,7 +1009,17 @@ function getNormalAttributeName(attribute) {
       return 'class';
   }
 
-  return attribute.toLowerCase();
+  const attributeLowerCase = attribute.toLowerCase();
+
+  if (CASE_SENSITIVE_SVG_ATTRIBUTES[attributeLowerCase]) {
+    return CASE_SENSITIVE_SVG_ATTRIBUTES[attributeLowerCase];
+  } else if (SVG_ATTRIBUTE_WITH_DASHES_LIST[attributeLowerCase]) {
+    return (0,external_lodash_namespaceObject.kebabCase)(SVG_ATTRIBUTE_WITH_DASHES_LIST[attributeLowerCase]);
+  } else if (SVG_ATTRIBUTES_WITH_COLONS[attributeLowerCase]) {
+    return SVG_ATTRIBUTES_WITH_COLONS[attributeLowerCase];
+  }
+
+  return attributeLowerCase;
 }
 /**
  * Returns the normal form of the style property name for HTML.
@@ -989,7 +1035,7 @@ function getNormalAttributeName(attribute) {
 
 
 function getNormalStylePropertyName(property) {
-  if ((0,external_lodash_namespaceObject.startsWith)(property, '--')) {
+  if (property.startsWith('--')) {
     return property;
   }
 
@@ -1064,7 +1110,7 @@ function renderElement(element, context) {
         children,
         ...wrapperProps
       } = props;
-      return renderNativeComponent((0,external_lodash_namespaceObject.isEmpty)(wrapperProps) ? null : 'div', { ...wrapperProps,
+      return renderNativeComponent(!Object.keys(wrapperProps).length ? null : 'div', { ...wrapperProps,
         dangerouslySetInnerHTML: {
           __html: children
         }
@@ -1117,7 +1163,11 @@ function renderNativeComponent(type, props, context) {
     // place of children. Ensure to omit so it is not assigned as attribute
     // as well.
     content = renderChildren(props.value, context, legacyContext);
-    props = (0,external_lodash_namespaceObject.omit)(props, 'value');
+    const {
+      value,
+      ...restProps
+    } = props;
+    props = restProps;
   } else if (props.dangerouslySetInnerHTML && typeof props.dangerouslySetInnerHTML.__html === 'string') {
     // Dangerous content is left unescaped.
     content = props.dangerouslySetInnerHTML.__html;
@@ -1182,7 +1232,7 @@ function renderComponent(Component, props, context) {
 function renderChildren(children, context) {
   let legacyContext = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
   let result = '';
-  children = (0,external_lodash_namespaceObject.castArray)(children);
+  children = Array.isArray(children) ? children : [children];
 
   for (let i = 0; i < children.length; i++) {
     const child = children[i];
@@ -1285,8 +1335,8 @@ function renderStyle(style) {
 
   return result;
 }
-/* harmony default export */ var serialize = (renderElement);
-//# sourceMappingURL=serialize.js.map
+/* harmony default export */ const serialize = (renderElement);
+
 ;// CONCATENATED MODULE: ./packages/element/build-module/index.js
 
 
@@ -1295,7 +1345,7 @@ function renderStyle(style) {
 
 
 
-//# sourceMappingURL=index.js.map
+
 (window.wp = window.wp || {}).element = __webpack_exports__;
 /******/ })()
 ;

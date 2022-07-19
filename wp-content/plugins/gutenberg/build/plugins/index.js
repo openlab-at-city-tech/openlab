@@ -1,8 +1,8 @@
-/******/ (function() { // webpackBootstrap
+/******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 9588:
-/***/ (function(module) {
+/***/ 9756:
+/***/ ((module) => {
 
 /**
  * Memize options object.
@@ -197,72 +197,70 @@ module.exports = memize;
 /******/ 	
 /************************************************************************/
 /******/ 	/* webpack/runtime/compat get default export */
-/******/ 	!function() {
+/******/ 	(() => {
 /******/ 		// getDefaultExport function for compatibility with non-harmony modules
-/******/ 		__webpack_require__.n = function(module) {
+/******/ 		__webpack_require__.n = (module) => {
 /******/ 			var getter = module && module.__esModule ?
-/******/ 				function() { return module['default']; } :
-/******/ 				function() { return module; };
+/******/ 				() => (module['default']) :
+/******/ 				() => (module);
 /******/ 			__webpack_require__.d(getter, { a: getter });
 /******/ 			return getter;
 /******/ 		};
-/******/ 	}();
+/******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/define property getters */
-/******/ 	!function() {
+/******/ 	(() => {
 /******/ 		// define getter functions for harmony exports
-/******/ 		__webpack_require__.d = function(exports, definition) {
+/******/ 		__webpack_require__.d = (exports, definition) => {
 /******/ 			for(var key in definition) {
 /******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
 /******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
 /******/ 				}
 /******/ 			}
 /******/ 		};
-/******/ 	}();
+/******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
-/******/ 	!function() {
-/******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
-/******/ 	}();
+/******/ 	(() => {
+/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/make namespace object */
-/******/ 	!function() {
+/******/ 	(() => {
 /******/ 		// define __esModule on exports
-/******/ 		__webpack_require__.r = function(exports) {
+/******/ 		__webpack_require__.r = (exports) => {
 /******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
 /******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 /******/ 			}
 /******/ 			Object.defineProperty(exports, '__esModule', { value: true });
 /******/ 		};
-/******/ 	}();
+/******/ 	})();
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be in strict mode.
-!function() {
+(() => {
 "use strict";
 // ESM COMPAT FLAG
 __webpack_require__.r(__webpack_exports__);
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
-  "PluginArea": function() { return /* reexport */ plugin_area; },
-  "getPlugin": function() { return /* reexport */ getPlugin; },
-  "getPlugins": function() { return /* reexport */ getPlugins; },
-  "registerPlugin": function() { return /* reexport */ registerPlugin; },
-  "unregisterPlugin": function() { return /* reexport */ unregisterPlugin; },
-  "withPluginContext": function() { return /* reexport */ withPluginContext; }
+  "PluginArea": () => (/* reexport */ plugin_area),
+  "getPlugin": () => (/* reexport */ getPlugin),
+  "getPlugins": () => (/* reexport */ getPlugins),
+  "registerPlugin": () => (/* reexport */ registerPlugin),
+  "unregisterPlugin": () => (/* reexport */ unregisterPlugin),
+  "withPluginContext": () => (/* reexport */ withPluginContext)
 });
 
 ;// CONCATENATED MODULE: external ["wp","element"]
-var external_wp_element_namespaceObject = window["wp"]["element"];
-;// CONCATENATED MODULE: external "lodash"
-var external_lodash_namespaceObject = window["lodash"];
+const external_wp_element_namespaceObject = window["wp"]["element"];
 // EXTERNAL MODULE: ./node_modules/memize/index.js
-var memize = __webpack_require__(9588);
+var memize = __webpack_require__(9756);
 var memize_default = /*#__PURE__*/__webpack_require__.n(memize);
 ;// CONCATENATED MODULE: external ["wp","hooks"]
-var external_wp_hooks_namespaceObject = window["wp"]["hooks"];
+const external_wp_hooks_namespaceObject = window["wp"]["hooks"];
 ;// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/extends.js
 function _extends() {
   _extends = Object.assign || function (target) {
@@ -282,7 +280,7 @@ function _extends() {
   return _extends.apply(this, arguments);
 }
 ;// CONCATENATED MODULE: external ["wp","compose"]
-var external_wp_compose_namespaceObject = window["wp"]["compose"];
+const external_wp_compose_namespaceObject = window["wp"]["compose"];
 ;// CONCATENATED MODULE: ./packages/plugins/build-module/components/plugin-context/index.js
 
 
@@ -314,9 +312,49 @@ const {
 const withPluginContext = mapContextToProps => (0,external_wp_compose_namespaceObject.createHigherOrderComponent)(OriginalComponent => {
   return props => (0,external_wp_element_namespaceObject.createElement)(Consumer, null, context => (0,external_wp_element_namespaceObject.createElement)(OriginalComponent, _extends({}, props, mapContextToProps(context, props))));
 }, 'withPluginContext');
-//# sourceMappingURL=index.js.map
+
+;// CONCATENATED MODULE: ./packages/plugins/build-module/components/plugin-error-boundary/index.js
+/**
+ * WordPress dependencies
+ */
+
+class PluginErrorBoundary extends external_wp_element_namespaceObject.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      hasError: false
+    };
+  }
+
+  static getDerivedStateFromError() {
+    return {
+      hasError: true
+    };
+  }
+
+  componentDidCatch(error) {
+    const {
+      name,
+      onError
+    } = this.props;
+
+    if (onError) {
+      onError(name, error);
+    }
+  }
+
+  render() {
+    if (!this.state.hasError) {
+      return this.props.children;
+    }
+
+    return null;
+  }
+
+}
+
 ;// CONCATENATED MODULE: external ["wp","primitives"]
-var external_wp_primitives_namespaceObject = window["wp"]["primitives"];
+const external_wp_primitives_namespaceObject = window["wp"]["primitives"];
 ;// CONCATENATED MODULE: ./packages/icons/build-module/library/plugins.js
 
 
@@ -330,18 +368,13 @@ const plugins = (0,external_wp_element_namespaceObject.createElement)(external_w
 }, (0,external_wp_element_namespaceObject.createElement)(external_wp_primitives_namespaceObject.Path, {
   d: "M10.5 4v4h3V4H15v4h1.5a1 1 0 011 1v4l-3 4v2a1 1 0 01-1 1h-3a1 1 0 01-1-1v-2l-3-4V9a1 1 0 011-1H9V4h1.5zm.5 12.5v2h2v-2l3-4v-3H8v3l3 4z"
 }));
-/* harmony default export */ var library_plugins = (plugins);
-//# sourceMappingURL=plugins.js.map
+/* harmony default export */ const library_plugins = (plugins);
+
 ;// CONCATENATED MODULE: ./packages/plugins/build-module/api/index.js
 /* eslint no-console: [ 'error', { allow: [ 'error' ] } ] */
 
 /**
  * WordPress dependencies
- */
-
-
-/**
- * External dependencies
  */
 
 
@@ -372,9 +405,9 @@ const api_plugins = {};
 /**
  * Registers a plugin to the editor.
  *
- * @param {string}   name     A string identifying the plugin.Must be
- *                            unique across all registered plugins.
- * @param {WPPlugin} settings The settings for this plugin.
+ * @param {string}                 name     A string identifying the plugin.Must be
+ *                                          unique across all registered plugins.
+ * @param {Omit<WPPlugin, 'name'>} settings The settings for this plugin.
  *
  * @example
  * ```js
@@ -473,7 +506,7 @@ function registerPlugin(name, settings) {
     scope
   } = settings;
 
-  if (!(0,external_lodash_namespaceObject.isFunction)(render)) {
+  if (typeof render !== 'function') {
     console.error('The "render" property must be specified and must be a valid function.');
     return null;
   }
@@ -557,14 +590,13 @@ function getPlugin(name) {
 function getPlugins(scope) {
   return Object.values(api_plugins).filter(plugin => plugin.scope === scope);
 }
-//# sourceMappingURL=index.js.map
+
 ;// CONCATENATED MODULE: ./packages/plugins/build-module/components/plugin-area/index.js
 
 
 /**
  * External dependencies
  */
-
 
 /**
  * WordPress dependencies
@@ -575,6 +607,7 @@ function getPlugins(scope) {
 /**
  * Internal dependencies
  */
+
 
 
 
@@ -628,7 +661,7 @@ class PluginArea extends external_wp_element_namespaceObject.Component {
 
   getCurrentPluginsState() {
     return {
-      plugins: (0,external_lodash_namespaceObject.map)(getPlugins(this.props.scope), _ref => {
+      plugins: getPlugins(this.props.scope).map(_ref => {
         let {
           icon,
           name,
@@ -661,7 +694,7 @@ class PluginArea extends external_wp_element_namespaceObject.Component {
       style: {
         display: 'none'
       }
-    }, (0,external_lodash_namespaceObject.map)(this.state.plugins, _ref2 => {
+    }, this.state.plugins.map(_ref2 => {
       let {
         context,
         Plugin
@@ -669,23 +702,27 @@ class PluginArea extends external_wp_element_namespaceObject.Component {
       return (0,external_wp_element_namespaceObject.createElement)(Provider, {
         key: context.name,
         value: context
-      }, (0,external_wp_element_namespaceObject.createElement)(Plugin, null));
+      }, (0,external_wp_element_namespaceObject.createElement)(PluginErrorBoundary, {
+        name: context.name,
+        onError: this.props.onError
+      }, (0,external_wp_element_namespaceObject.createElement)(Plugin, null)));
     }));
   }
 
 }
 
-/* harmony default export */ var plugin_area = (PluginArea);
-//# sourceMappingURL=index.js.map
+/* harmony default export */ const plugin_area = (PluginArea);
+
 ;// CONCATENATED MODULE: ./packages/plugins/build-module/components/index.js
 
 
-//# sourceMappingURL=index.js.map
+
 ;// CONCATENATED MODULE: ./packages/plugins/build-module/index.js
 
 
-//# sourceMappingURL=index.js.map
-}();
+
+})();
+
 (window.wp = window.wp || {}).plugins = __webpack_exports__;
 /******/ })()
 ;

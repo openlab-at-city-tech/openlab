@@ -1,36 +1,48 @@
-/******/ (function() { // webpackBootstrap
+/******/ (() => { // webpackBootstrap
 /******/ 	"use strict";
 /******/ 	// The require scope
 /******/ 	var __webpack_require__ = {};
 /******/ 	
 /************************************************************************/
+/******/ 	/* webpack/runtime/compat get default export */
+/******/ 	(() => {
+/******/ 		// getDefaultExport function for compatibility with non-harmony modules
+/******/ 		__webpack_require__.n = (module) => {
+/******/ 			var getter = module && module.__esModule ?
+/******/ 				() => (module['default']) :
+/******/ 				() => (module);
+/******/ 			__webpack_require__.d(getter, { a: getter });
+/******/ 			return getter;
+/******/ 		};
+/******/ 	})();
+/******/ 	
 /******/ 	/* webpack/runtime/define property getters */
-/******/ 	!function() {
+/******/ 	(() => {
 /******/ 		// define getter functions for harmony exports
-/******/ 		__webpack_require__.d = function(exports, definition) {
+/******/ 		__webpack_require__.d = (exports, definition) => {
 /******/ 			for(var key in definition) {
 /******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
 /******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
 /******/ 				}
 /******/ 			}
 /******/ 		};
-/******/ 	}();
+/******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
-/******/ 	!function() {
-/******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
-/******/ 	}();
+/******/ 	(() => {
+/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/make namespace object */
-/******/ 	!function() {
+/******/ 	(() => {
 /******/ 		// define __esModule on exports
-/******/ 		__webpack_require__.r = function(exports) {
+/******/ 		__webpack_require__.r = (exports) => {
 /******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
 /******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 /******/ 			}
 /******/ 			Object.defineProperty(exports, '__esModule', { value: true });
 /******/ 		};
-/******/ 	}();
+/******/ 	})();
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
@@ -39,53 +51,54 @@ __webpack_require__.r(__webpack_exports__);
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
-  "__unstableStripHTML": function() { return /* reexport */ stripHTML; },
-  "computeCaretRect": function() { return /* reexport */ computeCaretRect; },
-  "documentHasSelection": function() { return /* reexport */ documentHasSelection; },
-  "documentHasTextSelection": function() { return /* reexport */ documentHasTextSelection; },
-  "documentHasUncollapsedSelection": function() { return /* reexport */ documentHasUncollapsedSelection; },
-  "focus": function() { return /* binding */ build_module_focus; },
-  "getFilesFromDataTransfer": function() { return /* reexport */ getFilesFromDataTransfer; },
-  "getOffsetParent": function() { return /* reexport */ getOffsetParent; },
-  "getPhrasingContentSchema": function() { return /* reexport */ getPhrasingContentSchema; },
-  "getRectangleFromRange": function() { return /* reexport */ getRectangleFromRange; },
-  "getScrollContainer": function() { return /* reexport */ getScrollContainer; },
-  "insertAfter": function() { return /* reexport */ insertAfter; },
-  "isEmpty": function() { return /* reexport */ isEmpty; },
-  "isEntirelySelected": function() { return /* reexport */ isEntirelySelected; },
-  "isHorizontalEdge": function() { return /* reexport */ isHorizontalEdge; },
-  "isNumberInput": function() { return /* reexport */ isNumberInput; },
-  "isPhrasingContent": function() { return /* reexport */ isPhrasingContent; },
-  "isRTL": function() { return /* reexport */ isRTL; },
-  "isTextContent": function() { return /* reexport */ isTextContent; },
-  "isTextField": function() { return /* reexport */ isTextField; },
-  "isVerticalEdge": function() { return /* reexport */ isVerticalEdge; },
-  "placeCaretAtHorizontalEdge": function() { return /* reexport */ placeCaretAtHorizontalEdge; },
-  "placeCaretAtVerticalEdge": function() { return /* reexport */ placeCaretAtVerticalEdge; },
-  "remove": function() { return /* reexport */ remove; },
-  "removeInvalidHTML": function() { return /* reexport */ removeInvalidHTML; },
-  "replace": function() { return /* reexport */ replace; },
-  "replaceTag": function() { return /* reexport */ replaceTag; },
-  "safeHTML": function() { return /* reexport */ safeHTML; },
-  "unwrap": function() { return /* reexport */ unwrap; },
-  "wrap": function() { return /* reexport */ wrap; }
+  "__unstableStripHTML": () => (/* reexport */ stripHTML),
+  "computeCaretRect": () => (/* reexport */ computeCaretRect),
+  "documentHasSelection": () => (/* reexport */ documentHasSelection),
+  "documentHasTextSelection": () => (/* reexport */ documentHasTextSelection),
+  "documentHasUncollapsedSelection": () => (/* reexport */ documentHasUncollapsedSelection),
+  "focus": () => (/* binding */ build_module_focus),
+  "getFilesFromDataTransfer": () => (/* reexport */ getFilesFromDataTransfer),
+  "getOffsetParent": () => (/* reexport */ getOffsetParent),
+  "getPhrasingContentSchema": () => (/* reexport */ getPhrasingContentSchema),
+  "getRectangleFromRange": () => (/* reexport */ getRectangleFromRange),
+  "getScrollContainer": () => (/* reexport */ getScrollContainer),
+  "insertAfter": () => (/* reexport */ insertAfter),
+  "isEmpty": () => (/* reexport */ isEmpty),
+  "isEntirelySelected": () => (/* reexport */ isEntirelySelected),
+  "isFormElement": () => (/* reexport */ isFormElement),
+  "isHorizontalEdge": () => (/* reexport */ isHorizontalEdge),
+  "isNumberInput": () => (/* reexport */ isNumberInput),
+  "isPhrasingContent": () => (/* reexport */ isPhrasingContent),
+  "isRTL": () => (/* reexport */ isRTL),
+  "isTextContent": () => (/* reexport */ isTextContent),
+  "isTextField": () => (/* reexport */ isTextField),
+  "isVerticalEdge": () => (/* reexport */ isVerticalEdge),
+  "placeCaretAtHorizontalEdge": () => (/* reexport */ placeCaretAtHorizontalEdge),
+  "placeCaretAtVerticalEdge": () => (/* reexport */ placeCaretAtVerticalEdge),
+  "remove": () => (/* reexport */ remove),
+  "removeInvalidHTML": () => (/* reexport */ removeInvalidHTML),
+  "replace": () => (/* reexport */ replace),
+  "replaceTag": () => (/* reexport */ replaceTag),
+  "safeHTML": () => (/* reexport */ safeHTML),
+  "unwrap": () => (/* reexport */ unwrap),
+  "wrap": () => (/* reexport */ wrap)
 });
 
 // NAMESPACE OBJECT: ./packages/dom/build-module/focusable.js
 var focusable_namespaceObject = {};
 __webpack_require__.r(focusable_namespaceObject);
 __webpack_require__.d(focusable_namespaceObject, {
-  "find": function() { return find; }
+  "find": () => (find)
 });
 
 // NAMESPACE OBJECT: ./packages/dom/build-module/tabbable.js
 var tabbable_namespaceObject = {};
 __webpack_require__.r(tabbable_namespaceObject);
 __webpack_require__.d(tabbable_namespaceObject, {
-  "find": function() { return tabbable_find; },
-  "findNext": function() { return findNext; },
-  "findPrevious": function() { return findPrevious; },
-  "isTabbableIndex": function() { return isTabbableIndex; }
+  "find": () => (tabbable_find),
+  "findNext": () => (findNext),
+  "findPrevious": () => (findPrevious),
+  "isTabbableIndex": () => (isTabbableIndex)
 });
 
 ;// CONCATENATED MODULE: ./packages/dom/build-module/focusable.js
@@ -204,9 +217,9 @@ function find(context) {
     return true;
   });
 }
-//# sourceMappingURL=focusable.js.map
+
 ;// CONCATENATED MODULE: external "lodash"
-var external_lodash_namespaceObject = window["lodash"];
+const external_lodash_namespaceObject = window["lodash"];
 ;// CONCATENATED MODULE: ./packages/dom/build-module/tabbable.js
 /**
  * External dependencies
@@ -376,11 +389,18 @@ function tabbable_find(context) {
  *
  * @param {Element} element The focusable element before which to look. Defaults
  *                          to the active element.
+ *
+ * @return {Element|undefined} Preceding tabbable element.
  */
 
 function findPrevious(element) {
   const focusables = find(element.ownerDocument.body);
-  const index = focusables.indexOf(element); // Remove all focusables after and including `element`.
+  const index = focusables.indexOf(element);
+
+  if (index === -1) {
+    return undefined;
+  } // Remove all focusables after and including `element`.
+
 
   focusables.length = index;
   return (0,external_lodash_namespaceObject.last)(filterTabbable(focusables));
@@ -399,12 +419,12 @@ function findNext(element) {
   const remaining = focusables.slice(index + 1);
   return (0,external_lodash_namespaceObject.first)(filterTabbable(remaining));
 }
-//# sourceMappingURL=tabbable.js.map
+
 ;// CONCATENATED MODULE: ./packages/dom/build-module/utils/assert-is-defined.js
 function assertIsDefined(val, name) {
   if (false) {}
 }
-//# sourceMappingURL=assert-is-defined.js.map
+
 ;// CONCATENATED MODULE: ./packages/dom/build-module/dom/get-rectangle-from-range.js
 /**
  * Internal dependencies
@@ -507,7 +527,7 @@ function getRectangleFromRange(range) {
 
   return rect;
 }
-//# sourceMappingURL=get-rectangle-from-range.js.map
+
 ;// CONCATENATED MODULE: ./packages/dom/build-module/dom/compute-caret-rect.js
 /**
  * Internal dependencies
@@ -533,7 +553,7 @@ function computeCaretRect(win) {
 
   return getRectangleFromRange(range);
 }
-//# sourceMappingURL=compute-caret-rect.js.map
+
 ;// CONCATENATED MODULE: ./packages/dom/build-module/dom/document-has-text-selection.js
 /**
  * Internal dependencies
@@ -558,7 +578,7 @@ function documentHasTextSelection(doc) {
   const range = selection.rangeCount ? selection.getRangeAt(0) : null;
   return !!range && !range.collapsed;
 }
-//# sourceMappingURL=document-has-text-selection.js.map
+
 ;// CONCATENATED MODULE: ./packages/dom/build-module/dom/is-html-input-element.js
 /* eslint-disable jsdoc/valid-types */
 
@@ -568,9 +588,9 @@ function documentHasTextSelection(doc) {
  */
 function isHTMLInputElement(node) {
   /* eslint-enable jsdoc/valid-types */
-  return !!node && node.nodeName === 'INPUT';
+  return (node === null || node === void 0 ? void 0 : node.nodeName) === 'INPUT';
 }
-//# sourceMappingURL=is-html-input-element.js.map
+
 ;// CONCATENATED MODULE: ./packages/dom/build-module/dom/is-text-field.js
 /**
  * Internal dependencies
@@ -590,33 +610,12 @@ function isHTMLInputElement(node) {
 
 function isTextField(node) {
   /* eslint-enable jsdoc/valid-types */
-  const nonTextInputs = ['button', 'checkbox', 'hidden', 'file', 'radio', 'image', 'range', 'reset', 'submit', 'number'];
+  const nonTextInputs = ['button', 'checkbox', 'hidden', 'file', 'radio', 'image', 'range', 'reset', 'submit', 'number', 'email', 'time'];
   return isHTMLInputElement(node) && node.type && !nonTextInputs.includes(node.type) || node.nodeName === 'TEXTAREA' ||
   /** @type {HTMLElement} */
   node.contentEditable === 'true';
 }
-//# sourceMappingURL=is-text-field.js.map
-;// CONCATENATED MODULE: ./packages/dom/build-module/dom/is-number-input.js
-/**
- * Internal dependencies
- */
 
-/* eslint-disable jsdoc/valid-types */
-
-/**
- * Check whether the given element is an input field of type number
- * and has a valueAsNumber
- *
- * @param {Node} node The HTML node.
- *
- * @return {node is HTMLInputElement} True if the node is input and holds a number.
- */
-
-function isNumberInput(node) {
-  /* eslint-enable jsdoc/valid-types */
-  return isHTMLInputElement(node) && node.type === 'number' && !!node.valueAsNumber;
-}
-//# sourceMappingURL=is-number-input.js.map
 ;// CONCATENATED MODULE: ./packages/dom/build-module/dom/input-field-has-uncollapsed-selection.js
 /**
  * Internal dependencies
@@ -624,13 +623,17 @@ function isNumberInput(node) {
 
 
 /**
- * Check whether the given element, assumed an input field or textarea,
- * contains a (uncollapsed) selection of text.
+ * Check whether the given input field or textarea contains a (uncollapsed)
+ * selection of text.
  *
- * Note: this is perhaps an abuse of the term "selection", since these elements
- * manage selection differently and aren't covered by Selection#collapsed.
+ * CAVEAT: Only specific text-based HTML inputs support the selection APIs
+ * needed to determine whether they have a collapsed or uncollapsed selection.
+ * This function defaults to returning `true` when the selection cannot be
+ * inspected, such as with `<input type="time">`. The rationale is that this
+ * should cause the block editor to defer to the browser's native selection
+ * handling (e.g. copying and pasting), thereby reducing friction for the user.
  *
- * See: https://developer.mozilla.org/en-US/docs/Web/API/Window/getSelection#Related_objects.
+ * See: https://html.spec.whatwg.org/multipage/input.html#do-not-apply
  *
  * @param {Element} element The HTML element.
  *
@@ -638,9 +641,12 @@ function isNumberInput(node) {
  */
 
 function inputFieldHasUncollapsedSelection(element) {
-  if (!isTextField(element) && !isNumberInput(element)) {
+  if (!isHTMLInputElement(element) && !isTextField(element)) {
     return false;
-  }
+  } // Safari throws a type error when trying to get `selectionStart` and
+  // `selectionEnd` on non-text <input> elements, so a try/catch construct is
+  // necessary.
+
 
   try {
     const {
@@ -649,20 +655,19 @@ function inputFieldHasUncollapsedSelection(element) {
     } =
     /** @type {HTMLInputElement | HTMLTextAreaElement} */
     element;
-    return selectionStart !== null && selectionStart !== selectionEnd;
+    return (// `null` means the input type doesn't implement selection, thus we
+      // cannot determine whether the selection is collapsed, so we
+      // default to true.
+      selectionStart === null || // when not null, compare the two points
+      selectionStart !== selectionEnd
+    );
   } catch (error) {
-    // Safari throws an exception when trying to get `selectionStart`
-    // on non-text <input> elements (which, understandably, don't
-    // have the text selection API). We catch this via a try/catch
-    // block, as opposed to a more explicit check of the element's
-    // input types, because of Safari's non-standard behavior. This
-    // also means we don't have to worry about the list of input
-    // types that support `selectionStart` changing as the HTML spec
-    // evolves over time.
-    return false;
+    // This is Safari's way of saying that the input type doesn't implement
+    // selection, so we default to true.
+    return true;
   }
 }
-//# sourceMappingURL=input-field-has-uncollapsed-selection.js.map
+
 ;// CONCATENATED MODULE: ./packages/dom/build-module/dom/document-has-uncollapsed-selection.js
 /**
  * Internal dependencies
@@ -670,19 +675,19 @@ function inputFieldHasUncollapsedSelection(element) {
 
 
 /**
- * Check whether the current document has any sort of selection. This includes
- * ranges of text across elements and any selection inside `<input>` and
- * `<textarea>` elements.
+ * Check whether the current document has any sort of (uncollapsed) selection.
+ * This includes ranges of text across elements and any selection inside
+ * textual `<input>` and `<textarea>` elements.
  *
  * @param {Document} doc The document to check.
  *
- * @return {boolean} Whether there is any sort of "selection" in the document.
+ * @return {boolean} Whether there is any recognizable text selection in the document.
  */
 
 function documentHasUncollapsedSelection(doc) {
   return documentHasTextSelection(doc) || !!doc.activeElement && inputFieldHasUncollapsedSelection(doc.activeElement);
 }
-//# sourceMappingURL=document-has-uncollapsed-selection.js.map
+
 ;// CONCATENATED MODULE: ./packages/dom/build-module/dom/document-has-selection.js
 /**
  * Internal dependencies
@@ -691,8 +696,8 @@ function documentHasUncollapsedSelection(doc) {
 
 
 /**
- * Check whether the current document has a selection. This checks for both
- * focus in an input field and general text selection.
+ * Check whether the current document has a selection. This includes focus in
+ * input fields, textareas, and general rich-text selection.
  *
  * @param {Document} doc The document to check.
  *
@@ -700,9 +705,9 @@ function documentHasUncollapsedSelection(doc) {
  */
 
 function documentHasSelection(doc) {
-  return !!doc.activeElement && (isTextField(doc.activeElement) || isNumberInput(doc.activeElement) || documentHasTextSelection(doc));
+  return !!doc.activeElement && (isHTMLInputElement(doc.activeElement) || isTextField(doc.activeElement) || documentHasTextSelection(doc));
 }
-//# sourceMappingURL=document-has-selection.js.map
+
 ;// CONCATENATED MODULE: ./packages/dom/build-module/dom/get-computed-style.js
 /**
  * Internal dependencies
@@ -720,7 +725,7 @@ function getComputedStyle(element) {
   assertIsDefined(element.ownerDocument.defaultView, 'element.ownerDocument.defaultView');
   return element.ownerDocument.defaultView.getComputedStyle(element);
 }
-//# sourceMappingURL=get-computed-style.js.map
+
 ;// CONCATENATED MODULE: ./packages/dom/build-module/dom/get-scroll-container.js
 /**
  * Internal dependencies
@@ -749,14 +754,14 @@ function getScrollContainer(node) {
     if (/(auto|scroll)/.test(overflowY)) {
       return node;
     }
-  } // Continue traversing
+  } // Continue traversing.
 
 
   return getScrollContainer(
   /** @type {Element} */
   node.parentNode);
 }
-//# sourceMappingURL=get-scroll-container.js.map
+
 ;// CONCATENATED MODULE: ./packages/dom/build-module/dom/get-offset-parent.js
 /**
  * Internal dependencies
@@ -797,7 +802,7 @@ function getOffsetParent(node) {
   /** @type {Element} */
   closestElement).position !== 'static') {
     return closestElement;
-  } // offsetParent is undocumented/draft
+  } // offsetParent is undocumented/draft.
 
 
   return (
@@ -805,7 +810,7 @@ function getOffsetParent(node) {
     closestElement.offsetParent
   );
 }
-//# sourceMappingURL=get-offset-parent.js.map
+
 ;// CONCATENATED MODULE: ./packages/dom/build-module/dom/is-input-or-text-area.js
 /* eslint-disable jsdoc/valid-types */
 
@@ -817,7 +822,7 @@ function isInputOrTextArea(element) {
   /* eslint-enable jsdoc/valid-types */
   return element.tagName === 'INPUT' || element.tagName === 'TEXTAREA';
 }
-//# sourceMappingURL=is-input-or-text-area.js.map
+
 ;// CONCATENATED MODULE: ./packages/dom/build-module/dom/is-entirely-selected.js
 /**
  * Internal dependencies
@@ -900,7 +905,29 @@ function isDeepChild(query, container, propName) {
 
   return false;
 }
-//# sourceMappingURL=is-entirely-selected.js.map
+
+;// CONCATENATED MODULE: ./packages/dom/build-module/dom/is-form-element.js
+/**
+ * Internal dependencies
+ */
+
+/**
+ *
+ * Detects if element is a form element.
+ *
+ * @param {Element} element The element to check.
+ *
+ * @return {boolean} True if form element and false otherwise.
+ */
+
+function isFormElement(element) {
+  const {
+    tagName
+  } = element;
+  const checkForInputTextarea = isInputOrTextArea(element);
+  return checkForInputTextarea || tagName === 'BUTTON' || tagName === 'SELECT';
+}
+
 ;// CONCATENATED MODULE: ./packages/dom/build-module/dom/is-rtl.js
 /**
  * Internal dependencies
@@ -917,7 +944,7 @@ function isDeepChild(query, container, propName) {
 function isRTL(element) {
   return getComputedStyle(element).direction === 'rtl';
 }
-//# sourceMappingURL=is-rtl.js.map
+
 ;// CONCATENATED MODULE: ./packages/dom/build-module/dom/get-range-height.js
 /**
  * Gets the height of the range without ignoring zero width rectangles, which
@@ -947,7 +974,7 @@ function getRangeHeight(range) {
   }));
   return lowestBottom - highestTop;
 }
-//# sourceMappingURL=get-range-height.js.map
+
 ;// CONCATENATED MODULE: ./packages/dom/build-module/dom/is-selection-forward.js
 /**
  * Internal dependencies
@@ -999,7 +1026,7 @@ function isSelectionForward(selection) {
 
   return true;
 }
-//# sourceMappingURL=is-selection-forward.js.map
+
 ;// CONCATENATED MODULE: ./packages/dom/build-module/dom/caret-range-from-point.js
 /**
  * Polyfill.
@@ -1038,7 +1065,7 @@ function caretRangeFromPoint(doc, x, y) {
  * @typedef {{caretPositionFromPoint?: (x: number, y: number)=> CaretPosition | null} & Document } DocumentMaybeWithCaretPositionFromPoint
  * @typedef {{ readonly offset: number; readonly offsetNode: Node; getClientRect(): DOMRect | null; }} CaretPosition
  */
-//# sourceMappingURL=caret-range-from-point.js.map
+
 ;// CONCATENATED MODULE: ./packages/dom/build-module/dom/hidden-caret-range-from-point.js
 /**
  * Internal dependencies
@@ -1075,7 +1102,7 @@ function hiddenCaretRangeFromPoint(doc, x, y, container) {
   container.style.position = originalPosition;
   return range;
 }
-//# sourceMappingURL=hidden-caret-range-from-point.js.map
+
 ;// CONCATENATED MODULE: ./packages/dom/build-module/dom/is-edge.js
 /**
  * Internal dependencies
@@ -1196,7 +1223,7 @@ function isEdge(container, isReverse) {
   const hasHorizontalDiff = Math.abs(horizontalDiff) <= 1;
   return onlyVertical ? hasVerticalDiff : hasVerticalDiff && hasHorizontalDiff;
 }
-//# sourceMappingURL=is-edge.js.map
+
 ;// CONCATENATED MODULE: ./packages/dom/build-module/dom/is-horizontal-edge.js
 /**
  * Internal dependencies
@@ -1214,7 +1241,40 @@ function isEdge(container, isReverse) {
 function isHorizontalEdge(container, isReverse) {
   return isEdge(container, isReverse);
 }
-//# sourceMappingURL=is-horizontal-edge.js.map
+
+;// CONCATENATED MODULE: external ["wp","deprecated"]
+const external_wp_deprecated_namespaceObject = window["wp"]["deprecated"];
+var external_wp_deprecated_default = /*#__PURE__*/__webpack_require__.n(external_wp_deprecated_namespaceObject);
+;// CONCATENATED MODULE: ./packages/dom/build-module/dom/is-number-input.js
+/**
+ * WordPress dependencies
+ */
+
+/**
+ * Internal dependencies
+ */
+
+
+/* eslint-disable jsdoc/valid-types */
+
+/**
+ * Check whether the given element is an input field of type number.
+ *
+ * @param {Node} node The HTML node.
+ *
+ * @return {node is HTMLInputElement} True if the node is number input.
+ */
+
+function isNumberInput(node) {
+  external_wp_deprecated_default()('wp.dom.isNumberInput', {
+    since: '6.1',
+    version: '6.5'
+  });
+  /* eslint-enable jsdoc/valid-types */
+
+  return isHTMLInputElement(node) && node.type === 'number' && !isNaN(node.valueAsNumber);
+}
+
 ;// CONCATENATED MODULE: ./packages/dom/build-module/dom/is-vertical-edge.js
 /**
  * Internal dependencies
@@ -1232,7 +1292,7 @@ function isHorizontalEdge(container, isReverse) {
 function isVerticalEdge(container, isReverse) {
   return isEdge(container, isReverse, true);
 }
-//# sourceMappingURL=is-vertical-edge.js.map
+
 ;// CONCATENATED MODULE: ./packages/dom/build-module/dom/place-caret-at-edge.js
 /**
  * Internal dependencies
@@ -1328,7 +1388,7 @@ function placeCaretAtEdge(container, isReverse, x) {
   selection.removeAllRanges();
   selection.addRange(range);
 }
-//# sourceMappingURL=place-caret-at-edge.js.map
+
 ;// CONCATENATED MODULE: ./packages/dom/build-module/dom/place-caret-at-horizontal-edge.js
 /**
  * Internal dependencies
@@ -1344,7 +1404,7 @@ function placeCaretAtEdge(container, isReverse, x) {
 function placeCaretAtHorizontalEdge(container, isReverse) {
   return placeCaretAtEdge(container, isReverse, undefined);
 }
-//# sourceMappingURL=place-caret-at-horizontal-edge.js.map
+
 ;// CONCATENATED MODULE: ./packages/dom/build-module/dom/place-caret-at-vertical-edge.js
 /**
  * Internal dependencies
@@ -1361,7 +1421,7 @@ function placeCaretAtHorizontalEdge(container, isReverse) {
 function placeCaretAtVerticalEdge(container, isReverse, rect) {
   return placeCaretAtEdge(container, isReverse, rect === null || rect === void 0 ? void 0 : rect.left);
 }
-//# sourceMappingURL=place-caret-at-vertical-edge.js.map
+
 ;// CONCATENATED MODULE: ./packages/dom/build-module/dom/insert-after.js
 /**
  * Internal dependencies
@@ -1380,7 +1440,7 @@ function insertAfter(newNode, referenceNode) {
   assertIsDefined(referenceNode.parentNode, 'referenceNode.parentNode');
   referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
 }
-//# sourceMappingURL=insert-after.js.map
+
 ;// CONCATENATED MODULE: ./packages/dom/build-module/dom/remove.js
 /**
  * Internal dependencies
@@ -1397,7 +1457,7 @@ function remove(node) {
   assertIsDefined(node.parentNode, 'node.parentNode');
   node.parentNode.removeChild(node);
 }
-//# sourceMappingURL=remove.js.map
+
 ;// CONCATENATED MODULE: ./packages/dom/build-module/dom/replace.js
 /**
  * Internal dependencies
@@ -1418,7 +1478,7 @@ function replace(processedNode, newNode) {
   insertAfter(newNode, processedNode.parentNode);
   remove(processedNode);
 }
-//# sourceMappingURL=replace.js.map
+
 ;// CONCATENATED MODULE: ./packages/dom/build-module/dom/unwrap.js
 /**
  * Internal dependencies
@@ -1442,7 +1502,7 @@ function unwrap(node) {
 
   parent.removeChild(node);
 }
-//# sourceMappingURL=unwrap.js.map
+
 ;// CONCATENATED MODULE: ./packages/dom/build-module/dom/replace-tag.js
 /**
  * Internal dependencies
@@ -1468,7 +1528,7 @@ function replaceTag(node, tagName) {
   node.parentNode.replaceChild(newNode, node);
   return newNode;
 }
-//# sourceMappingURL=replace-tag.js.map
+
 ;// CONCATENATED MODULE: ./packages/dom/build-module/dom/wrap.js
 /**
  * Internal dependencies
@@ -1486,7 +1546,7 @@ function wrap(newNode, referenceNode) {
   referenceNode.parentNode.insertBefore(newNode, referenceNode);
   newNode.appendChild(referenceNode);
 }
-//# sourceMappingURL=wrap.js.map
+
 ;// CONCATENATED MODULE: ./packages/dom/build-module/dom/safe-html.js
 /**
  * Internal dependencies
@@ -1530,7 +1590,7 @@ function safeHTML(html) {
 
   return body.innerHTML;
 }
-//# sourceMappingURL=safe-html.js.map
+
 ;// CONCATENATED MODULE: ./packages/dom/build-module/dom/strip-html.js
 /**
  * Internal dependencies
@@ -1552,7 +1612,7 @@ function stripHTML(html) {
   doc.body.innerHTML = html;
   return doc.body.textContent || '';
 }
-//# sourceMappingURL=strip-html.js.map
+
 ;// CONCATENATED MODULE: ./packages/dom/build-module/dom/is-empty.js
 /**
  * Recursively checks if an element is empty. An element is not empty if it
@@ -1585,7 +1645,7 @@ function isEmpty(element) {
       return true;
   }
 }
-//# sourceMappingURL=is-empty.js.map
+
 ;// CONCATENATED MODULE: ./packages/dom/build-module/phrasing-content.js
 /**
  * External dependencies
@@ -1765,7 +1825,7 @@ function isTextContent(node) {
   const tag = node.nodeName.toLowerCase();
   return textContentSchema.hasOwnProperty(tag) || tag === 'span';
 }
-//# sourceMappingURL=phrasing-content.js.map
+
 ;// CONCATENATED MODULE: ./packages/dom/build-module/dom/is-element.js
 /* eslint-disable jsdoc/valid-types */
 
@@ -1777,7 +1837,7 @@ function isElement(node) {
   /* eslint-enable jsdoc/valid-types */
   return !!node && node.nodeType === node.ELEMENT_NODE;
 }
-//# sourceMappingURL=is-element.js.map
+
 ;// CONCATENATED MODULE: ./packages/dom/build-module/dom/clean-node-list.js
 /**
  * External dependencies
@@ -1793,6 +1853,8 @@ function isElement(node) {
 
 
 
+
+const noop = () => {};
 /* eslint-disable jsdoc/valid-types */
 
 /**
@@ -1818,6 +1880,7 @@ function isElement(node) {
  * @param {Schema}   schema   An array of functions that can mutate with the provided node.
  * @param {boolean}  inline   Whether to clean for inline mode.
  */
+
 
 function cleanNodeList(nodeList, doc, schema, inline) {
   Array.from(nodeList).forEach((
@@ -1870,7 +1933,7 @@ function cleanNodeList(nodeList, doc, schema, inline) {
                 className) => item.test(className);
               }
 
-              return external_lodash_namespaceObject.noop;
+              return noop;
             });
             Array.from(node.classList).forEach(name => {
               if (!mattchers.some(isMatch => isMatch(name))) {
@@ -1929,7 +1992,7 @@ function cleanNodeList(nodeList, doc, schema, inline) {
     }
   });
 }
-//# sourceMappingURL=clean-node-list.js.map
+
 ;// CONCATENATED MODULE: ./packages/dom/build-module/dom/remove-invalid-html.js
 /**
  * Internal dependencies
@@ -1951,7 +2014,7 @@ function removeInvalidHTML(HTML, schema, inline) {
   cleanNodeList(doc.body.childNodes, doc, schema, inline);
   return doc.body.innerHTML;
 }
-//# sourceMappingURL=remove-invalid-html.js.map
+
 ;// CONCATENATED MODULE: ./packages/dom/build-module/dom/index.js
 
 
@@ -1978,7 +2041,8 @@ function removeInvalidHTML(HTML, schema, inline) {
 
 
 
-//# sourceMappingURL=index.js.map
+
+
 ;// CONCATENATED MODULE: ./packages/dom/build-module/data-transfer.js
 /**
  * Gets all files from a DataTransfer object.
@@ -2005,7 +2069,7 @@ function getFilesFromDataTransfer(dataTransfer) {
   });
   return files;
 }
-//# sourceMappingURL=data-transfer.js.map
+
 ;// CONCATENATED MODULE: ./packages/dom/build-module/index.js
 /**
  * Internal dependencies
@@ -2024,7 +2088,7 @@ const build_module_focus = {
 
 
 
-//# sourceMappingURL=index.js.map
+
 (window.wp = window.wp || {}).dom = __webpack_exports__;
 /******/ })()
 ;

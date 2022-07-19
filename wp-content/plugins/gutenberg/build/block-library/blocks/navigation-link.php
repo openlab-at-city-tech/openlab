@@ -110,7 +110,7 @@ function gutenberg_block_core_navigation_link_build_css_font_sizes( $context ) {
  * @return string
  */
 function gutenberg_block_core_navigation_link_render_submenu_icon() {
-	return '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none" role="img" aria-hidden="true" focusable="false"><path d="M1.50002 4L6.00002 8L10.5 4" stroke-width="1.5"></path></svg>';
+	return '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true" focusable="false"><path d="M1.50002 4L6.00002 8L10.5 4" stroke-width="1.5"></path></svg>';
 }
 
 /**
@@ -193,36 +193,25 @@ function gutenberg_render_block_core_navigation_link( $attributes, $content, $bl
 		'<span class="wp-block-navigation-item__label">';
 
 	if ( isset( $attributes['label'] ) ) {
-		$html .= wp_kses(
-			$attributes['label'],
-			array(
-				'code'   => array(),
-				'em'     => array(),
-				'img'    => array(
-					'scale' => array(),
-					'class' => array(),
-					'style' => array(),
-					'src'   => array(),
-					'alt'   => array(),
-				),
-				's'      => array(),
-				'span'   => array(
-					'style' => array(),
-				),
-				'strong' => array(),
-			)
-		);
+		$html .= wp_kses_post( $attributes['label'] );
 	}
 
 	$html .= '</span>';
+
+	// Add description if available.
+	if ( ! empty( $attributes['description'] ) ) {
+		$html .= '<span class="wp-block-navigation-item__description">';
+		$html .= wp_kses_post( $attributes['description'] );
+		$html .= '</span>';
+	}
+
+	$html .= '</a>';
+	// End anchor tag content.
 
 	if ( isset( $block->context['showSubmenuIcon'] ) && $block->context['showSubmenuIcon'] && $has_submenu ) {
 		// The submenu icon can be hidden by a CSS rule on the Navigation Block.
 		$html .= '<span class="wp-block-navigation__submenu-icon">' . gutenberg_block_core_navigation_link_render_submenu_icon() . '</span>';
 	}
-
-	$html .= '</a>';
-	// End anchor tag content.
 
 	if ( $has_submenu ) {
 		$inner_blocks_html = '';

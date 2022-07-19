@@ -1,32 +1,32 @@
-/******/ (function() { // webpackBootstrap
+/******/ (() => { // webpackBootstrap
 /******/ 	"use strict";
 /******/ 	// The require scope
 /******/ 	var __webpack_require__ = {};
 /******/ 	
 /************************************************************************/
 /******/ 	/* webpack/runtime/define property getters */
-/******/ 	!function() {
+/******/ 	(() => {
 /******/ 		// define getter functions for harmony exports
-/******/ 		__webpack_require__.d = function(exports, definition) {
+/******/ 		__webpack_require__.d = (exports, definition) => {
 /******/ 			for(var key in definition) {
 /******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
 /******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
 /******/ 				}
 /******/ 			}
 /******/ 		};
-/******/ 	}();
+/******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
-/******/ 	!function() {
-/******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
-/******/ 	}();
+/******/ 	(() => {
+/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
-  "default": function() { return /* binding */ warning; }
+  "default": () => (/* binding */ warning)
 });
 
 ;// CONCATENATED MODULE: ./packages/warning/build-module/utils.js
@@ -37,7 +37,7 @@ __webpack_require__.d(__webpack_exports__, {
  * @type {Set<string>}
  */
 const logged = new Set();
-//# sourceMappingURL=utils.js.map
+
 ;// CONCATENATED MODULE: ./packages/warning/build-module/index.js
 /**
  * Internal dependencies
@@ -83,12 +83,12 @@ function warning(message) {
 
   try {
     throw Error(message);
-  } catch (x) {// do nothing
+  } catch (x) {// Do nothing.
   }
 
   logged.add(message);
 }
-//# sourceMappingURL=index.js.map
+
 (window.wp = window.wp || {}).warning = __webpack_exports__["default"];
 /******/ })()
 ;
