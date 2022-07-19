@@ -116,7 +116,7 @@ const mutations = {
 			// Check if the slideshow already exists in the store
 			const index = state.all.findIndex(slideshow => (slideshow.id === slideshows[key].id))
 			if (index > -1) {
-				
+
 				// If the two objects are not identical, replace with the new one
 				if (JSON.stringify(state.all[index]) !== JSON.stringify(slideshows[key])) {
 					Object.assign(state.all[index], slideshows[key])

@@ -82,7 +82,12 @@ class App
         preg_match('/Stable tag: ([0-9.:]+)/', $readme, $matches);
         self::$version = $matches[1];
 
+        // TODO: Remove this call for improving performance.
         self::$textDomain = $this->getPluginInfo('TextDomain');
+
+        if (empty(self::$textDomain)) {
+            self::$textDomain = 'metagallery';
+        }
     }
 
     /**

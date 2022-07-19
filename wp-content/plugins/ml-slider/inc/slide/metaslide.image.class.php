@@ -255,7 +255,7 @@ class MetaImageSlide extends MetaSlide
 
         // get some slide settings
         $thumb       = $this->get_thumb();
-        $slide_label = apply_filters("metaslider_image_slide_label", __("Image Slide", "ml-slider"), $this->slide, $this->settings);
+        $slide_label = apply_filters("metaslider_image_slide_label", esc_html__("Image Slide", "ml-slider"), $this->slide, $this->settings);
         $slide_type = get_post_meta($this->slide->ID, 'ml-slider_type', true);
         $attachment_id = $this->get_attachment_id();
 
@@ -266,10 +266,10 @@ class MetaImageSlide extends MetaSlide
         $edit_buttons = ob_get_clean();
 
         // slide row HTML
-        $row  = "<tr id='slide-{$this->slide->ID}' class='slide image flex responsive nivo coin' data-attachment-id='{$attachment_id}'>
+        $row  = "<tr id='slide-" . esc_attr($this->slide->ID) . "' class='slide image flex responsive nivo coin' data-attachment-id='" . esc_attr($attachment_id) . "'>
                     <td class='col-1'>
                         <div class='metaslider-ui-controls ui-sortable-handle rtl:pl-0 rtl:pr-3'>
-                        <h4 class='slide-details'>{$slide_label}</h4>";
+                        <h4 class='slide-details'>" . esc_html($slide_label) . "</h4>";
         if (metaslider_this_is_trash($this->slide)) {
             $row .= '<div class="row-actions trash-btns">';
             $row .= "<span class='untrash'>{$this->get_undelete_button_html()}</span>";
@@ -281,19 +281,19 @@ class MetaImageSlide extends MetaSlide
         }
         $row .= "</div>
                         <div class='metaslider-ui-inner'>
-                            <button class='update-image image-button' data-slide-type='{$slide_type}' data-button-text='" . __("Update slide image", "ml-slider") . "' title='" . esc_attr__("Update slide image", "ml-slider") . "' data-slide-id='{$this->slide->ID}' data-attachment-id='{$attachment_id}'>
-                                <div class='thumb' style='background-image: url({$thumb})'></div>
+                            <button class='update-image image-button' data-slide-type='" . esc_attr($slide_type) . "' data-button-text='" . esc_attr__("Update slide image", "ml-slider") . "' title='" . esc_attr__("Update slide image", "ml-slider") . "' data-slide-id='" . esc_attr($this->slide->ID) . "' data-attachment-id='" . esc_attr($attachment_id) . "'>
+                                <div class='thumb' style='background-image: url(" . esc_url($thumb) . ")'></div>
                             </button>
                         </div>
                     </td>
 					<td class='col-2'>".
                     // For now this is the entry point for a slide since you cant wrap around table elements.
-                    "<metaslider-slide id='{$this->slide->ID}' inline-template>
+                    "<metaslider-slide id='" . esc_attr($this->slide->ID) . "' inline-template>
                         <div class='metaslider-ui-inner flex flex-col h-full'>
                             " . $this->get_admin_slide_tabs_html() . "
-                            <input type='hidden' name='attachment[{$this->slide->ID}][type]' value='image' />
-                            <input type='hidden' class='menu_order' name='attachment[{$this->slide->ID}][menu_order]' value='{$this->slide->menu_order}' />
-                            <input type='hidden' name='resize_slide_id' data-slide_id='{$this->slide->ID}' data-width='{$this->settings['width']}' data-height='{$this->settings['height']}' />
+                            <input type='hidden' name='attachment[" . esc_attr($this->slide->ID) . "][type]' value='image' />
+                            <input type='hidden' class='menu_order' name='attachment[" . esc_attr($this->slide->ID) . "][menu_order]' value='" . esc_attr($this->slide->menu_order) . "' />
+                            <input type='hidden' name='resize_slide_id' data-slide_id='" . esc_attr($this->slide->ID) . "' data-width='" . esc_attr($this->settings['width']) . "' data-height='" . esc_attr($this->settings['height']) . "' />
 						</div>
 					</metaslider-slide>
                     </td>

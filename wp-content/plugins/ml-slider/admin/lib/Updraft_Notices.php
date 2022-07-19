@@ -201,7 +201,8 @@ abstract class Updraft_Notices_1_0
                     return $notice_data;
                 }
             } else {
-                $dismiss_time = $this->notices_content[$notice_id]['dismiss_time'];
+                $dismiss_time = isset($this->notices_content[$notice_id]['dismiss_time'])
+                    ? $this->notices_content[$notice_id]['dismiss_time'] : false;
                 $dismiss = $this->check_notice_dismissed($dismiss_time);
 
                 if (!$dismiss) {

@@ -66,24 +66,25 @@ class MetaSlider_Admin_Pages extends MetaSliderPlugin
 
         wp_register_script('metaslider-admin-script', METASLIDER_ADMIN_URL . 'assets/dist/js/admin.js', array('jquery'), METASLIDER_ASSETS_VERSION, true);
         wp_localize_script('metaslider-admin-script', 'metaslider', array(
-            'url' => __("URL", "ml-slider"),
-            'caption' => __("Caption", "ml-slider"),
-            'new_window' => __("New Window", "ml-slider"),
-            'confirm' => __("Please confirm that you would like to delete this slideshow.", "ml-slider"),
-            'restore_language' => __("Undo", "ml-slider"),
-            'restored_language' => __("Slide restored", "ml-slider"),
-            'deleted_language' => __("Slide deleted", "ml-slider"),
-            'success_language' => __("Success", "ml-slider"),
-            'copied_language' => __("Item was copied to your clipboard", "ml-slider"),
-            'click_to_undo_language' => __("Press to undo", "ml-slider"),
+            'url' => esc_html__("URL", "ml-slider"),
+            'caption' => esc_html__("Caption", "ml-slider"),
+            'new_window' => esc_html__("New Window", "ml-slider"),
+            'confirm' => esc_html__("Please confirm that you would like to delete this slideshow.", "ml-slider"),
+            'restore_language' => esc_html__("Undo", "ml-slider"),
+            'restored_language' => esc_html__("Slide restored", "ml-slider"),
+            'deleted_language' => esc_html__("Slide deleted", "ml-slider"),
+            'success_language' => esc_html__("Success", "ml-slider"),
+            'copied_language' => esc_html__("Item was copied to your clipboard", "ml-slider"),
+            'click_to_undo_language' => esc_html__("Press to undo", "ml-slider"),
             'ajaxurl' => admin_url('admin-ajax.php'),
-            'update_image' => __("Select replacement image", "ml-slider"),
+            'update_image' => esc_html__("Select replacement image", "ml-slider"),
             'resize_nonce' => wp_create_nonce('metaslider_resize'),
             'create_slide_nonce' => wp_create_nonce('metaslider_create_slide'),
             'delete_slide_nonce' => wp_create_nonce('metaslider_delete_slide'),
             'undelete_slide_nonce' => wp_create_nonce('metaslider_undelete_slide'),
             'update_slide_image_nonce' => wp_create_nonce('metaslider_update_slide_image'),
-            'useWithCaution' => __("Caution: This setting is for advanced developers only. If you're unsure, leave it checked.", "ml-slider")
+            'useWithCaution' => esc_html__("Caution: This setting is for advanced developers only. If you're unsure, leave it checked.", "ml-slider"),
+            'locale' => preg_replace('/[^a-z]/', '', get_locale()),
         ));
         wp_enqueue_script('metaslider-admin-script');
         do_action('metaslider_register_admin_scripts');
@@ -231,9 +232,12 @@ class MetaSlider_Admin_Pages extends MetaSliderPlugin
             $locale['']['plural_forms'] = $translations->headers['Plural-Forms'];
         }
 
-        foreach ($translations->entries as $msgid => $entry) {
-            $locale[$msgid] = $entry->translations;
+        if (isset($translations->entries) && ! empty($translations->entries)) {
+            foreach ($translations->entries as $msgid => $entry) {
+                $locale[$msgid] = $entry->translations;
+            }
         }
+
         return $locale;
     }
 
