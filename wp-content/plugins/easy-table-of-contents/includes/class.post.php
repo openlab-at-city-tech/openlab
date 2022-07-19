@@ -1,6 +1,6 @@
 <?php
 
-use function Easy_Plugins\Table_Of_Contents\TOCString\br2;
+use function Easy_Plugins\Table_Of_Contents\String\br2;
 
 class ezTOC_Post {
 
@@ -302,7 +302,7 @@ class ezTOC_Post {
 				// * @see wpautop()
 				// */
 				////$eligibleContent = str_replace( array( '<br>', '<br/>' ), array( '<br />' ), $eligibleContent );
-				//$eligibleContent = \Easy_Plugins\Table_Of_Contents\TOCString\force_balance_tags( $eligibleContent );
+				//$eligibleContent = \Easy_Plugins\Table_Of_Contents\String\force_balance_tags( $eligibleContent );
 
 				$this->extractExcludedNodes( $page, $content );
 
@@ -364,13 +364,13 @@ class ezTOC_Post {
 		$selectors = apply_filters( 'ez_toc_exclude_by_selector', array( '.ez-toc-exclude-headings' ), $content );
 
 		$nodes = $html->Find( implode( ',', $selectors ) );
+		if(isset($nodes['ids'])){
+			foreach ( $nodes['ids'] as $id ) {
 
-		foreach ( $nodes['ids'] as $id ) {
-
-			//$this->excludedNodes[ $page ][ $id ] = $html->Implode( $id, $tagFilterOptions );
-			array_push( $this->excludedNodes, $html->Implode( $id, $tagFilterOptions ) );
+				//$this->excludedNodes[ $page ][ $id ] = $html->Implode( $id, $tagFilterOptions );
+				array_push( $this->excludedNodes, $html->Implode( $id, $tagFilterOptions ) );
+			}
 		}
-
 		//$eligibleContent = $html->Implode( 0, $tagFilterOptions );
 
 		/**
@@ -379,7 +379,7 @@ class ezTOC_Post {
 		 *
 		 * @see wpautop()
 		 */
-		//$eligibleContent = \Easy_Plugins\Table_Of_Contents\TOCString\force_balance_tags( $eligibleContent );
+		//$eligibleContent = \Easy_Plugins\Table_Of_Contents\String\force_balance_tags( $eligibleContent );
 	}
 
 	/**
@@ -786,7 +786,7 @@ class ezTOC_Post {
 		$return = false;
 
 		if ( $heading ) {
-
+			$heading = apply_filters( 'ez_toc_url_anchor_target_before', $heading );
 			// WP entity encodes the post content.
 			$return = html_entity_decode( $heading, ENT_QUOTES, get_option( 'blog_charset' ) );
 			$return = br2( $return, ' ' );
@@ -1038,6 +1038,10 @@ class ezTOC_Post {
 			foreach ( $matches as $i => $match ) {
 
 				$anchor     = $matches[ $i ]['id'];
+				if (ezTOC_Option::get( 'remove_special_chars_from_title' )) {
+					$matches[ $i ][0] = str_replace(':', '', $matches[ $i ][0]);
+				}
+
 				$headings[] = str_replace(
 					array(
 						$matches[ $i ][1],                // start of heading
@@ -1105,7 +1109,10 @@ class ezTOC_Post {
 				case 'right':
 					$class[] = 'ez-toc-wrap-right';
 					break;
-
+				case 'center':
+					$class[] = 'ez-toc-wrap-center';
+					break;	
+					
 				case 'none':
 				default:
 					// do nothing
@@ -1132,6 +1139,14 @@ class ezTOC_Post {
 
 				case 'decimal':
 					$class[] = 'counter-decimal';
+					break;
+
+				case 'hyphen':
+					$class[] = 'counter-hyphen';
+					break;
+					
+				case 'disc':
+					$class[] = 'counter-disc';
 					break;
 			}
 
@@ -1161,6 +1176,11 @@ class ezTOC_Post {
 
 			$custom_classes = ezTOC_Option::get( 'css_container_class', '' );
 
+			$position = ezTOC_Option::get( 'position' );
+			if($position == 'afterpara'){
+				$custom_classes .= "afterpara";
+			}
+			
 			if ( 0 < strlen( $custom_classes ) ) {
 
 				$custom_classes = explode( ' ', $custom_classes );
@@ -1192,19 +1212,39 @@ class ezTOC_Post {
 					$toc_title = str_replace( '%PAGE_NAME%', get_the_title(), $toc_title );
 				}
 
-				$html .= '<div class="ez-toc-title-container">' . PHP_EOL;
+				if (ezTOC_Option::get( 'toc_loading' ) != 'css') {
+					$html .= '<div class="ez-toc-title-container">' . PHP_EOL;
+				}
 
 				$html .= '<p class="ez-toc-title">' . esc_html__( htmlentities( $toc_title, ENT_COMPAT, 'UTF-8' ), 'easy-table-of-contents' ). '</p>' . PHP_EOL;
 
-				$html .= '<span class="ez-toc-title-toggle">';
-
+				if (ezTOC_Option::get( 'toc_loading' ) != 'css') {
+					$html .= '<span class="ez-toc-title-toggle">';
+				}
+				
 				if ( ezTOC_Option::get( 'visibility' ) ) {
-
-					$html .= '<a class="ez-toc-pull-right ez-toc-btn ez-toc-btn-xs ez-toc-btn-default ez-toc-toggle" style="display: none;"><i class="ez-toc-glyphicon ez-toc-icon-toggle"></i></a>';
+					if (ezTOC_Option::get( 'toc_loading' ) != 'css') {
+						$html .= '<a href="#" class="ez-toc-pull-right ez-toc-btn ez-toc-btn-xs ez-toc-btn-default ez-toc-toggle" style="display: none;"><label for="item" aria-label="'.__( 'Table of Content', 'easy-table-of-contents' ).'"><i class="ez-toc-glyphicon ez-toc-icon-toggle"></i></label><input type="checkbox" id="item"></a>';
+					}else{
+						$toggle_view='';
+						if(ezTOC_Option::get('visibility_hide_by_default')==true){
+							$toggle_view= "checked";
+						}
+						$html .= '<label for="item" class="cssicon"><i class="ez-toc-glyphicon ez-toc-icon-toggle"></i></label><label for="item" class="cssiconcheckbox">1</label><input type="checkbox" id="item" '.$toggle_view.'>';
+					}
 				}
 
+				if (ezTOC_Option::get( 'toc_loading' ) != 'css') {
+					$html .= '</span>';
+				}
+				if (ezTOC_Option::get( 'toc_loading' ) != 'css') {
+					$html .= '</div>' . PHP_EOL;
+				}
+			}else{
+				$html .= '<div class="ez-toc-title-container">' . PHP_EOL;
+				$html .= '<span class="ez-toc-title-toggle">';
+				$html .= '<a class="ez-toc-pull-right ez-toc-btn ez-toc-btn-xs ez-toc-btn-default ez-toc-toggle" style="display: none;"><i class="ez-toc-glyphicon ez-toc-icon-toggle"></i></a>';
 				$html .= '</span>';
-
 				$html .= '</div>' . PHP_EOL;
 			}
 
@@ -1352,7 +1392,7 @@ class ezTOC_Post {
 			}
 		}
 
-		return $html;
+		return do_shortcode($html);
 	}
 
 	/**
@@ -1367,7 +1407,10 @@ class ezTOC_Post {
 	 * @return string
 	 */
 	private function createTOCItemAnchor( $page, $id, $title, $count ) {
-
+		if (ezTOC_Option::get( 'remove_special_chars_from_title' )) {
+			$title = str_replace(':', '', $title);
+		}
+		
 		return sprintf(
 			'<a class="ez-toc-link ez-toc-heading-' . $count . '" href="%1$s" title="%2$s">%3$s</a>',
 			esc_attr( $this->createTOCItemURL( $id, $page ) ),

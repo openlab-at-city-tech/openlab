@@ -118,7 +118,9 @@ div.ez-toc-widget-container li {
 	float: right;
 	margin-left: 10px;
 }
-
+.ez-toc-wrap-center {
+	margin: 0 auto;
+}
 #ez-toc-container a {
 	color: #444444;
 	box-shadow: none;
@@ -158,6 +160,21 @@ div.ez-toc-widget-container li {
 	list-style-type: decimal;
 	list-style-position: inside;
 }
+
+#ez-toc-container.counter-disc li,
+.ez-toc-widget-container.counter-disc li {
+	list-style-type: disc;
+	list-style-position: inside;
+}
+
+#ez-toc-container.counter-hyphen li,
+.ez-toc-widget-container.counter-hyphen li {
+	list-style-type: '-';
+	list-style-position: inside;    
+}
+
+
+
 
 #ez-toc-container.counter-decimal ul.ez-toc-list li a::before,
 .ez-toc-widget-container.counter-decimal ul.ez-toc-list li a::before {
@@ -344,4 +361,45 @@ div.ez-toc-widget-container li {
 
 .ez-toc-icon-toggle:before {
 	content: "\e87a";
+}
+#ez-toc-container input {
+  position: absolute;
+  left: -999em;
+}
+#ez-toc-container input[type="checkbox"]:checked + nav {
+  opacity: 0;
+  max-height: 0;
+  border: none;
+  display: none;
+}
+
+#ez-toc-container label {
+    float: right;
+    position: relative;
+    left: 10px;
+    font-size: 16px;
+    background: #f9efef;
+    padding: 0px 4px 0px 5px;
+    border: 1px solid #999191;
+    border-radius: 5px;
+    cursor: pointer;
+}
+div#ez-toc-container p.ez-toc-title { 
+    display: contents;
+}
+div#ez-toc-container {
+    padding-right: 20px;
+}
+
+label.cssicon .ez-toc-glyphicon:empty {
+    font-size: 16px;
+    margin-left: 2px;
+}
+
+label.cssiconcheckbox {
+    display: none;
+}
+
+div#ez-toc-container.afterpara + p {
+    display: none;
 }

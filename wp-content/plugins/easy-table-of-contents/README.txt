@@ -1,11 +1,11 @@
 === Easy Table of Contents ===
-Contributors: shazahm1@hotmail.com
-Donate link: https://connections-pro.com/
+Contributors: magazine3
+Donate link: https://magazine3.company/
 Tags: table of contents, toc
 Requires at least: 5.3
-Tested up to: 5.7
+Tested up to: 6.0
 Requires PHP: 5.6.20
-Stable tag: 2.0.17
+Stable tag: 2.0.29
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -15,7 +15,7 @@ Adds a user friendly and fully automatic way to create and display a table of co
 
 A user friendly, featured focused plugin which allows you to insert a table of contents into your posts, pages and custom post types.
 
-= Features =
+### Features 
 * Automatically generate a table of contents for your posts, pages and custom post types by parsing its contents for headers.
 * Supports the `<!--nextpage-->` tag.
 * Supports the Rank Math plugin.
@@ -36,31 +36,39 @@ A user friendly, featured focused plugin which allows you to insert a table of c
 * The widget auto highlights the sections currently visible on the page. The highlight color is configurable.
 * Developer friendly with many action hooks and filters available. More can be added by request on [Github](https://github.com/shazahm1/Easy-Table-of-Contents). Pull requests are welcomed.
 
-= Live Examples =
+### Support
 
-Here are links to documentation pages for several of the premium templates for the [Connections Business Directory plugin](https://wordpress.org/plugins/connections/) which utilize the widget included with this plugin:
+We try our best to provide support on WordPress.org forums. However, We have a special [team support](https://magazine3.company/contact/) where you can ask us questions and get help. Delivering a good user experience means a lot to us and so we try our best to reply each and every question that gets asked.
+
+### Bug Reports
+
+Bug reports for Easy Table of Contents are [welcomed on GitHub](https://github.com/ahmedkaludi/Easy-Table-of-Contents). Please note GitHub is not a support forum, and issues that aren't properly qualified as bugs will be closed.
+
+### [JOIN TELEGRAM GROUP COMMUNITY](https://t.me/+XADGN24lHNk0YjE1/)**: Purpose of this group is to get proper suggestions and feedback from plugin users and the community so that we can make the plugin even better.
+
+### Live Examples
 
 * [cMap Template Docs](http://connections-pro.com/documentation/cmap/)
 * [Circled Template Docs](http://connections-pro.com/documentation/circled/)
 * [Gridder Template Docs](http://connections-pro.com/documentation/gridder/)
 
-= Roadmap =
+### Roadmap 
 * Fragment caching for improved performance.
 * Improve SEO by adding options to add nofollow to TOC link and wrap TOC nav in noindex tag.
 * Improve accessibility.
 * Add Bullet and Arrow options for list counter style.
 
-= Credit =
+### Credit 
 
 Easy Table Contents is a fork of the excellent [Table of Contents Plus](https://wordpress.org/plugins/table-of-contents-plus/) plugin by [Michael Tran](http://dublue.com/plugins/toc/).
 
-== Screenshots ==
+### Screenshots 
 
 1. The General section of the settings.
 2. The Appearance section of the settings.
 3. The Advanced section of the settings.
 
-== Installation ==
+### Installation 
 
 = Using the WordPress Plugin Search =
 
@@ -88,6 +96,97 @@ Easy Table Contents is a fork of the excellent [Table of Contents Plus](https://
 4. Activate the plugin on the Plugins admin page.
 
 == Changelog ==
+
+= 2.0.29 07/19/2022 =
+* TWEAK: Added Oxygen pagebulider compatibility #198
+* TWEAK: Added toggle state class to container #129
+* TWEAK: Added Refresh Toggle State #149
+* BUG: TOC not showing in WooCommerce category description #134
+* BUG: TOC links not working with emoji in title #117
+* BUG: TOC not running on nested excluded filters #118
+* BUG: Showing incorrect excerpt in a grid with Genesis Framework and other themes #144
+
+= 2.0.28 07/15/2022 =
+* TWEAK: Added Sidebar placement option for TOC #156
+* TWEAK: Added SeedProd Pro compatibility #157
+* TWEAK: Added option to show the TOC content after the first paragraph #181
+* BUG: TOC not working in sidebar with Blocksy theme #220
+* BUG: Form elements do not have associated labels In lighthouse #219
+* BUG: Alternate Heading problem with Umlauts #148
+
+= 2.0.27 07/12/2022 =
+* TWEAK: Added subscribe to newsletters form on plugin activation #216
+* TWEAK: Added user feedback form on plugin deactivation #216
+* TWEAK: Added option to remove special characters from TOC Headings #217
+* BUG: Corner Stone page builder heading are not working #200
+* BUG: The links are not working using href with pure CSS option #208
+* BUG: Attribute href is missing in an anchor element due to which links cannot be crawled #210
+* BUG: Debug Warnings #212
+
+= 2.0.26 07/05/2022 =
+* BUG: TOC loading method should be same for CSS and JS #199
+* BUG: Custom width option should come after selecting the User Define option #201
+* BUG: Function added to front.js but not present in front.min.js #202
+* BUG: The custom heading is not working with WP Bakery page builder #205
+* BUG: TOC not working in the Avada themes in widgets #206
+* BUG: Headers in content of shortcodes are not getting showing up in TOC #209
+* BUG: TOC broken for non-English titles #211
+
+= 2.0.25 06/27/2022 =
+* TWEAK: Added Migration from Table of Contents Plus and LuckyWP Table of Contents #160
+* TWEAK: Added Option to add inline CSS and JS #189
+* TWEAK: Added Shortcode to show hidden view on particular posts #183
+* TWEAK: Added Hyphen Counter to display the TOC heading #192
+* TWEAK: Added Dot Counter to display the TOC heading #180
+* TWEAK: Improved the Web Accessibility in TOC Toggle #190
+* BUG: Shortcodes are not rendering in TOC titles #197
+* BUG: TOC heading are getting hidden in sticky header #186
+* BUG: No success or error message after support request is submitted #196
+* BUG: Same font size appearing in headings and sub-headings #161
+* BUG: Salient core plugin conflict with last update 2.0.24.1 #207
+
+= 2.0.24.1 06/14/2022 =
+* BUG: TOC not displaying properly when initial view option is disabled #195
+* BUG: Initial View option not working with Pure CSS Loading Method #194
+
+= 2.0.24 06/10/2022 =
+* TWEAK: Added TOC in Infinite Scroll #138
+* TWEAK: Improved the activation process #187
+* BUG: TOC Toggle not working with Magnolia Theme #174
+* BUG: Initial view not working with TOC Loading Method of CSS #179
+* BUG: Toggle is not visible when Display Header option is disable #171
+* BUG: CSS not loading when using shortcode in theme file #175
+* BUG: the_content filter run twice #182
+* BUG: Form UI looks ugly #169
+* BUG: Debug Warnings in multibyte string functions #185
+
+= 2.0.23 05/31/2022 =
+* TWEAK: Added filter to modify anchor links #167
+* TWEAK: Added filter to add TOC before or after the sidebar widget #166
+* TWEAK: Added option to align TOC to center #158
+* TWEAK: Design improvements in options panel #172
+
+= 2.0.22 05/06/2022 =
+* BUG: Double hyphens are getting removed from content issue fixed #163
+
+= 2.0.21 05/06/2022 =
+* BUG: Critical error fixed #147
+
+= 2.0.20 05/05/2022 =
+* TWEAK: Added Toggle with CSS for websites runs without jQuery #153
+* TWEAK: Added telegram group join link for suggestions and feedback #159
+* BUG: TOC links not jumping in some posts which have special characters #163
+* BUG: Incorrect email ID updated in the plugin #165
+* BUG: Proper documentation added for adding TOC with shortcodes & do_shortcode #152
+* BUG: TOC links not working when do_shortcode added directly in the template #147
+* BUG: TOC links not working with some specical character with Elementor #162
+
+= 2.0.19 04/16/2022 =
+* Bug Fixed : While Using Elementor Page builder TOC is not working when special characters are used in headings. #150
+* Bug Fixed : Need to load CSS/JS files only on the selected post types. #154
+
+= 2.0.18 03/29/2022 =
+* TWEAK: Added Technical Support Tab in Settings Panel.
 
 = 2.0.17 03/26/2021 =
 * TWEAK: Add additional check to prevent `Uncaught Error: Call to undefined function is_woocommerce()`.
@@ -388,6 +487,10 @@ You are not limited to a single a single nested item either. You can add as many
 <h1>Item 6</h1>`
 
 You can nest up 6 levels deep if needed. I hope this helps you understand how to create and build your own auto generated table of contents on your sites!
+
+= Is there any shortcode to add the table of content to anywhere I want ? =
+
+Yes you can add the TOC with this shortcode – [ez-toc] and with the help of this you can easily add the TOC in the content or anywhere in the WordPress and if you want to add the shortcode on the theme file then you can add it with the help of this code – <?php echo do_shortcode( ‘[ez-toc]’ ); ?> and with this, you can add the TOC on any file according to your need.
 
 == Upgrade Notice ==
 
