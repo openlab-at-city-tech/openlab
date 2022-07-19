@@ -2,8 +2,8 @@
 Contributors: boonebgorges
 Tags: comments, grade, course, privacy
 Requires at least: 4.4
-Tested up to: 5.8
-Stable tag: 1.4.4
+Tested up to: 6.0
+Stable tag: 1.4.5
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -30,6 +30,9 @@ This plugin was developed for the [https://openlab.citytech.cuny.edu](City Tech 
 3. Grades are visible on Dashboard > Posts.
 
 == Changelog ==
+
+= 1.4.5 =
+* Allow empty comments to be submitted when a grade is present.
 
 = 1.4.4 =
 * Ensure that empty grades are not recorded in the database, which could cause visibility issues.
