@@ -4,8 +4,8 @@
  * Plugin URI: https://badgeos.org/downloads/badgestack/
  * Description: This BadgeOS add-on automatically creates achievement types, pages and sample content to jumpstart your own badging system.
  * Author: BadgeOS
- * Version: 1.0.2
- * Author URI: https://www.badgeos.com/
+ * Version: 1.0.3
+ * Author URI: https://badgeos.org/
  * License: GNU AGPL
  */
 
@@ -73,8 +73,8 @@ final class BadgeOS_BadgeStack {
 						'plural'   => __( 'Quests', 'badgeos-badgestack' ),
 					),
 				'level' => array(
-						'singular' => __( 'Level', 'badgeos-badgestack' ),
-						'plural'   => __( 'Levels', 'badgeos-badgestack' ),
+						'singular' => __( 'Badge Level', 'badgeos-badgestack' ),
+						'plural'   => __( 'Badge Levels', 'badgeos-badgestack' ),
 					),
 			);
 			foreach ( $achievement_types as $type => $name ) {
@@ -388,15 +388,15 @@ final class BadgeOS_BadgeStack {
 				'post_type'    => $this->type['community-badge'],
 				'post_status'  => 'publish',
 				'post_author'  => 1,
-				'post_title'   => __( 'Active Learner', 'badgeos-badgestack' ),
-				'post_content' => __( "This badge rewards active participation on our site. Complete Quests, earn other badges, comment meaningfully on others' contributions and posts: all will contribute to your achievement of this internal community badge. (Earn 500 points in our community to earn this badge.)", 'badgeos-badgestack' ),
-				'post_excerpt' => __( "Rewards active participation right here in our learning community. Complete quests, earn other badges, comment meaningfully on others' contributions and posts: all will contribute to your achievement of this internal community badge.", 'badgeos-badgestack' ),
-				'thumbnail'    => 'community-badge-activelearner.png',
+				'post_title'   => __( 'Award author when user visits post', 'badgeos-badgestack' ),
+				'post_content' => __( "The administrator can award achievements, points or ranks and Award author when user visits post. Points will be awarded/deducted and Award author when user visits post.", 'badgeos-badgestack' ),
+				'post_excerpt' => __( "The administrator can award achievements, points or ranks and Award author when user visits post. Points will be awarded/deducted and Award author when user visits post.", 'badgeos-badgestack' ),
+				'thumbnail'    => 'level-default.png',
 				'post_meta'    => array(
 					'_badgeos_points'               => 75,
 					'_badgeos_earned_by'            => 'points',
 					'_badgeos_points_required'      => 500,
-					'_badgeos_congratulations_text' => __( "You earned 500 points by interacting with this online community. This makes you a very active learner, and we're rewarding you with a community badge to show for it.", 'badgeos-badgestack' ),
+					'_badgeos_congratulations_text' => __( "Congratulations!! you have earned a badge level Award author when user visits post.", 'badgeos-badgestack' ),
 					'_badgeos_hidden'               => 'show',
 				),
 			),
@@ -404,15 +404,15 @@ final class BadgeOS_BadgeStack {
 				'post_type'    => $this->type['community-badge'],
 				'post_status'  => 'publish',
 				'post_author'  => 1,
-				'post_title'   => __( 'Commentator', 'badgeos-badgestack' ),
-				'post_content' => __( 'This badge recognizes someone who engages deeply with our online learning community, taking the time to share feedback and insights based on the contributions of others.', 'badgeos-badgestack' ),
-				'post_excerpt' => __( 'This badge recognizes someone who engages deeply with our online learning community, taking the time to share feedback and insights based on the contributions of others.', 'badgeos-badgestack' ),
-				'thumbnail'    => 'community-badge-commentator.png',
+				'post_title'   => __( 'Register to the website', 'badgeos-badgestack' ),
+				'post_content' => __( 'The administrator can award achievements, points or ranks if the user registers to the website. This achievement will be awarded one time only.', 'badgeos-badgestack' ),
+				'post_excerpt' => __( 'The administrator can award achievements, points or ranks if the user registers to the website. This achievement will be awarded one time only.', 'badgeos-badgestack' ),
+				'thumbnail'    => 'level-default.png',
 				'post_meta'    => array(
 					'_badgeos_points'               => 75,
 					'_badgeos_earned_by'            => 'triggers',
 					'_badgeos_sequential'           => false,
-					'_badgeos_congratulations_text' => __( 'Thank you for taking time to consistently share feedback and insights with others in our online community. Your contributions make our learning experiences more vibrant and meaningful.', 'badgeos-badgestack' ),
+					'_badgeos_congratulations_text' => __( 'Thank you for taking time to Register to the website. Your contributions make our learning experiences more vibrant and meaningful.', 'badgeos-badgestack' ),
 					'_badgeos_hidden'               => 'show',
 				),
 				'steps' => array(
@@ -425,7 +425,7 @@ final class BadgeOS_BadgeStack {
 					array(
 						'post_title'       => __( "Comment at least 10 times on others' posts", 'badgeos-badgestack' ),
 						'count'            => 10,
-						'trigger_type'     => 'comment_post',
+						'trigger_type'     => 'badgeos_new_comment',
 						'order'            => 1,
 					),
 				),
@@ -434,15 +434,15 @@ final class BadgeOS_BadgeStack {
 				'post_type'    => $this->type['community-badge'],
 				'post_status'  => 'publish',
 				'post_author'  => 1,
-				'post_title'   => __( 'Community Activist', 'badgeos-badgestack' ),
-				'post_content' => __( 'The earner of this badge has participated in every core aspect of this online community, including completing the both levels, multiple quests and badges, and has engaged with peers in active dialogue and the exchange of ideas.', 'badgeos-badgestack' ),
-				'post_excerpt' => __( 'Rewarded to those who take full advantage of available opportunities to explore new information and exchange ideas with peers.', 'badgeos-badgestack' ),
-				'thumbnail'    => 'community-badge-activist.png',
+				'post_title'   => __( 'Daily visit website', 'badgeos-badgestack' ),
+				'post_content' => __( 'The administrator can award achievements, points or ranks if the user daily visit website. Points will be awarded/deducted when user daily visit website.', 'badgeos-badgestack' ),
+				'post_excerpt' => __( 'The administrator can award achievements, points or ranks if the user daily visit website. Points will be awarded/deducted when user daily visit website.', 'badgeos-badgestack' ),
+				'thumbnail'    => 'level-default.png',
 				'post_meta'    => array(
 					'_badgeos_points'               => 0,
 					'_badgeos_earned_by'            => 'triggers',
 					'_badgeos_sequential'           => false,
-					'_badgeos_congratulations_text' => __( 'You are an exceedingly active learner who takes full advantage of available opportunities to explore new information and exchange ideas with peers.', 'badgeos-badgestack' ),
+					'_badgeos_congratulations_text' => __( 'Congratulations!! you have earned a badge level Daily visit website.', 'badgeos-badgestack' ),
 					'_badgeos_hidden'               => 'show',
 				),
 				'steps' => array(
@@ -463,11 +463,11 @@ final class BadgeOS_BadgeStack {
 					array(
 						'post_title'       => __( 'Post at least 20 comments', 'badgeos-badgestack' ),
 						'count'            => 20,
-						'trigger_type'     => 'comment_post',
+						'trigger_type'     => 'badgeos_new_comment',
 						'order'            => 2,
 					),
 					array(
-						'post_title'       => __( 'Complete Both Levels', 'badgeos-badgestack' ),
+						'post_title'       => __( 'Complete All Levels', 'badgeos-badgestack' ),
 						'count'            => 1,
 						'trigger_type'     => 'all-achievements',
 						'achievement_type' => $this->type['level'],
@@ -479,14 +479,14 @@ final class BadgeOS_BadgeStack {
 				'post_type'    => $this->type['community-badge'],
 				'post_status'  => 'publish',
 				'post_author'  => 1,
-				'post_title'   => __( 'Innovator', 'badgeos-badgestack' ),
-				'post_content' => __( 'This badge recognizes someone who develops innovative strategies and shares new perspectives. Nominate a member of this community who you think epitomizes the role of "innovator".', 'badgeos-badgestack' ),
-				'post_excerpt' => __( 'This nomination-based badge recognizes someone who develops innovative strategies and shares new perspectives.', 'badgeos-badgestack' ),
-				'thumbnail'    => 'community-badge-innovator',
+				'post_title'   => __( 'After completing the number of years', 'badgeos-badgestack' ),
+				'post_content' => __( 'The administrator can award achievements, points or ranks if the user completes several number of years on the website. Points will be awarded/deducted on the user completes several number of years.', 'badgeos-badgestack' ),
+				'post_excerpt' => __( 'The administrator can award achievements, points or ranks if the user completes several number of years on the website. Points will be awarded/deducted on the user completes several number of years.', 'badgeos-badgestack' ),
+				'thumbnail'    => 'level-default.png',
 				'post_meta'    => array(
 					'_badgeos_points'               => 100,
 					'_badgeos_earned_by'            => 'nomination',
-					'_badgeos_congratulations_text' => __( 'You have been recognized by your peers as an innovative thinker and problem solver.', 'badgeos-badgestack' ),
+					'_badgeos_congratulations_text' => __( 'Congratulations!! you have successfully spent X number of years.', 'badgeos-badgestack' ),
 					'_badgeos_hidden'               => 'hidden',
 				),
 				'steps' => array(),
@@ -497,25 +497,25 @@ final class BadgeOS_BadgeStack {
 				'post_type'    => $this->type['level'],
 				'post_status'  => 'publish',
 				'post_author'  => 1,
-				'post_title'   => __( 'Adventures in Badging', 'badgeos-badgestack' ),
-				'post_content' => __( "In this Level you'll learn about the potential for digital badges, and think about skills, behaviors, roles or milestones that often go unrecognized -- but deserve to be acknowledged.", 'badgeos-badgestack' ),
-				'post_excerpt' => __( 'Learn about the potential for digital badges and think about skills, behaviors, roles or milestones that often go unrecognized -- but that deserve to be acknowledged.', 'badgeos-badgestack' ),
+				'post_title'   => __( 'Visit a Post', 'badgeos-badgestack' ),
+				'post_content' => __( "The administrator can award achievements, points or ranks if the user visit a post. Points will be awarded/deducted on the user visits any post.", 'badgeos-badgestack' ),
+				'post_excerpt' => __( 'The administrator can award achievements, points or ranks if the user visit a post. Points will be awarded/deducted on the user visits any post.', 'badgeos-badgestack' ),
 				'thumbnail'    => 'level-default.png',
 				'post_meta'    => array(
 					'_badgeos_points'               => 0,
 					'_badgeos_earned_by'            => 'triggers',
 					'_badgeos_sequential'           => false,
-					'_badgeos_congratulations_text' => __( 'Congratulations! You have completed the Level "Adventures in Badging" and are on your way to becoming a go-to resource on alternative forms of recognizing achievement.', 'badgeos-badgestack' ),
+					'_badgeos_congratulations_text' => __( 'Congratulations! You have completed the Level "Visit a Post" and are on your way to becoming a go-to resource on alternative forms of recognizing achievement.', 'badgeos-badgestack' ),
 					'_badgeos_maximum_earnings'     => 1,
 					'_badgeos_hidden'               => 'show',
 				),
 				'steps' => array(
 					array(
-						'post_title'       => __( 'Earn the Badge: “Badge Explorer”', 'badgeos-badgestack' ),
+						'post_title'       => __( 'Earn the Badge: “Visit a Post”', 'badgeos-badgestack' ),
 						'count'            => 1,
 						'trigger_type'     => 'specific-achievement',
 						'achievement_type' => $this->type['quest-badge'],
-						'achievement_post' => __( 'Badge Explorer', 'badgeos-badgestack' ),
+						'achievement_post' => __( 'Visit a Post', 'badgeos-badgestack' ),
 						'order'            => 0,
 					),
 				),
@@ -524,33 +524,33 @@ final class BadgeOS_BadgeStack {
 				'post_type'    => $this->type['level'],
 				'post_status'  => 'publish',
 				'post_author'  => 1,
-				'post_title'   => __( 'Begin Earning & Issuing Badges', 'badgeos-badgestack' ),
-				'post_content' => __( "In this Level you’ll set-up a profile on BadgeOS so you can earn, store, and share badges. You'll also issue a badge to one or more people who demonstrate skills, values or behaviors you have witnessed first-hand.", 'badgeos-badgestack' ),
-				'post_excerpt' => __( "In this Level you’ll set-up a profile on BadgeOS so you can earn, store, and share badges. You'll also issue a badge to one or more people who demonstrate skills, values or behaviors you have witnesses first-hand.", 'badgeos-badgestack' ),
+				'post_title'   => __( 'Log in for X days', 'badgeos-badgestack' ),
+				'post_content' => __( "The administrator can award achievements, points or ranks if the user log in for x days. With this trigger, you can set an achievement or even deduct the user’s BadgeOS points, if the user logged in for “X” number of days.", 'badgeos-badgestack' ),
+				'post_excerpt' => __( "The administrator can award achievements, points or ranks if the user log in for x days. With this trigger, you can set an achievement or even deduct the user’s BadgeOS points, if the user logged in for “X” number of days.", 'badgeos-badgestack' ),
 				'thumbnail'    => 'level-default.png',
 				'post_meta'    => array(
 					'_badgeos_points'               => 0,
 					'_badgeos_earned_by'            => 'triggers',
 					'_badgeos_sequential'           => false,
-					'_badgeos_congratulations_text' => __( 'Congratulations! You have completed the Level "Start Your Badge Profile" and now have a way to curate all of your achievements, and to recognize the skills and behaviors you value in the world! Add your BadgeOS profile link to your resume or email footer and share your achievements with the world.', 'badgeos-badgestack' ),
+					'_badgeos_congratulations_text' => __( 'Congratulations! You have successfully earned the log in for x days Badge Level.', 'badgeos-badgestack' ),
 					'_badgeos_maximum_earnings'     => 1,
 					'_badgeos_hidden'               => 'show',
 				),
 				'steps' => array(
 					array(
-						'post_title'       => __( 'Earn the Badge: “BadgeOS Member”', 'badgeos-badgestack' ),
+						'post_title'       => __( 'Earn the Badge: “Publish a new Page”', 'badgeos-badgestack' ),
 						'count'            => 1,
 						'trigger_type'     => 'specific-achievement',
 						'achievement_type' => $this->type['quest-badge'],
-						'achievement_post' => __( 'BadgeOS Member', 'badgeos-badgestack' ),
+						'achievement_post' => __( 'Publish a new Page', 'badgeos-badgestack' ),
 						'order'            => 0,
 					),
 					array(
-						'post_title'       => __( 'Earn the Badge: “Badge Issuer”', 'badgeos-badgestack' ),
+						'post_title'       => __( 'Earn the Badge: “Comment on a specific post”', 'badgeos-badgestack' ),
 						'count'            => 1,
 						'trigger_type'     => 'specific-achievement',
-						'achievement_type' => $this->type['quest-badge'],
-						'achievement_post' => __( 'Badge Issuer', 'badgeos-badgestack' ),
+						'achievement_type' => $this->type['quest'],
+						'achievement_post' => __( 'Comment on a specific post', 'badgeos-badgestack' ),
 						'order'            => 1,
 					),
 				),
@@ -561,27 +561,14 @@ final class BadgeOS_BadgeStack {
 				'post_type'    => $this->type['quest'],
 				'post_status'  => 'publish',
 				'post_author'  => 1,
-				'post_title'   => __( 'Customize Your Profile', 'badgeos-badgestack' ),
-				'post_content' => __( 'Your BadgeOS profile is like a dynamic resume that helps others appreciate your skills and accomplishments. Each badge is validated by a person or organization that has observed your achievements first hand.
-
-					In this Quest, you\'ll complete your BadgeOS profile and explore the various options for sharing your badges so that you can curate how you showcase your achievements to others.
-
-					Now that you have a <a href="https://badgeos.org" target="_blank">BadgeOS</a> account, login and visit the "Account Settings" area from the top right menu:
-					<ol>
-						<li>Hover your mouse over the "About Me" section and click the pencil to add some about information about yourself.</span></li>
-						<li>Click the pencil next to "Email" and add any email addresses you use. This will allow you to automatically consolidate achievements you receive from any person or organization in your BadgeOS account, regardless of what email address they use when they issue you badges.</li>
-						<li>Use the "Social Settings and Auto Share" area to link your social networks. This makes sharing your badges wherever you want them super easy.</li>
-						<li>Hover over the avatar area and add an image of yourself.</li>
-						<li>Click "<strong>Save Changes</strong>".</li>
-						<li>Then visit the "My Credit" area of BadgeOS to explore how to manage your badges, share them on social networks and create Categories.</li>
-					</ol>
-					When you are done, use the submission area to list at least one group or person who might issue you badges to recognize your achievements.', 'badgeos-badgestack' ),
-				'post_excerpt' => __( "In this Quest, you'll complete your BadgeOS profile and explore the various options for sharing your badges so that you can curate how you showcase your achievements to others.", 'badgeos-badgestack' ),
+				'post_title'   => __( 'Not Login for X days', 'badgeos-badgestack' ),
+				'post_content' => __( 'The administrator can award achievements, points or ranks if the user not login for x days. With this trigger, you can set an achievement or even deduct the users BadgeOS points, if the user has not logged in for X number of days.', 'badgeos-badgestack' ),
+				'post_excerpt' => __( "The administrator can award achievements, points or ranks if the user not login for x days. With this trigger, you can set an achievement or even deduct the users BadgeOS points, if the user has not logged in for X number of days.", 'badgeos-badgestack' ),
 				'thumbnail'    => 'quest-default.png',
 				'post_meta'    => array(
 					'_badgeos_points'               => 150,
 					'_badgeos_earned_by'            => 'submission_auto',
-					'_badgeos_congratulations_text' => __( 'You have set-up and customized your BadgeOS.com profile, so you are ready to begin earning and sharing credit you receive for your achievements.', 'badgeos-badgestack' ),
+					'_badgeos_congratulations_text' => __( 'Congratulations! You have earned the not login for x days Badge Level.', 'badgeos-badgestack' ),
 					'_badgeos_hidden'               => 'show',
 				),
 				'steps' => array(),
@@ -590,26 +577,14 @@ final class BadgeOS_BadgeStack {
 				'post_type'    => $this->type['quest'],
 				'post_status'  => 'publish',
 				'post_author'  => 1,
-				'post_title'   => __( 'Give Someone Credit', 'badgeos-badgestack' ),
-				'post_content' => __( 'We know that a badge says something about a person who earns it, but what does a badge say about the issuer?
-
-					When an observer of an earned badge looks at its criteria and the evidence that someone achieved something, what will they learn about the organization or individual who decided to bestow the badge? What does a badge say about what you value in the world?
-
-					In this Quest, you will define a badge that represents the achievement of something you value. For example, it could be the demonstration of a skill, an important behavior or attitude, or the reaching of a milestone that matters. You will create a badge for this achievement, and then you will issue it someone who deserves it. Here\'s how:
-					<ol>
-						<li><span style="line-height: 15px;">Sign into your <a href="https://badgeos.org" target="_blank">BadgeOS</a> account.</span></li>
-						<li>Click "Give" at the top of the page.</li>
-						<li>Design and define a badge that acknowledges something important to you or your work. Follow the steps to save and then give the badge to one or more people who deserves it.</li>
-					</ol>
-
-					After you give a badge, describe in the submission here the name of the badge and the criteria, or link to the badge on BadgeOS.
-					', 'badgeos-badgestack' ),
-				'post_excerpt' => __( 'In this Quest you will define a badge that represents the achievement of something you value. You will create a badge for this achievement, and then you will issue it someone who deserves it.', 'badgeos-badgestack' ),
+				'post_title'   => __( 'Comment on a Post', 'badgeos-badgestack' ),
+				'post_content' => __( 'The administrator can award achievements, points or ranks if the user comments on a post. Points will be awarded/deducted when a user comments on any post.', 'badgeos-badgestack' ),
+				'post_excerpt' => __( 'The administrator can award achievements, points or ranks if the user comments on a post. Points will be awarded/deducted when a user comments on any post.', 'badgeos-badgestack' ),
 				'thumbnail'    => 'quest-default.png',
 				'post_meta'    => array(
 					'_badgeos_points'               => 150,
 					'_badgeos_earned_by'            => 'submission_auto',
-					'_badgeos_congratulations_text' => __( 'You have considered what you value and have defined, designed and issued a badge on BadgeOS.com that acknowledges these values in practice in the world. ', 'badgeos-badgestack' ),
+					'_badgeos_congratulations_text' => __( 'Congratulations!! You have earned the badge level comment on a post. ', 'badgeos-badgestack' ),
 					'_badgeos_hidden'               => 'show',
 				),
 				'steps' => array(),
@@ -618,41 +593,33 @@ final class BadgeOS_BadgeStack {
 				'post_type'    => $this->type['quest'],
 				'post_status'  => 'publish',
 				'post_author'  => 1,
-				'post_title'   => __( 'Watch a Video: Learn about Badges', 'badgeos-badgestack' ),
-				'post_content' => __( 'In this Quest, you\'ll watch a video presentation entitled, "Giving Credit Where Credit is Due: Adventures in Digital Credentials and Badges". The talk was led by Jonathan Finkelstein, Founder of <a href="https://badgeos.org" target="_blank">BadgeOS</a> and director of the BadgeStack Project, at an annual meeting about transforming education through technology.
-
-					Watch the video below, and then in the submission box, share a brief comment or reflection about one action, milestone, behavior, or skill that people should get credit for achieving. Focus on something that people don\'t currently get properly acknowledged for having done.
-
-					<iframe src="http://educause.mediasite.com/mediasite/Play/2a2738935a3649b7a97c32449a017a641d" height="560" width="100%" frameborder="0" scrolling="no"></iframe>
-
-					Source: Original video available on the <a href="http://bit.ly/educause-finkelstein" target="_blank">EDUCAUSE</a> web site.
-
-					<strong>Quest Question:</strong> Describe at least one action, milestone, behavior, or skill that people should get credit for achieving, but which usually go unrecognized or unnoticed.', 'badgeos-badgestack' ),
-				'post_excerpt' => __( 'Watch a video about the potential for digital badges and share ideas about actions, milestones, behaviors, or skills that people should get credit for achieving, but which usually go unrecognized or unnoticed.', 'badgeos-badgestack' ),
+				'post_title'   => __( 'Comment on a specific post', 'badgeos-badgestack' ),
+				'post_content' => __( 'The administrator can award achievements, points or ranks if the user comments on a specific post. Points will be awarded/deducted when a user comments on a specific post.', 'badgeos-badgestack' ),
+				'post_excerpt' => __( 'The administrator can award achievements, points or ranks if the user comments on a specific post. Points will be awarded/deducted when a user comments on a specific post.', 'badgeos-badgestack' ),
 				'thumbnail'    => 'quest-default.png',
 				'post_meta'    => array(
 					'_badgeos_points'               => 150,
 					'_badgeos_earned_by'            => 'triggers',
 					'_badgeos_sequential'           => false,
-					'_badgeos_congratulations_text' => __( 'You are continuing your exploration about the power of digital badges and thinking about how they can be used to acknowledge valued -- but often unrecognized -- achievements.  You can re-visit or share the video you watched at any time: http://bit.ly/educause-finkelstein.', 'badgeos-badgestack' ),
+					'_badgeos_congratulations_text' => __( 'Congratulations!! You have earned the badge level comment on a specific post.', 'badgeos-badgestack' ),
 					'_badgeos_maximum_earnings'     => 1,
 					'_badgeos_hidden'               => 'show',
 				),
 				'steps' => array(
 					array(
-						'post_title'       => __( 'Earn “Customize Your Profile” 30 times.', 'badgeos-badgestack' ),
+						'post_title'       => __( 'Earn “Not Login for X days” 30 times.', 'badgeos-badgestack' ),
 						'count'            => 30,
 						'trigger_type'     => 'specific-achievement',
 						'achievement_type' => $this->type['quest'],
-						'achievement_post' => __( 'Customize Your Profile', 'badgeos-badgestack' ),
+						'achievement_post' => __( 'Not Login for X days', 'badgeos-badgestack' ),
 						'order'            => 0,
 					),
 					array(
-						'post_title'       => __( 'Earn “Give Someone Credit” 1 time.', 'badgeos-badgestack' ),
+						'post_title'       => __( 'Earn “Comment on a Post” 1 time.', 'badgeos-badgestack' ),
 						'count'            => 1,
 						'trigger_type'     => 'specific-achievement',
 						'achievement_type' => $this->type['quest'],
-						'achievement_post' => __( 'Give Someone Credit', 'badgeos-badgestack' ),
+						'achievement_post' => __( 'Comment on a Post', 'badgeos-badgestack' ),
 						'order'            => 2,
 					),
 				),
@@ -663,24 +630,24 @@ final class BadgeOS_BadgeStack {
 				'post_type'    => $this->type['quest-badge'],
 				'post_status'  => 'publish',
 				'post_author'  => 1,
-				'post_title'   => __( 'Badge Explorer', 'badgeos-badgestack' ),
-				'post_content' => __( 'A badge is a validated display of accomplishment, skill, quality or interest that can be earned in any environment. Badges can represent traditional academic achievement or the development of skills or knowledge outside traditional education. The earner of this badge has taken steps to learn about this new form of achievement recognition and to consider its potential.', 'badgeos-badgestack' ),
-				'post_excerpt' => __( 'A badge is a validated display of accomplishment, skill, quality or interest that can be earned in any environment. The earner of this badge has taken steps to learn about this unique form of achievement recognition and to consider its potential.', 'badgeos-badgestack' ),
-				'thumbnail'    => 'badge-badgeexplorer-pink.png',
+				'post_title'   => __( 'Visit a Post', 'badgeos-badgestack' ),
+				'post_content' => __( 'The administrator can award achievements, points or ranks if the user visit a post. Points will be awarded/deducted on the user visits any post.', 'badgeos-badgestack' ),
+				'post_excerpt' => __( 'The administrator can award achievements, points or ranks if the user visit a post. Points will be awarded/deducted on the user visits any post.', 'badgeos-badgestack' ),
+				'thumbnail'    => 'level-default.png',
 				'post_meta'    => array(
 					'_badgeos_points'               => 0,
 					'_badgeos_earned_by'            => 'triggers',
 					'_badgeos_sequential'           => false,
-					'_badgeos_congratulations_text' => __( 'You are taking steps to explore the potential for badges and the unique possibilities this form of achievement recognition affords to learners throughout their lives.', 'badgeos-badgestack' ),
+					'_badgeos_congratulations_text' => __( 'Congratulations! You have completed the Level "Visit a Post" and are on your way to becoming a go-to resource on alternative forms of recognizing achievement.', 'badgeos-badgestack' ),
 					'_badgeos_hidden'               => 'show',
 				),
 				'steps' => array(
 					array(
-						'post_title'       => __( 'Quest: Watch a Video: "Learn about Badges"', 'badgeos-badgestack' ),
+						'post_title'       => __( 'Quest: Comment on a specific post', 'badgeos-badgestack' ),
 						'count'            => 1,
 						'trigger_type'     => 'specific-achievement',
 						'achievement_type' => $this->type['quest'],
-						'achievement_post' => __( 'Watch a Video: Learn about Badges', 'badgeos-badgestack' ),
+						'achievement_post' => __( 'Comment on a specific post', 'badgeos-badgestack' ),
 						'order'            => 0,
 					),
 				),
@@ -689,15 +656,15 @@ final class BadgeOS_BadgeStack {
 				'post_type'    => $this->type['quest-badge'],
 				'post_status'  => 'publish',
 				'post_author'  => 1,
-				'post_title'   => __( 'Badge Issuer', 'badgeos-badgestack' ),
-				'post_content' => __( 'A badge says as much about the person or group who issued it as it does about the recipient.  To earn this "Issuer" badge, you will think about something you value in the world, define the criteria by which you and others will know that value has been exhibited, and then identify someone who deserves to be recognized.', 'badgeos-badgestack' ),
-				'post_excerpt' => __( 'To earn this "Issuer" badge, you will think about something you value in the world, define the criteria by which you and others will know that value has been exhibited, and then identify someone who deserves to be recognized.', 'badgeos-badgestack' ),
-				'thumbnail'    => 'badge-badge-issuer.png',
+				'post_title'   => __( 'Publish a new Post', 'badgeos-badgestack' ),
+				'post_content' => __( 'The administrator can award achievements, points or ranks if the user publish a new post. With this trigger, you can set an achievement or even deduct the users BadgeOS points, if the user publish a new post.', 'badgeos-badgestack' ),
+				'post_excerpt' => __( 'The administrator can award achievements, points or ranks if the user publish a new post. With this trigger, you can set an achievement or even deduct the users BadgeOS points, if the user publish a new post.', 'badgeos-badgestack' ),
+				'thumbnail'    => 'level-default.png',
 				'post_meta'    => array(
 					'_badgeos_points'                     => 0,
 					'_badgeos_earned_by'                  => 'triggers',
 					'_badgeos_sequential'                 => false,
-					'_badgeos_congratulations_text'       => __( 'You have taken the time to consider what you value in the world, you have defined a badge that represents those values, and you have identified and issued the badge to someone deserving of recognition.', 'badgeos-badgestack' ),
+					'_badgeos_congratulations_text'       => __( 'Congratulations!! you have earned the badge level publish a new page.', 'badgeos-badgestack' ),
 					'_badgeos_hidden'                     => 'show',
 					// '_badgeos_send_to_credly'             => 1,
 					// '_badgeos_credly_include_testimonial' => 1,
@@ -709,11 +676,11 @@ final class BadgeOS_BadgeStack {
 				),
 				'steps' => array(
 					array(
-						'post_title'       => __( 'Quest: Give Someone Credit', 'badgeos-badgestack' ),
+						'post_title'       => __( 'Quest: Comment on a Post', 'badgeos-badgestack' ),
 						'count'            => 1,
 						'trigger_type'     => 'specific-achievement',
 						'achievement_type' => $this->type['quest'],
-						'achievement_post' => __( 'Give Someone Credit', 'badgeos-badgestack' ),
+						'achievement_post' => __( 'Comment on a Post', 'badgeos-badgestack' ),
 						'order'            => 0,
 					),
 				),
@@ -722,15 +689,15 @@ final class BadgeOS_BadgeStack {
 				'post_type'    => $this->type['quest-badge'],
 				'post_status'  => 'publish',
 				'post_author'  => 1,
-				'post_title'   => __( 'BadgeOS Member', 'badgeos-badgestack' ),
-				'post_content' => __( 'To receive this badge, the earner needs to create a free profile on BadgeOS to receive, manage and share their lifelong achievements, and they need to issue a badge to someone else for a valued accomplishment or contribution that they have observed first-hand.', 'badgeos-badgestack' ),
-				'post_excerpt' => __( "This badge is earned by creating a profile on BadgeOS to receive, manage and share one's lifelong credentials and achievements, and by issuing a badge to someone else for a valued accomplishment or contribution.", 'badgeos-badgestack' ),
-				'thumbnail'    => 'badge-credly-member-grey.png',
+				'post_title'   => __( 'Publish a new Page', 'badgeos-badgestack' ),
+				'post_content' => __( 'The administrator can award achievements, points or ranks if the user publish a new page. With this trigger, you can set an achievement or even deduct the users BadgeOS points, if the user publish a new page.', 'badgeos-badgestack' ),
+				'post_excerpt' => __( "The administrator can award achievements, points or ranks if the user publish a new page. With this trigger, you can set an achievement or even deduct the users BadgeOS points, if the user publish a new page.", 'badgeos-badgestack' ),
+				'thumbnail'    => 'level-default.png',
 				'post_meta'    => array(
 					'_badgeos_points'                     => 500,
 					'_badgeos_earned_by'                  => 'triggers',
 					'_badgeos_sequential'                 => false,
-					'_badgeos_congratulations_text'       => __( 'BadgeOS empowers people to earn and give credit wherever it is due -- empowering everyone to acknowledge, share and reward achievement. Today, we give you credit for being a pioneer and a part of this growing movement by joining the BadgeOS community.', 'badgeos-badgestack' ),
+					'_badgeos_congratulations_text'       => __( 'Congratulations!! you have earned the badge level publish a new page.', 'badgeos-badgestack' ),
 					'_badgeos_maximum_earnings'           => 1,
 					'_badgeos_hidden'                     => 'show',
 					// '_badgeos_send_to_credly'             => 1,
@@ -744,19 +711,19 @@ final class BadgeOS_BadgeStack {
 				),
 				'steps' => array(
 					array(
-						'post_title'       => __( 'Quest: Create a free account on BadgeOS.com', 'badgeos-badgestack' ),
+						'post_title'       => __( 'Quest: Comment on a Post', 'badgeos-badgestack' ),
 						'count'            => 1,
 						'trigger_type'     => 'specific-achievement',
 						'achievement_type' => $this->type['quest'],
-						'achievement_post' => __( 'Join BadgeOS', 'badgeos-badgestack' ),
+						'achievement_post' => __( 'Comment on a Post', 'badgeos-badgestack' ),
 						'order'            => 0,
 					),
 					array(
-						'post_title'       => __( 'Quest: Customize Your BadgeOS Profile', 'badgeos-badgestack' ),
+						'post_title'       => __( 'Quest: Not Login for X Days', 'badgeos-badgestack' ),
 						'count'            => 1,
 						'trigger_type'     => 'specific-achievement',
 						'achievement_type' => $this->type['quest'],
-						'achievement_post' => __( 'Customize Your Profile', 'badgeos-badgestack' ),
+						'achievement_post' => __( 'Not Login for X Days', 'badgeos-badgestack' ),
 						'order'            => 1,
 					),
 				),
