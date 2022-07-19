@@ -14,7 +14,7 @@ class Taxonomy_Walker extends Walker_Category {
 		$this->defaults = $defaults;
 	}
 
-	function display_element( $element, &$children_elements, $max_depth, $depth=0, $args, &$output ) {
+	function display_element( $element, &$children_elements, $max_depth, $depth=0, $args = array(), &$output = '' ) {
 		
 		parent::display_element( $element, $children_elements, $max_depth, $depth, $args, $output );
 	}
