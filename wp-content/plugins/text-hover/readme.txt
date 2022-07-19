@@ -5,8 +5,8 @@ Tags: tooltips, abbreviations, terms, acronyms, help, coffee2code
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Requires at least: 4.9
-Tested up to: 5.7
-Stable tag: 4.1
+Tested up to: 5.9
+Stable tag: 4.2
 
 Add hover text (aka tooltips) to content in posts. Handy for providing explanations of names, terms, phrases, abbreviations, and acronyms.
 
@@ -46,9 +46,9 @@ Links: [Plugin Homepage](https://coffee2code.com/wp-plugins/text-hover/) | [Plug
 
 == Screenshots ==
 
-1. A screenshot of the admin options page for the plugin, where you define the terms/acronyms/phrases and their related hover text
-2. A screenshot of the plugin in action for a post when the mouse is hovering over a defined hover text term using the pretty tooltips
-3. A screenshot of the plugin in action for a post when the mouse is hovering over a defined hover text term using default browser tooltips (in this case, Chrome on OSX)
+1. The admin options page for the plugin, where you define the terms/acronyms/phrases and their related hover text
+2. The plugin in action for a post when the mouse is hovering over a defined hover text term using the pretty tooltips
+3. The plugin in action for a post when the mouse is hovering over a defined hover text term using default browser tooltips (in this case, Chrome on OSX)
 
 
 == Frequently Asked Questions ==
@@ -99,173 +99,54 @@ Yes. While this plugin is compatible with many other plugins that modify post an
 
 If you know the name of the filter provided by a plugin, you can add it to the "More filters" setting to have its value processed for text hover.
 
+= Why can't I find or access the plugin's settings page even though the plugin is activated? =
+
+The plugin's settings page is found at "Settings" -> "Text Hover" in the admin sidebar menu.
+
+In order to see that link in the menu and to access the plugin's settings page to configure the plugin, you must be logged in as an administrator. More specifically, you must be a user with the 'manage_options' and 'unfiltered_html' capabilities, which by default are capabilities of the 'administrator' role. If you have a custom role, or your administrator role has been customized, such that both capabilities are not assigned to you, then you cannot configure the plugin.
+
 = Does this plugin include unit tests? =
 
 Yes.
 
 
-== Hooks ==
+== Developer Documentation ==
 
-The plugin exposes a number of filters for hooking. Typically, the code to utilize these hooks would go inside your active theme's functions.php file. Bear in mind that all of the features controlled by these filters are configurable via the plugin's settings page. These filters are likely only of interest to advanced users able to code.
+Developer documentation can be found in [DEVELOPER-DOCS.md](https://github.com/coffee2code/text-hover/blob/master/DEVELOPER-DOCS.md). That documentation covers the numerous hooks provided by the plugin. Those hooks are listed below to provide an overview of what's available.
 
-**c2c_text_hover_filters (filter)**
-
-The 'c2c_text_hover_filters' hook allows you to customize what hooks get text hover applied to them.
-
-Arguments:
-
-* $hooks (array): Array of hooks that will be text hovered.
-
-Example:
-
-`
-/**
- * Enable text hover for post/page titles.
- *
- * @param array $filters Filters handled by the Text Hover plugin.
- * @return array
- */
-function more_text_hovers( $filters ) {
-	$filters[] = 'the_title'; // Here you could put in the name of any filter you want
-	return $filters;
-}
-add_filter( 'c2c_text_hover_filters', 'more_text_hovers' );
-`
-
-**c2c_text_hover_third_party_filters (filter)**
-
-The 'c2c_text_hover_third_party_filters' hook allows you to customize what third-party hooks get text hover applied to them. Note: the results of this filter are then passed through the `c2c_text_hover_filters` filter, so third-party filters can be modified using either hook.
-
-Arguments:
-
-* $filters (array): The third-party filters whose text should have text hover applied. Default `array( 'acf/format_value/type=text', 'acf/format_value/type=textarea', 'acf/format_value/type=url', 'acf_the_content', 'elementor/frontend/the_content', 'elementor/widget/render_content' )`.
-
-Example:
-
-`
-/**
- * Stop text hovers for ACF text fields and add text hovers for a custom filter.
- *
- * @param array $filters
- * @return array
- */
-function my_c2c_text_hover_third_party_filters( $filters ) {
-	// Remove a filter already in the list.
-	unset( $filters[ 'acf/format_value/type=text' ] );
-	// Add a filter to the list.
-	$filters[] = 'my_plugin_filter';
-	return $filters;
-}
-add_filter( 'c2c_text_hover_third_party_filters', 'my_c2c_text_hover_third_party_filters' );
-`
-
-**c2c_text_hover_filter_priority (filter)**
-
-The 'c2c_text_hover_filter_priority' hook allows you to override the default priority for the 'c2c_text_hover' filter.
-
-Arguments:
-
-* $priority (int): The priority for the 'c2c_text_hover' filter. The default value is 2.
-* $filter (string): The filter name.
-
-Example:
-
-`
-/**
- * Change the default priority of the 'c2c_text_hover' filter to run after most other plugins.
- *
- * @param int $priority The priority for the 'c2c_text_hover' filter.
- * @return int
- */
-function my_change_priority_for_c2c_text_hover( $priority, $filter ) {
-	return 1000;
-}
-add_filter( 'c2c_text_hover_filter_priority', 'my_change_priority_for_c2c_text_hover', 10, 2 );
-`
-
-**c2c_text_hover (filter)**
-
-The 'c2c_text_hover' hook allows you to customize or override the setting defining all of the text hover terms and their hover texts.
-
-Arguments:
-
-* $text_hover_array (array): Array of text hover terms and their hover texts. This will be the value set via the plugin's settings page.
-
-Example:
-
-`
-/**
- * Add dynamic text hover.
- *
- * @param array $text_hover_array Array of all text hover terms and their hover texts.
- * @return array
- */
-function my_text_hovers( $text_hover_array ) {
-	// Add new term and hover text
-	$text_hover_array['Matt'] => 'Matt Mullenweg';
-	// Unset a term that we never want hover texted
-	if ( isset( $text_hover_array['Drupal'] ) )
-		unset( $text_hover_array['Drupal'] );
-	// Important!
-	return $text_hover_array;
-}
-add_filter( 'c2c_text_hover', 'my_text_hovers' );
-`
-
-**c2c_text_hover_text_comments (filter)**
-
-The 'c2c_text_hover_text_comments' hook allows you to customize or override the setting indicating if text linkification should be enabled in comments.
-
-Arguments:
-
-* $state (bool): Either true or false indicating if text linkification is enabled for comments. The default value will be the value set via the plugin's settings page.
-
-Example:
-
-`// Prevent text linkification from ever being enabled in comments.
-add_filter( 'c2c_linkify_text_comments', '__return_false' );`
-
-**c2c_text_hover_case_sensitive (filter)**
-
-The 'c2c_text_hover_case_sensitive' hook allows you to customize or override the setting indicating if text hover should be case sensitive.
-
-Arguments:
-
-* $state (bool): Either true or false indicating if text hover is case sensitive. This will be the value set via the plugin's settings page.
-
-Example:
-
-`// Prevent text hover from ever being case sensitive.
-add_filter( 'c2c_text_hover_case_sensitive', '__return_false' );`
-
-**c2c_text_hover_once (filter)**
-
-The 'c2c_text_hover_once' hook allows you to customize or override the setting indicating if text hovering should be limited to once per term per piece of text being processed regardless of how many times the term appears.
-
-Arguments:
-
-* $state (bool): Either true or false indicating if text hovering is to only occur once per term. The default value will be the value set via the plugin's settings page.
-
-Example:
-
-`// Only show hovertext for a term/shortcut once per post.
-add_filter( 'c2c_text_hover_once', '__return_true' );`
-
-**c2c_text_hover_use_pretty_tooltips (filter)**
-
-The 'c2c_text_hover_use_pretty_tooltips' hook allows you to customize or override the setting indicating if text hovering should use prettier tooltips to display the hover text. If false, the browser's default tooltips will be used.
-
-Arguments:
-
-* $state (bool): Either true or false indicating if prettier tooltips should be used. The default value will be the value set via the plugin's settings page.
-
-Example:
-
-`// Prevent pretty tooltips from being used.
-add_filter( 'c2c_text_hover_use_pretty_tooltips', '__return_false' );`
+* `c2c_text_hover_filters` : Customize what hooks get text hover applied to them.
+* `c2c_text_hover_third_party_filters` : Customize what third-party hooks get text hover applied to them.
+* `c2c_text_hover_filter_priority` : Override the default priority for the `c2c_text_hover` filter.
+* `c2c_text_hover` Customize or override the setting defining all of the text hover terms and their hover texts.
+* `c2c_text_hover_comments` : Customize or override the setting indicating if text hover should be enabled in comments.
+* `c2c_text_hover_case_sensitive` : Customize or override the setting indicating if text hover should be case sensitive.
+* `c2c_text_hover_once` : Customize or override the setting indicating if text hovering should be limited to once per term per piece of text being processed regardless of how many times the term appears.
+* `c2c_text_hover_use_pretty_tooltips` : Customize or override the setting indicating if prettier tooltips should be used.
 
 
 == Changelog ==
+
+= 4.2 (2022-03-22) =
+Highlights:
+
+This release introduces security hardening to restrict HTML tags that can be used as hover text in fancy tooltips, adds DEVELOPER-DOCS.md, notes compatibility through WP 5.9, and minor settings page and documentation tweaks.
+
+Details:
+
+* Change: Disallow all but the most basic formatting markup within hover text. Props Rohan Chaudhari.
+    * As continues to be the case, markup only ever works in the better looking tooltips.
+    * This only enforces the already documented limited markup support to basic formatting tags.
+    * Existing text hovers will be unaffected until the next time settings get saved.
+* New: Add DEVELOPER-DOCS.md and move hooks documentation into it
+* Change: Remove settings page helptext about 'replace_once' setting not applying to multibyte strings since it's no longer true
+* Change: Lowercase the displayed values for 'when' setting
+* Change: Move 'code' tags out of translatable string for 'when' setting
+* Change: Note compatibility through WP 5.9+
+* Change: Remove "A screenshot of" prefix from all screenshot captions
+* Change: Tweak installation instructions in README.md
+* Change: Fix typo in function docblock
+* Change: Update copyright date (2022)
+* New: Add a few more possible TODO items
 
 = 4.1 (2021-06-29) =
 Highlights:
@@ -384,18 +265,13 @@ Details:
     * Change: Use HTTPS for link to WP SVN repository in bin script for configuring unit tests (and delete commented-out code)
 * Change: Update screenshot
 
-= 3.9.1 (2020-01-12) =
-* Fix: Revert to apply to the `the_excerpt` filter, which was mistakenly changed to `get_the_excerpt`
-* Change: Update some inline documentation relating to third-party plugin hook support
-* Unit tests:
-    * Change: Implement a more generic approach to capture default values provided for a filter
-    * New: Add test to verify the lack of any defined hover text doesn't remove zeroes from text
-    * Fix: Correct typo in function name used
-
 _Full changelog is available in [CHANGELOG.md](https://github.com/coffee2code/text-hover/blob/master/CHANGELOG.md)._
 
 
 == Upgrade Notice ==
+
+= 4.2 =
+Recommended hardening release: restricted HTML tags that can be used as hover text in fancy tooltips, added DEVELOPER-DOCS.md, noted compatibility through WP 5.9, and minor settings page and documentation tweaks.
 
 = 4.1 =
 Recommended feature release: added new setting to allow for user-specified filters to be processed, updated plugin framework significantly, improved plugin settings page, restructured unit test files, noted compatibility through WP 5.7, and more.
