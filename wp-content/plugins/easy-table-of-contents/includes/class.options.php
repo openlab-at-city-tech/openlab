@@ -183,6 +183,7 @@ if ( ! class_exists( 'ezTOC_Option' ) ) {
 							'options' => array(
 								'before' => __( 'Before first heading (default)', 'easy-table-of-contents' ),
 								'after' => __( 'After first heading', 'easy-table-of-contents' ),
+								'afterpara' => __( 'After first paragraph', 'easy-table-of-contents' ),
 								'top' => __( 'Top', 'easy-table-of-contents' ),
 								'bottom' => __( 'Bottom', 'easy-table-of-contents' ),
 								//'placeholder' => __( 'Replace [toc] placeholder. For backwards compatibility with Table of Content Plus.', 'easy-table-of-contents' ),
@@ -253,6 +254,8 @@ if ( ! class_exists( 'ezTOC_Option' ) ) {
 							'type' => 'select',
 							'options' => array(
 								'decimal' => __( 'Decimal (default)', 'easy-table-of-contents' ),
+								'disc' => __( 'Disc', 'easy-table-of-contents' ),
+								'hyphen' => __( 'Hyphen', 'easy-table-of-contents' ),
 								'numeric' => __( 'Numeric', 'easy-table-of-contents' ),
 								'roman' => __( 'Roman', 'easy-table-of-contents' ),
 								'none' => __( 'None', 'easy-table-of-contents' ),
@@ -265,6 +268,25 @@ if ( ! class_exists( 'ezTOC_Option' ) ) {
 							'desc' => '',
 							'type' => 'checkbox',
 							'default' => true,
+						),
+						'toc_loading' => array(
+							'id' => 'toc_loading',
+							'name' => __( 'TOC Loading Method', 'easy-table-of-contents' ),
+							'desc' => '',
+							'type' => 'select',
+							'options' => array(
+								'js' => __( 'JavaScript (default)', 'easy-table-of-contents' ),
+								'css' => __( 'Pure CSS', 'easy-table-of-contents' ),
+								 
+							),
+							'default' => 'js',
+						),
+						'remove_special_chars_from_title' => array(
+							'id' => 'remove_special_chars_from_title',
+							'name' => __( 'Remove \':\' from TOC Title', 'easy-table-of-contents' ),
+							'desc' => '',
+							'type' => 'checkbox',
+							'default' => false,
 						),
 					)
 				),
@@ -321,15 +343,22 @@ if ( ! class_exists( 'ezTOC_Option' ) ) {
 						),
 						'wrapping' => array(
 							'id' => 'wrapping',
-							'name' => __( 'Float', 'easy-table-of-contents' ),
+							'name' => __( 'Alignment', 'easy-table-of-contents' ),
 							'desc' => '',
 							'type' => 'select',
 							'options' => array(
 								'none' => __( 'None (Default)', 'easy-table-of-contents' ),
 								'left' => __( 'Left', 'easy-table-of-contents' ),
 								'right' => __( 'Right', 'easy-table-of-contents' ),
+								'center' => __( 'Center', 'easy-table-of-contents' ),
 							),
 							'default' => 'none',
+						),
+						'font_options_header' => array(
+							'id' => 'font_options',
+							'name' => '<strong>' . __( 'Font Option', 'easy-table-of-contents' ) . '</strong>',
+							//'desc' => __( 'For the following settings to apply, select the Custom Font option.', 'easy-table-of-contents' ),
+							'type' => 'header',
 						),
 						'title_font_size' => array(
 							'id' => 'title_font_size',
@@ -362,6 +391,19 @@ if ( ! class_exists( 'ezTOC_Option' ) ) {
 							'desc' => '',
 							'type' => 'font_size',
 							'default' => 95,
+						),
+						'child_font_size' => array(
+							'id' => 'child_font_size',
+							'name' => __( 'Child Font Size', 'easy-table-of-contents' ),
+							'desc' => '',
+							'type' => 'child_font_size',
+							'default' => 90,
+						),
+						'theme_option_header' => array(
+							'id' => 'theme_option_header',
+							'name' => '<strong>' . __( 'Theme Options', 'easy-table-of-contents' ) . '</strong>',
+							//'desc' => __( 'For the following settings to apply, select the Custom Theme option.', 'easy-table-of-contents' ),
+							'type' => 'header',
 						),
 						'theme' => array(
 							'id' => 'theme',
@@ -459,6 +501,13 @@ if ( ! class_exists( 'ezTOC_Option' ) ) {
 							'type' => 'checkbox',
 							'default' => false,
 						),
+						'inline_css' => array(
+							'id' => 'inline_css',
+							'name' => __( 'Inline CSS', 'easy-table-of-contents' ),
+							'desc' => __( "Improve your  website performance by inlining your CSS.", 'easy-table-of-contents' ),
+							'type' => 'checkbox',
+							'default' => false,
+						),
 						//'bullet_spacing' => array(
 						//	'id' => 'bullet_spacing',
 						//	'name' => __( 'Theme Bullets', 'easy-table-of-contents' ),
@@ -542,6 +591,26 @@ if ( ! class_exists( 'ezTOC_Option' ) ) {
 							'type' => 'text',
 							'default' => '',
 						),
+						
+					)
+				),
+				'prosettings' => apply_filters(
+					'ez_toc_settings_prosettings',
+						array(
+						'exclude_by_class' => array(
+							'id' => 'exclude_by_class',
+							'name' => __( 'Exclude Headings by Class', 'easy-table-of-contents' ),
+							'desc' => '<br/>' . __( 'You can hide the TOC heading by its class and if you want to hide multiple headings then please saparate them with a comma (,)', 'easy-table-of-contents' ),
+							'type' => 'text',
+							'default' => '',
+						),		
+						'fixedtoc' => array(
+							'id' => 'fixedtoc',
+							'name' => __( 'Fixed TOC', 'easy-table-of-contents' ),
+							'desc' => __( 'Fixed TOC in the page display so it can be easier to navigate', 'easy-table-of-contents' ),
+							'type' => 'checkbox',
+							'default' => false,
+						),		 
 					)
 				),
 			);
@@ -574,6 +643,8 @@ if ( ! class_exists( 'ezTOC_Option' ) ) {
 				'smooth_scroll_offset'               => 30,
 				'mobile_smooth_scroll_offset'        => 0,
 				'visibility'                         => true,
+				'toc_loading'                        => 'js',
+				'remove_special_chars_from_title'    => false,
 				//'visibility_show'                    => 'show',
 				//'visibility_hide'                    => 'hide',
 				'visibility_hide_by_default'         => false,
@@ -585,6 +656,7 @@ if ( ! class_exists( 'ezTOC_Option' ) ) {
 				'title_font_size_units'              => '%',
 				'title_font_weight'                  => 500,
 				'font_size'                          => 95,
+				'child_font_size'					 => 90,
 				'font_size_units'                    => '%',
 				'theme'                              => 'grey',
 				'custom_background_colour'           => '#fff',
@@ -598,6 +670,7 @@ if ( ! class_exists( 'ezTOC_Option' ) ) {
 				//'bullet_spacing'                     => false,
 				'include_homepage'                   => false,
 				'exclude_css'                        => false,
+				'inline_css'                        => false,
 				'exclude'                            => '',
 				'heading_levels'                     => array( '1', '2', '3', '4', '5', '6' ),
 				'restrict_path'                      => '',
@@ -1244,6 +1317,47 @@ if ( ! class_exists( 'ezTOC_Option' ) ) {
 		 * @param array $args
 		 */
 		public static function font_size( $args ) {
+
+			//$value = self::get( $args['id'], $args['default'] );
+
+			self::text(
+				array(
+					'id'      => $args['id'],
+					'desc'    => '',
+					'size'    => 'small',
+					'default' => $args['default'],
+				)
+			);
+
+			self::select(
+				array(
+					'id'      => $args['id'] . '_units',
+					'desc'    => '',
+					'options' => array(
+						'pt' => 'pt',
+						'px' => 'px',
+						'%'  => '%',
+						'em' => 'em',
+					),
+					'default' => '%',
+				)
+			);
+
+			if ( 0 < strlen( $args['desc'] ) ) {
+
+				echo '<label for="ez-toc-settings[' . $args['id'] . ']"> ' . $args['desc'] . '</label>';
+			}
+		}
+/**
+		 * Custom font size callback.
+		 *
+		 * @access public
+		 * @since  1.0
+		 * @static
+		 *
+		 * @param array $args
+		 */
+public static function child_font_size( $args ) {
 
 			//$value = self::get( $args['id'], $args['default'] );
 

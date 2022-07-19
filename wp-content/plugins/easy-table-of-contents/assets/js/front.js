@@ -11,6 +11,11 @@ jQuery( function( $ ) {
 
 	if ( typeof ezTOC != 'undefined' ) {
 
+		/**
+		 * Init EZ TOC.
+		 */
+		function ezTOCInit() {
+
 		var affix = $( '.ez-toc-widget-container.ez-toc-affix' );
 
 		if ( 0 !== affix.length ) {
@@ -129,10 +134,12 @@ jQuery( function( $ ) {
 			if ( Cookies ) {
 
 				Cookies.get( 'ezTOC_hidetoc' ) == 1 ? toggle.data( 'visible', false ) : toggle.data( 'visible', true );
+				Cookies.remove('ezTOC_hidetoc')
 
 			} else {
 
 				toggle.data( 'visible', true );
+				Cookies.remove('ezTOC_hidetoc')
 			}
 
 			if ( invert ) {
@@ -148,6 +155,9 @@ jQuery( function( $ ) {
 			toggle.on( 'click', function( event ) {
 
 				event.preventDefault();
+				
+				const main = document.querySelector("#ez-toc-container");
+				main.classList.toggle("toc_close");
 
 				if ( $( this ).data( 'visible' ) ) {
 
@@ -306,4 +316,14 @@ jQuery( function( $ ) {
             correctActiveListElementBackgroundColorHeight( activeListElement );
         }
     }
+
+    	/**
+		 * Attach global init handler to ezTOC window object.
+		 */
+		ezTOC.init = function(){
+			ezTOCInit();
+		}
+		// Start EZ TOC on page load.
+		ezTOCInit();
+	}
 } );
