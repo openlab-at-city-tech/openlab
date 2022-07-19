@@ -8,8 +8,7 @@ use Gravity_Forms\Gravity_Forms\License;
 use Gravity_Forms\Gravity_Forms\Query\Batch_Processing\GF_Entry_Meta_Batch_Processor;
 use Gravity_Forms\Gravity_Forms\Query\Batch_Processing\GF_Batch_Operations_Service_Provider;
 
-require_once( ABSPATH . WPINC . '/post.php' );
-require_once( 'includes/legacy/forms_model_legacy.php' );
+require_once GF_PLUGIN_DIR_PATH . 'includes/legacy/forms_model_legacy.php';
 
 /**
  * Class GFFormsModel
@@ -125,6 +124,19 @@ class GFFormsModel {
 	 */
 	public static function flush_current_lead() {
 		self::$_current_lead = null;
+	}
+
+	/**
+	 * Removes a form from the data stored within GFFormsModel::$_current_form.
+	 *
+	 * @since 2.6
+	 *
+	 * @var string $key The key of the form to clear from the current forms array.
+	 *
+	 * @return void
+	 */
+	public static function flush_current_form( $key ) {
+		self::$_current_forms[ $key ] = null;
 	}
 
 	/**
@@ -413,7 +425,7 @@ class GFFormsModel {
 	 */
 	public static function get_forms( $is_active = null, $sort_column = 'title', $sort_dir = 'ASC', $is_trash = false ) {
 		global $wpdb;
-		$form_table_name = self::get_form_table_name();
+		$form_table_name = esc_sql( self::get_form_table_name() );
 
 		$where_arr   = array();
 		$where_arr[] = $wpdb->prepare( 'is_trash=%d', $is_trash );
@@ -430,7 +442,8 @@ class GFFormsModel {
 			$sort_column = 'title';
 		}
 
-		$order_by     = ! empty( $sort_column ) ? "ORDER BY $sort_column $sort_keyword" : '';
+		$sort_column = sanitize_sql_orderby( $sort_column );
+		$order_by    = ! empty( $sort_column ) ? "ORDER BY $sort_column $sort_keyword" : '';
 
 		$sql = "SELECT f.id, f.title, f.date_created, f.is_active, 0 as entry_count, 0 view_count
                 FROM $form_table_name f
@@ -487,7 +500,7 @@ class GFFormsModel {
 	 */
 	public static function search_forms( $query = '', $is_active = null, $sort_column = 'title', $sort_dir = 'ASC', $is_trash = false ) {
 		global $wpdb;
-		$form_table_name = self::get_form_table_name();
+		$form_table_name = esc_sql( self::get_form_table_name() );
 
 		$where_arr   = array();
 		$where_arr[] = $wpdb->prepare( 'is_trash=%d', $is_trash );
@@ -499,7 +512,6 @@ class GFFormsModel {
 			$where_arr[] = $wpdb->prepare( 'title LIKE %s', '%' . $query . '%' );
 		}
 
-		$where_clause = 'WHERE ' . join( ' AND ', $where_arr );
 		$sort_keyword = $sort_dir == 'ASC' ? 'ASC' : 'DESC';
 
 		$db_columns = self::get_form_db_columns();
@@ -507,9 +519,12 @@ class GFFormsModel {
 		if ( ! in_array( strtolower( $sort_column ), $db_columns ) ) {
 			$sort_column = 'title';
 		}
+		$sort_column = sanitize_sql_orderby( $sort_column );
 
+		$where_clause = 'WHERE ' . join( ' AND ', $where_arr );
 		$order_by     = ! empty( $sort_column ) ? "ORDER BY $sort_column $sort_keyword" : '';
 
+		// All of the pieces of this SQL statement have already gone through $wpdb->prepare, so we don't prepare it again here.
 		$sql = "SELECT f.id, f.title, f.date_created, f.is_active, 0 as entry_count, 0 view_count
                 FROM $form_table_name f
                 $where_clause
@@ -566,12 +581,12 @@ class GFFormsModel {
 		}
 
 		global $wpdb;
-		$entry_table_name = self::get_entry_table_name();
+		$entry_table_name = esc_sql( self::get_entry_table_name() );
 
 		$entry_count = GFCache::get( 'get_entry_count_per_form' );
 		if ( empty( $entry_count ) ) {
 			//Getting entry count per form
-			$sql         = "SELECT form_id, count(id) as entry_count FROM $entry_table_name l WHERE status='active' GROUP BY form_id";
+			$sql         = $wpdb->prepare( "SELECT form_id, count(id) as entry_count FROM $entry_table_name l WHERE status=%s GROUP BY form_id", 'active' );
 			$entry_count = $wpdb->get_results( $sql );
 
 			GFCache::set( 'get_entry_count_per_form', $entry_count, true, 30 );
@@ -597,7 +612,7 @@ class GFFormsModel {
 	 */
 	public static function get_view_count_per_form() {
 		global $wpdb;
-		$view_table_name = self::get_form_view_table_name();
+		$view_table_name = esc_sql( self::get_form_view_table_name() );
 
 		$view_count = GFCache::get( 'get_view_count_per_form' );
 		if ( empty( $view_count ) ){
@@ -732,32 +747,37 @@ class GFFormsModel {
 	 */
 	public static function get_form_summary() {
 		global $wpdb;
-		$form_table_name = self::get_form_table_name();
-		$entry_table_name = version_compare( self::get_database_version(), '2.3-dev-1', '<' ) ? self::get_lead_table_name() : self::get_entry_table_name();
+		$form_table_name = esc_sql( self::get_form_table_name() );
+		$entry_table_name = version_compare( self::get_database_version(), '2.3-dev-1', '<' ) ? esc_sql( self::get_lead_table_name() ) : esc_sql( self::get_entry_table_name() );
 
-		$sql = "SELECT l.form_id, count(l.id) as unread_count
-                FROM $entry_table_name l
-                WHERE is_read=0 AND status='active'
-                GROUP BY form_id";
+		$sql = $wpdb->prepare( "SELECT l.form_id, count(l.id) as unread_count
+            FROM $entry_table_name l
+            WHERE is_read=%d AND status=%s
+            GROUP BY form_id",
+			0,
+			'active'
+		);
 
 		// Getting number of unread and total leads for all forms
 		$unread_results = $wpdb->get_results( $sql, ARRAY_A );
 
-		$sql = "SELECT l.form_id, max(l.date_created) as last_entry_date, count(l.id) as total_entries
-                FROM $entry_table_name l
-                WHERE status='active'
-                GROUP BY form_id";
+		$sql = $wpdb->prepare( "SELECT l.form_id, max(l.date_created) as last_entry_date, count(l.id) as total_entries
+            FROM $entry_table_name l
+            WHERE status=%s
+            GROUP BY form_id",
+			'active'
+		);
 
 		$lead_date_results = $wpdb->get_results( $sql, ARRAY_A );
 
-		$sql = "SELECT id, title, is_trash, '' as last_entry_date, 0 as unread_count
-
-                FROM $form_table_name
-                WHERE is_active=1
-                ORDER BY title";
+		$sql = $wpdb->prepare( "SELECT id, title, is_trash, '' as last_entry_date, 0 as unread_count
+            FROM $form_table_name
+            WHERE is_active=%d
+            ORDER BY title",
+			1
+		);
 
 		$forms = $wpdb->get_results( $sql, ARRAY_A );
-
 
 		for ( $i = 0; $count = sizeof( $forms ), $i < $count; $i ++ ) {
 			if ( is_array( $unread_results ) ) {
@@ -889,11 +909,12 @@ class GFFormsModel {
 	 *
 	 * @param string $string The string to convert.
 	 *
-	 * @return object|array The object that the string was converted to.
+	 * @return mixed
 	 */
 	public static function unserialize( $string ) {
-
-		if ( is_serialized( $string ) ) {
+		if ( empty( $string ) ) {
+			return null;
+		} elseif ( is_serialized( $string ) ) {
 			$obj = @unserialize( $string );
 		} else {
 			$obj = json_decode( $string, true );
@@ -1359,7 +1380,7 @@ class GFFormsModel {
 		}
 
 		foreach ( $current_fields as $field ) {
-			if ( $field->meta_key == $field_number && $field->item_index == $item_index) {
+			if ( (string) $field->meta_key === (string) $field_number && $field->item_index == $item_index) {
 				return $field->id;
 			}
 		}
@@ -2293,7 +2314,6 @@ class GFFormsModel {
 	}
 
 	public static function delete_field( $form_or_id, $field_id, $save_form = true ) {
-
 		$form = is_numeric( $form_or_id ) ? self::get_form_meta( $form_or_id ) : $form_or_id;
 
 		if ( empty( $form['id'] ) || ! isset( $form['fields'] ) || ! is_array( $form['fields'] ) ) {
@@ -4212,6 +4232,11 @@ class GFFormsModel {
 	}
 
 	public static function maybe_trim_input( $value, $form_id, $field ) {
+		
+		if ( is_null( $value ) ) {
+			return $value;
+		}
+		
 		$trim_value = apply_filters( 'gform_trim_input_value', true, $form_id, $field );
 
 		if ( $trim_value ) {
@@ -4743,7 +4768,6 @@ class GFFormsModel {
 			return $lead;
 		}
 
-
 		//processing post fields
 		GFCommon::log_debug( 'GFFormsModel::create_post(): Getting post fields.' );
 		$post_data = self::get_post_fields( $form, $lead );
@@ -5229,7 +5253,7 @@ class GFFormsModel {
 				$result                       = self::queue_batch_field_operation( $form, $lead, $field, $lead_detail_id, $input_id, $v, $new_item_index );
 				GFCommon::log_debug( __METHOD__ . "(): Saving: {$field->label}(#{$input_id}{$item_index} - {$field->type}). Result: " . var_export( $result, 1 ) );
 				foreach ( $current_fields as $current_field ) {
-					if ( $current_field->meta_key == $input_id && $current_field->item_index == $new_item_index ) {
+					if ( (string) $current_field->meta_key === (string) $input_id && $current_field->item_index == $new_item_index ) {
 						$current_field->update = true;
 					}
 				}
@@ -7432,6 +7456,33 @@ class GFFormsModel {
 	}
 
 	/**
+	 * Returns the encrypted field IDs for each entry_id specified in the $entry_ids array.
+	 *
+	 * @since 2.6
+	 *
+	 * @param array $entry_ids An array of entry IDs.
+	 *
+	 * @return array Returns an array with entry_id as the key and an array of field IDs (that have been encrypted using GFCommon::openssl_encrypt()) as the value.
+	 */
+	public static function get_openssl_encrypted_fields_by_entries( $entry_ids ) {
+		global $wpdb;
+
+		$entry_ids        = array_unique( $entry_ids );
+		$placeholders     = implode( ',', array_fill( 0, count( $entry_ids ), '%d' ) );
+		$entry_meta_table = self::get_entry_meta_table_name();
+
+		$sql     = sprintf( "SELECT entry_id, meta_value from $entry_meta_table WHERE meta_key = '_openssl_encrypted_fields' AND entry_id IN(%s)", $placeholders );
+		$results = $wpdb->get_results( $wpdb->prepare( $sql, $entry_ids ), ARRAY_A );
+
+		$encrypted_fields = array();
+		foreach ( $results as $row ) {
+			$encrypted_fields[ $row['entry_id'] ] = maybe_unserialize( $row['meta_value'] );
+		}
+
+		return $encrypted_fields;
+	}
+
+	/**
 	 * Adds the field IDs that have been encrypted using GFCommon::encrypt(). Merges the new IDs with the existing IDs.
 	 *
 	 * @since 2.3
@@ -7771,11 +7822,13 @@ class GFFormsModel {
 	}
 
 	/**
-	 * Evaluates the conditional logic based on the specified $logic variable.
-	 * @param $form         The current Form object.
-	 * @param $logic        The conditional logic configuration array with all the specified rules.
-	 * @param $field_values Default field values for this form. Used when form has not yet been submitted. Pass an array if no default field values are available/required.
-	 * @param $entry        Optional, default is null. If entry object is available, pass the entry.
+	 * Evaluates the conditional logic based on the specified $logic variable. This method is used when evaluating field conditional logic.
+	 * NOTE: There is a future refactoring opportunity to reduce code duplication by merging this method with GFCommon::evaluate_conditional_logic(), which currently handles non-field conditional logic (i.e. notification, confirmation and feed). A possible solution is for this method to call GFCommon::evaluate_conditional_logic().
+	 *
+	 * @param array $form         The current Form object.
+	 * @param array $logic        The conditional logic configuration array with all the specified rules.
+	 * @param array $field_values Default field values for this form. Used when form has not yet been submitted. Pass an array if no default field values are available/required.
+	 * @param array $entry        Optional, default is null. If entry object is available, pass the entry.
 	 *
 	 * @return bool         Returns true if the conditional logic passes (i.e. field/button is supposed to be displayed), false otherwise.
 	 */
@@ -7791,21 +7844,35 @@ class GFFormsModel {
 				/**
 				 * Filter the conditional logic rule before it is evaluated.
 				 *
+				 * @since 2.4.22
+				 *
 				 * @param array $rule         The conditional logic rule about to be evaluated.
 				 * @param array $form         The current form meta.
 				 * @param array $logic        All details required to evaluate an objects conditional logic.
 				 * @param array $field_values The default field values for this form.
 				 * @param array $entry        The current entry object (if available).
-				 *
-				 * @since 2.4.22
 				 */
 				$rule = apply_filters( 'gform_rule_pre_evaluation', $rule, $form, $logic, $field_values, $entry );
 			} catch ( Error $e ) {
 				GFCommon::log_error( __METHOD__ . '(): Error from function hooked to gform_rule_pre_evaluation. ' . $e->getMessage() );
 			}
 			$source_field   = RGFormsModel::get_field( $form, $rule['fieldId'] );
-			$field_value    = empty( $entry ) ? self::get_field_value( $source_field, $field_values ) : self::get_lead_field_value( $entry, $source_field );
-			$is_value_match = self::is_value_match( $field_value, $rule['value'], $rule['operator'], $source_field, $rule, $form );
+			$source_value   = empty( $entry ) ? self::get_field_value( $source_field, $field_values ) : self::get_lead_field_value( $entry, $source_field );
+
+			/**
+			 * Filter the source value of a conditional logic rule before it is compared with the target value.
+			 *
+			 * @since 2.6.2
+			 *
+			 * @param int|string $source_value The value of the rule's configured field ID, entry meta, or custom property.
+			 * @param array      $rule         The conditional logic rule that is being evaluated.
+			 * @param array      $form         The current form meta.
+			 * @param array      $logic        All details required to evaluate an objects conditional logic.
+			 * @param array      $entry        The current entry object (if available).
+			 */
+			$source_value = apply_filters( 'gform_rule_source_value', $source_value, $rule, $form, $logic, $entry );
+
+			$is_value_match = self::is_value_match( $source_value, $rule['value'], $rule['operator'], $source_field, $rule, $form );
 
 			if ( $is_value_match ) {
 				$match_count ++;
