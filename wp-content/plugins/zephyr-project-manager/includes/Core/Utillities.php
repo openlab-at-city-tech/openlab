@@ -15,6 +15,7 @@ use Inc\Api\Emails;
 use Inc\Core\Project;
 use Inc\Core\Utillities;
 use Inc\Base\BaseController;
+use Inc\Core\Members;
 use Inc\ZephyrProjectManager;
 
 class Utillities {
@@ -31,10 +32,10 @@ class Utillities {
 		$results = [];
 		$user_array = [];
 		$currentUserId = get_current_user_id();
-		$canView = Utillities::canViewMembers();
 		
 		if ( $formatted ) {
 			foreach ($users as $user) {
+				$canView = Members::canViewMember($user->ID);
 				if ($canView || $user->ID == $currentUserId) {
 					$user = Members::get_member( $user->ID );
 					array_push( $user_array, $user );
@@ -42,7 +43,7 @@ class Utillities {
 			}
 		} else {
 			foreach ($users as $user) {
-
+				$canView = Members::canViewMember($user->ID);
 				if ($canView || $user->ID == $currentUserId) {
 					$user_array[] = $user;
 				}
@@ -463,7 +464,12 @@ class Utillities {
 			$query_prefix = !empty( $permalink_structure ) ? $base . '?' : $base . '&';
 			return  $query_prefix . $query;
 		}
+	}
 
+	public static function getProjectLink($projectID) {
+		$base = Utillities::get_page_url('zephyr_project_manager_projects');
+		$link = $base . '&action=edit_project&project=' . $projectID;
+		return $link;
 	}
 
 	public static function adjust_brightness($hex, $steps) {
@@ -655,7 +661,9 @@ class Utillities {
 	}
 
 	public static function can_view_task( $task ) {
-
+		if (is_numeric($task)) {
+			$task = Tasks::get_task($task);
+		}
 		if ( !is_object($task) ) {
 			return false;
 		}
@@ -687,15 +695,19 @@ class Utillities {
 		return true;
 	}
 
-	public static function canViewMembers() {
-		if (current_user_can( 'administrator' )) {
-			return true;
-		}
+	public static function canViewMembers($user = null) {
+		if (current_user_can( 'administrator' )) return true;
 
 		$generalSettings = Utillities::general_settings();
 
 		if ($generalSettings['view_members'] == true) {
 			return true;
+		} else {
+			if (!is_null($user)) {
+				if (Members::isTeamMate($user['id'])) {
+					return true;
+				}
+			}
 		}
 
 		return false;

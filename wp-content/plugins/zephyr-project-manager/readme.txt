@@ -2,10 +2,10 @@
 
 Contributors: dylanjkotze
 Plugin URI: https://zephyr-one.com
-Donate link: https://zephyr-one.com
+Donate link: https://www.paypal.com/donate/?cmd=_donations&business=dylanjkotze@gmail.com&item_name=Zephyr+Project+Manager+Donation&currency_code=USD&source=url
 Tags: project manager, task manager, project, projects, task, tasks, files, discussions, collaboration, pm, zephyr, modern project, management, orginization, zpm
 Requires at least: 3.2
-Tested up to: 5.9
+Tested up to: 6.0
 Stable tag: 4.3
 Requires PHP: 5.2.4
 License: GPLv2 or later
@@ -151,6 +151,16 @@ For more information and documentation, please visit [the website](https://zephy
 1. See what is going on via the Activity page
 
 == Changelog ==
+= 3.2.42 =
+* Fixed new subtask option, not working with create tasks capability
+* Improved member project picker by allowing searching, and showing it in a dropdown instead of single toggles
+* Fixed non Zephyr members showing in project member picker
+
+= 3.2.41 =
+* Tested with WP 6.0
+* Fixed security issue
+* Updated Italian translations
+* Improved welcome page to only show once, even if not clicking on the get started button, and not showing the Pro option on the welcome page if it is installed simultaneously
 
 = 3.2.31 =
 * Tested and stable with PHP 8

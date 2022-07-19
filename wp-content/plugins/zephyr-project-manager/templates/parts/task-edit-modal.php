@@ -59,7 +59,7 @@
 					</select>
 				</div>
 			<?php else : ?>
-				<input type="hidden" id="zpm_edit_task_project" value="<?php echo $_GET['project'] ?>"/>
+				<input type="hidden" id="zpm_edit_task_project" value="<?= esc_attr($_GET['project']) ?>"/>
 			<?php endif; ?>
 			
 			<div class="zpm-edit-task-field__assignee">

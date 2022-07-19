@@ -607,7 +607,7 @@ class Admin extends BaseController {
 					$editTask = Utillities::canEditTask($task);
 
 					?>
-					<?php if ($a['type'] == 'cards') : ?>
+					<?php if ($a['type'] == 'cards' || $a['type'] == 'grid') : ?>
 						<div class="zpm-task-shortcode <?php echo $task->completed == '1' ? 'zpm-task-completed' : ''; ?>" data-task-id="<?php echo $task->id; ?>" data-edit-task="<?php echo $editTask; ?>">
 							<div class="zpm-task-card <?php echo $classes; ?>">
 
@@ -689,7 +689,7 @@ class Admin extends BaseController {
 
 			?>
 
-			<?php if ($a['type'] == 'cards') : ?>
+			<?php if ($a['type'] == 'cards' || $a['type'] == 'grid') : ?>
 				<div class="zpm-task-shortcode" data-task-id="<?php echo $task->id; ?>" data-edit-task="true">
 					<div class="zpm-task-card <?php echo $classes; ?>">
 
@@ -743,6 +743,7 @@ class Admin extends BaseController {
 				<?php endif; ?>
 			<?php
 		}
+		
 		$html = ob_get_clean();
 		return $html;
     }
@@ -1075,15 +1076,20 @@ class Admin extends BaseController {
 				'capability'  => $access_level, 
 				'menu_slug'   => 'zephyr_project_manager_calendar', 
 				'callback'    => array( $callbacks, 'adminCalendar' )
-			),
-			array(
+		));
+		
+		if (Utillities::is_admin()) {
+			$subpages[] = array(
 				'parent_slug' => 'zephyr_project_manager',
 				'page_title'  => __( 'Categories, Priorities & Statuses', 'zephyr-project-manager' ), 
 				'menu_title'  => __( 'Categories, Priorities & Statuses', 'zephyr-project-manager' ), 
 				'capability'  => $access_level, 
 				'menu_slug'   => 'zephyr_project_manager_categories', 
 				'callback'    => array( $callbacks, 'adminCategories' )
-			),
+			);
+		}
+		
+		$subpages = array_merge($subpages, array(
 			array(
 				'parent_slug' => 'zephyr_project_manager',
 				'page_title'  => __( 'Devices', 'zephyr-project-manager' ), 
@@ -1124,8 +1130,7 @@ class Admin extends BaseController {
 				'capability'  => $access_level, 
 				'menu_slug'   => 'zephyr_project_manager_help', 
 				'callback'    => array( $callbacks, 'help_page' )
-			)
-		);
+		)));
 		if (!BaseController::is_pro()) {
 			$subpages[] = array(
 				'parent_slug' => 'zephyr_project_manager',

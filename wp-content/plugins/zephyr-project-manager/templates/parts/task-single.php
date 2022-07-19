@@ -21,9 +21,17 @@
 	$task_id = isset($_GET['task_id']) ? $_GET['task_id'] : '-1';
 	$this_task = ($Tasks->get_task($task_id) !== null) ? $Tasks->get_task($task_id) : '';
 	$projects = Projects::get_projects();
+
 	if (!is_object($this_task)) {
 		?>
 			<p><?php _e( 'This task does not exist or has been deleted.', 'zephyr-project-manager'); ?></p>
+		<?php
+		exit();
+	}
+
+	if (!Utillities::can_view_task($this_task)) {
+		?>
+			<div class="zpm-notice"><?php _e( 'Sorry, you do not have access to this task.', 'zephyr-project-manager' ); ?></div>
 		<?php
 		exit();
 	}
@@ -315,7 +323,16 @@
 				<a id="zpm_save_changes_task" name="zpm_save_changes_task" class="zpm_button" data-task-id="<?php echo $this_task->id; ?>"><?php _e( 'Save Changes', 'zephyr-project-manager' ); ?></a>
 			<?php endif; ?>
 
-			<a class="zpm_button" href="<?php echo $base_url; ?>" id="zpm_back_to_projects"><?php _e( 'Back to Tasks', 'zephyr-project-manager' ); ?></a>
+			<a class="zpm_button" href="<?= $base_url; ?>" id="zpm_back_to_projects"><?php _e( 'Back to Tasks', 'zephyr-project-manager' ); ?></a>
+
+			<?php if (Tasks::hasParent($this_task)): ?>
+				<a class="zpm_button" href="<?= Utillities::getTaskLink($this_task->parent_id); ?>" id="zpm_back_to_projects"><?php _e( 'Go To Parent Task', 'zephyr-project-manager' ); ?></a>
+			<?php endif; ?>
+
+			<?php if (Tasks::hasProject($this_task)): ?>
+				<a class="zpm_button" href="<?= Utillities::getProjectLink($this_task->project); ?>" id="zpm_back_to_projects"><?php _e( 'Go To Project', 'zephyr-project-manager' ); ?></a>
+			<?php endif; ?>
+
 			<a id="zpm-task-single__add-files-btn" name="zpm-task-single__add-files-btn" class="zpm_button" data-task-id="<?php echo $this_task->id; ?>"><?php _e( 'Add Files', 'zephyr-project-manager' ); ?></a>
 
 			<?php do_action( 'zpm_edit_task_buttons' ); ?>
@@ -385,7 +402,10 @@
 				?>
 			<?php endforeach; ?>
 		</ul>
-		<button id="zpm_add_new_subtask" class="zpm_button"><?php _e( 'New Subtask', 'zephyr-project-manager' ); ?></button>
+		
+		<?php if (Utillities::can_create_tasks()) : ?>
+			<button id="zpm_add_new_subtask" class="zpm_button"><?php _e( 'New Subtask', 'zephyr-project-manager' ); ?></button>
+		<?php endif; ?>
 	</div>
 </div>
 

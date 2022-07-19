@@ -79,8 +79,8 @@
 						</div>
 						<div class="zpm-grid-item zpm-grid-item-3">
 							<a href="https://www.patreon.com/dylanjkotze" target="_blank" class="zpm-material-card zpm-material-card-colored zpm-card-color-darker-blue">
-								<h4 class="zpm-card-header"><?php _e( 'Donate and Support Me', 'zephyr-project-manager' ); ?></h4>
-								<p class="zpm-card__description"><?php _e( 'If you like the plugin and would like to support me to continue adding great new features and improvements, please consider supporting me on Patreon. It would truly mean so much to me!', 'zephyr-project-manager' ); ?></p>
+								<h4 class="zpm-card-header"><?php _e( 'Donate and Supporting the Plugin', 'zephyr-project-manager' ); ?></h4>
+								<p class="zpm-card__description"><?php _e( 'If you like the plugin and would like to support it to continue adding great new features and improvements, please consider supporting me on Patreon or via PayPal. It would truly mean so much to me!', 'zephyr-project-manager' ); ?></p>
 							</a>
 						</div>
 						<div class="zpm-grid-item zpm-grid-item-3">
@@ -91,7 +91,7 @@
 						</div>
 					</div>
 				</div>
-
+<!-- 
 				<h1 class="zpm_page_title"><?php _e( 'More Zephyr Plugins', 'zephyr-project-manager' ); ?></h1>
 				<div class="zpm-grid-container">
 					<div class="zpm-grid-row zpm-grid-row-12">
@@ -104,16 +104,17 @@
 					</div>
 				</div>
 
-				
+				 -->
 
 				<!-- Display Patreon Notice -->
 				<?php if ( !Utillities::notice_is_dismissed( 'zpm-patreon-notice' ) ) : ?>
 					<div id="zpm-whats-new" class="zpm-panel zpm-panel-12" data-notice="'zpm-patreon-notice'">
-						<h4 class="zpm_panel_title"><?php _e( 'Support me on Patreon', 'zephyr-project-manager' ); ?></h4>
-						<p><?php _e( 'If you like the plugin and what I do and would like to help me improve the plugin more, please consider supporting me on Patreon. This would help a lot in being able to work on the plugin full-time and focus more on it to make it better and add new features. Thank you so much.', 'zephyr-project-manager' ); ?></p>
+						<h4 class="zpm_panel_title"><?php _e( 'Support the plugin on Patreon', 'zephyr-project-manager' ); ?></h4>
+						<p><?php _e( 'If you like the plugin and would like to help improve the plugin further, please consider supporting me on Patreon. This would help a lot in being able to work on the plugin full-time and focus more on it to make it better and add new features. Thank you so much.', 'zephyr-project-manager' ); ?></p>
 						<div class="zpm-notice-buttons">
 							
 							<button class="zpm-dismiss-notice-button zpm_button" data-notice-version="zpm-patreon-notice"><?php _e( 'Dismiss Notice', 'zephyr-project-manager' ); ?></button>
+							<a href="https://www.paypal.com/donate/?cmd=_donations&business=dylanjkotze@gmail.com&item_name=Zephyr+Project+Manager+Donation&currency_code=USD&source=url" target="_blank" class="zpm-patreon-button zpm_button"><?php _e( 'PayPal Donation', 'zephyr-project-manager' ); ?></a>
 							<a href="https://www.patreon.com/dylanjkotze" target="_blank" class="zpm-patreon-button zpm_button"><?php _e( 'Support me on Patreon', 'zephyr-project-manager' ); ?></a>
 						</div>
 					</div>

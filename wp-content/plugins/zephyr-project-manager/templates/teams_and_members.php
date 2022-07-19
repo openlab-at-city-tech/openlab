@@ -43,6 +43,7 @@
 				</div>
 				<div id="zpm-member-list__table" class="zpm-table">
 					<?php foreach ( $users as $user ) : ?>
+						<?php if (!Members::canViewMember($user['id'])) { continue; } ?>
 						<?php echo Members::list_html( $user ); ?>
 					<?php endforeach; ?>
 				</div>
@@ -98,6 +99,7 @@
 	<ul class="zpm-new-team-member-list">
 		<?php foreach ($all_members as $member) : ?>
 			<?php if(!isset($member['id']) || !isset($member['name'])) { continue; } ?>
+			<?php if (!Members::canViewMember($member['id'])) { continue; } ?>
 			<li>
 				<span class="zpm-memeber-toggle">
 					<input type="checkbox" id="<?php echo 'zpm-member-toggle-' . $member['id']; ?>" class="zpm-toggle zpm-new-team-member" data-member-id="<?php echo isset($member['id']) ? $member['id'] : '';; ?>" >
@@ -136,6 +138,7 @@
 
 	<ul class="zpm-edit-team-member-list">
 		<?php foreach ($all_members as $member) : ?>
+			<?php if (!Members::canViewMember($member['id'])) { continue; } ?>
 			<li>
 				<span class="zpm-memeber-toggle">
 					<input type="checkbox" id="<?php echo 'zpm-member-edit-toggle-' . $member['id']; ?>" class="zpm-toggle zpm-edit-team-member" data-member-id="<?php echo $member['id']; ?>">

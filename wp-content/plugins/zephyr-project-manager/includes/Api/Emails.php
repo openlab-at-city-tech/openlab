@@ -443,11 +443,14 @@ class Emails {
 
 					$footer = '';
 					$preferences = $member['preferences'];
-					if ( ($preferences['notify_activity'] == '1' || $preferences['notify_updates'] == '1' ) || $settings['override_default_emails']) {
-						$html = Emails::email_template( $header, $content, $footer );
+					// if ( ($preferences['notify_activity'] == '1' || $preferences['notify_updates'] == '1' ) || $settings['override_default_emails']) {
+					// 	$html = Emails::email_template( $header, $content, $footer );
+					// 	Emails::send_email( $member['email'], $subject, $html );
+					// 	$sent_emails[] = $member['email'];
+					// }
+					$html = Emails::email_template( $header, $content, $footer );
 						Emails::send_email( $member['email'], $subject, $html );
 						$sent_emails[] = $member['email'];
-					}
 				}
 				$additionalEmails = Projects::getAdditionalEmails($object->id);
 				foreach ( $additionalEmails as $email ) {

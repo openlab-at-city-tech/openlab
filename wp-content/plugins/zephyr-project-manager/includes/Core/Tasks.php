@@ -42,12 +42,33 @@ class Tasks {
 			return true;
 		}
 
-		if ( Utillities::is_zephyr_role($this->userId) ) {
-			if ( current_user_can( 'zpm_view_assigned_tasks' ) && !current_user_can( 'zpm_view_tasks' ) ) {
+		// if ( Utillities::is_zephyr_role($this->userId) ) {
+		// 	if ( current_user_can( 'zpm_view_assigned_tasks' ) && !current_user_can( 'zpm_view_tasks' ) ) {
+		// 		if (Tasks::is_assignee( $task, $this->userId )) {
+		// 			return true;
+		// 		} else {
+		// 			return false;
+		// 		}
+		// 	}
+		// }
+
+		$generalSettings = Utillities::general_settings();
+		$currentUserID = get_current_user_id();
+
+		if ($task->user_id == $currentUserID) return true;
+
+		if ($generalSettings['view_members'] == true) {
+			return true;
+		} else {
+			if (current_user_can('zpm_view_assigned_tasks') || current_user_can('zpm_view_assigned_projects')) {
 				if (Tasks::is_assignee( $task, $this->userId )) {
 					return true;
 				} else {
-					return false;
+					if (Tasks::hasProject($task)) {
+						$project = Projects::get_project($task->project);
+						if (Projects::has_project_access($project)) return true;
+						return false;
+					}
 				}
 			}
 		}
@@ -336,7 +357,7 @@ class Tasks {
 		// $query = "SELECT id FROM $table_name WHERE parent_id = '-1'";
 		// $tasks = $wpdb->query($query);
 		$manager = ZephyrProjectManager();
-		$tasks = $manager::get_tasks();
+		$tasks = Tasks::getAvailableTasks();
 		return sizeof( $tasks );
 	}
 

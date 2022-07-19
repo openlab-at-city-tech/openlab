@@ -29,7 +29,7 @@ class EnqueueScripts {
 	* Enqueue all admin scripts and styles
 	*/
 	public static function enqueue_admin_scripts($hook) {
-		$version = '4.34.0';//Zephyr::getPluginVersion();
+		$version = '4.38.0';//Zephyr::getPluginVersion();
 		$manager = ZephyrProjectManager::get_instance();
 
 		wp_enqueue_media();

@@ -58,13 +58,14 @@
 					</select>
 				</div>
 			<?php else : ?>
-				<input type="hidden" id="zpm_new_task_project" value="<?php echo $_GET['project'] ?>"/>
+				<input type="hidden" id="zpm_new_task_project" value="<?= esc_attr($_GET['project']) ?>"/>
 			<?php endif; ?>
 
 			<div class="zpm-new-task-field__assignee">
 				<label class="zpm_label" for="zpm_new_task_assignee"><?php _e( 'Assignee', 'zephyr-project-manager' ); ?></label>
 				<select id="zpm_new_task_assignee" multiple data-placeholder="<?php _e( 'Select Assignees', 'zephyr-project-manager' ); ?>">
 					<?php foreach ($users as $user) : ?>
+						<?php if (!Members::canViewMember($user['id'])) { continue; } ?>
 						<option value="<?php echo $user['id']; ?>" <?php echo $defaultAssignee == $user['id'] ? 'selected' : ''; ?>><?php echo $user['name']; ?></option>;
 					<?php endforeach; ?>
 				</select>

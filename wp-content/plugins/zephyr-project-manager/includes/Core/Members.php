@@ -21,12 +21,16 @@ class Members {
 		$teams = maybe_unserialize( get_option( 'zpm_teams', array() ) );
 
 		foreach ( $teams as $team_key => $team ) {
+			
+			
 			foreach ( $team['members'] as $key => $value ) {
 				$teams[$team_key]['members'][$key] = Utillities::get_user_settings( $value );
 			}
 		}
 
-		return (array) $teams;
+		return array_filter($teams, function($team) {
+			return Members::canViewTeam($team);
+		});
 	}
 
 	public static function get_team( $id ) {
@@ -200,6 +204,7 @@ class Members {
 				<ul class="zpm-team-member-list">
 					<?php $member_count = 0; ?>
 					<?php foreach ($team['members'] as $member) : ?>
+
 						<?php if (!isset($member['name'])) { continue; } ?>
 						<li><?php echo $member['name']; ?></li>
 						<?php $member_count++; ?>
@@ -220,6 +225,34 @@ class Members {
 
 		$html = ob_get_clean();
 		return $html;
+	}
+
+	public static function canViewTeam($team) {
+		if (is_numeric($team)) {
+			$team = Members::get_team($team);
+		}
+
+		$generalSettings = Utillities::general_settings();
+		$userID = get_current_user_id();
+
+		if (current_user_can('zpm_all_zephyr_capabilities')) {
+			return true;
+		}
+
+		if ($generalSettings['view_members'] == true) {
+			return true;
+		} else {
+			if (current_user_can('zpm_view_other_members') || current_user_can('administrator')) {
+				return true;
+			} else {
+				if (Members::isTeamMember($team, $userID)) {
+					return true;
+				}
+				return false;
+			}
+		}
+
+		return false;
 	}
 
 	public static function team_dropdown_html( $id = '', $selected = null) {
@@ -389,5 +422,81 @@ class Members {
 			}
 		}
 		return implode(',', $ids);
+	}
+
+	public static function getTeamMembers( $team ) {
+		return isset($team['members']) ? $team['members'] : [];
+	}
+
+	public static function isTeamMember( $team, $userID = false ) {
+		if (!$userID) {
+			$userID = get_current_user_id();
+		}
+
+		$members = Members::getTeamMembers($team);
+
+		foreach ($members as $member) {
+			$memberID = is_array($member) ? intval($member['id']) : intval($member);
+			if ($memberID == intval($userID)) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+
+	public static function isTeamMate($userID) {
+		$currentUserID = get_current_user_id();
+
+		$teams = Members::getMemberTeams($currentUserID);
+
+		foreach ($teams as $team) {
+			$members = Members::getTeamMembers($team);
+
+			foreach ($members as $member) {
+				if (intval($member['id']) == intval($userID)) {
+					return true;
+				}
+			}
+		}
+		
+		return false;
+	}
+
+	// Get member teams
+	public static function getMemberTeams( $memberId = false ) {
+		$results = [];
+		$teams = Members::get_teams();
+		foreach ($teams as $team) {
+			foreach ($team['members'] as $member) {
+				if (isset($member['id']) && $member['id'] == $memberId) {
+					$results[] = $team;
+				}
+			}
+		}
+		return $results;
+	}
+
+	public static function canViewMember($memberID) {
+		$generalSettings = Utillities::general_settings();
+		$userID = get_current_user_id();
+		
+		if ($memberID == $userID) return true;
+
+		if (current_user_can('administrator')) return true;
+
+		if ($generalSettings['view_members'] == true) return true;
+
+		// if (!current_user_can('zpm_view_other_members')) {
+		// 	return true;
+		// }
+
+		$memberTeams = Members::getMemberTeams($userID);
+			
+		foreach ($memberTeams as $team) {
+			if (Members::isTeamMember($team, $memberID)) return true;
+		}
+		
+		return false;
 	}
 }
