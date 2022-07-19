@@ -91,17 +91,8 @@ if ( ! function_exists( 'lingonberry_load_style' ) ) :
 		$theme_version = wp_get_theme( 'lingonberry' )->get( 'Version' );
 		$dependencies = array();
 
-		/**
-		 * Translators: If there are characters in your language that are not
-		 * supported by the theme fonts, translate this to 'off'. Do not translate
-		 * into your own language.
-		 */
-		$google_fonts = _x( 'on', 'Google Fonts: on or off', 'lingonberry' );
-
-		if ( 'off' !== $google_fonts ) {
-			wp_register_style( 'lingonberry_google_fonts', '//fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Raleway:600,500,400' );
-			$dependencies[] = 'lingonberry_google_fonts';
-		}
+		wp_register_style( 'lingonberry_google_fonts', get_theme_file_uri( '/assets/css/fonts.css' ) );
+		$dependencies[] = 'lingonberry_google_fonts';
 
 		wp_enqueue_style( 'lingonberry_style', get_stylesheet_uri(), $dependencies, $theme_version );
 
@@ -117,19 +108,7 @@ endif;
 if ( ! function_exists( 'lingonberry_add_editor_styles' ) ) :
 	function lingonberry_add_editor_styles() {
 
-		add_editor_style( 'assets/css/classic-editor-styles.css' );
-
-		/**
-		 * Translators: If there are characters in your language that are not
-		 * supported by the theme fonts, translate this to 'off'. Do not translate
-		 * into your own language.
-		 */
-		$google_fonts = _x( 'on', 'Google Fonts: on or off', 'lingonberry' );
-
-		if ( 'off' !== $google_fonts ) {
-			$font_url = '//fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Raleway:600,500,400';
-			add_editor_style( str_replace( ',', '%2C', $font_url ) );
-		}
+		add_editor_style( array( 'assets/css/classic-editor-styles.css', 'assets/css/fonts.css' ) );
 
 	}
 	add_action( 'init', 'lingonberry_add_editor_styles' );
@@ -609,22 +588,9 @@ if ( ! function_exists( 'lingonberry_block_editor_styles' ) ) :
 	function lingonberry_block_editor_styles() {
 
 		$theme_version = wp_get_theme( 'lingonberry' )->get( 'Version' );
-		$dependencies = array();
-
-		/**
-		 * Translators: If there are characters in your language that are not
-		 * supported by the theme fonts, translate this to 'off'. Do not translate
-		 * into your own language.
-		 */
-		$google_fonts = _x( 'on', 'Google Fonts: on or off', 'lingonberry' );
-
-		if ( 'off' !== $google_fonts ) {
-			wp_register_style( 'lingonberry-block-editor-styles-font', '//fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Raleway:600,500,400' );
-			$dependencies[] = 'lingonberry-block-editor-styles-font';
-		}
-
-		// Enqueue the editor styles
-		wp_enqueue_style( 'lingonberry-block-editor-styles', get_theme_file_uri( '/assets/css/block-editor-styles.css' ), $dependencies, $theme_version, 'all' );
+		
+		wp_register_style( 'lingonberry-block-editor-styles-font', get_theme_file_uri( '/assets/css/fonts.css' ) );
+		wp_enqueue_style( 'lingonberry-block-editor-styles', get_theme_file_uri( '/assets/css/block-editor-styles.css' ), array( 'lingonberry-block-editor-styles-font' ), $theme_version, 'all' );
 
 	}
 	add_action( 'enqueue_block_editor_assets', 'lingonberry_block_editor_styles', 1 );
