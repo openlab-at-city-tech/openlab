@@ -264,3 +264,20 @@ add_filter(
 	10,
 	2
 );
+
+/**
+ * Filters the email headers for comment notifications.
+ *
+ * We wipe out the custom Reply-To and From and allow the global values to take effect.
+ */
+add_filter(
+	'comment_notification_headers',
+	function( $headers, $comment_id ) {
+		$headers = preg_replace( '/^From:.*?\n/m', '', $headers );
+		$headers = preg_replace( '/^Reply-To:.*?\n/m', '', $headers );
+
+		return trim( $headers );
+	},
+	10,
+	2
+);
