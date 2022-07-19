@@ -19,6 +19,11 @@
  * 
  */
 
+@font-face {
+    font-family: 'Lato';
+    src: url('../../nextgen_admin/static/Lato-Regular.ttf') format('truetype')
+}
+
 /* 1. Overall IGW Window */
 
 html, body {
@@ -160,7 +165,7 @@ table {
 #attach_to_post_tabs .ui-tabs-icon {
 	box-sizing: border-box;
     color: #fff;
-    font-family: Lato, sans-serif;
+    font-family: "Lato", sans-serif;
     float: none;
     font-size: 20px;
     font-weight: bold;
@@ -214,7 +219,7 @@ table {
     float: right;
     font-size: 13px;
     font-weight: 400;
-    font-family: lato, sans-serif;
+    font-family: "Lato", sans-serif;
     letter-spacing: 1.5px;
     line-height: 1;  
     text-transform: uppercase;
@@ -373,7 +378,7 @@ table {
     font-size: 13px;
     font-weight: 600;
     cursor: pointer;
-    font-family: Lato, sans-serif;
+    font-family: "Lato", sans-serif;
     background: black;
     color: #fff;
     text-transform: uppercase;

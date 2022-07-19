@@ -158,7 +158,7 @@ function nggallery_sortorder($galleryID = 0) {
 			</form>
 
 			<div id="debug" style="clear:both"></div>
-			<div class='jqui-sortable'>
+			<div id='ngg-sort-gallery-container' class='jqui-sortable'>
 				<?php
 				if ($picturelist) {
 					foreach($picturelist as $picture) { ?>

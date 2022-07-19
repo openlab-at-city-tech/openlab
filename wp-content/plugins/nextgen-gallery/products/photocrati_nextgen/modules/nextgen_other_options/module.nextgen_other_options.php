@@ -45,9 +45,6 @@ class M_NextGen_Other_Options extends C_Base_Module
             'watermarks'        => 'A_Watermarks_Form'
         );
 
-        if (!is_multisite() || (is_multisite() && C_NextGen_Settings::get_instance()->get('wpmuStyle')))
-            $forms['styles'] = 'A_Styles_Form';
-
         if (is_super_admin() && (!is_multisite() || (is_multisite() && C_NextGen_Settings::get_instance()->get('wpmuRoles'))))
             $forms['roles_and_capabilities'] = 'A_Roles_Form';
 
@@ -82,7 +79,6 @@ class M_NextGen_Other_Options extends C_Base_Module
 	function _register_adapters()
 	{
         $this->get_registry()->add_adapter('I_Ajax_Controller', 'A_Watermarking_Ajax_Actions');
-        $this->get_registry()->add_adapter('I_Ajax_Controller', 'A_Stylesheet_Ajax_Actions');
         $this->get_registry()->add_adapter('I_Ajax_Controller', 'A_Other_Options_Misc_Tab_Ajax');
 
         if (is_admin()) {
@@ -123,12 +119,6 @@ class M_NextGen_Other_Options extends C_Base_Module
 
             $this->get_registry()->add_adapter(
                 'I_Form',
-                'A_Styles_Form',
-                'styles'
-            );
-
-            $this->get_registry()->add_adapter(
-                'I_Form',
                 'A_Roles_Form',
                 'roles_and_capabilities'
             );
@@ -164,11 +154,9 @@ class M_NextGen_Other_Options extends C_Base_Module
             'A_Other_Options_Page' => 'adapter.other_options_page.php',
             'A_Reset_Form' => 'adapter.reset_form.php',
             'A_Roles_Form' => 'adapter.roles_form.php',
-            'A_Styles_Form' => 'adapter.styles_form.php',
             'A_Thumbnail_Options_Form' => 'adapter.thumbnail_options_form.php',
             'A_Watermarking_Ajax_Actions' => 'adapter.watermarking_ajax_actions.php',
             'A_Watermarks_Form' => 'adapter.watermarks_form.php',
-            'A_Stylesheet_Ajax_Actions' => 'adapter.stylesheet_ajax_actions.php',
             'A_Custom_Lightbox_Form' => 'adapter.custom_lightbox_form.php',
 			'C_Settings_Model'	=>	'class.settings_model.php'
         );

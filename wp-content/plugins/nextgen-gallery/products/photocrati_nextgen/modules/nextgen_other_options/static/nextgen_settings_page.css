@@ -98,15 +98,6 @@ td.align-to-top {
 	width: 100% !important;
 }
 
-#cssfile_contents {
-	background: #F9F9F9;
-	font-family: Consolas,Monaco,monospace;
-	font-size: 12px;
-	width: 100%;
-	height: 300px;
-	outline: 0;
-}
-
 #writable_identicator {
 	display: inline;
 }

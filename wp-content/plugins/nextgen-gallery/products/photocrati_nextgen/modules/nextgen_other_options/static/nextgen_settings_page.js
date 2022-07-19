@@ -79,35 +79,5 @@ jQuery(function($){
         
         return false;
     });
-	/**** STYLES TAB ****/
 
-    $('input[name="style_settings[activateCSS]"]')
-        .nextgen_radio_toggle_tr('1', $('#tr_photocrati-nextgen_styles_activated_stylesheet'))
-        .nextgen_radio_toggle_tr('1', $('#tr_photocrati-nextgen_styles_show_more'))
-        .on('change', function() {
-            var $this = $(this);
-            if ($this.val() == '0') {
-                $('#cssfile_contents').prop('disabled', true);
-                $('#advanced_stylesheet_form').hide('slow');
-            } else {
-                $('#cssfile_contents').prop('disabled', false);
-            }
-        });
-
-
-	// When the selected stylesheet changes, fetch it's contents
-	$('#activated_stylesheet').on('change', function() {
-		var selected = $(this).find(':selected');
-		var data = {
-			action:		'get_stylesheet_contents',
-			cssfile:	selected.val()
-		};
-		$.post(photocrati_ajax.url, data, function(res) {
-			if (typeof res !== 'object') res = JSON.parse(res);
-			$('#cssfile_contents').val(res.error ? res.error : res.contents);
-			var status = $('#writable_identicator');
-			if (res.writable) status.text(status.attr('writable_label')+' '+res.writepath);
-			else status.text(status.attr('readonly_label'));
-		});
-	}).trigger('change');
 });

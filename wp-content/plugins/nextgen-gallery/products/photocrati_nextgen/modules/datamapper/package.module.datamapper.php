@@ -270,7 +270,7 @@ class C_DataMapper_Driver_Base extends C_Component
      * @param string $operator
      * @return ExtensibleObject
      */
-    function _where($conditions = array(), $operator)
+    function _where($conditions, $operator)
     {
         $where_clauses = array();
         // If conditions is not an array, make it one

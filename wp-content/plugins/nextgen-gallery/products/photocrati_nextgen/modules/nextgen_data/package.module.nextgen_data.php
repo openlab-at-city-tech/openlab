@@ -481,14 +481,10 @@ class Mixin_Dynamic_Thumbnails_Manager extends Mixin
         $size_prefix = $prefix_list['size'];
         $flags_prefix = $prefix_list['flags'];
         $max_value_length = $prefix_list['max_value_length'];
-        $size_name = null;
-        $id_name = null;
-        $params = array();
+        $size_name = '';
+        $id_name = '';
+        $params = [];
         if (!$is_only_size_name) {
-            $extension = M_I18n::mb_pathinfo($name, PATHINFO_EXTENSION);
-            if ($extension != null) {
-                $extension = '.' . $extension;
-            }
             $name = M_I18n::mb_basename($name);
         }
         $size_index = strrpos($name, $size_prefix);
@@ -616,7 +612,12 @@ class C_Dynamic_Thumbnails_Manager extends C_Component
         return self::$_instances[$context];
     }
 }
-require_once 'pel-0.9.9/autoload.php';
+// 0.9.10 is compatible with PHP 8.0 but requires 7.2.0 as its minimum.
+if (version_compare(phpversion(), '7.2.0', '>=')) {
+    require_once 'pel-0.9.10/autoload.php';
+} else {
+    require_once 'pel-0.9.9/autoload.php';
+}
 use lsolesen\pel\PelDataWindow;
 use lsolesen\pel\PelJpeg;
 use lsolesen\pel\PelTiff;
@@ -740,6 +741,50 @@ class C_Exif_Writer
             return FALSE;
         }
     }
+    // In case bcmath isn't enabled we use these simple wrappers.
+    static function bcadd($one, $two, $scale = NULL)
+    {
+        if (!function_exists('bcadd')) {
+            return floatval($one) + floatval($two);
+        } else {
+            return bcadd($one, $two, $scale);
+        }
+    }
+    static function bcmul($one, $two, $scale = NULL)
+    {
+        if (!function_exists('bcmul')) {
+            return floatval($one) * floatval($two);
+        } else {
+            return bcmul($one, $two, $scale);
+        }
+    }
+    static function bcpow($one, $two, $scale = NULL)
+    {
+        if (!function_exists('bcpow')) {
+            return floatval($one) ** floatval($two);
+        } else {
+            return bcpow($one, $two, $scale);
+        }
+    }
+    /**
+     * Use bcmath as a replacement to hexdec() to handle numbers than PHP_INT_MAX. Also validates the $hex parameter using ctypes.
+     *
+     * @param string $hex
+     * @return float|int|string|null
+     */
+    public static function bchexdec($hex)
+    {
+        // Ensure $hex is actually a valid hex number and won't generate deprecated conversion warnings on PHP 7.4+
+        if (!ctype_xdigit($hex)) {
+            return NULL;
+        }
+        $decimal = 0;
+        $length = strlen($hex);
+        for ($i = 1; $i <= $length; $i++) {
+            $decimal = self::bcadd($decimal, self::bcmul(strval(hexdec($hex[$i - 1])), self::bcpow('16', strval($length - $i))));
+        }
+        return $decimal;
+    }
     /**
      * @param string $filename
      * @param array $data
@@ -769,7 +814,7 @@ class C_Exif_Writer
         // This can cause errors if incorrectly pointed at a non-JPEG file
         try {
             // Loop through each JPEG segment in search of region 13
-            while ((hexdec(substr($new_file_contents, 0, 2)) & 0xfff0) === 0xffe0) {
+            while ((self::bchexdec(substr($new_file_contents, 0, 2)) & 0xfff0) === 0xffe0) {
                 $segment_length = hexdec(substr($new_file_contents, 2, 2)) & 0xffff;
                 $segment_number = hexdec(substr($new_file_contents, 1, 1)) & 0xf;
                 // Not a segment we're interested in
@@ -1431,7 +1476,7 @@ class C_Gallery_Storage extends C_Component
         $watermark = isset($params['watermark']) ? $params['watermark'] : NULL;
         $reflection = isset($params['reflection']) ? $params['reflection'] : NULL;
         $rotation = isset($params['rotation']) ? $params['rotation'] : NULL;
-        $flip = isset($params['flip']) ? $params['flip'] : NULL;
+        $flip = isset($params['flip']) ? $params['flip'] : '';
         $destpath = NULL;
         $thumbnail = NULL;
         $result = $this->object->calculate_image_clone_result($image_path, $clone_path, $params);
@@ -1547,9 +1592,6 @@ class C_Gallery_Storage extends C_Component
                 }
                 if ($rotation && in_array(abs($rotation), array(90, 180, 270))) {
                     $thumbnail->rotateImageAngle($rotation);
-                    $remove_orientation_exif = TRUE;
-                } else {
-                    $remove_orientation_exif = FALSE;
                 }
                 $flip = strtolower($flip);
                 if ($flip && in_array($flip, array('h', 'v', 'hv'))) {
@@ -1560,8 +1602,8 @@ class C_Gallery_Storage extends C_Component
                 if ($reflection) {
                     $thumbnail->createReflection(40, 40, 50, FALSE, '#a4a4a4');
                 }
+                // Force format
                 if ($clone_format != null && isset($format_list[$clone_format])) {
-                    // Force format
                     $thumbnail->format = strtoupper($format_list[$clone_format]);
                 }
                 $thumbnail = apply_filters('ngg_before_save_thumbnail', $thumbnail);
@@ -2071,13 +2113,11 @@ class C_Gallery_Storage extends C_Component
     function _get_computed_image_abspath($image, $size = 'full', $check_existance = FALSE)
     {
         $retval = NULL;
-        $fs = C_Fs::get_instance();
         // If we have the id, get the actual image entity
         if (is_numeric($image)) {
             $image = $this->object->_image_mapper->find($image);
         }
-        // Ensure we have the image entity - user could have passed in an
-        // incorrect id
+        // Ensure we have the image entity - user could have passed in an incorrect id
         if (is_object($image)) {
             if ($gallery_path = $this->object->get_gallery_abspath($image->galleryid)) {
                 $folder = $prefix = $size;
@@ -2116,8 +2156,37 @@ class C_Gallery_Storage extends C_Component
                                 $image_path = path_join($this->object->get_cache_abspath($image->galleryid), $dynthumbs->get_image_name($image, $params));
                                 // Filename is not found in meta, nor dynamic
                             } else {
+                                $settings = C_NextGen_Settings::get_instance();
+                                // This next bit is annoying but necessary for legacy reasons. NextGEN until 3.19 stored thumbnails
+                                // with a filename of "thumbs_(whatever.jpg)" which Google indexes as "thumbswhatever.jpg" which is
+                                // not good for SEO. From 3.19 on the default setting is "thumbs-" but we must account for legacy
+                                // sites.
                                 $image_path = path_join($gallery_path, $folder);
-                                $image_path = path_join($image_path, "{$prefix}_{$image->filename}");
+                                $new_thumb_path = path_join($image_path, "{$prefix}-{$image->filename}");
+                                $old_thumb_path = path_join($image_path, "{$prefix}_{$image->filename}");
+                                if ($settings->get('dynamic_image_filename_separator_use_dash', FALSE)) {
+                                    // Check for thumbs- first
+                                    if (file_exists($new_thumb_path)) {
+                                        $image_path = $new_thumb_path;
+                                    } elseif (file_exists($old_thumb_path)) {
+                                        // Check for thumbs_ as a fallback
+                                        $image_path = $old_thumb_path;
+                                    } else {
+                                        // The thumbnail file does not exist, default to thumbs-
+                                        $image_path = $new_thumb_path;
+                                    }
+                                } else {
+                                    // Reversed: the option is disabled so check for thumbs_
+                                    if (file_exists($old_thumb_path)) {
+                                        $image_path = $old_thumb_path;
+                                    } elseif (file_exists($new_thumb_path)) {
+                                        // In case the user has switched back and forth, check for thumbs-
+                                        $image_path = $new_thumb_path;
+                                    } else {
+                                        // Default to thumbs_ per the site setting
+                                        $image_path = $old_thumb_path;
+                                    }
+                                }
                             }
                         }
                         $retval = $image_path;
@@ -2527,7 +2596,8 @@ class C_Gallery_Storage extends C_Component
             if (is_numeric($image)) {
                 $image = $image_mapper->find($image);
             }
-            if ($image_abspath = $this->object->get_image_abspath($image)) {
+            $image_abspath = $this->object->get_image_abspath($image, 'backup') ?: $this->object->get_image_abspath($image);
+            if ($image_abspath) {
                 // Import the image; this will copy the main file
                 $new_image_id = $this->object->import_image_file($dst_gallery, $image_abspath, $image->filename);
                 if ($new_image_id) {
@@ -2616,6 +2686,11 @@ class C_Gallery_Storage extends C_Component
             $this->object->_delete_gallery_directory($abspath);
         }
     }
+    /**
+     * @param int|C_Image $image
+     * @param string|FALSE $size
+     * @return bool
+     */
     function delete_image($image, $size = FALSE)
     {
         $retval = FALSE;
@@ -2721,7 +2796,7 @@ class C_Gallery_Storage extends C_Component
             $i = 1;
             while (file_exists($new_file_path)) {
                 $i++;
-                $new_file_path = $path . DIRECTORY_SEPARATOR . $i . '_' . $image->filename;
+                $new_file_path = $path . DIRECTORY_SEPARATOR . $i . '-' . $image->filename;
             }
             if (@copy($image_abspath, $new_file_path)) {
                 $upload_id = wp_insert_attachment(['guid' => $new_file_path, 'post_mime_type' => $new_file_mime, 'post_title' => preg_replace('/\\.[^.]+$/', '', $image->alttext), 'post_content' => '', 'post_status' => 'inherit'], $new_file_path);
@@ -3021,12 +3096,13 @@ class C_Gallery_Storage extends C_Component
     }
     /**
      * Uploads base64 file to a gallery
+     *
      * @param int|stdClass|C_Gallery $gallery
-     * @param $data base64-encoded string of data representing the image
+     * @param string $data base64-encoded string of data representing the image
      * @param string|false (optional) $filename specifies the name of the file
      * @param int|false $image_id (optional)
      * @param bool $override (optional)
-     * @return C_Image
+     * @return bool|int
      */
     function upload_base64_image($gallery, $data, $filename = FALSE, $image_id = FALSE, $override = FALSE, $move = FALSE)
     {
@@ -3409,8 +3485,9 @@ class Mixin_Gallery_Image_Mapper extends Mixin
         // If not set already, we'll add an exclude property. This is used
         // by NextGEN Gallery itself, as well as the Attach to Post module
         $this->object->_set_default_value($entity, 'exclude', 0);
-        // Ensure that the object has a description attribute
+        // Ensure that the object has description and alttext attributes
         $this->object->_set_default_value($entity, 'description', '');
+        $this->object->_set_default_value($entity, 'alttext', '');
         // If not set already, set a default sortorder
         $this->object->_set_default_value($entity, 'sortorder', 0);
         // The imagedate must be set
@@ -3425,7 +3502,7 @@ class Mixin_Gallery_Image_Mapper extends Mixin
             $this->object->_set_default_value($entity, 'alttext', $alttext);
         }
         // Set unique slug
-        if (isset($entity->alttext) && empty($entity->image_slug)) {
+        if (!empty($entity->alttext) && empty($entity->image_slug)) {
             $entity->image_slug = nggdb::get_unique_slug(sanitize_title_with_dashes($entity->alttext), 'image');
         }
         // Ensure that the exclude parameter is an integer or boolean-evaluated
@@ -4399,7 +4476,6 @@ class C_NextGen_Metadata extends C_Component
      */
     function get_date_time()
     {
-        $date = time();
         // Try getting the created_timestamp field
         $date = $this->exif_date2ts($this->get_META('created_timestamp'));
         if (!$date) {
@@ -4739,7 +4815,7 @@ class C_NggLegacy_Thumbnail
                     $channels = 3;
                     break;
                 case 'WEBP':
-                    $CHANNEL = $imageInfo['bits'];
+                    $channels = $imageInfo['bits'];
                     break;
             }
         }
@@ -5306,8 +5382,11 @@ class C_NggLegacy_Thumbnail
      * @param int $wmSize
      * @param int $wmOpaque
      */
-    function watermarkCreateText($color = '000000', $wmFont, $wmSize = 10, $wmOpaque = 90)
+    function watermarkCreateText($color, $wmFont, $wmSize = 10, $wmOpaque = 90)
     {
+        if (!$color) {
+            $color = '000000';
+        }
         // set font path
         $wmFontPath = NGGALLERY_ABSPATH . "fonts/" . $wmFont;
         if (!is_readable($wmFontPath)) {
@@ -5341,16 +5420,16 @@ class C_NggLegacy_Thumbnail
         $lines[] = trim($line);
         // use this string to determine our largest possible line height
         $line_dimensions = $this->ImageTTFBBoxDimensions($wmSize, 0, $this->correct_gd_unc_path($wmFontPath), 'MXQJALYmxqjabdfghjklpqry019`@$^&*(,!132');
-        $line_height = $line_dimensions['height'] * 1.05;
+        $line_height = (float) $line_dimensions['height'] * 1.05;
         // Create an image to apply our text to
-        $this->workingImage = ImageCreateTrueColor($watermark_image_width, count($lines) * $line_height);
+        $this->workingImage = ImageCreateTrueColor($watermark_image_width, (int) (count($lines) * $line_height));
         ImageSaveAlpha($this->workingImage, true);
         ImageAlphaBlending($this->workingImage, false);
         $bgText = imagecolorallocatealpha($this->workingImage, 255, 255, 255, 127);
         imagefill($this->workingImage, 0, 0, $bgText);
-        $wmTransp = 127 - $wmOpaque * 1.27;
+        $wmTransp = 127 - (int) $wmOpaque * 1.27;
         $rgb = $this->hex2rgb($color, false);
-        $TextColor = imagecolorallocatealpha($this->workingImage, $rgb[0], $rgb[1], $rgb[2], $wmTransp);
+        $TextColor = imagecolorallocatealpha($this->workingImage, (int) $rgb[0], (int) $rgb[1], (int) $rgb[2], (int) $wmTransp);
         // Put text on the image, line-by-line
         $y_pos = $wmSize;
         foreach ($lines as $line) {
@@ -5480,9 +5559,9 @@ class C_NggLegacy_Thumbnail
     function imagecopymerge_alpha($destination_image, $source_image, $destination_x, $destination_y, $source_x, $source_y, $source_w, $source_h, $pct)
     {
         $cut = imagecreatetruecolor($source_w, $source_h);
-        imagecopy($cut, $destination_image, 0, 0, $destination_x, $destination_y, $source_w, $source_h);
+        imagecopy($cut, $destination_image, 0, 0, (int) $destination_x, (int) $destination_y, (int) $source_w, (int) $source_h);
         imagecopy($cut, $source_image, 0, 0, $source_x, $source_y, $source_w, $source_h);
-        imagecopymerge($destination_image, $cut, $destination_x, $destination_y, 0, 0, $source_w, $source_h, $pct);
+        imagecopymerge($destination_image, $cut, (int) $destination_x, (int) $destination_y, 0, 0, (int) $source_w, (int) $source_h, (int) $pct);
     }
     /**
      * Modfied imagecopyresampled function to save transparent images
@@ -5827,7 +5906,7 @@ class Mixin_GalleryStorage_Base_Upload extends Mixin
             if (preg_match("#_backup\$#", $file_abspath)) {
                 $files_to_import[] = $file_abspath;
                 continue;
-            } elseif (in_array($file_abspath . "_backup", $files) || strpos("thumbs_", $file_abspath) !== FALSE) {
+            } elseif (in_array([$file_abspath . "_backup", 'thumbs_' . $file_abspath, 'thumbs-' . $file_abspath], $files)) {
                 continue;
             }
             $files_to_import[] = $file_abspath;

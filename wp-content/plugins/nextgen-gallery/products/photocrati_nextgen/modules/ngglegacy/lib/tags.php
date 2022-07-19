@@ -387,13 +387,14 @@ class nggTags {
  * @param string $element
  * @return null|string
  */
-if (!function_exists('nggtags_delete_empty_element')) {
-	function nggtags_delete_empty_element( &$element ) {
+if (!function_exists('nggtags_delete_empty_element'))
+{
+	function nggtags_delete_empty_element($element)
+    {
 		$element = stripslashes($element);
 		$element = trim($element);
-		if ( !empty($element) ) {
+		if (!empty($element))
 			return $element;
-		}
 		return NULL;
 	}
 }

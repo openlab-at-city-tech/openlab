@@ -102,7 +102,7 @@ class A_NextGen_Album_Breadcrumbs extends Mixin
         }
         return $found;
     }
-    function generate_breadcrumb($gallery_id = NULL, $entities)
+    function generate_breadcrumb($gallery_id, $entities)
     {
         $found = array();
         $router = C_Router::get_instance();
@@ -506,7 +506,7 @@ class A_NextGen_Basic_Album_Controller extends Mixin_NextGen_Basic_Pagination
         $entities = $displayed_gallery->get_included_entities($display_settings['galleries_per_page'], $offset);
         // If there are entities to be displayed
         if ($entities) {
-            $pagination_result = $this->object->create_pagination($current_page, $displayed_gallery->get_entity_count(), $display_settings['galleries_per_page'], urldecode($this->object->param('ajax_pagination_referrer')));
+            $pagination_result = $this->object->create_pagination($current_page, $displayed_gallery->get_entity_count(), $display_settings['galleries_per_page'], urldecode($this->object->param('ajax_pagination_referrer') ?: ''));
             $display_settings['entities'] = $entities;
             $display_settings['pagination'] = $pagination_result['output'];
             $display_settings['displayed_gallery'] = $displayed_gallery;
@@ -638,9 +638,11 @@ class A_NextGen_Basic_Album_Controller extends Mixin_NextGen_Basic_Pagination
             if ($gallery->previewpic && $gallery->previewpic > 0) {
                 if ($image = $image_mapper->find(intval($gallery->previewpic))) {
                     $gallery->previewpic_image = $image;
-                    $gallery->previewpic_fullsized_url = $storage->get_image_url($image, 'full');
+                    $gallery->previewpic_fullsized_url = $storage->get_image_url($image);
                     $gallery->previewurl = $storage->get_image_url($image, $image_gen->get_size_name($image_gen_params), TRUE);
                     $gallery->previewname = $gallery->name;
+                } else {
+                    $gallery->no_previewpic = TRUE;
                 }
             }
             // Get the page link. If the entity is an album, then the url will
@@ -725,7 +727,6 @@ class A_NextGen_Basic_Album_Controller extends Mixin_NextGen_Basic_Pagination
         if (!empty($ds['enable_breadcrumbs']) && $ds['enable_breadcrumbs'] || !empty($ds['original_settings']['enable_breadcrumbs']) && $ds['original_settings']['enable_breadcrumbs']) {
             wp_enqueue_style('nextgen_basic_album_breadcrumbs_style', $this->object->get_static_url('photocrati-nextgen_basic_album#breadcrumbs.css'), array(), NGG_SCRIPT_VERSION);
         }
-        $this->enqueue_ngg_styles();
     }
 }
 /**

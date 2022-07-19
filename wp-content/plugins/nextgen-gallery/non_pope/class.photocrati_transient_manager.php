@@ -2,8 +2,11 @@
 
 class C_Photocrati_Transient_Manager
 {
-	private $_groups = array();
-	static $_instance = NULL;
+	private $_groups  = [];
+	private $_tracker = [];
+
+	/** @var null|C_Photocrati_Transient_Manager */
+	private static $_instance = NULL;
 
 	/**
 	 * @return C_Photocrati_Transient_Manager
@@ -22,8 +25,15 @@ class C_Photocrati_Transient_Manager
 		global $_wp_using_ext_object_cache;
 
 		$this->_groups = get_option('ngg_transient_groups', array('__counter' => 1));
-		if ($_wp_using_ext_object_cache) $this->_tracker = get_option('photocrati_cache_tracker', array());
-		register_shutdown_function(array(&$this, '_update_tracker'));
+		if ($_wp_using_ext_object_cache)
+		    $this->_tracker = get_option('photocrati_cache_tracker', array());
+
+		// Ensure that _tracker remains an array or PHP 8 may generate fatal errors
+		if (!is_array($this->_tracker))
+		    $this->_tracker = [];
+
+		if (!defined('NGG_DISABLE_PHOTOCRATI_CACHE_TRACKER') || !NGG_DISABLE_PHOTOCRATI_CACHE_TRACKER)
+            register_shutdown_function(array(&$this, '_update_tracker'));
 	}
 
 	function delete_tracked($group=NULL)
@@ -110,6 +120,8 @@ class C_Photocrati_Transient_Manager
 		global $_wp_using_ext_object_cache;
 		if ($_wp_using_ext_object_cache)
 		{
+		    if (!is_array($this->_tracker))
+		        $this->_tracker = [];
 			$parts = explode('__', $key);
 			$group = $parts[0];
 			$id = $parts[1];

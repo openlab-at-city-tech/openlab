@@ -73,6 +73,10 @@ class C_Widget_Gallery extends WP_Widget
         // and cache the resulting displayed gallery for later rendering to avoid the ID changing due to misc attributes
         // in $args being different now and at render time ($args is sidebar information that is not relevant)
         add_action('wp_enqueue_scripts', function () {
+            // Prevent enqueueing resources if the widget is not in use
+            if (!is_active_widget(FALSE, FALSE, 'ngg-images', true)) {
+                return;
+            }
             global $wp_registered_sidebars;
             $sidebars = wp_get_sidebars_widgets();
             $options = $this->get_settings();
@@ -289,7 +293,7 @@ class C_Widget_MediaRSS extends WP_Widget
         $title = apply_filters('widget_title', empty($instance['title']) ? '&nbsp;' : $instance['title'], $instance, $this->id_base);
         $parent->render_partial('photocrati-widget#display_mediarss', array('self' => $this, 'instance' => $instance, 'title' => $title, 'settings' => $settings, 'before_widget' => $before_widget, 'before_title' => $before_title, 'after_widget' => $after_widget, 'after_title' => $after_title, 'widget_id' => $widget_id));
     }
-    function get_mrss_link($mrss_url, $show_icon = TRUE, $title, $text)
+    function get_mrss_link($mrss_url, $show_icon, $title, $text)
     {
         $out = '';
         if ($show_icon) {
@@ -317,6 +321,10 @@ class C_Widget_Slideshow extends WP_Widget
         // and cache the resulting displayed gallery for later rendering to avoid the ID changing due to misc attributes
         // in $args being different now and at render time ($args is sidebar information that is not relevant)
         add_action('wp_enqueue_scripts', function () {
+            // Prevent enqueueing resources if the widget is not in use
+            if (!is_active_widget(FALSE, FALSE, 'slideshow', true)) {
+                return;
+            }
             global $wp_registered_sidebars;
             $sidebars = wp_get_sidebars_widgets();
             $options = $this->get_settings();

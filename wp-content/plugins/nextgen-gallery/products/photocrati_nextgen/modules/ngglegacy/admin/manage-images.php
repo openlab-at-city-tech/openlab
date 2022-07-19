@@ -749,7 +749,11 @@ function nggallery_picturelist($controller)
 
 			$(this).data('ready', true);
 
-			columns.init('nggallery-manage-images');
+			// Wait for WordPress common.js to create the window.columns object
+            (async() => {
+                while(!window.hasOwnProperty('columns')) { await new Promise(resolve => setTimeout(resolve, 25)); }
+                columns.init('nggallery-manage-images');
+            })();
 
 			// Ensure that thumb preview images are always up-to-date
 			$('#ngg-listimages img.thumb').each(function () {

@@ -264,7 +264,6 @@ class M_Attach_To_Post extends C_Base_Module
 
 	/**
 	* Route the IGW requests using wp-admin
-	* @throws E_Clean_Exit
 	*/
     function route_insert_gallery_window()
     {
@@ -417,7 +416,6 @@ class M_Attach_To_Post extends C_Base_Module
 		if ($this->is_new_or_edit_post_screen()) {
 			$router = C_Router::get_instance();
 
-			add_editor_style('https://fonts.googleapis.com/css?family=Lato');
 			add_editor_style($router->get_static_url('photocrati-attach_to_post#ngg_attach_to_post_tinymce_plugin.css'));
 			wp_enqueue_script('photocrati_ajax');
 

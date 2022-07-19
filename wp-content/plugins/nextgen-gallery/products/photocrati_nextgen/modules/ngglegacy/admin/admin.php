@@ -204,7 +204,6 @@ class nggAdminPanel{
 		wp_register_script('ngg-progressbar', NGGALLERY_URLPATH .'admin/js/ngg.progressbar.js', array('jquery'), NGG_SCRIPT_VERSION);
 
 		wp_enqueue_script('wp-color-picker');
-        wp_enqueue_style('imagely-admin-font', 'https://fonts.googleapis.com/css?family=Lato:300,400,700,900', array(), NGG_SCRIPT_VERSION );
 
 		switch ($_GET['page']) {
 			case NGGFOLDER :

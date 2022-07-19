@@ -162,21 +162,25 @@ if (!class_exists('C_Photocrati_Settings_Manager_Base'))
 			return $this->get($key);
 		}
 
+        #[\ReturnTypeWillChange]
 		function offsetExists($key)
 		{
 			return $this->is_set($key);
 		}
 
+		#[\ReturnTypeWillChange]
 		function offsetGet($key)
 		{
 			return $this->get($key);
 		}
 
+        #[\ReturnTypeWillChange]
 		function offsetSet($key, $value)
 		{
 			return $this->set($key, $value);
 		}
 
+        #[\ReturnTypeWillChange]
 		function offsetUnset($key)
 		{
 			return $this->delete($key);

@@ -1,3 +1,8 @@
+@font-face {
+    font-family: 'Lato';
+    src: url('../../nextgen_admin/static/Lato-Regular.ttf') format('truetype')
+}
+
 .upsell {
     padding: 40px !important;
     border: 1px solid #eee;
@@ -55,5 +60,5 @@
 }
 
 .jquery-modal {
-    font-family:lato, sans-serif;
+    font-family: "Lato", sans-serif;
 }
