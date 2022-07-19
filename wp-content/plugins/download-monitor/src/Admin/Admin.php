@@ -72,6 +72,11 @@ class DLM_Admin {
 			$lu_message->display();
 		}
 
+		// Sets the rewrite rule option if dlm_download_endpoint option is changed.
+		add_filter( 'pre_update_option_dlm_download_endpoint', array( $this, 'set_rewrite_rules_flag_on_endpoint_change'), 15, 2 );
+
+		// Checks and flushes rewrite rule if rewrite flag option is set.
+		add_action( 'admin_init', array( $this, 'check_rewrite_rules') );
 	}
 
 	/**
@@ -197,7 +202,7 @@ class DLM_Admin {
 
 		$enqueue = false;
 
-		if ( $hook == 'post-new.php' || $hook == 'post.php' || $hook == 'edit.php' ) {
+		if ( $hook == 'post-new.php' || $hook == 'post.php' || $hook == 'edit.php' || 'term.php' == $hook ) {
 			if (
 				( ! empty( $_GET['post_type'] ) && in_array( $_GET['post_type'], array(
 						'dlm_download',
@@ -222,6 +227,10 @@ class DLM_Admin {
 		}
 
 		if ( isset( $_GET['page'] ) && 'download-monitor-orders' === $_GET['page'] ) {
+			$enqueue = true;
+		}
+
+		if ( 'dlm_product' === get_current_screen()->id ) {
 			$enqueue = true;
 		}
 
@@ -334,5 +343,38 @@ class DLM_Admin {
 		if ( true == $this->need_rewrite_flush ) {
 			flush_rewrite_rules();
 		}
+	}
+
+	/**
+	 * Check if endpoint has changed, and if so let's flush the rules
+	 *
+	 * 
+	 * @since 4.5.6
+	 */
+	public function check_rewrite_rules(){
+		$flush = get_transient( 'dlm_download_endpoints_rewrite' );
+		if ( $flush ) {
+			flush_rewrite_rules(false);
+			delete_transient( 'dlm_download_endpoints_rewrite' );
+		}
+	}
+
+	/**
+	 * Check if the endpoint has changed and set a transient if so
+	 *
+	 * @param String $new_value The new value for dlm_download_endpoint
+	 * @param String $old_value The old value of dlm_download_endpoint
+	 * @return String
+	 * 
+	 * @since 4.5.6
+	 */
+	public function set_rewrite_rules_flag_on_endpoint_change( $new_value, $old_value ) {
+
+		if ( $new_value === $old_value ) {
+			return $new_value;
+		}
+
+		set_transient( 'dlm_download_endpoints_rewrite', true, HOUR_IN_SECONDS );
+		return $new_value;
 	}
 }

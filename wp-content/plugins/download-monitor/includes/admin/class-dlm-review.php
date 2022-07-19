@@ -38,7 +38,7 @@ class DLM_Review {
 			add_action( 'admin_print_footer_scripts', array( $this, 'ajax_script' ) );
 		}
 
-		add_filter('st_uninstall_db_options',array($this,'uninstall_options'));
+		add_filter( 'dlm_uninstall_db_options', array( $this, 'uninstall_options' ) );
 
 	}
 
@@ -138,8 +138,8 @@ class DLM_Review {
 						data['download-monitor-review'] = 1;
 					}
 
-					$.post( '<?php echo admin_url( 'admin-ajax.php' ) ?>', data, function( response ) {
-						$( '#<?php echo $this->slug ?>-download-monitor-review-notice' ).slideUp( 'fast', function() {
+					$.post( '<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>', data, function( response ) {
+						$( '#<?php echo esc_attr( $this->slug ); ?>-download-monitor-review-notice' ).slideUp( 'fast', function() {
 							$( this ).remove();
 						} );
 					});

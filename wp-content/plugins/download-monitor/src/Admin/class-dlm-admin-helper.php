@@ -107,4 +107,20 @@ class DLM_Admin_Helper {
 		return $a['priority'] < $b['priority'] ? - 1 : 1;
 	}
 
+	/**
+	 * Checks if this is one of Download Monitor's page or not
+	 *
+	 * @return bool
+	 * 
+	 * @since 4.5.4
+	 */
+	public static function check_if_dlm_page() {
+
+		if ( ! isset( $_GET['post_type'] ) || ( 'dlm_download' !== $_GET['post_type'] && 'dlm_product' !== $_GET['post_type'] ) ) {
+			return false;
+		}
+
+		return true;
+	}
+
 }

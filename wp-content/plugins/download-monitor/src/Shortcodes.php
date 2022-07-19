@@ -69,6 +69,11 @@ class DLM_Shortcodes {
 	 * @return string
 	 */
 	public function download( $atts, $content = '' ) {
+		// enqueue style only on shortcode use
+		wp_enqueue_style( 'dlm-frontend' );
+
+		// Action to allow the adition of extra scripts and code related to the shortcode
+		do_action( 'dlm_download_shortcode_scripts' );
 
 		// extract shortcode atts
 		extract( shortcode_atts( array(
@@ -160,6 +165,9 @@ class DLM_Shortcodes {
 	 * @return string
 	 */
 	public function download_data( $atts ) {
+
+		// Action to allow the adition of extra scripts and code related to the shortcode
+		do_action( 'dlm_download_data_shortcode_scripts' );
 
 		extract( shortcode_atts( array(
 			'id'         => '',
@@ -280,6 +288,11 @@ class DLM_Shortcodes {
 	public function downloads( $atts ) {
 		global $dlm_max_num_pages;
 
+		// Action to allow the adition of extra scripts and code related to the shortcode
+		do_action( 'dlm_downloads_shortcode_scripts' );
+
+		// enqueue style only on shortcode use
+		wp_enqueue_style( 'dlm-frontend' );
 		extract( shortcode_atts( array(
 			// Query args
 			'per_page'                  => '-1', // -1 = no limit
@@ -421,6 +434,11 @@ class DLM_Shortcodes {
 				'key'   => '_featured',
 				'value' => 'yes'
 			);
+		} else if ( $featured === 'exclude_featured' ) {
+			$args['meta_query'][] = array(
+				'key'   => '_featured',
+				'value' => 'no'
+			);
 		}
 
 		if ( $members_only === 'true' || $members_only === true ) {
@@ -512,6 +530,9 @@ class DLM_Shortcodes {
 	 */
 	public function no_access_page( $atts ) {
 		global $wp;
+
+		// Action to allow the adition of extra scripts and code related to the shortcode
+		do_action( 'dlm_dlm_no_access_shortcode_scripts' );
 
 		// atts
 		$atts = shortcode_atts( array(

@@ -225,7 +225,7 @@ class DLM_Download_Handler {
 		}
 
 		// check if need to handle an actual download
-		if ( ! empty( $wp->query_vars[ $this->endpoint ] ) && ( ( null === $wp->request ) || ( null !== $wp->request && strstr( $wp->request, $this->endpoint . '/' ) ) ) ) {
+		if ( ! empty( $wp->query_vars[ $this->endpoint ] ) && ( ( null === $wp->request ) || ( '' === $wp->request ) || ( strstr( $wp->request, $this->endpoint . '/' ) ) ) ) {
 
 			// Prevent caching when endpoint is set
 			if ( ! defined( 'DONOTCACHEPAGE' ) ) {
@@ -409,6 +409,16 @@ class DLM_Download_Handler {
 			wp_die( esc_html__( 'No file paths defined.', 'download-monitor' ) . ' <a href="' . esc_url( home_url() ) . '">' . esc_html__( 'Go to homepage &rarr;', 'download-monitor' ) . '</a>', esc_html__( 'Download Error', 'download-monitor' ) );
 		}
 
+		// Parse file path
+		list( $file_path, $remote_file, $restriction ) = download_monitor()->service( 'file_manager' )->get_secure_path( $file_path );
+
+		$file_path = apply_filters( 'dlm_file_path', $file_path, $remote_file, $download );
+		// The return of the get_secure_path function is an array that consists of the path ( string ), remote file ( bool ) and restriction ( bool ).
+		// If the path is false it means that the file is restricted, so don't download it or redirect to it.
+		if ( $restriction ) {
+			wp_die( esc_html__( 'Access denied to this file', 'download-monitor' ) . ' <a href="' . esc_url( home_url() ) . '">' . esc_html__( 'Go to homepage &rarr;', 'download-monitor' ) . '</a>', esc_html__( 'Download Error', 'download-monitor' ) );
+		}
+
 		// Check Access
 		if ( ! apply_filters( 'dlm_can_download', true, $download, $version ) ) {
 
@@ -430,8 +440,16 @@ class DLM_Download_Handler {
 					// check if we can find a permalink
 					if ( false !== $no_access_permalink ) {
 
+						//get wordpress permalink structure so we can build the url
+						$structure = get_option('permalink_structure', 0 );
+
 						// append download id to no access URL
-						$no_access_permalink = untrailingslashit( $no_access_permalink ) . '/download-id/' . $download->get_id() . '/';
+
+						if( '' == $structure || 0 == $structure ){
+							$no_access_permalink = add_query_arg( 'download-id', $download->get_id(), untrailingslashit( $no_access_permalink ) );
+						}else{
+							$no_access_permalink = untrailingslashit( $no_access_permalink ) . '/download-id/' . $download->get_id() . '/';
+						}
 
 						if ( ! $download->get_version()->is_latest() ) {
 							$no_access_permalink = add_query_arg( 'version', $download->get_version()->get_version(), $no_access_permalink );
@@ -483,21 +501,22 @@ class DLM_Download_Handler {
 		// Redirect to the file...
 		if ( $download->is_redirect_only() || apply_filters( 'dlm_do_not_force', false, $download, $version ) ) {
 			$this->log( 'download', 'redirected', __( 'Redirected to file', 'download-monitor' ), $download, $version );
+			$allowed_paths = download_monitor()->service( 'file_manager' )->get_allowed_paths();
 
 			// Ensure we have a valid URL, not a file path
 			$scheme = parse_url( get_option( 'home' ), PHP_URL_SCHEME );
-			$file_path = str_replace( ABSPATH, site_url( '/', $scheme ), $file_path );
+			// At this point the $correct_path should have a value of the file path as the verification was made prior to this check
+			// we get the secure file path.
+			$correct_path = download_monitor()->service( 'file_manager' )->get_correct_path( $file_path, $allowed_paths );
+			$file_path    = str_replace( str_replace( DIRECTORY_SEPARATOR, '/', $correct_path ), site_url( '/', $scheme ), str_replace( DIRECTORY_SEPARATOR, '/', $file_path ) );
 
+			header("X-Robots-Tag: noindex, nofollow", true);
 			header( 'Location: ' . $file_path );
 			exit;
 		}
 
-		// Parse file path
-		list( $file_path, $remote_file ) = download_monitor()->service( 'file_manager' )->parse_file_path( $file_path );
-		$file_path = apply_filters( 'dlm_file_path', $file_path, $remote_file, $download );
-
 		$this->download_headers( $file_path, $download, $version );
-		
+
         do_action( 'dlm_start_download_process', $download, $version, $file_path, $remote_file );
 
 		if ( get_option( 'dlm_xsendfile_enabled' ) ) {
@@ -523,7 +542,7 @@ class DLM_Download_Handler {
 					// phpcs:ignore
 					$file_path = str_ireplace( $_SERVER['DOCUMENT_ROOT'], '', $file_path );
 				}
-				
+
 				header( "X-Accel-Redirect: /$file_path" );
 				exit;
 			}
@@ -538,13 +557,13 @@ class DLM_Download_Handler {
 			$range = intval( $range );
 
 			if ( ! $range_end ) {
-				$range_end = $version->get_filesize() - 1;
+				$range_end = $version->get_filesize() ;
 			} else {
 				$range_end = intval( $range_end );
 			}
 
-			$new_length = $range_end - $range;
-
+			//$new_length = $range_end - $range;
+			$new_length = ($range_end - $range) + 1;
 			header( "HTTP/1.1 206 Partial Content" );
 			header( "Content-Length: $new_length" );
 			header( "Content-Range: bytes {$range}-{$range_end}/{$version->get_filesize()}" );
@@ -553,7 +572,8 @@ class DLM_Download_Handler {
 			$range = false;
 		}
 
-		if ( $this->readfile_chunked( $file_path, $range ) ) {
+		if ( $this->readfile_chunked( $file_path, false, $range ) ) {
+		//if ( $this->readfile_chunked( $file_path, $range ) ) {
 
 			// Complete!
 			$this->log( 'download', 'completed', '', $download, $version );
@@ -651,8 +671,13 @@ class DLM_Download_Handler {
 		$headers['Content-Disposition']       = "attachment; filename=\"{$file_name}\";";
 		$headers['Content-Transfer-Encoding'] = 'binary';
 
-		if ( $version->get_filesize() ) {
-			$headers['Content-Length'] = $version->get_filesize();
+		$file_manager = new DLM_File_Manager();
+		$file_size    = $file_manager->get_file_size( $file_path );
+
+		if ( $file_size ) {
+			// Replace the old way ( getting the filesize from the DB ) in case the user has replaced the file directly using cPanel,
+			// FTP or other File Manager, or sometimes using  an optimization service it may cause unwanted results.
+			$headers['Content-Length'] = $file_size;
 			$headers['Accept-Ranges']  = 'bytes';
 		}
 
