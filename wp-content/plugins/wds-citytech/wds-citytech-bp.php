@@ -583,7 +583,7 @@ function openlab_send_group_join_admin_notification( $group_id, $user_id ) {
 		return;
 	}
 
-	$subject = sprintf( 'A new member has joined your group %s [%s]', $group->name, bp_get_option( 'blogname' ) );
+	$subject = sprintf( 'A new member has joined %s', $group->name );
 	$message = sprintf(
 		'A new member has joined your group %1$s on the %2$s.
 
