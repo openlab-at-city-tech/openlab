@@ -1,6 +1,6 @@
 <table cellspacing="0" cellpadding="10" border="0" align="left" width="100%" style="max-width: 600px; color: #222;" bgcolor="#f0f0f0" class="footer_bg">
 	<tr>
-		<td style="padding: 10px; width: 100%%; font-size: <?php echo esc_attr( $settings['footer_text_size'] . 'px' ); ?>; font-family: sans-serif; mso-height-rule: exactly; line-height: <?php echo esc_attr( floor( $settings['footer_text_size'] * 1.618 ) . 'px' ) ?>; text-align: left; color: <?php echo esc_attr( $settings['footer_text_color'] ); ?>;" class="footer_text_color footer_text_size">
+		<td style="padding: 10px; width: 100%%; font-size: <?php echo esc_attr( $args['footer_text_size'] . 'px' ); ?>; font-family: sans-serif; mso-height-rule: exactly; line-height: <?php echo esc_attr( floor( $args['footer_text_size'] * 1.618 ) . 'px' ) ?>; text-align: left; color: <?php echo esc_attr( $args['footer_text_color'] ); ?>;" class="footer_text_color footer_text_size">
 			<p style="font-size: 14px;"><b>The OpenLab at City Tech: A place to learn, work, and share</b></p>
 
 			<table cellspacing="0" cellpadding="0" border="0" align="left" width="100%">
@@ -20,7 +20,7 @@
 	</tr>
 
 	<tr>
-		<td style="padding: 10px 10px 20px 10px; width: 100%; font-size: 14px; font-family: sans-serif; mso-height-rule: exactly; line-height: <?php echo esc_attr( floor( $settings['footer_text_size'] * 1.618 ) . 'px' ) ?>; text-align: left; color: <?php echo esc_attr( $settings['footer_text_color'] ); ?>;" class="footer_text_color footer_text_size">
+		<td style="padding: 10px 10px 20px 10px; width: 100%; font-size: 14px; font-family: sans-serif; mso-height-rule: exactly; line-height: <?php echo esc_attr( floor( $args['footer_text_size'] * 1.618 ) . 'px' ) ?>; text-align: left; color: <?php echo esc_attr( $args['footer_text_color'] ); ?>;" class="footer_text_color footer_text_size">
 			<a href="http://www.citytech.cuny.edu/">New York City College of Technology</a> | <a href="https://cuny.edu">City University of New York</a>
 		</td>
 	</tr>
