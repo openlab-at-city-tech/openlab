@@ -1,16 +1,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/mappress-google-"
-"maps-for-wordpress\n"
-"POT-Creation-Date: 2020-12-15T18:23:01+00:00\n"
-"PO-Revision-Date: \n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/mappress-google-maps-for-wordpress\n"
 "Last-Translator: Age de Jong <age@multiweb.nl>\n"
 "Language-Team: \n"
-"Language: nl_NL\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2020-12-15T18:23:01+00:00\n"
+"PO-Revision-Date: \n"
+"Language: nl_NL\n"
 "X-Generator: Poedit 2.4.2\n"
 
 #. Plugin Name of the plugin
@@ -33,23 +32,21 @@ msgstr ""
 msgid "https://www.mappresspro.com/chris-contact"
 msgstr ""
 
-#: mappress.php:171 mappress.php:701 build/index_mappress_admin.js:1
+#: mappress.php:171
+#: mappress.php:701
+#: build/index_mappress_admin.js:1
 msgid "Settings"
 msgstr "Instellingen"
 
-#: mappress.php:172 build/index_mappress_admin.js:1
+#: mappress.php:172
+#: build/index_mappress_admin.js:1
 #, fuzzy
-#| msgid "Map border"
 msgid "Map Library"
 msgstr "Kaart rand"
 
 #: mappress.php:183
-msgid ""
-"MapPress database tables are missing.  Please deactivate the plugin and "
-"activate it again to fix this."
-msgstr ""
-"Er ontbreken MapPress database tabellen. Deactiveer de plugin en activeer "
-"deze opnieuw om dit op te lossen."
+msgid "MapPress database tables are missing.  Please deactivate the plugin and activate it again to fix this."
+msgstr "Er ontbreken MapPress database tabellen. Deactiveer de plugin en activeer deze opnieuw om dit op te lossen."
 
 #: mappress.php:188
 msgid "A Google Maps API key is required"
@@ -61,7 +58,6 @@ msgstr ""
 
 #: mappress.php:188
 #, fuzzy
-#| msgid "MapPress Options"
 msgid "MapPress Settings"
 msgstr "MapPress Opties"
 
@@ -82,22 +78,20 @@ msgid "Please Help Spread the Word"
 msgstr ""
 
 #: mappress.php:285
-msgid ""
-"If you're enjoying MapPress, would you mind taking a moment to write a brief "
-"review?  It would mean the world to me!"
+msgid "If you're enjoying MapPress, would you mind taking a moment to write a brief review?  It would mean the world to me!"
 msgstr ""
 
 #: mappress.php:286
-msgid ""
-"If you have any issues or suggestions, please let me know.  I'll be happy to "
-"help!"
+msgid "If you have any issues or suggestions, please let me know.  I'll be happy to help!"
 msgstr ""
 
-#: mappress.php:402 mappress.php:931
+#: mappress.php:402
+#: mappress.php:931
 msgid "Version"
 msgstr "Version"
 
-#: mappress.php:404 build/index_mappress_admin.js:1
+#: mappress.php:404
+#: build/index_mappress_admin.js:1
 msgid "Help"
 msgstr ""
 
@@ -110,9 +104,7 @@ msgid "Please enter your MapPress license key to enable plugin updates"
 msgstr ""
 
 #: mappress.php:477
-msgid ""
-"MapPress Gutenberg blocks require WordPress 5.3 or the latest Gutenberg "
-"Plugin. Please update if using the block editor."
+msgid "MapPress Gutenberg blocks require WordPress 5.3 or the latest Gutenberg Plugin. Please update if using the block editor."
 msgstr ""
 
 #: mappress.php:481
@@ -125,14 +117,11 @@ msgstr ""
 
 #: mappress.php:487
 #, fuzzy
-#| msgid "There are no maps yet for this post"
 msgid "The MapPress map editor has moved!"
 msgstr "Er zijn nog geen kaarten voor dit bericht"
 
 #: mappress.php:488
-msgid ""
-"Use this button to open the new popup editor where you can easily create, "
-"edit and insert maps."
+msgid "Use this button to open the new popup editor where you can easily create, edit and insert maps."
 msgstr ""
 
 #: mappress.php:534
@@ -153,7 +142,6 @@ msgstr ""
 
 #: mappress.php:538
 #, fuzzy
-#| msgid "Loading..."
 msgid "Loading"
 msgstr "Aan het laden..."
 
@@ -165,13 +153,13 @@ msgstr ""
 msgid "Unable to get your location"
 msgstr "Was niet in staat uw lokatie te achterhalen"
 
-#: mappress.php:541 build/index_mappress_admin.js:1
+#: mappress.php:541
+#: build/index_mappress_admin.js:1
 msgid "No results"
 msgstr ""
 
 #: mappress.php:542
 #, fuzzy
-#| msgid "Save Changes"
 msgid "Save changes?"
 msgstr "Veranderingen opslaan"
 
@@ -181,13 +169,12 @@ msgstr "Vorm"
 
 #: mappress.php:572
 #, fuzzy
-#| msgid "Delete this map?"
 msgid "Improve this map"
 msgstr "Verwijder kaart?"
 
-#: mappress.php:588 mappress.php:607
+#: mappress.php:588
+#: mappress.php:607
 #, fuzzy
-#| msgid "Street View"
 msgid "Streets"
 msgstr "Street view"
 
@@ -197,7 +184,6 @@ msgstr ""
 
 #: mappress.php:590
 #, fuzzy
-#| msgid "Right"
 msgid "Light"
 msgstr "Rechts"
 
@@ -211,39 +197,43 @@ msgstr "Satelliet"
 
 #: mappress.php:593
 #, fuzzy
-#| msgid "Satellite"
 msgid "Satellite Streets"
 msgstr "Satelliet"
 
-#: mappress_controls.php:93 templates_admin/widgets.php:42
+#: mappress_controls.php:93
+#: templates_admin/widgets.php:42
 #: build/index_mappress_admin.js:1
 msgid "Add"
 msgstr "Toevoegen"
 
-#: mappress_controls.php:102 templates_admin/editor.php:47
-#: templates_admin/mce.php:100 templates_admin/widgets.php:94
+#: mappress_controls.php:102
+#: templates_admin/editor.php:47
+#: templates_admin/mce.php:100
+#: templates_admin/widgets.php:94
 #: build/index_mappress_admin.js:1
 msgid "Delete"
 msgstr "Verwijderen"
 
-#: mappress_map.php:85 mappress_settings.php:321
+#: mappress_map.php:85
+#: mappress_settings.php:321
 msgid "MapPress"
 msgstr "MapPress"
 
-#: mappress_map.php:94 templates_admin/mce.php:30 templates_admin/mce.php:80
-#: templates_admin/mce.php:86 build/index_mappress_admin.js:1
+#: mappress_map.php:94
+#: templates_admin/mce.php:30
+#: templates_admin/mce.php:80
+#: templates_admin/mce.php:86
+#: build/index_mappress_admin.js:1
 msgid "Untitled"
 msgstr "Geen titel"
 
 #: mappress_map.php:95
 #, fuzzy
-#| msgid "Top of post"
 msgid "Copy of %s"
 msgstr "Bovenaan bericht"
 
 #: mappress_map.php:199
 #, fuzzy
-#| msgid "Map not found, was it deleted?"
 msgid "Map not found"
 msgstr "Kaart niet gevonden, is deze verwijderd?"
 
@@ -259,9 +249,9 @@ msgstr "Standaard instellingen"
 msgid "Mapping API"
 msgstr ""
 
-#: mappress_settings.php:92 build/index_mappress_admin.js:1
+#: mappress_settings.php:92
+#: build/index_mappress_admin.js:1
 #, fuzzy
-#| msgid "Google"
 msgid "Google API key"
 msgstr "Google"
 
@@ -275,7 +265,6 @@ msgstr ""
 
 #: mappress_settings.php:101
 #, fuzzy
-#| msgid "Settings"
 msgid "Map Settings"
 msgstr "Instellingen"
 
@@ -285,7 +274,6 @@ msgstr "Post typen"
 
 #: mappress_settings.php:103
 #, fuzzy
-#| msgid "Automatic map display"
 msgid "Automatic display"
 msgstr "Automatische kaart weergave"
 
@@ -293,24 +281,24 @@ msgstr "Automatische kaart weergave"
 msgid "Map alignment"
 msgstr "Kaart uitlijning"
 
-#: mappress_settings.php:105 templates/map-popup.php:3
+#: mappress_settings.php:105
+#: templates/map-popup.php:3
 #: templates/mashup-popup.php:6
 msgid "Directions"
 msgstr "Route"
 
 #: mappress_settings.php:108
 #, fuzzy
-#| msgid "Settings"
 msgid "POI Settings"
 msgstr "Instellingen"
 
 #: mappress_settings.php:109
 #, fuzzy
-#| msgid "Default icon"
 msgid "Default zoom"
 msgstr "Standaard pictogram"
 
-#: mappress_settings.php:110 mappress_settings.php:238
+#: mappress_settings.php:110
+#: mappress_settings.php:238
 msgid "Open first POI"
 msgstr "Open eerste POI"
 
@@ -320,7 +308,6 @@ msgstr ""
 
 #: mappress_settings.php:114
 #, fuzzy
-#| msgid "Icons URL"
 msgid "Icons"
 msgstr "Iconen URL"
 
@@ -342,7 +329,6 @@ msgstr "Lokalisatie"
 
 #: mappress_settings.php:121
 #, fuzzy
-#| msgid "language"
 msgid "Search language"
 msgstr "taal"
 
@@ -370,8 +356,10 @@ msgstr ""
 msgid "Compatiblity"
 msgstr ""
 
-#: mappress_settings.php:175 mappress_settings.php:244
-#: pro/mappress_pro_settings.php:234 templates_admin/widgets.php:78
+#: mappress_settings.php:175
+#: mappress_settings.php:244
+#: pro/mappress_pro_settings.php:234
+#: templates_admin/widgets.php:78
 #: build/index_mappress_admin.js:1
 msgid "Default"
 msgstr "Standaard"
@@ -400,7 +388,8 @@ msgstr "Bovenaan bericht"
 msgid "Bottom of post"
 msgstr "Onderaan bericht"
 
-#: mappress_settings.php:199 mappress_settings.php:243
+#: mappress_settings.php:199
+#: mappress_settings.php:243
 msgid "(list)"
 msgstr ""
 
@@ -412,8 +401,10 @@ msgstr "Landcode voor zoekopdrachten"
 msgid "Prevent other plugins/themes from loading the Google Maps API"
 msgstr ""
 
-#: mappress_settings.php:212 mappress_settings.php:221
-#: pro/mappress_pro_settings.php:232 build/index_mappress_admin.js:1
+#: mappress_settings.php:212
+#: mappress_settings.php:221
+#: pro/mappress_pro_settings.php:232
+#: build/index_mappress_admin.js:1
 msgid "Google"
 msgstr "Google"
 
@@ -421,17 +412,17 @@ msgstr "Google"
 msgid "Inline"
 msgstr "Inline"
 
-#: mappress_settings.php:221 build/index_mappress_admin.js:1
+#: mappress_settings.php:221
+#: build/index_mappress_admin.js:1
 msgid "Leaflet"
 msgstr ""
 
 #: mappress_settings.php:223
-msgid ""
-"Leaflet is free and requires no API key.  Google requires an API key and has "
-"strict usage limits."
+msgid "Leaflet is free and requires no API key.  Google requires an API key and has strict usage limits."
 msgstr ""
 
-#: mappress_settings.php:229 mappress_settings.php:232
+#: mappress_settings.php:229
+#: mappress_settings.php:232
 msgid "Output scripts in footer"
 msgstr ""
 
@@ -451,17 +442,18 @@ msgstr ""
 msgid "Enter token to use Mapbox map tiles"
 msgstr ""
 
-#: mappress_settings.php:257 mappress_settings.php:262
+#: mappress_settings.php:257
+#: mappress_settings.php:262
 msgid "Map type control"
 msgstr "Kaart typen bediening"
 
 #: mappress_settings.php:258
 #, fuzzy
-#| msgid "Overview map control"
 msgid "Street view control"
 msgstr "Overzicht mapbediening"
 
-#: mappress_settings.php:259 mappress_settings.php:263
+#: mappress_settings.php:259
+#: mappress_settings.php:263
 msgid "Zoom control"
 msgstr "In- uitzoom kaartbediening"
 
@@ -475,19 +467,16 @@ msgstr "Easy Google Maps"
 
 #: mappress_settings.php:299
 #, fuzzy
-#| msgid "Width(px)"
 msgid "Width (px, %, vh, vw)"
 msgstr "Breedte (px)"
 
 #: mappress_settings.php:299
 #, fuzzy
-#| msgid "Height(px)"
 msgid "Height (px, %, vh, vw)"
 msgstr "Hoogte (px)"
 
 #: mappress_settings.php:299
 #, fuzzy
-#| msgid "Default style"
 msgid "Default size"
 msgstr "Standaard stijl"
 
@@ -495,38 +484,40 @@ msgstr "Standaard stijl"
 msgid "Copy maps when overwriting a translation"
 msgstr ""
 
-#: mappress_settings.php:326 mappress_settings.php:334
+#: mappress_settings.php:326
+#: mappress_settings.php:334
 msgid "Save Changes"
 msgstr "Veranderingen opslaan"
 
-#: mappress_settings.php:327 mappress_settings.php:335
+#: mappress_settings.php:327
+#: mappress_settings.php:335
 msgid "Reset Defaults"
 msgstr "Herstel standaard instellingen"
 
 #: mappress_template.php:34
 #, fuzzy
-#| msgid "Add address"
 msgid "Address"
 msgstr "Adres Toevoegen"
 
-#: mappress_template.php:35 pro/mappress_pro_settings.php:338
+#: mappress_template.php:35
+#: pro/mappress_pro_settings.php:338
 msgid "Body"
 msgstr ""
 
-#: mappress_template.php:36 pro/mappress_pro_settings.php:174
+#: mappress_template.php:36
+#: pro/mappress_pro_settings.php:174
 #: pro/mappress_pro_settings.php:338
 #, fuzzy
-#| msgid "Icons URL"
 msgid "Icon"
 msgstr "Iconen URL"
 
 #: mappress_template.php:37
 #, fuzzy
-#| msgid "Thumbnails"
 msgid "Thumbnail"
 msgstr "Miniaturen"
 
-#: mappress_template.php:38 pro/mappress_pro_settings.php:338
+#: mappress_template.php:38
+#: pro/mappress_pro_settings.php:338
 msgid "Title"
 msgstr "Titel"
 
@@ -534,17 +525,18 @@ msgstr "Titel"
 msgid "Url"
 msgstr ""
 
-#: mappress_template.php:40 pro/mappress_filter.php:120
+#: mappress_template.php:40
+#: pro/mappress_filter.php:120
 #: pro/mappress_pro_settings.php:343
 #, fuzzy
-#| msgid "Custom Fields"
 msgid "Custom Field"
 msgstr "Vrij veld"
 
-#: pro/mappress_filter.php:84 pro/mappress_filter.php:133
-#: pro/mappress_pro_settings.php:167 build/index_mappress_admin.js:1
+#: pro/mappress_filter.php:84
+#: pro/mappress_filter.php:133
+#: pro/mappress_pro_settings.php:167
+#: build/index_mappress_admin.js:1
 #, fuzzy
-#| msgid "Post types"
 msgid "Post type"
 msgstr "Post typen"
 
@@ -554,7 +546,6 @@ msgstr ""
 
 #: pro/mappress_filter.php:120
 #, fuzzy
-#| msgid "Errors field"
 msgid "Post field"
 msgstr "Foutmeldingen veld"
 
@@ -562,10 +553,11 @@ msgstr "Foutmeldingen veld"
 msgid "Invalid geocoder: %s"
 msgstr ""
 
-#: pro/mappress_geocoder.php:59 pro/mappress_geocoder.php:110
-#: pro/mappress_geocoder.php:147 pro/mappress_geocoder.php:192
+#: pro/mappress_geocoder.php:59
+#: pro/mappress_geocoder.php:110
+#: pro/mappress_geocoder.php:147
+#: pro/mappress_geocoder.php:192
 #, fuzzy
-#| msgid "No geocoding result for address: %s"
 msgid "No results for address: %s"
 msgstr "Geen geocoding resultaat voor adres: %s"
 
@@ -579,7 +571,6 @@ msgstr ""
 
 #: pro/mappress_geocoder.php:221
 #, fuzzy
-#| msgid "from %s to %s"
 msgid "Error: %s %s"
 msgstr "van %s tot %s"
 
@@ -593,29 +584,26 @@ msgstr ""
 
 #: pro/mappress_icons.php:74
 #, fuzzy
-#| msgid "Field for errors"
 msgid "Files error: "
 msgstr "Veld voor fouten"
 
-#: pro/mappress_meta.php:109 build/index_mappress_admin.js:1
+#: pro/mappress_meta.php:109
+#: build/index_mappress_admin.js:1
 msgid "Automatic"
 msgstr "Automatisch"
 
 #: pro/mappress_pro_settings.php:16
 #, fuzzy
-#| msgid "MapPress News"
 msgid "MapPress license key"
 msgstr "MapPress nieuws"
 
 #: pro/mappress_pro_settings.php:17
 #, fuzzy
-#| msgid "Version"
 msgid "Beta versions"
 msgstr "Version"
 
 #: pro/mappress_pro_settings.php:21
 #, fuzzy
-#| msgid "Geocoding"
 msgid "Geocoder"
 msgstr "Geocoding"
 
@@ -625,13 +613,11 @@ msgstr "POI lijst"
 
 #: pro/mappress_pro_settings.php:24
 #, fuzzy
-#| msgid "POI list"
 msgid "POI list layout"
 msgstr "POI lijst"
 
 #: pro/mappress_pro_settings.php:25
 #, fuzzy
-#| msgid "Map width"
 msgid "Mini width"
 msgstr "Map breedte"
 
@@ -645,7 +631,6 @@ msgstr ""
 
 #: pro/mappress_pro_settings.php:30
 #, fuzzy
-#| msgid "Post types"
 msgid "Popup type"
 msgstr "Post typen"
 
@@ -659,7 +644,6 @@ msgstr ""
 
 #: pro/mappress_pro_settings.php:34
 #, fuzzy
-#| msgid "Custom Fields"
 msgid "Custom icons"
 msgstr "Vrij veld"
 
@@ -669,16 +653,18 @@ msgstr ""
 
 #: pro/mappress_pro_settings.php:36
 #, fuzzy
-#| msgid "Automatic"
 msgid "Automatic icons"
 msgstr "Automatisch"
 
-#: pro/mappress_pro_settings.php:38 templates/map.php:51
-#: templates_admin/mce.php:13 build/index_mappress_admin.js:1
+#: pro/mappress_pro_settings.php:38
+#: templates/map.php:51
+#: templates_admin/mce.php:13
+#: build/index_mappress_admin.js:1
 msgid "Search"
 msgstr ""
 
-#: pro/mappress_pro_settings.php:40 templates/map.php:58
+#: pro/mappress_pro_settings.php:40
+#: templates/map.php:58
 msgid "Filter"
 msgstr ""
 
@@ -688,7 +674,6 @@ msgstr ""
 
 #: pro/mappress_pro_settings.php:42
 #, fuzzy
-#| msgid "POI links"
 msgid "POI click"
 msgstr "POI koppelingen"
 
@@ -704,7 +689,8 @@ msgstr "Miniaturen"
 msgid "Thumbnail size"
 msgstr "Miniatuur grootte"
 
-#: pro/mappress_pro_settings.php:48 pro/mappress_pro_settings.php:50
+#: pro/mappress_pro_settings.php:48
+#: pro/mappress_pro_settings.php:50
 msgid "Styled maps"
 msgstr "Kaart stijlen"
 
@@ -714,7 +700,6 @@ msgstr "Standaard stijl"
 
 #: pro/mappress_pro_settings.php:54
 #, fuzzy
-#| msgid "Geocoding"
 msgid "Geocoding fields"
 msgstr "Geocoding"
 
@@ -724,7 +709,6 @@ msgstr ""
 
 #: pro/mappress_pro_settings.php:56
 #, fuzzy
-#| msgid "Geocoding"
 msgid "Geocoding errors"
 msgstr "Geocoding"
 
@@ -734,11 +718,11 @@ msgstr ""
 
 #: pro/mappress_pro_settings.php:61
 #, fuzzy
-#| msgid "Custom Fields"
 msgid "Custom templates"
 msgstr "Vrij veld"
 
-#: pro/mappress_pro_settings.php:62 pro/mappress_pro_settings.php:227
+#: pro/mappress_pro_settings.php:62
+#: pro/mappress_pro_settings.php:227
 msgid "Force resize"
 msgstr "Forceer vergroten/verkleinen"
 
@@ -780,7 +764,6 @@ msgstr ""
 
 #: pro/mappress_pro_settings.php:224
 #, fuzzy
-#| msgid "Permanently resize existing maps"
 msgid "Permanently resize existing maps (classic editor only)"
 msgstr "Permanent alle bestaande kaarten verkleinen/vergroten"
 
@@ -800,13 +783,13 @@ msgstr ""
 msgid "MapBox"
 msgstr ""
 
-#: pro/mappress_pro_settings.php:246 templates_admin/widgets.php:68
+#: pro/mappress_pro_settings.php:246
+#: templates_admin/widgets.php:68
 msgid "Edit"
 msgstr "Bewerken"
 
 #: pro/mappress_pro_settings.php:260
 #, fuzzy
-#| msgid "Standard icons"
 msgid "Standard"
 msgstr "Standaard pictogrammen"
 
@@ -820,13 +803,11 @@ msgstr ""
 
 #: pro/mappress_pro_settings.php:269
 #, fuzzy
-#| msgid "Show map"
 msgid "Below map"
 msgstr "Kaart weergeven"
 
 #: pro/mappress_pro_settings.php:275
 #, fuzzy
-#| msgid "Get Directions"
 msgid "Get license"
 msgstr "Bereken route"
 
@@ -842,9 +823,9 @@ msgstr ""
 msgid "Check now"
 msgstr ""
 
-#: pro/mappress_pro_settings.php:299 pro/mappress_updater.php:116
+#: pro/mappress_pro_settings.php:299
+#: pro/mappress_updater.php:116
 #, fuzzy
-#| msgid "Google internal error.  Try again later."
 msgid "Communication error, please try again later"
 msgstr "Interne Google fout, probeer het later nog eens."
 
@@ -858,19 +839,16 @@ msgstr ""
 
 #: pro/mappress_pro_settings.php:305
 #, fuzzy
-#| msgid "Post excerpt"
 msgid "Post title + post excerpt"
 msgstr "Bericht samenvatting"
 
 #: pro/mappress_pro_settings.php:310
 #, fuzzy
-#| msgid "Open first POI"
 msgid "Open POI"
 msgstr "Open eerste POI"
 
 #: pro/mappress_pro_settings.php:310
 #, fuzzy
-#| msgid "Current posts"
 msgid "Open post"
 msgstr "Huidige berichten"
 
@@ -888,7 +866,6 @@ msgstr ""
 
 #: pro/mappress_pro_settings.php:337
 #, fuzzy
-#| msgid "Address fields"
 msgid "Address line "
 msgstr "Adres velden"
 
@@ -900,13 +877,13 @@ msgstr ""
 msgid "Longitude"
 msgstr ""
 
-#: pro/mappress_pro_settings.php:338 build/index_mappress_admin.js:1
+#: pro/mappress_pro_settings.php:338
+#: build/index_mappress_admin.js:1
 msgid "Zoom"
 msgstr "Inzoomen"
 
 #: pro/mappress_pro_settings.php:343
 #, fuzzy
-#| msgid "Map size"
 msgid "Map Field"
 msgstr "Kaart groote"
 
@@ -920,19 +897,16 @@ msgstr ""
 
 #: pro/mappress_pro_settings.php:365
 #, fuzzy
-#| msgid "Show a list of POIs under each map"
 msgid "Show a list of POIs with each map"
 msgstr "Geef een lijst van POIs weer onder elke kaart"
 
 #: pro/mappress_pro_settings.php:373
 #, fuzzy
-#| msgid "Enable"
 msgid "Enable search"
 msgstr "Aanzetten"
 
 #: pro/mappress_pro_settings.php:377
 #, fuzzy
-#| msgid "Show the POI list as a sortable %s"
 msgid "Sort POI list by title"
 msgstr "Geef de POI lijst weer als een sorteerbare %s"
 
@@ -942,17 +916,16 @@ msgstr "Er zijn nog geen stijlen gedefinieerd"
 
 #: pro/mappress_pro_settings.php:392
 #, fuzzy
-#| msgid "Styled Maps"
 msgid "Snazzy Maps"
 msgstr "Gestileerde kaarten"
 
 #: pro/mappress_pro_settings.php:393
 #, fuzzy
-#| msgid "Enter JSON for %s from Google's %s"
 msgid "Enter JSON from %s"
 msgstr "Geef JSON op voor %s van Google's %s"
 
-#: pro/mappress_pro_settings.php:397 pro/mappress_pro_settings.php:413
+#: pro/mappress_pro_settings.php:397
+#: pro/mappress_pro_settings.php:413
 msgid "Style name"
 msgstr "Stijl naam"
 
@@ -984,11 +957,13 @@ msgstr "Toon Featured Image miniatuur in gecombineerde POI's"
 msgid "JSON error"
 msgstr ""
 
-#: pro/mappress_widget.php:69 pro/mappress_widget_map.php:56
+#: pro/mappress_widget.php:69
+#: pro/mappress_widget_map.php:56
 msgid "Widget title"
 msgstr "Widget titel"
 
-#: pro/mappress_widget.php:74 pro/mappress_widget_map.php:66
+#: pro/mappress_widget.php:74
+#: pro/mappress_widget_map.php:66
 msgid "Map size"
 msgstr "Kaart groote"
 
@@ -1016,24 +991,27 @@ msgstr "Vrije query"
 msgid "Learn about queries"
 msgstr "Leer meer over queries"
 
-#: pro/mappress_widget.php:94 pro/mappress_widget_map.php:74
+#: pro/mappress_widget.php:94
+#: pro/mappress_widget_map.php:74
 #, fuzzy
-#| msgid "POI list"
 msgid "Show POI list"
 msgstr "POI lijst"
 
-#: pro/mappress_widget.php:101 pro/mappress_widget_map.php:81
+#: pro/mappress_widget.php:101
+#: pro/mappress_widget_map.php:81
 #, fuzzy
-#| msgid "Settings"
 msgid "Other Settings"
 msgstr "Instellingen"
 
-#: pro/mappress_widget.php:104 pro/mappress_widget_map.php:84
+#: pro/mappress_widget.php:104
+#: pro/mappress_widget_map.php:84
 msgid "Example: initialopeninfo=\"true\""
 msgstr ""
 
-#: pro/mappress_widget_map.php:61 templates_admin/mce.php:49
-#: templates_admin/mce.php:69 build/index_mappress_admin.js:1
+#: pro/mappress_widget_map.php:61
+#: templates_admin/mce.php:49
+#: templates_admin/mce.php:69
+#: build/index_mappress_admin.js:1
 msgid "Map ID"
 msgstr "Kaart ID"
 
@@ -1055,13 +1033,11 @@ msgstr ""
 
 #: templates/map-loop.php:3
 #, fuzzy
-#| msgid "Reset Defaults"
 msgid "Results"
 msgstr "Herstel standaard instellingen"
 
 #: templates/map.php:53
 #, fuzzy
-#| msgid "Location"
 msgid "Your Location"
 msgstr "Locatie"
 
@@ -1087,13 +1063,11 @@ msgstr ""
 
 #: templates/map.php:84
 #, fuzzy
-#| msgid "Show"
 msgid "Show List"
 msgstr "Tonen"
 
 #: templates/map.php:85
 #, fuzzy
-#| msgid "Show map"
 msgid "Show Map"
 msgstr "Kaart weergeven"
 
@@ -1109,41 +1083,45 @@ msgstr ""
 msgid "Add Media"
 msgstr ""
 
-#: templates_admin/editor.php:45 templates_admin/mce.php:55
-#: templates_admin/widgets.php:91 build/index_mappress_admin.js:1
+#: templates_admin/editor.php:45
+#: templates_admin/mce.php:55
+#: templates_admin/widgets.php:91
+#: build/index_mappress_admin.js:1
 msgid "Save"
 msgstr "Bewaren"
 
-#: templates_admin/editor.php:46 templates_admin/mce.php:56
-#: templates_admin/widgets.php:92 build/index_mappress_admin.js:1
+#: templates_admin/editor.php:46
+#: templates_admin/mce.php:56
+#: templates_admin/widgets.php:92
+#: build/index_mappress_admin.js:1
 msgid "Cancel"
 msgstr "Annuleren"
 
-#: templates_admin/mce.php:6 build/index_mappress_admin.js:1
+#: templates_admin/mce.php:6
+#: build/index_mappress_admin.js:1
 #, fuzzy
-#| msgid "Delete this map?"
 msgid "Select a map"
 msgstr "Verwijder kaart?"
 
-#: templates_admin/mce.php:7 build/index_mappress_admin.js:1
+#: templates_admin/mce.php:7
+#: build/index_mappress_admin.js:1
 msgid "Add New"
 msgstr ""
 
 #: templates_admin/mce.php:14
 #, fuzzy
-#| msgid "Post title"
 msgid "post title"
 msgstr "Bericht titel"
 
-#: templates_admin/mce.php:18 build/index_mappress_admin.js:1
+#: templates_admin/mce.php:18
+#: build/index_mappress_admin.js:1
 #, fuzzy
-#| msgid "Maps in this post"
 msgid "Attached to this post"
 msgstr "Kaarten in dit bericht"
 
-#: templates_admin/mce.php:19 build/index_mappress_admin.js:1
+#: templates_admin/mce.php:19
+#: build/index_mappress_admin.js:1
 #, fuzzy
-#| msgid "All posts"
 msgid "All maps"
 msgstr "Alle berichten"
 
@@ -1151,7 +1129,8 @@ msgstr "Alle berichten"
 msgid "Close"
 msgstr "Sluiten"
 
-#: templates_admin/mce.php:35 build/index_mappress_admin.js:1
+#: templates_admin/mce.php:35
+#: build/index_mappress_admin.js:1
 msgid "Size"
 msgstr "Formaat"
 
@@ -1159,29 +1138,30 @@ msgstr "Formaat"
 msgid "Save center / zoom"
 msgstr ""
 
-#: templates_admin/mce.php:68 build/index_mappress_admin.js:1
+#: templates_admin/mce.php:68
+#: build/index_mappress_admin.js:1
 #, fuzzy
-#| msgid "Marker title"
 msgid "Map title"
 msgstr "Markeerpunt titel"
 
-#: templates_admin/mce.php:71 build/index_mappress_admin.js:1
+#: templates_admin/mce.php:71
+#: build/index_mappress_admin.js:1
 msgid "Attached to"
 msgstr ""
 
-#: templates_admin/mce.php:73 build/index_mappress_admin.js:1
+#: templates_admin/mce.php:73
+#: build/index_mappress_admin.js:1
 #, fuzzy
-#| msgid "Location"
 msgid "Action"
 msgstr "Locatie"
 
 #: templates_admin/mce.php:87
 #, fuzzy
-#| msgid "Current posts"
 msgid "Current post"
 msgstr "Huidige berichten"
 
-#: templates_admin/mce.php:92 build/index_mappress_admin.js:1
+#: templates_admin/mce.php:92
+#: build/index_mappress_admin.js:1
 msgid "Unattached"
 msgstr ""
 
@@ -1189,7 +1169,8 @@ msgstr ""
 msgid "Insert into post"
 msgstr "Neem op in post"
 
-#: templates_admin/mce.php:107 build/index_mappress_admin.js:1
+#: templates_admin/mce.php:107
+#: build/index_mappress_admin.js:1
 msgid "No maps found"
 msgstr ""
 
@@ -1203,13 +1184,11 @@ msgstr "Belang"
 
 #: templates_admin/widgets.php:28
 #, fuzzy
-#| msgid "No styles have been defined yet"
 msgid "No custom icons have been added yet."
 msgstr "Er zijn nog geen stijlen gedefinieerd"
 
 #: templates_admin/widgets.php:59
 #, fuzzy
-#| msgid "Default icon"
 msgid "Use default icon"
 msgstr "Standaard pictogram"
 
@@ -1219,7 +1198,6 @@ msgstr ""
 
 #: templates_admin/widgets.php:67
 #, fuzzy
-#| msgid "Marker list template"
 msgid "Map list item"
 msgstr "Markeerpunten lijst sjabloon"
 
@@ -1229,246 +1207,24 @@ msgstr ""
 
 #: templates_admin/widgets.php:67
 #, fuzzy
-#| msgid "Marker list template"
 msgid "Mashup list item"
 msgstr "Markeerpunten lijst sjabloon"
 
 #: templates_admin/widgets.php:74
 #, fuzzy
-#| msgid "New POI"
 msgid "New"
 msgstr "NIeuw POI"
 
-#: templates_admin/widgets.php:74 build/index_mappress_admin.js:1
+#: templates_admin/widgets.php:74
+#: build/index_mappress_admin.js:1
 #, fuzzy
-#| msgid "Custom CSS"
 msgid "Custom"
 msgstr "Vrije CSS"
 
 #: templates_admin/widgets.php:77
 #, fuzzy
-#| msgid "Edit"
 msgid "Editor"
 msgstr "Bewerken"
-
-#: build/index_mappress_admin.js:1
-#, fuzzy
-#| msgid "New Map"
-msgid "New map"
-msgstr "Nieuwe kaart"
-
-#: build/index_mappress_admin.js:1
-#, fuzzy
-#| msgid "Edit"
-msgid "Edit map"
-msgstr "Bewerken"
-
-#: build/index_mappress_admin.js:1
-msgid ""
-"Like the block?  Upgrade to the free plugin or MapPress Pro for more "
-"features!"
-msgstr ""
-
-#: build/index_mappress_admin.js:1
-#, fuzzy
-#| msgid "MapPress"
-msgid "MapPress Pro"
-msgstr "MapPress"
-
-#: build/index_mappress_admin.js:1
-msgid "Free plugin"
-msgstr ""
-
-#: build/index_mappress_admin.js:1
-#, fuzzy
-#| msgid "MapPress options screen."
-msgid "MapPress options"
-msgstr "MapPress optiescherm."
-
-#: build/index_mappress_admin.js:1
-#, fuzzy
-#| msgid "Settings"
-msgid "Map settings"
-msgstr "Instellingen"
-
-#: build/index_mappress_admin.js:1
-#, fuzzy
-#| msgid "MapPress"
-msgid "MapPress Map"
-msgstr "MapPress"
-
-#: build/index_mappress_admin.js:1
-msgid "Create a new map or choose one from the map library."
-msgstr ""
-
-#: build/index_mappress_admin.js:1
-#, fuzzy
-#| msgid "Delete this map?"
-msgid "Insert a map"
-msgstr "Verwijder kaart?"
-
-#: build/index_mappress_admin.js:1
-msgid "Query"
-msgstr ""
-
-#: build/index_mappress_admin.js:1
-#, fuzzy
-#| msgid "Overview map"
-msgid "Refresh map"
-msgstr "Overzichts kaart"
-
-#: build/index_mappress_admin.js:1
-msgid "Author"
-msgstr ""
-
-#: build/index_mappress_admin.js:1
-#, fuzzy
-msgid "Order by"
-msgstr "Markeerpunt body"
-
-#: build/index_mappress_admin.js:1
-msgid "Include children"
-msgstr ""
-
-#: build/index_mappress_admin.js:1
-#, fuzzy
-#| msgid "Custom fields"
-msgid "Add custom field"
-msgstr "Vrij veld"
-
-#: build/index_mappress_admin.js:1
-#, fuzzy
-#| msgid "Style name"
-msgid "Field name"
-msgstr "Stijl naam"
-
-#: build/index_mappress_admin.js:1
-msgid "The field \"%s\" has already been added"
-msgstr ""
-
-#: build/index_mappress_admin.js:1
-msgid "Please enter a field name"
-msgstr ""
-
-#: build/index_mappress_admin.js:1
-msgid "Value (a or a,b,c...)"
-msgstr ""
-
-#: build/index_mappress_admin.js:1
-msgid "Invalid JSON"
-msgstr ""
-
-#: build/index_mappress_admin.js:1
-msgid "Update"
-msgstr ""
-
-#: build/index_mappress_admin.js:1
-#, fuzzy
-#| msgid "country code"
-msgid "Query code"
-msgstr "Wat is mijn landcode?"
-
-#: build/index_mappress_admin.js:1
-#, fuzzy
-#| msgid "MapPress"
-msgid "MapPress Mashup"
-msgstr "MapPress"
-
-#: build/index_mappress_admin.js:1
-msgid "Insert a mashup"
-msgstr ""
-
-#: build/index_mappress_admin.js:1
-#, fuzzy
-#| msgid "Map saved"
-msgid "Options saved."
-msgstr "Kaart opgeslagen"
-
-#: build/index_mappress_admin.js:1
-msgid "Mapping Engine"
-msgstr ""
-
-#: build/index_mappress_admin.js:1
-msgid "Save options"
-msgstr ""
-
-#: build/index_mappress_admin.js:1
-#, fuzzy
-#| msgid "Map size"
-msgid "Map copied"
-msgstr "Kaart groote"
-
-#: build/index_mappress_admin.js:1
-#, fuzzy
-#| msgid "shortcodes"
-msgid "Shortcode copied"
-msgstr "Korte codes"
-
-#: build/index_mappress_admin.js:1
-msgid "post title, map title, or map id"
-msgstr ""
-
-#: build/index_mappress_admin.js:1
-#, fuzzy
-#| msgid "Current posts"
-msgid "current post"
-msgstr "Huidige berichten"
-
-#: build/index_mappress_admin.js:1
-#, fuzzy
-#| msgid "Edit"
-msgid "Edit post"
-msgstr "Bewerken"
-
-#: build/index_mappress_admin.js:1
-msgid "Copy"
-msgstr ""
-
-#: build/index_mappress_admin.js:1
-#, fuzzy
-#| msgid "shortcodes"
-msgid "Shortcode"
-msgstr "Korte codes"
-
-#: build/index_mappress_admin.js:1
-#, fuzzy
-#| msgid "Delete"
-msgid "Delete map"
-msgstr "Verwijderen"
-
-#: build/index_mappress_admin.js:1
-#, fuzzy
-#| msgid "Map saved"
-msgid "Viewport saved"
-msgstr "Kaart opgeslagen"
-
-#: build/index_mappress_admin.js:1
-#, fuzzy
-#| msgid "Width(px)"
-msgid "px, %, vw"
-msgstr "Breedte (px)"
-
-#: build/index_mappress_admin.js:1
-msgid "Width"
-msgstr "Breedte"
-
-#: build/index_mappress_admin.js:1
-#, fuzzy
-#| msgid "Width(px)"
-msgid "px, %, vh"
-msgstr "Breedte (px)"
-
-#: build/index_mappress_admin.js:1
-#, fuzzy
-#| msgid "Weight"
-msgid "Height"
-msgstr "Belang"
-
-#: build/index_mappress_admin.js:1
-#, fuzzy
-#| msgid "Center"
-msgid "Center/Zoom"
-msgstr "Midden"
 
 #: package.json
 msgctxt "block description"
@@ -1479,7 +1235,6 @@ msgstr ""
 #~ msgstr "Tooltips"
 
 #, fuzzy
-#~| msgid "Show POI titles as a \"tooltip\" on mouse-over"
 #~ msgid "Show a tooltip when mouse is over a POI"
 #~ msgstr "Geef POI titels weer als een \"tooltip\" bij een mouse-over."
 
@@ -1497,21 +1252,26 @@ msgstr ""
 
 #~ msgid "Internal error - unable to save map.  Your data has not been saved!"
 #~ msgstr ""
-#~ "Interne foutmelding - kon kaart niet opslaan. Uw data is niet opgeslagen!"
+"\n"
+"foutmelding - kon kaart niet opslaan. Uw data is niet opgeslagen!\""
 
 #~ msgid ""
-#~ "WARNING: MapPress now requires WordPress 3.2 or higher.  Please upgrade "
-#~ "before using MapPress."
+"\n"
+"MapPress now requires WordPress 3.2 or higher.  Please upgrade \"\n"
+"using MapPress.\""
 #~ msgstr ""
-#~ "WAARSCHUWING: MapPress heeft WordPress 3.2 of hoger nodig. Werk uw "
-#~ "WordPress installatie bij om MapPress te kunnen gebruiken."
+"\n"
+"MapPress heeft WordPress 3.2 of hoger nodig. Werk uw \"\n"
+"installatie bij om MapPress te kunnen gebruiken.\""
 
 #~ msgid ""
-#~ "WARNING: MapPress is not compatible with the WP-Geo plugin.  Please "
-#~ "deactivate or uninstall WP-Geo before using MapPress."
+"\n"
+"MapPress is not compatible with the WP-Geo plugin.  Please \"\n"
+"or uninstall WP-Geo before using MapPress.\""
 #~ msgstr ""
-#~ "WAARSCHUWING: MapPress kan niet samen werken met de WP-Geo plugin. "
-#~ "Deactiveer of verwijder WP-Geo voordat je MapPress gebruikt."
+"\n"
+"MapPress kan niet samen werken met de WP-Geo plugin. \"\n"
+"of verwijder WP-Geo voordat je MapPress gebruikt.\""
 
 #~ msgid "Bike"
 #~ msgstr "Fiets"
@@ -1520,15 +1280,18 @@ msgstr ""
 #~ msgstr "Één van de adressen kon niet gevonden worden."
 
 #~ msgid ""
-#~ "Google cannot return directions between those addresses.  There is no "
-#~ "route between them or the routing information is not available."
+"\n"
+"cannot return directions between those addresses.  There is no \"\n"
+"between them or the routing information is not available.\""
 #~ msgstr ""
-#~ "Google kan geen route calculeren tussen deze adressen. Er is geen route "
-#~ "mogelijk of routeinformatie is niet beschikbaar."
+"\n"
+"kan geen route calculeren tussen deze adressen. Er is geen route \"\n"
+"of routeinformatie is niet beschikbaar.\""
 
 #~ msgid "Unknown error, unable to return directions.  Status code = "
 #~ msgstr ""
-#~ "Onbekende fout, niet mogelijk om een route weer te geven. Status code = "
+"\n"
+"fout, niet mogelijk om een route weer te geven. Status code = \""
 
 #~ msgid "Enter address"
 #~ msgstr "Geef het adres op"
@@ -1620,11 +1383,13 @@ msgstr ""
 #~ msgstr "Bijwerken bij publicatie"
 
 #~ msgid ""
-#~ "Use the settings below to automatically create maps from custom fields "
-#~ "containing addresses or lat/lng data."
+"\n"
+"the settings below to automatically create maps from custom fields \"\n"
+"addresses or lat/lng data.\""
 #~ msgstr ""
-#~ "Gebruik de instellingen hieronder om automatisch kaarten aan te maken van "
-#~ "vrije velden welke adressen of breedte- en lengtedata bevatten."
+"\n"
+"de instellingen hieronder om automatisch kaarten aan te maken van \"\n"
+"velden welke adressen of breedte- en lengtedata bevatten.\""
 
 #, php-format
 #~ msgid "Enter a %s to use when searching (leave blank for USA)"
@@ -1632,8 +1397,9 @@ msgstr ""
 
 #~ msgid "Enter a google server URL for directions/printing"
 #~ msgstr ""
-#~ "Geef de google server op om te gebruiken voor routebeschrijvingen & "
-#~ "printen"
+"\n"
+"de google server op om te gebruiken voor routebeschrijvingen & \"\n"
+""
 
 #~ msgid "(Default)"
 #~ msgstr "(Standaard)"
@@ -1703,10 +1469,12 @@ msgstr ""
 #~ msgstr "Inline (in je blog)"
 
 #~ msgid ""
-#~ "Select 'Google' if directions aren't displaying properly in your theme"
+"\n"
+"'Google' if directions aren't displaying properly in your theme\""
 #~ msgstr ""
-#~ "Selecteer 'Google' als routebeschrijvingen niet juist worden weergegeven "
-#~ "in je thema"
+"\n"
+"'Google' als routebeschrijvingen niet juist worden weergegeven \"\n"
+"je thema\""
 
 #~ msgid "Automatically open the first POI when a map is displayed"
 #~ msgstr "Automatisch de eerste POI openen als de kaart wordt weergegeven"
@@ -1798,7 +1566,8 @@ msgstr ""
 #, php-format
 #~ msgid "A PRO Version update is available for manual installation: %s"
 #~ msgstr ""
-#~ "Er is een PRO versie update is beschikbaar voor handmatige installatie: %s"
+"\n"
+"is een PRO versie update is beschikbaar voor handmatige installatie: %s\""
 
 #~ msgid "By car"
 #~ msgstr "Per auto"
@@ -1841,8 +1610,9 @@ msgstr ""
 
 #~ msgid "Update map every time a custom field value changes"
 #~ msgstr ""
-#~ "Werk elke keer een kaart bij als de waarde van een op maat gemaakt veld "
-#~ "veranderd"
+"\n"
+"elke keer een kaart bij als de waarde van een op maat gemaakt veld \"\n"
+""
 
 #~ msgid "Enter default map sizes"
 #~ msgstr "Geef standaard kaart omvang op"
@@ -1884,29 +1654,34 @@ msgstr ""
 #~ msgstr "Bijwerken bij wijzigingen"
 
 #~ msgid ""
-#~ "Enter one or more address fields to use for maps.  Multiple fields are "
-#~ "concatenated with commas (for example city, state,zip)"
+"\n"
+"one or more address fields to use for maps.  Multiple fields are \"\n"
+"with commas (for example city, state,zip)\""
 #~ msgstr ""
-#~ "Geef één of meerdere adresvelen op om te gebruiken voor de kaarten. "
-#~ "Meerdere velden moeten gescheiden worden met een komma (bijvoorbeeld "
-#~ "plaats, postcode, straat)"
+"\n"
+"één of meerdere adresvelen op om te gebruiken voor de kaarten. \"\n"
+"velden moeten gescheiden worden met een komma (bijvoorbeeld \"\n"
+"postcode, straat)\""
 
 #~ msgid "Field for geocoding error messages"
 #~ msgstr "Veld voor geocoding fout meldingen"
 
 #~ msgid "To use existing latitude / longitude fields, enter them below"
 #~ msgstr ""
-#~ "Geef hieronder bestaande breedte/lengtegraden velden op om deze te "
-#~ "gebruiken"
+"\n"
+"hieronder bestaande breedte/lengtegraden velden op om deze te \"\n"
+""
 
 #~ msgid "Marker list"
 #~ msgstr "Markeerpunten lijst"
 
 #~ msgid ""
-#~ "Allow your readers to change the map type (street, satellite, or hybrid)"
+"\n"
+"your readers to change the map type (street, satellite, or hybrid)\""
 #~ msgstr ""
-#~ "Sta de lezers toe om het kaart type te veranderen (straat, satteliet, of "
-#~ "hybride)"
+"\n"
+"de lezers toe om het kaart type te veranderen (straat, satteliet, of \"\n"
+""
 
 #, fuzzy
 #~ msgid "Display the street view control \"peg man\""
@@ -1935,8 +1710,9 @@ msgstr ""
 
 #~ msgid "Take a moment to rate it %s on WordPress.org - or make a donation"
 #~ msgstr ""
-#~ "Neem een moment om uw waardering te geven %s op WordPress.org - of geef "
-#~ "een donatie"
+"\n"
+"een moment om uw waardering te geven %s op WordPress.org - of geef \"\n"
+"donatie\""
 
 #~ msgid "Report a bug"
 #~ msgstr "Rapporteer een fout"
@@ -1996,16 +1772,20 @@ msgstr ""
 #~ msgstr "GOOGLE FOUT:BAD REQUEST"
 
 #~ msgid ""
-#~ "The starting or ending address could not be found.  Please check that the "
-#~ "address is correct and completely entered."
+"\n"
+"starting or ending address could not be found.  Please check that the \"\n"
+"is correct and completely entered.\""
 #~ msgstr ""
-#~ "Het begin of eindpunt ontbreekt. Controleer aub of de adressen correct "
-#~ "zijn en compleet zijn ingevuld."
+"\n"
+"begin of eindpunt ontbreekt. Controleer aub of de adressen correct \"\n"
+"en compleet zijn ingevuld.\""
 
 #~ msgid ""
-#~ "Google cannot return those directions for legal or contractual reasons"
+"\n"
+"cannot return those directions for legal or contractual reasons\""
 #~ msgstr ""
-#~ "Google kan geen route weergeven wegens wettelijke of contractuele redenen."
+"\n"
+"kan geen route weergeven wegens wettelijke of contractuele redenen.\""
 
 #~ msgid "Invalid map API key"
 #~ msgstr "Ongeldige map APIkey"
@@ -2014,10 +1794,12 @@ msgstr ""
 #~ msgstr "Uw API key is vandaag te vaak gebruikt."
 
 #~ msgid ""
-#~ "Error: your browser does not seem to support the street view Flash player"
+"\n"
+"your browser does not seem to support the street view Flash player\""
 #~ msgstr ""
-#~ "Fout: het lijkt erop dat uw browser de street view Flash Player niet "
-#~ "ondersteund."
+"\n"
+"het lijkt erop dat uw browser de street view Flash Player niet \"\n"
+""
 
 #~ msgid "Sorry, no street view data is available for this location"
 #~ msgstr "Sorry, er is geen street view data beschikbaar voor deze lokatie."
@@ -2038,11 +1820,13 @@ msgstr ""
 #~ msgstr "Geef alsublieft uw API key in. API key nodig? Maak er één aan "
 
 #~ msgid ""
-#~ "MapPress could not load google maps.  Either your browser is incompatible "
-#~ "or your API key is invalid.  Need an API key?  Get one "
+"\n"
+"could not load google maps.  Either your browser is incompatible \"\n"
+"your API key is invalid.  Need an API key?  Get one \""
 #~ msgstr ""
-#~ "MapPress kan Google Maps niet laden. Uw browser is niet geschikt of de "
-#~ "API sleutel is niet valide. API Sleutel nodig? Maak er één aan"
+"\n"
+"kan Google Maps niet laden. Uw browser is niet geschikt of de \"\n"
+"sleutel is niet valide. API Sleutel nodig? Maak er één aan\""
 
 #~ msgid "here"
 #~ msgstr "Hier"
@@ -2051,10 +1835,12 @@ msgstr ""
 #~ msgstr "Dat adres staat reeds op de map"
 
 #~ msgid ""
-#~ "MapPress isn't ready yet.  Please enter your Google Maps API Key on the "
+"\n"
+"isn't ready yet.  Please enter your Google Maps API Key on the \""
 #~ msgstr ""
-#~ "MapPress is nog niet klaar. Geef alstublieft uw Google Maps API key op in "
-#~ "het "
+"\n"
+"is nog niet klaar. Geef alstublieft uw Google Maps API key op in \"\n"
+""
 
 #~ msgid "(leave blank for default)"
 #~ msgstr "Leeglaten voor standaard"
@@ -2084,14 +1870,18 @@ msgstr ""
 #~ msgstr "Geavanceerde instellingen"
 
 #~ msgid ""
-#~ "Enter a country code to use as a default when searching for an address."
+"\n"
+"a country code to use as a default when searching for an address.\""
 #~ msgstr ""
-#~ "Geef een landcode in die standaard gebruikt wordt bij zoekopdrachten"
+"\n"
+"een landcode in die standaard gebruikt wordt bij zoekopdrachten\""
 
 #~ msgid ""
-#~ "Check to show large map controls; uncheck for a small zoom control instead"
+"\n"
+"to show large map controls; uncheck for a small zoom control instead\""
 #~ msgstr ""
-#~ "Selecteer voor grote mapbediening; de-selecteer voor een kleine zoomknop."
+"\n"
+"voor grote mapbediening; de-selecteer voor een kleine zoomknop.\""
 
 #~ msgid "Check to enable the \"map types\" button on the map"
 #~ msgstr "Selecteer om de \"map types\" knop op de map te laten zien"
@@ -2101,8 +1891,9 @@ msgstr ""
 
 #~ msgid "Choose the map type to use when the map is first displayed"
 #~ msgstr ""
-#~ "Kies het maptype dat gebruikt moet worden als de map de eerste keer "
-#~ "bekeken wordt."
+"\n"
+"het maptype dat gebruikt moet worden als de map de eerste keer \"\n"
+"wordt.\""
 
 #~ msgid "Check to enable the real-time traffic button on the map"
 #~ msgstr "Selecteer om de live verkeersknop op de map te laten zien"
@@ -2111,10 +1902,12 @@ msgstr ""
 #~ msgstr "Selecteer om de \"street view\" link weer te geven"
 
 #~ msgid ""
-#~ "Check to show the \"GoogleBar\" search box for local business listings."
+"\n"
+"to show the \"GoogleBar\" search box for local business listings.\""
 #~ msgstr ""
-#~ "Selecteer om de  \"GoogleBar\" zoekknop voor lokale bedrijven weer te "
-#~ "geven"
+"\n"
+"om de  \"GoogleBar\" zoekknop voor lokale bedrijven weer te \"\n"
+""
 
 #~ msgid "Leave blank for default:"
 #~ msgstr "Leeglaten voor standaard"

@@ -1,0 +1,1 @@
+<div class="mapp-title">{{{poi.name}}}</div>
