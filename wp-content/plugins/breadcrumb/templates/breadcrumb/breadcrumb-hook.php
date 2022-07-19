@@ -14,13 +14,13 @@ function breadcrumb_main_items(){
 
     if(!empty($breadcrumb_items)):
         ?>
-        <ul>
+        <ol>
             <?php
             foreach ($breadcrumb_items as $item_index => $item):
                 do_action('breadcrumb_main_item_loop', $item);
             endforeach;
             ?>
-        </ul>
+        </ol>
         <?php
     else:
         ?>
