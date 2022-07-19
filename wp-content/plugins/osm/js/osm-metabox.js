@@ -61,8 +61,7 @@
 
     });
 
-
-  jQuery(window).load(function(){
+  jQuery(window).on('load', function(){
       AddMarker_map.updateSize();
       FileSC_map.updateSize();	
       TaggedSC_map.updateSize();
