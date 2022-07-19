@@ -12,7 +12,7 @@
  */
 ?>
 
-<div class="su-posts su-posts-single-post">
+<div class="su-posts su-posts-single-post <?php echo esc_attr( $atts['class'] ); ?>">
 	<?php
 		// Prepare marker to show only one post
 		$first = true;
@@ -26,7 +26,7 @@
 				if ( $first ) {
 					$first = false;
 					?>
-					<div id="su-post-<?php the_ID(); ?>" class="su-post">
+					<div id="su-post-<?php the_ID(); ?>" class="su-post <?php echo esc_attr( $atts['class_single'] ); ?>">
 						<h1 class="su-post-title"><?php the_title(); ?></h1>
 						<div class="su-post-meta"><?php _e( 'Posted', 'shortcodes-ultimate' ); ?>: <?php the_time( get_option( 'date_format' ) ); ?>
 						<?php if ( have_comments() || comments_open() ) : ?>

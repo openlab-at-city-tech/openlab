@@ -12,7 +12,7 @@
  */
 ?>
 
-<ul class="su-posts su-posts-list-loop">
+<ul class="su-posts su-posts-list-loop <?php echo esc_attr( $atts['class'] ); ?>">
 <?php
 // Posts are found
 if ( $posts->have_posts() ) {
@@ -20,7 +20,7 @@ if ( $posts->have_posts() ) {
 		$posts->the_post();
 		global $post;
 ?>
-<li id="su-post-<?php the_ID(); ?>" class="su-post"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></li>
+<li id="su-post-<?php the_ID(); ?>" class="su-post <?php echo esc_attr( $atts['class_single'] ); ?>"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></li>
 <?php
 	}
 }

@@ -191,6 +191,18 @@ su_add_shortcode(
 					'shortcodes-ultimate'
 				),
 			),
+			'class'               => array(
+				'type'    => 'text',
+				'name'    => __( 'Container CSS class', 'shortcodes-ultimate' ),
+				'desc'    => __( 'Additional CSS class name(s) separated by space(s) for the container element', 'shortcodes-ultimate' ),
+				'default' => '',
+			),
+			'class_single'        => array(
+				'type'    => 'text',
+				'name'    => __( 'Single CSS class', 'shortcodes-ultimate' ),
+				'desc'    => __( 'Additional CSS class name(s) separated by space(s) for each individual post element', 'shortcodes-ultimate' ),
+				'default' => '',
+			),
 		),
 		'desc'     => __(
 			'Custom posts query with customizable template',
@@ -222,6 +234,8 @@ function su_shortcode_posts( $atts = null, $content = null ) {
 			'post_parent'         => false,
 			'post_status'         => 'publish',
 			'ignore_sticky_posts' => 'no',
+			'class'               => '',
+			'class_single'        => '',
 		),
 		$atts,
 		'posts'
