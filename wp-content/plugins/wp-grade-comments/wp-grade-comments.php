@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: WP Grade Comments
-Version: 1.4.4
+Version: 1.4.5
 Description: Grades and private comments for WordPress blog posts. Built for the City Tech OpenLab.
 Author: Boone Gorges
 Author URI: http://boone.gorg.es
@@ -16,9 +16,6 @@ define( 'OLGC_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 if ( is_admin() ) {
 	require OLGC_PLUGIN_DIR . '/includes/admin.php';
 }
-
-// Sanization callback for private comment text.
-add_filter( 'olgc_private_comment_text', 'wp_kses_post' );
 
 /**
  * Load textdomain.
@@ -76,7 +73,7 @@ function olgc_leave_comment_after_comment_fields( $args ) {
 	if ( ! olgc_is_instructor() ) {
 		return $args;
 	}
-	
+
 	$args['comment_notes_after'] .= '
 	<div class="olgc-grade-entry">
 		<label for="olgc-grade">' . __( 'Grade:', 'wp-grade-comments' ) . '</label> <input type="text" maxlength="5" name="olgc-grade" id="olgc-grade" />
@@ -89,7 +86,6 @@ function olgc_leave_comment_after_comment_fields( $args ) {
 	return $args;
 }
 add_filter( 'comment_form_defaults', 'olgc_leave_comment_after_comment_fields', 1000 );
-
 
 /**
  * Catch and save values after comment submit.
@@ -117,7 +113,7 @@ function olgc_insert_comment( $comment_id, $comment ) {
 	// Grade
 	if ( olgc_is_instructor() && wp_verify_nonce( $_POST['_olgc_nonce'], 'olgc-grade-entry-' . $comment->comment_post_ID ) && ! empty( $_POST['olgc-add-a-grade'] ) && isset( $_POST['olgc-grade'] ) ) {
 		$grade = trim( wp_unslash( $_POST['olgc-grade'] ) );
-		if ( '' !== $grade ) {
+		if ( $grade ) {
 			update_comment_meta( $comment_id, 'olgc_grade', $grade );
 		} else {
 			delete_comment_meta( $comment_id, 'olgc_grade' );
@@ -165,17 +161,6 @@ function olgc_add_private_info_to_comment_text( $text, $comment ) {
 
 	$is_private = get_comment_meta( $comment->comment_ID, 'olgc_is_private', true );
 	$comment_text = $text;
-
-	/**
-	 * Filters the text of the comment to be shown in the expandable 'private' area.
-	 *
-	 * Sanitization callbacks, such as kses, are attached to this filter so that
-	 * they can be modified as necessary by third-party plugins.
-	 *
-	 * @param string $text Comment text.
-	 */
-	$text = apply_filters( 'olgc_private_comment_text', $text );
-
 	if ( $is_private ) {
 		$comment_text = sprintf(
 			'<div class="olgc-grade-display olgc-grade-hidden">' .
@@ -189,9 +174,9 @@ function olgc_add_private_info_to_comment_text( $text, $comment ) {
 			'</div>',
 			esc_html__( 'Comment (Private):', 'wp-grade-comments' ),
 			esc_html__( '(show)', 'wp-grade-comments' ),
-			$text,
+			esc_html( $text ),
 			esc_html__( '(hide)', 'wp-grade-comments' ),
-			$text
+			esc_html( $text )
 		);
 	}
 
