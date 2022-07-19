@@ -45,7 +45,7 @@ function wpcf7_captchac_form_tag_handler( $tag ) {
 	}
 
 	$class = wpcf7_form_controls_class( $tag->type );
-	$class .= ' wpcf7-captcha-' . $tag->name;
+	$class .= ' wpcf7-captcha-' . str_replace( ':', '', $tag->name );
 
 	$atts = array();
 	$atts['class'] = $tag->get_class_option( $class );
@@ -82,8 +82,10 @@ function wpcf7_captchac_form_tag_handler( $tag ) {
 	$prefix = substr( $filename, 0, strrpos( $filename, '.' ) );
 
 	$html = sprintf(
-		'<input type="hidden" name="_wpcf7_captcha_challenge_%1$s" value="%2$s" /><img %3$s />',
-		$tag->name, esc_attr( $prefix ), $atts
+		'<input type="hidden" name="%1$s" value="%2$s" /><img %3$s />',
+		esc_attr( sprintf( '_wpcf7_captcha_challenge_%s', $tag->name ) ),
+		esc_attr( $prefix ),
+		$atts
 	);
 
 	return $html;
@@ -143,11 +145,11 @@ function wpcf7_captchar_form_tag_handler( $tag ) {
 	$atts['type'] = 'text';
 	$atts['name'] = $tag->name;
 
-	$atts = wpcf7_format_atts( $atts );
-
 	$html = sprintf(
-		'<span class="wpcf7-form-control-wrap %1$s"><input %2$s />%3$s</span>',
-		sanitize_html_class( $tag->name ), $atts, $validation_error
+		'<span class="wpcf7-form-control-wrap" data-name="%1$s"><input %2$s />%3$s</span>',
+		esc_attr( $tag->name ),
+		wpcf7_format_atts( $atts ),
+		$validation_error
 	);
 
 	return $html;
@@ -547,7 +549,7 @@ function wpcf7_remove_captcha( $prefix ) {
 	$captcha->remove( $prefix );
 }
 
-add_action( 'template_redirect', 'wpcf7_cleanup_captcha_files', 20, 0 );
+add_action( 'shutdown', 'wpcf7_cleanup_captcha_files', 20, 0 );
 
 function wpcf7_cleanup_captcha_files() {
 	if ( ! $captcha = wpcf7_init_captcha() ) {
