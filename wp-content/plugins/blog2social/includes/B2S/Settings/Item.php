@@ -40,7 +40,7 @@ class B2S_Settings_Item {
 
         $optionUserTimeZone = $this->options->_getOption('user_time_zone');
         $optionUserTimeFormat = $this->options->_getOption('user_time_format');
-        if($optionUserTimeFormat == false) {
+        if($optionUserTimeFormat === false) {
             $optionUserTimeFormat = (strtolower(substr(get_locale(), 0, 2)) == 'de') ? 0 : 1;
         }
         $legacyMode = $this->generalOptions->_getOption('legacy_mode');
@@ -76,7 +76,7 @@ class B2S_Settings_Item {
         $content .='<hr>';
         $content .='<h4>' . esc_html__('Content', 'blog2social') . '</h4>';
         $content .='<strong>' . esc_html__('Url Shortener', 'blog2social') . '</strong><br>';
-        $content .='<div class="alert alert-warning">' . sprintf(__('You can use Bit.ly, Rebrandly or Sniply links to shorten the URL of your links and to track the performance of your links in your social networks. Activate one of the URL shorteners you like to use and link it to your account. Your social media posts will then be shared with your links of Bit.ly, Rebrandly or Sniply. You can then monitor the success of your posts in these accounts. Please note: Some networks do not allow shortlinks. Blog2Social will apply the regular URL for these social platforms. You find more information on the support of URL shortener by the different social platforms in the <a href="%s" target="_blank">link shortener guide</a>.', 'blog2social'), B2S_Tools::getSupportLink('url_shortener_faq')) . '</div>';
+        $content .='<div class="alert alert-warning">' . sprintf(__('You can use Bit.ly, Rebrandly or Sniply links to shorten the URL of your links and to track the performance of your links in your social networks. Activate one of the URL shorteners you like to use and link it to your account. Your social media posts will then be shared with your links of Bit.ly, Rebrandly or Sniply. You can then monitor the success of your posts in these accounts. Please note: Some networks do not allow shortlinks. Blog2Social will apply the regular URL for these social platforms. You find more information on the support of URL shortener by the different social platforms in the <a href="%s" target="_blank">link shortener guide</a>.', 'blog2social'), esc_url(B2S_Tools::getSupportLink('url_shortener_faq'))) . '</div>';
         $content .='<input type="radio" value="0" class="b2s-user-network-settings-short-url" id="b2s-user-network-settings-short-url-0" name="b2s-user-network-settings-short-url" ' . (($isCheckedShortener == -1) ? 'checked="checked"' : '') . ' data-provider-id="-1"/><label for="b2s-user-network-settings-short-url-0"> '.esc_html__('no URL Shortener', 'blog2social').'</label>';
         $content .= '<br>';
         $content .= '<input type="hidden" id="brandName" value="'.esc_html__('Brand', 'blog2social').'">';
@@ -96,11 +96,11 @@ class B2S_Settings_Item {
                     }
                 }
             }
-            $content .='<input type="radio" value="' . ($id+1) . '" class="b2s-user-network-settings-short-url" id="b2s-user-network-settings-short-url-'.($id+1).'" name="b2s-user-network-settings-short-url" ' . (($isCheckedShortener == $id) ? 'checked="checked"' : '') . ' data-provider-id="'.$id.'" /><label for="b2s-user-network-settings-short-url-'.($id+1).'"> <img class="b2s-shortener-image" alt="'.$name.'" src="' . plugins_url('/assets/images/settings/'. strtolower($name) .'.png', B2S_PLUGIN_FILE) . '"> ' . $name . '</label>';
-            $content .='<span class="b2s-user-network-shortener-account-area" data-provider-id="'.$id.'">';
-            $content .='<input type="hidden" class="b2s-user-network-shortener-state" data-provider-id="'.$id.'" value="' . ((!empty($display_name)) ? 1 : 0) . '"/>';
-            $content .='<span class="b2s-user-network-shortener-connect" data-provider-id="'.$id.'" style="display:' . ((empty($display_name)) ? 'inline-block' : 'none') . ';" ><a href="#" class="b2s-shortener-account-connect-btn" data-provider-id="'.$id.'" onclick="wopShortener(\'' . $this->authUrl . '&provider_id='.$id.'\', \'Blog2Social Network\'); return false;"> ' . esc_html__('authorize', 'blog2social') . '</a> </span>';
-            $content .=' <span class="b2s-user-network-shortener-account-detail" data-provider-id="'.$id.'" style="display:' . ((!empty($display_name)) ? 'inline-block' : 'none') . ';">(<span class="b2s-shortener-account-display-name" data-provider-id="'.$id.'">' . (!empty($display_name) ? esc_html($display_name) : '') . '</span> <a href="#" class="b2s-shortener-account-change-btn" data-provider-id="'.$id.'" onclick="wopShortener(\'' . $this->authUrl . '&provider_id='.$id.'\', \'Blog2Social Network\'); return false;">' . esc_html__('change', 'blog2social') . '</a> | <a href="#" class="b2s-shortener-account-delete-btn" data-provider-id="'.$id.'">' . esc_html__('delete', 'blog2social') . '</a>)</span>';
+            $content .='<input type="radio" value="' . esc_attr(($id+1)) . '" class="b2s-user-network-settings-short-url" id="b2s-user-network-settings-short-url-'.esc_attr(($id+1)).'" name="b2s-user-network-settings-short-url" ' . (($isCheckedShortener == $id) ? 'checked="checked"' : '') . ' data-provider-id="'.esc_attr($id).'" /><label for="b2s-user-network-settings-short-url-'.esc_attr(($id+1)).'"> <img class="b2s-shortener-image" alt="'.esc_attr($name).'" src="' . esc_url(plugins_url('/assets/images/settings/'. strtolower($name) .'.png', B2S_PLUGIN_FILE)) . '"> ' . esc_html($name) . '</label>';
+            $content .='<span class="b2s-user-network-shortener-account-area" data-provider-id="'.esc_attr($id).'">';
+            $content .='<input type="hidden" class="b2s-user-network-shortener-state" data-provider-id="'.esc_attr($id).'" value="' . ((!empty($display_name)) ? 1 : 0) . '"/>';
+            $content .='<span class="b2s-user-network-shortener-connect" data-provider-id="'.esc_attr($id).'" style="display:' . ((empty($display_name)) ? 'inline-block' : 'none') . ';" ><a href="#" class="b2s-shortener-account-connect-btn" data-provider-id="'.esc_attr($id).'" onclick="wopShortener(\'' . esc_url($this->authUrl) . '&provider_id='.esc_attr($id).'\', \'Blog2Social Network\'); return false;"> ' . esc_html__('authorize', 'blog2social') . '</a> </span>';
+            $content .=' <span class="b2s-user-network-shortener-account-detail" data-provider-id="'.esc_attr($id).'" style="display:' . ((!empty($display_name)) ? 'inline-block' : 'none') . ';">(<span class="b2s-shortener-account-display-name" data-provider-id="'.esc_attr($id).'">' . (!empty($display_name) ? esc_html($display_name) : '') . '</span> <a href="#" class="b2s-shortener-account-change-btn" data-provider-id="'.$id.'" onclick="wopShortener(\'' . esc_url($this->authUrl) . '&provider_id='.esc_attr($id).'\', \'Blog2Social Network\'); return false;">' . esc_html__('change', 'blog2social') . '</a> | <a href="#" class="b2s-shortener-account-delete-btn" data-provider-id="'.esc_attr($id).'">' . esc_html__('delete', 'blog2social') . '</a>)</span>';
             $content .='</span>';
             $content .= '<br>';
         }
@@ -137,29 +137,14 @@ class B2S_Settings_Item {
         $content .= '<br>';
         $content .='<div class="' . ( (B2S_PLUGIN_ADMIN) ? "" : "b2s-disabled-div") . '">';
         $content .='<h4>' . esc_html__('Meta Tags Settings for Posts and Pages', 'blog2social') . '</h4>';
-        $content .= '<input type="checkbox" value="' . $og_isChecked . '" name="b2s_og_active" ' . (($readonly) ? 'disabled="true"' : "") . '  id="b2s_og_active" ' . (($og_isChecked == 0) ? 'checked="checked"' : '') . ' /><label for="b2s_og_active"> ' . esc_html__('Add Open Graph meta tags to your shared posts or pages, required by Facebook and other social networks to display your post or page image, title and description correctly.', 'blog2social', 'blog2social') . ' <a href="#" class="b2s-load-info-meta-tag-modal b2s-info-btn del-padding-left" data-meta-type="og" data-meta-origin="settings">' . esc_html__('Info', 'Blog2Social') . '</a></label>';
+        $content .= '<input type="checkbox" value="' . esc_attr($og_isChecked) . '" name="b2s_og_active" ' . (($readonly) ? 'disabled="true"' : "") . '  id="b2s_og_active" ' . (($og_isChecked == 0) ? 'checked="checked"' : '') . ' /><label for="b2s_og_active"> ' . esc_html__('Add Open Graph meta tags to your shared posts or pages, required by Facebook and other social networks to display your post or page image, title and description correctly.', 'blog2social', 'blog2social') . ' <a href="#" class="b2s-load-info-meta-tag-modal b2s-info-btn del-padding-left" data-meta-type="og" data-meta-origin="settings">' . esc_html__('Info', 'Blog2Social') . '</a></label>';
         $content .='<br>';
-        $content .= '<input type="checkbox" value="' . $card_isChecked . '" name="b2s_card_active" ' . (($readonly) ? 'disabled="true"' : "") . ' id="b2s_card_active" ' . (($card_isChecked == 0) ? 'checked="checked"' : '') . ' /><label for="b2s_card_active"> ' . esc_html__('Add Twitter Card meta tags to your shared posts or pages, required by Twitter to display your post or page image, title and description correctly.', 'blog2social', 'blog2social') . ' <a href="#" class="b2s-load-info-meta-tag-modal b2s-info-btn del-padding-left" data-meta-type="card" data-meta-origin="settings">' . esc_html__('Info', 'Blog2Social') . '</a></label>';
+        $content .= '<input type="checkbox" value="' . esc_attr($card_isChecked) . '" name="b2s_card_active" ' . (($readonly) ? 'disabled="true"' : "") . ' id="b2s_card_active" ' . (($card_isChecked == 0) ? 'checked="checked"' : '') . ' /><label for="b2s_card_active"> ' . esc_html__('Add Twitter Card meta tags to your shared posts or pages, required by Twitter to display your post or page image, title and description correctly.', 'blog2social', 'blog2social') . ' <a href="#" class="b2s-load-info-meta-tag-modal b2s-info-btn del-padding-left" data-meta-type="card" data-meta-origin="settings">' . esc_html__('Info', 'Blog2Social') . '</a></label>';
         $content .='<br>';
-        $content .= '<input type="checkbox" value="' . $oembed_isChecked . '" name="b2s_oembed_active" ' . (($readonly) ? 'disabled="true"' : "") . ' id="b2s_oembed_active" ' . (($oembed_isChecked == 0) ? 'checked="checked"' : '') . ' /><label for="b2s_oEmbed_active"> ' . esc_html__('Add oEmbed tags', 'blog2social', 'blog2social') . ' <a href="#" class="b2s-load-info-meta-tag-modal b2s-info-btn del-padding-left" data-meta-type="oEmbed" data-meta-origin="settings">' . esc_html__('Info', 'Blog2Social') . '</a></label>';
+        $content .= '<input type="checkbox" value="' . esc_attr($oembed_isChecked) . '" name="b2s_oembed_active" ' . (($readonly) ? 'disabled="true"' : "") . ' id="b2s_oembed_active" ' . (($oembed_isChecked == 0) ? 'checked="checked"' : '') . ' /><label for="b2s_oEmbed_active"> ' . esc_html__('Add oEmbed tags', 'blog2social', 'blog2social') . ' <a href="#" class="b2s-load-info-meta-tag-modal b2s-info-btn del-padding-left" data-meta-type="oEmbed" data-meta-origin="settings">' . esc_html__('Info', 'Blog2Social') . '</a></label>';
         $content .='</div>';
         $content .='<button class="btn btn-primary pull-right" type="submit" '.(B2S_PLUGIN_ADMIN ? '' : 'disabled="true"').'>'.esc_html__('save', 'blog2social').'</button>';
         $content .='<div class="clearfix"></div><hr>';
-
-        /* $content .='<h4>' . __('Authorship Settings', 'blog2social');
-          if (B2S_PLUGIN_USER_VERSION < 1) {
-          $content .=' <span class="label label-success label-sm"><a href="#" class="btn-label-premium b2sPreFeatureModalBtn">' . __("PREMIUM", "blog2social") . '</a></span>';
-          }
-          $content .='</h4>';
-          $content .='<div class="' . ( (B2S_PLUGIN_USER_VERSION >= 1) ? "" : "b2s-disabled-div") . '">';
-          $content .='<p>' . __('Add authorship tags to your articles. When somesone shares your links on Facebook or Twitter, you will be automatically linked as the author.', 'blog2social') . '</p>';
-          $content .='<div class="col-md-8">';
-          $content .='<div class="form-group"><label for="b2s_og_article_author"><img alt="" class="b2s-post-item-network-image" src="' . plugins_url('/assets/images/portale/1_flat.png', B2S_PLUGIN_FILE) . '"> <strong>' . __("Facebook author link", "blog2social") . ':</strong></label><input type="text" placeholder="' . __("Enter your Facebook link profile here (e.g. https://www.facebook.com/Blog2Social/)", "blog2social") . '" ' . ((B2S_PLUGIN_USER_VERSION >= 1) ? "" : "readonly") . ' value="' . (($user_meta_author_data !== false && isset($user_meta_author_data['og_article_author'])) ? $user_meta_author_data['og_article_author'] : "") . '" name="b2s_og_article_author" class="form-control" id="b2s_og_article_author"></div>';
-          $content .='<div class="form-group"><label for="b2s_card_twitter_creator"><img alt="" class="b2s-post-item-network-image" src="' . plugins_url('/assets/images/portale/2_flat.png', B2S_PLUGIN_FILE) . '"> <strong>' . __("Twitter Username", "blog2social") . ':</strong></label><input type="text" placeholder="' . __("Enter your Twitter Username here (e.g. @blog2social)", "blog2social") . '" ' . ((B2S_PLUGIN_USER_VERSION >= 1) ? "" : "readonly") . ' value="' . (($user_meta_author_data !== false && isset($user_meta_author_data['card_twitter_creator'])) ? $user_meta_author_data['card_twitter_creator'] : "") . '" name="b2s_card_twitter_creator" class="form-control" id="b2s_card_twitter_creator"></div>';
-          $content .='</div>';
-          $content .='</div>';
-          $content .='<div class="clearfix"></div>';
-          $content .='<hr>'; */
 
         
         $content .='<strong>' . esc_html__('This is a global feature for your blog, which can only be edited by users with admin rights.', 'blog2social') . '</strong>';
@@ -179,13 +164,13 @@ class B2S_Settings_Item {
         $content .= '<p>' . esc_html__('Add the default Open Graph parameters for title, description and image you want Facebook to display, if you share the frontpage of your blog as link post (http://www.yourblog.com)', 'blog2social') . '</p>';
         $content .='<br>';
         $content .='<div class="col-md-8">';
-        $content .='<div class="form-group"><label for="b2s_og_default_title"><strong>' . esc_html__("Title", "blog2social") . ':</strong></label><input type="text" ' . (($readonly) ? "readonly" : "") . ' value="' . esc_attr(( ($this->generalOptions->_getOption('og_default_title') !== false && !empty($this->generalOptions->_getOption('og_default_title'))) ? stripslashes($this->generalOptions->_getOption('og_default_title')) : get_bloginfo('name'))) . '" name="b2s_og_default_title" class="form-control" id="b2s_og_default_title"></div>';
-        $content .='<div class="form-group"><label for="b2s_og_default_desc"><strong>' . esc_html__("Description", "blog2social") . ':</strong></label><input type="text" ' . (($readonly) ? "readonly" : "") . ' value="' . esc_attr(( ($this->generalOptions->_getOption('og_default_desc') !== false && !empty($this->generalOptions->_getOption('og_default_desc'))) ? stripslashes($this->generalOptions->_getOption('og_default_desc')) : get_bloginfo('description'))) . '" name="b2s_og_default_desc" class="form-control" id="b2s_og_default_desc"></div>';
+        $content .='<div class="form-group"><label for="b2s_og_default_title"><strong>' . esc_html__("Title", "blog2social") . ':</strong></label><input type="text" ' . (($readonly) ? "readonly" : "") . ' value="' . esc_attr(( ($this->generalOptions->_getOption('og_default_title') !== false && !empty($this->generalOptions->_getOption('og_default_title'))) ? esc_attr(stripslashes($this->generalOptions->_getOption('og_default_title'))) : get_bloginfo('name'))) . '" name="b2s_og_default_title" class="form-control" id="b2s_og_default_title"></div>';
+        $content .='<div class="form-group"><label for="b2s_og_default_desc"><strong>' . esc_html__("Description", "blog2social") . ':</strong></label><input type="text" ' . (($readonly) ? "readonly" : "") . ' value="' . esc_attr(( ($this->generalOptions->_getOption('og_default_desc') !== false && !empty($this->generalOptions->_getOption('og_default_desc'))) ? esc_attr(stripslashes($this->generalOptions->_getOption('og_default_desc'))) : get_bloginfo('description'))) . '" name="b2s_og_default_desc" class="form-control" id="b2s_og_default_desc"></div>';
         $content .='<div class="form-group"><label for="b2s_og_default_image"><strong>' . esc_html__("Image URL", "blog2social") . ':</strong></label>';
         if (!$readonly) {
             $content .='<button class="btn btn-link btn-xs b2s-upload-image pull-right" data-id="b2s_og_default_image">' . esc_html__("Image upload / Media Gallery", "blog2social") . '</button>';
         }
-        $content .='<input type="text" ' . (($readonly) ? "readonly" : "") . ' value="' . esc_attr((($this->generalOptions->_getOption('og_default_image') !== false && !empty($this->generalOptions->_getOption('og_default_image'))) ? $this->generalOptions->_getOption('og_default_image') : '')) . '" name="b2s_og_default_image" class="form-control" id="b2s_og_default_image">';
+        $content .='<input type="text" ' . (($readonly) ? "readonly" : "") . ' value="' . esc_attr((($this->generalOptions->_getOption('og_default_image') !== false && !empty($this->generalOptions->_getOption('og_default_image'))) ? esc_url($this->generalOptions->_getOption('og_default_image')) : '')) . '" name="b2s_og_default_image" class="form-control" id="b2s_og_default_image">';
         $content .='<span>' . esc_html__('Please note: Facebook supports images with a minimum dimension of 200x200 pixels and an aspect ratio of 1:1.', 'blog2social') . '</span>';
         
         $content .='<br><br>';
@@ -208,10 +193,10 @@ class B2S_Settings_Item {
             if(get_locale() == $key) {
                 $addBlogLocale = false;
             }
-            $content .= '<option value="'.$key.'" ' . (($b2sOgLocale == $key) ? 'selected="selected"' : '') . '>'.$key.'</option>';
+            $content .= '<option value="'.esc_attr($key).'" ' . (($b2sOgLocale == $key) ? 'selected="selected"' : '') . '>'.esc_html($key).'</option>';
         }
         if($addBlogLocale) {
-            $content .= '<option value="'.get_locale().'" ' . (($b2sOgLocale == get_locale()) ? 'selected="selected"' : '') . '>'.get_locale().'</option>';
+            $content .= '<option value="'.esc_attr(get_locale()).'" ' . (($b2sOgLocale == get_locale()) ? 'selected="selected"' : '') . '>'.esc_html(get_locale()).'</option>';
         }
         $content .= '</select>';
         
@@ -278,7 +263,7 @@ class B2S_Settings_Item {
                 $content .='<div class="b2s-user-network-settings-post-format-area col-md-12" data-post-format-type="' . esc_attr($postFormatType) . '" data-network-type="' . esc_attr($typeId) . '"  data-network-id="' . esc_attr($networkId) . '" data-network-title="' . esc_attr($networkName[$networkId]) . '" style="display:none;" >';
                 $content .='<div class="col-md-6 col-xs-12">';
                 $content .= '<b>1) ' . (($networkId == 12) ? esc_html__('Image with frame', 'blog2social') : esc_html__('Link Post', 'blog2social') . ' <span class="glyphicon glyphicon-link b2s-color-green"></span>' ) . '</b><br><br>';
-                $content .= '<label><input type="radio" name="b2s-user-network-settings-post-format-' . $networkId . '" class="b2s-user-network-settings-post-format ' . esc_attr($post_format_0) . '" data-post-wp-type="" data-post-format-type="' . esc_attr($postFormatType) . '" data-network-type="' . esc_attr($typeId) . '" data-network-id="' . esc_attr($networkId) . '" data-post-format="0" value="0"/><img class="img-responsive b2s-display-inline" src="' . plugins_url('/assets/images/settings/b2s-post-format-' . $networkId . '-1-' . (($this->lang == 'de') ? $this->lang : 'en') . '.png', B2S_PLUGIN_FILE) . '">';
+                $content .= '<label><input type="radio" name="b2s-user-network-settings-post-format-' . esc_attr($networkId) . '" class="b2s-user-network-settings-post-format ' . esc_attr($post_format_0) . '" data-post-wp-type="" data-post-format-type="' . esc_attr($postFormatType) . '" data-network-type="' . esc_attr($typeId) . '" data-network-id="' . esc_attr($networkId) . '" data-post-format="0" value="0"/><img class="img-responsive b2s-display-inline" src="' . esc_url(plugins_url('/assets/images/settings/b2s-post-format-' . $networkId . '-1-' . (($this->lang == 'de') ? $this->lang : 'en') . '.png', B2S_PLUGIN_FILE)) . '">';
                 $content .='</label>';
                 $content .='<br><br>';
                 if($networkId != 12) {
@@ -292,7 +277,7 @@ class B2S_Settings_Item {
                 $content .='</div>';
                 $content .='<div class="col-md-6 col-xs-12">';
                 $content .= '<b>2) ' . (($networkId == 12) ? esc_html__('Image cut out', 'blog2social') : esc_html__('Image Post', 'blog2social') . ' <span class="glyphicon glyphicon-picture b2s-color-green"></span>' ) . '</b><br><br>';
-                $content .= '<label><input type="radio" name="b2s-user-network-settings-post-format-' . $networkId . '" class="b2s-user-network-settings-post-format ' . esc_attr($post_format_1) . '" data-post-wp-type="" data-post-format-type="' . esc_attr($postFormatType) . '" data-network-type="' . esc_attr($typeId) . '" data-network-id="' . esc_attr($networkId) . '" data-post-format="1" value="1" /><img class="img-responsive b2s-display-inline" src="' . plugins_url('/assets/images/settings/b2s-post-format-' . $networkId . '-2-' . (($this->lang == 'de') ? $this->lang : 'en') . '.png', B2S_PLUGIN_FILE) . '">';
+                $content .= '<label><input type="radio" name="b2s-user-network-settings-post-format-' . esc_attr($networkId) . '" class="b2s-user-network-settings-post-format ' . esc_attr($post_format_1) . '" data-post-wp-type="" data-post-format-type="' . esc_attr($postFormatType) . '" data-network-type="' . esc_attr($typeId) . '" data-network-id="' . esc_attr($networkId) . '" data-post-format="1" value="1" /><img class="img-responsive b2s-display-inline" src="' . esc_url(plugins_url('/assets/images/settings/b2s-post-format-' . $networkId . '-2-' . (($this->lang == 'de') ? $this->lang : 'en') . '.png', B2S_PLUGIN_FILE)) . '">';
                 $content .='</label>';
                 $content .='<br><br>';
                 if ($networkId == 12) {

@@ -322,7 +322,7 @@ class B2S_Calendar_Filter {
                     continue;
                 }
                 $content .='<label><input type="radio" class="b2s-calendar-filter-network-btn" name="b2s-calendar-filter-network-btn" value="' . esc_attr($v->id) . '" /><span>';
-                $content .='<img class="b2s-calendar-filter-img" alt="' . esc_attr($v->name) . '" src="' . plugins_url('/assets/images/portale/' . $v->id . '_flat.png', B2S_PLUGIN_FILE) . '">';
+                $content .='<img class="b2s-calendar-filter-img" alt="' . esc_attr($v->name) . '" src="' . esc_url(plugins_url('/assets/images/portale/' . $v->id . '_flat.png', B2S_PLUGIN_FILE)) . '">';
                 $content .='</span></label>';
             }
         }

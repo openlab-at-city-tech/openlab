@@ -853,11 +853,16 @@ ul.b2s-network-item-auth-list li:last-child{
 
 .b2s-edit-template-preview-inner-border-24 {
     border: 1px solid gray;
-    border-radius: 5%;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.b2s-edit-template-preview-image-image-24 {
+    border-radius: 5px;
 }
 
 .b2s-edit-template-preview-border-24, .b2s-edit-template-preview-image-border-24 {
-    padding: 10px;
+    padding: 4px;
 }
 
 .b2s-edit-template-preview-link-meta-box-24 {
@@ -899,4 +904,8 @@ ul.b2s-network-item-auth-list li:last-child{
 
 .b2s-edit-template-preview-image-image-27 {
     margin-top: 10px;
+}
+
+#clr-picker {
+    z-index: 9999;
 }

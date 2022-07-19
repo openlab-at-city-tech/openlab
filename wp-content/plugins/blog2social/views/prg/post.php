@@ -7,7 +7,7 @@ require_once (B2S_PLUGIN_DIR . 'includes/Util.php');
 /* Sort */
 $currentPage = isset($_GET['b2sPage']) ? (int) $_GET['b2sPage'] : 1;
 $prgSortPostType = isset($_GET['prgSortPostType']) ? trim(sanitize_text_field($_GET['prgSortPostType'])) : "";
-$prgSortPostStatus = isset($_GET['prgSortPostStatus']) ? (in_array(trim($_GET['prgSortPostStatus']), array('publish', 'future', 'pending')) ? trim($_GET['prgSortPostStatus']) : "") : "";
+$prgSortPostStatus = isset($_GET['prgSortPostStatus']) ? (in_array(trim($_GET['prgSortPostStatus']), array('publish', 'future', 'pending')) ? trim(sanitize_text_field(wp_unslash($_GET['prgSortPostStatus']))) : "") : "";
 $prgSortPostTitle = isset($_GET['prgSortPostTitle']) ? trim(sanitize_text_field($_GET['prgSortPostTitle'])) : "";
 $prgSortPostAuthor = isset($_GET['prgSortPostAuthor']) ? (int) $_GET['prgSortPostAuthor'] : 0;
 $prgUserLang = strtolower(substr(get_locale(), 0, 2));
@@ -31,7 +31,37 @@ $prgUserLang = strtolower(substr(get_locale(), 0, 2));
                                     <input id="page" type="hidden" value="prg-post" name="page">
                                     <?php
                                     $postFilter = new PRG_Post_Filter('all', $prgSortPostTitle, $prgSortPostAuthor, $prgSortPostType, $prgSortPostStatus);
-                                    echo $postFilter->getItemHtml();
+                                    echo wp_kses($postFilter->getItemHtml(), array(
+                                        'div' => array(
+                                            'class' => array()
+                                        ),
+                                        'input' => array(
+                                            'id' => array(),
+                                            'name' => array(),
+                                            'class' => array(),
+                                            'value' => array(),
+                                            'maxlength' => array(),
+                                            'placeholder' => array(),
+                                            'type' => array(),
+                                        ),
+                                        'select' => array(
+                                            'name' => array(),
+                                            'class' => array(),
+                                            'id' => array(),
+                                        ),
+                                        'option' => array(
+                                            'value' => array(),
+                                            'selected' => array(),
+                                        ),
+                                        'button' => array(
+                                            'type' => array(),
+                                            'class' => array(),
+                                        ),
+                                        'a' => array(
+                                            'href' => array(),
+                                            'class' => array(),
+                                        ),
+                                    ));
                                     ?>
                                 </form>
                                 <!-- Filter Post Ende-->
@@ -45,13 +75,48 @@ $prgUserLang = strtolower(substr(get_locale(), 0, 2));
                                 <ul class="list-group">
                                     <?php
                                     $postItem = new PRG_Post_Item('all', $prgSortPostTitle, $prgSortPostAuthor, $prgSortPostType, $prgSortPostStatus, $currentPage, $prgUserLang);
-                                    echo $postItem->getItemHtml();
+                                    echo wp_kses($postItem->getItemHtml(), array(
+                                        'li' => array(
+                                            'class' => array(),
+                                        ),
+                                        'div' => array(
+                                            'class' => array(),
+                                        ),
+                                        'span' => array(
+                                            'class' => array(),
+                                        ),
+                                        'p' => array(
+                                            'class' => array(),
+                                        ),
+                                        'img' => array(
+                                            'class' => array(),
+                                            'src' => array(),
+                                            'alt' => array(),
+                                        ),
+                                        'strong' => array(),
+                                        'a' => array(
+                                            'target' => array(),
+                                            'href' => array(),
+                                            'class' => array(),
+                                        ),
+                                    ));
                                     ?>
                                 </ul>
                                 <br>
                                 <nav class="text-center">
                                     <?php
-                                    echo $postItem->getPaginationHtml();
+                                    echo wp_kses($postItem->getPaginationHtml(), array(
+                                        'ul' => array(
+                                            'class' => array()
+                                        ),
+                                        'li' => array(
+                                            'class' => array()
+                                        ),
+                                        'a' => array(
+                                            'href' => array()
+                                        ),
+                                        'span' => array(),
+                                    ));
                                     ?>
                                 </nav>
 <?php require_once (B2S_PLUGIN_DIR . 'views/prg/html/footer.php'); ?> 

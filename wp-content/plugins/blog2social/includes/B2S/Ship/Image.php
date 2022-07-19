@@ -31,12 +31,12 @@ class B2S_Ship_Image {
         $content .= ' <a target="_blank" href="' . esc_url(B2S_Tools::getSupportLink('affiliate')) . '">' . esc_html__('please upgrade', 'blog2social') . '</a>';
         $content .= '</div></div>';
         $content .= '<div class="col-xs-12 del-padding-left del-padding-right"><div class="alert alert-info b2s-gif-support-info" style="display:none;">' . esc_html__('The networks Diigo, Bloglovin’ and Google My Business do not support the GIF image format and will display your standard image instead.', 'blog2social') . '</div></div>';
-        $content .= '<div class="col-xs-12 del-padding-left del-padding-right"><div class="alert alert-primary b2s-change-meta-image-info" style="display:none;">' . esc_html__('By changing your image in the link post format it will be changed for all networks listed below. This also applies for all scheduled posts in this post format. ', 'blog2social') . '<a href="'.B2S_Tools::getSupportLink('open_graph_tags').'" target="_blank">' . esc_html__('More Information', 'blog2social') . '</a><br><br><div class="b2s-change-meta-image-networks"></div></div></div>';
+        $content .= '<div class="col-xs-12 del-padding-left del-padding-right"><div class="alert alert-primary b2s-change-meta-image-info" style="display:none;">' . esc_html__('By changing your image in the link post format it will be changed for all networks listed below. This also applies for all scheduled posts in this post format. ', 'blog2social') . '<a href="'.esc_url(B2S_Tools::getSupportLink('open_graph_tags')).'" target="_blank">' . esc_html__('More Information', 'blog2social') . '</a><br><br><div class="b2s-change-meta-image-networks"></div></div></div>';
 
         $content .= '<div class="row b2s-image-size-info">';
         $content .='<div class="col-xs-12 hidden-xs hidden-sm">';
-        $content .='<i class="b2s-multi-image-info-text">' . esc_html__('Sharing more than one image improves the visibility of your content. You can create image series, show sequences, and level up your storytelling. With Blog2Social you can share up to 4 images in one post on Facebook (page and group) and on Twitter.', 'blog2social') . '</i>';
-        $content .='<i class="b2s-multi-image-info-text">' . esc_html__('The best size for images in social media posts are between: 667-1000px x 523-1000px. Blog2Social will automatically resize your image according to network requirements.', 'blog2social') . '</i>';
+        $content .='<i class="b2s-multi-image-info-text">' . esc_html__('Sharing more than one image improves the visibility of your content. You can create image series, show sequences, and level up your storytelling. With Blog2Social you can share up to 10 images per post on Instagram, up to 4 images in one post on Facebook (page and group) and Twitter.', 'blog2social') . '</i>';
+        $content .='<i class="b2s-multi-image-info-text">' . esc_html__('The best size for images in social media posts are between: 667-1000px X 523-1000px. Blog2Social will automatically resize your image according to the requirements of each network.', 'blog2social') . '</i>';
         $content .='<i class="b2s-default-image-info-text">' . esc_html__('The best size for images in social media posts are between: 667-1000px x 523-1000px. Blog2Social will automatically resize your image according to the network requirements. You can also share up to 4 images in one post on Facebook (page and group) and on Twitter.', 'blog2social') . '</i>';
         $content .='<i> ' . esc_html__('Changes to the image for link-posts will apply to the image for all networks with link-post settings for this post.', 'blog2social') . '</i>';
         $content .='</div>';
@@ -50,7 +50,7 @@ class B2S_Ship_Image {
                 $firstImage = ($tempCountImage == 0) ? $image[0] : $firstImage;
                 $content .= '<div class="b2s-image-item">';
                 $content .= '<div class="b2s-image-item-thumb">';
-                $content .= '<label for="b2s-image-count-' . $tempCountImage . '">';
+                $content .= '<label for="b2s-image-count-' . esc_attr($tempCountImage) . '">';
                 $content .= '<img class="img-thumbnail networkImage img-responsive" alt="blogImage" src="' . esc_url($image[0]) . '">';
                 $content .= '</label>';
                 $content .= '</div>';

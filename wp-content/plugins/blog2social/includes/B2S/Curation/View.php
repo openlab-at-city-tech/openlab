@@ -127,7 +127,7 @@ class B2S_Curation_View {
                 <div class="panel-body">
                 <div class="b2s-post-item-area">
                 <div class="b2s-post-item-thumb hidden-xs">
-                <img alt="" class="img-responsive b2s-post-item-network-image" src="' . plugins_url('/assets/images/portale/' . $v['networkId'] . '_flat.png', B2S_PLUGIN_FILE) . '">
+                <img alt="" class="img-responsive b2s-post-item-network-image" src="' . esc_url(plugins_url('/assets/images/portale/' . $v['networkId'] . '_flat.png', B2S_PLUGIN_FILE)) . '">
                 </div>
                 <div class="b2s-post-item-details">
                 <h4 class="pull-left b2s-post-item-details-network-display-name">' . esc_html($v['networkDisplayName']) . '</h4>

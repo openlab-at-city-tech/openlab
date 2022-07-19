@@ -6,12 +6,12 @@
  * Author: Blog2Social, Adenion
  * Text Domain: blog2social
  * Domain Path: /languages
- * Version: 6.8.7
+ * Version: 6.9.9
  * Author URI: https://www.blog2social.com
  * License: GPL2+
  */
 
-define('B2S_PLUGIN_VERSION', '687');
+define('B2S_PLUGIN_VERSION', '699');
 define('B2S_PLUGIN_LANGUAGE', serialize(array('de_DE', 'en_US')));
 define('B2S_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('B2S_PLUGIN_URL', plugin_dir_url(__FILE__));
@@ -41,6 +41,10 @@ register_deactivation_hook(B2S_PLUGIN_FILE, array($b2sLoad, 'deactivatePlugin'))
 $b2sCheck = new B2S_System();
 if ($b2sCheck->check() === true) {
     add_action('init', array($b2sLoad, 'load'));
+    add_filter('safe_style_css', function( $styles ) {
+        $styles[] = 'display';
+        return $styles;
+    } );
 } else {
     require_once(B2S_PLUGIN_DIR . 'includes/Notice.php');
     add_action('admin_notices', array('B2S_Notice', 'sytemNotice'));

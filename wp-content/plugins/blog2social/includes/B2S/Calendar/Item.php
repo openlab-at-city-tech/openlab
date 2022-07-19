@@ -531,9 +531,9 @@ class B2S_Calendar_Item {
         if (!empty($error) && isset($this->errorTextList[$error])) {
             if($this->network_id == 12 && $error == 'DEFAULT') {
                 if($this->network_type == 0) {
-                    $this->errorText = sprintf(__('The post cannot be published due to changes on the Instagram interface. More information in the <a href="%s" target="_blank">Instagram guide</a>.', 'blog2social'), B2S_Tools::getSupportLink('instagram_error_private'));
+                    $this->errorText = sprintf(__('The post cannot be published due to changes on the Instagram interface. More information in the <a href="%s" target="_blank">Instagram guide</a>.', 'blog2social'), esc_url(B2S_Tools::getSupportLink('instagram_error_private')));
                 } else {
-                    $this->errorText = sprintf(__('Your post could not be posted. More information in this <a href="%s" target="_blank">Instagram troubleshoot checklist</a>.', 'blog2social'), B2S_Tools::getSupportLink('instagram_error_business'));
+                    $this->errorText = sprintf(__('Your post could not be posted. More information in this <a href="%s" target="_blank">Instagram troubleshoot checklist</a>.', 'blog2social'), esc_url(B2S_Tools::getSupportLink('instagram_error_business')));
                 }
             } else {
                 $this->errorText = $this->errorTextList[$error];

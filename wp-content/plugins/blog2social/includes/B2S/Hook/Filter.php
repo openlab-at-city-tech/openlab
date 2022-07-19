@@ -39,7 +39,7 @@ class B2S_Hook_Filter {
     }
     
     function get_posting_template_show_taxonomies($taxonomies = array()) {
-        if(B2S_PLUGIN_USER_VERSION < 3) {
+        if(!defined('B2S_PLUGIN_USER_VERSION') || (defined('B2S_PLUGIN_USER_VERSION') && B2S_PLUGIN_USER_VERSION < 3)) {
             return $taxonomies;
         }
         $taxonomies_data = apply_filters('b2s_filter_posting_template_show_taxonomies', $taxonomies);
@@ -47,7 +47,7 @@ class B2S_Hook_Filter {
     }
     
     function get_posting_template_set_taxonomies($taxonomies = array(), $postId = 0) {
-        if(B2S_PLUGIN_USER_VERSION < 3) {
+        if(!defined('B2S_PLUGIN_USER_VERSION') || (defined('B2S_PLUGIN_USER_VERSION') && B2S_PLUGIN_USER_VERSION < 3)) {
             return $taxonomies;
         }
         $taxonomies_data = apply_filters('b2s_filter_posting_template_set_taxonomies', $taxonomies, $postId);

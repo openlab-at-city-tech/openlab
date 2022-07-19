@@ -10,12 +10,12 @@ $customizeArea = B2S_System::customizeArea();
                     <div class="media">
                         <?php if (is_array($customizeArea) && isset($customizeArea['image_path']) && !empty($customizeArea['image_path'])) { ?>
                             <div class="col-md-12 del-padding-left">
-                                <img class="img-responsive" src="<?php echo $customizeArea['image_path']; ?>" alt="logo">    
+                                <img class="img-responsive" src="<?php echo esc_url($customizeArea['image_path']); ?>" alt="logo">    
                             </div> 
                         <?php } else { ?>
                             <div class="col-md-2 del-padding-left">
                                 <a class="" href="https://www.blog2social.com" target="_blank">
-                                    <img class="img-responsive b2s-img-logo" src="<?php echo plugins_url('/assets/images/b2s@64.png', B2S_PLUGIN_FILE); ?>" alt="logo">
+                                    <img class="img-responsive b2s-img-logo" src="<?php echo esc_url(plugins_url('/assets/images/b2s@64.png', B2S_PLUGIN_FILE)); ?>" alt="logo">
                                 </a>
                             </div>
                             <div class="col-md-10 del-padding-left">
@@ -31,9 +31,9 @@ $customizeArea = B2S_System::customizeArea();
                                                 <?php
                                                 $versionType = unserialize(B2S_PLUGIN_VERSION_TYPE);
                                                 if (defined("B2S_PLUGIN_TRAIL_END") && strtotime(B2S_PLUGIN_TRAIL_END) > time()) {
-                                                    echo 'FREE-TRIAL (' . $versionType[B2S_PLUGIN_USER_VERSION] . ')';
+                                                    echo 'FREE-TRIAL (' . esc_html($versionType[B2S_PLUGIN_USER_VERSION]) . ')';
                                                 } else {
-                                                    echo $versionType[B2S_PLUGIN_USER_VERSION];
+                                                    echo esc_html($versionType[B2S_PLUGIN_USER_VERSION]);
                                                 }
                                                 ?><i class="b2s-sidebar-licence-btn-edit glyphicon glyphicon-pencil"></i>
                                             </a>
@@ -41,9 +41,9 @@ $customizeArea = B2S_System::customizeArea();
                                             if(B2S_PLUGIN_USER_VERSION == 0) {
                                                 echo "<br>";
                                                 if((defined("B2S_PLUGIN_TRAIL_END") && strtotime(B2S_PLUGIN_TRAIL_END) < time()) || get_option('B2S_PLUGIN_DISABLE_TRAIL') == true){
-                                                    echo '<a class="btn-link b2s-free-link" target="_blank" href="'.B2S_Tools::getSupportLink('affiliate').'">' . esc_html__('Upgrade to Premium', 'blog2social') . '</a>';
+                                                    echo '<a class="btn-link b2s-free-link" target="_blank" href="'.esc_url(B2S_Tools::getSupportLink('affiliate')).'">' . esc_html__('Upgrade to Premium', 'blog2social') . '</a>';
                                                 } else {
-                                                    echo '<a class="btn-link b2s-free-link" target="_blank" href="'.B2S_Tools::getSupportLink('feature').'">' . esc_html__('Start your 30-day free Premium trial', 'blog2social') . '</a>';
+                                                    echo '<a class="btn-link b2s-free-link" target="_blank" href="'.esc_url(B2S_Tools::getSupportLink('feature')).'">' . esc_html__('Start your 30-day free Premium trial', 'blog2social') . '</a>';
                                                 }
                                             }
                                             ?>  

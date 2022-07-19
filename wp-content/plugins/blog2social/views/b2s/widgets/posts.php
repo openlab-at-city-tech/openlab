@@ -2,7 +2,7 @@
 /* Data */
 require_once (B2S_PLUGIN_DIR . 'includes/B2S/Post/Filter.php');
 require_once (B2S_PLUGIN_DIR . 'includes/Util.php');
-$b2sShowByDate = isset($_GET['b2sShowByDate']) ? (preg_match("#^[0-9\-.\]]+$#", trim($_GET['b2sShowByDate'])) ? trim($_GET['b2sShowByDate']) : "") : ""; //YYYY-mm-dd
+$b2sShowByDate = isset($_GET['b2sShowByDate']) ? trim(sanitize_text_field(wp_unslash($_GET['b2sShowByDate']))) : "";
 ?>
 
 <div>
@@ -71,5 +71,5 @@ $b2sShowByDate = isset($_GET['b2sShowByDate']) ? (preg_match("#^[0-9\-.\]]+$#", 
     </div>
 </div>
 
-<input type="hidden" id="b2sLang" value="<?php echo substr(B2S_LANGUAGE, 0, 2); ?>">
-<input type="hidden" id="b2sUserLang" value="<?php echo strtolower(substr(get_locale(), 0, 2)); ?>">
+<input type="hidden" id="b2sLang" value="<?php echo esc_attr(substr(B2S_LANGUAGE, 0, 2)); ?>">
+<input type="hidden" id="b2sUserLang" value="<?php echo esc_attr(strtolower(substr(get_locale(), 0, 2))); ?>">

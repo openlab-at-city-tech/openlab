@@ -389,3 +389,45 @@ body .fc-day-grid-event .fc-content{
     margin-left: 15px !important;
     font-weight: 600;
 }
+
+.b2s-add-multi-image {
+    width: 40px !important;
+    height: 40px !important;
+    padding: 10px 0 !important;
+    border-radius: 20px !important;
+}
+
+#b2sImageZoom {
+    width: 100%;
+}
+
+#b2sImageZoomModal {
+    z-index: 9999;
+}
+
+#b2sImageZoomModal .modal-body {
+    padding: 0px !important;
+}
+
+.b2sImageZoomModalClose {
+    position: absolute !important;
+    color: white !important;
+    opacity: 1 !important;
+    right: 5px !important;
+    top: 5px !important;
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black !important;
+}
+
+.b2s-multi-image-zoom-btn{
+    position: absolute;
+    top: -5px;
+    left: 0px;
+    font-weight: 700 !important;
+}
+
+.b2s-multi-image-remove-btn{
+    position: absolute;
+    top: -5px;
+    right: 0px;
+    font-weight: 700 !important;
+}

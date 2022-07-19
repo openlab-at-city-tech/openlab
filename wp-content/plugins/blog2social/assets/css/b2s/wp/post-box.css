@@ -43,6 +43,8 @@
 .b2s-meta-box-headline{
     margin: 0.55em 0 !important;
     font-size: 1.08em !important;
+    text-transform: none !important;
+    font-weight: 600 !important;
 }
 
 .b2s-meta-box-auto-post-area{

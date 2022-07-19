@@ -6,7 +6,7 @@
                 <form method="post" action="#" id="prgLogin" enctype="multipart/form-data">
                     <!--Logo-->
                     <a target="_blank" href="https://www.pr-gateway.de">
-                        <img class="img-responsive" src="<?php echo plugins_url('/assets/images/prg/prg_logo.png', B2S_PLUGIN_FILE); ?>" alt="pr-gateway">
+                        <img class="img-responsive" src="<?php echo esc_url(plugins_url('/assets/images/prg/prg_logo.png', B2S_PLUGIN_FILE)); ?>" alt="pr-gateway">
                     </a>
                     <!--Form-->
                     <div id="prgLoginInfoFail" class="panel panel-group panel-danger" style="display: none;">
@@ -24,7 +24,7 @@
                     <input type="text" name="username" id="username" placeholder="<?php esc_attr_e('E-Mail or Username', 'blog2social') ?>" required class="form-control input-lg"/>
                     <input type="password" class="form-control input-lg" id="password" placeholder="<?php esc_attr_e('Password', 'blog2social') ?>" required />
                     <input type="hidden" name="postId" id="postId" value="<?php echo (int) $_GET['postId']; ?>">
-                    <input type="hidden" name="token" value="<?php echo base64_encode(time()); ?>"/>
+                    <input type="hidden" name="token" value="<?php echo esc_attr(base64_encode(time())); ?>"/>
                     <button type="submit" name="submit" id="prgLoginBtn" class="btn btn-lg btn-primary btn-block"><?php esc_html_e('Sign in', 'blog2social') ?></button>
                     <div>
                         <a target="_blank" href="http://prg.li/pr-gateway-connect-registration"><?php esc_html_e('create account', 'blog2social') ?></a> or <a target="_blank" href="https://www.pr-gateway.de/component/users/?view=reset"><?php esc_html_e('reset password', 'blog2social') ?></a>

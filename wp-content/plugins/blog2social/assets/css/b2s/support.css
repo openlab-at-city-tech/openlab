@@ -29,11 +29,12 @@
 }
 
 .b2s-support-link-not-active {
-    pointer-events: none;
+/*    pointer-events: none;
     cursor: default;
     text-decoration: none;
     color: gray;
-    opacity: 0.5;
+    opacity: 0.5;*/
+    display: none !important;
 }
 
 .b2s-margin-left-10 {

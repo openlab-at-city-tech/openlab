@@ -170,6 +170,14 @@ class B2S_Api_Network_Pinterest {
         //$this->setRoute();
         $headerData = $this->setHeader($this->route, $this->route, 'JSON', true, false);
         $headerData['X-APP-VERSION'] = $this->appVersion;
+        if(is_array($this->cookie) && !empty($this->cookie)) {
+            foreach($this->cookie as $cookie) {
+                if(isset($cookie->name) && !empty($cookie->name) && $cookie->name == "_auth" && isset($cookie->domain) && !empty($cookie->domain)) {
+                    $this->route = 'https://' . $cookie->domain . '/';
+                    break;
+                }
+            }
+        }
         $pinBoardUrl = $this->route . 'resource/BoardPickerBoardsResource/get/';
         $requestData = array('headers' => $headerData, 'cookies' => $this->cookie, 'timeout' => $this->timeout);
         $result = wp_remote_get($pinBoardUrl, $requestData);
@@ -178,6 +186,11 @@ class B2S_Api_Network_Pinterest {
         }
         $content = $result['body'];
         $response = json_decode($content, true);
+        if($response == null || !is_array($response) || empty($response)) {
+            if(isset($result['response']) && !empty($result['response']) && isset($result['response']['code']) && $result['response']['code'] == 403) {
+                return array('error' => 403, 'error_pos' => 1, 'error_data' => 'access_denied', 'error_code' => 'limit');
+            }
+        }
         if (!empty($response['resource_data_cache']) || !empty($response['resource_response'])) {
             if (!empty($response['resource_data_cache'])) {
                 $boardsData = $response['resource_data_cache'];
@@ -202,5 +215,5 @@ class B2S_Api_Network_Pinterest {
         }
         return array('error' => 4, 'error_pos' => 1, 'error_data' => 'unknown_error');
     }
-
+    
 }

@@ -27,7 +27,7 @@ class B2S_Notice {
     }
     
     public static function hideProVersionNotice() {
-        if(isset($_GET['b2s_action']) && $_GET['b2s_action'] == 'hide_notice'){
+        if(isset($_GET['b2s_action']) && sanitize_text_field(wp_unslash($_GET['b2s_action'])) == 'hide_notice'){
             if (isset($_GET['b2s_notice_nonce']) && wp_verify_nonce(sanitize_key(wp_unslash($_GET['b2s_notice_nonce'])), 'b2s_notice_nonce')) {
                 global $wpdb;
                 $wpdb->update($wpdb->prefix . 'b2s_user', array('feature' => 1), array('blog_user_id' => B2S_PLUGIN_BLOG_USER_ID), array('%d'), array('%d'));
@@ -58,7 +58,19 @@ class B2S_Notice {
             $output = '<div id="message" class="notice inline notice-warning notice-alt"><p>';
             $output .= $b2sSytem->getErrorMessage($b2sCheck, true);
             $output .= '</p></div>';
-            echo $output;
+            echo wp_kses($output, array(
+                'div' => array(
+                    'id' => array(),
+                    'class' => array(),
+                ),
+                'p' => array(),
+                'br' => array(),
+                'a' => array(
+                    'href' => array(),
+                    'target' => array(),
+                    'class' => array(),
+                ),
+            ));
         }
     }
 

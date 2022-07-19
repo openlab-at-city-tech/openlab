@@ -57,23 +57,24 @@ class B2S_Ship_Navbar {
         }
 
         $mandantIds = array();
-        if(empty($draftData)){
-            global $wpdb;
-            $mandantCount = $wpdb->get_var($wpdb->prepare("SELECT COUNT(mandant_id)FROM {$wpdb->prefix}b2s_user_network_settings  WHERE mandant_id =%d AND blog_user_id=%d ", $data->mandantId, B2S_PLUGIN_BLOG_USER_ID));
-            $userSelected = $wpdb->get_results($wpdb->prepare("SELECT mandant_id FROM {$wpdb->prefix}b2s_user_network_settings WHERE blog_user_id =%d AND network_auth_id = %d", B2S_PLUGIN_BLOG_USER_ID, $data->networkAuthId));
-            
+        global $wpdb;
+        $mandantCount = $wpdb->get_var($wpdb->prepare("SELECT COUNT(mandant_id)FROM {$wpdb->prefix}b2s_user_network_settings  WHERE mandant_id =%d AND blog_user_id=%d ", $data->mandantId, B2S_PLUGIN_BLOG_USER_ID));
+        $userSelected = $wpdb->get_results($wpdb->prepare("SELECT mandant_id FROM {$wpdb->prefix}b2s_user_network_settings WHERE blog_user_id =%d AND network_auth_id = %d", B2S_PLUGIN_BLOG_USER_ID, $data->networkAuthId));
+
+        if(empty($draftData) && !isset($draftData['b2s'])){
             foreach ($userSelected as $key => $value) {
                 $mandantIds[] = $value->mandant_id;
             }
-
-            if ($mandantCount == 0) {
-                $mandantIds[] = $data->mandantId;
-            }
-        } else {
-            if (array_key_exists($data->networkAuthId, $draftData['b2s'])){
-                $mandantIds[] = "0";
-            }
         }
+
+        if ($mandantCount == 0) {
+            $mandantIds[] = $data->mandantId;
+        }
+        
+        if (isset($draftData['b2s']) && array_key_exists($data->networkAuthId, $draftData['b2s'])){
+            $mandantIds[] = "0";
+        }
+        
         //Bug: Converting json + PHP Extension
         if (function_exists('mb_strlen') && function_exists('mb_substr')) {
             $username = (mb_strlen($username,'UTF-8') >= 29 ? (mb_substr($username, 0, 26,'UTF-8') . '...') : $username);
