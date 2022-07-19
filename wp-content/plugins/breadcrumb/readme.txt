@@ -3,8 +3,8 @@
 	Donate link: https://www.pickplugins.com/item/breadcrumb-awesome-breadcrumbs-style-navigation-for-wordpress/?ref=wordpress.org
 	Tags: breadcrumb, breadcrumbs, breadcrumb nav, trail, woocommerce breadcrumb
 	Requires at least: 3.8
-	Tested up to: 5.8
-	Stable tag: 1.5.24
+	Tested up to: 6.0
+	Stable tag: 1.5.27
 	License: GPLv2 or later
 	License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -121,6 +121,17 @@ use this short-code any where to display breadcrumb
 
 
 == Changelog ==
+
+	= 1.5.27 =
+    * 2022-06-30 - fix - Breadcrumb wrapper ul to ol
+
+
+	= 1.5.26 =
+    * 2022-06-04 - fix - Term ancestors, Term parent issue fixed.
+
+
+	= 1.5.25 =
+    * 2022-04-18 - add - WPML transaltion support added.
 
 	= 1.5.24 =
     * 2021-07-09- add - custom text element added.

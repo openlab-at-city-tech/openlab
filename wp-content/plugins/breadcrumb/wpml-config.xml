@@ -1,0 +1,12 @@
+<wpml-config>
+	<admin-texts>
+
+		<key name="breadcrumb_text"/>
+		<key name="breadcrumb_separator"/>
+		<key name="breadcrumb_word_char_end"/>
+		<key name="breadcrumb_home_text"/>
+
+
+
+	</admin-texts>
+</wpml-config>
