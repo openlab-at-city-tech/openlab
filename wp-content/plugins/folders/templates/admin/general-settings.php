@@ -48,6 +48,11 @@ if ( ! defined( 'ABSPATH' ) ) exit;
                     setFoldersRemoveStatus("on");
                 }
                 $(".folder-popup-form").hide();
+                if($(this).closest(".folder-popup-form").attr("id") == "import-third-party-plugin-data") {
+                    if($("#wordpress-popup").length) {
+                        $("#wordpress-popup").show();
+                    }
+                }
             });
             $(document).on("click",".import-folders-button", function(e){
                 $("#import-folders-popup").show();
@@ -84,6 +89,10 @@ if ( ! defined( 'ABSPATH' ) ) exit;
                     $(this).val("").trigger("change");
                     window.open("<?php echo esc_url($this->getFoldersUpgradeURL()) ?>", "_blank");
                 }
+            });
+            $(document).on("click",".view-shortcodes", function(e){
+                e.preventDefault();
+                $("#keyboard-shortcut").show();
             });
             $(document).on("change", "#folder_size", function(){
                 if($(this).val() == "folders-pro" || $(this).val() == "folders-pro-item" || $(this).val() == "folders-item-pro") {
@@ -193,7 +202,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
                             }
                             $redirectURL = $redirectURL."&note=2";
                             ?>
-                            window.location = "<?php echo $redirectURL ?>";
+                            window.location = "<?php echo esc_url($redirectURL) ?>";
                         }
                     });
                 }
@@ -440,6 +449,67 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 <div id="custom-css">
 
 </div>
+<?php
+/* Check website is hosted on wp.org or not */
+delete_option("is_web_hosted_on_wp");
+$wp_status = get_option("is_web_hosted_on_wp");
+if($wp_status === false) {
+    $site_url = site_url("/");
+    $domain = parse_url($site_url);
+
+    $options  = array (
+        'http' =>
+            array (
+                'ignore_errors' => true,
+            ),
+    );
+
+    $webLink = $domain['host'];
+
+    $context  = stream_context_create( $options );
+    $response = file_get_contents(
+        'https://public-api.wordpress.com/rest/v1/sites/'.$webLink,
+        false,
+        $context
+    );
+    $response = json_decode( $response, true );
+
+    if(!empty($response) && is_array($response)) {
+        if(isset($response['ID']) && !empty($response['ID'])) {
+            add_option("is_web_hosted_on_wp", "yes");
+            $wp_status = "yes";
+        }
+    }
+}
+if($wp_status === false) {
+    if(!function_exists("get_current_user_id")) {
+        add_option("is_web_hosted_on_wp", "yes");
+        $wp_status = "yes";
+    }
+}
+if($wp_status === false) {
+    add_option("is_web_hosted_on_wp", "no");
+}
+$show_media_popup = false;
+if($wp_status == "yes") {
+    delete_option("is_wp_media_popup_shown");
+    $popup_shown = get_option("is_wp_media_popup_shown");
+    if($popup_shown === false) {
+        $show_media_popup = true;
+        add_option("is_wp_media_popup_shown", 1);
+    } else {
+        if(!is_numeric($popup_shown)) {
+            $popup_shown = 1;
+        }
+        $popup_shown++;
+        if($popup_shown < 4) {
+            $show_media_popup = true;
+        }
+        update_option("is_wp_media_popup_shown", $popup_shown);
+    }
+}
+//var_dump($show_media_popup); die;
+?>
 <div class="wrap">
     <h1><?php esc_html_e( 'Folders Settings', 'folders'); ?></h1>
     <?php
@@ -549,6 +619,44 @@ if ( ! defined( 'ABSPATH' ) ) exit;
                                             </tr>
                                         <?php }
                                     endforeach; ?>
+                                    <?php
+                                    $show_in_page = !isset($customize_folders['use_shortcuts'])?"yes":$customize_folders['use_shortcuts'];
+                                    ?>
+                                    <tr>
+                                        <td class="no-padding">
+                                            <input type="hidden" name="customize_folders[use_shortcuts]" value="no">
+                                            <label for="use_shortcuts" class="custom-checkbox">
+                                                <input id="use_shortcuts" class="sr-only" <?php checked($show_in_page, "yes") ?> type="checkbox" name="customize_folders[use_shortcuts]" value="yes">
+                                                <span></span>
+                                            </label>
+                                        </td>
+                                        <td colspan="3">
+                                            <label for="use_shortcuts" ><?php esc_html_e( 'Use keyboard shortcuts to navigate faster', 'folders'); ?> <a href="#" class="view-shortcodes">(<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg> <?php esc_html_e( 'View shortcuts', 'folders'); ?>)</a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 15px 10px 15px 0px" colspan="4">
+                                            <?php $dynamic_folders = "off"; ?>
+                                            <a class="upgrade-box-link" target="_blank" href="<?php echo esc_url($this->getFoldersUpgradeURL()) ?>" >
+                                                <label for="" class="custom-checkbox send-user-to-pro">
+                                                    <input disabled type="checkbox" class="sr-only" name="customize_folders[dynamic_folders]" id="dynamic_folders" value="on" <?php checked($dynamic_folders, "on") ?>>
+                                                    <span></span>
+                                                </label>
+                                                <label for="" class="send-user-to-pro">
+                                                    <?php esc_html_e("Dynamic Folders", "folders"); ?>
+                                                    <button type="button" class="upgrade-link" href="<?php echo esc_url($this->getFoldersUpgradeURL()) ?>"><?php esc_html_e("Upgrade to Pro", 'folders') ?></button>
+                                                    <span class="html-tooltip dynamic ">
+                                                        <span class="dashicons dashicons-editor-help"></span>
+                                                        <span class="tooltip-text top" style="">
+                                                            <?php esc_html_e("Automatically filter posts/pages/custom posts/media files based on author, date, file types & more", "folders") ?>
+                                                            <img src="<?php echo esc_url(WCP_FOLDER_URL."assets/images/dynamic-folders.gif") ?>">
+                                                        </span>
+                                                    </span>
+                                                    <span class="recommanded">Recommended</span>
+                                                </label>
+                                            </a>
+                                        </td>
+                                    </tr>
 	                                <?php
 	                                $show_in_page = !isset($customize_folders['use_folder_undo'])?"yes":$customize_folders['use_folder_undo'];
 	                                ?>
@@ -590,6 +698,117 @@ if ( ! defined( 'ABSPATH' ) ) exit;
                                                     <button type="button" class="upgrade-link" href="<?php echo esc_url($this->getFoldersUpgradeURL()) ?>"><?php esc_html_e("Upgrade to Pro", 'folders') ?></button>
                                                 </label>
                                             </a>
+                                        </td>
+                                    </tr>
+                                    <?php
+                                    $show_in_page = !isset($customize_folders['folders_media_cleaning'])?"yes":$customize_folders['folders_media_cleaning'];
+                                    ?>
+                                    <tr>
+                                        <td style="padding: 15px 10px 15px 0px" colspan="4">
+                                            <?php $replace_media_title = "off"; ?>
+                                            <a class="upgrade-box-link" target="_blank" href="<?php echo esc_url($this->getFoldersUpgradeURL()) ?>" >
+                                                <label for="" class="custom-checkbox send-user-to-pro">
+                                                    <input type="hidden" class="sr-only" name="customize_folders[folders_media_cleaning]" value="<?php echo esc_attr($show_in_page) ?>" />
+                                                    <input disabled type="checkbox" class="sr-only" id="folders_media_cleaning" value="off">
+                                                    <span></span>
+                                                </label>
+                                                <label for="" class="send-user-to-pro">
+                                                    <?php esc_html_e("Use Media Cleaning to clear unused media files", "folders"); ?>
+                                                    <span class="folder-tooltip" data-title="<?php esc_html_e("The Media Cleaning feature enables you to clean unused media files for your WordPress site and adds a Media Cleaning item under Media", "folders") ?>"><span class="dashicons dashicons-editor-help"></span></span>
+                                                    <button type="button" class="upgrade-link" href="<?php echo esc_url($this->getFoldersUpgradeURL()) ?>"><?php esc_html_e("Upgrade to Pro", 'folders') ?></button>
+                                                </label>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 15px 10px 15px 0px" colspan="4">
+                                            <input type="hidden" name="folders_settings1" value="folders">
+                                            <?php
+                                            $show_media_details = !isset($customize_folders['show_media_details'])?"on":$customize_folders['show_media_details'];
+                                            $show_media_details = "off";
+                                            ?>
+                                            <a class="upgrade-box-link" target="_blank" href="<?php echo esc_url($this->getFoldersUpgradeURL()) ?>" >
+                                                <label for="" class="custom-checkbox send-user-to-pro">
+                                                    <input disabled type="checkbox" class="sr-only" name="customize_folders[show_media_details]" id="show_media_details" value="on" <?php checked($show_media_details, "on") ?>>
+                                                    <span></span>
+                                                </label>
+                                                <label for="" class="send-user-to-pro">
+                                                    <?php esc_html_e("Show media details on hover", "folders"); ?>
+                                                    <button type="button" class="upgrade-link" href="<?php echo esc_url($this->getFoldersUpgradeURL()) ?>"><?php esc_html_e("Upgrade to Pro", 'folders'); ?></button>
+                                                    <span class="html-tooltip bottom">
+                                                        <span class="dashicons dashicons-editor-help"></span>
+                                                        <span class="tooltip-text top" style="">
+                                                            <?php esc_html_e("Show useful metadata including title, size, type, date, dimension & more on hover.", "folders"); ?>
+                                                            <img src="<?php echo esc_url(WCP_FOLDER_URL."assets/images/folders-media.gif") ?>">
+                                                        </span>
+                                                    </span>
+                                                    <span class="recommanded">Recommended</span>
+                                                </label>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="4">
+                                            <div class="">
+                                                <div class="">
+                                                    <?php
+                                                    $media_settings = array(
+                                                        'image_title' => array(
+                                                            "title" => esc_html__("Title", "folders"),
+                                                            "default" => "on",
+                                                        ),
+                                                        'image_alt_text' =>  array(
+                                                            "title" => esc_html__("Alternative Text", "folders"),
+                                                            "default" => "off",
+                                                        ),
+                                                        'image_file_url' =>  array(
+                                                            "title" => esc_html__("File URL", "folders"),
+                                                            "default" => "off",
+                                                        ),
+                                                        'image_dimensions' =>  array(
+                                                            "title" => esc_html__("Dimensions", "folders"),
+                                                            "default" => "on",
+                                                        ),
+                                                        'image_size' =>  array(
+                                                            "title" => esc_html__("Size", "folders"),
+                                                            "default" => "off",
+                                                        ),
+                                                        'image_file_name' =>  array(
+                                                            "title" => esc_html__("Filename", "folders"),
+                                                            "default" => "off",
+                                                        ),
+                                                        'image_type' =>  array(
+                                                            "title" => esc_html__("Type", "folders"),
+                                                            "default" => "on",
+                                                        ),
+                                                        'image_date' =>  array(
+                                                            "title" => esc_html__("Date", "folders"),
+                                                            "default" => "on",
+                                                        ),
+                                                        'image_uploaded_by' =>  array(
+                                                            "title" => esc_html__("Uploaded by", "folders"),
+                                                            "default" => "off",
+                                                        )
+                                                    );
+                                                    $media_col_settings = isset($customize_folders['media_col_settings']) && is_array($customize_folders['media_col_settings'])?$customize_folders['media_col_settings']:array("image_title","image_dimensions","image_type","image_date");
+                                                    ?>
+                                                    <input type="hidden" name="customize_folders[media_col_settings][]" value="all">
+                                                    <div class="media-setting-box active send-user-to-pro" >
+                                                        <div class="normal-box">
+                                                            <select disabled multiple="multiple" name="customize_folders[media_col_settings][]" class="select2-box">
+                                                                <?php foreach($media_settings as $key=>$media) {
+                                                                    $selected = $media['default'];
+                                                                    ?>
+                                                                    <option <?php selected($selected, "on") ?> value="<?php echo esc_attr($key) ?>"><?php echo esc_attr($media['title']) ?></option>
+                                                                <?php } ?>
+                                                            </select>
+                                                        </div>
+                                                        <a class="upgrade-box" target="_blank" href="<?php echo esc_url($this->getFoldersUpgradeURL()) ?>" >
+                                                            <button type="button"><?php esc_html_e("Upgrade to Pro", 'folders'); ?></button>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </td>
                                     </tr>
                                     <?php
@@ -646,29 +865,6 @@ if ( ! defined( 'ABSPATH' ) ) exit;
                                     </tr>
                                     <tr>
                                         <td style="padding: 15px 10px 15px 0px" colspan="4">
-			                                <?php $dynamic_folders = "off"; ?>
-                                            <a class="upgrade-box-link" target="_blank" href="<?php echo esc_url($this->getFoldersUpgradeURL()) ?>" >
-                                                <label for="" class="custom-checkbox send-user-to-pro">
-                                                    <input disabled type="checkbox" class="sr-only" name="customize_folders[dynamic_folders]" id="dynamic_folders" value="on" <?php checked($dynamic_folders, "on") ?>>
-                                                    <span></span>
-                                                </label>
-                                                <label for="" class="send-user-to-pro">
-					                                <?php esc_html_e("Dynamic Folders", "folders"); ?>
-                                                    <button type="button" class="upgrade-link" href="<?php echo esc_url($this->getFoldersUpgradeURL()) ?>"><?php esc_html_e("Upgrade to Pro", 'folders') ?></button>
-                                                    <span class="html-tooltip dynamic ">
-                                                        <span class="dashicons dashicons-editor-help"></span>
-                                                        <span class="tooltip-text top" style="">
-                                                            <?php esc_html_e("Automatically filter posts/pages/custom posts/media files based on author, date, file types & more", "folders") ?>
-                                                            <img src="<?php echo esc_url(WCP_FOLDER_URL."assets/images/dynamic-folders.gif") ?>">
-                                                        </span>
-                                                    </span>
-                                                    <span class="recommanded">Recommended</span>
-                                                </label>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td style="padding: 15px 10px 15px 0px" colspan="4">
 			                                <?php $replace_media_title = "off"; ?>
                                             <a class="upgrade-box-link" target="_blank" href="<?php echo esc_url($this->getFoldersUpgradeURL()) ?>" >
                                                 <label for="" class="custom-checkbox send-user-to-pro">
@@ -684,96 +880,10 @@ if ( ! defined( 'ABSPATH' ) ) exit;
                                         </td>
                                     </tr>
                                     <!-- Do not make changes here, Only for Free -->
-                                    <tr>
-                                        <td style="padding: 15px 10px 15px 0px" colspan="4">
-                                            <input type="hidden" name="folders_settings1" value="folders">
-	                                        <?php
-	                                        $show_media_details = !isset($customize_folders['show_media_details'])?"on":$customize_folders['show_media_details'];
-	                                        $show_media_details = "off";
-	                                        ?>
-                                            <a class="upgrade-box-link" target="_blank" href="<?php echo esc_url($this->getFoldersUpgradeURL()) ?>" >
-                                                <label for="" class="custom-checkbox send-user-to-pro">
-                                                    <input disabled type="checkbox" class="sr-only" name="customize_folders[show_media_details]" id="show_media_details" value="on" <?php checked($show_media_details, "on") ?>>
-                                                    <span></span>
-                                                </label>
-                                                <label for="" class="send-user-to-pro">
-			                                        <?php esc_html_e("Show media details on hover", "folders"); ?>
-                                                    <button type="button" class="upgrade-link" href="<?php echo esc_url($this->getFoldersUpgradeURL()) ?>"><?php esc_html_e("Upgrade to Pro", 'folders'); ?></button>
-                                                    <span class="html-tooltip bottom">
-                                                        <span class="dashicons dashicons-editor-help"></span>
-                                                        <span class="tooltip-text top" style="">
-                                                            <?php esc_html_e("Show useful metadata including title, size, type, date, dimension & more on hover.", "folders"); ?>
-                                                            <img src="<?php echo esc_url(WCP_FOLDER_URL."assets/images/folders-media.gif") ?>">
-                                                        </span>
-                                                    </span>
-                                                    <span class="recommanded">Recommended</span>
-                                                </label>
-                                            </a>
-                                        </td>
-                                    </tr>
                                 </tboby>
                             </table>
                             <input type="hidden" name="customize_folders[show_media_details]" value="off">
-                            <div class="media-details">
-                                <div class="">
-                                    <?php
-                                    $media_settings = array(
-                                        'image_title' => array(
-                                            "title" => esc_html__("Title", "folders"),
-                                            "default" => "on",
-                                        ),
-                                        'image_alt_text' =>  array(
-                                            "title" => esc_html__("Alternative Text", "folders"),
-                                            "default" => "off",
-                                        ),
-                                        'image_file_url' =>  array(
-                                            "title" => esc_html__("File URL", "folders"),
-                                            "default" => "off",
-                                        ),
-                                        'image_dimensions' =>  array(
-                                            "title" => esc_html__("Dimensions", "folders"),
-                                            "default" => "on",
-                                        ),
-                                        'image_size' =>  array(
-                                            "title" => esc_html__("Size", "folders"),
-                                            "default" => "off",
-                                        ),
-                                        'image_file_name' =>  array(
-                                            "title" => esc_html__("Filename", "folders"),
-                                            "default" => "off",
-                                        ),
-                                        'image_type' =>  array(
-                                            "title" => esc_html__("Type", "folders"),
-                                            "default" => "on",
-                                        ),
-                                        'image_date' =>  array(
-                                            "title" => esc_html__("Date", "folders"),
-                                            "default" => "on",
-                                        ),
-                                        'image_uploaded_by' =>  array(
-                                            "title" => esc_html__("Uploaded by", "folders"),
-                                            "default" => "off",
-                                        )
-                                    );
-                                    $media_col_settings = isset($customize_folders['media_col_settings']) && is_array($customize_folders['media_col_settings'])?$customize_folders['media_col_settings']:array("image_title","image_dimensions","image_type","image_date");
-                                    ?>
-                                    <input type="hidden" name="customize_folders[media_col_settings][]" value="all">
-                                    <div class="media-setting-box active send-user-to-pro" >
-                                        <div class="normal-box">
-                                            <select disabled multiple="multiple" name="customize_folders[media_col_settings][]" class="select2-box">
-                                                <?php foreach($media_settings as $key=>$media) {
-                                                    $selected = $media['default'];
-                                                    ?>
-                                                    <option <?php selected($selected, "on") ?> value="<?php echo esc_attr($key) ?>"><?php echo esc_attr($media['title']) ?></option>
-                                                <?php } ?>
-                                            </select>
-                                        </div>
-                                        <a class="upgrade-box" target="_blank" href="<?php echo esc_url($this->getFoldersUpgradeURL()) ?>" >
-                                            <button type="button"><?php esc_html_e("Upgrade to Pro", 'folders'); ?></button>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
+
                         </div>
                         <div class="accordion-right">
                             <div class="premio-help">
@@ -786,6 +896,15 @@ if ( ! defined( 'ABSPATH' ) ) exit;
                                     </div>
                                 </a>
                             </div>
+                            <?php if($wp_status == "yes") { ?>
+                                <div class="premio-help">
+                                    <div class="premio-help-btn wp-folder-user">
+                                        <div class="folder-help-icon"><span class="dashicons dashicons-wordpress"></span></div>
+                                        <div class="need-help"><?php esc_html_e("WordPress.com User?", "folders") ?></div>
+                                        <div class="visit-our"><a target="_blank" href="https://premio.io/help/folders/how-to-activate-folders-for-wordpress-com-media-library/">Enable Folders</a> for your Media Library</div>
+                                    </div>
+                                </div>
+                            <?php } ?>
                         </div>
                         <div class="clear"></div>
                         <div class="submit-button">
@@ -1021,9 +1140,9 @@ if ( ! defined( 'ABSPATH' ) ) exit;
                                                     $group = $value;
                                                 }
 	                                            if(($setting_font !== false && $setting_font != "" && !in_array($setting_font, array("Arial","Tahoma","Verdana","Helvetica","Times New Roman","Trebuchet MS","Georgia"))) || $value != "Google Fonts" ) { ?>
-                                                    <option value="<?php echo $key; ?>" <?php selected($font, $key); ?>><?php echo $title; ?></option>
+                                                    <option value="<?php echo esc_attr($key); ?>" <?php selected($font, $key); ?>><?php echo esc_attr($title); ?></option>
                                                 <?php } else { ?>
-                                                    <option class="pro-select-item" value="folders-pro"><?php echo $title; ?> (Pro) 🔑</option>
+                                                    <option class="pro-select-item" value="folders-pro"><?php echo esc_attr($title); ?> (Pro) 🔑</option>
                                                 <?php } ?>
                                             <?php endforeach; ?>
                                         </select>
@@ -1424,6 +1543,32 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 </div>
 
 <?php
+if($wp_status == "yes" && $show_media_popup) {
+    add_option("is_wp_media_popup_shown", "yes");
+    ?>
+    <div class="folder-popup-form" id="wordpress-popup">
+        <div class="popup-form-content">
+            <div class="popup-content">
+                <div class="popup-form-data">
+                    <div class="close-popup-button">
+                        <a class="" href="javascript:;"><span></span></a>
+                    </div>
+                    <div class="popup-folder-title">
+                        <?php esc_html_e("Seems you’re using WordPress.com", "folders") ?>
+                    </div>
+                    <div class="folder-form-message" style="padding: 25px 10px;" >
+                        <?php esc_html_e('You need to alter a setting to make Folders compatible with WordPress.com media library.', "folders") ?>
+                    </div>
+                    <div class="folder-form-buttons" style="display:block;">
+                        <a class="form-submit-btn a-inline" target="_blank" href="https://premio.io/help/folders/how-to-activate-folders-for-wordpress-com-media-library/" ><?php esc_html_e("Learn how to enable Folders on media library", 'folders'); ?></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<?php } ?>
+
+<?php
 $option = get_option("folder_intro_box");
 if(($option == "show" || get_option("folder_redirect_status") == 2) && $is_plugin_exists) { ?>
     <div class="folder-popup-form" id="import-third-party-plugin-data" style="display: block" ?>
@@ -1485,3 +1630,74 @@ if(($option == "show" || get_option("folder_redirect_status") == 2) && $is_plugi
     </div>
 </div>
 <?php include_once "help.php" ?>
+
+
+
+<div class="folder-popup-form" id="keyboard-shortcut">
+    <div class="popup-form-content">
+        <div class="popup-content">
+            <div class="close-popup-button">
+                <a class="" href="javascript:;"><span></span></a>
+            </div>
+            <div class="import-plugin-title"><?php esc_html_e("Keyboard shortcuts (Ctrl+K)", 'folders'); ?></div>
+            <div class="plugin-import-table">
+                <table class="keyboard-shortcut">
+                    <tr>
+                        <th><?php esc_html_e("Create New Folder", "folders") ?></th>
+                        <td><span class="key-button">Shift</span><span class="plus-button">+</span><span class="key-button">N</span> </td>
+                    </tr>
+                    <tr>
+                        <th><?php esc_html_e("Rename Folder", "folders") ?></th>
+                        <td><span class="key-button">F2</span></td>
+                    </tr>
+                    <tr>
+                        <th><?php esc_html_e("Copy Folder", "folders") ?></th>
+                        <td><span class="key-button">Ctrl</span><span class="plus-button">+</span><span class="key-button">C</span> </td>
+                    </tr>
+                    <tr>
+                        <th><?php esc_html_e("Cut Folder", "folders") ?></th>
+                        <td><span class="key-button">Ctrl</span><span class="plus-button">+</span><span class="key-button">X</span> </td>
+                    </tr>
+                    <tr>
+                        <th><?php esc_html_e("Paste Folder", "folders") ?></th>
+                        <td><span class="key-button">Ctrl</span><span class="plus-button">+</span><span class="key-button">V</span> </td>
+                    </tr>
+                    <tr>
+                        <th><?php esc_html_e("Duplicate Folder", "folders") ?></th>
+                        <td><span class="key-button">Ctrl</span><span class="plus-button">+</span><span class="key-button">D</span> </td>
+                    </tr>
+                    <tr>
+                        <th><?php esc_html_e("Delete Folder", "folders") ?></th>
+                        <td><span class="key-button">Delete</span></td>
+                    </tr>
+                    <tr>
+                        <th><?php esc_html_e("Next Folder", "folders") ?></th>
+                        <td><span class="key-button"><span class="dashicons dashicons-arrow-down-alt"></span></span> </td>
+                    </tr>
+                    <tr>
+                        <th><?php esc_html_e("Previous Folder", "folders") ?></th>
+                        <td><span class="key-button"><span class="dashicons dashicons-arrow-up-alt"></span></span> </td>
+                    </tr>
+                    <tr>
+                        <th><?php esc_html_e("Expand Folder", "folders") ?></th>
+                        <td><span class="key-button"><span class="dashicons dashicons-arrow-right-alt"></span></span> </td>
+                    </tr>
+                    <tr>
+                        <th><?php esc_html_e("Collapse Folder", "folders") ?></th>
+                        <td><span class="key-button"><span class="dashicons dashicons-arrow-left-alt"></span></span> </td>
+                    </tr>
+                    <tr>
+                        <th><?php esc_html_e("Re-order folders to upwards", "folders") ?></th>
+                        <td><span class="key-button">Ctrl</span><span class="plus-button">+</span><span class="key-button"><span class="dashicons dashicons-arrow-up-alt"></span></span></td>
+                    </tr>
+                    <tr>
+                        <th><?php esc_html_e("Re-order folders to downwards", "folders") ?></th>
+                        <td><span class="key-button">Ctrl</span><span class="plus-button">+</span><span class="key-button"><span class="dashicons dashicons-arrow-down-alt"></span></span></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+

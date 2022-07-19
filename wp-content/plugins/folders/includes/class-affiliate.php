@@ -46,7 +46,7 @@ class Folder_affiliate_program {
             }
             ?>
             <style>
-                .<?php echo $this->plugin_slug ?>-premio-affiliate p a {
+                .<?php echo esc_attr($this->plugin_slug) ?>-premio-affiliate p a {
                     display: inline-block;
                     float: right;
                     text-decoration: none;
@@ -55,20 +55,20 @@ class Folder_affiliate_program {
                     right: 12px;
                     top: 12px;
                 }
-                .<?php echo $this->plugin_slug ?>-premio-affiliate p a:hover, .<?php echo $this->plugin_slug ?>-premio-affiliate p a:focus {
+                .<?php echo esc_attr($this->plugin_slug) ?>-premio-affiliate p a:hover, .<?php echo esc_attr($this->plugin_slug) ?>-premio-affiliate p a:focus {
                     color: #333333;
                 }
-                .<?php echo $this->plugin_slug ?>-premio-affiliate .button span {
+                .<?php echo esc_attr($this->plugin_slug) ?>-premio-affiliate .button span {
                     display: inline-block;
                     line-height: 27px;
                     font-size: 16px;
                 }
-                .<?php echo $this->plugin_slug ?>-premio-affiliate {
+                .<?php echo esc_attr($this->plugin_slug) ?>-premio-affiliate {
                     padding: 1px 100px 12px 12px;
                     margin: 15px 15px 2px;
                     position: relative;
                 }
-                .<?php echo $this->plugin_slug ?>-affiliate-popup {
+                .<?php echo esc_attr($this->plugin_slug) ?>-affiliate-popup {
                     position: fixed;
                     width: 100%;
                     height: 100%;
@@ -78,7 +78,7 @@ class Folder_affiliate_program {
                     left: 0;
                     display: none;
                 }
-                .<?php echo $this->plugin_slug ?>-affiliate-popup-content {
+                .<?php echo esc_attr($this->plugin_slug) ?>-affiliate-popup-content {
                     background: #ffffff;
                     padding: 20px;
                     position: absolute;
@@ -92,23 +92,23 @@ class Folder_affiliate_program {
                     -moz-border-radius: 5px;
                     border-radius: 5px;
                 }
-                .<?php echo $this->plugin_slug ?>-affiliate-title {
+                .<?php echo esc_attr($this->plugin_slug) ?>-affiliate-title {
                     padding: 0 0 10px 0;
                     font-weight: bold;
                 }
-                .<?php echo $this->plugin_slug ?>-affiliate-options a {
+                .<?php echo esc_attr($this->plugin_slug) ?>-affiliate-options a {
                     display: block;
                     margin: 5px 0 5px 0;
                     color: #333;
                     text-decoration: none;
                 }
-                .<?php echo $this->plugin_slug ?>-affiliate-options a.dismiss {
+                .<?php echo esc_attr($this->plugin_slug) ?>-affiliate-options a.dismiss {
                     color: #999;
                 }
-                .<?php echo $this->plugin_slug ?>-affiliate-options a:hover, .affiliate-options a:focus {
+                .<?php echo esc_attr($this->plugin_slug) ?>-affiliate-options a:hover, .affiliate-options a:focus {
                     color: #0073aa;
                 }
-                button.<?php echo $this->plugin_slug ?>-close-affiliate-popup {
+                button.<?php echo esc_attr($this->plugin_slug) ?>-close-affiliate-popup {
                     position: absolute;
                     top: 5px;
                     right: 0;
@@ -116,7 +116,7 @@ class Folder_affiliate_program {
                     background: transparent;
                     cursor: pointer;
                 }
-                a.button.button-primary.<?php echo $this->plugin_slug ?>-affiliate-btn {
+                a.button.button-primary.<?php echo esc_attr($this->plugin_slug) ?>-affiliate-btn {
                     font-size: 14px;
                     background: #F51366;
                     color: #fff;
@@ -129,16 +129,16 @@ class Folder_affiliate_program {
                     text-shadow: none;
                 }
             </style>
-            <div class="notice notice-info chaty-notice <?php echo $this->plugin_slug ?>-premio-affiliate <?php echo $this->plugin_slug ?>-premio-affiliate">
-                <p>Hi there, you've been using <?php echo $this->plugin_name ?> for a while now. Do you know that <b><?php echo $this->plugin_name ?></b> has an affiliate program? Join now and get <b>25% lifetime commission</b> <a href="javascript:;" class="dismiss-btn"><span class="dashicons dashicons-no-alt"></span> Dismiss</a></p>
+            <div class="notice notice-info chaty-notice <?php echo esc_attr($this->plugin_slug) ?>-premio-affiliate <?php echo esc_attr($this->plugin_slug) ?>-premio-affiliate">
+                <p>Hi there, you've been using <?php echo esc_attr($this->plugin_name) ?> for a while now. Do you know that <b><?php echo esc_attr($this->plugin_name) ?></b> has an affiliate program? Join now and get <b>25% lifetime commission</b> <a href="javascript:;" class="dismiss-btn"><span class="dashicons dashicons-no-alt"></span> Dismiss</a></p>
                 <div class="clear clearfix"></div>
-                <a class="button button-primary <?php echo $this->plugin_slug ?>-affiliate-btn" target="_blank" href="https://premio.io/affiliates/?utm_source=inapp&plugin=folders&domain=<?php echo $_SERVER['HTTP_HOST'] ?>">Tell me more <span class="dashicons dashicons-arrow-right-alt"></span></a>
+                <a class="button button-primary <?php echo esc_attr($this->plugin_slug) ?>-affiliate-btn" target="_blank" href="https://premio.io/affiliates/?utm_source=inapp&plugin=folders&domain=<?php echo esc_url($_SERVER['HTTP_HOST']) ?>">Tell me more <span class="dashicons dashicons-arrow-right-alt"></span></a>
             </div>
-            <div class="<?php echo $this->plugin_slug ?>-affiliate-popup">
-                <div class="<?php echo $this->plugin_slug ?>-affiliate-popup-content">
-                    <button class="<?php echo $this->plugin_slug ?>-close-affiliate-popup"><span class="dashicons dashicons-no-alt"></span></button>
-                    <div class="<?php echo $this->plugin_slug ?>-affiliate-title">Would you like us to remind you about this later?</div>
-                    <div class="<?php echo $this->plugin_slug ?>-affiliate-options">
+            <div class="<?php echo esc_attr($this->plugin_slug) ?>-affiliate-popup">
+                <div class="<?php echo esc_attr($this->plugin_slug) ?>-affiliate-popup-content">
+                    <button class="<?php echo esc_attr($this->plugin_slug) ?>-close-affiliate-popup"><span class="dashicons dashicons-no-alt"></span></button>
+                    <div class="<?php echo esc_attr($this->plugin_slug) ?>-affiliate-title">Would you like us to remind you about this later?</div>
+                    <div class="<?php echo esc_attr($this->plugin_slug) ?>-affiliate-options">
                         <a href="javascript:;" data-days="3">Remind me in 3 days</a>
                         <a href="javascript:;" data-days="10">Remind me in 10 days</a>
                         <a href="javascript:;" data-days="-1" class="dismiss">Don't remind me about this</a>
@@ -147,23 +147,23 @@ class Folder_affiliate_program {
             </div>
             <script>
                 jQuery(document).ready(function(){
-                    jQuery(document).on("click", ".<?php echo $this->plugin_slug ?>-premio-affiliate p a.dismiss-btn", function(){
-                        jQuery(".<?php echo $this->plugin_slug ?>-affiliate-popup").show();
+                    jQuery(document).on("click", ".<?php echo esc_attr($this->plugin_slug) ?>-premio-affiliate p a.dismiss-btn", function(){
+                        jQuery(".<?php echo esc_attr($this->plugin_slug) ?>-affiliate-popup").show();
                     });
-                    jQuery(document).on("click", ".<?php echo $this->plugin_slug ?>-close-affiliate-popup", function(){
-                        jQuery(".<?php echo $this->plugin_slug ?>-affiliate-popup").hide();
+                    jQuery(document).on("click", ".<?php echo esc_attr($this->plugin_slug) ?>-close-affiliate-popup", function(){
+                        jQuery(".<?php echo esc_attr($this->plugin_slug) ?>-affiliate-popup").hide();
                     });
-                    jQuery(document).on("click", ".<?php echo $this->plugin_slug ?>-affiliate-options a", function(){
+                    jQuery(document).on("click", ".<?php echo esc_attr($this->plugin_slug) ?>-affiliate-options a", function(){
                         var dataDays = jQuery(this).attr("data-days");
-                        jQuery(".<?php echo $this->plugin_slug ?>-affiliate-popup").hide();
-                        jQuery(".<?php echo $this->plugin_slug ?>-premio-affiliate").hide();
+                        jQuery(".<?php echo esc_attr($this->plugin_slug) ?>-affiliate-popup").hide();
+                        jQuery(".<?php echo esc_attr($this->plugin_slug) ?>-premio-affiliate").hide();
                         jQuery.ajax({
                             url: "<?php echo admin_url("admin-ajax.php") ?>",
                             data: "action=<?php echo esc_attr($this->plugin_slug) ?>_affiliate_program&days="+dataDays+"&nonce=<?php echo esc_attr(wp_create_nonce($this->plugin_slug."_affiliate_program")) ?>",
                             type: "post",
                             success: function() {
-                                jQuery(".<?php echo $this->plugin_slug ?>-affiliate-popup").remove();
-                                jQuery(".<?php echo $this->plugin_slug ?>-premio-affiliate").remove();
+                                jQuery(".<?php echo esc_attr($this->plugin_slug) ?>-affiliate-popup").remove();
+                                jQuery(".<?php echo esc_attr($this->plugin_slug) ?>-premio-affiliate").remove();
                             }
                         });
                     });

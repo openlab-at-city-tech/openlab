@@ -411,7 +411,7 @@
         });
 
         $( document ).ajaxComplete(function( event, xhr, settings ) {
-            if(settings.data != undefined && settings.data != "" && settings.data.indexOf("action=query-attachments") != -1) {
+            if(settings.data != undefined && settings.data != "" && typeof settings.data == "string" && settings.data.indexOf("action=query-attachments") != -1) {
                 setDragAndDropElements();
             }
             if(folderSelectedAttachmentID.length > 0) {
@@ -466,6 +466,9 @@
             thisSlug = getSettingForPost(thisIndex, 'slug');
             set_default_folders(thisSlug);
             $(".custom-media-select").removeClass("active");
+            $(".folder-modal #js-tree-menu .jstree-clicked").removeClass("jstree-clicked");
+            $(".folder-modal #js-tree-menu").jstree('select_node', activeRecordID);
+            $(".folder-modal #js-tree-menu #"+selectedFolderMediaId+"_anchor").addClass("jstree-clicked");
             checkForCopyPaste();
         });
 
@@ -485,6 +488,11 @@
 
         $(document).on("click", ".close-popup-button a", function(){
             $(".folder-popup-form").hide();
+            if($(".folder-modal .jstree-node[id='"+fileFolderID+"']").length) {
+                $(".folder-modal .jstree-node[id='"+fileFolderID+"'] > a.jstree-anchor").trigger("focus");
+            } else if($(".folder-modal .jstree-anchor.jstree-clicked").length) {
+                $(".folder-modal .jstree-anchor.jstree-clicked").trigger("focus");
+            }
         });
 
         /* right click menu */
@@ -737,6 +745,7 @@
                                         'is_deleted': 0
                                     };
                                     folderPropertyArray.push(folderProperty);
+                                    folderPropertyArray.push(folderProperty);
                                     if(!creatingParentMenu) {
                                         $('#js-tree-menu').jstree().create_node(result.parent_id, {
                                             "id": result.data[i]['term_id'],
@@ -744,6 +753,7 @@
                                         }, "last", function () {
                                             $(".jstree-node[id='" + result.data[i]['term_id'] + "']").attr("data-nonce", result.data[i]['nonce']);
                                             $(".jstree-node[id='" + result.data[i]['term_id'] + "']").attr("data-slug", result.data[i]['slug']);
+                                            $(".jstree-node[id='" + result.data[i]['term_id'] + "'] > a.jstree-anchor .premio-folder-count").text(0);
                                         });
                                     } else {
                                         $('#js-tree-menu').jstree().create_node("#", {
@@ -752,15 +762,22 @@
                                         }, (folderOrder), function () {
                                             $(".jstree-node[id='" + result.data[i]['term_id'] + "']").attr("data-nonce", result.data[i]['nonce']);
                                             $(".jstree-node[id='" + result.data[i]['term_id'] + "']").attr("data-slug", result.data[i]['slug']);
+                                            $(".jstree-node[id='" + result.data[i]['term_id'] + "'] > a.jstree-anchor .premio-folder-count").text(0);
                                         });
                                     }
                                     creatingParentMenu = 0;
+
+                                    if($(".jstree-node[id='"+result.data[i]['term_id']+"']").length) {
+                                        $(".jstree-node[id='"+result.data[i]['term_id']+"'] > a.jstree-anchor").trigger("focus");
+                                    }
                                 }
                             }
                             ajaxAnimation();
                             make_sticky_folder_menu();
                             fileFolderID = result.term_id;
                             resetMediaData(0);
+                            isDuplicate = false;
+                            duplicateFolderId = 0;
                         } else {
                             $("#error-folder-popup-message").html(result.message);
                             $("#error-folder-popup").show();
@@ -773,10 +790,20 @@
 
         $(document).on("click", ".form-cancel-btn", function(){
             $(".folder-popup-form").hide();
+            if($(".folder-modal .jstree-node[id='"+fileFolderID+"']").length) {
+                $(".folder-modal .jstree-node[id='"+fileFolderID+"'] > a.jstree-anchor").trigger("focus");
+            } else if($(".folder-modal .jstree-anchor.jstree-clicked").length) {
+                $(".folder-modal .jstree-anchor.jstree-clicked").trigger("focus");
+            }
         });
 
         $(document).on("click", ".folder-popup-form", function (e) {
             $(".folder-popup-form").hide();
+            if($(".folder-modal .jstree-node[id='"+fileFolderID+"']").length) {
+                $(".folder-modal .jstree-node[id='"+fileFolderID+"'] > a.jstree-anchor").trigger("focus");
+            } else if($(".folder-modal .jstree-anchor.jstree-clicked").length) {
+                $(".folder-modal .jstree-anchor.jstree-clicked").trigger("focus");
+            }
         });
 
         $(document).on("click", ".popup-form-content", function (e) {
@@ -851,11 +878,16 @@
                                 folderPropertyArray[folderPostId]['slug'] = result.slug;
                             }
                             $(".folder-popup-form").hide();
-                            $(".folder-popup-form").hide();
                             $(".folder-popup-form").removeClass("disabled");
                             ajaxAnimation();
                             if($("#media-attachment-taxonomy-filter").length) {
                                 resetMediaData(0)
+                            }
+
+                            if($(".folder-modal .jstree-node[id='"+result.id+"']").length) {
+                                $(".folder-modal .jstree-node[id='"+result.id+"'] > a.jstree-anchor").trigger("focus");
+                            } else if($(".folder-modal .jstree-anchor.jstree-clicked").length) {
+                                $(".folder-modal .jstree-anchor.jstree-clicked").trigger("focus");
                             }
                         } else {
                             $(".folder-popup-form").hide();
@@ -899,6 +931,12 @@
                             if(folderPostId != null) {
                                 folderPropertyArray[folderPostId]['is_high'] = 0;
                             }
+                        }
+
+                        if($(".folder-modal .jstree-node[id='"+res.id+"']").length) {
+                            $(".folder-modal .jstree-node[id='"+res.id+"'] > a.jstree-anchor").trigger("focus");
+                        } else if($(".folder-modal .jstree-anchor.jstree-clicked").length) {
+                            $(".folder-modal .jstree-anchor.jstree-clicked").trigger("focus");
                         }
                         ajaxAnimation();
                     } else {
@@ -945,6 +983,7 @@
                     success: function (res) {
                         res = $.parseJSON(res);
                         if (res.status == '1') {
+                            var nextNode = getParentNodeInfo(fileFolderID);
                             $('#js-tree-menu').jstree().delete_node(fileFolderID);
                             isKeyActive = parseInt(res.is_key_active);
                             n_o_file = parseInt(res.folders);
@@ -959,6 +998,11 @@
                             if (activeRecordID == fileFolderID) {
                                 $(".header-posts").trigger("click");
                             }
+                            if(nextNode != 0 && $("#"+nextNode+"_anchor").length) {
+                                $("#"+nextNode+"_anchor").trigger("click");
+                            } else {
+                                $(".header-posts").trigger("click");
+                            }
                         } else {
                             $(".folder-popup-form").hide();
                             $(".folder-popup-form").removeClass("disabled");
@@ -969,6 +1013,17 @@
                 });
             }
         });
+
+        function getParentNodeInfo(nodeID) {
+            if($(".jstree-node[id='"+nodeID+"']").next().length) {
+                return $(".jstree-node[id='"+nodeID+"']").next().attr("id");
+            } else if($(".jstree-node[id='"+nodeID+"']").prev().length) {
+                return $(".jstree-node[id='"+nodeID+"']").prev().attr("id");
+            } else if($(".jstree-node[id='"+nodeID+"']").parent().parent().hasClass("jstree-node")) {
+                return $(".jstree-node[id='"+nodeID+"']").parent().parent().attr("id");
+            }
+            return 0;
+        }
 
         $(document).on("click", "#sort-order-list", function(e){
             e.stopPropagation();
@@ -1009,6 +1064,10 @@
                             $("#error-folder-popup-message").html(res.message);
                             $("#error-folder-popup").show();
                             window.location.reload(true);
+
+                            if($(".folder-modal .jstree-anchor.jstree-clicked").length) {
+                                $(".folder-modal .jstree-anchor.jstree-clicked").trigger("focus");
+                            }
                         }
                     }
                 });
@@ -1566,6 +1625,17 @@
         }).bind("ready.jstree", (function() {
             setFolderCount();
             setDragAndDropElements();
+            if(folders_media_options.default_folder != "" && folders_media_options.default_folder != 0) {
+                var defaultFolder = getFolderIDFromSlug(folders_media_options.default_folder);
+                if(defaultFolder != "") {
+                    if($(".folder-modal #media-attachment-taxonomy-filter option[value='"+defaultFolder+"']").length) {
+                        $(".folder-modal #media-attachment-taxonomy-filter").val(defaultFolder).trigger("change");
+                        $(".folder-modal #js-tree-menu .jstree-clicked").removeClass("jstree-clicked");
+                        $('.folder-modal #js-tree-menu').jstree('select_node', defaultFolder);
+                        $(".folder-modal #js-tree-menu .jstree-node[id='"+defaultFolder+"'] > a").addClass("jstree-clicked");
+                    }
+                }
+            }
         })).bind("after_open.jstree", (function() {
             //data.text is the new name:
             setDragAndDropElements();
@@ -1683,9 +1753,12 @@
 
     function setFolderCount() {
         $("#js-tree-menu .jstree-node").each(function(){
-            var folderCount = parseInt($(this).data("count"));
-            if(folderCount > 0) {
-                $(".jstree-node[id='" + $(this).attr("id") + "'] > a span.premio-folder-count").text(folderCount);
+            var folderCount = ($(this).data("count") && $(this).data("count") != "")?$(this).data("count"):0;
+            $(".jstree-node[id='" + $(this).attr("id") + "'] > a span.premio-folder-count").text(folderCount);
+        });
+        $("span.premio-folder-count").each(function(){
+            if($(this).text() == "") {
+                $(this).text(0);
             }
         });
 
@@ -1735,7 +1808,7 @@
         $("#js-tree-menu li.jstree-node.is-sticky").each(function(){
             var folder_ID = $(this).attr("id");
             var folderName = $.trim($("#js-tree-menu").jstree(true).get_node(folder_ID).text);
-            var folderCount = $("#"+folder_ID+"_anchor .premio-folder-count").text();
+            var folderCount = $("li.jstree-node[id='"+folder_ID+"'] > a span.premio-folder-count").text();
             var hasStar = $("li.jstree-node[id='"+folder_ID+"']").hasClass("is-high")?" is-high ":"";
             stickyMenuHtml += "<li data-folder-id='"+folder_ID+"' class='sticky-fldr "+hasStar+" sticky-folder-"+folder_ID+"'>" +
                 "<a href='javascript:;'>" +
@@ -1743,7 +1816,7 @@
                 "<span class='folder-actions'>" +
                 "<span class='update-inline-record'><i class='pfolder-edit-folder'></i></span>" +
                 "<span class='star-icon'><i class='pfolder-star'></i></span>" +
-                "<span class='premio-folder-count'></span>" +
+                "<span class='premio-folder-count'>"+folderCount+"</span>" +
                 "</span>"+
                 "</a>" +
                 "</li>";
@@ -1759,8 +1832,6 @@
         } else {
             $(".sticky-folders").removeClass("active");
         }
-
-        setCustomScrollForFolder();
     }
 
     function setCustomScrollForFolder() {
@@ -1959,11 +2030,14 @@
         $("span.premio-folder-count").text("");
         $(".folder-count").text("");
         for (i = 0; i < foldersArray.length; i++) {
-            if(parseInt(foldersArray[i].trash_count) != 0) {
-                $(".jstree-node[id='" + foldersArray[i].term_id + "'] > a.jstree-anchor span.premio-folder-count").text(foldersArray[i].trash_count);
-                $(".sticky-folder-"+foldersArray[i].term_id+" .premio-folder-count").text(foldersArray[i].trash_count);
-            }
+            $(".jstree-node[id='" + foldersArray[i].term_id + "'] > a.jstree-anchor span.premio-folder-count").text(foldersArray[i].trash_count);
+            $(".sticky-folder-"+foldersArray[i].term_id+" .premio-folder-count").text(foldersArray[i].trash_count);
         }
+        $("span.premio-folder-count").each(function(){
+            if($(this).text() == "") {
+                $(this).text(0);
+            }
+        });
 
         if(activeRecordID != "") {
             $("#wcp_folder_"+activeRecordID).addClass("active-item");
@@ -2134,4 +2208,206 @@
         }, 2000);
         setDragAndDropElements();
     }
+
+    $(document).ready(function(){
+        if(folders_media_options.use_shortcuts == "yes") {
+            $(document).on("click", ".view-shortcodes", function (e) {
+                e.preventDefault();
+                $("#keyboard-shortcut").show();
+            });
+
+            $(document).keydown(function (e) {
+                var isCtrlPressed = (e.ctrlKey || e.metaKey) ? true : false;
+
+                // Shift + N : New Folder
+                if(!($("input").is(":focus") || $("textarea").is(":focus"))) {
+                    if (e.shiftKey && (e.keyCode == 78 || e.which == 78) && !$(".block-editor-block-list__block").is(":focus") && $(".folder-modal").length) {
+                        e.preventDefault();
+                        $("#add-new-folder").trigger("click");
+                    }
+                }
+                // F2 Rename Folder
+                if(e.keyCode == 113 || e.which == 113) {
+                    if($(".folder-modal #js-tree-menu .jstree-anchor").is(":focus")) {
+                        fileFolderID = $(".folder-modal #js-tree-menu .jstree-anchor:focus").closest("li.jstree-node").attr("id");
+                        console.log("fileFolderID: " + fileFolderID);
+                        updateFolder();
+                        $(".dynamic-menu").remove();
+                    }
+                }
+
+                // Ctrl+C/CMD+C: Copy Folder
+                if(isCtrlPressed && (e.keyCode == 67 || e.which == 67)) {
+                    if($(".folder-modal #js-tree-menu .jstree-anchor").is(":focus")) {
+                        isFolderCopy = $(".folder-modal #js-tree-menu .jstree-anchor:focus").closest("li.jstree-node").attr("id");
+                        CPCAction = "copy";
+                        $(".folders-undo-notification").removeClass("active");
+                        $("#copy-message").addClass("active");
+                        setTimeout(function () {
+                            $("#copy-message").removeClass("active");
+                        }, 5000);
+                        checkForCopyPaste();
+                    }
+                }
+
+                // Ctrl+X/CMD+X: Cut Folder
+                if(isCtrlPressed && (e.keyCode == 88 || e.which == 88)) {
+                    if($(".folder-modal #js-tree-menu .jstree-anchor").is(":focus")) {
+                        e.preventDefault();
+                        isFolderCopy = $(".folder-modal #js-tree-menu .jstree-anchor:focus").closest("li.jstree-node").attr("id");
+                        CPCAction = "cut";
+                        $(".folders-undo-notification").removeClass("active");
+                        $("#cut-message").addClass("active");
+                        setTimeout(function () {
+                            $("#cut-message").removeClass("active");
+                        }, 5000);
+                        checkForCopyPaste();
+                    }
+                }
+
+                // Ctrl+V: Paste Folder
+                if(isCtrlPressed && (e.keyCode == 86 || e.which == 86)) {
+                    if($(".folder-modal #js-tree-menu .jstree-anchor").is(":focus")) {
+                        e.preventDefault();
+                        activeRecordID = $(".folder-modal #js-tree-menu .jstree-anchor:focus").closest("li.jstree-node").attr("id");
+                        if(activeRecordID == "" || isNaN(activeRecordID)) {
+                            activeRecordID = 0;
+                        }
+                        if(isFolderCopy != 0 && isFolderCopy != "" && isFolderCopy != activeRecordID) {
+                            if(CPCAction == "cut") {
+                                lastParentID = $("#" + isFolderCopy).data("parent");
+                                lastCopiedFolder = isFolderCopy;
+                                lastFolderOrder = $("#" + isFolderCopy).index() + 1;
+                                if(activeRecordID != "" && activeRecordID != 0) {
+                                    $('#js-tree-menu').jstree("move_node", "#" + isFolderCopy, "#" + activeRecordID, 0);
+                                } else {
+                                    $('#js-tree-menu').jstree("move_node", "#" + isFolderCopy, "#", $("#js-tree-menu > ul > li.jstree-node").length);
+                                }
+                                $(".folders-undo-notification").removeClass("active");
+                                $("#paste-message").addClass("active");
+                                setTimeout(function () {
+                                    $("#paste-message").removeClass("active");
+                                }, 5000);
+                            } else {
+                                if(activeRecordID == "" || isNaN(activeRecordID)) {
+                                    activeRecordID = 0;
+                                }
+                                copyFolders(isFolderCopy, activeRecordID);
+                            }
+                            checkForCopyPaste();
+                            CPCAction = "";
+                            isFolderCopy = 0;
+                        }
+                    }
+                }
+
+                if(isCtrlPressed && (e.keyCode == 75 || e.which == 75)) {
+                    $("#keyboard-shortcut").show();
+                }
+
+                // ctrl + down
+                if(isCtrlPressed && (e.keyCode == 40 || e.which == 40)) {
+                    if($(".folder-modal #js-tree-menu .jstree-anchor").is(":focus")) {
+                        fileFolderID = $(".folder-modal #js-tree-menu .jstree-anchor:focus").closest("li.jstree-node").attr("id");
+                        var lastParent = parseInt($(".folder-modal #"+fileFolderID).data("parent"));
+                        var folderOrder = parseInt($(".folder-modal #"+fileFolderID).index())+1;
+                        var dataChild = parseInt($(".folder-modal #"+fileFolderID).data("child"));
+                        if(isNaN(lastParent)) {
+                            lastParent = ($(".folder-modal li#" + fileFolderID).parents("li.jstree-node").length)?$(".folder-modal li#" + fileFolderID).parents("li.jstree-node").data("folder"):0;
+                            dataChild = ($(".folder-modal li#" + fileFolderID).parents("li.jstree-node").length)?$(".folder-modal li#" + fileFolderID).parents("li.jstree-node").children():($(".folder-modal #js-tree-menu > ul > li").length);
+                        }
+                        if(lastParent == 0) {
+                            lastParent = "";
+                        }
+                        if(dataChild == folderOrder) {
+                            $('.folder-modal #js-tree-menu').jstree("move_node", "#"+fileFolderID, "#"+lastParent, 0);
+                        } else {
+                            $('.folder-modal #js-tree-menu').jstree("move_node", "#"+fileFolderID, "#"+lastParent, folderOrder+1);
+                        }
+                    }
+                }
+
+                // ctrl + down
+                if(isCtrlPressed && (e.keyCode == 38 || e.which == 38)) {
+                    if($(".folder-modal #js-tree-menu .jstree-anchor").is(":focus")) {
+                        fileFolderID = $(".folder-modal #js-tree-menu .jstree-anchor:focus").closest("li.jstree-node").attr("id");
+                        var lastParent = parseInt($(".folder-modal #" + fileFolderID).data("parent"));
+                        var folderOrder = parseInt($(".folder-modal #" + fileFolderID).index()) - 1;
+                        var dataChild = parseInt($(".folder-modal #" + fileFolderID).data("child"));
+                        if(isNaN(lastParent)) {
+                            folderOrder = parseInt($("#" + fileFolderID).index()) - 1;
+                            lastParent = ($(".folder-modal li#" + fileFolderID).parents("li.jstree-node").length)?$(".folder-modal li#" + fileFolderID).parents("li.jstree-node").data("folder"):0;
+                            dataChild = ($(".folder-modal li#" + fileFolderID).parents("li.jstree-node").length)?$(".folder-modal li#" + fileFolderID).parents("li.jstree-node").children():($(".folder-modal #js-tree-menu > ul > li").length);
+                        }
+                        if (lastParent == 0) {
+                            lastParent = "";
+                        }
+                        if (folderOrder == -1) {
+                            $('.folder-modal #js-tree-menu').jstree("move_node", "#" + fileFolderID, "#" + lastParent, dataChild);
+                        } else {
+                            $('.folder-modal #js-tree-menu').jstree("move_node", "#" + fileFolderID, "#" + lastParent, folderOrder);
+                        }
+                    }
+                }
+
+                // delete action
+                if((e.keyCode == 46 || e.which == 46) || (e.keyCode == 8 || e.which == 8)) {
+                    if($(".folder-modal #js-tree-menu .jstree-anchor").is(":focus")) {
+                        if(!$(".folder-modal #js-tree-menu .jstree-anchor:focus").closest("li.jstree-node").hasClass("is-locked")) {
+                            fileFolderID = $(".folder-modal #js-tree-menu .jstree-anchor:focus").closest("li.jstree-node").attr("id");
+                            removeFolderFromID(0);
+                            $(".dynamic-menu").remove();
+                            $(".active-menu").removeClass("active-menu");
+                        }
+                    }
+                }
+
+                // ctrl + down
+                if(isCtrlPressed && (e.keyCode == 40 || e.which == 40)) {
+                    if($(".folder-modal #js-tree-menu .jstree-anchor").is(":focus")) {
+                        fileFolderID = $(".folder-modal #js-tree-menu .jstree-anchor:focus").closest("li.jstree-node").attr("id");
+                        var lastParent = parseInt($("#"+fileFolderID).data("parent"));
+                        var folderOrder = parseInt($("#"+fileFolderID).index())+1;
+                        var dataChild = parseInt($("#"+fileFolderID).data("child"));
+                        if(lastParent == 0) {
+                            lastParent = "";
+                        }
+                        if(dataChild == folderOrder) {
+                            $('.folder-modal #js-tree-menu').jstree("move_node", "#"+fileFolderID, "#"+lastParent, 0);
+                        } else {
+                            $('.folder-modal #js-tree-menu').jstree("move_node", "#"+fileFolderID, "#"+lastParent, folderOrder+1);
+                        }
+                    }
+                }
+
+                // ctrl + down
+                if(isCtrlPressed && (e.keyCode == 38 || e.which == 38)) {
+                    if($(".folder-modal #js-tree-menu .jstree-anchor").is(":focus")) {
+                        fileFolderID = $(".folder-modal #js-tree-menu .jstree-anchor:focus").closest("li.jstree-node").attr("id");
+                        var lastParent = parseInt($("#"+fileFolderID).data("parent"));
+                        var folderOrder = parseInt($("#"+fileFolderID).index())-1;
+                        var dataChild = parseInt($("#"+fileFolderID).data("child"));
+                        if(lastParent == 0) {
+                            lastParent = "";
+                        }
+                        if(folderOrder == -1) {
+                            $('.folder-modal #js-tree-menu').jstree("move_node", "#"+fileFolderID, "#"+lastParent, dataChild);
+                        } else {
+                            $('.folder-modal #js-tree-menu').jstree("move_node", "#"+fileFolderID, "#"+lastParent, folderOrder);
+                        }
+                    }
+                }
+
+                // esc key
+                if(e.keyCode == 27 || e.which == 27) {
+                    $(".folder-popup-form").hide();
+                    if($(".jstree-node[id='"+fileFolderID+"']").length) {
+                        $(".jstree-node[id='"+fileFolderID+"'] > a.jstree-anchor").trigger("focus");
+                    } else if($("#js-tree-menu .jstree-anchor.jstree-clicked").length) {
+                        $("#js-tree-menu .jstree-anchor.jstree-clicked").trigger("focus");
+                    }
+                }
+            });
+        }
+    });
 }));

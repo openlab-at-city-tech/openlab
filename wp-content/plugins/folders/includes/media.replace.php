@@ -22,7 +22,7 @@ class folders_replace_media {
         if($this->is_enabled) {
 
             add_action('admin_menu', array($this, 'admin_menu'));
-
+//
             add_filter('media_row_actions', array($this, 'add_media_action'), 10, 2);
 
             add_action('add_meta_boxes', function () {
@@ -145,14 +145,14 @@ class folders_replace_media {
             </div>
             <script>
                 jQuery(document).ready(function(){
-                     jQuery("#media-success").addClass("active");
-                     setTimeout(function(){
-                         jQuery("#media-success").removeClass("active");
-                     }, 5000);
+                    jQuery("#media-success").addClass("active");
+                    setTimeout(function(){
+                        jQuery("#media-success").removeClass("active");
+                    }, 5000);
 
-                     jQuery(document).on("click", ".close-undo-box", function(){
-                         jQuery("#media-success").removeClass("active");
-                     });
+                    jQuery(document).on("click", ".close-undo-box", function(){
+                        jQuery("#media-success").removeClass("active");
+                    });
                 });
             </script>
         <?php }
@@ -392,6 +392,8 @@ class folders_replace_media {
                     return;
                 }
 
+                $replacement_option = isset($_REQUEST['replacement_option'])?$_REQUEST['replacement_option']:"replace_only_file";
+
                 $this->attachment_id = $attachment_id;
 
                 $file = $_FILES['new_media_file'];
@@ -399,80 +401,140 @@ class folders_replace_media {
                 $file_ext = explode(".", $file_name);
                 $file_ext = array_pop($file_ext);
 
-                if ($guid == $file_ext) {
-                    $this->mode = "replace-file";
-                }
-
                 if (wp_attachment_is('image', $attachment_id)) {
                     $this->is_old_image = 1;
                 }
                 $this->old_file_url = $attachment_url;
+                $this->old_image_meta = wp_get_attachment_metadata($attachment_id);
 
                 $new_file = $file['tmp_name'];
 
                 $file_parts = pathinfo($attachment_url);
 
-                $upload_dir = wp_upload_dir($attachment->post_date_gmt);
-                $this->current_upload_data = $upload_dir;
-                $upload_path = $upload_dir['path'];
+                $db_file_name = $file_parts['basename'];
+                $db_file_array = explode(".", $db_file_name);
+                array_pop($db_file_array);
+                $db_file_name = implode(".", $db_file_array).".";
+                $db_file_name .= $file_ext;
+
+                $wp_upload_path = wp_get_upload_dir();
+
+                $base_path = $old_path = $wp_upload_path['basedir'].DIRECTORY_SEPARATOR;
+                $baseurl = $old_url = $wp_upload_path['baseurl']."/";
+
+                $post_upload = "";
+
+                $wp_attached_file = get_post_meta($attachment_id, "_wp_attached_file", true);
+                if($wp_attached_file !== false) {
+                    $old_file_name = explode("/", $wp_attached_file);
+                    array_pop($old_file_name);
+
+                    if(count($old_file_name) > 0) {
+                        $old_path .= implode(DIRECTORY_SEPARATOR, $old_file_name);
+                        $old_url .= implode("/", $old_file_name);
+                    }
+
+                    if($replacement_option == "replace_file_with_name" && isset($_REQUEST['new_folder_option']) && $_REQUEST['new_folder_option'] && isset($_REQUEST['new_folder_path']) && !empty($_REQUEST['new_folder_path'])) {
+                        $baseurl .= $_REQUEST['new_folder_path'];
+                        $base_path .= str_replace("/", DIRECTORY_SEPARATOR, $_REQUEST['new_folder_path']);
+
+                        $post_upload = $_REQUEST['new_folder_path'];
+                    } else if(count($old_file_name) > 0) {
+                        $baseurl .= implode(DIRECTORY_SEPARATOR, $old_file_name);
+                        $base_path .= implode("/", $old_file_name);
+
+                        $post_upload = implode("/", $old_file_name);
+                    }
+                }
+
+                $upload_dir = array();
+                $upload_dir['path'] = $base_path;
+                $upload_dir['old_path'] = $old_path;
+                $upload_dir['url'] = $baseurl;
+                $upload_dir['old_url'] = $old_url;
 
                 $this->upload_dir = $upload_dir;
 
-                $this->old_file_path = $upload_dir['path'] . "/" . $file_parts['basename'];
+                $this->old_file_path = $old_path . "/" . $file_parts['basename'];
 
-                $this->old_image_meta = wp_get_attachment_metadata($attachment_id);
-                if (!is_dir($upload_path)) {
-                    mkdir($upload_path, 755, true);
+                if (!is_dir($base_path)) {
+                    mkdir($base_path, 755, true);
                 }
-                if (is_dir($upload_path)) {
-//                    $file_name = $this->checkForFileName($file['name'], $upload_path.DIRECTORY_SEPARATOR);
 
-                    $db_file_name = $file_parts['basename'];
-                    $db_file_array = explode(".", $db_file_name);
-                    array_pop($db_file_array);
-                    $db_file_name = implode(".", $db_file_array).".";
-                    $db_file_name .= $file_ext;
+                if (is_dir($base_path)) {
 
-                    $file_name = $db_file_name;
+                    $file_array = explode(".", $file['name']);
+                    $file_ext = array_pop($file_array);
+                    $new_file_name = sanitize_title(implode(".", $file_array)).".".$file_ext;
+                    if($replacement_option == "replace_only_file") {
+                        $new_file_name = $db_file_name;
+                    }
 
-                    $upload_file = $upload_path . DIRECTORY_SEPARATOR . $file_name;
-                    $status = move_uploaded_file($new_file, $upload_file);
+                    if(strtolower($new_file_name) != strtolower($file_parts['basename'])) {
+                        $new_file_name = $this->checkForFileName($new_file_name, $base_path . DIRECTORY_SEPARATOR);
+                    }
 
-                    $this->new_file_path = trim($upload_dir['path'], "/") . "/" . $file_name;
+                    $this->new_file_path = $base_path . DIRECTORY_SEPARATOR . $new_file_name;
 
-                    $this->new_file_url = trim($upload_dir['url'], "/")."/".$file_name;
+                    $status = move_uploaded_file($new_file, $this->new_file_path);
+
+                    $this->new_file_url = trim($baseurl, "/")."/".$new_file_name;
 
                     if ($status) {
+                        $old_file_path = str_replace(array("/",DIRECTORY_SEPARATOR), array("", ""), $this->old_file_path);
+                        $new_file_path = str_replace(array("/",DIRECTORY_SEPARATOR), array("", ""), $this->new_file_path);
+                        if($old_file_path != $new_file_path) {
+                            if(file_exists($this->old_file_path)) {
+                                @unlink($this->old_file_path);
+                            }
+                        }
 
-//                        if(file_exists($this->upload_dir['path'].DIRECTORY_SEPARATOR.$file_parts['basename'])) {
-//                            @unlink($this->upload_dir['path'].DIRECTORY_SEPARATOR.$file_parts['basename']);
-//                        }
-
-                        $this->removeThumbImages();
-
-                        update_attached_file($attachment->ID, $this->new_file_path);
+                        update_attached_file($attachment->ID, $this->new_file_url);
 
                         $update_array = array();
                         $update_array['ID'] = $attachment->ID;
-                        $update_array['post_title'] = $file_parts['filename'];
-                        $update_array['post_name'] = sanitize_title($file_parts['filename']);
-                        $update_array['guid'] = $this->new_file_path; //wp_get_attachment_url($this->post_id);
+                        $update_array['guid'] = $this->new_file_url; //wp_get_attachment_url($this->post_id);
                         $update_array['post_mime_type'] = $file['type'];
+
+                        $current_date = date("Y-m-d H:i:s");
+                        $current_date_gmt = date_i18n("Y-m-d H:i:s", strtotime($current_date));
+                        if(isset($_REQUEST['date_options']) && !empty($_REQUEST['date_options'])) {
+                            if($_REQUEST['date_options'] == "replace_date") {
+                                $update_array['post_date'] = $current_date;
+                                $update_array['post_date_gmt'] = $current_date_gmt;
+                            } else if($_REQUEST['date_options'] == "custom_date") {
+                                $custom_date = $_POST['custom_date'];
+                                $custom_hour = str_pad($_POST['custom_date_hour'],2,0, STR_PAD_LEFT);
+                                $custom_minute = str_pad($_POST['custom_date_min'], 2, 0, STR_PAD_LEFT);
+                                $custom_date = date("Y-m-d H:i:s", strtotime($custom_date." {$custom_hour}:{$custom_minute}"));
+                                if($custom_date !== false) {
+                                    $datetime  =  date("Y-m-d H:i:s", strtotime($custom_date));
+                                    $datetime_gmt = date_i18n("Y-m-d H:i:s", strtotime($datetime));
+                                    $update_array['post_date'] = $datetime;
+                                    $update_array['post_date_gmt'] = $datetime_gmt;
+                                }
+                            }
+                        }
+                        $update_array['post_modified'] = $current_date;
+                        $update_array['post_modified_gmt'] = $current_date_gmt;
                         $post_id = \wp_update_post($update_array, true);
 
+                        update_post_meta( $attachment_id, '_wp_attached_file', trim(trim($post_upload, "/")."/".$new_file_name ), "/");
+
                         // update post doesn't update GUID on updates.
-                        $wpdb->update($wpdb->posts, array('guid' => $this->new_file_path), array('ID' => $attachment->ID));
+                        $wpdb->update($wpdb->posts, array('guid' => $this->new_file_url), array('ID' => $attachment->ID));
+
+                        $this->removeThumbImages();
 
                         $metadata = wp_generate_attachment_metadata($attachment->ID, $this->new_file_path);
                         wp_update_attachment_metadata($attachment->ID, $metadata);
 
                         $this->new_image_meta = wp_get_attachment_metadata($attachment_id);
 
+//                        update_post_meta( $attachment_id, '_wp_attached_file', trim(trim($post_upload, "/")."/".$new_file_name ), "/");
+
                         $this->searchAndReplace();
-
-                        wp_redirect(admin_url("post.php?post=" . $attachment_id . "&action=edit&premio_message=success"));
-
-
+                        wp_redirect(admin_url("post.php?post=" . $attachment_id . "&action=edit&premio_message=success&image_update=1"));
                         exit;
                     } else {
                         wp_die("Error during uploading file");

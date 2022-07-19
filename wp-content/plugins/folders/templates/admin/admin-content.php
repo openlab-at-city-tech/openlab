@@ -158,10 +158,10 @@ if(!empty($post_type)) {
                         </div>
                         <div class="folder-separator"></div>
                         <div class="header-posts">
-                            <a href="javascript:;" class="all-posts <?php echo esc_attr($active_all_class) ?>"><?php esc_attr_e("All ".$title, 'folders'); ?> <span class="total-count"><?php echo $ttpsts ?></span></a>
+                            <a href="javascript:;" class="all-posts <?php echo esc_attr($active_all_class) ?>"><?php esc_attr_e("All ".$title, 'folders'); ?> <span class="total-count"><?php echo esc_attr($ttpsts) ?></span></a>
                         </div>
                         <div class="un-categorised-items <?php echo esc_attr($active) ?>">
-                            <a href="javascript:;" class="un-categorized-posts"><?php esc_attr_e("Unassigned ".$title, 'folders'); ?> <span class="total-count total-empty"><?php echo $ttemp ?></span> </a>
+                            <a href="javascript:;" class="un-categorized-posts"><?php esc_attr_e("Unassigned ".$title, 'folders'); ?> <span class="total-count total-empty"><?php echo esc_attr($ttemp) ?></span> </a>
                         </div>
                         <div class="folder-separator-2"></div>
                         <div class="folders-action-menu">
@@ -482,6 +482,73 @@ if(!empty($post_type)) {
         <div class="folders-undo-body" style="padding: 0">
             <a href="javascript:;" class="close-undo-box"><span></span></a>
             <div class="folders-undo-header" style="color: #014737; padding: 0"><?php esc_html_e("Action reversed successfully", "folders") ?></div>
+        </div>
+    </div>
+
+    <div class="folder-popup-form" id="keyboard-shortcut">
+        <div class="popup-form-content">
+            <div class="popup-content" style="position: relative;">
+                <div class="close-popup-button">
+                    <a class="" href="javascript:;"><span></span></a>
+                </div>
+                <div class="import-plugin-title" style="font-weight: bold; padding: 0 0 20px 0; font-size: 16px;"><?php esc_html_e("Keyboard shortcuts (Ctrl+K)", 'folders'); ?></div>
+                <div class="plugin-import-table">
+                    <table class="keyboard-shortcut">
+                        <tr>
+                            <th><?php esc_html_e("Create New Folder", "folders") ?></th>
+                            <td><span class="key-button">Shift</span><span class="plus-button">+</span><span class="key-button">N</span> </td>
+                        </tr>
+                        <tr>
+                            <th><?php esc_html_e("Rename Folder", "folders") ?></th>
+                            <td><span class="key-button">F2</span></td>
+                        </tr>
+                        <tr>
+                            <th><?php esc_html_e("Copy Folder", "folders") ?></th>
+                            <td><span class="key-button">Ctrl</span><span class="plus-button">+</span><span class="key-button">C</span> </td>
+                        </tr>
+                        <tr>
+                            <th><?php esc_html_e("Cut Folder", "folders") ?></th>
+                            <td><span class="key-button">Ctrl</span><span class="plus-button">+</span><span class="key-button">X</span> </td>
+                        </tr>
+                        <tr>
+                            <th><?php esc_html_e("Paste Folder", "folders") ?></th>
+                            <td><span class="key-button">Ctrl</span><span class="plus-button">+</span><span class="key-button">V</span> </td>
+                        </tr>
+                        <tr>
+                            <th><?php esc_html_e("Duplicate Folder", "folders") ?></th>
+                            <td><span class="key-button">Ctrl</span><span class="plus-button">+</span><span class="key-button">D</span> </td>
+                        </tr>
+                        <tr>
+                            <th><?php esc_html_e("Delete Folder", "folders") ?></th>
+                            <td><span class="key-button">Delete</span></td>
+                        </tr>
+                        <tr>
+                            <th><?php esc_html_e("Next Folder", "folders") ?></th>
+                            <td><span class="key-button"><span class="dashicons dashicons-arrow-down-alt"></span></span> </td>
+                        </tr>
+                        <tr>
+                            <th><?php esc_html_e("Previous Folder", "folders") ?></th>
+                            <td><span class="key-button"><span class="dashicons dashicons-arrow-up-alt"></span></span> </td>
+                        </tr>
+                        <tr>
+                            <th><?php esc_html_e("Expand Folder", "folders") ?></th>
+                            <td><span class="key-button"><span class="dashicons dashicons-arrow-right-alt"></span></span> </td>
+                        </tr>
+                        <tr>
+                            <th><?php esc_html_e("Collapse Folder", "folders") ?></th>
+                            <td><span class="key-button"><span class="dashicons dashicons-arrow-left-alt"></span></span> </td>
+                        </tr>
+                        <tr>
+                            <th><?php esc_html_e("Re-order folders to upwards", "folders") ?></th>
+                            <td><span class="key-button">Ctrl</span><span class="plus-button">+</span><span class="key-button"><span class="dashicons dashicons-arrow-up-alt"></span></span></td>
+                        </tr>
+                        <tr>
+                            <th><?php esc_html_e("Re-order folders to downwards", "folders") ?></th>
+                            <td><span class="key-button">Ctrl</span><span class="plus-button">+</span><span class="key-button"><span class="dashicons dashicons-arrow-down-alt"></span></span></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 </div>
