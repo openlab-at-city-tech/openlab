@@ -8,14 +8,15 @@ class Meow_WPMC_Core {
 	public $is_pro = false;
 	public $engine = null;
 	public $catch_timeout = true; // This will halt the plugin before reaching the PHP timeout.
-	private $regex_file = '/[A-Za-z0-9-_,.\(\)\s]+[.]{1}(MIMETYPES)/';
 	public $types = "jpg|jpeg|jpe|gif|png|tiff|bmp|csv|svg|pdf|xls|xlsx|doc|docx|odt|wpd|rtf|tiff|mp3|mp4|mov|wav|lua";
 	public $current_method = 'media';
-	private $refcache = array();
 	public $servername = null; // meowapps.com (site URL without http/https)
 	public $site_url = null; // https://meowapps.com
 	public $upload_path = null; // /www/wp-content/uploads (path to uploads)
 	public $upload_url = null; // wp-content/uploads (uploads without domain)
+
+	private $regex_file = '/[A-Za-z0-9-_,.\(\)\s]+[.]{1}(MIMETYPES)/';
+	private $refcache = array();
 	private $check_content = null;
 	private $debug_logs = null;
 	private $multilingual = false;
@@ -361,6 +362,14 @@ class Meow_WPMC_Core {
     	array_push( $results, $src );
 		}
 
+		// Sources: src
+		$audios = $dom->getElementsByTagName( 'source' );
+		foreach ( $audios as $audio ) {
+			//error_log($audio->getAttribute('src'));
+			$src = $this->clean_url( $audio->getAttribute('src') );
+    	array_push( $results, $src );
+		}
+
 		// Links, href
 		$urls = $dom->getElementsByTagName( 'a' );
 		foreach ( $urls as $url ) {
@@ -408,6 +417,9 @@ class Meow_WPMC_Core {
 	// Parse a meta, visit all the arrays, look for the attributes, fill $ids and $urls arrays
 	// If rawMode is enabled, it will not check if the value is an ID or an URL, it will just returns it in URLs
 	function get_from_meta( $meta, $lookFor, &$ids, &$urls, $rawMode = false ) {
+		if ( !is_array( $meta ) && !is_object( $meta) ) {
+			return;
+		}
 		foreach ( $meta as $key => $value ) {
 			if ( is_object( $value ) || is_array( $value ) )
 				$this->get_from_meta( $value, $lookFor, $ids, $urls, $rawMode );
@@ -620,7 +632,7 @@ class Meow_WPMC_Core {
 					error_log( "Media Cleaner: Could not recover $path." );
 				}
 			}
-			if ( !wp_untrash_post( $issue->postId ) ) {
+			if ( !wp_update_post( array( 'ID' => $issue->postId, 'post_type' => 'attachment' ) ) ) {
 				$this->log( "🚫 Failed to Untrash Post {$issue->postId} (but deleted it from Cleaner DB)." );
 				error_log( "Media Cleaner: Failed to Untrash Post {$issue->postId} (but deleted it from Cleaner DB)." );
 				return false;
@@ -713,13 +725,14 @@ class Meow_WPMC_Core {
 		$regex = "^(.*)(\\s\\(\\+.*)$";
 		$issue->path = preg_replace( '/' . $regex . '/i', '$1', $issue->path ); // remove " (+ 6 files)" from path
 
+		// Commented on 2022/03/15: This is probably not needed, and slows down deletion
 		// Make sure there isn't a media DB entry
-		if ( $issue->type == 0 ) {
-			$attachmentid = $this->find_media_id_from_file( $issue->path, true );
-			if ( $attachmentid ) {
-				$this->log( "🚫 Issue listed as filesystem but Media {$attachmentid} exists." );
-			}
-		}
+		// if ( $issue->type == 0 ) {
+		// 	$attachmentid = $this->find_media_id_from_file( $issue->path, true );
+		// 	if ( $attachmentid ) {
+		// 		$this->log( "🚫 Issue listed as filesystem but Media {$attachmentid} exists." );
+		// 	}
+		// }
 
 		if ( $issue->type == 0 ) {
 
@@ -743,7 +756,7 @@ class Meow_WPMC_Core {
 		}
 
 		if ( $issue->type == 1 ) {
-			if ( $issue->deleted == 0 && MEDIA_TRASH ) {
+			if ( $issue->deleted == 0 ) {
 				// Move Media to trash
 				// Let's copy the images to the trash so that it can be recovered.
 				$paths = $this->get_paths_from_attachment( $issue->postId );
@@ -753,16 +766,15 @@ class Meow_WPMC_Core {
 						error_log( "Media Cleaner: Could not trash $path." );
 					}
 				}
-				wp_delete_attachment( $issue->postId, false );
+				wp_update_post( array( 'ID' => $issue->postId, 'post_type' => 'wmpc-trash' ) );
 				$wpdb->query( $wpdb->prepare( "UPDATE $table_name SET deleted = 1, ignored = 0 WHERE id = %d", $id ) );
 				return true;
 			}
 			else {
 				// Trash Media definitely by recovering it (to be like a normal Media) and remove it through the
 				// standard WordPress workflow
-				if ( MEDIA_TRASH ) {
-					$this->recover( $id );
-				}
+				$this->recover( $id );
+				wp_update_post( array( 'ID' => $issue->postId, 'post_type' => 'attachment' ) );
 				wp_delete_attachment( $issue->postId, true );
 				$wpdb->query( $wpdb->prepare( "DELETE FROM $table_name WHERE id = %d", $id ) );
 				return true;

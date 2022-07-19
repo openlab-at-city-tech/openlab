@@ -16,11 +16,6 @@ class Meow_WPMC_Rest
 	function rest_api_init() {
 		try {
 			// SETTINGS
-			register_rest_route( $this->namespace, '/enable_trash_media', array(
-				'methods' => 'POST',
-				'permission_callback' => array( $this->core, 'can_access_settings' ),
-				'callback' => array( $this, 'rest_enable_trash_media' )
-			) );
 			register_rest_route( $this->namespace, '/update_option', array(
 				'methods' => 'POST',
 				'permission_callback' => array( $this->core, 'can_access_features' ),
@@ -350,89 +345,11 @@ class Meow_WPMC_Rest
 		return new WP_REST_Response( [ 'success' => true ], 200 );
 	}
 
-	function rest_enable_trash_media() {
-		$is_defined = defined( 'MEDIA_TRASH' );
-		if ( $is_defined && MEDIA_TRASH ) {
-			return new WP_REST_Response([ 'success' => false, 'message' => 'Already been set.' ], 200 );
-		}
-
-		try {
-			$conf = ABSPATH . 'wp-config.php';
-			$stream = fopen( $conf, 'r+' );
-			if ( $stream === false )  {
-				return new WP_REST_Response([ 'success' => false, 'message' => 'Failed to open the config file.' ], 200 );
-			}
-
-			try {
-				if ( !flock( $stream, LOCK_EX ) ) {
-					return new WP_REST_Response([ 'success' => false, 'message' => 'Failed to lock the config file.' ], 200 );
-				}
-				$stat = fstat( $stream );
-
-				/* Find out the ideal position to write on */
-				$found = false;
-				$patterns = array (
-					array (
-						'regex' => '^\/\*\s*' . preg_quote( "That's all, stop editing!" ) . '.*?\s*\*\/',
-						'where' => 'above'
-					)
-				);
-				$current = 0;
-				while ( !feof( $stream ) ) {
-					$line = fgets( $stream ); // Read line by line
-					if ( $line === false ) break; // No more lines
-					$prev = $current; // Previous position
-					$current = ftell( $stream ); // Current position
-					foreach ( $patterns as $item ) {
-						if ( !preg_match( '/'.$item['regex'].'/', trim( $line ) ) ) { 
-							continue;
-						}
-						$found = true;
-						if ( $item['where'] == 'above' ) {
-							fseek( $stream, $prev );
-							$current = $prev;
-						}
-						break 2;
-					}
-				}
-
-				/* Check if the position is found */
-				if ( !$found ) {
-					return new WP_REST_Response([ 'success' => false, 'message' => 'Cannot determine the position.' ], 200 );
-				}
-
-				/* Write the constant definition line */
-				$new = "define( 'MEDIA_TRASH', true );" . PHP_EOL;
-				$rest = fread( $stream, $stat['size'] - $current );
-				fseek( $stream, $current );
-				$written = fwrite( $stream, $new . $rest );
-
-				/* All done */
-				if ( $written === false ) {
-					return new WP_REST_Response([ 'success' => false, 'message' => 'Failed to write.' ], 200 );
-				}
-				fclose( $stream );
-			} 
-			catch ( Exception $e ) {
-				fclose( $stream );
-				return new WP_REST_Response([ 'success' => false, 'message' => $e->getMessage() ], 200 );
-			}
-		} 
-		catch ( Exception $e ) {
-			$result['data']['message'] = $e->getMessage();
-			$result['data']['code'] = $e->getCode();
-			return new WP_REST_Response([ 'success' => false, 'message' => $e->getMessage() ], 200 );
-		}
-
-		return new WP_REST_Response([ 'success' => true ], 200 );
-	}
-
 	function rest_all_settings() {
 		return new WP_REST_Response( [
 			'success' => true,
 			'data' => array_merge( $this->admin->get_all_options(), [
-				'incompatible_plugins' => !class_exists( 'MeowPro_WPMC_Core' ) ? Meow_WPMC_Support::get_issues() : [],
-				'media_trash' => MEDIA_TRASH,
+				'incompatible_plugins' => !class_exists( 'MeowPro_WPMC_Core' ) ? Meow_WPMC_Support::get_issues() : []
 			])
 		], 200 );
 	}
@@ -546,9 +463,25 @@ class Meow_WPMC_Rest
 				$attachment_src_large = wp_get_attachment_image_src( $entry->postId, 'large' );
 				$thumbnail = empty( $attachment_src ) ? null : $attachment_src[0];
 				$image = empty( $attachment_src_large ) ? null : $attachment_src_large[0];
+				// This was working when the Post Type" was attachment"
 				if ( $filterBy == 'trash' && !empty( $thumbnail ) ) {
 					$new_url = $this->core->clean_url( $thumbnail );
 					$thumbnail = htmlspecialchars( trailingslashit( $base ) . $new_url, ENT_QUOTES );
+				}
+				if ( $filterBy == 'trash' && empty( $thumbnail ) ) {
+					$file = get_post_meta( $entry->postId, '_wp_attached_file', true );
+					$featured_image = wp_get_attachment_metadata( $entry->postId );
+					$thumbnail = "";
+					$image = htmlspecialchars( trailingslashit( $base ) . $file, ENT_QUOTES );
+					if ( isset( $featured_image['sizes']['thumbnail']['file'] ) ) {
+						$path = pathinfo( $file );
+						$thumbnail = $featured_image['sizes']['thumbnail']['file'];
+						$thumbnail = htmlspecialchars( trailingslashit( $base ) .
+							trailingslashit( $path['dirname'] ) . $thumbnail, ENT_QUOTES );
+					}
+					else {
+						$thumbnail = $image;
+					}
 				}
 				$entry->thumbnail_url = $thumbnail;
 				$entry->image_url = $image;
