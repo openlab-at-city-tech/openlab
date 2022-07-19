@@ -2,16 +2,17 @@
 
 	Theme Name: Hamilton
     Text Domain: hamilton
-	Version: 2.0.7
+	Version: 2.1.2
 	Description: Hamilton is a clean WordPress portfolio theme for creatives. It displays posts in a beautiful image grid that can be set to either two or three columns, which makes it a perfect fit for photographers, illustrators or graphic designers looking for a theme for their portfolio. It also features Block Editor/Gutenberg support, a dark mode, custom background color support, a resume page template, responsive design, Jetpack infinite scroll support, editor styling, and much more. Demo: https://andersnoren.se/themes/hamilton/
 	Tags: blog, two-columns, three-columns, custom-menu, featured-images, threaded-comments, translation-ready, grid-layout, custom-background, custom-logo, editor-style, sticky-post, theme-options, portfolio, photography, block-styles, wide-blocks
 	Author: Anders Norén
-	Author URI: https://www.andersnoren.se
+	Author URI: https://andersnoren.se
 	License: GNU General Public License version 2.0
 	License URI: http://www.gnu.org/licenses/gpl-2.0.html
-	Theme URI: https://www.andersnoren.se/teman/hamilton-wordpress-theme/
+	Theme URI: https://andersnoren.se/teman/hamilton-wordpress-theme/
 	Requires at least: 4.5
-	Tested up to: 5.4.1
+	Requires PHP: 5.4
+	Tested up to: 6.0
 	
 	All files, unless otherwise stated, are released under the GNU General Public License
 	version 2.0 (http://www.gnu.org/licenses/gpl-2.0.html)
