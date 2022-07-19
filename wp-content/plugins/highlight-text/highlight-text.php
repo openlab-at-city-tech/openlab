@@ -3,8 +3,8 @@
  * Plugin Name:       Highlight Text
  * Plugin URI:        https://github.com/Mamaduka/highlight
  * Description:       Text highligher for the Block Editor
- * Version:           1.1.0
- * Requires at least: 5.5
+ * Version:           1.2.0
+ * Requires at least: 5.7
  * Requires PHP:      5.6
  * Author:            George Mamadashvili
  * Author URI:        https://mamaduka.com/
