@@ -58,13 +58,6 @@
         image: plugin_url + "/igw_button.png",
       });
 
-      editor.on("SaveContent", function (event) {
-        if ($("body").hasClass("block-editor-page")) {
-          handle_shortcode(event, "[ngg_images ");
-          handle_shortcode(event, "[ngg ");
-        }
-      });
-
       /**
        * Listen for click events to our placeholder
        */

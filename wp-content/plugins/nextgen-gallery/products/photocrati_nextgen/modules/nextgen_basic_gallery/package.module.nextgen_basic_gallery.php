@@ -298,7 +298,6 @@ class A_NextGen_Basic_Slideshow_Controller extends Mixin
         wp_enqueue_style('ngg_slick_slideshow_style', $this->get_static_url('photocrati-nextgen_basic_gallery#slideshow/slick/slick.css'), array(), NGG_SCRIPT_VERSION);
         wp_enqueue_style('ngg_slick_slideshow_theme', $this->get_static_url('photocrati-nextgen_basic_gallery#slideshow/slick/slick-theme.css'), array(), NGG_SCRIPT_VERSION);
         $this->call_parent('enqueue_frontend_resources', $displayed_gallery);
-        $this->enqueue_ngg_styles();
     }
     /**
      * Provides the url of the JavaScript library required for
@@ -550,7 +549,7 @@ class A_NextGen_Basic_Thumbnails_Controller extends Mixin
         if ($images) {
             // Create pagination
             if ($display_settings['images_per_page'] && !$display_settings['disable_pagination']) {
-                $pagination_result = $this->object->create_pagination($current_page, $total, $display_settings['images_per_page'], urldecode($this->object->param('ajax_pagination_referrer')));
+                $pagination_result = $this->object->create_pagination($current_page, $total, $display_settings['images_per_page'], urldecode($this->object->param('ajax_pagination_referrer') ?: ''));
                 $this->object->remove_param('ajax_pagination_referrer');
                 $pagination_prev = $pagination_result['prev'];
                 $pagination_next = $pagination_result['next'];
@@ -648,7 +647,6 @@ class A_NextGen_Basic_Thumbnails_Controller extends Mixin
             wp_enqueue_script('nextgen-basic-thumbnails-ajax-pagination', $this->object->get_static_url('photocrati-nextgen_basic_gallery#thumbnails/ajax_pagination.js'), array(), NGG_SCRIPT_VERSION);
         }
         wp_enqueue_style('nextgen_pagination_style', $this->get_static_url('photocrati-nextgen_pagination#style.css'), array(), NGG_SCRIPT_VERSION);
-        $this->enqueue_ngg_styles();
     }
     /**
      * Provides the url of the JavaScript library required for

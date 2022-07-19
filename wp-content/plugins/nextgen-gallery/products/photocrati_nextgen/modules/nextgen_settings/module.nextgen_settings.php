@@ -18,7 +18,7 @@ class M_NextGen_Settings extends C_Base_Module
 			'photocrati-nextgen_settings',
 			'NextGEN Gallery Settings',
 			'Provides central management for NextGEN Gallery settings',
-			'3.10',
+			'3.19',
 			'https://www.imagely.com/wordpress-gallery-plugin/nextgen-gallery/',
 			'Imagely',
 			'https://www.imagely.com'
@@ -45,13 +45,13 @@ class C_NextGen_Settings_Installer
 
 	function __construct()
 	{
+	    $existing_options = get_option('ngg_options', []);
+
 		$this->blog_settings = C_NextGen_Settings::get_instance();
 		$this->site_settings = C_NextGen_Global_Settings::get_instance();
 
 		$this->_global_settings = apply_filters('ngg_default_global_settings', [
             'gallerypath' => implode(DIRECTORY_SEPARATOR, array('wp-content', 'uploads', 'sites', '%BLOG_ID%', 'nggallery')) . DIRECTORY_SEPARATOR,
-			'wpmuCSSfile' => 'nggallery.css',
-			'wpmuStyle'   => FALSE,
 			'wpmuRoles'   => FALSE,
 			'wpmuImportFolder' => FALSE,
 			'wpmuZipUpload'    => FALSE,
@@ -128,12 +128,8 @@ class C_NextGen_Settings_Installer
 			'irHeight'     => 500,
 			'irRotatetime' => 5,
 
-			// CSS Style
-			'activateCSS' => 1, // activate the CSS file
-			'CSSfile'     => 'nggallery.css',     // set default css filename
-			'always_enable_frontend_logic' => FALSE,
-
-            // Misc //
+            // Misc
+            'dynamic_image_filename_separator_use_dash' => !isset($existing_options['gallerypath']) ? TRUE : FALSE,
 
             // It is known that WPEngine disables 'order by rand()' by default, but exposes it as an option to users
             'use_alternate_random_method' => (function_exists('is_wpe') && is_wpe()) ? TRUE : FALSE,

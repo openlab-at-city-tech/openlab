@@ -92,7 +92,6 @@ class A_NextGen_Basic_Tagcloud_Controller extends Mixin
     {
         $this->call_parent('enqueue_frontend_resources', $displayed_gallery);
         wp_enqueue_style('photocrati-nextgen_basic_tagcloud-style', $this->get_static_url('photocrati-nextgen_basic_tagcloud#nextgen_basic_tagcloud.css'), array(), NGG_SCRIPT_VERSION);
-        $this->enqueue_ngg_styles();
     }
 }
 /**

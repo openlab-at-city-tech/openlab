@@ -4,6 +4,11 @@
  * ----------------------------------------------------------------------------
  */
 
+@font-face {
+    font-family: 'Lato';
+    src: url('../../nextgen_admin/static/Lato-Regular.ttf') format('truetype')
+}
+
 /* Customize the overall block */
 
 div[data-type="imagely/nextgen-gallery"] {

@@ -1,16 +1,29 @@
+<?php
+/**
+ * @var C_Displayed_Gallery $displayed_gallery
+ * @var array $galleries
+ * @var bool $open_gallery_in_lightbox
+ * @var string $pagination
+ */
+?>
 <?php $this->start_element('nextgen_gallery.gallery_container', 'container', $displayed_gallery); ?>
 <div class="ngg-albumoverview default-view">
     <?php
     foreach ($galleries as $gallery) {
-        if ($open_gallery_in_lightbox && $gallery->entity_type == 'gallery') {
+        if ($open_gallery_in_lightbox && $gallery->entity_type == 'gallery')
+        {
             $anchor = $gallery->displayed_gallery->effect_code . "
-                      href='" . nextgen_esc_url($gallery->pagelink) . "'
-                      data-src='" . esc_attr($gallery->previewpic_fullsized_url) . "'
-                      data-fullsize='" . esc_attr($gallery->previewpic_fullsized_url) . "'
-                      data-thumbnail='" . esc_attr($gallery->previewurl) . "'
-                      data-title='" . esc_attr($gallery->previewpic_image->alttext) . "'
-                      data-description='" . esc_attr(stripslashes($gallery->previewpic_image->description)) . "'
-                      data-image-id='" . esc_attr($gallery->previewpic) . "'";
+                      href='" . nextgen_esc_url($gallery->pagelink) . "'";
+
+            if (!isset($gallery->no_previewpic))
+            {
+                $anchor .= "data-src='"         . esc_attr($gallery->previewpic_fullsized_url) . "'
+                            data-fullsize='"    . esc_attr($gallery->previewpic_fullsized_url) . "'
+                            data-thumbnail='"   . esc_attr($gallery->previewurl) . "'
+                            data-title='"       . esc_attr($gallery->previewpic_image->alttext) . "'
+                            data-description='" . esc_attr(stripslashes($gallery->previewpic_image->description)) . "'
+                            data-image-id='"    . esc_attr($gallery->previewpic) . "'";
+            }
         } else {
             $anchor = "title='" . esc_attr($gallery->title) . "'
                        href='" . nextgen_esc_url($gallery->pagelink) . "'";
@@ -20,11 +33,13 @@
             <div class="ngg-album-compactbox">
                 <div class="ngg-album-link">
                     <?php $this->start_element('nextgen_gallery.album_gallery', 'item', $gallery); ?>
-                    <a <?php echo $anchor; ?>>
-                        <img class="Thumb"
-                             alt="<?php echo esc_attr($gallery->title); ?>"
-                             src="<?php echo nextgen_esc_url($gallery->previewurl); ?>"/>
-                    </a>
+                    <?php if (!isset($gallery->no_previewpic)) { ?>
+                        <a <?php echo $anchor; ?>>
+                            <img class="Thumb"
+                                 alt="<?php echo esc_attr($gallery->title); ?>"
+                                 src="<?php echo nextgen_esc_url($gallery->previewurl); ?>"/>
+                        </a>
+                    <?php } ?>
                     <?php $this->end_element(); ?>
                 </div>
             </div>

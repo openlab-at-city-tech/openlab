@@ -56,7 +56,6 @@ class M_Ajax extends C_Base_Module
 		if (isset($_REQUEST[NGG_AJAX_SLUG])) {
 			$controller = C_Ajax_Controller::get_instance();
 			$controller->index_action();
-            // E_Clean_Exit may cause a warning to be appended to our response, spoiling any JSON sent
             exit;
 		}
 	}

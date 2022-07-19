@@ -337,7 +337,7 @@ class A_Miscellaneous_Form extends Mixin
     }
     function render()
     {
-        return $this->object->render_partial('photocrati-nextgen_other_options#misc_tab', array('mediarss_activated' => C_NextGen_Settings::get_instance()->useMediaRSS, 'mediarss_activated_label' => __('Add MediaRSS link?', 'nggallery'), 'mediarss_activated_help' => __('When enabled, adds a MediaRSS link to your header. Third-party web services can use this to publish your galleries', 'nggallery'), 'mediarss_activated_no' => __('No'), 'mediarss_activated_yes' => __('Yes'), 'galleries_in_feeds' => C_NextGen_Settings::get_instance()->galleries_in_feeds, 'galleries_in_feeds_label' => __('Display galleries in feeds', 'nggallery'), 'galleries_in_feeds_help' => __('NextGEN hides its gallery displays in feeds other than MediaRSS. This enables image galleries in feeds.', 'nggallery'), 'galleries_in_feeds_no' => __('No'), 'galleries_in_feeds_yes' => __('Yes'), 'cache_label' => __('Clear image cache', 'nggallery'), 'cache_confirmation' => __("Completely clear the NextGEN cache of all image modifications?\n\nChoose [Cancel] to Stop, [OK] to proceed.", 'nggallery'), 'update_legacy_featured_images_field' => $this->object->render_partial('photocrati-nextgen_other_options#update_legacy_featured_images_field', ['i18n' => ['label' => __('Update legacy page featured images', 'nggallery'), 'confirmation' => __('Continue? This will copy all NextGen 1.x page featured images into the media library.', 'nggallery'), 'tooltip' => __('WordPress 5.4 is incompatible with NextGen 1.x page featured images and they must be updated in a bulk process to correct them. This button will launch a background process (with a progress bar) that imports each NextGen image into the Media Library. This process can be resumed if you close the popup window or this browser window.', 'nggallery'), 'header' => __('Updating legacy page featured images', 'nggallery'), 'no_images_found' => __('No legacy page featured images were found.', 'nggallery'), 'operation_finished' => __('Operation complete. Legacy featured images have been corrected.', 'nggallery')]], TRUE), 'slug_field' => $this->_render_text_field((object) array('name' => 'misc_settings'), 'router_param_slug', __('Permalink slug', 'nggallery'), $this->object->get_model()->get('router_param_slug', 'nggallery')), 'maximum_entity_count_field' => $this->_render_number_field((object) array('name' => 'misc_settings'), 'maximum_entity_count', __('Maximum image count', 'nggallery'), $this->object->get_model()->maximum_entity_count, __('This is the maximum limit of images that NextGEN will restrict itself to querying', 'nggallery') . " \n " . __('Note: This limit will not apply to slideshow widgets or random galleries if/when those galleries specify their own image limits', 'nggallery'), FALSE, '', 1), 'random_widget_cache_ttl_field' => $this->_render_number_field((object) array('name' => 'misc_settings'), 'random_widget_cache_ttl', __('Random widget cache duration', 'nggallery'), $this->object->get_model()->random_widget_cache_ttl, __('The duration of time (in minutes) that "random" widget galleries should be cached. A setting of zero will disable caching.', 'nggallery'), FALSE, '', 0), 'alternate_random_method_field' => $this->_render_radio_field((object) array('name' => 'misc_settings'), 'use_alternate_random_method', __('Use alternative method of retrieving random image galleries', 'nggallery'), C_NextGen_Settings::get_instance()->use_alternate_random_method, __("Some web hosts' database servers disable or disrupt queries using 'ORDER BY RAND()' which can cause galleries to lose their randomness. NextGen provides an alternative (but not completely random) method to determine what images are fed into 'random' galleries.", 'nggallery')), 'disable_fontawesome_field' => $this->_render_radio_field((object) array('name' => 'misc_settings'), 'disable_fontawesome', __('Do not enqueue FontAwesome', 'nggallery'), C_NextGen_Settings::get_instance()->disable_fontawesome, __("Warning: your theme or another plugin must provide FontAwesome or your gallery displays may appear incorrectly", 'nggallery')), 'disable_ngg_tags_page_field' => $this->_render_radio_field((object) array('name' => 'misc_settings'), 'disable_ngg_tags_page', __('Disable the /ngg_tag/ page', 'nggallery'), C_NextGen_Settings::get_instance()->get('disable_ngg_tags_page', FALSE), __("Normally an SEO feature; some users may wish to disable this to prevent NextGEN from revealing image tags to site visitors", 'nggallery'))), TRUE);
+        return $this->object->render_partial('photocrati-nextgen_other_options#misc_tab', array('mediarss_activated' => C_NextGen_Settings::get_instance()->useMediaRSS, 'mediarss_activated_label' => __('Add MediaRSS link?', 'nggallery'), 'mediarss_activated_help' => __('When enabled, adds a MediaRSS link to your header. Third-party web services can use this to publish your galleries', 'nggallery'), 'mediarss_activated_no' => __('No'), 'mediarss_activated_yes' => __('Yes'), 'galleries_in_feeds' => C_NextGen_Settings::get_instance()->galleries_in_feeds, 'galleries_in_feeds_label' => __('Display galleries in feeds', 'nggallery'), 'galleries_in_feeds_help' => __('NextGEN hides its gallery displays in feeds other than MediaRSS. This enables image galleries in feeds.', 'nggallery'), 'galleries_in_feeds_no' => __('No'), 'galleries_in_feeds_yes' => __('Yes'), 'cache_label' => __('Clear image cache', 'nggallery'), 'cache_confirmation' => __("Completely clear the NextGEN cache of all image modifications?\n\nChoose [Cancel] to Stop, [OK] to proceed.", 'nggallery'), 'update_legacy_featured_images_field' => $this->object->render_partial('photocrati-nextgen_other_options#update_legacy_featured_images_field', ['i18n' => ['label' => __('Update legacy page featured images', 'nggallery'), 'confirmation' => __('Continue? This will copy all NextGen 1.x page featured images into the media library.', 'nggallery'), 'tooltip' => __('WordPress 5.4 is incompatible with NextGen 1.x page featured images and they must be updated in a bulk process to correct them. This button will launch a background process (with a progress bar) that imports each NextGen image into the Media Library. This process can be resumed if you close the popup window or this browser window.', 'nggallery'), 'header' => __('Updating legacy page featured images', 'nggallery'), 'no_images_found' => __('No legacy page featured images were found.', 'nggallery'), 'operation_finished' => __('Operation complete. Legacy featured images have been corrected.', 'nggallery')]], TRUE), 'slug_field' => $this->_render_text_field((object) array('name' => 'misc_settings'), 'router_param_slug', __('Permalink slug', 'nggallery'), $this->object->get_model()->get('router_param_slug', 'nggallery')), 'maximum_entity_count_field' => $this->_render_number_field((object) array('name' => 'misc_settings'), 'maximum_entity_count', __('Maximum image count', 'nggallery'), $this->object->get_model()->maximum_entity_count, __('This is the maximum limit of images that NextGEN will restrict itself to querying', 'nggallery') . " \n " . __('Note: This limit will not apply to slideshow widgets or random galleries if/when those galleries specify their own image limits', 'nggallery'), FALSE, '', 1), 'random_widget_cache_ttl_field' => $this->_render_number_field((object) array('name' => 'misc_settings'), 'random_widget_cache_ttl', __('Random widget cache duration', 'nggallery'), $this->object->get_model()->random_widget_cache_ttl, __('The duration of time (in minutes) that "random" widget galleries should be cached. A setting of zero will disable caching.', 'nggallery'), FALSE, '', 0), 'alternate_random_method_field' => $this->_render_radio_field((object) array('name' => 'misc_settings'), 'use_alternate_random_method', __('Use alternative method of retrieving random image galleries', 'nggallery'), C_NextGen_Settings::get_instance()->use_alternate_random_method, __("Some web hosts' database servers disable or disrupt queries using 'ORDER BY RAND()' which can cause galleries to lose their randomness. NextGen provides an alternative (but not completely random) method to determine what images are fed into 'random' galleries.", 'nggallery')), 'disable_fontawesome_field' => $this->_render_radio_field((object) array('name' => 'misc_settings'), 'disable_fontawesome', __('Do not enqueue FontAwesome', 'nggallery'), C_NextGen_Settings::get_instance()->disable_fontawesome, __("Warning: your theme or another plugin must provide FontAwesome or your gallery displays may appear incorrectly", 'nggallery')), 'disable_ngg_tags_page_field' => $this->_render_radio_field((object) array('name' => 'misc_settings'), 'disable_ngg_tags_page', __('Disable the /ngg_tag/ page', 'nggallery'), C_NextGen_Settings::get_instance()->get('disable_ngg_tags_page', FALSE), __("Normally an SEO feature; some users may wish to disable this to prevent NextGEN from revealing image tags to site visitors", 'nggallery')), 'dynamic_image_filename_separator_use_dash' => $this->_render_radio_field((object) array('name' => 'misc_settings'), 'dynamic_image_filename_separator_use_dash', __('Use dashes instead of underscores when generating new image files', 'nggallery'), C_NextGen_Settings::get_instance()->get('dynamic_image_filename_separator_use_dash', FALSE), __("Google does not treat underscores as word separators when it indexes images and so treats 'portrait-of-a-man_800x600' as 'portrait-of-a-man800x600' which is not good for SEO. Until NextGEN 3.19 the default character was an underscore; enabling this option changes it to the SEO friendly dash character. This will cause new dynamic images to be generated, and using the above 'Clear image cache' button is recommended after changing.", 'nggallery'))), TRUE);
     }
     function cache_action()
     {
@@ -510,97 +510,6 @@ class A_Roles_Form extends Mixin
         $retval = ob_get_contents();
         ob_end_clean();
         return $retval;
-    }
-}
-/**
- * Class A_Styles_Form
- * @mixin C_Form
- * @adapts I_Form using "styles" context
- */
-class A_Styles_Form extends Mixin
-{
-    function get_model()
-    {
-        return C_Settings_Model::get_instance();
-    }
-    function get_title()
-    {
-        return __('Styles', 'nggallery');
-    }
-    function render()
-    {
-        return $this->object->render_partial('photocrati-nextgen_other_options#styling_tab', array('activateCSS_label' => __('Enable custom CSS', 'nggallery'), 'activateCSS' => $this->object->get_model()->activateCSS, 'select_stylesheet_label' => __('What stylesheet would you like to use?', 'nggallery'), 'stylesheets' => C_NextGen_Style_Manager::get_instance()->find_all_stylesheets(), 'activated_stylesheet' => $this->object->get_model()->CSSfile, 'hidden_label' => __('(Show Customization Options)', 'nggallery'), 'active_label' => __('(Hide Customization Options)', 'nggallery'), 'cssfile_contents_label' => __('File Content:', 'nggallery'), 'writable_label' => __('Changes you make to the contents will be saved to', 'nggallery'), 'readonly_label' => __('You could edit this file if it were writable', 'nggallery')), TRUE);
-    }
-    function save_action()
-    {
-        // Ensure that we have
-        if ($settings = $this->object->param('style_settings')) {
-            $settings['activateCSS'] = intval($settings['activateCSS']);
-            $valid = TRUE;
-            // the desired file, but users shouldn't use this to write files that don't end in .css anyway
-            $file_info = pathinfo($settings['CSSfile']);
-            // Prevent something.php.css from being executed on poorly configured servers
-            if (preg_match('/\\.php(.*)$/i', $settings['CSSfile'], $matches)) {
-                $valid = FALSE;
-            }
-            // Ensure a .css extension
-            if (strpos($file_info['extension'], 'css') === FALSE) {
-                $valid = FALSE;
-            }
-            // TODO: C_Page's add_error() doesn't seem to work here so we should report that we aren't saving
-            if ($valid) {
-                $this->object->get_model()->set($settings)->save();
-            }
-            // Are we to modify the CSS file?
-            if ($valid && ($contents = $this->object->param('cssfile_contents'))) {
-                // Find filename
-                $css_file = $settings['CSSfile'];
-                $styles = C_NextGen_Style_Manager::get_instance();
-                $styles->save($contents, $css_file);
-            }
-        }
-    }
-}
-/**
- * Registers new AJAX functions for retrieving/updating
- * the contents of CSS stylesheets
- *
- * @mixin C_Ajax_Controller
- * @adapts I_Ajax_Controller
- */
-class A_Stylesheet_Ajax_Actions extends Mixin
-{
-    /**
-     * Retrieves the contents of the CSS stylesheet specified
-     */
-    function get_stylesheet_contents_action()
-    {
-        $retval = array();
-        if ($this->object->_authorized_for_stylesheet_action()) {
-            $styles = C_NextGen_Style_Manager::get_instance();
-            $cssfile = str_replace('..', '', $this->object->param('cssfile'));
-            $abspath = $styles->find_selected_stylesheet_abspath($cssfile);
-            $writepath = $styles->get_selected_stylesheet_saved_abspath($this->object->param('cssfile'));
-            if (is_readable($abspath)) {
-                $retval['contents'] = file_get_contents($abspath);
-                $retval['writable'] = is_writable($abspath);
-                $retval['abspath'] = $abspath;
-                $retval['writepath'] = $writepath;
-            } else {
-                $retval['error'] = "Could not find stylesheet";
-            }
-        } else {
-            $retval['error'] = 'Unauthorized';
-        }
-        return $retval;
-    }
-    /**
-     * Determines if the request is authorized
-     * @return boolean
-     */
-    function _authorized_for_stylesheet_action()
-    {
-        return M_Security::is_allowed('nextgen_edit_style');
     }
 }
 /**

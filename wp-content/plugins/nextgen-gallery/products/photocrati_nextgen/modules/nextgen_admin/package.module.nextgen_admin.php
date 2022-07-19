@@ -350,12 +350,7 @@ class C_Admin_Notification_Manager
             }
             ob_end_clean();
             echo json_encode($retval);
-            // E_Clean_Exit causes warnings to be appended to XHR responses, potentially breaking the client JS
-            if (!defined('NGG_DISABLE_SHUTDOWN_EXCEPTION_HANDLER') || !NGG_DISABLE_SHUTDOWN_EXCEPTION_HANDLER) {
-                throw new E_Clean_Exit();
-            } else {
-                exit;
-            }
+            exit;
         }
     }
     function render_notice($name)
@@ -652,9 +647,19 @@ class Mixin_Form_Instance_Methods extends Mixin
  */
 class Mixin_Form_Field_Generators extends Mixin
 {
-    function _render_select_field($display_type, $name, $label, $options = array(), $value, $text = '', $hidden = FALSE)
+    /**
+     * @param stdClass|C_Display_Type $display_type
+     * @param string $name
+     * @param string $label
+     * @param array $options
+     * @param int|string $value
+     * @param string $text
+     * @param bool $hidden
+     * @return string
+     */
+    function _render_select_field($display_type, $name, $label, $options, $value, $text = '', $hidden = FALSE)
     {
-        return $this->object->render_partial('photocrati-nextgen_admin#field_generator/nextgen_settings_field_select', array('display_type_name' => $display_type->name, 'name' => $name, 'label' => $label, 'options' => $options, 'value' => $value, 'text' => $text, 'hidden' => $hidden), True);
+        return $this->object->render_partial('photocrati-nextgen_admin#field_generator/nextgen_settings_field_select', ['display_type_name' => $display_type->name, 'name' => $name, 'label' => $label, 'options' => $options, 'value' => $value, 'text' => $text, 'hidden' => $hidden], TRUE);
     }
     function _render_radio_field($display_type, $name, $label, $value, $text = '', $hidden = FALSE)
     {
@@ -1046,7 +1051,6 @@ class Mixin_NextGen_Admin_Page_Instance_Methods extends Mixin
         $this->object->enqueue_jquery_ui_theme();
         wp_enqueue_script('photocrati_ajax');
         wp_enqueue_script('jquery-ui-accordion');
-        wp_enqueue_style('imagely-admin-font', 'https://fonts.googleapis.com/css?family=Lato:300,400,700,900', array(), NGG_SCRIPT_VERSION);
         if (method_exists('M_Gallery_Display', 'enqueue_fontawesome')) {
             M_Gallery_Display::enqueue_fontawesome();
         }
@@ -1127,7 +1131,8 @@ class Mixin_NextGen_Admin_Page_Instance_Methods extends Mixin
      */
     function _get_action()
     {
-        $retval = preg_quote($this->object->param('action'), '/');
+        $action = $this->object->param('action') ?: '';
+        $retval = preg_quote($action, '/');
         $retval = strtolower(preg_replace("/[^\\w]/", '_', $retval));
         return preg_replace("/_{2,}/", "_", $retval) . '_action';
     }

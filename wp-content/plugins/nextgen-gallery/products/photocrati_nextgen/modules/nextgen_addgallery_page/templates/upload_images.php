@@ -152,25 +152,21 @@
                     }
                 })
                 .on('complete', (result) => {
-					// There was at least one error: remove the successful images so users can find out what went wrong
-					if (result.failed.length > 0) {
-                        uppy.getFiles().forEach((file) => {
-                        	console.log("FILE", file);
-                            if ('undefined' === typeof file.error) {
-                                uppy.removeFile(file.id);
-                            }
-                        });
-                    } else {
-                        // All uploads were a success; clear the board and reset the game
-                        setTimeout(() => {
-                            uppy.reset();
-                        }, 2000);
-                    }
+                    setTimeout(() => {
+                        uppy.reset();
+                    }, 2000);
 
                     const gallery_url = '<?php echo admin_url("/admin.php?page=nggallery-manage-gallery&mode=edit&gid=")?>' + gallery_select.value;
                     const chosen_name = String(gallery_select.selectedOptions[0].dataset.originalValue);
 
                     let upload_count = result.successful.length;
+
+                    // Modify the upload count so we can determine which message base to start with
+                    uppy.getFiles().forEach((file) => {
+                        if ('undefined' !== typeof file.response.body.error) {
+                            upload_count--;
+                        }
+                    })
 
                     // Adjust the upload count for images uploaded inside a zip file
                     result.successful.forEach(function(uploaded_file) {
@@ -188,16 +184,18 @@
                         message = NggUploadImages_i18n.one_image_uploaded;
                     }
 
-                    if (upload_count >= 1) {
-                        message = message + ' ' + NggUploadImages_i18n.manage_gallery;
-                    }
-
-                    if (result.failed.length > 0) {
-                        uppy.getFiles().forEach((file) => {
+                    // Append warning messages for individual images
+                    uppy.getFiles().forEach((file) => {
+                        if ('undefined' !== typeof file.response.body.error) {
                             message = message + "<br/>" + NggUploadImages_i18n.image_failed;
                             message = message.replace('{filename}', file.name)
-                                             .replace('{error}', file.error);
-                        })
+                                             .replace('{error}', file.response.body.error);
+                            uppy.removeFile(file.id);
+                        }
+                    })
+
+                    if (upload_count >= 1) {
+                        message = message + ' ' + NggUploadImages_i18n.manage_gallery;
                     }
 
                     message = message.replace('{count}', String(upload_count))

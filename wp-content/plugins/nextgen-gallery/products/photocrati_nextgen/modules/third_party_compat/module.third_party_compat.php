@@ -126,8 +126,24 @@ class M_Third_Party_Compat extends C_Base_Module
             add_action('template_redirect', array(&$this, 'fix_wpml_canonical_redirect'), 1);
         }
 
-        // TODO: Only needed for NGG Pro 1.0.10 and lower
-        add_action('the_post', array(&$this, 'add_ngg_pro_page_parameter'));
+        add_action('the_post', [$this, 'fix_page_parameter']);
+    }
+
+    /**
+     * This code was originally added to correct a bug in Pro 1.0.10 and was meant to be temporary. However now the
+     * albums pagination relies on this to function correctly, and fixing it properly would require more time than its worth.
+     *
+     * TODO: Remove this once the router and wordpress_routing modules are removed.
+     */
+    function fix_page_parameter()
+    {
+        global $post;
+
+        if ($post AND is_string($post->content) AND (strpos($post->content, "<!--nextpage-->") === FALSE) AND (strpos($_SERVER['REQUEST_URI'], '/page/') !== FALSE))
+        {
+            if (preg_match("#/page/(\\d+)#", $_SERVER['REQUEST_URI'], $match))
+                $_REQUEST['page'] = $match[1];
+        }
     }
 
     /**
@@ -473,23 +489,6 @@ class M_Third_Party_Compat extends C_Base_Module
                 continue;
 
             remove_action('init', array($object, 'init'), 10);
-        }
-    }
-
-    /**
-     * NGG Pro 1.0.10 relies on the 'page' parameter for pagination, but that conflicts with
-     * WordPress Post Pagination (<!-- nextpage -->). This was fixed in 1.0.11, so this code is
-     * for backwards compatibility
-     * TODO: This can be removed in a later release
-     */
-    function add_ngg_pro_page_parameter()
-    {
-        global $post;
-
-        if ($post AND !is_array($post->content) AND (strpos($post->content, "<!--nextpage-->") === FALSE) AND (strpos($_SERVER['REQUEST_URI'], '/page/') !== FALSE)) {
-            if (preg_match("#/page/(\\d+)#", $_SERVER['REQUEST_URI'], $match)) {
-                $_REQUEST['page'] = $match[1];
-            }
         }
     }
 

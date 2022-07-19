@@ -748,10 +748,12 @@ class Mixin_Routing_App extends Mixin
             $retval = $this->object->recursive_stripslashes($_REQUEST[$key]);
         }
         if (!$found && isset($_SERVER['REQUEST_URI'])) {
-            $params = array();
-            parse_str(@parse_url($_SERVER['REQUEST_URI'], PHP_URL_QUERY), $params);
+            $params = [];
+            $parsed = parse_url($_SERVER['REQUEST_URI'], PHP_URL_QUERY);
+            if (is_string($parsed)) {
+                parse_str($parsed, $params);
+            }
             if (isset($params[$key])) {
-                $found = TRUE;
                 $retval = $this->object->recursive_stripslashes($params[$key]);
             }
         }
