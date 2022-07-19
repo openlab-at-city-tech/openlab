@@ -43,7 +43,7 @@ endif;
 		</p>
 		
 		<p class="credits-right">
-			<span><?php printf( __( 'Theme by <a href="%s">Anders Noren</a>', 'lingonberry' ), 'https://www.andersnoren.se' ); ?> &mdash; </span><a class="tothetop"><?php _e( 'Up', 'lingonberry' ); ?> &uarr;</a>
+			<span><?php printf( __( 'Theme by <a href="%s">Anders Noren</a>', 'lingonberry' ), 'https://andersnoren.se' ); ?> &mdash; </span><a class="tothetop"><?php _e( 'Up', 'lingonberry' ); ?> &uarr;</a>
 		</p>
 	
 	</div><!-- .credits-inner -->
