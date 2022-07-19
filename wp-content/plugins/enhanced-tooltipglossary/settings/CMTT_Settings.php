@@ -5,10 +5,11 @@ namespace CM;
 include_once plugin_dir_path(__FILE__) . 'Settings.php';
 include_once plugin_dir_path(__FILE__) . './fields/CMTT_Glossary_Index_Page_ID.php';
 
-class CMTT_Settings extends Settings {
-    
+class CMTT_Settings extends \CMTT\Settings {
+
     protected static $abbrev = 'cmtt';
     protected static $dir = __DIR__;
+    protected static $settingsPageSlug;     // Needed for include settings styles and scripts only on plugin settings page
 
     public static function init() {
         self::load_config();
@@ -18,6 +19,16 @@ class CMTT_Settings extends Settings {
         add_filter(self::abbrev('_before_saving_option'), [__CLASS__, 'beforeSaveOption'], 10, 2);
         add_filter(self::abbrev('_before_sanitizing_option'), [__CLASS__, 'beforeSanitizingOption'], 10, 2);
         add_filter(self::abbrev('-custom-settings-tab-content-50'), array(__CLASS__, 'outputLabelsSettings'));
+        
+        add_action('cmtt_add_submenu_pages', array(__CLASS__, 'add_submenu_pages'), 1);
+        add_action( 'admin_enqueue_scripts', [__CLASS__, 'enqueueAssets']);
+    }
+    
+    public static function add_submenu_pages() {
+        self::$settingsPageSlug = add_submenu_page(CMTT_MENU_OPTION, 'TooltipGlossary Options', 'Settings', 'manage_options', CMTT_SETTINGS_OPTION, array(
+            'CMTT_Free',
+            'outputOptions'
+        ));
     }
 
     public static function outputLabelsSettings() {
@@ -30,7 +41,7 @@ class CMTT_Settings extends Settings {
     }
 
     public static function beforeSanitizingOption($option_value, $option_name) {
-        if (in_array($option_name, array('cmtt_glossaryPermalink'))) {
+        if (in_array($option_name, array())) {
             $option_value = sanitize_title($option_value);
         }
         return $option_value;
@@ -57,6 +68,17 @@ class CMTT_Settings extends Settings {
     }
 
     public static function afterSaveSettings($post, $messages) {
+
+        if (isset($post['cmtt_glossaryRelatedRefresh'])) {
+            \CMTT_Related::crawlArticles(true);
+            $messages = __('Related Articles Index rebuild has been started.', 'cm-tooltip-glossary');
+        }
+
+        if (isset($post['cmtt_glossaryRelatedRefreshContinue'])) {
+            \CMTT_Related::crawlArticles();
+            $messages = __('Related Articles Index has been updated.', 'cm-tooltip-glossary');
+        }
+
         $enqueeFlushRules = false;
         /*
          * Update the page options
@@ -68,7 +90,7 @@ class CMTT_Settings extends Settings {
              */
             $glossaryPost = array(
                 'ID'        => $post["cmtt_glossaryID"],
-                'post_name' => $post["cmtt_glossaryPermalink"]
+                'post_name' => sanitize_title($post["cmtt_glossaryPermalink"])
             );
             wp_update_post($glossaryPost);
             $enqueeFlushRules = true;
@@ -77,13 +99,13 @@ class CMTT_Settings extends Settings {
         if (empty($post["cmtt_glossaryPermalink"])) {
             $post["cmtt_glossaryPermalink"] = 'glossary';
         }
-        update_option('cmtt_glossaryPermalink', $post["cmtt_glossaryPermalink"]);
+        self::set('cmtt_glossaryPermalink', $post["cmtt_glossaryPermalink"]);
 
         if (apply_filters('cmtt_enqueueFlushRules', $enqueeFlushRules, $post)) {
             self::_flush_rewrite_rules();
         }
 
-        unset($post['cmtt_glossaryID'], $post['cmtt_glossaryPermalink'], $post['cmtt_glossarySave']);
+        unset($post['cmtt_glossaryID'], $post['cmtt_glossaryPermalink'], $post['cmtt_saveSettings']);
     }
 
     /**
@@ -96,11 +118,6 @@ class CMTT_Settings extends Settings {
          * Remove the data from the other tables
          */
         do_action('cmtt_do_cleanup');
-
-//        $glossaryIndexPageId = CMTT_Glossary_Index::getGlossaryIndexPageId();
-//        if (!empty($glossaryIndexPageId)) {
-//            wp_delete_post($glossaryIndexPageId);
-//        }
 
         /*
          * Remove the options
@@ -124,13 +141,19 @@ class CMTT_Settings extends Settings {
 
         do_action('cmtt_do_cleanup_items_before');
 
-        $glossary_index = self::getGlossaryItems();
+        $args = [
+            'fields' => 'ids',
+            'return_just_ids' => 1,
+            'nopaging'    => true,
+            'numberposts' => - 1];
+        $glossary_index = \CMTT_Free::getGlossaryItems($args);
 
         /*
          * Remove the glossary terms
          */
         foreach ($glossary_index as $post) {
-            wp_delete_post($post->ID, $force);
+            $postId = is_numeric($post) ? $post : $post->ID;
+            wp_delete_post($postId, $force);
         }
 
         $tags = get_terms(array(

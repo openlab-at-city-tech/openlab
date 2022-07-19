@@ -501,7 +501,7 @@ if (!function_exists('cminds_cmtt_admin_tooltip_preview')) {
         // Tooltip styling
         $minw = (int) \CM\CMTT_Settings::get('cmtt_tooltipWidthMin', 200);
         $maxw = (int) \CM\CMTT_Settings::get('cmtt_tooltipWidthMax', 400);
-        $endalpha = (int) \CM\CMTT_Settings::get('cmtt_tooltipOpacity');
+        $endalpha = (int) \CM\CMTT_Settings::get('cmtt_tooltipOpacity', 100);
         $borderStyle = \CM\CMTT_Settings::get('cmtt_tooltipBorderStyle');
         $borderWidth = \CM\CMTT_Settings::get('cmtt_tooltipBorderWidth') . 'px';
         $borderColor = \CM\CMTT_Settings::get('cmtt_tooltipBorderColor');

@@ -63,7 +63,6 @@
                 <hr>
 
                 <style>
-                    @import url('https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700,700i&subset=cyrillic,cyrillic-ext,latin-ext');
                     #mlb2-8021402,
                     #mlb2-8021402 *,
                     #mlb2-8021402 a:hover,
@@ -528,11 +527,11 @@
                         </div>
 
                         <div class="plugins-price item">
-                            <span>From $29</span>
+                            <span>From $36</span>
                         </div>
 
                         <div class="plugins-body item">
-                            <p><strong>CM Tooltip Glossary</strong> - The best glossary managment tool for WordPress</p>
+                            <p><strong>CM Tooltip Glossary Pro</strong> - The best glossary managment tool for WordPress</p>
                         </div>
 
                         <div class="plugins-action item">

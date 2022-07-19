@@ -4,8 +4,8 @@ Contributors: CreativeMindsSolutions
 Donate link: https://tooltip.cminds.com/
 Tags: glossary,tooltip,lexicon, dictionary, knowledgebase
 Requires at least: 3.9
-Tested up to: 5.8.0
-Stable tag: 3.9.21
+Tested up to: 6.0.0
+Stable tag: 4.0.11
 
 New 2021 Version! Easily create a glossary, encyclopedia or dictionary of your terms and show responsive tooltips when users hover over the terms.
 
