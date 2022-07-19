@@ -281,3 +281,15 @@ add_filter(
 	10,
 	2
 );
+
+/**
+ * Modifies metadata about emails created on Gravity Forms submissions.
+ */
+add_filter(
+	'gform_pre_send_email',
+	function( $email ) {
+		// Remove the From header and allow the global defaults to take effect.
+		unset( $email['headers']['From'] );
+		return $email;
+	}
+);
