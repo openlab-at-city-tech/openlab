@@ -57,7 +57,7 @@
 			<p><?php echo sprintf( esc_html__( 'This means %s, and %s.', 'search-filter' ), '<strong>' . esc_html( 'significant changes to how you build search forms', 'search-filter' ) . '</strong>', '<strong>' . esc_html( 'more features, filters, flexibility and integration options', 'search-filter' ) . '</strong>' ); ?></p>
 			<p><?php echo esc_html__( 'This is all part of a huge undertaking, bringing more features to Search & Filter free and pro, while also bringing a new interface and architecture to both editions.', 'search-filter' ); ?></p>
 			<p><a href="https://searchandfilter.com/search-filter-3-0-free/" target="_blank"><?php echo esc_html__( 'Read the full blog post here.', 'search-filter' ); ?></a></p>
-			<p><?php echo esc_html__( 'PS - we\'re looking for beta testers.', 'search-filter' ); ?></p>
+			<p><?php echo esc_html__( 'PS - ', 'search-filter' ); ?><a href="https://searchandfilter.com/version-3/" target="_blank"><?php echo esc_html__( 'we\'re looking for beta testers.', 'search-filter' ); ?></a></p>
 			
 		</div>
 		<?php

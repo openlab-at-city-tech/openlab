@@ -3,8 +3,8 @@ Contributors: DesignsAndCode, codeamp
 Donate link:
 Tags: category, filter, taxonomy, search, wordpress, post type, post date
 Requires at least: 3.5
-Tested up to: 5.7
-Stable tag: 1.2.14
+Tested up to: 5.9
+Stable tag: 1.2.15
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -33,6 +33,9 @@ The documentation has been updated to include examples almost all configurable o
 4. Example of Search & Filter using a post type filter
 
 == Changelog ==
+
+= 1.2.15 = 
+* Fixed - a PHP 8 warning when using the taxonomy walker class - thanks @jules-colle + @superthin
 
 = 1.2.14 =
 * Admin notice added - Version 3 is coming soon - beta testers wanted + tons of improvements and changes coming - make sure you know what's in store.
