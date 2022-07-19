@@ -1748,9 +1748,11 @@ function openlab_olgc_notify_instructor( $comment_id, $comment ) {
 		return;
 	}
 
-	$subject = sprintf( 'New private comment on %s', get_option( 'blogname' ) );
+	$group = groups_get_group( $group_id );
+	$post  = get_post( $comment->comment_post_ID );
 
-	$post    = get_post( $comment->comment_post_ID );
+	$subject = sprintf( 'A new private comment on %s in %s', $post->post_title, $group->name );
+
 	$message = sprintf(
 		'There is a new private comment on your site %s.
 
