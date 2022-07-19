@@ -90,6 +90,11 @@
 
 		edit_post_link( __( 'Edit', 'hemingway' ), '<p>', '</p>' ); 
 
+		// On the archives template, output the archives content.
+		if ( is_page_template( array( 'template-archives.php' ) ) ) {
+			get_template_part( 'inc/parts/template-archives-content' );
+		}
+
 		?>
 							
 	</div><!-- .post-content -->
