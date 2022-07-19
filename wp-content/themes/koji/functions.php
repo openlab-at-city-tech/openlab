@@ -706,6 +706,9 @@ endif;
 if ( ! function_exists( 'koji_loading_indicator' ) ) :
 	function koji_filter_comment_text( $comment_text, $comment, $args ) {
 
+		// Make sure we have a valid comment object.
+		if ( empty( $comment ) || ! isset( $comment->user_id ) ) return $comment_text;
+
 		$comment_author_user_id = $comment->user_id;
 		$post_author_user_id = get_post_field( 'post_author', $comment->comment_post_ID );
 

@@ -2,7 +2,7 @@
 Contributors: Anlino
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=anders%40andersnoren%2ese&lc=US&item_name=Free%20WordPress%20Themes%20from%20Anders%20Noren&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted
 Requires at least: 4.5
-Tested up to: 5.5
+Tested up to: 6.0
 Requires PHP: 5.4
 Stable tag: trunk
 License: GPLv2 or later
@@ -75,6 +75,14 @@ Source: https://feathericons.com
 
 
 == Changelog ==
+
+Version 2.0.10 (2022-05-27)
+-------------------------
+- Double check that we have a valid comments object before using it when filtering comment_text.
+- Removed www from all https://andersnoren.se links.
+- Bumped "Tested up to" to 6.0.
+- Minified SVG files.
+- Dumped woff2 versions of FontAwesome (used by the social icons) to reduce theme footprint.
 
 Version 2.0.9 (2020-08-24)
 -------------------------
