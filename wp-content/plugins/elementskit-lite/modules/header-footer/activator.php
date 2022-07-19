@@ -32,6 +32,10 @@ class Activator {
 				new Theme_Hooks\Astra( self::template_ids() );
 				break;
 
+			case 'neve':
+				new Theme_Hooks\Neve( self::template_ids() );
+				break;
+
 			case 'generatepress':  
 			case 'generatepress-child':
 				new Theme_Hooks\Generatepress( self::template_ids() );

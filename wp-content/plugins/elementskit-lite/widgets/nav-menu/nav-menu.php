@@ -416,6 +416,27 @@ class ElementsKit_Widget_Nav_Menu extends Widget_Base {
                 ],
             ]
         );
+	
+		$this->add_group_control(
+			Group_Control_Border::get_type(),
+			[
+				'name'  => 'elementskit_menu_text_border',
+				'selector'  => '{{WRAPPER}} .elementskit-navbar-nav > li > a',
+				'size_units'  => ['px'],
+			]
+		);
+
+		$this->add_control(
+			'elementskit_menu_text_border_radius',
+			[
+				'label'      => esc_html__('Border Radius (px)', 'elementskit-lite'),
+				'type'       => Controls_Manager::DIMENSIONS,
+				'size_units' => ['px'],
+				'selectors'  => [
+					'{{WRAPPER}} .elementskit-navbar-nav > li > a' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				],
+			]
+		);
 
         $this->end_controls_tab();
 
@@ -456,6 +477,27 @@ class ElementsKit_Widget_Nav_Menu extends Widget_Base {
             ]
         );
 
+		$this->add_group_control(
+			Group_Control_Border::get_type(),
+			[
+				'name'  => 'elementskit_menu_text_border_hover',
+				'selector'  => '{{WRAPPER}} .elementskit-navbar-nav > li:hover > a',
+				'size_units'  => ['px'],
+			]
+		);
+
+		$this->add_control(
+			'elementskit_menu_text_border_radius_hover',
+			[
+				'label'      => esc_html__('Border Radius (px)', 'elementskit-lite'),
+				'type'       => Controls_Manager::DIMENSIONS,
+				'size_units' => ['px'],
+				'selectors'  => [
+					'{{WRAPPER}} .elementskit-navbar-nav > li:hover > a' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				],
+			]
+		);
+
         $this->end_controls_tab();
 
         // active
@@ -490,6 +532,27 @@ class ElementsKit_Widget_Nav_Menu extends Widget_Base {
             ]
         );
 
+		$this->add_group_control(
+			Group_Control_Border::get_type(),
+			[
+				'name'  => 'elementskit_menu_text_border_active',
+				'selector'  => '{{WRAPPER}} .elementskit-navbar-nav > li.current-menu-item > a',
+				'size_units'  => ['px'],
+			]
+		);
+
+		$this->add_control(
+			'elementskit_menu_text_border_radius_active',
+			[
+				'label'      => esc_html__('Border Radius (px)', 'elementskit-lite'),
+				'type'       => Controls_Manager::DIMENSIONS,
+				'size_units' => ['px'],
+				'selectors'  => [
+					'{{WRAPPER}} .elementskit-navbar-nav > li.current-menu-item > a' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				],
+			]
+		);
+
         $this->end_controls_tab();
 
         $this->end_controls_tabs();
@@ -520,6 +583,19 @@ class ElementsKit_Widget_Nav_Menu extends Widget_Base {
                 ],
             ]
         );
+
+        $this->add_responsive_control(
+            'elementskit_menu_item_margin',
+            [
+                'label' => esc_html__( 'Item Margin', 'elementskit-lite' ),
+                'type' => Controls_Manager::DIMENSIONS,
+                'size_units' => [ 'px' ],
+                'selectors' => [
+                    '{{WRAPPER}} .elementskit-navbar-nav > li' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+                ],
+            ]
+        );
+
         $this->end_controls_section();
 
         $this->start_controls_section(

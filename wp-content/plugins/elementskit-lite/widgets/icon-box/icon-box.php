@@ -593,6 +593,23 @@ class ElementsKit_Widget_Icon_Box extends Widget_Base {
                 'name' => 'ekit_icon_box_iocnbox_border_group',
                 'label' => esc_html__( 'Border', 'elementskit-lite' ),
                 'selector' => '{{WRAPPER}} .elementskit-infobox',
+                'fields_options' => [
+					'border' => [
+						'default' => 'solid',
+					],
+                    'size_units'     => ['px'],
+					'width'  => [
+						'default' => [
+							'top'      => '1',
+							'right'    => '1',
+							'bottom'   => '1',
+							'left'     => '1',
+						],
+					],
+					'color'  => [
+						'default' => '#f5f5f5',
+                    ]
+                ]    
             ]
         );
         $this->add_responsive_control(
@@ -601,6 +618,13 @@ class ElementsKit_Widget_Icon_Box extends Widget_Base {
                 'label' => esc_html__( 'Border Radius', 'elementskit-lite' ),
                 'type' => Controls_Manager::DIMENSIONS,
                 'size_units' => [ 'px', '%', 'em' ],
+                'default' => [
+                    'top'      => '5',
+                    'right'    => '5',
+                    'bottom'   => '5',
+                    'left'     => '5',
+                    'unit'     => 'px',
+                ],
                 'selectors' => [
                     '{{WRAPPER}} .elementskit-infobox' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
                 ],
@@ -648,7 +672,7 @@ class ElementsKit_Widget_Icon_Box extends Widget_Base {
             [
                 'name' => 'ekit_icon_box_icon_box_border_hv_group',
                 'label' => esc_html__( 'Border', 'elementskit-lite' ),
-                'selector' => '{{WRAPPER}} .elementskit-infobox:hover',
+                'selector' => '{{WRAPPER}} .elementskit-infobox:hover',   
             ]
         );
         $this->add_responsive_control(
@@ -1794,7 +1818,7 @@ class ElementsKit_Widget_Icon_Box extends Widget_Base {
                 </<?php echo esc_attr ($ekit_icon_box_title_size_esc); ?>>
             <?php } ?>
             <?php if($settings['ekit_icon_box_description_text'] != ''): ?>
-		  <?php echo wp_kses($settings['ekit_icon_box_description_text'], \ElementsKit_Lite\Utils::get_kses_array()) ?>
+		  <p><?php echo wp_kses($settings['ekit_icon_box_description_text'], \ElementsKit_Lite\Utils::get_kses_array()); ?></p>
             <?php endif; ?>
             <?php if($settings['ekit_icon_box_enable_btn'] == 'yes') :  ?>
                 <div class="box-footer <?php if($settings['ekit_icon_box_enable_hover_btn']== 'yes'){echo esc_attr("enable_hover_btn");} else {echo esc_attr("disable_hover_button");}?>">

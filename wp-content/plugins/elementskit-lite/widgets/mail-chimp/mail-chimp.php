@@ -152,7 +152,7 @@ class ElementsKit_Widget_Mail_Chimp extends Widget_Base {
             [
                 'label' => esc_html__( 'Placeholder', 'elementskit-lite' ),
                 'type' => Controls_Manager::TEXT,
-				'placeholder' => esc_html__( 'Your frist name', 'elementskit-lite' ),
+				'placeholder' => esc_html__( 'Your first name', 'elementskit-lite' ),
 				'label_block'	 => false,
 				'condition' => [
 					'ekit_mail_chimp_section_form_name_show' => 'yes'

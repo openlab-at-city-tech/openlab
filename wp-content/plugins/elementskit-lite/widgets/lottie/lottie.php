@@ -11,13 +11,6 @@ class ElementsKit_Widget_Lottie extends Widget_Base {
     use \ElementsKit_Lite\Widgets\Widget_Notice;
 
     public $base;
-    
-    public function __construct( $data = [], $args = null ) {
-        parent::__construct( $data, $args );
-        
-        wp_register_script( 'lottie', Handler::get_url() . 'assets/js/lottie.min.js', null, '5.6.8', true );
-        wp_register_script( 'lottie-init', Handler::get_url() . 'assets/js/lottie.init.js', ['lottie', 'elementor-frontend'], \ElementsKit_Lite::version(), true );
-    }
 
     public function get_script_depends() {
         return ['lottie', 'lottie-init'];

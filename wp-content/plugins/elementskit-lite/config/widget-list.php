@@ -244,13 +244,13 @@ class Widget_List extends \ElementsKit_Lite\Core\Config_List {
 				),
 				'we-forms' => array(
 					'slug'            => 'we-forms',
-					'title'           => 'We Forms',
+					'title'           => 'weForms',
 					'package'         => 'free',
 					'widget-category' => 'form-widgets', // Form Widgets
 				),
 				'wp-forms' => array(
 					'slug'            => 'wp-forms',
-					'title'           => 'Wp Forms',
+					'title'           => 'WPForms',
 					'package'         => 'free',
 					'widget-category' => 'form-widgets', // Form Widgets
 				),
@@ -410,21 +410,21 @@ class Widget_List extends \ElementsKit_Lite\Core\Config_List {
 	
 				'dribble-feed' => array(
 					'slug'            => 'dribble-feed',
-					'title'           => 'Dribble Feed',
+					'title'           => 'Dribbble Feed',
 					'package'         => 'pro-disabled',
 					'widget-category' => 'social-media-feeds', // Social Media Feeds Widgets
 				),
 	
 				'facebook-feed' => array(
 					'slug'            => 'facebook-feed',
-					'title'           => 'Facebook feed',
+					'title'           => 'Facebook Feed',
 					'package'         => 'pro-disabled',
 					'widget-category' => 'social-media-feeds', // Social Media Feeds Widgets
 				),
 	
 				'facebook-review' => array(
 					'slug'            => 'facebook-review',
-					'title'           => 'Facebook review',
+					'title'           => 'Facebook Review',
 					'package'         => 'pro-disabled',
 					'widget-category' => 'review-widgets', // Review Widgets
 				),
@@ -452,7 +452,7 @@ class Widget_List extends \ElementsKit_Lite\Core\Config_List {
 	
 				'google-map' => array(
 					'slug'            => 'google-map',
-					'title'           => 'Google Map',
+					'title'           => 'Google Maps',
 					'package'         => 'pro-disabled',
 					'widget-category' => 'general', // General
 				),

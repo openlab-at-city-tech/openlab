@@ -12,7 +12,7 @@
 			<h2><?php esc_html_e( 'Easy Documentation', 'elementskit-lite' ); ?></h2>
 			<span class="ekit-admin-right-content--heading__sub-title"><?php esc_html_e( 'Docs', 'elementskit-lite' ); ?></span>
 		</div> 
-		<p><?php esc_html_e( 'Get started by spending some time with the documentation to get familiar with ElementsKit Lite. Build awesome websites for you or your clients with ease.', 'elementskit-lite' ); ?></p>
+		<p><?php esc_html_e( 'Get started by spending some time with the documentation to get familiar with ElementsKit. Build awesome websites for you or your clients with ease.', 'elementskit-lite' ); ?></p>
 		<div class="ekit-admin-right-content--button">
 			<a target="_blank" href="https://wpmet.com/doc/elementskit/" class="attr-btn attr-btn-primary ekit-admin-right-content--link"><i class="fa fa-newspaper-o"></i><?php esc_html_e( 'Get started', 'elementskit-lite' ); ?></a>
 		</div>
@@ -26,7 +26,7 @@
 			<h2><?php esc_html_e( 'Video Tutorials', 'elementskit-lite' ); ?></h2>
 			<span class="ekit-admin-right-content--heading__sub-title"><?php esc_html_e( 'Tutorials', 'elementskit-lite' ); ?></span>
 		</div> 
-		<p><?php esc_html_e( 'Get started by spending some time with the documentation to get familiar with ElementsKit Lite.', 'elementskit-lite' ); ?></p>
+		<p><?php esc_html_e( 'Get started by spending some time with the documentation to get familiar with ElementsKit.', 'elementskit-lite' ); ?></p>
 	</div>
 
 	<div class="ekit-admin-video-tutorial-list">
@@ -115,10 +115,10 @@
 <div class="ekit-admin-section ekit-admin-dual-layout ekit-admin-support-section">
 <div class="ekit-admin-right-content">
 		<div class="ekit-admin-right-content--heading">
-			<h2><?php esc_html_e( 'Top-notch Friendly Support', 'elementskit-lite' ); ?></h2>
+			<h2><?php esc_html_e( 'Top-notch & Friendly Support', 'elementskit-lite' ); ?></h2>
 			<span class="ekit-admin-right-content--heading__sub-title"><?php esc_html_e( 'Support', 'elementskit-lite' ); ?></span>
 		</div> 
-		<p><?php esc_html_e( 'Get started by spending some time with the documentation to get familiar with ElementsKit Lite. Build awesome websites for you or your clients with ease.', 'elementskit-lite' ); ?></p>
+		<p><?php esc_html_e( 'Stuck somewhere? Feel free to open a ticket for getting Pro support.', 'elementskit-lite' ); ?></p>
 		<div class="ekit-admin-right-content--button">
 			<a target="_blank" href="https://wpmet.com/support-ticket-form/" class="attr-btn attr-btn-primary ekit-admin-right-content--link"><i class="fa fa-question-circle"></i><?php esc_html_e( 'Join support forum', 'elementskit-lite' ); ?></a>
 		</div>
@@ -139,7 +139,7 @@
 
 		<p><?php esc_html_e( 'Maybe we’re missing something you can’t live without.', 'elementskit-lite' ); ?></p>
 		<div class="ekit-admin-right-content--button">
-			<a target="_blank" href="https://wpmet.com/plugin/elementskit/roadmaps/#ideas" class="attr-btn attr-btn-primary ekit-admin-right-content--link"><i class="fa fa-check-circle"></i><?php esc_html_e( 'Feature a request', 'elementskit-lite' ); ?></a>
+			<a target="_blank" href="https://wpmet.com/plugin/elementskit/roadmaps/#ideas" class="attr-btn attr-btn-primary ekit-admin-right-content--link"><i class="fa fa-check-circle"></i><?php esc_html_e( 'Request a Feature', 'elementskit-lite' ); ?></a>
 		</div>
 	</div>
 </div>
@@ -149,7 +149,7 @@
 	
 	<div class="ekit-admin-right-content">
 
-		<p><span><?php esc_html_e( 'Satisfied?', 'elementskit-lite' ); ?></span><?php esc_html_e( 'Don’t forget to rate our item.', 'elementskit-lite' ); ?></p>
+		<p><span><?php esc_html_e( 'Satisfied?', 'elementskit-lite' ); ?></span><?php esc_html_e( 'Don’t forget to rate ElementsKit', 'elementskit-lite' ); ?></p>
 		<div class="ekit-admin-right-content--button">
 			<a target="_blank" href="https://wordpress.org/support/plugin/elementskit-lite/reviews/?rate=5#new-post" class="attr-btn attr-btn-primary ekit-admin-right-content--link"><i class="fa fa-star"></i><?php esc_html_e( 'Rate it now', 'elementskit-lite' ); ?></a>
 		</div>

@@ -49,8 +49,15 @@ class ElementsKit_HeaderFooterBuilder_Api extends Core\Handler_Api {
 		update_post_meta( $id, 'elementskit_template_condition_singular', $condition_singular );
 		update_post_meta( $id, 'elementskit_template_condition_singular_id', $condition_singular_id );
 
+		// if wpml is active and wpml not set for this post
+		if ( defined( 'ICL_SITEPRESS_VERSION' ) ) {
+			global $sitepress;
+			$wpml_element_type = apply_filters( 'wpml_element_type', 'elementskit_template' );
+			$sitepress->set_element_language_details( $id, $wpml_element_type, false, $sitepress->get_current_language(), null, false );
+		}
+
 		if ( $open_editor == 'true' ) {
-			$url = get_admin_url() . '/post.php?post=' . $builder_post_id . '&action=elementor';
+			$url = get_admin_url() . '/post.php?post=' . $id . '&action=elementor';
 			wp_safe_redirect( $url );
 			exit;
 		} else {

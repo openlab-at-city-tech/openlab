@@ -45,6 +45,10 @@ class Enqueue_Scripts{
             wp_enqueue_style( 'fluent-form-styles' );
             wp_enqueue_style( 'fluentform-public-default' );
         }
+
+		// register scripts for lottie
+        wp_register_script( 'lottie',\ElementsKit_Lite::widget_url() . 'lottie/assets/js/lottie.min.js', null, '5.6.8', true );
+        wp_register_script( 'lottie-init',\ElementsKit_Lite::widget_url() . 'lottie/assets/js/lottie.init.js', ['lottie', 'elementor-frontend'], \ElementsKit_Lite::version(), true );
     }
 
     public function elementor_css() {

@@ -81,8 +81,18 @@ class Widget_Area_Utils {
 					<div class="elementor-widget-container">
 					<?php
 					if ( isset( $builder_post->ID ) ) {
+						$builder_post_id = $builder_post->ID;
+
+						// if wpml is active, get the post id from wpml
+						if( defined( 'ICL_SITEPRESS_VERSION' ) ) {
+							$language_details = apply_filters( 'wpml_post_language_details', NULL, get_the_ID() );
+							if( !is_wp_error($language_details) ) {
+								$builder_post_id = apply_filters( 'wpml_object_id', $builder_post_id, 'elementskit_content', true, $language_details['language_code'] );
+							}
+						}
+
 						// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped --  Displaying with Elementor content rendering
-						echo str_replace( '#elementor', '', \ElementsKit_Lite\Utils::render_tab_content( $elementor->frontend->get_builder_content_for_display( $builder_post->ID ), $builder_post->ID ) ); 
+						echo str_replace( '#elementor', '', \ElementsKit_Lite\Utils::render_tab_content( $elementor->frontend->get_builder_content_for_display( $builder_post_id ), $builder_post_id ) );
 					} else {
 						echo esc_html__( 'Click here to add content.', 'elementskit-lite' );
 					}

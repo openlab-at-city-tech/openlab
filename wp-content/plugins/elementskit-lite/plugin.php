@@ -63,6 +63,9 @@ class Plugin {
 		// Register ElementsKit supported widgets to Elementor from 3rd party plugins.
 		add_action( 'elementor/widgets/register', array( $this, 'register_widgets' ), 1050 );
 
+		// Register wpml compatibility
+		Compatibility\Wpml\Init::instance();
+
 		// Compatibility issues
 		Compatibility\Conflicts\Init::instance();
 

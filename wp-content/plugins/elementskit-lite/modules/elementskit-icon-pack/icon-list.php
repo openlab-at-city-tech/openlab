@@ -3,6 +3,7 @@ defined( 'ABSPATH' ) || exit;
 
 return array(
 	'icon icon-home'                                  => 'icon icon-home',
+	'icon icon-advanced-slider'                       => 'icon icon-advanced-slider',
 	'icon icon-apartment1'                            => 'icon icon-apartment1',
 	'icon icon-pencil'                                => 'icon icon-pencil',
 	'icon icon-magic-wand'                            => 'icon icon-magic-wand',

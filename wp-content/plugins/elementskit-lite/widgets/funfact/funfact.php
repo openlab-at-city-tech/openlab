@@ -180,7 +180,7 @@ class ElementsKit_Widget_Funfact extends Widget_Base {
 			'ekit_funfact_number',
 			[
 				'label'       => esc_html__('Number ', 'elementskit-lite'),
-				'type'        => Controls_Manager::TEXT,
+				'type'        => Controls_Manager::NUMBER,
 				'default'     => '254',
 				'placeholder' => esc_html__('Enter number', 'elementskit-lite'),
 			]

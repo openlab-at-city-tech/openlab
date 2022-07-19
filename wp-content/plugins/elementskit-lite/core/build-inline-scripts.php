@@ -26,7 +26,7 @@ class Build_Inline_Scripts {
 		ob_start(); ?>
 
 		var elementskit = {
-			resturl: '<?php echo esc_url(get_rest_url() . 'elementskit/v1/'); ?>',
+			resturl: '<?php echo defined( 'ICL_SITEPRESS_VERSION' ) ? esc_url(home_url('/wp-json/elementskit/v1/')) : esc_url(get_rest_url() . 'elementskit/v1/'); ?>',
 		}
 
 		<?php
