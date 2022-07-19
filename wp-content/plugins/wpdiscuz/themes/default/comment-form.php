@@ -275,7 +275,7 @@ if (!post_password_required($post->ID) && $load) {
                                 }
                                 ?>
                                 <div class="wpdiscuz-subscribe-form-button">
-                                    <input id="wpdiscuz_subscription_button" class="wpd-prim-button" type="submit" value="<?php echo esc_attr($wpdiscuz->options->getPhrase("wc_form_subscription_submit")); ?>" name="wpdiscuz_subscription_button" />
+                                    <input id="wpdiscuz_subscription_button" class="wpd-prim-button wpd_not_clicked" type="submit" value="<?php echo esc_attr($wpdiscuz->options->getPhrase("wc_form_subscription_submit")); ?>" name="wpdiscuz_subscription_button" />
                                 </div> 
                                 <?php
                                 if (!$currentUser->ID && $form->isShowSubscriptionBarAgreement()) {
@@ -459,7 +459,7 @@ if (!post_password_required($post->ID) && $load) {
                                     <?php esc_html_e($loadMoreButtonText); ?>
                                 </button>
                             </div>
-                            <input id="wpdiscuzHasMoreComments" type="hidden" value="0" />
+                            <span id="wpdiscuzHasMoreComments" data-is_show_load_more="0"></span>
                             <?php
                         } else if ($commentData["is_show_load_more"]) {
                             $loadMoreButtonText = $wpdiscuz->options->thread_display["commentListLoadType"] == 1 ? $wpdiscuz->options->getPhrase("wc_load_rest_comments_submit_text") : $wpdiscuz->options->getPhrase("wc_load_more_submit_text");
@@ -482,7 +482,7 @@ if (!post_password_required($post->ID) && $load) {
                                     ?>
                                 </button>
                             </div>
-                            <input id="wpdiscuzHasMoreComments" type="hidden" value="<?php echo esc_attr($commentData["is_show_load_more"]); ?>" />
+                            <span id="wpdiscuzHasMoreComments" data-is_show_load_more="<?php  echo esc_attr($commentData["is_show_load_more"]); ?>"></span>
                             <?php
                         }
                         ?>

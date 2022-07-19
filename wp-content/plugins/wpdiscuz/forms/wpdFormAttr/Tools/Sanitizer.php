@@ -13,7 +13,7 @@ class Sanitizer {
                 return $default;
             }
         }
-        $variable = filter_input($action, $variable_name, $filter, $options);
+        $variable = isset($variable_name) ? filter_input($action, $variable_name, $filter) : '';
         return $variable ? $variable : $default;
     }
 

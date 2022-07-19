@@ -544,3 +544,105 @@
 .wpdtool-left {float: left;}
 .wpdtool-right {float: right;}
 /* ============== TOOLS PAGE ============== */
+
+/* PHRASES ACCORDION START */
+.wc-form .wpd-accordion .wpd-accordion-item {
+    margin:7px 0px;
+}
+.wc-form .wpd-accordion .wpd-accordion-title {
+    position: relative;
+    padding: 4px 50px 4px 4px;
+    cursor: pointer;
+    display: block;
+    border: 1px solid #d3d3d3;
+    background-color: #f9f9f9;
+    color: #10b493;
+}
+
+.wc-form .wpd-accordion .wpd-accordion-title p {
+    margin: 5px 0 5px 15px;
+    font-weight: normal;
+    font-size: 20px;
+}
+.wc-form .wpd-accordion .wpd-accordion-title:after {
+    content: "\f139";
+    font-family: dashicons;
+    display: inline-block;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 10px;
+    transition: all .4s ease;
+    transform-origin: 50%;
+    font-size: 25px;
+}
+
+.wc-form .wpd-accordion .wpd-accordion-current .wpd-accordion-title:after {
+    transform: translateY(-50%) rotateZ(90deg);
+}
+.wc-form .wpd-accordion .wpd-accordion-item:not(.wpd-accordion-current) .wpd-accordion-content {
+    display: none;
+}
+.wc-form .wpd-accordion .wpd-accordion-current .wpd-accordion-title {
+    background-color: #00B38F;
+    color:#f0f0f0;
+}
+
+#wpd-setbox .wc-form .wpd-accordion .wpd-accordion-content .wpd-opt-name {
+    width: calc(40% - 42px);
+}
+#wpd-setbox .wc-form .wpd-accordion .wpd-accordion-content .wpd-opt-input {
+    width: 60%;
+}
+
+#wpd-setbox .wc-form .wpd-accordion .wc_available_variable[data-wpd-clipboard] {
+    cursor: pointer;
+    display: block;
+    margin-top: 5px;
+    font-weight: normal;
+    font-size: 13px;
+}
+/* PHRASES ACCORDION END */
+
+
+/* NOTICES START */
+
+.wpd-notices-container {
+    position: fixed;
+    top: 36px;
+    right: 5px;
+    width: 300px;
+    line-height: 20px;
+    z-index: 999999;
+}
+
+.wpd-notice {
+    /*background: #fff;*/
+    /*border: 1px solid #c3c4c7;*/
+    /*border-left-width: 4px;*/
+    /*box-shadow: 0 1px 1px rgba(0,0,0,.04);*/
+    /*padding: 1px 12px;*/
+    margin-top: 5px;
+    color: #fff;
+    font-size: 14px;
+    padding: 10px 20px;
+    box-shadow: #666 0px 0px 8px;
+}
+
+.wpd-notice-error {
+    background-color: #d63638;
+    /*border-left-color: #d63638;*/
+}
+
+.wpd-notice-warning {
+    background-color: #dba617;
+    /*border-left-color: #dba617;*/
+}
+
+.wpd-notice-success {
+    /*background-color: #00a32a;*/
+    background-color: #4caf50;
+    /*border-left-color: #00a32a;*/
+}
+
+/* NOTICES END */

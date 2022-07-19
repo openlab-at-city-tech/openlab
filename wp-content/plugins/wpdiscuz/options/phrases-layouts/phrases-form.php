@@ -52,10 +52,6 @@ if (!defined("ABSPATH")) {
                 <td colspan="3"><input type="text" value="<?php echo esc_attr($this->phrases["wc_notify_on_new_reply"]); ?>" name="wc_notify_on_new_reply" id="wc_notify_on_new_reply" /></td>
             </tr>
             <tr valign="top">
-                <th scope="row"><label for="wc_sort_by"><?php esc_html_e("Sort by", "wpdiscuz"); ?></label></th>
-                <td colspan="3"><input type="text" value="<?php echo esc_attr($this->phrases["wc_sort_by"]); ?>" name="wc_sort_by" id="wc_sort_by" /></td>
-            </tr>
-            <tr valign="top">
                 <th scope="row"><label for="wc_newest"><?php esc_html_e("Newest", "wpdiscuz"); ?></label></th>
                 <td colspan="3"><input type="text" value="<?php echo esc_attr($this->phrases["wc_newest"]); ?>" name="wc_newest" id="wc_newest" /></td>
             </tr>

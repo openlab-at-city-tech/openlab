@@ -19,7 +19,7 @@
         }
     });
 
-    $(document).on('mousedown', '#wpd-put-shortcode', function () {
+    $('body').on('mousedown', '#wpd-put-shortcode', function () {
         var question = $('#wpd-inline-question').val();
         var shortcode = '[' + wpdObject.shortcode + ' id="' + Math.random().toString(36).substr(2, 10) + '" question="' + (question ? $('<div>' + question + '</div>').text() : wpdObject.leave_feebdack) + '" opened="' + $('[name=wpd-inline-type]:checked').val() + '"]';
         shortcode += tinymce.activeEditor.selection.getContent();

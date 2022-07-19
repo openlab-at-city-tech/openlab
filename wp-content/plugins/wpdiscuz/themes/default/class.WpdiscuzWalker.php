@@ -36,7 +36,7 @@ class WpdiscuzWalker extends Walker_Comment implements WpDiscuzConstants {
         $commentOutput = "";
         $depth = isset($args["addComment"]) ? $args["addComment"] : $depth;
         $uniqueId = $comment->comment_ID . "_" . $comment->comment_parent;
-        $commentWrapperClass = ["wpd-comment"];
+        $commentWrapperClass = get_comment_class("wpd-comment",$comment->comment_ID, $comment->comment_post_ID);
         $commentWrapClass = ["wpd-comment-wrap"];
 
         if (isset($this->extra[$comment->comment_ID]["metas"])) {

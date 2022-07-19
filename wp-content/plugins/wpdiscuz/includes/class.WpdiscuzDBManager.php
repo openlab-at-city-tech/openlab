@@ -666,13 +666,14 @@ class WpdiscuzDBManager implements WpDiscuzConstants {
     public function getMostReactedCommentId($postId, $cache = true) {
         if ($cache) {
             $stat = get_post_meta($postId, self::POSTMETA_STATISTICS, true);
-            if (!is_array($stat))
+            if (!is_array($stat)) {
                 $stat = [];
-            if ($stat && isset($stat[self::POSTMETA_REACTED])) {
-                $reacted = intval($stat[self::POSTMETA_REACTED]);
+            }
+            if ($stat && array_key_exists(self::POSTMETA_REACTED, $stat) && $stat[self::POSTMETA_REACTED]) {
+                $reacted = (int)$stat[self::POSTMETA_REACTED];
             } else {
                 $sql = $this->db->prepare("SELECT v.`comment_id` FROM `{$this->usersVoted}` AS `v` INNER JOIN `{$this->db->comments}` AS `c` ON `v`.`comment_id` = `c`.`comment_ID` WHERE `c`.`comment_post_ID`  = %d AND `c`.`comment_approved` = '1' GROUP BY `v`.`comment_id` ORDER BY COUNT(`v`.`comment_id`) DESC, `c`.`comment_ID` DESC LIMIT 1;", $postId);
-                $reacted = intval($this->db->get_var($sql));
+                $reacted = (int)$this->db->get_var($sql);
                 $stat[self::POSTMETA_REACTED] = $reacted;
                 update_post_meta($postId, self::POSTMETA_STATISTICS, $stat);
             }
@@ -712,7 +713,7 @@ class WpdiscuzDBManager implements WpDiscuzConstants {
         $sql = "SELECT * FROM `{$this->emailNotification}` WHERE 1";
 
         if (!empty($args["id"])) {
-            $sql .= " AND `id` = " . (int) $args["id"];
+            $sql .= " AND `id` = " . (int)$args["id"];
         }
 
         if (!empty($args["email"])) {
@@ -720,11 +721,11 @@ class WpdiscuzDBManager implements WpDiscuzConstants {
         }
 
         if (!empty($args["subscribtion_id"])) {
-            $sql .= " AND `subscribtion_id` = " . (int) $args["subscribtion_id"];
+            $sql .= " AND `subscribtion_id` = " . (int)$args["subscribtion_id"];
         }
 
         if (!empty($args["post_id"])) {
-            $sql .= " AND `post_id` = " . (int) $args["post_id"];
+            $sql .= " AND `post_id` = " . (int)$args["post_id"];
         }
 
         if (!empty($args["subscribtion_type"])) {
@@ -736,7 +737,7 @@ class WpdiscuzDBManager implements WpDiscuzConstants {
         }
 
         if (!empty($args["confirm"])) {
-            $sql .= " AND `confirm` = " . (int) $args["confirm"];
+            $sql .= " AND `confirm` = " . (int)$args["confirm"];
         }
 
         if (!empty($args["subscription_date"])) {
@@ -756,11 +757,11 @@ class WpdiscuzDBManager implements WpDiscuzConstants {
         }
 
         if (!empty($args["limit"])) {
-            $sql .= " LIMIT " . (int) $args["limit"];
+            $sql .= " LIMIT " . (int)$args["limit"];
         }
 
         if (!empty($args["offset"])) {
-            $sql .= " OFFSET " . (int) $args["offset"];
+            $sql .= " OFFSET " . (int)$args["offset"];
         }
 
         return $this->db->get_results($sql, ARRAY_A);
@@ -958,8 +959,8 @@ class WpdiscuzDBManager implements WpDiscuzConstants {
     public function regenerateVoteMetas($ids) {
         foreach ($ids as $k => $id) {
             $votes = $this->getVotes($id);
-            $like = (int) $votes[0];
-            $dislike = (int) $votes[1];
+            $like = (int)$votes[0];
+            $dislike = (int)$votes[1];
             update_comment_meta($id, self::META_KEY_VOTES_SEPARATE, ["like" => $like, "dislike" => $dislike]);
             update_comment_meta($id, self::META_KEY_VOTES, $like - $dislike);
         }

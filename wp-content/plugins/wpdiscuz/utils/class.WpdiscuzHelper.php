@@ -413,6 +413,9 @@ class WpdiscuzHelper implements WpDiscuzConstants {
     }
 
     public function canUserEditComment($comment, $currentUser, $commentListArgs = []) {
+        if(!($comment instanceof WP_Comment)){
+            return false;
+        }
         if (isset($commentListArgs["comment_author_email"])) {
             $storedCookieEmail = $commentListArgs["comment_author_email"];
         } else {

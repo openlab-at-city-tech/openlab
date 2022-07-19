@@ -258,6 +258,22 @@ class WpdiscuzOptions implements WpDiscuzConstants {
         $this->subscription["usePostmaticForCommentNotification"] = isset($options[self::TAB_SUBSCRIPTION]["usePostmaticForCommentNotification"]) ? $options[self::TAB_SUBSCRIPTION]["usePostmaticForCommentNotification"] : $defaultOptions[self::TAB_SUBSCRIPTION]["usePostmaticForCommentNotification"];
         $this->subscription["isFollowActive"] = isset($options[self::TAB_SUBSCRIPTION]["isFollowActive"]) ? $options[self::TAB_SUBSCRIPTION]["isFollowActive"] : $defaultOptions[self::TAB_SUBSCRIPTION]["isFollowActive"];
         $this->subscription["disableFollowConfirmForUsers"] = isset($options[self::TAB_SUBSCRIPTION]["disableFollowConfirmForUsers"]) ? $options[self::TAB_SUBSCRIPTION]["disableFollowConfirmForUsers"] : $defaultOptions[self::TAB_SUBSCRIPTION]["disableFollowConfirmForUsers"];
+        $this->subscription["emailSubjectPostComment"] = isset($options[self::TAB_SUBSCRIPTION]["emailSubjectPostComment"]) ? $options[self::TAB_SUBSCRIPTION]["emailSubjectPostComment"] : $defaultOptions[self::TAB_SUBSCRIPTION]["emailSubjectPostComment"];
+        $this->subscription["emailContentPostComment"] = isset($options[self::TAB_SUBSCRIPTION]["emailContentPostComment"]) ? $options[self::TAB_SUBSCRIPTION]["emailContentPostComment"] : $defaultOptions[self::TAB_SUBSCRIPTION]["emailContentPostComment"];
+        $this->subscription["emailSubjectAllCommentReply"] = isset($options[self::TAB_SUBSCRIPTION]["emailSubjectAllCommentReply"]) ? $options[self::TAB_SUBSCRIPTION]["emailSubjectAllCommentReply"] : $defaultOptions[self::TAB_SUBSCRIPTION]["emailSubjectAllCommentReply"];
+        $this->subscription["emailContentAllCommentReply"] = isset($options[self::TAB_SUBSCRIPTION]["emailContentAllCommentReply"]) ? $options[self::TAB_SUBSCRIPTION]["emailContentAllCommentReply"] : $defaultOptions[self::TAB_SUBSCRIPTION]["emailContentAllCommentReply"];
+        $this->subscription["emailSubjectCommentReply"] = isset($options[self::TAB_SUBSCRIPTION]["emailSubjectCommentReply"]) ? $options[self::TAB_SUBSCRIPTION]["emailSubjectCommentReply"] : $defaultOptions[self::TAB_SUBSCRIPTION]["emailSubjectCommentReply"];
+        $this->subscription["emailContentCommentReply"] = isset($options[self::TAB_SUBSCRIPTION]["emailContentCommentReply"]) ? $options[self::TAB_SUBSCRIPTION]["emailContentCommentReply"] : $defaultOptions[self::TAB_SUBSCRIPTION]["emailContentCommentReply"];
+        $this->subscription["emailSubjectSubscriptionConfirmation"] = isset($options[self::TAB_SUBSCRIPTION]["emailSubjectSubscriptionConfirmation"]) ? $options[self::TAB_SUBSCRIPTION]["emailSubjectSubscriptionConfirmation"] : $defaultOptions[self::TAB_SUBSCRIPTION]["emailSubjectSubscriptionConfirmation"];
+        $this->subscription["emailContentSubscriptionConfirmation"] = isset($options[self::TAB_SUBSCRIPTION]["emailContentSubscriptionConfirmation"]) ? $options[self::TAB_SUBSCRIPTION]["emailContentSubscriptionConfirmation"] : $defaultOptions[self::TAB_SUBSCRIPTION]["emailContentSubscriptionConfirmation"];
+        $this->subscription["emailSubjectCommentApproved"] = isset($options[self::TAB_SUBSCRIPTION]["emailSubjectCommentApproved"]) ? $options[self::TAB_SUBSCRIPTION]["emailSubjectCommentApproved"] : $defaultOptions[self::TAB_SUBSCRIPTION]["emailSubjectCommentApproved"];
+        $this->subscription["emailContentCommentApproved"] = isset($options[self::TAB_SUBSCRIPTION]["emailContentCommentApproved"]) ? $options[self::TAB_SUBSCRIPTION]["emailContentCommentApproved"] : $defaultOptions[self::TAB_SUBSCRIPTION]["emailContentCommentApproved"];
+        $this->subscription["emailSubjectUserMentioned"] = isset($options[self::TAB_SUBSCRIPTION]["emailSubjectUserMentioned"]) ? $options[self::TAB_SUBSCRIPTION]["emailSubjectUserMentioned"] : $defaultOptions[self::TAB_SUBSCRIPTION]["emailSubjectUserMentioned"];
+        $this->subscription["emailContentUserMentioned"] = isset($options[self::TAB_SUBSCRIPTION]["emailContentUserMentioned"]) ? $options[self::TAB_SUBSCRIPTION]["emailContentUserMentioned"] : $defaultOptions[self::TAB_SUBSCRIPTION]["emailContentUserMentioned"];
+        $this->subscription["emailSubjectFollowConfirmation"] = isset($options[self::TAB_SUBSCRIPTION]["emailSubjectFollowConfirmation"]) ? $options[self::TAB_SUBSCRIPTION]["emailSubjectFollowConfirmation"] : $defaultOptions[self::TAB_SUBSCRIPTION]["emailSubjectFollowConfirmation"];
+        $this->subscription["emailContentFollowConfirmation"] = isset($options[self::TAB_SUBSCRIPTION]["emailContentFollowConfirmation"]) ? $options[self::TAB_SUBSCRIPTION]["emailContentFollowConfirmation"] : $defaultOptions[self::TAB_SUBSCRIPTION]["emailContentFollowConfirmation"];
+        $this->subscription["emailSubjectFollowComment"] = isset($options[self::TAB_SUBSCRIPTION]["emailSubjectFollowComment"]) ? $options[self::TAB_SUBSCRIPTION]["emailSubjectFollowComment"] : $defaultOptions[self::TAB_SUBSCRIPTION]["emailSubjectFollowComment"];
+        $this->subscription["emailContentFollowComment"] = isset($options[self::TAB_SUBSCRIPTION]["emailContentFollowComment"]) ? $options[self::TAB_SUBSCRIPTION]["emailContentFollowComment"] : $defaultOptions[self::TAB_SUBSCRIPTION]["emailContentFollowComment"];
         /* labels */
         $this->labels["blogRoleLabels"] = isset($options[self::TAB_LABELS]["blogRoleLabels"]) ? $options[self::TAB_LABELS]["blogRoleLabels"] : $defaultOptions[self::TAB_LABELS]["blogRoleLabels"];
         $this->labels["blogRoles"] = isset($options[self::TAB_LABELS]["blogRoles"]) ? $options[self::TAB_LABELS]["blogRoles"] : $defaultOptions[self::TAB_LABELS]["blogRoles"];
@@ -333,7 +349,6 @@ class WpdiscuzOptions implements WpDiscuzConstants {
             "wc_notify_on_new_comment" => esc_html__("new follow-up comments", "wpdiscuz"),
             "wc_notify_on_all_new_reply" => esc_html__("new replies to my comments", "wpdiscuz"),
             "wc_notify_on_new_reply" => esc_html__("Notify of new replies to this comment", "wpdiscuz"),
-            "wc_sort_by" => esc_html__("Sort by", "wpdiscuz"),
             "wc_newest" => esc_html__("Newest", "wpdiscuz"),
             "wc_oldest" => esc_html__("Oldest", "wpdiscuz"),
             "wc_most_voted" => esc_html__("Most Voted", "wpdiscuz"),
@@ -733,6 +748,22 @@ class WpdiscuzOptions implements WpDiscuzConstants {
                 "usePostmaticForCommentNotification" => $this->subscription["usePostmaticForCommentNotification"],
                 "isFollowActive" => $this->subscription["isFollowActive"],
                 "disableFollowConfirmForUsers" => $this->subscription["disableFollowConfirmForUsers"],
+                "emailSubjectPostComment" => $this->subscription["emailSubjectPostComment"],
+                "emailContentPostComment" => $this->subscription["emailContentPostComment"],
+                "emailSubjectAllCommentReply" => $this->subscription["emailSubjectAllCommentReply"],
+                "emailContentAllCommentReply" => $this->subscription["emailContentAllCommentReply"],
+                "emailSubjectCommentReply" => $this->subscription["emailSubjectCommentReply"],
+                "emailContentCommentReply" => $this->subscription["emailContentCommentReply"],
+                "emailSubjectSubscriptionConfirmation" => $this->subscription["emailSubjectSubscriptionConfirmation"],
+                "emailContentSubscriptionConfirmation" => $this->subscription["emailContentSubscriptionConfirmation"],
+                "emailSubjectCommentApproved" => $this->subscription["emailSubjectCommentApproved"],
+                "emailContentCommentApproved" => $this->subscription["emailContentCommentApproved"],
+                "emailSubjectUserMentioned" => $this->subscription["emailSubjectUserMentioned"],
+                "emailContentUserMentioned" => $this->subscription["emailContentUserMentioned"],
+                "emailSubjectFollowConfirmation" => $this->subscription["emailSubjectFollowConfirmation"],
+                "emailContentFollowConfirmation" => $this->subscription["emailContentFollowConfirmation"],
+                "emailSubjectFollowComment" => $this->subscription["emailSubjectFollowComment"],
+                "emailContentFollowComment" => $this->subscription["emailContentFollowComment"],
             ],
             self::TAB_LABELS => [
                 "blogRoleLabels" => $this->labels["blogRoleLabels"],
@@ -980,6 +1011,22 @@ class WpdiscuzOptions implements WpDiscuzConstants {
                 "usePostmaticForCommentNotification" => 0,
                 "isFollowActive" => 1,
                 "disableFollowConfirmForUsers" => 1,
+                "emailSubjectPostComment" => esc_html__("New Comment", "wpdiscuz"),
+                "emailContentPostComment" => __("Hi [SUBSCRIBER_NAME],<br/><br/> new comment has been posted by the <em><strong>[COMMENT_AUTHOR]</em></strong> on the discussion section you've been interested in<br/><br/><a href='[COMMENT_URL]'>[COMMENT_URL]</a><br/><br/>[COMMENT_CONTENT]<br/><br/><a href='[UNSUBSCRIBE_URL]'>Unsubscribe</a>", "wpdiscuz"),
+                "emailSubjectAllCommentReply" => esc_html__("New Reply ( your comments )", "wpdiscuz"),
+                "emailContentAllCommentReply" => __("Hi [SUBSCRIBER_NAME],<br/><br/> new reply has been posted by the <em><strong>[COMMENT_AUTHOR]</em></strong> on the discussion section you've been interested in<br/><br/><a href='[COMMENT_URL]'>[COMMENT_URL]</a><br/><br/>[COMMENT_CONTENT]<br/><br/><a href='[UNSUBSCRIBE_URL]'>Unsubscribe</a>", "wpdiscuz"),
+                "emailSubjectCommentReply" => esc_html__("New Reply ( your specific comment )", "wpdiscuz"),
+                "emailContentCommentReply" => __("Hi [SUBSCRIBER_NAME],<br/><br/> new reply has been posted by the <em><strong>[COMMENT_AUTHOR]</em></strong> on the discussion section you've been interested in<br/><br/><a href='[COMMENT_URL]'>[COMMENT_URL]</a><br/><br/>[COMMENT_CONTENT]<br/><br/><a href='[UNSUBSCRIBE_URL]'>Unsubscribe</a>", "wpdiscuz"),
+                "emailSubjectSubscriptionConfirmation" => esc_html__("Subscription Confirmation", "wpdiscuz"),
+                "emailContentSubscriptionConfirmation" => __("Hi, <br/> You just subscribed for new comments on our website. This means you will receive an email when new comments are posted according to subscription option you've chosen. <br/> To activate, click confirm below. If you believe this is an error, ignore this message and we'll never bother you again. <br/><br/><a href='[POST_URL]'>[POST_TITLE]</a><br/><br/><a href='[CONFIRM_URL]'>Confirm Your Subscription</a><br/><br/><a href='[CANCEL_URL]'>Cancel Subscription</a>", "wpdiscuz"),
+                "emailSubjectCommentApproved" => esc_html__("Your comment is approved!", "wpdiscuz"),
+                "emailContentCommentApproved" => __('Hi [COMMENT_AUTHOR],<br/><br/>your comment has been approved.<br/><br/><a href="[COMMENT_URL]">[COMMENT_URL]</a><br/><br/>[COMMENT_CONTENT]', "wpdiscuz"),
+                "emailSubjectUserMentioned" => __('You have been mentioned in comment', "wpdiscuz"),
+                "emailContentUserMentioned" => __('Hi [MENTIONED_USER_NAME]!<br/>You have been mentioned in a comment posted on "[POST_TITLE]" post by [COMMENT_AUTHOR].<br/><br/>Comment URL: <a href="[COMMENT_URL]">[COMMENT_URL]</a>', "wpdiscuz"),
+                "emailSubjectFollowConfirmation" => esc_html__('User Following Confirmation', "wpdiscuz"),
+                "emailContentFollowConfirmation" => __('Hi, <br/> You just started following a new user. You\'ll get email notification once new comment is posted by this user. <br/> Please click on "user following confirmation" link to confirm your request. If you believe this is an error, ignore this message and we\'ll never bother you again. <br/><br/><a href="[POST_URL]">[POST_TITLE]</a><br/><br/><a href="[CONFIRM_URL]">' . __("Confirm Follow", "wpdiscuz") . '</a><br/><br/><a href="[CANCEL_URL]">' . esc_html__("Unfollow", "wpdiscuz") . "</a>", "wpdiscuz"),
+                "emailSubjectFollowComment" => esc_html__("New Comment", "wpdiscuz"),
+                "emailContentFollowComment" => __('Hi [FOLLOWER_NAME],<br/><br/> new comment has been posted by the <em><strong>[COMMENT_AUTHOR]</em></strong> you are following<br/><br/><a href="[COMMENT_URL]">[COMMENT_URL]</a><br/><br/>[COMMENT_CONTENT]<br/><br/><a href="[CANCEL_URL]">' . esc_html__("Unfollow", "wpdiscuz") . '</a>', "wpdiscuz"),
             ],
             self::TAB_LABELS => [
                 "blogRoleLabels" => isset($this->labels["blogRoleLabels"]) ? $this->labels["blogRoleLabels"] : [],
@@ -1254,6 +1301,9 @@ class WpdiscuzOptions implements WpDiscuzConstants {
             if (!current_user_can("manage_options")) {
                 die(esc_html_e("Hacker?", "wpdiscuz"));
             }
+
+            $defaultOptions = $this->getDefaultOptions();
+
             check_admin_referer("wc_options_form-" . sanitize_text_field($_POST["wpd_tab"]));
             if (self::TAB_FORM === sanitize_text_field($_POST["wpd_tab"])) {
                 $this->form["commentFormView"] = isset($_POST[self::TAB_FORM]["commentFormView"]) ? trim(sanitize_text_field($_POST[self::TAB_FORM]["commentFormView"])) : "collapsed";
@@ -1449,6 +1499,22 @@ class WpdiscuzOptions implements WpDiscuzConstants {
                 $this->subscription["usePostmaticForCommentNotification"] = isset($_POST[self::TAB_SUBSCRIPTION]["usePostmaticForCommentNotification"]) ? absint($_POST[self::TAB_SUBSCRIPTION]["usePostmaticForCommentNotification"]) : 0;
                 $this->subscription["isFollowActive"] = isset($_POST[self::TAB_SUBSCRIPTION]["isFollowActive"]) ? absint($_POST[self::TAB_SUBSCRIPTION]["isFollowActive"]) : 0;
                 $this->subscription["disableFollowConfirmForUsers"] = isset($_POST[self::TAB_SUBSCRIPTION]["disableFollowConfirmForUsers"]) ? absint($_POST[self::TAB_SUBSCRIPTION]["disableFollowConfirmForUsers"]) : 0;
+                $this->subscription["emailSubjectPostComment"] = isset($_POST[self::TAB_SUBSCRIPTION]["emailSubjectPostComment"]) ? wp_kses_post(wp_unslash($_POST[self::TAB_SUBSCRIPTION]["emailSubjectPostComment"])) : wp_kses_post(wp_unslash($defaultOptions['emailSubjectPostComment']));
+                $this->subscription["emailContentPostComment"] = isset($_POST[self::TAB_SUBSCRIPTION]["emailContentPostComment"]) ? wp_kses_post(wp_unslash($_POST[self::TAB_SUBSCRIPTION]["emailContentPostComment"])) : wp_kses_post(wp_unslash($defaultOptions['emailContentPostComment']));
+                $this->subscription["emailSubjectAllCommentReply"] = isset($_POST[self::TAB_SUBSCRIPTION]["emailSubjectAllCommentReply"]) ? wp_kses_post(wp_unslash($_POST[self::TAB_SUBSCRIPTION]["emailSubjectAllCommentReply"])) : wp_kses_post(wp_unslash($defaultOptions['emailSubjectAllCommentReply']));
+                $this->subscription["emailContentAllCommentReply"] = isset($_POST[self::TAB_SUBSCRIPTION]["emailContentAllCommentReply"]) ? wp_kses_post(wp_unslash($_POST[self::TAB_SUBSCRIPTION]["emailContentAllCommentReply"])) : wp_kses_post(wp_unslash($defaultOptions['emailContentAllCommentReply']));
+                $this->subscription["emailSubjectCommentReply"] = isset($_POST[self::TAB_SUBSCRIPTION]["emailSubjectCommentReply"]) ? wp_kses_post(wp_unslash($_POST[self::TAB_SUBSCRIPTION]["emailSubjectCommentReply"])) : wp_kses_post(wp_unslash($defaultOptions['emailSubjectCommentReply']));
+                $this->subscription["emailContentCommentReply"] = isset($_POST[self::TAB_SUBSCRIPTION]["emailContentCommentReply"]) ? wp_kses_post(wp_unslash($_POST[self::TAB_SUBSCRIPTION]["emailContentCommentReply"])) : wp_kses_post(wp_unslash($defaultOptions['emailContentCommentReply']));
+                $this->subscription["emailSubjectSubscriptionConfirmation"] = isset($_POST[self::TAB_SUBSCRIPTION]["emailSubjectSubscriptionConfirmation"]) ? wp_kses_post(wp_unslash($_POST[self::TAB_SUBSCRIPTION]["emailSubjectSubscriptionConfirmation"])) : wp_kses_post(wp_unslash($defaultOptions['emailSubjectSubscriptionConfirmation']));
+                $this->subscription["emailContentSubscriptionConfirmation"] = isset($_POST[self::TAB_SUBSCRIPTION]["emailContentSubscriptionConfirmation"]) ? wp_kses_post(wp_unslash($_POST[self::TAB_SUBSCRIPTION]["emailContentSubscriptionConfirmation"])) : wp_kses_post(wp_unslash($defaultOptions['emailContentSubscriptionConfirmation']));
+                $this->subscription["emailSubjectCommentApproved"] = isset($_POST[self::TAB_SUBSCRIPTION]["emailSubjectCommentApproved"]) ? wp_kses_post(wp_unslash($_POST[self::TAB_SUBSCRIPTION]["emailSubjectCommentApproved"])) : wp_kses_post(wp_unslash($defaultOptions['emailSubjectCommentApproved']));
+                $this->subscription["emailContentCommentApproved"] = isset($_POST[self::TAB_SUBSCRIPTION]["emailContentCommentApproved"]) ? wp_kses_post(wp_unslash($_POST[self::TAB_SUBSCRIPTION]["emailContentCommentApproved"])) : wp_kses_post(wp_unslash($defaultOptions['emailContentCommentApproved']));
+                $this->subscription["emailSubjectUserMentioned"] = isset($_POST[self::TAB_SUBSCRIPTION]["emailSubjectUserMentioned"]) ? wp_kses_post(wp_unslash($_POST[self::TAB_SUBSCRIPTION]["emailSubjectUserMentioned"])) : wp_kses_post(wp_unslash($defaultOptions['emailSubjectUserMentioned']));
+                $this->subscription["emailContentUserMentioned"] = isset($_POST[self::TAB_SUBSCRIPTION]["emailContentUserMentioned"]) ? wp_kses_post(wp_unslash($_POST[self::TAB_SUBSCRIPTION]["emailContentUserMentioned"])) : wp_kses_post(wp_unslash($defaultOptions['emailContentUserMentioned']));
+                $this->subscription["emailSubjectFollowConfirmation"] = isset($_POST[self::TAB_SUBSCRIPTION]["emailSubjectFollowConfirmation"]) ? wp_kses_post(wp_unslash($_POST[self::TAB_SUBSCRIPTION]["emailSubjectFollowConfirmation"])) : wp_kses_post(wp_unslash($defaultOptions['emailSubjectFollowConfirmation']));
+                $this->subscription["emailContentFollowConfirmation"] = isset($_POST[self::TAB_SUBSCRIPTION]["emailContentFollowConfirmation"]) ? wp_kses_post(wp_unslash($_POST[self::TAB_SUBSCRIPTION]["emailContentFollowConfirmation"])) : wp_kses_post(wp_unslash($defaultOptions['emailContentFollowConfirmation']));
+                $this->subscription["emailSubjectFollowComment"] = isset($_POST[self::TAB_SUBSCRIPTION]["emailSubjectFollowComment"]) ? wp_kses_post(wp_unslash($_POST[self::TAB_SUBSCRIPTION]["emailSubjectFollowComment"])) : wp_kses_post(wp_unslash($defaultOptions['emailSubjectFollowComment']));
+                $this->subscription["emailContentFollowComment"] = isset($_POST[self::TAB_SUBSCRIPTION]["emailContentFollowComment"]) ? wp_kses_post(wp_unslash($_POST[self::TAB_SUBSCRIPTION]["emailContentFollowComment"])) : wp_kses_post(wp_unslash($defaultOptions['emailContentFollowComment']));
             } else if (self::TAB_LABELS === $_POST["wpd_tab"]) {
                 $emptyRolesArray = array_combine(array_keys($this->labels["blogRoleLabels"]), array_pad([], count($this->labels["blogRoleLabels"]), 0));
                 $this->labels["blogRoleLabels"] = isset($_POST[self::TAB_LABELS]["blogRoleLabels"]) ? wp_parse_args($_POST[self::TAB_LABELS]["blogRoleLabels"], $emptyRolesArray) : $emptyRolesArray;
@@ -1532,7 +1598,6 @@ class WpdiscuzOptions implements WpDiscuzConstants {
             $this->phrases["wc_notify_on_new_comment"] = sanitize_text_field($_POST["wc_notify_on_new_comment"]);
             $this->phrases["wc_notify_on_all_new_reply"] = sanitize_text_field($_POST["wc_notify_on_all_new_reply"]);
             $this->phrases["wc_notify_on_new_reply"] = sanitize_text_field($_POST["wc_notify_on_new_reply"]);
-            $this->phrases["wc_sort_by"] = sanitize_text_field($_POST["wc_sort_by"]);
             $this->phrases["wc_newest"] = sanitize_text_field($_POST["wc_newest"]);
             $this->phrases["wc_oldest"] = sanitize_text_field($_POST["wc_oldest"]);
             $this->phrases["wc_most_voted"] = sanitize_text_field($_POST["wc_most_voted"]);
@@ -1831,7 +1896,7 @@ class WpdiscuzOptions implements WpDiscuzConstants {
                         $data = $phrases;
                     }
                 }
-                if($data) {
+                if ($data) {
                     $file_name .= date('Y-m-d') . '.txt';
                     header('Content-Description: File Transfer');
                     header("Content-Disposition: attachment; filename={$file_name}");
@@ -2203,30 +2268,30 @@ class WpdiscuzOptions implements WpDiscuzConstants {
                         <?php esc_html_e("New wpDiscuz addon!"); ?>
                     </p>
                     <div style="font-size:14px;">
-                        <!--                        --><?php //if(!in_array("BuddyPress Integration", $lastHashArray)):           ?>
+                        <!--                        --><?php //if(!in_array("BuddyPress Integration", $lastHashArray)):                           ?>
                         <!--                            <div style="display:inline-block; min-width:27%; padding-right:10px; margin-bottom:10px;">-->
-                        <!--                                <img src="--><?php //echo plugins_url(WPDISCUZ_DIR_NAME . "/assets/addons/buddypress/header.png");          ?><!--" style="height:50px; width:auto; vertical-align:middle; margin:0px 10px; text-decoration:none; float: left;"/>-->
-                        <!--                                <a href="https://gvectors.com/product/wpdiscuz-buddypress-integration/" target="_blank" style="color:#444; text-decoration:none;" title="--><?php //esc_attr_e("Go to the addon page", "wpdiscuz");           ?><!--">wpDiscuz - BuddyPress Integration <br><span style="margin: 0; font-size: 12px; line-height: 15px; display: block; padding-top: 5px;">This addon integrates wpDiscuz with BuddyPress plugin. Creates &laquoDiscussion&raquo; tab in the users profile page, intgartes notifications, activities, and more...</span></a>-->
+                        <!--                                <img src="--><?php //echo plugins_url(WPDISCUZ_DIR_NAME . "/assets/addons/buddypress/header.png");                          ?><!--" style="height:50px; width:auto; vertical-align:middle; margin:0px 10px; text-decoration:none; float: left;"/>-->
+                        <!--                                <a href="https://gvectors.com/product/wpdiscuz-buddypress-integration/" target="_blank" style="color:#444; text-decoration:none;" title="--><?php //esc_attr_e("Go to the addon page", "wpdiscuz");                           ?><!--">wpDiscuz - BuddyPress Integration <br><span style="margin: 0; font-size: 12px; line-height: 15px; display: block; padding-top: 5px;">This addon integrates wpDiscuz with BuddyPress plugin. Creates &laquoDiscussion&raquo; tab in the users profile page, intgartes notifications, activities, and more...</span></a>-->
                         <!--                            </div>-->
-                        <!--                        --><?php //endif;           ?>
+                        <!--                        --><?php //endif;                           ?>
                         <?php if (!in_array("User Notifications", $lastHashArray)): ?>
                             <div style="display:inline-block; min-width:27%; padding-right:10px; margin-bottom:10px;">
                                 <img src="<?php echo plugins_url(WPDISCUZ_DIR_NAME . "/assets/addons/notifications/header.png"); ?>" style="height:50px; width:auto; vertical-align:middle; margin:0px 10px; text-decoration:none; float: left;"/>
                                 <a href="https://gvectors.com/product/wpdiscuz-user-notifications/" target="_blank" style="color:#444; text-decoration:none;" title="<?php esc_attr_e("Go to the addon page", "wpdiscuz"); ?>">wpDiscuz - User Notifications <br><span style="width: 60%; margin: 0; font-size: 12px; line-height: 15px; display: block; padding-top: 5px;">Adds a real-time user notification system to your site, so users can receive updates and notifications directly on your website as they happen (when someone likes your comment, rates your post, mentions you, replies to your comment).</span></a>
                             </div>
                         <?php endif; ?>
-                        <!--	                    --><?php //if(!in_array("GIPHY Integration", $lastHashArray)):          ?>
+                        <!--	                    --><?php //if(!in_array("GIPHY Integration", $lastHashArray)):                          ?>
                         <!--                            <div style="display:inline-block; min-width:27%; padding-right:10px; margin-bottom:10px;">-->
-                        <!--                                <img src="--><?php //echo plugins_url(WPDISCUZ_DIR_NAME . "/assets/addons/giphy/header.png");           ?><!--" style="height:50px; width:auto; vertical-align:middle; margin:0px 10px; text-decoration:none; float: left;"/>-->
-                        <!--                                <a href="https://gvectors.com/product/wpdiscuz-giphy-integration/" target="_blank" style="color:#444; text-decoration:none;" title="--><?php //esc_attr_e("Go to the addon page", "wpdiscuz");           ?><!--">wpDiscuz - GIPHY Integration <br><span style="margin: 0; font-size: 12px; line-height: 15px; display: block; padding-top: 5px;">This adds GIPHY [GIF] button on the toolbar of comment editor. Clicking this will open a new popup where you can search for your favorite gifs and insert them in your comment content.</span></a>-->
+                        <!--                                <img src="--><?php //echo plugins_url(WPDISCUZ_DIR_NAME . "/assets/addons/giphy/header.png");                           ?><!--" style="height:50px; width:auto; vertical-align:middle; margin:0px 10px; text-decoration:none; float: left;"/>-->
+                        <!--                                <a href="https://gvectors.com/product/wpdiscuz-giphy-integration/" target="_blank" style="color:#444; text-decoration:none;" title="--><?php //esc_attr_e("Go to the addon page", "wpdiscuz");                           ?><!--">wpDiscuz - GIPHY Integration <br><span style="margin: 0; font-size: 12px; line-height: 15px; display: block; padding-top: 5px;">This adds GIPHY [GIF] button on the toolbar of comment editor. Clicking this will open a new popup where you can search for your favorite gifs and insert them in your comment content.</span></a>-->
                         <!--                            </div>-->
-                        <!--	                    --><?php //endif;           ?>
-                        <!--				        --><?php //if(!in_array("Tenor GIFs Integration", $lastHashArray)):           ?>
+                        <!--	                    --><?php //endif;                           ?>
+                        <!--				        --><?php //if(!in_array("Tenor GIFs Integration", $lastHashArray)):                           ?>
                         <!--                            <div style="display:inline-block; min-width:27%; padding-right:10px; margin-bottom:10px;">-->
-                        <!--                                <img src="--><?php //echo plugins_url(WPDISCUZ_DIR_NAME . "/assets/addons/tenor/header.png");           ?><!--" style="height:50px; width:auto; vertical-align:middle; margin:0px 10px; text-decoration:none; float: left;"/>-->
-                        <!--                                <a href="https://gvectors.com/product/wpdiscuz-tenor-integration/" target="_blank" style="color:#444; text-decoration:none;" title="--><?php //esc_attr_e("Go to the addon page", "wpdiscuz");           ?><!--">wpDiscuz - Tenor GIFs Integration <br><span style="margin: 0; font-size: 12px; line-height: 15px; display: block; padding-top: 5px;">This adds Tenor [GIF] button on the toolbar of comment editor. Clicking this will open a new popup where you can search for your favorite gifs and insert them in your comment content.</span></a>-->
+                        <!--                                <img src="--><?php //echo plugins_url(WPDISCUZ_DIR_NAME . "/assets/addons/tenor/header.png");                           ?><!--" style="height:50px; width:auto; vertical-align:middle; margin:0px 10px; text-decoration:none; float: left;"/>-->
+                        <!--                                <a href="https://gvectors.com/product/wpdiscuz-tenor-integration/" target="_blank" style="color:#444; text-decoration:none;" title="--><?php //esc_attr_e("Go to the addon page", "wpdiscuz");                           ?><!--">wpDiscuz - Tenor GIFs Integration <br><span style="margin: 0; font-size: 12px; line-height: 15px; display: block; padding-top: 5px;">This adds Tenor [GIF] button on the toolbar of comment editor. Clicking this will open a new popup where you can search for your favorite gifs and insert them in your comment content.</span></a>-->
                         <!--                            </div>-->
-                        <!--				        --><?php //endif;           ?>
+                        <!--				        --><?php //endif;                           ?>
                         <div style="clear:both;"></div>
                     </div>
                     <p>&nbsp;&nbsp;&nbsp;<a href="<?php echo esc_url_raw(admin_url("admin.php?page=" . self::PAGE_ADDONS)); ?>"><?php esc_html_e("Go to wpDiscuz Addons subMenu"); ?> &raquo;</a></p>
@@ -2785,6 +2850,7 @@ class WpdiscuzOptions implements WpDiscuzConstants {
         } else if (isset($oldOptions[self::TAB_SUBSCRIPTION]["disableFollowConfirmForUsers"])) {
             $newOptions[self::TAB_SUBSCRIPTION]["disableFollowConfirmForUsers"] = $oldOptions[self::TAB_SUBSCRIPTION]["disableFollowConfirmForUsers"];
         }
+        // TODO -- add new options from phrases
         if (isset($oldOptions["wc_blog_roles"])) {
             $newOptions[self::TAB_LABELS]["blogRoles"] = $oldOptions["wc_blog_roles"];
         } else if (isset($oldOptions[self::TAB_LABELS]["blogRoles"])) {
@@ -2880,6 +2946,36 @@ class WpdiscuzOptions implements WpDiscuzConstants {
             $this->updateOptions();
         }
         return $newOptions;
+    }
+
+    // TODO
+    public function addEmailTemplates($update = false) {
+        if ($this->dbManager->isPhraseExists("wc_be_the_first_text") && $update) {
+            $defaultOptions = $this->getDefaultOptions();
+            $wc_saved_phrases = $this->dbManager->getPhrases();
+            $this->subscription["emailSubjectPostComment"] = array_key_exists("wc_email_subject", $wc_saved_phrases) ? $wc_saved_phrases["wc_email_subject"] : $defaultOptions["emailSubjectPostComment"];
+            $this->subscription["emailContentPostComment"] = array_key_exists("wc_email_message", $wc_saved_phrases) ? $wc_saved_phrases["wc_email_message"] : $defaultOptions["emailContentPostComment"];
+            $this->subscription["emailSubjectAllCommentReply"] = array_key_exists("wc_all_comment_new_reply_subject", $wc_saved_phrases) ? $wc_saved_phrases["wc_all_comment_new_reply_subject"] : $defaultOptions["emailSubjectAllCommentReply"];
+            $this->subscription["emailContentAllCommentReply"] = array_key_exists("wc_all_comment_new_reply_message", $wc_saved_phrases) ? $wc_saved_phrases['wc_all_comment_new_reply_message'] : $defaultOptions["emailContentAllCommentReply"];
+            $this->subscription["emailSubjectCommentReply"] = array_key_exists("wc_new_reply_email_subject", $wc_saved_phrases) ? $wc_saved_phrases["wc_new_reply_email_subject"] : $defaultOptions["emailSubjectCommentReply"];
+            $this->subscription["emailContentCommentReply"] = array_key_exists("wc_new_reply_email_message", $wc_saved_phrases) ? $wc_saved_phrases["wc_new_reply_email_message"] : $defaultOptions["emailContentCommentReply"];
+            $this->subscription["emailSubjectSubscriptionConfirmation"] = array_key_exists("wc_confirm_email_subject", $wc_saved_phrases) ? $wc_saved_phrases["wc_confirm_email_subject"] : $defaultOptions["emailSubjectSubscriptionConfirmation"];
+            $this->subscription["emailContentSubscriptionConfirmation"] = array_key_exists("wc_confirm_email_message", $wc_saved_phrases) ? $wc_saved_phrases["wc_confirm_email_message"] : $defaultOptions["emailContentSubscriptionConfirmation"];
+            $this->subscription["emailSubjectCommentApproved"] = array_key_exists("wc_comment_approved_email_subject", $wc_saved_phrases) ? $wc_saved_phrases["wc_comment_approved_email_subject"] : $defaultOptions["emailSubjectCommentApproved"];
+            $this->subscription["emailContentCommentApproved"] = array_key_exists("wc_comment_approved_email_message", $wc_saved_phrases) ? $wc_saved_phrases["wc_comment_approved_email_message"] : $defaultOptions["emailContentCommentApproved"];
+            $this->subscription["emailSubjectUserMentioned"] = array_key_exists("wc_mentioned_email_subject", $wc_saved_phrases) ? $wc_saved_phrases["wc_mentioned_email_subject"] : $defaultOptions["emailSubjectUserMentioned"];
+            $this->subscription["emailContentUserMentioned"] = array_key_exists("wc_mentioned_email_message", $wc_saved_phrases) ? $wc_saved_phrases["wc_mentioned_email_message"] : $defaultOptions["emailContentUserMentioned"];
+            $this->subscription["emailSubjectFollowConfirmation"] = array_key_exists("wc_follow_confirm_email_subject", $wc_saved_phrases) ? $wc_saved_phrases["wc_follow_confirm_email_subject"] : $defaultOptions["emailSubjectFollowConfirmation"];
+            $this->subscription["emailContentFollowConfirmation"] = array_key_exists("wc_follow_confirm_email_message", $wc_saved_phrases) ? $wc_saved_phrases["wc_follow_confirm_email_message"] : $defaultOptions["emailContentFollowConfirmation"];
+            $this->subscription["emailSubjectFollowComment"] = array_key_exists("wc_follow_email_subject", $wc_saved_phrases) ? $wc_saved_phrases["wc_follow_email_subject"] : $defaultOptions["emailSubjectFollowComment"];
+            $this->subscription["emailContentFollowComment"] = array_key_exists("wc_follow_email_message", $wc_saved_phrases) ? $wc_saved_phrases["wc_follow_email_message"] : $defaultOptions["emailContentFollowComment"];
+            /**
+             * get options 
+             * if keys dont exit add them from phrases else from default options
+             * update options
+             * init options
+             */
+        }
     }
 
     public function printDocLink($docUrl) {
@@ -4217,6 +4313,118 @@ class WpdiscuzOptions implements WpDiscuzConstants {
                             "description" => "",
                             "description_original" => "",
                             "docurl" => "https://wpdiscuz.com/docs/wpdiscuz-7/plugin-settings/subscription-and-user-following/#follow-users-without-email-confirmation",
+                        ],
+                        "emailSubjectPostComment" => [
+                            "label" => esc_html__("Email subject", "wpdiscuz"),
+                            "label_original" => "Email subject",
+                            "description" => "",
+                            "description_original" => "",
+                            "docurl" => "",
+                        ],
+                        "emailContentPostComment" => [
+                            "label" => esc_html__("Email content", "wpdiscuz"),
+                            "label_original" => "Email content",
+                            "description" => "",
+                            "description_original" => "",
+                            "docurl" => "",
+                        ],
+                        "emailSubjectAllCommentReply" => [
+                            "label" => esc_html__("Email subject", "wpdiscuz"),
+                            "label_original" => "Email subject",
+                            "description" => "",
+                            "description_original" => "",
+                            "docurl" => "",
+                        ],
+                        "emailContentAllCommentReply" => [
+                            "label" => esc_html__("Email content", "wpdiscuz"),
+                            "label_original" => "Email content",
+                            "description" => "",
+                            "description_original" => "",
+                            "docurl" => "",
+                        ],
+                        "emailSubjectCommentReply" => [
+                            "label" => esc_html__("Email subject", "wpdiscuz"),
+                            "label_original" => "Email subject",
+                            "description" => "",
+                            "description_original" => "",
+                            "docurl" => "",
+                        ],
+                        "emailContentCommentReply" => [
+                            "label" => esc_html__("Email content", "wpdiscuz"),
+                            "label_original" => "Email content",
+                            "description" => "",
+                            "description_original" => "",
+                            "docurl" => "",
+                        ],
+                        "emailSubjectSubscriptionConfirmation" => [
+                            "label" => esc_html__("Email subject", "wpdiscuz"),
+                            "label_original" => "Email subject",
+                            "description" => "",
+                            "description_original" => "",
+                            "docurl" => "",
+                        ],
+                        "emailContentSubscriptionConfirmation" => [
+                            "label" => esc_html__("Email content", "wpdiscuz"),
+                            "label_original" => "Email content",
+                            "description" => "",
+                            "description_original" => "",
+                            "docurl" => "",
+                        ],
+                        "emailSubjectCommentApproved" => [
+                            "label" => esc_html__("Email subject", "wpdiscuz"),
+                            "label_original" => "Email subject",
+                            "description" => "",
+                            "description_original" => "",
+                            "docurl" => "",
+                        ],
+                        "emailContentCommentApproved" => [
+                            "label" => esc_html__("Email content", "wpdiscuz"),
+                            "label_original" => "Email content",
+                            "description" => "",
+                            "description_original" => "",
+                            "docurl" => "",
+                        ],
+                        "emailSubjectUserMentioned" => [
+                            "label" => esc_html__("Email subject", "wpdiscuz"),
+                            "label_original" => "Email subject",
+                            "description" => "",
+                            "description_original" => "",
+                            "docurl" => "",
+                        ],
+                        "emailContentUserMentioned" => [
+                            "label" => esc_html__("Email content", "wpdiscuz"),
+                            "label_original" => "Email content",
+                            "description" => "",
+                            "description_original" => "",
+                            "docurl" => "",
+                        ],
+                        "emailSubjectFollowConfirmation" => [
+                            "label" => esc_html__("Email subject", "wpdiscuz"),
+                            "label_original" => "Email subject",
+                            "description" => "",
+                            "description_original" => "",
+                            "docurl" => "",
+                        ],
+                        "emailContentFollowConfirmation" => [
+                            "label" => esc_html__("Email content", "wpdiscuz"),
+                            "label_original" => "Email content",
+                            "description" => "",
+                            "description_original" => "",
+                            "docurl" => "",
+                        ],
+                        "emailSubjectFollowComment" => [
+                            "label" => esc_html__("Email subject", "wpdiscuz"),
+                            "label_original" => "Email subject",
+                            "description" => "",
+                            "description_original" => "",
+                            "docurl" => "",
+                        ],
+                        "emailContentFollowComment" => [
+                            "label" => esc_html__("Email content", "wpdiscuz"),
+                            "label_original" => "Email content",
+                            "description" => "",
+                            "description_original" => "",
+                            "docurl" => "",
                         ],
                     ],
                 ],

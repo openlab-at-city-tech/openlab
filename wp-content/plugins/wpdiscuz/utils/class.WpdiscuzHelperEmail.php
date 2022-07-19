@@ -6,8 +6,19 @@ if (!defined("ABSPATH")) {
 
 class WpdiscuzHelperEmail implements WpDiscuzConstants {
 
+    /**
+     * @var WpdiscuzOptions
+     */
     private $options;
+
+    /**
+     * @var WpdiscuzDBManager
+     */
     private $dbManager;
+
+    /**
+     * @var WpdiscuzHelper
+     */
     private $helper;
 
     public function __construct($options, $dbManager, $helper) {
@@ -24,7 +35,7 @@ class WpdiscuzHelperEmail implements WpDiscuzConstants {
     public function addSubscription() {
         $success = 0;
         $currentUser = WpdiscuzHelper::getCurrentUser();
-        $subscribeFormNonce = WpdiscuzHelper::sanitize(INPUT_POST, "wpdiscuz_subscribe_form_nonce","FILTER_SANITIZE_STRING");
+        $subscribeFormNonce = WpdiscuzHelper::sanitize(INPUT_POST, "wpdiscuz_subscribe_form_nonce", "FILTER_SANITIZE_STRING");
         $subscriptionType = WpdiscuzHelper::sanitize(INPUT_POST, "wpdiscuzSubscriptionType", "FILTER_SANITIZE_STRING");
         $postId = WpdiscuzHelper::sanitize(INPUT_POST, "postId", FILTER_SANITIZE_NUMBER_INT);
         $showSubscriptionBarAgreement = WpdiscuzHelper::sanitize(INPUT_POST, "show_subscription_agreement", FILTER_SANITIZE_NUMBER_INT);
@@ -85,9 +96,9 @@ class WpdiscuzHelperEmail implements WpDiscuzConstants {
 
         $search = ["[SITE_URL]", "[POST_URL]", "[BLOG_TITLE]", "[POST_TITLE]"];
         $replace = [$siteUrl, get_permalink($postId), $blogTitle, $postTitle];
-        $message = str_replace($search, $replace, $this->options->getPhrase("wc_confirm_email_message"));
 
-        $subject = str_replace(["[BLOG_TITLE]", "[POST_TITLE]"], [$blogTitle, $postTitle], $this->options->getPhrase("wc_confirm_email_subject"));
+        $subject = str_replace(["[BLOG_TITLE]", "[POST_TITLE]"], [$blogTitle, $postTitle], $this->options->subscription["emailSubjectSubscriptionConfirmation"]);
+        $message = str_replace($search, $replace, wpautop($this->options->subscription["emailContentSubscriptionConfirmation"]));
 
         if (strpos($message, "[CONFIRM_URL]") === false) {
             $message .= "<br/><br/><a href='$confirm_url'>" . $this->options->getPhrase("wc_confirm_email") . "</a>";
@@ -172,7 +183,8 @@ class WpdiscuzHelperEmail implements WpDiscuzConstants {
      * Check notification type and send email to post new comments subscribers
      */
     public function checkNotificationType() {
-        $postId = WpdiscuzHelper::sanitize(INPUT_POST, "postId", FILTER_SANITIZE_NUMBER_INT, 0);;
+        $postId = WpdiscuzHelper::sanitize(INPUT_POST, "postId", FILTER_SANITIZE_NUMBER_INT, 0);
+        ;
         $commentId = WpdiscuzHelper::sanitize(INPUT_POST, "comment_id", FILTER_SANITIZE_NUMBER_INT, 0);
         $email = isset($_POST["email"]) ? sanitize_email(trim($_POST["email"])) : "";
         $isParent = WpdiscuzHelper::sanitize(INPUT_POST, "isParent", "FILTER_SANITIZE_STRING");
@@ -181,10 +193,10 @@ class WpdiscuzHelperEmail implements WpDiscuzConstants {
             $email = $currentUser->user_email;
         }
         if ($commentId && $email && $postId && ($comment = get_comment($commentId))) {
-			if (apply_filters("wpdiscuz_enable_user_mentioning", $this->options->subscription["enableUserMentioning"]) && $this->options->subscription["sendMailToMentionedUsers"] && ($mentionedUsers = $this->helper->getMentionedUsers($comment->comment_content))) {
-				$this->sendMailToMentionedUsers($mentionedUsers, $comment);
-			}
-			do_action("wpdiscuz_before_sending_emails", $commentId, $comment);
+            if (apply_filters("wpdiscuz_enable_user_mentioning", $this->options->subscription["enableUserMentioning"]) && $this->options->subscription["sendMailToMentionedUsers"] && ($mentionedUsers = $this->helper->getMentionedUsers($comment->comment_content))) {
+                $this->sendMailToMentionedUsers($mentionedUsers, $comment);
+            }
+            do_action("wpdiscuz_before_sending_emails", $commentId, $comment);
             $this->notifyPostSubscribers($postId, $commentId, $email);
             $this->notifyFollowers($postId, $commentId, $email);
             if (!$isParent) {
@@ -209,8 +221,8 @@ class WpdiscuzHelperEmail implements WpDiscuzConstants {
      */
     public function notifyPostSubscribers($postId, $commentId, $email) {
         $emailsArray = $this->dbManager->getPostNewCommentNotification($postId, $email);
-        $subject = $this->options->getPhrase("wc_email_subject");
-        $message = $this->options->getPhrase("wc_email_message");
+        $subject = $this->options->subscription["emailSubjectPostComment"];
+        $message = wpautop($this->options->subscription["emailContentPostComment"]);
         foreach ($emailsArray as $k => $eRow) {
             $subscriberUserId = $eRow["id"];
             $subscriberEmail = $eRow["email"];
@@ -228,8 +240,8 @@ class WpdiscuzHelperEmail implements WpDiscuzConstants {
      */
     public function notifyAllCommentSubscribers($postId, $newCommentId, $email) {
         $emailsArray = $this->dbManager->getAllNewCommentNotification($postId, $email);
-        $subject = $this->options->getPhrase("wc_all_comment_new_reply_subject");
-        $message = $this->options->getPhrase("wc_all_comment_new_reply_message");
+        $subject = $this->options->subscription["emailSubjectAllCommentReply"];
+        $message = wpautop($this->options->subscription["emailContentAllCommentReply"]);
         foreach ($emailsArray as $k => $eRow) {
             $subscriberUserId = $eRow["id"];
             $subscriberEmail = $eRow["email"];
@@ -248,8 +260,8 @@ class WpdiscuzHelperEmail implements WpDiscuzConstants {
      */
     public function notifyCommentSubscribers($parentCommentId, $newCommentId, $email) {
         $emailsArray = $this->dbManager->getNewReplyNotification($parentCommentId, $email);
-        $subject = $this->options->getPhrase("wc_new_reply_email_subject");
-        $message = $this->options->getPhrase("wc_new_reply_email_message");
+        $subject = $this->options->subscription["emailSubjectCommentReply"];
+        $message = wpautop($this->options->subscription["emailContentCommentReply"]);
         foreach ($emailsArray as $k => $eRow) {
             $subscriberUserId = $eRow["id"];
             $subscriberEmail = $eRow["email"];
@@ -280,10 +292,10 @@ class WpdiscuzHelperEmail implements WpDiscuzConstants {
             $postId = $comment->comment_post_ID;
             $email = $comment->comment_author_email;
             $parentComment = $comment->comment_parent ? get_comment($comment->comment_parent) : 0;
-			if (apply_filters("wpdiscuz_enable_user_mentioning", $this->options->subscription["enableUserMentioning"]) && $this->options->subscription["sendMailToMentionedUsers"] && ($mentionedUsers = $this->helper->getMentionedUsers($comment->comment_content))) {
-				$this->sendMailToMentionedUsers($mentionedUsers, $comment);
-			}
-			do_action("wpdiscuz_before_sending_emails", $commentId, $comment);
+            if (apply_filters("wpdiscuz_enable_user_mentioning", $this->options->subscription["enableUserMentioning"]) && $this->options->subscription["sendMailToMentionedUsers"] && ($mentionedUsers = $this->helper->getMentionedUsers($comment->comment_content))) {
+                $this->sendMailToMentionedUsers($mentionedUsers, $comment);
+            }
+            do_action("wpdiscuz_before_sending_emails", $commentId, $comment);
             $this->notifyPostSubscribers($postId, $commentId, $email);
             if ($parentComment) {
                 $parentCommentEmail = $parentComment->comment_author_email;
@@ -316,26 +328,28 @@ class WpdiscuzHelperEmail implements WpDiscuzConstants {
                 } else {
                     $email = $comment->comment_author_email;
                 }
-				if (apply_filters("wpdiscuz_send_email_on_approving", true, $email, $comment)) {
-					$siteUrl = get_site_url();
-					$blogTitle = get_option("blogname");
-					$postTitle = get_the_title($comment->comment_post_ID);
-					$search = ["[SITE_URL]", "[POST_URL]", "[BLOG_TITLE]", "[POST_TITLE]", "[COMMENT_URL]", "[COMMENT_AUTHOR]", "[COMMENT_CONTENT]"];
-					$replace = [$siteUrl, get_permalink($comment->comment_post_ID), $blogTitle, $postTitle, get_comment_link($comment->comment_ID), $comment->comment_author, wpautop($comment->comment_content)];
-					$message = str_replace($search, $replace, $this->options->getPhrase("wc_comment_approved_email_message", ["comment" => $comment]));
+                if (apply_filters("wpdiscuz_send_email_on_approving", true, $email, $comment)) {
+                    $siteUrl = get_site_url();
+                    $blogTitle = get_option("blogname");
+                    $postTitle = get_the_title($comment->comment_post_ID);
+                    $search = ["[SITE_URL]", "[POST_URL]", "[BLOG_TITLE]", "[POST_TITLE]", "[COMMENT_URL]", "[COMMENT_AUTHOR]", "[COMMENT_CONTENT]"];
+                    $replace = [$siteUrl, get_permalink($comment->comment_post_ID), $blogTitle, $postTitle, get_comment_link($comment->comment_ID), $comment->comment_author, wpautop($comment->comment_content)];
+                    $message = str_replace($search, $replace, $this->options->getPhrase("wc_comment_approved_email_message", ["comment" => $comment]));
 
-					$subject = str_replace(["[BLOG_TITLE]", "[POST_TITLE]", "[COMMENT_AUTHOR]"], [$blogTitle, $postTitle, $comment->comment_author], $this->options->getPhrase("wc_comment_approved_email_subject", ["comment" => $comment]));
-					$headers = [];
-					$fromName = html_entity_decode($blogTitle, ENT_QUOTES);
-					$parsedUrl = parse_url($siteUrl);
-					$domain = isset($parsedUrl["host"]) ? WpdiscuzHelper::fixEmailFrom($parsedUrl["host"]) : "";
-					$fromEmail = "no-reply@" . $domain;
-					$headers[] = "Content-Type: text/html; charset=UTF-8";
-					$headers[] = "From: " . $fromName . " <" . $fromEmail . "> \r\n";
-					$subject = html_entity_decode($subject, ENT_QUOTES);
-					$message = html_entity_decode($message, ENT_QUOTES);
-					wp_mail($email, $subject, do_shortcode($message), $headers);
-				}
+                    $subject = str_replace(["[BLOG_TITLE]", "[POST_TITLE]", "[COMMENT_AUTHOR]"], [$blogTitle, $postTitle, $comment->comment_author], $this->options->subscription["emailSubjectCommentApproved"]);
+                    $message = str_replace($search, $replace, wpautop($this->options->subscription["emailContentCommentApproved"]));
+
+                    $headers = [];
+                    $fromName = html_entity_decode($blogTitle, ENT_QUOTES);
+                    $parsedUrl = parse_url($siteUrl);
+                    $domain = isset($parsedUrl["host"]) ? WpdiscuzHelper::fixEmailFrom($parsedUrl["host"]) : "";
+                    $fromEmail = "no-reply@" . $domain;
+                    $headers[] = "Content-Type: text/html; charset=UTF-8";
+                    $headers[] = "From: " . $fromName . " <" . $fromEmail . "> \r\n";
+                    $subject = html_entity_decode($subject, ENT_QUOTES);
+                    $message = html_entity_decode($message, ENT_QUOTES);
+                    wp_mail($email, $subject, do_shortcode($message), $headers);
+                }
             }
         }
     }
@@ -348,9 +362,9 @@ class WpdiscuzHelperEmail implements WpDiscuzConstants {
         $postTitle = get_the_title($postId);
         $search = ["[SITE_URL]", "[POST_URL]", "[BLOG_TITLE]", "[POST_TITLE]"];
         $replace = [$siteUrl, get_permalink($postId), $blogTitle, $postTitle];
-        $message = str_replace($search, $replace, $this->options->getPhrase("wc_follow_confirm_email_message"));
 
-        $subject = str_replace(["[BLOG_TITLE]", "[POST_TITLE]"], [$blogTitle, $postTitle], $this->options->getPhrase("wc_follow_confirm_email_subject"));
+        $subject = str_replace(["[BLOG_TITLE]", "[POST_TITLE]"], [$blogTitle, $postTitle], $this->options->subscription["emailSubjectFollowConfirmation"]);
+        $message = str_replace($search, $replace, wpautop($this->options->subscription["emailContentFollowConfirmation"]));
 
         if (strpos($message, "[CONFIRM_URL]") === false) {
             $message .= "<br/><br/><a href='$confirmUrl'>" . $this->options->getPhrase("wc_follow_confirm") . "</a>";
@@ -391,11 +405,12 @@ class WpdiscuzHelperEmail implements WpDiscuzConstants {
         $postUrl = get_permalink($post);
         $commentUrl = get_comment_link($comment);
 
-        $subject = str_replace(["[BLOG_TITLE]", "[POST_TITLE]"], [$blogTitle, $postTitle], $this->options->getPhrase("wc_follow_email_subject"));
+        $subject = str_replace(["[BLOG_TITLE]", "[POST_TITLE]"], [$blogTitle, $postTitle], $this->options->subscription["emailSubjectFollowComment"]);
 
         $search = ["[SITE_URL]", "[POST_URL]", "[BLOG_TITLE]", "[POST_TITLE]", "[COMMENT_URL]", "[COMMENT_CONTENT]"];
         $replace = [$siteUrl, $postUrl, $blogTitle, $postTitle, $commentUrl, wpautop($comment->comment_content)];
-        $message = str_replace($search, $replace, $this->options->getPhrase("wc_follow_email_message"));
+
+        $message = str_replace($search, $replace, wpautop($this->options->subscription["emailContentFollowComment"]));
         global $wp_rewrite;
         $cancelLink = !$wp_rewrite->using_permalinks() ? $postUrl . "&" : $postUrl . "?";
         $fromName = html_entity_decode($blogTitle, ENT_QUOTES);
@@ -414,7 +429,7 @@ class WpdiscuzHelperEmail implements WpDiscuzConstants {
             if (($followerData["follower_email"] === $postAuthor->user_email) && (($moderationNotify && $comment->comment_approved === "0") || ($commentsNotify && $comment->comment_approved === "1"))) {
                 return;
             }
-            $subject = str_replace(["[COMMENT_AUTHOR]"], [$followerData["user_name"]], $this->options->getPhrase("wc_follow_email_subject"));
+            $subject = str_replace(["[COMMENT_AUTHOR]"], [$followerData["user_name"]], $subject);
             $body = str_replace(["[COMMENT_AUTHOR]", "[FOLLOWER_NAME]"], [$followerData["user_name"], $followerData["follower_name"]], $message);
             $this->emailToFollower($followerData, $comment, $subject, $body, $cancelLink, $data);
             do_action("wpdiscuz_notify_followers", $comment, $followerData);
@@ -440,27 +455,39 @@ class WpdiscuzHelperEmail implements WpDiscuzConstants {
         }
     }
 
-    public function sendMailToMentionedUsers($users, $comment_data) {
+    public function sendMailToMentionedUsers($users, $comment) {
+        $post = get_post($comment->comment_post_ID);
+
         $parsedUrl = parse_url(get_site_url());
         $domain = isset($parsedUrl["host"]) ? WpdiscuzHelper::fixEmailFrom($parsedUrl["host"]) : "";
         $fromEmail = "no-reply@" . $domain;
         $fromName = html_entity_decode(get_option("blogname"), ENT_QUOTES);
         $headers[] = "Content-Type: text/html; charset=UTF-8";
         $headers[] = "From: " . $fromName . " <" . $fromEmail . "> \r\n";
-        $subject = $this->options->getPhrase("wc_mentioned_email_subject");
-        $message = $this->options->getPhrase("wc_mentioned_email_message");
-        $search = ["[MENTIONED_USER_NAME]", "[POST_TITLE]", "[COMMENT_URL]", "[COMMENT_AUTHOR]"];
-        $replace = ["", get_the_title($comment_data->comment_post_ID), get_comment_link($comment_data->comment_ID), $comment_data->comment_author];
+
+        $siteUrl = get_site_url();
+        $blogTitle = get_option("blogname");
+        $postTitle = get_the_title($post);
+        $postUrl = get_permalink($post);
+        $commentUrl = get_comment_link($comment);
+        $commentAuthor = $comment->comment_author;
+
+        $subject = str_replace(["[BLOG_TITLE]", "[POST_TITLE]"], [$blogTitle, $postTitle], $this->options->subscription["emailSubjectUserMentioned"]);
+        $message = wpautop($this->options->subscription["emailContentUserMentioned"]);
+
+        $search = ["[SITE_URL]", "[POST_URL]", "[BLOG_TITLE]", "[POST_TITLE]", "[MENTIONED_USER_NAME]", "[COMMENT_URL]", "[COMMENT_AUTHOR]"];
+        $replace = [$siteUrl, $postUrl, $blogTitle, $postTitle, "", $commentUrl, $commentAuthor];
+
         foreach ($users as $k => $user) {
-            if ($user["email"] !== $comment_data->comment_author_email) {
-                if (apply_filters("wpducm_mail_to_mentioned_user", true, $user, $comment_data)) {
-                    $replace[0] = $user["name"];
+            if ($user["email"] !== $comment->comment_author_email) {
+                if (apply_filters("wpducm_mail_to_mentioned_user", true, $user, $comment)) {
+                    $replace[4] = $user["name"];
                     $body = str_replace($search, $replace, $message);
-                    $subject = apply_filters("wpdiscuz_mentioned_user_mail_subject", $subject, $user, $comment_data);
-					$body = apply_filters("wpdiscuz_mentioned_user_mail_body", $body, $user, $comment_data);
+                    $subject = apply_filters("wpdiscuz_mentioned_user_mail_subject", $subject, $user, $comment);
+                    $body = apply_filters("wpdiscuz_mentioned_user_mail_body", $body, $user, $comment);
                     if ($subject && $body) {
-                    	wp_mail($user["email"], $subject, $body, $headers);
-					}
+                        wp_mail($user["email"], $subject, $body, $headers);
+                    }
                 }
             }
         }

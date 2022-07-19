@@ -1,10 +1,10 @@
 jQuery(document).ready(function ($) {
 
-    $(document).on('click', '#wpdcom .wmu-upload-wrap', function () {
+    $('body').on('click', '#wpdcom .wmu-upload-wrap', function () {
         $('.wpd-form-foot', $(this).parents('.wpd_comm_form')).slideDown(parseInt(wpdiscuzAjaxObj.enableDropAnimation) ? 500 : 0);
     });
 
-    $(document).on('change', '.wmu-add-files', function () {
+    $('body').on('change', '.wmu-add-files', function () {
         var btn = $(this);
         var form = btn.parents('.wpd_comm_form');
         var files = btn[0].files ? btn[0].files : [];
@@ -88,7 +88,7 @@ jQuery(document).ready(function ($) {
         });
     }
 
-    $(document).on('click', '.wmu-attachment-delete', function (e) {
+    $('body').on('click', '.wmu-attachment-delete', function (e) {
         if (confirm(wpdiscuzAjaxObj.wmuPhraseConfirmDelete)) {
             var btn = $(this);
             var attachmentId = btn.data('wmu-attachment');
@@ -130,7 +130,7 @@ jQuery(document).ready(function ($) {
      * ajax request
      * remove preview from frontend (html) and backend (db data)
      */
-    $(document).on('click', '.wmu-preview', function () {
+    $('body').on('click', '.wmu-preview', function () {
         var btn = $(this);
         var form = btn.parents('.wpd_comm_form');
         var type = btn.data('wmu-type');

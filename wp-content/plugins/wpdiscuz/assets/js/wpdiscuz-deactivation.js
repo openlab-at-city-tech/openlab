@@ -2,7 +2,7 @@ jQuery(document).ready(function ($) {
 
     var deactivateUrl = '';
 
-    $(document).on('click', '#the-list tr[data-plugin="wpdiscuz/class.WpdiscuzCore.php"] .deactivate a', function (e) {
+    $('body').on('click', '#the-list tr[data-plugin="wpdiscuz/class.WpdiscuzCore.php"] .deactivate a', function (e) {
         e.preventDefault();
         $('#wpdDeactivationReasonAnchor').trigger('click');
         deactivateUrl = $(this).attr('href');
@@ -13,13 +13,13 @@ jQuery(document).ready(function ($) {
     $('.wpd-deactivation-reason-more-info').slideUp(500);
     $('.wpd-deactivation-reason-more-info', parentItem).slideDown(500);
 
-    $(document).on('change', '.wpd-deactivation-reason', function (e) {
+    $('body').on('change', '.wpd-deactivation-reason', function (e) {
         $('.wpd-deactivation-reason-more-info').slideUp(500);
         var parentItem = $(this).parents('.wpd-deactivation-reason-item');
         $('.wpd-deactivation-reason-more-info', parentItem).slideDown(500);
     });
 
-    $(document).on('click', '.wpd-deactivate', function (e) {
+    $('body').on('click', '.wpd-deactivate', function (e) {
         if (isChecked($(this))) {
             var formData = '';
             if ($(this).hasClass('wpd-submit')) {
