@@ -1,27 +1,29 @@
 <?php
 // phpcs:ignoreFile -- legacy code in need of refactoring.
-/*
-Plugin Name: Taxonomy Dropdown Widget
-Plugin URI: https://ethitter.com/plugins/taxonomy-dropdown-widget/
-Description: Creates a dropdown list of non-hierarchical taxonomies as an alternative to the term (tag) cloud. Widget provides numerous options to tailor the output to fit your site. Dropdown function can also be called directly for use outside of the widget. Formerly known as <strong><em>Tag Dropdown Widget</em></strong>.
-Author: Erick Hitter
-Version: 2.3.1
-Author URI: https://ethitter.com/
-
-This program is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 2 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-*/
+/**
+ * Plugin Name: Taxonomy Dropdown Widget
+ * Plugin URI: https://ethitter.com/plugins/taxonomy-dropdown-widget/
+ * Description: Creates a dropdown list of non-hierarchical taxonomies as an alternative to the term (tag) cloud. Widget provides numerous options to tailor the output to fit your site. Dropdown function can also be called directly for use outside of the widget. Formerly known as <strong><em>Tag Dropdown Widget</em></strong>.
+ * Author: Erick Hitter
+ * Version: 2.3.3
+ * Author URI: https://ethitter.com/
+ * Text Domain: tag-dropdown-widget
+ * Domain Path: /languages/
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ */
 
 /**
  ** TAXONOMY DROPDOWN WIDGET PLUGIN
@@ -78,6 +80,7 @@ class taxonomy_dropdown_widget_plugin {
 	 * @return null
 	 */
 	protected function setup() {
+		add_action( 'plugins_loaded', array( $this, 'load_textdomain' ) );
 		add_action( 'widgets_init', array( $this, 'action_widgets_init' ) );
 
 		register_activation_hook( __FILE__, array( $this, 'activation_hook' ) );
@@ -97,6 +100,19 @@ class taxonomy_dropdown_widget_plugin {
 		}
 
 		return null;
+	}
+
+	/**
+	 * Load plugin translations.
+	 *
+	 * @return void
+	 */
+	public function load_textdomain() {
+		load_plugin_textdomain(
+			'tag-dropdown-widget',
+			false,
+			dirname( plugin_basename( __FILE__ ) ) . '/languages/'
+		);
 	}
 
 	/**
@@ -547,10 +563,10 @@ class taxonomy_dropdown_widget extends WP_Widget {
 		}
 
 	?>
-		<h3><?php _e( 'Basic Settings', 'taxonomy_dropdown_widget' ); ?></h3>
+		<h3><?php _e( 'Basic Settings', 'tag-dropdown-widget' ); ?></h3>
 
 		<p>
-			<label for="<?php echo $this->get_field_id( 'taxonomy' ); ?>"><?php _e( 'Taxonomy', 'taxonomy_dropdown_widget' ); ?>:</label><br />
+			<label for="<?php echo $this->get_field_id( 'taxonomy' ); ?>"><?php _e( 'Taxonomy', 'tag-dropdown-widget' ); ?>:</label><br />
 			<select name="<?php echo $this->get_field_name( 'taxonomy' ); ?>" id="<?php echo $this->get_field_id( 'taxonomy' ); ?>">
 				<?php foreach ( $taxonomies as $tax ) : ?>
 					<option value="<?php echo esc_attr( $tax->name ); ?>"<?php selected( $tax->name, $options['taxonomy'], true ); ?>><?php echo $tax->labels->name; ?></option>
@@ -559,91 +575,91 @@ class taxonomy_dropdown_widget extends WP_Widget {
 		</p>
 
 		<p>
-			<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:', 'taxonomy_dropdown_widget' ); ?></label><br />
+			<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:', 'tag-dropdown-widget' ); ?></label><br />
 			<input type="text" name="<?php echo $this->get_field_name( 'title' ); ?>" class="widefat code" id="<?php echo $this->get_field_id( 'title' ); ?>" value="<?php echo esc_attr( $options['title'] ); ?>" />
 		</p>
 
 		<p>
-			<label for="<?php echo $this->get_field_id( 'select_name' ); ?>"><?php _e( 'Default dropdown item:', 'taxonomy_dropdown_widget' ); ?></label><br />
+			<label for="<?php echo $this->get_field_id( 'select_name' ); ?>"><?php _e( 'Default dropdown item:', 'tag-dropdown-widget' ); ?></label><br />
 			<input type="text" name="<?php echo $this->get_field_name( 'select_name' ); ?>" class="widefat code" id="<?php echo $this->get_field_id( 'select_name' ); ?>" value="<?php echo esc_attr( $options['select_name'] ); ?>" />
 		</p>
 
-		<h3><?php _e( 'Order', 'taxonomy_dropdown_widget' ); ?></h3>
+		<h3><?php _e( 'Order', 'tag-dropdown-widget' ); ?></h3>
 
 		<p>
-			<label><?php _e( 'Order terms by:', 'taxonomy_dropdown_widget' ); ?></label><br />
+			<label><?php _e( 'Order terms by:', 'tag-dropdown-widget' ); ?></label><br />
 
 			<input type="radio" name="<?php echo $this->get_field_name( 'orderby' ); ?>" value="name" id="<?php echo $this->get_field_name( 'order_name' ); ?>"<?php checked( $options['orderby'], 'name', true ); ?> />
-			<label for="<?php echo $this->get_field_name( 'order_name' ); ?>"><?php _e( 'Name', 'taxonomy_dropdown_widget' ); ?></label><br />
+			<label for="<?php echo $this->get_field_name( 'order_name' ); ?>"><?php _e( 'Name', 'tag-dropdown-widget' ); ?></label><br />
 
 			<input type="radio" name="<?php echo $this->get_field_name( 'orderby' ); ?>" value="count" id="<?php echo $this->get_field_name( 'order_count' ); ?>"<?php checked( $options['orderby'], 'count', true ); ?> />
-			<label for="<?php echo $this->get_field_name( 'order_count' ); ?>"><?php _e( 'Post count', 'taxonomy_dropdown_widget' ); ?></label>
+			<label for="<?php echo $this->get_field_name( 'order_count' ); ?>"><?php _e( 'Post count', 'tag-dropdown-widget' ); ?></label>
 		</p>
 
 		<p>
-			<label><?php _e( 'Order terms:', 'taxonomy_dropdown_widget' ); ?></label><br />
+			<label><?php _e( 'Order terms:', 'tag-dropdown-widget' ); ?></label><br />
 
 			<input type="radio" name="<?php echo $this->get_field_name( 'order' ); ?>" value="ASC" id="<?php echo $this->get_field_name( 'order_asc' ); ?>"<?php checked( $options['order'], 'ASC', true ); ?> />
-			<label for="<?php echo $this->get_field_name( 'order_asc' ); ?>"><?php _e( 'Ascending', 'taxonomy_dropdown_widget' ); ?></label><br />
+			<label for="<?php echo $this->get_field_name( 'order_asc' ); ?>"><?php _e( 'Ascending', 'tag-dropdown-widget' ); ?></label><br />
 
 			<input type="radio" name="<?php echo $this->get_field_name( 'order' ); ?>" value="DESC" id="<?php echo $this->get_field_name( 'order_desc' ); ?>"<?php checked( $options['order'], 'DESC', true ); ?> />
-			<label for="<?php echo $this->get_field_name( 'order_desc' ); ?>"><?php _e( 'Descending', 'taxonomy_dropdown_widget' ); ?></label>
+			<label for="<?php echo $this->get_field_name( 'order_desc' ); ?>"><?php _e( 'Descending', 'tag-dropdown-widget' ); ?></label>
 		</p>
 
-		<h3><?php _e( 'Term Display', 'taxonomy_dropdown_widget' ); ?></h3>
+		<h3><?php _e( 'Term Display', 'tag-dropdown-widget' ); ?></h3>
 
 		<p>
-			<label for="<?php echo $this->get_field_id( 'limit' ); ?>"><?php _e( 'Limit number of terms shown to:', 'taxonomy_dropdown_widget' ); ?></label><br />
+			<label for="<?php echo $this->get_field_id( 'limit' ); ?>"><?php _e( 'Limit number of terms shown to:', 'tag-dropdown-widget' ); ?></label><br />
 			<input type="text" name="<?php echo $this->get_field_name( 'limit' ); ?>" id="<?php echo $this->get_field_id( 'limit' ); ?>" value="<?php echo intval( $options['limit'] ); ?>" size="3" /><br />
-			<span class="description"><small><?php _e( 'Enter <strong>0</strong> for no limit.', 'taxonomy_dropdown_widget' ); ?></small></span>
+			<span class="description"><small><?php _e( 'Enter <strong>0</strong> for no limit.', 'tag-dropdown-widget' ); ?></small></span>
 		</p>
 
 		<p>
-			<label for="<?php echo $this->get_field_id( 'max_name_length' ); ?>"><?php _e( 'Trim long term names to <em>x</em> characters:</label>', 'taxonomy_dropdown_widget' ); ?><br />
+			<label for="<?php echo $this->get_field_id( 'max_name_length' ); ?>"><?php _e( 'Trim long term names to <em>x</em> characters:</label>', 'tag-dropdown-widget' ); ?><br />
 			<input type="text" name="<?php echo $this->get_field_name( 'max_name_length' ); ?>" id="<?php echo $this->get_field_id( 'max_name_length' ); ?>" value="<?php echo intval( $options['max_name_length'] ); ?>" size="3" /><br />
-			<span class="description"><small><?php _e( 'Enter <strong>0</strong> to show full tag names.', 'taxonomy_dropdown_widget' ); ?></small></span>
+			<span class="description"><small><?php _e( 'Enter <strong>0</strong> to show full tag names.', 'tag-dropdown-widget' ); ?></small></span>
 		</p>
 
 		<p>
-			<label for="<?php echo $this->get_field_id( 'cutoff' ); ?>"><?php _e( 'Indicator that term names are trimmed:', 'taxonomy_dropdown_widget' ); ?></label><br />
+			<label for="<?php echo $this->get_field_id( 'cutoff' ); ?>"><?php _e( 'Indicator that term names are trimmed:', 'tag-dropdown-widget' ); ?></label><br />
 			<input type="text" name="<?php echo $this->get_field_name( 'cutoff' ); ?>" id="<?php echo $this->get_field_id( 'cutoff' ); ?>" value="<?php echo esc_attr( $options['cutoff'] ); ?>" size="3" /><br />
-			<span class="description"><small><?php _e( 'Leave blank to use an elipsis (&hellip;).', 'taxonomy_dropdown_widget' ); ?></small></span>
+			<span class="description"><small><?php _e( 'Leave blank to use an elipsis (&hellip;).', 'tag-dropdown-widget' ); ?></small></span>
 		</p>
 
 		<p>
 			<input type="checkbox" name="<?php echo $this->get_field_name( 'hide_empty' ); ?>" id="<?php echo $this->get_field_id( 'hide_empty' ); ?>"  value="0"<?php checked( false, $options['hide_empty'], true ); ?> />
-			<label for="<?php echo $this->get_field_id( 'hide_empty' ); ?>"><?php _e( 'Include terms that aren\'t assigned to any objects (empty terms).', 'taxonomy_dropdown_widget' ); ?></label>
+			<label for="<?php echo $this->get_field_id( 'hide_empty' ); ?>"><?php _e( 'Include terms that aren\'t assigned to any objects (empty terms).', 'tag-dropdown-widget' ); ?></label>
 		</p>
 
 		<p>
 			<input type="checkbox" name="<?php echo $this->get_field_name( 'post_counts' ); ?>" id="<?php echo $this->get_field_id( 'post_counts' ); ?>"  value="1"<?php checked( true, $options['post_counts'], true ); ?> />
-			<label for="<?php echo $this->get_field_id( 'post_counts' ); ?>"><?php _e( 'Display object (post) counts after term names.', 'taxonomy_dropdown_widget' ); ?></label>
+			<label for="<?php echo $this->get_field_id( 'post_counts' ); ?>"><?php _e( 'Display object (post) counts after term names.', 'tag-dropdown-widget' ); ?></label>
 		</p>
 
-		<h3><?php _e( 'Include/Exclude Terms', 'taxonomy_dropdown_widget' ); ?></h3>
+		<h3><?php _e( 'Include/Exclude Terms', 'tag-dropdown-widget' ); ?></h3>
 
 		<p>
-			<label><?php _e( 'Include/exclude terms:', 'taxonomy_dropdown_widget' ); ?></label><br />
+			<label><?php _e( 'Include/exclude terms:', 'tag-dropdown-widget' ); ?></label><br />
 
 			<input type="radio" name="<?php echo $this->get_field_name( 'incexc' ); ?>" value="include" id="<?php echo $this->get_field_id( 'include' ); ?>"<?php checked( $options['incexc'], 'include', true ); ?> />
-			<label for="<?php echo $this->get_field_id( 'include' ); ?>"><?php _e( 'Include only the term IDs listed below', 'taxonomy_dropdown_widget' ); ?></label><br />
+			<label for="<?php echo $this->get_field_id( 'include' ); ?>"><?php _e( 'Include only the term IDs listed below', 'tag-dropdown-widget' ); ?></label><br />
 
 			<input type="radio" name="<?php echo $this->get_field_name( 'incexc' ); ?>" value="exclude" id="<?php echo $this->get_field_id( 'exclude' ); ?>"<?php checked( $options['incexc'], 'exclude', true ); ?> />
-			<label for="<?php echo $this->get_field_id( 'exclude' ); ?>"><?php _e( 'Exclude the term IDs listed below', 'taxonomy_dropdown_widget' ); ?></label>
+			<label for="<?php echo $this->get_field_id( 'exclude' ); ?>"><?php _e( 'Exclude the term IDs listed below', 'tag-dropdown-widget' ); ?></label>
 		</p>
 
 		<p>
-			<label for="<?php echo $this->get_field_id( 'incexc_ids' ); ?>"><?php _e( 'Term IDs to include/exclude based on above setting:', 'taxonomy_dropdown_widget' ); ?></label><br />
+			<label for="<?php echo $this->get_field_id( 'incexc_ids' ); ?>"><?php _e( 'Term IDs to include/exclude based on above setting:', 'tag-dropdown-widget' ); ?></label><br />
 			<input type="text" name="<?php echo $this->get_field_name( 'incexc_ids' ); ?>" class="widefat code" id="<?php echo $this->get_field_id( 'incexc_ids' ); ?>" value="<?php echo esc_attr( implode( ', ', $options['incexc_ids'] ) ); ?>" /><br />
-			<span class="description"><small><?php _e( 'Enter comma-separated list of term IDs.', 'taxonomy_dropdown_widget' ); ?></small></span>
+			<span class="description"><small><?php _e( 'Enter comma-separated list of term IDs.', 'tag-dropdown-widget' ); ?></small></span>
 		</p>
 
-		<h3><?php _e( 'Advanced', 'taxonomy_dropdown_widget' ); ?></h3>
+		<h3><?php _e( 'Advanced', 'tag-dropdown-widget' ); ?></h3>
 
 		<p>
-			<label for="<?php echo $this->get_field_id( 'threshold' ); ?>"><?php _e( 'Show terms assigned to at least this many posts:', 'taxonomy_dropdown_widget' ); ?></label><br />
+			<label for="<?php echo $this->get_field_id( 'threshold' ); ?>"><?php _e( 'Show terms assigned to at least this many posts:', 'tag-dropdown-widget' ); ?></label><br />
 			<input type="text" name="<?php echo $this->get_field_name( 'threshold' ); ?>" id="<?php echo $this->get_field_id( 'threshold' ); ?>" value="<?php echo intval( $options['threshold'] ); ?>" size="3" /><br />
-			<span class="description"><small><?php _e( 'Set to <strong>0</strong> to display all terms matching the above criteria.', 'taxonomy_dropdown_widget' ); ?></small></span>
+			<span class="description"><small><?php _e( 'Set to <strong>0</strong> to display all terms matching the above criteria.', 'tag-dropdown-widget' ); ?></small></span>
 		</p>
 
 	<?php
