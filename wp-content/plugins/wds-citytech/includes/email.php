@@ -283,6 +283,19 @@ add_filter(
 );
 
 /**
+ * Filters the contents of comment notification emails.
+ */
+add_filter(
+	'comment_notification_text',
+	function( $text, $comment_id ) {
+		$text = preg_replace( '/^Comment:\s*$/m', "\n" . 'Comment:', $text );
+		return $text;
+	},
+	10,
+	2
+);
+
+/**
  * Modifies metadata about emails created on Gravity Forms submissions.
  */
 add_filter(
