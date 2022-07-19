@@ -167,7 +167,18 @@ if ( ! class_exists( 'Tribe__Events__Query' ) ) {
 				: false;
 
 			if ( 'default' === $query->get( 'eventDisplay' ) ) {
-				$query->set( 'eventDisplay', Tribe__Events__Main::instance()->default_view() );
+				$default_view = Tribe__Events__Main::instance()->default_view();
+
+				/**
+				 * Allows other plugins (and v2 views) to hook in and alter this before we change the query.
+				 *
+				 * @since 5.12.3
+				 *
+				 * @param string $default_view The slug of the default view to pass to the query.
+				 */
+				$default_view = apply_filters( 'tec_events_query_default_view', $default_view );
+
+				$query->set( 'eventDisplay', $default_view );
 			}
 
 			// check if any possibility of this being an event category
@@ -806,7 +817,7 @@ if ( ! class_exists( 'Tribe__Events__Query' ) ) {
 
 		/**
 		 * Internal method for properly setting a curated orderby value to $wp_query
-		 * Internal method for properly setting a currated orderby value to $wp_query.
+		 * Internal method for properly setting a curated orderby value to $wp_query.
 		 *
 		 * If optional param $default is not provided it will default to 'event_date' - unless a custom
 		 * orderby param was specified (via tribe_get_events() for example) - in which case that value
@@ -848,7 +859,7 @@ if ( ! class_exists( 'Tribe__Events__Query' ) ) {
 		}
 
 		/**
-		 * Internal method for properly setting a currated order value to $wp_query.
+		 * Internal method for properly setting a curated order value to $wp_query.
 		 *
 		 * If optional param $default is not provided it will default to 'ASC' - unless a custom order
 		 * was specified (via tribe_get_events() for example) - in which case that value will be used.
@@ -1538,7 +1549,7 @@ if ( ! class_exists( 'Tribe__Events__Query' ) ) {
 		 *
 		 * variables when using  pre_get_posts or posts_where
 		 *
-		 * This filter is removed when this funtions has finished the execution
+		 * This filter is removed when this functions has finished the execution
 		 *
 		 * @since 4.6.15
 		 *

@@ -7,4 +7,5 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Tribe\\Events\\' => array($baseDir . '/src/Tribe'),
+    'TEC\\Events\\' => array($baseDir . '/src/Events'),
 );

@@ -136,7 +136,7 @@ abstract class Date_Based {
 	 */
 	public function should_display() {
 		// If upsells have been manually hidden, respect that.
-		if ( defined( 'TRIBE_HIDE_UPSELL' ) && TRIBE_HIDE_UPSELL ) {
+		if ( tec_should_hide_upsell() ) {
 			return false;
 		}
 
@@ -146,6 +146,7 @@ abstract class Date_Based {
 			'tribe_events_page_tribe-app-shop', // App shop.
 			'events_page_tribe-app-shop', // App shop.
 			'tribe_events_page_tribe-common', // Settings & Welcome.
+			'tribe_events_page_tec-events-settings', // New Settings & Welcome.
 			'events_page_tribe-common', // Settings & Welcome.
 			'toplevel_page_tribe-common', // Settings & Welcome.
 		];
