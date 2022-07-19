@@ -52,9 +52,9 @@
             ?>
                 <div id="cpt_info_box">                   
                     <p><?php _e( "Did you find this plugin useful? Please support our work with a donation or write an article about this plugin in your blog with a link to our site", 'taxonomy-terms-order' ) ?> <strong>https://www.nsp-code.com/</strong></p>
-                    <h4><?php _e( "Did you know there is available an advanced version of this plug-in?", 'taxonomy-terms-order' ) ?> <a target="_blank" href="https://www.nsp-code.com/premium-plugins/wordpress-plugins/advanced-taxonomy-terms-order/"><?php _e( "Read more", 'taxonomy-terms-order' ) ?></a></h4>
-                    <p><?php _e('Check our', 'taxonomy-terms-order') ?> <a target="_blank" href="https://wordpress.org/plugins/post-terms-order/">Post Terms Order</a> <?php _e('plugin which allow to custom sort categories and custom taxonomies terms per post basis', 'taxonomy-terms-order') ?> </p>
-                    <p><?php _e( "Check our", 'taxonomy-terms-order' ) ?> <a target="_blank" href="https://wordpress.org/plugins/post-types-order/">Post Types Order</a> <?php _e( "plugin which allow to custom sort all posts, pages, custom post types", 'taxonomy-terms-order' ) ?> </p>
+                    <h4><?php _e( "Did you know there is an Advanced Version of this plug-in?", 'taxonomy-terms-order' ) ?> <a target="_blank" href="https://www.nsp-code.com/premium-plugins/wordpress-plugins/advanced-taxonomy-terms-order/"><?php _e( "Read more", 'taxonomy-terms-order' ) ?></a></h4>
+                    <p><?php _e( "Check our", 'taxonomy-terms-order' ) ?> <a target="_blank" href="https://wordpress.org/plugins/post-types-order/">Post Types Order</a> <?php _e( "plugin which allows to custom sort all posts, pages, custom post types", 'taxonomy-terms-order' ) ?> </p>
+                    <p><?php _e('Check our', 'taxonomy-terms-order') ?> <a target="_blank" href="https://wordpress.org/plugins/post-terms-order/">Post Terms Order</a> <?php _e('plugin which allows to custom sort categories and custom taxonomies terms per post basis', 'taxonomy-terms-order') ?> </p>
                     
                     <div class="clear"></div>
                 </div>
