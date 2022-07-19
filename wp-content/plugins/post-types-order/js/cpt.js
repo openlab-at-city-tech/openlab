@@ -20,6 +20,17 @@
         {
             
             jQuery('table.wp-list-table #the-list').sortable({
+                
+                                                        placeholder: {
+                                                                        element: function(currentItem) {
+                                                                            var cols    =   jQuery(currentItem).children('td:visible').length + 1;
+                                                                            return jQuery('<tr class="ui-sortable-placeholder"><td colspan="' + cols + '">&nbsp;</td></tr>')[0];
+                                                                        },
+                                                                        update: function(container, p) {
+                                                                            return;
+                                                                        }
+                                                                    },
+                
                                                         'items': 'tr',
                                                         'axis': 'y',
                                                         'update' : function(e, ui) {

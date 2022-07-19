@@ -528,7 +528,7 @@
                                 
                             $required_capability = apply_filters('pto/edit_capability', $capability, $post_type_name);
                             
-                            if ($post_type_name == 'post')
+                            if ( $post_type_name == 'post' )
                                 add_submenu_page('edit.php', __('Re-Order', 'post-types-order'), __('Re-Order', 'post-types-order'), $required_capability, 'order-post-types-'.$post_type_name, array(&$this, 'SortPage') );
                             elseif ($post_type_name == 'attachment') 
                                 add_submenu_page('upload.php', __('Re-Order', 'post-types-order'), __('Re-Order', 'post-types-order'), $required_capability, 'order-post-types-'.$post_type_name, array(&$this, 'SortPage') ); 
