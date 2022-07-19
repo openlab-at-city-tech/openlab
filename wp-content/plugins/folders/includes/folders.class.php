@@ -161,6 +161,77 @@ class WCP_Folders
 	    add_action( 'deleted_term_relationships', array($this, 'update_folder_term_relationships'), 10, 3 );
 
 	    add_action( 'added_term_relationship', array($this, 'update_folder_new_term_relationships'), 10, 3 );
+
+        add_action( 'set_object_terms', array($this, 'set_object_terms_for_folders'), 10, 6);
+
+        /*
+         * To Remove Attachment
+         * */
+
+        add_action( 'wp_trash_post', array($this, "wcp_delete_post"));
+        add_action( 'before_delete_post', array($this, "wcp_delete_post"));
+
+        /*
+         * Hide Folder CTA
+         * */
+        add_action( 'wp_ajax_hide_folders_cta', array($this, 'hide_folders_cta'));
+    }
+
+    public function hide_folders_cta() {
+        $response = array();
+        $response['status'] = 0;
+        $response['error'] = 0;
+        $response['data'] = array();
+        $response['message'] = "";
+        $postData = filter_input_array(INPUT_POST);
+        $errorCounter = 0;
+        if (!isset($postData['nonce']) || empty($postData['nonce'])) {
+            $response['message'] =  esc_html__("Your request is not valid", 'folders');
+            $errorCounter++;
+        } else {
+            $nonce = self::sanitize_options($postData['nonce']);
+            if(!wp_verify_nonce($nonce, 'hide_folders_cta')) {
+                $response['message'] =  esc_html__("Your request is not valid", 'folders');
+                $errorCounter++;
+            }
+        }
+        if($errorCounter == 0) {
+            $response['status'] = 1;
+            add_option("hide_folders_cta", "yes");
+        }
+        echo json_encode($response); die;
+    }
+
+    public function wcp_delete_post($postID) {
+        delete_transient("premio_folders_without_trash");
+    }
+
+    public function set_object_terms_for_folders($object_id, $terms, $tt_ids, $taxonomy, $append, $old_tt_ids) {
+        if(!empty($object_id)) {
+            $trash_folders = $initial_trash_folders = get_transient("premio_folders_without_trash");
+            if(!empty($tt_ids) && is_array($tt_ids)) {
+                foreach($tt_ids as $term_id) {
+                    $term = get_term($term_id, $taxonomy);
+                    if(isset($term->term_taxonomy_id) && isset($trash_folders[$term->term_taxonomy_id])) {
+                        unset($trash_folders[$term->term_taxonomy_id]);
+                    }
+                }
+            }
+
+            if(!empty($old_tt_ids) && is_array($old_tt_ids)) {
+                foreach($old_tt_ids as $term_id) {
+                    $term = get_term($term_id, $taxonomy);
+                    if(isset($term->term_taxonomy_id) && isset($trash_folders[$term->term_taxonomy_id])) {
+                        unset($trash_folders[$term->term_taxonomy_id]);
+                    }
+                }
+            }
+
+            if($initial_trash_folders != $trash_folders) {
+                delete_transient("premio_folders_without_trash");
+                set_transient("premio_folders_without_trash", $trash_folders, 3*DAY_IN_SECONDS);
+            }
+        }
     }
 
     public static function check_for_setting($key, $setting, $default = "") {
@@ -568,11 +639,9 @@ class WCP_Folders
                 if($status) {
                     if ($typenow == "attachment") {
                         if (!isset($_REQUEST['media_folder'])) {
-                            $admin_url = admin_url("upload.php?post_type=attachment&media_folder=");
-                            $admin_url .= $last_status;
                             ?>
                             <script>
-                                window.location = '<?php echo $admin_url ?>';
+                                window.location = '<?php echo admin_url("upload.php?post_type=attachment")."&media_folder=".esc_attr($last_status) ?>';
                             </script>
                             <?php
                             exit;
@@ -580,12 +649,10 @@ class WCP_Folders
                     } else {
                         $post_type = self::get_custom_post_type($typenow);
                         $admin_url = admin_url("edit.php?post_type=" . $typenow);
-                        $admin_url .= "&{$post_type}=";
                         if (!isset($_REQUEST[$post_type])) {
-                            $admin_url .= $last_status;
                             ?>
                             <script>
-                                window.location = '<?php echo $admin_url ?>';
+                                window.location = '<?php echo admin_url("edit.php?post_type=".$typenow)."&".esc_attr($post_type)."=".esc_attr($last_status) ?>';
                             </script>
                             <?php
                             exit;
@@ -611,31 +678,27 @@ class WCP_Folders
             }
             if($status) {
                 if ($typenow == "attachment") {
-                    $admin_url = admin_url("upload.php?post_type=attachment&media_folder=");
                     if (!isset($_REQUEST['media_folder'])) {
                         if (isset($default_folders[$typenow]) && !empty($default_folders[$typenow])) {
-                            $admin_url .= $default_folders[$typenow];
                             ?>
                             <script>
-                                window.location = '<?php echo $admin_url ?>';
+                                window.location = '<?php echo admin_url("upload.php?post_type=attachment")."&media_folder=".esc_attr($default_folders[$typenow]) ?>';
                             </script>
                             <?php
                             exit;
                         }
                     }
                 } else {
-                    $admin_url = admin_url("edit.php?post_type=" . $typenow);
+                    $search = "";
                     if (isset($_GET['s']) && !empty($_GET['s'])) {
-                        $admin_url .= "&s=" . $_GET['s'];
+                        $search = esc_attr($_GET['s']);
                     }
                     $post_type = self::get_custom_post_type($typenow);
-                    $admin_url .= "&{$post_type}=";
                     if (!isset($_REQUEST[$post_type])) {
                         if (isset($default_folders[$typenow]) && !empty($default_folders[$typenow])) {
-                            $admin_url .= $default_folders[$typenow];
                             ?>
                             <script>
-                                window.location = '<?php echo $admin_url ?>';
+                                window.location = '<?php echo admin_url("edit.php?post_type=".$typenow)."&".esc_attr($post_type)."=".esc_attr($default_folders[$typenow])."&s=".esc_attr($search) ?>';
                             </script>
                             <?php
                             exit;
@@ -647,20 +710,35 @@ class WCP_Folders
     }
 
     public function folder_update_status() {
-        if(!empty($_REQUEST['nonce']) && wp_verify_nonce($_REQUEST['nonce'], 'folder_update_status')) {
-            $status = filter_input(INPUT_POST, 'status', FILTER_SANITIZE_STRING);
-            $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_STRING);
+        $response = [];
+        $response['status'] = 0;
+        $nonce = filter_input(INPUT_POST, 'nonce');
+        if (!empty($nonce) && wp_verify_nonce($nonce, 'folder_update_status')) {
+            $status = filter_input(INPUT_POST, 'status');
+            $email  = filter_input(INPUT_POST, 'email');
             update_option("folder_update_message", 2);
-            if($status == 1) {
-                $url = 'https://go.premio.io/api/update.php?email='.$email.'&plugin=folders';
-                $handle = curl_init();
-                curl_setopt($handle, CURLOPT_URL, $url);
-                curl_setopt($handle, CURLOPT_RETURNTRANSFER, true);
-                $response = curl_exec($handle);
-                curl_close($handle);
+            if ($status == 1) {
+                $email = sanitize_email($email);
+
+                $apiURL = "https://premioapps.com/premio/signup/index.php?plugin=folders&email=".$email;
+
+                $apiParams = [
+                    'plugin' => 'folders',
+                    'email'  => $email,
+                ];
+
+                // Signup Email for Chaty
+                $apiResponse = wp_safe_remote_post($apiURL, ['body' => $apiParams, 'timeout' => 15, 'sslverify' => true]);
+
+                if (is_wp_error($apiResponse)) {
+                    wp_safe_remote_post($apiURL, ['body' => $apiParams, 'timeout' => 15, 'sslverify' => false]);
+                }
+
+                $response['status'] = 1;
             }
-        }
-        echo "1";
+        }//end if
+
+        echo json_encode($response);
         die;
     }
 
@@ -1149,11 +1227,9 @@ class WCP_Folders
                 if($status) {
                     if ($typenow == "attachment") {
                         if (!isset($_REQUEST['media_folder'])) {
-                            $admin_url = admin_url("upload.php?post_type=attachment&media_folder=");
-                            $admin_url .= $last_status;
                             ?>
                             <script>
-                                window.location = '<?php echo $admin_url ?>';
+                                window.location = '<?php echo admin_url("upload.php?post_type=attachment")."&media_folder=".esc_attr($last_status) ?>';
                             </script>
                             <?php
                             exit;
@@ -1176,13 +1252,11 @@ class WCP_Folders
             }
             if($status) {
                 if ($typenow == "attachment") {
-                    $admin_url = admin_url("upload.php?post_type=attachment&media_folder=");
                     if (!isset($_REQUEST['media_folder'])) {
                         if (isset($default_folders[$typenow]) && !empty($default_folders[$typenow])) {
-                            $admin_url .= $default_folders[$typenow];
                             ?>
                             <script>
-                                window.location = '<?php echo $admin_url ?>';
+                                window.location = '<?php echo admin_url("upload.php?post_type=attachment")."&media_folder=".esc_attr($default_folders[$typenow]) ?>';
                             </script>
                             <?php
                             exit;
@@ -1229,8 +1303,9 @@ class WCP_Folders
                 $is_active = 1;
                 $folders = -1;
 
-                /* Free/Pro URL Change */
+                remove_filter("terms_clauses", "TO_apply_order_filter");
 
+                /* Free/Pro URL Change */
                 $is_rtl = 0;
                 if (function_exists('is_rtl') && is_rtl()) {
                     $is_rtl = 1;
@@ -1272,6 +1347,14 @@ class WCP_Folders
 	            }
 	            $defaultTimeout = $defaultTimeout*1000;
 
+                $default_folders = get_option("default_folders");
+                $default_folder = "";
+                if(isset($default_folders["attachment"])) {
+                    $default_folder = $default_folders["attachment"];
+                }
+                $use_shortcuts = !isset($customize_folders['use_shortcuts'])?"yes":$customize_folders['use_shortcuts'];
+
+                wp_dequeue_script("jquery-jstree"); // CMS Tree Page View Conflict
                 wp_enqueue_script('folders-tree', WCP_FOLDER_URL . 'assets/js/jstree.min.js', array(), WCP_FOLDER_VERSION);
 	            wp_enqueue_script('wcp-folders-mcustomscrollbar', WCP_FOLDER_URL . 'assets/js/jquery.mcustomscrollbar.min.js', array(), WCP_FOLDER_VERSION);
                 wp_enqueue_script('wcp-folders-media', WCP_FOLDER_URL . 'assets/js/page-post-media.min.js', array('jquery', 'jquery-ui-resizable', 'jquery-ui-draggable', 'jquery-ui-droppable', 'jquery-ui-sortable', 'backbone'), WCP_FOLDER_VERSION, true);
@@ -1280,7 +1363,7 @@ class WCP_Folders
                     'terms' => $taxonomies,
                     'taxonomy' => get_taxonomy('media_folder'),
                     'ajax_url' => admin_url("admin-ajax.php"),
-                    'media_page_url' => admin_url("upload.php"),
+                    'media_page_url' => admin_url("upload.php?media_folder="),
                     'activate_url' => $this->getFoldersUpgradeURL(),
                     'nonce' => wp_create_nonce('wcp_folder_nonce_attachment'),
                     'is_key_active' => $is_active,
@@ -1303,6 +1386,8 @@ class WCP_Folders
                     'hasChildren' => $hasChild,
                     'useFolderUndo' => $use_folder_undo,
                     'defaultTimeout' => $defaultTimeout,
+                    'default_folder' => $default_folder,
+                    'use_shortcuts' => $use_shortcuts
                 ));
                 /* Free/Pro URL Change */
                 wp_enqueue_style('folders-jstree', WCP_FOLDER_URL . 'assets/css/jstree.min.css', array(), WCP_FOLDER_VERSION);
@@ -1946,39 +2031,32 @@ class WCP_Folders
         $postData = filter_input_array(INPUT_POST);
         $errorCounter = 0;
         if (!isset($postData['post_ids']) || empty($postData['post_ids'])) {
-            $response['message'] = esc_html__("Your request is not valid", 'folders');
+            $response['message'] =  esc_html__("Your request is not valid", 'folders');
             $errorCounter++;
         } else if (!isset($postData['folder_id']) || empty($postData['folder_id'])) {
-            $response['message'] = esc_html__("Your request is not valid", 'folders');
+            $response['message'] =  esc_html__("Your request is not valid", 'folders');
             $errorCounter++;
         } else if (!isset($postData['type']) || empty($postData['type'])) {
-            $response['message'] = esc_html__("Your request is not valid", 'folders');
+            $response['message'] =  esc_html__("Your request is not valid", 'folders');
             $errorCounter++;
         } else if (!isset($postData['nonce']) || empty($postData['nonce'])) {
-            $response['message'] = esc_html__("Your request is not valid", 'folders');
+            $response['message'] =  esc_html__("Your request is not valid", 'folders');
             $errorCounter++;
         } else if ($postData['type'] == "page" && !current_user_can("edit_pages")) {
-            $response['message'] = esc_html__("You have not permission to update folder", 'folders');
+            $response['message'] =  esc_html__("You have not permission to update folder", 'folders');
             $errorCounter++;
         } else if ($postData['type'] != "page" && !current_user_can("edit_posts")) {
-            $response['message'] = esc_html__("You have not permission to update folder", 'folders');
+            $response['message'] =  esc_html__("You have not permission to update folder", 'folders');
             $errorCounter++;
         } else {
             $folder_id = self::sanitize_options($postData['folder_id']);
             if(!wp_verify_nonce($postData['nonce'], 'wcp_folder_term_'.$folder_id)) {
-                $response['message'] = esc_html__("Your request is not valid", 'folders');
+                $response['message'] =  esc_html__("Your request is not valid", 'folders');
                 $errorCounter++;
             }
         }
         if ($errorCounter == 0) {
-
-	        $trash_folders = $initial_trash_folders = get_transient("premio_folders_without_trash");
-	        if($trash_folders === false) {
-		        $trash_folders = array();
-		        $initial_trash_folders = array();
-	        }
-
-	        $folderUndoSettings = array();
+            $folderUndoSettings = array();
             $postID = self::sanitize_options($postData['post_ids']);
             $postID = trim($postID, ",");
             $folderID = self::sanitize_options($postData['folder_id']);
@@ -1994,26 +2072,18 @@ class WCP_Folders
             if(isset($postData['taxonomy'])) {
                 $taxonomy = self::sanitize_options($postData['taxonomy']);
             }
-            $post_type = self::get_custom_post_type($type);
             if (is_array($postArray)) {
+                $post_type = self::get_custom_post_type($type);
                 foreach ($postArray as $post) {
                     $terms = get_the_terms($post, $post_type);
-	                $post_terms = array(
-		                'post_id' => $post,
-		                'terms' => $terms
-	                );
-	                foreach($post_terms as $term) {
-		                if(isset($trash_folders[$term->term_taxonomy_id])) {
-			                unset($trash_folders[$term->term_taxonomy_id]);
-		                }
-	                }
-	                $folderUndoSettings[] = $post_terms;
+                    $post_terms = array(
+                        'post_id' => $post,
+                        'terms' => $terms
+                    );
+                    $folderUndoSettings[] = $post_terms;
                     if (!empty($terms)) {
                         foreach ($terms as $term) {
                             if(!empty($taxonomy) && ($term->term_id == $taxonomy || $term->slug == $taxonomy)) {
-                                if(isset($trash_folders[$term->term_taxonomy_id])) {
-                                    unset($trash_folders[$term->term_taxonomy_id]);
-                                }
                                 wp_remove_object_terms($post, $term->term_id, $post_type);
                             }
                         }
@@ -2022,18 +2092,9 @@ class WCP_Folders
                 }
             }
             $response['status'] = 1;
-	        delete_transient("folder_undo_settings");
-	        set_transient("folder_undo_settings", $folderUndoSettings, DAY_IN_SECONDS);
-
-	        $term = get_term($folderID, $post_type);
-	        if(isset($term->term_taxonomy_id) && isset($trash_folders[$folderID])) {
-		        unset($trash_folders[$term->term_taxonomy_id]);
-	        }
-
-	        if($initial_trash_folders != $trash_folders) {
-	            delete_transient("premio_folders_without_trash");
-		        set_transient("premio_folders_without_trash", $trash_folders, 3*DAY_IN_SECONDS);
-	        }
+            delete_transient("folder_undo_settings");
+            delete_transient("premio_folders_without_trash");
+            set_transient("folder_undo_settings", $folderUndoSettings, DAY_IN_SECONDS);
         }
         echo json_encode($response);
         wp_die();
@@ -3155,13 +3216,16 @@ class WCP_Folders
             }
 
 
+            $hide_empty = true;
             if ($type == 'attachment') {
-                add_menu_page('Media Folders', 'Media Folders', 'publish_pages', "{$edit}?type=folder", false, 'dashicons-portfolio', "{$itemKey}.5");
+                $hide_empty = false;
+                add_menu_page('Media Folders', 'Media Folders', 'publish_pages', "{$edit}?post_type=attachment&media_folder=", false, 'dashicons-portfolio', "{$itemKey}.5");
             } else {
                 add_menu_page($upper . ' Folders', "{$upper} Folders", 'publish_pages', "{$edit}?post_type={$type}&type=folder", false, 'dashicons-portfolio', "{$itemKey}.5");
             }
+
             $terms = get_terms($tax_slug, array(
-                    'hide_empty' => true,
+                    'hide_empty' => $hide_empty,
                     'parent'   => 0,
                     'orderby' => 'meta_value_num',
                     'order' => 'ASC',
@@ -3175,24 +3239,29 @@ class WCP_Folders
 
             if ($terms) {
                 foreach ($terms as $term) {
-                    if ($type == 'attachment') {
-                        add_submenu_page("{$edit}?type=folder", $term->name, $term->name, 'publish_pages', "{$edit}?post_type=attachment&media_folder={$term->slug}", false);
-                    } else {
-                        add_submenu_page("{$edit}?post_type={$type}&type=folder", $term->name, $term->name, 'publish_pages', "{$edit}?post_type={$type}&{$tax_slug}={$term->slug}", false);
+                    if(isset($term->trash_count) && !empty($term->trash_count)) {
+                        if ($type == 'attachment') {
+                            add_submenu_page("{$edit}?type=folder", $term->name, $term->name, 'publish_pages', "{$edit}?post_type=attachment&media_folder={$term->slug}", false);
+                        } else {
+                            add_submenu_page("{$edit}?post_type={$type}&type=folder", $term->name, $term->name, 'publish_pages', "{$edit}?post_type={$type}&{$tax_slug}={$term->slug}", false);
+                        }
                     }
                 }
             }
         }
     }
 
-    function folders_admin_styles()
+    function folders_admin_styles($page)
     {
         if (self::is_active_for_screen()) {
             wp_enqueue_style('wcp-folders-fa', plugin_dir_url(dirname(__FILE__)) . 'assets/css/folder-icon.css', array(), WCP_FOLDER_VERSION);
             wp_enqueue_style('wcp-folders-admin', plugin_dir_url(dirname(__FILE__)) . 'assets/css/design.min.css', array(), WCP_FOLDER_VERSION);
             wp_enqueue_style('wcp-folders-jstree', plugin_dir_url(dirname(__FILE__)) . 'assets/css/jstree.min.css', array(), WCP_FOLDER_VERSION);
 	        wp_enqueue_style('wcp-folders-mcustomscrollbar', WCP_FOLDER_URL . 'assets/css/jquery.mcustomscrollbar.min.css', array(),WCP_FOLDER_VERSION);
-            wp_enqueue_style('wcp-folders-css', plugin_dir_url(dirname(__FILE__)) . 'assets/css/folders.min.css', array(), WCP_FOLDER_VERSION);
+            wp_enqueue_style('wcp-folders-css', plugin_dir_url(dirname(__FILE__)) . 'assets/css/folders.css', array(), WCP_FOLDER_VERSION);
+        }
+        if($page == "media_page_folders-media-cleaning") {
+            wp_enqueue_style('wcp-folders-media', plugin_dir_url(dirname(__FILE__)) . 'assets/css/media-clean.css', array(), WCP_FOLDER_VERSION);
         }
         wp_register_style('wcp-css-handle', false);
         wp_enqueue_style('wcp-css-handle');
@@ -3285,13 +3354,13 @@ class WCP_Folders
             foreach ($terms as $term) {
                 $status = get_term_meta($term->term_id, "is_highlighted", true);
                 ?>
-                <li class="grid-view" data-id="<?php echo $term->term_id ?>" id="folder_<?php echo $term->term_id ?>">
-                    <div class="folder-item is-folder" data-id="<?php echo $term->term_id ?>">
-                        <a title='<?php echo $term->name ?>' id="folder_view_<?php echo $term->term_id ?>"
+                <li class="grid-view" data-id="<?php echo esc_attr($term->term_id) ?>" id="folder_<?php echo esc_attr($term->term_id) ?>">
+                    <div class="folder-item is-folder" data-id="<?php echo esc_attr($term->term_id) ?>">
+                        <a title='<?php echo esc_attr($term->name) ?>' id="folder_view_<?php echo esc_attr($term->term_id) ?>"
                            class="folder-view <?php echo ($status == 1) ? "is-high" : "" ?>"
-                           data-id="<?php echo $term->term_id ?>">
-                        <span class="folder item-name"><span id="wcp_folder_text_<?php echo $term->term_id ?>"
-                                                             class="folder-title"><?php echo $term->name ?></span></span>
+                           data-id="<?php echo esc_attr($term->term_id) ?>">
+                        <span class="folder item-name"><span id="wcp_folder_text_<?php echo esc_attr($term->term_id) ?>"
+                                                             class="folder-title"><?php echo esc_attr($term->name) ?></span></span>
                             <!--<span class="folder-option"></span>-->
                         </a>
                     </div>
@@ -3316,8 +3385,12 @@ class WCP_Folders
     function folders_admin_scripts($hook)
     {
         if (self::is_active_for_screen()) {
+
+            remove_filter("terms_clauses", "TO_apply_order_filter");
+
             global $typenow;
             /* Free/Pro Version change */
+            wp_dequeue_script("jquery-jstree");
             wp_enqueue_script('wcp-folders-jstree', plugin_dir_url(dirname(__FILE__)) . 'assets/js/jstree.min.js', array('jquery'), WCP_FOLDER_VERSION);
 	        wp_enqueue_script('wcp-folders-mcustomscrollbar', plugin_dir_url(dirname(__FILE__)) . 'assets/js/jquery.mcustomscrollbar.min.js', array(), WCP_FOLDER_VERSION);
             wp_enqueue_script('wcp-folders-custom', plugin_dir_url(dirname(__FILE__)) . 'assets/js/folders.min.js', array('jquery', 'jquery-ui-resizable', 'jquery-ui-draggable', 'jquery-ui-droppable', 'jquery-ui-sortable', 'backbone'), WCP_FOLDER_VERSION);
@@ -3402,6 +3475,15 @@ class WCP_Folders
                 );
             }
 
+
+
+            $default_folders = get_option("default_folders");
+            $default_folder = "";
+            if(isset($default_folders["attachment"])) {
+                $default_folder = $default_folders["attachment"];
+            }
+            $use_shortcuts = !isset($customize_folders['use_shortcuts'])?"yes":$customize_folders['use_shortcuts'];
+
             $response['terms'] = $taxonomies;
             $currentPage = (isset($_GET['paged']) && !empty($_GET['paged']) && is_numeric($_GET['paged']) && $_GET['paged'] > 0)?$_GET['paged']:1;
 	        $hasStars = self::check_for_setting("has_stars", "general");
@@ -3433,6 +3515,8 @@ class WCP_Folders
                 'currentPage' => $currentPage,
                 'useFolderUndo' => $use_folder_undo,
                 'defaultTimeout' => $defaultTimeout,
+                'default_folder' => $default_folder,
+                'use_shortcuts' => $use_shortcuts
             ));
         } else {
             self::is_add_update_screen();
@@ -3564,6 +3648,20 @@ class WCP_Folders
         register_setting('customize_folders', 'customize_folders');
 
         self::check_and_set_post_type();
+
+        $getData = filter_input_array(INPUT_GET);
+        if(isset($getData['hide_menu']) && $getData['hide_menu'] == "scan-files" && isset($getData['nonce'])) {
+            if(current_user_can('manage_options')) {
+                $nonce = $getData['nonce'];
+                if(wp_verify_nonce($nonce, "folders-scan-files")) {
+                    $customize_folders = get_option('customize_folders');
+                    $customize_folders['folders_media_cleaning'] = "no";
+                    update_option("customize_folders", $customize_folders);
+                    wp_redirect(admin_url("upload.php"));
+                    exit;
+                }
+            }
+        }
 
         $option = get_option("folder_redirect_status");
         if ($option == 1) {
@@ -3717,6 +3815,20 @@ class WCP_Folders
                 'folders-upgrade-to-pro',
                 array($this, 'wcp_folders_upgrade_or_register')
             );
+
+            /* Add menu for media cleaning */
+            $show_in_page = !isset($customize_folders['folders_media_cleaning'])?"yes":$customize_folders['folders_media_cleaning'];
+
+            if($show_in_page == "yes") {
+                add_submenu_page(
+                    "upload.php",
+                    esc_html__('Media Cleaning', 'folders'),
+                    esc_html__('Media Cleaning', 'folders'),
+                    'manage_options',
+                    'folders-media-cleaning',
+                    array($this, 'wcp_folders_media_cleaning')
+                );
+            }
         }
 
         self::check_and_set_post_type();
@@ -3725,6 +3837,10 @@ class WCP_Folders
         if ($show_menu == "on") {
             self::create_menu_for_folders();
         }
+    }
+
+    public function wcp_folders_media_cleaning() {
+        include_once dirname(dirname(__FILE__)) . "/templates/admin/media-cleaning.php";
     }
 
     public function recommended_plugins() {

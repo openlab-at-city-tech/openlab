@@ -48,7 +48,7 @@
             if(!$("body").hasClass("folded")) {
                 if($("#adminmenuwrap").length) {
                     var yLength = parseInt($("#adminmenuwrap").width());
-                    if ($("html").prop("dir") == "rtl") {
+                    if($("html").prop("dir") == "rtl") {
                         $(".wcp-content").css("right", yLength);
                     } else {
                         $(".wcp-content").css("left", yLength);
@@ -63,7 +63,7 @@
                     if(!$("body").hasClass("folded")) {
                         if($("#adminmenuwrap").length) {
                             var yLength = parseInt($("#adminmenuwrap").width());
-                            if ($("html").prop("dir") == "rtl") {
+                            if($("html").prop("dir") == "rtl") {
                                 $(".wcp-content").css("right", yLength);
                             } else {
                                 $(".wcp-content").css("left", yLength);
@@ -74,6 +74,7 @@
             }, 50);
         });
 
+
         foldersArray = wcp_settings.taxonomies;
 
         isKeyActive = parseInt(wcp_settings.is_key_active);
@@ -82,6 +83,7 @@
         hasStars = parseInt(wcp_settings.hasStars);
         hasChildren = parseInt(wcp_settings.hasChildren);
         currentPage = parseInt(wcp_settings.currentPage);
+        console.log(activeRecordID);
 
         folderPropertyArray = wcp_settings.folder_settings;
 
@@ -100,6 +102,17 @@
 
         setCustomScrollForFolder();
 
+
+        $(document).ajaxComplete(function (ev, jqXHR, settings) {
+            var actionName = settings.data;
+            if(typeof actionName != "undefined") {
+                if(actionName.length && actionName.indexOf("action=inline-save") != -1) {
+                    resetMediaAndPosts();
+                    triggerInlineUpdate();
+                }
+            }
+        });
+
         var resizeDirection = (wcp_settings.isRTL == "1" || wcp_settings.isRTL == 1)?"w":"e";
         $(".wcp-content").resizable( {
             resizeHeight:   false,
@@ -113,8 +126,8 @@
                 } else {
                     $(".plugin-button").removeClass("d-block");
                 }
-                if(menuWidth <= 225) {
-                    menuWidth = 225;
+                if(menuWidth <= 245) {
+                    menuWidth = 245;
                 }
                 if(wcp_settings.isRTL == "1") {
                     $("#wpcontent").css("padding-right", (menuWidth + 20) + "px");
@@ -122,6 +135,7 @@
                 } else {
                     $("#wpcontent").css("padding-left", (menuWidth + 20) + "px");
                 }
+                $("body.wp-admin #e-admin-top-bar-root.e-admin-top-bar--active").css("width", "calc(100% - 160px - "+menuWidth+"px)");
                 newWidth = menuWidth - 40;
                 cssString = "";
                 classString = "";
@@ -144,6 +158,7 @@
                     } else {
                         $("#wpcontent").css("padding-left", "20px");
                     }
+                    $("body.wp-admin #e-admin-top-bar-root.e-admin-top-bar--active").css("width", "calc(100% - 160px)");
                 } else {
                     if($("#wcp-content").hasClass("hide-folders-area")) {
                         folderStatus = "show";
@@ -151,12 +166,13 @@
                         $(".wcp-hide-show-buttons .toggle-buttons.hide-folders").addClass("active");
                         $("#wcp-content").addClass("no-transition");
                         $("#wcp-content").removeClass("hide-folders-area");
-                        if (wcp_settings.isRTL == "1") {
+                        if(wcp_settings.isRTL == "1") {
                             $("#wpcontent").css("padding-right", (parseInt(wcp_settings.folder_width) + 20) + "px");
                             $("#wpcontent").css("padding-left", "0px");
                         } else {
                             $("#wpcontent").css("padding-left", (parseInt(wcp_settings.folder_width) + 20) + "px");
                         }
+                        $("body.wp-admin #e-admin-top-bar-root.e-admin-top-bar--active").css("width", "calc(100% - 160px - "+menuWidth+"px)");
                         setTimeout(function(){
                             $("#wcp-content").removeClass("no-transition");
                         }, 250);
@@ -170,8 +186,8 @@
                 } else {
                     $(".plugin-button").removeClass("d-block");
                 }
-                if(menuWidth <= 225) {
-                    menuWidth = 225;
+                if(menuWidth <= 245) {
+                    menuWidth = 245;
                 }
                 if(ui.size.width <= 185) {
                     folderStatus = "hide";
@@ -184,7 +200,7 @@
                     } else {
                         $("#wpcontent").css("padding-left", "20px");
                     }
-
+                    $("body.wp-admin #e-admin-top-bar-root.e-admin-top-bar--active").css("width", "calc(100% - 160px)");
                     $.ajax({
                         url: wcp_settings.ajax_url,
                         data: "type=" + wcp_settings.post_type + "&action=wcp_change_folder_display_status&status=" + folderStatus +"&nonce="+nonce,
@@ -200,12 +216,13 @@
                         $(".wcp-hide-show-buttons .toggle-buttons.hide-folders").addClass("active");
                         $("#wcp-content").addClass("no-transition");
                         $("#wcp-content").removeClass("hide-folders-area");
-                        if (wcp_settings.isRTL == "1") {
+                        if(wcp_settings.isRTL == "1") {
                             $("#wpcontent").css("padding-right", (parseInt(wcp_settings.folder_width) + 20) + "px");
                             $("#wpcontent").css("padding-left", "0px");
                         } else {
                             $("#wpcontent").css("padding-left", (parseInt(wcp_settings.folder_width) + 20) + "px");
                         }
+                        $("body.wp-admin #e-admin-top-bar-root.e-admin-top-bar--active").css("width", "calc(100% - 160px - "+menuWidth+"px)");
                         setTimeout(function(){
                             $("#wcp-content").removeClass("no-transition");
                         }, 250);
@@ -221,21 +238,21 @@
                         setStickyHeaderForMedia();
                     }
                 });
-                if(ui.size.width <= 225) {
-                    $(".wcp-content").width(225);
-                    wcp_settings.folder_width = 225;
+                if(ui.size.width <= 245) {
+                    $(".wcp-content").width(245);
+                    wcp_settings.folder_width = 245;
                 }
             }
         });
 
-        $(document).on("contextmenu", ".jstree-anchor", function(e){
+        $(document).on("contextmenu", "#js-tree-menu .jstree-anchor", function(e){
             contextOffsetX = e.pageX;
             contextOffsetY = e.pageY;
             $(this).find("span.folder-inline-edit").trigger("click");
             return false;
         });
 
-        $(document).on("click", ".folder-actions span.folder-inline-edit", function(e){
+        $(document).on("click", "#js-tree-menu .folder-actions span.folder-inline-edit", function(e){
             e.stopImmediatePropagation()
             e.stopPropagation();
             if(wcp_settings.can_manage_folder == 0) {
@@ -393,13 +410,16 @@
 
         $(document).on("click", ".close-popup-button a", function(){
             $(".folder-popup-form").hide();
+            if($(".jstree-node[id='"+fileFolderID+"']").length) {
+                $(".jstree-node[id='"+fileFolderID+"'] > a.jstree-anchor").trigger("focus");
+            }
         });
 
         $(document).on("click", "body, html", function(){
             $(".dynamic-menu").remove();
         });
 
-        $(".wcp-hide-show-buttons .toggle-buttons").on("click", function(){
+        $(document).on("click", ".wcp-hide-show-buttons .toggle-buttons", function(){
             var folderStatus = "show";
             if($(this).hasClass("hide-folders")) {
                 folderStatus = "hide";
@@ -415,6 +435,7 @@
                 } else {
                     $("#wpcontent").css("padding-left", (parseInt(wcp_settings.folder_width) + 20) + "px");
                 }
+                $("body.wp-admin #e-admin-top-bar-root.e-admin-top-bar--active").css("width", "calc(100% - 160px - "+parseInt(wcp_settings.folder_width)+"px)");
                 setTimeout(function(){
                     $("#wcp-content").removeClass("no-transition");
                 }, 250);
@@ -426,6 +447,7 @@
                 } else {
                     $("#wpcontent").css("padding-left", "20px");
                 }
+                $("body.wp-admin #e-admin-top-bar-root.e-admin-top-bar--active").css("width", "calc(100% - 160px)");
             }
 
             $.ajax({
@@ -579,8 +601,8 @@
                             success: function (res) {
                                 res = $.parseJSON(res);
                                 if(res.status == "1") {
-                                    checkForUndoFunctionality();
                                     resetMediaAndPosts();
+                                    checkForUndoFunctionality();
                                 } else {
                                     $(".folder-popup-form").hide();
                                     $(".folder-popup-form").removeClass("disabled");
@@ -607,8 +629,8 @@
                             res = $.parseJSON(res);
                             if(res.status == "1") {
                                 // window.location.reload();
-                                checkForUndoFunctionality();
                                 resetMediaAndPosts();
+                                checkForUndoFunctionality();
                             } else {
                                 $(".folder-popup-form").hide();
                                 $(".folder-popup-form").removeClass("disabled");
@@ -633,8 +655,8 @@
                         method: 'post',
                         success: function (res) {
                             // window.location.reload();
-                            checkForUndoFunctionality();
                             resetMediaAndPosts();
+                            checkForUndoFunctionality();
                         }
                     });
                 }
@@ -650,15 +672,15 @@
             drop: function (event, ui) {
                 folderID = -1;
                 nonce = wcp_settings.nonce;
-                if (ui.draggable.hasClass('wcp-move-multiple')) {
-                    if ($(".wp-list-table input:checked").length) {
+                if(ui.draggable.hasClass('wcp-move-multiple')) {
+                    if($(".wp-list-table input:checked").length) {
                         chkStr = "";
                         $(".wp-list-table input:checked").each(function(){
                             chkStr += $(this).val() + ",";
                         });
                         checkForOtherFolders(chkStr);
                     }
-                } else if (ui.draggable.hasClass('wcp-move-file')) {
+                } else if(ui.draggable.hasClass('wcp-move-file')) {
                     postID = ui.draggable[0].attributes['data-id'].nodeValue;
                     chkStr = postID+",";
                     $(".wp-list-table input:checked").each(function(){
@@ -667,9 +689,9 @@
                         }
                     });
                     checkForOtherFolders(chkStr);
-                } else if (ui.draggable.hasClass('attachment')) {
+                } else if(ui.draggable.hasClass('attachment')) {
                     chkStr = ui.draggable[0].attributes['data-id'].nodeValue;
-                    if ($(".attachments-browser li.attachment.selected").length > 1) {
+                    if($(".attachments-browser li.attachment.selected").length > 1) {
                         chkStr = "";
                         $(".attachments-browser li.attachment.selected").each(function(){
                             chkStr += $(this).data("id") + ",";
@@ -713,7 +735,7 @@
             drop: function( event, ui ) {
                 $("body").removeClass("no-hover-css");
                 folderID = $(this).data('id');
-                if ( ui.draggable.hasClass( 'wcp-move-multiple' ) ) {
+                if( ui.draggable.hasClass( 'wcp-move-multiple' ) ) {
                     nonce = getSettingForPost(folderID, 'nonce');
                     if($(".wp-list-table input:checked").length) {
                         chkStr = "";
@@ -726,13 +748,13 @@
                             method: 'post',
                             success: function (res) {
                                 // window.location.reload();
-                                checkForUndoFunctionality();
                                 resetMediaAndPosts();
                                 ajaxAnimation();
+                                checkForUndoFunctionality();
                             }
                         });
                     }
-                } else if ( ui.draggable.hasClass( 'wcp-move-file' ) ) {
+                } else if( ui.draggable.hasClass( 'wcp-move-file' ) ) {
                     postID = ui.draggable[0].attributes['data-id'].nodeValue;
                     nonce = getSettingForPost(folderID, 'nonce');
                     chkStr = postID+",";
@@ -747,9 +769,9 @@
                         method: 'post',
                         success: function (res) {
                             // window.location.reload();
-                            checkForUndoFunctionality();
                             resetMediaAndPosts();
                             ajaxAnimation();
+                            checkForUndoFunctionality();
                         }
                     });
                 } else if( ui.draggable.hasClass( 'attachment' ) ){
@@ -767,9 +789,9 @@
                         method: 'post',
                         success: function (res) {
                             // window.location.reload();
-                            checkForUndoFunctionality();
                             resetMediaAndPosts();
                             ajaxAnimation();
+                            checkForUndoFunctionality();
                         }
                     });
                 }
@@ -798,9 +820,9 @@
                             success: function (res) {
                                 res = $.parseJSON(res);
                                 if(res.status == "1") {
-                                    checkForUndoFunctionality();
                                     resetMediaAndPosts();
                                     ajaxAnimation();
+                                    checkForUndoFunctionality();
                                 } else {
                                     $(".folder-popup-form").hide();
                                     $(".folder-popup-form").removeClass("disabled");
@@ -827,9 +849,9 @@
                             res = $.parseJSON(res);
                             if(res.status == "1") {
                                 // window.location.reload();
-                                checkForUndoFunctionality();
                                 resetMediaAndPosts();
                                 ajaxAnimation();
+                                checkForUndoFunctionality();
                             } else {
                                 $(".folder-popup-form").hide();
                                 $(".folder-popup-form").removeClass("disabled");
@@ -838,10 +860,10 @@
                             }
                         }
                     });
-                } else if (ui.draggable.hasClass('attachment')) {
+                } else if(ui.draggable.hasClass('attachment')) {
                     chkStr = ui.draggable[0].attributes['data-id'].nodeValue;
                     nonce = getSettingForPost(folderID, 'nonce');
-                    if ($(".attachments-browser li.attachment.selected").length > 1) {
+                    if($(".attachments-browser li.attachment.selected").length > 1) {
                         chkStr = "";
                         $(".attachments-browser li.attachment.selected").each(function () {
                             chkStr += $(this).data("id") + ",";
@@ -854,9 +876,9 @@
                         method: 'post',
                         success: function (res) {
                             // window.location.reload();
-                            checkForUndoFunctionality();
                             resetMediaAndPosts();
                             ajaxAnimation();
+                            checkForUndoFunctionality();
                         }
                     });
                 }
@@ -868,9 +890,12 @@
 
     function setFolderCount() {
         $("#js-tree-menu .jstree-node").each(function(){
-            var folderCount = parseInt($(this).data("count"));
-            if(folderCount > 0) {
-                $(".jstree-node[id='" + $(this).attr("id") + "'] > a span.premio-folder-count").text(folderCount);
+            var folderCount = ($(this).data("count") && $(this).data("count") != "")?$(this).data("count"):0;
+            $(".jstree-node[id='" + $(this).attr("id") + "'] > a span.premio-folder-count").text(folderCount);
+        });
+        $("span.premio-folder-count").each(function(){
+            if($(this).text() == "") {
+                $(this).text(0);
             }
         });
 
@@ -968,6 +993,7 @@
                         $(".wp-header-end").before('<div class="tree-structure-content"><div class="tree-structure"><ul></ul><div class="clear clearfix"></div></div></div>');
                     }
                     add_active_item_to_list();
+                    triggerInlineUpdate();
                 });
             }
         }
@@ -1269,6 +1295,7 @@
                                         }, "last", function () {
                                             $(".jstree-node[id='" + result.data[i]['term_id'] + "']").attr("data-nonce", result.data[i]['nonce']);
                                             $(".jstree-node[id='" + result.data[i]['term_id'] + "']").attr("data-slug", result.data[i]['slug']);
+                                            $(".jstree-node[id='" + result.data[i]['term_id'] + "'] > a.jstree-anchor .premio-folder-count").text(0);
                                         });
                                     } else {
                                         $('#js-tree-menu').jstree().create_node("#", {
@@ -1277,9 +1304,14 @@
                                         }, (folderOrder), function () {
                                             $(".jstree-node[id='" + result.data[i]['term_id'] + "']").attr("data-nonce", result.data[i]['nonce']);
                                             $(".jstree-node[id='" + result.data[i]['term_id'] + "']").attr("data-slug", result.data[i]['slug']);
+                                            $(".jstree-node[id='" + result.data[i]['term_id'] + "'] > a.jstree-anchor .premio-folder-count").text(0);
                                         });
                                     }
                                     creatingParentMenu = 0;
+
+                                    if($(".jstree-node[id='"+result.data[i]['term_id']+"']").length) {
+                                        $(".jstree-node[id='"+result.data[i]['term_id']+"'] > a.jstree-anchor").trigger("focus");
+                                    }
                                 }
                             }
                             ajaxAnimation();
@@ -1287,7 +1319,11 @@
                             if($("#media-attachment-taxonomy-filter").length) {
                                 fileFolderID = result.term_id;
                                 resetMediaData(0);
+
+                                resetSelectMediaDropDown();
                             }
+                            isDuplicate = false;
+                            duplicateFolderId = 0;
                         } else {
                             $("#error-folder-popup-message").html(result.message);
                             $("#error-folder-popup").show();
@@ -1330,6 +1366,7 @@
         $(".dynamic-menu").remove();
     }
 
+
     /* update folder code */
     $(document).ready(function(){
         $("#inline-update").on("click", function(){
@@ -1350,10 +1387,20 @@
 
         $(document).on("click", ".form-cancel-btn", function(){
             $(".folder-popup-form").hide();
+            if($(".jstree-node[id='"+fileFolderID+"']").length) {
+                $(".jstree-node[id='"+fileFolderID+"'] > a.jstree-anchor").trigger("focus");
+            } else if($("#js-tree-menu .jstree-anchor.jstree-clicked").length) {
+                $("#js-tree-menu .jstree-anchor.jstree-clicked").trigger("focus");
+            }
         });
 
         $(document).on("click", ".folder-popup-form", function (e) {
             $(".folder-popup-form").hide();
+            if($(".jstree-node[id='"+fileFolderID+"']").length) {
+                $(".jstree-node[id='"+fileFolderID+"'] > a.jstree-anchor").trigger("focus");
+            } else if($("#js-tree-menu .jstree-anchor.jstree-clicked").length) {
+                $("#js-tree-menu .jstree-anchor.jstree-clicked").trigger("focus");
+            }
         });
 
         $(document).on("click", ".popup-form-content", function (e) {
@@ -1411,6 +1458,9 @@
                             $(".folder-popup-form").removeClass("disabled");
                             $("#error-folder-popup-message").html(result.message);
                             $("#error-folder-popup").show();
+                        }
+                        if($("#dynamic-folders .jstree-clicked").length) {
+                            $("#js-tree-menu .jstree-clicked").removeClass("jstree-clicked");
                         }
                     }
                 });
@@ -1501,7 +1551,8 @@
                     method: 'post',
                     success: function (res) {
                         res = $.parseJSON(res);
-                        if (res.status == '1') {
+                        if(res.status == '1') {
+                            var nextNode = getParentNodeInfo(fileFolderID);
                             $('#js-tree-menu').jstree().delete_node(fileFolderID);
                             isKeyActive = parseInt(res.is_key_active);
                             n_o_file = parseInt(res.folders);
@@ -1514,7 +1565,9 @@
                             $(".folder-popup-form").removeClass("disabled");
                             resetMediaAndPosts();
                             make_sticky_folder_menu();
-                            if (activeRecordID == fileFolderID) {
+                            if(nextNode != 0 && $("#"+nextNode+"_anchor").length) {
+                                $("#"+nextNode+"_anchor").trigger("click");
+                            } else {
                                 $(".header-posts").trigger("click");
                             }
                         } else {
@@ -1528,6 +1581,17 @@
             }
         });
     });
+
+    function getParentNodeInfo(nodeID) {
+        if($(".jstree-node[id='"+nodeID+"']").next().length) {
+            return $(".jstree-node[id='"+nodeID+"']").next().attr("id");
+        } else if($(".jstree-node[id='"+nodeID+"']").prev().length) {
+            return $(".jstree-node[id='"+nodeID+"']").prev().attr("id");
+        } else if($(".jstree-node[id='"+nodeID+"']").parent().parent().hasClass("jstree-node")) {
+            return $(".jstree-node[id='"+nodeID+"']").parent().parent().attr("id");
+        }
+        return 0;
+    }
 
     function check_for_sub_menu() {
         $("#js-tree-menu li.jstree-node").removeClass("has-sub-tree");
@@ -1546,11 +1610,16 @@
                 var folderIDs = "";
                 var activeItemDeleted = false;
                 $("#js-tree-menu input.checkbox:checked").each(function(){
-                    folderIDs += $(this).closest("li.jstree-node").attr("id")+",";
-                    if($(this).closest("li.jstree-node").hasClass("jstree-clicked")) {
-                        activeItemDeleted = true;
+                    if(!$(this).closest("li.jstree-node").hasClass("is-locked")) {
+                        folderIDs += $(this).closest("li.jstree-node").attr("id") + ",";
+                        if($(this).closest("li.jstree-node").hasClass("jstree-clicked")) {
+                            activeItemDeleted = true;
+                        }
                     }
                 });
+                if(folderIDs == "") {
+                    return;
+                }
                 $(".form-loader-count").css("width", "100%");
                 $.ajax({
                     url: wcp_settings.ajax_url,
@@ -1559,7 +1628,7 @@
                     success: function (res) {
                         res = $.parseJSON(res);
                         $(".form-loader-count").css("width", "0px");
-                        if (res.status == '1') {
+                        if(res.status == '1') {
                             isKeyActive = parseInt(res.is_key_active);
                             n_o_file = parseInt(res.folders);
                             $("#current-folder").text(n_o_file);
@@ -1660,6 +1729,9 @@
                         }
                         add_menu_to_list();
                         ajaxAnimation();
+                        if($(".jstree-node[id='"+res.id+"']").length) {
+                            $(".jstree-node[id='"+res.id+"'] > a.jstree-anchor").trigger("focus");
+                        }
                     } else {
                         $(".folder-popup-form").hide();
                         $(".folder-popup-form").removeClass("disabled");
@@ -1723,6 +1795,9 @@
             activeRecordID = $(this).closest("li.jstree-node").attr("id");
             fileFolderID = $(this).closest("li.jstree-node").attr("id");
             $(".sticky-folders .sticky-folder-"+activeRecordID+" a").addClass("active-item");
+            $("#js-tree-menu .jstree-clicked").removeClass("jstree-clicked");
+            $("#js-tree-menu").jstree('select_node', activeRecordID);
+            $("#js-tree-menu #"+activeRecordID+"_anchor").addClass("jstree-clicked");
             if(!$("#media-attachment-taxonomy-filter").length) {
                 var folderSlug = getSettingForPost(activeRecordID, 'slug');
                 folderCurrentURL = wcp_settings.page_url + folderSlug+"&paged="+currentPage;
@@ -2239,7 +2314,7 @@
             $(".sticky-folders").removeClass("active");
         }
 
-        setCustomScrollForFolder();
+        setDragAndDropElements();
     }
 
     function setFolderCountAndDD() {
@@ -2266,14 +2341,19 @@
                 }
             }
         }
-        $("span.premio-folder-count").text("");
         $(".folder-count").text("");
         for (i = 0; i < foldersArray.length; i++) {
-            if(parseInt(foldersArray[i].trash_count) != 0) {
-                $(".jstree-node[id='" + foldersArray[i].term_id + "'] > a.jstree-anchor span.premio-folder-count").text(foldersArray[i].trash_count);
-                $(".sticky-folder-"+foldersArray[i].term_id+" .premio-folder-count").text(foldersArray[i].trash_count);
+            if(foldersArray[i].trash_count == "") {
+                foldersArray[i].trash_count = 0;
             }
+            $(".jstree-node[id='" + foldersArray[i].term_id + "'] > a.jstree-anchor span.premio-folder-count").text(foldersArray[i].trash_count);
+            $(".sticky-folder-"+foldersArray[i].term_id+" .premio-folder-count").text(foldersArray[i].trash_count);
         }
+        $("span.premio-folder-count").each(function(){
+            if($(this).text() == "") {
+                $(this).text(0);
+            }
+        });
 
         if($(".media-select-folder").length) {
             $(".media-select-folder").html("<option value=''>Select Folder</option><option value='-1'>(Unassigned)</option>");
@@ -2291,6 +2371,8 @@
             $("#title_"+fileFolderID).trigger("click");
             isItFromMedia = false;
         }
+
+        uploadFolderID = 0;
     }
 
     $(document).ready(function(){
@@ -2369,7 +2451,7 @@
                     chkStr += $(this).val() + ",";
                 });
                 if($("#bulk-select").val() != "") {
-                    if ($("#bulk-select").val() == "-1") {
+                    if($("#bulk-select").val() == "-1") {
                         $.ajax({
                             url: wcp_settings.ajax_url,
                             data: "post_id=" + chkStr + "&type=" + wcp_settings.post_type + "&action=wcp_remove_post_folder&folder_id=" + $(this).val() + "&nonce=" + wcp_settings.nonce + "&status=" + wcp_settings.taxonomy_status + "&taxonomy=" + activeRecordID,
@@ -2513,7 +2595,7 @@
                         var wp1 = parent.wp;
                         if(wp1.media != undefined) {
                             wp1.media.frame.setState('insert');
-                            if (wp1.media.frame.content.get() !== null && typeof(wp1.media.frame.content.get().collection) != "undefined") {
+                            if(wp1.media.frame.content.get() !== null && typeof(wp1.media.frame.content.get().collection) != "undefined") {
                                 wp1.media.frame.content.get().collection.props.set({ignore: (+new Date())});
                                 wp1.media.frame.content.get().options.selection.reset();
                             } else {
@@ -2593,7 +2675,7 @@
 
         function setCookie(name,value,days) {
             var expires = "";
-            if (days) {
+            if(days) {
                 var date = new Date();
                 date.setTime(date.getTime() + (days*24*60*60*1000));
                 expires = "; expires=" + date.toUTCString();
@@ -2652,16 +2734,16 @@
             $(".delete-selected-button").before("<button type='button' class='button button-primary select-all-item-btn'>Select All</button>");
             $(".media-toolbar-secondary").after("<div class='custom-media-select'>Move Selected files to: <select class='media-select-folder'></select></div>");
             $(".media-toolbar").append("<div style='clear:both;'></div><div class='media-folder-loader'><span>Uploading files</span> <span id='current_upload_files'></span>/<span id='total_upload_files'></span><div class='folder-progress'><div class='folder-meter orange-bg'><span></span></div></div></div>");
-            if ($(".wcp-custom-form").length) {
-                if (wp.Uploader !== undefined) {
+            if($(".wcp-custom-form").length) {
+                if(wp.Uploader !== undefined) {
                     wp.Uploader.queue.on('reset', function () {
                         resetMediaData(1);
                     });
                 }
                 $(document).ajaxComplete(function (ev, jqXHR, settings) {
                     actionName = settings.data;
-                    if (typeof actionName != "undefined") {
-                        if (actionName.length && actionName.indexOf("action=delete-post&id=") == 0) {
+                    if(typeof actionName != "undefined") {
+                        if(actionName.length && actionName.indexOf("action=delete-post&id=") == 0) {
                             resetMediaData(0);
                         }
                     }
@@ -2669,13 +2751,13 @@
             }
             setTimeout(function () {
                 docReferrar = document.referrer;
-                if (docReferrar.indexOf("wp-admin/upload.php") != -1) {
+                if(docReferrar.indexOf("wp-admin/upload.php") != -1) {
                     mediaMode = getCookie("media-select-mode");
-                    if (mediaMode == "on") {
+                    if(mediaMode == "on") {
                         $("button.button.media-button.select-mode-toggle-button").trigger("click");
                         //$(".attachments-browser li.attachment").draggable("enable");
 
-                        if ($(".media-frame").hasClass("mode-select")) {
+                        if($(".media-frame").hasClass("mode-select")) {
                             $(".media-info-message").addClass("active");
                         } else {
                             $(".media-info-message, .custom-media-select").removeClass("active");
@@ -2700,8 +2782,8 @@
 
         $(document).on("click", ".attachments-browser ul.attachments .thumbnail", function () {
             if(wcp_settings.post_type == "attachment") {
-                if ($(".media-toolbar").hasClass("media-toolbar-mode-select")) {
-                    if ($("ul.attachments li.selected").length == 0) {
+                if($(".media-toolbar").hasClass("media-toolbar-mode-select")) {
+                    if($("ul.attachments li.selected").length == 0) {
                         $(".custom-media-select").removeClass("active");
                     } else {
                         $(".custom-media-select").addClass("active");
@@ -2712,7 +2794,7 @@
 
         $(document).on("change", ".media-select-folder", function () {
             if(wcp_settings.post_type == "attachment") {
-                if ($(this).val() != "") {
+                if($(this).val() != "") {
                     var checkStr = "";
                     $(".attachments-browser li.attachment.selected").each(function () {
                         checkStr += $(this).attr("data-id") + ",";
@@ -2757,5 +2839,170 @@
                 }
             }
         });
-    })
+    });
+
+    $(document).ready(function(){
+        if(wcp_settings.use_shortcuts == "yes") {
+            $(document).on("click", ".view-shortcodes", function (e) {
+                e.preventDefault();
+                $("#keyboard-shortcut").show();
+            });
+
+            $(document).keydown(function (e) {
+                var isCtrlPressed = (e.ctrlKey || e.metaKey) ? true : false;
+
+                // Shift + N : New Folder
+                if(!($("input").is(":focus") || $("textarea").is(":focus"))) {
+                    if (e.shiftKey && (e.keyCode == 78 || e.which == 78)) {
+                        e.preventDefault();
+                        $("#add-new-folder").trigger("click");
+                    }
+                }
+                // F2 Rename Folder
+                if(e.keyCode == 113 || e.which == 113) {
+                    if($("#js-tree-menu .jstree-anchor").is(":focus")) {
+                        fileFolderID = $("#js-tree-menu .jstree-anchor:focus").closest("li.jstree-node").attr("id");
+                        updateFolder();
+                        $(".dynamic-menu").remove();
+                    }
+                }
+
+                // Ctrl+C/CMD+C: Copy Folder
+                if(isCtrlPressed && (e.keyCode == 67 || e.which == 67)) {
+                    if($("#js-tree-menu .jstree-anchor").is(":focus")) {
+                        isFolderCopy = $("#js-tree-menu .jstree-anchor:focus").closest("li.jstree-node").attr("id");
+                        CPCAction = "copy";
+                        $(".folders-undo-notification").removeClass("active");
+                        $("#copy-message").addClass("active");
+                        setTimeout(function () {
+                            $("#copy-message").removeClass("active");
+                        }, 5000);
+                        checkForCopyPaste();
+                    }
+                }
+
+                // Ctrl+X/CMD+X: Cut Folder
+                if(isCtrlPressed && (e.keyCode == 88 || e.which == 88)) {
+                    if($("#js-tree-menu .jstree-anchor").is(":focus")) {
+                        e.preventDefault();
+                        isFolderCopy = $("#js-tree-menu .jstree-anchor:focus").closest("li.jstree-node").attr("id");
+                        CPCAction = "cut";
+                        $(".folders-undo-notification").removeClass("active");
+                        $("#cut-message").addClass("active");
+                        setTimeout(function () {
+                            $("#cut-message").removeClass("active");
+                        }, 5000);
+                        checkForCopyPaste();
+                    }
+                }
+
+                // Ctrl+V: Paste Folder
+                if(isCtrlPressed && (e.keyCode == 86 || e.which == 86)) {
+                    if($("#js-tree-menu .jstree-anchor").is(":focus")) {
+                        e.preventDefault();
+                        activeRecordID = $("#js-tree-menu .jstree-anchor:focus").closest("li.jstree-node").attr("id");
+                        if(activeRecordID == "" || isNaN(activeRecordID)) {
+                            activeRecordID = 0;
+                        }
+                        if(isFolderCopy != 0 && isFolderCopy != "" && isFolderCopy != activeRecordID) {
+                            if(CPCAction == "cut") {
+                                lastParentID = $("#" + isFolderCopy).data("parent");
+                                lastCopiedFolder = isFolderCopy;
+                                lastFolderOrder = $("#" + isFolderCopy).index() + 1;
+                                if(activeRecordID != "" && activeRecordID != 0) {
+                                    $('#js-tree-menu').jstree("move_node", "#" + isFolderCopy, "#" + activeRecordID, 0);
+                                } else {
+                                    $('#js-tree-menu').jstree("move_node", "#" + isFolderCopy, "#", $("#js-tree-menu > ul > li.jstree-node").length);
+                                }
+                                $(".folders-undo-notification").removeClass("active");
+                                $("#paste-message").addClass("active");
+                                setTimeout(function () {
+                                    $("#paste-message").removeClass("active");
+                                }, 5000);
+                            } else {
+                                if(activeRecordID == "" || isNaN(activeRecordID)) {
+                                    activeRecordID = 0;
+                                }
+                                copyFolders(isFolderCopy, activeRecordID);
+                            }
+                            checkForCopyPaste();
+                            CPCAction = "";
+                            isFolderCopy = 0;
+                        }
+                    }
+                }
+
+                if(isCtrlPressed && (e.keyCode == 75 || e.which == 75)) {
+                    $("#keyboard-shortcut").show();
+                }
+
+                // delete action
+                if((e.keyCode == 46 || e.which == 46) || (e.keyCode == 8 || e.which == 8)) {
+                    if($("#js-tree-menu .jstree-anchor").is(":focus")) {
+                        if(!$("#js-tree-menu .jstree-anchor:focus").closest("li.jstree-node").hasClass("is-locked")) {
+                            fileFolderID = $("#js-tree-menu .jstree-anchor:focus").closest("li.jstree-node").attr("id");
+                            removeFolderFromID(0);
+                            $(".dynamic-menu").remove();
+                            $(".active-menu").removeClass("active-menu");
+                        }
+                    }
+                }
+
+                // ctrl + down
+                if(isCtrlPressed && (e.keyCode == 40 || e.which == 40)) {
+                    if($("#js-tree-menu .jstree-anchor").is(":focus")) {
+                        fileFolderID = $("#js-tree-menu .jstree-anchor:focus").closest("li.jstree-node").attr("id");
+                        var lastParent = parseInt($("#"+fileFolderID).data("parent"));
+                        var folderOrder = parseInt($("#"+fileFolderID).index())+1;
+                        var dataChild = parseInt($("#"+fileFolderID).data("child"));
+                        if(isNaN(lastParent)) {
+                            lastParent = ($("li#" + fileFolderID).parents("li.jstree-node").length)?$("li#" + fileFolderID).parents("li.jstree-node").data("folder"):0;
+                            dataChild = ($("li#" + fileFolderID).parents("li.jstree-node").length)?$("li#" + fileFolderID).parents("li.jstree-node").children():($("#js-tree-menu > ul > li").length);
+                        }
+                        if(lastParent == 0) {
+                            lastParent = "";
+                        }
+                        if(dataChild == folderOrder) {
+                            $('#js-tree-menu').jstree("move_node", "#"+fileFolderID, "#"+lastParent, 0);
+                        } else {
+                            $('#js-tree-menu').jstree("move_node", "#"+fileFolderID, "#"+lastParent, folderOrder+1);
+                        }
+                    }
+                }
+
+                // ctrl + down
+                if(isCtrlPressed && (e.keyCode == 38 || e.which == 38)) {
+                    if($("#js-tree-menu .jstree-anchor").is(":focus")) {
+                        fileFolderID = $("#js-tree-menu .jstree-anchor:focus").closest("li.jstree-node").attr("id");
+                        var lastParent = parseInt($("#" + fileFolderID).data("parent"));
+                        var folderOrder = parseInt($("#" + fileFolderID).index()) - 1;
+                        var dataChild = parseInt($("#" + fileFolderID).data("child"));
+                        if(isNaN(lastParent)) {
+                            folderOrder = parseInt($("#" + fileFolderID).index()) - 1;
+                            lastParent = ($("li#" + fileFolderID).parents("li.jstree-node").length)?$("li#" + fileFolderID).parents("li.jstree-node").data("folder"):0;
+                            dataChild = ($("li#" + fileFolderID).parents("li.jstree-node").length)?$("li#" + fileFolderID).parents("li.jstree-node").children():($("#js-tree-menu > ul > li").length);
+                        }
+                        if (lastParent == 0) {
+                            lastParent = "";
+                        }
+                        if (folderOrder == -1) {
+                            $('#js-tree-menu').jstree("move_node", "#" + fileFolderID, "#" + lastParent, dataChild);
+                        } else {
+                            $('#js-tree-menu').jstree("move_node", "#" + fileFolderID, "#" + lastParent, folderOrder);
+                        }
+                    }
+                }
+
+                // esc key
+                if(e.keyCode == 27 || e.which == 27) {
+                    $(".folder-popup-form").hide();
+                    if($(".jstree-node[id='"+fileFolderID+"']").length) {
+                        $(".jstree-node[id='"+fileFolderID+"'] > a.jstree-anchor").trigger("focus");
+                    } else if($("#js-tree-menu .jstree-anchor.jstree-clicked").length) {
+                        $("#js-tree-menu .jstree-anchor.jstree-clicked").trigger("focus");
+                    }
+                }
+            });
+        }
+    });
 }));

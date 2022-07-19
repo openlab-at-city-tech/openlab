@@ -7,6 +7,8 @@ class WCP_Forms {
 
     public static function get_form_html($option_data = "") {
         ob_start();
+        $customize_folders = get_option('customize_folders');
+        $show_in_page = !isset($customize_folders['use_shortcuts'])?"yes":$customize_folders['use_shortcuts'];
         ?>
 
 	    <?php
@@ -36,6 +38,9 @@ class WCP_Forms {
                     </span>
                 </div>
                 <div class="plugin-button">
+                    <?php if($show_in_page == "yes") { ?>
+                        <a href="#" class="view-shortcodes folder-tooltip" data-folder-tooltip="<?php esc_html_e("Press Ctrl+K to view keyboard shortcuts", 'folders'); ?>"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg></a>
+                    <?php } ?>
                     <a href="javascript:;" class="add-new-folder" id="add-new-folder">
                         <span class="create_new_folder"><i class="pfolder-add-folder"></i></span> <span><?php esc_html_e("New Folder", 'folders'); ?></span>
                     </a>
