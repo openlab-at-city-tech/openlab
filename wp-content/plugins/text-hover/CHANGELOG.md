@@ -1,5 +1,28 @@
 # Changelog
 
+## 4.2 _(2022-03-22)_
+
+### Highlights:
+
+This release introduces security hardening to restrict HTML tags that can be used as hover text in fancy tooltips, adds DEVELOPER-DOCS.md, notes compatibility through WP 5.9, and minor settings page and documentation tweaks.
+
+### Details:
+
+* Change: Disallow all but the most basic formatting markup within hover text. Props Rohan Chaudhari.
+    * As continues to be the case, markup only ever works in the better looking tooltips.
+    * This only enforces the already documented limited markup support to basic formatting tags.
+    * Existing text hovers will be unaffected until the next time settings get saved.
+* New: Add DEVELOPER-DOCS.md and move hooks documentation into it
+* Change: Remove settings page helptext about 'replace_once' setting not applying to multibyte strings since it's no longer true
+* Change: Lowercase the displayed values for 'when' setting
+* Change: Move 'code' tags out of translatable string for 'when' setting
+* Change: Note compatibility through WP 5.9+
+* Change: Remove "A screenshot of" prefix from all screenshot captions
+* Change: Tweak installation instructions in README.md
+* Change: Fix typo in function docblock
+* Change: Update copyright date (2022)
+* New: Add a few more possible TODO items
+
 ## 4.1 _(2021-06-29)_
 
 ### Highlights:
