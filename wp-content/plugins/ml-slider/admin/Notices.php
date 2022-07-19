@@ -98,49 +98,54 @@ class MetaSlider_Notices extends Updraft_Notices_1_0
             return (!defined('METASLIDER_FORCE_LITE_NOTICES')) ? $this->pro_notices() : array();
         }
 
-        return array_merge(array(
-            'rate_plugin' => array(
-                'title' => _x('Like MetaSlider and have a minute to spare?', 'Keep the plugin name "MetaSlider" when possible', 'ml-slider'),
-                'text' => _x('Please help MetaSlider by giving a positive review at wordpress.org.', 'Keep the plugin name "MetaSlider" when possible', 'ml-slider'),
-                'image' => 'metaslider_logo.png',
-                'button_link' => 'metaslider_rate',
-                'button_meta' => 'review',
-                'dismiss_time' => 'rate_plugin',
-                'hide_time' => 12,
-                'supported_positions' => array('header'),
-            ),
-            'pro_layers' => array(
-                'title' => __('Spice up your site with animated layers and video slides', 'ml-slider'),
-                'text' => _x('With the MetaSlider Add-on pack you can give your slideshows a professional look!', 'Keep the plugin name "MetaSlider" when possible', 'ml-slider'),
-                'image' => 'metaslider_logo.png',
-                'button_link' => 'metaslider',
-                'button_meta' => 'buy-w-discount',
-                'dismiss_time' => 'pro_layers',
-                'hide_time' => 12,
-                'supported_positions' => array('header'),
-            ),
-            'pro_features' => array(
-                'title' => __('Increase your revenue and conversion with video slides and many more features', 'ml-slider'),
-                'text' => __('Upgrade today to benefit from many more premium features. Find out more.', 'ml-slider'),
-                'image' => 'metaslider_logo.png',
-                'button_link' => 'metaslider',
-                'button_meta' => 'buy-w-discount',
-                'dismiss_time' => 'pro_features',
-                'hide_time' => 12,
-                'supported_positions' => array('header'),
-            ),
-            'translation' => array(
-                'title' => __('Can you translate? Want to improve MetaSlider for speakers of your language?', 'ml-slider'),
-                'text' => __('Please go here for instructions - it is easy.', 'ml-slider'),
-                'image' => 'metaslider_logo.png',
-                'button_link' => 'metaslider_translate',
-                'button_meta' => 'lets_start',
-                'dismiss_time' => 'translation',
-                'hide_time' => 12,
-                'supported_positions' => array('header'),
-                'validity_function' => 'translation_needed',
-            ),
-        ), $this->valid_seasonal_notices());
+        return array_merge(
+            [
+                'rate_plugin' => [
+                    'title' => _x('Like MetaSlider? Please help us by giving a positive review at WordPress.org', 'Keep the plugin name "MetaSlider" when possible', 'ml-slider'),
+                    'text' => '',
+                    'image' => 'notices/metaslider_logo.png',
+                    'button_link' => 'metaslider_rate',
+                    'button_meta' => 'review',
+                    'dismiss_time' => 'rate_plugin',
+                    'hide_time' => 12,
+                    'supported_positions' => ['header'],
+                ],
+                'pro_layers' => [
+                    'title' => __('Spice up your site with animated layers and video slides with MetaSlider Pro', 'ml-slider'),
+                    'text' => '',
+                    'image' => 'notices/metaslider_logo.png',
+                    'button_link' => 'metaslider',
+                    'button_meta' => 'buy-w-discount',
+                    'dismiss_time' => 'pro_layers',
+                    'hide_time' => 12,
+                    'supported_positions' => ['header'],
+                    'validity_function' => 'metaslider_pro_is_not_installed',
+                ],
+                'pro_features' => [
+                    'title' => __('Increase your revenue and conversion with video slides and many more MetaSlider Pro features', 'ml-slider'),
+                    'text' => '',
+                    'image' => 'notices/metaslider_logo.png',
+                    'button_link' => 'metaslider',
+                    'button_meta' => 'buy-w-discount',
+                    'dismiss_time' => 'pro_features',
+                    'hide_time' => 12,
+                    'supported_positions' => ['header'],
+                    'validity_function' => 'metaslider_pro_is_not_installed',
+                ],
+                'translation' => [
+                    'title' => __('Can you translate? Want to improve MetaSlider for speakers of your language?', 'ml-slider'),
+                    'text' => '',
+                    'image' => 'notices/metaslider_logo.png',
+                    'button_link' => 'metaslider_translate',
+                    'button_meta' => 'lets_start',
+                    'dismiss_time' => 'translation',
+                    'hide_time' => 12,
+                    'supported_positions' => ['header'],
+                    'validity_function' => 'translation_needed',
+                ],
+            ],
+            $this->valid_seasonal_notices()
+        );
     }
 
     /**
@@ -151,12 +156,11 @@ class MetaSlider_Notices extends Updraft_Notices_1_0
     protected function pro_notices()
     {
         if (defined('METASLIDER_FORCE_LITE_NOTICES') && METASLIDER_FORCE_LITE_NOTICES) {
-
             // Override to force pro, but make sure both overrides arent set
-            return (!defined('METASLIDER_FORCE_PRO_NOTICES')) ? $this->lite_notices() : array();
+            return (!defined('METASLIDER_FORCE_PRO_NOTICES')) ? $this->lite_notices() : [];
         }
 
-        return array();
+        return [];
     }
 
     /**
@@ -175,45 +179,45 @@ class MetaSlider_Notices extends Updraft_Notices_1_0
         $coupons = json_decode(file_get_contents(METASLIDER_PATH .'seasonal-discounts.json'), true);
         $coupon_object =  array(
             'blackfriday' => array(
-                'title' => _x('Black Friday — Get 50% off the MetaSlider Add-on Pack until November 30th!', 'Keep the phrase "MetaSlider Add-on Pack" when possible. Also, "Black Friday" is the name of an event in the United States', 'ml-slider'),
-                'text' => __('With discount code:', 'ml-slider').' ',
-                'image' => 'seasonal/black_friday.png',
+                'title' => _x('Upgrade your slideshows! Join today and you get 50% off MetaSlider Pro until November 30th!', 'Keep the phrase "MetaSlider Add-on Pack" when possible. Also, "Black Friday" is the name of an event in the United States', 'ml-slider'),
+                'text' => '',
+                'image' => 'notices/metaslider_logo.png',
                 'button_link' => 'metaslider',
                 'button_meta' => 'buy-w-discount',
                 'hide_time' => '',
                 'supported_positions' => array('header', 'dashboard'),
             ),
             'christmas' => array(
-                'title' => _x('Christmas sale - 50% off the MetaSlider Add-on Pack until December 25th', 'Keep the phrase "MetaSlider Add-on Pack" when possible', 'ml-slider'),
-                'text' => __('With discount code:', 'ml-slider').' ',
-                'image' => 'seasonal/christmas.png',
+                'title' => _x('Upgrade your slideshows! Join today and you get 50% off MetaSlider Pro until December 25th!', 'Keep the phrase "MetaSlider Add-on Pack" when possible', 'ml-slider'),
+                'text' => '',
+                'image' => 'notices/metaslider_logo.png',
                 'button_link' => 'metaslider',
                 'button_meta' => 'buy-w-discount',
                 'hide_time' => '',
                 'supported_positions' => array('header', 'dashboard'),
             ),
             'newyear' => array(
-                'title' => _x('Happy New Year - 50% off the MetaSlider Add-on Pack until January 14th', 'Keep the phrase "MetaSlider Add-on Pack" when possible', 'ml-slider'),
-                'text' => __('With discount code:', 'ml-slider').' ',
-                'image' => 'seasonal/new_year.png',
+                'title' => _x('Upgrade your slideshows! Join today and you get 50% off MetaSlider Pro until January 14th!', 'Keep the phrase "MetaSlider Add-on Pack" when possible', 'ml-slider'),
+                'text' => '',
+                'image' => 'notices/metaslider_logo.png',
                 'button_link' => 'metaslider',
                 'button_meta' => 'buy-w-discount',
                 'hide_time' => '',
                 'supported_positions' => array('header', 'dashboard'),
             ),
             'spring' => array(
-                'title' => _x('Spring sale - 50% off the MetaSlider Add-on Pack until April 30th', 'Keep the phrase "MetaSlider Add-on Pack" when possible', 'ml-slider'),
-                'text' => __('With discount code:', 'ml-slider').' ',
-                'image' => 'seasonal/spring.png',
+                'title' => _x('Upgrade your slideshows! Join today and you get 50% off MetaSlider Pro until April 30th!', 'Keep the phrase "MetaSlider Add-on Pack" when possible', 'ml-slider'),
+                'text' => '',
+                'image' => 'notices/metaslider_logo.png',
                 'button_link' => 'metaslider',
                 'button_meta' => 'buy-w-discount',
                 'hide_time' => '',
                 'supported_positions' => array('header', 'dashboard'),
             ),
             'summer' => array(
-                'title' => _x('Summer sale - 50% off the MetaSlider Add-on Pack until July 31st', 'Keep the phrase "MetaSlider Add-on Pack" when possible', 'ml-slider'),
-                'text' => __('With discount code:', 'ml-slider').' ',
-                'image' => 'seasonal/summer.png',
+                'title' => _x('Upgrade your slideshows! Join today and you get 50% off MetaSlider Pro until July 31st!', 'Keep the phrase "MetaSlider Add-on Pack" when possible', 'ml-slider'),
+                'text' => '',
+                'image' => 'notices/metaslider_logo.png',
                 'button_link' => 'metaslider',
                 'button_meta' => 'buy-w-discount',
                 'hide_time' => '',
@@ -236,6 +240,16 @@ class MetaSlider_Notices extends Updraft_Notices_1_0
             $notice['dismiss_time'] = $notice['discount_code'];
         }
         return $notice;
+    }
+
+    /**
+     * Checks if MetaSlider Pro is NOT installed
+     *
+     * @return bool
+     */
+    protected function metaslider_pro_is_not_installed()
+    {
+        return ! metaslider_pro_is_installed();
     }
 
     /**
@@ -284,6 +298,9 @@ class MetaSlider_Notices extends Updraft_Notices_1_0
             }
             $valid_from = strtotime($notice['valid_from']);
             $valid_to = strtotime($notice['valid_to']);
+
+            $notice['validity_function'] = 'metaslider_pro_is_not_installed';
+
             if ($valid_from < $time_now && $time_now <= $valid_to) {
                 $valid[$ad_identifier] = $notice;
             }
@@ -447,16 +464,16 @@ class MetaSlider_Notices extends Updraft_Notices_1_0
     public function get_button_link($link, $type)
     {
         $messages = array(
-            'lets_start' => __('Let\'s Start', 'ml-slider'),
-            'review' => _x('Review MetaSlider', 'Keep the plugin name "MetaSlider" when possible', 'ml-slider'),
+            'lets_start' => __('Let\'s Start &rarr;', 'ml-slider'),
+            'review' => _x('Review MetaSlider &rarr;', 'Keep the plugin name "MetaSlider" when possible', 'ml-slider'),
             'ml-slider' => __('Find out more &rarr;', 'ml-slider'),
-            'buy-w-discount' => __('Get it now &rarr;', 'ml-slider'),
-            'signup' => __('Sign up', 'ml-slider'),
-            'go_there' => __('Go there', 'ml-slider')
+            'buy-w-discount' => __('Get MetaSlider Pro &rarr;', 'ml-slider'),
+            'signup' => __('Sign up &rarr;', 'ml-slider'),
+            'go_there' => __('Go there &rarr;', 'ml-slider')
         );
         $message = isset($messages[$type]) ? $messages[$type] : __('Read more', 'ml-slider');
 
-        return '<a class="updraft_notice_link underline text-blue-dark" target="_blank" href="' . $this->get_notice_url($link) . '">' . $message . '</a>';
+        return '<a class="updraft_notice_link ml-discount-ad-button" target="_blank" href="' . $this->get_notice_url($link) . '">' . $message . '</a>';
     }
 
     /**
@@ -472,7 +489,9 @@ class MetaSlider_Notices extends Updraft_Notices_1_0
             ), 401);
         }
 
-        if (is_wp_error($ad_data = $this->ad_exists($_POST['ad_identifier']))) {
+        $ad_data = $this->ad_exists($_POST['ad_identifier']);
+
+        if (is_wp_error($ad_data)) {
             wp_send_json_error(array(
                 'message' => __('This item does not exist. Please refresh the page and try again.', 'ml-slider')
             ), 401);
@@ -515,9 +534,11 @@ class MetaSlider_Notices extends Updraft_Notices_1_0
         // Filter out if the dismiss time has expired, then compare to the database
         $valid_ads = array();
         foreach ($ads as $ad_identifier => $values) {
-            $is_valid = isset($values['validity_function']) ? call_user_func(array($this, $values['validity_function'])) : true;
+            $is_valid = isset($values['validity_function'])
+                ? (bool)call_user_func([$this, $values['validity_function']]) : true;
             $not_dismissed = !$this->check_notice_dismissed($ad_identifier);
             $is_supported = in_array($location, $values['supported_positions']);
+
             if ($is_valid && $not_dismissed && $is_supported) {
                 $valid_ads[$ad_identifier] = $values;
             }

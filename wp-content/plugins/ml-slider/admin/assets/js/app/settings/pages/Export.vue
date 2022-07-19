@@ -56,45 +56,46 @@
 					<template slot="description">{{ __('Select or deselect all slideshows') }}</template>
 				</switch-single-input>
 			</div>
-			<template v-for="slideshow in slideshows">
-				<switch-single-input
-					:key="slideshow.id"
-					v-model="slideshowsList[slideshow.id]">
-					<template slot="header">{{ slideshow.title }}</template>
-					<template slot="subheader">
-						<span :title="slideshow.modified_at_gmt">{{ sprintf(__('last updated: %s', 'ml-slider'), modifiedAt(slideshow)) }}</span>
-					</template>
-					<template slot="description">
-						<div class="pl-3 inline-flex flex-row-reverse justify-end relative z-0 overflow-hidden">
-							<div
-								v-for="slide in slideshow.slides"
-								:key="slide.id"
-								class="relative -ml-3 z-30 inline-block h-12 w-12 text-white border border-gray-light shadow-solid rounded-full">
+			<template>
+				<div v-for="slideshow in slideshows" :key="slideshow.id">
+					<switch-single-input
+						v-model.lazy="slideshowsList[slideshow.id]">
+						<template slot="header">{{ slideshow.title }}</template>
+						<template slot="subheader">
+							<span :title="slideshow.modified_at_gmt">{{ sprintf(__('last updated: %s', 'ml-slider'), modifiedAt(slideshow)) }}</span>
+						</template>
+						<template slot="description">
+							<div class="pl-3 inline-flex flex-row-reverse justify-end relative z-0 overflow-hidden">
 								<div
-									v-if="'post_feed' === slide.meta['ml-slider_type']"
-									class="bg-blue border border-blue flex items-center justify-center text-lg text-white rounded-full h-full tipsy-tooltip-top"
-									:original-title="__('Post Feed slide', 'ml-slider')"
-									:title="__('Post Feed slide', 'ml-slider')">
-									P
+									v-for="slide in slideshow.slides"
+									:key="slide.id"
+									class="relative -ml-3 z-30 inline-block h-12 w-12 text-white border border-gray-light shadow-solid rounded-full">
+									<div
+										v-if="'post_feed' === slide.meta['ml-slider_type']"
+										class="bg-blue border border-blue flex items-center justify-center text-lg text-white rounded-full h-full tipsy-tooltip-top"
+										:original-title="__('Post Feed slide', 'ml-slider')"
+										:title="__('Post Feed slide', 'ml-slider')">
+										P
+									</div>
+									<div
+										v-else-if="'external' === slide.meta['ml-slider_type']"
+										class="bg-blue-light border border-blue-light flex items-center justify-center text-lg text-white rounded-full h-full tipsy-tooltip-top"
+										:original-title="__('External slide', 'ml-slider')"
+										:title="__('External slide', 'ml-slider')">
+										E
+									</div>
+									<img
+										v-else :src="slide.thumbnail"
+										class="gradient border border-white rounded-full h-full inline-block"
+										alt="">
 								</div>
-								<div
-									v-else-if="'external' === slide.meta['ml-slider_type']"
-									class="bg-blue-light border border-blue-light flex items-center justify-center text-lg text-white rounded-full h-full tipsy-tooltip-top"
-									:original-title="__('External slide', 'ml-slider')"
-									:title="__('External slide', 'ml-slider')">
-									E
+								<div class="relative -ml-3 z-50 inline-block bg-gray-lighter flex items-center justify-center text-lg text-gray-dark h-12 w-12 rounded-full shadow-solid border border-gray-light">
+									{{slideshow.slides.length}}
 								</div>
-								<img
-									v-else :src="slide.thumbnail"
-									class="gradient border border-white rounded-full h-full inline-block"
-									alt="">
 							</div>
-							<div class="relative -ml-3 z-50 inline-block bg-gray-lighter flex items-center justify-center text-lg text-gray-dark h-12 w-12 rounded-full shadow-solid border border-gray-light">
-								{{slideshow.slides.length}}
-							</div>
-						</div>
-					</template>
-				</switch-single-input>
+						</template>
+					</switch-single-input>
+				</div>
 			</template>
 		</template>
 	</split-layout>
@@ -213,6 +214,7 @@ export default {
 		modifiedAt(slideshow) {
 			return DateTime
 				.fromSQL(slideshow.modified_at_gmt, {zone: 'utc'})
+				.setLocale(metaslider.locale)
 				.toRelative()
 		},
 		toggleSlideshowsToExport(state) {

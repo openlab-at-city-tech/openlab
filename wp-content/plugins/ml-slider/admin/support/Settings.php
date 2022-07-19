@@ -61,7 +61,7 @@ if (! class_exists('MetaSlider_Settings')) {
          */
         public function get_disable_extendify_sdk()
         {
-            return (bool) $this->get_option('disableExtendify', false);
+            return (bool) $this->get_option('disableExtendify', true);
         }
     }
 }

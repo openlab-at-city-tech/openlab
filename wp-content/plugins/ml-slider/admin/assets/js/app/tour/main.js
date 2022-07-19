@@ -27,7 +27,7 @@ MainTour.addStep('add-image', {
 	buttons: [
 		{
 			text: __('Next step', 'ml-slider'),
-			action: function() {
+			action: function () {
 				MainTour.show('create-slide')
 			}
 		}
@@ -42,7 +42,7 @@ MainTour.addStep('search-unsplash', {
 	buttons: [
 		{
 			text: __('Hide step', 'ml-slider'),
-			action: function() {
+			action: function () {
 				MainTour.show('create-slide')
 			}
 		}
@@ -81,14 +81,14 @@ MainTour.setPosition = () => {
 
 // Events
 // Add slide button was clicked
-EventManager.$on('metaslider/add-slide-opening-ui', function() {
+EventManager.$on('metaslider/add-slide-opening-ui', function () {
 	this.$nextTick(() => {
 		this.tourEnabled && MainTour.show('add-image')
 	})
 })
 
 // Unsplash tab was opened
-EventManager.$on('metaslider/unsplash-tab-opened', function() {
+EventManager.$on('metaslider/unsplash-tab-opened', function () {
 	this.$nextTick(() => {
 		if (this.tourEnabled && 'add-image' === MainTour.getCurrentStep().id) {
 			MainTour.show('search-unsplash')
@@ -97,28 +97,28 @@ EventManager.$on('metaslider/unsplash-tab-opened', function() {
 })
 
 // Unsplash tab was opened
-EventManager.$on('metaslider/unsplash-tab-closed', function() {
+EventManager.$on('metaslider/unsplash-tab-closed', function () {
 	this.$nextTick(() => {
 		this.tourEnabled && MainTour.show('create-slide')
 	})
 })
 
 // Unsplash search was focused
-EventManager.$on('metaslider/unsplash-search-focused', function() {
+EventManager.$on('metaslider/unsplash-search-focused', function () {
 	this.$nextTick(() => {
 		this.tourEnabled && MainTour.show('create-slide')
 	})
 })
 
 // The create slide UI was closed
-EventManager.$on('metaslider/add-slide-closing-ui', function() {
+EventManager.$on('metaslider/add-slide-closing-ui', function () {
 	this.$nextTick(() => {
 		this.tourEnabled && MainTour.show('preview')
 	})
 })
 
 // The create slide UI was closed
-EventManager.$on('metaslider/preview-loaded', function() {
+EventManager.$on('metaslider/preview-loaded', function () {
 	this.tourEnabled && MainTour.setPosition()
 	this.tourEnabled && MainTour.hide()
 })

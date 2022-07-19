@@ -143,11 +143,11 @@
                         }"
                         class="w-full px-4 my-2 max-w-md"
                         style="min-width:400px"
-                        v-for="(slideshow, key) in slideshowsFiltered">
+                        v-for="(slideshow) in slideshowsFiltered">
                         <span
                             :class="{ 'whitespace-normal': expanded }"
                             class="block -mx-2 rounded bg-white shadow">
-                            <slideshow-meta :slideshow="slideshow" :include-images="key < 20 ? true : false"/>
+                            <slideshow-meta :slideshow="slideshow" :include-images="slideshow.slides.length > 0 ? true : false"/>
                         </span>
                     </li>
                     <li v-if="!expanded" style="min-width:4rem;"></li>

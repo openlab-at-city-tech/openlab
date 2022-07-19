@@ -94,7 +94,7 @@ export default {
             globalSettings: {
 				license: '',
 				optIn: false,
-				disableExtendify: false,
+				disableExtendify: true,
 			},
 
 		}

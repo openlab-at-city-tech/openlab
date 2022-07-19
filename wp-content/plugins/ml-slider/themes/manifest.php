@@ -56,7 +56,7 @@ return array(
 				// 'caption' => ''
 			),
 			array(
-				'filename' => 'manki-kim-269196-unsplash.jpg', 
+				'filename' => 'manki-kim-269196-unsplash.jpg',
 			),
 			array(
 				'filename' => 'danny-howe-361436-unsplash.jpg'
@@ -98,7 +98,7 @@ return array(
       	'supports' => array('flex', 'responsive', 'nivo', 'coin'),
       	'tags' => array('light', 'special'),
 		'description' => __('This theme has a special additional functionality that uses image titles as the slide navigation. ', 'ml-slider'),
-		'instructions' => 'If you would like to use the image titles as the navigation, you will need to use FlexSlider. Additionally, to change the slide navigation label, edit the image title in the media library or manually on the slide (SEO tab).',
+		'instructions' => __('If you would like to use the image titles as the navigation, you will need to use FlexSlider. Additionally, to change the slide navigation label, edit the image title in the media library or manually on the slide (SEO tab).', 'ml-slider'),
       	'images' => array(
 		  	array(
 				'filename' => 'norbert-levajsics-203627-unsplash.jpg',
@@ -152,7 +152,7 @@ return array(
 	'nivo-light' => array(
 		'folder' => 'nivo-light',
 		'title' => 'Nivo Light',
-		'type' => 'free', 
+		'type' => 'free',
 		'supports' => array('nivo'),
 		'tags' => array('nivo only'),
 		'description' => __('The Nivo Light theme included here for legacy purposes. Note: only works with Nivo Slider', 'ml-slider'),

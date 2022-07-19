@@ -86,7 +86,7 @@ class MetaSlide {
         if (!($thumbnail_url = wp_get_attachment_image_url($image_id))) {
             return new WP_Error('update_failed', __('The requested image does not exist. Please try again.', 'ml-slider'), array('status' => 409));
         }
-        
+
         /*
         * Updates the thumbnail, assigns it to the slideshow, crops the image
         */
@@ -109,7 +109,7 @@ class MetaSlide {
                 'img_url' => $imageHelper ? $imageHelper->get_image_url() : wp_get_attachment_image_url($image_id, 'full')
             );
         }
-        
+
         return new WP_Error('update_failed', __('There was an error updating the image. Please try again', 'ml-slider'), array('status' => 409));
     }
 
@@ -129,7 +129,7 @@ class MetaSlide {
         $result = $this->update_slide_image(
             absint($_POST['slide_id']), absint($_POST['image_id']), absint($_POST['slider_id'])
         );
-        
+
         if (is_wp_error($result)) {
             return wp_send_json_error(array(
                 'message' => $result->get_error_message()
@@ -199,7 +199,7 @@ class MetaSlide {
      */
     public function build_image_tag($attributes) {
         $attachment_id = $this->get_attachment_id();
-        
+
         if (('disabled' == $this->settings['smartCrop'] || 'disabled_pad' == $this->settings['smartCrop']) && ('image' == $this->identifier || 'html_overlay' == $this->identifier)) {
 
 			// This will use WP built in image building so we can remove some of these attributes
@@ -255,7 +255,7 @@ class MetaSlide {
      * @return int $slide_id - the ID of the newly created slide
      */
      public function insert_slide($media_id, $type, $slider_id) {
-        
+
         // Store the post in the database (without translation)
         $slide_id = wp_insert_post(
             array(
@@ -276,7 +276,7 @@ class MetaSlide {
         $this->add_or_update_or_delete_meta($slide_id, 'type', $type);
         return $slide_id;
     }
-        
+
 
     /**
      * Tag the slide attachment to the slider tax category
@@ -339,7 +339,7 @@ class MetaSlide {
      * @return string
      */
     public function get_delete_button_html() {
-        return "<button class='toolbar-button delete-slide alignright tipsy-tooltip-top' title='" . __("Delete slide", "ml-slider") . "' data-slide-id='{$this->slide->ID}'><i><svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-x'><line x1='18' y1='6' x2='6' y2='18'/><line x1='6' y1='6' x2='18' y2='18'/></svg></i></button>";
+        return "<button class='toolbar-button delete-slide alignright tipsy-tooltip-top' title='" . esc_html__("Delete slide", "ml-slider") . "' data-slide-id='" . esc_attr($this->slide->ID) . "'><i><svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-x'><line x1='18' y1='6' x2='6' y2='18'/><line x1='6' y1='6' x2='18' y2='18'/></svg></i></button>";
     }
 
     /**
@@ -348,7 +348,7 @@ class MetaSlide {
      * @return string
      */
     public function get_undelete_button_html() {
-        return "<a href='#' onclick='return false;' class='trash-view-restore' data-slide-id='{$this->slide->ID}'>" . __('Restore', 'default') . "</a>";
+        return "<a href='#' onclick='return false;' class='trash-view-restore' data-slide-id='" . esc_attr($this->slide->ID) . "'>" . esc_html__('Restore', 'ml-slider') . "</a>";
     }
 
     /**
@@ -359,8 +359,8 @@ class MetaSlide {
     public function get_perminant_delete_button_html() {
 
         // TODO allow for a perminant delete button
-        $url = wp_nonce_url(admin_url("post.php?ml-slide={$this->slide->ID}&action=delete"));
-        return "<a href='{$url}' class='trash-view-perminant-delete' data-slide-id='{$this->slide->ID}'>" . __('Delete Permanently', 'default') . "</a>";
+        $url = wp_nonce_url(admin_url("post.php?ml-slide=" . esc_url($this->slide->ID) . "&action=delete"));
+        return "<a href='" . esc_url($url) . "' class='trash-view-perminant-delete' data-slide-id='" . esc_attr($this->slide->ID) . "'>" . esc_html__('Delete Permanently', 'ml-slider') . "</a>";
     }
 
     /**
@@ -371,7 +371,7 @@ class MetaSlide {
     public function get_update_image_button_html() {
 		$attachment_id = $this->get_attachment_id();
 		$slide_type = get_post_meta($this->slide->ID, 'ml-slider_type', true);
-        return "<button class='toolbar-button update-image alignright tipsy-tooltip-top' data-slide-type='{$slide_type}' data-button-text='" . __("Update slide image", "ml-slider") . "' title='" . __("Update slide image", "ml-slider") . "' data-slide-id='{$this->slide->ID}' data-attachment-id='{$attachment_id}'><i><svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-edit-2'><polygon points='16 3 21 8 8 21 3 21 3 16 16 3'/></svg></i></button>";
+        return "<button class='toolbar-button update-image alignright tipsy-tooltip-top' data-slide-type='" . esc_attr($slide_type) . "' data-button-text='" . esc_attr__("Update slide image", "ml-slider") . "' title='" . esc_attr__("Update slide image", "ml-slider") . "' data-slide-id='" . esc_attr($this->slide->ID) . "' data-attachment-id='" . esc_attr($attachment_id) . "'><i><svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-edit-2'><polygon points='16 3 21 8 8 21 3 21 3 16 16 3'/></svg></i></button>";
     }
 
     /**
