@@ -36,6 +36,7 @@ add_action( 'wp_enqueue_scripts', 'wpa_toolbar_enqueue_scripts' );
  * Enqueue Toolbar scripts dependent on options.
  */
 function wpa_toolbar_enqueue_scripts() {
+	$wpa_version = wpa_check_version();
 	wp_enqueue_script( 'jquery' );
 	if ( 'on' === get_option( 'wpa_toolbar' ) ) {
 		// Enqueue Toolbar JS if enabled.
@@ -55,16 +56,34 @@ function wpa_toolbar_enqueue_scripts() {
 	wp_localize_script( 'ui-a11y', 'wpa11y', $plugin_path );
 
 	// Font files for toolbar.
-	wp_register_style( 'ui-font', plugins_url( 'toolbar/fonts/css/a11y-toolbar.css', __FILE__ ) );
+	wp_register_style( 'ui-font', plugins_url( 'toolbar/fonts/css/a11y-toolbar.css', __FILE__ ), array(), $wpa_version );
 
 	// Toolbar CSS.
+	/**
+	 * Filter URL for toolbar CSS.
+	 *
+	 * @hook wpa_toolbar_css
+	 *
+	 * @param {string} $url URL to stylesheet for accessibility toolbar.
+	 *
+	 * @return string
+	 */
 	$toolbar_styles = apply_filters( 'wpa_toolbar_css', plugins_url( 'toolbar/css/a11y.css', __FILE__ ) );
-	wp_register_style( 'ui-a11y', $toolbar_styles, array( 'ui-font' ) );
+	wp_register_style( 'ui-a11y', $toolbar_styles, array( 'ui-font' ), $wpa_version );
 
 	// Font resizing stylesheet.
 	$fontsize_stylesheet = ( 'on' === get_option( 'wpa_alternate_fontsize' ) ) ? 'a11y-fontsize-alt' : 'a11y-fontsize';
-	$fontsize            = apply_filters( 'wpa_fontsize_css', plugins_url( 'toolbar/css/' . $fontsize_stylesheet . '.css', __FILE__ ) );
-	wp_register_style( 'ui-fontsize.css', $fontsize );
+	/**
+	 * Filter the URL to the stylesheet controlling large font views.
+	 *
+	 * @hook wpa_fontsize_css
+	 *
+	 * @param {string} $stylesheet URL for increased font size stylesheet.
+	 *
+	 * @return string
+	 */
+	$fontsize = apply_filters( 'wpa_fontsize_css', plugins_url( 'toolbar/css/' . $fontsize_stylesheet . '.css', __FILE__ ) );
+	wp_register_style( 'ui-fontsize.css', $fontsize, array(), $wpa_version );
 
 	// Control toolbar font size.
 	$toolbar_size = get_option( 'wpa_toolbar_size' );
@@ -127,13 +146,13 @@ function wpa_toolbar_html( $type = 'widget', $control = 'button' ) {
 <div class="' . $responsive . ' ' . $is_rtl . ' ' . $is_right . ' ' . $toolbar_type . '">
 	<ul>';
 	if ( $enable_contrast ) {
-		$toolbar .= '<li><' . $control_type . ' class="a11y-toggle-contrast toggle-contrast" id="is_normal_contrast" aria-pressed="false"><span class="offscreen">' . $contrast . '</span> <span class="aticon aticon-adjust" aria-hidden="true"></span></' . $closure . '></li>';
+		$toolbar .= '<li><' . $control_type . ' class="a11y-toggle a11y-toggle-contrast toggle-contrast" id="is_normal_contrast" aria-pressed="false"><span class="offscreen">' . $contrast . '</span> <span class="aticon aticon-adjust" aria-hidden="true"></span></' . $closure . '></li>';
 	}
 	if ( $enable_grayscale ) {
-		$toolbar .= '<li><' . $control_type . ' class="a11y-toggle-grayscale toggle-grayscale" id="is_normal_color" aria-pressed="false"><span class="offscreen">' . $grayscale . '</span> <span class="aticon aticon-tint" aria-hidden="true"></span></' . $closure . '></li>';
+		$toolbar .= '<li><' . $control_type . ' class="a11y-toggle a11y-toggle-grayscale toggle-grayscale" id="is_normal_color" aria-pressed="false"><span class="offscreen">' . $grayscale . '</span> <span class="aticon aticon-tint" aria-hidden="true"></span></' . $closure . '></li>';
 	}
 	if ( $enable_fontsize ) {
-		$toolbar .= '<li><' . $control_type . ' class="a11y-toggle-fontsize toggle-fontsize" id="is_normal_fontsize" aria-pressed="false"><span class="offscreen">' . $fontsize . '</span> <span class="aticon aticon-font" aria-hidden="true"></span></' . $closure . '></li>';
+		$toolbar .= '<li><' . $control_type . ' class="a11y-toggle a11y-toggle-fontsize toggle-fontsize" id="is_normal_fontsize" aria-pressed="false"><span class="offscreen">' . $fontsize . '</span> <span class="aticon aticon-font" aria-hidden="true"></span></' . $closure . '></li>';
 	}
 	$toolbar .= '
 	</ul>
@@ -147,7 +166,16 @@ function wpa_toolbar_html( $type = 'widget', $control = 'button' ) {
  * Generate Toolbar variables for localization in JS.
  */
 function wpa_toolbar_js() {
-	$default    = ( false !== (bool) trim( get_option( 'wpa_toolbar_default' ) ) ) ? get_option( 'wpa_toolbar_default' ) : 'body';
+	$default = ( false !== (bool) trim( get_option( 'wpa_toolbar_default' ) ) ) ? get_option( 'wpa_toolbar_default' ) : 'body';
+	/**
+	 * Filter attachment location of the toolbar. Default `body`.
+	 *
+	 * @hook wpa_move_toolbar
+	 *
+	 * @param {string} $el Target element selector.
+	 *
+	 * @return string
+	 */
 	$location   = apply_filters( 'wpa_move_toolbar', $default );
 	$is_rtl     = ( is_rtl() ) ? 'rtl' : 'ltr';
 	$is_right   = ( 'on' === get_option( 'wpa_toolbar_right' ) ) ? 'right' : 'left';

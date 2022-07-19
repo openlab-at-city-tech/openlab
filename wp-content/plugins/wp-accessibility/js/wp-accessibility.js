@@ -22,16 +22,25 @@
 			viewport.setAttribute( 'content', conditions );
 		}
 	}
+
 	if ( wpa.target ) {
 		$('a:not(.wpa-allow-target)').removeAttr( 'target' );
 	}
 
 	if ( wpa.tabindex ) {
-		$('input,a,select,textarea,button').removeAttr('tabindex');
+		// Remove tabindex from elements that should be natively focusable.
+		var focusable = $('input,a,select,textarea,button').not('a:not([href])');
+		focusable.removeAttr('tabindex');
+
+		// Add tabindex to elements that appear active but are not natively focusable.
+		var fakeButtons = $('div[role="button"]').not('div[tabindex]' );
+		var buttonLinks = $('a[role="button"]').not('a[tabindex],a[href]');
+		fakeButtons.attr( 'tabindex', '0' ).addClass('wpa-focusable');
+		buttonLinks.attr( 'tabindex', '0' ).addClass('wpa-focusable');
 	}
 
 	if ( wpa.underline.enabled ) {
-		$( wpa.underline.target ).css( 'text-decoration','underline' );
+		$( wpa.underline.target ).not( 'nav ' + wpa.underline.target ).css( 'text-decoration','underline' );
 		$(  wpa.underline.target ).on( 'focusin mouseenter', function() {
 			$(this).css( 'text-decoration','none' );
 		});

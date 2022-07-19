@@ -62,6 +62,8 @@ function wpa_media_value( $column, $id ) {
 						echo '<span class="missing"><span class="dashicons dashicons-no" aria-hidden="true"></span> <a href="' . get_edit_post_link( $id ) . '#attachment_alt">' . __( 'Invalid <code>alt</code>', 'wp-accessibility' ) . '</a></span>';
 					} elseif ( wpa_suspicious_alt( $alt ) ) {
 						echo '<span class="missing"><span class="dashicons dashicons-no" aria-hidden="true"></span> <a href="' . get_edit_post_link( $id ) . '#attachment_alt">' . __( 'Suspicious <code>alt</code>', 'wp-accessibility' ) . '</a></span>';
+					} elseif ( wpa_long_alt( $alt ) ) {
+						echo '<span class="long"><span class="dashicons dashicons-warning" aria-hidden="true"></span> <a href="' . get_edit_post_link( $id ) . '#attachment_alt">' . __( 'Long <code>alt</code> text', 'wp-accessibility' ) . '</a></span>';
 					} else {
 						echo '<span class="ok"><span class="dashicons dashicons-yes" aria-hidden="true"></span> ' . __( 'Has <code>alt</code>', 'wp-accessibility' ) . '</span>';
 					}
@@ -76,6 +78,32 @@ function wpa_media_value( $column, $id ) {
 }
 
 /**
+ * Check whether an alt is unusually long.
+ *
+ * @param string $alt Alt attribute.
+ *
+ * @return bool
+ */
+function wpa_long_alt( $alt ) {
+	$length = strlen( $alt );
+	/**
+	 * What length of an alt text is considered long. Default `140`.
+	 *
+	 * @hook wpa_long_alt
+	 *
+	 * @param {int} $limit Default length to call alt text long.
+	 *
+	 * @return int
+	 */
+	$limit = apply_filters( 'wpa_long_alt', 140 );
+	if ( $length > $limit ) {
+		return true;
+	}
+
+	return false;
+}
+
+/**
  * Check whether an alt attribute contains suspect strings.
  *
  * @param string $alt Alt attribute.
@@ -86,13 +114,34 @@ function wpa_suspicious_alt( $alt ) {
 	$case_insensitive = array(
 		'logo',
 		'image',
+		'picture',
+		'alt text',
+		'alternative text',
 	);
+	/**
+	 * Filter array of case insensitive strings that make alt text suspicious.
+	 *
+	 * @hook wpa_case_insensitive
+	 *
+	 * @param {array} $case_insensitive Array of strings.
+	 *
+	 * @return array
+	 */
 	$case_insensitive = apply_filters( 'wpa_case_insensitive', $case_insensitive );
 	$case_sensitive   = array(
 		'DSC',
 		'IMG',
 	);
-	$case_sensitive   = apply_filters( 'wpa_case_sensitive', $case_sensitive );
+	/**
+	 * Filter array of case sensitive strings that make alt text suspicious.
+	 *
+	 * @hook wpa_case_sensitive
+	 *
+	 * @param {array} $case_sensitive Array of strings.
+	 *
+	 * @return array
+	 */
+	$case_sensitive = apply_filters( 'wpa_case_sensitive', $case_sensitive );
 	foreach ( $case_insensitive as $term ) {
 		if ( false !== stripos( $alt, $term ) ) {
 			return true;
