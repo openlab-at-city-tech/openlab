@@ -3,8 +3,8 @@ Contributors: michaelwilliamson
 Donate link: https://liberapay.com/mwilliamson/donate
 Tags: docx, html, word, office, paste
 Requires at least: 4.0
-Tested up to: 5.8.0
-Stable tag: 1.19.0
+Tested up to: 6.0.0
+Stable tag: 1.20.0
 License: BSD 2-clause
 License URI: http://opensource.org/licenses/BSD-2-Clause
 
@@ -61,6 +61,10 @@ As a WordPress plugin, Mammoth uses the JavaScript library mammoth.js to convert
 Install the plugin in the usual way, and you should be able to use the Mammoth .docx converter when adding a post. If you can't see the meta box, make sure that it's selected by taking a look at the "Screen Options" for adding a post.
 
 == Changelog ==
+
+= 1.20.0 =
+
+* Update mammoth.js to 1.4.21. This includes improved underline support and image handling.
 
 = 1.19.0 =
 
