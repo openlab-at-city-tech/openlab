@@ -3,6 +3,8 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 require_once plugin_dir_path( __FILE__ ) . 'link-library-defaults.php';
 
+$globallibraryoptions = array();
+
 /* Support functions to render output of link-library shortcode */
 
 function link_library_add_http( $url ) {
@@ -24,13 +26,50 @@ function link_library_highlight_phrase( $str, $phrase, $tag_open = '<strong>', $
 	return $str;
 }
 
+function ll_create_temp_column( $fields ) {
+	global $wpdb;
+
+	$genoptions = get_option( 'LinkLibraryGeneral' );
+	$genoptions = wp_parse_args( $genoptions, ll_reset_gen_settings( 'return' ) );
+
+	$matches = $genoptions['ignoresortarticles'];;
+	$has_the = " CASE 
+		WHEN $wpdb->posts.post_title regexp( '^($matches)[[:space:]]' )
+		  THEN trim(substr($wpdb->posts.post_title from 4)) 
+		ELSE $wpdb->posts.post_title 
+		  END AS title2";
+	if ( $has_the ) {
+		$fields .= ( preg_match( '/^(\s+)?,/', $has_the ) ) ? $has_the : ", $has_the";
+	}
+	return $fields;
+  }
+  
+function ll_sort_by_temp_column ( $orderby ) {
+	$custom_orderby = '';
+	
+	global $globallibraryoptions;
+	
+	if ( $globallibraryoptions['featuredfirst'] && 'random' != $globallibraryoptions['linkorder'] ) {
+		$custom_orderby = 'wp_postmeta.meta_value+0 DESC, ';
+	}
+	
+	$custom_orderby .= " UPPER(title2) ASC";
+	if ( $custom_orderby ) {
+		$orderby = $custom_orderby;
+	}
+	return $orderby;
+}
+
 function link_library_get_breadcrumb_path( $slug, $rewritepage, $level = 0 ) {
+	$genoptions = get_option( 'LinkLibraryGeneral' );
+	$genoptions = wp_parse_args( $genoptions, ll_reset_gen_settings( 'return' ) );
+
 	$cat_path = '';
 
-	$term = get_term_by( 'slug', $slug, 'link_library_category' );
+	$term = get_term_by( 'slug', $slug, $genoptions['cattaxonomy'] );
 
 	if ( !empty( $term ) ) {
-		$parent_term = get_term_by( 'id', $term->parent, 'link_library_category' );
+		$parent_term = get_term_by( 'id', $term->parent, $genoptions['cattaxonomy'] );
 		if ( !empty( $parent_term ) ) {
 			$cat_path .= link_library_get_breadcrumb_path( $parent_term->slug, $rewritepage, $level + 1 ) . ' - ';
 		}
@@ -38,11 +77,11 @@ function link_library_get_breadcrumb_path( $slug, $rewritepage, $level = 0 ) {
 
 	$new_link = esc_url( home_url() . '/' . $rewritepage . '/' . $slug );
 	if ( isset( $_GET['link_tags'] ) && !empty( $_GET['link_tags'] ) ) {
-		$new_link = add_query_arg( 'link_tags', $_GET['link_tags'], $new_link );
+		$new_link = add_query_arg( 'link_tags', sanitize_text_field( $_GET['link_tags'] ), $new_link );
 	}
 
 	if ( isset( $_GET['link_price'] ) && !empty( $_GET['link_price'] ) ) {
-		$new_link = add_query_arg( 'link_price', $_GET['link_price'], $new_link );
+		$new_link = add_query_arg( 'link_price', sanitize_text_field( $_GET['link_price'] ), $new_link );
 	}
 
 	if ( $level != 0 ) {
@@ -52,10 +91,10 @@ function link_library_get_breadcrumb_path( $slug, $rewritepage, $level = 0 ) {
 		$new_top_link = esc_url( home_url() . '/' . $rewritepage );
 
 		if ( isset( $_GET['link_tags'] ) && !empty( $_GET['link_tags'] ) ) {
-			$new_top_link = add_query_arg( 'link_tags', $_GET['link_tags'], $new_top_link );
+			$new_top_link = add_query_arg( 'link_tags', sanitize_text_field( $_GET['link_tags'] ), $new_top_link );
 		}
 		if ( isset( $_GET['link_price'] ) && !empty( $_GET['link_price'] ) ) {
-			$new_top_link = add_query_arg( 'link_price', $_GET['link_price'], $new_top_link );
+			$new_top_link = add_query_arg( 'link_price', sanitize_text_field( $_GET['link_price'] ), $new_top_link );
 		}
 
 		$cat_path = '<a href="' . $new_top_link .  '">Home</a> - ' . $cat_path;
@@ -284,6 +323,9 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
 	$libraryoptions = wp_parse_args( $libraryoptions, ll_reset_options( 1, 'list', 'return' ) );
 	extract( $libraryoptions );
 
+	global $globallibraryoptions;
+	$globallibraryoptions = $libraryoptions;
+
 	remove_filter('posts_request', 'relevanssi_prevent_default_request');
 	remove_filter('the_posts', 'relevanssi_query', 99);
 
@@ -291,7 +333,7 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
 
 	if ( $level == 0 && ( ( isset( $_GET['cat_name'] ) && !empty( $_GET['cat_name'] ) ) || ( isset( $wp_query->query_vars['cat_name'] ) && !empty( $wp_query->query_vars['cat_name'] ) ) ) ) {
 		if ( !empty( $_GET['cat_name'] ) ) {
-			$category_entry = get_term_by( 'slug', $_GET['cat_name'], 'link_library_category', OBJECT );
+			$category_entry = get_term_by( 'slug', sanitize_text_field( $_GET['cat_name'] ), $generaloptions['cattaxonomy'], OBJECT );
 		} elseif ( !empty( $wp_query->query_vars['cat_name'] ) ) {
 			$last_slash_pos = strripos( $wp_query->query_vars['cat_name'], '/' );
 			if ( $last_slash_pos != 0 ) {
@@ -300,7 +342,7 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
 				$cat_string = $wp_query->query_vars['cat_name'];
 			}
 
-			$category_entry = get_term_by( 'slug', $cat_string, 'link_library_category', OBJECT );
+			$category_entry = get_term_by( 'slug', $cat_string, $generaloptions['cattaxonomy'], OBJECT );
 		}
 
 		if ( !empty( $category_entry ) ) {
@@ -354,7 +396,7 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
 	$linkeditoruser = current_user_can( 'manage_options' );
 
 	if ( $level == 0 ) {
-		$output = "\n<!-- Beginning of Link Library Output -->\n\n";
+		$output = "<!-- Beginning of Link Library Output -->";
 	} else {
 		$output = '';
 	}
@@ -389,9 +431,9 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
 		$categorylist_cpt = intval( $_GET['cat_id'] );
 		$AJAXcatid = $categorylist_cpt;
 	} elseif ( ( $showonecatonly && 'HTMLGETSLUG' == $showonecatmode && isset( $_GET['catslug'] ) && ( !isset( $_GET['searchll'] ) || ( isset( $_GET['searchll'] ) && empty( $_GET['searchll'] ) ) ) ) || ( $searchfiltercats && isset( $_GET['catslug'] ) && isset( $_GET['searchll'] ) && !empty( $_GET['searchll'] ) ) ) {
-		$categorysluglist = $_GET['catslug'];
+		$categorysluglist = sanitize_text_field( $_GET['catslug'] );
 	} elseif ( ( $showonecatonly && 'HTMLGETCATNAME' == $showonecatmode && isset( $_GET['catname'] ) && ( !isset( $_GET['searchll'] ) || ( isset( $_GET['searchll'] ) && empty( $_GET['searchll'] ) ) ) ) || ( $searchfiltercats && isset( $_GET['catname'] ) && isset( $_GET['searchll'] ) && !empty( $_GET['searchll'] ) ) ) {
-		$categorynamelist = $_GET['catname'];
+		$categorynamelist = sanitize_text_field( $_GET['catname'] );
 	} elseif ( $showonecatonly && 'HTMLGETPERM' == $showonecatmode && empty( $_GET['searchll'] ) ) {
 		global $wp_query;
 
@@ -403,7 +445,7 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
 		$AJAXcatid = $categoryname;
 		$categorysluglist = '';
 		if ( isset( $_GET['catslug'] ) ) {
-			$categorysluglist = $_GET['catslug'];
+			$categorysluglist = sanitize_text_field( $_GET['catslug'] );
 		}
 	} elseif ( $showonecatonly && ( !isset( $AJAXcatid ) || empty( $AJAXcatid ) ) && !empty( $defaultsinglecat_cpt ) && ( !isset( $_GET['searchll'] ) || ( isset( $_GET['searchll'] ) && empty( $_GET['searchll'] ) ) ) ) {
 		$categorylist_cpt = $defaultsinglecat_cpt;
@@ -444,7 +486,7 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
 			if ( !empty( $categorysluglist ) ) {
 				$show_one_cat_query_args['slug'] = explode( ',', $categorysluglist );
 			} elseif ( isset( $_GET['catslug'] ) ) {
-				$show_one_cat_query_args['slug'] = isset( $_GET['catslug'] );
+				$show_one_cat_query_args['slug'] = sanitize_text_field( $_GET['catslug'] );
 			}
 
 		}
@@ -465,7 +507,7 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
 			$show_one_cat_query_args['order'] = in_array( $direction, $validdirections ) ? $direction : 'ASC';
 		}
 
-		$show_one_cat_query_args['taxonomy'] = 'link_library_category';
+		$show_one_cat_query_args['taxonomy'] = $generaloptions['cattaxonomy'];
 
 		$show_one_cat_link_categories = get_terms( $show_one_cat_query_args );
 		remove_filter( 'get_terms', 'link_library_get_terms_filter_only_publish' );
@@ -491,7 +533,7 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
 
 	if ( ( isset($_GET['searchll'] ) && !empty( $_GET['searchll'] ) || ( isset( $_POST['searchll'] ) && !empty( $_POST['searchll'] ) ) ) && empty( $singlelinkid ) ) {
 		if ( isset( $_GET['searchll'] ) ) {
-			$searchstring = $_GET['searchll'];
+			$searchstring = sanitize_text_field( $_GET['searchll'] );
 		} elseif ( isset( $_POST['searchll'] ) ) {
 			$searchstring = $_POST['searchll'];
 		}
@@ -568,7 +610,7 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
 			if ( !empty( $categorysluglist ) ) {
 				$link_categories_query_args['slug'] = explode( ',', $categorysluglist );
 			} elseif ( isset( $_GET['catslug'] ) ) {
-				$link_categories_query_args['slug'] = $_GET['catslug'];
+				$link_categories_query_args['slug'] = sanitize_text_field( $_GET['catslug'] );
 			}
 			$link_categories_query_args['include'] = array();
 			$link_categories_query_args['exclude'] = array();
@@ -599,7 +641,7 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
 			$no_sub_cat = true;
 			if ( !empty( $link_categories_query_args['include'] ) ) {
 				foreach ( $link_categories_query_args['include'] as $include_cat ) {
-					$cat_term = get_term_by( 'id', $include_cat, 'link_library_category' );
+					$cat_term = get_term_by( 'id', $include_cat, $generaloptions['cattaxonomy'] );
 					if ( !empty( $cat_term ) ) {
 						if ( $cat_term->parent != 0 && $level == 0 ) {
 							$no_sub_cat = false;
@@ -612,7 +654,7 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
 			}
 		}
 
-		$link_categories = get_terms( 'link_library_category', $link_categories_query_args );
+		$link_categories = get_terms( $generaloptions['cattaxonomy'], $link_categories_query_args );
 
 		remove_filter( 'get_terms', 'link_library_get_terms_filter_only_publish' );
 		remove_filter( 'get_terms', 'link_library_get_terms_filter_publish_pending' );
@@ -653,7 +695,7 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
 				$tag_array = array();
 
 				if ( ( isset( $_GET['link_tags'] ) && !empty( $_GET['link_tags'] ) ) ) {
-					$tag_array = explode( '.', $_GET['link_tags'] );
+					$tag_array = explode( '.', sanitize_text_field( $_GET['link_tags'] ) );
 				} elseif( !empty( $taglist_cpt ) ) {
 					$tag_array = explode( ',', $taglist_cpt );
 				}				
@@ -665,7 +707,7 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
 					'post_type' => 'link_library_links',
 					'tax_query' => array( 
 						array(
-							'taxonomy'  => 'link_library_category',
+							'taxonomy'  => $generaloptions['cattaxonomy'],
 							'field'     => 'term_id',
 							'terms'     => $link_category->term_id
 						)
@@ -676,7 +718,7 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
 				if ( !empty( $tag_array ) ) {
 					$args['tax_query'][] = array( 
 						array(
-							'taxonomy'  => 'link_library_tags',
+							'taxonomy'  => $generaloptions['tagtaxonomy'],
 							'field'     => 'slug',
 							'terms'     => $tag_array
 						)
@@ -709,7 +751,7 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
 				if ( isset( $_POST['linkresultpage'] ) ) {
 					$pagenumber = $_POST['linkresultpage'];
 				} elseif ( isset( $_GET['linkresultpage'] ) ) {
-					$pagenumber = $_GET['linkresultpage'];
+					$pagenumber = intval( $_GET['linkresultpage'] );
 				}
 				$startingitem = ( $pagenumber - 1 ) * $linksperpage + 1;
 			} else {
@@ -781,7 +823,7 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
 				if ( !$combineresults ) {
 					$link_query_args['tax_query'][] =
 						array(
-							'taxonomy' => 'link_library_category',
+							'taxonomy' => $generaloptions['cattaxonomy'],
 							'field'    => 'term_id',
 							'terms'    => $link_category->term_id,
 							'include_children' => false
@@ -794,7 +836,7 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
 					$tag_array = array();
 
 					if ( ( isset( $_GET['link_tags'] ) && !empty( $_GET['link_tags'] ) ) ) {
-						$tag_array = explode( '.', $_GET['link_tags'] );
+						$tag_array = explode( '.', sanitize_text_field( $_GET['link_tags'] ) );
 					} elseif( !empty( $taglist_cpt ) ) {
 						$tag_array = explode( ',', $taglist_cpt );
 					}
@@ -806,13 +848,13 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
 
 					if ( isset( $_GET['link_tags'] ) && !empty( $_GET['link_tags'] ) ) {
 						$link_query_args['tax_query'][] = array(
-							'taxonomy' => 'link_library_tags',
+							'taxonomy' => $generaloptions['tagtaxonomy'],
 							'field' => 'slug',
 							'terms' => $tag_array,
 						);
 					} elseif ( !empty( $taglist_cpt ) ) {
 						$link_query_args['tax_query'][] = array(
-							'taxonomy' => 'link_library_tags',
+							'taxonomy' => $generaloptions['tagtaxonomy'],
 							'field' => 'id',
 							'terms' => $tag_array,
 						);
@@ -834,7 +876,7 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
 
 					if ( !empty( $excludetaglist_cpt ) ) {
 						$link_query_args['tax_query'][] = array(
-							'taxonomy' => 'link_library_tags',
+							'taxonomy' => $generaloptions['tagtaxonomy'],
 							'field' => 'id',
 							'terms' => $exclude_tag_array,
 							'operator' => 'NOT IN'
@@ -890,8 +932,7 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
 					$link_query_args['meta_query']['link_updated_clause'] = array( 'key' => 'link_updated' );
 					$link_query_args['orderby']['link_updated_clause'] = in_array( $linkdirection, $validdirections ) ? $linkdirection : 'ASC';
 				} elseif ( 'pubdate' == $linkorder ) {
-					$link_query_args['orderby'] = 'publish_date';
-					$link_query_args['order'] = in_array( $linkdirection, $validdirections ) ? $linkdirection : 'ASC';
+					$link_query_args['orderby']['date'] = in_array( $linkdirection, $validdirections ) ? $linkdirection : 'ASC';
 				} elseif ( 'price' == $linkorder ) {
 					$link_query_args['meta_query']['link_price_clause'] = array( 'key' => 'link_price' );
 					$link_query_args['orderby']['link_price_clause'] = in_array( $linkdirection, $validdirections ) ? $linkdirection : 'ASC';
@@ -952,7 +993,7 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
 				}
 
 				if ( isset( $_GET['link_letter'] ) && !empty( $_GET['link_letter'] ) ) {
-					$link_query_args['link_starts_with'] = $_GET['link_letter'];
+					$link_query_args['link_starts_with'] = sanitize_text_field( $_GET['link_letter'] );
 				}
 
 				if ( true == $debugmode ) {
@@ -973,7 +1014,17 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
 					$link_query_args['tax_query']['relation'] = 'AND';
 				}
 
+				if ( 'name' == $linkorder && !empty( $ignoresortarticles ) ) {
+					add_filter( 'posts_fields', 'll_create_temp_column' );
+					add_filter( 'posts_orderby', 'll_sort_by_temp_column' );
+				}
+
 				$the_link_query = new WP_Query( $link_query_args );
+
+				if ( 'name' == $linkorder && !empty( $ignoresortarticles ) ) {
+					remove_filter( 'posts_fields', 'll_create_temp_column' );
+					remove_filter( 'posts_orderby', 'll_sort_by_temp_column' );
+				}
 
 				if ( $debugmode ) {
 					$output .= "\n<!-- Link Query: " . print_r( $link_query_args, TRUE ) . "-->\n\n";
@@ -985,7 +1036,7 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
 					$output .= '<!-- showonecatmode: ' . $showonecatonly . ', AJAXnocatset: ' . $AJAXnocatset . ', nocatonstartup: ' . $nocatonstartup . '-->';
 				}
 
-				$child_cat_params = array( 'taxonomy' => 'link_library_category', 'child_of' => $link_category->term_id );
+				$child_cat_params = array( 'taxonomy' => $generaloptions['cattaxonomy'], 'child_of' => $link_category->term_id );
 
 				if ( $hide_if_empty ) {
 					$child_cat_params['hide_empty'] = true;
@@ -1166,11 +1217,11 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
 											$cat_path = $link_category->slug;
 
 											if ( isset( $_GET['link_tags'] ) && !empty( $_GET['link_tags'] ) ) {
-												$cat_path = add_query_arg( 'link_tags', $_GET['link_tags'], $cat_path );
+												$cat_path = add_query_arg( 'link_tags', sanitize_text_field( $_GET['link_tags'] ), $cat_path );
 											}
 
 											if ( isset( $_GET['link_price'] ) && !empty( $_GET['link_price'] ) ) {
-												$cat_path = add_query_arg( 'link_price', $_GET['link_price'], $cat_path );
+												$cat_path = add_query_arg( 'link_price', sanitize_text_field( $_GET['link_price'] ), $cat_path );
 											}
 
 											$catlink .= '<a href="' . esc_url( site_url() . '/' . $rewritepage . $cat_path ) . '">';
@@ -1354,11 +1405,11 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
 												}
 												$sort_url = add_query_arg( $sorting_labels[$display_item], $sort_direction, '' );
 												if ( isset( $_GET['link_tags'] ) && !empty( $_GET['link_tags'] ) ) {
-													$sort_url = add_query_arg( 'link_tags', $_GET['link_tags'], $sort_url );
+													$sort_url = add_query_arg( 'link_tags', sanitize_text_field( $_GET['link_tags'] ), $sort_url );
 												}
 
 												if ( isset( $_GET['link_price'] ) && !empty( $_GET['link_price'] ) ) {
-													$sort_url = add_query_arg( 'link_price', $_GET['link_price'], $sort_url );
+													$sort_url = add_query_arg( 'link_price', sanitize_text_field( $_GET['link_price'] ), $sort_url );
 												}
 
 												$catstartlist .= '<a href="' . $sort_url . '">';
@@ -1418,7 +1469,7 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
 
 								$linkitem['category_name'] = '';
 								if ( $combineresults ) {
-									$link_terms = wp_get_post_terms( get_the_ID(), 'link_library_category' );
+									$link_terms = wp_get_post_terms( get_the_ID(), $generaloptions['cattaxonomy'] );
 									if ( !empty( $link_terms ) ) {
 										$link_term_array = array();
 										foreach( $link_terms as $link_term ) {
@@ -2388,7 +2439,7 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
 
 											case 15: 	//------------------ Link Tags Output --------------------
 
-												$link_tags = wp_get_post_terms( $linkitem['proper_link_id'], 'link_library_tags' );
+												$link_tags = wp_get_post_terms( $linkitem['proper_link_id'], $generaloptions['tagtaxonomy'] );
 
 												if ( $suppress_link_tags_if_empty && empty( $link_tags ) ) {
 													break;
@@ -2484,7 +2535,7 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
 														if ( 'currentcatname' == $catnameformat ) {
 															$current_cat_output .= $linkitem['category_name'];
 														} elseif( 'allcatnames' == $catnameformat ) {
-															$link_terms = wp_get_post_terms( get_the_ID(), 'link_library_category' );
+															$link_terms = wp_get_post_terms( get_the_ID(), $generaloptions['cattaxonomy'] );
 
 															$link_terms_array = array();
 															if ( !empty( $link_terms ) ) {

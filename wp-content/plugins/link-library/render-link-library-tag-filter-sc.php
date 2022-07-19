@@ -16,19 +16,19 @@ function RenderLinkLibraryFilterBox( $LLPluginClass, $generaloptions, $libraryop
 	$output .= '<legend>' . __( 'Filters', 'link-library' ) . '</legend>';
 
 	if ( isset( $_GET['link_price'] ) && !empty( $_GET['link_price'] ) ) {
-		$prev_link_price = $_GET['link_price'];
+		$prev_link_price = sanitize_text_field( $_GET['link_price'] );
 	} else {
 		$prev_link_price = '';
 	}
 
 	if ( isset( $_GET['link_letter'] ) && !empty( $_GET['link_letter'] ) ) {
-		$prev_link_letter = $_GET['link_letter'];
+		$prev_link_letter = sanitize_text_field( $_GET['link_letter'] );
 	} else {
 		$prev_link_letter = '';
 	}
 
 	if ( isset( $_GET['searchll'] ) && !empty( $_GET['searchll'] ) ) {
-		$searchstring = $_GET['searchll'];
+		$searchstring = sanitize_text_field( $_GET['searchll'] );
 	} else {
 		$searchstring = '';
 	}
@@ -37,10 +37,10 @@ function RenderLinkLibraryFilterBox( $LLPluginClass, $generaloptions, $libraryop
 
 		$output .= '<div class="tag-filters">';
 		$output .= '<div class="tag-filters-title">' . $tag_label . '</div>';
-		$link_terms = get_terms( array( 'taxonomy' => 'link_library_tags', 'include' => $include_tags, 'exclude' => $exclude_tags ) );
+		$link_terms = get_terms( array( 'taxonomy' => $generaloptions['tagtaxonomy'], 'include' => $include_tags, 'exclude' => $exclude_tags ) );
 
 		if ( isset( $_GET['link_tags'] ) && !empty( $_GET['link_tags'] ) ) {
-			$prev_link_tags = $_GET['link_tags'];
+			$prev_link_tags = sanitize_text_field( $_GET['link_tags'] );
 		} else {
 			$prev_link_tags = '';
 		}

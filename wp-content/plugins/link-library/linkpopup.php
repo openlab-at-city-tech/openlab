@@ -150,7 +150,7 @@ function link_library_popup_content( $my_link_library_plugin ) {
         }
 
         $link_cat_names = '';
-        $link_categories = wp_get_post_terms( get_the_ID(), 'link_library_category' );
+        $link_categories = wp_get_post_terms( get_the_ID(), $generaloptions['cattaxonomy'] );
         if ( $link_categories ) {
             $countcats = 0;
             foreach ( $link_categories as $link_category ) {

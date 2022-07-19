@@ -3,14 +3,16 @@ Contributors: jackdewey
 Donate link: https://ylefebvre.github.io/wordpress-plugins/link-library/
 Tags: link, list, directory, page, library, AJAX, RSS, feeds, inline, search, paging, add, submit, import, batch, pop-up
 Requires at least: 4.4
-Tested up to: 5.8
-Stable tag: 7.2.7
+Tested up to: 6.0
+Stable tag: 7.3.7
 
 The purpose of this plugin is to add the ability to output a list of link categories and a complete list of links with notes and descriptions.
 
 == Description ==
 
 This plugin is used to be able to create a page on your web site that will contain a list of all of the link categories that you have defined inside of the Links section of the Wordpress administration, along with all links defined in these categories. The user can select a sub-set of categories to be displayed or not displayed. Link Library also offers a mode where only one category is shown at a time, using AJAX or HTML Get queries to load other categories based on user input. It can display a search box and find results based on queries. It can also display a form to accept user submissions and allow the site administrator to moderate them before listing the new entries. Finally, it can generate an RSS feed for your link collection so that people can be aware of additions to your link library.
+
+You can try it out in a temporary copy of WordPress [here](https://demo.tastewp.com/link-library).
 
 For links that carry RSS feed information, Link Library can display a preview of the latest feed items inline with the all links or in a separate preview window.
 
@@ -47,6 +49,49 @@ In addition to specifying a library, categories to be displayed can be specified
 Further configuration is available under the Link Library Settings panel.
 
 == Changelog ==
+
+= 7.3.7 =
+* Improved display of link creation page on mobile devices
+
+= 7.3.6 =
+* Fix for item sorting with publication date
+
+= 7.3.5 =
+* Additional fixes for featured item sorting
+
+= 7.3.4 =
+* Fixed problem with quotes getting escaped in library-specific stylesheet editor
+
+= 7.3.3 =
+* Fixed problem with featured links not longer appearing ahead of other link when ordering by title and having specified articles to be ignored
+
+= 7.3.2 =
+* Fixed problems with new option to ignore specific articles introduced in version 7.3 beta 2
+
+= 7.3.1 =
+* Added extra field to Link Library widget to allow users to select category(ies) to be displayed
+
+= 7.3 =
+* Official 7.3 version containing all features from beta 1 to 4
+
+= 7.3 Beta 4 =
+* Added CSS rules for new visibility toggle buttons
+
+= 7.3 Beta 3 =
+* Added new option when displaying categories as visibility toggles to add show all and hide all buttons
+
+= 7.3 Beta 2 =
+* Added new global option to specify articles to be ignored when sorting links by title
+
+= 7.3 Beta 1 =
+* Added support to use post categories instead of Link Library categories
+* Added support to use post tags instead of Link Library tags
+
+= 7.2.9 =
+* Fixed additional potential security issues
+
+= 7.2.8 =
+* Fixed potential security issues in plugin admin section
 
 = 7.2.7 =
 * Increased character limit for user form fields from 255 to 1024 characters

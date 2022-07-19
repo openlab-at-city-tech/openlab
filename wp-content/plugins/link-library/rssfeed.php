@@ -14,6 +14,9 @@ function link_library_generate_rss_feed () {
         $settingsetid = 1;
     }
 
+    $genoptions = get_option( 'LinkLibraryGeneral' );
+	$genoptions = wp_parse_args( $genoptions, ll_reset_gen_settings( 'return' ) );
+
     $settingsname = 'LinkLibraryPP' . $settingsetid;
     $options = get_option( $settingsname );
 
@@ -57,7 +60,7 @@ function link_library_generate_rss_feed () {
     if ( !empty( $options['categorylist_cpt'] ) ) {
 	    $link_query_args['tax_query'] = array(
 		    array(
-			    'taxonomy' => 'link_library_category',
+			    'taxonomy' => $genoptions['cattaxonomy'],
 			    'field'    => 'term_id',
 			    'terms'    => explode( ',', $options['categorylist_cpt'] ),
 			    'operator'    => 'IN',
@@ -71,7 +74,7 @@ function link_library_generate_rss_feed () {
 	    }
 
 	    $link_query_args['tax_query'][] = array(
-		    'taxonomy' => 'link_library_category',
+		    'taxonomy' => $genoptions['cattaxonomy'],
 		    'field'    => 'term_id',
 		    'terms'    => explode( ',', $options['excludecategorylist_cpt'] ),
 		    'operator'    => 'NOT IN',
@@ -95,7 +98,7 @@ function link_library_generate_rss_feed () {
             
             $human_date = date( "Y-m-d H:i", $link_updated );
 
-            $link_categories = wp_get_post_terms( get_the_ID(), 'link_library_category' );
+            $link_categories = wp_get_post_terms( get_the_ID(), $genoptions['cattaxonomy'] );
 
             $cat_names = '';
             if ( $link_categories ) {
