@@ -2,7 +2,7 @@
 
 	Theme Name: Hemingway
     Text Domain: hemingway
-	Version: 2.1.3
+	Version: 2.3.1
 	Description: Hemingway is a clean and beautiful two-column theme for bloggers. It features a responsive design, retina-ready assets, Block Editor support, full-width header image with parallax scrolling effect, custom accent color settings, custom logo upload, and editor styles. Demo: https://andersnoren.se/themes/hemingway/
 	Tags: blog, two-columns, right-sidebar, custom-colors, custom-header, custom-menu, editor-style, featured-images, footer-widgets, full-width-template, post-formats, sticky-post, theme-options, threaded-comments, translation-ready, block-styles, wide-blocks
 	Author: Anders Norén
@@ -10,7 +10,7 @@
 	Theme URI: https://andersnoren.se/teman/hemingway-wordpress-theme/
 	License: GNU General Public License version 2.0
 	License URI: http://www.gnu.org/licenses/gpl-2.0.html
-	Tested up to: 5.8
+	Tested up to: 6.0
 	Requires PHP: 5.6
 
 	All files, unless otherwise stated, are released under the GNU General Public License
@@ -562,10 +562,14 @@ input[type="submit"]:hover {
 	width: 65%;
 }
 
+.template-nosidebar .content,
 .content.center {
-	margin-left: auto; margin-right: auto;
+	float: none;
+	margin-left: auto;
+	margin-right: auto;
 }
 
+.template-fullwidth .content,
 .content.full-width {
 	width: 100%;
 }
@@ -699,18 +703,25 @@ input[type="submit"]:hover {
 }
 
 .blog-menu a {
+	color: rgba( 255, 255, 255, 0.5 );
 	display: block;
+	font-size: 13px;
+	letter-spacing: 1px;
+	outline: none;
 	padding: 27px 20px;
 	text-transform: uppercase;
-	letter-spacing: 1px;
-	color: rgba( 255, 255, 255, 0.5 );
-	font-size: 13px;
+	text-underline-offset: .2em;
 }
 
 .blog-menu a:hover,
-.blog-menu .current-menu-item a {
+.blog-menu a:focus,
+.blog-menu .current-menu-item > a {
 	color: #fff;
-	text-decoration: none;
+	text-decoration: underline;
+}
+
+.blog-menu .current-menu-item > a:focus {
+	text-decoration-style: dotted;
 }
 
 .blog-menu > .menu-item-has-children a,
@@ -776,21 +787,23 @@ input[type="submit"]:hover {
 }
 
 .blog-menu ul a {
-	padding: 20px 0px;
-	margin: 0 20px;
-	line-height: 130%;
 	border-bottom: 1px solid rgba(255,255,255,0.1);
+	line-height: 130%;
+	margin: 0 20px;
+	padding: 20px 0px;
 }
 
 .blog-menu ul > li:last-child a { border-bottom-width: 0; }
 
-.blog-menu li:hover > ul {
+.blog-menu li:hover > ul,
+.blog-menu li.focus > ul {
 	opacity: 1;
 	left: 0;
 	display: block;
 }
 
-.blog-menu ul li:hover > ul {
+.blog-menu ul li:hover > ul,
+.blog-menu ul li.focus > ul {
 	left: 240px;
 	margin-left: 0;
 	top: 0;
@@ -1383,8 +1396,9 @@ input[type="submit"]:hover {
 
 .post-content .wp-block-pullquote blockquote {
 	background: transparent;
-	margin: 0;
-	padding: 0;
+	margin-bottom: 0;
+	margin-top: 0;
+	max-width: none;
 }
 
 .post-content .wp-block-pullquote p {
@@ -1407,16 +1421,16 @@ input[type="submit"]:hover {
 	content: none;
 }
 
-.wp-block-quote.is-large p,
-.wp-block-quote.is-style-large p {
+:root .wp-block-quote.is-large p,
+:root .wp-block-quote.is-style-large p {
 	font-size: 1.2em;
 	font-style: normal;
 }
 
-.wp-block-quote.is-large cite,
-.wp-block-quote.is-large footer,
-.wp-block-quote.is-style-large cite,
-.wp-block-quote.is-style-large footer {
+:root .wp-block-quote.is-large cite,
+:root .wp-block-quote.is-large footer,
+:root .wp-block-quote.is-style-large cite,
+:root .wp-block-quote.is-style-large footer {
 	font-size: 16px;
 }
 
@@ -1428,8 +1442,8 @@ input[type="submit"]:hover {
 
 /* STYLE: LARGE */
 
-.wp-block-quote.is-large,
-.wp-block-quote.is-style-large {
+:root .wp-block-quote.is-large,
+:root .wp-block-quote.is-style-large {
 	padding: 1.1em;
 }
 
@@ -1543,11 +1557,16 @@ code, kbd, pre {
 }
 
 .post-content pre {
-	white-space: pre-wrap;
-	word-wrap: break-word;
+	background: #f1f1f1;
 	line-height: 140%;
 	padding: 2% 2.5%;
-	background: #f1f1f1;
+	white-space: pre-wrap;
+	word-wrap: break-word;
+}
+
+.post-content pre code {
+	background-color: transparent;
+	padding: 0;
 }
 
 /* Post Quotes ------------------------------- */
@@ -1961,44 +1980,49 @@ p.form-allowed-tags {
 
 /* Template: Archives ------------------------ */
 
-.archive-col {
+.archive-box {
 	font-size: 0.9em;
 }
 
-.page-template-template-archives-php .post-content ul {
+.archive-box ul {
 	list-style: none;
+	margin: 0;
+}
+
+.archive-box ul li {
+	line-height: 130%;
+	margin-bottom: 0;
+	margin-top: 0;
+}
+
+.archive-box > ul > li {
 	margin-left: 0;
 }
 
-.page-template-template-archives-php .post-content ul li {
-	line-height: 130%;
-	margin-bottom: 0;
-}
-
-.page-template-template-archives-php .post-content ul li a {
+.archive-box ul li a {
 	border-bottom: 1px solid #eee;
 	display: block;
 	padding: 8px 0;
 }
 
-.page-template-template-archives-php .post-content ul li:last-child a {
+.archive-box ul li:last-child a {
 	border-bottom: none;
 }
 
-.page-template-template-archives-php .post-content ul.children li:first-child a {
+.archive-box ul.children li:first-child a {
 	border-bottom: 1px solid #eee;
 }
 
-.page-template-template-archives-php .post-content ul li a span {
+.archive-box ul li a span {
 	color: #767676;
 }
 
-.page-template-template-archives-php .post-content ul li a:hover {
+.archive-box ul li a:hover {
 	color: #666;
 	text-decoration: none;
 }
 
-.page-template-template-archives-php .post-content ul li a:hover {
+.archive-box ul li a:hover {
 	background-color: #F9F9F9;
 	padding-left: 12px;
 }
@@ -2091,8 +2115,17 @@ p.form-allowed-tags {
 	padding-left: 15px;
 }
 
+.widget_recent_entries ul li a,
+.widget_recent_entries ul li .post-date {
+	display: block;
+}
+
 .widget-content ul li .post-date {
-	margin-left: 5px; color: #767676;
+	color: #767676;
+}
+
+.widget-content ul li .post-date:not(:first-child) {
+	margin-top: 5px;
 }
 
 .widget-content > ul > li:first-child {
@@ -2353,8 +2386,12 @@ p.form-allowed-tags {
 		float: none;
 	}
 
-	.sidebar {
+	body:not(.show-sidebar-on-mobile) .sidebar {
 		display: none;
+	}
+
+	.sidebar {
+		margin-top: 15%;
 	}
 
 	.section.large-padding,
@@ -2667,6 +2704,17 @@ p.form-allowed-tags {
 		height: 180px;
 	}
 
+	/* Sidebar ------------------------------- */
+
+	.sidebar {
+		margin-top: 40px;
+	}
+
+	.widget {
+		margin-bottom: 40px;
+		padding-bottom: 40px;
+	}
+
 	/* Footer -------------------------------- */
 
 	.footer {
@@ -2685,12 +2733,6 @@ p.form-allowed-tags {
 		border-top: none;
 		margin-top: 0;
 		padding-top: 0;
-	}
-
-	.widget {
-		border-bottom: 4px solid rgba( 255, 255, 255, .1 );
-		margin-bottom: 40px;
-		padding-bottom: 40px;
 	}
 
 	/* Credits ------------------------------- */

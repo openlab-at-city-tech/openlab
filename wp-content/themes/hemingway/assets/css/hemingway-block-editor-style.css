@@ -103,10 +103,8 @@ p.has-drop-cap:not(:focus):first-letter {
 kbd,
 pre,
 samp {
-	background: #000;
 	border: none;
 	border-radius: 0;
-	color: #fff;
 	font-size: 16px;
 }
 

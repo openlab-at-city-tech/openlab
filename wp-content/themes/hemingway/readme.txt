@@ -2,7 +2,7 @@
 Contributors: Anlino
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=anders%40andersnoren%2ese&lc=US&item_name=Free%20WordPress%20Themes%20from%20Anders%20Noren&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted
 Requires at least: 4.5
-Tested up to: 5.8
+Tested up to: 6.0
 Requires PHP: 5.6
 Stable tag: trunk
 License: GPLv2 or later
@@ -41,6 +41,27 @@ Source: http://www.unsplash.com
 
 
 == Changelog ==
+
+Version 2.3.1 (2022-07-01)
+-------------------------
+- Improved fonts.css enqueue for child themes.
+
+Version 2.3 (2022-06-29)
+-------------------------
+- Switched from the Google Fonts CDN to font files included in the theme folder.
+- Bumped "Tested up to" to 6.0.
+
+Version 2.2 (2022-04-11)
+-------------------------
+- Feature: Added a Customizer setting for showing the sidebar on mobile.
+- Fixed the styles of large blockquotes.
+- Removed padding from code element inside pre element.
+- Nicer margin for recent entries widget.
+- Made the sub menus navigable with keyboard navigation.
+- Made the focus and hover styles for the main menu links clearer.
+- Updated the page templates to use singular.php, with conditional outputs and classes to match the original behavior, reducing code.
+- Simplified styles for template-archives.php.
+- Bumped "Tested up to" to 5.9.
 
 Version 2.1.3 (2022-01-11)
 -------------------------

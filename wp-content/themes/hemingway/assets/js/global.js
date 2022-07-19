@@ -1,6 +1,6 @@
 jQuery(document).ready(function($) {
 
-	// Toggle mobile-menu
+	// Toggle mobile-menu.
 	$(".nav-toggle").on("click", function(){	
 		$(this).toggleClass("active");
 		$(".mobile-menu").slideToggle();
@@ -10,7 +10,7 @@ jQuery(document).ready(function($) {
 		}
 	});
 	
-	// Toggle search form
+	// Toggle search form.
 	$(".search-toggle").on("click", function(){	
 		$(this).toggleClass("active");
 		$(".blog-search").slideToggle();
@@ -20,8 +20,7 @@ jQuery(document).ready(function($) {
 		}
 	});
 	
-	
-	// Show mobile-menu > 700
+	// Show mobile-menu > 700.
 	$(window).resize(function() {
 		if ($(window).width() > 800) {
 			$(".toggle").removeClass("active");
@@ -30,8 +29,7 @@ jQuery(document).ready(function($) {
 		}
 	});
 	
-	
-	// Cool header image scroll
+	// Cool header image scroll.
 	$(window).scroll(function(e){
 		if ($(window).width() > 800) {
 			$('.header').css({
@@ -48,8 +46,7 @@ jQuery(document).ready(function($) {
 		}
 	});
 	
-		
-	// resize videos after container
+	// Resize videos after container.
 	var vidSelector = ".post iframe, .post object, .post video, .widget-content iframe, .widget-content object, .widget-content iframe";	
 	var resizeVideo = function(sSel) {
 		$( sSel ).each(function() {
@@ -75,12 +72,17 @@ jQuery(document).ready(function($) {
 		resizeVideo(vidSelector);
 	});
 	
-	// Smooth scroll to header
+	// Smooth scroll to header.
     $('.tothetop').click(function(){
 		$('html,body').animate({scrollTop: 0}, 500);
 		$(this).unbind("mouseenter mouseleave");
         return false;
     });
+
+	// Add a class to enable keyboard navigation of the main menu dropdown.
+	$( '.blog-menu a' ).on( 'blur focus', function( e ) {
+		$( this ).parents( 'li.menu-item-has-children' ).toggleClass( 'focus' );
+	} );
 	
 
 });
