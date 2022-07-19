@@ -272,7 +272,7 @@ function eo_get_the_occurrence( $event_id, $occurrence_id ) {
 
 	global $wpdb;
 
-	$occurrences = wp_cache_get( 'eventorganiser_occurrences_'.$event_id );
+	$occurrences = (array) wp_cache_get( 'eventorganiser_occurrences_'.$event_id );
 
 	if ( ! isset ( $occurrences[$occurrence_id] ) ) {
 
@@ -310,8 +310,12 @@ function eo_get_the_occurrence( $event_id, $occurrence_id ) {
 * @param int $occurrence_id  The occurrence ID
 * @return string the start date formated to given format, as accepted by PHP date
  */
-function eo_get_the_occurrence_start($format='d-m-Y',$occurrence_id){
+function eo_get_the_occurrence_start($format = 'd-m-Y', $occurrence_id = 0){
 	global $wpdb;
+	
+	if( empty( $occurrence_id ) ) {
+		return false;
+	}
 
 	$querystr = $wpdb->prepare("
 		SELECT StartDate,StartTime FROM  {$wpdb->eo_events}
@@ -320,13 +324,15 @@ function eo_get_the_occurrence_start($format='d-m-Y',$occurrence_id){
 
 	$occurrence =  $wpdb->get_row($querystr);
 
-	if( !$occurrence )
+	if( !$occurrence ) {
 		return false;
+	}
 
 	$date = trim($occurrence->StartDate).' '.trim($occurrence->StartTime);
 
-	if(empty($date)||$date==" ")
+	if(empty($date)||$date==" ") {
 		return false;
+	}
 
 	return eo_format_date($date,$format);
 }
@@ -514,7 +520,7 @@ function eo_get_next_occurrence_of( $post_id = 0 ) {
 
 	//Retrieve the blog's local time and create the date part
 	$tz = eo_get_blog_timezone();
-	$blog_now = new DateTime( null, $tz );
+	$blog_now = new DateTime( "now", $tz );
 	$now_date = $blog_now->format( 'Y-m-d' );
 	$now_time = $blog_now->format( 'H:i:s' );
 
@@ -571,7 +577,7 @@ function eo_get_current_occurrence_of( $post_id = 0 ) {
 
 	//Retrieve the blog's local time and create the date part
 	$tz = eo_get_blog_timezone();
-	$blog_now = new DateTime( null, $tz );
+	$blog_now = new DateTime( "now", $tz );
 	$now_date = $blog_now->format( 'Y-m-d' );
 	$now_time = $blog_now->format( 'H:i:s' );
 
