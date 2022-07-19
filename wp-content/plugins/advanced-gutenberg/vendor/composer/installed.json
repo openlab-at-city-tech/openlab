@@ -1,18 +1,49 @@
 {
     "packages": [
         {
+            "name": "publishpress/publishpress-instance-protection",
+            "version": "v1.0.2",
+            "version_normalized": "1.0.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/publishpress/publishpress-instance-protection",
+                "reference": "ef1a631a41b723ce2e856f534ff4befbe914e964"
+            },
+            "require": {
+                "php": ">=5.6.20"
+            },
+            "time": "2022-06-03T17:41:36+00:00",
+            "type": "library",
+            "installation-source": "source",
+            "license": [
+                "GPL-3.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "PublishPress",
+                    "email": "help@publishpress.com"
+                }
+            ],
+            "description": "Library for protecting WordPress plugins to run twice.",
+            "homepage": "http://publishpress.com/",
+            "keywords": [
+                "wordpress plugin"
+            ],
+            "install-path": "../publishpress/publishpress-instance-protection"
+        },
+        {
             "name": "publishpress/wordpress-reviews",
-            "version": "v1.1.18",
-            "version_normalized": "1.1.18.0",
+            "version": "v1.1.19",
+            "version_normalized": "1.1.19.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/publishpress/wordpress-reviews.git",
-                "reference": "0020705b8f6a7177fc393c6c42c82171bf9e2fbd"
+                "reference": "028e573eb7c5da2455a7a823cabbbe5e3f89ca9c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/publishpress/wordpress-reviews/zipball/0020705b8f6a7177fc393c6c42c82171bf9e2fbd",
-                "reference": "0020705b8f6a7177fc393c6c42c82171bf9e2fbd",
+                "url": "https://api.github.com/repos/publishpress/wordpress-reviews/zipball/028e573eb7c5da2455a7a823cabbbe5e3f89ca9c",
+                "reference": "028e573eb7c5da2455a7a823cabbbe5e3f89ca9c",
                 "shasum": ""
             },
             "require": {
@@ -36,7 +67,7 @@
                 "wp-cli/i18n-command": "^2.2",
                 "wp-cli/wp-cli": "^2.5"
             },
-            "time": "2021-12-15T00:03:53+00:00",
+            "time": "2022-06-03T13:38:53+00:00",
             "type": "library",
             "installation-source": "source",
             "autoload": {
@@ -67,7 +98,7 @@
             ],
             "support": {
                 "issues": "https://github.com/publishpress/wordpress-reviews/issues",
-                "source": "https://github.com/publishpress/wordpress-reviews/tree/v1.1.18"
+                "source": "https://github.com/publishpress/wordpress-reviews/tree/v1.1.19"
             },
             "install-path": "../publishpress/wordpress-reviews"
         }

@@ -3,8 +3,8 @@
  * Plugin Name: PublishPress Blocks
  * Plugin URI: https://publishpress.com/blocks/
  * Description: PublishPress Blocks has everything you need to build professional websites with the Gutenberg editor.
- * Version: 2.11.6
- * Tested up to: 5.9.1
+ * Version: 2.13.3
+ * Tested up to: 6.0
  * Author: PublishPress
  * Author URI: https://publishpress.com/
  * License: GPL2
@@ -17,7 +17,7 @@
  *
  * @copyright 2014-2020  Joomunited
  * @copyright 2020       Advanced Gutenberg. help@advancedgutenberg.com
- * @copyright 2020-2021  PublishPress. help@publishpress.com
+ * @copyright 2020-2022  PublishPress. help@publishpress.com
  *
  *  Original development of this plugin was kindly funded by Joomunited
  *
@@ -38,29 +38,49 @@
 
 defined('ABSPATH') || die;
 
-if (! defined('ADVANCED_GUTENBERG_VERSION')) {
-    define('ADVANCED_GUTENBERG_VERSION', '2.11.6');
+$includeFilebRelativePath = '/publishpress/publishpress-instance-protection/include.php';
+if (file_exists(__DIR__ . '/vendor' . $includeFilebRelativePath)) {
+    require_once __DIR__ . '/vendor' . $includeFilebRelativePath;
+} else if (defined('PP_AUTHORS_VENDOR_PATH') && file_exists(PP_AUTHORS_VENDOR_PATH . $includeFilebRelativePath)) {
+    require_once PP_AUTHORS_VENDOR_PATH . $includeFilebRelativePath;
 }
 
-if (! defined('ADVANCED_GUTENBERG_PLUGIN')) {
-    define('ADVANCED_GUTENBERG_PLUGIN', __FILE__);
+if (class_exists('PublishPressInstanceProtection\\Config')) {
+    $pluginCheckerConfig = new PublishPressInstanceProtection\Config();
+    $pluginCheckerConfig->pluginSlug = 'advanced-gutenberg';
+    $pluginCheckerConfig->pluginName = 'PublishPress Blocks';
+
+    $pluginChecker = new PublishPressInstanceProtection\InstanceChecker($pluginCheckerConfig);
 }
 
-// Code shared with Pro version
-require_once __DIR__ . '/init.php';
+if (! defined('ADVANCED_GUTENBERG_LOADED')) {
 
-// Vendor and Ask-for-Review
-if(
-    file_exists(__DIR__ . '/vendor/autoload.php')
-    && !defined('ADVANCED_GUTENBERG_VENDOR_LOADED')
-    && is_admin()
-    && !class_exists('PublishPress\WordPressReviews\ReviewsController')
-) {
-    require_once __DIR__ . '/vendor/autoload.php';
-    define('ADVANCED_GUTENBERG_VENDOR_LOADED', true);
-
-    // Ask for review
-    if( file_exists(__DIR__ . '/review/review-request.php') ) {
-        require_once __DIR__ . '/review/review-request.php';
+    if (! defined('ADVANCED_GUTENBERG_VERSION')) {
+        define('ADVANCED_GUTENBERG_VERSION', '2.13.3');
     }
+
+    if (! defined('ADVANCED_GUTENBERG_PLUGIN')) {
+        define('ADVANCED_GUTENBERG_PLUGIN', __FILE__);
+    }
+
+    // Code shared with Pro version
+    require_once __DIR__ . '/init.php';
+
+    // Vendor and Ask-for-Review
+    if(
+        file_exists(__DIR__ . '/vendor/autoload.php')
+        && !defined('ADVANCED_GUTENBERG_VENDOR_LOADED')
+        && is_admin()
+        && !class_exists('PublishPress\WordPressReviews\ReviewsController')
+    ) {
+        require_once __DIR__ . '/vendor/autoload.php';
+        define('ADVANCED_GUTENBERG_VENDOR_LOADED', true);
+
+        // Ask for review
+        if( file_exists(__DIR__ . '/review/review-request.php') ) {
+            require_once __DIR__ . '/review/review-request.php';
+        }
+    }
+
+    define('ADVANCED_GUTENBERG_LOADED', true);
 }

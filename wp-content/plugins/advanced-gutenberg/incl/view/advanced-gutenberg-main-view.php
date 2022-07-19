@@ -103,10 +103,6 @@ if(!defined('ADVANCED_GUTENBERG_PRO')) {
             <?php foreach ($tabs_data as $thisTab) :
                 $tab_title = $thisTab['title'];
                 $icon = $thisTab['icon'];
-                if (isset($_GET['view']) && $_GET['view'] === 'profile' && $tab_title === 'Profiles') { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- No action, nonce is not required
-                    $tab_title = __('Back to profiles list', 'advanced-gutenberg');
-                    $icon = 'arrow-back';
-                }
                 ?>
                 <li class="tab" data-tab-title="<?php echo esc_attr($thisTab['title']) ?>">
                     <a href="#<?php echo esc_attr($thisTab['id']) ?>"

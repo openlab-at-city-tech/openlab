@@ -32,4 +32,26 @@ window.addEventListener('load', function () {
     $('#user_role').on( 'change', function(){
         window.location = 'admin.php?page=advgb_main&user_role=' + $(this).val();
     });
+
+    // Check/Uncheck all
+    $('#toggle_all_blocks').click(function () {
+        $('.block-item-editable input').prop('checked', $(this).prop('checked'));
+        saveButtonStatus();
+    });
+
+    // Enable save when at least one block is enabled
+    $('.block-item-editable input').click(function () {
+        saveButtonStatus();
+    });
+
+    // Show warning and disable save button if all blocks are disabled
+    var saveButtonStatus = function() {
+        if( $('.block-item-editable input:checked').length === 0 ) {
+            $('.advgb-enable-one-block-msg').show();
+            $('.save-profile-button').prop('disabled', true);
+        } else {
+            $('.advgb-enable-one-block-msg').hide();
+            $('.save-profile-button').prop('disabled', false);
+        }
+    }
 });
