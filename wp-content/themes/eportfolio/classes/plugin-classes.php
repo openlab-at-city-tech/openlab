@@ -60,6 +60,11 @@ if ( !class_exists('ePortfolio_Getting_started') ):
                     'class' => 'Demo_Import_Kit_Class',
                     'setting_page' => esc_url( get_home_url(null, '/').'wp-admin/themes.php?page=demo-import-kit' ),
                 ),
+                'themeinwp-import-companion' => array(
+                    'PluginFile' => 'themeinwp-import-companion.php',
+                    'class' => 'Themeinwp_Import_Companion',
+                    'setting_page' => esc_url( get_home_url(null, '/').'wp-admin/themes.php?page=themeinwp-import-companion' ),
+                ),
             );
 
         }
