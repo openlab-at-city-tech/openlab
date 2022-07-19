@@ -61,10 +61,12 @@ function setUpMammoth() {
 
     function insertIntoEditor() {
         var postId = document.getElementById("post_ID").value;
+        var lastImageNumber = 0;
         var options = {
             convertImage: mammoth.images.inline(function(element) {
+                var imageNumber = ++lastImageNumber;
                 return element.read("binary").then(function(imageBinaryString) {
-                    var filename = generateFilename(element);
+                    var filename = generateFilename(element, {postId: postId, imageNumber: imageNumber});
                     return uploadImage({
                         filename: filename,
                         contentType: element.contentType,
@@ -102,9 +104,9 @@ function setUpMammoth() {
         charmap: slugCharmap
     };
 
-    function generateFilename(options) {
-        var name = options.altText ? slug(options.altText.slice(0, 50), slugOptions) : "word-image";
-        var extension = options.contentType.split("/")[1];
+    function generateFilename(element, options) {
+        var name = element.altText ? slug(element.altText.slice(0, 50), slugOptions) : "word-image-" + options.postId + "-" + options.imageNumber;
+        var extension = element.contentType.split("/")[1];
         return name + "." + extension;
     }
 
@@ -10323,7 +10325,7 @@ function BodyReader(options) {
     function readUnderline(element) {
         if (element) {
             var value = element.attributes["w:val"];
-            return value !== "false" && value !== "0" && value !== "none";
+            return value !== undefined && value !== "false" && value !== "0" && value !== "none";
         } else {
             return false;
         }
@@ -10702,7 +10704,12 @@ function BodyReader(options) {
     function readBlip(element, blip) {
         var properties = element.first("wp:docPr").attributes;
         var altText = isBlank(properties.descr) ? properties.title : properties.descr;
-        return readImage(findBlipImageFile(blip), altText);
+        var blipImageFile = findBlipImageFile(blip);
+        if (blipImageFile === null) {
+            return emptyResultWithMessages([warning("Could not find image file for a:blip element")]);
+        } else {
+            return readImage(blipImageFile, altText);
+        }
     }
 
     function isBlank(value) {
@@ -10714,12 +10721,14 @@ function BodyReader(options) {
         var linkRelationshipId = blip.attributes["r:link"];
         if (embedRelationshipId) {
             return findEmbeddedImageFile(embedRelationshipId);
-        } else {
+        } else if (linkRelationshipId) {
             var imagePath = relationships.findTargetByRelationshipId(linkRelationshipId);
             return {
                 path: imagePath,
                 read: files.read.bind(files, imagePath)
             };
+        } else {
+            return null;
         }
     }
 
