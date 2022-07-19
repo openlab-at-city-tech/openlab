@@ -3,8 +3,8 @@ Contributors: FARAZFRANK
 Donate link: https://wpfrank.com/
 Tags: slider, best slider plugin, image slide show, responsive slider, wordpress image slider plugin
 Requires at least: 4.0
-Tested up to: 5.9.3
-Stable tag: 3.5.6
+Tested up to: 6.0.1
+Stable tag: 3.5.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -165,6 +165,9 @@ Just put this code  <?php echo do_shortcode('[URIS id=123]'); ?>
 Please use WordPress [support forum](http://wordpress.org/support/plugin/ultimate-responsive-image-slider) to ask any query regarding any issue.
 
 == Changelog ==
+
+= 3.5.7 =
+* Tested with latest WordPress
 
 = 3.5.6 =
 * Setting bug fixed: Distance Between Slide and Thumbnail Position
