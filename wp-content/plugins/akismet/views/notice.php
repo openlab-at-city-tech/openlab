@@ -26,6 +26,11 @@
 		<p><?php echo $link_text; ?></p>
 	<?php } ?>
 </div>
+<?php elseif ( $type == 'spam-check-cron-disabled' ) : ?>
+<div class="notice notice-warning">
+	<p><strong><?php esc_html_e( 'Akismet has detected a problem.', 'akismet' ); ?></strong></p>
+	<p><?php esc_html_e( 'WP-Cron has been disabled using the DISABLE_WP_CRON constant. Comment rechecks may not work properly.', 'akismet' ); ?></p>
+</div>
 <?php elseif ( $type == 'alert' ) : ?>
 <div class='error'>
 	<p><strong><?php printf( esc_html__( 'Akismet Error Code: %s', 'akismet' ), $code ); ?></strong></p>
