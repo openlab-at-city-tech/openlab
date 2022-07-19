@@ -3,13 +3,13 @@
 Plugin Name: Link Library
 Plugin URI: http://wordpress.org/extend/plugins/link-library/
 Description: Display links on pages with a variety of options
-Version: 7.2.7
+Version: 7.3.7
 Author: Yannick Lefebvre
 Author URI: http://ylefebvre.github.io/
 Text Domain: link-library
 
 A plugin for the blogging MySQL/PHP-based WordPress.
-Copyright 2021 Yannick Lefebvre
+Copyright 2022 Yannick Lefebvre
 
 Translations:
 French Translation courtesy of Luc Capronnier
@@ -344,7 +344,6 @@ class link_library_plugin {
 	}
 
 	function ll_rest_settings_list( WP_REST_Request $request ) {
-
 		$genoptions = get_option( 'LinkLibraryGeneral' );
 		$genoptions = wp_parse_args( $genoptions, ll_reset_gen_settings( 'return' ) );
 		
@@ -474,11 +473,11 @@ class link_library_plugin {
 			'menu_position' => 10,
 			'supports' =>
 				array( 'title', 'editor', 'comments' ),
-			'taxonomies' => array( 'link_library_category' ),
+			'taxonomies' => array( $genoptions['cattaxonomy'], $genoptions['tagtaxonomy'] ),
 			'menu_icon' =>
 				'dashicons-admin-links',
 			'has_archive' => false,
-			'rewrite' => array( 'slug' => $genoptions['cptslug'] . '/%link_library_category%' )
+			'rewrite' => array( 'slug' => $genoptions['cptslug'] . '/%' . $genoptions['cattaxonomy'] . '%' )
 		);
 
 		if ( $genoptions['exclude_from_search'] && $genoptions['publicly_queryable'] ) {
@@ -498,7 +497,7 @@ class link_library_plugin {
 					'add_new_item' => 'Add New Link Library Category',
 					'new_item_name' => 'New Link Library Category'
 				),
-				'show_ui' => true,
+				'show_ui' => ( $genoptions['cattaxonomy'] == 'link_library_category' ? true : false ),
 				'show_tagcloud' => false,
 				'hierarchical' => true,
 				'rewrite' => $genoptions['publicly_queryable'],
@@ -514,7 +513,7 @@ class link_library_plugin {
 				'labels' => array( 'name' => 'Tags',
 								   'add_new_item' => 'Add New Link Library Tag',
 								   'new_item_name' => 'New Link Library Tag' ),
-				'show_ui' => true,
+				'show_ui' => ( $genoptions['tagtaxonomy'] == 'link_library_tags' ? true : false ),
 				'rewrite' => false,
 				'show_in_rest' => true
 			)
@@ -740,6 +739,12 @@ class link_library_plugin {
 		$genoptions = get_option( 'LinkLibraryGeneral' );
 
 		if ( isset( $_GET['ll60reupdate'] ) ) {
+			if ( !current_user_can( 'manage_options' ) ) {
+				return;
+			}
+
+			check_admin_referer( 'll60reupdate' );
+
 			global $wpdb;
 
 			$wpdb->get_results ( 'DELETE a,b,c
@@ -757,11 +762,19 @@ class link_library_plugin {
 
 			require plugin_dir_path( __FILE__ ) . 'link-library-update-60.php';
 			link_library_60_update( $this );
-		} elseif ( isset( $_GET['continue60update'] ) ) {
+		} /* elseif ( isset( $_GET['continue60update'] ) ) {
+			if ( !current_user_can( 'manage_options' ) ) {
+				return;
+			}
+
 			require plugin_dir_path( __FILE__ ) . 'link-library-update-60.php';
 			link_library_60_update( $this, true );
-		} else {
+		} */ else {
 			if ( ( false == $link_library_60_update && !empty( $genoptions ) ) ) {
+				if ( !current_user_can( 'manage_options' ) ) {
+					return;
+				}
+				
 				require plugin_dir_path( __FILE__ ) . 'link-library-update-60.php';
 				link_library_60_update( $this );
 			}
@@ -781,10 +794,10 @@ class link_library_plugin {
 					$post_link = $link_url;
 				}
 			} else {
-				if ( !empty( $post_link ) && false !== strpos( $post_link, '%link_library_category%' ) ) {
-					$link_cat_type_term = get_the_terms( $post->ID, 'link_library_category' );
+				if ( !empty( $post_link ) && false !== strpos( $post_link, '%' . $genoptions['cattaxonomy'] . '%' ) ) {
+					$link_cat_type_term = get_the_terms( $post->ID, $genoptions['cattaxonomy'] );
 					if ( !empty( $link_cat_type_term ) ) {
-						$post_link = str_replace( '%link_library_category%', array_pop( $link_cat_type_term )->slug, $post_link );
+						$post_link = str_replace( '%' . $genoptions['cattaxonomy'] . '%', array_pop( $link_cat_type_term )->slug, $post_link );
 					}
 				}
 			}
@@ -996,16 +1009,20 @@ class link_library_plugin {
 		}
 
 		if ( !empty( $settingssetsids ) ) {
+			$processedsettings = array();
 			foreach ( $settingssetsids as $setting ) {
-				$settingsname = 'LinkLibraryPP' . $setting;
-				$options = get_option( $settingsname );
-				$options = wp_parse_args( $options, ll_reset_options( 1, 'list', 'return' ) );
+				if ( !in_array( $setting, $processedsettings ) ) {
+					$processedsettings[] = $setting;
+					$settingsname = 'LinkLibraryPP' . $setting;
+					$options = get_option( $settingsname );
+					$options = wp_parse_args( $options, ll_reset_options( 1, 'list', 'return' ) );
 
-				if ( !empty( $options['stylesheet'] ) ) {
-					echo "<style id='LinkLibrarySettings" . $setting . "Style' type='text/css'>\n";
-					echo stripslashes( $options['stylesheet'] ) . "\n";
-					echo "</style>\n";
-				}
+					if ( !empty( $options['stylesheet'] ) ) {
+						echo "<style id='LinkLibrarySettings" . $setting . "Style' type='text/css'>\n";
+						echo stripslashes( $options['stylesheet'] ) . "\n";
+						echo "</style>\n";
+					}
+				}				
 			}
 		}
 	}
@@ -1020,7 +1037,7 @@ class link_library_plugin {
 			$genoptions = get_option( 'LinkLibraryGeneral' );
 
 			$categoryname = ( isset( $wp_query->query_vars['cat_name'] ) ? $wp_query->query_vars['cat_name'] : '' );
-			$catid = ( isset( $_GET['cat_id'] ) ? intval($_GET['cat_id']) : '' );
+			$catid = ( isset( $_GET['cat_id'] ) ? intval( $_GET['cat_id'] ) : '' );
 
 			$linkcatquery = 'SELECT t.name ';
 			$linkcatquery .= 'FROM ' . $this->db_prefix() . 'terms t LEFT JOIN ' . $this->db_prefix(). 'term_taxonomy tt ON (t.term_id = tt.term_id) ';
@@ -1285,7 +1302,7 @@ class link_library_plugin {
 			foreach( $category_list_array as $index => $category_text ) {
 				if ( !is_numeric( $category_text ) ) {
 					$update_list = true;
-					$matched_term = get_term_by( 'slug', $category_text, 'link_library_category' );
+					$matched_term = get_term_by( 'slug', $category_text, $genoptions['cattaxonomy'] );
 
 					if ( $matched_term ) {
 						$category_list_array[$index] = $matched_term->term_id;
@@ -1307,7 +1324,7 @@ class link_library_plugin {
 			foreach( $exclude_category_list_array as $index => $category_text ) {
 				if ( !is_numeric( $category_text ) ) {
 					$update_list = true;
-					$matched_term = get_term_by( 'slug', $category_text, 'link_library_category' );
+					$matched_term = get_term_by( 'slug', $category_text, $genoptions['cattaxonomy'] );
 
 					if ( $matched_term ) {
 						$exclude_category_list_array[$index] = $matched_term->term_id;
@@ -1329,7 +1346,7 @@ class link_library_plugin {
 			foreach( $tag_list_array as $index => $tag_text ) {
 				if ( !is_numeric( $tag_text ) ) {
 					$update_list = true;
-					$matched_term = get_term_by( 'slug', $tag_text, 'link_library_tags' );
+					$matched_term = get_term_by( 'slug', $tag_text, $genoptions['tagtaxonomy'] );
 
 					if ( $matched_term ) {
 						$tag_list_array[$index] = $matched_term->term_id;
@@ -1351,7 +1368,7 @@ class link_library_plugin {
 			foreach( $exclude_tag_list_array as $index => $tag_text ) {
 				if ( !is_numeric( $tag_text ) ) {
 					$update_list = true;
-					$matched_term = get_term_by( 'slug', $tag_text, 'link_library_tags' );
+					$matched_term = get_term_by( 'slug', $tag_text, $genoptions['tagtaxonomy'] );
 
 					if ( $matched_term ) {
 						$exclude_tag_list_array[$index] = $matched_term->term_id;
@@ -1519,7 +1536,7 @@ class link_library_plugin {
 
 		if ( !empty( $options['categorylist_cpt'] ) ) {
 			$catlistarray = explode( ',', $options['categorylist_cpt'] );
-			$link_query_args['tax_query'] = array( array( 'taxonomy' => 'link_library_category',
+			$link_query_args['tax_query'] = array( array( 'taxonomy' => $genoptions['cattaxonomy'],
 														  'field' => 'term_id',
 														  'terms' => $catlistarray,
 														  'operator' => 'IN' ) );
@@ -1527,7 +1544,7 @@ class link_library_plugin {
 
 		if ( !empty( $options['excludecategorylist_cpt'] ) ) {
 			$catlistexcludearray = explode( ',', $options['excludecategorylist_cpt'] );
-			$link_query_args['tax_query'] = array( array( 'taxonomy' => 'link_library_category',
+			$link_query_args['tax_query'] = array( array( 'taxonomy' => $genoptions['cattaxonomy'],
 														  'field' => 'term_id',
 														  'terms' => $catlistexcludearray,
 														  'operator' => 'NOT IN' ) );
@@ -1726,7 +1743,7 @@ class link_library_plugin {
 			foreach( $category_list_array as $index => $category_text ) {
 				if ( !is_numeric( $category_text ) ) {
 					$update_list = true;
-					$matched_term = get_term_by( 'slug', $category_text, 'link_library_category' );
+					$matched_term = get_term_by( 'slug', $category_text, $genoptions['cattaxonomy'] );
 
 					if ( $matched_term ) {
 						$category_list_array[$index] = $matched_term->term_id;
@@ -1748,7 +1765,7 @@ class link_library_plugin {
 			foreach( $exclude_category_list_array as $index => $category_text ) {
 				if ( !is_numeric( $category_text ) ) {
 					$update_list = true;
-					$matched_term = get_term_by( 'slug', $category_text, 'link_library_category' );
+					$matched_term = get_term_by( 'slug', $category_text, $genoptions['cattaxonomy'] );
 
 					if ( $matched_term ) {
 						$exclude_category_list_array[$index] = $matched_term->term_id;
@@ -1770,7 +1787,7 @@ class link_library_plugin {
 			foreach( $tag_list_array as $index => $tag_text ) {
 				if ( !is_numeric( $tag_text ) ) {
 					$update_list = true;
-					$matched_term = get_term_by( 'slug', $tag_text, 'link_library_tags' );
+					$matched_term = get_term_by( 'slug', $tag_text, $genoptions['tagtaxonomy'] );
 
 					if ( $matched_term ) {
 						$tag_list_array[$index] = $matched_term->term_id;
@@ -1792,7 +1809,7 @@ class link_library_plugin {
 			foreach( $exclude_tag_list_array as $index => $tag_text ) {
 				if ( !is_numeric( $tag_text ) ) {
 					$update_list = true;
-					$matched_term = get_term_by( 'slug', $tag_text, 'link_library_tags' );
+					$matched_term = get_term_by( 'slug', $tag_text, $genoptions['tagtaxonomy'] );
 
 					if ( $matched_term ) {
 						$exclude_tag_list_array[$index] = $matched_term->term_id;
@@ -1929,7 +1946,7 @@ class link_library_plugin {
 			foreach( $category_list_array as $index => $category_text ) {
 				if ( !is_numeric( $category_text ) ) {
 					$update_list = true;
-					$matched_term = get_term_by( 'slug', $category_text, 'link_library_category' );
+					$matched_term = get_term_by( 'slug', $category_text, $genoptions['cattaxonomy'] );
 
 					if ( $matched_term ) {
 						$category_list_array[$index] = $matched_term->term_id;
@@ -1951,7 +1968,7 @@ class link_library_plugin {
 			foreach( $exclude_category_list_array as $index => $category_text ) {
 				if ( !is_numeric( $category_text ) ) {
 					$update_list = true;
-					$matched_term = get_term_by( 'slug', $category_text, 'link_library_category' );
+					$matched_term = get_term_by( 'slug', $category_text, $genoptions['cattaxonomy'] );
 
 					if ( $matched_term ) {
 						$exclude_category_list_array[$index] = $matched_term->term_id;
@@ -1973,7 +1990,7 @@ class link_library_plugin {
 			foreach( $tag_list_array as $index => $tag_text ) {
 				if ( !is_numeric( $tag_text ) ) {
 					$update_list = true;
-					$matched_term = get_term_by( 'slug', $tag_text, 'link_library_tags' );
+					$matched_term = get_term_by( 'slug', $tag_text, $genoptions['tagtaxonomy'] );
 
 					if ( $matched_term ) {
 						$tag_list_array[$index] = $matched_term->term_id;
@@ -1995,7 +2012,7 @@ class link_library_plugin {
 			foreach( $exclude_tag_list_array as $index => $tag_text ) {
 				if ( !is_numeric( $tag_text ) ) {
 					$update_list = true;
-					$matched_term = get_term_by( 'slug', $tag_text, 'link_library_tags' );
+					$matched_term = get_term_by( 'slug', $tag_text, $genoptions['tagtaxonomy'] );
 
 					if ( $matched_term ) {
 						$exclude_tag_list_array[$index] = $matched_term->term_id;
@@ -2029,7 +2046,10 @@ class link_library_plugin {
 	}	
 
 	function link_library_tagcloud( $atts = '' ) {
-		$link_library_terms = get_terms( array( 'taxonomy' => 'link_library_category' ) );
+		$genoptions = get_option( 'LinkLibraryGeneral' );
+		$genoptions = wp_parse_args( $genoptions, ll_reset_gen_settings( 'return' ) );
+		
+		$link_library_terms = get_terms( array( 'taxonomy' => $genoptions['cattaxonomy'] ) );
 		$output = wp_generate_tag_cloud( $link_library_terms );
 		return $output;
 	}
@@ -2270,7 +2290,7 @@ class link_library_plugin {
 				$link_email = esc_html( get_post_meta( get_the_ID(), 'link_email', true ) );
 				$link_phone_number = esc_html( get_post_meta( get_the_ID(), 'link_telephone', true ) );
 
-				$link_terms = wp_get_post_terms( get_the_ID(), 'link_library_category' );
+				$link_terms = wp_get_post_terms( get_the_ID(), $genoptions['cattaxonomy'] );
 				$link_terms_list = '';
 				$link_terms_array = array();
 				if ( is_array( $link_terms ) ) {
@@ -2405,6 +2425,7 @@ class Link_Library_Widget extends WP_Widget {
 
 		$selected_library = ( !empty( $instance['selected_library'] ) ? $instance['selected_library'] : 1 );
 		$widget_title = ( !empty( $instance['widget_title'] ) ? esc_attr( $instance['widget_title'] ) : 'Links' );
+		$category_list_override = ( !empty( $instance['cat_list_override'] ) ? esc_attr( $instance['cat_list_override'] ) : '' );
 		?>
 		<p>
 			<label for="<?php echo $this->get_field_id( 'widget_title' ); ?>">
@@ -2416,7 +2437,7 @@ class Link_Library_Widget extends WP_Widget {
 			</label>
 		</p>
 		<p>
-			<label for="<?php echo $this->get_field_id( 'nb_book_reviews' ); ?>">
+			<label for="<?php echo $this->get_field_id( 'selected_library' ); ?>">
 				<?php echo 'Select library configuration to display:'; ?>
 				<select id="<?php echo $this->get_field_id( 'selected_library' ); ?>"
 						name="<?php echo $this->get_field_name( 'selected_library' ); ?>">
@@ -2437,6 +2458,15 @@ class Link_Library_Widget extends WP_Widget {
 				</select>
 			</label>
 		</p>
+		<p>
+			<label for="<?php echo $this->get_field_id( 'cat_list_override' ); ?>">
+				<?php echo 'Comma-separated list of categories to display:'; ?>
+				<input type="text"
+					   id="<?php echo $this->get_field_id( 'cat_list_override' );?>"
+					   name="<?php echo $this->get_field_name( 'cat_list_override' ); ?>"
+					   value="<?php echo $category_list_override; ?>" />
+			</label>
+		</p>
 	<?php }
 
 	function widget( $args, $instance ) {
@@ -2445,13 +2475,22 @@ class Link_Library_Widget extends WP_Widget {
 		// Retrieve widget configuration options
 		$selected_library = ( !empty( $instance['selected_library'] ) ? $instance['selected_library'] : 1 );
 		$widget_title = ( !empty( $instance['widget_title'] ) ? esc_attr( $instance['widget_title'] ) : 'Links' );
+		$category_list_override = ( !empty( $instance['cat_list_override'] ) ? esc_attr( $instance['cat_list_override'] ) : '' );
 
 		// Display widget title
 		echo $before_widget . $before_title;
 		echo apply_filters( 'widget_title', $widget_title );
 		echo $after_title;
 
-		echo do_shortcode( '[link-library settings="' . $selected_library . '"]');
+		$shortcode_string = '[link-library settings="' . $selected_library . '"';
+
+		if ( !empty( $category_list_override ) ) {
+			$shortcode_string .= ' categorylistoverride="' . $category_list_override . '"';
+		}
+		
+		$shortcode_string .= ']';
+
+		echo do_shortcode( $shortcode_string );
 
 		echo $after_widget;
 	}

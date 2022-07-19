@@ -565,6 +565,9 @@ function ll_reset_gen_settings( $setoptions = 'return' ) {
 	$genoptions['suppresssubfolderredirection']	  = false;
 	$genoptions['suppressbadconfigredirection']   = false;
 	$genoptions['rsscheckdays']					 = 90;
+	$genoptions['cattaxonomy']					  = 'link_library_category';
+	$genoptions['tagtaxonomy']					  = 'link_library_tags';
+	$genoptions['ignoresortarticles']			  = '';
 
 	if ( 'return_and_set' == $setoptions ) {
 		$stylesheetlocation           = plugins_url( 'stylesheettemplate.css', __FILE__ );

@@ -30,7 +30,7 @@ function RenderLinkLibrarySearchForm( $libraryoptions ) {
 	$output .= "<input type='text' onfocus=\"this.value=''\" value='";
 
 	if ( $searchtextinsearchbox && isset( $_GET['searchll'] ) && !empty( $_GET['searchll'] ) ) {
-		$output .= $_GET['searchll'];
+		$output .= sanitize_text_field( $_GET['searchll'] );
 	} else {
 		$output .= $searchfieldtext;
 	}
@@ -38,17 +38,17 @@ function RenderLinkLibrarySearchForm( $libraryoptions ) {
 	$output .= "' name='searchll' id='searchll' />";
 
 	if ( isset( $_GET['page_id'] ) && !empty( $_GET['page_id'] ) ) {
-		$output .= '<input type="hidden" name="page_id" value="' . $_GET['page_id'] . '" />';
+		$output .= '<input type="hidden" name="page_id" value="' . intval( $_GET['page_id'] ) . '" />';
 	} elseif ( isset( $_GET['p'] ) && !empty( $_GET['p'] ) ) {
-		$output .= '<input type="hidden" name="p" value="' . $_GET['p'] . '" />';
+		$output .= '<input type="hidden" name="p" value="' . intval( $_GET['p'] ) . '" />';
 	}
 
 	if ( isset( $_GET['link_price'] ) && !empty( $_GET['link_price'] ) ) {
-		$output .= '<input type="hidden" name="link_price" value="' . $_GET['link_price'] . '" />';
+		$output .= '<input type="hidden" name="link_price" value="' . sanitize_text_field( $_GET['link_price'] ) . '" />';
 	}
 
 	if ( isset( $_GET['link_tags'] ) && !empty( $_GET['link_tags'] ) ) {
-		$output .= '<input type="hidden" name="link_tags" value="' . $_GET['link_tags'] . '" />';
+		$output .= '<input type="hidden" name="link_tags" value="' . sanitize_text_field( $_GET['link_tags'] ) . '" />';
 	}
 
 	$output .= "<input type='submit' id='searchbutton' value='" . $searchlabel . "' />";

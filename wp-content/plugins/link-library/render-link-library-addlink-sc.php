@@ -6,6 +6,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 require_once plugin_dir_path( __FILE__ ) . 'link-library-defaults.php';
 
 function addlink_render_category_list( $categories, $select_name, $depth, $order, $libraryoptions, $captureddata ) {
+	$genoptions = get_option( 'LinkLibraryGeneral' );
+	$genoptions = wp_parse_args( $genoptions, ll_reset_gen_settings( 'return' ) );
 
 	$output = '';
 	if ( !empty( $categories ) ) {
@@ -37,7 +39,7 @@ function addlink_render_category_list( $categories, $select_name, $depth, $order
 			}
 
 			$output .= '>' . str_repeat( '&nbsp;', 4 * $depth ) . $category->name . '</option>';
-			$child_categories = get_terms( 'link_library_category', array( 'orderby' => 'name', 'parent' => $category->term_id, 'order' => $order, 'hide_empty' => false ) );
+			$child_categories = get_terms( $genoptions['cattaxonomy'], array( 'orderby' => 'name', 'parent' => $category->term_id, 'order' => $order, 'hide_empty' => false ) );
 
 			if ( !empty( $child_categories ) ) {
 				$output .= addlink_render_category_list( $child_categories, $select_name, $depth + 1, $order, $libraryoptions, $captureddata );
@@ -391,7 +393,7 @@ function RenderLinkLibraryAddLinkForm( $LLPluginClass, $generaloptions, $library
 							$link_categories_query_args['exclude'] = $excluded_links_array;
 						}
 
-						$linkcats = get_terms( 'link_library_category', $link_categories_query_args );
+						$linkcats = get_terms( $generaloptions['cattaxonomy'], $link_categories_query_args );
 
 						if ( !empty( $include_links_array ) && !empty( $excluded_links_array ) ) {
 							foreach( $linkcats as $link_key => $linkcat ) {
@@ -400,6 +402,12 @@ function RenderLinkLibraryAddLinkForm( $LLPluginClass, $generaloptions, $library
 										unset( $linkcats[$link_key] );
 									}
 								}
+							}
+						}
+
+						foreach( $linkcats as $link_key => $linkcat ) {
+							if ( $linkcat->term_id == 1 ) {
+								unset( $linkcats[$link_key] );
 							}
 						}
 
@@ -458,7 +466,7 @@ function RenderLinkLibraryAddLinkForm( $LLPluginClass, $generaloptions, $library
 						}
 					break;
 					case 6: 	//------------------ Link Tags --------------------   
-						$link_tags_query_args = array( 'hide_empty' => false, 'taxonomy' => 'link_library_tags' );
+						$link_tags_query_args = array( 'hide_empty' => false, 'taxonomy' => $generaloptions['tagtaxonomy'] );
 						if ( !empty( $include_links_array ) ) {
 							$link_tags_query_args['include'] = explode( ',', $libraryoptions['addlinktaglistoverride'] );
 						}
@@ -877,7 +885,7 @@ function RenderLinkLibraryAddLinkForm( $LLPluginClass, $generaloptions, $library
 								if ( !empty( $categorysluglist ) ) {
 									$link_categories_query_args['slug'] = explode( ',', $categorysluglist );
 								} elseif ( isset( $_GET['catslug'] ) ) {
-									$link_categories_query_args['slug'] = $_GET['catslug'];
+									$link_categories_query_args['slug'] = sanitize_text_field( $_GET['catslug'] );
 								}
 								$link_categories_query_args['include'] = array();
 								$link_categories_query_args['exclude'] = array();
@@ -894,7 +902,7 @@ function RenderLinkLibraryAddLinkForm( $LLPluginClass, $generaloptions, $library
 							$link_categories_query_args['orderby'] = 'name';
 							$link_categories_query_args['order'] = 'ASC';
 
-							$link_categories = get_terms( 'link_library_category', $link_categories_query_args );
+							$link_categories = get_terms( $generaloptions['cattaxonomy'], $link_categories_query_args );
 
 							remove_filter( 'get_terms', 'link_library_get_terms_filter_only_publish' );
 							remove_filter( 'get_terms', 'link_library_get_terms_filter_publish_pending' );
@@ -908,7 +916,7 @@ function RenderLinkLibraryAddLinkForm( $LLPluginClass, $generaloptions, $library
 								if ( !$combineresults ) {
 									$link_query_args['tax_query'][] =
 										array(
-											'taxonomy' => 'link_library_category',
+											'taxonomy' => $generaloptions['cattaxonomy'],
 											'field'    => 'term_id',
 											'terms'    => $link_category->term_id,
 											'include_children' => false
@@ -936,13 +944,13 @@ function RenderLinkLibraryAddLinkForm( $LLPluginClass, $generaloptions, $library
 				
 									if ( isset( $_GET['link_tags'] ) && !empty( $_GET['link_tags'] ) ) {
 										$link_query_args['tax_query'][] = array(
-											'taxonomy' => 'link_library_tags',
+											'taxonomy' => $generaloptions['tagtaxonomy'],
 											'field' => 'slug',
 											'terms' => $tag_array,
 										);
 									} elseif ( !empty( $taglist_cpt ) ) {
 										$link_query_args['tax_query'][] = array(
-											'taxonomy' => 'link_library_tags',
+											'taxonomy' => $generaloptions['tagtaxonomy'],
 											'field' => 'id',
 											'terms' => $tag_array,
 										);
@@ -968,7 +976,7 @@ function RenderLinkLibraryAddLinkForm( $LLPluginClass, $generaloptions, $library
 				
 									if ( !empty( $excludetaglist_cpt ) ) {
 										$link_query_args['tax_query'][] = array(
-											'taxonomy' => 'link_library_tags',
+											'taxonomy' => $generaloptions['tagtaxonomy'],
 											'field' => 'id',
 											'terms' => $exclude_tag_array,
 											'operator' => 'NOT IN'

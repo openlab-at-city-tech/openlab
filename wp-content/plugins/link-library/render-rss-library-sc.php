@@ -149,7 +149,7 @@ function RenderRSSLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $se
 		$link_categories_query_args['orderby'] = 'name';
 		$link_categories_query_args['order'] = in_array( $direction, $validdirections ) ? $direction : 'ASC';
 
-		$link_categories = get_terms( 'link_library_category', $link_categories_query_args );
+		$link_categories = get_terms( $generaloptions['cattaxonomy'], $link_categories_query_args );
 
 		if ( $level == 0 ) {
 			$output .= "<div id='rsslist" . $settings . "' class='rsslist'><!-- Div Rsslist -->\n";
@@ -167,7 +167,7 @@ function RenderRSSLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $se
 
 				$link_query_args['tax_query'][] =
 					array(
-						'taxonomy' => 'link_library_category',
+						'taxonomy' => $generaloptions['cattaxonomy'],
 						'field'    => 'term_id',
 						'terms'    => $link_category->term_id,
 						'include_children' => false
@@ -177,7 +177,7 @@ function RenderRSSLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $se
 					$tag_array = array();
 
 					if ( ( isset( $_GET['link_tags'] ) && !empty( $_GET['link_tags'] ) ) ) {
-						$tag_array = explode( '.', $_GET['link_tags'] );
+						$tag_array = explode( '.', sanitize_text_field( $_GET['link_tags'] ) );
 					} elseif( !empty( $taglist_cpt ) ) {
 						$tag_array = explode( ',', $taglist_cpt );
 					}
@@ -189,13 +189,13 @@ function RenderRSSLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $se
 
 					if ( isset( $_GET['link_tags'] ) && !empty( $_GET['link_tags'] ) ) {
 						$link_query_args['tax_query'][] = array(
-							'taxonomy' => 'link_library_tags',
+							'taxonomy' => $generaloptions['tagtaxonomy'],
 							'field' => 'slug',
 							'terms' => $tag_array,
 						);
 					} elseif ( !empty( $taglist_cpt ) ) {
 						$link_query_args['tax_query'][] = array(
-							'taxonomy' => 'link_library_tags',
+							'taxonomy' => $generaloptions['tagtaxonomy'],
 							'field' => 'id',
 							'terms' => $tag_array,
 						);
@@ -216,7 +216,7 @@ function RenderRSSLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $se
 
 					if ( !empty( $excludetaglist_cpt ) ) {
 						$link_query_args['tax_query'][] = array(
-							'taxonomy' => 'link_library_tags',
+							'taxonomy' => $generaloptions['tagtaxonomy'],
 							'field' => 'id',
 							'terms' => $exclude_tag_array,
 							'operator' => 'NOT IN'
@@ -249,7 +249,7 @@ function RenderRSSLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $se
 					$output .= "\n<!-- Link Query Execution Time: " . ( microtime( true ) - $linkquerystarttime ) . "-->\n\n";
 				}
 
-				$child_cat_params = array( 'taxonomy' => 'link_library_category', 'child_of' => $link_category->term_id );
+				$child_cat_params = array( 'taxonomy' => $generaloptions['cattaxonomy'], 'child_of' => $link_category->term_id );
 
 				if ( $hide_if_empty ) {
 					$child_cat_params['hide_empty'] = true;
@@ -284,7 +284,7 @@ function RenderRSSLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $se
 							$linkitem['link_name'] = get_the_title();
 							$link_meta = get_metadata( 'post', get_the_ID() );
 
-							$link_terms = wp_get_post_terms( get_the_ID(), 'link_library_category' );
+							$link_terms = wp_get_post_terms( get_the_ID(), $generaloptions['cattaxonomy'] );
 							if ( !empty( $link_terms ) ) {
 								$link_term_array = array();
 								foreach( $link_terms as $link_term ) {
