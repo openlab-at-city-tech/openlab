@@ -68,10 +68,10 @@ Vue.mixin({
 				'window/global-js-error',
 					(message.length > 100 ? message.substring(0, 100) + '...' : message) +
 					(filename.length ? ` (${filename})` : ''),
-				true)
+				false)
 		}
 		Vue.config.errorHandler = function (error, vm, info) {
-			vm.notifyError(`vue/${info}-error`, error, true)
+			vm.notifyError(`vue/${info}-error`, error, false)
 		}
 	},
 	methods: {

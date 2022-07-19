@@ -6,7 +6,7 @@
  * Plugin Name: MetaSlider
  * Plugin URI:  https://www.metaslider.com
  * Description: Easy to use slideshow plugin. Create SEO optimised responsive slideshows with Nivo Slider, Flex Slider, Coin Slider and Responsive Slides.
- * Version:     3.27.5
+ * Version:     3.27.8
  * Author:      MetaSlider
  * Author URI:  https://www.metaslider.com
  * License:     GPL-2.0+
@@ -16,13 +16,19 @@
  * Domain Path: /languages
  */
 
-use Extendify\Library\App;
-
 if (!defined('ABSPATH')) {
     die('No direct access.');
 }
 
 if (!class_exists('MetaSliderPlugin')) {
+    if (! defined('METASLIDER_COMPOSER_AUTOLOAD_LOADED')) {
+        if (is_readable(__DIR__ . '/vendor/autoload.php')) {
+            require_once __DIR__ . '/vendor/autoload.php';
+        }
+
+        define('METASLIDER_COMPOSER_AUTOLOAD_LOADED', true);
+    }
+
     /**
      * Register the plugin.
      *
@@ -40,7 +46,7 @@ if (!class_exists('MetaSliderPlugin')) {
          *
          * @var string
          */
-        public $version = '3.27.5';
+        public $version = '3.27.8';
 
         /**
          * Pro installed version number
@@ -135,10 +141,7 @@ if (!class_exists('MetaSliderPlugin')) {
 
             // require_once(METASLIDER_PATH . 'admin/lib/temporary.php');
 
-            if (
-                ! MetaSlider_Settings::get_instance()->get_disable_extendify_sdk()
-                && apply_filters('extendifysdk_load_library', true)
-            ) {
+            if (MetaSliderPlugin::should_load_extendify_sdk()) {
                 require_once METASLIDER_PATH . 'admin/lib/extendify-notice.php';
             }
 
@@ -226,7 +229,16 @@ if (!class_exists('MetaSliderPlugin')) {
                 return;
             } ?>
             <div class='notice notice-error metaslider-pro-outdated-notice'>
-                <p><?php printf(__('MetaSlider Pro is installed but is out of date. You may update it <a target="_blank" href="%s">here</a>. Learn more about this notice <a href="%s">here</a>', 'ml-slider'), self_admin_url('plugins.php'), 'https://www.metaslider.com/pro-is-installed-but-out-of-date')?></p>
+                <p>
+                    <?php printf(
+                        esc_html__('MetaSlider Pro is installed but is out of date. You may update it %shere%s. Learn more about this notice %shere%s', 'ml-slider'),
+                        '<a href="' . esc_url(self_admin_url('plugins.php')) . '">',
+                        '</a>',
+                        '<a target="_blank" href="https://www.metaslider.com/pro-is-installed-but-out-of-date">',
+                        '</a>'
+                    );
+                    ?>
+                </p>
             </div>
             <?php
         }
@@ -407,10 +419,10 @@ if (!class_exists('MetaSliderPlugin')) {
             $title = metaslider_pro_is_active() ? 'MetaSlider Pro' : 'MetaSlider';
 
             $this->admin->add_page($title, 'metaslider');
-            $this->admin->add_page(__('Settings & Help', 'default'), 'metaslider-settings', 'metaslider');
+            $this->admin->add_page(__('Settings & Help', 'ml-slider'), 'metaslider-settings', 'metaslider');
 
             if (metaslider_user_sees_upgrade_page()) {
-                $this->admin->add_page(__('Add-ons', 'ml-slider'), 'upgrade-metaslider', 'metaslider');
+                $this->admin->add_page(__('Upgrade to Pro', 'ml-slider'), 'upgrade-metaslider', 'metaslider');
             }
         }
 
@@ -484,7 +496,24 @@ if (!class_exists('MetaSliderPlugin')) {
          */
         public function load_plugin_textdomain()
         {
-            load_plugin_textdomain('ml-slider', false, dirname(plugin_basename(__FILE__)) . '/languages/');
+            // First, unload textdomain - Based on https://core.trac.wordpress.org/ticket/34213#comment:26
+            unload_textdomain('ml-slider');
+
+            // Call the core translations from plugins languages/ folder
+            if (file_exists(METASLIDER_PATH . 'languages/' . 'ml-slider' . '-' . get_locale() . '.mo')) {
+                load_textdomain(
+                    'ml-slider',
+                    METASLIDER_PATH . 'languages/' . 'ml-slider' . '-' . get_locale() . '.mo'
+                );
+            }
+
+            if (function_exists('wp_set_script_translations')) {
+                wp_set_script_translations(
+                    'metaslider-admin-script',
+                    'ml-slider',
+                    METASLIDER_PATH . 'languages'
+                );
+            }
         }
 
         /**
@@ -956,7 +985,7 @@ if (!class_exists('MetaSliderPlugin')) {
                             $disabled = $option_name == 'thumbnails' ? 'disabled' : '';
                             $navigation_row .= "<li><label class='{$tease}'><input {$tease} type='radio' name='settings[{$id}]' value='{$option_name}' {$checked} {$disabled}/>{$option_value['label']}</label>";
                             if (isset($option_value['addon_required']) && $option_value['addon_required']) {
-                                $navigation_row .= sprintf(" <a target='_blank' class='get-addon' href='%s' title='%s'>%s</a>", metaslider_get_upgrade_link(), __('Get the Add-on Pack today!', 'ml-slider'), __('Learn More', 'ml-slider'));
+                                $navigation_row .= sprintf(" <a target='_blank' class='get-addon' href='%s' title='%s'>%s</a>", metaslider_get_upgrade_link(), esc_html__('Get the Add-on Pack today!', 'ml-slider'), esc_html__('Learn More', 'ml-slider'));
                             }
                             $navigation_row .= "</li>";
                         }
@@ -1339,48 +1368,48 @@ if (!class_exists('MetaSliderPlugin')) {
                                                             'fullWidth' => array(
                                                                 'priority' => 5,
                                                                 'type' => 'checkbox',
-                                                                'label' => __("100% width", "ml-slider"),
+                                                                'label' => esc_html__("100% width", "ml-slider"),
                                                                 'class' => 'option flex nivo responsive',
                                                                 'checked' => $this->slider->get_setting('fullWidth') == 'true' ? 'checked' : '',
-                                                                'helptext' => __("Stretch the slideshow output to fill it's parent container", "ml-slider")
+                                                                'helptext' => esc_html__("Stretch the slideshow output to fill it's parent container", "ml-slider")
                                                             ),
                                                             'center' => array(
                                                                 'priority' => 10,
                                                                 'type' => 'checkbox',
-                                                                'label' => __("Center align", "ml-slider"),
+                                                                'label' => esc_html__("Center align", "ml-slider"),
                                                                 'class' => 'option coin flex nivo responsive',
                                                                 'checked' => $this->slider->get_setting('center') == 'true' ? 'checked' : '',
-                                                                'helptext' => __("Center align the slideshow", "ml-slider")
+                                                                'helptext' => esc_html__("Center align the slideshow", "ml-slider")
                                                             ),
                                                             'autoPlay' => array(
                                                                 'priority' => 20,
                                                                 'type' => 'checkbox',
-                                                                'label' => __("Auto play", "ml-slider"),
+                                                                'label' => esc_html__("Auto play", "ml-slider"),
                                                                 'class' => 'option flex nivo responsive coin',
                                                                 'checked' => 'true' == $this->slider->get_setting('autoPlay') ? 'checked' : '',
-                                                                'helptext' => __("Transition between slides automatically", "ml-slider")
+                                                                'helptext' => esc_html__("Transition between slides automatically", "ml-slider")
                                                             ),
                                                             'smartCrop' => array(
                                                                 'priority' => 30,
                                                                 'type' => 'select',
-                                                                'label' => __("Image Crop", "ml-slider"),
+                                                                'label' => esc_html__("Image Crop", "ml-slider"),
                                                                 'class' => 'option coin flex nivo responsive',
                                                                 'value' => $this->slider->get_setting('smartCrop'),
                                                                 'options' => array(
-                                                                    'true' => array( 'label' => __("Smart Crop", "ml-slider"), 'class' => '' ),
-                                                                    'false' => array( 'label' => __("Standard", "ml-slider"), 'class' => '' ),
-                                                                    'disabled' => array( 'label' => __("Disabled", "ml-slider"), 'class' => '' ),
-                                                                    'disabled_pad' => array( 'label' => __("Disabled (Smart Pad)", "ml-slider"), 'class' => 'option flex' ),
+                                                                    'true' => array( 'label' => esc_html__("Smart Crop", "ml-slider"), 'class' => '' ),
+                                                                    'false' => array( 'label' => esc_html__("Standard", "ml-slider"), 'class' => '' ),
+                                                                    'disabled' => array( 'label' => esc_html__("Disabled", "ml-slider"), 'class' => '' ),
+                                                                    'disabled_pad' => array( 'label' => esc_html__("Disabled (Smart Pad)", "ml-slider"), 'class' => 'option flex' ),
                                                                 ),
-                                                                'helptext' => __("Smart Crop ensures your responsive slides are cropped to a ratio that results in a consistent slideshow size", "ml-slider")
+                                                                'helptext' => esc_html__("Smart Crop ensures your responsive slides are cropped to a ratio that results in a consistent slideshow size", "ml-slider")
                                                             ),
                                                             'carouselMode' => array(
                                                                 'priority' => 40,
                                                                 'type' => 'checkbox',
-                                                                'label' => __("Carousel mode", "ml-slider"),
+                                                                'label' => esc_html__("Carousel mode", "ml-slider"),
                                                                 'class' => 'option flex showNextWhenChecked',
                                                                 'checked' => $this->slider->get_setting('carouselMode') == 'true' ? 'checked' : '',
-                                                                'helptext' => __("Display multiple slides at once. Slideshow output will be 100% wide.", "ml-slider")
+                                                                'helptext' => esc_html__("Display multiple slides at once. Slideshow output will be 100% wide.", "ml-slider")
                                                             ),
                                                             'carouselMargin' => array(
                                                                 'priority' => 45,
@@ -1388,43 +1417,43 @@ if (!class_exists('MetaSliderPlugin')) {
                                                                 'max' => 9999,
                                                                 'step' => 1,
                                                                 'type' => 'number',
-                                                                'label' => __("Carousel margin", "ml-slider"),
+                                                                'label' => esc_html__("Carousel margin", "ml-slider"),
                                                                 'class' => 'option flex',
                                                                 'value' => $this->slider->get_setting('carouselMargin'),
-                                                                'helptext' => __("Pixel margin between slides in carousel.", "ml-slider"),
-                                                                'after' => __("px", "ml-slider")
+                                                                'helptext' => esc_html__("Pixel margin between slides in carousel.", "ml-slider"),
+                                                                'after' => esc_html__("px", "ml-slider")
                                                             ),
                                                             'firstSlideFadeIn' => array(
                                                                 'priority' => 47,
                                                                 'type' => 'checkbox',
-                                                                'label' => __("Fade in", "ml-slider"),
+                                                                'label' => esc_html__("Fade in", "ml-slider"),
                                                                 'class' => 'option flex',
                                                                 'checked' => 'true' == $this->slider->get_setting('firstSlideFadeIn') ? 'checked' : '',
-                                                                'helptext' => __("Fade in the first slide", "ml-slider"),
+                                                                'helptext' => esc_html__("Fade in the first slide", "ml-slider"),
                                                             ),
                                                             'random' => array(
                                                                 'priority' => 50,
                                                                 'type' => 'checkbox',
-                                                                'label' => __("Random", "ml-slider"),
+                                                                'label' => esc_html__("Random", "ml-slider"),
                                                                 'class' => 'option coin flex nivo responsive',
                                                                 'checked' => $this->slider->get_setting('random') == 'true' ? 'checked' : '',
-                                                                'helptext' => __("Randomise the order of the slides", "ml-slider")
+                                                                'helptext' => esc_html__("Randomise the order of the slides", "ml-slider")
                                                             ),
                                                             'hoverPause' => array(
                                                                 'priority' => 60,
                                                                 'type' => 'checkbox',
-                                                                'label' => __("Hover pause", "ml-slider"),
+                                                                'label' => esc_html__("Hover pause", "ml-slider"),
                                                                 'class' => 'option coin flex nivo responsive',
                                                                 'checked' => $this->slider->get_setting('hoverPause') == 'true' ? 'checked' : '',
-                                                                'helptext' => __("Pause the slideshow when hovering over slider, then resume when no longer hovering.", "ml-slider")
+                                                                'helptext' => esc_html__("Pause the slideshow when hovering over slider, then resume when no longer hovering.", "ml-slider")
                                                             ),
                                                             'reverse' => array(
                                                                 'priority' => 70,
                                                                 'type' => 'checkbox',
-                                                                'label' => __("Reverse", "ml-slider"),
+                                                                'label' => esc_html__("Reverse", "ml-slider"),
                                                                 'class' => 'option flex',
                                                                 'checked' => $this->slider->get_setting('reverse') == 'true' ? 'checked' : '',
-                                                                'helptext' => __("Reverse the animation direction", "ml-slider")
+                                                                'helptext' => esc_html__("Reverse the animation direction", "ml-slider")
                                                             ),
                                                             'delay' => array(
                                                                 'priority' => 80,
@@ -1434,10 +1463,10 @@ if (!class_exists('MetaSliderPlugin')) {
                                                                 'max' => 10000,
                                                                 'step' => 100,
                                                                 'value' => $this->slider->get_setting('delay'),
-                                                                'label' => __("Slide delay", "ml-slider"),
+                                                                'label' => esc_html__("Slide delay", "ml-slider"),
                                                                 'class' => 'option coin flex responsive nivo',
-                                                                'helptext' => __("How long to display each slide, in milliseconds", "ml-slider"),
-                                                                'after' => _x("ms", "Short for milliseconds", "ml-slider")
+                                                                'helptext' => esc_html__("How long to display each slide, in milliseconds", "ml-slider"),
+                                                                'after' => esc_html_x("ms", "Short for milliseconds", "ml-slider")
                                                             ),
                                                             'animationSpeed' => array(
                                                                 'priority' => 90,
@@ -1447,10 +1476,10 @@ if (!class_exists('MetaSliderPlugin')) {
                                                                 'max' => 2000,
                                                                 'step' => 100,
                                                                 'value' => $this->slider->get_setting('animationSpeed'),
-                                                                'label' => __("Animation speed", "ml-slider"),
+                                                                'label' => esc_html__("Animation speed", "ml-slider"),
                                                                 'class' => 'option flex responsive nivo',
-                                                                'helptext' => __("Set the speed of animations, in milliseconds", "ml-slider"),
-                                                                'after' => _x("ms", "Short for milliseconds", "ml-slider")
+                                                                'helptext' => esc_html__("Set the speed of animations, in milliseconds", "ml-slider"),
+                                                                'after' => esc_html_x("ms", "Short for milliseconds", "ml-slider")
                                                             ),
                                                             'slices' => array(
                                                                 'priority' => 100,
@@ -1460,10 +1489,10 @@ if (!class_exists('MetaSliderPlugin')) {
                                                                 'max' => 20,
                                                                 'step' => 1,
                                                                 'value' => $this->slider->get_setting('slices'),
-                                                                'label' => __("Number of slices", "ml-slider"),
+                                                                'label' => esc_html__("Number of slices", "ml-slider"),
                                                                 'class' => 'option nivo',
-                                                                'helptext' => __("Number of slices", "ml-slider"),
-                                                                'after' => _x("ms", "Short for milliseconds", "ml-slider")
+                                                                'helptext' => esc_html__("Number of slices", "ml-slider"),
+                                                                'after' => esc_html_x("ms", "Short for milliseconds", "ml-slider")
                                                             ),
                                                             'spw' => array(
                                                                 'priority' => 110,
@@ -1473,9 +1502,9 @@ if (!class_exists('MetaSliderPlugin')) {
                                                                 'max' => 20,
                                                                 'step' => 1,
                                                                 'value' => $this->slider->get_setting('spw'),
-                                                                'label' => __("Number of squares", "ml-slider") . " (" . __("Width", "ml-slider") . ")",
+                                                                'label' => esc_html__("Number of squares", "ml-slider") . " (" . esc_html__("Width", "ml-slider") . ")",
                                                                 'class' => 'option nivo',
-                                                                'helptext' => __("Number of squares", "ml-slider"),
+                                                                'helptext' => esc_html__("Number of squares", "ml-slider"),
                                                                 'after' => ''
                                                             ),
                                                             'sph' => array(
@@ -1486,46 +1515,46 @@ if (!class_exists('MetaSliderPlugin')) {
                                                                 'max' => 20,
                                                                 'step' => 1,
                                                                 'value' => $this->slider->get_setting('sph'),
-                                                                'label' => __("Number of squares", "ml-slider") . " (" . __("Height", "ml-slider") . ")",
+                                                                'label' => esc_html__("Number of squares", "ml-slider") . " (" . esc_html__("Height", "ml-slider") . ")",
                                                                 'class' => 'option nivo',
-                                                                'helptext' => __("Number of squares", "ml-slider"),
+                                                                'helptext' => esc_html__("Number of squares", "ml-slider"),
                                                                 'after' => ''
                                                             ),
                                                             'direction' => array(
                                                                 'priority' => 130,
                                                                 'type' => 'select',
-                                                                'label' => __("Slide direction", "ml-slider"),
+                                                                'label' => esc_html__("Slide direction", "ml-slider"),
                                                                 'class' => 'option flex',
-                                                                'helptext' => __("Select the sliding direction", "ml-slider"),
+                                                                'helptext' => esc_html__("Select the sliding direction", "ml-slider"),
                                                                 'value' => $this->slider->get_setting('direction'),
                                                                 'options' => array(
-                                                                    'horizontal' => array( 'label' => __("Horizontal", "ml-slider"), 'class' => '' ),
-                                                                    'vertical' => array( 'label' => __("Vertical", "ml-slider"), 'class' => '' ),
+                                                                    'horizontal' => array( 'label' => esc_html__("Horizontal", "ml-slider"), 'class' => '' ),
+                                                                    'vertical' => array( 'label' => esc_html__("Vertical", "ml-slider"), 'class' => '' ),
                                                                 )
                                                             ),
                                                             'easing' => array(
                                                                 'priority' => 140,
                                                                 'type' => 'select',
-                                                                'label' => __("Easing", "ml-slider"),
+                                                                'label' => esc_html__("Easing", "ml-slider"),
                                                                 'class' => 'option flex',
-                                                                'helptext' => __("Animation easing effect", "ml-slider"),
+                                                                'helptext' => esc_html__("Animation easing effect", "ml-slider"),
                                                                 'value' => $this->slider->get_setting('easing'),
                                                                 'options' => $this->get_easing_options()
                                                             ),
                                                             'prevText' => array(
                                                                 'priority' => 150,
                                                                 'type' => 'text',
-                                                                'label' => __("Previous text", "ml-slider"),
+                                                                'label' => esc_html__("Previous text", "ml-slider"),
                                                                 'class' => 'option coin flex responsive nivo',
-                                                                'helptext' => __("Set the text for the 'previous' direction item", "ml-slider"),
+                                                                'helptext' => esc_html__("Set the text for the 'previous' direction item", "ml-slider"),
                                                                 'value' => $this->slider->get_setting('prevText') == 'false' ? '' : $this->slider->get_setting('prevText')
                                                             ),
                                                             'nextText' => array(
                                                                 'priority' => 160,
                                                                 'type' => 'text',
-                                                                'label' => __("Next text", "ml-slider"),
+                                                                'label' => esc_html__("Next text", "ml-slider"),
                                                                 'class' => 'option coin flex responsive nivo',
-                                                                'helptext' => __("Set the text for the 'next' direction item", "ml-slider"),
+                                                                'helptext' => esc_html__("Set the text for the 'next' direction item", "ml-slider"),
                                                                 'value' => $this->slider->get_setting('nextText') == 'false' ? '' : $this->slider->get_setting('nextText')
                                                             ),
                                                             'sDelay' => array(
@@ -1536,18 +1565,18 @@ if (!class_exists('MetaSliderPlugin')) {
                                                                 'max' => 500,
                                                                 'step' => 10,
                                                                 'value' => $this->slider->get_setting('sDelay'),
-                                                                'label' => __("Square delay", "ml-slider"),
+                                                                'label' => esc_html__("Square delay", "ml-slider"),
                                                                 'class' => 'option coin',
-                                                                'helptext' => __("Delay between squares in ms", "ml-slider"),
-                                                                'after' => _x("ms", "Short for milliseconds", "ml-slider")
+                                                                'helptext' => esc_html__("Delay between squares in ms", "ml-slider"),
+                                                                'after' => esc_html_x("ms", "Short for milliseconds", "ml-slider")
                                                             ),
                                                             'opacity' => array(
                                                                 'priority' => 180,
                                                                 'type' => 'text',
                                                                 'value' => $this->slider->get_setting('opacity'),
-                                                                'label' => __("Opacity", "ml-slider"),
+                                                                'label' => esc_html__("Opacity", "ml-slider"),
                                                                 'class' => 'option coin',
-                                                                'helptext' => __("Opacity of title and navigation, between 0 and 1", "ml-slider"),
+                                                                'helptext' => esc_html__("Opacity of title and navigation, between 0 and 1", "ml-slider"),
                                                                 'after' => ''
                                                             ),
                                                             'titleSpeed' => array(
@@ -1558,48 +1587,48 @@ if (!class_exists('MetaSliderPlugin')) {
                                                                 'max' => 10000,
                                                                 'step' => 100,
                                                                 'value' => $this->slider->get_setting('titleSpeed'),
-                                                                'label' => __("Caption speed", "ml-slider"),
+                                                                'label' => esc_html__("Caption speed", "ml-slider"),
                                                                 'class' => 'option coin',
-                                                                'helptext' => __("Set the fade in speed of the caption", "ml-slider"),
-                                                                'after' => _x("ms", "Short for milliseconds", "ml-slider")
+                                                                'helptext' => esc_html__("Set the fade in speed of the caption", "ml-slider"),
+                                                                'after' => esc_html_x("ms", "Short for milliseconds", "ml-slider")
                                                             ),
                                                             'developerOptions' => array(
                                                                 'priority' => 195,
                                                                 'type' => 'divider',
                                                                 'class' => 'option coin flex responsive nivo',
-                                                                'value' => __("Developer options", "ml-slider")
+                                                                'value' => esc_html__("Developer options", "ml-slider")
                                                             ),
                                                             'cssClass' => array(
                                                                 'priority' => 200,
                                                                 'type' => 'text',
-                                                                'label' => __("CSS classes", "ml-slider"),
+                                                                'label' => esc_html__("CSS classes", "ml-slider"),
                                                                 'class' => 'option coin flex responsive nivo',
-                                                                'helptext' => __("Specify any custom CSS Classes you would like to be added to the slider wrapper", "ml-slider"),
+                                                                'helptext' => esc_html__("Specify any custom CSS Classes you would like to be added to the slider wrapper", "ml-slider"),
                                                                 'value' => $this->slider->get_setting('cssClass') == 'false' ? '' : $this->slider->get_setting('cssClass')
                                                             ),
                                                             'printCss' => array(
                                                                 'priority' => 210,
                                                                 'type' => 'checkbox',
-                                                                'label' => __("Print CSS", "ml-slider"),
+                                                                'label' => esc_html__("Print CSS", "ml-slider"),
                                                                 'class' => 'option coin flex responsive nivo useWithCaution',
                                                                 'checked' => $this->slider->get_setting('printCss') == 'true' ? 'checked' : '',
-                                                                'helptext' => __("Uncheck this is you would like to include your own CSS", "ml-slider")
+                                                                'helptext' => esc_html__("Uncheck this is you would like to include your own CSS", "ml-slider")
                                                             ),
                                                             'printJs' => array(
                                                                 'priority' => 220,
                                                                 'type' => 'checkbox',
-                                                                'label' => __("Print JS", "ml-slider"),
+                                                                'label' => esc_html__("Print JS", "ml-slider"),
                                                                 'class' => 'option coin flex responsive nivo useWithCaution',
                                                                 'checked' => $this->slider->get_setting('printJs') == 'true' ? 'checked' : '',
-                                                                'helptext' => __("Uncheck this is you would like to include your own Javascript", "ml-slider")
+                                                                'helptext' => esc_html__("Uncheck this is you would like to include your own Javascript", "ml-slider")
                                                             ),
                                                             'noConflict' => array(
                                                                 'priority' => 230,
                                                                 'type' => 'checkbox',
-                                                                'label' => __("No conflict mode", "ml-slider"),
+                                                                'label' => esc_html__("No conflict mode", "ml-slider"),
                                                                 'class' => 'option flex',
                                                                 'checked' => $this->slider->get_setting('noConflict') == 'true' ? 'checked' : '',
-                                                                'helptext' => __("Delay adding the flexslider class to the slideshow", "ml-slider")
+                                                                'helptext' => esc_html__("Delay adding the flexslider class to the slideshow", "ml-slider")
                                                             ),
                                                         );
 
@@ -1893,6 +1922,18 @@ if (!class_exists('MetaSliderPlugin')) {
 
             return $tag;
         }
+
+        static public function should_load_extendify_sdk()
+        {
+            $extendify_min_wp = '5.4';
+
+            require ABSPATH . WPINC . '/version.php';
+
+            return ! MetaSlider_Settings::get_instance()->get_disable_extendify_sdk()
+                && is_readable(__DIR__ . '/extendify-sdk/loader.php')
+                && apply_filters('extendifysdk_load_library', true)
+                && version_compare($wp_version, $extendify_min_wp, '>=');
+        }
     }
 
     if (! class_exists('MetaSlider_Settings')) {
@@ -1914,11 +1955,7 @@ if (!class_exists('MetaSliderPlugin')) {
     }
 
     // Load the Extendify SDK library
-    if (
-        ! MetaSlider_Settings::get_instance()->get_disable_extendify_sdk()
-        && is_readable(__DIR__ . '/extendify-sdk/loader.php')
-        && apply_filters('extendifysdk_load_library', true)
-    ) {
+    if (MetaSliderPlugin::should_load_extendify_sdk()) {
         if (! isset($GLOBALS['extendify_sdk_partner'])) {
             // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound
             $GLOBALS['extendify_sdk_partner'] = 'MetaSlider';

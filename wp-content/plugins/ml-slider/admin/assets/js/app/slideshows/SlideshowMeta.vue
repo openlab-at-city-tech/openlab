@@ -103,6 +103,7 @@ export default {
 		modifiedAt() {
 			return DateTime
 				.fromSQL(this.slideshow.modified_at_gmt, {zone: 'utc'})
+				.setLocale(metaslider.locale)
 				.toRelative()
 		},
 		loadSlideshow() {

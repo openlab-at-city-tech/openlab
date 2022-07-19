@@ -16,7 +16,7 @@
 		<div class="mt-5 sm:mt-0 sm:ml-6 sm:flex-shrink-0 sm:flex sm:items-center">
 			<span
 				:class="{ 'bg-gray-light': !value, 'bg-orange': value }"
-				:aria-checked="value.toString()"
+				:aria-checked="value ? value.toString() : false"
 				class="relative inline-block flex-no-shrink h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-50 focus:outline-none focus:shadow-outline"
 				role="checkbox"
 				tabindex="0"

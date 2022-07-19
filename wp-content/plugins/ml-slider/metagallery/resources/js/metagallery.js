@@ -1,4 +1,4 @@
-import 'alpine-magic-helpers/dist/component
+import 'alpine-magic-helpers/dist/component'
 import '@ryangjchandler/alpine-clipboard'
 import 'alpinejs'
 // import { Gallery as GalleryAPI } from './api'
@@ -10,7 +10,7 @@ import 'web-animations-js'
 
 // Hide nags - Doing this here instead of with CSS keeps users from thinking they have a blank screen
 // when another plugin has JS code running and breaking things.
-Array.from(document.querySelectorAll('#wpbody-content > *:not(.metagallery-allowed)')).forEach(element =>
+Array.from(document.querySelectorAll('#wpbody-content > *:not(.metagallery-allowed)')).forEach((element) =>
     element.style.setProperty('display', 'none', 'important'),
 )
 
