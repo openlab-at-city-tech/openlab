@@ -77,18 +77,11 @@ if ( $current_doc ) {
 									</p>
 
 									<div class="toggle-content">
-										<table class="toggle-table" id="toggle-table-tags">
-											<tr>
-												<td class="desc-column">
-													<label for="tax-input-bp_docs_tag"><?php _e('Tags are words or phrases that help to describe and organize your Docs.', 'bp-docs') ?></label>
-													<span class="description"><?php _e('Separate tags with commas (for example: <em>orchestra, snare drum, piccolo, Brahms</em>)', 'bp-docs') ?></span>
-												</td>
-
-												<td>
-													<?php bp_docs_post_tags_meta_box() ?>
-												</td>
-											</tr>
-										</table>
+										<div class="desc-column">
+											<p class="doc-meta-label"><?php _e('Tags are words or phrases that help to describe and organize your Docs.', 'bp-docs') ?></p>
+											<p class="description doc-meta-desc"><?php _e('Separate tags with commas (for example: <em>orchestra, snare drum, piccolo, Brahms</em>)', 'bp-docs') ?></p>
+										</div>
+										<?php bp_docs_post_tags_meta_box() ?>
 									</div>
 								</div>
 							</div>
@@ -101,19 +94,11 @@ if ( $current_doc ) {
 									</p>
 
 									<div class="toggle-content">
-										<table class="toggle-table" id="toggle-table-parent">
-											<tr>
-												<td class="desc-column">
-													<label for="parent_id"><?php _e('Select a parent for this Doc.', 'bp-docs') ?></label>
-
-													<span class="description"><?php _e('(Optional) Assigning a parent Doc means that a link to the parent will appear at the bottom of this Doc, and a link to this Doc will appear at the bottom of the parent.', 'bp-docs') ?></span>
-												</td>
-
-												<td class="content-column">
-													<?php bp_docs_edit_parent_dropdown() ?>
-												</td>
-											</tr>
-										</table>
+										<div class="desc-column">
+											<p class="doc-meta-label"><?php _e('Select a parent for this Doc. <em>(Optional)</em>', 'bp-docs') ?></p>
+											<p class="description doc-meta-desc"><?php _e('Assigning a parent Doc means that a link to the parent will appear at the bottom of this Doc, and a link to this Doc will appear at the bottom of the parent.', 'bp-docs') ?></span>
+										</div>
+										<?php bp_docs_edit_parent_dropdown() ?>
 									</div>
 								</div>
 							</div>

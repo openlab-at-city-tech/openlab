@@ -9,8 +9,6 @@
 
 <?php if ( ! bbp_is_single_forum() ) : ?>
 
-	<div id="bbpress-forums">
-
 	<?php bbp_breadcrumb(); ?>
 
 	<?php endif; ?>
@@ -35,9 +33,9 @@
 					<div class="panel-heading">
 						<?php
 						if ( bbp_is_topic_edit() ) {
-							printf( __( 'Now Editing &ldquo;%s&rdquo;', 'bbpress' ), bbp_get_topic_title() );
+							printf( __( 'Editing &ldquo;%s&rdquo;', 'bbpress' ), get_the_title( bbp_get_topic_id() ) );
 						} else {
-							bbp_is_single_forum() ? printf( __( 'Create New Topic in &ldquo;%s&rdquo;', 'bbpress' ), bbp_get_forum_title() ) : _e( 'Create New Topic', 'bbpress' );
+							_e( 'Create New Topic', 'bbpress' );
 						}
 						?>
 					</div>
@@ -195,30 +193,30 @@
 							<?php endif; ?>
 
 						</div>
+
+						<?php do_action( 'bbp_theme_before_topic_form_submit_wrapper' ); ?>
+
+						<div class="bbp-submit-wrapper">
+
+							<?php do_action( 'bbp_theme_before_topic_form_submit_button' ); ?>
+
+							<?php if ( ! bbp_is_topic_edit() ) : ?>
+								<div class="notify-group-members-ui">
+									<?php openlab_notify_group_members_ui( true ); ?>
+								</div>
+							<?php endif; ?>
+
+							<button type="submit" tabindex="<?php bbp_tab_index(); ?>" id="bbp_topic_submit" name="bbp_topic_submit" class="btn btn-primary submit"><?php esc_html_e( 'Submit', 'bbpress' ); ?></button>
+
+							<?php do_action( 'bbp_theme_after_topic_form_submit_button' ); ?>
+
+						</div>
+
+						<?php do_action( 'bbp_theme_after_topic_form_submit_wrapper' ); ?>
+
+						<?php bbp_topic_form_fields(); ?>
 					</div>
 				</div>
-
-				<?php do_action( 'bbp_theme_before_topic_form_submit_wrapper' ); ?>
-
-				<div class="bbp-submit-wrapper">
-
-					<?php do_action( 'bbp_theme_before_topic_form_submit_button' ); ?>
-
-					<?php if ( ! bbp_is_topic_edit() ) : ?>
-						<div class="notify-group-members-ui">
-							<?php openlab_notify_group_members_ui( true ); ?>
-						</div>
-					<?php endif; ?>
-
-					<button type="submit" tabindex="<?php bbp_tab_index(); ?>" id="bbp_topic_submit" name="bbp_topic_submit" class="btn btn-primary submit"><?php esc_html_e( 'Submit', 'bbpress' ); ?></button>
-
-					<?php do_action( 'bbp_theme_after_topic_form_submit_button' ); ?>
-
-				</div>
-
-				<?php do_action( 'bbp_theme_after_topic_form_submit_wrapper' ); ?>
-
-				<?php bbp_topic_form_fields(); ?>
 
 				<?php do_action( 'bbp_theme_after_topic_form' ); ?>
 
@@ -245,7 +243,5 @@
 	<?php endif; ?>
 
 	<?php if ( ! bbp_is_single_forum() ) : ?>
-
-	</div>
 
 <?php endif; ?>

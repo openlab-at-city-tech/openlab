@@ -9,8 +9,6 @@
 
 <?php if ( bbp_is_reply_edit() ) : ?>
 
-	<div id="bbpress-forums">
-
 		<?php bbp_breadcrumb(); ?>
 
 	<?php endif; ?>
@@ -24,7 +22,7 @@
 				<?php do_action( 'bbp_theme_before_reply_form' ); ?>
 
 				<div class="bbp-form panel panel-default">
-					<div class="panel-heading hyphenate"><?php printf( __( 'Reply To: %s', 'bbpress' ), bbp_get_topic_title() ); ?></div>
+					<div class="panel-heading hyphenate"><?php _e( 'Reply', 'openlab' ); ?></div>
 					<div class="panel-body">
 
 						<?php do_action( 'bbp_theme_before_reply_form_notices' ); ?>
@@ -139,8 +137,6 @@
 
 						<?php do_action( 'bbp_theme_before_reply_form_submit_button' ); ?>
 
-						<?php bbp_cancel_reply_to_link(); ?>
-
 						<?php if ( ! bbp_is_reply_edit() ) : ?>
 							<div class="notify-group-members-ui">
 								<?php openlab_notify_group_members_ui( true ); ?>
@@ -148,6 +144,8 @@
 						<?php endif; ?>
 
 						<button type="submit" tabindex="<?php bbp_tab_index(); ?>" id="bbp_reply_submit" name="bbp_reply_submit" class="btn  btn-primary submit"><?php _e( 'Submit', 'bbpress' ); ?></button>
+
+						<?php bbp_cancel_reply_to_link(); ?>
 
 						<?php do_action( 'bbp_theme_after_reply_form_submit_button' ); ?>
 
@@ -205,6 +203,5 @@
 
 	<?php if ( bbp_is_reply_edit() ) : ?>
 
-	</div>
 
 <?php endif; ?>

@@ -124,15 +124,7 @@ add_action(
  * Adding the forums submenu into the BBPress layout
  */
 function openlab_forum_tabs_output() {
-	?>
-	<div class="forum-nav">
-		<ul class="nav nav-inline">
-			<?php openlab_forum_tabs(); ?>
-		</ul>
-
-		<?php bbp_get_template_part( 'form', 'search' ); ?>
-	</div>
-	<?php
+	echo openlab_submenu_markup( 'group-forum' );
 }
 
 add_action( 'bbp_before_group_forum_display', 'openlab_forum_tabs_output' );
@@ -518,7 +510,7 @@ function openlab_remove_bbpress_forum_title( $title ) {
 			$is_single_forum_template = true;
 		}
 
-		if ( ! empty( $db['function'] ) && 'openlab_forum_tabs' === $db['function'] ) {
+		if ( ! empty( $db['function'] ) && 'openlab_group_forum_submenu' === $db['function'] ) {
 			$is_forum_nav = true;
 		}
 	}
@@ -677,3 +669,129 @@ function openlab_refresh_term_cache_after_ordering_update() {
 }
 
 add_action( 'tto/update-order', 'openlab_refresh_term_cache_after_ordering_update' );
+
+function openlab_forum_pagination_count( $html ) {
+	$bbp = bbpress();
+
+	// Define local variable(s)
+	$retstr = '';
+
+	// Topic query exists
+	if ( ! empty( $bbp->topic_query ) ) {
+
+		// Set pagination values
+		$count_int = intval( $bbp->topic_query->post_count );
+		$start_num = intval( ( $bbp->topic_query->paged - 1 ) * $bbp->topic_query->posts_per_page ) + 1;
+		$total_int = ! empty( $bbp->topic_query->found_posts )
+			? (int) $bbp->topic_query->found_posts
+			: $count_int;
+
+		// Format numbers for display
+		$count_num = bbp_number_format( $count_int );
+		$from_num  = bbp_number_format( $start_num );
+		$total     = bbp_number_format( $total_int );
+		$to_num    = bbp_number_format( ( $start_num + ( $bbp->topic_query->posts_per_page - 1 ) > $bbp->topic_query->found_posts )
+			? $bbp->topic_query->found_posts
+			: $start_num + ( $bbp->topic_query->posts_per_page - 1 ) );
+
+		// Several topics in a forum with a single page
+		if ( empty( $to_num ) ) {
+			$retstr = sprintf( _n( 'Viewing %1$s', 'Viewing %1$s', $total_int, 'bbpress' ), $total );
+
+		// Several topics in a forum with several pages
+		} else {
+			$retstr = sprintf( _n( 'Viewing topic %2$s (of %4$s total)', 'Viewing %2$s to %3$s (of %4$s total)', $total_int, 'bbpress' ), $count_num, $from_num, $to_num, $total );
+		}
+
+		// Escape results of _n()
+		$retstr = esc_html( $retstr );
+	}
+
+	return $retstr;
+}
+add_filter( 'bbp_get_forum_pagination_count', 'openlab_forum_pagination_count' );
+
+/**
+ * Change icons on the prev/next buttons in bbp topics pagination
+ */
+function openlab_bbp_topic_pagination($arr) {
+    $arr['next_text'] = '<span class="fa fa-long-arrow-right"></span>';
+	$arr['prev_text'] = '<span class="fa fa-long-arrow-left"></span>';
+	
+    return $arr;
+}
+add_filter( 'bbp_topic_pagination', 'openlab_bbp_topic_pagination' );
+
+function openlab_bbp_topic_pagination_count( $string ) {
+	$bbp = bbpress();
+
+	// We are threading replies
+	if ( bbp_thread_replies() ) {
+		$walker  = new BBP_Walker_Reply();
+		$threads = absint( $walker->get_number_of_root_elements( $bbp->reply_query->posts ) - 1 );
+		$string  = sprintf( _n( 'Viewing %1$s replies', 'Viewing %1$s replies', $threads, 'bbpress' ), bbp_number_format( $threads ) );
+	}
+
+	return $string;
+}
+add_filter( 'bbp_get_topic_pagination_count', 'openlab_bbp_topic_pagination_count' );
+
+
+function openlab_bbp_single_topic_description() {
+	return '';
+}
+add_filter( 'bbp_get_single_topic_description', 'openlab_bbp_single_topic_description' );
+
+function openlab_bp_docs_info_header_message() {
+	$filters = bp_docs_get_current_filters();
+	$message = '';
+
+	// All docs
+	if ( empty( $filters ) ) {
+		$message = __( 'Viewing <strong>All</strong> Docs', 'openlab' );	
+	} else {
+		
+		// Search
+		if ( ! empty( $filters['search_terms'] ) ) {
+			$message = sprintf( __( 'Viewing docs containing the term: %s', 'bp-docs' ), esc_html( $filters['search_terms'] ) );
+		}
+		
+		// Tag
+		if ( ! empty( $filters['tags'] ) ) {
+			$tagtext = array();
+	
+			foreach ( $filters['tags'] as $tag ) {
+				$tagtext[] = bp_docs_get_tag_link( array( 'tag' => $tag ) );
+			}
+	
+			$message = sprintf( __( 'Viewing docs with the tag: %s', 'buddypress-docs' ), implode( ', ', $tagtext ) );
+		}
+	}
+	?>
+	<p class="currently-viewing"><?php echo $message ?></p>	
+	<?php
+}
+
+add_filter( 'bp_docs_paginate_links', 'openlab_bp_docs_paginate_links' );
+function openlab_bp_docs_paginate_links() {
+	global $bp, $wp_query, $wp_rewrite;
+
+	$page_links_total = $bp->bp_docs->doc_query->max_num_pages;
+
+	$pagination_args = array(
+		'base' 		=> add_query_arg( 'paged', '%#%' ),
+		'format' 	=> '',
+		'prev_text' 	=> '<span class="fa fa-long-arrow-left">',
+		'next_text' 	=> '<span class="fa fa-long-arrow-right"></span>',
+		'total' 	=> $page_links_total,
+		'end_size'  => 2,
+	);
+
+	if ( $wp_rewrite->using_permalinks() ) {
+		$pagination_args['base'] = apply_filters( 'bp_docs_page_links_base_url', user_trailingslashit( trailingslashit( bp_docs_get_archive_link() ) . $wp_rewrite->pagination_base . '/%#%/', 'bp-docs-directory' ), $wp_rewrite->pagination_base );
+	}
+
+	$page_links = paginate_links( $pagination_args );
+
+	echo $page_links;
+}

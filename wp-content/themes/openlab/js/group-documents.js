@@ -62,6 +62,12 @@
             $('.submenu-item.item-all-files').addClass('current-menu-item');
         });
 
+        // Trigger cancel document comment
+        $(document).on( 'click', '#openlab-cancel-doc-reply', function(e) {
+            e.preventDefault();
+            $('#cancel-comment-reply-link')[0].click();
+        })
+
 	});
 
 }(jQuery));
