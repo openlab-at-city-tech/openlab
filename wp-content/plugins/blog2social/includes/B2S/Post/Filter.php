@@ -184,7 +184,7 @@ class B2S_Post_Filter {
         $networks = unserialize(B2S_PLUGIN_NETWORK);
         foreach ($networks as $var) {
             $networkId = array_search($var, $networks);
-            if(in_array($networkId, array(1, 2, 3, 4, 12, 6, 18, 19, 17, 16, 11, 14, 7, 9, 15, 24))) {
+            if(in_array($networkId, array(1, 2, 3, 4, 12, 6, 18, 19, 17, 16, 11, 14, 7, 9, 15, 24, 25, 26, 27))) {
                 $selected = ($networkId == (int) $this->searchSharedToNetwork) ? 'selected' : '';
                 $autor .= '<option ' . $selected . ' value="' . esc_attr($networkId) . '">' . esc_html($var) . '</option>';
             }

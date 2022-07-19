@@ -16,6 +16,9 @@ jQuery(window).on("load", function () {
     if (jQuery('.toggelbutton').is(':visible') && !jQuery("#b2s-wrapper").hasClass("toggled")) {
         jQuery('.btn-toggle-menu').trigger('click');
     }
+    if(jQuery('#b2sOpenDraftIncompleteModal').val() == '1') {
+        jQuery('#b2sDraftIncompleteModal').modal('show');
+    }
 });
 
 //Stop duplicate posts by page refreshing during the post process
@@ -698,7 +701,7 @@ jQuery(document).on("click", ".b2s-network-select-btn", function () {
             //TOS XING Groups
             if ((networkId == 8 || networkId == 19) && networkType == 2) {
                 if ((b2sTosXingGroupCount == jQuery('#b2sTosXingGroupCrosspostingLimit').val()) || (networkId == 19 && jQuery('.b2s-network-select-btn[data-network-id="' + networkId + '"][data-network-type="' + networkType + '"][data-network-tos-group-id="' + jQuery(this).attr('data-network-tos-group-id') + '"]').children().hasClass('active'))) {
-                    jQuery('#b2s-tos-xing-group-modal').modal('show');
+                    jQuery('#b2s-tos-xing-group-max-count-modal').modal('show');
                     return false;
                 } else {
                     b2sTosXingGroupCount++;
@@ -971,7 +974,7 @@ jQuery(document).on("click", ".b2s-network-select-btn", function () {
                                     var postFormatType = jQuery('.b2sNetworkSettingsPostFormatCurrent[data-network-type="' + data.networkType + '"][data-network-id="' + data.networkId + '"]').attr('data-post-format-type');
                                     if (jQuery('#user_version').val() >= 2) {
                                         //Multi Image
-                                        if (jQuery('.b2sNetworkSettingsPostFormatCurrent[data-network-type="' + data.networkType + '"][data-network-id="' + data.networkId + '"]').val() == 1 && ((data.networkId == 1 && (data.networkType == 1 || data.networkType == 2)) || (data.networkId == 2))) {
+                                        if ((jQuery('.b2sNetworkSettingsPostFormatCurrent[data-network-type="' + data.networkType + '"][data-network-id="' + data.networkId + '"]').val() == 1 && ((data.networkId == 1 && (data.networkType == 1 || data.networkType == 2)) || (data.networkId == 2))) || data.networkId == 12) {
                                             jQuery('.b2s-multi-image-area[data-network-auth-id="' + data.networkAuthId + '"]').show();
                                         }
                                         jQuery('.b2s-post-ship-item-post-format-text[data-network-auth-id="' + data.networkAuthId + '"]').html(postFormatText[postFormatType][jQuery('.b2sNetworkSettingsPostFormatCurrent[data-network-type="' + data.networkType + '"][data-network-id="' + data.networkId + '"]').val()]);
@@ -1102,6 +1105,23 @@ jQuery(document).on("click", ".b2s-network-select-btn", function () {
                                         }
                                     }
 
+                                }
+                                
+                                if(data.networkId == 4 && (jQuery('#b2sExPostFormat').val() == 0 || jQuery('#b2sExPostFormat').val() == 1 || jQuery('#b2sExPostFormat').val() == 2)) {
+                                    if (jQuery('#user_version').val() >= 1) {
+                                        var exPostFormat = jQuery('#b2sExPostFormat').val();
+                                        console.log(exPostFormat);
+                                        if (exPostFormat == 0) {
+                                            exPostFormat = 2;
+                                        }
+                                        if (exPostFormat == 1) {
+                                            exPostFormat = 0;
+                                        }
+                                        jQuery('.b2s-post-item-details-post-format[data-network-auth-id="'+data.networkAuthId+'"] option[value="'+0+'"]').removeAttr('selected');
+                                        jQuery('.b2s-post-item-details-post-format[data-network-auth-id="'+data.networkAuthId+'"] option[value="'+1+'"]').removeAttr('selected');
+                                        jQuery('.b2s-post-item-details-post-format[data-network-auth-id="'+data.networkAuthId+'"] option[value="'+2+'"]').removeAttr('selected');
+                                        jQuery('.b2s-post-item-details-post-format[data-network-auth-id="'+data.networkAuthId+'"] option[value="'+exPostFormat+'"]').attr('selected','selected').change();
+                                    }
                                 }
 
                                 //Draft
@@ -1272,6 +1292,7 @@ jQuery(document).on("click", ".b2s-network-select-btn", function () {
                                         jQuery('.b2s-add-multi-image-hidden-field[data-network-auth-id="' + data.networkAuthId + '"][data-image-count="1"]').val(data.draftActions.multi_image_1);
                                         jQuery('.b2s-post-item-details-url-image-multi[data-network-auth-id="' + data.networkAuthId + '"][data-image-count="1"]').show();
                                         jQuery('.b2s-multi-image-remove-btn[data-network-auth-id="' + data.networkAuthId + '"][data-image-count="1"]').show();
+                                        jQuery('.b2s-multi-image-zoom-btn[data-network-auth-id="' + data.networkAuthId + '"][data-image-count="1"]').show();
                                         jQuery('.b2s-add-multi-image[data-network-auth-id="' + data.networkAuthId + '"][data-image-count="1"]').hide();
                                         jQuery('.b2s-add-multi-image[data-network-auth-id="' + data.networkAuthId + '"][data-image-count="2"]').show();
                                         jQuery('.b2s-select-multi-image-modal-open[data-network-auth-id="' + data.networkAuthId + '"][data-image-count="1"]').show();
@@ -1281,18 +1302,81 @@ jQuery(document).on("click", ".b2s-network-select-btn", function () {
                                         jQuery('.b2s-add-multi-image-hidden-field[data-network-auth-id="' + data.networkAuthId + '"][data-image-count="2"]').val(data.draftActions.multi_image_2);
                                         jQuery('.b2s-post-item-details-url-image-multi[data-network-auth-id="' + data.networkAuthId + '"][data-image-count="2"]').show();
                                         jQuery('.b2s-multi-image-remove-btn[data-network-auth-id="' + data.networkAuthId + '"][data-image-count="2"]').show();
+                                        jQuery('.b2s-multi-image-zoom-btn[data-network-auth-id="' + data.networkAuthId + '"][data-image-count="2"]').show();
                                         jQuery('.b2s-add-multi-image[data-network-auth-id="' + data.networkAuthId + '"][data-image-count="2"]').hide();
                                         jQuery('.b2s-add-multi-image[data-network-auth-id="' + data.networkAuthId + '"][data-image-count="3"]').show();
                                         jQuery('.b2s-select-multi-image-modal-open[data-network-auth-id="' + data.networkAuthId + '"][data-image-count="2"]').show();
                                     }
                                     if (data.draftActions.multi_image_3 != "") {
-                                        jQuery('.b2s-post-item-details-url-image-multi[data-network-auth-id="' + data.networkAuthId + '"][data-image-count="2"]').attr('src', data.draftActions.multi_image_3);
-                                        jQuery('.b2s-add-multi-image-hidden-field[data-network-auth-id="' + data.networkAuthId + '"][data-image-count="2"]').val(data.draftActions.multi_image_3);
-                                        jQuery('.b2s-post-item-details-url-image-multi[data-network-auth-id="' + data.networkAuthId + '"][data-image-count="2"]').show();
-                                        jQuery('.b2s-multi-image-remove-btn[data-network-auth-id="' + data.networkAuthId + '"][data-image-count="2"]').show();
-                                        jQuery('.b2s-add-multi-image[data-network-auth-id="' + data.networkAuthId + '"][data-image-count="2"]').hide();
-                                        jQuery('.b2s-select-multi-image-modal-open[data-network-auth-id="' + data.networkAuthId + '"][data-image-count="2"]').show();
+                                        jQuery('.b2s-post-item-details-url-image-multi[data-network-auth-id="' + data.networkAuthId + '"][data-image-count="3"]').attr('src', data.draftActions.multi_image_3);
+                                        jQuery('.b2s-add-multi-image-hidden-field[data-network-auth-id="' + data.networkAuthId + '"][data-image-count="3"]').val(data.draftActions.multi_image_3);
+                                        jQuery('.b2s-post-item-details-url-image-multi[data-network-auth-id="' + data.networkAuthId + '"][data-image-count="3"]').show();
+                                        jQuery('.b2s-multi-image-remove-btn[data-network-auth-id="' + data.networkAuthId + '"][data-image-count="3"]').show();
+                                        jQuery('.b2s-multi-image-zoom-btn[data-network-auth-id="' + data.networkAuthId + '"][data-image-count="3"]').show();
+                                        jQuery('.b2s-add-multi-image[data-network-auth-id="' + data.networkAuthId + '"][data-image-count="3"]').hide();
+                                        jQuery('.b2s-add-multi-image[data-network-auth-id="' + data.networkAuthId + '"][data-image-count="4"]').show();
+                                        jQuery('.b2s-select-multi-image-modal-open[data-network-auth-id="' + data.networkAuthId + '"][data-image-count="3"]').show();
                                     }
+                                    if (data.draftActions.multi_image_4 != "") {
+                                        jQuery('.b2s-post-item-details-url-image-multi[data-network-auth-id="' + data.networkAuthId + '"][data-image-count="4"]').attr('src', data.draftActions.multi_image_4);
+                                        jQuery('.b2s-add-multi-image-hidden-field[data-network-auth-id="' + data.networkAuthId + '"][data-image-count="4"]').val(data.draftActions.multi_image_4);
+                                        jQuery('.b2s-post-item-details-url-image-multi[data-network-auth-id="' + data.networkAuthId + '"][data-image-count="4"]').show();
+                                        jQuery('.b2s-multi-image-remove-btn[data-network-auth-id="' + data.networkAuthId + '"][data-image-count="4"]').show();
+                                        jQuery('.b2s-multi-image-zoom-btn[data-network-auth-id="' + data.networkAuthId + '"][data-image-count="4"]').show();
+                                        jQuery('.b2s-add-multi-image[data-network-auth-id="' + data.networkAuthId + '"][data-image-count="4"]').hide();
+                                        jQuery('.b2s-add-multi-image[data-network-auth-id="' + data.networkAuthId + '"][data-image-count="5"]').show();
+                                        jQuery('.b2s-select-multi-image-modal-open[data-network-auth-id="' + data.networkAuthId + '"][data-image-count="4"]').show();
+                                    }
+                                    if (data.draftActions.multi_image_5 != "") {
+                                        jQuery('.b2s-post-item-details-url-image-multi[data-network-auth-id="' + data.networkAuthId + '"][data-image-count="5"]').attr('src', data.draftActions.multi_image_5);
+                                        jQuery('.b2s-add-multi-image-hidden-field[data-network-auth-id="' + data.networkAuthId + '"][data-image-count="5"]').val(data.draftActions.multi_image_5);
+                                        jQuery('.b2s-post-item-details-url-image-multi[data-network-auth-id="' + data.networkAuthId + '"][data-image-count="5"]').show();
+                                        jQuery('.b2s-multi-image-remove-btn[data-network-auth-id="' + data.networkAuthId + '"][data-image-count="5"]').show();
+                                        jQuery('.b2s-multi-image-zoom-btn[data-network-auth-id="' + data.networkAuthId + '"][data-image-count="5"]').show();
+                                        jQuery('.b2s-add-multi-image[data-network-auth-id="' + data.networkAuthId + '"][data-image-count="5"]').hide();
+                                        jQuery('.b2s-add-multi-image[data-network-auth-id="' + data.networkAuthId + '"][data-image-count="6"]').show();
+                                        jQuery('.b2s-select-multi-image-modal-open[data-network-auth-id="' + data.networkAuthId + '"][data-image-count="5"]').show();
+                                    }
+                                    if (data.draftActions.multi_image_6 != "") {
+                                        jQuery('.b2s-post-item-details-url-image-multi[data-network-auth-id="' + data.networkAuthId + '"][data-image-count="6"]').attr('src', data.draftActions.multi_image_6);
+                                        jQuery('.b2s-add-multi-image-hidden-field[data-network-auth-id="' + data.networkAuthId + '"][data-image-count="6"]').val(data.draftActions.multi_image_6);
+                                        jQuery('.b2s-post-item-details-url-image-multi[data-network-auth-id="' + data.networkAuthId + '"][data-image-count="6"]').show();
+                                        jQuery('.b2s-multi-image-remove-btn[data-network-auth-id="' + data.networkAuthId + '"][data-image-count="6"]').show();
+                                        jQuery('.b2s-multi-image-zoom-btn[data-network-auth-id="' + data.networkAuthId + '"][data-image-count="6"]').show();
+                                        jQuery('.b2s-add-multi-image[data-network-auth-id="' + data.networkAuthId + '"][data-image-count="6"]').hide();
+                                        jQuery('.b2s-add-multi-image[data-network-auth-id="' + data.networkAuthId + '"][data-image-count="7"]').show();
+                                        jQuery('.b2s-select-multi-image-modal-open[data-network-auth-id="' + data.networkAuthId + '"][data-image-count="6"]').show();
+                                    }
+                                    if (data.draftActions.multi_image_7 != "") {
+                                        jQuery('.b2s-post-item-details-url-image-multi[data-network-auth-id="' + data.networkAuthId + '"][data-image-count="7"]').attr('src', data.draftActions.multi_image_7);
+                                        jQuery('.b2s-add-multi-image-hidden-field[data-network-auth-id="' + data.networkAuthId + '"][data-image-count="7"]').val(data.draftActions.multi_image_7);
+                                        jQuery('.b2s-post-item-details-url-image-multi[data-network-auth-id="' + data.networkAuthId + '"][data-image-count="7"]').show();
+                                        jQuery('.b2s-multi-image-remove-btn[data-network-auth-id="' + data.networkAuthId + '"][data-image-count="7"]').show();
+                                        jQuery('.b2s-multi-image-zoom-btn[data-network-auth-id="' + data.networkAuthId + '"][data-image-count="7"]').show();
+                                        jQuery('.b2s-add-multi-image[data-network-auth-id="' + data.networkAuthId + '"][data-image-count="7"]').hide();
+                                        jQuery('.b2s-add-multi-image[data-network-auth-id="' + data.networkAuthId + '"][data-image-count="8"]').show();
+                                        jQuery('.b2s-select-multi-image-modal-open[data-network-auth-id="' + data.networkAuthId + '"][data-image-count="7"]').show();
+                                    }
+                                    if (data.draftActions.multi_image_8 != "") {
+                                        jQuery('.b2s-post-item-details-url-image-multi[data-network-auth-id="' + data.networkAuthId + '"][data-image-count="8"]').attr('src', data.draftActions.multi_image_8);
+                                        jQuery('.b2s-add-multi-image-hidden-field[data-network-auth-id="' + data.networkAuthId + '"][data-image-count="8"]').val(data.draftActions.multi_image_8);
+                                        jQuery('.b2s-post-item-details-url-image-multi[data-network-auth-id="' + data.networkAuthId + '"][data-image-count="8"]').show();
+                                        jQuery('.b2s-multi-image-remove-btn[data-network-auth-id="' + data.networkAuthId + '"][data-image-count="8"]').show();
+                                        jQuery('.b2s-multi-image-zoom-btn[data-network-auth-id="' + data.networkAuthId + '"][data-image-count="8"]').show();
+                                        jQuery('.b2s-add-multi-image[data-network-auth-id="' + data.networkAuthId + '"][data-image-count="8"]').hide();
+                                        jQuery('.b2s-add-multi-image[data-network-auth-id="' + data.networkAuthId + '"][data-image-count="9"]').show();
+                                        jQuery('.b2s-select-multi-image-modal-open[data-network-auth-id="' + data.networkAuthId + '"][data-image-count="8"]').show();
+                                    }
+                                    if (data.draftActions.multi_image_9 != "") {
+                                        jQuery('.b2s-post-item-details-url-image-multi[data-network-auth-id="' + data.networkAuthId + '"][data-image-count="9"]').attr('src', data.draftActions.multi_image_9);
+                                        jQuery('.b2s-add-multi-image-hidden-field[data-network-auth-id="' + data.networkAuthId + '"][data-image-count="9"]').val(data.draftActions.multi_image_9);
+                                        jQuery('.b2s-post-item-details-url-image-multi[data-network-auth-id="' + data.networkAuthId + '"][data-image-count="9"]').show();
+                                        jQuery('.b2s-multi-image-remove-btn[data-network-auth-id="' + data.networkAuthId + '"][data-image-count="9"]').show();
+                                        jQuery('.b2s-multi-image-zoom-btn[data-network-auth-id="' + data.networkAuthId + '"][data-image-count="9"]').show();
+                                        jQuery('.b2s-add-multi-image[data-network-auth-id="' + data.networkAuthId + '"][data-image-count="9"]').hide();
+                                        jQuery('.b2s-select-multi-image-modal-open[data-network-auth-id="' + data.networkAuthId + '"][data-image-count="9"]').show();
+                                    }
+                                    
                                 }
 
                                 //XING Groups
@@ -1433,7 +1517,7 @@ jQuery(document).on('change', '.b2s-post-item-details-release-input-date-select'
         if (jQuery(this).attr('data-network-id') == 2) {
             jQuery('.b2s-network-tos-sched-warning[data-network-auth-id="' + jQuery(this).attr('data-network-auth-id') + '"]').hide();
         }
-        if (jQuery('.b2s-post-item-details-post-format[data-network-auth-id="' + jQuery(this).attr('data-network-auth-id') + '"]').val() == 1) {
+        if (jQuery('.b2s-post-item-details-post-format[data-network-auth-id="' + jQuery(this).attr('data-network-auth-id') + '"]').val() == 1 || jQuery(this).attr('data-network-id') == 12) {
             jQuery('.b2s-multi-image-area[data-network-auth-id="' + jQuery(this).attr('data-network-auth-id') + '"][data-network-count="-1"]').show();
         }
     }
@@ -1463,7 +1547,7 @@ jQuery(document).on('change', '.b2s-post-item-details-release-input-date-select'
                 jQuery('.b2s-post-item-details-release-input-add[data-network-auth-id="' + jQuery(this).attr('data-network-auth-id') + '"][data-network-count="0"]').hide();
                 jQuery('.b2s-post-item-details-release-input-hide[data-network-auth-id="' + jQuery(this).attr('data-network-auth-id') + '"][data-network-count="1"').show();
             }
-            if (jQuery('.b2s-post-item-details-post-format[data-network-auth-id="' + jQuery(this).attr('data-network-auth-id') + '"]').val() == 1) {
+            if (jQuery('.b2s-post-item-details-post-format[data-network-auth-id="' + jQuery(this).attr('data-network-auth-id') + '"]').val() == 1 || jQuery(this).attr('data-network-id') == 12) {
                 jQuery('.b2s-multi-image-area[data-network-auth-id="' + jQuery(this).attr('data-network-auth-id') + '"][data-network-count="-1"]').show();
             }
         }
@@ -2096,7 +2180,7 @@ jQuery(document).on('click', '.b2s-upload-image', function () {
         });
         wpMedia.open();
         wpMedia.on('select', function () {
-            var validExtensions = ['jpg', 'jpeg', 'png', 'gif'];
+            var validExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
             var networkNotAllowGif = jQuery('#b2sNotAllowGif').val().split(";");
             var networkId = jQuery('input[name="b2s[' + networkAuthId + '][network_id]"]').val();
             var attachment = wpMedia.state().get('selection').first().toJSON();
@@ -2284,7 +2368,7 @@ jQuery.validator.addMethod('checkSched', function (value, element, rest) {
 });
 jQuery("#b2sNetworkSent").validate({
     ignore: "",
-    errorPlacement: function () {
+    errorPlacement: function (error, element) {
         return false;
     },
     submitHandler: function (form) {
@@ -3160,7 +3244,7 @@ function networkLimitAll(networkAuthId, networkId, limit) {
 }
 
 function networkCount(networkAuthId) {
-
+    var twitterLimit = 280;
     var networkCountId = -1; //default;
     if (jQuery(':focus').length > 0) {
         var attr = jQuery(':focus').attr('data-network-count');
@@ -3176,6 +3260,9 @@ function networkCount(networkAuthId) {
             url = "http://" + url;
             jQuery(".b2s-post-item-details-item-url-input[data-network-auth-id='" + networkAuthId + "']").val(url);
         }
+        if (jQuery(".b2s-post-item-details-item-message-input[data-network-auth-id='" + networkAuthId + "']").attr('data-network-id') == "2") { //twitter
+            twitterLimit = twitterLimit - 26;
+        }
     } else if (jQuery(".b2s-post-item-details-item-url-input[data-network-auth-id='" + networkAuthId + "']").hasClass("required_network_url")) {
         if (!((jQuery(".b2s-post-item-details-item-url-input[data-network-auth-id='" + networkAuthId + "']").attr('data-network-id') == 1 || jQuery(".b2s-post-item-details-item-url-input[data-network-auth-id='" + networkAuthId + "']").attr('data-network-id') == 3 || jQuery(".b2s-post-item-details-item-url-input[data-network-auth-id='" + networkAuthId + "']").attr('data-network-id') == 19) && jQuery('.b2s-post-item-details-post-format[data-network-auth-id=' + networkAuthId + ']').val() == 1)) { //Facebook & Linkedin Imagepost don't require Link
             url = jQuery("#b2sDefault_url").val();
@@ -3185,7 +3272,26 @@ function networkCount(networkAuthId) {
     if (typeof text !== 'undefined' && jQuery('.b2s-post-item-details-item-message-input-allow-html[data-network-auth-id="' + networkAuthId + '"]').length == 0) {
         var textLength = text.length;
         jQuery(".b2s-post-item-countChar[data-network-count='" + networkCountId + "'][data-network-auth-id='" + networkAuthId + "']").html(textLength);
+        if (jQuery(".b2s-post-item-details-item-message-input[data-network-auth-id='" + networkAuthId + "']").attr('data-network-id') == "2") {
+            var threadCount = Math.ceil(textLength / twitterLimit);
+            jQuery(".b2s-post-item-count-threads[data-network-count='" + networkCountId + "'][data-network-auth-id='" + networkAuthId + "']").html(threadCount);
+            if(threadCount >= 2) {
+                jQuery(".b2s-post-item-show-thread-count[data-network-count='" + networkCountId + "'][data-network-auth-id='" + networkAuthId + "']").show();
+            } else {
+                jQuery(".b2s-post-item-show-thread-count[data-network-count='" + networkCountId + "'][data-network-auth-id='" + networkAuthId + "']").hide();
+            }
+        }
     }
+    if (jQuery(".b2s-post-item-details-item-message-input[data-network-auth-id='" + networkAuthId + "']").attr('data-network-id') == "12") { //instagram
+        var matches = text.match(/(#[^# ]{1,})/g);
+        if (matches != null && matches.length > 30) {
+            jQuery('.b2s-content-info[data-network-auth-id="' + networkAuthId + '"]').show();
+            jQuery(".b2s-post-item-details-item-message-input[data-network-count='" + networkCountId + "'][data-network-auth-id='" + networkAuthId + "']").addClass("warning");
+        } else {
+            jQuery('.b2s-content-info[data-network-auth-id="' + networkAuthId + '"]').hide();
+            jQuery(".b2s-post-item-details-item-message-input[data-network-count='" + networkCountId + "'][data-network-auth-id='" + networkAuthId + "']").removeClass("warning");
+        }
+    }    
 }
 
 
@@ -3879,6 +3985,7 @@ jQuery(document).on('click', '.b2s-image-add-this-network', function () {
         jQuery('.b2s-add-multi-image-hidden-field[data-network-auth-id="' + authId + '"][data-image-count="' + imageCount + '"]').val(currentImage);
         jQuery('.b2s-post-item-details-url-image-multi[data-network-auth-id="' + authId + '"][data-image-count="' + imageCount + '"]').show();
         jQuery('.b2s-multi-image-remove-btn[data-network-auth-id="' + authId + '"][data-image-count="' + imageCount + '"]').show();
+        jQuery('.b2s-multi-image-zoom-btn[data-network-auth-id="' + authId + '"][data-image-count="' + imageCount + '"]').show();
         jQuery('.b2s-add-multi-image[data-network-auth-id="' + authId + '"][data-image-count="' + imageCount + '"]').hide();
         jQuery('.b2s-add-multi-image[data-network-auth-id="' + authId + '"][data-image-count="' + (parseInt(imageCount) + 1) + '"]').show();
         jQuery('.b2s-select-multi-image-modal-open[data-network-auth-id="' + authId + '"][data-image-count="' + imageCount + '"]').show();
@@ -3887,6 +3994,7 @@ jQuery(document).on('click', '.b2s-image-add-this-network', function () {
         jQuery('.b2s-add-multi-image-hidden-field[data-network-auth-id="' + authId + '"][data-image-count="' + imageCount + '"][data-network-count="' + countId + '"]').val(currentImage);
         jQuery('.b2s-post-item-details-url-image-multi[data-network-auth-id="' + authId + '"][data-image-count="' + imageCount + '"][data-network-count="' + countId + '"]').show();
         jQuery('.b2s-multi-image-remove-btn[data-network-auth-id="' + authId + '"][data-image-count="' + imageCount + '"][data-network-count="' + countId + '"]').show();
+        jQuery('.b2s-multi-image-zoom-btn[data-network-auth-id="' + authId + '"][data-image-count="' + imageCount + '"][data-network-count="' + countId + '"]').show();
         jQuery('.b2s-add-multi-image[data-network-auth-id="' + authId + '"][data-image-count="' + imageCount + '"][data-network-count="' + countId + '"]').hide();
         jQuery('.b2s-add-multi-image[data-network-auth-id="' + authId + '"][data-image-count="' + (parseInt(imageCount) + 1) + '"][data-network-count="' + countId + '"]').show();
         jQuery('.b2s-select-multi-image-modal-open[data-network-auth-id="' + authId + '"][data-image-count="' + imageCount + '"][data-network-count="' + countId + '"]').show();
@@ -3903,6 +4011,7 @@ jQuery(document).on('click', '.b2s-multi-image-remove-btn', function () {
     jQuery('.b2s-add-multi-image-hidden-field[data-network-auth-id="' + authId + '"][data-image-count="' + imageCount + '"][data-network-count="' + countId + '"]').val('');
     jQuery('.b2s-post-item-details-url-image-multi[data-network-auth-id="' + authId + '"][data-image-count="' + imageCount + '"][data-network-count="' + countId + '"]').hide();
     jQuery('.b2s-multi-image-remove-btn[data-network-auth-id="' + authId + '"][data-image-count="' + imageCount + '"][data-network-count="' + countId + '"]').hide();
+    jQuery('.b2s-multi-image-zoom-btn[data-network-auth-id="' + authId + '"][data-image-count="' + imageCount + '"][data-network-count="' + countId + '"]').hide();
     jQuery('.b2s-add-multi-image[data-network-auth-id="' + authId + '"][data-image-count="' + imageCount + '"][data-network-count="' + countId + '"]').show();
     jQuery('.b2s-add-multi-image[data-network-auth-id="' + authId + '"][data-image-count="' + (parseInt(imageCount) + 1) + '"][data-network-count="' + countId + '"]').hide();
     jQuery('.b2s-select-multi-image-modal-open[data-network-auth-id="' + authId + '"][data-image-count="' + imageCount + '"][data-network-count="' + countId + '"]').hide();
@@ -4282,7 +4391,7 @@ function changePostFormat(networkId, networkType, postFormat, networkAuthId, pos
     checkGifAnimation(networkAuthId, networkId);
 
     //Multi Image
-    if (postFormat == 1 && ((networkId == 1 && (networkType == 1 || networkType == 2)) || (networkId == 2)) && jQuery('.b2s-post-item-details-release-input-date-select[data-network-auth-id="' + networkAuthId + '"]').val() != 1) {
+    if (((postFormat == 1 && ((networkId == 1 && (networkType == 1 || networkType == 2)) || (networkId == 2) || (networkId == 3 && (networkType == 0 || networkType == 1)))) ||  networkId == 12) && jQuery('.b2s-post-item-details-release-input-date-select[data-network-auth-id="' + networkAuthId + '"]').val() != 1) {
         jQuery('.b2s-multi-image-area[data-network-auth-id="' + networkAuthId + '"][data-network-count="-1"]').show();
     } else {
         jQuery('.b2s-multi-image-area[data-network-auth-id="' + networkAuthId + '"][data-network-count="-1"]').hide();
@@ -4324,4 +4433,14 @@ jQuery(document).on('change', '.b2s-post-item-details-post-format[data-network-i
         jQuery('.b2s-format-area-tumblr-image[data-network-auth-id="' + networkAuthId + '"]').hide();
         jQuery('.b2s-post-item-details-item-message-area[data-network-auth-id="' + networkAuthId + '"]').show();
     }
+});
+
+
+jQuery(document).on('click', '.b2s-multi-image-zoom-btn', function () {
+    var img = jQuery(this).closest('.text-center').find('.b2s-post-item-details-url-image-multi').attr('src');
+    if(img != '') {
+        jQuery('#b2sImageZoomModal').modal('show');
+        jQuery('#b2sImageZoom').attr('src', img);
+    }
+    return false;
 });

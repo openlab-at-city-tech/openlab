@@ -81,7 +81,9 @@ jQuery('#b2s-post-ship-item-post-format-modal').on('hidden.bs.modal', function (
 jQuery('#b2s-info-change-meta-tag-modal').on('hidden.bs.modal', function () {
     jQuery('body').addClass('modal-open');
 });
-
+jQuery('#b2sImageZoomModal').on('hidden.bs.modal', function () {
+    jQuery('body').addClass('modal-open');
+});
 
 jQuery(document).on('click', '.b2sDetailsPublishPostBtn', function () {
     var postId = jQuery(this).attr('data-post-id');

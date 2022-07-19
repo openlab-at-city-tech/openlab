@@ -7206,6 +7206,7 @@ input[type="checkbox"].error + label{
 
 .clearfix{
     display: block !important;
+    -webkit-perspective: none !important;
 }
 
 .b2s-color-green{
@@ -7832,4 +7833,39 @@ CSS CheckBOX
 }
 .btn-instapaper:hover {
     color: #fff;
+}
+
+.btn-outline-dark {
+    color: #343a40;
+    background-color: transparent;
+    background-image: none;
+    border-color: #343a40;
+}
+
+.btn-outline-dark:hover {
+    color: #fff;
+    background-color: #343a40;
+    border-color: #343a40;
+}
+
+@media (min-width: 1560px) {
+    .b2s-margin-right-20 {
+        margin-right: 20px;
+    }
+}
+
+.b2s-bold{
+    font-weight: 600;
+}
+
+.padding-lr-40 {
+    padding: 0px 40px !important;
+}
+
+.b2s-dash {
+    border-top: 5px solid black;
+}
+
+.b2s-text-black {
+    color: black;
 }

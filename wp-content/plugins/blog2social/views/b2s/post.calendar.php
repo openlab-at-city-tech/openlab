@@ -22,17 +22,25 @@ $metaSettings = get_option('B2S_PLUGIN_GENERAL_OPTIONS');
 <div class="b2s-container">
     <div class="b2s-inbox">
         <div class="col-md-12 del-padding-left">
+            <?php require_once (B2S_PLUGIN_DIR . 'views/b2s/html/sidebar.php'); ?>
             <div class="col-md-9 del-padding-left del-padding-right">
                 <!--Header|Start - Include-->
                 <?php require_once (B2S_PLUGIN_DIR . 'views/b2s/html/header.php'); ?>
                 <!--Header|End-->
+                <div class="clearfix"></div>
+                <!--Navbar|Start-->
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                         <?php require_once (B2S_PLUGIN_DIR . 'views/b2s/html/post.navbar.php'); ?>
+                    </div>
+                </div>
+                <!--Navbar|End-->
                 <div class="clearfix"></div>
                 <!--Content|Start-->
                 <div class="panel panel-default">
                     <div class="panel-body">
                         <div>
                             <div class="grid-body">
-                                <?php require_once (B2S_PLUGIN_DIR . 'views/b2s/html/post.navbar.php'); ?>
                                 <div class="clearfix"></div>
                                 <div class="col-md-12 b2s-calendar-filter form-inline del-padding-left del-padding-right">
                                     <div class="b2s-calendar-filter-network-legend-text">
@@ -50,7 +58,43 @@ $metaSettings = get_option('B2S_PLUGIN_GENERAL_OPTIONS');
                                     if (!empty($filterNetwork)) {
                                         ?>
                                         <div class="b2s-calendar-filter-network-list">
-                                            <?php echo $filterNetwork ?>
+                                            <?php echo wp_kses($filterNetwork, array(
+                                        'div' => array(
+                                            'class' => array()
+                                        ),
+                                        'input' => array(
+                                            'id' => array(),
+                                            'name' => array(),
+                                            'class' => array(),
+                                            'value' => array(),
+                                            'type' => array(),
+                                            'placeholder' => array(),
+                                            'checked' => array(),
+                                        ),
+                                        'a' => array(
+                                            'href' => array(),
+                                            'id' => array(),
+                                            'class' => array()
+                                        ),
+                                        'span' => array(
+                                            'class' => array()
+                                        ),
+                                        'small' => array(),
+                                        'label' => array(),
+                                        'select' => array(
+                                            'id' => array(),
+                                            'name' => array(),
+                                            'class' => array()
+                                        ),
+                                        'option' => array(
+                                            'value' => array()
+                                        ),
+                                        'img' => array(
+                                            'class' => array(),
+                                            'alt' => array(),
+                                            'src' => array()
+                                        )
+                                    )); ?>
                                         </div>
                                         <div class="b2s-calendar-filter-network-account-list"></div>
                                     <?php }
@@ -66,12 +110,12 @@ $metaSettings = get_option('B2S_PLUGIN_GENERAL_OPTIONS');
                                 <div id='b2s_calendar'></div>
                                 <br>
                                 <script>
-                                    var b2s_calendar_locale = '<?= strtolower(substr(get_locale(), 0, 2)); ?>';
-                                    var b2s_calendar_date = '<?= B2S_Util::getbyIdentLocalDate($userTimeZoneOffset, "Y-m-d"); ?>';
-                                    var b2s_calendar_datetime = '<?= B2S_Util::getbyIdentLocalDate($userTimeZoneOffset); ?>';
-                                    var b2s_has_premium = <?= B2S_PLUGIN_USER_VERSION > 0 ? "true" : "false"; ?>;
-                                    var b2s_plugin_url = '<?= B2S_PLUGIN_URL; ?>';
-                                    var b2s_calendar_formats = <?= json_encode(array('post' => array(esc_html__('Link Post', 'blog2social'), esc_html__('Image Post', 'blog2social')), 'image' => array(esc_html__('Image with frame', 'blog2social'), esc_html__('Image cut out', 'blog2social')))); ?>;
+                                    var b2s_calendar_locale = '<?php echo esc_js(strtolower(substr(get_locale(), 0, 2))); ?>';
+                                    var b2s_calendar_date = '<?php echo esc_js(B2S_Util::getbyIdentLocalDate($userTimeZoneOffset, "Y-m-d")); ?>';
+                                    var b2s_calendar_datetime = '<?php echo esc_js(B2S_Util::getbyIdentLocalDate($userTimeZoneOffset)); ?>';
+                                    var b2s_has_premium = <?php echo esc_js(((B2S_PLUGIN_USER_VERSION > 0) ? "true" : "false")); ?>;
+                                    var b2s_plugin_url = '<?php echo esc_url(B2S_PLUGIN_URL); ?>';
+                                    var b2s_calendar_formats = <?php echo json_encode(array('post' => array(esc_html__('Link Post', 'blog2social'), esc_html__('Image Post', 'blog2social')), 'image' => array(esc_html__('Image with frame', 'blog2social'), esc_html__('Image cut out', 'blog2social')))); ?>;
                                     var b2s_is_calendar = true;
                                 </script>
                             </div>
@@ -83,30 +127,29 @@ $metaSettings = get_option('B2S_PLUGIN_GENERAL_OPTIONS');
                     </div>
                 </div>
             </div>
-            <?php require_once (B2S_PLUGIN_DIR . 'views/b2s/html/sidebar.php'); ?>
         </div>
     </div>
 </div>
 
-<input type="hidden" id="b2sLang" value="<?php echo substr(B2S_LANGUAGE, 0, 2); ?>">
-<input type="hidden" id="b2sUserTimeFormat" value="<?php echo $optionUserTimeFormat; ?>">
+<input type="hidden" id="b2sLang" value="<?php echo esc_attr(substr(B2S_LANGUAGE, 0, 2)); ?>">
+<input type="hidden" id="b2sUserTimeFormat" value="<?php echo esc_attr($optionUserTimeFormat); ?>">
 <input type="hidden" id="b2sJSTextAddPost" value="<?php esc_html_e("add post", "blog2social"); ?>">                    
-<input type="hidden" id="b2sUserLang" value="<?php echo strtolower(substr(get_locale(), 0, 2)); ?>">
-<input type='hidden' id="user_timezone" name="user_timezone" value="<?php echo $userTimeZoneOffset; ?>">
-<input type="hidden" id="user_version" name="user_version" value="<?php echo B2S_PLUGIN_USER_VERSION; ?>">
-<input type="hidden" id="b2sDefaultNoImage" value="<?php echo plugins_url('/assets/images/no-image.png', B2S_PLUGIN_FILE); ?>">
+<input type="hidden" id="b2sUserLang" value="<?php echo esc_attr(strtolower(substr(get_locale(), 0, 2))); ?>">
+<input type='hidden' id="user_timezone" name="user_timezone" value="<?php echo esc_attr($userTimeZoneOffset); ?>">
+<input type="hidden" id="user_version" name="user_version" value="<?php echo esc_attr(B2S_PLUGIN_USER_VERSION); ?>">
+<input type="hidden" id="b2sDefaultNoImage" value="<?php echo esc_url(plugins_url('/assets/images/no-image.png', B2S_PLUGIN_FILE)); ?>">
 <input type="hidden" id="b2sPostId" value="">
 <input type="hidden" id="b2sInsertImageType" value="0">
 <input type="hidden" id="isOgMetaChecked" value="<?php echo (isset($metaSettings['og_active']) ? (int) $metaSettings['og_active'] : 0); ?>">
 <input type="hidden" id="isCardMetaChecked" value="<?php echo (isset($metaSettings['card_active']) ? (int) $metaSettings['card_active'] : 0); ?>">
-<input type="hidden" id="b2sRedirectUrlContentCuration" value="<?php echo get_option('siteurl') . ((substr(get_option('siteurl'), -1, 1) == '/') ? '' : '/') . 'wp-admin/admin.php?page=blog2social-curation'; ?>">
-<input type="hidden" id="b2sNotAllowGif" value="<?php echo implode(";", json_decode(B2S_PLUGIN_NETWORK_NOT_ALLOW_GIF, true)); ?>">
-<input type="hidden" id="b2sAnimateGif" value='<?php echo B2S_PLUGIN_NETWORK_ANIMATE_GIF; ?>'>
-<input type="hidden" id="ogMetaNetworks" value="<?php echo implode(';', json_decode(B2S_PLUGIN_NETWORK_META_TAGS, true)['og']); ?>">
-<input type="hidden" id="b2sEmojiTranslation" value='<?php echo json_encode(B2S_Tools::getEmojiTranslationList()); ?>'>
+<input type="hidden" id="b2sRedirectUrlContentCuration" value="<?php echo esc_url(get_option('siteurl') . ((substr(get_option('siteurl'), -1, 1) == '/') ? '' : '/') . 'wp-admin/admin.php?page=blog2social-curation'); ?>">
+<input type="hidden" id="b2sNotAllowGif" value="<?php echo esc_attr(implode(";", json_decode(B2S_PLUGIN_NETWORK_NOT_ALLOW_GIF, true))); ?>">
+<input type="hidden" id="b2sAnimateGif" value='<?php echo esc_attr(B2S_PLUGIN_NETWORK_ANIMATE_GIF); ?>'>
+<input type="hidden" id="ogMetaNetworks" value="<?php echo esc_attr(implode(';', json_decode(B2S_PLUGIN_NETWORK_META_TAGS, true)['og'])); ?>">
+<input type="hidden" id="b2sEmojiTranslation" value='<?php echo esc_attr(json_encode(B2S_Tools::getEmojiTranslationList())); ?>'>
 <!--Routing from dashboard-->
 <input type="hidden" id="b2s_rfd" value="<?php echo (isset($_GET['rfd'])) ? 1 : 0; ?>">
-<input type="hidden" id="b2s_rfd_b2s_id" value="<?php echo (isset($_GET['b2s_id'])) ? esc_attr($_GET['b2s_id']) : ""; ?>">
+<input type="hidden" id="b2s_rfd_b2s_id" value="<?php echo (isset($_GET['b2s_id'])) ? esc_attr(sanitize_text_field(wp_unslash($_GET['b2s_id']))) : ""; ?>">
 
 <div id="b2s-post-ship-item-post-format-modal" class="modal fade" role="dialog" aria-labelledby="b2s-post-ship-item-post-format-modal" aria-hidden="true" data-backdrop="false" style="display:none;z-index: 1070;">
     <div class="modal-dialog modal-lg">
@@ -124,8 +167,52 @@ $metaSettings = get_option('B2S_PLUGIN_GENERAL_OPTIONS');
                     <div class="col-xs-12">
                         <?php
                         $settingsItem = new B2S_Settings_Item();
-                        echo $settingsItem->setNetworkSettingsHtml();
-                        echo $settingsItem->getNetworkSettingsHtml();
+                        echo wp_kses($settingsItem->setNetworkSettingsHtml(), array(
+                            'input' => array(
+                                'type' => array(),
+                                'class' => array(),
+                                'value' => array(),
+                                'data-post-format-type' => array(),
+                                'data-network-id' => array(),
+                                'data-network-type' => array()
+                            )
+                        ));
+                        echo wp_kses($settingsItem->getNetworkSettingsHtml(), array(
+                            'div' => array(
+                                'class' => array(),
+                                'data-post-format-type' => array(),
+                                'data-network-type' => array(),
+                                'data-network-id' => array(),
+                                'data-network-title' => array(),
+                                'style' => array()
+                            ),
+                            'b' => array(),
+                            'br' => array(),
+                            'a' => array(
+                                'target' => array(),
+                                'href' => array()
+                            ),
+                            'hr' => array(),
+                            'span' => array(
+                                'class' => array()
+                            ),
+                            'label' => array(),
+                            'input' => array(
+                                'type' => array(),
+                                'name' => array(),
+                                'value' => array(),
+                                'class' => array(),
+                                'data-post-wp-type' => array(),
+                                'data-post-format-type' => array(),
+                                'data-network-type' => array(),
+                                'data-network-id' => array(),
+                                'data-post-format' => array()
+                            ),
+                            'img' => array(
+                                'class' => array(),
+                                'src' => array()
+                            )
+                        ));
                         ?>
                     </div>
                 </div>
@@ -183,7 +270,7 @@ $metaSettings = get_option('B2S_PLUGIN_GENERAL_OPTIONS');
                     <div class="col-md-6 col-xs-12">
                         <div class="b2s-post-type-area text-center">
                             <div class="image">
-                                <img class="img-width-150" src="<?php echo plugins_url('/assets/images/b2s/blog-post-icon.png', B2S_PLUGIN_FILE); ?>" alt="blog post">
+                                <img class="img-width-150" src="<?php echo esc_url(plugins_url('/assets/images/b2s/blog-post-icon.png', B2S_PLUGIN_FILE)); ?>" alt="blog post">
                             </div>
                             <div class="text">
                                 <?php esc_html_e("Share your WordPress posts, pages or products", "blog2social") ?>
@@ -196,7 +283,7 @@ $metaSettings = get_option('B2S_PLUGIN_GENERAL_OPTIONS');
                     <div class="col-md-6 col-xs-12">
                         <div class="b2s-post-type-area text-center">
                             <div class="image">
-                                <img class="img-width-150" src="<?php echo plugins_url('/assets/images/b2s/content-curation-icon.png', B2S_PLUGIN_FILE); ?>" alt="content curation">
+                                <img class="img-width-150" src="<?php echo esc_url(plugins_url('/assets/images/b2s/content-curation-icon.png', B2S_PLUGIN_FILE)); ?>" alt="content curation">
                             </div>
                             <div class="text">
                                 <?php esc_html_e("Create or share content from other sources", "blog2social") ?>
@@ -236,7 +323,36 @@ $metaSettings = get_option('B2S_PLUGIN_GENERAL_OPTIONS');
                                         <input id="b2sPagination" type="hidden" value="1" name="b2sPagination">
                                         <?php
                                         $postFilter = new B2S_Post_Filter('all');
-                                        echo $postFilter->getItemHtml();
+                                        echo wp_kses($postFilter->getItemHtml(), array(
+                                                'div' => array(
+                                                'class' => array()
+                                            ),
+                                            'input' => array(
+                                                'id' => array(),
+                                                'name' => array(),
+                                                'class' => array(),
+                                                'value' => array(),
+                                                'type' => array(),
+                                                'placeholder' => array(),
+                                            ),
+                                            'a' => array(
+                                                'href' => array(),
+                                                'id' => array(),
+                                                'class' => array()
+                                            ),
+                                            'span' => array(
+                                                'class' => array()
+                                            ),
+                                            'small' => array(),
+                                            'select' => array(
+                                                'id' => array(),
+                                                'name' => array(),
+                                                'class' => array()
+                                            ),
+                                            'option' => array(
+                                                'value' => array()
+                                            )
+                                        ));
                                         ?>
                                     </form>
                                 </div>
@@ -320,6 +436,17 @@ $metaSettings = get_option('B2S_PLUGIN_GENERAL_OPTIONS');
                         <div class="alert alert-danger b2s-error-text"></div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="b2sImageZoomModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="b2sImageZoomModal" aria-hidden="true" data-backdrop="false"  style="display:none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <button type="button" class="btn btn-primary btn-circle b2sImageZoomModalClose b2s-modal-close close" data-modal-name="#b2sImageZoomModal" aria-label="Close"><i class="glyphicon glyphicon-remove"></i></button>
+                <img id="b2sImageZoom">
             </div>
         </div>
     </div>

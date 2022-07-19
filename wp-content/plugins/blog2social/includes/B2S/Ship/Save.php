@@ -128,6 +128,7 @@ class B2S_Ship_Save {
         $this->postData['post'] = serialize($this->postData['post']);
         $result = json_decode(B2S_Api_Post::post(B2S_PLUGIN_API_ENDPOINT, $this->postData,90));
         
+        $insertInsights = true;
         foreach ($postData as $k => $v) {
             $found = false;
             $networkId = (isset($v['network_id']) && (int) $v['network_id'] > 0) ? (int) $v['network_id'] : 0;
@@ -156,7 +157,24 @@ class B2S_Ship_Save {
 
                         $found = true;
                     }
+                    if ($insertInsights == true && isset($post->external_post_id) && !empty($post->external_post_id) && isset($post->insights) && !empty($post->insights)) {
+                        $sql = "SELECT id FROM {$wpdb->prefix}b2s_posts_network_details WHERE network_auth_id = %d";
+                        $postsNetworkDetailsId = $wpdb->get_results($wpdb->prepare($sql, $post->network_auth_id), ARRAY_A);
+                        if(isset($postsNetworkDetailsId[0]['id']) && (int) $postsNetworkDetailsId[0]['id'] > 0) {
+                            $insightData = array(
+                                'network_post_id' => $post->external_post_id,
+                                'insight' => json_encode($post->insights),
+                                'blog_user_id' => B2S_PLUGIN_BLOG_USER_ID,
+                                'b2s_posts_id' => (int) $post->internal_post_id,
+                                'b2s_posts_network_details_id' => (int) $postsNetworkDetailsId[0]['id'],
+                                'last_update' => date('Y-m-d H:i:s'),
+                                'active' => 1
+                            );
+                            $wpdb->insert($wpdb->prefix.'b2s_posts_insights', $insightData, array('%s', '%s', '%d', '%d', '%d', '%s', '%d'));
+                        }
+                    }
                 }
+                $insertInsights = false;
             }
 //DEFAULT ERROR
             if ($found == false) {
@@ -204,7 +222,7 @@ class B2S_Ship_Save {
 
     public function saveSchedDetails($data, $schedData, $relayData = array()) {
         global $wpdb;
-
+        
         $shipdays = array();
         $serializeData = $data;
         $networkDetailsId = $this->getNetworkDetailsId($data['network_id'], $data['network_type'], $data['network_auth_id'], $data['network_display_name']);
@@ -252,6 +270,24 @@ class B2S_Ship_Save {
                     }
                     if (isset($schedData['sched_multi_image_3'][$key]) && !empty($schedData['sched_multi_image_3'][$key])) {
                         array_push($multi_images, $schedData['sched_multi_image_3'][$key]);
+                    }
+                    if (isset($schedData['sched_multi_image_4'][$key]) && !empty($schedData['sched_multi_image_4'][$key])) {
+                        array_push($multi_images, $schedData['sched_multi_image_4'][$key]);
+                    }
+                    if (isset($schedData['sched_multi_image_5'][$key]) && !empty($schedData['sched_multi_image_5'][$key])) {
+                        array_push($multi_images, $schedData['sched_multi_image_5'][$key]);
+                    }
+                    if (isset($schedData['sched_multi_image_6'][$key]) && !empty($schedData['sched_multi_image_6'][$key])) {
+                        array_push($multi_images, $schedData['sched_multi_image_6'][$key]);
+                    }
+                    if (isset($schedData['sched_multi_image_7'][$key]) && !empty($schedData['sched_multi_image_7'][$key])) {
+                        array_push($multi_images, $schedData['sched_multi_image_7'][$key]);
+                    }
+                    if (isset($schedData['sched_multi_image_8'][$key]) && !empty($schedData['sched_multi_image_8'][$key])) {
+                        array_push($multi_images, $schedData['sched_multi_image_8'][$key]);
+                    }
+                    if (isset($schedData['sched_multi_image_9'][$key]) && !empty($schedData['sched_multi_image_9'][$key])) {
+                        array_push($multi_images, $schedData['sched_multi_image_9'][$key]);
                     }
                     if(!empty($multi_images)) {
                         $serializeData['multi_images'] = json_encode($multi_images);
@@ -465,7 +501,7 @@ class B2S_Ship_Save {
             }
 
             if($network_id == 12 && $error == 'DEFAULT') {
-                $networkError12 = sprintf(__('Your post could not be posted. More information in this <a href="%s" target="_blank">Instagram troubleshoot checklist</a>.', 'blog2social'), B2S_Tools::getSupportLink('instagram_error_business'));
+                $networkError12 = sprintf(__('Your post could not be posted. More information in this <a href="%s" target="_blank">Instagram troubleshoot checklist</a>.', 'blog2social'), esc_url(B2S_Tools::getSupportLink('instagram_error_business')));
                 $html .= '<br><span class="text-danger"><i class="glyphicon glyphicon-remove-circle glyphicon-danger"></i> ' . $networkError12 . $add . '</span>';
             } else {
                 $html .= '<br><span class="text-danger"><i class="glyphicon glyphicon-remove-circle glyphicon-danger"></i> ' . $errorText[$error] . $add . '</span>';

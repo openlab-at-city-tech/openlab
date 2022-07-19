@@ -61,7 +61,7 @@ class B2S_Loader {
             9 => array(0 => array('short_text' => array('active' => 0, 'range_min' => 200, 'range_max' => 250, 'excerpt_range_min' => 200, 'excerpt_range_max' => 250, 'limit' => 250), 'content' => '{CONTENT}', 'format' => false, 'disableKeywords' => true)),
             11 => array(0 => array('short_text' => array('active' => 0, 'range_min' => 1000, 'range_max' => 20000, 'excerpt_range_min' => 1000, 'excerpt_range_max' => 20000, 'limit' => 0), 'content' => '{CONTENT}', 'format' => false, 'separateKeywords' => true),
                 2 => array('short_text' => array('active' => 0, 'range_min' => 1000, 'range_max' => 20000, 'excerpt_range_min' => 1000, 'excerpt_range_max' => 20000, 'limit' => 0), 'content' => '{CONTENT}', 'format' => false, 'separateKeywords' => true)),
-            12 => array(1 => array('short_text' => array('active' => 0, 'range_min' => 200, 'range_max' => 400, 'excerpt_range_min' => 240, 'excerpt_range_max' => 400, 'limit' => 2000), 'content' => "{CONTENT}\n{KEYWORDS}", 'format' => 1, 'addLink' => false, 'shuffleHashtags' => false)),
+            12 => array(1 => array('short_text' => array('active' => 0, 'range_min' => 200, 'range_max' => 400, 'excerpt_range_min' => 240, 'excerpt_range_max' => 400, 'limit' => 2000), 'content' => "{CONTENT}\n{KEYWORDS}", 'format' => 1, 'addLink' => false, 'shuffleHashtags' => false, 'framecolor' => '#ffffff')),
             14 => array(0 => array('short_text' => array('active' => 0, 'range_min' => 1000, 'range_max' => 20000, 'excerpt_range_min' => 1000, 'excerpt_range_max' => 20000, 'limit' => 0), 'content' => '{CONTENT}', 'format' => false, 'disableKeywords' => true)),
             15 => array(0 => array('short_text' => array('active' => 0, 'range_min' => 200, 'range_max' => 300, 'excerpt_range_min' => 200, 'excerpt_range_max' => 300, 'limit' => 0), 'content' => '{CONTENT}', 'format' => false, 'disableKeywords' => true)),
             16 => array(0 => array('short_text' => array('active' => 0, 'range_min' => 1000, 'range_max' => 1500, 'excerpt_range_min' => 1000, 'excerpt_range_max' => 1500, 'limit' => 0), 'content' => '{CONTENT}', 'format' => false, 'disableKeywords' => true)),
@@ -72,7 +72,7 @@ class B2S_Loader {
             19 => array(0 => array('short_text' => array('active' => 0, 'range_min' => 200, 'range_max' => 320, 'excerpt_range_min' => 200, 'excerpt_range_max' => 320, 'limit' => 0), 'content' => '{CONTENT}', 'format' => 0, 'disableKeywords' => true),
                 1 => array('short_text' => array(0 => array('active' => 0, 'range_min' => 200, 'range_max' => 320, 'excerpt_range_min' => 200, 'excerpt_range_max' => 320, 'limit' => 1000), 4 => array('active' => 0, 'range_min' => 880, 'range_max' => 920, 'excerpt_range_min' => 880, 'excerpt_range_max' => 920, 'limit' => 1000)), 'content' => '{CONTENT}', 'format' => 1, 'disableKeywords' => true),
                 2 => array('short_text' => array('active' => 0, 'range_min' => 200, 'range_max' => 320, 'excerpt_range_min' => 200, 'excerpt_range_max' => 320, 'limit' => 10000), 'content' => '{CONTENT}', 'format' => 1, 'disableKeywords' => true)),
-            24 => array(0 => array('short_text' => array('active' => 0, 'range_min' => 200, 'range_max' => 320, 'excerpt_range_min' => 200, 'excerpt_range_max' => 320, 'limit' => 420), 'content' => '{CONTENT}', 'format' => 0, 'addLink' => true)),
+            24 => array(0 => array('short_text' => array('active' => 0, 'range_min' => 200, 'range_max' => 320, 'excerpt_range_min' => 200, 'excerpt_range_max' => 320, 'limit' => 420), 'content' => '{CONTENT}', 'format' => 0)),
             25 => array(0 => array('short_text' => array('active' => 0, 'range_min' => 1000, 'range_max' => 20000, 'excerpt_range_min' => 1000, 'excerpt_range_max' => 20000, 'limit' => 0), 'content' => '{CONTENT}', 'format' => false)),
             26 => array(0 => array('short_text' => array('active' => 0, 'range_min' => 1000, 'range_max' => 20000, 'excerpt_range_min' => 1000, 'excerpt_range_max' => 20000, 'limit' => 0), 'content' => '{CONTENT}', 'format' => false)),
             27 => array(0 => array('short_text' => array('active' => 0, 'range_min' => 1000, 'range_max' => 20000, 'excerpt_range_min' => 1000, 'excerpt_range_max' => 20000, 'limit' => 0), 'content' => '{CONTENT}', 'format' => false))
@@ -267,6 +267,31 @@ class B2S_Loader {
                                         }
                                     }
                                 }
+                                if (isset($autoPostData['post_taxonomies']) && is_array($autoPostData['post_taxonomies']) && !empty($autoPostData['post_taxonomies'])) {
+                                    $postTaxonomiesData = get_taxonomies(array('public' => true));
+                                    $customTaxonomies = array();
+                                    foreach ($postTaxonomiesData as $tax) {
+                                        if(!in_array($tax, array('category', 'post_tag'))) {
+                                            $term = get_the_terms($post->ID, $tax);
+                                            if($term != false && is_array($term) && !empty($term)) {
+                                                $customTaxonomies[] = $term;
+                                            }
+                                        }
+                                    }
+                                    if (!empty($customTaxonomies)) {
+                                        foreach ($customTaxonomies as $k => $v) {
+                                            if (isset($autoPostData['post_taxonomies_state']) && (int) $autoPostData['post_taxonomies_state'] == 0) { //include
+                                                if (!in_array($v->term_id, $autoPostData['post_taxonomies'])) {
+                                                    $filter = false;
+                                                }
+                                            } else { //exclude
+                                                if (in_array($v->term_id, $autoPostData['post_taxonomies'])) {
+                                                    $filter = false;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
                             }
                             if ($filter && isset($autoPostData['network_auth_id']) && !empty($autoPostData['network_auth_id']) && is_array($autoPostData['network_auth_id'])) {
                                 //LIMIT
@@ -298,7 +323,7 @@ class B2S_Loader {
                                 if (!empty($conData)) {
                                     $options->_setOption('auto_post_import_condition', $conData);
                                 }
-
+                                
                                 if ($limit) {
                                     global $wpdb;
                                     $hook_filter = new B2S_Hook_Filter();
@@ -329,7 +354,7 @@ class B2S_Loader {
                                         'board' => '', 'group' => '', 'url' => $url, 'user_timezone' => $userTimeZoneOffset);
 
                                     $defaultBlogPostData = array('post_id' => (int) $post->ID, 'blog_user_id' => (int) $post->post_author, 'user_timezone' => $userTimeZoneOffset, 'sched_type' => $sched_type, 'sched_date' => $sched_date, 'sched_date_utc' => $sched_date_utc);
-
+                                    
                                     $autoShare = new B2S_AutoPost((int) $post->ID, $defaultBlogPostData, $current_user_date, false, $title, $content, $excerpt, $url, $image_url, $keywords, trim(strtolower(substr(B2S_LANGUAGE, 0, 2))), $optionPostFormat, true, $userVersion);
 
 //TOS Twitter 032018 - none multiple Accounts - User select once
@@ -441,7 +466,70 @@ class B2S_Loader {
         $postType = (isset($_GET['post_type']) && !empty($_GET['post_type'])) ? sanitize_text_field($_GET['post_type']) : get_post_type($postId);
         $postStatus = ($postId != 0) ? get_post_status($postId) : '';
         $postBox = new B2S_PostBox();
-        echo $postBox->getPostBox($postId, $postType, $postStatus);
+        echo wp_kses($postBox->getPostBox($postId, $postType, $postStatus), array(
+            'div' => array(
+                'class' => array(),
+                'id' => array(),
+                'style' => array(),
+                'aria-hidden' => array(),
+            ),
+            'button' => array(
+                'data-area-id' => array(),
+                'class' => array(),
+                'title' => array(),
+            ),
+            'a' => array(
+                'target' => array(),
+                'class' => array(),
+                'href' => array(),
+                'id' => array(),
+                'data-modal-target' => array(),
+                'aria-hidden' => array(),
+            ),
+            'input' => array(
+                'type' => array(),
+                'value' => array(),
+                'id' => array(),
+                'name' => array(),
+                'class' => array(),
+                'checked' => array()
+            ),
+            'h3' => array(
+                'class' => array()
+            ),
+            'h4' => array(
+                'class' => array()
+            ),
+            'span' => array(
+                'class' => array(),
+                'style' => array()
+            ),
+            'i' => array(
+                'class' => array()
+            ),
+            'p' => array(
+                'class' => array()
+            ),
+            'img' => array(
+                'class' => array(),
+                'alt' => array(),
+                'src' => array()
+            ),
+            'select' => array(
+                'class' => array(),
+                'id' => array(),
+                'name' => array(),
+            ),
+            'option' => array(
+                'value' => array(),
+                'selected' => array(),
+                'data-mandant-id' => array(),
+                'disabled' => array()
+            ),
+            'label' => array(
+                'for' => array(),
+            )
+        ));
     }
 
     public function b2s_view_post_box_calendar() {
@@ -457,7 +545,7 @@ class B2S_Loader {
     public function b2s_save_post_box() {
 
         if (!isset($_POST['wphb-clear-cache'])) {  // WP-Hummingbird  BTN clear cache - protection
-            if (!isset($_POST['wp-preview']) || (isset($_POST['wp-preview']) && $_POST['wp-preview'] != 'dopreview')) {
+            if (!isset($_POST['wp-preview']) || (isset($_POST['wp-preview']) && sanitize_text_field(wp_unslash($_POST['wp-preview'])) != 'dopreview')) {
                 if (isset($_POST['post_ID']) && (int) $_POST['post_ID'] > 0) {
 
                     //Gutenberg WP V5.0 - B2S V5.1.0 optimization
@@ -482,7 +570,7 @@ class B2S_Loader {
                         } else {
                             $desc = str_replace("\r\n", ' ', substr(sanitize_textarea_field(strip_shortcodes($_POST['content'])), 0, 160));
                         }
-                        $images_urls = $hook_filter->get_wp_post_image((int) $_POST['post_ID'], true, ((isset($_POST['content']) && !empty($_POST['content'])) ? trim($_POST['content']) : ''));
+                        $images_urls = $hook_filter->get_wp_post_image((int) $_POST['post_ID'], true, ((isset($_POST['content']) && !empty($_POST['content'])) ? trim(sanitize_text_field(wp_unslash($_POST['content']))) : ''));
                         $image_url = ((!empty($images_urls) && isset(array_values($images_urls)[0][0])) ? array_values($images_urls)[0][0] : false);
                         $meta->setMeta('og_title', $title);
                         $meta->setMeta('og_desc', $desc);
@@ -501,7 +589,7 @@ class B2S_Loader {
                         } else {
                             $desc = str_replace("\r\n", ' ', substr(sanitize_textarea_field(strip_shortcodes($_POST['content'])), 0, 160));
                         }
-                        $images_urls = $hook_filter->get_wp_post_image((int) $_POST['post_ID'], true, ((isset($_POST['content']) && !empty($_POST['content'])) ? trim($_POST['content']) : ''));
+                        $images_urls = $hook_filter->get_wp_post_image((int) $_POST['post_ID'], true, ((isset($_POST['content']) && !empty($_POST['content'])) ? trim(sanitize_text_field(wp_unslash($_POST['content']))) : ''));
                         $image_url = ((!empty($images_urls) && isset(array_values($images_urls)[0][0])) ? array_values($images_urls)[0][0] : false);
                         $meta->setMeta('card_title', $title);
                         $meta->setMeta('card_desc', $desc);
@@ -509,15 +597,15 @@ class B2S_Loader {
                         $meta->updateMeta((int) $_POST['post_ID']);
                     }
 
-                    if (isset($_POST['post_ID']) && isset($_POST['user_ID']) && (int) $_POST['post_ID'] > 0 && (int) $_POST['user_ID'] > 0 && !defined("B2S_SAVE_META_BOX_AUTO_SHARE") && !wp_is_post_autosave($_POST['post_ID']) && isset($_POST['b2s-meta-box-nonce']) && wp_verify_nonce($_POST['b2s-meta-box-nonce'], 'b2s-meta-box-nonce-post-area') && isset($_POST['post_status'])) {
+                    if (isset($_POST['post_ID']) && isset($_POST['user_ID']) && (int) $_POST['post_ID'] > 0 && (int) $_POST['user_ID'] > 0 && !defined("B2S_SAVE_META_BOX_AUTO_SHARE") && !wp_is_post_autosave((int) $_POST['post_ID']) && isset($_POST['b2s-meta-box-nonce']) && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s-meta-box-nonce'])), 'b2s-meta-box-nonce-post-area') && isset($_POST['post_status'])) {
                         $ship = false;
                         if (isset($_POST['b2s-enable-auto-post'])) {
                             if ((int) $_POST['b2s-enable-auto-post'] == 1) {
-                                if ((strtolower($_POST['post_status']) == "publish" || strtolower($_POST['post_status']) == "future") && isset($_POST['b2s-post-meta-box-profil-dropdown'])) {
+                                if ((strtolower(sanitize_text_field(wp_unslash($_POST['post_status']))) == "publish" || strtolower(sanitize_text_field(wp_unslash($_POST['post_status']))) == "future") && isset($_POST['b2s-post-meta-box-profil-dropdown'])) {
                                     $profilId = (int) $_POST['b2s-post-meta-box-profil-dropdown'];
 
                                     //save network settings and besttimes if different than default
-                                    $postOptions = new B2S_Options($_POST['post_ID'], 'B2S_PLUGIN_POST_OPTIONS');
+                                    $postOptions = new B2S_Options((int) $_POST['post_ID'], 'B2S_PLUGIN_POST_OPTIONS');
                                     $newPostOption = $postOptions->_getOption('auto_post_manuell');
                                     if ($newPostOption == false || !is_array($newPostOption)) {
                                         $newPostOption = array();
@@ -542,7 +630,7 @@ class B2S_Loader {
                                     $postOptions->_setOption('auto_post_manuell', $newPostOption);
 
                                     if (isset($_POST['b2s-post-meta-box-profil-data-' . $profilId]) && !empty($_POST['b2s-post-meta-box-profil-data-' . $profilId])) {
-                                        $networkData = json_decode(base64_decode($_POST['b2s-post-meta-box-profil-data-' . $profilId]));
+                                        $networkData = json_decode(base64_decode(sanitize_text_field(wp_unslash($_POST['b2s-post-meta-box-profil-data-' . $profilId]))));
                                         if ($networkData !== false && is_array($networkData) && !empty($networkData)) {
                                             $user_timezone = isset($_POST['b2s-user-timezone']) ? (int) $_POST['b2s-user-timezone'] : 0;
                                             $current_utc_date = gmdate('Y-m-d H:i:s');
@@ -550,10 +638,10 @@ class B2S_Loader {
                                             $post_date = '';
                                             //WP User Sched Post + B2S Share NOW
                                             if (isset($_POST['mm']) && isset($_POST['jj']) && isset($_POST['aa']) && isset($_POST['hh']) && isset($_POST['mn']) && isset($_POST['ss'])) {
-                                                $wp_user_sched_post_date = $_POST['aa'] . '-' . $_POST['mm'] . '-' . $_POST['jj'] . ' ' . $_POST['hh'] . ':' . $_POST['mn'] . ':' . $_POST['ss'];
+                                                $wp_user_sched_post_date = sanitize_text_field(wp_unslash($_POST['aa'])) . '-' . sanitize_text_field(wp_unslash($_POST['mm'])) . '-' . sanitize_text_field(wp_unslash($_POST['jj'])) . ' ' . sanitize_text_field(wp_unslash($_POST['hh'])) . ':' . sanitize_text_field(wp_unslash($_POST['mn'])) . ':' . sanitize_text_field(wp_unslash($_POST['ss']));
                                             } else {
                                                 //V5.0.0 Gutenberg Editor
-                                                $wp_user_sched_post_date = get_the_date('Y-m-d H:i:s', $_POST['post_ID']);
+                                                $wp_user_sched_post_date = get_the_date('Y-m-d H:i:s', (int) $_POST['post_ID']);
                                             }
                                             $post_date = date('Y-m-d H:i:s', strtotime($wp_user_sched_post_date));
 
@@ -571,10 +659,10 @@ class B2S_Loader {
                                             }
 
                                             //Schedule post for best times
-                                            if (isset($_POST['b2s-post-meta-box-sched-select']) && $_POST['b2s-post-meta-box-sched-select'] == 1) {
+                                            if (isset($_POST['b2s-post-meta-box-sched-select']) && (int) $_POST['b2s-post-meta-box-sched-select'] == 1) {
                                                 if (isset($_POST['b2s-post-meta-box-best-time-settings'])) {
                                                     $sched_type = 2;
-                                                    $myTimeSettings = unserialize(stripslashes($_POST['b2s-post-meta-box-best-time-settings']));
+                                                    $myTimeSettings = json_decode(stripslashes(sanitize_text_field(wp_unslash($_POST['b2s-post-meta-box-best-time-settings']))), true);
                                                     if ($myTimeSettings !== false && is_array($myTimeSettings) && isset($myTimeSettings['times']) && isset($myTimeSettings['type'])) {
                                                         $myTimeSettings = $myTimeSettings;
                                                     }
@@ -583,10 +671,10 @@ class B2S_Loader {
 
                                             delete_option('B2S_PLUGIN_POST_CONTENT_' . (int) $_POST['post_ID']);
                                             $keywords = $hook_filter->get_wp_post_hashtag((int) $_POST['post_ID'], get_post_type((int) $_POST['post_ID']));
-                                            $url = get_permalink($_POST['post_ID']);
-                                            $title = isset($_POST['post_title']) ? B2S_Util::getTitleByLanguage(strip_tags($_POST['post_title']), strtolower($b2sPostLang)) : '';
-                                            $content = (isset($_POST['content']) && !empty($_POST['content'])) ? trim($_POST['content']) : '';
-                                            $excerpt = (isset($_POST['excerpt']) && !empty($_POST['excerpt'])) ? trim($_POST['excerpt']) : get_the_excerpt((int) $_POST['post_ID']);
+                                            $url = get_permalink((int) $_POST['post_ID']);
+                                            $title = isset($_POST['post_title']) ? B2S_Util::getTitleByLanguage(strip_tags(sanitize_text_field(wp_unslash($_POST['post_title']))), strtolower($b2sPostLang)) : '';
+                                            $content = (isset($_POST['content']) && !empty($_POST['content'])) ? trim(html_entity_decode(sanitize_textarea_field(htmlentities(wp_unslash($_POST['content']))))) : '';
+                                            $excerpt = (isset($_POST['excerpt']) && !empty($_POST['excerpt'])) ? trim(html_entity_decode(sanitize_textarea_field(htmlentities(wp_unslash($_POST['excerpt']))))) : get_the_excerpt((int) $_POST['post_ID']);
                                             $images_urls = $hook_filter->get_wp_post_image((int) $_POST['post_ID'], true, $content);
                                             $image_url = ((!empty($images_urls) && isset(array_values($images_urls)[0][0])) ? array_values($images_urls)[0][0] : false);
 
@@ -612,7 +700,7 @@ class B2S_Loader {
                                             $tosCrossPosting = unserialize(B2S_PLUGIN_NETWORK_CROSSPOSTING_LIMIT);
 
                                             //Delete old sched posts (don't delete, if network group changed)
-                                            if (!isset($_POST['b2s-profile-selected']) || $_POST['b2s-profile-selected'] < 0 || !isset($_POST['b2s-post-meta-box-profil-dropdown']) || (int) $_POST['b2s-post-meta-box-profil-dropdown'] == (int) $_POST['b2s-profile-selected']) {
+                                            if (!isset($_POST['b2s-profile-selected']) || (int) $_POST['b2s-profile-selected'] < 0 || !isset($_POST['b2s-post-meta-box-profil-dropdown']) || (int) $_POST['b2s-post-meta-box-profil-dropdown'] == (int) $_POST['b2s-profile-selected']) {
                                                 global $wpdb;
                                                 $getSchedData = $wpdb->prepare("SELECT b.id as b2sPostId,d.network_id as networkId,d.network_type as networkType,d.network_auth_id as networkAuthId,d.network_display_name as networkUserName FROM {$wpdb->prefix}b2s_posts b LEFT JOIN {$wpdb->prefix}b2s_posts_network_details d ON (d.id = b.network_details_id) WHERE b.post_id = %d AND b.sched_type = %d AND b.publish_date = %s AND b.hide = %d", (int) $_POST['post_ID'], 3, "0000-00-00 00:00:00", 0);
                                                 $schedDataResult = $wpdb->get_results($getSchedData);
@@ -728,7 +816,7 @@ class B2S_Loader {
 
                                             if ($sched_type != 3) {
                                                 if (isset($_POST['b2s-user-lang']) && !empty($_POST['b2s-user-lang'])) {
-                                                    $dateFormat = ($_POST['b2s-user-lang'] == 'de') ? 'd.m.Y' : 'Y-m-d';
+                                                    $dateFormat = (sanitize_text_field(wp_unslash($_POST['b2s-user-lang'])) == 'de') ? 'd.m.Y' : 'Y-m-d';
                                                     $_POST['b2s_update_publish_date'] = date($dateFormat, strtotime($sched_date));
                                                 }
                                             }
@@ -739,12 +827,12 @@ class B2S_Loader {
                                         add_filter('redirect_post_location', array($this, 'b2s_add_param_auto_share_error_data_meta_box'));
                                     }
                                 } else {
-                                    if (strtolower($_POST['post_status']) == "publish" || strtolower($_POST['post_status']) == "future") {
+                                    if (strtolower(sanitize_text_field(wp_unslash($_POST['post_status']))) == "publish" || strtolower(sanitize_text_field(wp_unslash($_POST['post_status']))) == "future") {
                                         add_filter('redirect_post_location', array($this, 'b2s_add_param_auto_share_error_meta_box'));
                                     }
                                 }
                             }
-                        } else if (isset($_POST['post_status']) && strtolower($_POST['post_status']) == "future") {
+                        } else if (isset($_POST['post_status']) && strtolower(sanitize_text_field(wp_unslash($_POST['post_status']))) == "future") {
                             //update existing posts, if sched date before future date
                             $user_timezone = isset($_POST['b2s-user-timezone']) ? (int) $_POST['b2s-user-timezone'] : 0;
                             $current_utc_date = gmdate('Y-m-d H:i:s');
@@ -752,15 +840,15 @@ class B2S_Loader {
 
                             $post_date = '';
                             if (isset($_POST['post_date']) && !empty($_POST['post_date'])) {
-                                $post_date = date('Y-m-d H:i:s', strtotime($_POST['post_date']));
+                                $post_date = date('Y-m-d H:i:s', strtotime(sanitize_text_field(wp_unslash($_POST['post_date']))));
                             }
 
                             if (empty($post_date)) {
                                 if (isset($_POST['mm']) && isset($_POST['jj']) && isset($_POST['aa']) && isset($_POST['hh']) && isset($_POST['mn']) && isset($_POST['ss'])) {
-                                    $wp_user_sched_post_date = $_POST['aa'] . '-' . $_POST['mm'] . '-' . $_POST['jj'] . ' ' . $_POST['hh'] . ':' . $_POST['mn'] . ':' . $_POST['ss'];
+                                    $wp_user_sched_post_date = sanitize_text_field(wp_unslash($_POST['aa'])) . '-' . sanitize_text_field(wp_unslash($_POST['mm'])) . '-' . sanitize_text_field(wp_unslash($_POST['jj'])) . ' ' . sanitize_text_field(wp_unslash($_POST['hh'])) . ':' . sanitize_text_field(wp_unslash($_POST['mn'])) . ':' . sanitize_text_field(wp_unslash($_POST['ss']));
                                 } else {
                                     //V5.0.0 Gutenberg Editor
-                                    $wp_user_sched_post_date = get_the_date('Y-m-d H:i:s', $_POST['post_ID']);
+                                    $wp_user_sched_post_date = get_the_date('Y-m-d H:i:s', (int) $_POST['post_ID']);
                                 }
                                 $post_date = date('Y-m-d H:i:s', strtotime($wp_user_sched_post_date));
                             }
@@ -792,7 +880,7 @@ class B2S_Loader {
     public function b2s_add_param_auto_share_meta_box($location) {
         remove_filter('redirect_post_location', array($this, 'b2s_add_param_auto_share_meta_box'));
         if (isset($_POST['b2s_update_publish_date'])) {
-            return add_query_arg(array('b2s_action' => 1, 'b2s_update_publish_date' => $_POST['b2s_update_publish_date']), $location);
+            return add_query_arg(array('b2s_action' => 1, 'b2s_update_publish_date' => sanitize_text_field(wp_unslash($_POST['b2s_update_publish_date']))), $location);
         }
         return add_query_arg(array('b2s_action' => 1), $location);
     }
@@ -809,11 +897,11 @@ class B2S_Loader {
 
     public function b2s_save_post_alert_meta_box() {
         if (isset($_GET['b2s_action'])) {
-            $b2sAction = $_GET['b2s_action'];
+            $b2sAction = sanitize_text_field(wp_unslash($_GET['b2s_action']));
             if ((int) $b2sAction == 1) {
                 $b2sLink = get_option('siteurl') . ((substr(get_option('siteurl'), -1, 1) == '/') ? '' : '/') . 'wp-admin/admin.php?page=';
                 if (isset($_GET['b2s_update_publish_date']) && !empty($_GET['b2s_update_publish_date'])) {
-                    $publishDate = htmlspecialchars($_GET['b2s_update_publish_date']);
+                    $publishDate = htmlspecialchars(sanitize_text_field(wp_unslash($_GET['b2s_update_publish_date'])));
                     echo '<div class="updated"><p>' . esc_html__('This post will be shared into your social media from', 'blog2social') . ' ' . $publishDate . ' <a target="_blank" href="' . $b2sLink . 'blog2social-sched">' . esc_html__('show details', 'blog2social') . '</a></p></div>';
                 } else {
                     echo '<div class="updated"><p>' . esc_html__('This post will be shared on social media in 2-3 minutes!', 'blog2social') . ' <a target="_blank" href="' . $b2sLink . 'blog2social-publish">' . esc_html__('show details', 'blog2social') . '</a></p></div>';
@@ -889,7 +977,7 @@ class B2S_Loader {
     }
 
     public function defineText() {
-        define('B2S_PLUGIN_PAGE_TITLE', serialize(array('blog2social-notice' => esc_html__('Notifications', 'blog2social'), 'blog2social-publish' => esc_html__('Shared Posts', 'blog2social'), 'blog2social-approve' => esc_html__('Instant Sharing', 'blog2social'), 'blog2social-draft-post' => esc_html__('Drafts', 'blog2social'), 'blog2social-sched' => esc_html__('Scheduled Posts', 'blog2social'), 'blog2social-curation-draft' => esc_html__('Social Media Post Drafts', 'blog2social'), 'blog2social-favorites' => esc_html__('Favorites', 'blog2social'), 'blog2social-autopost' => esc_html__('Auto-Post', 'blog2social'), 'blog2social-repost' => esc_html__('Re-Share Posts', 'blog2social') . ' <span class="label label-success label-sm">' . esc_html__("NEW", "blog2social") . '</span>')));
+        define('B2S_PLUGIN_PAGE_TITLE', serialize(array('blog2social-notice' => esc_html__('Notifications', 'blog2social'), 'blog2social-publish' => esc_html__('Shared Posts', 'blog2social'), 'blog2social-approve' => esc_html__('Instant Sharing', 'blog2social'), 'blog2social-draft-post' => esc_html__('Drafts', 'blog2social'), 'blog2social-sched' => esc_html__('Scheduled Posts', 'blog2social'), 'blog2social-curation-draft' => esc_html__('Social Media Post Drafts', 'blog2social'), 'blog2social-favorites' => esc_html__('Favorites', 'blog2social'), 'blog2social-autopost' => esc_html__('Auto-Post', 'blog2social'), 'blog2social-repost' => esc_html__('Re-Share Posts', 'blog2social') . ' <span class="label label-success label-sm">' . esc_html__("NEW", "blog2social") . '</span>', 'blog2social-metrics' => esc_html__('Social Media Metrics', 'blog2social') . ' <button class="btn btn-link b2s-metrics-info-btn">' . esc_html__("Info", "blog2social") . '</button>')));
         define('B2S_PLUGIN_NETWORK_TYPE', serialize(array(esc_html__('Profile', 'blog2social'), esc_html__('Page', 'blog2social'), esc_html__('Group', 'blog2social'))));
         define('B2S_PLUGIN_NETWORK_TYPE_INDIVIDUAL', serialize(array(
             4 => array(0 => __('Blog', 'blog2social')),
@@ -924,7 +1012,14 @@ class B2S_Loader {
             'LINK_FOR_CURATION' => esc_html__('To share social media posts on Reddit or Diigo, a link is required.', 'blog2social'), // special for content curation V.6.0.0
             'IMAGE_NETWORK' => esc_html__('Your post could not be posted, because your image can not be processed by the network.', 'blog2social'),
             'TEXT_NOT_PUBLISHED_12' => sprintf(__('Instagram published your post without text. Please see the following <a target="_blank" href="%s">guide</a>.', 'blog2social'), esc_url(B2S_Tools::getSupportLink('instagram_without_text'))),
-            'GROUP_CONTENT' => esc_html__('Your group can not be found by the network.', 'blog2social'))));
+            'GROUP_CONTENT' => esc_html__('Your group can not be found by the network.', 'blog2social'),
+            'NETWORK_12_NOT_ADMIN' => esc_html__('Please make sure that you are administrator, editor or moderator of this Facebook page. Please also check if the Two-Factor Authentication is either activated or deactivated on both of the connected Instagram and Facebook accounts.', 'blog2social'),
+            'NETWORK_12_PAGE_DELETED' => esc_html__('Your Facebook page is not available. Please check if a valid Facebook page is connected with your Instagram Business account.', 'blog2social'),
+            'NETWORK_12_NO_PERMISSION' => sprintf(__('Blog2Social does not have the permission to publish your post. <a target="_blank" href="%s">Learn more about how to check the access right for Blog2Social.</a>', 'blog2social'), esc_url(B2S_Tools::getSupportLink('NETWORK_12_NO_PERMISSION'))),
+            'NETWORK_12_ACCESS_RESTRICTED' => sprintf(__('Please change your Instagram account type into a Business account type. Learn more about how to convert your account in the <a target="_blank" href="%s">Instagram guide</a>.', 'blog2social'), esc_url(B2S_Tools::getSupportLink('NETWORK_12_ACCESS_RESTRICTED'))),
+            'NETWORK_12_SESSION_INVALID' => sprintf(__('Your authorization has expired. Please reconnect your Instagram account in the Blog2Social network settings. <a target="_blank" href="%s">Learn how to reconnect your account.</a>', 'blog2social'), esc_url(B2S_Tools::getSupportLink('NETWORK_12_SESSION_INVALID'))),
+            'NETWORK_12_RESOURCE_DOSE_NOT_EXIST' => sprintf(__('Your Facebook profile does not have access to the Facebook page which is connected to your Instagram account. <a target="_blank" href="%s">Learn how to check and edit the Facebook page settings.</a>', 'blog2social'), esc_url(B2S_Tools::getSupportLink('NETWORK_12_RESOURCE_DOSE_NOT_EXIST'))),
+            'NETWORK_12_NOT_BUSINESS' => sprintf(__('Please change your Instagram account type into a Business account type. Learn more about how to convert your account in the <a target="_blank" href="%s">Instagram guide</a>.', 'blog2social'), esc_url(B2S_Tools::getSupportLink('NETWORK_12_NOT_BUSINESS'))))));
     }
 
     public function getToken() {
@@ -932,7 +1027,7 @@ class B2S_Loader {
         $sql = $wpdb->prepare("SELECT token FROM `{$wpdb->prefix}b2s_user` WHERE `blog_user_id` = %d", $this->blogUserData->ID);
         $userExist = $wpdb->get_row($sql);
         if (empty($userExist) || !isset($userExist->token)) {
-            if (isset($_GET['page']) && !empty($_GET['page']) && in_array($_GET['page'], unserialize(B2S_PLUGIN_PAGE_SLUG))) {
+            if (isset($_GET['page']) && !empty($_GET['page']) && in_array(sanitize_text_field(wp_unslash($_GET['page'])), unserialize(B2S_PLUGIN_PAGE_SLUG))) {
                 $postData = array('action' => 'getToken', 'blog_user_id' => $this->blogUserData->ID, 'blog_url' => get_option('home'), 'email' => $this->blogUserData->user_email, 'is_multisite' => is_multisite());
                 $result = json_decode(B2S_Tools::getToken($postData));
                 if (isset($result->result) && (int) $result->result == 1 && isset($result->token)) {
@@ -959,6 +1054,9 @@ class B2S_Loader {
                 define('B2S_PLUGIN_TRAIL_END', $tokenInfo['B2S_PLUGIN_TRAIL_END']);
                 update_option('B2S_PLUGIN_DISABLE_TRAIL', true, false);
             }
+            if (isset($tokenInfo['B2S_PLUGIN_PERMISSION_INSIGHTS'])) {
+                define('B2S_PLUGIN_PERMISSION_INSIGHTS', $tokenInfo['B2S_PLUGIN_PERMISSION_INSIGHTS']);
+            }
         }
 
         $checkUpdateOption = get_option('B2S_PLUGIN_NEXT_CHECK_UPDATE_REQUEST');
@@ -984,13 +1082,16 @@ class B2S_Loader {
     public function createMenu() {
         $subPages = array();
 //pageTitle,menutitle,$capability, $menu_slug, $function, $icon_url, $position
-        add_menu_page('Blog2Social', 'Blog2Social', 'blog2social_access', 'blog2social', null, plugins_url('/assets/images/b2s_icon.png', B2S_PLUGIN_FILE));
+        add_menu_page('Blog2Social', 'Blog2Social', 'blog2social_access', 'blog2social', null, esc_url(plugins_url('/assets/images/b2s_icon.png', B2S_PLUGIN_FILE)));
 //$parent_slug, $page_title, $menu_title, $capability, $menu_slug, $function
         $subPages[] = add_submenu_page('blog2social', esc_html__('Dashboard', 'blog2social'), esc_html__('Dashboard', 'blog2social'), 'blog2social_access', 'blog2social', array($this, 'b2sstart'));
-        $subPages[] = add_submenu_page('blog2social', esc_html__('Share Website & Blog Content', 'blog2social'), esc_html__('Site & Blog Content', 'blog2social'), 'blog2social_access', 'blog2social-post', array($this, 'b2sPost'));
-        $subPages[] = add_submenu_page('blog2social', esc_html__('Create Social Media Posts', 'blog2social'), esc_html__('Social Media Posts', 'blog2social'), 'blog2social_access', 'blog2social-curation', array($this, 'b2sContentCuration'));
-        $subPages[] = add_submenu_page('blog2social', esc_html__('Calendar', 'blog2social'), esc_html__('Calendar', 'blog2social'), 'blog2social_access', 'blog2social-calendar', array($this, 'b2sPostCalendar'));
         $subPages[] = add_submenu_page('blog2social', esc_html__('Networks', 'blog2social'), esc_html__('Networks', 'blog2social'), 'blog2social_access', 'blog2social-network', array($this, 'b2sNetwork'));
+        $subPages[] = add_submenu_page('blog2social', esc_html__('Social Media Posts', 'blog2social'), esc_html__('Social Media Posts', 'blog2social'), 'blog2social_access', 'blog2social-post', array($this, 'b2sPost'));
+        $subPages[] = add_submenu_page(null, 'Create Social Media Posts', 'Social Media Posts', 'blog2social_access', 'blog2social-curation', array($this, 'b2sContentCuration'));
+        if((defined("B2S_PLUGIN_USER_VERSION") && B2S_PLUGIN_USER_VERSION >= 3 && (!defined("B2S_PLUGIN_TRAIL_END") || (defined("B2S_PLUGIN_TRAIL_END") && strtotime(B2S_PLUGIN_TRAIL_END) < time()))) || (defined('B2S_PLUGIN_PERMISSION_INSIGHTS') && B2S_PLUGIN_PERMISSION_INSIGHTS == 1)) {
+            $subPages[] = add_submenu_page('blog2social', '', esc_html__('Social Media Metrics', 'blog2social'), 'blog2social_access', 'blog2social-metrics', array($this, 'b2sMetrics'));
+        }
+        $subPages[] = add_submenu_page('blog2social', esc_html__('Calendar', 'blog2social'), esc_html__('Calendar', 'blog2social'), 'blog2social_access', 'blog2social-calendar', array($this, 'b2sPostCalendar'));
         $subPages[] = add_submenu_page('blog2social', esc_html__('Settings', 'blog2social'), esc_html__('Settings', 'blog2social'), 'blog2social_access', 'blog2social-settings', array($this, 'b2sSettings'));
         if (!B2S_System::isblockedArea('B2S_MENU_ITEM_WP_PR_SERVICE', B2S_PLUGIN_ADMIN)) {
             $subPages[] = add_submenu_page('blog2social', esc_html__('PR-Service', 'blog2social'), esc_html__('PR-Service', 'blog2social'), 'blog2social_access', 'prg-post', array($this, 'prgPost'));
@@ -1022,7 +1123,7 @@ class B2S_Loader {
         }
         global $wp_admin_bar;
         $seo_url = strtolower(get_admin_url(null, 'admin.php?page='));
-        $title = '<div id="blog2social-ab-icon" class="ab-item" style="padding-left: 25px; background-repeat: no-repeat; background-size: 16px auto; background-position: left center; background-image: url(\'' . plugins_url('/assets/images/b2s_icon.png', B2S_PLUGIN_FILE) . '\');">' . esc_html__('Blog2Social', 'blog2social') . '</div>';
+        $title = '<div id="blog2social-ab-icon" class="ab-item" style="padding-left: 25px; background-repeat: no-repeat; background-size: 16px auto; background-position: left center; background-image: url(\'' . esc_url(plugins_url('/assets/images/b2s_icon.png', B2S_PLUGIN_FILE)) . '\');">' . esc_html__('Blog2Social', 'blog2social') . '</div>';
         $wp_admin_bar->add_node(array(
             'id' => 'blog2social',
             'title' => $title,
@@ -1035,34 +1136,37 @@ class B2S_Loader {
             'href' => $seo_url . 'blog2social',
             'parent' => 'blog2social'
         ));
-
-        $wp_admin_bar->add_node(array(
-            'id' => 'blog2social-post',
-            'title' => esc_html__('Site & Blog Content', 'blog2social'),
-            'href' => $seo_url . 'blog2social-post',
-            'parent' => 'blog2social'
-        ));
-
-        $wp_admin_bar->add_node(array(
-            'id' => 'blog2social-curation',
-            'title' => esc_html__('Social Media Posts', 'blog2social'),
-            'href' => $seo_url . 'blog2social-curation',
-            'parent' => 'blog2social'
-        ));
-
-        $wp_admin_bar->add_node(array(
-            'id' => 'blog2social-calendar',
-            'title' => esc_html__('Calendar', 'blog2social'),
-            'href' => $seo_url . 'blog2social-calendar',
-            'parent' => 'blog2social'
-        ));
-
+        
         $wp_admin_bar->add_node(array(
             'id' => 'blog2social-network',
             'title' => esc_html__('Networks', 'blog2social'),
             'href' => $seo_url . 'blog2social-network',
             'parent' => 'blog2social'
         ));
+
+        $wp_admin_bar->add_node(array(
+            'id' => 'blog2social-post',
+            'title' => esc_html__('Social Media Posts', 'blog2social'),
+            'href' => $seo_url . 'blog2social-post',
+            'parent' => 'blog2social'
+        ));
+        
+        if((defined("B2S_PLUGIN_USER_VERSION") && B2S_PLUGIN_USER_VERSION >= 3 && (!defined("B2S_PLUGIN_TRAIL_END") || (defined("B2S_PLUGIN_TRAIL_END") && strtotime(B2S_PLUGIN_TRAIL_END) < time()))) || (defined('B2S_PLUGIN_PERMISSION_INSIGHTS') && B2S_PLUGIN_PERMISSION_INSIGHTS == 1)) {
+            $wp_admin_bar->add_node(array(
+                'id' => 'blog2social-metrics',
+                'title' => esc_html__('Social Media Metrics', 'blog2social'),
+                'href' => $seo_url . 'blog2social-metrics',
+                'parent' => 'blog2social'
+            ));
+        }
+        
+        $wp_admin_bar->add_node(array(
+            'id' => 'blog2social-calendar',
+            'title' => esc_html__('Calendar', 'blog2social'),
+            'href' => $seo_url . 'blog2social-calendar',
+            'parent' => 'blog2social'
+        ));
+        
         $wp_admin_bar->add_node(array(
             'id' => 'blog2social-settings',
             'title' => esc_html__('Settings', 'blog2social'),
@@ -1101,15 +1205,37 @@ class B2S_Loader {
 
         if (B2S_Tools::showNotice() == false) {
             wp_enqueue_script('B2SVALIDATEJS');
+            wp_enqueue_script('B2SLIB');
             wp_enqueue_style('B2SFULLCALLENDARCSS');
             wp_enqueue_style('B2SCALENDARCSS');
+            wp_enqueue_style('B2SDATEPICKERCSS');
+            wp_enqueue_style('B2STIMEPICKERCSS');
+            wp_enqueue_style('B2SAPEXCHARTSCSS');
+            wp_enqueue_script('B2SDATEPICKERJS');
+            wp_enqueue_script('B2SDATEPICKERDEJS');
+            wp_enqueue_script('B2SDATEPICKERENJS');
+            wp_enqueue_script('B2STIMEPICKERJS');
+            wp_enqueue_script('B2SCALENDARJS');
             wp_enqueue_script('B2SFULLCALENDARMOMENTJS');
             wp_enqueue_script('B2SFULLCALENDARJS');
             wp_enqueue_script('B2SFULLCALENDARLOCALEJS');
-            wp_enqueue_script('B2SLIB');
+            wp_enqueue_style('B2SWYSIWYGCSS');
+            wp_enqueue_script('B2SWYSIWYGJS');
+            wp_enqueue_script('B2SEMOJIBUTTONJS');
+            wp_enqueue_script('B2SAPEXCHARTSJS');
+            wp_enqueue_script('B2SSHIPJS');
+            if (substr(B2S_LANGUAGE, 0, 2) == 'de') {
+                wp_enqueue_script('B2SWYSIWYGLANGDEJS');
+            } else {
+                wp_enqueue_script('B2SWYSIWYGLANGENJS');
+            }
+
+            if (current_user_can('upload_files')) {
+//Capability by Super Admin ,Administrator ,Editor ,Author
+                wp_enqueue_media();
+            }
 
             wp_enqueue_script('B2SMOMENT');
-            wp_enqueue_script('B2SCHARTJS');
             wp_enqueue_style('B2SSTARTCSS');
             wp_enqueue_script('B2SSTARTJS');
             wp_enqueue_style('B2SPOSTCSS');
@@ -1131,6 +1257,28 @@ class B2S_Loader {
             wp_enqueue_style('B2SPOSTCSS');
             wp_enqueue_script('B2SPOSTJS');
             require_once( B2S_PLUGIN_DIR . 'views/b2s/post.php');
+        } else {
+            require_once( B2S_PLUGIN_DIR . 'views/notice.php');
+        }
+    }
+    
+    //Page Metrics
+    public function b2sMetrics() {
+        if (B2S_Tools::showNotice() == false) {
+            wp_enqueue_script('B2SVALIDATEJS');
+            wp_enqueue_style('B2SPOSTPUBLISHCSS');
+            wp_enqueue_style('B2SCALENDARCSS');
+            
+            wp_enqueue_script('B2SMOMENT');
+            wp_enqueue_style('B2SDATERANGEPICKERCSS');
+            wp_enqueue_script('B2SDATERANGEPICKERJS');
+            wp_enqueue_style('B2SAIRDATEPICKERCSS');
+            wp_enqueue_script('B2SAIRDATEPICKERJS');
+            wp_enqueue_script('B2SAIRDATEPICKERDEJS');
+            wp_enqueue_script('B2SAIRDATEPICKERENJS');
+            wp_enqueue_script('B2SMETRICSJS');
+            wp_enqueue_style('B2SMETRICSCSS');
+            require_once( B2S_PLUGIN_DIR . 'views/b2s/metrics.php');
         } else {
             require_once( B2S_PLUGIN_DIR . 'views/notice.php');
         }
@@ -1160,6 +1308,8 @@ class B2S_Loader {
 //PageFunktion
     public function b2sNetwork() {
         if (B2S_Tools::showNotice() == false) {
+            wp_enqueue_style('B2SCOLORISCSS');
+            wp_enqueue_script('B2SCOLORISJS');
             wp_enqueue_script('B2SVALIDATEJS');
             wp_enqueue_style('B2SNETWORKCSS');
             wp_enqueue_script('B2SNETWORKJS');
@@ -1304,7 +1454,7 @@ class B2S_Loader {
             $prgInfo = get_option('B2S_PLUGIN_PRG_' . B2S_PLUGIN_BLOG_USER_ID);
             if ($prgInfo != false && isset($prgInfo['B2S_PRG_ID']) && (int) $prgInfo['B2S_PRG_ID'] > 0 && isset($prgInfo['B2S_PRG_TOKEN']) && !empty($prgInfo['B2S_PRG_TOKEN'])) {
                 $postId = (int) $_GET['postId'];
-                echo'<script> window.location="' . admin_url('/admin.php?page=prg-ship&postId=' . $postId, 'http') . '"; </script> ';
+                echo'<script> window.location="' . esc_url(admin_url('/admin.php?page=prg-ship&postId=' . $postId, 'http')) . '"; </script> ';
                 wp_die();
             } else {
                 wp_enqueue_style('PRGLOGINCSS');
@@ -1545,6 +1695,10 @@ class B2S_Loader {
         wp_register_style('B2SCURATIONDRAFTCSS', plugins_url('assets/css/b2s/curation.css', B2S_PLUGIN_FILE), array(), B2S_PLUGIN_VERSION);
         wp_register_style('B2SAUTOPOSTCSS', plugins_url('assets/css/b2s/autopost.css', B2S_PLUGIN_FILE), array(), B2S_PLUGIN_VERSION);
         wp_register_style('B2SREPOSTCSS', plugins_url('assets/css/b2s/repost.css', B2S_PLUGIN_FILE), array(), B2S_PLUGIN_VERSION);
+        wp_register_style('B2SMETRICSCSS', plugins_url('assets/css/b2s/metrics.css', B2S_PLUGIN_FILE), array(), B2S_PLUGIN_VERSION);
+        wp_register_style('B2SCOLORISCSS', plugins_url('assets/lib/coloris/coloris.min.css', B2S_PLUGIN_FILE), array(), B2S_PLUGIN_VERSION);
+        wp_register_style('B2SDATERANGEPICKERCSS', plugins_url('assets/lib/daterangepicker/daterangepicker.css', B2S_PLUGIN_FILE), array(), B2S_PLUGIN_VERSION);
+        wp_register_style('B2SAPEXCHARTSCSS', plugins_url('assets/lib/apexcharts/apexcharts.css', B2S_PLUGIN_FILE), array(), B2S_PLUGIN_VERSION);
 
         wp_register_script('B2SNETWORKJS', plugins_url('assets/js/b2s/network.js', B2S_PLUGIN_FILE), array(), B2S_PLUGIN_VERSION);
         wp_register_script('B2SSETTINGSJS', plugins_url('assets/js/b2s/settings.js', B2S_PLUGIN_FILE), array(), B2S_PLUGIN_VERSION);
@@ -1567,7 +1721,6 @@ class B2S_Loader {
         wp_register_script('B2SAIRDATEPICKERJS', plugins_url('assets/lib/air-datepicker/js/datepicker.js', B2S_PLUGIN_FILE), array(), B2S_PLUGIN_VERSION);
         wp_register_script('B2SAIRDATEPICKERDEJS', plugins_url('assets/lib/air-datepicker/js/locales/datepicker.de.js', B2S_PLUGIN_FILE), array(), B2S_PLUGIN_VERSION);
         wp_register_script('B2SAIRDATEPICKERENJS', plugins_url('assets/lib/air-datepicker/js/locales/datepicker.en.js', B2S_PLUGIN_FILE), array(), B2S_PLUGIN_VERSION);
-        wp_register_script('B2SCHARTJS', plugins_url('assets/lib/chartjs/Chart.bundle.min.js', B2S_PLUGIN_FILE), array(), B2S_PLUGIN_VERSION);
         wp_register_script('B2SMOMENT', plugins_url('assets/lib/moment/moment-with-locales.min.js', B2S_PLUGIN_FILE), array(), B2S_PLUGIN_VERSION);
         wp_register_script('B2STIMEPICKERJS', plugins_url('assets/lib/timepicker/timepicker.js', B2S_PLUGIN_FILE), array(), B2S_PLUGIN_VERSION);
         wp_register_script('PRGPOSTJS', plugins_url('assets/js/prg/post.js', B2S_PLUGIN_FILE), array(), B2S_PLUGIN_VERSION);
@@ -1588,6 +1741,10 @@ class B2S_Loader {
         wp_register_script('B2SCURATIONDRAFTJS', plugins_url('assets/js/b2s/curation.draft.js', B2S_PLUGIN_FILE), array(), B2S_PLUGIN_VERSION);
         wp_register_script('B2SPREMIUMJS', plugins_url('assets/js/b2s/premium.js', B2S_PLUGIN_FILE), array(), B2S_PLUGIN_VERSION);
         wp_register_script('B2SEMOJIBUTTONJS', plugins_url('assets/lib/emoji-button/emoji-button.min.js', B2S_PLUGIN_FILE), array(), B2S_PLUGIN_VERSION);
+        wp_register_script('B2SMETRICSJS', plugins_url('assets/js/b2s/metrics.js', B2S_PLUGIN_FILE), array(), B2S_PLUGIN_VERSION);
+        wp_register_script('B2SCOLORISJS', plugins_url('assets/lib/coloris/coloris.min.js', B2S_PLUGIN_FILE), array(), B2S_PLUGIN_VERSION);
+        wp_register_script('B2SDATERANGEPICKERJS', plugins_url('assets/lib/daterangepicker/daterangepicker.js', B2S_PLUGIN_FILE), array(), B2S_PLUGIN_VERSION);
+        wp_register_script('B2SAPEXCHARTSJS', plugins_url('assets/lib/apexcharts/apexcharts.min.js', B2S_PLUGIN_FILE), array(), B2S_PLUGIN_VERSION);
     }
 
     public function initCaps() {
@@ -1844,9 +2001,53 @@ class B2S_Loader {
             PRIMARY KEY (`id`),
             INDEX `blog_user_id` (`blog_user_id`), INDEX `post_id` (`post_id`)
             ) DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci AUTO_INCREMENT=1;";
+        $wpdb->query($sqlCreateFavorites);
 
-        if (!$wpdb->query($sqlCreateFavorites)) {
+        
+        $sqlCreateInsightsPosts = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}b2s_posts_insights` (
+            `id` int(11) NOT NULL AUTO_INCREMENT,
+            `blog_user_id` int(11) NOT NULL,
+            `b2s_posts_id` int(11) NOT NULL,
+            `network_post_id` varchar(50) NOT NULL,
+            `b2s_posts_network_details_id` int(11) NOT NULL,
+            `insight` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+            `last_update` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+            `active` tinyint(4) NOT NULL DEFAULT 1,
+            PRIMARY KEY (`id`),
+            INDEX `blog_user_id` (`blog_user_id`), INDEX `b2s_posts_id` (`b2s_posts_id`)
+            ) DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci AUTO_INCREMENT=1;";
+        $wpdb->query($sqlCreateInsightsPosts);
+        
+        $b2sPostsInsightsCols = $wpdb->get_results('SHOW COLUMNS FROM ' . $wpdb->prefix . 'b2s_posts_insights');
+        if (is_array($b2sPostsInsightsCols) && isset($b2sPostsInsightsCols[0])) {
+            foreach ($b2sPostsInsightsCols as $key => $value) {
+                if (isset($value->Field) && !empty($value->Field) && $value->Field == 'insight') {
+                    $wpdb->query("ALTER TABLE {$wpdb->prefix}b2s_posts_insights MODIFY insight longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL;");
+                }
+            }
+        }
+        
+        $sqlCreateInsightsNetwork = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}b2s_network_insights` (
+            `id` int(11) NOT NULL AUTO_INCREMENT,
+            `blog_user_id` int(11) NOT NULL,
+            `b2s_posts_network_details_id` int(11) NOT NULL,
+            `insight` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+            `create_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+            PRIMARY KEY (`id`),
+            INDEX `b2s_posts_network_details_id` (`b2s_posts_network_details_id`)
+            ) DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci AUTO_INCREMENT=1;";
+
+        if (!$wpdb->query($sqlCreateInsightsNetwork)) {
             $mySqlPermission = false;
+        }
+        
+        $b2sNetworkInsightsCols = $wpdb->get_results('SHOW COLUMNS FROM ' . $wpdb->prefix . 'b2s_network_insights');
+        if (is_array($b2sNetworkInsightsCols) && isset($b2sNetworkInsightsCols[0])) {
+            foreach ($b2sNetworkInsightsCols as $key => $value) {
+                if (isset($value->Field) && !empty($value->Field) && $value->Field == 'insight') {
+                    $wpdb->query("ALTER TABLE {$wpdb->prefix}b2s_network_insights MODIFY insight longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL;");
+                }
+            }
         }
 
         /*
@@ -1860,7 +2061,9 @@ class B2S_Loader {
         $wpdb->query("ALTER TABLE `{$wpdb->prefix}b2s_user_contact` CHANGE `id` `id` INT(11) NOT NULL AUTO_INCREMENT;");
         $wpdb->query("ALTER TABLE `{$wpdb->prefix}b2s_user_network_settings` CHANGE `id` `id` INT(11) NOT NULL AUTO_INCREMENT;");
         $wpdb->query("ALTER TABLE `{$wpdb->prefix}b2s_posts_drafts` CHANGE `id` `id` INT(11) NOT NULL AUTO_INCREMENT;");
-        if (!$wpdb->query("ALTER TABLE `{$wpdb->prefix}b2s_posts_favorites` CHANGE `id` `id` INT(11) NOT NULL AUTO_INCREMENT;")) {
+        $wpdb->query("ALTER TABLE `{$wpdb->prefix}b2s_posts_favorites` CHANGE `id` `id` INT(11) NOT NULL AUTO_INCREMENT;");
+        $wpdb->query("ALTER TABLE `{$wpdb->prefix}b2s_posts_insights` CHANGE `id` `id` INT(11) NOT NULL AUTO_INCREMENT;");
+        if (!$wpdb->query("ALTER TABLE `{$wpdb->prefix}b2s_network_insights` CHANGE `id` `id` INT(11) NOT NULL AUTO_INCREMENT;")) {
             $mySqlPermission = false;
         }
 

@@ -516,6 +516,11 @@ jQuery('#b2s-post-ship-item-post-format-modal').on('hidden.bs.modal', function (
     jQuery('body').addClass('modal-open');
 });
 
+//Overlay second modal
+jQuery('#b2sImageZoomModal').on('hidden.bs.modal', function () {
+    jQuery('body').addClass('modal-open');
+});
+
 jQuery(document).on('click', '.b2s-select-image-modal-open', function () {
     jQuery('.b2s-network-select-image-content').html("");
     jQuery.ajax({

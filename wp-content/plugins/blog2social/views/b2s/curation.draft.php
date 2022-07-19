@@ -7,6 +7,7 @@ require_once (B2S_PLUGIN_DIR . 'includes/Util.php');
 <div class="b2s-container">
     <div class="b2s-inbox">
         <div class="col-md-12 del-padding-left">
+            <?php require_once (B2S_PLUGIN_DIR . 'views/b2s/html/sidebar.php'); ?>
             <div class="col-md-9 del-padding-left del-padding-right">
                 <!--Header|Start - Include-->
                 <?php require_once (B2S_PLUGIN_DIR . 'views/b2s/html/header.php'); ?>
@@ -31,7 +32,26 @@ require_once (B2S_PLUGIN_DIR . 'includes/Util.php');
                                     <input id="b2sPagination" type="hidden" value="1" name="b2sPagination">
                                     <?php
                                     $postFilter = new B2S_Post_Filter('draft');
-                                    echo $postFilter->getItemHtml();
+                                    echo wp_kses($postFilter->getItemHtml(), array(
+                                        'div' => array(
+                                            'class' => array()
+                                        ),
+                                        'input' => array(
+                                            'id' => array(),
+                                            'name' => array(),
+                                            'class' => array(),
+                                            'value' => array(),
+                                        ),
+                                        'a' => array(
+                                            'href' => array(),
+                                            'id' => array(),
+                                            'class' => array()
+                                        ),
+                                        'span' => array(
+                                            'class' => array()
+                                        ),
+                                        'small' => array()
+                                    ));
                                     ?>
                                 </form>
                                 <!-- Filter Post Ende-->
@@ -65,13 +85,12 @@ require_once (B2S_PLUGIN_DIR . 'includes/Util.php');
                     </div>
                 </div>
             </div>
-            <?php require_once (B2S_PLUGIN_DIR . 'views/b2s/html/sidebar.php'); ?>
         </div>
     </div>
 </div>
 
-<input type="hidden" id="b2sLang" value="<?php echo substr(B2S_LANGUAGE, 0, 2); ?>">
-<input type="hidden" id="b2sUserLang" value="<?php echo strtolower(substr(get_locale(), 0, 2)); ?>">
+<input type="hidden" id="b2sLang" value="<?php echo esc_attr(substr(B2S_LANGUAGE, 0, 2)); ?>">
+<input type="hidden" id="b2sUserLang" value="<?php echo esc_attr(strtolower(substr(get_locale(), 0, 2))); ?>">
 
 
 

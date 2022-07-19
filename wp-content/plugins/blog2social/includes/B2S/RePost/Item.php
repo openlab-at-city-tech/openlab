@@ -30,7 +30,7 @@ class B2S_RePost_Item {
         //Post Settings
         $content .= '<div class="col-md-12 col-lg-6">';
         $content .= '<h4>' . esc_html__('Which content should be shared?', 'blog2social') . '</h4>';
-        $content .= '<div class="alert alert-info b2s-re-post-limit-info" style="display:none;"> <a class="b2s-info-btn" href="' . esc_html(B2S_Tools::getSupportLink('affiliate')) . '" target="_blank">' . esc_html__('Upgrade', 'blog2social') . '</a> ' . esc_html__('your Blog2Social license to extend the quota for the number of posts in your queue.', 'blog2social') . '</div>';
+        $content .= '<div class="alert alert-info b2s-re-post-limit-info" style="display:none;"> <a class="b2s-info-btn" href="' . esc_url(B2S_Tools::getSupportLink('affiliate')) . '" target="_blank">' . esc_html__('Upgrade', 'blog2social') . '</a> ' . esc_html__('your Blog2Social license to extend the quota for the number of posts in your queue.', 'blog2social') . '</div>';
         
         $content .= '<span>' . esc_html__('Number of posts', 'blog2social') . ' </span>';
         $content .= '<select name="b2s-re-post-limit" class="b2s-re-post-limit">';
@@ -123,7 +123,7 @@ class B2S_RePost_Item {
         $postItem = new B2S_Post_Item('repost');
         $postItem->currentPage = 1;
         $limit = unserialize(B2S_PLUGIN_RE_POST_LIMIT);
-        $needMoreBtn = (B2S_PLUGIN_USER_VERSION <=2) ? '<a class="b2s-info-btn" href="' . esc_html(B2S_Tools::getSupportLink('affiliate')) . '" target="_blank">' . esc_html__('Need more?', 'blog2social') . '</a>' :'';
+        $needMoreBtn = (B2S_PLUGIN_USER_VERSION <=2) ? '<a class="b2s-info-btn" href="' . esc_url(B2S_Tools::getSupportLink('affiliate')) . '" target="_blank">' . esc_html__('Need more?', 'blog2social') . '</a>' :'';
         $content = '';
         $content .= '<div class="col-md-12 b2s-re-post-queue-header">';
         $content .= '<i class="glyphicon glyphicon-random b2s-icon-size"></i><span class="b2s-re-post-headline"> ' . esc_html__('Queue', 'blog2social') . '</span>';

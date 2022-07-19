@@ -150,7 +150,7 @@ class B2S_Util {
         $args = array(
             'timeout' => '20',
             'redirection' => '5',
-            'user-agent' => "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:5.0) Gecko/20100101 Firefox/5.0"
+            'user-agent' => "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:97.0) Gecko/20100101 Firefox/97.0"
         );
         $response = wp_remote_get($url, $args);
         if (!is_wp_error($response)) {
@@ -205,7 +205,7 @@ class B2S_Util {
                     $list['description'] = (function_exists('mb_convert_encoding') ? htmlspecialchars($desc) : $desc);
                 }
                 if (($meta->getAttribute('property') == $type . ':image' || $meta->getAttribute('name') == $type . ':image') && !isset($list['image'])) {
-                    $list['image'] = (function_exists('mb_convert_encoding') ? htmlspecialchars($meta->getAttribute('content')) : $meta->getAttribute('content'));
+                    $list['image'] = $meta->getAttribute('content');
                 }
             } else {
                 if ($meta->getAttribute('name') == 'description' && !isset($list['default_description'])) {
@@ -219,7 +219,7 @@ class B2S_Util {
                     $list['og_description'] = (function_exists('mb_convert_encoding') ? htmlspecialchars($desc) : $desc);
                 }
                 if ($meta->getAttribute($search) == 'og:image' && !isset($list['og_image'])) {
-                    $list['og_image'] = (function_exists('mb_convert_encoding') ? htmlspecialchars($meta->getAttribute('content')) : $meta->getAttribute('content'));
+                    $list['og_image'] = $meta->getAttribute('content');
                 }
                 //Further
                 /* if ($meta->getAttribute($search) == 'twitter:title' && !isset($list['twitter_title'])) {
@@ -245,14 +245,19 @@ class B2S_Util {
         $featuredImage = wp_get_attachment_url($attachment_id);
         $image_alt = get_post_meta($attachment_id, '_wp_attachment_image_alt', true);
         if ($forceFeaturedImage && $featuredImage != false && !empty($featuredImage)) {
-            return array(0 => array(0 => $featuredImage, 1 => esc_attr($image_alt)));
-        } else {
-            $content = stripcslashes(self::getFullContent($postId, $postContent, $postUrl, $postLang));
-            if (!preg_match_all('%<img.*?src=[\"\'](.*?)[\"\'].*?>%', $content, $matches) && !$featuredImage) {
-                return false;
+            $ext = pathinfo(
+                parse_url($featuredImage, PHP_URL_PATH), 
+                PATHINFO_EXTENSION
+            );
+            if(!in_array($ext, array('jpg', 'png', 'webp'))) {
+                return array(0 => array(0 => $featuredImage, 1 => esc_attr($image_alt)));
             }
-            array_unshift($matches[1], $featuredImage);
         }
+        $content = stripcslashes(self::getFullContent($postId, $postContent, $postUrl, $postLang));
+        if (!preg_match_all('%<img.*?src=[\"\'](.*?)[\"\'].*?>%', $content, $matches) && !$featuredImage) {
+            return false;
+        }
+        array_unshift($matches[1], $featuredImage);
         $rtrnArray = array();
         if (isset($matches[1])) {
             foreach ($matches[1] as $key => $imgUrl) {
@@ -462,7 +467,7 @@ class B2S_Util {
                 return trim($text);
             }
 
-            $stops = array('.', '?', '!', '#');
+            $stops = array('.', '?', '!', '#', '(');
             $min = $count;
             $cleanTruncateWord = true;
             $max = ($max !== false) ? ($max - $min) : ($min - 1);
@@ -582,7 +587,7 @@ class B2S_Util {
             $utcStr = '(UTC ' . self::humanReadableOffset($timezoneData[$timezone]) . ')';
             $timeZoneEntry = trim($utcStr) . ' ' . trim(preg_replace("/\_/", ' ', $timezone));
             $isSelected = ($timezone == $selected) ? 'selected' : '';
-            $optionHtmlList .= '<option value="' . $timezone . '" data-offset="' . $timezoneData[$timezone] . '" ' . $isSelected . '>' . $timeZoneEntry . '</option>';
+            $optionHtmlList .= '<option value="' . esc_attr($timezone) . '" data-offset="' . esc_attr($timezoneData[$timezone]) . '" ' . $isSelected . '>' . esc_html($timeZoneEntry) . '</option>';
         }
         return $optionHtmlList;
     }
