@@ -1,6 +1,6 @@
-/*! elementor - v3.6.6 - 08-06-2022 */
+/*! elementor - v3.6.7 - 03-07-2022 */
 "use strict";
-(self["webpackChunkelementor"] = self["webpackChunkelementor"] || []).push([["tabs"],{
+(self["webpackChunkelementor"] = self["webpackChunkelementor"] || []).push([["toggle"],{
 
 /***/ "../assets/dev/js/frontend/handlers/base-tabs.js":
 /*!*******************************************************!*\
@@ -73,7 +73,8 @@ class baseTabs extends elementorModules.frontend.handlers.Base {
   handleKeyboardNavigation(event) {
     const tab = event.currentTarget,
           $tabList = jQuery(tab.closest(this.getSettings('selectors').tablist)),
-          $tabs = $tabList.find(this.getSettings('selectors').tabTitle),
+          // eslint-disable-next-line @wordpress/no-unused-vars-before-return
+    $tabs = $tabList.find(this.getSettings('selectors').tabTitle),
           isVertical = 'vertical' === $tabList.attr('aria-orientation');
 
     switch (event.key) {
@@ -191,8 +192,8 @@ class baseTabs extends elementorModules.frontend.handlers.Base {
     });
   }
 
-  onInit(...args) {
-    super.onInit(...args);
+  onInit() {
+    super.onInit(...arguments);
     this.activateDefaultTab();
   }
 
@@ -225,10 +226,10 @@ exports["default"] = baseTabs;
 
 /***/ }),
 
-/***/ "../assets/dev/js/frontend/handlers/tabs.js":
-/*!**************************************************!*\
-  !*** ../assets/dev/js/frontend/handlers/tabs.js ***!
-  \**************************************************/
+/***/ "../assets/dev/js/frontend/handlers/toggle.js":
+/*!****************************************************!*\
+  !*** ../assets/dev/js/frontend/handlers/toggle.js ***!
+  \****************************************************/
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -242,19 +243,22 @@ exports["default"] = void 0;
 
 var _baseTabs = _interopRequireDefault(__webpack_require__(/*! ./base-tabs */ "../assets/dev/js/frontend/handlers/base-tabs.js"));
 
-class Tabs extends _baseTabs.default {
+class Toggle extends _baseTabs.default {
   getDefaultSettings() {
     const defaultSettings = super.getDefaultSettings();
     return { ...defaultSettings,
-      toggleSelf: false
+      showTabFn: 'slideDown',
+      hideTabFn: 'slideUp',
+      hidePrevious: false,
+      autoExpand: 'editor'
     };
   }
 
 }
 
-exports["default"] = Tabs;
+exports["default"] = Toggle;
 
 /***/ })
 
 }]);
-//# sourceMappingURL=tabs.973c14c2ee401e66e192.bundle.js.map
+//# sourceMappingURL=toggle.723b9b5593f2a58fd036.bundle.js.map

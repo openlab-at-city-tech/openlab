@@ -1,4 +1,4 @@
-/*! elementor - v3.6.6 - 08-06-2022 */
+/*! elementor - v3.6.7 - 03-07-2022 */
 "use strict";
 (self["webpackChunkelementor"] = self["webpackChunkelementor"] || []).push([["container"],{
 
@@ -164,12 +164,12 @@ class Shapes extends elementorModules.frontend.handlers.Base {
     this.elements['$' + side + 'Container'].attr('data-negative', !!this.getElementSettings('shape_divider_' + side + '_negative'));
   }
 
-  onInit(...args) {
+  onInit() {
     if (!this.isActive(this.getSettings())) {
       return;
     }
 
-    super.onInit(...args);
+    super.onInit(...arguments);
     ['top', 'bottom'].forEach(side => {
       if (this.getElementSettings('shape_divider_' + side)) {
         this.buildSVG(side);
@@ -200,4 +200,4 @@ exports["default"] = Shapes;
 /***/ })
 
 }]);
-//# sourceMappingURL=container.f3a37a5bf3c787312748.bundle.js.map
+//# sourceMappingURL=container.a98d5868735d029bae47.bundle.js.map

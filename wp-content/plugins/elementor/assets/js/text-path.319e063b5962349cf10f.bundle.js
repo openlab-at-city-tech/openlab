@@ -1,4 +1,4 @@
-/*! elementor - v3.6.6 - 08-06-2022 */
+/*! elementor - v3.6.7 - 03-07-2022 */
 "use strict";
 (self["webpackChunkelementor"] = self["webpackChunkelementor"] || []).push([["text-path"],{
 
@@ -42,7 +42,7 @@ class TextPathHandler extends elementorModules.frontend.handlers.Base {
   /**
    * Initialize the object.
    *
-   * @returns {void}
+   * @return {void}
    */
 
 
@@ -63,7 +63,7 @@ class TextPathHandler extends elementorModules.frontend.handlers.Base {
   /**
    * Fetch & Inject the SVG markup.
    *
-   * @return {Promise}
+   * @return {Promise} success
    */
 
 
@@ -86,9 +86,9 @@ class TextPathHandler extends elementorModules.frontend.handlers.Base {
    *  Gets a text offset (relative to the starting point) as a string or int, and set it as percents to the
    *  `startOffset` attribute of the `<textPath>` element.
    *
-   * @param offset {string|int} The text start offset.
+   * @param {string|number} offset The text start offset.
    *
-   * @returns {void}
+   * @return {void}
    */
 
 
@@ -106,9 +106,9 @@ class TextPathHandler extends elementorModules.frontend.handlers.Base {
   /**
    * Handle element settings changes.
    *
-   * @param setting {Object} The settings object from the editor.
+   * @param {Object} setting The settings object from the editor.
    *
-   * @returns {void}
+   * @return {void}
    */
 
 
@@ -140,7 +140,7 @@ class TextPathHandler extends elementorModules.frontend.handlers.Base {
    * Attach a unique ID to the `path` element in the SVG, based on the container's ID.
    * This function selects the first `path` with a `data-path-anchor` attribute, or defaults to the first `path` element.
    *
-   * @returns {void}
+   * @return {void}
    */
 
 
@@ -152,7 +152,7 @@ class TextPathHandler extends elementorModules.frontend.handlers.Base {
   /**
    * Initialize & build the SVG markup of the widget using the settings from the panel.
    *
-   * @returns {void}
+   * @return {void}
    */
 
 
@@ -176,20 +176,18 @@ class TextPathHandler extends elementorModules.frontend.handlers.Base {
   /**
    * Sets the text on the SVG path, including the link (if set) and its properties.
    *
-   * @param newText {string} The new text to put in the text path.
+   * @param {string} newText The new text to put in the text path.
    *
-   * @returns {void}
+   * @return {void}
    */
 
 
   setText(newText) {
-    var _this$getElementSetti;
-
     const {
       url,
       is_external: isExternal,
       nofollow
-    } = (_this$getElementSetti = this.getElementSettings()) === null || _this$getElementSetti === void 0 ? void 0 : _this$getElementSetti.link;
+    } = this.getElementSettings()?.link;
     const target = isExternal ? '_blank' : '',
           rel = nofollow ? 'nofollow' : ''; // Add link attributes.
 
@@ -220,7 +218,7 @@ class TextPathHandler extends elementorModules.frontend.handlers.Base {
   /**
    * Determine if the text direction of the widget should be RTL or not, based on the site direction and the widget's settings.
    *
-   * @returns {boolean}
+   * @return {boolean} is RTL
    */
 
 
@@ -239,7 +237,7 @@ class TextPathHandler extends elementorModules.frontend.handlers.Base {
   /**
    * Determine if it should RTL the text (reversing it, etc.).
    *
-   * @returns {boolean}
+   * @return {boolean} should RTL
    */
 
 
@@ -249,7 +247,7 @@ class TextPathHandler extends elementorModules.frontend.handlers.Base {
   /**
    * Reverse the text path to support RTL.
    *
-   * @returns {void}
+   * @return {void}
    */
 
 
@@ -274,4 +272,4 @@ exports["default"] = TextPathHandler;
 /***/ })
 
 }]);
-//# sourceMappingURL=text-path.15d47ed8e5e3031f9610.bundle.js.map
+//# sourceMappingURL=text-path.319e063b5962349cf10f.bundle.js.map

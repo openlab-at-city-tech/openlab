@@ -1,4 +1,4 @@
-/*! elementor - v3.6.6 - 08-06-2022 */
+/*! elementor - v3.6.7 - 03-07-2022 */
 "use strict";
 (self["webpackChunkelementor"] = self["webpackChunkelementor"] || []).push([["accordion"],{
 
@@ -105,7 +105,8 @@ class baseTabs extends elementorModules.frontend.handlers.Base {
   handleKeyboardNavigation(event) {
     const tab = event.currentTarget,
           $tabList = jQuery(tab.closest(this.getSettings('selectors').tablist)),
-          $tabs = $tabList.find(this.getSettings('selectors').tabTitle),
+          // eslint-disable-next-line @wordpress/no-unused-vars-before-return
+    $tabs = $tabList.find(this.getSettings('selectors').tabTitle),
           isVertical = 'vertical' === $tabList.attr('aria-orientation');
 
     switch (event.key) {
@@ -223,8 +224,8 @@ class baseTabs extends elementorModules.frontend.handlers.Base {
     });
   }
 
-  onInit(...args) {
-    super.onInit(...args);
+  onInit() {
+    super.onInit(...arguments);
     this.activateDefaultTab();
   }
 
@@ -258,4 +259,4 @@ exports["default"] = baseTabs;
 /***/ })
 
 }]);
-//# sourceMappingURL=accordion.a037e351fac33e9c9dfc.bundle.js.map
+//# sourceMappingURL=accordion.7411c73941af1c106000.bundle.js.map

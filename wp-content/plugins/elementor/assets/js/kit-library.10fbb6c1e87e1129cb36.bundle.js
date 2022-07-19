@@ -1,4 +1,4 @@
-/*! elementor - v3.6.6 - 08-06-2022 */
+/*! elementor - v3.6.7 - 03-07-2022 */
 (self["webpackChunkelementor"] = self["webpackChunkelementor"] || []).push([["kit-library"],{
 
 /***/ "../core/app/modules/kit-library/assets/js/components/badge.scss":
@@ -202,14 +202,11 @@
 /* provided dependency */ var __ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n")["__"];
 
 
-var _Object$defineProperty = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "../node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
 
-var _interopRequireDefault = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireDefault */ "../node_modules/@babel/runtime-corejs2/helpers/interopRequireDefault.js");
-
-_Object$defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
-
+}));
 exports["default"] = ElementorLoading;
 
 var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
@@ -255,17 +252,18 @@ ElementorLoading.defaultProps = {
 /* provided dependency */ var PropTypes = __webpack_require__(/*! prop-types */ "../node_modules/prop-types/index.js");
 
 
-var _Object$defineProperty = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "../node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
+var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "../node_modules/@babel/runtime/helpers/typeof.js");
 
-var _interopRequireWildcard = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireWildcard */ "../node_modules/@babel/runtime-corejs2/helpers/interopRequireWildcard.js");
-
-_Object$defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
-
+}));
 exports["default"] = PopoverDialog;
 
 var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "react"));
+
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 function PopoverDialog(props) {
   var targetRef = props.targetRef,
@@ -277,7 +275,6 @@ function PopoverDialog(props) {
       popoverRef = (0, _react.useCallback)(function (popoverEl) {
     var target = targetRef === null || targetRef === void 0 ? void 0 : targetRef.current; // If the target or the popover element does not exist on the page anymore after a re-render, do nothing.
 
-    // If the target or the popover element does not exist on the page anymore after a re-render, do nothing.
     if (!target || !popoverEl) {
       return;
     }
@@ -286,9 +283,6 @@ function PopoverDialog(props) {
      */
 
 
-    /**
-     * Show Popover
-     */
     var showPopover = function showPopover() {
       popoverEl.style.display = 'block';
       popoverEl.setAttribute('aria-expanded', true);
@@ -298,7 +292,6 @@ function PopoverDialog(props) {
       popoverEl.style.top = targetRect.bottom + offsetTop + 'px';
       popoverEl.style.left = targetRect.left - widthDifference / 2 - offsetLeft + 'px'; // 16px to compensate for the arrow width.
 
-      // 16px to compensate for the arrow width.
       popoverEl.style.setProperty('--popover-arrow-offset-end', (popoverRect.width - 16) / 2 + 'px');
     };
     /**
@@ -306,9 +299,6 @@ function PopoverDialog(props) {
      */
 
 
-    /**
-     * Hide Popover
-     */
     var hidePopover = function hidePopover() {
       popoverEl.style.display = 'none';
       popoverEl.setAttribute('aria-expanded', false);
@@ -318,20 +308,15 @@ function PopoverDialog(props) {
      */
 
 
-    /**
-     * Handle the Popover's hover functionality
-     */
     var handlePopoverHover = function handlePopoverHover() {
       var hideOnMouseOut = true,
           timeOut = null; // Show popover on hover of the target
 
-      // Show popover on hover of the target
       target.addEventListener('mouseover', function () {
         hideOnMouseOut = true;
         showPopover();
       }); // Hide popover when not overing over the target or the popover itself
 
-      // Hide popover when not overing over the target or the popover itself
       target.addEventListener('mouseleave', function () {
         timeOut = setTimeout(function () {
           if (hideOnMouseOut) {
@@ -342,7 +327,6 @@ function PopoverDialog(props) {
         }, hideAfter);
       }); // Don't hide the popover if the user is still hovering over it.
 
-      // Don't hide the popover if the user is still hovering over it.
       popoverEl.addEventListener('mouseover', function () {
         hideOnMouseOut = false;
 
@@ -352,7 +336,6 @@ function PopoverDialog(props) {
         }
       }); // Once the user stops hovering over the popover, hide it.
 
-      // Once the user stops hovering over the popover, hide it.
       popoverEl.addEventListener('mouseleave', function () {
         timeOut = setTimeout(function () {
           if (hideOnMouseOut) {
@@ -369,9 +352,6 @@ function PopoverDialog(props) {
      */
 
 
-    /**
-     * Handle the Popover's click functionality
-     */
     var handlePopoverClick = function handlePopoverClick() {
       var popoverIsActive = false;
       target.addEventListener('click', function (e) {
@@ -387,12 +367,10 @@ function PopoverDialog(props) {
         }
       }); // Make sure the popover doesn't close when it is clicked on.
 
-      // Make sure the popover doesn't close when it is clicked on.
       popoverEl.addEventListener('click', function (e) {
         e.stopPropagation();
       }); // Hide the popover when clicking outside of it.
 
-      // Hide the popover when clicking outside of it.
       document.body.addEventListener('click', function () {
         if (popoverIsActive) {
           hidePopover();
@@ -450,14 +428,11 @@ PopoverDialog.defaultProps = {
 "use strict";
 
 
-var _Object$defineProperty = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "../node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
 
-var _interopRequireDefault = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireDefault */ "../node_modules/@babel/runtime-corejs2/helpers/interopRequireDefault.js");
-
-_Object$defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
-
+}));
 exports["default"] = App;
 
 var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
@@ -524,23 +499,22 @@ function App() {
 /* provided dependency */ var PropTypes = __webpack_require__(/*! prop-types */ "../node_modules/prop-types/index.js");
 
 
-var _Object$defineProperty = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "../node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
+var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "../node_modules/@babel/runtime/helpers/typeof.js");
 
-var _interopRequireWildcard = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireWildcard */ "../node_modules/@babel/runtime-corejs2/helpers/interopRequireWildcard.js");
-
-_Object$defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
-
+}));
 exports["default"] = ApplyKitDialog;
 
 var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "react"));
 
-__webpack_require__(/*! core-js/modules/es6.regexp.replace.js */ "../node_modules/core-js/modules/es6.regexp.replace.js");
-
 var _router = __webpack_require__(/*! @reach/router */ "../node_modules/@reach/router/es/index.js");
 
 var _appUi = __webpack_require__(/*! @elementor/app-ui */ "@elementor/app-ui");
+
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 function ApplyKitDialog(props) {
   var navigate = (0, _router.useNavigate)();
@@ -592,14 +566,11 @@ ApplyKitDialog.defaultProps = {
 /* provided dependency */ var PropTypes = __webpack_require__(/*! prop-types */ "../node_modules/prop-types/index.js");
 
 
-var _Object$defineProperty = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "../node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
 
-var _interopRequireDefault = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireDefault */ "../node_modules/@babel/runtime-corejs2/helpers/interopRequireDefault.js");
-
-_Object$defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
-
+}));
 exports["default"] = Badge;
 
 var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
@@ -637,14 +608,11 @@ Badge.defaultProps = {
 /* provided dependency */ var PropTypes = __webpack_require__(/*! prop-types */ "../node_modules/prop-types/index.js");
 
 
-var _Object$defineProperty = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "../node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
 
-var _interopRequireDefault = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireDefault */ "../node_modules/@babel/runtime-corejs2/helpers/interopRequireDefault.js");
-
-_Object$defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
-
+}));
 exports["default"] = Collapse;
 
 var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
@@ -697,19 +665,14 @@ Collapse.defaultProps = {
 /* provided dependency */ var PropTypes = __webpack_require__(/*! prop-types */ "../node_modules/prop-types/index.js");
 
 
-var _Object$defineProperty = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "../node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
 
-var _interopRequireDefault = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireDefault */ "../node_modules/@babel/runtime-corejs2/helpers/interopRequireDefault.js");
-
-_Object$defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
-
+}));
 exports["default"] = ConnectDialog;
 
 var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
-
-__webpack_require__(/*! core-js/modules/es6.regexp.replace.js */ "../node_modules/core-js/modules/es6.regexp.replace.js");
 
 var _appUi = __webpack_require__(/*! @elementor/app-ui */ "@elementor/app-ui");
 
@@ -776,14 +739,11 @@ ConnectDialog.propTypes = {
 /* provided dependency */ var __ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n")["__"];
 
 
-var _Object$defineProperty = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "../node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
 
-var _interopRequireDefault = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireDefault */ "../node_modules/@babel/runtime-corejs2/helpers/interopRequireDefault.js");
-
-_Object$defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
-
+}));
 exports["default"] = EnvatoPromotion;
 
 var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
@@ -818,14 +778,11 @@ function EnvatoPromotion() {
 /* provided dependency */ var PropTypes = __webpack_require__(/*! prop-types */ "../node_modules/prop-types/index.js");
 
 
-var _Object$defineProperty = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "../node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
 
-var _interopRequireDefault = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireDefault */ "../node_modules/@babel/runtime-corejs2/helpers/interopRequireDefault.js");
-
-_Object$defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
-
+}));
 exports["default"] = ErrorScreen;
 
 var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
@@ -834,6 +791,7 @@ var _appUi = __webpack_require__(/*! @elementor/app-ui */ "@elementor/app-ui");
 
 __webpack_require__(/*! ./error-screen.scss */ "../core/app/modules/kit-library/assets/js/components/error-screen.scss");
 
+/* eslint-disable jsx-a11y/alt-text */
 function ErrorScreen(props) {
   return /*#__PURE__*/_react.default.createElement(_appUi.Grid, {
     container: true,
@@ -883,14 +841,11 @@ ErrorScreen.propTypes = {
 /* provided dependency */ var PropTypes = __webpack_require__(/*! prop-types */ "../node_modules/prop-types/index.js");
 
 
-var _Object$defineProperty = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "../node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
 
-var _interopRequireDefault = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireDefault */ "../node_modules/@babel/runtime-corejs2/helpers/interopRequireDefault.js");
-
-_Object$defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
-
+}));
 exports["default"] = FavoritesActions;
 
 var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
@@ -945,21 +900,14 @@ FavoritesActions.propTypes = {
 /* provided dependency */ var PropTypes = __webpack_require__(/*! prop-types */ "../node_modules/prop-types/index.js");
 
 
-var _Object$defineProperty = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "../node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
 
-var _interopRequireDefault = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireDefault */ "../node_modules/@babel/runtime-corejs2/helpers/interopRequireDefault.js");
-
-_Object$defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
-
+}));
 exports["default"] = FilterIndicationText;
 
 var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
-
-__webpack_require__(/*! core-js/modules/es6.regexp.search.js */ "../node_modules/core-js/modules/es6.regexp.search.js");
-
-__webpack_require__(/*! core-js/modules/es6.array.map.js */ "../node_modules/core-js/modules/es6.array.map.js");
 
 var _useSelectedTaxonomies = _interopRequireDefault(__webpack_require__(/*! ../hooks/use-selected-taxonomies */ "../core/app/modules/kit-library/assets/js/hooks/use-selected-taxonomies.js"));
 
@@ -1023,25 +971,20 @@ FilterIndicationText.propTypes = {
 /* provided dependency */ var PropTypes = __webpack_require__(/*! prop-types */ "../node_modules/prop-types/index.js");
 
 
-var _Object$defineProperty = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "../node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
 
-var _interopRequireDefault = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireDefault */ "../node_modules/@babel/runtime-corejs2/helpers/interopRequireDefault.js");
+var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "../node_modules/@babel/runtime/helpers/typeof.js");
 
-var _interopRequireWildcard = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireWildcard */ "../node_modules/@babel/runtime-corejs2/helpers/interopRequireWildcard.js");
-
-_Object$defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
-
+}));
 exports["default"] = ItemHeader;
 
 var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "react"));
 
-__webpack_require__(/*! core-js/modules/es6.regexp.replace.js */ "../node_modules/core-js/modules/es6.regexp.replace.js");
+var _toConsumableArray2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/toConsumableArray */ "../node_modules/@babel/runtime/helpers/toConsumableArray.js"));
 
-var _toConsumableArray2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/toConsumableArray */ "../node_modules/@babel/runtime-corejs2/helpers/toConsumableArray.js"));
-
-var _slicedToArray2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/slicedToArray */ "../node_modules/@babel/runtime-corejs2/helpers/slicedToArray.js"));
+var _slicedToArray2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/slicedToArray */ "../node_modules/@babel/runtime/helpers/slicedToArray.js"));
 
 var _applyKitDialog = _interopRequireDefault(__webpack_require__(/*! ./apply-kit-dialog */ "../core/app/modules/kit-library/assets/js/components/apply-kit-dialog.js"));
 
@@ -1063,13 +1006,19 @@ var _settingsContext = __webpack_require__(/*! ../context/settings-context */ ".
 
 __webpack_require__(/*! ./item-header.scss */ "../core/app/modules/kit-library/assets/js/components/item-header.scss");
 
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
 /**
  * Returns the right call to action button.
  *
- * @param model
- * @param onConnect
- * @param onApply
- * @returns {object}
+ * @param {Kit}      model
+ * @param {Object}   root0
+ * @param {Function} root0.apply
+ * @param {Function} root0.onConnect
+ * @param {boolean}  root0.isApplyLoading
+ * @return {Object} result
  */
 function useKitCallToActionButton(model, _ref) {
   var apply = _ref.apply,
@@ -1185,7 +1134,7 @@ function ItemHeader(props) {
     text: __('Nothing to worry about, just try again. If the problem continues, head over to the Help Center.', 'elementor'),
     approveButtonText: __('Learn More', 'elementor'),
     approveButtonColor: "link",
-    approveButtonUrl: "http://go.elementor.com/app-kit-library-error",
+    approveButtonUrl: "http://go.elementor.com/app-kit-library-error/",
     approveButtonOnClick: function approveButtonOnClick() {
       return setError(false);
     },
@@ -1255,21 +1204,18 @@ ItemHeader.propTypes = {
 /* provided dependency */ var PropTypes = __webpack_require__(/*! prop-types */ "../node_modules/prop-types/index.js");
 
 
-var _Object$defineProperty = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "../node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
 
-var _interopRequireWildcard = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireWildcard */ "../node_modules/@babel/runtime-corejs2/helpers/interopRequireWildcard.js");
+var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "../node_modules/@babel/runtime/helpers/typeof.js");
 
-var _interopRequireDefault = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireDefault */ "../node_modules/@babel/runtime-corejs2/helpers/interopRequireDefault.js");
-
-_Object$defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
-
+}));
 exports["default"] = void 0;
 
 var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
 
-var _slicedToArray2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/slicedToArray */ "../node_modules/@babel/runtime-corejs2/helpers/slicedToArray.js"));
+var _slicedToArray2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/slicedToArray */ "../node_modules/@babel/runtime/helpers/slicedToArray.js"));
 
 var _badge = _interopRequireDefault(__webpack_require__(/*! ./badge */ "../core/app/modules/kit-library/assets/js/components/badge.js"));
 
@@ -1282,6 +1228,10 @@ var _useKitCallToAction3 = _interopRequireWildcard(__webpack_require__(/*! ../ho
 var _appUi = __webpack_require__(/*! @elementor/app-ui */ "@elementor/app-ui");
 
 __webpack_require__(/*! ./kit-list-item.scss */ "../core/app/modules/kit-library/assets/js/components/kit-list-item.scss");
+
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 var KitListItem = function KitListItem(props) {
   var _useKitCallToAction = (0, _useKitCallToAction3.default)(props.model.accessLevel),
@@ -1346,21 +1296,14 @@ exports["default"] = _default;
 /* provided dependency */ var PropTypes = __webpack_require__(/*! prop-types */ "../node_modules/prop-types/index.js");
 
 
-var _Object$defineProperty = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "../node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
 
-var _interopRequireDefault = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireDefault */ "../node_modules/@babel/runtime-corejs2/helpers/interopRequireDefault.js");
-
-_Object$defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
-
+}));
 exports["default"] = KitList;
 
 var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
-
-__webpack_require__(/*! core-js/modules/es6.regexp.split.js */ "../node_modules/core-js/modules/es6.regexp.split.js");
-
-__webpack_require__(/*! core-js/modules/es6.array.map.js */ "../node_modules/core-js/modules/es6.array.map.js");
 
 var _router = __webpack_require__(/*! @reach/router */ "../node_modules/@reach/router/es/index.js");
 
@@ -1404,14 +1347,11 @@ KitList.propTypes = {
 /* provided dependency */ var __ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n")["__"];
 
 
-var _Object$defineProperty = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "../node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
 
-var _interopRequireDefault = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireDefault */ "../node_modules/@babel/runtime-corejs2/helpers/interopRequireDefault.js");
-
-_Object$defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
-
+}));
 exports["default"] = HeaderBackButton;
 
 var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
@@ -1454,14 +1394,11 @@ function HeaderBackButton() {
 /* provided dependency */ var PropTypes = __webpack_require__(/*! prop-types */ "../node_modules/prop-types/index.js");
 
 
-var _Object$defineProperty = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "../node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
 
-var _interopRequireDefault = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireDefault */ "../node_modules/@babel/runtime-corejs2/helpers/interopRequireDefault.js");
-
-_Object$defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
-
+}));
 exports["default"] = Header;
 
 var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
@@ -1511,14 +1448,11 @@ Header.propTypes = {
 /* provided dependency */ var PropTypes = __webpack_require__(/*! prop-types */ "../node_modules/prop-types/index.js");
 
 
-var _Object$defineProperty = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "../node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
 
-var _interopRequireDefault = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireDefault */ "../node_modules/@babel/runtime-corejs2/helpers/interopRequireDefault.js");
-
-_Object$defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
-
+}));
 exports["default"] = Index;
 
 var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
@@ -1553,14 +1487,11 @@ Index.propTypes = {
 /* provided dependency */ var PropTypes = __webpack_require__(/*! prop-types */ "../node_modules/prop-types/index.js");
 
 
-var _Object$defineProperty = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "../node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
 
-var _interopRequireDefault = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireDefault */ "../node_modules/@babel/runtime-corejs2/helpers/interopRequireDefault.js");
-
-_Object$defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
-
+}));
 exports["default"] = PageLoader;
 
 var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
@@ -1597,27 +1528,28 @@ PageLoader.defaultProps = {
 /* provided dependency */ var PropTypes = __webpack_require__(/*! prop-types */ "../node_modules/prop-types/index.js");
 
 
-var _Object$defineProperty = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "../node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
 
-var _interopRequireDefault = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireDefault */ "../node_modules/@babel/runtime-corejs2/helpers/interopRequireDefault.js");
+var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "../node_modules/@babel/runtime/helpers/typeof.js");
 
-var _interopRequireWildcard = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireWildcard */ "../node_modules/@babel/runtime-corejs2/helpers/interopRequireWildcard.js");
-
-_Object$defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
-
+}));
 exports["default"] = SearchInput;
 
 var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "react"));
 
-var _slicedToArray2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/slicedToArray */ "../node_modules/@babel/runtime-corejs2/helpers/slicedToArray.js"));
+var _slicedToArray2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/slicedToArray */ "../node_modules/@babel/runtime/helpers/slicedToArray.js"));
 
 var _useDebouncedCallback = _interopRequireDefault(__webpack_require__(/*! ../hooks/use-debounced-callback */ "../core/app/modules/kit-library/assets/js/hooks/use-debounced-callback.js"));
 
 var _appUi = __webpack_require__(/*! @elementor/app-ui */ "@elementor/app-ui");
 
 __webpack_require__(/*! ./search-input.scss */ "../core/app/modules/kit-library/assets/js/components/search-input.scss");
+
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 function SearchInput(props) {
   var _useState = (0, _react.useState)(props.value || ''),
@@ -1682,14 +1614,11 @@ SearchInput.defaultProps = {
 /* provided dependency */ var PropTypes = __webpack_require__(/*! prop-types */ "../node_modules/prop-types/index.js");
 
 
-var _Object$defineProperty = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "../node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
 
-var _interopRequireDefault = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireDefault */ "../node_modules/@babel/runtime-corejs2/helpers/interopRequireDefault.js");
-
-_Object$defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
-
+}));
 exports["default"] = SortSelect;
 
 var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
@@ -1753,31 +1682,20 @@ SortSelect.propTypes = {
 /* provided dependency */ var PropTypes = __webpack_require__(/*! prop-types */ "../node_modules/prop-types/index.js");
 
 
-var _Object$defineProperty = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "../node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
 
-var _interopRequireDefault = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireDefault */ "../node_modules/@babel/runtime-corejs2/helpers/interopRequireDefault.js");
+var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "../node_modules/@babel/runtime/helpers/typeof.js");
 
-var _interopRequireWildcard = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireWildcard */ "../node_modules/@babel/runtime-corejs2/helpers/interopRequireWildcard.js");
-
-_Object$defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
-
+}));
 exports["default"] = void 0;
 
 var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "react"));
 
-__webpack_require__(/*! core-js/modules/es6.array.filter.js */ "../node_modules/core-js/modules/es6.array.filter.js");
+var _toConsumableArray2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/toConsumableArray */ "../node_modules/@babel/runtime/helpers/toConsumableArray.js"));
 
-__webpack_require__(/*! core-js/modules/es6.string.includes.js */ "../node_modules/core-js/modules/es6.string.includes.js");
-
-__webpack_require__(/*! core-js/modules/es7.array.includes.js */ "../node_modules/core-js/modules/es7.array.includes.js");
-
-__webpack_require__(/*! core-js/modules/es6.array.map.js */ "../node_modules/core-js/modules/es6.array.map.js");
-
-var _toConsumableArray2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/toConsumableArray */ "../node_modules/@babel/runtime-corejs2/helpers/toConsumableArray.js"));
-
-var _slicedToArray2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/slicedToArray */ "../node_modules/@babel/runtime-corejs2/helpers/slicedToArray.js"));
+var _slicedToArray2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/slicedToArray */ "../node_modules/@babel/runtime/helpers/slicedToArray.js"));
 
 var _taxonomy = _interopRequireDefault(__webpack_require__(/*! ../models/taxonomy */ "../core/app/modules/kit-library/assets/js/models/taxonomy.js"));
 
@@ -1788,6 +1706,10 @@ var _searchInput = _interopRequireDefault(__webpack_require__(/*! ./search-input
 var _appUi = __webpack_require__(/*! @elementor/app-ui */ "@elementor/app-ui");
 
 var _i18n = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 var MIN_TAGS_LENGTH_FOR_SEARCH_INPUT = 15;
 
@@ -1819,7 +1741,8 @@ var TaxonomiesFilterList = function TaxonomiesFilterList(props) {
     onChange: setIsOpen
   }, props.taxonomiesByType.data.length >= MIN_TAGS_LENGTH_FOR_SEARCH_INPUT && /*#__PURE__*/_react.default.createElement(_searchInput.default, {
     size: "sm",
-    className: "e-kit-library__tags-filter-list-search",
+    className: "e-kit-library__tags-filter-list-search" // eslint-disable-next-line @wordpress/i18n-ellipsis
+    ,
     placeholder: (0, _i18n.sprintf)(__('Search %s...', 'elementor'), props.taxonomiesByType.label),
     value: search,
     onChange: setSearch
@@ -1828,20 +1751,24 @@ var TaxonomiesFilterList = function TaxonomiesFilterList(props) {
   }, 0 === taxonomies.length && /*#__PURE__*/_react.default.createElement(_appUi.Text, null, __('No Results Found', 'elementor')), taxonomies.map(function (taxonomy) {
     var _props$selected$taxon;
 
-    return /*#__PURE__*/_react.default.createElement("label", {
-      key: taxonomy.text,
-      className: "e-kit-library__tags-filter-list-item"
-    }, /*#__PURE__*/_react.default.createElement(_appUi.Checkbox, {
-      checked: ((_props$selected$taxon = props.selected[taxonomy.type]) === null || _props$selected$taxon === void 0 ? void 0 : _props$selected$taxon.includes(taxonomy.text)) || false,
-      onChange: function onChange(e) {
-        var checked = e.target.checked;
-        props.onSelect(taxonomy.type, function (prev) {
-          return checked ? [].concat((0, _toConsumableArray2.default)(prev), [taxonomy.text]) : prev.filter(function (tagId) {
-            return tagId !== taxonomy.text;
+    return (
+      /*#__PURE__*/
+      // eslint-disable-next-line jsx-a11y/label-has-for
+      _react.default.createElement("label", {
+        key: taxonomy.text,
+        className: "e-kit-library__tags-filter-list-item"
+      }, /*#__PURE__*/_react.default.createElement(_appUi.Checkbox, {
+        checked: ((_props$selected$taxon = props.selected[taxonomy.type]) === null || _props$selected$taxon === void 0 ? void 0 : _props$selected$taxon.includes(taxonomy.text)) || false,
+        onChange: function onChange(e) {
+          var checked = e.target.checked;
+          props.onSelect(taxonomy.type, function (prev) {
+            return checked ? [].concat((0, _toConsumableArray2.default)(prev), [taxonomy.text]) : prev.filter(function (tagId) {
+              return tagId !== taxonomy.text;
+            });
           });
-        });
-      }
-    }), taxonomy.text);
+        }
+      }), taxonomy.text)
+    );
   })));
 };
 
@@ -1872,31 +1799,32 @@ exports["default"] = _default;
 /* provided dependency */ var PropTypes = __webpack_require__(/*! prop-types */ "../node_modules/prop-types/index.js");
 
 
-var _Object$defineProperty = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "../node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
 
-var _interopRequireWildcard = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireWildcard */ "../node_modules/@babel/runtime-corejs2/helpers/interopRequireWildcard.js");
+var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "../node_modules/@babel/runtime/helpers/typeof.js");
 
-var _interopRequireDefault = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireDefault */ "../node_modules/@babel/runtime-corejs2/helpers/interopRequireDefault.js");
-
-_Object$defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
-
+}));
 exports["default"] = TaxonomiesFilter;
 
 var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
 
-var _objectSpread2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/objectSpread2 */ "../node_modules/@babel/runtime-corejs2/helpers/objectSpread2.js"));
-
-__webpack_require__(/*! core-js/modules/es6.array.filter.js */ "../node_modules/core-js/modules/es6.array.filter.js");
-
-__webpack_require__(/*! core-js/modules/es6.array.map.js */ "../node_modules/core-js/modules/es6.array.map.js");
+var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "../node_modules/@babel/runtime/helpers/defineProperty.js"));
 
 var _taxonomiesFilterList = _interopRequireDefault(__webpack_require__(/*! ./taxonomies-filter-list */ "../core/app/modules/kit-library/assets/js/components/taxonomies-filter-list.js"));
 
 var _taxonomy = _interopRequireWildcard(__webpack_require__(/*! ../models/taxonomy */ "../core/app/modules/kit-library/assets/js/models/taxonomy.js"));
 
 __webpack_require__(/*! ./tags-filter.scss */ "../core/app/modules/kit-library/assets/js/components/tags-filter.scss");
+
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { (0, _defineProperty2.default)(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
 
 var _React = _react.default,
     useMemo = _React.useMemo;
@@ -1908,7 +1836,7 @@ function TaxonomiesFilter(props) {
     }
 
     return _taxonomy.taxonomyType.map(function (tagType) {
-      return (0, _objectSpread2.default)((0, _objectSpread2.default)({}, tagType), {}, {
+      return _objectSpread(_objectSpread({}, tagType), {}, {
         data: props.taxonomies.filter(function (item) {
           return item.type === tagType.key;
         })
@@ -1948,28 +1876,29 @@ TaxonomiesFilter.propTypes = {
 /* provided dependency */ var PropTypes = __webpack_require__(/*! prop-types */ "../node_modules/prop-types/index.js");
 
 
-var _Object$defineProperty = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "../node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
 
-var _interopRequireDefault = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireDefault */ "../node_modules/@babel/runtime-corejs2/helpers/interopRequireDefault.js");
+var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "../node_modules/@babel/runtime/helpers/typeof.js");
 
-var _interopRequireWildcard = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireWildcard */ "../node_modules/@babel/runtime-corejs2/helpers/interopRequireWildcard.js");
-
-_Object$defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
-
+}));
 exports.LastFilterProvider = LastFilterProvider;
 exports.useLastFilterContext = useLastFilterContext;
 
 var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "react"));
 
-var _slicedToArray2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/slicedToArray */ "../node_modules/@babel/runtime-corejs2/helpers/slicedToArray.js"));
+var _slicedToArray2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/slicedToArray */ "../node_modules/@babel/runtime/helpers/slicedToArray.js"));
+
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 var LastFilterContext = (0, _react.createContext)({});
 /**
  * Consume the context
  *
- * @returns {{}}
+ * @return {{}} context value
  */
 
 function useLastFilterContext() {
@@ -1978,9 +1907,9 @@ function useLastFilterContext() {
 /**
  * Settings Provider
  *
- * @param props
- * @returns {JSX.Element}
- * @constructor
+ * @param {*} props
+ * @return {JSX.Element} element
+ * @function Object() { [native code] }
  */
 
 
@@ -2014,30 +1943,35 @@ LastFilterProvider.propTypes = {
 /* provided dependency */ var PropTypes = __webpack_require__(/*! prop-types */ "../node_modules/prop-types/index.js");
 
 
-var _Object$defineProperty = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "../node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
 
-var _interopRequireDefault = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireDefault */ "../node_modules/@babel/runtime-corejs2/helpers/interopRequireDefault.js");
+var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "../node_modules/@babel/runtime/helpers/typeof.js");
 
-var _interopRequireWildcard = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireWildcard */ "../node_modules/@babel/runtime-corejs2/helpers/interopRequireWildcard.js");
-
-_Object$defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
-
+}));
 exports.SettingsProvider = SettingsProvider;
 exports.useSettingsContext = useSettingsContext;
 
 var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "react"));
 
-var _objectSpread2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/objectSpread2 */ "../node_modules/@babel/runtime-corejs2/helpers/objectSpread2.js"));
+var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "../node_modules/@babel/runtime/helpers/defineProperty.js"));
 
-var _slicedToArray2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/slicedToArray */ "../node_modules/@babel/runtime-corejs2/helpers/slicedToArray.js"));
+var _slicedToArray2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/slicedToArray */ "../node_modules/@babel/runtime/helpers/slicedToArray.js"));
+
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { (0, _defineProperty2.default)(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
 
 var SettingsContext = (0, _react.createContext)({});
 /**
  * Consume the context
  *
- * @returns {{emptyTrashDays: number}}
+ * @return {{emptyTrashDays: number}} context value
  */
 
 function useSettingsContext() {
@@ -2046,9 +1980,9 @@ function useSettingsContext() {
 /**
  * Settings Provider
  *
- * @param props
- * @returns {JSX.Element}
- * @constructor
+ * @param {*} props
+ * @return {JSX.Element} element
+ * @function Object() { [native code] }
  */
 
 
@@ -2060,7 +1994,7 @@ function SettingsProvider(props) {
 
   var updateSettings = (0, _react.useCallback)(function (newSettings) {
     setSettings(function (prev) {
-      return (0, _objectSpread2.default)((0, _objectSpread2.default)({}, prev), newSettings);
+      return _objectSpread(_objectSpread({}, prev), newSettings);
     });
   }, [setSettings]);
   (0, _react.useEffect)(function () {
@@ -2092,20 +2026,13 @@ SettingsProvider.propTypes = {
 /* provided dependency */ var __ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n")["__"];
 
 
-var _Object$defineProperty = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "../node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
 
-var _interopRequireDefault = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireDefault */ "../node_modules/@babel/runtime-corejs2/helpers/interopRequireDefault.js");
-
-_Object$defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
-
+}));
 exports.KEY = void 0;
 exports["default"] = useContentTypes;
-
-__webpack_require__(/*! core-js/modules/es6.array.map.js */ "../node_modules/core-js/modules/es6.array.map.js");
-
-var _promise = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/core-js/promise */ "../node_modules/@babel/runtime-corejs2/core-js/promise.js"));
 
 var _contentType = _interopRequireDefault(__webpack_require__(/*! ../models/content-type */ "../core/app/modules/kit-library/assets/js/models/content-type.js"));
 
@@ -2116,7 +2043,7 @@ var KEY = 'content-types';
  * The data should come from the server, this is a temp solution that helps to demonstrate that data comes from the server
  * but for now this is a local data.
  *
- * @returns {UseQueryResult<Promise.constructor, unknown>}
+ * @return {import('react-query').UseQueryResult<Promise.constructor, unknown>} result
  */
 
 exports.KEY = KEY;
@@ -2125,12 +2052,12 @@ function useContentTypes() {
   return (0, _reactQuery.useQuery)([KEY], fetchContentTypes);
 }
 /**
- * @returns {Promise.constructor}
+ * @return {Promise.constructor} content types
  */
 
 
 function fetchContentTypes() {
-  return _promise.default.resolve([{
+  return Promise.resolve([{
     id: 'page',
     label: __('Pages', 'elementor'),
     doc_types: ['wp-page'],
@@ -2165,12 +2092,9 @@ function fetchContentTypes() {
 "use strict";
 
 
-var _Object$defineProperty = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "../node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
-
-_Object$defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
-
+}));
 exports["default"] = useDebouncedCallback;
 
 var _react = __webpack_require__(/*! react */ "react");
@@ -2203,12 +2127,9 @@ function useDebouncedCallback(callback, wait) {
 "use strict";
 
 
-var _Object$defineProperty = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "../node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
-
-_Object$defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
-
+}));
 exports["default"] = useDownloadLinkMutation;
 
 var _react = __webpack_require__(/*! react */ "react");
@@ -2242,12 +2163,9 @@ function useDownloadLinkMutation(model, _ref) {
 "use strict";
 
 
-var _Object$defineProperty = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "../node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
-
-_Object$defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
-
+}));
 exports.TYPE_PROMOTION = exports.TYPE_CONNECT = exports.TYPE_APPLY = void 0;
 exports["default"] = useKitCallToAction;
 
@@ -2304,21 +2222,22 @@ function useKitCallToAction(kitAccessLevel) {
 "use strict";
 
 
-var _Object$defineProperty = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "../node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
 
-var _interopRequireDefault = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireDefault */ "../node_modules/@babel/runtime-corejs2/helpers/interopRequireDefault.js");
-
-_Object$defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
-
+}));
 exports["default"] = useKitDocumentByType;
 
-var _objectSpread2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/objectSpread2 */ "../node_modules/@babel/runtime-corejs2/helpers/objectSpread2.js"));
+var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "../node_modules/@babel/runtime/helpers/defineProperty.js"));
 
 var _useContentTypes = _interopRequireDefault(__webpack_require__(/*! ./use-content-types */ "../core/app/modules/kit-library/assets/js/hooks/use-content-types.js"));
 
 var _react = __webpack_require__(/*! react */ "react");
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { (0, _defineProperty2.default)(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
 
 function useKitDocumentByType(kit) {
   var contentTypesQuery = (0, _useContentTypes.default)();
@@ -2331,7 +2250,7 @@ function useKitDocumentByType(kit) {
       return a.order - b.order;
     });
   }, [kit, contentTypesQuery.data]);
-  return (0, _objectSpread2.default)((0, _objectSpread2.default)({}, contentTypesQuery), {}, {
+  return _objectSpread(_objectSpread({}, contentTypesQuery), {}, {
     data: data
   });
 }
@@ -2347,15 +2266,10 @@ function useKitDocumentByType(kit) {
 "use strict";
 
 
-var _Object$defineProperty = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "../node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
-
-_Object$defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
-
+}));
 exports.useKitFavoritesMutations = useKitFavoritesMutations;
-
-__webpack_require__(/*! core-js/modules/es6.array.map.js */ "../node_modules/core-js/modules/es6.array.map.js");
 
 var _react = __webpack_require__(/*! react */ "react");
 
@@ -2431,20 +2345,15 @@ function useKitFavoritesMutations() {
 "use strict";
 
 
-var _Object$defineProperty = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "../node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
 
-var _interopRequireDefault = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireDefault */ "../node_modules/@babel/runtime-corejs2/helpers/interopRequireDefault.js");
-
-_Object$defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
-
+}));
 exports.KEY = void 0;
 exports["default"] = useKit;
 
-var _slicedToArray2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/slicedToArray */ "../node_modules/@babel/runtime-corejs2/helpers/slicedToArray.js"));
-
-__webpack_require__(/*! core-js/modules/es6.array.find.js */ "../node_modules/core-js/modules/es6.array.find.js");
+var _slicedToArray2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/slicedToArray */ "../node_modules/@babel/runtime/helpers/slicedToArray.js"));
 
 var _kit = _interopRequireDefault(__webpack_require__(/*! ../models/kit */ "../core/app/modules/kit-library/assets/js/models/kit.js"));
 
@@ -2467,8 +2376,8 @@ function useKit(id) {
 /**
  * Return placeholder function for kit query.
  *
- * @param id
- * @returns {function(): (undefined|*)}
+ * @param {*} id
+ * @return {function(): (undefined|*)} placeholder
  */
 
 
@@ -2491,14 +2400,18 @@ function usePlaceholderDataCallback(id) {
 /**
  * Fetch kit
  *
- * @param key
- * @param id
- * @returns {Promise<Kit>}
+ * @param {Object} root0
+ * @param {Object} root0.queryKey
+ * @param {*}      root0.queryKey.0
+ * @param {string} root0.queryKey.1
+ * @return {Promise<Kit>} kit
  */
+// eslint-disable-next-line no-unused-vars
 
 
 function fetchKitItem(_ref) {
   var _ref$queryKey = (0, _slicedToArray2.default)(_ref.queryKey, 2),
+      _ = _ref$queryKey[0],
       id = _ref$queryKey[1];
 
   return $e.data.get('kits/index', {
@@ -2524,37 +2437,20 @@ function fetchKitItem(_ref) {
 "use strict";
 
 
-var _Object$defineProperty = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "../node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
 
-var _interopRequireDefault = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireDefault */ "../node_modules/@babel/runtime-corejs2/helpers/interopRequireDefault.js");
-
-_Object$defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
-
+}));
 exports.KEY = void 0;
 exports["default"] = useKits;
 exports.defaultQueryParams = void 0;
 
-var _values = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/core-js/object/values */ "../node_modules/@babel/runtime-corejs2/core-js/object/values.js"));
+var _slicedToArray2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/slicedToArray */ "../node_modules/@babel/runtime/helpers/slicedToArray.js"));
 
-__webpack_require__(/*! core-js/modules/es6.array.filter.js */ "../node_modules/core-js/modules/es6.array.filter.js");
+var _toConsumableArray2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/toConsumableArray */ "../node_modules/@babel/runtime/helpers/toConsumableArray.js"));
 
-__webpack_require__(/*! core-js/modules/es6.regexp.search.js */ "../node_modules/core-js/modules/es6.regexp.search.js");
-
-__webpack_require__(/*! core-js/modules/es6.string.includes.js */ "../node_modules/core-js/modules/es6.string.includes.js");
-
-__webpack_require__(/*! core-js/modules/es7.array.includes.js */ "../node_modules/core-js/modules/es7.array.includes.js");
-
-__webpack_require__(/*! core-js/modules/es6.array.map.js */ "../node_modules/core-js/modules/es6.array.map.js");
-
-var _slicedToArray2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/slicedToArray */ "../node_modules/@babel/runtime-corejs2/helpers/slicedToArray.js"));
-
-var _toConsumableArray2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/toConsumableArray */ "../node_modules/@babel/runtime-corejs2/helpers/toConsumableArray.js"));
-
-var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/defineProperty */ "../node_modules/@babel/runtime-corejs2/helpers/defineProperty.js"));
-
-var _objectSpread3 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/objectSpread2 */ "../node_modules/@babel/runtime-corejs2/helpers/objectSpread2.js"));
+var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "../node_modules/@babel/runtime/helpers/defineProperty.js"));
 
 var _kit = _interopRequireDefault(__webpack_require__(/*! ../models/kit */ "../core/app/modules/kit-library/assets/js/models/kit.js"));
 
@@ -2566,11 +2462,15 @@ var _reactQuery = __webpack_require__(/*! react-query */ "../node_modules/react-
 
 var _react = __webpack_require__(/*! react */ "react");
 
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { (0, _defineProperty2.default)(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
+
 var KEY = 'kits';
 /**
  * The default query params
  *
- * @type {object}
+ * @type {Object}
  */
 
 exports.KEY = KEY;
@@ -2579,7 +2479,7 @@ var defaultQueryParams = {
   search: '',
   taxonomies: _taxonomy.taxonomyType.reduce(function (current, _ref) {
     var key = _ref.key;
-    return (0, _objectSpread3.default)((0, _objectSpread3.default)({}, current), {}, (0, _defineProperty2.default)({}, key, []));
+    return _objectSpread(_objectSpread({}, current), {}, (0, _defineProperty2.default)({}, key, []));
   }, {}),
   order: {
     direction: 'desc',
@@ -2592,9 +2492,9 @@ var kitsPipeFunctions = {
   /**
    * Filter by favorite
    *
-   * @param data
-   * @param queryParams
-   * @returns {array}
+   * @param {Array<*>} data
+   * @param {*}        queryParams
+   * @return {Array} filtered data
    */
   favoriteFilter: function favoriteFilter(data, queryParams) {
     if (!queryParams.favorite) {
@@ -2609,9 +2509,9 @@ var kitsPipeFunctions = {
   /**
    * filter by search term.
    *
-   * @param data
-   * @param queryParams
-   * @returns {array}
+   * @param {Array<*>} data
+   * @param {*}        queryParams
+   * @return {Array} filtered data
    */
   searchFilter: function searchFilter(data, queryParams) {
     if (!queryParams.search) {
@@ -2631,12 +2531,12 @@ var kitsPipeFunctions = {
    * Filter by taxonomies.
    * In each taxonomy type it use the OR operator and between types it uses the AND operator.
    *
-   * @param data
-   * @param queryParams
-   * @returns {array}
+   * @param {Array<*>} data
+   * @param {*}        queryParams
+   * @return {Array} filtered data
    */
   taxonomiesFilter: function taxonomiesFilter(data, queryParams) {
-    return (0, _values.default)(queryParams.taxonomies).filter(function (taxonomies) {
+    return Object.values(queryParams.taxonomies).filter(function (taxonomies) {
       return taxonomies.length;
     }).reduce(function (current, taxonomies) {
       return current.filter(function (item) {
@@ -2652,9 +2552,9 @@ var kitsPipeFunctions = {
   /**
    * Sort all the data by the "order" query param
    *
-   * @param data
-   * @param queryParams
-   * @returns {array}
+   * @param {Array<*>} data
+   * @param {*}        queryParams
+   * @return {Array} sorted data
    */
   sort: function sort(data, queryParams) {
     var order = queryParams.order;
@@ -2670,8 +2570,8 @@ var kitsPipeFunctions = {
 /**
  * A util function to transform data throw transform functions
  *
- * @param functions
- * @returns {function(*=, ...[*]): *}
+ * @param {Array<Function>} functions
+ * @return {function(*=, ...[*]): *} function
  */
 
 function pipe() {
@@ -2692,8 +2592,8 @@ function pipe() {
 /**
  * Fetch kits
  *
- * @param force
- * @returns {*}
+ * @param {boolean} force
+ * @return {*} kits
  */
 
 
@@ -2714,8 +2614,8 @@ function fetchKits(force) {
 /**
  * Main function.
  *
- * @param initialQueryParams
- * @returns {object}
+ * @param {*} initialQueryParams
+ * @return {Object} query
  */
 
 
@@ -2728,7 +2628,7 @@ function useKits() {
       setForce = _useState2[1];
 
   var _useState3 = (0, _react.useState)(function () {
-    return (0, _objectSpread3.default)((0, _objectSpread3.default)({
+    return _objectSpread(_objectSpread({
       ready: false
     }, defaultQueryParams), initialQueryParams);
   }),
@@ -2740,7 +2640,7 @@ function useKits() {
     return setForce(true);
   }, [setForce]);
   var clearQueryParams = (0, _react.useCallback)(function () {
-    return setQueryParams((0, _objectSpread3.default)((0, _objectSpread3.default)({
+    return setQueryParams(_objectSpread(_objectSpread({
       ready: true
     }, defaultQueryParams), initialQueryParams));
   }, [setQueryParams]);
@@ -2748,7 +2648,7 @@ function useKits() {
     return fetchKits(force);
   });
   var data = (0, _react.useMemo)(function () {
-    return !query.data ? [] : pipe.apply(void 0, (0, _toConsumableArray2.default)((0, _values.default)(kitsPipeFunctions)))((0, _toConsumableArray2.default)(query.data), queryParams);
+    return !query.data ? [] : pipe.apply(void 0, (0, _toConsumableArray2.default)(Object.values(kitsPipeFunctions)))((0, _toConsumableArray2.default)(query.data), queryParams);
   }, [query.data, queryParams]);
   var selectedTaxonomies = (0, _useSelectedTaxonomies.default)(queryParams.taxonomies);
   var isFilterActive = (0, _react.useMemo)(function () {
@@ -2763,7 +2663,7 @@ function useKits() {
       return setForce(false);
     });
   }, [force]);
-  return (0, _objectSpread3.default)((0, _objectSpread3.default)({}, query), {}, {
+  return _objectSpread(_objectSpread({}, query), {}, {
     data: data,
     queryParams: queryParams,
     setQueryParams: setQueryParams,
@@ -2784,25 +2684,20 @@ function useKits() {
 "use strict";
 
 
-var _Object$defineProperty = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "../node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
 
-var _interopRequireDefault = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireDefault */ "../node_modules/@babel/runtime-corejs2/helpers/interopRequireDefault.js");
-
-_Object$defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
-
+}));
 exports["default"] = useSelectedTaxonomies;
 
-var _toConsumableArray2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/toConsumableArray */ "../node_modules/@babel/runtime-corejs2/helpers/toConsumableArray.js"));
-
-var _values = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/core-js/object/values */ "../node_modules/@babel/runtime-corejs2/core-js/object/values.js"));
+var _toConsumableArray2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/toConsumableArray */ "../node_modules/@babel/runtime/helpers/toConsumableArray.js"));
 
 var _react = __webpack_require__(/*! react */ "react");
 
 function useSelectedTaxonomies(taxonomiesFilter) {
   return (0, _react.useMemo)(function () {
-    return (0, _values.default)(taxonomiesFilter).reduce(function (current, groupedTaxonomies) {
+    return Object.values(taxonomiesFilter).reduce(function (current, groupedTaxonomies) {
       return [].concat((0, _toConsumableArray2.default)(current), (0, _toConsumableArray2.default)(groupedTaxonomies));
     });
   }, [taxonomiesFilter]);
@@ -2819,28 +2714,27 @@ function useSelectedTaxonomies(taxonomiesFilter) {
 "use strict";
 
 
-var _Object$defineProperty = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "../node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
 
-var _interopRequireDefault = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireDefault */ "../node_modules/@babel/runtime-corejs2/helpers/interopRequireDefault.js");
-
-_Object$defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
-
+}));
 exports.KEY = void 0;
 exports["default"] = useTaxonomies;
 
-__webpack_require__(/*! core-js/modules/es6.array.map.js */ "../node_modules/core-js/modules/es6.array.map.js");
+var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "../node_modules/@babel/runtime/helpers/defineProperty.js"));
 
-var _objectSpread2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/objectSpread2 */ "../node_modules/@babel/runtime-corejs2/helpers/objectSpread2.js"));
-
-var _slicedToArray2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/slicedToArray */ "../node_modules/@babel/runtime-corejs2/helpers/slicedToArray.js"));
+var _slicedToArray2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/slicedToArray */ "../node_modules/@babel/runtime/helpers/slicedToArray.js"));
 
 var _taxonomy = _interopRequireDefault(__webpack_require__(/*! ../models/taxonomy */ "../core/app/modules/kit-library/assets/js/models/taxonomy.js"));
 
 var _reactQuery = __webpack_require__(/*! react-query */ "../node_modules/react-query/es/index.js");
 
 var _react = __webpack_require__(/*! react */ "react");
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { (0, _defineProperty2.default)(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
 
 var KEY = 'tags';
 exports.KEY = KEY;
@@ -2866,7 +2760,7 @@ function useTaxonomies() {
       return setForce(false);
     });
   }, [force]);
-  return (0, _objectSpread2.default)((0, _objectSpread2.default)({}, query), {}, {
+  return _objectSpread(_objectSpread({}, query), {}, {
     forceRefetch: forceRefetch
   });
 }
@@ -2897,25 +2791,18 @@ function fetchTaxonomies(force) {
 "use strict";
 
 
-var _Object$defineProperty = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "../node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
 
-var _interopRequireDefault = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireDefault */ "../node_modules/@babel/runtime-corejs2/helpers/interopRequireDefault.js");
-
-_Object$defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
-
+}));
 exports["default"] = void 0;
 
-var _keys = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/core-js/object/keys */ "../node_modules/@babel/runtime-corejs2/core-js/object/keys.js"));
+var _slicedToArray2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/slicedToArray */ "../node_modules/@babel/runtime/helpers/slicedToArray.js"));
 
-var _entries = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/core-js/object/entries */ "../node_modules/@babel/runtime-corejs2/core-js/object/entries.js"));
+var _classCallCheck2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "../node_modules/@babel/runtime/helpers/classCallCheck.js"));
 
-var _slicedToArray2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/slicedToArray */ "../node_modules/@babel/runtime-corejs2/helpers/slicedToArray.js"));
-
-var _classCallCheck2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/classCallCheck */ "../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js"));
-
-var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/createClass */ "../node_modules/@babel/runtime-corejs2/helpers/createClass.js"));
+var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/createClass */ "../node_modules/@babel/runtime/helpers/createClass.js"));
 
 var BaseModel = /*#__PURE__*/function () {
   function BaseModel() {
@@ -2928,13 +2815,13 @@ var BaseModel = /*#__PURE__*/function () {
     /**
      * Clone to object to avoid changing the reference.
      *
-     * @returns {BaseModel}
+     * @return {BaseModel} cloned model
      */
     function clone() {
       var _this = this;
 
       var instance = new this.constructor();
-      (0, _keys.default)(this).forEach(function (key) {
+      Object.keys(this).forEach(function (key) {
         instance[key] = _this[key];
       });
       return instance;
@@ -2943,8 +2830,8 @@ var BaseModel = /*#__PURE__*/function () {
      * Using init and not the default constructor because there is a problem to fill the instance
      * dynamically in the constructor.
      *
-     * @param data
-     * @returns {BaseModel}
+     * @param {*} data
+     * @return {BaseModel} model
      */
 
   }, {
@@ -2953,7 +2840,7 @@ var BaseModel = /*#__PURE__*/function () {
       var _this2 = this;
 
       var data = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-      (0, _entries.default)(data).forEach(function (_ref) {
+      Object.entries(data).forEach(function (_ref) {
         var _ref2 = (0, _slicedToArray2.default)(_ref, 2),
             key = _ref2[0],
             value = _ref2[1];
@@ -2979,34 +2866,37 @@ exports["default"] = BaseModel;
 "use strict";
 
 
-var _Object$defineProperty = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "../node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
 
-var _interopRequireDefault = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireDefault */ "../node_modules/@babel/runtime-corejs2/helpers/interopRequireDefault.js");
-
-_Object$defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
-
+}));
 exports["default"] = void 0;
 
-var _classCallCheck2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/classCallCheck */ "../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js"));
+var _classCallCheck2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "../node_modules/@babel/runtime/helpers/classCallCheck.js"));
 
-var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/createClass */ "../node_modules/@babel/runtime-corejs2/helpers/createClass.js"));
+var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/createClass */ "../node_modules/@babel/runtime/helpers/createClass.js"));
 
-var _assertThisInitialized2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/assertThisInitialized */ "../node_modules/@babel/runtime-corejs2/helpers/assertThisInitialized.js"));
+var _assertThisInitialized2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/assertThisInitialized */ "../node_modules/@babel/runtime/helpers/assertThisInitialized.js"));
 
-var _inherits2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/inherits */ "../node_modules/@babel/runtime-corejs2/helpers/inherits.js"));
+var _inherits2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/inherits */ "../node_modules/@babel/runtime/helpers/inherits.js"));
 
-var _createSuper2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/createSuper */ "../node_modules/@babel/runtime-corejs2/helpers/createSuper.js"));
+var _possibleConstructorReturn2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/possibleConstructorReturn */ "../node_modules/@babel/runtime/helpers/possibleConstructorReturn.js"));
 
-var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/defineProperty */ "../node_modules/@babel/runtime-corejs2/helpers/defineProperty.js"));
+var _getPrototypeOf2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/getPrototypeOf */ "../node_modules/@babel/runtime/helpers/getPrototypeOf.js"));
+
+var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "../node_modules/@babel/runtime/helpers/defineProperty.js"));
 
 var _baseModel = _interopRequireDefault(__webpack_require__(/*! ./base-model */ "../core/app/modules/kit-library/assets/js/models/base-model.js"));
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = (0, _getPrototypeOf2.default)(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = (0, _getPrototypeOf2.default)(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return (0, _possibleConstructorReturn2.default)(this, result); }; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 
 var ContentType = /*#__PURE__*/function (_BaseModel) {
   (0, _inherits2.default)(ContentType, _BaseModel);
 
-  var _super = (0, _createSuper2.default)(ContentType);
+  var _super = _createSuper(ContentType);
 
   function ContentType() {
     var _this;
@@ -3054,34 +2944,37 @@ exports["default"] = ContentType;
 "use strict";
 
 
-var _Object$defineProperty = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "../node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
 
-var _interopRequireDefault = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireDefault */ "../node_modules/@babel/runtime-corejs2/helpers/interopRequireDefault.js");
-
-_Object$defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
-
+}));
 exports["default"] = void 0;
 
-var _classCallCheck2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/classCallCheck */ "../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js"));
+var _classCallCheck2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "../node_modules/@babel/runtime/helpers/classCallCheck.js"));
 
-var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/createClass */ "../node_modules/@babel/runtime-corejs2/helpers/createClass.js"));
+var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/createClass */ "../node_modules/@babel/runtime/helpers/createClass.js"));
 
-var _assertThisInitialized2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/assertThisInitialized */ "../node_modules/@babel/runtime-corejs2/helpers/assertThisInitialized.js"));
+var _assertThisInitialized2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/assertThisInitialized */ "../node_modules/@babel/runtime/helpers/assertThisInitialized.js"));
 
-var _inherits2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/inherits */ "../node_modules/@babel/runtime-corejs2/helpers/inherits.js"));
+var _inherits2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/inherits */ "../node_modules/@babel/runtime/helpers/inherits.js"));
 
-var _createSuper2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/createSuper */ "../node_modules/@babel/runtime-corejs2/helpers/createSuper.js"));
+var _possibleConstructorReturn2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/possibleConstructorReturn */ "../node_modules/@babel/runtime/helpers/possibleConstructorReturn.js"));
 
-var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/defineProperty */ "../node_modules/@babel/runtime-corejs2/helpers/defineProperty.js"));
+var _getPrototypeOf2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/getPrototypeOf */ "../node_modules/@babel/runtime/helpers/getPrototypeOf.js"));
+
+var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "../node_modules/@babel/runtime/helpers/defineProperty.js"));
 
 var _baseModel = _interopRequireDefault(__webpack_require__(/*! ./base-model */ "../core/app/modules/kit-library/assets/js/models/base-model.js"));
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = (0, _getPrototypeOf2.default)(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = (0, _getPrototypeOf2.default)(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return (0, _possibleConstructorReturn2.default)(this, result); }; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 
 var Document = /*#__PURE__*/function (_BaseModel) {
   (0, _inherits2.default)(Document, _BaseModel);
 
-  var _super = (0, _createSuper2.default)(Document);
+  var _super = _createSuper(Document);
 
   function Document() {
     var _this;
@@ -3107,7 +3000,7 @@ var Document = /*#__PURE__*/function (_BaseModel) {
     /**
      * Create a tag from server response
      *
-     * @param document
+     * @param {Document} document
      */
     function createFromResponse(document) {
       return new Document().init({
@@ -3135,44 +3028,42 @@ exports["default"] = Document;
 "use strict";
 
 
-var _Object$defineProperty = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "../node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
 
-var _interopRequireDefault = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireDefault */ "../node_modules/@babel/runtime-corejs2/helpers/interopRequireDefault.js");
-
-_Object$defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
-
+}));
 exports["default"] = void 0;
 
-__webpack_require__(/*! core-js/modules/es6.array.map.js */ "../node_modules/core-js/modules/es6.array.map.js");
+var _classCallCheck2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "../node_modules/@babel/runtime/helpers/classCallCheck.js"));
 
-__webpack_require__(/*! core-js/modules/es6.array.filter.js */ "../node_modules/core-js/modules/es6.array.filter.js");
+var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/createClass */ "../node_modules/@babel/runtime/helpers/createClass.js"));
 
-__webpack_require__(/*! core-js/modules/es6.string.includes.js */ "../node_modules/core-js/modules/es6.string.includes.js");
+var _assertThisInitialized2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/assertThisInitialized */ "../node_modules/@babel/runtime/helpers/assertThisInitialized.js"));
 
-__webpack_require__(/*! core-js/modules/es7.array.includes.js */ "../node_modules/core-js/modules/es7.array.includes.js");
+var _inherits2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/inherits */ "../node_modules/@babel/runtime/helpers/inherits.js"));
 
-var _classCallCheck2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/classCallCheck */ "../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js"));
+var _possibleConstructorReturn2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/possibleConstructorReturn */ "../node_modules/@babel/runtime/helpers/possibleConstructorReturn.js"));
 
-var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/createClass */ "../node_modules/@babel/runtime-corejs2/helpers/createClass.js"));
+var _getPrototypeOf2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/getPrototypeOf */ "../node_modules/@babel/runtime/helpers/getPrototypeOf.js"));
 
-var _assertThisInitialized2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/assertThisInitialized */ "../node_modules/@babel/runtime-corejs2/helpers/assertThisInitialized.js"));
-
-var _inherits2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/inherits */ "../node_modules/@babel/runtime-corejs2/helpers/inherits.js"));
-
-var _createSuper2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/createSuper */ "../node_modules/@babel/runtime-corejs2/helpers/createSuper.js"));
-
-var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/defineProperty */ "../node_modules/@babel/runtime-corejs2/helpers/defineProperty.js"));
+var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "../node_modules/@babel/runtime/helpers/defineProperty.js"));
 
 var _baseModel = _interopRequireDefault(__webpack_require__(/*! ./base-model */ "../core/app/modules/kit-library/assets/js/models/base-model.js"));
 
 var _document = _interopRequireDefault(__webpack_require__(/*! ./document */ "../core/app/modules/kit-library/assets/js/models/document.js"));
 
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = (0, _getPrototypeOf2.default)(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = (0, _getPrototypeOf2.default)(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return (0, _possibleConstructorReturn2.default)(this, result); }; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+/**
+ * @typedef {import('./content-type')} ContentType
+ */
 var Kit = /*#__PURE__*/function (_BaseModel) {
   (0, _inherits2.default)(Kit, _BaseModel);
 
-  var _super = (0, _createSuper2.default)(Kit);
+  var _super = _createSuper(Kit);
 
   function Kit() {
     var _this;
@@ -3209,7 +3100,7 @@ var Kit = /*#__PURE__*/function (_BaseModel) {
      * Get content types as param and group all the documents based on it.
      *
      * @param {ContentType[]} contentTypes
-     * @returns {ContentType[]}
+     * @return {ContentType[]} content types
      */
     function getDocumentsByTypes(contentTypes) {
       var _this2 = this;
@@ -3228,7 +3119,7 @@ var Kit = /*#__PURE__*/function (_BaseModel) {
     /**
      * Create a kit from server response
      *
-     * @param kit
+     * @param {Kit} kit
      */
     function createFromResponse(kit) {
       return new Kit().init({
@@ -3271,29 +3162,32 @@ exports["default"] = Kit;
 /* provided dependency */ var __ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n")["__"];
 
 
-var _Object$defineProperty = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "../node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
 
-var _interopRequireDefault = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireDefault */ "../node_modules/@babel/runtime-corejs2/helpers/interopRequireDefault.js");
-
-_Object$defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
-
+}));
 exports.taxonomyType = exports["default"] = void 0;
 
-var _classCallCheck2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/classCallCheck */ "../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js"));
+var _classCallCheck2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "../node_modules/@babel/runtime/helpers/classCallCheck.js"));
 
-var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/createClass */ "../node_modules/@babel/runtime-corejs2/helpers/createClass.js"));
+var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/createClass */ "../node_modules/@babel/runtime/helpers/createClass.js"));
 
-var _assertThisInitialized2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/assertThisInitialized */ "../node_modules/@babel/runtime-corejs2/helpers/assertThisInitialized.js"));
+var _assertThisInitialized2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/assertThisInitialized */ "../node_modules/@babel/runtime/helpers/assertThisInitialized.js"));
 
-var _inherits2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/inherits */ "../node_modules/@babel/runtime-corejs2/helpers/inherits.js"));
+var _inherits2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/inherits */ "../node_modules/@babel/runtime/helpers/inherits.js"));
 
-var _createSuper2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/createSuper */ "../node_modules/@babel/runtime-corejs2/helpers/createSuper.js"));
+var _possibleConstructorReturn2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/possibleConstructorReturn */ "../node_modules/@babel/runtime/helpers/possibleConstructorReturn.js"));
 
-var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/defineProperty */ "../node_modules/@babel/runtime-corejs2/helpers/defineProperty.js"));
+var _getPrototypeOf2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/getPrototypeOf */ "../node_modules/@babel/runtime/helpers/getPrototypeOf.js"));
+
+var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "../node_modules/@babel/runtime/helpers/defineProperty.js"));
 
 var _baseModel = _interopRequireDefault(__webpack_require__(/*! ./base-model */ "../core/app/modules/kit-library/assets/js/models/base-model.js"));
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = (0, _getPrototypeOf2.default)(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = (0, _getPrototypeOf2.default)(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return (0, _possibleConstructorReturn2.default)(this, result); }; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 
 var taxonomyType = [{
   key: 'categories',
@@ -3317,7 +3211,7 @@ exports.taxonomyType = taxonomyType;
 var Taxonomy = /*#__PURE__*/function (_BaseModel) {
   (0, _inherits2.default)(Taxonomy, _BaseModel);
 
-  var _super = (0, _createSuper2.default)(Taxonomy);
+  var _super = _createSuper(Taxonomy);
 
   function Taxonomy() {
     var _this;
@@ -3340,7 +3234,7 @@ var Taxonomy = /*#__PURE__*/function (_BaseModel) {
     /**
      * Create a tag from server response
      *
-     * @param taxonomy
+     * @param {Taxonomy} taxonomy
      */
     function createFromResponse(taxonomy) {
       return new Taxonomy().init({
@@ -3367,14 +3261,11 @@ exports["default"] = Taxonomy;
 /* provided dependency */ var PropTypes = __webpack_require__(/*! prop-types */ "../node_modules/prop-types/index.js");
 
 
-var _Object$defineProperty = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "../node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
 
-var _interopRequireDefault = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireDefault */ "../node_modules/@babel/runtime-corejs2/helpers/interopRequireDefault.js");
-
-_Object$defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
-
+}));
 exports["default"] = Favorites;
 
 var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
@@ -3388,7 +3279,8 @@ var _router = __webpack_require__(/*! @reach/router */ "../node_modules/@reach/r
 function Favorites(props) {
   var navigate = (0, _router.useNavigate)();
 
-  var indexNotResultsFavorites = /*#__PURE__*/_react.default.createElement(_errorScreen.default, {
+  var indexNotResultsFavorites = /*#__PURE__*/_react.default.createElement(_errorScreen.default // eslint-disable-next-line @wordpress/i18n-ellipsis
+  , {
     title: __('No favorites here yet...', 'elementor'),
     description: __('Use the heart icon to save kits that inspire you. You\'ll be able to find them here.', 'elementor'),
     button: {
@@ -3434,21 +3326,18 @@ Favorites.propTypes = {
 /* provided dependency */ var PropTypes = __webpack_require__(/*! prop-types */ "../node_modules/prop-types/index.js");
 
 
-var _Object$defineProperty = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "../node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
 
-var _interopRequireDefault = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireDefault */ "../node_modules/@babel/runtime-corejs2/helpers/interopRequireDefault.js");
+var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "../node_modules/@babel/runtime/helpers/typeof.js");
 
-var _interopRequireWildcard = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireWildcard */ "../node_modules/@babel/runtime-corejs2/helpers/interopRequireWildcard.js");
-
-_Object$defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
-
+}));
 exports["default"] = IndexHeader;
 
 var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "react"));
 
-var _slicedToArray2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/slicedToArray */ "../node_modules/@babel/runtime-corejs2/helpers/slicedToArray.js"));
+var _slicedToArray2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/slicedToArray */ "../node_modules/@babel/runtime/helpers/slicedToArray.js"));
 
 var _header = _interopRequireDefault(__webpack_require__(/*! ../../components/layout/header */ "../core/app/modules/kit-library/assets/js/components/layout/header.js"));
 
@@ -3459,6 +3348,10 @@ var _router = __webpack_require__(/*! @reach/router */ "../node_modules/@reach/r
 var _popoverDialog = _interopRequireDefault(__webpack_require__(/*! elementor-app/ui/popover-dialog/popover-dialog */ "../core/app/assets/js/ui/popover-dialog/popover-dialog.js"));
 
 __webpack_require__(/*! ./index-header.scss */ "../core/app/modules/kit-library/assets/js/pages/index/index-header.scss");
+
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 function IndexHeader(props) {
   var navigate = (0, _router.useNavigate)();
@@ -3518,7 +3411,7 @@ function IndexHeader(props) {
     tag: "h3",
     variant: "h3"
   }, __('Happy browsing!', 'elementor')), /*#__PURE__*/_react.default.createElement(_appUi.Text, null, /*#__PURE__*/_react.default.createElement(_appUi.Button, {
-    url: "https://go.elementor.com/app-kit-library-how-to-use-kits",
+    url: "https://go.elementor.com/app-kit-library-how-to-use-kits/",
     target: "_blank",
     rel: "noreferrer",
     text: __('Learn more', 'elementor'),
@@ -3543,19 +3436,14 @@ IndexHeader.propTypes = {
 /* provided dependency */ var PropTypes = __webpack_require__(/*! prop-types */ "../node_modules/prop-types/index.js");
 
 
-var _Object$defineProperty = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "../node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
 
-var _interopRequireDefault = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireDefault */ "../node_modules/@babel/runtime-corejs2/helpers/interopRequireDefault.js");
-
-_Object$defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
-
+}));
 exports["default"] = IndexSidebar;
 
 var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
-
-__webpack_require__(/*! core-js/modules/es6.array.map.js */ "../node_modules/core-js/modules/es6.array.map.js");
 
 var _appUi = __webpack_require__(/*! @elementor/app-ui */ "@elementor/app-ui");
 
@@ -3594,43 +3482,22 @@ IndexSidebar.propTypes = {
 /* provided dependency */ var PropTypes = __webpack_require__(/*! prop-types */ "../node_modules/prop-types/index.js");
 
 
-var _Object$defineProperty = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "../node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
 
-var _interopRequireDefault = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireDefault */ "../node_modules/@babel/runtime-corejs2/helpers/interopRequireDefault.js");
+var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "../node_modules/@babel/runtime/helpers/typeof.js");
 
-var _interopRequireWildcard = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireWildcard */ "../node_modules/@babel/runtime-corejs2/helpers/interopRequireWildcard.js");
-
-_Object$defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
-
+}));
 exports["default"] = Index;
 
 var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "react"));
 
-__webpack_require__(/*! core-js/modules/es6.array.filter.js */ "../node_modules/core-js/modules/es6.array.filter.js");
+var _toConsumableArray2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/toConsumableArray */ "../node_modules/@babel/runtime/helpers/toConsumableArray.js"));
 
-__webpack_require__(/*! core-js/modules/es6.regexp.replace.js */ "../node_modules/core-js/modules/es6.regexp.replace.js");
+var _slicedToArray2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/slicedToArray */ "../node_modules/@babel/runtime/helpers/slicedToArray.js"));
 
-__webpack_require__(/*! core-js/modules/es6.string.includes.js */ "../node_modules/core-js/modules/es6.string.includes.js");
-
-__webpack_require__(/*! core-js/modules/es7.array.includes.js */ "../node_modules/core-js/modules/es7.array.includes.js");
-
-__webpack_require__(/*! core-js/modules/es6.regexp.split.js */ "../node_modules/core-js/modules/es6.regexp.split.js");
-
-__webpack_require__(/*! core-js/modules/es6.regexp.search.js */ "../node_modules/core-js/modules/es6.regexp.search.js");
-
-var _entries = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/core-js/object/entries */ "../node_modules/@babel/runtime-corejs2/core-js/object/entries.js"));
-
-var _keys = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/core-js/object/keys */ "../node_modules/@babel/runtime-corejs2/core-js/object/keys.js"));
-
-var _toConsumableArray2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/toConsumableArray */ "../node_modules/@babel/runtime-corejs2/helpers/toConsumableArray.js"));
-
-var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/defineProperty */ "../node_modules/@babel/runtime-corejs2/helpers/defineProperty.js"));
-
-var _slicedToArray2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/slicedToArray */ "../node_modules/@babel/runtime-corejs2/helpers/slicedToArray.js"));
-
-var _objectSpread4 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/objectSpread2 */ "../node_modules/@babel/runtime-corejs2/helpers/objectSpread2.js"));
+var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "../node_modules/@babel/runtime/helpers/defineProperty.js"));
 
 var _content = _interopRequireDefault(__webpack_require__(/*! ../../../../../../assets/js/layout/content */ "../core/app/assets/js/layout/content.js"));
 
@@ -3670,34 +3537,43 @@ var _router = __webpack_require__(/*! @reach/router */ "../node_modules/@reach/r
 
 __webpack_require__(/*! ./index.scss */ "../core/app/modules/kit-library/assets/js/pages/index/index.scss");
 
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { (0, _defineProperty2.default)(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
+
 /**
  * Generate select and unselect taxonomy functions.
  *
- * @param setQueryParams
- * @returns {((function(*, *): *)|(function(*=): *))[]}
+ * @param {Function} setQueryParams
+ * @return {((function(*, *): *)|(function(*=): *))[]} taxonomy functions
  */
 function useTaxonomiesSelection(setQueryParams) {
   var selectTaxonomy = (0, _react.useCallback)(function (type, callback) {
     return setQueryParams(function (prev) {
-      var taxonomies = (0, _objectSpread4.default)({}, prev.taxonomies);
+      var taxonomies = _objectSpread({}, prev.taxonomies);
+
       taxonomies[type] = callback(prev.taxonomies[type]);
-      return (0, _objectSpread4.default)((0, _objectSpread4.default)({}, prev), {}, {
+      return _objectSpread(_objectSpread({}, prev), {}, {
         taxonomies: taxonomies
       });
     });
   }, [setQueryParams]);
   var unselectTaxonomy = (0, _react.useCallback)(function (taxonomy) {
     return setQueryParams(function (prev) {
-      var taxonomies = (0, _entries.default)(prev.taxonomies).reduce(function (current, _ref) {
+      var taxonomies = Object.entries(prev.taxonomies).reduce(function (current, _ref) {
         var _ref2 = (0, _slicedToArray2.default)(_ref, 2),
             key = _ref2[0],
             groupedTaxonomies = _ref2[1];
 
-        return (0, _objectSpread4.default)((0, _objectSpread4.default)({}, current), {}, (0, _defineProperty2.default)({}, key, groupedTaxonomies.filter(function (item) {
+        return _objectSpread(_objectSpread({}, current), {}, (0, _defineProperty2.default)({}, key, groupedTaxonomies.filter(function (item) {
           return item !== taxonomy;
         })));
       }, {});
-      return (0, _objectSpread4.default)((0, _objectSpread4.default)({}, prev), {}, {
+      return _objectSpread(_objectSpread({}, prev), {}, {
         taxonomies: taxonomies
       });
     });
@@ -3707,8 +3583,8 @@ function useTaxonomiesSelection(setQueryParams) {
 /**
  * Generate the menu items for the index page.
  *
- * @param path
- * @returns {array}
+ * @param {string} path
+ * @return {Array} menu items
  */
 
 
@@ -3731,9 +3607,9 @@ function useMenuItems(path) {
 /**
  * Update and read the query param from the url
  *
- * @param queryParams
- * @param setQueryParams
- * @param exclude
+ * @param {*}             queryParams
+ * @param {*}             setQueryParams
+ * @param {Array<string>} exclude
  */
 
 
@@ -3745,7 +3621,7 @@ function useRouterQueryParams(queryParams, setQueryParams) {
       setLastFilter = _useLastFilterContext.setLastFilter;
 
   (0, _react.useEffect)(function () {
-    var filteredQueryParams = Object.fromEntries((0, _entries.default)(queryParams).filter(function (_ref3) {
+    var filteredQueryParams = Object.fromEntries(Object.entries(queryParams).filter(function (_ref3) {
       var _ref4 = (0, _slicedToArray2.default)(_ref3, 2),
           key = _ref4[0],
           item = _ref4[1];
@@ -3756,7 +3632,7 @@ function useRouterQueryParams(queryParams, setQueryParams) {
     history.replaceState(null, '', decodeURI("#".concat(wp.url.addQueryArgs(location.pathname.split('?')[0] || '/', filteredQueryParams))));
   }, [queryParams]);
   (0, _react.useEffect)(function () {
-    var routerQueryParams = (0, _keys.default)(_useKits2.defaultQueryParams).reduce(function (current, key) {
+    var routerQueryParams = Object.keys(_useKits2.defaultQueryParams).reduce(function (current, key) {
       // TODO: Replace with `wp.url.getQueryArgs` when WordPress 5.7 is the min version
       var queryArg = wp.url.getQueryArg(location.pathname, key);
 
@@ -3764,11 +3640,11 @@ function useRouterQueryParams(queryParams, setQueryParams) {
         return current;
       }
 
-      return (0, _objectSpread4.default)((0, _objectSpread4.default)({}, current), {}, (0, _defineProperty2.default)({}, key, queryArg));
+      return _objectSpread(_objectSpread({}, current), {}, (0, _defineProperty2.default)({}, key, queryArg));
     }, {});
     setQueryParams(function (prev) {
-      return (0, _objectSpread4.default)((0, _objectSpread4.default)((0, _objectSpread4.default)({}, prev), routerQueryParams), {}, {
-        taxonomies: (0, _objectSpread4.default)((0, _objectSpread4.default)({}, prev.taxonomies), routerQueryParams.taxonomies),
+      return _objectSpread(_objectSpread(_objectSpread({}, prev), routerQueryParams), {}, {
+        taxonomies: _objectSpread(_objectSpread({}, prev.taxonomies), routerQueryParams.taxonomies),
         ready: true
       });
     });
@@ -3793,7 +3669,7 @@ function Index(props) {
       forceRefetch = _useKits.forceRefetch,
       isFilterActive = _useKits.isFilterActive;
 
-  useRouterQueryParams(queryParams, setQueryParams, ['ready'].concat((0, _toConsumableArray2.default)((0, _keys.default)(props.initialQueryParams))));
+  useRouterQueryParams(queryParams, setQueryParams, ['ready'].concat((0, _toConsumableArray2.default)(Object.keys(props.initialQueryParams))));
 
   var _useTaxonomies = (0, _useTaxonomies2.default)(),
       taxonomiesData = _useTaxonomies.data,
@@ -3829,12 +3705,13 @@ function Index(props) {
   }, /*#__PURE__*/_react.default.createElement(_appUi.Grid, {
     item: true,
     className: "e-kit-library__index-layout-top-area-search"
-  }, /*#__PURE__*/_react.default.createElement(_searchInput.default, {
+  }, /*#__PURE__*/_react.default.createElement(_searchInput.default // eslint-disable-next-line @wordpress/i18n-ellipsis
+  , {
     placeholder: __('Search all Template Kits...', 'elementor'),
     value: queryParams.search,
     onChange: function onChange(value) {
       return setQueryParams(function (prev) {
-        return (0, _objectSpread4.default)((0, _objectSpread4.default)({}, prev), {}, {
+        return _objectSpread(_objectSpread({}, prev), {}, {
           search: value
         });
       });
@@ -3864,7 +3741,7 @@ function Index(props) {
     value: queryParams.order,
     onChange: function onChange(order) {
       return setQueryParams(function (prev) {
-        return (0, _objectSpread4.default)((0, _objectSpread4.default)({}, prev), {}, {
+        return _objectSpread(_objectSpread({}, prev), {}, {
           order: order
         });
       });
@@ -3876,7 +3753,7 @@ function Index(props) {
     description: __('Nothing to worry about, use 🔄 on the top right to try again. If the problem continues, head over to the Help Center.', 'elementor'),
     button: {
       text: __('Learn More', 'elementor'),
-      url: 'http://go.elementor.com/app-kit-library-error',
+      url: 'http://go.elementor.com/app-kit-library-error/',
       target: '_blank'
     }
   }), isSuccess && 0 < data.length && queryParams.ready && /*#__PURE__*/_react.default.createElement(_kitList.default, {
@@ -3920,14 +3797,11 @@ Index.defaultProps = {
 /* provided dependency */ var PropTypes = __webpack_require__(/*! prop-types */ "../node_modules/prop-types/index.js");
 
 
-var _Object$defineProperty = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "../node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
 
-var _interopRequireDefault = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireDefault */ "../node_modules/@babel/runtime-corejs2/helpers/interopRequireDefault.js");
-
-_Object$defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
-
+}));
 exports["default"] = OverviewContentGroupItem;
 
 var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
@@ -3970,19 +3844,14 @@ OverviewContentGroupItem.propTypes = {
 /* provided dependency */ var PropTypes = __webpack_require__(/*! prop-types */ "../node_modules/prop-types/index.js");
 
 
-var _Object$defineProperty = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "../node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
 
-var _interopRequireDefault = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireDefault */ "../node_modules/@babel/runtime-corejs2/helpers/interopRequireDefault.js");
-
-_Object$defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
-
+}));
 exports["default"] = OverviewContentGroup;
 
 var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
-
-__webpack_require__(/*! core-js/modules/es6.array.map.js */ "../node_modules/core-js/modules/es6.array.map.js");
 
 var _contentType = _interopRequireDefault(__webpack_require__(/*! ../../models/content-type */ "../core/app/modules/kit-library/assets/js/models/content-type.js"));
 
@@ -4033,23 +3902,18 @@ OverviewContentGroup.propTypes = {
 /* provided dependency */ var PropTypes = __webpack_require__(/*! prop-types */ "../node_modules/prop-types/index.js");
 
 
-var _Object$defineProperty = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "../node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
 
-var _interopRequireDefault = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireDefault */ "../node_modules/@babel/runtime-corejs2/helpers/interopRequireDefault.js");
+var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "../node_modules/@babel/runtime/helpers/typeof.js");
 
-var _interopRequireWildcard = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireWildcard */ "../node_modules/@babel/runtime-corejs2/helpers/interopRequireWildcard.js");
-
-_Object$defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
-
+}));
 exports["default"] = OverviewSidebar;
 
 var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "react"));
 
-__webpack_require__(/*! core-js/modules/es6.array.map.js */ "../node_modules/core-js/modules/es6.array.map.js");
-
-var _slicedToArray2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/slicedToArray */ "../node_modules/@babel/runtime-corejs2/helpers/slicedToArray.js"));
+var _slicedToArray2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/slicedToArray */ "../node_modules/@babel/runtime/helpers/slicedToArray.js"));
 
 var _collapse = _interopRequireDefault(__webpack_require__(/*! ../../components/collapse */ "../core/app/modules/kit-library/assets/js/components/collapse.js"));
 
@@ -4064,6 +3928,10 @@ var _overviewTaxonomyBadge = _interopRequireDefault(__webpack_require__(/*! ./ov
 var _appUi = __webpack_require__(/*! @elementor/app-ui */ "@elementor/app-ui");
 
 __webpack_require__(/*! ./overview-sidebar.scss */ "../core/app/modules/kit-library/assets/js/pages/overview/overview-sidebar.scss");
+
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 function OverviewSidebar(props) {
   var _props$groupedKitCont;
@@ -4141,27 +4009,26 @@ OverviewSidebar.propTypes = {
 /* provided dependency */ var PropTypes = __webpack_require__(/*! prop-types */ "../node_modules/prop-types/index.js");
 
 
-var _Object$defineProperty = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "../node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
 
-var _interopRequireDefault = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireDefault */ "../node_modules/@babel/runtime-corejs2/helpers/interopRequireDefault.js");
+var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "../node_modules/@babel/runtime/helpers/typeof.js");
 
-var _interopRequireWildcard = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireWildcard */ "../node_modules/@babel/runtime-corejs2/helpers/interopRequireWildcard.js");
-
-_Object$defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
-
+}));
 exports["default"] = OverviewTaxonomyBadge;
 
 var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "react"));
-
-__webpack_require__(/*! core-js/modules/es6.array.find.js */ "../node_modules/core-js/modules/es6.array.find.js");
 
 var _badge = _interopRequireDefault(__webpack_require__(/*! ../../components/badge */ "../core/app/modules/kit-library/assets/js/components/badge.js"));
 
 var _useTaxonomies2 = _interopRequireDefault(__webpack_require__(/*! ../../hooks/use-taxonomies */ "../core/app/modules/kit-library/assets/js/hooks/use-taxonomies.js"));
 
 var _router = __webpack_require__(/*! @reach/router */ "../node_modules/@reach/router/es/index.js");
+
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 function OverviewTaxonomyBadge(props) {
   var _useTaxonomies = (0, _useTaxonomies2.default)(),
@@ -4206,21 +4073,16 @@ OverviewTaxonomyBadge.propTypes = {
 /* provided dependency */ var PropTypes = __webpack_require__(/*! prop-types */ "../node_modules/prop-types/index.js");
 
 
-var _Object$defineProperty = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "../node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
 
-var _interopRequireDefault = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireDefault */ "../node_modules/@babel/runtime-corejs2/helpers/interopRequireDefault.js");
+var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "../node_modules/@babel/runtime/helpers/typeof.js");
 
-var _interopRequireWildcard = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireWildcard */ "../node_modules/@babel/runtime-corejs2/helpers/interopRequireWildcard.js");
-
-_Object$defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
-
+}));
 exports["default"] = Overview;
 
 var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "react"));
-
-__webpack_require__(/*! core-js/modules/es6.array.map.js */ "../node_modules/core-js/modules/es6.array.map.js");
 
 var _content = _interopRequireDefault(__webpack_require__(/*! elementor/core/app/assets/js/layout/content */ "../core/app/assets/js/layout/content.js"));
 
@@ -4243,6 +4105,10 @@ var _usePageTitle = _interopRequireDefault(__webpack_require__(/*! elementor-app
 var _router = __webpack_require__(/*! @reach/router */ "../node_modules/@reach/router/es/index.js");
 
 __webpack_require__(/*! ./overview.scss */ "../core/app/modules/kit-library/assets/js/pages/overview/overview.scss");
+
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 function useHeaderButtons(id) {
   var navigate = (0, _router.useNavigate)();
@@ -4273,7 +4139,8 @@ function Overview(props) {
 
   var headerButtons = useHeaderButtons(props.id);
   (0, _usePageTitle.default)({
-    title: kit ? "".concat(__('Kit Library', 'elementor'), " | ").concat(kit.title) : __('Loading...', 'elementor')
+    title: kit ? "".concat(__('Kit Library', 'elementor'), " | ").concat(kit.title) // eslint-disable-next-line @wordpress/i18n-ellipsis
+    : __('Loading...', 'elementor')
   });
 
   if (isError) {
@@ -4320,20 +4187,22 @@ Overview.propTypes = {
 /* provided dependency */ var PropTypes = __webpack_require__(/*! prop-types */ "../node_modules/prop-types/index.js");
 
 
-var _Object$defineProperty = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "../node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
+var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "../node_modules/@babel/runtime/helpers/typeof.js");
 
-var _interopRequireWildcard = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireWildcard */ "../node_modules/@babel/runtime-corejs2/helpers/interopRequireWildcard.js");
-
-_Object$defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
-
+}));
 exports.PreviewIframe = PreviewIframe;
 
 var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "react"));
 
 var _appUi = __webpack_require__(/*! @elementor/app-ui */ "@elementor/app-ui");
 
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+/* eslint-disable jsx-a11y/iframe-has-title */
 function PreviewIframe(props) {
   var ref = (0, _react.useRef)();
   (0, _react.useEffect)(function () {
@@ -4387,19 +4256,14 @@ PreviewIframe.defaultProps = {
 /* provided dependency */ var PropTypes = __webpack_require__(/*! prop-types */ "../node_modules/prop-types/index.js");
 
 
-var _Object$defineProperty = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "../node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
 
-var _interopRequireDefault = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireDefault */ "../node_modules/@babel/runtime-corejs2/helpers/interopRequireDefault.js");
-
-_Object$defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
-
+}));
 exports["default"] = PreviewResponsiveControls;
 
 var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
-
-__webpack_require__(/*! core-js/modules/es6.array.map.js */ "../node_modules/core-js/modules/es6.array.map.js");
 
 var _preview = __webpack_require__(/*! ./preview */ "../core/app/modules/kit-library/assets/js/pages/preview/preview.js");
 
@@ -4456,28 +4320,19 @@ PreviewResponsiveControls.defaultProps = {
 /* provided dependency */ var PropTypes = __webpack_require__(/*! prop-types */ "../node_modules/prop-types/index.js");
 
 
-var _Object$defineProperty = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "../node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
 
-var _interopRequireDefault = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireDefault */ "../node_modules/@babel/runtime-corejs2/helpers/interopRequireDefault.js");
+var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "../node_modules/@babel/runtime/helpers/typeof.js");
 
-var _interopRequireWildcard = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireWildcard */ "../node_modules/@babel/runtime-corejs2/helpers/interopRequireWildcard.js");
-
-_Object$defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
-
+}));
 exports.breakpoints = void 0;
 exports["default"] = Preview;
 
 var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "react"));
 
-var _slicedToArray2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/slicedToArray */ "../node_modules/@babel/runtime-corejs2/helpers/slicedToArray.js"));
-
-var _parseInt2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/core-js/parse-int */ "../node_modules/@babel/runtime-corejs2/core-js/parse-int.js"));
-
-__webpack_require__(/*! core-js/modules/es6.regexp.split.js */ "../node_modules/core-js/modules/es6.regexp.split.js");
-
-__webpack_require__(/*! core-js/modules/es6.array.find.js */ "../node_modules/core-js/modules/es6.array.find.js");
+var _slicedToArray2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/slicedToArray */ "../node_modules/@babel/runtime/helpers/slicedToArray.js"));
 
 var _elementorLoading = _interopRequireDefault(__webpack_require__(/*! elementor-app/molecules/elementor-loading */ "../core/app/assets/js/molecules/elementor-loading.js"));
 
@@ -4498,6 +4353,10 @@ var _previewIframe = __webpack_require__(/*! ./preview-iframe */ "../core/app/mo
 var _router = __webpack_require__(/*! @reach/router */ "../node_modules/@reach/router/es/index.js");
 
 __webpack_require__(/*! ./preview.scss */ "../core/app/modules/kit-library/assets/js/pages/preview/preview.scss");
+
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 var breakpoints = [{
   value: 'desktop',
@@ -4547,8 +4406,8 @@ function useHeaderButtons(id) {
 /**
  * Get preview url.
  *
- * @param data
- * @returns {null|string}
+ * @param {*} data
+ * @return {null|string} Preview URL
  */
 
 
@@ -4568,7 +4427,7 @@ function usePreviewUrl(data) {
     }
 
     return ((_data$documents$find = data.documents.find(function (item) {
-      return item.id === (0, _parseInt2.default)(documentId);
+      return item.id === parseInt(documentId);
     })) === null || _data$documents$find === void 0 ? void 0 : _data$documents$find.previewUrl) || data.previewUrl;
   }, [location, data]);
 }
@@ -4599,7 +4458,8 @@ function Preview(props) {
     }).style;
   }, [activeDevice]);
   (0, _usePageTitle.default)({
-    title: data ? "".concat(__('Kit Library', 'elementor'), " | ").concat(data.title) : __('Loading...', 'elementor')
+    title: data ? "".concat(__('Kit Library', 'elementor'), " | ").concat(data.title) // eslint-disable-next-line @wordpress/i18n-ellipsis
+    : __('Loading...', 'elementor')
   });
 
   if (isError) {
@@ -4648,14 +4508,11 @@ Preview.propTypes = {
 /* provided dependency */ var __ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n")["__"];
 
 
-var _Object$defineProperty = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "../node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
 
-var _interopRequireDefault = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireDefault */ "../node_modules/@babel/runtime-corejs2/helpers/interopRequireDefault.js");
-
-_Object$defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
-
+}));
 exports["default"] = void 0;
 
 var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
@@ -4694,4 +4551,4 @@ exports["default"] = _default;
 /***/ })
 
 }]);
-//# sourceMappingURL=kit-library.c7db5f02248493fe3f04.bundle.js.map
+//# sourceMappingURL=kit-library.10fbb6c1e87e1129cb36.bundle.js.map
