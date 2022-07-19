@@ -33,4 +33,32 @@ class Utils {
 		// Standard non array names.
 		return isset( $settings[ $name ] ) && 'checked' === $settings[ $name ];
 	}
+
+
+	/**
+	 * Apply a callback to all elements of an array recursively.
+	 *
+	 * Like `array_walk_recursive` except returns the result as
+	 * a new array instead of requiring you pass the array element by reference
+	 * and alter it directly.
+	 *
+	 * @param callable $callback - Callback for each element in each level of array.
+	 * @param array    $array    - Array to recurse.
+	 *
+	 * @since 8.6.5
+	 *
+	 * @return array
+	 */
+	public function array_map_recursive( callable $callback, array $array ) {
+		$output = [];
+		foreach ( $array as $key => $data ) {
+			if ( \is_array( $data ) ) {
+				$output[ $key ] = $this->array_map_recursive( $callback, $data );
+			} else {
+				$output[ $key ] = $callback( $data );
+			}
+		}
+
+		return $output;
+	}
 }

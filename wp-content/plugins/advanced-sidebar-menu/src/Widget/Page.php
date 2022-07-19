@@ -51,7 +51,7 @@ class Page extends Widget_Abstract {
 			'width' => wp_is_mobile() ? false : 620,
 		];
 
-		parent::__construct( self::NAME, __( 'Advanced Sidebar Pages Menu', 'advanced-sidebar-menu' ), $widget_ops, $control_ops );
+		parent::__construct( self::NAME, __( 'Advanced Sidebar - Pages', 'advanced-sidebar-menu' ), $widget_ops, $control_ops );
 
 		$this->hook();
 	}

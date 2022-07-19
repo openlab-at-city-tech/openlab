@@ -3,10 +3,10 @@
 Contributors: Mat Lipe, onpointplugins
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=paypal%40onpointplugins%2ecom&lc=US&item_name=Advanced%20Sidebar%20Menu&no_note=0&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHostedGuest
 Tags: menus, sidebar menu, hierarchy, category menu, pages menu, dynamic
-Requires at least: 5.2.0
-Tested up to: 5.8.2
+Requires at least: 5.4.0
+Tested up to: 6.0.1
 Requires PHP: 5.6.0
-Stable tag: 8.6.4
+Stable tag: 8.8.2
 
 == Description ==
 
@@ -16,7 +16,7 @@ Keeps the menu clean and usable. Only related items display so you don't have to
 
 <strong>Check out <a href="https://onpointplugins.com/product/advanced-sidebar-menu-pro/">Advanced Sidebar Menu PRO</a> for more features including accordion menus, menu colors and styles, custom link text, excluding of pages, category ordering, custom post types, custom taxonomies, priority support, and so much more!</strong>
 
-<blockquote><a href="https://onpointplugins.com/product/advanced-sidebar-menu-pro/" target="_blank">PRO version 8.4.0</a> is now available with accordion options to use links for open/close!</blockquote>
+<blockquote><a href="https://onpointplugins.com/product/advanced-sidebar-menu-pro/" target="_blank">PRO version 8.9.0</a> is now available with accordion options to use links for open/close!</blockquote>
 
 <h3>Features</h3>
 * Page and Category widgets.
@@ -133,18 +133,15 @@ For example the following CSS would:
 3. Add a background on hover.
 
 <code>
-.advanced-sidebar-menu li.current-cat a,
-.advanced-sidebar-menu li.current_page_item a {
+.advanced-sidebar-menu li.current-menu-item a {
     color: black;
 }
 
-.advanced-sidebar-menu li.current-cat,
-.advanced-sidebar-menu li.current_page_item {
+.advanced-sidebar-menu li.current-menu-item {
     list-style-type: none !important;
 }
 
-.advanced-sidebar-menu li.current-cat > a:hover,
-.advanced-sidebar-menu li.current_page_item > a:hover {
+.advanced-sidebar-menu li.current-menu-item > a:hover {
 	background: teal;
 }
 </code>
@@ -161,6 +158,49 @@ Yes. Based on whatever page, post or category you are on, the menu will change a
 
 
 == Changelog ==
+= 8.8.2 =
+* Fixed widget id generation with block based widgets.
+* Introduced `advanced-sidebar-menu/core/include-template-parts-comments` filter.
+* Organized the `Menu_Abtract` class constants.
+* Tested to WordPress Core 6.0.1.
+
+= 8.8.1 = 
+* Introduced `advanced-sidebar-menu/menus/page/is-excluded` filter.
+* Introduced `advanced-sidebar-menu/menus/category/is-excluded` filter.
+* Tested to WordPress Core 6.0.0.
+* Required PRO version 8.7.0+.
+
+= 8.8.0 =
+* Implement universal 'menu-item' style CSS classes to all menus.
+* Introduced `Category::is_current_top_level_term` method.
+* Introduced `Category::get_current_ancestors` method.
+* Introduced `Category::is_current_term` method.
+* Enabled PHPCS caching.
+* Required WordPress core version 5.4.0+.
+* Tested to WordPress 5.9.3.
+
+= 8.7.3 = 
+* Include WP core version in debug info.
+* Tested to WordPress 5.9.2.
+
+= 8.7.2 = 
+* Improved position of close icon in widget previews.
+* Improved plugin links utm structure.
+* Added a "Go PRO" action to the plugins list.
+* Prevented overrides of non-public post types during debugging.
+
+= 8.7.1 =
+* Fine tune widgets styles for WordPress 5.9.
+* Tested to WordPress 5.9.
+
+= 8.7.0 =
+* Use Webp extension for preview images.
+* Simplify the Widget names.
+* Introduce `Utils::array_map_recursive` method for deep sanitization.
+* Support multidimensional arrays in debug overrides. 
+* Tested to WordPress 5.8.3.
+* Required PRO version 8.5.0+.
+
 = 8.6.4 = 
 * Introduced `advanced-sidebar-menu/debug/print-instance` filter.
 * Improved FAQ information.

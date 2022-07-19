@@ -15,18 +15,18 @@
 }
 
 .advanced-sidebar-menu-column-box h3 {
-   font-size: 17px;
-   font-weight: 600 !important;
-   margin: 17px 0 !important;
+	font-size: 17px;
+	font-weight: 600 !important;
+	margin: 17px 0 !important;
 }
 
 .advanced-sidebar-menu-column-box p {
-	line-height: 19.5px !important;
+	line-height: 19px !important;
 }
 
 .advanced-sidebar-menu-column-box label {
 	display: inline !important;
-	line-height: 19.5px !important;
+	line-height: 19px !important;
 }
 
 .advanced-sidebar-menu-column a {
@@ -41,6 +41,12 @@
 .advanced-sidebar-menu-column-box select {
 	display: inline-block !important;
 	width: auto !important;
+}
+
+.advanced-sidebar-menu-column-box select,
+.advanced-sidebar-menu-column-box input[type='text'] {
+	line-height: 1.5 !important;
+	padding: 4px 8px !important;
 }
 
 .advanced-sidebar-menu-column-box select.widefat {
@@ -62,7 +68,8 @@
 	font-size: 17px;
 	font-weight: 600 !important;
 	box-shadow: none;
-	color: #000; !important;
+	color: #000;
+!important;
 }
 
 .advanced-sidebar-info-panel ol {
@@ -72,8 +79,8 @@
 
 .advanced-sidebar-info-panel li {
 	font-size: 13px;
-    line-height: 1.23076923;
-    margin: 0 0 6px 0 !important;
+	line-height: 1.23076923;
+	margin: 0 0 6px 0 !important;
 }
 
 .advanced-sidebar-info-panel li a {
@@ -173,10 +180,14 @@ select.advanced-sidebar-menu-block-field {
 	transition: all 300ms linear;
 	position: absolute;
 	font-size: 40px;
-	/* top: 130px; */
-	right: 50px;
+	margin: 5px 0 0 0;
+	right: 40px;
 	cursor: pointer;
 	display: none;
+}
+
+.block-editor-page .advanced-sidebar-menu-close-icon {
+	right: 25px;
 }
 
 .advanced-sidebar-menu-close-icon:hover {

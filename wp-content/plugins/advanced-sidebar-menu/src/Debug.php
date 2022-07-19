@@ -45,7 +45,19 @@ class Debug {
 	 * @return array
 	 */
 	public function adjust_widget_settings( array $instance ) {
-		$overrides = array_map( 'sanitize_text_field', (array) $_GET[ self::DEBUG_PARAM ] ); //phpcs:ignore
+		if ( empty( $_GET[ self::DEBUG_PARAM ] ) ) { //phpcs:ignore
+			return $instance;
+		}
+
+		$overrides = Utils::instance()->array_map_recursive( 'sanitize_text_field', (array) $_GET[ self::DEBUG_PARAM ] ); //phpcs:ignore
+
+		// Do not allow passing a non-public post type.
+		if ( isset( $overrides['post_type'] ) ) {
+			$type = get_post_type_object( $overrides['post_type'] );
+			if ( $type && ! $type->public ) {
+				unset( $overrides['post_type'] );
+			}
+		}
 
 		return wp_parse_args( $overrides, $instance );
 	}
@@ -61,7 +73,8 @@ class Debug {
 	 */
 	public function print_instance( $menu, $widget ) {
 		$data = [
-			'version' => ADVANCED_SIDEBAR_BASIC_VERSION,
+			'version'    => ADVANCED_SIDEBAR_BASIC_VERSION,
+			'wp-version' => get_bloginfo( 'version' ),
 		];
 		if ( defined( 'ADVANCED_SIDEBAR_MENU_PRO_VERSION' ) ) {
 			$data['pro_version'] = ADVANCED_SIDEBAR_MENU_PRO_VERSION;

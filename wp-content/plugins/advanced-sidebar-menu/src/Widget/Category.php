@@ -55,7 +55,7 @@ class Category extends Widget_Abstract {
 			'width' => wp_is_mobile() ? false : 620,
 		];
 
-		parent::__construct( self::NAME, __( 'Advanced Sidebar Categories Menu', 'advanced-sidebar-menu' ), $widget_ops, $control_ops );
+		parent::__construct( self::NAME, __( 'Advanced Sidebar - Categories', 'advanced-sidebar-menu' ), $widget_ops, $control_ops );
 
 		$this->hook();
 	}
@@ -77,13 +77,16 @@ class Category extends Widget_Abstract {
 		$hooked = true;
 
 		add_action( 'advanced-sidebar-menu/widget/category/left-column', [ $this, 'box_display' ], 5, 2 );
-		add_action( 'advanced-sidebar-menu/widget/category/left-column', [ $this, 'box_display_on_single_posts' ], 15, 2 );
+		add_action( 'advanced-sidebar-menu/widget/category/left-column', [
+			$this,
+			'box_display_on_single_posts',
+		], 15, 2 );
 		add_action( 'advanced-sidebar-menu/widget/category/left-column', [ $this, 'box_exclude' ], 20, 2 );
 	}
 
 
 	/**
-	 * Get the label for use taxonomy.
+	 * Get the label for set taxonomy.
 	 *
 	 * For adjusting widget option labels.
 	 *

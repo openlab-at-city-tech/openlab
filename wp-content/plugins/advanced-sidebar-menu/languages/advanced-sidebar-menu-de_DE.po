@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Advanced Sidebar Menu\n"
-"POT-Creation-Date: 2020-12-07 10:17-0700\n"
-"PO-Revision-Date: 2020-12-07 10:20-0700\n"
+"POT-Creation-Date: 2021-12-02 08:19-0500\n"
+"PO-Revision-Date: 2021-12-02 08:20-0500\n"
 "Last-Translator: Mat Lipe <support@onpointplugins.com>\n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -21,7 +21,7 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: *.js\n"
 
-#: advanced-sidebar-menu.php:128
+#: advanced-sidebar-menu.php:136
 msgid "widget documentation"
 msgstr "widget-dokumentation"
 
@@ -36,11 +36,11 @@ msgstr ""
 "Das Advanced Sidebar Menu erfordert %1$s sAdvanced Sidebar Menu PRO%2$s es "
 "Version %3$s+. Bitte aktualisieren oder deaktivieren Sie die PRO-Version."
 
-#: src/Notice.php:88
+#: src/Notice.php:86
 msgid "Advanced Sidebar Menu PRO"
 msgstr "Advanced Sidebar Menu PRO"
 
-#: src/Notice.php:92
+#: src/Notice.php:90
 msgid ""
 "Styling options including borders, bullets, colors, backgrounds, size, and "
 "font weight."
@@ -48,38 +48,38 @@ msgstr ""
 "Stylingoptionen wie Rahmen, Aufzählungszeichen, Farben, Hintergründe, Größe "
 "und Schriftstärke."
 
-#: src/Notice.php:93
+#: src/Notice.php:91
 msgid "Accordion menus."
 msgstr "Akkordeon-Menüs."
 
-#: src/Notice.php:94
+#: src/Notice.php:92
 msgid "Support for custom navigation menus from Appearance -> Menus."
 msgstr ""
 "Unterstützung für kundenspezifische Navigationsmenüs von Appearance-> Menü."
 
-#: src/Notice.php:98
+#: src/Notice.php:96
 msgid "Select and display custom post types."
 msgstr "Wählen Sie benutzerdefinierte Posttypen aus und zeigen Sie sie an."
 
-#: src/Notice.php:102
+#: src/Notice.php:100
 msgid "Select and display custom taxonomies."
 msgstr "Wählen Sie benutzerdefinierte Taxonomien aus und zeigen Sie sie an."
 
-#: src/Notice.php:106
+#: src/Notice.php:104
 msgid "Priority support with access to members only support area."
 msgstr ""
 "Prioritätsunterstützung, einschließlich Zugang zum Supportbereich für "
 "Mitglieder."
 
-#: src/Notice.php:112
+#: src/Notice.php:110
 msgid "So much more..."
 msgstr "So viel mehr..."
 
-#: src/Notice.php:121
+#: src/Notice.php:119
 msgid "Upgrade"
 msgstr "Aktualisierung"
 
-#: src/Notice.php:137
+#: src/Notice.php:127
 msgid "Preview"
 msgstr "Vorschau"
 
@@ -91,8 +91,8 @@ msgstr ""
 "Beziehung"
 
 #: src/Widget/Category.php:58
-msgid "Advanced Sidebar Categories Menu"
-msgstr "Advanced Sidebar Kategorien-Menü"
+msgid "Advanced Sidebar - Categories"
+msgstr "Advanced Sidebar - Kategorien"
 
 #. translators: Selected taxonomy single label
 #: src/Widget/Category.php:123
@@ -151,7 +151,7 @@ msgstr "In einer anderen Liste im selben Widget"
 msgid "%s to exclude (ids, comma separated)"
 msgstr "Auszuschließende %s (IDs), durch Kommas getrennt"
 
-#: src/Widget/Category.php:285 src/Widget/Page.php:278
+#: src/Widget/Category.php:283 src/Widget/Page.php:276
 msgid "Title"
 msgstr "Titel"
 
@@ -162,8 +162,8 @@ msgstr ""
 "verwenden"
 
 #: src/Widget/Page.php:54
-msgid "Advanced Sidebar Pages Menu"
-msgstr "Advanced Sidebar Seitenmenü"
+msgid "Advanced Sidebar - Pages"
+msgstr "Advanced Sidebar - Seitenmenü"
 
 #. translators: Selected post type single label
 #: src/Widget/Page.php:119

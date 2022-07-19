@@ -24,6 +24,8 @@ class Notice {
 		add_action( 'advanced-sidebar-menu/widget/category/right-column', [ $this, 'info_panel' ], 1, 2 );
 		add_action( 'advanced-sidebar-menu/widget/page/right-column', [ $this, 'info_panel' ], 1, 2 );
 
+		add_filter( 'plugin_action_links_' . Core::PLUGIN_FILE, [ $this, 'plugin_action_link' ] );
+
 		if ( $this->is_conflicting_pro_version() ) {
 			add_action( 'all_admin_notices', [ $this, 'pro_version_warning' ] );
 		}
@@ -82,7 +84,7 @@ class Notice {
 		?>
 		<div class="advanced-sidebar-menu-column-box advanced-sidebar-info-panel">
 			<h3>
-				<a href="https://onpointplugins.com/product/advanced-sidebar-menu-pro/">
+				<a href="https://onpointplugins.com/product/advanced-sidebar-menu-pro/?utm_source=widget-title&utm_campaign=gopro&utm_medium=wp-dash">
 					<?php esc_html_e( 'Advanced Sidebar Menu PRO', 'advanced-sidebar-menu' ); ?>
 				</a>
 			</h3>
@@ -104,7 +106,7 @@ class Notice {
 				<li><?php esc_html_e( 'Priority support with access to members only support area.', 'advanced-sidebar-menu' ); ?></li>
 				<li>
 					<a
-						href="https://onpointplugins.com/product/advanced-sidebar-menu-pro/"
+						href="https://onpointplugins.com/product/advanced-sidebar-menu-pro/?utm_source=widget-more&utm_campaign=gopro&utm_medium=wp-dash"
 						target="_blank"
 						style="text-decoration: none;">
 						<?php esc_html_e( 'So much more...', 'advanced-sidebar-menu' ); ?>
@@ -113,7 +115,7 @@ class Notice {
 			</ol>
 			<a
 				class="button-primary"
-				href="https://onpointplugins.com/product/advanced-sidebar-menu-pro/?trigger_buy_now=1"
+				href="https://onpointplugins.com/product/advanced-sidebar-menu-pro/?trigger_buy_now=1&utm_source=widget-upgrade&utm_campaign=gopro&utm_medium=wp-dash"
 				target="_blank"
 			>
 				<?php esc_html_e( 'Upgrade', 'advanced-sidebar-menu' ); ?>
@@ -133,16 +135,16 @@ class Notice {
 
 
 	/**
-	 * Display a preview image which covers the widget when the "Preview"
+	 * Display a preview image, which covers the widget when the "Preview"
 	 * button is clicked.
 	 *
 	 * @param array      $instance - Widgets settings.
 	 * @param \WP_Widget $widget   - Widget class.
 	 */
 	public function preview( array $instance, \WP_Widget $widget ) {
-		$src = 'pages-widget-min.png?version=' . ADVANCED_SIDEBAR_BASIC_VERSION;
+		$src = 'pages-widget-min.webp?version=' . ADVANCED_SIDEBAR_BASIC_VERSION;
 		if ( Category::NAME === $widget->id_base ) {
-			$src = 'category-widget-min.png?version=' . ADVANCED_SIDEBAR_BASIC_VERSION;
+			$src = 'category-widget-min.webp?version=' . ADVANCED_SIDEBAR_BASIC_VERSION;
 		}
 		?>
 		<div
@@ -153,10 +155,25 @@ class Notice {
 				data-js="advanced-sidebar-menu/pro/preview/image"
 				class="advanced-sidebar-menu-preview-image"
 				src="https://onpointplugins.com/plugins/assets/shared/<?php echo esc_attr( $src ); ?>"
-				srcset="https://onpointplugins.com/plugins/assets/shared/<?php echo esc_attr( str_replace( '-min.png', '-1x-min.png', $src ) ); ?> 1x, https://onpointplugins.com/plugins/assets/shared/<?php echo esc_attr( $src ); ?> 2x"
-				alt="PRO version widget options" />
+				srcset="https://onpointplugins.com/plugins/assets/shared/<?php echo esc_attr( str_replace( '-min.webp', '-1x-min.webp', $src ) ); ?> 1x, https://onpointplugins.com/plugins/assets/shared/<?php echo esc_attr( $src ); ?> 2x"
+				alt="<?php esc_attr_e( 'PRO version widget options', 'advanced-sidebar-menu' ); ?>" />
 		</div>
 		<?php
+	}
+
+
+	/**
+	 * Display a "Go PRO" action link in plugins list.
+	 *
+	 * @param array $actions - Array of actions and their link.
+	 *
+	 * @return array
+	 */
+	public function plugin_action_link( array $actions ) {
+		if ( ! \defined( 'ADVANCED_SIDEBAR_MENU_PRO_VERSION' ) ) {
+			$actions['go-pro'] = sprintf( '<a href="%1$s" target="_blank" style="color:#3db634;font-weight:700;">%2$s</a>', 'https://onpointplugins.com/product/advanced-sidebar-menu-pro/?utm_source=wp-plugins&utm_campaign=gopro&utm_medium=wp-dash', __( 'Go PRO', 'advanced-sidebar-menu' ) );
+		}
+		return $actions;
 	}
 
 }

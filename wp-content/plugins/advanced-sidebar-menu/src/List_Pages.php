@@ -103,7 +103,7 @@ class List_Pages {
 	 *
 	 * Follow existing WP core pattern for `wp_list_pages`.
 	 *
-	 * WP core handles pages, but it doesn't handle custom custom post types.
+	 * WP core handles pages, but it doesn't handle custom post types.
 	 * We cover pages as well to handle edge cases where a site's theme
 	 * changes/removes default classes.
 	 *
@@ -113,6 +113,7 @@ class List_Pages {
 	 * @return array
 	 */
 	public function add_list_item_classes( $classes, \WP_Post $post ) {
+		$classes[] = 'menu-item';
 		$children = $this->get_child_pages( $post->ID, $post->ID === $this->top_parent_id );
 		if ( ! empty( $children ) ) {
 			$classes[] = 'has_children';
@@ -120,9 +121,11 @@ class List_Pages {
 		if ( ! empty( $this->get_current_page_id() ) ) {
 			if ( $this->get_current_page_id() === $post->ID ) {
 				$classes[] = 'current_page_item';
+				$classes[] = 'current-menu-item';
 			} elseif ( $this->current_page->post_parent === $post->ID ) {
 				$classes[] = 'current_page_parent';
 				$classes[] = 'current_page_ancestor';
+				$classes[] = 'current-menu-parent';
 			} else {
 				$ancestors = get_post_ancestors( $this->get_current_page_id() );
 				if ( ! empty( $ancestors ) && \in_array( $post->ID, $ancestors, true ) ) {

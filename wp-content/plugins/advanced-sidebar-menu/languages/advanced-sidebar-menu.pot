@@ -1,10 +1,11 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project: https://translate.wordpress.org/projects/wp-plugins/advanced-sidebar-menu\n"
+"Project: https://translate.wordpress.org/projects/wp-plugins/advanced-"
+"sidebar-menu\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 "Project-Id-Version: Advanced Sidebar Menu\n"
-"POT-Creation-Date: 2021-01-20 11:16-0700\n"
+"POT-Creation-Date: 2021-12-02 08:19-0500\n"
 "PO-Revision-Date: 2019-03-05 12:29-0500\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -22,7 +23,7 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: *.js\n"
 
-#: advanced-sidebar-menu.php:132
+#: advanced-sidebar-menu.php:136
 msgid "widget documentation"
 msgstr ""
 
@@ -35,45 +36,45 @@ msgid ""
 "%3$s+. Please update or deactivate the PRO version."
 msgstr ""
 
-#: src/Notice.php:88
+#: src/Notice.php:86
 msgid "Advanced Sidebar Menu PRO"
 msgstr ""
 
-#: src/Notice.php:92
+#: src/Notice.php:90
 msgid ""
 "Styling options including borders, bullets, colors, backgrounds, size, and "
 "font weight."
 msgstr ""
 
-#: src/Notice.php:93
+#: src/Notice.php:91
 msgid "Accordion menus."
 msgstr ""
 
-#: src/Notice.php:94
+#: src/Notice.php:92
 msgid "Support for custom navigation menus from Appearance -> Menus."
 msgstr ""
 
-#: src/Notice.php:98
+#: src/Notice.php:96
 msgid "Select and display custom post types."
 msgstr ""
 
-#: src/Notice.php:102
+#: src/Notice.php:100
 msgid "Select and display custom taxonomies."
 msgstr ""
 
-#: src/Notice.php:106
+#: src/Notice.php:104
 msgid "Priority support with access to members only support area."
 msgstr ""
 
-#: src/Notice.php:112
+#: src/Notice.php:110
 msgid "So much more..."
 msgstr ""
 
-#: src/Notice.php:121
+#: src/Notice.php:119
 msgid "Upgrade"
 msgstr ""
 
-#: src/Notice.php:137
+#: src/Notice.php:127
 msgid "Preview"
 msgstr ""
 
@@ -83,7 +84,7 @@ msgid ""
 msgstr ""
 
 #: src/Widget/Category.php:58
-msgid "Advanced Sidebar Categories Menu"
+msgid "Advanced Sidebar - Categories"
 msgstr ""
 
 #. translators: Selected taxonomy single label
@@ -152,7 +153,7 @@ msgid "Creates a menu of all the pages using the child/parent relationship"
 msgstr ""
 
 #: src/Widget/Page.php:54
-msgid "Advanced Sidebar Pages Menu"
+msgid "Advanced Sidebar - Pages"
 msgstr ""
 
 #. translators: Selected post type single label
