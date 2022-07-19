@@ -32,6 +32,13 @@ class EIO_Picture_Webp extends EIO_Page_Parser {
 	protected $user_element_exclusions = array();
 
 	/**
+	 * Request URI.
+	 *
+	 * @var string $request_uri
+	 */
+	public $request_uri = '';
+
+	/**
 	 * Register (once) actions and filters for Picture WebP.
 	 */
 	function __construct() {
@@ -45,8 +52,12 @@ class EIO_Picture_Webp extends EIO_Page_Parser {
 		parent::__construct();
 		$this->debug_message( '<b>' . __METHOD__ . '()</b>' );
 
-		$uri = add_query_arg( null, null );
-		$this->debug_message( "request uri is $uri" );
+		$this->request_uri = add_query_arg( null, null );
+		if ( false === strpos( $this->request_uri, 'page=ewww-image-optimizer-options' ) ) {
+			$this->debug_message( "request uri is {$this->request_uri}" );
+		} else {
+			$this->debug_message( 'request uri is EWWW IO settings' );
+		}
 
 		add_filter( 'eio_do_picture_webp', array( $this, 'should_process_page' ), 10, 2 );
 
@@ -54,9 +65,9 @@ class EIO_Picture_Webp extends EIO_Page_Parser {
 		 * Allow pre-empting <picture> WebP by page.
 		 *
 		 * @param bool Whether to parse the page for images to rewrite for WebP, default true.
-		 * @param string $uri The URL of the page.
+		 * @param string The URI/path of the page.
 		 */
-		if ( ! apply_filters( 'eio_do_picture_webp', true, $uri ) ) {
+		if ( ! apply_filters( 'eio_do_picture_webp', true, $this->request_uri ) ) {
 			return;
 		}
 
@@ -68,6 +79,8 @@ class EIO_Picture_Webp extends EIO_Page_Parser {
 		} else {
 			add_filter( 'ewww_image_optimizer_filter_page_output', array( $this, 'filter_page_output' ), 10 );
 		}
+		// Filter for FacetWP JSON responses.
+		add_filter( 'facetwp_render_output', array( $this, 'filter_facetwp_json_output' ) );
 
 		$allowed_urls = ewww_image_optimizer_get_option( 'ewww_image_optimizer_webp_paths' );
 		if ( $this->is_iterable( $allowed_urls ) ) {
@@ -109,7 +122,10 @@ class EIO_Picture_Webp extends EIO_Page_Parser {
 			return false;
 		}
 		if ( empty( $uri ) ) {
-			$uri = add_query_arg( null, null );
+			$uri = $this->request_uri;
+		}
+		if ( false !== strpos( $uri, 'bricks=run' ) ) {
+			return false;
 		}
 		if ( false !== strpos( $uri, '?brizy-edit' ) ) {
 			return false;
@@ -165,10 +181,6 @@ class EIO_Picture_Webp extends EIO_Page_Parser {
 			return $should_process;
 		}
 		if ( $this->is_amp() ) {
-			return false;
-		}
-		if ( is_embed() ) {
-			$this->debug_message( 'is_embed' );
 			return false;
 		}
 		if ( is_feed() ) {
@@ -260,6 +272,9 @@ class EIO_Picture_Webp extends EIO_Page_Parser {
 			$this->debug_message( 'picture WebP should not process page' );
 			return $buffer;
 		}
+		if ( ! apply_filters( 'eio_do_picture_webp', true, $this->request_uri ) ) {
+			return $buffer;
+		}
 
 		$images = $this->get_images_from_html( preg_replace( '/<(picture|noscript).*?\/\1>/s', '', $buffer ), false );
 		if ( ! empty( $images[0] ) && $this->is_iterable( $images[0] ) ) {
@@ -336,6 +351,28 @@ class EIO_Picture_Webp extends EIO_Page_Parser {
 		}
 		$this->debug_message( 'all done parsing page for picture webp' );
 		return $buffer;
+	}
+
+	/**
+	 * Parse template data from FacetWP that will be included in JSON response.
+	 * https://facetwp.com/documentation/developers/output/facetwp_render_output/
+	 *
+	 * @param array $output The full array of FacetWP data.
+	 * @return array The FacetWP data with WebP images.
+	 */
+	function filter_facetwp_json_output( $output ) {
+		$this->debug_message( '<b>' . __METHOD__ . '()</b>' );
+		if ( empty( $output['template'] ) || ! is_string( $output['template'] ) ) {
+			return $output;
+		}
+
+		$template = $this->filter_page_output( $output['template'] );
+		if ( $template ) {
+			$this->debug_message( 'template data modified' );
+			$output['template'] = $template;
+		}
+
+		return $output;
 	}
 
 	/**
