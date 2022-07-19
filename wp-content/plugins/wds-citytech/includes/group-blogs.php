@@ -1839,7 +1839,10 @@ function openlab_olpc_notify_comment_author_of_reply( $comment_id, $comment ) {
 		return;
 	}
 
-	$subject = sprintf( 'New reply to your private comment on %s', get_option( 'blogname' ) );
+	$group_id = openlab_get_group_id_by_blog_id( get_current_blog_id() );
+	$group    = groups_get_group( $group_id );
+
+	$subject = sprintf( 'A new reply to your private comment on %s in %s', $comment_post->post_title, $group->name );
 
 	$message = sprintf(
 		'There is a new reply to your private comment on the site %s.
