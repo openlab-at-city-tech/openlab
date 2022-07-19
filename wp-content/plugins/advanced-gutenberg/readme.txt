@@ -2,8 +2,8 @@
 Contributors: publishpress, stevejburge, htmgarcia
 Tags: gutenberg, gutenberg blocks, gutenberg block, block editor, blocks
 Requires at least: 5.0
-Tested up to: 5.9.1
-Stable tag: 2.11.6
+Tested up to: 6.0
+Stable tag: 2.13.3
 Requires PHP: 5.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -256,6 +256,61 @@ Yes, we use the phrase "publishpress-advg-install" to share install links. You w
 16. Custom Styles for Blocks: You create custom CSS styles and make them available to end users.
 
 == Changelog ==
+
+= 2.13.3 - 6 Jul 2022 =
+  * Add: Blue color from WordPress core to unit elements (px, %) for Content Display block
+  * Add: Choose to display author, date, excerpt, read more, category, tags, comment counts and custom taxonomies for up to 5 first posts in Content Display block
+  * Add: Offset posts filter to Content Display block
+  * Add: Featured image color overlay and opacity for headline style to Content Display block
+  * Add: JSON translations for French, Danish and Norwegian
+  * Fix: Center featured image when using default slider view for Content Display block
+  * Fix: Don't output text after title and text before read more when empty in editor for Content Display block
+  * Fix: Lost password link broken in Login/Register Form block
+  * Fix: Slideshow view text in editor preview is cropped for Content Display block
+  * Fix: Make email and password fields required for Login/Register Form block
+  * Remove: PublishPress Series box from editor preview in Content Display block
+
+= 2.13.2.1 - 21 Jun 2022 =
+  * Add: Exclude posts shared method for Content Display block
+  * Fix: Limit request for post suggestions in Exclude for Content Display block
+
+= 2.13.2 - 2 Jun 2022 =
+  * Add: Toggle to check/uncheck all blocks in Block Access screen
+  * Add: PublishPress Series order by option
+  * Add: Select posts by id
+  * Fix: Edit title and text over the image for Images Slider block
+  * Fix: Undefined postTitleVsIdMap error in Content Display block
+  * Fix: Console error already registered WordPress 6.0 new core blocks
+  * Remove: Select posts by title
+
+= 2.13.1 - 17 May 2022 =
+  * Add: Plugin Instance Protection
+  * Add: PublishPress Series support to Content Display block
+  * Fix: Don't display post info and categories/tags, taxonomies wrappers when empty for Content Display block
+  * Fix: Reset categories attribute when changing post type
+  * Fix: Duplicated padding/margin icons for Info Box block
+  * Fix: Forced scroll to top issue in editor caused by masonry in Content Display block
+
+= 2.13.0 - 26 Apr 2022 =
+  * Add: Target support to author link for Content Display block
+  * Fix: Make responsive headings translatable
+  * Remove: Deprecated profiles post type and its capabilities
+
+= 2.12.0 - 30 Mar 2022 =
+  * Add: Ad to upgrade to Pro for Advanced List, Count Up, Testimonial and Advanced Image blocks
+  * Add: Updated translations for Spanish (ES), French, Norwegian and Danish
+  * Add: Spanish (MX) translations
+  * Add: Id attribute to Count Up block
+  * Add: Center alignment through CSS file for Count Up block
+  * Add: Block id as class to Content Display block
+  * Fix: Check if category exists when outputting blocks in access screen
+  * Fix: Text format for counter displayed as raw HTML in frontend for Count Up block
+  * Fix: Duplicated id for Testimonial block
+  * Fix: Title and subtitle output with RichText for Advanced Image block
+  * Fix: Title and text output with RichText for Images Slider block
+  * Fix: Tags attribute messing with CPT in frontend after switching from post to CPT
+  * Fix: Load styles in frontend for Content Display block
+  * Remove: Inline center alignment for Count Up block
 
 = 2.11.6 - 10 Mar 2022 =
   * Add: Improved design for Advanced Tabs remove and add settings

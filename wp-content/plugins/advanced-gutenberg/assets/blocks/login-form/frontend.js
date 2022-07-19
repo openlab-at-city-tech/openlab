@@ -4,7 +4,13 @@ jQuery(document).ready(function ($) {
     var registerForm = $('.advgb-form-register');
     loginForm.attr('action', advgbLoresForm.login_url);
     registerForm.attr('action', advgbLoresForm.register_url);
-    $('.advgb-lost-password .advgb-lost-password-link').attr('href', advgbLoresForm.lostpwd_url);
+    $('.advgb-lost-password > a').attr('href', advgbLoresForm.lostpwd_url);
+
+    // Make user, email and password fields required
+    loginForm.find('#advgb-login-user').attr('required', true);
+    loginForm.find('#advgb-login-password').attr('required', true);
+    registerForm.find('#advgb-register-username').attr('required', true);
+    registerForm.find('#advgb-register-email').attr('required', true);
 
     // Add value to redirect input
     var redirectInput = $('.advgb-lores-form .redirect_to');

@@ -109,11 +109,24 @@ $advgb_block_readonly_  = null;
                     >
                     <i class="mi mi-search"></i>
                 </div>
+                <div class="advgb-toggle-wrapper">
+                    <?php _e('Enable or disable all blocks', 'advanced-gutenberg') ?>
+                    <div class="ju-switch-button">
+                        <label class="switch">
+                            <input type="checkbox" name="toggle_all_blocks" id="toggle_all_blocks">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
                 <div class="inline-button-wrapper">
-                    <span id="block-update-notice">
-                        <?php esc_html_e('Blocks list updated.', 'advanced-gutenberg') ?>
+                    <span class="advgb_qtip advgb_qtip_no_after advgb-enable-one-block-msg"
+                        data-qtip="<?php esc_attr_e(
+                            'To save this configuration, enable at least one block',
+                            'advanced-gutenberg'
+                        ) ?>"
+                        style="display: none;">
+                        <span class="dashicons dashicons-warning"></span>
                     </span>
-
                     <button class="button button-primary pp-primary-button save-profile-button"
                             type="submit"
                             name="advgb_block_access_save"
@@ -139,7 +152,7 @@ $advgb_block_readonly_  = null;
                         <ul class="blocks-list">
                             <?php
                             foreach ($advgb_blocks_list as $block) {
-                                if( $blockCategory['slug'] === $block['category'] ) {
+                                if( isset($block['category']) && $blockCategory['slug'] === $block['category'] ) {
                                     // Convert object to array
                                     $block = (array)$block;
 
@@ -156,7 +169,7 @@ $advgb_block_readonly_  = null;
                                         $advgb_block_readonly_  = false;
                                     }
                                     ?>
-                                    <li class="block-item block-access-item ju-settings-option<?php echo ($advgb_block_readonly_) ? ' block-item-readonly' : '' ?>">
+                                    <li class="block-item block-access-item ju-settings-option<?php echo ($advgb_block_readonly_) ? ' block-item-readonly' : ' block-item-editable' ?>">
                                         <label class="ju-setting-label">
                                             <span class="block-icon"<?php echo isset( $block['iconColor'] ) && !empty( $block['iconColor'] ) ? ' style="color:' . esc_attr($block['iconColor']) . ';"' : ''; ?>>
                                                 <?php
@@ -195,11 +208,11 @@ $advgb_block_readonly_  = null;
 
                 // Generate hidden fields with all the saved blocks (except the ones not listed in this page to avoid saving them as inactive)
                 foreach ($advgb_blocks_list as $block) {
-                    if( $block['name'] && in_array( $block['category'], $blockCategoriesSlug ) ) {
+                    if( $block['name'] && isset($block['category']) && in_array( $block['category'], $blockCategoriesSlug ) ) {
                     ?>
                         <input type="hidden" name="blocks_list[]" value="<?php echo esc_attr( $block['name'] ); ?>">
                     <?php
-                    } elseif ( $block['name'] && !in_array( $block['category'], $blockCategoriesSlug ) ) {
+                    } elseif ( $block['name'] && isset($block['category']) && !in_array( $block['category'], $blockCategoriesSlug ) ) {
                         ?>
                         <input type="hidden" name="blocks_list_undetected[]" value="<?php echo esc_attr( $block['name'] ); ?>">
                         <?php
@@ -212,12 +225,21 @@ $advgb_block_readonly_  = null;
         </div>
 
         <!--Save button-->
-        <button class="button button-primary pp-primary-button save-profile-button"
-                type="submit"
-                name="advgb_block_access_save"
-                style="margin-top: 20px;"
-        >
-            <span><?php esc_html_e('Save Block Access', 'advanced-gutenberg') ?></span>
-        </button>
+        <div style="margin-top: 20px;">
+            <button class="button button-primary pp-primary-button save-profile-button"
+                    type="submit"
+                    name="advgb_block_access_save"
+            >
+                <span><?php esc_html_e('Save Block Access', 'advanced-gutenberg') ?></span>
+            </button>
+            <span class="advgb_qtip advgb_qtip_no_after advgb-enable-one-block-msg"
+                data-qtip="<?php esc_attr_e(
+                    'To save this configuration, enable at least one block',
+                    'advanced-gutenberg'
+                ) ?>"
+                style="display: none;">
+                <span class="dashicons dashicons-warning"></span>
+            </span>
+        </div>
     </div>
 </form>

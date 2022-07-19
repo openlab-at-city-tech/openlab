@@ -12,7 +12,7 @@
                 <img src="<?php echo esc_url(plugins_url('assets/images/pro-placeholder.jpg', dirname(dirname(__FILE__)))) ?>" class="pp-blocks-mobile" />
                 <div class="pp-blocks-menus-promo-content">
                     <p>
-                        <?php _e('PublishPress Blocks Pro includes new blocks, support and more features for Tabs, Accordions, Buttons, Image Sliders and Content display.', 'advanced-gutenberg'); ?>
+                        <?php _e('PublishPress Blocks Pro includes new blocks, support and more features for Tabs, Accordions, Buttons, Image Sliders, Content Display, and more.', 'advanced-gutenberg'); ?>
                     </p>
                     <p>
                         <a href="https://publishpress.com/links/blocks-banner" target="_blank">

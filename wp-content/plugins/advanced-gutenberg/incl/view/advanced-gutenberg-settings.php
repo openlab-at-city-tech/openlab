@@ -141,6 +141,11 @@ if (!isset($saved_settings['enable_advgb_blocks'])) {
                 if(defined('ADVANCED_GUTENBERG_PRO')) {
                     if ( method_exists( 'PPB_AdvancedGutenbergPro\Utils\Definitions', 'advgb_pro_setting' ) ) {
                         echo PPB_AdvancedGutenbergPro\Utils\Definitions::advgb_pro_setting(
+                            'enable_core_blocks_features',
+                            __('Enable core blocks features', 'advanced-gutenberg'),
+                            __('Add Pro features to core blocks such as Google Font support', 'advanced-gutenberg')
+                        );
+                        echo PPB_AdvancedGutenbergPro\Utils\Definitions::advgb_pro_setting(
                             'enable_pp_branding',
                             __('Display PublishPress branding', 'advanced-gutenberg'),
                             __('Display PublishPress logo and links in the footer of the admin pages', 'advanced-gutenberg')
