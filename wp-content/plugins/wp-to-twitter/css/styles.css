@@ -226,12 +226,12 @@ label[for="wpt_license_key"] {
 	display: inline-block;
 }
 
-.jcd-wide {
-	width: 75%;
+#wp-to-twitter .jcd-wide {
+	width: 70%;
 }
 
-.jcd-narrow {
-	width: 20%;
+#wp-to-twitter .jcd-narrow {
+	width: 25%;
 }
 
 label[for='wpt_prepend_rt'], label[for='wpt_prepend_rt2'], label[for='wpt_prepend_rt3'] {
@@ -319,11 +319,11 @@ label[for='wpt_prepend_rt'], label[for='wpt_prepend_rt2'], label[for='wpt_prepen
 }
 
 @media (max-width: 782px) {
-	.jcd-narrow {
+	#wp-to-twitter .jcd-narrow {
 		width: 100%;
 	}
 
-	.jcd-wide {
+	#wp-to-twitter .jcd-wide {
 		width: 100%;
 	}
 	
