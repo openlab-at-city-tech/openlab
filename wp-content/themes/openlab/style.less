@@ -4939,19 +4939,19 @@ p.private-membership-indicator {
         background: transparent !important;
         padding: 0 !important;
         margin-bottom: 0 !important;
-    
+
         p.currently-viewing {
             font-size: 14px;
             margin: 0;
         }
     }
-    
+
     #bp-docs-pagination {
         height: auto;
         display: flex;
         flex-flow: row wrap;
         align-items: flex-end;
-        
+
         #bp-docs-paginate-links,
         #bp-docs-pagination-count {
             position: relative;
@@ -4960,10 +4960,10 @@ p.private-membership-indicator {
             right: auto;
             flex: 0 0 auto;
         }
-    
+
         #bp-docs-paginate-links {
             display: flex;
-    
+
             > span,
             > a {
                 display: flex;
@@ -4976,30 +4976,30 @@ p.private-membership-indicator {
                 border: 1px solid #ccc !important;
                 text-decoration: none;
                 margin-right: 6px;
-    
+
                 &.current {
                     background-color: #f1f1f1;
                     color: rgba(68,68,68,.8);
                 }
-    
+
                 &:hover {
                     text-decoration: none;
                 }
-    
+
                 &:last-child {
                     margin-right: 15px;
                 }
             }
-    
+
             > a {
                 color: #444;
-    
+
                 &:hover {
                     background-color: #eee;
                 }
             }
         }
-    
+
         #bp-docs-pagination-count {
             font-size: 14px;
         }
@@ -5008,6 +5008,31 @@ p.private-membership-indicator {
     .doc-meta {
         margin-top: 20px;
     }
+
+	table.doc-history {
+		width: 100%;
+
+		.diff-header {
+			span {
+				display: inline-block;
+				width: calc(50% - 40px);
+			}
+		}
+
+		table.diff.is-split-view {
+			border-collapse: separate;
+			border-spacing: 20px;
+
+			td {
+				width: 50%;
+			}
+		}
+	}
+
+	.doc-history-revisions table {
+		border-collapse: separate;
+		border-spacing: 10px;
+	}
 
     // Comments
     #comments {
@@ -5059,7 +5084,7 @@ p.private-membership-indicator {
                         height: auto;
                         margin-bottom: 0;
                     }
-                    
+
                     .quicktags-toolbar {
                         padding: 5px;
                         font-size: 14px;

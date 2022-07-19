@@ -11891,6 +11891,24 @@ p.private-membership-indicator {
 .bp-docs .doc-meta {
   margin-top: 20px;
 }
+.bp-docs table.doc-history {
+  width: 100%;
+}
+.bp-docs table.doc-history .diff-header span {
+  display: inline-block;
+  width: calc(50% - 40px);
+}
+.bp-docs table.doc-history table.diff.is-split-view {
+  border-collapse: separate;
+  border-spacing: 20px;
+}
+.bp-docs table.doc-history table.diff.is-split-view td {
+  width: 50%;
+}
+.bp-docs .doc-history-revisions table {
+  border-collapse: separate;
+  border-spacing: 10px;
+}
 .bp-docs #comments {
   margin-top: 40px;
 }
