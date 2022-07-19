@@ -6,17 +6,17 @@ $(document).ready(function ($) {
 
     $('.icp-auto').iconpicker();
     
-    $(document).on('click', '#wpdiscuz_form_add_row', function () {
+    $('body').on('click', '#wpdiscuz_form_add_row', function () {
         wpdiscuzForm.addRow('#wpd-form-sortable-rows');
         wpdFormFieldSortable();
     });
 
-    $(document).on('click', '.wpd-form-row-wrap .wpd-form-row-actions .fa-columns', function () {
+    $('body').on('click', '.wpd-form-row-wrap .wpd-form-row-actions .fa-columns', function () {
         wpdiscuzForm.formTwoColumn($(this));
         wpdFormFieldSortable();
     });
 
-    $(document).on('click', '.wpd-form-row-wrap .wpd-form-row-actions .fa-trash-alt', function () {
+    $('body').on('click', '.wpd-form-row-wrap .wpd-form-row-actions .fa-trash-alt', function () {
          if($(this).parents('.wpd-form-row-wrap').find('.wpd-default-field').length){
             alert(wpdFormAdminOptions.can_not_delete_field);
             return;
@@ -26,7 +26,7 @@ $(document).ready(function ($) {
         }
     });
 
-    $(document).on('click', '.wpd-form-add-filed', function () {
+    $('body').on('click', '.wpd-form-add-filed', function () {
         currentRowId = $(this).parents('.wpd-form-row-wrap').attr('id');
         currentColumnType = 'full';
         if ($(this).parents('.wpd-form-col').hasClass('left-col')) {
@@ -39,17 +39,17 @@ $(document).ready(function ($) {
         return false;
     });
 
-    $(document).on('click', '.wpd-field .fa-trash-alt', function () {
+    $('body').on('click', '.wpd-field .fa-trash-alt', function () {
         if (confirm(wpdFormAdminOptions.confirm_delete_message)) {
             $(this).parents('.wpd-field').remove();
         }
     });
 
-    $(document).on('click', '.wpd-field .fa-pencil-alt', function () {
+    $('body').on('click', '.wpd-field .fa-pencil-alt', function () {
         $(this).parents('.wpd-field').find('.wpd-field-body').toggle(500);
     });
 
-    $(document).on('click', '.wpd-field-button', function () {
+    $('body').on('click', '.wpd-field-button', function () {
         var fieldType = $(this).attr('id');
         var fieldTitle = $(this).text();
         var defaultField = '0';
@@ -74,7 +74,7 @@ $(document).ready(function ($) {
         });
     });
 
-    $(document).on('click', '#wpd-add-field-button', function () {
+    $('body').on('click', '#wpd-add-field-button', function () {
         var tbForm = $('#TB_ajaxContent_form');
         tbForm.submit(function (event) {
             event.preventDefault();
@@ -129,7 +129,7 @@ $(document).ready(function ($) {
     function wpdFieldLoad() {
         $('#TB_ajaxContent').html('<img class="wpdFieldLoad" src="' + wpdFormAdminOptions.loaderImg + '">');
     }
-    $(document).on('click', '.wpd-advaced-options-title', function(){
+    $('body').on('click', '.wpd-advaced-options-title', function(){
          $(this).next('.wpd-advaced-options-cont').toggle();
     });
 });

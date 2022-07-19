@@ -242,6 +242,8 @@ class WpdiscuzHelperOptimization implements WpDiscuzConstants {
                 \SiteGround_Optimizer\Supercacher\Supercacher::delete_assets();
             }
         }
+
+        update_post_meta($postId, self::POSTMETA_STATISTICS, []);
     }
 
     public function cleanAllCaches() {

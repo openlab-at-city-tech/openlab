@@ -2,7 +2,7 @@
 /*
  * Plugin Name: wpDiscuz
  * Description: #1 WordPress Comment Plugin. Innovative, modern and feature-rich comment system to supercharge your website comment section.
- * Version: 7.3.17
+ * Version: 7.3.19
  * Author: gVectors Team
  * Author URI: https://gvectors.com/
  * Plugin URI: https://wpdiscuz.com/
@@ -39,6 +39,9 @@ class WpdiscuzCore implements WpDiscuzConstants {
     public $helperOptimization;
     public $helperUpload;
     public $wpdiscuzOptionsJs;
+    /**
+     * @var WpdiscuzOptions
+     */
     public $options;
     public $commentsArgs;
     private $version;
@@ -764,6 +767,13 @@ class WpdiscuzCore implements WpDiscuzConstants {
         if ($commentCache = $this->cache->getCommentsCache($this->commentsArgs)) {
             $commentList = $commentCache["commentList"];
             $commentData = $commentCache["commentData"];
+            if ($commentList && $this->options->thread_layouts["highlightVotingButtons"]) {
+                if (!empty($commentListArgs["current_user"]->ID)) {
+                    $commentListArgs["user_votes"] = $this->dbManager->getUserVotes($commentList, $commentListArgs['current_user']->ID);
+                } else {
+                    $commentListArgs["user_votes"] = $this->dbManager->getUserVotes($commentList, md5($this->helper->getRealIPAddr()));
+                }
+            }
             if ($this->options->wp["isPaginate"]) {
                 $commentListArgs["page"] = 0;
                 $commentListArgs["per_page"] = 0;
@@ -1429,6 +1439,10 @@ class WpdiscuzCore implements WpDiscuzConstants {
                 $this->cache->deleteGravatarsFolder();
                 $this->dbManager->deleteGravatarsTable();
             }
+            // adding email templates as options            
+            if (version_compare($this->version, "7.3.17", "<=")) {
+                $this->options->addEmailTemplates(true);
+            }
             do_action("wpdiscuz_clean_all_caches", $pluginData["Version"], $this->version);
         }
         do_action("wpdiscuz_check_version");
@@ -1987,7 +2001,7 @@ class WpdiscuzCore implements WpDiscuzConstants {
                 echo "</div>";
                 echo "<div id='wpd-bubble-comment'>";
                 echo "<span id='wpd-bubble-comment-text'></span>";
-                echo "<span id='wpd-bubble-comment-reply-link'>| <a href='#'>Reply</a></span>";
+                echo "<span id='wpd-bubble-comment-reply-link'>| <a href='#'>".$this->options->getPhrase("wc_reply_text")."</a></span>";
                 echo "</div>";
                 echo "</div>";
             }

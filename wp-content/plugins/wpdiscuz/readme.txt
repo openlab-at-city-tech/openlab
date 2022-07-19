@@ -2,8 +2,8 @@
 Contributors: gVectors Team
 Tags: comment, comments, ajax comments, comment form, comment fields
 Requires at least: 5.0
-Tested up to: 5.9
-Stable tag: 7.3.17
+Tested up to: 6.0
+Stable tag: 7.3.19
 Requires PHP: 5.6 and higher
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -185,15 +185,35 @@ Nothing will be lost!  **Comments - wpDiscuz** will show all old comments.
 
 == Changelog ==
 
-= Comments - wpDiscuz v7.3.17 - 30.03.2022 =
 
-* Fixed Bug: Conflict with Redis based cache plugins
-* Fixed Bug: Conflict with Memcached based cache plugins
+= Comments - wpDiscuz v7.3.19 - 15.06.2022 =
+
+Fixed bug: Uncaught TypeError: array_key_exists()
+
 
 **IMPORTANT!**
 
 * Please don't forget delete all caches and purge CDN after the update.
 
+= Comments - wpDiscuz v7.3.18 - 14.06.2022 =
+
+* Added: Preventing multiple clicks on subscription button
+* Fixed Bug: Problem with comments Lazy Loading of mobile devices
+* Fixed Bug: jQuery events not triggered
+* Fixed Bug: Problem with most reacted comment
+* Fixed Bug: Cache conflict with voting buttons highlighting
+* Fixed Bug: Problems with Subscription, Follow and other notification messages
+* Fixed Bug: Untranslated UI element, reply button in the bubble notification area
+* Fixed Bug: PHP Error: Undefined variable $options in sanitizer function
+* Fixed Bug: Warning - Illegal string offset 'enable_post_rating'
+* Fixed Bug: PHP Fatal error: Cannot use string offset as an array in class.WpdiscuzWalker.php:45
+* Fixed Bug: PHP Fatal error: array_key_exists() in Form.php (when creating a new form)
+* Fixed Bug: PHP Fatal error: Call to a member function get_children() on null in class.WpdiscuzHelper.php:421
+
+= Comments - wpDiscuz v7.3.17 - 30.03.2022 =
+
+* Fixed Bug: Conflict with Redis based cache plugins
+* Fixed Bug: Conflict with Memcached based cache plugins
 
 
 = Comments - wpDiscuz v7.3.16 - 19.03.2022 =

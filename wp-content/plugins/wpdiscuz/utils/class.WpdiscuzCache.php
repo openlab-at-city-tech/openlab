@@ -124,7 +124,7 @@ class WpdiscuzCache implements WpDiscuzConstants {
                 @unlink($fileInfo["path"]);
                 return [];
             }
-            if (is_readable($fileInfo["path"]) && ($cache = maybe_unserialize(file_get_contents($fileInfo["path"])))) {
+            if (is_readable($fileInfo["path"]) && ($cache = maybe_unserialize(file_get_contents($fileInfo["path"]))) && is_array($cache)) {
                 return $cache;
             }
         }

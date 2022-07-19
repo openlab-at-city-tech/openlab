@@ -39,7 +39,7 @@ jQuery(document).ready(function ($) {
             scrollTop: $('#comments').offset().top - 32
         }, 1000);
     }
-    $(document).on('click', '.wpd-comment-share .fa-facebook-f', function () {
+    $('body').on('click', '.wpd-comment-share .fa-facebook-f', function () {
         if (wpdiscuzAjaxObj.enableFbShare != 1) {
             return;
         }
@@ -54,13 +54,13 @@ jQuery(document).ready(function ($) {
     });
 
     var socialLoginProvider = '';
-    $(document).on('click', '#wpdcom .wpd-social-login .wpdiscuz-login-button', function () {
+    $('body').on('click', '#wpdcom .wpd-social-login .wpdiscuz-login-button', function () {
         var socialLoginContainer = $(this).parents('.wpd-social-login');
         socialLoginProvider = wpdInitProvider($(this));
         wpdSocialLoginIsConfirmAgreement(socialLoginProvider, socialLoginContainer);
     });
 
-    $(document).on('click', '#wpdcom .wpd-agreement-buttons-right .wpd-agreement-button', function () {
+    $('body').on('click', '#wpdcom .wpd-agreement-buttons-right .wpd-agreement-button', function () {
         var socialLoginContainer = $(this).parents('.wpd-form-wrap, .wpd-form').find('.wpd-social-login-agreement').slideUp(700);
         if ($(this).hasClass('wpd-agreement-button-agree')) {
             if (wpdiscuzAjaxObj.isCookiesEnabled) {
