@@ -193,6 +193,7 @@ function ewww_image_optimizer_tool_script( $hook ) {
 	if ( 'tools_page_ewww-image-optimizer-tools' !== $hook ) {
 		return;
 	}
+	add_filter( 'admin_footer_text', 'ewww_image_optimizer_footer_review_text' );
 	wp_enqueue_script( 'ewww-tool-script', plugins_url( '/includes/eio-tools.js', __FILE__ ), array( 'jquery', 'jquery-ui-progressbar' ), EWWW_IMAGE_OPTIMIZER_VERSION, true );
 	// Number of images in the ewwwio_table (previously optimized images).
 	$image_count = ewww_image_optimizer_aux_images_table_count();
@@ -668,6 +669,7 @@ function ewww_image_optimizer_bulk_script( $hook ) {
 	if ( 'media_page_ewww-image-optimizer-bulk' !== $hook ) {
 		return;
 	}
+	add_filter( 'admin_footer_text', 'ewww_image_optimizer_footer_review_text' );
 	global $wpdb;
 	global $ewww_force;
 	global $ewww_webp_only;
@@ -2033,6 +2035,10 @@ function ewww_image_optimizer_bulk_loop( $hook = '', $delay = 0 ) {
 		// Do metadata update after full-size is processed, usually because of conversion or resizing.
 		if ( 'full' === $image->resize && $image->attachment_id ) {
 			if ( $meta && is_array( $meta ) ) {
+				clearstatcache();
+				if ( ! empty( $image->file ) && is_file( $image->file ) ) {
+					$meta['filesize'] = filesize( $image->file );
+				}
 				$meta_saved = wp_update_attachment_metadata( $image->attachment_id, $meta );
 				if ( ! $meta_saved ) {
 					ewwwio_debug_message( 'failed to save meta' );
@@ -2154,6 +2160,8 @@ function ewww_image_optimizer_bulk_update_meta() {
 	$attachment_id = (int) $_REQUEST['attachment_id'];
 	ewwwio_debug_message( "saving attachment meta for $attachment_id" );
 	$meta = wp_get_attachment_metadata( $attachment_id );
+	$meta = ewww_image_optimizer_update_filesize_metadata( $meta, $attachment_id );
+	remove_filter( 'wp_update_attachment_metadata', 'ewww_image_optimizer_update_filesize_metadata', 9 );
 	if ( class_exists( 'S3_Uploads' ) || class_exists( 'S3_Uploads\Plugin' ) ) {
 		ewwwio_debug_message( 're-uploading to S3(_Uploads)' );
 		ewww_image_optimizer_remote_push( $meta, $attachment_id );

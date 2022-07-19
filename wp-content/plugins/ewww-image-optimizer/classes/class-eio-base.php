@@ -207,6 +207,7 @@ if ( ! class_exists( 'EIO_Base' ) ) {
 			if ( ! is_string( $message ) && ! is_int( $message ) && ! is_float( $message ) ) {
 				return;
 			}
+			$message = "$message";
 			if ( defined( 'WP_CLI' ) && WP_CLI ) {
 				WP_CLI::debug( $message );
 				return;
@@ -379,9 +380,18 @@ if ( ! class_exists( 'EIO_Base' ) ) {
 		 * @return bool True for an AMP endpoint, false otherwise.
 		 */
 		function is_amp() {
+			// Just return false if we can't properly check yet.
+			if ( ! did_action( 'parse_request' ) ) {
+				return false;
+			}
 			if ( ! did_action( 'wp' ) ) {
 				return false;
 			}
+			global $wp_query;
+			if ( ! isset( $wp_query ) || ! ( $wp_query instanceof WP_Query ) ) {
+				return false;
+			}
+
 			if ( function_exists( 'amp_is_request' ) && amp_is_request() ) {
 				return true;
 			}
@@ -624,6 +634,7 @@ if ( ! class_exists( 'EIO_Base' ) ) {
 					)
 				) {
 					// We will wait until the paths loop to fix this one.
+					$this->debug_message( 'skipping domains and going to URLs' );
 					continue;
 				}
 				if ( false !== strpos( $url, $allowed_domain ) ) {
@@ -640,6 +651,9 @@ if ( ! class_exists( 'EIO_Base' ) ) {
 					continue;
 				}
 				$this->debug_message( "looking for path $allowed_url in $url" );
+				if ( ! empty( $this->s3_active ) && ! empty( $this->s3_object_prefix ) ) {
+					$this->debug_message( "checking first for $this->s3_active and $allowed_url" . $this->s3_object_prefix );
+				}
 				if (
 					! empty( $this->s3_active ) && // We've got an S3 configuration, and...
 					false !== strpos( $url, $this->s3_active ) && // the S3 domain is present in the URL, and...
@@ -776,22 +790,23 @@ if ( ! class_exists( 'EIO_Base' ) ) {
 				} elseif ( ! empty( $s3_bucket ) && ! is_wp_error( $s3_bucket ) && method_exists( $as3cf, 'get_storage_provider' ) ) {
 					$s3_domain = $as3cf->get_storage_provider()->get_url_domain( $s3_bucket, $s3_region );
 				}
+				if ( $as3cf->get_setting( 'enable-object-prefix' ) ) {
+					$this->s3_object_prefix = $as3cf->get_setting( 'object-prefix' );
+					$this->debug_message( $this->s3_object_prefix );
+				} else {
+					$this->s3_object_prefix = '';
+					$this->debug_message( 'no WOM prefix' );
+				}
 				if ( ! empty( $s3_domain ) && $as3cf->get_setting( 'serve-from-s3' ) ) {
 					$this->s3_active = $s3_domain;
 					$this->debug_message( "found S3 domain of $s3_domain with bucket $s3_bucket and region $s3_region" );
 					$this->allowed_urls[] = $s3_scheme . '://' . $s3_domain . '/';
 					if ( $as3cf->get_setting( 'enable-delivery-domain' ) && $as3cf->get_setting( 'delivery-domain' ) ) {
 						$delivery_domain         = $as3cf->get_setting( 'delivery-domain' );
-						$this->allowed_urls[]    = $s3_scheme . '://' . $delivery_domain . '/';
+						$this->allowed_urls[]    = $s3_scheme . '://' . \trailingslashit( $delivery_domain ) . trailingslashit( trim( $this->s3_object_prefix, '/' ) );
 						$this->allowed_domains[] = $delivery_domain;
 						$this->debug_message( "found WOM delivery domain of $delivery_domain" );
 					}
-				}
-				if ( $as3cf->get_setting( 'enable-object-prefix' ) ) {
-					$this->s3_object_prefix = $as3cf->get_setting( 'object-prefix' );
-					$this->debug_message( $as3cf->get_setting( 'object-prefix' ) );
-				} else {
-					$this->debug_message( 'no WOM prefix' );
 				}
 				if ( $as3cf->get_setting( 'object-versioning' ) ) {
 					$this->s3_object_version = true;
@@ -844,7 +859,7 @@ if ( ! class_exists( 'EIO_Base' ) ) {
 
 			// NOTE: we don't want this for Easy IO as they might be using SWIS to deliver
 			// JS/CSS from a different CDN domain, and that will break with Easy IO!
-			if ( 'ExactDN' !== get_class( $this ) && 'EIO_Base' !== get_class( $this ) && function_exists( 'swis' ) && swis()->settings->get_option( 'cdn_domain' ) ) {
+			if ( 'ExactDN' !== get_class( $this ) && 'EIO_Base' !== get_class( $this ) && function_exists( 'swis' ) && is_object( swis()->settings ) && swis()->settings->get_option( 'cdn_domain' ) ) {
 				$this->allowed_urls[]    = swis()->settings->get_option( 'cdn_domain' );
 				$this->allowed_domains[] = $this->parse_url( swis()->settings->get_option( 'cdn_domain' ), PHP_URL_HOST );
 			}
@@ -859,7 +874,7 @@ if ( ! class_exists( 'EIO_Base' ) ) {
 				$home_domain = $this->parse_url( $home_url, PHP_URL_HOST );
 				$site_domain = $this->parse_url( $site_url, PHP_URL_HOST );
 				// If the home domain does not match the upload url, and the site domain does match...
-				if ( false === strpos( $upload_dir['baseurl'], $home_domain ) && false !== strpos( $upload_dir['baseurl'], $site_domain ) ) {
+				if ( $home_domain && false === strpos( $upload_dir['baseurl'], $home_domain ) && $site_domain && false !== strpos( $upload_dir['baseurl'], $site_domain ) ) {
 					$this->debug_message( "using WP URL (via get_site_url) with $site_domain rather than $home_domain" );
 					$home_url = $site_url;
 				}
@@ -872,6 +887,14 @@ if ( ! class_exists( 'EIO_Base' ) ) {
 			// But this is used by Easy IO, so it should be derived from the above logic instead, which already matches the site/home URLs against the upload URL.
 			$this->upload_domain     = $this->parse_url( $this->site_url, PHP_URL_HOST );
 			$this->allowed_domains[] = $this->upload_domain;
+			// For when plugins don't do a very good job of updating URLs for mapped multi-site domains.
+			if ( is_multisite() && false === strpos( $upload_dir['baseurl'], $this->upload_domain ) ) {
+				$this->debug_message( 'upload domain does not match the home URL' );
+				$origin_upload_domain = $this->parse_url( $upload_dir['baseurl'], PHP_URL_HOST );
+				if ( $origin_upload_domain ) {
+					$this->allowed_domains[] = $origin_upload_domain;
+				}
+			}
 			// Grab domain aliases that might point to the same place as the upload_domain.
 			if ( ! $this->s3_active && 0 !== strpos( $this->upload_domain, 'www' ) ) {
 				$this->allowed_domains[] = 'www.' . $this->upload_domain;
