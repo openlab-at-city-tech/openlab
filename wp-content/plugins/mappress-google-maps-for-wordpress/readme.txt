@@ -4,8 +4,8 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: maps, google maps, map, map markers, google map, leaflet maps, leaflet map plugin, google maps plugin, wp google maps, wp google map, map plugin, store locator, google map plugin, map widget,
 Requires at least: 5.3
 Requires PHP: 5.6
-Tested up to: 5.9
-Stable tag: 2.73.14
+Tested up to: 6.0
+Stable tag: 2.83.5
 
 == Description ==
 MapPress is the easiest way to add beautiful interactive Google and Leaflet maps to WordPress.
@@ -88,6 +88,212 @@ Please see the plugin documentation pages:
 1. Follow the installation instructions to install the new version
 
 == Changelog ==
+
+= 2.83.5 =
+* Changed: workaround for other plugins loading obsolete versions of wp.element
+* Fixed: clicking on mashup thumbnail image not opening underlying post
+
+= 2.83.4 =
+* Fixed: updated German translation
+* Fixed: double markers showing when using multiple maps with Leaflet clustering
+
+= 2.83.3 =
+* Fixed: POI list pagination incorrect
+
+= 2.83.2 =
+* Fixed: drag and drop error with Leaflet polyfill
+
+= 2.83.1 =
+* Fixed: error from Leaflet json polyfill when theme overwrites Leaflet
+
+= 2.83 =
+* Added: setting to disable Leaflet cluster outline polygons
+* Changed: editor maps switched to react
+* Fixed: directions not working for POIs with no address
+
+= 2.82.4 =
+* Fixed: directions link not working
+
+= 2.82.3 =
+* Fixed: markers shown outside clusters on initial load
+* Fixed: editor marker drag/drop not working
+
+= 2.82.2 =
+* Fixed: zooming in and out on Google clusters could result in 'null' marker
+* Fixed: revert auto-sizing iframes; not compatible with viewport ('vh') sizing
+
+= 2.82.1 =
+* Fixed: maps sized wrong when using sizes without units
+
+= 2.82 =
+* Changed: frontend loader and rendering switched to react components
+* Changed: iframes resize to content
+
+= 2.81.2 =
+* Changed: convert import/settings to react map
+
+= 2.81.1 =
+* Fixed: url query parameter removed, some sites throw 403 error
+
+= 2.81 =
+* Fixed: POI list showing extra POI beyond page size
+* Fixed: Map editor page size should not be controlled by front-end settings
+* Changed: begin React code transition for admin
+
+= 2.80.11 =
+* Fixed: innodb utf8mb4 index on map title limited to 191 characters
+
+= 2.80.10 =
+* Fixed: sorting not working in map list
+* Fixed: save button not disabled during map save
+* Fixed: trashed maps included in mashups
+
+= 2.80.9 =
+* Fixed: array not initialized for custom props
+
+= 2.80.8 =
+* Fixed: missing token description in template editor
+* Fixed: multiple custom fields not pulled into templates
+
+= 2.80.7 =
+* Fixed: settings not saved in setup wizard
+
+= 2.80.6 =
+* Added: trigger DB upgrade automatically
+
+= 2.80.5 =
+* Fixed: maps not displaying when scripts output in footer
+
+= 2.80.4 =
+* Added: enabled user maps
+
+= 2.80.3 =
+* Changed: authorization 'edit_posts' is now used instead of 'manage_options' for the 'maps' menu
+* Changed: thumbnail images now specify size for better popup sizing
+
+= 2.80.2 =
+* Fixed: POI list not selecting open POI
+* Fixed: mashup error when debugging enabled
+* Fixed: error when dismissing notices
+
+= 2.80.1 =
+* Fixed: database upgrade check incorrect
+
+= 2.80 =
+* Added: settings added for directions links in POI list
+* Changed: filters output even when closed, to allow custom CSS modification
+* Fixed: POIs filtered by map bounds even when search disabled
+
+= 2.77.3 =
+* Fixed: thumbnail not positioned properly in popup modal
+* Fixed: template 'default' tab showing current template instead
+* Fixed: POIs were being filtered by bounds even when search disabled
+
+
+= 2.77.2 =
+* Fixed: shapes not centering correctly when clicked
+* Fixed: not possible to enable POI hover and open POIs in a new tab or modal
+* Changed: added lazy loading and speed tests for iframes
+* Changed: deactivation screen updated
+
+= 2.77.1 =
+* Fixed: ACF map fields not being read in mashups
+* Fixed: enable beta versions checkbox not working
+
+= 2.77 =
+* Changed: source files renamed
+* Fixed: show filter options without escaping
+
+= 2.76.6 =
+* Changed: updated query filters for WP 6.0
+* Fixed: adjusted infowindow sizing for sub-pixel rendering
+
+= 2.76.5 =
+* Fixed: adjust webpack configuration to pick up missing translations
+
+= 2.76.4 =
+* Fixed: mashup inline list not scrolling
+* Fixed: category filter include/exclude not working
+
+= 2.76.3 =
+* Fixed: mashup list pagination not working
+
+= 2.76.2 =
+* Fixed: directions link not working
+
+= 2.76.1 =
+* Fixed: syntax error in mashups
+* Fixed: missing translation for pages
+* Fixed: list page size not working
+
+= 2.76 =
+* Added: images can now be attached to POIs
+* Added: if multiple images exist, an image gallery is displayed in the map list and popups
+* Fixed: KML overlays were not displaying properly
+
+= 2.75.6 =
+* Fixed: error when dragging Leaflet markers
+
+= 2.75.5 =
+* Fixed: geocoding errors written to posts with no custom fields
+* Fixed: thumbnails not displaying properly in list
+* Fixed: insert not working for map sidebar panel
+
+= 2.75.4 =
+* Fixed: maps with save center not displaying
+
+= 2.75.3 =
+* Fixed: directions 'to' address blank
+
+= 2.75.2 =
+* Changed: removed unused list templates
+* Fixed: missing POT translation for filter counts
+* Fixed: POI popup modal not working
+
+= 2.75.1 =
+* Fixed: CSS preventing scrolling bottom POI list
+* Fixed: POI list not displaying in editor if disabled in settings
+* Fixed: blank map edit screen for some sites
+
+= 2.75 =
+* Changed: completed removal of obsolete Algolia geocoder
+* Changed: updated JavaScript: map editor, POI editor, POI list, directions, map menu, map picker and settings
+* Changed: clustering libraries sourced from CDN
+
+= 2.74.3 =
+* Fixed: removed import menu from free version
+* Fixed: removed french translation from plugin directory
+
+= 2.74.2 =
+* Fixed: custom field geocoding not working
+
+= 2.74.1 =
+* Fixed: option screen alignment wrong for some options
+* Fixed: travel line animation setting not saving properly
+
+= 2.74 =
+* Added: option to connect POIs with lines, for travel blogs, etc.  Lines can be enabled/disabled in the settings or with the shortcode: [mappress lines="true"]
+* Added: new filters form using AJAX
+* Added: import screen for importing maps from CSV files
+* Changed: geocoding custom fields now use a datalist dropdown for easier entry
+* Fixed: Leaflet popup not centered when POI is opened from off-screen
+* Fixed: translations not available for JavaScript texts
+* Fixed: directions not opening when list is below map
+* Fixed: hovering highlight not removed
+* Fixed: on some servers compression settings prevented AJAX calls with output buffering enabled
+
+= 2.73.18 =
+* Fixed: added back ability to programmatically specify center as array of (lat,lng)
+
+= 2.73.17 =
+* Added: KML URL is now output when there is an error loading the KML file
+* Fixed: geocoder not recognizing some locations, including "lat,lng" entries
+
+= 2.73.16 =
+* Fixed: autocomplete not creating new POIs
+
+= 2.73.15 =
+* Changed: replaced JQuery Autocomplete with new search box
 
 = 2.73.14 =
 * Fixed: check for wp-config settings preventing file changes

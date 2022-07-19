@@ -2,21 +2,34 @@
 class Mappress_Poi extends Mappress_Obj {
 	var $address,
 		$body = '',
-		$correctedAddress,
+		$email,
 		$iconid,
+		$images,
+		$kml,
+		$name,
+		$oid,
+		$otype,
 		$point = array('lat' => 0, 'lng' => 0),
 		$poly,
-		$postid,
 		$props = array(),
-		$kml,
-		$thumbnail,
 		$title = '',
 		$type,
 		$url,
 		$viewport;              // array('sw' => array('lat' => 0, 'lng' => 0), 'ne' => array('lat' => 0, 'lng' => 0))
 
-	function __sleep() {
-		return array('address', 'body', 'correctedAddress', 'iconid', 'point', 'poly', 'kml', 'title', 'type', 'viewport');
+	function to_json() {
+		return array(
+			'address' => $this->address,
+			'body' => $this->body,
+			'iconid' => $this->iconid,
+			'images' => $this->images,
+			'kml' => $this-> kml,
+			'point' => $this->point,
+			'poly' => $this->poly,
+			'title' => $this->title,
+			'type' => $this->type,
+			'viewport' => $this->viewport
+		);
 	}
 
 	function __construct($atts = '') {
@@ -34,7 +47,14 @@ class Mappress_Poi extends Mappress_Obj {
 			return new WP_Error('geocode', 'MapPress Pro required for geocoding');
 
 		// If point has a lat/lng then no geocoding
-		if (!empty($this->point['lat']) && !empty($this->point['lng'])) {
+		$lat = (isset($this->point['lat'])) ? $this->point['lat'] : null;
+		$lng = (isset($this->point['lng'])) ? $this->point['lng'] : null;
+
+		if (!empty($lat) && !empty($lng)) {
+			// Confirm that lat/lng are numbers
+			if (!is_numeric($lat) || !is_numeric($lng))
+				return new WP_Error('latlng', sprintf(__('Invalid lat/lng coordinate: %s,%s', 'mappress-google-maps-for-wordpress'), $lat, $lng));
+			$this->address = "$lat, $lng";
 			$this->viewport = null;
 		} else {
 			$location = Mappress_Geocoder::geocode($this->address);
@@ -72,16 +92,61 @@ class Mappress_Poi extends Mappress_Obj {
 		return apply_filters('mappress_poi_excerpt', $excerpt, $raw);
 	}
 
-	/**
-	* Get thumbnails if needed.  If dimensions are specified, size 'medium-large' is used to allow scaling w/o pixellation
-	*
-	* @param mixed $post
-	*/
-	function get_thumbnail($post) {
-		$force_size = (Mappress::$options->thumbWidth && Mappress::$options->thumbHeight);
-		$size = (Mappress::$options->thumbSize && !$force_size) ? Mappress::$options->thumbSize : 'medium_large';
-		$style = ($force_size) ? sprintf("width: %spx; height : %spx;", Mappress::$options->thumbWidth, Mappress::$options->thumbHeight) : null;
-		return get_the_post_thumbnail($post, $size, array('style' => $style));			// Slow due to get_post_thumbnail_id()
+	// Update image details, picks up current thumbnail settings and and changed URLs
+	function update_images($size = null) {
+		if (!$this->images)
+			return;
+
+		$force_size = null;
+
+		if (!$size) {
+			$force_size = (Mappress::$options->thumbWidth && Mappress::$options->thumbHeight) ? array(Mappress::$options->thumbWidth, Mappress::$options->thumbHeight) : null;
+			if ($force_size) {
+				$size = $force_size;
+			} else if (Mappress::$options->thumbSize) {
+				$size = Mappress::$options->thumbSize;
+			} else {
+				$size = 'thumbnail';
+			}
+		}
+
+		// Let wp_get_attachment_image_src pick the best-sized image
+		foreach($this->images as $i => $image) {
+			$image = (object) $image;
+
+			$type = (isset($image->type)) ? $image->type : '';
+			switch($type) {
+				case 'avatar' :
+					$image->html = get_avatar($image->id, '100');
+					$this->images[$i] = $image;
+					break;
+
+				case 'embed' :
+					// Limit embed to selected thumbnail dimensions
+					$all_sizes = wp_get_registered_image_subsizes();
+					if ($force_size) {
+						$dims = array('width' => $force_size[0], 'height' => $force_size[1]);
+					} else {
+						$sizes = wp_get_registered_image_subsizes();
+						$dims = (isset($sizes[$size])) ? $sizes[$size] : null;
+					}
+					$html = wp_oembed_get($image->url, $dims);
+					$image->html = $html;
+					$this->images[$i] = $image;
+					break;
+
+				case 'image' :
+				default :
+					// For fixed size, WP will only return a smaller image if the aspect ratio matches exactly, otherwise it returns the original (full size)
+					$source = wp_get_attachment_image_src($image->id, $size);
+					if ($source)
+						$image = (object) array('id' => $image->id, 'url' => $source[0], 'size' => ($force_size) ? array($size[0], $size[1]) : array($source[1], $source[2]));
+					else
+						unset($this->images[$i]);
+					$this->images[$i] = $image;
+					break;
+			}
+		}
 	}
 }
 ?>

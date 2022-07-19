@@ -10,6 +10,7 @@ class Mappress_Template extends Mappress_Obj {
 		;
 
 	static $tokens;
+	static $user_tokens;
 	static $queue = array();
 
 	function __construct($atts = null) {
@@ -20,7 +21,6 @@ class Mappress_Template extends Mappress_Obj {
 		add_action('wp_ajax_mapp_tpl_get', array(__CLASS__, 'ajax_get'));
 		add_action('wp_ajax_mapp_tpl_save', array(__CLASS__, 'ajax_save'));
 		add_action('wp_ajax_mapp_tpl_delete', array(__CLASS__, 'ajax_delete'));
-		add_filter('mappress_poi_props', array(__CLASS__, 'filter_poi_props'), 0, 3);
 
 		// Print queued templates
 		// wp_footer used instead of wp_footer_scripts because NGG reverses calling order of the two hooks
@@ -30,13 +30,20 @@ class Mappress_Template extends Mappress_Obj {
 		add_action('admin_print_footer_scripts', array(__CLASS__, 'print_footer_templates'), -10);
 
 		self::$tokens = array(
-			'address' => array('label' => __('Address', 'mappress-google-maps-for-wordpress'), 'token' => 'address'),
-			'body' => array('label' => __('Body', 'mappress-google-maps-for-wordpress'), 'token' => 'body'),
-			'icon' => array('label' => __('Icon', 'mappress-google-maps-for-wordpress'), 'token' => 'icon'),
-			'thumbnail' => array('label' => __('Thumbnail', 'mappress-google-maps-for-wordpress'), 'token' => 'thumbnail'),
-			'title' => array('label' => __('Title', 'mappress-google-maps-for-wordpress'), 'token' => 'title'),
-			'url' => array('label' => __('Url', 'mappress-google-maps-for-wordpress'), 'token' => 'url'),
-			'custom' => array('label' => __('Custom Field', 'mappress-google-maps-for-wordpress'), 'token' => 'props.myfield')
+			'address' => __('Address', 'mappress-google-maps-for-wordpress'),
+			'body' => __('Body', 'mappress-google-maps-for-wordpress'),
+			'icon' => __('Icon', 'mappress-google-maps-for-wordpress'),
+			'title' => __('Title', 'mappress-google-maps-for-wordpress'),
+			'url' => __('URL', 'mappress-google-maps-for-wordpress'),
+			'props.myfield' => __('Custom Field', 'mappress-google-maps-for-wordpress')
+		);
+
+		self::$user_tokens = array(
+			'address' => __('Address', 'mappress-google-maps-for-wordpress'),
+			'user_email' => __('Email', 'mappress-google-maps-for-wordpress'),
+			'user_display_name' => __('Display Name', 'mappress-google-maps-for-wordpress'),
+			'icon' => __('Icon', 'mappress-google-maps-for-wordpress'),
+			'props.myfield' => __('Custom Field', 'mappress-google-maps-for-wordpress'),
 		);
 	}
 
@@ -46,7 +53,8 @@ class Mappress_Template extends Mappress_Obj {
 		if (!current_user_can('manage_options'))
 			Mappress::ajax_response('Not authorized');
 
-		$name = (isset($_POST['name'])) ? $_POST['name'] : null;
+		$args = json_decode(wp_unslash($_POST['data']));
+		$name = $args->name;
 		$filepath = get_stylesheet_directory() . '/' . $name . '.php';
 
 		$result = @unlink($filepath);
@@ -65,14 +73,14 @@ class Mappress_Template extends Mappress_Obj {
 		$name = (isset($_GET['name'])) ? $_GET['name'] : null;
 		$filename = basename($name) . '.php';
 		$filepath = get_stylesheet_directory() . '/' . $filename;
-		$html = @file_get_contents($filepath);
+		$html = (file_exists($filepath)) ? @file_get_contents($filepath) : null;
 
 		// Verify legitimate path
 		$standard_path = realpath(Mappress::$basedir . "/templates/$filename");
 		if (strpos($standard_path, realpath(Mappress::$basedir)) !== 0)
 			Mappress::ajax_response('Invalid template path');
 
-		$standard = @file_get_contents($standard_path);
+		$standard = (file_exists($standard_path)) ? file_get_contents($standard_path) : null;
 
 		if (!$standard)
 			Mappress::ajax_response('Invalid template');
@@ -85,24 +93,25 @@ class Mappress_Template extends Mappress_Obj {
 			'exists' => ($html) ? true : false,
 		));
 
-		Mappress::ajax_response('OK', array('template' => $template, 'tokens' => self::$tokens));
+		$tokens = (substr($name, 0, 4) == 'user') ? self::$user_tokens : self::$tokens;
+		Mappress::ajax_response('OK', array('template' => $template, 'tokens' => $tokens));
 	}
 
 	static function ajax_save() {
 		check_ajax_referer('mappress', 'nonce');
-		
+
 		if (!current_user_can('manage_options'))
 			Mappress::ajax_response('Not authorized');
-		
+
 		if ((defined('DISALLOW_FILE_EDIT') && DISALLOW_FILE_EDIT) || defined('DISALLOW_FILE_MODS') && DISALLOW_FILE_MODS)
 			Mappress::ajax_response('Unable to save, DISALLOW_FILE_EDIT or DISALLOW_FILE_MODS has been set in wp-config');
 
 		if (!current_user_can('unfiltered_html'))
 			Mappress::ajax_response('Not authorized: DISALLOW_UNFILTERED_HTML is set in wp-config.php');
 
-		$name = (isset($_POST['name'])) ? basename($_POST['name']) : null;
-
-		$content = (isset($_POST['content'])) ? stripslashes($_POST['content']) : null;
+		$args = json_decode(wp_unslash($_POST['data']));
+		$name = $args->name;
+		$content = $args->content;
 		$filepath = get_stylesheet_directory() . '/' . $name . '.php';
 
 		$result = @file_put_contents($filepath, $content);
@@ -132,7 +141,9 @@ class Mappress_Template extends Mappress_Obj {
 	}
 
 	/**
-	* Get template.
+	* Get template by requiring its file.
+	* It would be much faster to read templates from the database and evaluate them,
+	* but most WP "security" plugins flag this as a risk.
 	*/
 	static function get_template($template_name, $args = array()) {
 		foreach($args as $arg => $value)
@@ -150,16 +161,18 @@ class Mappress_Template extends Mappress_Obj {
 		}
 	}
 
-	static function filter_poi_props($props, $postid) {
-		$tokens = self::get_custom_tokens();
+	static function get_poi_props($poi, $otype, $oid, $tokens) {
+		$props = array();
 		foreach($tokens as $token)
-			$props[$token] = get_post_meta($postid, $token, true);
-		return $props;
+			$props[$token] = get_metadata($otype, $oid, $token, true);
+		return apply_filters('mappress_poi_props', $props, $oid, $poi, 'user');
 	}
 
-	static function get_custom_tokens() {
+	static function get_custom_tokens($otype) {
 		$tokens = array();
-		foreach(array('map-popup', 'map-item', 'mashup-item', 'mashup-popup') as $name) {
+		$templates = ($otype == 'user') ? array('user-mashup-popup', 'user-mashup-item') : array('map-popup', 'map-item', 'mashup-item', 'mashup-popup');
+
+		foreach($templates as $name) {
 			$template = self::get_template($name);
 			// shortcode: preg_match_all("/\[([^\]]*)\]/", $template, $matches);
 			preg_match_all("/{{([\s\S]+?)}}/", $template, $matches);
@@ -199,23 +212,15 @@ class Mappress_Template extends Mappress_Obj {
 	}
 
 	static function print_template($template_name) {
-		// Read collections of templates or individual templates
-		if (in_array($template_name, array('editor', 'map')))
-			require(self::locate_template($template_name));
-		else {
-			$template = self::get_template($template_name);
-			if ($template)
-				printf("<script type='text/html' id='mapp-tmpl-$template_name'>%s</script>", $template);
-		}
+		$template = self::get_template($template_name);
+		if ($template)
+			printf("<script type='text/html' id='mapp-tmpl-$template_name'>%s</script>", $template);
 	}
 
 
 	static function print_js_templates() {
 		$results = array();
 		foreach(self::$queue as $template_name => $footer) {
-			// Ignore static editor templates
-			if (in_array($template_name, array('editor', 'map')))
-				continue;
 			$template = self::get_template($template_name);
 			// JS doesn't like dashes in property names
 			$results[str_replace('-', '_', $template_name)] = $template;

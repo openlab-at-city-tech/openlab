@@ -1,18 +1,15 @@
-# MAPPRESS
-#
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/mappress-google-"
-"maps-for-wordpress\n"
-"POT-Creation-Date: 2020-12-15T18:23:01+00:00\n"
-"PO-Revision-Date: 2020-12-15 11:21-0800\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/mappress-google-maps-for-wordpress\n"
 "Last-Translator: Plugin Author <donotreply@gmail.com>\n"
 "Language-Team: \n"
-"Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2020-12-15T18:23:01+00:00\n"
+"PO-Revision-Date: 2020-12-15 11:21-0800\n"
+"Language: zh_TW\n"
 "X-Generator: Poedit 2.4.2\n"
 
 #. Plugin Name of the plugin
@@ -35,24 +32,24 @@ msgstr ""
 msgid "https://www.mappresspro.com/chris-contact"
 msgstr ""
 
-#: mappress.php:171 mappress.php:701 build/index_mappress_admin.js:1
+#: mappress.php:171
+#: mappress.php:701
+#: build/index_mappress_admin.js:1
 #, fuzzy
 msgid "Settings"
 msgstr "儲存設定"
 
-#: mappress.php:172 build/index_mappress_admin.js:1
+#: mappress.php:172
+#: build/index_mappress_admin.js:1
 msgid "Map Library"
 msgstr ""
 
 #: mappress.php:183
-msgid ""
-"MapPress database tables are missing.  Please deactivate the plugin and "
-"activate it again to fix this."
+msgid "MapPress database tables are missing.  Please deactivate the plugin and activate it again to fix this."
 msgstr ""
 
 #: mappress.php:188
 #, fuzzy
-#| msgid "Google Maps API Key"
 msgid "A Google Maps API key is required"
 msgstr "Google地圖API鍵"
 
@@ -62,7 +59,6 @@ msgstr ""
 
 #: mappress.php:188
 #, fuzzy
-#| msgid "MapPress Options"
 msgid "MapPress Settings"
 msgstr "MapPress 選項畫面"
 
@@ -83,24 +79,21 @@ msgid "Please Help Spread the Word"
 msgstr ""
 
 #: mappress.php:285
-msgid ""
-"If you're enjoying MapPress, would you mind taking a moment to write a brief "
-"review?  It would mean the world to me!"
+msgid "If you're enjoying MapPress, would you mind taking a moment to write a brief review?  It would mean the world to me!"
 msgstr ""
 
 #: mappress.php:286
-msgid ""
-"If you have any issues or suggestions, please let me know.  I'll be happy to "
-"help!"
+msgid "If you have any issues or suggestions, please let me know.  I'll be happy to help!"
 msgstr ""
 
-#: mappress.php:402 mappress.php:931
+#: mappress.php:402
+#: mappress.php:931
 #, fuzzy
-#| msgid " Version: "
 msgid "Version"
 msgstr " Version: "
 
-#: mappress.php:404 build/index_mappress_admin.js:1
+#: mappress.php:404
+#: build/index_mappress_admin.js:1
 msgid "Help"
 msgstr ""
 
@@ -114,9 +107,7 @@ msgid "Please enter your MapPress license key to enable plugin updates"
 msgstr ""
 
 #: mappress.php:477
-msgid ""
-"MapPress Gutenberg blocks require WordPress 5.3 or the latest Gutenberg "
-"Plugin. Please update if using the block editor."
+msgid "MapPress Gutenberg blocks require WordPress 5.3 or the latest Gutenberg Plugin. Please update if using the block editor."
 msgstr ""
 
 #: mappress.php:481
@@ -132,9 +123,7 @@ msgid "The MapPress map editor has moved!"
 msgstr ""
 
 #: mappress.php:488
-msgid ""
-"Use this button to open the new popup editor where you can easily create, "
-"edit and insert maps."
+msgid "Use this button to open the new popup editor where you can easily create, edit and insert maps."
 msgstr ""
 
 #: mappress.php:534
@@ -165,13 +154,13 @@ msgstr ""
 msgid "Unable to get your location"
 msgstr ""
 
-#: mappress.php:541 build/index_mappress_admin.js:1
+#: mappress.php:541
+#: build/index_mappress_admin.js:1
 msgid "No results"
 msgstr ""
 
 #: mappress.php:542
 #, fuzzy
-#| msgid "Save Changes"
 msgid "Save changes?"
 msgstr "儲存改變"
 
@@ -183,7 +172,8 @@ msgstr ""
 msgid "Improve this map"
 msgstr ""
 
-#: mappress.php:588 mappress.php:607
+#: mappress.php:588
+#: mappress.php:607
 #, fuzzy
 msgid "Streets"
 msgstr "街道觀"
@@ -209,25 +199,32 @@ msgstr ""
 msgid "Satellite Streets"
 msgstr ""
 
-#: mappress_controls.php:93 templates_admin/widgets.php:42
+#: mappress_controls.php:93
+#: templates_admin/widgets.php:42
 #: build/index_mappress_admin.js:1
 #, fuzzy
 msgid "Add"
 msgstr "地址"
 
-#: mappress_controls.php:102 templates_admin/editor.php:47
-#: templates_admin/mce.php:100 templates_admin/widgets.php:94
+#: mappress_controls.php:102
+#: templates_admin/editor.php:47
+#: templates_admin/mce.php:100
+#: templates_admin/widgets.php:94
 #: build/index_mappress_admin.js:1
 msgid "Delete"
 msgstr "刪除"
 
-#: mappress_map.php:85 mappress_settings.php:321
+#: mappress_map.php:85
+#: mappress_settings.php:321
 #, fuzzy
 msgid "MapPress"
 msgstr "MapPress幫幫我"
 
-#: mappress_map.php:94 templates_admin/mce.php:30 templates_admin/mce.php:80
-#: templates_admin/mce.php:86 build/index_mappress_admin.js:1
+#: mappress_map.php:94
+#: templates_admin/mce.php:30
+#: templates_admin/mce.php:80
+#: templates_admin/mce.php:86
+#: build/index_mappress_admin.js:1
 msgid "Untitled"
 msgstr ""
 
@@ -252,9 +249,9 @@ msgstr "儲存設定"
 msgid "Mapping API"
 msgstr ""
 
-#: mappress_settings.php:92 build/index_mappress_admin.js:1
+#: mappress_settings.php:92
+#: build/index_mappress_admin.js:1
 #, fuzzy
-#| msgid "Google Maps API Key"
 msgid "Google API key"
 msgstr "Google地圖API鍵"
 
@@ -284,7 +281,8 @@ msgstr ""
 msgid "Map alignment"
 msgstr "地圖高度"
 
-#: mappress_settings.php:105 templates/map-popup.php:3
+#: mappress_settings.php:105
+#: templates/map-popup.php:3
 #: templates/mashup-popup.php:6
 #, fuzzy
 msgid "Directions"
@@ -300,7 +298,8 @@ msgstr "儲存設定"
 msgid "Default zoom"
 msgstr "地圖內定值"
 
-#: mappress_settings.php:110 mappress_settings.php:238
+#: mappress_settings.php:110
+#: mappress_settings.php:238
 #, fuzzy
 msgid "Open first POI"
 msgstr "最初的標誌"
@@ -361,8 +360,10 @@ msgstr ""
 msgid "Compatiblity"
 msgstr ""
 
-#: mappress_settings.php:175 mappress_settings.php:244
-#: pro/mappress_pro_settings.php:234 templates_admin/widgets.php:78
+#: mappress_settings.php:175
+#: mappress_settings.php:244
+#: pro/mappress_pro_settings.php:234
+#: templates_admin/widgets.php:78
 #: build/index_mappress_admin.js:1
 #, fuzzy
 msgid "Default"
@@ -393,7 +394,8 @@ msgstr ""
 msgid "Bottom of post"
 msgstr ""
 
-#: mappress_settings.php:199 mappress_settings.php:243
+#: mappress_settings.php:199
+#: mappress_settings.php:243
 msgid "(list)"
 msgstr ""
 
@@ -405,8 +407,10 @@ msgstr "國碼查詢"
 msgid "Prevent other plugins/themes from loading the Google Maps API"
 msgstr ""
 
-#: mappress_settings.php:212 mappress_settings.php:221
-#: pro/mappress_pro_settings.php:232 build/index_mappress_admin.js:1
+#: mappress_settings.php:212
+#: mappress_settings.php:221
+#: pro/mappress_pro_settings.php:232
+#: build/index_mappress_admin.js:1
 #, fuzzy
 msgid "Google"
 msgstr "GoogleBar"
@@ -415,17 +419,17 @@ msgstr "GoogleBar"
 msgid "Inline"
 msgstr ""
 
-#: mappress_settings.php:221 build/index_mappress_admin.js:1
+#: mappress_settings.php:221
+#: build/index_mappress_admin.js:1
 msgid "Leaflet"
 msgstr ""
 
 #: mappress_settings.php:223
-msgid ""
-"Leaflet is free and requires no API key.  Google requires an API key and has "
-"strict usage limits."
+msgid "Leaflet is free and requires no API key.  Google requires an API key and has strict usage limits."
 msgstr ""
 
-#: mappress_settings.php:229 mappress_settings.php:232
+#: mappress_settings.php:229
+#: mappress_settings.php:232
 msgid "Output scripts in footer"
 msgstr ""
 
@@ -445,7 +449,8 @@ msgstr ""
 msgid "Enter token to use Mapbox map tiles"
 msgstr ""
 
-#: mappress_settings.php:257 mappress_settings.php:262
+#: mappress_settings.php:257
+#: mappress_settings.php:262
 #, fuzzy
 msgid "Map type control"
 msgstr "地圖類型按鈕"
@@ -455,9 +460,9 @@ msgstr "地圖類型按鈕"
 msgid "Street view control"
 msgstr "街道觀"
 
-#: mappress_settings.php:259 mappress_settings.php:263
+#: mappress_settings.php:259
+#: mappress_settings.php:263
 #, fuzzy
-#| msgid "Big map controls"
 msgid "Zoom control"
 msgstr "大圖控制"
 
@@ -467,7 +472,6 @@ msgstr ""
 
 #: mappress_settings.php:291
 #, fuzzy
-#| msgid "Google Maps API Key"
 msgid "Easy Google Maps"
 msgstr "Google地圖API鍵"
 
@@ -488,26 +492,29 @@ msgstr "地圖內定值"
 msgid "Copy maps when overwriting a translation"
 msgstr ""
 
-#: mappress_settings.php:326 mappress_settings.php:334
+#: mappress_settings.php:326
+#: mappress_settings.php:334
 msgid "Save Changes"
 msgstr "儲存改變"
 
-#: mappress_settings.php:327 mappress_settings.php:335
+#: mappress_settings.php:327
+#: mappress_settings.php:335
 #, fuzzy
 msgid "Reset Defaults"
 msgstr "地圖內定值"
 
 #: mappress_template.php:34
 #, fuzzy
-#| msgid "Add address"
 msgid "Address"
 msgstr "加入地址"
 
-#: mappress_template.php:35 pro/mappress_pro_settings.php:338
+#: mappress_template.php:35
+#: pro/mappress_pro_settings.php:338
 msgid "Body"
 msgstr ""
 
-#: mappress_template.php:36 pro/mappress_pro_settings.php:174
+#: mappress_template.php:36
+#: pro/mappress_pro_settings.php:174
 #: pro/mappress_pro_settings.php:338
 msgid "Icon"
 msgstr ""
@@ -516,7 +523,8 @@ msgstr ""
 msgid "Thumbnail"
 msgstr ""
 
-#: mappress_template.php:38 pro/mappress_pro_settings.php:338
+#: mappress_template.php:38
+#: pro/mappress_pro_settings.php:338
 msgid "Title"
 msgstr ""
 
@@ -524,14 +532,17 @@ msgstr ""
 msgid "Url"
 msgstr ""
 
-#: mappress_template.php:40 pro/mappress_filter.php:120
+#: mappress_template.php:40
+#: pro/mappress_filter.php:120
 #: pro/mappress_pro_settings.php:343
 #, fuzzy
 msgid "Custom Field"
 msgstr "客製欄位"
 
-#: pro/mappress_filter.php:84 pro/mappress_filter.php:133
-#: pro/mappress_pro_settings.php:167 build/index_mappress_admin.js:1
+#: pro/mappress_filter.php:84
+#: pro/mappress_filter.php:133
+#: pro/mappress_pro_settings.php:167
+#: build/index_mappress_admin.js:1
 msgid "Post type"
 msgstr ""
 
@@ -548,8 +559,10 @@ msgstr "客製欄位"
 msgid "Invalid geocoder: %s"
 msgstr ""
 
-#: pro/mappress_geocoder.php:59 pro/mappress_geocoder.php:110
-#: pro/mappress_geocoder.php:147 pro/mappress_geocoder.php:192
+#: pro/mappress_geocoder.php:59
+#: pro/mappress_geocoder.php:110
+#: pro/mappress_geocoder.php:147
+#: pro/mappress_geocoder.php:192
 msgid "No results for address: %s"
 msgstr ""
 
@@ -577,7 +590,8 @@ msgstr ""
 msgid "Files error: "
 msgstr ""
 
-#: pro/mappress_meta.php:109 build/index_mappress_admin.js:1
+#: pro/mappress_meta.php:109
+#: build/index_mappress_admin.js:1
 msgid "Automatic"
 msgstr ""
 
@@ -588,7 +602,6 @@ msgstr "MapPress幫幫我"
 
 #: pro/mappress_pro_settings.php:17
 #, fuzzy
-#| msgid " Version: "
 msgid "Beta versions"
 msgstr " Version: "
 
@@ -606,7 +619,6 @@ msgstr ""
 
 #: pro/mappress_pro_settings.php:25
 #, fuzzy
-#| msgid "Map width"
 msgid "Mini width"
 msgstr "地圖寬度"
 
@@ -625,7 +637,6 @@ msgstr "地圖類型按鈕"
 
 #: pro/mappress_pro_settings.php:32
 #, fuzzy
-#| msgid "Default map icon: "
 msgid "Default icon"
 msgstr "內定地圖圖案"
 
@@ -646,12 +657,15 @@ msgstr ""
 msgid "Automatic icons"
 msgstr ""
 
-#: pro/mappress_pro_settings.php:38 templates/map.php:51
-#: templates_admin/mce.php:13 build/index_mappress_admin.js:1
+#: pro/mappress_pro_settings.php:38
+#: templates/map.php:51
+#: templates_admin/mce.php:13
+#: build/index_mappress_admin.js:1
 msgid "Search"
 msgstr ""
 
-#: pro/mappress_pro_settings.php:40 templates/map.php:58
+#: pro/mappress_pro_settings.php:40
+#: templates/map.php:58
 msgid "Filter"
 msgstr ""
 
@@ -675,7 +689,8 @@ msgstr ""
 msgid "Thumbnail size"
 msgstr ""
 
-#: pro/mappress_pro_settings.php:48 pro/mappress_pro_settings.php:50
+#: pro/mappress_pro_settings.php:48
+#: pro/mappress_pro_settings.php:50
 msgid "Styled maps"
 msgstr ""
 
@@ -698,7 +713,6 @@ msgstr ""
 
 #: pro/mappress_pro_settings.php:59
 #, fuzzy
-#| msgid "Google Maps API Key"
 msgid "Google Server API key"
 msgstr "Google地圖API鍵"
 
@@ -707,7 +721,8 @@ msgstr "Google地圖API鍵"
 msgid "Custom templates"
 msgstr "客製欄位"
 
-#: pro/mappress_pro_settings.php:62 pro/mappress_pro_settings.php:227
+#: pro/mappress_pro_settings.php:62
+#: pro/mappress_pro_settings.php:227
 msgid "Force resize"
 msgstr ""
 
@@ -767,7 +782,8 @@ msgstr ""
 msgid "MapBox"
 msgstr ""
 
-#: pro/mappress_pro_settings.php:246 templates_admin/widgets.php:68
+#: pro/mappress_pro_settings.php:246
+#: templates_admin/widgets.php:68
 msgid "Edit"
 msgstr "編輯"
 
@@ -804,9 +820,9 @@ msgstr ""
 msgid "Check now"
 msgstr ""
 
-#: pro/mappress_pro_settings.php:299 pro/mappress_updater.php:116
+#: pro/mappress_pro_settings.php:299
+#: pro/mappress_updater.php:116
 #, fuzzy
-#| msgid "Google internal error.  Try again later."
 msgid "Communication error, please try again later"
 msgstr "Google內部錯誤.請稍後再試."
 
@@ -855,7 +871,8 @@ msgstr ""
 msgid "Longitude"
 msgstr ""
 
-#: pro/mappress_pro_settings.php:338 build/index_mappress_admin.js:1
+#: pro/mappress_pro_settings.php:338
+#: build/index_mappress_admin.js:1
 msgid "Zoom"
 msgstr ""
 
@@ -896,7 +913,8 @@ msgstr ""
 msgid "Enter JSON from %s"
 msgstr ""
 
-#: pro/mappress_pro_settings.php:397 pro/mappress_pro_settings.php:413
+#: pro/mappress_pro_settings.php:397
+#: pro/mappress_pro_settings.php:413
 msgid "Style name"
 msgstr ""
 
@@ -928,11 +946,13 @@ msgstr ""
 msgid "JSON error"
 msgstr ""
 
-#: pro/mappress_widget.php:69 pro/mappress_widget_map.php:56
+#: pro/mappress_widget.php:69
+#: pro/mappress_widget_map.php:56
 msgid "Widget title"
 msgstr ""
 
-#: pro/mappress_widget.php:74 pro/mappress_widget_map.php:66
+#: pro/mappress_widget.php:74
+#: pro/mappress_widget_map.php:66
 msgid "Map size"
 msgstr ""
 
@@ -960,21 +980,26 @@ msgstr ""
 msgid "Learn about queries"
 msgstr ""
 
-#: pro/mappress_widget.php:94 pro/mappress_widget_map.php:74
+#: pro/mappress_widget.php:94
+#: pro/mappress_widget_map.php:74
 msgid "Show POI list"
 msgstr ""
 
-#: pro/mappress_widget.php:101 pro/mappress_widget_map.php:81
+#: pro/mappress_widget.php:101
+#: pro/mappress_widget_map.php:81
 #, fuzzy
 msgid "Other Settings"
 msgstr "儲存設定"
 
-#: pro/mappress_widget.php:104 pro/mappress_widget_map.php:84
+#: pro/mappress_widget.php:104
+#: pro/mappress_widget_map.php:84
 msgid "Example: initialopeninfo=\"true\""
 msgstr ""
 
-#: pro/mappress_widget_map.php:61 templates_admin/mce.php:49
-#: templates_admin/mce.php:69 build/index_mappress_admin.js:1
+#: pro/mappress_widget_map.php:61
+#: templates_admin/mce.php:49
+#: templates_admin/mce.php:69
+#: build/index_mappress_admin.js:1
 msgid "Map ID"
 msgstr ""
 
@@ -1046,21 +1071,27 @@ msgstr ""
 msgid "Add Media"
 msgstr ""
 
-#: templates_admin/editor.php:45 templates_admin/mce.php:55
-#: templates_admin/widgets.php:91 build/index_mappress_admin.js:1
+#: templates_admin/editor.php:45
+#: templates_admin/mce.php:55
+#: templates_admin/widgets.php:91
+#: build/index_mappress_admin.js:1
 msgid "Save"
 msgstr "儲存"
 
-#: templates_admin/editor.php:46 templates_admin/mce.php:56
-#: templates_admin/widgets.php:92 build/index_mappress_admin.js:1
+#: templates_admin/editor.php:46
+#: templates_admin/mce.php:56
+#: templates_admin/widgets.php:92
+#: build/index_mappress_admin.js:1
 msgid "Cancel"
 msgstr "取消"
 
-#: templates_admin/mce.php:6 build/index_mappress_admin.js:1
+#: templates_admin/mce.php:6
+#: build/index_mappress_admin.js:1
 msgid "Select a map"
 msgstr ""
 
-#: templates_admin/mce.php:7 build/index_mappress_admin.js:1
+#: templates_admin/mce.php:7
+#: build/index_mappress_admin.js:1
 msgid "Add New"
 msgstr ""
 
@@ -1068,11 +1099,13 @@ msgstr ""
 msgid "post title"
 msgstr ""
 
-#: templates_admin/mce.php:18 build/index_mappress_admin.js:1
+#: templates_admin/mce.php:18
+#: build/index_mappress_admin.js:1
 msgid "Attached to this post"
 msgstr ""
 
-#: templates_admin/mce.php:19 build/index_mappress_admin.js:1
+#: templates_admin/mce.php:19
+#: build/index_mappress_admin.js:1
 msgid "All maps"
 msgstr ""
 
@@ -1080,7 +1113,8 @@ msgstr ""
 msgid "Close"
 msgstr ""
 
-#: templates_admin/mce.php:35 build/index_mappress_admin.js:1
+#: templates_admin/mce.php:35
+#: build/index_mappress_admin.js:1
 msgid "Size"
 msgstr ""
 
@@ -1088,16 +1122,19 @@ msgstr ""
 msgid "Save center / zoom"
 msgstr ""
 
-#: templates_admin/mce.php:68 build/index_mappress_admin.js:1
+#: templates_admin/mce.php:68
+#: build/index_mappress_admin.js:1
 #, fuzzy
 msgid "Map title"
 msgstr "地圖類型按鈕"
 
-#: templates_admin/mce.php:71 build/index_mappress_admin.js:1
+#: templates_admin/mce.php:71
+#: build/index_mappress_admin.js:1
 msgid "Attached to"
 msgstr ""
 
-#: templates_admin/mce.php:73 build/index_mappress_admin.js:1
+#: templates_admin/mce.php:73
+#: build/index_mappress_admin.js:1
 #, fuzzy
 msgid "Action"
 msgstr "標籤"
@@ -1106,7 +1143,8 @@ msgstr "標籤"
 msgid "Current post"
 msgstr ""
 
-#: templates_admin/mce.php:92 build/index_mappress_admin.js:1
+#: templates_admin/mce.php:92
+#: build/index_mappress_admin.js:1
 msgid "Unattached"
 msgstr ""
 
@@ -1115,7 +1153,8 @@ msgstr ""
 msgid "Insert into post"
 msgstr "將地圖加入文章中"
 
-#: templates_admin/mce.php:107 build/index_mappress_admin.js:1
+#: templates_admin/mce.php:107
+#: build/index_mappress_admin.js:1
 msgid "No maps found"
 msgstr ""
 
@@ -1134,7 +1173,6 @@ msgstr ""
 
 #: templates_admin/widgets.php:59
 #, fuzzy
-#| msgid "Default map icon: "
 msgid "Use default icon"
 msgstr "內定地圖圖案"
 
@@ -1158,211 +1196,16 @@ msgstr ""
 msgid "New"
 msgstr ""
 
-#: templates_admin/widgets.php:74 build/index_mappress_admin.js:1
+#: templates_admin/widgets.php:74
+#: build/index_mappress_admin.js:1
 #, fuzzy
 msgid "Custom"
 msgstr "客製欄位"
 
 #: templates_admin/widgets.php:77
 #, fuzzy
-#| msgid "Edit"
 msgid "Editor"
 msgstr "編輯"
-
-#: build/index_mappress_admin.js:1
-msgid "New map"
-msgstr ""
-
-#: build/index_mappress_admin.js:1
-#, fuzzy
-#| msgid "Edit"
-msgid "Edit map"
-msgstr "編輯"
-
-#: build/index_mappress_admin.js:1
-msgid ""
-"Like the block?  Upgrade to the free plugin or MapPress Pro for more "
-"features!"
-msgstr ""
-
-#: build/index_mappress_admin.js:1
-#, fuzzy
-msgid "MapPress Pro"
-msgstr "MapPress幫幫我"
-
-#: build/index_mappress_admin.js:1
-msgid "Free plugin"
-msgstr ""
-
-#: build/index_mappress_admin.js:1
-#, fuzzy
-#| msgid "MapPress options screen."
-msgid "MapPress options"
-msgstr "MapPress Options畫面"
-
-#: build/index_mappress_admin.js:1
-#, fuzzy
-msgid "Map settings"
-msgstr "儲存設定"
-
-#: build/index_mappress_admin.js:1
-#, fuzzy
-msgid "MapPress Map"
-msgstr "MapPress幫幫我"
-
-#: build/index_mappress_admin.js:1
-msgid "Create a new map or choose one from the map library."
-msgstr ""
-
-#: build/index_mappress_admin.js:1
-#, fuzzy
-msgid "Insert a map"
-msgstr "將地圖加入文章中"
-
-#: build/index_mappress_admin.js:1
-msgid "Query"
-msgstr ""
-
-#: build/index_mappress_admin.js:1
-msgid "Refresh map"
-msgstr ""
-
-#: build/index_mappress_admin.js:1
-msgid "Author"
-msgstr ""
-
-#: build/index_mappress_admin.js:1
-msgid "Order by"
-msgstr ""
-
-#: build/index_mappress_admin.js:1
-msgid "Include children"
-msgstr ""
-
-#: build/index_mappress_admin.js:1
-#, fuzzy
-msgid "Add custom field"
-msgstr "客製欄位"
-
-#: build/index_mappress_admin.js:1
-msgid "Field name"
-msgstr ""
-
-#: build/index_mappress_admin.js:1
-msgid "The field \"%s\" has already been added"
-msgstr ""
-
-#: build/index_mappress_admin.js:1
-#, fuzzy
-#| msgid "Please enter an address"
-msgid "Please enter a field name"
-msgstr "請輸入地址"
-
-#: build/index_mappress_admin.js:1
-msgid "Value (a or a,b,c...)"
-msgstr ""
-
-#: build/index_mappress_admin.js:1
-msgid "Invalid JSON"
-msgstr ""
-
-#: build/index_mappress_admin.js:1
-msgid "Update"
-msgstr ""
-
-#: build/index_mappress_admin.js:1
-#, fuzzy
-msgid "Query code"
-msgstr "請輸入國碼"
-
-#: build/index_mappress_admin.js:1
-#, fuzzy
-msgid "MapPress Mashup"
-msgstr "MapPress幫幫我"
-
-#: build/index_mappress_admin.js:1
-msgid "Insert a mashup"
-msgstr ""
-
-#: build/index_mappress_admin.js:1
-msgid "Options saved."
-msgstr ""
-
-#: build/index_mappress_admin.js:1
-msgid "Mapping Engine"
-msgstr ""
-
-#: build/index_mappress_admin.js:1
-msgid "Save options"
-msgstr ""
-
-#: build/index_mappress_admin.js:1
-#, fuzzy
-msgid "Map copied"
-msgstr "地圖內定值"
-
-#: build/index_mappress_admin.js:1
-#, fuzzy
-#| msgid "shortcodes"
-msgid "Shortcode copied"
-msgstr "縮碼"
-
-#: build/index_mappress_admin.js:1
-msgid "post title, map title, or map id"
-msgstr ""
-
-#: build/index_mappress_admin.js:1
-msgid "current post"
-msgstr ""
-
-#: build/index_mappress_admin.js:1
-#, fuzzy
-#| msgid "Edit"
-msgid "Edit post"
-msgstr "編輯"
-
-#: build/index_mappress_admin.js:1
-msgid "Copy"
-msgstr ""
-
-#: build/index_mappress_admin.js:1
-#, fuzzy
-#| msgid "shortcodes"
-msgid "Shortcode"
-msgstr "縮碼"
-
-#: build/index_mappress_admin.js:1
-#, fuzzy
-#| msgid "Delete"
-msgid "Delete map"
-msgstr "刪除"
-
-#: build/index_mappress_admin.js:1
-msgid "Viewport saved"
-msgstr ""
-
-#: build/index_mappress_admin.js:1
-msgid "px, %, vw"
-msgstr ""
-
-#: build/index_mappress_admin.js:1
-#, fuzzy
-#| msgid "Width "
-msgid "Width"
-msgstr "寬度"
-
-#: build/index_mappress_admin.js:1
-msgid "px, %, vh"
-msgstr ""
-
-#: build/index_mappress_admin.js:1
-#, fuzzy
-msgid "Height"
-msgstr "高度"
-
-#: build/index_mappress_admin.js:1
-msgid "Center/Zoom"
-msgstr ""
 
 #: package.json
 msgctxt "block description"
@@ -1382,8 +1225,9 @@ msgstr ""
 #~ msgstr "缺少起始或終點地址."
 
 #~ msgid ""
-#~ "Google cannot return directions between those addresses.  There is no "
-#~ "route between them or the routing information is not available."
+"\n"
+"cannot return directions between those addresses.  There is no \"\n"
+"between them or the routing information is not available.\""
 #~ msgstr "Google無法提供地址間之所需路線(地址間無道路或是路程資料不存在)."
 
 #~ msgid "Unknown error, unable to return directions.  Status code = "
@@ -1412,20 +1256,23 @@ msgstr ""
 #~ msgstr "取得路線"
 
 #~ msgid ""
-#~ "MapPress has changed with this version.  You must re-enter your maps.  "
-#~ "Please see the note on the %1$sMapPress options screen%2$s"
+"\n"
+"has changed with this version.  You must re-enter your maps.  \"\n"
+"see the note on the %1$sMapPress options screen%2$s\""
 #~ msgstr "MapPress已有新版本,請重新輸入你的地圖.詳情請閱讀MapPress選項畫面."
 
 #~ msgid "Google error: BAD REQUEST"
 #~ msgstr "Google 錯誤:不正確要求."
 
 #~ msgid ""
-#~ "The starting or ending address could not be found.  Please check that the "
-#~ "address is correct and completely entered."
+"\n"
+"starting or ending address could not be found.  Please check that the \"\n"
+"is correct and completely entered.\""
 #~ msgstr "找不到起始或終點地址.請重新確認正確地址."
 
 #~ msgid ""
-#~ "Google cannot return those directions for legal or contractual reasons"
+"\n"
+"cannot return those directions for legal or contractual reasons\""
 #~ msgstr "基於法令或合約因素,Google無法提供相關資訊."
 
 #~ msgid "Invalid map API key"
@@ -1435,7 +1282,8 @@ msgstr ""
 #~ msgstr "你的查詢次數已超過Google的當日限制."
 
 #~ msgid ""
-#~ "Error: your browser does not seem to support the street view Flash player"
+"\n"
+"your browser does not seem to support the street view Flash player\""
 #~ msgstr "錯誤：你的瀏覽器並不支援街頭觀的Flash player."
 
 #~ msgid "Sorry, no street view data is available for this location"
@@ -1454,11 +1302,13 @@ msgstr ""
 #~ msgstr "請輸入你的API鍵.若無API鍵,請向Google申請."
 
 #~ msgid ""
-#~ "MapPress could not load google maps.  Either your browser is incompatible "
-#~ "or your API key is invalid.  Need an API key?  Get one "
+"\n"
+"could not load google maps.  Either your browser is incompatible \"\n"
+"your API key is invalid.  Need an API key?  Get one \""
 #~ msgstr ""
-#~ "MapPress無法下載Google地圖.可能是你的瀏覽器不相容或是API鍵不正確.若無API"
-#~ "鍵,請向Google申請."
+"\n"
+"\n"
+""
 
 #~ msgid "here"
 #~ msgstr "這裏"
@@ -1467,7 +1317,8 @@ msgstr ""
 #~ msgstr "此地址已存在地圖上"
 
 #~ msgid ""
-#~ "MapPress isn't ready yet.  Please enter your Google Maps API Key on the "
+"\n"
+"isn't ready yet.  Please enter your Google Maps API Key on the \""
 #~ msgstr "MapPress還未準備好,請重新輸入你的Google地圖API鍵在"
 
 #~ msgid "(leave blank for default)"
@@ -1498,11 +1349,13 @@ msgstr ""
 #~ msgstr "進階設定"
 
 #~ msgid ""
-#~ "Enter a country code to use as a default when searching for an address."
+"\n"
+"a country code to use as a default when searching for an address.\""
 #~ msgstr "搜尋地址時請輸入內定國碼"
 
 #~ msgid ""
-#~ "Check to show large map controls; uncheck for a small zoom control instead"
+"\n"
+"to show large map controls; uncheck for a small zoom control instead\""
 #~ msgstr "打勾以顯示大地圖控制,不打勾則使用小变焦控制"
 
 #~ msgid "Check to enable the \"map types\" button on the map"
@@ -1515,7 +1368,8 @@ msgstr ""
 #~ msgstr "當地圖剛顯示時,請選擇欲使用之地圖類型"
 
 #~ msgid ""
-#~ "Check to show the \"GoogleBar\" search box for local business listings."
+"\n"
+"to show the \"GoogleBar\" search box for local business listings.\""
 #~ msgstr "尋找當地店家目錄請打勾以顯示\"GoogleBar\"搜尋工具箱"
 
 #~ msgid "Disable MapPress link"

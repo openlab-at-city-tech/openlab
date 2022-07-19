@@ -2,29 +2,36 @@
 class Mappress_WPML {
 	static function register() {
 		if (Mappress::$options->wpml)
-			add_action('icl_make_duplicate', array(__CLASS__, 'icl_make_duplicate'), 1, 4);
+			add_action('wpml_pro_translation_completed', array(__CLASS__, 'copy_maps'), 1, 3);
 	}
 
 	// WPML Duplicate
-	// Note: icl_copy_from_original doesn't refresh the page, so is not suitable for maps
-	static function icl_make_duplicate($src_postid, $lang, $post, $postid) {
+	static function copy_maps($new_post_id, $fields, $job) {
+
+		$src_postid = $job->original_doc_id;
+		$postid = $new_post_id;
+
+		$lang =  apply_filters( 'wpml_post_language_details', NULL, $postid);
+		$lang = $lang['language_code'];
+
+		$post = get_post($postid);
+		$post = (array)$post;
+
 		$updated = false;
 
-		if (!$src_postid || !$postid)
-			return;
-
 		// Trash any existing maps in target post
-		$mapids = Mappress_Map::get_list($postid, 'ids');
+		$mapids = Mappress_Map::get_list('post', $postid, 'ids');
 		foreach($mapids as $mapid)
 			Mappress_Map::mutate($mapid, array('status' => 'trashed'));
 
 		// Copy maps
-		$maps = Mappress_Map::get_list($src_postid);
+		$maps = Mappress_Map::get_list('post', $src_postid);
 		$converted = array();
 		foreach($maps as $map) {
 			$src_mapid = $map->mapid;
 			$map->mapid = null;
-			$map->postid = $postid;
+			$map->otype = 'post';
+			$map->oid = $postid;
 			$map->save();
 			$converted[$src_mapid] = $map->mapid;
 		}
