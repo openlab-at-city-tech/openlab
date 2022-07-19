@@ -13,6 +13,9 @@ if ( ! class_exists( 'GFForms' ) ) {
 // Require GFFeedAddOn.
 require_once( 'class-gf-feed-addon.php' );
 
+use \Gravity_Forms\Gravity_Forms\Orders\Factories\GF_Order_Factory;
+use \Gravity_Forms\Gravity_Forms\Orders\Exporters\GF_Save_Entry_Order_Exporter;
+
 /**
  * Class GFPaymentAddOn
  *
@@ -205,7 +208,7 @@ abstract class GFPaymentAddOn extends GFFeedAddOn {
 
 		add_filter( 'gform_confirmation', array( $this, 'confirmation' ), 20, 4 );
 
-		add_filter( 'gform_validation', array( $this, 'maybe_validate' ), 20 );
+		add_filter( 'gform_validation', array( $this, 'maybe_validate' ), 20, 2 );
 		add_filter( 'gform_entry_post_save', array( $this, 'entry_post_save' ), 10, 2 );
 
 		if ( $this->_requires_credit_card ) {
@@ -523,19 +526,18 @@ abstract class GFPaymentAddOn extends GFFeedAddOn {
 	/**
 	 * Check if the rest of the form has passed validation, is the last page, and that the honeypot field has not been completed.
 	 *
-	 * @since  Unknown
-	 * @access public
+	 * @since Unknown
+	 * @since 2.6.4 Added the $context param.
 	 *
-	 * @used-by GFPaymentAddOn::init()
-	 * @uses    GFFormDisplay::is_last_page()
-	 * @uses    GFFormDisplay::get_max_field_id()
-	 * @uses    GFPaymentAddOn::validation()
-	 *
-	 * @param array $validation_result Contains the validation result, the Form Object, and the failed validation page number.
+	 * @param array  $validation_result Contains the validation result, the Form Object, and the failed validation page number.
+	 * @param string $context           The context for the current submission. Possible values: form-submit, api-submit, api-validate.
 	 *
 	 * @return array $validation_result
 	 */
-	public function maybe_validate( $validation_result ) {
+	public function maybe_validate( $validation_result, $context = 'api-submit' ) {
+		if ( $context === 'api-validate' || ! $validation_result['is_valid'] ) {
+			return $validation_result;
+		}
 
 		$form            = $validation_result['form'];
 		$is_last_page    = GFFormDisplay::is_last_page( $form );
@@ -549,7 +551,7 @@ abstract class GFPaymentAddOn extends GFFeedAddOn {
 		// Validation called by partial entries feature via the heartbeat API.
 		$is_heartbeat = rgpost('action') == 'heartbeat';
 
-		if ( ! $validation_result['is_valid'] || ! $is_last_page || $failed_honeypot || $is_heartbeat ) {
+		if ( ! $is_last_page || $failed_honeypot || $is_heartbeat ) {
 			return $validation_result;
 		}
 
@@ -955,6 +957,13 @@ abstract class GFPaymentAddOn extends GFFeedAddOn {
 
 		}
 
+		$order = GF_Order_Factory::create_from_feed( $feed, $form, $entry, $this->current_submission_data, $this );
+		gform_add_meta(
+			$entry['id'],
+			'gform_order',
+			( new GF_Save_Entry_Order_Exporter( $order ) )->export()
+		);
+
 		return $entry;
 	}
 
@@ -1064,7 +1073,6 @@ abstract class GFPaymentAddOn extends GFFeedAddOn {
 
 		// Updating subscription information.
 		if ( $subscription['is_success'] ) {
-
 			$entry = $this->start_subscription( $entry, $subscription );
 
 		} else {

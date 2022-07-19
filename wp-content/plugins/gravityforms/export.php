@@ -388,7 +388,7 @@ class GFExport {
 		}
 
 		self::page_header();
-
+		self::maybe_process_automated_export();
 		?>
 		<script type="text/javascript">
 
@@ -459,6 +459,7 @@ class GFExport {
                         </table>
 
                         <br /><br />
+						<input type="hidden" name="gform_automatic_submit" id="gform_automatic_submit" value="false" />
                         <input type="submit" value="<?php esc_attr_e( 'Download Export File', 'gravityforms' ) ?>" name="export_forms" class="button large primary" />
                     </div>
                 </div>
@@ -468,6 +469,42 @@ class GFExport {
 
 		self::page_footer();
 
+	}
+
+	/**
+	 * Checks if form ids are provided in query to be automatically exported.
+	 *
+	 * This method checks the checkboxes of the desired forms and simulates a click on the submit button.
+	 *
+	 * @since 2.6.2
+	 *
+	 * @return void
+	 */
+	public static function maybe_process_automated_export() {
+		$export_ids       = rgget( 'export_form_ids' );
+		$automatic_submit = rgpost( 'gform_automatic_submit' );
+		if ( $export_ids && ! $automatic_submit ) {
+			?>
+			<script>
+				jQuery( document ).ready( function () {
+					var export_ids = <?php echo json_encode( $export_ids ); ?>;
+					var clickSubmit = false;
+					export_ids.split(',').forEach( ( id ) => {
+						var formCheckbox = jQuery( '#gf_form_id_' + id );
+						if( formCheckbox.length ) {
+							formCheckbox.prop( 'checked', true );
+							clickSubmit = true;
+						}
+					});
+
+					if ( clickSubmit ) {
+						jQuery( '#gform_automatic_submit' ).val( true );
+						jQuery( '#gform_export input[type="submit"]' ).click();
+					}
+				})
+			</script>
+			<?php
+		}
 	}
 
 	public static function export_lead_page() {
@@ -492,7 +529,7 @@ class GFExport {
 				if (!formId)
 					return;
 
-				gfSpinner = new gfAjaxSpinner(jQuery('select#export_form'), gf_vars.baseUrl + '/images/spinner.svg', 'position: relative; top: 2px; left: 5px;');
+				gform.utils.trigger( { event: 'gform/page_loader/show' } );
 
 				var mysack = new sack("<?php echo admin_url( 'admin-ajax.php' )?>");
 				mysack.execute = 1;
@@ -509,8 +546,7 @@ class GFExport {
 			}
 
 			function EndSelectExportForm(aryFields, filterSettings) {
-
-				gfSpinner.destroy();
+				gform.utils.trigger( { event: 'gform/page_loader/hide' } );
 
 				if (aryFields.length == 0) {
 					jQuery("#export_field_container, #export_date_container, #export_submit_container").hide()
@@ -593,7 +629,7 @@ class GFExport {
 		</script>
 
         <div class="gform-settings__content">
-            <form method="post" id="gform_export" class="gform_settings_form">
+            <form method="post" id="gform_export" class="gform_settings_form" data-js="page-loader">
 	            <?php echo wp_nonce_field( 'rg_start_export', 'rg_start_export_nonce' ); ?>
                 <div class="gform-settings-panel gform-settings-panel--full">
                     <header class="gform-settings-panel__header"><legend class="gform-settings-panel__title"><?php esc_html_e( 'Export Entries', 'gravityforms' ) ;?></legend></header>
@@ -720,15 +756,25 @@ class GFExport {
 		while ( $go_to_next_page ) {
 
 			if ( version_compare( GFFormsModel::get_database_version(), '2.3-dev-1', '<' ) ) {
-				$sql = "SELECT d.field_number as field_id, d.value as value
+				$sql = $wpdb->prepare( "SELECT d.field_number as field_id, d.value as value
                     FROM {$wpdb->prefix}rg_lead_detail d
-                    WHERE d.form_id={$form['id']} AND cast(d.field_number as decimal) IN ({$field_ids})
-                    LIMIT {$offset}, {$page_size}";
+                    WHERE d.form_id=%d AND cast(d.field_number as decimal) IN (%d)
+                    LIMIT %d, %d",
+					$form['id'],
+					$field_ids,
+					$offset,
+					$page_size
+				);
 			} else {
-				$sql = "SELECT d.meta_key as field_id, d.meta_value as value
+				$sql = $wpdb->prepare( "SELECT d.meta_key as field_id, d.meta_value as value
                     FROM {$wpdb->prefix}gf_entry_meta d
-                    WHERE d.form_id={$form['id']} AND d.meta_key IN ({$field_ids})
-                    LIMIT {$offset}, {$page_size}";
+                    WHERE d.form_id=%d AND d.meta_key IN (%d)
+                    LIMIT %d, %d",
+					$form['id'],
+					$field_ids,
+					$offset,
+					$page_size
+				);
 			}
 
 
@@ -1039,12 +1085,16 @@ class GFExport {
 					}
 				}
 
-				if ( strpos( $value, '=' ) === 0 ) {
-					// Prevent Excel formulas
-					$value = "'" . $value;
+				if ( ! empty( $value ) ) {
+					if ( strpos( $value, '=' ) === 0 ) {
+						// Prevent Excel formulas
+						$value = "'" . $value;
+					}
+
+					$value = str_replace( '"', '""', $value );
 				}
 
-				$line .= '"' . str_replace( '"', '""', $value ) . '"' . $separator;
+				$line .= '"' . $value . '"' . $separator;
 			}
 		}
 

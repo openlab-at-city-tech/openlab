@@ -204,27 +204,6 @@ class GF_Confirmation {
 	 */
 	private static function settings_fields( $confirmation, $form ) {
 
-		// Initialize page choices array.
-		$page_choices = array(
-			array(
-				'label' => esc_html__( 'Select a Page', 'gravityforms' ),
-				'value' => '',
-			),
-		);
-
-		// Get pages.
-		$pages = get_pages( array( 'depth' => 0, 'child_of' => 0 ) );
-
-		// Loop through pages, add as choices.
-		if ( is_array( $pages ) && ! empty( $pages ) ) {
-			foreach ( $pages as $page ) {
-				$page_choices[] = array(
-					'label' => esc_html( $page->post_title ),
-					'value' => esc_attr( $page->ID ),
-				);
-			}
-		}
-
 		// Build confirmation settings fields.
 		$fields = array(
 			array(
@@ -304,8 +283,7 @@ class GF_Confirmation {
 					array(
 						'name'       => 'page',
 						'label'      => esc_html__( 'Page', 'gravityforms' ),
-						'type'       => 'select',
-						'choices'    => $page_choices,
+						'type'       => 'post_select',
 						'required'   => true,
 						'dependency' => array(
 							'live'     => true,
@@ -459,9 +437,8 @@ class GF_Confirmation {
 		}
 
 		// Reset confirmation ID, default status, conditional logic.
-		$confirmation['id']               = null;
-		$confirmation['isDefault']        = false;
-		$confirmation['conditionalLogic'] = null;
+		$confirmation['id']        = null;
+		$confirmation['isDefault'] = false;
 
 		// Check for confirmation count in confirmation name.
 		preg_match_all( '/(\\(([0-9])*\\))$/mi', $confirmation['name'], $count_exists_in_name );
@@ -840,6 +817,20 @@ class GF_Confirmation {
 
 		return $text;
 
+	}
+
+	/**
+	 * Output the duplicate conditional logic confirmation notice.
+	 *
+	 * @since  2.6
+	 */
+	public static function output_duplicate_confirmation_notice() {
+		echo '<div class="gform-alert gform-alert--notice" data-js="gform-alert">
+				<span class="gform-alert__icon gform-icon gform-icon--circle-notice" aria-hidden="true"></span>
+  				<div class="gform-alert__message-wrap">
+    				<p class="gform-alert__message">In order to avoid conflicts with other confirmations on this form, please ensure these conditional logic rules are unique.</p>
+  				</div>
+			</div>';
 	}
 
 }
