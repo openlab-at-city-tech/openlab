@@ -80,11 +80,16 @@ class Activity {
 	public static function display_activities( $all_activities ) {
 		$prev_day = '';
 		$activities = array();
+
 		foreach($all_activities as $activity) {
 			$user_details = get_user_by('ID', $activity->user_id);
+
 			if (!is_object($user_details)) {
 				continue;
 			}
+
+			if (!self::canViewActivity($activity)) continue;
+
 			$username = $user_details->display_name;
 			$link = '';
 
@@ -209,7 +214,16 @@ class Activity {
 		} else {
 			$html = ob_get_clean(); 
 			return $html;
+		}	
+	}
+
+	public static function canViewActivity($activity) {
+		if (in_array($activity->action, ['task_changed_name', 'task_changed_date', 'task_changed_description', 'task_added', 'task_assigned'])) {
+			if (!Utillities::can_view_task($activity->subject_id)) {
+				return false;
+			}
 		}
-		
+
+		return true;
 	}
 }

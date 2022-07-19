@@ -86,6 +86,9 @@
 	$settingsPages = Zephyr::getSettingsPages();
 	$users = Members::get_zephyr_members();
 	$projects = Projects::get_projects();
+
+	$canAccessGeneralSettings = Utillities::is_admin();
+	$canAccessAdvancedSettings = Utillities::is_admin();
 ?>
 
 <main class="zpm_settings_wrap">
@@ -95,10 +98,20 @@
 			<div class="tab-content">
 				<div data-section="profile_settings" class="tab-pane active">
 					<?php
-						$tabs = '<h3 class="zpm_h3 zpm_tab_title ' . $selected . '" data-zpm-tab-trigger="1">' . __( 'Profile Settings', 'zephyr-project-manager' ) . '</h3><h3 class="zpm_h3 zpm_tab_title" data-zpm-tab-trigger="0">' . __( 'General Settings', 'zephyr-project-manager' ) . '</h3>';
-						echo apply_filters( 'zpm_settings_tabs', $tabs);
+						ob_start();
+						?>
+							<h3 class="zpm_h3 zpm_tab_title <?= $selected ?>" data-zpm-tab-trigger="1"><?= __( 'Profile Settings', 'zephyr-project-manager' ) ?></h3>
 
-						echo '<h3 class="zpm_h3 zpm_tab_title" data-zpm-tab-trigger="advanced">' . __( 'Advanced', 'zephyr-project-manager' ) . '</h3>';
+							<?php if ($canAccessGeneralSettings): ?>
+								<h3 class="zpm_h3 zpm_tab_title" data-zpm-tab-trigger="0"><?= __( 'General Settings', 'zephyr-project-manager' ) ?></h3>
+							<?php endif; ?>
+						<?php
+						$tabs = ob_get_clean();
+						echo apply_filters( 'zpm_settings_tabs', $tabs);
+						
+						if ($canAccessAdvancedSettings) {
+							echo '<h3 class="zpm_h3 zpm_tab_title" data-zpm-tab-trigger="advanced">' . __( 'Advanced', 'zephyr-project-manager' ) . '</h3>';
+						}
 
 						foreach ($settingsPages as $page) {
 							?>
@@ -198,210 +211,214 @@
 								</div>
 						</form>
 					</div>
+					
+					<?php if ($canAccessGeneralSettings): ?>
+						<div class="zpm_tab_panel <?php echo $action == 'general' ? 'zpm_tab_active' : ''; ?>" data-zpm-tab="0">
+							<!-- General Settings -->
+							<form id="zpm_profile_settings" method="post">
 
-					<div class="zpm_tab_panel <?php echo $action == 'general' ? 'zpm_tab_active' : ''; ?>" data-zpm-tab="0">
-						<!-- General Settings -->
-						<form id="zpm_profile_settings" method="post">
+								<label class="zpm_label zpm_divider_label"><?php _e( 'General Settings', 'zephyr-project-manager' ) ?></label>
 
-							<label class="zpm_label zpm_divider_label"><?php _e( 'General Settings', 'zephyr-project-manager' ) ?></label>
+								<div class="zpm-form__group">
+									<input type="text" name="zpm-settings__projects-per-page" id="zpm-settings__projects-per-page" class="zpm-form__field" placeholder="<?php _e( 'Projects Per Page', 'zephyr-project-manager' ); ?>" value="<?php echo $general_settings['projects_per_page']; ?>">
+									<label for="zpm-settings__projects-per-page" class="zpm-form__label"><?php _e( 'Projects Per Page', 'zephyr-project-manager' ); ?></label>
+								</div>
 
-							<div class="zpm-form__group">
-								<input type="text" name="zpm-settings__projects-per-page" id="zpm-settings__projects-per-page" class="zpm-form__field" placeholder="<?php _e( 'Projects Per Page', 'zephyr-project-manager' ); ?>" value="<?php echo $general_settings['projects_per_page']; ?>">
-								<label for="zpm-settings__projects-per-page" class="zpm-form__label"><?php _e( 'Projects Per Page', 'zephyr-project-manager' ); ?></label>
-							</div>
+								<div class="zpm-form__group">
+									<input type="text" name="zpm-settings__tasks-per-page" id="zpm-settings__tasks-per-page" class="zpm-form__field" placeholder="<?php _e( 'Tasks Per Page', 'zephyr-project-manager' ); ?>" value="<?php echo $general_settings['tasks_per_page']; ?>">
+									<label for="zpm-settings__tasks-per-page" class="zpm-form__label"><?php _e( 'Tasks Per Page', 'zephyr-project-manager' ); ?></label>
+								</div>
 
-							<div class="zpm-form__group">
-								<input type="text" name="zpm-settings__tasks-per-page" id="zpm-settings__tasks-per-page" class="zpm-form__field" placeholder="<?php _e( 'Tasks Per Page', 'zephyr-project-manager' ); ?>" value="<?php echo $general_settings['tasks_per_page']; ?>">
-								<label for="zpm-settings__tasks-per-page" class="zpm-form__label"><?php _e( 'Tasks Per Page', 'zephyr-project-manager' ); ?></label>
-							</div>
+								<label class="zpm_label"><?php _e( 'Group Projects by Category', 'zephyr-project-manager' ); ?></label>
 
-							<label class="zpm_label"><?php _e( 'Group Projects by Category', 'zephyr-project-manager' ); ?></label>
-
-							<label for="zpm-settings__enable-category-grouping" class="zpm-material-checkbox">
-								<input type="checkbox" id="zpm-settings__enable-category-grouping" name="zpm-settings__enable-category-grouping" class="zpm_toggle invisible" value="1" <?php echo isset( $general_settings['enable_category_grouping'] ) && $general_settings['enable_category_grouping'] ? 'checked' : '';  ?>>
-								<span class="zpm-material-checkbox-label"><?php _e( 'Enable grouping of projects by category', 'zephyr-project-manager' ); ?></span>
-							</label>
-
-							<label class="zpm_label"><?php _e( 'Display Project ID', 'zephyr-project-manager' ); ?></label>
-
-							<label for="zpm-settings-display-project-id" class="zpm-material-checkbox">
-								<input type="checkbox" id="zpm-settings-display-project-id" name="zpm-settings-display-project-id" class="zpm_toggle invisible" value="1" <?php echo isset( $general_settings['display_project_id'] ) && $general_settings['display_project_id'] !== "0" ? 'checked' : '';  ?>>
-								<span class="zpm-material-checkbox-label"><?php _e( 'Display Unique Project ID', 'zephyr-project-manager' ); ?></span>
-							</label>
-
-							<label for="zpm-settings-display-database-project-id" class="zpm-material-checkbox">
-								<input type="checkbox" id="zpm-settings-display-database-project-id" name="zpm-settings-display-database-project-id" class="zpm_toggle invisible" value="1" <?php echo isset( $general_settings['display_database_project_id'] ) && $general_settings['display_database_project_id'] !== "0" ? 'checked' : '';  ?>>
-								<span class="zpm-material-checkbox-label"><?php _e( 'Display Auto Increment Project ID', 'zephyr-project-manager' ); ?></span>
-							</label>
-
-							<div class="zpm-form-field-section">
-								<label for="zpm-settings__display-task-id" class="zpm-material-checkbox">
-									<input type="checkbox" id="zpm-settings__display-task-id" name="zpm-settings__display-task-id" class="zpm_toggle invisible" value="1" <?php echo isset( $general_settings['display_task_id'] ) && $general_settings['display_task_id'] !== "0" ? 'checked' : '';  ?>>
-									<span class="zpm-material-checkbox-label"><?php _e( 'Display Task ID', 'zephyr-project-manager' ); ?></span>
+								<label for="zpm-settings__enable-category-grouping" class="zpm-material-checkbox">
+									<input type="checkbox" id="zpm-settings__enable-category-grouping" name="zpm-settings__enable-category-grouping" class="zpm_toggle invisible" value="1" <?php echo isset( $general_settings['enable_category_grouping'] ) && $general_settings['enable_category_grouping'] ? 'checked' : '';  ?>>
+									<span class="zpm-material-checkbox-label"><?php _e( 'Enable grouping of projects by category', 'zephyr-project-manager' ); ?></span>
 								</label>
-							</div>
 
-							<label class="zpm_label zpm_divider_label"><?php _e( 'Email Settings', 'zephyr-project-manager' ) ?></label>
+								<label class="zpm_label"><?php _e( 'Display Project ID', 'zephyr-project-manager' ); ?></label>
 
-							<div class="zpm-form__group">
-								<input type="text" name="zpm-settings-email-from-name" id="zpm-settings-email-from-name" class="zpm-form__field" placeholder="<?php _e( 'From Name', 'zephyr-project-manager' ); ?>" value="<?php echo $general_settings['email_from_name']; ?>">
-								<label for="zpm-settings-email-from-name" class="zpm-form__label"><?php _e( 'From Name', 'zephyr-project-manager' ); ?></label>
-							</div>
+								<label for="zpm-settings-display-project-id" class="zpm-material-checkbox">
+									<input type="checkbox" id="zpm-settings-display-project-id" name="zpm-settings-display-project-id" class="zpm_toggle invisible" value="1" <?php echo isset( $general_settings['display_project_id'] ) && $general_settings['display_project_id'] !== "0" ? 'checked' : '';  ?>>
+									<span class="zpm-material-checkbox-label"><?php _e( 'Display Unique Project ID', 'zephyr-project-manager' ); ?></span>
+								</label>
 
-							<div class="zpm-form__group">
-								<input type="text" name="zpm-settings-email-from-email" id="zpm-settings-email-from-email" class="zpm-form__field" placeholder="<?php _e( 'From Email', 'zephyr-project-manager' ); ?>" value="<?php echo $general_settings['email_from_email']; ?>">
-								<label for="zpm-settings-email-from-email" class="zpm-form__label"><?php _e( 'From Email', 'zephyr-project-manager' ); ?></label>
-							</div>
+								<label for="zpm-settings-display-database-project-id" class="zpm-material-checkbox">
+									<input type="checkbox" id="zpm-settings-display-database-project-id" name="zpm-settings-display-database-project-id" class="zpm_toggle invisible" value="1" <?php echo isset( $general_settings['display_database_project_id'] ) && $general_settings['display_database_project_id'] !== "0" ? 'checked' : '';  ?>>
+									<span class="zpm-material-checkbox-label"><?php _e( 'Display Auto Increment Project ID', 'zephyr-project-manager' ); ?></span>
+								</label>
 
-							<label class="zpm_label zpm_divider_label"><?php _e( 'Permissions & Capabilities', 'zephyr-project-manager' ) ?></label>
+								<div class="zpm-form-field-section">
+									<label for="zpm-settings__display-task-id" class="zpm-material-checkbox">
+										<input type="checkbox" id="zpm-settings__display-task-id" name="zpm-settings__display-task-id" class="zpm_toggle invisible" value="1" <?php echo isset( $general_settings['display_task_id'] ) && $general_settings['display_task_id'] !== "0" ? 'checked' : '';  ?>>
+										<span class="zpm-material-checkbox-label"><?php _e( 'Display Task ID', 'zephyr-project-manager' ); ?></span>
+									</label>
+								</div>
 
-							<?php if (Utillities::is_admin()) : ?>
-								<?php foreach ( $zpm_roles as $key => $role ) : ?>
-									<label class="zpm_label"><?php echo $role['name']; ?></label>
-									<select multiple="true" class="zpm-multi-select" name="zpm-settings-user-caps-<?php echo $key; ?>[]">
-									<?php foreach ($user_caps as $cap) {
-										$name = str_replace('zpm_', '', $cap);
-										$name = str_replace('_', ' ', $name);
-										$name = ucwords($name);
-									?>
+								<label class="zpm_label zpm_divider_label"><?php _e( 'Email Settings', 'zephyr-project-manager' ) ?></label>
 
-									<option <?php echo isset( $role['role']->capabilities[$cap]) && $role['role']->capabilities[$cap] == true ? 'selected' : ''; ?> value="<?php echo $cap; ?>"><?php echo $name; ?></option>
-									<?php
-									} ?>
+								<div class="zpm-form__group">
+									<input type="text" name="zpm-settings-email-from-name" id="zpm-settings-email-from-name" class="zpm-form__field" placeholder="<?php _e( 'From Name', 'zephyr-project-manager' ); ?>" value="<?php echo $general_settings['email_from_name']; ?>">
+									<label for="zpm-settings-email-from-name" class="zpm-form__label"><?php _e( 'From Name', 'zephyr-project-manager' ); ?></label>
+								</div>
+
+								<div class="zpm-form__group">
+									<input type="text" name="zpm-settings-email-from-email" id="zpm-settings-email-from-email" class="zpm-form__field" placeholder="<?php _e( 'From Email', 'zephyr-project-manager' ); ?>" value="<?php echo $general_settings['email_from_email']; ?>">
+									<label for="zpm-settings-email-from-email" class="zpm-form__label"><?php _e( 'From Email', 'zephyr-project-manager' ); ?></label>
+								</div>
+
+								<label class="zpm_label zpm_divider_label"><?php _e( 'Permissions & Capabilities', 'zephyr-project-manager' ) ?></label>
+
+								<?php if (Utillities::is_admin()) : ?>
+									<?php foreach ( $zpm_roles as $key => $role ) : ?>
+										<label class="zpm_label"><?php echo $role['name']; ?></label>
+										<select multiple="true" class="zpm-multi-select" name="zpm-settings-user-caps-<?php echo $key; ?>[]">
+										<?php foreach ($user_caps as $cap) {
+											$name = str_replace('zpm_', '', $cap);
+											$name = str_replace('_', ' ', $name);
+											$name = ucwords($name);
+										?>
+
+										<option <?php echo isset( $role['role']->capabilities[$cap]) && $role['role']->capabilities[$cap] == true ? 'selected' : ''; ?> value="<?php echo $cap; ?>"><?php echo $name; ?></option>
+										<?php
+										} ?>
+										</select>
+									<?php endforeach; ?>
+
+									<!-- Who can complete tasks -->
+									<label class="zpm_label"><?php _e( 'Who can complete tasks', 'zephyr-project-manager' ); ?></label>
+									<select class="zpm_input" name="zpm-settings__can-complete-tasks">
+										<option value="0" <?php echo isset($general_settings['can_complete_tasks']) && $general_settings['can_complete_tasks'] == '0' ? 'selected' : ''; ?>><?php _e( 'Everyone', 'zephyr-project-manager' ); ?></option>
+										<option value="1" <?php echo isset($general_settings['can_complete_tasks']) && $general_settings['can_complete_tasks'] == '1' ? 'selected' : ''; ?>><?php _e( 'Only Assigned Users', 'zephyr-project-manager' ); ?></option>
+										<option value="2" <?php echo isset($general_settings['can_complete_tasks']) && $general_settings['can_complete_tasks'] == '2' ? 'selected' : ''; ?>><?php _e( 'Only Administrators & Managers', 'zephyr-project-manager' ); ?></option>
+										<option value="3" <?php echo isset($general_settings['can_complete_tasks']) && $general_settings['can_complete_tasks'] == '3' ? 'selected' : ''; ?>><?php _e( 'Nobody', 'zephyr-project-manager' ); ?></option>
 									</select>
-								<?php endforeach; ?>
+								<?php endif; ?>
 
-								<!-- Who can complete tasks -->
-								<label class="zpm_label"><?php _e( 'Who can complete tasks', 'zephyr-project-manager' ); ?></label>
-								<select class="zpm_input" name="zpm-settings__can-complete-tasks">
-									<option value="0" <?php echo isset($general_settings['can_complete_tasks']) && $general_settings['can_complete_tasks'] == '0' ? 'selected' : ''; ?>><?php _e( 'Everyone', 'zephyr-project-manager' ); ?></option>
-									<option value="1" <?php echo isset($general_settings['can_complete_tasks']) && $general_settings['can_complete_tasks'] == '1' ? 'selected' : ''; ?>><?php _e( 'Only Assigned Users', 'zephyr-project-manager' ); ?></option>
-									<option value="2" <?php echo isset($general_settings['can_complete_tasks']) && $general_settings['can_complete_tasks'] == '2' ? 'selected' : ''; ?>><?php _e( 'Only Administrators & Managers', 'zephyr-project-manager' ); ?></option>
-									<option value="3" <?php echo isset($general_settings['can_complete_tasks']) && $general_settings['can_complete_tasks'] == '3' ? 'selected' : ''; ?>><?php _e( 'Nobody', 'zephyr-project-manager' ); ?></option>
+								<div class="zpm-form-field-section">
+									<label for="zpm_view_own_files" class="zpm-material-checkbox">
+										<input type="checkbox" id="zpm_view_own_files" name="zpm_view_own_files" class="zpm_toggle invisible" value="1" <?php echo isset( $general_settings['view_own_files'] ) && $general_settings['view_own_files'] ? 'checked' : '';  ?>>
+										<span class="zpm-material-checkbox-label"><?php _e( 'Allow users to only view own files', 'zephyr-project-manager' ); ?></span>
+									</label>
+								</div>
+
+								<div class="zpm-form-field-section">
+									<label for="zpm-settings__view-members" class="zpm-material-checkbox">
+										<input type="checkbox" id="zpm-settings__view-members" name="zpm-settings__view-members" class="zpm_toggle invisible" value="1" <?php echo isset( $general_settings['view_members'] ) && $general_settings['view_members'] ? 'checked' : '';  ?>>
+										<span class="zpm-material-checkbox-label"><?php _e( 'Allow users to view other members on the site', 'zephyr-project-manager' ); ?></span>
+									</label>
+								</div>
+
+								<label class="zpm_label"><?php _e( 'Default Assignee', 'zephyr-project-manager' ); ?></label>
+								<select class="zpm_input" name="zpm-settings__default-assignee">
+									<option value="-1" <?php echo isset($general_settings['default_assignee']) && $general_settings['default_assignee'] == '-1' ? 'selected' : ''; ?>><?php _e( 'None', 'zephyr-project-manager' ); ?></option>
+									<?php foreach ($users as $user) : ?>
+										<option value="<?php echo $user['id']; ?>" <?php echo isset($general_settings['default_assignee']) && $general_settings['default_assignee'] == $user['id'] ? 'selected' : ''; ?>><?php echo $user['name']; ?></option>
+									<?php endforeach; ?>
 								</select>
-							<?php endif; ?>
 
-							<div class="zpm-form-field-section">
-								<label for="zpm_view_own_files" class="zpm-material-checkbox">
-									<input type="checkbox" id="zpm_view_own_files" name="zpm_view_own_files" class="zpm_toggle invisible" value="1" <?php echo isset( $general_settings['view_own_files'] ) && $general_settings['view_own_files'] ? 'checked' : '';  ?>>
-									<span class="zpm-material-checkbox-label"><?php _e( 'Allow users to only view own files', 'zephyr-project-manager' ); ?></span>
+								<label class="zpm_label"><?php _e( 'Default Project', 'zephyr-project-manager' ); ?></label>
+								<select class="zpm_input" name="zpm-settings__default-project">
+									<option value="-1" <?php echo isset($general_settings['default_project']) && $general_settings['default_project'] == '-1' ? 'selected' : ''; ?>><?php _e( 'None', 'zephyr-project-manager' ); ?></option>
+									<?php foreach ($projects as $project) : ?>
+										<option value="<?php echo $project->id; ?>" <?php echo isset($general_settings['default_project']) && $general_settings['default_project'] == $project->id ? 'selected' : ''; ?>><?php echo $project->name; ?></option>
+									<?php endforeach; ?>
+								</select>
+
+								<?php do_action( 'zpm_permission_settings' ); ?>
+
+								<label class="zpm_label zpm_divider_label"><?php _e( 'Customization', 'zephyr-project-manager' ) ?></label>
+
+								<label class="zpm_label" for="zpm_colorpicker_primary"><?php _e( 'Primary Color', 'zephyr-project-manager' ); ?></label>
+								<input type="text" name="zpm_backend_primary_color" id="zpm_colorpicker_primary" class="zpm_input" value="<?php echo $general_settings['primary_color']; ?>">
+
+								<label class="zpm_label" for="zpm_colorpicker_primary_dark"><?php _e( 'Primary Dark Color', 'zephyr-project-manager' ); ?></label>
+								<input type="text" name="zpm_backend_primary_color_dark" id="zpm_colorpicker_primary_dark" class="zpm_input" value="<?php echo $general_settings['primary_color_dark']; ?>">
+								<label class="zpm_label" for="zpm_colorpicker_primary_light"><?php _e( 'Primary Light Color', 'zephyr-project-manager' ); ?></label>
+								<input type="text" name="zpm_backend_primary_color_light" id="zpm_colorpicker_primary_light" class="zpm_input" value="<?php echo $general_settings['primary_color_light']; ?>">
+
+								<label class="zpm_label zpm_divider_label"><?php _e( 'Dates & Calendar Settings', 'zephyr-project-manager' ) ?></label>
+
+								<!-- First day of week -->
+								<label class="zpm_label"><?php _e( 'Calendar First Day', 'zephyr-project-manager' ); ?></label>
+								<select id="zpm-settings-first-day" class="zpm_input" name="zpm-settings-first-day">
+									<?php foreach ($days_of_week as $val => $name) : ?>
+										<option value="<?php echo $val; ?>" <?php echo $general_settings['first_day'] == $val ? 'selected' : ''; ?>><?php echo $name; ?></option>
+									<?php endforeach; ?>
+								</select>
+
+								<!-- Date formats -->
+								<label class="zpm_label"><?php _e( 'Date Format', 'zephyr-project-manager' ); ?></label>
+								<select id="zpm-settings-date-format" class="zpm_input" name="zpm-settings-date-format">
+									<?php foreach ($date_formats as $val => $date) : ?>
+										<option value="<?php echo $val; ?>" <?php echo $general_settings['date_format'] == $val ? 'selected' : ''; ?>><?php echo $date; ?></option>
+									<?php endforeach; ?>
+								</select>
+
+								<!-- Show Time -->
+								<label for="zpm-setting__show-time" class="zpm-material-checkbox">
+									<input type="checkbox" id="zpm-setting__show-time" name="zpm-setting__show-time" class="zpm_toggle invisible" value="1" <?php echo isset( $general_settings['show_time'] ) && $general_settings['show_time'] == true ? 'checked' : '';  ?>>
+									<span class="zpm-material-checkbox-label"><?php _e( 'Show Time', 'zephyr-project-manager' ); ?></span>
 								</label>
-							</div>
 
-							<div class="zpm-form-field-section">
-								<label for="zpm-settings__view-members" class="zpm-material-checkbox">
-									<input type="checkbox" id="zpm-settings__view-members" name="zpm-settings__view-members" class="zpm_toggle invisible" value="1" <?php echo isset( $general_settings['view_members'] ) && $general_settings['view_members'] ? 'checked' : '';  ?>>
-									<span class="zpm-material-checkbox-label"><?php _e( 'Allow users to view other members on the site', 'zephyr-project-manager' ); ?></span>
-								</label>
-							</div>
+								<!-- Emails -->
+								<label class="zpm_label zpm_divider_label"><?php _e( 'Email Settings', 'zephyr-project-manager' ) ?></label>
+								<div class="zpm-form__group">
+									<textarea name="zpm-settings__email-mentions-content" id="zpm-settings__email-mentions-content" class="zpm-form__field" placeholder="<?php _e( 'Mentions Email', 'zephyr-project-manager' ); ?>" value="<?php echo $general_settings['email_from_email']; ?>"><?php echo $general_settings['email_mentions_content']; ?></textarea>
+									<label for="zpm-settings__email-mentions-content" class="zpm-form__label"><?php _e( 'Mentions Email', 'zephyr-project-manager' ); ?></label>
+								</div>
 
-							<label class="zpm_label"><?php _e( 'Default Assignee', 'zephyr-project-manager' ); ?></label>
-							<select class="zpm_input" name="zpm-settings__default-assignee">
-								<option value="-1" <?php echo isset($general_settings['default_assignee']) && $general_settings['default_assignee'] == '-1' ? 'selected' : ''; ?>><?php _e( 'None', 'zephyr-project-manager' ); ?></option>
-								<?php foreach ($users as $user) : ?>
-									<option value="<?php echo $user['id']; ?>" <?php echo isset($general_settings['default_assignee']) && $general_settings['default_assignee'] == $user['id'] ? 'selected' : ''; ?>><?php echo $user['name']; ?></option>
-								<?php endforeach; ?>
-							</select>
+								
+								<?php do_action( 'zpm_general_settings', '' ); ?>
 
-							<label class="zpm_label"><?php _e( 'Default Project', 'zephyr-project-manager' ); ?></label>
-							<select class="zpm_input" name="zpm-settings__default-project">
-								<option value="-1" <?php echo isset($general_settings['default_project']) && $general_settings['default_project'] == '-1' ? 'selected' : ''; ?>><?php _e( 'None', 'zephyr-project-manager' ); ?></option>
-								<?php foreach ($projects as $project) : ?>
-									<option value="<?php echo $project->id; ?>" <?php echo isset($general_settings['default_project']) && $general_settings['default_project'] == $project->id ? 'selected' : ''; ?>><?php echo $project->name; ?></option>
-								<?php endforeach; ?>
-							</select>
+								<div>
+									<label for="zpm-settings__enable-node" class="zpm-material-checkbox">
+										<input type="checkbox" id="zpm-settings__enable-node" name="zpm-settings__enable-node" class="zpm_toggle invisible" value="1" <?php echo isset( $general_settings['node_enabled'] ) && $general_settings['node_enabled'] == true ? 'checked' : '';  ?>>
+										<span class="zpm-material-checkbox-label"><?php _e( 'Enable Node Server (For real-time updates)', 'zephyr-project-manager' ); ?></span>
+									</label>
+								</div>
 
-							<?php do_action( 'zpm_permission_settings' ); ?>
+								<div class="zpm-form-field-section">
+									<label for="zpm-settings__override-default-emails" class="zpm-material-checkbox">
+										<input type="checkbox" id="zpm-settings__override-default-emails" name="zpm-settings__override-default-emails" class="zpm_toggle invisible" value="1" <?php echo isset( $general_settings['override_default_emails'] ) && $general_settings['override_default_emails'] ? 'checked' : '';  ?>>
+										<span class="zpm-material-checkbox-label"><?php _e( 'Override default email settings', 'zephyr-project-manager' ); ?></span>
+									</label>
+								</div>
 
-							<label class="zpm_label zpm_divider_label"><?php _e( 'Customization', 'zephyr-project-manager' ) ?></label>
+								<?php wp_nonce_field('zpm_save_general_settings'); ?>
+								<button type="submit" class="zpm_button" name="zpm_save_general_settings" id="zpm_save_general_settings"><?php _e( 'Save Settings', 'zephyr-project-manager' ); ?></button>
+							</form>
+						</div>
+					<?php endif; ?>
+					
+					<?php if ($canAccessAdvancedSettings): ?>
+						<div class="zpm_tab_panel <?php echo $action == 'advanced' ? 'zpm_tab_active' : ''; ?>" data-zpm-tab="advanced">
+							<!-- General Settings -->
+							<form id="zpm_advanced_settings" method="post" enctype='multipart/form-data'>
 
-							<label class="zpm_label" for="zpm_colorpicker_primary"><?php _e( 'Primary Color', 'zephyr-project-manager' ); ?></label>
-							<input type="text" name="zpm_backend_primary_color" id="zpm_colorpicker_primary" class="zpm_input" value="<?php echo $general_settings['primary_color']; ?>">
+								<?php do_action( 'zpm_advanced_settings_content' ); ?>
 
-							<label class="zpm_label" for="zpm_colorpicker_primary_dark"><?php _e( 'Primary Dark Color', 'zephyr-project-manager' ); ?></label>
-							<input type="text" name="zpm_backend_primary_color_dark" id="zpm_colorpicker_primary_dark" class="zpm_input" value="<?php echo $general_settings['primary_color_dark']; ?>">
-							<label class="zpm_label" for="zpm_colorpicker_primary_light"><?php _e( 'Primary Light Color', 'zephyr-project-manager' ); ?></label>
-							<input type="text" name="zpm_backend_primary_color_light" id="zpm_colorpicker_primary_light" class="zpm_input" value="<?php echo $general_settings['primary_color_light']; ?>">
+								<div class="zpm-form__group">
+									<textarea type="text" name="zpm-settings__custom-css" id="zpm-settings__custom-css" class="zpm-form__field" placeholder="<?php _e( 'Custom CSS', 'zephyr-project-manager' ); ?>"><?php echo $general_settings['custom_css']; ?></textarea>
+									<label for="zpm-settings__custom-css" class="zpm-form__label"><?php _e( 'Custom CSS', 'zephyr-project-manager' ); ?></label>
+								</div>
 
-							<label class="zpm_label zpm_divider_label"><?php _e( 'Dates & Calendar Settings', 'zephyr-project-manager' ) ?></label>
-
-							<!-- First day of week -->
-							<label class="zpm_label"><?php _e( 'Calendar First Day', 'zephyr-project-manager' ); ?></label>
-							<select id="zpm-settings-first-day" class="zpm_input" name="zpm-settings-first-day">
-								<?php foreach ($days_of_week as $val => $name) : ?>
-									<option value="<?php echo $val; ?>" <?php echo $general_settings['first_day'] == $val ? 'selected' : ''; ?>><?php echo $name; ?></option>
-								<?php endforeach; ?>
-							</select>
-
-							<!-- Date formats -->
-							<label class="zpm_label"><?php _e( 'Date Format', 'zephyr-project-manager' ); ?></label>
-							<select id="zpm-settings-date-format" class="zpm_input" name="zpm-settings-date-format">
-								<?php foreach ($date_formats as $val => $date) : ?>
-									<option value="<?php echo $val; ?>" <?php echo $general_settings['date_format'] == $val ? 'selected' : ''; ?>><?php echo $date; ?></option>
-								<?php endforeach; ?>
-							</select>
-
-							<!-- Show Time -->
-							<label for="zpm-setting__show-time" class="zpm-material-checkbox">
-								<input type="checkbox" id="zpm-setting__show-time" name="zpm-setting__show-time" class="zpm_toggle invisible" value="1" <?php echo isset( $general_settings['show_time'] ) && $general_settings['show_time'] == true ? 'checked' : '';  ?>>
-								<span class="zpm-material-checkbox-label"><?php _e( 'Show Time', 'zephyr-project-manager' ); ?></span>
-							</label>
-
-							<!-- Emails -->
-							<label class="zpm_label zpm_divider_label"><?php _e( 'Email Settings', 'zephyr-project-manager' ) ?></label>
-							<div class="zpm-form__group">
-								<textarea name="zpm-settings__email-mentions-content" id="zpm-settings__email-mentions-content" class="zpm-form__field" placeholder="<?php _e( 'Mentions Email', 'zephyr-project-manager' ); ?>" value="<?php echo $general_settings['email_from_email']; ?>"><?php echo $general_settings['email_mentions_content']; ?></textarea>
-								<label for="zpm-settings__email-mentions-content" class="zpm-form__label"><?php _e( 'Mentions Email', 'zephyr-project-manager' ); ?></label>
-							</div>
-
-							
-							<?php do_action( 'zpm_general_settings', '' ); ?>
-
-							<div>
-								<label for="zpm-settings__enable-node" class="zpm-material-checkbox">
-									<input type="checkbox" id="zpm-settings__enable-node" name="zpm-settings__enable-node" class="zpm_toggle invisible" value="1" <?php echo isset( $general_settings['node_enabled'] ) && $general_settings['node_enabled'] == true ? 'checked' : '';  ?>>
-									<span class="zpm-material-checkbox-label"><?php _e( 'Enable Node Server (For real-time updates)', 'zephyr-project-manager' ); ?></span>
-								</label>
-							</div>
-
-							<div class="zpm-form-field-section">
-								<label for="zpm-settings__override-default-emails" class="zpm-material-checkbox">
-									<input type="checkbox" id="zpm-settings__override-default-emails" name="zpm-settings__override-default-emails" class="zpm_toggle invisible" value="1" <?php echo isset( $general_settings['override_default_emails'] ) && $general_settings['override_default_emails'] ? 'checked' : '';  ?>>
-									<span class="zpm-material-checkbox-label"><?php _e( 'Override default email settings', 'zephyr-project-manager' ); ?></span>
-								</label>
-							</div>
-
-							<?php wp_nonce_field('zpm_save_general_settings'); ?>
-							<button type="submit" class="zpm_button" name="zpm_save_general_settings" id="zpm_save_general_settings"><?php _e( 'Save Settings', 'zephyr-project-manager' ); ?></button>
-						</form>
-					</div>
-
-					<div class="zpm_tab_panel <?php echo $action == 'advanced' ? 'zpm_tab_active' : ''; ?>" data-zpm-tab="advanced">
-						<!-- General Settings -->
-						<form id="zpm_advanced_settings" method="post" enctype='multipart/form-data'>
-
-							<?php do_action( 'zpm_advanced_settings_content' ); ?>
-
-							<div class="zpm-form__group">
-								<textarea type="text" name="zpm-settings__custom-css" id="zpm-settings__custom-css" class="zpm-form__field" placeholder="<?php _e( 'Custom CSS', 'zephyr-project-manager' ); ?>"><?php echo $general_settings['custom_css']; ?></textarea>
-								<label for="zpm-settings__custom-css" class="zpm-form__label"><?php _e( 'Custom CSS', 'zephyr-project-manager' ); ?></label>
-							</div>
+								<?php if(current_user_can( 'administrator' )) : ?>
+									<button type="button" class="zpm_button zpm-button__red" id="zpm-delete-data__button" data-zpm-modal="zpm-delete-data__modal"><?php _e( "DELETE all Zephyr Project Manager Data", 'zephyr-project-manager' ); ?></button>
+								<?php endif; ?>
+								
+								<?php wp_nonce_field('zpm_save_general_settings'); ?>
+								<button type="submit" class="zpm_button" name="zpm-settings__advanced-submit"><?php _e( 'Save Settings', 'zephyr-project-manager' ); ?></button>
+							</form>
 
 							<?php if(current_user_can( 'administrator' )) : ?>
-								<button type="button" class="zpm_button zpm-button__red" id="zpm-delete-data__button" data-zpm-modal="zpm-delete-data__modal"><?php _e( "DELETE all Zephyr Project Manager Data", 'zephyr-project-manager' ); ?></button>
+								<form id="zpm-delete-data__form" style="display: none;" method="post" name="zpm-delete-all-data">
+									<button type="submit" name="zpm-delete-all-data"></button>
+								</form>
 							<?php endif; ?>
 							
-							<?php wp_nonce_field('zpm_save_general_settings'); ?>
-							<button type="submit" class="zpm_button" name="zpm-settings__advanced-submit"><?php _e( 'Save Settings', 'zephyr-project-manager' ); ?></button>
-						</form>
-
-						<?php if(current_user_can( 'administrator' )) : ?>
-							<form id="zpm-delete-data__form" style="display: none;" method="post" name="zpm-delete-all-data">
-								<button type="submit" name="zpm-delete-all-data"></button>
-							</form>
-						<?php endif; ?>
-						
-					</div>
+						</div>
+					<?php endif; ?>
 
 					<?php
 						$pages = ob_get_clean();

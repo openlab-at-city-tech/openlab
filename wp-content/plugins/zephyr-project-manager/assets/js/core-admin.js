@@ -2750,45 +2750,42 @@ jQuery(document).ready(function($) {
 	});
 
 	$('body').on('click', '#zpm-save-project-members', function(){
-		var members = [];
+		var members = jQuery('body').find('#zpm-edit-project__members').val();
 		var project_id = $('#zpm-project-id').val();
-
-		$('.zpm-project-member').each(function(){
-			var checked = $(this).is(':checked');
-			var member_id = $(this).data('member-id');
-			if (checked) {
-				members.push(member_id);
-			}
-		});
-
+		
 		var data = {
 			project_id: project_id,
 			members: members
 		}
-
+		
 		ZephyrProjects.Project.update_members( data, function(response){
 		});
 	});
-
+	
 	$('body').on('click', '#zpm-select-all-project-members', function(){
+		let $select = jQuery('body').find('#zpm-edit-project__members');
 		var action = $(this).data('zpm-action');
 		if (action === "select_all") {
-			$('.zpm-project-member').each(function(){
-				var checked = $(this).is(':checked');
-				if (!checked) {
-					$(this).trigger('click');
-				}
-			});
+			$select.find('option').prop('selected', true);  
+			$select.trigger('chosen:updated');
+			// $('.zpm-project-member').each(function(){
+			// 	var checked = $(this).is(':checked');
+			// 	if (!checked) {
+			// 		$(this).trigger('click');
+			// 	}
+			// });
 
-			$('#zpm-select-all-project-members').data('zpm-action', 'deselect_all').text(zpm_localized.strings.deselect_all);
+			// $('#zpm-select-all-project-members').data('zpm-action', 'deselect_all').text(zpm_localized.strings.deselect_all);
 		} else {
-			$('.zpm-project-member').each(function(){
-				var checked = $(this).is(':checked');
-				if (checked) {
-					$(this).trigger('click');
-				}
-			});
-			$('#zpm-select-all-project-members').data('zpm-action', 'select_all').text(zpm_localized.strings.select_all);
+			$select.find('option:selected').removeAttr('selected');
+			$select.trigger('chosen:updated');
+			// $('.zpm-project-member').each(function(){
+			// 	var checked = $(this).is(':checked');
+			// 	if (checked) {
+			// 		$(this).trigger('click');
+			// 	}
+			// });
+			// $('#zpm-select-all-project-members').data('zpm-action', 'select_all').text(zpm_localized.strings.select_all);
 		}
 
 
@@ -2912,7 +2909,7 @@ jQuery(document).ready(function($) {
 			teamDescription.val(res.description);
 			$.each(res.members, function(key, val) {
 				let userId = val.id;
-				$('body').find('.zpm-edit-team-member[data-member-id="' + userId + '"]').attr('checked', 'checked');
+				$('body').find('.zpm-edit-team-member[data-member-id="' + userId + '"]').prop('checked', true);
 			});
 		});
 

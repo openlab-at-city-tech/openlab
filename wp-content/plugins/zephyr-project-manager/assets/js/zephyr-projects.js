@@ -230,7 +230,7 @@ var zpmProjects = [];
 			dataType: 'json',
 			data: data,
 			error: function(response) {
-				alert( zpm_localized.strings.error_loading_tasks );
+				//alert( zpm_localized.strings.error_loading_tasks );
 			},
 			success: function(response) {
 				callback(response);	
@@ -265,7 +265,7 @@ var zpmProjects = [];
 			type: 'post',
 			data: data,
 			error: function(response) {
-				alert( zpm_localized.strings.error_loading_tasks );
+				//alert( zpm_localized.strings.error_loading_tasks );
 			},
 			success: function(response) {
 				callback(response);	
@@ -781,6 +781,8 @@ var zpmProjects = [];
 
 		ZephyrProjects.get_all_tasks( function( data ) {
 			$.each( data, function( key, val ) {
+				if (typeof val == 'undefined') return;
+				
 				var name = val.name;
 				var id = val.id;
 				var date_due = val.date_due;

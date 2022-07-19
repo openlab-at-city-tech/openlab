@@ -19,7 +19,8 @@
 	use Inc\ZephyrProjectManager;
 
 	$manager = ZephyrProjectManager();
-	$project = Projects::get_project( $_GET['project'] );
+	$projectId = isset($_GET['project']) ? esc_attr($_GET['project']) : '';
+	$project = Projects::get_project($projectId);
 	$base_url =  esc_url(admin_url('/admin.php?page=zephyr_project_manager_projects'));
 	$BaseController = new BaseController;
 	$user = $BaseController->get_user_info( $project->user_id);
@@ -33,7 +34,7 @@
 	$project_status = maybe_unserialize( $project->status );
 	$project_status['color'] = isset($project_status['color']) ? $project_status['color'] : 'not_started';
 	$project_members = maybe_unserialize( $project->team ) ? maybe_unserialize( $project->team ) : array();
-	$members = Utillities::get_users();
+	$members = Members::get_zephyr_members();
 	$priority = property_exists( $project, 'priority' ) ? $project->priority : 'priority_none';
 	$priority_label = Utillities::get_priority_label( $priority );
 	$priorities = Utillities::get_statuses( 'priority' );
@@ -45,6 +46,7 @@
 		?>
 			<div class="zpm-notice"><?php _e( 'Sorry, you do not have access to this project.', 'zephyr-project-manager' ); ?></div>
 		<?php
+		return;
 	}
 
 	$projectInstance = new Project($project);
@@ -283,18 +285,17 @@
 		<h4 class="zpm_panel_heading"><?php _e( 'Members', 'zephyr-project-manager' ); ?></h4>
 		<div>
 			<ul class="zpm-member-list">
-				<?php foreach ($members as $member) : ?>
-					<li><?php echo $member['name']; ?>
-						<span class="zpm-memeber-toggle">
-							<input type="checkbox" id="<?php echo 'zpm-member-toggle-' . $member['id']; ?>" class="zpm-toggle zpm-project-member" data-member-id="<?php echo $member['id']; ?>" <?php echo in_array($member['id'], (array)$project_members) ? 'checked' : ''; ?>>
-							<label for="<?php echo 'zpm-member-toggle-' . $member['id']; ?>" class="zpm-toggle-label">
-							</label>
-						</span>
-					</li>
-				<?php endforeach; ?>
-				<button id="zpm-save-project-members" class="zpm_button"><?php _e( 'Save Members', 'zephyr-project-manager' ); ?></button>
-				<button id="zpm-select-all-project-members" data-zpm-action="select_all" class="zpm_button"><?php _e( 'Select All', 'zephyr-project-manager' ); ?></button>
+				<select id="zpm-edit-project__members" class="zpm_input zpm-input-chosen zpm-multi-select" multiple data-placeholder="<?php _e( 'Select Project Members', 'zephyr-project-manager' ); ?>">
+					<?php foreach ( $members as $member ) : ?>
+						<?php $selected = in_array($member['id'], (array)$project_members) ? 'selected' : ''; ?>
+						<option <?php echo $selected; ?> value="<?php echo $member['id']; ?>"><?php echo $member['name']; ?></option>
+					<?php endforeach; ?>
+				</select>
 
+				<div class="zpm-mt-2">
+					<button id="zpm-save-project-members" class="zpm_button"><?php _e( 'Save Members', 'zephyr-project-manager' ); ?></button>
+					<button id="zpm-select-all-project-members" data-zpm-action="select_all" class="zpm_button"><?php _e( 'Select All', 'zephyr-project-manager' ); ?></button>
+				</div>
 			</ul>
 		</div>
 	</div>

@@ -5,6 +5,8 @@
 	if ( !defined( 'ABSPATH' ) ) {
 		die;
 	}
+
+	add_option('zpm_first_time', true);
 ?>
 
 <main id="zpm_welcome_page">
@@ -70,7 +72,10 @@
 
 		<form method="post">
 			<button id="zpm_get_started" name="zpm_first_time" class="zpm_button">Get started and create your first project.</button>
-			<a class="zpm_button" href="https://zephyr-one.com/purchase-pro" target="_blank">Get Zephyr Pro Now</a>
+			
+			<?php if (!zpmIsPro()): ?>
+				<a class="zpm_button" href="https://zephyr-one.com/purchase-pro" target="_blank">Get Zephyr Pro Now</a>
+			<?php endif; ?>
 		</form>
 	</div>
 </main>

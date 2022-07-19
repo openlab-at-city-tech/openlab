@@ -191,7 +191,9 @@ class Projects {
 			}
 		}
 
-		return $projects;
+		return array_filter($projects, function($project) {
+			return Projects::has_project_access($project);
+		});
 	}
 
 	/**
@@ -267,6 +269,12 @@ class Projects {
 		}
 
 		return $results;
+	}
+
+	public static function isAssignee( $project ) {
+		$assignees = explode(',', $project->assignees);
+		$results = [];
+		return in_array(get_current_user_id(), $assignees);
 	}
 
 	public static function get_members( $project_id ) {
@@ -628,7 +636,6 @@ class Projects {
 	}
 
 	public static function has_project_access( $project ) {
-
 		if ( !is_object($project) ) {
 			return false;
 		}
@@ -637,19 +644,21 @@ class Projects {
 		$user_roles = Utillities::get_user_roles();
 		$userId = get_current_user_id();
 
-		if (current_user_can( 'zpm_all_zephyr_capabilities' )) {
+		if (current_user_can( 'zpm_all_zephyr_capabilities' ) || current_user_can('administrator')) {
 			return true;
 		}
 
-		if ( Utillities::is_zephyr_role($userId) ) {
-			if ( current_user_can( 'zpm_view_assigned_projects' ) ) {
-				if (Projects::is_project_member($project, $userId)) {
-					return true;
-				}
-			}
-			if ( !current_user_can( 'zpm_view_projects' ) ) {
+		if ( current_user_can( 'zpm_view_assigned_projects' ) ) {
+			if (Projects::is_project_member($project, $userId) || Projects::isAssignee($project)) {
+				return true;
+			} else {
 				return false;
 			}
+		}
+		if ( !current_user_can( 'zpm_view_projects' ) ) {
+			return false;
+		} else {
+			return true;
 		}
 
 		$project_members = property_exists($project, 'team') && maybe_unserialize( $project->team ) ? maybe_unserialize( $project->team ) : array();
