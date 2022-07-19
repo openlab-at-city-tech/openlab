@@ -46,8 +46,8 @@ class CMTT_Glossary_Index {
         add_filter('cmtt_index_term_tooltip_permalink', array(__CLASS__, 'modifyTermPermalink'), 10, 3);
 
         add_filter('cmtt_glossary_index_after_content', array(__CLASS__, 'wrapInMainContainer'), 1, 3);
-        if (\CM\CMTT_Settings::get('cmtt_glossaryShowShareBox') == 1) {
-            add_filter('cmtt_glossary_index_after_content', array('CMTT_Free', 'cmtt_glossaryAddShareBox'), 5, 3);
+        if (class_exists('CMTT_Pro') && \CM\CMTT_Settings::get('cmtt_glossaryShowShareBox') == 1) {
+            add_filter('cmtt_glossary_index_after_content', array('CMTT_Pro', 'cmtt_glossaryAddShareBox'), 5, 3);
         }
         add_filter('cmtt_glossary_index_after_content', array(__CLASS__, 'outputAdditionalHTML'), 5, 3);
         add_filter('cmtt_glossary_index_after_content', array(__CLASS__, 'wrapInStyleContainer'), 10, 3);
@@ -209,22 +209,21 @@ class CMTT_Glossary_Index {
      * @return string
      */
     public static function getTheTooltipContentBase($content, $glossary_item) {
-
-        if (\CM\CMTT_Settings::get('cmtt_glossaryExcerptHover') && $glossary_item->post_excerpt ) {
+        if (\CM\CMTT_Settings::get('cmtt_glossaryExcerptHover') && $glossary_item->post_excerpt) {
             $content = $glossary_item->post_excerpt;
         } else {
             $content = $glossary_item->post_content;
-            if (class_exists('Themify_Builder')){
+            if (class_exists('Themify_Builder')) {
                 $themify_json = CMTT_Free::_get_meta('_themify_builder_settings_json', $glossary_item->ID);
-                if (!empty($themify_json)){
+                if (!empty($themify_json)) {
                     global $ThemifyBuilder;
-                    $builder_data = $ThemifyBuilder->get_builder_output( $glossary_item->ID, $glossary_item->post_content );
+                    $builder_data = $ThemifyBuilder->get_builder_output($glossary_item->ID, $glossary_item->post_content);
                     $content .= $builder_data;
                 }
             }
         }
 
-        if ( has_shortcode( $content, 'cmtgend' ) ) {
+        if (has_shortcode($content, 'cmtgend')) {
             $content = preg_match('/\[cmtgend\](.*?)\[\/cmtgend\]/s', $content, $match);
             $content = $match[1];
         }
@@ -256,7 +255,6 @@ class CMTT_Glossary_Index {
     public static function disableTooltips($disable, $post) {
         if (!empty($post)) {
             $tooltipsDisabledGlobal = \CM\CMTT_Settings::get('cmtt_glossaryTooltip') != 1;
-//            $tooltipsDisabled = (1 == CMTT_Free::_get_meta('_glossary_disable_tooltip_for_page', $post->ID) );
 
             $disableTooltip = (int) CMTT_Free::_get_meta('_glossary_disable_tooltip_for_page', $post->ID);
             switch ($disableTooltip) {
@@ -274,14 +272,35 @@ class CMTT_Glossary_Index {
             }
             $disable = $tooltipsDisabled;
         }
+
+        //Check if we need to show the tooltip for current visitor
+        $tooltips_for_all = \CM\CMTT_Settings::get('cmtt_glossaryTooltipForAll', 1);
+        $allowed_roles = \CM\CMTT_Settings::get('cmtt_glossaryRolesShowTooltip', array());
+        if (!$tooltips_for_all) {
+            if (!empty($allowed_roles)) {
+                if (is_user_logged_in() && is_array($allowed_roles)) {
+                    $user = wp_get_current_user();
+
+                    // Don't show the tooltip if current visitor role isn't allowed
+                    if (empty(array_intersect($allowed_roles, $user->roles))) {
+                        $disable = 1;
+                    }
+                }
+
+                // Don't show the tooltip for not logged in users if it not allowed
+                if (!is_user_logged_in() && !in_array('Guest', $allowed_roles)) {
+                    $disable = 1;
+                }
+            }
+        }
+
         return $disable;
     }
 
     /**
      * Check whether to disable the tooltips on Glossary Index page
-     * @param type $disable
-     * @param type $post
-     * @return type
+     * @param bool $disable
+     * @return bool
      */
     public static function disableTooltipsOnIndex($disable) {
         /*
@@ -316,7 +335,7 @@ class CMTT_Glossary_Index {
      * Wrap Glossary Index in styling container
      * @param type $content
      * @param type $glossaryIndexStyle
-     * @return type
+     * @return string
      */
     public static function wrapInStyleContainer($content, $glossary_query, $shortcodeAtts) {
         if (!defined('DOING_AJAX')) {
@@ -329,6 +348,8 @@ class CMTT_Glossary_Index {
                     $class = $styles[$glossaryIndexStyle];
                     $content = '<div class="cm-glossary ' . $class . '">' . $content . '<div class="clear clearfix cmtt-clearfix"></div></div>';
                 }
+            } else {
+                $content = '<div class="cm-glossary">' . $content . '</div>';
             }
         }
         return $content;
@@ -475,8 +496,7 @@ class CMTT_Glossary_Index {
      * @param type $shortcodeAtts
      * @return string $content
      */
-    public static function outputGlossaryIndexPage($shortcodeAtts)
-    {
+    public static function outputGlossaryIndexPage($shortcodeAtts) {
         global $post;
 
         $content = '';
@@ -517,14 +537,14 @@ class CMTT_Glossary_Index {
         $paginationPosition = $shortcodeAtts['pagination_position'];
 
         $args = array(
-            'post_type' => 'glossary',
-            'post_status' => 'publish',
-            'orderby' => 'title',
-            'order' => 'ASC',
-            'update_post_meta_cache' => FALSE,
-            'update_post_term_cache' => FALSE,
-            'suppress_filters' => FALSE,
-            'exact' => $shortcodeAtts['exact_search']
+            'post_type'              => 'glossary',
+            'post_status'            => 'publish',
+            'orderby'                => 'title',
+            'order'                  => 'ASC',
+            'update_post_meta_cache' => false,
+            'update_post_term_cache' => false,
+            'suppress_filters'       => false,
+            'exact'                  => $shortcodeAtts['exact_search']
         );
 
         if (self::isServerSide()) {
@@ -540,10 +560,10 @@ class CMTT_Glossary_Index {
                 }
                 $args['paged'] = $currentPage;
             } else {
-                $args['nopaging'] = TRUE;
+                $args['nopaging'] = true;
             }
         } else {
-            $args['nopaging'] = TRUE;
+            $args['nopaging'] = true;
         }
 
         if (!empty($shortcodeAtts['author_id'])) {
@@ -576,14 +596,12 @@ class CMTT_Glossary_Index {
         /*
          * Style links based on option
          */
-        $glossary_list_class =
-            apply_filters('cmtt_glossary_index_list_class', (\CM\CMTT_Settings::get('cmtt_glossaryDiffLinkClass') == 1) ? 'glossaryLinkMain' : 'glossaryLink ');
+        $glossary_list_class = apply_filters('cmtt_glossary_index_list_class', (\CM\CMTT_Settings::get('cmtt_glossaryDiffLinkClass') == 1) ? 'glossaryLinkMain' : 'glossaryLink glossary-link-title');
 
         $content .= apply_filters('cmtt_glossary_index_before_listnav_content', '', $shortcodeAtts, $glossary_query);
 
-        $listnavContent = '<div id="' . $glossary_list_id . '-nav" class="listNav ' . $letterSize . '">';
-        if (CMTT_AMP::is_amp_endpoint())
-            $listnavContent .= apply_filters('cmtt_glossary_index_listnav_content_inside', '', $shortcodeAtts, $glossary_query);
+        $listnavContent = '<div id="' . $glossary_list_id . '-nav" class="listNav ' . $letterSize . '" role="tablist">';
+        $listnavContent .= apply_filters('cmtt_glossary_index_listnav_content_inside', '', $shortcodeAtts, $glossary_query);
         $listnavContent .= '</div>';
 
         $content .= apply_filters('cmtt_glossary_index_listnav_content', $listnavContent, $shortcodeAtts, $glossary_query);
@@ -608,17 +626,22 @@ class CMTT_Glossary_Index {
         $chartsArr = [];
         if ($glossary_index) {
             $letters = (array) \CM\CMTT_Settings::get('cmtt_index_letters');
+            $letters = apply_filters('cmtt_index_letters', $letters, $shortcodeAtts);
             foreach ($glossary_index as $glossaryItem) {
 
                 /*
                  * Limit the terms starting with given letter
                  */
                 $limit_terms = (int) \CM\CMTT_Settings::get('cmtt_limitNum', 0);
-                $chart       = utf8_encode(strtolower($glossaryItem->post_title[0]));
+                if (isset($glossaryItem->post_title[0])) {
+                    $chart = utf8_encode(strtolower($glossaryItem->post_title[0]));
+                } else {
+                    $chart = '';
+                }
 
                 if ($limit_terms !== 0) {
                     if (isset($chartsArr[$chart])) {
-                        $chartsArr[$chart] ++;
+                        $chartsArr[$chart]++;
                         if ($chartsArr[$chart] > $limit_terms) {
                             continue;
                         }
@@ -680,27 +703,37 @@ class CMTT_Glossary_Index {
                 }
                 // End image tiles thumbnail PLUS
 
+                if (in_array($glossaryIndexStyle, array('img-term-definition'))) {
+                    if (class_exists('CMTT_Glossary_Plus')) {
+                        $result = CMTT_Glossary_Plus::_image_term_definition_view($glossaryItem->ID);
+                        (isset($result['liAdditionalClass'])) ? $thumbnail = $result['thumbnail'] : '';
+                        (isset($result['liAdditionalClass'])) ? $liAdditionalClass = $result['liAdditionalClass'] : '';
+                    }
+                }
+
                 $liAdditionalClass = apply_filters('cmtt_liAdditionalClass', $liAdditionalClass);
-                $liAdditionalAttr  = '';
+                $liAdditionalAttr = '';
 
                 $rand_id = rand(0, 100); // Using rand number to separate the same terms in AMP version
-                if (CMTT_AMP::is_amp_endpoint() || isset($shortcodeAtts['__amp_source_origin'])){
+                if (CMTT_AMP::is_amp_endpoint() || isset($shortcodeAtts['__amp_source_origin'])) {
                     $first_letter = substr(strtolower($glossaryItem->post_title), 0, 1);
-                    if (! is_numeric($first_letter)){
+                    if (!is_numeric($first_letter)) {
                         $first_letter_count = array_search($first_letter, $letters);
                         $first_letter_count = $first_letter_count >= 0 ? $first_letter_count : '-';
                     } else {
                         $first_letter_count = 'num';
                     }
                     $first_letter_class = 'ln-' . $first_letter_count;
-                    $liAdditionalClass  .= ' ' . $first_letter_class;
-                    $liAdditionalAttr .= ' [hidden]="cmindsState.visibleLetter!=\'ln-all\' && cmindsState.visibleLetter!=\'' . $first_letter_class . '\'"';
-                    $titleAttr        .= ' on="tap:AMP.setState({ cmindsState: {visibleTooltip: \'tooltip-' . $glossaryItem->ID . $rand_id . '\'} })"';
-                }
+                    $liAdditionalClass .= ' ' . $first_letter_class;
 
+                    $liAdditionalAttr .= ' [hidden]="cmindsState.visibleLetter!=\'ln-all\' && cmindsState.visibleLetter!=\'' . $first_letter_class . '\'"';
+                    $titleAttr .= ' on="tap:AMP.setState({ cmindsState: {visibleTooltip: \'tooltip-' . $glossaryItem->ID . $rand_id . '\'} })"';
+                }
                 $preItemTitleContent .= '<li class="' . $liAdditionalClass . '" ' . $liAdditionalAttr . '>';
+                $preItemTitleContent .= (in_array($glossaryIndexStyle, array('term-definition', 'img-term-definition', 'flipboxes-with-definition'))) ? '<div class="term-block">' : '';
                 $preItemTitleContent .= $thumbnail;
-                $preItemTitleContent = apply_filters('cmtt_preItemTitleContent', $preItemTitleContent);
+                $preItemTitleContent = apply_filters('cmtt_preItemTitleContent', $preItemTitleContent, $glossaryItem, $glossaryIndexStyle);
+                $preItemTitleContent .= $glossaryIndexStyle == 'img-term-definition' ? '</div><div>' : '';
 
                 /*
                  * Start the internal tag: span or a
@@ -716,16 +749,19 @@ class CMTT_Glossary_Index {
                 if (empty(\CM\CMTT_Settings::get('cmtt_index_sortby_title')) && in_array(substr($lang, 0, 2), ['ja', 'ar', 'ru', 'zh'])) {
                     $dataPostName = ' data-postname="' . $glossaryItem->post_name . '" ';
                 }
-
-                $preItemTitleContent .= '<' . $tag . ' class="' . $glossary_list_class . ' ' . $additionalClass . '" ' . $titleAttr . ' ' . $href . ' ' . $windowTarget . ' ' . $dataPostName;
+                $styleAttr = ' style="' . apply_filters('cmtt_term_style_attribute', '', $glossaryItem) . '" ';
+                $preItemTitleContent .= '<' . $tag
+                        . ' role="tab" class="' . $glossary_list_class . ' ' . $additionalClass . '" ' . $titleAttr . ' ' . $href . ' '
+                        . $windowTarget . ' ' . $dataPostName . $styleAttr;
 
                 /*
                  * Add tooltip if needed (general setting enabled and page not excluded from plugin)
                  */
                 if (!$tooltipsDisabled && !$excludeTT) {
-                    $tooltipContent = apply_filters('cmtt_glossary_index_tooltip_content', '', $glossaryItem);
-                    $tooltipContent = apply_filters('cmtt_3rdparty_tooltip_content', $tooltipContent, $glossaryItem, true);
-                    $tooltipContent = apply_filters('cmtt_tooltip_content_add', $tooltipContent, $glossaryItem);
+                    $glossary_item = apply_filters('cmtt_glossary_item_for_tooltip', $glossaryItem, $post, $shortcodeAtts);
+                    $tooltipContent = apply_filters('cmtt_glossary_index_tooltip_content', '', $glossary_item);
+                    $tooltipContent = apply_filters('cmtt_3rdparty_tooltip_content', $tooltipContent, $glossary_item, true);
+                    $tooltipContent = apply_filters('cmtt_tooltip_content_add', $tooltipContent, $glossary_item);
                     $preItemTitleContent .= ' aria-describedby="tt" data-cmtooltip="' . $tooltipContent . '"';
                 }
 
@@ -740,12 +776,16 @@ class CMTT_Glossary_Index {
                  * Insert post title here later on
                  */
                 $postItemTitleContent .= '</' . $tag . '>';
-                $postItemTitleContent .= apply_filters('cmtt_pre_item_description_content', $postItemTitleContent, $glossaryItem, $rand_id);
+                $postItemTitleContent = apply_filters('cmtt_pre_item_description_content', $postItemTitleContent, $glossaryItem, $rand_id);
+                $postItemTitleContent .= $glossaryIndexStyle == 'term-definition' ? '</div>' : '';
+
                 /*
                  * Add description if needed
                  */
                 $postItemTitleContent .= $glossaryItemDesc;
-                $postItemTitleContent = apply_filters('cmtt_postItemTitleContent', $postItemTitleContent);
+                $postItemTitleContent = apply_filters('cmtt_postItemTitleContent', $postItemTitleContent, $glossaryItem, $glossaryIndexStyle, $tag, $windowTarget, $shortcodeAtts);
+
+                $postItemTitleContent .= in_array($glossaryIndexStyle, array('img-term-definition', 'flipboxes-with-definition')) ? '</div>' : '';
                 $postItemTitleContent .= '</li>';
 
                 if (!$hideTerms) {
@@ -754,7 +794,7 @@ class CMTT_Glossary_Index {
 
                     if ($sortByTitle) {
                         /*
-                         * This verion doesn't support the two items with different meanings
+                         * This version doesn't support the two items with different meanings
                          */
                         $key = mb_strtolower($glossaryItem->post_title);
                     } else {
@@ -768,13 +808,14 @@ class CMTT_Glossary_Index {
             }
 
             $glossaryIndexContentArr = apply_filters('cmtt_glossary_index_items_before_sorting', $glossaryIndexContentArr, $glossary_index, $glossary_query);
-
             /*
              * Don't need this later
              */
             $glossary_index = NULL;
-
-            $content .= '<ul class="glossaryList" role="tablist" id="' . $glossary_list_id . '">';
+            $ulAdditionalClass = $glossaryIndexStyle == 'term-carousel' ? ' term-carousel-wrapper' : '';
+            $glossaryListContent = '<ul class="glossaryList' . $ulAdditionalClass . '" role="tablist" id="' . $glossary_list_id . '">';
+            $content .= apply_filters('cmtt_before_glossary_list', $glossaryListContent);
+            $content = apply_filters('cmtt_glossary_index_before_terms_list', $content, $glossaryIndexStyle, $shortcodeAtts);
 
             if (extension_loaded('intl') === true) {
                 $customLocale = \CM\CMTT_Settings::get('cmtt_index_locale', '');
@@ -799,22 +840,22 @@ class CMTT_Glossary_Index {
             $glossariIndexContentArrUnFliped = apply_filters('cmtt_glossary_index_items_after_sorting', $glossariIndexContentArrUnFliped);
             foreach ($glossariIndexContentArrUnFliped as $key => $value) {
                 /* ML  */
-                if (in_array($glossaryIndexStyle, array('classic-table', 'modern-table', 'expand-style', 'expand2-style', 'grid-style', 'cube-style'))) {
+                $styles_without_desc = array('classic-table', 'modern-table', 'expand-style', 'expand2-style', 'grid-style', 'cube-style');
+                if (in_array($glossaryIndexStyle, $styles_without_desc)) {
                     $newIndexLetter = self::detectStartNewIndexLetter(null, $key);
                     if ($newIndexLetter !== false) {
 
                         $liAdditionalAttr = '';
                         $liAdditionalClass = '';
 
-                        if (CMTT_AMP::is_amp_endpoint() || isset($shortcodeAtts['__amp_source_origin'])){
-                            if (! is_numeric($newIndexLetter)){
+                        if (CMTT_AMP::is_amp_endpoint() || isset($shortcodeAtts['__amp_source_origin'])) {
+                            if (!is_numeric($newIndexLetter)) {
                                 $first_letter_count = array_search($newIndexLetter, $letters);
                                 $first_letter_count = $first_letter_count ? $first_letter_count : '-';
                             } else {
                                 $first_letter_count = 'num';
                             }
-                            $liAdditionalClass  .= ' ln-' . $first_letter_count;
-
+                            $liAdditionalClass .= ' ln-' . $first_letter_count;
                             $liAdditionalAttr .= ' [hidden]="cmindsState.visibleLetter!=\'ln-all\' && cmindsState.visibleLetter!=\'' . $liAdditionalClass . '\'"';
                         }
 
@@ -829,6 +870,7 @@ class CMTT_Glossary_Index {
             }
 
             $content .= '</ul>';
+            $content = apply_filters('cmtt_glossary_index_after_terms_list', $content, $shortcodeAtts);
 
             if (self::isServerSide() && !isset($args['nopaging']) && in_array($paginationPosition, array('bottom', 'both'))) {
                 $content .= apply_filters('cmtt_glossary_index_pagination', '', $glossary_query, $shortcodeAtts);
@@ -885,7 +927,9 @@ class CMTT_Glossary_Index {
         $showLast = $nextHalf < $lastPage;
 
         $roundPagination = (bool) \CM\CMTT_Settings::get('cmtt_glossaryPaginationRound', 0);
-
+        if (isset($_POST['gtags'])) {
+            $currentTag = $_POST['gtags'];
+        }
         ob_start();
         ?>
         <ul class="pageNumbers <?php echo esc_attr(($roundPagination ? 'round' : '')); ?>">
@@ -893,6 +937,9 @@ class CMTT_Glossary_Index {
             <?php
             if (1 != $currentPage) :
                 $args = array('itemspage' => $prevPage);
+                if (!empty($currentTag)) {
+                    $args = array_merge($args, array('gtags' => $currentTag));
+                }
                 if (CMTT_AMP::is_amp_endpoint())
                     $args['amp'] = 1;
                 ?>
@@ -907,6 +954,9 @@ class CMTT_Glossary_Index {
             $pageSelected = (1 == $currentPage) ? ' selected' : '';
             if ($showFirst) :
                 $args = array('itemspage' => 1);
+                if (!empty($currentTag)) {
+                    $args = array_merge($args, array('gtags' => $currentTag));
+                }
                 if (CMTT_AMP::is_amp_endpoint())
                     $args['amp'] = 1;
                 ?>
@@ -920,6 +970,9 @@ class CMTT_Glossary_Index {
             <?php
             if ($prevSectionPage > 1) :
                 $args = array('itemspage' => $prevSectionPage);
+                if (!empty($currentTag)) {
+                    $args = array_merge($args, array('gtags' => $currentTag));
+                }
                 if (CMTT_AMP::is_amp_endpoint())
                     $args['amp'] = 1;
                 ?>
@@ -930,8 +983,12 @@ class CMTT_Glossary_Index {
                 </a>
             <?php endif; ?>
 
-            <?php for ($i = $pagesStart; $i <= $pagesEnd; $i++):
+            <?php
+            for ($i = $pagesStart; $i <= $pagesEnd; $i++):
                 $args = array('itemspage' => $i);
+                if (!empty($currentTag)) {
+                    $args = array_merge($args, array('gtags' => $currentTag));
+                }
                 if (CMTT_AMP::is_amp_endpoint())
                     $args['amp'] = 1;
                 ?>
@@ -946,11 +1003,16 @@ class CMTT_Glossary_Index {
             <?php
             if ($nextHalf !== $lastPage) :
                 $args = array('itemspage' => $nextSectionPage);
+                if (!empty($currentTag)) {
+                    $args = array_merge($args, array('gtags' => $currentTag));
+                }
                 if (CMTT_AMP::is_amp_endpoint())
                     $args['amp'] = 1;
                 ?>
                 <a href="<?php echo esc_url(add_query_arg($args, $glossaryPageLink)); ?>">
-                    <li class="next-section" data-page-number="<?php echo $nextSectionPage ?>">(...)</li>
+                    <li class="next-section" data-page-number="<?php echo $nextSectionPage ?>">
+                        (...)
+                    </li>
                 </a>
             <?php endif; ?>
 
@@ -958,6 +1020,9 @@ class CMTT_Glossary_Index {
             $pageSelected = ($lastPage == $currentPage) ? ' selected' : '';
             if ($showLast) :
                 $args = array('itemspage' => $lastPage);
+                if (!empty($currentTag)) {
+                    $args = array_merge($args, array('gtags' => $currentTag));
+                }
                 if (CMTT_AMP::is_amp_endpoint())
                     $args['amp'] = 1;
                 ?>
@@ -971,6 +1036,9 @@ class CMTT_Glossary_Index {
             <?php
             if ($lastPage != $currentPage) :
                 $args = array('itemspage' => ($nextPage));
+                if (!empty($currentTag)) {
+                    $args = array_merge($args, array('gtags' => $currentTag));
+                }
                 if (CMTT_AMP::is_amp_endpoint())
                     $args['amp'] = 1;
                 ?>
@@ -1013,7 +1081,7 @@ class CMTT_Glossary_Index {
     public static function _scriptStyleLoader($config, $embeddedMode = false) {
         $stylesAndScripts = '';
         if (!empty($config)) {
-            if (!empty($config['scripts']) && ! CMTT_AMP::is_amp_endpoint()) {
+            if (!empty($config['scripts']) && !CMTT_AMP::is_amp_endpoint()) {
                 foreach ($config['scripts'] as $scriptKey => $scriptData) {
                     $scriptData = shortcode_atts(array(
                         'path'      => '',
@@ -1047,7 +1115,7 @@ class CMTT_Glossary_Index {
 
             if (!empty($config['styles'])) {
                 foreach ($config['styles'] as $styleKey => $styleData) {
-                    wp_enqueue_style($styleKey, $styleData['path']);
+                    wp_enqueue_style($styleKey, $styleData['path'], array(), CMTT_VERSION);
                     /*
                      * It's WP 3.3+ function
                      */
@@ -1099,21 +1167,21 @@ class CMTT_Glossary_Index {
         } else {
             self::outputScripts();
         }
-        add_action('wp_footer', array(__CLASS__, 'outputTooltipWrapper'), PHP_INT_MAX);
+//        add_action('wp_footer', array(__CLASS__, 'outputTooltipWrapper'), PHP_INT_MAX);
     }
 
     public static function outputTooltipWrapper() {
         $addflipclass = 'cmtt';
-        if (\CM\CMTT_Settings::get('cmtt_tooltipDisplayanimation') == 'center_flip' && \CM\CMTT_Settings::get('cmtt_tooltipHideanimation') != 'center_flip') {
+        if (\CM\CMTT_Settings::get('cmtt_tooltipDisplayanimation', 'no_animation') == 'center_flip' && \CM\CMTT_Settings::get('cmtt_tooltipHideanimation', 'no_animation') != 'center_flip') {
             $addflipclass .= ' has-in no-out';
         }
-        if (\CM\CMTT_Settings::get('cmtt_tooltipHideanimation') == 'center_flip' && \CM\CMTT_Settings::get('cmtt_tooltipDisplayanimation') != 'center_flip') {
+        if (\CM\CMTT_Settings::get('cmtt_tooltipHideanimation', 'no_animation') == 'center_flip' && \CM\CMTT_Settings::get('cmtt_tooltipDisplayanimation', 'no_animation') != 'center_flip') {
             $addflipclass .= ' no-in';
         }
-        if (\CM\CMTT_Settings::get('cmtt_tooltipDisplayanimation') == 'center_flip' && \CM\CMTT_Settings::get('cmtt_tooltipHideanimation') == 'center_flip') {
+        if (\CM\CMTT_Settings::get('cmtt_tooltipDisplayanimation', 'no_animation') == 'center_flip' && \CM\CMTT_Settings::get('cmtt_tooltipHideanimation', 'no_animation') == 'center_flip') {
             $addflipclass .= ' has-in';
         }
-        if (\CM\CMTT_Settings::get('cmtt_tooltipDisplayanimation') == 'horizontal_flip' || \CM\CMTT_Settings::get('cmtt_tooltiphideanimation') == 'horizontal_flip' || \CM\CMTT_Settings::get('cmtt_tooltipDisplayanimation') == 'grow' || \CM\CMTT_Settings::get('cmtt_tooltipHideanimation') == 'shrink' || \CM\CMTT_Settings::get('cmtt_tooltipDisplayanimation') == 'fade_in' || \CM\CMTT_Settings::get('cmtt_tooltipHideanimation') == 'fade_out') {
+        if (\CM\CMTT_Settings::get('cmtt_tooltipDisplayanimation', 'no_animation') == 'horizontal_flip' || \CM\CMTT_Settings::get('cmtt_tooltiphideanimation', 'no_animation') == 'horizontal_flip' || \CM\CMTT_Settings::get('cmtt_tooltipDisplayanimation') == 'grow' || \CM\CMTT_Settings::get('cmtt_tooltipHideanimation') == 'shrink' || \CM\CMTT_Settings::get('cmtt_tooltipDisplayanimation', 'no_animation') == 'fade_in' || \CM\CMTT_Settings::get('cmtt_tooltipHideanimation', 'no_animation') == 'fade_out') {
             $addflipclass .= ' animated';
         }
         echo '<div id="tt" role="tooltip" aria-label="Tooltip content" class="' . apply_filters('cmtt_tt_class', $addflipclass) . '"></div>';
@@ -1135,44 +1203,61 @@ class CMTT_Glossary_Index {
         $isGlossaryIndex = $post && has_shortcode($post->post_content, 'glossary');
         $isIframe = $post && strpos($post->post_content, 'cm-embedded-content') !== FALSE;
         $miniSuffix = (current_user_can('manage_options') || \CM\CMTT_Settings::get('cmtt_disableMinifiedTooltip', false)) ? '' : '.min';
-
+        $forceLoad = \CM\CMTT_Settings::get('cmtt_forceLoadScripts', false);
         /*
          * If the scripts are loaded in footer and there's no tooltips found, and we're not on Glossary Term Page, we can ignore loading scripts
          */
-        if (($inFooter && !$embeddedMode) && (empty($replacedTerms) && !self::$shortcodeDisplayed) && !$isGlossaryTerm && !$isGlossaryIndex && !$isIframe) {
+        if (!$forceLoad && (($inFooter && !$embeddedMode) && (empty($replacedTerms) && !self::$shortcodeDisplayed) && !$isGlossaryTerm && !$isGlossaryIndex && !$isIframe)) {
             return;
         }
 
         $tooltipData = array();
 
+        $displayAnimation = \CM\CMTT_Settings::get('cmtt_tooltipDisplayanimation', 'no_animation');
+        $hideAnimation = \CM\CMTT_Settings::get('cmtt_tooltipHideanimation', 'no_animation');
+
         $tooltipArgs = array(
-            'placement'        => \CM\CMTT_Settings::get('cmtt_tooltipPlacement', 'horizontal'),
-            'clickable'        => (bool) apply_filters('cmtt_is_tooltip_clickable', FALSE),
-            'close_on_moveout' => (bool) \CM\CMTT_Settings::get('cmtt_glossaryCloseOnMoveout', 1),
-            'only_on_button'   => (bool) \CM\CMTT_Settings::get('cmtt_glossaryCloseOnlyOnButton', FALSE),
-            'touch_anywhere'   => (bool) \CM\CMTT_Settings::get('cmtt_glossaryCloseOnTouchAnywhere', FALSE),
-            'delay'            => (int) 1000 * \CM\CMTT_Settings::get('cmtt_tooltipDisplayDelay', 0),
-            'timer'            => (int) 1000 * \CM\CMTT_Settings::get('cmtt_tooltipHideDelay', 0),
-            'minw'             => (int) \CM\CMTT_Settings::get('cmtt_tooltipWidthMin', 200),
-            'maxw'             => (int) \CM\CMTT_Settings::get('cmtt_tooltipWidthMax', 400),
-            'top'              => (int) \CM\CMTT_Settings::get('cmtt_tooltipPositionTop'),
-            'left'             => (int) \CM\CMTT_Settings::get('cmtt_tooltipPositionLeft'),
-            'endalpha'         => (int) \CM\CMTT_Settings::get('cmtt_tooltipOpacity'),
-            'borderStyle'      => \CM\CMTT_Settings::get('cmtt_tooltipBorderStyle'),
-            'borderWidth'      => \CM\CMTT_Settings::get('cmtt_tooltipBorderWidth') . 'px',
-            'borderColor'      => \CM\CMTT_Settings::get('cmtt_tooltipBorderColor'),
-            'background'       => \CM\CMTT_Settings::get('cmtt_tooltipBackground'),
-            'foreground'       => \CM\CMTT_Settings::get('cmtt_tooltipForeground'),
-            'fontSize'         => \CM\CMTT_Settings::get('cmtt_tooltipFontSize') . 'px',
-            'padding'          => \CM\CMTT_Settings::get('cmtt_tooltipPadding'),
-            'borderRadius'     => \CM\CMTT_Settings::get('cmtt_tooltipBorderRadius') . 'px'
+            'placement'               => \CM\CMTT_Settings::get('cmtt_tooltipPlacement', 'horizontal'),
+            'clickable'               => (bool) apply_filters('cmtt_is_tooltip_clickable', FALSE),
+            'close_on_moveout'        => (bool) \CM\CMTT_Settings::get('cmtt_glossaryCloseOnMoveout', 1),
+            'only_on_button'          => (bool) \CM\CMTT_Settings::get('cmtt_glossaryCloseOnlyOnButton', FALSE),
+            'touch_anywhere'          => (bool) \CM\CMTT_Settings::get('cmtt_glossaryCloseOnTouchAnywhere', FALSE),
+            'delay'                   => (int) 1000 * \CM\CMTT_Settings::get('cmtt_tooltipDisplayDelay', 0),
+            'timer'                   => (int) 1000 * \CM\CMTT_Settings::get('cmtt_tooltipHideDelay', 0),
+            'minw'                    => (int) \CM\CMTT_Settings::get('cmtt_tooltipWidthMin', 200),
+            'maxw'                    => (int) \CM\CMTT_Settings::get('cmtt_tooltipWidthMax', 400),
+            'top'                     => (int) \CM\CMTT_Settings::get('cmtt_tooltipPositionTop', 5),
+            'left'                    => (int) \CM\CMTT_Settings::get('cmtt_tooltipPositionLeft', 50),
+            'endalpha'                => (int) \CM\CMTT_Settings::get('cmtt_tooltipOpacity', 100),
+            'zIndex'                  => (int) \CM\CMTT_Settings::get('cmtt_tooltipZIndex', 1500),
+            'borderStyle'             => \CM\CMTT_Settings::get('cmtt_tooltipBorderStyle'),
+            'borderWidth'             => \CM\CMTT_Settings::get('cmtt_tooltipBorderWidth') . 'px',
+            'borderColor'             => \CM\CMTT_Settings::get('cmtt_tooltipBorderColor'),
+            'background'              => \CM\CMTT_Settings::get('cmtt_tooltipBackground'),
+            'foreground'              => \CM\CMTT_Settings::get('cmtt_tooltipForeground'),
+            'fontSize'                => \CM\CMTT_Settings::get('cmtt_tooltipFontSize') . 'px',
+            'padding'                 => \CM\CMTT_Settings::get('cmtt_tooltipPadding'),
+            'borderRadius'            => \CM\CMTT_Settings::get('cmtt_tooltipBorderRadius') . 'px',
+            'tooltipDisplayanimation' => $displayAnimation,
+            'tooltipHideanimation'    => $hideAnimation,
+            'toolip_dom_move'         => (bool) \CM\CMTT_Settings::get('cmtt_tooltipMoveTooltipInDOM'),
+            'link_whole_tt'           => (bool) \CM\CMTT_Settings::get('cmtt_tooltipLinkWholeTooltip')
         );
         $tooltipData['cmtooltip'] = apply_filters('cmtt_tooltip_script_args', $tooltipArgs);
         $tooltipData['ajaxurl'] = admin_url('admin-ajax.php');
         $tooltipData['post_id'] = $postId;
         $tooltipData['mobile_disable_tooltips'] = \CM\CMTT_Settings::get('cmtt_glossaryMobileDisableTooltips', '0');
-        $tooltipData['desktop_disable_tooltips']= \CM\CMTT_Settings::get('cmtt_glossaryDesktopDisableTooltips', '0');
+        $tooltipData['desktop_disable_tooltips'] = \CM\CMTT_Settings::get('cmtt_glossaryDesktopDisableTooltips', '0');
         $tooltipData['tooltip_on_click'] = \CM\CMTT_Settings::get('cmtt_glossaryShowTooltipOnClick', '0');
+        $tooltipData['exclude_ajax'] = 'cmttst_event_save';
+
+        $tooltipFrontendJsDeps = array('jquery', 'cm-modernizr-js',);
+        if (\CM\CMTT_Settings::get('cmtt_audioPlayerEnabled', '0')) {
+            /*
+             * If needed we require mediaelement
+             */
+            $tooltipFrontendJsDeps[] = 'mediaelement';
+        }
 
         $scriptsConfig = array(
             'scripts' => array(
@@ -1182,7 +1267,7 @@ class CMTT_Glossary_Index {
                 ),
                 'tooltip-frontend-js' => array(
                     'path'      => self::$jsPath . 'tooltip' . $miniSuffix . '.js',
-                    'deps'      => array('jquery', 'cm-modernizr-js', 'mediaelement'),
+                    'deps'      => $tooltipFrontendJsDeps,
                     'in_footer' => $inFooter,
                     'localize'  => array(
                         'var_name' => 'cmtt_data',
@@ -1202,6 +1287,13 @@ class CMTT_Glossary_Index {
                 ),
             )
         );
+
+        $animationsEnabled = $displayAnimation != 'no_animation' && $hideAnimation != 'no_animation';
+        if ($animationsEnabled && !cminds_is_amp_endpoint()) {
+            $scriptsConfig['styles']['animate-css'] = array(
+                'path' => self::$cssPath . 'animate.css',
+            );
+        }
 
         $fontName = \CM\CMTT_Settings::get('cmtt_tooltipFontStyle', 'default (disables Google Fonts)');
         if (is_string($fontName) && $fontName !== 'default (disables Google Fonts)' && $fontName !== 'default') {
@@ -1223,34 +1315,47 @@ class CMTT_Glossary_Index {
         $embeddedMode = \CM\CMTT_Settings::get('cmtt_enableEmbeddedMode', false);
         $inFooter = \CM\CMTT_Settings::get('cmtt_script_in_footer', true);
         $miniSuffix = current_user_can('manage_options') ? '' : '.min';
+        $default_language = \CM\CMTT_Settings::get('cmtt_enable_languages', 0) ? \CM\CMTT_Settings::get('cmtt_default_language', '') : '';
         if (self::isServerSide()) {
             $listnavArgs['limit'] = (int) \CM\CMTT_Settings::get('cmtt_limitNum', 0);
         }
         if (!self::isServerSide()) {
+            $letters = (array) \CM\CMTT_Settings::get('cmtt_index_letters');
+            $letters = apply_filters('cmtt_index_letters', $letters, $shortcodeAtts, FALSE);
+
             $listnavArgs = array(
-                'letterBgWidth'      => (int) \CM\CMTT_Settings::get('cmtt_letter_width', 0),
-                'perPage'            => (int) \CM\CMTT_Settings::get('cmtt_perPage', 0),
-                'limit'              => (int) \CM\CMTT_Settings::get('cmtt_limitNum', 0),
-                'letters'            => (array) \CM\CMTT_Settings::get('cmtt_index_letters'),
-                'includeNums'        => (bool) \CM\CMTT_Settings::get('cmtt_index_includeNum'),
-                'includeAll'         => (bool) \CM\CMTT_Settings::get('cmtt_index_includeAll'),
-                'initLetter'         => isset($shortcodeAtts['letter']) ? $shortcodeAtts['letter'] : \CM\CMTT_Settings::get('cmtt_index_initLetter', ''),
-                'initLetterOverride' => !empty($shortcodeAtts['letter']),
-                'allLabel'           => __(\CM\CMTT_Settings::get('cmtt_index_allLabel', 'ALL'), 'cm-tooltip-glossary'),
-                'noResultsLabel'     => __(\CM\CMTT_Settings::get('cmtt_glossary_NoResultsLabel', 'Nothing found. Please change the filters.'), 'cm-tooltip-glossary'),
-                'showCounts'         => (bool) \CM\CMTT_Settings::get('cmtt_index_showCounts', '1'),
-                'sessionSave'        => (bool) \CM\CMTT_Settings::get('cmtt_index_sessionSave', '1'),
-                'doingSearch'        => !empty($shortcodeAtts['search_term']),
+                'perPage'              => (int) \CM\CMTT_Settings::get('cmtt_perPage', 0),
+                'limit'                => (int) \CM\CMTT_Settings::get('cmtt_limitNum', 0),
+                'letters'              => $letters,
+                'includeNums'          => (bool) \CM\CMTT_Settings::get('cmtt_index_includeNum'),
+                'includeAll'           => (bool) \CM\CMTT_Settings::get('cmtt_index_includeAll'),
+                'showRound'            => (bool) \CM\CMTT_Settings::get('cmtt_index_showRound'),
+                'initLetter'           => isset($shortcodeAtts['letter']) ? $shortcodeAtts['letter'] : \CM\CMTT_Settings::get('cmtt_index_initLetter', ''),
+                'ignoreLetterOnSearch' => (bool) \CM\CMTT_Settings::get('cmtt_glossary_ignore_letter_on_search', 0),
+                'initLetterOverride'   => !empty($shortcodeAtts['letter']),
+                'allLabel'             => __(\CM\CMTT_Settings::get('cmtt_index_allLabel', 'ALL'), 'cm-tooltip-glossary'),
+                'noResultsLabel'       => __(\CM\CMTT_Settings::get('cmtt_glossary_NoResultsLabel', 'Nothing found. Please change the filters.'), 'cm-tooltip-glossary'),
+                'showCounts'           => (bool) \CM\CMTT_Settings::get('cmtt_index_showCounts', '1'),
+                'sessionSave'          => (bool) \CM\CMTT_Settings::get('cmtt_index_sessionSave', '1'),
+                'doingSearch'          => (bool) !empty($shortcodeAtts['search_term']),
+                'letterBgWidth'        => (int) \CM\CMTT_Settings::get('cmtt_letter_width', 0),
+                'language'             => isset($shortcodeAtts['language']) ? $shortcodeAtts['language'] : $default_language,
+                /*
+                 * If sort by post_name (3.8.15)
+                 */
+                'sortByTitle'          => (bool) \CM\CMTT_Settings::get('cmtt_index_sortby_title'),
             );
             $tooltipData['enabled'] = !(bool) (isset($shortcodeAtts['disable_listnav']) ? $shortcodeAtts['disable_listnav'] : false);
-            $tooltipData['listnav'] = apply_filters('cmtt_listnav_js_args', $listnavArgs);
             $tooltipData['list_id'] = apply_filters('cmtt_glossary_index_list_id', 'glossaryList');
-            $tooltipData['fast_filter'] = (bool) apply_filters('cmtt_glossary_index_fast_filter', \CM\CMTT_Settings::get('cmtt_indexFastFilter', '0'));
         }
-        $tooltipData['listnav'] = apply_filters('cmtt_listnav_js_args', $listnavArgs);
+        $tooltipData['fast_filter'] = (bool) apply_filters('cmtt_glossary_index_fast_filter', \CM\CMTT_Settings::get('cmtt_indexFastFilter', '0'));
         $tooltipData['letterBgWidth'] = \CM\CMTT_Settings::get('cmtt_letter_width', 0);
+        $tooltipData['listnav'] = apply_filters('cmtt_listnav_js_args', $listnavArgs);
         $tooltipData['glossary_page_link'] = get_permalink(self::getGlossaryIndexPageId());
         $tooltipData['ajaxurl'] = admin_url('admin-ajax.php');
+        $tooltipData['scrollTop'] = \CM\CMTT_Settings::get('cmtt_glossaryScrollTop', 0);
+        $tooltipData['enableAjaxComplete'] = \CM\CMTT_Settings::get('cmtt_glossaryEnableAjaxComplete', 1);
+        $tooltipData['cmtt_listnav_script_data'] = 'glossary_search|cmttst_event_save';
 
         /*
          * post_id is either the ID of the page where post has been found or the default Glossary Index Page from settings
@@ -1259,14 +1364,9 @@ class CMTT_Glossary_Index {
 
         $scriptsConfig = array(
             'scripts' => array(
-                'cm-fastlivefilter-js' => array(
-                    'path'      => self::$jsPath . 'jquery.fastLiveFilter.js',
+                'tooltip-listnav-js' => array(
+                    'path'      => self::$jsPath . 'cm-glossary-listnav' . $miniSuffix . '.js',
                     'deps'      => array('jquery'),
-                    'in_footer' => $inFooter
-                ),
-                'tooltip-listnav-js'   => array(
-                    'path'      => self::$jsPath . 'cm-glossary-listnav'.$miniSuffix.'.js',
-                    'deps'      => array('jquery', 'cm-fastlivefilter-js'),
                     'in_footer' => $inFooter,
                     'localize'  => array(
                         'var_name' => 'cmtt_listnav_data',
@@ -1276,10 +1376,37 @@ class CMTT_Glossary_Index {
             ),
             'styles'  => array(
                 'jquery-listnav-style' => array(
-                    'path' => self::$cssPath . 'jquery.listnav.min.css',
-                ),
+                    'path' => self::$cssPath . 'jquery.listnav.css',
+                )
             )
         );
+
+        /*
+         * Only load if "Use Fast-live-Filter?" option is enabled
+         */
+        if ($tooltipData['fast_filter']) {
+            $scriptsConfig['scripts']['cm-fastlivefilter-js'] = array(
+                'path'      => self::$jsPath . 'jquery.fastLiveFilter.js',
+                'deps'      => array('jquery'),
+                'in_footer' => $inFooter
+            );
+            $scriptsConfig['scripts']['tooltip-listnav-js']['deps'][] = 'cm-fastlivefilter-js';
+        }
+
+        /*
+         * Only load if "Term Carousel" view is enabled
+         */
+        if (isset($shortcodeAtts['glossary_index_style']) && $shortcodeAtts['glossary_index_style'] == 'term-carousel') {
+            $scriptsConfig['scripts']['slick-js'] = array(
+                'path'      => self::$jsPath . 'slick.min.js',
+                'deps'      => array('jquery'),
+                'in_footer' => $inFooter
+            );
+            $scriptsConfig['styles']['slick-css'] = array(
+                'path' => self::$cssPath . 'slick.css',
+            );
+            $scriptsConfig['scripts']['tooltip-listnav-js']['deps'][] = 'slick-js';
+        }
 
         self::_scriptStyleLoader($scriptsConfig, $embeddedMode);
         $runOnce = TRUE;
@@ -1302,14 +1429,44 @@ class CMTT_Glossary_Index {
         .cm-glossary.tiles.big ul.glossaryList a { min-width:<?php echo \CM\CMTT_Settings::get('cmtt_glossaryBigTileWidth', '179px'); ?>; width:<?php echo \CM\CMTT_Settings::get('cmtt_glossaryBigTileWidth', '179px'); ?> }
         .cm-glossary.tiles.big ul.glossaryList span { min-width:<?php echo \CM\CMTT_Settings::get('cmtt_glossaryBigTileWidth', '179px'); ?>; width:<?php echo \CM\CMTT_Settings::get('cmtt_glossaryBigTileWidth', '179px'); ?>; }
 
+        <?php
+        $linkColor = \CM\CMTT_Settings::get('cmtt_tooltipLinkColor');
+        $linkColorOnHover = \CM\CMTT_Settings::get('cmtt_tooltipLinkHoverColor');
+        ?>
         span.glossaryLink, a.glossaryLink {
         border-bottom: <?php echo \CM\CMTT_Settings::get('cmtt_tooltipLinkUnderlineStyle'); ?> <?php echo \CM\CMTT_Settings::get('cmtt_tooltipLinkUnderlineWidth'); ?>px <?php echo \CM\CMTT_Settings::get('cmtt_tooltipLinkUnderlineColor'); ?> !important;
-        color: <?php echo \CM\CMTT_Settings::get('cmtt_tooltipLinkColor'); ?> !important;
+        <?php if (!empty($linkColor)) : ?>
+            color: <?php echo $linkColor; ?> !important;
+        <?php endif; ?>
         }
         span.glossaryLink:hover, a.glossaryLink:hover {
         border-bottom: <?php echo \CM\CMTT_Settings::get('cmtt_tooltipLinkHoverUnderlineStyle'); ?> <?php echo \CM\CMTT_Settings::get('cmtt_tooltipLinkHoverUnderlineWidth'); ?>px <?php echo \CM\CMTT_Settings::get('cmtt_tooltipLinkHoverUnderlineColor'); ?> !important;
-        color:<?php echo \CM\CMTT_Settings::get('cmtt_tooltipLinkHoverColor'); ?> !important;
+        <?php if (!empty($linkColorOnHover)) : ?>
+            color:<?php echo $linkColorOnHover; ?> !important;
+        <?php endif; ?>
         }
+
+        <?php
+        $titleFontSize = \CM\CMTT_Settings::get('cmtt_indexTermFontSize');
+        if (!empty($titleFontSize)) :
+            ?>
+            .glossaryList .glossary-link-title,
+            .glossaryList .cmtt-related-term-title {
+            font-size: <?php echo $titleFontSize; ?>px !important;
+            }
+        <?php endif; ?>
+        .glossaryList .glossary-link-title {
+        font-weight: <?php echo \CM\CMTT_Settings::get('cmtt_indexTermFontWeight', 'normal'); ?> !important;
+        }
+
+        <?php
+        $imgSize = \CM\CMTT_Settings::get('cmtt_img_term_def_imgsize', '');
+        if (!empty($imgSize)) :
+            ?>
+            .cm-glossary.img-term-definition .glossary-container ul#glossaryList > li {
+            grid-template-columns: minmax(100px, <?php echo $imgSize; ?>) 1fr;
+            }
+        <?php endif; ?>
 
         <?php
         $closeIconColor = \CM\CMTT_Settings::get('cmtt_tooltipCloseColor', '#222');
@@ -1327,6 +1484,21 @@ class CMTT_Glossary_Index {
             #tt #tt-btn-close{
             direction: rtl;
             font-size: <?php echo $closeIconSize; ?>px !important
+            }
+        <?php endif; ?>
+
+        <?php
+        $hintIcon = \CM\CMTT_Settings::get('cmtt_glossary_search_hint', '');
+
+        if (!empty($hintIcon)) :
+            $src = wp_get_attachment_image_src($hintIcon, 'thumbnail', false);
+            ?>
+            div.cmtt_help {
+            background-image: url(<?php echo $src[0]; ?>);
+            background-size: contain;
+            }
+            div.cmtt_help:hover {
+            background-image: url(<?php echo $src[0]; ?>);
             }
         <?php endif; ?>
 
@@ -1372,21 +1544,255 @@ class CMTT_Glossary_Index {
             }
             <?php
         endif;
+        $tooltipDisplayDelay = \CM\CMTT_Settings::get('cmtt_tooltipDisplayDelay', '0.5');
+        $tooltipHideDelay = \CM\CMTT_Settings::get('cmtt_tooltipHideDelay', '0.5');
 
-        if (\CM\CMTT_Settings::get('cmtt_letter_width', 0)): ?>
-            #glossaryList-nav .ln-letters {
-                width: 100%;
-                display: flex;
-                flex-wrap: wrap;
+        if ($tooltipDisplayDelay > 0) :
+            ?>
+            .fadeIn,.zoomIn,.flipInY,.in{
+            animation-duration:<?php echo $tooltipDisplayDelay ?>s !important;
             }
-            #glossaryList-nav .ln-letters a {
-                text-align: center;
-                flex-grow: 1;
+            <?php
+        endif;
+        if ($tooltipHideDelay > 0) :
+            ?>
+            .fadeOut,.zoomOut,.flipOutY,.out{
+            animation-duration:<?php echo $tooltipHideDelay ?>s !important;
             }
-
-        <?php
+            <?php
         endif;
 
+        $slide_height = \CM\CMTT_Settings::get('cmtt_carousel_slide_height', '250px');
+        if (!empty($slide_height)) :
+            ?>
+            .cm-glossary.term-carousel .slick-slide,
+            .cm-glossary.tiles-with-definition ul > li { height: <?php echo $slide_height; ?> !important}
+            <?php
+        endif;
+
+        $tile_width = \CM\CMTT_Settings::get('cmtt_term_tiles_width', '220px');
+        if (!empty($tile_width)) :
+            ?>
+            .cm-glossary.tiles-with-definition ul {
+            grid-template-columns: repeat(auto-fill, <?php echo $tile_width; ?>) !important;
+            }
+        <?php endif;
+
+        if (\CM\CMTT_Settings::get('cmtt_letter_width', 0)):
+            ?>
+            #glossaryList-nav .ln-letters {
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            }
+            #glossaryList-nav .ln-letters a {
+            text-align: center;
+            flex-grow: 1;
+            }
+            <?php
+        endif;
+
+        $searchBtnColor = \CM\CMTT_Settings::get('cmtt_searchBtnBgColor', '');
+        if (!empty($searchBtnColor)) :
+            ?>
+            .cm-glossary #glossary-search {
+            background-color: <?php echo $searchBtnColor; ?> !important;
+            }
+            <?php
+        endif;
+
+        $searchBtnColorOnHover = \CM\CMTT_Settings::get('cmtt_searchBtnBgColorOnHover', '');
+        if (!empty($searchBtnColorOnHover)) :
+            ?>
+            .cm-glossary #glossary-search:hover {
+            background-color: <?php echo $searchBtnColorOnHover; ?> !important;
+            }
+            <?php
+        endif;
+
+        $searchBtnTextColor = \CM\CMTT_Settings::get('cmtt_searchBtnTextColor', '');
+        if (!empty($searchBtnTextColor)) :
+            ?>
+            .cm-glossary #glossary-search {
+            color: <?php echo $searchBtnTextColor; ?> !important;
+            }
+            <?php
+        endif;
+
+        $searchBtnTextColorOnHover = \CM\CMTT_Settings::get('cmtt_searchBtnTextColorOnHover', '');
+        if (!empty($searchBtnTextColorOnHover)) :
+            ?>
+            .cm-glossary #glossary-search:hover {
+            color: <?php echo $searchBtnTextColorOnHover; ?> !important;
+            }
+            <?php
+        endif;
+
+        $cubeBtnColorOnHover = \CM\CMTT_Settings::get('cmtt_cubeBtnColorSelected', '');
+        if (!empty($cubeBtnColorOnHover)) :
+            ?>
+            .cm-glossary.cube .listNav .ln-letters a {
+            color: <?php echo $cubeBtnColorOnHover; ?>;
+            border: 1px solid <?php echo $cubeBtnColorOnHover; ?>;
+            }
+            <?php
+        endif;
+
+        $cubeBtnColor = \CM\CMTT_Settings::get('cmtt_cubeBtnColor', '');
+        if (!empty($cubeBtnColor)) :
+            ?>
+            .cm-glossary.cube .listNav .ln-letters a.ln-disabled {
+            color: <?php echo $cubeBtnColor; ?>;
+            border: 1px solid <?php echo $cubeBtnColor; ?>;
+            }
+            <?php
+        endif;
+
+        if (\CM\CMTT_Settings::get('cmtt_glossaryDisplayStyle', '') == 'flipboxes-with-definition'):
+            $number_of_flipboxes = \CM\CMTT_Settings::get('cmtt_number_of_flipboxes', 6);
+            $background_color = \CM\CMTT_Settings::get('cmtt_flipbox_background_color', '#cecece');
+            $flipbox_height = \CM\CMTT_Settings::get('cmtt_flipbox_item_height', '160px');
+            ?>
+            .cm-glossary.flipboxes-with-definition #glossaryList.glossaryList {
+            grid-template-columns: repeat(<?php echo $number_of_flipboxes; ?>, 1fr);
+            }
+            .cm-glossary.flipboxes-with-definition #glossaryList.glossaryList > li > div.term-block > .glossaryLinkMain,
+            .cm-glossary.flipboxes-with-definition #glossaryList.glossaryList > li > div.term-block > .glossaryLink,
+            .cm-glossary.flipboxes-with-definition #glossaryList.glossaryList .glossary_itemdesc .glossary-read-more-link {
+            background-color: <?php echo $background_color; ?>;
+            }
+            .cm-glossary.flipboxes-with-definition #glossaryList.glossaryList > li,
+            .cm-glossary.flipboxes-with-definition #glossaryList.glossaryList > li > div.term-block > .glossaryLinkMain,
+            .cm-glossary.flipboxes-with-definition #glossaryList.glossaryList > li > div.term-block > .glossaryLink,
+            .cm-glossary.flipboxes-with-definition #glossaryList.glossaryList > li > div.term-block > .glossary_itemdesc {
+            height: <?php echo $flipbox_height; ?>;
+            }
+            <?php
+        endif;
+
+        $selected_languages = \CM\CMTT_Settings::get('cmtt_language_table_list', array());
+        if (\CM\CMTT_Settings::get('cmtt_glossaryDisplayStyle', '') == 'language-table' && is_array($selected_languages) && count($selected_languages) > 0):
+            $number = count($selected_languages);
+            ?>
+            .cm-glossary.language-table #glossaryList li {
+            display: grid;
+            grid-template-columns: repeat(<?php echo $number; ?>, 1fr);
+            }
+            <?php
+        endif;
+
+        //Styling for search form
+        $searchInputBorderWidth = \CM\CMTT_Settings::get('cmtt_glossaryInputBorderWidth', '');
+        $searchInputBorderStyle = \CM\CMTT_Settings::get('cmtt_glossaryInputBorderStyle', '');
+        $searchInputBorderColor = \CM\CMTT_Settings::get('cmtt_glossaryInputBorderColor', '');
+        $searchInputBackgroundColor = \CM\CMTT_Settings::get('cmtt_glossaryInputBackgroundColor', '');
+        $searchInputTextColor = \CM\CMTT_Settings::get('cmtt_glossaryInputTextColor', '');
+        $searchInputFontSize = \CM\CMTT_Settings::get('cmtt_glossaryInputFontSize', '');
+        $searchFormBorderRadius = \CM\CMTT_Settings::get('cmtt_glossaryFormBorderRadius', '');
+        $searchFormCombine = \CM\CMTT_Settings::get('cmtt_glossaryCombineForm', '');
+        $searchFormWidth = \CM\CMTT_Settings::get('cmtt_glossarySearchFormWidth', '');
+        ?>
+
+        .glossary-search-wrapper {
+        display: inline-block;
+        <?php if (!empty($searchFormWidth)): ?>
+            display: inline-flex;
+            align-items: center;
+            width: 100%;
+            max-width: <?php echo $searchFormWidth; ?>px;
+        <?php endif; ?>
+        }
+
+
+        <?php if (!empty($searchFormCombine)): ?>
+            .glossary-search-wrapper {
+            display: inline-flex;
+            align-items: stretch;
+            }
+
+            input.glossary-search-term {
+            border-right: none !important;
+            margin-right: 0 !important;
+            <?php if (!empty($searchFormBorderRadius)) : ?>
+                border-radius: <?php echo esc_attr($searchFormBorderRadius); ?>px 0 0 <?php echo esc_attr($searchFormBorderRadius); ?>px !important;
+            <?php endif; ?>
+
+            }
+
+            button.glossary-search.button {
+            border-left: none !important;
+            <?php if (!empty($searchFormBorderRadius)) : ?>
+                border-radius: 0 <?php echo esc_attr($searchFormBorderRadius); ?>px <?php echo esc_attr($searchFormBorderRadius); ?>px 0 !important;
+            <?php endif; ?>
+            <?php if (!empty($searchFormWidth)): ?>
+                flex-shrink: 0;
+            <?php endif; ?>
+            }
+        <?php endif; ?>
+
+        input.glossary-search-term {
+        <?php if (!empty($searchFormWidth)): ?>
+            width: 100%;
+            margin-right: 5px;
+        <?php endif; ?>
+        outline: none;
+        <?php if (!empty($searchInputBorderWidth)) : ?>
+            border-width: <?php echo esc_attr($searchInputBorderWidth); ?>px;
+        <?php endif; ?>
+        <?php if (!empty($searchInputBorderStyle)) : ?>
+            border-style: <?php echo esc_attr($searchInputBorderStyle); ?>;
+        <?php endif; ?>
+        <?php if (!empty($searchInputBorderColor)) : ?>
+            border-color: <?php echo esc_attr($searchInputBorderColor); ?>;
+        <?php endif; ?>
+        <?php if (!empty($searchInputBackgroundColor)) : ?>
+            background-color: <?php echo esc_attr($searchInputBackgroundColor); ?>;
+        <?php endif; ?>
+        <?php if (!empty($searchInputTextColor)) : ?>
+            color: <?php echo esc_attr($searchInputTextColor); ?>;
+        <?php endif; ?>
+        <?php if (!empty($searchInputFontSize)) : ?>
+            font-size: <?php echo esc_attr($searchInputFontSize); ?>px;
+        <?php endif; ?>
+        <?php if (!empty($searchFormBorderRadius)) : ?>
+            border-radius: <?php echo esc_attr($searchFormBorderRadius); ?>px;
+        <?php endif; ?>
+        }
+
+
+        <?php if (!empty($searchFormWidth)): ?>
+            button.glossary-search.button {
+            flex-shrink: 0;
+            }
+        <?php endif; ?>
+
+        <?php
+        $searchButtonBorderWidth = \CM\CMTT_Settings::get('cmtt_glossaryButtonBorderWidth', '');
+        $searchButtonBorderStyle = \CM\CMTT_Settings::get('cmtt_glossaryButtonBorderStyle', '');
+        $searchButtonBorderColor = \CM\CMTT_Settings::get('cmtt_glossaryButtonBorderColor', '');
+        $searchButtonFontSize = \CM\CMTT_Settings::get('cmtt_glossaryButtonFontSize', '');
+        ?>
+
+        button.glossary-search.button {
+        outline: none;
+        <?php if (!empty($searchButtonBorderWidth)) : ?>
+            border-width: <?php echo esc_attr($searchButtonBorderWidth); ?>px;
+        <?php endif; ?>
+        <?php if (!empty($searchButtonBorderStyle)) : ?>
+            border-style: <?php echo esc_attr($searchButtonBorderStyle); ?>;
+        <?php endif; ?>
+        <?php if (!empty($searchButtonBorderColor)) : ?>
+            border-color: <?php echo esc_attr($searchButtonBorderColor); ?>;
+        <?php endif; ?>
+        <?php if (!empty($searchButtonFontSize)) : ?>
+            font-size: <?php echo esc_attr($searchButtonFontSize); ?>px;
+        <?php endif; ?>
+        <?php if (!empty($searchFormBorderRadius)) : ?>
+            border-radius: <?php echo esc_attr($searchFormBorderRadius); ?>px;
+        <?php endif; ?>
+        }
+
+        <?php
         echo apply_filters('cmtt_dynamic_css_after', '');
         $content = ob_get_clean();
 

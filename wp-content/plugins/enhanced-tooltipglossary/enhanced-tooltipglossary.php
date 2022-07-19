@@ -3,7 +3,7 @@
   Plugin Name: CM Tooltip Glossary
   Plugin URI: https://www.cminds.com/
   Description: Easily create a Glossary, Encyclopedia or Dictionary of your custom terms. Plugin parses posts and pages searching for defined glossary terms and adds links to the glossary term page. Hovering over the link shows a tooltip with the definition.
-  Version: 3.9.21
+  Version: 4.0.11
   Text Domain: enchanced-tooltipglossary
   Author: CreativeMindsSolutions
   Author URI: https://www.cminds.com/
@@ -33,7 +33,7 @@ try {
  * @since 1.0
  */
 if ( !defined( 'CMTT_VERSION' ) ) {
-	define( 'CMTT_VERSION', '3.9.20' );
+	define( 'CMTT_VERSION', '4.0.11' );
 }
 
 /**

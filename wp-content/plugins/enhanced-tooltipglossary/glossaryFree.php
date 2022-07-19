@@ -112,6 +112,11 @@ class CMTT_Free {
                 self::$calledClassName,
                 'cmtt_glossary_parse'
                     ), \CM\CMTT_Settings::get('cmtt_tooltipParsingPriority', 20000));
+            add_filter(
+                    'category_description', array(
+                self::$calledClassName,
+                'cmtt_glossary_parse'
+                    ), \CM\CMTT_Settings::get('cmtt_tooltipParsingPriority', 20000));
         }
 
         /*
@@ -226,10 +231,21 @@ class CMTT_Free {
                 ), \CM\CMTT_Settings::get('cmtt_tooltipParsingPriority', 20000));
 
         /*
-         * Tooltips in wpDatatables
+         * Tooltips in Ninja tables
          */
-//            add_filter( 'wpdatatables_filter_rendered_table', array( self::$calledClassName, 'cmtt_glossary_parse' ), 20000 );
-//            add_filter( 'wpdatatables_filter_cell_output', array( self::$calledClassName, 'parseWPDatatablesFields' ), 20000 );
+        if (\CM\CMTT_Settings::get('cmtt_glossaryParseNinjaTables', 0) == 1) {
+            add_filter('ninja_tables_get_public_data', array(
+                self::$calledClassName,
+                'cmtt_parse_ninja_tables'
+                    ), 10, 2);
+        }
+
+        /*
+         * Tooltips in Oxygen builder
+         */
+        if (\CM\CMTT_Settings::get('cmtt_glossaryParseOxygenBuilder', 0) == 1) {
+            add_action('ct_builder_end', [__CLASS__, 'oxygenParse']);
+        }
 
         add_filter('comments_open', array(self::$calledClassName, 'cmtt_comments_open'), 10, 2);
         add_filter('get_comments_number', array(self::$calledClassName, 'cmtt_comments_number'), 10, 2);
@@ -302,6 +318,20 @@ class CMTT_Free {
         add_filter('cmtt_glossary_index_listnav_content_inside', array(__CLASS__, 'outputListnav'), 10, 3);
     }
 
+    public static function oxygenParse() {
+
+        // only for frontend
+        if (defined("SHOW_CT_BUILDER")) {
+            return false;
+        }
+
+        global $template_content;
+
+        if ($template_content !== false) {
+            $template_content = self::cmtt_glossary_parse($template_content);
+        }
+    }
+
     public static function fusionBuilderFix() {
         remove_filter('the_content', array('CMTT_Free', 'cmtt_glossary_addBacklink'), 21000);
         add_filter('fusion_component_fusion_tb_content_content', array(self::$calledClassName, 'cmtt_glossary_addBacklink'), 21000);
@@ -344,6 +374,8 @@ class CMTT_Free {
              * Store the TooltipContent in the JS, after decoding the entities, and return the hash
              */
             $glossaryItemContent = self::addTooltipDefinition(html_entity_decode($glossaryItemContent));
+        } else {
+            $glossaryItemContent = htmlentities($glossaryItemContent); //possible fix for Elementor? (added 4.0.4)
         }
 
         return $glossaryItemContent;
@@ -388,7 +420,7 @@ class CMTT_Free {
     }
 
     public static function fixQuotes($glossaryItemContent, $glossary_item) {
-        $glossaryItemContent = str_replace('"', '&quot;', $glossaryItemContent);
+        $glossaryItemContent = str_replace(['"', '“', '„'], '&quot;', $glossaryItemContent);
 
         return $glossaryItemContent;
     }
@@ -511,6 +543,11 @@ class CMTT_Free {
         padding: <?php echo $paddingContent; ?> !important;
         <?php if (!empty($fontSize)) : ?>
             font-size: <?php echo $fontSize; ?>px !important;
+        <?php endif; ?>
+        }
+        #tt #ttcont .mobile-link{
+        <?php if (!empty($fontSize)) : ?>
+            font-size: <?php echo $fontSize; ?>px;
         <?php endif; ?>
         }
 
@@ -951,13 +988,8 @@ class CMTT_Free {
 
         add_menu_page('Glossary', CMTT_NAME, 'manage_glossary', CMTT_MENU_OPTION, 'edit.php?post_type=glossary', CMTT_PLUGIN_URL . 'assets/css/images/cm-glossary-tooltip-icon.png');
 
-//        add_submenu_page(CMTT_MENU_OPTION, 'Trash', 'Trash', 'manage_glossary', 'edit.php?post_status=trash&post_type=glossary');
         add_submenu_page(CMTT_MENU_OPTION, 'Add New', 'Add New', 'manage_glossary', 'post-new.php?post_type=glossary');
         do_action('cmtt_add_admin_menu_after_new');
-        add_submenu_page(CMTT_MENU_OPTION, 'TooltipGlossary Options', 'Settings', 'manage_options', CMTT_SETTINGS_OPTION, array(
-            self::$calledClassName,
-            'outputOptions'
-        ));
 
         do_action('cmtt_add_submenu_pages');
 
@@ -1001,24 +1033,15 @@ class CMTT_Free {
             return;
         }
 
-        wp_enqueue_style('jqueryUIStylesheet', self::$cssPath . 'jquery-ui-1.10.3.custom.css');
+        wp_enqueue_script('cmtt-select2-js', self::$filePath . 'settings/assets/js/select2.min.js', ['jquery']);
+        wp_enqueue_style('cmtt-select2-css', self::$filePath . 'settings/assets/css/select2.min.css');
         wp_enqueue_style('cm-tooltip-admin-css', self::$cssPath . 'tooltip-admin.css');
-        wp_enqueue_style('wp-color-picker');
-        wp_enqueue_style('select2-css', self::$jsPath . 'select2/css/select2.min.css');
-        wp_enqueue_script('select2-js', self::$jsPath . 'select2/js/select2.min.js', array());
-
         wp_enqueue_script('tooltip-admin-js', self::$jsPath . 'cm-tooltip.js', array(
             'jquery',
             'wp-color-picker',
-            'jquery-ui-core',
-            'jquery-ui-tooltip',
             'inline-edit-post',
-            'select2-js'
+            'cmtt-select2-js'
         ));
-
-        wp_enqueue_script('jquery-ui-core');
-        wp_enqueue_script('jquery-ui-tooltip');
-        wp_enqueue_script('jquery-ui-tabs');
 
         $tooltipData['ajaxurl'] = admin_url('admin-ajax.php');
         $tooltipData['nonce'] = wp_create_nonce('cmtt-admin-script-nonce');
@@ -1044,12 +1067,14 @@ class CMTT_Free {
             return;
         }
 
+        wp_enqueue_script('cmtt-select2-js', self::$filePath . 'settings/assets/js/select2.min.js', ['jquery']);
+        wp_enqueue_style('cmtt-select2-css', self::$filePath . 'settings/assets/css/select2.min.css');
         wp_enqueue_style('cm-tooltip-admin-css', self::$cssPath . 'tooltip-admin.css');
         wp_enqueue_script('tooltip-admin-js', self::$jsPath . 'cm-tooltip.js', array(
             'jquery',
             'wp-color-picker',
-            'jquery-ui-core',
-            'jquery-ui-tooltip'
+            'inline-edit-post',
+            'cmtt-select2-js'
         ));
     }
 
@@ -1213,14 +1238,15 @@ class CMTT_Free {
      * @global type $wp_version
      */
     public static function cmtt_glossary_admin_notice_client_pagination() {
-        $serverSide = \CM\CMTT_Settings::get('cmtt_glossaryServerSidePagination');
-        $glossaryItemsCount = wp_count_posts('glossary');
-
-        if (!$serverSide && (int) $glossaryItemsCount->publish > 4000) {
-            $message = sprintf(__('%s has detected that your glossary has more than 4000 terms and the "Client-side" pagination has been selected.', 'cm-tooltip-glossary'), CMTT_NAME);
-            $message .= '<br/>';
-            $message .= __('Please switch to the "Server-side" pagination to avoid slowness and problems with the server memory on the Glossary Index Page.', 'cm-tooltip-glossary');
-            cminds_show_message($message, true);
+        $serverSide = \CM\CMTT_Settings::get('cmtt_glossaryServerSidePagination', 0);
+        if (!$serverSide) {
+            $glossaryItemsCount = wp_count_posts('glossary');
+            if ((int) $glossaryItemsCount->publish > 2000) {
+                $message = sprintf(__('%s has detected that your glossary has more than 2000 terms and the "Client-side" pagination has been selected.', 'cm-tooltip-glossary'), CMTT_NAME);
+                $message .= '<br/>';
+                $message .= __('Please switch to the "Server-side" pagination to avoid slowness and problems with the server memory on the Glossary Index Page. (Pro version only)', 'cm-tooltip-glossary');
+                cminds_show_message($message, true);
+            }
         }
     }
 
@@ -1443,16 +1469,10 @@ class CMTT_Free {
             return false;
         }
 
-//        $currentPostType = get_post_type($post);
-//        $showOnPostTypes = \CM\CMTT_Settings::get('cmtt_glossaryOnPosttypes');
         $showOnHomepageAuthorpageEtc = (!is_page($post->ID) && !is_single($post->ID) && !is_singular($post->post_type) && \CM\CMTT_Settings::get('cmtt_glossaryOnlySingle') == 0 );
         $onMainQueryOnly = ( \CM\CMTT_Settings::get('cmtt_glossaryOnMainQuery') == 1 ) ? is_main_query() : true;
         $noHomepage = ( \CM\CMTT_Settings::get('cmtt_glossaryOnlySingle') == 1 && is_front_page() );
 
-//        if (!is_array($showOnPostTypes)) {
-//            $showOnPostTypes = array();
-//        }
-//        $showOnSingleCustom = ( is_singular($post) && in_array($currentPostType, $showOnPostTypes) );
         $showOnSingleCustom = is_singular($post);
 
         $condition = ( $showOnHomepageAuthorpageEtc || ( $showOnSingleCustom && !$noHomepage ) );
@@ -1466,21 +1486,14 @@ class CMTT_Free {
         return $result;
     }
 
-    public static function prepare_parser_string_arr() {
+    public static function prepare_parser_string_arr($glossary_index) {
         /*
          * Initialize $glossarySearchStringArr as empty array
          */
-        global $glossaryIndexArr, $onlySynonyms, $caseSensitive;
+        global $glossaryIndexArr;
 
         $glossarySearchStringArr = array();
         $glossarySearchStringArrays = array();
-        $onlySynonyms = array();
-
-        $args = apply_filters('cmtt_parser_query_args', array(
-            'nopaging'    => true,
-            'numberposts' => - 1,
-        ));
-        $glossary_index = CMTT_Free::getGlossaryItemsSorted($args);
 
         //the tag:[glossary_exclude]+[/glossary_exclude] can be used to mark text will not be taken into account by the glossary
         if ($glossary_index) {
@@ -1511,23 +1524,29 @@ class CMTT_Free {
                     $glossarySearchStringArrays[] = $glossarySearchStringArr;
                     $glossarySearchStringArr = array();
                 }
+
+                /*
+                 * New in 4.0.9 support for duplicates (especially private duplicates)
+                 */
+                if (isset($glossaryIndexArr[$glossaryIndexArrKey])) {
+                    $current_user_id = get_current_user_id();
+                    if (!empty($current_user_id) && !empty($glossary_item->post_author) && $current_user_id == $glossary_item->post_author) {
                 $glossaryIndexArr[$glossaryIndexArrKey] = $glossary_item->ID;
+            }
+                } else {
+                    $glossaryIndexArr[$glossaryIndexArrKey] = $glossary_item->ID;
+        }
             }
         }
 
 
         $glossarySearchStringArrays[] = $glossarySearchStringArr;
-//		$parserArrays = array(
-//			'search_string'	 => $glossarySearchStringArr,
-//			'index'			 => $glossaryIndexArr,
-//		);
-//		set_transient( $transientKey, $parserArrays, 60 * 60 * 24 * 30 );
 
         return $glossarySearchStringArrays;
     }
 
     public static function cmtt_glossary_parse($content, $force = false) {
-        global $post, $wp_query, $caseSensitive, $replacedTerms;
+        global $post, $wp_query, $replacedTerms;
 
         if (apply_filters('cmtt_glossary_parse_post', $post, $content, $force) === null) {
             return $content;
@@ -1567,7 +1586,7 @@ class CMTT_Free {
         $contentHashKey = 'cmtt_content_hash_for_' . $post->ID;
 
         if (!$force) {
-            if (!\CM\CMTT_Settings::get('cmtt_glossaryEnableCaching', false)) {
+            if (!\CM\CMTT_Settings::get('cmtt_glossaryEnableCaching', false) && \CM\CMTT_Settings::get('cmtt_glossaryClearCaches', false)) {
                 wp_cache_delete($contentHash);
                 $oldContentHash = (string) get_transient($contentHashKey);
                 delete_transient($contentHash);
@@ -1587,8 +1606,26 @@ class CMTT_Free {
             }
         }
 
-        $glossarySearchStringArrays = self::prepare_parser_string_arr();
+        $args = apply_filters('cmtt_parser_query_args', array(
+            'nopaging'    => true,
+            'numberposts' => - 1,
+        ));
+        $glossary_index = CMTT_Free::getGlossaryItemsSorted($args);
 
+        /*
+         * New feature introduced in 4.0.4 - it should improve performance for big glossaries and large pages
+         * what it does - is filtering the terms which can appear on the page, but without checking context and
+         * without doing any replacements
+         */
+        $enableQuickScan = \CM\CMTT_Settings::get('cmtt_glossaryEnableQuickScan', false);
+        if ($enableQuickScan) {
+            $glossary_index = self::quickScan($glossary_index, $content);
+        }
+
+        $glossarySearchStringArrays = self::prepare_parser_string_arr($glossary_index);
+
+        $highlightTermOwnPage = \CM\CMTT_Settings::get('cmtt_highlightTermOnItsOwnPage', 1);
+        $caseSensitive = \CM\CMTT_Settings::get('cmtt_glossaryCaseSensitive', 0);
         /*
          * No replace required if there's no glossary items
          */
@@ -1596,14 +1633,15 @@ class CMTT_Free {
             foreach ($glossarySearchStringArrays as $glossarySearchStringArr) {
                 $excludeGlossaryStrs = array();
                 $excludeGlossaryTagsStrs = array();
+                $excludeGlossaryScripts = array();
                 /*
                  * Don't highlight glossary term on it's own page
                  */
-                if ($post->post_type == 'glossary') {
+                if (!$highlightTermOwnPage) {
                     unset($glossarySearchStringArr[$post->ID]);
                 }
 
-                $excludeGlossary_regex = '/\\['   // Opening bracket
+                $excludeGlossary_regex = '\\['   // Opening bracket
                         . '(\\[?)'   // 1: Optional second opening bracket for escaping shortcodes: [[tag]]
                         . "(glossary_exclude)"   // 2: Shortcode name
                         . '\\b'   // Word boundary
@@ -1644,12 +1682,13 @@ class CMTT_Free {
                 }
 
                 if ($exclude_in_double_quotes) {
-                    $excludeGlossary_regex .= '|(&#8220;.*&#8221;)';
-                    $excludeGlossary_regex .= '|(&#34;.*&#34;)';
-                    $excludeGlossary_regex .= '|(".*")';
+                    $excludeGlossary_regex .= '|(&#8220;.*?&#8221;)';
+                    $excludeGlossary_regex .= '|(&#34;.*?&#34;)';
+                    $excludeGlossary_regex .= '|(&“;.*?&”;)';
+                    $excludeGlossary_regex .= '|(&quot;.*?&quot;)';
                 }
 
-                $excludeGlossary_regex .= '/s';
+                $excludeGlossary_regex = '/' . $excludeGlossary_regex . '/s';
 
                 /*
                  * Fix for the &amp; character and the AMP term
@@ -1663,16 +1702,20 @@ class CMTT_Free {
                  * before glossary plug go over the content and add its code
                  * (later will be returned to the marked places in content)
                  */
-                $excludeTagsCount = preg_match_all($excludeGlossary_regex, $content, $excludeGlossaryStrs, PREG_PATTERN_ORDER);
+                preg_match_all($excludeGlossary_regex, $content, $excludeGlossaryStrs, PREG_PATTERN_ORDER);
                 $i = 0;
 
-                if ($excludeTagsCount > 0) {
+                if (!empty($excludeGlossaryStrs)) {
                     foreach ($excludeGlossaryStrs[0] as $excludeStr) {
                         $content = preg_replace($excludeGlossary_regex, '#' . $i . 'excludeGlossary', $content, 1);
                         $i++;
                     }
                 }
 
+                /*
+                 * Only for simple parser, doesn't work with DOM
+                 */
+                $j = 0;
                 if (strlen(\CM\CMTT_Settings::get('cmtt_glossaryParseExcludedTags')) > 0 && self::is_DOM_parser_disabled($post)) {
                     $excludedTags = explode(',', \CM\CMTT_Settings::get('cmtt_glossaryParseExcludedTags'));
                     $excludeGlossaryTags_regex = '#(';
@@ -1681,13 +1724,26 @@ class CMTT_Free {
                     }
                     $excludeGlossaryTags_regex = substr($excludeGlossaryTags_regex, 0, strlen($excludeGlossaryTags_regex) - 1);
                     $excludeGlossaryTags_regex .= ')#sU';
-                    $excludeTagsCountForSimpleParser = preg_match_all($excludeGlossaryTags_regex, $content, $excludeGlossaryTagsStrs);
-                    if ($excludeTagsCountForSimpleParser > 0) {
-                        $j = 0;
+                    preg_match_all($excludeGlossaryTags_regex, $content, $excludeGlossaryTagsStrs);
+                    if (count($excludeGlossaryTagsStrs) > 0) {
                         foreach ($excludeGlossaryTagsStrs[0] as $excludeStr) {
                             $content = preg_replace($excludeGlossaryTags_regex, '#' . $j . 'excludeTagsGlossary', $content, 1);
                             ++$j;
                         }
+                    }
+                }
+
+                /*
+                 * Since 4.0.5
+                 * Always exclude scripts from inline content as DOM parser breaks them often (eg. LearnDash)
+                 */
+                $excludeScript_regex = '#(<script[^>]*>([^>]*)</script>)#sU';
+                preg_match_all($excludeScript_regex, $content, $excludeGlossaryScripts);
+                if (!empty($excludeGlossaryScripts)) {
+                    $j = 0;
+                    foreach ($excludeGlossaryScripts[0] as $excludeStr) {
+                        $content = preg_replace($excludeScript_regex, '#' . $j . 'excludeScriptsGlossary', $content, 1);
+                        ++$j;
                     }
                 }
 
@@ -1714,7 +1770,7 @@ class CMTT_Free {
                     $content = self::cmtt_str_replace($content, $glossarySearchString);
                 }
 
-                if ($excludeTagsCount > 0) {
+                if (!empty($excludeGlossaryStrs)) {
                     $i = 0;
                     foreach ($excludeGlossaryStrs[0] as $excludeStr) {
                         $content = str_replace('#' . $i . 'excludeGlossary', $excludeStr, $content);
@@ -1727,13 +1783,24 @@ class CMTT_Free {
                             ), $content);
                 }
 
-                if (strlen(\CM\CMTT_Settings::get('cmtt_glossaryParseExcludedTags')) > 0 && self::is_DOM_parser_disabled($post)) {
-                    if ($excludeTagsCountForSimpleParser > 0) {
-                        $j = 0;
-                        foreach ($excludeGlossaryTagsStrs[0] as $excludeStr) {
-                            $content = str_replace('#' . $j . 'excludeTagsGlossary', $excludeStr, $content);
-                            ++$j;
-                        }
+                /*
+                 * Only with Simple parser (doesn't work with DOM)
+                 */
+                if (!empty($excludeGlossaryTagsStrs)) {
+                    $j = 0;
+                    foreach ($excludeGlossaryTagsStrs[0] as $excludeStr) {
+                        $content = str_replace('#' . $j . 'excludeTagsGlossary', $excludeStr, $content);
+                        ++$j;
+                    }
+                }
+
+                /*
+                 * Since 4.0.5
+                 */
+                if (!empty($excludeGlossaryScripts)) {
+                    $j = 0;
+                    foreach ($excludeGlossaryScripts[0] as $excludeStr) {
+                        $content = str_replace('#' . $j++ . 'excludeScriptsGlossary', $excludeStr, $content);
                     }
                 }
             }
@@ -1781,6 +1848,7 @@ class CMTT_Free {
 
                 $cmtt_temporaryAdditions[$term->ID][] = $content;
                 add_filter('cmtt_parse_addition_add', array(__CLASS__, 'addTemporaryAdditions'), 10, 2);
+                add_filter('cmtt_glossary_index_item_additions', array(__CLASS__, 'addTemporaryToAdditions'), 10, 2);
 
                 add_filter('cmtt_highlight_first_only', array(__CLASS__, 'overrideFirstOnly'), 10);
                 $cmWrapItUp = true;
@@ -1826,6 +1894,27 @@ class CMTT_Free {
     }
 
     /**
+     * Adds temporary terms to parsing
+     *
+     * @param type $additions
+     * @param type $glossary_item
+     *
+     * @return type
+     */
+    public static function addTemporaryToAdditions($additions, $glossary_item) {
+        global $cmtt_temporaryAdditions;
+
+        $termId = $glossary_item->ID;
+        $temporaryAddition = !empty($cmtt_temporaryAdditions[$termId]) ? $cmtt_temporaryAdditions[$termId] : [];
+
+        if (!empty($temporaryAddition)) {
+            $additions = array_merge($additions, [preg_quote(str_replace('\'', '&#39;', htmlspecialchars(trim($temporaryAddition), ENT_QUOTES, 'UTF-8')), '/')]);
+        }
+
+        return $additions;
+    }
+
+    /**
      * [cm_tooltip_parse]content[/cm_tooltip_parse]
      *
      * @param type $atts
@@ -1852,11 +1941,30 @@ class CMTT_Free {
      * @return type
      */
     public static function cmtt_replace_matches($match) {
-        if (!empty($match[0])) {
-            $replacementText = self::cmtt_prepareReplaceTemplate(htmlspecialchars_decode($match[0], ENT_COMPAT));
+        $replacementText = '';
 
-            return $replacementText;
+        if (!empty($match[0])) {  // Standard tooltips matching
+            $replacementText = CMTT_Free::cmtt_prepareReplaceTemplate(htmlspecialchars_decode($match[0], ENT_COMPAT));
         }
+        return $replacementText;
+    }
+
+    public static function maybeRemoveLinkToGlossaryTerm($post) {
+        /*
+         *  Checks whether to show links to glossary pages or not
+         */
+        $linksDisabled = CMTT_Free::_get_meta('_glossary_disable_links_for_page', $post->ID) == 1;
+
+        $mainPageId = CMTT_Glossary_Index::getGlossaryIndexPageId();
+        $onGlossaryIndex = !empty($post) && $post->ID == $mainPageId;
+        $removeLinksToTermsOnIndex = $onGlossaryIndex && \CM\CMTT_Settings::get('cmtt_glossaryOnlyTitleLinksToTerm', 0);
+
+        /*
+         * If TRUE then the links to glossary pages are exchanged with spans
+         */
+        $removeLinksToTerms = ( \CM\CMTT_Settings::get('cmtt_glossaryTermLink') == 1 || $linksDisabled || !\CM\CMTT_Settings::get('cmtt_createGlossaryTermPages', true) || $removeLinksToTermsOnIndex );
+
+        return $removeLinksToTerms;
     }
 
     /**
@@ -1875,7 +1983,7 @@ class CMTT_Free {
         /*
          * Array of glossary items, settings
          */
-        global $glossaryIndexArr, $caseSensitive, $templatesArr, $removeLinksToTerms, $replacedTerms, $post;
+        global $glossaryIndexArr, $templatesArr, $removeLinksToTerms, $replacedTerms, $post;
 
         /*
          *  Checks whether to show tooltips on this page or not
@@ -1883,24 +1991,19 @@ class CMTT_Free {
         $tooltipsDisabled = CMTT_Glossary_Index::disableTooltips(false, $post);
 
         /*
-         *  Checks whether to show links to glossary pages or not
-         */
-        $linksDisabled = get_post_meta($post->ID, '_glossary_disable_links_for_page', TRUE) == 1;
-//        $linksDisabled = CMTT_Free::_get_meta('_glossary_disable_links_for_page', $post->ID) == 1;
-
-        $mainPageId = CMTT_Glossary_Index::getGlossaryIndexPageId();
-        $onGlossaryIndex = !empty($post) && $post->ID == $mainPageId;
-        $removeLinksToTermsOnIndex = $onGlossaryIndex && \CM\CMTT_Settings::get('cmtt_glossaryOnlyTitleLinksToTerm', 0);
-
-        /*
          * If TRUE then the links to glossary pages are exchanged with spans
          */
-        $removeLinksToTerms = ( \CM\CMTT_Settings::get('cmtt_glossaryTermLink') == 1 || $linksDisabled || !\CM\CMTT_Settings::get('cmtt_createGlossaryTermPages', true) || $removeLinksToTermsOnIndex );
+        $removeLinksToTerms = CMTT_Free::maybeRemoveLinkToGlossaryTerm($post);
 
         /*
          * If "Highlight first occurrence only" option is set
          */
-        $highlightFirstOccuranceOnly = self::isHighlightOnlyOnceEnabled($post);
+        $highlightFirstOccuranceOnly = CMTT_Free::isHighlightOnlyOnceEnabled($post);
+
+        /*
+         * Check the case sensitive setting
+         */
+        $caseSensitive = \CM\CMTT_Settings::get('cmtt_glossaryCaseSensitive', 0);
 
         /*
          * If it's case insensitive, then the term keys are stored as lowercased
@@ -1956,9 +2059,9 @@ class CMTT_Free {
             }
         }
 
-        if (null === $glossary_item_id)
+        if (null === $glossary_item_id) {
             return $title;
-
+        }
         $glossary_item = get_post($glossary_item_id);
 
         try {
@@ -2023,56 +2126,109 @@ class CMTT_Free {
          * Replacement is already cached - use it
          */
         if (!empty($templatesArr[$id])) {
-            if (!empty(\CM\CMTT_Settings::get('cmtt_tooltipLinkIconInContent'))) {
+
+            $replaceEveryNth = \CM\CMTT_Settings::get('cmtt_tooltipReplaceEveryNth', 1);
+            if($replaceEveryNth <= 0){ //sanity check
+                $replaceEveryNth = 1;
+            }
+            $shouldReplace = $templatesArr[$id]['count'] && $templatesArr[$id]['count'] % $replaceEveryNth == 0;
+            /*
+             * Increment the occurrence count
+             */
+            $templatesArr[$id]['count']++;
+            
+            if (!$shouldReplace) {
+                /*
+                 * Don't replace unless it's every n-th
+                 */
+                return $title;
+            } else {
+            if (!empty(\CM\CMTT_Settings::get('cmtt_tooltipLinkIconInContent', 0))) {
                 $title = apply_filters('cmtt_glossaryItemTitle', $title, $glossary_item, 0);
             }
-            $templateReplaced = str_replace($titlePlaceholder, $title, $templatesArr[$id]);
+                $templateReplaced = str_replace($titlePlaceholder, $title, $templatesArr[$id]['template']);
 
             return $templateReplaced;
         }
+        }
 
+        $class = '';
 
-        $additionalClass = apply_filters('cmtt_term_tooltip_additional_class', '', $glossary_item);
-        $excludeTT = CMTT_Free::_get_meta('_cmtt_exclude_tooltip', $glossary_item->ID) || $tooltipsDisabled;
-        $permalink = apply_filters('cmtt_term_tooltip_permalink', get_permalink($glossary_item), $glossary_item->ID);
-        $disable_by_category = apply_filters('cmtt_term_disable_tooltip_by_category', false, $glossary_item);
+        $titleAttrPrefix = __(\CM\CMTT_Settings::get('cmtt_titleAttributeLabelPrefix', 'Glossary:'), 'cm-tooltip-glossary');
+        $titleAttr = ( \CM\CMTT_Settings::get('cmtt_showTitleAttribute') == 1 ) ? ['title' => $titleAttrPrefix . ' ' . esc_attr($glossary_item->post_title)] : [];
+        $attributes = array_merge([], $titleAttr);
 
         /*
-         * Open in new window
+         * Conditions to show tooltips
          */
-        $newPage = \CM\CMTT_Settings::get('cmtt_glossaryInNewPage') || CMTT_Free::_get_meta('_cmtt_new_page_exception', $post->ID);
-        $windowTarget = $newPage ? ' target="_blank" ' : '';
-        $titleAttrPrefix = __(\CM\CMTT_Settings::get('cmtt_titleAttributeLabelPrefix', 'Glossary:'), 'cm-tooltip-glossary');
-        $titleAttr = ( \CM\CMTT_Settings::get('cmtt_showTitleAttribute') == 1 ) ? ' title="' . $titleAttrPrefix . ' ' . esc_attr($glossary_item->post_title) . '" ' : '';
-        if ($excludeTT != 1 && !$disable_by_category) {
+        $excludeTT = CMTT_Free::_get_meta('_cmtt_exclude_tooltip', $glossary_item->ID) || $tooltipsDisabled;
+        $disable_by_category = apply_filters('cmtt_term_disable_tooltip_by_category', false, $glossary_item);
+        $showTooltipsPrefiltered = $excludeTT != 1 && !$disable_by_category;
+        /*
+         * This filter can be used to disable tooltips and/or enable replacement eg. footnotes
+         */
+        $showTooltips = apply_filters('cmtt_show_tooltips', $showTooltipsPrefiltered, $glossary_item, $post);
 
+        if ($showTooltips) {
+            $class = 'glossaryLink';
             $tooltipContent = self::getTooltipContent($glossary_item);
+            $attributes = array_merge($attributes,
+                    [
+                        'aria-describedby' => 'tt',
+                        'data-cmtooltip'   => $tooltipContent
+            ]);
+        }
 
-            if ($removeLinksToTerms) {
-                $link_replace = '<span aria-describedby="tt" class="glossaryLink' . $additionalClass . '" ' . $titleAttr . ' data-cmtooltip="' . $tooltipContent . '">' . $titlePlaceholder . '</span>';
-            } else {
-                $link_replace = '<a aria-describedby="tt" href="' . $permalink . '"' . $titleAttr . ' class="glossaryLink' . $additionalClass . '" data-cmtooltip="' . $tooltipContent . '" ' . $windowTarget . '>' . $titlePlaceholder . '</a>';
-            }
-        } else {
-            if ($removeLinksToTerms) {
-                $link_replace = '<span  ' . $titleAttr . ' class="glossaryLink' . $additionalClass . '">' . $titlePlaceholder . '</span>';
-            } else {
-                $link_replace = '<a href="' . $permalink . '"' . $titleAttr . ' class="glossaryLink' . $additionalClass . '"' . $windowTarget . '>' . $titlePlaceholder . '</a>';
+        $tag = 'span';
+        if (!$removeLinksToTerms) {
+            $tag = 'a';
+            $class = 'glossaryLink';
+            $permalink = apply_filters('cmtt_term_tooltip_permalink', get_permalink($glossary_item), $glossary_item->ID);
+            $attributes = array_merge($attributes, ['href' => $permalink]);
+            /*
+             * Open in new window
+             */
+            $newPage = \CM\CMTT_Settings::get('cmtt_glossaryInNewPage') || CMTT_Free::_get_meta('_cmtt_new_page_exception', $post->ID);
+            $windowTarget = $newPage ? ['target' => '_blank'] : [];
+            $attributes = array_merge($attributes, $windowTarget);
+        }
+
+        $additionalClass = apply_filters('cmtt_term_tooltip_additional_class', $class, $glossary_item);
+
+        /*
+         * The array of the additional attributes
+         */
+        $additionalAttributesArr = apply_filters('cmtt_term_tooltip_additional_attibutes', $attributes, $glossary_item);
+        $additionalAttributes = '';
+        /*
+         * Change the additional attributes array to HTML attributes
+         */
+        if (!empty($additionalAttributesArr)) {
+            foreach ($additionalAttributesArr as $key => $value) {
+                $additionalAttributes .= sprintf(' %s="%s" ', $key, $value);
             }
         }
+
+        $additionalAttributes .= " data-gt-translate-attributes='[{\"attribute\":\"data-cmtooltip\", \"format\":\"html\"}]'";
+
+        /*
+         * Build the span/link with/without tooltips for replacement
+         */
+        $link_replace = sprintf('<%s class="%s" %s>%s</%s>', $tag, $additionalClass, $additionalAttributes, $titlePlaceholder, $tag);
 
         /*
          * Save with $titlePlaceholder - for the synonyms
          */
-        $templatesArr[$id] = apply_filters('cmtt_link_replace', $link_replace, $titleAttr, $glossary_item, $additionalClass, $titlePlaceholder);
+        $templatesArr[$id]['template'] = apply_filters('cmtt_link_replace', $link_replace, $titleAttr, $glossary_item, $additionalClass, $titlePlaceholder, $title);
 
-        if (!empty(\CM\CMTT_Settings::get('cmtt_tooltipLinkIconInContent'))) {
+        if (!empty(\CM\CMTT_Settings::get('cmtt_tooltipLinkIconInContent', 0))) {
             $title = apply_filters('cmtt_glossaryItemTitle', $title, $glossary_item, 0);
         }
         /*
          * Replace it with title to show correctly for the first time
          */
-        $link_replace = str_replace($titlePlaceholder, $title, $link_replace);
+        $link_replace = str_replace($titlePlaceholder, $title, $templatesArr[$id]['template']);
+        $templatesArr[$id]['count'] = 1;
 
         return $link_replace;
     }
@@ -2250,14 +2406,11 @@ class CMTT_Free {
         $post = $wp_query->post;
         $id = $post->ID;
 
-        $disableSynonymsForThisTerm = (bool) CMTT_Free::_get_meta('_cmtt_disable_synonyms_for_term', $id);
         $onMainQueryOnly = ( \CM\CMTT_Settings::get('cmtt_glossaryOnMainQuery') == 1 ) ? is_main_query() : true;
-        $addBacklink = apply_filters('cmtt_add_backlink', is_single() && get_query_var('post_type') == 'glossary' && $onMainQueryOnly && 'glossary' == get_post_type());
+        $is_single = is_single();
+        $addBacklink = apply_filters('cmtt_add_backlink', $onMainQueryOnly && $is_single && $post->post_type == 'glossary');
 
         if ($addBacklink) {
-            $showPagination = (bool) \CM\CMTT_Settings::get('cmtt_glossary_relatedArticlesPagination');
-            $limitCustomArticles = \CM\CMTT_Settings::get('cmtt_glossary_showCustomRelatedArticlesCount');
-
             $mainPageId = CMTT_Glossary_Index::getGlossaryIndexPageId();
             $backlinkHref = apply_filters('cmtt_glossary_backlink_href', get_permalink($mainPageId), $post);
             $backlink = ( \CM\CMTT_Settings::get('cmtt_glossary_addBackLink') == 1 && $mainPageId > 0 ) ? '<a href="' . $backlinkHref . '" class="cmtt-backlink cmtt-backlink-top">' . __(\CM\CMTT_Settings::get('cmtt_glossary_backLinkText'), 'cm-tooltip-glossary') . '</a>' : '';
@@ -2955,9 +3108,32 @@ class CMTT_Free {
              * Base query NEVER parse in scripts
              */
             $query = '//text()[not(ancestor::script)][not(ancestor::style)]';
-            if (\CM\CMTT_Settings::get('cmtt_glossaryProtectedTags') == 1) {
-                $query .= '[not(ancestor::header)][not(ancestor::a)][not(ancestor::pre)][not(ancestor::object)][not(ancestor::h1)][not(ancestor::h2)][not(ancestor::h3)][not(ancestor::h4)][not(ancestor::h5)][not(ancestor::h6)][not(ancestor::textarea)]';
+
+            $excludedTags = \CM\CMTT_Settings::get('cmtt_glossaryProtectedTags', array('all_h', 'h1', 'a', 'other'));
+            if ($excludedTags == 1)
+                $excludedTags = array('all_h', 'h1', 'a', 'other');
+
+            if (is_array($excludedTags)) {
+                foreach ($excludedTags as $tag) {
+                    switch ($tag) {
+                        case 'all_h':
+                            $query .= '[not(ancestor::h1)][not(ancestor::h2)][not(ancestor::h3)][not(ancestor::h4)][not(ancestor::h5)][not(ancestor::h6)]';
+                            break;
+
+                        case 'h1':
+                            $query .= '[not(ancestor::h1)]';
+                            break;
+
+                        case 'a':
+                            $query .= '[not(ancestor::a)]';
+                            break;
+
+                        case 'other':
+                            $query .= '[not(ancestor::header)][not(ancestor::pre)][not(ancestor::object)][not(ancestor::textarea)]';
+                    }
+                }
             }
+
             /*
              * Parsing of the Glossary Index Page
              */
@@ -3209,15 +3385,42 @@ class CMTT_Free {
      * @return type
      */
     public static function getGlossaryItemsSorted($args = array()) {
-        $glossary_index_full_sorted = array();
+        static $glossary_index_full_sorted = array();
 
         if ($glossary_index_full_sorted === array()) {
+            /*
+             * 1) Get list of all Glossary Terms from database
+             */
             $glossary_index = self::getGlossaryItems($args);
-            $glossary_index_full_sorted = $glossary_index;
+
+            /*
+             * 2) Add all the synonyms/variants/abbreviations - everything what parser can find for given term
+             */
+            $glossary_index_full = self::glossaryFillAdditions($glossary_index);
+            $glossary_index_full_sorted = $glossary_index_full;
+            /*
+             * 3) Sort the items in such way, that longest title/synonyms/variants are before shorter ones
+             * (currently only works by sorting titles, need to find way to sort $glossary_item->additions too)
+             */
             uasort($glossary_index_full_sorted, array(self::$calledClassName, '_sortByWPQueryObjectTitleLength'));
         }
 
         return apply_filters('cmtt_glossary_index_sorted', $glossary_index_full_sorted, $args);
+    }
+
+    /**
+     * Function responsible for storing all of additional strings which should trigger parsing 
+     * eg. synonyms,variations,abbreviations
+     * @param type $glossary_index
+     * @return type
+     */
+    public static function glossaryFillAdditions($glossary_index) {
+        if (!empty($glossary_index)) {
+            foreach ($glossary_index as $id => $glossary_term) {
+                $glossary_term->additions = apply_filters('cmtt_glossary_index_item_additions', [], $glossary_term);
+            }
+        }
+        return $glossary_index;
     }
 
     /**
@@ -3242,8 +3445,10 @@ class CMTT_Free {
 
         if (!\CM\CMTT_Settings::get('cmtt_glossaryEnableCaching', false)) {
             delete_transient($argsKey);
+            $glossaryItems = false;
+        } else {
+            $glossaryItems = get_transient($argsKey);
         }
-        $glossaryItems = get_transient($argsKey);
         if (false === $glossaryItems || !isset($glossaryItems['args']) || !isset($glossaryItems['args']['fields'])) {
             $defaultArgs = array(
                 'post_type'              => 'glossary',
@@ -3321,9 +3526,13 @@ class CMTT_Free {
             }
         }
 
+        if (!empty($args['return_just_ids'])) {
+            return $glossaryIndexIds;
+        }
+
         $glossaryIndexIdsWhere = !empty($glossaryIndexIds) ? implode(',', $glossaryIndexIds) : - 1;
         $sql = $wpdb->prepare(
-                'SELECT ID,post_title,post_name,post_content,post_excerpt,post_date,post_type FROM ' . $wpdb->posts .
+                'SELECT ID,post_title,post_name,post_content,post_excerpt,post_date,post_type,post_author FROM ' . $wpdb->posts .
                 ' WHERE ID IN (' . $glossaryIndexIdsWhere .
                 ') LIMIT %d', '999999');
         if ($glossaryIndexCacheKey = apply_filters('cmtt_glossary_index_cache_key', '')) {
@@ -3338,8 +3547,6 @@ class CMTT_Free {
 
         foreach ($glossaryIndex as $key => $post) {
             $obj = (object) $post;
-//			wp_cache_add( $obj->ID, $obj, 'posts' );
-
             $newObj = apply_filters('cmtt_get_all_glossary_items_single', $obj, $post);
             $glossary_index[] = $newObj;
             unset($glossaryIndex[$key]);
@@ -3361,73 +3568,119 @@ class CMTT_Free {
         return $obj;
     }
 
-    public static function outputCustomPostTypesList() {
+    /**
+     * 
+     * @param int $output 0 - multicheckbox, 1 - select
+     * @return string
+     */
+    public static function outputCustomPostTypesList($option_name, $output = 0) {
         $content = '';
         $args = array(
             'public' => true,
-//            '_builtin' => false
         );
 
-        $output = 'objects'; // names or objects, note names is the default
+        $output_type = 'objects'; // names or objects, note names is the default
         $operator = 'and'; // 'and' or 'or'
 
-        $post_types = get_post_types($args, $output, $operator);
-        $selected_post_types = \CM\CMTT_Settings::get('cmtt_glossaryOnPosttypes');
-
-        if (!is_array($selected_post_types)) {
-            $selected_post_types = array();
-        }
-
-        foreach ($post_types as $post_type) {
-            $label = $post_type->labels->singular_name . ' (' . $post_type->name . ')';
-            $name = $post_type->name;
-
-            $content .= '<div><label><input type="checkbox" name="cmtt_glossaryOnPosttypes[]" ' . checked(true, in_array($name, $selected_post_types), false) . ' value="' . $name . '" />' . $label . '</label></div>';
-        }
-
-        return $content;
-    }
-
-    public static function outputRolesList() {
-        $content = '';
-
-        $roles = get_editable_roles();
-        $selected_roles = \CM\CMTT_Settings::get('cmtt_glossaryRoles', array('administrator', 'editor'));
-
-        if (!is_array($selected_roles)) {
-            $selected_roles = array();
-        }
-
-        foreach ($roles as $role => $role_info) {
-            $label = $role . ' (' . $role_info['name'] . ')';
-            $name = $role;
-
-            $content .= '<div><label><input type="checkbox" name="cmtt_glossaryRoles[]" ' . checked(true, in_array($name, $selected_roles), false) . ' value="' . $name . '" />' . $label . '</label></div>';
-        }
-
-        return $content;
-    }
-
-    public static function outputACFTypesList(
-            $fieldName = 'cmtt_acf_parsed_field_types', $defaultSelected = array(
-                'text',
-                'wysiwyg'
-            )
-    ) {
-        $content = '';
-
-        $options = array('text' => 'Text', 'textarea' => 'Textarea', 'wysiwyg' => 'WYSIWYG', 'message' => 'Message', 'checkbox' => 'Checkbox');
-        $selected = \CM\CMTT_Settings::get($fieldName, $defaultSelected);
+        $post_types = get_post_types($args, $output_type, $operator);
+        $selected = \CM\CMTT_Settings::get($option_name);
 
         if (!is_array($selected)) {
             $selected = array();
         }
 
-        foreach ($options as $option => $optionInfo) {
-            $label = $optionInfo;
-            $name = $option;
+        $options = [];
+        foreach ($post_types as $post_type) {
+            $label = $post_type->labels->singular_name . ' (' . $post_type->name . ')';
+            $name = $post_type->name;
+            $options[$name] = $label;
+        }
+        $post_types = null;
+        $content = CMTT_Free::_outputMultipleValues($option_name, $options, $selected, $output);
 
-            $content .= '<div><label><input type="checkbox" name="' . $fieldName . '[]" ' . checked(true, in_array($name, $selected), false) . ' value="' . $name . '" />' . $label . '</label></div>';
+        return $content;
+    }
+
+    /**
+     * 
+     * @param type $option_name
+     * @param type $default_values
+     * @param type $guest
+     * @param int $output 0 - multicheckbox, 1 - select
+     * @return string
+     */
+    public static function outputRolesList($option_name, $default_values, $guest = false, $output = 0) {
+        $content = '';
+
+        $roles = get_editable_roles();
+        $selected = \CM\CMTT_Settings::get($option_name, $default_values);
+
+        if (!is_array($selected)) {
+            $selected = array();
+        }
+
+        // Adding Guest to the roles list
+        if ($guest) {
+            $roles = array_merge($roles, array('Guest' => array('name' => 'Not logged in user')));
+        }
+
+        foreach ($roles as $role => $role_info) {
+            $roles[$role] = $role . ' (' . $role_info['name'] . ')';
+        }
+
+        $content = CMTT_Free::_outputMultipleValues($option_name, $roles, $selected, $output);
+
+        return $content;
+    }
+
+    /**
+     * 
+     * @param type $option_name
+     * @param type $defaultSelected
+     * @param int $output 0 - multicheckbox, 1 - select
+     * @return string
+     */
+    public static function outputACFTypesList(
+            $option_name = 'cmtt_acf_parsed_field_types', $defaultSelected = array(
+                'text',
+                'wysiwyg'
+            )
+            , $output = 0) {
+        $content = '';
+
+        $options = array('text' => 'Text', 'textarea' => 'Textarea', 'wysiwyg' => 'WYSIWYG', 'message' => 'Message', 'checkbox' => 'Checkbox');
+        $selected = \CM\CMTT_Settings::get($option_name, $defaultSelected);
+
+        if (!is_array($selected)) {
+            $selected = array();
+        }
+
+        $content = CMTT_Free::_outputMultipleValues($option_name, $options, $selected, $output);
+
+        return $content;
+    }
+
+    public static function _outputMultipleValues($option_name, $options, $selected = [], $output = 0) {
+        $content = '';
+
+        if (1 === $output) {
+            $content .= '<div><select name="' . $option_name . '[]" multiple="multiple">';
+        }
+
+        foreach ($options as $name => $label) {
+            switch ($output) {
+                case 0:
+                default:
+                    $content .= '<div><label><input type="checkbox" name="' . $option_name . '[]" ' . checked(true, in_array($name, $selected), false) . ' value="' . $name . '" />' . $label . '</label></div>';
+                    break;
+                case 1:
+                    $content .= '<option value="' . $name . '" ' . selected(true, in_array($name, $selected), false) . '>' . $label . '</option>';
+                    break;
+            }
+        }
+
+        if (1 === $output) {
+            $content .= '</select></div>';
         }
 
         return $content;
@@ -3546,12 +3799,12 @@ class CMTT_Free {
         }
 
         if (null !== $id) {
-            $result = isset($_cache[$meta_key][$id]) ? $_cache[$meta_key][$id] : false;
+            $result = (isset($_cache[$meta_key]) && isset($_cache[$meta_key][$id])) ? $_cache[$meta_key][$id] : false;
         } else {
             $result = $_cache[$meta_key];
         }
 
-        return $result;
+        return maybe_unserialize($result);
     }
 
     public static function _get_term($taxonomies, $id = null) {
@@ -3618,6 +3871,20 @@ class CMTT_Free {
         return $glossaryItemContent;
     }
 
+    public static function getFirstLetter($title, $permalink, $sortByTitle = true) {
+        if ($sortByTitle) {
+            $what = $title;
+        } else {
+            $what = $permalink;
+        }
+
+        mb_internal_encoding("UTF-8");
+        $what = urldecode($what);
+
+        $letter = mb_strtolower(mb_substr($what, 0, 1));
+        return $letter;
+    }
+
     /**
      * Returns the numbers of posts for server-side pagination
      * @param array $shortcodeAtts
@@ -3626,45 +3893,40 @@ class CMTT_Free {
     public static function getListnavCounts($shortcodeAtts) {
         $counts = array();
         $nonLatinLetters = (bool) \CM\CMTT_Settings::get('cmtt_index_nonLatinLetters');
+        $sortByTitle = (bool) \CM\CMTT_Settings::get('cmtt_index_sortby_title');
 
-        $args = isset(CMTT_Free::$lastQueryDetails['nopaging_args']) ? CMTT_Free::$lastQueryDetails['nopaging_args'] : array();
+        $args = array();
 
-        if (!empty($args) && is_array($args)) {
-            do_action('cmtt_glossary_doing_search', $args, $shortcodeAtts);
-            $hideTerms = !empty($shortcodeAtts['hide_terms']);
+        do_action('cmtt_glossary_doing_search', $args, $shortcodeAtts);
+        $hideTerms = !empty($shortcodeAtts['hide_terms']);
 
-            $glossaryIndex = CMTT_Free::getGlossaryItems($args);
-            $counts['all'] = !$hideTerms ? count($glossaryIndex) : 0;
+        $glossaryIndex = CMTT_Free::getGlossaryItems($args);
+        $counts['all'] = !$hideTerms ? count($glossaryIndex) : 0;
 
-            foreach ($glossaryIndex as $term) {
-                if (!$hideTerms) {
-                    $title = urldecode($term->post_title);
+        foreach ($glossaryIndex as $term) {
+            if (!$hideTerms) {
+                $firstLetterOriginal = self::getFirstLetter($term->post_title, $term->post_name, $sortByTitle);
+                if (!$nonLatinLetters) {
+                    $firstLetterOriginal = remove_accents($firstLetterOriginal);
+                }
+                $firstLetter = mb_strtolower($firstLetterOriginal);
 
-                    mb_internal_encoding("UTF-8");
-                    $firstLetterOriginal = mb_substr($title, 0, 1);
-
-                    if (!$nonLatinLetters) {
-                        $firstLetterOriginal = remove_accents($firstLetterOriginal);
-                    }
-                    $firstLetter = mb_strtolower($firstLetterOriginal);
-
-                    if (preg_match('/\d/', $firstLetter)) {
-                        $firstLetter = 'al-num';
-                    }
-
-                    if (!isset($counts[$firstLetter])) {
-                        $counts[$firstLetter] = 0;
-                    }
-                    if (\CM\CMTT_Settings::get('cmtt_limitNum') > 0) {
-                        if ($counts[$firstLetter] > \CM\CMTT_Settings::get('cmtt_limitNum') - 1)
-                            continue;
-                        $counts['all'] = '';
-                    }
-                    $counts[$firstLetter]++;
+                if (preg_match('/\d/', $firstLetter)) {
+                    $firstLetter = 'al-num';
                 }
 
-                $counts = apply_filters('cmtt_modify_listnav_counts_term', $counts, $term, $shortcodeAtts);
+                if (!isset($counts[$firstLetter])) {
+                    $counts[$firstLetter] = 0;
+                }
+                if (\CM\CMTT_Settings::get('cmtt_limitNum') > 0) {
+                    if ($counts[$firstLetter] > \CM\CMTT_Settings::get('cmtt_limitNum') - 1)
+                        continue;
+                    $counts['all'] = '';
+                }
+                $counts[$firstLetter]++;
             }
+
+            $counts = apply_filters('cmtt_modify_listnav_counts_term', $counts, $term, $shortcodeAtts);
         }
 
         return apply_filters('cmtt_modify_listnav_counts_all', $counts);
@@ -3734,11 +3996,9 @@ class CMTT_Free {
         }
 
         if ($showCounts) {
+            $resultsLabel = \CM\CMTT_Settings::get('cmtt_index_resultsLabel', 'Results:');
             $listNavInsideContent .= '<div class="ln-letter-count" style="position: absolute; top: 0px; left: 88px; width: 20px; display: none;"></div>';
-        }
-
-        if (\CM\CMTT_Settings::get('cmtt_index_showCounts', '1')) {
-            $listNavInsideContent .= '<div class="ln-letter-count" style="position: absolute; top: 0px; left: 88px; width: 20px; display: none;"></div>';
+            $listNavInsideContent .= '<div class="query-results-count">'.sprintf('%s %d',$resultsLabel, $glossaryQuery->found_posts).'</div>';
         }
         $listNavInsideContent .= '</div>';
 
@@ -3764,7 +4024,7 @@ class CMTT_Free {
         switch ($post_meta) {
             case 0:
                 $post = get_post($post_id);
-                if (!empty($post)) {
+                if (is_object($post)) {
                     $selected_post_types = \CM\CMTT_Settings::get('cmtt_glossaryOnPosttypes');
 
                     if (is_array($selected_post_types) && !empty($selected_post_types)) {
@@ -3792,6 +4052,72 @@ class CMTT_Free {
                 $normalizedTitle
         );
         return $normalizedTitle;
+    }
+
+    public static function cmtt_parse_ninja_tables($table, $tableId) {
+        global $post;
+        $post = new stdClass();
+
+        foreach ($table as $key => $row) {
+            foreach ($row as $rowkey => $cell) {
+                if ($rowkey == '___id___') {
+                    continue;
+                }
+                $cmWrapItUp = true;
+                $table[$key][$rowkey] = apply_filters('cm_tooltip_parse', $cell, true);
+                $cmWrapItUp = false;
+            }
+        }
+
+        return $table;
+    }
+
+    /**
+     * Function should quickly scan the content looking for potential terms
+     * without looking for replacements. It's meant to be used for huge glossaries
+     * to limit the amount of terms that needs to be searched and replaced using 
+     * DOM parser
+     * 
+     * @param type $content
+     * @return array
+     */
+    public static function quickScan($potentialTerms, $content) {
+        $foundTerms = [];
+
+        $caseSensitive = \CM\CMTT_Settings::get('cmtt_glossaryCaseSensitive', 0);
+
+        foreach ($potentialTerms as $key => $glossary_item) {
+            /*
+             * Simply try to find the term in the content
+             */
+            if (!$caseSensitive) {
+                $found = FALSE !== stripos($content, $glossary_item->post_title);
+            } else {
+                $found = FALSE !== strpos($content, $glossary_item->post_title);
+            }
+            if ($found) {
+                $foundTerms[$key] = $glossary_item;
+                continue;
+            } elseif (!empty($glossary_item->additions)) {
+                /*
+                 * Try to find any of the additions in content
+                 */
+                foreach ($glossary_item->additions as $key => $addition) {
+                    if (!$caseSensitive) {
+                        if (FALSE !== stripos($content, $addition)) {
+                            $foundTerms[$key] = $glossary_item;
+                            continue;
+                        }
+                    } else {
+                    if (FALSE !== strpos($content, $addition)) {
+                        $foundTerms[$key] = $glossary_item;
+                        continue;
+                    }
+                }
+            }
+        }
+        }
+        return $foundTerms;
     }
 
 }

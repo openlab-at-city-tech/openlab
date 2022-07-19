@@ -217,7 +217,7 @@ class CMTT_AMP {
             $permalink = apply_filters('cmtt_term_tooltip_permalink', get_permalink($glossaryItem), $glossaryItem->ID);
 
             $tt_styles .= 'width: 300px;';
-            $tt_styles .= 'opacity:' . (int) \CM\CMTT_Settings::get('cmtt_tooltipOpacity') / 100 . ';';
+            $tt_styles .= 'opacity:' . (int) \CM\CMTT_Settings::get('cmtt_tooltipOpacity', 100) / 100 . ';';
 
             $ttcont_styles .= 'border:' . \CM\CMTT_Settings::get('cmtt_tooltipBorderWidth') . 'px '
                     . \CM\CMTT_Settings::get('cmtt_tooltipBorderStyle')
@@ -313,7 +313,7 @@ class CMTT_AMP {
         $tt_styles = '';
         $tt_styles .= 'min-width:' . (int) \CM\CMTT_Settings::get('cmtt_tooltipWidthMin', 200) . 'px;';
         $tt_styles .= 'max-width:' . (int) \CM\CMTT_Settings::get('cmtt_tooltipWidthMax', 400) . 'px;';
-        $tt_styles .= 'opacity:' . (int) \CM\CMTT_Settings::get('cmtt_tooltipOpacity') / 100 . ';';
+        $tt_styles .= 'opacity:' . (int) \CM\CMTT_Settings::get('cmtt_tooltipOpacity', 100) / 100 . ';';
 
         $ttcont_styles = '';
         $ttcont_styles .= 'border:' . \CM\CMTT_Settings::get('cmtt_tooltipBorderWidth') . 'px ' . \CM\CMTT_Settings::get('cmtt_tooltipBorderStyle') .
