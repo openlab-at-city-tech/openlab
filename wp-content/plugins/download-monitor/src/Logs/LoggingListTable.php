@@ -109,8 +109,8 @@ class DLM_Logging_List_Table extends WP_List_Table {
 					}
 
 
-					$download_string = '<a href="' . admin_url( 'post.php?post=' . $download->get_id() . '&action=edit' ) . '">';
-					$download_string .= '#' . $download->get_id() . ' &ndash; ' . $download->get_title();
+					$download_string = '<a href="' . admin_url( 'post.php?post=' . absint( $download->get_id() ) . '&action=edit' ) . '">';
+					$download_string .= '#' . $download->get_id() . ' &ndash; ' . esc_html( $download->get_title() );
 					$download_string .= '</a>';
 
 					if ( $log->get_version() ) {
@@ -294,6 +294,12 @@ class DLM_Logging_List_Table extends WP_List_Table {
 								continue;
 							}
 							$the_user = get_userdata( $a_user->user_id );
+
+							//skip users that no longer exist
+							if( ! $the_user ){
+								continue;
+							}
+
 							?>
                         <option value="<?php echo esc_attr( $a_user->user_id ); ?>" <?php echo ( $this->filter_user == $a_user->user_id ) ? 'selected="selected"' : ''; ?>>
 							<?php echo esc_html( $the_user->display_name ); ?>

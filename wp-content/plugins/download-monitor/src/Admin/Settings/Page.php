@@ -11,7 +11,7 @@ class DLM_Settings_Page {
 		add_filter( 'dlm_admin_menu_links', array( $this, 'add_settings_page' ), 30 );
 
 		// catch setting actions
-		add_action( 'admin_init', array( $this, 'catch_admin_actions' ) );
+		add_action( 'current_screen', array( $this, 'catch_admin_actions' ) );
 
 		//$this->load_hooks();
 
@@ -55,7 +55,19 @@ class DLM_Settings_Page {
 				case 'dlm_clear_transients':
 					$result = download_monitor()->service( 'transient_manager' )->clear_all_version_transients();
 					if ( $result ) {
-						wp_redirect( add_query_arg( array( 'dlm_action_done' => $action ), DLM_Admin_Settings::get_url() ) );
+						wp_redirect( add_query_arg( array( 'dlm_action_done' => $action ), admin_url( 'edit.php?post_type=dlm_download&page=download-monitor-settings&tab=advanced&section=misc' ) ) );
+						exit;
+					}
+					break;
+				case 'dlm_regenerate_protection':
+					if ( $this->regenerate_protection() ) {
+						wp_redirect( add_query_arg( array( 'dlm_action_done' => $action ), admin_url( 'edit.php?post_type=dlm_download&page=download-monitor-settings&tab=advanced&section=misc' ) ) );
+						exit;
+					}
+					break;
+				case 'dlm_regenerate_robots':
+					if ( $this->regenerate_robots() ) {
+						wp_redirect( add_query_arg( array( 'dlm_action_done' => $action ), admin_url( 'edit.php?post_type=dlm_download&page=download-monitor-settings&tab=advanced&section=misc' ) ) );
 						exit;
 					}
 					break;
@@ -65,6 +77,19 @@ class DLM_Settings_Page {
 		if ( isset( $_GET['dlm_action_done'] ) ) {
 			add_action( 'admin_notices', array( $this, 'display_admin_action_message' ) );
 		}
+
+		$screen = get_current_screen();
+
+		if( $screen->base ==  'dlm_download_page_download-monitor-settings' ) {
+			$ep_value = get_option( 'dlm_download_endpoint' );
+			$page_check = get_page_by_path( $ep_value, 'ARRAY_A', array( 'page', 'post' ) );
+			$cpt_check  = post_type_exists( $ep_value );
+
+			if( $page_check || $cpt_check ) {
+				add_action( 'admin_notices', array( $this, 'display_admin_invalid_ep' ) );
+			}
+		}
+
 	}
 
 	/**
@@ -83,11 +108,26 @@ class DLM_Settings_Page {
 				case 'dlm_clear_transients':
 					echo "<p>" . esc_html__( 'Download Monitor Transients successfully cleared!', 'download-monitor' ) . "</p>";
 					break;
+				case 'dlm_regenerate_protection':
+					echo "<p>" . esc_html__( '.htaccess file successfully regenerated!', 'download-monitor' ) . "</p>";
+					break;
+				case 'dlm_regenerate_robots':
+					echo "<p>" . esc_html__( 'Robots.txt file successfully regenerated!', 'download-monitor' ) . "</p>";
+					break;
 			}
 			?>
 		</div>
 		<?php
 	}
+
+	public function display_admin_invalid_ep() {
+		?>
+		<div class="notice notice-error">
+			<p><?php echo esc_html__( 'The Download Monitor endpoint is already in use by a page or post. Please change the endpoint to something else.', 'download-monitor' ); ?></p>
+		</div>
+		<?php
+	}
+
 
 
 	/**
@@ -106,7 +146,8 @@ class DLM_Settings_Page {
 		// print global notices
 		$this->print_global_notices();
 		?>
-		<div class="wrap dlm-admin-settings">
+		<div class="wrap dlm-admin-settings <?php echo esc_attr( $tab ); ?>">
+			<hr class="wp-header-end">
 			<form method="post" action="options.php">
 
 				<?php $this->generate_tabs( $settings ); ?>
@@ -137,7 +178,7 @@ class DLM_Settings_Page {
 									<a href="<?php echo esc_url( add_query_arg( array(
 											'tab'     => $tab,
 											'section' => $section_key
-									), DLM_Admin_Settings::get_url() ) ); ?>"><?php echo esc_html( $section['title'] ); ?></a></liM>
+									), DLM_Admin_Settings::get_url() ) ); ?>"><?php echo esc_html( $section['title'] ); ?><?php echo isset( $section['badge'] ) ?  '<span class="dlm-upsell-badge">PRO</span>' : ''; ?></a></li>
 								<?php endforeach; ?>
 							</ul>
 								</div><!--.wp-clearfix-->
@@ -146,6 +187,7 @@ class DLM_Settings_Page {
 						}
 
 						//echo '<div id="settings-' . sanitize_title( $key ) . '" class="settings_panel">';
+						do_action( 'dlm_tab_section_content_' . $active_section,  $settings );
 
 						if ( isset( $settings[ $tab ]['sections'][ $active_section ]['fields'] ) && ! empty( $settings[ $tab ]['sections'][ $active_section ]['fields'] ) ) {
 
@@ -254,6 +296,10 @@ class DLM_Settings_Page {
 		add_action( 'in_admin_header', array( $this, 'dlm_page_header' ) );
 
 		add_filter( 'dlm_page_header', array( $this, 'page_header_locations' ) );
+
+		add_filter( 'dlm_settings', array( $this, 'access_files_checker_field' ) );
+
+		add_filter( 'dlm_settings', array( $this, 'robots_files_checker_field' ) );
 	}
 
 	/**
@@ -270,7 +316,7 @@ class DLM_Settings_Page {
 		?>
 		<div class="dlm-page-header <?php echo ( $extra_class ) ? esc_attr( $extra_class ) : ''; ?>">
 			<div class="dlm-header-logo">
-				
+
 				<img src="<?php echo esc_url( DLM_URL . 'assets/images/logo.png' ); ?>" class="dlm-logo" />
 			</div>
 			<div class="dlm-header-links">
@@ -312,7 +358,7 @@ class DLM_Settings_Page {
 	private
 	function generate_tabs( $settings ) {
 
-		
+
 		?>
 		<h2 class="nav-tab-wrapper">
 			<?php
@@ -321,7 +367,7 @@ class DLM_Settings_Page {
 				// backwards compatibility for when $section did not have 'title' index yet (it simply had the title set at 0)
 				$title = ( isset( $section['title'] ) ? $section['title'] : $section[0] );
 
-				echo '<a href="' . esc_url( add_query_arg( 'tab', $key, DLM_Admin_Settings::get_url() ) ) . '" class="nav-tab' . ( ( $this->get_active_tab() === $key ) ? ' nav-tab-active' : '' ) . '">' . esc_html( $title ) . ( isset( $section['badge'] ) ? ' <span class="dlm-upsell-badge">PRO</span>' : '' ) . '</a>';
+				echo '<a href="' . esc_url( add_query_arg( 'tab', $key, DLM_Admin_Settings::get_url() ) ) . '" class="nav-tab' . ( ( $this->get_active_tab() === $key ) ? ' nav-tab-active' : '' ) . '">' . esc_html( $title ) . ( ( isset( $section['badge'] ) && true === $section['badge'] ) ? ' <span class="dlm-upsell-badge">PRO</span>' : '' ) . '</a>';
 			}
 			?>
 		</h2>
@@ -365,5 +411,297 @@ class DLM_Settings_Page {
 		return ( ! empty( $_GET['section'] ) ? sanitize_title( wp_unslash($_GET['section']) ) : $this->array_first_key( $sections ) );
 	}
 
+	/**
+	 * Function used to regenerate the .htaccess for the dlm_uploads folder
+	 *
+	 * @return void
+	 * 
+	 * @since 4.5.5
+	 */
+	private function regenerate_protection(){
+		$upload_dir = wp_upload_dir();
 
+		$htaccess_path = $upload_dir['basedir'] . '/dlm_uploads/.htaccess';
+		$index_path = $upload_dir['basedir'] . '/dlm_uploads/index.html';
+
+		//remove old htaccess and index files 
+		if ( file_exists( $htaccess_path ) ) {
+			unlink( $htaccess_path );
+		}
+		if ( file_exists( $index_path ) ) {
+			unlink( $index_path );
+		}
+
+		//generate new htaccess and index files
+		$this->directory_protection();
+
+		//check if the files were created.
+		if ( file_exists( $htaccess_path ) && file_exists( $index_path ) ) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Add setting to check if the .htaccess file is there
+	 *
+	 * @param Array $settings
+	 * @return void
+	 * 
+	 * @since 4.5.5
+	 */
+	public function access_files_checker_field( $settings ){
+
+		if ( ! self::check_if_dlm_settings() ) {
+			return $settings;
+		}
+
+		$upload_dir    = wp_upload_dir();
+		$htaccess_path = $upload_dir['basedir'] . '/dlm_uploads/.htaccess';
+		$icon          = 'dashicons-dismiss';
+		$icon_color    = '#f00';
+		$icon_text     = __( 'Htaccess is missing.', 'download-monitor' );
+
+		if ( file_exists( $htaccess_path ) ) {
+			$icon       = 'dashicons-yes-alt';
+			$icon_color = '#00A32A';
+			$icon_text  = __( 'You are protected by htaccess.', 'download-monitor' );
+		}
+
+		if ( stristr( sanitize_text_field( wp_unslash( $_SERVER['SERVER_SOFTWARE'] ) ), 'nginx' ) !== false ) {
+
+			$upload_path = str_replace( sanitize_text_field( wp_unslash( $_SERVER['DOCUMENT_ROOT'] ) ), '', $upload_dir['basedir'] );
+			$nginx_rules = "<code class='dlm-code-nginx-rules'>location " . $upload_path . "/dlm_uploads {<br />deny all;<br />return 403;<br />}</code>";
+
+			$nginx_text =  sprintf( __( 'Please add the following rules to your nginx config to disable direct file access: %s', 'download-monitor'), wp_kses_post( $nginx_rules ) );
+
+			$icon       = 'dashicons-dismiss';
+			$icon_color = '#f00';
+			$icon_text  = sprintf( __( 'Because your server is running on nginx, our .htaccess file can\'t protect your downloads. %s', 'download-monitor' ), $nginx_text );
+			$disabled   = true;
+		}
+
+		$settings['advanced']['sections']['misc']['fields'][] = array(
+			'name'       => 'dlm_regenerate_protection',
+			'label'      => __( 'Regenerate protection for uploads folder', 'download-monitor' ),
+			'desc'       => __( 'Regenerates the .htaccess file.', 'download-monitor' ),
+			'link'       => admin_url( 'edit.php?post_type=dlm_download&page=download-monitor-settings' ) . '&tab=advanced&section=misc',
+			'icon'       => $icon,
+			'icon-color' => $icon_color,
+			'icon-text'  => $icon_text,
+			'disabled'   => isset( $disabled ) ? 'true' : 'false',
+			'type'       => 'htaccess_status',
+			'priority'   => 30
+		);
+
+		return $settings;
+	}
+
+	/**
+	 * Protect the upload dir on activation.
+	 *
+	 * @access public
+	 * @return void
+	 * 
+	 * @since 4.5.5 // Copied from Installer.php
+	 */
+	private function directory_protection() {
+
+		// Install files and folders for uploading files and prevent hotlinking
+		$upload_dir = wp_upload_dir();
+
+		$htaccess_content = "# Apache 2.4 and up
+<IfModule mod_authz_core.c>
+Require all denied
+</IfModule>
+
+# Apache 2.3 and down
+<IfModule !mod_authz_core.c>
+Order Allow,Deny
+Deny from all
+</IfModule>";
+
+		$files = array(
+			array(
+				'base'    => $upload_dir['basedir'] . '/dlm_uploads',
+				'file'    => '.htaccess',
+				'content' => $htaccess_content
+			),
+			array(
+				'base'    => $upload_dir['basedir'] . '/dlm_uploads',
+				'file'    => 'index.html',
+				'content' => ''
+			)
+		);
+
+		foreach ( $files as $file ) {
+			if ( wp_mkdir_p( $file['base'] ) && ! file_exists( trailingslashit( $file['base'] ) . $file['file'] ) ) {
+				if ( $file_handle = @fopen( trailingslashit( $file['base'] ) . $file['file'], 'w' ) ) {
+					fwrite( $file_handle, $file['content'] );
+					fclose( $file_handle );
+				}
+			}
+		}
+	}
+
+	/**
+	 * Add setting to check if the robots.txt file is there
+	 *
+	 * @param Array $settings
+	 * @return array
+	 *
+	 * @since 4.5.9
+	 */
+	public function robots_files_checker_field( $settings ) {
+
+		if ( ! self::check_if_dlm_settings() ) {
+			return $settings;
+		}
+
+		$transient = get_transient( 'dlm_robots_txt' );
+
+		if( !$transient ){
+			$robots_file = "{$_SERVER['DOCUMENT_ROOT']}/robots.txt";
+			$page = wp_remote_get( get_home_url() . '/robots.txt');
+			$has_virtual_robots = 'undetermined';
+
+			if ( ! is_wp_error( $page ) && is_array( $page ) ) {
+				$has_virtual_robots = false !== strpos( $page['headers']['content-type'], 'text/plain' );
+			}
+		}
+
+
+		if ( ( !$transient ) && ! file_exists( $robots_file ) ) {
+			$icon       = 'dashicons-dismiss';
+			$icon_color = '#f00';
+			$icon_text  = __( 'Robots.txt is missing.', 'download-monitor' );
+			$transient['virtual'] = false;
+
+			if ( $has_virtual_robots && 'undetermined' !== $has_virtual_robots ) {
+				$transient['virtual'] = true;
+				$icon_text  = __( 'Robots.txt file is missing but site has virtual Robots.txt file. If you regenerate this you will loose the restrictions set in the virtual one. Please either update the virtual with the corresponding rules for dlm_uploads or regenerate and update the newly created one with the contents from the virtual file.', 'download-monitor' );
+				$transient['text'] = $icon_text;
+			}
+
+			if ( $has_virtual_robots && 'undetermined' === $has_virtual_robots ) {
+				$transient['virtual'] = 'maybe';
+				$icon_text  = __( 'Robots.txt file is missing but site may have virtual Robots.txt file. If you regenerate this you will loose the restrictions set in the virtual one. Please either update the virtual with the corresponding rules for dlm_uploads or regenerate and update the newly created one with the contents from the virtual file.', 'download-monitor' );
+				$transient['text'] = $icon_text;
+			}
+		} else {
+			if( !$transient ){
+				$content = file_get_contents( $robots_file );
+				if ( stristr( $content, 'dlm_uploads' ) ) {
+					$icon       = 'dashicons-yes-alt';
+					$icon_color = '#00A32A';
+					$icon_text  = __( 'You are protected by robots.txt.', 'download-monitor' );
+					$transient['protected'] = true;
+					$transient['icon'] = $icon;
+					$transient['icon_color'] = $icon_color;
+					$transient['text'] = $icon_text;
+				} else {
+					$icon       = 'dashicons-dismiss';
+					$icon_color = '#f00';
+					$icon_text  = __( 'Robots.txt file exists but dlm_uploads folder is not protected.', 'download-monitor' );
+					$transient['protected'] = false;
+					$transient['icon'] = $icon;
+					$transient['icon_color'] = $icon_color;
+					$transient['text'] = $icon_text;
+				}
+			}
+
+		}
+
+		$settings['advanced']['sections']['misc']['fields'][] = array(
+			'name'       => 'dlm_regenerate_robots',
+			'label'      => __( 'Regenerate crawler protection for uploads folder', 'download-monitor' ),
+			'desc'       => __( 'Regenerates the robots.txt file.', 'download-monitor' ),
+			'link'       => admin_url( 'edit.php?post_type=dlm_download&page=download-monitor-settings' ) . '&tab=advanced&section=misc',
+			'icon'       => $transient['icon'],
+			'icon-color' => $transient['icon_color'],
+			'icon-text'  => $transient['text'],
+			'disabled'   => isset( $disabled ) ? 'true' : 'false',
+			'type'       => 'htaccess_status',
+			'priority'   => 40
+		);
+
+		set_transient( 'dlm_robots_txt', $transient, DAY_IN_SECONDS );
+		return $settings;
+	}
+
+	/**
+	 * Function used to regenerate the robots.txt for the dlm_uploads folder
+	 *
+	 * @return void
+	 * 
+	 * @since 4.5.9
+	 */
+	private function regenerate_robots(){
+
+		delete_transient( 'dlm_robots_txt' );
+
+		$robots_file = "{$_SERVER['DOCUMENT_ROOT']}/robots.txt";
+		if( ! file_exists( $robots_file ) ) {
+			$txt        = 'User-agent: *' . "\n" . 'Disallow: /dlm_uploads/';
+			$dlm_robots = fopen( $robots_file, "w" );
+			fwrite( $dlm_robots, $txt );
+
+			return true;
+
+		} else {
+
+			$content = file_get_contents( $robots_file );
+			if ( ! stristr( $content, 'dlm_uploads' ) ) {
+
+				$dlm_robots = fopen( $robots_file, "w" );
+				$txt        = 'User-agent: *' . "\n" . 'Disallow: /dlm_uploads/' . "\n\n" . $content;
+
+				fwrite( $dlm_robots, $txt );
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Undocumented function
+	 *
+	 * @return void
+	 */
+	public function redo_upgrade() {
+
+		global $wp, $wpdb, $pagenow;
+
+		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
+			return false;
+		}
+
+		// Drop the dlm_reports_log
+		$drop_statement = "DROP TABLE IF EXISTS {$wpdb->prefix}dlm_reports_log";
+		$wpdb->query( $drop_statement );
+
+		// Delete upgrade history and set the need DB pgrade
+		delete_option( 'dlm_db_upgraded' );
+		set_transient( 'dlm_needs_upgrade', '1', 30 * DAY_IN_SECONDS );
+
+		return true;
+	}
+
+	/**
+	 * Check if this is Download Monitor's settings page
+	 *
+	 * @return bool
+	 */
+	public static function check_if_dlm_settings() {
+
+		if ( ! isset( $_GET['post_type'] ) || 'dlm_download' !== $_GET['post_type'] || ! isset( $_GET['page'] ) || 'download-monitor-settings' !== $_GET['page'] ) {
+			return false;
+		}
+
+		return true;
+	}
 }
+
+
+

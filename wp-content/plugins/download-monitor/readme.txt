@@ -2,8 +2,8 @@
 Contributors: wpchill, silkalns, barrykooij, mikejolley
 Tags: download manager, document management, file manager, digital store, ecommerce, document management plugin,  download monitor, download counter, password protection, download protection, password, protect downloads, tracker, sell, shop, ecommerce, paypal
 Requires at least: 5.4
-Tested up to: 5.8
-Stable tag: 4.4.13
+Tested up to: 6.0
+Stable tag: 4.5.94
 License: GPLv3
 Text Domain: -
 Requires PHP: 5.6
@@ -29,6 +29,7 @@ Download Monitor provides an interface for uploading and managing downloadable f
 * Member only downloads, requires users to be logged in to download your files.
 * Customisable endpoints for showing pretty download links.
 
+Download Monitor has been featured on the websites of some of the most popular and leading businesses in the WordPress ecosystem, such as WPBeginner, Pagely, Jilt, WP Fusion & Kinsta.
 
 > #### Download Monitor Extensions
 > Extend the core Download Monitor plugin with it's powerful extensions.
@@ -48,9 +49,9 @@ We have a large Knowledge Base on our [Download Monitor website](https://www.dow
 
 Are you a new Download Monitor user? Read these articles on how to get your files ready for download with Download Monitor:
 
-1. [How to install Download Monitor](https://www.download-monitor.com/kb/installation/?utm_source=wp-plugin-repo&utm_medium=link&utm_campaign=description-documentation)
-2. [How to add your first download in Download Monitor](https://www.download-monitor.com/kb/adding-downloads/?utm_source=wp-plugin-repo&utm_medium=link&utm_campaign=description-documentation)
-3. [How to list your first download on your website with the download shortcode](https://www.download-monitor.com/kb/shortcode-download/?utm_source=wp-plugin-repo&utm_medium=link&utm_campaign=description-documentation)
+1. [How to install Download Monitor](https://www.download-monitor.com/kb/install-and-activate-download-monitor//?utm_source=wp-plugin-repo&utm_medium=link&utm_campaign=description-documentation)
+2. [How to add your first download in Download Monitor](https://www.download-monitor.com/kb/adding-downloads-to-your-website/?utm_source=wp-plugin-repo&utm_medium=link&utm_campaign=description-documentation)
+3. [How to list your first download on your website with the download shortcode](https://www.download-monitor.com/kb/shortcode-downloads/?utm_source=wp-plugin-repo&utm_medium=link&utm_campaign=description-documentation)
 
 More advanced topics that a lot of people find interesting:
 
@@ -60,15 +61,13 @@ More advanced topics that a lot of people find interesting:
 
 = Contributing and reporting bugs =
 
-You can contribute code to this plugin via GitHub: [https://github.com/download-monitor/download-monitor](https://github.com/download-monitor/download-monitor)
+You can contribute code to this plugin via GitHub: [https://github.com/WPChill/download-monitor](https://github.com/WPChill/download-monitor)
 
 You can contribute localizations via Transifex [https://www.transifex.com/projects/p/download-monitor/](https://www.transifex.com/projects/p/download-monitor/)
 
 = Support =
 
-Use the WordPress.org forums for community support. If you spot a bug, you can of course log it on [Github](https://github.com/download-monitor/download-monitor) instead where we can act upon it more efficiently.
-
-Unfortunately we can't offer you help with a customisation. Please consider hiring a developer for your website's customizations.
+Use the WordPress.org forums for community support. If you spot a bug, you can of course log it on [Github](https://github.com/WPChill/download-monitor/issues/new/choose) instead where we can act upon it more efficiently.
 
 == Installation ==
 
@@ -121,6 +120,116 @@ More documentation can be found in our [Knowledge Base](https://www.download-mon
 4. The quick add panel can be opened via a link about the post editor. This lets you quickly add a file and insert it into a post.
 
 == Changelog ==
+
+= 4.5.94 - 31.05.2022 =
+Changed: Remove Duplicator Upsells ( https://github.com/WPChill/download-monitor/issues/959 )
+Fixed: Download url not working while permalinks are set to plain ( https://github.com/WPChill/download-monitor/issues/964 )
+Fixed: User IPs now showing in logs/download notification emails ( https://github.com/WPChill/download-monitor/issues/965 )
+
+= 4.5.93 - 25.05.2022 =
+Fixed: Robots.txt check on all pages ( https://github.com/WPChill/download-monitor/issues/937 )
+Added: "No file provided" notification in download admin listing for "empty" downloads ( https://github.com/WPChill/download-monitor/issues/887 )
+Added: Product ID in admin DLM products listing ( https://github.com/WPChill/download-monitor/issues/885 )
+Fixed: Downloads hanging at 99% in multi-threaded mode ( https://github.com/WPChill/download-monitor/issues/816 )
+Fixed: Critical error on quick-editing a Download/Product ( https://github.com/WPChill/download-monitor/issues/906 )
+Changed: Onboarding page ( https://github.com/WPChill/download-monitor/issues/820 )
+Changed: Partition the Download Monitor's menu into groups ( https://github.com/WPChill/download-monitor/issues/776 )
+Fixed: the_title filter too few arguments ( https://github.com/WPChill/download-monitor/issues/908 )
+Added: Notice for BETA testers ( https://github.com/WPChill/download-monitor/issues/951 )
+
+= 4.5.92 - 11.04.2022 =
+Fixed: Missing Files/Access denied for users with out of root wp-content ( https://github.com/WPChill/download-monitor/issues/888 )
+Added: New setting for out of root/uploads directory for files to be downloaded
+
+= 4.5.91 - 05.04.2022 =
+Fixed: Error when checking for robots.txt file ( https://github.com/WPChill/download-monitor/issues/883 )
+
+= 4.5.9 - 05.04.2022 =
+Fixed: Security issues regarding file downloads and download titles
+Added: Option to not count admin downloads. ( https://github.com/WPChill/download-monitor/issues/854 )
+Added: No-index/no-follow header for redirect to file option ( https://github.com/WPChill/download-monitor/issues/879 )
+Added: Welcome banner on activation ( https://github.com/WPChill/download-monitor/issues/874 )
+Added: Robots.txt generation/protection setting ( https://github.com/WPChill/download-monitor/issues/878 )
+Added: Metabox and shortcode column for products ( https://github.com/WPChill/download-monitor/issues/866 )
+Fixed: Error downloading files if the files have been modified directly using a File Manager and the Download has not been updated ( https://github.com/WPChill/download-monitor/issues/860 )
+Fixed: Polyfill DateTimeImmutable __set_state array initialization
+
+= 4.5.8 - 28.03.2022 =
+Fixed: Upgrade to PRO now disappears when all extensions installed ( https://github.com/WPChill/download-monitor/issues/875 )
+
+= 4.5.7 - 21.03.2022 =
+Changed: Removed Download Duplicator from LITE vs PRO page ( https://github.com/WPChill/download-monitor/issues/872 )
+Changed: Versions from Gutenberg block now mention `n/a #id` as title if they are non-versioned ( https://github.com/WPChill/download-monitor/issues/873 )
+Added: Upgrade to pro link in plugins page ( https://github.com/WPChill/download-monitor/issues/870 )
+Added: do_action in shortcodes so we can add scripts only if shortcode is present ( https://github.com/WPChill/download-monitor/issues/868 )
+Change: members_only column to locked_downloads in admin listing table and added filters so we can override from extensions ( https://github.com/WPChill/download-monitor/issues/867 )
+
+= 4.5.6 - 14.03.2022 =
+Fixed: Endpoint changing value notice and flushing permalinks on endpoint change ( https://github.com/WPChill/download-monitor/issues/801 )
+Fixed: Place back the categories column in admin list view and change the copy shortcode functionality ( https://github.com/WPChill/download-monitor/issues/821 )
+Changed: Removed thumb column from Admin list table
+Fixed: PolyLang compatibility ( https://github.com/WPChill/download-monitor/issues/733 )
+Changed: Uploader enhancement ( https://github.com/WPChill/download-monitor/issues/869 )
+
+= 4.5.5 - 08.03.2022 =
+* Fixed: Uninstall now completely removes everything based on selection ( https://github.com/WPChill/download-monitor/issues/761 )
+* Added: New option to display featured downloads for the [downloads] shortcode ( https://github.com/WPChill/download-monitor/issues/624)
+* Added: Shortcode visible on all downloads page ( #821 )
+* Fixed: Set our own orderby param on Admin Dashboard ( https://github.com/WPChill/download-monitor/issues/809 )
+* Fixed: PayPal - new API ( https://github.com/WPChill/download-monitor/issues/861, https://github.com/WPChill/download-monitor/issues/796, https://github.com/WPChill/download-monitor/issues/665, https://github.com/WPChill/download-monitor/issues/636 )
+* Fixed: Direct upload button ( https://github.com/WPChill/download-monitor/issues/863 )
+* Fixed: Escaping on shop e-mail templates
+* Fixed: Issue preventing a product to be added to cart. ( https://github.com/WPChill/download-monitor/issues/865 )
+
+= 4.5.4 - 28.02.2022 =
+Added: Included DLM Download Duplicator as core Download Monitor function ( https://github.com/WPChill/download-monitor/issues/848 )
+Fixed: Insert downloads button ( https://github.com/WPChill/download-monitor/issues/811 )
+Fixed: File/Version date error ( https://github.com/WPChill/download-monitor/issues/812 )
+Fixed: Download Monitor endpoint already in use by a page/post ( https://github.com/WPChill/download-monitor/issues/826 )
+Added: Secure attribute on wp_dlm_downloading cookie ( https://github.com/WPChill/download-monitor/issues/592 )
+Fixed: DLM_Admin_Fields esc_attr insead of esc_attr ( https://github.com/WPChill/download-monitor/issues/656 )
+Fixed: Dismissable warnings ( https://github.com/WPChill/download-monitor/issues/680 )
+Fixed: Browse for file should use Wordpress Media Manager ( https://github.com/WPChill/download-monitor/issues/670 )
+Added: Shop enabled - create a new tab ( https://github.com/WPChill/download-monitor/issues/858 )
+Added: Lite vs Pro button in upsells ( https://github.com/WPChill/download-monitor/issues/857 )
+Fixed: Orders submenu entry under the Shop Menu entry ( https://github.com/WPChill/download-monitor/issues/859 )
+
+
+= 4.5.3 - 21.02.2022 =
+Added: LITE vs PRO page - https://github.com/WPChill/download-monitor/issues/851
+Changed: Extensions UI/texts update ( -https://github.com/WPChill/download-monitor/issues/846, https://github.com/WPChill/download-monitor/issues/849, https://github.com/WPChill/download-monitor/issues/838 )
+Fixed: Escaping the excerpt - https://github.com/WPChill/download-monitor/issues/790
+Fixed: Error in logs `select user` filter if user was deleted - https://github.com/WPChill/download-monitor/issues/828
+Added: Setting to disable file browser - https://github.com/WPChill/download-monitor/issues/469
+Fixed: Translation & escaping fixes
+
+= 4.5.2 - 16.02.2022 =
+Fixed: Reports date selection bug - ( https://github.com/WPChill/download-monitor/issues/823 )
+Fixed: Extensions page view on Safari
+
+= 4.5.1 - 31.01.2022 =
+Removed: Removed plugin updater from lite.
+
+= 4.5.0 - 26.01.2022 =
+Fixed: Style missing in `[downloads]` shortcode - ( https://wordpress.org/support/topic/box-template-styling-stopped-displaying/ )
+Fixed:  Downloads not being filtered by categories - https://github.com/WPChill/download-monitor/issues/815
+Fixed: Missing admin.css file for Download Monitor admin header in category edit page - https://github.com/WPChill/download-monitor/issues/817
+Changed: Category link in Downloads view table will now work similar to Posts and keep already set filters - https://github.com/WPChill/download-monitor/issues/818
+Changed: Minor sanitization and escaping fix
+Changed: Redo public taxonomies ( https://github.com/WPChill/download-monitor/issues/775 )
+
+= 4.4.14 - 12.01.2022 =
+Added: Filter 'dlm_filemanager_get_file_name' to filter the displayed file name.
+Fixed: Check if there are pages/posts/cpt with the same slug as the endpoint ( https://github.com/WPChill/download-monitor/issues/774 )
+Added: Filter 'dlm_completed_order_download' to filter download button in checkout page.
+Added: DLM Rest Routes for dlm_download, dlm_download_category & dlm_download_tag
+Fixed: Changed the escaping method to allow some html tags to be inserted in the title ( https://github.com/WPChill/download-monitor/issues/783 )
+Changed: The "View" category button in Downloads > Categories should not exist ( https://github.com/WPChill/download-monitor/issues/775 )
+Added: Upsells in admin download page options metabox ( https://github.com/WPChill/download-monitor/issues/780 )
+Fixed: Fixed a typo in settings. ( https://github.com/WPChill/download-monitor/issues/663 )
+Added: Quick copy button in download page. ( https://github.com/WPChill/download-monitor/issues/717 )
+Fixed: Wrong post_type in url. Coud not see order details. ( https://github.com/WPChill/download-monitor/issues/788 )
+Changed: The plugin's css will only load when the shortcode is present. ( https://github.com/WPChill/download-monitor/issues/782 )
 
 = 4.4.13 - 16.11.2021 =
 Fixed: Fatal error because an extra semicolon
