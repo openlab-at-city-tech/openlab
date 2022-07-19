@@ -3,6 +3,7 @@
 namespace Advanced_Sidebar_Menu\Menus;
 
 use Advanced_Sidebar_Menu\Core;
+use Advanced_Sidebar_Menu\Traits\Memoize;
 use Advanced_Sidebar_Menu\Walkers\Category_Walker;
 
 /**
@@ -12,17 +13,12 @@ use Advanced_Sidebar_Menu\Walkers\Category_Walker;
  * @since  7.0.0
  */
 class Category extends Menu_Abstract {
+	use Memoize;
+
 	const WIDGET = 'category';
 
 	const DISPLAY_ON_SINGLE     = 'single';
 	const EACH_CATEGORY_DISPLAY = 'new_widget';
-
-	/**
-	 * Parents and grandparents of current term.
-	 *
-	 * @var array
-	 */
-	public $ancestors = [];
 
 	/**
 	 * Top_level_term.
@@ -93,12 +89,48 @@ class Category extends Menu_Abstract {
 
 
 	/**
+	 * Get all ancestor of the current term or terms assigned
+	 * to the current post.
+	 *
+	 * @since 8.8.0
+	 *
+	 * @return array
+	 */
+	public function get_current_ancestors() {
+		return $this->once( function() {
+			$included = $this->get_included_term_ids();
+			$ancestors = [];
+			foreach ( $included as $term_id ) {
+				$term_ancestors = \array_reverse( get_ancestors( $term_id, $this->get_taxonomy(), 'taxonomy' ) );
+				// All the post's assigned categories are considered ancestors.
+				if ( ! $this->is_tax() ) {
+					$term_ancestors[] = $term_id;
+				}
+				$ancestors[] = $term_ancestors;
+			}
+
+			return \array_merge( ...$ancestors );
+		}, __METHOD__, [] );
+	}
+
+
+	/**
+	 * Get the current item if available.
+	 *
+	 * @since 8.8.0
+	 *
+	 * @return ?\WP_Term
+	 */
+	public function get_current_term() {
+		if ( $this->is_tax() ) {
+			return get_queried_object();
+		}
+		return null;
+	}
+
+
+	/**
 	 * Get the first level child terms.
-	 *
-	 * $this->set_current_top_level_term() most likely should be called
-	 * before this.
-	 *
-	 * @see \Advanced_Sidebar_Menu\Menus\Category::set_current_top_level_term()
 	 *
 	 * @return \WP_Term[]
 	 */
@@ -281,14 +313,27 @@ class Category extends Menu_Abstract {
 	public function is_tax() {
 		$taxonomy = $this->get_taxonomy();
 		if ( 'category' === $taxonomy ) {
-			if ( is_category() ) {
-				return true;
-			}
-		} elseif ( is_tax( $taxonomy ) ) {
-			return true;
+			return is_category();
 		}
 
-		return false;
+		return is_tax( $taxonomy );
+	}
+
+
+	/**
+	 * Is a term our current top level term?
+	 *
+	 * @param \WP_Term $term - Term to check against.
+	 *
+	 * @since 8.8.0
+	 *
+	 * @return bool
+	 */
+	public function is_current_top_level_term( \WP_Term $term ) {
+		if ( null === $this->top_level_term ) {
+			return false;
+		}
+		return ( (int) $term->term_id ) === ( (int) $this->top_level_term->term_id );
 	}
 
 
@@ -330,31 +375,41 @@ class Category extends Menu_Abstract {
 	 * @return int
 	 */
 	public function get_highest_parent( $term_id ) {
-		$this->ancestors = \array_reverse( get_ancestors( $term_id, $this->get_taxonomy(), 'taxonomy' ) );
-		// Store current term at the end ancestors for backward compatibility.
-		$this->ancestors[] = $term_id;
+		$ancestors = \array_reverse( get_ancestors( $term_id, $this->get_taxonomy(), 'taxonomy' ) );
+		// Use current term if no ancestors available.
+		$ancestors[] = $term_id;
 
-		return reset( $this->ancestors );
+		return reset( $ancestors );
 	}
 
 
 	/**
-	 * If a category has children add the 'has_children' class
-	 * to the list item.
+	 * Add various classes to category item to define it among levels
+	 * as well as current item state.
 	 *
-	 * @param array    $classes - List of classes added to category list item.
+	 * @param array    $classes  - List of classes added to category list item.
 	 * @param \WP_Term $category - Current category.
 	 *
 	 * @filter category_css_class 11 2
 	 *
 	 * @return array
 	 */
-	public function add_has_children_category_class( $classes, $category ) {
+	public function add_list_item_classes( $classes, $category ) {
+		$classes[] = 'menu-item';
 		if ( $this->has_children( $category ) ) {
 			$classes[] = 'has_children';
 		}
 
-		return array_unique( $classes );
+		if ( $this->is_current_term( $category ) ) {
+			$classes[] = 'current-menu-item';
+		} else {
+			$current = $this->get_current_term();
+			if ( null !== $current && $current->parent === $category->term_id ) {
+				$classes[] = 'current-menu-parent';
+			}
+		}
+
+		return \array_unique( $classes );
 	}
 
 
@@ -381,6 +436,23 @@ class Category extends Menu_Abstract {
 
 
 	/**
+	 * Is a term the currently viewed term?
+	 *
+	 * @param \WP_Term $term - Term to check against.
+	 *
+	 * @since 8.8.0
+	 *
+	 * @return bool
+	 */
+	public function is_current_term( \WP_Term $term ) {
+		if ( ! $this->is_tax() ) {
+			return false;
+		}
+		return get_queried_object_id() === $term->term_id;
+	}
+
+
+	/**
 	 * Is this term an ancestor of the current term?
 	 * Does this term have children?
 	 *
@@ -390,7 +462,8 @@ class Category extends Menu_Abstract {
 	 */
 	public function is_current_term_ancestor( \WP_Term $term ) {
 		$return = false;
-		if ( (int) $term->term_id === (int) $this->top_level_term->term_id || in_array( $term->term_id, $this->ancestors, false ) ) { //phpcs:ignore WordPress.PHP.StrictInArray.FoundNonStrictFalse
+
+		if ( $this->is_current_top_level_term( $term ) || \in_array( $term->term_id, $this->get_current_ancestors(), true ) ) {
 			$children = get_term_children( $term->term_id, $this->get_taxonomy() );
 			if ( ! empty( $children ) ) {
 				$return = true;
@@ -429,7 +502,7 @@ class Category extends Menu_Abstract {
 			return;
 		}
 
-		add_filter( 'category_css_class', [ $this, 'add_has_children_category_class' ], 11, 2 );
+		add_filter( 'category_css_class', [ $this, 'add_list_item_classes' ], 11, 2 );
 
 		$menu_open = false;
 		$close_menu = false;

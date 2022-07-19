@@ -29,7 +29,7 @@ trait Memoize {
 	 * @param string   $identifier - Something unique to identify the the method being used
 	 *                             so we can determine the difference in the cache.
 	 *                             `__METHOD__` works nicely here.
-	 * @param mixed    $args       - Arguments will be passed to the callback..
+	 * @param mixed    $args       - Arguments will be passed to the callback.
 	 *
 	 * @return mixed
 	 */

@@ -1,13 +1,15 @@
 msgid ""
 msgstr ""
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "Project-Id-Version: Advanced Sidebar Menu\n"
-"POT-Creation-Date: 2021-01-20 11:16-0700\n"
-"PO-Revision-Date: 2021-01-20 11:39-0700\n"
+"POT-Creation-Date: 2021-12-02 08:21-0500\n"
+"PO-Revision-Date: 2021-12-02 08:21-0500\n"
+"Last-Translator: \n"
 "Language-Team: \n"
+"Language: fr_FR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Poedit 2.4.2\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-Flags-xgettext: --add-comments=translators:\n"
@@ -16,12 +18,10 @@ msgstr ""
 "X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
 "esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
 "_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
-"Last-Translator: \n"
-"Language: fr_FR\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: *.js\n"
 
-#: advanced-sidebar-menu.php:132
+#: advanced-sidebar-menu.php:136
 msgid "widget documentation"
 msgstr "documentation widget"
 
@@ -36,11 +36,11 @@ msgstr ""
 "Le menu Sidebar avancé nécessite %1$sAvanced Sidebar Menu PRO%2$s version "
 "%3$s+. Veuillez mettre à jour ou désactiver la version PRO."
 
-#: src/Notice.php:88
+#: src/Notice.php:86
 msgid "Advanced Sidebar Menu PRO"
 msgstr "Advanced Sidebar Menu PRO"
 
-#: src/Notice.php:92
+#: src/Notice.php:90
 msgid ""
 "Styling options including borders, bullets, colors, backgrounds, size, and "
 "font weight."
@@ -48,35 +48,35 @@ msgstr ""
 "Options de style incluant les bordures, les balles, les couleurs, les "
 "arrière-plans, la taille et le poids de la police."
 
-#: src/Notice.php:93
+#: src/Notice.php:91
 msgid "Accordion menus."
 msgstr "Menus accordéon."
 
-#: src/Notice.php:94
+#: src/Notice.php:92
 msgid "Support for custom navigation menus from Appearance -> Menus."
 msgstr "Prise en charge des menus de navigation personnalisés "
 
-#: src/Notice.php:98
+#: src/Notice.php:96
 msgid "Select and display custom post types."
 msgstr "Sélectionnez et affichez les types de postes personnalisés."
 
-#: src/Notice.php:102
+#: src/Notice.php:100
 msgid "Select and display custom taxonomies."
 msgstr "Sélectionnez et affichez des taxonomies personnalisées."
 
-#: src/Notice.php:106
+#: src/Notice.php:104
 msgid "Priority support with access to members only support area."
 msgstr "Soutien prioritaire avec accès aux membres uniquement zone de soutien."
 
-#: src/Notice.php:112
+#: src/Notice.php:110
 msgid "So much more..."
 msgstr "Tellement plus..."
 
-#: src/Notice.php:121
+#: src/Notice.php:119
 msgid "Upgrade"
 msgstr "Mise à jour"
 
-#: src/Notice.php:137
+#: src/Notice.php:127
 msgid "Preview"
 msgstr "Aperçu"
 
@@ -88,8 +88,8 @@ msgstr ""
 "parent"
 
 #: src/Widget/Category.php:58
-msgid "Advanced Sidebar Categories Menu"
-msgstr "Sidebar Catégories Menu Avancée"
+msgid "Advanced Sidebar - Categories"
+msgstr "Advanced Sidebar - Catégories"
 
 #. translators: Selected taxonomy single label
 #: src/Widget/Category.php:123
@@ -158,8 +158,8 @@ msgstr ""
 "Crée un menu de toutes les pages en utilisant la relation enfant/parent"
 
 #: src/Widget/Page.php:54
-msgid "Advanced Sidebar Pages Menu"
-msgstr "Advanced Sidebar Menu Des Pages"
+msgid "Advanced Sidebar - Pages"
+msgstr "Advanced Sidebar - Des Pages"
 
 #. translators: Selected post type single label
 #: src/Widget/Page.php:119

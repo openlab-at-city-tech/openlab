@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Advanced Sidebar Menu\n"
-"POT-Creation-Date: 2021-01-20 11:19-0700\n"
-"PO-Revision-Date: 2021-01-20 11:23-0700\n"
+"POT-Creation-Date: 2021-12-02 08:20-0500\n"
+"PO-Revision-Date: 2021-12-02 08:20-0500\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: es_ES\n"
@@ -21,7 +21,7 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: *.js\n"
 
-#: advanced-sidebar-menu.php:132
+#: advanced-sidebar-menu.php:136
 msgid "widget documentation"
 msgstr "documentación del widget"
 
@@ -36,11 +36,11 @@ msgstr ""
 "Advanced Sidebar Menu requiere %1$sAdvanced Sidebar Menu PRO%2$s versión %3$s"
 "+. Actualice o desactive la versión PRO."
 
-#: src/Notice.php:88
+#: src/Notice.php:86
 msgid "Advanced Sidebar Menu PRO"
 msgstr "Advanced Sidebar Menu PRO"
 
-#: src/Notice.php:92
+#: src/Notice.php:90
 msgid ""
 "Styling options including borders, bullets, colors, backgrounds, size, and "
 "font weight."
@@ -48,35 +48,35 @@ msgstr ""
 "Opciones de estilo que incluyen bordes, viñetas, colores, fondos, tamaño y "
 "peso de fuente."
 
-#: src/Notice.php:93
+#: src/Notice.php:91
 msgid "Accordion menus."
 msgstr "Menús de acordeón."
 
-#: src/Notice.php:94
+#: src/Notice.php:92
 msgid "Support for custom navigation menus from Appearance -> Menus."
 msgstr "Compatibilidad con menús de navegación personalizados."
 
-#: src/Notice.php:98
+#: src/Notice.php:96
 msgid "Select and display custom post types."
 msgstr "Seleccione y muestre los tipos de mensajes personalizados."
 
-#: src/Notice.php:102
+#: src/Notice.php:100
 msgid "Select and display custom taxonomies."
 msgstr "Seleccione y muestre taxonomías personalizadas."
 
-#: src/Notice.php:106
+#: src/Notice.php:104
 msgid "Priority support with access to members only support area."
 msgstr "Soporte prioritario con acceso a los miembros solo área de apoyo."
 
-#: src/Notice.php:112
+#: src/Notice.php:110
 msgid "So much more..."
 msgstr "Mucho más..."
 
-#: src/Notice.php:121
+#: src/Notice.php:119
 msgid "Upgrade"
 msgstr "Actualizar"
 
-#: src/Notice.php:137
+#: src/Notice.php:127
 msgid "Preview"
 msgstr "Vista previa"
 
@@ -86,8 +86,8 @@ msgid ""
 msgstr "Crea un menú de todas las categorías utilizando la relación hijo/padre"
 
 #: src/Widget/Category.php:58
-msgid "Advanced Sidebar Categories Menu"
-msgstr "Menú Categorías Advanced Sidebar"
+msgid "Advanced Sidebar - Categories"
+msgstr "Advanced Sidebar - Categorías"
 
 #. translators: Selected taxonomy single label
 #: src/Widget/Category.php:123
@@ -155,8 +155,8 @@ msgid "Creates a menu of all the pages using the child/parent relationship"
 msgstr "Crea un menú de todas las páginas utilizando la relación hijo/padre"
 
 #: src/Widget/Page.php:54
-msgid "Advanced Sidebar Pages Menu"
-msgstr "Menú Páginas Advanced Sidebar"
+msgid "Advanced Sidebar - Pages"
+msgstr "Advanced Sidebar - Páginas"
 
 #. translators: Selected post type single label
 #: src/Widget/Page.php:119
