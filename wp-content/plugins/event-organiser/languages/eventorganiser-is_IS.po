@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-12 23:08+0000\n"
+"POT-Creation-Date: 2022-03-30 22:40+0000\n"
 "PO-Revision-Date: 2016-12-06T20:43:36+00:00\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -59,7 +59,7 @@ msgid "Include 'Add To Google' link"
 msgstr "Birta 'Bæta við Google' slóð"
 
 #: classes/class-eo-agenda-widget.php:140 event-organiser-edit.php:151
-#: includes/event-organiser-event-functions.php:1382
+#: includes/event-organiser-event-functions.php:1388
 msgid "All day"
 msgstr "Heils dags"
 
@@ -258,7 +258,7 @@ msgstr "Flokkar viðburða"
 
 #: classes/class-eo-widget-categories.php:25
 #: includes/event-organiser-cpt.php:95 includes/event-organiser-cpt.php:106
-#: includes/event-organiser-event-functions.php:1563
+#: includes/event-organiser-event-functions.php:1569
 #: templates/event-meta-event-single.php:62
 msgid "Categories"
 msgstr "Flokkar"
@@ -299,7 +299,7 @@ msgstr "Staðsetning:"
 msgid "Select Venue"
 msgstr "Velja staðsetningu"
 
-#: classes/class-eventorganiser-shortcodes.php:464
+#: classes/class-eventorganiser-shortcodes.php:472
 msgid "There is no excerpt because this is a protected post."
 msgstr "Enginn útdráttur er til fyrir ritvarða færslu."
 
@@ -383,7 +383,7 @@ msgid "24 hour time"
 msgstr "24 tíma klukka"
 
 #: event-organiser-calendar.php:256
-#: includes/event-organiser-event-functions.php:1500
+#: includes/event-organiser-event-functions.php:1506
 msgid "Loading&#8230;"
 msgstr "Hleður inn..."
 
@@ -655,7 +655,7 @@ msgid "day of week"
 msgstr "vikudagur"
 
 #: event-organiser-edit.php:225
-#: includes/event-organiser-event-functions.php:856
+#: includes/event-organiser-event-functions.php:862
 #: includes/event-organiser-register.php:307
 msgid "until"
 msgstr "þar til"
@@ -1672,7 +1672,7 @@ msgid "Choose from the most used tags"
 msgstr "Veljið úr vinsælustu tögunum"
 
 #: includes/event-organiser-cpt.php:163
-#: includes/event-organiser-event-functions.php:1571
+#: includes/event-organiser-event-functions.php:1577
 #: templates/event-meta-event-single.php:66
 msgid "Tags"
 msgstr "Tög"
@@ -2042,77 +2042,77 @@ msgstr "Litur"
 msgid "Assign the category a colour."
 msgstr "Setja lit flokks"
 
-#: includes/event-organiser-event-functions.php:777
+#: includes/event-organiser-event-functions.php:783
 #: includes/event-organiser-register.php:313
 msgid "last"
 msgstr "síðasti"
 
-#: includes/event-organiser-event-functions.php:777
+#: includes/event-organiser-event-functions.php:783
 #: includes/event-organiser-register.php:309
 msgid "first"
 msgstr "fyrsti"
 
-#: includes/event-organiser-event-functions.php:777
+#: includes/event-organiser-event-functions.php:783
 #: includes/event-organiser-register.php:310
 msgid "second"
 msgstr "annar"
 
-#: includes/event-organiser-event-functions.php:777
+#: includes/event-organiser-event-functions.php:783
 #: includes/event-organiser-register.php:311
 msgid "third"
 msgstr "þriðji"
 
-#: includes/event-organiser-event-functions.php:777
+#: includes/event-organiser-event-functions.php:783
 #: includes/event-organiser-register.php:312
 msgid "fourth"
 msgstr "fjórði"
 
-#: includes/event-organiser-event-functions.php:787
+#: includes/event-organiser-event-functions.php:793
 msgid "one time only"
 msgstr "aðeins einu sinni"
 
-#: includes/event-organiser-event-functions.php:790
+#: includes/event-organiser-event-functions.php:796
 msgid "custom recurrence"
 msgstr "sérstillt endurtekning"
 
-#: includes/event-organiser-event-functions.php:797
+#: includes/event-organiser-event-functions.php:803
 #: includes/event-organiser-register.php:298
 msgid "every day"
 msgstr "daglega"
 
-#: includes/event-organiser-event-functions.php:799
+#: includes/event-organiser-event-functions.php:805
 #: includes/event-organiser-register.php:299
 #, php-format
 msgid "every %d days"
 msgstr "á %d. daga fresti"
 
-#: includes/event-organiser-event-functions.php:805
+#: includes/event-organiser-event-functions.php:811
 #: includes/event-organiser-register.php:300
 msgid "every week on"
 msgstr "hverja viku á"
 
-#: includes/event-organiser-event-functions.php:807
+#: includes/event-organiser-event-functions.php:813
 #: includes/event-organiser-register.php:301
 #, php-format
 msgid "every %d weeks on"
 msgstr "hverja %d. viku þann"
 
-#: includes/event-organiser-event-functions.php:818
+#: includes/event-organiser-event-functions.php:824
 #: includes/event-organiser-register.php:302
 msgid "every month on the"
 msgstr "hvern mánuð þann"
 
-#: includes/event-organiser-event-functions.php:820
+#: includes/event-organiser-event-functions.php:826
 #: includes/event-organiser-register.php:303
 #, php-format
 msgid "every %d months on the"
 msgstr "hvern %d mánuð þann"
 
-#: includes/event-organiser-event-functions.php:849
+#: includes/event-organiser-event-functions.php:855
 msgid "every year"
 msgstr "hvert ár"
 
-#: includes/event-organiser-event-functions.php:851
+#: includes/event-organiser-event-functions.php:857
 #, php-format
 msgid "every %d years"
 msgstr "hvert %d ár"
@@ -2273,11 +2273,11 @@ msgstr "Ógilt mánaðarskipulag (ógilt raðnúmer)"
 msgid "Event does not contain any dates."
 msgstr "Viðburður án dagsetninga."
 
-#: includes/event.php:1080
+#: includes/event.php:1085
 msgid "Occurrence not deleted. Occurrence not found."
 msgstr "Tilviki ekki eytt. Tilvik fannst ekki."
 
-#: includes/event.php:1136
+#: includes/event.php:1141
 msgid "There is already an occurrence on this date"
 msgstr "Tilvik viðburðar er þegar til á þessum degi"
 

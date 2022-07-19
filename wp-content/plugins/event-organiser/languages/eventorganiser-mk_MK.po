@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-12 23:08+0000\n"
+"POT-Creation-Date: 2022-03-30 22:40+0000\n"
 "PO-Revision-Date: 2016-11-27T01:16:03+00:00\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -56,7 +56,7 @@ msgid "Include 'Add To Google' link"
 msgstr ""
 
 #: classes/class-eo-agenda-widget.php:140 event-organiser-edit.php:151
-#: includes/event-organiser-event-functions.php:1382
+#: includes/event-organiser-event-functions.php:1388
 msgid "All day"
 msgstr "Цел ден"
 
@@ -248,7 +248,7 @@ msgstr ""
 
 #: classes/class-eo-widget-categories.php:25
 #: includes/event-organiser-cpt.php:95 includes/event-organiser-cpt.php:106
-#: includes/event-organiser-event-functions.php:1563
+#: includes/event-organiser-event-functions.php:1569
 #: templates/event-meta-event-single.php:62
 msgid "Categories"
 msgstr "Категории"
@@ -288,7 +288,7 @@ msgstr ""
 msgid "Select Venue"
 msgstr ""
 
-#: classes/class-eventorganiser-shortcodes.php:464
+#: classes/class-eventorganiser-shortcodes.php:472
 msgid "There is no excerpt because this is a protected post."
 msgstr "Нема извадок бидејќи ова е заштитен напис"
 
@@ -370,7 +370,7 @@ msgid "24 hour time"
 msgstr "24 часа"
 
 #: event-organiser-calendar.php:256
-#: includes/event-organiser-event-functions.php:1500
+#: includes/event-organiser-event-functions.php:1506
 msgid "Loading&#8230;"
 msgstr "Вчитување&#8230;"
 
@@ -639,7 +639,7 @@ msgid "day of week"
 msgstr "ден од седмица"
 
 #: event-organiser-edit.php:225
-#: includes/event-organiser-event-functions.php:856
+#: includes/event-organiser-event-functions.php:862
 #: includes/event-organiser-register.php:307
 msgid "until"
 msgstr "до"
@@ -1613,7 +1613,7 @@ msgid "Choose from the most used tags"
 msgstr ""
 
 #: includes/event-organiser-cpt.php:163
-#: includes/event-organiser-event-functions.php:1571
+#: includes/event-organiser-event-functions.php:1577
 #: templates/event-meta-event-single.php:66
 msgid "Tags"
 msgstr ""
@@ -1956,77 +1956,77 @@ msgstr "Боја"
 msgid "Assign the category a colour."
 msgstr "Додели боја на категоријата"
 
-#: includes/event-organiser-event-functions.php:777
+#: includes/event-organiser-event-functions.php:783
 #: includes/event-organiser-register.php:313
 msgid "last"
 msgstr "последен"
 
-#: includes/event-organiser-event-functions.php:777
+#: includes/event-organiser-event-functions.php:783
 #: includes/event-organiser-register.php:309
 msgid "first"
 msgstr "прв"
 
-#: includes/event-organiser-event-functions.php:777
+#: includes/event-organiser-event-functions.php:783
 #: includes/event-organiser-register.php:310
 msgid "second"
 msgstr "втор(а)"
 
-#: includes/event-organiser-event-functions.php:777
+#: includes/event-organiser-event-functions.php:783
 #: includes/event-organiser-register.php:311
 msgid "third"
 msgstr "трет(а)"
 
-#: includes/event-organiser-event-functions.php:777
+#: includes/event-organiser-event-functions.php:783
 #: includes/event-organiser-register.php:312
 msgid "fourth"
 msgstr "четврт(а)"
 
-#: includes/event-organiser-event-functions.php:787
+#: includes/event-organiser-event-functions.php:793
 msgid "one time only"
 msgstr "само еднаш"
 
-#: includes/event-organiser-event-functions.php:790
+#: includes/event-organiser-event-functions.php:796
 msgid "custom recurrence"
 msgstr "друга повторливост"
 
-#: includes/event-organiser-event-functions.php:797
+#: includes/event-organiser-event-functions.php:803
 #: includes/event-organiser-register.php:298
 msgid "every day"
 msgstr "секој ден"
 
-#: includes/event-organiser-event-functions.php:799
+#: includes/event-organiser-event-functions.php:805
 #: includes/event-organiser-register.php:299
 #, php-format
 msgid "every %d days"
 msgstr "Секој %d ден"
 
-#: includes/event-organiser-event-functions.php:805
+#: includes/event-organiser-event-functions.php:811
 #: includes/event-organiser-register.php:300
 msgid "every week on"
 msgstr "секоја седмица на"
 
-#: includes/event-organiser-event-functions.php:807
+#: includes/event-organiser-event-functions.php:813
 #: includes/event-organiser-register.php:301
 #, php-format
 msgid "every %d weeks on"
 msgstr "Секоја %d седмица на"
 
-#: includes/event-organiser-event-functions.php:818
+#: includes/event-organiser-event-functions.php:824
 #: includes/event-organiser-register.php:302
 msgid "every month on the"
 msgstr "секој месец на"
 
-#: includes/event-organiser-event-functions.php:820
+#: includes/event-organiser-event-functions.php:826
 #: includes/event-organiser-register.php:303
 #, php-format
 msgid "every %d months on the"
 msgstr "секој %d месец на"
 
-#: includes/event-organiser-event-functions.php:849
+#: includes/event-organiser-event-functions.php:855
 msgid "every year"
 msgstr "секоја година"
 
-#: includes/event-organiser-event-functions.php:851
+#: includes/event-organiser-event-functions.php:857
 #, php-format
 msgid "every %d years"
 msgstr "секоја %d година"
@@ -2182,11 +2182,11 @@ msgstr ""
 msgid "Event does not contain any dates."
 msgstr ""
 
-#: includes/event.php:1080
+#: includes/event.php:1085
 msgid "Occurrence not deleted. Occurrence not found."
 msgstr ""
 
-#: includes/event.php:1136
+#: includes/event.php:1141
 msgid "There is already an occurrence on this date"
 msgstr ""
 

@@ -3,8 +3,8 @@ Contributors: stephenharris
 Donate link: http://www.wp-event-organiser.com/donate
 Tags: events, event, event categories, event organizer, events calendar, event management, ical, locations, google map, OpenStreetMap, widget, venues, maps, gigs, shows,
 Requires at least: 3.8.0
-Tested up to: 5.8.1
-Stable tag: 3.10.8
+Tested up to: 5.9.1
+Stable tag: 3.12.0
 License: GPLv3
 
 Create and maintain events, including complex reoccurring patterns, venue management (with Google Maps or OpenStreetMap), calendars and customisable event lists
@@ -221,6 +221,16 @@ More information on shortcodes is [available here](http://wp-event-organiser.com
 8. Events list (using TwentySixteen)
 
 == Changelog ==
+
+
+= 3.12.0 - 30th March 2022 =
+* feat: Add %event_organiser_url% placeholder for event list shortcode (url of the event's organiser)
+
+= 3.11.1 - 30th March 2022 =
+* bugfix: Fix "InvalidValueError: setIcon: not a string..." error with Google Maps
+
+= 3.11.0 - 10th March 2022 =
+* bugfix: Add support for PHP 8+
 
 = 3.10.8 - 13th October 2021 =
 * bugfix: Close open tooltip windows when opening tooltip..
