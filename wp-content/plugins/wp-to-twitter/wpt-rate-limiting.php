@@ -150,7 +150,7 @@ function wpt_term_rate_limits() {
  */
 function wpt_save_term_rate_limit( $term_id, $tax_id ) {
 	$limits     = get_option( 'wpt_rate_limit' );
-	$option_set = isset( $_POST['wpt_rate_limit'] ) ? $_POST['wpt_rate_limit'] : wpt_default_rate_limit( $term_id );
+	$option_set = isset( $_POST['wpt_rate_limit'] ) ? sanitize_text_field( $_POST['wpt_rate_limit'] ) : wpt_default_rate_limit( $term_id );
 	if ( isset( $_POST['taxonomy'] ) ) {
 		if ( isset( $_POST['wpt_rate_limit'] ) ) {
 			$limits[ $term_id ] = $option_set;
@@ -172,7 +172,7 @@ function wpt_edit_term_rate_limit( $term, $taxonomy ) {
 	?>
 	<tr class="form-field">
 		<th valign="top" scope="row">
-			<label for="wpt_rate_limit"><?php _e( 'Max Tweets per hour on this term', 'wp-tweets-pro' ); ?></label>
+			<label for="wpt_rate_limit"><?php _e( 'Max Tweets per hour on this term', 'wp-to-twitter' ); ?></label>
 		</th>
 		<td>
 			<input type='number' size='4' value='<?php echo esc_attr( $option_set ); ?>' name='wpt_rate_limit' id='wpt_rate_limit' />
@@ -190,7 +190,7 @@ function wpt_add_term_rate_limit( $term ) {
 	$default = wpt_default_rate_limit();
 	?>
 	<div class="form-field">
-		<label for="wpt_rate_limit"><?php _e( 'Max Tweets per hour on this term', 'wp-tweets-pro' ); ?></label> <input type='number' value='<?php echo esc_attr( $default ); ?>' id='wpt_rate_limit' name='wpt_rate_limit' />
+		<label for="wpt_rate_limit"><?php _e( 'Max Tweets per hour on this term', 'wp-to-twitter' ); ?></label> <input type='number' value='<?php echo esc_attr( $default ); ?>' id='wpt_rate_limit' name='wpt_rate_limit' />
 	</div>
 	<?php
 }

@@ -326,7 +326,15 @@ class WPT_TwitterFeed {
 				$this->st_last_error = $last_error;
 			}
 		}
-		// Run an action on the results output from the Twitter widget query.
+		/**
+		 * Run an action on the results output from the Twitter widget query.
+		 *
+		 * @hook wpt_process_tweets
+		 *
+		 * @param {array}  $result Array of data received from Twitter's API.
+		 * @param {string} $screenname Twitter user's screen name.
+		 * @param {array}  $options Array of options passed to this widget.
+		 */
 		do_action( 'wpt_process_tweets', $result, $screenname, $options );
 
 		return $result;

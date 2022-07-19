@@ -65,7 +65,7 @@ function wpt_filter_urls( $tweet, $post_ID ) {
  * @param array   $post Post data.
  * @param int     $post_ID Post ID.
  * @param boolean $retweet Is this a retweet.
- * @param boolean $ref Reference.
+ * @param boolean $ref Twitter author Reference.
  *
  * @return string New text.
  */
@@ -73,11 +73,20 @@ function jd_truncate_tweet( $tweet, $post, $post_ID, $retweet = false, $ref = fa
 	// media file no longer needs accounting in shortening. 9/22/2016.
 	$maxlength = wpt_max_length();
 	$length    = $maxlength['base_length'];
-	$tweet     = apply_filters( 'wpt_tweet_sentence', $tweet, $post_ID );
-	$tweet     = trim( wpt_custom_shortcodes( $tweet, $post_ID ) );
-	$tweet     = trim( wpt_user_meta_shortcodes( $tweet, $post['authId'] ) );
-	$encoding  = ( 'UTF-8' !== get_option( 'blog_charset' ) && '' !== get_option( 'blog_charset', '' ) ) ? get_option( 'blog_charset' ) : 'UTF-8';
-	$diff      = 0;
+	/**
+	 * Filter a Tweet template prior to parsing tags.
+	 *
+	 * @hook wpt_tweet_sentence
+	 * @param {string} $tweet Template for this Tweet.
+	 * @param {int}    $post_ID Post ID.
+	 *
+	 * @return {string}
+	 */
+	$tweet    = apply_filters( 'wpt_tweet_sentence', $tweet, $post_ID );
+	$tweet    = trim( wpt_custom_shortcodes( $tweet, $post_ID ) );
+	$tweet    = trim( wpt_user_meta_shortcodes( $tweet, $post['authId'] ) );
+	$encoding = ( 'UTF-8' !== get_option( 'blog_charset' ) && '' !== get_option( 'blog_charset', '' ) ) ? get_option( 'blog_charset' ) : 'UTF-8';
+	$diff     = 0;
 
 	// Add custom append/prepend fields to Tweet text.
 	if ( '' !== get_option( 'jd_twit_prepend', '' ) && '' !== $tweet ) {
@@ -90,6 +99,18 @@ function jd_truncate_tweet( $tweet, $post, $post_ID, $retweet = false, $ref = fa
 	// there are no tags in this Tweet. Truncate and return.
 	if ( ! wpt_has_tags( $tweet ) ) {
 		$post_tweet = mb_substr( $tweet, 0, $length, $encoding );
+		/**
+		 * Filter a Tweet template that does not contain any WP to Twitter template tags.
+		 *
+		 * @hook wpt_custom_truncate
+		 * @param {string} $post_tweet Text to Tweet truncated to maximum allowed length.
+		 * @param {string} $tweet Original passed text.
+		 * @param {int}    $post_ID Post ID.
+		 * @param {bool}   $retweet Boolean flag that indicates whether this is being reposted.
+		 * @param {int}    $reference Pass reference (1).
+		 *
+		 * @return {string}
+		 */
 		return apply_filters( 'wpt_custom_truncate', $post_tweet, $tweet, $post_ID, $retweet, 1 );
 	}
 
@@ -107,7 +128,18 @@ function jd_truncate_tweet( $tweet, $post, $post_ID, $retweet = false, $ref = fa
 		if ( mb_strlen( wpt_normalize( $post_tweet ) ) > $length + 1 ) {
 			$post_tweet = mb_substr( $post_tweet, 0, $length, $encoding );
 		}
-
+		/**
+		 * Filter a Tweet template after tags have been parsed but prior to truncating for length.
+		 *
+		 * @hook wpt_custom_truncate
+		 * @param {string} $post_tweet Text to Tweet truncated to maximum allowed length.
+		 * @param {string} $tweet Original passed text.
+		 * @param {int}    $post_ID Post ID.
+		 * @param {bool}   $retweet Boolean flag that indicates whether this is being reposted.
+		 * @param {int}    $reference Pass reference (2).
+		 *
+		 * @return {string}
+		 */
 		return apply_filters( 'wpt_custom_truncate', $post_tweet, $tweet, $post_ID, $retweet, 2 ); // return early if all is well.
 	} else {
 		$has_excerpt_tag = wpt_has( $tweet, '#post#' );
@@ -181,6 +213,17 @@ function jd_truncate_tweet( $tweet, $post, $post_ID, $retweet = false, $ref = fa
 							$last_space = strrpos( $new_value, ' ' );
 							$new_value  = mb_substr( $new_value, 0, $last_space, $encoding );
 							// If you want to add something like an ellipsis after truncation, use this filter.
+
+							/**
+							 * Filter a template tag value after truncation. If a value like an excerpt or post content has been truncated, you can modify the output using this filter.
+							 *
+							 * @hook wpt_filter_truncated_value
+							 * @param {string} $new_value Text truncated to maximum allowed length.
+							 * @param {string} $key Template tag.
+							 * @param {string} $old_value Text prior to truncation.
+							 *
+							 * @return {string}
+							 */
 							$new_value = apply_filters( 'wpt_filter_truncated_value', $new_value, $key, $old_value );
 						}
 						$post_tweet = str_ireplace( $old_value, $new_value, $post_tweet );
@@ -225,7 +268,18 @@ function jd_truncate_tweet( $tweet, $post, $post_ID, $retweet = false, $ref = fa
 			}
 		}
 	}
-
+	/**
+	 * Filter a Tweet template after all content checks are completed.
+	 *
+	 * @hook wpt_custom_truncate
+	 * @param {string} $post_tweet Text to Tweet truncated to maximum allowed length.
+	 * @param {string} $tweet Original passed text.
+	 * @param {int}    $post_ID Post ID.
+	 * @param {bool}   $retweet Boolean flag that indicates whether this is being reposted.
+	 * @param {int}    $reference Pass reference (3).
+	 *
+	 * @return {string}
+	 */
 	return apply_filters( 'wpt_custom_truncate', $post_tweet, $tweet, $post_ID, $retweet, 3 );
 }
 
@@ -295,6 +349,14 @@ function wpt_remove_tag( $key ) {
  * @return array tags.
  */
 function wpt_tags() {
+	/**
+	 * Add a new template tag placeholder.
+	 *
+	 * @hook wpt_tags
+	 * @param {array} $tags Array of strings for each tag, e.g. 'blog' for #blog#.
+	 *
+	 * @return {array}
+	 */
 	return apply_filters( 'wpt_tags', array( 'url', 'title', 'blog', 'post', 'category', 'categories', 'date', 'author', 'displayname', 'tags', 'modified', 'reference', 'account', '@', 'cat_desc', 'longurl' ) );
 }
 
