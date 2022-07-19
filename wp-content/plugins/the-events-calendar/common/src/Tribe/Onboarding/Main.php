@@ -15,7 +15,7 @@ class Main {
 	 *
 	 * @return array $steps The tour data.
 	 */
-	private function tour_data() {
+	protected function tour_data() {
 		$data             = [];
 		$registered_tours = $this->get_registered_tours();
 
@@ -62,7 +62,7 @@ class Main {
 	 *
 	 * @return array $steps The hints data.
 	 */
-	private function hints_data() {
+	protected function hints_data() {
 		$data             = [];
 		$registered_hints = $this->get_registered_hints();
 
@@ -112,7 +112,7 @@ class Main {
 	public function localize_tour( $hook ) {
 		$data = $this->tour_data();
 
-		wp_localize_script( 'tribe-onboarding-js', 'TribeOnboardingTour', $data );
+		wp_localize_script( 'tec-onboarding-js', 'TribeOnboardingTour', $data );
 	}
 
 	/**
@@ -125,7 +125,7 @@ class Main {
 	public function localize_hints( $hook ) {
 		$data = $this->hints_data();
 
-		wp_localize_script( 'tribe-onboarding-js', 'TribeOnboardingHints', $data );
+		wp_localize_script( 'tec-onboarding-js', 'TribeOnboardingHints', $data );
 	}
 
 	/**

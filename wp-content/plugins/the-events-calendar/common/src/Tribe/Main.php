@@ -20,15 +20,14 @@ class Tribe__Main {
 	const OPTIONNAME          = 'tribe_events_calendar_options';
 	const OPTIONNAMENETWORK   = 'tribe_events_calendar_network_options';
 
-	const VERSION             = '4.14.10';
-
+	const VERSION             = '4.15.3';
 	const FEED_URL            = 'https://theeventscalendar.com/feed/';
 
 	protected $plugin_context;
 	protected $plugin_context_class;
 
 	public static $tribe_url = 'http://tri.be/';
-	public static $tec_url = 'https://theeventscalendar.com/';
+	public static $tec_url   = 'https://theeventscalendar.com/';
 
 	public $plugin_dir;
 	public $plugin_path;
@@ -87,6 +86,16 @@ class Tribe__Main {
 
 		add_action( 'plugins_loaded', [ $this, 'plugins_loaded' ], 1 );
 		add_action( 'tribe_common_loaded', [ $this, 'tribe_common_app_store' ], 10 );
+		add_action( 'customize_controls_print_styles', [ $this, 'load_tec_variables' ], 10 );
+
+		if ( did_action( 'plugins_loaded' ) && ! doing_action( 'plugins_loaded' ) ) {
+			/*
+			 * This might happen in the context of a plugin activation.
+			 * Complete the loading now and set the singleton instance to avoid infinite loops.
+			 */
+			self::$instance = $this;
+			$this->plugins_loaded();
+		}
 	}
 
 	/**
@@ -96,6 +105,7 @@ class Tribe__Main {
 
 		$this->init_autoloading();
 
+		$this->init_early_libraries();
 		$this->bind_implementations();
 		$this->init_libraries();
 		$this->add_hooks();
@@ -155,10 +165,20 @@ class Tribe__Main {
 	}
 
 	/**
+	 * Initializes all libraries used/required by our singletons.
+	 *
+	 * @since 4.14.18
+	 */
+	public function init_early_libraries() {
+		require_once $this->plugin_path . 'src/functions/editor.php';
+	}
+
+	/**
 	 * initializes all required libraries
 	 */
 	public function init_libraries() {
 		require_once $this->plugin_path . 'src/functions/utils.php';
+		require_once $this->plugin_path . 'src/functions/conditionals.php';
 		require_once $this->plugin_path . 'src/functions/url.php';
 		require_once $this->plugin_path . 'src/functions/query.php';
 		require_once $this->plugin_path . 'src/functions/multibyte.php';
@@ -187,7 +207,7 @@ class Tribe__Main {
 			[
 				[ 'tribe-accessibility-css', 'accessibility.css' ],
 				[ 'tribe-query-string', 'utils/query-string.js' ],
-				[ 'tribe-clipboard', 'vendor/clipboard/clipboard.js' ],
+				[ 'tribe-clipboard', 'node_modules/clipboard/dist/clipboard.min.js' ],
 				[ 'datatables', 'vendor/datatables/datatables.js', [ 'jquery' ] ],
 				[ 'tribe-select2', 'vendor/tribe-selectWoo/dist/js/selectWoo.full.js', [ 'jquery' ] ],
 				[ 'tribe-select2-css', 'vendor/tribe-selectWoo/dist/css/selectWoo.css' ],
@@ -206,6 +226,8 @@ class Tribe__Main {
 				[ 'tribe-jquery-timepicker-css', 'vendor/jquery-tribe-timepicker/jquery.timepicker.css' ],
 				[ 'tribe-timepicker', 'timepicker.js', [ 'jquery', 'tribe-jquery-timepicker' ] ],
 				[ 'tribe-attrchange', 'vendor/attrchange/js/attrchange.js' ],
+				[ 'tec-ky-module', 'vendor/ky/ky.js', [], null, [ 'module' => true ] ],
+				[ 'tec-ky', 'vendor/ky/tec-ky.js', [ 'tec-ky-module' ], null, [ 'module' => true ] ],
 			]
 		);
 
@@ -214,7 +236,7 @@ class Tribe__Main {
 			[
 				[ 'tec-variables-skeleton', 'variables-skeleton.css', ],
 				[ 'tribe-common-skeleton-style', 'common-skeleton.css', [ 'tec-variables-skeleton' ] ],
-				[ 'tec-variables-full', 'variables-full.css', ],
+				[ 'tec-variables-full', 'variables-full.css', [ 'tec-variables-skeleton' ] ],
 				[ 'tribe-common-full-style', 'common-full.css', [ 'tec-variables-full', 'tribe-common-skeleton-style' ] ],
 			],
 			null
@@ -274,6 +296,16 @@ class Tribe__Main {
 		);
 
 		tribe( Tribe__Admin__Help_Page::class )->register_assets();
+	}
+
+	/**
+	 * Ensure that the customizer styles get the variables they need.
+	 *
+	 * @since 4.14.13
+	 */
+	public function load_tec_variables() {
+		tribe_asset_enqueue( 'tec-variables-skeleton' );
+		tribe_asset_enqueue( 'tec-variables-full' );
 	}
 
 	/**
@@ -641,7 +673,9 @@ class Tribe__Main {
 		tribe_singleton( \Tribe\Admin\Troubleshooting::class, \Tribe\Admin\Troubleshooting::class, [ 'hook' ] );
 
 		tribe_singleton( 'callback', 'Tribe__Utils__Callback' );
-		tribe_singleton( Tribe__Admin__Help_Page::class, Tribe__Admin__Help_Page::class );
+		tribe_singleton( Tribe__Admin__Help_Page::class, Tribe__Admin__Help_Page::class, [ 'hook' ] );
+		tribe_singleton( 'admin.pages', '\Tribe\Admin\Pages' );
+		tribe_singleton( 'admin.activation.page', 'Tribe__Admin__Activation_Page' );
 
 		tribe_register_provider( Tribe__Editor__Provider::class );
 		tribe_register_provider( Tribe__Service_Providers__Debug_Bar::class );
