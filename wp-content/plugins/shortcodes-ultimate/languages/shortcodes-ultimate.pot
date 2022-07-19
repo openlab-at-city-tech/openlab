@@ -1,4 +1,4 @@
-# Copyright (C) 2021 Shortcodes Ultimate
+# Copyright (C) 2022 Shortcodes Ultimate
 # This file is distributed under the same license as the Shortcodes Ultimate package.
 msgid ""
 msgstr ""
@@ -397,6 +397,10 @@ msgstr ""
 
 #: inc/core/generator.php:223
 msgid "Pro Tip"
+msgstr ""
+
+#: inc/core/generator.php:223
+msgid "Hit enter to select highlighted shortcode, while searching"
 msgstr ""
 
 #: inc/core/generator.php:225
@@ -1703,11 +1707,11 @@ msgstr ""
 msgid "Anchors lets you link directly to an element on a page"
 msgstr ""
 
-#: includes/shortcodes/display-posts.php:228, includes/shortcodes/posts.php:195
+#: includes/shortcodes/display-posts.php:228, includes/shortcodes/posts.php:207
 msgid "Custom posts query with customizable template"
 msgstr ""
 
-#: includes/shortcodes/display-posts.php:260, includes/shortcodes/posts.php:383, includes/shortcodes/template.php:33
+#: includes/shortcodes/display-posts.php:260, includes/shortcodes/posts.php:397, includes/shortcodes/template.php:33
 msgid "invalid template name"
 msgstr ""
 
@@ -2926,6 +2930,22 @@ msgstr ""
 
 #: includes/shortcodes/posts.php:189
 msgid "Set to yes to prevent sticky posts from being moved to the start of the returned list of posts. They are still included, but appear in regular order."
+msgstr ""
+
+#: includes/shortcodes/posts.php:196
+msgid "Container CSS class"
+msgstr ""
+
+#: includes/shortcodes/posts.php:197
+msgid "Additional CSS class name(s) separated by space(s) for the container element"
+msgstr ""
+
+#: includes/shortcodes/posts.php:202
+msgid "Single CSS class"
+msgstr ""
+
+#: includes/shortcodes/posts.php:203
+msgid "Additional CSS class name(s) separated by space(s) for each individual post element"
 msgstr ""
 
 #: includes/shortcodes/private.php:8

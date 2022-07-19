@@ -89,7 +89,7 @@ function su_get_config( $key = null, $default = false ) {
  * @param string  $message Error message.
  * @return string          Error message markup.
  */
-function su_error_message( $title = '', $message = '' ) {
+function su_error_message( $title = '', $message = '', $echo = false ) {
 
 	if ( ! su_current_user_can_insert() ) {
 		return;
@@ -99,11 +99,19 @@ function su_error_message( $title = '', $message = '' ) {
 		$title = "<strong>${title}:</strong> ";
 	}
 
-	return sprintf(
+	$output = sprintf(
 		'<p class="su-error" style="padding:5px 10px;color:#8f3a35;border-left:3px solid #8f3a35;background:#fff7f6;line-height:1.35">%1$s%2$s</p>',
 		$title,
 		$message
 	);
+
+	if ( $echo ) {
+		// phpcs:disable
+		echo $output;
+		// phpcs:enable
+	}
+
+	return $output;
 
 }
 

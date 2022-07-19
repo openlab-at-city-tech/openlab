@@ -3,10 +3,10 @@ Contributors: gn_themes
 License: GPLv3
 Donate link: https://paypal.me/anovladimir
 Tags: shortcode, toggle, columns, button, slider
-Stable tag: 5.11.1
+Stable tag: 5.12.0
 Requires PHP: 5.4
 Requires at least: 4.6
-Tested up to: 5.8
+Tested up to: 5.9
 
 
 A comprehensive collection of visual components for your site
@@ -147,17 +147,12 @@ First, visit the [Help Center](https://getshortcodes.com/support/). If you get s
 ## Changelog
 
 
-### 5.11.1
+### 5.12.0
 
 **What's new**
 
-- Updated ForkAwesome library, now it includes [52 new icons](https://forkaweso.me/Fork-Awesome/icons/)
-
-**Fixed**
-
-- Minor improvements to the plugin settings UX
-- Fixed some typos
-- Fixed issue in `[su_posts]` where posts with thumbnails were generating PHP warnings. Thanks to [@dimabr](https://wordpress.org/support/topic/su_posts/#post-14756135)
+- New options `class` and `class_single` for the *Posts* shortcode. Use new options to specify custom CSS classes for the container and for a single post item respectively.
+- Tested compatibility with WordPress 5.9
 
 ---
 [Version history →](https://plugins.trac.wordpress.org/browser/shortcodes-ultimate/trunk/changelog.txt)

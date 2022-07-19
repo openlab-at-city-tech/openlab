@@ -1,3 +1,23 @@
+### 5.11.2
+
+**Fixed**
+
+- Fixed *Pro Tip* translation in shortcode generator. Thanks to (Pieterjan Deneys)[https://wordpress.org/support/topic/bug-untranslated-string/]
+
+
+### 5.11.1
+
+**What's new**
+
+- Updated ForkAwesome library, now it includes [52 new icons](https://forkaweso.me/Fork-Awesome/icons/)
+
+**Fixed**
+
+- Minor improvements to the plugin settings UX
+- Fixed some typos
+- Fixed issue in `[su_posts]` where posts with thumbnails were generating PHP warnings. Thanks to [@dimabr](https://wordpress.org/support/topic/su_posts/#post-14756135)
+
+
 ### 5.11.0
 
 **What's changed**
