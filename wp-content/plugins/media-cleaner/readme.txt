@@ -3,19 +3,19 @@ Contributors: TigrouMeow
 Tags: clean, delete, file, files, images, image, media, library, upload, acf
 Donate link: https://meowapps.com/donation/
 Requires at least: 5.0
-Tested up to: 5.9
+Tested up to: 6.0
 Requires PHP: 7.0
-Stable tag: 6.3.0
+Stable tag: 6.4.0
 
 Clean your WordPress from unused files, broken media entries. Powerful engine and beautiful UI!
 
 == Description ==
 
-Media Cleaner cleans your Media Library from the media entries (and files) which aren't used in your website, as well as broken entries. An internal trash allows you to make sure everything works properly before deleting the media entries (and files) permanently. It uses a smart analysis powered by many implementations for specific plugins and themes.
+Media Cleaner cleans your Media Library from the media entries (and files) which aren't used in your website, as well as broken entries. An internal trash allows you to make sure everything works properly before deleting the media entries (and files) permanently. It uses a smart analysis powered by many implementations for specific plugins and themes. This is the perfect companion to [Database Cleaner](https://meowapps.com/plugin/database-cleaner/).
 
 **Before using this plugin, make sure you have a proper backup of your install. This step is not optional; it is required. You cannot trust any tools modifying or deleting your files.**
 
-For compatibility, Pro version and important information, please read this until the end. Last but not least, it is necessary to read the [tutorial](https://meowapps.com/media-cleaner-tutorial/). It is available on the official website, here: [Media Cleaner](https://meowapps.com/plugin/media-cleaner/). 
+To know more about compatibility, important information and Pro version, please read this until the end. Last but not least, it is necessary to read the [tutorial](https://meowapps.com/media-cleaner/tutorial/). It is available on the official website, here: [Media Cleaner](https://meowapps.com/plugin/media-cleaner/). 
 
 === IMPORTANT ===
 
@@ -35,7 +35,7 @@ The Pro version adds Filesystem Analysis, extra support for complex plugins, Liv
 
 With the Filesystem Analysis, [Media Cleaner Pro](https://meowapps.com/plugin/media-cleaner/) scans your physical /uploads directory, and match it against the Media Library. It also has extra support for complex plugins, such as:
 
-- ACF (+ ACF Widgets)
+- ACF, Metabox
 - Divi Builder
 - Fusion Builder (Avada)
 - WPBakery Page Builder
@@ -56,6 +56,10 @@ Last but not least, [Media Cleaner Pro](https://meowapps.com/plugin/media-cleane
 
 Better to be safe than sorry. This plugin deletes files! Therefore, backup is not only important, it is **required**. Do not use this plugin if you are not ready. I can't help you if you damage your media library permanently without a backup.
 
+=== DATABASE CLEANER ===
+
+To make everything perfect, you will also need to clean and optimize your database. If you enjoy how Media Cleaner is made and supported, you will love [Database Cleaner](https://meowapps.com/plugin/database-cleaner/). Please give it a try!
+
 === SPECIAL THANKS ===
 
 - Mike Meinz, an amazing developer from the US who made a thorough debugging of the whole process, loaded a lot of corrections and optimizations and added support for more plugins.
@@ -75,15 +79,49 @@ Better to be safe than sorry. This plugin deletes files! Therefore, backup is no
 
 == Changelog ==
 
+= 6.4.0 (2022/06/30) =
+* Add: Support for retry when an error occurs.
+* Fix: There was an issue with the resolution of some filepaths.
+
+= 6.3.9 (2022/06/23) =
+* Add: Support of the source tag.
+
+= 6.3.8 (2022/06/13) =
+* Fix: The links and thumbnails were broken in the Dashboard Trash.
+* Info: New plugin the the family! 🎉 It is simply called Database Cleaner, and it aims to be... the best Database Cleaner! You can find it [here](https://wordpress.org/plugins/database-cleaner).
+
+= 6.3.7 (2022/06/07) =
+* Fix: Better support for filters for filesystem scan (and a little optimization as well).
+* Fix: Better support for backgrounds/overlays in elementor.
+* Info: I am working hard on Media Cleaner. If you want to give me some love and motivation, write a simple and nice review [here](https://wordpress.org/support/plugin/media-cleaner/reviews/?rate=5#new-post). Thank you so much! 💖
+
+= 6.3.6 (2022/05/17) =
+* Fix: Support for Elementor background images.
+
+= 6.3.5 (2022/05/05) =
+* Fix: There were a few warnings related to undeclared arrays.
+* Add: Support for Metabox.
+
+= 6.3.4 (2022/04/29) =
+* Fix: Issue with Elementor.
+* Fix: Issue with JetEngine.
+* Add: Support for ACF Photo Gallery.
+
+= 6.3.2 (2022/03/22) =
+* Fix: Better support for WebP.
+
+= 6.3.1 (2022/03/15) =
+* Add: Do not rely on the Media Trash anymore (MEDIA_TRASH)!
+* Fix: Better support for WPBakery.
+* Add: Support for Google Web Stories.
+* Info: There is no need to add MEDIA_TRASH anymore :) You can remove it from your wp-config.php if you added it in there. 
+
 = 6.3.0 (2022/02/20) =
 * Fix: When a Media entry is removed from Media Library, also remove it from the Issues in the Cleaner Dashboard.
 
 = 6.2.9 (2022/02/14) =
 * Update: Consider SVGs as images.
-
-= 6.2.8 (2022/01/28) =
 * Update: Support for WordPress 5.9.
-* Info: I am working hard on Media Cleaner. If you want to give me some love and motivation, write a simple and nice review [here](https://wordpress.org/support/plugin/media-cleaner/reviews/?rate=5#new-post). Thank you so much! 💖
 
 = 6.2.7 (2021/12/11) =
 * Add: Support for Jet Engine and its metaboxes and fields.
@@ -335,7 +373,7 @@ Better to be safe than sorry. This plugin deletes files! Therefore, backup is no
 * Update: Compatibility with WordPress 5.1.
 
 = 5.1.0 =
-* Add: Filters for Filesystem scan. Please have a look at the tutorial (https://meowapps.com/media-cleaner-tutorial/), there is now a section about those filters.
+* Add: Filters for Filesystem scan. Please have a look at the tutorial (https://meowapps.com/media-cleaner/tutorial/), there is now a section about those filters.
 * Fix: Query for metakey.
 * Fix: Thumbnails matching.
 * Update: Compatibility for WordPress 5 and Gutenberg.
