@@ -168,7 +168,7 @@ function openlab_embed_handler_desmos( $matches, $attr, $url, $rawattr ) {
 	$embed = sprintf(
 		'<div class="desmos-iframe-container" style="position: relative; width: 100%%; height: 0; padding-bottom: 56.25%%;">
 		<iframe 
-			src="https://www.desmos.com/calculator/%s?embed"
+			src="https://www.desmos.com/calculator/%s"
 			style="position: absolute; top: 0; left: 0; width:100%%; height:100%%; border: 0;" frameborder=0>
 		</iframe>
 		</div>',
