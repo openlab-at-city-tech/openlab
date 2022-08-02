@@ -136,7 +136,7 @@ class ezTOC_Post {
 
 		$this->post->post_content = apply_filters( 'the_content', strip_shortcodes( $this->post->post_content ) );
 
-		add_filter( 'the_content', array( 'ezTOC', 'the_content' ), 100 );
+		add_filter( 'the_content', array( 'ezTOC', 'the_content' ), 100 );  // increased  priority to fix other plugin filter overwriting our changes
 
 		remove_filter( 'strip_shortcodes_tagnames', array( __CLASS__, 'stripShortcodes' ) );
 
@@ -802,7 +802,8 @@ class ezTOC_Post {
 			// title needs to be converted to HTML entities.
 			// @link https://stackoverflow.com/a/21801444/5351316
 			$return = htmlentities2( $return );
-			$return = str_replace( array( '&amp;', '&nbsp;' ), ' ', $return );
+			$return = str_replace( array( '&amp;', '&nbsp;'), ' ', $return );
+			$return = str_replace( array( '&shy;' ),'', $return );					// removed silent hypen 
 			$return = html_entity_decode( $return, ENT_QUOTES, get_option( 'blog_charset' ) );
 
 			// remove non alphanumeric chars
@@ -1195,7 +1196,6 @@ class ezTOC_Post {
 			$class = array_filter( $class );
 			$class = array_map( 'trim', $class );
 			$class = array_map( 'sanitize_html_class', $class );
-
 			$html .= '<div id="ez-toc-container" class="' . implode( ' ', $class ) . '">' . PHP_EOL;
 
 			if ( ezTOC_Option::get( 'show_heading_text' ) ) {
@@ -1224,7 +1224,11 @@ class ezTOC_Post {
 				
 				if ( ezTOC_Option::get( 'visibility' ) ) {
 					if (ezTOC_Option::get( 'toc_loading' ) != 'css') {
-						$html .= '<a href="#" class="ez-toc-pull-right ez-toc-btn ez-toc-btn-xs ez-toc-btn-default ez-toc-toggle" style="display: none;"><label for="item" aria-label="'.__( 'Table of Content', 'easy-table-of-contents' ).'"><i class="ez-toc-glyphicon ez-toc-icon-toggle"></i></label><input type="checkbox" id="item"></a>';
+						$icon = '<i class="ez-toc-glyphicon ez-toc-icon-toggle"></i>';
+						if(function_exists('ez_toc_pro_activation_link')){
+							$icon = apply_filters('ez_toc_modify_icon',$icon);
+						}
+						$html .= '<a href="#" class="ez-toc-pull-right ez-toc-btn ez-toc-btn-xs ez-toc-btn-default ez-toc-toggle" style="display: none;"><label for="item" aria-label="'.__( 'Table of Content', 'easy-table-of-contents' ).'">'.$icon.'</label><input type="checkbox" id="item"></a>';
 					}else{
 						$toggle_view='';
 						if(ezTOC_Option::get('visibility_hide_by_default')==true){
