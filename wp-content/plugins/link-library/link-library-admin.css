@@ -2128,8 +2128,12 @@ input[type="text"].module-search + label:after {
 	margin-bottom: 16px;
 }
 
-.mobile #link_url, .mobile #link_description, .mobile #link_notes, .mobile #link_rss, .mobile #link_image, .mobile #link_second_url, .mobile #link_telephone, .mobile #link_email, .mobile #link_reciprocal, .mobile #link_visits, .mobile #link_submitter, .mobile #link_submitter_name, .mobile #link_submitter_email, .mobile #link_submitter_comment, .mobile #link_rel, .mobile #link_updated {
+.mobile #link_second_url, .mobile #link_telephone, .mobile #link_email, .mobile #link_reciprocal, .mobile #link_visits, .mobile #link_submitter, .mobile #link_submitter_name, .mobile #link_submitter_email, .mobile #link_submitter_comment, .mobile #link_rel, .mobile #link_updated {
 	width: auto !important;
+}
+
+.mobile #link_url, .mobile #link_submitter_comment {
+	width: 100% !important;
 }
 
 .mobile #genthumbs, .mobile #genfavicons {
