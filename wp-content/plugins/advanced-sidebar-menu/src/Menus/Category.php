@@ -170,7 +170,7 @@ class Category extends Menu_Abstract {
 	 * If on a single this could be multiple.
 	 * If on an archive this will be one.
 	 *
-	 * @return array
+	 * @return \WP_Term[]
 	 */
 	public function get_top_level_terms() {
 		$child_term_ids = $this->get_included_term_ids();
@@ -178,6 +178,8 @@ class Category extends Menu_Abstract {
 		foreach ( $child_term_ids as $_term_id ) {
 			$top_level_term_ids[] = $this->get_highest_parent( $_term_id );
 		}
+		$top_level_term_ids = apply_filters( 'advanced-sidebar-menu/menus/category/top-level-term-ids', $top_level_term_ids, $this->args, $this->instance, $this );
+
 		$terms = [];
 		if ( ! empty( $top_level_term_ids ) ) {
 			$terms = get_terms(
@@ -188,9 +190,10 @@ class Category extends Menu_Abstract {
 					'order'      => $this->get_order(),
 				]
 			);
-		}
-		if ( is_wp_error( $terms ) ) {
-			return [];
+
+			if ( is_wp_error( $terms ) ) {
+				return [];
+			}
 		}
 
 		return $terms;
