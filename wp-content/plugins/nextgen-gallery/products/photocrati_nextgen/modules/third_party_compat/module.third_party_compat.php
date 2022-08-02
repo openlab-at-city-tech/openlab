@@ -139,7 +139,7 @@ class M_Third_Party_Compat extends C_Base_Module
     {
         global $post;
 
-        if ($post AND is_string($post->content) AND (strpos($post->content, "<!--nextpage-->") === FALSE) AND (strpos($_SERVER['REQUEST_URI'], '/page/') !== FALSE))
+        if ($post AND isset($post->post_content) AND (strpos($post->post_content, "<!--nextpage-->") === FALSE) AND (strpos($_SERVER['REQUEST_URI'], '/page/') !== FALSE))
         {
             if (preg_match("#/page/(\\d+)#", $_SERVER['REQUEST_URI'], $match))
                 $_REQUEST['page'] = $match[1];

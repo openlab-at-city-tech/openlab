@@ -262,7 +262,7 @@ class C_Taxonomy_Controller extends C_MVC_Controller
         $tag = urldecode(get_query_var('ngg_tag') ? get_query_var('ngg_tag') : get_query_var('name'));
         $tag = stripslashes(M_NextGen_Data::strip_html($tag));
         // Tags may not include HTML
-        if (!$this->ngg_tag_detection_has_run && !is_admin() && !empty($tag) && (stripos($wp->request, 'ngg_tag') === 0 || isset($wp_query->query_vars['page_id']) && $wp_query->query_vars['page_id'] === 'ngg_tag')) {
+        if (!$this->ngg_tag_detection_has_run && !is_admin() && !empty($tag) && is_string($wp->request) && (stripos($wp->request, 'ngg_tag') === 0 || isset($wp_query->query_vars['page_id']) && $wp_query->query_vars['page_id'] === 'ngg_tag')) {
             $this->ngg_tag_detection_has_run = TRUE;
             // Wordpress somewhat-correctly generates several notices, so silence them as they're really unnecessary
             if (!defined('WP_DEBUG') || !WP_DEBUG) {
