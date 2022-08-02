@@ -35,6 +35,9 @@ class Akismet {
 		add_filter( 'preprocess_comment', array( 'Akismet', 'auto_check_comment' ), 1 );
 		add_filter( 'rest_pre_insert_comment', array( 'Akismet', 'rest_auto_check_comment' ), 1 );
 
+		add_action( 'comment_form', array( 'Akismet', 'load_form_js' ) );
+		add_action( 'do_shortcode_tag', array( 'Akismet', 'load_form_js_via_filter' ), 10, 4 );
+
 		add_action( 'akismet_scheduled_delete', array( 'Akismet', 'delete_old_comments' ) );
 		add_action( 'akismet_scheduled_delete', array( 'Akismet', 'delete_old_comments_meta' ) );
 		add_action( 'akismet_scheduled_delete', array( 'Akismet', 'delete_orphaned_commentmeta' ) );
@@ -42,6 +45,7 @@ class Akismet {
 
 		add_action( 'comment_form',  array( 'Akismet',  'add_comment_nonce' ), 1 );
 		add_action( 'comment_form', array( 'Akismet', 'output_custom_form_fields' ) );
+		add_filter( 'script_loader_tag', array( 'Akismet', 'set_form_js_async' ), 10, 3 );
 
 		add_filter( 'comment_moderation_recipients', array( 'Akismet', 'disable_moderation_emails_if_unreachable' ), 1000, 2 );
 		add_filter( 'pre_comment_approved', array( 'Akismet', 'last_comment_status' ), 10, 2 );
@@ -1344,13 +1348,17 @@ class Akismet {
 		}
 	}
 
-	public static function load_form_js() {
-		/* deprecated */
-	}
-
+	/**
+	 * Mark akismet-frontend.js as deferred. Because nothing depends on it, it can run at any time
+	 * after it's loaded, and the browser won't have to wait for it to load to continue
+	 * parsing the rest of the page.
+	 */
 	public static function set_form_js_async( $tag, $handle, $src ) {
-		/* deprecated */
-		return $tag;
+		if ( 'akismet-frontend' !== $handle ) {
+			return $tag;
+		}
+
+		return preg_replace( '/^<script /i', '<script defer ', $tag );
 	}
 
 	public static function get_akismet_form_fields() {
@@ -1738,5 +1746,27 @@ p {
 				'https://akismet.com/privacy/'
 			) . '</p>'
 		);
+	}
+
+	public static function load_form_js() {
+		if (
+			! is_admin()
+			&& ( ! function_exists( 'amp_is_request' ) || ! amp_is_request() )
+			&& self::get_api_key()
+			) {
+			wp_register_script( 'akismet-frontend', plugin_dir_url( __FILE__ ) . '_inc/akismet-frontend.js', array(), filemtime( plugin_dir_path( __FILE__ ) . '_inc/akismet-frontend.js' ), true );
+			wp_enqueue_script( 'akismet-frontend' );
+		}
+	}
+
+	/**
+	 * Add the form JavaScript when we detect that a supported form shortcode is being parsed.
+	 */
+	public static function load_form_js_via_filter( $return_value, $tag, $attr, $m ) {
+		if ( in_array( $tag, array( 'contact-form', 'gravityform', 'contact-form-7', 'formidable', 'fluentform' ) ) ) {
+			self::load_form_js();
+		}
+
+		return $return_value;
 	}
 }
