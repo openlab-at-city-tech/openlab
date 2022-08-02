@@ -199,6 +199,9 @@ class EIO_JS_Webp extends EIO_Page_Parser {
 		if ( false !== strpos( $uri, '?fl_builder' ) ) {
 			return false;
 		}
+		if ( false !== strpos( $uri, '?giveDonationFormInIframe' ) ) {
+			return false;
+		}
 		if ( '/print/' === substr( $uri, -7 ) ) {
 			return false;
 		}
@@ -387,6 +390,7 @@ class EIO_JS_Webp extends EIO_Page_Parser {
 
 		$body_tags        = $this->get_elements_from_html( $buffer, 'body' );
 		$body_webp_script = '<script data-cfasync="false" data-no-defer="1">if(ewww_webp_supported){document.body.classList.add("webp-support");}</script>';
+		$body_webp_script = '<script data=cfasync="false" data-no-defer="1">if(typeof ewww_webp_supported==="undefined"){var ewww_webp_supported=!1}if(ewww_webp_supported){document.body.classList.add("webp-support")}</script>';
 		if ( $this->is_iterable( $body_tags ) && ! empty( $body_tags[0] ) && false !== strpos( $body_tags[0], '<body' ) ) {
 			// Add the WebP script right after the opening tag.
 			$buffer = str_replace( $body_tags[0], $body_tags[0] . "\n" . $body_webp_script, $buffer );
@@ -406,7 +410,7 @@ class EIO_JS_Webp extends EIO_Page_Parser {
 				if ( ! $this->validate_tag( $image ) ) {
 					continue;
 				}
-				$file = $images['img_url'][ $index ];
+				$file = trim( $images['img_url'][ $index ] );
 				ewwwio_debug_message( "parsing an image: $file" );
 				if ( strpos( $image, 'jetpack-lazy-image' ) && $this->validate_image_url( $file ) ) {
 					$new_image = $image;
@@ -543,7 +547,7 @@ class EIO_JS_Webp extends EIO_Page_Parser {
 				if ( strpos( $image, 'data-src=' ) && strpos( $image, 'data-srcset=' ) && strpos( $image, 'lazyload' ) ) {
 					// EWWW IO Lazy Load.
 					$new_image = $image;
-					$real_file = $this->get_attribute( $new_image, 'data-src' );
+					$real_file = trim( $this->get_attribute( $new_image, 'data-src' ) );
 					ewwwio_debug_message( "checking webp for Lazy Load data-src: $real_file" );
 					if ( $this->validate_image_url( $real_file ) ) {
 						ewwwio_debug_message( 'found webp for Lazy Load' );
@@ -571,7 +575,7 @@ class EIO_JS_Webp extends EIO_Page_Parser {
 					if ( ! $this->validate_tag( $image ) ) {
 						continue;
 					}
-					$file = $this->get_attribute( $image, 'src' );
+					$file = trim( $this->get_attribute( $image, 'src' ) );
 					if ( ( empty( $file ) || strpos( $image, 'R0lGODlhAQABAIAAAAAAAP' ) ) && strpos( $image, ' data-srcset=' ) && strpos( $this->get_attribute( $image, 'class' ), 'lazyload' ) ) {
 						$new_image = $image;
 						$srcset    = $this->get_attribute( $new_image, 'data-srcset' );
