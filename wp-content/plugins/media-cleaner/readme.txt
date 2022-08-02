@@ -5,7 +5,7 @@ Donate link: https://meowapps.com/donation/
 Requires at least: 5.0
 Tested up to: 6.0
 Requires PHP: 7.0
-Stable tag: 6.4.0
+Stable tag: 6.4.1
 
 Clean your WordPress from unused files, broken media entries. Powerful engine and beautiful UI!
 
@@ -79,6 +79,11 @@ To make everything perfect, you will also need to clean and optimize your databa
 
 == Changelog ==
 
+= 6.4.1 (2022/07/25) =
+* Add: Select a range of items by using shift.
+* Info: New plugin the the family! 🎉 It is simply called Database Cleaner, and it aims to be... the best Database Cleaner! You can find it [here](https://wordpress.org/plugins/database-cleaner).
+* Info: I am working hard on Media Cleaner. If you want to give me some love and motivation, write a simple and nice review [here](https://wordpress.org/support/plugin/media-cleaner/reviews/?rate=5#new-post). Thank you so much! 💖
+
 = 6.4.0 (2022/06/30) =
 * Add: Support for retry when an error occurs.
 * Fix: There was an issue with the resolution of some filepaths.
@@ -88,12 +93,10 @@ To make everything perfect, you will also need to clean and optimize your databa
 
 = 6.3.8 (2022/06/13) =
 * Fix: The links and thumbnails were broken in the Dashboard Trash.
-* Info: New plugin the the family! 🎉 It is simply called Database Cleaner, and it aims to be... the best Database Cleaner! You can find it [here](https://wordpress.org/plugins/database-cleaner).
 
 = 6.3.7 (2022/06/07) =
 * Fix: Better support for filters for filesystem scan (and a little optimization as well).
 * Fix: Better support for backgrounds/overlays in elementor.
-* Info: I am working hard on Media Cleaner. If you want to give me some love and motivation, write a simple and nice review [here](https://wordpress.org/support/plugin/media-cleaner/reviews/?rate=5#new-post). Thank you so much! 💖
 
 = 6.3.6 (2022/05/17) =
 * Fix: Support for Elementor background images.

@@ -146,7 +146,7 @@ if ( !class_exists( 'MeowCommon_Admin' ) ) {
 		}
 
 		function get_phpinfo() {
-			if ( !current_user_can( 'administrator' ) ) {
+			if ( !current_user_can( 'administrator' ) || !function_exists( 'phpinfo' ) ) {
 				return;
 			}
 			ob_start();
