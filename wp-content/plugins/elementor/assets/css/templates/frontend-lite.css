@@ -1940,6 +1940,9 @@ ul.elementor-icon-list-items.elementor-inline-items .elementor-inline-item {
   max-width: 100%;
   flex-basis: 100%;
 }
+.e-container > .elementor-widget > .elementor-widget-container {
+  height: 100%;
+}
 .e-container > .e-container > .elementor-element-overlay .elementor-editor-element-setting, .elementor-widget .e-container > .elementor-element-overlay .elementor-editor-element-setting {
   position: relative;
   background-color: #556068;

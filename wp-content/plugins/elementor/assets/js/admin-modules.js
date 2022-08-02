@@ -1,6 +1,112 @@
-/*! elementor - v3.6.7 - 03-07-2022 */
+/*! elementor - v3.6.8 - 27-07-2022 */
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
+
+/***/ "../assets/dev/js/admin/menu-handler.js":
+/*!**********************************************!*\
+  !*** ../assets/dev/js/admin/menu-handler.js ***!
+  \**********************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+
+var _classCallCheck2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "../node_modules/@babel/runtime/helpers/classCallCheck.js"));
+
+var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/createClass */ "../node_modules/@babel/runtime/helpers/createClass.js"));
+
+var _get2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/get */ "../node_modules/@babel/runtime/helpers/get.js"));
+
+var _inherits2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/inherits */ "../node_modules/@babel/runtime/helpers/inherits.js"));
+
+var _possibleConstructorReturn2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/possibleConstructorReturn */ "../node_modules/@babel/runtime/helpers/possibleConstructorReturn.js"));
+
+var _getPrototypeOf2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/getPrototypeOf */ "../node_modules/@babel/runtime/helpers/getPrototypeOf.js"));
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = (0, _getPrototypeOf2.default)(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = (0, _getPrototypeOf2.default)(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return (0, _possibleConstructorReturn2.default)(this, result); }; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+var MenuHandler = /*#__PURE__*/function (_elementorModules$Vie) {
+  (0, _inherits2.default)(MenuHandler, _elementorModules$Vie);
+
+  var _super = _createSuper(MenuHandler);
+
+  function MenuHandler() {
+    (0, _classCallCheck2.default)(this, MenuHandler);
+    return _super.apply(this, arguments);
+  }
+
+  (0, _createClass2.default)(MenuHandler, [{
+    key: "getDefaultSettings",
+    value: function getDefaultSettings() {
+      return {
+        selectors: {
+          currentSubmenuItems: '#adminmenu .current'
+        }
+      };
+    }
+  }, {
+    key: "getDefaultElements",
+    value: function getDefaultElements() {
+      var settings = this.getSettings();
+      return {
+        $currentSubmenuItems: jQuery(settings.selectors.currentSubmenuItems),
+        $adminPageMenuLink: jQuery("a[href=\"".concat(settings.path, "\"]"))
+      };
+    } // This method highlights the currently visited submenu item for the slug provided as an argument to this handler.
+    // This method also accepts a jQuery instance of a custom submenu item to highlight. If provided, the provided
+    // item will be the one highlighted.
+
+  }, {
+    key: "highlightSubMenuItem",
+    value: function highlightSubMenuItem() {
+      var $element = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+      var $submenuItem = $element || this.elements.$adminPageMenuLink;
+
+      if (this.elements.$currentSubmenuItems.length) {
+        this.elements.$currentSubmenuItems.removeClass('current');
+      }
+
+      $submenuItem.addClass('current'); // Need to add the 'current' class to the link element's parent `<li>` element as well.
+
+      $submenuItem.parent().addClass('current');
+    }
+  }, {
+    key: "highlightTopLevelMenuItem",
+    value: function highlightTopLevelMenuItem($elementToHighlight) {
+      var $elementToRemove = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+      var activeClasses = 'wp-has-current-submenu wp-menu-open current';
+      $elementToHighlight.parent().addClass(activeClasses).removeClass('wp-not-current-submenu');
+
+      if ($elementToRemove) {
+        $elementToRemove.removeClass(activeClasses);
+      }
+    }
+  }, {
+    key: "onInit",
+    value: function onInit() {
+      (0, _get2.default)((0, _getPrototypeOf2.default)(MenuHandler.prototype), "onInit", this).call(this);
+      var settings = this.getSettings();
+
+      if (window.location.href.includes(settings.path)) {
+        this.highlightSubMenuItem();
+      }
+    }
+  }]);
+  return MenuHandler;
+}(elementorModules.ViewModule);
+
+exports["default"] = MenuHandler;
+
+/***/ }),
 
 /***/ "../node_modules/@babel/runtime/helpers/assertThisInitialized.js":
 /*!***********************************************************************!*\
@@ -240,112 +346,6 @@ function _typeof(obj) {
 }
 
 module.exports = _typeof, module.exports.__esModule = true, module.exports["default"] = module.exports;
-
-/***/ }),
-
-/***/ "../assets/dev/js/admin/menu-handler.js":
-/*!**********************************************!*\
-  !*** ../assets/dev/js/admin/menu-handler.js ***!
-  \**********************************************/
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-
-var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports["default"] = void 0;
-
-var _classCallCheck2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "../node_modules/@babel/runtime/helpers/classCallCheck.js"));
-
-var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/createClass */ "../node_modules/@babel/runtime/helpers/createClass.js"));
-
-var _get2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/get */ "../node_modules/@babel/runtime/helpers/get.js"));
-
-var _inherits2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/inherits */ "../node_modules/@babel/runtime/helpers/inherits.js"));
-
-var _possibleConstructorReturn2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/possibleConstructorReturn */ "../node_modules/@babel/runtime/helpers/possibleConstructorReturn.js"));
-
-var _getPrototypeOf2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/getPrototypeOf */ "../node_modules/@babel/runtime/helpers/getPrototypeOf.js"));
-
-function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = (0, _getPrototypeOf2.default)(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = (0, _getPrototypeOf2.default)(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return (0, _possibleConstructorReturn2.default)(this, result); }; }
-
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
-
-var MenuHandler = /*#__PURE__*/function (_elementorModules$Vie) {
-  (0, _inherits2.default)(MenuHandler, _elementorModules$Vie);
-
-  var _super = _createSuper(MenuHandler);
-
-  function MenuHandler() {
-    (0, _classCallCheck2.default)(this, MenuHandler);
-    return _super.apply(this, arguments);
-  }
-
-  (0, _createClass2.default)(MenuHandler, [{
-    key: "getDefaultSettings",
-    value: function getDefaultSettings() {
-      return {
-        selectors: {
-          currentSubmenuItems: '#adminmenu .current'
-        }
-      };
-    }
-  }, {
-    key: "getDefaultElements",
-    value: function getDefaultElements() {
-      var settings = this.getSettings();
-      return {
-        $currentSubmenuItems: jQuery(settings.selectors.currentSubmenuItems),
-        $adminPageMenuLink: jQuery("a[href=\"".concat(settings.path, "\"]"))
-      };
-    } // This method highlights the currently visited submenu item for the slug provided as an argument to this handler.
-    // This method also accepts a jQuery instance of a custom submenu item to highlight. If provided, the provided
-    // item will be the one highlighted.
-
-  }, {
-    key: "highlightSubMenuItem",
-    value: function highlightSubMenuItem() {
-      var $element = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
-      var $submenuItem = $element || this.elements.$adminPageMenuLink;
-
-      if (this.elements.$currentSubmenuItems.length) {
-        this.elements.$currentSubmenuItems.removeClass('current');
-      }
-
-      $submenuItem.addClass('current'); // Need to add the 'current' class to the link element's parent `<li>` element as well.
-
-      $submenuItem.parent().addClass('current');
-    }
-  }, {
-    key: "highlightTopLevelMenuItem",
-    value: function highlightTopLevelMenuItem($elementToHighlight) {
-      var $elementToRemove = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
-      var activeClasses = 'wp-has-current-submenu wp-menu-open current';
-      $elementToHighlight.parent().addClass(activeClasses).removeClass('wp-not-current-submenu');
-
-      if ($elementToRemove) {
-        $elementToRemove.removeClass(activeClasses);
-      }
-    }
-  }, {
-    key: "onInit",
-    value: function onInit() {
-      (0, _get2.default)((0, _getPrototypeOf2.default)(MenuHandler.prototype), "onInit", this).call(this);
-      var settings = this.getSettings();
-
-      if (window.location.href.includes(settings.path)) {
-        this.highlightSubMenuItem();
-      }
-    }
-  }]);
-  return MenuHandler;
-}(elementorModules.ViewModule);
-
-exports["default"] = MenuHandler;
 
 /***/ })
 
