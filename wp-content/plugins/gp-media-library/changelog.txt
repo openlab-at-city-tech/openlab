@@ -1,6 +1,36 @@
 
 # Changelog
 
+## 1.2.25
+
+	- Added support for mapping Multi-file Upload fields as a featured image and mapping the same field to an ACF gallery field. The first image will be uploaded as the featured image. All other photos would be added to the gallery field.
+
+## 1.2.24
+
+	- Fixed error that could occur if deleting a file from a single file upload field using GravityView.
+
+## 1.2.23
+
+	- Added [gpml_image_sizes](https://gravitywiz.com/documentation/gpml_image_sizes) to allow filtering image sizes on upload.
+	- Added "Update URI" to plugin header to improve security.
+
+## 1.2.22
+
+	- Improved reliabiltiy of deleting files when integrated with other plugins.
+
+## 1.2.21
+
+	- Added [gpml_supported_acf_field_types](https://gravitywiz.com/documentation/gpml_supported_acf_field_types/) filter to allow enabling support for other ACF field types.
+	- Added support for Image Aspect Ratio Crop ACF field type.
+
+## 1.2.20
+
+	- Added support for setting File Upload Custom Fields as featured images. (#8)
+
+## 1.2.19
+
+	- Added support for automatically saving to a `file` or `image` ACF field.
+
 ## 1.2.18
 
 	- Fixed issue where GF Media Library would interfere with file ordering specified by File Upload Pro's sorting.
