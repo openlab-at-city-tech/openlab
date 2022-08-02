@@ -1747,7 +1747,7 @@ class C_Gallery_Storage extends C_Component
             if (!empty($dimensions['mime']) && $dimensions['mime'] == 'image/jpeg') {
                 $possible_quality = NULL;
                 $try_image_magick = TRUE;
-                if (function_exists('is_wpe') && ($dimensions[0] >= 8000 || $dimensions[1] >= 8000)) {
+                if (defined('NGG_DISABLE_IMAGICK') && NGG_DISABLE_IMAGICK || function_exists('is_wpe') && ($dimensions[0] >= 8000 || $dimensions[1] >= 8000)) {
                     $try_image_magick = FALSE;
                 }
                 if ($try_image_magick && extension_loaded('imagick') && class_exists('Imagick')) {

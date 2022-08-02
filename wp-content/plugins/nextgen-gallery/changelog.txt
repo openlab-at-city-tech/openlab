@@ -1,6 +1,14 @@
 NextGEN Gallery
 by Imagely
 
+= V3.28  - 07.20.2022 =
+* NEW:     Added NGG_DISABLE_IMAGICK constant to disable use of ImageMagick
+
+= V3.27  - 05.25.2022 =
+* Fixed:   A possible PHP warning in the third party compatibility warning.
+* Fixed:   PHP 8 may emit a warning in the taxonomy controller when viewing the site frontpage while no posts or pages exist.
+* Fixed:   ThickBox's loadingAnimation.gif and tb-close.png URL were incorrect.
+
 = V3.26  - 04.27.2022 =
 * Fixed:   A change in NextGEN 3.23 broke albums pagination.
 * Fixed:   Compatibility with TinyMCE editor used by Advanced Custom Fields.
