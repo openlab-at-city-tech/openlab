@@ -290,8 +290,12 @@ body:not( .gf-legacy-ui ) .gp-field-setting input[type="number"] {
 	flex: 1;
 }
 
+/*
+ * Labels that are direct children of a group are displayed side-by-side with a corresponding input and vertically
+ * centered. Prevent any margin from interfering with that.
+ */
 .gp-group > label {
-	margin-bottom: 0;
+	margin-bottom: 0 !important;
 }
 
 /* Force inputs in gp-group containers to fill their containers in < GF 2.4. */

@@ -234,34 +234,42 @@ jQuery( document ).ready( function ( $ ) {
 	});
 
 	/**
-	 * GF uses this same technique to initialize tooltips last. We'll follow suit so we only update the tooltip
-	 * options once GF has initialized them.
+	 * Add additional capabilities to Gravity Forms tooltips including a "gp-tooltip-right" class as well as being
+     * able to pass data-gp-tooltip-options as an attribute to modify the jQuery UI Tooltip options for the current
+     * tooltip.
 	 */
+	var perkifyTooltip = function(el) {
+        var options = $( el ).data( 'gp-tooltip-options' );
+
+        if ( ! options && $( el ).hasClass( 'gp-tooltip-right' ) ) {
+            options = {
+                classes: {
+                    'ui-tooltip': 'gp-tooltip-right'
+                },
+                position: {
+                    my: 'right bottom',
+                    at: 'right+10 top-11',
+                    collision: 'none'
+                },
+	            // Fixes positional issues introduced by GF in [PR#1183](https://github.com/gravityforms/gravityforms/pull/1883/files).
+	            open: null
+            };
+        }
+
+
+        if ( options ) {
+            $( el ).tooltip( 'option', options );
+        }
+    };
+
+	$(document).on('gperks_tooltips_initialized', function() {
+        $( '.gp-tooltip' ).each( function() {
+            perkifyTooltip(this);
+        } );
+    });
+
     setTimeout( function() {
-
-	    $( '.gp-tooltip' ).each( function() {
-
-	    	var options = $( this ).data( 'gp-tooltip-options' );
-
-	    	if ( ! options && $( this ).hasClass( 'gp-tooltip-right' ) ) {
-	    		options = {
-				    classes: {
-					    'ui-tooltip': 'gp-tooltip-right'
-				    },
-				    position: {
-					    my: 'right bottom',
-					    at: 'right+10 top-11',
-					    collision: 'none'
-				    },
-			    };
-		    }
-
-	    	if ( options ) {
-			    $( this ).tooltip( 'option', options );
-		    }
-
-	    } );
-
+        $(document).trigger('gperks_tooltips_initialized');
     } );
 
 } );
