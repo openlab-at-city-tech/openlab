@@ -503,19 +503,24 @@ class DLM_Download_Handler {
 			$this->log( 'download', 'redirected', __( 'Redirected to file', 'download-monitor' ), $download, $version );
 			$allowed_paths = download_monitor()->service( 'file_manager' )->get_allowed_paths();
 
-			// Ensure we have a valid URL, not a file path
-			$scheme = parse_url( get_option( 'home' ), PHP_URL_SCHEME );
 			// At this point the $correct_path should have a value of the file path as the verification was made prior to this check
 			// we get the secure file path.
 			$correct_path = download_monitor()->service( 'file_manager' )->get_correct_path( $file_path, $allowed_paths );
-			$file_path    = str_replace( str_replace( DIRECTORY_SEPARATOR, '/', $correct_path ), site_url( '/', $scheme ), str_replace( DIRECTORY_SEPARATOR, '/', $file_path ) );
 
-			header("X-Robots-Tag: noindex, nofollow", true);
+			// Ensure we have a valid URL, not a file path.
+			$scheme = wp_parse_url( get_option( 'home' ), PHP_URL_SCHEME );
+
+			// If there are symbolik links the return of the function will be an URL, so the last replace will not be taken into consideration.
+			$file_path = download_monitor()->service( 'file_manager' )->check_symbolic_links( $file_path, true );
+
+			$file_path = str_replace( $correct_path, site_url( '/', $scheme ), $file_path );
+
+			header( 'X-Robots-Tag: noindex, nofollow', true );
 			header( 'Location: ' . $file_path );
 			exit;
 		}
 
-		$this->download_headers( $file_path, $download, $version );
+		$this->download_headers( $file_path, $download, $version, $remote_file );
 
         do_action( 'dlm_start_download_process', $download, $version, $file_path, $remote_file );
 
@@ -616,7 +621,7 @@ class DLM_Download_Handler {
 	 * @param DLM_Download $download
 	 * @param DLM_Download_Version $version
 	 */
-	private function download_headers( $file_path, $download, $version ) {
+	private function download_headers( $file_path, $download, $version, $remote_file ) {
 
 		// Get Mime Type
 		$mime_type = "application/octet-stream";
@@ -671,10 +676,17 @@ class DLM_Download_Handler {
 		$headers['Content-Disposition']       = "attachment; filename=\"{$file_name}\";";
 		$headers['Content-Transfer-Encoding'] = 'binary';
 
-		$file_manager = new DLM_File_Manager();
-		$file_size    = $file_manager->get_file_size( $file_path );
+		if ( $remote_file ) {
+			$file = wp_remote_head( $file_path );
 
-		if ( $file_size ) {
+			if ( ! is_wp_error( $file ) && ! empty( $file['headers']['content-length'] ) ) {
+				$file_size = $file['headers']['content-length'];
+			}
+		} else {
+			$file_size = filesize( $file_path );
+		}
+
+		if ( isset( $file_size ) && $file_size ) {
 			// Replace the old way ( getting the filesize from the DB ) in case the user has replaced the file directly using cPanel,
 			// FTP or other File Manager, or sometimes using  an optimization service it may cause unwanted results.
 			$headers['Content-Length'] = $file_size;
