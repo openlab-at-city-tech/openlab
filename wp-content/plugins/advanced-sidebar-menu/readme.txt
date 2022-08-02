@@ -6,7 +6,7 @@ Tags: menus, sidebar menu, hierarchy, category menu, pages menu, dynamic
 Requires at least: 5.4.0
 Tested up to: 6.0.1
 Requires PHP: 5.6.0
-Stable tag: 8.8.2
+Stable tag: 8.8.3
 
 == Description ==
 
@@ -158,6 +158,10 @@ Yes. Based on whatever page, post or category you are on, the menu will change a
 
 
 == Changelog ==
+= 8.8.3 = 
+* Introduced `advanced-sidebar-menu/menus/category/top-level-term-ids` filter.
+* Supported PRO version 8.9.2.
+
 = 8.8.2 =
 * Fixed widget id generation with block based widgets.
 * Introduced `advanced-sidebar-menu/core/include-template-parts-comments` filter.
