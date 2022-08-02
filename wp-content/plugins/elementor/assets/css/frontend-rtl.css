@@ -1,4 +1,4 @@
-/*! elementor - v3.6.7 - 03-07-2022 */
+/*! elementor - v3.6.8 - 27-07-2022 */
 @charset "UTF-8";
 .dialog-widget-content {
   background-color: #fff;
@@ -2298,6 +2298,9 @@ ul.elementor-icon-list-items.elementor-inline-items .elementor-inline-item {
   -ms-flex-preferred-size: 100%;
       flex-basis: 100%;
 }
+.e-container > .elementor-widget > .elementor-widget-container {
+  height: 100%;
+}
 .e-container > .e-container > .elementor-element-overlay .elementor-editor-element-setting, .elementor-widget .e-container > .elementor-element-overlay .elementor-editor-element-setting {
   position: relative;
   background-color: #556068;
@@ -4519,6 +4522,13 @@ button.swiper-pagination-bullet {
 
 .rtl .elementor-widget-divider .elementor-divider__text {
   direction: rtl;
+}
+
+.e-container > .elementor-widget-divider {
+  width: var(--container-widget-width, 100%);
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
 }
 
 .elementor-image-gallery .gallery-item {
