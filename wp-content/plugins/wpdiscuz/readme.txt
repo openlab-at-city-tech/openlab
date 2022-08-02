@@ -3,7 +3,7 @@ Contributors: gVectors Team
 Tags: comment, comments, ajax comments, comment form, comment fields
 Requires at least: 5.0
 Tested up to: 6.0
-Stable tag: 7.3.19
+Stable tag: 7.3.20
 Requires PHP: 5.6 and higher
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -185,15 +185,23 @@ Nothing will be lost!  **Comments - wpDiscuz** will show all old comments.
 
 == Changelog ==
 
+= Comments - wpDiscuz v7.3.20 - 20.07.2022 =
 
-= Comments - wpDiscuz v7.3.19 - 15.06.2022 =
-
-Fixed bug: Uncaught TypeError: array_key_exists()
+* Fixed bug: document.querySelectorAll().forEach is not a function. (old browsers)
+* Fixed bug: Restriction commenting by roles doesn't work until the page refresh
+* Fixed bug: Comment rating calculation issue
+* Added: new wpd-blog-[role-name]  class for every registered user
+* Added: Template function to get all options - wpdiscuzGetOptions()
+* Added: Template function to get single option by key / (tab optional) - wpDiscuzGetOption($key, $tab)
 
 
 **IMPORTANT!**
 
 * Please don't forget delete all caches and purge CDN after the update.
+
+= Comments - wpDiscuz v7.3.19 - 15.06.2022 =
+
+* Fixed bug: Uncaught TypeError: array_key_exists()
 
 = Comments - wpDiscuz v7.3.18 - 14.06.2022 =
 
