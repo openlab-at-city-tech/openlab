@@ -950,8 +950,8 @@ if ( ! class_exists( 'ExactDN' ) ) {
 					$fullsize_url = false;
 
 					// Identify image source.
-					$src      = $images['img_url'][ $index ];
-					$src_orig = $images['img_url'][ $index ];
+					$src      = trim( $images['img_url'][ $index ] );
+					$src_orig = $images['img_url'][ $index ]; // Don't trim, because we'll use it for search/replacement later.
 					if ( is_string( $src ) ) {
 						$this->debug_message( $src );
 					} else {
@@ -993,7 +993,7 @@ if ( ! class_exists( 'ExactDN' ) ) {
 					}
 					// Support Lazy Load plugins.
 					// Don't modify $tag yet as we need unmodified version later.
-					$lazy_load_src = $this->get_attribute( $images['img_tag'][ $index ], 'data-lazy-src' );
+					$lazy_load_src = trim( $this->get_attribute( $images['img_tag'][ $index ], 'data-lazy-src' ) );
 					if ( $lazy_load_src ) {
 						$placeholder_src      = $src;
 						$placeholder_src_orig = $src;
@@ -1004,7 +1004,7 @@ if ( ! class_exists( 'ExactDN' ) ) {
 						$srcset_fill          = true;
 					}
 					// Must be a legacy Jetpack thing as far as I can tell, no matches found in any currently installed plugins.
-					$lazy_load_src = $this->get_attribute( $images['img_tag'][ $index ], 'data-lazy-original' );
+					$lazy_load_src = trim( $this->get_attribute( $images['img_tag'][ $index ], 'data-lazy-original' ) );
 					if ( ! $lazy && $lazy_load_src ) {
 						$placeholder_src      = $src;
 						$placeholder_src_orig = $src;
@@ -1013,7 +1013,7 @@ if ( ! class_exists( 'ExactDN' ) ) {
 						$lazy                 = true;
 					}
 					if ( ! $lazy && strpos( $images['img_tag'][ $index ], 'a3-lazy-load/assets/images/lazy_placeholder' ) ) {
-						$lazy_load_src = $this->get_attribute( $images['img_tag'][ $index ], 'data-src' );
+						$lazy_load_src = trim( $this->get_attribute( $images['img_tag'][ $index ], 'data-src' ) );
 					}
 					if (
 						! $lazy &&
@@ -1037,7 +1037,7 @@ if ( ! class_exists( 'ExactDN' ) ) {
 						$srcset_fill          = true;
 					}
 					if ( ! $lazy && strpos( $images['img_tag'][ $index ], 'revslider/admin/assets/images/dummy' ) ) {
-						$lazy_load_src = $this->get_attribute( $images['img_tag'][ $index ], 'data-lazyload' );
+						$lazy_load_src = trim( $this->get_attribute( $images['img_tag'][ $index ], 'data-lazyload' ) );
 					}
 					if ( ! $lazy && $lazy_load_src ) {
 						$placeholder_src      = $src;
@@ -1343,7 +1343,7 @@ if ( ! class_exists( 'ExactDN' ) ) {
 							}
 
 							// Cleanup ExactDN URL.
-							$exactdn_url = str_replace( '&#038;', '&', esc_url( $exactdn_url ) );
+							$exactdn_url = str_replace( '&#038;', '&', esc_url( trim( $exactdn_url ) ) );
 							// Supplant the original source value with our ExactDN URL.
 							$this->debug_message( "replacing $src_orig with $exactdn_url" );
 							if ( $is_relative ) {
@@ -1357,7 +1357,7 @@ if ( ! class_exists( 'ExactDN' ) ) {
 								$placeholder_src = $this->generate_url( $placeholder_src );
 
 								if ( $placeholder_src !== $placeholder_src_orig ) {
-									$new_tag = str_replace( $placeholder_src_orig, str_replace( '&#038;', '&', esc_url( $placeholder_src ) ), $new_tag );
+									$new_tag = str_replace( $placeholder_src_orig, str_replace( '&#038;', '&', esc_url( trim( $placeholder_src ) ) ), $new_tag );
 								}
 
 								unset( $placeholder_src );
@@ -1442,7 +1442,7 @@ if ( ! class_exists( 'ExactDN' ) ) {
 						// If Lazy Load is in use, pass placeholder image through ExactDN.
 						$placeholder_src = $this->generate_url( $placeholder_src );
 						if ( $placeholder_src !== $placeholder_src_orig ) {
-							$new_tag = str_replace( $placeholder_src_orig, str_replace( '&#038;', '&', esc_url( $placeholder_src ) ), $new_tag );
+							$new_tag = str_replace( $placeholder_src_orig, str_replace( '&#038;', '&', esc_url( trim( $placeholder_src ) ) ), $new_tag );
 							// Replace original tag with modified version.
 							$content = str_replace( $tag, $new_tag, $content );
 						}
@@ -1855,6 +1855,9 @@ if ( ! class_exists( 'ExactDN' ) ) {
 				return $allow;
 			}
 			if ( ! empty( $_REQUEST['action'] ) && 'alm_get_posts' === $_REQUEST['action'] ) { // phpcs:ignore WordPress.Security.NonceVerification
+				return true;
+			}
+			if ( ! empty( $_POST['action'] ) && 'do_filter_products' === $_POST['action'] ) { // phpcs:ignore WordPress.Security.NonceVerification
 				return true;
 			}
 			if ( ! empty( $_POST['action'] ) && 'eddvbugm_viewport_downloads' === $_POST['action'] ) { // phpcs:ignore WordPress.Security.NonceVerification
@@ -2686,7 +2689,7 @@ if ( ! class_exists( 'ExactDN' ) ) {
 				add_filter( 'exactdn_skip_image', '__return_true', PHP_INT_MAX ); // This skips existing srcset indices.
 				add_filter( 'exactdn_srcset_multipliers', '__return_false', PHP_INT_MAX ); // This one skips the additional multipliers.
 			} elseif ( is_string( $route ) && false !== strpos( $route, 'wp/v2/media/' ) && ! empty( $request['context'] ) && 'view' === $request['context'] ) {
-				$this->debug_message( 'REST API media endpoint (could be post editor with WP >= 6.0)' );
+				$this->debug_message( 'REST API media endpoint, could be editor, we may never know...' );
 				// We don't want ExactDN urls anywhere near the editor, so disable everything we can.
 				add_filter( 'exactdn_override_image_downsize', '__return_true', PHP_INT_MAX );
 				add_filter( 'exactdn_skip_image', '__return_true', PHP_INT_MAX ); // This skips existing srcset indices.
@@ -3103,6 +3106,9 @@ if ( ! class_exists( 'ExactDN' ) ) {
 				return array();
 			}
 			if ( strpos( $image_url, 'public/images/spacer.' ) ) {
+				return array();
+			}
+			if ( strpos( $image_url, '/images/default/blank.gif' ) ) {
 				return array();
 			}
 			if ( '.svg' === substr( $image_url, -4 ) ) {
