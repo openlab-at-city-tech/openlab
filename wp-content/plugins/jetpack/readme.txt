@@ -1,7 +1,7 @@
 === Jetpack - WP Security, Backup, Speed, & Growth ===
 Contributors: automattic, adamkheckler, adrianmoldovanwp, aduth, akirk, allendav, alternatekev, andy, annamcphee, annezazu, apeatling, arcangelini, azaozz, batmoo, barry, beaulebens, biskobe, blobaugh, bjorsch, brbrr, cainm, cena, cfinke, chaselivingston, chellycat, clickysteve, csonnek, danielbachhuber, davoraltman, daniloercoli, delawski, designsimply, dllh, drawmyface, dsmart, dzver, ebinnion, egregor, eliorivero, enej, eoigal, erania-pinnera, ethitter, fgiannar, gcorne, georgestephanis, gibrown, goldsounds, hew, hugobaeta, hypertextranch, iammattthomas, iandunn, jblz, jasmussen, jeffgolenski, jeherve, jenhooks, jenia, jessefriedman, jgs, jkudish, jmdodd, joanrho, johnjamesjacoby, jshreve, kbrownkd, keoshi, koke, kraftbj, lancewillett, leogermani, lschuyler, macmanx, martinremy, matt, matveb, mattwiebe, maverick3x6, mcsf, mdawaffe, mdbitz, MichaelArestad, migueluy, mikeyarce, mkaz, nancythanki, nickmomrik, obenland, oskosk, pento, professor44, rachelsquirrel, rdcoll, ryancowles, richardmuscat, richardmtl, robertbpugh, roccotripaldi, samhotchkiss, samiff, scarstocea, scottsweb, sdixon194, sdquirk, sermitr, simison, stephdau, tmoorewp, tyxla, Viper007Bond, westi, yoavf, zinigor
 Tags: Security, backup, Woo, malware, scan, spam, CDN, search, social
-Stable tag: 11.1.2
+Stable tag: 11.2
 Requires at least: 5.9
 Requires PHP: 5.6
 Tested up to: 6.0
@@ -242,44 +242,42 @@ Jetpack Backup can do a full website migration to a new host, migrate theme file
 4. Promote your newest posts, pages, and products across your social media channels.
 
 == Changelog ==
-### 11.1.2 - 2022-07-15
-#### Bug fixes
-- Dashboard: avoid JavaScript errors and layout problems on sites experiencing URL-related connection issues with WordPress.com.
-
-### 11.1 - 2022-07-05
+### 11.2 - 2022-08-02
 #### Enhancements
-- Dashboard: add "Getting started with Jetpack Backup" video to Assistant and "At a glance" dashboard.
-- Recipe Block (beta): introduce a new Recipe block to display an easy to read recipe anywhere on your site. Currently a JETPACK_BETA_BLOCKS feature.
-- VideoPress: enable blocks with VideoPress markdown to be previewed within the mobile app.
-- VideoPress Block (beta): introduce VideoPress block currently in beta status.
+- Blocks: enable Jetpack block collection for the native editor block inserter (on self hosted Jetpack sites).
+- Connection: make sure pre-existing settings are respected on plugin activation.
+- Form Block: add a lock to the contact form submit button.
+- Native block inserter: only display blocks under a Jetpack heading if the host app is WordPress.
+- Podcast Player: add new actions to make it possible for users to set up code that runs for podcast fetches.
+- VideoPress Block (beta): mutiple UI enhancements including error messaging, markup, layout and behavior. Currently a JETPACK_BETA_BLOCKS feature.
+
 
 #### Improved compatibility
-- Blocks: add Jetpack block elements to WPML configuration so they can be translated.
-- Connection: update connection banner to use updated Emerald styling.
+- Admin UI: add h1 page headings for better screen reader navigation.
 - Custom Post Types: change Nova functions to public to re-allow hooking.
-- Publicize: configure Publicize only when the module is active.
-- VideoPress: update non-iframe player to latest version for sites using the `jetpack_videopress_player_use_iframe` filter.
 
 #### Bug fixes
-- CLI: avoid PHP notice when running connection tests.
-- Connection: move the connection_url_redirect action handling to the connection package.
-- Contact Form: support saving array of data, such as multiple checkboxes.
-- Contact Form Block: display expected success message when used in FSE header or footer.
-- Contact Form Block: radio, select, and multiple checkbox fields can now have option with a value of '0'.
-- Dashboard: fix the link to Anti-spam stats.
-- Dashboard: format anti-spam stats properly, including in languages using a space as thousands separator.
-- Mailchimp Block: center spinner during loading block content.
-- Payment Block: fix issue preventing images in payment buttons.
-- Payments Block: only add PayPal email meta to Payment posts.
-- Payments Block: remove hardcoded recurring-payments button color.
-- Photon: do not return Photonized URLs to the block editor in WordPress 6.0.
-- Search: avoid broken images in search results by preferring the _jetpack_featured_media_url postmeta over the GUID.
-- SEO Tools: allow WooCommerce to use custom SEO description for the shop page.
-- Sharing: avoid fatal errors when email sharing process is called  without clicking on the button.
-- Subscribe Block: fix double-quote breaking the Subscribe block button.
-- VideoPress: fix average color parameter for seekbar.
-- VideoPress: fix embeds in classic editor when theme has no $content_width set.
-- VideoPress Block: fix Cancel button on block and provide better error message when video format is not supported.
+- Admin menu: display the translations for the plan name.
+- Comments: avoid PHP Notice when using Jetpack's Comment form feature when your site is no longer properly connected to WordPress.com.
+- Connection: fix Jetpack redirect after registration.
+- Form Block: prevent error notice when processing submission from 404 page.
+- Form block: fix Checkbox Group option color.
+- Form block: preserve line breaks in form submissions.
+- Gathering Twitter Threads: ensure that only contributors can access the endpoint to unroll threads.
+- Masterbar: ensure that the WordPress.com Add Ons menu item doesn't display on Jetpack-connected sites.
+- Masterbar: fix All Posts dashboard redirect issue when switching between classic and default editor views.
+- Product Descriptions: fix search price on Search Product Description by accounting for sale coupons and ensuring the correct JP Search tier is shown.
+- Related Posts: avoid PHP warnings when visiting AMP post views.
+- Sharing: ensure that sharing buttons are not displayed for excerpts.
+- Sharing: hide button information in Blog Posts block in editor.
+- Slideshow Block: override container display to prevent a gap between slideshow and contents.
+- Slideshow Block: support wide and full alignment options.
+- Stats: allow custom user role stats settings to be properly recognized and saved.
+- Stats: fix dashboard widget form name to allow form choices to be saved.
+- Subscribe block: fix support for allowed HTML tags in submit button.
+- Subscriptions: format the number of subscribers displayed in the block editor's controls.
+- VideoPress: avoid PHP notices when inserting videos that miss some metadata.
+- VideoPress: fix bug when getting the video preview of the VideoPress block.
 
 --------
 
