@@ -639,6 +639,10 @@ button.mapp-query-refresh {
 	flex: 1;
 }
 
+.mapp-query-help {
+	margin-bottom: 10px;
+}
+
 /*
 	-----------------------------------------------------------------------------------
 	GT document sidebar document panel
@@ -768,14 +772,19 @@ button.mapp-query-refresh {
 	-----------------------------------------------------------------------------------
 */
 
-.mapp-mce-visual, .mapp-mce-html {
+.mapp-iw .mapp-mce-visual, .mapp-iw .mapp-mce-html {
+	border-bottom: 2px solid white !important;
 	cursor: pointer;
 	display: inline-block;
 	padding: 5px !important;
 }
 
-.mapp-mce-visual.mapp-active, .mapp-mce-html.mapp-active {
+.mapp-iw .mapp-mce-tabs a.mapp-active, .mapp-iw .mapp-mce-tabs a.mapp-active:hover {
 	border-bottom: 2px solid black !important;
+}
+
+.mapp-iw .mapp-mce-visual:hover, .mapp-iw .mapp-mce-html:hover {
+	background-color: #e9f0f5;
 }
 
 .mapp-mce-toolbar {
