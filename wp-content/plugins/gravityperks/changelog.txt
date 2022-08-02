@@ -1,9 +1,15 @@
 
 # Changelog
 
+## 2.2.7
+
+	- Fixed positional tooltip issues introduced in Gravity Forms 2.5.6.
+	- Added `gperks_tooltips_initialized` jQuery event to be used by Perks adding tooltips after initial load.
+
 ## 2.2.6
 
-	- Added ASM Select so perks no longer need to include this individually.
+	- Fixed a potential issue where some perks may display settings in the wrong tab.
+	- Updated field setting group label styles.
 
 ## 2.2.5
 

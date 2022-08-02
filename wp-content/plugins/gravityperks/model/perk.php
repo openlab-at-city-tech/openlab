@@ -28,8 +28,6 @@ class GP_Perk {
 
     function __construct( $perk_file = null, $product_id = null ) {
 
-	    $args = func_get_args();
-
         if( ! class_exists( 'GWPerks') ) {
 	        return;
         }
@@ -38,6 +36,8 @@ class GP_Perk {
         	_doing_it_wrong( __CLASS__ . ':' . __METHOD__, 'Oops! You\'re instantiating this perk to early.', '1.2.21' );
         	return;
         }
+
+	    $args = func_get_args();
 
         $this->basename   = $perk_file;
         $this->slug       = strtolower( basename( $perk_file, '.php' ) );

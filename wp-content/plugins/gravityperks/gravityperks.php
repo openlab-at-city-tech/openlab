@@ -3,7 +3,7 @@
  * Plugin Name: Gravity Perks
  * Plugin URI: https://gravitywiz.com/
  * Description: Effortlessly install and manage small functionality enhancements (aka "perks") for Gravity Forms.
- * Version: 2.2.5
+ * Version: 2.2.7
  * Author: Gravity Wiz
  * Author URI: https://gravitywiz.com/
  * License: GPL2
@@ -11,7 +11,7 @@
  * Domain Path: /languages
  */
 
-define( 'GRAVITY_PERKS_VERSION', '2.2.5' );
+define( 'GRAVITY_PERKS_VERSION', '2.2.7' );
 
 /**
  * Include the perk model as early as possible to when Perk plugins are loaded, they can safely extend
@@ -151,7 +151,7 @@ class GravityPerks {
 
 		// Add Perks tab to form editor.
 		add_action( 'gform_field_settings_tabs', array( __class__, 'add_perks_tab' ) );
-		add_action( 'gform_field_settings_tab_content', array( __class__, 'add_perks_tab_settings' ) );
+		add_action( 'gform_field_settings_tab_content_gravity-perks', array( __class__, 'add_perks_tab_settings' ) );
 
         add_action( 'gform_field_standard_settings',   array( __class__, 'dynamic_setting_actions' ), 10, 2 );
         add_action( 'gform_field_appearance_settings', array( __class__, 'dynamic_setting_actions' ), 10, 2 );
@@ -781,14 +781,14 @@ class GravityPerks {
 		if( !self::has_valid_license() && empty($api->download_link) ) {
 			$actions['invalid_license'] = '<div class="notice notice-error gp-plugin-action-invalid-license">
 		        <p>
-		            <strong>Uh-oh!</strong> It looks like this site doesn&lsquo;t have a valid Gravity Perks license. 
+		            <strong>Uh-oh!</strong> It looks like this site doesn&lsquo;t have a valid Gravity Perks license.
 		            Please add your license under Manage Perks if you already have a license.
                 </p>
-                
+
                 <p>
                     Otherwise, you may purchase a license by clicking &ldquo;Buy License&rdquo; below.
                 </p>
-                
+
                 <p>
                     <a class="button-secondary" href="' . GW_MANAGE_PERKS_URL . '">Manage Perks</a>
                     &nbsp;
