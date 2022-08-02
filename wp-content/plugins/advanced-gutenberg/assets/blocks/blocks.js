@@ -5074,6 +5074,130 @@ function AdvColorControl(props) {
 
 /***/ }),
 
+/***/ "./src/assets/blocks/0-adv-components/datetime.jsx":
+/*!*********************************************************!*\
+  !*** ./src/assets/blocks/0-adv-components/datetime.jsx ***!
+  \*********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
+exports.AdvDateTimeControl = AdvDateTimeControl;
+function AdvDateTimeControl(props) {
+    var _wp$components = wp.components,
+        Button = _wp$components.Button,
+        DateTimePicker = _wp$components.DateTimePicker,
+        Popover = _wp$components.Popover,
+        Tooltip = _wp$components.Tooltip;
+    var _wp$element = wp.element,
+        Fragment = _wp$element.Fragment,
+        useState = _wp$element.useState;
+    var __ = wp.i18n.__;
+
+    var _useState = useState(false),
+        _useState2 = _slicedToArray(_useState, 2),
+        popupState = _useState2[0],
+        setPopupState = _useState2[1];
+
+    var togglePopup = function togglePopup() {
+        setPopupState(function (state) {
+            return !state;
+        });
+    };
+
+    var buttonLabel = props.buttonLabel,
+        dateLabel = props.dateLabel,
+        date = props.date,
+        onChangeDate = props.onChangeDate,
+        onDateClear = props.onDateClear,
+        onInvalidDate = props.onInvalidDate;
+
+
+    return React.createElement(
+        Fragment,
+        null,
+        React.createElement(
+            "div",
+            { className: "advgb-advcalendar-control" },
+            React.createElement(
+                "label",
+                null,
+                dateLabel
+            ),
+            React.createElement(
+                "div",
+                null,
+                React.createElement(
+                    Button,
+                    {
+                        isLink: true,
+                        icon: "calendar",
+                        onClick: function onClick() {
+                            return setPopupState(togglePopup);
+                        }
+                    },
+                    React.createElement(
+                        Tooltip,
+                        { text: __('Change date', 'advanced-gutenberg') },
+                        React.createElement(
+                            "span",
+                            null,
+                            date ? moment(date).format("MMMM DD YYYY, h:mm a") : buttonLabel
+                        )
+                    )
+                ),
+                date && React.createElement(Button, {
+                    icon: "no-alt",
+                    className: "advgb-advcalendar-remove-icon",
+                    onClick: function onClick() {
+                        return onDateClear();
+                    }
+                })
+            )
+        ),
+        popupState && React.createElement(
+            Popover,
+            {
+                className: "advgb-advcalendar-popover",
+                onClose: setPopupState.bind(null, false)
+            },
+            React.createElement(
+                "label",
+                { className: "advgb-advcalendar-popover-label" },
+                dateLabel,
+                React.createElement(Button, {
+                    icon: "no-alt",
+                    className: "advgb-advcalendar-remove-icon",
+                    onClick: function onClick() {
+                        return setPopupState(togglePopup);
+                    }
+                })
+            ),
+            React.createElement(
+                "div",
+                { className: "advgb-advcalendar-popover-timezone" },
+                typeof advgbBlocks.timezone !== 'undefined' && advgbBlocks.timezone.length ? advgbBlocks.timezone.replace(/_/g, ' ') + " " + __('time', 'advanced-gutenberg') : __('WordPress settings timezone', 'advanced-gutenberg')
+            ),
+            React.createElement(DateTimePicker, {
+                currentDate: date,
+                onChange: onChangeDate,
+                is12Hour: true,
+                isInvalidDate: onInvalidDate
+            })
+        )
+    );
+}
+
+/***/ }),
+
 /***/ "./src/assets/blocks/0-adv-components/icon-class.jsx":
 /*!***********************************************************!*\
   !*** ./src/assets/blocks/0-adv-components/icon-class.jsx ***!
@@ -30606,13 +30730,14 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 /***/ }),
 
 /***/ 0:
-/*!****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** multi ./src/assets/blocks/0-adv-components/components.jsx ./src/assets/blocks/0-adv-components/icon-class.jsx ./src/assets/blocks/accordion/block.jsx ./src/assets/blocks/advaccordion/accordion.jsx ./src/assets/blocks/advaccordion/block.jsx ./src/assets/blocks/advbutton/block.jsx ./src/assets/blocks/advicon/block.jsx ./src/assets/blocks/advimage/block.jsx ./src/assets/blocks/advlist/block.jsx ./src/assets/blocks/advtable/block.jsx ./src/assets/blocks/advtabs/block.jsx ./src/assets/blocks/advtabs/tab.jsx ./src/assets/blocks/advvideo/block.jsx ./src/assets/blocks/columns/block.jsx ./src/assets/blocks/columns/column.jsx ./src/assets/blocks/contact-form/block.jsx ./src/assets/blocks/container/block.jsx ./src/assets/blocks/count-up/block.jsx ./src/assets/blocks/images-slider/block.jsx ./src/assets/blocks/infobox/block.jsx ./src/assets/blocks/login-form/block.jsx ./src/assets/blocks/map/block.jsx ./src/assets/blocks/newsletter/block.jsx ./src/assets/blocks/recent-posts/block.jsx ./src/assets/blocks/recent-posts/query-controls.jsx ./src/assets/blocks/search-bar/block.jsx ./src/assets/blocks/social-links/block.jsx ./src/assets/blocks/summary/block.jsx ./src/assets/blocks/tabs/block.jsx ./src/assets/blocks/testimonial/block.jsx ./src/assets/blocks/woo-products/block.jsx ***!
-  \****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*!******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** multi ./src/assets/blocks/0-adv-components/components.jsx ./src/assets/blocks/0-adv-components/datetime.jsx ./src/assets/blocks/0-adv-components/icon-class.jsx ./src/assets/blocks/accordion/block.jsx ./src/assets/blocks/advaccordion/accordion.jsx ./src/assets/blocks/advaccordion/block.jsx ./src/assets/blocks/advbutton/block.jsx ./src/assets/blocks/advicon/block.jsx ./src/assets/blocks/advimage/block.jsx ./src/assets/blocks/advlist/block.jsx ./src/assets/blocks/advtable/block.jsx ./src/assets/blocks/advtabs/block.jsx ./src/assets/blocks/advtabs/tab.jsx ./src/assets/blocks/advvideo/block.jsx ./src/assets/blocks/columns/block.jsx ./src/assets/blocks/columns/column.jsx ./src/assets/blocks/contact-form/block.jsx ./src/assets/blocks/container/block.jsx ./src/assets/blocks/count-up/block.jsx ./src/assets/blocks/images-slider/block.jsx ./src/assets/blocks/infobox/block.jsx ./src/assets/blocks/login-form/block.jsx ./src/assets/blocks/map/block.jsx ./src/assets/blocks/newsletter/block.jsx ./src/assets/blocks/recent-posts/block.jsx ./src/assets/blocks/recent-posts/query-controls.jsx ./src/assets/blocks/search-bar/block.jsx ./src/assets/blocks/social-links/block.jsx ./src/assets/blocks/summary/block.jsx ./src/assets/blocks/tabs/block.jsx ./src/assets/blocks/testimonial/block.jsx ./src/assets/blocks/woo-products/block.jsx ***!
+  \******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(/*! ./src/assets/blocks/0-adv-components/components.jsx */"./src/assets/blocks/0-adv-components/components.jsx");
+__webpack_require__(/*! ./src/assets/blocks/0-adv-components/datetime.jsx */"./src/assets/blocks/0-adv-components/datetime.jsx");
 __webpack_require__(/*! ./src/assets/blocks/0-adv-components/icon-class.jsx */"./src/assets/blocks/0-adv-components/icon-class.jsx");
 __webpack_require__(/*! ./src/assets/blocks/accordion/block.jsx */"./src/assets/blocks/accordion/block.jsx");
 __webpack_require__(/*! ./src/assets/blocks/advaccordion/accordion.jsx */"./src/assets/blocks/advaccordion/accordion.jsx");
