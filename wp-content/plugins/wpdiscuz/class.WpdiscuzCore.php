@@ -2,7 +2,7 @@
 /*
  * Plugin Name: wpDiscuz
  * Description: #1 WordPress Comment Plugin. Innovative, modern and feature-rich comment system to supercharge your website comment section.
- * Version: 7.3.19
+ * Version: 7.3.20
  * Author: gVectors Team
  * Author URI: https://gvectors.com/
  * Plugin URI: https://wpdiscuz.com/
@@ -328,7 +328,7 @@ class WpdiscuzCore implements WpDiscuzConstants {
             $this->form = $this->wpdiscuzForm->getForm($postId);
             $this->form->initFormFields();
             $currentUser = WpdiscuzHelper::getCurrentUser();
-            if ($this->form->isUserCanSeeComments($currentUser, $postId)) {
+            if ($this->form->isUserCanSeeComments($currentUser, $postId) && $this->form->isUserCanComment($currentUser, $postId)) {
                 do_action("wpdiscuz_before_comment_post");
                 if (!comments_open($postId)) {
                     wp_die(esc_html($this->options->getPhrase("wc_commenting_is_closed")));
@@ -480,7 +480,7 @@ class WpdiscuzCore implements WpDiscuzConstants {
                     wp_send_json_error("wc_invalid_field");
                 }
             } else {
-                wp_send_json_error("wc_msg_required_fields");
+                wp_die(esc_html($this->options->getPhrase("wc_commenting_is_closed")));
             }
         } else {
             wp_send_json_error("wc_msg_required_fields");
@@ -508,7 +508,7 @@ class WpdiscuzCore implements WpDiscuzConstants {
             $this->form = $this->wpdiscuzForm->getForm($comment->comment_post_ID);
             $this->form->initFormFields();
             $this->form->validateFields($currentUser);
-            if (!intval(get_comment_meta($comment->comment_ID, self::META_KEY_CLOSED, true)) && ($highLevelUser || $isCurrentUserCanEdit) && $this->form->isUserCanSeeComments($currentUser, $comment->comment_post_ID)) {
+            if (!intval(get_comment_meta($comment->comment_ID, self::META_KEY_CLOSED, true)) && ($highLevelUser || $isCurrentUserCanEdit) && $this->form->isUserCanSeeComments($currentUser, $comment->comment_post_ID)  && $this->form->isUserCanComment($currentUser, $comment->comment_post_ID)) {
                 $isInRange = $this->helper->isContentInRange($trimmedContent, $comment->comment_parent);
 
                 if (!$isInRange && !$highLevelUser) {
@@ -1054,10 +1054,8 @@ class WpdiscuzCore implements WpDiscuzConstants {
             &$this->options,
             "tools"
         ]);
-        add_submenu_page(self::PAGE_WPDISCUZ, "&raquo; " . esc_html__("Addons", "wpdiscuz"), "&raquo; " . esc_html__("Addons", "wpdiscuz"), "manage_options", self::PAGE_ADDONS, [
-            &$this->options,
-            "addons"
-        ]);
+
+        do_action("wpdiscuz_submenu_page");
     }
 
     /**
@@ -2466,6 +2464,15 @@ class WpdiscuzCore implements WpDiscuzConstants {
             }
         }
     }
+
+    /**
+     * @return WpdiscuzOptions
+     */
+    public function getOptions() {
+        return $this->options;
+    }
+
+
 
 }
 

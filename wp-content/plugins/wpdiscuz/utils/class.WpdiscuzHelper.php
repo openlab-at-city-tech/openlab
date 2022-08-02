@@ -413,7 +413,7 @@ class WpdiscuzHelper implements WpDiscuzConstants {
     }
 
     public function canUserEditComment($comment, $currentUser, $commentListArgs = []) {
-        if(!($comment instanceof WP_Comment)){
+        if (!($comment instanceof WP_Comment)) {
             return false;
         }
         if (isset($commentListArgs["comment_author_email"])) {
@@ -1148,34 +1148,35 @@ class WpdiscuzHelper implements WpDiscuzConstants {
         $user["author_title"] = "";
         $user["commentWrapRoleClass"] = [];
         if ($user["user"]) {
+            if ($this->options->labels["blogRoles"]) {
+                if ($user["user"]->roles && is_array($user["user"]->roles)) {
+                    foreach ($user["user"]->roles as $k => $role) {
+                        if (isset($this->options->labels["blogRoles"][$role])) {
+                            $user["commentWrapRoleClass"][] = "wpd-blog-user";
+                            $user["commentWrapRoleClass"][] = "wpd-blog-" . $role;
+                            $rolePhrase = esc_html($this->options->getPhrase("wc_blog_role_" . $role, ["default" => ""]));
+                            if (!empty($this->options->labels["blogRoleLabels"][$role])) {
+                                $user["author_title"] = apply_filters("wpdiscuz_user_label", $rolePhrase, $user["user"]);
+                            }
+                            break;
+                        }
+                    }
+                } else {
+                    $user["commentWrapRoleClass"][] = "wpd-blog-guest";
+                    if (!empty($this->options->labels["blogRoleLabels"]["guest"])) {
+                        $user["author_title"] = esc_html($this->options->getPhrase("wc_blog_role_guest"));
+                    }
+                }
+            }
+
             if ($user["user"]->ID == $args["post_author"]) {
                 $user["commentWrapRoleClass"][] = "wpd-blog-user";
                 $user["commentWrapRoleClass"][] = "wpd-blog-post_author";
                 if (!empty($this->options->labels["blogRoleLabels"]["post_author"])) {
                     $user["author_title"] = esc_html($this->options->getPhrase("wc_blog_role_post_author"));
                 }
-            } else {
-                if ($this->options->labels["blogRoles"]) {
-                    if ($user["user"]->roles && is_array($user["user"]->roles)) {
-                        foreach ($user["user"]->roles as $k => $role) {
-                            if (isset($this->options->labels["blogRoles"][$role])) {
-                                $user["commentWrapRoleClass"][] = "wpd-blog-user";
-                                $user["commentWrapRoleClass"][] = "wpd-blog-" . $role;
-                                $rolePhrase = esc_html($this->options->getPhrase("wc_blog_role_" . $role, ["default" => ""]));
-                                if (!empty($this->options->labels["blogRoleLabels"][$role])) {
-                                    $user["author_title"] = apply_filters("wpdiscuz_user_label", $rolePhrase, $user["user"]);
-                                }
-                                break;
-                            }
-                        }
-                    } else {
-                        $user["commentWrapRoleClass"][] = "wpd-blog-guest";
-                        if (!empty($this->options->labels["blogRoleLabels"]["guest"])) {
-                            $user["author_title"] = esc_html($this->options->getPhrase("wc_blog_role_guest"));
-                        }
-                    }
-                }
             }
+            
         } else {
             $user["commentWrapRoleClass"][] = "wpd-blog-guest";
             if (!empty($this->options->labels["blogRoleLabels"]["guest"])) {
@@ -1493,7 +1494,7 @@ class WpdiscuzHelper implements WpDiscuzConstants {
             $glob = INPUT_POST === $action ? $_POST : $_GET;
             if (key_exists($variable_name, $glob)) {
                 return sanitize_text_field($glob[$variable_name]);
-            }else{
+            } else {
                 return $default;
             }
         }

@@ -283,7 +283,7 @@ class Form {
         if ($this->ratingsExists && $this->ratings) {
             $ratingSum = 0;
             foreach ($this->ratings as $k => $rating) {
-                $ratingSum += $rating["value"];
+                $ratingSum += (int)$rating["value"];
             }
             $gRating = round($ratingSum / count($this->ratings));
             update_comment_meta($commentID, "rating", $gRating);

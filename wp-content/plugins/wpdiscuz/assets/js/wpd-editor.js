@@ -14,8 +14,8 @@ class wpdEditorCounter {
 
     calculate() {
         let length = this.quill.getText().length,
-                editorid = this.quill.container.id,
-                images = document.querySelectorAll(`#${editorid} .ql-editor img`);
+            editorid = this.quill.container.id,
+            images = Array.from(document.querySelectorAll(`#${editorid} .ql-editor img`));
         if (images.length) {
             images.forEach(function (img) {
                 if (img.src.match(/https\:\/\/s\.w\.org\/images\/core\/emoji/gi) !== null) {
@@ -32,7 +32,7 @@ class wpdEditorCounter {
 
     update() {
         let length = this.calculate(),
-                _length = length - 1;
+            _length = length - 1;
         let parentId = this.quill.container.id.substring(this.quill.container.id.lastIndexOf('_') + 1);
         let commentmaxcount = parseInt(parentId) ? this.replymaxcount : this.commentmaxcount;
 
@@ -56,6 +56,7 @@ class wpdEditorCounter {
 Quill.register('modules/counter', wpdEditorCounter);
 
 let Link = Quill.import('formats/link');
+
 class wpdEditorLink extends Link {
     static create(value) {
         let node = super.create(value);
@@ -67,6 +68,7 @@ class wpdEditorLink extends Link {
         }
         return node;
     }
+
     static sanitize(url) {
         let s_url = super.sanitize(url);
         let protocol = s_url.slice(0, s_url.indexOf(':'));
@@ -77,6 +79,7 @@ class wpdEditorLink extends Link {
     }
 
 }
+
 Quill.register(wpdEditorLink, true);
 
 class WpdEditor {
@@ -153,25 +156,24 @@ class WpdEditor {
                     return delta;
                 }
             });
-            
+
             editor.clipboard.addMatcher('img', (node, delta) => {
                 let Delta = Quill.import('delta');
-                let src  = node.getAttribute("src");
+                let src = node.getAttribute("src");
                 if (/^data:image\/.+;base64/.test(src)) {
                     return new Delta([{insert: ''}]);
                 } else {
-                   return new Delta([{insert: src}]);
+                    return new Delta([{insert: src}]);
                 }
             });
-            document.querySelectorAll(`${toolbar} button`).forEach(
-                    (button) => {
+            Array.from(document.querySelectorAll(`${toolbar} button`)).forEach((button) => {
                 button.onclick = () => {
                     this.currentEditor = editor;
                     this.container = editor.container.id;
                     let buttonName = button.dataset.wpde_button_name;
                     if (buttonName !== undefined &&
-                            typeof buttonName === 'string' &&
-                            buttonName.trim() !== '' && this._handlers.has(buttonName)) {
+                        typeof buttonName === 'string' &&
+                        buttonName.trim() !== '' && this._handlers.has(buttonName)) {
                         this._handlers.get(buttonName)(this.currentEditor, this.uniqueid);
                     }
                 };
@@ -206,7 +208,7 @@ class WpdEditor {
 
     _bindTextEditor(editor) {
         let textEditorID = `${this.textEditorPrefix}-${this.uniqueid}`,
-                textEditorHtml = document.getElementById(textEditorID);
+            textEditorHtml = document.getElementById(textEditorID);
         if (textEditorHtml) {
             textEditorHtml.style.cssText = "display: none;";
             editor.addContainer(this.textEditorContainer).appendChild(textEditorHtml);
@@ -248,8 +250,8 @@ class WpdEditor {
                 return;
             }
             let spoilerShortCodeLeft = ` [spoiler title="${spoilerTitle}"] `,
-                    spoilerShortCodeRight = ' [/spoiler] ',
-                    reng = editor.getSelection();
+                spoilerShortCodeRight = ' [/spoiler] ',
+                reng = editor.getSelection();
             if (reng === null) {
                 reng = {
                     index: editor.getLength() - 1,
