@@ -49,6 +49,11 @@ $enable_advgb_blocks = isset($saved_settings['enable_advgb_blocks']) && $saved_s
 if (!isset($saved_settings['enable_advgb_blocks'])) {
     $enable_advgb_blocks  = 'checked';
 }
+
+$block_controls = isset($saved_settings['block_controls']) && $saved_settings['block_controls'] ? 'checked' : '';
+if (!isset($saved_settings['block_controls'])) {
+    $block_controls = 'checked';
+}
 ?>
 
 <div id="advgb-settings-container">
@@ -394,6 +399,29 @@ if (!isset($saved_settings['enable_advgb_blocks'])) {
                                        id="enable_columns_visual_guide"
                                        value="1"
                                     <?php echo esc_attr($enable_columns_visual_guide) ?>
+                                />
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </li>
+                <li class="ju-settings-option clearfix">
+                    <div class="settings-option-wrapper clearfix">
+                        <label for="block_controls"
+                               class="advgb_qtip ju-setting-label"
+                               data-qtip="<?php esc_attr_e(
+                                   'Enable block controls panel to schedule blocks',
+                                   'advanced-gutenberg'
+                               ) ?>"
+                        >
+                            <?php esc_html_e('Enable block controls', 'advanced-gutenberg') ?>
+                        </label>
+                        <div class="ju-switch-button">
+                            <label class="switch">
+                                <input type="checkbox" name="block_controls"
+                                       id="block_controls"
+                                       value="1"
+                                    <?php echo esc_attr($block_controls) ?>
                                 />
                                 <span class="slider"></span>
                             </label>

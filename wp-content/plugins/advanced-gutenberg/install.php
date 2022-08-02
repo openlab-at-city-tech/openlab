@@ -49,6 +49,7 @@ register_activation_hook(ADVANCED_GUTENBERG_PLUGIN, function () {
             'enable_advgb_blocks' => 1,
             'enable_pp_branding' => 1,
             'enable_core_blocks_features' => 1,
+            'block_controls' => 1,
         ));
     }
 
