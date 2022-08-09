@@ -74,7 +74,7 @@ add_filter(
 		}
 
 		if ( empty( $_GET['checkemail'] ) || 'confirm' !== $_GET['checkemail'] ) {
-			$errors->add( 'password_reset_message', sprintf( '<strong>Please note</strong>: For the safety of your account, all City Tech OpenLab passwords were reset on August 4, 2022.  If you have not yet set a new password for your account, or if you have forgotten your password, <a href="%s">reset it now</a>.', esc_url( wp_lostpassword_url() ) ), 'message' );
+			$errors->add( 'password_reset_message', sprintf( '<strong>Please note</strong>: For the safety of your account, all City Tech OpenLab passwords were reset on August 9, 2022.  If you have not yet set a new password for your account, or if you have forgotten your password, <a href="%s">reset it now</a>.', esc_url( wp_lostpassword_url() ) ), 'message' );
 		}
 
 		$password_error_messages = $errors->get_error_messages( 'incorrect_password' );
