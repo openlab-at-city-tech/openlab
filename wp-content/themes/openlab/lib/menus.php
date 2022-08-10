@@ -587,7 +587,7 @@ function openlab_group_forum_submenu() {
         ];
 
         $bbp = bbpress();
-        
+
         // Forum data
         $offset = 0;
         $forum_ids = bbp_get_group_forum_ids(bp_get_current_group_id());
