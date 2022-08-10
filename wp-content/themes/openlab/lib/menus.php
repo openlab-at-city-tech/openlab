@@ -78,10 +78,21 @@ add_filter('wp_nav_menu_objects', 'openlab_wp_menu_customizations', 11, 2);
  * Hooked to bp_screens at 1 because apparently BP is broken??
  */
 function openlab_modify_options_nav() {
-    if (bp_is_group() && openlab_is_portfolio() && !bp_is_group_create()) {
-        buddypress()->groups->nav->edit_nav(array(
-            'name' => 'Profile',
-                ), 'home', bp_get_current_group_slug());
+    if ( bp_is_group() && openlab_is_portfolio() && !bp_is_group_create() ) {
+		$group_type_label = openlab_get_group_type_label(
+			[
+				'group_id' => bp_get_current_group_id(),
+				'case'     => 'upper',
+			]
+		);
+
+        buddypress()->groups->nav->edit_nav(
+			[
+				'name' => $group_type_label . ' Profile',
+			],
+            'home',
+			bp_get_current_group_slug()
+		);
 
         buddypress()->groups->nav->edit_nav(array(
             'name' => 'Settings',
