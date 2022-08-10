@@ -1125,8 +1125,7 @@ function openlab_filter_subnav_nav_announcements( $subnav_item ) {
 		[
 			'post_type'      => 'openlab_announcement',
 			'post_status'    => 'publish',
-			'posts_per_page' => $per_page,
-			'paged'          => $paged,
+			'posts_per_page' => -1,
 			'meta_query'     => [
 				[
 					'key'   => 'openlab_announcement_group_id',
