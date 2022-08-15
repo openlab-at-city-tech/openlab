@@ -61,9 +61,11 @@ $pagination = str_replace( 'current\'><span class="sr-only">Page', 'current\'><s
 
 	<div class="item-list announcement-list clearfix"></div>
 
-	<div id="no-announcement-message" class="info no-announcement-message">
-		<p>This group has no announcements.</p>
-	</div>
+	<?php if ( ! openlab_user_can_post_announcements() ) : ?>
+		<div id="no-announcement-message" class="info no-announcement-message">
+			<p>This group has no announcements.</p>
+		</div>
+	<?php endif; ?>
 
 <?php endif; ?>
 
