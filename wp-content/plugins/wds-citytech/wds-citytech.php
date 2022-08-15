@@ -1418,9 +1418,16 @@ function ra_copy_blog_page( $group_id ) {
 
 							/**
 							 * Add "Home" and "Group Profile" nav menu items.
+							 *
+							 * Remove the taxonomy-terms-order filter for this query; the
+							 * plugin may be active on the main site, but it is not active
+							 * on the cloned site, and so the t.term_order clause will
+							 * always trigger an error.
 							 */
+							remove_filter( 'terms_clauses', 'TO_apply_order_filter', 10, 3 );
 							OpenLab\NavMenus\add_group_menu_item( $group_id );
 							OpenLab\NavMenus\add_home_menu_item();
+							add_filter( 'terms_clauses', 'TO_apply_order_filter', 10, 3 );
 
 							restore_current_blog();
 							$msg = __( 'Blog Copied' );
