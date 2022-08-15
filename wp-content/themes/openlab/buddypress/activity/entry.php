@@ -11,7 +11,7 @@ $group = groups_get_group( $group_id );
 // Get group data
 $group_name = bp_get_group_name( $group );
 $group_url = bp_get_group_permalink( $group );
-$group_avatar_url = bp_get_group_avatar_url( $group, 'medium' );
+$group_avatar_url = bp_get_group_avatar_url( $group, 'full' );
 ?>
 <div class="group-item">
 	<div class="group-item-wrapper">
