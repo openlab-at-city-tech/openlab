@@ -253,6 +253,8 @@ function openlab_create_announcement( $args = [] ) {
 	 */
 	do_action( 'openlab_create_announcement', $post_id );
 
+	groups_update_last_activity( $r['group_id'] );
+
 	return $post_id;
 }
 
@@ -298,6 +300,8 @@ function openlab_create_announcement_reply( $args = [] ) {
 	if ( ! $comment_id ) {
 		return false;
 	}
+
+	groups_update_last_activity( $r['group_id'] );
 
 	return $comment_id;
 }
