@@ -24,14 +24,12 @@ if ( comments_open() ) {
 	$user          = wp_get_current_user();
 	$user_identity = $user->exists() ? $user->display_name : '';
 
-	$required_attribute = ( $html5 ? ' required' : ' required="required"' );
-
     add_filter( 'comment_form_defaults', 'openlab_docs_comment_form' );
 	comment_form(
 		[
 			'comment_field'             => sprintf(
 				'<div class="comment-form-comment">%s</div>',
-				'<textarea id="comment" name="comment" cols="45" rows="8" maxlength="65525"' . $required_attribute . '></textarea>'
+				'<textarea id="comment" name="comment" cols="45" rows="8" maxlength="65525" required="required"></textarea>'
 			),
             'title_reply'               => sprintf(
                 '<p class="comment-reply-text">%s</p> <p class="logged-in-as">%s</p>',
