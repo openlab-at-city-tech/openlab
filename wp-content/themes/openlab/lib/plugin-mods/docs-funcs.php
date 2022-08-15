@@ -188,3 +188,17 @@ add_action(
 	},
 	5
 );
+
+/**
+ * Fix the redirect URL after restoring a Docs version.
+ */
+add_filter(
+	'wp_redirect',
+	function( $location ) {
+		if ( empty( $_GET['revision'] ) || empty( $_GET['action'] ) || 'restore' !== $_GET['action'] ) {
+			return $location;
+		}
+
+		return bp_docs_get_doc_link();
+	}
+);
