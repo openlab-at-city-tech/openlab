@@ -102,7 +102,7 @@ if ( $read_only ) {
 					</div>
 				<?php endif; ?>
 
-				<?php if ( current_user_can( 'edit_post', $announcement_id ) ) : ?>
+				<?php if ( current_user_can( 'edit_openlab_announcement', $announcement_id ) ) : ?>
 					<div class="hide-if-no-js announcement-action">
 						<a class="announcement-edit-link" href="">Edit</a>
 					</div>

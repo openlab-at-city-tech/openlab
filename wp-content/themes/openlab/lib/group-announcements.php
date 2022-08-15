@@ -30,11 +30,76 @@ add_action(
 			'show_ui'             => false,
 			'publicly_queryable'  => false,
 			'exclude_from_search' => true,
+			'map_meta_cap'        => true,
 			'show_in_rest'        => false,
 		];
 
 		register_post_type( 'openlab_announcement', $args );
 	}
+);
+
+/**
+ * Capability mapping for announcements.
+ */
+add_filter(
+	'map_meta_cap',
+	function( $caps, $cap, $user_id, $args ) {
+		if ( 'edit_openlab_announcement' !== $cap && 'edit_openlab_announcement_comment' !== $cap ) {
+			return $caps;
+		}
+
+		if ( empty( $args ) ) {
+			return $caps;
+		}
+
+		if ( ! $user_id ) {
+			return [ 'do_not_allow' ];
+		}
+
+		if ( 'edit_openlab_announcement' === $cap ) {
+			$announcement_id = (int) $args[0];
+
+			$announcement = get_post( $announcement_id );
+			if ( ! $announcement ) {
+				return [ 'do_not_allow' ] ;
+			}
+
+			if ( (int) $user_id === (int) $announcement->post_author ) {
+				return [ 'exist' ];
+			}
+
+			$group_id = (int) get_post_meta( $announcement_id, 'openlab_announcement_group_id', true );
+			if ( $group_id ) {
+				if ( groups_is_user_admin( $user_id, $group_id ) || groups_is_user_mod( $user_id, $group_id ) ) {
+					return [ 'exist' ];
+				}
+			}
+		} elseif ( 'edit_openlab_announcement_comment' === $cap ) {
+			$comment_id = (int) $args[0];
+
+			$comment = get_comment( $comment_id );
+			if ( ! $comment ) {
+				return [ 'do_not_allow' ];
+			}
+
+			if ( (int) $user_id === (int) $comment->user_id ) {
+				return [ 'exist' ];
+			}
+
+			$announcement = get_post( $comment->comment_post_ID );
+			if ( ! $announcement ) {
+				return [ 'do_not_allow' ];
+			}
+
+			if ( user_can( $user_id, 'edit_openlab_announcement', $announcement->ID ) ) {
+				return [ 'exist' ];
+			}
+		}
+
+		return $caps;
+	},
+	10,
+	4
 );
 
 /**
@@ -417,7 +482,7 @@ function openlab_handle_announcement_edit_ajax() {
 
 	$announcement_id = wp_unslash( $_POST['announcementId'] );
 
-	if ( ! current_user_can( 'edit_post', $announcement_id ) ) {
+	if ( ! current_user_can( 'edit_openlab_announcement', $announcement_id ) ) {
 		wp_send_json_error();
 	}
 
@@ -466,7 +531,7 @@ function openlab_handle_announcement_reply_edit_ajax() {
 
 	$reply_id = intval( $_POST['replyId'] );
 
-	if ( ! current_user_can( 'edit_comment', $reply_id ) ) {
+	if ( ! current_user_can( 'edit_openlab_announcement_comment', $reply_id ) ) {
 		wp_send_json_error();
 	}
 
@@ -506,7 +571,7 @@ function openlab_handle_announcement_delete_request() {
 
 	check_admin_referer( 'announcement_delete_' . $announcement_id );
 
-	if ( ! current_user_can( 'delete_post', $announcement_id ) ) {
+	if ( ! current_user_can( 'edit_openlab_announcement', $announcement_id ) ) {
 		return;
 	}
 
@@ -535,7 +600,7 @@ function openlab_handle_announcement_reply_delete_request() {
 
 	check_admin_referer( 'announcement_delete_' . $reply_id );
 
-	if ( ! current_user_can( 'delete_comment', $reply_id ) ) {
+	if ( ! current_user_can( 'edit_openlab_announcement_comment', $reply_id ) ) {
 		return;
 	}
 
