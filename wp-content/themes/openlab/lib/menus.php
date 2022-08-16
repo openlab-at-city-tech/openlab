@@ -618,7 +618,15 @@ function openlab_group_forum_submenu() {
         ];
     }
 
-    return openlab_submenu_gen( $menu_list, true, $current_item );
+    if( isset( $_GET['bbp_search'] ) ) {
+        $menu_list += [
+            $base_url . '?bbp_search=' . $_GET['bbp_search']  => 'Search Results'
+        ];
+
+        $current_item = $base_url . '?bbp_search=' . $_GET['bbp_search'];
+    }
+
+    return openlab_submenu_gen( $menu_list, false, $current_item );
 }
 
 function openlab_group_docs_submenu() {
