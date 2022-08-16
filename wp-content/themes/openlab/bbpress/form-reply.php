@@ -84,12 +84,31 @@
 
 							<?php endif; ?>
 
+							<?php if ( bbp_allow_revisions() && bbp_is_reply_edit() ) : ?>
+
+								<?php do_action( 'bbp_theme_before_reply_form_revisions' ); ?>
+
+								<p class="bbp-form">
+									<legend>
+										<input name="bbp_log_reply_edit" id="bbp_log_reply_edit" type="checkbox" value="1" <?php bbp_form_reply_log_edit(); ?> tabindex="<?php bbp_tab_index(); ?>" />
+										<label for="bbp_log_reply_edit"><?php _e( 'Keep a log of this edit:', 'bbpress' ); ?></label><br />
+									</legend>
+
+									<div>
+										<label for="bbp_reply_edit_reason"><?php printf( __( 'Optional reason for editing:', 'bbpress' ), bbp_get_current_user_name() ); ?></label><br />
+										<input type="text" value="<?php bbp_form_reply_edit_reason(); ?>" tabindex="<?php bbp_tab_index(); ?>" size="40" name="bbp_reply_edit_reason" id="bbp_reply_edit_reason" />
+									</div>
+								</p>
+
+								<?php do_action( 'bbp_theme_after_reply_form_revisions' ); ?>
+
+							<?php endif; ?>
+
 							<?php if ( bbp_is_subscriptions_active() && ! bbp_is_anonymous() && ( ! bbp_is_reply_edit() || ( bbp_is_reply_edit() && ! bbp_is_reply_anonymous() ) ) ) : ?>
 
 								<?php do_action( 'bbp_theme_before_reply_form_subscription' ); ?>
 
-								<p>
-
+								<p class="<?php echo ! bbp_is_reply_edit() ? 'bbp-reply-form-checkbox-p' : ''; ?>">
 									<input name="bbp_topic_subscription" id="bbp_topic_subscription" type="checkbox" value="bbp_subscribe"<?php bbp_form_topic_subscribed(); ?> tabindex="<?php bbp_tab_index(); ?>" />
 
 									<?php if ( bbp_is_reply_edit() && ( bbp_get_reply_author_id() !== bbp_get_current_user_id() ) ) : ?>
@@ -108,54 +127,33 @@
 
 							<?php endif; ?>
 
-							<?php if ( bbp_allow_revisions() && bbp_is_reply_edit() ) : ?>
+						</div>
 
-								<?php do_action( 'bbp_theme_before_reply_form_revisions' ); ?>
+						<?php do_action( 'bbp_theme_before_reply_form_submit_wrapper' ); ?>
 
-								<fieldset class="bbp-form">
-									<legend>
-										<input name="bbp_log_reply_edit" id="bbp_log_reply_edit" type="checkbox" value="1" <?php bbp_form_reply_log_edit(); ?> tabindex="<?php bbp_tab_index(); ?>" />
-										<label for="bbp_log_reply_edit"><?php _e( 'Keep a log of this edit:', 'bbpress' ); ?></label><br />
-									</legend>
+						<div class="bbp-submit-wrapper">
 
-									<div>
-										<label for="bbp_reply_edit_reason"><?php printf( __( 'Optional reason for editing:', 'bbpress' ), bbp_get_current_user_name() ); ?></label><br />
-										<input type="text" value="<?php bbp_form_reply_edit_reason(); ?>" tabindex="<?php bbp_tab_index(); ?>" size="40" name="bbp_reply_edit_reason" id="bbp_reply_edit_reason" />
-									</div>
-								</fieldset>
+							<?php do_action( 'bbp_theme_before_reply_form_submit_button' ); ?>
 
-								<?php do_action( 'bbp_theme_after_reply_form_revisions' ); ?>
-
+							<?php if ( ! bbp_is_reply_edit() ) : ?>
+								<div class="notify-group-members-ui">
+									<?php openlab_notify_group_members_ui( true ); ?>
+								</div>
 							<?php endif; ?>
 
+							<button type="submit" tabindex="<?php bbp_tab_index(); ?>" id="bbp_reply_submit" name="bbp_reply_submit" class="btn  btn-primary submit"><?php _e( 'Submit', 'bbpress' ); ?></button>
+
+							<?php bbp_cancel_reply_to_link(); ?>
+
+							<?php do_action( 'bbp_theme_after_reply_form_submit_button' ); ?>
+
 						</div>
+
+						<?php do_action( 'bbp_theme_after_reply_form_submit_wrapper' ); ?>
+
+
+						<?php bbp_reply_form_fields(); ?>
 					</div>
-
-					<?php do_action( 'bbp_theme_before_reply_form_submit_wrapper' ); ?>
-
-					<div class="bbp-submit-wrapper">
-
-						<?php do_action( 'bbp_theme_before_reply_form_submit_button' ); ?>
-
-						<?php if ( ! bbp_is_reply_edit() ) : ?>
-							<div class="notify-group-members-ui">
-								<?php openlab_notify_group_members_ui( true ); ?>
-							</div>
-						<?php endif; ?>
-
-						<button type="submit" tabindex="<?php bbp_tab_index(); ?>" id="bbp_reply_submit" name="bbp_reply_submit" class="btn  btn-primary submit"><?php _e( 'Submit', 'bbpress' ); ?></button>
-
-						<?php bbp_cancel_reply_to_link(); ?>
-
-						<?php do_action( 'bbp_theme_after_reply_form_submit_button' ); ?>
-
-					</div>
-
-					<?php do_action( 'bbp_theme_after_reply_form_submit_wrapper' ); ?>
-
-
-					<?php bbp_reply_form_fields(); ?>
-
 				</div>
 
 				<?php do_action( 'bbp_theme_after_reply_form' ); ?>

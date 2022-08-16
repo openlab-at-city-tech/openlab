@@ -10654,9 +10654,11 @@ a.delete-doc-button {
 #content #bbpress-forums .notify-group-members-ui {
   margin-bottom: 10px;
 }
-#content #bbpress-forums .bbp-reply-form .bbp-submit-wrapper {
-  padding-bottom: 15px;
-  padding-left: 15px;
+#content #bbpress-forums .bbp-reply-form-checkbox-p {
+  margin: 0;
+}
+#content #bbpress-forums .bbp-submit-wrapper {
+  margin-top: 0;
 }
 #content #bbpress-forums .bbp-topic-tags {
   padding: 12px 8px 0 0;
