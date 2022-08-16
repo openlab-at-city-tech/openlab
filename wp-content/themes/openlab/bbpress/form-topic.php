@@ -170,7 +170,7 @@
 
 							<?php endif; ?>
 
-							<?php //if ( bbp_is_subscriptions_active() && ! bbp_is_anonymous() && ( ! bbp_is_topic_edit() || ( bbp_is_topic_edit() && ! bbp_is_topic_anonymous() ) ) ) : ?>
+							<?php if ( bbp_is_subscriptions_active() && ! bbp_is_anonymous() && ( ! bbp_is_topic_edit() || ( bbp_is_topic_edit() && ! bbp_is_topic_anonymous() ) ) ) : ?>
 
 								<?php do_action( 'bbp_theme_before_topic_form_subscriptions' ); ?>
 
@@ -190,7 +190,7 @@
 
 								<?php do_action( 'bbp_theme_after_topic_form_subscriptions' ); ?>
 
-							<?php //endif; ?>
+							<?php endif; ?>
 
 						</div>
 						<?php do_action( 'bbp_theme_before_topic_form_submit_wrapper' ); ?>
