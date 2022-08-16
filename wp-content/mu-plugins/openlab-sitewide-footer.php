@@ -13,6 +13,15 @@ function cuny_local_env_flag() {
         $env_type = 'local';
         if (defined('ENV_TYPE')) {
             $env_type = ENV_TYPE;
+
+			$git_branch = '';
+			$git_head_path = ABSPATH . '/.git/HEAD';
+			if ( is_readable( $git_head_path ) ) {
+				$git_head = file( ABSPATH . '/.git/HEAD' );
+				if ( $git_head ) {
+					$git_branch = str_replace( 'ref: refs/heads/', '', $git_head[0] );
+				}
+			}
         }
         ?>
 
@@ -44,7 +53,7 @@ function cuny_local_env_flag() {
         </style>
 
         <div id="local-env-flag">
-            <?php echo esc_html(strtoupper($env_type)) ?>
+            <?php echo esc_html(strtoupper($env_type)) ?><br /><?php echo esc_html( $git_branch ); ?>
         </div>
 
         <?php
