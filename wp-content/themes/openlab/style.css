@@ -10721,7 +10721,7 @@ a.delete-doc-button {
   margin-right: 6px !important;
 }
 .bbp-pagination-row-flex .pagination-links .pagination li:last-child {
-  margin-right: 16px;
+  margin-right: 16px !important;
 }
 .bbp-pagination-row-flex .pagination-links .pagination li > span,
 .bbp-pagination-row-flex .pagination-links .pagination li a {
