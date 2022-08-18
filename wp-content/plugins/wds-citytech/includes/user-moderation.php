@@ -60,7 +60,7 @@ function prevent_login( $member = null ) {
 		// Set the default message.
 		$message = __( '<strong>ERROR</strong>: This account has been suspended. Please contact the site administrator.', 'bp-toolkit' );
 		// Set an error object to short-circuit the authentication process.
-		$member = new WP_Error( 'bptk_suspended_user', $message );
+		$member = new \WP_Error( 'bptk_suspended_user', $message );
 	}
 
 	return $member;
