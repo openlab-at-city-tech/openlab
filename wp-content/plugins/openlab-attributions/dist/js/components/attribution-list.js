@@ -4,6 +4,7 @@
 import { useSelect, useDispatch } from '@wordpress/data';
 import { RawHTML } from '@wordpress/element';
 import { Button, ToolbarGroup } from '@wordpress/components';
+import { __ } from '@wordpress/i18n';
 
 /**
  * Internal dependencies
@@ -38,7 +39,7 @@ export default function AttributionList() {
 								<Button
 									className="components-toolbar__control"
 									icon="edit"
-									label="Edit"
+									label={ __( 'Edit', 'openlab-attributions' ) }
 									onClick={ () =>
 										open( { item, modalType: 'update' } )
 									}
@@ -46,7 +47,7 @@ export default function AttributionList() {
 								<Button
 									className="components-toolbar__control"
 									icon="trash"
-									label="Delete"
+									label={ __( 'Delete', 'openlab-attributions' ) }
 									onClick={ () => remove( item.id ) }
 								/>
 							</ToolbarGroup>

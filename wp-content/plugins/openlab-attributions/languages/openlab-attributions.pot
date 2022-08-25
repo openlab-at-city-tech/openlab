@@ -1,0 +1,267 @@
+# Copyright (C) 2022 OpenLab
+# This file is distributed under the same license as the OpenLab Attributions plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: OpenLab Attributions 2.0.1\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/openlab-attributions\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2022-08-22T10:20:54-05:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.4.0\n"
+"X-Domain: openlab-attributions\n"
+
+#. Plugin Name of the plugin
+msgid "OpenLab Attributions"
+msgstr ""
+
+#. Plugin URI of the plugin
+#. Author URI of the plugin
+msgid "https://openlab.citytech.cuny.edu/"
+msgstr ""
+
+#. Description of the plugin
+msgid "Add formatted attributions to post content."
+msgstr ""
+
+#. Author of the plugin
+msgid "OpenLab"
+msgstr ""
+
+#: src/helpers.php:16
+msgid "Unknown"
+msgstr ""
+
+#: src/helpers.php:21
+msgid "Standard Copyright"
+msgstr ""
+
+#: src/helpers.php:26
+msgid "Public Domain"
+msgstr ""
+
+#: src/helpers.php:31
+msgid "Fair Use"
+msgstr ""
+
+#: src/helpers.php:36
+msgid "CC BY"
+msgstr ""
+
+#: src/helpers.php:41
+msgid "CC BY-SA"
+msgstr ""
+
+#: src/helpers.php:46
+msgid "CC BY-ND"
+msgstr ""
+
+#: src/helpers.php:51
+msgid "CC BY-NC"
+msgstr ""
+
+#: src/helpers.php:56
+msgid "CC BY-NC-SA"
+msgstr ""
+
+#: src/helpers.php:61
+msgid "CC BY-NC-ND"
+msgstr ""
+
+#: src/helpers.php:120
+msgid "License unknown."
+msgstr ""
+
+#. translators: Link to license.
+#: src/helpers.php:125
+msgid "Licensed under %s."
+msgstr ""
+
+#. translators: URL of the original work
+#: src/helpers.php:147
+msgid "Adapted from the <a href=\"%s\">original work</a>"
+msgstr ""
+
+#. translators: 1. Link to original work; 2. Link to license
+#: src/helpers.php:157
+msgid "Adapted from %1$s, licensed under %2$s."
+msgstr ""
+
+#. translators: 1. Link to original work; 2. Author name; 3. Link to license
+#: src/helpers.php:165
+msgid "Adapted from %1$s by %2$s, licensed under %3$s."
+msgstr ""
+
+#: src/meta.php:89
+msgid "Attributions"
+msgstr ""
+
+#: views/attributions.php:6
+msgid "Sources"
+msgstr ""
+
+#: dist/js/classic-editor.js:44
+#: dist/js/components/modal.js:80
+#: dist/js/formats/edit.js:68
+msgid "Add Attribution"
+msgstr ""
+
+#: dist/js/components/attribution-list.js:42
+msgid "Edit"
+msgstr ""
+
+#: dist/js/components/attribution-list.js:50
+msgid "Delete"
+msgstr ""
+
+#: dist/js/components/modal.js:80
+msgid "Update Attribution"
+msgstr ""
+
+#: dist/js/components/modal.js:97
+#: dist/js/components/modal.js:161
+msgid "Title"
+msgstr ""
+
+#: dist/js/components/modal.js:103
+#: dist/js/components/modal.js:166
+msgid "Item Title"
+msgstr ""
+
+#: dist/js/components/modal.js:107
+#: dist/js/components/modal.js:141
+#: dist/js/components/modal.js:207
+#: dist/js/components/modal.js:230
+msgid "URL"
+msgstr ""
+
+#: dist/js/components/modal.js:112
+msgid "URL of the item"
+msgstr ""
+
+#: dist/js/components/modal.js:118
+#: dist/js/components/modal.js:180
+msgid "License"
+msgstr ""
+
+#: dist/js/components/modal.js:131
+#: dist/js/components/modal.js:137
+#: dist/js/components/modal.js:176
+msgid "Author Name"
+msgstr ""
+
+#: dist/js/components/modal.js:146
+msgid "URL of the author"
+msgstr ""
+
+#: dist/js/components/modal.js:152
+msgid "Adapted From"
+msgstr ""
+
+#: dist/js/components/modal.js:158
+msgid "URL of original work"
+msgstr ""
+
+#: dist/js/components/modal.js:171
+msgid "Author"
+msgstr ""
+
+#: dist/js/components/modal.js:197
+msgid "Organization / Publisher"
+msgstr ""
+
+#: dist/js/components/modal.js:203
+msgid "Name of organization or publisher"
+msgstr ""
+
+#: dist/js/components/modal.js:212
+msgid "URL of the organization or publisher"
+msgstr ""
+
+#: dist/js/components/modal.js:220
+msgid "Project"
+msgstr ""
+
+#: dist/js/components/modal.js:226
+msgid "Name of project"
+msgstr ""
+
+#: dist/js/components/modal.js:235
+msgid "URL of the project"
+msgstr ""
+
+#: dist/js/components/modal.js:243
+msgid "Date Published"
+msgstr ""
+
+#: dist/js/components/modal.js:249
+msgid "Date item was published"
+msgstr ""
+
+#: dist/js/components/modal.js:274
+msgid "You have edited this text. You can no longer make changes using the fields above. All additional changes must be made manually."
+msgstr ""
+
+#: dist/js/components/modal.js:276
+msgid "Discard changes and revert to suggested attribution."
+msgstr ""
+
+#: dist/js/components/modal.js:282
+msgid "Cancel"
+msgstr ""
+
+#: dist/js/components/plugin-attribution.js:5
+msgid "&quot;OpenLab Attribution&quot; by the <a href=\"https://openlab.citytech.cuny.edu\">City Tech OpenLab</a>, is licensed under <a href=\"https://creativecommons.org/licenses/by-nc-sa/3.0\"> CC BY-NC-SA </a> / A derivative from <a href=\"https://www.openwa.org/attrib-builder\">original work</a> by <a href=\"https://www.openwa.org\">Open Washington</a>."
+msgstr ""
+
+#: dist/js/components/select-control.js:54
+#: dist/js/components/text-control.js:43
+msgid "Please add %s"
+msgstr ""
+
+#: dist/js/formats/index.js:14
+msgid "Attribution"
+msgstr ""
+
+#: dist/js/utils/help.js:8
+msgid ""
+"Title of the work you’re attributing. You can use something general like “this work” or “this image” if you can’t find a specific title.\n"
+"\n"
+"URL is the link to the original source. If you can’t find the URL, say where you got the work, e.g. “Brooklyn Bridge photograph from Wikimedia Commons.”"
+msgstr ""
+
+#: dist/js/utils/help.js:10
+msgid ""
+"Name of the author(s) of the material you are attributing. If you can’t find the name, you can list the author’s screen or username. If available, enter the URL to the author’s website or user account page.\n"
+"\n"
+"If an organization is listed but no individual author you can (1) use the organization name as the author, or (2) leave the author field blank and fill in the organization field below."
+msgstr ""
+
+#: dist/js/utils/help.js:12
+msgid "If available, add the name of the organization that sponsored or managed the work you are adopting; it’s always nice to acknowledge those entities for their contribution."
+msgstr ""
+
+#: dist/js/utils/help.js:14
+msgid ""
+"If available, add the name of the project associated with the work. For example, Open Learning Initiative is the name of a project managed by Carnegie Mellon University.\n"
+"\n"
+"If available, add the project URL."
+msgstr ""
+
+#: dist/js/utils/help.js:16
+msgid "Include the date that the work you’re attributing was published. Leave this blank if you can’t find the date or are unsure."
+msgstr ""
+
+#: dist/js/utils/help.js:18
+msgid ""
+"Choose the exact Creative Commons license given to the work you’re attributing.\n"
+"\n"
+"If the work is in the public domain, you can choose whether it’s in the general public domain (‘General’) or if it’s officially released under the Creative Commons public domain (‘CC0’)."
+msgstr ""
+
+#: dist/js/utils/help.js:20
+msgid "If you are attributing a work derived from other works, please add a link to the original."
+msgstr ""
