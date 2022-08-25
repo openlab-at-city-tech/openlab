@@ -2,6 +2,7 @@
  * External dependencies
  */
 import classnames from 'classnames';
+import { __, sprintf } from '@wordpress/i18n';
 
 /**
  * Internal dependencies
@@ -50,7 +51,7 @@ function SelectControl( {
 			</select>
 			{ isRequired && (
 				<p id={ id + '__help' } className="form-control__help">
-					{ `Please add ${ label }.` }
+					{ sprintf( __( 'Please add %s', 'openlab-attributions' ), label ) }
 				</p>
 			) }
 		</div>

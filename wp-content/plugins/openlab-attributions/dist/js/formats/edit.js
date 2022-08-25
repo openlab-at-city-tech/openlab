@@ -10,7 +10,8 @@ import { useState } from '@wordpress/element';
 import { dispatch, useSelect } from '@wordpress/data';
 import { BlockControls } from '@wordpress/block-editor';
 import { isCollapsed, insertObject } from '@wordpress/rich-text';
-import { Toolbar, IconButton } from '@wordpress/components';
+import { Toolbar, IconButton } from '@wordpress/components'
+import { __ } from '@wordpress/i18n';
 
 /**
  * Internal dependencies
@@ -60,12 +61,11 @@ export default function Edit( { isActive, value, onChange } ) {
 					/>
 				</Toolbar>
 			</BlockControls>
-
 			{ isOpen && (
 				<Modal
 					isOpen={ isOpen }
 					modalType="add"
-					title="Add Attribution"
+					title={ __( "Add Attribution", 'openlab-attributions' ) }
 					item={ item }
 					onClose={ () => setIsOpen( false ) }
 					addItem={ ( data ) => onChange( addMarker( value, data ) ) }
