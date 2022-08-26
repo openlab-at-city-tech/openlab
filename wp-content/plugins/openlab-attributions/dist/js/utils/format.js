@@ -42,7 +42,7 @@ function formatLicense( value ) {
 			break;
 
 		case 'u':
-			text = __( 'License unknown.', 'openlab-attributions' );
+			text = __( 'License unknown', 'openlab-attributions' );
 			break;
 
 		default:
@@ -134,7 +134,7 @@ export function formatAttribution( data ) {
 	let attribution = parts.join( '. ' );
 
 	if ( data.adaptedTitle || data.derivative ) {
-		const separator = parts.length > 0 ? ' / ' : '';
+		const separator = parts.length > 0 ? '. ' : '';
 		attribution += `${ separator }${ formatAdaptedFrom( data ) }`;
 	}
 

@@ -1,0 +1,11 @@
+{
+    "name": "openlab-at-city-tech/openlab-attributions",
+    "type": "library",
+    "license": "GPLv3",
+    "require": {},
+    "require-dev": {
+        "dealerdirect/phpcodesniffer-composer-installer": "^0.7.1",
+        "phpcompatibility/phpcompatibility-wp": "^2.1.0",
+        "wp-coding-standards/wpcs": "^2.3.0"
+    }
+}
