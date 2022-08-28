@@ -2794,6 +2794,10 @@ add_filter( 'bbp_bypass_check_for_moderation', function( $retval, $anon_data, $u
 add_action(
 	'pre_get_posts',
 	function( $query ) {
+		if ( ! function_exists( 'ksuce_exclude_categories' ) ) {
+			return;
+		}
+
 		if ( ! $query->is_main_query() ) {
 			remove_filter( 'pre_get_posts', 'ksuce_exclude_categories' );
 
