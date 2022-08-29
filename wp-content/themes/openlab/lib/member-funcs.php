@@ -885,7 +885,10 @@ function cuny_member_profile_header() {
 							openlab_get_xprofile_field_id( 'Last Name' ),
 							openlab_get_xprofile_field_id( 'Major Program of Study' ),
 							openlab_get_xprofile_field_id( 'Department' ),
+							openlab_get_xprofile_field_id( 'Email address (Student)' ),
 						);
+
+						$exclude_fields = array_values( $exclude_fields );
 
 						$has_profile_args = array(
 							'exclude_fields' => $exclude_fields,
