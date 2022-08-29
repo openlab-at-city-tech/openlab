@@ -12,7 +12,9 @@ if (is_super_admin($user_ID)) {
 
 $display_name = bp_get_profile_field_data('field=Name');
 
-$profile_args = array();
+$profile_args = [
+	'exclude_fields' => [ openlab_get_xprofile_field_id( 'Email address (Student)' ) ],
+];
 
 if (isset($pgroup)) {
     $profile_args['profile_group_id'] = $pgroup;
