@@ -1,0 +1,110 @@
+#myModal .modal-header {
+	padding: 15px;
+	border-bottom: 1px solid #e5e5e5;
+	background-color: rgba(30, 140, 190, 0.53);
+	color: #eee;
+	border-top-left-radius: 15px;
+	border-top-right-radius: 15px;
+}
+#myModal .modal-content{
+	border-radius: 15px !important;
+	/* background-color: #008080 !important; */
+	background-color: #fff !important;
+}
+
+#myModal .modal-header .close{
+	color: #fff;
+    border: 1px solid #fff;
+    font-size: 26px;
+    border-radius: 4px;
+    padding: 0px 5px 5px 5px;
+    margin:0;
+}
+#myModal .btn-default {
+	color: #717171;
+	background-color: #fff !important;
+	border-color: #717171 !important;
+	transition: 0.2s;
+}
+#myModal .btn-default:active:hover{
+	background-color: #717171 !important;
+	border-color: #fff;
+	color: #fff;	
+	outline: none !important;			
+}	
+#myModal .btn-default.focus,#myModal .btn-default:focus{
+	outline: none !important;
+	border: 1px solid #fff !important;
+}
+.wp-editor-area{
+	/* color: #fff !important;
+	background-color: #717171 !important; */
+	 color: #000 !important;
+	background-color: #fff !important;
+	
+}
+#myModal .modal-footer {
+	padding: 15px;
+	text-align: right;
+	border-bottom-left-radius: 15px;
+	border-bottom-right-radius: 15px;
+	background-color: rgba(30, 140, 190, 0.53);
+	border-top: 1px solid rgba(255, 255, 255, 0.53);
+}
+#myModal .quicktags-toolbar, #myModal #tinymce{
+	background-color: rgba(0, 160, 210, 0.54) !important ;
+    background-image: linear-gradient(to top,rgba(229, 229, 229, 0),rgba(244, 244, 244, 0))!important;
+}
+
+#myModal .wp-editor-wrap  #myModal .quicktags-toolbar{
+	background-color: rgba(0, 160, 210, 0.54) !important ;
+    background-image: linear-gradient(to top,rgba(229, 229, 229, 0),rgba(244, 244, 244, 0))!important;
+	width:none !important;
+}
+#myModal div.mce-toolbar-grp{
+	background-color: rgba(0, 160, 210, 0.54) ;
+}
+#myModal iframe#fetch_wpeditor_data_ifr #document html > body#tinymce{
+	background-color: #717171 !important;
+}
+.quicktags-toolbar{
+	    background-image: linear-gradient(to top,rgba(229, 229, 229, 0),rgba(244, 244, 244, 0))!important;
+}
+
+.modal-title
+{
+ font-size: 23px !important;
+}
+
+#myModal .mce-toolbar .mce-btn-group .mce-btn.mce-listbox {
+    display: none;
+}
+
+#myModal .qt-fullscreen 
+{
+	display: none;
+}
+
+#myModal #mceu_3 ,  #myModal #mceu_4 , #myModal #mceu_5 ,  #myModal #mceu_6 , #myModal #mceu_7 , #myModal #mceu_8 , #myModal #mceu_11 , #myModal #mceu_12 , #myModal #mceu_13
+{
+	display: none;
+}
+
+#titlediv #title-prompt-text {
+color: #72777c;
+position: absolute;
+font-size: 1.7em;
+/* padding: 5px 10px !important; */
+}
+
+.has-dfw .quicktags-toolbar {
+        width: 100% !important;
+}
+
+#wp-content-editor-tools {
+     background-color: #fff;
+    padding-top: 20px;
+}
+h4.modal-title {
+    float: left;
+}
