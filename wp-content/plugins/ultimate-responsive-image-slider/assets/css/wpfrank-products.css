@@ -1,0 +1,101 @@
+.wpfrank-products-container {
+	max-width: 1400px;
+	margin: 0 auto;
+	font-family: sans-serif;
+}
+.wpfrank-products-title {
+	text-align: center;
+	letter-spacing: 1px;
+	text-transform: uppercase;
+	margin-bottom: 30px;
+	margin-top: 15px;
+	padding: 10px 0;
+	background-color: #045ca3;
+}
+.wpfrank-products-title h1 {
+	color: #fff;
+}
+.wpfrank-products {
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	-ms-flex-wrap: wrap;
+	    flex-wrap: wrap;
+	-ms-flex-pack: distribute;
+	    justify-content: space-around;
+}
+.wpfrank-product {
+	-webkit-box-sizing: border-box;
+	        box-sizing: border-box;
+	-ms-flex-preferred-size: 30%;
+	    flex-basis: 30%;
+	margin-bottom: 30px;
+}
+@media(max-width: 1024px) {
+	.wpfrank-product {
+		-ms-flex-preferred-size: 45%;
+		    flex-basis: 45%;
+	}
+}
+@media(max-width: 640px) {
+	.wpfrank-product {
+		-ms-flex-preferred-size: 90%;
+		    flex-basis: 90%;
+	}
+}
+.wpfrank-product-title {
+	font-size: 18px;
+	text-align: center;
+	font-weight: bold;
+	margin-bottom: 8px;
+}
+.wpfrank-product-image {
+	width: 100%;
+}
+.wpfrank-product-links {
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-pack: justify;
+	    -ms-flex-pack: justify;
+	        justify-content: space-between;
+}
+.wpfrank-product-tagline {
+	text-align: center;
+	line-height: 1.6em;
+	margin-bottom: 8px;
+	background-color: #e8e8e8;
+    padding: 10px 0;
+}
+.wpfrank-link-button {
+	-webkit-box-sizing: border-box;
+	        box-sizing: border-box;
+	-ms-flex-preferred-size: 45%;
+	    flex-basis: 45%;
+	border-radius: 10px;
+	text-align: center;
+	text-decoration: none;
+	font-size: .88rem;
+	padding: 10px 20px;
+	-webkit-transition: 0.4s all;
+	-o-transition: 0.4s all;
+	transition: 0.4s all;
+}
+.wpfrank-try-now {
+	color: #3498db;
+	border: 1px solid #3498db;
+}
+.wpfrank-buy-now {
+	background-color: #3498db;
+	color: #fff;
+	border: 1px solid #3498db;
+}
+.wpfrank-try-now:hover {
+	background-color: #3498db;
+}
+.wpfrank-buy-now:hover {
+	background-color: #2383c3;
+}
+.wpfrank-link-button:hover {
+	color: #fff;
+}
