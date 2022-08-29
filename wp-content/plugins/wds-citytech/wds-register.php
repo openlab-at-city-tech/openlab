@@ -159,6 +159,7 @@ function wds_get_register_fields( $account_type, $post_data = array() ) {
 		openlab_get_xprofile_field_id( 'Last Name' ),
 		openlab_get_xprofile_field_id( 'Major Program of Study' ),
 		openlab_get_xprofile_field_id( 'Department' ),
+		openlab_get_xprofile_field_id( 'Email address (Student)' ),
 	);
 
 	$has_profile_args = array(

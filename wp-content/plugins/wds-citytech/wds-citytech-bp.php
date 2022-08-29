@@ -636,6 +636,9 @@ function openlab_get_xprofile_field_id( $field_name ) {
 
 		case 'Account Type' :
 			return 7;
+
+		case 'Email address (Student)' :
+			return 195;
 	}
 }
 
