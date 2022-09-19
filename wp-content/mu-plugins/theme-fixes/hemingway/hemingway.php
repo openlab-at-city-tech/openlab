@@ -129,3 +129,18 @@ add_filter(
 		return $els;
 	}
 );
+
+add_filter(
+	'option_theme_mods_hemingway',
+	function( $mods ) {
+		if ( empty( $mods ) ) {
+			$mods = [];
+		}
+
+		if ( ! isset( $mods['hemingway_show_sidebar_on_mobile'] ) ) {
+			$mods['hemingway_show_sidebar_on_mobile'] = true;
+		}
+
+		return $mods;
+	}
+);
