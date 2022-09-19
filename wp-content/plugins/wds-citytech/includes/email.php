@@ -173,3 +173,11 @@ add_filter(
 	10,
 	4
 );
+
+/**
+ * Change default wp_mail() content type to 'text/html'.
+ */
+function openlab_set_wp_mail_content_type( $content_type ) {
+	return 'text/html';
+}
+add_filter( 'wp_mail_content_type', 'openlab_set_wp_mail_content_type' );
