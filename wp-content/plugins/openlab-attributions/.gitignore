@@ -1,4 +1,4 @@
-/node_modules
-/build/js/*.deps.json
-/build/mix-manifest.json
+/vendor/
+/node_modules/
+/build/
 yarn.lock

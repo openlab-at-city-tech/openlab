@@ -213,15 +213,11 @@ class AttributionModal extends Component {
 								/>
 								<SelectControl
 									label={ __( 'License', 'openlab-attributions' ) }
-									id="adaptedLicense"
-									name="adaptedLicense"
-									value={ this.state.adaptedLicense }
+									id="license"
+									name="license"
+									value={ this.state.license }
 									options={ licenses }
 									onChange={ this.handleChange }
-									required={
-										!! this.state.derivative ||
-										this.state.adaptedTitle
-									}
 									isInline
 								/>
 								<TextControl
