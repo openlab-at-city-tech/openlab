@@ -266,7 +266,7 @@ class WPLNST_Core_Nonce {
 	 * Yest, it is very ugly
 	 */
 	private static function salt_file_path() {
-		return dirname(dirname(dirname(dirname(dirname(__FILE__))))).'/wp-link-status-salt.php';
+		return dirname(dirname(dirname(dirname(dirname(__FILE__))))).'/uploads/wp-link-status-salt.php';
 	}
 
 
