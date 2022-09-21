@@ -149,6 +149,7 @@ class WPLNST_Core_Alive {
 		WPLNST_Core_CURL::spawn(array(
 			'CURLOPT_URL' 				=> self::get_crawler_url($scan_id, $hash, $thread_id),
 			'CURLOPT_USERAGENT' 		=> wplnst_get_tsetting('user_agent'),
+			'CURLOPT_USERPWD' => 'citytech:devsonly'
 		));
 	}
 
