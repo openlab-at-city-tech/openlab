@@ -156,8 +156,6 @@ if ( $descendant_of ) {
 				Narrow down your results using the search filters.
 			<?php elseif ( $descendant_of ) : ?>
 				<?php echo $descendant_of_string; ?>
-			<?php else : ?>
-				Use the search and filters to find a <?php echo esc_html( ucwords( $group_type ) ); ?>.
 			<?php endif; ?>
 		</div>
 	<?php endif; ?>
