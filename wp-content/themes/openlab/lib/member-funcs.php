@@ -1662,7 +1662,7 @@ function openlab_is_my_membership_private( $group_id ) {
 function openlab_get_user_private_membership( $user_id ) {
 	// Skip if user id is missing
 	if ( empty( $user_id ) ) {
-		return;
+		return [];
 	}
 
 	global $wpdb;
