@@ -182,8 +182,6 @@ if( ! bp_is_my_profile() && ! current_user_can( 'bp_moderate' ) ) {
 				<?php echo $descendant_of_string; ?>
 			<?php elseif ( $ancestor_of ) : ?>
 				<?php echo $ancestor_of_string; ?>
-			<?php else : ?>
-				Use the search and filters to find a <?php echo esc_html( ucwords( $group_type ) ); ?>.
 			<?php endif; ?>
 		</div>
 	<?php endif; ?>
