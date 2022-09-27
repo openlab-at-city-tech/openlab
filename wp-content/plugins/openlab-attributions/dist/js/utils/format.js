@@ -46,7 +46,7 @@ function formatLicense( value ) {
 			break;
 
 		default:
-			text = sprintf( __( 'Licensed under %s.', 'openlab-attributions' ), format( license.label, license.url ) );
+			text = sprintf( __( 'Licensed under %s', 'openlab-attributions' ), format( license.label, license.url ) );
 			break;
 	}
 
