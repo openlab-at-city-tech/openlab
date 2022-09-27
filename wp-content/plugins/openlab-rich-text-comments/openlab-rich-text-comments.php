@@ -30,7 +30,7 @@ add_action( 'init', __NAMESPACE__ . '\\load_textdomain' );
  * @return void
  */
 function register_assets() {
-	if( is_single() ) {
+	if( is_single() || is_page() ) {
 		wp_register_style(
 			'quill-style',
 			plugins_url( 'assets/css/quill.snow.css' , __FILE__ ),
