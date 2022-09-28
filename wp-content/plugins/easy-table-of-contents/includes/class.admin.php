@@ -31,7 +31,12 @@ if ( ! class_exists( 'ezTOC_Admin' ) ) {
 		 * @static
 		 */
 		private function hooks() {
+            global $pagenow;
 
+            if($pagenow == 'options-general.php' && isset($_REQUEST['page']) && !empty($_REQUEST['page']) &&
+            $_REQUEST['page'] == 'table-of-contents') {
+                add_action( 'admin_head', array( $this,'_clean_other_plugins_stuff' ) );
+            }
 			add_action( 'admin_init', array( $this, 'registerScripts' ) );
 			add_action( 'admin_menu', array( $this, 'menu' ) );
 			add_action( 'init', array( $this, 'registerMetaboxes' ), 99 );
@@ -40,7 +45,23 @@ if ( ! class_exists( 'ezTOC_Admin' ) ) {
 			add_action('wp_ajax_eztoc_send_query_message', array( $this, 'eztoc_send_query_message'));
 		}
 
-		/**
+        /**
+         * Attach to admin_head hook to hide all admin notices.
+         *
+         * @scope public
+         * @since  2.0.33
+         * @return void
+         * @uses remove_all_actions()
+         */
+        public function _clean_other_plugins_stuff()
+        {
+            remove_all_actions('admin_notices');
+            remove_all_actions('network_admin_notices');
+            remove_all_actions('all_admin_notices');
+            remove_all_actions('user_admin_notices');
+        }
+
+        /**
 		 * Callback to add the Settings link to the plugin action links.
 		 *
 		 * @access private
@@ -74,6 +95,118 @@ if ( ! class_exists( 'ezTOC_Admin' ) ) {
 
 			wp_register_script( 'cn_toc_admin_script', EZ_TOC_URL . 'assets/js/admin.js', array( 'jquery', 'wp-color-picker' ), ezTOC::VERSION, true );
 			wp_register_style( 'cn_toc_admin_style', EZ_TOC_URL . 'assets/css/admin.css', array( 'wp-color-picker' ), ezTOC::VERSION );
+
+
+//                                wp_enqueue_style( 'ez-toc' );
+//                                self::inlineStickyToggleCSS();
+			wp_enqueue_script( 'cn_toc_admin_script' );
+            $data = array(
+                'ajax_url'      		       => admin_url( 'admin-ajax.php' ),
+                'eztoc_security_nonce'         => wp_create_nonce('eztoc_ajax_check_nonce'),
+            );
+
+            $data = apply_filters( 'eztoc_localize_filter', $data, 'eztoc_admin_data' );
+
+            wp_localize_script( 'cn_toc_admin_script', 'cn_toc_admin_data', $data );
+			self::inlineAdminStickyToggleJS();
+
+		}
+
+		/**
+		 * inlineAdminStickyToggleJS Method
+		 * Prints out inline Sticky Toggle JS after the core CSS file to allow overriding core styles via options.
+		 *
+		 * @access private
+		 * @return void
+		 * @since  2.0.32
+		 * @static
+		 */
+		private static function inlineAdminStickyToggleJS() {
+            $stickyToggleOpenButtonTextJS = "";
+            if( empty( ezTOC_Option::get( 'sticky-toggle-open-button-text' ) ) ) {
+                $stickyToggleOpenButtonTextJS = "$('input[name=\"ez-toc-settings[sticky-toggle-open-button-text]\"').val('Index')";
+            }
+			$inlineAdminStickyToggleJS = <<<INLINESTICKYTOGGLEJS
+/**
+ * Admin Sticky Sidebar JS
+ */
+jQuery(function($) {
+
+    let stickyToggleCheckbox = $('#eztoc-general').find("input[name='ez-toc-settings[sticky-toggle]']");
+    let stickyToggleWidth = $('#eztoc-general').find("select[name='ez-toc-settings[sticky-toggle-width]']");
+    let stickyToggleWidthCustom = $('#eztoc-general').find("input[name='ez-toc-settings[sticky-toggle-width-custom]']");
+    let stickyToggleHeight = $('#eztoc-general').find("select[name='ez-toc-settings[sticky-toggle-height]']");
+    let stickyToggleHeightCustom = $('#eztoc-general').find("input[name='ez-toc-settings[sticky-toggle-height-custom]']");
+    
+    
+    
+    $stickyToggleOpenButtonTextJS
+    
+    
+    if($(stickyToggleCheckbox).prop('checked') == false) {
+        $(stickyToggleWidth).parents('tr').hide(500);
+        $(stickyToggleWidthCustom).parents('tr').hide(500);
+        $(stickyToggleHeight).parents('tr').hide(500);
+        $(stickyToggleHeightCustom).parents('tr').hide(500);
+        $(stickyToggleWidth).val('auto');
+        $(stickyToggleHeight).val('auto');
+        $('input[name="ez-toc-settings[sticky-toggle-open-button-text]"').parents('tr').hide(500);
+        $('input[name="ez-toc-settings[sticky-toggle-open-button-text]"').val('Index');
+    }
+    $(document).on("change, click", "input[name='ez-toc-settings[sticky-toggle]']", function() {
+    
+        if($(stickyToggleCheckbox).prop('checked') == true) {
+            $(stickyToggleWidth).parents('tr').show(500);
+            $(stickyToggleHeight).parents('tr').show(500);
+            $('input[name="ez-toc-settings[sticky-toggle-open-button-text]"').parents('tr').show(500);
+            $('input[name="ez-toc-settings[sticky-toggle-open-button-text]"').val('Index');
+        } else {
+            $(stickyToggleWidth).parents('tr').hide(500);
+            $(stickyToggleWidthCustom).parents('tr').hide(500);
+            $(stickyToggleHeight).parents('tr').hide(500);
+            $(stickyToggleHeightCustom).parents('tr').hide(500);
+            $('input[name="ez-toc-settings[sticky-toggle-open-button-text]"').parents('tr').hide(500);
+            $(stickyToggleWidth).val('auto');
+            $(stickyToggleHeight).val('auto');
+            $('input[name="ez-toc-settings[sticky-toggle-open-button-text]"').val('Index');
+        }
+        
+    });
+     
+    
+    if($(stickyToggleWidth).val() == '' || $(stickyToggleWidth).val() != 'custom')
+        $(stickyToggleWidthCustom).parents('tr').hide();
+        
+    $(document).on("change", "select[name='ez-toc-settings[sticky-toggle-width]']", function() {
+        console.log("change-stickyToggleWidth");
+        if($(stickyToggleWidth).val() == 'custom') {
+            $(stickyToggleWidthCustom).val('350px');
+            $(stickyToggleWidthCustom).parents('tr').show(500);
+        } else {
+            $(stickyToggleWidthCustom).val('');
+            $(stickyToggleWidthCustom).parents('tr').hide(500);
+        }
+    });
+     
+    
+    if($(stickyToggleHeight).val() == '' || $(stickyToggleHeight).val() != 'custom')
+        $(stickyToggleHeightCustom).parents('tr').hide();
+        
+    $(document).on("change", "select[name='ez-toc-settings[sticky-toggle-height]']", function() {
+        console.log("change-stickyToggleHeight");
+        if($(stickyToggleHeight).val() == 'custom') {
+            $(stickyToggleHeightCustom).val('800px');
+            $(stickyToggleHeightCustom).parents('tr').show(500);
+        } else {
+            $(stickyToggleHeightCustom).val('');
+            $(stickyToggleHeightCustom).parents('tr').hide(500);
+        }
+    });
+    
+    
+});
+INLINESTICKYTOGGLEJS;
+			wp_add_inline_script( 'cn_toc_admin_script', $inlineAdminStickyToggleJS );
 		}
 
 		/**
@@ -434,7 +567,7 @@ if ( ! class_exists( 'ezTOC_Admin' ) ) {
 
 		}
 
-          
+
 	     /**
 	     * Enqueue Admin js scripts
 	     *

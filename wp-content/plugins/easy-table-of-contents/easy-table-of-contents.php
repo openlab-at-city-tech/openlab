@@ -3,7 +3,7 @@
  * Plugin Name: Easy Table of Contents
  * Plugin URI: https://magazine3.company/
  * Description: Adds a user friendly and fully automatic way to create and display a table of contents generated from the page content.
- * Version: 2.0.31
+ * Version: 2.0.33.2
  * Author: Magazine3
  * Author URI: https://magazine3.company/
  * Text Domain: easy-table-of-contents
@@ -26,7 +26,7 @@
  * @package  Easy Table of Contents
  * @category Plugin
  * @author   Magazine3
- * @version  2.0.31
+ * @version  2.0.33.2
  */
 
 use Easy_Plugins\Table_Of_Contents\Debug;
@@ -48,7 +48,7 @@ if ( ! class_exists( 'ezTOC' ) ) {
 		 * @since 1.0
 		 * @var string
 		 */
-		const VERSION = '2.0.31';
+		const VERSION = '2.0.33.2';
 
 		/**
 		 * Stores the instance of this class.
@@ -235,15 +235,15 @@ if ( ! class_exists( 'ezTOC' ) ) {
 			if (!ezTOC_Option::get( 'inline_css' )) {
 				wp_register_style( 'ez-toc', EZ_TOC_URL . "assets/css/screen$min.css", array( 'ez-icomoon' ), ezTOC::VERSION );
 			}
-			wp_register_script( 'js-cookie', EZ_TOC_URL . "vendor/js-cookie/js.cookie$min.js", array(), '2.2.1', TRUE );
-			wp_register_script( 'jquery-smooth-scroll', EZ_TOC_URL . "vendor/smooth-scroll/jquery.smooth-scroll$min.js", array( 'jquery' ), '2.2.0', TRUE );
-			wp_register_script( 'jquery-sticky-kit', EZ_TOC_URL . "vendor/sticky-kit/jquery.sticky-kit$min.js", array( 'jquery' ), '1.9.2', TRUE );
+			wp_register_script( 'ez-toc-js-cookie', EZ_TOC_URL . "vendor/js-cookie/js.cookie$min.js", array(), '2.2.1', TRUE );
+			wp_register_script( 'ez-toc-jquery-smooth-scroll', EZ_TOC_URL . "vendor/smooth-scroll/jquery.smooth-scroll$min.js", array( 'jquery' ), '2.2.0', TRUE );
+			wp_register_script( 'ez-toc-jquery-sticky-kit', EZ_TOC_URL . "vendor/sticky-kit/jquery.sticky-kit$min.js", array( 'jquery' ), '1.9.2', TRUE );
 
 			if (ezTOC_Option::get( 'toc_loading' ) != 'css') {
 				wp_register_script(
 				'ez-toc-js',
 				EZ_TOC_URL . "assets/js/front{$min}.js",
-				array( 'jquery-smooth-scroll', 'js-cookie', 'jquery-sticky-kit' ),
+				array( 'ez-toc-jquery-smooth-scroll', 'ez-toc-js-cookie', 'ez-toc-jquery-sticky-kit' ),
 				ezTOC::VERSION . '-' . filemtime( EZ_TOC_PATH . "/assets/js/front{$min}.js" ),
 				true
 				);
@@ -253,6 +253,20 @@ if ( ! class_exists( 'ezTOC' ) ) {
 
 				wp_enqueue_style( 'ez-toc' );
 				self::inlineCSS();
+			}
+
+			if ( ezTOC_Option::get( 'sticky-toggle' ) ) {
+				wp_register_style(
+					'ez-toc-sticky',
+					EZ_TOC_URL . "assets/css/ez-toc-sticky{$min}.css",
+					array( 'ez-icomoon' ),
+					self::VERSION
+				);
+				wp_enqueue_style( 'ez-toc-sticky' );
+				self::inlineStickyToggleCSS();
+				wp_register_script( 'ez-toc-sticky', '', array(), '', true );
+                wp_enqueue_script( 'ez-toc-sticky', '', '','', true );
+				self::inlineStickyToggleJS();
 			}
 
 			if ( ezTOC_Option::get( 'smooth_scroll' ) ) {
@@ -350,6 +364,411 @@ if ( ! class_exists( 'ezTOC' ) ) {
 
 				wp_add_inline_style( 'ez-toc', $css );
 			}
+
+            /**
+             * RTL Direction
+             * @since 2.0.33
+            */
+            self::InlineCountingCSS( ezTOC_Option::get( 'heading-text-direction', 'ltr' ) );
+            self::InlineCountingCSS( ezTOC_Option::get( 'heading-text-direction', 'ltr' ),'ez-toc-widget-direction','ez-toc-widget-container', 'counter', 'ez-toc-widget-container' );
+
+            if( ezTOC_Option::get( 'sticky-toggle' ) ) {
+                self::InlineCountingCSS( ezTOC_Option::get( 'heading-text-direction', 'ltr' ), 'ez-toc-sticky-toggle-direction', 'ez-toc-sticky-toggle-counter', 'counter', 'ez-toc-sticky-container' );
+            }
+            /* End rtl direction */
+		}
+
+        /**
+         * InlineCountingCSS Method
+         * @since 2.0.33
+         * @scope private
+         * @static
+         * @param string $direction
+         * @param string $directionClass
+         * @param string $class
+         * @param string $counter
+         * @param string $containerId
+         * @return void
+        */
+        private static function InlineCountingCSS( $direction = 'ltr', $directionClass = 'ez-toc-container-direction', $class = 'ez-toc-counter',  $counter = 'counter', $containerId = 'ez-toc-container' )
+        {
+            $list_type = ezTOC_Option::get( $counter, 'decimal' );
+            wp_enqueue_style('ez-toc');
+            $inlineCSS = '';
+            $counterListAll = array_merge(ezTOC_Option::getCounterListDecimal(), ezTOC_Option::getCounterList_i18n());
+            $listTypesForCounting = array_keys($counterListAll);
+            $inlineCSS .= <<<INLINECSS
+.$directionClass {
+    direction: $direction;
+}\n\n
+INLINECSS;
+			$listAnchorPosition = 'before';
+            $marginCSS = 'margin-right: .2em;';
+            $floatPosition = 'float: left;';
+            if( $direction == 'rtl' )
+            {
+                $class .= '-rtl';
+
+                $marginCSS = 'margin-left: .2em;';
+				$floatPosition = 'float: right;';
+            }
+
+			if( $list_type == '- ' ) {
+                $inlineCSS .= <<<INLINECSS
+#$containerId.$class nav ul li {
+    list-style-type: '- ' !important;
+    list-style-position: inside !important;
+}\n\n
+INLINECSS;
+			} else if( in_array($list_type, $listTypesForCounting)) {
+                if( $direction == 'rtl' )
+				{
+                    $length = 6;
+                    $counterRTLCSS = self::rtlCounterResetCSS( $length, $class );
+                    $counterRTLCSS .= self::rtlCounterIncrementCSS( $length, $class );
+                    $counterRTLCSS .= self::rtlCounterContentCSS( $length, $list_type, $class );
+                    $inlineCSS .= <<<INLINECSS
+$counterRTLCSS
+INLINECSS;
+                }
+                if( $direction == 'ltr' )
+				{
+                     $inlineCSS .= <<<INLINECSS
+.$class ul {
+    counter-reset: item;
+}\n\n
+
+.$class nav ul li a::$listAnchorPosition {
+    content: counters(item, ".", $list_type) ". ";
+    display: inline-block;
+    counter-increment: item;
+    $marginCSS \n
+    $floatPosition
+}\n\n
+INLINECSS;
+                }
+            } else {
+
+
+                $inlineCSS .= <<<INLINECSS
+.$class ul {
+    direction: $direction;
+    counter-reset: item;
+}\n\n
+.$class nav ul li a::$listAnchorPosition {
+    content: counter(item, $list_type) " ";
+    $marginCSS
+    counter-increment: item;
+    $floatPosition
+}\n\n
+INLINECSS;
+
+            }
+             wp_add_inline_style('ez-toc', $inlineCSS);
+        }
+
+        /**
+         * rtlCounterResetCSS Method
+         * @since 2.0.33
+         * @scope private
+         * @static
+         * @param int $length
+         * @param string $class
+         * @return string
+        */
+        private static function rtlCounterResetCSS( $length = 6, $class = 'ez-toc-counter-rtl' )
+        {
+            if ($length < 6) {
+                $length = 6;
+            }
+            $counterResetCSS = "";
+            for ($i = 1; $i <= $length; $i++) {
+                $ul = [];
+                for ($j = 1; $j <= $i; $j++) {
+                    $ul[$j] = "ul";
+                }
+                $ul = implode(" ", $ul);
+                $items = [];
+                for ($j = $i; $j <= $length; $j++) {
+                    $items[$j] = "item-level$j";
+                }
+                $items = implode(", ", $items);
+                $counterResetCSS .= <<<COUNTERRESETCSS
+.$class $ul  {
+    direction: rtl;
+    counter-reset: $items;
+}\n\n
+COUNTERRESETCSS;
+            }
+            return $counterResetCSS;
+        }
+
+        /**
+         * rtlCounterIncrementCSS Method
+         * @since 2.0.33
+         * @scope private
+         * @static
+         * @param int $length
+         * @param string $class
+         * @return string
+        */
+        private static function rtlCounterIncrementCSS( $length = 6, $class = 'ez-toc-counter-rtl' )
+        {
+            if ($length < 6) {
+                $length = 6;
+            }
+            $counterIncrementCSS = "";
+            for ($i = 1; $i <= $length; $i++) {
+                $ul = [];
+                for ($j = 1; $j <= $i; $j++) {
+                    $ul[$j] = "ul";
+                }
+                $ul = implode(" ", $ul);
+                $item = "item-level$i";
+                $counterIncrementCSS .= <<<COUNTERINCREMENTCSS
+.$class $ul li {
+    counter-increment: $item;
+}\n\n
+COUNTERINCREMENTCSS;
+            }
+            return $counterIncrementCSS;
+        }
+
+        /**
+         * rtlCounterContentCSS Method
+         * @since 2.0.33
+         * @scope private
+         * @static
+         * @param int $length
+         * @param string $list_type
+         * @param string $class
+         * @return string
+        */
+        private static function rtlCounterContentCSS( $length = 6, $list_type = 'decimal', $class = 'ez-toc-counter-rtl' )
+        {
+            if ($length < 6) {
+                $length = 6;
+            }
+            $counterContentCSS = "";
+            for ($i = 1; $i <= $length; $i++) {
+                $ul = [];
+                for ($j = 1; $j <= $i; $j++) {
+                    $ul[$j] = "ul";
+                }
+                $ul = implode(" ", $ul);
+                $items = [];
+
+                $cnt = $i;
+                for ($j = 1; $j <= $i; $j++) {
+                    $items[$cnt] = "counter(item-level$cnt, $list_type)";
+                    $cnt--;
+                }
+                $items = implode(' "." ', $items);
+                $counterContentCSS .= <<<COUNTERINCREMENTCSS
+.$class nav $ul li a::before {
+    content: $items ". ";
+    float: right;
+    margin-left: 0.2rem;
+}\n\n
+COUNTERINCREMENTCSS;
+            }
+            return $counterContentCSS;
+        }
+
+
+        /**
+         * inlineStickyToggleCSS Method
+         * Prints out inline Sticky Toggle CSS after the core CSS file to allow overriding core styles via options.
+         *
+         * @since  2.0.32
+         * @static
+         */
+        private static function inlineStickyToggleCSS()
+        {
+            $custom_width = 'max-width: auto;';
+            if (null !== ezTOC_Option::get('sticky-toggle-width-custom') && !empty(ezTOC_Option::get(
+                    'sticky-toggle-width-custom'
+                ))) {
+                $custom_width = 'max-width: ' . ezTOC_Option::get('sticky-toggle-width-custom') . ';' . PHP_EOL;
+                $custom_width .= 'min-width: ' . ezTOC_Option::get('sticky-toggle-width-custom') . ';' . PHP_EOL;
+            }
+            $custom_height = 'max-height: 100vh;';
+            if (null !== ezTOC_Option::get('sticky-toggle-height-custom') && !empty(ezTOC_Option::get(
+                    'sticky-toggle-height-custom'
+                ))) {
+                $custom_height = 'max-height: ' . ezTOC_Option::get('sticky-toggle-height-custom') . ';' . PHP_EOL;
+                $custom_height .= 'min-height: ' . ezTOC_Option::get('sticky-toggle-height-custom') . ';' . PHP_EOL;
+            }
+            $inlineStickyToggleCSS = <<<INLINESTICKYTOGGLECSS
+/**
+* Ez Toc Sidebar Sticky CSS
+*/
+.ez-toc-sticky-fixed {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 999999;
+    width: auto;
+    max-width: 100%;
+}
+.ez-toc-sticky-fixed .ez-toc-sidebar {
+    position: relative;
+    top: auto;
+    width: auto !important;
+    {$custom_width}
+    height: 100%;
+    box-shadow: 1px 1px 10px 3px rgb(0 0 0 / 20%);
+    box-sizing: border-box;
+    padding: 20px 30px;
+    background: white;
+    margin-left: 0 !important;
+    height: auto;
+    {$custom_height}
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+.ez-toc-sticky-fixed .ez-toc-sidebar #ez-toc-sticky-container {
+    {$custom_width}
+    max-width: auto;
+    padding: 0px;
+    border: none;
+    margin-bottom: 0;
+    margin-top: 65px;
+}
+#ez-toc-sticky-container a {
+    color: #000;
+}
+.ez-toc-sticky-fixed .ez-toc-sidebar .ez-toc-sticky-title-container {
+    border-bottom-color: #EEEEEE;
+    background-color: #FAFAFA;
+    padding: 15px;
+    border-bottom: 1px solid #e5e5e5;
+    width: 100%;
+    position: absolute;
+    height: auto;
+    top: 0;
+    left: 0;
+    z-index: 99999999;
+}
+.ez-toc-sticky-fixed .ez-toc-sidebar .ez-toc-sticky-title-container .ez-toc-sticky-title {
+    font-weight: 550;
+    font-size: 18px;
+    color: #111;
+}
+.ez-toc-sticky-fixed .ez-toc-close-icon {
+	-webkit-appearance: none;
+    padding: 0;
+    cursor: pointer;
+    background: 0 0;
+    border: 0;
+    float: right;
+    font-size: 30px;
+    font-weight: 600;
+    line-height: 1;
+    position: relative;
+    color: #000;
+    top: -2px;
+    text-decoration: none;
+}
+.ez-toc-open-icon {
+    position: fixed;
+    left: 0px;
+    top: 8%;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 5px 10px 15px 10px;
+    box-shadow: 1px -5px 10px 5px rgb(0 0 0 / 10%);
+    background-color: #fff;
+    display: inline-grid;
+    line-height: 1.4;
+    border-radius: 0px 10px 10px 0px;
+    z-index: 999999;
+}
+.ez-toc-sticky-fixed.hide {
+    -webkit-transition: opacity 0.3s linear, left 0.3s cubic-bezier(0.4, 0, 1, 1);
+	-ms-transition: opacity 0.3s linear, left 0.3s cubic-bezier(0.4, 0, 1, 1);
+	-o-transition: opacity 0.3s linear, left 0.3s cubic-bezier(0.4, 0, 1, 1);
+	transition: opacity 0.3s linear, left 0.3s cubic-bezier(0.4, 0, 1, 1);
+    left: -100%;
+}
+.ez-toc-sticky-fixed.show {
+    -webkit-transition: left 0.3s linear, left 0.3s easy-out;
+    -moz-transition: left 0.3s linear;
+    -o-transition: left 0.3s linear;
+    transition: left 0.3s linear;
+    left: 0;
+//    opacity: 1;
+}
+.ez-toc-open-icon span.arrow {
+	font-size: 18px;
+}
+.ez-toc-open-icon span.text {
+	font-size: 13px;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+}
+@media screen  and (max-device-width: 640px) {
+        
+    .ez-toc-sticky-fixed .ez-toc-sidebar {
+        min-width: auto;
+    }
+    .ez-toc-sticky-fixed .ez-toc-sidebar.show {
+        padding-top: 35px;
+    }
+    .ez-toc-sticky-fixed .ez-toc-sidebar #ez-toc-sticky-container {
+        min-width: 100%;
+    }
+}
+INLINESTICKYTOGGLECSS;
+			wp_add_inline_style( 'ez-toc-sticky', $inlineStickyToggleCSS );
+		}
+
+		/**
+		 * inlineStickyToggleJS Method
+		 * Prints out inline Sticky Toggle JS after the core CSS file to allow overriding core styles via options.
+		 *
+		 * @since  2.0.32
+		 * @static
+		 */
+		private static function inlineStickyToggleJS() {
+			$inlineStickyToggleJS = <<<'INLINESTICKYTOGGLEJS'
+/**
+ * Sticky Sidebar JS
+ */ 
+function hideBar(e) {
+    e.preventDefault();
+    var sidebar = document.querySelector(".ez-toc-sticky-fixed");
+    sidebar.classList.remove("show");
+    sidebar.classList.add("hide");
+    setTimeout(function() {
+        document.querySelector(".ez-toc-open-icon").style = "z-index: 9999999";
+    }, 200);
+}
+function showBar(e) {
+    e.preventDefault();
+    document.querySelector(".ez-toc-open-icon").style = "z-index: -1;";
+    setTimeout(function() {
+		var sidebar = document.querySelector(".ez-toc-sticky-fixed");
+		sidebar.classList.remove("hide");
+		sidebar.classList.add("show");
+    }, 200);  
+}
+(function() {
+	let ez_toc_sticky_fixed_container = document.querySelector('div.ez-toc-sticky-fixed');
+	if(ez_toc_sticky_fixed_container) {
+		document.body.addEventListener("click", function (evt) {
+		    hideBar(event);
+		});
+		ez_toc_sticky_fixed_container.addEventListener('click', function(event) {
+			event.stopPropagation();
+		});
+		document.querySelector('.ez-toc-open-icon').addEventListener('click', function(event) {
+			event.stopPropagation();
+		});
+	}
+})();
+INLINESTICKYTOGGLEJS;
+			wp_add_inline_script( 'ez-toc-sticky', $inlineStickyToggleJS );
 		}
 
 		/**
@@ -549,6 +968,11 @@ if ( ! class_exists( 'ezTOC' ) ) {
 				$html = preg_replace('/class="ez-toc-list ez-toc-list-level-1"/', 'class="ez-toc-list ez-toc-list-level-1" style="display:none"', $html);
 			}
 
+            if( !is_home() ) {
+                if ( ezTOC_Option::get('sticky-toggle') ) {
+                    add_action('wp_footer', array(__CLASS__, 'stickyToggleContent'));
+                }
+            }
 			return $html;
 		}
 
@@ -730,9 +1154,45 @@ if ( ! class_exists( 'ezTOC' ) ) {
 					}
 			}
 
+            /**
+             * @since 2.0.32
+             */
+            if ( ezTOC_Option::get('sticky-toggle') && !is_home() ) {
+                add_action('wp_footer', array(__CLASS__, 'stickyToggleContent'));
+            }
+
 			return Debug::log()->appendTo( $content );
 		}
-		
+
+		/**
+		 * stickyToggleContent Method
+		 * Call back for the `wp_footer` action.
+		 *
+		 * @since  2.0.32
+		 * @static
+		 */
+		public static function stickyToggleContent() {
+			$post = self::get( get_the_ID() );
+			if ( null !== $post ) {
+				$stickyToggleTOC = $post->getStickyToggleTOC();
+				$openButtonText = "Index";
+				if( !empty( ezTOC_Option::get( 'sticky-toggle-open-button-text' ) ) ) {
+					$openButtonText = ezTOC_Option::get( 'sticky-toggle-open-button-text' );
+				}
+				echo <<<STICKYTOGGLEHTML
+					<div class="ez-toc-sticky">
+				        <div class="ez-toc-sticky-fixed hide">
+		                    <div class='ez-toc-sidebar'>{$stickyToggleTOC}</div>
+				        </div>
+			            <a class='ez-toc-open-icon' href='javascript:void(0)' onclick='showBar(event)'>
+                            <span class="arrow">&#8594;</span>
+                            <span class="text">{$openButtonText}</span>
+                        </a>
+					</div>
+STICKYTOGGLEHTML;
+			}
+		}
+
 		/**
 		 * Call back for the `wp_head` action.
 		 *
