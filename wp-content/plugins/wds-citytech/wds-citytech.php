@@ -562,8 +562,8 @@ function openlab_get_entity_departments( $entity = null ) {
 			'dental-hygiene'                            => array(
 				'label' => 'Dental Hygiene',
 			),
-			'health-services-administration'            => array(
-				'label' => 'Health Services Administration',
+			'health-sciences'                           => array(
+				'label' => 'Health Sciences',
 			),
 			'hospitality-management'                    => array(
 				'label' => 'Hospitality Management',

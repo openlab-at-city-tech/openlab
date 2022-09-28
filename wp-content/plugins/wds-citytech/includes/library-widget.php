@@ -503,7 +503,7 @@ function openlab_get_library_subject_guides() {
 
 		'health-services-administration' => [
 			'url'  => 'https://libguides.citytech.cuny.edu/healthservicesadmin',
-			'name' => 'Health Services Administration',
+			'name' => 'Health Sciences',
 			'type' => 'subject',
 		],
 
