@@ -20,6 +20,19 @@
 
     });
 
+    $(function() {
+        var $menu_tabs = $('.about-tab-navbar .tab-navbar-list li a');
+        $menu_tabs.on('click', function(e) {
+            e.preventDefault();
+            $menu_tabs.removeClass('active');
+            $(this).addClass('active');
+
+            $('.about-panel-item').fadeOut(300);
+            $(this.hash).delay(300).fadeIn();
+        });
+
+    });
+
     // Getting Start action
     $('.twp-install-active').click(function(){
 

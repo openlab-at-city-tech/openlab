@@ -77,25 +77,42 @@
         if( e('body').hasClass('rtl')){
             rtlStatus = true;
         }
-        e(".wp-block-gallery.columns-1,.wp-block-gallery.columns-1 .blocks-gallery-grid,.gallery-columns-1,.twp-eportfolio-photography-slider").slick({
-            autoplay: true,
-            infinite: false,
-            speed: 300,
-            arrow: false,
-            dots: false,
-            slidesToShow: 1,
-            slidesToScroll: 1,
-            rtl: rtlStatus
+        e(".twp-eportfolio-photography-slider").each(function () {
+            e(this).slick({
+                autoplay: true,
+                infinite: false,
+                speed: 300,
+                arrow: false,
+                dots: false,
+                slidesToShow: 1,
+                slidesToScroll: 1
+            });
         });
-        e(".twp-blog-slider,.twp-widget-slider").slick({
-            autoplay: true,
-            infinite: false,
-            speed: 300,
-            arrow: true,
-            dots: true,
-            slidesToShow: 1,
-            slidesToScroll: 1,
-            cssEase: "linear",
+
+        e("figure.wp-block-gallery.has-nested-images.columns-1, .wp-block-gallery.columns-1 ul.blocks-gallery-grid, .gallery-columns-1").each(function () {
+            e(this).slick({
+                autoplay: true,
+                infinite: false,
+                speed: 300,
+                arrow: false,
+                dots: false,
+                slidesToShow: 1,
+                slidesToScroll: 1,
+                rtl: rtlStatus
+            });
+        });
+
+        e(".twp-blog-slider,.twp-widget-slider").each(function () {
+            e(this).slick({
+                autoplay: true,
+                infinite: false,
+                speed: 300,
+                arrow: true,
+                dots: true,
+                slidesToShow: 1,
+                slidesToScroll: 1,
+                cssEase: "linear",
+            });
         });
         e(".twp-eportfolio-photography-slider").on("wheel", (function(ep) {
             ep.preventDefault();
