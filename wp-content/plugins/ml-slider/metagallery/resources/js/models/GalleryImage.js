@@ -1,3 +1,5 @@
+import { xssEscape } from 'xss-escape'
+
 export function GalleryImageMarkup(image) {
     return `<div
         x-title="Image Wrapper"
@@ -35,7 +37,7 @@ export function GalleryImageMarkup(image) {
                     width="${image.width}"
                     height="${image.height}"
                     src="${image.src.main.url}"
-                    alt="${image.alt}"/>
+                    alt="${xssEscape(image.alt)}"/>
             </div>
         </div>
     </div>`

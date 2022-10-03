@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The right side image settings area
  */
@@ -98,7 +99,7 @@ if (!defined('ABSPATH')) {
                             imageId = null
                         }, 300)"
                         class="mr-4 px-6 py-1 bg-nord11 text-white shadow-sm text-base font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-nord4 focus:ring-nord11"
-                        title="<?php \esc_html_e('Remove image from gallery', 'metagallery'); ?>">
+                        title="<?php \esc_attr_e('Remove image from gallery', 'metagallery'); ?>">
                         <?php \esc_html_e('Remove image', 'metagallery'); ?>
                     </button>
                 </div>

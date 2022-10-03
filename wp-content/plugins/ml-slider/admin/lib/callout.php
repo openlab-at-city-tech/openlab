@@ -33,7 +33,6 @@ new MetaSlider_Callout($metaslider_callout_name, $metaslider_callout_text, $meta
  */
 class MetaSlider_Callout
 {
-
     /**
      * The notice key
      *
@@ -66,10 +65,10 @@ class MetaSlider_Callout
     /**
      * Constructor
      *
-     * @param string 	  $key   The key of the callout (should be unique)
-     * @param string 	  $text  The text of the callout
+     * @param string      $key   The key of the callout (should be unique)
+     * @param string      $text  The text of the callout
      * @param string|null $image The html of the image
-     * @param string 	  $page  The page to show the callout
+     * @param string      $page  The page to show the callout
      */
     public function __construct($key, $text, $image = null, $page = 'plugins')
     {
@@ -91,7 +90,7 @@ class MetaSlider_Callout
     {
 
         // Only show to users who can access MetaSlider
-        $capability = apply_filters('metaslider_capability', 'edit_others_posts');
+        $capability = apply_filters('metaslider_capability', MetaSliderPlugin::DEFAULT_CAPABILITY_EDIT_SLIDES);
         if (!current_user_can($capability)) {
             return;
         }

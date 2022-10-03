@@ -9,7 +9,6 @@ if (!defined('ABSPATH')) {
  */
 class MetaSlider_Analytics
 {
-
     /**
      * @var Appsero\Insights $appsero
      */
@@ -79,14 +78,14 @@ class MetaSlider_Analytics
                 style="display:flex;align-items:stretch;justify-content:space-between;position:relative">
                 <div style="display:flex;align-items:center;position:relative">
                     <img
-                        src="<?php echo METASLIDER_BASE_URL.'admin/images/metaslider_logo.png'?>"
+                        src="<?php echo esc_url(METASLIDER_BASE_URL . 'admin/images/metaslider_logo.png'); ?>"
                         width="60" height="60"
                         style="margin-right:0.5rem;"
-                        alt="<?php _e('MetaSlider Logo', 'ml-slider');?>" />
+                        alt="<?php esc_attr_e('MetaSlider Logo', 'ml-slider');?>" />
                     <div>
-                        <h3 style="margin-bottom:0.25rem;"><?php _e('Thanks for using MetaSlider', 'ml-slider'); ?></h3>
+                        <h3 style="margin-bottom:0.25rem;"><?php esc_html_e('Thanks for using MetaSlider', 'ml-slider'); ?></h3>
                         <p style="max-width:850px;">
-                            <?php printf(__('We are currently building the next version of MetaSlider. Can you help us out by sharing non-sensitive diagnostic information? We\'d also like to send you infrequent emails with important security and feature updates. See our %s for more details.', 'ml-slider'), '<a target="_blank" href="https://www.metaslider.com/privacy-policy">' . __('privacy policy', 'ml-slider') . '</a>'); ?>
+                            <?php printf(esc_html__('We are currently building the next version of MetaSlider. Can you help us out by sharing non-sensitive diagnostic information? We\'d also like to send you infrequent emails with important security and feature updates. See our %s for more details.', 'ml-slider'), '<a target="_blank" href="https://www.metaslider.com/privacy-policy">' . esc_html__('privacy policy', 'ml-slider') . '</a>'); ?>
                         </p>
                     </div>
                 </div>
@@ -100,10 +99,10 @@ class MetaSlider_Analytics
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                         </svg>
                     </button>
-                    <button class="button button-primary" onclick="jQuery('#metaslider-optin-notice').remove();jQuery.post(window.ajaxurl, {action: 'handle_optin_action', activate: true, _wpnonce: metaslider_optin_notice_nonce });"><?php _e('Agree', 'ml-slider'); ?></button>
+                    <button class="button button-primary" onclick="jQuery('#metaslider-optin-notice').remove();jQuery.post(window.ajaxurl, {action: 'handle_optin_action', activate: true, _wpnonce: metaslider_optin_notice_nonce });"><?php esc_html_e('Agree', 'ml-slider'); ?></button>
                 </div>
             </div>
-        <?php }
+            <?php }
         }
     }
 
@@ -114,9 +113,9 @@ class MetaSlider_Analytics
      */
     public function handleOptinDismiss()
     {
-        if (!wp_verify_nonce($_REQUEST['_wpnonce'], 'metaslider_optin_notice_nonce')) {
+        if (! isset($_REQUEST['_wpnonce']) || ! wp_verify_nonce(sanitize_key($_REQUEST['_wpnonce']), 'metaslider_optin_notice_nonce')) {
             wp_send_json_error(array(
-                'message' => __('The security check failed. Please refresh the page and try again.', 'ml-slider')
+                'message' => esc_html__('The security check failed. Please refresh the page and try again.', 'ml-slider')
             ), 401);
         }
         // They opted in, so we can instruct Appsero to communicate with the server
@@ -204,7 +203,7 @@ class MetaSlider_Analytics
     /**
      * Add some extra fields - This is called async now so no need to cache it.
      *
-     * @return void
+     * @return array
      */
     public function extraDataToCollect()
     {
@@ -233,7 +232,7 @@ class MetaSlider_Analytics
             );
 
             return $data;
-        } catch (\Throwable $th) {
+        } catch (\Exception $e) {
             return array();
         }
     }
@@ -286,7 +285,7 @@ class MetaSlider_Analytics
         update_option('metaslider_optin_user_extras', array(
             'id' => $current_user->ID,
             'email' => $current_user->user_email,
-            'ip' => isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '',
+            'ip' => isset($_SERVER['REMOTE_ADDR']) ? sanitize_text_field($_SERVER['REMOTE_ADDR']) : '', // phpcs:ignore WordPressVIPMinimum.Variables.ServerVariables.UserControlledHeaders
             'time' => time()
         ));
 

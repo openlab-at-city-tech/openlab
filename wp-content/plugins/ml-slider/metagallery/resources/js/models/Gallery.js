@@ -36,7 +36,7 @@ export default function Gallery() {
             )
         },
         removeImages(images) {
-            // Not the most effecient filter, but there's no mechinism
+            // Not the most efficient filter, but there's no mechanism
             // currently to remove multiple images, so it's fine
             this.$component('current').dirty = true
             const gridItems = window.metagalleryGrid.getItems()

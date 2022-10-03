@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The archive page view
  */

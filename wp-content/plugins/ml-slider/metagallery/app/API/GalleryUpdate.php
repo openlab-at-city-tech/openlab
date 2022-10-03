@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Return all galleries
  */
@@ -20,7 +21,6 @@ use Extendify\MetaGallery\Controllers\GalleryController;
  */
 class GalleryUpdate implements BasicRoute
 {
-
     /**
      * Update single gallery - TODO: maybe move this to main controller
      *

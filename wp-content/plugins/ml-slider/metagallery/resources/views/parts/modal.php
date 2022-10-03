@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The generic utility popup modal
  */

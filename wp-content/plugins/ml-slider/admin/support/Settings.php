@@ -22,7 +22,6 @@ if (! class_exists('MetaSlider_Settings')) {
 
         public function __construct()
         {
-
         }
 
         /**

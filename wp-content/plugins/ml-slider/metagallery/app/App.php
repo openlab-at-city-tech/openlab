@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The App details file
  */
@@ -12,7 +13,6 @@ namespace Extendify\MetaGallery;
  */
 class App
 {
-
     /**
      * Plugin name
      *

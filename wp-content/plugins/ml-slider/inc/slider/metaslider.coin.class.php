@@ -1,13 +1,15 @@
 <?php
 
-if (!defined('ABSPATH')) die('No direct access.');
+if (!defined('ABSPATH')) {
+die('No direct access.');
+}
 
 /**
  * Override parent 'MetaSlider' class with CoinSlider specific markup,
  * javascript, css and settings.
  */
-class MetaCoinSlider extends MetaSlider {
-
+class MetaCoinSlider extends MetaSlider
+{
     protected $js_function = 'coinslider';
     protected $js_path = 'sliders/coin-slider/coin-slider.min.js';
     protected $css_path = 'sliders/coin-slider/coin-slider-styles.css';
@@ -18,7 +20,8 @@ class MetaCoinSlider extends MetaSlider {
      * @param  array $param Parameters
      * @return boolean
      */
-    protected function get_param( $param ) {
+    protected function get_param($param)
+    {
         $params = array(
             'effect' => 'animation',
             'width' => 'width',
@@ -37,7 +40,7 @@ class MetaCoinSlider extends MetaSlider {
             'autoPlay' => 'autoplay'
         );
 
-        if ( isset( $params[$param] ) ) {
+        if (isset($params[$param])) {
             return $params[$param];
         }
 
@@ -49,15 +52,16 @@ class MetaCoinSlider extends MetaSlider {
      *
      * @return string slider markup.
      */
-    protected function get_html() {
+    protected function get_html()
+    {
         $return_value = "<div id='" . $this->get_identifier() . "' class='coin-slider'>";
 
-        foreach ( $this->slides as $slide ) {
+        foreach ($this->slides as $slide) {
             $return_value .= "\n" . $slide;
         }
 
         $return_value .= "\n        </div>";
 
-        return apply_filters( 'metaslider_coin_slider_get_html', $return_value, $this->id, $this->settings );
+        return apply_filters('metaslider_coin_slider_get_html', $return_value, $this->id, $this->settings);
     }
 }

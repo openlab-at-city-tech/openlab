@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The state controller for the toolbar (3 dots) dropdown
  */

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Controls Galleries
  */
@@ -18,7 +19,6 @@ use Extendify\MetaGallery\App;
  */
 class GalleryController
 {
-
     /**
      * Display the onboarding page.
      *
@@ -43,18 +43,27 @@ class GalleryController
         // phpcs:ignore WordPress.Security.NonceVerification.Recommended
         if (isset($_GET['gallery'])) {
             // Remove the gallery param if it's set.
-            \wp_safe_redirect(
-                \admin_url('admin.php?page=' . \esc_attr(METAGALLERY_PAGE_NAME) . '&route=archive')
+            $redirect = add_query_arg(
+                [
+                    'page' => METAGALLERY_PAGE_NAME,
+                    'route' => 'archive'
+                ],
+                \admin_url('admin.php')
             );
+            \wp_safe_redirect($redirect);
             exit;
         }
 
         $galleries = Gallery::get()->all();
         if (!$galleries) {
-            \wp_safe_redirect(
-                // For now, re-route users with no galleries to the start page.
-                \admin_url('admin.php?page=' . \esc_attr(METAGALLERY_PAGE_NAME) . '&route=start')
+            $redirect = add_query_arg(
+                [
+                    'page' => METAGALLERY_PAGE_NAME,
+                    'route' => 'start'
+                ],
+                \admin_url('admin.php')
             );
+            \wp_safe_redirect($redirect);
             exit;
         }
 
@@ -70,10 +79,15 @@ class GalleryController
     {
         // phpcs:ignore WordPress.Security.NonceVerification.Recommended
         if (isset($_GET['gallery'])) {
-            // Remove the gallery param if it's set.
-            \wp_safe_redirect(
-                \admin_url('admin.php?page=' . \esc_attr(METAGALLERY_PAGE_NAME) . '&route=create')
+            $redirect = add_query_arg(
+                [
+                    'page' => METAGALLERY_PAGE_NAME,
+                    'route' => 'create'
+                ],
+                \admin_url('admin.php')
             );
+            // Remove the gallery param if it's set.
+            \wp_safe_redirect($redirect);
             exit;
         }
 
@@ -100,9 +114,15 @@ class GalleryController
         $gallery->settings = [];
         $id = $gallery->save();
 
-        \wp_safe_redirect(
-            \admin_url('admin.php?page=' . \esc_attr(METAGALLERY_PAGE_NAME) . '&route=single&gallery=' . \esc_attr($id))
+        $redirect = add_query_arg(
+            [
+                'page' => METAGALLERY_PAGE_NAME,
+                'route' => 'single',
+                'gallery' => (int)$id,
+            ],
+            \admin_url('admin.php')
         );
+        \wp_safe_redirect($redirect);
         exit;
     }
 
@@ -116,9 +136,14 @@ class GalleryController
         // phpcs:ignore WordPress.Security.NonceVerification.Recommended
         if (!isset($_GET['gallery'])) {
             // TODO: Flash message if they tried to access a gallery that wasnt set.
-            \wp_safe_redirect(
-                \admin_url('admin.php?page=' . \esc_attr(METAGALLERY_PAGE_NAME) . '&route=archive')
+            $redirect = add_query_arg(
+                [
+                    'page' => METAGALLERY_PAGE_NAME,
+                    'route' => 'archive'
+                ],
+                \admin_url('admin.php')
             );
+            \wp_safe_redirect($redirect);
             exit;
         }
 
@@ -131,9 +156,14 @@ class GalleryController
 
         if (!$gallery) {
             // TODO: Flash message if they tried to access a gallery doesnt exist.
-            \wp_safe_redirect(
-                \admin_url('admin.php?page=' . \esc_attr(METAGALLERY_PAGE_NAME) . '&route=archive')
+            $redirect = add_query_arg(
+                [
+                    'page' => METAGALLERY_PAGE_NAME,
+                    'route' => 'archive'
+                ],
+                \admin_url('admin.php')
             );
+            \wp_safe_redirect($redirect);
             exit;
         }
 
@@ -141,23 +171,57 @@ class GalleryController
     }
 
     // phpcs:disable
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    // public function edit($id)
+//    /**
+//     * Show the form for editing the specified resource.
+//     *
+//     * @param  int  $id
+//     * @return Response
+//     */
+//    // public function edit($id)
     // {
     //     //
     // }
     // phpcs:enable
 
     /**
+     * @param $value
+     * @return array
+     */
+    private function sanitizeValue(&$value)
+    {
+        if (is_array($value) && ! empty($value)) {
+            $defaultValuesByKey = [
+                'maxImageWidth' => 600,
+                'minImageWidth'=> 315,
+                'percentImageWidth' => 25,
+                'imageSpacing' => 0
+            ];
+
+            foreach ($value as $key => &$item) {
+                $item = $this->sanitizeValue($item);
+
+                if (array_key_exists($key, $defaultValuesByKey)) {
+                    $item = (int)$item;
+
+                    if (empty($item) && isset($defaultValuesByKey[$key])) {
+                        $item = $defaultValuesByKey[$key];
+                    }
+                }
+            }
+        }
+
+        if (is_string($value)) {
+            $value = \sanitize_text_field($value);
+        }
+
+        return $value;
+    }
+
+    /**
      * Update the specified resource in storage.
      *
      * @param  \WP_REST_Request $request - The request.
-     * @return Response
+     * @return Response|\WP_Error
      */
     public function update(\WP_REST_Request $request)
     {
@@ -170,10 +234,15 @@ class GalleryController
         }
 
         // Always include the title, but use whitelist for others.
-        \update_post_meta($id, 'metagallery-title', $request->get_param('title'));
+        \update_post_meta($id, 'metagallery-title', \sanitize_text_field($request->get_param('title')));
         foreach ($request->get_params() as $key => $value) {
+            $key = sanitize_key($key);
+
+            $sanitizedValue = json_decode($value, true);
+            $sanitizedValue = $this->sanitizeValue($sanitizedValue);
+
             if (in_array($key, ['settings', 'images'], true)) {
-                \update_post_meta($id, 'metagallery-' . $key, json_decode($value, true));
+                \update_post_meta($id, 'metagallery-' . $key, $sanitizedValue);
             }
         }
 
@@ -187,9 +256,16 @@ class GalleryController
             return isset($g[0]) ? $g[0] : [];
         }
 
-        \wp_safe_redirect(
-            \admin_url('admin.php?page=' . \esc_attr(METAGALLERY_PAGE_NAME) . '&route=single&gallery=' . \esc_attr($id))
+        $redirect = add_query_arg(
+            [
+                'page' => METAGALLERY_PAGE_NAME,
+                'route' => 'single',
+                'gallery' => (int)$id,
+            ],
+            \admin_url('admin.php')
         );
+
+        \wp_safe_redirect($redirect);
         exit;
     }
 
@@ -208,9 +284,14 @@ class GalleryController
         }
 
         // TODO: 'flash' a message?
-        \wp_safe_redirect(
-            \admin_url('admin.php?page=' . \esc_attr(METAGALLERY_PAGE_NAME) . '&route=archive')
+        $redirect = add_query_arg(
+            [
+                'page' => METAGALLERY_PAGE_NAME,
+                'route' => 'archive'
+            ],
+            \admin_url('admin.php')
         );
+        \wp_safe_redirect($redirect);
         exit;
     }
 }

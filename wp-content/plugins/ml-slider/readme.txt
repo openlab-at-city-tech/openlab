@@ -2,7 +2,7 @@
 Contributors: matchalabs, DavidAnderson, dnutbourne, kbat82, andergmartins, htmgarcia
 Tags: slideshow, slider, image slider, carousel, gallery, flexslider, wordpress slider, nivoslider, rotating banner, responsive slideshow, seo slideshow, unsplash
 Requires at least: 3.5
-Stable tag: 3.27.8
+Stable tag: 3.27.13
 Requires PHP: 5.4
 Tested up to: 6.0
 License: GPLv2 or later
@@ -321,8 +321,40 @@ See https://www.metaslider.com/documentation/image-cropping/
 
 == Changelog ==
 
-The format is based on [Keep a Changelog recomendations](http://keepachangelog.com/)
+The format is based on [Keep a Changelog recommendations](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
+
+= [3.27.13] - 22 Sep, 2022 =
+
+* FIXED: Fix Unsplash library, #248;
+* FIXED: Fix PHP warnings about undefined array keys: "post_excerpt", "new_window", #246;
+* FIXED: Fix error on PHP 8: Fatal error: uncaught TypeError: floor(): Argument 1 must be of type int|float, #247;
+* FIXED: Advanced settings processing, fixing the field Open in lightbox added by the lightbox plugin, #251;
+* CHANGED: Updated IT and FR translations (Thanks to @wocmultimedia), #245;
+
+= [3.27.12] - 08 Sep, 2022 =
+
+* FIXED: Fix the option "Open in a new window" on the slide editor page, #238;
+* FIXED: Fix the "Caption" field accepting HTML code, #242;
+* FIXED: Fix slide saving that was stripping settings when Pro was activated, #239, #240;
+
+= [3.27.11] - 07 Sep, 2022 =
+
+* FIXED: Fix the Caption field when editing a slideshow, #234;
+* FIXED: Fix the SEO fields when editing a slideshow, #235;
+
+= [3.27.10] - 07 Sep, 2022 =
+
+* FIXED: Fix select fields in the slideshow metabox, #231;
+
+= [3.27.9] - 06 Sep, 2022 =
+
+* CHANGED: Updated Axios JS library to v0.21.2;
+* SECURITY: Fix image alt attribute sanitization and escaping on the gallery, #207;
+* SECURITY: Fix gallery settings input sanitization, #207;
+* SECURITY: Added additional permissions check before saving data in the admin;
+* FIXED: Removed not used demo folders and index.html files from JS libraries, #213;
+* FIXED: Fixed the redirection URL after deleting a gallery, #221;
 
 = [3.27.8] - 18 Jul, 2022 =
 
@@ -536,7 +568,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 = [3.17.1] - 13 Aug, 2020 =
 
-* CHANGED: Adds permission_callback check to register_rest_route as an added redundency.
+* CHANGED: Adds permission_callback check to register_rest_route as an added redundancy.
 * CHANGED: Updates colorbox's jQuery .live() function to use .on().
 
 = [3.17.0] - 05 Aug, 2020 =
@@ -584,7 +616,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 * CHANGED: Adds loaded event that other plugins can wait for.
 * CHANGED: Updates a few UI elements on the search bar and slideshow drawer.
 * CHANGED: Adds better checks for error messages.
-* FIXED: Fixes an issue where cetain settings would show when not needed.
+* FIXED: Fixes an issue where certain settings would show when not needed.
 * FIXED: Fixes a layout break in IE11.
 * FIXED: Addresses performance issues with a very large collection of slideshows.
 
@@ -959,7 +991,7 @@ UPGRADE NOTE: **This is not a major update. We're just following the WordPress v
 * ADDED: HTML5 Compatibility (Experimental). Set `define('METASLIDER_ENABLE_RESOURCE_MANAGER', true);` in wp-config.php to move MetaSlider link tags head of the page..
 * CHANGED: Preview now uses admin-post action.
 * CHANGED: Classes are now auto loaded to reduce memory footprint (Thanks to Viktor Szépe for the above suggestions!).
-* CHANGED: Slideshow initilization time reduced.
+* CHANGED: Slideshow initialization time reduced.
 * CHANGED: HTML5 Compatibility: Alt tags always present on image tag - even if empty..
 * CHANGED: Flex Slider slideshows should now 'reserve' a space for themselves while they fully load.
 * CHANGED: Flex Slider updated to v2.2.2.
@@ -1191,7 +1223,7 @@ UPGRADE NOTE: More info/Comments: http://www.metaslider.com/coming-soon-meta-sli
 * ADDED: 'Easing' options added to flex slider.
 * ADDED: 'Carousel mode' option added for flex slider.
 * ADDED: 'Auto play' option added.
-* ADDED: 'Smart Crop' setting ensures your slideshow size remains consitent regardless of image dimensions.
+* ADDED: 'Smart Crop' setting ensures your slideshow size remains consistent regardless of image dimensions.
 * ADDED: 'Center align slideshow' option added for all sliders.
 * ADDED: Coin Slider upgraded to latest version, new options now exposed in MetaSlider.
 * ADDED: Captions now supported by responsive slides.

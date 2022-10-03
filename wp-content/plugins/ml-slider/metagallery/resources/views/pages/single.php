@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The single page view
  */

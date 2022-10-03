@@ -1,4 +1,5 @@
 <?php
+
 /**
  * View handler for base pages
  */
@@ -12,7 +13,6 @@ namespace Extendify\MetaGallery;
  */
 class View
 {
-
     /**
      * The instance
      *

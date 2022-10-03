@@ -9,15 +9,15 @@
             <thead>
                 <tr>
                     <th></th>
-                    <th><img src="<?php echo METASLIDER_ADMIN_URL.'images/notices/metaslider_logo.png';?>" alt="<?php esc_attr_e('MetaSlider logo', 'ml-slider');?>" width="80" height="80">MetaSlider<br><span><?php esc_html_e('free', 'ml-slider');?></span></th>
-                    <th><img src="<?php echo METASLIDER_ADMIN_URL.'images/notices/metaslider_logo.png';?>" alt="<?php esc_attr_e('MetaSlider logo', 'ml-slider');?>" width="80" height="80"><?php esc_html_e('MetaSlider', 'ml-slider'); ?><br><span><?php esc_html_e('pro', 'ml-slider'); ?></span></th>
+                    <th><img src="<?php echo esc_url(METASLIDER_ADMIN_URL . 'images/notices/metaslider_logo.png');?>" alt="<?php esc_attr_e('MetaSlider logo', 'ml-slider');?>" width="80" height="80">MetaSlider<br><span><?php esc_html_e('free', 'ml-slider');?></span></th>
+                    <th><img src="<?php echo esc_url(METASLIDER_ADMIN_URL . 'images/notices/metaslider_logo.png');?>" alt="<?php esc_attr_e('MetaSlider logo', 'ml-slider');?>" width="80" height="80"><?php esc_html_e('MetaSlider', 'ml-slider'); ?><br><span><?php esc_html_e('pro', 'ml-slider'); ?></span></th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <td></td>
                     <td class="metaslider_installed_status"><?php esc_html_e('Installed', 'ml-slider');?></td>
-                    <td class="metaslider_installed_status"><?php echo metaslider_optimize_url("https://www.metaslider.com/upgrade/", esc_html__('Upgrade now', 'ml-slider'));?></td>
+                    <td class="metaslider_installed_status"><?php echo metaslider_optimize_url("https://www.metaslider.com/upgrade/", esc_html__('Upgrade now', 'ml-slider')); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></td>
                 </tr>
                 <tr>
                     <td><i class="metaslider-premium-image"><svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-package"><path d="M12.89 1.45l8 4A2 2 0 0 1 22 7.24v9.53a2 2 0 0 1-1.11 1.79l-8 4a2 2 0 0 1-1.79 0l-8-4a2 2 0 0 1-1.1-1.8V7.24a2 2 0 0 1 1.11-1.79l8-4a2 2 0 0 1 1.78 0z"/><polyline points="2.32 6.16 12 11 21.68 6.16"/><line x1="12" y1="22.76" x2="12" y2="11"/><line x1="7" y1="3.5" x2="17" y2="8.5"/></svg></i>
@@ -57,7 +57,7 @@
                 <tr>
                     <td><i class="metaslider-premium-image"><svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-video"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg></i>
                         <h4><?php esc_html_e('Add video slides', 'ml-slider');?></h4>
-                        <p><?php _ex('Easily include responsive high definition YouTube and Vimeo videos.', '"YouTube" and "Vimeo" are brand names.', 'ml-slider');?></p></td>
+                        <p><?php echo esc_html_x('Easily include responsive high definition YouTube and Vimeo videos.', '"YouTube" and "Vimeo" are brand names.', 'ml-slider');?></p></td>
                     <td><i class="dashicons dashicons-no-alt" aria-label="<?php esc_attr_e('No', 'ml-slider');?>"></i></td>
                     <td><i class="dashicons dashicons-yes" aria-label="<?php esc_attr_e('Yes', 'ml-slider');?>"></i></td>
                 </tr>
@@ -109,7 +109,7 @@
                 <tr>
                     <td></td>
                     <td class="metaslider_installed_status"><?php esc_html_e('Installed', 'ml-slider');?></td>
-                    <td class="metaslider_installed_status"><?php echo metaslider_optimize_url("https://www.metaslider.com/upgrade/", esc_html__('Upgrade now', 'ml-slider'));?></td>
+                    <td class="metaslider_installed_status"><?php echo metaslider_optimize_url("https://www.metaslider.com/upgrade/", esc_html__('Upgrade now', 'ml-slider')); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></td>
                 </tr>
             </tfoot>
         </table>

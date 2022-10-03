@@ -1,4 +1,5 @@
 <?php
+
 if (!defined('ABSPATH')) {
     die('No direct access.');
 }
@@ -8,7 +9,6 @@ if (!defined('ABSPATH')) {
  */
 class MetaSlider_Gutenberg
 {
-
     /**
      * Init
      */
@@ -69,19 +69,19 @@ class MetaSlider_Gutenberg
     public function preview_styles($styles)
     {
         ob_start(); ?>
-		body, html {
-			overflow: hidden;
-			height: auto;
-			margin:0;
-			padding:0;
-			box-sizing: border-box;
-			font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
-			font-size: 14px;
-		}
-		.metaslider {
-			margin: 0 auto;
-		}
-		<?php
+        body, html {
+            overflow: hidden;
+            height: auto;
+            margin:0;
+            padding:0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+            font-size: 14px;
+        }
+        .metaslider {
+            margin: 0 auto;
+        }
+        <?php
         return ob_get_clean();
     }
 

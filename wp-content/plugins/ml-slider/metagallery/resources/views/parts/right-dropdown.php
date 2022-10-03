@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The right three dot menu dropdown
  */

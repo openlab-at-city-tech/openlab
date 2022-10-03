@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The button that says "Add images"
  */

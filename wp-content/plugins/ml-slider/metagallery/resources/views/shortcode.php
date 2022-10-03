@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The shortcode output view
  * This should eventually be split into multiple

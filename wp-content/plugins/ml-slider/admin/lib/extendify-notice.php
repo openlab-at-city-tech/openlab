@@ -23,18 +23,18 @@ add_action('admin_notices', function () use ($extendifysdk_ms_notices_key, $exte
     <?php esc_html_e('MetaSlider users have been asking for easier options to create and edit their sites using the new block editor and to make their sliders stand out. We\'re excited to announce that MetaSlider has partnered with the Extendify library of Gutenberg patterns and templates to bring the power of WordPress 5.9 to the most popular WordPress slider plugin!  By clicking “Install & Activate Extendify” you will get access to 10 free monthly imports of patterns and templates. Installing Extendify is optional, and MetaSlider will continue to work if you decide to not install Extendify.', 'ml-slider') ?>
 </p>
 
-<button id="extendify-install-button" type="button" class="button-primary" style="margin-bottom: 0.3rem;margin-top: 0.5rem;"><?php _e('Install & Activate Extendify', 'ml-slider'); ?></button>
+<button id="extendify-install-button" type="button" class="button-primary" style="margin-bottom: 0.3rem;margin-top: 0.5rem;"><?php esc_html_e('Install & Activate Extendify', 'ml-slider'); ?></button>
 <script>
     jQuery(function ($) {
         $('#extendify-install-button').on('click', function () {
             const _this = $(this);
             var data = {
                 action: 'handle_extendify_install',
-                _wpnonce: '<?php echo $extendifysdk_ms_notices_nonce; ?>'
+                _wpnonce: '<?php echo esc_js($extendifysdk_ms_notices_nonce); ?>'
             };
-            _this.attr('disabled', true).text("<?php _e('Installing...', 'ml-slider'); ?>");
+            _this.attr('disabled', true).text("<?php esc_html_e('Installing...', 'ml-slider'); ?>");
             $.post(ajaxurl, data, function (response) {
-                _this.text("<?php _e('Finished. Reloading...', 'ml-slider'); ?>");
+                _this.text("<?php esc_html_e('Finished. Reloading...', 'ml-slider'); ?>");
                 setTimeout(function () {
                     // Regardless of pass/fail, refresh to hide the notice.
                     window.location.reload();
@@ -55,7 +55,7 @@ add_action('admin_notices', function () use ($extendifysdk_ms_notices_key, $exte
 
     // In short, the notice will always show until they press dismiss
     if (!ml_slider_has_extendify_already() && !get_user_option($extendifysdk_ms_notices_key)) { ?>
-<div id="<?php echo $extendifysdk_ms_notices_key; ?>" class="notice notice-info"
+<div id="<?php echo esc_attr($extendifysdk_ms_notices_key); ?>" class="notice notice-info"
     style="display:flex;align-items:stretch;justify-content:space-between;position:relative;border-left-color:#29375B">
     <div style="display:flex;align-items:flex-start;position:relative">
         <div style="margin-right:1.25rem;margin-left:0.5rem; margin-top:1.25rem">
@@ -65,7 +65,7 @@ add_action('admin_notices', function () use ($extendifysdk_ms_notices_key, $exte
             <h3 style="margin-bottom:0.25rem;">
                 <?php printf(esc_html__('MetaSlider + Gutenberg = %s', 'ml-slider'), '🚀'); ?></h3>
             <div>
-                <?php echo $extendifysdk_ms_notices_content; ?>
+                <?php echo $extendifysdk_ms_notices_content; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
             </div>
         </div>
     </div>
@@ -74,7 +74,7 @@ add_action('admin_notices', function () use ($extendifysdk_ms_notices_key, $exte
             style="max-width:15px;border:0;background:0;color: #7b7b7b;white-space:nowrap;cursor: pointer;padding: 0"
             title="<?php esc_attr_e('Dismiss notice', 'ml-slider') ?>"
             aria-label="<?php esc_attr_e('Dismiss Extendify notice', 'ml-slider') ?>"
-            onclick="jQuery('#<?php echo $extendifysdk_ms_notices_key; ?>').remove();jQuery.post(window.ajaxurl, {action: 'handle_<?php echo $extendifysdk_ms_notices_key; ?>', _wpnonce: '<?php echo $extendifysdk_ms_notices_nonce ?>' });">
+            onclick="jQuery('#<?php echo esc_js($extendifysdk_ms_notices_key); ?>').remove();jQuery.post(window.ajaxurl, {action: 'handle_<?php echo esc_js($extendifysdk_ms_notices_key); ?>', _wpnonce: '<?php echo esc_js($extendifysdk_ms_notices_nonce) ?>' });">
             <svg width="15" height="15" style="width:100%" xmlns="http://www.w3.org/2000/svg" fill="none"
                 viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -82,11 +82,11 @@ add_action('admin_notices', function () use ($extendifysdk_ms_notices_key, $exte
         </button>
     </div>
 </div>
-<?php }
+    <?php }
 });
 
 add_action('wp_ajax_handle_' . $extendifysdk_ms_notices_key, function () use ($extendifysdk_ms_notices_key) {
-    if (!wp_verify_nonce($_REQUEST['_wpnonce'], $extendifysdk_ms_notices_key)) {
+    if (! isset($_REQUEST['_wpnonce']) || ! wp_verify_nonce(sanitize_key($_REQUEST['_wpnonce']), $extendifysdk_ms_notices_key)) {
         wp_send_json_error(array(
             'message' => esc_html__('The security check failed. Please refresh the page and try again.', 'ml-slider')
         ), 401);
@@ -96,7 +96,7 @@ add_action('wp_ajax_handle_' . $extendifysdk_ms_notices_key, function () use ($e
 });
 
 add_action('wp_ajax_handle_extendify_install', function () use ($extendifysdk_ms_notices_key) {
-    if (!wp_verify_nonce($_REQUEST['_wpnonce'], $extendifysdk_ms_notices_key)) {
+    if (! isset($_REQUEST['_wpnonce']) || ! wp_verify_nonce(sanitize_key($_REQUEST['_wpnonce']), $extendifysdk_ms_notices_key)) {
         wp_send_json_error(array(
             'message' => esc_html__('The security check failed. Please refresh the page and try again.', 'ml-slider')
         ), 401);

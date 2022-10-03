@@ -9,7 +9,6 @@ if (!defined('ABSPATH')) {
  */
 class MetaSlider_Slideshows
 {
-
     /**
      * Themes class
      *
@@ -112,7 +111,7 @@ class MetaSlider_Slideshows
      * Method to save a slideshow
      *
      * @param int|string $slideshow_id - The id of the slideshow
-     * @param array		 $new_settings - The settings
+     * @param array      $new_settings - The settings
      *
      * @return int - id of the slideshow
      */
@@ -191,7 +190,6 @@ class MetaSlider_Slideshows
                 wp_set_post_terms($new_slide_id, $term['term_id'], 'ml-slider', true);
             }
         } catch (Exception $e) {
-
             // If there was a failure somewhere, clean up
             wp_trash_post($new_slideshow_id);
             $this->delete_all_slides($new_slideshow_id);
@@ -289,7 +287,7 @@ class MetaSlider_Slideshows
                     $slides_export[$key]['meta'][$metakey] = $this->stub_image_urls_from_string($value[0]);
                 }
 
-                // Unset unecessary meta
+                // Unset unnecessary meta
                 unset($slides_export[$key]['meta']['_thumbnail_id']);
             }
 
@@ -301,7 +299,7 @@ class MetaSlider_Slideshows
         }
         $export['metadata'] = array(
             'version' => $this->plugin->version,
-            'date' => date("Y/m/d")
+            'date' => date("Y/m/d") // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
         );
         return $export;
     }
@@ -453,7 +451,7 @@ class MetaSlider_Slideshows
         $url = str_replace('{#CONTENTURL#}', $dir['baseurl'], $matches[1]);
         $content_urlname = str_replace('{#CONTENTURL#}', '', $matches[1]);
         $image = $wpdb->get_row($wpdb->prepare("SELECT post_name, post_title FROM $wpdb->posts WHERE guid = %s AND post_type = 'attachment' LIMIT 1", $url));
-        return '"{#CONTENTURL#}{#URLname:'. $content_urlname .'#}{#filename:'. $image->post_name .'#}{#filetitle:'. $image->post_title .'#}"';
+        return '"{#CONTENTURL#}{#URLname:' . $content_urlname . '#}{#filename:' . $image->post_name . '#}{#filetitle:' . $image->post_title . '#}"';
     }
 
     /**
@@ -597,7 +595,7 @@ class MetaSlider_Slideshows
      * Method to get slideshows from the database
      *
      * @param int $posts_per_page How many slideshows to return
-     * @param int $page 		  What page to return
+     * @param int $page           What page to return
      *
      * @return array
      */
@@ -793,7 +791,7 @@ class MetaSlider_Slideshows
     /**
      * Returns the shortcode of the slideshow
      *
-     * @param string|int  $id 		   - The id of a slideshow
+     * @param string|int  $id          - The id of a slideshow
      * @param string|int  $restrict_to - page to limit the slideshow to
      * @param string|null $theme_id    - load a theme, defaults to the current theme
      */
@@ -802,8 +800,16 @@ class MetaSlider_Slideshows
 
         // if no id is given, try to find the first available slideshow
         if (is_null($id)) {
-            $the_query = get_posts(array('orderby' => 'rand', 'posts_per_page' => '1'));
-            $id = isset($the_query[0]) ? $the_query[0]->ID : $id;
+            if (function_exists('vip_get_random_posts')) {
+                $ids = vip_get_random_posts(1, 'post', true);
+                $id = isset($ids[0]) ? $ids[0] : $id;
+            }
+
+            if (! function_exists('vip_get_random_posts')) {
+                // phpcs:ignore WordPressVIPMinimum.Performance.OrderByRand.orderby_orderby
+                $the_query = get_posts(array('orderby' => 'rand', 'posts_per_page' => '1'));
+                $id = isset($the_query[0]) ? $the_query[0]->ID : $id;
+            }
         }
 
         return "[metaslider id='{$id}' restrict_to='{$restrict_to}' theme='{$theme_id}']";
@@ -813,7 +819,7 @@ class MetaSlider_Slideshows
      * Return the preview
      *
      * @param int|string $slideshow_id The id of the current slideshow
-     * @param string 	 $theme_id 	   The folder name of the theme
+     * @param string     $theme_id     The folder name of the theme
      *
      * @return string|WP_Error whether the file was included, or error class
      */
@@ -835,58 +841,58 @@ class MetaSlider_Slideshows
 
 <!DOCTYPE html>
 <html>
-	<head>
-		<style type='text/css'>
-			<?php ob_start(); ?>
-			body, html {
-				overflow: auto;
-				height:100%;
-				margin:0;
-				padding:0;
-				box-sizing: border-box;
-				font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
-		        font-size: 14px;
-			}
-			body {
-				padding: 60px 40px 40px;
-			}
-			#preview-container {
-				min-height: 100%;
-				max-width: <?php echo $settings->get_single('width'); ?>px;
-				margin: 0 auto;
-				display: -webkit-box;
-				display: -ms-flexbox;
-				display: flex;
-				-webkit-box-align: center;
-				   -ms-flex-align: center;
-				      align-items: center;
-				-webkit-box-pack: center;
-				   -ms-flex-pack: center;
-				 justify-content: center;
-			}
-			#preview-inner {
-				width: 100%;
-				height: 100%;
-			}
-			.metaslider {
-				margin: 0 auto;
-			}
-			<?php echo apply_filters('metaslider_preview_styles', ob_get_clean()); ?>
-		</style>
-		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-		<meta http-equiv="Pragma" content="no-cache">
-		<meta http-equiv="Expires" content="0">
-	</head>
-	<body>
-		<div id="preview-container">
-			<div id="preview-inner">
-				<?php echo do_shortcode($this->shortcode(absint($slideshow_id), null, 'none')); ?>
-			</div>
-		</div>
-		<?php wp_footer(); ?>
-	</body>
+    <head>
+        <style type='text/css'>
+            <?php ob_start(); ?>
+            body, html {
+                overflow: auto;
+                height:100%;
+                margin:0;
+                padding:0;
+                box-sizing: border-box;
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+                font-size: 14px;
+            }
+            body {
+                padding: 60px 40px 40px;
+            }
+            #preview-container {
+                min-height: 100%;
+                max-width: <?php echo (int) $settings->get_single('width'); ?>px;
+                margin: 0 auto;
+                display: -webkit-box;
+                display: -ms-flexbox;
+                display: flex;
+                -webkit-box-align: center;
+                   -ms-flex-align: center;
+                      align-items: center;
+                -webkit-box-pack: center;
+                   -ms-flex-pack: center;
+                 justify-content: center;
+            }
+            #preview-inner {
+                width: 100%;
+                height: 100%;
+            }
+            .metaslider {
+                margin: 0 auto;
+            }
+            <?php echo apply_filters('metaslider_preview_styles', ob_get_clean()); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+        </style>
+        <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+        <meta http-equiv="Pragma" content="no-cache">
+        <meta http-equiv="Expires" content="0">
+    </head>
+    <body>
+        <div id="preview-container">
+            <div id="preview-inner">
+                <?php echo do_shortcode($this->shortcode(absint($slideshow_id), null, 'none')); ?>
+            </div>
+        </div>
+        <?php wp_footer(); ?>
+    </body>
 </html>
-			<?php return preg_replace('/\s+/S', " ", ob_get_clean());
+            <?php return preg_replace('/\s+/S', " ", ob_get_clean());
         } catch (Exception $e) {
             ob_clean();
             return new WP_Error('preview_failed', $e->getMessage());

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * A simple form to create a gallery with a title
  */
@@ -6,6 +7,14 @@
 if (!defined('ABSPATH')) {
     die('No direct access.');
 }
+
+$redirect = add_query_arg(
+    [
+        'page' => METAGALLERY_PAGE_NAME,
+        'route' => 'archive'
+    ],
+    \admin_url('admin.php')
+);
 ?>
 
 <form
@@ -13,7 +22,7 @@ if (!defined('ABSPATH')) {
     class="w-full"
     method="POST"
     @submit.prevent="ready && title.length && $el.submit()"
-    action="<?php echo \esc_url(\admin_url('admin.php?page=' . METAGALLERY_PAGE_NAME . '&route=archive')); ?>">
+    action="<?php echo \esc_url($redirect); ?>">
     <input type="hidden" name="HTTP_X_WP_NONCE" value="<?php echo \esc_attr(\wp_create_nonce('wp_metagallery')); ?>">
     <div class="w-full mb-6" x-cloak x-show.transition.opacity.duration.500ms="ready">
         <label for="title" class="sr-only"><?php \esc_html_e('Title', 'metagallery'); ?></label>

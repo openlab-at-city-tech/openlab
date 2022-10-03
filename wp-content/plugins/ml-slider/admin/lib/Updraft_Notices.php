@@ -57,7 +57,7 @@ abstract class Updraft_Notices_1_0
             return class_exists($product);
         }
         if (!function_exists('get_plugins')) {
-            include_once(ABSPATH.'wp-admin/includes/plugin.php');
+            include_once(ABSPATH . 'wp-admin/includes/plugin.php');
         }
         $plugins = get_plugins();
         // Don't cache plugins this early
@@ -85,10 +85,10 @@ abstract class Updraft_Notices_1_0
         if (strlen($wplang) < 1 || 'en_US' == $wplang || 'en_GB' == $wplang) {
             return false;
         }
-        if (defined('WP_LANG_DIR') && is_file(WP_LANG_DIR.'/plugins/'.$product_name.'-'.$wplang.'.mo')) {
+        if (defined('WP_LANG_DIR') && is_file(WP_LANG_DIR . '/plugins/' . $product_name . '-' . $wplang . '.mo')) {
             return false;
         }
-        if (is_file($plugin_base_dir.'/languages/'.$product_name.'-'.$wplang.'.mo')) {
+        if (is_file($plugin_base_dir . '/languages/' . $product_name . '-' . $wplang . '.mo')) {
             return false;
         }
         return true;
@@ -107,9 +107,9 @@ abstract class Updraft_Notices_1_0
     {
         $proto = ($https) ? 'https' : 'http';
         if (strpos($url, $website_home) !== false) {
-            return (($html_allowed) ? "<a href=".apply_filters(str_replace('.', '_', $website_home).'_link', $proto.'://'.$url).">" : "");
+            return (($html_allowed) ? "<a href=" . apply_filters(str_replace('.', '_', $website_home) . '_link', $proto . '://' . $url) . ">" : "");
         } else {
-            return (($html_allowed) ? '<a href="'.$proto.'://'.$url.'">' : "");
+            return (($html_allowed) ? '<a href="' . $proto . '://' . $url . '">' : "");
         }
     }
     /**
@@ -123,14 +123,14 @@ abstract class Updraft_Notices_1_0
     protected function url_end($html_allowed, $url, $https = false)
     {
         $proto = (($https) ? 'https' : 'http');
-        return (($html_allowed) ? '</a>' : " (".$proto."://".$url.")");
+        return (($html_allowed) ? '</a>' : " (" . $proto . "://" . $url . ")");
     }
 
     /**
      * This method prepares the notice for display
      *
      * @param  Boolean|String $notice                 the notice to display or false if we want a random one
-     * @param  string  		  $position               the position to display the notice in
+     * @param  string         $position               the position to display the notice in
      * @param  boolean        $return_instead_of_echo a bool to indicate if the notice should be returned or printed
      * @return String                                 a notice to display
      */

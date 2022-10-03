@@ -1,1 +1,0 @@
-[FlexSlider](http://www.woocommerce.com/flexslider/) fork used in MetaSlider

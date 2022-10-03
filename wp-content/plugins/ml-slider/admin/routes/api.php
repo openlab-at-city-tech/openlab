@@ -10,7 +10,6 @@ if (!defined('ABSPATH')) {
  */
 class MetaSlider_Api
 {
-
     /**
      * Theme instance
      *
@@ -97,15 +96,15 @@ class MetaSlider_Api
      */
     public function can_access()
     {
-        $capability = apply_filters('metaslider_capability', 'edit_others_posts');
+        $capability = apply_filters('metaslider_capability', MetaSliderPlugin::DEFAULT_CAPABILITY_EDIT_SLIDES);
 
         // Check for the nonce on the server (used by WP REST)
-        if (isset($_SERVER['HTTP_X_WP_NONCE']) && wp_verify_nonce($_SERVER['HTTP_X_WP_NONCE'], 'wp_rest')) {
+        if (isset($_SERVER['HTTP_X_WP_NONCE']) && wp_verify_nonce(sanitize_key($_SERVER['HTTP_X_WP_NONCE']), 'wp_rest')) {
             return current_user_can($capability);
         }
 
         // This is for when not using Axios (example: callout.php)
-        if (isset($_REQUEST['METASLIDER_NONCE']) && wp_verify_nonce($_REQUEST['METASLIDER_NONCE'], 'metaslider_request')) {
+        if (isset($_REQUEST['METASLIDER_NONCE']) && wp_verify_nonce(sanitize_key($_REQUEST['METASLIDER_NONCE']), 'metaslider_request')) {
             return current_user_can($capability);
         }
 
@@ -127,7 +126,7 @@ class MetaSlider_Api
      * (supports rest & admin-ajax)
      * Does not handle any validation
      *
-     * @param object $request 	 The request
+     * @param object $request    The request
      * @param array  $parameters The wanted parameters
      * @return array
      */
@@ -138,7 +137,7 @@ class MetaSlider_Api
             if (method_exists($request, 'get_param')) {
                 $results[$param] = $request->get_param($param);
             } else {
-                $results[$param] = isset($_REQUEST[$param]) ? stripslashes_deep($_REQUEST[$param]) : null;
+                $results[$param] = isset($_REQUEST[$param]) ? stripslashes_deep(sanitize_text_field($_REQUEST[$param])) : null;
             }
         }
 
@@ -527,8 +526,8 @@ class MetaSlider_Api
 
         // If we are missing the count, then it's likely the payload was truncated
         if (!$data['count'] && version_compare(phpversion(), '5.3.9', '>=')) {
-
             // If the input vars count is close to the max allowed, assume that the data was truncated and inform the user to increase the value
+            // phpcs:ignore WordPress.Security.NonceVerification.Missing
             $current_vars = count($_POST, COUNT_RECURSIVE);
             if (($current_vars + 50) > ini_get('max_input_vars')) { // phpcs:ignore PHPCompatibility.IniDirectives.NewIniDirectives.max_input_varsFound
                 wp_send_json_error(array(
@@ -538,8 +537,14 @@ class MetaSlider_Api
         }
 
         try {
+            // phpcs:ignore WordPress.Security.NonceVerification.Missing
             if (isset($data['attachment'])) {
                 foreach ($data['attachment'] as $slide_id => $fields) {
+                    $fields = $this->sanitize_files_array($fields);
+
+                    $slide_id = (int)$slide_id;
+
+                    // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
                     do_action("metaslider_save_{$fields['type']}_slide", $slide_id, $data['slideshow_id'], $fields);
                 }
             }
@@ -548,6 +553,55 @@ class MetaSlider_Api
         }
 
         wp_send_json_success('OK', 200);
+    }
+
+    private function sanitize_files_array($fields)
+    {
+        if (isset($fields['caption_source'])) {
+            $fields['caption_source'] = sanitize_text_field($fields['caption_source']);
+        }
+
+        if (isset($fields['post_excerpt'])) {
+            $fields['post_excerpt'] = wp_filter_post_kses($fields['post_excerpt']);
+        }
+
+        if (isset($fields['url'])) {
+            $fields['url'] = sanitize_url($fields['url']);
+        }
+
+        if (isset($fields['inherit_image_title'])) {
+            $fields['inherit_image_title'] = sanitize_text_field($fields['inherit_image_title']);
+        }
+
+        if (isset($fields['title'])) {
+            $fields['title'] = sanitize_text_field($fields['title']);
+        }
+
+        if (isset($fields['inherit_image_alt'])) {
+            $fields['inherit_image_alt'] = sanitize_text_field($fields['inherit_image_alt']);
+        }
+
+        if (isset($fields['alt'])) {
+            $fields['alt'] = sanitize_text_field($fields['alt']);
+        }
+
+        if (isset($fields['crop_position'])) {
+            $fields['crop_position'] = sanitize_text_field($fields['crop_position']);
+        }
+
+        if (isset($fields['type'])) {
+            $fields['type'] = sanitize_text_field($fields['type']);
+        }
+
+        if (isset($fields['menu_order'])) {
+            $fields['menu_order'] = sanitize_text_field($fields['menu_order']);
+        }
+
+        if (isset($fields['new_window'])) {
+            $fields['new_window'] = sanitize_text_field($fields['new_window']);
+        }
+
+        return $fields;
     }
 
     /**
@@ -761,7 +815,7 @@ class MetaSlider_Api
 
             // This includes a setting "metaslider_user_explicitly_opted_out" which can be used elsewhere to
             // say "Hey, this user actually pressed the button to enable or disable their 'opt' preference"
-            update_option('metaslider_user_explicitly_opted_out', get_current_user_id().':'.time(), true);
+            update_option('metaslider_user_explicitly_opted_out', get_current_user_id() . ':' . time(), true);
         }
 
         update_option('metaslider_global_settings', $settings, true);
@@ -838,6 +892,7 @@ class MetaSlider_Api
 
         // If there are files here, then we need to prepare them
         // Dont use get_file_params() as it's WP4.4
+        // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
         $images = isset($_FILES['files']) ? $this->process_uploads($_FILES['files'], $data['image_data']) : array();
 
         // $images should be an array of image data at this point
@@ -887,7 +942,6 @@ class MetaSlider_Api
     {
         $images = array();
         foreach ($files['tmp_name'] as $index => $tmp_name) {
-
             // If there was an error, skip this file
             // TODO: consider reporting an error back to the user, but skipping might be best
             if (!empty($files['error'][$index])) {
@@ -919,11 +973,11 @@ class MetaSlider_Api
             // Tests were passed, so move forward with this image
             $filename = $files['name'][$index];
             $images[$filename] = array(
-                'source' => (string) $tmp_name,
-                'caption' => isset($data[$filename]['caption']) ? (string) $data[$filename]['caption'] : '',
-                'title' => isset($data[$filename]['title']) ? (string) $data[$filename]['title'] : '',
-                'description' => isset($data[$filename]['description']) ? (string) $data[$filename]['description'] : '',
-                'alt' => isset($data[$filename]['alt']) ? (string) $data[$filename]['alt'] : ''
+                'source' => sanitize_text_field($tmp_name),
+                'caption' => isset($data[$filename]['caption']) ? sanitize_text_field($data[$filename]['caption']) : '',
+                'title' => isset($data[$filename]['title']) ? sanitize_text_field($data[$filename]['title']) : '',
+                'description' => isset($data[$filename]['description']) ? sanitize_text_field($data[$filename]['description']) : '',
+                'alt' => isset($data[$filename]['alt']) ? sanitize_text_field($data[$filename]['alt']) : ''
             );
         }
         return $images;
@@ -936,7 +990,6 @@ if (class_exists('WP_REST_Controller')) :
      */
     class MetaSlider_REST_Controller extends WP_REST_Controller
     {
-
         /**
          * Namespace and version for the API
          *

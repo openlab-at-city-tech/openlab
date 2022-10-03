@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Admin page router.
  */
@@ -117,7 +118,14 @@ class AdminRouter
 
         // phpcs:ignore WordPress.Security.NonceVerification.Recommended
         if (!isset($_SERVER['REQUEST_METHOD']) || !isset($_GET['route'])) {
-            \wp_safe_redirect(\admin_url('admin.php?page=' . \esc_attr(METAGALLERY_PAGE_NAME) . '&route=archive'));
+            $redirect = add_query_arg(
+                [
+                    'page' => METAGALLERY_PAGE_NAME,
+                    'route' => 'archive'
+                ],
+                \admin_url('admin.php')
+            );
+            \wp_safe_redirect($redirect);
             exit;
         }
 
@@ -163,9 +171,14 @@ class AdminRouter
         }
 
         // Default to archive page.
-        \wp_safe_redirect(
-            \admin_url('admin.php?page=' . \esc_attr(METAGALLERY_PAGE_NAME) . '&route=archive')
+        $redirect = add_query_arg(
+            [
+                'page' => METAGALLERY_PAGE_NAME,
+                'route' => 'archive'
+            ],
+            \admin_url('admin.php')
         );
+        \wp_safe_redirect($redirect);
         exit;
     }
 
@@ -187,7 +200,7 @@ class AdminRouter
 
         \add_action(
             'init',
-            function() {
+            function () {
                 // First, unload textdomain - Based on https://core.trac.wordpress.org/ticket/34213#comment:26
                 unload_textdomain('metagallery');
 

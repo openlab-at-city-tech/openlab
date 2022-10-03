@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The Model base class
  */
@@ -18,7 +19,6 @@ use Extendify\MetaGallery\App;
  */
 abstract class Model
 {
-
     /**
      * How to order the query results
      *
