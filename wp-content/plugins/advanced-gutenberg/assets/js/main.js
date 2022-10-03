@@ -219,3 +219,180 @@ function advgbGetCookie(cname) {
     }
     return "";
 }
+
+/**
+ * Output categories and blocks inside a form
+ *
+ * @param {array}   inactive_blocks The inactive blocks - e.g. advgbCUserRole.access.inactive_blocks
+ * @param {string}  nonce_field_id  The nonce field id - e.g. '#advgb_access_nonce_field'
+ * @param {string}  blocks_list_id  The block list id field - e.g. '#blocks_list_access'
+ *
+ * @return {number} x raised to the n-th power.
+ */
+function advgbGetBlocks( inactive_blocks, nonce_field_id, blocks_list_id ) {
+    if (typeof wp.blocks !== 'undefined') {
+        if (wp.blockLibrary && typeof wp.blockLibrary.registerCoreBlocks === 'function') {
+            wp.blockLibrary.registerCoreBlocks();
+        }
+
+        var $ = jQuery;
+        var allBlocks = wp.blocks.getBlockTypes();
+        var allCategories = wp.blocks.getCategories();
+        var listBlocks = [];
+        var nonce = '';
+
+        // Get blocks saved in advgb_blocks_list option to include the ones that are missing in allBlocks.
+        // e.g. blocks registered only via PHP
+        if(
+            typeof advgbBlocks.block_extend !== 'undefined'
+            && parseInt(advgbBlocks.block_extend)
+            && typeof advgb_blocks_list !== 'undefined'
+            && advgb_blocks_list.length > 0
+        ) {
+            let diff_blocks = advgb_blocks_list.filter(
+                blocksA => !allBlocks.some( blocksB => blocksA.name === blocksB.name )
+            );
+            if( diff_blocks.length > 0 ) {
+                diff_blocks.forEach(function (block) {
+                    allBlocks.push(block);
+                });
+            }
+        }
+
+        // Array of block names already available through wp.blocks.getBlockTypes()
+        var force_deactivate_blocks = []; // 'advgb/container'
+
+        // Array of objects not available through wp.blocks.getBlockTypes()
+        // As example: the ones that loads only in Appearance > Widget
+        var force_activate_blocks = [
+            {
+              'name': 'core/legacy-widget',
+              'icon': 'block-default',
+              'title': 'Legacy Widget',
+              'category': 'widgets'
+            }
+        ];
+
+        // Include force_activate_blocks in the blocks list
+        force_activate_blocks.forEach(function (block) {
+            allBlocks.push(block);
+        });
+
+
+        allBlocks.forEach(function (block) {
+            var blockItemIcon = '';
+            var blockItem = {
+                name: block.name,
+                icon: block.icon.src || block.icon,
+                title: block.title,
+                category: block.category,
+                parent: block.parent
+            };
+
+            var savedIcon = !!block.icon.src ? block.icon.src : block.icon;
+
+            if (block.icon.foreground !== undefined) blockItem.iconColor = block.icon.foreground;
+
+            if (typeof savedIcon === 'function') {
+                if(typeof savedIcon.prototype !== 'undefined') {
+                    blockItem.icon = wp.element.renderToString(wp.element.createElement(savedIcon));
+                    blockItem.icon = blockItem.icon.replace(/stopcolor/g, 'stop-color');
+                    blockItem.icon = blockItem.icon.replace(/stopopacity/g, 'stop-opacity');
+                } else {
+                    blockItemIcon = wp.element.createElement(wp.components.Dashicon, {icon: 'block-default'});
+                    blockItem.icon = wp.element.renderToString(blockItemIcon);
+                }
+            } else if (typeof savedIcon === 'object') {
+                blockItem.icon = wp.element.renderToString(savedIcon);
+                blockItem.icon = blockItem.icon.replace(/stopcolor/g, 'stop-color');
+                blockItem.icon = blockItem.icon.replace(/stopopacity/g, 'stop-opacity');
+            } else if (
+                typeof savedIcon === 'string'
+                && !savedIcon.includes('<span') // Merged blocks icons from 'advgb_blocks_list' are stored as html
+                && !savedIcon.includes('<svg') // Merged blocks icons from 'advgb_blocks_list' are stored as html
+            ) {
+                blockItemIcon = wp.element.createElement(wp.components.Dashicon, {icon: savedIcon});
+                blockItem.icon = wp.element.renderToString(blockItemIcon);
+            } else {
+                blockItem.icon = savedIcon; // Pure html for merged blocks icons from 'advgb_blocks_list'
+            }
+
+            listBlocks.push(blockItem);
+            return block;
+        });
+
+        if (typeof updateListNonce !== 'undefined') {
+            nonce = updateListNonce.nonce;
+        } else {
+            nonce = $(nonce_field_id).val();
+        }
+
+        // Update categories
+        allCategories.forEach(function (category) {
+            var categoryBlock = $('.category-block[data-category="'+ category.slug +'"]');
+            if (categoryBlock.length > 0) {
+                categoryBlock.find('h3.category-name').text(category.title);
+            } else {
+                var categoryHTML = '';
+                categoryHTML += '<div class="category-block clearfix" data-category='+ category.slug +'>';
+                categoryHTML +=     '<h3 class="category-name">';
+                categoryHTML +=         '<span>'+ category.title +'</span>';
+                categoryHTML +=         '<i class="mi"></i>';
+                categoryHTML +=     '</h3>';
+                categoryHTML +=     '<ul class="blocks-list"></ul>';
+                categoryHTML += '</div>';
+
+                $('.blocks-section').append(categoryHTML);
+            }
+        });
+
+        var list_blocks_names = [];
+
+        // Update blocks
+        listBlocks.forEach(function (block) {
+            list_blocks_names.push(block.name);
+
+            var blockHTML = '';
+            blockHTML += '<li class="block-item block-access-item ju-settings-option ' + (force_deactivate_blocks.indexOf(block.name) > -1 || force_activate_blocks.find(item => item.name === block.name) ? 'block-item-readonly' : 'block-item-editable' ) + '" data-type="'+ block.name +'">';
+            blockHTML +=    '<label for="'+ block.name +'" class="ju-setting-label">';
+            blockHTML +=        '<span class="block-icon"';
+            if (block.iconColor) {
+                blockHTML += ' style="color:'+ block.iconColor +'"';
+            }
+            blockHTML += '>';
+            blockHTML += block.icon;
+            var checked = '';
+
+            if (
+                typeof inactive_blocks === 'object'
+                && inactive_blocks !== null
+            ) {
+                checked = inactive_blocks.indexOf(block.name) === -1
+                && (
+                    force_deactivate_blocks.indexOf(block.name) === -1
+                    || force_activate_blocks.find(item => item.name === block.name)
+                )
+                    ? 'checked="checked"' : '';
+            } else {
+                checked = 'checked="checked"';
+            }
+
+            blockHTML +=        '</span>';
+            blockHTML +=        '<span class="block-title">'+ block.title +'</span>';
+            blockHTML +=    '</label>';
+            blockHTML +=    '<div class="ju-switch-button">';
+            blockHTML +=        '<label class="switch">';
+            blockHTML +=            '<input id="'+ block.name +'" type="checkbox" name="active_blocks[]" value="'+ block.name +'" '+checked+' ' + ( force_deactivate_blocks.indexOf(block.name) > -1 || force_activate_blocks.find(item => item.name === block.name) ? 'onclick="return false;"' : '' ) + '/>';
+            blockHTML +=            '<span class="slider"></span>';
+            blockHTML +=        '</label>';
+            blockHTML +=    '</div>';
+            blockHTML += '</li>';
+
+            var categoryBlock = $('.category-block[data-category="'+ block.category +'"]');
+            categoryBlock.find('.blocks-list').append(blockHTML);
+
+        });
+
+        $(blocks_list_id).val(JSON.stringify(list_blocks_names));
+    }
+}

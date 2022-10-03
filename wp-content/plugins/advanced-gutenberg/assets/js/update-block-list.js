@@ -49,7 +49,7 @@ window.addEventListener('load', function () {
         if (typeof updateListNonce !== 'undefined') {
             nonce = updateListNonce.nonce;
         } else {
-            nonce = $('#advgb_nonce_field').val();
+            nonce = $('#advgb_access_nonce_field').val();
         }
 
         // Use this ajax query to update the block list in db

@@ -3,7 +3,7 @@ Contributors: publishpress, stevejburge, htmgarcia
 Tags: gutenberg, gutenberg blocks, gutenberg block, block editor, blocks
 Requires at least: 5.0
 Tested up to: 6.0.1
-Stable tag: 2.14.0
+Stable tag: 2.14.2
 Requires PHP: 5.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -256,6 +256,19 @@ Yes, we use the phrase "publishpress-advg-install" to share install links. You w
 16. Custom Styles for Blocks: You create custom CSS styles and make them available to end users.
 
 == Changelog ==
+
+= 2.14.2 - 25 Aug 2022 =
+  * Add: Extend supported blocks setting to support blocks not listed in Block access
+  * Fix: Authors and Series order by from Content Display make some legacy widgets to disappear in frontend
+  * Fix: Allow to enable Container block through Block access
+  * Fix: Cropped read more link when having padding in Content Display block
+
+= 2.14.1 - 3 Aug 2022 =
+  * Add: Pre-populate title and text with image properties from media library (title, alt, caption and description) for Images Slider block
+  * Fix: Block Access support for third party plugins blocks
+  * Fix: Block access for super admin in multisite child site
+  * Fix: Custom styles conflict with Block controls class in editor preview
+  * Fix: Images slider inside Advanced Tabs
 
 = 2.14.0 - 25 Jul 2022 =
   * Add: Block controls to schedule blocks visibility
