@@ -17,7 +17,7 @@ msgstr ""
 msgid "About"
 msgstr ""
 
-#: admin/class-shortcodes-ultimate-admin-addons.php:26, admin/class-shortcodes-ultimate-admin-addons.php:29, admin/class-shortcodes-ultimate-admin-addons.php:54, inc/core/generator.php:215, admin/partials/help/sidebar.php:7
+#: admin/class-shortcodes-ultimate-admin-addons.php:26, admin/class-shortcodes-ultimate-admin-addons.php:29, admin/class-shortcodes-ultimate-admin-addons.php:54, inc/core/generator.php:216, admin/partials/help/sidebar.php:7
 msgid "Add-ons"
 msgstr ""
 
@@ -191,7 +191,7 @@ msgstr ""
 msgid "This option enables alternative (deprecated) mode for nested shortcodes."
 msgstr ""
 
-#: admin/class-shortcodes-ultimate-admin-settings.php:202, admin/class-shortcodes-ultimate-admin-settings.php:203, admin/class-shortcodes-ultimate-admin-settings.php:320, inc/core/generator.php:209, admin/partials/notices/unsafe-features.php:19
+#: admin/class-shortcodes-ultimate-admin-settings.php:202, admin/class-shortcodes-ultimate-admin-settings.php:203, admin/class-shortcodes-ultimate-admin-settings.php:320, inc/core/generator.php:210, admin/partials/notices/unsafe-features.php:19
 msgid "Settings"
 msgstr ""
 
@@ -375,79 +375,79 @@ msgstr ""
 msgid "Select taxonomy and it's terms.<br>You can select multiple terms with Ctrl (Cmd) key"
 msgstr ""
 
-#: inc/core/generator.php:56, inc/core/generator.php:124, inc/core/generator.php:152, inc/core/generator.php:279
+#: inc/core/generator.php:57, inc/core/generator.php:125, inc/core/generator.php:153, inc/core/generator.php:281
 msgid "Insert shortcode"
 msgstr ""
 
-#: inc/core/generator.php:209
+#: inc/core/generator.php:210
 msgid "Plugin settings"
 msgstr ""
 
-#: inc/core/generator.php:210, inc/core/generator.php:210
+#: inc/core/generator.php:211, inc/core/generator.php:211
 msgid "Plugin homepage"
 msgstr ""
 
-#: inc/core/generator.php:215, admin/partials/pages/about.php:45, admin/partials/pages/addons.php:14
+#: inc/core/generator.php:216, admin/partials/pages/about.php:45, admin/partials/pages/addons.php:14
 msgid "Premium Add-ons"
 msgstr ""
 
-#: inc/core/generator.php:222
+#: inc/core/generator.php:223
 msgid "Search for shortcodes"
 msgstr ""
 
-#: inc/core/generator.php:223
+#: inc/core/generator.php:224
 msgid "Pro Tip"
 msgstr ""
 
-#: inc/core/generator.php:223
+#: inc/core/generator.php:224
 msgid "Hit enter to select highlighted shortcode, while searching"
 msgstr ""
 
-#: inc/core/generator.php:225
+#: inc/core/generator.php:226
 msgid "Filter by type"
 msgstr ""
 
-#: inc/core/generator.php:264
+#: inc/core/generator.php:266
 msgid "Shortcode not specified"
 msgstr ""
 
-#: inc/core/generator.php:280
+#: inc/core/generator.php:282
 msgid "Live preview"
 msgstr ""
 
-#: inc/core/generator.php:284, admin/partials/pro-features/generator.php:2
+#: inc/core/generator.php:286, admin/partials/pro-features/generator.php:2
 msgid "Click to return to the shortcodes list"
 msgstr ""
 
-#: inc/core/generator.php:284, admin/partials/pro-features/generator.php:2
+#: inc/core/generator.php:286, admin/partials/pro-features/generator.php:2
 msgid "All shortcodes"
 msgstr ""
 
-#: inc/core/generator.php:308
+#: inc/core/generator.php:310
 msgid "Click to set this value"
 msgstr ""
 
-#: inc/core/generator.php:326, includes/config/groups.php:7
+#: inc/core/generator.php:328, includes/config/groups.php:7
 msgid "Content"
 msgstr ""
 
-#: inc/core/generator.php:343
+#: inc/core/generator.php:345
 msgid "Preview"
 msgstr ""
 
-#: inc/core/generator.php:351
+#: inc/core/generator.php:353
 msgid "Access denied"
 msgstr ""
 
-#: inc/core/generator.php:396
+#: inc/core/generator.php:398
 msgid "Presets"
 msgstr ""
 
-#: inc/core/generator.php:399
+#: inc/core/generator.php:401
 msgid "Save current settings as preset"
 msgstr ""
 
-#: inc/core/generator.php:431, inc/core/generator.php:428
+#: inc/core/generator.php:433, inc/core/generator.php:430
 msgid "Presets not found"
 msgstr ""
 
@@ -1711,7 +1711,7 @@ msgstr ""
 msgid "Custom posts query with customizable template"
 msgstr ""
 
-#: includes/shortcodes/display-posts.php:260, includes/shortcodes/posts.php:397, includes/shortcodes/template.php:33
+#: includes/shortcodes/display-posts.php:258, includes/shortcodes/posts.php:397, includes/shortcodes/template.php:33
 msgid "invalid template name"
 msgstr ""
 

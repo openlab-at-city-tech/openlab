@@ -1,4 +1,5 @@
 <?php
+// phpcs:ignoreFile
 /**
  * Shortcode Generator
  */
@@ -249,6 +250,7 @@ class Su_Generator {
 			<input type="hidden" name="su-generator-url" id="su-generator-url" value="<?php echo plugins_url( '', SU_PLUGIN_FILE ); ?>" />
 			<input type="hidden" name="su-compatibility-mode-prefix" id="su-compatibility-mode-prefix" value="<?php echo su_get_shortcode_prefix(); ?>" />
 			<input type="hidden" name="su-generator-option-skip" id="su-generator-option-skip" value="<?php echo esc_attr( get_option( 'su_option_skip', '' ) ); ?>" />
+			<?php wp_nonce_field( 'su_generator_preset', 'su_generator_presets_nonce' ); ?>
 			<div id="su-generator-result" style="display:none"></div>
 		</div>
 	</div>
@@ -438,11 +440,21 @@ class Su_Generator {
 		if ( empty( $_POST['name'] ) ) return;
 		if ( empty( $_POST['settings'] ) ) return;
 		if ( empty( $_POST['shortcode'] ) ) return;
+		// Check Nonce
+		if (
+			empty( $_POST['nonce'] ) ||
+			! is_string( $_POST['nonce'] ) ||
+			! wp_verify_nonce( $_POST['nonce'], 'su_generator_preset' )
+		) {
+			return;
+		}
 		// Clean-up incoming data
 		$id = sanitize_key( $_POST['id'] );
 		$name = sanitize_text_field( $_POST['name'] );
-		$settings = ( is_array( $_POST['settings'] ) ) ? stripslashes_deep( $_POST['settings'] ) : array();
 		$shortcode = sanitize_key( $_POST['shortcode'] );
+		// Validate and sanitize settings
+		$settings = is_array( $_POST['settings'] ) ? stripslashes_deep( $_POST['settings'] ) : array();
+		$settings = array_map( 'wp_kses_post', $settings );
 		// Prepare option name
 		$option = 'su_presets_' . $shortcode;
 		// Get the existing presets
@@ -467,6 +479,14 @@ class Su_Generator {
 		// Check incoming data
 		if ( empty( $_POST['id'] ) ) return;
 		if ( empty( $_POST['shortcode'] ) ) return;
+		// Check Nonce
+		if (
+			empty( $_POST['nonce'] ) ||
+			! is_string( $_POST['nonce'] ) ||
+			! wp_verify_nonce( $_POST['nonce'], 'su_generator_preset' )
+		) {
+			return;
+		}
 		// Clean-up incoming data
 		$id = sanitize_key( $_POST['id'] );
 		$shortcode = sanitize_key( $_POST['shortcode'] );
@@ -489,6 +509,14 @@ class Su_Generator {
 		// Check incoming data
 		if ( empty( $_GET['id'] ) ) return;
 		if ( empty( $_GET['shortcode'] ) ) return;
+		// Check Nonce
+		if (
+			empty( $_GET['nonce'] ) ||
+			! is_string( $_GET['nonce'] ) ||
+			! wp_verify_nonce( $_GET['nonce'], 'su_generator_preset' )
+		) {
+			return;
+		}
 		// Clean-up incoming data
 		$id = sanitize_key( $_GET['id'] );
 		$shortcode = sanitize_key( $_GET['shortcode'] );

@@ -1,3 +1,18 @@
+### 5.12.1
+
+**Security release**
+
+This update fixes a security vulnerability in the shortcode generator. Thanks to Dave John for discovering it.
+
+
+### 5.12.0
+
+**What's new**
+
+- New options `class` and `class_single` for the *Posts* shortcode. Use new options to specify custom CSS classes for the container and for a single post item respectively.
+- Tested compatibility with WordPress 5.9
+
+
 ### 5.11.2
 
 **Fixed**
