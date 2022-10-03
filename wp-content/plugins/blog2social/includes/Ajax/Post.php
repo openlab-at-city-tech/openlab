@@ -72,7 +72,7 @@ class Ajax_Post {
 
     public function curationDraft() {
         //save as blog post
-        if (isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {  //0-24hours lifetime
+        if (current_user_can('read') && isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {  //0-24hours lifetime
             if (isset($_POST['postFormat'])) {
                 if ((int) $_POST['postFormat'] == 1) { //Imagepost
                     if (isset($_POST['image_id']) && !empty($_POST['image_id']) && isset($_POST['comment_image']) && !empty($_POST['comment_image'])) {
@@ -149,7 +149,7 @@ class Ajax_Post {
 
     public function curationShare() {
         //save as blog post
-        if (isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
+        if (current_user_can('read') && isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
             if (isset($_POST['postFormat'])) {
                 if ((int) $_POST['postFormat'] == 1) { //Imagepost
                     if (isset($_POST['image_id']) && !empty($_POST['image_id']) && isset($_POST['comment_image']) && !empty($_POST['comment_image'])) {
@@ -331,7 +331,7 @@ class Ajax_Post {
     }
 
     public function curationCustomize() {
-        if (isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
+        if (current_user_can('read') && isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
             if (isset($_POST['postFormat'])) {
                 if ((int) $_POST['postFormat'] == 1) { //Imagepost
                     if (isset($_POST['image_id']) && !empty($_POST['image_id']) && isset($_POST['comment_image']) && !empty($_POST['comment_image'])) {
@@ -401,7 +401,7 @@ class Ajax_Post {
     }
 
     public function b2sPluginDeactivate() {
-        if (isset($_POST['b2s_deactivate_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_deactivate_nonce'])), 'b2s_deactivate_nonce') > 0) {
+        if (current_user_can('administrator') && isset($_POST['b2s_deactivate_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_deactivate_nonce'])), 'b2s_deactivate_nonce') > 0) {
             if (isset($_POST['delete_sched_post']) && (int) $_POST['delete_sched_post'] == 1) {
                 update_option("B2S_PLUGIN_DEACTIVATE_SCHED_POST", 1, false);
             } else {
@@ -416,7 +416,7 @@ class Ajax_Post {
     }
 
     public function prgShip() {
-        if (isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
+        if (current_user_can('read') && isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
             if (!empty($_POST) && isset($_POST['token']) && !empty($_POST['token']) && isset($_POST['prg_id']) && (int) $_POST['prg_id'] > 0 && isset($_POST['blog_user_id']) && (int) $_POST['blog_user_id'] > 0 && isset($_POST['post_id']) && (int) $_POST['post_id'] > 0) {
                 $dataPost = $_POST;
                 $type = sanitize_text_field(wp_unslash($dataPost['publish']));
@@ -470,7 +470,7 @@ class Ajax_Post {
     }
 
     public function lockAutoPostImport() {
-        if (isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
+        if (current_user_can('read') && isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
             if (isset($_POST['userId']) && (int) $_POST['userId'] > 0) {
                 update_option('B2S_LOCK_AUTO_POST_IMPORT_' . (int) $_POST['userId'], 1, false);
             }
@@ -483,7 +483,7 @@ class Ajax_Post {
     }
 
     public function prgLogin() {
-        if (isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
+        if (current_user_can('read') && isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
             if (isset($_POST['postId']) && (int) $_POST['postId'] > 0 && isset($_POST['username']) && !empty($_POST['username']) && isset($_POST['password']) && !empty($_POST['password'])) {
                 $pubKey = json_decode(PRG_Api_Get::get(B2S_PLUGIN_PRG_API_ENDPOINT . 'auth.php?publicKey=true', array()));
                 if (!empty($pubKey) && is_object($pubKey) && isset($pubKey->publicKey) && !empty($pubKey->publicKey) && function_exists('openssl_public_encrypt')) {
@@ -522,7 +522,7 @@ class Ajax_Post {
     }
 
     public function prgLogout() {
-        if (isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
+        if (current_user_can('read') && isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
             delete_option('B2S_PLUGIN_PRG_' . B2S_PLUGIN_BLOG_USER_ID);
             echo json_encode(array('result' => true));
             wp_die();
@@ -533,7 +533,7 @@ class Ajax_Post {
     }
 
     public function saveShipData() {
-        if (isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
+        if (current_user_can('read') && isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
             require_once (B2S_PLUGIN_DIR . 'includes/B2S/Ship/Save.php');
             $post = $_POST;
             $metaOg = false;
@@ -760,7 +760,7 @@ class Ajax_Post {
     }
 
     public function saveSocialMetaTags() {
-        if (isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
+        if (current_user_can('read') && isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
             $result = array('result' => true);
             if (isset($_POST['is_admin']) && (int) $_POST['is_admin'] == 1) {
 
@@ -802,7 +802,7 @@ class Ajax_Post {
     }
 
     public function resetSocialMetaTags() {
-        if (isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
+        if (current_user_can('read') && isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
             global $wpdb;
             $sql = "DELETE FROM " . $wpdb->postmeta . " WHERE meta_key = %s";
             $sql = $wpdb->prepare($sql, "_b2s_post_meta");
@@ -816,7 +816,7 @@ class Ajax_Post {
     }
 
     public function saveNetworkBoardAndGroup() {
-        if (isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
+        if (current_user_can('read') && isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
             if (isset($_POST['networkAuthId']) && !empty($_POST['networkAuthId']) && isset($_POST['networkType']) && isset($_POST['boardAndGroup']) && !empty($_POST['boardAndGroup']) && isset($_POST['networkId']) && !empty($_POST['networkId']) && isset($_POST['lang']) && !empty($_POST['lang'])) {
                 $post = array('token' => B2S_PLUGIN_TOKEN,
                     'action' => 'saveNetworkBoardAndGroup',
@@ -841,7 +841,7 @@ class Ajax_Post {
     }
 
     public function saveUserNetworkSettings() {
-        if (isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
+        if (current_user_can('read') && isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
             if (isset($_POST['short_url'])) {
                 $post = array('token' => B2S_PLUGIN_TOKEN,
                     'action' => 'saveSettings',
@@ -920,7 +920,7 @@ class Ajax_Post {
     }
 
     public function saveAutoPostSettings() {
-        if (isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
+        if (current_user_can('read') && isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
             if (isset($_POST['b2s-import-auto-post']) && (int) $_POST['b2s-import-auto-post'] == 1 && !isset($_POST['b2s-import-auto-post-network-auth-id'])) {
                 echo json_encode(array('result' => false, 'type' => 'no-auth-selected'));
                 wp_die();
@@ -1060,7 +1060,7 @@ class Ajax_Post {
     }
 
     public function autoPostAssignByDisconnect() {
-        if (isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
+        if (current_user_can('read') && isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
             $options = new B2S_Options(B2S_PLUGIN_BLOG_USER_ID);
             $auto_post_options = $options->_getOption('auto_post');
 
@@ -1102,7 +1102,7 @@ class Ajax_Post {
     }
 
     public function saveUserMandant() {
-        if (isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
+        if (current_user_can('read') && isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
             require_once (B2S_PLUGIN_DIR . 'includes/B2S/Network/Save.php');
             $mandant = (isset($_POST['mandant']) && !empty($_POST['mandant'])) ? sanitize_text_field($_POST['mandant']) : '';
             if (empty($mandant)) {
@@ -1119,7 +1119,7 @@ class Ajax_Post {
     }
 
     public function deleteUserMandant() {
-        if (isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
+        if (current_user_can('read') && isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
             if (isset($_POST['mandantId'])) {
                 $post = array('token' => B2S_PLUGIN_TOKEN,
                     'action' => 'deleteUserMandant',
@@ -1141,7 +1141,7 @@ class Ajax_Post {
     }
 
     public function deleteUserAuth() {
-        if (isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
+        if (current_user_can('read') && isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
             $assignList = array();
             require_once (B2S_PLUGIN_DIR . 'includes/B2S/Post/Tools.php');
             if (isset($_POST['networkAuthId']) && (int) $_POST['networkAuthId'] > 0 && isset($_POST['networkId']) && (int) $_POST['networkId'] > 0 && isset($_POST['networkType'])) {
@@ -1224,7 +1224,7 @@ class Ajax_Post {
     }
 
     public function updateUserVersion() {
-        if (isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
+        if (current_user_can('read') && isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
             require_once (B2S_PLUGIN_DIR . '/includes/Tools.php');
             if (isset($_POST['key']) && !empty($_POST['key'])) {
                 $isCurrentUser = true;
@@ -1286,7 +1286,7 @@ class Ajax_Post {
     }
 
     public function acceptPrivacyPolicy() {
-        if (isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
+        if (current_user_can('read') && isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
             require_once (B2S_PLUGIN_DIR . '/includes/Tools.php');
             if (isset($_POST['accept'])) {
                 $post = array('token' => B2S_PLUGIN_TOKEN,
@@ -1308,7 +1308,7 @@ class Ajax_Post {
     }
 
     public function createTrail() {
-        if (isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
+        if (current_user_can('read') && isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
             require_once (B2S_PLUGIN_DIR . '/includes/Tools.php');
             if (isset($_POST['vorname']) && !empty($_POST['vorname']) && isset($_POST['nachname']) && !empty($_POST['nachname']) && isset($_POST['email']) && !empty($_POST['email']) && isset($_POST['url']) && !empty($_POST['url'])) {
                 $data = array('token' => B2S_PLUGIN_TOKEN,
@@ -1336,7 +1336,7 @@ class Ajax_Post {
     }
 
     public function deleteUserPublishPost() {
-        if (isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
+        if (current_user_can('read') && isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
             require_once (B2S_PLUGIN_DIR . '/includes/B2S/Post/Tools.php');
             if (isset($_POST['postId']) && !empty($_POST['postId'])) {
                 $postIds = explode(',', sanitize_text_field(wp_unslash($_POST['postId'])));
@@ -1354,7 +1354,7 @@ class Ajax_Post {
     }
 
     public function deleteUserApprovePost() {
-        if (isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
+        if (current_user_can('read') && isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
             require_once (B2S_PLUGIN_DIR . '/includes/B2S/Post/Tools.php');
             if (isset($_POST['postId']) && !empty($_POST['postId'])) {
                 $postIds = explode(',', sanitize_text_field(wp_unslash($_POST['postId'])));
@@ -1372,7 +1372,7 @@ class Ajax_Post {
     }
 
     public function deleteUserCcDraftPost() {
-        if (isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
+        if (current_user_can('read') && isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
             if (isset($_POST['postId']) && !empty($_POST['postId']) && (int) $_POST['postId'] > 0) {
                 $res = wp_update_post(array('ID' => (int) $_POST['postId'], 'post_status' => 'trash'), true);
                 if ((int) $res > 0) {
@@ -1389,7 +1389,7 @@ class Ajax_Post {
     }
 
     public function sendTrailFeedback() {
-        if (isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
+        if (current_user_can('read') && isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
             require_once (B2S_PLUGIN_DIR . '/includes/Tools.php');
             if (isset($_POST['feedback']) && !empty($_POST['feedback'])) {
                 $post = array('token' => B2S_PLUGIN_TOKEN,
@@ -1411,7 +1411,7 @@ class Ajax_Post {
 
     //NEW V5.1.0
     public function saveUserTimeSettings() {
-        if (isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
+        if (current_user_can('read') && isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
             if (isset($_POST['b2s-user-sched-data']) && !empty($_POST['b2s-user-sched-data']) && isset($_POST['b2s-user-sched-data']['time']) && isset($_POST['b2s-user-sched-data']['delay_day'])) {
                 foreach (B2S_Tools::sanitize_array($_POST['b2s-user-sched-data']['time']) as $k => $v) {
                     $_POST['b2s-user-sched-data']['time'][$k] = date('H:i', strtotime(date('Y-m-d') . ' ' . $v));
@@ -1430,7 +1430,7 @@ class Ajax_Post {
     }
 
     public function b2sShipNavbarSaveSettings() {
-        if (isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
+        if (current_user_can('read') && isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
             if (isset($_POST['mandantId'])) {
                 global $wpdb;
 
@@ -1453,7 +1453,7 @@ class Ajax_Post {
     }
 
     public function saveAuthToSettings() {
-        if (isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
+        if (current_user_can('read') && isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
             if (isset($_POST['mandandId']) && isset($_POST['networkAuthId']) && (int) $_POST['networkAuthId'] > 0 && isset($_POST['networkId']) && (int) $_POST['networkId'] > 0 && isset($_POST['networkType']) && isset($_POST['displayName']) && !empty($_POST['displayName'])) {
                 global $wpdb;
                 $networkDetailsIdSelect = $wpdb->get_col($wpdb->prepare("SELECT postNetworkDetails.id FROM {$wpdb->prefix}b2s_posts_network_details AS postNetworkDetails WHERE postNetworkDetails.network_auth_id = %s", sanitize_text_field(wp_unslash($_POST['networkAuthId']))));
@@ -1480,7 +1480,7 @@ class Ajax_Post {
     }
 
     public function b2sPostMailUpdate() {
-        if (isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
+        if (current_user_can('read') && isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
             if (isset($_POST['email']) && !empty($_POST['email'])) {
                 require_once (B2S_PLUGIN_DIR . '/includes/Tools.php');
                 $post = array('action' => 'updateMail',
@@ -1498,7 +1498,7 @@ class Ajax_Post {
     }
 
     public function updateApprovePost() {
-        if (isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
+        if (current_user_can('read') && isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
             //post_id
             if (is_numeric($_POST['post_id']) && (int) $_POST['post_id'] > 0) {
                 global $wpdb;
@@ -1507,17 +1507,13 @@ class Ajax_Post {
                 $option = new B2S_Options(B2S_PLUGIN_BLOG_USER_ID);
                 $optionUserTimeZone = $option->_getOption('user_time_zone');
                 $userTimeZone = ($optionUserTimeZone !== false) ? $optionUserTimeZone : get_option('timezone_string');
-                $userTimeZoneOffset = (empty($userTimeZone)) ? get_option('gmt_offset') : B2S_Util::getOffsetToUtcByTimeZone($userTimeZone);
+                $userTimeZoneOffset = (empty($userTimeZone)) ? get_option('gmt_offset') : B2S_Util::getOffsetToUtcByTimeZone($userTimeZone);	
+				$publishLink = (isset($_POST['publish_link']) && !empty($_POST['publish_link'])) ? sanitize_text_field(esc_url_raw($_POST['publish_link'])) : '';
+                $publishError = (isset($_POST['publish_error_code']) && !empty($_POST['publish_error_code'])) ? addslashes(sanitize_text_field($_POST['publish_error_code'])) : '';
 
-                $sql = "UPDATE {$wpdb->prefix}b2s_posts "
-                        . "SET sched_date = '0000-00-00 00:00:00', "
-                        . "sched_date_utc = '0000-00-00 00:00:00', "
-                        . "publish_date = '" . B2S_Util::getbyIdentLocalDate($userTimeZoneOffset) . "', "
-                        . "publish_link =  '" . ((isset($_POST['publish_link']) && !empty($_POST['publish_link'])) ? esc_url_raw($_POST['publish_link']) : '') . "', "
-                        . "publish_error_code = '" . ((isset($_POST['publish_error_code']) && !empty($_POST['publish_error_code'])) ? addslashes(sanitize_text_field($_POST['publish_error_code'])) : '') . "', "
-                        . "post_for_approve = 0 "
-                        . "WHERE id = " . (int) $_POST['post_id'];
-                $wpdb->query($sql);
+                $wpdb->query($wpdb->prepare("UPDATE {$wpdb->prefix}b2s_posts SET sched_date = %s, sched_date_utc= %s, publish_date = %s, publish_link = %s, publish_error_code = %s, post_for_approve = %d  WHERE id = %d",
+                                '0000-00-00 00:00:00', '0000-00-00 00:00:00', B2S_Util::getbyIdentLocalDate($userTimeZoneOffset), $publishLink, $publishError, 0, (int) $_POST['post_id']));
+			
                 echo json_encode(array('result' => true));
                 wp_die();
             }
@@ -1528,7 +1524,7 @@ class Ajax_Post {
     }
 
     public function b2sCalendarMovePost() {
-        if (isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
+        if (current_user_can('read') && isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
             global $wpdb;
             if (is_numeric($_POST['b2s_id']) && is_string($_POST['sched_date']) && isset($_POST['user_timezone'])) {
 
@@ -1546,7 +1542,8 @@ class Ajax_Post {
 
 //is post for relay?
                 if (isset($_POST['post_for_relay']) && (int) $_POST['post_for_relay'] == 1) {
-                    $res = $this->getAllRelayByPrimaryPostId((int) $_POST['b2s_id']);
+                    require_once (B2S_PLUGIN_DIR . 'includes/B2S/Post/Tools.php');
+                    $res = B2S_Post_Tools::getAllRelayByPrimaryPostId((int) $_POST['b2s_id']);
                     if (is_array($res) && !empty($res)) {
                         foreach ($res as $item) {
                             if (isset($item->id) && (int) $item->id > 0 && isset($item->relay_delay_min) && (int) $item->relay_delay_min > 0) {
@@ -1573,7 +1570,7 @@ class Ajax_Post {
     }
 
     public function deleteUserSchedPost() {
-        if (isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
+        if (current_user_can('read') && isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
             require_once (B2S_PLUGIN_DIR . '/includes/B2S/Post/Tools.php');
 
             if (isset($_POST['postId']) && !empty($_POST['postId'])) {
@@ -1592,7 +1589,7 @@ class Ajax_Post {
     }
 
     public function b2sDeletePost() {
-        if (isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
+        if (current_user_can('read') && isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
             require_once (B2S_PLUGIN_DIR . '/includes/B2S/Post/Tools.php');
 
             if (isset($_POST['b2s_id']) && !empty($_POST['b2s_id']) && isset($_POST['post_id']) && !empty($_POST['post_id'])) {
@@ -1614,7 +1611,7 @@ class Ajax_Post {
     }
 
     public function b2sEditSavePost() {
-        if (isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
+        if (current_user_can('read') && isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
             global $wpdb;
             require_once (B2S_PLUGIN_DIR . 'includes/B2S/Calendar/Save.php');
 
@@ -1790,7 +1787,8 @@ class Ajax_Post {
 //is post for relay ?
 //get all relays in primary post id by b2s id & change sched_date + utc
                             if (isset($post['post_for_relay']) && (int) $post['post_for_relay'] == 1 && isset($data['date'][0]) && isset($data['time'][0]) && (int) $b2s_id > 0) {
-                                $res = $this->getAllRelayByPrimaryPostId($b2s_id);
+                                require_once (B2S_PLUGIN_DIR . 'includes/B2S/Post/Tools.php');
+                                $res = B2S_Post_Tools::getAllRelayByPrimaryPostId((int) $_POST['b2s_id']);
                                 if (is_array($res) && !empty($res)) {
                                     foreach ($res as $item) {
                                         if (isset($item->id) && (int) $item->id > 0 && isset($item->relay_delay_min) && (int) $item->relay_delay_min > 0) {
@@ -1821,14 +1819,8 @@ class Ajax_Post {
         }
     }
 
-    public function getAllRelayByPrimaryPostId($primary_post_id = 0) {
-        global $wpdb;
-        $sqlData = $wpdb->prepare("SELECT `id`, `relay_delay_min` FROM `{$wpdb->prefix}b2s_posts` WHERE `hide` = 0 AND `sched_type` = 4  AND `{$wpdb->prefix}b2s_posts`.`publish_date` = '0000-00-00 00:00:00' AND `relay_primary_post_id` = %d ", $primary_post_id);
-        return $wpdb->get_results($sqlData);
-    }
-
     public function releaseLocks() {
-        if (isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
+        if (current_user_can('read') && isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
             require_once(B2S_PLUGIN_DIR . 'includes/Options.php');
             $options = new B2S_Options(get_current_user_id());
             $lock = $options->_getOption("B2S_PLUGIN_USER_CALENDAR_BLOCKED");
@@ -1848,7 +1840,7 @@ class Ajax_Post {
     }
 
     public function hideRating() {
-        if (isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
+        if (current_user_can('read') && isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
             $forever = (isset($_POST['forever']) && $_POST['forever'] === true) ? true : false;
             B2S_Rating::hide($forever);
         } else {
@@ -1858,7 +1850,7 @@ class Ajax_Post {
     }
 
     public function hidePremiumMessage() {
-        if (isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
+        if (current_user_can('read') && isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
             update_option("B2S_HIDE_PREMIUM_MESSAGE", true, false);
         } else {
             echo json_encode(array('result' => false, 'error' => 'nonce'));
@@ -1867,7 +1859,7 @@ class Ajax_Post {
     }
 
     public function hideTrailMessage() {
-        if (isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
+        if (current_user_can('read') && isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
             update_option("B2S_HIDE_TRAIL_MESSAGE", true, false);
         } else {
             echo json_encode(array('result' => false, 'error' => 'nonce'));
@@ -1876,7 +1868,7 @@ class Ajax_Post {
     }
 
     public function hideTrailEndedMessage() {
-        if (isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
+        if (current_user_can('read') && isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
             update_option("B2S_HIDE_TRAIL_ENDED", true, false);
         } else {
             echo json_encode(array('result' => false, 'error' => 'nonce'));
@@ -1885,7 +1877,7 @@ class Ajax_Post {
     }
 
     public function moveUserAuthToProfile() {
-        if (isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
+        if (current_user_can('read') && isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
             if (isset($_POST['mandantId']) && isset($_POST['networkAuthId']) && (int) $_POST['networkAuthId'] > 0) {
                 $data = array('action' => 'moveUserAuthToProfile', 'token' => B2S_PLUGIN_TOKEN, 'networkAuthId' => (int) $_POST['networkAuthId'], 'mandantId' => (int) $_POST['mandantId']);
                 $moveUserAuth = json_decode(B2S_Api_Post::post(B2S_PLUGIN_API_ENDPOINT, $data, 30));
@@ -1910,7 +1902,7 @@ class Ajax_Post {
     }
 
     public function assignNetworkUserAuth() {
-        if (isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
+        if (current_user_can('read') && isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
             if (isset($_POST['networkAuthId']) && (int) $_POST['networkAuthId'] > 0 && isset($_POST['assignBlogUserId']) && (int) $_POST['assignBlogUserId'] > 0) {
                 $assignToken = B2S_Tools::getTokenById((int) $_POST['assignBlogUserId']);
                 $data = array('action' => 'approveUserAuth', 'token' => B2S_PLUGIN_TOKEN, 'networkAuthId' => (int) $_POST['networkAuthId'], 'assignToken' => $assignToken, 'tokenBlogUserId' => B2S_PLUGIN_BLOG_USER_ID, 'assignTokenBlogUserId' => (int) $_POST['assignBlogUserId']);
@@ -2026,7 +2018,7 @@ class Ajax_Post {
     }
 
     public function savePostTemplate() {
-        if (isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
+        if (current_user_can('read') && isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
             if (isset($_POST['template_data']) && isset($_POST['networkId']) && (int) $_POST['networkId'] > 0) {
                 require_once(B2S_PLUGIN_DIR . 'includes/Options.php');
                 $options = new B2S_Options(get_current_user_id());
@@ -2121,7 +2113,7 @@ class Ajax_Post {
     }
 
     public function loadDefaultPostTemplate() {
-        if (isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
+        if (current_user_can('read') && isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
             if (isset($_POST['networkId']) && (int) $_POST['networkId'] > 0 && isset($_POST['networkType']) && isset(unserialize(B2S_PLUGIN_NETWORK_SETTINGS_TEMPLATE_DEFAULT)[(int) $_POST['networkId']])) {
                 $default = unserialize(B2S_PLUGIN_NETWORK_SETTINGS_TEMPLATE_DEFAULT)[(int) $_POST['networkId']];
                 require_once B2S_PLUGIN_DIR . 'includes/B2S/Network/Item.php';
@@ -2139,7 +2131,7 @@ class Ajax_Post {
     }
 
     public function saveDraftData() {
-        if (isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
+        if (current_user_can('read') && isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
             if (isset($_POST['post_id']) && (int) $_POST['post_id'] > 0) {
                 global $wpdb;
                 if ($wpdb->get_var("SHOW TABLES LIKE '{$wpdb->prefix}b2s_posts_drafts'") == $wpdb->prefix . 'b2s_posts_drafts') {
@@ -2170,7 +2162,7 @@ class Ajax_Post {
     }
 
     public function deleteDraft() {
-        if (isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
+        if (current_user_can('read') && isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
             if (isset($_POST['draftId']) && (int) $_POST['draftId'] > 0) {
                 global $wpdb;
                 $wpdb->delete($wpdb->prefix . 'b2s_posts_drafts', array('id' => (int) $_POST['draftId'], 'blog_user_id' => B2S_PLUGIN_BLOG_USER_ID), array('%d', '%d'));
@@ -2186,7 +2178,7 @@ class Ajax_Post {
     }
 
     public function authNetworkLogin() {
-        if (isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
+        if (current_user_can('read') && isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
             if (isset($_POST['username']) && !empty($_POST['username']) && isset($_POST['password']) && !empty($_POST['password'])) {
                 require_once(B2S_PLUGIN_DIR . 'includes/B2S/Api/Network/Pinterest.php');
                 $location = 'en';
@@ -2229,7 +2221,7 @@ class Ajax_Post {
     }
 
     public function authNetworkConfirm() {
-        if (isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
+        if (current_user_can('read') && isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
             if (isset($_POST['username']) && !empty($_POST['username']) && isset($_POST['boardId']) && !empty($_POST['boardId']) && isset($_POST['identData']) && !empty($_POST['identData'])) {
                 $mandantId = ((isset($_POST['mandantId']) && (int) $_POST['mandantId'] >= 0) ? (int) $_POST['mandantId'] : 0);
                 $publicKey = B2S_PLUGIN_DIR . '/includes/B2S/Api/Network/public_key.pem';
@@ -2270,7 +2262,7 @@ class Ajax_Post {
     }
 
     public function changeFavoriteStatus() {
-        if (isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
+        if (current_user_can('read') && isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
             if (isset($_POST['postId']) && (int) $_POST['postId'] > 0 && isset($_POST['setStatus']) && (int) $_POST['setStatus'] >= 0) {
                 global $wpdb;
                 if ((int) $_POST['setStatus'] == 1) {
@@ -2294,7 +2286,7 @@ class Ajax_Post {
     }
 
     public function saveUrlParameter() {
-        if (isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
+        if (current_user_can('read') && isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
             if (isset($_POST['originNetworkAuthId']) && (int) $_POST['originNetworkAuthId'] > 0 && isset($_POST['networkId']) && (int) $_POST['networkId'] > 0 && isset($_POST['networks']) && !empty($_POST['networks']) && isset($_POST['urlParameter'])) {
                 $inputParams = json_decode(stripslashes_deep(sanitize_text_field(wp_unslash($_POST['urlParameter']))), true);
                 if ($inputParams === false) {
@@ -2358,7 +2350,7 @@ class Ajax_Post {
     }
 
     public function rePostSubmit() {
-        if (isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
+        if (current_user_can('read') && isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
             if (isset($_POST['b2s-re-post-profil-dropdown']) && (int) $_POST['b2s-re-post-profil-dropdown'] >= 0 && isset($_POST['b2s-re-post-profil-data-' . sanitize_text_field(wp_unslash($_POST['b2s-re-post-profil-dropdown']))]) && !empty($_POST['b2s-re-post-profil-data-' . sanitize_text_field(wp_unslash($_POST['b2s-re-post-profil-dropdown']))])) {
                 $networkData = json_decode(base64_decode(sanitize_text_field($_POST['b2s-re-post-profil-data-' . sanitize_text_field($_POST['b2s-re-post-profil-dropdown'])])));
                 if ($networkData !== false && is_array($networkData) && !empty($networkData)) {
@@ -2564,7 +2556,7 @@ class Ajax_Post {
     }
 
     public function deleteRePostSched() {
-        if (isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
+        if (current_user_can('read') && isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
             if (isset($_POST['postId']) && !empty($_POST['postId'])) {
                 $postIds = explode(',', sanitize_text_field(wp_unslash($_POST['postId'])));
                 if (is_array($postIds) && !empty($postIds)) {
@@ -2599,7 +2591,7 @@ class Ajax_Post {
     }
 
     public function communityRegister() {
-        if (isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
+        if (current_user_can('read') && isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
             if (isset($_POST['username']) && !empty($_POST['username']) && isset($_POST['password']) && !empty($_POST['password']) && isset($_POST['email']) && !empty($_POST['email'])) {
                 $username = '';
                 $password = '';
@@ -2633,7 +2625,7 @@ class Ajax_Post {
     }
 
     public function networkCheckUserData() {
-        if (isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
+        if (current_user_can('read') && isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
             $wpCookie = array();
             $tempCookies = array();
             foreach ($_POST['networkUserData']['accData'] as $key => $value) {
@@ -2667,7 +2659,7 @@ class Ajax_Post {
     }
     
     public function metricsStartingConfirm() {
-        if (isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
+        if (current_user_can('read') && isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
             require_once (B2S_PLUGIN_DIR . '/includes/Options.php');
             $option = new B2S_Options(B2S_PLUGIN_BLOG_USER_ID);
             $option->_setOption('metrics_started', true);
@@ -2680,7 +2672,7 @@ class Ajax_Post {
     }
     
     public function metricsBannerClose() {
-        if (isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
+        if (current_user_can('read') && isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
             require_once (B2S_PLUGIN_DIR . '/includes/Options.php');
             $option = new B2S_Options(B2S_PLUGIN_BLOG_USER_ID);
             $option->_setOption('metrics_banner', true);
@@ -2693,7 +2685,7 @@ class Ajax_Post {
     }
     
     public function continueTrialOption() {
-        if (isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
+        if (current_user_can('read') && isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
             require_once (B2S_PLUGIN_DIR . '/includes/Options.php');
             $option = new B2S_Options(B2S_PLUGIN_BLOG_USER_ID);
             $option->_setOption('hide_7_day_trail', true);
@@ -2706,7 +2698,7 @@ class Ajax_Post {
     }
     
     public function hideFinalTrialOption() {
-        if (isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
+        if (current_user_can('read') && isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
             require_once (B2S_PLUGIN_DIR . '/includes/Options.php');
             $option = new B2S_Options(B2S_PLUGIN_BLOG_USER_ID);
             $option->_setOption('hide_final_trail', true);
