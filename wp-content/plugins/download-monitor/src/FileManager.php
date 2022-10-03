@@ -257,8 +257,8 @@ class DLM_File_Manager {
 	 * Return the secured file path or url of the downloadable file. Should not let restricted files or out of root files to be downloaded.
 	 *
 	 * @param string $file The file path/url
-	 * @param bool $relative Wheter or not to return a relative path. Default is false 
-	 * 
+	 * @param bool $relative Wheter or not to return a relative path. Default is false
+	 *
 	 * @return array The secured file path/url and restriction status
 	 * @since 4.5.9
 	 */
@@ -270,6 +270,23 @@ class DLM_File_Manager {
 		}
 
 		list( $file_path, $remote_file ) = $this->parse_file_path( $file );
+
+		// Let's see if the file path is dirty
+		$file_scheme = parse_url( $file_path, PHP_URL_SCHEME );
+		// Default restricted URL schemes
+		$restricted_schemes = array( 'php' );
+		$restricted_schemes = array_merge(
+			$restricted_schemes,
+			apply_filters(
+				'dlm_restricted_schemes',
+				array()
+			)
+		);
+
+		if ( in_array( $file_scheme, $restricted_schemes ) ) {
+			$restriction = true;
+			return array( $file_path, $remote_file, $restriction );
+		}
 
 		// If the file is remote, return the file path. If the file is not located on local server, return the file path.
 		// This is available even if the file is one of the restricted files below. The plugin will let the user download the file,
@@ -359,7 +376,7 @@ class DLM_File_Manager {
 	 *
 	 * @param string $file_path The current path of the file
 	 * @param array $allowed_paths The allowed paths of the files
-	 * 
+	 *
 	 * @return string The correct path of the file
 	 * @since 4.5.92
 	 */

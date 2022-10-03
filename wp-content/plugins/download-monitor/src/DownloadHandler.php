@@ -559,17 +559,23 @@ class DLM_Download_Handler {
 			list( $a, $range ) = explode( "=", $_SERVER['HTTP_RANGE'], 2 );
 			list( $range ) = explode( ",", $range, 2 );
 			list( $range, $range_end ) = explode( "-", $range );
-			$range = intval( $range );
+			$range              = intval( $range );
+			$range_end_modified = false;
 
-			if ( ! $range_end ) {
-				$range_end = $version->get_filesize() ;
+			if ( ! $range_end || $range_end > $version->get_filesize() ) {
+				$range_end          = $version->get_filesize() - 1;
+				$range_end_modified = true;
 			} else {
 				$range_end = intval( $range_end );
 			}
 
-			//$new_length = $range_end - $range;
-			$new_length = ($range_end - $range) + 1;
-			header( "HTTP/1.1 206 Partial Content" );
+			if ( $range_end_modified ) {
+				$new_length = ( $range_end - $range ) + 1;
+			} else {
+				$new_length = $range_end - $range;
+			}
+
+			header( $_SERVER['SERVER_PROTOCOL'] . " 206 Partial Content" );
 			header( "Content-Length: $new_length" );
 			header( "Content-Range: bytes {$range}-{$range_end}/{$version->get_filesize()}" );
 
@@ -578,7 +584,6 @@ class DLM_Download_Handler {
 		}
 
 		if ( $this->readfile_chunked( $file_path, false, $range ) ) {
-		//if ( $this->readfile_chunked( $file_path, $range ) ) {
 
 			// Complete!
 			$this->log( 'download', 'completed', '', $download, $version );
@@ -714,6 +719,7 @@ class DLM_Download_Handler {
 	 * @return   mixed
 	 */
 	public function readfile_chunked( $file, $retbytes = true, $range = false ) {
+		
 		$chunksize = 1 * ( 1024 * 1024 );
 		$buffer    = '';
 		$cnt       = 0;
