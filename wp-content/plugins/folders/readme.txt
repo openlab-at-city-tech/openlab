@@ -3,7 +3,7 @@ Contributors: galdub, tomeraharon, premio
 Tags: folder, folders, replace media, pages folders, media library, posts folders, media folders, media replace, file manager, directories, media library folders, media library folder
 Requires at least: 3.0.0
 Tested up to: 6.0
-Stable tag: 2.8.2
+Stable tag: 2.8.5
 Plugin URI: https://premio.io/downloads/folders/
 
 Folders is a WordPress plugin that will help you quickly create unlimited folders and organize and manage your Media Library files, Pages & Posts in folders
@@ -95,6 +95,7 @@ It’s rather simple really – once you install the plugin, you can begin using
 = 🔁 Replace media files =
 With the Folders plugin, you can replace media library files with other files. This feature is a life-saver whenever you need to replace a media file on all of your pages, posts, etc. When you replace a media file, the change will reflect on all of your pages, posts, and more. Check out the media replace feature in action:
 [youtube  https://www.youtube.com/watch?v=16MrxVo2EC4]
+The media replacer code was forked from Enable Media Replace
 
 = 👋 Import folders =
 You can import folders data from FileBird, Enhanced Media Library, Wicked Folders, Real Media Library, WP Media Folder, HappyFiles (Happy Files), and Mediamatic 
@@ -197,6 +198,15 @@ Just follow our <a href="https://premio.io/wordpress-premio-pro-version-installa
 A live demo for the Folders plugin is available at <a href="https://demo.premio.io/folders/?utm_source=wordpressorg" target="_blank" title="Premio.io demo site">Premio's demo site</a>.
 
 == Changelog ==
+
+= 2.8.5 =
+WPML Folders bug fixed
+
+= 2.8.4 =
+Infrastructure improvements
+
+= 2.8.3 =
+Texts changed
 
 = 2.8.2 =
 Keyboard shortcuts bugs fixed.

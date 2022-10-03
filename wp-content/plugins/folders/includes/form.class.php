@@ -1,30 +1,56 @@
 <?php
-if ( ! defined( 'ABSPATH' ) ) exit;
-class WCP_Forms {
-    public function __construct() {
+/**
+ * Class Folders Forms
+ *
+ * @author  : Premio <contact@premio.io>
+ * @license : GPL2
+ * */
 
-    }
+if (! defined('ABSPATH')) {
+    exit;
+}
 
-    public static function get_form_html($option_data = "") {
+class  WCP_Forms
+{
+
+
+    /**
+     * Define the core functionality of the plugin.
+     *
+     * @since 1.0.0
+     */
+    public function __construct()
+    {
+
+    }//end __construct()
+
+
+    /**
+     * Return form HTML data
+     *
+     * @since  1.0.0
+     * @access public
+     * @return $isWPMLActive
+     */
+    public static function get_form_html($option_data="")
+    {
         ob_start();
-        $customize_folders = get_option('customize_folders');
-        $show_in_page = !isset($customize_folders['use_shortcuts'])?"yes":$customize_folders['use_shortcuts'];
+        $customizeFolders = get_option('customize_folders');
+        $showInPage       = !isset($customizeFolders['use_shortcuts']) ? "yes" : $customizeFolders['use_shortcuts'];
+
+        $customizeFolders = get_option("customize_folders");
+        if (isset($customizeFolders['show_folder_in_settings']) && $customizeFolders['show_folder_in_settings'] == "yes") {
+            $upgradeURL = admin_url("options-general.php?page=wcp_folders_settings&setting_page=upgrade-to-pro");
+        } else {
+            $upgradeURL = admin_url("admin.php?page=folders-upgrade-to-pro");
+        }
+
+        $isOld     = false;
+        $oldStatus = get_option("wcp_folder_version_267");
+        if ($oldStatus === false) {
+            // $isOld = true;
+        }
         ?>
-
-	    <?php
-	    $customize_folders = get_option("customize_folders");
-	    if(isset($customize_folders['show_folder_in_settings']) && $customize_folders['show_folder_in_settings'] == "yes") {
-		    $upgradeURL = admin_url("options-general.php?page=wcp_folders_settings&setting_page=upgrade-to-pro");
-	    } else {
-		    $upgradeURL = admin_url("admin.php?page=folders-upgrade-to-pro");
-	    }
-
-	    $is_old = false;
-	    $old_status = get_option("wcp_folder_version_267");
-	    if($old_status === false) {
-		    //$is_old = true;
-	    }
-	    ?>
         <div class="wcp-custom-form">
             <div class="form-title">
                 <div class="plugin-title">
@@ -38,7 +64,7 @@ class WCP_Forms {
                     </span>
                 </div>
                 <div class="plugin-button">
-                    <?php if($show_in_page == "yes") { ?>
+                    <?php if ($showInPage == "yes") { ?>
                         <a href="#" class="view-shortcodes folder-tooltip" data-folder-tooltip="<?php esc_html_e("Press Ctrl+K to view keyboard shortcuts", 'folders'); ?>"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg></a>
                     <?php } ?>
                     <a href="javascript:;" class="add-new-folder" id="add-new-folder">
@@ -58,7 +84,7 @@ class WCP_Forms {
                     <li>
                         <a href="javascript:;" id="inline-remove"><span class="icon pfolder-remove"></span> <span class="text"><?php /*esc_html_e("Delete", 'folders'); */?></span> </a>
                     </li>-->
-	                <?php if($is_old) { ?>
+                    <?php if ($isOld) { ?>
                         <li>
                             <a href="javascript:;" class="expand-collapse folder-tooltip" id="expand-collapse-list" data-folder-tooltip="<?php esc_html_e("Expand", 'folders'); ?>">
                                 <span class="icon pfolder-arrow-down"></span><!-- <span class="text"><?php /*esc_html_e("Expand", 'folders'); */?></span>-->
@@ -79,11 +105,11 @@ class WCP_Forms {
                                     <a data-folder-tooltip="Sort Folders" href="javascript:;" id="sort-order-list" class="sort-folder-order folder-tooltip">
                                         <span class="icon pfolder-arrow-sort"></span><!-- <span class="text"><?php /*esc_html_e("Sort", 'folders'); */?></span>-->
                                     </a>
-                                    <div class="folder-sort-menu <?php echo ($is_old)?"":"is-pro" ?>">
+                                    <div class="folder-sort-menu <?php echo ($isOld) ? "" : "is-pro" ?>">
                                         <ul>
                                             <li><a data-sort="a-z" href="#"><?php esc_html_e("A → Z", 'folders'); ?></a></li>
                                             <li><a data-sort="z-a" href="#"><?php esc_html_e("Z → A", 'folders'); ?></a></li>
-                                            <?php if($is_old) { ?>
+                                            <?php if ($isOld) { ?>
                                                 <li><a data-sort="n-o" href="#"><?php esc_html_e("Sort by newest", 'folders'); ?></a></li>
                                                 <li><a data-sort="o-n" href="#"><?php esc_html_e("Sort by oldest", 'folders'); ?></a></li>
                                             <?php } else { ?>
@@ -107,5 +133,9 @@ class WCP_Forms {
         </div>
         <?php
         return ob_get_clean();
-    }
-}
+
+    }//end get_form_html()
+
+
+}//end class
+

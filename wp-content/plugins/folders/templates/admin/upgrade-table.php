@@ -1,8 +1,18 @@
-<?php if ( ! defined( 'ABSPATH' ) ) exit;
-$pro_url = "https://go.premio.io/?edd_action=add_to_cart&download_id=687&edd_options[price_id]=";
+<?php
+/**
+ * Folders Upgrade to Pro
+ *
+ * @author  : Premio <contact@premio.io>
+ * @license : GPL2
+ * */
+
+if (! defined('ABSPATH')) {
+    exit;
+}
+
+$proURL = "https://go.premio.io/?edd_action=add_to_cart&download_id=687&edd_options[price_id]=";
 ?>
-<link href="<?php echo esc_url(WCP_FOLDER_URL."assets/css/select2.min.css?ver=".WCP_FOLDER_VERSION) ?>" type="text/css" rel="stylesheet" />
-<link href="<?php echo esc_url(WCP_FOLDER_URL."assets/css/admin-setting.css?ver=".WCP_FOLDER_VERSION) ?>" type="text/css" rel="stylesheet" />
+
 <div class="modal-upgrade upgrade-block" id="folder-modal">
     <div class="easy-modal-inner">
         <div class="container">
@@ -80,12 +90,12 @@ $pro_url = "https://go.premio.io/?edd_action=add_to_cart&download_id=687&edd_opt
                                 <div class="price-table-bottom">
                                     <div class="custom-dd">
                                         <select class="multiple-options">
-                                            <option data-option="1_year" data-header="Renewals for 25% off" data-price="39" value="<?php echo $pro_url ?>22">Updates &amp; support for 1 year</option>
-                                            <option data-option="2_year" data-header="For 2 years" data-price="59" value="<?php echo $pro_url ?>23">Updates &amp; support for 2 years</option>
-                                            <option data-option="lifetime" data-header="For lifetime" data-price="119" value="<?php echo $pro_url ?>24">Updates &amp; support for lifetime</option>
+                                            <option data-option="1_year" data-header="Renewals for 25% off" data-price="39" value="<?php echo esc_url($proURL) ?>22">Updates &amp; support for 1 year</option>
+                                            <option data-option="2_year" data-header="For 2 years" data-price="59" value="<?php echo esc_url($proURL) ?>23">Updates &amp; support for 2 years</option>
+                                            <option data-option="lifetime" data-header="For lifetime" data-price="119" value="<?php echo esc_url($proURL) ?>24">Updates &amp; support for lifetime</option>
                                         </select>
                                     </div>
-                                    <a class="cart-link" target="_blank" href="<?php echo $pro_url ?>22">Buy now</a>
+                                    <a class="cart-link" target="_blank" href="<?php echo esc_url($proURL) ?>22">Buy now</a>
                                 </div>
                                 <div class="bottom-position"></div>
                             </div>
@@ -141,9 +151,9 @@ $pro_url = "https://go.premio.io/?edd_action=add_to_cart&download_id=687&edd_opt
                                 <div class="price-table-bottom">
                                     <div class="custom-dd">
                                         <select class="multiple-options">
-                                            <option data-option="1_year" data-header="Renewals for 25% off" data-price="89" value="<?php echo $pro_url ?>25">Updates &amp; support for 1 year</option>
-                                            <option data-option="2_year" data-header="For 2 years" data-price="139" value="<?php echo $pro_url ?>26">Updates &amp; support for 2 years</option>
-                                            <option data-option="lifetime" data-header="For lifetime" data-price="229" value="<?php echo $pro_url ?>27">Updates &amp; support for lifetime</option>
+                                            <option data-option="1_year" data-header="Renewals for 25% off" data-price="89" value="<?php echo esc_url($proURL) ?>25">Updates &amp; support for 1 year</option>
+                                            <option data-option="2_year" data-header="For 2 years" data-price="139" value="<?php echo esc_url($proURL) ?>26">Updates &amp; support for 2 years</option>
+                                            <option data-option="lifetime" data-header="For lifetime" data-price="229" value="<?php echo esc_url($proURL) ?>27">Updates &amp; support for lifetime</option>
                                         </select>
                                     </div>
                                     <a class="cart-link" target="_blank" href="https://go.premio.io/?edd_action=add_to_cart&amp;download_id=687&amp;edd_options%5Bprice_id%5D=25">Buy now</a>
@@ -209,9 +219,9 @@ $pro_url = "https://go.premio.io/?edd_action=add_to_cart&download_id=687&edd_opt
                                 <div class="price-table-bottom">
                                     <div class="custom-dd">
                                         <select class="multiple-options has-multiple-websites">
-                                            <option data-option="1_year" data-header="Renewals for 25% off" data-price="149" value="<?php echo $pro_url ?>28">Updates &amp; support for 1 year</option>
-                                            <option data-option="2_year" data-header="For 2 years" data-price="229" value="<?php echo $pro_url ?>29">Updates &amp; support for 2 years</option>
-                                            <option data-option="lifetime" data-header="For lifetime" data-price="389" value="<?php echo $pro_url ?>30">Updates &amp; support for lifetime</option>
+                                            <option data-option="1_year" data-header="Renewals for 25% off" data-price="149" value="<?php echo esc_url($proURL) ?>28">Updates &amp; support for 1 year</option>
+                                            <option data-option="2_year" data-header="For 2 years" data-price="229" value="<?php echo esc_url($proURL) ?>29">Updates &amp; support for 2 years</option>
+                                            <option data-option="lifetime" data-header="For lifetime" data-price="389" value="<?php echo esc_url($proURL) ?>30">Updates &amp; support for lifetime</option>
                                         </select>
                                     </div>
                                     <a class="cart-link" target="_blank" href="https://go.premio.io/?edd_action=add_to_cart&amp;download_id=687&amp;edd_options%5Bprice_id%5D=28">Buy now</a>
@@ -247,7 +257,6 @@ $pro_url = "https://go.premio.io/?edd_action=add_to_cart&download_id=687&edd_opt
         </div>
     </div>
 </div>
-<script src="<?php echo esc_url(WCP_FOLDER_URL."assets/js/select2.min.js?ver=".WCP_FOLDER_VERSION) ?>" type="text/javascript" ></script>
 <script>
     (function (factory) {
         "use strict";

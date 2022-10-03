@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Folders
  * Description: Organize your Media library, Pages, and Posts into folders. You can easily drag and drop items into directories and change the folders tree view.
- * Version: 2.8.2
+ * Version: 2.8.5
  * Author: Premio
  * Author URI: https://premio.io/downloads/folders/
  * Text Domain: folders
@@ -24,7 +24,7 @@ if(!defined("WCP_FOLDER_URL")) {
     define('WCP_FOLDER_URL', plugin_dir_url(__FILE__));
 }
 if(!defined("WCP_FOLDER_VERSION")) {
-    define('WCP_FOLDER_VERSION', "2.8.2");
+    define('WCP_FOLDER_VERSION', "2.8.5");
 }
 
 
@@ -147,7 +147,7 @@ if(!function_exists('premio_folders_plugin_check_for_setting')) {
 			$post_array = array("page", "post", "attachment");
 			foreach ( $post_types as $post_type ) {
 				if(!in_array($post_type->name, $post_array)) {
-					$eCondition .= "OR $wpdb->term_taxonomy.taxonomy = '{$post_type->name}_folder'";
+					$eCondition .= "OR $wpdb->term_taxonomy.taxonomy = '".esc_attr($post_type->name)."_folder'";
 				}
 			}
 			$eCondition .= ")";

@@ -1,4 +1,15 @@
-<?php if(!defined('ABSPATH')) exit; ?>
+<?php
+/**
+ * Admin folders popup data
+ *
+ * @author  : Premio <contact@premio.io>
+ * @license : GPL2
+ * */
+
+if (!defined('ABSPATH')) {
+    exit;
+}
+?>
 <div class="folder-popup" id="folder-intro-popup">
     <div class="folder-popup-box">
         <div class="folder-popup-header">
