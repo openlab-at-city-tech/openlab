@@ -148,6 +148,14 @@ class Meow_WPMC_Support {
       array_push( $unsupported, 'Metabox' );
 		}
 
+    if ( defined( 'URIS_PLUGIN_URL' ) ) {
+      array_push( $unsupported, 'Ultimate Responsive Image Slider' );
+    }
+
+		if ( defined( 'PRESTO_PLAYER_PLUGIN_URL' ) ) {
+      array_push( $unsupported, 'Presto Player' );
+		}
+
     return $unsupported;
   }
 }

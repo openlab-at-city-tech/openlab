@@ -62,7 +62,6 @@ class Meow_WPMC_UI {
 	}
 
 	function display_metabox( $post ) {
-
 		// Search the references to the ID
 		$originType = $this->core->reference_exists( null, $post->ID );
 
@@ -77,17 +76,23 @@ class Meow_WPMC_UI {
 			}
 		}
 
-		// Resolve the readable name for this issue (if exists)
 		if ( $originType ) {
-			if ( array_key_exists( $originType, $this->foundTypes ) )
+			if ( array_key_exists( $originType, $this->foundTypes ) ) {
 				echo $this->foundTypes[ $originType ];
-			else
+			}
+			else {
 				echo "It seems to be used as: " . $originType;
+			}
+			return;
 		}
-		// Otherwise just display the un-readable name
-		else {
-			echo "There is no information about this media in the Cleaner DB. It is either not in use, or the scan hasn't been ran.";
+
+		$issue = $this->core->get_issue_for_postId( $post->ID );
+		if ( $issue ) {
+			$this->core->echo_issue( $issue->issue );
+			return;
 		}
+		
+		echo "There is no information about this media in the Cleaner DB. It is either not in use, or the scan hasn't been ran.";
 	}
 
 	function media_row_actions( $actions, $post ) {

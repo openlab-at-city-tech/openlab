@@ -14,6 +14,7 @@ class Meow_WPMC_Core {
 	public $site_url = null; // https://meowapps.com
 	public $upload_path = null; // /www/wp-content/uploads (path to uploads)
 	public $upload_url = null; // wp-content/uploads (uploads without domain)
+	private $option_name = 'wpmc_options';
 
 	private $regex_file = '/[A-Za-z0-9-_,.\(\)\s]+[.]{1}(MIMETYPES)/';
 	private $refcache = array();
@@ -25,8 +26,8 @@ class Meow_WPMC_Core {
 	public function __construct() {
 		add_action( 'plugins_loaded', array( $this, 'plugins_loaded' ) );
 		add_action( 'init', array( $this, 'init' ) );
-		add_action( 'delete_attachment', array( $this, 'delete_or_trash_attachment' ), 10, 1 );
-		add_action( 'trashed_post', array( $this, 'delete_or_trash_attachment' ), 10, 1 );
+		add_action( 'delete_attachment', array( $this, 'delete_attachment_related_data' ), 10, 1 );
+		add_action( 'trashed_post', array( $this, 'delete_attachment_related_data' ), 10, 1 );
 	}
 
 	function plugins_loaded() {
@@ -35,16 +36,17 @@ class Meow_WPMC_Core {
 		$this->site_url = get_site_url();
 		$this->multilingual = $this->is_multilingual();
 		$this->languages = $this->get_languages();
-		$this->current_method = get_option( 'wpmc_method', 'media' );
+		$this->current_method = $this->get_option( 'method' );
 		$this->regex_file = str_replace( "MIMETYPES", $this->types, $this->regex_file );
 		$this->servername = str_replace( 'http://', '', str_replace( 'https://', '', $this->site_url ) );
 		$uploaddir = wp_upload_dir();
 		$this->upload_path = $uploaddir['basedir'];
 		$this->upload_url = substr( $uploaddir['baseurl'], 1 + strlen( $this->site_url ) );
-		$this->check_content = get_option( 'wpmc_content', true );
-		$this->debug_logs = get_option( 'wpmc_debuglogs', false );
+		$this->check_content = $this->get_option( 'content' );
+		$this->debug_logs = $this->get_option( 'debuglogs' );
 		$this->is_rest = MeowCommon_Helpers::is_rest();
 		$this->is_cli = defined( 'WP_CLI' ) && WP_CLI;
+		
 		global $wpmc;
 		$wpmc = $this;
 
@@ -142,7 +144,7 @@ class Meow_WPMC_Core {
 		}
 	}
 
-	function delete_or_trash_attachment( $post_id ) {
+	function delete_attachment_related_data( $post_id ) {
 		global $wpdb;
 		$table_name = $wpdb->prefix . "mclean_scan";
 		$wpdb->query( $wpdb->prepare( "DELETE FROM $table_name WHERE postId = %d", $post_id ) );
@@ -258,7 +260,7 @@ class Meow_WPMC_Core {
 		}
 
 		// Resolve src-set and shortcodes
-		if ( !get_option( 'wpmc_shortcodes_disabled', false ) ) {
+		if ( !$this->get_option( 'shortcodes_disabled' ) ) {
 			$html = do_shortcode( $html );
 		}
 
@@ -518,7 +520,7 @@ class Meow_WPMC_Core {
 		$fh = @fopen( WPMC_PATH . '/logs/media-cleaner.log', 'a' );
 		if ( !$fh )
 			return false;
-		$date = date( "Y-m-d H:i:s" );
+		$date = current_datetime()->format( 'Y-m-d H:i:s' );
 		if ( is_null( $data ) )
 			fwrite( $fh, "\n" );
 		else
@@ -604,18 +606,17 @@ class Meow_WPMC_Core {
 	function recover( $id ) {
 		global $wpdb;
 		$table_name = $wpdb->prefix . "mclean_scan";
-		$issue = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $table_name WHERE id = %d", $id ), OBJECT );
-		$issue->path = stripslashes( $issue->path );
+		$issue = $this->get_issue( $id );
 
 		// Files
-		if ( $issue->type == 0 ) {
+		if ( $issue->type === 0 ) {
 			$this->recover_file( $issue->path );
 			$wpdb->query( $wpdb->prepare( "UPDATE $table_name SET deleted = 0 WHERE id = %d", $id ) );
 			$this->log( "✅ Recovered {$issue->path}." );
 			return true;
 		}
 		// Media
-		else if ( $issue->type == 1 ) {
+		else if ( $issue->type === 1 ) {
 
 			// If there is no file attached, doesn't handle the files
 			$fullpath = get_attached_file( $issue->postId );
@@ -680,12 +681,15 @@ class Meow_WPMC_Core {
 	function ignore( $id, $ignore ) {
 		global $wpdb;
 		$table_name = $wpdb->prefix . "mclean_scan";
-		$issue = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $table_name WHERE id = %d", $id ), OBJECT );
-		if ( !$ignore )
+		$issue = $this->get_issue( $id );
+		if ( !$ignore ) {
 			$wpdb->query( $wpdb->prepare( "UPDATE $table_name SET ignored = 0 WHERE id = %d", $id ) );
+		}
 		else {
-			if ( (int) $issue->deleted ) // If it is in trash, recover it
+			// If it is in trash, recover it
+			if ( $issue->deleted ) {
 				$this->recover( $id );
+			}
 			$wpdb->query( $wpdb->prepare( "UPDATE $table_name SET ignored = 1 WHERE id = %d", $id ) );
 		}
 		return true;
@@ -712,10 +716,23 @@ class Meow_WPMC_Core {
 		}
 	}
 
-	function delete( $id ) {
+	function get_issue( $id ) {
 		global $wpdb;
 		$table_name = $wpdb->prefix . "mclean_scan";
 		$issue = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $table_name WHERE id = %d", $id ), OBJECT );
+		$issue->id = (int)$issue->id;
+		$issue->postId = (int)$issue->postId;
+		$issue->type = (int)$issue->type;
+		$issue->deleted = (int)$issue->deleted;
+		$issue->ignored = (int)$issue->ignored;
+		$issue->path = stripslashes( $issue->path );
+		return $issue;
+	}
+
+	function delete( $id ) {
+		global $wpdb;
+		$table_name = $wpdb->prefix . "mclean_scan";
+		$issue = $this->get_issue( $id );
 
 		if ( !isset( $issue ) ) {
 			$this->log( "🚫 Issue {$id} could not be found." );
@@ -724,39 +741,52 @@ class Meow_WPMC_Core {
 
 		$regex = "^(.*)(\\s\\(\\+.*)$";
 		$issue->path = preg_replace( '/' . $regex . '/i', '$1', $issue->path ); // remove " (+ 6 files)" from path
+		$skip_trash = $this->get_option( 'skip_trash' );
 
-		// Commented on 2022/03/15: This is probably not needed, and slows down deletion
-		// Make sure there isn't a media DB entry
-		// if ( $issue->type == 0 ) {
-		// 	$attachmentid = $this->find_media_id_from_file( $issue->path, true );
-		// 	if ( $attachmentid ) {
-		// 		$this->log( "🚫 Issue listed as filesystem but Media {$attachmentid} exists." );
-		// 	}
-		// }
+		if ( $issue->type === 0 ) {
 
-		if ( $issue->type == 0 ) {
+			// Delete file from the trash
+			if ( $issue->deleted === 1 ) {
+				$trashPath = trailingslashit( $this->get_trashdir() ) . $issue->path;
+				if ( unlink( $trashPath ) ) {
+					$wpdb->query( $wpdb->prepare( "DELETE FROM $table_name WHERE id = %d", $id ) );
+					$this->clean_dir( dirname( $trashPath ) );
+					return true;
+				}
+			}
+			// Delete file without using trash
+			else if ( $skip_trash ) {
+				$originalPath = trailingslashit( $this->upload_path ) . $issue->path;
+				if ( unlink( $originalPath ) ) {
+					$wpdb->query( $wpdb->prepare( "DELETE FROM $table_name WHERE id = %d", $id ) );
+					$this->clean_dir( dirname( $originalPath ) );
+					return true;
+				}
+			}
+			// Move file to the trash
+			else  if ( $this->trash_file( $issue->path ) ) {
+				$wpdb->query( $wpdb->prepare( "UPDATE $table_name SET deleted = 1, ignored = 0 WHERE id = %d", $id ) );
+				return true;
+			}
 
-			if ( $issue->deleted == 0 ) {
-				// Move file to the trash
-				if ( $this->trash_file( $issue->path ) )
-					$wpdb->query( $wpdb->prepare( "UPDATE $table_name SET deleted = 1, ignored = 0 WHERE id = %d", $id ) );
+			$this->log( "🚫 Failed to delete/trash the file." );
+			error_log( "Media Cleaner: Failed to delete/trash the file." );
+		}
+
+		if ( $issue->type === 1 ) {
+
+			// Trash Media definitely by recovering it (to be like a normal Media) and remove it through the
+			// standard WordPress workflow
+			if ( $issue->deleted === 1 || $skip_trash  ) {
+				if ( $issue->deleted === 1 ) {
+					$this->recover( $id );
+				}
+				wp_update_post( array( 'ID' => $issue->postId, 'post_type' => 'attachment' ) );
+				wp_delete_attachment( $issue->postId, true );
+				$wpdb->query( $wpdb->prepare( "DELETE FROM $table_name WHERE id = %d", $id ) );
 				return true;
 			}
 			else {
-				// Delete file from the trash
-				$trashPath = trailingslashit( $this->get_trashdir() ) . $issue->path;
-				if ( !unlink( $trashPath ) ) {
-					$this->log( "🚫 Failed to delete the file." );
-					error_log( "Media Cleaner: Failed to delete the file." );
-				}
-				$wpdb->query( $wpdb->prepare( "DELETE FROM $table_name WHERE id = %d", $id ) );
-				$this->clean_dir( dirname( $trashPath ) );
-				return true;
-			}
-		}
-
-		if ( $issue->type == 1 ) {
-			if ( $issue->deleted == 0 ) {
 				// Move Media to trash
 				// Let's copy the images to the trash so that it can be recovered.
 				$paths = $this->get_paths_from_attachment( $issue->postId );
@@ -768,15 +798,6 @@ class Meow_WPMC_Core {
 				}
 				wp_update_post( array( 'ID' => $issue->postId, 'post_type' => 'wmpc-trash' ) );
 				$wpdb->query( $wpdb->prepare( "UPDATE $table_name SET deleted = 1, ignored = 0 WHERE id = %d", $id ) );
-				return true;
-			}
-			else {
-				// Trash Media definitely by recovering it (to be like a normal Media) and remove it through the
-				// standard WordPress workflow
-				$this->recover( $id );
-				wp_update_post( array( 'ID' => $issue->postId, 'post_type' => 'attachment' ) );
-				wp_delete_attachment( $issue->postId, true );
-				$wpdb->query( $wpdb->prepare( "DELETE FROM $table_name WHERE id = %d", $id ) );
 				return true;
 			}
 		}
@@ -1081,6 +1102,11 @@ class Meow_WPMC_Core {
 			return true;
 		}
 
+		// Remove everything related to this media from the database.
+		if ( !$checkOnly ) {
+			$this->delete_attachment_related_data( $attachmentId );
+		}
+
 		$size = 0;
 		$countfiles = 0;
 		$check_broken_media = !$this->check_content;
@@ -1157,9 +1183,16 @@ class Meow_WPMC_Core {
 		$wpdb->query("TRUNCATE $table_name");
 	}
 
+	function get_issue_for_postId( $postId ) {
+		global $wpdb;
+		$table_name = $wpdb->prefix . "mclean_scan";
+		$issue = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $table_name WHERE postId = %d", $postId ), OBJECT );
+		return $issue;
+	}
+
 	function echo_issue( $issue ) {
 		if ( $issue == 'NO_CONTENT' ) {
-			_e( "Seems not use", 'media-cleaner' );
+			_e( "Not found in content", 'media-cleaner' );
 		}
 		else if ( $issue == 'ORPHAN_FILE' ) {
 			_e( "Not in Library", 'media-cleaner' );
@@ -1190,33 +1223,123 @@ class Meow_WPMC_Core {
 	public function can_access_features() {
 		return apply_filters( 'wpmc_allow_usage', current_user_can( 'administrator' ) );
 	}
-}
 
-/*
-	INSTALL / UNINSTALL
-*/
+	#region Options 
 
-function wpmc_init( $mainfile ) {
-	//register_activation_hook( $mainfile, 'wpmc_install' );
-	//register_deactivation_hook( $mainfile, 'wpmc_uninstall' );
-	register_uninstall_hook( $mainfile, 'wpmc_uninstall' );
-}
-
-function wpmc_install() {
-	wpmc_create_database();
-}
-
-function wpmc_reset () {
-	wpmc_remove_database();
-	wpmc_create_database();
-}
-
-function wpmc_uninstall () {
-	$cleanUninstall = get_option( 'wpmc_clean_uninstall', false );
-	if ($cleanUninstall) {
-		wpmc_remove_options();
-		wpmc_remove_database();
+	function list_options() {
+		return array(
+			'method' => 'media',
+			'content' => true,
+			'filesystem_content' => false,
+			'media_library' => true,
+			'live_content' => false,
+			'debuglogs' => false,
+			'images_only' => false,
+			'attach_is_use' => false,
+			'thumbnails_only' => false,
+			'dirs_filter' => '',
+			'files_filter' => '',
+			'hide_thumbnails' => false,
+			'hide_warning' => false,
+			'skip_trash' => false,
+			'medias_buffer' => 100,
+			'posts_buffer' => 5,
+			'analysis_buffer' => 100,
+			'file_op_buffer' => 20,
+			'delay' => 100,
+			'shortcodes_disabled' => false,
+			'posts_per_page' => 10,
+			'clean_uninstall' => false,
+		);
 	}
+
+	function get_option( $option ) {
+		$options = $this->get_all_options();
+		return $options[$option];
+	}
+
+	function get_all_options() {
+		$options = get_option( $this->option_name, null );
+		$options = $this->check_options( $options );
+		return $options;
+	}
+
+	// Let's work on this function if we need it.
+	// Right now, it looks like the options are all updated at the same time.
+
+	// function update_option( $option, $value ) {
+	// 	if ( !array_key_exists( $name, $options ) ) {
+	// 		return new WP_REST_Response([ 'success' => false, 'message' => 'This option does not exist.' ], 200 );
+	// 	}
+	//  $value = is_bool( $params['value'] ) ? ( $params['value'] ? '1' : '' ) : $params['value'];
+	// }
+
+	function update_options( $options ) {
+		if ( !update_option( $this->option_name, $options, false ) ) {
+			return false;
+		}
+		$options = $this->sanitize_options();
+		return $options;
+	}
+
+	// Upgrade from the old way of storing options to the new way.
+	function check_options( $options = [] ) {
+		$plugin_options = $this->list_options();
+		$options = empty( $options ) ? [] : $options;
+		$hasChanges = false;
+		foreach ( $plugin_options as $option => $default ) {
+			// The option already exists
+			if ( isset( $options[$option] ) ) {
+				continue;
+			}
+			// The option does not exist, so we need to add it.
+			// Let's use the old value if any, or the default value.
+			$options[$option] = get_option( 'wpmc_' . $option, $default );
+			delete_option( 'wpmc_' . $option );
+			$hasChanges = true;
+		}
+		if ( $hasChanges ) {
+			update_option( $this->option_name , $options );
+		}
+		return $options;
+	}
+
+	// Validate and keep the options clean and logical.
+	function sanitize_options() {
+		$options = $this->get_all_options();
+		$medias = $options['medias_buffer'];
+		$posts = $options['posts_buffer'];
+		$analysis = $options['analysis_buffer'];
+		$fileOp = $options['file_op_buffer'];
+		$delay = $options['delay'];
+		$hasChanges = false;
+		if ( $medias === '' ) {
+			$options['medias_buffer'] = 100;
+			$hasChanges = true;
+		}
+		if ( $posts === '' ) {
+			$options['posts_buffer'] = 5;
+			$hasChanges = true;
+		}
+		if ( $analysis === '' ) {
+			$options['analysis_buffer'] = 100;
+			$hasChanges = true;
+		}
+		if ( $fileOp === '' ) {
+			$options['file_op_buffer'] = 20;
+			$hasChanges = true;
+		}
+		if ( $delay === '' ) {
+			$options['delay'] = 100;
+			$hasChanges = true;
+		}
+		if ( $hasChanges ) {
+			update_option( $this->option_name, $options, false );
+		}
+		return $options;
+	}
+
+	#endregion
 }
 
 // Check the DB. If does not exist, let's create it.
@@ -1274,14 +1397,6 @@ function wpmc_create_database() {
 	dbDelta( $sql );
 }
 
-function wpmc_remove_options() {
-	global $wpdb;
-	$options = $wpdb->get_results( "SELECT option_name FROM $wpdb->options WHERE option_name LIKE 'wpmc_%'" );
-	foreach( $options as $option ) {
-		delete_option( $option->option_name );
-	}
-}
-
 function wpmc_remove_database() {
 	global $wpdb;
 	$table_name1 = $wpdb->prefix . "mclean_scan";
@@ -1290,3 +1405,43 @@ function wpmc_remove_database() {
 	$sql = "DROP TABLE IF EXISTS $table_name1, $table_name2, $table_name3;";
 	$wpdb->query( $sql );
 }
+
+#region Install / Uninstall
+
+/*
+	INSTALL / UNINSTALL
+*/
+
+function wpmc_init( $mainfile ) {
+	//register_activation_hook( $mainfile, 'wpmc_install' );
+	//register_deactivation_hook( $mainfile, 'wpmc_uninstall' );
+	register_uninstall_hook( $mainfile, 'wpmc_uninstall' );
+}
+
+function wpmc_install() {
+	wpmc_create_database();
+}
+
+function wpmc_reset () {
+	wpmc_remove_database();
+	wpmc_create_database();
+}
+
+function wpmc_remove_options() {
+	global $wpdb;
+	$options = $wpdb->get_results( "SELECT option_name FROM $wpdb->options WHERE option_name LIKE 'wpmc_%'" );
+	foreach( $options as $option ) {
+		delete_option( $option->option_name );
+	}
+}
+
+function wpmc_uninstall () {
+	$options = get_option( 'wpmc_options', [] );
+	$cleanUninstall = $options['clean_uninstall'];
+	if ($cleanUninstall) {
+		wpmc_remove_options();
+		wpmc_remove_database();
+	}
+}
+
+#endregion
