@@ -631,6 +631,9 @@ class GFFormDisplay {
 		$page_number = RGForms::post( "gform_target_page_number_{$form['id']}" );
 		$page_number = ! is_numeric( $page_number ) ? 1 : $page_number;
 
+		// cast to an integer since page numbers can only be whole numbers
+		$page_number = absint( $page_number );
+
 		$direction = $page_number >= $current_page ? 1 : - 1;
 
 		//Finding next page that is not hidden by conditional logic
@@ -1008,7 +1011,10 @@ class GFFormDisplay {
 				$form_string .= self::get_validation_errors_markup( $form, $submitted_values, $show_summary );
 			}
 
-			if ( $display_title || $display_description ) {
+			$required_indicator_type = rgar( $form, 'requiredIndicator', 'text' );
+			$display_required_legend = GFCommon::has_required_field( $form ) && ! GFCommon::is_legacy_markup_enabled( $form ) && 'text' !== $required_indicator_type;
+
+			if ( ( $display_title || $display_description ) || $display_required_legend ) {
 				$gform_title_open  = GFCommon::is_legacy_markup_enabled( $form ) ? '<h3 class="gform_title">' : '<h2 class="gform_title">';
 				$gform_title_close = GFCommon::is_legacy_markup_enabled( $form ) ? '</h3>' : '</h2>';
 
@@ -1023,8 +1029,7 @@ class GFFormDisplay {
                             <span class='gform_description'>" . rgar( $form, 'description' ) . '</span>';
 				}
 
-				$required_indicator_type = rgar( $form, 'requiredIndicator', 'text' );
-				if ( GFCommon::has_required_field( $form ) && ! GFCommon::is_legacy_markup_enabled( $form ) && 'text' !== $required_indicator_type ) {
+				if ( $display_required_legend ) {
 					/**
 					 * Modify the legend displayed at the bottom of the form header which explains how required fields are indicated.
 					 *
@@ -2022,8 +2027,7 @@ class GFFormDisplay {
 
 			//display error message if field is marked as required and the submitted value is empty
 			if ( $field->isRequired && self::is_empty( $field, $form['id'] ) ) {
-				$field->failed_validation  = true;
-				$field->validation_message = empty( $field->errorMessage ) ? __( 'This field is required.', 'gravityforms' ) : $field->errorMessage;
+				$field->set_required_error( $value );
 			} //display error if field does not allow duplicates and the submitted value already exists
 			else if ( $field->noDuplicates && RGFormsModel::is_duplicate( $form['id'], $field, $value ) ) {
 				$field->failed_validation = true;
@@ -3774,7 +3778,9 @@ class GFFormDisplay {
 		 * @param string   $style           Holds the conditional logic display style. Deprecated in 1.9.4.4.
 		 * @param string   $field_content   The markup for the field content: label, description, inputs, etc.
 		 */
-		$field_container = gf_apply_filters( array( 'gform_field_container', $form_id, $field->id ), $field_container, $field, $form, $css_class, $style, $field_content );
+		if ( rgar( $field, 'type' ) !== 'submit' ) {
+			$field_container = gf_apply_filters( array( 'gform_field_container', $form_id, $field->id ), $field_container, $field, $form, $css_class, $style, $field_content );
+		}
 
 		$field_markup = str_replace( '{FIELD_CONTENT}', $field_content, $field_container );
 

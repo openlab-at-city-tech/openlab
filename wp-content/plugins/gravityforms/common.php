@@ -1329,7 +1329,8 @@ class GFCommon {
 			}
 			$text = str_replace( '{embed_url}', $current_page_url, $text );
 
-			$local_timestamp = self::get_local_timestamp( time() );
+			$utc_timestamp   = time();
+			$local_timestamp = self::get_local_timestamp( $utc_timestamp );
 
 			//date (mm/dd/yyyy)
 			$local_date_mdy = date_i18n( 'm/d/Y', $local_timestamp, true );
@@ -1347,8 +1348,13 @@ class GFCommon {
 				foreach ( $matches as $match ) {
 					$is_today    = $match[1] === 'today';
 					$full_tag    = $match[0];
-					$date_string = ! $is_today ? rgar( $entry, $match[1] ) : $local_timestamp;
+					$date_string = ! $is_today ? rgar( $entry, $match[1] ) : $utc_timestamp;
 					$property    = $match[2];
+
+					// $date_string can't be a timestamp; convert to an actual date format.
+					if ( ! empty( $date_string ) && self::is_numeric( $date_string ) ) {
+						$date_string = date( 'c', (int) $date_string );
+					}
 
 					if( ! empty( $date_string ) ) {
 						// Expand all modifiers, skipping escaped colons
@@ -1384,7 +1390,7 @@ class GFCommon {
 						if ( $is_raw ) {
 							$formatted_date = $date_string;
 						} elseif ( $is_timestamp ) {
-							$formatted_date = $date_local_timestamp;
+							$formatted_date = $is_today ? $utc_timestamp : $date_local_timestamp;
 						} elseif ( $is_diff ) {
 							$formatted_date = sprintf( $date_format, human_time_diff( $date_gmt_time ) );
 						} else {
@@ -2757,6 +2763,18 @@ Content-Type: text/html;
 		return get_option( 'rg_gforms_key' );
 	}
 
+	/**
+	 * Gets the support url configured for the current environment.
+	 *
+	 * @since 2.6.7
+	 *
+	 * @return string Returns the support URL.
+	 */
+	public static function get_support_url() {
+		$env_handler = GFForms::get_service_container()->get( Gravity_Forms\Gravity_Forms\Environment_Config\GF_Environment_Config_Service_Provider::GF_ENVIRONMENT_CONFIG_HANDLER );
+		return $env_handler->get_support_url();
+	}
+
 	public static function has_update( $use_cache = true ) {
 		$version_info = GFCommon::get_version_info( $use_cache );
 		$version      = rgar( $version_info, 'version' );
@@ -3162,7 +3180,7 @@ Content-Type: text/html;
 	}
 
 	public static function get_selection_value( $value ) {
-		
+
 		if ( is_null( $value ) ) {
 			return $value;
 		}
@@ -3170,7 +3188,7 @@ Content-Type: text/html;
 		if ( ! is_array( $value ) ) {
 			$value = explode( '|', $value );
 		}
-		
+
 		return $value[0];
 
 	}
@@ -5286,15 +5304,15 @@ Content-Type: text/html;
 			$gf_vars['idString'] = __( 'ID: ', 'gravityforms' );
 		}
 
-		$prefixes = array_unique( array_filter( array(
-			__( 'Mr.', 'gravityforms' ),
-			__( 'Mrs.', 'gravityforms' ),
-			__( 'Miss', 'gravityforms' ),
-			__( 'Ms.', 'gravityforms' ),
-			__( 'Dr.', 'gravityforms' ),
-			__( 'Prof.', 'gravityforms' ),
-			__( 'Rev.', 'gravityforms' ),
-		) ) );
+		/*
+		 * Translators: This string is a list of name prefixes/honorifics.  If the language you are translating into
+		 * doesn't have equivalents, just provide a list with as many or few prefixes as your language has.
+		 */
+		$prefixes_string = __( 'Mr., Mrs., Miss, Ms., Mx., Dr., Prof., Rev.', 'gravityforms' );
+		$prefixes_array  = explode( ', ', $prefixes_string );
+
+		$prefixes = array_unique( array_filter( $prefixes_array ) );
+
 		sort( $prefixes );
 
 		$gf_vars['nameFieldDefaultPrefixes'] = array();
@@ -7236,7 +7254,7 @@ Content-Type: text/html;
 	 */
 	public static function safe_unserialize( $string, $expected, $default = false ) {
 
-		$data = @unserialize( $string );
+		$data = is_string( $string ) ? @unserialize( $string ) : $string;
 
 		if ( is_a( $data, $expected ) ) {
 			return $data;
