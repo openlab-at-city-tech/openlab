@@ -95,7 +95,9 @@ function openlab_hide_plugins( $plugins ) {
 		'wp-twitter/wp-twitter.php',
 		'wpbadgedisplay/wpbadgedisplay.php',
 		'wpbadger/wpbadger.php',
+		'wpdiscuz/class.WpdiscuzCore.php',
 		'wp-to-twitter/wp-to-twitter.php',
+		'zephyr-project-manager/zephyr-project-manager.php',
 	);
 
 	if ( ! is_super_admin() ) {
