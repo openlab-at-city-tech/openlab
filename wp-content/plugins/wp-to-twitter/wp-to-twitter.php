@@ -17,7 +17,7 @@
  * License:     GPL-2.0+
  * License URI: http://www.gnu.org/license/gpl-2.0.txt
  * Domain Path: lang
- * Version:     3.6.1
+ * Version:     3.6.2
  */
 
 /*
@@ -65,7 +65,7 @@ require_once( plugin_dir_path( __FILE__ ) . 'wpt-widget.php' );
 require_once( plugin_dir_path( __FILE__ ) . 'wpt-rate-limiting.php' );
 
 global $wpt_version;
-$wpt_version = '3.6.1';
+$wpt_version = '3.6.2';
 
 add_action( 'init', 'wpt_load_textdomain' );
 /**
@@ -1596,8 +1596,8 @@ function wpt_ajax_tweet() {
 		die;
 	}
 	$action       = ( 'tweet' === $_REQUEST['tweet_action'] ) ? 'tweet' : 'schedule';
-	$authors      = ( isset( $_REQUEST['tweet_auth'] ) && null !== $_REQUEST['tweet_auth'] ) ? $_REQUEST['tweet_auth'] : false;
-	$upload       = ( isset( $_REQUEST['tweet_upload'] ) && null !== $_REQUEST['tweet_upload'] ) ? $_REQUEST['tweet_upload'] : '1';
+	$authors      = ( isset( $_REQUEST['tweet_auth'] ) && null !== $_REQUEST['tweet_auth'] ) ? map_deep( $_REQUEST['tweet_auth'], 'sanitize_text_field' ) : false;
+	$upload       = ( isset( $_REQUEST['tweet_upload'] ) && null !== $_REQUEST['tweet_upload'] ) ? (int) $_REQUEST['tweet_upload'] : '1';
 	$current_user = wp_get_current_user();
 	if ( function_exists( 'wpt_pro_exists' ) && wpt_pro_exists() ) {
 		if ( wtt_oauth_test( $current_user->ID, 'verify' ) ) {
@@ -1718,7 +1718,7 @@ function wpt_save_post( $id, $post ) {
 	if ( isset( $_POST['wp_to_twitter_meta'] ) ) {
 		$nonce = ( isset( $_POST['wp_to_twitter_nonce'] ) ) ? $_POST['wp_to_twitter_nonce'] : false;
 		if ( ! ( $nonce && wp_verify_nonce( $nonce, 'wp-to-twitter-nonce' ) ) ) {
-			die( 'WP to Twitter: Security check failed' );
+			wp_die( 'WP to Twitter: Security check failed' );
 		}
 		if ( isset( $_POST['_yourls_keyword'] ) ) {
 			$yourls = sanitize_text_field( $_POST['_yourls_keyword'] );
