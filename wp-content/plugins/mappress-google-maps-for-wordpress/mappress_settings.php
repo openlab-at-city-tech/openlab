@@ -41,6 +41,7 @@ class Mappress_Options extends Mappress_Obj {
 		$mashupBody = 'poi',
 		$mashupClick = 'poi',
 		$mashupKml,
+		$mashupThumbs = 'post',
 		$metaKeys = array('post' => array(), 'user' => array()),
 		$metaSyncSave = true,
 		$mini = 500,
@@ -270,7 +271,7 @@ class Mappress_Settings {
 		if (isset($settings->clusteringOptions['spiderfyOnMaxZoom']))
 			$settings->clusteringOptions['spiderfyOnMaxZoom'] = ($settings->clusteringOptions['spiderfyOnMaxZoom'] == "true") ? true : false;
 		if (isset($settings->clusteringOptions['showCoverageOnHover']))
-			$settings->clusteringOptions['showCoverageOnHover'] = ($settings->clusteringOptions['spiderfyOnMaxZoom'] == "true") ? true : false;
+			$settings->clusteringOptions['showCoverageOnHover'] = ($settings->clusteringOptions['showCoverageOnHover'] == "true") ? true : false;
 
 		// Merge in old values so they're not lost, e.g. stylesMapbox and stylesGoogle
 		$options = Mappress_Options::get();

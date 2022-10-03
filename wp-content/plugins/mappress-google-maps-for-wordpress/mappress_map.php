@@ -18,6 +18,7 @@ class Mappress_Map extends Mappress_Obj {
 		$metaKey,
 		$name,
 		$oid,
+		$otitle,
 		$otype,
 		$poiList,
 		$query,
@@ -307,7 +308,7 @@ class Mappress_Map extends Mappress_Obj {
 	*
 	* @param mixed $atts - override attributes.  Attributes applied from options -> map -> $atts
 	*/
-	function display($atts = null, $in_iframe = false) {
+	function display($atts = null) {
 		static $div = 0;
 
 		$this->update($atts);
@@ -318,9 +319,6 @@ class Mappress_Map extends Mappress_Obj {
 			$div++;
 		}
 
-		if (!$in_iframe && (Mappress::$options->iframes))
-			return $this->display_iframe();
-
 		// Prepare POIs for maps
 		if (empty($this->query))
 			$this->prepare();
@@ -328,46 +326,51 @@ class Mappress_Map extends Mappress_Obj {
 		// Last chance to alter map before display
 		do_action('mappress_map_display', $this);
 
-		// Container and data
-		$id = $this->name . '-layout';
-		$html = "<div class='mapp-layout' id='$id'></div>";
+		// Map data
+		$script = Mappress::script(
+			"window.mapp = window.mapp || {}; mapp.data = mapp.data || [];\r\n"
+			. "mapp.data.push( " . json_encode($this) . " ); \r\nif (typeof mapp.load != 'undefined') { mapp.load(); };"
+		);
 
-		// Enqueue scripts and data
-		Mappress::scripts_enqueue();
-		$script = "window.mapp = window.mapp || {}; mapp.data = mapp.data || [];\r\n";
-		$script .= "mapp.data.push( " . json_encode($this) . " ); \r\nif (typeof mapp.load != 'undefined') { mapp.load(); };";
-
-		// Use inline scripts for XHTML and some themes which mismatch tags in the content
-		if (function_exists('wp_add_inline_script') && Mappress::is_footer())
-			wp_add_inline_script('mappress', "//<![CDATA[\r\n" . $script . "\r\n//]]>");
-		else
-			$html .= Mappress::script($script);
-
-		return $html;
+		if (Mappress::$options->iframes) {
+			Mappress::generate_iframe();
+			$url = Mappress::$baseurl . '/templates/iframe.html';
+			$iframe = "<iframe class='mapp-iframe' id='{$this->name}' src='$url' scrolling='no' loading='lazy'></iframe>";
+			return $script . $this->get_layout($iframe);
+		} else {
+			Mappress::scripts_enqueue();
+			return $this->get_layout() . $script;
+		}
 	}
 
-	function display_iframe() {
-		$atts = (array) $this;
+	function get_dims() {
+		$suffix = function($dim) {
+			return (is_string($dim) && (stristr($dim, 'px') || stristr($dim, '%') || stristr($dim, 'vh') || stristr($dim, 'vw'))) ? $dim : ($dim . 'px');
+		};
+		$defaultSize = (isset(Mappress::$options->sizes[Mappress::$options->size])) ? (object) Mappress::$options->sizes[Mappress::$options->size] : (object) Mappress::$options->sizes[0];
+		return (object) array(
+			'width' => ($this->width) ? $suffix($this->width) : $suffix($defaultSize->width),
+			'height' => ($this->height) ? $suffix($this->height) : $suffix($defaultSize->height)
+		);
+	}
 
-		$atts['mapp_iframe'] = true;
-		unset($atts['name']);	// 'name' is a reserved word and causes 404 errors
+	function get_layout($content = '') {
+		$layout = ($this->layout) ? $this->layout : Mappress::$options->layout;
+		$layoutClass = (Mappress::$options->iframes) ? 'mapp-iframe-container' : 'mapp-layout';
 
-		// If mapid, map will be re-read
-		if ($this->mapid)
-			unset($atts['pois']);
-
-		// Programmatic maps
-		else if ($this->pois) {
-			$json = json_encode($this->pois);
-			$key = 'mapp-iframe-' . ( ($json) ? md5($json) : uniqid() );
-			$atts['transient'] = $key;
-			set_transient($key, $this->pois, 20);
-			unset($atts['pois']);
+		$alignment = ($this->alignment) ? $this->alignment : Mappress::$options->alignment;
+		if ($alignment) {
+			$layoutClass .= ' align' . $alignment;
+			$layoutClass .= ' mapp-align-' . $alignment;
 		}
 
-		$url = get_home_url() . '?' . http_build_query($atts);
-		$html = "<div class='mapp-iframe-container'><div class='mapp-iframe-wrapper'><iframe class='mapp-iframe' src='$url' scrolling='no' loading='lazy'></iframe></div></div>";
-		return $html;
+		$dims = $this->get_dims();
+		$layoutStyle = ($this->alignment == 'full') ? "width: auto" : "width: {$dims->width}";
+
+		$wrapperClass = (Mappress::$options->iframes) ? 'mapp-iframe-wrapper' : 'mapp-wrapper';
+		$wrapperStyle = (stristr($dims->height, 'vh')) ? "height: {$dims->height};" : "padding-bottom: {$dims->height}";
+
+		return "<div id='{$this->name}' class='$layoutClass' style='$layoutStyle'><div class='$wrapperClass' style='$wrapperStyle'>$content</div></div>";
 	}
 
 	static function display_user_map($user) {
