@@ -2771,6 +2771,17 @@ add_action(
 );
 
 /**
+ * wp-accessibility Content Summary metabox should always be closed by default.
+ */
+add_action(
+	'get_user_option_closedpostboxes_post',
+	function( $closed ) {
+		$closed[] = 'wpa_content_summary';
+		return $closed;
+	}
+);
+
+/**
  * Force bbPress roles to have the 'read' capability.
  *
  * Without 'read', users can't access my-sites.php.
