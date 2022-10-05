@@ -2754,6 +2754,23 @@ add_action(
 );
 
 /**
+ * Decrease priority of wp-accessibility Content Summary meta box.
+ */
+add_action(
+	'admin_menu',
+	function() {
+		$allowed = get_option( 'wpa_post_types', array() );
+		if ( is_array( $allowed ) ) {
+			foreach ( $allowed as $post_type ) {
+				remove_meta_box( 'wpa_content_summary', $post_type, 'normal' );
+				add_meta_box( 'wpa_content_summary', __( 'Content Summary', 'wp-accessibility' ), 'wpa_add_inner_box', $post_type, 'normal', 'low' );
+			}
+		}
+	},
+	20
+);
+
+/**
  * Force bbPress roles to have the 'read' capability.
  *
  * Without 'read', users can't access my-sites.php.
