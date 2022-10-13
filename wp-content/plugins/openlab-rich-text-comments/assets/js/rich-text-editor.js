@@ -88,6 +88,18 @@
         } );
 
         /**
+         * Add label on the link and media popups
+         */
+        let insertMediaField = $('.ql-tooltip input[data-video="Embed URL"]');
+        insertMediaField.attr('id', 'quill-media');
+        $('<label for="quill-media" class="sr-only">Enter media url</label>').insertBefore(insertMediaField);
+
+        /**
+         * Remove ql-preview
+         */
+        $('.ql-preview').remove();
+
+        /**
          * Toggle aria-pressed attribute on clicking the buttons
          * in the editor's toolbar.
          */
