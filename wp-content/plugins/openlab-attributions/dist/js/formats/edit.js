@@ -22,11 +22,13 @@ import Modal from '../components/modal';
 const addMarker = ( value, data ) => {
 	const id = nanoid( 8 );
 	const item = { ...data, id };
+
 	const format = {
 		type: 'ol/attributions',
 		attributes: {
 			href: `#ref-${ id }`,
 			id: `anchor-${ id }`,
+			'aria-label': `See attribution`
 		},
 	};
 
