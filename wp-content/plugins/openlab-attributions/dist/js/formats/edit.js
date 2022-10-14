@@ -36,6 +36,9 @@ const addMarker = ( value, data ) => {
 	dispatch( 'openlab/attributions' ).add( item );
 
 	const startIndex = isCollapsed( value ) ? value.start : value.end;
+	
+	// Add empty space at the end of the sentence, so it's possible to continue writing after it.
+	value.text += ' ';
 
 	const newValue = insertObject( value, format, startIndex );
 
