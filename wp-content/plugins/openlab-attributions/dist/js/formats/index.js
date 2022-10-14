@@ -12,7 +12,7 @@ import Edit from './edit';
 // Register fake format.
 registerFormatType( 'ol/attributions', {
 	title: __( 'Attribution', 'openlab-attributions' ),
-	tagName: 'a',
+	tagName: 'span',
 	className: 'attribution-anchor',
 	edit: Edit,
 } );
