@@ -3406,3 +3406,8 @@ function openlab_load_google_analytics() {
  * its Attachments component.
  */
 add_filter( 'bp_docs_enable_attachments', '__return_false' );
+
+/**
+ * Disable Akismet scanning for buddypress-docs.
+ */
+add_filter( 'bp_docs_use_akismet', '__return_false' );
