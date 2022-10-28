@@ -1,0 +1,8 @@
+.is-dark-theme .ql-snow .ql-stroke {
+    stroke: #fff;
+}
+
+.is-dark-theme .ql-snow .ql-fill, 
+.is-dark-theme .ql-snow .ql-stroke.ql-fill {
+    fill: #fff;
+}
