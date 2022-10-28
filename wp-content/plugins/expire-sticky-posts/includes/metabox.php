@@ -11,7 +11,15 @@
 if ( ! defined( 'ABSPATH' ) ) exit;
 
 /**
- * Render the metabox options in the main Publish box
+ * Register meta box
+ */
+function openlab_register_expire_sticky_post_meta_boxes() {
+	add_meta_box( 'expire-sticky-post-meta-box', __( 'Expire Sticky Post', 'openlab' ), 'pw_esp_add_expiration_field', 'post', 'side', 'high' );
+}
+add_action( 'add_meta_boxes', 'openlab_register_expire_sticky_post_meta_boxes' );
+
+/**
+ * Render the metabox options
  *
  * @access public
  * @since 1.0
@@ -51,7 +59,6 @@ function pw_esp_add_expiration_field() {
 	</div>
 <?php
 }
-add_action( 'post_submitbox_misc_actions', 'pw_esp_add_expiration_field' );
 
 /**
  * Save the posts's expiration date
