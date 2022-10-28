@@ -72,7 +72,7 @@ function rich_text_comment_form( $args ) {
 
 	return $args;
 }
-add_filter( 'comment_form_defaults', __NAMESPACE__ . '\\rich_text_comment_form' );
+add_filter( 'comment_form_defaults', __NAMESPACE__ . '\\rich_text_comment_form', 20 );
 
 /**
  * Sanitize comment content with allowed HTML KSES rules.
