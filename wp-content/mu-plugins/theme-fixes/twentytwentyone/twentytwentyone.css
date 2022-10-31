@@ -1,8 +1,20 @@
-.is-dark-theme .ql-snow .ql-stroke {
-    stroke: #fff;
+/* Dark Theme */
+.is-light-theme.is-dark-theme .ql-toolbar.ql-snow {
+    background-color: var(--global--color-white-90);
 }
 
-.is-dark-theme .ql-snow .ql-fill, 
-.is-dark-theme .ql-snow .ql-stroke.ql-fill {
-    fill: #fff;
+.is-light-theme.is-dark-theme .ql-container.ql-snow {
+    border: var(--form--border-width) solid var(--global--color-white-90);
+    border-top: 0;
+}
+
+/* Light Theme */
+.is-light-theme:not(body.is-dark-theme) .ql-toolbar.ql-snow,
+.is-light-theme:not(body.is-dark-theme) .ql-container.ql-snow {
+    border: var(--form--border-width) solid var(--form--border-color);
+    background-color: #fff;
+}
+
+.is-light-theme:not(body.is-dark-theme) .ql-toolbar.ql-snow {
+    border-bottom: 0;
 }
