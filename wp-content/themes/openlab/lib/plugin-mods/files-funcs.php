@@ -459,7 +459,6 @@ function openlab_group_documents_email_notification( $document ) {
 
 	$email_args = array(
 		'tokens' => array(
-			'group.id'         => bp_get_current_group_id(),
 			'bpgd.author-name' => $user_name,
 			'bpgd.author-url'  => $user_profile_link,
 			'bpgd.file-link'   => sprintf( '<a href="%s">%s</a>', $document_link, $document_name ),
