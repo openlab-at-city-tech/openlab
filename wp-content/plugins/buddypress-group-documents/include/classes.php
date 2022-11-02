@@ -222,7 +222,7 @@ class BP_Group_Documents {
 
 		//if the user didn't specify a display name, use the file name (before the timestamp)
 		if ( !$this->name )
-			if( get_magic_quotes_gpc() ){
+			if( function_exists( 'get_magic_quotes_gpc' ) && get_magic_quotes_gpc() ){
 				$this->name = stripslashes( basename( $_FILES['bp_group_documents_file']['name'] ) );
 			} else {
 				$this->name = basename( $_FILES['bp_group_documents_file']['name'] );
