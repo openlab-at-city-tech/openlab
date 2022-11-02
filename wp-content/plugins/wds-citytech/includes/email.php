@@ -401,3 +401,31 @@ function ol_comment_moderation_text( $notify_message, $comment_id ) {
 	return $notify_message;
 }
 add_filter( 'comment_moderation_text', 'ol_comment_moderation_text', 10, 2);
+
+/**
+ * Adds OL-specific tokens to BP emails.
+ */
+add_filter(
+	'bp_after_send_email_parse_args',
+	function( $args ) {
+		if ( ! isset( $args['tokens']['group.id'] ) ) {
+			return;
+		}
+
+		$args['tokens']['openlab.group_type'] = openlab_get_group_type_label(
+			[
+				'group_id' => $tokens['group.id'],
+				'case'     => 'lower',
+			]
+		);
+
+		$args['tokens']['openlab.group_type_uc'] = openlab_get_group_type_label(
+			[
+				'group_id' => $tokens['group.id'],
+				'case'     => 'upper',
+			]
+		);
+
+		return $args;
+	}
+);
