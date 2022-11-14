@@ -1,6 +1,6 @@
 /**
 * Styles for various Perk administration screens
-* 
+*
 */
 
 body.perk-iframe {
@@ -98,24 +98,24 @@ body.perk-iframe {
 .perk-settings { }
 
 .perk-settings textarea {
-    width: 75%;
-    height: 150px;
+	width: 75%;
+	height: 150px;
 }
 
 .perk-settings .updated *:last-child {
-    margin-bottom: 0;
+	margin-bottom: 0;
 }
 
 .perk-settings-container {
-    border-left: 2px solid #eee;
-    margin: -18px 0 15px 6px;
-    padding: 15px 0 15px 22px;
+	border-left: 2px solid #eee;
+	margin: -18px 0 15px 6px;
+	padding: 15px 0 15px 22px;
 }
 
 .gwp-field {
-    margin: 0 0 18px;
-    padding: 0 0 18px;
-    border-bottom: 1px dotted #ddd;
+	margin: 0 0 18px;
+	padding: 0 0 18px;
+	border-bottom: 1px dotted #ddd;
 }
 
 .gwp-expandable {
@@ -124,111 +124,111 @@ body.perk-iframe {
 .content > .gwp-field:nth-last-child(2),
 .gwp-field:last-child,
 .gwp-expandable.open {
-    padding-bottom: 0;
-    border-bottom: 0;
+	padding-bottom: 0;
+	border-bottom: 0;
 }
 
 .gwp-field label {
-    margin-bottom: 5px;
+	margin-bottom: 5px;
 }
 
 .gwp-field p.description {
-    margin: 0 0 5px;
+	margin: 0 0 5px;
 }
 
 .gwp-checkbox input[type="checkbox"] {
-    float: left;
+	float: left;
 }
 
 .gwp-checkbox .label {
-    margin-left: 30px;
+	margin-left: 30px;
 }
 
 .gwp-checkbox input[type="checkbox"]:checked + .label label {
-    font-weight: bold !important;
+	font-weight: bold !important;
 }
 
 .gwp-checkbox label + p {
-    margin-bottom: 5px;
+	margin-bottom: 5px;
 }
 
 .gwp-select select {
-    height: 2em;
-    padding: 2px;
+	height: 2em;
+	padding: 2px;
 }
 
 .gwp-select option {
-    padding-right: 10px;
+	padding-right: 10px;
 }
 
 .gwp-field input[type="checkbox"],
 .gwp-field input[type="radio"] {
-    margin-top: 5px;
+	margin-top: 5px;
 }
 
 .documentation a.back {
-    display: block;
-    margin: 20px 0;
+	display: block;
+	margin: 20px 0;
 }
 
 .documentation p {
-    margin: 0 0 1.6em;
+	margin: 0 0 1.6em;
 }
 
 .documentation p img {
-    border: 5px solid #eee;
+	border: 5px solid #eee;
 }
 
 .documentation p img.alignright {
-    float: right;
-    margin: 0 0 1.6em 20px;
+	float: right;
+	margin: 0 0 1.6em 20px;
 }
 
 .documentation p img.alignleft {
-    float: left;
-    margin: 0 20px 1.6em 0;
+	float: left;
+	margin: 0 20px 1.6em 0;
 }
 
 .documentation .notice {
-    padding: 1em 1.2em;
-    margin-bottom: 1.6em;
-    color: #946E2B;
-    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
-    background-color: #fcf8e3;
-    border: 1px solid #fbeed5;
-    -webkit-border-radius: 4px;
-    -moz-border-radius: 4px;
-    border-radius: 4px;
+	padding: 1em 1.2em;
+	margin-bottom: 1.6em;
+	color: #946E2B;
+	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+	background-color: #fcf8e3;
+	border: 1px solid #fbeed5;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
 }
 
 /* Form Editor Styles */
 
 .field_setting .half {
-    float: left;
-    width: 47.5%;
-    margin-left: 5%;
+	float: left;
+	width: 47.5%;
+	margin-left: 5%;
 }
 
 .field_setting .half:first-child {
-    margin-left: 0;
+	margin-left: 0;
 }
 
 .field_setting .third {
-    float: left;
-    width: 30%;
-    margin-left: 5%;
+	float: left;
+	width: 30%;
+	margin-left: 5%;
 }
 
 .field_setting .third:first-child {
-    margin-left: 0;
+	margin-left: 0;
 }
 
 .gp-field-setting .gp-row {
-    margin: 0 0 0.9375rem;
+	margin: 0 0 0.9375rem;
 }
 
 .gp-field-setting .gp-row:last-child {
-    margin: 0;
+	margin: 0;
 }
 
 .gp-field-setting .gp-row > label {
@@ -243,14 +243,14 @@ body:not( .gf-legacy-ui ) .gp-field-setting input[type="number"] {
 }
 
 .gp-notice {
-    background-color: #FFFFE0;
-    border: 1px solid #F4EFB8;
-    padding: 10px;
-    border-radius: 2px;
+	background-color: #FFFFE0;
+	border: 1px solid #F4EFB8;
+	padding: 10px;
+	border-radius: 2px;
 }
 
 .gp-notice i {
-    color: #D4662C;
+	color: #D4662C;
 }
 
 .gp-child-settings {
@@ -307,26 +307,26 @@ body:not( .gf-legacy-ui ) .gp-field-setting input[type="number"] {
 
 /* WP Pointer */
 .gwp-pointer .wp-pointer-buttons {
-    display: inline-block;
+	display: inline-block;
 }
 
 .gwp-pointer .wp-pointer-buttons:first-of-type {
-    margin: 0 0 0 15px;
+	margin: 0 0 0 15px;
 }
 
 .gwp-pointer .wp-pointer-buttons:last-of-type {
-    float: right;
+	float: right;
 }
 
 .gwp-pointer .wp-pointer-buttons:first-of-type:last-of-type {
-    float: none;
-    display: block;
+	float: none;
+	display: block;
 }
 
 .gwp-pointer a.next::before {
-    content: '\f148';
-    transform: scale(-1, 1);
-    left: -9px;
+	content: '\f148';
+	transform: scale(-1, 1);
+	left: -9px;
 }
 
 .gp-tooltip-right:after {
