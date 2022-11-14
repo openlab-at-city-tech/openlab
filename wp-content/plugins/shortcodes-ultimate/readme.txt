@@ -3,10 +3,10 @@ Contributors: gn_themes
 License: GPLv3
 Donate link: https://paypal.me/anovladimir
 Tags: shortcode, toggle, columns, button, slider
-Stable tag: 5.12.2
+Stable tag: 5.12.5
 Requires PHP: 5.4
-Requires at least: 4.6
-Tested up to: 6.0
+Requires at least: 5.0
+Tested up to: 6.1
 
 
 A comprehensive collection of visual components for your site
@@ -137,10 +137,12 @@ First, visit the [Help Center](https://getshortcodes.com/support/). If you get s
 ## Changelog
 
 
-### 5.12.2
+### 5.12.5
 
-* Fixed issue with Shortcode Generator Presets, introduced in the previous update
-* Tested compatibility with WordPress 6
+* Added Freemius SDK
+* Fixed JS error introduced in the previous update. See [forum topic](https://wordpress.org/support/topic/su-tabs-and-other-shortcodes-no-longer-work-after-recent-update/).
+
+
 
 
 ---

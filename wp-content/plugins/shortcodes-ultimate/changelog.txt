@@ -1,3 +1,14 @@
+### 5.12.3
+
+* Tested compatibility with WordPress 6.1
+
+
+### 5.12.2
+
+* Fixed issue with Shortcode Generator Presets, introduced in the previous update
+* Tested compatibility with WordPress 6
+
+
 ### 5.12.1
 
 **Security release**
