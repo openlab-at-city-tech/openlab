@@ -45,14 +45,17 @@
 						
 						if ( $custom_logo_id || $legacy_logo_url ) : 
 
-							$custom_logo_url = $custom_logo_id ? wp_get_attachment_image_url( $custom_logo_id, 'full' ) : $legacy_logo_url;
+							$custom_logo_url 		= $custom_logo_id ? wp_get_attachment_image_url( $custom_logo_id, 'full' ) : $legacy_logo_url;
+							
+							$custom_logo_alt 		= $custom_logo_id ? get_post_meta( $custom_logo_id, '_wp_attachment_image_alt', true ) : '';
+							$custom_logo_alt_attr 	= $custom_logo_alt ? ' alt="' . esc_attr( $custom_logo_alt ) . '"' : '';
 						
 							?>
 						
 							<<?php echo $blog_title_elem; ?> class="blog-logo">
 							
 						        <a href="<?php echo esc_url( home_url( "/" ) ); ?>" rel="home">
-						        	<img src="<?php echo esc_url( $custom_logo_url ); ?>">
+						        	<img src="<?php echo esc_url( $custom_logo_url ); ?>"<?php echo $custom_logo_alt_attr; ?> />
 									<?php if ( $blog_title ) : ?>
 										<span class="screen-reader-text"><?php echo $blog_title; ?></span>
 									<?php endif; ?>
