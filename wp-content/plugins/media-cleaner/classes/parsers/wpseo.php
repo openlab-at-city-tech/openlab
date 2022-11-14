@@ -9,7 +9,7 @@ function wpmc_scan_postmeta_wpseo( $id ) {
 		$wpmc->add_reference_url( $data, 'META (URL)' );
   $data = get_post_meta( $id, '_yoast_wpseo_opengraph-image-id', true );
   if ( !empty( $data ) )
-		$wpmc->add_reference_id( $data, 'META (ID)' );
+		$wpmc->add_reference_id( $data, 'META (ID)', $id );
 }
 
 ?>

@@ -3,9 +3,9 @@ Contributors: TigrouMeow
 Tags: clean, delete, file, files, images, image, media, library, upload, acf
 Donate link: https://meowapps.com/donation/
 Requires at least: 5.0
-Tested up to: 6.0.1
+Tested up to: 6.1
 Requires PHP: 7.0
-Stable tag: 6.4.6
+Stable tag: 6.5.0
 
 Clean your WordPress from unused files, broken media entries. Powerful engine and beautiful UI!
 
@@ -83,6 +83,17 @@ To make everything perfect, you will also need to clean and optimize your databa
 1. Media -> Media Cleaner
 
 == Changelog ==
+
+= 6.5.0 (2022/11/12) =
+* Add: In the Edit Media page, you can now see the post/page where your media are used.
+* Fix: Avoid a few errors in some specific cases.
+
+= 6.4.9 (2022/10/24) =
+* Fix: Improved (and fixed) the accuracy of the explanation displayed before the scan.
+* Note: Please try my new [Database Cleaner](https://wordpress.org/plugins/database-cleaner/)! You'll love it!
+
+= 6.4.7 (2022/10/10) =
+* Add: Fixed a potential issue while scanning the widgets.
 
 = 6.4.6 (2022/09/27) =
 * Add: Option to skip trash.

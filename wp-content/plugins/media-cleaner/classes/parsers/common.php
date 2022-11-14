@@ -59,7 +59,9 @@ class MeowApps_WPMC_Parser_Common {
 		}
 		if ( !empty( $widget_data[$instance_id]['ids'] ) ) {
 			$newIds = $widget_data[$instance_id]['ids'];
-			$ids = array_merge( $ids, $newIds );
+			if ( is_array( $newIds ) ) {
+				$ids = array_merge( $ids, $newIds );
+			}
 		}
 		// Recent Blog Posts
 		if ( !empty( $widget_data[$instance_id]['thumbnail'] ) ) {
@@ -125,9 +127,9 @@ class MeowApps_WPMC_Parser_Common {
 			}
 		}
 
-		$wpmc->add_reference_id( $posts_images_ids, "CONTENT #$id (ID)" );
-		$wpmc->add_reference_url( $posts_images_urls, "CONTENT #$id (URL)" );
-		$wpmc->add_reference_url( $galleries_images, "GALLERY #$id (URL)" );
+		$wpmc->add_reference_id( $posts_images_ids, "CONTENT (ID)", $id );
+		$wpmc->add_reference_url( $posts_images_urls, "CONTENT (URL)", $id );
+		$wpmc->add_reference_url( $galleries_images, "GALLERY (URL)", $id );
 	}
 
 	public function scan_postmeta( $id ) {
@@ -168,8 +170,8 @@ SQL;
 					}
 				}
 			}
-			$wpmc->add_reference_id( $postmeta_images_ids, 'META (ID)' );
-			$wpmc->add_reference_id( $postmeta_images_urls, 'META (URL)' );
+			$wpmc->add_reference_id( $postmeta_images_ids, 'META (ID)', $id );
+			$wpmc->add_reference_id( $postmeta_images_urls, 'META (URL)', $id );
 		}
 	}
 }

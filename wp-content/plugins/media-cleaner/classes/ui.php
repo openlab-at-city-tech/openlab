@@ -67,6 +67,7 @@ class Meow_WPMC_UI {
 
 		// Search the references to the files
 		if ( !$originType ) {
+			$originType = "";
 			$paths = $this->core->get_paths_from_attachment( $post->ID );
 			foreach ( $paths as $path ) {
 				$originType = $this->core->reference_exists( $path, null );
@@ -77,11 +78,21 @@ class Meow_WPMC_UI {
 		}
 
 		if ( $originType ) {
+			$id = $originType;
+			$originType = preg_replace( '/\s*\[.*\]/', '', $originType );
+			$id = str_replace( $originType, '', $id );
+			$id = trim( $id, '[' );
+			echo "Used as: " . $originType . "<br />";
 			if ( array_key_exists( $originType, $this->foundTypes ) ) {
-				echo $this->foundTypes[ $originType ];
+				echo "Meaning: " . $this->foundTypes[ $originType ] . "<br />";
 			}
-			else {
-				echo "It seems to be used as: " . $originType;
+			if ( !empty( $id ) ) {
+				$id = trim( $id, ' []' );
+				$post = get_post( $id );
+				if ( $post ) {
+					echo "Used in: <a href='" . get_permalink( $id ) . "' target='_blank'>" . $post->post_title . "</a>";
+					echo " (<a href='" . get_edit_post_link( $id ) . "'>edit</a>)";
+				}
 			}
 			return;
 		}

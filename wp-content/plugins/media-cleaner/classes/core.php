@@ -859,6 +859,11 @@ class Meow_WPMC_Core {
 	// The references are actually not being added directly in the DB, they are being pushed
 	// into a cache ($this->refcache).
 	private function add_reference( $id, $url, $type, $origin = null, $extra = null ) {
+
+		if ( !empty( $origin ) ) {
+			$type = $type . " [$origin]";
+		}
+
 		if ( !empty( $id ) ) {
 			if ( !in_array( $id, $this->cached_ids ) ) {
 				array_push( $this->cached_ids, $id );
