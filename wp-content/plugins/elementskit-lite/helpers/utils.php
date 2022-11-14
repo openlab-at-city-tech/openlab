@@ -52,7 +52,9 @@ class Utils {
 			'abbr'                          => array(
 				'title' => array(),
 			),
-			'b'                             => array(),
+			'b'                             => array(
+                'class' => array(),
+            ),
 			'blockquote'                    => array(
 				'cite' => array(),
 			),
@@ -165,6 +167,7 @@ class Utils {
 				'width'           => true,
 				'height'          => true,
 				'viewbox'         => true, // <= Must be lower case!
+                'preserveaspectratio' => true,
 			),
 			'g'                             => array( 'fill' => true ),
 			'title'                         => array( 'title' => true ),

@@ -33,7 +33,7 @@ class ElementsKit_Widget_Progressbar extends Widget_Base {
     }
 
     public function get_help_url() {
-        return '';
+        return 'https://wpmet.com/doc/progress-bar/';
     }
 
     protected function register_controls() {
@@ -88,6 +88,9 @@ class ElementsKit_Widget_Progressbar extends Widget_Base {
                 'label'         => esc_html__('Title', 'elementskit-lite'),
                 'label_block'   => true,
                 'type'          => Controls_Manager::TEXT,
+                'dynamic' 		=> [
+                    'active' => true,
+                ],
                 'default'       => 'WordPress',
             ]
         );
@@ -97,6 +100,9 @@ class ElementsKit_Widget_Progressbar extends Widget_Base {
             [
                 'label'     => esc_html__('Percentage', 'elementskit-lite'),
                 'type'      => Controls_Manager::NUMBER,
+                'dynamic' 	=> [
+                    'active' => true,
+                ],
                 'min'       => 1,
                 'max'       => 100,
                 'step'      => 1,
@@ -124,6 +130,9 @@ class ElementsKit_Widget_Progressbar extends Widget_Base {
             [
                 'label'     => esc_html__('Animation Duration', 'elementskit-lite'),
                 'type'      => Controls_Manager::SLIDER,
+                'dynamic' 	=> [
+                    'active' => true,
+                ],
                 'size_units' => [ 'px'],
 				'range' => [
 					'px' => [

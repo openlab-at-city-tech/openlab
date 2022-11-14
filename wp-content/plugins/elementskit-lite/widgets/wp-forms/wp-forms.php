@@ -33,7 +33,7 @@ class ElementsKit_Widget_Wp_Forms extends Widget_Base {
 	}
 
     public function get_help_url() {
-        return '';
+        return 'https://wpmet.com/doc/wp-forms/';
     }
 
     protected function register_controls() {

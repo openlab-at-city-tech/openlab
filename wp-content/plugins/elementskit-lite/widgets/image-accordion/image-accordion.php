@@ -29,7 +29,7 @@ class ElementsKit_Widget_Image_Accordion extends Widget_Base {
     }
 
     public function get_help_url() {
-        return '';
+        return 'https://wpmet.com/doc/image-accordion/';
     }
 
     protected function register_controls() {
@@ -59,6 +59,9 @@ class ElementsKit_Widget_Image_Accordion extends Widget_Base {
                 [
                     'label'     => esc_html__( 'Background Image', 'elementskit-lite' ),
                     'type'      => Controls_Manager::MEDIA,
+					'dynamic'	=> [
+						'active' => true,
+					],
                     'default'   => [
                         'url' => Utils::get_placeholder_image_src(),
                         'id'    => -1
@@ -71,6 +74,9 @@ class ElementsKit_Widget_Image_Accordion extends Widget_Base {
                 [
                     'label'         => esc_html__('Title', 'elementskit-lite'),
                     'type'          => Controls_Manager::TEXT,
+					'dynamic'		=> [
+						'active' => true,
+					],
                     'label_block'   => true,
                     'default'       => esc_html__('Image accordion Title', 'elementskit-lite'),
                 ]
@@ -138,6 +144,9 @@ class ElementsKit_Widget_Image_Accordion extends Widget_Base {
                 [
                     'label'     => esc_html__('Wrap URL', 'elementskit-lite'),
                     'type'      => Controls_Manager::URL,
+					'dynamic'	=> [
+						'active' => true,
+					],
                     'condition' => [
                         'ekit_img_accordion_enable_wrap_link' => 'yes',
                     ],
@@ -162,6 +171,9 @@ class ElementsKit_Widget_Image_Accordion extends Widget_Base {
                 [
                     'label'         => esc_html__('Button Label', 'elementskit-lite'),
                     'type'          => Controls_Manager::TEXT,
+					'dynamic'		=> [
+						'active' => true,
+					],
                     'label_block'   => true,
                     'default'       => esc_html__('Read More','elementskit-lite'),
                     'condition'     => [
@@ -175,6 +187,9 @@ class ElementsKit_Widget_Image_Accordion extends Widget_Base {
                 [
                     'label'     => esc_html__('Button URL', 'elementskit-lite'),
                     'type'      => Controls_Manager::URL,
+					'dynamic'	=> [
+						'active' => true,
+					],
                     'condition' => [
                         'ekit_img_accordion_enable_button' => 'yes',
                     ],
@@ -228,6 +243,9 @@ class ElementsKit_Widget_Image_Accordion extends Widget_Base {
                 [
                     'label'         => esc_html__( 'Project Link', 'elementskit-lite' ),
                     'type'          => Controls_Manager::URL,
+					'dynamic'		=> [
+						'active' => true,
+					],
                     'placeholder'   => esc_html__( 'https://wpmet.com', 'elementskit-lite' ),
                     'condition'     => [
                         'ekit_img_accordion_enable_project_link' => 'yes'

@@ -33,7 +33,7 @@ class ElementsKit_Widget_Testimonial extends Widget_Base {
     }
 
     public function get_help_url() {
-        return '';
+        return 'https://wpmet.com/doc/how-to-create-testimonials-in-wordpress/';
     }
 
     protected function register_controls() {
@@ -296,30 +296,43 @@ class ElementsKit_Widget_Testimonial extends Widget_Base {
 		);
 
 		$repeater = new Repeater();
+
         $repeater->add_control(
             'client_name', [
                 'label' => esc_html__('Client Name', 'elementskit-lite'),
 				'type' => Controls_Manager::TEXT,
+                'dynamic' => [
+                    'active' => true,
+                ],
 				'default' => esc_html__('Testimonial #1', 'elementskit-lite'),
 				'label_block' => true,
             ]
         );
+
         $repeater->add_control(
             'designation', [
                 'label' => esc_html__('Designation', 'elementskit-lite'),
 				'type' => Controls_Manager::TEXT,
+                'dynamic' => [
+                    'active' => true,
+                ],
 				'label_block' => true,
 				'default' => esc_html__('Designation', 'elementskit-lite'),
             ]
         );
+
         $repeater->add_control(
             'review', [
 				'label' => esc_html__('Testimonial Review', 'elementskit-lite'),
 				'type' => Controls_Manager::TEXTAREA,
+                'dynamic' => [
+                    'active' => true,
+                ],
 				'label_block' => true,
 				'default' => esc_html__('Review Text', 'elementskit-lite'),
             ]
         );
+
         $repeater->add_control(
             'rating', [
 				'label' => esc_html__('Testimonial Rating', 'elementskit-lite'),
@@ -341,6 +354,9 @@ class ElementsKit_Widget_Testimonial extends Widget_Base {
 			[
 				'label'			=> esc_html__( 'Link', 'elementskit-lite' ),
 				'type'			=> Controls_Manager::URL,
+				'dynamic'		=> [
+					'active' => true,
+				],
 				'placeholder'	=> esc_url( 'https://wpmet.com', 'elementskit-lite' ),
 			]
 		);
@@ -349,6 +365,9 @@ class ElementsKit_Widget_Testimonial extends Widget_Base {
             'client_photo', [
 				'label' => esc_html__('Client Avatar', 'elementskit-lite'),
 				'type' => Controls_Manager::MEDIA,
+				'dynamic' => [
+					'active' => true,
+				],
 				'default' => [
 					'url' => Utils::get_placeholder_image_src(),
 					'id'    => -1
@@ -356,16 +375,21 @@ class ElementsKit_Widget_Testimonial extends Widget_Base {
 				'separator'	=> 'before',
             ]
         );
+
         $repeater->add_control(
             'client_logo', [
 				'label' => esc_html__('Logo', 'elementskit-lite'),
 				'type' => Controls_Manager::MEDIA,
+				'dynamic' => [
+					'active' => true,
+				],
 				'default' => [
 					'url' => Utils::get_placeholder_image_src(),
 					'id'    => -1
 				],
             ]
         );
+
         $repeater->add_control(
             'use_hover_logo', [
 				'label' => esc_html__( 'Display different logo on hover?', 'elementskit-lite' ),
@@ -376,10 +400,14 @@ class ElementsKit_Widget_Testimonial extends Widget_Base {
 				'separator' => 'before',
             ]
         );
+
         $repeater->add_control(
             'client_logo_active', [
 				'label' => esc_html__('Logo Active', 'elementskit-lite'),
 				'type' => Controls_Manager::MEDIA,
+				'dynamic' => [
+					'active' => true,
+				],
 				'default' => [
 					'url' => Utils::get_placeholder_image_src(),
 					'id'    => -1
@@ -387,6 +415,18 @@ class ElementsKit_Widget_Testimonial extends Widget_Base {
 				'condition' => ['use_hover_logo' => 'yes'],
             ]
         );
+
+		$repeater->add_control(
+            'ekit_testimonial_active', [
+				'label' => esc_html__( 'Active Testimonial?', 'elementskit-lite' ),
+				'type' => Controls_Manager::SWITCHER,
+				'label_on' => esc_html__( 'Yes', 'elementskit-lite' ),
+				'label_off' => esc_html__( 'No', 'elementskit-lite' ),
+				'return_value' => 'yes',
+				'default' => '',
+            ]
+        );
+
 		$repeater->add_group_control(
             Group_Control_Background::get_type(),
             [
@@ -396,6 +436,7 @@ class ElementsKit_Widget_Testimonial extends Widget_Base {
                 'selector' => '{{WRAPPER}} {{CURRENT_ITEM}}',
             ]
         );
+
         $this->add_control(
             'ekit_testimonial_data',
             [
@@ -748,12 +789,38 @@ class ElementsKit_Widget_Testimonial extends Widget_Base {
 						]
 					);
 				$this->end_controls_tab();
+
+				$this->start_controls_tab(
+					'ekit_testimonial_wrapper_tab_active',
+					[
+						'label' => esc_html__( 'Active', 'elementskit-lite' ),
+					]
+				);
+
+				$this->add_group_control(
+					Group_Control_Background::get_type(),
+					[
+						'name' => 'ekit_testimonial_active_layout_background',
+						'label' => esc_html__( 'Background', 'elementskit-lite' ),
+						'types' => [ 'classic', 'gradient' ],
+						'selector' => '{{WRAPPER}} .elementskit-single-testimonial-slider.testimonial-active',
+					]
+				);
+
+				$this->add_group_control(
+					Group_Control_Box_Shadow::get_type(), [
+						'name'      => 'ekit_testimonial_active_layout_shadow',
+						'selector'  => '{{WRAPPER}} .elementskit-single-testimonial-slider.testimonial-active',
+					]
+				);
+
+				$this->end_controls_tab();
 			$this->end_controls_tabs();
 		$this->end_controls_section();
 
 		$this->start_controls_section(
 		    'ekit_testimonial_section_wraper_style', [
-			    'label'	 => esc_html__( 'Wraper Content Style', 'elementskit-lite' ),
+			    'label'	 => esc_html__( 'Wrapper Content Style', 'elementskit-lite' ),
 				'tab'	 => Controls_Manager::TAB_STYLE,
 		    ]
 		);
@@ -767,15 +834,15 @@ class ElementsKit_Widget_Testimonial extends Widget_Base {
 				'options' => [
 					'flex-start'    => [
 						'title' =>esc_html__( 'Top', 'elementskit-lite' ),
-						'icon' => 'fa fa-caret-up',
+						'icon' => 'eicon-sort-up',
 					],
 					'center' => [
 						'title' =>esc_html__( 'Center', 'elementskit-lite' ),
-						'icon' => 'fa fa-align-center',
+						'icon' => 'eicon-text-align-center',
 					],
 					'flex-end' => [
 						'title' =>esc_html__( 'Bottom', 'elementskit-lite' ),
-						'icon' => 'fa fa-caret-down',
+						'icon' => 'eicon-sort-down',
 					],
 				],
 				'selectors' => [
@@ -893,10 +960,11 @@ class ElementsKit_Widget_Testimonial extends Widget_Base {
 		$this->add_control(
 			'ekit_testimonial_description_active_color',
 			[
-				'label' => esc_html__( 'Hover Color', 'elementskit-lite' ),
+				'label' => esc_html__( 'Hover & Active Color', 'elementskit-lite' ),
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .elementskit-single-testimonial-slider:hover  .elementskit-commentor-content > p' => 'color: {{VALUE}}',
+					'{{WRAPPER}} .elementskit-single-testimonial-slider.testimonial-active  .elementskit-commentor-content > p' => 'color: {{VALUE}}',
 				],
 			]
 		);
@@ -953,10 +1021,11 @@ class ElementsKit_Widget_Testimonial extends Widget_Base {
 		$this->add_control(
 			'ekit_testimonial_rating_hover_color',
 			[
-				'label'		=> esc_html__( 'Active Color', 'elementskit-lite' ),
+				'label'		=> esc_html__( 'Hover & Active Color', 'elementskit-lite' ),
 				'type'		=> Controls_Manager::COLOR,
 				'selectors'	=> [
 					'{{WRAPPER}} .elementskit-single-testimonial-slider:hover .elementskit-stars > li > a, {{WRAPPER}} .elementskit-single-testimonial-slider:hover .elementskit-stars > li > span' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .elementskit-single-testimonial-slider.testimonial-active .elementskit-stars > li > a, {{WRAPPER}} .elementskit-single-testimonial-slider.testimonial-active .elementskit-stars > li > span' => 'color: {{VALUE}};',
 				],
 			]
 		);
@@ -992,6 +1061,18 @@ class ElementsKit_Widget_Testimonial extends Widget_Base {
 				],
 				'selectors' => [
 					'{{WRAPPER}} .elementskit-stars > li:not(:last-child)' => 'margin-right: {{SIZE}}{{UNIT}};',
+				],
+			]
+		);
+
+		$this->add_responsive_control(
+			'ekit_testimonial_review_ratting_padding',
+			[
+				'label' => esc_html__( 'Review Padding', 'elementskit-lite' ),
+				'type' => Controls_Manager::DIMENSIONS,
+				'size_units' => [ 'px', 'em' ],
+				'selectors' => [
+					'{{WRAPPER}} .elementskit-stars' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
 		);
@@ -1047,6 +1128,19 @@ class ElementsKit_Widget_Testimonial extends Widget_Base {
 		    ]
 	    );
 
+		$this->add_group_control(
+			Group_Control_Background::get_type(),
+			[
+				'name' => 'ekit_testimonial_section_wathermark_icon_badge_background',
+				'label' => esc_html__( 'Background', 'elementskit-lite' ),
+				'types' => [ 'classic', 'gradient' ],
+				'selector' => '{{WRAPPER}} .elementskit-commentor-content > i, {{WRAPPER}} .elementskit-icon-content > i,{{WRAPPER}} .elementskit-watermark-icon > i, {{WRAPPER}} .elementskit-watermark-icon svg',
+				'condition' => [
+					'ekit_testimonial_style!' => 'style6'
+				]
+			]
+		);
+
 		$this->end_controls_tab();
 
         $this->start_controls_tab(
@@ -1063,13 +1157,67 @@ class ElementsKit_Widget_Testimonial extends Widget_Base {
                 'type'       => Controls_Manager::COLOR,
                 'selectors'  => [
                     '{{WRAPPER}} .elementskit-single-testimonial-slider:hover .elementskit-watermark-icon > i' => 'color: {{VALUE}};',
-                    '{{WRAPPER}} .elementskit-testimonial-slider-block-style .elementskit-commentor-content > i' => 'color: {{VALUE}};',
-                    '{{WRAPPER}} .elementskit-testimonial-slider-block-style-two .elementskit-icon-content > i' => 'color: {{VALUE}};',
-					'{{WRAPPER}} .elementskit-testimonial-slider-block-style-three .elementskit-icon-content > i' => 'color: {{VALUE}};',
+                    '{{WRAPPER}} .elementskit-testimonial-slider-block-style:hover .elementskit-commentor-content > i' => 'color: {{VALUE}};',
+                    '{{WRAPPER}} .elementskit-testimonial-slider-block-style-two:hover .elementskit-icon-content > i' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .elementskit-testimonial-slider-block-style-three:hover .elementskit-icon-content > i' => 'color: {{VALUE}};',
 					'{{WRAPPER}} .elementskit-single-testimonial-slider:hover .elementskit-watermark-icon svg path'	=> 'stroke: {{VALUE}}; fill: {{VALUE}};',
+                    '{{WRAPPER}} .elementskit-single-testimonial-slider.testimonial-active:hover .elementskit-watermark-icon > i' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .elementskit-single-testimonial-slider.testimonial-active:hover .elementskit-watermark-icon svg path'	=> 'stroke: {{VALUE}}; fill: {{VALUE}};',
+
+
                 ],
             ]
         );
+
+		$this->add_group_control(
+			Group_Control_Background::get_type(),
+			[
+				'name' => 'ekit_testimonial_section_wathermark_icon_badge_hover_background',
+				'label' => esc_html__( 'Background', 'elementskit-lite' ),
+				'types' => [ 'classic', 'gradient' ],
+				'selector' => '{{WRAPPER}}.elementskit-single-testimonial-slider:hover .elementskit-commentor-content > i, {{WRAPPER}} .elementskit-single-testimonial-slider:hover .elementskit-icon-content > i,{{WRAPPER}} .elementskit-single-testimonial-slider:hover .elementskit-watermark-icon > i, {{WRAPPER}} .elementskit-single-testimonial-slider:hover .elementskit-watermark-icon svg,
+				
+				{{WRAPPER}}.elementskit-single-testimonial-slider.testimonial-active:hover .elementskit-commentor-content > i, {{WRAPPER}} .elementskit-single-testimonial-slider.testimonial-active:hover .elementskit-icon-content > i,{{WRAPPER}} .elementskit-single-testimonial-slider.testimonial-active:hover .elementskit-watermark-icon > i, {{WRAPPER}} .elementskit-single-testimonial-slider.testimonial-active:hover .elementskit-watermark-icon svg
+				',
+				'condition' => [
+					'ekit_testimonial_style!' => 'style6'
+				]
+			]
+		);
+
+		$this->end_controls_tab();
+
+        $this->start_controls_tab(
+            'ekit_testimonial_client_watermark_hover_color_tab',
+            [
+                'label' => esc_html__( 'Active', 'elementskit-lite' ),
+            ]
+		);
+
+		$this->add_responsive_control(
+            'ekit_testimonial_section_wathermark_hover_color',
+            [
+                'label'      => esc_html__( 'Color', 'elementskit-lite' ),
+                'type'       => Controls_Manager::COLOR,
+                'selectors'  => [
+                    '{{WRAPPER}} .elementskit-single-testimonial-slider.testimonial-active .elementskit-watermark-icon > i' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .elementskit-single-testimonial-slider.testimonial-active .elementskit-watermark-icon svg path'	=> 'stroke: {{VALUE}}; fill: {{VALUE}};',
+                ],
+            ]
+        );
+
+		$this->add_group_control(
+			Group_Control_Background::get_type(),
+			[
+				'name' => 'ekit_testimonial_section_wathermark_icon_badge_active_background',
+				'label' => esc_html__( 'Background', 'elementskit-lite' ),
+				'types' => [ 'classic', 'gradient' ],
+				'selector' => '{{WRAPPER}} .elementskit-single-testimonial-slider.testimonial-active .elementskit-commentor-content > i, {{WRAPPER}} .elementskit-single-testimonial-slider.testimonial-active .elementskit-icon-content > i, {{WRAPPER}} .elementskit-single-testimonial-slider.testimonial-active .elementskit-watermark-icon > i, {{WRAPPER}} .elementskit-single-testimonial-slider.testimonial-active .elementskit-watermark-icon svg',
+				'condition' => [
+					'ekit_testimonial_style!' => 'style6'
+				]
+			]
+		);
 
 		$this->end_controls_tab();
 
@@ -1137,19 +1285,6 @@ class ElementsKit_Widget_Testimonial extends Widget_Base {
 					'{{WRAPPER}} .elementskit-watermark-icon > i' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 					'{{WRAPPER}} .elementskit-watermark-icon svg'	=> 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
-			]
-		);
-
-		$this->add_group_control(
-			Group_Control_Background::get_type(),
-			[
-				'name' => 'ekit_testimonial_section_wathermark_icon_badge_background',
-				'label' => esc_html__( 'Background', 'elementskit-lite' ),
-				'types' => [ 'classic', 'gradient' ],
-				'selector' => '{{WRAPPER}} .elementskit-commentor-content > i, {{WRAPPER}} .elementskit-icon-content > i,{{WRAPPER}} .elementskit-watermark-icon > i, {{WRAPPER}} .elementskit-watermark-icon svg',
-				'condition' => [
-					'ekit_testimonial_style!' => 'style6'
-				]
 			]
 		);
 
@@ -1230,7 +1365,8 @@ class ElementsKit_Widget_Testimonial extends Widget_Base {
 				'label' => esc_html__( 'Title Separetor', 'elementskit-lite' ),
 				'tab' => Controls_Manager::TAB_STYLE,
 				'condition' => [
-					'ekit_testimonial_title_separetor' => 'yes'
+					'ekit_testimonial_title_separetor' => 'yes',
+					'ekit_testimonial_style' => ['style1', 'style2'],
 				]
 			]
 		);
@@ -1380,10 +1516,11 @@ class ElementsKit_Widget_Testimonial extends Widget_Base {
 		// Client Name Color
 		$this->add_control(
 			'ekit_testimonial_client_name_active_color', [
-				'label'		 =>esc_html__( 'Hover Color', 'elementskit-lite' ),
+				'label'		 =>esc_html__( 'Hover & Active Color', 'elementskit-lite' ),
 				'type'		 => Controls_Manager::COLOR,
 				'selectors'	 => [
-					'{{WRAPPER}} .elementskit-single-testimonial-slider:hover .elementskit-author-name' => 'color: {{VALUE}};'
+					'{{WRAPPER}} .elementskit-single-testimonial-slider:hover .elementskit-author-name' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .elementskit-single-testimonial-slider.testimonial-active .elementskit-author-name' => 'color: {{VALUE}};'
 				],
 			]
 		);
@@ -1440,13 +1577,14 @@ class ElementsKit_Widget_Testimonial extends Widget_Base {
 		    ]
 	    );
 
-		// Designation Color
+		// Designation Hover Color
 	    $this->add_control(
 		    'ekit_testimonial_designation_active_color', [
-			    'label'		 =>esc_html__( 'Hover Color', 'elementskit-lite' ),
+			    'label'		 =>esc_html__( 'Hover & Active Color', 'elementskit-lite' ),
 			    'type'		 => Controls_Manager::COLOR,
 			    'selectors'	 => [
-				    '{{WRAPPER}} .elementskit-single-testimonial-slider:hover .elementskit-author-des' => 'color: {{VALUE}};'
+				    '{{WRAPPER}} .elementskit-single-testimonial-slider:hover .elementskit-author-des' => 'color: {{VALUE}};',
+				    '{{WRAPPER}} .elementskit-single-testimonial-slider.testimonial-active .elementskit-author-des' => 'color: {{VALUE}};'
 			    ],
 		    ]
 	    );
@@ -2268,14 +2406,6 @@ class ElementsKit_Widget_Testimonial extends Widget_Base {
 
         $testimonials = isset($ekit_testimonial_data) ? $ekit_testimonial_data : [];
 		$style = isset($ekit_testimonial_style) ? $ekit_testimonial_style : 'default';
-		switch ($ekit_testimonial_style) {
-			case 'default':
-				$wrapper_class = "elementskit-default-testimonial";
-				break;
-			default:
-				$wrapper_class = "elementskit-default-testimonial";
-				break;
-		}
 
 		if (is_array($testimonials) && !empty($testimonials)):
 			require Handler::get_dir() . 'style/'.$style.'.php';

@@ -29,7 +29,7 @@ class ElementsKit_Widget_Dual_Button extends Widget_Base {
     }
 
     public function get_help_url() {
-        return '';
+        return 'https://wpmet.com/doc/dual-button/';
     }
 
     protected function register_controls() {

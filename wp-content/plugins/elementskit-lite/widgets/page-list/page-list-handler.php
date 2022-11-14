@@ -15,7 +15,7 @@ class ElementsKit_Widget_Page_List_Handler extends \ElementsKit_Lite\Core\Handle
 
 
 	static function get_icon() {
-		return 'eicon-bullet-list ekit-widget-icon ';
+		return 'ekit ekit-widget-icon ekit-page-list';
 	}
 
 

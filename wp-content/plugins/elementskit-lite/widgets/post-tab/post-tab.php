@@ -33,7 +33,7 @@ class ElementsKit_Widget_Post_Tab extends Widget_Base {
     }
 
     public function get_help_url() {
-        return '';
+        return 'https://wpmet.com/doc/how-to-add-post-tab-in-elementor/';
     }
 
     protected function register_controls() {
@@ -434,7 +434,57 @@ class ElementsKit_Widget_Post_Tab extends Widget_Base {
                 'default' => 'left',
             ]
 		);
-		
+		$this->end_controls_section();
+
+		$this->start_controls_section(
+			'title_style',
+			[
+				'label' => esc_html__( 'Title', 'elementskit-lite' ),
+				'tab'   => Controls_Manager::TAB_STYLE
+			]
+		);
+			$this->add_group_control(
+				\Elementor\Group_Control_Typography::get_type(),
+				[
+					'name' 		=> 'title_font',
+					'label' 	=> esc_html__( 'Typography', 'elementskit-lite' ),
+					'selector' 	=> '{{WRAPPER}} .tab__post--title',
+				]
+			);
+			$this->add_control(
+				'title_color_normal',
+				[
+					'label' 	=> esc_html__( 'Color', 'elementskit-lite' ),
+					'type' 		=> \Elementor\Controls_Manager::COLOR,
+					'default' => 'inherit',
+					'selectors' => [
+						'{{WRAPPER}} .tab__post--title > a' => 'color: {{VALUE}}; transition: all 0.3s ease;',
+					],
+				]
+			);
+			$this->add_control(
+				'title_color_hover',
+				[
+					'label'		=> esc_html__( 'Hover Color', 'elementskit-lite' ),
+					'type' 		=> \Elementor\Controls_Manager::COLOR,
+					'selectors' => [
+						'{{WRAPPER}} .tab__post__single--item:hover .tab__post--title > a' => 'color: {{VALUE}}',
+					],
+				]
+			);
+
+			$this->add_responsive_control(
+				'title_margin',
+				[
+					'label' 	 => esc_html__( 'Margin', 'elementskit-lite' ),
+					'type' 		 => Controls_Manager::DIMENSIONS,
+					'size_units' => [ 'px', '%', 'em' ],
+					'selectors'  => [
+						'{{WRAPPER}} .tab__post--title' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					],
+				]
+			);
+
 		$this->end_controls_section();
 
 		$this->insert_pro_message();

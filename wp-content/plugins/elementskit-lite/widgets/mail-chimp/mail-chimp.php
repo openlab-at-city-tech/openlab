@@ -28,7 +28,7 @@ class ElementsKit_Widget_Mail_Chimp extends Widget_Base {
     }
 
     public function get_help_url() {
-        return '';
+        return 'https://wpmet.com/doc/mailchimp-3/';
     }
 
 	public function __get_lists(){
@@ -107,6 +107,10 @@ class ElementsKit_Widget_Mail_Chimp extends Widget_Base {
             [
                 'label' => esc_html__( 'Opt-in Success Message', 'elementskit-lite' ),
                 'type' => Controls_Manager::TEXT,
+                'dynamic' => [
+                    'active' => true,
+                ],
+				'label_block' => true,
                 'default' => esc_html__( 'Please check your mail and confirm subscribe', 'elementskit-lite' ),
                 'placeholder' => esc_html__( 'Type your title here', 'elementskit-lite' ),
                 'condition' => [
@@ -140,6 +144,9 @@ class ElementsKit_Widget_Mail_Chimp extends Widget_Base {
             [
                 'label' => esc_html__( 'Label', 'elementskit-lite' ),
                 'type' => Controls_Manager::TEXT,
+                'dynamic' => [
+                    'active' => true,
+                ],
 				'placeholder' => esc_html__( 'First name', 'elementskit-lite' ),
 				'label_block'	 => false,
 				'condition' => [
@@ -152,6 +159,9 @@ class ElementsKit_Widget_Mail_Chimp extends Widget_Base {
             [
                 'label' => esc_html__( 'Placeholder', 'elementskit-lite' ),
                 'type' => Controls_Manager::TEXT,
+                'dynamic' => [
+                    'active' => true,
+                ],
 				'placeholder' => esc_html__( 'Your first name', 'elementskit-lite' ),
 				'label_block'	 => false,
 				'condition' => [
@@ -233,6 +243,9 @@ class ElementsKit_Widget_Mail_Chimp extends Widget_Base {
             [
                 'label' => esc_html__( 'Label', 'elementskit-lite' ),
                 'type' => Controls_Manager::TEXT,
+                'dynamic' => [
+                    'active' => true,
+                ],
 				'placeholder' => esc_html__( 'Last name:', 'elementskit-lite' ),
 				'label_block'	 => false,
 				'condition' => [
@@ -245,6 +258,9 @@ class ElementsKit_Widget_Mail_Chimp extends Widget_Base {
             [
                 'label' => esc_html__( 'Placeholder', 'elementskit-lite' ),
                 'type' => Controls_Manager::TEXT,
+                'dynamic' => [
+                    'active' => true,
+                ],
 				'placeholder' => esc_html__( 'Your last name', 'elementskit-lite' ),
 				'label_block'	 => false,
 				'condition' => [
@@ -326,6 +342,9 @@ class ElementsKit_Widget_Mail_Chimp extends Widget_Base {
             [
                 'label' => esc_html__( 'Label', 'elementskit-lite' ),
                 'type' => Controls_Manager::TEXT,
+                'dynamic' => [
+                    'active' => true,
+                ],
 				'placeholder' => esc_html__( 'Phone', 'elementskit-lite' ),
 				'label_block'	 => false,
 				'condition' => [
@@ -338,6 +357,9 @@ class ElementsKit_Widget_Mail_Chimp extends Widget_Base {
             [
                 'label' => esc_html__( 'Placeholder', 'elementskit-lite' ),
                 'type' => Controls_Manager::TEXT,
+                'dynamic' => [
+                    'active' => true,
+                ],
 				'placeholder' => esc_html__( 'Your phone No', 'elementskit-lite' ),
 				'label_block'	 => false,
 				'condition' => [
@@ -407,6 +429,9 @@ class ElementsKit_Widget_Mail_Chimp extends Widget_Base {
             [
                 'label' => esc_html__( 'Label', 'elementskit-lite' ),
                 'type' => Controls_Manager::TEXT,
+                'dynamic' => [
+                    'active' => true,
+                ],
 				'placeholder' => esc_html__( 'Email address', 'elementskit-lite' ),
 				'label_block'	 => false,
 
@@ -417,6 +442,9 @@ class ElementsKit_Widget_Mail_Chimp extends Widget_Base {
             [
                 'label' => esc_html__( 'Placeholder', 'elementskit-lite' ),
                 'type' => Controls_Manager::TEXT,
+                'dynamic' => [
+                    'active' => true,
+                ],
 				'placeholder' 	 => esc_html__( 'Your email address', 'elementskit-lite' ),
 				'label_block'	 => false,
             ]
@@ -478,6 +506,9 @@ class ElementsKit_Widget_Mail_Chimp extends Widget_Base {
             [
                 'label' => esc_html__( 'Submit Button Text', 'elementskit-lite' ),
                 'type' => Controls_Manager::TEXT,
+                'dynamic' => [
+                    'active' => true,
+                ],
                 'default' => esc_html__( 'Sign Up', 'elementskit-lite' ),
 				'label_block'	 => false,
             ]
@@ -550,6 +581,9 @@ class ElementsKit_Widget_Mail_Chimp extends Widget_Base {
 			[
 				'label' => __( 'Success Message', 'elementskit-lite' ),
 				'type' => Controls_Manager::TEXT,
+                'dynamic' => [
+                    'active' => true,
+                ],
 				'default' => __( 'Successfully listed this email', 'elementskit-lite' ),
 				'placeholder' => __( 'Type your title here', 'elementskit-lite' ),
 			]

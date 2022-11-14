@@ -29,7 +29,7 @@ class ElementsKit_Widget_Button extends Widget_Base {
     }
 
     public function get_help_url() {
-        return '';
+        return 'https://wpmet.com/doc/button/';
     }
 
     protected function register_controls() {
@@ -151,6 +151,9 @@ class ElementsKit_Widget_Button extends Widget_Base {
 		    [
 			    'label' => esc_html__( 'Class', 'elementskit-lite' ),
 			    'type' => Controls_Manager::TEXT,
+				'dynamic' => [
+					'active' => true,
+				],
 			    'placeholder' => esc_html__( 'Class Name', 'elementskit-lite' ),
 		    ]
 	    );
@@ -160,6 +163,9 @@ class ElementsKit_Widget_Button extends Widget_Base {
 		    [
 			    'label' => esc_html__( 'id', 'elementskit-lite' ),
 			    'type' => Controls_Manager::TEXT,
+				'dynamic' => [
+					'active' => true,
+				],
 			    'placeholder' => esc_html__( 'ID', 'elementskit-lite' ),
 		    ]
 	    );

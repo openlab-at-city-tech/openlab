@@ -28,7 +28,7 @@ class ElementsKit_Widget_Back_To_Top extends Widget_Base {
     }
     
     public function get_help_url() {
-        return '';
+        return 'https://wpmet.com/doc/back-to-top/';
     }
 
     protected function register_controls() {
@@ -84,9 +84,12 @@ class ElementsKit_Widget_Back_To_Top extends Widget_Base {
 			[
 				'label'       => esc_html__( 'Button Text', 'elementskit-lite' ),
 				'type'        => Controls_Manager::TEXT,
+				'dynamic'     => [
+					'active' => true,
+				],
 				'default'     => esc_html__( 'Top', 'elementskit-lite' ),
 				'placeholder' => esc_html__( 'Type button label here', 'elementskit-lite' ),
-            'condition'	=> [
+            	'condition'   => [
 					'ekit_button_appearance' => 'text_only'
 				]
 			]

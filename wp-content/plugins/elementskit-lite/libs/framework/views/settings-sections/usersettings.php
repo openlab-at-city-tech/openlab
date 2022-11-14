@@ -494,7 +494,7 @@ $pro_active = ( in_array( 'elementskit/elementskit.php', apply_filters( 'active_
 							array(
 								'type'        => 'text',
 								'name'        => 'user_data[instragram][token_expire]',
-								'label'       => esc_html__( 'Token expires time', 'elementskit-lite' ),
+								'label'       => esc_html__( 'Token Expiry Time', 'elementskit-lite' ),
 								'placeholder' => 'This is needed for automatically refreshing the token...',
 								'value'       => $insta_time,
 							)

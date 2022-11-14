@@ -1,13 +1,10 @@
-<div class="attr-modal attr-fade" id="elementskit_headerfooter_modal" tabindex="-1" role="dialog"
-	aria-labelledby="elementskit_headerfooter_modalLabel">
+<div class="attr-modal attr-fade" id="elementskit_headerfooter_modal" tabindex="-1" role="dialog" aria-labelledby="elementskit_headerfooter_modalLabel">
 	<div class="attr-modal-dialog attr-modal-dialog-centered" role="document">
-	<form action="" method="get" id="elementskit-template-modalinput-form" data-open-editor="0"
-			data-editor-url="<?php echo esc_url(get_admin_url()); ?>" data-nonce="<?php echo esc_attr(wp_create_nonce( 'wp_rest' )); ?>">
+		<form action="" method="get" id="elementskit-template-modalinput-form" data-open-editor="0" data-editor-url="<?php echo esc_url(get_admin_url()); ?>" data-nonce="<?php echo esc_attr(wp_create_nonce( 'wp_rest' )); ?>">
 			<!-- <input type="hidden" name="post_author" value ="<?php //echo get_current_user_id(); ?>"> -->
 			<div class="attr-modal-content">
 				<div class="attr-modal-header">
-					<button type="button" class="attr-close" data-dismiss="modal" aria-label="Close"><span
-							aria-hidden="true">&times;</span></button>
+					<button type="button" class="attr-close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 					<h4 class="attr-modal-title" id="elementskit_headerfooter_modalLabel"><?php esc_html_e( 'Template Settings', 'elementskit-lite' ); ?></h4>
 				</div>
 				<div class="attr-modal-body" id="elementskit_headerfooter_modal_body">
@@ -39,14 +36,12 @@
 						<div class="ekit-template-modalinput-condition_singular-container">
 							<div class="ekit-input-group">
 								<label class="attr-input-label"></label>
-								<select name="condition_singular"
-									class="ekit-template-modalinput-condition_singular attr-form-control">
+								<select name="condition_singular" class="ekit-template-modalinput-condition_singular attr-form-control">
 									<option value="all"><?php esc_html_e( 'All Singulars (Only Pro)', 'elementskit-lite' ); ?></option>
 									<option value="front_page"><?php esc_html_e( 'Front Page (Only Pro)', 'elementskit-lite' ); ?></option>
 									<option value="all_posts"><?php esc_html_e( 'All Posts (Only Pro)', 'elementskit-lite' ); ?></option>
 									<option value="all_pages"><?php esc_html_e( 'All Pages (Only Pro)', 'elementskit-lite' ); ?></option>
-									<option value="selective"><?php esc_html_e( 'Selective Singular (Only Pro)', 'elementskit-lite' ); ?>
-									</option>
+									<option value="selective"><?php esc_html_e( 'Selective Singular (Only Pro)', 'elementskit-lite' ); ?></option>
 									<option value="404page"><?php esc_html_e( '404 Page (Only Pro)', 'elementskit-lite' ); ?></option>
 								</select>
 							</div>
@@ -61,7 +56,6 @@
 							</div>
 							<br>
 						</div>
-
 
 						<div class="ekit-switch-group">
 							<label class="attr-input-label"><?php esc_html_e( 'Activate/Deactivate:', 'elementskit-lite' ); ?></label>

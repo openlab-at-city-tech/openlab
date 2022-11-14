@@ -99,6 +99,11 @@ class Module_List extends \ElementsKit_Lite\Core\Config_List {
 					'package' => 'pro-disabled',
 					'title'   => 'Google Sheet For Elementor Pro Form',
 				),
+				'masking' => array(
+					'slug'    => 'masking',
+					'package' => 'pro-disabled',
+					'title'   => 'Masking',
+				),
 			)
 		);
 	}

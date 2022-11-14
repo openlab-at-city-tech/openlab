@@ -18,16 +18,17 @@ if ( ! class_exists( '\Wpmet\Libs\Pro_Awareness' ) ) :
 		private $default_grid_link      = 'https://wpmet.com/support-ticket';
 		private $default_grid_title     = 'Support Center';
 		private $default_grid_thumbnail = '';
-		private $default_grid_desc      = '';
+		private $default_grid_desc      = 'Our experienced support team is ready to resolve your issues any time.';
 		private $pro_link_conf          = array();
 
 		private $grids            = array();
 		private $action_links     = array();
 		private $row_meta_links   = array();
 		private $parent_menu_text = 'Get Help';
+		private $products = array();
 
 
-		protected $script_version = '1.0.3';
+		protected $script_version = '1.2.0';
 
 		/**
 		 * Get version of this script
@@ -164,6 +165,20 @@ if ( ! class_exists( '\Wpmet\Libs\Pro_Awareness' ) ) :
 		}
 
 		/**
+		 *  Set wpmet products
+		 */
+		public function set_products( $product = array() ) {			
+			$this->products[] = array(
+				'url' => empty( $product['url'] ) ? '' : esc_url( $product['url'] ),
+				'title'       => empty( $product['title'] ) ? esc_html__( 'Default Title', 'elementskit-lite' ) : $product['title'],
+				'thumbnail'   => empty( $product['thumbnail'] ) ? '' : esc_url( $product['thumbnail'] ),
+				'description' => empty( $product['description'] ) ? '' : $product['description'],
+			);
+
+			return $this;
+		}
+
+		/**
 		 * @deprecated This method will be removed
 		 */
 		public function set_grid( $conf = array() ) {
@@ -222,7 +237,7 @@ if ( ! class_exists( '\Wpmet\Libs\Pro_Awareness' ) ) :
 
 									<h4 class="wpmet_pro_a_grid_title"><?php echo esc_attr( $grid['title'] ); ?></h4>
 									<?php if ( ! empty( $grid['description'] ) ) { ?>
-										<p class="wpmet_pro_a_description"><?php echo esc_html( $grid['description'] ); ?></p>
+										<p class="wpmet_pro_a_description"><?php esc_html_e( $grid['description'],'elementskit-lite' ); ?></p>
 										<!-- // description -->
 									<?php } ?>
 									<!-- // title -->
@@ -232,6 +247,22 @@ if ( ! class_exists( '\Wpmet\Libs\Pro_Awareness' ) ) :
 						<?php
 					} 
 					?>
+				</div>
+
+				<div class="wpmet-products">
+					<div class="wpmet-products__header">
+						<h1><?php esc_html_e('Take your website to the next level','elementskit-lite'); ?></h1>
+						<p><?php esc_html_e('We have some plugins you can install to get most from Wordpress.','elementskit-lite'); ?><br> <?php echo esc_html('These are absolute FREE to use.','elementskit-lite'); ?></p>
+					</div>
+					<div class="wpmet-products__content">
+						<?php foreach ( $this->products as $product ) : ?>
+							<a title="<?php echo esc_attr($product['title']); ?>" class="help-card" href="<?php echo esc_url( $product['url'] ); ?>" target="_blank">
+								<label>
+									<img src="<?php echo esc_attr( $product['thumbnail'] ); ?>" alt="Thumbnail">
+								</label>
+							<span><?php esc_html_e($product['description'],'elementskit-lite'); ?></span></a>
+						<?php endforeach; ?>
+					</div>
 				</div>
 
 				<?php do_action( $this->text_domain . '/pro_awareness/after_grid_contents' ); ?>
@@ -251,7 +282,7 @@ if ( ! class_exists( '\Wpmet\Libs\Pro_Awareness' ) ) :
 
             <style>
             .wpmet_pro_a-grid-container {
-                max-width: 1140px;
+                max-width: 1350px;
                 width: 100%;
                 padding-right: 15px;
                 padding-left: 15px;
@@ -259,41 +290,27 @@ if ( ! class_exists( '\Wpmet\Libs\Pro_Awareness' ) ) :
                 margin-top: 50px;
             }
         
-            .wpmet_pro_a-grid-inner {
-                margin-bottom: 20px;
+            .wpmet_pro_a-grid-inner .wpmet_pro_a_wrapper {
+                padding: 35px 50px;
+                display: block;
+            }
+    
+            .wpmet_pro_a-row {
+                display: grid;
+				grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+				grid-gap: 30px;
+            }
+        
+            .wpmet_pro_a-grid {
                 background-color: #fff;
                 border-radius: 4px;
                 box-shadow: 0px 2px 5px 10px rgba(0,0,0,.01);
                 transition: all .4s ease;
             }
-            .wpmet_pro_a-grid-inner .wpmet_pro_a_wrapper {
-                padding: 35px 50px;
-                display: block;
-            }
-        
-            .wpmet_pro_a-grid-inner:hover {
+
+			.wpmet_pro_a-grid:hover {
                 transform: translateY(-3px);
                 box-shadow: 0px 10px 15px 15px rgba(0,0,0,.05);
-            }
-        
-            .wpmet_pro_a-row {
-                display: -webkit-box;
-                display: -ms-flexbox;
-                display: flex;
-                -ms-flex-wrap: wrap;
-                flex-wrap: wrap;
-                margin-right: -15px;
-                margin-left: -15px;
-                box-sizing: border-box;
-            }
-        
-            .wpmet_pro_a-grid {
-                padding-right: 15px;
-                padding-left: 15px;
-                position: relative;
-                width: 100%;
-                min-height: 1px;
-                box-sizing: border-box;
             }
         
             .wpmet_pro_a_thumb {
@@ -304,52 +321,98 @@ if ( ! class_exists( '\Wpmet\Libs\Pro_Awareness' ) ) :
             }
         
             .wpmet_pro_a_grid_title {
-                font-size:1.6rem;
-                margin:0;
-                color: #222;
-                display: inline-block;
-                line-height: normal;
-                text-decoration: none;
+                font-size: 1.6rem;
+				display: inline-block;
+				line-height: normal;
+				text-decoration: none;
+				margin: 0px;
+				font-weight: 600;
+				color: #021343;
             }
         
             .wpmet_pro_a_description {
                 margin-bottom: 0;
+				text-decoration: none;
+				display: inline-block;
+				margin-top: 10px;
+				font-size: 15px;
+				line-height: 22px;
+				color: #5D5E65;
             }
             .wp-submenu > li > a{
                 position: relative;
             }
-        
-            @media (min-width: 991px) {
-                .wpmet_pro_a-grid {
-                    -webkit-box-flex: 0;
-                    -ms-flex: 0 0 33.333333%;
-                    flex: 0 0 33.333333%;
-                    max-width: 33.333333%;
-                }
-            }
-        
-            @media (max-width: 991px) and (min-width: 768px) {
-                .wpmet_pro_a-grid {
-                    -webkit-box-flex: 0;
-                    -ms-flex: 0 0 50%;
-                    flex: 0 0 50%;
-                    max-width: 50%;
-                }
-            }
+
+			.wpmet_pro_a-grid-container .wpmet-products {
+				margin-top: 80px;
+			}
+
+			.wpmet_pro_a-grid-container .wpmet-products h1 {
+				font-size: 40px;
+				color: #021343;
+				font-weight: 700;
+				margin-bottom: 0;
+				line-height: 44px;
+			}
+
+			.wpmet_pro_a-grid-container .wpmet-products p {
+				color: #5D5E65;
+    			font-size: 16px;
+			}
+
+			.wpmet_pro_a-grid-container .wpmet-products__content {
+				margin-top: 40px;
+				display: grid;
+				grid-gap: 20px;
+				grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+			}
+
+			.wpmet_pro_a-grid-container .wpmet-products__content .help-card {
+				background-color: #fff;
+				border-radius: 4px;
+				-webkit-box-shadow: 0px 2px 5px 10px #00000003;
+				box-shadow: 0px 2px 5px 10px #00000003;
+				-webkit-transition: all .4s ease;
+				transition: all .4s ease;
+				padding: 30px;
+			}
+
+			.wpmet_pro_a-grid-container .wpmet-products__content .help-card:hover {
+				-webkit-transform: translateY(-3px);
+				transform: translateY(-3px);
+				-webkit-box-shadow: 0px 10px 15px 15px #0000000d;
+				box-shadow: 0px 10px 15px 15px #0000000d;
+			}
+
+			.wpmet_pro_a-grid-container .wpmet-products__content label {
+				color: #021343;
+				font-size: 16px;
+				font-weight: 700;
+				display: -webkit-box;
+				display: -ms-flexbox;
+				display: flex;
+				-webkit-column-gap: 10px;
+				-moz-column-gap: 10px;
+				column-gap: 10px;
+				-webkit-box-align: center;
+				-ms-flex-align: center;
+				align-items: center;
+				margin-bottom: 15px;
+			}
+
+			.wpmet_pro_a-grid-container .wpmet-products__content span {
+				display: inline-block;
+				color: #5D5E65;
+    			font-size: 16px;
+			}
         
             @media (max-width: 767px) {
-                .wpmet_pro_a-grid {
-                    -webkit-box-flex: 0;
-                    -ms-flex: 0 0 100%;
-                    flex: 0 0 100%;
-                    max-width: 100%;
-                }
                 .wpmet_pro_a_grid_title {
                     font-size: 1.2rem;
                 }
             }
-        </style>
-		";
+        	</style>
+			";
 		}
 
 		public function insert_plugin_links( $links ) {

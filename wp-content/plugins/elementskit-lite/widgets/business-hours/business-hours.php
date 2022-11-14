@@ -29,7 +29,7 @@ class ElementsKit_Widget_Business_Hours extends Widget_Base {
     }
 
     public function get_help_url() {
-        return '';
+        return 'https://wpmet.com/doc/business-hours/';
     }
 
     protected function register_controls() {
@@ -49,6 +49,9 @@ class ElementsKit_Widget_Business_Hours extends Widget_Base {
 			[
 				'label'   => esc_html__( 'Day', 'elementskit-lite' ),
 				'type'    => Controls_Manager::TEXT,
+				'dynamic' => [
+					'active' => true,
+				],
 				'default' => esc_html__( 'Saturday', 'elementskit-lite' ),
 			]
 		);
@@ -58,6 +61,9 @@ class ElementsKit_Widget_Business_Hours extends Widget_Base {
 			[
 				'label'   => esc_html__( 'Time', 'elementskit-lite' ),
 				'type'    => Controls_Manager::TEXTAREA,
+				'dynamic' => [
+					'active' => true,
+				],
 				'default' => esc_html__( '9:00 AM - 6:00 PM', 'elementskit-lite' ),
 			]
 		);

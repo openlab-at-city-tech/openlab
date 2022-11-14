@@ -118,7 +118,10 @@ class Plugin {
 		/**
 		 * Show go Premium menu
 		 */
-		\Wpmet\Libs\Pro_Awareness::instance( 'elementskit-lite' )
+		$pro_awareness = \Wpmet\Libs\Pro_Awareness::instance('elementskit-lite');
+
+		if(version_compare($pro_awareness->get_version(), '1.2.0') >= 0) {
+			$pro_awareness
 			->set_parent_menu_slug( 'elementskit' )
 			->set_plugin_file( 'elementskit-lite/elementskit-lite.php' )
 			->set_pro_link(
@@ -131,6 +134,7 @@ class Plugin {
 					'url'       => 'https://wpmet.com/fb-group',
 					'title'     => 'Join the Community',
 					'thumbnail' => \ElementsKit_Lite::lib_url() . 'pro-awareness/assets/community.png',
+					'description' => 'Join our Facebook group to get 20% discount coupon on premium products. Follow us to get more exciting offers.'
 				)
 			)
 			->set_page_grid(
@@ -138,6 +142,7 @@ class Plugin {
 					'url'       => 'https://www.youtube.com/playlist?list=PL3t2OjZ6gY8MVnyA4OLB6qXb77-roJOuY',
 					'title'     => 'Video Tutorials',
 					'thumbnail' => \ElementsKit_Lite::lib_url() . 'pro-awareness/assets/videos.png',
+					'description' => 'Learn the step by step process for developing your site easily from video tutorials.'
 				)
 			)
 			->set_page_grid(
@@ -145,8 +150,76 @@ class Plugin {
 					'url'       => 'https://wpmet.com/plugin/elementskit/roadmaps#ideas',
 					'title'     => 'Request a feature',
 					'thumbnail' => \ElementsKit_Lite::lib_url() . 'pro-awareness/assets/request.png',
+					'description' => 'Have any special feature in mind? Let us know through the feature request.'
 				)
 			)
+			->set_page_grid(
+				array(
+					'url'       => 'https://wpmet.com/doc/elementskit/',
+					'title'     => 'Documentation',
+					'thumbnail' => \ElementsKit_Lite::lib_url() . 'pro-awareness/assets/documentation.png',
+					'description' => 'Detailed documentation to help you understand the functionality of each feature.'
+				)
+			)
+			->set_page_grid(
+				array(
+					'url'       => 'https://wpmet.com/plugin/elementskit/roadmaps/',
+					'title'     => 'Public Roadmap',
+					'thumbnail' => \ElementsKit_Lite::lib_url() . 'pro-awareness/assets/roadmaps.png',
+					'description' => 'Check our upcoming new features, detailed development stories and tasks'
+				)
+			)
+
+			// set wpmet products
+			->set_products(
+				array(
+					'url'       => 'https://getgenie.ai/',
+					'title'     => 'GetGenie',
+					'thumbnail' => \ElementsKit_Lite::lib_url() . 'framework/assets/images/onboard/getgenie-logo.svg',
+					'description' => 'Your AI-Powered Content & SEO Assistant for WordPress',
+				)
+			)
+			->set_products(
+				array(
+					'url'       => 'https://wpmet.com/plugin/shopengine/',
+					'title'     => 'ShopEngine',
+					'thumbnail' => \ElementsKit_Lite::lib_url() . 'framework/assets/images/onboard/shopengine-logo.svg',
+					'description' => 'Complete WooCommerce Solution for Elementor',
+				)
+			)
+			->set_products(
+				array(
+					'url'       => 'https://wpmet.com/plugin/metform/',
+					'title'     => 'MetForm',
+					'thumbnail' => \ElementsKit_Lite::lib_url() . 'framework/assets/images/onboard/metform-logo.svg',
+					'description' => 'Most flexible drag-and-drop form builder'
+				)
+			)
+			->set_products(
+				array(
+					'url'       => 'https://wpmet.com/plugin/wp-social/',
+					'title'     => 'WP Social',
+					'thumbnail' => \ElementsKit_Lite::lib_url() . 'framework/assets/images/onboard/wp-social-logo.svg',
+					'description' => 'Integrate all your social media to your website'
+				)
+			)
+			->set_products(
+				array(
+					'url'       => 'https://wpmet.com/plugin/wp-ultimate-review/?ref=wpmet',
+					'title'     => 'Ultimate Review',
+					'thumbnail' => \ElementsKit_Lite::lib_url() . 'framework/assets/images/onboard/ultimate-review-logo.svg',
+					'description' => 'Integrate various styled review system in your website'
+				)
+			)
+			->set_products(
+				array(
+					'url'       => 'https://products.wpmet.com/crowdfunding/?ref=wpmet',
+					'title'     => 'Fundraising & Donation Platform',
+					'thumbnail' => \ElementsKit_Lite::lib_url() . 'framework/assets/images/onboard/wp-fundraising-logo.svg',
+					'description' => 'Enable donation system in your website'
+				)
+			)
+
 			->set_plugin_row_meta( 'Documentation', 'https://wpmet.com/elementskit-docs', array( 'target' => '_blank' ) )
 			->set_plugin_row_meta( 'Facebook Community', 'https://wpmet.com/fb-group', array( 'target' => '_blank' ) )
 			->set_plugin_row_meta( 'Rate the plugin ★★★★★', 'https://wordpress.org/support/plugin/elementskit-lite/reviews/#new-post', array( 'target' => '_blank' ) )
@@ -160,6 +233,7 @@ class Plugin {
 				) 
 			)
 			->call();
+		}
 
 		// Adding pro lebel
 		if ( \ElementsKit_Lite::package_type() == 'free' ) {

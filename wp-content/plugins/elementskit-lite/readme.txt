@@ -4,7 +4,7 @@ Contributors: Ataurr, wpmet, emranio, aion11
 Tags: elementor addons, mega menu builder, header footer builder, elementor widgets, Accordion tab, elementor modules, page builder addons, elementor addon, elementor widget, addons
 Requires at least: 5.0
 Tested up to: 6.0
-Stable tag: 2.7.0
+Stable tag: 2.7.4
 Requires PHP: 7.0
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -460,6 +460,30 @@ Visit  [wpmet](https://wpmet.com/)  to learn more about how to get the best of W
 
 
 == Changelog ==
+Version: 2.7.4 (2022-11-07)
+Improved: Coding standard
+Improved: Edit Content button for advanced widgets
+Improved: Spelling error for Instragram User Data
+Fixed: Submenu child items is not showing at WP 6.1
+
+Version: 2.7.3 (2022-10-17)
+Added: Widgets Documentation URL
+Added: Title margin control in Post Grid widget
+Added: Arrow icon vertical position in Client Logo widget
+Added: Title styles in Post Tab widget
+Fixed: Label and input style in Caldera Forms widget
+Fixed: Post item bottom space not working in Post Grid widget
+Fixed: Elementor responsive visibility not working properly when One Page Scroll is enable
+
+Version: 2.7.2 (2022-10-02)
+Added: Controls for Header Search widget and fixed CSS issue
+Added: Control for border open and close in Accordion Widget
+Added: Active property for Testimonial widget
+Added: New icons in ElementsKit Icon Pack
+Added: Dynamic content support for Elementor pro
+Fixed: Testimonial widget alignment issue
+Fixed: Focused title's CSS not working after adding a link in the Heading widget
+
 Version: 2.7.0 (2022-08-24)
 Added: Mega menu ajax load for better performance
 Added: Icon for Image box and Image swap widget

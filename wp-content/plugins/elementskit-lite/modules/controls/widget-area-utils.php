@@ -25,7 +25,7 @@ class Widget_Area_Utils {
 			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped --  Displaying with Elementor content rendering
 			echo str_replace( '#elementor', '', \ElementsKit_Lite\Utils::render_tab_content( $elementor->frontend->get_builder_content_for_display( $post_id ), $post_id ) );
 		} else {
-			echo esc_html__( 'Click here to add content.', 'elementskit-lite' );
+            echo esc_html__( 'Click on the Edit Content button to edit/add the content.', 'elementskit-lite' );
 		}
 		
 		wp_die();
@@ -56,7 +56,7 @@ class Widget_Area_Utils {
 		<div class="widgetarea_warper widgetarea_warper_editable" data-elementskit-widgetarea-key="<?php echo esc_attr( $extract_key ); ?>"  data-elementskit-widgetarea-index="<?php echo esc_attr( $tab_id ); ?>">
 			<div class="widgetarea_warper_edit" data-elementskit-widgetarea-key="<?php echo esc_attr( $extract_key ); ?>" data-elementskit-widgetarea-index="<?php echo esc_attr( $tab_id ); ?>">
 				<i class="eicon-edit" aria-hidden="true"></i>
-				<span class="elementor-screen-only"><?php esc_html_e( 'Edit', 'elementskit-lite' ); ?></span>
+				<span><?php esc_html_e( 'Edit Content', 'elementskit-lite' ); ?></span>
 			</div>
 
 			<?php
@@ -94,7 +94,7 @@ class Widget_Area_Utils {
 						// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped --  Displaying with Elementor content rendering
 						echo str_replace( '#elementor', '', \ElementsKit_Lite\Utils::render_tab_content( $elementor->frontend->get_builder_content_for_display( $builder_post_id ), $builder_post_id ) );
 					} else {
-						echo esc_html__( 'Click here to add content.', 'elementskit-lite' );
+                        echo esc_html__( 'Click on the Edit Content button to edit/add the content.', 'elementskit-lite' );
 					}
 					?>
 					</div>

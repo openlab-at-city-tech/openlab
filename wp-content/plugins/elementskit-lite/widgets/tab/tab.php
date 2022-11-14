@@ -28,7 +28,7 @@ class ElementsKit_Widget_Tab extends Widget_Base {
     }
 
     public function get_help_url() {
-        return '';
+        return 'https://wpmet.com/doc/tab/';
     }
 
     protected function register_controls() {
@@ -347,6 +347,9 @@ class ElementsKit_Widget_Tab extends Widget_Base {
             'ekit_tab_title', [
                 'label' => esc_html__('Title', 'elementskit-lite'),
                 'type' => Controls_Manager::TEXT,
+                'dynamic' => [
+                    'active' => true,
+                ],
                 'label_block' => true,
             ]
         );
@@ -405,6 +408,9 @@ class ElementsKit_Widget_Tab extends Widget_Base {
             [
                 'label' => esc_html__( 'Choose Image', 'elementskit-lite' ),
                 'type' => Controls_Manager::MEDIA,
+                'dynamic' => [
+                    'active' => true,
+                ],
                 'default' => [
                     'url' => Utils::get_placeholder_image_src(),
                     'id'    => -1
@@ -418,6 +424,9 @@ class ElementsKit_Widget_Tab extends Widget_Base {
             'ekit_tab_content', [
                 'label' => esc_html__('Content', 'elementskit-lite'),
                 'type' => Controls_Manager::WYSIWYG,
+                'dynamic' => [
+                    'active' => true,
+                ],
                 'label_block' => true,
             ]
         );

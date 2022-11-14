@@ -32,7 +32,7 @@ class ElementsKit_Widget_Page_List extends Widget_Base {
     }
 
     public function get_help_url() {
-        return '';
+        return 'https://wpmet.com/doc/page-list/';
     }
 
 	protected function register_controls() {
@@ -50,6 +50,9 @@ class ElementsKit_Widget_Page_List extends Widget_Base {
 			[
 				'label' => esc_html__( 'Text', 'elementskit-lite' ),
 				'type' => Controls_Manager::TEXT,
+				'dynamic' => [
+					'active' => true,
+				],
 				'label_block' => true,
 				'placeholder' => esc_html__( 'List Title', 'elementskit-lite' ),
 			]
@@ -60,6 +63,9 @@ class ElementsKit_Widget_Page_List extends Widget_Base {
 			[
 				'label' => esc_html__( 'Sub Title', 'elementskit-lite' ),
 				'type' => Controls_Manager::TEXT,
+				'dynamic' => [
+					'active' => true,
+				],
 				'label_block' => true,
 				'placeholder' => esc_html__( 'Type your title here', 'elementskit-lite' ),
 			]
@@ -154,6 +160,9 @@ class ElementsKit_Widget_Page_List extends Widget_Base {
 			[
 				'label' => esc_html__( 'Link', 'elementskit-lite' ),
 				'type' => Controls_Manager::URL,
+				'dynamic' => [
+					'active' => true,
+				],
 				'placeholder' => esc_html__( 'https://wpmet.com', 'elementskit-lite' ),
 				'show_external' => true,
 				'default' => [
@@ -184,6 +193,9 @@ class ElementsKit_Widget_Page_List extends Widget_Base {
 			[
 				'label' => esc_html__( 'Label', 'elementskit-lite' ),
 				'type' => Controls_Manager::TEXT,
+				'dynamic' => [
+					'active' => true,
+				],
 				'default' => esc_html__( 'Default title', 'elementskit-lite' ),
 				'placeholder' => esc_html__( 'Type your title here', 'elementskit-lite' ),
 				'condition' => [

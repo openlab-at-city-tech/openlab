@@ -28,7 +28,7 @@ class ElementsKit_Widget_Caldera_Forms extends Widget_Base {
     }
 
     public function get_help_url() {
-        return '';
+        return 'https://wpmet.com/doc/caldera-form/';
 	}
 	
 	function elementskit_caldera_forms_options() {
@@ -158,7 +158,7 @@ class ElementsKit_Widget_Caldera_Forms extends Widget_Base {
 				'type' => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%', 'em' ],
 				'selectors' => [
-					'{{WRAPPER}} .ekit-form form input:not([type="submit"])' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .ekit-form form input.form-control:not([type="submit"])' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
 		);
@@ -185,7 +185,7 @@ class ElementsKit_Widget_Caldera_Forms extends Widget_Base {
 					'size' => 100,
 				],
 				'selectors' => [
-					'{{WRAPPER}} .ekit-form form input:not([type="submit"])' => 'width: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .ekit-form form input.form-control:not([type="submit"])' => 'width: {{SIZE}}{{UNIT}};',
 					'{{WRAPPER}} .ekit-form form textarea' => 'width: {{SIZE}}{{UNIT}};',
 				],
 			]
@@ -209,7 +209,7 @@ class ElementsKit_Widget_Caldera_Forms extends Widget_Base {
 					'size' => 50,
 				],
 				'selectors' => [
-					'{{WRAPPER}} .ekit-form form input:not([type="submit"])' => 'height: {{SIZE}}px;',
+					'{{WRAPPER}} .ekit-form form input.form-control:not([type="submit"])' => 'height: {{SIZE}}px;',
 					'{{WRAPPER}} .ekit-form form textarea' => 'height: {{SIZE}}px;',
 				],
 			]
@@ -309,7 +309,7 @@ class ElementsKit_Widget_Caldera_Forms extends Widget_Base {
 				'name' => 'ekit_contact_form_input_style_background',
 				'label' => esc_html__( 'Background', 'elementskit-lite' ),
 				'types' => [ 'classic', 'gradient' ],
-				'selector' => '{{WRAPPER}} .ekit-form form input:not([type="submit"]) ,{{WRAPPER}} .ekit-form form textarea',
+				'selector' => '{{WRAPPER}} .ekit-form form.caldera_forms_form .form-group input.form-control:not([type="submit"]), {{WRAPPER}} .ekit-form form textarea',
 				'exclude' => [
 					'image'
 				]
@@ -334,7 +334,7 @@ class ElementsKit_Widget_Caldera_Forms extends Widget_Base {
 			[
 				'name' => 'ekit_contact_form_input_style_border',
 				'label' => esc_html__( 'Border', 'elementskit-lite' ),
-				'selector' => '{{WRAPPER}} .ekit-form form input:not([type="submit"]), {{WRAPPER}} .ekit-form form textarea',
+				'selector' => '{{WRAPPER}} .ekit-form form input.form-control:not([type="submit"]), {{WRAPPER}} .ekit-form form textarea',
 			]
 		);
 
@@ -364,7 +364,7 @@ class ElementsKit_Widget_Caldera_Forms extends Widget_Base {
 				'name' => 'ekit_contact_form_input_hover_style_background',
 				'label' => esc_html__( 'Background', 'elementskit-lite' ),
 				'types' => [ 'classic', 'gradient' ],
-				'selector' => '{{WRAPPER}} .ekit-form form input:not([type="submit"]):hover ,{{WRAPPER}} .ekit-form form textarea:hover',
+				'selector' => '{{WRAPPER}} .ekit-form form.caldera_forms_form .form-group input.form-control:not([type="submit"]):hover, {{WRAPPER}} .ekit-form form textarea:hover',
 				'exclude' => [
 					'image'
 				]
@@ -389,7 +389,7 @@ class ElementsKit_Widget_Caldera_Forms extends Widget_Base {
 			[
 				'name' => 'ekit_contact_form_input_hover_style_border',
 				'label' => esc_html__( 'Border', 'elementskit-lite' ),
-				'selector' => '{{WRAPPER}} .ekit-form form input:not([type="submit"]):hover, {{WRAPPER}} .ekit-form form textarea:hover',
+				'selector' => '{{WRAPPER}} .ekit-form form input.form-control:not([type="submit"]):hover, {{WRAPPER}} .ekit-form form textarea:hover',
 			]
 		);
 
@@ -399,7 +399,7 @@ class ElementsKit_Widget_Caldera_Forms extends Widget_Base {
 				'name' => 'ekit_contact_form_input_hover_style_box_shadow',
 				'label' => esc_html__( 'Box Shadow', 'elementskit-lite' ),
                 'selector' => '
-                            {{WRAPPER}} .ekit-form form input:not([type="submit"]):hover,
+                            {{WRAPPER}} .ekit-form form input.form-control:not([type="submit"]):hover,
                             {{WRAPPER}} .ekit-form form textarea:hover'
                             ,
 			]
@@ -419,7 +419,7 @@ class ElementsKit_Widget_Caldera_Forms extends Widget_Base {
 				'name' => 'ekit_contact_form_input_focus_style_background',
 				'label' => esc_html__( 'Background', 'elementskit-lite' ),
 				'types' => [ 'classic', 'gradient' ],
-				'selector' => '{{WRAPPER}} .ekit-form form input:not([type="submit"]):focus ,{{WRAPPER}} .ekit-form form textarea:focus',
+				'selector' => '{{WRAPPER}} .ekit-form form.caldera_forms_form .form-group input.form-control:not([type="submit"]):focus, {{WRAPPER}} .ekit-form form textarea:focus',
 				'exclude' => [
 					'image'
 				]
@@ -444,7 +444,7 @@ class ElementsKit_Widget_Caldera_Forms extends Widget_Base {
 			[
 				'name' => 'ekit_contact_form_input_focus_style_border',
 				'label' => esc_html__( 'Border', 'elementskit-lite' ),
-				'selector' => '{{WRAPPER}} .ekit-form form input:not([type="submit"]):focus, {{WRAPPER}} .ekit-form form textarea:focus',
+				'selector' => '{{WRAPPER}} .ekit-form form input.form-control:not([type="submit"]):focus, {{WRAPPER}} .ekit-form form textarea.form-control:focus',
 			]
 		);
 
@@ -455,7 +455,7 @@ class ElementsKit_Widget_Caldera_Forms extends Widget_Base {
 				'label' => esc_html__( 'Box Shadow', 'elementskit-lite' ),
                 'selector' => '
                             {{WRAPPER}} .ekit-form form input:not([type="submit"]):focus,
-                            {{WRAPPER}} .ekit-form form textarea:focus'
+                            {{WRAPPER}} .ekit-form form textarea.form-control:focus'
                             ,
 			]
 		);
@@ -886,13 +886,15 @@ class ElementsKit_Widget_Caldera_Forms extends Widget_Base {
         $this->add_render_attribute( 'shortcode', $calderaform_attributes );
 		?>
 		<div class="ekit-form">
-		<?php
-			if ( !$settings['ekit_caldera_form_list'] ) {
-				echo '<div class="elementskit-notices"><p>'.esc_html__('Please select a Contact Form From Setting!', 'elementskit-lite').'</p></div>';
-			}else{
-				echo do_shortcode( sprintf( '[caldera_form %s]', $this->get_render_attribute_string( 'shortcode' ) ) );
-			}
-		?>
+			<div class="caldera-form-wrap">
+				<?php
+				if ( !$settings['ekit_caldera_form_list'] ) {
+					echo '<div class="elementskit-notices"><p>'.esc_html__('Please select a Contact Form From Setting!', 'elementskit-lite').'</p></div>';
+				}else{
+					echo do_shortcode( sprintf( '[caldera_form %s]', $this->get_render_attribute_string( 'shortcode' ) ) );
+				}
+				?>
+			</div>
 		</div>
 		<?php
 	}

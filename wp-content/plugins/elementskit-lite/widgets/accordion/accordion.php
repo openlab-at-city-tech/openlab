@@ -28,7 +28,7 @@ class ElementsKit_Widget_Accordion extends Widget_Base {
     }
 
     public function get_help_url() {
-        return '';
+        return 'https://wpmet.com/doc/accordion/';
     }
 
     protected function register_controls() {
@@ -46,6 +46,9 @@ class ElementsKit_Widget_Accordion extends Widget_Base {
             'acc_title', [
                 'label'         => esc_html__('Title', 'elementskit-lite'),
                 'type'          => Controls_Manager::TEXT,
+				'dynamic' => [
+					'active' => true,
+				],
                 'label_block'   => true,
                 'default'       => 'Accordion Item',
             ]
@@ -66,6 +69,9 @@ class ElementsKit_Widget_Accordion extends Widget_Base {
             'acc_content', [
                 'label'         => esc_html__('Description', 'elementskit-lite'),
                 'type'          => Controls_Manager::WYSIWYG,
+				'dynamic' => [
+					'active' => true,
+				],
                 'label_block'   => true,
                 'default'       => 'Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast',
             ]
@@ -563,6 +569,57 @@ class ElementsKit_Widget_Accordion extends Widget_Base {
             ]
         );
 
+        $this->start_controls_tabs(
+            'border_style_tabs'
+        );
+        
+        $this->start_controls_tab(
+            'style_open_tab',
+            [
+                'label' => esc_html__( 'OPEN', 'elementskit-lite' ),
+            ]
+        );
+
+        $this->add_group_control(
+            Group_Control_Border::get_type(),
+            [
+                'name' => 'ekit_accordion_border_closed',
+                'label' => esc_html__( 'Border', 'elementskit-lite' ),
+                'selector' => '{{WRAPPER}} .elementskit-accordion > .elementskit-card.active',
+            ]
+        );
+
+        $this->add_control(
+            'ekit_accordion_border_radious_closed',
+            [
+                'label' => esc_html__( 'Border Radius', 'elementskit-lite' ),
+                'type' => Controls_Manager::DIMENSIONS,
+                'size_units' => [ 'px', '%', 'em' ],
+                'selectors' => [
+                    '{{WRAPPER}} .elementskit-accordion > .elementskit-card.active' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+                    '{{WRAPPER}} .elementskit-accordion .elementskit-card-header > .elementskit-btn-link' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} 0{{UNIT}} 0{{UNIT}};',
+                ],
+            ]
+        );
+
+        $this->add_group_control(
+            Group_Control_Box_Shadow::get_type(),
+            [
+                'name' => 'ekit_accordion_element_box_shadow_group_closed',
+                'label' => esc_html__( 'Box Shadow', 'elementskit-lite' ),
+                'selector' => '{{WRAPPER}} .elementskit-accordion > .elementskit-card.active',
+            ]
+        );
+        
+        $this->end_controls_tab();
+
+        $this->start_controls_tab(
+            'style_close_tab',
+            [
+                'label' => esc_html__( 'CLOSED', 'elementskit-lite' ),
+            ]
+        );
+        
         $this->add_group_control(
             Group_Control_Border::get_type(),
             [
@@ -580,6 +637,7 @@ class ElementsKit_Widget_Accordion extends Widget_Base {
                 'size_units' => [ 'px', '%', 'em' ],
                 'selectors' => [
                     '{{WRAPPER}} .elementskit-accordion > .elementskit-card' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+                    '{{WRAPPER}} .elementskit-accordion .elementskit-card-header > .elementskit-btn-link.collapsed' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
                 ],
             ]
         );
@@ -593,6 +651,9 @@ class ElementsKit_Widget_Accordion extends Widget_Base {
             ]
         );
 
+        $this->end_controls_tab();
+        
+        $this->end_controls_tabs();
 
         $this->end_controls_section();
 
@@ -782,7 +843,7 @@ class ElementsKit_Widget_Accordion extends Widget_Base {
                 $is_active = ($ekit_accordion_open_first_slide == 'yes' && $has_user_defined_active_tab == false && $i == 0) ? ' show collapse' : $is_active;
                 ?>
 
-                <div class="elementskit-card">
+                <div class="elementskit-card <?php echo esc_attr($is_active == ' collapse' ? '' : 'active');  ?>">
                     <div class="elementskit-card-header" id="primaryHeading-<?php echo esc_attr($i); ?>-<?php echo esc_attr($this->get_id()); ?>">
                         <a href="#collapse-<?php echo esc_attr($accorion_content['_id'].$acc_id)?>" class="ekit-accordion--toggler elementskit-btn-link collapsed" data-ekit-toggle="collapse" data-target="#Collapse-<?php echo esc_attr($accorion_content['_id'].$acc_id)?>" aria-expanded="<?php echo esc_attr($is_active == ' collapse' ? 'false' : 'true');  ?>" aria-controls="Collapse-<?php echo esc_attr($accorion_content['_id'].$acc_id)?>">
                             <?php if(($ekit_accordion_icon_pos_style == 'left') || ($ekit_accordion_icon_pos_style == 'bothside')) :  ?>

@@ -34,7 +34,7 @@ class ElementsKit_Widget_Piechart extends Widget_Base {
     }
 
     public function get_help_url() {
-        return '';
+        return 'https://wpmet.com/doc/pie-chart/';
     }
 
     protected function register_controls() {
@@ -126,6 +126,9 @@ class ElementsKit_Widget_Piechart extends Widget_Base {
             [
                 'label' => esc_html__( 'Choose Image', 'elementskit-lite' ),
                 'type' => Controls_Manager::MEDIA,
+				'dynamic' => [
+					'active' => true,
+				],
                 'default' => [
                     'url' => Utils::get_placeholder_image_src(),
                     'id'    => -1
@@ -154,6 +157,9 @@ class ElementsKit_Widget_Piechart extends Widget_Base {
             [
                 'label' => esc_html__( 'Title', 'elementskit-lite' ),
                 'type' => Controls_Manager::TEXT,
+				'dynamic' => [
+					'active' => true,
+				],
                 'default' => esc_html__( 'Default title', 'elementskit-lite' ),
                 'placeholder' => esc_html__( 'Type your title here', 'elementskit-lite' ),
                 'label_block' => true,
@@ -169,6 +175,9 @@ class ElementsKit_Widget_Piechart extends Widget_Base {
                 'label' => esc_html__( 'Description', 'elementskit-lite' ),
                 'type' => Controls_Manager::TEXTAREA,
                 'rows' => 10,
+				'dynamic' => [
+					'active' => true,
+				],
                 'default' => esc_html__( 'Default description', 'elementskit-lite' ),
                 'placeholder' => esc_html__( 'Type your description here', 'elementskit-lite' ),
                 'label_block' => true,

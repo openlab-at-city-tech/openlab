@@ -29,7 +29,7 @@ class ElementsKit_Widget_Icon_Box extends Widget_Base {
     }
 
     public function get_help_url() {
-        return '';
+        return 'https://wpmet.com/doc/icon-box-4/';
     }
 
     protected function register_controls() {
@@ -444,6 +444,9 @@ class ElementsKit_Widget_Icon_Box extends Widget_Base {
             [
                 'label' => esc_html__( 'Title', 'elementskit-lite' ),
                 'type' => Controls_Manager::TEXT,
+                'dynamic' => [
+                    'active' => true,
+                ],
                 'default' => esc_html__( 'EXCLUSIVE', 'elementskit-lite' ),
                 'placeholder' => esc_html__( 'Type your title here', 'elementskit-lite' ),
                 'condition' => [

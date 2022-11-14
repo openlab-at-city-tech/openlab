@@ -34,7 +34,7 @@ class ElementsKit_Widget_Header_Search extends Widget_Base
     }
 
     public function get_help_url() {
-        return '';
+        return 'https://wpmet.com/doc/search-2/';
     }
 
     protected function register_controls()
@@ -51,6 +51,9 @@ class ElementsKit_Widget_Header_Search extends Widget_Base
             'ekit_search_placeholder_text', [
                 'label' => esc_html__('Placeholder Text', 'elementskit-lite'),
                 'type' => Controls_Manager::TEXT,
+				'dynamic' => [
+					'active' => true,
+				],
                 'default'   => 'Search...',
                 'label_block' => true,
             ]
@@ -295,6 +298,7 @@ class ElementsKit_Widget_Header_Search extends Widget_Base
                 ]
             ]
         );
+
         $this->add_responsive_control(
             'ekit_search_icon_text_align',
             [
@@ -321,6 +325,7 @@ class ElementsKit_Widget_Header_Search extends Widget_Base
                 ],
             ]
         );
+
         $this->end_controls_section();
 
         $this->start_controls_section(
@@ -337,7 +342,7 @@ class ElementsKit_Widget_Header_Search extends Widget_Base
 				'name' => 'ekit_search_backdrop_background',
 				'label' => __( 'Background', 'elementskit-lite' ),
 				'types' => [ 'classic', 'gradient' ],
-				'selector' => '{{WRAPPER}} .ekit-wid-con .mfp-wrap.ekit-promo-popup:before',
+				'selector' => '{{WRAPPER}} .ekit_modal-searchPanel .ekit-search-group input:not([type="submit"])',
 			]
         );
 
@@ -367,7 +372,259 @@ class ElementsKit_Widget_Header_Search extends Widget_Base
 			]
         );
 
+        $this->add_control(
+			'ekit_search_border_heading',
+			[
+				'label' => esc_html__( 'Border', 'elementskit-lite' ),
+				'type' => \Elementor\Controls_Manager::HEADING,
+				'separator' => 'before',
+			]
+		);
+
+        $this->add_group_control(
+			Group_Control_Border::get_type(),
+			[
+				'name' => 'ekit_search_border',
+				'label' => esc_html__( 'Border Type', 'elementskit-lite' ),
+                'default' =>'',
+				'selector' => '{{WRAPPER}} .ekit_modal-searchPanel .ekit-search-group input:not([type="submit"])',
+			]
+		);
+
+        $this->add_control(
+            'ekit_search_border_radius',
+            [
+                'label' => esc_html__( 'Border radius', 'elementskit-lite' ),
+                'type' => Controls_Manager::DIMENSIONS,
+                'size_units' => [ 'px', '%', 'em' ],
+                'selectors' => [
+                    '{{WRAPPER}} .ekit_modal-searchPanel .ekit-search-group input:not([type="submit"])' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+                ],
+                'separator' => 'after',
+            ]
+        );
+
+        $this->add_control(
+			'ekit_search_input_height',
+			[
+				'label' => esc_html__( 'Height (px)', 'elementskit-lite' ),
+				'type' => Controls_Manager::SLIDER,
+				'size_units' => [ 'px' ],
+				'range' => [
+					'px' => [
+						'min' => 0,
+						'max' => 100,
+						'step' => 1,
+					],
+				],
+				'selectors' => [
+					'{{WRAPPER}} .ekit_modal-searchPanel .ekit-search-group input:not([type="submit"])' => 'height: {{SIZE}}{{UNIT}};',
+				],
+			]
+		);
+
+        $this->add_control(
+			'ekit_search_input_width',
+			[
+				'label' => esc_html__( 'Width', 'elementskit-lite' ),
+				'type' => Controls_Manager::SLIDER,
+				'size_units' => [ 'px' ],
+				'range' => [
+					'px' => [
+						'min' => 350,
+						'max' => 900
+					],
+				],
+				'selectors' => [
+					'{{WRAPPER}} .ekit_modal-searchPanel .ekit-search-panel' => 'max-width: {{SIZE}}{{UNIT}};',
+				],
+			]
+		);
+
+        $this->add_control(
+			'ekit_search_input_left',
+			[
+				'label' => esc_html__( 'Icon Left Position (px)', 'elementskit-lite' ),
+				'type' => Controls_Manager::SLIDER,
+				'size_units' => [ 'px' ],
+				'range' => [
+					'px' => [
+						'min' => 0,
+						'max' => 100,
+						'step' => 1,
+					],
+				],
+				'selectors' => [
+					'{{WRAPPER}} .ekit_modal-searchPanel .ekit-search-group .ekit_search-button' => 'right: {{SIZE}}{{UNIT}};',
+				],
+			]
+		);
+
+        $this->add_control(
+			'ekit_search_background_overlay_color',
+			[
+				'label' => esc_html__( 'Background Overlay Color', 'elementskit-lite' ),
+				'type' => \Elementor\Controls_Manager::COLOR,
+				'selectors' => [
+					'{{WRAPPER}} .mfp-bg.ekit-promo-popup' => 'background-color: {{VALUE}}',
+				],
+                'separator' => 'before',
+			]
+		);
+
+        $this->add_control(
+            'ekit_search_box_align',
+            [
+                'label' => esc_html__( 'Alignment', 'elementskit-lite' ),
+                'type' => Controls_Manager::CHOOSE,
+                'options' => [
+                    'top' => [
+                        'title' => esc_html__( 'Top', 'elementskit-lite' ),
+                        'icon' => 'eicon-v-align-top',
+                    ],
+                    'middle' => [
+                        'title' => esc_html__( 'Middle', 'elementskit-lite' ),
+                        'icon' => 'eicon-v-align-middle',
+                    ],
+                    'bottom' => [
+                        'title' => esc_html__( 'Bottom', 'elementskit-lite' ),
+                        'icon' => 'eicon-v-align-bottom',
+                    ],
+                ],
+                'toggle' => true,
+                'selectors' => [
+                    '{{WRAPPER}} .ekit-wid-con .ekit-promo-popup > .mfp-container > .mfp-content' => 'vertical-align: {{VALUE}};',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'ekit_search_box_padding',
+            [
+                'label' => esc_html__( 'Padding', 'elementskit-lite' ),
+                'type' => Controls_Manager::DIMENSIONS,
+                'size_units' => [ 'px', '%', 'em' ],
+                'selectors' => [
+                    '{{WRAPPER}} .ekit-wid-con .ekit-promo-popup > .mfp-container > .mfp-content' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+                ],
+            ]
+        );
+
 		$this->end_controls_section();
+
+        $this->start_controls_section(
+			'ekit_search_close_button_style_tabs',
+			[
+				'label' => __( 'Close Button', 'elementskit-lite' ),
+				'tab' => Controls_Manager::TAB_STYLE,
+			]
+		);
+
+        $this->add_responsive_control(
+            'ekit_search_close_button_border_radius',
+            [
+                'label'         => esc_html__('Border Radius', 'elementskit-lite'),
+                'type'          => Controls_Manager::SLIDER,
+                'size_units'    => ['%', 'px'],
+                'default' => [
+                    'unit' => '%'
+                ],
+                'range' => [
+					'min' => 0,
+					'max' => 100,
+				],
+                'selectors' => [
+                    '{{WRAPPER}} .ekit-promo-popup .mfp-close' => 'border-radius: {{SIZE}}{{UNIT}};',
+                ],
+
+            ]
+        );
+
+        $this->add_responsive_control(
+            'ekit_search_close_button_size',
+            [
+                'label'         => esc_html__('Size (px)', 'elementskit-lite'),
+                'type'          => Controls_Manager::SLIDER,
+                'size_units'    => ['px'],
+                'range' => [
+                    'px' => [
+						'min' => 30,
+						'max' => 50,
+					],
+				],
+                'selectors' => [
+                    '{{WRAPPER}} .ekit-promo-popup .mfp-close' => 'height: {{SIZE}}{{UNIT}}; width: {{SIZE}}{{UNIT}}; line-height: {{SIZE}}{{UNIT}};',
+                    '{{WRAPPER}} .ekit-promo-popup .mfp-close:hover' => 'width: {{SIZE}}{{UNIT}};',
+                ],
+
+            ]
+        );
+
+        $this->start_controls_tabs( 'ekit_search_close_button_tabs' );
+
+        $this->start_controls_tab(
+            'ekit_search_close_button_normal',
+            [
+                'label' =>esc_html__( 'Normal', 'elementskit-lite' ),
+            ]
+        );
+
+        $this->add_control(
+            'ekit_search_close_button_color',
+            [
+                'label' =>esc_html__( 'Color', 'elementskit-lite' ),
+                'type' => Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} .ekit-promo-popup .mfp-close' => 'color: {{VALUE}}; border-color: {{VALUE}}',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'ekit_search_close_button_bg_color',
+            [
+                'label' =>esc_html__( 'Background Color', 'elementskit-lite' ),
+                'type' => Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} .ekit-promo-popup .mfp-close' => 'background-color: {{VALUE}};',
+                ],
+            ]
+        );
+        $this->end_controls_tab();
+
+        $this->start_controls_tab(
+            'ekit_search_close_button_hover',
+            [
+                'label' =>esc_html__( 'Hover', 'elementskit-lite' ),
+            ]
+        );
+
+        $this->add_control(
+            'ekit_search_close_button_hover_color',
+            [
+                'label' =>esc_html__( 'Color', 'elementskit-lite' ),
+                'type' => Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} .ekit-promo-popup .mfp-close:hover' => 'color: {{VALUE}}; border-color: {{VALUE}}',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'ekit_search_close_button_hover_bg_color',
+            [
+                'label' =>esc_html__( 'Background Color', 'elementskit-lite' ),
+                'type' => Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} .ekit-promo-popup .mfp-close:hover' => 'background-color: {{VALUE}};',
+                ],
+            ]
+        );
+        $this->end_controls_tab();
+
+        $this->end_controls_tabs();
+
+        $this->end_controls_section();
 
         $this->insert_pro_message();
     }

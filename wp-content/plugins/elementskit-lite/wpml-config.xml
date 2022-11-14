@@ -648,7 +648,7 @@
 				<field type="Unfold: Title" editor_type="LINE">unfold_title</field>
 				<field type="Unfold: Content" editor_type="VISUAL">unfold_content</field>
 				<field type="Unfold: Expand Button Text" editor_type="LINE">unfold_expand_btn_text</field>
-				<field type="Collapse Button Text" editor_type="LINE">unfold_collapse_btn_text</field>
+				<field type="Unfold: Collapse Button Text" editor_type="LINE">unfold_collapse_btn_text</field>
 			</fields>								
 		</widget>
 		<widget name="ekit-vertical-menu">
@@ -715,6 +715,45 @@
 				<field type="Zoom: Title" editor_type="LINE">ekit_meeting_join_url_label</field>			
 				<field type="Zoom: Button Text" editor_type="LINE">ekit_meeting_join_url_btn_text</field>			
 			</fields>								
+		</widget>
+		<widget name="elementskit-image-hover-effect">
+			<conditions>
+				<condition key="widgetType">elementskit-image-hover-effect</condition>
+			</conditions>
+			<fields>
+				<field type="Image Hover Effect: Title" editor_type="LINE">ekit_hover_title</field>
+				<field type="Image Hover Effect: Description" editor_type="AREA">ekit_hover_description</field>
+				<field type="Image Hover Effect: Image Link URL" editor_type="LINK">ekit_hover_link</field>
+				<field type="Image Hover Effect: Button Text" editor_type="LINE">ekit_image_button_text</field>
+				<field type="Image Hover Effect: Button Link URL" editor_type="LINK">ekit_image_button_link</field>
+			</fields>
+		</widget>
+        <widget name="elementskit-fancy-animated-text">
+			<conditions>
+				<condition key="widgetType">elementskit-fancy-animated-text</condition>
+			</conditions>
+			<fields>
+				<field type="Fancy Heading: Prefix Text" editor_type="LINE">ekit_fancy_prefix_text</field>
+				<field type="Fancy Heading: Highlighted Text" editor_type="LINE">ekit_fancy_highlighted_text</field>
+				<field type="Fancy Heading: Suffix Text" editor_type="LINE">ekit_fancy_suffix_text</field>
+				<field type="Fancy Heading: Link (Optional)" editor_type="LINK">ekit_fancy_text_link>url</field>
+			</fields>								
+			<fields-in-item items_of="ekit_fancy_text_lists">
+				<field type="Fancy Heading: Fancy Text" editor_type="LINE">ekit_fancy_text</field>
+			</fields-in-item>
+        </widget>								
+		<widget name="elementskit-price-menu">
+			<conditions>
+				<condition key="widgetType">elementskit-price-menu</condition>
+			</conditions>
+			<fields-in-item items_of="ekit_price_list">
+				<field type="Price Menu: Title" editor_type="LINE">title</field>
+				<field type="Price Menu: Description" editor_type="AREA">description</field>
+				<field type="Price Menu: Price" editor_type="LINE">price</field>
+				<field type="Price Menu: Link" editor_type="LINK">link>url</field>
+				<field type="Price Menu: Button Text" editor_type="LINE">button_text</field>
+				<field type="Price Menu: Button Link" editor_type="LINK">button_link>url</field>
+			</fields-in-item>
 		</widget>
 	</elementor-widgets>
 </wpml-config>

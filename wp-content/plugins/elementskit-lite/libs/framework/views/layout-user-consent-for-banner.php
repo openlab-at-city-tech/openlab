@@ -1,7 +1,7 @@
 <style>
 	.ekit-user-consent-for-banner{
 		margin: 0 0 15px 0!important;
-		max-width: 450px;
+		max-width: 655px;
 	}
 </style>
 <script>

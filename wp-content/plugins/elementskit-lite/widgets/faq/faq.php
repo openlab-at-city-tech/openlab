@@ -29,7 +29,7 @@ class ElementsKit_Widget_FAQ extends Widget_Base {
     }
 
     public function get_help_url() {
-        return '';
+        return 'https://wpmet.com/doc/faq/';
     }
 
     protected function register_controls() {
@@ -47,6 +47,9 @@ class ElementsKit_Widget_FAQ extends Widget_Base {
             [
                 'label' =>esc_html__( 'Title', 'elementskit-lite' ),
                 'type' => Controls_Manager::TEXT,
+				'dynamic' => [
+					'active' => true,
+				],
                 'label_block' => true,
                 'placeholder' =>esc_html__( 'Title type here', 'elementskit-lite' ),
                 'default' =>esc_html__( 'How to Change my Photo from Admin Dashboard?', 'elementskit-lite' ),
@@ -57,6 +60,9 @@ class ElementsKit_Widget_FAQ extends Widget_Base {
             [
                 'label' =>esc_html__( 'Content', 'elementskit-lite' ),
                 'type' => Controls_Manager::TEXTAREA,
+				'dynamic' => [
+					'active' => true,
+				],
                 'label_block' => true,
                 'placeholder' =>esc_html__( 'Description type here', 'elementskit-lite' ),
                 'default' =>esc_html__( 'Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast', 'elementskit-lite' ),
