@@ -952,16 +952,14 @@ function breadcrumb_permalink_term_parent($breadcrumb_items)
 
 
 
-    $term_id = $queried_object->term_id;
+    $term_id = isset($queried_object->term_id) ? $queried_object->term_id : '';
 
-    $term_parent_id = $queried_object->parent;
+    $term_parent_id = isset($queried_object->parent) ? $queried_object->parent : '';
 
 
     $term_parent = get_term($term_parent_id);
-    $term_parent_name = $term_parent->name;
-
-
-    $taxonomy = $queried_object->taxonomy;
+    $term_parent_name = isset($term_parent->name) ? $term_parent->name : '';
+    $taxonomy = isset($queried_object->taxonomy) ? $queried_object->taxonomy : '';
     $term_parent_link = get_term_link($term_parent_id, $taxonomy);
 
     return array(
