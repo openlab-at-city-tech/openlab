@@ -2,20 +2,20 @@
 # This file is distributed under the GPL2.
 msgid ""
 msgstr ""
-"Project-Id-Version: GP Media Library 1.2.25\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/cloned-perk-M9euaG_WP\n"
+"Project-Id-Version: GP Media Library 1.2.26\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/cloned-perk-av9uQJ5ci\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2022-04-20T21:03:55+00:00\n"
+"POT-Creation-Date: 2022-10-12T02:50:22+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.6.0\n"
 "X-Domain: gp-media-library\n"
 
 #. Plugin Name of the plugin
-#: class-gp-media-library.php:471
+#: class-gp-media-library.php:472
 msgid "GP Media Library"
 msgstr ""
 
@@ -35,7 +35,7 @@ msgstr ""
 msgid "http://gravitywiz.com/"
 msgstr ""
 
-#: class-gp-media-library.php:132
+#: class-gp-media-library.php:133
 msgid "Media Library ID"
 msgid_plural "Media Library IDs"
 msgstr[0] ""
