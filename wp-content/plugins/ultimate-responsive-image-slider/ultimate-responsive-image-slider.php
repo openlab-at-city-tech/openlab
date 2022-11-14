@@ -2,10 +2,10 @@
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 /*
-Plugin Name: Ultimate Responsive Image Slider - 3.5.7
+Plugin Name: Ultimate Responsive Image Slider - 3.5.9
 Plugin URI: https://wordpress.org/plugins/ultimate-responsive-image-slider/
 Description: Add unlimited image slides using Ultimate Responsive Image Slider in any Page and Post content to give an attractive mode to represent contents.
-Version: 3.5.7
+Version: 3.5.9
 Author: FARAZFRANK
 Author URI: http://wpfrank.com/
 Text Domain: ultimate-responsive-image-slider
@@ -27,6 +27,7 @@ along with Ultimate Responsive Image Slider. If not, see http://www.gnu.org/lice
 
 //Constant Variable
 define("URIS_PLUGIN_URL", plugin_dir_url(__FILE__));
+define("URIS_PLUGIN_VER", '3.5.9');
 
 // Apply default settings on activation
 register_activation_hook( __FILE__, 'WRIS_DefaultSettingsPro' );
@@ -294,7 +295,7 @@ class URIS {
 			<h4>Unlock More Features in Ultimate Responsive Image Slider Pro</h4>
 			<p>5 Design Layouts, Transition Effect, Color Customizations, 500+ Google Fonts For Slide Title & Description, Slides Ordering, Link On Slides, 2 Light Box Style, Various Slider Control Settings</p>
 			<a class="button button-primary button-hero load-customize hide-if-no-customize wpfrank-action-button" target="_blank" href="http://wpfrank.com/demo/ultimate-responsive-image-slider-pro/">Check Pro Plugin Demo</a>
-			<a class="button button-primary button-hero load-customize hide-if-no-customize wpfrank-action-button" target="_blank" href="http://wpfrank.com/account/signup/ultimate-responsive-image-slider-pro">Buy Pro Plugin $25</a>
+			<a class="button button-primary button-hero load-customize hide-if-no-customize wpfrank-action-button" target="_blank" href="http://wpfrank.com/account/signup/ultimate-responsive-image-slider-pro">Buy Pro Plugin $35</a>
 			<h4>Also Try My New Slider Plugin</h4>
 			<a class="button button-primary button-hero load-customize hide-if-no-customize wpfrank-action-button" target="_blank" href="https://wordpress.org/plugins/slider-factory/">Slider Factory</a>
 		</div>

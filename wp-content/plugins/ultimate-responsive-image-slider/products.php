@@ -11,10 +11,18 @@ class WPFURIS_Product_Menu {
 		<div class="wpfrank-products-container">
 			<div class="wpfrank-products-title"><h1>Our Premium Products</h1></div>
 			<div class="wpfrank-products">
-				
+				<div class="wpfrank-product">
+					<div class="wpfrank-product-title">Filter Gallery Pro</div>
+					<img class="wpfrank-product-image" height="236px" src="<?php echo esc_url(URIS_PLUGIN_URL . "assets/img/products/Filter-Gallery-Pro.jpg"); ?>">
+					<div class="wpfrank-product-tagline">Premium Filter Gallery With Parent & Child Filters</div>
+					<div class="wpfrank-product-links">
+						<a target="_blank" href="http://wpfrank.com/demo/filter-gallery-pro/" class="wpfrank-link-button wpfrank-try-now">Live Demo</a>
+						<a target="_blank" href="http://wpfrank.com/account/signup/filter-gallery-pro" class="wpfrank-link-button wpfrank-buy-now">Buy Now</a>
+					</div>
+				</div>
 				<div class="wpfrank-product">
 					<div class="wpfrank-product-title">Slider Factory Pro</div>
-					<img class="wpfrank-product-image" src="<?php echo esc_url(URIS_PLUGIN_URL . "assets/img/products/Slider-Factory-Pro.png"); ?>">
+					<img class="wpfrank-product-image" height="236px" src="<?php echo esc_url(URIS_PLUGIN_URL . "assets/img/products/Slider-Factory-Pro.png"); ?>">
 					<div class="wpfrank-product-tagline">Premium Slider Plugin To Add Responsive Slide Show On Website</div>
 					<div class="wpfrank-product-links">
 						<a target="_blank" href="http://wpfrank.com/demo/slider-factory-pro/" class="wpfrank-link-button wpfrank-try-now">Live Demo</a>
@@ -39,7 +47,6 @@ class WPFURIS_Product_Menu {
 						<a target="_blank" href="http://wpfrank.com/account/signup/ultimate-responsive-image-slider-pro" class="wpfrank-link-button wpfrank-buy-now">Buy Now</a>
 					</div>
 				</div>
-				
 			</div>
 		</div>
 	<?php

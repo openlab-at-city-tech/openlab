@@ -22,7 +22,7 @@ wp_enqueue_style('uris-bootstrap-min', URIS_PLUGIN_URL.'assets/css/bootstrap-lat
 		</ul>
 		<div class="col-md-12 wpfrank_banner_actions">
 			<a class="button-primary button-hero" href="http://wpfrank.com/demo/ultimate-responsive-image-slider-pro/" target="_blank">Live Demo</a>
-			<a class="button-primary button-hero" href="http://wpfrank.com/account/signup/ultimate-responsive-image-slider-pro" target="_blank">Buy Now $25</a>
+			<a class="button-primary button-hero" href="http://wpfrank.com/account/signup/ultimate-responsive-image-slider-pro" target="_blank">Buy Now $35</a>
 		</div>
 		<div class="plugin_version">
 			<span><b>7.x</b>Version</span>
