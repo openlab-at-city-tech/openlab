@@ -597,7 +597,7 @@ class B2S_Loader {
                         $meta->updateMeta((int) $_POST['post_ID']);
                     }
 
-                    if (isset($_POST['post_ID']) && isset($_POST['user_ID']) && (int) $_POST['post_ID'] > 0 && (int) $_POST['user_ID'] > 0 && !defined("B2S_SAVE_META_BOX_AUTO_SHARE") && !wp_is_post_autosave((int) $_POST['post_ID']) && isset($_POST['b2s-meta-box-nonce']) && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s-meta-box-nonce'])), 'b2s-meta-box-nonce-post-area') && isset($_POST['post_status'])) {
+                    if (isset($_POST['post_ID']) && isset($_POST['user_ID']) && (int) $_POST['post_ID'] > 0 && (int) $_POST['user_ID'] > 0 && (int)$_POST['user_ID'] == B2S_PLUGIN_BLOG_USER_ID && !defined("B2S_SAVE_META_BOX_AUTO_SHARE") && !wp_is_post_autosave((int) $_POST['post_ID']) && isset($_POST['b2s-meta-box-nonce']) && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s-meta-box-nonce'])), 'b2s-meta-box-nonce-post-area') && isset($_POST['post_status'])) {
                         $ship = false;
                         if (isset($_POST['b2s-enable-auto-post'])) {
                             if ((int) $_POST['b2s-enable-auto-post'] == 1) {
@@ -678,7 +678,7 @@ class B2S_Loader {
                                             $images_urls = $hook_filter->get_wp_post_image((int) $_POST['post_ID'], true, $content);
                                             $image_url = ((!empty($images_urls) && isset(array_values($images_urls)[0][0])) ? array_values($images_urls)[0][0] : false);
 
-                                            $options = new B2S_Options((int) $_POST['user_ID']);
+                                            $options = new B2S_Options(B2S_PLUGIN_BLOG_USER_ID);
                                             $optionPostFormat = $options->_getOption('post_template');
 
                                             $defaultPostData = array('default_titel' => $title,
@@ -687,12 +687,12 @@ class B2S_Loader {
                                                 'no_cache' => 0, //default inactive , 1=active 0=not
                                                 'board' => '', 'group' => '', 'url' => $url, 'user_timezone' => $user_timezone); // 'publish_date' => $sched_date, OLD FOR Share Now?
 
-                                            $defaultBlogPostData = array('post_id' => (int) $_POST['post_ID'], 'blog_user_id' => (int) $_POST['user_ID'], 'user_timezone' => $user_timezone, 'sched_type' => $sched_type, 'sched_date' => $sched_date, 'sched_date_utc' => $sched_date_utc);
+                                            $defaultBlogPostData = array('post_id' => (int) $_POST['post_ID'], 'blog_user_id' => B2S_PLUGIN_BLOG_USER_ID, 'user_timezone' => $user_timezone, 'sched_type' => $sched_type, 'sched_date' => $sched_date, 'sched_date_utc' => $sched_date_utc);
 
                                             $autoShare = new B2S_AutoPost((int) $_POST['post_ID'], $defaultBlogPostData, $current_user_date, $myTimeSettings, $title, $content, $excerpt, $url, $image_url, $keywords, $b2sPostLang, $optionPostFormat);
                                             define('B2S_SAVE_META_BOX_AUTO_SHARE', (int) $_POST['post_ID']);
                                             if (isset($_POST['b2s-user-last-selected-profile-id']) && (int) $_POST['b2s-user-last-selected-profile-id'] != (int) $_POST['b2s-post-meta-box-profil-dropdown'] && (int) $_POST['b2s-post-meta-box-profil-dropdown'] != 0) {
-                                                update_option('B2S_PLUGIN_SAVE_META_BOX_AUTO_SHARE_PROFILE_USER_' . (int) $_POST['user_ID'], (int) $_POST['b2s-post-meta-box-profil-dropdown'], false);
+                                                update_option('B2S_PLUGIN_SAVE_META_BOX_AUTO_SHARE_PROFILE_USER_' .B2S_PLUGIN_BLOG_USER_ID, (int) $_POST['b2s-post-meta-box-profil-dropdown'], false);
                                             }
 
                                             $metaOg = false;
@@ -722,7 +722,7 @@ class B2S_Loader {
                                             foreach ($networkData as $k => $value) {
                                                 $initialTwitterPost = false;
                                                 if ((int) $value->networkId == 1 || (int) $value->networkId == 3 || (int) $value->networkId == 19) {
-                                                    $linkNoCache = B2S_Tools::getNoCacheData((int) $_POST['user_ID']);
+                                                    $linkNoCache = B2S_Tools::getNoCacheData(B2S_PLUGIN_BLOG_USER_ID);
                                                     if (is_array($linkNoCache) && isset($linkNoCache[$value->networkId]) && (int) $linkNoCache[$value->networkId] > 0) {
                                                         $defaultPostData['no_cache'] = $linkNoCache[$value->networkId];
                                                     }
@@ -746,10 +746,9 @@ class B2S_Loader {
                                                     if ($res !== false && is_array($res)) {
                                                         $ship = true;
                                                         $res = array_merge($res, $defaultPostData);
-                                                        if (((int) $value->networkId == 12 && isset($optionPostFormat[12][0]['addLink']) && $optionPostFormat[12][0]['addLink'] === false) || ((int) $value->networkId == 24 && isset($optionPostFormat[24][0]['addLink']) && $optionPostFormat[24][0]['addLink'] === false)) {
+                                                        if (((int) $value->networkId == 12) && isset($optionPostFormat[$value->networkId][$value->networkType]['addLink']) && $optionPostFormat[$value->networkId][$value->networkType]['addLink'] == false) {
                                                             $res['url'] = '';
-                                                        }
-                                                        if (((int) $value->networkId == 1 || (int) $value->networkId == 2) && isset($optionPostFormat[1][$value->networkType]['format']) && $optionPostFormat[1][$value->networkType]['format'] == 1 && isset($optionPostFormat[1][$value->networkType]['addLink']) && $optionPostFormat[1][$value->networkType]['addLink'] === false) {
+                                                        } else if (((int) $value->networkId == 1 || (int) $value->networkId == 2 || (int) $value->networkId == 24) && isset($optionPostFormat[$value->networkId][$value->networkType]['format']) && (int) $optionPostFormat[$value->networkId][$value->networkType]['format'] == 1 && isset($optionPostFormat[$value->networkId][$value->networkType]['addLink']) && $optionPostFormat[$value->networkId][$value->networkType]['addLink'] == false) {
                                                             $res['url'] = '';
                                                         }
                                                         $shareApprove = (isset($value->instant_sharing) && (int) $value->instant_sharing == 1) ? 1 : 0;

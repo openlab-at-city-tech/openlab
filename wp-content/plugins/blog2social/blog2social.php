@@ -6,7 +6,7 @@
  * Author: Blog2Social, Adenion
  * Text Domain: blog2social
  * Domain Path: /languages
- * Version: 6.9.10
+ * Version: 6.9.14
  * Author URI: https://www.blog2social.com
  * License: GPL2+
  */

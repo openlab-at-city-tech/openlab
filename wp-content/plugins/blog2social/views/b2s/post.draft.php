@@ -1,6 +1,10 @@
 <?php
 wp_nonce_field('b2s_security_nonce', 'b2s_security_nonce');
 require_once (B2S_PLUGIN_DIR . 'includes/B2S/Post/Filter.php');
+require_once(B2S_PLUGIN_DIR . 'includes/Options.php');
+$options = new B2S_Options(B2S_PLUGIN_BLOG_USER_ID);
+$optionPostFilters = $options->_getOption('post_filters');
+$postsPerPage = (isset($optionPostFilters['postsPerPage']) && (int) $optionPostFilters['postsPerPage'] > 0) ? (int) $optionPostFilters['postsPerPage'] : 25;
 ?>
 
 <div class="b2s-container">
@@ -84,9 +88,9 @@ require_once (B2S_PLUGIN_DIR . 'includes/B2S/Post/Filter.php');
                                     <br>
                                     <nav class="b2s-sort-pagination-area text-center">
                                         <div class="btn-group btn-group-sm pull-right b2s-post-per-page-area hidden-xs" role="group">
-                                            <button type="button" class="btn btn-primary b2s-post-per-page" data-post-per-page="25">25</button>
-                                            <button type="button" class="btn btn-default b2s-post-per-page" data-post-per-page="50">50</button>
-                                            <button type="button" class="btn btn-default b2s-post-per-page" data-post-per-page="100">100</button>
+                                            <button type="button" class="btn <?php echo ((int) $postsPerPage == 25) ? "btn-primary" : "btn-default" ?> b2s-post-per-page" data-post-per-page="25">25</button>
+                                            <button type="button" class="btn <?php echo ((int) $postsPerPage == 50) ? "btn-primary" : "btn-default" ?> b2s-post-per-page" data-post-per-page="50">50</button>
+                                            <button type="button" class="btn <?php echo ((int) $postsPerPage == 100) ? "btn-primary" : "btn-default" ?> b2s-post-per-page" data-post-per-page="100">100</button>
                                         </div>
                                         <div class="b2s-sort-pagination-content"></div>
                                     </nav>

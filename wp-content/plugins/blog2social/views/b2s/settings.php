@@ -5,7 +5,7 @@ require_once B2S_PLUGIN_DIR . 'includes/Options.php';
 $settingsItem = new B2S_Settings_Item();
 $options = new B2S_Options(B2S_PLUGIN_BLOG_USER_ID);
 $optionUserTimeFormat = $options->_getOption('user_time_format');
-if($optionUserTimeFormat == false) {
+if ($optionUserTimeFormat == false) {
     $optionUserTimeFormat = (substr(B2S_LANGUAGE, 0, 2) == 'de') ? 0 : 1;
 }
 ?>
@@ -59,7 +59,8 @@ if($optionUserTimeFormat == false) {
                             <hr class="b2s-settings-line">
                             <div class="tab-content clearfix">
                                 <div class="tab-pane active" id="b2s-general">
-                                    <?php echo wp_kses($settingsItem->getGeneralSettingsHtml(), array(
+                                    <?php
+                                    echo wp_kses($settingsItem->getGeneralSettingsHtml(), array(
                                         'h4' => array(
                                             'style' => array()
                                         ),
@@ -120,66 +121,78 @@ if($optionUserTimeFormat == false) {
                                             'alt' => array(),
                                             'src' => array(),
                                         )
-                                    )); ?>
+                                    ));
+                                    ?>
                                 </div>
                                 <div class="tab-pane" id="b2s-social-meta-data">
-                                    <form class="b2sSaveSocialMetaTagsSettings" method="post" novalidate="novalidate">
-                                        <?php echo wp_kses($settingsItem->getSocialMetaDataHtml(), array(
-                                            'strong' => array(),
-                                            'br' => array(),
-                                            'h4' => array(),
-                                            'b' => array(),
-                                            'p' => array(),
-                                            'div' => array(
-                                                'class' => array()
-                                            ),
-                                            'span' => array(
-                                                'class' => array()
-                                            ),
-                                            'a' => array(
-                                                'href' => array(),
-                                                'class' => array(),
-                                                'target' => array(),
-                                                'data-meta-type' => array(),
-                                                'data-meta-origin' => array(),
-                                            ),
-                                            'input' => array(
-                                                'type' => array(),
-                                                'name' => array(),
-                                                'value' => array(),
-                                                'id' => array(),
-                                                'class' => array(),
-                                                'checked' => array(),
-                                                'readonly' => array(),
-                                            ),
-                                            'label' => array(
-                                                'for' => array()
-                                            ),
-                                            'button' => array(
-                                                'class' => array(),
-                                                'type' => array(),
-                                                'disabled' => array(),
-                                                'data-id' => array(),
-                                            ),
-                                            'select' => array(
-                                                'class' => array(),
-                                                'name' => array(),
-                                            ),
-                                            'option' => array(
-                                                'value' => array(),
-                                                'selected' => array(),
-                                            )
-                                        )); ?>
-                                        <button class="btn btn-primary pull-right" type="submit" <?php if (B2S_PLUGIN_ADMIN) {
-                                            echo '';
-                                        } else {
-                                            echo 'disabled="true"';
-                                        } ?>><?php esc_html_e('save', 'blog2social') ?></button>
-                                        <input type="hidden" name="is_admin" value="<?php echo ((B2S_PLUGIN_ADMIN) ? 1 : 0) ?>">
-                                        <input type="hidden" name="version" value="<?php echo esc_attr(B2S_PLUGIN_USER_VERSION) ?>">
-                                        <input type="hidden" name="action" value="b2s_save_social_meta_tags">
-                                    </form>
+                                    <?php if (current_user_can('administrator')) { ?>
+                                        <form class="b2sSaveSocialMetaTagsSettings" method="post" novalidate="novalidate">
+                                            <?php
+                                            echo wp_kses($settingsItem->getSocialMetaDataHtml(), array(
+                                                'strong' => array(),
+                                                'br' => array(),
+                                                'h4' => array(),
+                                                'b' => array(),
+                                                'p' => array(),
+                                                'div' => array(
+                                                    'class' => array()
+                                                ),
+                                                'span' => array(
+                                                    'class' => array()
+                                                ),
+                                                'a' => array(
+                                                    'href' => array(),
+                                                    'class' => array(),
+                                                    'target' => array(),
+                                                    'data-meta-type' => array(),
+                                                    'data-meta-origin' => array(),
+                                                ),
+                                                'input' => array(
+                                                    'type' => array(),
+                                                    'name' => array(),
+                                                    'value' => array(),
+                                                    'id' => array(),
+                                                    'class' => array(),
+                                                    'checked' => array(),
+                                                    'readonly' => array(),
+                                                ),
+                                                'label' => array(
+                                                    'for' => array()
+                                                ),
+                                                'button' => array(
+                                                    'class' => array(),
+                                                    'type' => array(),
+                                                    'disabled' => array(),
+                                                    'data-id' => array(),
+                                                ),
+                                                'select' => array(
+                                                    'class' => array(),
+                                                    'name' => array(),
+                                                ),
+                                                'option' => array(
+                                                    'value' => array(),
+                                                    'selected' => array(),
+                                                )
+                                            ));
+                                            ?>
+                                            <button class="btn btn-primary pull-right" type="submit" <?php
+                                            if (B2S_PLUGIN_ADMIN) {
+                                                echo '';
+                                            } else {
+                                                echo 'disabled="true"';
+                                            }
+                                            ?>><?php esc_html_e('save', 'blog2social') ?></button>
+                                            <input type="hidden" name="is_admin" value="<?php echo ((B2S_PLUGIN_ADMIN) ? 1 : 0) ?>">
+                                            <input type="hidden" name="version" value="<?php echo esc_attr(B2S_PLUGIN_USER_VERSION) ?>">
+                                            <input type="hidden" name="action" value="b2s_save_social_meta_tags">
+                                        </form>
+                                    <?php } else { ?>
+                                        <div class="row width-100" id="b2s-settings-no-admin">
+                                            <div class="text-center b2s-text-bold"><?php esc_html_e("You need admin rights to use the Social Meta Data. Please contact your administrator.", "blog2social"); ?></div>
+                                        </div>
+                                    <?php } ?>
                                 </div>
+
                                 <div class="tab-pane" id="b2s-network">
                                     <p><strong><?php esc_html_e("Connect Blog2Social with 16 different social media networks you like to share your WordPress blog posts and pages as well as imported posts and social media posts on. The following networks are available:", "blog2social") ?></strong></p>
                                     <br>
@@ -235,10 +248,10 @@ if($optionUserTimeFormat == false) {
                             </div>
                         </div>
                         <input type="hidden" id="b2s_user_version" value="<?php echo esc_attr(B2S_PLUGIN_USER_VERSION); ?>" />
-<?php
-$noLegend = 1;
-require_once (B2S_PLUGIN_DIR . 'views/b2s/html/footer.php');
-?>
+                        <?php
+                        $noLegend = 1;
+                        require_once (B2S_PLUGIN_DIR . 'views/b2s/html/footer.php');
+                        ?>
                     </div>
                 </div>
             </div>
@@ -264,7 +277,7 @@ require_once (B2S_PLUGIN_DIR . 'views/b2s/html/footer.php');
                 <h4 class="modal-title"><?php esc_html_e('Allow shortcodes in my social media posts (e.g. Page Builder)', 'blog2social') ?></h4>
             </div>
             <div class="modal-body">
-<?php echo sprintf(__('Some WordPress plugins use short codes, e.g. Page Builder plugins. When a shortcode is inserted in a WordPress post or WordPress page, WordPress calls the function that is included in the shortcode and performs the corresponding actions as soon as you publish your post on your Wordpress website. If you like Blog2Social to consider shortcodes when posting to social media and automatically insert the defined content in your social media post, activate this feature. You will find more information about the function of shortcodes and which plugins are supported by Blog2Social in the following <a href="%s" target="_blank">shortcode guide</a>.', 'blog2social'), esc_url(B2S_Tools::getSupportLink('allow_shortcodes'))); ?>
+                <?php echo sprintf(__('Some WordPress plugins use short codes, e.g. Page Builder plugins. When a shortcode is inserted in a WordPress post or WordPress page, WordPress calls the function that is included in the shortcode and performs the corresponding actions as soon as you publish your post on your Wordpress website. If you like Blog2Social to consider shortcodes when posting to social media and automatically insert the defined content in your social media post, activate this feature. You will find more information about the function of shortcodes and which plugins are supported by Blog2Social in the following <a href="%s" target="_blank">shortcode guide</a>.', 'blog2social'), esc_url(B2S_Tools::getSupportLink('allow_shortcodes'))); ?>
             </div>
         </div>
     </div>
@@ -278,7 +291,7 @@ require_once (B2S_PLUGIN_DIR . 'views/b2s/html/footer.php');
                 <h4 class="modal-title"><?php esc_html_e('Activate Legacy mode ', 'blog2social') ?></h4>
             </div>
             <div class="modal-body">
-<?php esc_html_e('Plugin contents are loaded one at a time to minimize server load.', 'blog2social') ?>
+                <?php esc_html_e('Plugin contents are loaded one at a time to minimize server load.', 'blog2social') ?>
             </div>
         </div>
     </div>
@@ -292,7 +305,7 @@ require_once (B2S_PLUGIN_DIR . 'views/b2s/html/footer.php');
                 <h4 class="modal-title"><?php esc_html_e('Instant Caching for Facebook Link Posts', 'blog2social') ?></h4>
             </div>
             <div class="modal-body">
-<?php esc_html_e('Please enable this feature, if you are using varnish caching (HTTP accelerator to relieve your website). Blog2Social will add a "no-cache=1" parameter to the post URL of your Facebook link posts to ensure that Facebook always pulls the current meta data of your blog post.', 'blog2social') ?>
+                <?php esc_html_e('Please enable this feature, if you are using varnish caching (HTTP accelerator to relieve your website). Blog2Social will add a "no-cache=1" parameter to the post URL of your Facebook link posts to ensure that Facebook always pulls the current meta data of your blog post.', 'blog2social') ?>
             </div>
         </div>
     </div>
@@ -306,7 +319,7 @@ require_once (B2S_PLUGIN_DIR . 'views/b2s/html/footer.php');
                 <h4 class="modal-title"><?php esc_html_e('Personal Time Zone', 'blog2social') ?></h4>
             </div>
             <div class="modal-body">
-<?php esc_html_e('Blog2Social applies the scheduled time settings based on the time zone defined in the general settings of your WordPress. You can select a user-specific time zone that deviates from the Wordpress system time zone for your social media scheduling. To do this, select the desired time zone 24h or 12h (am/pm), by simply clicking on the button.', 'blog2social') ?>
+                <?php esc_html_e('Blog2Social applies the scheduled time settings based on the time zone defined in the general settings of your WordPress. You can select a user-specific time zone that deviates from the Wordpress system time zone for your social media scheduling. To do this, select the desired time zone 24h or 12h (am/pm), by simply clicking on the button.', 'blog2social') ?>
             </div>
         </div>
     </div>

@@ -133,7 +133,7 @@ class Ajax_Get {
             $optionPostFilters['searchSharedToNetwork'] = $b2sSortSharedToNetwork;
             $optionPostFilters['searchSharedAtDateStart'] = $b2sSortSharedAtDateStart;
             $optionPostFilters['searchSharedAtDateEnd'] = $b2sSortSharedAtDateEnd;
-            $optionPostFilters = $options->_setOption('post_filters', $optionPostFilters);
+            $options->_setOption('post_filters', $optionPostFilters);
 
             if (!empty($b2sType) && in_array($b2sType, array('all', 'sched', 'publish', 'notice', 'approve', 'draft', 'draft-post', 'favorites'))) {
                 $postItem = new B2S_Post_Item($b2sType, $b2sSortPostTitle, $b2sSortPostAuthor, $b2sSortPostStatus, $b2sSortPostShareStatus, $b2sSortPostPublishDate, $b2sSortPostSchedDate, $b2sShowByDate, $b2sShowByNetwork, $b2sUserAuthId, $b2sPostBlogId, $b2sPagination, $b2sSortPostCat, $b2sSortPostType, $b2sUserLang, $b2sResultsPerPage, $b2sSortPostSharedBy, $b2sSortSharedToNetwork, $b2sSortSharedAtDateStart, $b2sSortSharedAtDateEnd);
@@ -265,7 +265,7 @@ class Ajax_Get {
 
     public function getPublishPostData() {
         if (current_user_can('read') && isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
-            if ((int) $_POST['postId']) {
+            if (isset($_POST['postId']) && (int) $_POST['postId'] > 0) {
                 require_once (B2S_PLUGIN_DIR . 'includes/B2S/Post/Item.php');
                 require_once (B2S_PLUGIN_DIR . 'includes/Util.php');
                 $postData = new B2S_Post_Item();
@@ -289,7 +289,7 @@ class Ajax_Get {
 
     public function getApprovePostData() {
         if (current_user_can('read') && isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
-            if ((int) $_POST['postId']) {
+            if (isset($_POST['postId']) && (int) $_POST['postId'] > 0) {
                 require_once (B2S_PLUGIN_DIR . 'includes/B2S/Post/Item.php');
                 require_once (B2S_PLUGIN_DIR . 'includes/Util.php');
                 $postData = new B2S_Post_Item();
@@ -423,7 +423,7 @@ class Ajax_Get {
     public function getUserTimeSettings() {
         if (current_user_can('read') && isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
             $lang = substr(B2S_LANGUAGE, 0, 2);
-            $options = new B2S_Options(get_current_user_id());
+            $options = new B2S_Options(B2S_PLUGIN_BLOG_USER_ID);
             $userSchedData = $options->_getOption('auth_sched_time');
             if (isset($userSchedData['time'])) {
                 if (is_array($userSchedData) && isset($userSchedData['delay_day']) && isset($userSchedData['time']) && is_array($userSchedData['time'])) {
@@ -540,8 +540,8 @@ class Ajax_Get {
                 if ($item != null) {
                     $lock_user_id = get_option("B2S_PLUGIN_CALENDAR_BLOCKED_" . (int) $_POST['id']);
                     if (!$lock_user_id) {
-                        update_option("B2S_PLUGIN_CALENDAR_BLOCKED_" . (int) $_POST['id'], get_current_user_id(), false);
-                        $options = new B2S_Options(get_current_user_id());
+                        update_option("B2S_PLUGIN_CALENDAR_BLOCKED_" . (int) $_POST['id'], B2S_PLUGIN_BLOG_USER_ID, false);
+                        $options = new B2S_Options(B2S_PLUGIN_BLOG_USER_ID);
                         $block_old = $options->_getOption("B2S_PLUGIN_USER_CALENDAR_BLOCKED");
 
                         if ($block_old) {

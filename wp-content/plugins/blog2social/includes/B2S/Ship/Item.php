@@ -1238,7 +1238,7 @@ class B2S_Ship_Item {
                 $hashTags .= ' #' . str_replace(array(" ", "-", '"', "'", "!", "?", ",", ".", ";", ":"), "", (function_exists('htmlspecialchars_decode') ? htmlspecialchars_decode($tag->name) : $tag->name));
             }
         }
-        return (!empty($hashTags) ? (!empty($add) ? $add . $hashTags : $hashTags) : '');
+        return (!empty($hashTags) ? (!empty($add) ? $add . trim($hashTags) : trim($hashTags)) : '');
     }
 
     private function getBoardHtml($networkAuthId, $networkId) {

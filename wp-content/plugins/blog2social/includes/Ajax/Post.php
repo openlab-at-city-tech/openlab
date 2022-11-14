@@ -471,15 +471,14 @@ class Ajax_Post {
 
     public function lockAutoPostImport() {
         if (current_user_can('read') && isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
-            if (isset($_POST['userId']) && (int) $_POST['userId'] > 0) {
-                update_option('B2S_LOCK_AUTO_POST_IMPORT_' . (int) $_POST['userId'], 1, false);
+            if (isset($_POST['userId']) && (int) $_POST['userId'] > 0 && (int) $_POST['userId'] == B2S_PLUGIN_BLOG_USER_ID) {
+                update_option('B2S_LOCK_AUTO_POST_IMPORT_' . B2S_PLUGIN_BLOG_USER_ID, 1, false);
+                echo json_encode(array('result' => true));
+                wp_die();
             }
-            echo json_encode(array('result' => true));
-            wp_die();
-        } else {
-            echo json_encode(array('result' => false, 'error' => 'nonce'));
-            wp_die();
         }
+        echo json_encode(array('result' => false, 'error' => 'nonce'));
+        wp_die();
     }
 
     public function prgLogin() {
@@ -646,8 +645,8 @@ class Ajax_Post {
                     'frame_color' => ((isset($data['frame_color']) && !empty($data['frame_color'])) ? sanitize_text_field($data['frame_color']) : '#ffffff')
                 );
 
-                if (isset($data['post_format']) && (int) $data['post_format'] == 1) {
-                    $multi_images = array();
+             if ((isset($data['post_format']) && (int) $data['post_format'] == 1) || (int) $data['network_id'] == 12) { //Case IG
+                 $multi_images = array();
                     if (isset($data['multi_image_1']) && !empty($data['multi_image_1'])) {
                         array_push($multi_images, $data['multi_image_1']);
                     }
@@ -760,38 +759,34 @@ class Ajax_Post {
     }
 
     public function saveSocialMetaTags() {
-        if (current_user_can('read') && isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
+        if (current_user_can('administrator') && isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
             $result = array('result' => true);
-            if (isset($_POST['is_admin']) && (int) $_POST['is_admin'] == 1) {
+            $options = new B2S_Options(0, 'B2S_PLUGIN_GENERAL_OPTIONS');
+            $og_active = (!isset($_POST['b2s_og_active'])) ? 0 : 1;
+            $options->_setOption('og_active', $og_active);
+            $options->_setOption('og_default_title', ((B2S_PLUGIN_USER_VERSION >= 1) ? sanitize_text_field($_POST['b2s_og_default_title']) : ''));
+            $options->_setOption('og_default_desc', ((B2S_PLUGIN_USER_VERSION >= 1) ? sanitize_text_field($_POST['b2s_og_default_desc']) : ''));
+            $options->_setOption('og_default_image', ((B2S_PLUGIN_USER_VERSION >= 1) ? esc_url_raw($_POST['b2s_og_default_image']) : ''));
+            $options->_setOption('og_imagedata_active', ((B2S_PLUGIN_USER_VERSION >= 1) ? (int) $_POST['b2s_og_imagedata_active'] : 1));
+            $options->_setOption('og_objecttype_active', ((B2S_PLUGIN_USER_VERSION >= 1) ? (int) $_POST['b2s_og_objecttype_active'] : 1));
+            $options->_setOption('og_locale_active', ((B2S_PLUGIN_USER_VERSION >= 1) ? (int) $_POST['b2s_og_locale_active'] : 1));
+            $options->_setOption('og_locale', ((B2S_PLUGIN_USER_VERSION >= 1) ? sanitize_text_field($_POST['b2s_og_locale']) : ''));
 
-                $options = new B2S_Options(0, 'B2S_PLUGIN_GENERAL_OPTIONS');
+            $card_active = (!isset($_POST['b2s_card_active'])) ? 0 : 1;
+            $options->_setOption('card_active', $card_active);
+            $options->_setOption('card_default_type', ((B2S_PLUGIN_USER_VERSION >= 1) ? sanitize_text_field($_POST['b2s_card_default_type']) : 0));
+            $options->_setOption('card_default_title', ((B2S_PLUGIN_USER_VERSION >= 1) ? sanitize_text_field($_POST['b2s_card_default_title']) : ''));
+            $options->_setOption('card_default_desc', ((B2S_PLUGIN_USER_VERSION >= 1) ? sanitize_text_field($_POST['b2s_card_default_desc']) : ''));
+            $options->_setOption('card_default_image', ((B2S_PLUGIN_USER_VERSION >= 1) ? esc_url_raw($_POST['b2s_card_default_image']) : ''));
 
-                $og_active = (!isset($_POST['b2s_og_active'])) ? 0 : 1;
-                $options->_setOption('og_active', $og_active);
-                $options->_setOption('og_default_title', ((B2S_PLUGIN_USER_VERSION >= 1) ? sanitize_text_field($_POST['b2s_og_default_title']) : ''));
-                $options->_setOption('og_default_desc', ((B2S_PLUGIN_USER_VERSION >= 1) ? sanitize_text_field($_POST['b2s_og_default_desc']) : ''));
-                $options->_setOption('og_default_image', ((B2S_PLUGIN_USER_VERSION >= 1) ? esc_url_raw($_POST['b2s_og_default_image']) : ''));
-                $options->_setOption('og_imagedata_active', ((B2S_PLUGIN_USER_VERSION >= 1) ? (int) $_POST['b2s_og_imagedata_active'] : 1));
-                $options->_setOption('og_objecttype_active', ((B2S_PLUGIN_USER_VERSION >= 1) ? (int) $_POST['b2s_og_objecttype_active'] : 1));
-                $options->_setOption('og_locale_active', ((B2S_PLUGIN_USER_VERSION >= 1) ? (int) $_POST['b2s_og_locale_active'] : 1));
-                $options->_setOption('og_locale', ((B2S_PLUGIN_USER_VERSION >= 1) ? sanitize_text_field($_POST['b2s_og_locale']) : ''));
+            $oembed_active = (!isset($_POST['b2s_oembed_active'])) ? 0 : 1;
+            $options->_setOption('oembed_active', $oembed_active);
 
-                $card_active = (!isset($_POST['b2s_card_active'])) ? 0 : 1;
-                $options->_setOption('card_active', $card_active);
-                $options->_setOption('card_default_type', ((B2S_PLUGIN_USER_VERSION >= 1) ? sanitize_text_field($_POST['b2s_card_default_type']) : 0));
-                $options->_setOption('card_default_title', ((B2S_PLUGIN_USER_VERSION >= 1) ? sanitize_text_field($_POST['b2s_card_default_title']) : ''));
-                $options->_setOption('card_default_desc', ((B2S_PLUGIN_USER_VERSION >= 1) ? sanitize_text_field($_POST['b2s_card_default_desc']) : ''));
-                $options->_setOption('card_default_image', ((B2S_PLUGIN_USER_VERSION >= 1) ? esc_url_raw($_POST['b2s_card_default_image']) : ''));
-
-                $oembed_active = (!isset($_POST['b2s_oembed_active'])) ? 0 : 1;
-                $options->_setOption('oembed_active', $oembed_active);
-
-                $meta = B2S_Meta::getInstance();
-                $result['b2s'] = ($card_active == 1 || $og_active == 1) ? true : false;
-                $result['yoast'] = $meta->is_yoast_seo_active();
-                $result['aioseop'] = $meta->is_aioseop_active();
-                $result['webdados'] = $meta->is_webdados_active();
-            }
+            $meta = B2S_Meta::getInstance();
+            $result['b2s'] = ($card_active == 1 || $og_active == 1) ? true : false;
+            $result['yoast'] = $meta->is_yoast_seo_active();
+            $result['aioseop'] = $meta->is_aioseop_active();
+            $result['webdados'] = $meta->is_webdados_active();
 
             echo json_encode($result);
             wp_die();
@@ -802,7 +797,7 @@ class Ajax_Post {
     }
 
     public function resetSocialMetaTags() {
-        if (current_user_can('read') && isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
+        if (current_user_can('administrator') && isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
             global $wpdb;
             $sql = "DELETE FROM " . $wpdb->postmeta . " WHERE meta_key = %s";
             $sql = $wpdb->prepare($sql, "_b2s_post_meta");
@@ -898,7 +893,7 @@ class Ajax_Post {
                 wp_die();
             }
 
-            if (isset($_POST['legacy_mode'])) {
+            if (isset($_POST['legacy_mode']) && current_user_can('administrator')) {
                 $options = new B2S_Options(0, 'B2S_PLUGIN_GENERAL_OPTIONS');
                 $options->_setOption('legacy_mode', (int) $_POST['legacy_mode']);
                 
