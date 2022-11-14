@@ -2,8 +2,8 @@
 Contributors: galdub, tomeraharon, premio
 Tags: folder, folders, replace media, pages folders, media library, posts folders, media folders, media replace, file manager, directories, media library folders, media library folder
 Requires at least: 3.0.0
-Tested up to: 6.0
-Stable tag: 2.8.5
+Tested up to: 6.1
+Stable tag: 2.8.7
 Plugin URI: https://premio.io/downloads/folders/
 
 Folders is a WordPress plugin that will help you quickly create unlimited folders and organize and manage your Media Library files, Pages & Posts in folders
@@ -198,6 +198,15 @@ Just follow our <a href="https://premio.io/wordpress-premio-pro-version-installa
 A live demo for the Folders plugin is available at <a href="https://demo.premio.io/folders/?utm_source=wordpressorg" target="_blank" title="Premio.io demo site">Premio's demo site</a>.
 
 == Changelog ==
+
+= 2.8.7 =
+WordPress 6.1 Folders compatibility adjustments
+
+= 2.8.6 =
+- We've added a horizontal scroll to the folders view
+- Importing folders works better and faster now, the same goes for uploading folders and media library scan for used files (Pro)
+- Published/Drafts view works for specific folders too
+- Fixed some bugs
 
 = 2.8.5 =
 WPML Folders bug fixed

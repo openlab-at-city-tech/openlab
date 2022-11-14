@@ -283,23 +283,33 @@ if (! defined('ABSPATH')) {
             });
         }
 
+        var totalAttachments = 0;
+
         function importPluginData() {
             $("#import-folder-button").addClass("button");
             $("#import-folder-button").prop("disabled", true);
-            $(".other-plugins-"+selectedItem+" .import-folder-data").prop("disabled", true);
+            $(".import-folder-data").prop("disabled", true);
             $(".other-plugins-"+selectedItem+" .import-folder-data .spinner").addClass("active");
+            totalAttachments = 0;
+            importPluginDataByPage(1);
+        }
+
+        function importPluginDataByPage(pageNo) {
             $.ajax({
                 url: "<?php echo admin_url("admin-ajax.php") ?>",
                 data: {
                     'plugin': $(".other-plugins-"+selectedItem).data("plugin"),
                     'nonce': $(".other-plugins-"+selectedItem).data("nonce"),
-                    'action': 'wcp_import_plugin_folders_data'
+                    'action': 'wcp_import_plugin_folders_data',
+                    'paged' : pageNo,
+                    'attached': totalAttachments
                 },
                 type: 'post',
                 success: function(res){
                     var response = $.parseJSON(res);
                     if(response.status == -1) {
-                        $(".other-plugins-"+selectedItem+" .import-folder-data").prop("disabled", false);
+                        totalAttachments = 0;
+                        $(".import-folder-data").prop("disabled", false);
                         $(".other-plugins-"+selectedItem+" .import-folder-data .spinner").removeClass("active");
                         $("#import-third-party-plugin-data").hide();
                         $("#no-more-folder-credit").show();
@@ -307,10 +317,20 @@ if (! defined('ABSPATH')) {
                         $("#import-folder-button").prop("disabled", false);
                     } else if(response.status) {
                         $(".other-plugins-"+response.data.plugin+" .import-message").html(response.message).addClass("success-import");
-                        $(".other-plugins-"+response.data.plugin+" .import-folder-data").remove();
+
+                        if(parseInt(response.data.pages) > parseInt(response.data.current)) {
+                            totalAttachments = response.data.attachments;
+                            importPluginDataByPage(parseInt(response.data.current)+1);
+                        } else {
+                            totalAttachments = 0;
+                            $(".other-plugins-"+response.data.plugin+" .import-folder-data").remove();
+                            $(".import-folder-data").prop("disabled", false);
+                        }
                     } else {
                         $(".other-plugins-"+response.data.plugin+" .import-message").html(response.message).addClass("error-import");
                         $(".other-plugins-"+response.data.plugin+" .import-folder-data").remove();
+                        $(".import-folder-data").prop("disabled", false);
+                        totalAttachments = 0;
                     }
                     $("#import-folder-button").prop("disabled", false);
                     $("#import-plugin-data").hide();
@@ -650,7 +670,7 @@ if ($wp_status == "yes") {
                                                             <img src="<?php echo esc_url(WCP_FOLDER_URL."assets/images/dynamic-folders.gif") ?>">
                                                         </span>
                                                     </span>
-                                                    <span class="recommanded">Recommended</span>
+                                                    <span class="recommanded"><?php esc_html_e("Recommended", "folders") ?></span>
                                                 </label>
                                             </a>
                                         </td>
@@ -667,7 +687,7 @@ if ($wp_status == "yes") {
                                             </label>
                                         </td>
                                         <td colspan="3">
-                                            <label for="use_folder_undo" ><?php esc_html_e('Use folders with Undo action after performing tasks', 'folders'); ?> <span class="recommanded">Recommended</span></label>
+                                            <label for="use_folder_undo" ><?php esc_html_e('Use folders with Undo action after performing tasks', 'folders'); ?> <span class="recommanded"><?php esc_html_e("Recommended", "folders") ?></span></label>
                                         </td>
                                     </tr>
                                     <?php
@@ -740,7 +760,7 @@ if ($wp_status == "yes") {
                                                             <img src="<?php echo esc_url(WCP_FOLDER_URL."assets/images/folders-media.gif") ?>">
                                                         </span>
                                                     </span>
-                                                    <span class="recommanded">Recommended</span>
+                                                    <span class="recommanded"><?php esc_html_e("Recommended", "folders") ?></span>
                                                 </label>
                                             </a>
                                         </td>
@@ -834,7 +854,7 @@ if ($wp_status == "yes") {
                                                         <span class="new"><?php printf(esc_html__("%sPro version ✨%s includes updating all previous links of the file in the database, changing dates &  more", "folders"), "<a href='".esc_url($this->getFoldersUpgradeURL())."' target='_blank'>", "</a>") ?></span>
                                                     </span>
                                                 </span>
-                                                <span class="recommanded">Recommended</span>
+                                                <span class="recommanded"><?php esc_html_e("Recommended", "folders") ?></span>
                                             </label>
                                         </td>
                                     </tr>
@@ -1195,6 +1215,23 @@ if ($wp_status == "yes") {
                                             }
                                             ?>
                                         </select>
+                                    </td>
+                                </tr>
+                                <?php $enable_horizontal_scroll = ! isset($customize_folders['enable_horizontal_scroll']) || empty($customize_folders['enable_horizontal_scroll']) ? "on" : $customize_folders['enable_horizontal_scroll']; ?>
+                                <tr>
+                                    <td class="no-padding">
+                                        <label for="enable_horizontal_scroll" >
+                                            <?php esc_html_e("Enable Horizontal Scroll", 'folders'); ?> <span class="folder-tooltip" data-title="<?php esc_html_e("When a folder has too much text or you have many levels of sub-folders, a horizontal scroll bar will appear on the bottom to scroll & view Folder names", "folders") ?>"><span class="dashicons dashicons-editor-help"></span></span>
+                                        </label>
+                                    </td>
+                                    <td colspan="2">
+                                        <input type="hidden" name="customize_folders[enable_horizontal_scroll]" value="off" />
+                                        <div class="inline-checkbox">
+                                            <label class="folder-switch " for="enable_horizontal_scroll">
+                                                <input type="checkbox" class="sr-only normal-input" name="customize_folders[enable_horizontal_scroll]" id="enable_horizontal_scroll" value="on" <?php checked($enable_horizontal_scroll, "on") ?>>
+                                                <div class="folder-slider normal round"></div>
+                                            </label>
+                                        </div>
                                     </td>
                                 </tr>
                                 <?php

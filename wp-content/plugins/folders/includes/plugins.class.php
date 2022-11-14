@@ -44,6 +44,7 @@ class WCP_Folder_Plugins
 
     /**
      * Define the core functionality of the import data functionality.
+     * Define the core functionality of the import data functionality.
      *
      * Import data from other plugins
      * Remove data from other plugins
@@ -133,41 +134,59 @@ class WCP_Folder_Plugins
     }//end remove_plugin_folders_data()
 
 
-    /**
-     * Import data from other plugins
-     *
-     * @since  1.0.0
-     * @access public
-     * @return $response
-     */
+    public function filter_categories_by_term_id($attachments)
+    {
+        $termsData = [];
+        foreach ($attachments as $attachment) {
+            $termsData[$attachment->folder_id][] = $attachment->attachment_id;
+        }
+
+        return $termsData;
+
+    }//end filter_categories_by_term_id()
+
+
     public function import_plugin_folders_data()
     {
+
+        global $wpdb;
+
         $postData = filter_input_array(INPUT_POST);
 
-        $plugin   = isset($postData['plugin']) ? sanitize_text_field($postData['plugin']) : "";
-        $nonce    = isset($postData['nonce']) ? sanitize_text_field($postData['nonce']) : "";
-        $response = [];
-        $response['status']         = 0;
+        $paged         = isset($postData['paged']) && is_numeric($postData['paged']) && $postData['paged'] > 0 ? intval(sanitize_text_field($postData['paged'])) : 1;
+        $attachedItems = isset($postData['attached']) && is_numeric($postData['attached']) && $postData['attached'] > 0 ? intval(sanitize_text_field($postData['attached'])) : 0;
+        $startFrom     = (10 * ($paged - 1));
+        $endFolder     = (10 * $paged);
+        $totalFolders  = 0;
+
+        $plugin = isset($postData['plugin']) ? $postData['plugin'] : "";
+        $nonce  = isset($postData['nonce']) ? $postData['nonce'] : "";
+
+        $dataSet            = [];
+        $response           = [];
+        $response['status'] = 0;
         $response['message']        = esc_html__("Invalid request", "folders");
         $response['data']           = [];
         $response['data']['plugin'] = $plugin;
         if (wp_verify_nonce($nonce, "import_data_from_".$plugin)) {
             $this->get_plugin_information();
-            $folders     = isset($this->plugins[$plugin]['folders']) ? $this->plugins[$plugin]['folders'] : [];
-            $attachments = isset($this->plugins[$plugin]['attachments']) ? $this->plugins[$plugin]['attachments'] : [];
+            $folders      = isset($this->plugins[$plugin]['folders']) ? $this->plugins[$plugin]['folders'] : [];
+            $totalFolders = count($folders);
+            $attachments  = isset($this->plugins[$plugin]['attachments']) ? $this->plugins[$plugin]['attachments'] : [];
 
             $categoryByID        = [];
             $foldersImported     = [];
             $attachmentsImported = [];
-
             if ($plugin != 'filebird' && $plugin != 'real-media-library') {
+                $currentFolder = -1;
                 foreach ($folders as $folder) {
+                    $currentFolder++;
                     $folder_id = $folder->term_id;
                     $parent    = intval($folder->parent);
 
                     $taxonomy = 'media_folder';
 
-                    foreach ($this->postTypes as $post_type) {
+                    foreach ($this->post_types as $post_type) {
                         if (strpos($folder->taxonomy, $post_type) !== false) {
                             if ($post_type == "post") {
                                 $taxonomy = "post_folder";
@@ -188,7 +207,17 @@ class WCP_Folder_Plugins
                     $new_term = wp_insert_term($folder->name, $taxonomy, ['parent' => $parent]);
 
                     if (is_wp_error($new_term)) {
-                        continue;
+                        if (isset($new_term->errors['term_exists']) && $new_term->error_data['term_exists']) {
+                            $termId   = $new_term->error_data['term_exists'];
+                            $termData = get_term($termId, "", ARRAY_A);
+                            if (!empty($termData)) {
+                                $new_term = $termData;
+                            } else {
+                                continue;
+                            }
+                        } else {
+                            continue;
+                        }
                     }
 
                     $arg      = [
@@ -225,47 +254,54 @@ class WCP_Folder_Plugins
                         'parent'  => $parent,
                         'name'    => $folder->name,
                     ];
-                }//end foreach
 
-                // STEP: Assign plugin categories to HF categories
-                foreach ($attachments as $attachment) {
-                    $hf_category_id = isset($categoryByID[$attachment->term_taxonomy_id]['term_id']) ? intval($categoryByID[$attachment->term_taxonomy_id]['term_id']) : 0;
-                    $attachment_id  = isset($attachment->object_id) ? intval($attachment->object_id) : 0;
+                    $newTermID     = $new_term['term_id'];
+                    $folderItems   = 0;
+                    $failedItems   = 0;
+                    $query         = "SELECT object_id FROM ".$wpdb->term_relationships." WHERE term_taxonomy_id = %d";
+                    $query         = $wpdb->prepare($query, [$folder->term_taxonomy_id]);
+                    $results       = $wpdb->get_results($query);
+                    $found_results = count($results);
+                    if ($currentFolder >= $startFrom && $currentFolder < $endFolder) {
+                        if (count($results)) {
+                            foreach ($results as $result) {
+                                $term_set = wp_set_object_terms($result->object_id, $newTermID, $taxonomy, true);
 
-                    if (!$hf_category_id || !$attachment_id) {
-                        continue;
-                    }
+                                if (is_wp_error($term_set)) {
+                                    $failedItems++;
+                                    continue;
+                                }
 
-                    // Get attachment taxonomy by post type
-                    $post_type = get_post_type($attachment_id);
-                    if ($post_type == "post") {
-                        $taxonomy = "post_folder";
-                    } else if ($post_type == "page") {
-                        $taxonomy = "folder";
-                    } else if ($post_type == "attachment") {
-                        $taxonomy = "media_folder";
-                    } else {
-                        $taxonomy = $post_type.'_folder';
-                    }
+                                $folderItems++;
 
-                    $term_ids   = wp_get_object_terms($attachment_id, $taxonomy, ['fields' => 'ids']);
-                    $term_ids[] = $hf_category_id;
+                                $attachmentsImported[] = [
+                                    'cat_id'   => $newTermID,
+                                    'term_ids' => $result->object_id,
+                                    'set'      => $term_set,
+                                ];
+                            }
+                        }
 
-                    $term_set = wp_set_object_terms($attachment_id, $term_ids, $taxonomy);
-
-                    if (is_wp_error($term_set)) {
-                        continue;
-                    }
-
-                    $attachmentsImported[] = [
-                        'cat_id'   => $hf_category_id,
-                        'term_ids' => $term_ids,
-                        'set'      => $term_set,
-                    ];
+                        $dataSet[] = [
+                            'id'      => $newTermID,
+                            'old_id'  => $folder->term_taxonomy_id,
+                            'name'    => $folder->name,
+                            'items'   => $folderItems,
+                            'failed'  => $failedItems,
+                            'results' => $found_results,
+                        ];
+                    }//end if
                 }//end foreach
             } else {
+                $attachments   = $this->filter_categories_by_term_id($attachments);
+                $currentFolder = -1;
                 foreach ($folders as $folder) {
-                    $parent   = intval($folder->parent);
+                    $currentFolder++;
+                    $parent = intval($folder->parent);
+                    if ($parent == -1) {
+                        $parent = 0;
+                    }
+
                     $parentID = 0;
 
                     if ($parent && isset($categoryByID[$parent]['term_id'])) {
@@ -275,7 +311,17 @@ class WCP_Folder_Plugins
                     $new_term = wp_insert_term($folder->name, "media_folder", ['parent' => $parentID]);
 
                     if (is_wp_error($new_term)) {
-                        continue;
+                        if (isset($new_term->errors['term_exists']) && $new_term->error_data['term_exists']) {
+                            $termId   = $new_term->error_data['term_exists'];
+                            $termData = get_term($termId, "", ARRAY_A);
+                            if (!empty($termData)) {
+                                $new_term = $termData;
+                            } else {
+                                continue;
+                            }
+                        } else {
+                            continue;
+                        }
                     }
 
                     $taxonomy = 'media_folder';
@@ -298,38 +344,55 @@ class WCP_Folder_Plugins
                         'parent'  => $parent,
                         'term_id' => $new_term['term_id'],
                     ];
-                }//end foreach
 
-                foreach ($attachments as $attachment) {
-                    $hf_category_id = isset($categoryByID[$attachment->folder_id]['term_id']) ? intval($categoryByID[$attachment->folder_id]['term_id']) : 0;
-                    $attachment_id  = isset($attachment->attachment_id) ? intval($attachment->attachment_id) : 0;
+                    $newTermID     = $new_term['term_id'];
+                    $folderItems   = 0;
+                    $failedItems   = 0;
+                    $found_results = 0;
+                    if ($currentFolder >= $startFrom && $currentFolder < $endFolder) {
+                        if (isset($attachments[$folder->id]) && count($attachments[$folder->id]) > 0) {
+                            foreach ($attachments[$folder->id] as $result) {
+                                $term_set = wp_set_object_terms($result, $newTermID, $taxonomy, true);
 
-                    if (! $hf_category_id || ! $attachment_id) {
-                        continue;
-                    }
+                                if (is_wp_error($term_set)) {
+                                    $failedItems++;
+                                    continue;
+                                }
 
-                    $term_ids   = wp_get_object_terms($attachment_id, "media_folder", ['fields' => 'ids']);
-                    $term_ids[] = $hf_category_id;
+                                $folderItems++;
 
-                    $term_set = wp_set_object_terms($attachment_id, $term_ids, "media_folder");
+                                $attachmentsImported[] = [
+                                    'cat_id'   => $newTermID,
+                                    'term_ids' => $result->object_id,
+                                    'set'      => $term_set,
+                                ];
+                            }
 
-                    if (is_wp_error($term_set)) {
-                        continue;
-                    }
-
-                    $attachmentsImported[] = [
-                        'cat_id'   => $hf_category_id,
-                        'term_ids' => $term_ids,
-                        'set'      => $term_set,
-                    ];
+                            $dataSet[] = [
+                                'id'      => $newTermID,
+                                'old_id'  => $folder->id,
+                                'name'    => $folder->name,
+                                'items'   => $folderItems,
+                                'failed'  => $failedItems,
+                                'results' => $found_results,
+                            ];
+                        }//end if
+                    }//end if
                 }//end foreach
             }//end if
 
-            $response['status']           = 1;
-            $response['data']['imported'] = count($foldersImported);
-            $response['data']['attachments'] = count($attachmentsImported);
+            delete_transient("premio_folders_without_trash");
+
+            $totalPages         = ceil($totalFolders / 10);
+            $response['status'] = 1;
+            $response['data']['imported']    = count($foldersImported);
+            $response['data']['attachments'] = (count($attachmentsImported) + $attachedItems);
+            $response['data']['data_set']    = $dataSet;
+            $response['data']['folders']     = $totalFolders;
+            $response['data']['pages']       = $totalPages;
+            $response['data']['current']     = $paged;
             $response['data']['plugin']      = $plugin;
-            $response['message'] = sprintf(esc_html__('%s folders imported and %s attachments categorized.', 'folders'), count($foldersImported), count($attachmentsImported));
+            $response['message'] = sprintf(esc_html__('%s folders imported and %s attachments categorized.', 'folders'), count($foldersImported), (count($attachmentsImported) + $attachedItems));
         }//end if
 
         echo json_encode($response);
@@ -366,16 +429,17 @@ class WCP_Folder_Plugins
             return $this->plugins;
         }
 
-        $this->plugins   = [
+        $this->plugins    = [
             // FileBird
             'filebird'               => [
                 'name'              => 'FileBird (v4)',
                 'taxonomy'          => 'filebird',
+        // has custom DB table
                 'folders'           => [],
                 'attachments'       => [],
                 'total_folders'     => 0,
                 'total_attachments' => 0,
-                'isExists'          => 0,
+                'is_exists'         => 0,
             ],
             'enhanced-media-library' => [
                 // Enhanced Media Library
@@ -385,17 +449,17 @@ class WCP_Folder_Plugins
                 'attachments'       => [],
                 'total_folders'     => 0,
                 'total_attachments' => 0,
-                'isExists'          => 0,
+                'is_exists'         => 0,
             ],
             'wicked-folders'         => [
-                // Enhanced Media Library
+                // Wicked Folders
                 'name'              => 'Wicked Folders',
                 'taxonomy'          => 'wf_attachment_folders',
                 'folders'           => [],
                 'attachments'       => [],
                 'total_folders'     => 0,
                 'total_attachments' => 0,
-                'isExists'          => 0,
+                'is_exists'         => 0,
             ],
             'real-media-library'     => [
                 // Real Media Library
@@ -406,17 +470,17 @@ class WCP_Folder_Plugins
                 'attachments'       => [],
                 'total_folders'     => 0,
                 'total_attachments' => 0,
-                'isExists'          => 0,
+                'is_exists'         => 0,
             ],
             'wp-media-folder'        => [
-                // Real Media Library
+                // WP Media Folder
                 'name'              => 'WP Media Folder (by JoomUnited)',
                 'taxonomy'          => 'wpmf-category',
                 'folders'           => [],
                 'attachments'       => [],
                 'total_folders'     => 0,
                 'total_attachments' => 0,
-                'isExists'          => 0,
+                'is_exists'         => 0,
             ],
             'mediamatic'             => [
                 // Mediamatic
@@ -426,7 +490,7 @@ class WCP_Folder_Plugins
                 'attachments'       => [],
                 'total_folders'     => 0,
                 'total_attachments' => 0,
-                'isExists'          => 0,
+                'is_exists'         => 0,
             ],
             'happyfiles'             => [
                 // HappyFiles
@@ -436,11 +500,11 @@ class WCP_Folder_Plugins
                 'attachments'       => [],
                 'total_folders'     => 0,
                 'total_attachments' => 0,
-                'isExists'          => 0,
+                'is_exists'         => 0,
             ],
         ];
-        $postTypes       = get_post_types([]);
-        $this->postTypes = array_keys($postTypes);
+        $post_types       = get_post_types([]);
+        $this->post_types = array_keys($post_types);
 
         foreach ($this->plugins as $slug => $plugin_data) {
             $taxonomy = $plugin_data['taxonomy'];
@@ -449,7 +513,7 @@ class WCP_Folder_Plugins
                 // Run for all registered post types
                 $folders = [];
 
-                foreach ($this->postTypes as $post_type) {
+                foreach ($this->post_types as $post_type) {
                     $wicked_folders = $this->get_plugin_folders('wf_'.$post_type.'_folders', $slug);
 
                     if (is_array($wicked_folders)) {
@@ -483,8 +547,8 @@ class WCP_Folder_Plugins
             $this->plugins[$key]['total_attachments'] = count($attachments);
 
             if (count($folders) > 0 || count($attachments) > 0) {
-                $this->plugins[$key]['isExists'] = 1;
-                $this->isExists = 1;
+                $this->plugins[$key]['is_exists'] = 1;
+                $this->is_exists = 1;
             }
         }
 
@@ -561,14 +625,14 @@ class WCP_Folder_Plugins
         foreach ($folders as $folder) {
             // FileBird, Real Media Library
             if ($taxonomy === 'filebird' || $taxonomy === 'rml') {
-                $folder_object = new \stdClass();
+                $folderObj = new \stdClass();
 
-                $folder_object->name     = $folder->name;
-                $folder_object->id       = intval($folder->id);
-                $folder_object->parent   = intval($folder->parent);
-                $folder_object->position = intval($folder->ord);
+                $folderObj->name     = $folder->name;
+                $folderObj->id       = intval($folder->id);
+                $folderObj->parent   = intval($folder->parent);
+                $folderObj->position = intval($folder->ord);
 
-                $mapped_folders[] = $folder_object;
+                $mapped_folders[] = $folderObj;
             }
         }
 
@@ -591,22 +655,22 @@ class WCP_Folder_Plugins
         foreach ($attachments as $folder) {
             // FileBird
             if ($taxonomy === 'filebird') {
-                $folder_object = new \stdClass();
+                $folderObj = new \stdClass();
 
-                $folder_object->folder_id     = intval($folder->folder_id);
-                $folder_object->attachment_id = intval($folder->attachment_id);
+                $folderObj->folder_id     = intval($folder->folder_id);
+                $folderObj->attachment_id = intval($folder->attachment_id);
 
-                $mapped_attachments[] = $folder_object;
+                $mapped_attachments[] = $folderObj;
             }
 
             // Real Media Library
             if ($taxonomy === 'rml') {
-                $folder_object = new \stdClass();
+                $folderObj = new \stdClass();
 
-                $folder_object->folder_id     = intval($folder->fid);
-                $folder_object->attachment_id = intval($folder->attachment);
+                $folderObj->folder_id     = intval($folder->fid);
+                $folderObj->attachment_id = intval($folder->attachment);
 
-                $mapped_attachments[] = $folder_object;
+                $mapped_attachments[] = $folderObj;
             }
         }//end foreach
 
@@ -628,32 +692,32 @@ class WCP_Folder_Plugins
 
         // FileBird has its own db table
         if ($taxonomy === 'filebird') {
-            $filebird_attachments_table = $wpdb->prefix.'fbv_attachment_folder';
+            $filebirdTable = $wpdb->prefix.'fbv_attachment_folder';
 
-            // Get FileBird attachments (order by 'folder_id')
-            if ($wpdb->get_var("SHOW TABLES LIKE '$filebird_attachments_table'") == $filebird_attachments_table) {
-                return $wpdb->get_results("SELECT * FROM $filebird_attachments_table ORDER BY folder_id ASC");
+            // Get FileBird attachments
+            if ($wpdb->get_var("SHOW TABLES LIKE '{$filebirdTable}'") == $filebirdTable) {
+                return $wpdb->get_results("SELECT * FROM {$filebirdTable} ORDER BY folder_id ASC");
             }
         }
 
         // Real Media Library has its own db table
         else if ($taxonomy === 'rml') {
-            $rml_attachments_table = $wpdb->prefix.'realmedialibrary_posts';
+            $rmlTable = $wpdb->prefix.'realmedialibrary_posts';
 
-            // Get FileBird folders (order by 'parent' to create parent categories first)
-            if ($wpdb->get_var("SHOW TABLES LIKE '$rml_attachments_table'") == $rml_attachments_table) {
-                return $wpdb->get_results("SELECT * FROM $rml_attachments_table ORDER BY fid ASC");
+            // Get Data from Real Media Library DB Table
+            if ($wpdb->get_var("SHOW TABLES LIKE '{$rmlTable}'") == $rmlTable) {
+                return $wpdb->get_results("SELECT * FROM {$rmlTable} ORDER BY fid ASC");
             }
         }
 
         // Default: Plugins with custom taxonomy terms
         else {
-            $query = "SELECT  ".$wpdb->term_relationships.".object_id,
-				".$wpdb->term_relationships.".term_taxonomy_id
-				FROM ".$wpdb->term_relationships."
-				WHERE ".$wpdb->term_relationships.".term_taxonomy_id IN (%s)";
-            $query = $wpdb->prepare($query, implode(',', array_column($folders, 'term_id')));
-            return $wpdb->get_results($query);
+            return $wpdb->get_results(
+                "SELECT  TR.object_id,
+                        TR.term_taxonomy_id
+				FROM ".$wpdb->term_relationships." AS TR
+				WHERE TR.term_taxonomy_id IN (".implode(',', array_column($folders, 'term_taxonomy_id')).")"
+            );
         }
 
     }//end get_plugin_attachments()

@@ -69,6 +69,7 @@ button.button.organize-button:hover { background-color: <?php echo esc_attr($cus
 $rgbColor = self::hexToRgb($customize_folders['folder_bg_color']); ?>
 body:not(.no-hover-css) #custom-scroll-menu .jstree-hovered:not(.jstree-clicked), body:not(.no-hover-css) #custom-scroll-menu .jstree-hovered:not(.jstree-clicked):hover, .dynamic-menu a.active, .dynamic-menu a:hover, .folder-setting-menu li a:hover { background: rgba(<?php echo esc_attr($rgbColor['r'].",".$rgbColor['g'].",".$rgbColor['b'].", 0.08") ?>) !important; color: #333333;}
 body:not(.no-hover-css) #custom-scroll-menu .jstree-clicked, body:not(.no-hover-css) #custom-scroll-menu .jstree-clicked:not(.jstree-clicked):focus, #custom-scroll-menu .jstree-clicked, #custom-scroll-menu .jstree-clicked:hover { background: <?php echo esc_attr($customize_folders['folder_bg_color']) ?> !important; color: #ffffff !important; }
+body:not(.no-hover-css) #custom-scroll-menu .jstree-clicked .folder-actions { background: <?php echo esc_attr($customize_folders['folder_bg_color']) ?> !important; color: #ffffff !important; }
 #custom-scroll-menu .jstree-hovered.wcp-drop-hover, #custom-scroll-menu .jstree-hovered.wcp-drop-hover:hover, #custom-scroll-menu .jstree-clicked.wcp-drop-hover, #custom-scroll-menu .jstree-clicked.wcp-drop-hover:hover, body #custom-scroll-menu  *.drag-in > a:hover { background: <?php echo esc_attr($customize_folders['folder_bg_color']) ?> !important; color: #ffffff !important; }
 .drag-bot > a {
     border-bottom: solid 2px <?php echo esc_attr($customize_folders['folder_bg_color']) ?>;
@@ -97,6 +98,7 @@ body:not(.no-hover-css) .wcp-container .route .title:hover, body:not(.no-hover-c
 }
 #custom-menu .route .nav-icon .wcp-icon {color: <?php echo esc_attr($customize_folders['folder_bg_color']) ?> !important;}
 .mCS-3d.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar { background: <?php echo esc_attr($customize_folders['folder_bg_color']) ?> !important; }
+.os-theme-dark>.os-scrollbar>.os-scrollbar-track>.os-scrollbar-handle { background: <?php echo esc_attr($customize_folders['folder_bg_color']) ?> !important; }
 .jstree-node.drag-in > a.jstree-anchor.jstree-hovered { background-color: <?php echo esc_attr($customize_folders['folder_bg_color']) ?> !important; color: #ffffff; }
 <?php
 
@@ -159,6 +161,7 @@ if (!empty($post_type)) {
         $active_all_class = "active-item";
     }
 }
+$horClass = (!isset($customize_folders['enable_horizontal_scroll']) || $customize_folders['enable_horizontal_scroll'] == "on") ? "hor-scroll" : "";
 ?>
 <div id="wcp-content" class="<?php echo esc_attr(isset($display_status) && $display_status == "hide" ? "hide-folders-area" : "")  ?>" >
     <div id="wcp-content-resize">
@@ -225,19 +228,20 @@ if (!empty($post_type)) {
                         <div class="folder-separator-2"></div>
                     </div>
                 </div>
-                <div id="custom-scroll-menu">
-                    <div class="ajax-preloader">
-                        <div class="cssload-container">
-                            <div class="cssload-tube-tunnel"></div>
+                <div id="custom-scroll-menu" class="custom-scroll-menu <?php echo esc_attr($horClass) ?>">
+                    <div class="horizontal-scroll-menu">
+                        <div class="ajax-preloader">
+                            <div class="cssload-container">
+                                <div class="cssload-tube-tunnel"></div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="js-tree-data">
+                        <div class="js-tree-data">
                         <div id="js-tree-menu" class="<?php echo ($status == 1) ? "active" : "" ?>">
-                            <!--<div class="wcp-parent" id="title0"><i class="fa fa-folder-o"></i> All Folders</div>-->
                             <ul class='space first-space' id='space_0'>
                                 <?php echo ($terms_data); ?>
                             </ul>
                         </div>
+                    </div>
                     </div>
                 </div>
             </div>
@@ -427,7 +431,7 @@ if (!empty($post_type)) {
                     <?php esc_html_e("Confirm your change", "folders") ?>
                 </div>
                 <div class="folder-form-message" style="padding: 25px 10px;" >
-                    Hey, it looks like you want to move the file to "Unassigned Files." Do you want to move the file from the current folder only or from all the folders where the file exists?
+                    <?php esc_html_e("Hey, it looks like you want to move the file to \"Unassigned Files.\" Do you want to move the file from the current folder only or from all the folders where the file exists?", "folders") ?>
                 </div>
                 <div class="folder-form-buttons">
                     <input type="hidden" id="unassigned_folders" />

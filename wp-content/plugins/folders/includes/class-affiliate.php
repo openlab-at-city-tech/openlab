@@ -189,18 +189,18 @@ class Folder_affiliate_program
                 }
             </style>
             <div class="notice notice-info chaty-notice <?php echo esc_attr($this->pluginSlug) ?>-premio-affiliate <?php echo esc_attr($this->pluginSlug) ?>-premio-affiliate">
-                <p>Hi there, you've been using <?php echo esc_attr($this->pluginName) ?> for a while now. Do you know that <b><?php echo esc_attr($this->pluginName) ?></b> has an affiliate program? Join now and get <b>25% lifetime commission</b> <a href="javascript:;" class="dismiss-btn"><span class="dashicons dashicons-no-alt"></span> Dismiss</a></p>
+                <p><?php printf(esc_html__("Hi there, you've been using %s for a while now. Do you know that %s has an affiliate program? Join now and get %s ", "folders"), $this->pluginName, "<b>".$this->pluginName."</b>", "<b>".esc_html__("25% lifetime commission", "folders")."</b>") ?> <a href="javascript:;" class="dismiss-btn"><span class="dashicons dashicons-no-alt"></span> <?php esc_html_e("Dismiss", "folders") ?></a></p>
                 <div class="clear clearfix"></div>
-                <a class="button button-primary <?php echo esc_attr($this->pluginSlug) ?>-affiliate-btn" target="_blank" href="https://premio.io/affiliates/?utm_source=inapp&plugin=folders&domain=<?php echo esc_url($_SERVER['HTTP_HOST']) ?>">Tell me more <span class="dashicons dashicons-arrow-right-alt"></span></a>
+                <a class="button button-primary <?php echo esc_attr($this->pluginSlug) ?>-affiliate-btn" target="_blank" href="https://premio.io/affiliates/?utm_source=inapp&plugin=folders&domain=<?php echo esc_url($_SERVER['HTTP_HOST']) ?>"><?php esc_html_e("Tell me more", "folders") ?> <span class="dashicons dashicons-arrow-right-alt"></span></a>
             </div>
             <div class="<?php echo esc_attr($this->pluginSlug) ?>-affiliate-popup">
                 <div class="<?php echo esc_attr($this->pluginSlug) ?>-affiliate-popup-content">
                     <button class="<?php echo esc_attr($this->pluginSlug) ?>-close-affiliate-popup"><span class="dashicons dashicons-no-alt"></span></button>
-                    <div class="<?php echo esc_attr($this->pluginSlug) ?>-affiliate-title">Would you like us to remind you about this later?</div>
+                    <div class="<?php echo esc_attr($this->pluginSlug) ?>-affiliate-title"><?php esc_html_e("Would you like us to remind you about this later?", "folders") ?></div>
                     <div class="<?php echo esc_attr($this->pluginSlug) ?>-affiliate-options">
-                        <a href="javascript:;" data-days="3">Remind me in 3 days</a>
-                        <a href="javascript:;" data-days="10">Remind me in 10 days</a>
-                        <a href="javascript:;" data-days="-1" class="dismiss">Don't remind me about this</a>
+                        <a href="javascript:;" data-days="3"><?php esc_html_e("Remind me in 3 days", "folders") ?></a>
+                        <a href="javascript:;" data-days="10"><?php esc_html_e("Remind me in 10 days", "folders") ?></a>
+                        <a href="javascript:;" data-days="-1" class="dismiss"><?php esc_html_e("Don't remind me about this", "folders") ?></a>
                     </div>
                 </div>
             </div>

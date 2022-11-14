@@ -131,7 +131,7 @@ class WCP_Tree
 
                 $string .= "<li id='".esc_attr($term->term_id)."' class='".esc_attr($class)."' data-slug='".esc_attr($term->slug)."' data-nonce='".esc_attr($nonce)."' data-folder='".esc_attr($term->term_id)."' data-child='".esc_attr($child)."' data-count='".esc_attr($count)."' data-parent='".esc_attr($parent)."'>
                                 ".esc_attr($term->name)."
-                                <ul>".esc_attr($return['string'])."</ul>
+                                <ul>".$return['string']."</ul>
                             </li>";
 
                 $sticky_string .= $return['sticky_string'];
@@ -156,7 +156,7 @@ class WCP_Tree
      */
     public static function get_option_data_for_select($postType)
     {
-        $string  = "<option value='0'>Parent Folder</option>";
+        $string  = "<option value='0'>".esc_html__("Parent Folder", "folders")."</option>";
         $string .= self::get_folder_option_data($postType, 0, '');
         return $string;
 

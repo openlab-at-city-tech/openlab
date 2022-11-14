@@ -9,7 +9,6 @@
 if (! defined('ABSPATH')) {
     exit;
 }
-
 $proURL = "https://go.premio.io/?edd_action=add_to_cart&download_id=687&edd_options[price_id]=";
 ?>
 
@@ -17,23 +16,23 @@ $proURL = "https://go.premio.io/?edd_action=add_to_cart&download_id=687&edd_opti
     <div class="easy-modal-inner">
         <div class="container">
             <div class="pricing-table">
-                <div class="price-title">Unlock All Features</div>
+                <div class="price-title"><?php esc_html_e("Unlock All Features", "folders") ?></div>
                 <div class="pricing-table-header">
                     <div class="pricing-table-body">
                         <div class="pricing-table-content first active" data-option="1_year">
-                            <div class="year-col">1 Year</div>
-                            <div class="update-col">Updates &amp; Support</div>
+                            <div class="year-col"><?php esc_html_e("1 Year", "folders") ?></div>
+                            <div class="update-col"><?php esc_html_e("Updates & Support", "folders") ?></div>
                             <div class="pricing-discount-col"></div>
                         </div>
                         <div class="pricing-table-content second" data-option="2_year">
-                            <div class="year-col">2 Years</div>
-                            <div class="update-col">Updates &amp; Support</div>
-                            <div class="pricing-discount-col"><span>32% off &#128526;</span></div>
+                            <div class="year-col"><?php esc_html_e("2 Years", "folders") ?></div>
+                            <div class="update-col"><?php esc_html_e("Updates & Support", "folders") ?></div>
+                            <div class="pricing-discount-col"><span><?php esc_html_e("32% off", "folders") ?> &#128526;</span></div>
                         </div>
                         <div class="pricing-table-content third" data-option="lifetime">
-                            <div class="year-col">Lifetime</div>
-                            <div class="update-col">Updates &amp; Support</div>
-                            <div class="pricing-discount-col"><span>63% off &#129395;</span></div>
+                            <div class="year-col"><?php esc_html_e("Lifetime", "folders") ?></div>
+                            <div class="update-col"><?php esc_html_e("Updates & Support", "folders") ?></div>
+                            <div class="pricing-discount-col"><span><?php esc_html_e("63% off", "folders") ?> &#129395;</span></div>
                         </div>
                     </div>
                 </div>
@@ -43,20 +42,20 @@ $proURL = "https://go.premio.io/?edd_action=add_to_cart&download_id=687&edd_opti
                             <div class="price-table basic-feature">
                                 <div class="price-table-top">
                                     <div class="price-head">
-                                        <div class="plan-name">Basic</div>
-                                        <div class="plan-price">$39<span>/year</span></div>
+                                        <div class="plan-name"><?php esc_html_e("Basic", "folders") ?></div>
+                                        <div class="plan-price">$39<span><?php esc_html_e("/year", "folders") ?></span></div>
                                     </div>
-                                    <div class="price-websites">For small website owners</div>
-                                    <div class="price-offer">Renewals for <b>25% off</b></div>
+                                    <div class="price-websites"><?php esc_html_e("For small website owners", "folders") ?></div>
+                                    <div class="price-offer"><?php printf(esc_html__("Renewals for %s", "folders"), "<b>".esc_html__("25% off", "folders")."</b>") ?></div>
                                 </div>
                                 <div class="price-table-middle">
                                     <ul>
-                                        <li><a href="javascript:;" class="cus-tooltip">1 website <span class="has-tooltip">*</span><span class="tooltip__content">Use Folders on 1 domain</span></a></li>
-                                        <li><a href="javascript:;">Organize pages, posts, and media files</a></li>
-                                        <li><a href="javascript:;" class="cus-tooltip">Unlimited subfolders (with multilevel support)<span class="has-tooltip">*</span><span class="tooltip__content">Create unlimited folders, sub-folders with multi-level support</span></a></li>
+                                        <li><a href="javascript:;" class="cus-tooltip"><?php esc_html_e("1 website", "folders") ?> <span class="has-tooltip">*</span><span class="tooltip__content"><?php esc_html_e("Use Folders on 1 domain", "folders") ?></span></a></li>
+                                        <li><a href="javascript:;"><?php esc_html_e("Organize pages, posts, and media files", "folders") ?></a></li>
+                                        <li><a href="javascript:;" class="cus-tooltip"><?php esc_html_e("Unlimited subfolders (with multilevel support)", "folders") ?><span class="has-tooltip">*</span><span class="tooltip__content"><?php esc_html_e("Create unlimited folders, sub-folders with multi-level support", "folders") ?></span></a></li>
                                         <li><a href="javascript:;" class="cus-tooltip">
                                                 <span class="html-tooltip dynamic last">
-                                                    Dynamic Folders<span class="has-tooltip">*</span>
+                                                    <?php esc_html_e("Dynamic Folders", "folders") ?><span class="has-tooltip">*</span>
                                                     <span class="tooltip-text" style="">
                                                         <?php esc_html_e("Automatically filter posts/pages/custom posts/media files based on author, date, file types & more", "folders") ?>
                                                         <img src="<?php echo esc_url(WCP_FOLDER_URL."assets/images/dynamic-folders.gif") ?>">
@@ -64,10 +63,10 @@ $proURL = "https://go.premio.io/?edd_action=add_to_cart&download_id=687&edd_opti
                                                 </span>
                                             </a>
                                         </li>
-                                        <li><a href="javascript:;" class="cus-tooltip">Create folders for each post type. I.e. WooCommerce, Elementor<span class="has-tooltip">*</span><span class="tooltip__content">Use folders with other plugins that have custom post type (e.g. Elementor templates, WooCommerce & more)</span></a></li>
+                                        <li><a href="javascript:;" class="cus-tooltip"><?php esc_html_e("Create folders for each post type. I.e. WooCommerce, Elementor", "folders") ?><span class="has-tooltip">*</span><span class="tooltip__content"><?php esc_html_e("Use folders with other plugins that have custom post type (e.g. Elementor templates, WooCommerce & more)", "folders") ?></span></a></li>
                                         <li><a href="javascript:;" class="cus-tooltip">
                                                 <span class="html-tooltip last">
-                                                    Metadata details on Media Library hover <span class="has-tooltip">*</span>
+                                                    <?php esc_html_e("Metadata details on Media Library hover", "folders") ?> <span class="has-tooltip">*</span>
                                                     <span class="tooltip-text " style="">
                                                         <?php esc_html_e("Show useful metadata including title, size, type, date, dimension & more on hover.", "folders") ?>
                                                         <img src="<?php echo esc_url(WCP_FOLDER_URL."assets/images/folders-media.gif") ?>">
@@ -75,27 +74,27 @@ $proURL = "https://go.premio.io/?edd_action=add_to_cart&download_id=687&edd_opti
                                                 </span>
                                             </a>
                                         </li>
-                                        <li><a href="javascript:;" class="cus-tooltip">Clean unused media files from your Media Library<span class="has-tooltip">*</span><span class="tooltip__content">Media Cleaner will first analyze your whole WordPress and show you a list of unused media files for you to go through and delete them</span></a></li>
-                                        <li><a href="javascript:;" class="cus-tooltip">Directly upload folders with all its content<span class="has-tooltip">*</span><span class="tooltip__content">Upload a folder (all its content within the folder) directly</span></a></li>
-                                        <li><a href="javascript:;" class="cus-tooltip">Sort folders based on the date<span class="has-tooltip">*</span><span class="tooltip__content">Sort folders based on the creation date of the folders</span></a></li>
-                                        <li><a href="javascript:;" class="cus-tooltip">Replace media for all file types and update file names from WordPress titles<span class="has-tooltip">*</span><span class="tooltip__content">Replace all types of media files including PDF/SVG/ZIP/DOCX/XSLX & more. While replacing compare the two files side by side</span></a></li>
-                                        <li><a href="javascript:;" class="cus-tooltip">Advanced Media Replacements<span class="has-tooltip">*</span><span class="tooltip__content">Replace media files when uploading and update all references in the database, change dates, organize by newer date & more without hurting your SEO</span></a></li>
-                                        <li><a href="javascript:;" class="cus-tooltip">User access restriction<span class="has-tooltip">*</span><span class="tooltip__content">Restrict users within their own folders only (restrict Dynamic Folder access as well)</span></a></li>
-                                        <li><a href="javascript:;" class="cus-tooltip">Bookmark, lock & duplicate folders<span class="has-tooltip">*</span><span class="tooltip__content">Bookmark, lock/unlock or duplicate folders for faster & easier access to your favorite folders</span></a></li>
-                                        <li><a href="javascript:;" class="cus-tooltip">Move files to trash before permanently removing<span class="has-tooltip">*</span><span class="tooltip__content">Before deleting files permanently, move them to trash to reduce accidental deletion</span></a></li>
-                                        <li><a href="javascript:;" class="cus-tooltip">Customize folder styles with fonts, custom colors & more<span class="has-tooltip">*</span><span class="tooltip__content">Customize folders with your preferred colors, font size, font family & more</span></a></li>
-                                        <li><a href="javascript:;" class="cus-tooltip">Download folders as ZIP<span class="has-tooltip">*</span><span class="tooltip__content">Download all contents of a folder as a ZIP</span></a></li>
+                                        <li><a href="javascript:;" class="cus-tooltip"><?php esc_html_e("Clean unused media files from your Media Library", "folders") ?><span class="has-tooltip">*</span><span class="tooltip__content"><?php esc_html_e("DMedia Cleaner will first analyze your whole WordPress and show you a list of unused media files for you to go through and delete them", "folders") ?></span></a></li>
+                                        <li><a href="javascript:;" class="cus-tooltip"><?php esc_html_e("Directly upload folders with all its content", "folders") ?><span class="has-tooltip">*</span><span class="tooltip__content"><?php esc_html_e("Upload a folder (all its content within the folder) directly", "folders") ?></span></a></li>
+                                        <li><a href="javascript:;" class="cus-tooltip"><?php esc_html_e("Sort folders based on the date", "folders") ?><span class="has-tooltip">*</span><span class="tooltip__content"><?php esc_html_e("Sort folders based on the creation date of the folders", "folders") ?></span></a></li>
+                                        <li><a href="javascript:;" class="cus-tooltip"><?php esc_html_e("Replace media for all file types and update file names from WordPress titles", "folders") ?><span class="has-tooltip">*</span><span class="tooltip__content"><?php esc_html_e("Replace all types of media files including PDF/SVG/ZIP/DOCX/XSLX & more. While replacing compare the two files side by side", "folders") ?></span></a></li>
+                                        <li><a href="javascript:;" class="cus-tooltip"><?php esc_html_e("Advanced Media Replacements", "folders") ?><span class="has-tooltip">*</span><span class="tooltip__content"><?php esc_html_e("Replace media files when uploading and update all references in the database, change dates, organize by newer date & more without hurting your SEO", "folders") ?></span></a></li>
+                                        <li><a href="javascript:;" class="cus-tooltip"><?php esc_html_e("User access restriction", "folders") ?><span class="has-tooltip">*</span><span class="tooltip__content"><?php esc_html_e("Restrict users within their own folders only (restrict Dynamic Folder access as well)", "folders") ?></span></a></li>
+                                        <li><a href="javascript:;" class="cus-tooltip"><?php esc_html_e("Bookmark, lock & duplicate folders", "folders") ?><span class="has-tooltip">*</span><span class="tooltip__content"><?php esc_html_e("Bookmark, lock/unlock or duplicate folders for faster & easier access to your favorite folders", "folders") ?></span></a></li>
+                                        <li><a href="javascript:;" class="cus-tooltip"><?php esc_html_e("Move files to trash before permanently removing", "folders") ?><span class="has-tooltip">*</span><span class="tooltip__content"><?php esc_html_e("Before deleting files permanently, move them to trash to reduce accidental deletion", "folders") ?></span></a></li>
+                                        <li><a href="javascript:;" class="cus-tooltip"><?php esc_html_e("Customize folder styles with fonts, custom colors & more", "folders") ?><span class="has-tooltip">*</span><span class="tooltip__content"><?php esc_html_e("Customize folders with your preferred colors, font size, font family & more", "folders") ?></span></a></li>
+                                        <li><a href="javascript:;" class="cus-tooltip"><?php esc_html_e("Download folders as ZIP", "folders") ?><span class="has-tooltip">*</span><span class="tooltip__content"><?php esc_html_e("Download all contents of a folder as a ZIP", "folders") ?></span></a></li>
                                     </ul>
                                 </div>
                                 <div class="price-table-bottom">
                                     <div class="custom-dd">
                                         <select class="multiple-options">
-                                            <option data-option="1_year" data-header="Renewals for 25% off" data-price="39" value="<?php echo esc_url($proURL) ?>22">Updates &amp; support for 1 year</option>
-                                            <option data-option="2_year" data-header="For 2 years" data-price="59" value="<?php echo esc_url($proURL) ?>23">Updates &amp; support for 2 years</option>
-                                            <option data-option="lifetime" data-header="For lifetime" data-price="119" value="<?php echo esc_url($proURL) ?>24">Updates &amp; support for lifetime</option>
+                                            <option data-option="1_year" data-header="Renewals for 25% off" data-price="39" value="<?php echo esc_url($proURL) ?>22"><?php esc_html_e("Updates & support for 1 year", "folders") ?></option>
+                                            <option data-option="2_year" data-header="For 2 years" data-price="59" value="<?php echo esc_url($proURL) ?>23"><?php esc_html_e("Updates & support for 2 years", "folders") ?></option>
+                                            <option data-option="lifetime" data-header="For lifetime" data-price="119" value="<?php echo esc_url($proURL) ?>24"><?php esc_html_e("Updates & support for lifetime", "folders") ?></option>
                                         </select>
                                     </div>
-                                    <a class="cart-link" target="_blank" href="<?php echo esc_url($proURL) ?>22">Buy now</a>
+                                    <a class="cart-link" target="_blank" href="<?php echo esc_url($proURL) ?>22"><?php esc_html_e("Buy now", "folders") ?></a>
                                 </div>
                                 <div class="bottom-position"></div>
                             </div>
@@ -104,20 +103,20 @@ $proURL = "https://go.premio.io/?edd_action=add_to_cart&download_id=687&edd_opti
                             <div class="price-table plus-feature">
                                 <div class="price-table-top">
                                     <div class="price-head">
-                                        <div class="plan-name">Plus</div>
-                                        <div class="plan-price">$89<span>/year</span></div>
+                                        <div class="plan-name"><?php esc_html_e("Plus", "folders") ?></div>
+                                        <div class="plan-price">$89<span><?php esc_html_e("/year", "folders") ?></span></div>
                                     </div>
-                                    <div class="price-websites">For businesses with multiple websites</div>
-                                    <div class="price-offer">Renewals for <b>25% off</b></div>
+                                    <div class="price-websites"><?php esc_html_e("For businesses with multiple websites", "folders") ?></div>
+                                    <div class="price-offer"><?php printf(esc_html__("Renewals for %s", "folders"), "<b>".esc_html__("25% off", "folders")."</b>") ?></div>
                                 </div>
                                 <div class="price-table-middle">
                                     <ul>
                                         <li><a href="javascript:;" class="cus-tooltip">5 website <span class="has-tooltip">*</span><span class="tooltip__content">Use Folders on 5 domains</span></a></li>
-                                        <li><a href="javascript:;">Organize pages, posts, and media files</a></li>
-                                        <li><a href="javascript:;" class="cus-tooltip">Unlimited subfolders (with multilevel support)<span class="has-tooltip">*</span><span class="tooltip__content">Create unlimited folders, sub-folders with multi-level support</span></a></li>
+                                        <li><a href="javascript:;"><?php esc_html_e("Organize pages, posts, and media files", "folders") ?></a></li>
+                                        <li><a href="javascript:;" class="cus-tooltip"><?php esc_html_e("Unlimited subfolders (with multilevel support)", "folders") ?><span class="has-tooltip">*</span><span class="tooltip__content"><?php esc_html_e("Create unlimited folders, sub-folders with multi-level support", "folders") ?></span></a></li>
                                         <li><a href="javascript:;" class="cus-tooltip">
                                                 <span class="html-tooltip dynamic last">
-                                                    Dynamic Folders<span class="has-tooltip">*</span>
+                                                    <?php esc_html_e("Dynamic Folders", "folders") ?><span class="has-tooltip">*</span>
                                                     <span class="tooltip-text top" style="">
                                                         <?php esc_html_e("Automatically filter posts/pages/custom posts/media files based on author, date, file types & more", "folders") ?>
                                                         <img src="<?php echo esc_url(WCP_FOLDER_URL."assets/images/dynamic-folders.gif") ?>">
@@ -125,10 +124,10 @@ $proURL = "https://go.premio.io/?edd_action=add_to_cart&download_id=687&edd_opti
                                                 </span>
                                             </a>
                                         </li>
-                                        <li><a href="javascript:;" class="cus-tooltip">Create folders for each post type. I.e. WooCommerce, Elementor<span class="has-tooltip">*</span><span class="tooltip__content">Use folders with other plugins that have custom post type (e.g. Elementor templates, WooCommerce & more)</span></a></li>
+                                        <li><a href="javascript:;" class="cus-tooltip"><?php esc_html_e("Create folders for each post type. I.e. WooCommerce, Elementor", "folders") ?><span class="has-tooltip">*</span><span class="tooltip__content"><?php esc_html_e("Use folders with other plugins that have custom post type (e.g. Elementor templates, WooCommerce & more)", "folders") ?></span></a></li>
                                         <li><a href="javascript:;" class="cus-tooltip">
                                                 <span class="html-tooltip last">
-                                                    Metadata details on Media Library hover <span class="has-tooltip">*</span>
+                                                    <?php esc_html_e("Metadata details on Media Library hover", "folders") ?> <span class="has-tooltip">*</span>
                                                     <span class="tooltip-text" style="">
                                                         <?php esc_html_e("Show useful metadata including title, size, type, date, dimension & more on hover.", "folders") ?>
                                                         <img src="<?php echo esc_url(WCP_FOLDER_URL."assets/images/folders-media.gif") ?>">
@@ -136,27 +135,27 @@ $proURL = "https://go.premio.io/?edd_action=add_to_cart&download_id=687&edd_opti
                                                 </span>
                                             </a>
                                         </li>
-                                        <li><a href="javascript:;" class="cus-tooltip">Clean unused media files from your Media Library<span class="has-tooltip">*</span><span class="tooltip__content">Media Cleaner will first analyze your whole WordPress and show you a list of unused media files for you to go through and delete them</span></a></li>
-                                        <li><a href="javascript:;" class="cus-tooltip">Directly upload folders with all its content<span class="has-tooltip">*</span><span class="tooltip__content">Upload a folder (all its content within the folder) directly</span></a></li>
-                                        <li><a href="javascript:;" class="cus-tooltip">Sort folders based on the date<span class="has-tooltip">*</span><span class="tooltip__content">Sort folders based on the creation date of the folders</span></a></li>
-                                        <li><a href="javascript:;" class="cus-tooltip">Replace media for all file types and update file names from WordPress titles<span class="has-tooltip">*</span><span class="tooltip__content">Replace all types of media files including PDF/SVG/ZIP/DOCX/XSLX & more. While replacing compare the two files side by side</span></a></li>
-                                        <li><a href="javascript:;" class="cus-tooltip">Advanced Media Replacements<span class="has-tooltip">*</span><span class="tooltip__content">Replace media files when uploading and update all references in the database, change dates, organize by newer date & more without hurting your SEO</span></a></li>
-                                        <li><a href="javascript:;" class="cus-tooltip">User access restriction<span class="has-tooltip">*</span><span class="tooltip__content">Restrict users within their own folders only (restrict Dynamic Folder access as well)</span></a></li>
-                                        <li><a href="javascript:;" class="cus-tooltip">Bookmark, lock & duplicate folders<span class="has-tooltip">*</span><span class="tooltip__content">Bookmark, lock/unlock or duplicate folders for faster & easier access to your favorite folders</span></a></li>
-                                        <li><a href="javascript:;" class="cus-tooltip">Move files to trash before permanently removing<span class="has-tooltip">*</span><span class="tooltip__content">Before deleting files permanently, move them to trash to reduce accidental deletion</span></a></li>
-                                        <li><a href="javascript:;" class="cus-tooltip">Customize folder styles with fonts, custom colors & more<span class="has-tooltip">*</span><span class="tooltip__content">Customize folders with your preferred colors, font size, font family & more</span></a></li>
-                                        <li><a href="javascript:;" class="cus-tooltip">Download folders as ZIP<span class="has-tooltip">*</span><span class="tooltip__content">Download all contents of a folder as a ZIP</span></a></li>
+                                        <li><a href="javascript:;" class="cus-tooltip"><?php esc_html_e("Clean unused media files from your Media Library", "folders") ?><span class="has-tooltip">*</span><span class="tooltip__content"><?php esc_html_e("DMedia Cleaner will first analyze your whole WordPress and show you a list of unused media files for you to go through and delete them", "folders") ?></span></a></li>
+                                        <li><a href="javascript:;" class="cus-tooltip"><?php esc_html_e("Directly upload folders with all its content", "folders") ?><span class="has-tooltip">*</span><span class="tooltip__content"><?php esc_html_e("Upload a folder (all its content within the folder) directly", "folders") ?></span></a></li>
+                                        <li><a href="javascript:;" class="cus-tooltip"><?php esc_html_e("Sort folders based on the date", "folders") ?><span class="has-tooltip">*</span><span class="tooltip__content"><?php esc_html_e("Sort folders based on the creation date of the folders", "folders") ?></span></a></li>
+                                        <li><a href="javascript:;" class="cus-tooltip"><?php esc_html_e("Replace media for all file types and update file names from WordPress titles", "folders") ?><span class="has-tooltip">*</span><span class="tooltip__content"><?php esc_html_e("Replace all types of media files including PDF/SVG/ZIP/DOCX/XSLX & more. While replacing compare the two files side by side", "folders") ?></span></a></li>
+                                        <li><a href="javascript:;" class="cus-tooltip"><?php esc_html_e("Advanced Media Replacements", "folders") ?><span class="has-tooltip">*</span><span class="tooltip__content"><?php esc_html_e("Replace media files when uploading and update all references in the database, change dates, organize by newer date & more without hurting your SEO", "folders") ?></span></a></li>
+                                        <li><a href="javascript:;" class="cus-tooltip"><?php esc_html_e("User access restriction", "folders") ?><span class="has-tooltip">*</span><span class="tooltip__content"><?php esc_html_e("Restrict users within their own folders only (restrict Dynamic Folder access as well)", "folders") ?></span></a></li>
+                                        <li><a href="javascript:;" class="cus-tooltip"><?php esc_html_e("Bookmark, lock & duplicate folders", "folders") ?><span class="has-tooltip">*</span><span class="tooltip__content"><?php esc_html_e("Bookmark, lock/unlock or duplicate folders for faster & easier access to your favorite folders", "folders") ?></span></a></li>
+                                        <li><a href="javascript:;" class="cus-tooltip"><?php esc_html_e("Move files to trash before permanently removing", "folders") ?><span class="has-tooltip">*</span><span class="tooltip__content"><?php esc_html_e("Before deleting files permanently, move them to trash to reduce accidental deletion", "folders") ?></span></a></li>
+                                        <li><a href="javascript:;" class="cus-tooltip"><?php esc_html_e("Customize folder styles with fonts, custom colors & more", "folders") ?><span class="has-tooltip">*</span><span class="tooltip__content"><?php esc_html_e("Customize folders with your preferred colors, font size, font family & more", "folders") ?></span></a></li>
+                                        <li><a href="javascript:;" class="cus-tooltip"><?php esc_html_e("Download folders as ZIP", "folders") ?><span class="has-tooltip">*</span><span class="tooltip__content"><?php esc_html_e("Download all contents of a folder as a ZIP", "folders") ?></span></a></li>
                                     </ul>
                                 </div>
                                 <div class="price-table-bottom">
                                     <div class="custom-dd">
                                         <select class="multiple-options">
-                                            <option data-option="1_year" data-header="Renewals for 25% off" data-price="89" value="<?php echo esc_url($proURL) ?>25">Updates &amp; support for 1 year</option>
-                                            <option data-option="2_year" data-header="For 2 years" data-price="139" value="<?php echo esc_url($proURL) ?>26">Updates &amp; support for 2 years</option>
-                                            <option data-option="lifetime" data-header="For lifetime" data-price="229" value="<?php echo esc_url($proURL) ?>27">Updates &amp; support for lifetime</option>
+                                            <option data-option="1_year" data-header="Renewals for 25% off" data-price="89" value="<?php echo esc_url($proURL) ?>25"><?php esc_html_e("Updates & support for 1 year", "folders") ?></option>
+                                            <option data-option="2_year" data-header="For 2 years" data-price="139" value="<?php echo esc_url($proURL) ?>26"><?php esc_html_e("Updates & support for 2 years", "folders") ?></option>
+                                            <option data-option="lifetime" data-header="For lifetime" data-price="229" value="<?php echo esc_url($proURL) ?>27"><?php esc_html_e("Updates & support for lifetime", "folders") ?></option>
                                         </select>
                                     </div>
-                                    <a class="cart-link" target="_blank" href="https://go.premio.io/?edd_action=add_to_cart&amp;download_id=687&amp;edd_options%5Bprice_id%5D=25">Buy now</a>
+                                    <a class="cart-link" target="_blank" href="https://go.premio.io/?edd_action=add_to_cart&download_id=687&edd_options[price_id]=25"><?php esc_html_e("Buy now", "folders") ?></a>
                                 </div>
                                 <div class="bottom-position"></div>
                             </div>
@@ -165,28 +164,28 @@ $proURL = "https://go.premio.io/?edd_action=add_to_cart&download_id=687&edd_opti
                             <div class="price-table agency-feature">
                                 <div class="price-table-top">
                                     <div class="price-head">
-                                        <div class="plan-name">Agency</div>
-                                        <div class="plan-price">$149<span>/year</span></div>
+                                        <div class="plan-name"><?php esc_html_e("Agency", "folders") ?></div>
+                                        <div class="plan-price">$149<span><?php esc_html_e("/year", "folders") ?></span></div>
                                     </div>
-                                    <div class="price-websites">For agencies who manage clients</div>
-                                    <div class="price-offer">Renewals for <b>25% off</b></div>
+                                    <div class="price-websites"><?php esc_html_e("For agencies who manage clients", "folders") ?></div>
+                                    <div class="price-offer"><?php printf(esc_html__("Renewals for %s", "folders"), "<b>".esc_html__("25% off", "folders")."</b>") ?></div>
                                 </div>
                                 <div class="price-table-middle">
                                     <ul>
                                         <li>
                                             <div class="website-package">
                                                 <select class="multiple-web-options">
-                                                    <option value="50_websites">50 websites</option>
-                                                    <option value="500_websites">500 websites</option>
-                                                    <option value="1000_websites">1000 websites</option>
+                                                    <option value="50_websites"><?php esc_html_e("50 websites", "folders") ?></option>
+                                                    <option value="500_websites"><?php esc_html_e("500 websites", "folders") ?></option>
+                                                    <option value="1000_websites"><?php esc_html_e("1000 websites", "folders") ?></option>
                                                 </select>
                                             </div>
                                         </li>
-                                        <li><a href="javascript:;">Organize pages, posts, and media files</a></li>
-                                        <li><a href="javascript:;" class="cus-tooltip">Unlimited subfolders (with multilevel support)<span class="has-tooltip">*</span><span class="tooltip__content">Create unlimited folders, sub-folders with multi-level support</span></a></li>
+                                        <li><a href="javascript:;"><?php esc_html_e("Organize pages, posts, and media files", "folders") ?></a></li>
+                                        <li><a href="javascript:;" class="cus-tooltip"><?php esc_html_e("Unlimited subfolders (with multilevel support)", "folders") ?><span class="has-tooltip">*</span><span class="tooltip__content"><?php esc_html_e("Create unlimited folders, sub-folders with multi-level support", "folders") ?></span></a></li>
                                         <li><a href="javascript:;" class="cus-tooltip">
                                                 <span class="html-tooltip dynamic last">
-                                                    Dynamic Folders<span class="has-tooltip">*</span>
+                                                    <?php esc_html_e("Dynamic Folders", "folders") ?><span class="has-tooltip">*</span>
                                                     <span class="tooltip-text top" style="">
                                                         <?php esc_html_e("Automatically filter posts/pages/custom posts/media files based on author, date, file types & more", "folders") ?>
                                                         <img src="<?php echo esc_url(WCP_FOLDER_URL."assets/images/dynamic-folders.gif") ?>">
@@ -194,37 +193,37 @@ $proURL = "https://go.premio.io/?edd_action=add_to_cart&download_id=687&edd_opti
                                                 </span>
                                             </a>
                                         </li>
-                                        <li><a href="javascript:;" class="cus-tooltip">Create folders for each post type. I.e. WooCommerce, Elementor<span class="has-tooltip">*</span><span class="tooltip__content">Use folders with other plugins that have custom post type (e.g. Elementor templates, WooCommerce & more)</span></a></li>
+                                        <li><a href="javascript:;" class="cus-tooltip"><?php esc_html_e("Create folders for each post type. I.e. WooCommerce, Elementor", "folders") ?><span class="has-tooltip">*</span><span class="tooltip__content"><?php esc_html_e("Use folders with other plugins that have custom post type (e.g. Elementor templates, WooCommerce & more)", "folders") ?></span></a></li>
                                         <li><a href="javascript:;" class="cus-tooltip">
                                                 <span class="html-tooltip last">
-                                                    Metadata details on Media Library hover <span class="has-tooltip">*</span>
+                                                    <?php esc_html_e("Metadata details on Media Library hover", "folders") ?> <span class="has-tooltip">*</span>
                                                     <span class="tooltip-text top" style="">
                                                         <?php esc_html_e("Show useful metadata including title, size, type, date, dimension & more on hover.", "folders") ?>
                                                         <img src="<?php echo esc_url(WCP_FOLDER_URL."assets/images/folders-media.gif") ?>">
                                                     </span>
                                                 </span>
                                             </a></li>
-                                        <li><a href="javascript:;" class="cus-tooltip">Clean unused media files from your Media Library<span class="has-tooltip">*</span><span class="tooltip__content">Media Cleaner will first analyze your whole WordPress and show you a list of unused media files for you to go through and delete them</span></a></li>
-                                        <li><a href="javascript:;" class="cus-tooltip">Directly upload folders with all its content<span class="has-tooltip">*</span><span class="tooltip__content">Upload a folder (all its content within the folder) directly</span></a></li>
-                                        <li><a href="javascript:;" class="cus-tooltip">Sort folders based on the date<span class="has-tooltip">*</span><span class="tooltip__content">Sort folders based on the creation date of the folders</span></a></li>
-                                        <li><a href="javascript:;" class="cus-tooltip">Replace media for all file types and update file names from WordPress titles<span class="has-tooltip">*</span><span class="tooltip__content">Replace all types of media files including PDF/SVG/ZIP/DOCX/XSLX & more. While replacing compare the two files side by side</span></a></li>
-                                        <li><a href="javascript:;" class="cus-tooltip">Advanced Media Replacements<span class="has-tooltip">*</span><span class="tooltip__content">Replace media files when uploading and update all references in the database, change dates, organize by newer date & more without hurting your SEO</span></a></li>
-                                        <li><a href="javascript:;" class="cus-tooltip">User access restriction<span class="has-tooltip">*</span><span class="tooltip__content">Restrict users within their own folders only (restrict Dynamic Folder access as well)</span></a></li>
-                                        <li><a href="javascript:;" class="cus-tooltip">Bookmark, lock & duplicate folders<span class="has-tooltip">*</span><span class="tooltip__content">Bookmark, lock/unlock or duplicate folders for faster & easier access to your favorite folders</span></a></li>
-                                        <li><a href="javascript:;" class="cus-tooltip">Move files to trash before permanently removing<span class="has-tooltip">*</span><span class="tooltip__content">Before deleting files permanently, move them to trash to reduce accidental deletion</span></a></li>
-                                        <li><a href="javascript:;" class="cus-tooltip">Customize folder styles with fonts, custom colors & more<span class="has-tooltip">*</span><span class="tooltip__content">Customize folders with your preferred colors, font size, font family & more</span></a></li>
-                                        <li><a href="javascript:;" class="cus-tooltip">Download folders as ZIP<span class="has-tooltip">*</span><span class="tooltip__content">Download all contents of a folder as a ZIP</span></a></li>
+                                        <li><a href="javascript:;" class="cus-tooltip"><?php esc_html_e("Clean unused media files from your Media Library", "folders") ?><span class="has-tooltip">*</span><span class="tooltip__content"><?php esc_html_e("DMedia Cleaner will first analyze your whole WordPress and show you a list of unused media files for you to go through and delete them", "folders") ?></span></a></li>
+                                        <li><a href="javascript:;" class="cus-tooltip"><?php esc_html_e("Directly upload folders with all its content", "folders") ?><span class="has-tooltip">*</span><span class="tooltip__content"><?php esc_html_e("Upload a folder (all its content within the folder) directly", "folders") ?></span></a></li>
+                                        <li><a href="javascript:;" class="cus-tooltip"><?php esc_html_e("Sort folders based on the date", "folders") ?><span class="has-tooltip">*</span><span class="tooltip__content"><?php esc_html_e("Sort folders based on the creation date of the folders", "folders") ?></span></a></li>
+                                        <li><a href="javascript:;" class="cus-tooltip"><?php esc_html_e("Replace media for all file types and update file names from WordPress titles", "folders") ?><span class="has-tooltip">*</span><span class="tooltip__content"><?php esc_html_e("Replace all types of media files including PDF/SVG/ZIP/DOCX/XSLX & more. While replacing compare the two files side by side", "folders") ?></span></a></li>
+                                        <li><a href="javascript:;" class="cus-tooltip"><?php esc_html_e("Advanced Media Replacements", "folders") ?><span class="has-tooltip">*</span><span class="tooltip__content"><?php esc_html_e("Replace media files when uploading and update all references in the database, change dates, organize by newer date & more without hurting your SEO", "folders") ?></span></a></li>
+                                        <li><a href="javascript:;" class="cus-tooltip"><?php esc_html_e("User access restriction", "folders") ?><span class="has-tooltip">*</span><span class="tooltip__content"><?php esc_html_e("Restrict users within their own folders only (restrict Dynamic Folder access as well)", "folders") ?></span></a></li>
+                                        <li><a href="javascript:;" class="cus-tooltip"><?php esc_html_e("Bookmark, lock & duplicate folders", "folders") ?><span class="has-tooltip">*</span><span class="tooltip__content"><?php esc_html_e("Bookmark, lock/unlock or duplicate folders for faster & easier access to your favorite folders", "folders") ?></span></a></li>
+                                        <li><a href="javascript:;" class="cus-tooltip"><?php esc_html_e("Move files to trash before permanently removing", "folders") ?><span class="has-tooltip">*</span><span class="tooltip__content"><?php esc_html_e("Before deleting files permanently, move them to trash to reduce accidental deletion", "folders") ?></span></a></li>
+                                        <li><a href="javascript:;" class="cus-tooltip"><?php esc_html_e("Customize folder styles with fonts, custom colors & more", "folders") ?><span class="has-tooltip">*</span><span class="tooltip__content"><?php esc_html_e("Customize folders with your preferred colors, font size, font family & more", "folders") ?></span></a></li>
+                                        <li><a href="javascript:;" class="cus-tooltip"><?php esc_html_e("Download folders as ZIP", "folders") ?><span class="has-tooltip">*</span><span class="tooltip__content"><?php esc_html_e("Download all contents of a folder as a ZIP", "folders") ?></span></a></li>
                                     </ul>
                                 </div>
                                 <div class="price-table-bottom">
                                     <div class="custom-dd">
                                         <select class="multiple-options has-multiple-websites">
-                                            <option data-option="1_year" data-header="Renewals for 25% off" data-price="149" value="<?php echo esc_url($proURL) ?>28">Updates &amp; support for 1 year</option>
-                                            <option data-option="2_year" data-header="For 2 years" data-price="229" value="<?php echo esc_url($proURL) ?>29">Updates &amp; support for 2 years</option>
-                                            <option data-option="lifetime" data-header="For lifetime" data-price="389" value="<?php echo esc_url($proURL) ?>30">Updates &amp; support for lifetime</option>
+                                            <option data-option="1_year" data-header="Renewals for 25% off" data-price="149" value="<?php echo esc_url($proURL) ?>28"><?php esc_html_e("Updates & support for 1 year", "folders") ?></option>
+                                            <option data-option="2_year" data-header="For 2 years" data-price="229" value="<?php echo esc_url($proURL) ?>29"><?php esc_html_e("Updates & support for 2 years", "folders") ?></option>
+                                            <option data-option="lifetime" data-header="For lifetime" data-price="389" value="<?php echo esc_url($proURL) ?>30"><?php esc_html_e("Updates & support for lifetime", "folders") ?></option>
                                         </select>
                                     </div>
-                                    <a class="cart-link" target="_blank" href="https://go.premio.io/?edd_action=add_to_cart&amp;download_id=687&amp;edd_options%5Bprice_id%5D=28">Buy now</a>
+                                    <a class="cart-link" target="_blank" href="https://go.premio.io/?edd_action=add_to_cart&download_id=687&edd_options[price_id]=28"><?php esc_html_e("Buy now", "folders") ?></a>
                                 </div>
                                 <div class="bottom-position"></div>
                             </div>
@@ -248,9 +247,9 @@ $proURL = "https://go.premio.io/?edd_action=add_to_cart&download_id=687&edd_opti
     <div class="folder-testimonial">
         <div class="testimonial-image"> <img src="<?php echo esc_url(WCP_FOLDER_URL."assets/images/client-image.jpg") ?>"> </div>
         <div class="testimonial-data">
-            <div class="testimonial-title">A brilliant solution!</div>
-            <div class="testimonial-desc">I’ve used other folder plug-ins for my WordPress media files, but Folders is better than any of them. An uncluttered interface, intuitive to use, allows drag-and-drop and allows subfolders: exactly what I needed in a media library folder plug-in. I can’t believe it’s free!</div>
-            <div class="testimonial-author">- Trevor Jordan</div>
+            <div class="testimonial-title"><?php esc_html_e("A brilliant solution!", 'folders'); ?></div>
+            <div class="testimonial-desc"><?php esc_html_e("I’ve used other folder plug-ins for my WordPress media files, but Folders is better than any of them. An uncluttered interface, intuitive to use, allows drag-and-drop and allows subfolders: exactly what I needed in a media library folder plug-in. I can’t believe it’s free!", 'folders'); ?></div>
+            <div class="testimonial-author"><?php esc_html_e("- Trevor Jordan", 'folders'); ?></div>
         </div>
     </div>
 </div>
@@ -356,13 +355,13 @@ $proURL = "https://go.premio.io/?edd_action=add_to_cart&download_id=687&edd_opti
                 }
                 thisOption = $(this).find("option:selected").attr("data-option");
                 if (thisOption == "1_year") {
-                    thisPrice = thisPrice + "<span>/year</span>";
-                    priceText = "Renewals for <b>25% off</b>";
+                    thisPrice = thisPrice + "<span><?php esc_html_e("/year", "folders") ?></span>";
+                    priceText = "<?php printf(esc_html__("Renewals for %s", "folders"), "<b>".esc_html__("25% off", "folders")."</b>") ?>";
                 } else if (thisOption == "2_year") {
-                    thisPrice = thisPrice + "<span>/2 years</span>";
-                    priceText = "Renewals for <b>25% off</b>";
+                    thisPrice = thisPrice + "<span><?php esc_html_e("/2 years", "folders") ?></span>";
+                    priceText = "<?php printf(esc_html__("Renewals for %s", "folders"), "<b>".esc_html__("25% off", "folders")."</b>") ?>";
                 } else {
-                    thisPrice = thisPrice + "<span>/lifetime</span>";
+                    thisPrice = thisPrice + "<span><?php esc_html_e("/lifetime", "folders") ?></span>";
                     priceText = "For lifetime";
                 }
                 $(this).closest(".price-table").find("a.cart-link").attr("href", thisValue);
