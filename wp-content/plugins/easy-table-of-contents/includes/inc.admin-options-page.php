@@ -13,7 +13,7 @@
         $pro = '';
 
         if (function_exists('ez_toc_pro_activation_link')) {
-            $pro = '<a id="eztoc-default" class="eztoc-tablinks" data-href="no" href="#eztoc-prosettings" onclick="ezTocTabToggle(event, \'prosettings\')">' . esc_html_e( 'PRO Settings', 'easy-table-of-contents' ) . '</a>';
+            $pro = '<a id="eztoc-default" class="eztoc-tablinks" data-href="no" href="#eztoc-prosettings" onclick="ezTocTabToggle(event, \'general\')">PRO Settings</a>';
         } ?>
         <?php echo $pro; ?>
 
@@ -25,12 +25,17 @@
         ?>
         <a class="eztoc-tablinks" id="eztoc-technical" href="#technical-support"
            onclick="ezTocTabToggle(event, 'technical')" data-href="no"><?= esc_html_e( 'Help & Support', 'easy-table-of-contents' ) ?></a>
-        <a class="eztoc-tablinks" id="eztoc-upgrade" href="https://tocwp.com/pricing/" target="_blank"><?= esc_html_e( 'UPGRADE to PRO', 'easy-table-of-contents' ) ?></a>
+           <?php if (!function_exists('ez_toc_pro_activation_link')) { ?>
+            <a class="eztoc-tablinks" id="eztoc-upgrade" href="https://tocwp.com/pricing/" target="_blank"><?= esc_html( 'UPGRADE to PRO', 'easy-table-of-contents' ) ?></a>
+            <?php } ?>
         <?php
 
         if (function_exists('ez_toc_pro_activation_link')) {
             $license_info = get_option("easytoc_pro_upgrade_license");
-            $license_exp = date('Y-m-d', strtotime($license_info['pro']['license_key_expires']));
+            $license_exp = null;
+            if( !empty( $license_info['pro']['license_key_expires'] ) ) {
+                $license_exp = date( 'Y-m-d', strtotime($license_info['pro']['license_key_expires'] ) );
+            }
             $today = date('Y-m-d');
             $exp_date = $license_exp;
             $date1 = date_create($today);
@@ -158,7 +163,10 @@
                 </div><!-- /.metabox-holder -->
             <?php } ?>
             <?php settings_fields('ez-toc-settings'); ?>
-            <?php submit_button(esc_html_e('Save Changes', 'easy-table-of-contents')); ?>
+            <p class="submit">
+                <?php submit_button( esc_html( 'Save Changes', 'easy-table-of-contents'  ), 'primary large', 'submit', false) ; ?>
+                <button type="button" id="reset-options-to-default-button" class="button button-primary button-large" style="background-color: #cd3241"><?= __( 'Reset', 'easy-table-of-contents' ) ?></button>
+            </p>
         </form>
     </div><!-- /.General Settings ended -->
 

@@ -155,7 +155,12 @@ if ( ! class_exists( 'ezTOC_Option' ) ) {
 		 * @return array
 		 */
 		private static function getRegistered() {
-
+			$eztoc_latest_link=home_url();
+			$args = array( 'numberposts' => '1');
+			$recent_posts = wp_get_recent_posts( $args );
+			foreach( $recent_posts as $recent ){
+			 $eztoc_latest_link= add_query_arg( 'eztoc-edit-position', '', get_permalink($recent["ID"] ));
+			}
 			$options = array(
 				'general' => apply_filters(
 					'ez_toc_settings_general',
@@ -721,37 +726,7 @@ if ( ! class_exists( 'ezTOC_Option' ) ) {
                     )
                 ),
 				'prosettings' => apply_filters(
-					'ez_toc_settings_prosettings',
-						array(
-						'exclude_by_class' => array(
-							'id' => 'exclude_by_class',
-							'name' => __( 'Exclude Headings by Class', 'easy-table-of-contents' ),
-							'desc' => '<br/>' . __( 'You can hide the TOC heading by its class and if you want to hide multiple headings then please saparate them with a comma (,)', 'easy-table-of-contents' ),
-							'type' => 'text',
-							'default' => '',
-						),		
-						'fixedtoc' => array(
-							'id' => 'fixedtoc',
-							'name' => __( 'Fixed TOC', 'easy-table-of-contents' ),
-							'desc' => __( 'Fixed TOC in the page display so it can be easier to navigate', 'easy-table-of-contents' ),
-							'type' => 'checkbox',
-							'default' => false,
-						),		 
-						'highlightheadings' => array(
-							'id' => 'highlightheadings',
-							'name' => __( 'Highlight TOC Headings ', 'easy-table-of-contents' ),
-							'desc' => __( 'Highlight TOC headings while scrolling ', 'easy-table-of-contents' ),
-							'type' => 'checkbox',
-							'default' => false,
-						),
-						'shrinkthewidth' => array(
-							'id' => 'shrinkthewidth',
-							'name' => __( 'Shrink the width', 'easy-table-of-contents' ),
-							'desc' => __( 'Shrink the width to the size of the title' ),
-							'type' => 'checkbox',
-							'default' => false,
-						),
-					)
+					'ez_toc_settings_prosettings', array()
 				),
 			);
 
@@ -1690,7 +1665,27 @@ public static function child_font_size( $args ) {
 				echo '<label for="ez-toc-settings[' . $args['id'] . ']"> ' . $args['desc'] . '</label>';
 			}
 		}
+
+		/**
+         * reset_options_to_default Method
+         * to reset options
+         * @since 2.0.37
+         * @return bool|string
+        */
+        public static function eztoc_reset_options_to_default() {
+            if( !wp_verify_nonce( sanitize_text_field( $_POST['eztoc_security_nonce'] ), 'eztoc_ajax_check_nonce' ) )
+            {
+                return esc_attr__('Security Alert: nonce not verified!', 'easy-table-of-contents' );
+            }
+
+            delete_option('ez-toc-settings');
+            return add_option( 'ez-toc-settings', self::getDefaults() );
+        }
 	}
 
 	add_action( 'admin_init', array( 'ezTOC_Option', 'register' ) );
+
+	add_action( 'wp_ajax_eztoc_reset_options_to_default', array( 'ezTOC_Option', 'eztoc_reset_options_to_default' ) );
+
+
 }

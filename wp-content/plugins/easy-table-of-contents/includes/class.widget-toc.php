@@ -257,7 +257,7 @@ if ( ! class_exists( 'ezTOC_Widget' ) ) {
 							<?php
 							if ( ezTOC_Option::get( 'visibility' ) ) {
 
-								echo '<a class="ez-toc-pull-right ez-toc-btn ez-toc-btn-xs ez-toc-btn-default ez-toc-toggle"><i class="ez-toc-glyphicon ez-toc-icon-toggle"></i></a>';
+								echo '<a class="ez-toc-pull-right ez-toc-btn ez-toc-btn-xs ez-toc-btn-default ez-toc-toggle">' . ezTOC::getTOCToggleIcon() . '</a>';
 							}
 							?>
 
@@ -328,7 +328,7 @@ if ( ! class_exists( 'ezTOC_Widget' ) ) {
 			$defaults = array(
 				'affix' => '0',
 				'highlight_color' => '#ededed',
-				'title' => '',
+				'title' => 'Table of Contents',
 			);
 
 			$instance = wp_parse_args( (array) $instance, $defaults );
