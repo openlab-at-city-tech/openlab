@@ -908,7 +908,6 @@ function wds_load_group_type( $group_type ) {
 	$wds_section_code = '';
 	$wds_semester     = '';
 	$wds_year         = '';
-	$wds_course_html  = '';
 
 	if ( bp_get_current_group_id() ) {
 		$wds_faculty      = groups_get_groupmeta( bp_get_current_group_id(), 'wds_faculty' );
@@ -916,7 +915,6 @@ function wds_load_group_type( $group_type ) {
 		$wds_section_code = groups_get_groupmeta( bp_get_current_group_id(), 'wds_section_code' );
 		$wds_semester     = groups_get_groupmeta( bp_get_current_group_id(), 'wds_semester' );
 		$wds_year         = groups_get_groupmeta( bp_get_current_group_id(), 'wds_year' );
-		$wds_course_html  = groups_get_groupmeta( bp_get_current_group_id(), 'wds_course_html' );
 	}
 
 	$last_name = xprofile_get_field_data( 'Last Name', $bp->loggedin_user->id );
@@ -959,11 +957,6 @@ function wds_load_group_type( $group_type ) {
 		$return .= '<tr class="additional-field year-field">';
 		$return .= '<td class="additional-field-label"><label class="passive" for="wds_year">Year:</label></td>';
 		$return .= '<td><input class="form-control" type="text" id="wds_year" name="wds_year" value="' . $wds_year . '"></td>';
-		$return .= '</tr>';
-
-		$return .= '<tr class="additional-field additional-description-field">';
-		$return .= '<td colspan="2" class="additional-field-label"><label class="passive" for="additional-desc-html">Additional Description/HTML:</label></td></tr>';
-		$return .= '<tr><td colspan="2"><textarea class="form-control" name="wds_course_html" id="additional-desc-html">' . $wds_course_html . '</textarea></td></tr>';
 		$return .= '</tr>';
 
 		$return .= '</table></div></div><!--.panel-->';
@@ -1090,9 +1083,6 @@ function wds_bp_group_meta_save( $group ) {
 	}
 	if ( isset( $_POST['wds_year'] ) ) {
 		groups_update_groupmeta( $group->id, 'wds_year', $_POST['wds_year'] );
-	}
-	if ( isset( $_POST['wds_course_html'] ) ) {
-		groups_update_groupmeta( $group->id, 'wds_course_html', $_POST['wds_course_html'] );
 	}
 	if ( isset( $_POST['group_project_type'] ) ) {
 		groups_update_groupmeta( $group->id, 'wds_group_project_type', $_POST['group_project_type'] );

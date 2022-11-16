@@ -152,21 +152,20 @@ function openlab_group_clone_details( $group_id ) {
 	$is_shared_clone = ! in_array( bp_loggedin_user_id(), $group_admin_ids, true );
 
 	$retval = array(
-		'group_id'               => $group_id,
-		'enable_sharing'         => false,
-		'is_shared_clone'        => $is_shared_clone,
-		'name'                   => '',
-		'description'            => '',
-		'schools'                => array(),
-		'offices'                => array(),
-		'departments'            => array(),
-		'course_code'            => '',
-		'section_code'           => '',
-		'additional_description' => '',
-		'categories'             => '',
-		'site_id'                => '',
-		'site_url'               => '',
-		'site_path'              => '',
+		'group_id'        => $group_id,
+		'enable_sharing'  => false,
+		'is_shared_clone' => $is_shared_clone,
+		'name'            => '',
+		'description'     => '',
+		'schools'         => array(),
+		'offices'         => array(),
+		'departments'     => array(),
+		'course_code'     => '',
+		'section_code'    => '',
+		'categories'      => '',
+		'site_id'         => '',
+		'site_url'        => '',
+		'site_path'       => '',
 	);
 
 	if ( $group_id ) {
@@ -184,8 +183,6 @@ function openlab_group_clone_details( $group_id ) {
 
 		$retval['course_code']            = groups_get_groupmeta( $group_id, 'wds_course_code' );
 		$retval['section_code']           = groups_get_groupmeta( $group_id, 'wds_section_code' );
-		$retval['additional_description'] = groups_get_groupmeta( $group_id, 'wds_course_html' );
-
 		$group_categories = bpcgc_get_group_selected_terms( $group_id );
 		if ( ! empty( $group_categories ) ) {
 			$retval['categories'] = array_values( wp_list_pluck( $group_categories, 'term_id' ) );
