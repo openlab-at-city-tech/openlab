@@ -180,8 +180,6 @@ if( ! bp_is_my_profile() && ! current_user_can( 'bp_moderate' ) ) {
 				Narrow down your results using the search filters.
 			<?php elseif ( $descendant_of ) : ?>
 				<?php echo $descendant_of_string; ?>
-			<?php elseif ( $ancestor_of ) : ?>
-				<?php echo $ancestor_of_string; ?>
 			<?php endif; ?>
 		</div>
 	<?php endif; ?>

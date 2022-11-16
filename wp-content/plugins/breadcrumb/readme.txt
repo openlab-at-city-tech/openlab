@@ -4,7 +4,7 @@
 	Tags: breadcrumb, breadcrumbs, breadcrumb nav, trail, woocommerce breadcrumb
 	Requires at least: 3.8
 	Tested up to: 6.0
-	Stable tag: 1.5.27
+	Stable tag: 1.5.28
 	License: GPLv2 or later
 	License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -121,6 +121,10 @@ use this short-code any where to display breadcrumb
 
 
 == Changelog ==
+
+	= 1.5.28 =
+    * 2022-011-01  - fix - Undefined property: WP_Error::$name issue fixed
+
 
 	= 1.5.27 =
     * 2022-06-30 - fix - Breadcrumb wrapper ul to ol

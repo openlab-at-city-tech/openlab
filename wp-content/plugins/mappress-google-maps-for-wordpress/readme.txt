@@ -4,13 +4,13 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: maps, google maps, map, map markers, google map, leaflet maps, leaflet map plugin, google maps plugin, wp google maps, wp google map, map plugin, store locator, google map plugin, map widget,
 Requires at least: 5.3
 Requires PHP: 5.6
-Tested up to: 6.0
-Stable tag: 2.83.9
+Tested up to: 6.1
+Stable tag: 2.83.22
 
 == Description ==
 MapPress is the easiest way to add beautiful interactive Google and Leaflet maps to WordPress.
 
-Create unlimited maps and map markers using Gutenberg blocks or the classic editor.  The popup map editor makes creating and editing maps easy!
+Create **unlimited maps and markers** using Gutenberg blocks or the classic editor.  The popup map editor makes creating and editing maps easy!
 
 Upgrade to [MapPress Pro](https://mappresspro.com/mappress) for even more features, including custom markers, searchable mashups, clustering, and much more.  See it in action on the [MapPress Home Page](https://mappresspro.com/mappress) or test it yourself with a [Free Demo Site](https://mappresspro.com/demo)!
 
@@ -88,6 +88,57 @@ Please see the plugin documentation pages:
 1. Follow the installation instructions to install the new version
 
 == Changelog ==
+
+= 2.83.22 =
+* Changed: allow popup to size larger when thumbnails are set to top, but no image is present
+* Fixed: missing scrollbars when popup content is large
+* Fixed: warning if default size selected in settings is invalid
+
+= 2.83.21 =
+* Fixed: typo in setting 'showCoverageOnHover'
+
+= 2.83.20 =
+* Fixed: SVN publish
+
+= 2.83.19 =
+* Fixed: remove generated iframe from build
+
+= 2.83.18 =
+* Changed: enabled 'check now' button even when license is active
+
+= 2.83.17 =
+* Fixed: mini map class not being applied to small maps
+* Fixed: other plugins break iframes by adding 'defer' to script tags
+
+= 2.83.16 =
+* Changed: prevent WP from overwriting Pro with free version
+
+= 2.83.15 =
+* Fixed: setting initialopeninfo with no map POIs causes JS error
+
+= 2.83.14 =
+* Fixed: console warnings in Google marker clusterer from deprecated google.maps.addDomEventListener
+* Fixed: iframe not resizing when height is 'vh'
+
+= 2.83.13 =
+* Added: setting to allow mashup thumbnail images to come from either post or POI (mashupThumbs)
+* Added: fast iframes, and iframes that resize to inline (bottom) POI list layout
+* Changed: popups opened by marker hover now close after a short delay when mouse is moved away
+* Fixed: POI list not scrolling to top on page change
+
+= 2.83.12 =
+* Changed: Google now returns viewport for street addresses, so poiZoom (default zoom) setting applies even if viewport is present
+* Fixed: map loses attachment if attached and then immediately edited
+
+= 2.83.11 =
+* Fixed: syntax error in API for old versions of PHP (<7.3)
+
+= 2.83.10 =
+* Changed: map minimum width changed from 250 to 200px
+* Changed: template editor split to separate module
+* Changed: post attachment control updated
+* Changed: REST API code added
+* Fixed: hideEmpty mashup parameter not compatible with new query functions
 
 = 2.83.9 =
 * Changed: importer updated to allow upper-case column names

@@ -189,34 +189,20 @@ if ( ! class_exists( 'ezTOC_Widget' ) ) {
 					$class[] = 'counter-flat';
 				}
 
-				switch ( ezTOC_Option::get( 'counter' ) ) {
-
-					case 'numeric':
-						$class[] = 'counter-numeric';
-						break;
-
-					case 'roman':
-						$class[] = 'counter-roman';
-						break;
-
-					case 'decimal':
-						$class[] = 'counter-decimal';
-						break;
-					
-					case 'hyphen':
-						$class[] = 'counter-hyphen';
-						break;
-						
-					case 'disc':
-						$class[] = 'counter-disc';
-						break;
-		
-				}
+				if( ezTOC_Option::get( 'heading-text-direction', 'ltr' ) == 'ltr' ) {
+                    $class[] = 'ez-toc-widget-container';
+                }
+                if( ezTOC_Option::get( 'heading-text-direction', 'ltr' ) == 'rtl' ) {
+                    $class[] = 'ez-toc-widget-container-rtl';
+                }
 
 				if ( $instance['affix'] ) {
 
 					$class[] = 'ez-toc-affix';
 				}
+
+
+                $class[] = 'ez-toc-widget-direction';
 
 				$custom_classes = ezTOC_Option::get( 'css_container_class', '' );
 
@@ -238,7 +224,7 @@ if ( ! class_exists( 'ezTOC_Widget' ) ) {
 				echo $before_widget;				
 				do_action( 'ez_toc_before_widget_container');
 
-				echo '<div class="ez-toc-widget-container ' . implode( ' ', $class ) . '">' . PHP_EOL;
+				echo '<div id="ez-toc-widget-container" class="ez-toc-widget-container ' . implode( ' ', $class ) . '">' . PHP_EOL;
 
 				do_action( 'ez_toc_before_widget' );
 
@@ -271,7 +257,7 @@ if ( ! class_exists( 'ezTOC_Widget' ) ) {
 							<?php
 							if ( ezTOC_Option::get( 'visibility' ) ) {
 
-								echo '<a class="ez-toc-pull-right ez-toc-btn ez-toc-btn-xs ez-toc-btn-default ez-toc-toggle"><i class="ez-toc-glyphicon ez-toc-icon-toggle"></i></a>';
+								echo '<a class="ez-toc-pull-right ez-toc-btn ez-toc-btn-xs ez-toc-btn-default ez-toc-toggle">' . ezTOC::getTOCToggleIcon() . '</a>';
 							}
 							?>
 
@@ -342,7 +328,7 @@ if ( ! class_exists( 'ezTOC_Widget' ) ) {
 			$defaults = array(
 				'affix' => '0',
 				'highlight_color' => '#ededed',
-				'title' => '',
+				'title' => 'Table of Contents',
 			);
 
 			$instance = wp_parse_args( (array) $instance, $defaults );

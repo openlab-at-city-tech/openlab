@@ -1,12 +1,14 @@
 <?php
 
-if (!defined('ABSPATH')) die('No direct access.');
+if (!defined('ABSPATH')) {
+die('No direct access.');
+}
 
 /**
  * Helper class for resizing images, returning the correct URL to the image etc
  */
-class MetaSliderImageHelper {
-
+class MetaSliderImageHelper
+{
     private $crop_type = 'smart';
     private $container_width; // slideshow width
     private $container_height; // slideshow height
@@ -19,8 +21,8 @@ class MetaSliderImageHelper {
      *
      * @var integer
      */
-	private $slide_id;
-		
+    private $slide_id;
+        
     /**
      * The ID of the image
      *
@@ -38,12 +40,15 @@ class MetaSliderImageHelper {
      * @param bool    $use_image_editor - Whether to use the image editor
      * @param integer $image_id         - used when the slide in admin is a looped item (i.e. post type)
      */
-    public function __construct($slide_id, $width, $height, $crop_type, $use_image_editor = true, $image_id = null) {
+    public function __construct($slide_id, $width, $height, $crop_type, $use_image_editor = true, $image_id = null)
+    {
         // There's a chance that $slide_id might be an $image_id 
         // if the user has an older version of the pro plugin (<2.7)
-        if ('attachment' == get_post_type($slide_id)) { $image_id = $slide_id; }
+        if ('attachment' == get_post_type($slide_id)) {
+$image_id = $slide_id; 
+        }
 
-		$this->image_id = !is_null($image_id) ? $image_id : get_post_thumbnail_id($slide_id);
+        $this->image_id = !is_null($image_id) ? $image_id : get_post_thumbnail_id($slide_id);
         $this->slide_id = $slide_id;
         $this->url = apply_filters("metaslider_attachment_url", wp_get_attachment_url($this->image_id), $this->image_id);
         $this->path = get_attached_file($this->image_id);
@@ -65,9 +70,10 @@ class MetaSliderImageHelper {
      *
      * @param string $crop_type Crop type
      */
-    private function set_crop_type( $crop_type ) {
+    private function set_crop_type($crop_type)
+    {
 
-        switch ( $crop_type ) {
+        switch ($crop_type) {
             case "false":
             case "standard":
                 $this->crop_type = 'standard'; // smart crop enabled
@@ -83,7 +89,6 @@ class MetaSliderImageHelper {
             default:
                 $this->crop_type = 'smart';
         }
-
     }
 
 
@@ -97,32 +102,42 @@ class MetaSliderImageHelper {
      * @param integer $image_height Image height
      * @return array image dimensions
      */
-    private function get_crop_dimensions( $image_width, $image_height ) {
-        if ( $this->crop_type == 'standard' ) {
-            return array( 'width' => absint( $this->container_width ), 'height' => absint( $this->container_height ) );
+    private function get_crop_dimensions($image_width, $image_height)
+    {
+        if ($this->crop_type == 'standard') {
+            return [
+                'width' => absint($this->container_width),
+                'height' => absint($this->container_height),
+            ];
         }
 
-        if ( $this->crop_type == 'disabled' ) {
-            return array( 'width' => absint( $image_width ), 'height' => absint( $image_height ) );
+        if ($this->crop_type == 'disabled') {
+            return [
+                'width' => absint($image_width),
+                'height' => absint($image_height),
+            ];
         }
 
         $container_width = $this->container_width;
         $container_height = $this->container_height;
 
+        $new_slide_width = null;
+        $new_slide_height = null;
+
         /**
          * Slideshow Width == Slide Width
          */
-        if ( $image_width == $container_width && $image_height == $container_height ) {
+        if ($image_width == $container_width && $image_height == $container_height) {
             $new_slide_width = $container_width;
             $new_slide_height = $container_height;
         }
 
-        if ( $image_width == $container_width && $image_height < $container_height ) {
+        if ($image_width == $container_width && $image_height < $container_height) {
             $new_slide_height = $image_height;
             $new_slide_width = $container_width / ( $container_height / $image_height );
         }
 
-        if ( $image_width == $container_width && $image_height > $container_height ) {
+        if ($image_width == $container_width && $image_height > $container_height) {
             $new_slide_width = $container_width;
             $new_slide_height = $container_height;
         }
@@ -130,7 +145,7 @@ class MetaSliderImageHelper {
         /**
          * Slideshow Width < Slide Width
          */
-        if ( $image_width < $container_width && $image_height == $container_height ) {
+        if ($image_width < $container_width && $image_height == $container_height) {
             $new_slide_width = $image_width;
             $new_slide_height = $image_height / ( $container_width / $image_width );
         }
@@ -138,15 +153,15 @@ class MetaSliderImageHelper {
         /**
          * Slide is smaller than slidehow - both width and height
          */
-        if ( $image_width < $container_width && $image_height < $container_height ) {
-            if ( $container_width > $container_height ) {
+        if ($image_width < $container_width && $image_height < $container_height) {
+            if ($container_width > $container_height) {
                 // wide
-                if ( $image_width > $image_height ) {
+                if ($image_width > $image_height) {
                     // wide
                     $new_slide_height = $image_height;
                     $new_slide_width = $container_width / ( $container_height / $image_height );
 
-                    if ( $new_slide_width > $image_width ) {
+                    if ($new_slide_width > $image_width) {
                         $new_slide_width = $image_width;
                         $new_slide_height = $container_height / ( $container_width / $image_width );
                     }
@@ -155,19 +170,19 @@ class MetaSliderImageHelper {
                     $new_slide_width = $image_width;
                     $new_slide_height = $container_height / ( $container_width / $image_width );
 
-                    if ( $new_slide_height > $image_height ) {
+                    if ($new_slide_height > $image_height) {
                         $new_slide_height = $image_height;
                         $new_slide_width = $container_width / ( $container_height / $image_height );
                     }
                 }
             } else {
                 // tall
-                if ( $image_width > $image_height ) {
+                if ($image_width > $image_height) {
                     // wide
                     $new_slide_height = $image_height;
                     $new_slide_width = $container_width / ( $container_height / $image_height );
 
-                    if ( $new_slide_width > $image_width ) {
+                    if ($new_slide_width > $image_width) {
                         $new_slide_width = $image_width;
                         $new_slide_height = $container_height / ( $container_width / $image_width );
                     }
@@ -176,7 +191,7 @@ class MetaSliderImageHelper {
                     $new_slide_width = $image_width;
                     $new_slide_height = $container_height / ( $container_width / $image_width );
 
-                    if ( $new_slide_height > $image_height ) {
+                    if ($new_slide_height > $image_height) {
                         $new_slide_height = $image_height;
                         $new_slide_width = $container_width / ( $container_height / $image_height );
                     }
@@ -184,7 +199,7 @@ class MetaSliderImageHelper {
             }
         }
 
-        if ( $image_width < $container_width && $image_height > $container_height ) {
+        if ($image_width < $container_width && $image_height > $container_height) {
             $new_slide_width = $image_width;
             $new_slide_height = $container_height / ( $container_width / $image_width );
         }
@@ -192,22 +207,25 @@ class MetaSliderImageHelper {
         /**
          * Slideshow Width > Slide Width
          */
-        if ( $image_width > $container_width && $image_height == $container_height ) {
+        if ($image_width > $container_width && $image_height == $container_height) {
             $new_slide_width = $container_width;
             $new_slide_height = $container_height;
         }
 
-        if ( $image_width > $container_width && $image_height < $container_height ) {
+        if ($image_width > $container_width && $image_height < $container_height) {
             $new_slide_height = $image_height;
             $new_slide_width = $container_width / ( $container_height / $image_height );
         }
 
-        if ( $image_width > $container_width && $image_height > $container_height ) {
+        if ($image_width > $container_width && $image_height > $container_height) {
             $new_slide_width = $container_width;
             $new_slide_height = $container_height;
         }
 
-        return array( 'width' => floor( $new_slide_width ), 'height' => floor( $new_slide_height ) );
+        return [
+            'width' => floor((float)$new_slide_width),
+            'height' => floor((float)$new_slide_height)
+        ];
     }
 
 
@@ -217,7 +235,8 @@ class MetaSliderImageHelper {
      * @param bool $force_resize Force resize of image
      * @return string resized image URL
      */
-    public function get_image_url($force_resize = false) {
+    public function get_image_url($force_resize = false)
+    {
         // Get the image file path
         if (!strlen($this->path)) {
             return apply_filters('metaslider_resized_image_url', $this->url, $this->url);
@@ -243,12 +262,9 @@ class MetaSliderImageHelper {
         $dest_file_name = $this->get_destination_file_name($dest_size);
 
         if (file_exists($dest_file_name) && !$force_resize) {
-
             // good. no need for resize, just return the URL
             $dest_url = str_replace(basename($this->url), basename($dest_file_name), $this->url);
-
         } else if ($this->use_image_editor) {
-
             // resize, assuming we're allowed to use the image editor
             $dest_url = $this->resize_image($orig_size, $dest_size, $dest_file_name);
 
@@ -270,8 +286,7 @@ class MetaSliderImageHelper {
                     }
                 }
             }
-        }
-        else {
+        } else {
             // fall back to the full URL
             $dest_url = $this->url;
         }
@@ -289,7 +304,8 @@ class MetaSliderImageHelper {
      *
      * @return array
      */
-    private function get_original_image_dimensions() {
+    private function get_original_image_dimensions()
+    {
         $size = array();
 
         // try and get the image size from metadata
@@ -298,7 +314,6 @@ class MetaSliderImageHelper {
             return $meta;
         }
         if ($this->use_image_editor) {
-
             // get the size from the image itself
             $image = wp_get_image_editor($this->path);
             if (!is_wp_error($image)) {
@@ -316,11 +331,12 @@ class MetaSliderImageHelper {
      * @param array $dest_size image dimensions (width/height) in pixels
      * @return string path and file name
      */
-    private function get_destination_file_name( $dest_size ) {
-        $info = pathinfo( $this->path );
+    private function get_destination_file_name($dest_size)
+    {
+        $info = pathinfo($this->path);
         $dir = $info['dirname'];
         $ext = $info['extension'];
-        $name = wp_basename( $this->path, ".$ext" );
+        $name = wp_basename($this->path, ".$ext");
         $dest_file_name = "{$dir}/{$name}-{$dest_size['width']}x{$dest_size['height']}.{$ext}";
 
         return $dest_file_name;
@@ -334,7 +350,8 @@ class MetaSliderImageHelper {
      * @param array $dest_file_name Destination file name
      * @return string
      */
-    private function resize_image($orig_size, $dest_size, $dest_file_name) {
+    private function resize_image($orig_size, $dest_size, $dest_file_name)
+    {
         
         // load image
         $image = wp_get_image_editor($this->path);
@@ -405,13 +422,14 @@ class MetaSliderImageHelper {
      *
      * @return array
      */
-    private function get_crop_position() {
-        $crop_position = get_post_meta( $this->slide_id, 'ml-slider_crop_position', true );
+    private function get_crop_position()
+    {
+        $crop_position = get_post_meta($this->slide_id, 'ml-slider_crop_position', true);
 
-        if ( $crop_position ) {
-            $parts = explode( "-", $crop_position );
+        if ($crop_position) {
+            $parts = explode("-", $crop_position);
 
-            if ( isset( $parts[0], $parts[1] ) ) {
+            if (isset($parts[0], $parts[1])) {
                 return array($parts[0], $parts[1]);
             }
         }

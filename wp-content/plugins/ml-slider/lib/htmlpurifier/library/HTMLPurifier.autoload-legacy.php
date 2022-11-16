@@ -7,7 +7,7 @@
  * Must be separate to prevent deprecation warning on PHP 7.2
  */
 
-function __autoload($class)
+function HTMLPurifier__autoload($class)
 {
     return HTMLPurifier_Bootstrap::autoload($class);
 }

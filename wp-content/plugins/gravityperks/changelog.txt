@@ -1,6 +1,14 @@
 
 # Changelog
 
+## 2.2.8
+
+	- Fixed issue where a license validation function was being called on every request.
+	- Improved permission handling of Gravity Wiz licenses and perk registration on subsites for users who are not network admins.
+	- Improved license API performance on WordPress multisite.
+	- Fixed issue where license data would become cached which would cause some actions such as refreshing, registering perks, and deregistering perks to not always show the correct information.
+	- Added "Update URI" to plugin header to improve security.
+
 ## 2.2.7
 
 	- Fixed positional tooltip issues introduced in Gravity Forms 2.5.6.

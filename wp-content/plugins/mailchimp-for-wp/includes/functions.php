@@ -220,15 +220,27 @@ function mc4wp_get_request_path() {
 */
 function mc4wp_get_request_ip_address() {
 	if ( isset( $_SERVER['X-Forwarded-For'] ) ) {
-		return $_SERVER['X-Forwarded-For'];
-	}
-
-	if ( isset( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ) {
-		return $_SERVER['HTTP_X_FORWARDED_FOR'];
-	}
-
-	if ( isset( $_SERVER['REMOTE_ADDR'] ) ) {
+		$ip_address = $_SERVER['X-Forwarded-For'];
+	} else if ( isset( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ) {
+		$ip_address = $_SERVER['HTTP_X_FORWARDED_FOR'];
+	} else if ( isset( $_SERVER['REMOTE_ADDR'] ) ) {
 		return $_SERVER['REMOTE_ADDR'];
+	}
+
+	if ( isset( $ip_address ) ) {
+		if ( ! is_array( $ip_address ) ) {
+			$ip_address = explode( ',', $ip_address );
+		}
+
+		// use first IP in list
+		$ip_address = trim( $ip_address[0] );
+
+		// if IP address is not valid, simply return null
+		if ( ! filter_var( $ip_address, FILTER_VALIDATE_IP ) ) {
+			return null;
+		}
+
+		return $ip_address;
 	}
 
 	return null;
@@ -496,4 +508,105 @@ function mc4wp_array_get( $array, $key, $default = null ) {
 	}
 
 	return $array;
+}
+
+/**
+ * Filters string and strips out all HTML tags and attributes, except what's in our whitelist.
+ *
+ * @param string $string The string to apply KSES whitelist on
+ * @return string
+ * @since 4.8.8
+ */
+function mc4wp_kses( $string ) {
+	$always_allowed_attr = array_fill_keys(
+		array(
+			'aria-describedby',
+			'aria-details',
+			'aria-label',
+			'aria-labelledby',
+			'aria-hidden',
+			'class',
+			'id',
+			'style',
+			'title',
+			'role',
+			'data-*',
+			'tabindex',
+		),
+		true
+	);
+	$input_allowed_attr  = array_merge(
+		$always_allowed_attr,
+		array_fill_keys(
+			array(
+				'type',
+				'required',
+				'placeholder',
+				'value',
+				'name',
+				'step',
+				'min',
+				'max',
+				'checked',
+				'width',
+				'autocomplete',
+				'autofocus',
+				'minlength',
+				'maxlength',
+				'size',
+				'pattern',
+				'disabled',
+				'readonly',
+			),
+			true
+		)
+	);
+
+	$allowed         = array(
+		'p'        => $always_allowed_attr,
+		'label'    => array_merge( $always_allowed_attr, array( 'for' => true ) ),
+		'input'    => $input_allowed_attr,
+		'button'   => $input_allowed_attr,
+		'fieldset' => $always_allowed_attr,
+		'legend'   => $always_allowed_attr,
+		'ul'       => $always_allowed_attr,
+		'ol'       => $always_allowed_attr,
+		'li'       => $always_allowed_attr,
+		'select'   => array_merge( $input_allowed_attr, array( 'multiple' => true ) ),
+		'option'   => array_merge( $input_allowed_attr, array( 'selected' => true ) ),
+		'optgroup' => array(
+			'disabled' => true,
+			'label' => true,
+		),
+		'textarea' => array_merge(
+			$input_allowed_attr,
+			array(
+				'rows' => true,
+				'cols' => true,
+			)
+		),
+		'div'      => $always_allowed_attr,
+		'strong'   => $always_allowed_attr,
+		'b'         => $always_allowed_attr,
+		'i'         => $always_allowed_attr,
+		'br'        => array(),
+		'em'       => $always_allowed_attr,
+		'span'     => $always_allowed_attr,
+		'a'        => array_merge( $always_allowed_attr, array( 'href' => true ) ),
+		'img'      => array_merge(
+			$always_allowed_attr,
+			array(
+				'src' => true,
+				'alt' => true,
+				'width' => true,
+				'height' => true,
+				'srcset' => true,
+				'sizes' => true,
+				'referrerpolicy' => true,
+			)
+		),
+		'u' => $always_allowed_attr,
+	);
+
+	return wp_kses( $string, $allowed );
 }

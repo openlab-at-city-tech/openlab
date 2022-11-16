@@ -134,6 +134,15 @@
 										<label for="position_type_relative"><?php esc_html_e( 'Relative', 'elementskit-lite' ); ?></label>
 									</td>
 								</tr>
+								<tr id="enable_ajax_load">
+									<td><strong><?php esc_html_e( 'Enable Ajax Load:', 'elementskit-lite' ); ?></strong></td>
+									<td class="alignright">
+										<input type="radio" id="ajax_load_yes" name="megamenu_ajax_load" value="yes">
+										<label for="ajax_load_yes"><?php esc_html_e( 'Yes', 'elementskit-lite' ); ?></label>
+										<input type="radio" id="ajax_load_no" name="megamenu_ajax_load" checked value="no">
+										<label for="ajax_load_no"><?php esc_html_e( 'No', 'elementskit-lite' ); ?></label>
+									</td>
+								</tr>
 							</tbody>
 						</table>
 					</div>

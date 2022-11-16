@@ -5,12 +5,11 @@ if (!defined('ABSPATH')) {
 }
 
 if (!isset(MetaSlider_Theme_Base::$themes['simply-dark'])) {
-
     // instanciate the theme
     $ms_theme_simply_dark = new MetaSlider_Theme_Base(
-        'simply-dark', 	// ID
-        '1.0.0', 		// version
-        array( 			// assets
+        'simply-dark',  // ID
+        '1.0.0',        // version
+        array(          // assets
             array(
                 'type' => 'css',
                 'file' => '/v1.0.0/style.min.css',

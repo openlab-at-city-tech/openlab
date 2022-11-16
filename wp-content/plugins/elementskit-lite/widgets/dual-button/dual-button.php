@@ -29,7 +29,7 @@ class ElementsKit_Widget_Dual_Button extends Widget_Base {
     }
 
     public function get_help_url() {
-        return '';
+        return 'https://wpmet.com/doc/dual-button/';
     }
 
     protected function register_controls() {
@@ -605,7 +605,7 @@ class ElementsKit_Widget_Dual_Button extends Widget_Base {
                             'name' => 'ekit_double_button_one_hover_background',
                             'label' => esc_html__( 'Background', 'elementskit-lite' ),
                             'types' => [ 'classic', 'gradient' ],
-                            'selector' => '{{WRAPPER}} .ekit-double-btn.ekit-double-btn-one:before',
+                            'selector' => '{{WRAPPER}} .ekit-double-btn.ekit-double-btn-one:hover',
                             'separator' => 'before',
                         ]
                     );
@@ -823,7 +823,7 @@ class ElementsKit_Widget_Dual_Button extends Widget_Base {
                             'name' => 'ekit_double_button_two_hover_background',
                             'label' => esc_html__( 'Background', 'elementskit-lite' ),
                             'types' => [ 'classic', 'gradient' ],
-                            'selector' => '{{WRAPPER}} .ekit-double-btn.ekit-double-btn-two:before',
+                            'selector' => '{{WRAPPER}} .ekit-double-btn.ekit-double-btn-two:hover',
                             'separator' => 'before',
                         ]
                     );
@@ -916,18 +916,6 @@ class ElementsKit_Widget_Dual_Button extends Widget_Base {
                     'selector' => '{{WRAPPER}} .ekit-wid-con .ekit_button_middle_text',
                 ]
             );
-            $this->add_control(
-                'ekit_double_button_middletext_use_height_width',
-                [
-                    'label' => __( 'Show Title', 'elementskit-lite' ),
-                    'type' => Controls_Manager::SWITCHER,
-                    'label_on' => __( 'Show', 'elementskit-lite' ),
-                    'label_off' => __( 'Hide', 'elementskit-lite' ),
-                    'return_value' => 'yes',
-                    'default' => 'yes',
-                    'separator' => 'before',
-                ]
-            );
 
             $this->add_responsive_control(
                 'ekit_double_button_middletext_width',
@@ -937,7 +925,7 @@ class ElementsKit_Widget_Dual_Button extends Widget_Base {
                     'size_units' => [ 'px' ],
                     'range' => [
                         'px' => [
-                            'min' => 40,
+                            'min' => 10,
                             'max' => 140,
                             'step' => 1,
                         ],
@@ -949,9 +937,6 @@ class ElementsKit_Widget_Dual_Button extends Widget_Base {
                     'selectors' => [
                         '{{WRAPPER}} .ekit-wid-con .ekit_button_middle_text' => 'width: {{SIZE}}{{UNIT}};',
                     ],
-                    'condition' => [
-                        'ekit_double_button_middletext_use_height_width' => 'yes'
-                    ]
                 ]
             );
 
@@ -963,7 +948,7 @@ class ElementsKit_Widget_Dual_Button extends Widget_Base {
                     'size_units' => [ 'px' ],
                     'range' => [
                         'px' => [
-                            'min' => 40,
+                            'min' => 10,
                             'max' => 140,
                             'step' => 1,
                         ],
@@ -975,9 +960,6 @@ class ElementsKit_Widget_Dual_Button extends Widget_Base {
                     'selectors' => [
                         '{{WRAPPER}} .ekit-wid-con .ekit_button_middle_text' => 'height: {{SIZE}}{{UNIT}};',
                     ],
-                    'condition' => [
-                        'ekit_double_button_middletext_use_height_width' => 'yes'
-                    ]
                 ]
             );
 

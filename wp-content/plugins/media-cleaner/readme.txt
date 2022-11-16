@@ -3,19 +3,21 @@ Contributors: TigrouMeow
 Tags: clean, delete, file, files, images, image, media, library, upload, acf
 Donate link: https://meowapps.com/donation/
 Requires at least: 5.0
-Tested up to: 6.0
+Tested up to: 6.1
 Requires PHP: 7.0
-Stable tag: 6.4.1
+Stable tag: 6.5.0
 
 Clean your WordPress from unused files, broken media entries. Powerful engine and beautiful UI!
 
 == Description ==
 
-Media Cleaner cleans your Media Library from the media entries (and files) which aren't used in your website, as well as broken entries. An internal trash allows you to make sure everything works properly before deleting the media entries (and files) permanently. It uses a smart analysis powered by many implementations for specific plugins and themes. This is the perfect companion to [Database Cleaner](https://meowapps.com/plugin/database-cleaner/).
+Media Cleaner cleans your Media Library from the media entries (and files) which aren't used in your website, as well as broken entries. An internal trash allows you to make sure everything works properly before deleting the media entries (and files) permanently. It uses a smart analysis powered by many implementations for specific plugins and themes.
+
+This is the perfect companion to [Database Cleaner](https://wordpress.org/plugins/database-cleaner/).
 
 **Before using this plugin, make sure you have a proper backup of your install. This step is not optional; it is required. You cannot trust any tools modifying or deleting your files.**
 
-To know more about compatibility, important information and Pro version, please read this until the end. Last but not least, it is necessary to read the [tutorial](https://meowapps.com/media-cleaner/tutorial/). It is available on the official website, here: [Media Cleaner](https://meowapps.com/plugin/media-cleaner/). 
+To know more about compatibility, important information and Pro version, please read this until the end. Last but not least, it is necessary to read the [tutorial](https://meowapps.com/media-cleaner/tutorial/). It is available on the official website, here: [Media Cleaner](https://meowapps.com/media-cleaner/). 
 
 === IMPORTANT ===
 
@@ -31,9 +33,11 @@ This plugin works with any kind of media entry, including retina and/or WebP ver
 
 === PRO VERSION ===
 
-The Pro version adds Filesystem Analysis, extra support for complex plugins, Live Site option and WP-CLI support.
+[Media Cleaner Pro](https://meowapps.com/media-cleaner/) adds Filesystem Analysis, extra support for complex plugins, an 'Live Site' option and WP-CLI support. 
 
-With the Filesystem Analysis, [Media Cleaner Pro](https://meowapps.com/plugin/media-cleaner/) scans your physical /uploads directory, and match it against the Media Library. It also has extra support for complex plugins, such as:
+With the Filesystem Analysis, [Media Cleaner Pro](https://meowapps.com/media-cleaner/) scans your physical /uploads directory, and match it against the Media Library.
+
+Extra support concerns complex plugins, such as:
 
 - ACF, Metabox
 - Divi Builder
@@ -45,12 +49,13 @@ With the Filesystem Analysis, [Media Cleaner Pro](https://meowapps.com/plugin/me
 - Brizy Builder
 - Oxygen Builder
 - Slider Revolution
+- Justified Image Grid
 - Avia Framework
-- And more (Theme X, YooTheme, WP Residence, WCFM MarketPlace, UberMenu, Justified Image Grid, ZipList Recipe, SmartSlider, Jet Engine, Cornerstone, etc...)
+- ... and many, many more!
 
-The Live Site option will analyze the online version of your website, which might enhance the accuracy of the Cleaner in edge-cases.
+The Live Site option will analyze the online version of your website, which might enhance the accuracy of the Cleaner in some edge cases.
 
-Last but not least, [Media Cleaner Pro](https://meowapps.com/plugin/media-cleaner/) has support for WP-CLI. If you have direct access (SSH) to your server, you will be able to run the plugin at a much higher speed or have it run automatically, if you’d like.
+Last but not least, [Media Cleaner Pro](https://meowapps.com/media-cleaner/) has support for WP-CLI. If you have direct access (SSH) to your server, you will be able to run the plugin at a much higher speed or have it run automatically, if you’d like.
 
 === BE CAREFUL: PREPARE A BACKUP ===
 
@@ -58,7 +63,7 @@ Better to be safe than sorry. This plugin deletes files! Therefore, backup is no
 
 === DATABASE CLEANER ===
 
-To make everything perfect, you will also need to clean and optimize your database. If you enjoy how Media Cleaner is made and supported, you will love [Database Cleaner](https://meowapps.com/plugin/database-cleaner/). Please give it a try!
+To make everything perfect, you will also need to clean and optimize your database. If you enjoy how Media Cleaner is made and supported, you will love [Database Cleaner](https://wordpress.org/plugins/database-cleaner/). Please give it a try!
 
 === SPECIAL THANKS ===
 
@@ -78,6 +83,34 @@ To make everything perfect, you will also need to clean and optimize your databa
 1. Media -> Media Cleaner
 
 == Changelog ==
+
+= 6.5.0 (2022/11/12) =
+* Add: In the Edit Media page, you can now see the post/page where your media are used.
+* Fix: Avoid a few errors in some specific cases.
+
+= 6.4.9 (2022/10/24) =
+* Fix: Improved (and fixed) the accuracy of the explanation displayed before the scan.
+* Note: Please try my new [Database Cleaner](https://wordpress.org/plugins/database-cleaner/)! You'll love it!
+
+= 6.4.7 (2022/10/10) =
+* Add: Fixed a potential issue while scanning the widgets.
+
+= 6.4.6 (2022/09/27) =
+* Add: Option to skip trash.
+* Update: Better and faster handling of options (big refactor).
+* Update: Tiny UI enhancements to make this a bit better.
+* Add: Better support for ACF Blocks.
+
+= 6.4.5 (2022/09/10) =
+* Add: Support for Ultimate Responsive Image Slider.
+* Add: Support for Presto Player.
+
+= 6.4.4 (2022/09/01) =
+= Fix: Avoid duplicate issues, even if a file is analyzed twice for some reason.
+* Add: Auto-retry in the UI.
+
+= 6.4.2 (2022/08/03) =
+* Fix: Tiny UI issues in Safari.
 
 = 6.4.1 (2022/07/25) =
 * Add: Select a range of items by using shift.

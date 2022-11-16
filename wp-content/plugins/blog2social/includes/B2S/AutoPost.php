@@ -280,7 +280,7 @@ class B2S_AutoPost {
                     $hashTags = substr($hashTags, 0, $pos - 1);
                 }
             }
-            return (!empty($hashTags) ? (!empty($add) ? $add . $hashTags : $hashTags) : '');
+            return (!empty($hashTags) ? (!empty($add) ? $add . trim($hashTags) : trim($hashTags)) : '');
         } else {
             return '';
         }

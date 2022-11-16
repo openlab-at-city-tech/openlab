@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Trait for making something routable
  */
@@ -16,7 +17,6 @@ if (!defined('ABSPATH')) {
  */
 trait Routable
 {
-
     /**
      * The class instance.
      *

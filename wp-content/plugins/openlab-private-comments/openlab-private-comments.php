@@ -202,7 +202,7 @@ function comment_notice( $text, $comment ) {
 		esc_html__( '(show)', 'openlab-private-comments' ),
 		wp_kses_post( $text ),
 		esc_html__( '(hide)', 'openlab-private-comments' ),
-		wp_kses_post( $text ),
+		wp_kses_post( $text )
 	);
 
 	return $comment_text;

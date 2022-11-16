@@ -32,7 +32,7 @@ class ElementsKit_Widget_Category_List extends Widget_Base {
     }
 
     public function get_help_url() {
-        return '';
+        return 'https://wpmet.com/doc/category-list/';
     }
 
 	protected function register_controls() {
@@ -73,6 +73,9 @@ class ElementsKit_Widget_Category_List extends Widget_Base {
 			[
 				'label' => esc_html__( 'Text', 'elementskit-lite' ),
 				'type' => Controls_Manager::TEXT,
+				'dynamic' => [
+					'active' => true,
+				],
 				'label_block' => true,
 				'placeholder' => esc_html__( 'List Title', 'elementskit-lite' ),
 			]

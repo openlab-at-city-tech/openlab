@@ -1,4 +1,5 @@
 import { Gallery } from '../api'
+import { xssEscape } from 'xss-escape'
 
 // TODO: The "dirty" is just set on each update method but could also be more dynamic
 export default function Current(data) {

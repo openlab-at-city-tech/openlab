@@ -28,7 +28,7 @@ class ElementsKit_Widget_Contact_Form7 extends Widget_Base {
     }
 
     public function get_help_url() {
-        return '';
+        return 'https://wpmet.com/doc/contact-form-7/';
     }
 
     function ekit_cf7form() {

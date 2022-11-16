@@ -12,7 +12,7 @@ class ElementsKit_Widget_Category_List_Handler extends \ElementsKit_Lite\Core\Ha
     }
 
     static function get_icon() {
-        return ' ekit-widget-icon eicon-bullet-list';
+        return 'ekit ekit-widget-icon ekit-category-list';
     }
 
 

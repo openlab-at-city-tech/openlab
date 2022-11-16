@@ -13,7 +13,7 @@
 				<div class="swiper-slide">
 					<div class="slick-slide">
 						<<?php echo esc_attr( $wrapTag ); ?> class="elementskit-testimonial-inner" <?php echo $this->get_render_attribute_string( 'link-' . esc_attr($testimonial['_id'] )); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Already escaped by elementor ?>>
-							<div class="elementskit-single-testimonial-slider ekit_testimonial_style_2">
+							<div class="elementskit-single-testimonial-slider <?php echo esc_attr(!empty($testimonial['ekit_testimonial_active']) ? 'testimonial-active' : ''); ?> ekit_testimonial_style_2">
 								<div class="elementskit-commentor-content">
 									<?php
 										if (isset($testimonial['client_logo']) && !empty($testimonial['client_logo']['url']) && sizeof($testimonial['client_logo']) > 0) {	?>

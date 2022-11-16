@@ -1,2 +1,0 @@
-# Zephyr Project Manager
-Zephyr Project Manager is a simple-to-use, yet sophisticated project manager for WordPress, to help manage all your projects and tasks effectively and get work done. It features a beautifully designed user interface to efficiently keep your projects on tracks. You can create unlimited projects, tasks and categories, start discussions on tasks and projects and upload files/attachments, manage files from the file manager page, view project progress using charts and use the built-in calendar, just to name a few features.

@@ -233,7 +233,7 @@ class Widget_Writer {
 	private function write_title_method( $title = 'empty_title' ) {
 
 		$ret  = "\n\t" . 'public function get_title() {' . PHP_EOL;
-		$ret .= "\t\t" . 'return esc_html__( \'' . $title . '\', \'' . $this->text_domain . '\' );' . PHP_EOL;
+		$ret .= "\t\t" . 'return esc_html__( \'' . esc_html($title) . '\', \'' . $this->text_domain . '\' );' . PHP_EOL;
 		$ret .= "\t" . '}' . PHP_EOL . PHP_EOL;
 
 		return $ret;
@@ -321,7 +321,7 @@ class Widget_Writer {
 	}
 
 
-	private function write_section( $label, $tab = 'Controls_Manager::TAB_CONTENT', $tab_name = 'content', $indx ) {
+	private function write_section( $label, $tab = 'Controls_Manager::TAB_CONTENT', $tab_name = 'content', $indx = '' ) {
 
 		$key = $tab_name . '_section_' . $this->widget_id . '_' . $indx;
 
@@ -329,7 +329,7 @@ class Widget_Writer {
 		$ret .= "\t\t\t" . '\'' . $key . '\',' . PHP_EOL;
 		$ret .= "\t\t\t" . 'array(' . PHP_EOL;
 
-		$ret .= "\t\t\t\t" . '\'label\' => esc_html__( \'' . $label . '\', \'' . $this->text_domain . '\' ),' . PHP_EOL;
+		$ret .= "\t\t\t\t" . '\'label\' => esc_html__( \'' . esc_html($label) . '\', \'' . $this->text_domain . '\' ),' . PHP_EOL;
 		$ret .= "\t\t\t\t" . '\'tab\'   => ' . $tab . ',' . PHP_EOL;
 
 		$ret .= "\t\t\t" . ')' . PHP_EOL;
@@ -372,7 +372,7 @@ class Widget_Writer {
 		$ret .= "\t\t\t" . '\'' . $this->control_prefix . $controlObj->key . '\',' . PHP_EOL;
 		$ret .= "\t\t\t" . 'array(' . PHP_EOL;
 
-		$ret .= "\t\t\t\t" . '\'label\' => esc_html__( \'' . $controlObj->label . '\', \'' . $this->text_domain . '\' ),' . PHP_EOL;
+		$ret .= "\t\t\t\t" . '\'label\' => esc_html__( \'' . esc_html($controlObj->label) . '\', \'' . $this->text_domain . '\' ),' . PHP_EOL;
 		$ret .= "\t\t\t\t" . '\'type\'  => ' . $controlObj->control_type . ',' . PHP_EOL;
 
 		$ret .= $cnt_obj->start_writing_conf( $this->file_handler, $controlObj );
@@ -393,7 +393,7 @@ class Widget_Writer {
 		$ret .= "\t\t\t" . '\'' . $this->control_prefix . $controlObj->key . '\',' . PHP_EOL;
 		$ret .= "\t\t\t" . 'array(' . PHP_EOL;
 
-		$ret .= "\t\t\t\t" . '\'label\' => esc_html__( \'' . $controlObj->label . '\', \'' . $this->text_domain . '\' ),' . PHP_EOL;
+		$ret .= "\t\t\t\t" . '\'label\' => esc_html__( \'' . esc_html($controlObj->label) . '\', \'' . $this->text_domain . '\' ),' . PHP_EOL;
 		$ret .= "\t\t\t\t" . '\'type\'  => ' . $controlObj->control_type . ',' . PHP_EOL;
 
 		//$cnt_obj->start_writing_conf($this->file_handler, $controlObj);

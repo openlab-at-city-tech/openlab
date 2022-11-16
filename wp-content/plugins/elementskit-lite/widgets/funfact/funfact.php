@@ -41,7 +41,7 @@ class ElementsKit_Widget_Funfact extends Widget_Base {
 	}
 
     public function get_help_url() {
-        return '';
+        return 'https://wpmet.com/doc/funfact/';
     }
 
 	protected function register_controls() {
@@ -132,6 +132,9 @@ class ElementsKit_Widget_Funfact extends Widget_Base {
 			[
 				'label'     => esc_html__('Choose Image', 'elementskit-lite'),
 				'type'      => Controls_Manager::MEDIA,
+				'dynamic' => [
+					'active' => true,
+				],
 				'default'   => [
 					'url' => Utils::get_placeholder_image_src(),
 					'id'    => -1
@@ -171,6 +174,9 @@ class ElementsKit_Widget_Funfact extends Widget_Base {
 			[
 				'label'       => esc_html__('Number Prefix ', 'elementskit-lite'),
 				'type'        => Controls_Manager::TEXT,
+				'dynamic'     => [
+					'active' => true,
+				],
 				'default'     => '',
 				'placeholder' => esc_html__('$', 'elementskit-lite'),
 			]
@@ -181,6 +187,9 @@ class ElementsKit_Widget_Funfact extends Widget_Base {
 			[
 				'label'       => esc_html__('Number ', 'elementskit-lite'),
 				'type'        => Controls_Manager::NUMBER,
+				'dynamic'     => [
+					'active' => true,
+				],
 				'default'     => '254',
 				'placeholder' => esc_html__('Enter number', 'elementskit-lite'),
 			]
@@ -191,6 +200,9 @@ class ElementsKit_Widget_Funfact extends Widget_Base {
 			[
 				'label'       => esc_html__('Number Suffix ', 'elementskit-lite'),
 				'type'        => Controls_Manager::TEXT,
+				'dynamic'     => [
+					'active' => true,
+				],
 				'default'     => 'M',
 				'placeholder' => esc_html__('M+', 'elementskit-lite'),
 			]
@@ -201,6 +213,9 @@ class ElementsKit_Widget_Funfact extends Widget_Base {
 			[
 				'label'       => esc_html__('Title ', 'elementskit-lite'),
 				'type'        => Controls_Manager::TEXT,
+				'dynamic'     => [
+					'active' => true,
+				],
 				'default'     => esc_html__('This is the heading', 'elementskit-lite'),
 				'placeholder' => esc_html__('Enter your title', 'elementskit-lite'),
 				'label_block' => true,
@@ -221,6 +236,9 @@ class ElementsKit_Widget_Funfact extends Widget_Base {
 			[
 				'label'       => esc_html__('Super', 'elementskit-lite'),
 				'type'        => Controls_Manager::TEXT,
+				'dynamic' => [
+					'active' => true,
+				],
 				'default'     => '+',
 				'placeholder' => esc_html__('+', 'elementskit-lite'),
 				'condition'   => ['ekit_funfact_super' => 'yes'],

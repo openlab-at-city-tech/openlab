@@ -1,4 +1,6 @@
 // import { __ } from '@wordpress/i18n' FULL OF BUGS!
+import { xssEscape } from 'xss-escape'
+
 export default function MediaLibrary() {
     return {
         manager: {},
@@ -20,7 +22,7 @@ export default function MediaLibrary() {
                             height: image.height,
                             width: image.width,
                             title: image.title,
-                            alt: image.alt,
+                            alt: xssEscape(image.alt),
                             caption: image.caption,
                             src: {
                                 main: image.sizes.full,

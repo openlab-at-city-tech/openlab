@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The shortcode helper
  */
@@ -15,7 +16,6 @@ use Extendify\MetaGallery\Models\Gallery;
  */
 class Shortcode
 {
-
     /**
      * Adds scripts, styles and the view returned.
      *

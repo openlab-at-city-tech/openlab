@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The second level toolbar
  */

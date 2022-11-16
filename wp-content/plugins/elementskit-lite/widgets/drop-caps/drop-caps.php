@@ -29,7 +29,7 @@ class ElementsKit_Widget_Drop_Caps extends Widget_Base {
     }
 
     public function get_help_url() {
-        return '';
+        return 'https://wpmet.com/doc/dropcaps/';
     }
 
     protected function register_controls() {

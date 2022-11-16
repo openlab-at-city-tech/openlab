@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The notice that shows in the settings area
  */

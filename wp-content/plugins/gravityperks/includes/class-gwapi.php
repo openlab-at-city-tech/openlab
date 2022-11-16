@@ -28,12 +28,12 @@ class GWAPI {
 	function __construct( $args ) {
 
 		/**
-		 * @var $license
-		 * @var $plugin_file
-		 * @var $item_name
-		 * @var $author
-		 * @var $versiion
-		 */
+		* @var $license
+		* @var $plugin_file
+		* @var $item_name
+		* @var $author
+		* @var $versiion
+		*/
 		extract( wp_parse_args( $args ) );
 
 		$this->license_key = $license;
@@ -48,16 +48,16 @@ class GWAPI {
 	private function request( $args ) {
 
 		/**
-		 * @var $action
-		 * @var $api_params
-		 * @var $callback
-		 * @var $method
-		 * @var $cache
-		 * @var $flush
-		 * @var $transient
-		 * @var $cache_expiration
-		 * @var $output
-		 */
+		* @var $action
+		* @var $api_params
+		* @var $callback
+		* @var $method
+		* @var $cache
+		* @var $flush
+		* @var $transient
+		* @var $cache_expiration
+		* @var $output
+		*/
 		extract( wp_parse_args( $args, array(
 			'action'           => '',
 			'api_params'       => array(),
@@ -75,7 +75,7 @@ class GWAPI {
 		}
 
 		if ( $cache && ! $flush ) {
-			$cached = get_transient( $transient );
+			$cached = get_site_transient( $transient );
 
 			if ( $cached !== false ) {
 				return $cached;
@@ -109,7 +109,7 @@ class GWAPI {
 
 		if ( is_wp_error( $response ) ) {
 			if ( $cache ) {
-				set_transient( $transient, null, $cache_expiration );
+				set_site_transient( $transient, null, $cache_expiration );
 			}
 
 			return false;
@@ -120,15 +120,15 @@ class GWAPI {
 		}
 
 		$response_body = wp_remote_retrieve_body( $response );
-		$response = json_decode( $response_body, $output === ARRAY_A);
+		$response      = json_decode( $response_body, $output === ARRAY_A );
 
 		/**
-		 * We check that the response is not an array as an empty array evaluates as false when it is a valid response
-		 * in this situation.
-		 */
-		if ( ! $response && ! is_array ( $response ) ) {
+		* We check that the response is not an array as an empty array evaluates as false when it is a valid response
+		* in this situation.
+		*/
+		if ( ! $response && ! is_array( $response ) ) {
 			if ( $cache ) {
-				set_transient( $transient, null, $cache_expiration );
+				set_site_transient( $transient, null, $cache_expiration );
 			}
 
 			return false;
@@ -139,7 +139,7 @@ class GWAPI {
 		}
 
 		if ( $cache ) {
-			set_transient( $transient, $response, $cache_expiration );
+			set_site_transient( $transient, $response, $cache_expiration );
 		}
 
 		return $response;
@@ -165,15 +165,15 @@ class GWAPI {
 	}
 
 	/**
-	 * Get all available perks from the store.
-	 */
+	* Get all available perks from the store.
+	*/
 	public function get_products( $flush = false ) {
 
 		return $this->request( array(
 			'action'   => 'get_products',
 			'output'   => OBJECT,
 			'callback' => array( __CLASS__, 'process_get_products' ),
-            'flush'    => $flush,
+			'flush'    => $flush,
 		) );
 
 	}
@@ -190,15 +190,19 @@ class GWAPI {
 
 			$license = GravityPerks::get_license_data();
 
-			$perk->package = str_replace(array(
-				'%URL%',
-				'%LICENSE_ID%',
-				'%LICENSE_HASH%',
-			), array(
-				rawurlencode( GWAPI::get_site_url() ),
-				rawurlencode( isset( $license['ID'] ) ? $license['ID'] : '' ),
-				rawurlencode( md5( GWPerks::get_license_key() ) ),
-			), $perk->package);
+			$perk->package = str_replace(
+				array(
+					'%URL%',
+					'%LICENSE_ID%',
+					'%LICENSE_HASH%',
+				),
+				array(
+					rawurlencode( GWAPI::get_site_url() ),
+					rawurlencode( isset( $license['ID'] ) ? $license['ID'] : '' ),
+					rawurlencode( md5( GWPerks::get_license_key() ) ),
+				),
+				$perk->package
+			);
 
 			$perk->download_link = $perk->package;
 
@@ -211,8 +215,8 @@ class GWAPI {
 	}
 
 	/**
-	 * Get Dashboard Announcements
-	 */
+	* Get Dashboard Announcements
+	*/
 	public function get_dashboard_announcements() {
 
 		return $this->request( array(
@@ -223,11 +227,11 @@ class GWAPI {
 	}
 
 	/**
-	 * This is the function that let's WordPress know if there is an update avialable
-	 * for one of our products.
-	 *
-	 * @param mixed $_transient_data
-	 */
+	* This is the function that let's WordPress know if there is an update avialable
+	* for one of our products.
+	*
+	* @param mixed $_transient_data
+	*/
 	public function pre_set_site_transient_update_plugins_filter( $_transient_data ) {
 
 		/* Make sure this is only ran once. */
@@ -285,16 +289,16 @@ class GWAPI {
 	}
 
 	/**
-	 * Provides download package when installing and information on the "View version x.x details" page.
-	 *
-	 * @uses api_request()
-	 *
-	 * @param mixed $_data
-	 * @param string $_action
-	 * @param object $_args
-	 *
-	 * @return object $_data
-	 */
+	* Provides download package when installing and information on the "View version x.x details" page.
+	*
+	* @uses api_request()
+	*
+	* @param mixed $_data
+	* @param string $_action
+	* @param object $_args
+	*
+	* @return object $_data
+	*/
 	public function products_plugins_api_filter( $_data, $_action = '', $_args = null ) {
 
 		GravityPerks::log_debug( 'products_plugins_api_filter() start. Retrieves download package and plugin info.' );
@@ -357,10 +361,11 @@ class GWAPI {
 
 		return $this->request( array(
 			'action'     => 'check_license',
+			'method'     => 'POST',
 			'transient'  => 'gwp_license_data',
 			'flush'      => $flush,
 			'cache'      => true,
-			'callback'   => array($this, 'process_license_data'),
+			'callback'   => array( $this, 'process_license_data' ),
 			'api_params' => array(
 				'license'   => GWPerks::get_license_key(),
 				'item_name' => urlencode( $this->get_product_name() ),
@@ -383,7 +388,6 @@ class GWAPI {
 			} else {
 				$has_valid_license = $response['license'] == 'valid';
 			}
-
 		}
 
 		$response['valid'] = $has_valid_license;
@@ -460,7 +464,7 @@ class GWAPI {
 			'action'     => 'register_perk',
 			'api_params' => array(
 				'license' => GWPerks::get_license_key(),
-				'perk_id' => $perk_id
+				'perk_id' => $perk_id,
 			),
 			'cache'      => false,
 			'method'     => 'POST',
@@ -476,7 +480,7 @@ class GWAPI {
 			'action'     => 'deregister_perk',
 			'api_params' => array(
 				'license' => GWPerks::get_license_key(),
-				'perk_id' => $perk_id
+				'perk_id' => $perk_id,
 			),
 			'cache'      => false,
 			'method'     => 'POST',
@@ -489,7 +493,7 @@ class GWAPI {
 	public static function get_api_args( $args = array() ) {
 		return wp_parse_args( $args, array(
 			'url'     => self::get_site_url(),
-			'timeout' => 15
+			'timeout' => 15,
 		) );
 	}
 

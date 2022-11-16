@@ -31,7 +31,7 @@ class ElementsKit_Widget_Fluent_Forms extends Widget_Base {
     }
 
     public function get_help_url() {
-        return '';
+        return 'https://wpmet.com/doc/fluent-forms/';
     }
     
     public static function getForms()
@@ -95,6 +95,9 @@ class ElementsKit_Widget_Fluent_Forms extends Widget_Base {
             [
                 'label' => esc_html__('Title', 'elementskit-lite'),
                 'type' => Controls_Manager::TEXT,
+				'dynamic' => [
+					'active' => true,
+				],
                 'label_block' => true,
                 'default' => '',
                 'condition' => [
@@ -108,6 +111,9 @@ class ElementsKit_Widget_Fluent_Forms extends Widget_Base {
             [
                 'label' => esc_html__('Description', 'elementskit-lite'),
                 'type' => Controls_Manager::TEXTAREA,
+				'dynamic' => [
+					'active' => true,
+				],
                 'default' => '',
                 'condition' => [
                     'custom_title_description' => 'yes',

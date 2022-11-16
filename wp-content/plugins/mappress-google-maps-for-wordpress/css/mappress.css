@@ -6,10 +6,8 @@
 
 .mapp-layout {
 	border: 1px solid lightgray;
-	color: black;
-	font-family: sans-serif;
 	max-width: none;				/* Some themes limit, e.g. 2020 */
-	min-width: 250px;
+	min-width: 200px;
 	opacity: 1 !important;			/* Some themes set to 0 */
 	padding: 0px !important;		/* Some themes set */
 }
@@ -21,42 +19,39 @@
 
 .mapp-layout, .mapp-layout * {
 	box-sizing: border-box;
-	font-size: 13px;
-}
-
-/* 2019 */
-.mapp-layout input, .mapp-layout button, .mapp-layout select, .mapp-layout textarea, .mapp-layout p, .mapp-layout a {
+	color: black;
 	font-family: sans-serif;
+	font-size: 13px;
 }
 
 .mapp-canvas {
 	user-select: none;
 }
 
-.mapp-layout .mapp-main .mapp-canvas img {
-	border: none;
-	max-width: none;        	/* 2021 interferes with pegman */
-	padding: 0;					/* 2011 pads img tags, which interferes with map markers and tiles */
-}
-
-.mapp-layout .mapp-wrapper {
+.mapp-wrapper {
 	min-height: 50px;
 	position: relative;
 }
 
 /* Responsive content */
-.mapp-layout .mapp-content {
+.mapp-content {
 	display: flex;
 	flex-direction: column;
 	position: absolute;
 	top: 0; left: 0; bottom: 0; right: 0;
 }
 
-.mapp-layout .mapp-main {
+.mapp-main {
 	display: flex;
 	flex: 1;
 	overflow: hidden;
 	position: relative;
+}
+
+.mapp-content .mapp-main .mapp-canvas img {
+	border: none;
+	max-width: none;        	/* 2021 interferes with pegman */
+	padding: 0;					/* 2011 pads img tags, which interferes with map markers and tiles */
 }
 
 .mapp-hidden {
@@ -107,7 +102,7 @@ a.leaflet-control-zoom-in, .leaflet-control-zoom-out {
 	text-decoration: none !important;
 }
 
-.mapp-layout .mapp-spinner-overlay {
+.mapp-content .mapp-spinner-overlay {
 	align-items: center;
 	background-color: #c0c0c0;
 	justify-content: center;
@@ -119,7 +114,7 @@ a.leaflet-control-zoom-in, .leaflet-control-zoom-out {
 }
 
 /* https://icons8.com/preloaders/en/circular# */
-.mapp-layout .mapp-spinner {
+.mapp-content .mapp-spinner {
 	background: transparent url(../images/loading.gif) no-repeat center center;
 	background-size: 64px;
 	display: inline-block;
@@ -137,7 +132,7 @@ a.leaflet-control-zoom-in, .leaflet-control-zoom-out {
 	-----------------------------------------------------------------------------------
 */
 
-.mapp-google .mapp-geolocate-control-wrapper {
+.mapp-google-geolocate-wrapper {
 	box-shadow: rgb(0 0 0 / 30%) 0px 1px 4px -1px;
 	border-radius: 4px;
 	position: absolute;
@@ -145,7 +140,7 @@ a.leaflet-control-zoom-in, .leaflet-control-zoom-out {
 
 }
 
-.mapp-google .mapp-geolocate-control {
+.mapp-google-geolocate-wrapper .mapp-geolocate-control {
 	background-color: white;
 	background: white url('../images/geolocate-2x.png') no-repeat center center;
 	background-size: 18px 18px;
@@ -153,7 +148,7 @@ a.leaflet-control-zoom-in, .leaflet-control-zoom-out {
 	width: 40px;
 }
 
-.mapp-leaflet .mapp-geolocate-control-wrapper {
+.mapp-leaflet-geolocate-wrapper {
 	border: 2px solid rgba(0,0,0,0.2);
 	border-radius: 4px;
 	position: absolute;
@@ -161,7 +156,7 @@ a.leaflet-control-zoom-in, .leaflet-control-zoom-out {
 	z-index: 1000;
 }
 
-.mapp-geolocate-control {
+.mapp-leaflet-geolocate-wrapper .mapp-geolocate-control {
 	background-color: white;
 	background: white url('../images/geolocate-2x.png') no-repeat center center;
 	background-size: 18px 18px;
@@ -224,14 +219,33 @@ a.leaflet-control-zoom-in, .leaflet-control-zoom-out {
 }
 
 /* Sidebar inline */
-.mapp-inline .mapp-sidebar-toggle {
-	display: none;
-}
-
-.mapp-inline .mapp-sidebar {
+.mapp-sidebar.mapp-sidebar-inline  {
+	border: none;
+	border-top: 1px solid lightgray;
 	max-width: none;
 	width: auto;
 }
+
+.mapp-sidebar-inline .mapp-sidebar-toggle {
+	display: none;
+}
+
+.mapp-sidebar-inline .mapp-directions {
+	max-width: none;
+	width: auto;
+}
+
+.mapp-sidebar-inline .mapp-list {
+	display: flex;
+	flex: none;
+	flex-direction: column;
+	max-height: 350px;
+	max-width: none;
+	overflow: auto;
+	width: auto;
+}
+
+
 
 
 /*
@@ -317,12 +331,14 @@ a.leaflet-control-zoom-in, .leaflet-control-zoom-out {
 	padding: 10px;
 }
 
+.mapp-list .mapp-dir-wrapper {
+	margin-top: 10px;
+}
+
 /* Make directions look like a link */
 .mapp-list .mapp-dir {
 	color: #4272db;
 	cursor: pointer;
-	display: inline-block;
-	margin-top: 5px;
 	white-space: nowrap;
 }
 
@@ -363,6 +379,7 @@ a.leaflet-control-zoom-in, .leaflet-control-zoom-out {
 /*
 	-----------------------------------------------------------------------------------
 	Header
+	- min-height to prevent popins
 	-----------------------------------------------------------------------------------
 */
 .mapp-header {
@@ -371,6 +388,7 @@ a.leaflet-control-zoom-in, .leaflet-control-zoom-out {
 	border-bottom: 1px solid lightgray;
 	display: flex;
 	gap: 5px;
+	min-height: 45px;
 }
 
 /*
@@ -557,7 +575,7 @@ a.leaflet-control-zoom-in, .leaflet-control-zoom-out {
 }
 
 /* Many selectors, to override styles from GT editor, theme */
-.mapp-layout .mapp-filters .mapp-filter-values input[type="text"] {
+.mapp-content .mapp-filters .mapp-filter-values input[type="text"] {
 	border: 1px solid gray;
 	border-radius: 0;
 	box-shadow: none;
@@ -568,7 +586,7 @@ a.leaflet-control-zoom-in, .leaflet-control-zoom-out {
 	padding: 5px;
 }
 
-.mapp-layout .mapp-filters .mapp-filter-values input[type="radio"], .mapp-filter-values input[type="checkbox"] {
+.mapp-content .mapp-filters .mapp-filter-values input[type="radio"], .mapp-filter-values input[type="checkbox"] {
 	border-radius: 0;
 	box-shadow: none;
 	line-height: 1;
@@ -577,7 +595,7 @@ a.leaflet-control-zoom-in, .leaflet-control-zoom-out {
 	outline: none;
 }
 
-.mapp-layout .mapp-filters .mapp-filter-values select {
+.mapp-content .mapp-filters .mapp-filter-values select {
 	border: 1px solid gray;
 	border-radius: 0;
 	box-shadow: none;
@@ -791,12 +809,13 @@ a.leaflet-control-zoom-in, .leaflet-control-zoom-out {
 	overflow: hidden;
 }
 
-.mapp-iw * {
+/* Selectivity needed to override GT editor */
+.mapp-ib .mapp-iw * {
 	font-size: 13px;
 }
 
 /* Override common theme / user agent styles that interfere */
-.mapp-layout .mapp-iw * {
+.mapp-content .mapp-iw * {
 	line-height: normal;
 }
 
@@ -832,7 +851,10 @@ a.leaflet-control-zoom-in, .leaflet-control-zoom-out {
 
 .mapp-iw .mapp-info .mapp-template {
 	align-items: center;
+	display: flex;
 	flex: 1;
+	flex-direction: column;
+	overflow: hidden;
 }
 
 .mapp-iw .mapp-title {
@@ -844,6 +866,10 @@ a.leaflet-control-zoom-in, .leaflet-control-zoom-out {
 	overflow: auto;
 	overflow-wrap: break-word;
 	padding-top: 10px;
+}
+
+.mapp-iw .mapp-dir-wrapper {
+	margin-top: 10px;
 }
 
 /* Make directions look like a link */
@@ -925,8 +951,8 @@ a.leaflet-control-zoom-in, .leaflet-control-zoom-out {
 	text-align: center;
 }
 
-/* Limit info section to width of featured image.  */
-.mapp-iw.mapp-thumb-top .mapp-info {
+/* When thumbnails are on top AND an image is present, limit info section width to width of the image */
+.mapp-iw.mapp-thumb-top.mapp-has-thumb .mapp-info {
 	min-width: 100%;
 	width: 0;
 }
@@ -1021,36 +1047,6 @@ a.leaflet-control-zoom-in, .leaflet-control-zoom-out {
 
 .mapp-ib-wrapper.mapp-ib-flip.mapp-ib-float {
 	animation: floatdown 0.4s forwards;
-}
-
-
-/*
-	-----------------------------------------------------------------------------------
-	Layouts
-	-----------------------------------------------------------------------------------
-*/
-
-/* Put directions on bottom instead of left in layout */
-.mapp-inline .mapp-main {
-	flex-direction: column-reverse;
-}
-
-.mapp-inline .mapp-directions {
-	border-top: 1px solid lightgray;
-	max-width: none;
-	width: auto;
-}
-
-/* List outside layout */
-.mapp-inline .mapp-list {
-	border: none;
-	border-top: 1px solid lightgray;
-	display: flex;
-	flex-direction: column;
-	max-height: 400px;
-	max-width: none;
-	overflow: auto;
-	width: auto;
 }
 
 
@@ -1169,8 +1165,7 @@ a.leaflet-control-zoom-in, .leaflet-control-zoom-out {
 
 .mapp-directions {
 	background-color: white;
-	border-right: 1px solid lightgray;
-	max-width: 45%;
+	max-width: 50%;
 	overflow: auto;
 	padding: 10px;
 	position: relative;
@@ -1414,31 +1409,38 @@ body.mapp-modal-noscroll {
 	-----------------------------------------------------------------------------------
 */
 
-/* Container div is needed because default iframe width = 300px, not 100% like a div */
-.mapp-iframe-container {}
-
-.mapp-iframe-wrapper {
-	position: relative;
+.mapp-iframe-container {
+	border: 1px solid lightgray;
 }
 
+.mapp-iframe-wrapper { position: relative; }
+
+/* Size only works with position absolute AND h/w=100%; z-index because 2020 page breaks appear over map */
 .mapp-iframe {
 	border: none;
-	height: 100% !important;
-	overflow: hidden;			/* scrolling=no is also required */
+	height: 100%;
+	overflow: hidden;
 	position: absolute;
 	top: 0; left: 0; bottom: 0; right: 0;
-	width: 100% !important;
-	z-index: 1;					/* 2020 page breaks appear over map */
+	width: 100%;
+	z-index: 1;
 }
 
-.mapp-iframe-html {
-	height: 100%;
-}
+.mapp-iframe-html { height: 100%; }
 
 .mapp-iframe-body {
 	height: 100%;
 	margin: 0;
 	padding: 0;
+}
+
+.mapp-iframe-content { height: 100%; }
+
+.mapp-iframe-content * {
+	box-sizing: border-box;
+	color: black;
+	font-family: sans-serif;
+	font-size: 13px;
 }
 
 /*

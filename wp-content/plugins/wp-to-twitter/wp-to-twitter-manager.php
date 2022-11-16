@@ -25,7 +25,7 @@ function wpt_updated_settings() {
 
 	$nonce = $_REQUEST['_wpnonce'];
 	if ( ! wp_verify_nonce( $nonce, 'wp-to-twitter-nonce' ) ) {
-		die( 'Security check failed' );
+		wp_die( 'WP to Twitter: Security check failed' );
 	}
 	if ( isset( $_POST['oauth_settings'] ) ) {
 		$post          = map_deep( $_POST, 'sanitize_text_field' );

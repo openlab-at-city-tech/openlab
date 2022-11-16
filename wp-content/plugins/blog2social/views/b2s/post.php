@@ -3,7 +3,6 @@ wp_nonce_field('b2s_security_nonce', 'b2s_security_nonce');
 /* Data */
 require_once (B2S_PLUGIN_DIR . 'includes/B2S/Post/Filter.php');
 require_once (B2S_PLUGIN_DIR . 'includes/Util.php');
-
 require_once(B2S_PLUGIN_DIR . 'includes/Options.php');
 $options = new B2S_Options((int) B2S_PLUGIN_BLOG_USER_ID);
 $optionPostFilters = $options->_getOption('post_filters');

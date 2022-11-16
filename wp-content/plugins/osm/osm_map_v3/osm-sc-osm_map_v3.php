@@ -335,7 +335,7 @@ else{
         var raster = getTileLayer("'.$type.'","'.$api_key.'");			
 
 			  var '. $MapName .' = new ol.Map({
-				interactions: ol.interaction.defaults({mouseWheelZoom:'.$mwz.'}),
+				interactions: ol.interaction.defaults.defaults({mouseWheelZoom:'.$mwz.'}),
 				layers: [raster],
 				target: "'. $MapName .'",
 				view: new ol.View({

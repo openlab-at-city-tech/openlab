@@ -41,7 +41,7 @@ if ( comments_open() ) {
 	$user          = wp_get_current_user();
 	$user_identity = $user->exists() ? $user->display_name : '';
 
-	$required_attribute = ( $html5 ? ' required' : ' required="required"' );
+	$required_attribute = ' required="required"';
 
 	comment_form(
 		[

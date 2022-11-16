@@ -3,7 +3,7 @@
 Plugin Name: OSM
 Plugin URI: https://wp-osm-plugin.hyumika.com
 Description: Embeds maps in your blog and adds geo data to your posts.  Find samples and a forum on the <a href="https://wp-osm-plugin.hyumika.com">OSM plugin page</a>.
-Version: 6.0
+Version: 6.0.1
 Author: MiKa
 Author URI: http://www.hyumika.com
 Minimum WordPress Version Required: 3.0
@@ -27,7 +27,7 @@ Minimum WordPress Version Required: 3.0
 */
 load_plugin_textdomain('OSM', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/');
 
-define ("PLUGIN_VER", "V6.0");
+define ("PLUGIN_VER", "V6.0.1");
 
 // modify anything about the marker for tagged posts here
 // instead of the coding.
@@ -169,9 +169,16 @@ function savePostMarker(){
   $MarkerLatLon  = sanitize_text_field( $_POST['MarkerLat'] ).','.sanitize_text_field( $_POST['MarkerLon'] );
   $MarkerIcon      = sanitize_text_field( $_POST['MarkerIcon']);
   $MarkerName   = sanitize_text_field( $_POST['MarkerName']);
-  $MarkerText      = sanitize_text_field( $_POST['MarkerText']);
   $post_id = sanitize_text_field( $_POST['post_id']);
   $nonce   = sanitize_text_field( $_POST['marker_nonce']); 
+ 
+  $allowed_html = array(
+    'a' => array('href' => array(),),
+    'br' => array(),
+    'b' => array(),
+    'i' => array(),
+  );
+  $MarkerText      = wp_kses( $_POST['MarkerText'], $allowed_html);
   
   if (!wp_verify_nonce($nonce, 'osm_marker_nonce')){
     echo "Error: Bad ajax request";
@@ -283,7 +290,7 @@ class Osm
     }
   }
 
-	// add it to the Settings page
+  // add it to the Settings page
   static function options_page_osm()
   {
       
@@ -300,17 +307,17 @@ class Osm
     $osm_default_lon=get_option('osm_default_lon',OSM_default_lon);  
     $osm_default_zoom=get_option('osm_default_zoom',OSM_default_zoom); 
     // update default maps values
-    if (isset($_POST['osm_default_lat'])) {
+    if (isset($_POST['osm_default_lat']) && wp_verify_nonce( $_POST['osm_options'], 'update_options' )) {
         $temp_lat=(float) $_POST['osm_default_lat'];
         if ($temp_lat>LAT_MAX || $temp_lat<LAT_MIN) {
           $Option_Error = 1;
           Osm::traceText(DEBUG_ERROR, "e_default_lat_range");   
         } else {
           $osm_default_lat=$temp_lat;   
-          update_option('osm_default_lat',$temp_lat);  
+          update_option('osm_default_lat',$temp_lat); 
         }
     } 
-    if (isset($_POST['osm_default_lon'])) {
+    if (isset($_POST['osm_default_lon']) && wp_verify_nonce( $_POST['osm_options'], 'update_options' )) {
         $temp_lon=(float) $_POST['osm_default_lon'];
         if ($temp_lon>LON_MAX || $temp_lon<LON_MIN) {
           $Option_Error = 1;
@@ -318,16 +325,16 @@ class Osm
         } else {
           $osm_default_lon=$temp_lon;   
           update_option('osm_default_lon',$temp_lon);  
-        }
+          }
      } 
-    if (isset($_POST['osm_default_zoom'])) {
+    if (isset($_POST['osm_default_zoom']) && wp_verify_nonce( $_POST['osm_options'], 'update_options' )) {
         $temp_zoom=(int) $_POST['osm_default_zoom'];
         if ($temp_zoom>19 || $temp_zoom<1) {
           $Option_Error = 1;
           Osm::traceText(DEBUG_ERROR, "e_default_zoom_range");   
         } else {
           $osm_default_zoom=$temp_zoom;
-          update_option('osm_default_zoom',$temp_zoom);  
+          update_option('osm_default_zoom',$temp_zoom);
         }
      } 
      // Let the user know whether all was fine or not
@@ -557,7 +564,7 @@ var HTTP_GET_VARS = [];
          $PostMarker = $metapostIcon_name;
          $PostMarker = Osm_icon::replaceOldIcon($PostMarker);
 
-	     $Marker_Txt = $metapostmarker_text.'  </a><br />';
+	     $Marker_Txt = '<p>'.$metapostmarker_text.'</p>';
          $MarkerArray[] = array('lat'=> $temp_lat,'lon'=>$temp_lon,'popup_height'=>'100', 'popup_width'=>'150', 'marker'=>$PostMarker, 'text'=>$Marker_Txt, 'Marker'=>$PostMarker);
        }
        $post = $post_org;

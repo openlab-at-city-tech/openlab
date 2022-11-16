@@ -1,4 +1,4 @@
-<div class="elementskit-testimonial-slider slick-slider arrow_inside <?php echo !empty($settings['ekit_testimonial_show_dot']) ? 'slick-dotted' : '' ?> <?php echo esc_attr($wrapper_class); ?>" <?php echo $this->get_render_attribute_string('wrapper'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Already escaped by elementor ?>>
+<div class="elementskit-testimonial-slider slick-slider arrow_inside elementskit-default-testimonial <?php echo !empty($settings['ekit_testimonial_show_dot']) ? 'slick-dotted' : '' ?>" <?php echo $this->get_render_attribute_string('wrapper'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Already escaped by elementor ?>>
 	<div class="swiper-container">
         <div class="slick-list swiper-wrapper">
 		<?php
@@ -14,7 +14,7 @@
 			<div class="swiper-slide">
 				<div class="slick-slide">
 					<<?php echo esc_attr( $wrapTag ); ?> class="elemntskit-testimonial-item" <?php echo $this->get_render_attribute_string( 'link-' . $testimonial['_id'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Already escaped by elementor ?>>
-						<div class="elementskit-single-testimonial-slider">
+						<div class="elementskit-single-testimonial-slider <?php echo esc_attr(!empty($testimonial['ekit_testimonial_active']) ? 'testimonial-active' : ''); ?>">
 							<div class="row">
 								<div class="col-lg-6 elementkit-testimonial-col">
 									<div class="elementskit-commentor-content">

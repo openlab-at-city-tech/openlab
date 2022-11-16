@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Factory to create models
  */
@@ -16,7 +17,6 @@ use Faker\Factory as Faker;
  */
 abstract class Factory
 {
-
     /**
      * The name of the factory's corresponding model.
      *

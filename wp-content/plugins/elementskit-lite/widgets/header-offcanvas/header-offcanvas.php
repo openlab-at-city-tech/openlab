@@ -30,7 +30,7 @@ class ElementsKit_Widget_Header_Offcanvas extends Widget_Base
     }
 
     public function get_help_url() {
-        return '';
+        return 'https://wpmet.com/doc/header-offcanvas/';
     }
 
     protected function register_controls()
@@ -126,6 +126,9 @@ class ElementsKit_Widget_Header_Offcanvas extends Widget_Base
                     'label' => esc_html__('Text', 'elementskit-lite'),
                     'label_block' => true,
                     'type' => Controls_Manager::TEXT,
+					'dynamic' => [
+						'active' => true,
+					],
                     'condition' => [
                         'ekit_offcanvas_menu_type' => [ 'text', 'icon_with_text' ],
                     ] 
@@ -270,7 +273,7 @@ class ElementsKit_Widget_Header_Offcanvas extends Widget_Base
                         '{{WRAPPER}} .ekit_navSidebar-button svg'   => 'max-width: {{SIZE}}{{UNIT}};',
                     ],
                     'condition' => [
-                        'ekit_offcanvas_menu_type' => [ 'text', 'icon_with_text' ],
+                        'ekit_offcanvas_menu_type!' => [ 'text' ],
                     ]
                 ]
             );

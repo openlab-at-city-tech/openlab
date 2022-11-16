@@ -1,4 +1,5 @@
 <?php
+// phpcs:ignoreFile
 /**
  * Shortcode Generator
  */
@@ -210,9 +211,8 @@ class Su_Generator {
 				'<a href="https://getshortcodes.com/" target="_blank" title="' . __( 'Plugin homepage', 'shortcodes-ultimate' ) . '">' . __( 'Plugin homepage', 'shortcodes-ultimate' ) . '</a>',
 			) );
 
-		// Add add-ons links
-		if ( ! self::is_addons_active() ) {
-			$tools[] = '<a href="' . admin_url( 'admin.php?page=shortcodes-ultimate-addons&from-generator' ) . '" target="_blank" title="' . __( 'Add-ons', 'shortcodes-ultimate' ) . '" class="su-add-ons">&#9733; ' . __( 'Premium Add-ons', 'shortcodes-ultimate' ) . '</a>';
+		if ( ! su_fs()->can_use_premium_code() && ! su_has_all_active_addons() ) {
+			$tools[] = '<a href="' . esc_attr( su_get_utm_link( 'https://getshortcodes.com/pricing/', array( 'wp-admin', 'generator', 'badge' ) ) ) . '" target="_blank" title="' . __( 'Upgrade to PRO', 'shortcodes-ultimate' ) . '" class="su-add-ons">&#9733; ' . __( 'Upgrade to PRO', 'shortcodes-ultimate' ) . '</a>';
 		}
 ?>
 	<div id="su-generator-wrap" style="display:none">
@@ -223,7 +223,7 @@ class Su_Generator {
 				<p id="su-generator-search-pro-tip"><?php printf( '<strong>%s:</strong> %s', __( 'Pro Tip', 'shortcodes-ultimate' ), __( 'Hit enter to select highlighted shortcode, while searching', 'shortcodes-ultimate' ) ) ?></p>
 				<div id="su-generator-filter">
 					<strong><?php _e( 'Filter by type', 'shortcodes-ultimate' ); ?></strong>
-					<?php foreach ( su_get_config( 'groups' ) as $group => $label ) echo '<a href="#" data-filter="' . $group . '">' . $label . '</a>'; ?>
+					<?php foreach ( su_get_groups() as $group => $label ) echo '<a href="#" data-filter="' . $group . '">' . $label . '</a>'; ?>
 				</div>
 				<div id="su-generator-choices" class="su-generator-clearfix">
 					<?php
@@ -249,6 +249,7 @@ class Su_Generator {
 			<input type="hidden" name="su-generator-url" id="su-generator-url" value="<?php echo plugins_url( '', SU_PLUGIN_FILE ); ?>" />
 			<input type="hidden" name="su-compatibility-mode-prefix" id="su-compatibility-mode-prefix" value="<?php echo su_get_shortcode_prefix(); ?>" />
 			<input type="hidden" name="su-generator-option-skip" id="su-generator-option-skip" value="<?php echo esc_attr( get_option( 'su_option_skip', '' ) ); ?>" />
+			<?php wp_nonce_field( 'su_generator_preset', 'su_generator_presets_nonce' ); ?>
 			<div id="su-generator-result" style="display:none"></div>
 		</div>
 	</div>
@@ -438,11 +439,21 @@ class Su_Generator {
 		if ( empty( $_POST['name'] ) ) return;
 		if ( empty( $_POST['settings'] ) ) return;
 		if ( empty( $_POST['shortcode'] ) ) return;
+		// Check Nonce
+		if (
+			empty( $_POST['nonce'] ) ||
+			! is_string( $_POST['nonce'] ) ||
+			! wp_verify_nonce( $_POST['nonce'], 'su_generator_preset' )
+		) {
+			return;
+		}
 		// Clean-up incoming data
 		$id = sanitize_key( $_POST['id'] );
 		$name = sanitize_text_field( $_POST['name'] );
-		$settings = ( is_array( $_POST['settings'] ) ) ? stripslashes_deep( $_POST['settings'] ) : array();
 		$shortcode = sanitize_key( $_POST['shortcode'] );
+		// Validate and sanitize settings
+		$settings = is_array( $_POST['settings'] ) ? stripslashes_deep( $_POST['settings'] ) : array();
+		$settings = array_map( 'wp_kses_post', $settings );
 		// Prepare option name
 		$option = 'su_presets_' . $shortcode;
 		// Get the existing presets
@@ -467,6 +478,14 @@ class Su_Generator {
 		// Check incoming data
 		if ( empty( $_POST['id'] ) ) return;
 		if ( empty( $_POST['shortcode'] ) ) return;
+		// Check Nonce
+		if (
+			empty( $_POST['nonce'] ) ||
+			! is_string( $_POST['nonce'] ) ||
+			! wp_verify_nonce( $_POST['nonce'], 'su_generator_preset' )
+		) {
+			return;
+		}
 		// Clean-up incoming data
 		$id = sanitize_key( $_POST['id'] );
 		$shortcode = sanitize_key( $_POST['shortcode'] );
@@ -489,6 +508,14 @@ class Su_Generator {
 		// Check incoming data
 		if ( empty( $_GET['id'] ) ) return;
 		if ( empty( $_GET['shortcode'] ) ) return;
+		// Check Nonce
+		if (
+			empty( $_GET['nonce'] ) ||
+			! is_string( $_GET['nonce'] ) ||
+			! wp_verify_nonce( $_GET['nonce'], 'su_generator_preset' )
+		) {
+			return;
+		}
 		// Clean-up incoming data
 		$id = sanitize_key( $_GET['id'] );
 		$shortcode = sanitize_key( $_GET['shortcode'] );
@@ -604,23 +631,7 @@ class Su_Generator {
 	 * @return boolean True if all addons active, False otherwise.
 	 */
 	public static function is_addons_active() {
-
-		foreach ( su_get_config( 'addons' ) as $addon ) {
-
-			if ( isset( $addon['is_bundle'] ) && $addon['is_bundle'] ) {
-				continue;
-			}
-
-			$addon_id = sanitize_key( $addon['id'] );
-
-			if ( ! did_action( "su/{$addon_id}/ready" ) ) {
-				return false;
-			}
-
-		}
-
-		return true;
-
+		return false;
 	}
 
 	/**

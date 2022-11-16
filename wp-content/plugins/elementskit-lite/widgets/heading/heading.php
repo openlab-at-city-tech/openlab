@@ -29,7 +29,7 @@ class ElementsKit_Widget_Heading extends Widget_Base {
     }
 
     public function get_help_url() {
-        return '';
+        return 'https://wpmet.com/doc/widget-documentation/';
     }
 
     protected function register_controls() {
@@ -44,19 +44,25 @@ class ElementsKit_Widget_Heading extends Widget_Base {
 
 		$this->add_control(
 			'ekit_heading_title', [
-				'label'			 =>esc_html__( 'Heading Title', 'elementskit-lite' ),
+				'label'			 => esc_html__( 'Heading Title', 'elementskit-lite' ),
 				'type'			 => Controls_Manager::TEXT,
-				'description'	=> esc_html__( '"Focused Title" Settings will be worked, If you use this {{something}} format', 'elementskit-lite' ),
+				'dynamic'		 => [
+					'active' => true,
+				],
+				'description'	 => esc_html__( '"Focused Title" Settings will be worked, If you use this {{something}} format', 'elementskit-lite' ),
 				'label_block'	 => true,
-				'placeholder'	 =>esc_html__( 'Grow your {{report}}', 'elementskit-lite' ),
-				'default'	 =>esc_html__( 'Grow your {{report}}', 'elementskit-lite' ),
+				'placeholder'	 => esc_html__( 'Grow your {{report}}', 'elementskit-lite' ),
+				'default'		 => esc_html__( 'Grow your {{report}}', 'elementskit-lite' ),
 
 			]
 		);
 
 		$this->add_control( 'ekit_heading_link', [
-			'label'			 =>esc_html__( 'Link', 'elementskit-lite' ),
+			'label'			 => esc_html__( 'Link', 'elementskit-lite' ),
 			'type'			 => Controls_Manager::URL,
+			'dynamic'		 => [
+				'active' => true,
+			],
 			'label_block' => true,
 			'placeholder' => esc_html__( 'Paste URL or type', 'elementskit-lite' ),
 			'autocomplete' => false,
@@ -180,6 +186,9 @@ class ElementsKit_Widget_Heading extends Widget_Base {
 			'ekit_heading_sub_title', [
 				'label'			 =>esc_html__( 'Heading Sub Title', 'elementskit-lite' ),
 				'type'			 => Controls_Manager::TEXT,
+				'dynamic'		 => [
+					'active' => true,
+				],
 				'label_block'	 => true,
 				'placeholder'	 =>esc_html__( 'Time has changed', 'elementskit-lite' ),
 				'default'		 =>esc_html__( 'Time has changed', 'elementskit-lite' ),
@@ -251,6 +260,9 @@ class ElementsKit_Widget_Heading extends Widget_Base {
 			[
 				'label' => esc_html__( 'Heading Description', 'elementskit-lite' ),
 				'type' => Controls_Manager::WYSIWYG,
+				'dynamic' => [
+					'active' => true,
+				],
 				'rows' => 10,
 				'label_block'	 => true,
 				'default'	 =>esc_html__( 'A small river named Duden flows by their place and supplies it with the necessary regelialia. It is a paradise ', 'elementskit-lite' ),
@@ -288,9 +300,12 @@ class ElementsKit_Widget_Heading extends Widget_Base {
 		]);
 
 		$this->add_control( 'shadow_text_content', [
-			'label'			 =>esc_html__( 'Content', 'elementskit-lite' ),
+			'label'			 => esc_html__( 'Content', 'elementskit-lite' ),
 			'label_block'	 => true,
 			'type'			 => Controls_Manager::TEXT,
+			'dynamic'		 => [
+				'active' => true,
+			],
 			'default'		 => esc_html__( 'bussiness', 'elementskit-lite' ),
 			'condition' => [
 				'show_shadow_text' => 'yes'
@@ -304,14 +319,14 @@ class ElementsKit_Widget_Heading extends Widget_Base {
 		$this->start_controls_section(
 			'ekit_heading_section_seperator',
 			array(
-				'label' => esc_html__( 'Seperator', 'elementskit-lite' ),
+				'label' => esc_html__( 'Separator', 'elementskit-lite' ),
 			)
 		);
 
 
 		$this->add_control(
 			'ekit_heading_show_seperator', [
-				'label'			 =>esc_html__( 'Show Seperator', 'elementskit-lite' ),
+				'label'			 =>esc_html__( 'Show Separator', 'elementskit-lite' ),
 				'type'			 => Controls_Manager::SWITCHER,
 				'default' => 'yes',
 				'label_on' =>esc_html__( 'Yes', 'elementskit-lite' ),
@@ -322,7 +337,7 @@ class ElementsKit_Widget_Heading extends Widget_Base {
 		$this->add_control(
 			'ekit_heading_seperator_style',
 			[
-				'label' => esc_html__( 'Seperator Style', 'elementskit-lite' ),
+				'label' => esc_html__( 'Separator Style', 'elementskit-lite' ),
 				'type' => Controls_Manager::SELECT,
 				'options' => [
 					'elementskit-border-divider ekit-dotted' => esc_html__( 'Dotted', 'elementskit-lite' ),
@@ -341,7 +356,7 @@ class ElementsKit_Widget_Heading extends Widget_Base {
 		$this->add_control(
 			'ekit_heading_seperator_position',
 			[
-				'label' => esc_html__( 'Seperator Position', 'elementskit-lite' ),
+				'label' => esc_html__( 'Separator Position', 'elementskit-lite' ),
 				'type' => Controls_Manager::SELECT,
 				'options' => [
 					'top' => esc_html__( 'Top', 'elementskit-lite' ),
@@ -361,6 +376,9 @@ class ElementsKit_Widget_Heading extends Widget_Base {
 			[
 				'label' => esc_html__( 'Choose Image', 'elementskit-lite' ),
 				'type' => Controls_Manager::MEDIA,
+				'dynamic' => [
+					'active' => true,
+				],
 				'default' => [
 					'url' => Utils::get_placeholder_image_src(),
 					'id'    => -1
@@ -430,10 +448,20 @@ class ElementsKit_Widget_Heading extends Widget_Base {
 
 		$this->add_responsive_control(
 			'ekit_heading_title_color', [
-				'label'		 =>esc_html__( 'Title primary color', 'elementskit-lite' ),
+				'label'		 =>esc_html__( 'Color', 'elementskit-lite' ),
 				'type'		 => Controls_Manager::COLOR,
 				'selectors'	 => [
 					'{{WRAPPER}} .elementskit-section-title-wraper .elementskit-section-title' => 'color: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->add_responsive_control(
+			'ekit_heading_title_color_hover', [
+				'label'		 =>esc_html__( 'Hover Color', 'elementskit-lite' ),
+				'type'		 => Controls_Manager::COLOR,
+				'selectors'	 => [
+					'{{WRAPPER}} .elementskit-section-title-wraper .elementskit-section-title:hover' => 'color: {{VALUE}};',
 				],
 			]
 		);
@@ -601,7 +629,7 @@ class ElementsKit_Widget_Heading extends Widget_Base {
 
 		$this->add_responsive_control(
 			'ekit_heading_focused_title_color', [
-				'label'		 =>esc_html__( 'Title primary color', 'elementskit-lite' ),
+				'label'		 =>esc_html__( 'Color', 'elementskit-lite' ),
 				'type'		 => Controls_Manager::COLOR,
 				'default' => '#000000',
 				'selectors'	 => [
@@ -609,12 +637,25 @@ class ElementsKit_Widget_Heading extends Widget_Base {
 				],
 			]
 		);
+
+		$this->add_responsive_control(
+			'ekit_heading_focused_title_color_hover', [
+				'label'		 =>esc_html__( 'Hover Color', 'elementskit-lite' ),
+				'type'		 => Controls_Manager::COLOR,
+				'default' => '#000000',
+				'selectors'	 => [
+					'{{WRAPPER}} .elementskit-section-title-wraper .elementskit-section-title:hover > span' => 'color: {{VALUE}};',
+				],
+			]
+		);
+
 		$this->add_group_control(
 			Group_Control_Typography::get_type(), [
 			'name'		 => 'ekit_heading_focused_title_typography',
 			'selector'	 => '{{WRAPPER}} .elementskit-section-title-wraper .elementskit-section-title > span',
 			]
 		);
+
 		$this->add_responsive_control(
 			'ekit_heading_title_text_decoration_color', [
 				'label'		 =>esc_html__( 'Text decoration color', 'elementskit-lite' ),
@@ -624,6 +665,7 @@ class ElementsKit_Widget_Heading extends Widget_Base {
 				],
 			]
 		);
+
 		$this->add_group_control(
             Group_Control_Text_Shadow::get_type(),
             [
@@ -632,6 +674,7 @@ class ElementsKit_Widget_Heading extends Widget_Base {
 
             ]
         );
+
 		$this->add_responsive_control(
 			'ekit_heading_focused_title_secondary_spacing',
 			[
@@ -643,6 +686,7 @@ class ElementsKit_Widget_Heading extends Widget_Base {
 				],
 			]
 		);
+
 		$this->add_control(
 			'ekit_heading_use_focused_title_bg', [
 				'label'			 =>esc_html__( 'Use background color on text', 'elementskit-lite' ),
@@ -655,6 +699,7 @@ class ElementsKit_Widget_Heading extends Widget_Base {
 				],
 			]
 		);
+
         $this->add_group_control(
             Group_Control_Background::get_type(),
             array(
@@ -668,6 +713,7 @@ class ElementsKit_Widget_Heading extends Widget_Base {
 				],
             )
 		);
+
 		$this->add_control(
 			'ekit_heading_focused_title_secondary_border_radius',
 			[
@@ -683,6 +729,7 @@ class ElementsKit_Widget_Heading extends Widget_Base {
 				],
 			]
 		);
+
 		$this->add_control(
 			'ekit_heading_use_title_text_fill', [
 				'label'			 =>esc_html__( 'Use text fill', 'elementskit-lite' ),
@@ -696,6 +743,7 @@ class ElementsKit_Widget_Heading extends Widget_Base {
 				]
 			]
 		);
+
         $this->add_group_control(
             Group_Control_Background::get_type(),
             array(
@@ -709,6 +757,7 @@ class ElementsKit_Widget_Heading extends Widget_Base {
 				],
             )
         );
+
 		$this->end_controls_section();
 
 		//Sub title Style Section
@@ -1074,10 +1123,10 @@ class ElementsKit_Widget_Heading extends Widget_Base {
 
 		$this->end_controls_section();
 
-		//Seperator Style Section
+		//Separator Style Section
 		$this->start_controls_section(
 			'ekit_heading_section_seperator_style', [
-				'label'	 => esc_html__( 'Seperator', 'elementskit-lite' ),
+				'label'	 => esc_html__( 'Separator', 'elementskit-lite' ),
 				'tab'	 => Controls_Manager::TAB_STYLE,
 				'condition' => [
 					'ekit_heading_show_seperator' => 'yes'
@@ -1151,7 +1200,7 @@ class ElementsKit_Widget_Heading extends Widget_Base {
 
 		$this->add_responsive_control(
 			'ekit_heading_seperator_color', [
-				'label'		 =>esc_html__( 'Seperator color', 'elementskit-lite' ),
+				'label'		 =>esc_html__( 'Separator color', 'elementskit-lite' ),
 				'type'		 => Controls_Manager::COLOR,
 				'selectors'	 => [
 					'{{WRAPPER}} .elementskit-section-title-wraper .elementskit-border-divider' => 'background: linear-gradient(90deg, {{VALUE}} 0%, {{VALUE}} 100%);',
@@ -1338,17 +1387,21 @@ class ElementsKit_Widget_Heading extends Widget_Base {
 				endif;
 			}
 
-			$ekit_link_target = $ekit_heading_link['is_external'] == 'on' ? 'target="_blank"' : '';
-			$ekit_link_rel =  $ekit_heading_link['nofollow'] == 'on' ?  'rel="nofollow"' : '';
-			$ekit_link_custom_attributes = $ekit_heading_link['custom_attributes'] ? $ekit_heading_link['custom_attributes'] : '';
-
-			$ekit_title = !empty($ekit_heading_link['url']) ? '<a href="'.esc_url($ekit_heading_link['url']).'" '.$ekit_link_target.' '.$ekit_link_rel.' '.$ekit_link_custom_attributes.'> '.\ElementsKit_Lite\Utils::kspan($ekit_heading_title).' </a>' : \ElementsKit_Lite\Utils::kspan($ekit_heading_title);
+			$ekit_title = \ElementsKit_Lite\Utils::kspan($ekit_heading_title);
 
 			echo (($ekit_heading_seperator_position) == 'before') ? wp_kses($seperator, \ElementsKit_Lite\Utils::get_kses_array()) : '';
 			if(!empty($ekit_heading_title)):
-				echo ('<'.esc_attr($title_tag).' class="ekit-heading--title elementskit-section-title '.esc_attr($title_text_fill.''.$title_border).'">
+				if ( ! empty( $ekit_heading_link['url'] ) ) {
+					$this->add_link_attributes( 'ekit_heading_link', $ekit_heading_link );
+
+					echo('<a '.$this->get_render_attribute_string( 'ekit_heading_link' ).'> '. '<'.esc_attr($title_tag).' class="ekit-heading--title elementskit-section-title '.esc_attr($title_text_fill.''.$title_border).'">
 					'.wp_kses($ekit_title, \ElementsKit_Lite\Utils::get_kses_array()).'
-				</'.esc_attr($title_tag).'>');
+					</'.esc_attr($title_tag).'>' .'</a>');
+				}else {
+					echo ('<'.esc_attr($title_tag).' class="ekit-heading--title elementskit-section-title '.esc_attr($title_text_fill.''.$title_border).'">
+					'.wp_kses($ekit_title, \ElementsKit_Lite\Utils::get_kses_array()).'
+					</'.esc_attr($title_tag).'>');
+				}
 			endif;
 
 			echo (

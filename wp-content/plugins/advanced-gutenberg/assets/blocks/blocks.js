@@ -18273,7 +18273,9 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                                 var imgInsert = image.map(function (img) {
                                     return {
                                         url: img.url,
-                                        id: img.id
+                                        id: img.id,
+                                        title: img.title || img.alt,
+                                        text: img.caption || img.description
                                     };
                                 });
 
@@ -18587,9 +18589,14 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                                         value: currentSelected,
                                         multiple: true,
                                         onSelect: function onSelect(imgs) {
-                                            return setAttributes({
+                                            setAttributes({
                                                 images: [].concat(_toConsumableArray(images), _toConsumableArray(imgs.map(function (img) {
-                                                    return lodash.pick(img, 'id', 'url');
+                                                    return {
+                                                        url: img.url,
+                                                        id: img.id,
+                                                        title: img.title || img.alt,
+                                                        text: img.caption || img.description
+                                                    };
                                                 })))
                                             });
                                         },

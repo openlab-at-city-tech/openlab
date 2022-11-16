@@ -42,6 +42,10 @@ Source: http://www.unsplash.com
 
 == Changelog ==
 
+Version 2.3.2 (2022-10-03)
+-------------------------
+- Added output of alt attribute to the header logo.
+
 Version 2.3.1 (2022-07-01)
 -------------------------
 - Improved fonts.css enqueue for child themes.

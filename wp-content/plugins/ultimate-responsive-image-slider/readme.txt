@@ -3,8 +3,8 @@ Contributors: FARAZFRANK
 Donate link: https://wpfrank.com/
 Tags: slider, best slider plugin, image slide show, responsive slider, wordpress image slider plugin
 Requires at least: 4.0
-Tested up to: 6.0.1
-Stable tag: 3.5.7
+Tested up to: 6.0.2
+Stable tag: 3.5.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -148,7 +148,7 @@ Yes, you can add Unlimited images slides in this plugin , you can easily change 
 
 = Will Ultimate Responsive Image Slider Plugin work with my theme =
 
-Yes, Its work with any theme, include the WordPress twenty themes (default Themes) also.
+Yes, Its work with any theme, include the al WordPress default themes also.
 
 = I add and remove slider but nothing happen =
 
@@ -166,7 +166,11 @@ Please use WordPress [support forum](http://wordpress.org/support/plugin/ultimat
 
 == Changelog ==
 
-= 3.5.7 =
+= 3.5.9 =
+* Plugin details and sub pages updated
+* Tested with latest WordPress
+
+= 3.5.7 + 3.5.8 =
 * Tested with latest WordPress
 
 = 3.5.6 =

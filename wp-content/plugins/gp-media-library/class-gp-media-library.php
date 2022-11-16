@@ -38,6 +38,7 @@ class GP_Media_Library extends GWPerk {
 
 		// functionality
 		add_filter( 'gform_entry_post_save', array( $this, 'maybe_upload_to_media_library' ), 10, 2 );
+		add_action( 'gform_post_add_entry', array( $this, 'maybe_upload_to_media_library' ), 10, 2 );
 		add_action( 'gform_after_update_entry', array( $this, 'maybe_upload_to_media_library_after_update' ), 10, 2 );
 		add_action( 'wp_ajax_rg_delete_file', array( $this, 'hijack_delete_file' ), 9 );
 		add_action( 'gform_delete_lead', array( $this, 'maybe_delete_from_media_library' ) );

@@ -29,7 +29,7 @@ class ElementsKit_Widget_Header_Info extends Widget_Base
     }
 
     public function get_help_url() {
-        return '';
+        return 'https://wpmet.com/doc/header-info/';
     }
 
     protected function register_controls()

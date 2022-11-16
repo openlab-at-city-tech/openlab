@@ -9,6 +9,7 @@ const nanoid = require( 'nanoid' );
 import domReady from '@wordpress/dom-ready';
 import { dispatch } from '@wordpress/data';
 import { render } from '@wordpress/element';
+import { __ } from '@wordpress/i18n';
 
 /**
  * Internal dependencies
@@ -40,7 +41,7 @@ const addMarker = ( editor, value, data ) => {
 tinymce.create( 'tinymce.plugins.Attributions', {
 	init( editor ) {
 		editor.addButton( 'attribution-button', {
-			title: 'Add Attribution',
+			title: __( 'Add Attribution', 'openlab-attributions' ),
 			cmd: 'add-attribution',
 			icon: 'attribution',
 			onPostRender: () => {

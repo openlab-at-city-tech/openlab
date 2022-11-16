@@ -1337,7 +1337,7 @@ add_filter( 'rest_post_query', 'advgbMultipleAuthorSortREST', 10, 2 );
 function advgbMultipleAuthorSort() {
 	if ( function_exists('get_multiple_authors') ){
 		add_action('pre_get_posts', function( $query )  {
-			if ( is_admin() ) {
+			if ( is_admin() || $query->query_vars['orderby'] !== 'author' ) {
 				return $query;
 			}
 
@@ -1345,7 +1345,6 @@ function advgbMultipleAuthorSort() {
 			$query->set('meta_key', 'ppma_authors_name');
 
 			return $query;
-
 		} );
 	}
 }
@@ -1357,7 +1356,7 @@ function advgbMultipleAuthorSort() {
 function advgbSeriesOrderSort() {
 	if ( class_exists('orgSeries') ){
 		add_action('pre_get_posts', function( $query )  {
-			if ( is_admin() ) {
+			if ( is_admin() || $query->query_vars['orderby'] !== 'series_order' ) {
 				return $query;
 			}
 			$query->set('orderby', 'meta_value');

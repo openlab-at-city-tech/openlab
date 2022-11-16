@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Return all galleries
  */

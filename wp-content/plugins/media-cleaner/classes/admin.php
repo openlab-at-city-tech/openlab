@@ -39,7 +39,7 @@ class Meow_WPMC_Admin extends MeowCommon_Admin {
     wp_enqueue_style( 'meow-neko-ui-lato-font' );
 
     // Localize and options
-    wp_localize_script( 'wpmc_media_cleaner', 'wpmc_media_cleaner', array_merge( [
+    wp_localize_script( 'wpmc_media_cleaner', 'wpmc_media_cleaner', [
       'api_url' => rest_url( 'media-cleaner/v1' ),
       'rest_url' => rest_url(),
       'plugin_url' => WPMC_URL,
@@ -47,8 +47,9 @@ class Meow_WPMC_Admin extends MeowCommon_Admin {
       'domain' => WPMC_DOMAIN,
       'is_pro' => class_exists( 'MeowPro_WPMC_Core' ),
       'is_registered' => !!$this->is_registered(),
-      'rest_nonce' => wp_create_nonce( 'wp_rest' )
-    ], $this->get_all_options() ) );
+      'rest_nonce' => wp_create_nonce( 'wp_rest' ),
+      'options' => $this->core->get_all_options()
+    ] );
   }
 
   function app_menu() {
@@ -67,40 +68,7 @@ class Meow_WPMC_Admin extends MeowCommon_Admin {
     echo '<div id="wpmc-admin-settings"></div>';
   }
 
-  function list_options() {
-    return array(
-      'wpmc_method' => 'media',
-      'wpmc_content' => true,
-      'wpmc_filesystem_content' => false,
-      'wpmc_media_library' => true,
-      'wpmc_live_content' => false,
-      'wpmc_debuglogs' => false,
-      'wpmc_images_only' => false,
-      'wpmc_attach_is_use' => false,
-      'wpmc_thumbnails_only' => false,
-      'wpmc_dirs_filter' => '',
-      'wpmc_files_filter' => '',
-      'wpmc_hide_thumbnails' => false,
-      'wpmc_hide_warning' => false,
-      'wpmc_medias_buffer' => 100,
-      'wpmc_posts_buffer' => 5,
-      'wpmc_analysis_buffer' => 100,
-      'wpmc_file_op_buffer' => 20,
-      'wpmc_delay' => 100,
-      'wpmc_shortcodes_disabled' => false,
-      'wpmc_posts_per_page' => 10,
-      'wpmc_clean_uninstall' => false,
-    );
-  }
-
-  function get_all_options() {
-    $options = $this->list_options();
-    $current_options = array();
-    foreach ( $options as $option => $default ) {
-      $current_options[$option] = get_option( $option, $default );
-    }
-    return $current_options;
-  }
+  
 
 }
 

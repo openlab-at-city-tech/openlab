@@ -80,7 +80,7 @@ class BP_Group_Documents_Template {
 		do_action('bp_group_documents_template_do_post_action');
 
 		if( isset( $_POST['bp_group_documents_operation'] ) ) {
-			if ( get_magic_quotes_gpc() ) {
+			if ( function_exists( 'get_magic_quotes_gps' ) && get_magic_quotes_gpc() ) {
 				$_POST = array_map( 'stripslashes_deep', $_POST );
 			}
 

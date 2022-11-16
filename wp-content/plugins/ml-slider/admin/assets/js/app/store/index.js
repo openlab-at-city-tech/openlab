@@ -9,10 +9,10 @@ import slideshows from './modules/slideshows'
 
 // Keep in local storage
 const vuexLocal = new VuexPersistence({
-	key: 'metaslider-vuex-' + window.metaslider_api.site_id,
-	reducer: state => ({
-		slideshows: {
-			all: state.slideshows.all.map(s => {
+    key: 'metaslider-vuex-' + window.metaslider_api.site_id,
+    reducer: state => ({
+        slideshows: {
+            all: state.slideshows.all.map(s => {
                 if (state.slideshows?.all?.length < 20 && s.slides.length < 50) {
                     return s
                 }

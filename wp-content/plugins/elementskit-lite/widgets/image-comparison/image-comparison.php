@@ -37,7 +37,7 @@ class ElementsKit_Widget_Image_Comparison extends Widget_Base {
     }
 
     public function get_help_url() {
-        return '';
+        return 'https://wpmet.com/doc/image-comparisn/';
     }
 
     protected function register_controls() {
@@ -75,6 +75,9 @@ class ElementsKit_Widget_Image_Comparison extends Widget_Base {
             [
                 'label' => esc_html__( 'Choose Image', 'elementskit-lite' ),
                 'type' => Controls_Manager::MEDIA,
+                'dynamic' => [
+                    'active' => true,
+                ],
                 'default' => [
                     'url' => Utils::get_placeholder_image_src(),
 					'id'    => -1
@@ -86,6 +89,9 @@ class ElementsKit_Widget_Image_Comparison extends Widget_Base {
             [
                 'label' => esc_html__( 'Label', 'elementskit-lite' ),
                 'type' => Controls_Manager::TEXT,
+                'dynamic' => [
+                    'active' => true,
+                ],
                 'default' => 'Before',
             ]
         );
@@ -102,6 +108,9 @@ class ElementsKit_Widget_Image_Comparison extends Widget_Base {
             [
                 'label' => esc_html__( 'Choose Image', 'elementskit-lite' ),
                 'type' => Controls_Manager::MEDIA,
+                'dynamic' => [
+                    'active' => true,
+                ],
                 'default' => [
                     'url' => Utils::get_placeholder_image_src(),
 					'id'    => -1
@@ -113,6 +122,9 @@ class ElementsKit_Widget_Image_Comparison extends Widget_Base {
             [
                 'label' => esc_html__( 'Label', 'elementskit-lite' ),
                 'type' => Controls_Manager::TEXT,
+                'dynamic' => [
+                    'active' => true,
+                ],
                 'default' => 'After',
             ]
         );

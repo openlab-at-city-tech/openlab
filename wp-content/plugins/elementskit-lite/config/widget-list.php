@@ -400,56 +400,48 @@ class Widget_List extends \ElementsKit_Lite\Core\Config_List {
 					'package'         => 'pro-disabled',
 					'widget-category' => 'social-media-feeds', // Social Media Feeds Widgets
 				),
-	
 				'breadcrumb' => array(
 					'slug'            => 'breadcrumb',
 					'title'           => 'Breadcrumb',
 					'package'         => 'pro-disabled',
 					'widget-category' => 'general', // General
 				),
-	
 				'dribble-feed' => array(
 					'slug'            => 'dribble-feed',
 					'title'           => 'Dribbble Feed',
 					'package'         => 'pro-disabled',
 					'widget-category' => 'social-media-feeds', // Social Media Feeds Widgets
 				),
-	
 				'facebook-feed' => array(
 					'slug'            => 'facebook-feed',
 					'title'           => 'Facebook Feed',
 					'package'         => 'pro-disabled',
 					'widget-category' => 'social-media-feeds', // Social Media Feeds Widgets
 				),
-	
 				'facebook-review' => array(
 					'slug'            => 'facebook-review',
 					'title'           => 'Facebook Review',
 					'package'         => 'pro-disabled',
 					'widget-category' => 'review-widgets', // Review Widgets
 				),
- 
 				'yelp' => array(
 					'slug'            => 'yelp',
 					'title'           => 'Yelp',
 					'package'         => 'pro-disabled',
 					'widget-category' => 'review-widgets', // Review Widgets
 				),
-	
 				'pinterest-feed' => array(
 					'slug'            => 'pinterest-feed',
 					'title'           => 'Pinterest Feed',
 					'package'         => 'pro-disabled',
 					'widget-category' => 'social-media-feeds', // Social Media Feeds Widgets
 				),
-			
 				'popup-modal' => array(
 					'slug'            => 'popup-modal',
 					'title'           => 'Popup Modal',
 					'package'         => 'pro-disabled',
 					'widget-category' => 'general', // General
 				),
-	
 				'google-map' => array(
 					'slug'            => 'google-map',
 					'title'           => 'Google Maps',
@@ -465,6 +457,36 @@ class Widget_List extends \ElementsKit_Lite\Core\Config_List {
 				'image-swap' => array(
 					'slug'            => 'image-swap',
 					'title'           => 'Image Swap',
+					'package'         => 'pro-disabled',
+					'widget-category' => 'general', // General
+				),
+				'whatsapp' => array(
+					'slug'            => 'whatsapp',
+					'title'           => 'WhatsApp',
+					'package'         => 'pro-disabled',
+					'widget-category' => 'general', // General
+				),
+				'advanced-slider' => array(
+					'slug'            => 'advanced-slider',
+					'title'           => 'Advanced Slider',
+					'package'         => 'pro-disabled',
+					'widget-category' => 'general', // General
+				),
+				'image-hover-effect' => array(
+					'slug'            => 'image-hover-effect',
+					'title'           => 'Image Hover Effect',
+					'package'         => 'pro-disabled',
+					'widget-category' => 'general', // General
+				),
+				'fancy-animated-text' => array(
+					'slug'            => 'fancy-animated-text',
+					'title'           => 'Fancy Animated Text',
+					'package'         => 'pro-disabled',
+					'widget-category' => 'general', // General
+				),
+				'price-menu' => array(
+					'slug'            => 'price-menu',
+					'title'           => 'Price Menu',
 					'package'         => 'pro-disabled',
 					'widget-category' => 'general', // General
 				),

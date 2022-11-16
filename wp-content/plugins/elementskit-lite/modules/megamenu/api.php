@@ -36,5 +36,17 @@ class Megamenu_Api extends Core\Handler_Api {
 		return (array) json_decode( $data );
 	}
 
+	public function get_megamenu_content() {
+		$menu_item_id = intval($this->request['id']);
+
+		if (!get_post_status ($menu_item_id) || post_password_required($menu_item_id)) {
+			return;
+		}
+
+		$elementor = \Elementor\Plugin::instance();
+		$output   = $elementor->frontend->get_builder_content_for_display($menu_item_id);
+
+		return $output;
+	}
 }
 new Megamenu_Api();

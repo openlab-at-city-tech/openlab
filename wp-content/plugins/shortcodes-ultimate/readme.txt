@@ -3,10 +3,10 @@ Contributors: gn_themes
 License: GPLv3
 Donate link: https://paypal.me/anovladimir
 Tags: shortcode, toggle, columns, button, slider
-Stable tag: 5.12.0
+Stable tag: 5.12.5
 Requires PHP: 5.4
-Requires at least: 4.6
-Tested up to: 5.9
+Requires at least: 5.0
+Tested up to: 6.1
 
 
 A comprehensive collection of visual components for your site
@@ -35,18 +35,9 @@ A comprehensive collection of visual components for your site
 ### Links
 
 - [Available Shortcodes](https://getshortcodes.com/docs-category/shortcodes/?utm_campaign=wporg&utm_source=readme&utm_medium=available-shortcodes)
-- [Add-ons](https://getshortcodes.com/add-ons/?utm_campaign=wporg&utm_source=readme&utm_medium=add-ons)
 - [Documentation](https://getshortcodes.com/docs/?utm_campaign=wporg&utm_source=readme&utm_medium=docs)
 - [Support Forum](https://wordpress.org/support/plugin/shortcodes-ultimate)
 - [Premium Support](https://getshortcodes.com/support/?utm_campaign=wporg&utm_source=readme&utm_medium=support)
-
-
-### Check out premium add-ons!
-
-- [Extra Shortcodes](https://getshortcodes.com/add-ons/extra-shortcodes/?utm_campaign=wporg&utm_source=readme&utm_medium=extra-shortcodes) - 15+ additional shortcodes
-- [Additional Skins](https://getshortcodes.com/add-ons/additional-skins/?utm_campaign=wporg&utm_source=readme&utm_medium=additional-skins) - 60+ additional skins
-- [Shortcode Creator](https://getshortcodes.com/add-ons/shortcode-creator/?utm_campaign=wporg&utm_source=readme&utm_medium=shortcode-creator) - create your own custom shortcodes
-- **[Add-ons Bundle](https://getshortcodes.com/add-ons/add-ons-bundle/?utm_campaign=wporg&utm_source=readme&utm_medium=add-ons-bundle)** - All-in-one!
 
 
 ### Available Shortcodes
@@ -121,7 +112,6 @@ Yes, you can remove default shortcodes using 'su/data/shortcodes' filter. Tutori
 ### Can I create custom shortcodes?
 
 Yes, you can create custom shortcodes using 'su/data/shortcodes' filter. Tutorial: [How to add custom shortcodes](https://getshortcodes.com/docs/registering-custom-shortcodes/).
-Alternatively, you can use [Shortcode Creator add-on](https://getshortcodes.com/add-ons/shortcode-creator/).
 
 
 ### Can I use shortcodes in template files?
@@ -141,18 +131,19 @@ Yes! Shortcodes Ultimate is designed to work with any theme, but your theme must
 
 ### Where can I get help?
 
-First, visit the [Help Center](https://getshortcodes.com/support/). If you get stuck, ask for help at the [community support forum](https://wordpress.org/support/plugin/shortcodes-ultimate). Also, you can get personal support from the developer by purchasing any of the [premium add-ons](https://getshortcodes.com/add-ons/).
+First, visit the [Help Center](https://getshortcodes.com/support/). If you get stuck, ask for help at the [community support forum](https://wordpress.org/support/plugin/shortcodes-ultimate).
 
 
 ## Changelog
 
 
-### 5.12.0
+### 5.12.5
 
-**What's new**
+* Added Freemius SDK
+* Fixed JS error introduced in the previous update. See [forum topic](https://wordpress.org/support/topic/su-tabs-and-other-shortcodes-no-longer-work-after-recent-update/).
 
-- New options `class` and `class_single` for the *Posts* shortcode. Use new options to specify custom CSS classes for the container and for a single post item respectively.
-- Tested compatibility with WordPress 5.9
+
+
 
 ---
 [Version history →](https://plugins.trac.wordpress.org/browser/shortcodes-ultimate/trunk/changelog.txt)

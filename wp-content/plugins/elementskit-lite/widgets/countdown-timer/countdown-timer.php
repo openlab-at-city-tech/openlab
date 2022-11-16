@@ -34,7 +34,7 @@ class ElementsKit_Widget_Countdown_Timer extends Widget_Base {
     }
 
     public function get_help_url() {
-        return '';
+        return 'https://wpmet.com/doc/countdown-timer/';
     }
 
     protected function register_controls() {
@@ -125,6 +125,9 @@ class ElementsKit_Widget_Countdown_Timer extends Widget_Base {
 			[
 				'label' => esc_html__( 'Weeks', 'elementskit-lite' ),
 				'type' => Controls_Manager::TEXT,
+				'dynamic' => [
+					'active' => true,
+				],
 				'default' => esc_html__( 'Weeks', 'elementskit-lite' ),
                 'condition' => ['ekit_countdown_timer_style' => 'style3'],
 			]
@@ -136,6 +139,9 @@ class ElementsKit_Widget_Countdown_Timer extends Widget_Base {
 			[
 				'label' => esc_html__( 'Days', 'elementskit-lite' ),
 				'type' => Controls_Manager::TEXT,
+				'dynamic' => [
+					'active' => true,
+				],
                 'default' => esc_html__( 'Days', 'elementskit-lite' ),
 			]
 		);
@@ -145,6 +151,9 @@ class ElementsKit_Widget_Countdown_Timer extends Widget_Base {
 			[
 				'label' => esc_html__( 'Hours', 'elementskit-lite' ),
 				'type' => Controls_Manager::TEXT,
+				'dynamic' => [
+					'active' => true,
+				],
                 'default' => esc_html__( 'Hours', 'elementskit-lite' ),
 			]
 		);
@@ -154,6 +163,9 @@ class ElementsKit_Widget_Countdown_Timer extends Widget_Base {
 			[
 				'label' => esc_html__( 'Minutes', 'elementskit-lite' ),
 				'type' => Controls_Manager::TEXT,
+				'dynamic' => [
+					'active' => true,
+				],
                 'default' => esc_html__( 'Minutes', 'elementskit-lite' ),
 			]
 		);
@@ -163,6 +175,9 @@ class ElementsKit_Widget_Countdown_Timer extends Widget_Base {
 			[
 				'label' => esc_html__( 'Seconds', 'elementskit-lite' ),
 				'type' => Controls_Manager::TEXT,
+				'dynamic' => [
+					'active' => true,
+				],
                 'default' => esc_html__( 'Seconds', 'elementskit-lite' ),
 			]
 		);
@@ -181,6 +196,9 @@ class ElementsKit_Widget_Countdown_Timer extends Widget_Base {
 			[
 				'label'			=> esc_html__('On Expiry Title', 'elementskit-lite'),
 				'type'			=> Controls_Manager::TEXTAREA,
+				'dynamic' => [
+					'active' => true,
+				],
                 'default'		=> esc_html__('Countdown is finished!','elementskit-lite'),
 			]
 		);
@@ -190,6 +208,9 @@ class ElementsKit_Widget_Countdown_Timer extends Widget_Base {
 			[
 				'label'			=> esc_html__('On Expiry Content', 'elementskit-lite'),
 				'type'			=> Controls_Manager::TEXTAREA,
+				'dynamic' => [
+					'active' => true,
+				],
                 'default'		=> esc_html__('Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s','elementskit-lite'),
 			]
 		);

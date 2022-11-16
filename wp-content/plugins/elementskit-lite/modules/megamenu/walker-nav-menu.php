@@ -27,6 +27,7 @@ class ElementsKit_Menu_Walker extends \Walker_Nav_Menu {
 			'vertical_megamenu_position_type' => 'relative_position',
 			'vertical_menu_width'             => '',
 			'megamenu_width_type'             => 'default_width',
+			'megamenu_ajax_load'              => 'no',
 		);
 		return array_merge( $default, $data );
 	}
@@ -302,7 +303,14 @@ class ElementsKit_Menu_Walker extends \Walker_Nav_Menu {
 					$output            .= '<div class="elementskit-megamenu-panel">';
 					if ( $builder_post != null ) {
 						$elementor = \Elementor\Plugin::instance();
-						$output   .= $elementor->frontend->get_builder_content_for_display( $builder_post->ID );
+						$mega_menu_output = $elementor->frontend->get_builder_content_for_display( $builder_post->ID );
+
+						// if ajax load is enable and not elementor editor mode
+						if(!empty($item_meta['megamenu_ajax_load']) && $item_meta['megamenu_ajax_load'] == 'yes') {
+							$mega_menu_output = sprintf('<div class="megamenu-ajax-load" data-id="%1$s"></div>', $builder_post->ID);
+						}
+
+						$output .= $mega_menu_output;
 					} else {
 						$output .= esc_html__( 'No content found', 'elementskit-lite' );
 					}

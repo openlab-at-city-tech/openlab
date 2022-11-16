@@ -1,4 +1,4 @@
-/*  (c) Copyright 2021  MiKa (http://wp-osm-plugin.hyumika.com)
+/*  (c) Copyright 2022  MiKa (http://wp-osm-plugin.hyumika.com)
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -27,7 +27,7 @@
 		jQuery(this).addClass('current');
 		jQuery("#"+tab_id).addClass('current');
                
-      AddMarker_map.updateSize();
+                AddMarker_map.updateSize();
 		FileSC_map.updateSize();	
 		TaggedSC_map.updateSize();
 		AddGeotag_map.updateSize();

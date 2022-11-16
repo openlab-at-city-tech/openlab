@@ -6,17 +6,17 @@
 	<div class="su-generator-clear"></div>
 </div>
 
-<div class="su-generator-extra-banner">
-	<div class="su-generator-extra-banner-message">
-		<?php esc_html_e( 'This shortcode is available with the Extra Shortcodes add-on', 'shortcodes-ultimate' ); ?>
-	</div>
-	<img src="<?php echo esc_attr( $data['image_url'] . 'icon-banner.png' ); ?>" class="su-generator-extra-banner-icon">
-	<h3 class="su-generator-extra-banner-title"><?php esc_html_e( 'Extra Shortcodes', 'shortcodes-ultimate' ); ?></h3>
-	<p class="su-generator-extra-banner-description"><?php esc_html_e( 'This add-on extends Shortcodes Ultimate with 15 new shortcodes. Parallax sections, responsive content slider, pricing tables and more', 'shortcodes-ultimate' ); ?></p>
-	<p class="su-generator-extra-banner-action">
-		<a href="<?php echo esc_attr( su_get_utm_link( 'https://getshortcodes.com/add-ons/extra-shortcodes/', array( 'generator', 'extra-shortcode', 'wp-dashboard' ) ) ); ?>" target="_blank" class="button button-primary"><?php esc_html_e( 'Details & Pricing', 'shortcodes-ultimate' ); ?> &rarr;</a>
+<div class="su-generator-pro-features-banner">
+	<img src="<?php echo esc_attr( $data['image_url'] . 'icon-banner.png' ); ?>" class="su-generator-pro-features-banner-icon">
+	<h3 class="su-generator-pro-features-banner-title"><?php esc_html_e( 'Shortcodes Ultimate PRO', 'shortcodes-ultimate' ); ?></h3>
+	<p class="su-generator-pro-features-banner-description">
+		<?php // translators: %s - shortcode name ?>
+		<?php printf( esc_html( __( 'This shortcode is available in the Pro version. Upgrade now to get 15 additional shortcodes, including %s and others', 'shortcodes-ultimate' ) ), '<strong style="text-transform:capitalize">' . esc_html( $data['shortcode']['name'] ) . '</strong>' ); ?>
 	</p>
-	<div class="su-generator-extra-banner-screenshot">
+	<p class="su-generator-pro-features-banner-action">
+		<a href="<?php echo esc_attr( esc_attr( su_get_utm_link( 'https://getshortcodes.com/pricing/', array( 'wp-admin', 'generator', 'shortcode' ) ) ) ); ?>" target="_blank" class="button button-primary"><?php esc_html_e( 'Details & Pricing', 'shortcodes-ultimate' ); ?> &rarr;</a>
+	</p>
+	<div class="su-generator-pro-features-banner-screenshot">
 		<img src="<?php echo esc_attr( $data['image_url'] . 'screenshots/' . $data['shortcode']['id'] . '.png' ); ?>">
 	</div>
 </div>

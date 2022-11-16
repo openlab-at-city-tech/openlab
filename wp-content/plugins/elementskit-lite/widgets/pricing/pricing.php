@@ -28,7 +28,7 @@ class ElementsKit_Widget_Pricing extends Widget_Base {
     }
 
     public function get_help_url() {
-        return '';
+        return 'https://wpmet.com/doc/pricing-table/';
     }
 
     protected function register_controls() {
@@ -44,6 +44,9 @@ class ElementsKit_Widget_Pricing extends Widget_Base {
         $this->add_control(
 			'ekit_pricing_table_title', [
 				'type' => Controls_Manager::TEXT,
+				'dynamic' => [
+					'active' => true,
+				],
                 'label' => esc_html__('Table Title', 'elementskit-lite'),
                 'default'   =>  esc_html__('Starter','elementskit-lite'),
 				'label_block' => true,
@@ -72,6 +75,9 @@ class ElementsKit_Widget_Pricing extends Widget_Base {
         $this->add_control(
 			'ekit_pricing_table_subtitle', [
 				'type' => Controls_Manager::TEXT,
+				'dynamic' => [
+					'active' => true,
+				],
                 'label' => esc_html__('Table Subtitle', 'elementskit-lite'),
                 'default'   =>  esc_html__('A small river named Duden flows by their place and supplies','elementskit-lite'),
 				'label_block' => true,
@@ -138,6 +144,9 @@ class ElementsKit_Widget_Pricing extends Widget_Base {
             [
                 'label' => esc_html__( 'Choose Image', 'elementskit-lite' ),
                 'type' => Controls_Manager::MEDIA,
+				'dynamic' => [
+					'active' => true,
+				],
                 'default' => [
                     'url' => Utils::get_placeholder_image_src(),
 					'id'    => -1
@@ -170,6 +179,9 @@ class ElementsKit_Widget_Pricing extends Widget_Base {
 	    $this->add_control(
 			'ekit_pricing_currency_icon', [
 				'type' => Controls_Manager::TEXT,
+				'dynamic' => [
+					'active' => true,
+				],
                 'label' => esc_html__('Currency', 'elementskit-lite'),
 				'default'   => '$',
 			]
@@ -177,6 +189,9 @@ class ElementsKit_Widget_Pricing extends Widget_Base {
         $this->add_control(
 			'ekit_pricing_table_price', [
 				'type' => Controls_Manager::TEXT,
+				'dynamic' => [
+					'active' => true,
+				],
                 'label' => esc_html__('Price', 'elementskit-lite'),
 				'default'   => esc_html__('5.99', 'elementskit-lite'),
 			]
@@ -184,6 +199,9 @@ class ElementsKit_Widget_Pricing extends Widget_Base {
         $this->add_control(
 			'ekit_pricing_table_duration', [
 				'type' => Controls_Manager::TEXT,
+				'dynamic' => [
+					'active' => true,
+				],
                 'label' => esc_html__('Duration', 'elementskit-lite'),
 				'default'   => esc_html__('Month', 'elementskit-lite'),
 			]
@@ -211,6 +229,9 @@ class ElementsKit_Widget_Pricing extends Widget_Base {
         $this->add_control(
 			'ekit_pricing_table_content', [
                 'type' => Controls_Manager::TEXTAREA,
+				'dynamic' => [
+					'active' => true,
+				],
                 'label' => esc_html__('Table Content', 'elementskit-lite'),
 				'label_block' => true,
 				'default' => esc_html__('Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam','elementskit-lite'),
@@ -225,6 +246,9 @@ class ElementsKit_Widget_Pricing extends Widget_Base {
             'ekit_pricing_list', [
                 'label' => esc_html__('List text', 'elementskit-lite'),
 				'type' => Controls_Manager::TEXT,
+				'dynamic' => [
+					'active' => true,
+				],
 				'default' => esc_html__( '15 Email Account' , 'elementskit-lite' ),
 				'label_block' => true,
             ]
@@ -282,6 +306,9 @@ class ElementsKit_Widget_Pricing extends Widget_Base {
 			[
 				'label'	=> esc_html__( 'Info Text', 'elementskit-lite' ),
 				'type'	=> Controls_Manager::TEXT,
+				'dynamic' => [
+					'active' => true,
+				],
 			]
 		);
 
@@ -325,6 +352,9 @@ class ElementsKit_Widget_Pricing extends Widget_Base {
 			[
 				'label' =>esc_html__( 'Label', 'elementskit-lite' ),
 				'type' => Controls_Manager::TEXT,
+				'dynamic' => [
+					'active' => true,
+				],
 				'default' =>esc_html__( 'Learn more ', 'elementskit-lite' ),
 				'placeholder' =>esc_html__( 'Learn more ', 'elementskit-lite' ),
 			]
@@ -335,6 +365,9 @@ class ElementsKit_Widget_Pricing extends Widget_Base {
 			[
 				'label' =>esc_html__( 'Link', 'elementskit-lite' ),
 				'type' => Controls_Manager::URL,
+				'dynamic' => [
+					'active' => true,
+				],
 				'placeholder' =>esc_url('https://wpmet.com'),
 				'default' => [
 					'url' => '#',
@@ -418,6 +451,9 @@ class ElementsKit_Widget_Pricing extends Widget_Base {
 		    [
 			    'label' => esc_html__( 'Class', 'elementskit-lite' ),
 			    'type' => Controls_Manager::TEXT,
+				'dynamic' => [
+					'active' => true,
+				],
 			    'placeholder' => esc_html__( 'Class Name', 'elementskit-lite' ),
 		    ]
 	    );
@@ -427,6 +463,9 @@ class ElementsKit_Widget_Pricing extends Widget_Base {
 		    [
 			    'label' => esc_html__( 'id', 'elementskit-lite' ),
 			    'type' => Controls_Manager::TEXT,
+				'dynamic' => [
+					'active' => true,
+				],
 			    'placeholder' => esc_html__( 'ID', 'elementskit-lite' ),
 		    ]
 	    );

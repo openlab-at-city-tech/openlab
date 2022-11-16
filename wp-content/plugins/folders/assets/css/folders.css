@@ -656,3 +656,25 @@ span.dashicons.dashicons-cloud-upload {
     display: inline-block;
     vertical-align: middle;
 }
+.os-content {
+    background: #ffffff;
+}
+.custom-scroll-menu.hor-scroll .horizontal-scroll-menu {
+    width: fit-content;
+    background: #fff;
+    min-width: 100%;
+}
+.custom-scroll-menu.hor-scroll .jstree-default .jstree-anchor {
+    width: auto;
+    min-width: calc(100% - 24px);
+}
+.os-viewport {
+    background: #ffffff;
+}
+.custom-scroll-menu.hor-scroll .horizontal-scroll-menu .folder-actions {
+    background: #ffffff;
+    padding: 0 15px 0 4px;
+}
+.custom-scroll-menu.hor-scroll .horizontal-scroll-menu .folder-actions {
+
+}

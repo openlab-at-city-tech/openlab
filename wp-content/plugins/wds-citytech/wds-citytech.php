@@ -13,7 +13,6 @@ define( 'WDS_CITYTECH_URL', plugin_dir_url( __FILE__ ) );
 
 require 'wds-register.php';
 require 'wds-docs.php';
-require 'includes/activity.php';
 require 'includes/block-editor.php';
 require 'includes/oembed.php';
 require 'includes/library-widget.php';
@@ -2717,6 +2716,34 @@ add_action(
 );
 
 /**
+ * Decrease priority of wp-accessibility Content Summary meta box.
+ */
+add_action(
+	'admin_menu',
+	function() {
+		$allowed = get_option( 'wpa_post_types', array() );
+		if ( is_array( $allowed ) ) {
+			foreach ( $allowed as $post_type ) {
+				remove_meta_box( 'wpa_content_summary', $post_type, 'normal' );
+				add_meta_box( 'wpa_content_summary', __( 'Content Summary', 'wp-accessibility' ), 'wpa_add_inner_box', $post_type, 'normal', 'low' );
+			}
+		}
+	},
+	20
+);
+
+/**
+ * wp-accessibility Content Summary metabox should always be closed by default.
+ */
+add_action(
+	'get_user_option_closedpostboxes_post',
+	function( $closed ) {
+		$closed[] = 'wpa_content_summary';
+		return $closed;
+	}
+);
+
+/**
  * Force bbPress roles to have the 'read' capability.
  *
  * Without 'read', users can't access my-sites.php.
@@ -2757,7 +2784,11 @@ add_filter( 'bbp_bypass_check_for_moderation', function( $retval, $anon_data, $u
 add_action(
 	'pre_get_posts',
 	function( $query ) {
-		if ( ! $query->is_main_query() && function_exists( 'ksuce_exclude_categories' ) ) {
+		if ( ! function_exists( 'ksuce_exclude_categories' ) ) {
+			return;
+		}
+
+		if ( ! $query->is_main_query() ) {
 			remove_filter( 'pre_get_posts', 'ksuce_exclude_categories' );
 
 			// Then add it back for future queries.
@@ -3115,6 +3146,10 @@ add_action(
 
 function openlab_sanitize_url_params( $url ) {
 	$request_params = parse_url( $url, PHP_URL_QUERY );
+	if ( ! $request_params ) {
+		return;
+	}
+
 	parse_str( $request_params, $params );
 	$param_keys = array_keys( $params );
 
@@ -3337,3 +3372,8 @@ function openlab_load_google_analytics() {
  * its Attachments component.
  */
 add_filter( 'bp_docs_enable_attachments', '__return_false' );
+
+/**
+ * Disable Akismet scanning for buddypress-docs.
+ */
+add_filter( 'bp_docs_use_akismet', '__return_false' );

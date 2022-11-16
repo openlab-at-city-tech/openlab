@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The footer page view
  */

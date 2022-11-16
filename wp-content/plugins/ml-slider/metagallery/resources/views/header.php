@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The header page view
  */

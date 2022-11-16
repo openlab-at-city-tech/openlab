@@ -32,7 +32,7 @@ class ElementsKit_Widget_Post_Grid extends Widget_Base {
     }
 
     public function get_help_url() {
-        return '';
+        return 'https://wpmet.com/doc/post-grid/';
     }
 
     protected function register_controls() {
@@ -128,8 +128,16 @@ class ElementsKit_Widget_Post_Grid extends Widget_Base {
 			[
 				'label'     => esc_html__( 'Bottom Space', 'elementskit-lite' ),
 				'type'      => Controls_Manager::SLIDER,
+                'size_units' => [ 'px' ],
+                'range'         => [
+					'px' => [
+						'min' => 10,
+						'max' => 100,
+						'step' => 1,
+					]
+				],
 				'selectors' => [
-					'{{WRAPPER}} .ekit-post_grid-item' => 'margin-bottom: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .tab__post__single--item' => 'margin-bottom: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
@@ -145,7 +153,7 @@ class ElementsKit_Widget_Post_Grid extends Widget_Base {
 			]
 		);
 			$this->add_group_control(
-				\Elementor\Group_Control_Typography::get_type(),
+				Group_Control_Typography::get_type(),
 				[
 					'name' => 'title_font',
 					'label' => esc_html__( 'Typography', 'elementskit-lite' ),
@@ -156,44 +164,42 @@ class ElementsKit_Widget_Post_Grid extends Widget_Base {
 			$this->start_controls_tabs(
 				'title_style_tabs'
 			);
-				$this->start_controls_tab(
-					'title_style_tab_normal',
-					[
-						'label' => esc_html__( 'Normal', 'elementskit-lite' ),
-					]
-				);
-					$this->add_control(
-						'title_color_normal',
-						[
-							'label' => esc_html__( 'Color', 'elementskit-lite' ),
-							'type' => \Elementor\Controls_Manager::COLOR,
-							'selectors' => [
-								'{{WRAPPER}} .ekit-post_grid-title' => 'color: {{VALUE}}',
-							],
-						]
-					);
-				$this->end_controls_tab();
-				
-				$this->start_controls_tab(
-					'title_style_tab_hover',
-					[
-						'label' => esc_html__( 'Hover', 'elementskit-lite' ),
-					]
-				);
-					$this->add_control(
-						'title_color_hover',
-						[
-							'label' => esc_html__( 'Color', 'elementskit-lite' ),
-							'type' => \Elementor\Controls_Manager::COLOR,
-							'selectors' => [
-								'{{WRAPPER}} .ekit-post_grid-item:hover .ekit-post_grid-title > a' => 'color: {{VALUE}}',
-							],
-						]
-					);
-				$this->end_controls_tab();
-			$this->end_controls_tabs();
-		$this->end_controls_section();
 
+            $this->add_control(
+				'title_color_normal',
+				[
+					'label' 	=> esc_html__( 'Color', 'elementskit-lite' ),
+					'type' 		=> Controls_Manager::COLOR,
+					'default' => 'inherit',
+					'selectors' => [
+						'{{WRAPPER}} .tab__post__single--item .ekit-post_grid-title > a' => 'color: {{VALUE}}; transition: all 0.3s ease;',
+					],
+				]
+			);
+			$this->add_control(
+				'title_color_hover',
+				[
+					'label'		=> esc_html__( 'Hover Color', 'elementskit-lite' ),
+					'type' 		=> Controls_Manager::COLOR,
+					'selectors' => [
+						'{{WRAPPER}} .tab__post__single--item:hover .ekit-post_grid-title > a' => 'color: {{VALUE}}',
+					],
+				]
+			);
+
+            $this->add_responsive_control(
+                'ekit-post_grid-title_margin',
+                [
+                    'label' => esc_html__( 'Margin', 'elementskit-lite' ),
+                    'type' => Controls_Manager::DIMENSIONS,
+                    'size_units' => [ 'px', '%', 'em' ],
+                    'selectors' => [
+                        '{{WRAPPER}} .ekit-post_grid-title' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+                    ],
+                ]
+            );
+
+		$this->end_controls_section();
         $this->insert_pro_message();
     }
 

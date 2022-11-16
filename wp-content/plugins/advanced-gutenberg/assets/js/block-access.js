@@ -1,6 +1,9 @@
 window.addEventListener('load', function () {
     var $ = jQuery;
 
+    // Output categories and blocks
+    advgbGetBlocks( advgbCUserRole.access.inactive_blocks, '#advgb_access_nonce_field', '#blocks_list_access' );
+
     // Toggle blocks list in category when click category title
     $('.category-block .category-name').unbind('click').click(function () {
         var categoryWrapper = $(this).closest('.category-block');

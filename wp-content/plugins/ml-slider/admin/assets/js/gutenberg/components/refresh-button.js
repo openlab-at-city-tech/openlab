@@ -10,8 +10,8 @@
  * WordPress dependencies
  */
 const wp = window.wp
-const { __ } = wp.i18n
-const { Toolbar } = wp.components
+const {__} = wp.i18n
+const {Toolbar} = wp.components
 
 /**
  * BlockStretchToolbar
@@ -20,23 +20,23 @@ const { Toolbar } = wp.components
  * @param  {object} $object
  * @return {function}
  */
-export default function RefreshButton({ value, onChange, onClick }) {
-	/**
-	 * applyOrUnset - Applies the value or unsets it when cligking
-	 *
-	 * @param  {string} $align
-	 * @return {function}
-	 */
-	return (
-		<Toolbar
-			controls={[
-				{
-					icon: 'update',
-					title: __('Update preview', 'ml-slider'),
-					isActive: false,
-					onClick: onClick
-				}
-			]}
-		/>
-	)
+export default function RefreshButton({value, onChange, onClick}) {
+    /**
+     * applyOrUnset - Applies the value or unsets it when cligking
+     *
+     * @param  {string} $align
+     * @return {function}
+     */
+    return (
+        <Toolbar
+            controls={[
+                {
+                    icon: 'update',
+                    title: __('Update preview', 'ml-slider'),
+                    isActive: false,
+                    onClick: onClick
+                }
+            ]}
+        />
+    )
 }

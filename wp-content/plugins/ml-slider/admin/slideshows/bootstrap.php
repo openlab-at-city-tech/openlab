@@ -1,6 +1,8 @@
 <?php
 
-if (!defined('ABSPATH')) die('No direct access.');
+if (!defined('ABSPATH')) {
+die('No direct access.');
+}
 
 /**
  * Use this file to load in models and libraries.

@@ -32,7 +32,7 @@ class ElementsKit_Widget_TablePress extends Widget_Base {
     }
 
     public function get_help_url() {
-        return '';
+        return 'https://wpmet.com/doc/data-table-2/';
     }
 
     protected function register_controls() {

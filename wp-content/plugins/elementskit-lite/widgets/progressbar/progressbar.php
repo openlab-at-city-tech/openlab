@@ -33,7 +33,7 @@ class ElementsKit_Widget_Progressbar extends Widget_Base {
     }
 
     public function get_help_url() {
-        return '';
+        return 'https://wpmet.com/doc/progress-bar/';
     }
 
     protected function register_controls() {
@@ -88,6 +88,9 @@ class ElementsKit_Widget_Progressbar extends Widget_Base {
                 'label'         => esc_html__('Title', 'elementskit-lite'),
                 'label_block'   => true,
                 'type'          => Controls_Manager::TEXT,
+                'dynamic' 		=> [
+                    'active' => true,
+                ],
                 'default'       => 'WordPress',
             ]
         );
@@ -97,10 +100,28 @@ class ElementsKit_Widget_Progressbar extends Widget_Base {
             [
                 'label'     => esc_html__('Percentage', 'elementskit-lite'),
                 'type'      => Controls_Manager::NUMBER,
+                'dynamic' 	=> [
+                    'active' => true,
+                ],
                 'min'       => 1,
                 'max'       => 100,
                 'step'      => 1,
                 'default'   => 90,
+            ]
+        );
+
+        $this->add_control(
+            'ekit_progressbar_percentage_show',
+            [
+                'label' => esc_html__('Hide Percentage Number? ', 'elementskit-lite'),
+                'type' => Controls_Manager::SWITCHER,
+                'default' => 'no',
+                'return_value' => 'none',
+                'label_on' => esc_html__( 'Yes', 'elementskit-lite' ),
+                'label_off' => esc_html__( 'No', 'elementskit-lite' ),
+                'selectors' => [
+                    '{{WRAPPER}} .skillbar-group .number-percentage-wraper' => 'display: {{VALUE}};',
+                ],
             ]
         );
 
@@ -109,6 +130,9 @@ class ElementsKit_Widget_Progressbar extends Widget_Base {
             [
                 'label'     => esc_html__('Animation Duration', 'elementskit-lite'),
                 'type'      => Controls_Manager::SLIDER,
+                'dynamic' 	=> [
+                    'active' => true,
+                ],
                 'size_units' => [ 'px'],
 				'range' => [
 					'px' => [
@@ -312,16 +336,36 @@ class ElementsKit_Widget_Progressbar extends Widget_Base {
                 ],
             ]
         );
+
         $this->add_group_control(
             Group_Control_Typography::get_type(), [
                 'name'       => 'ekit_progressbar_title_typography',
                 'selector'   => '{{WRAPPER}} .skillbar-group .skill-title',
             ]
         );
+
         $this->add_group_control(
             Group_Control_Text_Shadow::get_type(), [
                 'name'       => 'ekit_progressbar_title_shadow',
                 'selector'   => '{{WRAPPER}} .skillbar-group .skill-title',
+            ]
+        );
+
+        $this->add_responsive_control(
+            'ekit_progressbar_margin_bottom',
+            [
+                'type'          => Controls_Manager::SLIDER,
+                'label'         => esc_html__( 'Margin Bottom', 'elementskit-lite' ),
+                'size_units'    => ['px'],
+                'range'  => [
+                    'px' => [
+                        'min'   => 1,
+                        'max'   => 100,
+                    ],
+                ],
+                'selectors' => [
+                    '{{WRAPPER}} .skill-bar-content' => 'margin-bottom: {{SIZE}}{{UNIT}};',
+                ],
             ]
         );
 

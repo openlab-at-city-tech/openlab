@@ -27,7 +27,7 @@ abstract class GP_Feed_Plugin extends GFFeedAddOn {
 
 	public function __construct( $perk = null ) {
 
-		if( ! $this->perk ) {
+		if ( ! $this->perk ) {
 			$this->perk = $perk ? $perk : new GP_Perk( $this->_path, $this );
 		}
 
@@ -82,9 +82,10 @@ abstract class GP_Feed_Plugin extends GFFeedAddOn {
 
 	public function check_requirements() {
 
-		$requirements = $this->minimum_requirements();
+		$requirements   = $this->minimum_requirements();
+		$min_gf_version = rgars( $requirements, 'gravityforms/version' );
 
-		if ($min_gf_version = rgars($requirements, 'gravityforms/version')) {
+		if ( $min_gf_version ) {
 			$this->_min_gravityforms_version = $min_gf_version;
 		}
 
@@ -105,7 +106,7 @@ abstract class GP_Feed_Plugin extends GFFeedAddOn {
 	}
 
 	public function log( $message, $is_error = false ) {
-		if( $is_error ) {
+		if ( $is_error ) {
 			$this->log_error( $message );
 		} else {
 			$this->log_debug( $message );

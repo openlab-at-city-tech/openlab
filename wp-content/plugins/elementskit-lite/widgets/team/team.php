@@ -34,7 +34,7 @@ class ElementsKit_Widget_Team extends Widget_Base {
     }
 
     public function get_help_url() {
-        return '';
+        return 'https://wpmet.com/doc/team-2/';
     }
 
     protected function register_controls() {
@@ -73,6 +73,9 @@ class ElementsKit_Widget_Team extends Widget_Base {
             [
                 'label' => esc_html__( 'Choose Member Image', 'elementskit-lite' ),
                 'type' => Controls_Manager::MEDIA,
+                'dynamic' => [
+                    'active' => true,
+                ],
                 'default' => [
                     'url' => Utils::get_placeholder_image_src(),
                     'id'    => -1
@@ -93,6 +96,9 @@ class ElementsKit_Widget_Team extends Widget_Base {
             [
                 'label' => esc_html__( 'Member Name', 'elementskit-lite' ),
                 'type' => Controls_Manager::TEXT,
+                'dynamic' => [
+                    'active' => true,
+                ],
                 'default' => esc_html__( 'Jane Doe', 'elementskit-lite' ),
                 'placeholder' => esc_html__( 'Member Name', 'elementskit-lite' ),
             ]
@@ -103,6 +109,9 @@ class ElementsKit_Widget_Team extends Widget_Base {
             [
                 'label' => esc_html__( 'Member Position', 'elementskit-lite' ),
                 'type' => Controls_Manager::TEXT,
+                'dynamic' => [
+                    'active' => true,
+                ],
                 'default' => esc_html__( 'Designer', 'elementskit-lite' ),
                 'placeholder' => esc_html__( 'Member Position', 'elementskit-lite' ),
 
@@ -158,6 +167,9 @@ class ElementsKit_Widget_Team extends Widget_Base {
             [
                 'label' => esc_html__( 'About Member', 'elementskit-lite' ),
                 'type' => Controls_Manager::TEXTAREA,
+                'dynamic' => [
+                    'active' => true,
+                ],
                 'default' => esc_html__( 'A small river named Duden flows by their place and supplies it with the necessary', 'elementskit-lite' ),
                 'placeholder' => esc_html__( 'About Member', 'elementskit-lite' ),
                 'condition' => [
@@ -211,6 +223,9 @@ class ElementsKit_Widget_Team extends Widget_Base {
             [
                 'label' => esc_html__( 'Label', 'elementskit-lite' ),
                 'type' => Controls_Manager::TEXT,
+                'dynamic' => [
+                    'active' => true,
+                ],
                 'default' => 'Facebook',
             ]
         );
@@ -220,6 +235,9 @@ class ElementsKit_Widget_Team extends Widget_Base {
             [
                 'label' => esc_html__( 'Link', 'elementskit-lite' ),
                 'type' => Controls_Manager::URL,
+                'dynamic' => [
+                    'active' => true,
+                ],
                 'default' => [
                     'url' => 'https://facebook.com',
                 ],
@@ -420,6 +438,9 @@ class ElementsKit_Widget_Team extends Widget_Base {
             [
                 'label' => esc_html__( 'About Member', 'elementskit-lite' ),
                 'type' => Controls_Manager::TEXTAREA,
+                'dynamic' => [
+                    'active' => true,
+                ],
                 'default' => esc_html__( 'A small river named Duden flows by their place and supplies it with the necessary', 'elementskit-lite' ),
                 'placeholder' => esc_html__( 'About Member', 'elementskit-lite' ),
                 'condition' => [
@@ -433,6 +454,9 @@ class ElementsKit_Widget_Team extends Widget_Base {
             [
                 'label' => esc_html__( 'Phone', 'elementskit-lite' ),
                 'type' => Controls_Manager::TEXT,
+                'dynamic' => [
+                    'active' => true,
+                ],
                 'default' => '+1 (859) 254-6589',
                 'placeholder' => esc_html__( 'Phone Number', 'elementskit-lite' ),
                 'condition' => [
@@ -446,6 +470,9 @@ class ElementsKit_Widget_Team extends Widget_Base {
             [
                 'label' => esc_html__( 'Email', 'elementskit-lite' ),
                 'type' => Controls_Manager::TEXT,
+                'dynamic' => [
+                    'active' => true,
+                ],
                 'default' => 'info@example.com',
                 'placeholder' => esc_html__( 'Email Address', 'elementskit-lite' ),
                 'condition' => [
@@ -690,6 +717,7 @@ class ElementsKit_Widget_Team extends Widget_Base {
                 'size_units' => [ 'px', 'em', '%' ],
                 'selectors' => [
                     '{{WRAPPER}} .profile-body' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+                    '{{WRAPPER}} .ekit-wid-con .profile-square-v .profile-card .profile-body' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
                 ],
             ]
         );
@@ -2468,7 +2496,7 @@ class ElementsKit_Widget_Team extends Widget_Base {
 								<?php if ( $ekit_team_phone || $ekit_team_email ) { ?>
 									<ul class="ekit-team-modal-list">
 										<?php if ( $ekit_team_phone ): ?>
-											<li><strong><?php esc_html_e( 'Phone', 'elementskit-lite' ); ?>:</strong><a href="tel:<?php echo esc_attr( urlencode($ekit_team_phone) ); ?>"><?php echo esc_html( $ekit_team_phone ); ?></a></li>
+											<li><strong><?php esc_html_e( 'Phone', 'elementskit-lite' ); ?>:</strong><a href="tel:<?php echo esc_attr( $ekit_team_phone ); ?>"><?php echo esc_html( $ekit_team_phone ); ?></a></li>
 										<?php endif; ?>
 
 										<?php if ( $ekit_team_email ): ?>

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * A factory class to build galleries
  */
@@ -16,7 +17,6 @@ use Extendify\MetaGallery\Models\Gallery;
  */
 class GalleryFactory extends Factory
 {
-
     /**
      * The name of the factory's corresponding model.
      *

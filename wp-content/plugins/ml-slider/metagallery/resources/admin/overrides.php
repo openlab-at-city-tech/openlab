@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Overrides to various WP defaults
  */

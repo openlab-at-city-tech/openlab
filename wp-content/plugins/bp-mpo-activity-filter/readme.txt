@@ -2,7 +2,7 @@
 Contributors: boonebgorges, cuny-academic-commons
 Tags: buddypress, activity, privacy, more privacy options, filter
 Requires at least: 3.5
-Tested up to: 5.5
+Tested up to: 6.0
 Requires PHP: 5.3
 Donate link: http://teleogistic.net/donate/
 Stable tag: 1.3.2
@@ -24,6 +24,10 @@ I borrowed the idea, and a little bit of the code, from this plugin: http://blog
 * Upload the directory '/bp-mpo-activity-filter/' to your WP plugins directory and activate from the Dashboard of the main blog.
 
 == Changelog ==
+
+= 1.3.3 =
+* Fixes bug where switch_to_blog() routine may not be reset during certain sequences.
+* Ensures that private site activity is not shown in public stream.
 
 = 1.3.2 =
 * Improves PHP 7 compatibility

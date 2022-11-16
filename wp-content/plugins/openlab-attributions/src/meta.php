@@ -86,7 +86,7 @@ function sanitize_attributions( $item ) {
 function register_metabox() {
 	add_meta_box(
 		'ol-attributions-box',
-		'Attributions',
+		__( 'Attributions', 'openlab-attributions' ),
 		__NAMESPACE__ . '\\render_metabox',
 		get_supported_post_types(),
 		'normal',
@@ -111,7 +111,9 @@ function remove_markers( $post_data ) {
 		return $post_data;
 	}
 
-	$search     = [];
+	$search = [];
+
+	// phpcs:ignore WordPress.Security.NonceVerification.Missing
 	$attr_ids   = empty( $_POST['attributions'] ) ? [] : wp_list_pluck( $_POST['attributions'], 'id' );
 	$remove_ids = array_diff( $marker_ids, $attr_ids );
 
@@ -160,6 +162,7 @@ function save_attributions( $post_id, $post ) {
 		return;
 	}
 
+	// phpcs:ignore WordPress.Security.NonceVerification.Missing
 	if ( empty( $_POST['attributions'] ) ) {
 		delete_post_meta( $post_id, 'attributions' );
 		return;
@@ -168,14 +171,21 @@ function save_attributions( $post_id, $post ) {
 	$order = get_attribution_marker_ids( $post->post_content );
 
 	// Remove items that doesn't have content markers.
-	$filtered = array_filter( $_POST['attributions'], function( $item ) use ( $order ) {
-		return in_array( $item['id'], $order, true );
-	} );
+	$filtered = array_filter(
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$_POST['attributions'],
+		function( $item ) use ( $order ) {
+			return in_array( $item['id'], $order, true );
+		}
+	);
 
 	// Sort items based on marker order.
-	$attributions = sort_by( $filtered, function ( $item ) use ( $order ) {
-		return array_search( $item['id'], $order );
-	} );
+	$attributions = sort_by(
+		$filtered,
+		function ( $item ) use ( $order ) {
+			return array_search( $item['id'], $order, true );
+		}
+	);
 
 	// Sanitize data.
 	$attributions = array_map( __NAMESPACE__ . '\\sanitize_attributions', $attributions );

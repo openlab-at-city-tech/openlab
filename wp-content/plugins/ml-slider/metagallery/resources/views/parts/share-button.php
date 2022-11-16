@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The share button
  */
@@ -19,7 +20,7 @@ if (!defined('ABSPATH')) {
             type: 'info',
             headline: '<?php \esc_attr_e('Add to page/post', 'metagallery'); ?>',
             content: `<div class='text-lg mt-2 text-nord11'>${shortcode}</div>
-                <p><?php \esc_attr_e('Copy the shortcode and insert it on your page using a shortcode block or otherwise an html block.', 'metagallery'); ?></p>
+                <p><?php \esc_html_e('Copy the shortcode and insert it on your page using a shortcode block or otherwise an html block.', 'metagallery'); ?></p>
             `,
             source: $el.__x.$data,
             action: function() {

@@ -43,7 +43,7 @@ class ElementsKit_Widget_Post_List_Handler extends \ElementsKit_Lite\Core\Handle
 
 
 	static function get_icon() {
-		return 'eicon-bullet-list ekit-widget-icon ';
+		return 'ekit ekit-widget-icon ekit-post-list';
 	}
 
 	static function get_keywords() {

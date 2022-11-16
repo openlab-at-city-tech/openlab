@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import { __, _x, _n, _nx, sprintf, setLocaleData, EventManager } from './utils'
-import SweetModal from '../tmp/sweet-modal-vue/src/plugin.js'
+import SweetModal from 'sweet-modal-vue/src/plugin.js'
 import Swal from 'sweetalert2'
 import "@sweetalert2/theme-wordpress-admin/wordpress-admin.scss";
 import { mapGetters } from 'vuex'

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The gallery modek
  */
@@ -16,7 +17,6 @@ use Extendify\MetaGallery\Models\Model;
  */
 class Gallery extends Model
 {
-
     /**
      * The title of tha gallery
      *

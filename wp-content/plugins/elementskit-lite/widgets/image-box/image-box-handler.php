@@ -12,7 +12,7 @@ class ElementsKit_Widget_Image_Box_Handler extends \ElementsKit_Lite\Core\Handle
     }
 
     static function get_icon() {
-        return 'eicon-image-rollover ekit-widget-icon ';
+        return 'ekit ekit-widget-icon ekit-image-box';
     }
 
     static function get_categories() {

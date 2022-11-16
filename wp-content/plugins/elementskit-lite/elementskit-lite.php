@@ -9,7 +9,7 @@ defined( 'ABSPATH' ) || exit;
  * Description: The most advanced addons for Elementor with tons of widgets, Header builder, Footer builder, Mega menu builder, layout pack and powerful custom controls.
  * Plugin URI: https://products.wpmet.com/elementskit
  * Author: Wpmet
- * Version: 2.6.3
+ * Version: 2.7.4
  * Author URI: https://wpmet.com/
  *
  * Text Domain: elementskit-lite
@@ -32,7 +32,7 @@ final class ElementsKit_Lite {
 	 * @var string The plugin version.
 	 */
 	static function version() {
-		return '2.6.3';
+		return '2.7.4';
 	}
 
 	/**
@@ -271,6 +271,7 @@ final class ElementsKit_Lite {
 		require_once self::plugin_dir() . 'libs/stories/stories.php'; // new stories system
 		require_once self::plugin_dir() . 'libs/rating/rating.php';
 		require_once self::plugin_dir() . 'libs/pro-awareness/pro-awareness.php'; // pro menu class file
+		require_once self::plugin_dir() . 'libs/forms/forms.php'; // form menu class file
 		require_once self::plugin_dir() . 'helpers/utils.php';
 
 		// Load translation

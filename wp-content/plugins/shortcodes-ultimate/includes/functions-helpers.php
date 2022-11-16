@@ -436,3 +436,39 @@ function su_partial( $file, $data = array() ) {
 	echo su_get_partial( $file, $data );
 	// phpcs:enable
 }
+
+function su_has_active_addons() {
+
+	foreach ( array( 'skins', 'extra', 'maker' ) as $addon ) {
+
+		if ( function_exists( "run_shortcodes_ultimate_{$addon}" ) ) {
+			return true;
+		}
+	}
+
+	return false;
+
+}
+
+function su_has_all_active_addons() {
+
+	foreach ( array( 'skins', 'extra', 'maker' ) as $addon ) {
+
+		if ( ! function_exists( "run_shortcodes_ultimate_{$addon}" ) ) {
+			return false;
+		}
+	}
+
+	return true;
+
+}
+
+function su_load_textdomain() {
+
+	$domain    = 'shortcodes-ultimate';
+	$languages = plugin_dir_path( SU_PLUGIN_FILE ) . 'languages/';
+	$mofile    = $languages . $domain . '-' . determine_locale() . '.mo';
+
+	load_textdomain( $domain, $mofile );
+
+}

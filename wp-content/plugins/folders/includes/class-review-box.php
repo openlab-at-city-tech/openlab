@@ -1,58 +1,117 @@
-<?php if ( ! defined( 'ABSPATH' ) ) exit; ?>
 <?php
-class folders_review_box {
+/**
+ * Class Folders Review
+ *
+ * @author  : Premio <contact@premio.io>
+ * @license : GPL2
+ * */
 
-    public $plugin_name = "Folders";
+if (! defined('ABSPATH')) {
+    exit;
+}
 
-    public $plugin_slug = "folders";
+class folders_review_box
+{
 
-    public function __construct() {
+    /**
+     * The Name of this plugin.
+     *
+     * @var    string    $pluginName    The Name of this plugin.
+     * @since  1.0.0
+     * @access public
+     */
+    public $pluginName = "Folders";
 
-        add_action("wp_ajax_".$this->plugin_slug."_review_box", array($this, "form_review_box"));
+    /**
+     * The Slug of this plugin.
+     *
+     * @var    string    $pluginSlug    The Slug of this plugin.
+     * @since  1.0.0
+     * @access public
+     */
+    public $pluginSlug = "folders";
 
-        add_action('admin_notices', array($this, 'admin_notices'));
-    }
 
-    public function form_review_box() {
+    /**
+     * Define the core functionality of the plugin.
+     *
+     * Set the plugin name and the plugin version that can be used throughout the plugin.
+     * Load the dependencies, define the locale, and set the hooks for the admin area and
+     * the public-facing side of the site.
+     *
+     * @since 1.0.0
+     */
+    public function __construct()
+    {
+
+        add_action("wp_ajax_".$this->pluginSlug."_review_box", [$this, "form_review_box"]);
+
+        add_action('admin_notices', [$this, 'admin_notices']);
+
+    }//end __construct()
+
+
+    /**
+     * Updates settings for Review Box
+     *
+     * @since  1.0.0
+     * @access public
+     * @return status
+     */
+    public function form_review_box()
+    {
         if (current_user_can('manage_options')) {
-            $nonce = filter_input(INPUT_POST, 'nonce', FILTER_SANITIZE_STRING);
-            $days = filter_input(INPUT_POST, 'days', FILTER_SANITIZE_STRING);
-            if (!empty($nonce) && wp_verify_nonce($nonce, $this->plugin_slug . "_review_box")) {
+            $nonce = filter_input(INPUT_POST, 'nonce');
+            $days  = filter_input(INPUT_POST, 'days');
+            if (!empty($nonce) && wp_verify_nonce($nonce, $this->pluginSlug."_review_box")) {
                 if ($days == -1) {
-                    add_option($this->plugin_slug . "_hide_review_box", "1");
+                    add_option($this->pluginSlug."_hide_review_box", "1");
                 } else {
-                    $date = date("Y-m-d", strtotime("+" . $days . " days"));
-                    update_option($this->plugin_slug . "_show_review_box_after", $date);
+                    $date = date("Y-m-d", strtotime("+".$days." days"));
+                    update_option($this->pluginSlug."_show_review_box_after", $date);
                 }
             }
+
             die;
         }
-    }
 
-    public function admin_notices() {
+    }//end form_review_box()
+
+
+    /**
+     * Display Review Box
+     *
+     * @since  1.0.0
+     * @access public
+     * @return html
+     */
+    public function admin_notices()
+    {
         if (current_user_can('manage_options')) {
-            $is_hidden = get_option($this->plugin_slug . "_hide_review_box");
-            if ($is_hidden !== false) {
+            $isHidden = get_option($this->pluginSlug."_hide_review_box");
+            if ($isHidden !== false) {
                 return;
             }
-            $current_count = get_option($this->plugin_slug . "_show_review_box_after");
-            if ($current_count === false) {
+
+            $currentCount = get_option($this->pluginSlug."_show_review_box_after");
+            if ($currentCount === false) {
                 $date = date("Y-m-d", strtotime("+14 days"));
-                add_option($this->plugin_slug . "_show_review_box_after", $date);
+                add_option($this->pluginSlug."_show_review_box_after", $date);
                 return;
-            } else if ($current_count < 35) {
+            } else if ($currentCount < 35) {
                 return;
             }
-            $date_to_show = get_option($this->plugin_slug . "_show_review_box_after");
-            if ($date_to_show !== false) {
-                $current_date = date("Y-m-d");
-                if ($current_date < $date_to_show) {
+
+            $dateToShow = get_option($this->pluginSlug."_show_review_box_after");
+            if ($dateToShow !== false) {
+                $currentDate = date("Y-m-d");
+                if ($currentDate < $dateToShow) {
                     return;
                 }
             }
             ?>
             <style>
-                .<?php echo esc_attr($this->plugin_slug) ?>-premio-review-box p a {
+                .<?php echo esc_attr($this->pluginSlug) ?>-premio-review-box p a {
                     display: inline-block;
                     float: right;
                     text-decoration: none;
@@ -62,17 +121,17 @@ class folders_review_box {
                     top: 12px;
                 }
 
-                .<?php echo esc_attr($this->plugin_slug) ?>-premio-review-box p a:hover, .<?php echo esc_attr($this->plugin_slug) ?>-premio-review-box p a:focus {
+                .<?php echo esc_attr($this->pluginSlug) ?>-premio-review-box p a:hover, .<?php echo esc_attr($this->pluginSlug) ?>-premio-review-box p a:focus {
                     color: #333333;
                 }
 
-                .<?php echo esc_attr($this->plugin_slug) ?>-premio-review-box .button span {
+                .<?php echo esc_attr($this->pluginSlug) ?>-premio-review-box .button span {
                     display: inline-block;
                     line-height: 27px;
                     font-size: 16px;
                 }
 
-                .<?php echo esc_attr($this->plugin_slug) ?>-review-box-popup {
+                .<?php echo esc_attr($this->pluginSlug) ?>-review-box-popup {
                     position: fixed;
                     width: 100%;
                     height: 100%;
@@ -83,7 +142,7 @@ class folders_review_box {
                     display: none;
                 }
 
-                .<?php echo esc_attr($this->plugin_slug) ?>-review-box-popup-content {
+                .<?php echo esc_attr($this->pluginSlug) ?>-review-box-popup-content {
                     background: #ffffff;
                     padding: 20px;
                     position: absolute;
@@ -99,27 +158,27 @@ class folders_review_box {
                 :;
                 }
 
-                .<?php echo esc_attr($this->plugin_slug) ?>-review-box-title {
+                .<?php echo esc_attr($this->pluginSlug) ?>-review-box-title {
                     padding: 0 0 10px 0;
                     font-weight: bold;
                 }
 
-                .<?php echo esc_attr($this->plugin_slug) ?>-review-box-options a {
+                .<?php echo esc_attr($this->pluginSlug) ?>-review-box-options a {
                     display: block;
                     margin: 5px 0 5px 0;
                     color: #333;
                     text-decoration: none;
                 }
 
-                .<?php echo esc_attr($this->plugin_slug) ?>-review-box-options a.dismiss {
+                .<?php echo esc_attr($this->pluginSlug) ?>-review-box-options a.dismiss {
                     color: #999;
                 }
 
-                .<?php echo esc_attr($this->plugin_slug) ?>-review-box-options a:hover, .affiliate-options a:focus {
+                .<?php echo esc_attr($this->pluginSlug) ?>-review-box-options a:hover, .affiliate-options a:focus {
                     color: #0073aa;
                 }
 
-                button.<?php echo esc_attr($this->plugin_slug) ?>-close-review-box-popup {
+                button.<?php echo esc_attr($this->pluginSlug) ?>-close-review-box-popup {
                     position: absolute;
                     top: 5px;
                     right: 0;
@@ -128,7 +187,7 @@ class folders_review_box {
                     cursor: pointer;
                 }
 
-                a.button.button-primary.<?php echo esc_attr($this->plugin_slug) ?>-review-box-btn {
+                a.button.button-primary.<?php echo esc_attr($this->pluginSlug) ?>-review-box-btn {
                     font-size: 14px;
                     background: #F51366;
                     color: #fff;
@@ -156,14 +215,14 @@ class folders_review_box {
                     text-decoration: underline;
                 }
 
-                .<?php echo esc_attr($this->plugin_slug) ?>-premio-review-box p {
+                .<?php echo esc_attr($this->pluginSlug) ?>-premio-review-box p {
                     display: inline-block;
                     line-height: 30px;
                     vertical-align: middle;
                     padding: 0 10px 0 0;
                 }
 
-                .<?php echo esc_attr($this->plugin_slug) ?>-premio-review-box p img {
+                .<?php echo esc_attr($this->pluginSlug) ?>-premio-review-box p img {
                     width: 30px;
                     height: 30px;
                     display: inline-block;
@@ -222,91 +281,95 @@ class folders_review_box {
                 }
             </style>
             <div
-                    class="notice notice-info premio-notice <?php echo esc_attr($this->plugin_slug) ?>-premio-review-box <?php echo esc_attr($this->plugin_slug) ?>-premio-review-box">
-                <div class="review-box-default" id="default-review-box-<?php echo esc_attr($this->plugin_slug) ?>">
+                    class="notice notice-info premio-notice <?php echo esc_attr($this->pluginSlug) ?>-premio-review-box <?php echo esc_attr($this->pluginSlug) ?>-premio-review-box">
+                <div class="review-box-default" id="default-review-box-<?php echo esc_attr($this->pluginSlug) ?>">
                     <p>
-                        <?php printf(esc_html__("Hi there, it seems like %s is bringing you some value, and that's pretty awesome! Can you please show us some love and rate %s on WordPress? It'll only take 2 minutes of your time, and will really help us spread the word - %s, %s"), "<b>".$this->plugin_name."</b>", $this->plugin_name, "<b>Gal Dubinski</b>", "Co-founder") ?>
-                        <img width="30px" src="<?php echo esc_url(plugin_dir_url(__FILE__) . "../assets/images/premio-owner.jpg") ?>"/>
-                        <a href="javascript:;" class="dismiss-btn <?php echo esc_attr($this->plugin_slug) ?>-premio-review-dismiss-btn"><span class="dashicons dashicons-no-alt"></span></a>
+                        <?php printf(esc_html__("Hi there, it seems like %s is bringing you some value, and that's pretty awesome! Can you please show us some love and rate %s on WordPress? It'll only take 2 minutes of your time, and will really help us spread the word - %s, %s"), "<b>".esc_attr($this->pluginName)."</b>", esc_attr($this->pluginName), "<b>Gal Dubinski</b>", "Co-founder") ?>
+                        <img width="30px" src="<?php echo esc_url(plugin_dir_url(__FILE__)."../assets/images/premio-owner.jpg") ?>"/>
+                        <a href="javascript:;" class="dismiss-btn <?php echo esc_attr($this->pluginSlug) ?>-premio-review-dismiss-btn"><span class="dashicons dashicons-no-alt"></span></a>
                     </p>
 
                     <div class="clear clearfix"></div>
                     <ul>
-                        <li><a class="<?php echo esc_attr($this->plugin_slug) ?>-premio-review-box-hide-btn" href="https://wordpress.org/support/plugin/folders/reviews/?filter=5" target="_blank"><?php esc_html_e("I'd love to help :) ",'folders')?></a></li>
-                        <li><a class="<?php echo esc_attr($this->plugin_slug) ?>-premio-review-box-future-btn" href="javascript:;"><?php esc_html_e("Not this time ",'folders')?></a></li>
-                        <li><a class="<?php echo esc_attr($this->plugin_slug) ?>-premio-review-box-hide-btn" href="javascript:;"><?php esc_html_e("I've already rated you ",'folders')?></a></li>
+                        <li><a class="<?php echo esc_attr($this->pluginSlug) ?>-premio-review-box-hide-btn" href="https://wordpress.org/support/plugin/folders/reviews/?filter=5" target="_blank"><?php esc_html_e("I'd love to help :) ", 'folders')?></a></li>
+                        <li><a class="<?php echo esc_attr($this->pluginSlug) ?>-premio-review-box-future-btn" href="javascript:;"><?php esc_html_e("Not this time ", 'folders')?></a></li>
+                        <li><a class="<?php echo esc_attr($this->pluginSlug) ?>-premio-review-box-hide-btn" href="javascript:;"><?php esc_html_e("I've already rated you ", 'folders')?></a></li>
                     </ul>
                 </div>
-                <div class="review-thanks-box" id="review-thanks-<?php echo esc_attr($this->plugin_slug) ?>">
-                    <button class="<?php echo esc_attr($this->plugin_slug) ?>-close-thanks-btn review-thanks-btn"><span class="dashicons dashicons-no-alt"></span></button>
+                <div class="review-thanks-box" id="review-thanks-<?php echo esc_attr($this->pluginSlug) ?>">
+                    <button class="<?php echo esc_attr($this->pluginSlug) ?>-close-thanks-btn review-thanks-btn"><span class="dashicons dashicons-no-alt"></span></button>
                     <div class="review-thanks-img">
-                        <img width="30px" src="<?php echo esc_url(plugin_dir_url(__FILE__) . "/images/thanks.gif") ?>"/>
+                        <img width="30px" src="<?php echo esc_url(plugin_dir_url(__FILE__)."/images/thanks.gif") ?>"/>
                     </div>
                     <div class="review-thanks-msg">
-                        <div class="thanks-msg-title"><?php esc_html_e("You are awesome ",'folders')?> &#128591;</div>
-                        <div class="thanks-msg-desc"><?php esc_html_e("Thanks for your support, We really appreciate it!",'folders')?></div>
-                        <div class="thanks-msg-footer"><?php esc_html_e("Premio team ",'folders')?></div>
+                        <div class="thanks-msg-title"><?php esc_html_e("You are awesome ", 'folders')?> &#128591;</div>
+                        <div class="thanks-msg-desc"><?php esc_html_e("Thanks for your support, We really appreciate it!", 'folders')?></div>
+                        <div class="thanks-msg-footer"><?php esc_html_e("Premio team ", 'folders')?></div>
                     </div>
                     <div class="clear clearfix"></div>
                 </div>
             </div>
-            <div class="<?php echo esc_attr($this->plugin_slug) ?>-review-box-popup">
-                <div class="<?php echo esc_attr($this->plugin_slug) ?>-review-box-popup-content">
-                    <button class="<?php echo esc_attr($this->plugin_slug) ?>-close-review-box-popup"><span class="dashicons dashicons-no-alt"></span></button>
-                    <div class="<?php echo esc_attr($this->plugin_slug) ?>-review-box-title">
-                        <?php esc_html_e("Would you like us to remind you about this later?",'folders')?>
+            <div class="<?php echo esc_attr($this->pluginSlug) ?>-review-box-popup">
+                <div class="<?php echo esc_attr($this->pluginSlug) ?>-review-box-popup-content">
+                    <button class="<?php echo esc_attr($this->pluginSlug) ?>-close-review-box-popup"><span class="dashicons dashicons-no-alt"></span></button>
+                    <div class="<?php echo esc_attr($this->pluginSlug) ?>-review-box-title">
+                        <?php esc_html_e("Would you like us to remind you about this later?", 'folders')?>
                     </div>
-                    <div class="<?php echo esc_attr($this->plugin_slug) ?>-review-box-options">
-                        <a href="javascript:;" data-days="3"><?php esc_html_e("Remind me in 3 days ",'folders')?></a>
-                        <a href="javascript:;" data-days="10"><?php esc_html_e("Remind me in 10 days ",'folders')?></a>
-                        <a href="javascript:;" data-days="-1" class="dismiss"><?php esc_html_e("Don't remind me about this ",'folders')?></a>
+                    <div class="<?php echo esc_attr($this->pluginSlug) ?>-review-box-options">
+                        <a href="javascript:;" data-days="3"><?php esc_html_e("Remind me in 3 days ", 'folders')?></a>
+                        <a href="javascript:;" data-days="10"><?php esc_html_e("Remind me in 10 days ", 'folders')?></a>
+                        <a href="javascript:;" data-days="-1" class="dismiss"><?php esc_html_e("Don't remind me about this ", 'folders')?></a>
                     </div>
                 </div>
             </div>
             <script>
                 jQuery(document).on('ready', function () {
                     jQuery("body").addClass("has-premio-box");
-                    jQuery(document).on("click", ".<?php echo esc_attr($this->plugin_slug) ?>-premio-review-dismiss-btn, .<?php echo esc_attr($this->plugin_slug) ?>-premio-review-box-future-btn", function () {
-                        jQuery(".<?php echo esc_attr($this->plugin_slug) ?>-review-box-popup").show();
+                    jQuery(document).on("click", ".<?php echo esc_attr($this->pluginSlug) ?>-premio-review-dismiss-btn, .<?php echo esc_attr($this->pluginSlug) ?>-premio-review-box-future-btn", function () {
+                        jQuery(".<?php echo esc_attr($this->pluginSlug) ?>-review-box-popup").show();
                     });
-                    jQuery(document).on("click", ".<?php echo esc_attr($this->plugin_slug) ?>-close-review-box-popup", function () {
-                        jQuery(".<?php echo esc_attr($this->plugin_slug) ?>-review-box-popup").hide();
+                    jQuery(document).on("click", ".<?php echo esc_attr($this->pluginSlug) ?>-close-review-box-popup", function () {
+                        jQuery(".<?php echo esc_attr($this->pluginSlug) ?>-review-box-popup").hide();
                     });
-                    jQuery(document).on("click", ".<?php echo esc_attr($this->plugin_slug) ?>-close-thanks-btn", function () {
-                        jQuery(".<?php echo esc_attr($this->plugin_slug) ?>-review-box-popup").remove();
-                        jQuery(".<?php echo esc_attr($this->plugin_slug) ?>-premio-review-box").remove();
+                    jQuery(document).on("click", ".<?php echo esc_attr($this->pluginSlug) ?>-close-thanks-btn", function () {
+                        jQuery(".<?php echo esc_attr($this->pluginSlug) ?>-review-box-popup").remove();
+                        jQuery(".<?php echo esc_attr($this->pluginSlug) ?>-premio-review-box").remove();
                     });
-                    jQuery(document).on("click", ".<?php echo esc_attr($this->plugin_slug)?>-premio-review-box-hide-btn", function () {
-                        jQuery("#default-review-box-<?php echo esc_attr($this->plugin_slug) ?>").hide();
-                        jQuery("#review-thanks-<?php echo esc_attr($this->plugin_slug) ?>").show();
+                    jQuery(document).on("click", ".<?php echo esc_attr($this->pluginSlug)?>-premio-review-box-hide-btn", function () {
+                        jQuery("#default-review-box-<?php echo esc_attr($this->pluginSlug) ?>").hide();
+                        jQuery("#review-thanks-<?php echo esc_attr($this->pluginSlug) ?>").show();
                         jQuery.ajax({
                             url: "<?php echo admin_url("admin-ajax.php") ?>",
-                            data: "action=<?php echo esc_attr($this->plugin_slug) ?>_review_box&days=-1&nonce=<?php echo esc_attr(wp_create_nonce($this->plugin_slug."_review_box")) ?>",
+                            data: "action=<?php echo esc_attr($this->pluginSlug) ?>_review_box&days=-1&nonce=<?php echo esc_attr(wp_create_nonce($this->pluginSlug."_review_box")) ?>",
                             type: "post",
                             success: function () {
 
                             }
                         });
                     });
-                    jQuery(document).on("click", ".<?php echo esc_attr($this->plugin_slug) ?>-review-box-options a", function () {
+                    jQuery(document).on("click", ".<?php echo esc_attr($this->pluginSlug) ?>-review-box-options a", function () {
                         var dataDays = jQuery(this).attr("data-days");
-                        jQuery(".<?php echo esc_attr($this->plugin_slug) ?>-review-box-popup").remove();
-                        jQuery(".<?php echo esc_attr($this->plugin_slug) ?>-premio-review-box").remove();
+                        jQuery(".<?php echo esc_attr($this->pluginSlug) ?>-review-box-popup").remove();
+                        jQuery(".<?php echo esc_attr($this->pluginSlug) ?>-premio-review-box").remove();
                         jQuery("body").removeClass("has-premio-box");
                         jQuery.ajax({
                             url: "<?php echo admin_url("admin-ajax.php") ?>",
-                            data: "action=<?php echo esc_attr($this->plugin_slug) ?>_review_box&days=" + dataDays + "&nonce=<?php echo esc_attr(wp_create_nonce($this->plugin_slug."_review_box")) ?>",
+                            data: "action=<?php echo esc_attr($this->pluginSlug) ?>_review_box&days=" + dataDays + "&nonce=<?php echo esc_attr(wp_create_nonce($this->pluginSlug."_review_box")) ?>",
                             type: "post",
                             success: function () {
-                                jQuery(".<?php echo esc_attr($this->plugin_slug)?>-review-box-popup").remove();
-                                jQuery(".<?php echo esc_attr($this->plugin_slug)?>-premio-review-box").remove();
+                                jQuery(".<?php echo esc_attr($this->pluginSlug)?>-review-box-popup").remove();
+                                jQuery(".<?php echo esc_attr($this->pluginSlug)?>-premio-review-box").remove();
                             }
                         });
                     });
                 });
             </script>
             <?php
-        }
-    }
-}
+        }//end if
+
+    }//end admin_notices()
+
+
+}//end class
+
 $folders_review_box = new folders_review_box();

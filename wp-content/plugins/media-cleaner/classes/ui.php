@@ -62,12 +62,12 @@ class Meow_WPMC_UI {
 	}
 
 	function display_metabox( $post ) {
-
 		// Search the references to the ID
 		$originType = $this->core->reference_exists( null, $post->ID );
 
 		// Search the references to the files
 		if ( !$originType ) {
+			$originType = "";
 			$paths = $this->core->get_paths_from_attachment( $post->ID );
 			foreach ( $paths as $path ) {
 				$originType = $this->core->reference_exists( $path, null );
@@ -77,17 +77,33 @@ class Meow_WPMC_UI {
 			}
 		}
 
-		// Resolve the readable name for this issue (if exists)
 		if ( $originType ) {
-			if ( array_key_exists( $originType, $this->foundTypes ) )
-				echo $this->foundTypes[ $originType ];
-			else
-				echo "It seems to be used as: " . $originType;
+			$id = $originType;
+			$originType = preg_replace( '/\s*\[.*\]/', '', $originType );
+			$id = str_replace( $originType, '', $id );
+			$id = trim( $id, '[' );
+			echo "Used as: " . $originType . "<br />";
+			if ( array_key_exists( $originType, $this->foundTypes ) ) {
+				echo "Meaning: " . $this->foundTypes[ $originType ] . "<br />";
+			}
+			if ( !empty( $id ) ) {
+				$id = trim( $id, ' []' );
+				$post = get_post( $id );
+				if ( $post ) {
+					echo "Used in: <a href='" . get_permalink( $id ) . "' target='_blank'>" . $post->post_title . "</a>";
+					echo " (<a href='" . get_edit_post_link( $id ) . "'>edit</a>)";
+				}
+			}
+			return;
 		}
-		// Otherwise just display the un-readable name
-		else {
-			echo "There is no information about this media in the Cleaner DB. It is either not in use, or the scan hasn't been ran.";
+
+		$issue = $this->core->get_issue_for_postId( $post->ID );
+		if ( $issue ) {
+			$this->core->echo_issue( $issue->issue );
+			return;
 		}
+		
+		echo "There is no information about this media in the Cleaner DB. It is either not in use, or the scan hasn't been ran.";
 	}
 
 	function media_row_actions( $actions, $post ) {

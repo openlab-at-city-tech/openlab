@@ -17,18 +17,22 @@ wp_enqueue_script('codemirror_mode_css');
 wp_enqueue_script('codemirror_hint_css');
 wp_enqueue_script('advgb_settings_js');
 
-$saved_settings    = get_option('advgb_settings');
+$saved_settings             = get_option('advgb_settings');
+$gallery_lightbox_caption   = isset($saved_settings['gallery_lightbox_caption']) ? $saved_settings['gallery_lightbox_caption'] : '1';
+$disable_wpautop_checked    = !empty($saved_settings['disable_wpautop']) ? 'checked' : '';
+$google_api_key_saved       = isset($saved_settings['google_api_key']) ? $saved_settings['google_api_key'] : '';
+$enable_blocks_spacing      = isset($saved_settings['enable_blocks_spacing']) && $saved_settings['enable_blocks_spacing'] ? 'checked' : '';
+$blocks_spacing             = isset($saved_settings['blocks_spacing']) ? $saved_settings['blocks_spacing'] : 0;
+$blocks_icon_color          = isset($saved_settings['blocks_icon_color']) ? $saved_settings['blocks_icon_color'] : '#5952de';
+$editor_width               = isset($saved_settings['editor_width']) ? $saved_settings['editor_width'] : '0';
+$default_thumb              = plugins_url('assets/blocks/recent-posts/recent-post-default.png', ADVANCED_GUTENBERG_PLUGIN);
+$rp_default_thumb           = isset($saved_settings['rp_default_thumb']) ? $saved_settings['rp_default_thumb'] : array('url' => $default_thumb, 'id' => 0);
+$block_extend               = isset($saved_settings['block_extend']) && $saved_settings['block_extend'] ? 'checked' : '';
 
-$gallery_lightbox_checked         = $saved_settings['gallery_lightbox'] ? 'checked' : '';
-$gallery_lightbox_caption         = isset($saved_settings['gallery_lightbox_caption']) ? $saved_settings['gallery_lightbox_caption'] : '1';
-$disable_wpautop_checked          = !empty($saved_settings['disable_wpautop']) ? 'checked' : '';
-$google_api_key_saved             = isset($saved_settings['google_api_key']) ? $saved_settings['google_api_key'] : '';
-$enable_blocks_spacing            = isset($saved_settings['enable_blocks_spacing']) && $saved_settings['enable_blocks_spacing'] ? 'checked' : '';
-$blocks_spacing                   = isset($saved_settings['blocks_spacing']) ? $saved_settings['blocks_spacing'] : 0;
-$blocks_icon_color                = isset($saved_settings['blocks_icon_color']) ? $saved_settings['blocks_icon_color'] : '#5952de';
-$editor_width                     = isset($saved_settings['editor_width']) ? $saved_settings['editor_width'] : '0';
-$default_thumb                    = plugins_url('assets/blocks/recent-posts/recent-post-default.png', ADVANCED_GUTENBERG_PLUGIN);
-$rp_default_thumb                 = isset($saved_settings['rp_default_thumb']) ? $saved_settings['rp_default_thumb'] : array('url' => $default_thumb, 'id' => 0);
+$gallery_lightbox_checked = isset($saved_settings['gallery_lightbox']) && $saved_settings['gallery_lightbox'] ? 'checked' : '';
+if (!isset($saved_settings['gallery_lightbox'])) {
+    $gallery_lightbox_checked = 'checked';
+}
 
 $enable_columns_visual_guide = isset($saved_settings['enable_columns_visual_guide']) && $saved_settings['enable_columns_visual_guide'] ? 'checked' : '';
 if (!isset($saved_settings['enable_columns_visual_guide'])) {
@@ -422,6 +426,29 @@ if (!isset($saved_settings['block_controls'])) {
                                        id="block_controls"
                                        value="1"
                                     <?php echo esc_attr($block_controls) ?>
+                                />
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </li>
+                <li class="ju-settings-option clearfix">
+                    <div class="settings-option-wrapper clearfix">
+                        <label for="block_extend"
+                               class="advgb_qtip ju-setting-label"
+                               data-qtip="<?php esc_attr_e(
+                                   'If some blocks are not listed in Block access, try enabling Extend supported blocks',
+                                   'advanced-gutenberg'
+                               ) ?>"
+                        >
+                            <?php esc_html_e('Extend supported blocks (beta)', 'advanced-gutenberg') ?>
+                        </label>
+                        <div class="ju-switch-button">
+                            <label class="switch">
+                                <input type="checkbox" name="block_extend"
+                                       id="block_extend"
+                                       value="1"
+                                    <?php echo esc_attr($block_extend) ?>
                                 />
                                 <span class="slider"></span>
                             </label>

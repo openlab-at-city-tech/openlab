@@ -1,59 +1,75 @@
 <?php
-if ( ! defined( 'ABSPATH' ) ) exit;
+/**
+ * Admin form folder settings
+ *
+ * @author  : Premio <contact@premio.io>
+ * @license : GPL2
+ * */
+
+if (! defined('ABSPATH')) {
+    exit;
+}
+
 ?>
 <style>
     <?php
     $string = "";
     global $typenow;
-    $width = get_option("wcp_dynamic_width_for_" . $typenow);
+    $width = get_option("wcp_dynamic_width_for_".$typenow);
     $width = intval($width);
-    if($width == null || empty($width) || $width > 1200) {
+    if ($width == null || empty($width) || $width > 1200) {
         $width = 280;
     }
-    $width = $width - 40;
+
+    $width = ($width - 40);
     $customize_folders = get_option('customize_folders');
     ?>
 </style>
 <style>
 <?php
 $font_family = "";
-if(isset($customize_folders['folder_font']) && !empty($customize_folders['folder_font'])) {
-    $font_family = $customize_folders['folder_font'];
+if (isset($customize_folders['folder_font']) && !empty($customize_folders['folder_font'])) {
+    $font_family  = $customize_folders['folder_font'];
     $folder_fonts = self::get_font_list();
-    if(isset($folder_fonts[$font_family])) {
-        if($font_family == "System Stack") {
+    if (isset($folder_fonts[$font_family])) {
+        if ($font_family == "System Stack") {
             $font_family = "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif";
         }
         ?>
 .wcp-container, .folder-popup-form, .dynamic-menu { font-family: <?php echo esc_attr($font_family) ?>; }
-<?php
+        <?php
+    }
+
+    if ($font_family == "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif") {
+        $font_family = "System Stack";
+    }
+
+    if ($folder_fonts[$font_family] == "Default") {
+        $font_family = "";
+    }
 }
-if($font_family == "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif") {
-$font_family = "System Stack";
-}
-if($folder_fonts[$font_family] == "Default") {
-$font_family = "";
-}
-}
-if(!isset($customize_folders['new_folder_color']) || empty($customize_folders['new_folder_color'])) {
-$customize_folders['new_folder_color'] = "#f51366";
+
+if (!isset($customize_folders['new_folder_color']) || empty($customize_folders['new_folder_color'])) {
+    $customize_folders['new_folder_color'] = "#f51366";
 }
 ?>
 .add-new-folder { background-color: <?php echo esc_attr($customize_folders['new_folder_color']) ?>; border-color: <?php echo esc_attr($customize_folders['new_folder_color']) ?> }
 .wcp-hide-show-buttons .toggle-buttons { background-color: <?php echo esc_attr($customize_folders['new_folder_color']) ?>; }
 .folders-toggle-button span { background-color: <?php echo esc_attr($customize_folders['new_folder_color']) ?>; }
 .ui-resizable-handle.ui-resizable-e:before, .ui-resizable-handle.ui-resizable-w:before {border-color: <?php echo esc_attr($customize_folders['new_folder_color']) ?>;}
-<?php if(!isset($customize_folders['bulk_organize_button_color']) || empty($customize_folders['bulk_organize_button_color'])) {
+<?php if (!isset($customize_folders['bulk_organize_button_color']) || empty($customize_folders['bulk_organize_button_color'])) {
     $customize_folders['bulk_organize_button_color'] = "#f51366";
 } ?>
 button.button.organize-button { background-color: <?php echo esc_attr($customize_folders['bulk_organize_button_color']) ?>; border-color: <?php echo esc_attr($customize_folders['bulk_organize_button_color']) ?>; }
 button.button.organize-button:hover { background-color: <?php echo esc_attr($customize_folders['bulk_organize_button_color']) ?>; border-color: <?php echo esc_attr($customize_folders['bulk_organize_button_color']) ?>; }
-<?php if(!isset($customize_folders['folder_bg_color']) || empty($customize_folders['folder_bg_color'])) {
+<?php if (!isset($customize_folders['folder_bg_color']) || empty($customize_folders['folder_bg_color'])) {
     $customize_folders['folder_bg_color'] = "#f51366";
 }
+
 $rgbColor = self::hexToRgb($customize_folders['folder_bg_color']); ?>
 body:not(.no-hover-css) #custom-scroll-menu .jstree-hovered:not(.jstree-clicked), body:not(.no-hover-css) #custom-scroll-menu .jstree-hovered:not(.jstree-clicked):hover, .dynamic-menu a.active, .dynamic-menu a:hover, .folder-setting-menu li a:hover { background: rgba(<?php echo esc_attr($rgbColor['r'].",".$rgbColor['g'].",".$rgbColor['b'].", 0.08") ?>) !important; color: #333333;}
 body:not(.no-hover-css) #custom-scroll-menu .jstree-clicked, body:not(.no-hover-css) #custom-scroll-menu .jstree-clicked:not(.jstree-clicked):focus, #custom-scroll-menu .jstree-clicked, #custom-scroll-menu .jstree-clicked:hover { background: <?php echo esc_attr($customize_folders['folder_bg_color']) ?> !important; color: #ffffff !important; }
+body:not(.no-hover-css) #custom-scroll-menu .jstree-clicked .folder-actions { background: <?php echo esc_attr($customize_folders['folder_bg_color']) ?> !important; color: #ffffff !important; }
 #custom-scroll-menu .jstree-hovered.wcp-drop-hover, #custom-scroll-menu .jstree-hovered.wcp-drop-hover:hover, #custom-scroll-menu .jstree-clicked.wcp-drop-hover, #custom-scroll-menu .jstree-clicked.wcp-drop-hover:hover, body #custom-scroll-menu  *.drag-in > a:hover { background: <?php echo esc_attr($customize_folders['folder_bg_color']) ?> !important; color: #ffffff !important; }
 .drag-bot > a {
     border-bottom: solid 2px <?php echo esc_attr($customize_folders['folder_bg_color']) ?>;
@@ -82,12 +98,13 @@ body:not(.no-hover-css) .wcp-container .route .title:hover, body:not(.no-hover-c
 }
 #custom-menu .route .nav-icon .wcp-icon {color: <?php echo esc_attr($customize_folders['folder_bg_color']) ?> !important;}
 .mCS-3d.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar { background: <?php echo esc_attr($customize_folders['folder_bg_color']) ?> !important; }
+.os-theme-dark>.os-scrollbar>.os-scrollbar-track>.os-scrollbar-handle { background: <?php echo esc_attr($customize_folders['folder_bg_color']) ?> !important; }
 .jstree-node.drag-in > a.jstree-anchor.jstree-hovered { background-color: <?php echo esc_attr($customize_folders['folder_bg_color']) ?> !important; color: #ffffff; }
 <?php
 
-if(isset($customize_folders['folder_size']) && !empty($customize_folders['folder_size'])) {
-    if($customize_folders['folder_size'] == "custom") {
-        $customize_folders['folder_size'] = ! isset( $customize_folders['folder_custom_font_size'] ) || empty( $customize_folders['folder_custom_font_size'] ) ? "16" : $customize_folders['folder_custom_font_size'];
+if (isset($customize_folders['folder_size']) && !empty($customize_folders['folder_size'])) {
+    if ($customize_folders['folder_size'] == "custom") {
+        $customize_folders['folder_size'] = ! isset($customize_folders['folder_custom_font_size']) || empty($customize_folders['folder_custom_font_size']) ? "16" : $customize_folders['folder_custom_font_size'];
     }
     ?>
     .wcp-container .route span.title-text, .header-posts a, .un-categorised-items a, .sticky-title, .sticky-folders > ul > li > a, .jstree-default .jstree-anchor { font-size: <?php echo esc_attr($customize_folders['folder_size']) ?>px; }
@@ -95,51 +112,58 @@ if(isset($customize_folders['folder_size']) && !empty($customize_folders['folder
 }
 ?>
 </style>
-<?php if(!empty($font_family)) {
-    wp_enqueue_style( 'custom-google-fonts', 'https://fonts.googleapis.com/css?family='.urlencode($font_family), false );
+<?php if (!empty($font_family)) {
+    wp_enqueue_style('custom-google-fonts', 'https://fonts.googleapis.com/css?family='.urlencode($font_family), false);
 } ?>
 <div id="media-css">
 
 </div>
 <?php
 $optionName = $typenow."_parent_status";
-$status = get_option($optionName);
+$status     = get_option($optionName);
 global $typenow;
 $title = ucfirst($typenow);
-if($typenow == "page") {
+if ($typenow == "page") {
     $title = "Pages";
-} else if($typenow == "post") {
+} else if ($typenow == "post") {
     $title = "Posts";
-} else if($typenow == "attachment") {
+} else if ($typenow == "attachment") {
     $title = "Files";
 } else {
-    $post_type = $typenow;
-    $post_types = get_post_types( array( "name" => $post_type), 'objects' );
-    if(!empty($post_types) && is_array($post_types) && isset($post_types[$post_type]) && isset($post_types[$post_type]->label)) {
+    $post_type  = $typenow;
+    $post_types = get_post_types([ "name" => $post_type], 'objects');
+    if (!empty($post_types) && is_array($post_types) && isset($post_types[$post_type]) && isset($post_types[$post_type]->label)) {
         $title = $post_types[$post_type]->label;
     }
 }
-$display_status = "wcp_dynamic_display_status_" . $typenow;
-$display_status = get_option($display_status);
-$class_name = isset($display_status) && $display_status == "hide"?"hide-folders-area":"";
-$active_class = (isset($display_status) && $display_status == "hide")?"":"active";
-$active_class_2 = (isset($display_status) && $display_status == "hide")?"active":"";
 
-/* Do not change here, Free/Pro Class name */
-$post_type = WCP_Folders::get_custom_post_type($typenow);
-$active = "";
+$display_status = "wcp_dynamic_display_status_".$typenow;
+$display_status = get_option($display_status);
+$class_name     = isset($display_status) && $display_status == "hide" ? "hide-folders-area" : "";
+$active_class   = (isset($display_status) && $display_status == "hide") ? "" : "active";
+$active_class_2 = (isset($display_status) && $display_status == "hide") ? "active" : "";
+
+// Do not change here, Free/Pro Class name
+$post_type        = WCP_Folders::get_custom_post_type($typenow);
+$active           = "";
 $active_all_class = "";
-if(!empty($post_type)) {
-    if(isset($_REQUEST[$post_type]) && $_REQUEST[$post_type] == -1) {
+if (!empty($post_type)) {
+    $activeItem = filter_input(INPUT_POST, $post_type);
+    if (empty($activeItem)) {
+        $activeItem = filter_input(INPUT_GET, $post_type);
+    }
+
+    if ($activeItem == -1) {
         $active = "active-item";
     }
 
-    if(!isset($_REQUEST[$post_type]) || $_REQUEST[$post_type] == "") {
+    if (empty($activeItem) || $activeItem == "") {
         $active_all_class = "active-item";
     }
 }
+$horClass = (!isset($customize_folders['enable_horizontal_scroll']) || $customize_folders['enable_horizontal_scroll'] == "on") ? "hor-scroll" : "";
 ?>
-<div id="wcp-content" class="<?php echo esc_attr(isset($display_status) && $display_status == "hide"?"hide-folders-area":"")  ?>" >
+<div id="wcp-content" class="<?php echo esc_attr(isset($display_status) && $display_status == "hide" ? "hide-folders-area" : "")  ?>" >
     <div id="wcp-content-resize">
         <div class="wcp-content">
             <div class="wcp-hide-show-buttons">
@@ -148,7 +172,7 @@ if(!empty($post_type)) {
             </div>
             <div class='wcp-container'>
                 <div class="sticky-wcp-custom-form">
-                    <?php echo $form_html ?>
+                    <?php echo ($form_html) ?>
                     <div class="top-settings">
                         <div class="folder-search-form">
                             <div class="form-search-input">
@@ -158,10 +182,10 @@ if(!empty($post_type)) {
                         </div>
                         <div class="folder-separator"></div>
                         <div class="header-posts">
-                            <a href="javascript:;" class="all-posts <?php echo esc_attr($active_all_class) ?>"><?php esc_attr_e("All ".$title, 'folders'); ?> <span class="total-count"><?php echo esc_attr($ttpsts) ?></span></a>
+                            <a href="javascript:;" class="all-posts <?php echo esc_attr($active_all_class) ?>"><?php echo esc_attr("All ".$title); ?> <span class="total-count"><?php echo esc_attr($ttpsts) ?></span></a>
                         </div>
                         <div class="un-categorised-items <?php echo esc_attr($active) ?>">
-                            <a href="javascript:;" class="un-categorized-posts"><?php esc_attr_e("Unassigned ".$title, 'folders'); ?> <span class="total-count total-empty"><?php echo esc_attr($ttemp) ?></span> </a>
+                            <a href="javascript:;" class="un-categorized-posts"><?php echo esc_attr("Unassigned ".$title); ?> <span class="total-count total-empty"><?php echo esc_attr($ttemp) ?></span> </a>
                         </div>
                         <div class="folder-separator-2"></div>
                         <div class="folders-action-menu">
@@ -204,19 +228,20 @@ if(!empty($post_type)) {
                         <div class="folder-separator-2"></div>
                     </div>
                 </div>
-                <div id="custom-scroll-menu">
-                    <div class="ajax-preloader">
-                        <div class="cssload-container">
-                            <div class="cssload-tube-tunnel"></div>
+                <div id="custom-scroll-menu" class="custom-scroll-menu <?php echo esc_attr($horClass) ?>">
+                    <div class="horizontal-scroll-menu">
+                        <div class="ajax-preloader">
+                            <div class="cssload-container">
+                                <div class="cssload-tube-tunnel"></div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="js-tree-data">
-                        <div id="js-tree-menu" class="<?php echo ($status==1)?"active":"" ?>">
-                            <!--<div class="wcp-parent" id="title0"><i class="fa fa-folder-o"></i> All Folders</div>-->
+                        <div class="js-tree-data">
+                        <div id="js-tree-menu" class="<?php echo ($status == 1) ? "active" : "" ?>">
                             <ul class='space first-space' id='space_0'>
-                                <?php echo $terms_data; ?>
+                                <?php echo ($terms_data); ?>
                             </ul>
                         </div>
+                    </div>
                     </div>
                 </div>
             </div>
@@ -252,7 +277,7 @@ if(!empty($post_type)) {
                                 <?php esc_html_e("Pro tip", "folders") ?>
                             </span>
                         <div class="pro-notice">
-			                <?php printf( esc_html__("%sUpgrade to Pro%s to create subfolders (with 20+ amazing features) & premium support 🎉", "folders"), '<a class="inline-button" target="_blank" href="'.esc_url($this->getFoldersUpgradeURL()).'">', "</a>"); ?>
+                            <?php printf(esc_html__("%sUpgrade to Pro%s to create subfolders (with 20+ amazing features) & premium support 🎉", "folders"), '<a class="inline-button" target="_blank" href="'.esc_url($this->getFoldersUpgradeURL()).'">', "</a>"); ?>
                         </div>
                     </div>
                     <div class="folder-form-buttons">
@@ -327,7 +352,7 @@ if(!empty($post_type)) {
                 </div>
                 <div class="folder-form-buttons">
                     <a href="javascript:;" class="form-cancel-btn"><?php esc_html_e("Cancel", "folders") ?></a>
-                    <a href="<?php echo esc_url($this->getFoldersUpgradeURL()) ?>" target="_blank" class="form-submit-btn"><?php esc_html_e("Activate License Key", "folders") ?></a>
+                    <a href="<?php echo esc_url($this->getFoldersUpgradeURL()) ?>" target="_blank" class="form-submit-btn"><?php esc_html_e("Upgrade to Pro", "folders") ?></a>
                 </div>
             </div>
         </div>
@@ -376,13 +401,13 @@ if(!empty($post_type)) {
                     <a class="" href="javascript:;"><span></span></a>
                 </div>
                 <div class="add-update-folder-title">
-					<?php esc_html_e("Sub-folders is a pro feature", "folders") ?>
+                    <?php esc_html_e("Sub-folders is a pro feature", "folders") ?>
                 </div>
                 <div class="folder-form-message" style="padding: 25px 0 15px;" >
-					<?php esc_html_e("Hey, it looks like you want to create sub-folders on Folders. Sub-folders is a premium feature. Upgrade to Pro to create, access and organize your files with sub-folders.", "folders") ?>
+                    <?php esc_html_e("Hey, it looks like you want to create sub-folders on Folders. Sub-folders is a premium feature. Upgrade to Pro to create, access and organize your files with sub-folders.", "folders") ?>
                 </div>
                 <div class="folder-form-message" style="padding: 0 10px 25px;" >
-					<?php esc_html_e("You can still create unlimited folders in the free version.", "folders") ?>
+                    <?php esc_html_e("You can still create unlimited folders in the free version.", "folders") ?>
                 </div>
                 <div class="checkbox-content">
                     <?php $check_status = get_option("premio_hide_child_popup"); ?>
@@ -403,10 +428,10 @@ if(!empty($post_type)) {
                     <a class="" href="javascript:;"><span></span></a>
                 </div>
                 <div class="add-update-folder-title">
-					<?php esc_html_e("Confirm your change", "folders") ?>
+                    <?php esc_html_e("Confirm your change", "folders") ?>
                 </div>
                 <div class="folder-form-message" style="padding: 25px 10px;" >
-                    Hey, it looks like you want to move the file to "Unassigned Files." Do you want to move the file from the current folder only or from all the folders where the file exists?
+                    <?php esc_html_e("Hey, it looks like you want to move the file to \"Unassigned Files.\" Do you want to move the file from the current folder only or from all the folders where the file exists?", "folders") ?>
                 </div>
                 <div class="folder-form-buttons">
                     <input type="hidden" id="unassigned_folders" />
@@ -438,7 +463,7 @@ if(!empty($post_type)) {
                         <?php esc_html_e("Pro tip", "folders") ?>
                     </span>
                     <div class="pro-notice">
-                        <?php printf( esc_html__("%sUpgrade to Pro%s to create subfolders (with 20+ amazing features) & premium support 🎉", "folders"), '<a class="inline-button" target="_blank" href="'.esc_url($this->getFoldersUpgradeURL()).'">', "</a>"); ?>
+                        <?php printf(esc_html__("%sUpgrade to Pro%s to create subfolders (with 20+ amazing features) & premium support 🎉", "folders"), '<a class="inline-button" target="_blank" href="'.esc_url($this->getFoldersUpgradeURL()).'">', "</a>"); ?>
                     </div>
                 </div>
             </div>

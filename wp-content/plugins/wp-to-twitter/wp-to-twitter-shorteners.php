@@ -38,6 +38,16 @@ if ( ! function_exists( 'wpt_shorten_url' ) ) {
 
 			return $shrink;
 		}
+		/**
+		 * Make modifications to URLs prior to shortening.
+		 *
+		 * @hook wpt_shorten_link
+		 * @param {string} $url Full permalink URL to post.
+		 * @param {string} $shortener Shortener selected in settings.
+		 * @param {int}    $post_ID Post ID.
+		 *
+		 * @return {string}
+		 */
 		$url = apply_filters( 'wpt_shorten_link', $url, $shortener, $post_ID );
 		if ( false === $testmode ) {
 			if ( '1' === get_option( 'use-twitter-analytics' ) || '1' === get_option( 'use_dynamic_analytics' ) ) {
@@ -86,7 +96,19 @@ if ( ! function_exists( 'wpt_shorten_url' ) ) {
 		// custom word setting.
 		$keyword_format = ( '1' === get_option( 'jd_keyword_format' ) ) ? $post_ID : '';
 		$keyword_format = ( '2' === get_option( 'jd_keyword_format' ) ) ? get_post_meta( $post_ID, '_yourls_keyword', true ) : $keyword_format;
-		// Generate and grab the short url.
+		/**
+		 * Apply a custom shortener to your Tweet. Return false to allow the settings to parse the URL or a URL to shortcircuit plugin settings.
+		 *
+		 * @hook wpt_do_shortening
+		 * @param {bool}   $shrink False prior to shortening.
+		 * @param {string} $shortener Shortener selected in settings.
+		 * @param {string} $url Full permalink URL to post.
+		 * @param {string} $post_title Title of source post.
+		 * @param {int}    $post_ID Post ID.
+		 * @param {bool}   $testmode True if running a test of WP to twitter.
+		 *
+		 * @return {string}
+		 */
 		$shrink = apply_filters( 'wpt_do_shortening', false, $shortener, $url, $post_title, $post_ID, $testmode );
 		// if an add-on has shortened the link, skip shortening.
 		$error = false;
@@ -96,7 +118,7 @@ if ( ! function_exists( 'wpt_shorten_url' ) ) {
 					$shrink = $url;
 					break;
 				case 2: // updated to v3 3/31/2010.
-					// v3 is being sunsetted 3/31/2020. Option to enable removed 7/4/2019.
+					// Bitly supported via https://wordpress.org/plugins/codehaveli-bitly-url-shortener/.
 					$bitlyurl = get_post_meta( $post_ID, '_wbitly_shorturl', true );
 					if ( ! empty( $bitlyurl ) ) {
 						$shrink = $bitlyurl;
@@ -171,6 +193,7 @@ if ( ! function_exists( 'wpt_shorten_url' ) ) {
 
 						$api_url = add_query_arg( $args, $yourlsurl );
 						$json    = wpt_remote_json( $api_url, false );
+
 						if ( is_object( $json ) ) {
 							$shrink = $json->shorturl;
 						} else {
@@ -227,17 +250,24 @@ if ( ! function_exists( 'wpt_shorten_url' ) ) {
 					break;
 				case 11:
 					// Hum URL shortener.
-					if ( class_exists( 'Hum' ) && method_exists( 'Hum', 'get_shortlink' ) ) {
-						$hum    = new Hum;
-						$shrink = $hum->get_shortlink( $url, $post_ID, 'post', true );
-					} else {
+					if ( $testmode ) {
+						// Hum does not support shortening links without IDs.
 						$shrink = $url;
+					} else {
+						if ( class_exists( 'Hum' ) && method_exists( 'Hum', 'get_shortlink' ) ) {
+							$hum    = new Hum;
+							$shrink = $hum->get_shortlink( $url, $post_ID, 'post', true );
+
+						} else {
+							$shrink = $url;
+						}
 					}
 					break;
 				default:
 					$shrink = $url;
 			}
 		}
+
 		if ( $error ) {
 			update_option( 'wpt_shortener_status', "$shrink : $error" );
 		}
@@ -305,7 +335,7 @@ if ( ! function_exists( 'wpt_shorten_url' ) ) {
 			$token     = get_option( 'yourlstoken' );
 			if ( $token ) {
 				$decoded = wpt_remote_json( $yourl_api . "?action=expand&shorturl=$short_url&format=json&signature=$token" );
-				if ( '404' === (string) $decoded ) {
+				if ( '404' === (string) $decoded['errorCode'] ) {
 					$short_url = urldecode( $short_url );
 					if ( false === stripos( $short_url, 'https://' ) ) {
 						// Yourls will throw an error for mismatched protocol.
