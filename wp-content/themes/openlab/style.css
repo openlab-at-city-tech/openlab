@@ -10473,6 +10473,9 @@ body.docs .notify-group-members-ui {
   text-decoration: none;
   border-radius: 4px 4px 0 0;
 }
+.doc-content .tmce-active .quicktags-toolbar {
+  display: none !important;
+}
 .doc-content .tmce-active .switch-tmce {
   color: #333333;
   font-weight: 600;
