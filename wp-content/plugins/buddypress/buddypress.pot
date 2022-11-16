@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2022-05-19T21:07:43+00:00\n"
+"POT-Creation-Date: 2022-10-31T17:02:44+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.5.0\n"
 "X-Domain: buddypress\n"
@@ -407,7 +407,7 @@ msgid "View Activity"
 msgstr ""
 
 #: bp-activity/bp-activity-admin.php:863
-#: bp-members/bp-members-membership-requests.php:346
+#: bp-members/bp-members-membership-requests.php:352
 msgid "Approved"
 msgstr ""
 
@@ -3103,7 +3103,7 @@ msgid "Customize the appearance of emails sent by BuddyPress."
 msgstr ""
 
 #: bp-core/bp-core-customizer-email.php:27
-#: bp-core/bp-core-filters.php:1261
+#: bp-core/bp-core-filters.php:1264
 msgctxt "screen heading"
 msgid "BuddyPress Emails"
 msgstr ""
@@ -3164,27 +3164,27 @@ msgstr ""
 msgid "Footer text"
 msgstr ""
 
-#: bp-core/bp-core-filters.php:408
-#: bp-core/bp-core-filters.php:441
+#: bp-core/bp-core-filters.php:411
+#: bp-core/bp-core-filters.php:444
 msgid "[User Set]"
 msgstr ""
 
 #. translators: %s: the page number.
-#: bp-core/bp-core-filters.php:665
+#: bp-core/bp-core-filters.php:668
 msgid "Page %s"
 msgstr ""
 
-#: bp-core/bp-core-filters.php:871
+#: bp-core/bp-core-filters.php:874
 msgctxt "customizer menu type label"
 msgid "Custom Link"
 msgstr ""
 
-#: bp-core/bp-core-filters.php:892
+#: bp-core/bp-core-filters.php:895
 msgctxt "customizer menu section title"
 msgid "BuddyPress (logged-in)"
 msgstr ""
 
-#: bp-core/bp-core-filters.php:897
+#: bp-core/bp-core-filters.php:900
 msgctxt "customizer menu section title"
 msgid "BuddyPress (logged-out)"
 msgstr ""
@@ -4315,11 +4315,11 @@ msgstr ""
 
 #: bp-core/bp-core-template.php:3196
 #: bp-groups/bp-groups-template.php:3673
-#: bp-members/bp-members-membership-requests.php:388
-#: bp-members/bp-members-membership-requests.php:405
-#: bp-members/bp-members-membership-requests.php:427
-#: bp-members/bp-members-membership-requests.php:431
-#: bp-members/bp-members-membership-requests.php:450
+#: bp-members/bp-members-membership-requests.php:394
+#: bp-members/bp-members-membership-requests.php:411
+#: bp-members/bp-members-membership-requests.php:433
+#: bp-members/bp-members-membership-requests.php:437
+#: bp-members/bp-members-membership-requests.php:456
 #: bp-members/classes/class-bp-registration-theme-compat.php:101
 #: bp-templates/bp-legacy/buddypress-functions.php:1620
 msgid "Request Membership"
@@ -8839,29 +8839,29 @@ msgstr ""
 msgid "Your account is now active!"
 msgstr ""
 
-#: bp-members/bp-members-membership-requests.php:271
+#: bp-members/bp-members-membership-requests.php:277
 #: bp-templates/bp-legacy/buddypress/members/register.php:357
 msgid "Submit Request"
 msgstr ""
 
-#: bp-members/bp-members-membership-requests.php:301
+#: bp-members/bp-members-membership-requests.php:307
 msgid "Approve Request"
 msgstr ""
 
-#: bp-members/bp-members-membership-requests.php:301
+#: bp-members/bp-members-membership-requests.php:307
 msgid "Resend Approval"
 msgstr ""
 
-#: bp-members/bp-members-membership-requests.php:315
+#: bp-members/bp-members-membership-requests.php:321
 msgid "Profile Info"
 msgstr ""
 
-#: bp-members/bp-members-membership-requests.php:332
+#: bp-members/bp-members-membership-requests.php:338
 msgctxt "Pending signup action"
 msgid "Approve"
 msgstr ""
 
-#: bp-members/bp-members-membership-requests.php:363
+#: bp-members/bp-members-membership-requests.php:369
 msgid "Not yet approved"
 msgstr ""
 
@@ -10561,7 +10561,7 @@ msgstr ""
 
 #: bp-messages/bp-messages-template.php:1878
 #: bp-messages/bp-messages-template.php:2150
-#: bp-messages/classes/class-bp-messages-thread.php:1108
+#: bp-messages/classes/class-bp-messages-thread.php:1109
 msgid "Deleted User"
 msgstr ""
 
@@ -10705,7 +10705,7 @@ msgid "Display Sitewide Notices posted by the site administrator"
 msgstr ""
 
 #. translators: %s: number of message recipients
-#: bp-messages/classes/class-bp-messages-thread.php:1099
+#: bp-messages/classes/class-bp-messages-thread.php:1100
 msgid "%s Recipients"
 msgstr ""
 
