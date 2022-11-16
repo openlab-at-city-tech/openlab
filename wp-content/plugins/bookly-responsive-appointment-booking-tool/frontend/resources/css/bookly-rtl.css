@@ -1,0 +1,207 @@
+/* global class */
+.bookly-right {
+    float: left!important;
+}
+.bookly-left {
+    float: right!important;
+}
+.bookly-rtext {
+    text-align: left;
+}
+
+/* Form Elements */
+.bookly-form-group > div {
+    margin: 5px 0 0 14px !important;
+}
+.bookly-form-group:last-child > div {
+    margin-left: 0;
+}
+
+/* Login Form */
+.bookly-close:hover,
+.bookly-close:focus,
+.bookly-close {
+    float: left;
+}
+.bookly-modal {
+    right: 0;
+    left: auto;
+}
+.bookly-modal .bookly-modal-dialog {
+    right: 50%;
+    margin-right: -200px;
+    left: auto;
+    margin-left: auto;
+}
+.bookly-modal .bookly-modal-content .bookly-modal-footer {
+    text-align: left;
+}
+@media (max-width: 768px) {
+    .bookly-modal .bookly-modal-content .bookly-modal-footer {
+        text-align: left;
+    }
+
+}
+/* Progress Tracker */
+.bookly-progress-tracker > div {
+    padding: 0 4px 0 0;
+}
+.bookly-progress-tracker > div:last-child .step {
+    border-radius: 5px 0 0 5px !important;
+}
+.bookly-progress-tracker > div:first-child .step {
+    border-radius: 0px 5px 5px 0 !important;
+}
+.bookly-progress-tracker > div:last-child {
+    padding-left: 0px !important;
+}
+.bookly-progress-tracker > div:first-child {
+    padding-left: 4px !important;
+    padding-right: 0px !important;
+}
+
+/* Service */
+.bookly-service-step .bookly-available-date,
+.bookly-service-step .bookly-week-days {
+    margin-right: 0 !important;
+    margin-left: 14px !important;
+}
+.bookly-form .picker__holder {
+    left: auto!important;
+}
+.bookly-mobile-step-1 {
+    margin-left: -14px;
+    margin-right: auto;
+}
+
+/* Time */
+.bookly-slot-calendar {
+    float: right;
+}
+
+/* Buttons */
+.bookly-back-step {
+    margin-left: 10px;
+    margin-right: auto;
+    float: right!important;
+}
+.bookly-time-next {
+    margin-right: 10px;
+    margin-left: 0;
+}
+.bookly-go-to-cart{
+    float: right!important;
+}
+/* Details */
+.bookly-form-group .intl-tel-input input {
+    padding-right: 45px !important;
+    padding-left: 0 !important;
+}
+
+.bookly-mobile-step-1,
+.bookly-details-step {
+    margin: 0 0 0 -14px !important;
+}
+
+.bookly-list {
+    margin-right: 10px!important;
+    margin-left: auto;
+}
+
+.intl-tel-input {
+    margin-top: -2px !important;
+}
+
+.intl-tel-input .selected-flag .iti-flag {
+    margin: auto 10px auto auto !important;
+}
+
+.bookly-details-step .bookly-form-group .intl-tel-input input,
+.bookly-details-step .bookly-form-group .intl-tel-input input[type=text],
+.bookly-details-step .bookly-form-group .intl-tel-input input[type=tel] {
+    padding: 6px 48px 5px 5px !important;
+}
+.intl-tel-input .flag-container {
+    position: relative !important;
+}
+.intl-tel-input .selected-flag {
+    position: absolute;
+    top: 2px;
+    padding:0 8px 0 0;
+    display: block;
+    height: 28px;
+}
+.intl-tel-input .selected-flag .arrow {
+    left:4px;
+    border-right:3px solid transparent;
+    border-left:3px solid transparent;
+    right: auto;
+}
+.intl-tel-input .country-list {
+    margin: 32px -1px 0 0;
+    text-align: right !important;
+}
+.intl-tel-input .country-list .flag-box,
+.intl-tel-input .country-list .country-name {
+    margin-left:6px;
+}
+.intl-tel-input select {
+    right:0;
+    left: auto;
+}
+
+/* Other */
+.ladda-button[data-style="zoom-in"][data-loading] .ladda-spinner {
+    margin-left: -22px !important;
+}
+
+/* Repeat */
+.bookly-repeat-step .bookly-schedule-row > div:last-child {
+    border-left: 0 !important;
+    border-right: 1px solid #cccccc !important;
+}
+
+/* Pagination */
+.bookly-pagination li:first-child a {
+    border-top-right-radius:.25rem;
+    border-bottom-right-radius:.25rem;
+    border-top-left-radius:0;
+    border-bottom-left-radius:0;
+    margin-right: 1px;
+}
+
+.bookly-pagination li:last-child a {
+    border-top-left-radius:.25rem;
+    border-bottom-left-radius:.25rem;
+    border-top-right-radius:0;
+    border-bottom-right-radius:0;
+}
+
+/* Mobile */
+@media screen and (max-width: 650px) {
+    .bookly-form .picker__holder {
+        right: 0!important;
+    }
+
+    .bookly-mobile-float-none {
+        float: none !important;
+    }
+    .bookly-form-group > div {
+        margin-left: 0 !important;
+    }
+    .bookly-service-step .bookly-available-date,
+    .bookly-service-step .bookly-week-days {
+        margin-left: 0 !important;
+    }
+    .bookly-service-step .bookly-time-to {
+        float: left !important;
+    }
+    .bookly-mobile-step-1 {
+        margin-left: 0;
+    }
+
+    .bookly-not-time-screen {
+        margin-right: 0!important;
+        margin-left: auto !important;
+    }
+}

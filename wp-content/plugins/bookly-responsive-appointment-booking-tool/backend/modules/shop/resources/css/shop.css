@@ -1,0 +1,41 @@
+#bookly-tbs .panel.bookly-shop-plugin.bookly-shop-bundle {
+    border-color: #e0e0a0;
+}
+
+#bookly-tbs .panel.bookly-shop-plugin.bookly-shop-bundle .panel-heading {
+    background-color: #ffffe0;
+}
+
+#bookly-tbs .panel.bookly-shop-plugin.bookly-shop-highlighted {
+    border-color: #f4662f;
+}
+
+#bookly-tbs .panel.bookly-shop-plugin.bookly-shop-highlighted .panel-heading {
+    background-color: #f4e9e6;
+}
+
+#bookly-tbs .panel.bookly-shop-plugin .panel-heading .badge-danger {
+    background-color: #ff0000;
+}
+
+#bookly-tbs .panel.bookly-shop-plugin .panel-heading .bookly-shop-rating {
+    color: #ffa500;
+}
+
+#bookly-tbs #bookly-shop .card {
+    min-width: 532px;
+    max-width: 532px;
+}
+
+@media (max-width: 616px) {
+    #bookly-tbs #bookly-shop .card {
+        width: 100%;
+        min-width: 280px;
+    }
+}
+
+@media (min-width: 1000px) {
+    #bookly-tbs #bookly-shop {
+        margin-right: -1.5rem;
+    }
+}

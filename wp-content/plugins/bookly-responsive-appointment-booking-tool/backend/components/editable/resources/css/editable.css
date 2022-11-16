@@ -1,0 +1,55 @@
+#bookly-tbs .bookly-editable {
+    cursor: pointer;
+    text-decoration: underline dashed #0088cc 1px;
+}
+
+#bookly-tbs .bookly-editable-popover {
+    z-index: 9999 !important; /* Show editable popover over WP header and menu */
+    min-width: 280px;
+    max-width: none;
+    white-space: nowrap;
+}
+
+#bookly-tbs .bookly-editable-popover textarea {
+    resize: both;
+}
+
+#bookly-tbs .bookly-editable-clear {
+    margin-left: -40px;
+    z-index: 100;
+}
+
+#bookly-tbs .bookly-editable-clear:not(:hover) {
+    color: grey;
+}
+
+#bookly-tbs .bookly-editable-clear:focus {
+    box-shadow: none;
+}
+
+#bookly-tbs #bookly-ace-editor {
+    height: 300px;
+    width: 100%;
+    display: block;
+    border: 1px solid gainsboro;
+    border-radius: 3px;
+    color: #495057;
+}
+
+#bookly-tbs .ace_bookly_each, #bookly-tbs .ace_bookly_endeach {
+    color: #e36209;
+}
+#bookly-tbs .ace_bookly_if, #bookly-tbs .ace_bookly_endif {
+    color: #d73a49;
+}
+#bookly-tbs .ace_bookly_code {
+    color: #005cc5;
+}
+
+.ace_tooltip {
+    padding: 10px;
+}
+
+.ace_editor.ace_autocomplete {
+    width: 440px;
+}
