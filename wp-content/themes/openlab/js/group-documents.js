@@ -1,7 +1,7 @@
 (function($){
-	
+
     $(document).ready(function() {
-		
+
         $(document).on( 'change', 'input.bp-group-documents-file-type', function(e) {
             let wrapper = $('.bp-group-documents-fields');
 
@@ -17,7 +17,7 @@
 
         // Attach new submit event on the group documents form
         $(document).on( 'submit', 'form#bp-group-documents-form', function() {
-            
+
             //check for pre-filled values, and remove before sumitting
             if( $('input.bp-group-documents-new-category').val() == 'New Category...' ) {
                 $('input.bp-group-documents-new-category').val('');
@@ -44,7 +44,7 @@
             $('#bp-group-documents').addClass('is-edit-mode');
         });
 
-        // Toggle current menu item when clicking 
+        // Toggle current menu item when clicking
         $(document).on( 'click', '.submenu-item.item-add-new-file a', function(e) {
             e.preventDefault();
             if( ! $(this).hasClass('current-menu-item') ) {
