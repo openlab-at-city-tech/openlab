@@ -34,6 +34,7 @@ function openlab_hide_plugins( $plugins ) {
 		'cubepoints/cubepoints.php',
 		'dk-pdf/dk-pdf.php',
 		'download-media-library/download-media-library.php',
+		'dw-question-answer/dw-question-answer.php',
 		'dynamic-widgets/dynamic-widgets.php',
 		'easy-table/easy-table.php',
 		'elasticpress/elasticpress.php',
