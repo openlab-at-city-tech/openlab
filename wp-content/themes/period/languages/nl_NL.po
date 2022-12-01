@@ -1,0 +1,534 @@
+# Copyright (C) 2016 Compete Themes
+# This file is distributed under the GNU General Public License v2 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: Period 1.04\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/support/theme/style\n"
+"POT-Creation-Date: 2016-09-27 13:13+0200\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2016-09-27 14:02+0200\n"
+"Language-Team: \n"
+"X-Generator: Poedit 1.8.6\n"
+"Last-Translator: \n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: nl_NL\n"
+
+#: 404.php:6
+msgid "404: Page Not Found"
+msgstr "404 - Pagina niet gevonden"
+
+#: 404.php:9
+msgid ""
+"Looks like nothing was found on this url.  Double-check that the url is "
+"correct or try the search form below to find what you were looking for."
+msgstr ""
+"Het lijkt erop dat er niets werd gevonden op deze url. Double-controleren of "
+"de URL juist is of probeer onder het zoekformulier om te vinden wat u zocht."
+
+#: comments.php:12 comments.php:32 comments.php:54
+msgid "Be First to Comment"
+msgstr "Schrijf als eerste een reactie"
+
+#: comments.php:12 comments.php:32 comments.php:54
+msgid "One Comment"
+msgstr "Eén reactie"
+
+#: comments.php:12 comments.php:32 comments.php:54 content/comments-link.php:5
+#: content/comments-link.php:8
+msgid "% Comments"
+msgstr "% reacties"
+
+#: comments.php:46
+msgid ""
+"Comments are closed, but <a href=\"%s\" title=\"Trackback URL for this post"
+"\">trackbacks</a> and pingbacks are open."
+msgstr ""
+"Reacties zijn gesloten, maar <a href=“%1$s” title=“Trackback URL voor dit "
+"bericht”>trackbacks</a> en pingbacks zijn open."
+
+#: comments.php:68 comments.php:75
+msgid "Comments are closed."
+msgstr "Reacties zijn gesloten"
+
+#: content/archive-header.php:4
+msgid "Posts"
+msgstr "Berichten"
+
+#: content/comments-link.php:2
+msgid "comment icon"
+msgstr "Reactiespictogram"
+
+#: content/comments-link.php:5
+msgid "Comments closed"
+msgstr "Reageren is niet (meer) mogelijk"
+
+#: content/comments-link.php:5 content/comments-link.php:8
+msgid "1 Comment"
+msgstr "1 Reactie"
+
+#: content/comments-link.php:8
+msgid "Leave a Comment"
+msgstr "Reageer"
+
+#: content/post-categories.php:10
+msgid "Published in"
+msgstr "Gepubliceerd in"
+
+#: content/post-categories.php:17
+msgid "View all posts in %s"
+msgstr "Bekijk alle berichten in %s"
+
+#: content/post-nav-attachment.php:3
+msgid "Previous Image"
+msgstr "Vorige afbeelding"
+
+#: content/post-nav-attachment.php:6
+msgid "Next Image"
+msgstr "Volgende afbeelding"
+
+#: content/post-nav.php:6
+msgid "Previous Post"
+msgstr "Vorige bericht"
+
+#: content/post-nav.php:9
+msgid "No Older Posts"
+msgstr "Geen ouder bericht"
+
+#: content/post-nav.php:15 content/post-nav.php:28
+msgid "Return to Blog"
+msgstr "Terug naar blog"
+
+#: content/post-nav.php:19
+msgid "Next Post"
+msgstr "Volgend bericht"
+
+#: content/post-nav.php:22
+msgid "No Newer Posts"
+msgstr "Geen nieuwer bericht"
+
+#: content/post-tags.php:8
+msgid "View all posts tagged %s"
+msgstr "Bekijk alle berichten in %s"
+
+#: content/search-bar.php:11 searchform.php:3 searchform.php:6
+msgid "Search"
+msgstr "Zoek"
+
+#: content/search-bar.php:12
+msgid "Search..."
+msgstr "Zoek..."
+
+#: content/search-bar.php:13 searchform.php:5
+msgid "Search for:"
+msgstr "Zoek naar:"
+
+#: content-page.php:12 content.php:13
+msgid "Pages:"
+msgstr "Pagina's:"
+
+#: footer.php:15
+msgid "<a href=\"%s\">Period WordPress Theme</a> by Compete Themes."
+msgstr "<a href=\"%s\">Period WordPRess Thema</a> door Compete Themes."
+
+#: functions.php:32
+msgid "Primary"
+msgstr "Primair"
+
+#: functions.php:43
+msgid "Primary Sidebar"
+msgstr "Primaire zijbalk"
+
+#: functions.php:45
+msgid ""
+"Widgets in this area will be shown in the sidebar next to the main post "
+"content"
+msgstr ""
+"Widgets in dit gebied zullen weergegeven worden in de zijbalk naast de "
+"berichteninhoud"
+
+#: functions.php:72
+msgid "Your comment is awaiting moderation."
+msgstr "Je reactie wacht op moderatie"
+
+#: functions.php:79
+msgid "Reply"
+msgstr "Reageer"
+
+#: functions.php:84
+msgid "Edit"
+msgstr "Bewerk"
+
+#: functions.php:96
+msgid "(optional)"
+msgstr "(Optioneel)"
+
+#: functions.php:101
+msgid "Name"
+msgstr "Naam"
+
+#: functions.php:102
+msgid "Jane Doe"
+msgstr "Jane Doe"
+
+#: functions.php:108
+msgid "Email"
+msgstr "Email"
+
+#: functions.php:109
+msgid "name@email.com"
+msgstr "naam@emailadres.nl"
+
+#: functions.php:115
+msgid "Website"
+msgstr "Website"
+
+#: functions.php:130
+msgid "Comment"
+msgstr "Reactie"
+
+#: functions.php:161 functions.php:170 functions.php:186
+msgid "Continue reading"
+msgstr "Lees verder"
+
+#: functions.php:329 functions.php:330
+msgid "email"
+msgstr "Email"
+
+#: functions.php:381 inc/scripts.php:12
+msgid "open dropdown menu"
+msgstr "Open dropdownmenu"
+
+#: functions.php:392
+msgid "Featured"
+msgstr "Uitgelicht"
+
+#: functions.php:450
+msgid "Customizer settings deleted"
+msgstr "Customizer instellingen verwijderd"
+
+#: header.php:11
+msgid "Press \"Enter\" to skip to content"
+msgstr "Toets \"Enter\" om naar de inhoud te gaan"
+
+#: header.php:23 inc/scripts.php:10
+msgid "open menu"
+msgstr "Open menu"
+
+#: inc/customizer.php:15
+msgid "Front Page"
+msgstr "Frontpage"
+
+#: inc/customizer.php:27
+msgid "Logo"
+msgstr "Logo"
+
+#: inc/customizer.php:37
+msgid "Upload a logo"
+msgstr "Upload een logo"
+
+#: inc/customizer.php:50
+msgid "Adjust the size of the logo"
+msgstr "Pas de afmetingen van het logo aan."
+
+#: inc/customizer.php:71
+msgid "Social Media Icons"
+msgstr "Sociale media pictogrammen"
+
+#: inc/customizer.php:73
+msgid "Add the URL for each of your social profiles."
+msgstr "Voeg de adressen van je sociale profielen toe."
+
+#: inc/customizer.php:86
+msgid "Email Address"
+msgstr "Emailadres"
+
+#: inc/customizer.php:135
+msgid ""
+"Accepts Skype link protocol (<a href=\"%s\" target=\"_blank\">learn more</a>)"
+msgstr ""
+"Accepteert Skype link protocol (<a href=\"%s\" target=\"_blank\">Leer meer</"
+"a>)"
+
+#: inc/customizer.php:161
+msgid "Search Bar"
+msgstr "Zoekbalk"
+
+#: inc/customizer.php:172
+msgid "Show search bar at top of site?"
+msgstr "Plaats zoekbalk boven aan de pagina?"
+
+#: inc/customizer.php:176 inc/customizer.php:275 inc/customizer.php:291
+#: inc/customizer.php:326 inc/customizer.php:370
+msgid "Show"
+msgstr "Laat zien"
+
+#: inc/customizer.php:177 inc/customizer.php:276 inc/customizer.php:292
+#: inc/customizer.php:327 inc/customizer.php:371
+msgid "Hide"
+msgstr "Verstop"
+
+#: inc/customizer.php:185
+msgid "Layout"
+msgstr "Layout"
+
+#: inc/customizer.php:187
+msgid ""
+"Want more layouts? Check out the <a target=\"_blank\" href=\"%s\">Period Pro "
+"plugin</a>."
+msgstr ""
+"Wil je meer layouts? Bekijk de <a target=\"_blank\" href=\"%s\">Period Pro "
+"plugin</a>."
+
+#: inc/customizer.php:197
+msgid "Choose your layout"
+msgstr "Kies je layout"
+
+#: inc/customizer.php:202 inc/customizer.php:385
+msgid "Right sidebar"
+msgstr "Rechter zijbalk"
+
+#: inc/customizer.php:203 inc/customizer.php:386
+msgid "Left sidebar"
+msgstr "Linker zijbalk"
+
+#: inc/customizer.php:211
+msgid "Blog"
+msgstr "Blog"
+
+#: inc/customizer.php:221
+msgid "Show full posts on blog?"
+msgstr "Laat volledige berichten zien op blog?"
+
+#: inc/customizer.php:226 inc/customizer.php:345
+msgid "Yes"
+msgstr "Ja"
+
+#: inc/customizer.php:227 inc/customizer.php:346
+msgid "No"
+msgstr "Nee"
+
+#: inc/customizer.php:237
+msgid "Excerpt word count"
+msgstr "Aantal woorden in samenvatting"
+
+#: inc/customizer.php:244
+msgid "Continue Reading"
+msgstr "Lees verder"
+
+#: inc/customizer.php:249
+msgid "Read More button text"
+msgstr "Tekst op lees meer knop"
+
+#: inc/customizer.php:259
+msgid "Display Controls"
+msgstr "Weergave instellingen"
+
+#: inc/customizer.php:261
+msgid ""
+"Want more options like these? Check out the <a target=\"_blank\" href=\"%s"
+"\"> Period Pro plugin</a>."
+msgstr ""
+"Wil je meer opties zoals deze? Bekijk de <a target=\"_blank\" href=\"%s"
+"\">Period Pro plugin</a>."
+
+#: inc/customizer.php:271
+msgid "Post author name in byline"
+msgstr "Berichtauteur  onder berichttitel"
+
+#: inc/customizer.php:287
+msgid "Post date in byline"
+msgstr "Berichtdatum onder berichttitel"
+
+#: inc/customizer.php:300
+msgid "Custom CSS"
+msgstr "Aanghepaste CSS"
+
+#: inc/customizer.php:311
+msgid "Add Custom CSS Here"
+msgstr "Plaats hier je eigen CSS"
+
+#: inc/customizer.php:387
+msgid "No sidebar - Narrow"
+msgstr "Geen zijbalk - Smal"
+
+#: inc/customizer.php:388
+msgid "No sidebar - Wide"
+msgstr "Geen zijbalk - Breed"
+
+#: inc/customizer.php:389
+msgid "Two column - Right sidebar"
+msgstr "Twee kolommen - Rechter zijbalk"
+
+#: inc/customizer.php:390
+msgid "Two column - Left sidebar"
+msgstr "Twee kolommen - Linker zijbalk"
+
+#: inc/customizer.php:391
+msgid "Two column - No Sidebar - Narrow"
+msgstr "Twee kolommen - Geen zijbalk - Smal"
+
+#: inc/customizer.php:392
+msgid "Two column - No Sidebar - Wide"
+msgstr "Two column - No Sidebar - Breed"
+
+#: inc/customizer.php:402
+msgid "View the Period Pro Plugin"
+msgstr "Bekijk de Period Pro Plugin"
+
+#: inc/scripts.php:11
+msgid "close menu"
+msgstr "sluit menu"
+
+#: inc/scripts.php:13
+msgid "close dropdown menu"
+msgstr "sluit dropdown menu"
+
+#: index.php:21
+msgid "Previous"
+msgstr "Vorige"
+
+#: index.php:22
+msgid "Next"
+msgstr "Volgende"
+
+#: search.php:9
+msgid "%d search result for \"%s\""
+msgid_plural "%d search results for <span class=\"query\">\"%s\"</span>"
+msgstr[0] "%d zoekresultaat voor \"%s\""
+msgstr[1] "%d zoekresultaten voor <span class=\"query\">\"%s\"</span>"
+
+#: search.php:11
+msgid "No search results for <span class=\"query\">\"%s\"</span>"
+msgstr "Geen zoekresultaten voor <span class=\"query\">\"%s\"</span>"
+
+#: search.php:34
+msgid "Can't find what you're looking for?  Try refining your search:"
+msgstr "Niet gevonden wat je zocht? Probeer je zoekopdracht te verfijnen:"
+
+#: searchform.php:5
+msgid "Search for..."
+msgstr "Zoek naar..."
+
+#: sidebar-primary.php:3
+msgid "Sidebar"
+msgstr "Zijbalk"
+
+#: theme-options.php:4 theme-options.php:19
+msgid "Period Dashboard"
+msgstr "Period Dashboard"
+
+#: theme-options.php:22
+msgid "Customization"
+msgstr "Aanpassingen"
+
+#: theme-options.php:23
+msgid ""
+"Click the \"Customize\" link in your menu, or use the button below to get "
+"started customizing Period"
+msgstr ""
+"Klik de \"Customizer\" link in het menu, of gebruik onderstaande knop om "
+"Period aan te passen."
+
+#: theme-options.php:26
+msgid "Use Customizer"
+msgstr "Gebruik Customizer"
+
+#: theme-options.php:30
+msgid "Support"
+msgstr "Support"
+
+#: theme-options.php:31
+msgid ""
+"You can find the knowledgebase, changelog, support forum, and more in the "
+"Period Support Center"
+msgstr ""
+"Je kunt de kennisbank, changelog, supportforum, en meer in het Periode "
+"Support Center vinden."
+
+#: theme-options.php:34
+msgid "Visit Support Center"
+msgstr "Bezoek Support Center"
+
+#: theme-options.php:38
+msgid "Period Pro"
+msgstr "Period Pro"
+
+#: theme-options.php:39
+msgid ""
+"Download the Period Pro plugin and unlock custom colors, new layouts, "
+"sliders, and more"
+msgstr ""
+"Download de Period Pro plugin en ontgrendel aangepaste kleuren, nieuwe "
+"layouts, sliders, en meer"
+
+#: theme-options.php:42
+msgid "See Full Feature List"
+msgstr "Bekijk de lijst met alle eigenschappen"
+
+#: theme-options.php:46
+msgid "WordPress Resources"
+msgstr "WordPress Bronnen"
+
+#: theme-options.php:47
+msgid ""
+"Save time and money searching for WordPress products by following our "
+"recommendations"
+msgstr ""
+"Volg onze aanbevelingen en bespaar tijd en geld bij het zoeken naar "
+"WordPress producten."
+
+#: theme-options.php:50
+msgid "View Resources"
+msgstr "Bekijk Bronnen"
+
+#: theme-options.php:54 theme-options.php:56
+msgid "Leave a Review"
+msgstr "Plaats een recensie"
+
+#: theme-options.php:55
+msgid "Help others find Period by leaving a review on wordpress.org."
+msgstr ""
+"Help anderen om Period te vinden door een recensie te plaatsen op wordpress."
+"org."
+
+#: theme-options.php:59 theme-options.php:67
+msgid "Reset Customizer Settings"
+msgstr "Herstel Customizer instellingen"
+
+#: theme-options.php:61
+msgid ""
+"<strong>Warning:</strong> Clicking this button will erase the Period theme's "
+"current settings in the <a href='%s'>Customizer</a>."
+msgstr ""
+"<strong>Waarschuwing:</strong> Door op deze knop te klikken verwijder je "
+"alle huidige instellingen in het Period thema uit de <a "
+"href='%s'>Customizer</a>."
+
+#. Description of the plugin/theme
+msgid ""
+"Period displays your content beautifully across phones, widescreen monitors, "
+"and everything in between. With special attention to typography, "
+"accessibility, and space, Period is a design you can trust for displaying "
+"your content."
+msgstr ""
+"Periode geeft uw inhoud prachtig weer, op telefoons, breedbeeldmonitoren, en "
+"alles daar tussenin. Met speciale aandacht voor typografie, toegankelijkheid "
+"en ruimte is Periode een ontwerp dat u kunt vertrouwen voor de weergave van "
+"je eigen content."
+
+#: content/post-byline.php:14
+msgctxt "This blog post was published on some date"
+msgid "Published %s"
+msgstr "Gepubliceerd op %s"
+
+#: content/post-byline.php:16
+msgctxt "This blog post was published by some author"
+msgid "Published by %s"
+msgstr "Gepubliceerd door %s"
+
+#: content/post-byline.php:18
+msgctxt "This blog post was published on some date by some author"
+msgid "Published %1$s by %2$s"
+msgstr "Gepubliceerd op %1$s door %2$s"
