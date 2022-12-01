@@ -1,0 +1,9 @@
+/* FILE: content/entry/_content.scss */
+
+.entry-content {
+	@extend %clearfix;
+}
+
+.entry-summary {
+	word-wrap: break-word;
+}

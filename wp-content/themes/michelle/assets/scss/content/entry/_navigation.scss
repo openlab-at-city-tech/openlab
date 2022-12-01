@@ -1,0 +1,55 @@
+/* FILE: content/entry/_navigation.scss */
+
+.post-navigation {
+	margin-top: var(--white_space);
+
+	a {
+		display: block;
+		height: 100%;
+		text-decoration: none;
+		color: var(--color_body_headings);
+
+		&:hover .title {
+			text-decoration: underline;
+		}
+
+	}
+
+	.label,
+	.title {
+		display: block;
+		color: var(--color_body_text);
+	}
+
+	.label {
+		margin-bottom: .25rem;
+		font-size: var(--typography_font_size_S_em);
+	}
+
+	.title {
+		font-family: var(--typography_font_headings);
+		font-size: 1em;
+		line-height: 1.25;
+		text-transform: uppercase;
+		letter-spacing: var(--letter_spacing);
+		color: var(--color_body_headings);
+	}
+
+	.nav-links > div:nth-last-child(2) {
+		padding-bottom: 1em;
+		margin-bottom: 1em;
+		border-bottom-width: 1px;
+		border-bottom-style: solid;
+	}
+
+}
+
+.nav-previous .label::before {
+	content: '\2190'; // &larr;
+	margin-#{$right}: .5em;
+}
+
+.nav-next .label::after {
+	content: '\2192'; // &larr;
+	margin-#{$left}: .5em;
+}

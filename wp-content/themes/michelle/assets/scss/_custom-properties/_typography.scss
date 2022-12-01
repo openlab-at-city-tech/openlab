@@ -1,0 +1,74 @@
+/* FILE: _custom-properties/_typography.scss */
+
+:root {
+
+	--typography_ratio: 1.333;
+
+	--typography_font_size_base: 16px;
+	@include media( map_get( $breakpoint, 'xl' ) ) {
+		--typography_font_size_base: var(--typography_size_html);
+	}
+
+	--typography_ratio_pow_-2: calc( var(--typography_ratio_pow_-1) / var(--typography_ratio) );
+	--typography_ratio_pow_-1: calc( 1 / var(--typography_ratio) );
+	--typography_ratio_pow_2:  calc( var(--typography_ratio) * var(--typography_ratio) );
+	--typography_ratio_pow_3:  calc( var(--typography_ratio_pow_2) * var(--typography_ratio) );
+	--typography_ratio_pow_4:  calc( var(--typography_ratio_pow_3) * var(--typography_ratio) );
+	--typography_ratio_pow_5:  calc( var(--typography_ratio_pow_4) * var(--typography_ratio) );
+	--typography_ratio_pow_6:  calc( var(--typography_ratio_pow_5) * var(--typography_ratio) );
+
+	--responsive_scale: .75;
+	@include media( map_get( $breakpoint, 'm' ) ) {
+		--responsive_scale: .875;
+	}
+	@include media( map_get( $breakpoint, 'l' ) ) {
+		--responsive_scale: 1;
+	}
+
+	// Default: https://www.modularscale.com/?1&em&1.333
+	--typography_font_size_XS:     var(--typography_ratio_pow_-2); // Default: 1.333 ^ -2 = 0.56
+	--typography_font_size_S:      var(--typography_ratio_pow_-1); // Default: 1.333 ^ -1 = 0.75
+	--typography_font_size_L:      var(--typography_ratio);        // Default:              1.333
+	--typography_font_size_XL:     var(--typography_ratio_pow_2);  // Default: 1.333 ^ 2  = 1.777
+	--typography_font_size_XXL:    var(--typography_ratio_pow_3);  // Default: 1.333 ^ 3  = 2.369
+	--typography_font_size_XXXL:   var(--typography_ratio_pow_4);  // Default: 1.333 ^ 4  = 3.157
+	--typography_font_size_XXXXL:  var(--typography_ratio_pow_5);  // Default: 1.333 ^ 5  = 4.209
+	--typography_font_size_XXXXXL: var(--typography_ratio_pow_6);  // Default: 1.333 ^ 6  = 5.610
+
+	--typography_font_size_XS_em:   calc( var(--typography_font_size_XS) * 1em );
+	--typography_font_size_S_em:    calc( var(--typography_font_size_S) * 1em );
+	--typography_font_size_L_em:    calc( var(--typography_font_size_L) * 1em );
+	--typography_font_size_XL_em:   calc( var(--typography_font_size_XL) * 1em );
+	--typography_font_size_XXL_em:  calc( var(--typography_font_size_XXL) * 1em );
+	--typography_font_size_XXXL_em: calc( var(--typography_font_size_XXXL) * 1em );
+
+	--typography_heading_size_6: calc( var(--responsive_scale) * var(--typography_font_size_S) );
+	--typography_heading_size_5: var(--responsive_scale);
+	--typography_heading_size_4: calc( var(--responsive_scale) * var(--typography_font_size_L) );
+	--typography_heading_size_3: calc( var(--responsive_scale) * var(--typography_font_size_XL) );
+	--typography_heading_size_2: calc( var(--responsive_scale) * var(--typography_font_size_XXL) );
+	--typography_heading_size_1: calc( var(--responsive_scale) * var(--typography_font_size_XXXL) );
+
+	@include media( map_get( $breakpoint, 'xxl' ) ) {
+		--typography_heading_size_1: calc( var(--responsive_scale) * var(--typography_font_size_XXXXL) );
+	}
+
+	--typography_heading_size_6_em: calc( var(--typography_heading_size_6) * 1em );
+	--typography_heading_size_5_em: calc( var(--typography_heading_size_5) * 1em );
+	--typography_heading_size_4_em: calc( var(--typography_heading_size_4) * 1em );
+	--typography_heading_size_3_em: calc( var(--typography_heading_size_3) * 1em );
+	--typography_heading_size_2_em: calc( var(--typography_heading_size_2) * 1em );
+	--typography_heading_size_1_em: calc( var(--typography_heading_size_1) * 1em );
+
+	--typography_heading_size_posts: var(--typography_heading_size_3);
+
+	--typography_line_height: 1.5;
+	@include media( map_get( $breakpoint, 'l' ) ) {
+		--typography_line_height: #{ $ratio };
+	}
+	--typography_line_height_headings: #{ $ratio_min };
+
+	--typography_font_size_huge: var(--typography_heading_size_1);
+	--typography_font_size_gigantic: calc( var(--responsive_scale) * var(--typography_font_size_XXXXXL) );
+
+}

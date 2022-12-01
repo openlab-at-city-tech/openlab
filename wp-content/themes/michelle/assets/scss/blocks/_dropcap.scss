@@ -1,0 +1,28 @@
+/* FILE: blocks/_dropcap.scss */
+
+.has-drop-cap {
+
+	&:not(:focus) {
+
+		&:first-letter {
+			float: $left;
+			padding: .5em;
+			margin-#{$right}: .25em;
+			font-family: var(--typography_font_headings);
+			font-size: $ratio +em;
+			line-height: .8;
+			border: 1px solid;
+
+			@include media( map_get( $breakpoint, 'm' ) ) {
+				font-size: 2.33em;
+			}
+
+		}
+
+		&::after {
+			padding: 0;
+		}
+
+	}
+
+}

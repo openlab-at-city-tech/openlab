@@ -1,0 +1,44 @@
+/* FILE: editor-block/blocks/_separator.scss */
+
+#{ $selector_editor_wrapper } {
+
+	.wp-block-separator {
+		max-width: $max_width_entry_content !important;
+		height: var(--hr_height) !important;
+		padding: 0; // This is really needed...
+		line-height: var(--hr_height);
+		opacity: 1;
+
+		&.is-style-dots.has-background::before {
+			color: inherit;
+		}
+
+	}
+
+	[data-align="left"] > .wp-block-separator {
+		text-align: left;
+	}
+
+	[data-align="right"] > .wp-block-separator {
+		text-align: right;
+	}
+
+	[data-align="center"] > .wp-block-separator {
+		text-align: center;
+	}
+
+	[data-align="wide"] > .wp-block-separator {
+		--hr_width: 100%;
+		max-width: $max_width_content !important;
+	}
+
+	[data-align="full"] > .wp-block-separator {
+		--hr_width: 100%;
+		max-width: none !important;
+	}
+
+}
+
+hr {
+	margin-bottom: $ratio +em;
+}

@@ -1,0 +1,21 @@
+<!--
+
+WPML plugin setup.
+
+@package    Michelle
+@copyright  WebMan Design, Oliver Juhas
+
+@since  1.0.0
+
+-->
+
+<wpml-config>
+
+	<admin-texts>
+		<key name="theme_mods_michelle">
+			<key name="featured_posts_tag" />
+			<key name="featured_posts_image" />
+		</key>
+	</admin-texts>
+
+</wpml-config>

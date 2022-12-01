@@ -1,0 +1,11 @@
+/* FILE: comments/__index.scss */
+
+@import 'base';
+@import 'list';
+@import 'single';
+@import 'meta';
+@import 'form';
+@import 'bypostauthor';
+@import 'pagination';
+
+@import '../extend';

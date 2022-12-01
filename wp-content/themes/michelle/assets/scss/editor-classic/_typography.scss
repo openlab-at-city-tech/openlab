@@ -1,0 +1,12 @@
+/* FILE: editor-classic/_typography.scss */
+
+html {
+	font-size: 100%;
+}
+
+.mce-content-body,
+.mce-content-body.rtl {
+	font-family: var(--typography_font_global);
+	font-size: var(--typography_font_size_base);
+	line-height: var(--typography_line_height);
+}

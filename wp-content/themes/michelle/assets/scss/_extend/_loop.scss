@@ -1,0 +1,95 @@
+/* FILE: _extend/_loop.scss */
+
+// Post list columns.
+
+	%posts_list_columns_1 {
+		width: calc( #{ percentage( 1 / 1 ) } - var(--posts_list_gap) );
+	}
+
+	%posts_list_columns_2 {
+		@include media( map_get( $breakpoint, 'm' ) ) {
+			width: calc( #{ percentage( 1 / 2 ) } - var(--posts_list_gap) );
+		}
+	}
+
+	%posts_list_columns_3 {
+		@include media( map_get( $breakpoint, 'm' ) ) {
+			width: calc( #{ percentage( 1 / 2 ) } - var(--posts_list_gap) );
+		}
+		@include media(
+			( map_get( $breakpoint, 'm' ), 'min-width' ),
+			( map_get( $breakpoint, 'l' ), 'max-width' )
+		) {
+			&:nth-last-child( 1 ):nth-child( 2n - 1 ) {
+				margin-left: auto;
+				margin-right: auto;
+			}
+		}
+
+		@include media( map_get( $breakpoint, 'l' ) ) {
+			width: calc( #{ percentage( 1 / 3 ) } - var(--posts_list_gap) );
+		}
+	}
+
+	%posts_list_columns_4 {
+		@include media( map_get( $breakpoint, 'm' ) ) {
+			width: calc( #{ percentage( 1 / 2 ) } - var(--posts_list_gap) );
+		}
+
+		@include media( map_get( $breakpoint, 'l' ) ) {
+			width: calc( #{ percentage( 1 / 4 ) } - var(--posts_list_gap) );
+		}
+	}
+
+	%posts_list_columns_5 {
+		@include media( map_get( $breakpoint, 'm' ) ) {
+			width: calc( #{ percentage( 1 / 2 ) } - var(--posts_list_gap) );
+		}
+		@include media(
+			( map_get( $breakpoint, 'm' ), 'min-width' ),
+			( map_get( $breakpoint, 'l' ), 'max-width' )
+		) {
+			&:nth-last-child( 1 ):nth-child( 2n - 1 ) {
+				margin-left: auto;
+				margin-right: auto;
+			}
+		}
+
+		@include media( map_get( $breakpoint, 'l' ) ) {
+			width: calc( #{ percentage( 1 / 3 ) } - var(--posts_list_gap) );
+		}
+		@include media(
+			( map_get( $breakpoint, 'l' ), 'min-width' ),
+			( map_get( $breakpoint, 'xl' ), 'max-width' )
+		) {
+			// @link  https://jsfiddle.net/Lbjwqo38/
+			&:nth-last-child( 2 ):nth-child( 5n - 1 ):nth-child( 3n + 1 ) {
+				margin-#{$left}: auto;
+			}
+			&:nth-last-child( 1 ):nth-child( 5n ):nth-child( 3n + 2 ) {
+				margin-#{$right}: auto;
+			}
+			&:nth-last-child( 1 ):nth-child( 5n ):nth-child( 3n ) {
+				margin-left: auto;
+				margin-right: auto;
+			}
+		}
+
+		@include media( map_get( $breakpoint, 'xl' ) ) {
+			width: calc( #{ percentage( 1 / 5 ) } - var(--posts_list_gap) );
+		}
+	}
+
+	%posts_list_columns_6 {
+		@include media( map_get( $breakpoint, 'm' ) ) {
+			width: calc( #{ percentage( 1 / 2 ) } - var(--posts_list_gap) );
+		}
+
+		@include media( map_get( $breakpoint, 'l' ) ) {
+			width: calc( #{ percentage( 1 / 3 ) } - var(--posts_list_gap) );
+		}
+
+		@include media( map_get( $breakpoint, 'xl' ) ) {
+			width: calc( #{ percentage( 1 / 6 ) } - var(--posts_list_gap) );
+		}
+	}

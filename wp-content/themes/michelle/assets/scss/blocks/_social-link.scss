@@ -1,0 +1,24 @@
+/* FILE: blocks/_social-link.scss */
+
+.wp-block-social-links {
+
+	&.alignleft:last-child,
+	&.alignright:last-child {
+		margin-bottom: 0;
+	}
+
+	&.is-style-logos-only .wp-social-link.wp-social-link {
+		margin: 0;
+	}
+
+	[style*="color:"] a {
+		color: inherit;
+	}
+
+}
+
+.items-justified-right {
+	@media (max-width: 599px) {
+		justify-content: flex-start;
+	}
+}

@@ -1,0 +1,140 @@
+/* FILE: global/form/_base.scss */
+
+form {
+	max-width: 100%;
+}
+
+fieldset {
+	padding: 0;
+	margin: 0;
+	border-width: 0;
+}
+
+legend {
+	margin: 0 0 ( $ratio +rem );
+	font-size: var(--typography_font_size_S_em);
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: var(--letter_spacing);
+}
+
+button,
+input,
+select,
+textarea {
+	max-width: 100%;
+	padding: $form_field_padding_vertical 1em;
+	line-height: inherit;
+	font-size: 1em;
+	font-family: inherit;
+	text-transform: inherit;
+	letter-spacing: inherit;
+	background: transparent;
+	color: inherit;
+	border: 1px solid transparent;
+	border-bottom-color: currentColor;
+	border-radius: 0;
+	vertical-align: baseline;
+
+	&:focus {
+		border-color: currentColor;
+	}
+
+	&.disabled {
+		@extend %field_disabled;
+	}
+
+	&.fullwidth {
+		width: 100%;
+	}
+
+}
+
+textarea,
+select[multiple],
+select[size] {
+	height: auto;
+	line-height: inherit;
+}
+
+textarea {
+	word-wrap: break-word;
+	vertical-align: top;
+	overflow-y: auto;
+	resize: vertical;
+}
+
+select {
+
+	// Cross-browser (Safari on OS X) required styles:
+
+		$dropdown_svg_size: 10px;
+		$dropdown_svg: '<svg viewBox="0 0 10 7" xmlns="http://www.w3.org/2000/svg"><path stroke="#{ rgba( #fff, .66 ) }" fill="#{ rgba( #000, .66 ) }" stroke-width="1" d="m1 1 l4 5 l4 -5 z" /></svg>';
+
+		display: inline-block;
+		max-width: 100%;
+		padding-#{$right}: calc( 14px + 1em );
+		background: none;
+		background-image: url('data:image/svg+xml;utf8,#{ _url_encode( $dropdown_svg ) }');
+		background-size: $dropdown_svg_size auto;
+		background-position: $right 4px top 50%;
+		background-repeat: no-repeat;
+		color: inherit;
+		appearance: none;
+		overflow-wrap: normal;
+		word-wrap: normal;
+		hyphens: manual;
+
+		&::-ms-expand {
+			display: none;
+		}
+
+}
+
+option {
+	background: #fff !important;
+	color: #444 !important;
+}
+
+label {
+	display: inline-block;
+	padding-bottom: .5em;
+
+	&[for] {
+		cursor: pointer;
+	}
+
+	+ [type="checkbox"],
+	[type="checkbox"] + & {
+		margin-#{$left}: .5em;
+	}
+
+}
+
+[type="checkbox"],
+[type="radio"] {
+	position: relative;
+	width: 1em;
+	height: 1em;
+	bottom: -.2em;
+	vertical-align: baseline;
+}
+
+:disabled,
+[disabled],
+[aria-disabled="true"] {
+	@extend %field_disabled;
+}
+
+%field_disabled {
+	cursor: not-allowed;
+	pointer-events: none;
+	opacity: .5;
+}
+
+::placeholder {
+	font-weight: 400;
+	line-height: normal;
+	opacity: .75;
+	color: inherit;
+}

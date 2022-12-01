@@ -1,0 +1,6 @@
+/* FILE: comments/_bypostauthor.scss */
+
+.bypostauthor > .comment-body .vcard .fn::before {
+	content: '✍️ '; // https://emojipedia.org/writing-hand/
+	speak: none;
+}

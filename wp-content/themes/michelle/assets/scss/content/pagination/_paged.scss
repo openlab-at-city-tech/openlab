@@ -1,0 +1,76 @@
+/* FILE: content/pagination/_paged.scss */
+
+.pagination {
+	@extend %clearfix;
+	clear: both;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: center;
+	position: relative;
+	margin-top: var(--white_space);
+	text-align: center;
+
+	&.pagination::before {
+		content: attr(data-current) " / " attr(data-total);
+		position: absolute;
+		left: 50%; // No RTL needed here.
+		top: 50%;
+		transform: translateX(-50%) translateY(-50%); // No RTL needed here.
+
+		@include media( map_get( $breakpoint, 'm' ) ) {
+			display: none;
+		}
+
+	}
+
+	.nav-links {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: center;
+	}
+
+}
+
+.pagination a:not(.next):not(.prev),
+.pagination span,
+.page-numbers {
+	display: none;
+	min-width: 2.5em;
+	margin: .25em;
+	font-size: $button_font_size +em;
+	text-align: center;
+	text-decoration: none;
+	vertical-align: top;
+
+	@include media( map_get( $breakpoint, 'm' ) ) {
+		display: inline-block;
+	}
+
+	&.prev {
+
+		@include media( ( map_get( $breakpoint, 'm' ), 'max-width' ) ) {
+			margin-#{$right}: auto;
+		}
+
+	}
+
+	&.next {
+
+		@include media( ( map_get( $breakpoint, 'm' ), 'max-width' ) ) {
+			margin-#{$left}: auto;
+		}
+
+	}
+
+	&.dots,
+	&.extend {
+		width: auto;
+	}
+
+	&.current {
+		font-weight: 700;
+	}
+
+}

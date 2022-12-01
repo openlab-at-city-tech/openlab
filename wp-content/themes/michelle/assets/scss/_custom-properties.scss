@@ -1,0 +1,28 @@
+/* FILE: _custom-properties.scss */
+
+//
+// Custom properties (CSS variables).
+//
+// @package    Michelle
+// @copyright  WebMan Design, Oliver Juhas
+//
+// @since    1.0.0
+// @version  1.4.0
+//
+
+:root {
+
+	// Unit is required in `calc()`.
+	// A non-zero value is required for minification process not to strip the unit.
+	--zero: 0.001px;
+
+	// Overridden with JavaScript:
+	--scrollbar_width: var(--zero);
+
+}
+
+@import '_custom-properties/theme-options';
+@import '_custom-properties/colors';
+@import '_custom-properties/typography';
+@import '_custom-properties/box-model';
+@import '_custom-properties/others';

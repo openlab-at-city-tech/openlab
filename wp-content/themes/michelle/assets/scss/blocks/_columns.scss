@@ -1,0 +1,176 @@
+/* FILE: blocks/_columns.scss */
+
+// WP6.0+ fix:
+// @link  https://github.com/WordPress/gutenberg/blob/b12e82a53d534eac76550e5d03d513f8458b4cf2/packages/block-library/src/columns/style.scss
+.wp-block-columns:not(.is-not-stacked-on-mobile) > .wp-block-column {
+	// Between mobile and large viewports, allow 2 columns.
+	@media (min-width: 600px) and (max-width: 781px) {
+		// Only add two column styling if there are two or more columns
+		&:not(:only-child) {
+			// As with mobile styles, this must be important since the Column
+			// assigns its own width as an inline style, which should take effect
+			// starting at `break-medium`.
+			flex-basis: calc(50% - calc(var(--wp--style--block-gap, 2em) / 2)) !important;
+			flex-grow: 0;
+		}
+
+		// Add space between the multiple columns. Themes can customize this if they wish to work differently.
+		// Only apply this beyond the mobile breakpoint, as there's only a single column on mobile.
+		&:nth-child(even) {
+			margin-left: var(--wp--style--block-gap, 2em);
+		}
+	}
+}
+
+.wp-block-column {
+	@if not variable-exists( 'selector_editor_wrapper' ) {
+		@extend %clearfix;
+	}
+
+	&s {
+
+		&.wp-block-columns:not(.has-background) {
+			margin-bottom: 0;
+		}
+
+		&.alignfull:not(.is-style-no-gaps) {
+			padding-left: var(--body_padding);
+			padding-right: var(--body_padding);
+		}
+
+		&.has-background {
+			padding: $ratio +em;
+			padding-bottom: 0;
+
+			@include media( map_get( $breakpoint, 'xl' ) ) {
+				padding: var(--block_padding);
+				padding-bottom: calc( var(--block_padding) - #{ $ratio +em } );
+			}
+
+			&.is-style-no-gaps {
+				padding-bottom: $ratio +em;
+
+				@include media( map_get( $breakpoint, 'xl' ) ) {
+					padding-bottom: var(--block_padding);
+				}
+
+			}
+
+		}
+
+	}
+
+	&.wp-block-column:only-child {
+		// With single column we can control content width, so we need to center align the column!
+		margin-left: auto;
+		margin-right: auto;
+
+		&.alignleft,
+		&.is-style-alignleft,
+		&.alignright,
+		&.is-style-alignright {
+			float: none;
+		}
+
+		&.alignleft,
+		&.is-style-alignleft {
+			margin-left: 0;
+		}
+
+		&.alignright,
+		&.is-style-alignright {
+			margin-right: 0;
+		}
+
+	}
+
+	&.wp-block-column {
+
+		&.wp-block-column:last-child {
+			margin-bottom: var(--wp--style--block-gap);
+		}
+
+		&.is-style-no-margin-vertical:last-child {
+			margin-bottom: 0;
+		}
+
+	}
+
+	&s.is-style-no-margin-vertical:not(.has-background) > .wp-block-column {
+		margin-bottom: 0;
+	}
+
+	&.is-style-hidden-on-tablet {
+		@include media(
+			( 600 ),
+			( map_get( $breakpoint, 'l' ), 'max-width' )
+		) {
+
+			~ .wp-block-column.wp-block-column {
+				flex-grow: 1;
+				margin-#{$left}: 0;
+
+				&:nth-child(odd) {
+					margin-#{$left}: var(--wp--style--block-gap);
+				}
+
+			}
+
+		}
+	}
+
+	&[style*="flex-basis"] {
+		flex-grow: 0;
+	}
+
+	&.wp-block-column:empty {
+
+		&,
+		&:last-child {
+			margin-bottom: 0;
+		}
+
+	}
+
+	hr {
+		@if variable-exists( 'selector_editor_wrapper' ) {
+			max-width: none !important;
+		} @else {
+			max-width: none;
+		}
+	}
+
+	&,
+	&s {
+
+		&.is-style-drop-shadow,
+		&.is-style-inner-shadow {
+			padding: $ratio +em;
+		}
+
+	}
+
+}
+
+// Column gaps:
+
+	$prepend : '';
+	@if variable-exists( 'selector_editor_wrapper' ) {
+		$prepend : '.block-editor-block-list__block';
+	}
+
+	@media (min-width: 600px) {
+		#{ $prepend }.wp-block-column:nth-child(even) {
+			margin-#{$left}: var(--wp--style--block-gap);
+		}
+	}
+	@media (min-width: 600px) and (max-width: 781px) {
+		#{ $prepend }.wp-block-column:not(:only-child) {
+			flex-basis: calc( 50% - var(--wp--style--block-gap) / 2 ) !important;
+		}
+	}
+	@media (min-width: 782px) {
+		#{ $prepend }.wp-block-column:not(:first-child) {
+			margin-#{$left}: var(--wp--style--block-gap);
+		}
+	}

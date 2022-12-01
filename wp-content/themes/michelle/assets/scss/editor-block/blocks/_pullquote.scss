@@ -1,0 +1,17 @@
+/* FILE: editor-block/blocks/_pullquote.scss */
+
+.wp-block-pullquote {
+
+	blockquote {
+
+		&:last-child {
+			margin: 0;
+		}
+
+	}
+
+}
+
+[data-type="core/pullquote"]:not(:last-child) {
+	margin-bottom: var(--gap);
+}
