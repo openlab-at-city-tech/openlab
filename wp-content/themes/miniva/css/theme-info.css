@@ -1,0 +1,64 @@
+/**
+ * Theme info
+ *
+ * @package Miniva
+ */
+
+.theme-info {
+	max-width: 1000px;
+	line-height: 1.6;
+}
+
+.theme-info h1 + div {
+	margin-top: 2em;
+}
+
+.theme-info h2 {
+	margin: 0;
+}
+
+.theme-info img {
+	max-width: 100%;
+}
+
+.theme-info hr {
+	margin-top: 40px;
+	margin-bottom: 40px;
+}
+
+.theme-info .row {
+	display: -webkit-flex;
+	display: -moz-flex;
+	display: -ms-flex;
+	display: -o-flex;
+	display: flex;
+	flex-wrap: wrap;
+	margin-left: -20px;
+	margin-right: -20px;
+}
+
+.theme-info .col {
+	width: 50%;
+	padding-left: 20px;
+	padding-right: 20px;
+	box-sizing: border-box;
+}
+
+.theme-links .col {
+	margin-bottom: 30px;
+}
+
+.theme-description {
+	font-size: 1.3em;
+	color: #888;
+	margin-bottom: 2em;
+}
+
+.section {
+	margin-top: 3em;
+}
+
+.desc {
+	font-size: 1.2em;
+	color: #666;
+}

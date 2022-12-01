@@ -1,0 +1,54 @@
+/**
+ * Adjust stylings of the customizer controls
+ *
+ * @package Miniva
+ */
+
+.customize-control-custom {
+	margin-bottom: 0;
+}
+
+.customize-control-custom hr {
+	margin-top: 10px;
+	margin-bottom: 16px;
+}
+
+.customize-control-heading {
+	display: block;
+	font-size: 20px;
+	font-weight: 600;
+	margin-bottom: 16px;
+}
+
+.customize-control-checkbox {
+	margin-bottom: 4px;
+}
+
+.radio-image label {
+	display: block;
+	margin: 0 0 15px 0;
+}
+
+.radio-image.inline label {
+	display: inline-block;
+	margin: 0 5px 7px 0;
+}
+
+.radio-image.hide-radio label > input {
+	visibility: hidden;
+	position: absolute;
+}
+
+.radio-image label > input + img {
+	cursor: pointer;
+	border: 3px solid #ddd;
+	vertical-align: top;
+}
+
+.radio-image label:hover img {
+	border-color: #aaa;
+}
+
+.radio-image label > input:checked + img {
+	border-color: #278ab7;
+}
