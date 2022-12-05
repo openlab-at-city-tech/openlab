@@ -440,7 +440,7 @@ function openlab_my_groups_submenu($group) {
         // determines if there are any courses - if not, only show "create"
         $filters['wds_group_type'] = openlab_page_slug_to_grouptype();
 
-        if ( is_super_admin( get_current_user_id() ) || 'faculty' === $account_type ) {
+        if ( is_super_admin( get_current_user_id() ) || 'faculty' === $member_type ) {
 			$can_create = true;
 		} else {
 			$can_create = false;
