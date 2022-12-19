@@ -10357,6 +10357,10 @@ body.membership-requests .group-list {
   font-weight: bold;
   text-decoration: none;
 }
+.bp-group-documents-fields-for-file-type {
+  margin-top: 18px;
+  margin-left: 17px;
+}
 .bp-group-documents-fields.show-link #bp-group-documents-fields-for-file-type-upload {
   display: none;
 }
