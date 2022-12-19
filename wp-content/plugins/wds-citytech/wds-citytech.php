@@ -3137,7 +3137,7 @@ add_action(
 function openlab_sanitize_url_params( $url ) {
 	$request_params = parse_url( $url, PHP_URL_QUERY );
 	if ( ! $request_params ) {
-		return;
+		return $url;
 	}
 
 	parse_str( $request_params, $params );
