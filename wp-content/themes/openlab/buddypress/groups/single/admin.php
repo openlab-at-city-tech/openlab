@@ -114,7 +114,7 @@ $portfolio_sharing = groups_get_groupmeta( bp_get_current_group_id(), 'enable_po
 
 			?>
 			<div class="panel panel-default">
-				<div class="panel-heading">Discussion, Docs, and File Library Settings</div>
+				<div class="panel-heading">Announcements, Discussion, Docs, and File Library Settings</div>
 				<div class="panel-body">
 					<p id="discussion-settings-tag">These settings enable or disable Announcements, Discussions, Docs, and File Library on your <?php echo $group_label_uc; ?> profile.</p>
 					<div class="checkbox checkbox-float">
