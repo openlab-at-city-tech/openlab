@@ -301,6 +301,14 @@ function openlab_create_announcement_reply( $args = [] ) {
 		return false;
 	}
 
+	/**
+	 * Fires after an announcement reply has been created.
+	 *
+	 * @param int $comment_id      ID of the reply comment.
+	 * @param int $announcement_id ID of the announcement object.
+	 */
+	do_action( 'openlab_create_announcement_reply', $comment_id, $announcement_id );
+
 	groups_update_last_activity( $r['group_id'] );
 
 	return $comment_id;
@@ -665,6 +673,53 @@ function openlab_generate_announcement_activity( $announcement_id ) {
 	bp_activity_add( $args );
 }
 add_action( 'openlab_create_announcement', 'openlab_generate_announcement_activity' );
+
+/**
+ * Generates an activity item after an announcement reply is posted.
+ *
+ * @param int $reply_id
+ * @param int $announcement_id
+ */
+function openlab_generate_announcement_reply_activity( $reply_id, $announcement_id ) {
+	$post = get_post( $announcement_id );
+	if ( ! $post ) {
+		return;
+	}
+
+	$comment = get_comment( $reply_id );
+	if ( ! $comment ) {
+		return;
+	}
+
+	$group_id = (int) get_post_meta( $announcement_id, 'openlab_announcement_group_id', true );
+	$group    = groups_get_group( $group_id );
+
+	$hide_sitewide = ! empty( $group ) && isset( $group->status ) && 'public' !== $group->status;
+
+	$announcement_url  = bp_get_group_permalink( $group ) . 'announcements/#announcement-item-' . $announcement_id;
+	$announcement_link = sprintf( '<a href="%s">%s</a>', esc_url( $announcement_url ), get_the_title( $post ) );
+
+	$action = sprintf(
+		'%1$s replied to the announcement %2$s in the group %3$s',
+		bp_core_get_userlink( $comment->user_id ),
+		$announcement_link,
+		openlab_get_group_link( $group_id )
+	);
+
+	$args = array(
+		'type'          => 'created_announcement_reply',
+		'content'       => $comment->comment_content,
+		'component'     => 'groups',
+		'action'        => $action,
+		'primary_link'  => bp_get_group_permalink( $group ) . 'announcements/',
+		'user_id'       => $comment->user_id,
+		'item_id'       => $group_id,
+		'hide_sitewide' => $hide_sitewide,
+	);
+
+	bp_activity_add( $args );
+}
+add_action( 'openlab_create_announcement_reply', 'openlab_generate_announcement_reply_activity', 10, 2 );
 
 /**
  * Checks whether Announcements tab is enabled for a group.
