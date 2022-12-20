@@ -97,13 +97,17 @@ function openlab_get_stylesheet_dir_uri() {
 }
 
 /**
- * Custom mysteryman
- * @return type
+ * Gets the OpenLab default avatar URL.
+ *
+ * Always points to production site because of Gravatar limitations around HTTP authentication.
+ *
+ * @return string
  */
-function openlab_new_mysteryman() {
-	return openlab_get_stylesheet_dir_uri() . '/images/default-avatar.jpg';
+function openlab_get_default_avatar_uri() {
+	$uri = openlab_get_stylesheet_dir_uri() . '/images/default-avatar.jpg';
+	return str_replace( 'http://openlabdev.org', 'https://openlab.citytech.cuny.edu', $uri );
 }
-add_filter( 'bp_core_mysteryman_src', 'openlab_new_mysteryman', 2, 7 );
+add_filter( 'bp_core_mysteryman_src', 'openlab_get_default_avatar_uri', 2, 7 );
 
 /**
  * Custom default avatar
@@ -113,7 +117,7 @@ add_filter( 'bp_core_mysteryman_src', 'openlab_new_mysteryman', 2, 7 );
  */
 function openlab_default_get_group_avatar( $url, $params ) {
 	if ( strstr( $url, 'default-avatar' ) || strstr( $url, 'wavatar' ) || strstr( $url, 'mystery-group.png' ) ) {
-		$url = openlab_get_stylesheet_dir_uri() . '/images/default-avatar.jpg';
+		$url = openlab_get_default_avatar_uri();
 	}
 
 	return $url;
@@ -122,7 +126,7 @@ add_filter( 'bp_core_fetch_avatar_url', 'openlab_default_get_group_avatar', 10, 
 
 function openlab_default_group_avatar_img( $html ) {
 	$default_avatar = buddypress()->plugin_url . 'bp-core/images/mystery-group.png';
-	return str_replace( $default_avatar, openlab_get_stylesheet_dir_uri() . '/images/default-avatar.jpg', $html );
+	return str_replace( $default_avatar, openlab_get_default_avatar_uri(), $html );
 }
 add_filter( 'bp_core_fetch_avatar', 'openlab_default_group_avatar_img' );
 

@@ -31,7 +31,6 @@ $author_avatar = bp_core_fetch_avatar(
 		'width'   => 60,
 		'height'  => 60,
 		'html'    => true,
-		'no_grav' => true,
 		'alt'     => sprintf( __( 'Profile picture of %s', 'buddypress' ), $author_name )
 	]
 );
