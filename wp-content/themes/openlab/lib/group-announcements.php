@@ -328,6 +328,10 @@ function openlab_handle_announcement_post() {
 		$group_id = apply_filters( 'bp_activity_post_update_item_id', $_POST['whats-new-post-in'] );
 	}
 
+	if ( ! empty( $_POST['announcement-title'] ) ) {
+		$title = sanitize_text_field( wp_unslash( $_POST['announcement-title'] ) );
+	}
+
 	if ( ! $group_id ) {
 		return;
 	}
@@ -346,7 +350,7 @@ function openlab_handle_announcement_post() {
 	$announcement_id = openlab_create_announcement(
 		[
 			'content'  => $content,
-			'title'    => $_POST['title'],
+			'title'    => $title,
 			'group_id' => $group_id,
 			'user_id'  => bp_loggedin_user_id(),
 		]
