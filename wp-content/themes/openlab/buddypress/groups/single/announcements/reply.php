@@ -43,11 +43,14 @@ $group_url = bp_get_group_permalink( $group );
 $reply_title_prefix = ! empty( $reply->comment_parent ) ? 'RE: RE: ' : 'RE: ';
 $reply_title        = $reply_title_prefix . $announcement->post_title;
 
+// See https://buddypress.trac.wordpress.org/ticket/8777, http://redmine.citytech.cuny.edu/issues/3125
+remove_filter( 'comments_pre_query', 'bp_comments_pre_query', 10, 2 );
 $reply_replies = get_comments(
 	[
-		'parent' => $reply_id,
+		'parent' => (int) $reply_id,
 	]
 );
+add_filter( 'comments_pre_query', 'bp_comments_pre_query', 10, 2 );
 
 $user_can_reply  = openlab_user_can_reply_to_reply( bp_loggedin_user_id(), $reply_id );
 $can_reply_class = $user_can_reply ? 'user-can-reply' : '';
