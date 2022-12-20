@@ -1447,11 +1447,13 @@ HTML;
 	 * Add a 'Log Out' link to the far right
 	 */
 	public function add_logout_item( $wp_admin_bar ) {
+		$request_uri = openlab_sanitize_url_params( $_SERVER['REQUEST_URI'] );
+
 		$wp_admin_bar->add_menu(
 			array(
 				'parent' => 'top-secondary',
 				'id'     => 'top-logout',
-				'href'   => add_query_arg( 'redirect_to', bp_get_root_domain(), wp_logout_url() ),
+				'href'   => add_query_arg( 'redirect_to', $request_uri, wp_logout_url() ),
 				'title'  => 'Log Out',
 				'meta'   => array(
 					'class' => 'bold pull-right',
