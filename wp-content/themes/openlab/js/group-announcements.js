@@ -103,7 +103,7 @@
 				replyEditor.enable( false )
 			}
 
-			const replyContent = replyEditor ? replyEditor.getText() : ''
+			const replyContent = replyEditor ? replyEditor.root.innerHTML : ''
 
 			e.target.classList.add( 'ajax-loading' )
 			e.target.disabled = true
