@@ -91,7 +91,7 @@ $delete_url = wp_nonce_url( $group_url . 'announcements/?delete-announcement-rep
 					</div>
 				<?php endif; ?>
 
-				<?php if ( current_user_can( 'edit_comment', $reply_id ) ) : ?>
+				<?php if ( current_user_can( 'edit_openlab_announcement_comment', $reply_id ) ) : ?>
 					<div class="announcement-action">
 						<a class="announcement-edit-link" href="">Edit</a>
 					</div>
