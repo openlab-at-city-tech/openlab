@@ -16,7 +16,7 @@ You can find more information about <?php echo CMTT_NAME; ?> <a href="<?php echo
 
 <h3>CM Tooltip Glossary Add-Ons by CreativeMinds</h3>
 <div>
-    <iframe src="https://www.cminds.com/store/?showfilter=No&tags=Tooltip" height="700" style="width: 100%" ></iframe>
+    <iframe src="https://www.cminds.com/wordpress-plugins/?showfilter=No&tags=Tooltip" height="700" style="width: 100%" ></iframe>
 </div>
 
 <br />

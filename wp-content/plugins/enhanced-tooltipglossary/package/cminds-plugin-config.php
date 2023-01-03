@@ -1,9 +1,8 @@
 <?php
-
 $cminds_plugin_config = array(
     'plugin-is-pro'                 => false,
     'plugin-has-addons'             => TRUE,
-    'plugin-version'                => '3.9.15',
+    'plugin-version'                => '4.1.0',
     'plugin-abbrev'                 => 'cmtt',
     'plugin-affiliate'              => '',
     'plugin-redirect-after-install' => admin_url('admin.php?page=cmtt_settings'),
@@ -11,7 +10,7 @@ $cminds_plugin_config = array(
     'plugin-show-guide'             => TRUE,
     'plugin-show-upgrade'           => TRUE,
     'plugin-show-upgrade-first'     => TRUE,
-    'plugin-guide-text'             => '    <div style="display:block">
+    'plugin-guide-text'             => '<div style="display:block">
         <ol>
             <li>Go to <strong>"Add New"</strong> under the CM Tooltip Glossary menu</li>
             <li>Fill the <strong>"Title"</strong> of the glossary item and <strong>"Content"</strong></li>
@@ -56,8 +55,8 @@ $cminds_plugin_config = array(
     'plugin-menu-item'              => CMTT_MENU_OPTION,
     'plugin-textdomain'             => CMTT_SLUG_NAME,
     'plugin-userguide-key'          => '2162-cm-tooltip-cmtg-free-version-tutorial',
-    'plugin-video-tutorials-url'    => 'https://www.cminds.com/video-lesson/lesson/tooltip-glossary-plugin/',
-    'plugin-store-url'              => 'https://www.cminds.com/store/tooltipglossary/',
+    'plugin-video-tutorials-url'    => 'https://www.videolessonsplugin.com/video-lesson/lesson/tooltip-glossary-plugin/',
+    'plugin-store-url'              => 'https://www.cminds.com/wordpress-plugins-library/tooltipglossary/',
     'plugin-support-url'            => 'https://wordpress.org/support/plugin/enhanced-tooltipglossary/',
     'plugin-review-url'             => 'https://wordpress.org/support/view/plugin-reviews/enhanced-tooltipglossary/',
     'plugin-changelog-url'          => CMTT_RELEASE_NOTES,
@@ -75,12 +74,12 @@ $cminds_plugin_config = array(
                     Other CreativeMinds Offerings
                     <hr>
                  <a href="https://www.cminds.com/wordpress-plugins-library/seo-keyword-hound-wordpress/" target="blank"><img src="' . plugin_dir_url(__FILE__) . 'views/Hound2.png"  width="220"></a><br><br><br>
-                <a href="https://www.cminds.com/store/cm-wordpress-plugins-yearly-membership/" target="blank"><img src="' . plugin_dir_url(__FILE__) . 'views/banner_yearly-membership_220px.png"  width="220"></a><br>
+                <a href="https://www.videolessonsplugin.com/video-lesson/lesson/tooltip-glossary-plugin/" target="blank"><img src="' . plugin_dir_url(__FILE__) . 'views/banner_yearly-membership_220px.png"  width="220"></a><br>
                  </ul>
 
                 <ul>
-                    <li class="heading">Essential (Pro)<a href="https://www.cminds.com/store/tooltipglossary?utm_source=glossary&utm_campaign=freeupgrade&upgrade=1" style="float:right;font-size:11px;color:white;" target="_blank">More</a></li>
-                    <li class="price">$36.00<br /> <span style="font-size:14px;">(For one Year / Site)<br />Additional pricing options available <a href="https://www.cminds.com/store/tooltipglossary?utm_source=glossary&utm_campaign=freeupgrade&upgrade=1" target="_blank"> >>> </a></span> <br /></li>
+                    <li class="heading">Essential (Pro)<a href="https://www.cminds.com/wordpress-plugins-library/tooltipglossary/?utm_source=glossary&utm_campaign=freeupgrade&upgrade=1" style="float:right;font-size:11px;color:white;" target="_blank">More</a></li>
+                    <li class="price">$36.00<br /> <span style="font-size:14px;">(For one Year / Site)<br />Additional pricing options available <a href="https://www.cminds.com/wordpress-plugins-library/tooltipglossary/?utm_source=glossary&utm_campaign=freeupgrade&upgrade=1" target="_blank"> >>> </a></span> <br /></li>
                     <li class="action"><a href="https://www.cminds.com/?utm_source=glossary&utm_campaign=freeupgrade&upgrade=1&edd_action=add_to_cart&download_id=693&edd_options[price_id]=21" style="font-size:18px;" target="_blank">Upgrade Now</a></li>
                      <li style="text-align:left;"><span class="dashicons dashicons-plus-alt"></span><span style="background-color:lightyellow">&nbsp;All Free Version Features </span><span class="dashicons dashicons-admin-comments cminds-package-show-tooltip" style="color:green" title="All free features are supported in the pro"></span></li>
                     <li style="text-align:left;"><span class="dashicons dashicons-yes"></span>Unlimited glossary terms <span class="dashicons dashicons-admin-comments cminds-package-show-tooltip" style="color:green" title="While free version is limited to 500 terms the pro has no restriction and glossary can have even 10,000 terms "></span></li>
@@ -103,8 +102,8 @@ $cminds_plugin_config = array(
                  </ul>
 
               <ul>
-                     <li class="heading">Advanced (Pro+)<a href="https://www.cminds.com/store/tooltipglossary?utm_source=glossary&utm_campaign=freeupgrade&upgrade=1" style="float:right;font-size:11px;color:white;" target="_blank">More</a></li>
-                    <li class="price">$59.00<br /> <span style="font-size:14px;">(For one Year / 3 Sites)<br />Additional pricing options available <a href="https://www.cminds.com/store/tooltipglossary?utm_source=glossary&utm_campaign=freeupgrade&upgrade=1" target="_blank"> >>> </a></span> <br /></li>
+                     <li class="heading">Advanced (Pro+)<a href="https://www.cminds.com/wordpress-plugins-library/tooltipglossary/?utm_source=glossary&utm_campaign=freeupgrade&upgrade=1" style="float:right;font-size:11px;color:white;" target="_blank">More</a></li>
+                    <li class="price">$59.00<br /> <span style="font-size:14px;">(For one Year / 3 Sites)<br />Additional pricing options available <a href="https://www.cminds.com/wordpress-plugins-library/tooltipglossary/?utm_source=glossary&utm_campaign=freeupgrade&upgrade=1" target="_blank"> >>> </a></span> <br /></li>
                     <li class="action"><a href="https://www.cminds.com/?utm_source=glossary&utm_campaign=freeupgrade&upgrade=1&edd_action=add_to_cart&download_id=11728&edd_options[price_id]=7" style="font-size:18px;" target="_blank">Upgrade Now</a></li>
                      <li style="text-align:left;"><span class="dashicons dashicons-plus-alt"></span><span style="background-color:lightyellow">&nbsp;All Free and Pro Version Features</span> <span class="dashicons dashicons-admin-comments cminds-package-show-tooltip" style="color:green" title="All free and pro features are supported in the pro+"></span></li>
                     <li style="text-align:left;"><span class="dashicons dashicons-yes"></span>Share This widget <span class="dashicons dashicons-admin-comments cminds-package-show-tooltip" style="color:green" title="Option to show social sharing icons in the glossary term page"></span></li>
@@ -126,8 +125,8 @@ $cminds_plugin_config = array(
                         <span class="dashicons dashicons-yes"></span> Save 40% once renewing license <span class="dashicons dashicons-admin-comments cminds-package-show-tooltip" style="color:grey" title="Once license expires, If you choose to renew the plugin license you can do this anytime you choose. The renewal cost will be 35% off the product cost."></span></li>
                </ul>
                             <ul>
-                    <li class="heading">Expert (Ecom)<a href="https://www.cminds.com/store/tooltipglossary?utm_source=glossary&utm_campaign=freeupgrade&upgrade=1" style="float:right;font-size:11px;color:white;" target="_blank">More</a></li>
-                    <li class="price">$89.00<br /> <span style="font-size:14px;">(For one Year / 5 Sites)<br />Additional pricing options available <a href="https://www.cminds.com/store/tooltipglossary?utm_source=glossary&utm_campaign=freeupgrade&upgrade=1" target="_blank"> >>> </a></span> <br /></li>
+                    <li class="heading">Expert (Ecom)<a href="https://www.cminds.com/wordpress-plugins-library/tooltipglossary/?utm_source=glossary&utm_campaign=freeupgrade&upgrade=1" style="float:right;font-size:11px;color:white;" target="_blank">More</a></li>
+                    <li class="price">$89.00<br /> <span style="font-size:14px;">(For one Year / 5 Sites)<br />Additional pricing options available <a href="https://www.cminds.com/wordpress-plugins-library/tooltipglossary/?utm_source=glossary&utm_campaign=freeupgrade&upgrade=1" target="_blank"> >>> </a></span> <br /></li>
                     <li class="action"><a href="https://www.cminds.com/?utm_source=glossary&utm_campaign=freeupgrade&upgrade=1&edd_action=add_to_cart&download_id=6764&edd_options[price_id]=7" style="font-size:18px;" target="_blank">Upgrade Now</a></li>
                      <li style="text-align:left;"><span class="dashicons dashicons-plus-alt"></span><span style="background-color:lightyellow">&nbsp;All Free, Pro and Pro+ Version Features </span><span class="dashicons dashicons-admin-comments cminds-package-show-tooltip" style="color:green" title="All free, pro and Pro+ features are supported"></span></li>
                   <li style="text-align:left;"><span class="dashicons dashicons-yes"></span>Embed audio in tooltip <span class="dashicons dashicons-admin-comments cminds-package-show-tooltip" style="color:green" title="Support an audio player inside the tooltip. This is usefull once adding an audio file to the glossary term page"></span></li>
@@ -145,7 +144,5 @@ $cminds_plugin_config = array(
                         <span class="dashicons dashicons-yes"></span> Plugin can be used forever <span class="dashicons dashicons-admin-comments cminds-package-show-tooltip" style="color:grey" title="Once license expires, If you choose not to renew the plugin license, you can still continue to use it as long as you want."></span><br />
                         <span class="dashicons dashicons-yes"></span> Save 40% once renewing license <span class="dashicons dashicons-admin-comments cminds-package-show-tooltip" style="color:grey" title="Once license expires, If you choose to renew the plugin license you can do this anytime you choose. The renewal cost will be 35% off the product cost."></span></li>
               </ul>
-
-
             </div>',
 );

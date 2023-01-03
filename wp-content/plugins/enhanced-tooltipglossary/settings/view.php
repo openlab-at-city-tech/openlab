@@ -227,7 +227,7 @@
                             </td>
                         </tr>
                         <tr valign="top" class="onlyinpro">
-                            <th scope="row">Treat variations/synonyms the same as base term?</th>
+                            <th scope="row">Highlight each variations/synonyms of the term?</th>
                             <td>
                                 <?php echo \CM\CMTT_Settings::renderOnlyin(); ?>
                             </td>
@@ -435,6 +435,16 @@
                                 after the CM Tooltip parser has processed the content.
                             </td>
                         </tr>
+	                    <tr valign="top">
+		                    <th scope="row">Shortcode for Glossary Index
+		                    </th>
+		                    <td><input type="text" name="cmtt_glossaryShortcode"
+		                               value="<?php echo \CM\CMTT_Settings::get( 'cmtt_glossaryShortcode', 'glossary' ); ?>"/>
+		                    </td>
+		                    <td colspan="2" class="cm_field_help_container"><strong>Warning!</strong>Only change this option
+			                    if there is a problem with displaying the Glossary Index page.!
+		                    </td>
+	                    </tr>
                     </table>
                     <div class="clear"></div>
                 </div>
