@@ -10426,6 +10426,7 @@ body div#bp-docs-pagination-count {
   list-style-type: none;
 }
 .doctable-panel {
+  margin-top: 15px;
   padding-bottom: 12px;
 }
 .doctable-panel .doctable tr:nth-child(2n) {
