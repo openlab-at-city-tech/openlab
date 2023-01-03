@@ -156,6 +156,26 @@ class Meow_WPMC_Support {
       array_push( $unsupported, 'Presto Player' );
 		}
 
+		if ( defined( 'GG_VER' ) ) {
+			array_push( $unsupported, 'Global Gallery' );
+		}
+
+		if ( defined( 'LANA_DOWNLOADS_MANAGER_VERSION' ) ) {
+      array_push( $unsupported, 'Lana Downloads Manager' );
+		}
+
+    if ( defined( 'POWERPRESS_VERSION' ) ) {
+			array_push( $unsupported, 'Powerpress' );
+		}
+
+    if ( class_exists( 'Connections_Directory' ) ) {
+      array_push( $unsupported, 'Connections Business Directory' );
+    }
+
+		if ( defined( 'WONDERPLUGIN_3DCAROUSEL_VERSION' ) ) {
+      array_push( $unsupported, 'WonderPlugin 3D Carousel' );
+		}
+
     return $unsupported;
   }
 }

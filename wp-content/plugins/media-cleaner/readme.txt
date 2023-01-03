@@ -5,7 +5,7 @@ Donate link: https://meowapps.com/donation/
 Requires at least: 5.0
 Tested up to: 6.1
 Requires PHP: 7.0
-Stable tag: 6.5.0
+Stable tag: 6.5.2 
 
 Clean your WordPress from unused files, broken media entries. Powerful engine and beautiful UI!
 
@@ -84,13 +84,21 @@ To make everything perfect, you will also need to clean and optimize your databa
 
 == Changelog ==
 
+= 6.5.2 (2022/12/26) =
+* Add: Support for Global Gallery, Lana Downloads Manager, Powerpress, Connections Business Directory, Wonderful Plugin 3D Carousel.
+* Update: Better support for Avada (Fusion Builder).
+* Update: Live content is not restricted to Posts and Pages anymore (it can be used for any custom post type).
+
+= 6.5.1 (2022/12/09) =
+* Update: Better support for WPBakery and Elementor.
+* Note: Please try my new [Database Cleaner](https://wordpress.org/plugins/database-cleaner/)! You'll love it!
+
 = 6.5.0 (2022/11/12) =
 * Add: In the Edit Media page, you can now see the post/page where your media are used.
 * Fix: Avoid a few errors in some specific cases.
 
 = 6.4.9 (2022/10/24) =
 * Fix: Improved (and fixed) the accuracy of the explanation displayed before the scan.
-* Note: Please try my new [Database Cleaner](https://wordpress.org/plugins/database-cleaner/)! You'll love it!
 
 = 6.4.7 (2022/10/10) =
 * Add: Fixed a potential issue while scanning the widgets.
