@@ -11825,6 +11825,9 @@ p.private-membership-indicator {
   width: 28px;
 }
 /** Group Docs **/
+.bp-docs .bp-template-notice {
+  margin-bottom: 15px;
+}
 .bp-docs .doctable-panel {
   padding-bottom: 0;
 }
