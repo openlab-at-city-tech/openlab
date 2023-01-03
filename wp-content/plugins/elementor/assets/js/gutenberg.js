@@ -1,4 +1,4 @@
-/*! elementor - v3.6.8 - 27-07-2022 */
+/*! elementor - v3.9.2 - 21-12-2022 */
 /******/ (() => { // webpackBootstrap
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
@@ -71,36 +71,31 @@ var __webpack_exports__ = {};
     },
     buildPanel: function buildPanel() {
       var self = this;
-
       if (!self.cache.$gutenberg.find('#elementor-switch-mode').length) {
         self.cache.$gutenberg.find('.edit-post-header-toolbar').append(self.cache.$switchMode);
       }
-
       if (!$('#elementor-editor').length) {
-        self.cache.$editorPanel = $($('#elementor-gutenberg-panel').html()); // TODO: `editor-block-list__layout` class for WP < 5.3 support.
-
+        self.cache.$editorPanel = $($('#elementor-gutenberg-panel').html());
+        // TODO: `editor-block-list__layout` class for WP < 5.3 support.
         self.cache.$gurenbergBlockList = self.cache.$gutenberg.find('.editor-block-list__layout, .editor-post-text-editor, .block-editor-block-list__layout');
         self.cache.$gurenbergBlockList.after(self.cache.$editorPanel);
         self.cache.$editorPanelButton = self.cache.$editorPanel.find('#elementor-go-to-edit-page-link');
         self.cache.$editorPanelButton.on('click', function (event) {
           event.preventDefault();
-          self.animateLoader(); // A new post is initialized as an 'auto-draft'.
+          self.animateLoader();
+
+          // A new post is initialized as an 'auto-draft'.
           // if the post is not a new post it should not save it to avoid some saving conflict between elementor and gutenberg.
-
           var isNewPost = 'auto-draft' === wp.data.select('core/editor').getCurrentPost().status;
-
           if (isNewPost) {
             var documentTitle = wp.data.select('core/editor').getEditedPostAttribute('title');
-
             if (!documentTitle) {
               wp.data.dispatch('core/editor').editPost({
                 title: 'Elementor #' + $('#post_ID').val()
               });
             }
-
             wp.data.dispatch('core/editor').savePost();
           }
-
           self.redirectWhenSave();
         });
       }

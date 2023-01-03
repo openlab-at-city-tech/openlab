@@ -1,4 +1,4 @@
-/*! elementor - v3.6.8 - 27-07-2022 */
+/*! elementor - v3.9.2 - 21-12-2022 */
 #e-dashboard-widget-admin-top-bar {
   position: absolute;
   opacity: 0;
@@ -8,8 +8,7 @@
 #e-admin-top-bar-root {
   left: 0;
   background: #ffffff;
-  -webkit-box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.0394871);
-          box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.0394871);
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.0394871);
   display: none;
   position: absolute;
   top: 0;
@@ -17,21 +16,16 @@
   z-index: 1;
 }
 #e-admin-top-bar-root .e-admin-top-bar {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
   height: 50px;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
+  justify-content: space-between;
   padding: 0 16px;
 }
 #e-admin-top-bar-root .page-title-action {
   background: #f7f7f7;
   border: 1px solid #0275d8;
   border-radius: 3px;
-  -webkit-box-sizing: border-box;
-          box-sizing: border-box;
+  box-sizing: border-box;
   color: #0275d8;
   cursor: pointer;
   display: inline-block;
@@ -47,42 +41,24 @@
   color: #1b607f;
 }
 #e-admin-top-bar-root .e-admin-top-bar__heading {
-  display: -webkit-inline-box;
-  display: -ms-inline-flexbox;
   display: inline-flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  align-items: center;
+  justify-content: center;
   -webkit-margin-end: 40px;
           margin-inline-end: 40px;
 }
 #e-admin-top-bar-root .e-admin-top-bar__main-area {
-  display: -webkit-inline-box;
-  display: -ms-inline-flexbox;
   display: inline-flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  align-items: center;
+  justify-content: center;
 }
 #e-admin-top-bar-root .e-admin-top-bar__main-area button {
   margin: 0 4px;
 }
 #e-admin-top-bar-root .e-admin-top-bar__secondary-area {
-  display: -webkit-inline-box;
-  display: -ms-inline-flexbox;
   display: inline-flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  align-items: center;
+  justify-content: center;
 }
 #e-admin-top-bar-root .e-admin-top-bar__heading-logo {
   width: 30px;
@@ -124,16 +100,10 @@
   display: inline-block;
 }
 #e-admin-top-bar-root .e-admin-top-bar__bar-button {
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  align-items: center;
   cursor: pointer;
-  display: -webkit-inline-box;
-  display: -ms-inline-flexbox;
   display: inline-flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  justify-content: center;
   margin: 0 10px;
   text-decoration: none;
   color: #6d7882;
@@ -176,15 +146,9 @@
 }
 @media (max-width: 768px) {
   #e-admin-top-bar-root {
-    display: -webkit-inline-box;
-    display: -ms-inline-flexbox;
     display: inline-flex;
-    -webkit-box-align: center;
-        -ms-flex-align: center;
-            align-items: center;
-    -webkit-box-pack: center;
-        -ms-flex-pack: center;
-            justify-content: center;
+    align-items: center;
+    justify-content: center;
   }
   #e-admin-top-bar-root .e-admin-top-bar__main-area-buttons {
     position: absolute;
@@ -199,8 +163,6 @@
 }
 @media (min-width: 768px) {
   #e-admin-top-bar-root .e-admin-top-bar__secondary-area .e-admin-top-bar__secondary-area-buttons {
-    display: -webkit-box;
-    display: -ms-flexbox;
     display: flex;
   }
 }

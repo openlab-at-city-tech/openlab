@@ -96,6 +96,11 @@ class Modules_Manager {
 			'admin-top-bar',
 			'container-converter',
 			'web-cli',
+			'promotions',
+			'notes',
+			'performance-lab',
+			'lazyload',
+			'kit-elements-defaults',
 		];
 	}
 

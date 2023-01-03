@@ -1,18 +1,16 @@
-/*! elementor - v3.6.8 - 27-07-2022 */
+/*! elementor - v3.9.2 - 21-12-2022 */
 .dialog-widget-content {
   background-color: #fff;
   position: absolute;
   border-radius: 3px;
-  -webkit-box-shadow: 2px 8px 23px 3px rgba(0, 0, 0, 0.2);
-          box-shadow: 2px 8px 23px 3px rgba(0, 0, 0, 0.2);
+  box-shadow: 2px 8px 23px 3px rgba(0, 0, 0, 0.2);
   overflow: hidden;
 }
 
 .dialog-message {
   font-size: 12px;
   line-height: 1.5;
-  -webkit-box-sizing: border-box;
-          box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 .dialog-type-lightbox {
@@ -25,7 +23,6 @@
   z-index: 9999;
   -webkit-user-select: none;
      -moz-user-select: none;
-      -ms-user-select: none;
           user-select: none;
 }
 .dialog-type-lightbox .dialog-widget-content {
@@ -95,6 +92,34 @@
 
 .dialog-confirm-widget .dialog-button:first-child {
   border-left: 1px solid #e6e9ec;
+}
+
+#elementor-change-exit-preference-dialog .dialog-message a {
+  cursor: pointer;
+}
+#elementor-change-exit-preference-dialog .dialog-message > div {
+  margin-bottom: 10px;
+}
+#elementor-change-exit-preference-dialog .dialog-ok {
+  color: #39b54a;
+}
+
+#e-experiments-dependency-dialog .dialog-confirm-header {
+  font-weight: 600;
+}
+#e-experiments-dependency-dialog .dialog-ok {
+  color: #39b54a;
+}
+
+#e-kit-elements-defaults-create-dialog .dialog-ok {
+  color: #39b54a;
+}
+#e-kit-elements-defaults-create-dialog label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
 }
 
 .dialog-prevent-scroll {
@@ -187,8 +212,7 @@
 .elementor-templates-modal .dialog-header {
   padding: 0;
   background-color: #fff;
-  -webkit-box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
-          box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
   position: relative;
   z-index: 1;
 }
@@ -196,12 +220,9 @@
   background-color: #fff;
   border: none;
   display: none;
-  -webkit-box-pack: end;
-      -ms-flex-pack: end;
-          justify-content: flex-end;
+  justify-content: flex-end;
   padding: 5px;
-  -webkit-box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
-          box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
   position: relative;
 }
 .elementor-templates-modal .dialog-buttons-wrapper .elementor-button {
@@ -220,7 +241,7 @@
 .elementor-templates-modal .dialog-message {
   height: 750px;
   max-height: 85vh;
-  overflow: auto;
+  overflow-y: scroll;
   padding-top: 25px;
 }
 .elementor-templates-modal .dialog-content {
@@ -230,15 +251,9 @@
   display: none;
 }
 .elementor-templates-modal__header {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
+  align-items: center;
+  justify-content: space-between;
   height: 50px;
 }
 .elementor-templates-modal__header__logo {
@@ -252,12 +267,8 @@
   padding-right: 15px;
 }
 .elementor-templates-modal__header__logo-area > * {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  align-items: center;
 }
 .elementor-templates-modal__header__logo__icon-wrapper {
   margin-left: 10px;
@@ -267,32 +278,18 @@
   padding-top: 2px;
 }
 .elementor-templates-modal__header__items-area {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: reverse;
-      -ms-flex-direction: row-reverse;
-          flex-direction: row-reverse;
+  flex-direction: row-reverse;
 }
 .elementor-templates-modal__header__item {
   position: relative;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-sizing: content-box;
-          box-sizing: content-box;
+  align-items: center;
+  justify-content: center;
+  box-sizing: content-box;
 }
 .elementor-templates-modal__header__item > i {
   font-size: 20px;
-  -webkit-transition: all 0.3s;
-  -o-transition: all 0.3s;
   transition: all 0.3s;
   cursor: pointer;
 }
@@ -329,17 +326,13 @@
   color: #fff;
 }
 .elementor-templates-modal__sidebar {
-  -ms-flex-negative: 0;
-      flex-shrink: 0;
+  flex-shrink: 0;
   width: 25%;
   background-color: rgba(255, 255, 255, 0.3);
 }
 .elementor-templates-modal__content {
-  -webkit-box-flex: 1;
-      -ms-flex-positive: 1;
-          flex-grow: 1;
-  -webkit-box-shadow: 0 0 13px inset rgba(0, 0, 0, 0.05);
-          box-shadow: 0 0 13px inset rgba(0, 0, 0, 0.05);
+  flex-grow: 1;
+  box-shadow: 0 0 13px inset rgba(0, 0, 0, 0.05);
 }
 
 /* Will select next element after last '.elementor-general-section' */
@@ -412,11 +405,8 @@
 }
 #elementor-finder__search {
   padding: 14px 15px 14px 21px;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-shadow: 0 -3px 15px 6px rgba(0, 0, 0, 0.03);
-          box-shadow: 0 -3px 15px 6px rgba(0, 0, 0, 0.03);
+  box-shadow: 0 -3px 15px 6px rgba(0, 0, 0, 0.03);
 }
 #elementor-finder__search i {
   font-size: 16px;
@@ -430,25 +420,12 @@
   outline: none;
   padding: 0;
   margin: 0;
-  -webkit-box-flex: 1;
-      -ms-flex-positive: 1;
-          flex-grow: 1;
+  flex-grow: 1;
   font-size: 14px;
   color: #495157;
-  -webkit-box-shadow: none;
-          box-shadow: none;
-}
-#elementor-finder__search__input::-webkit-input-placeholder {
-  color: #a4afb7;
-  font-style: italic;
-  font-weight: 300;
+  box-shadow: none;
 }
 #elementor-finder__search__input::-moz-placeholder {
-  color: #a4afb7;
-  font-style: italic;
-  font-weight: 300;
-}
-#elementor-finder__search__input::-ms-input-placeholder {
   color: #a4afb7;
   font-style: italic;
   font-weight: 300;
@@ -466,6 +443,9 @@
   display: none;
   padding: 20px;
   color: #a4afb7;
+}
+#elementor-finder__lock-dialog {
+  z-index: 100000;
 }
 
 .elementor-finder__results__category {
@@ -490,20 +470,16 @@
   font-size: 14px;
 }
 .elementor-finder__results__item {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
 }
 .elementor-finder__results__item a {
   text-decoration: none;
-  -webkit-box-shadow: none;
-          box-shadow: none;
+  box-shadow: none;
   outline: none;
 }
 .elementor-finder__results__item.elementor-active {
   background-color: #71d7f7;
-  -webkit-box-shadow: none;
-          box-shadow: none;
+  box-shadow: none;
   outline: none;
 }
 .elementor-finder__results__item.elementor-active * {
@@ -513,16 +489,10 @@
   display: none;
 }
 .elementor-finder__results__item__link {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  align-items: center;
   height: 35px;
-  -webkit-box-flex: 1;
-      -ms-flex-positive: 1;
-          flex-grow: 1;
+  flex-grow: 1;
 }
 .elementor-finder__results__item__icon {
   width: 60px;
@@ -539,21 +509,24 @@
   color: #a4afb7;
   font-style: italic;
 }
+.elementor-finder__results__item__badge {
+  text-transform: uppercase;
+  position: absolute;
+  inset-inline-end: 16px;
+  color: #556068;
+  font-size: 8px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
 .elementor-finder__results__item__actions {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
 }
 .elementor-finder__results__item__action {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  align-items: center;
+  justify-content: center;
   height: 100%;
   width: 35px;
 }
@@ -576,8 +549,7 @@
   padding: 5px 12px;
   text-align: center;
   border-radius: 3px;
-  -webkit-box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.5);
-          box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.5);
 }
 
 .tipsy-arrow {
