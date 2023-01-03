@@ -1,24 +1,14 @@
 const Form = require('./form.js')
 const forms = []
-const listeners = {}
+const EventEmitter = require('./../events.js')
+const events = new EventEmitter()
 
-function emit (event, args) {
-  listeners[event] = listeners[event] || []
-  listeners[event].forEach(f => f.apply(null, args))
-}
-
-function on (event, func) {
-  listeners[event] = listeners[event] || []
-  listeners[event].push(func)
-}
-
-function off (event, func) {
-  listeners[event] = listeners[event] || []
-  listeners[event] = listeners[event].filter(f => f !== func)
-}
-
-// get form by its id
-// please note that this will get the FIRST occurence of the form with that ID on the page
+/**
+ * Get a Form object by its ID.
+ * This will return the first occurence of the form with the given ID on the page.
+ * @param {string|int} formId
+ * @returns {Form}
+ */
 function get (formId) {
   formId = parseInt(formId)
 
@@ -34,7 +24,12 @@ function get (formId) {
   return createFromElement(formElement, formId)
 }
 
-// get form by <form> element (or any input in form)
+/**
+ * Get form object from its HTML element (or from input field inside form element)
+ *
+ * @param {HTMLElement|HTMLInputElement} element
+ * @returns {Form}
+ */
 function getByElement (element) {
   const formElement = element.form || element
 
@@ -55,16 +50,35 @@ function createFromElement (formElement, id) {
   return form
 }
 
+/**
+ * Triggers two events. One namespaced to the specific form ID and one global (ie fires for all forms)
+ *
+ * @param {string} eventName The name of the event to trigger
+ * @param {array} eventArgs Arguments to pass to registered event listeners. The first argument should be a Form object.
+ * @public
+ */
 function trigger (eventName, eventArgs) {
   if (eventName === 'submit' || eventName.indexOf('.submit') > 0) {
     // don't spin up new thread for submit event as we want to preventDefault()...
-    emit(eventName, eventArgs)
+    events.emit(eventArgs[0].id + '.' + eventName, eventArgs)
+    events.emit(eventName, eventArgs)
   } else {
     // process in separate thread to prevent errors from breaking core functionality
     window.setTimeout(function () {
-      emit(eventName, eventArgs)
-    }, 1)
+      events.emit(eventArgs[0].id + '.' + eventName, eventArgs)
+      events.emit(eventName, eventArgs)
+    }, 10)
   }
 }
 
-module.exports = { get, getByElement, on, off, trigger }
+/**
+ * Add event listener.
+ * For a list of valid event names, please see https://www.mc4wp.com/kb/javascript-form-events/.
+ * @param {string} eventName
+ * @param {function} callback
+ */
+function on (eventName, callback) {
+  events.on(eventName, callback)
+}
+
+module.exports = { get, getByElement, on, trigger }

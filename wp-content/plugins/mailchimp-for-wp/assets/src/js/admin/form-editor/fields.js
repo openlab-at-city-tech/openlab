@@ -1,5 +1,6 @@
+const EventEmitter = require('../../events.js')
+const events = new EventEmitter()
 const fields = {}
-const listeners = {}
 
 function Field (data) {
   return {
@@ -34,19 +35,7 @@ function FieldChoice (data) {
 }
 
 function createChoices (data) {
-  let choices
-  if (typeof (data.map) === 'function') {
-    choices = data.map(function (choiceLabel) {
-      return new FieldChoice({ label: choiceLabel })
-    })
-  } else {
-    choices = Object.keys(data).map(function (key) {
-      const choiceLabel = data[key]
-      return new FieldChoice({ label: choiceLabel, value: key })
-    })
-  }
-
-  return choices
+  return Object.keys(data).map((key) => new FieldChoice({ label: data[key], value: key }))
 }
 
 function register (category, data) {
@@ -83,18 +72,8 @@ function register (category, data) {
   fields[data.name] = field
 
   // trigger event
-  emit('change')
+  events.emit('change', [])
   return field
-}
-
-function emit (event, args) {
-  listeners[event] = listeners[event] || []
-  listeners[event].forEach(f => f.apply(null, args))
-}
-
-function on (event, func) {
-  listeners[event] = listeners[event] || []
-  listeners[event].push(func)
 }
 
 function deregister (field) {
@@ -109,15 +88,10 @@ function getAll () {
   return Object.values(fields)
 }
 
-function getAllWhere (searchKey, searchValue) {
-  return getAll().filter(field => field[searchKey] === searchValue)
-}
-
 module.exports = {
-  get: get,
-  getAll: getAll,
-  getAllWhere: getAllWhere,
-  deregister: deregister,
-  register: register,
-  on
+  get,
+  getAll,
+  deregister,
+  register,
+  on: events.on.bind(events)
 }
