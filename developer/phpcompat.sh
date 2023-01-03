@@ -10,6 +10,10 @@ ignores=(
   'wp-content/plugins/awesome-flickr-gallery-plugin/afgFlickr/afgFlickr.php'
 #  'wp-content/plugins/backtype-connect/parser_php4.php'
   'wp-content/plugins/bbpress/includes/users/template.php' # punt
+
+  # Issues with 'static' keyword in included non-class files
+  'wp-content/plugins/bookly-responsive-appointment-booking-tool/backend'
+
   'wp-content/plugins/bp-reply-by-email/includes/phpseclib'
 #  'wp-content/plugins/btcnew/parser_php4.php'
   'wp-content/plugins/buddypress/cli/features'
