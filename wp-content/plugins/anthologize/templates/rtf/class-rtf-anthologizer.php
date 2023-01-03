@@ -477,7 +477,6 @@ class RtfAnthologizer extends Anthologizer {
     $data = preg_replace('~&#([0-9]+);~',      '"\\u\\1"',              $data);  // Dec
 
     // Replace literal entities
-
     $trans_tbl = get_html_translation_table(HTML_ENTITIES);
     $trans_tbl = array_flip($trans_tbl);
     $data = strtr($data, $trans_tbl);
