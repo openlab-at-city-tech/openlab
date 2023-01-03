@@ -11,7 +11,6 @@ function breadcrumb_items_override_permalinks($breadcrumb_items)
     $active_plugins = get_option('active_plugins');
 
 
-    //echo '<pre>'.var_export($permalinks, true).'</pre>';
     if (is_front_page() && is_home()) {
 
         $breadcrumb_items_new = array();
@@ -19,7 +18,6 @@ function breadcrumb_items_override_permalinks($breadcrumb_items)
 
         if (isset($permalinks['front_page']) && !empty($permalinks['front_page'])) {
             $post_type_permalinks = isset($permalinks['front_page']) ? $permalinks['front_page'] : array();
-            //echo '<pre>'.var_export($post_type_permalinks, true).'</pre>';
 
             $i = 0;
             if (!empty($post_type_permalinks))
@@ -49,7 +47,6 @@ function breadcrumb_items_override_permalinks($breadcrumb_items)
 
         if (isset($permalinks['home']) && !empty($permalinks['home'])) {
             $post_type_permalinks = isset($permalinks['home']) ? $permalinks['home'] : array();
-            //echo '<pre>'.var_export($post_type_permalinks, true).'</pre>';
 
             $i = 0;
             if (!empty($post_type_permalinks))
@@ -79,7 +76,6 @@ function breadcrumb_items_override_permalinks($breadcrumb_items)
 
         if (isset($permalinks['blog']) && !empty($permalinks['blog'])) {
             $post_type_permalinks = isset($permalinks['blog']) ? $permalinks['blog'] : array();
-            //echo '<pre>'.var_export($post_type_permalinks, true).'</pre>';
 
             $i = 0;
             if (!empty($post_type_permalinks))
@@ -111,7 +107,6 @@ function breadcrumb_items_override_permalinks($breadcrumb_items)
 
         if (isset($permalinks['wc_shop']) && !empty($permalinks['wc_shop'])) {
             $post_type_permalinks = isset($permalinks['wc_shop']) ? $permalinks['wc_shop'] : array();
-            //echo '<pre>'.var_export($post_type_permalinks, true).'</pre>';
 
             $i = 0;
             if (!empty($post_type_permalinks))
@@ -143,7 +138,6 @@ function breadcrumb_items_override_permalinks($breadcrumb_items)
 
         if (isset($permalinks[$post_type]) && !empty($permalinks[$post_type])) {
             $post_type_permalinks = isset($permalinks[$post_type]) ? $permalinks[$post_type] : array();
-            //echo '<pre>'.var_export($post_type_permalinks, true).'</pre>';
 
             $i = 0;
             if (!empty($post_type_permalinks))
@@ -170,7 +164,6 @@ function breadcrumb_items_override_permalinks($breadcrumb_items)
     } elseif (is_tax()) {
 
         $queried_object = get_queried_object();
-        //echo '<pre>'.var_export($queried_object, true).'</pre>';
 
         $taxonomy = $queried_object->taxonomy;
 
@@ -179,7 +172,6 @@ function breadcrumb_items_override_permalinks($breadcrumb_items)
 
         if (isset($permalinks[$taxonomy]) && !empty($permalinks[$taxonomy])) {
             $post_type_permalinks = isset($permalinks[$taxonomy]) ? $permalinks[$taxonomy] : array();
-            //echo '<pre>'.var_export($post_type_permalinks, true).'</pre>';
 
             $i = 0;
             if (!empty($post_type_permalinks))
@@ -206,7 +198,6 @@ function breadcrumb_items_override_permalinks($breadcrumb_items)
     } else if (is_category()) {
 
         $queried_object = get_queried_object();
-        //echo '<pre>'.var_export($queried_object, true).'</pre>';
 
         $taxonomy = $queried_object->taxonomy;
 
@@ -215,7 +206,6 @@ function breadcrumb_items_override_permalinks($breadcrumb_items)
 
         if (isset($permalinks[$taxonomy]) && !empty($permalinks[$taxonomy])) {
             $post_type_permalinks = isset($permalinks[$taxonomy]) ? $permalinks[$taxonomy] : array();
-            //echo '<pre>'.var_export($post_type_permalinks, true).'</pre>';
 
             $i = 0;
             if (!empty($post_type_permalinks))
@@ -242,7 +232,6 @@ function breadcrumb_items_override_permalinks($breadcrumb_items)
     } else if (is_tag()) {
 
         $queried_object = get_queried_object();
-        //echo '<pre>'.var_export($queried_object, true).'</pre>';
 
         $taxonomy = $queried_object->taxonomy;
 
@@ -251,7 +240,6 @@ function breadcrumb_items_override_permalinks($breadcrumb_items)
 
         if (isset($permalinks[$taxonomy]) && !empty($permalinks[$taxonomy])) {
             $post_type_permalinks = isset($permalinks[$taxonomy]) ? $permalinks[$taxonomy] : array();
-            //echo '<pre>'.var_export($post_type_permalinks, true).'</pre>';
 
             $i = 0;
             if (!empty($post_type_permalinks))
@@ -281,7 +269,6 @@ function breadcrumb_items_override_permalinks($breadcrumb_items)
 
         if (isset($permalinks['author']) && !empty($permalinks['author'])) {
             $post_type_permalinks = isset($permalinks['author']) ? $permalinks['author'] : array();
-            //echo '<pre>'.var_export($post_type_permalinks, true).'</pre>';
 
             $i = 0;
             if (!empty($post_type_permalinks))
@@ -312,7 +299,6 @@ function breadcrumb_items_override_permalinks($breadcrumb_items)
 
         if (isset($permalinks['search']) && !empty($permalinks['search'])) {
             $post_type_permalinks = isset($permalinks['search']) ? $permalinks['search'] : array();
-            //echo '<pre>'.var_export($post_type_permalinks, true).'</pre>';
 
             $i = 0;
             if (!empty($post_type_permalinks))
@@ -343,7 +329,6 @@ function breadcrumb_items_override_permalinks($breadcrumb_items)
 
         if (isset($permalinks['year']) && !empty($permalinks['year'])) {
             $post_type_permalinks = isset($permalinks['year']) ? $permalinks['year'] : array();
-            //echo '<pre>'.var_export($post_type_permalinks, true).'</pre>';
 
             $i = 0;
             if (!empty($post_type_permalinks))
@@ -374,7 +359,6 @@ function breadcrumb_items_override_permalinks($breadcrumb_items)
 
         if (isset($permalinks['month']) && !empty($permalinks['month'])) {
             $post_type_permalinks = isset($permalinks['month']) ? $permalinks['month'] : array();
-            //echo '<pre>'.var_export($post_type_permalinks, true).'</pre>';
 
             $i = 0;
             if (!empty($post_type_permalinks))
@@ -405,7 +389,6 @@ function breadcrumb_items_override_permalinks($breadcrumb_items)
 
         if (isset($permalinks['date']) && !empty($permalinks['date'])) {
             $post_type_permalinks = isset($permalinks['date']) ? $permalinks['date'] : array();
-            //echo '<pre>'.var_export($post_type_permalinks, true).'</pre>';
 
             $i = 0;
             if (!empty($post_type_permalinks))
@@ -414,7 +397,6 @@ function breadcrumb_items_override_permalinks($breadcrumb_items)
                     $breadcrumb_items_new[$i] = apply_filters('breadcrumb_permalink_' . $permalinkIndex, array('permalink' => $permalink));
 
 
-                    //echo '<pre>'.var_export($permalink, true).'</pre>';
 
 
                     if (!empty($breadcrumb_items_new[$i][0]) && is_array($breadcrumb_items_new[$i][0])) :
@@ -440,7 +422,6 @@ function breadcrumb_items_override_permalinks($breadcrumb_items)
 
         if (isset($permalinks['404']) && !empty($permalinks['404'])) {
             $post_type_permalinks = isset($permalinks['404']) ? $permalinks['404'] : array();
-            //echo '<pre>'.var_export($post_type_permalinks, true).'</pre>';
 
             $i = 0;
             if (!empty($post_type_permalinks))
@@ -449,7 +430,6 @@ function breadcrumb_items_override_permalinks($breadcrumb_items)
                     $breadcrumb_items_new[$i] = apply_filters('breadcrumb_permalink_' . $permalinkIndex, array('permalink' => $permalink));
 
 
-                    //echo '<pre>'.var_export($permalink, true).'</pre>';
 
 
                     if (!empty($breadcrumb_items_new[$i][0]) && is_array($breadcrumb_items_new[$i][0])) :
@@ -767,7 +747,6 @@ function breadcrumb_permalink_product_cat($breadcrumb_items)
             endif;
             $breadcrumb_items = array_merge($breadcrumb_items, $breadcrumb_items_new);
 
-            //echo '<pre>'.var_export($terms[0], true).'</pre>';
         }
     }
 
@@ -777,6 +756,137 @@ function breadcrumb_permalink_product_cat($breadcrumb_items)
 
     return $breadcrumb_items;
 }
+
+
+
+
+add_filter('breadcrumb_permalink_category_ancestors', 'breadcrumb_permalink_category_ancestors');
+
+function breadcrumb_permalink_category_ancestors($breadcrumb_items)
+{
+
+    $category_string = get_query_var('product_cat');
+    $category_arr = array();
+    $breadcrumb_items = array();
+
+
+
+    $taxonomy = 'product_cat';
+    $array_list = array();
+
+    if (!empty($category_string)) {
+        if (strpos($category_string, '/')) {
+
+            $category_arr = explode('/', $category_string);
+            $category_count = count($category_arr);
+            $last_cat = $category_arr[($category_count - 1)];
+            $breadcrumb_items_new = array();
+            $term_data = get_term_by('slug', $last_cat, $taxonomy);
+
+            $term_id = $term_data->term_id;
+            $term_name = $term_data->name;
+            $term_link = get_term_link($term_id, $taxonomy);
+
+            $parents_id  = get_ancestors($term_id, $taxonomy);
+            $parents_id = array_reverse($parents_id);
+
+
+
+            foreach ($parents_id as $id) {
+
+                $parent_term_link = get_term_link($id, $taxonomy);
+                $paren_term_name = get_term_by('id', $id, $taxonomy);
+
+                $breadcrumb_items_new[] = array(
+                    'link' => $parent_term_link,
+                    'title' => $paren_term_name->name,
+                );
+            }
+
+            $breadcrumb_items_new[] = array(
+                'link' => $term_link,
+                'title' => $term_name,
+            );
+
+
+            $breadcrumb_items = $breadcrumb_items_new;
+        } else {
+
+            $term_data = get_term_by('slug', $category_string, $taxonomy);
+            $breadcrumb_items_new = array();
+
+            //var_dump($category_string);
+
+            $term_id = isset($term_data->term_id) ? $term_data->term_id : '';
+            $term_name = isset($term_data->name) ? $term_data->name : '';
+
+            if (!empty($term_id)) :
+                $term_link = get_term_link($term_id, $taxonomy);
+
+                $breadcrumb_items_new = array(
+                    'link' => $term_link,
+                    'title' => $term_name,
+                );
+            endif;
+
+            $breadcrumb_items = array_merge($breadcrumb_items, $breadcrumb_items_new);
+        }
+    } else {
+
+        if (is_singular()) {
+            $post_id = get_the_ID();
+
+            //$terms = get_terms();
+            $terms = get_the_terms($post_id, $taxonomy);
+            $term_data = isset($terms[0]) ? $terms[0] : '';
+
+            $term_id = isset($term_data->term_id) ? $term_data->term_id : '';
+            $term_name = isset($term_data->name) ? $term_data->name : '';
+
+
+
+            $parents_id  = get_ancestors($term_id, $taxonomy);
+            $parents_id = array_reverse($parents_id);
+
+
+            foreach ($parents_id as $id) {
+
+                $parent_term_link = get_term_link($id, $taxonomy);
+                $paren_term_name = get_term_by('id', $id, $taxonomy);
+
+                $breadcrumb_items_new[] = array(
+                    'link' => $parent_term_link,
+                    'title' => $paren_term_name->name,
+                );
+            }
+
+
+            $breadcrumb_items = array_merge($breadcrumb_items, $breadcrumb_items_new);
+
+        }
+    }
+
+
+
+
+
+    return $breadcrumb_items;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 add_filter('breadcrumb_permalink_product_tag', 'breadcrumb_permalink_product_tag');
@@ -871,7 +981,6 @@ function breadcrumb_permalink_product_tag($breadcrumb_items)
             endif;
             $breadcrumb_items = array_merge($breadcrumb_items, $breadcrumb_items_new);
 
-            //echo '<pre>'.var_export($terms[0], true).'</pre>';
         }
     }
 
@@ -903,7 +1012,6 @@ function breadcrumb_permalink_post_tag($breadcrumb_items)
     $post_id = get_the_id();
 
     $post_tags = get_the_tags($post_id);
-    //echo '<pre>'.var_export($post_tags, true).'</pre>';
 
     $first_tag = isset($post_tags[0]) ? $post_tags[0] : '';
     if (!empty($first_tag)) :
@@ -1183,12 +1291,10 @@ function related_post_display_auto_20200409($title)
 
     if (in_array($post_type, $post_types) && in_the_loop()) {
 
-        //echo '<pre>'.var_export($post_types, true).'</pre>';
-        //echo '<pre>'.var_export($breadcrumb_posttitle_positions, true).'</pre>';
 
         ob_start();
 
-        echo do_shortcode('[breadcrumbgh]');
+        echo do_shortcode('[breadcrumb]');
 
         $html .= ob_get_clean();
 

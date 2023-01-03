@@ -30,7 +30,7 @@ class class_breadcrumb_shortcodes  {
 
         $html = '';
 
-        $themes = isset($atts['themes']) ? $atts['themes'] : '';
+        $themes = isset($atts['themes']) ? sanitize_text_field($atts['themes']) : '';
         $breadcrumb_themes = get_option( 'breadcrumb_themes', 'theme5' );
 
         $breadcrumb_themes = !empty($themes) ? $themes : $breadcrumb_themes;

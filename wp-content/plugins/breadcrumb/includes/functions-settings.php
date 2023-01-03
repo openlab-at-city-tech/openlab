@@ -208,7 +208,6 @@ function breadcrumb_settings_tabs_content_options(){
 //            $post_types_array[$post_type] = $singular_name;
 //        }
 //
-//        //echo '<pre>'.var_export($post_types_array, true).'</pre>';
 //
 //        $args = array(
 //            'id'		=> 'breadcrumb_display_auto_post_types',
@@ -264,7 +263,6 @@ function breadcrumb_settings_tabs_content_builder(){
 
 
     $page_views = breadcrumb_page_views();
-    //echo '<pre>'.var_export($breadcrumb_pages_objects, ture).'</pre>';
 
     $breadcrumb_tags = breadcrumb_tags();
     $breadcrumb_tag_options = array();
@@ -298,7 +296,6 @@ function breadcrumb_settings_tabs_content_builder(){
             jQuery(document).ready(function($){
                 breadcrumb_tag_options = <?php echo $breadcrumb_tag_options; ?>;
 
-                //console.log(breadcrumb_tag_options.front_text);
 
 
                 $(document).on('click','.breadcrumb-tags span',function(){
@@ -322,7 +319,7 @@ function breadcrumb_settings_tabs_content_builder(){
     foreach ($page_views as $view_type => $view) {
 
         ?>
-        <h2><?php echo ucfirst(str_replace('_',' ', $view_type)); ?></h2>
+        <h2><?php echo ucfirst(str_replace('_',' ', esc_html($view_type))); ?></h2>
         <hr>
         <?php
 
@@ -333,13 +330,12 @@ function breadcrumb_settings_tabs_content_builder(){
 
                 $post_type_name = isset($postTypeData['name'])? $postTypeData['name'] : '';
 
-                //echo '<pre>'.var_export($postType, ture).'</pre>';
 
                 if(empty($post_type_name)) continue;
 
                 ?>
                 <div class="item">
-                    <p style="font-weight: bold;"><?php echo $post_type_name; ?></p>
+                    <p style="font-weight: bold;"><?php echo esc_html($post_type_name); ?></p>
                     <div class="breadcrumb-tags">
                         <?php
 
@@ -349,7 +345,7 @@ function breadcrumb_settings_tabs_content_builder(){
                                 $input_name = 'breadcrumb_options[permalinks]'.'['.$postType.']';
 
                                 ?>
-                                <span input_name="<?php echo $input_name; ?>" tag_id="<?php echo $tag_id; ?>"><?php echo $tag_name; ?></span>
+                                <span input_name="<?php echo esc_attr($input_name); ?>" tag_id="<?php echo esc_attr($tag_id); ?>"><?php echo esc_html($tag_name); ?></span>
                             <?php
                             endforeach;
                         ?>
@@ -359,7 +355,6 @@ function breadcrumb_settings_tabs_content_builder(){
                         <?php
                         $post_permalinks = isset($permalinks[$postType]) ? $permalinks[$postType] : array();
                         $args = array('input_name'=> 'breadcrumb_options[permalinks]'.'['.$postType.']');
-                        //echo '<pre>'.var_export($post_permalinks, ture).'</pre>';
 
                         if(!empty($post_permalinks)):
                             foreach ($post_permalinks as $permalink_tag => $permalink){

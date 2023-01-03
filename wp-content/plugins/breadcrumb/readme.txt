@@ -3,8 +3,8 @@
 	Donate link: https://www.pickplugins.com/item/breadcrumb-awesome-breadcrumbs-style-navigation-for-wordpress/?ref=wordpress.org
 	Tags: breadcrumb, breadcrumbs, breadcrumb nav, trail, woocommerce breadcrumb
 	Requires at least: 3.8
-	Tested up to: 6.0
-	Stable tag: 1.5.28
+	Tested up to: 6.1.1
+	Stable tag: 1.5.32
 	License: GPLv2 or later
 	License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -121,6 +121,19 @@ use this short-code any where to display breadcrumb
 
 
 == Changelog ==
+
+
+	= 1.5.32 =
+    * 2022-01-03  - add - Product Category ancestors element added for WooCommerce
+
+	= 1.5.31 =
+    * 2022-12-30  - fix - CSS as text output issue fixed.
+
+	= 1.5.30 =
+    * 2022-12-30  - fix - escape issues fixed
+
+	= 1.5.29 =
+    * 2022-12-30  - fix - Sanitization issue fixed.
 
 	= 1.5.28 =
     * 2022-011-01  - fix - Undefined property: WP_Error::$name issue fixed

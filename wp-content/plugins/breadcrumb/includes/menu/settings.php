@@ -81,7 +81,7 @@ array_multisort($tabs_sorted, SORT_ASC, $breadcrumb_settings_tabs);
 	<div id="icon-tools" class="icon32"><br></div><?php echo "<h2>".sprintf(__('%s Settings'), breadcrumb_plugin_name )."</h2>";?>
 		<form  method="post" action="<?php echo str_replace( '%7E', '~', esc_url_raw($_SERVER['REQUEST_URI'])); ?>">
 	        <input type="hidden" name="breadcrumb_hidden" value="Y">
-            <input type="hidden" name="tab" value="<?php echo $current_tab; ?>">
+            <input type="hidden" name="tab" value="<?php echo esc_attr($current_tab); ?>">
 
             <?php
             if(!empty($_POST['breadcrumb_hidden'])){
@@ -112,7 +112,7 @@ array_multisort($tabs_sorted, SORT_ASC, $breadcrumb_settings_tabs);
                         $data_visible = isset($tab['data_visible']) ? $tab['data_visible'] : '';
                         $hidden = isset($tab['hidden']) ? $tab['hidden'] : false;
                         ?>
-                        <li <?php if(!empty($data_visible)):  ?> data_visible="<?php echo $data_visible; ?>" <?php endif; ?> class="tab-nav <?php if($hidden) echo 'hidden';?> <?php if($active) echo 'active';?>" data-id="<?php echo $id; ?>"><?php echo $title; ?></li>
+                        <li <?php if(!empty($data_visible)):  ?> data_visible="<?php echo esc_attr($data_visible); ?>" <?php endif; ?> class="tab-nav <?php if($hidden) echo 'hidden';?> <?php if($active) echo 'active';?>" data-id="<?php echo esc_attr($id); ?>"><?php echo wp_kses_post($title); ?></li>
                         <?php
                     }
                     ?>
@@ -125,7 +125,7 @@ array_multisort($tabs_sorted, SORT_ASC, $breadcrumb_settings_tabs);
                         $active = $tab['active'];
 
                         ?>
-                        <div class="right-panel-content <?php if($active) echo 'active';?> right-panel-content-<?php echo $id; ?>">
+                        <div class="right-panel-content <?php if($active) echo 'active';?> right-panel-content-<?php echo esc_attr($id); ?>">
                             <?php
 
                             do_action('breadcrumb_settings_tabs_right_panel_'.$id);
@@ -147,7 +147,7 @@ array_multisort($tabs_sorted, SORT_ASC, $breadcrumb_settings_tabs);
 
                     ?>
 
-                    <div class="tab-content <?php if($active) echo 'active';?>" id="<?php echo $id; ?>">
+                    <div class="tab-content <?php if($active) echo 'active';?>" id="<?php echo esc_attr($id); ?>">
                         <?php
                         do_action('breadcrumb_settings_tabs_content_'.$id, $tab);
                         ?>

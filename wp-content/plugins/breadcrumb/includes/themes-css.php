@@ -21,7 +21,7 @@ function breadcrumb_themes_css($theme){
             padding: 0;
         }
         .breadcrumb-container.theme1 a {
-            background: <?php echo $breadcrumb_bg_color; ?>;
+            background: <?php echo esc_attr($breadcrumb_bg_color); ?>;
             display: inline-block;
             margin: 0 5px;
             padding: 5px 10px;
@@ -42,7 +42,7 @@ function breadcrumb_themes_css($theme){
             padding: 0;
         }
         .breadcrumb-container.theme2 a {
-            background: <?php echo $breadcrumb_bg_color; ?>;
+            background: <?php echo esc_attr($breadcrumb_bg_color); ?>;
             border-bottom: 1px solid rgb(139, 139, 139);
             border-top: 1px solid rgba(255, 255, 255, 0);
             display: inline-block;
@@ -69,7 +69,7 @@ function breadcrumb_themes_css($theme){
 
 
         .breadcrumb-container.theme3 a {
-            background: <?php echo $breadcrumb_bg_color; ?>;
+            background: <?php echo esc_attr($breadcrumb_bg_color); ?>;
             border-top: 1px solid rgb(139, 139, 139);
             border-bottom: 1px solid rgba(355, 355, 355, 0);
             display: inline-block;
@@ -95,7 +95,7 @@ function breadcrumb_themes_css($theme){
         }
 
         .breadcrumb-container.theme4 a {
-            background: <?php echo $breadcrumb_bg_color; ?>;
+            background: <?php echo esc_attr($breadcrumb_bg_color); ?>;
             color: rgb(102, 102, 102);
             display: inline-block;
             font-size: 14px;
@@ -112,7 +112,7 @@ function breadcrumb_themes_css($theme){
             -moz-border-left-colors: none;
             -moz-border-right-colors: none;
             -moz-border-top-colors: none;
-            border-color: rgba(0, 0, 0, 0) rgba(0, 0, 0, 0) rgba(0, 0, 0, 0) <?php echo $breadcrumb_bg_color; ?>;
+            border-color: rgba(0, 0, 0, 0) rgba(0, 0, 0, 0) rgba(0, 0, 0, 0) <?php echo esc_attr($breadcrumb_bg_color); ?>;
             border-image: none;
             border-style: solid;
             border-width: 13px;
@@ -147,7 +147,7 @@ function breadcrumb_themes_css($theme){
         }
 
         .breadcrumb-container.theme5 a {
-            background: <?php echo $breadcrumb_bg_color; ?>;
+            background: <?php echo esc_attr($breadcrumb_bg_color); ?>;
             color: rgb(102, 102, 102);
             display: inline-block;
             font-size: 14px;
@@ -163,7 +163,7 @@ function breadcrumb_themes_css($theme){
             -moz-border-left-colors: none;
             -moz-border-right-colors: none;
             -moz-border-top-colors: none;
-            border-color: <?php echo $breadcrumb_bg_color; ?> <?php echo $breadcrumb_bg_color; ?> <?php echo $breadcrumb_bg_color; ?> rgba(0, 0, 0, 0);
+            border-color: <?php echo esc_attr($breadcrumb_bg_color); ?> <?php echo esc_attr($breadcrumb_bg_color); ?> <?php echo esc_attr($breadcrumb_bg_color); ?> rgba(0, 0, 0, 0);
             border-image: none;
             border-style: solid;
             border-width: 13px;
@@ -180,7 +180,7 @@ function breadcrumb_themes_css($theme){
             -moz-border-left-colors: none;
             -moz-border-right-colors: none;
             -moz-border-top-colors: none;
-            border-color: rgba(0, 0, 0, 0) rgba(0, 0, 0, 0) rgba(0, 0, 0, 0) <?php echo $breadcrumb_bg_color; ?>;
+            border-color: rgba(0, 0, 0, 0) rgba(0, 0, 0, 0) rgba(0, 0, 0, 0) <?php echo esc_attr($breadcrumb_bg_color); ?>;
             border-image: none;
             border-style: solid;
             border-width: 13px;
@@ -205,7 +205,6 @@ function breadcrumb_themes_css($theme){
 
     $breadcrumb_themes_css = apply_filters('breadcrumb_themes_css', $breadcrumb_themes_css);
 
-    //echo '<pre>'.var_export($breadcrumb_themes_css, true).'</pre>';
 
     return isset($breadcrumb_themes_css[$theme]) ? $breadcrumb_themes_css[$theme] : '';
 						

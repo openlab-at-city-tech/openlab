@@ -100,6 +100,8 @@ function breadcrumb_posttypes_tags($tags){
             $tags['product']['wc_shop'] = array('name' => __('Shop','breadcrumb'));
             $tags['product']['product_cat'] = array('name' => __('Product category','breadcrumb'));
             $tags['product']['product_tag'] = array('name' => __('Product tag','breadcrumb'));
+            $tags['product']['category_ancestors'] = array('name' => __('Category ancestors','breadcrumb'));
+
 
         }
 
@@ -108,7 +110,6 @@ function breadcrumb_posttypes_tags($tags){
 
     }
 
-    //echo "<pre>".var_export($tags, true)."</pre>";
 
     return $tags;
 }
@@ -123,7 +124,6 @@ function breadcrumb_taxonomy_terms_tags($tags){
     //$taxonomies = get_taxonomies();
     $taxonomies = get_object_taxonomies( $post_types );
 
-    //echo "<pre>".var_export($taxonomies, true)."</pre>";
 
 
     foreach ($taxonomies as $taxonomy){
@@ -349,7 +349,6 @@ function breadcrumb_page_views(){
 
         $obj = $wp_post_types[$post_type];
 
-        //echo '<pre>'.var_export($obj, true).'</pre>';
 
 
         $post_types_array[$post_type] = $obj->labels->singular_name;
@@ -363,7 +362,6 @@ function breadcrumb_page_views(){
     if(!empty($taxonomies))
     foreach ($taxonomies as $taxonomy){
 
-        //echo '<pre>'.var_export($taxonomy, true).'</pre>';
 
         $taxonomy_data = get_taxonomy($taxonomy);
         $taxonomy_public = $taxonomy_data->public;
@@ -393,7 +391,6 @@ function breadcrumb_page_views(){
 
 
 
-    //echo '<pre>'.var_export($views, true).'</pre>';
 
     $views = apply_filters('breadcrumb_page_views', $views);
 
@@ -1036,6 +1033,47 @@ function breadcrumb_tag_options_product_cat($parameters){
 }
 
 
+add_action('breadcrumb_tag_options_category_ancestors', 'breadcrumb_tag_options_category_ancestors');
+
+function breadcrumb_tag_options_category_ancestors($parameters){
+    $settings_tabs_field = new settings_tabs_field();
+    $input_name = isset($parameters['input_name']) ? $parameters['input_name'] : '{input_name}';
+
+
+
+    ?>
+    <div class="item">
+        <div class="element-title header ">
+            <span class="remove" onclick="jQuery(this).parent().parent().remove()"><i class="fas fa-times"></i></span>
+            <span class="sort"><i class="fas fa-sort"></i></span>
+
+            <span class="expand"><?php echo __('Category Ancestors','breadcrumb'); ?></span>
+        </div>
+        <div class="element-options options">
+
+            <?php
+
+            $prefix_text = '';
+            $args = array(
+                'id'		=> 'prefix_text',
+                'wrapper_class'		=> 'hidden',
+                'parent' => $input_name.'[category_ancestors]',
+                'title'		=> __('Prefix text','breadcrumb'),
+                'details'	=> __('Add prefix text.','breadcrumb'),
+                'type'		=> 'text',
+                'value'		=> $prefix_text,
+                'default'		=> '',
+            );
+
+            $settings_tabs_field->generate_field($args);
+
+            ?>
+
+        </div>
+    </div>
+    <?php
+
+}
 
 add_action('breadcrumb_tag_options_product_tag', 'breadcrumb_tag_options_product_tag');
 
@@ -1730,7 +1768,6 @@ function breadcrumb_trail_array_list(){
             );
 
 
-        //echo '<pre>'.var_export($permalink_items, true).'</pre>';
 
         if(!empty($permalink_structure) && get_post_type()=='post'){
 
@@ -1787,7 +1824,6 @@ function breadcrumb_trail_array_list(){
                     $category_arr = array();
                     $taxonomy = 'category';
 
-                    //echo '<pre>'.var_export($category_string, true).'</pre>';
 
                     if(strpos( $category_string, '/' )){
 
