@@ -8,8 +8,8 @@ class EMCS_Customizer
     {
         add_submenu_page(
             'emcs-event-types',
-            __('Customize Widget - Embed Calendly', 'emcs'),
-            __('Customizer', 'emcs'),
+            __('Customize Widget - Embed Calendly', 'embed-calendly-scheduling'),
+            __('Customizer', 'embed-calendly-scheduling'),
             'manage_options',
             'emcs-customizer',
             'EMCS_Customizer::get_layout'

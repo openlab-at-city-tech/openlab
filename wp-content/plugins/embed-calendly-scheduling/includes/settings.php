@@ -11,14 +11,14 @@ function emcs_settings_init()
 
     add_settings_section(
         'emcs_api_section',
-        __('Setup Calendly connection', 'emcs'),
+        __('Setup Calendly connection', 'embed-calendly-scheduling'),
         '',
         'emcs'
     );
 
     add_settings_field(
         'emcs_v1api_field',
-        __('V1 API Key', 'emcs'),
+        __('V1 API Key', 'embed-calendly-scheduling'),
         'emcs_api_field_cb',
         'emcs',
         'emcs_api_section',
@@ -29,7 +29,7 @@ function emcs_settings_init()
 
     add_settings_field(
         'emcs_v2api_field',
-        __('V2 API Key', 'emcs'),
+        __('V2 API Key', 'embed-calendly-scheduling'),
         'emcs_v2api_field_cb',
         'emcs',
         'emcs_api_section',
@@ -76,8 +76,8 @@ function emcs_settings_page()
 {
     add_submenu_page(
         'emcs-event-types',
-        __('', 'emcs'),
-        __('Settings', 'emcs'),
+        __('', 'embed-calendly-scheduling'),
+        __('Settings', 'embed-calendly-scheduling'),
         'manage_options',
         'emcs-settings',
         'emcs_settings_page_html'
@@ -99,7 +99,7 @@ function emcs_settings_page_html()
     }
 
     if (isset($_GET['settings-updated'])) {
-        add_settings_error('emcs_messages', 'emcs_message', __('Settings Saved', 'emcs'), 'updated');
+        add_settings_error('emcs_messages', 'emcs_message', __('Settings Saved', 'embed-calendly-scheduling'), 'updated');
     }
 ?>
     <div class="emcs-title">

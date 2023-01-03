@@ -5,7 +5,7 @@
  * Description: Easy and simple way to embed Calendly scheduling pages on WordPress.
  * Author: Embed Calendly, Shycoder
  * Author URI: https://embedcalendly.com/
- * Version: 3.1
+ * Version: 3.2
  * License: GPLv2 or later
  */
 

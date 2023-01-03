@@ -8,8 +8,8 @@ class EMCS_Event_Types_Dashboard
     public static function init()
     {
         add_menu_page(
-            __('Embed Calendly', 'emcs'),
-            __('Embed Calendly', 'emcs'),
+            __('Embed Calendly', 'embed-calendly-scheduling'),
+            __('Embed Calendly', 'embed-calendly-scheduling'),
             'manage_options',
             'emcs-event-types',
             'EMCS_Event_Types_Dashboard::emcs_event_list_html',
@@ -19,8 +19,8 @@ class EMCS_Event_Types_Dashboard
 
         add_submenu_page(
             'emcs-event-types',
-            __('Event Types', 'emcs'),
-            __('Event Types', 'emcs'),
+            __('Event Types', 'embed-calendly-scheduling'),
+            __('Event Types', 'embed-calendly-scheduling'),
             'manage_options',
             'emcs-event-types',
             'EMCS_Event_Types_Dashboard::emcs_event_list_html'
