@@ -402,7 +402,7 @@ class Admin_Menu extends Base_Admin_Menu {
 	 * Update Site Editor menu item's link and position.
 	 */
 	public function add_gutenberg_menus() {
-		if ( self::CLASSIC_VIEW === $this->get_preferred_view( 'admin.php?page=gutenberg-edit-site' ) ) {
+		if ( self::CLASSIC_VIEW === $this->get_preferred_view( 'site-editor.php' ) ) {
 			return;
 		}
 
@@ -410,13 +410,12 @@ class Admin_Menu extends Base_Admin_Menu {
 
 		// Gutenberg 11.9 moves the Site Editor to an Appearance submenu as Editor.
 		$submenus_to_update = array(
+			// Keep the old rule in order to Calypsoify the route for GB < 13.7.
 			'gutenberg-edit-site' => 'https://wordpress.com/site-editor/' . $this->domain,
+			// New route: Gutenberg 13.7 changes the site editor menu item slug and url.
+			'site-editor.php'     => 'https://wordpress.com/site-editor/' . $this->domain,
 		);
 		$this->update_submenus( 'themes.php', $submenus_to_update );
-		// Gutenberg 11.9 adds an redundant site editor entry point that requires some calypso work
-		// before it can be exposed.  Note, there are also already discussions to remove this excess
-		// item in Gutenberg.
-		$this->hide_submenu_page( 'themes.php', 'gutenberg-edit-site&styles=open' );
 	}
 
 	/**

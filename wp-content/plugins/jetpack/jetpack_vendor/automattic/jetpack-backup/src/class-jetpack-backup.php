@@ -13,6 +13,7 @@ use Automattic\Jetpack\Admin_UI\Admin_Menu;
 use Automattic\Jetpack\Assets;
 use Automattic\Jetpack\Backup\Initial_State as Backup_Initial_State;
 use Automattic\Jetpack\Backup\Jetpack_Backup_Upgrades;
+use Automattic\Jetpack\Connection\Client;
 use Automattic\Jetpack\Connection\Initial_State as Connection_Initial_State;
 use Automattic\Jetpack\Connection\Manager as Connection_Manager;
 use Automattic\Jetpack\Connection\Rest_Authentication as Connection_Rest_Authentication;
@@ -73,8 +74,8 @@ class Jetpack_Backup {
 		add_action( 'rest_api_init', array( __CLASS__, 'register_rest_routes' ) );
 
 		$page_suffix = Admin_Menu::add_menu(
-			__( 'Jetpack Backup', 'jetpack-backup-pkg' ),
-			_x( 'Backup', 'The Jetpack Backup product name, without the Jetpack prefix', 'jetpack-backup-pkg' ),
+			__( 'Jetpack VaultPress Backup', 'jetpack-backup-pkg' ),
+			_x( 'VaultPress Backup', 'The Jetpack VaultPress Backup product name, without the Jetpack prefix', 'jetpack-backup-pkg' ),
 			'manage_options',
 			'jetpack-backup',
 			array( __CLASS__, 'plugin_settings_page' ),
@@ -82,7 +83,7 @@ class Jetpack_Backup {
 		);
 		add_action( 'load-' . $page_suffix, array( __CLASS__, 'admin_init' ) );
 
-		// Init Jetpack packages and ConnectionUI.
+		// Init Jetpack packages.
 		add_action(
 			'plugins_loaded',
 			function () {
@@ -207,6 +208,17 @@ class Jetpack_Backup {
 			)
 		);
 
+		// Get whether the site has a backup plan
+		register_rest_route(
+			'jetpack/v4',
+			'/has-backup-plan',
+			array(
+				'methods'             => WP_REST_Server::READABLE,
+				'callback'            => __CLASS__ . '::has_backup_plan',
+				'permission_callback' => __CLASS__ . '::backups_permissions_callback',
+			)
+		);
+
 		// Get site rewind data.
 		register_rest_route(
 			'jetpack/v4',
@@ -247,20 +259,17 @@ class Jetpack_Backup {
 			'jetpack/v4',
 			'/site/dismissed-review-request',
 			array(
-				array(
-					'methods'             => WP_REST_Server::READABLE,
-					'callback'            => __CLASS__ . '::get_dismissed_backup_review_request',
-					'permission_callback' => __CLASS__ . '::backups_permissions_callback',
-				),
-				array(
-					'methods'             => \WP_REST_Server::EDITABLE,
-					'callback'            => __CLASS__ . '::set_dismissed_backup_review_request',
-					'permission_callback' => __CLASS__ . '::backups_permissions_callback',
-					'args'                => array(
-						'dismissed_value' => array(
-							'required' => true,
-							'type'     => 'boolean',
-						),
+				'methods'             => \WP_REST_Server::EDITABLE,
+				'callback'            => __CLASS__ . '::manage_dismissed_backup_review_request',
+				'permission_callback' => __CLASS__ . '::backups_permissions_callback',
+				'args'                => array(
+					'option_name'    => array(
+						'required' => true,
+						'type'     => 'string',
+					),
+					'should_dismiss' => array(
+						'required' => true,
+						'type'     => 'boolean',
 					),
 				),
 			)
@@ -305,6 +314,44 @@ class Jetpack_Backup {
 		return rest_ensure_response(
 			json_decode( $response['body'], true )
 		);
+	}
+
+	/**
+	 * Hits the wpcom api to check rewind status.
+	 *
+	 * @return Object|WP_Error
+	 */
+	private static function get_rewind_state_from_wpcom() {
+		static $status = null;
+
+		if ( $status !== null ) {
+			return $status;
+		}
+
+		$site_id = Jetpack_Options::get_option( 'id' );
+
+		$response = Client::wpcom_json_api_request_as_blog( sprintf( '/sites/%d/rewind', $site_id ) . '?force=wpcom', '2', array( 'timeout' => 2 ), null, 'wpcom' );
+
+		if ( 200 !== wp_remote_retrieve_response_code( $response ) ) {
+			return new WP_Error( 'rewind_state_fetch_failed' );
+		}
+
+		$body   = wp_remote_retrieve_body( $response );
+		$status = json_decode( $body );
+		return $status;
+	}
+
+	/**
+	 * Checks whether the current plan (or purchases) of the site already supports the product
+	 *
+	 * @return boolean
+	 */
+	public static function has_backup_plan() {
+		$rewind_data = static::get_rewind_state_from_wpcom();
+		if ( is_wp_error( $rewind_data ) ) {
+			return false;
+		}
+		return is_object( $rewind_data ) && isset( $rewind_data->state ) && 'unavailable' !== $rewind_data->state;
 	}
 
 	/**
@@ -410,47 +457,31 @@ class Jetpack_Backup {
 			return self::get_failed_fetch_error();
 		}
 
-		// Decode the results.
-		$results = json_decode( $response['body'], true );
-
-		// Bail if there were no results or purchase details returned.
-		if ( ! is_array( $results ) ) {
-			return self::get_failed_fetch_error();
-		}
-
 		return rest_ensure_response(
-			array(
-				'code'    => 'success',
-				'message' => esc_html__( 'Site purchases correctly received.', 'jetpack-backup-pkg' ),
-				'data'    => $results,
-			)
+			json_decode( $response['body'], true )
 		);
-	}
 
-	/**
-	 * Returns the value of the dismissed_backup_review_request Jetack option.
-	 *
-	 * @access public
-	 * @static
-	 *
-	 * @return bool option value.
-	 */
-	public static function get_dismissed_backup_review_request() {
-		return rest_ensure_response(
-			\Jetpack_Options::get_option( 'dismissed_backup_review_request' )
-		);
 	}
 
 	/**
 	 * Set value of the dismissed_backup_review_request Jetack option.
+	 * Get value if should_dismiss is false
 	 *
 	 * @access public
 	 * @static
-	 * @param bool $request used ot update value of the option.
-	 * @return void
+	 * @param array $request arguments should_dismiss and option_name.
+	 * @return bool value of option if value is requested | updated or not if value is updated.
 	 */
-	public static function set_dismissed_backup_review_request( $request ) {
-		\Jetpack_Options::update_option( 'dismissed_backup_review_request', $request['dismissed_value'] );
+	public static function manage_dismissed_backup_review_request( $request ) {
+
+		if ( ! $request['should_dismiss'] ) {
+
+			return rest_ensure_response(
+				\Jetpack_Options::get_option( 'dismissed_backup_review_' . $request['option_name'] )
+			);
+		}
+
+		return \Jetpack_Options::update_option( 'dismissed_backup_review_' . $request['option_name'], true );
 	}
 
 	/**

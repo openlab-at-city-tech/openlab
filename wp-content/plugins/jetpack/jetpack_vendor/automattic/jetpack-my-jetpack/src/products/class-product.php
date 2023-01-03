@@ -118,6 +118,7 @@ abstract class Product {
 			'description'              => static::get_description(),
 			'long_description'         => static::get_long_description(),
 			'features'                 => static::get_features(),
+			'disclaimers'              => static::get_disclaimers(),
 			'status'                   => static::get_status(),
 			'pricing_for_ui'           => static::get_pricing_for_ui(),
 			'is_bundle'                => static::is_bundle_product(),
@@ -200,6 +201,15 @@ abstract class Product {
 	}
 
 	/**
+	 * Get the disclaimers corresponding to a feature
+	 *
+	 * @return ?array
+	 */
+	public static function get_disclaimers() {
+		return array();
+	}
+
+	/**
 	 * Checks whether the current plan (or purchases) of the site already supports the product
 	 *
 	 * Returns true if it supports. Return false if a purchase is still required.
@@ -210,6 +220,19 @@ abstract class Product {
 	 */
 	public static function has_required_plan() {
 		return true;
+	}
+
+	/**
+	 * Checks whether the product supports trial or not
+	 *
+	 * Returns true if it supports. Return false otherwise.
+	 *
+	 * Free products will always return false.
+	 *
+	 * @return boolean
+	 */
+	public static function has_trial_support() {
+		return false;
 	}
 
 	/**
@@ -256,11 +279,19 @@ abstract class Product {
 			// We only consider missing user connection an error when the Product is active.
 			if ( static::$requires_user_connection && ! ( new Connection_Manager() )->has_connected_owner() ) {
 				$status = 'error';
-			} elseif ( ! static::has_required_plan() ) {
-				$status = 'needs_purchase'; // We need needs_purchase here as well because some products we consider active without the required plan.
+			} elseif ( ! static::has_required_plan() ) { // We need needs_purchase here as well because some products we consider active without the required plan.
+				if ( static::has_trial_support() ) {
+					$status = 'needs_purchase_or_free';
+				} else {
+					$status = 'needs_purchase';
+				}
 			}
 		} elseif ( ! static::has_required_plan() ) {
-			$status = 'needs_purchase';
+			if ( static::has_trial_support() ) {
+				$status = 'needs_purchase_or_free';
+			} else {
+				$status = 'needs_purchase';
+			}
 		} else {
 			$status = 'inactive';
 		}

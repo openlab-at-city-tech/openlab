@@ -187,14 +187,6 @@ class Jetpack {
 		'comment-likes'      => array(
 			'Epoch' => 'epoch/plugincore.php',
 		),
-		'contact-form'       => array(
-			'Contact Form 7'           => 'contact-form-7/wp-contact-form-7.php',
-			'Gravity Forms'            => 'gravityforms/gravityforms.php',
-			'Contact Form Plugin'      => 'contact-form-plugin/contact_form.php',
-			'Easy Contact Forms'       => 'easy-contact-forms/easy-contact-forms.php',
-			'Fast Secure Contact Form' => 'si-contact-form/si-contact-form.php',
-			'Ninja Forms'              => 'ninja-forms/ninja-forms.php',
-		),
 		'latex'              => array(
 			'LaTeX for WordPress'     => 'latex/latex.php',
 			'Youngwhans Simple Latex' => 'youngwhans-simple-latex/yw-latex.php',
@@ -245,6 +237,10 @@ class Jetpack {
 			'The SEO Framework'              => 'autodescription/autodescription.php',
 			'Rank Math'                      => 'seo-by-rank-math/rank-math.php',
 			'Slim SEO'                       => 'slim-seo/slim-seo.php',
+			'SEOKEY'                         => 'seo-key/seo-key.php',
+			'SEOKEY Pro'                     => 'seo-key-pro/seo-key.php',
+			'SEOPress'                       => 'wp-seopress/seopress.php',
+			'SEOPress Pro'                   => 'wp-seopress-pro/seopress-pro.php',
 		),
 		'verification-tools' => array(
 			'WordPress SEO by Yoast'         => 'wordpress-seo/wp-seo.php',
@@ -733,7 +729,7 @@ class Jetpack {
 			 * We'll shortcircuit wp_notify_postauthor and wp_notify_moderator pluggable functions
 			 * so they point moderation links on emails to Calypso.
 			 */
-			jetpack_require_lib( 'functions.wp-notify' );
+			require_once JETPACK__PLUGIN_DIR . '_inc/lib/functions.wp-notify.php';
 			add_filter( 'comment_notification_recipients', 'jetpack_notify_postauthor', 1, 2 );
 			add_filter( 'notify_moderator', 'jetpack_notify_moderator', 1, 2 );
 		}
@@ -825,15 +821,12 @@ class Jetpack {
 				'jitm',
 				'sync',
 				'waf',
+				'videopress',
+				'stats',
 			)
 			as $feature
 		) {
 			$config->ensure( $feature );
-		}
-
-		$modules = new Automattic\Jetpack\Modules();
-		if ( $modules->is_active( 'publicize' ) ) {
-			$config->ensure( 'publicize' );
 		}
 
 		$config->ensure(
@@ -861,6 +854,11 @@ class Jetpack {
 
 		if ( ! $this->connection_manager ) {
 			$this->connection_manager = new Connection_Manager( 'jetpack' );
+		}
+
+		$modules = new Automattic\Jetpack\Modules();
+		if ( $modules->is_active( 'publicize' ) && $this->connection_manager->has_connected_user() ) {
+			$config->ensure( 'publicize' );
 		}
 
 		/*
@@ -1565,7 +1563,7 @@ class Jetpack {
 	 * @return bool
 	 */
 	public static function is_active() {
-		return self::connection()->is_active();
+		return self::connection()->has_connected_owner();
 	}
 
 	/**
@@ -1581,14 +1579,6 @@ class Jetpack {
 	 * @return bool is the site connection ready to be used?
 	 */
 	public static function is_connection_ready() {
-		$is_connected = false;
-
-		if ( method_exists( self::connection(), 'is_connected' ) ) {
-			$is_connected = self::connection()->is_connected();
-		} elseif ( method_exists( self::connection(), 'is_registered' ) ) {
-			$is_connected = self::connection()->is_registered();
-		}
-
 		/**
 		 * Allows filtering whether the connection is ready to be used. If true, this will enable the Jetpack UI and modules
 		 *
@@ -1599,7 +1589,7 @@ class Jetpack {
 		 * @param bool                                  $is_connection_ready Is the connection ready?
 		 * @param Automattic\Jetpack\Connection\Manager $connection_manager Instance of the Manager class, can be used to check the connection status.
 		 */
-		return apply_filters( 'jetpack_is_connection_ready', $is_connected, self::connection() );
+		return apply_filters( 'jetpack_is_connection_ready', self::connection()->is_connected(), self::connection() );
 	}
 
 	/**
@@ -3278,6 +3268,7 @@ p {
 
 		if ( ! $is_offline_mode ) {
 			Jetpack_Connection_Banner::init();
+			Jetpack_Connection_Widget::init();
 		}
 
 		if ( ( self::is_connection_ready() || $is_offline_mode ) && false === $fallback_no_verify_ssl_certs && ! $client_verify_ssl_certs ) {
@@ -3296,7 +3287,10 @@ p {
 		add_action( 'load-plugins.php', array( $this, 'intercept_plugin_error_scrape_init' ) );
 		add_action( 'load-plugins.php', array( $this, 'plugins_page_init_jetpack_state' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_menu_css' ) );
-		add_action( 'admin_enqueue_scripts', array( $this, 'deactivate_dialog' ) );
+
+		if ( ! ( is_multisite() && is_plugin_active_for_network( 'jetpack/jetpack.php' ) && ! is_network_admin() ) ) {
+			add_action( 'admin_enqueue_scripts', array( $this, 'deactivate_dialog' ) );
+		}
 
 		if ( isset( $_COOKIE['jetpackState']['display_update_modal'] ) ) {
 			add_action( 'admin_enqueue_scripts', __CLASS__ . '::enqueue_block_style' );
@@ -6545,17 +6539,16 @@ endif;
 		if ( ! static::connection()->has_connected_owner() ) {
 			return false;
 		}
-
 		$rewind_enabled = get_transient( 'jetpack_rewind_enabled' );
-		if ( false === $rewind_enabled ) {
-			jetpack_require_lib( 'class.core-rest-api-endpoints' );
+		$recheck        = ( is_admin() || ( defined( 'REST_REQUEST' ) && REST_REQUEST ) ) && '0' === $rewind_enabled;
+		if ( false === $rewind_enabled || $recheck ) {
+			require_once JETPACK__PLUGIN_DIR . '_inc/lib/class.core-rest-api-endpoints.php';
 			$rewind_data    = (array) Jetpack_Core_Json_Api_Endpoints::rewind_data();
 			$rewind_enabled = ( ! is_wp_error( $rewind_data )
 				&& ! empty( $rewind_data['state'] )
 				&& 'active' === $rewind_data['state'] )
 				? 1
 				: 0;
-
 			set_transient( 'jetpack_rewind_enabled', $rewind_enabled, 10 * MINUTE_IN_SECONDS );
 		}
 		return $rewind_enabled;
@@ -6724,8 +6717,13 @@ endif;
 			'features'          => array(
 				_x( 'Real-time cloud backups', 'Backup Product Feature', 'jetpack' ),
 				_x( '10GB of backup storage', 'Backup Product Feature', 'jetpack' ),
-				_x( '30-day archive & activity log', 'Backup Product Feature', 'jetpack' ),
+				_x( '30-day archive & activity log*', 'Backup Product Feature', 'jetpack' ),
 				_x( 'One-click restores', 'Backup Product Feature', 'jetpack' ),
+			),
+			'disclaimer'        => array(
+				'text'      => __( '* Subject to your usage and storage limit.', 'jetpack' ),
+				'link_text' => __( 'Learn more', 'jetpack' ),
+				'url'       => Redirect::get_url( 'jetpack-faq-backup-disclaimer' ),
 			),
 		);
 
@@ -6754,7 +6752,7 @@ endif;
 			'features'          => array(
 				_x( 'Instant search and indexing', 'Search Product Feature', 'jetpack' ),
 				_x( 'Powerful filtering', 'Search Product Feature', 'jetpack' ),
-				_x( 'Supports 29 languages', 'Search Product Feature', 'jetpack' ),
+				_x( 'Supports 38 languages', 'Search Product Feature', 'jetpack' ),
 				_x( 'Spelling correction', 'Search Product Feature', 'jetpack' ),
 			),
 		);

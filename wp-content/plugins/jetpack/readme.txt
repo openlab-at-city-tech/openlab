@@ -1,10 +1,10 @@
 === Jetpack - WP Security, Backup, Speed, & Growth ===
 Contributors: automattic, adamkheckler, adrianmoldovanwp, aduth, akirk, allendav, alternatekev, andy, annamcphee, annezazu, apeatling, arcangelini, azaozz, batmoo, barry, beaulebens, biskobe, blobaugh, bjorsch, brbrr, cainm, cena, cfinke, chaselivingston, chellycat, clickysteve, csonnek, danielbachhuber, davoraltman, daniloercoli, delawski, designsimply, dllh, drawmyface, dsmart, dzver, ebinnion, egregor, eliorivero, enej, eoigal, erania-pinnera, ethitter, fgiannar, gcorne, georgestephanis, gibrown, goldsounds, hew, hugobaeta, hypertextranch, iammattthomas, iandunn, jblz, jasmussen, jeffgolenski, jeherve, jenhooks, jenia, jessefriedman, jgs, jkudish, jmdodd, joanrho, johnjamesjacoby, jshreve, kbrownkd, keoshi, koke, kraftbj, lancewillett, leogermani, lschuyler, macmanx, martinremy, matt, matveb, mattwiebe, maverick3x6, mcsf, mdawaffe, mdbitz, MichaelArestad, migueluy, mikeyarce, mkaz, nancythanki, nickmomrik, obenland, oskosk, pento, professor44, rachelsquirrel, rdcoll, ryancowles, richardmuscat, richardmtl, robertbpugh, roccotripaldi, samhotchkiss, samiff, scarstocea, scottsweb, sdixon194, sdquirk, sermitr, simison, stephdau, tmoorewp, tyxla, Viper007Bond, westi, yoavf, zinigor
 Tags: Security, backup, Woo, malware, scan, spam, CDN, search, social
-Stable tag: 11.2
-Requires at least: 5.9
+Stable tag: 11.6
+Requires at least: 6.0
 Requires PHP: 5.6
-Tested up to: 6.0
+Tested up to: 6.1
 
 Improve your WP security with powerful one-click tools like backup and malware scan. Get essential free tools including stats, CDN and social sharing.
 
@@ -242,42 +242,59 @@ Jetpack Backup can do a full website migration to a new host, migrate theme file
 4. Promote your newest posts, pages, and products across your social media channels.
 
 == Changelog ==
-### 11.2 - 2022-08-02
+### 11.6 - 2022-12-06
 #### Enhancements
-- Blocks: enable Jetpack block collection for the native editor block inserter (on self hosted Jetpack sites).
-- Connection: make sure pre-existing settings are respected on plugin activation.
-- Form Block: add a lock to the contact form submit button.
-- Native block inserter: only display blocks under a Jetpack heading if the host app is WordPress.
-- Podcast Player: add new actions to make it possible for users to set up code that runs for podcast fetches.
-- VideoPress Block (beta): mutiple UI enhancements including error messaging, markup, layout and behavior. Currently a JETPACK_BETA_BLOCKS feature.
-
+- Editor: adds an experimental editor extension that displays a placeholder blogging prompt when starting a new post.
+- Form Block: add a new form variation and template for a Salesforce Lead form.
+- Form Block: add block alignment control for the form wrapper: center, wide and full
+- Form block: add support links to form type selector.
+- Form Block: enable editing placeholders on form input fields.
+- Form Block: feedback export function is now integrated with the feedback table filters
+- Form Block: fix form placeholder background color.
+- Form Block: improve the styling and formatting of the form submission page after a form block is submitted.
+- Form Block: move the 'check for spam' buttont to below the responses table on the feedback page in WP Admin.
+- Form block: register Jetpack forms in the pattern inserter.
+- Form Block: remove connection button from the Form block toolbar
+- Form block: update contact-form icon
+- Form block: update Contact Form Sidebar to include Manage Responses section and split Form Settings section into more specific sections
+- Form block: update Contact Form Toolbar to include a form settings dropdown
+- Form Block: update design for Feedback table in WP Admin.
+- Form Block: updates Form block placeholder to include pattern selection modal
+- Form Block: updates Form block to allow layout blocks
+- Form Block: updates URL validitity check
+- Pre-Publish Panel: split out the email subscribers & social followers count in the pre-publish panel.
+- SEO: add a 'noindex' checkbox for posts and pages.
+- SEO: add a per post/page HTML title option.
+- Stats: add stats option `enable_calypso_stats` to allow users to enable the new Calypso Stats experience
+- Stats: conditionally load the new Calypso Stats package
+- Stats: update mentions of "Site Stats" to "Jetpack Stats"
+- VideoPress: adds VideoPress feedback link to the VideoPress block.
+- VideoPress: detect if the video has a vtt chapters file
+- WordAds: add US Privacy support for additional states (Colorado, Connecticut, Utah, and Virginia).
 
 #### Improved compatibility
-- Admin UI: add h1 page headings for better screen reader navigation.
-- Custom Post Types: change Nova functions to public to re-allow hooking.
+- Form block: update Form child blocks to show the "Manage Responses" section on the Sidebar.
+- Improves compatibility with the Jetpack Protect standalone plugin.
+- Sitemaps: improve compatibility with recent Google Image Sitemap changes.
+- VideoPress (beta): introduce Video Chapters beta block.
 
 #### Bug fixes
-- Admin menu: display the translations for the plan name.
-- Comments: avoid PHP Notice when using Jetpack's Comment form feature when your site is no longer properly connected to WordPress.com.
-- Connection: fix Jetpack redirect after registration.
-- Form Block: prevent error notice when processing submission from 404 page.
-- Form block: fix Checkbox Group option color.
-- Form block: preserve line breaks in form submissions.
-- Gathering Twitter Threads: ensure that only contributors can access the endpoint to unroll threads.
-- Masterbar: ensure that the WordPress.com Add Ons menu item doesn't display on Jetpack-connected sites.
-- Masterbar: fix All Posts dashboard redirect issue when switching between classic and default editor views.
-- Product Descriptions: fix search price on Search Product Description by accounting for sale coupons and ensuring the correct JP Search tier is shown.
-- Related Posts: avoid PHP warnings when visiting AMP post views.
-- Sharing: ensure that sharing buttons are not displayed for excerpts.
-- Sharing: hide button information in Blog Posts block in editor.
-- Slideshow Block: override container display to prevent a gap between slideshow and contents.
-- Slideshow Block: support wide and full alignment options.
-- Stats: allow custom user role stats settings to be properly recognized and saved.
-- Stats: fix dashboard widget form name to allow form choices to be saved.
-- Subscribe block: fix support for allowed HTML tags in submit button.
-- Subscriptions: format the number of subscribers displayed in the block editor's controls.
-- VideoPress: avoid PHP notices when inserting videos that miss some metadata.
-- VideoPress: fix bug when getting the video preview of the VideoPress block.
+- Customizer: make sure the menu item is shown for block themes.
+- Dashboard: fixes issue where default icon would be empty
+- Dashboard: prevent scrolling to the active settings menu item on page load.
+- Form block: add line breaks back to plain text email submissions.
+- Form block: fix contact Form view responses URL
+- Form block: fix form patterns modal scrollbar behavior
+- Image Editor: fix issue where users are not able to edit/crop and restore images.
+- Provide a fix for WPA click tracking in Agencies card
+- Related Posts Block: when 3 posts are output, increase the width closer to 100%.
+- Shortcodes: fix content_width handling for various shortcodes.
+- SSO: fix setting toggle inconsistency.
+- SSO: properly disable "match by email" by default.
+- Stats: stop stats loading indefinitely when a hashtag exists
+- VideoPress: fix issue with uploading VideoPress videos in the Full Site Editor.
+- Widget Visibility: fix error with WooCommerce Product Categories block
+- WordPress.com REST API: Fix fatal error in site ID endpoint.
 
 --------
 

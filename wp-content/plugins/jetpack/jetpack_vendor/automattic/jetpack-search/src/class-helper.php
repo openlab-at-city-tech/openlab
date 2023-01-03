@@ -24,11 +24,6 @@ class Helper {
 	const FILTER_WIDGET_BASE = 'jetpack-search-filters';
 
 	/**
-	 * The post types to hide from 'Excluded post types'.
-	 */
-	const POST_TYPES_TO_HIDE_FROM_EXCLUDED_CHECK_LIST = array( 'attachment' );
-
-	/**
 	 * Create a URL for the current search that doesn't include the "paged" parameter.
 	 *
 	 * @since 5.8.0
@@ -238,6 +233,14 @@ class Helper {
 		switch ( $widget_filter['type'] ) {
 			case 'post_type':
 				$name = _x( 'Post Types', 'label for filtering posts', 'jetpack-search-pkg' );
+				break;
+
+			case 'author':
+				$name = _x( 'Authors', 'label for filtering posts', 'jetpack-search-pkg' );
+				break;
+
+			case 'blog_id':
+				$name = _x( 'Blogs', 'label for filtering posts', 'jetpack-search-pkg' );
 				break;
 
 			case 'date_histogram':
@@ -814,13 +817,6 @@ class Helper {
 				'name'          => $obj->labels->name,
 			);
 		}
-		$post_type_labels = array_filter(
-			$post_type_labels,
-			function ( $key ) {
-				return ! in_array( $key, self::POST_TYPES_TO_HIDE_FROM_EXCLUDED_CHECK_LIST, true );
-			},
-			ARRAY_FILTER_USE_KEY
-		);
 
 		$prefix         = Options::OPTION_PREFIX;
 		$posts_per_page = (int) get_option( 'posts_per_page' );
@@ -853,9 +849,9 @@ class Helper {
 				'enableInfScroll'   => get_option( $prefix . 'inf_scroll', '1' ) === '1',
 				'enableSort'        => get_option( $prefix . 'enable_sort', '1' ) === '1',
 				'highlightColor'    => get_option( $prefix . 'highlight_color', '#FFC' ),
-				'overlayTrigger'    => get_option( $prefix . 'overlay_trigger', 'immediate' ),
+				'overlayTrigger'    => get_option( $prefix . 'overlay_trigger', Options::DEFAULT_OVERLAY_TRIGGER ),
 				'resultFormat'      => get_option( $prefix . 'result_format', Options::RESULT_FORMAT_MINIMAL ),
-				'showPoweredBy'     => get_option( $prefix . 'show_powered_by', '1' ) === '1',
+				'showPoweredBy'     => ( new Plan() )->is_free_plan() || ( get_option( $prefix . 'show_powered_by', '1' ) === '1' ),
 
 				// These options require kicking off a new search.
 				'defaultSort'       => get_option( $prefix . 'default_sort', 'relevance' ),
@@ -870,6 +866,7 @@ class Helper {
 			'postTypes'             => $post_type_labels,
 			'webpackPublicPath'     => plugins_url( '/build/instant-search/', __DIR__ ),
 			'isPhotonEnabled'       => ( $is_wpcom || $is_jetpack_photon_enabled ) && ! $is_private_site,
+			'isFreePlan'            => ( new Plan() )->is_free_plan(),
 
 			// config values related to private site support.
 			'apiRoot'               => esc_url_raw( rest_url() ),
@@ -951,5 +948,22 @@ class Helper {
 
 		// Returns cache site ID.
 		return \Jetpack_Options::get_option( 'id' );
+	}
+
+	/**
+	 * Returns true if the free_plan is set to not empty in URL, which is used for testing purpose.
+	 */
+	public static function is_forced_free_plan() {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash
+		return isset( $_GET['free_plan'] ) && $_GET['free_plan'];
+	}
+
+	/**
+	 * Returns true if the new_pricing_202210 is set to not empty in URL for testing purpose.
+	 */
+	public static function is_forced_new_pricing_202208() {
+		$referrer = wp_get_referer();
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash
+		return ( isset( $_GET['new_pricing_202208'] ) && $_GET['new_pricing_202208'] ) || $referrer && strpos( $referrer, 'new_pricing_202208=1' ) !== false;
 	}
 }

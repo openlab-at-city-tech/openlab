@@ -89,6 +89,7 @@
   -webkit-background-clip: border-box !important;
   background-clip: border-box !important;
   background-size: auto !important;
+  -o-border-image: none !important;
   border-image: none !important;
   border-radius: 0 !important;
   box-shadow: none !important;
@@ -110,7 +111,6 @@
   -ms-perspective-origin: 50% 50% !important;
   -o-perspective-origin: 50% 50% !important;
   perspective-origin: 50% 50% !important;
-  -webkit-backface-visibility: visible !important;
   backface-visibility: visible !important;
   text-shadow: none !important;
   transition: all 0s ease 0s !important;

@@ -302,7 +302,7 @@ class REST_Connector {
 		$connection = new Manager();
 
 		$connection_status = array(
-			'isActive'          => $connection->is_active(), // TODO deprecate this.
+			'isActive'          => $connection->has_connected_owner(), // TODO deprecate this.
 			'isStaging'         => $status->is_staging_site(),
 			'isRegistered'      => $connection->is_connected(),
 			'isUserConnected'   => $connection->is_user_connected(),
@@ -432,6 +432,8 @@ class REST_Connector {
 	 * @return \WP_REST_Response|array
 	 */
 	public static function get_user_connection_data( $rest_response = true ) {
+		$blog_id = \Jetpack_Options::get_option( 'id' );
+
 		$connection = new Manager();
 
 		$current_user     = wp_get_current_user();
@@ -464,6 +466,7 @@ class REST_Connector {
 			'isMaster'    => $is_master_user,
 			'username'    => $current_user->user_login,
 			'id'          => $current_user->ID,
+			'blogId'      => $blog_id,
 			'wpcomUser'   => $wpcom_user_data,
 			'gravatar'    => get_avatar_url( $current_user->ID, 64, 'mm', '', array( 'force_display' => true ) ),
 			'permissions' => array(
