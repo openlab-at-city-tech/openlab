@@ -1,48 +1,48 @@
-/******/ (() => { // webpackBootstrap
+/******/ (function() { // webpackBootstrap
 /******/ 	"use strict";
 /******/ 	// The require scope
 /******/ 	var __webpack_require__ = {};
 /******/ 	
 /************************************************************************/
 /******/ 	/* webpack/runtime/compat get default export */
-/******/ 	(() => {
+/******/ 	!function() {
 /******/ 		// getDefaultExport function for compatibility with non-harmony modules
-/******/ 		__webpack_require__.n = (module) => {
+/******/ 		__webpack_require__.n = function(module) {
 /******/ 			var getter = module && module.__esModule ?
-/******/ 				() => (module['default']) :
-/******/ 				() => (module);
+/******/ 				function() { return module['default']; } :
+/******/ 				function() { return module; };
 /******/ 			__webpack_require__.d(getter, { a: getter });
 /******/ 			return getter;
 /******/ 		};
-/******/ 	})();
+/******/ 	}();
 /******/ 	
 /******/ 	/* webpack/runtime/define property getters */
-/******/ 	(() => {
+/******/ 	!function() {
 /******/ 		// define getter functions for harmony exports
-/******/ 		__webpack_require__.d = (exports, definition) => {
+/******/ 		__webpack_require__.d = function(exports, definition) {
 /******/ 			for(var key in definition) {
 /******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
 /******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
 /******/ 				}
 /******/ 			}
 /******/ 		};
-/******/ 	})();
+/******/ 	}();
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
-/******/ 	(() => {
-/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
-/******/ 	})();
+/******/ 	!function() {
+/******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
+/******/ 	}();
 /******/ 	
 /******/ 	/* webpack/runtime/make namespace object */
-/******/ 	(() => {
+/******/ 	!function() {
 /******/ 		// define __esModule on exports
-/******/ 		__webpack_require__.r = (exports) => {
+/******/ 		__webpack_require__.r = function(exports) {
 /******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
 /******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 /******/ 			}
 /******/ 			Object.defineProperty(exports, '__esModule', { value: true });
 /******/ 		};
-/******/ 	})();
+/******/ 	}();
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
@@ -51,54 +51,54 @@ __webpack_require__.r(__webpack_exports__);
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
-  "__unstableStripHTML": () => (/* reexport */ stripHTML),
-  "computeCaretRect": () => (/* reexport */ computeCaretRect),
-  "documentHasSelection": () => (/* reexport */ documentHasSelection),
-  "documentHasTextSelection": () => (/* reexport */ documentHasTextSelection),
-  "documentHasUncollapsedSelection": () => (/* reexport */ documentHasUncollapsedSelection),
-  "focus": () => (/* binding */ build_module_focus),
-  "getFilesFromDataTransfer": () => (/* reexport */ getFilesFromDataTransfer),
-  "getOffsetParent": () => (/* reexport */ getOffsetParent),
-  "getPhrasingContentSchema": () => (/* reexport */ getPhrasingContentSchema),
-  "getRectangleFromRange": () => (/* reexport */ getRectangleFromRange),
-  "getScrollContainer": () => (/* reexport */ getScrollContainer),
-  "insertAfter": () => (/* reexport */ insertAfter),
-  "isEmpty": () => (/* reexport */ isEmpty),
-  "isEntirelySelected": () => (/* reexport */ isEntirelySelected),
-  "isFormElement": () => (/* reexport */ isFormElement),
-  "isHorizontalEdge": () => (/* reexport */ isHorizontalEdge),
-  "isNumberInput": () => (/* reexport */ isNumberInput),
-  "isPhrasingContent": () => (/* reexport */ isPhrasingContent),
-  "isRTL": () => (/* reexport */ isRTL),
-  "isTextContent": () => (/* reexport */ isTextContent),
-  "isTextField": () => (/* reexport */ isTextField),
-  "isVerticalEdge": () => (/* reexport */ isVerticalEdge),
-  "placeCaretAtHorizontalEdge": () => (/* reexport */ placeCaretAtHorizontalEdge),
-  "placeCaretAtVerticalEdge": () => (/* reexport */ placeCaretAtVerticalEdge),
-  "remove": () => (/* reexport */ remove),
-  "removeInvalidHTML": () => (/* reexport */ removeInvalidHTML),
-  "replace": () => (/* reexport */ replace),
-  "replaceTag": () => (/* reexport */ replaceTag),
-  "safeHTML": () => (/* reexport */ safeHTML),
-  "unwrap": () => (/* reexport */ unwrap),
-  "wrap": () => (/* reexport */ wrap)
+  "__unstableStripHTML": function() { return /* reexport */ stripHTML; },
+  "computeCaretRect": function() { return /* reexport */ computeCaretRect; },
+  "documentHasSelection": function() { return /* reexport */ documentHasSelection; },
+  "documentHasTextSelection": function() { return /* reexport */ documentHasTextSelection; },
+  "documentHasUncollapsedSelection": function() { return /* reexport */ documentHasUncollapsedSelection; },
+  "focus": function() { return /* binding */ build_module_focus; },
+  "getFilesFromDataTransfer": function() { return /* reexport */ getFilesFromDataTransfer; },
+  "getOffsetParent": function() { return /* reexport */ getOffsetParent; },
+  "getPhrasingContentSchema": function() { return /* reexport */ getPhrasingContentSchema; },
+  "getRectangleFromRange": function() { return /* reexport */ getRectangleFromRange; },
+  "getScrollContainer": function() { return /* reexport */ getScrollContainer; },
+  "insertAfter": function() { return /* reexport */ insertAfter; },
+  "isEmpty": function() { return /* reexport */ isEmpty; },
+  "isEntirelySelected": function() { return /* reexport */ isEntirelySelected; },
+  "isFormElement": function() { return /* reexport */ isFormElement; },
+  "isHorizontalEdge": function() { return /* reexport */ isHorizontalEdge; },
+  "isNumberInput": function() { return /* reexport */ isNumberInput; },
+  "isPhrasingContent": function() { return /* reexport */ isPhrasingContent; },
+  "isRTL": function() { return /* reexport */ isRTL; },
+  "isTextContent": function() { return /* reexport */ isTextContent; },
+  "isTextField": function() { return /* reexport */ isTextField; },
+  "isVerticalEdge": function() { return /* reexport */ isVerticalEdge; },
+  "placeCaretAtHorizontalEdge": function() { return /* reexport */ placeCaretAtHorizontalEdge; },
+  "placeCaretAtVerticalEdge": function() { return /* reexport */ placeCaretAtVerticalEdge; },
+  "remove": function() { return /* reexport */ remove; },
+  "removeInvalidHTML": function() { return /* reexport */ removeInvalidHTML; },
+  "replace": function() { return /* reexport */ replace; },
+  "replaceTag": function() { return /* reexport */ replaceTag; },
+  "safeHTML": function() { return /* reexport */ safeHTML; },
+  "unwrap": function() { return /* reexport */ unwrap; },
+  "wrap": function() { return /* reexport */ wrap; }
 });
 
 // NAMESPACE OBJECT: ./packages/dom/build-module/focusable.js
 var focusable_namespaceObject = {};
 __webpack_require__.r(focusable_namespaceObject);
 __webpack_require__.d(focusable_namespaceObject, {
-  "find": () => (find)
+  "find": function() { return find; }
 });
 
 // NAMESPACE OBJECT: ./packages/dom/build-module/tabbable.js
 var tabbable_namespaceObject = {};
 __webpack_require__.r(tabbable_namespaceObject);
 __webpack_require__.d(tabbable_namespaceObject, {
-  "find": () => (tabbable_find),
-  "findNext": () => (findNext),
-  "findPrevious": () => (findPrevious),
-  "isTabbableIndex": () => (isTabbableIndex)
+  "find": function() { return tabbable_find; },
+  "findNext": function() { return findNext; },
+  "findPrevious": function() { return findPrevious; },
+  "isTabbableIndex": function() { return isTabbableIndex; }
 });
 
 ;// CONCATENATED MODULE: ./packages/dom/build-module/focusable.js
@@ -218,17 +218,10 @@ function find(context) {
   });
 }
 
-;// CONCATENATED MODULE: external "lodash"
-const external_lodash_namespaceObject = window["lodash"];
 ;// CONCATENATED MODULE: ./packages/dom/build-module/tabbable.js
-/**
- * External dependencies
- */
-
 /**
  * Internal dependencies
  */
-
 
 /**
  * Returns the tab index of the given element. In contrast with the tabIndex
@@ -302,7 +295,7 @@ function createStatefulCollapseRadioGroup() {
 
     if (hasChosen) {
       const hadChosenElement = CHOSEN_RADIO_BY_NAME[name];
-      result = (0,external_lodash_namespaceObject.without)(result, hadChosenElement);
+      result = result.filter(e => e !== hadChosenElement);
     }
 
     CHOSEN_RADIO_BY_NAME[name] = element;
@@ -403,13 +396,16 @@ function findPrevious(element) {
 
 
   focusables.length = index;
-  return (0,external_lodash_namespaceObject.last)(filterTabbable(focusables));
+  const tabbable = filterTabbable(focusables);
+  return tabbable[tabbable.length - 1];
 }
 /**
  * Given a focusable element, find the next tabbable element.
  *
  * @param {Element} element The focusable element after which to look. Defaults
  *                          to the active element.
+ *
+ * @return {Element|undefined} Next tabbable element.
  */
 
 function findNext(element) {
@@ -417,7 +413,7 @@ function findNext(element) {
   const index = focusables.indexOf(element); // Remove all focusables before and including `element`.
 
   const remaining = focusables.slice(index + 1);
-  return (0,external_lodash_namespaceObject.first)(filterTabbable(remaining));
+  return filterTabbable(remaining)[0];
 }
 
 ;// CONCATENATED MODULE: ./packages/dom/build-module/utils/assert-is-defined.js
@@ -431,11 +427,12 @@ function assertIsDefined(val, name) {
  */
 
 /**
- * Get the rectangle of a given Range.
+ * Get the rectangle of a given Range. Returns `null` if no suitable rectangle
+ * can be found.
  *
  * @param {Range} range The range.
  *
- * @return {DOMRect} The rectangle.
+ * @return {DOMRect?} The rectangle.
  */
 
 function getRectangleFromRange(range) {
@@ -508,7 +505,14 @@ function getRectangleFromRange(range) {
     range.setEnd(parentNode, index);
   }
 
-  let rect = range.getClientRects()[0]; // If the collapsed range starts (and therefore ends) at an element node,
+  const rects = range.getClientRects(); // If we have multiple rectangles for a collapsed range, there's no way to
+  // know which it is, so don't return anything.
+
+  if (rects.length > 1) {
+    return null;
+  }
+
+  let rect = rects[0]; // If the collapsed range starts (and therefore ends) at an element node,
   // `getClientRects` can be empty in some browsers. This can be resolved
   // by adding a temporary text node with zero-width space to the range.
   //
@@ -754,6 +758,10 @@ function getScrollContainer(node) {
     if (/(auto|scroll)/.test(overflowY)) {
       return node;
     }
+  }
+
+  if (node.ownerDocument === node.parentNode) {
+    return node;
   } // Continue traversing.
 
 
@@ -1247,7 +1255,7 @@ function isHorizontalEdge(container, isReverse) {
 }
 
 ;// CONCATENATED MODULE: external ["wp","deprecated"]
-const external_wp_deprecated_namespaceObject = window["wp"]["deprecated"];
+var external_wp_deprecated_namespaceObject = window["wp"]["deprecated"];
 var external_wp_deprecated_default = /*#__PURE__*/__webpack_require__.n(external_wp_deprecated_namespaceObject);
 ;// CONCATENATED MODULE: ./packages/dom/build-module/dom/is-number-input.js
 /**
@@ -1323,9 +1331,15 @@ function getRange(container, isReverse, x) {
   const isReverseDir = isRTL(container) ? !isReverse : isReverse;
   const containerRect = container.getBoundingClientRect(); // When placing at the end (isReverse), find the closest range to the bottom
   // right corner. When placing at the start, to the top left corner.
+  // Ensure x is defined and within the container's boundaries. When it's
+  // exactly at the boundary, it's not considered within the boundaries.
 
   if (x === undefined) {
     x = isReverse ? containerRect.right - 1 : containerRect.left + 1;
+  } else if (x <= containerRect.left) {
+    x = containerRect.left + 1;
+  } else if (x >= containerRect.right) {
+    x = containerRect.right - 1;
   }
 
   const y = isReverseDir ? containerRect.bottom - 1 : containerRect.top + 1;
@@ -1652,10 +1666,6 @@ function isEmpty(element) {
 
 ;// CONCATENATED MODULE: ./packages/dom/build-module/phrasing-content.js
 /**
- * External dependencies
- */
-
-/**
  * All phrasing content elements.
  *
  * @see https://www.w3.org/TR/2011/WD-html5-20110525/content-models.html#phrasing-content-0
@@ -1678,7 +1688,6 @@ function isEmpty(element) {
  *
  * @type {ContentSchema}
  */
-
 const textContentSchema = {
   strong: {},
   em: {},
@@ -1732,8 +1741,13 @@ const textContentSchema = {
 // Possible: strong > em > strong.
 // Impossible: strong > strong.
 
-(0,external_lodash_namespaceObject.without)(Object.keys(textContentSchema), '#text', 'br').forEach(tag => {
-  textContentSchema[tag].children = (0,external_lodash_namespaceObject.omit)(textContentSchema, tag);
+const excludedElements = ['#text', 'br'];
+Object.keys(textContentSchema).filter(element => !excludedElements.includes(element)).forEach(tag => {
+  const {
+    [tag]: removedTag,
+    ...restSchema
+  } = textContentSchema;
+  textContentSchema[tag].children = restSchema;
 });
 /**
  * Embedded content elements.
@@ -1787,8 +1801,28 @@ function getPhrasingContentSchema(context) {
   if (context !== 'paste') {
     return phrasingContentSchema;
   }
+  /**
+   * @type {Partial<ContentSchema>}
+   */
 
-  return (0,external_lodash_namespaceObject.omit)({ ...phrasingContentSchema,
+
+  const {
+    u,
+    // Used to mark misspelling. Shouldn't be pasted.
+    abbr,
+    // Invisible.
+    data,
+    // Invisible.
+    time,
+    // Invisible.
+    wbr,
+    // Invisible.
+    bdi,
+    // Invisible.
+    bdo,
+    // Invisible.
+    ...remainingContentSchema
+  } = { ...phrasingContentSchema,
     // We shouldn't paste potentially sensitive information which is not
     // visible to the user when pasted, so strip the attributes.
     ins: {
@@ -1797,14 +1831,8 @@ function getPhrasingContentSchema(context) {
     del: {
       children: phrasingContentSchema.del.children
     }
-  }, ['u', // Used to mark misspelling. Shouldn't be pasted.
-  'abbr', // Invisible.
-  'data', // Invisible.
-  'time', // Invisible.
-  'wbr', // Invisible.
-  'bdi', // Invisible.
-  'bdo' // Invisible.
-  ]);
+  };
+  return remainingContentSchema;
 }
 /**
  * Find out whether or not the given node is phrasing content.
@@ -1844,13 +1872,8 @@ function isElement(node) {
 
 ;// CONCATENATED MODULE: ./packages/dom/build-module/dom/clean-node-list.js
 /**
- * External dependencies
- */
-
-/**
  * Internal dependencies
  */
-
 
 
 
@@ -1918,7 +1941,7 @@ function cleanNodeList(nodeList, doc, schema, inline) {
               name
             } = _ref;
 
-            if (name !== 'class' && !(0,external_lodash_namespaceObject.includes)(attributes, name)) {
+            if (name !== 'class' && !attributes.includes(name)) {
               node.removeAttribute(name);
             }
           }); // Strip invalid classes.

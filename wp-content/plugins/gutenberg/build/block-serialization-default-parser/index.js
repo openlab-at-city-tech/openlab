@@ -1,47 +1,92 @@
-/******/ (() => { // webpackBootstrap
+/******/ (function() { // webpackBootstrap
 /******/ 	"use strict";
 /******/ 	// The require scope
 /******/ 	var __webpack_require__ = {};
 /******/ 	
 /************************************************************************/
 /******/ 	/* webpack/runtime/define property getters */
-/******/ 	(() => {
+/******/ 	!function() {
 /******/ 		// define getter functions for harmony exports
-/******/ 		__webpack_require__.d = (exports, definition) => {
+/******/ 		__webpack_require__.d = function(exports, definition) {
 /******/ 			for(var key in definition) {
 /******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
 /******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
 /******/ 				}
 /******/ 			}
 /******/ 		};
-/******/ 	})();
+/******/ 	}();
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
-/******/ 	(() => {
-/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
-/******/ 	})();
+/******/ 	!function() {
+/******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
+/******/ 	}();
 /******/ 	
 /******/ 	/* webpack/runtime/make namespace object */
-/******/ 	(() => {
+/******/ 	!function() {
 /******/ 		// define __esModule on exports
-/******/ 		__webpack_require__.r = (exports) => {
+/******/ 		__webpack_require__.r = function(exports) {
 /******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
 /******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 /******/ 			}
 /******/ 			Object.defineProperty(exports, '__esModule', { value: true });
 /******/ 		};
-/******/ 	})();
+/******/ 	}();
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "parse": () => (/* binding */ parse)
+/* harmony export */   "parse": function() { return /* binding */ parse; }
 /* harmony export */ });
+/**
+ * @type {string}
+ */
 let document;
+/**
+ * @type {number}
+ */
+
 let offset;
+/**
+ * @type {ParsedBlock[]}
+ */
+
 let output;
+/**
+ * @type {ParsedFrame[]}
+ */
+
 let stack;
+/**
+ * @typedef {Object|null} Attributes
+ */
+
+/**
+ * @typedef {Object} ParsedBlock
+ * @property {string|null}        blockName    Block name.
+ * @property {Attributes}         attrs        Block attributes.
+ * @property {ParsedBlock[]}      innerBlocks  Inner blocks.
+ * @property {string}             innerHTML    Inner HTML.
+ * @property {Array<string|null>} innerContent Inner content.
+ */
+
+/**
+ * @typedef {Object} ParsedFrame
+ * @property {ParsedBlock} block            Block.
+ * @property {number}      tokenStart       Token start.
+ * @property {number}      tokenLength      Token length.
+ * @property {number}      prevOffset       Previous offset.
+ * @property {number|null} leadingHtmlStart Leading HTML start.
+ */
+
+/**
+ * @typedef {'no-more-tokens'|'void-block'|'block-opener'|'block-closer'} TokenType
+ */
+
+/**
+ * @typedef {[TokenType, string, Attributes, number, number]} Token
+ */
+
 /**
  * Matches block comment delimiters
  *
@@ -85,6 +130,16 @@ let stack;
  */
 
 const tokenizer = /<!--\s+(\/)?wp:([a-z][a-z0-9_-]*\/)?([a-z][a-z0-9_-]*)\s+({(?:(?=([^}]+|}+(?=})|(?!}\s+\/?-->)[^])*)\5|[^]*?)}\s+)?(\/)?-->/g;
+/**
+ * Constructs a block object.
+ *
+ * @param {string|null}   blockName
+ * @param {Attributes}    attrs
+ * @param {ParsedBlock[]} innerBlocks
+ * @param {string}        innerHTML
+ * @param {string[]}      innerContent
+ * @return {ParsedBlock} The block object.
+ */
 
 function Block(blockName, attrs, innerBlocks, innerHTML, innerContent) {
   return {
@@ -95,10 +150,28 @@ function Block(blockName, attrs, innerBlocks, innerHTML, innerContent) {
     innerContent
   };
 }
+/**
+ * Constructs a freeform block object.
+ *
+ * @param {string} innerHTML
+ * @return {ParsedBlock} The freeform block object.
+ */
+
 
 function Freeform(innerHTML) {
   return Block(null, {}, [], innerHTML, [innerHTML]);
 }
+/**
+ * Constructs a frame object.
+ *
+ * @param {ParsedBlock} block
+ * @param {number}      tokenStart
+ * @param {number}      tokenLength
+ * @param {number}      prevOffset
+ * @param {number|null} leadingHtmlStart
+ * @return {ParsedFrame} The frame object.
+ */
+
 
 function Frame(block, tokenStart, tokenLength, prevOffset, leadingHtmlStart) {
   return {
@@ -184,7 +257,7 @@ function Frame(block, tokenStart, tokenLength, prevOffset, leadingHtmlStart) {
  *     }
  * ];
  * ```
- * @return {Array} A block-based representation of the input HTML.
+ * @return {ParsedBlock[]} A block-based representation of the input HTML.
  */
 
 
@@ -200,11 +273,16 @@ const parse = doc => {
 
   return output;
 };
+/**
+ * Parses the next token in the input document.
+ *
+ * @return {boolean} Returns true when there is more tokens to parse.
+ */
 
 function proceed() {
+  const stackDepth = stack.length;
   const next = nextToken();
-  const [tokenType, blockName, attrs, startOffset, tokenLength] = next;
-  const stackDepth = stack.length; // We may have some HTML soup before the next block.
+  const [tokenType, blockName, attrs, startOffset, tokenLength] = next; // We may have some HTML soup before the next block.
 
   const leadingHtmlStart = startOffset > offset ? offset : null;
 
@@ -281,7 +359,9 @@ function proceed() {
       // block and add it as a innerBlock to the parent.
 
 
-      const stackTop = stack.pop();
+      const stackTop =
+      /** @type {ParsedFrame} */
+      stack.pop();
       const html = document.substr(stackTop.prevOffset, startOffset - stackTop.prevOffset);
       stackTop.block.innerHTML += html;
       stackTop.block.innerContent.push(html);
@@ -315,6 +395,12 @@ function parseJSON(input) {
     return null;
   }
 }
+/**
+ * Finds the next token in the document.
+ *
+ * @return {Token} The next matched token.
+ */
+
 
 function nextToken() {
   // Aye the magic
@@ -326,7 +412,7 @@ function nextToken() {
   const matches = tokenizer.exec(document); // We have no more tokens.
 
   if (null === matches) {
-    return ['no-more-tokens'];
+    return ['no-more-tokens', '', null, 0, 0];
   }
 
   const startedAt = matches.index;
@@ -356,6 +442,12 @@ function nextToken() {
 
   return ['block-opener', name, attrs, startedAt, length];
 }
+/**
+ * Adds a freeform block to the output.
+ *
+ * @param {number} [rawLength]
+ */
+
 
 function addFreeform(rawLength) {
   const length = rawLength ? rawLength : document.length - offset;
@@ -366,6 +458,15 @@ function addFreeform(rawLength) {
 
   output.push(Freeform(document.substr(offset, length)));
 }
+/**
+ * Adds inner block to the parent block.
+ *
+ * @param {ParsedBlock} block
+ * @param {number}      tokenStart
+ * @param {number}      tokenLength
+ * @param {number}      [lastOffset]
+ */
+
 
 function addInnerBlock(block, tokenStart, tokenLength, lastOffset) {
   const parent = stack[stack.length - 1];
@@ -380,6 +481,12 @@ function addInnerBlock(block, tokenStart, tokenLength, lastOffset) {
   parent.block.innerContent.push(null);
   parent.prevOffset = lastOffset ? lastOffset : tokenStart + tokenLength;
 }
+/**
+ * Adds block from the stack to the output.
+ *
+ * @param {number} [endOffset]
+ */
+
 
 function addBlockFromStack(endOffset) {
   const {
@@ -387,7 +494,9 @@ function addBlockFromStack(endOffset) {
     leadingHtmlStart,
     prevOffset,
     tokenStart
-  } = stack.pop();
+  } =
+  /** @type {ParsedFrame} */
+  stack.pop();
   const html = endOffset ? document.substr(prevOffset, endOffset - prevOffset) : document.substr(prevOffset);
 
   if (html) {

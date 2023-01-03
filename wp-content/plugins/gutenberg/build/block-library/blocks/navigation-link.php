@@ -98,7 +98,14 @@ function gutenberg_block_core_navigation_link_build_css_font_sizes( $context ) {
 		$font_sizes['css_classes'][] = sprintf( 'has-%s-font-size', $context['fontSize'] );
 	} elseif ( $has_custom_font_size ) {
 		// Add the custom font size inline style.
-		$font_sizes['inline_styles'] = sprintf( 'font-size: %s;', $context['style']['typography']['fontSize'] );
+		$font_sizes['inline_styles'] = sprintf(
+			'font-size: %s;',
+			gutenberg_get_typography_font_size_value(
+				array(
+					'size' => $context['style']['typography']['fontSize'],
+				)
+			)
+		);
 	}
 
 	return $font_sizes;
@@ -150,7 +157,7 @@ function gutenberg_render_block_core_navigation_link( $attributes, $content, $bl
 
 	$css_classes = trim( implode( ' ', $classes ) );
 	$has_submenu = count( $block->inner_blocks ) > 0;
-	$is_active   = ! empty( $attributes['id'] ) && ( get_the_ID() === $attributes['id'] );
+	$is_active   = ! empty( $attributes['id'] ) && ( get_queried_object_id() === (int) $attributes['id'] );
 
 	$wrapper_attributes = get_block_wrapper_attributes(
 		array(
@@ -337,3 +344,35 @@ function gutenberg_register_block_core_navigation_link() {
 	);
 }
 add_action( 'init', 'gutenberg_register_block_core_navigation_link', 20 );
+
+/**
+ * Disables the display of block inspector tabs for the Navigation Link block.
+ *
+ * This is only a temporary measure until we have a TabPanel and mechanism that
+ * will allow the Navigation Link to programmatically select a tab when edited
+ * via a specific context.
+ *
+ * See:
+ * - https://github.com/WordPress/gutenberg/issues/45951
+ * - https://github.com/WordPress/gutenberg/pull/46321
+ * - https://github.com/WordPress/gutenberg/pull/46271
+ *
+ * @param array $settings Default editor settings.
+ * @return array Filtered editor settings.
+ */
+function gutenberg_gutenberg_disable_tabs_for_navigation_link_block( $settings ) {
+	$current_tab_settings = _wp_array_get(
+		$settings,
+		array( '__experimentalBlockInspectorTabs' ),
+		array()
+	);
+
+	$settings['__experimentalBlockInspectorTabs'] = array_merge(
+		$current_tab_settings,
+		array( 'core/navigation-link' => false )
+	);
+
+	return $settings;
+}
+
+add_filter( 'block_editor_settings_all', 'gutenberg_gutenberg_disable_tabs_for_navigation_link_block' );

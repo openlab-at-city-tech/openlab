@@ -1,9 +1,9 @@
-/******/ (() => { // webpackBootstrap
+/******/ (function() { // webpackBootstrap
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
 /***/ 9025:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
 
@@ -124,7 +124,7 @@ exports["default"] = [promise, fork, join, race, subscribe];
 /***/ }),
 
 /***/ 7961:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
 
@@ -224,7 +224,7 @@ exports["default"] = [error, iterator, array, object, any];
 /***/ }),
 
 /***/ 2165:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
 
@@ -266,7 +266,7 @@ exports["default"] = [call, cps];
 /***/ }),
 
 /***/ 6288:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
 
@@ -351,7 +351,7 @@ exports["default"] = create;
 /***/ }),
 
 /***/ 2290:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
 
@@ -393,7 +393,7 @@ exports.wrapControls = _wrap2.default;
 /***/ }),
 
 /***/ 2451:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ (function(__unused_webpack_module, exports) {
 
 
 
@@ -425,7 +425,7 @@ exports["default"] = createDispatcher;
 /***/ }),
 
 /***/ 7783:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
 
@@ -565,7 +565,7 @@ var createChannel = exports.createChannel = function createChannel(callback) {
 /***/ }),
 
 /***/ 9681:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
 
@@ -629,7 +629,7 @@ exports["default"] = is;
 /***/ }),
 
 /***/ 9851:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ (function(__unused_webpack_module, exports) {
 
 
 
@@ -679,30 +679,30 @@ exports["default"] = keys;
 /******/ 	
 /************************************************************************/
 /******/ 	/* webpack/runtime/define property getters */
-/******/ 	(() => {
+/******/ 	!function() {
 /******/ 		// define getter functions for harmony exports
-/******/ 		__webpack_require__.d = (exports, definition) => {
+/******/ 		__webpack_require__.d = function(exports, definition) {
 /******/ 			for(var key in definition) {
 /******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
 /******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
 /******/ 				}
 /******/ 			}
 /******/ 		};
-/******/ 	})();
+/******/ 	}();
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
-/******/ 	(() => {
-/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
-/******/ 	})();
+/******/ 	!function() {
+/******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
+/******/ 	}();
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
-(() => {
+!function() {
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
-  "default": () => (/* binding */ createMiddleware)
+  "default": function() { return /* binding */ createMiddleware; }
 });
 
 ;// CONCATENATED MODULE: ./packages/redux-routine/build-module/is-generator.js
@@ -726,12 +726,46 @@ function isGenerator(object) {
 
 // EXTERNAL MODULE: ./node_modules/rungen/dist/index.js
 var dist = __webpack_require__(2290);
-;// CONCATENATED MODULE: external "lodash"
-const external_lodash_namespaceObject = window["lodash"];
 ;// CONCATENATED MODULE: ./node_modules/is-promise/index.mjs
 function isPromise(obj) {
   return !!obj && (typeof obj === 'object' || typeof obj === 'function') && typeof obj.then === 'function';
 }
+
+;// CONCATENATED MODULE: ./node_modules/is-plain-object/dist/is-plain-object.mjs
+/*!
+ * is-plain-object <https://github.com/jonschlinkert/is-plain-object>
+ *
+ * Copyright (c) 2014-2017, Jon Schlinkert.
+ * Released under the MIT License.
+ */
+
+function isObject(o) {
+  return Object.prototype.toString.call(o) === '[object Object]';
+}
+
+function isPlainObject(o) {
+  var ctor,prot;
+
+  if (isObject(o) === false) return false;
+
+  // If has modified constructor
+  ctor = o.constructor;
+  if (ctor === undefined) return true;
+
+  // If has modified prototype
+  prot = ctor.prototype;
+  if (isObject(prot) === false) return false;
+
+  // If constructor does not have an Object-specific method
+  if (prot.hasOwnProperty('isPrototypeOf') === false) {
+    return false;
+  }
+
+  // Most likely a plain Object
+  return true;
+}
+
+
 
 ;// CONCATENATED MODULE: ./packages/redux-routine/build-module/is-action.js
 /**
@@ -749,7 +783,7 @@ function isPromise(obj) {
  */
 
 function isAction(object) {
-  return (0,external_lodash_namespaceObject.isPlainObject)(object) && typeof object.type === 'string';
+  return isPlainObject(object) && typeof object.type === 'string';
 }
 /**
  * Returns true if the given object quacks like an action and has a specific
@@ -773,7 +807,6 @@ function isActionOfType(object, expectedType) {
 
 
 
-
 /**
  * Internal dependencies
  */
@@ -788,21 +821,24 @@ function isActionOfType(object, expectedType) {
 function createRuntime() {
   let controls = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
   let dispatch = arguments.length > 1 ? arguments[1] : undefined;
-  const rungenControls = (0,external_lodash_namespaceObject.map)(controls, (control, actionType) => (value, next, iterate, yieldNext, yieldError) => {
-    if (!isActionOfType(value, actionType)) {
-      return false;
-    }
+  const rungenControls = Object.entries(controls).map(_ref => {
+    let [actionType, control] = _ref;
+    return (value, next, iterate, yieldNext, yieldError) => {
+      if (!isActionOfType(value, actionType)) {
+        return false;
+      }
 
-    const routine = control(value);
+      const routine = control(value);
 
-    if (isPromise(routine)) {
-      // Async control routine awaits resolution.
-      routine.then(yieldNext, yieldError);
-    } else {
-      yieldNext(routine);
-    }
+      if (isPromise(routine)) {
+        // Async control routine awaits resolution.
+        routine.then(yieldNext, yieldError);
+      } else {
+        yieldNext(routine);
+      }
 
-    return true;
+      return true;
+    };
   });
 
   const unhandledActionControl = (value, next) => {
@@ -859,8 +895,7 @@ function createMiddleware() {
   };
 }
 
-})();
-
+}();
 (window.wp = window.wp || {}).reduxRoutine = __webpack_exports__["default"];
 /******/ })()
 ;

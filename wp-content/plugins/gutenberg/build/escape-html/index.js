@@ -1,36 +1,36 @@
-/******/ (() => { // webpackBootstrap
+/******/ (function() { // webpackBootstrap
 /******/ 	"use strict";
 /******/ 	// The require scope
 /******/ 	var __webpack_require__ = {};
 /******/ 	
 /************************************************************************/
 /******/ 	/* webpack/runtime/define property getters */
-/******/ 	(() => {
+/******/ 	!function() {
 /******/ 		// define getter functions for harmony exports
-/******/ 		__webpack_require__.d = (exports, definition) => {
+/******/ 		__webpack_require__.d = function(exports, definition) {
 /******/ 			for(var key in definition) {
 /******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
 /******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
 /******/ 				}
 /******/ 			}
 /******/ 		};
-/******/ 	})();
+/******/ 	}();
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
-/******/ 	(() => {
-/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
-/******/ 	})();
+/******/ 	!function() {
+/******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
+/******/ 	}();
 /******/ 	
 /******/ 	/* webpack/runtime/make namespace object */
-/******/ 	(() => {
+/******/ 	!function() {
 /******/ 		// define __esModule on exports
-/******/ 		__webpack_require__.r = (exports) => {
+/******/ 		__webpack_require__.r = function(exports) {
 /******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
 /******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 /******/ 			}
 /******/ 			Object.defineProperty(exports, '__esModule', { value: true });
 /******/ 		};
-/******/ 	})();
+/******/ 	}();
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
@@ -39,13 +39,13 @@ __webpack_require__.r(__webpack_exports__);
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
-  "escapeAmpersand": () => (/* binding */ escapeAmpersand),
-  "escapeAttribute": () => (/* binding */ escapeAttribute),
-  "escapeEditableHTML": () => (/* binding */ escapeEditableHTML),
-  "escapeHTML": () => (/* binding */ escapeHTML),
-  "escapeLessThan": () => (/* binding */ escapeLessThan),
-  "escapeQuotationMark": () => (/* binding */ escapeQuotationMark),
-  "isValidAttributeName": () => (/* binding */ isValidAttributeName)
+  "escapeAmpersand": function() { return /* binding */ escapeAmpersand; },
+  "escapeAttribute": function() { return /* binding */ escapeAttribute; },
+  "escapeEditableHTML": function() { return /* binding */ escapeEditableHTML; },
+  "escapeHTML": function() { return /* binding */ escapeHTML; },
+  "escapeLessThan": function() { return /* binding */ escapeLessThan; },
+  "escapeQuotationMark": function() { return /* binding */ escapeQuotationMark; },
+  "isValidAttributeName": function() { return /* binding */ isValidAttributeName; }
 });
 
 ;// CONCATENATED MODULE: ./packages/escape-html/build-module/escape-greater.js
@@ -87,7 +87,7 @@ const REGEXP_INVALID_ATTRIBUTE_NAME = /[\u007F-\u009F "'>/="\uFDD0-\uFDEF]/;
  * Returns a string with ampersands escaped. Note that this is an imperfect
  * implementation, where only ampersands which do not appear as a pattern of
  * named, decimal, or hexadecimal character references are escaped. Invalid
- * named references (i.e. ambiguous ampersand) are are still permitted.
+ * named references (i.e. ambiguous ampersand) are still permitted.
  *
  * @see https://w3c.github.io/html/syntax.html#character-references
  * @see https://w3c.github.io/html/syntax.html#ambiguous-ampersand

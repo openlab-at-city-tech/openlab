@@ -1,36 +1,48 @@
-/******/ (() => { // webpackBootstrap
+/******/ (function() { // webpackBootstrap
 /******/ 	"use strict";
 /******/ 	// The require scope
 /******/ 	var __webpack_require__ = {};
 /******/ 	
 /************************************************************************/
+/******/ 	/* webpack/runtime/compat get default export */
+/******/ 	!function() {
+/******/ 		// getDefaultExport function for compatibility with non-harmony modules
+/******/ 		__webpack_require__.n = function(module) {
+/******/ 			var getter = module && module.__esModule ?
+/******/ 				function() { return module['default']; } :
+/******/ 				function() { return module; };
+/******/ 			__webpack_require__.d(getter, { a: getter });
+/******/ 			return getter;
+/******/ 		};
+/******/ 	}();
+/******/ 	
 /******/ 	/* webpack/runtime/define property getters */
-/******/ 	(() => {
+/******/ 	!function() {
 /******/ 		// define getter functions for harmony exports
-/******/ 		__webpack_require__.d = (exports, definition) => {
+/******/ 		__webpack_require__.d = function(exports, definition) {
 /******/ 			for(var key in definition) {
 /******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
 /******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
 /******/ 				}
 /******/ 			}
 /******/ 		};
-/******/ 	})();
+/******/ 	}();
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
-/******/ 	(() => {
-/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
-/******/ 	})();
+/******/ 	!function() {
+/******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
+/******/ 	}();
 /******/ 	
 /******/ 	/* webpack/runtime/make namespace object */
-/******/ 	(() => {
+/******/ 	!function() {
 /******/ 		// define __esModule on exports
-/******/ 		__webpack_require__.r = (exports) => {
+/******/ 		__webpack_require__.r = function(exports) {
 /******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
 /******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 /******/ 			}
 /******/ 			Object.defineProperty(exports, '__esModule', { value: true });
 /******/ 		};
-/******/ 	})();
+/******/ 	}();
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
@@ -39,77 +51,64 @@ __webpack_require__.r(__webpack_exports__);
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
-  "__UNSTABLE_LINE_SEPARATOR": () => (/* reexport */ LINE_SEPARATOR),
-  "__experimentalRichText": () => (/* reexport */ __experimentalRichText),
-  "__unstableCanIndentListItems": () => (/* reexport */ canIndentListItems),
-  "__unstableCanOutdentListItems": () => (/* reexport */ canOutdentListItems),
-  "__unstableChangeListType": () => (/* reexport */ changeListType),
-  "__unstableCreateElement": () => (/* reexport */ createElement),
-  "__unstableFormatEdit": () => (/* reexport */ FormatEdit),
-  "__unstableIndentListItems": () => (/* reexport */ indentListItems),
-  "__unstableInsertLineSeparator": () => (/* reexport */ insertLineSeparator),
-  "__unstableIsActiveListType": () => (/* reexport */ isActiveListType),
-  "__unstableIsEmptyLine": () => (/* reexport */ isEmptyLine),
-  "__unstableIsListRootSelected": () => (/* reexport */ isListRootSelected),
-  "__unstableOutdentListItems": () => (/* reexport */ outdentListItems),
-  "__unstableRemoveLineSeparator": () => (/* reexport */ removeLineSeparator),
-  "__unstableToDom": () => (/* reexport */ toDom),
-  "__unstableUseRichText": () => (/* reexport */ useRichText),
-  "applyFormat": () => (/* reexport */ applyFormat),
-  "concat": () => (/* reexport */ concat),
-  "create": () => (/* reexport */ create),
-  "getActiveFormat": () => (/* reexport */ getActiveFormat),
-  "getActiveObject": () => (/* reexport */ getActiveObject),
-  "getTextContent": () => (/* reexport */ getTextContent),
-  "insert": () => (/* reexport */ insert),
-  "insertObject": () => (/* reexport */ insertObject),
-  "isCollapsed": () => (/* reexport */ isCollapsed),
-  "isEmpty": () => (/* reexport */ isEmpty),
-  "join": () => (/* reexport */ join),
-  "registerFormatType": () => (/* reexport */ registerFormatType),
-  "remove": () => (/* reexport */ remove),
-  "removeFormat": () => (/* reexport */ removeFormat),
-  "replace": () => (/* reexport */ replace_replace),
-  "slice": () => (/* reexport */ slice),
-  "split": () => (/* reexport */ split),
-  "store": () => (/* reexport */ store),
-  "toHTMLString": () => (/* reexport */ toHTMLString),
-  "toggleFormat": () => (/* reexport */ toggleFormat),
-  "unregisterFormatType": () => (/* reexport */ unregisterFormatType),
-  "useAnchorRef": () => (/* reexport */ useAnchorRef)
+  "__UNSTABLE_LINE_SEPARATOR": function() { return /* reexport */ LINE_SEPARATOR; },
+  "__experimentalRichText": function() { return /* reexport */ __experimentalRichText; },
+  "__unstableCreateElement": function() { return /* reexport */ createElement; },
+  "__unstableFormatEdit": function() { return /* reexport */ FormatEdit; },
+  "__unstableInsertLineSeparator": function() { return /* reexport */ insertLineSeparator; },
+  "__unstableIsEmptyLine": function() { return /* reexport */ isEmptyLine; },
+  "__unstableToDom": function() { return /* reexport */ toDom; },
+  "__unstableUseRichText": function() { return /* reexport */ useRichText; },
+  "applyFormat": function() { return /* reexport */ applyFormat; },
+  "concat": function() { return /* reexport */ concat; },
+  "create": function() { return /* reexport */ create; },
+  "getActiveFormat": function() { return /* reexport */ getActiveFormat; },
+  "getActiveFormats": function() { return /* reexport */ getActiveFormats; },
+  "getActiveObject": function() { return /* reexport */ getActiveObject; },
+  "getTextContent": function() { return /* reexport */ getTextContent; },
+  "insert": function() { return /* reexport */ insert; },
+  "insertObject": function() { return /* reexport */ insertObject; },
+  "isCollapsed": function() { return /* reexport */ isCollapsed; },
+  "isEmpty": function() { return /* reexport */ isEmpty; },
+  "join": function() { return /* reexport */ join; },
+  "registerFormatType": function() { return /* reexport */ registerFormatType; },
+  "remove": function() { return /* reexport */ remove; },
+  "removeFormat": function() { return /* reexport */ removeFormat; },
+  "replace": function() { return /* reexport */ replace_replace; },
+  "slice": function() { return /* reexport */ slice; },
+  "split": function() { return /* reexport */ split; },
+  "store": function() { return /* reexport */ store; },
+  "toHTMLString": function() { return /* reexport */ toHTMLString; },
+  "toggleFormat": function() { return /* reexport */ toggleFormat; },
+  "unregisterFormatType": function() { return /* reexport */ unregisterFormatType; },
+  "useAnchor": function() { return /* reexport */ useAnchor; },
+  "useAnchorRef": function() { return /* reexport */ useAnchorRef; }
 });
 
 // NAMESPACE OBJECT: ./packages/rich-text/build-module/store/selectors.js
 var selectors_namespaceObject = {};
 __webpack_require__.r(selectors_namespaceObject);
 __webpack_require__.d(selectors_namespaceObject, {
-  "getFormatType": () => (getFormatType),
-  "getFormatTypeForBareElement": () => (getFormatTypeForBareElement),
-  "getFormatTypeForClassName": () => (getFormatTypeForClassName),
-  "getFormatTypes": () => (getFormatTypes)
+  "getFormatType": function() { return getFormatType; },
+  "getFormatTypeForBareElement": function() { return getFormatTypeForBareElement; },
+  "getFormatTypeForClassName": function() { return getFormatTypeForClassName; },
+  "getFormatTypes": function() { return getFormatTypes; }
 });
 
 // NAMESPACE OBJECT: ./packages/rich-text/build-module/store/actions.js
 var actions_namespaceObject = {};
 __webpack_require__.r(actions_namespaceObject);
 __webpack_require__.d(actions_namespaceObject, {
-  "addFormatTypes": () => (addFormatTypes),
-  "removeFormatTypes": () => (removeFormatTypes)
+  "addFormatTypes": function() { return addFormatTypes; },
+  "removeFormatTypes": function() { return removeFormatTypes; }
 });
 
 ;// CONCATENATED MODULE: external ["wp","data"]
-const external_wp_data_namespaceObject = window["wp"]["data"];
-;// CONCATENATED MODULE: external "lodash"
-const external_lodash_namespaceObject = window["lodash"];
+var external_wp_data_namespaceObject = window["wp"]["data"];
 ;// CONCATENATED MODULE: ./packages/rich-text/build-module/store/reducer.js
-/**
- * External dependencies
- */
-
 /**
  * WordPress dependencies
  */
-
 
 /**
  * Reducer managing the format types
@@ -134,12 +133,15 @@ function formatTypes() {
       };
 
     case 'REMOVE_FORMAT_TYPES':
-      return (0,external_lodash_namespaceObject.omit)(state, action.names);
+      return Object.fromEntries(Object.entries(state).filter(_ref => {
+        let [key] = _ref;
+        return !action.names.includes(key);
+      }));
   }
 
   return state;
 }
-/* harmony default export */ const reducer = ((0,external_wp_data_namespaceObject.combineReducers)({
+/* harmony default export */ var reducer = ((0,external_wp_data_namespaceObject.combineReducers)({
   formatTypes
 }));
 
@@ -446,7 +448,6 @@ function isShallowEqual(a, b, fromIndex) {
  * External dependencies
  */
 
-
 /**
  * Returns all the available format types.
  *
@@ -479,12 +480,19 @@ function getFormatType(state, name) {
  */
 
 function getFormatTypeForBareElement(state, bareElementTagName) {
-  return (0,external_lodash_namespaceObject.find)(getFormatTypes(state), _ref => {
+  const formatTypes = getFormatTypes(state);
+  return formatTypes.find(_ref => {
     let {
       className,
       tagName
     } = _ref;
     return className === null && bareElementTagName === tagName;
+  }) || formatTypes.find(_ref2 => {
+    let {
+      className,
+      tagName
+    } = _ref2;
+    return className === null && '*' === tagName;
   });
 }
 /**
@@ -497,10 +505,10 @@ function getFormatTypeForBareElement(state, bareElementTagName) {
  */
 
 function getFormatTypeForClassName(state, elementClassName) {
-  return (0,external_lodash_namespaceObject.find)(getFormatTypes(state), _ref2 => {
+  return getFormatTypes(state).find(_ref3 => {
     let {
       className
-    } = _ref2;
+    } = _ref3;
 
     if (className === null) {
       return false;
@@ -512,10 +520,6 @@ function getFormatTypeForClassName(state, elementClassName) {
 
 ;// CONCATENATED MODULE: ./packages/rich-text/build-module/store/actions.js
 /**
- * External dependencies
- */
-
-/**
  * Returns an action object used in signalling that format types have been
  * added.
  *
@@ -523,11 +527,10 @@ function getFormatTypeForClassName(state, elementClassName) {
  *
  * @return {Object} Action object.
  */
-
 function addFormatTypes(formatTypes) {
   return {
     type: 'ADD_FORMAT_TYPES',
-    formatTypes: (0,external_lodash_namespaceObject.castArray)(formatTypes)
+    formatTypes: Array.isArray(formatTypes) ? formatTypes : [formatTypes]
   };
 }
 /**
@@ -541,7 +544,7 @@ function addFormatTypes(formatTypes) {
 function removeFormatTypes(names) {
   return {
     type: 'REMOVE_FORMAT_TYPES',
-    names: (0,external_lodash_namespaceObject.castArray)(names)
+    names: Array.isArray(names) ? names : [names]
   };
 }
 
@@ -864,7 +867,7 @@ function createEmptyValue() {
 
 function toFormat(_ref) {
   let {
-    type,
+    tagName,
     attributes
   } = _ref;
   let formatType;
@@ -883,15 +886,15 @@ function toFormat(_ref) {
   }
 
   if (!formatType) {
-    formatType = (0,external_wp_data_namespaceObject.select)(store).getFormatTypeForBareElement(type);
+    formatType = (0,external_wp_data_namespaceObject.select)(store).getFormatTypeForBareElement(tagName);
   }
 
   if (!formatType) {
     return attributes ? {
-      type,
+      type: tagName,
       attributes
     } : {
-      type
+      type: tagName
     };
   }
 
@@ -901,7 +904,8 @@ function toFormat(_ref) {
 
   if (!attributes) {
     return {
-      type: formatType.name
+      type: formatType.name,
+      tagName
     };
   }
 
@@ -933,6 +937,7 @@ function toFormat(_ref) {
 
   return {
     type: formatType.name,
+    tagName,
     attributes: registeredAttributes,
     unregisteredAttributes
   };
@@ -1186,7 +1191,7 @@ function createFromElement(_ref2) {
 
   for (let index = 0; index < length; index++) {
     const node = element.childNodes[index];
-    const type = node.nodeName.toLowerCase();
+    const tagName = node.nodeName.toLowerCase();
 
     if (node.nodeType === node.TEXT_NODE) {
       let filter = removeReservedCharacters;
@@ -1214,16 +1219,16 @@ function createFromElement(_ref2) {
 
     if (isEditableTree && ( // Ignore any placeholders.
     node.getAttribute('data-rich-text-placeholder') || // Ignore any line breaks that are not inserted by us.
-    type === 'br' && !node.getAttribute('data-rich-text-line-break'))) {
+    tagName === 'br' && !node.getAttribute('data-rich-text-line-break'))) {
       accumulateSelection(accumulator, node, range, createEmptyValue());
       continue;
     }
 
-    if (type === 'script') {
+    if (tagName === 'script') {
       const value = {
         formats: [,],
         replacements: [{
-          type,
+          type: tagName,
           attributes: {
             'data-rich-text-script': node.getAttribute('data-rich-text-script') || encodeURIComponent(node.innerHTML)
           }
@@ -1235,7 +1240,7 @@ function createFromElement(_ref2) {
       continue;
     }
 
-    if (type === 'br') {
+    if (tagName === 'br') {
       accumulateSelection(accumulator, node, range, createEmptyValue());
       mergePair(accumulator, create({
         text: '\n'
@@ -1244,13 +1249,13 @@ function createFromElement(_ref2) {
     }
 
     const format = toFormat({
-      type,
+      tagName,
       attributes: getAttributes({
         element: node
       })
     });
 
-    if (multilineWrapperTags && multilineWrapperTags.indexOf(type) !== -1) {
+    if (multilineWrapperTags && multilineWrapperTags.indexOf(tagName) !== -1) {
       const value = createFromMultilineElement({
         element: node,
         range,
@@ -1512,13 +1517,8 @@ function getActiveFormats(_ref) {
 
 ;// CONCATENATED MODULE: ./packages/rich-text/build-module/get-active-format.js
 /**
- * External dependencies
- */
-
-/**
  * Internal dependencies
  */
-
 
 /** @typedef {import('./create').RichTextValue} RichTextValue */
 
@@ -1538,8 +1538,13 @@ function getActiveFormats(_ref) {
  */
 
 function getActiveFormat(value, formatType) {
-  return (0,external_lodash_namespaceObject.find)(getActiveFormats(value), {
-    type: formatType
+  var _getActiveFormats;
+
+  return (_getActiveFormats = getActiveFormats(value)) === null || _getActiveFormats === void 0 ? void 0 : _getActiveFormats.find(_ref => {
+    let {
+      type
+    } = _ref;
+    return type === formatType;
   });
 }
 
@@ -1582,6 +1587,7 @@ function getActiveObject(_ref) {
 
 /** @typedef {import('./create').RichTextValue} RichTextValue */
 
+const pattern = new RegExp(`[${OBJECT_REPLACEMENT_CHARACTER}${LINE_SEPARATOR}]`, 'g');
 /**
  * Get the textual content of a Rich Text value. This is similar to
  * `Element.textContent`.
@@ -1595,101 +1601,7 @@ function getTextContent(_ref) {
   let {
     text
   } = _ref;
-  return text.replace(new RegExp(OBJECT_REPLACEMENT_CHARACTER, 'g'), '').replace(new RegExp(LINE_SEPARATOR, 'g'), '\n');
-}
-
-;// CONCATENATED MODULE: ./packages/rich-text/build-module/get-line-index.js
-/**
- * Internal dependencies
- */
-
-/** @typedef {import('./create').RichTextValue} RichTextValue */
-
-/**
- * Gets the currently selected line index, or the first line index if the
- * selection spans over multiple items.
- *
- * @param {RichTextValue} value      Value to get the line index from.
- * @param {boolean}       startIndex Optional index that should be contained by
- *                                   the line. Defaults to the selection start
- *                                   of the value.
- *
- * @return {number|void} The line index. Undefined if not found.
- */
-
-function getLineIndex(_ref) {
-  let {
-    start,
-    text
-  } = _ref;
-  let startIndex = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : start;
-  let index = startIndex;
-
-  while (index--) {
-    if (text[index] === LINE_SEPARATOR) {
-      return index;
-    }
-  }
-}
-
-;// CONCATENATED MODULE: ./packages/rich-text/build-module/is-list-root-selected.js
-/**
- * Internal dependencies
- */
-
-/** @typedef {import('./create').RichTextValue} RichTextValue */
-
-/**
- * Whether or not the root list is selected.
- *
- * @param {RichTextValue} value The value to check.
- *
- * @return {boolean} True if the root list or nothing is selected, false if an
- *                   inner list is selected.
- */
-
-function isListRootSelected(value) {
-  const {
-    replacements,
-    start
-  } = value;
-  const lineIndex = getLineIndex(value, start);
-  const replacement = replacements[lineIndex];
-  return !replacement || replacement.length < 1;
-}
-
-;// CONCATENATED MODULE: ./packages/rich-text/build-module/is-active-list-type.js
-/**
- * Internal dependencies
- */
-
-/** @typedef {import('./create').RichTextValue} RichTextValue */
-
-/**
- * Whether or not the selected list has the given tag name.
- *
- * @param {RichTextValue} value    The value to check.
- * @param {string}        type     The tag name the list should have.
- * @param {string}        rootType The current root tag name, to compare with in
- *                                 case nothing is selected.
- *
- * @return {boolean} True if the current list type matches `type`, false if not.
- */
-
-function isActiveListType(value, type, rootType) {
-  const {
-    replacements,
-    start
-  } = value;
-  const lineIndex = getLineIndex(value, start);
-  const replacement = replacements[lineIndex];
-
-  if (!replacement || replacement.length === 0) {
-    return type === rootType;
-  }
-
-  const lastFormat = replacement[replacement.length - 1];
-  return lastFormat.type === type;
+  return text.replace(pattern, c => c === OBJECT_REPLACEMENT_CHARACTER ? '' : '\n');
 }
 
 ;// CONCATENATED MODULE: ./packages/rich-text/build-module/is-collapsed.js
@@ -1891,7 +1803,7 @@ function registerFormatType(name, settings) {
   if (settings.className === null) {
     const formatTypeForBareElement = (0,external_wp_data_namespaceObject.select)(store).getFormatTypeForBareElement(settings.tagName);
 
-    if (formatTypeForBareElement) {
+    if (formatTypeForBareElement && formatTypeForBareElement.name !== 'core/unknown') {
       window.console.error(`Format "${formatTypeForBareElement.name}" is already registered to handle bare tag name "${settings.tagName}".`);
       return;
     }
@@ -2201,68 +2113,6 @@ function insertLineSeparator(value) {
   return insert(value, valueToInsert, startIndex, endIndex);
 }
 
-;// CONCATENATED MODULE: ./packages/rich-text/build-module/remove-line-separator.js
-/**
- * Internal dependencies
- */
-
-
-
-/** @typedef {import('./create').RichTextValue} RichTextValue */
-
-/**
- * Removes a line separator character, if existing, from a Rich Text value at
- * the current indices. If no line separator exists on the indices it will
- * return undefined.
- *
- * @param {RichTextValue} value    Value to modify.
- * @param {boolean}       backward Indicates if are removing from the start
- *                                 index or the end index.
- *
- * @return {RichTextValue|undefined} A new value with the line separator
- *                                   removed. Or undefined if no line separator
- *                                   is found on the position.
- */
-
-function removeLineSeparator(value) {
-  let backward = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
-  const {
-    replacements,
-    text,
-    start,
-    end
-  } = value;
-  const collapsed = isCollapsed(value);
-  let index = start - 1;
-  let removeStart = collapsed ? start - 1 : start;
-  let removeEnd = end;
-
-  if (!backward) {
-    index = end;
-    removeStart = start;
-    removeEnd = collapsed ? end + 1 : end;
-  }
-
-  if (text[index] !== LINE_SEPARATOR) {
-    return;
-  }
-
-  let newValue; // If the line separator that is about te be removed
-  // contains wrappers, remove the wrappers first.
-
-  if (collapsed && replacements[index] && replacements[index].length) {
-    const newReplacements = replacements.slice();
-    newReplacements[index] = replacements[index].slice(0, -1);
-    newValue = { ...value,
-      replacements: newReplacements
-    };
-  } else {
-    newValue = remove(value, removeStart, removeEnd);
-  }
-
-  return newValue;
-}
-
 ;// CONCATENATED MODULE: ./packages/rich-text/build-module/insert-object.js
 /**
  * Internal dependencies
@@ -2477,6 +2327,7 @@ function restoreOnAttributes(attributes, isEditableTree) {
  *
  * @param {Object}  $1                        Named parameters.
  * @param {string}  $1.type                   The format type.
+ * @param {string}  $1.tagName                The tag name.
  * @param {Object}  $1.attributes             The format attributes.
  * @param {Object}  $1.unregisteredAttributes The unregistered format
  *                                            attributes.
@@ -2493,6 +2344,7 @@ function restoreOnAttributes(attributes, isEditableTree) {
 function fromFormat(_ref) {
   let {
     type,
+    tagName,
     attributes,
     unregisteredAttributes,
     object,
@@ -2543,7 +2395,7 @@ function fromFormat(_ref) {
   }
 
   return {
-    type: formatType.tagName,
+    type: formatType.tagName === '*' ? tagName : formatType.tagName,
     object: formatType.object,
     attributes: restoreOnAttributes(elementAttributes, isEditableTree)
   };
@@ -2672,6 +2524,7 @@ function toTree(_ref2) {
 
         const {
           type,
+          tagName,
           attributes,
           unregisteredAttributes
         } = format;
@@ -2679,6 +2532,7 @@ function toTree(_ref2) {
         const parent = getParent(pointer);
         const newNode = append(parent, fromFormat({
           type,
+          tagName,
           attributes,
           unregisteredAttributes,
           boundaryClass,
@@ -3121,7 +2975,7 @@ function applySelection(_ref6, current) {
 }
 
 ;// CONCATENATED MODULE: external ["wp","escapeHtml"]
-const external_wp_escapeHtml_namespaceObject = window["wp"]["escapeHtml"];
+var external_wp_escapeHtml_namespaceObject = window["wp"]["escapeHtml"];
 ;// CONCATENATED MODULE: ./packages/rich-text/build-module/to-html-string.js
 /**
  * WordPress dependencies
@@ -3264,9 +3118,9 @@ function createChildrenHTML() {
 }
 
 ;// CONCATENATED MODULE: external ["wp","a11y"]
-const external_wp_a11y_namespaceObject = window["wp"]["a11y"];
+var external_wp_a11y_namespaceObject = window["wp"]["a11y"];
 ;// CONCATENATED MODULE: external ["wp","i18n"]
-const external_wp_i18n_namespaceObject = window["wp"]["i18n"];
+var external_wp_i18n_namespaceObject = window["wp"]["i18n"];
 ;// CONCATENATED MODULE: ./packages/rich-text/build-module/toggle-format.js
 /**
  * WordPress dependencies
@@ -3347,371 +3201,16 @@ function unregisterFormatType(name) {
   return oldFormat;
 }
 
-;// CONCATENATED MODULE: ./packages/rich-text/build-module/can-indent-list-items.js
-/**
- * Internal dependencies
- */
-
-/** @typedef {import('./create').RichTextValue} RichTextValue */
-
-/**
- * Checks if the selected list item can be indented.
- *
- * @param {RichTextValue} value Value to check.
- *
- * @return {boolean} Whether or not the selected list item can be indented.
- */
-
-function canIndentListItems(value) {
-  const lineIndex = getLineIndex(value); // There is only one line, so the line cannot be indented.
-
-  if (lineIndex === undefined) {
-    return false;
-  }
-
-  const {
-    replacements
-  } = value;
-  const previousLineIndex = getLineIndex(value, lineIndex);
-  const formatsAtLineIndex = replacements[lineIndex] || [];
-  const formatsAtPreviousLineIndex = replacements[previousLineIndex] || []; // If the indentation of the current line is greater than previous line,
-  // then the line cannot be furter indented.
-
-  return formatsAtLineIndex.length <= formatsAtPreviousLineIndex.length;
-}
-
-;// CONCATENATED MODULE: ./packages/rich-text/build-module/can-outdent-list-items.js
-/**
- * Internal dependencies
- */
-
-/** @typedef {import('./create').RichTextValue} RichTextValue */
-
-/**
- * Checks if the selected list item can be outdented.
- *
- * @param {RichTextValue} value Value to check.
- *
- * @return {boolean} Whether or not the selected list item can be outdented.
- */
-
-function canOutdentListItems(value) {
-  const {
-    replacements,
-    start
-  } = value;
-  const startingLineIndex = getLineIndex(value, start);
-  return replacements[startingLineIndex] !== undefined;
-}
-
-;// CONCATENATED MODULE: ./packages/rich-text/build-module/indent-list-items.js
-/**
- * Internal dependencies
- */
-
-
-
-/** @typedef {import('./create').RichTextValue} RichTextValue */
-
-/** @typedef {import('./create').RichTextFormat} RichTextFormat */
-
-/**
- * Gets the line index of the first previous list item with higher indentation.
- *
- * @param {RichTextValue} value     Value to search.
- * @param {number}        lineIndex Line index of the list item to compare
- *                                  with.
- *
- * @return {number|void} The line index.
- */
-
-function getTargetLevelLineIndex(_ref, lineIndex) {
-  let {
-    text,
-    replacements
-  } = _ref;
-  const startFormats = replacements[lineIndex] || [];
-  let index = lineIndex;
-
-  while (index-- >= 0) {
-    if (text[index] !== LINE_SEPARATOR) {
-      continue;
-    }
-
-    const formatsAtIndex = replacements[index] || []; // Return the first line index that is one level higher. If the level is
-    // lower or equal, there is no result.
-
-    if (formatsAtIndex.length === startFormats.length + 1) {
-      return index;
-    } else if (formatsAtIndex.length <= startFormats.length) {
-      return;
-    }
-  }
-}
-/**
- * Indents any selected list items if possible.
- *
- * @param {RichTextValue}  value      Value to change.
- * @param {RichTextFormat} rootFormat Root format.
- *
- * @return {RichTextValue} The changed value.
- */
-
-
-function indentListItems(value, rootFormat) {
-  if (!canIndentListItems(value)) {
-    return value;
-  }
-
-  const lineIndex = getLineIndex(value);
-  const previousLineIndex = getLineIndex(value, lineIndex);
-  const {
-    text,
-    replacements,
-    end
-  } = value;
-  const newFormats = replacements.slice();
-  const targetLevelLineIndex = getTargetLevelLineIndex(value, lineIndex);
-
-  for (let index = lineIndex; index < end; index++) {
-    if (text[index] !== LINE_SEPARATOR) {
-      continue;
-    } // Get the previous list, and if there's a child list, take over the
-    // formats. If not, duplicate the last level and create a new level.
-
-
-    if (targetLevelLineIndex) {
-      const targetFormats = replacements[targetLevelLineIndex] || [];
-      newFormats[index] = targetFormats.concat((newFormats[index] || []).slice(targetFormats.length - 1));
-    } else {
-      const targetFormats = replacements[previousLineIndex] || [];
-      const lastformat = targetFormats[targetFormats.length - 1] || rootFormat;
-      newFormats[index] = targetFormats.concat([lastformat], (newFormats[index] || []).slice(targetFormats.length));
-    }
-  }
-
-  return { ...value,
-    replacements: newFormats
-  };
-}
-
-;// CONCATENATED MODULE: ./packages/rich-text/build-module/get-parent-line-index.js
-/**
- * Internal dependencies
- */
-
-/** @typedef {import('./create').RichTextValue} RichTextValue */
-
-/**
- * Gets the index of the first parent list. To get the parent list formats, we
- * go through every list item until we find one with exactly one format type
- * less.
- *
- * @param {RichTextValue} value     Value to search.
- * @param {number}        lineIndex Line index of a child list item.
- *
- * @return {number|void} The parent list line index.
- */
-
-function getParentLineIndex(_ref, lineIndex) {
-  let {
-    text,
-    replacements
-  } = _ref;
-  const startFormats = replacements[lineIndex] || [];
-  let index = lineIndex;
-
-  while (index-- >= 0) {
-    if (text[index] !== LINE_SEPARATOR) {
-      continue;
-    }
-
-    const formatsAtIndex = replacements[index] || [];
-
-    if (formatsAtIndex.length === startFormats.length - 1) {
-      return index;
-    }
-  }
-}
-
-;// CONCATENATED MODULE: ./packages/rich-text/build-module/get-last-child-index.js
-/**
- * Internal dependencies
- */
-
-/** @typedef {import('./create').RichTextValue} RichTextValue */
-
-/**
- * Gets the line index of the last child in the list.
- *
- * @param {RichTextValue} value     Value to search.
- * @param {number}        lineIndex Line index of a list item in the list.
- *
- * @return {number} The index of the last child.
- */
-
-function getLastChildIndex(_ref, lineIndex) {
-  let {
-    text,
-    replacements
-  } = _ref;
-  const lineFormats = replacements[lineIndex] || []; // Use the given line index in case there are no next children.
-
-  let childIndex = lineIndex; // `lineIndex` could be `undefined` if it's the first line.
-
-  for (let index = lineIndex || 0; index < text.length; index++) {
-    // We're only interested in line indices.
-    if (text[index] !== LINE_SEPARATOR) {
-      continue;
-    }
-
-    const formatsAtIndex = replacements[index] || []; // If the amout of formats is equal or more, store it, then return the
-    // last one if the amount of formats is less.
-
-    if (formatsAtIndex.length >= lineFormats.length) {
-      childIndex = index;
-    } else {
-      return childIndex;
-    }
-  } // If the end of the text is reached, return the last child index.
-
-
-  return childIndex;
-}
-
-;// CONCATENATED MODULE: ./packages/rich-text/build-module/outdent-list-items.js
-/**
- * Internal dependencies
- */
-
-
-
-
-
-/** @typedef {import('./create').RichTextValue} RichTextValue */
-
-/**
- * Outdents any selected list items if possible.
- *
- * @param {RichTextValue} value Value to change.
- *
- * @return {RichTextValue} The changed value.
- */
-
-function outdentListItems(value) {
-  if (!canOutdentListItems(value)) {
-    return value;
-  }
-
-  const {
-    text,
-    replacements,
-    start,
-    end
-  } = value;
-  const startingLineIndex = getLineIndex(value, start);
-  const newFormats = replacements.slice(0);
-  const parentFormats = replacements[getParentLineIndex(value, startingLineIndex)] || [];
-  const endingLineIndex = getLineIndex(value, end);
-  const lastChildIndex = getLastChildIndex(value, endingLineIndex); // Outdent all list items from the starting line index until the last child
-  // index of the ending list. All children of the ending list need to be
-  // outdented, otherwise they'll be orphaned.
-
-  for (let index = startingLineIndex; index <= lastChildIndex; index++) {
-    // Skip indices that are not line separators.
-    if (text[index] !== LINE_SEPARATOR) {
-      continue;
-    } // In the case of level 0, the formats at the index are undefined.
-
-
-    const currentFormats = newFormats[index] || []; // Omit the indentation level where the selection starts.
-
-    newFormats[index] = parentFormats.concat(currentFormats.slice(parentFormats.length + 1));
-
-    if (newFormats[index].length === 0) {
-      delete newFormats[index];
-    }
-  }
-
-  return { ...value,
-    replacements: newFormats
-  };
-}
-
-;// CONCATENATED MODULE: ./packages/rich-text/build-module/change-list-type.js
-/**
- * Internal dependencies
- */
-
-
-
-/** @typedef {import('./create').RichTextValue} RichTextValue */
-
-/** @typedef {import('./create').RichTextFormat} RichTextFormat */
-
-/**
- * Changes the list type of the selected indented list, if any. Looks at the
- * currently selected list item and takes the parent list, then changes the list
- * type of this list. When multiple lines are selected, the parent lists are
- * takes and changed.
- *
- * @param {RichTextValue}  value     Value to change.
- * @param {RichTextFormat} newFormat The new list format object. Choose between
- *                                   `{ type: 'ol' }` and `{ type: 'ul' }`.
- *
- * @return {RichTextValue} The changed value.
- */
-
-function changeListType(value, newFormat) {
-  const {
-    text,
-    replacements,
-    start,
-    end
-  } = value;
-  const startingLineIndex = getLineIndex(value, start);
-  const startLineFormats = replacements[startingLineIndex] || [];
-  const endLineFormats = replacements[getLineIndex(value, end)] || [];
-  const startIndex = getParentLineIndex(value, startingLineIndex);
-  const newReplacements = replacements.slice();
-  const startCount = startLineFormats.length - 1;
-  const endCount = endLineFormats.length - 1;
-  let changed;
-
-  for (let index = startIndex + 1 || 0; index < text.length; index++) {
-    if (text[index] !== LINE_SEPARATOR) {
-      continue;
-    }
-
-    if ((newReplacements[index] || []).length <= startCount) {
-      break;
-    }
-
-    if (!newReplacements[index]) {
-      continue;
-    }
-
-    changed = true;
-    newReplacements[index] = newReplacements[index].map((format, i) => {
-      return i < startCount || i > endCount ? format : newFormat;
-    });
-  }
-
-  if (!changed) {
-    return value;
-  }
-
-  return { ...value,
-    replacements: newReplacements
-  };
-}
-
 ;// CONCATENATED MODULE: external ["wp","element"]
-const external_wp_element_namespaceObject = window["wp"]["element"];
+var external_wp_element_namespaceObject = window["wp"]["element"];
+;// CONCATENATED MODULE: external ["wp","deprecated"]
+var external_wp_deprecated_namespaceObject = window["wp"]["deprecated"];
+var external_wp_deprecated_default = /*#__PURE__*/__webpack_require__.n(external_wp_deprecated_namespaceObject);
 ;// CONCATENATED MODULE: ./packages/rich-text/build-module/component/use-anchor-ref.js
 /**
  * WordPress dependencies
  */
+
 
 /**
  * Internal dependencies
@@ -3745,6 +3244,10 @@ function useAnchorRef(_ref) {
     value,
     settings = {}
   } = _ref;
+  external_wp_deprecated_default()('`useAnchorRef` hook', {
+    since: '6.1',
+    alternative: '`useAnchor` hook'
+  });
   const {
     tagName,
     className,
@@ -3782,8 +3285,93 @@ function useAnchorRef(_ref) {
   }, [activeFormat, value.start, value.end, tagName, className]);
 }
 
+;// CONCATENATED MODULE: ./packages/rich-text/build-module/component/use-anchor.js
+/**
+ * WordPress dependencies
+ */
+
+/**
+ * Internal dependencies
+ */
+
+
+/** @typedef {import('../register-format-type').RichTextFormatType} RichTextFormatType */
+
+/** @typedef {import('../create').RichTextValue} RichTextValue */
+
+/**
+ * @typedef {Object} VirtualAnchorElement
+ * @property {Function} getBoundingClientRect A function returning a DOMRect
+ * @property {Document} ownerDocument         The element's ownerDocument
+ */
+
+/**
+ * This hook, to be used in a format type's Edit component, returns the active
+ * element that is formatted, or a virtual element for the selection range if
+ * no format is active. The returned value is meant to be used for positioning
+ * UI, e.g. by passing it to the `Popover` component via the `anchor` prop.
+ *
+ * @param {Object}             $1                        Named parameters.
+ * @param {HTMLElement|null}   $1.editableContentElement The element containing
+ *                                                       the editable content.
+ * @param {RichTextValue}      $1.value                  Value to check for selection.
+ * @param {RichTextFormatType} $1.settings               The format type's settings.
+ * @return {Element|VirtualAnchorElement|undefined|null} The active element or selection range.
+ */
+
+function useAnchor(_ref) {
+  let {
+    editableContentElement,
+    value,
+    settings = {}
+  } = _ref;
+  const {
+    tagName,
+    className,
+    name
+  } = settings;
+  const activeFormat = name ? getActiveFormat(value, name) : undefined;
+  return (0,external_wp_element_namespaceObject.useMemo)(() => {
+    if (!editableContentElement) return;
+    const {
+      ownerDocument: {
+        defaultView
+      }
+    } = editableContentElement;
+    const selection = defaultView.getSelection();
+
+    if (!selection.rangeCount) {
+      return;
+    }
+
+    const selectionWithinEditableContentElement = editableContentElement === null || editableContentElement === void 0 ? void 0 : editableContentElement.contains(selection === null || selection === void 0 ? void 0 : selection.anchorNode);
+    const range = selection.getRangeAt(0);
+
+    if (!activeFormat) {
+      return {
+        ownerDocument: range.startContainer.ownerDocument,
+
+        getBoundingClientRect() {
+          return selectionWithinEditableContentElement ? range.getBoundingClientRect() : editableContentElement.getBoundingClientRect();
+        }
+
+      };
+    }
+
+    let element = range.startContainer; // If the caret is right before the element, select the next element.
+
+    element = element.nextElementSibling || element;
+
+    while (element.nodeType !== element.ELEMENT_NODE) {
+      element = element.parentNode;
+    }
+
+    return element.closest(tagName + (className ? '.' + className : ''));
+  }, [editableContentElement, activeFormat, value.start, value.end, tagName, className]);
+}
+
 ;// CONCATENATED MODULE: external ["wp","compose"]
-const external_wp_compose_namespaceObject = window["wp"]["compose"];
+var external_wp_compose_namespaceObject = window["wp"]["compose"];
 ;// CONCATENATED MODULE: ./packages/rich-text/build-module/component/use-default-style.js
 /**
  * WordPress dependencies
@@ -3935,7 +3523,7 @@ function useCopyHandler(props) {
 }
 
 ;// CONCATENATED MODULE: external ["wp","keycodes"]
-const external_wp_keycodes_namespaceObject = window["wp"]["keycodes"];
+var external_wp_keycodes_namespaceObject = window["wp"]["keycodes"];
 ;// CONCATENATED MODULE: ./packages/rich-text/build-module/component/use-format-boundaries.js
 /**
  * WordPress dependencies
@@ -4081,72 +3669,6 @@ function useSelectObject() {
     element.addEventListener('click', onClick);
     return () => {
       element.removeEventListener('click', onClick);
-    };
-  }, []);
-}
-
-;// CONCATENATED MODULE: ./packages/rich-text/build-module/component/use-indent-list-item-on-space.js
-/**
- * WordPress dependencies
- */
-
-
-
-/**
- * Internal dependencies
- */
-
-
-
-
-function useIndentListItemOnSpace(props) {
-  const propsRef = (0,external_wp_element_namespaceObject.useRef)(props);
-  propsRef.current = props;
-  return (0,external_wp_compose_namespaceObject.useRefEffect)(element => {
-    function onKeyDown(event) {
-      const {
-        keyCode,
-        shiftKey,
-        altKey,
-        metaKey,
-        ctrlKey
-      } = event;
-      const {
-        multilineTag,
-        createRecord,
-        handleChange
-      } = propsRef.current;
-
-      if ( // Only override when no modifiers are pressed.
-      shiftKey || altKey || metaKey || ctrlKey || keyCode !== external_wp_keycodes_namespaceObject.SPACE || multilineTag !== 'li') {
-        return;
-      }
-
-      const currentValue = createRecord();
-
-      if (!isCollapsed(currentValue)) {
-        return;
-      }
-
-      const {
-        text,
-        start
-      } = currentValue;
-      const characterBefore = text[start - 1]; // The caret must be at the start of a line.
-
-      if (characterBefore && characterBefore !== LINE_SEPARATOR) {
-        return;
-      }
-
-      handleChange(indentListItems(currentValue, {
-        type: element.tagName.toLowerCase()
-      }));
-      event.preventDefault();
-    }
-
-    element.addEventListener('keydown', onKeyDown);
-    return () => {
-      element.removeEventListener('keydown', onKeyDown);
     };
   }, []);
 }
@@ -4346,6 +3868,15 @@ function useInputAndSelection(props) {
 
 
       if (ownerDocument.activeElement !== element) {
+        // Only process if the active elment is contentEditable, either
+        // this rich text instance or the writing flow parent. Fixes a
+        // bug in Firefox where it strangely selects the closest
+        // contentEditable element, even though the click was outside
+        // any contentEditable element.
+        if (ownerDocument.activeElement.contentEditable !== 'true') {
+          return;
+        }
+
         if (!ownerDocument.activeElement.contains(element)) {
           return;
         }
@@ -4370,7 +3901,7 @@ function useInputAndSelection(props) {
           } = createRecord();
           record.current.activeFormats = use_input_and_selection_EMPTY_ACTIVE_FORMATS;
           onSelectionChange(offset);
-        } else if (element.contains(focusNode) && element !== focusNode) {
+        } else if (element.contains(focusNode)) {
           const {
             start,
             end: offset = start
@@ -4438,6 +3969,8 @@ function useInputAndSelection(props) {
     }
 
     function onCompositionStart() {
+      var _element$querySelecto;
+
       isComposing = true; // Do not update the selection when characters are being composed as
       // this rerenders the component and might destroy internal browser
       // editing state.
@@ -4447,7 +3980,7 @@ function useInputAndSelection(props) {
       // no need to re-add it, when the value is updated on compositionend
       // it will be re-added when the value is empty.
 
-      element.querySelector(`[${PLACEHOLDER_ATTR_NAME}]`).remove();
+      (_element$querySelecto = element.querySelector(`[${PLACEHOLDER_ATTR_NAME}]`)) === null || _element$querySelecto === void 0 ? void 0 : _element$querySelecto.remove();
     }
 
     function onCompositionEnd() {
@@ -4521,6 +4054,68 @@ function useInputAndSelection(props) {
       defaultView.cancelAnimationFrame(rafId);
     };
   }, []);
+}
+
+;// CONCATENATED MODULE: ./packages/rich-text/build-module/remove-line-separator.js
+/**
+ * Internal dependencies
+ */
+
+
+
+/** @typedef {import('./create').RichTextValue} RichTextValue */
+
+/**
+ * Removes a line separator character, if existing, from a Rich Text value at
+ * the current indices. If no line separator exists on the indices it will
+ * return undefined.
+ *
+ * @param {RichTextValue} value    Value to modify.
+ * @param {boolean}       backward Indicates if are removing from the start
+ *                                 index or the end index.
+ *
+ * @return {RichTextValue|undefined} A new value with the line separator
+ *                                   removed. Or undefined if no line separator
+ *                                   is found on the position.
+ */
+
+function removeLineSeparator(value) {
+  let backward = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+  const {
+    replacements,
+    text,
+    start,
+    end
+  } = value;
+  const collapsed = isCollapsed(value);
+  let index = start - 1;
+  let removeStart = collapsed ? start - 1 : start;
+  let removeEnd = end;
+
+  if (!backward) {
+    index = end;
+    removeStart = start;
+    removeEnd = collapsed ? end + 1 : end;
+  }
+
+  if (text[index] !== LINE_SEPARATOR) {
+    return;
+  }
+
+  let newValue; // If the line separator that is about te be removed
+  // contains wrappers, remove the wrappers first.
+
+  if (collapsed && replacements[index] && replacements[index].length) {
+    const newReplacements = replacements.slice();
+    newReplacements[index] = replacements[index].slice(0, -1);
+    newValue = { ...value,
+      replacements: newReplacements
+    };
+  } else {
+    newValue = remove(value, removeStart, removeEnd);
+  }
+
+  return newValue;
 }
 
 ;// CONCATENATED MODULE: ./packages/rich-text/build-module/component/use-delete.js
@@ -4606,7 +4201,6 @@ function useDelete(props) {
 /**
  * Internal dependencies
  */
-
 
 
 
@@ -4829,10 +4423,6 @@ function useRichText(_ref) {
     createRecord,
     handleChange,
     multilineTag
-  }), useIndentListItemOnSpace({
-    multilineTag,
-    createRecord,
-    handleChange
   }), useInputAndSelection({
     record,
     applyRecord,
@@ -4897,12 +4487,6 @@ function FormatEdit(_ref) {
 }
 
 ;// CONCATENATED MODULE: ./packages/rich-text/build-module/index.js
-
-
-
-
-
-
 
 
 
