@@ -273,6 +273,12 @@ function bpdig_is_existing_doc( $is_existing_doc ) {
 		return $is_existing_doc;
 	}
 
+	// Prevents the 'pagination_base' action variable from triggering a false positive.
+	global $wp_query;
+	if ( $wp_query && $wp_query->get( 'paged' ) > 0 ) {
+		return false;
+	}
+
 	return true;
 }
 add_filter( 'bp_docs_is_existing_doc', 'bpdig_is_existing_doc' );
