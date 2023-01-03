@@ -54,7 +54,8 @@ class Mappress_Poi extends Mappress_Obj {
 			// Confirm that lat/lng are numbers
 			if (!is_numeric($lat) || !is_numeric($lng))
 				return new WP_Error('latlng', sprintf(__('Invalid lat/lng coordinate: %s,%s', 'mappress-google-maps-for-wordpress'), $lat, $lng));
-			$this->address = "$lat, $lng";
+			if (empty($this->address))
+				$this->address = "$lat, $lng";
 			$this->viewport = null;
 		} else {
 			$location = Mappress_Geocoder::geocode($this->address);

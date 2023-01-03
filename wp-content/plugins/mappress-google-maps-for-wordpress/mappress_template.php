@@ -24,10 +24,14 @@ class Mappress_Template extends Mappress_Obj {
 
 		// Print queued templates
 		// wp_footer used instead of wp_footer_scripts because NGG reverses calling order of the two hooks
-		add_action('wp_print_scripts', array(__CLASS__, 'print_templates'), -1);
 		add_action('admin_print_scripts', array(__CLASS__, 'print_templates'), -1);
-		add_action('wp_footer', array(__CLASS__, 'print_footer_templates'), -10);
 		add_action('admin_print_footer_scripts', array(__CLASS__, 'print_footer_templates'), -10);
+
+		// For frontend iframes, suppress templates in main page
+		if (!Mappress::$options->iframes) {
+			add_action('wp_print_scripts', array(__CLASS__, 'print_templates'), -1);
+			add_action('wp_footer', array(__CLASS__, 'print_footer_templates'), -10);
+		}
 
 		self::$tokens = array(
 			'address' => __('Address', 'mappress-google-maps-for-wordpress'),
@@ -172,24 +176,16 @@ class Mappress_Template extends Mappress_Obj {
 		$tokens = array();
 		$templates = ($otype == 'user') ? array('user-mashup-popup', 'user-mashup-item') : array('map-popup', 'map-item', 'mashup-item', 'mashup-popup');
 
+		// Scan all templates for props
 		foreach($templates as $name) {
 			$template = self::get_template($name);
-			// shortcode: preg_match_all("/\[([^\]]*)\]/", $template, $matches);
-			preg_match_all("/{{([\s\S]+?)}}/", $template, $matches);
+			preg_match_all("/{{(poi.props[\s\S]+?)}}/", $template, $matches);
 			if ($matches[1])
 				$tokens = array_merge($tokens, $matches[1]);
 		}
-		// Remove '{', 'poi.', 'poi.props.'
-		$tokens = str_replace(array('{', 'poi.', 'props.'), '', $tokens);
-
-		// Remove standard tokens, make a unique list
-		$user_tokens = array();
-		foreach($tokens as $token) {
-			if (!array_key_exists($token, self::$tokens))
-				$user_tokens[] = $token;
-		}
-		$user_tokens = array_unique($user_tokens);
-		return $user_tokens;
+		// Some sites use props with hyphenated names, e.g. poi.props['a-b']
+		$tokens = str_replace(array('poi.props.', "poi.props['", "']"), '', $tokens);
+		return array_unique($tokens);
 	}
 
 	static function enqueue_template($template_name, $footer) {

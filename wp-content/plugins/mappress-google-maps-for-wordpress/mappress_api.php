@@ -279,6 +279,19 @@ class Mappress_Api {
 				},
 			)
 		);
+
+		register_rest_route(
+			$this->namespace,
+			'/maps/import/',
+			array(
+				'methods' => 'POST',
+				'callback' => array('Mappress_Import', 'import'),
+				'permission_callback' => function() {
+					return current_user_can('manage_options');
+				},
+			)
+		);
+
 	}
 
 	public function rest_response($response = null) {

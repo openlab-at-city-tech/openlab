@@ -4,6 +4,7 @@ class Mappress_Map extends Mappress_Obj {
 		$center,
 		$classname,
 		$embed,
+		$geolocate,
 		$height,
 		$hideEmpty,
 		$initialOpenDirections,
@@ -36,7 +37,7 @@ class Mappress_Map extends Mappress_Obj {
 		foreach($this->pois as $poi)
 			$json_pois[] = $poi->to_json();
 
-		return json_encode(array(
+		return array(
 			'mapid' => $this->mapid,
 			'otype' => $this->otype,
 			'oid' => $this->oid,
@@ -50,7 +51,7 @@ class Mappress_Map extends Mappress_Obj {
 			'title' => $this->title,
 			'width' => $this->width,
 			'zoom' => $this->zoom
-		));
+		);
 	}
 
 	function __construct($atts = null) {
@@ -66,86 +67,16 @@ class Mappress_Map extends Mappress_Obj {
 	static function register() {
 		global $wpdb;
 
-		add_action('deleted_post', array(__CLASS__, 'deleted_post'));
-		add_action('trashed_post', array(__CLASS__, 'trashed_post'));
-		add_action('wp_ajax_mapp_delete', array(__CLASS__, 'ajax_delete'));
-		add_action('wp_ajax_mapp_duplicate', array(__CLASS__, 'ajax_duplicate'));
-		add_action('wp_ajax_mapp_find', array(__CLASS__, 'ajax_find'));
-		add_action('wp_ajax_mapp_get', array(__CLASS__, 'ajax_get'));
 		add_action('wp_ajax_mapp_get_post', array(__CLASS__, 'ajax_get_post'));
 		add_action('wp_ajax_nopriv_mapp_get_post', array(__CLASS__, 'ajax_get_post'));
-		add_action('wp_ajax_mapp_mutate', array(__CLASS__, 'ajax_mutate'));
-		add_action('wp_ajax_mapp_save', array(__CLASS__, 'ajax_save'));
+
+		add_action('deleted_post', array(__CLASS__, 'deleted_post'));
+		add_action('trashed_post', array(__CLASS__, 'trashed_post'));
 		add_action('media_buttons', array(__CLASS__, 'media_buttons'));
 
 		add_action('show_user_profile', array(__CLASS__, 'display_user_map'));
 		add_action('edit_user_profile', array(__CLASS__, 'display_user_map'));
 		add_action('deleted_user', array(__CLASS__, 'deleted_user'));
-	}
-
-	static function ajax_delete() {
-		check_ajax_referer('mappress', 'nonce');
-
-		if (!current_user_can('edit_posts'))
-			Mappress::ajax_response('Not authorized');
-
-		ob_start();
-		$args = json_decode(wp_unslash($_POST['data']));
-		$mapid = $args->mapid;
-		$result = Mappress_Map::delete($mapid);
-
-		if (!$result)
-			Mappress::ajax_response("Internal error when deleting map ID '$mapid'!");
-
-		Mappress::ajax_response('OK');
-	}
-
-	static function ajax_duplicate() {
-		check_ajax_referer('mappress', 'nonce');
-		ob_start();
-
-		if (!current_user_can('edit_posts'))
-			Mappress::ajax_response('Not authorized');
-
-		$args = json_decode(wp_unslash($_POST['data']));
-		$mapid = $args->mapid;
-
-		if (!$mapid)
-			Mappress::ajax_response('Internal error, your data has not been saved!');
-
-		$map = self::duplicate($mapid);
-		if ($map)
-			Mappress::ajax_response('OK', $map);
-		else
-			Mappress::ajax_response('Internal error when copying');
-	}
-
-	static function ajax_find() {
-		check_ajax_referer('mappress', 'nonce');
-		ob_start();
-
-		if (!current_user_can('edit_posts'))
-			Mappress::ajax_response('Not authorized');
-
-		Mappress::ajax_response('OK', self::find($_GET));
-	}
-
-	static function ajax_get() {
-		check_ajax_referer('mappress', 'nonce');
-		ob_start();
-		$mapid = (isset($_GET['mapid'])) ? $_GET['mapid']  : null;
-		$map = ($mapid) ? self::get($mapid) : null;
-
-		// Update existing images for editor
-		if ($map) {
-			foreach($map->pois as $poi)
-				$poi->update_images();
-		}
-
-		if (!$map)
-			Mappress::ajax_response(sprintf(__('Map not found', 'mappress-google-maps-for-wordpress'), $mapid));
-		else
-			Mappress::ajax_response('OK', $map);
 	}
 
 	static function ajax_get_post() {
@@ -162,50 +93,6 @@ class Mappress_Map extends Mappress_Obj {
 		setup_postdata($post);
 		$html = Mappress_Template::get_template('mashup-modal');
 		die($html);
-	}
-
-	static function ajax_mutate() {
-		global $wpdb;
-
-		check_ajax_referer('mappress', 'nonce');
-
-		if (!current_user_can('edit_posts'))
-			Mappress::ajax_response('Not authorized');
-
-		ob_start();
-		$args = json_decode(wp_unslash($_POST['data']), true);
-		$mapid = (isset($args['mapid'])) ? $args['mapid'] : null;
-		$mapdata = (isset($args['mapdata'])) ? $args['mapdata'] : null;
-
-		$result = self::mutate($mapid, $mapdata);
-		if (!$result)
-			Mappress::ajax_response('Internal error when mutating, your data was not saved!');
-
-		// Return updated map
-		Mappress::ajax_response('OK', $result);
-	}
-
-	static function ajax_save() {
-		check_ajax_referer('mappress', 'nonce');
-
-		if (!current_user_can('edit_posts'))
-			Mappress::ajax_response('Not authorized');
-
-		ob_start();
-		$args = json_decode(wp_unslash($_POST['data']), true);
-		$mapdata = (isset($args['mapdata'])) ? $args['mapdata'] : null;
-
-		if (!$mapdata)
-			Mappress::ajax_response('Internal error, your data has not been saved!');
-
-		$map = new Mappress_Map($mapdata);
-		$result = $map->save();
-
-		if (!$result)
-			Mappress::ajax_response('Internal error, your data has not been saved!');
-
-		// Return saved mapid
-		Mappress::ajax_response('OK', $map->mapid);
 	}
 
 	/**
@@ -308,7 +195,7 @@ class Mappress_Map extends Mappress_Obj {
 	*
 	* @param mixed $atts - override attributes.  Attributes applied from options -> map -> $atts
 	*/
-	function display($atts = null) {
+	function display($atts = null, $in_iframe = false) {
 		static $div = 0;
 
 		$this->update($atts);
@@ -319,9 +206,30 @@ class Mappress_Map extends Mappress_Obj {
 			$div++;
 		}
 
-		// Prepare POIs for maps
-		if (empty($this->query))
-			$this->prepare();
+		// iframe container
+		if (Mappress::$options->iframes && !$in_iframe) {
+			// Convert booleans to strings
+			$args = array_map(function($arg) { if (is_bool($arg)) return ($arg) ? "true" : "false"; else return $arg; }, (array) $this);
+
+			// Query or mapid - no POIs in iframe URL
+			if ($this->query || $this->mapid)
+				unset($args['pois']);
+			else {
+				// Programmatic - URL contains only transient id
+				$transient = 'mapp-iframe-' . md5(json_encode($this));
+				set_transient($transient, $this, 30);
+				$args = array('transient' => $transient);
+			}
+
+			$url = get_home_url() . '?mappress=embed&' . http_build_query($args);
+
+			// Width + height attributes are required for Google AMP
+			$iframe = "<iframe height='100%' width='100%' class='mapp-iframe' src='$url' scrolling='no' loading='lazy'></iframe>";
+			return $this->get_layout($iframe);
+		}
+
+		// Prepare POIs
+		$this->prepare();
 
 		// Last chance to alter map before display
 		do_action('mappress_map_display', $this);
@@ -332,11 +240,8 @@ class Mappress_Map extends Mappress_Obj {
 			. "mapp.data.push( " . json_encode($this) . " ); \r\nif (typeof mapp.load != 'undefined') { mapp.load(); };"
 		);
 
-		if (Mappress::$options->iframes) {
-			Mappress::generate_iframe();
-			$url = Mappress::$baseurl . '/templates/iframe.html';
-			$iframe = "<iframe class='mapp-iframe' id='{$this->name}' src='$url' scrolling='no' loading='lazy'></iframe>";
-			return $script . $this->get_layout($iframe);
+		if ($in_iframe) {
+			return "<div id='{$this->name}' class='mapp-content'></div>". $script;
 		} else {
 			Mappress::scripts_enqueue();
 			return $this->get_layout() . $script;
@@ -355,8 +260,8 @@ class Mappress_Map extends Mappress_Obj {
 	}
 
 	function get_layout($content = '') {
-		$layout = ($this->layout) ? $this->layout : Mappress::$options->layout;
-		$layoutClass = (Mappress::$options->iframes) ? 'mapp-iframe-container' : 'mapp-layout';
+		$layoutClass = 'mapp-layout';
+		$layoutClass .= (Mappress::$options->iframes) ? ' mapp-has-iframe' : '';
 
 		$alignment = ($this->alignment) ? $this->alignment : Mappress::$options->alignment;
 		if ($alignment) {
@@ -367,8 +272,8 @@ class Mappress_Map extends Mappress_Obj {
 		$dims = $this->get_dims();
 		$layoutStyle = ($this->alignment == 'full') ? "width: auto" : "width: {$dims->width}";
 
-		$wrapperClass = (Mappress::$options->iframes) ? 'mapp-iframe-wrapper' : 'mapp-wrapper';
-		$wrapperStyle = (stristr($dims->height, 'vh')) ? "height: {$dims->height};" : "padding-bottom: {$dims->height}";
+		$wrapperClass = 'mapp-wrapper';
+		$wrapperStyle = "padding-bottom: {$dims->height}";
 
 		return "<div id='{$this->name}' class='$layoutClass' style='$layoutStyle'><div class='$wrapperClass' style='$wrapperStyle'>$content</div></div>";
 	}
@@ -396,56 +301,6 @@ class Mappress_Map extends Mappress_Obj {
 	}
 
 
-	static function duplicate($mapid) {
-		$map = self::get($mapid);
-		if (!$map)
-			return null;
-
-		$title = ($map->title) ? $map->title : __('Untitled', 'mappress-google-maps-for-wordpress');
-		$map->title = sprintf(__('Copy of %s', 'mappress-google-maps-for-wordpress'), $title);
-
-		$map->mapid = null;
-		$map->metaKey = null;		// Map is no longer automatic
-
-		$result = $map->save();
-		return ($result) ? $map : null;
-	}
-
-	static function find($args) {
-		global $wpdb;
-
-		$maps_table = $wpdb->prefix . 'mapp_maps';
-
-		$sql = "SELECT SQL_CALC_FOUND_ROWS $maps_table.mapid, $maps_table.obj, $maps_table.otype, $maps_table.oid, "
-			. " $maps_table.status, $maps_table.title, $wpdb->posts.post_status, $wpdb->posts.post_title "
-			. " FROM $maps_table "
-			. " LEFT OUTER JOIN $wpdb->posts ON ($wpdb->posts.ID = $maps_table.oid AND $maps_table.otype = 'post')"
-		;
-		$results = $wpdb->get_results($sql);
-
-		$items = array();
-		foreach($results as $result) {
-			// Check post status & permissions (posts only)
-			if ($result->oid) {
-				// Causes error if custom  type is deleted after map created
-				//if (!current_user_can('edit_post', $result->oid))
-				//	continue;
-				if (in_array($result->post_status, array('auto-draft', 'inherit')))
-					continue;
-			}
-
-			$items[] = array(
-				'mapid' => $result->mapid,
-				'title' => $result->title,
-				'oid' => $result->oid,
-				'otype' => $result->otype,
-				'post_title' => $result->post_title,
-				'status' => $result->status
-			);
-		}
-		return $items;
-	}
-
 	/**
 	* Get a map.  Output is 'raw' or 'object'
 	*/
@@ -468,6 +323,13 @@ class Mappress_Map extends Mappress_Obj {
 		$mapdata->oid = $result->oid;
 		$mapdata->status = $result->status;
 		$mapdata->title = $result->title;
+
+		// Object title is needed for editor
+		if ($mapdata->oid) {
+			$obj = ($mapdata->otype == 'user') ? wp_get_current_user($mapdata->oid) : get_post($mapdata->oid);
+			if ($obj)
+				$mapdata->otitle = ($mapdata->otype == 'user') ? $obj->user_nicename : $obj->post_title;
+		}
 
 		$map = new Mappress_Map($mapdata);
 		return $map;
@@ -550,6 +412,7 @@ class Mappress_Map extends Mappress_Obj {
 
 			// Process oembeds and embed shortcodes ([embed], etc)
 			if ($poi->body) {
+				$poi->body = do_shortcode($poi->body);
 				$poi->body = $wp_embed->autoembed($poi->body);
 				$poi->body = $wp_embed->run_shortcode($poi->body);
 			}
@@ -574,7 +437,7 @@ class Mappress_Map extends Mappress_Obj {
 		foreach($this->pois as &$poi)
 			$poi->body = wpautop($poi->body);
 
-		$obj = $this->to_json();
+		$obj = json_encode($this->to_json());
 
 		// Insert if no ID, else update
 		if (!$this->mapid) {

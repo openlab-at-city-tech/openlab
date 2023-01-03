@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the MapPress Maps for WordPress plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: MapPress Maps for WordPress 2.83.22\n"
+"Project-Id-Version: MapPress Maps for WordPress 2.84.19\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/mappress-google-maps-for-wordpress\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2022-09-07T01:04:09+00:00\n"
+"POT-Creation-Date: 2022-12-29T05:45:38+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.4.0\n"
 
@@ -30,187 +30,151 @@ msgstr ""
 msgid "Chris Richardson"
 msgstr ""
 
-#: mappress.php:181
-#: mappress.php:769
+#: mappress.php:195
+#: mappress.php:753
 msgid "Settings"
 msgstr ""
 
-#: mappress.php:182
+#: mappress.php:196
 #: build/index_mappress_admin.js:1
 msgid "Maps"
 msgstr ""
 
-#: mappress.php:184
+#: mappress.php:198
 #: build/index_mappress_admin.js:1
 msgid "Import"
 msgstr ""
 
-#: mappress.php:185
+#: mappress.php:199
 #: build/index_mappress.js:1
 #: build/index_mappress_admin.js:1
 msgid "Support"
 msgstr ""
 
-#: mappress.php:186
+#: mappress.php:200
 #: build/index_mappress_admin.js:1
 msgid "Upgrade"
 msgstr ""
 
-#: mappress.php:199
+#: mappress.php:213
 msgid "MapPress database tables are missing.  Please deactivate the plugin and activate it again to fix this."
 msgstr ""
 
-#: mappress.php:204
+#: mappress.php:218
 msgid "A Google Maps API key is required"
 msgstr ""
 
-#: mappress.php:204
+#: mappress.php:218
 msgid "Please update your"
 msgstr ""
 
-#: mappress.php:204
+#: mappress.php:218
 msgid "MapPress Settings"
 msgstr ""
 
-#: mappress.php:209
+#: mappress.php:223
 msgid "Upgrade Now"
 msgstr ""
 
-#: mappress.php:210
+#: mappress.php:224
 msgid "Your MapPress data must be upgraded!  Please %s.</strong>"
 msgstr ""
 
-#: mappress.php:537
+#: mappress.php:529
 msgid "Renew your license"
 msgstr ""
 
-#: mappress.php:539
+#: mappress.php:531
 msgid "Your MapPress license has expired.  %s to get the latest updates and prevent errors."
 msgstr ""
 
-#: mappress.php:548
+#: mappress.php:540
 msgid "Please enter your MapPress license key to enable plugin updates"
 msgstr ""
 
-#: mappress.php:551
+#: mappress.php:543
 msgid "MapPress Gutenberg blocks require WordPress 5.3 or the latest Gutenberg Plugin. Please update if using the block editor."
 msgstr ""
 
-#: mappress.php:554
+#: mappress.php:546
 msgid "MapPress has many new features!  %s."
 msgstr ""
 
-#: mappress.php:554
-#: mappress.php:557
-#: mappress.php:563
-#: mappress.php:599
+#: mappress.php:546
+#: mappress.php:549
+#: mappress.php:555
+#: mappress.php:591
 #: build/index_mappress_admin.js:1
 msgid "Learn more"
 msgstr ""
 
-#: mappress.php:557
-#: mappress.php:599
+#: mappress.php:549
+#: mappress.php:591
 msgid "MapPress templates have changed!  Please update custom templates to the new format. %s."
 msgstr ""
 
-#: mappress.php:563
+#: mappress.php:555
 msgid "MapPress templates and filters have changed.  Please update custom templates and filters. %s."
 msgstr ""
 
-#: mappress.php:671
+#: mappress.php:663
 msgid "Are you sure you want to delete?"
 msgstr ""
 
-#: mappress.php:672
-msgid "Permanently delete this map?"
-msgstr ""
-
-#: mappress.php:673
-msgid "Error reading KML file"
-msgstr ""
-
-#: mappress.php:674
-msgid "URL for KML file"
-msgstr ""
-
-#: mappress.php:675
-msgid "Please select an editor to insert into."
-msgstr ""
-
-#: mappress.php:676
-msgid "Unable to get your location"
-msgstr ""
-
-#: mappress.php:677
-#: build/index_mappress_admin.js:1
-msgid "No results"
-msgstr ""
-
-#: mappress.php:678
-msgid "Save changes?"
-msgstr ""
-
-#: mappress.php:679
-#: build/index_mappress_admin.js:1
-msgid "Shape"
-msgstr ""
-
-#: mappress.php:712
-#: mappress.php:721
+#: mappress.php:695
+#: mappress.php:704
 msgid "Streets"
 msgstr ""
 
-#: mappress.php:713
+#: mappress.php:696
 msgid "Outdoors"
 msgstr ""
 
-#: mappress.php:714
+#: mappress.php:697
 msgid "Light"
 msgstr ""
 
-#: mappress.php:715
+#: mappress.php:698
 msgid "Dark"
 msgstr ""
 
-#: mappress.php:716
-#: mappress.php:729
+#: mappress.php:699
+#: mappress.php:712
 msgid "Satellite"
 msgstr ""
 
-#: mappress.php:717
+#: mappress.php:700
 msgid "Satellite Streets"
 msgstr ""
 
-#: mappress.php:727
+#: mappress.php:710
 msgid "Roadmap"
 msgstr ""
 
-#: mappress.php:728
+#: mappress.php:711
 msgid "Terrain"
 msgstr ""
 
-#: mappress.php:730
+#: mappress.php:713
 msgid "Hybrid"
 msgstr ""
 
-#: mappress.php:770
-#: mappress_settings.php:519
-#: mappress_settings.php:550
+#: mappress.php:754
+#: mappress_settings.php:536
+#: mappress_settings.php:567
 #: build/index_mappress_admin.js:1
 msgid "What's new"
 msgstr ""
 
-#: mappress.php:1140
+#: mappress.php:1157
 msgid "Version"
 msgstr ""
 
 #: mappress_api.php:67
-#: mappress_map.php:405
 msgid "Copy of %s"
 msgstr ""
 
 #: mappress_api.php:67
-#: mappress_map.php:404
 #: build/index_mappress_admin.js:1
 msgid "Untitled"
 msgstr ""
@@ -220,9 +184,9 @@ msgid "Success!  Upgrade complete."
 msgstr ""
 
 #: mappress_db.php:148
-#: mappress_map.php:509
-#: mappress_settings.php:514
-#: mappress_settings.php:545
+#: mappress_map.php:371
+#: mappress_settings.php:531
+#: mappress_settings.php:562
 #: build/index_mappress_admin.js:1
 msgid "MapPress"
 msgstr ""
@@ -243,19 +207,15 @@ msgstr ""
 msgid "Your map data is up to date."
 msgstr ""
 
-#: mappress_map.php:146
-msgid "Map not found"
-msgstr ""
-
-#: mappress_map.php:160
+#: mappress_map.php:91
 msgid "Post not found"
 msgstr ""
 
-#: mappress_map.php:379
+#: mappress_map.php:284
 msgid "Geocoding error: %s"
 msgstr ""
 
-#: mappress_map.php:385
+#: mappress_map.php:290
 msgid "Location"
 msgstr ""
 
@@ -263,100 +223,100 @@ msgstr ""
 msgid "Invalid lat/lng coordinate: %s,%s"
 msgstr ""
 
-#: mappress_settings.php:318
+#: mappress_settings.php:324
 #: build/index_mappress_admin.js:1
 msgid "Default"
 msgstr ""
 
-#: mappress_settings.php:388
+#: mappress_settings.php:394
 msgid "Address line "
 msgstr ""
 
-#: mappress_settings.php:389
+#: mappress_settings.php:395
 msgid "Latitude"
 msgstr ""
 
-#: mappress_settings.php:389
+#: mappress_settings.php:395
 msgid "Longitude"
 msgstr ""
 
-#: mappress_settings.php:389
-#: mappress_template.php:36
+#: mappress_settings.php:395
+#: mappress_template.php:40
 #: build/index_mappress_admin.js:1
 msgid "Title"
 msgstr ""
 
-#: mappress_settings.php:389
-#: mappress_template.php:34
+#: mappress_settings.php:395
+#: mappress_template.php:38
 msgid "Body"
 msgstr ""
 
-#: mappress_settings.php:389
-#: mappress_template.php:35
-#: mappress_template.php:45
+#: mappress_settings.php:395
+#: mappress_template.php:39
+#: mappress_template.php:49
 #: build/index_mappress_admin.js:1
 msgid "Icon"
 msgstr ""
 
-#: mappress_settings.php:389
+#: mappress_settings.php:395
 msgid "Zoom"
 msgstr ""
 
-#: mappress_settings.php:496
+#: mappress_settings.php:504
 msgid "OK, you deserve it!"
 msgstr ""
 
-#: mappress_settings.php:497
+#: mappress_settings.php:505
 msgid "Nope, maybe later"
 msgstr ""
 
-#: mappress_settings.php:498
+#: mappress_settings.php:506
 msgid "I need help using the plugin"
 msgstr ""
 
-#: mappress_settings.php:500
+#: mappress_settings.php:508
 msgid "Help Spread the Word"
 msgstr ""
 
-#: mappress_settings.php:501
+#: mappress_settings.php:509
 msgid "Hi, I hope you're enjoying MapPress.  Would you mind taking a moment to write a brief review?  It would mean a lot to me!"
 msgstr ""
 
-#: mappress_settings.php:518
-#: mappress_settings.php:549
+#: mappress_settings.php:535
+#: mappress_settings.php:566
 msgid "Get help"
 msgstr ""
 
-#: mappress_settings.php:521
-#: mappress_settings.php:552
+#: mappress_settings.php:538
+#: mappress_settings.php:569
 #: build/index_mappress_admin.js:1
 msgid "Your account"
 msgstr ""
 
-#: mappress_settings.php:523
-#: mappress_settings.php:554
+#: mappress_settings.php:540
+#: mappress_settings.php:571
 msgid "Upgrade to MapPress Pro"
 msgstr ""
 
-#: mappress_template.php:33
-#: mappress_template.php:42
+#: mappress_template.php:37
+#: mappress_template.php:46
 msgid "Address"
 msgstr ""
 
-#: mappress_template.php:37
+#: mappress_template.php:41
 msgid "URL"
 msgstr ""
 
-#: mappress_template.php:38
-#: mappress_template.php:46
+#: mappress_template.php:42
+#: mappress_template.php:50
 msgid "Custom Field"
 msgstr ""
 
-#: mappress_template.php:43
+#: mappress_template.php:47
 msgid "Email"
 msgstr ""
 
-#: mappress_template.php:44
+#: mappress_template.php:48
 msgid "Display Name"
 msgstr ""
 
@@ -415,6 +375,11 @@ msgstr ""
 #: build/index_mappress.js:1
 #: build/index_mappress_admin.js:1
 msgid "Filter"
+msgstr ""
+
+#: build/index_mappress.js:1
+#: build/index_mappress_admin.js:1
+msgid "Unable to get your location"
 msgstr ""
 
 #: build/index_mappress.js:1
@@ -494,6 +459,16 @@ msgstr ""
 
 #: build/index_mappress.js:1
 #: build/index_mappress_admin.js:1
+msgid "List"
+msgstr ""
+
+#: build/index_mappress.js:1
+#: build/index_mappress_admin.js:1
+msgid "Map"
+msgstr ""
+
+#: build/index_mappress.js:1
+#: build/index_mappress_admin.js:1
 msgid "Traffic"
 msgstr ""
 
@@ -525,6 +500,16 @@ msgstr ""
 #: build/index_mappress.js:1
 #: build/index_mappress_admin.js:1
 msgid "Enter an address, place, KML file URL, or lat,lng"
+msgstr ""
+
+#: build/index_mappress.js:1
+#: build/index_mappress_admin.js:1
+msgid "Error reading KML file."
+msgstr ""
+
+#: build/index_mappress.js:1
+#: build/index_mappress_admin.js:1
+msgid "This may be a CORS error.  See the MapPress FAQ for help."
 msgstr ""
 
 #: build/index_mappress_admin.js:1
@@ -580,7 +565,7 @@ msgid "Contact me"
 msgstr ""
 
 #: build/index_mappress_admin.js:1
-msgid "If not, I'd really appreciate some feedback:"
+msgid "Please provide some feedback:"
 msgstr ""
 
 #: build/index_mappress_admin.js:1
@@ -588,7 +573,15 @@ msgid "I don't want to say"
 msgstr ""
 
 #: build/index_mappress_admin.js:1
-msgid "I didn't want to set up an API key"
+msgid "I don't want to get an API key"
+msgstr ""
+
+#: build/index_mappress_admin.js:1
+msgid "Leaflet doesn't require a key."
+msgstr ""
+
+#: build/index_mappress_admin.js:1
+msgid "Google and MapBox require a credit card, but include so much free usage that 99% of sites are never billed."
 msgstr ""
 
 #: build/index_mappress_admin.js:1
@@ -596,19 +589,11 @@ msgid "The map didn't display"
 msgstr ""
 
 #: build/index_mappress_admin.js:1
-msgid "My address wasn't found"
-msgstr ""
-
-#: build/index_mappress_admin.js:1
-msgid "The map looked too plain"
-msgstr ""
-
-#: build/index_mappress_admin.js:1
 msgid "Too hard to use"
 msgstr ""
 
 #: build/index_mappress_admin.js:1
-msgid "What was too hard?"
+msgid "Please explain..."
 msgstr ""
 
 #: build/index_mappress_admin.js:1
@@ -616,15 +601,11 @@ msgid "Missing feature"
 msgstr ""
 
 #: build/index_mappress_admin.js:1
-msgid "What's missing?"
-msgstr ""
-
-#: build/index_mappress_admin.js:1
 msgid "Other"
 msgstr ""
 
 #: build/index_mappress_admin.js:1
-msgid "Can you provide any details?"
+msgid "Did you know?"
 msgstr ""
 
 #: build/index_mappress_admin.js:1
@@ -636,15 +617,11 @@ msgid "Cancel"
 msgstr ""
 
 #: build/index_mappress_admin.js:1
-msgid "Map title"
+msgid "%d maps for this post"
 msgstr ""
 
 #: build/index_mappress_admin.js:1
-msgid "Map ID"
-msgstr ""
-
-#: build/index_mappress_admin.js:1
-msgid "No maps found"
+msgid "No maps attached to post"
 msgstr ""
 
 #: build/index_mappress_admin.js:1
@@ -721,6 +698,10 @@ msgstr ""
 
 #: build/index_mappress_admin.js:1
 msgid "Create new icon"
+msgstr ""
+
+#: build/index_mappress_admin.js:1
+msgid "Shape"
 msgstr ""
 
 #: build/index_mappress_admin.js:1
@@ -812,10 +793,6 @@ msgid "Show map"
 msgstr ""
 
 #: build/index_mappress_admin.js:1
-msgid "Map"
-msgstr ""
-
-#: build/index_mappress_admin.js:1
 msgid "Edit map"
 msgstr ""
 
@@ -824,15 +801,23 @@ msgid "Map Library"
 msgstr ""
 
 #: build/index_mappress_admin.js:1
-msgid "MapPress Map"
-msgstr ""
-
-#: build/index_mappress_admin.js:1
 msgid "Use the map library to create a new map or insert an existing map."
 msgstr ""
 
 #: build/index_mappress_admin.js:1
+msgid "Map %d could not be found.  Please select a different map."
+msgstr ""
+
+#: build/index_mappress_admin.js:1
+msgid "MapPress Map"
+msgstr ""
+
+#: build/index_mappress_admin.js:1
 msgid "Insert a map"
+msgstr ""
+
+#: build/index_mappress_admin.js:1
+msgid "No results"
 msgstr ""
 
 #: build/index_mappress_admin.js:1
@@ -952,6 +937,38 @@ msgid "Enter API key to use Google geocoder"
 msgstr ""
 
 #: build/index_mappress_admin.js:1
+msgid "Compatibility"
+msgstr ""
+
+#: build/index_mappress_admin.js:1
+msgid "Prevents conflicts with other plugins, but maps may load slower."
+msgstr ""
+
+#: build/index_mappress_admin.js:1
+msgid "Required because %s is active"
+msgstr ""
+
+#: build/index_mappress_admin.js:1
+msgid "Compatibility mode"
+msgstr ""
+
+#: build/index_mappress_admin.js:1
+msgid "Enable iframe compatibility mode"
+msgstr ""
+
+#: build/index_mappress_admin.js:1
+msgid "GDPR Compliance"
+msgstr ""
+
+#: build/index_mappress_admin.js:1
+msgid "MapPress is compatible with the free %s plugin for GDPR compliance with Google Maps."
+msgstr ""
+
+#: build/index_mappress_admin.js:1
+msgid "Complianz is active.  No setup is necessary in Complianz."
+msgstr ""
+
+#: build/index_mappress_admin.js:1
 msgid "Map Settings"
 msgstr ""
 
@@ -1016,11 +1033,15 @@ msgid "POIs"
 msgstr ""
 
 #: build/index_mappress_admin.js:1
-msgid "Default zoom"
+msgid "Initial zoom"
 msgstr ""
 
 #: build/index_mappress_admin.js:1
-msgid "Default zoom when displaying a single POI"
+msgid "Used for geolocation and centering maps with a single POI"
+msgstr ""
+
+#: build/index_mappress_admin.js:1
+msgid "For searches, use the Search Radius setting instead."
 msgstr ""
 
 #: build/index_mappress_admin.js:1
@@ -1244,11 +1265,11 @@ msgid "Thumbnails"
 msgstr ""
 
 #: build/index_mappress_admin.js:1
-msgid "POI images"
+msgid "Post featured image"
 msgstr ""
 
 #: build/index_mappress_admin.js:1
-msgid "Post featured image"
+msgid "POI images"
 msgstr ""
 
 #: build/index_mappress_admin.js:1
@@ -1280,11 +1301,23 @@ msgid "Country code for searches"
 msgstr ""
 
 #: build/index_mappress_admin.js:1
+msgid "Geolocate"
+msgstr ""
+
+#: build/index_mappress_admin.js:1
+msgid "Center on user location when map is displayed"
+msgstr ""
+
+#: build/index_mappress_admin.js:1
+msgid "Only available for sites using https"
+msgstr ""
+
+#: build/index_mappress_admin.js:1
 msgid "User location"
 msgstr ""
 
 #: build/index_mappress_admin.js:1
-msgid "Show user location on map"
+msgid "Show user location as a blue circle on the map"
 msgstr ""
 
 #: build/index_mappress_admin.js:1
@@ -1436,14 +1469,6 @@ msgid "Generate Maps from Custom Fields"
 msgstr ""
 
 #: build/index_mappress_admin.js:1
-msgid "Field mapping"
-msgstr ""
-
-#: build/index_mappress_admin.js:1
-msgid "Map field"
-msgstr ""
-
-#: build/index_mappress_admin.js:1
 msgid "Post types"
 msgstr ""
 
@@ -1453,6 +1478,14 @@ msgstr ""
 
 #: build/index_mappress_admin.js:1
 msgid "Overwrite maps on publish/save"
+msgstr ""
+
+#: build/index_mappress_admin.js:1
+msgid "Custom fields"
+msgstr ""
+
+#: build/index_mappress_admin.js:1
+msgid "Map field"
 msgstr ""
 
 #: build/index_mappress_admin.js:1
@@ -1512,19 +1545,15 @@ msgid "Copy maps when overwriting a translation"
 msgstr ""
 
 #: build/index_mappress_admin.js:1
-msgid "Compatibility"
-msgstr ""
-
-#: build/index_mappress_admin.js:1
-msgid "Prevent loading Google Maps multiple times"
-msgstr ""
-
-#: build/index_mappress_admin.js:1
-msgid "Output maps in iframes for better compatibility"
-msgstr ""
-
-#: build/index_mappress_admin.js:1
 msgid "Reset Defaults"
+msgstr ""
+
+#: build/index_mappress_admin.js:1
+msgid "Map %d attached to post"
+msgstr ""
+
+#: build/index_mappress_admin.js:1
+msgid "Map ID"
 msgstr ""
 
 #: build/index_mappress_admin.js:1
@@ -1540,15 +1569,11 @@ msgid "Unattached"
 msgstr ""
 
 #: build/index_mappress_admin.js:1
-msgid "Map restored"
-msgstr ""
-
-#: build/index_mappress_admin.js:1
 msgid "Restore"
 msgstr ""
 
 #: build/index_mappress_admin.js:1
-msgid "Map deleted"
+msgid "Map %d restored"
 msgstr ""
 
 #: build/index_mappress_admin.js:1
@@ -1556,15 +1581,15 @@ msgid "Delete Permanently"
 msgstr ""
 
 #: build/index_mappress_admin.js:1
+msgid "Permanently delete this map?"
+msgstr ""
+
+#: build/index_mappress_admin.js:1
+msgid "Map %d deleted"
+msgstr ""
+
+#: build/index_mappress_admin.js:1
 msgid "Edit"
-msgstr ""
-
-#: build/index_mappress_admin.js:1
-msgid "Insert into post"
-msgstr ""
-
-#: build/index_mappress_admin.js:1
-msgid "Map copied"
 msgstr ""
 
 #: build/index_mappress_admin.js:1
@@ -1572,7 +1597,7 @@ msgid "Copy"
 msgstr ""
 
 #: build/index_mappress_admin.js:1
-msgid "Map moved to trash"
+msgid "Map %d copied"
 msgstr ""
 
 #: build/index_mappress_admin.js:1
@@ -1580,11 +1605,19 @@ msgid "Trash"
 msgstr ""
 
 #: build/index_mappress_admin.js:1
+msgid "Map %d moved to trash"
+msgstr ""
+
+#: build/index_mappress_admin.js:1
 msgid "Detach"
 msgstr ""
 
 #: build/index_mappress_admin.js:1
-msgid "Attach"
+msgid "Attach to post"
+msgstr ""
+
+#: build/index_mappress_admin.js:1
+msgid "Copy shortcode"
 msgstr ""
 
 #: build/index_mappress_admin.js:1
@@ -1592,7 +1625,11 @@ msgid "Shortcode copied"
 msgstr ""
 
 #: build/index_mappress_admin.js:1
-msgid "Add New"
+msgid "Insert into post"
+msgstr ""
+
+#: build/index_mappress_admin.js:1
+msgid "No maps found"
 msgstr ""
 
 #: build/index_mappress_admin.js:1
@@ -1600,19 +1637,19 @@ msgid "Attached to post"
 msgstr ""
 
 #: build/index_mappress_admin.js:1
-msgid "post title, map title, or map id"
+msgid "Map ID (Up)"
 msgstr ""
 
 #: build/index_mappress_admin.js:1
-msgid "ID"
+msgid "Map ID (Down)"
 msgstr ""
 
 #: build/index_mappress_admin.js:1
-msgid "Attached to"
+msgid "Map ID, post title, or map title..."
 msgstr ""
 
 #: build/index_mappress_admin.js:1
-msgid "Shortcode"
+msgid "Add New"
 msgstr ""
 
 #: build/index_mappress_admin.js:1
@@ -1712,6 +1749,10 @@ msgid "Download style"
 msgstr ""
 
 #: build/index_mappress_admin.js:1
+msgid "Download"
+msgstr ""
+
+#: build/index_mappress_admin.js:1
 msgid "Enter style name"
 msgstr ""
 
@@ -1792,7 +1833,11 @@ msgid "No API key"
 msgstr ""
 
 #: build/index_mappress_admin.js:1
-msgid "Free unlimited usage"
+msgid "No credit card"
+msgstr ""
+
+#: build/index_mappress_admin.js:1
+msgid "Unlimited free usage"
 msgstr ""
 
 #: build/index_mappress_admin.js:1
@@ -1800,23 +1845,19 @@ msgid "Good functionality"
 msgstr ""
 
 #: build/index_mappress_admin.js:1
-msgid "Best for high traffic sites"
-msgstr ""
-
-#: build/index_mappress_admin.js:1
 msgid "API key required"
 msgstr ""
 
 #: build/index_mappress_admin.js:1
-msgid "Limited free usage"
+msgid "Credit card required"
+msgstr ""
+
+#: build/index_mappress_admin.js:1
+msgid "Lots of free usage"
 msgstr ""
 
 #: build/index_mappress_admin.js:1
 msgid "Excellent functionality"
-msgstr ""
-
-#: build/index_mappress_admin.js:1
-msgid "Best for low traffic sites"
 msgstr ""
 
 #: build/index_mappress_admin.js:1
@@ -1828,7 +1869,15 @@ msgid "Google API Key"
 msgstr ""
 
 #: build/index_mappress_admin.js:1
-msgid "Google requires an API key to use Google Maps.  Please enter your key below."
+msgid "(credit card required)"
+msgstr ""
+
+#: build/index_mappress_admin.js:1
+msgid "Google requires an API key to use Google Maps."
+msgstr ""
+
+#: build/index_mappress_admin.js:1
+msgid "A $200 monthly usage credit means it's free for most sites"
 msgstr ""
 
 #: build/index_mappress_admin.js:1
@@ -1840,11 +1889,15 @@ msgid "Sign up with Mapbox"
 msgstr ""
 
 #: build/index_mappress_admin.js:1
+msgid "(optional - credit card required)"
+msgstr ""
+
+#: build/index_mappress_admin.js:1
 msgid "Mapbox makes Leaflet better, with great-looking map tiles, styled maps, and a powerful geocoder."
 msgstr ""
 
 #: build/index_mappress_admin.js:1
-msgid "A generous free tier means it's free for most sites."
+msgid "A generous monthly usage credit means it's free for most sites."
 msgstr ""
 
 #: build/index_mappress_admin.js:1

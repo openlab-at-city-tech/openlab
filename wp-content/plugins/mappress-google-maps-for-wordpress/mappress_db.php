@@ -60,7 +60,7 @@ class Mappress_Db {
 		$current_version = get_option('mappress_db_version');
 
 		foreach($upgrades as $version) {
-			if ($current_version && version_compare($current_version, $version, '>='))
+			if (!$current_version || version_compare($current_version, $version, '>='))
 				continue;
 
 			$fn = 'upgrade_' . str_replace('.', '_', $version);
