@@ -84,8 +84,53 @@ function booklyModal(title, text, closeCaption, mainActionCaption) {
     $modal.on('hide.bs.modal', function () {
         setTimeout(function () {$modal.remove();}, 2000)
     });
+    setTimeout(function() {$modal.booklyModal('show')}, 0);
 
-    return $modal.booklyModal('show');
+    return $modal;
+}
+
+function requiredBooklyPro() {
+    jQuery.ajax({
+        url: ajaxurl,
+        type: 'POST',
+        data: {
+            action: 'bookly_required_bookly_pro',
+            csrf_token: BooklyL10nGlobal.csrf_token
+        },
+        success: function(response) {
+            if (response.success) {
+                let $features = jQuery('<div>', {class: 'col-12'}),
+                    $content = jQuery('<div>')
+                ;
+                response.data.features.forEach(function(feature, f) {
+                    $features.append(jQuery('<div>', {html: feature}).prepend(jQuery('<i>', {class: 'fa-fw mr-1 fas fa-check text-success'})));
+                });
+
+                $content
+                    .append(jQuery('<div>', {class: 'm-n3'})
+                        .append(
+                            jQuery('<img/>', {src: response.data.image, alt: 'Bookly Pro', class: 'img-fluid'})
+                        )
+                    ).append(jQuery('<div>', {class: 'row'})
+                        .append(jQuery('<div>', {class: 'mx-auto h4 mt-4 text-bookly', html: response.data.caption}))
+                    ).append(jQuery('<div>', {class: 'row'})
+                        .append(jQuery('<div>', {class: 'col text-center', html: response.data.body}))
+                    ).append(jQuery('<div>', {class: 'form-row mt-3'})
+                        .append($features)
+                    );
+
+                booklyModal('', $content, response.data.close, response.data.upgrade)
+                    .on('bs.click.main.button', function(event, modal, mainButton) {
+                        Ladda.create(mainButton).start();
+                        window.location.href = 'https://codecanyon.net/item/bookly-booking-plugin-responsive-appointment-booking-and-scheduling/7226091?ref=ladela&utm_campaign=admin_menu&utm_medium=pro_not_active&utm_source=bookly_admin';
+                        modal.booklyModal('hide');
+                    })
+                    .on('show.bs.modal', function() {
+                        jQuery('.modal-header', jQuery(this)).remove();
+                    });
+            }
+        },
+    });
 }
 
 (function ($) {
@@ -94,7 +139,7 @@ function booklyModal(title, text, closeCaption, mainActionCaption) {
             let data = {};
 
             $.map($form.serializeArray(), function(n) {
-                const keys = n.name.match(/[a-zA-Z0-9_]+|(?=\[\])/g);
+                const keys = n.name.match(/[a-zA-Z0-9_-]+|(?=\[\])/g);
                 if (keys.length > 1) {
                     let tmp = data, pop = keys.pop();
                     for (let i = 0; i < keys.length, j = keys[i]; i++) {
@@ -117,7 +162,7 @@ function booklyModal(title, text, closeCaption, mainActionCaption) {
             return {
                 action: action,
                 csrf_token: BooklyL10nGlobal.csrf_token,
-                data: JSON.stringify(data),
+                json_data: JSON.stringify(data),
             }
         }
     }

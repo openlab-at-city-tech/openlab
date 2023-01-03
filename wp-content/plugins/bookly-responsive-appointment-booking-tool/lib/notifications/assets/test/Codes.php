@@ -26,25 +26,29 @@ class Codes extends Assets\Item\Codes
     /**
      * @inheritDoc
      */
-    public function __construct()
+    public function __construct( $order = null )
     {
-        $customer = new Entities\Customer();
-        $customer
-            ->setPhone( '12345678' )
-            ->setEmail( 'client@example.com' )
-            ->setNotes( 'Client notes' )
-            ->setFullName( 'Client Name' )
-            ->setFirstName( 'Client First Name' )
-            ->setLastName( 'Client Last Name' )
-            ->setBirthday( '2000-01-01' )
-            ->setCity( 'City' )
-            ->setCountry( 'Country' )
-            ->setPostcode( 'Post code' )
-            ->setState( 'State' )
-            ->setStreet( 'Street' )
-            ->setAdditionalAddress( 'Addition address' );
+        if ( $order && $order->getCustomer() ) {
+            $customer = $order->getCustomer();
+        } else {
+            $customer = new Entities\Customer();
+            $customer
+                ->setPhone( '12345678' )
+                ->setEmail( 'client@example.com' )
+                ->setNotes( 'Client notes' )
+                ->setFullName( 'Client Name' )
+                ->setFirstName( 'Client First Name' )
+                ->setLastName( 'Client Last Name' )
+                ->setBirthday( '2000-01-01' )
+                ->setCity( 'City' )
+                ->setCountry( 'Country' )
+                ->setPostcode( 'Post code' )
+                ->setState( 'State' )
+                ->setStreet( 'Street' )
+                ->setAdditionalAddress( 'Addition address' );
+        }
 
-        parent::__construct( new Order( $customer ) );
+        parent::__construct( $order ?: new Order( $customer ) );
 
         $this->item = Simple::create( new Entities\CustomerAppointment( array( 'token' => '2000200020002000200020002' ) ) );
 

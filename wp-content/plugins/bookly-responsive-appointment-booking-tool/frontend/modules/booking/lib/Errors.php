@@ -16,4 +16,9 @@ abstract class Errors
     const PAYMENT_ERROR               = 'payment_error';
     const INCORRECT_USERNAME_PASSWORD = 'incorrect_username_password';
     const ALREADY_LOGGED_IN           = 'already_logged_in';
+
+    public static function sendSessionError()
+    {
+        wp_send_json( array( 'success' => false, 'error' => self::SESSION_ERROR ) );
+    }
 }

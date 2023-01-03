@@ -30,23 +30,12 @@ class Page extends Lib\Base\Ajax
             'module' => array( 'js/services-list.js' => array( 'bookly-range-tools.js' ) ),
         ) );
 
-        $staff = array();
-        foreach ( self::getStaffDropDownData() as $category ) {
-            foreach ( $category['items'] as $employee ) {
-                $staff[ $employee['id'] ] = $employee['full_name'];
-            }
-        }
-
-        $services = Lib\Entities\Service::query( 's' )
-            ->whereIn( 's.type', array_keys( Proxy\Shared::prepareServiceTypes( array( Lib\Entities\Service::TYPE_SIMPLE => Lib\Entities\Service::TYPE_SIMPLE ) ) ) )
-            ->sortBy( 'position' )
-            ->fetchArray();
         $categories = Lib\Entities\Category::query()->sortBy( 'position' )->fetchArray();
         foreach ( $categories as &$category ) {
             $category['attachment'] = Lib\Utils\Common::getAttachmentUrl( $category['attachment_id'], 'thumbnail' ) ?: null;
         }
 
-        $datatables = Lib\Utils\Tables::getSettings( 'services' );
+        $datatables = Lib\Utils\Tables::getSettings( Lib\Utils\Tables::SERVICES );
 
         wp_localize_script( 'bookly-services-list.js', 'BooklyL10n', array(
             'are_you_sure' => esc_attr__( 'Are you sure?', 'bookly' ),
@@ -54,10 +43,8 @@ class Page extends Lib\Base\Ajax
             'edit' => esc_attr__( 'Edit', 'bookly' ),
             'duplicate' => esc_attr__( 'Duplicate', 'bookly' ),
             'reorder' => esc_attr__( 'Reorder', 'bookly' ),
-            'staff' => $staff,
             'categories' => $categories,
             'uncategorized' => esc_attr__( 'Uncategorized', 'bookly' ),
-            'services' => $services,
             'noResultFound' => esc_attr__( 'No result found', 'bookly' ),
             'zeroRecords' => esc_attr__( 'No records.', 'bookly' ),
             'processing' => esc_attr__( 'Processing...', 'bookly' ),
@@ -65,21 +52,8 @@ class Page extends Lib\Base\Ajax
             'datatables' => $datatables,
         ) );
 
-        foreach ( $services as &$service ) {
-            $service['title'] = esc_html( $service['title'] );
-            $service['colors'] = Proxy\Shared::prepareServiceColors( array_fill( 0, 3, $service['color'] ), $service['id'], $service['type'] );
-            $service['sub_services'] = Lib\Entities\SubService::query()
-                ->where( 'service_id', $service['id'] )
-                ->sortBy( 'position' )
-                ->fetchArray();
-            $service['sub_services_count'] = array_sum( array_map( function ( $sub_service ) {
-                return (int) ( $sub_service['type'] == Lib\Entities\SubService::TYPE_SERVICE );
-            }, $service['sub_services'] ) );
-        }
-        $data['services'] = $services;
-        $data['service_types'] = Proxy\Shared::prepareServiceTypes( array( Lib\Entities\Service::TYPE_SIMPLE => __( 'Simple', 'bookly' ) ) );
         $data['categories'] = $categories;
-        $data['datatables'] = $datatables;
+        $data['datatable'] = $datatables[ Lib\Utils\Tables::SERVICES ];
 
         self::renderTemplate( 'index', $data );
     }
@@ -102,7 +76,7 @@ class Page extends Lib\Base\Ajax
 
             return array(
                 0 => array(
-                    'name'  => '',
+                    'name' => '',
                     'items' => $items,
                 ),
             );

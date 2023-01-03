@@ -374,7 +374,9 @@ abstract class Config
             || ( self::payuBizActive() && get_option( 'bookly_payu_biz_enabled' ) )
             || ( self::payuLatamActive() && get_option( 'bookly_payu_latam_enabled' ) )
             || ( self::stripeActive() && get_option( 'bookly_stripe_enabled' ) )
-            || ( Cloud\API::getInstance()->account->productActive( 'stripe' ) && get_option( 'bookly_cloud_stripe_enabled' ) )
+            || ( Cloud\API::getInstance()->account->productActive( Cloud\Account::PRODUCT_STRIPE ) && get_option( 'bookly_cloud_stripe_enabled' ) )
+            || self::squareEnabled()
+            || self::giftEnabled()
             || self::paypalEnabled()
         );
     }
@@ -408,6 +410,22 @@ abstract class Config
     public static function paypalEnabled()
     {
         return self::proActive() && get_option( 'bookly_paypal_enabled' ) != '0';
+    }
+
+    /**
+     * @return bool
+     */
+    public static function squareEnabled()
+    {
+        return self::proActive() && get_option( 'bookly_cloud_square_enabled' ) && Cloud\API::getInstance()->account->productActive( Cloud\Account::PRODUCT_SQUARE );
+    }
+
+    /**
+     * @return bool
+     */
+    public static function giftEnabled()
+    {
+        return self::proActive() && get_option( 'bookly_cloud_gift_enabled' ) && Cloud\API::getInstance()->account->productActive( Cloud\Account::PRODUCT_GIFT );
     }
 
     /**
@@ -848,5 +866,19 @@ abstract class Config
     public static function isZeroDecimalsCurrency()
     {
         return in_array( self::getCurrency(), array( 'BIF', 'CLP', 'DJF', 'GNF', 'JPY', 'KMF', 'KRW', 'MGA', 'PYG', 'RWF', 'VND', 'VUV', 'XAF', 'XOF', 'XPF', ) );
+    }
+
+    /**
+     * Get payment systems preference
+     *
+     * @return array
+     */
+    public static function getGatewaysPreference()
+    {
+        $order = get_option( 'bookly_pmt_order', '' );
+
+        return is_array( $order )
+            ? $order
+            : explode( ',', $order );
     }
 }

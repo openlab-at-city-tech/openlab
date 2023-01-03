@@ -63,11 +63,7 @@ jQuery(function($) {
         });
         $.post(
             ajaxurl,
-            {
-                action: 'bookly_update_service_categories',
-                categories: categories,
-                csrf_token: BooklyL10nGlobal.csrf_token
-            },
+            booklySerialize.buildRequestData('bookly_update_service_categories', {categories: categories}),
             function(response) {
                 if (response.success) {
                     BooklyL10n.categories = response.data;

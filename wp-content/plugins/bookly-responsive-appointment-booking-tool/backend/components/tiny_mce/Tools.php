@@ -58,7 +58,7 @@ class Tools extends Lib\Base\Component
 
         self::enqueueData( array(
             'casest',
-            'custom-location-settings',
+            'custom_location_settings',
         ) );
 
         wp_localize_script( 'bookly-bookly-form-settings.js', 'BooklyFormShortCodeL10n', array(

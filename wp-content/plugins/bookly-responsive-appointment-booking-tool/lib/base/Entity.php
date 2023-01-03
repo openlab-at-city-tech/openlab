@@ -319,6 +319,9 @@ abstract class Entity extends Cache
                     $ref_entity = $options['reference']['entity'];
                     if ( isset ( $options['reference']['namespace'] ) ) {
                         $ref_entity = $options['reference']['namespace'] . '\\' . $ref_entity;
+                        if ( ! class_exists( $ref_entity ) ) {
+                            continue;
+                        }
                     } else {
                         $called_class = get_called_class();
                         $ref_entity   = substr( $called_class, 0, strrpos( $called_class, '\\' ) ) . '\\' . $ref_entity;

@@ -333,7 +333,7 @@
 
             $this.prop('disabled', true).addClass('bookly-checkbox-loading');
 
-            $.get(
+            $.post(
                 ajaxurl,
                 options,
                 function (response) {

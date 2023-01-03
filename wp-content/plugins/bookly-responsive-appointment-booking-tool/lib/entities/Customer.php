@@ -5,11 +5,12 @@ use Bookly\Lib;
 
 /**
  * Class Customer
+ *
  * @package Bookly\Lib\Entities
  */
 class Customer extends Lib\Base\Entity
 {
-    const REMOTE_LIMIT  = 100;
+    const REMOTE_LIMIT = 100;
 
     /** @var int */
     protected $wp_user_id;
@@ -55,27 +56,27 @@ class Customer extends Lib\Base\Entity
     protected static $table = 'bookly_customers';
 
     protected static $schema = array(
-        'id'                 => array( 'format' => '%d' ),
-        'wp_user_id'         => array( 'format' => '%d' ),
-        'facebook_id'        => array( 'format' => '%d' ),
-        'group_id'           => array( 'format' => '%d', 'reference' => array( 'entity' => 'CustomerGroups', 'namespace' => '\BooklyCustomerGroups\Lib\Entities', 'required' => 'bookly-addon-customer-groups' ) ),
-        'full_name'          => array( 'format' => '%s' ),
-        'first_name'         => array( 'format' => '%s' ),
-        'last_name'          => array( 'format' => '%s' ),
-        'phone'              => array( 'format' => '%s' ),
-        'email'              => array( 'format' => '%s' ),
-        'birthday'           => array( 'format' => '%s' ),
-        'country'            => array( 'format' => '%s' ),
-        'state'              => array( 'format' => '%s' ),
-        'postcode'           => array( 'format' => '%s' ),
-        'city'               => array( 'format' => '%s' ),
-        'street'             => array( 'format' => '%s' ),
-        'street_number'      => array( 'format' => '%s' ),
+        'id' => array( 'format' => '%d' ),
+        'wp_user_id' => array( 'format' => '%d' ),
+        'facebook_id' => array( 'format' => '%d' ),
+        'group_id' => array( 'format' => '%d', 'reference' => array( 'entity' => 'CustomerGroups', 'namespace' => '\BooklyCustomerGroups\Lib\Entities', 'required' => 'bookly-addon-customer-groups' ) ),
+        'full_name' => array( 'format' => '%s' ),
+        'first_name' => array( 'format' => '%s' ),
+        'last_name' => array( 'format' => '%s' ),
+        'phone' => array( 'format' => '%s' ),
+        'email' => array( 'format' => '%s' ),
+        'birthday' => array( 'format' => '%s' ),
+        'country' => array( 'format' => '%s' ),
+        'state' => array( 'format' => '%s' ),
+        'postcode' => array( 'format' => '%s' ),
+        'city' => array( 'format' => '%s' ),
+        'street' => array( 'format' => '%s' ),
+        'street_number' => array( 'format' => '%s' ),
         'additional_address' => array( 'format' => '%s' ),
-        'notes'              => array( 'format' => '%s' ),
-        'info_fields'        => array( 'format' => '%s' ),
-        'stripe_account'     => array( 'format' => '%s' ),
-        'created_at'         => array( 'format' => '%s' ),
+        'notes' => array( 'format' => '%s' ),
+        'info_fields' => array( 'format' => '%s' ),
+        'stripe_account' => array( 'format' => '%s' ),
+        'created_at' => array( 'format' => '%s' ),
     );
 
     /**
@@ -96,8 +97,7 @@ class Customer extends Lib\Base\Entity
             ->leftJoin( 'CustomerAppointment', 'ca', 'ca.appointment_id = a.id' )
             ->where( 'ca.customer_id', $this->getId() )
             ->groupBy( 'a.id' )
-            ->find()
-        ;
+            ->find();
 
         $this->delete();
 
@@ -159,7 +159,7 @@ class Customer extends Lib\Base\Entity
     {
         foreach ( $records as &$record ) {
             $record['start_date'] = Lib\Utils\DateTime::applyTimeZone( $record['start_date'], $record['time_zone'], $record['time_zone_offset'] );
-            $time_zone_offset = $record['time_zone_offset'] === null ? get_option( 'gmt_offset' ) * 60 : - $record['time_zone_offset'];
+            $time_zone_offset = $record['time_zone_offset'] === null ? get_option( 'gmt_offset' ) * 60 : -$record['time_zone_offset'];
             $record['time_zone'] = $record['time_zone'] ?: 'UTC' . ( $time_zone_offset >= 0 ? '+' : '' ) . ( $time_zone_offset / 60 );
         }
 
@@ -194,6 +194,7 @@ class Customer extends Lib\Base\Entity
                 a.start_date,
                 ca.time_zone,
                 ca.time_zone_offset,
+                ca.units,
                 ca.token'
             )
             ->leftJoin( 'Staff', 'st', 'st.id = a.staff_id' )
@@ -651,12 +652,12 @@ class Customer extends Lib\Base\Entity
     public function getAddress()
     {
         return Lib\Proxy\Pro::getFullAddressByCustomerData( array(
-            'country'            => $this->getCountry(),
-            'state'              => $this->getState(),
-            'postcode'           => $this->getPostcode(),
-            'city'               => $this->getCity(),
-            'street'             => $this->getStreet(),
-            'street_number'      => $this->getStreetNumber(),
+            'country' => $this->getCountry(),
+            'state' => $this->getState(),
+            'postcode' => $this->getPostcode(),
+            'city' => $this->getCity(),
+            'street' => $this->getStreet(),
+            'street_number' => $this->getStreetNumber(),
             'additional_address' => $this->getAdditionalAddress(),
         ) );
     }

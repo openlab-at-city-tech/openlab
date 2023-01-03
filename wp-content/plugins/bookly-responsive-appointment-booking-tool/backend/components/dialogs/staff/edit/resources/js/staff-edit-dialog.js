@@ -53,7 +53,7 @@ jQuery(function ($) {
                     dataType : 'json',
                     success  : function (response) {
                         if (response.data.count > 0) {
-                            booklyAlert({error: [BooklyStaffEditDialogL10n.limitation]});
+                            requiredBooklyPro();
                         } else {
                             staff_id = 0;
                             editStaff(staff_id);

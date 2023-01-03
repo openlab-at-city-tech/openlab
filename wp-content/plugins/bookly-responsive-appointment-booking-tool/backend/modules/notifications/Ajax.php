@@ -60,7 +60,7 @@ class Ajax extends Lib\Base\Ajax
                 );
                 break;
             default:
-                $datatables = Lib\Utils\Tables::getSettings( 'email_notifications' );
+                $datatables = Lib\Utils\Tables::getSettings( Lib\Utils\Tables::EMAIL_NOTIFICATIONS );
                 $response = array(
                     'html' => self::renderTemplate( '_notifications', compact( 'datatables' ), false ),
                 );

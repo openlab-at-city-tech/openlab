@@ -49,6 +49,7 @@ class Settings
             case Notification::TYPE_FREE_PLACE_WAITING_LIST:
             case Notification::TYPE_VERIFY_PHONE:
             case Notification::TYPE_VERIFY_EMAIL:
+            case Notification::TYPE_NEW_GIFT_CARD:
                 $this->instant = 1;
                 break;
             case Notification::TYPE_CUSTOMER_APPOINTMENT_STATUS_CHANGED:

@@ -5,7 +5,7 @@ use Bookly\Lib;
 
 /**
  * Class Ajax
- * @package Bookly\Backend\Modules\CloudSms
+ * @package Bookly\Backend\Modules\CloudZapier
  */
 class Ajax extends Lib\Base\Ajax
 {

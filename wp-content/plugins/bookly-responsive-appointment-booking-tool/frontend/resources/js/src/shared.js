@@ -31,16 +31,31 @@ export function scrollTo($elem, formId) {
     }
 }
 
+export function requestCancellable() {
+    const request = {
+        xhr: null,
+        booklyAjax: () => {},
+        cancel: () => {}
+    };
+    request.booklyAjax = (options) => {
+        return new Promise((resolve, reject) => {
+            request.cancel = () => {
+                if (request.xhr != null) {
+                    request.xhr.abort();
+                    request.xhr = null;
+                }
+            };
+            request.xhr = ajax(options, resolve, reject);
+        });
+    }
+
+    return request
+}
+
 export function booklyAjax(options) {
-    return $.ajax(
-        jQuery.extend({
-            url: BooklyL10n.ajaxurl,
-            dataType: 'json',
-            xhrFields: {withCredentials: true},
-            crossDomain: 'withCredentials' in new XMLHttpRequest(),
-            beforeSend(jqXHR, settings) {},
-        }, options)
-    )
+    return new Promise((resolve, reject) => {
+        ajax(options, resolve, reject);
+    });
 }
 
 export class Format {
@@ -83,4 +98,39 @@ export class Format {
             (c ? d + Math.abs(n - i).toFixed(c).slice(2) : '')
             ;
     }
+}
+
+function ajax(options, resolve, reject) {
+    options.data.csrf_token = BooklyL10n.csrf_token;
+    return $.ajax(
+        jQuery.extend({
+            url: BooklyL10n.ajaxurl,
+            dataType: 'json',
+            xhrFields: {withCredentials: true},
+            crossDomain: 'withCredentials' in new XMLHttpRequest(),
+            beforeSend(jqXHR, settings) {}
+        }, options)
+    ).always(response => {
+        if (processSessionSaveResponse(response)) {
+            if (response.success) {
+                resolve(response);
+            } else {
+                reject(response);
+            }
+        }
+    })
+}
+
+function processSessionSaveResponse(response) {
+    if (!response.success && response?.error === 'session_error') {
+        Ladda.stopAll();
+        setTimeout(function() {
+            if (confirm(BooklyL10n.sessionHasExpired)) {
+                location.reload();
+            }
+        }, 100);
+        return false;
+    }
+
+    return true;
 }

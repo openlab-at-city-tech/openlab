@@ -35,9 +35,12 @@ class Account extends Base
     const PRODUCTS                       = '/1.0/users/%token%/products';                 //GET
 
     const PRODUCT_SMS_NOTIFICATIONS = 'sms';
-    const PRODUCT_STRIPE            = 'stripe';
-    const PRODUCT_ZAPIER            = 'zapier';
-    const PRODUCT_CRON              = 'cron';
+    const PRODUCT_STRIPE  = 'stripe';
+    const PRODUCT_ZAPIER = 'zapier';
+    const PRODUCT_CRON  = 'cron';
+    const PRODUCT_VOICE = 'voice';
+    const PRODUCT_SQUARE = 'square';
+    const PRODUCT_GIFT = 'gift';
 
     /** @var string */
     protected $username;

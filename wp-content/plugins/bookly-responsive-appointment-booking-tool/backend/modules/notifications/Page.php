@@ -27,7 +27,7 @@ class Page extends Lib\Base\Component
 
         Proxy\Shared::enqueueAssets();
         
-        $datatables = Lib\Utils\Tables::getSettings( array( 'email_notifications', 'email_logs' ) );
+        $datatables = Lib\Utils\Tables::getSettings( array( Lib\Utils\Tables::EMAIL_NOTIFICATIONS, Lib\Utils\Tables::EMAIL_LOGS ) );
 
         wp_localize_script( 'bookly-email-notifications.js', 'BooklyL10n', array(
             'sentSuccessfully' => __( 'Sent successfully.', 'bookly' ),

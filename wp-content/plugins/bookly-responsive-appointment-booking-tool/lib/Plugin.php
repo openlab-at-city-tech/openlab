@@ -48,6 +48,7 @@ abstract class Plugin extends Base\Plugin
         Backend\Components\Dialogs\Staff\Order\Ajax::init();
         Backend\Components\Dialogs\TableSettings\Ajax::init();
         Backend\Components\Editable\Proxy\Shared::init();
+        Backend\Components\Notices\Limitation\Ajax::init();
         Backend\Components\Gutenberg\BooklyForm\Block::init();
         Backend\Components\Notices\Lite\Ajax::init();
         Backend\Components\Notices\Nps\Ajax::init();
@@ -67,6 +68,7 @@ abstract class Plugin extends Base\Plugin
         Backend\Modules\CloudProducts\Ajax::init();
         Backend\Modules\CloudSettings\Ajax::init();
         Backend\Modules\CloudSms\Ajax::init();
+        Backend\Modules\CloudVoice\Ajax::init();
         Backend\Modules\CloudZapier\Ajax::init();
         Backend\Modules\Customers\Ajax::init();
         Backend\Modules\Diagnostics\Ajax::init();
@@ -79,9 +81,9 @@ abstract class Plugin extends Base\Plugin
         Backend\Modules\Staff\Ajax::init();
         Frontend\Modules\Booking\Ajax::init();
         Frontend\Modules\Booking\Proxy\Invoices::init();
+        Frontend\Modules\Cron\Ajax::init();
         Frontend\Modules\Stripe\Ajax::init();
         Frontend\Modules\Zapier\Ajax::init();
-        Frontend\Modules\Cron\Ajax::init();
 
         add_action( 'elementor/widgets/widgets_registered', function ( $widgets_manager ) {
             Backend\Components\Elementor\Widgets\BooklyForm\Widget::register( $widgets_manager );

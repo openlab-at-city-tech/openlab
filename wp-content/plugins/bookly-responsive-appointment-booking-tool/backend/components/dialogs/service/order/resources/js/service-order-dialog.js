@@ -5,11 +5,8 @@ jQuery(function($) {
         .on('service.submitForm', {},
             // Bind submit handler for service saving.
             function(event, $panel, data) {
-                let id = data.find(function(value) { return value.name === 'id'; }).value,
-                    title = $.fn.dataTable.render.text().display(data.find(function(value) { return value.name === 'title'; }).value);
-
                 BooklyServiceOrderDialogL10n.services
-                    .find(function(service) { return service.id == id; }).title = title;
+                    .find(function(service) { return service.id == data.id; }).title = $.fn.dataTable.render.text().display(data.title);
             })
         .on('service.deleted', {},
             function(event, services) {
@@ -33,11 +30,7 @@ jQuery(function($) {
         $list.find('li').each(function(position, category) {
             services.push($(category).find('[name="id"]').val());
         });
-        $.post(ajaxurl, {
-                action: 'bookly_update_service_positions',
-                services: services,
-                csrf_token: BooklyL10nGlobal.csrf_token
-            },
+        $.post(ajaxurl, booklySerialize.buildRequestData('bookly_update_service_positions', {services: services}),
             function(response) {
                 if (response.success) {
                     BooklyServiceOrderDialogL10n.services = response.data;
@@ -53,7 +46,7 @@ jQuery(function($) {
             $list.append(
                 $template.clone().show().html()
                     .replace(/{{id}}/g, service.id)
-                    .replace(/{{title}}/g, service.title)
+                    .replace(/{{title}}/g, service.title||'')
             );
         });
     });

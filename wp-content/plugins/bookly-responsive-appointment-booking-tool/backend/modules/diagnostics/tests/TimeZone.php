@@ -28,7 +28,8 @@ class TimeZone extends Test
             $this->addError( 'РНР default timezone is incorrect' );
         }
 
-        if ( in_array( substr( wp_timezone_string(), 0, 1 ), array( '+', '-' ) ) ) {
+        $timezone_string = get_option( 'timezone_string' );
+        if ( ! $timezone_string ) {
             $this->addError( 'You\'re using numerical representation of timezone in WP settings. Please change it to geographic.' );
         }
 

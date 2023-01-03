@@ -195,8 +195,7 @@ class Page extends Lib\Base\Ajax
             ->leftJoin( 'Staff', 'st', 'st.id = a.staff_id' )
             ->whereNot( 'a.start_date', null )
             // Custom service without customers have not ca.id
-            ->groupBy( 'COALESCE(ca.id,CONCAT(\'appointment-\',a.id))' )
-        ;
+            ->groupBy( 'COALESCE(ca.id,CONCAT(\'appointment-\',a.id))' );
         if ( Lib\Proxy\Locations::servicesPerLocationAllowed() ) {
             $query = Proxy\Locations::prepareCalendarQuery( $query );
         } else {
@@ -242,8 +241,8 @@ class Page extends Lib\Base\Ajax
                 'payment_status' => Lib\Entities\Payment::statusToString( $appointment['payment_status'] ),
                 'payment_type' => Lib\Entities\Payment::typeToString( $appointment['payment_gateway'] ),
                 'status' => $appointment['status'],
-                '_info_fields' => json_decode( $appointment['info_fields'], true ),
-                '_custom_fields' => json_decode( $appointment['custom_fields'], true ),
+                '_info_fields' => isset( $appointment['info_fields'] ) ? json_decode( $appointment['info_fields'], true ) : array(),
+                '_custom_fields' => isset( $appointment['custom_fields'] ) ? json_decode( $appointment['custom_fields'], true ) : array(),
             );
         }
 
@@ -413,10 +412,10 @@ class Page extends Lib\Base\Ajax
         $calendar = __( 'Calendar', 'bookly' );
         if ( $calendar_badge ) {
             add_submenu_page( 'bookly-menu', $calendar, sprintf( '%s <span class="update-plugins count-%d"><span class="update-count">%d</span></span>', $calendar, $calendar_badge, $calendar_badge ), 'read',
-                self::pageSlug(), function () { Page::render(); } );
+                self::pageSlug(), function() { Page::render(); } );
         } else {
             add_submenu_page( 'bookly-menu', $calendar, $calendar, 'read',
-                self::pageSlug(), function () { Page::render(); } );
+                self::pageSlug(), function() { Page::render(); } );
         }
     }
 }

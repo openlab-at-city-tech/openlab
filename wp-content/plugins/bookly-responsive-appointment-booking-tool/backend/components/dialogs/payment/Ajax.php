@@ -47,14 +47,18 @@ class Ajax extends Lib\Base\Ajax
         }
         if ( $payment ) {
             $data = $payment->getPaymentData();
-            $show_deposit = Lib\Config::depositPaymentsActive();
-            if ( ! $show_deposit ) {
-                foreach ( $data['payment']['items'] as $item ) {
-                    if ( isset( $item['deposit_format'] ) ) {
-                        $show_deposit = true;
-                        break;
+            if ( $payment->getPaidType() === Lib\Entities\Payment::PAY_DEPOSIT ) {
+                $show_deposit = Lib\Config::depositPaymentsActive();
+                if ( ! $show_deposit ) {
+                    foreach ( $data['payment']['items'] as $item ) {
+                        if ( isset( $item['deposit_format'] ) ) {
+                            $show_deposit = true;
+                            break;
+                        }
                     }
                 }
+            } else {
+                $show_deposit = false;
             }
 
             switch ( $data['payment']['type'] ) {
@@ -82,7 +86,7 @@ class Ajax extends Lib\Base\Ajax
 
             $data['payment']['created_at'] = Lib\Utils\DateTime::applyStaffTimeZone( $data['payment']['created_at'] );
             if ( isset( $data['payment']['gateway_ref_id'] )
-                && $payment->getType() == Lib\Entities\Payment::TYPE_WOOCOMMERCE
+                && $payment->getType() === Lib\Entities\Payment::TYPE_WOOCOMMERCE
                 && current_user_can( 'edit_post', $data['payment']['gateway_ref_id'] )
             ) {
                 $data['payment']['order_link'] = admin_url( 'post.php?action=edit&post=' . $data['payment']['gateway_ref_id'] );

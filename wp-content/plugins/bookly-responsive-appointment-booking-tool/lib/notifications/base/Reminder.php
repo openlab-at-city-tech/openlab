@@ -39,8 +39,8 @@ abstract class Reminder
             // No recipient.
             return false;
         }
-
-        if ( $notification->getGateway() == 'sms' ) {
+        $gateway = $notification->getGateway();
+        if ( $gateway === 'sms' ) {
             return static::_sendSmsTo(
                 self::RECIPIENT_ADMINS,
                 get_option( 'bookly_sms_administrator_phone', '' ),
@@ -49,7 +49,7 @@ abstract class Reminder
                 array( 'name' => __( 'Admins', 'bookly' ) ),
                 $queue
             );
-        } else {
+        } elseif ( $gateway === 'email' ) {
             $result = false;
             foreach ( Utils\Common::getAdminEmails() as $email ) {
                 if ( static::_sendEmailTo(
@@ -69,7 +69,16 @@ abstract class Reminder
             }
 
             return $result;
-        }
+        } elseif ( $gateway === 'voice' ) {
+            return static::_callTo(
+                self::RECIPIENT_ADMINS,
+                get_option( 'bookly_sms_administrator_phone', '' ),
+                $notification,
+                $codes,
+                array( 'name' => __( 'Admins', 'bookly' ) ),
+                $queue
+            );
+         }
     }
 
     /**
@@ -89,7 +98,8 @@ abstract class Reminder
             // No recipient.
             return $result;
         }
-        if ( $notification->getGateway() == 'sms' ) {
+        $gateway = $notification->getGateway();
+        if ( $gateway === 'sms' ) {
             foreach ( array_map( 'trim', array_filter( explode( "\n", $notification->getCustomRecipients() ), 'trim' ) ) as $phone ) {
                 if ( static::_sendSmsTo(
                     self::RECIPIENT_ADMINS,
@@ -102,7 +112,7 @@ abstract class Reminder
                     $result = true;
                 }
             }
-        } else {
+        } elseif ( $gateway === 'email' ) {
             foreach ( array_map( 'trim', array_filter( explode( "\n", $notification->getCustomRecipients() ), 'trim' ) ) as $email ) {
                 if ( static::_sendEmailTo(
                     self::RECIPIENT_ADMINS,
@@ -113,6 +123,19 @@ abstract class Reminder
                     $reply_to,
                     null,
                     null,
+                    array( 'name' => __( 'Custom', 'bookly' ) ),
+                    $queue
+                ) ) {
+                    $result = true;
+                }
+            }
+        } elseif ( $gateway === 'voice' ) {
+            foreach ( array_map( 'trim', array_filter( explode( "\n", $notification->getCustomRecipients() ), 'trim' ) ) as $phone ) {
+                if ( static::_callTo(
+                    self::RECIPIENT_ADMINS,
+                    $phone,
+                    $notification,
+                    $codes,
                     array( 'name' => __( 'Custom', 'bookly' ) ),
                     $queue
                 ) ) {
@@ -139,8 +162,8 @@ abstract class Reminder
             // No recipient.
             return false;
         }
-
-        if ( $notification->getGateway() == 'sms' ) {
+        $gateway = $notification->getGateway();
+        if ( $gateway === 'sms' ) {
             return static::_sendSmsTo(
                 self::RECIPIENT_CLIENT,
                 $customer->getPhone(),
@@ -149,7 +172,7 @@ abstract class Reminder
                 array( 'name' => $customer->getFullName() ),
                 $queue
             );
-        } else {
+        } elseif ( $gateway === 'email' ) {
             return static::_sendEmailTo(
                 self::RECIPIENT_CLIENT,
                 $customer->getEmail(),
@@ -159,6 +182,15 @@ abstract class Reminder
                 null,
                 null,
                 null,
+                array( 'name' => $customer->getFullName() ),
+                $queue
+            );
+        } elseif ( $gateway === 'voice' ) {
+            return static::_callTo(
+                self::RECIPIENT_CLIENT,
+                $customer->getPhone(),
+                $notification,
+                $codes,
                 array( 'name' => $customer->getFullName() ),
                 $queue
             );
@@ -182,8 +214,8 @@ abstract class Reminder
             // No recipient.
             return false;
         }
-
-        if ( $notification->getGateway() == 'sms' ) {
+        $gateway = $notification->getGateway();
+        if ( $gateway === 'sms' ) {
             return static::_sendSmsTo(
                 self::RECIPIENT_STAFF,
                 $staff->getPhone(),
@@ -192,7 +224,7 @@ abstract class Reminder
                 array( 'name' => $staff->getFullName() ),
                 $queue
             );
-        } else {
+        } elseif ( $gateway === 'email' ) {
             return static::_sendEmailTo(
                 self::RECIPIENT_STAFF,
                 $staff->getEmail(),
@@ -202,6 +234,15 @@ abstract class Reminder
                 $reply_to,
                 null,
                 null,
+                array( 'name' => $staff->getFullName() ),
+                $queue
+            );
+        } elseif ( $gateway === 'voice' ) {
+            return static::_callTo(
+                self::RECIPIENT_STAFF,
+                $staff->getPhone(),
+                $notification,
+                $codes,
                 array( 'name' => $staff->getFullName() ),
                 $queue
             );
@@ -306,7 +347,7 @@ abstract class Reminder
      */
     protected static function _sendSmsTo( $recipient, $phone, $notification, Codes $codes, $queue_data = array(), &$queue = false )
     {
-        if ( get_option( 'bookly_cloud_token' ) == '' || $phone == '' || ! Cloud\API::getInstance()->account->productActive( 'sms' ) ) {
+        if ( get_option( 'bookly_cloud_token' ) == '' || $phone == '' || ! Cloud\API::getInstance()->account->productActive( Cloud\Account::PRODUCT_SMS_NOTIFICATIONS  ) ) {
             return false;
         }
 
@@ -334,6 +375,48 @@ abstract class Reminder
         } else {
             return Cloud\API::getInstance()->sms->sendSms( $phone, $message['personal'], $message['impersonal'], $notification->getTypeId() );
         }
+    }
 
+    /**
+     * Make a call.
+     *
+     * @param string $recipient
+     * @param string $phone
+     * @param Notification $notification
+     * @param Codes $codes
+     * @param array $queue_data,
+     * @param array|bool $queue
+     * @return bool
+     */
+    protected static function _callTo( $recipient, $phone, $notification, Codes $codes, $queue_data = array(), &$queue = false )
+    {
+        if ( get_option( 'bookly_cloud_token' ) == '' || $phone == '' || ! Cloud\API::getInstance()->account->productActive( Cloud\Account::PRODUCT_VOICE ) ) {
+            return false;
+        }
+
+        // Message.
+        if ( $recipient == self::RECIPIENT_CLIENT ) {
+            $message = $notification->getTranslatedMessage();
+        } else {
+            $message = Proxy\Pro::prepareNotificationMessage( $notification->getMessage(), $recipient, 'sms' );
+        }
+        $message = $codes->replaceForSms( $message );
+
+        // Do send.
+        if ( $queue !== false ) {
+            $queue[] = array(
+                'data'       => $queue_data,
+                'gateway'    => $notification->getGateway(),
+                'name'       => $notification->getName(),
+                'address'    => $phone,
+                'message'    => $message['personal'],
+                'impersonal' => $message['impersonal'],
+                'type_id'    => $notification->getTypeId(),
+            );
+
+            return true;
+        } else {
+            return Cloud\API::getInstance()->voice->call( $phone, $message['personal'], $message['impersonal'] );
+        }
     }
 }

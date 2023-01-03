@@ -82,7 +82,7 @@
             .on('click', '#bookly-details-save', function (e) {
                 e.preventDefault();
                 let ladda = Ladda.create(this),
-                    data         = $form.serializeArray(),
+                    data = booklySerialize.form($form),
                     $staff_phone = $('#bookly-phone', $form),
                     phone;
                 ladda.start();
@@ -98,13 +98,11 @@
                 } catch (error) {  // In case when intlTelInput can't return phone number.
                     phone = $staff_phone.val();
                 }
-                data.push({name: 'action', value: 'bookly_update_staff'});
-                data.push({name: 'phone', value: phone});
-                data.push({name: 'csrf_token', value: BooklyL10nGlobal.csrf_token});
+                data.phone = phone;
                 $.ajax({
                     type: 'POST',
                     url: ajaxurl,
-                    data: data,
+                    data: booklySerialize.buildRequestData('bookly_update_staff', data),
                     dataType: 'json',
                     xhrFields: {withCredentials: true},
                     crossDomain: 'withCredentials' in new XMLHttpRequest(),

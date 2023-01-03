@@ -144,7 +144,7 @@ class Scheduler
         foreach ( $this->userData->chain->getItems() as $item ) {
             $appointments_in_chain += $item->getQuantity();
         }
-        
+
         for ( $i = 0, $count = count( $slots ); $i < $count; $i += $appointments_in_chain ) {
             $dp = DatePoint::fromStr( $slots[ $i ] );
             $client_dp = $dp->toClientTz();
@@ -266,16 +266,17 @@ class Scheduler
     private function _addSlot( DatePoint $client_dp, $skip_days_off = false )
     {
         $this->finder->client_start_dp = $client_dp;
-        $this->finder->client_end_dp = $this->client_until->modify( '+1 day' );
+        $until = $this->client_until->modify( '+1 day' );
+        $last_date = new DatePoint( date_create() );
+        $last_date = $last_date->modify( Config::getMaximumAvailableDaysForBooking() . ' days' );
+        $this->finder->client_end_dp = $this->for_backend || $last_date->gte( $until ) ? $until : $last_date;
         $this->finder->start_dp = $this->finder->client_start_dp->toWpTz();
         $this->finder->end_dp = $this->finder->client_end_dp->toWpTz();
 
-        $last_date = new DatePoint( date_create() );
-        $last_date = $last_date->modify( Config::getMaximumAvailableDaysForBooking() . ' days' );
         $this->finder->load(
             $skip_days_off ?
-                function( DatePoint $dp, $srv_duration_days, $slots_count ) use ( $client_dp, $last_date ) {
-                    return ( $dp->gte( $client_dp->modify( max( $srv_duration_days, 1 ) . ' days' ) ) && $slots_count == 0 ) || $dp->gte( $last_date );
+                function( DatePoint $dp, $srv_duration_days, $slots_count ) use ( $client_dp ) {
+                    return ( $dp->gte( $client_dp->modify( max( $srv_duration_days, 1 ) . ' days' ) ) && $slots_count == 0 ) || $dp->gte( $this->finder->client_end_dp );
                 }
                 : null
         );

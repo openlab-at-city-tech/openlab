@@ -5,6 +5,7 @@ use Bookly\Lib;
 use Bookly\Frontend\Components\Booking\InfoText;
 use Bookly\Frontend\Modules\Booking\Lib\Steps;
 use Bookly\Frontend\Modules\Booking\Lib\Errors;
+use Bookly\Frontend\Modules\Booking\Proxy as BookingProxy;
 
 /**
  * Class Ajax
@@ -161,13 +162,14 @@ class Ajax extends Lib\Base\Ajax
                     $userData->getFirstStep() != Steps::EXTRAS
                 ),
             ), 'extras', $userData );
-        } else {
-            $response = array( 'success' => false, 'error' => Errors::SESSION_ERROR );
-        }
-        $userData->sessionSave();
 
-        // Output JSON response.
-        wp_send_json( $response );
+            $userData->sessionSave();
+
+            // Output JSON response.
+            wp_send_json( $response );
+        }
+
+        Errors::sendSessionError();
     }
 
     /**
@@ -277,7 +279,7 @@ class Ajax extends Lib\Base\Ajax
 
             $slots_data = Proxy\Shared::prepareSlotsData( $slots_data );
 
-            $slots_data = array_map( function( $slot_data ) {
+            $slots_data = array_map( function ( $slot_data ) {
                 unset ( $slot_data['slot'] );
 
                 return $slot_data;
@@ -328,13 +330,13 @@ class Ajax extends Lib\Base\Ajax
                     $response['disabled_days'] = $finder->getDisabledDaysForPickadate();
                 }
             }
-        } else {
-            $response = array( 'success' => false, 'error' => Errors::SESSION_ERROR );
-        }
-        $userData->sessionSave();
+            $userData->sessionSave();
 
-        // Output JSON response.
-        wp_send_json( $response );
+            // Output JSON response.
+            wp_send_json( $response );
+        }
+
+        Errors::sendSessionError();
     }
 
     /**
@@ -373,7 +375,7 @@ class Ajax extends Lib\Base\Ajax
 
             $slots_data = Proxy\Shared::prepareSlotsData( $slots_data );
 
-            $slots_data = array_map( function( $slot_data ) {
+            $slots_data = array_map( function ( $slot_data ) {
                 unset ( $slot_data['slot'] );
 
                 return $slot_data;
@@ -387,13 +389,12 @@ class Ajax extends Lib\Base\Ajax
                 'has_more_slots' => $finder->hasMoreSlots(), // show/hide the next button
                 'selected_date' => $selected_date,
             );
-        } else {
-            $response = array( 'success' => false, 'error' => Errors::SESSION_ERROR );
-        }
-        $userData->sessionSave();
+            $userData->sessionSave();
 
-        // Output JSON response.
-        wp_send_json( $response );
+            wp_send_json( $response );
+        }
+
+        Errors::sendSessionError();
     }
 
     /**
@@ -414,13 +415,13 @@ class Ajax extends Lib\Base\Ajax
                 'success' => true,
                 'html' => Proxy\RecurringAppointments::getStepHtml( $userData, $show_cart_btn, $info_text, $progress_tracker ),
             ), 'repeat', $userData );
-        } else {
-            $response = array( 'success' => false, 'error' => Errors::SESSION_ERROR );
-        }
-        $userData->sessionSave();
+            $userData->sessionSave();
 
-        // Output JSON response.
-        wp_send_json( $response );
+            // Output JSON response.
+            wp_send_json( $response );
+        }
+
+        Errors::sendSessionError();
     }
 
     /**
@@ -450,13 +451,13 @@ class Ajax extends Lib\Base\Ajax
                 'success' => true,
                 'html' => Proxy\Cart::getStepHtml( $userData, $progress_tracker, $info_text, $userData->getFirstStep() != Steps::CART ),
             ), 'cart', $userData );
-        } else {
-            $response = array( 'success' => false, 'error' => Errors::SESSION_ERROR );
-        }
-        $userData->sessionSave();
+            $userData->sessionSave();
 
-        // Output JSON response.
-        wp_send_json( $response );
+            // Output JSON response.
+            wp_send_json( $response );
+        }
+
+        Errors::sendSessionError();
     }
 
     /**
@@ -528,13 +529,13 @@ class Ajax extends Lib\Base\Ajax
                     'terms_error' => Lib\Utils\Common::getTranslatedOption( 'bookly_l10n_error_terms' ),
                 ),
             ), 'details', $userData );
-        } else {
-            $response = array( 'success' => false, 'error' => Errors::SESSION_ERROR );
-        }
-        $userData->sessionSave();
+            $userData->sessionSave();
 
-        // Output JSON response.
-        wp_send_json( $response );
+            // Output JSON response.
+            wp_send_json( $response );
+        }
+
+        Errors::sendSessionError();
     }
 
     /**
@@ -578,7 +579,7 @@ class Ajax extends Lib\Base\Ajax
                     $gateways = self::getGateways( $userData, $cart_info );
 
                     if ( $gateways ) {
-                        $order = explode( ',', get_option( 'bookly_pmt_order' ) );
+                        $order = Lib\Config::getGatewaysPreference();
 
                         if ( $order ) {
                             foreach ( $order as $payment_system ) {
@@ -638,13 +639,12 @@ class Ajax extends Lib\Base\Ajax
                     'disabled' => true,
                 );
             }
-        } else {
-            $response = array( 'success' => false, 'error' => Errors::SESSION_ERROR );
+            $userData->sessionSave();
+            // Output JSON response.
+            wp_send_json( $response );
         }
-        $userData->sessionSave();
 
-        // Output JSON response.
-        wp_send_json( $response );
+        Errors::sendSessionError();
     }
 
     /**
@@ -684,13 +684,13 @@ class Ajax extends Lib\Base\Ajax
                 'success' => true,
                 'html' => self::renderTemplate( '8_complete', compact( 'progress_tracker', 'info_text', 'state' ), false ),
             ), 'complete', $userData );
-        } else {
-            $response = array( 'success' => false, 'error' => Errors::SESSION_ERROR );
-        }
-        $userData->sessionSave();
+            $userData->sessionSave();
 
-        // Output JSON response.
-        wp_send_json( $response );
+            // Output JSON response.
+            wp_send_json( $response );
+        }
+
+        Errors::sendSessionError();
     }
 
     /**
@@ -702,47 +702,50 @@ class Ajax extends Lib\Base\Ajax
         $errors = array();
         if ( $form_id ) {
             $userData = new Lib\UserBookingData( $form_id );
-            $userData->load();
-            $parameters = self::parameters();
-            $errors = $userData->validate( $parameters );
-            if ( empty ( $errors ) ) {
-                if ( self::hasParameter( 'no_extras' ) ) {
-                    foreach ( $parameters['chain'] as &$item ) {
-                        $item['extras'] = array();
+            if ( $userData->load() ) {
+                $parameters = self::parameters();
+                $errors = $userData->validate( $parameters );
+                if ( empty ( $errors ) ) {
+                    if ( self::hasParameter( 'no_extras' ) ) {
+                        foreach ( $parameters['chain'] as &$item ) {
+                            $item['extras'] = array();
+                        }
+                    } elseif ( self::hasParameter( 'extras' ) ) {
+                        $parameters['chain'] = $userData->chain->getItemsData();
+                        foreach ( $parameters['chain'] as $key => &$item ) {
+                            // Decode extras.
+                            $item['extras'] = json_decode( $parameters['extras'][ $key ], true );
+                        }
+                    } elseif ( self::hasParameter( 'slots' ) ) {
+                        // Decode slots.
+                        $parameters['slots'] = json_decode( $parameters['slots'], true );
+                    } elseif ( self::hasParameter( 'cart' ) ) {
+                        $parameters['captcha_ids'] = json_decode( $parameters['captcha_ids'], true );
+                        foreach ( $parameters['cart'] as &$service ) {
+                            // Remove captcha from custom fields.
+                            $custom_fields = array_filter( json_decode( $service['custom_fields'], true ), function ( $field ) use ( $parameters ) {
+                                return ! in_array( $field['id'], $parameters['captcha_ids'] );
+                            } );
+                            // Index the array numerically.
+                            $service['custom_fields'] = array_values( $custom_fields );
+                        }
+                        // Copy custom fields to all cart items.
+                        $cart = array();
+                        $cf_per_service = Lib\Config::customFieldsPerService();
+                        $merge_cf = Lib\Config::customFieldsMergeRepeating();
+                        foreach ( $userData->cart->getItems() as $cart_key => $_cart_item ) {
+                            $cart[ $cart_key ] = $cf_per_service
+                                ? $parameters['cart'][ $merge_cf ? $_cart_item->getService()->getId() : $cart_key ]
+                                : $parameters['cart'][0];
+                        }
+                        $parameters['cart'] = $cart;
                     }
-                } elseif ( self::hasParameter( 'extras' ) ) {
-                    $parameters['chain'] = $userData->chain->getItemsData();
-                    foreach ( $parameters['chain'] as $key => &$item ) {
-                        // Decode extras.
-                        $item['extras'] = json_decode( $parameters['extras'][ $key ], true );
-                    }
-                } elseif ( self::hasParameter( 'slots' ) ) {
-                    // Decode slots.
-                    $parameters['slots'] = json_decode( $parameters['slots'], true );
-                } elseif ( self::hasParameter( 'cart' ) ) {
-                    $parameters['captcha_ids'] = json_decode( $parameters['captcha_ids'], true );
-                    foreach ( $parameters['cart'] as &$service ) {
-                        // Remove captcha from custom fields.
-                        $custom_fields = array_filter( json_decode( $service['custom_fields'], true ), function( $field ) use ( $parameters ) {
-                            return ! in_array( $field['id'], $parameters['captcha_ids'] );
-                        } );
-                        // Index the array numerically.
-                        $service['custom_fields'] = array_values( $custom_fields );
-                    }
-                    // Copy custom fields to all cart items.
-                    $cart = array();
-                    $cf_per_service = Lib\Config::customFieldsPerService();
-                    $merge_cf = Lib\Config::customFieldsMergeRepeating();
-                    foreach ( $userData->cart->getItems() as $cart_key => $_cart_item ) {
-                        $cart[ $cart_key ] = $cf_per_service
-                            ? $parameters['cart'][ $merge_cf ? $_cart_item->getService()->getId() : $cart_key ]
-                            : $parameters['cart'][0];
-                    }
-                    $parameters['cart'] = $cart;
+                    $userData->fillData( $parameters );
                 }
-                $userData->fillData( $parameters );
+                $userData->sessionSave();
+            } else {
+                Errors::sendSessionError();
             }
-            $userData->sessionSave();
         }
         $errors['success'] = empty( $errors );
 
@@ -761,7 +764,7 @@ class Ajax extends Lib\Base\Ajax
             if ( $failed_cart_key === null ) {
                 $cart_info = $userData->cart->getInfo();
                 $is_payment_disabled = Lib\Config::paymentStepDisabled();
-                $skip_payment = Lib\Proxy\CustomerGroups::getSkipPayment( $userData->getCustomer() );
+                $skip_payment = BookingProxy\CustomerGroups::getSkipPayment( $userData->getCustomer() );
                 $gateways = self::getGateways( $userData, clone $cart_info );
 
                 if ( $is_payment_disabled || isset( $gateways['local'] ) || $cart_info->getPayNow() <= 0 || $skip_payment ) {
@@ -802,7 +805,7 @@ class Ajax extends Lib\Base\Ajax
                             if ( $status !== Lib\Entities\Payment::STATUS_COMPLETED ) {
                                 $gift_card = $userData->getGiftCard();
                                 if ( $gift_card ) {
-                                    $type = Lib\Entities\Payment::TYPE_GIFT_CARD;
+                                    $type = Lib\Entities\Payment::TYPE_CLOUD_GIFT;
                                     $cart_info->setGateway( $type );
                                     if ( $gift_card->getBalance() >= $cart_info->getPayNow() ) {
                                         $status = Lib\Entities\Payment::STATUS_COMPLETED;
@@ -846,12 +849,12 @@ class Ajax extends Lib\Base\Ajax
                     'error' => Errors::CART_ITEM_NOT_AVAILABLE,
                 );
             }
-        } else {
-            $response = array( 'success' => false, 'error' => Errors::SESSION_ERROR );
-        }
-        $userData->sessionSave();
+            $userData->sessionSave();
 
-        wp_send_json( $response );
+            wp_send_json( $response );
+        }
+
+        Errors::sendSessionError();
     }
 
     /**
@@ -872,11 +875,11 @@ class Ajax extends Lib\Base\Ajax
                     'error' => Errors::CART_ITEM_NOT_AVAILABLE,
                 );
             }
-        } else {
-            $response = array( 'success' => false, 'error' => Errors::INVALID_GATEWAY );
+
+            wp_send_json( $response );
         }
 
-        wp_send_json( $response );
+        Errors::sendSessionError();
     }
 
     /**
@@ -1047,13 +1050,13 @@ class Ajax extends Lib\Base\Ajax
                     'data' => $user_info + array( 'csrf_token' => Lib\Utils\Common::getCsrfToken() ),
                 );
             }
-        } else {
-            $response = array( 'success' => false, 'error' => Errors::SESSION_ERROR );
-        }
-        $userData->sessionSave();
+            $userData->sessionSave();
 
-        // Output JSON response.
-        wp_send_json( $response );
+            // Output JSON response.
+            wp_send_json( $response );
+        }
+
+        Errors::sendSessionError();
     }
 
     /**
@@ -1196,48 +1199,52 @@ class Ajax extends Lib\Base\Ajax
     {
         // Staff ids.
         $defaults = Lib\Session::getFormVar( self::parameter( 'form_id' ), 'defaults' );
-        $service_id = $defaults['service_id'];
-        if ( $defaults['staff_id'] == 0 ) {
-            $service = Lib\Entities\Service::find( $defaults['service_id'] );
-            if ( $service && $service->withSubServices() ) {
-                $sub_services = $service->getSubServices();
-                $service_id = reset( $sub_services )->getId();
+        if ( $defaults !== null ) {
+            $service_id = $defaults['service_id'];
+            if ( $defaults['staff_id'] == 0 ) {
+                $service = Lib\Entities\Service::find( $defaults['service_id'] );
+                if ( $service && $service->withSubServices() ) {
+                    $sub_services = $service->getSubServices();
+                    $service_id = reset( $sub_services )->getId();
+                }
+                $staff_ids = Lib\Entities\StaffService::query( 'ss' )
+                    ->leftJoin( 'Staff', 's', 's.id = ss.staff_id' )
+                    ->where( 'ss.service_id', $service_id )
+                    ->where( 's.visibility', 'public' )
+                    ->fetchCol( 'ss.staff_id' );
+            } else {
+                $staff_ids = array( $defaults['staff_id'] );
             }
-            $staff_ids = Lib\Entities\StaffService::query( 'ss' )
-                ->leftJoin( 'Staff', 's', 's.id = ss.staff_id' )
-                ->where( 'ss.service_id', $service_id )
-                ->where( 's.visibility', 'public' )
-                ->fetchCol( 'ss.staff_id' );
+            // Date.
+            $date_from = isset( $defaults['date_from'] ) && $defaults['date_from'] ? Lib\Slots\DatePoint::fromStr( $defaults['date_from'] ) : Lib\Slots\DatePoint::now()->modify( Lib\Proxy\Pro::getMinimumTimePriorBooking( $service_id ) );
+            // Days and times.
+            $days_times = Lib\Config::getDaysAndTimes();
+
+            $time_from = isset( $defaults['time_from'] ) && $defaults['time_from'] ? $defaults['time_from'] : key( $days_times['times'] );
+            end( $days_times['times'] );
+
+            $userData->chain->clear();
+            $chain_item = new Lib\ChainItem();
+            $chain_item
+                ->setNumberOfPersons( 1 )
+                ->setQuantity( 1 )
+                ->setUnits( isset( $defaults['units'] ) && $defaults['units'] ? $defaults['units'] : 1 )
+                ->setServiceId( $defaults['service_id'] )
+                ->setStaffIds( $staff_ids )
+                ->setLocationId( $defaults['location_id'] ?: null );
+            $userData->chain->add( $chain_item );
+
+            $userData->fillData( array(
+                'date_from' => $date_from->toClientTz()->format( 'Y-m-d' ),
+                'days' => array_keys( $days_times['days'] ),
+                'edit_cart_keys' => array(),
+                'slots' => array(),
+                'time_from' => $time_from,
+                'time_to' => isset( $defaults['time_to'] ) && $defaults['time_to'] ? $defaults['time_to'] : key( $days_times['times'] ),
+            ) );
         } else {
-            $staff_ids = array( $defaults['staff_id'] );
+            Errors::sendSessionError();
         }
-        // Date.
-        $date_from = isset( $defaults['date_from'] ) && $defaults['date_from'] ? Lib\Slots\DatePoint::fromStr( $defaults['date_from'] ) : Lib\Slots\DatePoint::now()->modify( Lib\Proxy\Pro::getMinimumTimePriorBooking( $service_id ) );
-        // Days and times.
-        $days_times = Lib\Config::getDaysAndTimes();
-
-        $time_from = isset( $defaults['time_from'] ) && $defaults['time_from'] ? $defaults['time_from'] : key( $days_times['times'] );
-        end( $days_times['times'] );
-
-        $userData->chain->clear();
-        $chain_item = new Lib\ChainItem();
-        $chain_item
-            ->setNumberOfPersons( 1 )
-            ->setQuantity( 1 )
-            ->setUnits( isset( $defaults['units'] ) && $defaults['units'] ? $defaults['units'] : 1 )
-            ->setServiceId( $defaults['service_id'] )
-            ->setStaffIds( $staff_ids )
-            ->setLocationId( $defaults['location_id'] ?: null );
-        $userData->chain->add( $chain_item );
-
-        $userData->fillData( array(
-            'date_from' => $date_from->toClientTz()->format( 'Y-m-d' ),
-            'days' => array_keys( $days_times['days'] ),
-            'edit_cart_keys' => array(),
-            'slots' => array(),
-            'time_from' => $time_from,
-            'time_to' => isset( $defaults['time_to'] ) && $defaults['time_to'] ? $defaults['time_to'] : key( $days_times['times'] ),
-        ) );
     }
 
     /**
@@ -1291,11 +1298,11 @@ class Ajax extends Lib\Base\Ajax
                 'pay' => $cart_info->getPayNow(),
             );
         }
-        if ( Proxy\CustomerGroups::allowedGateway( 'cloud_stripe', $userData ) !== false ) {
-            $pay_cloud_stripe = Lib\Cloud\API::getInstance()->account->productActive( 'stripe' ) && get_option( 'bookly_cloud_stripe_enabled' );
+        if ( Proxy\CustomerGroups::allowedGateway( Lib\Entities\Payment::TYPE_CLOUD_STRIPE, $userData ) !== false ) {
+            $pay_cloud_stripe = Lib\Cloud\API::getInstance()->account->productActive( Lib\Cloud\Account::PRODUCT_STRIPE ) && get_option( 'bookly_cloud_stripe_enabled' );
             if ( $pay_cloud_stripe ) {
                 $cart_info->setGateway( Lib\Entities\Payment::TYPE_CLOUD_STRIPE );
-                $gateways['cloud_stripe'] = array(
+                $gateways[ Lib\Entities\Payment::TYPE_CLOUD_STRIPE ] = array(
                     'html' => self::renderTemplate(
                         '_cloud_stripe_option',
                         array(
@@ -1311,6 +1318,7 @@ class Ajax extends Lib\Base\Ajax
                 );
             }
         }
+
         $gateways = Proxy\Shared::preparePaymentOptions(
             $gateways,
             self::parameter( 'form_id' ),

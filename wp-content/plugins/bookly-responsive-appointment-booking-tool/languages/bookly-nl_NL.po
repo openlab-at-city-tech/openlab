@@ -8,11 +8,11 @@ msgstr ""
 "Language: nl_NL\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-20 08:25+0000\n"
-"PO-Revision-Date: 2022-09-20 11:42+0000\n"
+"POT-Creation-Date: 2022-12-14 12:55+0000\n"
+"PO-Revision-Date: 2022-12-14 15:41+0000\n"
 "Last-Translator: support@bookly.info\n"
 "Language-Team: Dutch\n"
-"X-Loco-Version: 2.3.1; wp-6.0"
+"X-Loco-Version: 2.3.1; wp-6.1"
 
 msgid "Invoice #{invoice_number} for your appointment"
 msgstr "Factuur #{invoice_number} voor uw afspraak"
@@ -75,17 +75,6 @@ msgstr "We waarderen het zeer"
 
 msgid "Download invoice"
 msgstr "Factuur downloaden"
-
-msgid ""
-"Invoices add-on requires your customers address information. So options "
-"\"Make address field mandatory\" in Settings/Customers and \"Show address "
-"field\" in Appearance/Details are activated automatically and can be "
-"disabled after Invoices add-on is deactivated."
-msgstr ""
-"Facturen add-on vereist de adresinformatie van uw klanten. Dus opties \"Maak "
-"adres veld verplicht\" in de Instellingen/Klanten en \"Toon adres veld\" in "
-"Uiterlijk/Details worden automatisch geactiveerd en kunnen worden "
-"uitgeschakeld nadat de Facturen add-on gedeactiveerd is."
 
 msgid "Invoice due days"
 msgstr "Factuur verval dagen"
@@ -741,15 +730,23 @@ msgstr ""
 msgid "Fields matching"
 msgstr "Velden die overeenkomen"
 
+msgid ""
+"Enter the tags of the fields in your Mailchimp audience settings in "
+"accordance with Bookly data."
+msgstr ""
+"Voer de tags van de velden in uw Mailchimp publiek instellingen in volgens "
+"Bookly gegevens."
+
 #, php-format
 msgid ""
-"Enter the names of the fields in your Mailchimp audience settings in "
-"accordance with Bookly data. You can find these names in <b>Audience "
-"settings > Audience fields and %s tags</b> in your Mailchimp account"
+"You can find these tags in <b>Audience settings > Audience fields and %s "
+"tags</b> in your Mailchimp account"
 msgstr ""
-"Geef de namen van de velden in uw Mailchimp publieksinstellingen in "
-"overeenstemming met de gegevens van Bookly. U kunt deze namen vinden in <b>"
-"Publieksinstellingen > Publieksvelden en %s tags</b> in uw Mailchimp account"
+"U kunt deze tags vinden in <b>Publiek instellingen > Publiek velden en %s "
+"tags</b> in uw Mailchimp account."
+
+msgid "Tag"
+msgstr "Tag"
 
 msgid "Value"
 msgstr "Waarde"
@@ -2321,6 +2318,13 @@ msgid_plural " and %d more items"
 msgstr[0] " en nog %d item"
 msgstr[1] " en nog %d items"
 
+msgid "Phone number is empty."
+msgstr "Telefoonnummer is leeg."
+
+#, php-format
+msgid "%d min"
+msgstr "%d min"
+
 msgid "Bookly Cloud couldn't connect to your server."
 msgstr "Bookly Cloud kon geen verbinding maken met uw server."
 
@@ -2418,9 +2422,6 @@ msgstr ""
 
 msgid "Failed to send SMS."
 msgstr "Kon SMS niet versturen."
-
-msgid "Phone number is empty."
-msgstr "Telefoonnummer is leeg."
 
 msgid "Queued"
 msgstr "In de wachtrij"
@@ -2811,6 +2812,12 @@ msgstr "Melding aan klant met verificatiecode"
 
 msgid "Bookly verification code"
 msgstr "Bookly verificatiecode"
+
+msgid "&lt;"
+msgstr "&lt;"
+
+msgid "&gt;"
+msgstr "&gt;"
 
 msgid "Download ICS"
 msgstr "Download ICS"
@@ -3337,10 +3344,6 @@ msgstr[1] "%d dagen"
 msgid "%d h"
 msgstr "%d uur"
 
-#, php-format
-msgid "%d min"
-msgstr "%d min"
-
 msgid "From"
 msgstr "Van"
 
@@ -3443,6 +3446,9 @@ msgstr "Vlag"
 msgid "Code"
 msgstr "Code"
 
+msgid "Price/Minute"
+msgstr "Prijs/Minuut"
+
 msgid "Regular price"
 msgstr "Normale prijs"
 
@@ -3520,6 +3526,14 @@ msgstr ""
 "Let op: als u dit Bookly-item verwijdert, worden alle bijbehorende gegevens "
 "permanent verwijderd"
 
+msgid ""
+"To save data, please set \"Don't delete\" in Bookly Settings > General > "
+"Bookly data upon deleting Bookly items"
+msgstr ""
+"Om gegevens te bewaren, stelt u \"Niet verwijderen\" in bij Bookly "
+"Instellingen > Algemeen > Bookly gegevens bij het verwijderen van Bookly "
+"items"
+
 #, php-format
 msgid "%s updated"
 msgstr "%s bijgewerkt"
@@ -3535,7 +3549,7 @@ msgstr "Geen updates beschikbaar"
 msgid "Free"
 msgstr "Vrij"
 
-msgid "Gift Card"
+msgid "Gift card"
 msgstr "Cadeaubon"
 
 msgid "Completed"
@@ -3893,6 +3907,12 @@ msgstr ""
 "Selecteer \"Ingeschakeld\" als u wilt dat Bookly caching door caching-plug-"
 "ins van derden voorkomt door een constante DONOTCACHEPAGE toe te voegen op "
 "pagina's met boekingsformulier"
+
+msgid "Session storage mode"
+msgstr "Sessie opslag modus"
+
+msgid "Select where to store session data"
+msgstr "Selecteer waar de sessiegegevens moeten worden opgeslagen"
 
 msgid "Prevent PHP session locking"
 msgstr "Voorkom het vergrendelen van PHP-sessie"
@@ -4334,6 +4354,9 @@ msgstr "Neem de deelnemerslijst door met scheidingsteken"
 msgid "Last month"
 msgstr "Afgelopen maand"
 
+msgid "No records for selected period."
+msgstr "Geen records voor de geselecteerde periode."
+
 msgid "SMS Notifications"
 msgstr "SMS-meldingen"
 
@@ -4422,9 +4445,6 @@ msgstr "Afzender ID verzoek is verzonden."
 
 msgid "Sender ID is reset to default."
 msgstr "Afzender ID is teruggezet naar de standaardinstelling."
-
-msgid "No records for selected period."
-msgstr "Geen records voor de geselecteerde periode."
 
 msgid "enable"
 msgstr "inschakelen"
@@ -4553,9 +4573,6 @@ msgstr "De service wordt gemaakt met de zichtbaarheid van Privé."
 msgid "Duplicate"
 msgstr "Dupliceer"
 
-msgid "Simple"
-msgstr "Eenvoudig"
-
 #, php-format
 msgid "%d service"
 msgid_plural "%d services"
@@ -4565,9 +4582,6 @@ msgstr[1] "%d diensten"
 #, php-format
 msgid "Copy of %s"
 msgstr "Kopie van %s"
-
-msgid "Bookly Cloud Zapier"
-msgstr "Bookly Cloud Zapier"
 
 #, php-format
 msgid ""
@@ -5364,6 +5378,28 @@ msgstr ""
 msgid "Sent successfully."
 msgstr "Succesvol verzonden."
 
+msgid "Voice Notifications"
+msgstr "Spraakmeldingen"
+
+msgid "Make a test call"
+msgstr "Doe een testoproep"
+
+msgid "Language"
+msgstr "Taal"
+
+msgid "Select the language of your notifications"
+msgstr "Selecteer de taal van uw meldingen"
+
+msgid "Busy"
+msgstr "Bezet"
+
+msgid "No answer"
+msgstr "Geen antwoord"
+
+#, php-format
+msgid "Calling %s"
+msgstr "Oproep aan %s"
+
 msgid "Default value for category select"
 msgstr "Standaardwaarde selectieveld categorie"
 
@@ -5503,8 +5539,8 @@ msgstr "Herladen"
 msgid "Thank you for registration."
 msgstr "Bedankt voor het registreren."
 
-msgid "You're almost ready to get started with Bookly SMS Service."
-msgstr "U bent bijna klaar om aan de slag te gaan met de Bookly SMS Service."
+msgid "You're almost ready to get started with Bookly Cloud."
+msgstr "U bent bijna klaar om aan de slag te gaan met Bookly Cloud."
 
 msgid ""
 "An email containing the confirmation code has been sent to your email "
@@ -6109,6 +6145,15 @@ msgstr "Alle niet bewaarde wijzigingen zullen verloren gaan."
 msgid "Don't save"
 msgstr "Niet bewaren"
 
+msgid "Voice"
+msgstr "Spraak"
+
+msgid "New voice notification"
+msgstr "Nieuwe spraakmelding"
+
+msgid "Edit voice notification"
+msgstr "Spraakmelding bewerken"
+
 msgid "Create service"
 msgstr "Voeg service toe"
 
@@ -6139,6 +6184,9 @@ msgstr ""
 
 msgid "Edit service"
 msgstr "Bewerk service"
+
+msgid "Simple"
+msgstr "Eenvoudig"
 
 msgid "Adjust the order of services in your booking form"
 msgstr "Pas de volgorde van diensten in uw boekingsformulier aan"
@@ -6269,32 +6317,42 @@ msgstr ""
 "verschijnen, moet u ze herstellen. Ga naar WPML, selecteer strings binnen %s "
 "domein, kies een vertaling, en klik op de knop \"Opslaan\"."
 
-msgid "This function is not available in the Bookly."
-msgstr "Deze functie is niet beschikbaar in Bookly."
+msgid "This is a Pro version feature"
+msgstr "Dit is een functie van de Pro-versie"
 
 msgid ""
-"You are using the free version of Bookly, so you can't add more than 5 "
-"services. To remove this limitation, get access to all Bookly features, "
-"lifetime free updates and 24/7 support, please upgrade to the Pro version of "
-"Bookly."
+"To get access to more features, lifetime free updates and 24/7 support, "
+"upgrade to the Pro version of Bookly."
 msgstr ""
-"U gebruikt de gratis versie van Bookly, dus u kunt niet meer dan 5 diensten "
-"toevoegen. Om deze beperking op te heffen, toegang te krijgen tot alle "
-"functies van Bookly, levenslange gratis updates en 24/7 ondersteuning te "
-"ontvangen, kunt u upgraden naar de Pro-versie van Bookly."
+"Om toegang te krijgen tot meer functies, levenslange gratis updates en 24/7 "
+"ondersteuning, upgrade u naar de Pro-versie van Bookly."
 
-msgid "For more information visit"
-msgstr "Voor meer informatie zie"
+msgid "Compatibility with Bookly add-ons"
+msgstr "Compatibiliteit met Bookly add-ons"
 
-msgid ""
-"You are using the free version of Bookly, so you can't add more than 1 staff."
-" To remove this limitation, get access to all Bookly features, lifetime free "
-"updates and 24/7 support, please upgrade to the Pro version of Bookly."
-msgstr ""
-"U gebruikt de gratis versie van Bookly, dus u kunt niet meer dan 1 "
-"medewerker toevoegen. Om deze beperking op te heffen, toegang te krijgen tot "
-"alle functies van Bookly, levenslange gratis updates en 24/7 ondersteuning "
-"te ontvangen, kunt u upgraden naar de Pro-versie van Bookly."
+msgid "Unlimited staff members"
+msgstr "Onbeperkt aantal personeelsleden"
+
+msgid "Unlimited services"
+msgstr "Onbeperkte services"
+
+msgid "Modern booking forms"
+msgstr "Moderne boekingsformulieren"
+
+msgid "Online meetings"
+msgstr "Online vergaderingen"
+
+msgid "WooCommerce compatibility"
+msgstr "WooCommerce compatibiliteit"
+
+msgid "Google Calendar integration"
+msgstr "Google Agenda integratie"
+
+msgid "Advanced service and staff management"
+msgstr "Geavanceerd service- en personeelsbeheer"
+
+msgid "Upgrade"
+msgstr "Upgrade"
 
 #, php-format
 msgid ""
@@ -6525,6 +6583,9 @@ msgstr "Verifiëren"
 
 msgid "Show more"
 msgstr "Laat meer zien"
+
+msgid "Your session has expired. Please press \"Ok\" to refresh the page"
+msgstr "Uw sessie is verlopen. Druk op \"Ok\" om de pagina te verversen."
 
 msgid "Session error."
 msgstr "Sessie-fout."
@@ -6996,6 +7057,30 @@ msgstr ""
 "{company_phone}\n"
 "{company_website}"
 
+msgid "Notification to customer about purchased gift card"
+msgstr "Melding aan klant over gekochte cadeaubon"
+
+msgid "Your gift card at"
+msgstr "Uw cadeaubon bij"
+
+msgid ""
+"Dear {client_name},\n"
+"\n"
+"This is a confirmation that the following Gift Card {gift_card} has been "
+"purchased at {company_name}.\n"
+"\n"
+"We are waiting for you at {company_address}."
+msgstr ""
+"Geachte {client_name},\n"
+"\n"
+"Dit is een bevestiging dat de volgende Cadeaubon {gift_card} is gekocht bij "
+"{company_name}.\n"
+"\n"
+"Wij wachten op u bij {company_address}."
+
+msgid "Thank you for choosing our company."
+msgstr "Bedankt dat u voor ons bedrijf heeft gekozen."
+
 msgid ""
 "Hello.\n"
 "An account was created for you at {site_address}\n"
@@ -7036,6 +7121,9 @@ msgstr "Toegepast"
 msgid "I will pay now with PayPal"
 msgstr "Ik betaal nu met Paypal"
 
+msgid "I will pay by gift card"
+msgstr "Ik betaal met een cadeaubon"
+
 msgid ""
 "You are not required to pay for the booked services, click Next to complete "
 "the booking process."
@@ -7067,6 +7155,18 @@ msgstr "Creditcard Nummer"
 
 msgid "Appointment"
 msgstr "Afspraak"
+
+msgid "This gift card has expired"
+msgstr "Deze cadeaubon is verlopen"
+
+msgid "This gift card cannot be used for the current order"
+msgstr "Deze cadeaubon kan niet worden gebruikt voor de huidige bestelling"
+
+msgid "Gift card balance is not enough"
+msgstr "Het saldo van de cadeaubon is niet voldoende"
+
+msgid "Gift card not found"
+msgstr "Cadeaubon niet gevonden"
 
 msgid "New customer's WordPress user login details"
 msgstr "Wordpress gebruiker login gegevens van nieuwe klant"
@@ -7123,11 +7223,26 @@ msgstr "Adres van de klant"
 msgid "Customer birthday"
 msgstr "Verjaardag klant"
 
-msgid "Online meetings"
-msgstr "Online vergaderingen"
+msgid "Balance"
+msgstr "Saldo"
+
+msgid "Active from"
+msgstr "Actief vanaf"
+
+msgid "Active until"
+msgstr "Actief tot"
+
+msgid "Min. appointments"
+msgstr "Min. afspraken"
+
+msgid "Max. appointments"
+msgstr "Max. aantal afspraken"
 
 msgid "New staff's WordPress user login details"
 msgstr "Inloggegevens WordPress-gebruiker van nieuw personeel"
+
+msgid "Notification about new gift card creation"
+msgstr "Melding over het aanmaken van nieuwe cadeaubon"
 
 msgid "License verification"
 msgstr "Licentie valideren"
@@ -7242,6 +7357,97 @@ msgstr "Niet gelukt om een online vergadering te maken"
 
 msgid "Print"
 msgstr "Printen"
+
+msgid "Gift Cards"
+msgstr "Cadeaubonnen"
+
+msgid "Add gift card series"
+msgstr "Cadeaubonreeks toevoegen"
+
+msgid "Add gift card"
+msgstr "Cadeaubon toevoegen"
+
+msgid "Gift card code"
+msgstr "Cadeaubon code"
+
+msgid "Show only active"
+msgstr "Toon alleen actieve"
+
+msgid "Export only active gift cards"
+msgstr "Alleen actieve cadeaubonnen exporteren"
+
+msgid "New gift cards series"
+msgstr "Nieuwe reeks cadeaubonnen"
+
+msgid "New gift card"
+msgstr "Nieuwe cadeaubon"
+
+msgid "Edit gift card"
+msgstr "Cadeaubon bewerken"
+
+msgid "Generate"
+msgstr "Genereer"
+
+msgid ""
+"You can enter a mask containing asterisks \"*\" for variables here and click "
+"Generate."
+msgstr ""
+"U kunt hier een masker invullen die sterretjes \"*\" bevat voor variabelen "
+"en dan op Genereer klikken."
+
+msgid "Mask"
+msgstr "Masker"
+
+msgid "Enter a mask containing asterisks \"*\" for variables."
+msgstr "Vul een masker in die sterretjes \"*\" voor variabelen bevat."
+
+msgid "Date limit (from and to)"
+msgstr "Datum limiet (van en tot)"
+
+msgid "No limit"
+msgstr "Geen limiet"
+
+msgid "Clear field"
+msgstr "Maak veld leeg"
+
+msgid "Limit appointments in cart (min and max)"
+msgstr "Limiet afspraken in mandje (min en max)"
+
+msgid ""
+"Specify minimum and maximum (optional) number of services of the same type "
+"required to apply a gift card."
+msgstr ""
+"Specificeer het minimum en maximum (optioneel) aantal services van hetzelfde "
+"type dat nodig is om een cadeaubon toe te passen."
+
+msgid "Create another gift card"
+msgstr "Maak nog een cadeaubon"
+
+msgid "No gift cards found."
+msgstr "Geen cadeaubonnen gevonden."
+
+msgid "Min appointments should be greater than zero."
+msgstr "Min afspraken moet groter zijn dan nul."
+
+msgid "Max appointments should be greater than zero."
+msgstr "Max afspraken moet groter zijn dan nul."
+
+msgid "The code already exists"
+msgstr "De code bestaat reeds"
+
+msgid "Please enter a non empty mask."
+msgstr "Voer een niet leeg masker in."
+
+#, php-format
+msgid ""
+"It is not possible to generate %d codes for this mask. Only %d codes "
+"available."
+msgstr ""
+"Het is niet mogelijk om %d codes te genereren voor dit masker. Alleen %d "
+"codes beschikbaar."
+
+msgid "All possible codes have already been generated for this mask."
+msgstr "Alle mogelijke codes zijn al gegenereerd voor dit masker."
 
 msgid "API Username"
 msgstr "API Gebruikersnaam"
@@ -7545,39 +7751,45 @@ msgstr ""
 msgid "To set up Facebook integration, do the following:"
 msgstr "Om Facebook integratie in te stellen, doe het volgende:"
 
-msgid ""
-"Follow the steps at <a href=\"https://developers.facebook."
-"com/docs/apps/register\" target=\"_blank\">https://developers.facebook."
-"com/docs/apps/register</a> to create a Developer Account, register and "
-"configure your <b>Facebook App</b>. Then you'll need to submit your app for "
-"review. Learn more about the review process and what's required to pass "
-"review in the <a href=\"https://developers.facebook.com/docs/facebook-"
-"login/review\" target=\"_blank\">Login Review Guide</a>."
-msgstr ""
-"Volg de stappen op <a href=\"https://developers.facebook."
-"com/docs/apps/register\" target=\"_blank\">https://developers.facebook."
-"com/docs/apps/register</a> om een Ontwikkelaarsaccount aan te maken, "
-"registreer en configureer uw <b>Facebook App</b>. Dan moet u uw app indienen "
-"ter beoordeling. Lees verder over het beoordelingsproces en wat er vereist "
-"is om voor de beoordeling te slagen in de <a href=\"https://developers."
-"facebook.com/docs/facebook-login/review\" target=\"_blank\">Inloggen "
-"Beoordelingsgids</a>."
+#, php-format
+msgid "Follow the steps at %s to create a Developer Account."
+msgstr "Volg de stappen bij %s om een Ontwikkelaarsaccount aan te maken."
 
 msgid ""
-"Below the App Details Panel click Add Platform button, select Website and "
-"enter your website URL."
+"In \"My apps\" section, press \"Create App\" button, select \"Consumer\" as "
+"the app type and provide the necessary information (App name, App contact "
+"email)."
 msgstr ""
-"Onder het App Details Paneel klik op Platform knop toevoegen, selecteer "
-"Website en voer uw website URL in."
+"Druk in de sectie \"Mijn apps\" op de knop \"App maken\", selecteer "
+"\"Consument\" als app-type en geef de nodige informatie (App-naam, App-"
+"contact e-mail)."
+
+msgid "Then click \"Create App\"."
+msgstr "Klik vervolgens op \"App aanmaken\"."
 
 msgid ""
-"Go to your App Dashboard. In the left side navigation panel of the App "
-"Dashboard, click Settings > Basic to view the App Details Panel with your "
-"App ID. Use it in the form below."
+"In \"Add products to your app\" section, find \"Facebook login\" and press "
+"\"Set up\"."
 msgstr ""
-"Ga naar uw App Dashboard. In het linker navigatie paneel van de App "
-"Dashboard, klik op Instellingen > Basis om het App Details Paneel met uw App "
-"ID te bekijken. Gebruik het in onderstaande formulier."
+"Zoek in de sectie \"Producten toevoegen aan uw app\" naar \"Facebook login\" "
+"en druk op \"Instellen\"."
+
+msgid "In the sidebar on the left, select \"Settings\"."
+msgstr "Selecteer in de zijbalk links \"Instellingen\"."
+
+msgid ""
+"Enable \"Login with the JavaScript SDK\" and enter your site URL in \"Allow "
+"Domains for the JavaScript SDK\". Click \"Save changes\"."
+msgstr ""
+"Schakel \"Inloggen met de JavaScript SDK\" in en voer de URL van uw site in "
+"bij \"Domeinen toestaan voor de JavaScript SDK\". Klik op \"Wijzigingen "
+"opslaan\"."
+
+msgid "At the top of your screen press on App ID to copy it."
+msgstr "Druk bovenaan uw scherm op App ID om het te kopiëren."
+
+msgid "Use it in the form below."
+msgstr "Gebruik het in het onderstaande formulier."
 
 msgid "App ID"
 msgstr "App ID"
@@ -7587,6 +7799,57 @@ msgstr "Selecteer wie Bookly afspraken kan beheren"
 
 msgid "Select who can administrate Bookly"
 msgstr "Selecteer wie Bookly kan beheren"
+
+#, php-format
+msgid ""
+"Go to the <a href=\"%s\" target=\"_blank\">Square Developer dashboard</a>."
+msgstr ""
+"Ga naar het <a href=\"%s\" target=\"_blank\">Square Developer dashboard</a>."
+
+msgid "Select an app or create a new one."
+msgstr "Selecteer een app of maak een nieuwe."
+
+msgid ""
+"Depending on the mode (Sandbox or Production), look for the <b>Application "
+"ID</b> and <b>Access token</b>."
+msgstr ""
+"Zoek, afhankelijk van de modus (Sandbox of Productie), naar de <b>Applicatie-"
+"ID</b> en <b>Toegangstoken</b>."
+
+msgid "Use them in the form below on this page."
+msgstr "Gebruik ze in het formulier hieronder op deze pagina."
+
+msgid "In the sidebar on the left, go to the <b>Webhooks > Subscriptions</b>."
+msgstr ""
+"Ga in de zijbalk aan de linkerkant naar de <b>Webhooks > Abonnementen</b>."
+
+#, php-format
+msgid ""
+"Depending on the mode (Sandbox or Production), press <b>Add subscription</b> "
+"button, enter the following URL as the destination for events %s and select "
+"%s in <b>Events</b>."
+msgstr ""
+"Afhankelijk van de modus (Sandbox of Productie), drukt u op de knop <b>"
+"Abonnement toevoegen</b>, voert u de volgende URL in als de bestemming voor "
+"evenementen %s en selecteert u %s in <b>Evenementen</b>."
+
+msgid "Click <b>Save</b>."
+msgstr "Klik op <b>Opslaan</b>."
+
+msgid "In the sidebar on the left, select <b>Locations</b>."
+msgstr "Selecteer in de linker zijbalk <b>Locaties</b>."
+
+msgid "Look for the necessary location and copy <b>Location ID</b>."
+msgstr "Zoek de benodigde locatie en kopieer <b>Locatie-ID</b>."
+
+msgid "Use it in the form below on this page."
+msgstr "Gebruik het in het formulier hieronder op deze pagina."
+
+msgid "Access token"
+msgstr "Toegangstoken"
+
+msgid "Location ID"
+msgstr "Locatie-ID"
 
 msgid ""
 "Upon providing the purchase code you will have access to free updates of "
@@ -7838,6 +8101,12 @@ msgstr "Het Geheim verkregen uit command return"
 msgid "Please select a Booking product"
 msgstr "Selecteer een Booking product"
 
+msgid "Extras titles"
+msgstr "Extra's titels"
+
+msgid "Extras total price"
+msgstr "Extra's totale prijs"
+
 msgid "Online meeting password"
 msgstr "Wachtwoord online vergadering"
 
@@ -8042,6 +8311,12 @@ msgstr "Pakket boeken gelukt"
 msgid "Custom CSS"
 msgstr "Aangepaste CSS"
 
+msgid "Save the appearance to apply changes."
+msgstr "Sla het uiterlijk op om de wijzigingen toe te passen."
+
+msgid "Changes saved."
+msgstr "Wijzigingen opgeslagen."
+
 msgid ""
 "Select the form you want to publish, click on the menu button, and select "
 "'Copy shortcode'. Open the page where you want to add the booking form in a "
@@ -8214,6 +8489,15 @@ msgstr "Geboortedatum klant volledige datum"
 msgid "Time zone of staff"
 msgstr "Tijdzone van personeelslid"
 
+msgid "Gift card amount"
+msgstr "Bedrag cadeubon"
+
+msgid "Gift card valid-from date"
+msgstr "Cadeaubon geldig vanaf datum"
+
+msgid "Gift card expiration date"
+msgstr "Vervaldatum cadeaubon"
+
 msgid "Appearance form name"
 msgstr "Uiterlijk formulier naam"
 
@@ -8275,9 +8559,6 @@ msgstr "Fout bij loskoppelen aankoop code."
 
 msgid "This calendar is already connected to another staff member"
 msgstr "Deze agenda is al verbonden met een ander personeelslid"
-
-msgid "Google Calendar integration"
-msgstr "Google Agenda integratie"
 
 #, php-format
 msgid "Please configure Google Calendar <a href=\"%s\">settings</a> first"
@@ -8963,18 +9244,6 @@ msgstr "Gebruikslimiet"
 msgid "Number of times used"
 msgstr "Aantal keer gebruikt"
 
-msgid "Active from"
-msgstr "Actief vanaf"
-
-msgid "Active until"
-msgstr "Actief tot"
-
-msgid "Min. appointments"
-msgstr "Min. afspraken"
-
-msgid "Max. appointments"
-msgstr "Max. aantal afspraken"
-
 msgid "Coupons"
 msgstr "Kortingsbonnen"
 
@@ -8986,9 +9255,6 @@ msgstr "Kortingsbon toevoegen"
 
 msgid "Coupon code"
 msgstr "Kortingscode"
-
-msgid "Show only active"
-msgstr "Toon alleen actieve"
 
 msgid "Export only active coupons"
 msgstr "Exporteer alleen actieve kortingsbonnen"
@@ -9002,22 +9268,6 @@ msgstr "Nieuwe kortingsbon"
 msgid "Edit coupon"
 msgstr "Kortingsbon bewerken"
 
-msgid "Generate"
-msgstr "Genereer"
-
-msgid ""
-"You can enter a mask containing asterisks \"*\" for variables here and click "
-"Generate."
-msgstr ""
-"U kunt hier een masker invullen die sterretjes \"*\" bevat voor variabelen "
-"en dan op Genereer klikken."
-
-msgid "Mask"
-msgstr "Masker"
-
-msgid "Enter a mask containing asterisks \"*\" for variables."
-msgstr "Vul een masker in die sterretjes \"*\" voor variabelen bevat."
-
 msgid "Once per customer"
 msgstr "Een per klant"
 
@@ -9026,18 +9276,6 @@ msgid ""
 msgstr ""
 "Selecteer deze optie om het gebruik van de kortingsbon te limiteren tot 1 "
 "keer per klant."
-
-msgid "Date limit (from and to)"
-msgstr "Datum limiet (van en tot)"
-
-msgid "No limit"
-msgstr "Geen limiet"
-
-msgid "Clear field"
-msgstr "Maak veld leeg"
-
-msgid "Limit appointments in cart (min and max)"
-msgstr "Limiet afspraken in mandje (min en max)"
 
 msgid ""
 "Specify minimum and maximum (optional) number of services of the same type "
@@ -9063,29 +9301,6 @@ msgstr "Korting moet tussen 0 en 100 liggen."
 
 msgid "Deduction should be a positive number."
 msgstr "Korting moet een positief getal zijn."
-
-msgid "Min appointments should be greater than zero."
-msgstr "Min afspraken moet groter zijn dan nul."
-
-msgid "Max appointments should be greater than zero."
-msgstr "Max afspraken moet groter zijn dan nul."
-
-msgid "The code already exists"
-msgstr "De code bestaat reeds"
-
-msgid "Please enter a non empty mask."
-msgstr "Voer een niet leeg masker in."
-
-#, php-format
-msgid ""
-"It is not possible to generate %d codes for this mask. Only %d codes "
-"available."
-msgstr ""
-"Het is niet mogelijk om %d codes te genereren voor dit masker. Alleen %d "
-"codes beschikbaar."
-
-msgid "All possible codes have already been generated for this mask."
-msgstr "Alle mogelijke codes zijn al gegenereerd voor dit masker."
 
 msgid "Default code mask"
 msgstr "Standaard code masker"
@@ -9489,12 +9704,6 @@ msgstr "Overzicht"
 msgid "Service Extras"
 msgstr "Dienst extra's"
 
-msgid "Extras titles"
-msgstr "Extra's titels"
-
-msgid "Extras total price"
-msgstr "Extra's totale prijs"
-
 msgid "Show title"
 msgstr "Toon titel"
 
@@ -9540,115 +9749,6 @@ msgstr "Min hoeveelheid mag niet groter zijn dan max hoeveelheid"
 msgid "Extras tax"
 msgstr "Extra belasting"
 
-msgid "This gift card has expired"
-msgstr "Deze cadeaubon is verlopen"
-
-msgid "This gift card cannot be used for the current order"
-msgstr "Deze cadeaubon kan niet worden gebruikt voor de huidige bestelling"
-
-msgid "Gift card balance is not enough"
-msgstr "Het saldo van de cadeaubon is niet voldoende"
-
-msgid "Gift card not found"
-msgstr "Cadeaubon niet gevonden"
-
-msgid "I will pay by gift card"
-msgstr "Ik betaal met een cadeaubon"
-
-msgid "Balance"
-msgstr "Saldo"
-
-msgid "Gift Cards"
-msgstr "Cadeaubonnen"
-
-msgid "Add Gift card Series"
-msgstr "Cadeaubonreeks toevoegen"
-
-msgid "Add Gift card"
-msgstr "Cadeaubon toevoegen"
-
-msgid "Gift code"
-msgstr "Cadeaucode"
-
-msgid "Export only active gift cards"
-msgstr "Alleen actieve cadeaubonnen exporteren"
-
-msgid "New gift cards series"
-msgstr "Nieuwe reeks cadeaubonnen"
-
-msgid "New gift card"
-msgstr "Nieuwe cadeaubon"
-
-msgid "Edit gift card"
-msgstr "Cadeaubon bewerken"
-
-msgid ""
-"Specify minimum and maximum (optional) number of services of the same type "
-"required to apply a gift card."
-msgstr ""
-"Specificeer het minimum en maximum (optioneel) aantal services van hetzelfde "
-"type dat nodig is om een cadeaubon toe te passen."
-
-msgid "Create another gift card"
-msgstr "Maak nog een cadeaubon"
-
-msgid "No gift cards found."
-msgstr "Geen cadeaubonnen gevonden."
-
-msgid "Gift card code"
-msgstr "Cadeaubon code"
-
-#, php-format
-msgid ""
-"Go to the <a href=\"%s\" target=\"_blank\">Square Developer dashboard</a>."
-msgstr ""
-"Ga naar het <a href=\"%s\" target=\"_blank\">Square Developer dashboard</a>."
-
-msgid "Select an app or create a new one."
-msgstr "Selecteer een app of maak een nieuwe."
-
-msgid ""
-"Depending on the mode (Sandbox or Production), look for the <b>Application "
-"ID</b> and <b>Access token</b>."
-msgstr ""
-"Zoek, afhankelijk van de modus (Sandbox of Productie), naar de <b>Applicatie-"
-"ID</b> en <b>Toegangstoken</b>."
-
-msgid "Use them in the form below on this page."
-msgstr "Gebruik ze in het formulier hieronder op deze pagina."
-
-msgid "In the sidebar on the left, go to the <b>Webhooks > Subscriptions</b>."
-msgstr ""
-"Ga in de zijbalk aan de linkerkant naar de <b>Webhooks > Abonnementen</b>."
-
-#, php-format
-msgid ""
-"Depending on the mode (Sandbox or Production), press <b>Add subscription</b> "
-"button, enter the following URL as the destination for events %s and select "
-"%s in <b>Events</b>."
-msgstr ""
-"Afhankelijk van de modus (Sandbox of Productie), drukt u op de knop <b>"
-"Abonnement toevoegen</b>, voert u de volgende URL in als de bestemming voor "
-"evenementen %s en selecteert u %s in <b>Evenementen</b>."
-
-msgid "Click <b>Save</b>."
-msgstr "Klik op <b>Opslaan</b>."
-
-msgid "In the sidebar on the left, select <b>Locations</b>."
-msgstr "Selecteer in de linker zijbalk <b>Locaties</b>."
-
-msgid "Look for the necessary location and copy <b>Location ID</b>."
-msgstr "Zoek de benodigde locatie en kopieer <b>Locatie-ID</b>."
-
-msgid "Use it in the form below on this page."
-msgstr "Gebruik het in het formulier hieronder op deze pagina."
-
-msgid "Access token"
-msgstr "Toegangstoken"
-
-msgid "Location ID"
-msgstr "Locatie-ID"
-
 msgid "Book More"
 msgstr "Boek Meer"
 
@@ -9688,9 +9788,6 @@ msgstr "Bewerk Status"
 
 msgid "Free/busy"
 msgstr "Vrij/bezet"
-
-msgid "Busy"
-msgstr "Bezet"
 
 msgid ""
 "If you select busy, then a customer with this status will occupy a place in "
@@ -9966,9 +10063,6 @@ msgstr ""
 "instellingen </a> van het dashboard op <b>Eindpunt toevoegen</b> om een "
 "formulier weer te geven om een nieuw eindpunt toe te voegen voor het "
 "ontvangen van gebeurtenissen."
-
-msgid "Session has expired. Please reload the page and try again"
-msgstr "Sessie is verlopen. Herlaad de pagina en probeer het opnieuw"
 
 msgid "Condition"
 msgstr "Voorwaarde"

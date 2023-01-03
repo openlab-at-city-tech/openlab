@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import {opt, laddaStart, scrollTo, booklyAjax} from './shared.js';
+import {opt, laddaStart, scrollTo, booklyAjax, requestCancellable} from './shared.js';
 import stepService from './service_step.js';
 import stepExtras from './extras_step.js';
 import stepRepeat from './repeat_step.js';
@@ -9,7 +9,6 @@ import stepDetails from './details_step.js';
 /**
  * Time step.
  */
-var xhr_render_time = null;
 export default function stepTime(params, error_message) {
     if (opt[params.form_id].no_time || opt[params.form_id].skip_steps.time) {
         if (!opt[params.form_id].skip_steps.extras && opt[params.form_id].step_extras == 'after_step_time' && !opt[params.form_id].no_extras) {
@@ -23,7 +22,6 @@ export default function stepTime(params, error_message) {
     }
     var data = {
             action: 'bookly_render_time',
-            csrf_token: BooklyL10n.csrf_token,
         },
         $container = opt[params.form_id].$container;
     if (opt[params.form_id].skip_steps.service && opt[params.form_id].use_client_time_zone) {
@@ -52,21 +50,11 @@ export default function stepTime(params, error_message) {
         return response;
     }
 
-    function dropAjax() {
-        if (xhr_render_time != null) {
-            xhr_render_time.abort();
-            xhr_render_time = null;
-        }
-    }
+    let requestRenderTime = requestCancellable(),
+        requestSessionSave = requestCancellable();
 
-    xhr_render_time = booklyAjax({
-        data: data,
-        success: function (response) {
-            if (response.success == false) {
-                // The session doesn't contain data.
-                stepService({form_id: params.form_id});
-                return;
-            }
+    requestRenderTime.booklyAjax({data})
+        .then(response => {
             BooklyL10n.csrf_token = response.csrf_token;
 
             $container.html(response.html);
@@ -119,7 +107,7 @@ export default function stepTime(params, error_message) {
                 opt[params.form_id].timeZone       = this.value;
                 opt[params.form_id].timeZoneOffset = undefined;
                 showSpinner();
-                dropAjax();
+                requestRenderTime.cancel();
                 stepTime({
                     form_id: params.form_id,
                     time_zone: opt[params.form_id].timeZone
@@ -162,7 +150,7 @@ export default function stepTime(params, error_message) {
                                 $time_next_button.toggle($screens.length != 1);
                             } else {
                                 // Load new data from server.
-                                dropAjax();
+                                requestRenderTime.cancel();
                                 stepTime({form_id: params.form_id, selected_date : date});
                                 showSpinner();
                             }
@@ -178,7 +166,7 @@ export default function stepTime(params, error_message) {
                             e.stopPropagation();
                             e.preventDefault();
                             date.setUTCMonth(date.getUTCMonth() + 1);
-                            dropAjax();
+                            requestRenderTime.cancel();
                             stepTime({form_id: params.form_id, selected_date: date.toJSON().substr(0, 10)});
                             showSpinner();
                         });
@@ -186,7 +174,7 @@ export default function stepTime(params, error_message) {
                             e.stopPropagation();
                             e.preventDefault();
                             date.setUTCMonth(date.getUTCMonth() - 1);
-                            dropAjax();
+                            requestRenderTime.cancel();
                             stepTime({form_id: params.form_id, selected_date: date.toJSON().substr(0, 10)});
                             showSpinner();
                         });
@@ -278,44 +266,39 @@ export default function stepTime(params, error_message) {
 
                         // Render Next Time
                         var data = {
-                                action     : 'bookly_render_next_time',
-                                csrf_token : BooklyL10n.csrf_token,
-                                form_id    : params.form_id,
-                                last_slot  : $button.val()
+                                action: 'bookly_render_next_time',
+                                form_id: params.form_id,
+                                last_slot: $button.val()
                             },
                             ladda = laddaStart(this);
 
                         booklyAjax({
-                            type : 'POST',
-                            data : data,
-                            success : function (response) {
-                                if (response.success) {
-                                    if (response.has_slots) { // if there are available time
-                                        has_more_slots = response.has_more_slots;
-                                        var slots_data = '';
-                                        $.each(prepareSlotsHtml(response.slots_data, response.selected_date), function(group, group_slots) {
-                                            slots_data += group_slots;
-                                        });
-                                        var $html = $(slots_data);
-                                        // The first slot is always a day slot.
-                                        // Check if such day slot already exists (this can happen
-                                        // because of time zone offset) and then remove the first slot.
-                                        var $first_day = $html.eq(0);
-                                        if ($('button.bookly-day[value="' + $first_day.attr('value') + '"]', $container).length) {
-                                            $html = $html.not(':first');
-                                        }
-                                        $columnizer.append($html);
-                                        initSlots();
-                                        $time_next_button.trigger('click');
-                                    } else { // no available time
-                                        $time_next_button.hide();
-                                    }
-                                } else { // no available time
-                                    $time_next_button.hide();
+                            type: 'POST',
+                            data: data
+                        }).then(response => {
+                            if (response.has_slots) { // if there are available time
+                                has_more_slots = response.has_more_slots;
+                                var slots_data = '';
+                                $.each(prepareSlotsHtml(response.slots_data, response.selected_date), function(group, group_slots) {
+                                    slots_data += group_slots;
+                                });
+                                var $html = $(slots_data);
+                                // The first slot is always a day slot.
+                                // Check if such day slot already exists (this can happen
+                                // because of time zone offset) and then remove the first slot.
+                                var $first_day = $html.eq(0);
+                                if ($('button.bookly-day[value="' + $first_day.attr('value') + '"]', $container).length) {
+                                    $html = $html.not(':first');
                                 }
-                                ladda.stop();
+                                $columnizer.append($html);
+                                initSlots();
+                                $time_next_button.trigger('click');
+                            } else { // no available time
+                                $time_next_button.hide();
                             }
-                        });
+                            ladda.stop();
+                        }).catch(response => { $time_next_button.hide(); ladda.stop(); });
+
                     }
                 });
 
@@ -465,18 +448,13 @@ export default function stepTime(params, error_message) {
                 });
 
                 // On click on a slot.
-                var xhr_session_save = null;
                 $('button.bookly-hour', $container).off('click').on('click', function (e) {
-                    if (xhr_session_save != null) {
-                        xhr_session_save.abort();
-                        xhr_session_save = null;
-                    }
+                    requestSessionSave.cancel();
                     e.stopPropagation();
                     e.preventDefault();
                     var $this = $(this),
                         data = {
                             action: 'bookly_session_save',
-                            csrf_token: BooklyL10n.csrf_token,
                             form_id: params.form_id,
                             slots: this.value
                         };
@@ -492,19 +470,18 @@ export default function stepTime(params, error_message) {
                         }
                     }
 
-                    xhr_session_save = booklyAjax({
-                        type : 'POST',
-                        data : data,
-                        success : function (response) {
-                            if(!opt[params.form_id].skip_steps.extras && opt[params.form_id].step_extras == 'after_step_time' && !opt[params.form_id].no_extras) {
-                                stepExtras({form_id: params.form_id});
-                            } else if (!opt[params.form_id].skip_steps.repeat && opt[params.form_id].recurrence_enabled) {
-                                stepRepeat({form_id: params.form_id});
-                            } else if (!opt[params.form_id].skip_steps.cart) {
-                                stepCart({form_id: params.form_id, add_to_cart : true, from_step : 'time'});
-                            } else {
-                                stepDetails({form_id: params.form_id, add_to_cart : true});
-                            }
+                    requestSessionSave.booklyAjax({
+                        type: 'POST',
+                        data: data
+                    }).then(response => {
+                        if (!opt[params.form_id].skip_steps.extras && opt[params.form_id].step_extras == 'after_step_time' && !opt[params.form_id].no_extras) {
+                            stepExtras({form_id: params.form_id});
+                        } else if (!opt[params.form_id].skip_steps.repeat && opt[params.form_id].recurrence_enabled) {
+                            stepRepeat({form_id: params.form_id});
+                        } else if (!opt[params.form_id].skip_steps.cart) {
+                            stepCart({form_id: params.form_id, add_to_cart: true, from_step: 'time'});
+                        } else {
+                            stepDetails({form_id: params.form_id, add_to_cart: true});
                         }
                     });
                 });
@@ -516,6 +493,6 @@ export default function stepTime(params, error_message) {
                     : $current_screen.height());
                 form_hidden = false;
             }
-        }
-    });
-}
+        })
+        .catch(response => { stepService({form_id: params.form_id}); })
+    }

@@ -2,9 +2,11 @@
 namespace Bookly\Lib;
 
 use Bookly\Lib\Notifications\Verification\Sender;
+use Bookly\Frontend\Modules\Booking\Proxy as BookingProxy;
 
 /**
  * Class Validator
+ *
  * @package Bookly\Lib
  */
 class Validator
@@ -59,9 +61,9 @@ class Validator
         $required = get_option( 'bookly_cst_required_birthday' );
 
         // Day
-        $day    = (int) $data['day'];
-        $month  = (int) $data['month'];
-        $year   = (int) $data['year'];
+        $day = (int) $data['day'];
+        $month = (int) $data['month'];
+        $year = (int) $data['year'];
 
         $last_day = (int) date( 't', strtotime( $year . '-' . $month . '-01' ) );
 
@@ -79,8 +81,8 @@ class Validator
         }
 
         // Year
-        $max_year  = (int) Slots\DatePoint::now()->format( 'Y' );
-        $min_year  = $max_year - 100;
+        $max_year = (int) Slots\DatePoint::now()->format( 'Y' );
+        $min_year = $max_year - 100;
 
         if ( $required && ( $year < $min_year || $year > $max_year ) ) {
             $this->errors[ $field_name . '_year' ] = Utils\Common::getTranslatedOption( 'bookly_l10n_required_year' );
@@ -209,7 +211,7 @@ class Validator
     public function postValidateCustomer( $data, UserBookingData $userData )
     {
         if ( empty ( $this->errors ) ) {
-            $user_id  = get_current_user_id();
+            $user_id = get_current_user_id();
             $customer = new Entities\Customer();
             if ( $user_id > 0 ) {
                 // Try to find customer by WP user ID.
@@ -217,7 +219,7 @@ class Validator
             }
             $verify_customer_details = get_option( 'bookly_cst_verify_customer_details', false );
             if ( ! $customer->isLoaded() ) {
-                $entity = Proxy\Pro::getCustomerByFacebookId( $userData->getFacebookId() );
+                $entity = BookingProxy\Pro::getCustomerByFacebookId( $userData->getFacebookId() );
                 if ( $entity ) {
                     $customer = $entity;
                 }
@@ -238,7 +240,7 @@ class Validator
                         if ( Config::showFirstLastName() ) {
                             $customer_data = array(
                                 'first_name' => $data['first_name'],
-                                'last_name'  => $data['last_name'],
+                                'last_name' => $data['last_name'],
                             );
                         } else {
                             $customer_data = array( 'full_name' => $data['full_name'] );
@@ -266,9 +268,9 @@ class Validator
                         }
                         foreach ( $fields as $field => $name ) {
                             if (
-                                $data[ $field ] != '' &&
-                                $current[ $field ] != '' &&
-                                $data[ $field ] != $current[ $field ]
+                                $data[ $field ] !== '' &&
+                                $current[ $field ] !== '' &&
+                                strcasecmp( $data[ $field ], $current[ $field ] ) !== 0
                             ) {
                                 $diff[] = $name;
                             }
@@ -316,7 +318,7 @@ class Validator
             }
 
             // Check "skip payment" custom groups settings
-            if ( Proxy\CustomerGroups::getSkipPayment( $customer ) ) {
+            if ( BookingProxy\CustomerGroups::getSkipPayment( $customer ) ) {
                 $this->errors['group_skip_payment'] = true;
             }
             // Check appointments limit
@@ -328,7 +330,7 @@ class Validator
                 }
 
                 $service = $cart_item->getService();
-                $slots   = $cart_item->getSlots();
+                $slots = $cart_item->getSlots();
 
                 $data[ $service->getId() ]['service'] = $service;
                 $data[ $service->getId() ]['dates'][] = $slots[0][2];

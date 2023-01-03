@@ -34,10 +34,10 @@ class SMS extends Base
     {
         if ( $this->api->getToken() ) {
             $data = array(
-                'message'            => $message,
+                'message' => $message,
                 'impersonal_message' => $impersonal_message,
-                'phone'              => $this->normalizePhoneNumber( $phone_number ),
-                'type'               => $type_id,
+                'phone' => self::normalizePhoneNumber( $phone_number ),
+                'type' => $type_id,
             );
             if ( $data['phone'] != '' ) {
                 $response = $this->api->sendPostRequest( self::SEND_SMS, $data );
@@ -91,7 +91,7 @@ class SMS extends Base
      * @param $phone_number
      * @return string
      */
-    public function normalizePhoneNumber( $phone_number )
+    public static function normalizePhoneNumber( $phone_number )
     {
         // Remove everything except numbers and "+".
         $phone_number = preg_replace( '/[^\d\+]/', '', $phone_number );
@@ -126,12 +126,12 @@ class SMS extends Base
             if ( $response ) {
                 array_walk( $response['list'], function( &$item ) {
                     $date_time = Utils\DateTime::UTCToWPTimeZone( $item['datetime'] );
-                    $item['date']    = Utils\DateTime::formatDate( $date_time );
-                    $item['time']    = Utils\DateTime::formatTime( $date_time );
+                    $item['date'] = Utils\DateTime::formatDate( $date_time );
+                    $item['time'] = Utils\DateTime::formatTime( $date_time );
                     $item['message'] = nl2br( preg_replace( '/([^\s]{50})+/U', '$1 ', htmlspecialchars( $item['message'] ) ) );
                     $item['phone']   = '+' . $item['phone'];
-                    $item['charge']  = rtrim( $item['charge'], '0' );
-                    $item['info']    = nl2br( htmlspecialchars( $item['info'] ) );
+                    $item['charge'] = $item['charge'] === null ? '' : rtrim( $item['charge'], '0' );
+                    $item['info'] = $item['info'] === null ? '' : nl2br( htmlspecialchars( $item['info'] ) );
                     switch ( $item['status'] ) {
                         case 1:
                         case 10:
@@ -357,9 +357,9 @@ class SMS extends Base
         $sms = $this;
 
         $this->api->listen( Events::ACCOUNT_PROFILE_LOADED, function ( $response ) use ( $sms ) {
-            if ( isset( $response['account']['sms'] ) ) {
-                $sms->sender_id = $response['account']['sms']['sender_id'];
-                $sms->setUndeliveredSmsCount( $response['account']['sms']['undelivered_count'] );
+            if ( isset( $response['account'][ Account::PRODUCT_SMS_NOTIFICATIONS ] ) ) {
+                $sms->sender_id = $response['account'][ Account::PRODUCT_SMS_NOTIFICATIONS ]['sender_id'];
+                $sms->setUndeliveredSmsCount( $response['account'][ Account::PRODUCT_SMS_NOTIFICATIONS ]['undelivered_count'] );
             } else {
                 $sms->setUndeliveredSmsCount( 0 );
             }

@@ -67,11 +67,8 @@ function initFacebookLogin(options) {
                         type: 'POST',
                         data: $.extend(userInfo, {
                             action: 'bookly_pro_facebook_login',
-                            csrf_token: BooklyL10n.csrf_token,
                             form_id: options.form_id
-                        }),
-                        success: function (response) {
-                        }
+                        })
                     });
                 });
             } else {

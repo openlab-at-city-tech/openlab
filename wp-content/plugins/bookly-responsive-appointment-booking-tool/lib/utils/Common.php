@@ -185,6 +185,17 @@ abstract class Common extends Lib\Base\Cache
                         } catch ( \Exception $e ) {
                         }
                     }
+
+                    try {
+                        foreach ( get_post_meta( $post->ID ) as $meta ) {
+                            if ( has_shortcode( $meta[0], $short_code ) ) {
+                                $result = true;
+                                break 2;
+                            }
+                        }
+                    } catch ( \Exception $e ) {
+                    }
+
                 }
             }
 
@@ -468,7 +479,6 @@ abstract class Common extends Lib\Base\Cache
         return $token;
     }
 
-
     /**
      * Get CSRF token.
      *
@@ -545,13 +555,13 @@ abstract class Common extends Lib\Base\Cache
     {
         $gateways = array();
         if ( Lib\Config::payLocallyEnabled()) {
-            $gateways['local'] = array(
+            $gateways[ Lib\Entities\Payment::TYPE_LOCAL ] = array(
                 'title' => __( 'Local', 'bookly' ),
             );
         }
 
-        if ( Lib\Cloud\API::getInstance()->account->productActive( 'stripe' ) ) {
-            $gateways['cloud_stripe'] = array(
+        if ( Lib\Cloud\API::getInstance()->account->productActive( Lib\Cloud\Account::PRODUCT_STRIPE ) ) {
+            $gateways[ Lib\Entities\Payment::TYPE_CLOUD_STRIPE ] = array(
                 'title' => 'Stripe Cloud',
             );
         }
@@ -559,7 +569,7 @@ abstract class Common extends Lib\Base\Cache
             return $gateway['title'];
         }, \Bookly\Backend\Modules\Appearance\Proxy\Shared::paymentGateways( $gateways ) );
 
-        $order = explode( ',', get_option( 'bookly_pmt_order' ) );
+        $order = Lib\Config::getGatewaysPreference();
         $payment_systems = array();
 
         if ( $order ) {

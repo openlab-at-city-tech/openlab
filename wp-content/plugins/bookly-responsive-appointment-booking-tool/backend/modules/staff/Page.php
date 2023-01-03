@@ -37,7 +37,7 @@ class Page extends Lib\Base\Component
             $category['attachment'] = Lib\Utils\Common::getAttachmentUrl( $category['attachment_id'], 'thumbnail' ) ?: null;
         }
 
-        $datatables = Lib\Utils\Tables::getSettings( 'staff_members' );
+        $datatables = Lib\Utils\Tables::getSettings( Lib\Utils\Tables::STAFF_MEMBERS );
 
         wp_localize_script( 'bookly-staff-list.js', 'BooklyL10n', array(
             'proRequired' => (int) ! Lib\Config::proActive(),

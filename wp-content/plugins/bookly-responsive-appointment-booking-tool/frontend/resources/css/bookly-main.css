@@ -216,8 +216,7 @@ button.bookly-square:active {
 
 .bookly-time-next,
 .bookly-time-prev {
-    width: 60px;
-    min-width: inherit;
+    min-width: 60px;
     height: 35px !important;
     padding: 0 5px !important;
 }
@@ -254,8 +253,8 @@ span.bookly-round {
 }
 
 .bookly-checkbox-group > input[type='checkbox'] {
-    width: 0!important;
-    height: 0!important;
+    width: 0 !important;
+    height: 0 !important;
     max-width: 0px !important;
     max-height: 0px !important;
     min-width: 0px !important;
@@ -263,8 +262,7 @@ span.bookly-round {
     opacity: 0;
 }
 
-.bookly-checkbox-group > input[type='checkbox']:focus + label > i
-{
+.bookly-checkbox-group > input[type='checkbox']:focus + label > i {
     border-radius: 3px;
     outline: 0;
     box-shadow: 0px 0px 1px 0px rgba(37, 0, 255, 1) inset;
@@ -406,10 +404,9 @@ span.bookly-round {
 }
 
 .bookly-service-step .bookly-week-days input[type='checkbox'],
-.bookly-repeat-step .bookly-week-days input[type='checkbox']
-{
-    width: 0!important;
-    height: 0!important;
+.bookly-repeat-step .bookly-week-days input[type='checkbox'] {
+    width: 0 !important;
+    height: 0 !important;
     max-width: 0px !important;
     max-height: 0px !important;
     min-width: 0px !important;
@@ -418,14 +415,12 @@ span.bookly-round {
 }
 
 .bookly-service-step .bookly-week-days input[type='checkbox']:checked + label,
-.bookly-repeat-step .bookly-week-days input[type='checkbox']:checked + label
-{
+.bookly-repeat-step .bookly-week-days input[type='checkbox']:checked + label {
     background: #f56530 url("../images/checkbox.png") 0 0 no-repeat;
 }
 
 .bookly-service-step .bookly-week-days input[type='checkbox']:focus + label,
-.bookly-repeat-step .bookly-week-days input[type='checkbox']:focus + label
-{
+.bookly-repeat-step .bookly-week-days input[type='checkbox']:focus + label {
     outline: 0;
     box-shadow: 0px 0px 1px 0px rgba(37, 0, 255, 1) inset;
 }
@@ -841,9 +836,9 @@ select.bookly-time-zone-switcher {
 
 /* pagination */
 .bookly-pagination {
-    display:flex;
-    padding-left:0;
-    list-style:none;
+    display: flex;
+    padding-left: 0;
+    list-style: none;
     margin: 0;
 }
 
@@ -854,10 +849,10 @@ select.bookly-time-zone-switcher {
 }
 
 .bookly-pagination li a {
-    position:relative;
-    display:block;
-    text-decoration:none;
-    border:1px solid #cccccc;
+    position: relative;
+    display: block;
+    text-decoration: none;
+    border: 1px solid #cccccc;
     width: 35px;
     height: 35px;
     line-height: 32px;
@@ -865,22 +860,22 @@ select.bookly-time-zone-switcher {
 }
 
 .bookly-pagination li a:focus {
-    z-index:3;
-    outline:0;
+    z-index: 3;
+    outline: 0;
 }
 
 .bookly-pagination li.active a {
-    color:#fff;
+    color: #fff;
 }
 
 .bookly-pagination li:first-child a {
-    border-top-left-radius:.25rem;
-    border-bottom-left-radius:.25rem
+    border-top-left-radius: .25rem;
+    border-bottom-left-radius: .25rem
 }
 
 .bookly-pagination li:last-child a {
-    border-top-right-radius:.25rem;
-    border-bottom-right-radius:.25rem
+    border-top-right-radius: .25rem;
+    border-bottom-right-radius: .25rem
 }
 
 .bookly-visible-sm {
@@ -1333,6 +1328,20 @@ label.bookly-square {
     left: auto !important;
 }
 
+.bookly-form .picker__header {
+    position: inherit;
+}
+
+.bookly-form .picker__nav--next {
+    position: inherit;
+    float: right;
+}
+
+.bookly-form .picker__nav--prev {
+    position: inherit;
+    float: left;
+}
+
 .bookly-form .picker:before,
 .bookly-form .picker:after {
     display: none !important;
@@ -1445,6 +1454,7 @@ label.bookly-square {
     -webkit-border-radius: 4px !important;
     -moz-border-radius: 4px !important;
     border-radius: 4px !important;
+    position: inherit;
 }
 
 .bookly-form .picker__day--today:before {
@@ -1465,7 +1475,7 @@ label.bookly-square {
 
 .bookly-form .picker__day--outfocus,
 .bookly-form .picker__day--disabled {
-    opacity: .5;
+    color: rgba(255, 255, 255, 0.5) !important;
     background: none !important;
 }
 
@@ -1474,18 +1484,21 @@ label.bookly-square {
 }
 
 .bookly-form .picker__nav--disabled {
-    display: none;
+    opacity: 0;
+    cursor: default;
 }
 
 .bookly-form .bookly-image-box {
     height: 298px;
     position: relative;
 }
+
 .bookly-form .bookly-image-box img {
     position: absolute;
     left: calc(50% - 149px);
     top: calc(50% - 149px);
 }
+
 .bookly-form .bookly-loading:before {
     content: '';
     position: absolute;
@@ -1599,8 +1612,7 @@ label.bookly-square {
 }
 
 /* Other */
-.bookly-form *:focus
-{
+.bookly-form *:focus {
     outline: 0;
     box-shadow: 0px 0px 1px 0px rgba(37, 0, 255, 1) inset;
 }

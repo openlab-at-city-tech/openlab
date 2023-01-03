@@ -1,7 +1,8 @@
 <?php if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
-use Bookly\Lib\Utils\Common;
+use Bookly\Frontend\Components\Payment\Gateway;
 use Bookly\Frontend\Modules\Booking\Proxy;
-
+use Bookly\Lib\Entities\Payment;
+use Bookly\Lib\Utils\Common;
 echo Common::stripScripts( $progress_tracker );
 Proxy\Coupons::renderPaymentStep( $userData );
 Proxy\Pro::renderPaymentStep( $userData );
@@ -22,7 +23,7 @@ Proxy\DepositPayments::renderPaymentStep( $userData );
 
     <?php if ( isset( $payment_options['local'] ) ) : ?>
         <div class="bookly-gateway-buttons pay-local bookly-box bookly-nav-steps">
-            <button class="bookly-back-step bookly-js-back-step bookly-btn ladda-button" data-style="zoom-in"  data-spinner-size="40">
+            <button class="bookly-back-step bookly-js-back-step bookly-btn ladda-button" data-style="zoom-in" data-spinner-size="40">
                 <span class="ladda-label"><?php echo Common::getTranslatedOption( 'bookly_l10n_button_back' ) ?></span>
             </button>
             <div class="<?php echo get_option( 'bookly_app_align_buttons_left' ) ? 'bookly-left' : 'bookly-right' ?>">
@@ -44,8 +45,8 @@ Proxy\DepositPayments::renderPaymentStep( $userData );
         </div>
     </div>
 
-    <?php if ( isset( $payment_options['cloud_stripe'] ) ) : ?>
-        <?php \Bookly\Frontend\Components\Payment\Gateway::renderForm( $form_id, \Bookly\Lib\Entities\Payment::TYPE_CLOUD_STRIPE, $page_url ) ?>
+    <?php if ( isset( $payment_options[ Payment::TYPE_CLOUD_STRIPE ] ) ) : ?>
+        <?php Gateway::renderForm( $form_id, Payment::TYPE_CLOUD_STRIPE, $page_url ) ?>
     <?php endif ?>
 
     <?php Proxy\Shared::renderPaymentForms( $form_id, $page_url ) ?>

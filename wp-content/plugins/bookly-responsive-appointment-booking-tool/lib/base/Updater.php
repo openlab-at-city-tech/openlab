@@ -281,4 +281,21 @@ abstract class Updater extends Schema
         }
     }
 
+    /**
+     * @param array $data
+     * @return void
+     */
+    protected function createTables( $data )
+    {
+        /** @global \wpdb $wpdb */
+        global $wpdb;
+
+        $charset_collate = $wpdb->has_cap( 'collation' )
+            ? $wpdb->get_charset_collate()
+            : 'DEFAULT CHARACTER SET = utf8 COLLATE = utf8_general_ci';
+
+        foreach ( $data as $table => $query ) {
+            $wpdb->query( sprintf( $query . ' ' . $charset_collate, $this->getTableName( $table ) ) );
+        }
+   }
 }

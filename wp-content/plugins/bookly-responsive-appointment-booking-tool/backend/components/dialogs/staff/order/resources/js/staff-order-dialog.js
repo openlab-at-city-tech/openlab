@@ -46,11 +46,7 @@ jQuery(function($) {
             list.push({id: id, full_name: $('.bookly-js-full_name', $(elem)).html()});
         });
 
-        $.post(ajaxurl, {
-                action: 'bookly_update_staff_positions',
-                staff: staff,
-                csrf_token: BooklyL10nGlobal.csrf_token
-            },
+        $.post(ajaxurl, booklySerialize.buildRequestData('bookly_update_staff_positions', {staff: staff}),
             function(response) {
                 if (response.success) {
                     $dialog.booklyModal('hide');

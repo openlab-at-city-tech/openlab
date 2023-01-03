@@ -7,6 +7,7 @@ use Bookly\Lib\Entities\CustomerAppointment;
 
 /**
  * Class Page
+ *
  * @package Bookly\Backend\Modules\Settings
  */
 class Page extends Lib\Base\Ajax
@@ -64,7 +65,7 @@ class Page extends Lib\Base\Ajax
                     update_option( 'bookly_pmt_currency', self::parameter( 'bookly_pmt_currency' ) );
                     update_option( 'bookly_pmt_price_format', self::parameter( 'bookly_pmt_price_format' ) );
                     update_option( 'bookly_pmt_local', self::parameter( 'bookly_pmt_local' ) );
-                    if ( Lib\Cloud\API::getInstance()->account->productActive( 'stripe' ) ) {
+                    if ( Lib\Cloud\API::getInstance()->account->productActive( Lib\Cloud\Account::PRODUCT_STRIPE ) ) {
                         update_option( 'bookly_cloud_stripe_enabled', self::parameter( 'bookly_cloud_stripe_enabled' ) );
                         update_option( 'bookly_cloud_stripe_timeout', self::parameter( 'bookly_cloud_stripe_timeout' ) );
                         update_option( 'bookly_cloud_stripe_increase', self::parameter( 'bookly_cloud_stripe_increase' ) );
@@ -109,6 +110,7 @@ class Page extends Lib\Base\Ajax
                     update_option( 'bookly_gen_prevent_caching', (int) self::parameter( 'bookly_gen_prevent_caching' ) );
                     update_option( 'bookly_gen_prevent_session_locking', (int) self::parameter( 'bookly_gen_prevent_session_locking' ) );
                     update_option( 'bookly_gen_badge_consider_news', (int) self::parameter( 'bookly_gen_badge_consider_news' ) );
+                    update_option( 'bookly_gen_session_type', self::parameter( 'bookly_gen_session_type' ) );
                     $alert['success'][] = __( 'Settings saved.', 'bookly' );
                     break;
                 case 'url': // URL settings form.
@@ -157,10 +159,10 @@ class Page extends Lib\Base\Ajax
                     update_option( 'bookly_logs_enabled', self::parameter( 'bookly_logs_enabled' ) );
                     $alert['success'][] = __( 'Settings saved.', 'bookly' );
                     break;
-                }
+            }
 
             // Let Add-ons save their settings.
-            $alert = Proxy\Shared::saveSettings( $alert, self::parameter( 'tab' ), self::postParameters() );
+            $alert = Proxy\Shared::saveSettings( $alert, self::parameter( 'tab' ), self::parameters() );
         }
 
         Proxy\Shared::enqueueAssets();
@@ -182,6 +184,8 @@ class Page extends Lib\Base\Ajax
             'datePicker' => Lib\Utils\DateTime::datePickerOptions(),
             'dateRange' => Lib\Utils\DateTime::dateRangeOptions( array( 'lastMonth' => __( 'Last month', 'bookly' ), ) ),
             'stripeCloudMetadata' => get_option( 'bookly_cloud_stripe_metadata', array() ),
+            'zeroRecords' => __( 'No records for selected period.', 'bookly' ),
+            'processing' => __( 'Processing...', 'bookly' ),
         ) );
         $values = array();
         foreach ( array( 2, 4, 5, 10, 12, 15, 20, 30, 45, 60, 90, 120, 180, 240, 360 ) as $duration ) {
@@ -252,7 +256,7 @@ class Page extends Lib\Base\Ajax
             'saturday',
         );
         $start_of_week = (int) get_option( 'start_of_week' );
-        for ( $i = 1; $i <= 7; $i ++ ) {
+        for ( $i = 1; $i <= 7; $i++ ) {
             $index = ( $start_of_week + $i ) < 8 ? $start_of_week + $i : $start_of_week + $i - 7;
             $day = $week_days[ $index ];
             $business_hours->addHours( $day, $index, get_option( 'bookly_bh_' . $day . '_start' ), get_option( 'bookly_bh_' . $day . '_end' ) );
@@ -266,17 +270,17 @@ class Page extends Lib\Base\Ajax
      */
     protected static function _getPayments()
     {
-        $payments     = array();
+        $payments = array();
         $payment_data = array(
             'local' => self::renderTemplate( '_payment_local', array(), false ),
         );
-        if ( Lib\Cloud\API::getInstance()->account->productActive( 'stripe' ) ) {
-            $payment_data['cloud_stripe'] = self::renderTemplate( '_cloud_stripe_settings', array(), false );
+        if ( Lib\Cloud\API::getInstance()->account->productActive( Lib\Cloud\Account::PRODUCT_STRIPE ) ) {
+            $payment_data[ Lib\Entities\Payment::TYPE_CLOUD_STRIPE ] = self::renderTemplate( '_cloud_stripe_settings', array(), false );
         }
 
         $payment_data = Proxy\Shared::preparePaymentGatewaySettings( $payment_data );
 
-        $order = explode( ',', get_option( 'bookly_pmt_order' ) );
+        $order = Lib\Config::getGatewaysPreference();
         foreach ( $order as $payment_system ) {
             if ( array_key_exists( $payment_system, $payment_data ) ) {
                 $payments[] = $payment_data[ $payment_system ];

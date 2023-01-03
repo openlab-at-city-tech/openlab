@@ -27,7 +27,7 @@ class Page extends Lib\Base\Component
                 'module' => array( 'js/cloud-billing.js' => array( 'bookly-backend-globals' ), ),
             ) );
 
-            $datatables = Lib\Utils\Tables::getSettings( 'cloud_purchases' );
+            $datatables = Lib\Utils\Tables::getSettings( Lib\Utils\Tables::CLOUD_PURCHASES );
 
             $invoice_data = Lib\Cloud\API::getInstance()->account->getInvoiceData();
 

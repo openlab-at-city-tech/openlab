@@ -7,7 +7,7 @@ use Bookly\Backend\Components\Controls\Buttons;
 ?>
 <div id="bookly-tbs" class="wrap">
     <div class="form-row align-items-center mb-3">
-        <h4 class="col m-0"><?php esc_html_e( 'Bookly Cloud Zapier', 'bookly' ) ?></h4>
+        <h4 class="col m-0">Zapier</h4>
         <?php Support\Buttons::render( $self::pageSlug() ) ?>
     </div>
     <div class="card mb-4">

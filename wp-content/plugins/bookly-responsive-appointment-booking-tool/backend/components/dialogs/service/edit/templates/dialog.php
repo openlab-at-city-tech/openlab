@@ -1,6 +1,5 @@
 <?php if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 use Bookly\Backend\Components\Controls\Buttons;
-use Bookly\Backend\Components\Controls\Inputs;
 use Bookly\Backend\Components\Dialogs\Service\Edit\Proxy;
 use Bookly\Lib;
 ?>
@@ -68,11 +67,9 @@ use Bookly\Lib;
                 </div>
                 <div class="modal-footer">
                     <span class="bookly-js-service-error text-danger float-left text-left"></span>
-                    <input type="hidden" name="action" value="bookly_update_service"/>
                     <input type="hidden" name="id"/>
                     <input type="hidden" name="type"/>
                     <input type="hidden" name="update_staff" value="0"/>
-                    <?php Inputs::renderCsrf() ?>
                     <?php Buttons::renderSubmit() ?>
                     <?php Buttons::renderCancel() ?>
                 </div>

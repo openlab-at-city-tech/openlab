@@ -81,16 +81,12 @@
             // Save services
             .on('click', '#bookly-services-save', function (e) {
                 e.preventDefault();
-                let ladda = Ladda.create(this),
-                    data = $services_form.serializeArray()
-                ;
-                data.push({name: 'action', value: 'bookly_update_staff_services'});
-                data.push({name: 'csrf_token', value: BooklyL10nGlobal.csrf_token});
+                let ladda = Ladda.create(this);
                 ladda.start();
                 $.ajax({
                     type: 'POST',
                     url: ajaxurl,
-                    data: data,
+                    data: booklySerialize.buildRequestDataFromForm('bookly_update_staff_services',$services_form),
                     dataType: 'json',
                     xhrFields: {withCredentials: true},
                     crossDomain: 'withCredentials' in new XMLHttpRequest(),

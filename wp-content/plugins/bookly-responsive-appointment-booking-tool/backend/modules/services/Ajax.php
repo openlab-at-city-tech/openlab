@@ -8,6 +8,7 @@ use Bookly\Lib;
 
 /**
  * Class Ajax
+ *
  * @package Bookly\Backend\Modules\Services
  */
 class Ajax extends Page
@@ -18,21 +19,20 @@ class Ajax extends Page
     public static function getServices()
     {
         $columns = self::parameter( 'columns' );
-        $order   = self::parameter( 'order', array() );
-        $filter  = self::parameter( 'filter' );
-        $limits  = array(
+        $order = self::parameter( 'order', array() );
+        $filter = self::parameter( 'filter' );
+        $limits = array(
             'length' => self::parameter( 'length' ),
-            'start'  => self::parameter( 'start' ),
+            'start' => self::parameter( 'start' ),
         );
 
         $query = Lib\Entities\Service::query( 's' )
             ->select( 's.*, c.name AS category_name' )
-            ->leftJoin( 'Category', 'c', 'c.id = s.category_id' )
-            ->whereIn( 's.type', array_keys( Proxy\Shared::prepareServiceTypes( array( Lib\Entities\Service::TYPE_SIMPLE => Lib\Entities\Service::TYPE_SIMPLE ) ) ) );
+            ->leftJoin( 'Category', 'c', 'c.id = s.category_id' );
 
         foreach ( $order as $sort_by ) {
             $query->sortBy( str_replace( '.', '_', $columns[ $sort_by['column'] ]['data'] ) )
-                  ->order( $sort_by['dir'] == 'desc' ? Lib\Query::ORDER_DESCENDING : Lib\Query::ORDER_ASCENDING );
+                ->order( $sort_by['dir'] == 'desc' ? Lib\Query::ORDER_DESCENDING : Lib\Query::ORDER_ASCENDING );
         }
 
         $total = $query->count();
@@ -76,15 +76,16 @@ class Ajax extends Page
         foreach ( $query->fetchArray() as $service ) {
             $sub_services_count = count( Lib\Entities\Service::find( $service['id'] )->getSubServices() );
             $data[] = array(
-                'id'            => $service['id'],
-                'title'         => $service['title'],
-                'position'      => sprintf( '%05d-%05d', $service['position'], $service['id'] ),
+                'id' => $service['id'],
+                'title' => $service['title'],
+                'position' => sprintf( '%05d-%05d', $service['position'], $service['id'] ),
                 'category_name' => $service['category_name'],
-                'colors'        => Proxy\Shared::prepareServiceColors( array_fill( 0, 3, $service['color'] ), $service['id'], $service['type'] ),
-                'type'          => ucfirst( $service['type'] ),
-                'type_icon'     => $type_icons[ $service['type'] ],
-                'price'         => Lib\Utils\Price::format( $service['price'] ),
-                'duration'      => in_array( $service['type'], array( Lib\Entities\Service::TYPE_COLLABORATIVE, Lib\Entities\Service::TYPE_COMPOUND ) )
+                'color' => $service['color'],
+                'type' => ucfirst( $service['type'] ),
+                'type_icon' => isset( $type_icons[ $service['type'] ] ) ? $type_icons[ $service['type'] ] : 'far fa-question-circle',
+                'disabled' => ! isset( $type_icons[ $service['type'] ] ),
+                'price' => Lib\Utils\Price::format( $service['price'] ),
+                'duration' => in_array( $service['type'], array( Lib\Entities\Service::TYPE_COLLABORATIVE, Lib\Entities\Service::TYPE_COMPOUND ) )
                     ? sprintf( _n( '%d service', '%d services', $sub_services_count, 'bookly' ), $sub_services_count )
                     : Lib\Utils\DateTime::secondsToInterval( $service['duration'] ),
                 'online_meetings' => $service['online_meetings'],
@@ -96,9 +97,9 @@ class Ajax extends Page
         Lib\Utils\Tables::updateSettings( 'services', $columns, $order, $filter );
 
         wp_send_json( array(
-            'draw'            => ( int ) self::parameter( 'draw' ),
-            'data'            => $data,
-            'recordsTotal'    => $total,
+            'draw' => ( int ) self::parameter( 'draw' ),
+            'data' => $data,
+            'recordsTotal' => $total,
             'recordsFiltered' => $filtered,
         ) );
     }
@@ -127,30 +128,18 @@ class Ajax extends Page
         ! Lib\Config::proActive() &&
         get_option( 'bookly_updated_from_legacy_version' ) != 'lite' &&
         Lib\Entities\Service::query()->count() > 4 &&
-        wp_send_json_error( array( 'message' => Limitation\Notice::forNewService() ) );
+        wp_send_json_error();
 
         $form = new Forms\Service();
-        $form->bind( self::postParameters() );
+        $form->bind( self::parameters() );
         $form->getObject()->setDuration( Lib\Config::getTimeSlotLength() );
         $service = $form->save();
 
         Proxy\Shared::serviceCreated( $service );
 
-        $sub_services_count = array_sum( array_map( function ( $sub_service ) {
-            /** @var Lib\Entities\Service $sub_service */
-            return (int) ( $sub_service->getType() == Lib\Entities\SubService::TYPE_SERVICE );
-        }, $service->getSubServices() ) );
-
         wp_send_json_success( array(
-            'id'       => $service->getId(),
-            'type'     => $service->getType(),
-            'title'    => $service->getTitle(),
-            'category' => $service->getCategoryId(),
-            'colors'   => Proxy\Shared::prepareServiceColors( array_fill( 0, 3, $service->getColor() ), $service->getId(), $service->getType() ),
-            'duration' => in_array( $service->getType(), array(
-                Lib\Entities\Service::TYPE_COLLABORATIVE,
-                Lib\Entities\Service::TYPE_COMPOUND,
-            ) ) ? sprintf( _n( '%d service', '%d services', $sub_services_count, 'bookly' ), $sub_services_count ) : Lib\Utils\DateTime::secondsToInterval( $service->getDuration() ),
+            'id' => $service->getId(),
+            'title' => $service->getTitle(),
         ) );
     }
 
@@ -189,14 +178,14 @@ class Ajax extends Page
 
             if ( $appointment ) {
                 $last_month = date_create( $appointment['start_date'] )->modify( 'last day of' )->format( 'Y-m-d' );
-                $action     = 'show_modal';
+                $action = 'show_modal';
                 $filter_url = sprintf( '%s#service=%d&appointment-date=%s-%s',
                     Lib\Utils\Common::escAdminUrl( Appointments\Page::pageSlug() ),
                     $appointment['service_id'],
                     date_create( current_time( 'mysql' ) )->format( 'Y-m-d' ),
                     $last_month );
                 wp_send_json_error( compact( 'action', 'filter_url' ) );
-            } else if ( $task = Lib\Entities\Appointment::query( 'a' )
+            } elseif ( $task = Lib\Entities\Appointment::query( 'a' )
                 ->select( 'a.service_id' )
                 ->leftJoin( 'CustomerAppointment', 'ca', 'ca.appointment_id = a.id' )
                 ->whereIn( 'a.service_id', $service_ids )
@@ -208,7 +197,7 @@ class Ajax extends Page
                 ->limit( 1 )
                 ->fetchRow()
             ) {
-                $action     = 'show_modal';
+                $action = 'show_modal';
                 $filter_url = sprintf( '%s#service=%d&tasks',
                     Lib\Utils\Common::escAdminUrl( Appointments\Page::pageSlug() ),
                     $task['service_id'] );
@@ -264,9 +253,9 @@ class Ajax extends Page
         ! Lib\Config::proActive() &&
         get_option( 'bookly_updated_from_legacy_version' ) != 'lite' &&
         Lib\Entities\Service::query()->count() > 4 &&
-        wp_send_json_error( array( 'message' => Limitation\Notice::forNewService() ) );
+        wp_send_json_error();
         $service_id = self::parameter( 'service_id' );
-        $service    = Lib\Entities\Service::find( $service_id );
+        $service = Lib\Entities\Service::find( $service_id );
         if ( $service ) {
             // Create copy of service
             $new_service = new Lib\Entities\Service( $service->getFields() );
@@ -289,7 +278,7 @@ class Ajax extends Page
             Proxy\Shared::duplicateService( $service->getId(), $new_service->getId() );
 
             wp_send_json_success( array(
-                'id'    => $new_service->getId(),
+                'id' => $new_service->getId(),
                 'title' => $new_service->getTitle(),
             ) );
         }

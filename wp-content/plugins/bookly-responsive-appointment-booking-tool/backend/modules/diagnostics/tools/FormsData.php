@@ -41,6 +41,6 @@ class FormsData extends Tool
         $form_id = self::parameter( 'form_id' );
         Session::destroyFormData( $form_id );
 
-        wp_send_json_error();
+        wp_send_json_success();
     }
 }

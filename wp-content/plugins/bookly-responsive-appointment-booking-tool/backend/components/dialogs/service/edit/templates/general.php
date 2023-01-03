@@ -4,11 +4,11 @@ use Bookly\Lib\Entities\Service;
 /**
  * @var array $service
  * @var array $categories_collection
- * @var array $service_collection
+ * @var array $simple_services
  * @var array $staff_dropdown_data
+ * @var array $staff_ids
  */
 $service_id = $service['id'];
-$assigned_staff_ids = $service['staff_ids'] ? explode( ',', $service['staff_ids'] ) : array();
 ?>
 <div class="bookly-js-service-general-container">
     <input type="hidden" name="attachment_id" value="<?php echo esc_attr( $service['attachment_id'] ) ?>">
@@ -67,10 +67,10 @@ $assigned_staff_ids = $service['staff_ids'] ? explode( ',', $service['staff_ids'
     <?php Proxy\Pro::renderVisibility( $service ) ?>
     <?php Proxy\CustomerGroups::renderSubForm( $service ) ?>
     <?php if ( $service['type'] == Service::TYPE_COLLABORATIVE ) : ?>
-        <?php Proxy\CollaborativeServices::renderSubForm( $service, $service_collection ) ?>
+        <?php Proxy\CollaborativeServices::renderSubForm( $service, $simple_services ) ?>
     <?php endif ?>
     <?php if ( $service['type'] == Service::TYPE_COMPOUND ) : ?>
-        <?php Proxy\CompoundServices::renderSubForm( $service, $service_collection ) ?>
+        <?php Proxy\CompoundServices::renderSubForm( $service, $simple_services ) ?>
     <?php endif ?>
     <div class="form-group">
         <label for="bookly_service_price" class="bookly-js-price-label"><?php esc_html_e( 'Price', 'bookly' ) ?></label>
@@ -81,7 +81,7 @@ $assigned_staff_ids = $service['staff_ids'] ? explode( ',', $service['staff_ids'
         <?php Proxy\DepositPayments::renderDeposit( $service ) ?>
     <?php endif ?>
     <?php if ( $service['type'] == Service::TYPE_PACKAGE ) : ?>
-        <?php Proxy\Packages::renderSubForm( $service, $service_collection ) ?>
+        <?php Proxy\Packages::renderSubForm( $service, $simple_services ) ?>
     <?php endif ?>
     <?php if ( $service['type'] == Service::TYPE_SIMPLE || $service['type'] == Service::TYPE_PACKAGE ) : ?>
         <div id="bookly-js-service-providers">
@@ -99,7 +99,7 @@ $assigned_staff_ids = $service['staff_ids'] ? explode( ',', $service['staff_ids'
                                     <li
                                             data-input-name="staff_ids[]"
                                             data-value="<?php echo esc_attr( $staff['id'] ) ?>"
-                                            data-selected="<?php echo (int) in_array( $staff['id'], $assigned_staff_ids ) ?>"
+                                            data-selected="<?php echo (int) in_array( $staff['id'], $staff_ids ) ?>"
                                     >
                                         <?php echo esc_html( $staff['full_name'] ) ?>
                                     </li>

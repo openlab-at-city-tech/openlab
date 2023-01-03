@@ -27,7 +27,7 @@ class Ajax extends Lib\Base\Ajax
             'errors' => array(),
         );
 
-        $params = self::postParameters();
+        $params = self::parameters();
 
         // Check for errors.
         if ( get_option( 'bookly_cst_first_last_name' ) ) {

@@ -109,17 +109,17 @@ class Ajax extends Lib\Base\Ajax
             wp_die( 'Bookly: ' . __( 'You do not have sufficient permissions to access this page.' ) );
         }
 
-        $params = self::postParameters();
-        if ( ! isset( $params['category_id'] ) || ! $params['category_id'] ) {
-            $params['category_id'] = null;
+        $parameters = self::parameters();
+        if ( ! isset( $parameters['category_id'] ) || ! $parameters['category_id'] ) {
+            $parameters['category_id'] = null;
         }
-        self::$staff->setFields( $params );
+        self::$staff->setFields( $parameters );
         $data = array( 'alerts' => array( 'error' => array() ) );
-        $data = Proxy\Shared::preUpdateStaffDetails( $data, self::$staff, $params );
+        $data = Proxy\Shared::preUpdateStaffDetails( $data, self::$staff, $parameters );
         if ( empty( $data['alerts']['error'] ) ) {
             self::$staff->save();
 
-            Proxy\Shared::updateStaffDetails( self::$staff, $params );
+            Proxy\Shared::updateStaffDetails( self::$staff, $parameters );
             $staff = self::$staff->getFields();
             $staff['full_name'] = esc_html( $staff['full_name'] );
             wp_send_json_success( array( 'staff' => $staff ) );
@@ -149,10 +149,10 @@ class Ajax extends Lib\Base\Ajax
     public static function updateStaffServices()
     {
         $form = new Forms\StaffServices();
-        $form->bind( self::postParameters() );
+        $form->bind( self::parameters() );
         $form->save();
 
-        Proxy\Shared::updateStaffServices( self::postParameters() );
+        Proxy\Shared::updateStaffServices( self::parameters() );
 
         wp_send_json_success();
     }
@@ -174,10 +174,10 @@ class Ajax extends Lib\Base\Ajax
     public static function updateStaffSchedule()
     {
         $form = new Forms\StaffSchedule();
-        $form->bind( self::postParameters() );
+        $form->bind( self::parameters() );
         $form->save();
 
-        Proxy\Shared::updateStaffSchedule( self::postParameters() );
+        Proxy\Shared::updateStaffSchedule( self::parameters() );
 
         wp_send_json_success();
     }

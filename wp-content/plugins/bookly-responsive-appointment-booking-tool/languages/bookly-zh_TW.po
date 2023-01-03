@@ -8,11 +8,11 @@ msgstr ""
 "Language: zh_TW\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-20 08:25+0000\n"
-"PO-Revision-Date: 2022-09-20 16:37+0000\n"
-"Last-Translator: support@bookly.info\n"
+"POT-Creation-Date: 2022-12-14 12:45+0000\n"
+"PO-Revision-Date: 2022-12-15 03:38+0000\n"
+"Last-Translator: Wina H <chillhchill@gmail.com>\n"
 "Language-Team: Chinese (Taiwan)\n"
-"X-Loco-Version: 2.3.1; wp-6.0"
+"X-Loco-Version: 2.3.1; wp-6.1"
 
 msgid "Invoice #{invoice_number} for your appointment"
 msgstr "您預約的發票＃{invoice_number}"
@@ -74,14 +74,6 @@ msgstr "我們感謝你！"
 
 msgid "Download invoice"
 msgstr "下載發票"
-
-msgid ""
-"Invoices add-on requires your customers address information. So options "
-"\"Make address field mandatory\" in Settings/Customers and \"Show address "
-"field\" in Appearance/Details are activated automatically and can be "
-"disabled after Invoices add-on is deactivated."
-msgstr ""
-"發票插件需要您的客戶地址。因此，在設置/客戶中的\"將地址字段設為必填項\"和外觀/詳細信息中的\"顯示地址字段\"選項將自動激活，並且可以在停用發票插件後將中止。"
 
 msgid "Invoice due days"
 msgstr "發票到期日期"
@@ -659,14 +651,19 @@ msgstr "可在設置 > 觀眾姓名和感興趣觀眾的活動預設值中找到
 msgid "Fields matching"
 msgstr "欄位匹配"
 
+msgid ""
+"Enter the tags of the fields in your Mailchimp audience settings in "
+"accordance with Bookly data."
+msgstr "根據Bookly資料在您的Mailchimp觀眾設定中輸入欄位的標籤。"
+
 #, php-format
 msgid ""
-"Enter the names of the fields in your Mailchimp audience settings in "
-"accordance with Bookly data. You can find these names in <b>Audience "
-"settings > Audience fields and %s tags</b> in your Mailchimp account"
-msgstr ""
-"根據Bookly資料輸入您的Mailchimp觀眾設置中的欄位名稱。您可在您的Mailchimp帳戶中的<b>觀眾設置 > 觀眾欄位和%s標籤</b>"
-"中找到這些名稱"
+"You can find these tags in <b>Audience settings > Audience fields and %s "
+"tags</b> in your Mailchimp account"
+msgstr "您可以在Mailchimp賬戶中的<b>觀眾設定 > 觀眾欄位和%s標籤</b>中找到這些標籤"
+
+msgid "Tag"
+msgstr "標籤"
 
 msgid "Value"
 msgstr "值"
@@ -2158,6 +2155,13 @@ msgid_plural " and %d more items"
 msgstr[0] "和 %d 項目"
 msgstr[1] ""
 
+msgid "Phone number is empty."
+msgstr "沒有輸入電話號碼。"
+
+#, php-format
+msgid "%d min"
+msgstr "%d 分"
+
 msgid "Bookly Cloud couldn't connect to your server."
 msgstr "Bookly雲端無法連接您的伺服器。"
 
@@ -2246,9 +2250,6 @@ msgstr "您的Bookly雲端餘額不足，無法發送此消息。請向您的餘
 
 msgid "Failed to send SMS."
 msgstr "傳送SMS短訊失敗。"
-
-msgid "Phone number is empty."
-msgstr "沒有輸入電話號碼。"
 
 msgid "Queued"
 msgstr "排列"
@@ -2637,6 +2638,12 @@ msgstr "向客戶發送帶驗證碼的通知"
 
 msgid "Bookly verification code"
 msgstr "Bookly驗證碼"
+
+msgid "&lt;"
+msgstr "<"
+
+msgid "&gt;"
+msgstr ">"
 
 msgid "Download ICS"
 msgstr "下載ICS"
@@ -3154,10 +3161,6 @@ msgstr[1] ""
 msgid "%d h"
 msgstr "%d 小時"
 
-#, php-format
-msgid "%d min"
-msgstr "%d 分"
-
 msgid "From"
 msgstr "由"
 
@@ -3260,6 +3263,9 @@ msgstr "國家"
 msgid "Code"
 msgstr "代碼"
 
+msgid "Price/Minute"
+msgstr "價格/分鐘"
+
 msgid "Regular price"
 msgstr "正常價格"
 
@@ -3323,6 +3329,11 @@ msgid ""
 "will be permanently deleted"
 msgstr "請注意，在刪除這個Bookly項目時，所有與之相關的數據將被永久刪除"
 
+msgid ""
+"To save data, please set \"Don't delete\" in Bookly Settings > General > "
+"Bookly data upon deleting Bookly items"
+msgstr "如需保存數據，請在刪除Bookly項時，在Bookly Settings > 常規 > Bookly數據中設置\"不刪除\""
+
 #, php-format
 msgid "%s updated"
 msgstr "%s已升級"
@@ -3337,7 +3348,7 @@ msgstr "沒有更新"
 msgid "Free"
 msgstr "空閒"
 
-msgid "Gift Card"
+msgid "Gift card"
 msgstr "禮品卡"
 
 msgid "Completed"
@@ -3662,6 +3673,12 @@ msgid ""
 "caching plugins by adding a DONOTCACHEPAGE constant on pages with booking "
 "form"
 msgstr "如果您希望Bookly通過在預約表格的頁面上添加DONOTCACHEPAGE常量來防止第三方緩存插件進行緩存，請選擇“啟用”"
+
+msgid "Session storage mode"
+msgstr "會話存儲模式"
+
+msgid "Select where to store session data"
+msgstr "選擇存儲會話數據的位置"
 
 msgid "Prevent PHP session locking"
 msgstr "防止PHP會話鎖定"
@@ -4042,6 +4059,9 @@ msgstr "用分隔符號循環參與者列表"
 msgid "Last month"
 msgstr "上個月"
 
+msgid "No records for selected period."
+msgstr "沒有記錄時間選擇。"
+
 msgid "SMS Notifications"
 msgstr "SMS 短信通知"
 
@@ -4125,9 +4145,6 @@ msgstr "發件人ID發送請求。"
 
 msgid "Sender ID is reset to default."
 msgstr "發件人ID被重置為默認值。"
-
-msgid "No records for selected period."
-msgstr "沒有記錄時間選擇。"
 
 msgid "enable"
 msgstr "啟用"
@@ -4249,9 +4266,6 @@ msgstr "將在\"私人\"的可見性下創建該服務。"
 msgid "Duplicate"
 msgstr "重覆"
 
-msgid "Simple"
-msgstr "簡單"
-
 #, php-format
 msgid "%d service"
 msgid_plural "%d services"
@@ -4261,9 +4275,6 @@ msgstr[1] ""
 #, php-format
 msgid "Copy of %s"
 msgstr "%s的副本"
-
-msgid "Bookly Cloud Zapier"
-msgstr "Bookly雲端Zapier"
 
 #, php-format
 msgid ""
@@ -4973,6 +4984,28 @@ msgstr "設置系統嘗試向用戶傳遞通知的時間。期限到期後，通
 msgid "Sent successfully."
 msgstr "成功發送。"
 
+msgid "Voice Notifications"
+msgstr "語音通知"
+
+msgid "Make a test call"
+msgstr "打一個測試電話"
+
+msgid "Language"
+msgstr "語言"
+
+msgid "Select the language of your notifications"
+msgstr "選擇通知的語言"
+
+msgid "Busy"
+msgstr "忙碌"
+
+msgid "No answer"
+msgstr "無應答"
+
+#, php-format
+msgid "Calling %s"
+msgstr "撥打%s"
+
 msgid "Default value for category select"
 msgstr "分類選擇的預設值"
 
@@ -5099,8 +5132,8 @@ msgstr "充值"
 msgid "Thank you for registration."
 msgstr "感謝您的註冊。"
 
-msgid "You're almost ready to get started with Bookly SMS Service."
-msgstr "你快將完成，準備使用Bookly 短訊服務。"
+msgid "You're almost ready to get started with Bookly Cloud."
+msgstr "您差不多準備好開始使用Bookly雲端服務了。"
 
 msgid ""
 "An email containing the confirmation code has been sent to your email "
@@ -5661,6 +5694,15 @@ msgstr "所有未保存的更改將丟失。"
 msgid "Don't save"
 msgstr "不要儲存"
 
+msgid "Voice"
+msgstr "語音"
+
+msgid "New voice notification"
+msgstr "新語音通知"
+
+msgid "Edit voice notification"
+msgstr "編輯語音通知"
+
 msgid "Create service"
 msgstr "建立服務"
 
@@ -5684,6 +5726,9 @@ msgstr "在時間步中，為服務建立的時段將成為一步。該設置將
 
 msgid "Edit service"
 msgstr "編輯服務"
+
+msgid "Simple"
+msgstr "簡單"
 
 msgid "Adjust the order of services in your booking form"
 msgstr "在您的預訂表格中調整服務次序"
@@ -5800,26 +5845,40 @@ msgid ""
 msgstr ""
 "如果您使用WPML，並注意到有些翻譯沒有在前端顯示，則您將需要恢復它們。前往WPML，在%s域中選擇字符串，選擇任何翻譯，然後點擊“保存”按鈕。"
 
-msgid "This function is not available in the Bookly."
-msgstr "此功能在Bookly中不可用。"
+msgid "This is a Pro version feature"
+msgstr "這是專業版功能"
 
 msgid ""
-"You are using the free version of Bookly, so you can't add more than 5 "
-"services. To remove this limitation, get access to all Bookly features, "
-"lifetime free updates and 24/7 support, please upgrade to the Pro version of "
-"Bookly."
-msgstr ""
-"您正在使用Bookly免費版，因此您無法添加超過5項服務。要移除該限制並獲取所有Bookly功能、終身免費更新和24小時支持，請更新至Bookly專業版。"
+"To get access to more features, lifetime free updates and 24/7 support, "
+"upgrade to the Pro version of Bookly."
+msgstr "要獲得更多功能，終身免費更新和24/7客服支援，請升級到Bookly專業版。"
 
-msgid "For more information visit"
-msgstr "欲了解更多信息，請訪問"
+msgid "Compatibility with Bookly add-ons"
+msgstr "與Bookly插件的兼容性"
 
-msgid ""
-"You are using the free version of Bookly, so you can't add more than 1 staff."
-" To remove this limitation, get access to all Bookly features, lifetime free "
-"updates and 24/7 support, please upgrade to the Pro version of Bookly."
-msgstr ""
-"您正在使用Bookly免費版，因此您無法添加超過1名員工。要移除該限制並獲取所有Bookly功能、終身免費更新和24小時支持，請更新至Bookly專業版。"
+msgid "Unlimited staff members"
+msgstr "無限制員工"
+
+msgid "Unlimited services"
+msgstr "無限制服務"
+
+msgid "Modern booking forms"
+msgstr "現代預約表單"
+
+msgid "Online meetings"
+msgstr "網上會議"
+
+msgid "WooCommerce compatibility"
+msgstr "WooCommerce兼容性"
+
+msgid "Google Calendar integration"
+msgstr "Google日曆整合"
+
+msgid "Advanced service and staff management"
+msgstr "高級服務和員工管理"
+
+msgid "Upgrade"
+msgstr "升級"
 
 #, php-format
 msgid ""
@@ -6023,6 +6082,9 @@ msgstr "驗證"
 
 msgid "Show more"
 msgstr "顯示更多"
+
+msgid "Your session has expired. Please press \"Ok\" to refresh the page"
+msgstr "您的會話已過期。請按\"好的\"刷新頁面"
 
 msgid "Session error."
 msgstr "訪問時段錯誤。"
@@ -6483,6 +6545,29 @@ msgstr ""
 "{company_phone}\n"
 "{company_website}"
 
+msgid "Notification to customer about purchased gift card"
+msgstr "關於客戶購買禮品卡的通知"
+
+msgid "Your gift card at"
+msgstr "您的禮品卡在"
+
+msgid ""
+"Dear {client_name},\n"
+"\n"
+"This is a confirmation that the following Gift Card {gift_card} has been "
+"purchased at {company_name}.\n"
+"\n"
+"We are waiting for you at {company_address}."
+msgstr ""
+"親愛的{client_name}，\n"
+"\n"
+"此為確認已在{company_name}購買如下禮品卡{gift_card}。\n"
+"\n"
+"我們在{company_address}等著您。"
+
+msgid "Thank you for choosing our company."
+msgstr "感謝您選擇我們公司。"
+
 msgid ""
 "Hello.\n"
 "An account was created for you at {site_address}\n"
@@ -6525,6 +6610,9 @@ msgstr "已應用"
 msgid "I will pay now with PayPal"
 msgstr "我會現在使用Paypal支付"
 
+msgid "I will pay by gift card"
+msgstr "我將用禮品卡支付"
+
 msgid ""
 "You are not required to pay for the booked services, click Next to complete "
 "the booking process."
@@ -6552,6 +6640,18 @@ msgstr "信用卡號碼"
 
 msgid "Appointment"
 msgstr "預約"
+
+msgid "This gift card has expired"
+msgstr "該禮品卡已過期"
+
+msgid "This gift card cannot be used for the current order"
+msgstr "該禮品卡無法用於當前訂單"
+
+msgid "Gift card balance is not enough"
+msgstr "禮品卡餘額不足"
+
+msgid "Gift card not found"
+msgstr "未找到禮品卡"
 
 msgid "New customer's WordPress user login details"
 msgstr "新客戶的WordPress用戶登錄詳細信息"
@@ -6603,11 +6703,26 @@ msgstr "自定地址"
 msgid "Customer birthday"
 msgstr "客戶生日日期"
 
-msgid "Online meetings"
-msgstr "網上會議"
+msgid "Balance"
+msgstr "餘額"
+
+msgid "Active from"
+msgstr "有效於"
+
+msgid "Active until"
+msgstr "有效至"
+
+msgid "Min. appointments"
+msgstr "最少預約"
+
+msgid "Max. appointments"
+msgstr "最多預約"
 
 msgid "New staff's WordPress user login details"
 msgstr "新員工的WordPress用戶登入詳情"
+
+msgid "Notification about new gift card creation"
+msgstr "關於新禮品卡創建的通知"
 
 msgid "License verification"
 msgstr "許可證驗證"
@@ -6699,6 +6814,91 @@ msgstr "創建線上會議失敗"
 
 msgid "Print"
 msgstr "打印"
+
+msgid "Gift Cards"
+msgstr "禮品卡"
+
+msgid "Add gift card series"
+msgstr "添加禮品卡系列"
+
+msgid "Add gift card"
+msgstr "添加禮品卡"
+
+msgid "Gift card code"
+msgstr "禮品卡碼"
+
+msgid "Show only active"
+msgstr "僅顯示活躍"
+
+msgid "Export only active gift cards"
+msgstr "僅匯出有效禮品卡"
+
+msgid "New gift cards series"
+msgstr "新禮品卡系列"
+
+msgid "New gift card"
+msgstr "新禮品卡"
+
+msgid "Edit gift card"
+msgstr "編輯禮品卡"
+
+msgid "Generate"
+msgstr "生成"
+
+msgid ""
+"You can enter a mask containing asterisks \"*\" for variables here and click "
+"Generate."
+msgstr "您可以在此處輸入包含星號 \"*\"作為數值的掩碼，然後按進行。"
+
+msgid "Mask"
+msgstr "掩蓋"
+
+msgid "Enter a mask containing asterisks \"*\" for variables."
+msgstr "輸入包含星號\"*\"作為變量的掩碼。"
+
+msgid "Date limit (from and to)"
+msgstr "日期限制（從和到）"
+
+msgid "No limit"
+msgstr "沒有限制"
+
+msgid "Clear field"
+msgstr "清除字段"
+
+msgid "Limit appointments in cart (min and max)"
+msgstr "限制購物車中的預約（最少和最多）"
+
+msgid ""
+"Specify minimum and maximum (optional) number of services of the same type "
+"required to apply a gift card."
+msgstr "具體說明申請禮品卡所需的相同類型服務的最少和最多數量（選填）。"
+
+msgid "Create another gift card"
+msgstr "創建另一個禮品卡"
+
+msgid "No gift cards found."
+msgstr "未找到禮品卡。"
+
+msgid "Min appointments should be greater than zero."
+msgstr "最少預約應大於零。"
+
+msgid "Max appointments should be greater than zero."
+msgstr "最多預約需要大過零"
+
+msgid "The code already exists"
+msgstr "該代碼已經存在"
+
+msgid "Please enter a non empty mask."
+msgstr "請輸入非空掩碼。"
+
+#, php-format
+msgid ""
+"It is not possible to generate %d codes for this mask. Only %d codes "
+"available."
+msgstr "無法為此掩碼生成％d代碼。僅％d代碼可用。"
+
+msgid "All possible codes have already been generated for this mask."
+msgstr "已經為該掩碼生成了所有可能的代碼。"
 
 msgid "API Username"
 msgstr "API用戶名"
@@ -6943,31 +7143,38 @@ msgstr ""
 msgid "To set up Facebook integration, do the following:"
 msgstr "要連結Facebook，請執行以下操作："
 
+#, php-format
+msgid "Follow the steps at %s to create a Developer Account."
+msgstr "按照%s的步驟創建開發者賬戶。"
+
 msgid ""
-"Follow the steps at <a href=\"https://developers.facebook."
-"com/docs/apps/register\" target=\"_blank\">https://developers.facebook."
-"com/docs/apps/register</a> to create a Developer Account, register and "
-"configure your <b>Facebook App</b>. Then you'll need to submit your app for "
-"review. Learn more about the review process and what's required to pass "
-"review in the <a href=\"https://developers.facebook.com/docs/facebook-"
-"login/review\" target=\"_blank\">Login Review Guide</a>."
+"In \"My apps\" section, press \"Create App\" button, select \"Consumer\" as "
+"the app type and provide the necessary information (App name, App contact "
+"email)."
+msgstr "在\"我的應用\"部分，點擊\"創建應用\"按鍵，選擇\"消費者\"作為應用類型，並提供必要的資訊（應用名稱、應用聯絡郵箱）。"
+
+msgid "Then click \"Create App\"."
+msgstr "然後點擊\"創建應用\"。"
+
+msgid ""
+"In \"Add products to your app\" section, find \"Facebook login\" and press "
+"\"Set up\"."
+msgstr "在\"添加產品到您的應用\"部分，找到\"Facebook登入\"並點擊\"設定\"。"
+
+msgid "In the sidebar on the left, select \"Settings\"."
+msgstr "在左側側邊欄中，選擇\"設定\"。"
+
+msgid ""
+"Enable \"Login with the JavaScript SDK\" and enter your site URL in \"Allow "
+"Domains for the JavaScript SDK\". Click \"Save changes\"."
 msgstr ""
-"請按照<a href=\"https://developers.facebook.com/docs/apps/register\" "
-"target=\"_blank\"> https://developers.facebook.com/docs/apps/register </a>"
-"中的步驟進行操作並建立一個開發者帳戶，註冊並配置您的<b>Facebook應用程式</b>。然後，您需要提交您的應用程式進行審核。在<a "
-"href=\"https://developers.facebook.com/docs/facebook-login/review\" "
-"target=\"_blank\">登錄審核指南</a>中了解有關審核過程以及通過審核所需的資料 。"
+"啟用\"使用JavaScript SDK登入\"，並在\"允許JavaScript SDK的域\"中輸入您的站點URL。點擊\"保存更改\"。"
 
-msgid ""
-"Below the App Details Panel click Add Platform button, select Website and "
-"enter your website URL."
-msgstr "在應用程式詳細信息面板下，點擊添加平台按鈕，選擇網站，然後輸入您的網站URL。"
+msgid "At the top of your screen press on App ID to copy it."
+msgstr "在熒幕頂部按App ID來複製。"
 
-msgid ""
-"Go to your App Dashboard. In the left side navigation panel of the App "
-"Dashboard, click Settings > Basic to view the App Details Panel with your "
-"App ID. Use it in the form below."
-msgstr "轉到您的應用程式儀表板。在應用程式儀表板的左側導航面板中，單擊設置>基本以查看具有App ID的應用程式詳細信息面板。使用下面的表格。"
+msgid "Use it in the form below."
+msgstr "請在如下表單中使用。"
 
 msgid "App ID"
 msgstr "應用程式號"
@@ -6977,6 +7184,50 @@ msgstr "選擇可管理Bookly預約的人"
 
 msgid "Select who can administrate Bookly"
 msgstr "選擇可管理Bookly的人"
+
+#, php-format
+msgid ""
+"Go to the <a href=\"%s\" target=\"_blank\">Square Developer dashboard</a>."
+msgstr "前往<a href=\"%s\" target=\"_blank\">Square開發者面板</a>."
+
+msgid "Select an app or create a new one."
+msgstr "選擇一個應用或創建一個新應用。"
+
+msgid ""
+"Depending on the mode (Sandbox or Production), look for the <b>Application "
+"ID</b> and <b>Access token</b>."
+msgstr "根據模式（沙箱或生產），請查找<b>應用ID</b>和<b>訪問令牌</b>。"
+
+msgid "Use them in the form below on this page."
+msgstr "在本頁面下的表單中使用它們。"
+
+msgid "In the sidebar on the left, go to the <b>Webhooks > Subscriptions</b>."
+msgstr "在左側的邊欄中，前往<b>Webhooks>訂閱</b>。"
+
+#, php-format
+msgid ""
+"Depending on the mode (Sandbox or Production), press <b>Add subscription</b> "
+"button, enter the following URL as the destination for events %s and select "
+"%s in <b>Events</b>."
+msgstr "根據模式（沙箱或生產），按<b>添加訂閱</b>按鈕，輸入如下URL作為事件%s並在<b>事件</b>中選擇%s。"
+
+msgid "Click <b>Save</b>."
+msgstr "點擊<b>保存</b>。"
+
+msgid "In the sidebar on the left, select <b>Locations</b>."
+msgstr "在左側邊欄中，選擇<b>位置</b>。"
+
+msgid "Look for the necessary location and copy <b>Location ID</b>."
+msgstr "查找必要位置並複製<b>位置ID</b>。"
+
+msgid "Use it in the form below on this page."
+msgstr "在本頁面下的表單中使用它。"
+
+msgid "Access token"
+msgstr "訪問令牌"
+
+msgid "Location ID"
+msgstr "位置ID"
 
 msgid ""
 "Upon providing the purchase code you will have access to free updates of "
@@ -7182,6 +7433,12 @@ msgstr "從命令返回獲得的密鈅"
 msgid "Please select a Booking product"
 msgstr "請選擇一個預定產品"
 
+msgid "Extras titles"
+msgstr "額外標題"
+
+msgid "Extras total price"
+msgstr "額外總價錢"
+
 msgid "Online meeting password"
 msgstr "網上會議密碼"
 
@@ -7359,6 +7616,12 @@ msgstr "成功包裹預定"
 msgid "Custom CSS"
 msgstr "自定義CSS"
 
+msgid "Save the appearance to apply changes."
+msgstr "保存外觀以應用更改。"
+
+msgid "Changes saved."
+msgstr "已保存更改。"
+
 msgid ""
 "Select the form you want to publish, click on the menu button, and select "
 "'Copy shortcode'. Open the page where you want to add the booking form in a "
@@ -7517,6 +7780,15 @@ msgstr "客戶完整出生日期"
 msgid "Time zone of staff"
 msgstr "員工的時區"
 
+msgid "Gift card amount"
+msgstr "禮品卡數量"
+
+msgid "Gift card valid-from date"
+msgstr "禮品卡生效日期"
+
+msgid "Gift card expiration date"
+msgstr "禮品卡過期日期"
+
 msgid "Appearance form name"
 msgstr "外觀表單名稱"
 
@@ -7573,9 +7845,6 @@ msgstr "分離購買代碼時出錯。"
 
 msgid "This calendar is already connected to another staff member"
 msgstr "該日曆已經連接到另一名工作人員"
-
-msgid "Google Calendar integration"
-msgstr "Google日曆整合"
 
 #, php-format
 msgid "Please configure Google Calendar <a href=\"%s\">settings</a> first"
@@ -8178,18 +8447,6 @@ msgstr "使用限額"
 msgid "Number of times used"
 msgstr "優惠券已經被使用過"
 
-msgid "Active from"
-msgstr "有效於"
-
-msgid "Active until"
-msgstr "有效至"
-
-msgid "Min. appointments"
-msgstr "最少預約"
-
-msgid "Max. appointments"
-msgstr "最多預約"
-
 msgid "Coupons"
 msgstr "優惠券"
 
@@ -8201,9 +8458,6 @@ msgstr "添加優惠卷"
 
 msgid "Coupon code"
 msgstr "優惠券代碼"
-
-msgid "Show only active"
-msgstr "僅顯示活躍"
 
 msgid "Export only active coupons"
 msgstr "導出有效的優惠券"
@@ -8217,38 +8471,12 @@ msgstr "新的優惠券"
 msgid "Edit coupon"
 msgstr "編輯優惠券"
 
-msgid "Generate"
-msgstr "生成"
-
-msgid ""
-"You can enter a mask containing asterisks \"*\" for variables here and click "
-"Generate."
-msgstr "您可以在此處輸入包含星號 \"*\"作為數值的掩碼，然後按進行。"
-
-msgid "Mask"
-msgstr "掩蓋"
-
-msgid "Enter a mask containing asterisks \"*\" for variables."
-msgstr "輸入包含星號\"*\"作為變量的掩碼。"
-
 msgid "Once per customer"
 msgstr "每個客戶一次"
 
 msgid ""
 "Select this option to limit the use of the coupon to 1 time per customer."
 msgstr "選擇此選項可將優惠券的使用限制為每位客戶1次。"
-
-msgid "Date limit (from and to)"
-msgstr "日期限制（從和到）"
-
-msgid "No limit"
-msgstr "沒有限制"
-
-msgid "Clear field"
-msgstr "清除字段"
-
-msgid "Limit appointments in cart (min and max)"
-msgstr "限制購物車中的預約（最少和最多）"
 
 msgid ""
 "Specify minimum and maximum (optional) number of services of the same type "
@@ -8272,27 +8500,6 @@ msgstr "折扣應該在0到100之間。"
 
 msgid "Deduction should be a positive number."
 msgstr "折扣應該爲一個正數。"
-
-msgid "Min appointments should be greater than zero."
-msgstr "最少預約應大於零。"
-
-msgid "Max appointments should be greater than zero."
-msgstr "最多預約需要大過零"
-
-msgid "The code already exists"
-msgstr "該代碼已經存在"
-
-msgid "Please enter a non empty mask."
-msgstr "請輸入非空掩碼。"
-
-#, php-format
-msgid ""
-"It is not possible to generate %d codes for this mask. Only %d codes "
-"available."
-msgstr "無法為此掩碼生成％d代碼。僅％d代碼可用。"
-
-msgid "All possible codes have already been generated for this mask."
-msgstr "已經為該掩碼生成了所有可能的代碼。"
 
 msgid "Default code mask"
 msgstr "預設代碼掩碼"
@@ -8667,12 +8874,6 @@ msgstr "總結"
 msgid "Service Extras"
 msgstr "額外服務"
 
-msgid "Extras titles"
-msgstr "額外標題"
-
-msgid "Extras total price"
-msgstr "額外總價錢"
-
 msgid "Show title"
 msgstr "顯示標題"
 
@@ -8718,106 +8919,6 @@ msgstr "最小數量不應大於最大數量"
 msgid "Extras tax"
 msgstr "額外稅收"
 
-msgid "This gift card has expired"
-msgstr "該禮品卡已過期"
-
-msgid "This gift card cannot be used for the current order"
-msgstr "該禮品卡無法用於當前訂單"
-
-msgid "Gift card balance is not enough"
-msgstr "禮品卡餘額不足"
-
-msgid "Gift card not found"
-msgstr "未找到禮品卡"
-
-msgid "I will pay by gift card"
-msgstr "我將用禮品卡支付"
-
-msgid "Balance"
-msgstr "餘額"
-
-msgid "Gift Cards"
-msgstr "禮品卡"
-
-msgid "Add Gift card Series"
-msgstr "添加禮品卡系列"
-
-msgid "Add Gift card"
-msgstr "添加禮品卡"
-
-msgid "Gift code"
-msgstr "禮品碼"
-
-msgid "Export only active gift cards"
-msgstr "僅匯出有效禮品卡"
-
-msgid "New gift cards series"
-msgstr "新禮品卡系列"
-
-msgid "New gift card"
-msgstr "新禮品卡"
-
-msgid "Edit gift card"
-msgstr "編輯禮品卡"
-
-msgid ""
-"Specify minimum and maximum (optional) number of services of the same type "
-"required to apply a gift card."
-msgstr "具體說明申請禮品卡所需的相同類型服務的最少和最多數量（選填）。"
-
-msgid "Create another gift card"
-msgstr "創建另一個禮品卡"
-
-msgid "No gift cards found."
-msgstr "未找到禮品卡。"
-
-msgid "Gift card code"
-msgstr "禮品卡碼"
-
-#, php-format
-msgid ""
-"Go to the <a href=\"%s\" target=\"_blank\">Square Developer dashboard</a>."
-msgstr "前往<a href=\"%s\" target=\"_blank\">Square開發者面板</a>."
-
-msgid "Select an app or create a new one."
-msgstr "選擇一個應用或創建一個新應用。"
-
-msgid ""
-"Depending on the mode (Sandbox or Production), look for the <b>Application "
-"ID</b> and <b>Access token</b>."
-msgstr "根據模式（沙箱或生產），請查找<b>應用ID</b>和<b>訪問令牌</b>。"
-
-msgid "Use them in the form below on this page."
-msgstr "在本頁面下的表單中使用它們。"
-
-msgid "In the sidebar on the left, go to the <b>Webhooks > Subscriptions</b>."
-msgstr "在左側的邊欄中，前往<b>Webhooks>訂閱</b>。"
-
-#, php-format
-msgid ""
-"Depending on the mode (Sandbox or Production), press <b>Add subscription</b> "
-"button, enter the following URL as the destination for events %s and select "
-"%s in <b>Events</b>."
-msgstr "根據模式（沙箱或生產），按<b>添加訂閱</b>按鈕，輸入如下URL作為事件%s並在<b>事件</b>中選擇%s。"
-
-msgid "Click <b>Save</b>."
-msgstr "點擊<b>保存</b>。"
-
-msgid "In the sidebar on the left, select <b>Locations</b>."
-msgstr "在左側邊欄中，選擇<b>位置</b>。"
-
-msgid "Look for the necessary location and copy <b>Location ID</b>."
-msgstr "查找必要位置並複製<b>位置ID</b>。"
-
-msgid "Use it in the form below on this page."
-msgstr "在本頁面下的表單中使用它。"
-
-msgid "Access token"
-msgstr "訪問令牌"
-
-msgid "Location ID"
-msgstr "位置ID"
-
 msgid "Book More"
 msgstr "預約更多"
 
@@ -8857,9 +8958,6 @@ msgstr "編輯狀態"
 
 msgid "Free/busy"
 msgstr "空閒/忙碌"
-
-msgid "Busy"
-msgstr "忙碌"
 
 msgid ""
 "If you select busy, then a customer with this status will occupy a place in "
@@ -9107,9 +9205,6 @@ msgid ""
 msgstr ""
 "2.在控制板的<a href=\"%s\" target=\"_blank\"> Webhooks設置</a>部分中，點擊<b>添加端點</b>"
 "以顯示一個表單，以添加一個新的端點來接收事件。"
-
-msgid "Session has expired. Please reload the page and try again"
-msgstr "會話已過期。請重新加載頁面并重試"
 
 msgid "Condition"
 msgstr "條件"

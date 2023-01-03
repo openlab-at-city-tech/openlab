@@ -133,15 +133,14 @@ jQuery(function($) {
                 });
                 $staffPreference.on('change', function() {
                     if (this.value === 'order' && $prefStaffList.html() === '') {
-                        var $staffIds = $staffPreference.data('default'),
+                        let staffIds = $staffPreference.data('default'),
                             $draggable = $('<div class="col-12">').append('<i class="fas fa-fw fa-bars text-muted bookly-cursor-move bookly-js-draghandle"/>').append('<input type="hidden" name="positions[]"/>');
                         $draggable.find('i').attr('title', BooklyL10n.reorder);
-                        $staffIds.forEach(function(staffId) {
-                            $prefStaffList.append($draggable.clone().find('input').val(staffId).end().append(staff_data[staffId]));
+                        staffIds.forEach(function(staffId) {
+                            $prefStaffList.append($draggable.clone().find('input').val(staffId).end().append('&nbsp;' + staff_data[staffId]));
                         });
                         Object.keys(BooklyServiceEditDialogL10n.staff).forEach(function(staffId) {
-                            staffId = parseInt(staffId);
-                            if ($staffIds.indexOf(staffId) === -1) {
+                            if (staffIds.indexOf(staffId) === -1) {
                                 $prefStaffList.append($draggable.clone().find('input').val(staffId).end().append('&nbsp;' + staff_data[staffId]));
                             }
                         });
@@ -155,19 +154,17 @@ jQuery(function($) {
                     Sortable.create($prefStaffList[0], {
                         handle: '.bookly-js-draghandle',
                         onEnd: function() {
-                            var positions = [];
+                            let data = {
+                                service_id: service_id,
+                                staff: []
+                            }
                             $prefStaffList.find('input').each(function() {
-                                positions.push(this.value);
+                                data.staff.push(this.value);
                             });
                             $.ajax({
                                 type: 'POST',
                                 url: ajaxurl,
-                                data: {
-                                    action: 'bookly_pro_update_service_staff_preference_orders',
-                                    service_id: service_id,
-                                    positions: positions,
-                                    csrf_token: BooklyL10nGlobal.csrf_token,
-                                }
+                                data: booklySerialize.buildRequestData('bookly_pro_update_service_staff_preference_orders', data)
                             });
                         }
                     });
@@ -267,16 +264,16 @@ jQuery(function($) {
                  * Local functions
                  */
                 function encodeHTML(s) {
-                    return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+                    return s === null ? '' : s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
                 }
 
                 function submitServiceFrom($panel, update_staff) {
                     $('input[name=update_staff]', $panel).val(update_staff ? 1 : 0);
                     $('input[name=package_service_changed]', $panel).val($panel.find('[name=package_service]').data('last_value') != $panel.find('[name=package_service]').val() ? 1 : 0);
                     var ladda = rangeTools.ladda($('#bookly-save', $panel).get(0)),
-                        data = $('form', $panel).serializeArray();
+                        data = booklySerialize.form($('form', $panel));
                     $(document.body).trigger('service.submitForm', [$panel, data]);
-                    $.post(ajaxurl, data, function(response) {
+                    $.post(ajaxurl, booklySerialize.buildRequestData('bookly_update_service', data), function(response) {
                         if (response.success) {
                             booklyAlert(response.data.alert);
                             if (response.data.new_extras_list) {

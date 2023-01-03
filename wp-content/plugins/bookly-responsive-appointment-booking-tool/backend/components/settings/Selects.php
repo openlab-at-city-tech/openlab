@@ -73,13 +73,27 @@ class Selects
     /**
      * Render drop-down select.
      *
-     * @param $option_name
+     * @param string $option_name
      * @param null $label
      * @param null $help
      * @param array $options
      * @param array $attributes
      */
     public static function renderSingle( $option_name, $label = null, $help = null, array $options = array(), $attributes = array() )
+    {
+        self::renderSingleValue( $option_name, get_option( $option_name ), $label, $help, $options, $attributes );
+    }
+
+    /**
+     * @param string $name
+     * @param string $value
+     * @param string $label
+     * @param string $help
+     * @param array $options
+     * @param array $attributes
+     * @return void
+     */
+    public static function renderSingleValue( $name, $value, $label, $help = null, $options = array(), $attributes = array() )
     {
         if ( empty ( $options ) ) {
             $options = array(
@@ -94,17 +108,18 @@ class Selects
             $options_str .= strtr(
                 '<option value="{value}"{attr}>{caption}</option>',
                 array(
-                    '{value}'   => esc_attr( $attr[ 0 ] ),
-                    '{attr}'    => empty ( $attr[ 2 ] )
-                        ? selected( get_option( $option_name ), $attr[0], false )
+                    '{value}' => esc_attr( $attr[0] ),
+                    '{attr}' => empty ( $attr[2] )
+                        ? selected( $value, $attr[0], false )
                         : disabled( true, true, false ),
                     '{caption}' => esc_html( $attr[1] ),
                 )
             );
         }
-        $attributes['id'] = $option_name;
+
+        $attributes['id'] = $name;
         $attributes['class'] = 'form-control custom-select';
-        $attributes['name'] = $option_name;
+        $attributes['name'] = $name;
 
         $attributes_str = '';
         foreach ( $attributes as $attr => $value ) {
@@ -121,7 +136,7 @@ class Selects
             )
         );
 
-        echo Inputs::buildControl( $option_name, $label, $help, $control );
+        echo Inputs::buildControl( $name, $label, $help, $control );
     }
 
     /**

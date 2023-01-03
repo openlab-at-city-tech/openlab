@@ -8,8 +8,8 @@ msgstr ""
 "Language: it_IT\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-19 07:56+0000\n"
-"PO-Revision-Date: 2022-07-19 07:56+0000\n"
+"POT-Creation-Date: 2022-10-06 10:15+0000\n"
+"PO-Revision-Date: 2022-10-06 10:15+0000\n"
 "Last-Translator: support@bookly.info\n"
 "Language-Team: Italian\n"
 "X-Loco-Version: 2.3.1; wp-6.0"
@@ -165,6 +165,9 @@ msgid "Coupon discount"
 msgstr ""
 
 msgid "Group discount"
+msgstr ""
+
+msgid "Gift card discount"
 msgstr ""
 
 msgid "Total"
@@ -1229,6 +1232,9 @@ msgstr ""
 msgid "Pages with another time"
 msgstr ""
 
+msgid "Hide times input"
+msgstr ""
+
 msgid "Show Repeat step"
 msgstr ""
 
@@ -1376,6 +1382,9 @@ msgstr ""
 msgid "Custom"
 msgstr ""
 
+msgid "Units"
+msgstr ""
+
 msgid "Duplicate dates are not permitted."
 msgstr "Le date duplicate non sono permesse."
 
@@ -1408,9 +1417,6 @@ msgstr "L'intervallo richiesto non è disponibile"
 
 msgid "OFF"
 msgstr "OFF"
-
-msgid "Uncategorized"
-msgstr "Senza categoria"
 
 msgid "Compound"
 msgstr ""
@@ -2153,6 +2159,9 @@ msgstr "Fuori del credito"
 msgid "Country out of service"
 msgstr "Paese fuori servizio"
 
+msgid "Blocked"
+msgstr ""
+
 msgid "Sending"
 msgstr "Invio"
 
@@ -2789,6 +2798,9 @@ msgstr ""
 "Se non vieni automaticamente re-indirizzato, segui questo <a href=\"%s\">"
 "link</a>."
 
+msgid "Uncategorized"
+msgstr "Senza categoria"
+
 msgid "Local"
 msgstr "Locale"
 
@@ -3206,6 +3218,9 @@ msgid "No updates available"
 msgstr ""
 
 msgid "Free"
+msgstr ""
+
+msgid "Gift Card"
 msgstr ""
 
 msgid "Completed"
@@ -4286,6 +4301,12 @@ msgstr ""
 msgid "Success"
 msgstr ""
 
+msgid "Warning"
+msgstr ""
+
+msgid "End points"
+msgstr ""
+
 msgid "PHP Sessions"
 msgstr ""
 
@@ -4307,7 +4328,7 @@ msgid ""
 "Logs and contact Bookly support."
 msgstr ""
 
-msgid "Timezone settings"
+msgid "Time settings"
 msgstr ""
 
 msgid ""
@@ -4380,6 +4401,11 @@ msgid ""
 msgstr ""
 
 msgid "Some Bookly items are outdated. Please update the following items:"
+msgstr ""
+
+msgid ""
+"Please update the following add-ons for correct work of your version of "
+"Bookly:"
 msgstr ""
 
 msgid "All staff"
@@ -4463,6 +4489,9 @@ msgstr "Modifica CSS personalizzato"
 
 msgid "Set up your custom CSS styles"
 msgstr "Impostare gli stili CSS personalizzati"
+
+msgid "Bookly form"
+msgstr ""
 
 msgid "Show form progress tracker"
 msgstr "Mostra barra di progresso"
@@ -4588,6 +4617,9 @@ msgstr ""
 msgid "Loop over appointments list with delimiter"
 msgstr ""
 
+msgid "Image of category"
+msgstr ""
+
 msgid "Service category info of appointment"
 msgstr ""
 
@@ -4603,13 +4635,19 @@ msgstr ""
 msgid "Service price of appointment"
 msgstr ""
 
+msgid "Image of staff category"
+msgstr ""
+
+msgid "Staff category info of appointment"
+msgstr ""
+
+msgid "Staff category name of appointment"
+msgstr ""
+
 msgid "Staff member full name in appointment"
 msgstr ""
 
 msgid "Total quantity of appointments in cart"
-msgstr ""
-
-msgid "Image of category"
 msgstr ""
 
 msgid "Info of category"
@@ -4637,6 +4675,12 @@ msgid "URL of service image (to use inside img tag)"
 msgstr ""
 
 msgid "URL of category image (to use inside img tag)"
+msgstr ""
+
+msgid "Info of staff category"
+msgstr ""
+
+msgid "Name of staff category"
 msgstr ""
 
 msgid "URL of staff photo (to use inside img tag)"
@@ -6502,6 +6546,24 @@ msgstr ""
 msgid "Please verify Bookly add-ons license; {days} remaining."
 msgstr "Controllare Bookly licenza add-on; {days} rimanenti."
 
+msgid "Cancellation confirmation"
+msgstr ""
+
+msgid "Search form"
+msgstr ""
+
+msgid "Services form"
+msgstr ""
+
+msgid "A custom block for displaying cancellation confirmation"
+msgstr ""
+
+msgid "A custom block for displaying search form"
+msgstr ""
+
+msgid "A custom block for displaying services form"
+msgstr ""
+
 msgid "no limit"
 msgstr ""
 
@@ -6609,6 +6671,9 @@ msgstr ""
 "indirizzati al carrello WooCommerce invece di procedere allo step "
 "predefinito per il pagamento."
 
+msgid "Booking product"
+msgstr "Prenotazione del prodotto"
+
 msgid "Create a WooCommerce order from backend"
 msgstr ""
 
@@ -6631,9 +6696,6 @@ msgid ""
 "price. Please note that if the order contains at least one service with a "
 "price other than 0, the WooCommerce order will still be created"
 msgstr ""
-
-msgid "Booking product"
-msgstr "Prenotazione del prodotto"
 
 msgid "Cart item data"
 msgstr "Dati del prodotto nel carrello"
@@ -7035,6 +7097,9 @@ msgstr ""
 msgid "The Secret obtained from command return"
 msgstr ""
 
+msgid "Please select a Booking product"
+msgstr ""
+
 msgid "Online meeting password"
 msgstr "Password videoconferenza"
 
@@ -7170,6 +7235,165 @@ msgstr ""
 msgid "Show QR code"
 msgstr ""
 
+msgid ""
+"Modern, fast, and smooth form that allows your customers to easily find the "
+"right service."
+msgstr ""
+
+msgid ""
+"Catalog view allows you to organize and display the services conveniently "
+"for your customers."
+msgstr ""
+
+msgid "Step by step form"
+msgstr ""
+
+msgid "Classic booking form with the consequent scheduling process."
+msgstr ""
+
+msgid "Cancellation form"
+msgstr ""
+
+msgid ""
+"Lightweight form that allows your customers to cancel their appointments and "
+"optionally specify the cancellation reason."
+msgstr ""
+
+msgid "Add new form"
+msgstr ""
+
+msgid ""
+"Are you sure you want to change the slug? Changing the slug may lead to "
+"unexpected behavior."
+msgstr ""
+
+msgid "Copy shortcode"
+msgstr ""
+
+msgid "Clone form"
+msgstr ""
+
+msgid "Delete form"
+msgstr ""
+
+msgid "Complete"
+msgstr ""
+
+msgid "Success appointment booking"
+msgstr ""
+
+msgid "Success package booking"
+msgstr ""
+
+msgid "Custom CSS"
+msgstr ""
+
+msgid ""
+"Select the form you want to publish, click on the menu button, and select "
+"'Copy shortcode'. Open the page where you want to add the booking form in a "
+"page edit mode and paste the previously copied shortcode. The form will be "
+"added to the page."
+msgstr ""
+
+msgid "Placeholder"
+msgstr ""
+
+msgid "Empty option"
+msgstr ""
+
+msgid "Width"
+msgstr ""
+
+msgid "Form title"
+msgstr ""
+
+msgid "Slug"
+msgstr ""
+
+msgid "Main color"
+msgstr ""
+
+msgid "Show 'Book more' button"
+msgstr ""
+
+msgid "Show price"
+msgstr "Mostra prezzo"
+
+msgid "Show summary"
+msgstr "Mostra totale dei prezzi"
+
+msgid "Show QR Code"
+msgstr ""
+
+msgid "Categories list"
+msgstr ""
+
+msgid "Services list"
+msgstr ""
+
+msgid "Hide categories step"
+msgstr ""
+
+msgid "Hide services step"
+msgstr ""
+
+msgid "Show cancellation reason"
+msgstr ""
+
+msgid "Book now"
+msgstr ""
+
+msgid "Buy now"
+msgstr ""
+
+msgid "Book more"
+msgstr ""
+
+msgid "No time slots available"
+msgstr ""
+
+msgid "Slot already booked"
+msgstr ""
+
+msgid "No results found"
+msgstr ""
+
+msgid "Thank you!"
+msgstr ""
+
+msgid "Your booking is complete."
+msgstr ""
+
+msgid "Payment has been skipped."
+msgstr ""
+
+msgid "Select the Extras you'd like (Multiple Selection)"
+msgstr ""
+"Aggiungi ulteriori servizi (scelta facoltativa con possibilità di selezione "
+"multipla)"
+
+msgid "Click on a time slot to proceed with booking"
+msgstr ""
+
+msgid ""
+"Please provide your details in the form below to proceed with the booking"
+msgstr ""
+
+msgid "Please tell us how you would like to pay"
+msgstr ""
+
+msgid "Please select a category"
+msgstr ""
+
+msgid "Thank you for being with us"
+msgstr ""
+
+msgid "Confirm cancellation"
+msgstr "Cancella prenotazione"
+
+msgid "Do not cancel"
+msgstr "Mantieni prenotazione"
+
 msgid "Import"
 msgstr "Importa"
 
@@ -7228,10 +7452,7 @@ msgstr ""
 msgid "Time zone of staff"
 msgstr "Fuso orario dell'incaricato"
 
-msgid "Show cancellation reason"
-msgstr ""
-
-msgid "Add appointment cancellation confirmation"
+msgid "Appearance form name"
 msgstr ""
 
 #, php-format
@@ -7253,6 +7474,9 @@ msgid "Add Bookly search form"
 msgstr ""
 
 msgid "Add Bookly services form"
+msgstr ""
+
+msgid "Add appointment cancellation confirmation"
 msgstr ""
 
 #, php-format
@@ -7364,6 +7588,10 @@ msgid ""
 msgstr ""
 
 msgid "Create WordPress user"
+msgstr ""
+
+msgid ""
+"This text can be inserted into notifications with {staff_category_info} code"
 msgstr ""
 
 msgid "Create payment"
@@ -7695,24 +7923,6 @@ msgid ""
 "to verify your license by providing a valid purchase code."
 msgstr ""
 
-msgid "Cancellation confirmation"
-msgstr ""
-
-msgid "A custom block for displaying cancellation confirmation"
-msgstr ""
-
-msgid "Services form"
-msgstr ""
-
-msgid "A custom block for displaying services form"
-msgstr ""
-
-msgid "Search form"
-msgstr ""
-
-msgid "A custom block for displaying search form"
-msgstr ""
-
 msgid "A custom block for displaying frontend calendar"
 msgstr ""
 
@@ -7720,36 +7930,6 @@ msgid "Appointments list"
 msgstr ""
 
 msgid "A custom block for displaying appointments list"
-msgstr ""
-
-msgid "Confirm cancellation"
-msgstr "Cancella prenotazione"
-
-msgid "Do not cancel"
-msgstr "Mantieni prenotazione"
-
-msgid "Thank you for being with us"
-msgstr ""
-
-msgid "Book now"
-msgstr ""
-
-msgid "Book more"
-msgstr ""
-
-msgid "No time slots available"
-msgstr ""
-
-msgid "No results found"
-msgstr ""
-
-msgid "Thank you!"
-msgstr ""
-
-msgid "Your booking is complete"
-msgstr ""
-
-msgid "Slot already booked"
 msgstr ""
 
 msgid "Invalid token provided"
@@ -8356,11 +8536,6 @@ msgstr ""
 msgid "Secret Word"
 msgstr ""
 
-msgid "Select the Extras you'd like (Multiple Selection)"
-msgstr ""
-"Aggiungi ulteriori servizi (scelta facoltativa con possibilità di selezione "
-"multipla)"
-
 msgid "Multiply extras by number of persons"
 msgstr ""
 
@@ -8393,17 +8568,11 @@ msgstr "Prezzo totale servizi extra"
 msgid "Show title"
 msgstr "Mostra titolo"
 
-msgid "Show price"
-msgstr "Mostra prezzo"
-
 msgid "Show image"
 msgstr "Mostra immagine"
 
 msgid "Show duration"
 msgstr "Mostra durata"
-
-msgid "Show summary"
-msgstr "Mostra totale dei prezzi"
 
 msgid "Show Extras step"
 msgstr "Mostra step Servizi extra"
@@ -8439,6 +8608,62 @@ msgid "Min quantity should not be greater than max quantity"
 msgstr ""
 
 msgid "Extras tax"
+msgstr ""
+
+msgid "This gift card has expired"
+msgstr ""
+
+msgid "This gift card cannot be used for the current order"
+msgstr ""
+
+msgid "Gift card balance is not enough"
+msgstr ""
+
+msgid "Gift card not found"
+msgstr ""
+
+msgid "I will pay by gift card"
+msgstr ""
+
+msgid "Balance"
+msgstr ""
+
+msgid "Gift Cards"
+msgstr ""
+
+msgid "Add Gift card Series"
+msgstr ""
+
+msgid "Add Gift card"
+msgstr ""
+
+msgid "Gift code"
+msgstr ""
+
+msgid "Export only active gift cards"
+msgstr ""
+
+msgid "New gift cards series"
+msgstr ""
+
+msgid "New gift card"
+msgstr ""
+
+msgid "Edit gift card"
+msgstr ""
+
+msgid ""
+"Specify minimum and maximum (optional) number of services of the same type "
+"required to apply a gift card."
+msgstr ""
+
+msgid "Create another gift card"
+msgstr ""
+
+msgid "No gift cards found."
+msgstr ""
+
+msgid "Gift card code"
 msgstr ""
 
 #, php-format

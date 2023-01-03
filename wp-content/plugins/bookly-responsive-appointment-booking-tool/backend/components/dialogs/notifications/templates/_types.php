@@ -1,6 +1,7 @@
-<?php if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+<?php defined( 'ABSPATH' ) || exit; // Exit if accessed directly
 use Bookly\Lib\Entities\Notification;
 use Bookly\Lib\Config;
+use Bookly\Lib\Cloud;
 ?>
 <div class="row">
     <div class="col-md-12">
@@ -64,6 +65,13 @@ use Bookly\Lib\Config;
                                 data-recipients='["staff"]'
                                 data-icon='<?php echo esc_attr( Notification::getIcon( Notification::TYPE_STAFF_NEW_WP_USER ) ) ?>'
                                 data-attach='[]'><?php echo esc_attr( Notification::getTitle( Notification::TYPE_STAFF_NEW_WP_USER ) ) ?></option>
+                        <?php if ( get_option( 'bookly_cloud_token' ) != '' && Cloud\API::getInstance()->account->productActive( Cloud\Account::PRODUCT_GIFT ) ) : ?>
+                            <option value="<?php echo Notification::TYPE_NEW_GIFT_CARD ?>"
+                                    data-set="instantly"
+                                    data-recipients='["customer","staff","admin","custom"]'
+                                    data-icon='<?php echo esc_attr( Notification::getIcon( Notification::TYPE_NEW_GIFT_CARD ) ) ?>'
+                                    data-attach='[]'><?php echo esc_attr( Notification::getTitle( Notification::TYPE_NEW_GIFT_CARD ) ) ?></option>
+                        <?php endif ?>
                     <?php endif ?>
                     <?php if ( Config::waitingListActive() ) : ?>
                         <option value="<?php echo Notification::TYPE_STAFF_WAITING_LIST ?>"

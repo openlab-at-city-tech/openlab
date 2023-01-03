@@ -13,7 +13,7 @@ use Bookly\Lib\Entities\Notification;
 class Dialog extends Lib\Base\Component
 {
     /**
-     * Render payment details dialog.
+     * Render notification dialog.
      */
     public static function render()
     {

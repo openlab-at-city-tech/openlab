@@ -17,7 +17,7 @@ class Page extends Lib\Base\Component
     {
         $cloud = Lib\Cloud\API::getInstance();
         if ( ! $cloud->account->loadProfile() ) {
-            Components\Cloud\LoginRequired\Page::render( __( 'Bookly Cloud Zapier', 'bookly' ), self::pageSlug() );
+            Components\Cloud\LoginRequired\Page::render( 'Zapier', self::pageSlug() );
         } elseif ( $cloud->account->productActive( 'zapier' ) ) {
             self::enqueueStyles( array(
                 'alias' => array( 'bookly-backend-globals', ),

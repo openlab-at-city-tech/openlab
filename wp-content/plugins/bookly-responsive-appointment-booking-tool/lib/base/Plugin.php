@@ -107,7 +107,7 @@ abstract class Plugin
     {
         try {
             register_shutdown_function( array( __CLASS__, 'logErrors' ) );
-            Lib\Session::init();
+            Lib\Session::init( get_option( 'bookly_gen_session_type', 'php' ) );
 
             /** @var static $plugin_class */
             $plugin_class = get_called_class();

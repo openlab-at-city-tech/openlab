@@ -139,7 +139,7 @@ class CartItem
             }
 
             if ( Config::specialHoursActive() ) {
-                $service_start = $this->slots === null
+                $service_start = $this->slots === null || $date_time === null
                     ? 'unused'
                     : date( 'H:i:s', strtotime( $date_time ) );
             } else {
@@ -155,7 +155,7 @@ class CartItem
                     $staff_service->loadBy( array( 'staff_id' => $staff_id, 'service_id' => $service_id, 'location_id' => null ) );
                 }
                 $service_price = $staff_service->getPrice() * $this->getUnits();
-                if ( $this->slots ) {
+                if ( $this->slots && $date_time ) {
                     $service_price = Proxy\SpecialHours::adjustPrice( $service_price, $staff_id, $service_id, $location_id, $service_start, $this->getUnits(), date( 'w', strtotime( $date_time ) ) + 1 );
                 }
                 $service_prices_cache[ $staff_id ][ $service_id ][ $location_id ][ $service_start ][ $this->getUnits() ] = $service_price;

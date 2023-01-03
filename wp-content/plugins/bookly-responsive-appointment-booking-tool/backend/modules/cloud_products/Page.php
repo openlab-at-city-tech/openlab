@@ -57,8 +57,7 @@ class Page extends Lib\Base\Component
         }
 
         wp_localize_script( 'bookly-cloud-products.js', 'BooklyL10n', array(
-            'csrfToken' => Lib\Utils\Common::getCsrfToken(),
-            'products'  => $js_products,
+            'products' => $js_products,
             'subscriptions' => $subscriptions,
         ) );
 

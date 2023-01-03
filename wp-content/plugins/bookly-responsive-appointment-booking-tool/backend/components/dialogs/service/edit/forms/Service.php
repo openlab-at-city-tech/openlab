@@ -8,7 +8,7 @@ use Bookly\Backend\Components\Dialogs\Service\Edit\Proxy;
  * Class Service
  * @method Lib\Entities\Service getObject
  *
- * @package Bookly\Backend\Modules\Services\Forms
+ * @package Bookly\Backend\Components\Dialogs\Service\Edit\Forms
  */
 class Service extends Lib\Base\Form
 {

@@ -1,6 +1,6 @@
 /**
 *                            Patched
-* @version: 3.0.5
+* @version: 3.1
 * @author: Dan Grossman http://www.dangrossman.info/
 * @copyright: Copyright (c) 2012-2019 Dan Grossman. All rights reserved.
 * @license: Licensed under the MIT license. See http://www.opensource.org/licenses/mit-license.php
@@ -12,7 +12,7 @@
         // AMD. Make globaly available as well
         define(['moment', 'jquery'], function (moment, jquery) {
             if (!jquery.fn) jquery.fn = {}; // webpack server rendering
-            if (typeof moment !== 'function' && moment.default) moment = moment.default
+            if (typeof moment !== 'function' && moment.hasOwnProperty('default')) moment = moment['default']
             return factory(moment, jquery);
         });
     } else if (typeof module === 'object' && module.exports) {
@@ -29,8 +29,19 @@
         // Browser globals
         root.daterangepicker = factory(root.moment, root.jQuery);
     }
-}(this, function(moment, $) {
+}(typeof window !== 'undefined' ? window : this, function(moment, $) {
     var DateRangePicker = function(element, options, cb) {
+
+        // Define moment.js locale 'bookly-daterange'
+        if (options.locale !== undefined && !moment.locales().includes('bookly-daterange'))
+        {
+            moment.defineLocale('bookly-daterange', {
+                months: options.locale.monthNames,
+                monthsShort: options.locale.monthNamesShort,
+                weekdays: options.locale.dayNames,
+                weekdaysMin: options.locale.dayNamesShort
+            });
+        }
 
         //default settings for options
         this.parentEl = 'body';
@@ -283,17 +294,6 @@
         if (typeof options.alwaysShowCalendars === 'boolean')
             this.alwaysShowCalendars = options.alwaysShowCalendars;
 
-        // Modify moment.js locale
-        if (options.locale !== undefined) {
-            moment.locale(moment.locale(), {
-                months       : options.locale.monthNames,
-                monthsShort  : options.locale.monthNamesShort,
-                weekdays     : options.locale.dayNames,
-                weekdaysShort: options.locale.dayNamesShort,
-                weekdaysMin  : options.locale.dayNamesShort
-            });
-        }
-
         // update day names order to firstDay
         if (this.locale.firstDay != 0) {
             var iterator = this.locale.firstDay;
@@ -433,14 +433,14 @@
             .on('mouseenter.daterangepicker', 'td.available', $.proxy(this.hoverDate, this))
             .on('change.daterangepicker', 'select.yearselect', $.proxy(this.monthOrYearChanged, this))
             .on('change.daterangepicker', 'select.monthselect', $.proxy(this.monthOrYearChanged, this))
-            .on('change.daterangepicker', 'select.hourselect,select.minuteselect,select.secondselect,select.ampmselect', $.proxy(this.timeChanged, this))
+            .on('change.daterangepicker', 'select.hourselect,select.minuteselect,select.secondselect,select.ampmselect', $.proxy(this.timeChanged, this));
 
         this.container.find('.ranges')
-            .on('click.daterangepicker', 'li', $.proxy(this.clickRange, this))
+            .on('click.daterangepicker', 'li', $.proxy(this.clickRange, this));
 
         this.container.find('.drp-buttons')
             .on('click.daterangepicker', 'button.applyBtn', $.proxy(this.clickApply, this))
-            .on('click.daterangepicker', 'button.cancelBtn', $.proxy(this.clickCancel, this))
+            .on('click.daterangepicker', 'button.cancelBtn', $.proxy(this.clickCancel, this));
 
         if (this.element.is('input') || this.element.is('button')) {
             this.element.on({
@@ -521,7 +521,7 @@
 
             this.previousRightTime = this.endDate.clone();
 
-            this.container.find('.drp-selected').html(this.startDate.format(this.locale.format) + this.locale.separator + this.endDate.format(this.locale.format));
+            this.container.find('.drp-selected').html(this.startDate.locale('bookly-daterange').format(this.locale.format) + this.locale.separator + this.endDate.locale('bookly-daterange').format(this.locale.format));
 
             if (!this.isShowing)
                 this.updateElement();
@@ -548,7 +548,7 @@
                 }
             }
             if (this.endDate)
-                this.container.find('.drp-selected').html(this.startDate.format(this.locale.format) + this.locale.separator + this.endDate.format(this.locale.format));
+                this.container.find('.drp-selected').html(this.startDate.locale('bookly-daterange').format(this.locale.format) + this.locale.separator + this.endDate.locale('bookly-daterange').format(this.locale.format));
             this.updateMonthsInView();
             this.updateCalendars();
             this.updateFormInputs();
@@ -1039,7 +1039,9 @@
 
         move: function() {
             var parentOffset = { top: 0, left: 0 },
-                containerTop;
+                containerTop,
+                drops = this.drops;
+
             var parentRightEdge = $(window).width();
             if (!this.parentEl.is('body')) {
                 parentOffset = {
@@ -1049,10 +1051,21 @@
                 parentRightEdge = this.parentEl[0].clientWidth + this.parentEl.offset().left;
             }
 
-            if (this.drops == 'up')
-                containerTop = this.element.offset().top - this.container.outerHeight() - parentOffset.top;
-            else
+            switch (drops) {
+            case 'auto':
                 containerTop = this.element.offset().top + this.element.outerHeight() - parentOffset.top;
+                if (containerTop + this.container.outerHeight() >= this.parentEl[0].scrollHeight) {
+                    containerTop = this.element.offset().top - this.container.outerHeight() - parentOffset.top;
+                    drops = 'up';
+                }
+                break;
+            case 'up':
+                containerTop = this.element.offset().top - this.container.outerHeight() - parentOffset.top;
+                break;
+            default:
+                containerTop = this.element.offset().top + this.element.outerHeight() - parentOffset.top;
+                break;
+            }
 
             // Force the container to it's actual width
             this.container.css({
@@ -1062,7 +1075,7 @@
             });
             var containerWidth = this.container.outerWidth();
 
-            this.container[this.drops == 'up' ? 'addClass' : 'removeClass']('drop-up');
+            this.container.toggleClass('drop-up', drops == 'up');
 
             if (this.opens == 'left') {
                 var containerRight = parentRightEdge - this.element.offset().left - this.element.outerWidth();
@@ -1547,9 +1560,9 @@
 
         updateElement: function() {
             if (this.element.is('input') && this.autoUpdateInput) {
-                var newValue = this.startDate.format(this.locale.format);
+                var newValue = this.startDate.locale('bookly-daterange').format(this.locale.format);
                 if (!this.singleDatePicker) {
-                    newValue += this.locale.separator + this.endDate.format(this.locale.format);
+                    newValue += this.locale.separator + this.endDate.locale('bookly-daterange').format(this.locale.format);
                 }
                 if (newValue !== this.element.val()) {
                     this.element.val(newValue).trigger('change');
@@ -1571,7 +1584,7 @@
             var el = $(this);
             if (el.data('daterangepicker'))
                 el.data('daterangepicker').remove();
-            el.data('daterangepicker', new DateRangePicker(el, implementOptions, callback));
+            el.data('daterangepicker', new DateRangePicker(el, implementOptions, function(start, end, label) { start.locale('bookly-daterange'); end.locale('bookly-daterange'); callback(start, end, label); }));
         });
         return this;
     };

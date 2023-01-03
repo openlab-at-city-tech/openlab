@@ -181,15 +181,14 @@ jQuery(function ($) {
             } else {
                 $('[name=notification\\[message\\]]').val(editor.booklyAceEditor('getValue'));
             }
-            var data  = $modalNotification.serializeArray(),
+            var data = booklySerialize.form($modalNotification),
                 ladda = Ladda.create(this);
             ladda.start();
-            data.push({name: 'action', value: 'bookly_save_notification'});
 
             $.ajax({
                 url: ajaxurl,
                 type: 'POST',
-                data: data,
+                data: booklySerialize.buildRequestData('bookly_save_notification', data),
                 dataType: 'json',
                 success: function (response) {
                     ladda.stop();

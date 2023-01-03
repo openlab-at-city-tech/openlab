@@ -51,6 +51,8 @@ abstract class Routines
             Proxy\Shared::doHourlyRoutine();
             // Handle mailing campaigns
             self::mailing();
+            // Handle expired sessions
+            self::clearSessions();
         }
 
         self::doDailyRoutine();
@@ -243,8 +245,8 @@ abstract class Routines
                 ->find();
             foreach ( $mc_list as $mc ) {
                 $mc->setState( MailingCampaign::STATE_IN_PROGRESS )->save();
-                $query = 'INSERT INTO `' . MailingQueue::getTableName() . '` (phone, text, sent, campaign_id, created_at)
-                          SELECT mlr.phone, %s, 0, %d, %s
+                $query = 'INSERT INTO `' . MailingQueue::getTableName() . '` (phone, name, text, sent, campaign_id, created_at)
+                          SELECT mlr.phone, mlr.name, %s, 0, %d, %s
                             FROM `' . MailingListRecipient::getTableName() . '` AS mlr
                            WHERE mlr.mailing_list_id = %s';
                 $wpdb->query( $wpdb->prepare( $query, $mc->getText(), $mc->getId(), current_time( 'mysql' ), $mc->getMailingListId() ) );
@@ -257,8 +259,11 @@ abstract class Routines
                 $init_campaign_id = $campaign_id = $sms_items[0]->getCampaignId();
                 foreach ( $sms_items as $sms ) {
                     $sms->setSent( 1 )->save();
-                    $cloud->sms->sendSms( $sms->getPhone(), $sms->getText(), $sms->getText(), $notification_type_id );
-                    if ( $campaign_id != $sms->getCampaignId() ) {
+
+                    $codes = new Notifications\Assets\Mailing\Codes( $sms );
+                    $message = $codes->replaceForSms( $sms->getText() );
+                    $cloud->sms->sendSms( $sms->getPhone(), $message['personal'], $message['impersonal'], $notification_type_id );
+                    if ( $campaign_id !== $sms->getCampaignId() ) {
                         MailingCampaign::query()
                             ->update()
                             ->set( 'state', MailingCampaign::STATE_COMPLETED )
@@ -277,5 +282,10 @@ abstract class Routines
                 }
             }
         }
+    }
+
+    public static function clearSessions()
+    {
+        Entities\Session::query()->delete()->whereLt( 'expire', current_time( 'mysql' ) )->execute();
     }
 }

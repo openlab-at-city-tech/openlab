@@ -6,6 +6,7 @@ use Bookly\Backend\Modules\Appearance\Proxy;
 
 /**
  * Class Ajax
+ *
  * @package Bookly\Backend\Modules\Appearance
  */
 class Ajax extends Lib\Base\Ajax
@@ -37,6 +38,8 @@ class Ajax extends Lib\Base\Ajax
             'bookly_l10n_button_apply',
             'bookly_l10n_button_back',
             'bookly_l10n_button_download_ics',
+            'bookly_l10n_button_time_prev',
+            'bookly_l10n_button_time_next',
             'bookly_l10n_label_category',
             'bookly_l10n_label_email',
             'bookly_l10n_label_email_confirm',
@@ -142,6 +145,6 @@ class Ajax extends Lib\Base\Ajax
     {
         update_option( 'bookly_app_custom_styles', self::parameter( 'custom_css' ) );
 
-        wp_send_json_success( array( 'message' => __( 'Your custom CSS was saved. Please refresh the page to see your changes.', 'bookly') ) );
+        wp_send_json_success( array( 'message' => __( 'Your custom CSS was saved. Please refresh the page to see your changes.', 'bookly' ) ) );
     }
 }

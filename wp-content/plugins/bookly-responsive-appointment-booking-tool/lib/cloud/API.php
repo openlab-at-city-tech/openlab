@@ -36,6 +36,12 @@ class API extends Cache
     public $zapier;
     /** @var Cron */
     public $cron;
+    /** @var Voice */
+    public $voice;
+    /** @var \BooklyPro\Lib\Cloud\Square */
+    public $square;
+    /** @var \BooklyPro\Lib\Cloud\Gift */
+    public $gift;
 
     /**
      * Constructor.
@@ -49,6 +55,8 @@ class API extends Cache
         $this->stripe = new Stripe( $this );
         $this->zapier = new Zapier( $this );
         $this->cron = new Cron( $this );
+        $this->voice = new Voice( $this );
+        Proxy\Shared::initApi( $this );
     }
 
     /**

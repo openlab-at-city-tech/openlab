@@ -52,7 +52,7 @@ jQuery(function($) {
         responsivePriority: 1,
         orderable: false,
         render: function(data, type, row, meta) {
-            return '<i class="fas fa-fw fa-circle" style="color:' + row.colors[0] + ';">';
+            return '<i class="fas fa-fw fa-circle" style="color:' + row.color + ';">';
         }
     });
 
@@ -104,7 +104,7 @@ jQuery(function($) {
         orderable: false,
         searchable: false,
         render: function(data, type, row, meta) {
-            return '<div class="d-inline-flex"><button type="button" class="btn btn-default mr-1" data-action="edit"><i class="far fa-fw fa-edit mr-lg-1"></i><span class="d-none d-lg-inline">' + BooklyL10n.edit + '…</span></button><button type="button" class="btn btn-default ladda-button" data-action="duplicate" data-spinner-size="40" data-style="zoom-in" data-spinner-color="#666666"><span class="ladda-label"><i class="far fa-fw fa-clone mr-lg-1"></i><span class="d-none d-lg-inline">' + BooklyL10n.duplicate + '…</span></span></button></div>';
+            return data.disabled ? '' : '<div class="d-inline-flex"><button type="button" class="btn btn-default mr-1" data-action="edit"><i class="far fa-fw fa-edit mr-lg-1"></i><span class="d-none d-lg-inline">' + BooklyL10n.edit + '…</span></button><button type="button" class="btn btn-default ladda-button" data-action="duplicate" data-spinner-size="40" data-style="zoom-in" data-spinner-color="#666666"><span class="ladda-label"><i class="far fa-fw fa-clone mr-lg-1"></i><span class="d-none d-lg-inline">' + BooklyL10n.duplicate + '…</span></span></button></div>';
         }
     });
     columns.push({
@@ -144,13 +144,17 @@ jQuery(function($) {
             type: 'POST',
             data: function(d) {
                 let data = $.extend({action: 'bookly_get_services', csrf_token: BooklyL10nGlobal.csrf_token, filter: {}}, d);
-
                 Object.keys(filters).map(function(filter) {data.filter[filter] = filters[filter].val();});
 
                 return data;
             }
         },
         columns: columns,
+        rowCallback: function(row, data) {
+            if (data.disabled) {
+                $(row).addClass('text-muted');
+            }
+        },
         dom: "<'row'<'col-sm-12'tr>><'row float-left mt-3'<'col-sm-12'p>>",
         language: {
             zeroRecords: BooklyL10n.zeroRecords,
@@ -259,7 +263,7 @@ jQuery(function($) {
                         dt.ajax.reload();
                         BooklyServiceOrderDialogL10n.services.push({id: response.data.id, title: response.data.title});
                     } else {
-                        booklyAlert({error: [response.data.message]});
+                        requiredBooklyPro();
                     }
                     ladda.stop();
                 }

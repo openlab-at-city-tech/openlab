@@ -29,6 +29,7 @@ class Notification extends Lib\Base\Entity
     const TYPE_VERIFY_PHONE                                  = 'verify_phone';
     const TYPE_FREE_PLACE_WAITING_LIST                       = 'free_place_waiting_list';
     const TYPE_MAILING                                       = 'mailing';
+    const TYPE_NEW_GIFT_CARD                                 = 'new_gift_card';
 
     /** @var array Human readable notification titles */
     public static $titles;
@@ -164,7 +165,7 @@ class Notification extends Lib\Base\Entity
             self::TYPE_NEW_BOOKING,
             self::TYPE_CUSTOMER_APPOINTMENT_STATUS_CHANGED,
         );
-        if ( $gateway == 'sms' ) {
+        if ( $gateway == 'sms' ||  $gateway == 'voice'  ) {
             $types[] = self::TYPE_APPOINTMENT_REMINDER;
             $types[] = self::TYPE_LAST_CUSTOMER_APPOINTMENT;
             $types[] = self::TYPE_STAFF_DAY_AGENDA;
@@ -242,6 +243,7 @@ class Notification extends Lib\Base\Entity
                 self::TYPE_STAFF_WAITING_LIST                  => 53,
                 self::TYPE_FREE_PLACE_WAITING_LIST             => 54,
                 self::TYPE_MAILING                             => 60,
+                self::TYPE_NEW_GIFT_CARD                       => 70,
                 self::TYPE_NEW_PACKAGE                         => 81,
                 self::TYPE_PACKAGE_DELETED                     => 83,
             );
@@ -272,6 +274,7 @@ class Notification extends Lib\Base\Entity
                 self::TYPE_STAFF_DAY_AGENDA                              => 'far fa-list-alt',
                 self::TYPE_VERIFY_EMAIL                                  => 'fas fa-address-card',
                 self::TYPE_VERIFY_PHONE                                  => 'fas fa-address-card',
+                self::TYPE_NEW_GIFT_CARD                                 => 'fas fa-gifts',
             );
         }
     }

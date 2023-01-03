@@ -297,7 +297,7 @@
                 if (!obj) {
                     return;
                 }
-                obj.$button.dropdown('toggle');
+                obj.$button.booklyDropdown('toggle');
             });
         }
     };

@@ -136,6 +136,18 @@ class Ajax extends Lib\Base\Ajax
                 $custom_fields[] = $cf['label'] . ': ' . $cf['value'];
             }
 
+            if ( $appointment['payment_id'] === null ) {
+                $total = 0;
+                if ( $appointment['order_id'] === null ) {
+                    $total = Lib\DataHolders\Booking\Simple::create( Lib\Entities\CustomerAppointment::find( $appointment['ca_id'] ) )->getTotalPrice();
+                } else {
+                    foreach ( Lib\DataHolders\Booking\Order::createFromOrderId( $appointment['order_id'] )->getItems() as $item ) {
+                        $total += $item->getTotalPrice();
+                    }
+                }
+                $appointment['total'] = $total;
+            }
+
             // Money
             foreach ( array( 'service_price', 'total', 'paid' ) as $key ) {
                 $appointment[ $key ] = Lib\Utils\Price::format( $appointment[ $key ] );
@@ -158,7 +170,7 @@ class Ajax extends Lib\Base\Ajax
             $appointment['custom_fields']    = implode( '; ', $custom_fields );
             $appointment['extras']           = implode( '; ', $extras );
 
-            unset( $appointment['extras_multiply_nop'], $appointment['extras_multiply_nop'], $appointment['time_zone'], $appointment['time_zone_offset'], $appointment['online_meeting_provider'], $appointment['online_meeting_id'], $appointment['online_meeting_data'] );
+            unset( $appointment['extras_multiply_nop'], $appointment['extras_multiply_nop'], $appointment['time_zone'], $appointment['time_zone_offset'], $appointment['online_meeting_provider'], $appointment['online_meeting_id'], $appointment['online_meeting_data'], $appointment['ca_id'], $appointment['order_id'] );
 
             return $appointment;
         }, $query->fetchArray() );
@@ -204,6 +216,8 @@ class Ajax extends Lib\Base\Ajax
             COALESCE(s.title,a.custom_service_name) AS service_name, s.info AS service_info,
             COALESCE(ss.price,a.custom_service_price) AS service_price,
             st.full_name AS staff_name, st.email AS staff_email, st.info AS staff_info, st.phone AS staff_phone,
+            ca.id AS ca_id,
+            ca.order_id,
             ca.number_of_persons,
             ca.units,
             ca.custom_fields,

@@ -14,14 +14,15 @@ class Ajax extends Lib\Base\Ajax
      */
     public static function updateServicePositions()
     {
-        foreach ( (array) self::parameter( 'services' ) as $position => $service_id ) {
+        foreach ( self::parameter( 'services', array() ) as $position => $service_id ) {
             Lib\Entities\Service::query( 's' )
                 ->update()
                 ->set( 'position', $position )
                 ->where( 'id', $service_id )
+                ->whereNot( 'position', $position )
                 ->execute();
         }
 
-        wp_send_json_success( Lib\Entities\Service::query()->sortBy( 'position' )->fetchArray() );
+        wp_send_json_success( Lib\Entities\Service::query()->select( 'id, title' )->sortBy( 'position' )->fetchArray() );
     }
 }

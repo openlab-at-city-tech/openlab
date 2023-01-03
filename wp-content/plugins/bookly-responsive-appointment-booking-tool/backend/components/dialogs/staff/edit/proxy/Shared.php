@@ -8,10 +8,10 @@ use Bookly\Lib;
  * @package Bookly\Backend\Components\Dialogs\Staff\Edit\Proxy
  *
  * @method static array editStaffAdvanced( array $data, Lib\Entities\Staff $staff ) Prepare edit staff form.
- * @method static array preUpdateStaffAdvanced( array $data, Lib\Entities\Staff $staff, array $params ) Do stuff before staff update.
+ * @method static array preUpdateStaffAdvanced( array $data, Lib\Entities\Staff $staff, array $parameters ) Do stuff before staff update.
  * @method static void  renderStaffDetails( Lib\Entities\Staff $staff ) Render Details tab of staff edit form.
- * @method static array preUpdateStaffDetails( array $data, Lib\Entities\Staff $staff, array $params ) Update staff settings in add-ons.
- * @method static void  updateStaffDetails( Lib\Entities\Staff $staff, array $params ) Update staff settings in add-ons.
+ * @method static array preUpdateStaffDetails( array $data, Lib\Entities\Staff $staff, array $parameters ) Update staff settings in add-ons.
+ * @method static void  updateStaffDetails( Lib\Entities\Staff $staff, array $parameters ) Update staff settings in add-ons.
  * @method static array updateStaffAdvanced( array $data, Lib\Entities\Staff $staff, array $params ) Update staff settings in add-ons.
  * @method static void  updateStaffSchedule( array $_post ) Update staff schedule settings in add-ons.
  * @method static void  updateStaffSpecialDays( array $_post ) Update staff special days settings in add-ons.

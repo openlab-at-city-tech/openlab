@@ -29,6 +29,9 @@ abstract class Tables
     const SMS_MAILING_LISTS = 'sms_mailing_lists';
     const SMS_MAILING_RECIPIENTS_LIST = 'sms_mailing_recipients_list';
     const SMS_NOTIFICATIONS = 'sms_notifications';
+    const VOICE_NOTIFICATIONS = 'voice_notifications';
+    const VOICE_DETAILS = 'voice_details';
+    const VOICE_PRICES = 'voice_prices';
     const SMS_PRICES = 'sms_prices';
     const SMS_SENDER = 'sms_sender';
     const STAFF_MEMBERS = 'staff_members';
@@ -89,6 +92,7 @@ abstract class Tables
                 break;
             case self::EMAIL_NOTIFICATIONS:
             case self::SMS_NOTIFICATIONS:
+            case self::VOICE_NOTIFICATIONS:
                 $columns = array(
                     'id' => esc_html__( 'ID', 'bookly' ),
                     'type' => esc_html__( 'Type', 'bookly' ),
@@ -158,6 +162,25 @@ abstract class Tables
                     'charge' => esc_html__( 'Cost', 'bookly' ),
                     'status' => esc_html__( 'Status', 'bookly' ),
                     'info' => esc_html__( 'Info', 'bookly' ),
+                );
+                break;
+            case self::VOICE_DETAILS:
+                $columns = array(
+                    'date' => esc_html__( 'Date', 'bookly' ),
+                    'time' => esc_html__( 'Time', 'bookly' ),
+                    'message' => esc_html__( 'Text', 'bookly' ),
+                    'phone' => esc_html__( 'Phone', 'bookly' ),
+                    'duration' => esc_html__( 'Duration', 'bookly' ),
+                    'charge' => esc_html__( 'Cost', 'bookly' ),
+                    'status' => esc_html__( 'Status', 'bookly' ),
+                );
+                break;
+            case self::VOICE_PRICES:
+                $columns = array(
+                    'country_iso_code' => esc_html__( 'Flag', 'bookly' ),
+                    'country_name' => esc_html__( 'Country', 'bookly' ),
+                    'phone_code' => esc_html__( 'Code', 'bookly' ),
+                    'call_price' => esc_html__( 'Price/Minute', 'bookly' ),
                 );
                 break;
             case self::SMS_PRICES:

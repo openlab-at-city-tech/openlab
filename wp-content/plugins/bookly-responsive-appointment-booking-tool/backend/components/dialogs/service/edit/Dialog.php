@@ -37,9 +37,7 @@ class Dialog extends Lib\Base\Component
             }
         }
 
-        wp_localize_script( 'bookly-service-edit-dialog.js', 'BooklyServiceEditDialogL10n', array(
-            'staff' => $staff,
-        ) );
+        wp_localize_script( 'bookly-service-edit-dialog.js', 'BooklyServiceEditDialogL10n', compact( 'staff' ) );
 
         self::renderTemplate( 'dialog' );
     }

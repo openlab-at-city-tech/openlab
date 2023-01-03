@@ -12,7 +12,6 @@ use Bookly\Lib;
  * @method static void   createBackendPayment( array $data, Lib\Entities\CustomerAppointment $ca ) Crate WP user for customer.
  * @method static void   deleteGoogleCalendarEvent( Lib\Entities\Appointment $appointment ) Delete Google Calendar event for given appointment.
  * @method static void   deleteOnlineMeeting( Lib\Entities\Appointment $appointment ) Delete online meeting.
- * @method static Lib\Entities\Customer|false getCustomerByFacebookId( int|null $facebook_id ) Find customer by Facebook id.
  * @method static string getFullAddressByCustomerData( array $data ) Get address string from customer data.
  * @method static string getCustomerTimezone( string|null $time_zone, string $time_zone_offset ) Get last appointment timezone for customer.
  * @method static array  getDisplayedAddressFields() Get displayed address fields.

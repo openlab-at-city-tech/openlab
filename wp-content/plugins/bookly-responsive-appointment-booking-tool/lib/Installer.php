@@ -176,6 +176,14 @@ class Installer extends Base\Installer
             'to_customer' => 1,
             'settings' => $settings,
         );
+        $this->notifications[] = array(
+            'gateway' => 'voice',
+            'type' => Notification::TYPE_APPOINTMENT_REMINDER,
+            'name' => __( 'Evening reminder to customer about next day appointment (requires cron setup)', 'bookly' ),
+            'message' => __( "Dear {client_name}.\nWe would like to remind you that you have booked {service_name} tomorrow at {appointment_time}. We are waiting for you at {company_address}.\nThank you for choosing our company.\n{company_name}\n{company_phone}\n{company_website}", 'bookly' ),
+            'to_customer' => 1,
+            'settings' => $settings,
+        );
         $settings = $default_settings;
         $settings['option'] = 2;
         $settings['at_hour'] = 21;
@@ -217,6 +225,7 @@ class Installer extends Base\Installer
             'to_customer' => 1,
             'settings' => '[]',
         );
+
         /*
          * Options.
          */
@@ -247,6 +256,8 @@ class Installer extends Base\Installer
             'bookly_app_show_download_ics' => '0',
             'bookly_l10n_button_apply' => __( 'Apply', 'bookly' ),
             'bookly_l10n_button_back' => __( 'Back', 'bookly' ),
+            'bookly_l10n_button_time_prev' => __( '&lt;', 'bookly' ),
+            'bookly_l10n_button_time_next' => __( '&gt;', 'bookly' ),
             'bookly_l10n_button_download_ics' => __( 'Download ICS', 'bookly' ),
             'bookly_l10n_info_complete_step' => __( 'Thank you! Your booking is complete. An email with details of your booking has been sent to you.', 'bookly' ),
             'bookly_l10n_info_complete_step_limit_error' => __( 'You are trying to use the service too often. Please contact us to make a booking.', 'bookly' ),
@@ -352,6 +363,7 @@ class Installer extends Base\Installer
             'bookly_gen_link_assets_method' => 'enqueue',
             'bookly_gen_collect_stats' => '0',
             'bookly_gen_show_powered_by' => '0',
+            'bookly_gen_session_type' => 'php',
             'bookly_gen_prevent_caching' => '1',
             'bookly_gen_prevent_session_locking' => '0',
             'bookly_gen_badge_consider_news' => '1',
@@ -374,18 +386,26 @@ class Installer extends Base\Installer
             'bookly_cloud_auto_recharge_end_at_ts' => '0',
             'bookly_cloud_auto_recharge_gateway' => '',
             'bookly_cloud_badge_consider_sms' => '1',
+            'bookly_cloud_cron_api_key' => '',
             'bookly_cloud_notify_low_balance' => '1',
             'bookly_cloud_promotions' => '',
             'bookly_cloud_renew_auto_recharge_notice_hide_until' => '-1',
+            'bookly_cloud_square_addition' => '0',
+            'bookly_cloud_square_api_access_token' => '',
+            'bookly_cloud_square_api_application_id' => '',
+            'bookly_cloud_square_api_location_id' => '',
+            'bookly_cloud_square_enabled' => '0',
+            'bookly_cloud_square_increase' => '0',
+            'bookly_cloud_square_sandbox' => '0',
+            'bookly_cloud_square_timeout' => '0',
             'bookly_cloud_stripe_addition' => '0',
+            'bookly_cloud_stripe_custom_metadata' => '0',
             'bookly_cloud_stripe_enabled' => '0',
             'bookly_cloud_stripe_increase' => '0',
-            'bookly_cloud_stripe_timeout' => '0',
-            'bookly_cloud_stripe_custom_metadata' => '0',
             'bookly_cloud_stripe_metadata' => array(),
+            'bookly_cloud_stripe_timeout' => '0',
             'bookly_cloud_token' => '',
             'bookly_cloud_zapier_api_key' => '',
-            'bookly_cloud_cron_api_key' => '',
             // Business hours.
             'bookly_bh_monday_start' => '08:00:00',
             'bookly_bh_monday_end' => '18:00:00',
@@ -430,6 +450,7 @@ class Installer extends Base\Installer
      */
     public function uninstall()
     {
+        remove_action( 'shutdown', array( 'Bookly\Lib\SessionDB', 'save' ), 20 );
         if ( get_option( 'bookly_gen_delete_data_on_uninstall' ) ) {
             /** @var \wpdb */
             global $wpdb;
@@ -667,7 +688,7 @@ class Installer extends Base\Installer
         $wpdb->query(
             'CREATE TABLE IF NOT EXISTS `' . Entities\Notification::getTableName() . '` (
                 `id`             INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                `gateway`        ENUM("email","sms") NOT NULL DEFAULT "email",
+                `gateway`        ENUM("email","sms","voice") NOT NULL DEFAULT "email",
                 `type`           VARCHAR(255) NOT NULL DEFAULT "",
                 `active`         TINYINT(1) NOT NULL DEFAULT 0,
                 `name`           VARCHAR(255) NOT NULL DEFAULT "",
@@ -781,7 +802,7 @@ class Installer extends Base\Installer
                 `target`       ENUM("appointments","packages") NOT NULL DEFAULT "appointments",
                 `coupon_id`    INT UNSIGNED DEFAULT NULL,
                 `gift_card_id` INT UNSIGNED DEFAULT NULL,
-                `type`         ENUM("local","free","paypal","authorize_net","stripe","2checkout","payu_biz","payu_latam","payson","mollie","woocommerce","cloud_stripe","square","gift_card") NOT NULL DEFAULT "local",
+                `type`         ENUM("local","free","paypal","authorize_net","stripe","2checkout","payu_biz","payu_latam","payson","mollie","woocommerce","cloud_stripe","cloud_square","cloud_gift") NOT NULL DEFAULT "local",
                 `total`        DECIMAL(10,2) NOT NULL DEFAULT 0.00,
                 `tax`          DECIMAL(10,2) NOT NULL DEFAULT 0.00,
                 `paid`         DECIMAL(10,2) NOT NULL DEFAULT 0.00,
@@ -993,10 +1014,23 @@ class Installer extends Base\Installer
             'CREATE TABLE IF NOT EXISTS `' . Entities\MailingQueue::getTableName() . '` (
                 `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `phone` VARCHAR(255) NOT NULL,
+                `name` VARCHAR(255) DEFAULT NULL,
                 `text` TEXT DEFAULT NULL,
                 `sent` TINYINT(1) DEFAULT 0,
                 `campaign_id` INT NOT NULL DEFAULT 0,
                 `created_at` DATETIME NOT NULL
+            ) ENGINE = INNODB
+            ' . $charset_collate
+        );
+
+        $wpdb->query(
+            'CREATE TABLE IF NOT EXISTS `' . Entities\Session::getTableName() . '` (
+                `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `token` VARCHAR(255) NOT NULL,
+                `value` TEXT DEFAULT NULL,
+                `expire` DATETIME NOT NULL,
+                INDEX `token` (`token`),
+                INDEX `expire` (`expire`)
             ) ENGINE = INNODB
             ' . $charset_collate
         );

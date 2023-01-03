@@ -299,7 +299,7 @@ class PluginsUpdater
         wp_localize_script( 'bookly-plugins-page', 'BooklyPluginsPageL10n', array(
             'csrfToken' => Utils\Common::getCsrfToken(),
             'deleteData' => get_option( 'bookly_gen_delete_data_on_uninstall', '1' ),
-            'deletingInfo' => __( 'Please note that upon deleting this Bookly item, all data associated with it will be permanently deleted', 'bookly' ),
+            'deletingInfo' => __( 'Please note that upon deleting this Bookly item, all data associated with it will be permanently deleted', 'bookly' ) . '. ' . __( 'To save data, please set "Don\'t delete" in Bookly Settings > General > Bookly data upon deleting Bookly items', 'bookly' ),
             'updated' => __( '%s updated', 'bookly' ) . '!',
             'addons' => array_keys( $bookly_plugins ),
             'wait' => __( 'Please wait, we are checking updates for {checked}/{total} Bookly add-ons', 'bookly' ),

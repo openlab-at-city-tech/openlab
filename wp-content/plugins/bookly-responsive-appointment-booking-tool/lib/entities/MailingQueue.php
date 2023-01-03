@@ -14,6 +14,8 @@ class MailingQueue extends Lib\Base\Entity
     protected $phone;
     /** @var string */
     protected $text;
+    /** @var string */
+    protected $name;
     /** @var int */
     protected $sent;
     /** @var int */
@@ -26,6 +28,7 @@ class MailingQueue extends Lib\Base\Entity
     protected static $schema = array(
         'id' => array( 'format' => '%d' ),
         'phone' => array( 'format' => '%s' ),
+        'name' => array( 'format' => '%s' ),
         'text' => array( 'format' => '%s' ),
         'sent' => array( 'format' => '%d' ),
         'campaign_id' => array( 'format' => '%d' ),
@@ -55,6 +58,29 @@ class MailingQueue extends Lib\Base\Entity
     public function setPhone( $phone )
     {
         $this->phone = $phone;
+
+        return $this;
+    }
+
+    /**
+     * Gets name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Sets name
+     *
+     * @param string $name
+     * @return $this
+     */
+    public function setName( $name )
+    {
+        $this->name = $name;
 
         return $this;
     }

@@ -16,6 +16,8 @@ use Bookly\Lib as BooklyLib;
  * @method static string prepareHtmlContentDoneStep( BooklyLib\UserBookingData $userData, array $codes ) Render content for Done step
  * @method static string getHtmlPaymentImpossible( string $progress_tracker, BooklyLib\UserBookingData $userData ) Render payment impossible message
  * @method static array filterGateways( $gateways, BooklyLib\UserBookingData $userData ) Remain gateways that are suitable for all staff members
+ * @method static \BooklyPro\Lib\Entities\GiftCard findOneGiftCardByCode( string $code ) Return gift entity.
+ * @method static \Bookly\Lib\Entities\Customer|false getCustomerByFacebookId( int|null $facebook_id ) Find customer by Facebook id.
  */
 abstract class Pro extends BooklyLib\Base\Proxy
 {

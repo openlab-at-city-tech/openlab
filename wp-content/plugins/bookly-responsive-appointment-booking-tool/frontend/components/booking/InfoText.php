@@ -262,11 +262,11 @@ class InfoText
                 foreach ( $userData->cart->getItems() as $cart_item ) {
                     $service = $cart_item->getService();
                     $slots = $cart_item->getSlots();
-                    $service_dp = Lib\Slots\DatePoint::fromStr( $slots[0][2] )->toClientTz();
+                    $service_dp = $slots[0][2] ? Lib\Slots\DatePoint::fromStr( $slots[0][2] )->toClientTz() : null;
 
                     $category = $service->getCategoryId() ? Lib\Entities\Category::find( $service->getCategoryId() ) : false;
                     $appointment_data['appointment_id'] = $cart_item->getAppointmentId();
-                    $appointment_data['appointment_date'] = $slots[0][2] !== null ? $service_dp->formatI18nDate() : __( 'N/A', 'bookly' );
+                    $appointment_data['appointment_date'] = $service_dp ? $service_dp->formatI18nDate() : __( 'N/A', 'bookly' );
                     $appointment_data['category_image'] = ( $category && $url = $category->getImageUrl() ) ? '<img src="' . $url . '"/>' : '';
                     $appointment_data['category_info'] = $category ? $category->getTranslatedInfo() : '';
                     $appointment_data['category_name'] = $service->getTranslatedCategoryName();
@@ -293,12 +293,12 @@ class InfoText
                                 $duration = max( $duration, $sub_service->getDuration() );
                             }
                         }
-                        $appointment_data['appointment_time'] = $slots[0][2] !== null
+                        $appointment_data['appointment_time'] = $service_dp
                             ? ( $duration >= DAY_IN_SECONDS ? $service->getStartTimeInfo() : $service_dp->formatI18nTime() )
                             : __( 'N/A', 'bookly' );
                         $appointment_data['service_duration'] = Lib\Utils\DateTime::secondsToInterval( $duration );
                     } else {
-                        $appointment_data['appointment_time'] = $slots[0][2] !== null
+                        $appointment_data['appointment_time'] = $service_dp
                             ? ( $cart_item->getUnits() * $cart_item->getService()->getDuration() >= DAY_IN_SECONDS ? $service->getStartTimeInfo() : $service_dp->formatI18nTime() )
                             : __( 'N/A', 'bookly' );
                         $appointment_data['service_duration'] = Lib\Utils\DateTime::secondsToInterval( $cart_item->getUnits() * $cart_item->getService()->getDuration() );

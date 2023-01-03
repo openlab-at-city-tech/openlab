@@ -21,14 +21,7 @@ jQuery(function($) {
             utilsScript: BooklyL10n.intlTelInput.utils
         });
     }
-    $('#bookly-js-submit-notifications').on('click', function(e) {
-        e.preventDefault();
-        var ladda = Ladda.create(this);
-        ladda.start();
-        var $form = $(this).parents('form');
-        $form.bookly_sms_administrator_phone = getPhoneNumber();
-        $form.submit();
-    });
+
     $('#send_test_sms').on('click', function(e) {
         e.preventDefault();
         $.ajax({
@@ -638,7 +631,16 @@ jQuery(function($) {
 
         $.each(BooklyL10n.datatables.sms_details.settings.columns, function(column, show) {
             if (show) {
-                columns.push({data: column, render: $.fn.dataTable.render.text()});
+                if (column === 'message') {
+                    columns.push({
+                        data: column,
+                        render: function(data, type, row, meta) {
+                            return $.fn.dataTable.render.text().display(data).replaceAll('&lt;br /&gt;', '<br/>');
+                        }
+                    })
+                } else {
+                    columns.push({data: column, render: $.fn.dataTable.render.text()});
+                }
             }
         });
         if (columns.length) {

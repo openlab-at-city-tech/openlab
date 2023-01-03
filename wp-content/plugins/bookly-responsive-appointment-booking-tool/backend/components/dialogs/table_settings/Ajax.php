@@ -14,9 +14,9 @@ class Ajax extends Lib\Base\Ajax
         Lib\Utils\Tables::APPOINTMENTS,
         Lib\Utils\Tables::CLOUD_PURCHASES,
         Lib\Utils\Tables::COUPONS,
-        Lib\Utils\Tables::CUSTOM_STATUSES,
-        Lib\Utils\Tables::CUSTOMER_GROUPS,
         Lib\Utils\Tables::CUSTOMERS,
+        Lib\Utils\Tables::CUSTOMER_GROUPS,
+        Lib\Utils\Tables::CUSTOM_STATUSES,
         Lib\Utils\Tables::DISCOUNTS,
         Lib\Utils\Tables::EMAIL_LOGS,
         Lib\Utils\Tables::EMAIL_NOTIFICATIONS,
@@ -33,6 +33,9 @@ class Ajax extends Lib\Base\Ajax
         Lib\Utils\Tables::SMS_SENDER,
         Lib\Utils\Tables::STAFF_MEMBERS,
         Lib\Utils\Tables::TAXES,
+        Lib\Utils\Tables::VOICE_DETAILS,
+        Lib\Utils\Tables::VOICE_NOTIFICATIONS,
+        Lib\Utils\Tables::VOICE_PRICES,
     );
 
     /**

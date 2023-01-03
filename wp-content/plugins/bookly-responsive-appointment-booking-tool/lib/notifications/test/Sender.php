@@ -56,7 +56,6 @@ abstract class Sender extends Base\Sender
                         );
                     }
                     break;
-                case Notification::TYPE_STAFF_WAITING_LIST:
                 case Notification::TYPE_STAFF_DAY_AGENDA:
                     if ( $notification->getToStaff() ) {
                         static::_sendEmailTo(

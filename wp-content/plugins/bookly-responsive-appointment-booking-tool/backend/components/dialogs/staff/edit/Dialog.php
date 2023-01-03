@@ -83,7 +83,6 @@ class Dialog extends Lib\Base\Component
             'createStaff' => esc_attr__( 'Create staff', 'bookly' ),
             'currentTab' => self::parameter( 'tab', 'details' ),
             'editStaff' => esc_attr__( 'Edit staff', 'bookly' ),
-            'limitation' => Limitation\Notice::forNewStaff(),
             'proRequired' => (int) ! Lib\Config::proActive(),
             'settingsSaved' => esc_attr__( 'Settings saved.', 'bookly' ),
             'staff' => $query->sortBy( 'position' )->fetchArray(),

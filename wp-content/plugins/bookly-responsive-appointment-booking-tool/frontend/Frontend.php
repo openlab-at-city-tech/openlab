@@ -30,16 +30,14 @@ abstract class Frontend
 
             Lib\Proxy\Shared::handleRequestAction( $_REQUEST['bookly_action'] );
 
-            if ( Lib\Cloud\API::getInstance()->account->productActive( 'stripe' ) ) {
+            if ( Lib\Cloud\API::getInstance()->account->productActive( Lib\Cloud\Account::PRODUCT_STRIPE ) ) {
                 switch ( $_REQUEST['bookly_action'] ) {
                     case 'cloud_stripe-checkout':
                         Stripe::checkout();
                         break;
-                    case 'stripe-cloud-success':  // <- deprecated
                     case 'cloud_stripe-success':
                         Stripe::success();
                         break;
-                    case 'stripe-cloud-cancel': // <- deprecated
                     case 'cloud_stripe-cancel':
                         Stripe::cancel();
                         break;

@@ -1,6 +1,6 @@
 (function ($) {
 
-    let Calendar = function($container, options) {
+    let Calendar = function ($container, options) {
         let obj = this;
         jQuery.extend(obj.options, options);
 
@@ -16,7 +16,7 @@
                     : obj.options.l10n.datePicker.meridiem[isLower ? 'pm' : 'PM'];
             },
         });
-        let existsAppointmentForm  = typeof BooklyAppointmentDialog !== 'undefined'
+        let existsAppointmentForm = typeof BooklyAppointmentDialog !== 'undefined'
         // Settings for Event Calendar
         let settings = {
             view: 'timeGridWeek',
@@ -48,6 +48,8 @@
             },
             flexibleSlotTimeLimits: true,
             eventStartEditable: false,
+            eventDurationEditable: false,
+            allDaySlot: false,
 
             slotLabelFormat: function (date) {
                 return moment(date).locale('bookly').format(obj.options.l10n.mjsTimeFormat);
@@ -167,7 +169,8 @@
                                 } else {
                                     if (visible_staff_id == event.resourceId || visible_staff_id == 0) {
                                         // Update event in calendar.
-                                        calendar.updateEvent(event);
+                                        calendar.removeEventById(event.id);
+                                        calendar.addEvent(event);
                                     } else {
                                         // Switch to the event owner tab.
                                         jQuery('li > a[data-staff_id=' + event.resourceId + ']').click();
@@ -232,58 +235,58 @@
             if (obj.options.l10n.recurring_appointments.active == '1' && props.series_id) {
                 $buttons.append(
                     $('<a class="btn btn-default btn-sm mr-1">').append('<i class="fas fa-fw fa-link">')
-                        .attr('title', obj.options.l10n.recurring_appointments.title)
-                        .on('click', function (e) {
-                            e.stopPropagation();
-                            BooklySeriesDialog.showDialog({
-                                series_id: props.series_id,
-                                done: function () {
-                                    calendar.refetchEvents();
-                                }
-                            });
-                        })
+                    .attr('title', obj.options.l10n.recurring_appointments.title)
+                    .on('click', function (e) {
+                        e.stopPropagation();
+                        BooklySeriesDialog.showDialog({
+                            series_id: props.series_id,
+                            done: function () {
+                                calendar.refetchEvents();
+                            }
+                        });
+                    })
                 );
             }
             if (obj.options.l10n.waiting_list.active == '1' && props.waitlisted > 0) {
                 $buttons.append(
                     $('<a class="btn btn-default btn-sm mr-1">').append('<i class="far fa-fw fa-list-alt">')
-                        .attr('title', obj.options.l10n.waiting_list.title)
+                    .attr('title', obj.options.l10n.waiting_list.title)
                 );
             }
             if (obj.options.l10n.packages.active == '1' && props.package_id > 0) {
                 $buttons.append(
                     $('<a class="btn btn-default btn-sm mr-1">').append('<i class="far fa-fw fa-calendar-alt">')
-                        .attr('title', obj.options.l10n.packages.title)
-                        .on('click', function (e) {
-                            e.stopPropagation();
-                            if (obj.options.l10n.packages.active == '1' && props.package_id) {
-                                $(document.body).trigger('bookly_packages.schedule_dialog', [props.package_id, function () {
-                                    calendar.refetchEvents();
-                                }]);
-                            }
-                        })
+                    .attr('title', obj.options.l10n.packages.title)
+                    .on('click', function (e) {
+                        e.stopPropagation();
+                        if (obj.options.l10n.packages.active == '1' && props.package_id) {
+                            $(document.body).trigger('bookly_packages.schedule_dialog', [props.package_id, function () {
+                                calendar.refetchEvents();
+                            }]);
+                        }
+                    })
                 );
             }
             $buttons.append(
                 $('<a class="btn btn-danger btn-sm text-white">').append('<i class="far fa-fw fa-trash-alt">')
-                    .attr('title', obj.options.l10n.delete)
-                    .on('click', function (e) {
-                        e.stopPropagation();
-                        // Localize contains only string values
-                        if (obj.options.l10n.recurring_appointments.active == '1' && props.series_id) {
-                            $(document.body).trigger('recurring_appointments.delete_dialog', [calendar, arg.event]);
-                        } else {
-                            new BooklyConfirmDeletingAppointment({
-                                    action: 'bookly_delete_appointment',
-                                    appointment_id: arg.event.id,
-                                    csrf_token: BooklyL10nGlobal.csrf_token
-                                },
-                                function (response) {
-                                    calendar.removeEventById(arg.event.id);
-                                }
-                            );
-                        }
-                    })
+                .attr('title', obj.options.l10n.delete)
+                .on('click', function (e) {
+                    e.stopPropagation();
+                    // Localize contains only string values
+                    if (obj.options.l10n.recurring_appointments.active == '1' && props.series_id) {
+                        $(document.body).trigger('recurring_appointments.delete_dialog', [calendar, arg.event]);
+                    } else {
+                        new BooklyConfirmDeletingAppointment({
+                                action: 'bookly_delete_appointment',
+                                appointment_id: arg.event.id,
+                                csrf_token: BooklyL10nGlobal.csrf_token
+                            },
+                            function (response) {
+                                calendar.removeEventById(arg.event.id);
+                            }
+                        );
+                    }
+                })
             );
 
             return $buttons;
@@ -299,7 +302,7 @@
         }
 
         function addAppointmentDialog(date, staffId, visibleStaffId) {
-            if( existsAppointmentForm) {
+            if (existsAppointmentForm) {
                 BooklyAppointmentDialog.showDialog(
                     null,
                     parseInt(staffId),
@@ -343,17 +346,17 @@
         });
         // Init date picker for fast navigation in Event Calendar.
         $('.ec-toolbar .ec-title', $container).daterangepicker({
-            parentEl        : '.bookly-js-calendar',
+            parentEl: '.bookly-js-calendar',
             singleDatePicker: true,
-            showDropdowns   : true,
-            autoUpdateInput : false,
-            locale          : obj.options.l10n.datePicker
-        }).on('apply.daterangepicker', function (ev, picker) {
+            showDropdowns: true,
+            autoUpdateInput: false,
+            locale: obj.options.l10n.datePicker
+        }, function (start) {
             dateSetFromDatePicker = true;
             if (calendar.view.type !== 'timeGridDay' && calendar.view.type !== 'resourceTimeGridDay') {
-                calendar.setOption('highlightedDates', [picker.startDate.toDate()]);
+                calendar.setOption('highlightedDates', [start.toDate()]);
             }
-            calendar.setOption('date', picker.startDate.toDate());
+            calendar.setOption('date', start.toDate());
         });
 
         // Export calendar
@@ -366,7 +369,7 @@
     };
 
     var locationChanged = false;
-    $('body').on('change', '#bookly-appointment-location', function() {
+    $('body').on('change', '#bookly-appointment-location', function () {
         locationChanged = true;
     });
 

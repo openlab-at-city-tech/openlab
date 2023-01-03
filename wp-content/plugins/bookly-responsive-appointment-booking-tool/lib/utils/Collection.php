@@ -25,7 +25,7 @@ class Collection implements \IteratorAggregate, \Countable
      */
     public function get( $key, $default = null )
     {
-        return $this->has( $key ) ? stripslashes_deep( $this->values[ $key ] ) : $default;
+        return $this->has( $key ) ? $this->values[ $key ] : $default;
     }
 
     /**
@@ -69,14 +69,16 @@ class Collection implements \IteratorAggregate, \Countable
      *
      * @return \ArrayIterator<string, mixed>
      */
+    #[\ReturnTypeWillChange]
     public function getIterator()
     {
-        return new \ArrayIterator($this->values);
+        return new \ArrayIterator( $this->values );
     }
 
     /**
      * Returns the number of parameters.
      */
+    #[\ReturnTypeWillChange]
     public function count()
     {
         return count( $this->values );

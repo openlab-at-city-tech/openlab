@@ -186,7 +186,7 @@ abstract class Backend
                 $cloud = Lib\Cloud\API::getInstance();
                 $dynamic_position .= '1'; // position always is under `Bookly`
                 $page_title = $menu_title = 'Bookly Cloud';
-                if ( $promotion = $cloud->general->getPromotionForNotice() ) {
+                if ( $cloud->general->getPromotionForNotice() ) {
                     $menu_title .= ' <span class="update-plugins"><span class="update-count">$</span></span>';
                 }
                 add_menu_page( $page_title, $menu_title, $required_capability, 'bookly-cloud-menu', '',
@@ -203,6 +203,11 @@ abstract class Backend
                                 case Lib\Cloud\Account::PRODUCT_ZAPIER:
                                     Modules\CloudZapier\Page::addBooklyCloudMenuItem( $product );
                                     break;
+                                case Lib\Cloud\Account::PRODUCT_VOICE:
+                                    Modules\CloudVoice\Page::addBooklyCloudMenuItem( $product );
+                                    break;
+                                default:
+                                    Lib\Cloud\Proxy\Shared::renderCloudMenu( $product );
                             }
                         }
                     }

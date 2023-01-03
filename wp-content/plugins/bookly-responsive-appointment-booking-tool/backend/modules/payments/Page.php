@@ -22,7 +22,7 @@ class Page extends Lib\Base\Component
             'module' => array( 'js/payments.js' => array( 'bookly-backend-globals' ) ),
         ) );
 
-        $datatables = Lib\Utils\Tables::getSettings( 'payments' );
+        $datatables = Lib\Utils\Tables::getSettings( Lib\Utils\Tables::PAYMENTS );
 
         wp_localize_script( 'bookly-payments.js', 'BooklyL10n', array(
             'datePicker' => Lib\Utils\DateTime::datePickerOptions(),

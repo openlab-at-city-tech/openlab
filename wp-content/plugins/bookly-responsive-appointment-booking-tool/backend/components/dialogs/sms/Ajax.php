@@ -14,9 +14,9 @@ class Ajax extends Lib\Base\Ajax
      */
     public static function saveNotification()
     {
-        $data         = self::parameter( 'notification' );
+        $data = self::parameter( 'notification' );
         $notification = new Lib\Entities\Notification();
-        $is_new       = ! $notification->load( $data['id'] );
+        $is_new = ! $notification->load( $data['id'] );
         if ( ! $is_new ) {
             unset( $data['id'] );
         }
@@ -32,9 +32,9 @@ class Ajax extends Lib\Base\Ajax
     {
         $notification = new Lib\Entities\Notification();
         $notification->load( self::parameter( 'id' ) );
-        $data             = $notification->getFields();
+        $data = $notification->getFields();
         $data['settings'] = array_merge( Lib\DataHolders\Notification\Settings::getDefault(), json_decode( $data['settings'], true ) );
-        if ( get_user_meta( get_current_user_id(), 'rich_editing', true ) !== 'false' && $notification->getGateway() != 'sms' ) {
+        if ( get_user_meta( get_current_user_id(), 'rich_editing', true ) !== 'false' && $notification->getGateway() == 'email' ) {
             $data['message'] = wpautop( $data['message'] );
         }
 

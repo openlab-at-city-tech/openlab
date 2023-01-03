@@ -71,7 +71,7 @@ abstract class Component extends Cache
      */
     protected static function csrfTokenValid( $action = null )
     {
-        return wp_verify_nonce( static::parameter( 'csrf_token' ), 'bookly' ) == 1;
+        return isset( $_REQUEST['csrf_token'] ) && wp_verify_nonce( $_REQUEST['csrf_token'], 'bookly' ) == 1;
     }
 
     /**
@@ -137,7 +137,7 @@ abstract class Component extends Cache
      */
     protected static function hasParameter( $name )
     {
-        return array_key_exists( $name, $_REQUEST );
+        return self::getRequest()->has( $name );
     }
 
     /**
@@ -164,22 +164,7 @@ abstract class Component extends Cache
      */
     protected static function parameter( $name, $default = null )
     {
-        return static::hasParameter( $name ) ? stripslashes_deep( $_REQUEST[ $name ] ) : $default;
-    }
-
-    /**
-     * @return Lib\Utils\Collection
-     */
-    protected static function jsonParameters()
-    {
-        static $collection;
-        if ( $collection === null ) {
-            $collection = new Lib\Utils\Collection( array_map( function ( $value ) {
-                return $value != '' ? $value : null;
-            }, json_decode( self::parameter( 'data' ), true ) ) );
-        }
-
-        return $collection;
+        return self::getRequest()->get( $name, $default );
     }
 
     /**
@@ -189,17 +174,23 @@ abstract class Component extends Cache
      */
     protected static function parameters()
     {
-        return stripslashes_deep( $_REQUEST );
+        return self::getRequest()->getAll();
     }
 
     /**
-     * Get all POST parameters.
-     *
-     * @return mixed
+     * @return Lib\Utils\Collection
      */
-    protected static function postParameters()
+    protected static function getRequest()
     {
-        return stripslashes_deep( $_POST );
+        static $parameters;
+        if ( $parameters === null ) {
+            $parameters = new Lib\Utils\Collection(
+                isset( $_REQUEST['json_data'] )
+                    ? array_map( function( $value ) { return $value != '' ? $value : null; }, json_decode( stripslashes_deep( $_REQUEST['json_data'] ), true ) ?: array() )
+                    : stripslashes_deep( $_REQUEST ) );
+        }
+
+        return $parameters;
     }
 
     /**
@@ -207,6 +198,8 @@ abstract class Component extends Cache
      */
     protected static function registerGlobalAssets()
     {
+        global $sitepress;
+
         if ( ! ( wp_script_is( 'bookly-frontend-globals', 'registered' )
             || wp_script_is( 'bookly-backend-globals', 'registered' ) ) ) {
             Component::_register( 'scripts', array(
@@ -238,9 +231,11 @@ abstract class Component extends Cache
                     'bookly-backend-globals' => array( 'bookly-bootstrap.min.css', 'bookly-ladda.min.css' ),
                 ),
             ) );
-
+            $ajax_url = admin_url( 'admin-ajax.php' );
             wp_localize_script( 'bookly-globals', 'BooklyL10nGlobal', Lib\Proxy\Shared::prepareL10nGlobal( array(
                 'csrf_token' => Lib\Utils\Common::getCsrfToken(),
+                'ajax_url_backend' => $ajax_url,
+                'ajax_url_frontend' => $sitepress instanceof \SitePress ? add_query_arg( array( 'lang' => $sitepress->get_current_language() ), $ajax_url ) : admin_url( 'admin-ajax.php' ),
                 'mjsTimeFormat' => Lib\Utils\DateTime::convertFormat( 'time', Lib\Utils\DateTime::FORMAT_MOMENT_JS ),
                 'datePicker' => Lib\Utils\DateTime::datePickerOptions(),
                 'dateRange' => Lib\Utils\DateTime::dateRangeOptions(),

@@ -24,9 +24,9 @@ class Payment extends Lib\Base\Entity
     const TYPE_PAYULATAM    = 'payu_latam';
     const TYPE_PAYSON       = 'payson';
     const TYPE_MOLLIE       = 'mollie';
-    const TYPE_SQUARE       = 'square';
+    const TYPE_CLOUD_SQUARE = 'cloud_square';
     const TYPE_WOOCOMMERCE  = 'woocommerce';
-    const TYPE_GIFT_CARD    = 'gift_card';
+    const TYPE_CLOUD_GIFT   = 'cloud_gift';
 
     const STATUS_COMPLETED = 'completed';
     const STATUS_PENDING   = 'pending';
@@ -75,7 +75,7 @@ class Payment extends Lib\Base\Entity
     protected static $schema = array(
         'id' => array( 'format' => '%d' ),
         'coupon_id' => array( 'format' => '%d', 'reference' => array( 'entity' => 'Coupon', 'namespace' => '\BooklyCoupons\Lib\Entities', 'required' => 'bookly-addon-coupons' ) ),
-        'gift_card_id' => array( 'format' => '%d', 'reference' => array( 'entity' => 'GiftCard', 'namespace' => '\BooklyGiftCards\Lib\Entities', 'required' => 'bookly-addon-gift-cards' ) ),
+        'gift_card_id' => array( 'format' => '%d', 'reference' => array( 'entity' => 'GiftCard', 'namespace' => '\BooklyPro\Lib\Entities', 'required' => 'bookly-addon-pro' ) ),
         'target' => array( 'format' => '%s' ),
         'type' => array( 'format' => '%s' ),
         'total' => array( 'format' => '%f' ),
@@ -108,6 +108,8 @@ class Payment extends Lib\Base\Entity
                 return 'Stripe';
             case self::TYPE_CLOUD_STRIPE:
                 return 'Stripe Cloud';
+            case self::TYPE_CLOUD_SQUARE:
+                return 'Square Cloud';
             case self::TYPE_AUTHORIZENET:
                 return 'Authorize.Net';
             case self::TYPE_2CHECKOUT:
@@ -120,12 +122,10 @@ class Payment extends Lib\Base\Entity
                 return 'Payson';
             case self::TYPE_MOLLIE:
                 return 'Mollie';
-            case self::TYPE_SQUARE:
-                return 'Square';
             case self::TYPE_FREE:
                 return __( 'Free', 'bookly' );
-            case self::TYPE_GIFT_CARD:
-                return __( 'Gift Card', 'bookly' );
+            case self::TYPE_CLOUD_GIFT:
+                return __( 'Gift card', 'bookly' );
             case self::TYPE_WOOCOMMERCE:
                 return 'WooCommerce';
             default:
@@ -169,10 +169,10 @@ class Payment extends Lib\Base\Entity
             self::TYPE_PAYULATAM,
             self::TYPE_PAYSON,
             self::TYPE_MOLLIE,
-            self::TYPE_SQUARE,
+            self::TYPE_CLOUD_SQUARE,
             self::TYPE_FREE,
             self::TYPE_WOOCOMMERCE,
-            self::TYPE_GIFT_CARD,
+            self::TYPE_CLOUD_GIFT,
         );
     }
 
@@ -766,18 +766,40 @@ class Payment extends Lib\Base\Entity
 
     public function save()
     {
-        if ( $this->getId() == null ) {
+        $created = false;
+        if ( $this->getId() === null ) {
             $this
                 ->setCreatedAt( current_time( 'mysql' ) )
                 ->setUpdatedAt( current_time( 'mysql' ) );
+            $created = true;
         } elseif ( $this->getModified() ) {
             $this->setUpdatedAt( current_time( 'mysql' ) );
         }
         // Generate new token if it is not set.
-        if ( $this->getToken() == '' ) {
+        if ( ! $this->getToken() ) {
             $this->setToken( Lib\Utils\Common::generateToken( get_class( $this ), 'token' ) );
         }
 
-        return parent::save();
+        if ( ! $created ) {
+            Lib\Utils\Log::fromBacktrace( $this );
+        }
+
+        $result = parent::save();
+
+        if ( $created ) {
+            Lib\Utils\Log::fromBacktrace( $this, Lib\Utils\Log::ACTION_CREATE );
+        }
+
+        return $result;
+    }
+
+    /**
+     * Delete payment
+     */
+    public function delete()
+    {
+        Lib\Utils\Log::fromBacktrace( $this, Lib\Utils\Log::ACTION_DELETE );
+
+        return parent::delete();
     }
 }

@@ -27,8 +27,7 @@ use Bookly\Lib;
                 <?php endif ?>
             </div>
             <div class="modal-footer">
-                <input type="hidden" name="action" value="bookly_create_service"/>
-                <?php Buttons::renderSubmit( null, 'bookly-js-save',__( 'Create service', 'bookly' ) ) ?>
+                <?php Buttons::renderSubmit( null, 'bookly-js-save', __( 'Create service', 'bookly' ) ) ?>
                 <?php Buttons::renderCancel( __( 'Close', 'bookly' ) ) ?>
             </div>
         </div>

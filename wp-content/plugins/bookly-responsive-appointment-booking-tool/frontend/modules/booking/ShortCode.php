@@ -104,6 +104,7 @@ class ShortCode extends Lib\Base\Component
                 'nextMonth' => __( 'Next month', 'bookly' ),
                 'prevMonth' => __( 'Previous month', 'bookly' ),
                 'show_more' => __( 'Show more', 'bookly' ),
+                'sessionHasExpired' => __( 'Your session has expired. Please press "Ok" to refresh the page', 'bookly' )
             ) );
         }
     }
@@ -145,7 +146,7 @@ class ShortCode extends Lib\Base\Component
                     $data['payment']['processed'] = true;
                     Lib\Session::setFormVar( $saved_form_id, 'payment', $data['payment'] );
                 }
-            } elseif ( $data['last_touched'] + 30 * MINUTE_IN_SECONDS < time() ) {
+            } elseif ( isset( $data['last_touched'] ) && $data['last_touched'] + 30 * MINUTE_IN_SECONDS < time() ) {
                 // Destroy forms older than 30 min.
                 Lib\Session::destroyFormData( $saved_form_id );
             }

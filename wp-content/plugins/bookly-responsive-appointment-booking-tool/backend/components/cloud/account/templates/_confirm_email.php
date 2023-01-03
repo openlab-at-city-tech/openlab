@@ -10,7 +10,7 @@ use Bookly\Backend\Components\Controls\Buttons;
             </div>
             <div class="modal-body">
                 <p>
-                    <?php esc_html_e( 'You\'re almost ready to get started with Bookly SMS Service.', 'bookly' ) ?>
+                    <?php esc_html_e( 'You\'re almost ready to get started with Bookly Cloud.', 'bookly' ) ?>
                     <?php esc_html_e( 'An email containing the confirmation code has been sent to your email address.', 'bookly' ) ?>
                 </p>
                 <p><?php esc_html_e( 'To complete registration, please enter the confirmation code below.', 'bookly' ) ?></p>

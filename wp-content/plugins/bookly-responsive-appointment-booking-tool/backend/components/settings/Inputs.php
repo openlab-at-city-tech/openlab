@@ -125,15 +125,29 @@ class Inputs
      */
     public static function renderText( $option_name, $label, $help = null )
     {
+        self::renderTextValue( $option_name, get_option( $option_name ), $label, $help );
+    }
+
+    /**
+     * Render text input
+     *
+     * @param string $name
+     * @param string $value
+     * @param string $label
+     * @param string|null $help
+     * @return void
+     */
+    public static function renderTextValue( $name, $value, $label, $help = null )
+    {
         $control = strtr(
             '<input type="text" id="{name}" class="form-control" name="{name}" value="{value}" />',
             array(
-                '{name}'  => esc_attr( $option_name ),
-                '{value}' => esc_attr( get_option( $option_name ) ),
+                '{name}' => esc_attr( $name ),
+                '{value}' => esc_attr( $value ),
             )
         );
 
-        echo self::buildControl( $option_name, $label, $help, $control );
+        echo self::buildControl( $name, $label, $help, $control );
     }
 
     /**
@@ -170,7 +184,6 @@ class Inputs
      */
     public static function buildControl( $option_name, $label, $help, $control_html )
     {
-
         return strtr(
             '<div class="form-group">{label}{control}{help}</div>',
             array(

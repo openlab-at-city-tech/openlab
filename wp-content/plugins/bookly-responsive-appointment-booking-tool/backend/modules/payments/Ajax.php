@@ -5,6 +5,7 @@ use Bookly\Lib;
 
 /**
  * Class Ajax
+ *
  * @package Bookly\Backend\Modules\Payments
  */
 class Ajax extends Lib\Base\Ajax
@@ -22,7 +23,7 @@ class Ajax extends Lib\Base\Ajax
      */
     public static function getPayments()
     {
-        $filter  = self::parameter( 'filter' );
+        $filter = self::parameter( 'filter' );
 
         $query = Lib\Entities\Payment::query( 'p' )
             ->select( 'p.id, p.created_at, p.type, p.paid, p.total, p.status, p.details, c.full_name customer, st.full_name provider, s.title service, a.start_date' )
@@ -69,10 +70,10 @@ class Ajax extends Lib\Base\Ajax
 
         Lib\Utils\Tables::updateSettings( 'payments', null, null, $filter );
 
-        $data  = array();
+        $data = array();
         $total = 0;
         foreach ( $payments as $payment ) {
-            $details  = json_decode( $payment['details'], true );
+            $details = json_decode( $payment['details'], true );
 
             $paid_title = Lib\Utils\Price::format( $payment['paid'] );
             if ( $payment['paid'] != $payment['total'] ) {
@@ -80,31 +81,31 @@ class Ajax extends Lib\Base\Ajax
             }
 
             $data[] = array(
-                'id'         => $payment['id'],
+                'id' => $payment['id'],
                 'created_at' => $payment['created_at'],
                 'created_format' => Lib\Utils\DateTime::formatDateTime( $payment['created_at'] ),
-                'type'       => Lib\Entities\Payment::typeToString( $payment['type'] ),
-                'multiple'   => isset( $details['items'] ) && is_array( $details['items'] ) && count( $details['items'] ) > 1,
-                'customer'   => $payment['customer'] ?: $details['customer'],
-                'provider'   => ( $payment['provider'] ?: $details['items'][0]['staff_name'] ),
-                'service'    => ( $payment['service'] ?: $details['items'][0]['service_name'] ),
+                'type' => Lib\Entities\Payment::typeToString( $payment['type'] ),
+                'multiple' => isset( $details['items'] ) && is_array( $details['items'] ) && count( $details['items'] ) > 1,
+                'customer' => $payment['customer'] ?: $details['customer'],
+                'provider' => ( $payment['provider'] ?: $details['items'][0]['staff_name'] ),
+                'service' => ( $payment['service'] ?: $details['items'][0]['service_name'] ),
                 'start_date' => $payment['start_date'] ?: $details['items'][0]['appointment_date'] ?: __( 'N/A', 'bookly' ),
                 'start_date_format' => $payment['start_date']
                     ? Lib\Utils\DateTime::formatDateTime( $payment['start_date'] )
                     : ( $details['items'][0]['appointment_date'] ? Lib\Utils\DateTime::formatDateTime( $details['items'][0]['appointment_date'] ) : __( 'N/A', 'bookly' ) ),
-                'paid'       => $paid_title,
-                'status'     => Lib\Entities\Payment::statusToString( $payment['status'] ),
+                'paid' => $paid_title,
+                'status' => Lib\Entities\Payment::statusToString( $payment['status'] ),
             );
 
             $total += $payment['paid'];
         }
 
         wp_send_json( array(
-            'draw'            => ( int ) self::parameter( 'draw' ),
-            'recordsTotal'    => count( $data ),
+            'draw' => ( int ) self::parameter( 'draw' ),
+            'recordsTotal' => count( $data ),
             'recordsFiltered' => count( $data ),
-            'data'            => $data,
-            'total'           => Lib\Utils\Price::format( $total ),
+            'data' => $data,
+            'total' => Lib\Utils\Price::format( $total ),
         ) );
     }
 
@@ -114,7 +115,10 @@ class Ajax extends Lib\Base\Ajax
     public static function deletePayments()
     {
         $payment_ids = array_map( 'intval', self::parameter( 'data', array() ) );
-        Lib\Entities\Payment::query()->delete()->whereIn( 'id', $payment_ids )->execute();
+        /** @var Lib\Entities\Payment $payment */
+        foreach ( Lib\Entities\Payment::query()->whereIn( 'id', $payment_ids )->find() as $payment ) {
+            $payment->delete();
+        }
         wp_send_json_success();
     }
 

@@ -193,6 +193,9 @@ class Codes
                 }
             }
             if ( $valid ) {
+                if ( isset( $data['loop']['codes'] ) ) {
+                    $data['loop']['codes'] = self::filter( $data['loop']['codes'], $flags );
+                }
                 $result[ $code ] = $data;
             }
         }

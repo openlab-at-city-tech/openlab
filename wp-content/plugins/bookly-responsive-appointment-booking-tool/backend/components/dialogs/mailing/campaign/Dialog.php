@@ -6,6 +6,7 @@ use Bookly\Backend\Components\Controls\Buttons;
 
 /**
  * Class Dialog
+ *
  * @package Bookly\Backend\Components\Dialogs\Mailing\Campaign
  */
 class Dialog extends Lib\Base\Component
@@ -17,9 +18,16 @@ class Dialog extends Lib\Base\Component
     {
         self::enqueueStyles( array(
             'backend' => array( 'css/fontawesome-all.min.css' => array( 'bookly-backend-globals' ), ),
+            'bookly' => array( 'backend/components/ace/resources/css/ace.css', ),
         ) );
 
         self::enqueueScripts( array(
+            'bookly' => array(
+                'backend/components/ace/resources/js/ace.js' => array(),
+                'backend/components/ace/resources/js/ext-language_tools.js' => array(),
+                'backend/components/ace/resources/js/mode-bookly.js' => array(),
+                'backend/components/ace/resources/js/editor.js' => array( 'bookly-campaign-dialog.js' ),
+            ),
             'module' => array( 'js/campaign-dialog.js' => array( 'bookly-backend-globals' ), ),
         ) );
 
@@ -28,6 +36,16 @@ class Dialog extends Lib\Base\Component
             'datePicker' => Lib\Utils\DateTime::datePickerOptions(),
             'moment_format_date' => Lib\Utils\DateTime::convertFormat( 'date', Lib\Utils\DateTime::FORMAT_MOMENT_JS ),
             'moment_format_time' => Lib\Utils\DateTime::convertFormat( 'time', Lib\Utils\DateTime::FORMAT_MOMENT_JS ),
+            'codes' => json_encode( array(
+                'client_name' => array( 'description' => __( 'Full name of client', 'bookly' ), 'if' => true ),
+                'client_first_name' => array( 'description' => __( 'First name of client', 'bookly' ), 'if' => true ),
+                'client_last_name' => array( 'description' => __( 'Last name of client', 'bookly' ), 'if' => true ),
+                'client_phone' => array( 'description' => __( 'Phone of client', 'bookly' ), 'if' => true ),
+                'company_address' => array( 'description' => __( 'Address of company', 'bookly' ), 'if' => true ),
+                'company_name' => array( 'description' => __( 'Name of company', 'bookly' ), 'if' => true ),
+                'company_phone' => array( 'description' => __( 'Company phone', 'bookly' ), 'if' => true ),
+                'company_website' => array( 'description' => __( 'Company web-site address', 'bookly' ), 'if' => true ),
+            ) ),
             'l10n' => array(
                 'new_campaign' => __( 'New campaign', 'bookly' ),
                 'edit_campaign' => __( 'Edit campaign', 'bookly' ),

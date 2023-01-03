@@ -8,11 +8,11 @@ msgstr ""
 "Language: fr_FR\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-20 08:25+0000\n"
-"PO-Revision-Date: 2022-09-23 06:34+0000\n"
-"Last-Translator: support@bookly.info\n"
+"POT-Creation-Date: 2022-12-14 12:40+0000\n"
+"PO-Revision-Date: 2022-12-15 08:28+0000\n"
+"Last-Translator: Mathilde Massardier <mathilde.mass@icloud.com>\n"
 "Language-Team: French (France)\n"
-"X-Loco-Version: 2.3.1; wp-6.0"
+"X-Loco-Version: 2.3.1; wp-6.1"
 
 msgid "Invoice #{invoice_number} for your appointment"
 msgstr "Facture n° {invoice_number} de votre rendez-vous"
@@ -77,18 +77,6 @@ msgstr "Nous apprécions beaucoup"
 
 msgid "Download invoice"
 msgstr "Télécharger la facture"
-
-msgid ""
-"Invoices add-on requires your customers address information. So options "
-"\"Make address field mandatory\" in Settings/Customers and \"Show address "
-"field\" in Appearance/Details are activated automatically and can be "
-"disabled after Invoices add-on is deactivated."
-msgstr ""
-"Le add-on facturation nécessite l'adresse de vos clients. Par conséquent, "
-"les options \"Rendre adresse obligatoire\" dans Paramètres/Clients et "
-"\"Afficher champ adresse\" dans \"Apparence/Détails\" sont activés "
-"automatiquement et pourront être désactivés si le add-on Facturation est "
-"désactivé."
 
 msgid "Invoice due days"
 msgstr "Nombre de jours d'éxigibilité"
@@ -751,16 +739,23 @@ msgstr ""
 msgid "Fields matching"
 msgstr "Champs correspondants"
 
+msgid ""
+"Enter the tags of the fields in your Mailchimp audience settings in "
+"accordance with Bookly data."
+msgstr ""
+"Saisissez les balises des champs dans les paramètres de votre audience "
+"Mailchimp en fonction des données Bookly."
+
 #, php-format
 msgid ""
-"Enter the names of the fields in your Mailchimp audience settings in "
-"accordance with Bookly data. You can find these names in <b>Audience "
-"settings > Audience fields and %s tags</b> in your Mailchimp account"
+"You can find these tags in <b>Audience settings > Audience fields and %s "
+"tags</b> in your Mailchimp account"
 msgstr ""
-"Saisissez les noms des champs dans vos paramètres d'audience Mailchimp en "
-"adéquation avec les données de Bookly. Ces noms se trouvent dans <b>"
-"Paramètres d'audience > Champs d'audience et balises %s</b> dans votre "
-"compte Mailchimp"
+"Vous pouvez trouver ces balises dans <b>Paramètres d'audience > Champs "
+"d'audience et balises %s</b> dans votre compte Mailchimp."
+
+msgid "Tag"
+msgstr "Balise"
 
 msgid "Value"
 msgstr "Valeur"
@@ -2336,6 +2331,13 @@ msgid_plural " and %d more items"
 msgstr[0] " et %d élément en plus"
 msgstr[1] " et %d éléments en plus"
 
+msgid "Phone number is empty."
+msgstr "Numéro de téléphone vide."
+
+#, php-format
+msgid "%d min"
+msgstr "%d min"
+
 msgid "Bookly Cloud couldn't connect to your server."
 msgstr "Bookly Cloud n'a pas pu se connecter à votre serveur."
 
@@ -2433,9 +2435,6 @@ msgstr ""
 
 msgid "Failed to send SMS."
 msgstr "Impossible d'envoyer le SMS."
-
-msgid "Phone number is empty."
-msgstr "Numéro de téléphone vide."
 
 msgid "Queued"
 msgstr "En attente"
@@ -2826,6 +2825,12 @@ msgstr "Notification au client avec le code de vérification"
 
 msgid "Bookly verification code"
 msgstr "Code de vérification de Bookly"
+
+msgid "&lt;"
+msgstr "&lt;"
+
+msgid "&gt;"
+msgstr "&gt;"
 
 msgid "Download ICS"
 msgstr "Télécharger ICS"
@@ -3354,10 +3359,6 @@ msgstr[1] "%d jours"
 msgid "%d h"
 msgstr "%d h"
 
-#, php-format
-msgid "%d min"
-msgstr "%d min"
-
 msgid "From"
 msgstr "De"
 
@@ -3460,6 +3461,9 @@ msgstr "Flag"
 msgid "Code"
 msgstr "Code"
 
+msgid "Price/Minute"
+msgstr "Prix/Minute"
+
 msgid "Regular price"
 msgstr "Prix normal"
 
@@ -3538,6 +3542,14 @@ msgstr ""
 "Veuillez noter qu'en supprimant cet élément Bookly, toutes les données qui "
 "lui sont associées seront définitivement supprimées."
 
+msgid ""
+"To save data, please set \"Don't delete\" in Bookly Settings > General > "
+"Bookly data upon deleting Bookly items"
+msgstr ""
+"Pour sauvegarder les données, veuillez choisir l'option \"Ne pas supprimer\" "
+"dans Réglages Bookly > Général > Données Bookly lors de la suppression "
+"d'éléments Bookly."
+
 #, php-format
 msgid "%s updated"
 msgstr "%s mis à jour"
@@ -3554,7 +3566,7 @@ msgstr "Pas de mises à jour disponibles"
 msgid "Free"
 msgstr "Libre"
 
-msgid "Gift Card"
+msgid "Gift card"
 msgstr "Carte cadeau"
 
 msgid "Completed"
@@ -3913,6 +3925,12 @@ msgstr ""
 "Sélectionnez \"Activé\" si vous voulez que Bookly empêche la mise en cache "
 "par des plugins de mise en cache tiers en ajoutant une constante "
 "DONOTCACHEPAGE sur les pages avec le formulaire de réservation"
+
+msgid "Session storage mode"
+msgstr "Mode de stockage des sessions"
+
+msgid "Select where to store session data"
+msgstr "Choisissez où stocker les données de session"
 
 msgid "Prevent PHP session locking"
 msgstr ""
@@ -4365,6 +4383,9 @@ msgstr "Boucle sur la liste des participants avec délimiteur"
 msgid "Last month"
 msgstr "Mois dernier"
 
+msgid "No records for selected period."
+msgstr "Pas d'enregistrements pour cette période."
+
 msgid "SMS Notifications"
 msgstr "Notifications SMS"
 
@@ -4454,9 +4475,6 @@ msgstr "La requête ID Émetteur est envoyée."
 
 msgid "Sender ID is reset to default."
 msgstr "L'ID Émetteur est réinitialisé."
-
-msgid "No records for selected period."
-msgstr "Pas d'enregistrements pour cette période."
 
 msgid "enable"
 msgstr "activer"
@@ -4587,9 +4605,6 @@ msgstr "Le service sera créé avec la visibilité de Privé."
 msgid "Duplicate"
 msgstr "Dupliquer"
 
-msgid "Simple"
-msgstr "Simple"
-
 #, php-format
 msgid "%d service"
 msgid_plural "%d services"
@@ -4599,9 +4614,6 @@ msgstr[1] "%d services"
 #, php-format
 msgid "Copy of %s"
 msgstr "Copie de %s"
-
-msgid "Bookly Cloud Zapier"
-msgstr "Bookly Cloud Zapier"
 
 #, php-format
 msgid ""
@@ -5401,6 +5413,28 @@ msgstr ""
 msgid "Sent successfully."
 msgstr "Envoyé avec succès."
 
+msgid "Voice Notifications"
+msgstr "Notifications vocales"
+
+msgid "Make a test call"
+msgstr "Effectuer un appel de test"
+
+msgid "Language"
+msgstr "Langue"
+
+msgid "Select the language of your notifications"
+msgstr "Sélectionnez la langue de vos notifications"
+
+msgid "Busy"
+msgstr "Occupé"
+
+msgid "No answer"
+msgstr "Pas de réponse"
+
+#, php-format
+msgid "Calling %s"
+msgstr "Appel de %s"
+
 msgid "Default value for category select"
 msgstr "Valeur par défaut du choix de catégorie"
 
@@ -5541,8 +5575,8 @@ msgstr "Recharge"
 msgid "Thank you for registration."
 msgstr "Merci de vous être enregistré"
 
-msgid "You're almost ready to get started with Bookly SMS Service."
-msgstr "Vous allez pouvoir bientôt démarrer le service Bookly SMS."
+msgid "You're almost ready to get started with Bookly Cloud."
+msgstr "Vous êtes presque prêt à démarrer avec Bookly Cloud."
 
 msgid ""
 "An email containing the confirmation code has been sent to your email "
@@ -6160,6 +6194,15 @@ msgstr "Toutes les modifs non sauvegardées seront perdues."
 msgid "Don't save"
 msgstr "Ne pas sauvegarder"
 
+msgid "Voice"
+msgstr "Voix"
+
+msgid "New voice notification"
+msgstr "Nouvelle notification vocale"
+
+msgid "Edit voice notification"
+msgstr "Modifier la notification vocale"
+
 msgid "Create service"
 msgstr "Créer un service"
 
@@ -6191,6 +6234,9 @@ msgstr ""
 
 msgid "Edit service"
 msgstr "Modifier service"
+
+msgid "Simple"
+msgstr "Simple"
 
 msgid "Adjust the order of services in your booking form"
 msgstr "Définir l'ordre des services dans le formulaire de réservation"
@@ -6321,32 +6367,43 @@ msgstr ""
 "sélectionnez les chaînes dans le domaine %s, choisissez n'importe quelle "
 "traduction, puis cliquez sur le bouton \"Enregistrer\"."
 
-msgid "This function is not available in the Bookly."
-msgstr "Cette fonction n'est pas disponible dans Bookly."
+msgid "This is a Pro version feature"
+msgstr "Il s'agit d'une fonctionnalité de la version Pro"
 
 msgid ""
-"You are using the free version of Bookly, so you can't add more than 5 "
-"services. To remove this limitation, get access to all Bookly features, "
-"lifetime free updates and 24/7 support, please upgrade to the Pro version of "
-"Bookly."
+"To get access to more features, lifetime free updates and 24/7 support, "
+"upgrade to the Pro version of Bookly."
 msgstr ""
-"Vous utilisez la version gratuite de Bookly, vous ne pouvez donc pas ajouter "
-"plus de 5 services. Pour supprimer cette limitation, et avoir accès à toutes "
-"les fonctionnalités de Bookly, aux mises à jour gratuites à vie et au "
-"support 24/7, veuillez passer à la version Pro de Bookly."
+"Pour avoir accès à davantage de fonctionnalités, à des mises à jour "
+"gratuites à vie et à une assistance 24h/24 et 7j/7, passez à la version Pro "
+"de Bookly."
 
-msgid "For more information visit"
-msgstr "Pour plus d'informations, visitez "
+msgid "Compatibility with Bookly add-ons"
+msgstr "Compatibilité avec les modules complémentaires de Bookly"
 
-msgid ""
-"You are using the free version of Bookly, so you can't add more than 1 staff."
-" To remove this limitation, get access to all Bookly features, lifetime free "
-"updates and 24/7 support, please upgrade to the Pro version of Bookly."
-msgstr ""
-"Vous utilisez la version gratuite de Bookly, vous ne pouvez donc pas ajouter "
-"plus d'un employé. Pour supprimer cette limitation, et avoir accès à toutes "
-"les fonctionnalités de Bookly, aux mises à jour gratuites à vie et au "
-"support 24/7, veuillez passer à la version Pro de Bookly."
+msgid "Unlimited staff members"
+msgstr "Nombre illimité de membres du personnel"
+
+msgid "Unlimited services"
+msgstr "Services illimités"
+
+msgid "Modern booking forms"
+msgstr "Formulaires de réservation modernes"
+
+msgid "Online meetings"
+msgstr "Réunions en ligne"
+
+msgid "WooCommerce compatibility"
+msgstr "Compatibilité avec WooCommerce"
+
+msgid "Google Calendar integration"
+msgstr "Intégration Google Calendar"
+
+msgid "Advanced service and staff management"
+msgstr "Gestion avancée du service et du personnel"
+
+msgid "Upgrade"
+msgstr "Mise à niveau"
 
 #, php-format
 msgid ""
@@ -6578,6 +6635,10 @@ msgstr "Vérifier"
 
 msgid "Show more"
 msgstr "Afficher plus"
+
+msgid "Your session has expired. Please press \"Ok\" to refresh the page"
+msgstr ""
+"Votre session a expiré. Veuillez appuyer sur \"Ok\" pour rafraîchir la page."
 
 msgid "Session error."
 msgstr "Erreur Session."
@@ -7046,6 +7107,30 @@ msgstr ""
 "{company_phone}\n"
 "{company_website}"
 
+msgid "Notification to customer about purchased gift card"
+msgstr "Notification au client concernant la carte cadeau achetée"
+
+msgid "Your gift card at"
+msgstr "Votre carte cadeau à"
+
+msgid ""
+"Dear {client_name},\n"
+"\n"
+"This is a confirmation that the following Gift Card {gift_card} has been "
+"purchased at {company_name}.\n"
+"\n"
+"We are waiting for you at {company_address}."
+msgstr ""
+"Cher {client_name},\n"
+"\n"
+"Nous vous confirmons par la présente que la carte cadeau {gift_card} "
+"suivante a été achetée chez {company_name}.\n"
+"\n"
+"Nous vous attendons à {company_address}."
+
+msgid "Thank you for choosing our company."
+msgstr "Merci d'avoir choisi notre entreprise."
+
 msgid ""
 "Hello.\n"
 "An account was created for you at {site_address}\n"
@@ -7086,6 +7171,9 @@ msgstr "Appliqué"
 msgid "I will pay now with PayPal"
 msgstr "Je paie avec PayPal"
 
+msgid "I will pay by gift card"
+msgstr "Je paierai par carte cadeau"
+
 msgid ""
 "You are not required to pay for the booked services, click Next to complete "
 "the booking process."
@@ -7117,6 +7205,18 @@ msgstr "Numéro de Carte"
 
 msgid "Appointment"
 msgstr "Rendez-vous"
+
+msgid "This gift card has expired"
+msgstr "Cette carte cadeau a expiré"
+
+msgid "This gift card cannot be used for the current order"
+msgstr "Cette carte cadeau ne peut pas être utilisée pour la commande en cours"
+
+msgid "Gift card balance is not enough"
+msgstr "Le solde de la carte cadeau n'est pas suffisant"
+
+msgid "Gift card not found"
+msgstr "Carte cadeau non trouvée"
 
 msgid "New customer's WordPress user login details"
 msgstr "Information du login utilisateur Wordpress d'un nouveau client"
@@ -7173,11 +7273,26 @@ msgstr "Adresse client"
 msgid "Customer birthday"
 msgstr "Anniversaire du client"
 
-msgid "Online meetings"
-msgstr "Réunions en ligne"
+msgid "Balance"
+msgstr "Solde"
+
+msgid "Active from"
+msgstr "Actif depuis"
+
+msgid "Active until"
+msgstr "Actif seulement"
+
+msgid "Min. appointments"
+msgstr "Rendez-vous min."
+
+msgid "Max. appointments"
+msgstr "Rendez-vous max."
 
 msgid "New staff's WordPress user login details"
 msgstr "Détails de connexion de l'utilisateur WordPress du nouveau personnel"
+
+msgid "Notification about new gift card creation"
+msgstr "Notification de la création d'une nouvelle carte cadeau"
 
 msgid "License verification"
 msgstr "Vérification de licence"
@@ -7293,6 +7408,95 @@ msgstr "Échec de la création d'une réunion en ligne"
 
 msgid "Print"
 msgstr "Imprimer"
+
+msgid "Gift Cards"
+msgstr "Cartes cadeaux"
+
+msgid "Add gift card series"
+msgstr "Ajouter une série de cartes cadeaux"
+
+msgid "Add gift card"
+msgstr "Ajouter une carte cadeau"
+
+msgid "Gift card code"
+msgstr "Code de la carte cadeau"
+
+msgid "Show only active"
+msgstr "Montrer actif seulement"
+
+msgid "Export only active gift cards"
+msgstr "Exporter uniquement les cartes cadeaux actives"
+
+msgid "New gift cards series"
+msgstr "Nouvelle série de cartes cadeaux"
+
+msgid "New gift card"
+msgstr "Nouvelle carte cadeau"
+
+msgid "Edit gift card"
+msgstr "Modifier la carte cadeau"
+
+msgid "Generate"
+msgstr "Créer"
+
+msgid ""
+"You can enter a mask containing asterisks \"*\" for variables here and click "
+"Generate."
+msgstr ""
+"Vous pouvez entrer un masque contenant des astérisques \"*\" pour ces "
+"variables, puis cliquer Créer"
+
+msgid "Mask"
+msgstr "Masque"
+
+msgid "Enter a mask containing asterisks \"*\" for variables."
+msgstr "Entrer un code contenant des astérisques \"*\" pour les variables."
+
+msgid "Date limit (from and to)"
+msgstr "Date limite (début et fin)"
+
+msgid "No limit"
+msgstr "Sans limite"
+
+msgid "Clear field"
+msgstr "Effacer champ"
+
+msgid "Limit appointments in cart (min and max)"
+msgstr "Limite rendez-vous dans le panier (Min. et Max.)"
+
+msgid ""
+"Specify minimum and maximum (optional) number of services of the same type "
+"required to apply a gift card."
+msgstr ""
+"Indiquez le nombre minimum et maximum (facultatif) de services du même type "
+"requis pour appliquer une carte cadeau."
+
+msgid "Create another gift card"
+msgstr "Créer une autre carte cadeau"
+
+msgid "No gift cards found."
+msgstr "Aucune carte cadeau trouvée."
+
+msgid "Min appointments should be greater than zero."
+msgstr "Min. rendez-vous doit être supérieur à 0."
+
+msgid "Max appointments should be greater than zero."
+msgstr "Max. rendez-vous doit être supérieur à 0."
+
+msgid "The code already exists"
+msgstr "Le code existe déjà "
+
+msgid "Please enter a non empty mask."
+msgstr "Veuillez entrer un masque."
+
+#, php-format
+msgid ""
+"It is not possible to generate %d codes for this mask. Only %d codes "
+"available."
+msgstr "Impossible de créer des codes %d pour ce masque. Codes %d uniquement."
+
+msgid "All possible codes have already been generated for this mask."
+msgstr "Tous les codes possibles ont déjà été créés pour ce masque"
 
 msgid "API Username"
 msgstr "Utilisateur API"
@@ -7599,39 +7803,46 @@ msgid "To set up Facebook integration, do the following:"
 msgstr ""
 "Pour définir l'intégration Facebook, vous devez faire les actions suivantes:"
 
-msgid ""
-"Follow the steps at <a href=\"https://developers.facebook."
-"com/docs/apps/register\" target=\"_blank\">https://developers.facebook."
-"com/docs/apps/register</a> to create a Developer Account, register and "
-"configure your <b>Facebook App</b>. Then you'll need to submit your app for "
-"review. Learn more about the review process and what's required to pass "
-"review in the <a href=\"https://developers.facebook.com/docs/facebook-"
-"login/review\" target=\"_blank\">Login Review Guide</a>."
-msgstr ""
-"Suivez les étapes sur <a href=\"https://developers.facebook."
-"com/docs/apps/register\" target=\"_blank\">https://developers.facebook."
-"com/docs/apps/register</a> pour créer un Compte Développeur, enregistrez-"
-"vous et configurez votre <b>Facebook App</b>. Ensuite, vous devrez soumettre "
-"votre application pour examen. En savoir plus sur le processus d'examen et "
-"ce qui est nécessaire pour réussir l'examen sur <a href=\"https://developers."
-"facebook.com/docs/facebook-login/review\" target=\"_blank\">Login Review "
-"Guide</a>. "
+#, php-format
+msgid "Follow the steps at %s to create a Developer Account."
+msgstr "Suivez les étapes indiquées à %s pour créer un compte de développeur."
 
 msgid ""
-"Below the App Details Panel click Add Platform button, select Website and "
-"enter your website URL."
+"In \"My apps\" section, press \"Create App\" button, select \"Consumer\" as "
+"the app type and provide the necessary information (App name, App contact "
+"email)."
 msgstr ""
-"Sous le panneau App Details, cliquez sur le bouton Add Platform, "
-"sélectionnez Website et entrez l'URL de votre site web."
+"Dans la section \"Mes applications\", cliquez sur le bouton \"Créer une "
+"application\", sélectionnez \"Consommateur\" comme type d'application et "
+"fournissez les informations nécessaires (nom de l'application, adresse "
+"électronique de contact de l'application)."
+
+msgid "Then click \"Create App\"."
+msgstr "Cliquez ensuite sur \"Créer une application\"."
 
 msgid ""
-"Go to your App Dashboard. In the left side navigation panel of the App "
-"Dashboard, click Settings > Basic to view the App Details Panel with your "
-"App ID. Use it in the form below."
+"In \"Add products to your app\" section, find \"Facebook login\" and press "
+"\"Set up\"."
 msgstr ""
-"Allez dans votre App Dashboard. Dans le panneau de navigation gauche, "
-"cliquez sur Settings > Basic pour visualiser le panneau App Details "
-"contenant l'app ID. entrez l'ID dans le formulaire ci-dessous."
+"Dans la section \"Ajoutez des produits à votre application\", trouvez "
+"\"Connexion Facebook \" et appuyez sur \" Configurer \"."
+
+msgid "In the sidebar on the left, select \"Settings\"."
+msgstr "Dans la barre latérale de gauche, sélectionnez \"Paramètres\"."
+
+msgid ""
+"Enable \"Login with the JavaScript SDK\" and enter your site URL in \"Allow "
+"Domains for the JavaScript SDK\". Click \"Save changes\"."
+msgstr ""
+"Activez \"Connexion avec le JavaScript SDK\" et entrez l'URL de votre site "
+"dans \"Autoriser les domaines pour le JavaScript SDK\". Cliquez sur "
+"\"Enregistrer les modifications\"."
+
+msgid "At the top of your screen press on App ID to copy it."
+msgstr "En haut de votre écran, appuyez sur App ID pour le copier."
+
+msgid "Use it in the form below."
+msgstr "Utilisez-le dans le formulaire ci-dessous."
 
 msgid "App ID"
 msgstr "ID App"
@@ -7641,6 +7852,59 @@ msgstr "Sélectionnez qui peut gérer les rendez-vous Bookly"
 
 msgid "Select who can administrate Bookly"
 msgstr "Sélectionnez qui peut administrer Bookly"
+
+#, php-format
+msgid ""
+"Go to the <a href=\"%s\" target=\"_blank\">Square Developer dashboard</a>."
+msgstr ""
+"Allez au <a href=\"%s\" target=\"_blank\">Tableau de bord du développeur "
+"Square</a>."
+
+msgid "Select an app or create a new one."
+msgstr "Sélectionnez une application ou créez-en une nouvelle."
+
+msgid ""
+"Depending on the mode (Sandbox or Production), look for the <b>Application "
+"ID</b> and <b>Access token</b>."
+msgstr ""
+"En fonction du mode (Sandbox ou Production), recherchez l'<b>ID de "
+"l'application</b> et <b>le token d'accès</b>."
+
+msgid "Use them in the form below on this page."
+msgstr "Utilisez-les dans le formulaire ci-dessous sur cette page."
+
+msgid "In the sidebar on the left, go to the <b>Webhooks > Subscriptions</b>."
+msgstr ""
+"Dans la barre latérale de gauche, allez dans<b>Webhooks > Abonnements</b>."
+
+#, php-format
+msgid ""
+"Depending on the mode (Sandbox or Production), press <b>Add subscription</b> "
+"button, enter the following URL as the destination for events %s and select "
+"%s in <b>Events</b>."
+msgstr ""
+"Selon le mode (Sandbox ou Production), appuyez sur le bouton <b>Ajouter un "
+"abonnement</b>, saisissez l'URL suivante comme destination des événements %s "
+"et sélectionnez %s dans<b>Événements</b>."
+
+msgid "Click <b>Save</b>."
+msgstr "Cliquez sur <b>Sauvegarder</b>."
+
+msgid "In the sidebar on the left, select <b>Locations</b>."
+msgstr "Dans la barre latérale de gauche, sélectionnez <b>Localisation</b>."
+
+msgid "Look for the necessary location and copy <b>Location ID</b>."
+msgstr ""
+"Recherchez l'emplacement nécessaire et copiez l'<b>ID de la localisation</b>."
+
+msgid "Use it in the form below on this page."
+msgstr "Utilisez-le dans le formulaire ci-dessous sur cette page."
+
+msgid "Access token"
+msgstr "Token d'accès"
+
+msgid "Location ID"
+msgstr "ID de la localisation"
 
 msgid ""
 "Upon providing the purchase code you will have access to free updates of "
@@ -7901,6 +8165,12 @@ msgstr "Le secret obtenu par le retour de commande"
 msgid "Please select a Booking product"
 msgstr "Veuillez sélectionner un produit de réservation"
 
+msgid "Extras titles"
+msgstr "Titres suplémentaires"
+
+msgid "Extras total price"
+msgstr "Prix total des suppléments "
+
 msgid "Online meeting password"
 msgstr "Mot de passe de la réunion en ligne"
 
@@ -8110,6 +8380,12 @@ msgstr "Réservation du package avec succès"
 msgid "Custom CSS"
 msgstr "CSS personnalisé"
 
+msgid "Save the appearance to apply changes."
+msgstr "Sauvegardez l'apparence pour appliquer les changements."
+
+msgid "Changes saved."
+msgstr "Les modifications sont enregistrées."
+
 msgid ""
 "Select the form you want to publish, click on the menu button, and select "
 "'Copy shortcode'. Open the page where you want to add the booking form in a "
@@ -8281,6 +8557,15 @@ msgstr "Date complète de l'anniversaire du client"
 msgid "Time zone of staff"
 msgstr "Fuseau horaire du personnel"
 
+msgid "Gift card amount"
+msgstr "Montant de la carte cadeau"
+
+msgid "Gift card valid-from date"
+msgstr "Date de début de validité de la carte cadeau"
+
+msgid "Gift card expiration date"
+msgstr "Date d'expiration de la carte cadeau "
+
 msgid "Appearance form name"
 msgstr "Nom du formulaire d'apparence"
 
@@ -8343,9 +8628,6 @@ msgstr "Erreur en dissociant le code achat"
 
 msgid "This calendar is already connected to another staff member"
 msgstr "Cet agenda est déjà connecté avec un autre membre du personnel"
-
-msgid "Google Calendar integration"
-msgstr "Intégration Google Calendar"
 
 #, php-format
 msgid "Please configure Google Calendar <a href=\"%s\">settings</a> first"
@@ -9035,18 +9317,6 @@ msgstr "Limite d'utilisation"
 msgid "Number of times used"
 msgstr "Nombre de fois utilisé"
 
-msgid "Active from"
-msgstr "Actif depuis"
-
-msgid "Active until"
-msgstr "Actif seulement"
-
-msgid "Min. appointments"
-msgstr "Rendez-vous min."
-
-msgid "Max. appointments"
-msgstr "Rendez-vous max."
-
 msgid "Coupons"
 msgstr "Codes promo"
 
@@ -9058,9 +9328,6 @@ msgstr "Ajouter Code promo"
 
 msgid "Coupon code"
 msgstr "Code promo"
-
-msgid "Show only active"
-msgstr "Montrer actif seulement"
 
 msgid "Export only active coupons"
 msgstr "Exporter uniquement les codes promo actifs"
@@ -9074,22 +9341,6 @@ msgstr "Nouveau code promo"
 msgid "Edit coupon"
 msgstr "Modifier code promo"
 
-msgid "Generate"
-msgstr "Créer"
-
-msgid ""
-"You can enter a mask containing asterisks \"*\" for variables here and click "
-"Generate."
-msgstr ""
-"Vous pouvez entrer un masque contenant des astérisques \"*\" pour ces "
-"variables, puis cliquer Créer"
-
-msgid "Mask"
-msgstr "Masque"
-
-msgid "Enter a mask containing asterisks \"*\" for variables."
-msgstr "Entrer un code contenant des astérisques \"*\" pour les variables."
-
 msgid "Once per customer"
 msgstr "Une fois par client"
 
@@ -9098,18 +9349,6 @@ msgid ""
 msgstr ""
 "Sélectionnez cette option pour limiter l'utilisation du code promo à 1 seule "
 "fois par client."
-
-msgid "Date limit (from and to)"
-msgstr "Date limite (début et fin)"
-
-msgid "No limit"
-msgstr "Sans limite"
-
-msgid "Clear field"
-msgstr "Effacer champ"
-
-msgid "Limit appointments in cart (min and max)"
-msgstr "Limite rendez-vous dans le panier (Min. et Max.)"
 
 msgid ""
 "Specify minimum and maximum (optional) number of services of the same type "
@@ -9135,27 +9374,6 @@ msgstr "La réduction doit être entre 0 et 100."
 
 msgid "Deduction should be a positive number."
 msgstr "La réduction doit être un nombre positif."
-
-msgid "Min appointments should be greater than zero."
-msgstr "Min. rendez-vous doit être supérieur à 0."
-
-msgid "Max appointments should be greater than zero."
-msgstr "Max. rendez-vous doit être supérieur à 0."
-
-msgid "The code already exists"
-msgstr "Le code existe déjà "
-
-msgid "Please enter a non empty mask."
-msgstr "Veuillez entrer un masque."
-
-#, php-format
-msgid ""
-"It is not possible to generate %d codes for this mask. Only %d codes "
-"available."
-msgstr "Impossible de créer des codes %d pour ce masque. Codes %d uniquement."
-
-msgid "All possible codes have already been generated for this mask."
-msgstr "Tous les codes possibles ont déjà été créés pour ce masque"
 
 msgid "Default code mask"
 msgstr "Code masque par défaut"
@@ -9570,12 +9788,6 @@ msgstr "Résumé"
 msgid "Service Extras"
 msgstr "Suppléments du service"
 
-msgid "Extras titles"
-msgstr "Titres suplémentaires"
-
-msgid "Extras total price"
-msgstr "Prix total des suppléments "
-
 msgid "Show title"
 msgstr "Afficher titre"
 
@@ -9622,117 +9834,6 @@ msgstr ""
 msgid "Extras tax"
 msgstr "Taxes additionnelles"
 
-msgid "This gift card has expired"
-msgstr "Cette carte cadeau a expiré"
-
-msgid "This gift card cannot be used for the current order"
-msgstr "Cette carte cadeau ne peut pas être utilisée pour la commande en cours"
-
-msgid "Gift card balance is not enough"
-msgstr "Le solde de la carte cadeau n'est pas suffisant"
-
-msgid "Gift card not found"
-msgstr "Carte cadeau non trouvée"
-
-msgid "I will pay by gift card"
-msgstr "Je paierai par carte cadeau"
-
-msgid "Balance"
-msgstr "Solde"
-
-msgid "Gift Cards"
-msgstr "Cartes cadeaux"
-
-msgid "Add Gift card Series"
-msgstr "Ajouter une série de cartes cadeaux"
-
-msgid "Add Gift card"
-msgstr "Ajouter une carte cadeau"
-
-msgid "Gift code"
-msgstr "Code cadeau"
-
-msgid "Export only active gift cards"
-msgstr "Exporter uniquement les cartes cadeaux actives"
-
-msgid "New gift cards series"
-msgstr "Nouvelle série de cartes cadeaux"
-
-msgid "New gift card"
-msgstr "Nouvelle carte cadeau"
-
-msgid "Edit gift card"
-msgstr "Modifier la carte cadeau"
-
-msgid ""
-"Specify minimum and maximum (optional) number of services of the same type "
-"required to apply a gift card."
-msgstr ""
-"Indiquez le nombre minimum et maximum (facultatif) de services du même type "
-"requis pour appliquer une carte cadeau."
-
-msgid "Create another gift card"
-msgstr "Créer une autre carte cadeau"
-
-msgid "No gift cards found."
-msgstr "Aucune carte cadeau trouvée."
-
-msgid "Gift card code"
-msgstr "Code de la carte cadeau"
-
-#, php-format
-msgid ""
-"Go to the <a href=\"%s\" target=\"_blank\">Square Developer dashboard</a>."
-msgstr ""
-"Allez au <a href=\"%s\" target=\"_blank\">Tableau de bord du développeur "
-"Square</a>."
-
-msgid "Select an app or create a new one."
-msgstr "Sélectionnez une application ou créez-en une nouvelle."
-
-msgid ""
-"Depending on the mode (Sandbox or Production), look for the <b>Application "
-"ID</b> and <b>Access token</b>."
-msgstr ""
-"En fonction du mode (Sandbox ou Production), recherchez l'<b>ID de "
-"l'application</b> et <b>le token d'accès</b>."
-
-msgid "Use them in the form below on this page."
-msgstr "Utilisez-les dans le formulaire ci-dessous sur cette page."
-
-msgid "In the sidebar on the left, go to the <b>Webhooks > Subscriptions</b>."
-msgstr ""
-"Dans la barre latérale de gauche, allez dans<b>Webhooks > Abonnements</b>."
-
-#, php-format
-msgid ""
-"Depending on the mode (Sandbox or Production), press <b>Add subscription</b> "
-"button, enter the following URL as the destination for events %s and select "
-"%s in <b>Events</b>."
-msgstr ""
-"Selon le mode (Sandbox ou Production), appuyez sur le bouton <b>Ajouter un "
-"abonnement</b>, saisissez l'URL suivante comme destination des événements %s "
-"et sélectionnez %s dans<b>Événements</b>."
-
-msgid "Click <b>Save</b>."
-msgstr "Cliquez sur <b>Sauvegarder</b>."
-
-msgid "In the sidebar on the left, select <b>Locations</b>."
-msgstr "Dans la barre latérale de gauche, sélectionnez <b>Localisation</b>."
-
-msgid "Look for the necessary location and copy <b>Location ID</b>."
-msgstr ""
-"Recherchez l'emplacement nécessaire et copiez l'<b>ID de la localisation</b>."
-
-msgid "Use it in the form below on this page."
-msgstr "Utilisez-le dans le formulaire ci-dessous sur cette page."
-
-msgid "Access token"
-msgstr "Token d'accès"
-
-msgid "Location ID"
-msgstr "ID de la localisation"
-
 msgid "Book More"
 msgstr "Réserver plus"
 
@@ -9772,9 +9873,6 @@ msgstr "Modifier statut"
 
 msgid "Free/busy"
 msgstr "Libre/Occupé"
-
-msgid "Busy"
-msgstr "Occupé"
 
 msgid ""
 "If you select busy, then a customer with this status will occupy a place in "
@@ -10050,9 +10148,6 @@ msgstr ""
 "du Tableau de bord, cliquez <b>Ajouter endpoint</b> pour afficher un "
 "formulaire qui permet d'ajouter un nouvel enpoint pour les événements "
 "entrants."
-
-msgid "Session has expired. Please reload the page and try again"
-msgstr "La session a expiré. Veuillez recharger la page et réessayer"
 
 msgid "Condition"
 msgstr "Condition"

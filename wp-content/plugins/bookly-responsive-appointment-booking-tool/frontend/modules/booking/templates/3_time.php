@@ -2,6 +2,7 @@
 use Bookly\Lib\Config;
 use Bookly\Frontend\Modules\Booking\Proxy;
 use Bookly\Lib\Utils\Common;
+
 ?>
 <?php echo Common::stripScripts( $progress_tracker ) ?>
 <div class="bookly-box"><?php echo Common::html( $info_text ) ?></div>
@@ -50,10 +51,10 @@ use Bookly\Lib\Utils\Common;
         <div class="<?php echo get_option( 'bookly_app_align_buttons_left' ) ? 'bookly-left' : 'bookly-right' ?>">
             <?php Proxy\Tasks::renderSkipButton( $userData ) ?>
             <button class="bookly-time-prev bookly-btn bookly-left ladda-button" data-style="zoom-in" style="display: none" data-spinner-size="40">
-                <span class="ladda-label">&lt;</span>
+                <span class="ladda-label"><?php echo Common::getTranslatedOption( 'bookly_l10n_button_time_prev' ) ?></span>
             </button>
             <button class="bookly-time-next bookly-btn bookly-left ladda-button" data-style="zoom-in" data-spinner-size="40">
-                <span class="ladda-label">&gt;</span>
+                <span class="ladda-label"><?php echo Common::getTranslatedOption( 'bookly_l10n_button_time_next' ) ?></span>
             </button>
         </div>
     <?php endif ?>

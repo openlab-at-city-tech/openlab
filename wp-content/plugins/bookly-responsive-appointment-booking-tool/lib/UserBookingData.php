@@ -1,8 +1,11 @@
 <?php
 namespace Bookly\Lib;
 
+use Bookly\Frontend\Modules\Booking\Proxy as BookingProxy;
+
 /**
  * Class UserBookingData
+ *
  * @package Bookly\Frontend\Modules\Booking\Lib
  */
 class UserBookingData
@@ -146,7 +149,7 @@ class UserBookingData
     private $customer;
     /** @var \BooklyCoupons\Lib\Entities\Coupon|null */
     private $coupon;
-    /** @var \BooklyGiftCards\Lib\Entities\GiftCard|null */
+    /** @var \BooklyPro\Lib\Entities\GiftCard|null */
     private $gift_card;
     /** @var integer|null */
     private $payment_id;
@@ -168,8 +171,8 @@ class UserBookingData
     public function __construct( $form_id )
     {
         $this->form_id = $form_id;
-        $this->cart    = new Cart( $this );
-        $this->chain   = new Chain();
+        $this->cart = new Cart( $this );
+        $this->chain = new Chain();
 
         // If logged in then set name, email and if existing customer then also phone.
         $current_user = wp_get_current_user();
@@ -198,8 +201,7 @@ class UserBookingData
                     ->setStreet( $customer->getStreet() )
                     ->setStreetNumber( $customer->getStreetNumber() )
                     ->setAdditionalAddress( $customer->getAdditionalAddress() )
-                    ->setInfoFields( json_decode( $customer->getInfoFields(), true ) )
-                ;
+                    ->setInfoFields( json_decode( $customer->getInfoFields(), true ) );
             } else {
                 $this
                     ->setFullName( $current_user->display_name )
@@ -211,28 +213,49 @@ class UserBookingData
         } elseif ( get_option( 'bookly_cst_remember_in_cookie' ) && isset( $_COOKIE['bookly-cst-full-name'] ) ) {
             $this
                 ->setFullName( $_COOKIE['bookly-cst-full-name'] )
-                ->setInfoFields( (array) json_decode( stripslashes( $_COOKIE['bookly-cst-info-fields'] ), true ) )
-            ;
+                ->setInfoFields( (array) json_decode( stripslashes( $_COOKIE['bookly-cst-info-fields'] ), true ) );
             if ( isset( $_COOKIE['bookly-cst-birthday'] ) ) {
-                $date     = explode( '-', $_COOKIE['bookly-cst-birthday'] );
+                $date = explode( '-', $_COOKIE['bookly-cst-birthday'] );
                 $birthday = array(
-                    'year'  => $date[0],
+                    'year' => $date[0],
                     'month' => isset( $date[1] ) ? (int) $date[1] : 0,
-                    'day'   => isset( $date[2] ) ? (int) $date[2] : 0,
+                    'day' => isset( $date[2] ) ? (int) $date[2] : 0,
                 );
                 $this->setBirthday( $birthday );
             }
-            if ( isset( $_COOKIE['bookly-cst-email'] ) ) { $this->setEmail( $_COOKIE['bookly-cst-email'] )->setEmailConfirm( $_COOKIE['bookly-cst-email'] ); }
-            if ( isset( $_COOKIE['bookly-cst-phone'] ) ) { $this->setPhone( $_COOKIE['bookly-cst-phone'] ); }
-            if ( isset( $_COOKIE['bookly-cst-first-name'] ) ) { $this->setFirstName( $_COOKIE['bookly-cst-first-name'] ); }
-            if ( isset( $_COOKIE['bookly-cst-last-name'] ) ) { $this->setLastName( $_COOKIE['bookly-cst-last-name'] ); }
-            if ( isset( $_COOKIE['bookly-cst-country'] ) ) { $this->setCountry( $_COOKIE['bookly-cst-country'] ); }
-            if ( isset( $_COOKIE['bookly-cst-state'] ) ) { $this->setState( $_COOKIE['bookly-cst-state'] ); }
-            if ( isset( $_COOKIE['bookly-cst-postcode'] ) ) { $this->setPostcode( $_COOKIE['bookly-cst-postcode'] ); }
-            if ( isset( $_COOKIE['bookly-cst-city'] ) ) { $this->setCity( $_COOKIE['bookly-cst-city'] ); }
-            if ( isset( $_COOKIE['bookly-cst-street'] ) ) { $this->setStreet( $_COOKIE['bookly-cst-street'] ); }
-            if ( isset( $_COOKIE['bookly-cst-street-number'] ) ) { $this->setStreetNumber( $_COOKIE['bookly-cst-street-number'] ); }
-            if ( isset( $_COOKIE['bookly-cst-additional-address'] ) ) { $this->setAdditionalAddress( $_COOKIE['bookly-cst-additional-address'] ); }
+            if ( isset( $_COOKIE['bookly-cst-email'] ) ) {
+                $this->setEmail( $_COOKIE['bookly-cst-email'] )->setEmailConfirm( $_COOKIE['bookly-cst-email'] );
+            }
+            if ( isset( $_COOKIE['bookly-cst-phone'] ) ) {
+                $this->setPhone( $_COOKIE['bookly-cst-phone'] );
+            }
+            if ( isset( $_COOKIE['bookly-cst-first-name'] ) ) {
+                $this->setFirstName( $_COOKIE['bookly-cst-first-name'] );
+            }
+            if ( isset( $_COOKIE['bookly-cst-last-name'] ) ) {
+                $this->setLastName( $_COOKIE['bookly-cst-last-name'] );
+            }
+            if ( isset( $_COOKIE['bookly-cst-country'] ) ) {
+                $this->setCountry( $_COOKIE['bookly-cst-country'] );
+            }
+            if ( isset( $_COOKIE['bookly-cst-state'] ) ) {
+                $this->setState( $_COOKIE['bookly-cst-state'] );
+            }
+            if ( isset( $_COOKIE['bookly-cst-postcode'] ) ) {
+                $this->setPostcode( $_COOKIE['bookly-cst-postcode'] );
+            }
+            if ( isset( $_COOKIE['bookly-cst-city'] ) ) {
+                $this->setCity( $_COOKIE['bookly-cst-city'] );
+            }
+            if ( isset( $_COOKIE['bookly-cst-street'] ) ) {
+                $this->setStreet( $_COOKIE['bookly-cst-street'] );
+            }
+            if ( isset( $_COOKIE['bookly-cst-street-number'] ) ) {
+                $this->setStreetNumber( $_COOKIE['bookly-cst-street-number'] );
+            }
+            if ( isset( $_COOKIE['bookly-cst-additional-address'] ) ) {
+                $this->setAdditionalAddress( $_COOKIE['bookly-cst-additional-address'] );
+            }
         }
     }
 
@@ -270,6 +293,7 @@ class UserBookingData
         Session::setFormVar( $this->form_id, 'verification_code', $this->verification_code ?: mt_rand( 100000, 999999 ) );
         Session::setFormVar( $this->form_id, 'verification_code_sent', $this->verification_code_sent );
         Session::setFormVar( $this->form_id, 'order_id', $this->order_id );
+        Session::save();
     }
 
     /**
@@ -383,12 +407,12 @@ class UserBookingData
      */
     public function addChainToCart()
     {
-        $cart_items     = array();
+        $cart_items = array();
         $edit_cart_keys = $this->getEditCartKeys();
-        $eck_idx        = 0;
-        $slots          = $this->getSlots();
-        $slots_idx      = 0;
-        $repeated       = $this->getRepeated() ?: 1;
+        $eck_idx = 0;
+        $slots = $this->getSlots();
+        $slots_idx = 0;
+        $repeated = $this->getRepeated() ?: 1;
         if ( $this->getRepeated() ) {
             $series_unique_id = mt_rand( 1, PHP_INT_MAX );
         } else {
@@ -399,15 +423,15 @@ class UserBookingData
         for ( $i = 0; $i < $repeated; $i++ ) {
             $items_in_repeat = array();
             foreach ( $this->chain->getItems() as $chain_item ) {
-                for ( $q = 0; $q < $chain_item->getQuantity(); ++ $q ) {
+                for ( $q = 0; $q < $chain_item->getQuantity(); ++$q ) {
                     $cart_item_slots = array();
 
                     if ( $chain_item->getService()->withSubServices() ) {
                         foreach ( $chain_item->getSubServices() as $sub_service ) {
-                            $cart_item_slots[] = $slots[ $slots_idx ++ ];
+                            $cart_item_slots[] = $slots[ $slots_idx++ ];
                         }
                     } else {
-                        $cart_item_slots[] = $slots[ $slots_idx ++ ];
+                        $cart_item_slots[] = $slots[ $slots_idx++ ];
                     }
                     $cart_item = new CartItem();
 
@@ -418,7 +442,7 @@ class UserBookingData
                         ->setTimeTo( $this->getTimeTo() );
 
                     $cart_item
-                        ->setSeriesUniqueId( $chain_item->getSeriesUniqueId()?: $series_unique_id )
+                        ->setSeriesUniqueId( $chain_item->getSeriesUniqueId() ?: $series_unique_id )
                         ->setExtras( $chain_item->getExtras() )
                         ->setConsiderExtrasDuration( $consider_extras_duration )
                         ->setLocationId( $chain_item->getLocationId() )
@@ -430,7 +454,7 @@ class UserBookingData
                         ->setFirstInSeries( false );
                     if ( isset ( $edit_cart_keys[ $eck_idx ] ) ) {
                         $cart_item->setCustomFields( $this->cart->get( $edit_cart_keys[ $eck_idx ] )->getCustomFields() );
-                        ++ $eck_idx;
+                        ++$eck_idx;
                     }
 
                     $items_in_repeat[] = $cart_item;
@@ -450,7 +474,7 @@ class UserBookingData
                 $slots = $cart_item->getSlots();
                 foreach ( $slots as $slot ) {
                     if ( $slot[2] < $first_visit_time ) {
-                        $first_visit_time   = $slots[2];
+                        $first_visit_time = $slots[2];
                         $first_visit_repeat = $repeat_id;
                     }
                 }
@@ -630,20 +654,20 @@ class UserBookingData
 
             $expire = time() + YEAR_IN_SECONDS;
 
-            setcookie( 'bookly-cst-full-name',          $customer->getFullName(), $expire );
-            setcookie( 'bookly-cst-first-name',         $customer->getFirstName(), $expire );
-            setcookie( 'bookly-cst-last-name',          $customer->getLastName(), $expire );
-            setcookie( 'bookly-cst-phone',              $customer->getPhone(), $expire );
-            setcookie( 'bookly-cst-email',              $customer->getEmail(), $expire );
-            setcookie( 'bookly-cst-birthday',           $customer->getBirthday() ?: '', $expire );
-            setcookie( 'bookly-cst-country',            $customer->getCountry(), $expire );
-            setcookie( 'bookly-cst-state',              $customer->getState(), $expire );
-            setcookie( 'bookly-cst-postcode',           $customer->getPostcode(), $expire );
-            setcookie( 'bookly-cst-city',               $customer->getCity(), $expire );
-            setcookie( 'bookly-cst-street',             $customer->getStreet(), $expire );
-            setcookie( 'bookly-cst-street-number',      $customer->getStreetNumber(), $expire );
+            setcookie( 'bookly-cst-full-name', $customer->getFullName(), $expire );
+            setcookie( 'bookly-cst-first-name', $customer->getFirstName(), $expire );
+            setcookie( 'bookly-cst-last-name', $customer->getLastName(), $expire );
+            setcookie( 'bookly-cst-phone', $customer->getPhone(), $expire );
+            setcookie( 'bookly-cst-email', $customer->getEmail(), $expire );
+            setcookie( 'bookly-cst-birthday', $customer->getBirthday() ?: '', $expire );
+            setcookie( 'bookly-cst-country', $customer->getCountry(), $expire );
+            setcookie( 'bookly-cst-state', $customer->getState(), $expire );
+            setcookie( 'bookly-cst-postcode', $customer->getPostcode(), $expire );
+            setcookie( 'bookly-cst-city', $customer->getCity(), $expire );
+            setcookie( 'bookly-cst-street', $customer->getStreet(), $expire );
+            setcookie( 'bookly-cst-street-number', $customer->getStreetNumber(), $expire );
             setcookie( 'bookly-cst-additional-address', $customer->getAdditionalAddress(), $expire );
-            setcookie( 'bookly-cst-info-fields',        $customer->getInfoFields(), $expire );
+            setcookie( 'bookly-cst-info-fields', $customer->getInfoFields(), $expire );
         }
 
         return $this->cart->save( $order, $this->getTimeZone(), $this->getTimeZoneOffset() );
@@ -685,7 +709,7 @@ class UserBookingData
                 $this->customer->loadBy( array( 'wp_user_id' => $user_id ) );
             }
             if ( ! $this->customer->isLoaded() ) {
-                $customer = Proxy\Pro::getCustomerByFacebookId( $this->getFacebookId() );
+                $customer = BookingProxy\Pro::getCustomerByFacebookId( $this->getFacebookId() );
                 if ( $customer ) {
                     $this->customer = $customer;
                 }
@@ -698,7 +722,7 @@ class UserBookingData
                         );
                         if ( Config::showFirstLastName() ) {
                             $customer_data['first_name'] = $this->getFirstName();
-                            $customer_data['last_name']  = $this->getLastName();
+                            $customer_data['last_name'] = $this->getLastName();
                         } else {
                             $customer_data['full_name'] = $this->getFullName();
                         }
@@ -739,7 +763,7 @@ class UserBookingData
     public function getCoupon()
     {
         if ( $this->coupon === null ) {
-            $coupon = Proxy\Coupons::findOneByCode( $this->getCouponCode() );
+            $coupon = BookingProxy\Coupons::findOneByCode( $this->getCouponCode() );
             if ( $coupon ) {
                 $this->coupon = $coupon;
             } else {
@@ -753,14 +777,14 @@ class UserBookingData
     /**
      * Get gift card.
      *
-     * @return \BooklyGiftCards\Lib\Entities\GiftCard|false
+     * @return \BooklyPro\Lib\Entities\GiftCard|false
      */
     public function getGiftCard()
     {
         if ( $this->gift_card === null ) {
-            $gift = Proxy\GiftCards::findOneByCode( $this->getGiftCode() );
-            if ( $gift ) {
-                $this->gift_card = $gift;
+            $gift_card = BookingProxy\Pro::findOneGiftCardByCode( $this->getGiftCode() );
+            if ( $gift_card ) {
+                $this->gift_card = $gift_card;
             } else {
                 $this->gift_card = false;
             }
@@ -787,7 +811,7 @@ class UserBookingData
      *
      * @param string $gateway
      * @param string $status
-     * @param mixed  $data
+     * @param mixed $data
      * @return $this
      * @todo use $status as const
      */
@@ -801,7 +825,7 @@ class UserBookingData
     /**
      * @param string $gateway
      * @param string $status
-     * @param null   $data
+     * @param null $data
      * @return $this
      */
     public function setFailedPaymentStatus( $gateway, $status, $data = null )
@@ -864,7 +888,7 @@ class UserBookingData
     public function applyTimeZone()
     {
         if ( $this->getTimeZoneOffset() !== null ) {
-            Slots\TimePoint::$client_timezone_offset = - $this->getTimeZoneOffset() * MINUTE_IN_SECONDS;
+            Slots\TimePoint::$client_timezone_offset = -$this->getTimeZoneOffset() * MINUTE_IN_SECONDS;
             $timezone = $this->getTimeZone() ?: Utils\DateTime::formatOffset( Slots\TimePoint::$client_timezone_offset );
             Slots\DatePoint::$client_timezone = date_create( $timezone ) === false ? null : $timezone;
         }

@@ -3,15 +3,16 @@ jQuery(function ($) {
 
     const $prices = $('.bookly-js-product-price-selector'),
         component = {
-            items:    '[data-product-price-id]',
+            items: '[data-product-price-id]',
             dropdown: '.bookly-js-product-price-dropdown',
-            enable:   '.bookly-js-product-enable',
-            disable:  '.bookly-js-product-disable',
+            enable: '.bookly-js-product-enable',
+            disable: '.bookly-js-product-disable',
         },
         $onOffButtons = $('.bookly-js-product-enable,.bookly-js-product-disable'),
         $infoButtons = $('.bookly-js-product-info-button'),
         $revertCancelButtons = $('.bookly-js-product-revert-cancel'),
         $updateRequiredButtons = $('.bookly-js-bookly-update-required'),
+        $requiredBooklyPro = $('.bookly-js-required-bookly-pro'),
         $infoModal = $('#bookly-product-info-modal'),
         infoModal = {
             $loading: $('.bookly-js-loading', $infoModal),
@@ -89,11 +90,11 @@ jQuery(function ($) {
         $infoModal.booklyModal('show');
         $.ajax({
             type: 'POST',
-            url : ajaxurl,
+            url: ajaxurl,
             data: {
                 action: 'bookly_cloud_get_product_info',
                 product: product,
-                csrf_token: BooklyL10n.csrfToken,
+                csrf_token: BooklyL10nGlobal.csrf_token
             },
             dataType: 'json',
             success: function (response) {
@@ -121,7 +122,6 @@ jQuery(function ($) {
         if (status) {
             product_price = $(this).parents('.bookly-js-product-price-selector').data('pp-id');
         }
-
         if (!status && BooklyL10n.products[product].has_subscription) {
             $unsubscribeModal.data('product', product);
             $unsubscribeModal.booklyModal('show');
@@ -131,28 +131,22 @@ jQuery(function ($) {
     });
 
     $revertCancelButtons.on('click', function () {
-        const $button = $(this);
         const product = $(this).closest('.bookly-js-cloud-product').data('product');
-        const ladda = Ladda.create($button.get(0));
-        let action;
         switch (product) {
-            case 'zapier':
-                action = 'bookly_cloud_zapier_revert_cancel';
-                break;
-            case 'cron':
-                action = 'bookly_cloud_cron_revert_cancel';
-                break;
-            default:
+            case 'sms':
+            case 'stripe':
                 return;
         }
-
+        const $button = $(this);
+        const ladda = Ladda.create($button.get(0));
         ladda.start();
         $.ajax({
             type: 'POST',
             url : ajaxurl,
             data: {
-                action: action,
-                csrf_token: BooklyL10n.csrfToken,
+                action: 'bookly_cloud_revert_cancel_subscription',
+                product: product,
+                csrf_token: BooklyL10nGlobal.csrf_token
             },
             dataType: 'json',
             success: function (response) {
@@ -181,13 +175,12 @@ jQuery(function ($) {
                 action = 'bookly_cloud_sms_change_status';
                 break;
             case 'zapier':
-                action = 'bookly_cloud_zapier_change_status';
-                break;
             case 'cron':
-                action = 'bookly_cloud_cron_change_status';
-                break;
+            case 'voice':
+            case 'square':
             default:
-                return;
+                action = 'bookly_cloud_change_product_status';
+                break;
         }
 
         ladda.start();
@@ -198,7 +191,8 @@ jQuery(function ($) {
                 action: action,
                 status: status,
                 product_price: product_price,
-                csrf_token: BooklyL10n.csrfToken,
+                product: product,
+                csrf_token: BooklyL10nGlobal.csrf_token
             },
             dataType: 'json',
             success: function (response) {
@@ -219,43 +213,36 @@ jQuery(function ($) {
         });
     }
     function showProductActivationMessage(product, status) {
-        switch (product) {
-            case 'stripe':
-            case 'sms':
-            case 'zapier':
-            case 'cron':
-                $activationModal.booklyModal('show');
-                activationModal.$title.html(BooklyL10n.products[product].title);
-                $.ajax({
-                    type: 'POST',
-                    url: ajaxurl,
-                    data: {
-                        action: 'bookly_cloud_get_product_activation_message',
-                        product: product,
-                        status: status,
-                        csrf_token: BooklyL10n.csrfToken,
-                    },
-                    dataType: 'json',
-                    success: function (response) {
-                        if (response.success) {
-                            activationModal.$success.show();
-                            activationModal.$content.html(response.data.content);
-                            if (response.data.button) {
-                                activationModal.$button
-                                    .find('span').html(response.data.button.caption).end().off()
-                                    .on('click', function () {
-                                        window.location.href = response.data.button.url;
-                                    })
-                                    .show();
-                            }
-                        } else {
-                            activationModal.$fail.show();
-                            activationModal.$content.html(response.data.content);
-                        }
+        $activationModal.booklyModal('show');
+        activationModal.$title.html(BooklyL10n.products[product].title);
+        $.ajax({
+            type: 'POST',
+            url: ajaxurl,
+            data: {
+                action: 'bookly_cloud_get_product_activation_message',
+                product: product,
+                status: status,
+                csrf_token: BooklyL10nGlobal.csrf_token
+            },
+            dataType: 'json',
+            success: function (response) {
+                if (response.success) {
+                    activationModal.$success.show();
+                    activationModal.$content.html(response.data.content);
+                    if (response.data.button) {
+                        activationModal.$button
+                            .find('span').html(response.data.button.caption).end().off()
+                            .on('click', function () {
+                                window.location.href = response.data.button.url;
+                            })
+                            .show();
                     }
-                });
-                break;
-        }
+                } else {
+                    activationModal.$fail.show();
+                    activationModal.$content.html(response.data.content);
+                }
+            }
+        });
     }
 
     $updateRequiredButtons.on('click', function (e) {
@@ -289,4 +276,7 @@ jQuery(function ($) {
         }
     }
 
+    $requiredBooklyPro.on('click', function() {
+        requiredBooklyPro();
+    });
 });

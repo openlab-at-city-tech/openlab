@@ -202,13 +202,13 @@ class Codes extends Order\Codes
             'reject_appointment_url' => $this->appointment_token
                 ? admin_url( 'admin-ajax.php?action=bookly_reject_appointment&token=' . urlencode( Utils\Common::xorEncrypt( $this->appointment_token, 'reject' ) ) )
                 : '',
-            'service_info' => $format === 'html' ? nl2br( $this->service_info ) : $this->service_info,
+            'service_info' => $format === 'html' && $this->service_info ? nl2br( $this->service_info ) : $this->service_info,
             'service_name' => $this->service_name,
             'service_image' => $service_image,
             'service_price' => Utils\Price::format( $this->service_price ),
             'service_duration' => Utils\DateTime::secondsToInterval( $this->service_duration ),
             'staff_email' => $this->staff_email,
-            'staff_info' => $format === 'html' ? nl2br( $this->staff_info ) : $this->staff_info,
+            'staff_info' => $format === 'html' && $this->staff_info ? nl2br( $this->staff_info ) : $this->staff_info,
             'staff_name' => $this->staff_name,
             'staff_phone' => $this->staff_phone,
             'staff_photo' => $staff_photo,

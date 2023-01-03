@@ -8,6 +8,66 @@ namespace Bookly\Lib;
  */
 class Updater extends Base\Updater
 {
+    function update_21_4()
+    {
+        $this->alterTables( array(
+            'bookly_mailing_queue' => array(
+                'ALTER TABLE `%s` ADD COLUMN `name` VARCHAR(255) DEFAULT NULL AFTER `phone`',
+            ),
+            'bookly_notifications' => array(
+                'UPDATE `%s` SET `type` = \'appointment_reminder\' WHERE `type` = \'verify_email\' and `gateway` = \'voice\'',
+            ),
+        ) );
+    }
+
+    function update_21_3()
+    {
+        global $wpdb;
+
+        $charset_collate = $wpdb->has_cap( 'collation' )
+            ? $wpdb->get_charset_collate()
+            : 'DEFAULT CHARACTER SET = utf8 COLLATE = utf8_general_ci';
+
+        $wpdb->query(
+            'CREATE TABLE IF NOT EXISTS `' . $this->getTableName( 'bookly_sessions' ) . '` (
+                `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `token` VARCHAR(255) NOT NULL,
+                `value` TEXT DEFAULT NULL,
+                `expire` DATETIME NOT NULL,
+                INDEX `token` (`token`),
+                INDEX `expire` (`expire`)
+            ) ENGINE = INNODB
+            ' . $charset_collate
+        );
+
+        $this->alterTables( array(
+            'bookly_notifications' => array(
+                'ALTER TABLE `%s` CHANGE `gateway` `gateway` ENUM("email","sms","voice") NOT NULL DEFAULT "email"',
+            ),
+            'bookly_payments' => array(
+                'ALTER TABLE `%s` CHANGE `type` `type` ENUM("local", "free", "paypal", "authorize_net", "stripe", "2checkout", "payu_biz", "payu_latam", "payson", "mollie", "woocommerce", "cloud_stripe", "cloud_square", "cloud_gift" ) NOT NULL DEFAULT "local"',
+            ),
+        ) );
+
+        add_option( 'bookly_gen_session_type', 'php' );
+
+        $this->addL10nOptions( array(
+            'bookly_l10n_button_time_prev' => __( '&lt;', 'bookly' ),
+            'bookly_l10n_button_time_next' => __( '&gt;', 'bookly' ),
+        ) );
+
+        $this->addNotifications( array(
+            array(
+                'gateway' => 'voice',
+                'type' => 'appointment_reminder',
+                'name' => __( 'Evening reminder to customer about next day appointment (requires cron setup)', 'bookly' ),
+                'message' => __( "Dear {client_name}.\nWe would like to remind you that you have booked {service_name} tomorrow at {appointment_time}. We are waiting for you at {company_address}.\nThank you for choosing our company.\n{company_name}\n{company_phone}\n{company_website}", 'bookly' ),
+                'to_customer' => 1,
+                'settings' => '{"status":"any","option":2,"services":{"any":"any","ids":[]},"offset_hours":1,"perform":"before","at_hour":18,"before_at_hour":18,"offset_before_hours":-24,"offset_bidirectional_hours":-24}',
+            ),
+        ) );
+    }
+
     function update_21_2()
     {
         $currency = get_option( 'bookly_pmt_currency' );

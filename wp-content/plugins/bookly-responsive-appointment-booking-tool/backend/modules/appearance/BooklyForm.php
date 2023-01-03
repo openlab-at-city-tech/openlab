@@ -107,7 +107,7 @@ class BooklyForm extends Lib\Base\Component
             ),
         );
         if ( Lib\Cloud\API::getInstance()->account->productActive( 'stripe' ) ) {
-            $gateways['cloud_stripe'] = array(
+            $gateways[ Lib\Entities\Payment::TYPE_CLOUD_STRIPE ] = array(
                 'label_option_name' => 'bookly_l10n_label_pay_cloud_stripe',
                 'title' => 'Stripe Cloud',
                 'with_card' => true,
@@ -123,7 +123,7 @@ class BooklyForm extends Lib\Base\Component
             return $gateway;
         }, Proxy\Shared::paymentGateways( $gateways ) );
 
-        $order = explode( ',', get_option( 'bookly_pmt_order' ) );
+        $order = Lib\Config::getGatewaysPreference();
         $payment_options = array();
 
         if ( $order ) {

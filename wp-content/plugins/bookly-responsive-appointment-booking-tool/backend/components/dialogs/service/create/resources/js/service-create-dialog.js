@@ -29,11 +29,9 @@ jQuery(function ($) {
     });
     $saveBtn.on('click', function (e) {
         e.preventDefault();
-        let ladda = Ladda.create(this),
-            data  = $modal.serializeArray();
-        data.push({name: 'csrf_token', value: BooklyL10nGlobal.csrf_token});
+        let ladda = Ladda.create(this);
         ladda.start();
-        $.post(ajaxurl, data, function (response) {
+        $.post(ajaxurl, booklySerialize.buildRequestDataFromForm('bookly_create_service', $modal), function (response) {
             if (response.success) {
                 $servicesList.DataTable().ajax.reload();
                 $serviceTitle.val('');
@@ -43,7 +41,7 @@ jQuery(function ($) {
                 BooklyServiceOrderDialogL10n.services.push({id: response.data.id, title: response.data.title});
                 $(document.body).trigger('service.edit', [response.data.id]);
             } else {
-                booklyAlert({error: [response.data.message]});
+                requiredBooklyPro();
             }
             ladda.stop();
         });

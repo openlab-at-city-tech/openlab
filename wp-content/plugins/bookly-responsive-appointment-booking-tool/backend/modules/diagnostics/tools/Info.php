@@ -23,8 +23,12 @@ class Info extends Tool
         global $wpdb;
 
         ob_start();
-        phpinfo();
-        $info = ob_get_clean();
+        if ( function_exists( 'phpinfo' ) ) {
+            phpinfo();
+            $info = ob_get_clean();
+        } else {
+            $info = '<div class="text-danger w-100 mt-2">undefined function phpinfo</div>';
+        }
         ob_start();
         ?>
         <style type="text/css">

@@ -6,8 +6,7 @@ use Bookly\Backend\Components\Dialogs;
 
 /**
  * @var array $categories
- * @var array $datatables
- * @var array $services
+ * @var array $datatable
  */
 ?>
 <div id="bookly-tbs" class="wrap">
@@ -53,9 +52,9 @@ use Bookly\Backend\Components\Dialogs;
                         <th width="24"></th>
                     <?php endif ?>
                     <th width="24"></th>
-                    <?php foreach ( $datatables['services']['settings']['columns'] as $column => $show ) : ?>
+                    <?php foreach ( $datatable['settings']['columns'] as $column => $show ) : ?>
                         <?php if ( $show ) : ?>
-                            <th><?php echo esc_html( $datatables['services']['titles'][ $column ] ) ?></th>
+                            <th><?php echo esc_html( $datatable['titles'][ $column ] ) ?></th>
                         <?php endif ?>
                     <?php endforeach ?>
                     <th width="75"></th>
@@ -73,7 +72,7 @@ use Bookly\Backend\Components\Dialogs;
     <?php Dialogs\Service\Create\Dialog::render() ?>
     <?php Dialogs\Service\Edit\Dialog::render() ?>
     <?php Dialogs\Service\Categories\Dialog::render() ?>
-    <?php Dialogs\Service\Order\Dialog::render( $services ) ?>
+    <?php Dialogs\Service\Order\Dialog::render() ?>
     <?php Dialogs\TableSettings\Dialog::render() ?>
     <div id="bookly-update-service-settings" class="bookly-modal bookly-fade" tabindex=-1 role="dialog">
         <div class="modal-dialog modal-lg">

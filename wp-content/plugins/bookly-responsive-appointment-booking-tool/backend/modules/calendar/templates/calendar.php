@@ -73,7 +73,7 @@ use Bookly\Backend\Modules\Calendar\Proxy;
                         <div class="btn-group">
                             <button type="button" class="btn <?php echo esc_attr( $refresh_rate > 0 ? 'btn-success' : 'btn-default' ) ?>" id="bookly-calendar-refresh"><i class="fas fa-sync-alt"></i></button>
                             <button type="button" class="btn <?php echo esc_attr( $refresh_rate > 0 ? 'btn-success' : 'btn-default' ) ?> bookly-dropdown-toggle bookly-dropdown-toggle-split" data-toggle="bookly-dropdown" aria-haspopup="true" aria-expanded="false"></button>
-                            <div class="bookly-dropdown-menu pb-0 bookly-dropdown-menu-right">
+                            <div class="bookly-dropdown-menu pb-0 bookly-dropdown-menu-right overflow-hidden">
                                 <h6 class="bookly-dropdown-header"><?php esc_html_e( 'Auto-refresh Calendar', 'bookly' ) ?></h6>
                                 <div class="bookly-dropdown-divider"></div>
                                 <?php Components\Controls\Inputs::renderRadioGroup( null, null,
@@ -84,7 +84,7 @@ use Bookly\Backend\Modules\Calendar\Proxy;
                                         '0' => array( 'title' => __( 'Disable', 'bookly' ) ),
                                     ),
                                     $refresh_rate,
-                                    array( 'name' => 'bookly_calendar_refresh_rate', 'parent-class' => 'bookly-dropdown-item' ) ) ?>
+                                    array( 'name' => 'bookly_calendar_refresh_rate', 'parent-class' => 'bookly-dropdown-item mx-3 w-100' ) ) ?>
                             </div>
                         </div>
                     </div>

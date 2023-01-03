@@ -624,6 +624,19 @@ class Query
     }
 
     /**
+     * Returns an array containing all the entries from array
+     * that are not present in specified column
+     *
+     * @param $column
+     * @param array $array
+     * @return array
+     */
+    public function fetchColDiff( $column, array $array )
+    {
+        return array_diff( $array, $this->fetchCol( $column ) );
+    }
+
+    /**
      * Return the specified column value
      *
      * @param string $column

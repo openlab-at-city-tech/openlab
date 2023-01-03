@@ -1,6 +1,8 @@
 <?php
 namespace Bookly\Lib;
 
+use Bookly\Frontend\Modules\Booking\Proxy as BookingProxy;
+
 /**
  * Class CartInfo
  * @package Bookly\Lib\Booking
@@ -44,7 +46,7 @@ class CartInfo
 
     /** @var \BooklyCoupons\Lib\Entities\Coupon|null */
     private $coupon;
-    /** @var \BooklyGiftCards\Lib\Entities\GiftCard|null */
+    /** @var \BooklyPro\Lib\Entities\GiftCard|null */
     private $gift_card;
     /** @var bool */
     private $tax_included = true;
@@ -112,11 +114,11 @@ class CartInfo
         }
 
         $total_without_discount = $this->total;
-        $this->total = Proxy\Discounts::prepareCartTotalPrice( $total_without_discount, $userData );
+        $this->total = BookingProxy\Discounts::prepareCartTotalPrice( $total_without_discount, $userData );
         $this->addon_discount = $this->total - $total_without_discount;
 
         $total_without_group_discount = $this->total;
-        $this->total = Proxy\CustomerGroups::prepareCartTotalPrice( $total_without_group_discount, $userData );
+        $this->total = BookingProxy\CustomerGroups::prepareCartTotalPrice( $total_without_group_discount, $userData );
         $this->group_discount = $this->total - $total_without_group_discount;
     }
 
@@ -133,7 +135,7 @@ class CartInfo
     /**
      * Gets gift card.
      *
-     * @return \BooklyGiftCards\Lib\Entities\GiftCard
+     * @return \BooklyPro\Lib\Entities\GiftCard
      */
     public function getGiftCard()
     {
