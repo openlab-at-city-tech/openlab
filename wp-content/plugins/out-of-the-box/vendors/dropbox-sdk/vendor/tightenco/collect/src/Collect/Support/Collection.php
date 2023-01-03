@@ -392,10 +392,12 @@ class Collection implements ArrayAccess, Arrayable, Countable, IteratorAggregate
      */
     public function except($keys)
     {
+		$func_args = func_get_args();
+
         if ($keys instanceof self) {
             $keys = $keys->all();
         } elseif (! is_array($keys)) {
-            $keys = func_get_args();
+            $keys = $func_args;
         }
 
         return new static(Arr::except($this->items, $keys));
@@ -1062,6 +1064,8 @@ class Collection implements ArrayAccess, Arrayable, Countable, IteratorAggregate
      */
     public function only($keys)
     {
+		$func_args = func_get_args();
+
         if (is_null($keys)) {
             return new static($this->items);
         }
@@ -1070,7 +1074,7 @@ class Collection implements ArrayAccess, Arrayable, Countable, IteratorAggregate
             $keys = $keys->all();
         }
 
-        $keys = is_array($keys) ? $keys : func_get_args();
+        $keys = is_array($keys) ? $keys : $func_args;
 
         return new static(Arr::only($this->items, $keys));
     }
