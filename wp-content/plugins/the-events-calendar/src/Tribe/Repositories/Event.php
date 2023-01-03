@@ -604,8 +604,8 @@ class Tribe__Events__Repositories__Event extends Tribe__Repository {
 			return null;
 		}
 
-		$start = Tribe__Events__Template__Month::calculate_first_cell_date( $year_month_string );
-		$end   = Tribe__Events__Template__Month::calculate_final_cell_date( $year_month_string );
+		$start = \Tribe\Events\Views\V2\Views\Month_View::calculate_first_cell_date( $year_month_string );
+		$end   = \Tribe\Events\Views\V2\Views\Month_View::calculate_final_cell_date( $year_month_string );
 
 		return $this->filter_by_runs_between( $start, tribe_end_of_day( $end ) );
 	}
@@ -1090,7 +1090,7 @@ class Tribe__Events__Repositories__Event extends Tribe__Repository {
 
 			$timezone         = Tribe__Timezones::build_timezone_object( $input_timezone );
 			$timezone_changed = $input_timezone !== $current_event_timezone_string;
-			$utc              = $this->normal_timezone;
+			$utc              = new DateTimezone('UTC');
 			$dates_changed    = [];
 
 			/**
@@ -1187,7 +1187,9 @@ class Tribe__Events__Repositories__Event extends Tribe__Repository {
 					$the_end       = clone $dates_changed['Start'];
 					$the_end->setTimestamp( $end_timestamp );
 
-					$postarr['meta_input']['_EventEndDate'] = $the_end->format( $datetime_format );
+					$postarr['meta_input']['_EventEndDate']    = $the_end
+						->setTimezone( $timezone )
+						->format( $datetime_format );
 					$postarr['meta_input']['_EventEndDateUTC'] = $the_end
 						->setTimezone( $utc )
 						->format( $datetime_format );
@@ -1779,14 +1781,19 @@ class Tribe__Events__Repositories__Event extends Tribe__Repository {
 	 */
 	public function filter_by_hidden_on_upcoming( $hidden ) {
 		$hidden = tribe_is_truthy( $hidden );
+		$hidden_posts = tribe( \Tribe\Events\Views\V2\Query\Hide_From_Upcoming_Controller::class )->get_hidden_post_ids();
 
 		if ( $hidden ) {
-			$this->by( 'meta_equals', '_EventHideFromUpcoming', 'yes' );
-
-			return;
+			if ( isset( $this->query_args['post__in'] ) ) {
+				$hidden_posts = array_merge( (array) $this->query_args['post__in'], $hidden_posts );
+			}
+			$this->in( $hidden_posts );
+		} else {
+			if ( isset( $this->query_args['post__not_in'] ) ) {
+				$hidden_posts = array_merge( (array) $this->query_args['post__not_in'], $hidden_posts );
+			}
+			$this->not_in( $hidden_posts );
 		}
-
-		$this->by( 'meta_not_exists', '_EventHideFromUpcoming' );
 	}
 
 	/**

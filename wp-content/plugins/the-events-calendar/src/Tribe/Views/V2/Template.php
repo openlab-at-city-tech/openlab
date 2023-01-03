@@ -97,7 +97,7 @@ class Template extends Base_Template {
 		// Set some defaults on the template.
 		$this->set( 'view_class', get_class( $view ), false );
 		$this->set( 'view_slug', $view->get_slug(), false );
-		$this->set( 'view_label', $view->get_label(), false );
+		$this->set( 'view_label', $view::get_view_label(), false );
 
 		// Set which view globally.
 		$this->set( 'view', $view, false );
@@ -110,7 +110,7 @@ class Template extends Base_Template {
 	 *
 	 * @since 4.9.2
 	 *
-	 * @param string|array|null $name Either a specific name to check, the frgments of a name to check, or `null` to let
+	 * @param string|array|null $name Either a specific name to check, the fragments of a name to check, or `null` to let
 	 *                                the view pick the template according to the template override rules.
 	 *
 	 * @return string The path to the template file the View will use to render its contents.
@@ -160,7 +160,7 @@ class Template extends Base_Template {
 
 		if ( $this->view instanceof View_Interface ) {
 			$this->set( 'view_slug', $this->view->get_slug(), false );
-			$this->set( 'view_label', $this->view->get_label(), false );
+			$this->set( 'view_label', $this->view::get_view_label(), false );
 			$this->set( 'view_class', get_class( $this->view ), false );
 		}
 
