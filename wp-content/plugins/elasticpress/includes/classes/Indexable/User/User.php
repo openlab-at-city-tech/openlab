@@ -477,78 +477,8 @@ class User extends Indexable {
 			 */
 			$prepared_search_fields = apply_filters( 'ep_user_search_fields', $prepared_search_fields, $query_vars );
 
-			$query = array(
-				'bool' => array(
-					'should' => array(
-						array(
-							'multi_match' => array(
-								'query'  => $query_vars['search'],
-								'type'   => 'phrase',
-								'fields' => $prepared_search_fields,
-								/**
-								 * Filter boost for user match phrase query
-								 *
-								 * @hook ep_user_match_phrase_boost
-								 * @param  {int} $boost Phrase boost
-								 * @param {array} $prepared_search_fields Search fields
-								 * @param {array} $query_vars Query variables
-								 * @since  3.0
-								 * @return  {int} New phrase boost
-								 */
-								'boost'  => apply_filters( 'ep_user_match_phrase_boost', 4, $prepared_search_fields, $query_vars ),
-							),
-						),
-						array(
-							'multi_match' => array(
-								'query'     => $query_vars['search'],
-								'fields'    => $prepared_search_fields,
-								/**
-								 * Filter boost for user match query
-								 *
-								 * @hook ep_user_match_boost
-								 * @param  {int} $boost Boost
-								 * @param {array} $prepared_search_fields Search fields
-								 * @param {array} $query_vars Query variables
-								 * @since  3.0
-								 * @return  {int} New boost
-								 */
-								'boost'     => apply_filters( 'ep_user_match_boost', 2, $prepared_search_fields, $query_vars ),
-								'fuzziness' => 0,
-								'operator'  => 'and',
-							),
-						),
-						array(
-							'multi_match' => array(
-								'fields'    => $prepared_search_fields,
-								'query'     => $query_vars['search'],
-								/**
-								 * Filter fuzziness for user query
-								 *
-								 * @hook ep_user_fuzziness_arg
-								 * @param  {int} $fuzziness Fuzziness
-								 * @param {array} $prepared_search_fields Search fields
-								 * @param {array} $query_vars Query variables
-								 * @since  3.0
-								 * @return  {int} New fuzziness
-								 */
-								'fuzziness' => apply_filters( 'ep_user_fuzziness_arg', 1, $prepared_search_fields, $query_vars ),
-							),
-						),
-					),
-				),
-			);
-
-			/**
-			 * Filter formatted Elasticsearch user query (only contains query part)
-			 *
-			 * @hook ep_user_formatted_args_query
-			 * @param {array} $query Current query
-			 * @param {array} $query_vars Query variables
-			 * @since  3.0
-			 * @return  {array} New query
-			 */
-			$formatted_args['query'] = apply_filters( 'ep_user_formatted_args_query', $query, $query_vars );
-
+			$search_algorithm        = $this->get_search_algorithm( $query_vars['search'], $prepared_search_fields, $query_vars );
+			$formatted_args['query'] = $search_algorithm->get_query( 'user', $query_vars['search'], $prepared_search_fields, $query_vars );
 		} else {
 			$formatted_args['query']['match_all'] = [
 				'boost' => 1,
@@ -624,6 +554,22 @@ class User extends Indexable {
 			$orderby = explode( ' ', $orderby );
 		}
 
+		$from_to = [
+			'relevance'     => '_score',
+			'user_login'    => 'user_login.raw',
+			'login'         => 'user_login.raw',
+			'id'            => 'ID',
+			'display_name'  => 'display_name.sortable',
+			'name'          => 'display_name.sortable',
+			'nicename'      => 'user_nicename.raw',
+			'user_nicename' => 'user_nicename.raw',
+			'user_email'    => 'user_email.raw',
+			'email'         => 'user_email.raw',
+			'user_url'      => 'user_url.raw',
+			'url'           => 'user_url.raw',
+			'registered'    => 'user_registered',
+		];
+
 		$sort = [];
 
 		if ( empty( $orderby ) ) {
@@ -645,65 +591,19 @@ class User extends Indexable {
 				continue;
 			}
 
-			switch ( $orderby_clause ) {
-				case 'relevance':
-					$orderby_field = '_score';
-					break;
-
-				case 'user_login':
-				case 'login':
-					$orderby_field = 'user_login.raw';
-					break;
-
-				case 'ID':
-				case 'id':
-					$orderby_field = 'ID';
-					break;
-
-				case 'display_name':
-				case 'name':
-					$orderby_field = 'display_name.sortable';
-					break;
-
-				case 'nicename':
-				case 'user_nicename':
-					$orderby_field = 'user_nicename.raw';
-					break;
-
-				case 'user_email':
-				case 'email':
-					$orderby_field = 'user_email.raw';
-					break;
-
-				case 'user_url':
-				case 'url':
-					$orderby_field = 'user_url.raw';
-					break;
-
-				case 'user_registered':
-				case 'registered':
-					$orderby_field = 'user_registered';
-					break;
-
-				case 'meta_value':
-					if ( ! empty( $query_vars['meta_key'] ) ) {
-						$orderby_field = 'meta.' . $query_vars['meta_key'] . '.raw';
-					}
-					break;
-
-				case 'meta_value_num':
-					if ( ! empty( $query_vars['meta_key'] ) ) {
-						$orderby_field = 'meta.' . $query_vars['meta_key'] . '.long';
-					}
-					break;
-
-				default:
-					$orderby_field = $orderby_clause;
-					break;
+			if ( in_array( $orderby_clause, [ 'meta_value', 'meta_value_num' ], true ) ) {
+				if ( empty( $args['meta_key'] ) ) {
+					continue;
+				} else {
+					$from_to['meta_value']     = 'meta.' . $args['meta_key'] . '.raw';
+					$from_to['meta_value_num'] = 'meta.' . $args['meta_key'] . '.long';
+				}
 			}
 
+			$orderby_clause = $from_to[ $orderby_clause ] ?? $orderby_clause;
+
 			$sort[] = array(
-				$orderby_field => array(
+				$orderby_clause => array(
 					'order' => $order,
 				),
 			);

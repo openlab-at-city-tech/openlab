@@ -56,6 +56,7 @@ class ProtectedContent extends Feature {
 		add_filter( 'ep_post_sync_args', [ $this, 'include_post_password' ], 10, 2 );
 		add_filter( 'ep_post_sync_args', [ $this, 'remove_fields_from_password_protected' ], 11, 2 );
 		add_filter( 'ep_search_post_return_args', [ $this, 'return_post_password' ] );
+		add_filter( 'ep_skip_autosave_sync', '__return_false' );
 
 		if ( is_admin() ) {
 			add_filter( 'ep_admin_wp_query_integration', '__return_true' );
@@ -80,33 +81,24 @@ class ProtectedContent extends Feature {
 		// Let's get non public post types first
 		$pc_post_types = get_post_types( array( 'public' => false ) );
 
-		// We don't want to deal with nav menus
-		if ( $pc_post_types['nav_menu_item'] ) {
-			unset( $pc_post_types['nav_menu_item'] );
-		}
+		$ignored_post_types = [
+			'custom_css',
+			'customize_changeset',
+			'ep-synonym',
+			'ep-pointer',
+			'nav_menu_item',
+			'oembed_cache',
+			'revision',
+			'user_request',
+			'wp_block',
+			'wp_global_styles',
+			'wp_navigation',
+			'wp_template',
+			'wp_template_part',
+		];
 
-		if ( ! empty( $pc_post_types['revision'] ) ) {
-			unset( $pc_post_types['revision'] );
-		}
-
-		if ( ! empty( $pc_post_types['custom_css'] ) ) {
-			unset( $pc_post_types['custom_css'] );
-		}
-
-		if ( ! empty( $pc_post_types['customize_changeset'] ) ) {
-			unset( $pc_post_types['customize_changeset'] );
-		}
-
-		if ( ! empty( $pc_post_types['oembed_cache'] ) ) {
-			unset( $pc_post_types['oembed_cache'] );
-		}
-
-		if ( ! empty( $pc_post_types['wp_block'] ) ) {
-			unset( $pc_post_types['wp_block'] );
-		}
-
-		if ( ! empty( $pc_post_types['user_request'] ) ) {
-			unset( $pc_post_types['user_request'] );
+		foreach ( $ignored_post_types as $ignored_post_type ) {
+			unset( $pc_post_types[ $ignored_post_type ] );
 		}
 
 		// By default, attachments are not indexed, we have to make sure they are included (Could already be included by documents feature).
