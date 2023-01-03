@@ -5,14 +5,14 @@ msgstr ""
 "sidebar-menu\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 "Project-Id-Version: Advanced Sidebar Menu\n"
-"POT-Creation-Date: 2021-12-02 08:19-0500\n"
+"POT-Creation-Date: 2022-08-22 10:24-0400\n"
 "PO-Revision-Date: 2019-03-05 12:29-0500\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.4.2\n"
+"X-Generator: Poedit 2.4.3\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-Flags-xgettext: --add-comments=translators:\n"
 "X-Poedit-WPHeader: advanced-sidebar-menu.php\n"
@@ -23,12 +23,152 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: *.js\n"
 
-#: advanced-sidebar-menu.php:136
+#. translators: Selected taxonomy single label
+#: js/src/gutenberg/blocks/Display.tsx:36 src/Widget/Category.php:140
+#, javascript-format, php-format
+msgid "Display the highest level parent %s"
+msgstr ""
+
+#. translators: Selected taxonomy single label
+#. translators: Selected taxonomy single label
+#. translators: Selected post type single label
+#: js/src/gutenberg/blocks/Display.tsx:38 src/Widget/Category.php:149
+#: src/Widget/Page.php:150
+#, javascript-format, php-format
+msgid "Display menu when there is only the parent %s"
+msgstr ""
+
+#. translators: Selected taxonomy plural label
+#. translators: Selected taxonomy plural label
+#. translators: Selected post type plural label
+#: js/src/gutenberg/blocks/Display.tsx:40 src/Widget/Category.php:158
+#: src/Widget/Page.php:160
+#, javascript-format, php-format
+msgid "Always display child %s"
+msgstr ""
+
+#: js/src/gutenberg/blocks/Display.tsx:71
+msgid "Display"
+msgstr ""
+
+#. translators: {select html input}, {post type plural label}
+#. translators: {select html input}, {Selected post type plural label}
+#: js/src/gutenberg/blocks/Display.tsx:91 src/Widget/Category.php:187
+#: src/Widget/Page.php:195
+#, javascript-format, php-format
+msgid "Display %1$s levels of child %2$s"
+msgstr ""
+
+#: js/src/gutenberg/blocks/Display.tsx:99 src/Widget/Category.php:172
+#: src/Widget/Page.php:181
+msgid "- All -"
+msgstr ""
+
+#: js/src/gutenberg/blocks/InfoPanel.tsx:16 src/Notice.php:97
+msgid "Advanced Sidebar Menu PRO"
+msgstr ""
+
+#: js/src/gutenberg/blocks/InfoPanel.tsx:29
+msgid "So much more…"
+msgstr ""
+
+#: js/src/gutenberg/blocks/InfoPanel.tsx:40 src/Notice.php:124
+msgid "Upgrade"
+msgstr ""
+
+#: js/src/gutenberg/blocks/Preview.tsx:64
+#: js/src/gutenberg/blocks/pages/block.tsx:66 src/Widget/Page.php:55
+msgid "Advanced Sidebar - Pages"
+msgstr ""
+
+#: js/src/gutenberg/blocks/Preview.tsx:65
+#: js/src/gutenberg/blocks/Preview.tsx:72
+#: js/src/gutenberg/blocks/Preview.tsx:79
+msgid "No preview available"
+msgstr ""
+
+#: js/src/gutenberg/blocks/Preview.tsx:71
+#: js/src/gutenberg/blocks/categories/block.tsx:67 src/Widget/Category.php:59
+msgid "Advanced Sidebar - Categories"
+msgstr ""
+
+#: js/src/gutenberg/blocks/Preview.tsx:78
+msgid "Advanced Sidebar - Navigation"
+msgstr ""
+
+#: js/src/gutenberg/blocks/categories/Edit.tsx:63
+#: js/src/gutenberg/blocks/pages/Edit.tsx:60 src/Widget/Category.php:305
+#: src/Widget/Page.php:116 src/Widget/Page.php:286
+msgid "Title"
+msgstr ""
+
+#. translators: Selected taxonomy plural label
+#: js/src/gutenberg/blocks/categories/Edit.tsx:81 src/Widget/Category.php:217
+#, javascript-format, php-format
+msgid "Display %s on single posts"
+msgstr ""
+
+#. translators: Selected taxonomy single label
+#: js/src/gutenberg/blocks/categories/Edit.tsx:96 src/Widget/Category.php:227
+#, javascript-format, php-format
+msgid "Display each single post's %s"
+msgstr ""
+
+#. translators: Selected post type plural label
+#. translators: Selected taxonomy plural label
+#. translators: Selected post type plural label
+#: js/src/gutenberg/blocks/categories/Edit.tsx:115
+#: js/src/gutenberg/blocks/pages/Edit.tsx:91 src/Widget/Category.php:273
+#: src/Widget/Page.php:255
+#, javascript-format, php-format
+msgid "%s to exclude (ids, comma separated)"
+msgstr ""
+
+#: js/src/gutenberg/blocks/categories/Edit.tsx:128
+#: js/src/gutenberg/blocks/pages/Edit.tsx:104
+msgid "block documentation"
+msgstr ""
+
+#: js/src/gutenberg/blocks/pages/Edit.tsx:77 src/Widget/Page.php:221
+msgid "Order by"
+msgstr ""
+
+#: src/Blocks/Block_Abstract.php:258
+msgid "This block requires WordPress version 5.6!"
+msgstr ""
+
+#: src/Blocks/Categories.php:25 src/Blocks/Pages.php:25
+#: src/Widget/Category.php:52
+msgid ""
+"Creates a menu of all the categories using the parent/child relationship"
+msgstr ""
+
+#: src/Blocks/Categories.php:65 src/Blocks/Pages.php:58
+msgid "menu"
+msgstr ""
+
+#: src/Blocks/Categories.php:66 src/Blocks/Pages.php:59
+msgid "sidebar"
+msgstr ""
+
+#: src/Blocks/Categories.php:67
+msgid "taxonomy"
+msgstr ""
+
+#: src/Blocks/Categories.php:68
+msgid "term"
+msgstr ""
+
+#: src/Blocks/Pages.php:60
+msgid "pages"
+msgstr ""
+
+#: src/Core.php:49
 msgid "widget documentation"
 msgstr ""
 
 #. translators: Link to PRO plugin {%1$s}[<a href="https://onpointplugins.com/product/advanced-sidebar-menu-pro/">]{%2$s}[</a>]
-#: src/Notice.php:54
+#: src/Notice.php:69
 #, php-format
 msgctxt "{<a>}{</a>}"
 msgid ""
@@ -36,134 +176,68 @@ msgid ""
 "%3$s+. Please update or deactivate the PRO version."
 msgstr ""
 
-#: src/Notice.php:86
-msgid "Advanced Sidebar Menu PRO"
+#: src/Notice.php:115
+msgid "So much more..."
 msgstr ""
 
-#: src/Notice.php:90
+#: src/Notice.php:132
+msgid "Preview"
+msgstr ""
+
+#: src/Notice.php:162
+msgid "PRO version widget options"
+msgstr ""
+
+#: src/Notice.php:177
+msgid "Go PRO"
+msgstr ""
+
+#: src/Notice.php:191
 msgid ""
 "Styling options including borders, bullets, colors, backgrounds, size, and "
 "font weight."
 msgstr ""
 
-#: src/Notice.php:91
+#: src/Notice.php:192
 msgid "Accordion menus."
 msgstr ""
 
-#: src/Notice.php:92
+#: src/Notice.php:193
 msgid "Support for custom navigation menus from Appearance -> Menus."
 msgstr ""
 
-#: src/Notice.php:96
-msgid "Select and display custom post types."
+#: src/Notice.php:194
+msgid "Select and display custom post types and taxonomies."
 msgstr ""
 
-#: src/Notice.php:100
-msgid "Select and display custom taxonomies."
-msgstr ""
-
-#: src/Notice.php:104
+#: src/Notice.php:195
 msgid "Priority support with access to members only support area."
 msgstr ""
 
-#: src/Notice.php:110
-msgid "So much more..."
-msgstr ""
-
-#: src/Notice.php:119
-msgid "Upgrade"
-msgstr ""
-
-#: src/Notice.php:127
-msgid "Preview"
-msgstr ""
-
-#: src/Widget/Category.php:52
-msgid ""
-"Creates a menu of all the categories using the child/parent relationship"
-msgstr ""
-
-#: src/Widget/Category.php:58
-msgid "Advanced Sidebar - Categories"
-msgstr ""
-
-#. translators: Selected taxonomy single label
-#: src/Widget/Category.php:123
-#, php-format
-msgid "Display the highest level parent %s"
-msgstr ""
-
-#. translators: Selected taxonomy single label
-#. translators: Selected post type single label
-#: src/Widget/Category.php:132 src/Widget/Page.php:130
-#, php-format
-msgid "Display menu when there is only the parent %s"
-msgstr ""
-
-#. translators: Selected taxonomy plural label
-#. translators: Selected post type plural label
-#: src/Widget/Category.php:141 src/Widget/Page.php:140
-#, php-format
-msgid "Always display child %s"
-msgstr ""
-
-#: src/Widget/Category.php:155 src/Widget/Page.php:161
-msgid "- All -"
-msgstr ""
-
-#. translators: {select html input}, {Selected post type plural label}
-#: src/Widget/Category.php:170 src/Widget/Page.php:175
-#, php-format
-msgid "Display %1$s levels of child %2$s"
-msgstr ""
-
-#. translators: Selected taxonomy plural label
-#: src/Widget/Category.php:200
-#, php-format
-msgid "Display %s on single posts"
-msgstr ""
-
-#. translators: Selected taxonomy single label
-#: src/Widget/Category.php:210
-#, php-format
-msgid "Display each single post's %s"
-msgstr ""
-
-#: src/Widget/Category.php:220
+#: src/Widget/Category.php:118
 msgid "In a new widget"
 msgstr ""
 
-#: src/Widget/Category.php:223
+#: src/Widget/Category.php:119
 msgid "In another list in the same widget"
 msgstr ""
 
-#. translators: Selected taxonomy plural label
-#. translators: Selected post type plural label
-#: src/Widget/Category.php:251 src/Widget/Page.php:245
-#, php-format
-msgid "%s to exclude (ids, comma separated)"
-msgstr ""
-
-#: src/Widget/Category.php:283 src/Widget/Page.php:276
-msgid "Title"
-msgstr ""
-
 #: src/Widget/Page.php:48
-msgid "Creates a menu of all the pages using the child/parent relationship"
+msgid "Creates a menu of all the pages using the parent/child relationship"
 msgstr ""
 
-#: src/Widget/Page.php:54
-msgid "Advanced Sidebar - Pages"
+#: src/Widget/Page.php:115
+msgid "Page Order"
+msgstr ""
+
+#: src/Widget/Page.php:117
+msgid "Published Date"
 msgstr ""
 
 #. translators: Selected post type single label
-#: src/Widget/Page.php:119
+#: src/Widget/Page.php:139
 #, php-format
 msgid "Display highest level parent %s"
-msgstr ""
-
-#: src/Widget/Page.php:202
-msgid "Order by"
 msgstr ""
 
 #. Plugin Name of the plugin/theme

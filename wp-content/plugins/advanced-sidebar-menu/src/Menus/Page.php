@@ -101,7 +101,7 @@ class Page extends Menu_Abstract {
 	public function is_displayed() {
 		$display = false;
 		$post_type = $this->get_post_type();
-		if ( is_page() || ( is_single() && $post_type === $this->get_current_post()->post_type ) ) {
+		if ( is_page() || ( is_singular() && $post_type === $this->get_current_post()->post_type ) ) {
 			// If we are on the correct post type.
 			if ( get_post_type( $this->get_top_parent_id() ) === $post_type ) {
 				// If we have children.
@@ -135,7 +135,7 @@ class Page extends Menu_Abstract {
 
 
 	/**
-	 * Gets the number of levels ot display when doing 'Always display'
+	 * Gets the number of levels to display when doing 'Always display'
 	 *
 	 * @return int
 	 */

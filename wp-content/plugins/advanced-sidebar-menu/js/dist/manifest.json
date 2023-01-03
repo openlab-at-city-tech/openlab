@@ -1,0 +1,14 @@
+{
+  "admin.min.css": {
+    "src": "admin.min.css",
+    "integrity": "sha256-Wr7NQv3Tom2oLlg2Xc0kftYisZNQop8CxIRTCZuXAD0= sha384-9tfNkTop/Fd237pCVexAdxq+NuEGjZASkO1u3wlX16xe60XOque8Jvb6Ab5zS0TB sha512-4gsxkk6dnlFYDgG0R2xAvvvk/ZIRKgVeEbaQ75wqxgfaInQHlhCsaXF0Lnp2ieqXyjmi3K0SomAt5EAmAej21w=="
+  },
+  "admin.min.js": {
+    "src": "admin.min.js",
+    "integrity": "sha256-YMsVMCIrzCf1vVhr/Blf/rUj5XB6FLLlEZy+fciiiSw= sha384-cBk6rhqge1hzuSAu/8KbLh3L6oN4E6GtEI+PQCQv4irANkxmdRqphsFmYkRRQtfJ sha512-lPfUr4TCvVGT3D+Uuq6VtkdryUAEREDczFPtHP8rHdE2zevZ1waE53gPbxX8Hf1Z2aKa18oLSxi9V58gQWtNnQ=="
+  },
+  "admin.min.js.LICENSE.txt": {
+    "src": "admin.min.js.LICENSE.txt",
+    "integrity": "sha256-wyNQxpz4tzoXllsiY73lQh19mmS5APFg+P0PgCwHrZQ= sha384-64Ff8FC2egZ650+D0i8DSccCNoXL3lfp3vXLQBykpicSluEZu85aBCZFUTKTh47+ sha512-S4/moBEwu3mvoTWtH5kA3gt7m1PNpWRAbHb1QVM3466sV7mi3lydKjKfAZtn11PWbONXf1yGEEFmvM8pTtH4jQ=="
+  }
+}

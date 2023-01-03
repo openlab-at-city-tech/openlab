@@ -20,6 +20,9 @@ class Category extends Menu_Abstract {
 	const DISPLAY_ON_SINGLE     = 'single';
 	const EACH_CATEGORY_DISPLAY = 'new_widget';
 
+	const EACH_LIST   = 'list';
+	const EACH_WIDGET = 'widget';
+
 	/**
 	 * Top_level_term.
 	 *
@@ -109,6 +112,10 @@ class Category extends Menu_Abstract {
 				$ancestors[] = $term_ancestors;
 			}
 
+			if ( empty( $ancestors ) ) {
+				return [];
+			}
+
 			return \array_merge( ...$ancestors );
 		}, __METHOD__, [] );
 	}
@@ -151,7 +158,7 @@ class Category extends Menu_Abstract {
 
 
 	/**
-	 * Gets the number of levels ot display when doing 'Always display'
+	 * Gets the number of levels to display when using "Always display child categories".
 	 *
 	 * @return int
 	 */
@@ -167,17 +174,17 @@ class Category extends Menu_Abstract {
 
 	/**
 	 * Get the top-level terms for the current page.
-	 * If on a single this could be multiple.
-	 * If on an archive this will be one.
+	 * Could be multiple if on a single.
+	 * This will be one if on an archive.
 	 *
 	 * @return \WP_Term[]
 	 */
 	public function get_top_level_terms() {
-		$child_term_ids = $this->get_included_term_ids();
-		$top_level_term_ids = [];
-		foreach ( $child_term_ids as $_term_id ) {
-			$top_level_term_ids[] = $this->get_highest_parent( $_term_id );
-		}
+		$top_level_term_ids = \array_filter( \array_map( function( $term_id ) {
+			$top = $this->get_highest_parent( $term_id );
+			return $this->is_excluded( $top ) ? null : $top;
+		}, $this->get_included_term_ids() ) );
+
 		$top_level_term_ids = apply_filters( 'advanced-sidebar-menu/menus/category/top-level-term-ids', $top_level_term_ids, $this->args, $this->instance, $this );
 
 		$terms = [];
@@ -208,7 +215,7 @@ class Category extends Menu_Abstract {
 	 */
 	public function get_included_term_ids() {
 		$term_ids = [];
-		if ( is_single() ) {
+		if ( is_singular() ) {
 			$term_ids = wp_get_object_terms( get_the_ID(), $this->get_taxonomy(), [ 'fields' => 'ids' ] );
 		} elseif ( $this->is_tax() ) {
 			$term_ids[] = get_queried_object()->term_id;
@@ -270,7 +277,7 @@ class Category extends Menu_Abstract {
 	 */
 	public function is_displayed() {
 		$display = false;
-		if ( is_single() ) {
+		if ( is_singular() ) {
 			if ( $this->checked( self::DISPLAY_ON_SINGLE ) ) {
 				$display = true;
 			}
@@ -407,8 +414,13 @@ class Category extends Menu_Abstract {
 			$classes[] = 'current-menu-item';
 		} else {
 			$current = $this->get_current_term();
-			if ( null !== $current && $current->parent === $category->term_id ) {
-				$classes[] = 'current-menu-parent';
+			if ( null !== $current ) {
+				if ( $current->parent === $category->term_id ) {
+					$classes[] = 'current-menu-parent';
+					$classes[] = 'current-menu-ancestor';
+				} elseif ( $this->is_current_term_ancestor( $current ) ) {
+					$classes[] = 'current-menu-ancestor';
+				}
 			}
 		}
 
@@ -496,7 +508,25 @@ class Category extends Menu_Abstract {
 
 
 	/**
-	 * Render the widget output
+	 * Render the widget output.
+	 *
+	 * @example Display singe post categories in a new widget.
+	 *          ```html
+	 *          <div>
+	 *              <ul />
+	 *          </div>
+	 *          <div>
+	 *             <ul />
+	 *          </div>
+	 *          ```
+	 *
+	 * @example Display singe post categories in another list.
+	 *          ```html
+	 *          <div>
+	 *              <ul />
+	 *              <ul />
+	 *          </div>
+	 *          ```
 	 *
 	 * @return void
 	 */
@@ -509,6 +539,7 @@ class Category extends Menu_Abstract {
 
 		$menu_open = false;
 		$close_menu = false;
+		$output = '';
 
 		foreach ( $this->get_top_level_terms() as $_cat ) {
 			$this->set_current_top_level_term( $_cat );
@@ -516,9 +547,8 @@ class Category extends Menu_Abstract {
 				continue;
 			}
 
-			if ( ! $menu_open || ( 'widget' === $this->instance[ self::EACH_CATEGORY_DISPLAY ] ) ) {
-				//phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
-				echo $this->args['before_widget'];
+			if ( ! $menu_open || ( static::EACH_WIDGET === $this->instance[ self::EACH_CATEGORY_DISPLAY ] ) ) {
+				echo $this->args['before_widget']; //phpcs:ignore
 
 				do_action( 'advanced-sidebar-menu/menus/category/render', $this );
 
@@ -528,27 +558,50 @@ class Category extends Menu_Abstract {
 
 					$menu_open = true;
 					$close_menu = true;
-					if ( 'list' === $this->instance[ self::EACH_CATEGORY_DISPLAY ] ) {
+					if ( static::EACH_LIST === $this->instance[ self::EACH_CATEGORY_DISPLAY ] ) {
 						$close_menu = false;
 					}
 				}
 			}
 
-			$output = require Core::instance()->get_template_part( 'category_list.php' );
+			$view = require Core::instance()->get_template_part( 'category_list.php' );
 
-			echo apply_filters( 'advanced-sidebar-menu/menus/category/output', $output, $this->args, $this->instance, $this );
+			$output .= apply_filters( 'advanced-sidebar-menu/menus/category/output', $view, $this->args, $this->instance, $this );
 
 			if ( $close_menu ) {
-				do_action( 'advanced-sidebar-menu/menus/category/render/after', $this );
-				echo $this->args['after_widget'];
+				$this->close_menu( $output );
+				$output = '';
 			}
 		}
 
 		if ( ! $close_menu && $menu_open ) {
-			do_action( 'advanced-sidebar-menu/menus/category/render/after', $this );
-			echo $this->args['after_widget'];
+			$this->close_menu( $output );
 		}
-		//phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
+	}
+
+
+	/**
+	 * Close the menu after applying final filters.
+	 *
+	 * Either we wrap each list when display each category in a
+	 * new widget, or we wrap all lists when displaying each
+	 * category in another list.
+	 *
+	 * The `advanced-sidebar-menu/menus/category/close-menu` filter lets
+	 * us target the inner content of each `<div>`.
+	 *
+	 * @param string $output - Contents of the widget `<div>`.
+	 *
+	 * @since   9.0.0
+	 *
+	 * @return void
+	 */
+	protected function close_menu( $output ) {
+		//phpcs:disable WordPress.Security.EscapeOutput
+		echo apply_filters( 'advanced-sidebar-menu/menus/category/close-menu', $output, $this->args, $this->instance, $this );
+		do_action( 'advanced-sidebar-menu/menus/category/render/after', $this );
+		echo $this->args['after_widget'];
+		//phpcs:enable WordPress.Security.EscapeOutput
 	}
 
 }

@@ -4,7 +4,6 @@ namespace Advanced_Sidebar_Menu;
 
 use Advanced_Sidebar_Menu\Traits\Singleton;
 use Advanced_Sidebar_Menu\Widget\Category;
-use Advanced_Sidebar_Menu\Widget\Page as Widget_Page;
 
 /**
  * Various notice handling for the admin and widgets.
@@ -28,6 +27,7 @@ class Notice {
 
 		if ( $this->is_conflicting_pro_version() ) {
 			add_action( 'all_admin_notices', [ $this, 'pro_version_warning' ] );
+			add_filter( 'advanced-sidebar-menu/scripts/js-config/error', [ $this, 'get_pro_version_warning_message' ] );
 		}
 	}
 
@@ -51,13 +51,22 @@ class Notice {
 		?>
 		<div class="<?php echo true === $no_banner ? '' : 'error'; ?>">
 			<p>
-				<?php
-				/* translators: Link to PRO plugin {%1$s}[<a href="https://onpointplugins.com/product/advanced-sidebar-menu-pro/">]{%2$s}[</a>] */
-				printf( esc_html_x( 'Advanced Sidebar Menu requires %1$sAdvanced Sidebar Menu PRO%2$s version %3$s+. Please update or deactivate the PRO version.', '{<a>}{</a>}', 'advanced-sidebar-menu' ), '<a target="_blank" rel="noreferrer noopener" href="https://onpointplugins.com/product/advanced-sidebar-menu-pro/">', '</a>', esc_attr( ADVANCED_SIDEBAR_MENU_REQUIRED_PRO_VERSION ) );
-				?>
+				<?php echo $this->get_pro_version_warning_message(); //phpcs:ignore ?>
 			</p>
 		</div>
 		<?php
+	}
+
+
+	/**
+	 * Get message to display in various admin locations if
+	 * basic version of the plugin is unsupported.
+	 *
+	 * @return string
+	 */
+	public function get_pro_version_warning_message() {
+		/* translators: Link to PRO plugin {%1$s}[<a href="https://onpointplugins.com/product/advanced-sidebar-menu-pro/">]{%2$s}[</a>] */
+		return sprintf( esc_html_x( 'Advanced Sidebar Menu requires %1$sAdvanced Sidebar Menu PRO%2$s version %3$s+. Please update or deactivate the PRO version.', '{<a>}{</a>}', 'advanced-sidebar-menu' ), '<a target="_blank" rel="noreferrer noopener" href="https://onpointplugins.com/product/advanced-sidebar-menu-pro/">', '</a>', esc_attr( ADVANCED_SIDEBAR_MENU_REQUIRED_PRO_VERSION ) );
 	}
 
 
@@ -89,21 +98,15 @@ class Notice {
 				</a>
 			</h3>
 			<ol>
-				<li><?php esc_html_e( 'Styling options including borders, bullets, colors, backgrounds, size, and font weight.', 'advanced-sidebar-menu' ); ?></li>
-				<li><?php esc_html_e( 'Accordion menus.', 'advanced-sidebar-menu' ); ?></li>
-				<li><?php esc_html_e( 'Support for custom navigation menus from Appearance -> Menus.', 'advanced-sidebar-menu' ); ?></li>
 				<?php
-				if ( Widget_Page::NAME === $widget->id_base ) {
+				foreach ( $this->get_features() as $feature ) {
 					?>
-					<li><?php esc_html_e( 'Select and display custom post types.', 'advanced-sidebar-menu' ); ?></li>
-					<?php
-				} else {
-					?>
-					<li><?php esc_html_e( 'Select and display custom taxonomies.', 'advanced-sidebar-menu' ); ?></li>
+					<li>
+						<?php echo esc_html( $feature ); ?>
+					</li>
 					<?php
 				}
 				?>
-				<li><?php esc_html_e( 'Priority support with access to members only support area.', 'advanced-sidebar-menu' ); ?></li>
 				<li>
 					<a
 						href="https://onpointplugins.com/product/advanced-sidebar-menu-pro/?utm_source=widget-more&utm_campaign=gopro&utm_medium=wp-dash"
@@ -142,6 +145,9 @@ class Notice {
 	 * @param \WP_Widget $widget   - Widget class.
 	 */
 	public function preview( array $instance, \WP_Widget $widget ) {
+		if ( \defined( 'ADVANCED_SIDEBAR_MENU_PRO_VERSION' ) ) {
+			return;
+		}
 		$src = 'pages-widget-min.webp?version=' . ADVANCED_SIDEBAR_BASIC_VERSION;
 		if ( Category::NAME === $widget->id_base ) {
 			$src = 'category-widget-min.webp?version=' . ADVANCED_SIDEBAR_BASIC_VERSION;
@@ -174,6 +180,23 @@ class Notice {
 			$actions['go-pro'] = sprintf( '<a href="%1$s" target="_blank" style="color:#3db634;font-weight:700;">%2$s</a>', 'https://onpointplugins.com/product/advanced-sidebar-menu-pro/?utm_source=wp-plugins&utm_campaign=gopro&utm_medium=wp-dash', __( 'Go PRO', 'advanced-sidebar-menu' ) );
 		}
 		return $actions;
+	}
+
+
+	/**
+	 * Get a list of PRO plugin features for display in
+	 * the info panel for widgets and blocks.
+	 *
+	 * @return array
+	 */
+	public function get_features() {
+		return [
+			__( 'Styling options including borders, bullets, colors, backgrounds, size, and font weight.', 'advanced-sidebar-menu' ),
+			__( 'Accordion menus.', 'advanced-sidebar-menu' ),
+			__( 'Support for custom navigation menus from Appearance -> Menus.', 'advanced-sidebar-menu' ),
+			__( 'Select and display custom post types and taxonomies.', 'advanced-sidebar-menu' ),
+			__( 'Priority support with access to members only support area.', 'advanced-sidebar-menu' ),
+		];
 	}
 
 }

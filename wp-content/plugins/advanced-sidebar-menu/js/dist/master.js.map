@@ -1,0 +1,1 @@
+{"version":3,"file":"master.js","mappings":";;;;;AAAAA,OAAO,CAACC,GAAR,CAAa,oBAAb,E","sources":["webpack://@onpointplugins/advanced-sidebar-menu/./src/index.js"],"sourcesContent":["console.log( 'Currently not used' );\n"],"names":["console","log"],"sourceRoot":""}

@@ -30,7 +30,7 @@ class Debug {
 		if ( ! empty( $_GET[ self::DEBUG_PARAM ] ) ) { //phpcs:ignore
 			add_action( 'advanced-sidebar-menu/widget/before-render', [ $this, 'print_instance' ], 1, 2 );
 
-			if ( is_array( $_GET[ self::DEBUG_PARAM ] ) ) { //phpcs:ignore
+			if ( \is_array( $_GET[ self::DEBUG_PARAM ] ) ) { //phpcs:ignore
 				add_filter( 'advanced-sidebar-menu/menus/widget-instance', [ $this, 'adjust_widget_settings' ] );
 			}
 		}
@@ -64,6 +64,34 @@ class Debug {
 
 
 	/**
+	 * Get information about the current site.
+	 *
+	 * 1. PHP version.
+	 * 2. Plugin version.
+	 * 3. WP version.
+	 * 4. PRO version.
+	 *
+	 * @since 9.0.2
+	 *
+	 * @return array
+	 */
+	public function get_site_info() {
+		$data = [
+			'basic'       => ADVANCED_SIDEBAR_BASIC_VERSION,
+			'php'         => PHP_VERSION,
+			'pro'         => false,
+			'scriptDebug' => Scripts::instance()->is_script_debug_enabled(),
+			'wordpress'   => get_bloginfo( 'version' ),
+		];
+		if ( defined( 'ADVANCED_SIDEBAR_MENU_PRO_VERSION' ) ) {
+			$data['pro'] = ADVANCED_SIDEBAR_MENU_PRO_VERSION;
+		}
+
+		return $data;
+	}
+
+
+	/**
 	 * Print the widget settings as a JS variable.
 	 *
 	 * @param Menu_Abstract $menu   - Menu class.
@@ -72,20 +100,13 @@ class Debug {
 	 * @return void
 	 */
 	public function print_instance( $menu, $widget ) {
-		$data = [
-			'version'    => ADVANCED_SIDEBAR_BASIC_VERSION,
-			'wp-version' => get_bloginfo( 'version' ),
-		];
-		if ( defined( 'ADVANCED_SIDEBAR_MENU_PRO_VERSION' ) ) {
-			$data['pro_version'] = ADVANCED_SIDEBAR_MENU_PRO_VERSION;
-		}
-		$data = apply_filters( 'advanced-sidebar-menu/debug/print-instance', $data, $menu, $widget );
+		$data = apply_filters( 'advanced-sidebar-menu/debug/print-instance', $this->get_site_info(), $menu, $widget );
 		?>
-		<script class="<?php echo esc_attr( self::DEBUG_PARAM ); ?>">
+		<script name="<?php echo esc_attr( self::DEBUG_PARAM ); ?>">
 			if ( 'undefined' === typeof ( <?php echo esc_attr( self::DEBUG_PARAM ); ?> ) ) {
 				var <?php echo esc_attr( self::DEBUG_PARAM ); ?> = <?php echo wp_json_encode( $data ); ?>;
 			}
-				<?php echo esc_attr( self::DEBUG_PARAM ); ?>[ '<?php echo esc_js( $widget->id ); ?>' ] = <?php echo wp_json_encode( $menu->instance ); ?>;
+				<?php echo esc_attr( self::DEBUG_PARAM ); ?>[ '<?php echo esc_js( $menu->args['widget_id'] ); ?>' ] = <?php echo wp_json_encode( $menu->instance ); ?>;
 		</script>
 		<?php
 	}

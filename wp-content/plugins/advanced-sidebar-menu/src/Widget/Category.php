@@ -48,8 +48,9 @@ class Category extends Widget_Abstract {
 	 */
 	public function __construct() {
 		$widget_ops = [
-			'classname'   => 'advanced-sidebar-menu advanced-sidebar-category',
-			'description' => __( 'Creates a menu of all the categories using the child/parent relationship', 'advanced-sidebar-menu' ),
+			'classname'             => 'advanced-sidebar-menu advanced-sidebar-category',
+			'description'           => __( 'Creates a menu of all the categories using the parent/child relationship', 'advanced-sidebar-menu' ),
+			'show_instance_in_rest' => true,
 		];
 		$control_ops = [
 			'width' => wp_is_mobile() ? false : 620,
@@ -104,6 +105,19 @@ class Category extends Widget_Abstract {
 		}
 
 		return $single ? $taxonomy->labels->singular_name : $taxonomy->labels->name;
+	}
+
+
+	/**
+	 * Get list of display each single post's category options.
+	 *
+	 * @return array
+	 */
+	public static function get_display_each_options() {
+		return [
+			\Advanced_Sidebar_Menu\Menus\Category::EACH_WIDGET => __( 'In a new widget', 'advanced-sidebar-menu' ),
+			\Advanced_Sidebar_Menu\Menus\Category::EACH_LIST   => __( 'In another list in the same widget', 'advanced-sidebar-menu' ),
+		];
 	}
 
 
@@ -218,13 +232,18 @@ class Category extends Widget_Abstract {
 						name="<?php echo esc_attr( $widget->get_field_name( self::EACH_CATEGORY_DISPLAY ) ); ?>"
 						class="advanced-sidebar-menu-block-field"
 					>
-						<option
-							value="widget" <?php selected( 'widget', $instance[ self::EACH_CATEGORY_DISPLAY ] ); ?>>
-							<?php esc_html_e( 'In a new widget', 'advanced-sidebar-menu' ); ?>
-						</option>
-						<option value="list" <?php selected( 'list', $instance[ self::EACH_CATEGORY_DISPLAY ] ); ?>>
-							<?php esc_html_e( 'In another list in the same widget', 'advanced-sidebar-menu' ); ?>
-						</option>
+						<?php
+						foreach ( static::get_display_each_options() as $value => $label ) {
+							?>
+							<option
+								value="<?php echo esc_attr( $value ); ?>"
+								<?php selected( $value, $instance[ self::EACH_CATEGORY_DISPLAY ] ); ?>
+							>
+								<?php echo esc_html( $label ); ?>
+							</option>
+							<?php
+						}
+						?>
 					</select>
 				</p>
 			</div>

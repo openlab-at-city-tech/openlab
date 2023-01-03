@@ -59,8 +59,6 @@ abstract class Widget_Abstract extends \WP_Widget {
 	 *                                     which controls this.
 	 * @param bool   $reverse              - hide on check instead of show on check.
 	 *
-	 * @todo  Convert all uses of this method to supply the $element_key
-	 *
 	 * @return void
 	 */
 	public function hide_element( $controlling_checkbox, $element_key = null, $reverse = false ) {
