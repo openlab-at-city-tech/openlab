@@ -1019,20 +1019,17 @@ class WCP_Folders
             $email  = filter_input(INPUT_POST, 'email');
             update_option("folder_update_message", 2);
             if ($status == 1) {
-                $email = sanitize_email($email);
-
-                $apiURL = "https://premioapps.com/premio/signup/index.php?plugin=folders&email=".esc_attr($email);
-
+                $url = 'https://premioapps.com/premio/signup/email.php';
                 $apiParams = [
                     'plugin' => 'folders',
                     'email'  => $email,
                 ];
 
-                // Signup Email for Chaty
-                $apiResponse = wp_safe_remote_post($apiURL, ['body' => $apiParams, 'timeout' => 15, 'sslverify' => true]);
+                // Signup Email for Folders
+                $apiResponse = wp_safe_remote_post($url, ['body' => $apiParams, 'timeout' => 15, 'sslverify' => true]);
 
                 if (is_wp_error($apiResponse)) {
-                    wp_safe_remote_post($apiURL, ['body' => $apiParams, 'timeout' => 15, 'sslverify' => false]);
+                    wp_safe_remote_post($url, ['body' => $apiParams, 'timeout' => 15, 'sslverify' => false]);
                 }
 
                 $response['status'] = 1;
