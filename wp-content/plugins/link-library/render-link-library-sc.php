@@ -60,7 +60,7 @@ function ll_sort_by_temp_column ( $orderby ) {
 	return $orderby;
 }
 
-function link_library_get_breadcrumb_path( $slug, $rewritepage, $level = 0 ) {
+function link_library_get_breadcrumb_path( $slug, $rewritepage, $rewritecategoriespage, $level = 0 ) {
 	$genoptions = get_option( 'LinkLibraryGeneral' );
 	$genoptions = wp_parse_args( $genoptions, ll_reset_gen_settings( 'return' ) );
 
@@ -71,7 +71,7 @@ function link_library_get_breadcrumb_path( $slug, $rewritepage, $level = 0 ) {
 	if ( !empty( $term ) ) {
 		$parent_term = get_term_by( 'id', $term->parent, $genoptions['cattaxonomy'] );
 		if ( !empty( $parent_term ) ) {
-			$cat_path .= link_library_get_breadcrumb_path( $parent_term->slug, $rewritepage, $level + 1 ) . ' - ';
+			$cat_path .= link_library_get_breadcrumb_path( $parent_term->slug, $rewritepage, $rewritecategoriespage, $level + 1 ) . ' - ';
 		}
 	}
 
@@ -88,7 +88,7 @@ function link_library_get_breadcrumb_path( $slug, $rewritepage, $level = 0 ) {
 		$cat_path .= '<a href="' . $new_link . '">' . $term->name . '</a>';		
 	} elseif ( $level == 0 ) {
 		$cat_path .= $term->name;
-		$new_top_link = esc_url( home_url() . '/' . $rewritepage );
+		$new_top_link = esc_url( home_url() . '/' . $rewritecategoriespage . '/' );
 
 		if ( isset( $_GET['link_tags'] ) && !empty( $_GET['link_tags'] ) ) {
 			$new_top_link = add_query_arg( 'link_tags', sanitize_text_field( $_GET['link_tags'] ), $new_top_link );
@@ -393,7 +393,10 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
 
 	$validdirections = array( 'ASC', 'DESC' );
 
-	$linkeditoruser = current_user_can( 'manage_options' );
+	$linkeditoruser = false;
+	if ( current_user_can( 'manage_options' ) ) {
+		$linkeditoruser = true;
+	}
 
 	if ( $level == 0 ) {
 		$output = "<!-- Beginning of Link Library Output -->";
@@ -786,7 +789,7 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
 			$output .= link_library_display_pagination( $previouspagenumber, $nextpagenumber, $number_of_pages, $pagenumber, $showonecatonly, $showonecatmode, $AJAXcatid, $settings, $pageID, $currentcatletter );
 		}
 
-		if ( $level == 0 && 'search' == $mode ) {
+		if ( $level == 0 && 'search' == $mode && !$suppressonemptysearch ) {
 			$output .= '<div class="resulttitle">' . __('Search Results for', 'link-library') . ' "' . esc_html( stripslashes( $searchstring ) ) . '"</div><!-- Div search results title -->';
 		}
 
@@ -803,7 +806,7 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
 				}
 
 				if ( $enablerewrite && $showbreadcrumbspermalinks && $parent_cat_id != 0 && $level == 0) {
-					$breadcrumb = '<div class="breadcrumb">' . link_library_get_breadcrumb_path( $link_category->slug, $rewritepage ) . '</div>';
+					$breadcrumb = '<div class="breadcrumb">' . link_library_get_breadcrumb_path( $link_category->slug, $rewritepage, $rewritecategoriespage ) . '</div>';
 					$output .= $breadcrumb;
 				}
 
@@ -1055,6 +1058,10 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
 
 				// Display links
 				if ( ( $the_link_query->found_posts && $showonecatonly && ( ( 'AJAX' == $showonecatmode && $AJAXnocatset ) || ( 'AJAX' != $showonecatmode && $GETnocatset ) ) && $nocatonstartup && empty( $searchstring ) ) || ( 0 == $the_link_query->found_posts && $nocatonstartup && empty( $searchstring ) ) ) {
+					if ( $level == 0 && 'search' == $mode && !$suppressonemptysearch ) {
+						$output .= '<div class="resulttitle">' . __( 'Search Results for', 'link-library' ) . ' "' . esc_html( stripslashes( $searchstring ) ) . '"</div><!-- Div search results title -->';
+					}
+
 					$output .= "<div id='linklist" . $settings . "' class='linklist'>\n";
 					$output .= '</div><!-- Div empty list -->';
 				} elseif ( ( $the_link_query->found_posts || !$hide_if_empty || $cat_has_children ) ) {
@@ -1974,7 +1981,7 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
 															$current_cat_output .= '</a>';
 														}
 
-														if ( $showadmineditlinks && $linkeditoruser ) {
+														if ( $showadmineditlinks && is_user_logged_in() && ( $linkeditoruser || current_user_can( 'edit_posts', get_the_ID() ) ) ) {
 															$current_cat_output .= $between . '<span class="editlink"><a href="' . esc_url( add_query_arg( array(
 																	'action' => 'edit', 'post' => $linkitem['proper_link_id'] ),
 																	admin_url( 'post.php' ) ) ) . '">(' . __('Edit', 'link-library') . ')</a></span>';
@@ -2853,8 +2860,8 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
 		$output .= '<span class="nolinksfoundallcats">' . __( 'No links found', 'link-library' ) . '</span>';
 	}
 
-	if ( !empty( $searchstring ) && $linkcount == 1 && $level == 0 ) {
-		$output .= '<span class="nolinksfoundallcats">' . $searchnoresultstext . "</span>\n";
+	if ( !empty( $searchstring ) && $linkcount == 1 && $level == 0 && !$suppressonemptysearch ) {
+		$output .= '<span class="nolinksfoundallcats">' . stripslashes( $searchnoresultstext ) . "</span>\n";
 	}
 
 	if ( $usethumbshotsforimages && $level == 0 ) {

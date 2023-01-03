@@ -14,7 +14,7 @@ require_once plugin_dir_path( __FILE__ ) . 'link-library-defaults.php';
  * @return                  List of categories output for browser
  */
 
-function RenderLinkLibraryCategories( $LLPluginClass, $generaloptions, $libraryoptions, $settings, $targetlibrary, $parent_cat_id = 0, $level = 0 ) {
+function RenderLinkLibraryCategories( $LLPluginClass, $generaloptions, $libraryoptions, $settings, $targetlibrary, $parent_cat_id, $level = 0, $parent_id_array ) {
     $generaloptions = wp_parse_args( $generaloptions, ll_reset_gen_settings( 'return' ) );
     extract( $generaloptions );
 
@@ -105,7 +105,11 @@ function RenderLinkLibraryCategories( $LLPluginClass, $generaloptions, $libraryo
 		    }
 	    }
 
-        $link_categories_query_args = array( 'parent' => $parent_cat_id );
+		$link_categories_query_args = array( );
+
+		if ( isset( $parent_cat_id ) ) {
+			$link_categories_query_args['parent'] = $parent_cat_id;
+		}
 
         if ( $hide_if_empty ) {
             $link_categories_query_args['hide_empty'] = true;
@@ -125,12 +129,30 @@ function RenderLinkLibraryCategories( $LLPluginClass, $generaloptions, $libraryo
             add_filter( 'get_terms', 'link_library_get_terms_filter_publish_draft_pending', 10, 3 );
         }
 
-        if ( !empty( $categorylist_cpt ) && empty( $singlelinkid ) && $level == 0 ) {
-            $link_categories_query_args['include'] = explode( ',', $categorylist_cpt );
+		// Could build an array of parents that gets passed down each level and then cycle through to remove all parents
+
+        if ( !empty( $categorylist_cpt ) && empty( $singlelinkid ) ) {
+			$link_categories_query_args['include'] = explode( ',', $categorylist_cpt );
+
+			if ( $level != 0 ) {
+				foreach ( $parent_id_array as $parent_id_search ) {
+					$pos = array_search( $parent_id_search, $link_categories_query_args['include'] );
+					if ($pos !== false) {
+						unset( $link_categories_query_args['include'][$pos] );
+					}	
+				}
+			}            
         }
 
-        if ( !empty( $excludecategorylist_cpt ) && empty( $singlelinkid ) && $level == 0 ) {
+        if ( !empty( $excludecategorylist_cpt ) && empty( $singlelinkid ) ) {
             $link_categories_query_args['exclude'] = explode( ',', $excludecategorylist_cpt );
+
+			/* if ( $level != 0 ) {
+				$pos = array_search( $parent_cat_id, $link_categories_query_args['exclude'] );
+				if ($pos !== false) {
+					unset( $link_categories_query_args['exclude'][$pos] );
+				}
+			} */
         }
 
         /* if ( isset( $categoryname ) && !empty( $categoryname ) && 'HTMLGETPERM' == $showonecatmode && empty( $singlelinkid ) && $level == 0 ) {
@@ -171,7 +193,7 @@ function RenderLinkLibraryCategories( $LLPluginClass, $generaloptions, $libraryo
 		    }
 	    }
 
-        if ( 'catlist' == $order ) {
+        if ( 'catlist' == $order && $level == 0 ) {
             $temp_link_categories = $link_categories;
             $link_categories = array();
             foreach ( $link_categories_query_args['include'] as $sort_link_category_id ) {
@@ -185,8 +207,10 @@ function RenderLinkLibraryCategories( $LLPluginClass, $generaloptions, $libraryo
         }
 
         if ( $debugmode ) {
-            $output .= "\n<!-- Category Query: " . print_r( $link_categories_query_args, TRUE ) . "-->\n\n";
-            $output .= "\n<!-- Category Results: " . print_r( $link_categories, TRUE ) . "-->\n\n";
+			$output .= "\n<!-- Category taxonomy: " . print_r( $generaloptions['cattaxonomy'], TRUE ) . " -->\n\n";
+			$output .= "\n<!-- Parent Cat ID: " . print_r( $parent_id_array, TRUE ) . " -->\n\n";
+            $output .= "\n<!-- Category Query: " . print_r( $link_categories_query_args, TRUE ) . " -->\n\n";
+            $output .= "\n<!-- Category Results: " . print_r( $link_categories, TRUE ) . " -->\n\n";
         }
 
         // Display each category
@@ -215,7 +239,7 @@ function RenderLinkLibraryCategories( $LLPluginClass, $generaloptions, $libraryo
 		            if ( $dropdownselectionprompt && !empty( $dropdownselectionprompttext ) ) {
 		            	$output .= '<option value="">' . $dropdownselectionprompttext . '</option>';
 		            }
-	            }
+	            } 
             } else {
 	            if ( 'dropdown' == $flatlist || 'dropdowndirect' == $flatlist ) {
 
@@ -304,6 +328,7 @@ function RenderLinkLibraryCategories( $LLPluginClass, $generaloptions, $libraryo
 	            if ( isset( $_GET['searchll'] ) ) {
 		            $searchstring = sanitize_text_field( $_GET['searchll'] );
 		            if ( !empty( $searchstring ) ) {
+						add_filter( 'posts_search', 'll_expand_posts_search', 10, 2 );
 			            $link_query_args['s'] = $searchstring;
 		            }
 	            }
@@ -325,7 +350,9 @@ function RenderLinkLibraryCategories( $LLPluginClass, $generaloptions, $libraryo
 
 	            $the_link_query = new WP_Query( $link_query_args );
 	            $linkcount = $the_link_query->post_count;
-	            wp_reset_postdata();
+	            
+				remove_filter( 'posts_search', 'll_expand_posts_search', 10 );
+				wp_reset_postdata();
 
 				if ( $hideemptycats && !$cat_has_children && $linkcount == 0 ) {
 					continue;
@@ -342,7 +369,9 @@ function RenderLinkLibraryCategories( $LLPluginClass, $generaloptions, $libraryo
 		                $catfront = "\t<td>";
 	                } elseif ( 'unordered' == $flatlist ) {
 		                $catfront = "\t<li>";
-	                } elseif ( ( 'dropdown' == $flatlist || 'dropdowndirect' == $flatlist ) && ( $linkcount > 0 || !$hide_if_empty )) {
+	                } elseif ( 'simpledivs' == $flatlist ) {
+						$output .= "<div class='catlistdiv'>\n";
+					} elseif ( ( 'dropdown' == $flatlist || 'dropdowndirect' == $flatlist ) && ( $linkcount > 0 || !$hide_if_empty )) {
 		                $catfront = "\t<option ";
 		                if ( !empty( $categoryid ) && $categoryid == $catname->term_id ) {
 			                $catfront .= 'selected="selected" ';
@@ -439,7 +468,7 @@ function RenderLinkLibraryCategories( $LLPluginClass, $generaloptions, $libraryo
 				                $cattext = "<a href='";
 			                }
 
-			                $cattargetaddress = esc_url( site_url() . '/' . $rewritepage . '/' . $catname->slug );
+			                $cattargetaddress = esc_url( site_url() . '/' . $rewritepage . '/' . $catname->slug . '/' );
 			                if ( $searchfiltercats && isset( $_GET['searchll'] ) && !empty( $_GET['searchll'] ) ) {
 				                $cattargetaddress = add_query_arg( 'searchll', sanitize_text_field( $_GET['searchll'] ), $cattargetaddress );
 			                }
@@ -573,7 +602,8 @@ function RenderLinkLibraryCategories( $LLPluginClass, $generaloptions, $libraryo
 	            }
 
                 if ( $cat_has_children && ( empty( $catlistchildcatdepthlimit ) || ( !empty( $catlistchildcatdepthlimit ) && intval( $catlistchildcatdepthlimit ) - 1 > $level ) ) ) {
-	                $output .= RenderLinkLibraryCategories( $LLPluginClass, $generaloptions, $libraryoptions, $settings, $targetlibrary, $catname->term_id, $level + 1 );
+					array_push( $parent_id_array, $catname->term_id );
+	                $output .= RenderLinkLibraryCategories( $LLPluginClass, $generaloptions, $libraryoptions, $settings, $targetlibrary, $catname->term_id, $level + 1, $parent_id_array );
                 }
 
 	            $catterminator = '';
@@ -582,8 +612,10 @@ function RenderLinkLibraryCategories( $LLPluginClass, $generaloptions, $libraryo
 		                $catterminator = "</td>\n";
 	                } elseif ( 'unordered' == $flatlist ) {
 		                $catterminator = "</li>\n";
-	                }
-                } elseif ( 'dropdown' != $flatlist && 'dropdowndirect' != $flatlist ) {
+	                } elseif ( 'simpledivs' == $flatlist ) {
+		                $catterminator = "</div>\n";
+	                } 
+                } elseif ( 'dropdown' != $flatlist && 'dropdowndirect' != $flatlist && 'simpledivs' != $flatlist ) {
 	                $catterminator = "</li>\n";
                 }
 
@@ -625,7 +657,7 @@ function RenderLinkLibraryCategories( $LLPluginClass, $generaloptions, $libraryo
 				}
 
 	            $output .= "</div>\n";
-            } elseif ( 'dropdown' != $flatlist && 'dropdowndirect' != $flatlist && $link_categories ) {
+            } elseif ( 'dropdown' != $flatlist && 'dropdowndirect' != $flatlist && 'simpledivs' != $flatlist && $link_categories ) {
             	$output .= '</ul>';
             }
 
@@ -638,7 +670,7 @@ function RenderLinkLibraryCategories( $LLPluginClass, $generaloptions, $libraryo
             }
 
             if ( 0 == $level && ( 'dropdown' == $flatlist || 'dropdowndirect' == $flatlist ) ) {
-                $output .= "<SCRIPT TYPE='text/javascript'>\n";
+                $output .= "<script TYPE='text/javascript'>\n";
                 $output .= "\tfunction showcategory( catidvar ){\n";
 
                 if ( $showonecatonly && ( 'AJAX' == $showonecatmode || empty( $showonecatmode ) ) ) {
@@ -656,7 +688,7 @@ function RenderLinkLibraryCategories( $LLPluginClass, $generaloptions, $libraryo
                     $output .= "\t\tlocation=\n";
                     $output .= "document.catselect.catdropdown" . $settings . ".options[document.catselect.catdropdown" . $settings . ".selectedIndex].value }\n";
                 }
-                $output .= "</SCRIPT>\n";
+                $output .= "</script>\n";
             }
         } else {
             $output .= '<div>' . __('No categories found', 'link-library') . '.</div>';

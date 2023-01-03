@@ -332,7 +332,7 @@ function link_library_process_user_submission( $my_link_library_plugin ) {
 
 							if ( $reciprocal_return == 'exists_found' ) {
 								$newlinkvisibility = 'publish';
-								unset ( $message );
+								$message = "";
 							} else {
 								$newlinkvisibility = 'pending';
 							}
@@ -341,7 +341,7 @@ function link_library_process_user_submission( $my_link_library_plugin ) {
 						}
 					} else {
 						$newlinkvisibility = 'publish';
-						unset ( $message );
+						$message = "";
 					}
 
 					$username = '';
@@ -497,8 +497,6 @@ function link_library_process_user_submission( $my_link_library_plugin ) {
 						
 						update_post_meta( $new_link_ID, 'submitter_comment', $captureddata['ll_submittercomment'] );
 						update_post_meta( $new_link_ID, 'link_reference', $captureddata['ll_linkreference'] );
-
-						update_post_meta( $new_link_ID, 'link_submitter_comment', $submittercomment );
 
 						update_post_meta( $new_link_ID, 'link_textfield', sanitize_text_field( $captureddata['link_textfield'] ) );
 
@@ -783,6 +781,8 @@ function link_library_process_user_submission( $my_link_library_plugin ) {
 	} else {
 		if ( isset ( $_POST['pageid'] ) && is_numeric( $_POST['pageid'] ) ) {
 			$redirectaddress = get_permalink( $_POST['pageid'] );
+		} else {
+			$redirectaddress = add_query_arg( array( 'link_library_popup_content' => 'true', 'settings' => $settings ), home_url() );
 		}
 	}
 

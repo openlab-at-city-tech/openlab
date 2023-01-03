@@ -44,7 +44,7 @@ class link_library_plugin_admin {
 		add_action( 'save_post', array( $this, 'll_save_link_fields' ), 10, 2 );
 		add_action( 'before_delete_post', array( $this, 'll_delete_link_fields' ), 10 );
 		add_filter( 'manage_edit-link_library_links_columns', array( $this, 'll_add_columns' ) );
-		add_action( 'manage_posts_custom_column', array( $this, 'll_populate_columns' ) );
+		add_action( 'manage_link_library_links_posts_custom_column', array( $this, 'll_populate_columns' ) );
 		add_filter( 'manage_edit-link_library_links_sortable_columns', array( $this, 'll_column_sortable' ) );
 		add_filter( 'request', array( $this, 'll_column_ordering' ) );
 		add_action( 'pre_get_posts', array( $this, 'll_custom_post_order' ) );
@@ -88,46 +88,111 @@ class link_library_plugin_admin {
 				'title' => array(),
 				'class' => array(),
 				'data' => array(),
-				'rel'   => array(),
+				'rel' => array(),
 		  	),
+			'abbr' => array(
+				'title' => array(),
+			),
+			'acronym' => array(
+				'title' => true,
+			),
+			'b' => array(),
+			'blockquote' => array(
+				'cite' => array(),
+			),
 		  	'br' => array(),
-		  	'em' => array(),
-		  	'ul' => array(
-				'class' => array(),
-		  	),
-		  	'ol' => array(
-				'class' => array(),
-		  	),
-		  	'li' => array(
-				'class' => array(),
-		  	),
-		  	'strong' => array(),
-		  	'div' => array(
+			'cite' => array(
+				'title' => array(),
+			),
+			'code' => array(),
+			'del' => array(
+				'datetime' => array(),
+				'title' => array(),
+			),
+			'dd' => array(),
+			'div' => array(
 				'class' => array(),
 				'data' => array(),
 				'style' => array(),
 		  	),
-		  	'span' => array(
-				'class' => array(),
-				'style' => array(),
-		  	),
-		  	'img' => array(
+		  	'em' => array(),
+			'dl' => array(),
+			'dt' => array(),
+			'em' => array(),
+			'h1' => array(),
+			'h2' => array(),
+			'h3' => array(),
+			'h4' => array(),
+			'h5' => array(),
+			'h6' => array(),
+			'hr' => array(),
+			'i' => array(),
+			'img' => array(
 				'alt'    => array(),
 			  	'class'  => array(),
 			  	'height' => array(),
 			  	'src'    => array(),
 			  	'width'  => array(),
+				'style'  => array(),
 		  	),
-		  	'select' => array(
+			'li' => array(
+				'class' => array(),
+		  	),
+			'ol' => array(
+				'class' => array(),
+		  	),
+			'option' => array(
+				'value' => array(),
+				'selected' => array(),
+			),
+			'p' => array(
+				'class' => array(),
+			),
+			'q' => array(
+				'cite' => array(),
+				'title' => array(),
+			),
+		  	'ul' => array(
+				'class' => array(),
+		  	),
+			'select' => array(
 				'id'   => array(),
 			  	'class' => array(),
 			  	'name' => array(),
 		  	),
-		  	'option' => array(
-			  	'value' => array(),
-			  	'selected' => array(),
-		  	),
+		  	'span' => array(
+				'class' => array(),
+				'title' => array(),
+				'style' => array(),
+			),
+			'strike' => array(),	  	
+		  	'strong' => array(),
+			'tr' => array(
+				'style' => array(),
+				'class' => array(),
+			),
+			'td' => array(
+				'style' => array(),
+				'class' => array(),
+			),
 		);
+	}
+
+	function script_tag_remover( $data_to_parse ) {
+		return preg_replace( '#<script(.*?)>(.*?)</script>#is', '', $data_to_parse );
+	}
+
+	function validate_css( $css ) {
+		require_once plugin_dir_path( __FILE__ ) . '/csstidy/class.csstidy.php';
+
+		$csstidy = new csstidy();
+		$csstidy->set_cfg( 'optimise_shorthands', 2 );
+		$csstidy->set_cfg( 'template', 'low' );
+		$csstidy->set_cfg( 'discard_invalid_properties', false );
+		$csstidy->set_cfg( 'remove_last_;', false );
+		$csstidy->parse( $css );
+
+		return $csstidy->print->plain();
 	}
 
 	function is_edit_page( $new_edit = null ) {
@@ -348,7 +413,7 @@ class link_library_plugin_admin {
 			echo '<td>';
 		} ?>
 		<input type="text" id="ll_category_url" name="ll_category_url" size="60" value="<?php echo $caturl; ?>" />
-		<p class="description">Link that will be associated with category when displayed by Link Library</p>
+		<p class="description"><?php _e( 'Link that will be associated with category when displayed by Link Library', 'link-library' ); ?></p>
 		<?php if ( $mode == 'edit' ) {
 			echo '</td>';
 		} ?>
@@ -377,7 +442,7 @@ class link_library_plugin_admin {
 			echo '<td>';
 		} ?>
 		<input type="text" id="cat_extra_query_string" name="cat_extra_query_string" size="60" value="<?php echo $cat_extra_query_string; ?>" />
-		<p class="description">Query string arguments that will be added to all links in this category</p>
+		<p class="description"><?php _e( 'Query string arguments that will be added to all links in this category', 'link-library' ); ?></p>
 		<?php if ( $mode == 'edit' ) {
 			echo '</td>';
 		} ?>
@@ -457,145 +522,6 @@ class link_library_plugin_admin {
 
 		return $newurl;
 	}
-
-	function ll_get_link_image( $url, $name, $mode, $linkid, $cid, $filepath, $filepathtype, $thumbnailsize, $thumbnailgenerator ) {
-		$status = false;
-		if ( $url != "" && $name != "" ) {
-			$protocol = is_ssl() ? 'https://' : 'http://';
-
-			if ( $mode == 'thumb' || $mode == 'thumbonly' ) {
-				if ( $thumbnailgenerator == 'robothumb' ) {
-					$genthumburl = $protocol . "www.robothumb.com/src/?url=" . esc_html( $url ) . "&size=" . $thumbnailsize;
-				} elseif ( $thumbnailgenerator == 'pagepeeker' ) {
-					if ( empty( $cid ) ) {
-						$genthumburl = $protocol . "free.pagepeeker.com/v2/thumbs.php?size=" . $thumbnailsize . "&url=" . esc_html( $url );
-					} else {
-						$genthumburl = $protocol . "api.pagepeeker.com/v2/thumbs.php?size=" . $thumbnailsize . "&url=" . esc_html( $url );
-					}
-				} elseif ( $thumbnailgenerator == 'shrinktheweb' ) {
-					$genthumburl .= $protocol . "images.shrinktheweb.com/xino.php?stwembed=1&stwaccesskeyid=" . $cid . "&stwsize=" . $thumbnailsize . "&stwurl=" . esc_html( $url );
-				} elseif ( $thumbnailgenerator == 'thumbshots' ) {
-					if ( !empty ( $cid ) ) {
-						$genthumburl = $protocol . "images.thumbshots.com/image.aspx?cid=" . rawurlencode( $cid ) . "&v1=w=120&url=" . esc_html( $url );
-					}
-				} elseif ( $thumbnailgenerator == 'wordpressmshots' ) {
-					$dimension_array = explode( 'x', $thumbnailsize );
-					$genthumburl = $protocol . "s0.wp.com/mshots/v1/" . rtrim( esc_html( $url ), '/' ) . '?w=' . $dimension_array[0]. '&h=' . $dimension_array[1];
-				}
-			} elseif ( $mode == 'favicon' || $mode == 'favicononly' ) {
-				$genthumburl = $protocol . "www.google.com/s2/favicons?domain=" . $url;
-			}
-
-			linklibrary_write_log( $genthumburl );
-
-			$uploads = wp_upload_dir();
-
-			if ( !file_exists( $uploads['basedir'] ) ) {
-				return __( 'Please create a folder called uploads under your Wordpress /wp-content/ directory with write permissions to use this functionality.', 'link-library' );
-			} elseif ( !is_writable( $uploads['basedir'] ) ) {
-				return __( 'Please make sure that the /wp-content/uploads/ directory has write permissions to use this functionality.', 'link-library' );
-			} else {
-				if ( !file_exists( $uploads['basedir'] . '/' . $filepath ) ) {
-					mkdir( $uploads['basedir'] . '/' . $filepath );
-				}
-			}
-
-			$img    = $uploads['basedir'] . "/" . $filepath . "/" . $linkid . '.png';
-			if ( $thumbnailgenerator != 'google' || $mode == 'favicon' || $mode == 'favicononly' ) {
-				$tempfile = download_url( $genthumburl );
-				if ( !is_wp_error( $tempfile ) ) {
-					copy( $tempfile, $img );
-					unlink( $tempfile );
-					$status = true;
-				}
-			} elseif ( $thumbnailgenerator == 'google' && ( $mode == 'thumb' || $mode == 'thumbonly' ) ) {
-				$screenshot = file_get_contents('https://pagespeedonline.googleapis.com/pagespeedonline/v5/runPagespeed?url=' . esc_html( $url ));
-				$data_whole = json_decode($screenshot);
-
-				if (isset($data_whole->error) || empty($screenshot)) {
-					if (!(substr($url, 0, 4) == 'http')) {
-						$url2 = 'https%3A%2F%2F' . $url;
-						$screenshot = file_get_contents('https://pagespeedonline.googleapis.com/pagespeedonline/v5/runPagespeed?url='.$url2);
-						$data_whole = json_decode($screenshot);
-					}
-				}
-				if (isset($data_whole->error) || empty($screenshot)) {
-					if (!(substr($url, 0, 3) == 'www')) {
-						$url3 = 'https%3A%2F%2F' . 'www.' . $url;
-						$screenshot = file_get_contents('https://pagespeedonline.googleapis.com/pagespeedonline/v5/runPagespeed?url='.$url3);
-						$data_whole = json_decode($screenshot);
-					}
-				}
-				if (isset($data_whole->error)) {
-					$status = false;
-				} else {
-					if (isset($data_whole->lighthouseResult->audits->{'final-screenshot'}->details->data)) {
-						$data = $data_whole->lighthouseResult->audits->{'final-screenshot'}->details->data;
-						$data = str_replace('data:image/jpeg;base64','',$data);
-
-						$data = str_replace('_', '/', $data);
-						$data = str_replace('-', '+', $data);
-						$base64img = str_replace('data:image/jpeg;base64,', '', $data);
-
-						$data   		  = base64_decode($data);
-						$upload_dir       = $uploads['basedir'] . '/' . $filepath; // Set upload folder
-						$image_data       = $data; // img data
-						$unique_file_name = wp_unique_filename( $uploads['basedir'] . '/' . $filepath, $linkid . '.png' ); // Generate unique name
-						$filename         = basename( $unique_file_name ); // Create image file name
-
-						// Create the image  file on the server
-						file_put_contents( $img, $image_data );
-
-						$exists = file_exists($tmp);
-						$status = true;
-					} else {
-						$status = false;
-					}
-
-				}
-
-			}
-
-			if ( $status !== false ) {
-				if ( $filepathtype == 'absolute' || empty( $filepathtype ) ) {
-					$newimagedata = $uploads['baseurl'] . "/" . $filepath . "/" . $linkid . ".png";
-				} elseif ( $filepathtype == 'relative' ) {
-					$parsedaddress = parse_url( $uploads['baseurl'] );
-					$newimagedata  = $parsedaddress['path'] . "/" . $filepath . "/" . $linkid . ".png";
-				}
-
-				if ( $mode == 'thumb' || $mode == 'favicon' ) {
-					update_post_meta( $linkid, 'link_image', $newimagedata );
-
-					if ( empty( $newimagedata ) ) {
-						delete_post_thumbnail( $linkid );
-					} else {
-						$wpFileType = wp_check_filetype( $newimagedata, null);
-
-						$attachment = array(
-							'post_mime_type' => $wpFileType['type'],  // file type
-							'post_title' => sanitize_file_name( $newimagedata ),  // sanitize and use image name as file name
-							'post_content' => '',  // could use the image description here as the content
-							'post_status' => 'inherit'
-						);
-
-						// insert and return attachment id
-						$attachmentId = wp_insert_attachment( $attachment, $newimagedata, $linkid );
-						$attachmentData = wp_generate_attachment_metadata( $attachmentId, $newimagedata );
-						wp_update_attachment_metadata( $attachmentId, $attachmentData );
-						set_post_thumbnail( $linkid, $attachmentId );
-					}
-				}
-
-				return $newimagedata;
-			} else {
-				return "";
-			}
-		}
-
-		return 'Parameters are missing';
-	}
-
 
 	//for WordPress 2.8 we have to tell, that we support 2 columns !
 	function on_screen_layout_columns( $columns, $screen ) {
@@ -967,87 +893,8 @@ wp_editor( $post->post_content, 'content', $editor_config );
 		}
 
 		if ( isset( $_GET['genthumbs'] ) || isset( $_GET['genfavicons'] ) || isset( $_GET['genthumbsingle'] ) || isset( $_GET['genfaviconsingle'] ) ) {
-			if ( isset( $_GET['genthumbs'] ) ) {
-				check_admin_referer( 'llgenthumbs' );
-			}
-
-			if ( isset( $_GET['genfavicons'] ) ) {
-				check_admin_referer( 'llgenfavicons' );
-			}
-
-			if ( isset( $_GET['genthumbs'] ) || isset( $_GET['genthumbsingle'] ) ) {
-				$filepath = "link-library-images";
-			} elseif ( isset( $_GET['genfavicons'] ) || isset( $_GET['genfaviconsingle'] ) ) {
-				$filepath = "link-library-favicons";
-			}
-
-			$uploads = wp_upload_dir();
-
-			if ( !file_exists( $uploads['basedir'] ) ) {
-				echo "<div id='message' class='updated fade'><p><strong>" . __( 'Please create a folder called uploads under your Wordpress /wp-content/ directory with write permissions to use this functionality.', 'link-library' ) . "</strong></p></div>";
-			} elseif ( !is_writable( $uploads['basedir'] ) ) {
-				echo "<div id='message' class='updated fade'><p><strong>" . __( 'Please make sure that the /wp-content/uploads/ directory has write permissions to use this functionality.', 'link-library' ) . "</strong></p></div>";
-			} else {
-				if ( !file_exists( $uploads['basedir'] . '/' . $filepath ) ) {
-					mkdir( $uploads['basedir'] . '/' . $filepath );
-				}
-
-				if ( isset( $_GET['genthumbs'] ) || isset( $_GET['genthumbsingle'] ) ) {
-					$genmode = 'thumb';
-				} elseif ( isset( $_GET['genfavicons'] ) || isset( $_GET['genfaviconsingle'] ) ) {
-					$genmode = 'favicon';
-				}
-
-				$link_query_args = array( 'post_type' => 'link_library_links', 'posts_per_page' => -1, 'post_status' => array( 'publish', 'pending', 'draft', 'future', 'private' ) );
-
-				if ( $options['categorylist_cpt'] != "" && !isset( $_GET['genthumbsingle'] ) && !isset( $_GET['genfaviconsingle'] ) ) {
-					$link_query_args['tax_query'] = array(
-														array( 'taxonomy' => $genoptions['cattaxonomy'],
-															    'field' => 'term-id',
-															    'terms' => $options['categorylist_cpt'],
-																'operator' => 'IN' )
-														);
-				} else if ( isset( $_GET['genthumbsingle'] ) || isset( $_GET['genfaviconsingle'] ) ) {
-					$link_query_args['p'] = intval( $_GET['linkid'] );
-				}
-
-				$the_link_query = new WP_Query( $link_query_args );
-
-				if ( $the_link_query->have_posts() ) {
-					$filescreated = 0;
-					$totallinks   = $the_link_query->found_posts;
-
-					while ( $the_link_query->have_posts() ) {
-						$the_link_query->the_post();
-
-						$link_url = get_post_meta( get_the_ID(), 'link_url', true );
-						$link_image = get_post_meta( get_the_ID(), 'link_image', true );
-
-						if ( !$options['uselocalimagesoverthumbshots'] || ( $options['uselocalimagesoverthumbshots'] && empty( $link_image ) ) ) {
-							if ( in_array( $genoptions['thumbnailgenerator'], array( 'robothumb', 'thumbshots', 'wordpressmshots', 'google' ) ) ) {
-								$this->ll_get_link_image( $link_url, get_the_title(), $genmode, get_the_ID(), $genoptions['thumbshotscid'], $filepath, $genoptions['imagefilepath'], $genoptions['thumbnailsize'], $genoptions['thumbnailgenerator'] );
-							} elseif ( 'pagepeeker' == $genoptions['thumbnailgenerator'] ) {
-								$this->ll_get_link_image( $link_url, get_the_title(), $genmode, get_the_ID(), $genoptions['pagepeekerid'], $filepath, $genoptions['imagefilepath'], $genoptions['pagepeekersize'], $genoptions['thumbnailgenerator'] );
-							} elseif ( 'shrinktheweb' == $genoptions['thumbnailgenerator'] ) {
-								$this->ll_get_link_image( $link_url, get_the_title(), $genmode, get_the_ID(), $genoptions['shrinkthewebaccesskey'], $filepath, $genoptions['imagefilepath'], $genoptions['stwthumbnailsize'], $genoptions['thumbnailgenerator'] );
-							}
-						}
-						$linkname = get_the_title();
-					}
-
-					wp_reset_postdata();
-
-					if ( isset( $_GET['genthumbs'] ) ) {
-						echo "<div id='message' class='updated fade'><p><strong>" . __( 'Thumbnails successfully generated!', 'link-library' ) . "</strong></p></div>";
-					} elseif ( isset( $_GET['genfavicons'] ) ) {
-						echo "<div id='message' class='updated fade'><p><strong>" . __( 'Favicons successfully generated!', 'link-library' ) . "</strong></p></div>";
-					} elseif ( isset( $_GET['genthumbsingle'] ) ) {
-						echo "<div id='message' class='updated fade'><p><strong>" . __( 'Thumbnail successfully generated for', 'link-library' ) . " " . $linkname . ".</strong></p></div>";
-					} elseif ( isset( $_GET['genfaviconsingle'] ) ) {
-						echo "<div id='message' class='updated fade'><p><strong>" . __( 'Favicon successfully generated for', 'link-library' ) . " " . $linkname . ".</strong></p></div>";
-					}
-				}
-			}
+			require_once plugin_dir_path( __FILE__ ) . 'link-library-image-generator.php';
+			link_library_image_generator( $this, $options );
 		} elseif ( isset( $_GET['deleteallthumbs'] ) ) {
 			check_admin_referer( 'lldeleteallthumbs' );
 			$uploads = wp_upload_dir();
@@ -1215,7 +1062,7 @@ wp_editor( $post->post_content, 'content', $editor_config );
 
 			if ( isset( $_GET['message'] ) && $_GET['message'] == '1' ) {
 				echo "<div id='message' class='updated fade'><p><strong>" . __( 'Settings updated', 'link-library' ) . ".</strong></p></div>";
-			} elseif ( isset( $_GET['message'] ) && ( $_GET['message'] == '2' || $_GET['message'] == '3' || $_GET['message'] == 6 ) ) { ?>
+			} elseif ( isset( $_GET['message'] ) && ( $_GET['message'] == '2' || $_GET['message'] == '3' || $_GET['message'] == 6 || $_GET['message'] == 7 || $_GET['message'] == 8 ) ) { ?>
 				<div id='message' class='updated fade'><p>
 				<strong>
 				<?php
@@ -1229,9 +1076,14 @@ wp_editor( $post->post_content, 'content', $editor_config );
 					} elseif ( intval( $_GET['message'] ) == 6 ) {
 						_e( 'RSS Link Checker Report', 'link-library' );
 						$mode = 'rss';
+					} elseif ( intval( $_GET['message'] ) == 7 ) {
+						_e( 'Secondary URLs Link Checker Report', 'link-library' );
+						$mode = 'secondary';
+					} elseif ( intval( $_GET['message'] ) == 8 ) {
+						_e( 'Image Link Checker Report', 'link-library' );
+						$mode = 'image';
 					}
 				?></strong><br />
-				<span class="loadingicon"><img src="<?php echo plugins_url( 'icons/Ajax-loader.gif', __FILE__ ); ?> " /></span><span class="processinglinks">Processing Link <span class="currentlinknumber">0</span> / <span class="totallinknumber">
 				<?php
 				$args = array(
 					'post_type' => 'link_library_links',
@@ -1265,14 +1117,33 @@ wp_editor( $post->post_content, 'content', $editor_config );
 							if ( !empty( $link_rss ) ) {
 								$total_post_count++;
 							}
-						}						
-					}
-				}
+						} elseif( 'secondary' == $mode )  {
+							$link_secondary = get_post_meta( get_the_ID(), 'link_second_url', true );
 
-				echo $total_post_count;
-				?>
+							if ( !empty( $link_secondary ) ) {
+								$total_post_count++;
+							}
+						} elseif( 'image' == $mode )  {
+							$link_image = get_post_meta( get_the_ID(), 'link_image', true );
+
+							if ( !empty( $link_image ) ) {
+								$total_post_count++;
+							}
+						} 	
+					}
+				} 
+				
+				if ( $total_post_count > 0 ) { ?>
+
+				<span class="loadingicon"><img src="<?php echo plugins_url( 'icons/Ajax-loader.gif', __FILE__ ); ?> " /></span><span class="processinglinks"><?php _e( 'Processing Link', 'link-library' ); ?> <span class="currentlinknumber">0</span> / <span class="totallinknumber">
+				
+				<?php echo $total_post_count; } else { ?>
+					<?php _e( 'No links to check', 'link-library' ); ?>
+				<?php } ?>
+
 				</span></span>
 				<br />
+				<?php if ( $total_post_count > 0 ) { ?>
 				<div class="nextcheckitem"></div>
 				<script type="text/javascript">
 					var currentlinkindex = 1;
@@ -1319,6 +1190,7 @@ wp_editor( $post->post_content, 'content', $editor_config );
 						}
 					}
 				</script>
+				<?php } ?>
 				</p></div>
 			<?php } elseif ( isset( $_GET['message'] ) && $_GET['message'] == '4' ) {
 				echo "<div id='message' class='updated fade'><p>";
@@ -1337,56 +1209,6 @@ wp_editor( $post->post_content, 'content', $editor_config );
 		$data['genoptions'] = $genoptions;
 		global $pagehookmoderate, $pagehookstylesheet, $pagehooksettingssets, $pagehookreciprocal;
 		?>
-		<div class="ll-content">
-			<div class="ll-frame">
-				<div class="header">
-					<nav role="navigation" class="header-nav drawer-nav nav-horizontal">
-
-						<ul class="main-nav">
-							<li class="link-library-logo">
-								<img src="<?php echo plugins_url( 'icons/folder-beige-internet-icon32.png', __FILE__ ); ?>" /><span>Link Library</span>
-							</li>
-							<li class="link-library-page">
-								<a href="<?php echo esc_url( add_query_arg( array( 'page' => 'link-library-general-options' ), admin_url( 'admin.php' ) ) ); ?>" <?php if ( isset( $_GET['page'] ) && $_GET['page'] == 'link-library' ) {
-									echo 'class="current"';
-								} ?>><?php _e( 'General Options', 'link-library' ); ?></a>
-							</li>
-							<li class="link-library-page">
-								<a href="<?php echo esc_url( add_query_arg( array( 'page' => 'link-library-settingssets' ), admin_url( 'admin.php' ) ) ); ?>" <?php if ( isset( $_GET['page'] ) && $_GET['page'] == 'link-library-settingssets' ) {
-									echo 'class="current"';
-								} ?>><?php _e( 'Library Settings', 'link-library' ); ?></a>
-							</li>
-							<li class="link-library-page">
-								<a href="<?php echo esc_url( add_query_arg( array( 'page' => 'link-library-moderate' ), admin_url( 'admin.php' ) ) ); ?>" <?php if ( isset( $_GET['page'] ) && $_GET['page'] == 'link-library-moderate' ) {
-									echo 'class="current"';
-								} ?>><?php _e( 'Moderate', 'link-library' ); ?></a>
-							</li>
-							<li class="link-library-page">
-								<a href="<?php echo esc_url( add_query_arg( array( 'page' => 'link-library-stylesheet' ), admin_url( 'admin.php' ) ) ); ?>" <?php if ( isset( $_GET['page'] ) && $_GET['page'] == 'link-library-stylesheet' ) {
-									echo 'class="current"';
-								} ?>><?php _e( 'Stylesheet', 'link-library' ); ?></a>
-							</li>
-							<li class="link-library-page">
-								<a href="<?php echo esc_url( add_query_arg( array( 'page' => 'link-library-reciprocal' ), admin_url( 'admin.php' ) ) ); ?>" <?php if ( isset( $_GET['page'] ) && $_GET['page'] == 'link-library-reciprocal' ) {
-									echo 'class="current"';
-								} ?>><?php _e( 'Reciprocal Check', 'link-library' ); ?></a>
-							</li>
-							<li class="link-library-page">
-								<a target="LinkLibraryFAQ" href="https://github.com/ylefebvre/link-library/wiki"><?php _e( 'FAQ', 'link-library' ); ?></a>
-							</li>
-							<?php if ( isset( $genoptions['hidedonation'] ) && !$genoptions['hidedonation'] ) { ?>
-								<li class="link-library-page">
-									<a href="https://ylefebvre.github.io/wordpress-plugins/link-library/"><img src="<?php echo plugins_url( '/icons/btn_donate_LG.gif', __FILE__ ); ?>" /></a>
-								</li>
-							<?php } ?>
-
-						</ul>
-
-					</nav>
-				</div>
-				<!-- .header -->
-			</div>
-		</div>
 		<div id="link-library-general" class="wrap">
 			<div class='icon32'>
 				<img src="<?php echo plugins_url( 'icons/folder-beige-internet-icon32.png', __FILE__ ); ?>" />
@@ -1438,7 +1260,10 @@ wp_editor( $post->post_content, 'content', $editor_config );
 								<?php
 								if ( $_GET['page'] == 'link-library-general-options' ) {
 									$this->display_menu( 'general', $genoptions );
+									$this->general_save_meta_box();
 									$this->general_meta_box( $data );
+									$this->general_thumbnail_generation_meta_box( $data );
+									$this->general_captcha_meta_box( $data );
 									$this->general_custom_fields_meta_box( $data );
 									$this->general_singleitemlayout_meta_box( $data );
 									$this->general_globalsearchresultslayout_meta_box( $data );
@@ -1449,6 +1274,7 @@ wp_editor( $post->post_content, 'content', $editor_config );
 										$this->general_hide_donation_meta_box( $data );
 									}
 									$this->general_importexport_meta_box( $data );
+									$this->general_buddypress_meta_box( $data );
 
 									$this->general_save_meta_box();
 
@@ -1552,7 +1378,9 @@ wp_editor( $post->post_content, 'content', $editor_config );
 	function display_menu( $menu_name = 'settingsset', $genoptions = '' ) {
 		if ( $menu_name == 'general' ) {
 			$tabitems = array ( 'll-general' => __( 'General', 'link-library' ),
-								'll-customfields' => __( 'Custom Fields', 'link-library ' ),
+								'll-thumbnail-generation' => __( 'Thumbnail Generation', 'link-library' ),
+								'll-captcha' => __( 'Captcha', 'link-library' ),
+								'll-customfields' => __( 'Custom Fields', 'link-library' ),
 								'll-singleitem' => __( 'Single Item Layout', 'link-library' ),
 								'll-globalsearchresultslayout' => __( 'Global Search Results / Main Site RSS Feed Item Layout', 'link-library' ),
 			                    'll-images' => __( 'Images', 'link-library' ),
@@ -1560,6 +1388,7 @@ wp_editor( $post->post_content, 'content', $editor_config );
 			                    'll-moderation' => __( 'Moderation', 'link-library' ),
 			                    'll-hidedonation' => __( 'Hide Donation', 'link-library' ),
 			                    'll-importexport' => __( 'Import/Export Links', 'link-library' ),
+								'll-buddypress' => __( 'BuddyPress', 'link-library' ),
 			);
 
 			if ( isset( $genoptions['hidedonation'] ) && $genoptions['hidedonation'] ) {
@@ -1662,432 +1491,8 @@ wp_editor( $post->post_content, 'content', $editor_config );
 		$genoptions = wp_parse_args( $genoptions, ll_reset_gen_settings( 'return' ) );
 
 		if ( isset( $_POST['importlinks'] ) ) {
-			wp_defer_term_counting( true );
-			wp_defer_comment_counting( true );
-			wp_suspend_cache_addition( true );
-			define( 'WP_IMPORTING', true );
-			set_time_limit( 1800 );
-
-			if ( !empty( $_FILES['linksfile']['tmp_name'] ) ) {
-				$handle = fopen( $_FILES['linksfile']['tmp_name'], "r" );
-
-				if ( $handle ) {
-					$skiprow = 1;
-					$import_columns = array();
-	
-					while ( ( $data = fgetcsv( $handle, 5000, "," ) ) !== false ) {
-						$row += 1;
-						if ( $skiprow == 1 && $row >= 2 ) {
-							$skiprow = 0;
-						}
-	
-						if ( 1 == $row ) {
-							foreach ( $data as $index => $column_name ) {
-								$import_columns[$column_name] = $index;
-							}
-						} else {
-							$existing_link_post_id = '';
-							$matched_link_cats = array();
-							$matched_link_tags = array();
-	
-							if ( ( isset( $import_columns['Category Slugs'] ) && !empty( $data[$import_columns['Category Slugs']] ) ) ) {
-								$new_link_cats_slugs_array = array();
-								if ( isset( $import_columns['Category Slugs'] ) ) {
-									$new_link_cats_slugs_array = explode( ',', $data[$import_columns['Category Slugs']] );
-								}
-	
-								if ( ( isset( $import_columns['Category Names'] ) && !empty( $data[$import_columns['Category Names']] ) ) || ( isset( $import_columns['cat_name'] ) && !empty( $data[$import_columns['cat_name']] ) ) ) {
-									if ( isset( $import_columns['Category Names'] ) ) {
-										$new_link_cats_array = explode( ',', $data[$import_columns['Category Names']] );
-									} elseif( isset( $import_columns['cat_name'] ) ) {
-										$new_link_cats_array = explode( ',', $data[$import_columns['cat_name']] );
-									}
-								}
-	
-								foreach ( $new_link_cats_slugs_array as $index => $new_link_cat_slug ) {
-									$cat_matched_term = get_term_by( 'slug', $new_link_cat_slug, $genoptions['cattaxonomy'] );
-	
-									if ( false !== $cat_matched_term ) {
-										$matched_link_cats[] = $cat_matched_term->term_id;
-									} else {
-										$new_link_cat = '';
-										if ( !empty( $new_link_cats_array ) && isset( $new_link_cats_array[$index] ) ) {
-											$new_link_cat = $new_link_cats_array[$index];
-										} else {
-											$new_link_cat = $new_link_cat_slug;
-										}
-	
-										$new_cat_term_data   = wp_insert_term( $new_link_cat, $genoptions['cattaxonomy'], array( 'slug' => $new_link_cat_slug ) );
-										if ( is_wp_error( $new_cat_term_data ) ) {
-											print_r( 'Failed creating category ' . $new_link_cat );
-										} else {
-											$matched_link_cats[] = $new_cat_term_data['term_id'];
-										}
-									}
-								}
-							}
-	
-							if ( ( isset( $import_columns['Tag Slugs'] ) && !empty( $data[$import_columns['Tag Slugs']] ) ) ) {
-								$new_link_tags_slugs_array = array();
-								if ( isset( $import_columns['Tag Slugs'] ) ) {
-									$new_link_tags_slugs_array = explode( ',', $data[$import_columns['Tag Slugs']] );
-								}
-	
-								if ( ( isset( $import_columns['Tag Names'] ) && !empty( $data[$import_columns['Tag Names']] ) ) ) {
-									if ( isset( $import_columns['Tag Names'] ) ) {
-										$new_link_tags_array = explode( ',', $data[$import_columns['Tag Names']] );
-									}
-								}
-	
-								foreach ( $new_link_tags_slugs_array as $index => $new_link_tag_slug ) {
-									$tag_matched_term = get_term_by( 'slug', $new_link_tag_slug, $genoptions['tagtaxonomy'] );
-	
-									if ( false !== $tag_matched_term ) {
-										$matched_link_tags[] = $tag_matched_term->term_id;
-									} else {
-										$new_link_tag = '';
-										if ( !empty( $new_link_tags_array ) && isset( $new_link_tags_array[$index] ) ) {
-											$new_link_tag = $new_link_tags_array[$index];
-										} else {
-											$new_link_tag = $new_link_tag_slug;
-										}
-	
-										$new_tag_term_data   = wp_insert_term( $new_link_tag, $genoptions['tagtaxonomy'], array( 'slug' => $new_link_tag_slug ) );
-										if ( is_wp_error( $new_tag_term_data ) ) {
-											print_r( 'Failed creating tag ' . $new_link_tag );
-										} else {
-											$matched_link_tags[] = $new_tag_term_data['term_id'];
-										}
-									}
-								}
-							}
-	
-							$link_url = '';
-							$url_labels = array( 'Address', 'link_url' );
-							foreach( $url_labels as $url_label ) {
-								if ( isset( $import_columns[$url_label] ) ) {
-									if ( !empty( $data[$import_columns[$url_label]] ) ) {
-										$link_url = esc_url( $data[$import_columns[$url_label]] );
-									}
-								}
-							}
-	
-							if ( isset( $_POST['updatesameurl'] ) ) {
-								$search_link_url = preg_replace("(^https?://)", "", $link_url );
-								$find_post_args = array( 'post_type' => 'link_library_links',
-														 'meta_key' => 'link_url',
-														 'meta_value' => $search_link_url,
-														 'meta_compare' => 'LIKE',
-														 'numberposts' => 1 );
-	
-								$posts_same_url_array = get_posts( $find_post_args );
-	
-								if ( !empty( $posts_same_url_array ) ) {
-									$existing_link_post_id = $posts_same_url_array[0]->ID;
-								}
-							}
-	
-							$post_status = 'publish';
-							$post_status_import_value = '';
-	
-							$visible_labels = array( 'Status', 'Visible', 'link_visible' );
-							foreach( $visible_labels as $visible_label ) {
-								if ( isset( $import_columns[$visible_label] ) ) {
-									$post_status_import_value = $data[$import_columns[$visible_label]];
-								}
-							}
-	
-							if ( in_array( $post_status_import_value, array( 'publish', 'draft', 'private' ) ) ) {
-								$post_status = $post_status_import_value;
-							} elseif ( 'N' == $post_status_import_value ) {
-								$post_status = 'private';
-							}
-	
-							$post_title = '';
-							$title_labels = array( 'Link Name', 'link_name', 'Name' );
-							foreach( $title_labels as $title_label ) {
-								if ( isset( $import_columns[$title_label] ) ) {
-									if ( ! empty( $data[ $import_columns[$title_label] ] ) ) {
-										$post_title = sanitize_text_field( $data[ $import_columns[$title_label] ] );
-									}
-								}
-							}
-	
-	
-							$link_publication = current_time( 'mysql' );
-							$publication_labels = array( 'Publication Date' );
-							foreach( $publication_labels as $publication_label ) {
-								if ( isset( $import_columns[$publication_label] ) ) {
-									if ( !empty( $import_columns[$publication_label] ) ) {
-										$link_publication = $data[ $import_columns[$publication_label] ];
-									}
-								}
-							}
-	
-							$new_link_data = array(
-								'post_type' => 'link_library_links',
-								'post_content' => '',
-								'post_title' => $post_title,
-								'tax_input' => array( $genoptions['cattaxonomy'] => $matched_link_cats, $genoptions['tagtaxonomy'] => $matched_link_tags ),
-								'post_status' => $post_status,
-								'post_date' => $link_publication
-							);
-	
-							if ( !empty( $existing_link_post_id ) ) {
-								$new_link_data['ID'] = $existing_link_post_id;
-								$new_link_ID = wp_insert_post( $new_link_data );
-								$successfulupdate++;
-							} else {
-								$new_link_ID = wp_insert_post( $new_link_data );
-								$successfulimport++;
-							}
-	
-							update_post_meta( $new_link_ID, 'link_url', $link_url );
-	
-							$link_image = '';
-							$image_labels = array( 'Image Address', 'link_image' );
-							foreach( $image_labels as $image_label ) {
-								if ( isset( $import_columns[$image_label] ) ) {
-									$link_image = esc_url( $data[$import_columns[$image_label]] );
-								}
-							}
-							update_post_meta( $new_link_ID, 'link_image', $link_image );
-	
-							if ( empty( $link_image ) ) {
-								delete_post_thumbnail( $new_link_ID );
-							} else {
-								$wpFileType = wp_check_filetype( $link_image, null);
-	
-								$attachment = array(
-									'post_mime_type' => $wpFileType['type'],  // file type
-									'post_title' => sanitize_file_name( $link_image ),  // sanitize and use image name as file name
-									'post_content' => '',  // could use the image description here as the content
-									'post_status' => 'inherit'
-								);
-	
-								// insert and return attachment id
-								$attachmentId = wp_insert_attachment( $attachment, $link_image, $new_link_ID );
-								$attachmentData = wp_generate_attachment_metadata( $attachmentId, $link_image );
-								wp_update_attachment_metadata( $attachmentId, $attachmentData );
-								set_post_thumbnail( $new_link_ID, $attachmentId );
-							}
-	
-							$link_target = '';
-							$target_labels = array( 'Link Target', 'link_target' );
-							foreach( $target_labels as $target_label ) {
-								if ( isset( $import_columns[$target_label] ) ) {
-									$link_target = sanitize_text_field( $data[$import_columns[$target_label]] );
-								}
-							}
-							update_post_meta( $new_link_ID, 'link_target', $link_target );
-	
-							$link_description = '';
-							$description_labels = array( 'Description', 'link_description' );
-							foreach( $description_labels as $description_label ) {
-								if ( isset( $import_columns[$description_label] ) ) {
-									$link_description = sanitize_text_field( $data[$import_columns[$description_label]] );
-									$link_description = str_replace( '(LinkLibrary:AwaitingModeration:RemoveTextToApprove)', '', $link_description );
-								}
-							}
-							update_post_meta( $new_link_ID, 'link_description', $link_description );
-	
-							$link_rating = '';
-							$rating_labels = array( 'Rating', 'rating' );
-							foreach( $rating_labels as $rating_label ) {
-								if ( isset( $import_columns[$rating_label] ) ) {
-									$newrating = intval( $data[$import_columns[$rating_label]] );
-									if ( $newrating < 0 ) {
-										$newrating = 0;
-									}
-									$link_rating = $newrating;
-								}
-							}
-							update_post_meta( $new_link_ID, 'link_rating', $link_rating );
-	
-							update_post_meta( $new_link_ID, '_thumbs_rating_up', 0 );
-	
-							$link_updated = current_time( 'timestamp' );
-							$updated_labels = array( 'Updated Date - Empty for none', 'link_updated' );
-							foreach( $updated_labels as $updated_label ) {
-								if ( isset( $import_columns[$updated_label] ) ) {
-									if ( !empty( $import_columns[$updated_label] ) ) {
-										$link_updated = strtotime( $data[ $import_columns[$updated_label] ] );
-									}
-								}
-							}
-							update_post_meta( $new_link_ID, 'link_updated', $link_updated );
-	
-							$link_notes = '';
-							$notes_labels = array( 'Notes', 'link_notes' );
-							foreach( $notes_labels as $notes_label ) {
-								if ( isset( $import_columns[$notes_label] ) ) {
-									$link_notes = sanitize_text_field( $data[$import_columns[$notes_label]] );
-								}
-							}
-							update_post_meta( $new_link_ID, 'link_notes', $link_notes );
-	
-							$link_rss = '';
-							$rss_labels = array( 'RSS', 'link_rss' );
-							foreach( $rss_labels as $rss_label ) {
-								if ( isset( $import_columns[$rss_label] ) ) {
-									$link_rss = esc_url( $data[$import_columns[$rss_label]] );
-								}
-							}
-							update_post_meta( $new_link_ID, 'link_rss', $link_rss );
-	
-							$link_second_url = '';
-							$second_url_labels = array( 'Secondary URL', 'link_second_url' );
-							foreach( $second_url_labels as $second_url_label ) {
-								if ( isset( $import_columns[$second_url_label] ) ) {
-									$link_second_url = esc_url( $data[$import_columns[$second_url_label]] );
-								}
-							}
-							update_post_meta( $new_link_ID, 'link_second_url',  $link_second_url );
-	
-							$link_telephone = '';
-							$telephone_labels = array( 'Telephone', 'link_telephone' );
-							foreach( $telephone_labels as $telephone_label ) {
-								if ( isset( $import_columns[$telephone_label] ) ) {
-									$link_telephone = sanitize_text_field( $data[$import_columns[$telephone_label]] );
-								}
-							}
-							update_post_meta( $new_link_ID, 'link_telephone', $link_telephone );
-	
-							$link_email = '';
-							$email_labels = array( 'E-mail', 'link_email' );
-							foreach( $email_labels as $email_label ) {
-								if ( isset( $import_columns[$email_label] ) ) {
-									$link_email = sanitize_email( $data[$import_columns[$email_label]] );
-								}
-							}
-							update_post_meta( $new_link_ID, 'link_email', $link_email );
-	
-							if ( empty( $existing_link_post_id ) ) {
-								$link_visits = 0;
-								$link_visits_labels = array( 'Link Visits' );
-								foreach( $link_visits_labels as $link_visits_label ) {
-									if ( isset( $import_columns[$link_visits_label] ) ) {
-										$link_visits = intval( $data[$import_columns[$link_visits_label]] );
-									}
-								}
-	
-								update_post_meta( $new_link_ID, 'link_visits', $link_visits );
-							}
-	
-							$link_reciprocal = '';
-							$reciprocal_labels = array( 'Reciprocal Link', 'link_reciprocal' );
-							foreach( $reciprocal_labels as $reciprocal_label ) {
-								if ( isset( $import_columns[$reciprocal_label] ) ) {
-									$link_reciprocal = esc_url( $data[$import_columns[$reciprocal_label]] );
-								}
-							}
-							update_post_meta( $new_link_ID, 'link_reciprocal', $link_reciprocal );
-	
-							$link_large_description = '';
-							$large_description_labels = array( 'Large Description', 'link_textfield' );
-							foreach( $large_description_labels as $large_description_label ) {
-								if ( isset( $import_columns[$large_description_label] ) ) {
-									$link_large_description = sanitize_text_field( $data[$import_columns[$large_description_label]] );
-								}
-							}
-							update_post_meta( $new_link_ID, 'link_textfield', $link_large_description );
-	
-							$link_no_follow = 0;
-							$no_follow_labels = array( 'No Follow', 'link_no_follow' );
-							foreach( $no_follow_labels as $no_follow_labels ) {
-								if ( isset( $import_columns[$no_follow_labels] ) ) {
-									$link_no_follow = $data[$import_columns[$no_follow_labels]];
-								}
-							}
-	
-							if ( '1' == $link_no_follow || 'Y' == $link_no_follow ) {
-								update_post_meta( $new_link_ID, 'link_no_follow', true );
-							} else {
-								update_post_meta( $new_link_ID, 'link_no_follow', false );
-							}
-	
-							$link_featured = 0;
-							$featured_labels = array( 'Link Featured' );
-							foreach( $featured_labels as $featured_label ) {
-								if ( isset( $import_columns[$featured_label] ) ) {
-									$link_featured = $data[$import_columns[$featured_label]];
-								}
-							}
-	
-							if ( '1' == $link_featured || 'Y' == $link_featured ) {
-								update_post_meta( $new_link_ID, 'link_featured', true );
-							} else {
-								update_post_meta( $new_link_ID, 'link_featured', false );
-							}
-	
-							$link_submitter_name = '';
-							$submitter_name_labels = array( 'Link Submitter Name' );
-							foreach( $submitter_name_labels as $submitter_name_label ) {
-								if ( isset( $import_columns[$submitter_name_label] ) ) {
-									$link_submitter_name = sanitize_text_field( $data[$import_columns[$submitter_name_label]] );
-								}
-							}
-							update_post_meta( $new_link_ID, 'link_submitter_name', $link_submitter_name );
-	
-							$link_submitter_email = '';
-							$submitter_email_labels = array( 'Link Submitter E-mail' );
-							foreach( $submitter_email_labels as $submitter_email_label ) {
-								if ( isset( $import_columns[$submitter_email_label] ) ) {
-									$link_submitter_email = sanitize_email( $data[$import_columns[$submitter_email_label]] );
-								}
-							}
-							update_post_meta( $new_link_ID, 'link_submitter_email', $link_submitter_email );
-	
-							for ( $customurlfieldnumber = 1; $customurlfieldnumber < 6; $customurlfieldnumber++ ) {
-								$custom_link = '';
-								if ( $genoptions['customurl' . $customurlfieldnumber . 'active'] ) {
-									$valuelabel = 'Custom URL ' . $customurlfieldnumber;
-									$valuefield = 'link_custom_url_' . $customurlfieldnumber;
-									if ( isset( $import_columns[$valuelabel] ) ) {
-										$custom_link = esc_url( $data[$import_columns[$valuelabel]] );
-									}
-	
-									update_post_meta( $new_link_ID, $valuefield, $custom_link );
-								}
-							}
-	
-							for ( $customtextfieldnumber = 1; $customtextfieldnumber < 6; $customtextfieldnumber++ ) {
-								$custom_text = '';
-								if ( $genoptions['customtext' . $customtextfieldnumber . 'active'] ) {
-									$valuelabel = 'Custom Text ' . $customtextfieldnumber;
-									$valuefield = 'link_custom_text_' . $customtextfieldnumber;
-									if ( isset( $import_columns[$valuelabel] ) ) {
-										$custom_text = sanitize_text_field( $data[$import_columns[$valuelabel]] );
-									}
-	
-									update_post_meta( $new_link_ID, $valuefield, $custom_text );
-								}
-							}
-	
-							for ( $customlistnumber = 1; $customlistnumber < 6; $customlistnumber++ ) {
-								$custom_list = '';
-								if ( $genoptions['customlist' . $customlistnumber . 'active'] ) {
-									$valuelabel = 'Custom List ' . $customlistnumber;
-									$valuefield = 'link_custom_list_' . $customlistnumber;
-									if ( isset( $import_columns[$valuelabel] ) ) {
-										$custom_list = intval( $data[$import_columns[$valuelabel]] );
-									}
-	
-									update_post_meta( $new_link_ID, $valuefield, $custom_list );
-								}
-							}
-						}
-					}
-				}
-			}			
-
-			$row -= 1;
-
-			$message = '9';
-
-			wp_suspend_cache_addition( false );
-			wp_defer_term_counting( false );
-			wp_defer_comment_counting( false );
+			require_once plugin_dir_path( __FILE__ ) . 'link-library-link-importer.php';
+			$message = link_library_import_links( $genoptions, $row, $successfulimport, $successfulupdate );
 		} elseif ( isset( $_POST['siteimport'] ) ) {
 			wp_suspend_cache_addition( true );
 			wp_defer_term_counting( true );
@@ -2367,6 +1772,45 @@ wp_editor( $post->post_content, 'content', $editor_config );
 			} else {
 				$message = '3';
 			}
+		}  elseif ( isset( $_POST['exportallcategories'] ) ) {
+			$upload_dir = wp_upload_dir();
+
+			if ( is_writable( $upload_dir['path'] ) ) {
+				$myFile = $upload_dir['path'] . "/CategoriesExport.csv";
+				$fh = fopen( $myFile, 'w' ) or die( "can't open file" );
+
+				$link_library_categories = get_terms( 'link_library_category', array( 'hide_empty' => false, ) );
+
+				if ( !empty( $link_library_categories ) ) {
+					$headerrow = array( 'Category Name', 'Category ID' );
+					
+					$headerdata = join( ',', $headerrow ) . "\n";
+					fwrite( $fh, $headerdata );
+
+					foreach( $link_library_categories as $link_library_cat ) {
+						$datarow = array();
+						$datarow[] = $link_library_cat->name;
+						$datarow[] = $link_library_cat->term_id;
+						fputcsv( $fh, $datarow, ',', '"' );
+					}
+				}
+
+				fclose( $fh );				
+
+				if ( file_exists( $myFile ) ) {
+					header( 'Content-Description: File Transfer' );
+					header( 'Content-Type: application/octet-stream' );
+					header( 'Content-Disposition: attachment; filename=' . basename( $myFile ) );
+					header( 'Expires: 0' );
+					header( 'Cache-Control: must-revalidate' );
+					header( 'Pragma: public' );
+					header( 'Content-Length: ' . filesize( $myFile ) );
+					readfile( $myFile );
+					exit;
+				}
+			} else {
+				$message = '3';
+			}
 		} elseif ( isset( $_POST['ll60catmapping'] ) ) {
 			$upload_dir = wp_upload_dir();
 
@@ -2503,7 +1947,7 @@ wp_editor( $post->post_content, 'content', $editor_config );
 						$row ++;
 					} else if ( $row == 2 ) {
 						for ( $counter = 0; $counter <= count( $data ) - 1; $counter ++ ) {
-							$options[$optionnames[$counter]] = $data[$counter];
+							$options[$optionnames[$counter]] = sanitize_text_field( $data[$counter] );
 						}
 						$row ++;
 					}
@@ -2522,6 +1966,23 @@ wp_editor( $post->post_content, 'content', $editor_config );
 				$message = '8';
 			}
 		} else {
+
+			if ( isset( $_POST['enableautolinksimport'] ) && !$genoptions['enableautolinksimport'] && !empty( sanitize_text_field( $_POST['importlinksschedule'] ) ) ) {
+				if ( !wp_next_scheduled ( 'link_library_import_links', $args ) ) {
+					wp_schedule_event( time(), sanitize_text_field( $_POST['importlinksschedule'] ), 'link_library_import_links' );
+				}
+			} elseif ( !isset( $_POST['enableautolinksimport'] ) && $genoptions['enableautolinksimport'] ) {
+				wp_clear_scheduled_hook( 'link_library_import_links' );
+			}
+
+			if ( isset( $_POST['autothumbgen'] ) && !$genoptions['autothumbgen'] && !empty( sanitize_text_field( $_POST['autothumbgenschedule'] ) ) ) {
+				if ( !wp_next_scheduled ( 'link_library_gen_thumbs', $args ) ) {
+					wp_schedule_event( time(), sanitize_text_field( $_POST['autothumbgenschedule'] ), 'link_library_gen_thumbs' );
+				}
+			} elseif ( !isset( $_POST['autothumbgen'] ) && $genoptions['autothumbgen'] ) {
+				wp_clear_scheduled_hook( 'link_library_gen_thumbs' );
+			}
+
 			foreach (
 				array(
 					'numberstylesets', 'includescriptcss', 'pagetitleprefix', 'pagetitlesuffix', 'schemaversion', 'thumbshotscid', 'approvalemailtitle',
@@ -2530,11 +1991,21 @@ wp_editor( $post->post_content, 'content', $editor_config );
 					'extraprotocols', 'thumbnailsize', 'thumbnailgenerator', 'rsscachedelay', 'single_link_layout', 'rolelevel', 'editlevel', 'cptslug',
 					'defaultlinktarget', 'bp_link_page_url', 'bp_link_settings', 'defaultprotocoladmin', 'pagepeekerid', 'pagepeekersize', 'stwthumbnailsize', 'shrinkthewebaccesskey', 'customurl1label', 'customurl2label',
 					'customurl3label', 'customurl4label', 'customurl5label', 'customtext1label', 'customtext2label', 'customtext3label', 'customtext4label', 'customtext5label', 'customlist1label', 'customlist2label', 'customlist3label', 'customlist4label', 'customlist5label', 'customlist1values', 'customlist2values', 'customlist3values', 'customlist4values', 'customlist5values',
-					'customlist1html', 'customlist2html', 'customlist3html', 'customlist4html', 'customlist5html', 'global_search_results_layout', 'globalsearchresultstitleprefix', 'cattaxonomy', 'tagtaxonomy', 'ignoresortarticles'
+					'customlist1html', 'customlist2html', 'customlist3html', 'customlist4html', 'customlist5html', 'global_search_results_layout', 'globalsearchresultstitleprefix', 'cattaxonomy', 'tagtaxonomy', 'ignoresortarticles', 'importlinksschedule', 'autothumbgenschedule'
 				) as $option_name
 			) {
 				if ( isset( $_POST[$option_name] ) ) {
-					$genoptions[$option_name] = $_POST[$option_name];
+					$genoptions[$option_name] = sanitize_text_field( $_POST[$option_name] );
+				}
+			}
+
+			foreach (
+				array(
+					'importlinksurl'
+				) as $option_name
+			) {
+				if ( isset( $_POST[$option_name] ) ) {
+					$genoptions[$option_name] = sanitize_url( $_POST[$option_name] );
 				}
 			}
 
@@ -2556,7 +2027,8 @@ wp_editor( $post->post_content, 'content', $editor_config );
 			foreach ( array( 'debugmode', 'emaillinksubmitter', 'suppressemailfooter', 'usefirstpartsubmittername', 'hidedonation', 'publicly_queryable', 'exclude_from_search', 'bp_log_activity', 'deletelocalfile', 'customurl1active',
 				'customurl2active', 'customurl3active', 'customurl4active', 'customurl5active', 'customtext1active', 'customtext2active',
 				'customtext3active', 'customtext4active', 'customtext5active', 'customlist1active', 'customlist2active',
-				'customlist3active', 'customlist4active', 'customlist5active', 'globalsearchresultslinkurl', 'add_to_main_rss' ) as $option_name ) {
+				'customlist3active', 'customlist4active', 'customlist5active', 'globalsearchresultslinkurl', 'add_to_main_rss', 'showexcerpt',
+				'enableautolinksimport', 'autothumbgen' ) as $option_name ) {
 				if ( isset( $_POST[$option_name] ) ) {
 					$genoptions[$option_name] = true;
 				} else {
@@ -2568,7 +2040,7 @@ wp_editor( $post->post_content, 'content', $editor_config );
 
 			update_option( 'LinkLibraryGeneral', $genoptions );
 
-			update_option( 'links_updated_date_format', $_POST['links_updated_date_format'] );
+			update_option( 'links_updated_date_format', sanitize_text_field( $_POST['links_updated_date_format'] ) );
 		}
 
 		global $wp_rewrite;
@@ -2739,7 +2211,7 @@ wp_editor( $post->post_content, 'content', $editor_config );
 
 			foreach ( array ( 'stylesheet' ) as $option_name ) {
 				if ( isset( $_POST[$option_name] ) ) {
-					$options[$option_name] = $_POST[$option_name];
+					$options[$option_name] = $this->validate_css( $_POST[$option_name] );
 				}
 			}
 
@@ -2752,12 +2224,12 @@ wp_editor( $post->post_content, 'content', $editor_config );
 					'displayweblink', 'sourceweblink', 'showtelephone', 'sourcetelephone', 'showemail', 'sourceimage', 'sourcename', 'popup_width', 'popup_height', 'rssfeedinlinedayspublished', 'tooltipname', 'catlistchildcatdepthlimit', 'childcatdepthlimit', 'showcurrencyplacement', 'tooltipname', 'showupdatedpos', 'datesource', 'taglinks', 'linkcurrencyplacement', 'displaycustomurl1', 'displaycustomurl2', 'displaycustomurl3', 'displaycustomurl4', 'displaycustomurl5', 'displaycustomtext1', 'displaycustomtext2',
 					'displaycustomtext3', 'displaycustomtext4', 'displaycustomtext5', 'displaycustomlist1', 'displaycustomlist2',
 					'displaycustomlist3', 'displaycustomlist4', 'displaycustomlist5', 'catnameformat', 'rsslibraryitemspersite', 'rsslibrarymaxwordsitem', 
-					'rsslibrarypaginationnb',
+					'rsslibrarypaginationnb', 'addlinkformdisplaymode'
 				)
 				as $option_name
 			) {
 				if ( isset( $_POST[$option_name] ) ) {
-					$options[$option_name] = str_replace( "\"", "'", strtolower( $_POST[$option_name] ) );
+					$options[$option_name] = sanitize_text_field( str_replace( "\"", "'", strtolower( $_POST[$option_name] ) ) );
 				}
 			}
 
@@ -2775,9 +2247,9 @@ wp_editor( $post->post_content, 'content', $editor_config );
 			foreach ( array( 'categorylist_cpt', 'excludecategorylist_cpt', 'taglist_cpt', 'excludetaglist_cpt' ) as $option_name ) {
 				if ( isset( $_POST[$option_name] ) ) {
 					if ( $genoptions['catselectmethod'] == 'commalist' || empty( $genoptions['catselectmethod'] ) ) {
-						$options[$option_name] = str_replace( "\"", "'", strtolower( $_POST[$option_name] ) );
+						$options[$option_name] = sanitize_text_field( str_replace( "\"", "'", strtolower( $_POST[$option_name] ) ) );
 					} else if ( $genoptions['catselectmethod'] == 'multiselectlist' ) {
-						$options[$option_name] = implode( ',', $_POST[$option_name] );
+						$options[$option_name] = sanitize_text_field( implode( ',', $_POST[$option_name] ) );
 					}
 				} else {
 					$options[$option_name] = '';
@@ -2792,7 +2264,7 @@ wp_editor( $post->post_content, 'content', $editor_config );
 					'imageclass', 'rssfeedtitle', 'rssfeeddescription', 'showonecatmode', 'linkcustomcatlabel', 'linkcustomcatlistentry',
 					'searchlabel', 'dragndroporder', 'cattargetaddress', 'beforeweblink', 'afterweblink', 'weblinklabel', 'beforetelephone',
 					'aftertelephone', 'telephonelabel', 'beforeemail', 'afteremail', 'emaillabel', 'beforelinkhits', 'afterlinkhits',
-					'linkreciprocallabel', 'linksecondurllabel', 'linktelephonelabel', 'linkemaillabel', 'emailcommand', 'rewritepage',
+					'linkreciprocallabel', 'linksecondurllabel', 'linktelephonelabel', 'linkemaillabel', 'emailcommand', 'rewritepage', 'rewritecategoriespage',
 					'maxlinks', 'beforedate', 'afterdate', 'beforeimage', 'afterimage', 'beforerss', 'afterrss', 'beforenote', 'afternote',
 					'beforelink', 'afterlink', 'beforeitem', 'afteritem', 'beforedesc', 'afterdesc', 'addbeforelink', 'addafterlink',
 					'beforelinkrating', 'afterlinkrating', 'linksubmitternamelabel', 'linksubmitteremaillabel', 'linksubmittercommentlabel',
@@ -2808,16 +2280,26 @@ wp_editor( $post->post_content, 'content', $editor_config );
 					'beforecatname', 'aftercatname', 'linkimagelabel', 'showaddlinkimage', 'linknametooltip', 'linkaddrtooltip', 'linkrsstooltip',
 					'linkcattooltip', 'linkusercattooltip', 'linkusertagtooltip', 'linkdesctooltip', 'linknotestooltip', 'linkimagetooltip', 'linkreciptooltip',
 					'linksecondtooltip', 'linktelephonetooltip', 'linkemailtooltip', 'submitternametooltip', 'submitteremailtooltip',
-					'submittercommenttooltip', 'largedesctooltip', 'linktagtooltip', 'linkfilelabel', 'linkfiletooltip', 'showaddlinkfile', 'linkfileallowedtypes', 'beforecustomurl1', 'beforecustomurl2', 'beforecustomurl3', 'beforecustomurl4', 'beforecustomurl5', 'aftercustomurl1', 'aftercustomurl2', 'aftercustomurl3', 'aftercustomurl4', 'aftercustomurl5', 'labelcustomurl1',  'labelcustomurl2', 'labelcustomurl3', 'labelcustomurl4', 'labelcustomurl5', 'customurl1target', 'customurl2target', 'customurl3target', 'customurl4target', 'customurl5target', 'beforeuservotes', 'afteruservotes', 'uservotelikelabel', 'beforecustomtext1', 'beforecustomtext2', 'beforecustomtext3', 'beforecustomtext4', 'beforecustomtext5', 'aftercustomtext1', 'aftercustomtext2', 'aftercustomtext3', 'aftercustomtext4', 'aftercustomtext5', 'beforecustomlist1', 'beforecustomlist2', 'beforecustomlist3', 'beforecustomlist4', 'beforecustomlist5', 'aftercustomlist1', 'aftercustomlist2', 'aftercustomlist3', 'aftercustomlist4', 'aftercustomlist5', 'categoryseparator', 'customqueryarg', 'customqueryargvalue', 'usersubmissiondragndroporder',
+					'submittercommenttooltip', 'largedesctooltip', 'linktagtooltip', 'linkfilelabel', 'linkfiletooltip', 'showaddlinkfile', 'linkfileallowedtypes', 'labelcustomurl1',  'labelcustomurl2', 'labelcustomurl3', 'labelcustomurl4', 'labelcustomurl5', 'customurl1target', 'customurl2target', 'customurl3target', 'customurl4target', 'customurl5target', 'beforeuservotes', 'afteruservotes', 'uservotelikelabel', 'categoryseparator', 'customqueryarg', 'customqueryargvalue', 'usersubmissiondragndroporder',
 					'showlinkreferencelist', 'linkreferencelabel', 'linkreferencetooltip', 'showcustomurl1', 'showcustomurl2', 'showcustomurl3', 'showcustomurl4',
 					'showcustomurl5', 'customurl1tooltip', 'customurl2tooltip', 'customurl3tooltip', 'customurl4tooltip', 'customurl5tooltip', 'showcustomtext1', 'showcustomtext2', 
 					'showcustomtext3', 'showcustomtext4', 'showcustomtext5', 'customtext1tooltip', 'customtext2tooltip', 'customtext3tooltip', 'customtext4tooltip',
 					'customtext5tooltip', 'showcustomlist1', 'showcustomlist2', 'showcustomlist3', 'showcustomlist4', 'showcustomlist5', 'customlist1tooltip', 'customlist2tooltip',
-					'customlist3tooltip', 'customlist4tooltip', 'customlist5tooltip', 'rss_item_date_source', 'updateddays'
+					'customlist3tooltip', 'customlist4tooltip', 'customlist5tooltip', 'rss_item_date_source', 'updateddays', 'popupbuttonlabel'
 				) as $option_name
 			) {
 				if ( isset( $_POST[$option_name] ) ) {
-					$options[$option_name] = str_replace( "\"", "'", $_POST[$option_name] );
+					$options[$option_name] = str_replace( "\"", "'", wp_kses( stripslashes( $_POST[$option_name] ), $this->allowed_html_tags() ) );
+				}
+			}
+
+			foreach (
+				array(
+					'beforecustomtext1', 'beforecustomtext2', 'beforecustomtext3', 'beforecustomtext4', 'beforecustomtext5', 'aftercustomtext1', 'aftercustomtext2', 'aftercustomtext3', 'aftercustomtext4', 'aftercustomtext5', 'beforecustomlist1', 'beforecustomlist2', 'beforecustomlist3', 'beforecustomlist4', 'beforecustomlist5', 'aftercustomlist1', 'aftercustomlist2', 'aftercustomlist3', 'aftercustomlist4', 'aftercustomlist5', 'beforecustomurl1', 'beforecustomurl2', 'beforecustomurl3', 'beforecustomurl4', 'beforecustomurl5', 'aftercustomurl1', 'aftercustomurl2', 'aftercustomurl3', 'aftercustomurl4', 'aftercustomurl5'
+				) as $option_name
+			) {
+				if ( isset( $_POST[$option_name] ) ) {
+					$options[$option_name] = str_replace( "\"", "'", $this->script_tag_remover( stripslashes( $_POST[$option_name] ), array( 'img' ) ) );
 				}
 			}
 
@@ -2843,7 +2325,7 @@ wp_editor( $post->post_content, 'content', $editor_config );
 					'suppress_custom_text_1_if_empty', 'suppress_custom_text_2_if_empty', 'suppress_custom_text_3_if_empty',
 					'suppress_custom_text_4_if_empty', 'suppress_custom_text_5_if_empty', 'suppress_custom_list_1_if_empty', 'suppress_custom_list_2_if_empty',
 					'suppress_custom_list_3_if_empty', 'suppress_custom_list_4_if_empty', 'suppress_custom_list_5_if_empty', 'catnamelink', 'hideemptycats',
-					'rsslibrarypagination', 'showupdatedonly', 'searchfromallcats'
+					'rsslibrarypagination', 'showupdatedonly', 'searchfromallcats', 'suppressonemptysearch'
 				)
 				as $option_name
 			) {
@@ -3088,7 +2570,7 @@ wp_editor( $post->post_content, 'content', $editor_config );
 			$genoptions = get_option( 'LinkLibraryGeneral' );
 			$genoptions = wp_parse_args( $genoptions, ll_reset_gen_settings( 'return' ) );
 
-			$genoptions['fullstylesheet'] = $_POST['fullstylesheet'];
+			$genoptions['fullstylesheet'] = $this->validate_css( $_POST['fullstylesheet'] );
 
 			update_option( 'LinkLibraryGeneral', $genoptions );
 			$message = 1;
@@ -3099,7 +2581,7 @@ wp_editor( $post->post_content, 'content', $editor_config );
 			$stylesheetlocation = plugin_dir_path( __FILE__ ) . 'stylesheettemplate.css';
 
 			if ( file_exists( $stylesheetlocation ) ) {
-				$genoptions['fullstylesheet'] = file_get_contents( $stylesheetlocation );
+				$genoptions['fullstylesheet'] = $this->validate_css( file_get_contents( $stylesheetlocation ) );
 			}
 
 			update_option( 'LinkLibraryGeneral', $genoptions );
@@ -3146,7 +2628,7 @@ wp_editor( $post->post_content, 'content', $editor_config );
 
 		update_option( 'LinkLibraryGeneral', $genoptions );
 
-		if ( !isset( $_POST['recipcheck'] ) && !isset( $_POST['brokencheck'] ) && !isset( $_POST['duplicatecheck'] ) && !isset( $_POST['emptycatcheck'] ) && !isset( $_POST['rsscheck'] ) ) {
+		if ( !isset( $_POST['recipcheck'] ) && !isset( $_POST['brokencheck'] ) && !isset( $_POST['duplicatecheck'] ) && !isset( $_POST['emptycatcheck'] ) && !isset( $_POST['rsscheck'] ) && !isset( $_POST['secondaryurlcheck'] ) && !isset( $_POST['imagelinkcheck'] ) ) {
 			$message = 1;
 		} elseif ( isset( $_POST['recipcheck'] ) ) {
 			$message = 2;
@@ -3158,7 +2640,11 @@ wp_editor( $post->post_content, 'content', $editor_config );
 			$message = 5;
 		} elseif ( isset( $_POST['rsscheck'] ) ) {
 			$message = 6;
-		}
+		} elseif ( isset( $_POST['secondaryurlcheck'] ) ) {
+			$message = 7;
+		} elseif ( isset( $_POST['imagelinkcheck'] ) ) {
+			$message = 8;
+		} 
 
 		//lets redirect the post request into get request (you may add additional params at the url, if you need to show save results
 		$redirect_url = remove_query_arg( array( 'message' ), $_POST['_wp_http_referer'] );
@@ -3175,394 +2661,194 @@ wp_editor( $post->post_content, 'content', $editor_config );
 		?>
 
 		<div style='padding-top:15px' id="ll-general" class="content-section">
-		<table>
-			<tr>
-				<td>
-					<input type='hidden' value='<?php echo $genoptions['schemaversion']; ?>' name='schemaversion' id='schemaversion' />
-					<table>
-						<tr>
-							<td colspan="2"><h4>Link Library 6.0 Upgrade Tools</h4></td>
-						</tr>
-						<tr>
-							<td><?php _e( 'Re-import', 'link-library' ); ?></td>
-							<td><button class="button" type="button" <?php echo "onclick=\"if ( confirm('" . esc_js( __( "Using the re-import function will delete all links in your Link Library and re-import links from the old Link Library 5.9 format to version 6.x. Only use this function if you recently upgraded from 5.9 to 6.x and are having issues with the converter links.", "link-library" ) ) . "') ) window.location.href='edit.php?page=link-library-general-options&amp;post_type=link_library_links&amp;ll60reupdate=1&amp;_wpnonce=" . wp_create_nonce( 'll60reupdate' ) . "' \""; ?>><?php _e( 'Re-import links', 'link-library' ); ?></button></td>
-						</tr>
-						<tr>
-							<td><?php _e( 'Category mapping table', 'link-library' ); ?></td>
-							<td><input class="button" type="submit" id="ll60catmapping" name="ll60catmapping" value="<?php _e( 'Export category mapping', 'link-library' ); ?>" /></td>
-						</tr>
-						<tr>
-							<td><?php _e( 'Delete old Link Library 5.9 Links', 'link-library' ); ?></td>
-							<td><input class="button" type="submit" id="deletell59links" name="deletell59links" value="<?php _e( 'Delete old links', 'link-library' ); ?>" /></td>
-						</tr>
-						<tr>
-							<td colspan="2"><h4>General Options</h4></td>
-						</tr>
-						<?php if ( !is_multisite() ) { ?>
-						<tr>
-							<td><?php _e( 'Update channel', 'link-library' ); ?></td>
-							<td><select id="updatechannel" name="updatechannel">
-									<option value="standard" <?php selected( $genoptions['updatechannel'], 'standard' ); ?>><?php _e( 'Standard channel - Updates as they are released', 'link-library' ); ?>
-									<option value="monthly" <?php selected( $genoptions['updatechannel'], 'monthly' ); ?>><?php _e( 'Monthly Channel - Updates once per month', 'link-library' ); ?>
-								</select></td>
-						</tr>
-						<?php } ?>
-						<tr>
-							<td class='lltooltip' title='<?php _e( 'The stylesheet is now defined and stored using the Link Library admin interface. This avoids problems with updates from one version to the next.', 'link-library' ); ?>' style='width:200px'><?php _e( 'Stylesheet', 'link-library' ); ?></td>
-							<td class='lltooltip' title='<?php _e( 'The stylesheet is now defined and stored using the Link Library admin interface. This avoids problems with updates from one version to the next.', 'link-library' ); ?>'>
-								<a href="<?php echo esc_url( add_query_arg( array( 'page' => 'link-library-stylesheet', 'section' => 'stylesheet' ), admin_url( 'admin.php' ) ) ); ?>"><?php _e( 'Editor', 'link-library' ); ?></a>
-							</td>
-						</tr>
-						<tr>
-							<td><?php _e( 'Number of Libraries', 'link-library' ); ?></td>
-							<td>
-								<input type="text" id="numberstylesets" name="numberstylesets" size="5" value="<?php echo $genoptions['numberstylesets']; ?>" />
-							</td>
-						</tr>
-						<tr>
-							<td><?php _e( 'Link Library Post Slug', 'link-library' ); ?></td>
-							<td>
-								<input type="text" id="cptslug" name="cptslug" size="20" value="<?php echo $genoptions['cptslug']; ?>" />
-							</td>
-						</tr>
-						<tr>
-							<td><?php _e( 'Taxonomy for link category', 'link-library' ); ?></td>
-							<td><select id="cattaxonomy" name="cattaxonomy">
-									<option value="link_library_category" <?php selected( $genoptions['cattaxonomy'], 'link_library_category' ); ?>><?php _e( 'Link Library Categories', 'link-library' ); ?>
-									<option value="category" <?php selected( $genoptions['cattaxonomy'], 'category' ); ?>><?php _e( 'Post Categories', 'link-library' ); ?>
-								</select></td>
-						</tr>
-						<tr>
-							<td><?php _e( 'Taxonomy for link tags', 'link-library' ); ?></td>
-							<td><select id="tagtaxonomy" name="tagtaxonomy">
-									<option value="link_library_tags" <?php selected( $genoptions['tagtaxonomy'], 'link_library_tags' ); ?>><?php _e( 'Link Library Tags', 'link-library' ); ?>
-									<option value="post_tag" <?php selected( $genoptions['tagtaxonomy'], 'post_tag' ); ?>><?php _e( 'Post Tags', 'link-library' ); ?>
-								</select></td>
-						</tr>
-						<tr>
-							<td><?php _e( 'Articles to be ignored when sorting (separate with |)', 'link-library' ); ?></td>
-							<td>
-								<input type="text" id="ignoresortarticles" name="ignoresortarticles" value="<?php echo $genoptions['ignoresortarticles']; ?>" />
-							</td>
-						</tr>
-						<tr>
-							<td><?php _e(  'Individual link pages can be seen by visitors', 'link-library' ); ?></td>
-							<td><input type="checkbox" id="publicly_queryable" name="publicly_queryable" <?php checked( $genoptions['publicly_queryable'] ); ?>/></td>
-						</tr>
-						<tr>
-							<td><?php _e( 'Links appear in search results', 'link-library' ); ?></td>
-							<td><input type="checkbox" id="exclude_from_search" name="exclude_from_search" <?php checked( $genoptions['exclude_from_search'] ); ?>/></td>
-						</tr>
-						<tr>
-							<td><?php _e( 'Links appear in main site RSS feed', 'link-library' ); ?></td>
-							<td><input type="checkbox" id="add_to_main_rss" name="add_to_main_rss" <?php checked( $genoptions['add_to_main_rss'] ); ?>/></td>
-						</tr>
-						<tr>
-							<td>Minimum role for Link Library configuration</td>
-							<td>
-								<?php global $wp_roles;
-								if ( $wp_roles ):?>
-									<select name='rolelevel' style='width: 200px'>
-										<?php $roles = $wp_roles->roles;
-
-										foreach ( $roles as $role ):
-											$selectedterm = selected( $genoptions['rolelevel'], $role['name'], false ); ?>
-											<option value='<?php echo $role['name']; ?>' <?php echo $selectedterm; ?>><?php echo $role['name']; ?></option>
-										<?php endforeach; ?>
-									</select>
-								<?php endif; ?>
-							</td>
-						</tr>
-						<tr>
-							<td>Minimum role for Link editing</td>
-							<td>
-								<?php global $wp_roles;
-								if ( $wp_roles ):?>
-									<select name='editlevel' style='width: 200px'>
-										<?php $roles = $wp_roles->roles;
-
-										foreach ( $roles as $role ):
-											$selectedterm = selected( $genoptions['editlevel'], $role['name'], false ); ?>
-											<option value='<?php echo $role['name']; ?>' <?php echo $selectedterm; ?>><?php echo $role['name']; ?></option>
-										<?php endforeach; ?>
-									</select>
-								<?php endif; ?>
-							</td>
-						</tr>
-						<tr>
-							<td class="lltooltip" title="<?php _e( 'Changes how categories to be displayed are selected in library configurations. Specifying through a comma-separated list allows user to specify order to display the categories, when used in conjunction with the Results Order option' ); ?>"><?php _e( 'Category selection method', 'link-library' ); ?></td>
-							<td><select id="catselectmethod" name="catselectmethod">
-									<option value="commalist" <?php selected( $genoptions['catselectmethod'], 'commalist' ); ?>><?php _e( 'Comma-separated ID list', 'link-library' ); ?>
-									<option value="multiselectlist" <?php selected( $genoptions['catselectmethod'], 'multiselectlist' ); ?>><?php _e( 'Multi-select List', 'link-library' ); ?>
-								</select></td>
-						</tr>
-						<tr>
-							<td><?php _e( 'Default link target in editor', 'link-library' ); ?></td>
-							<td><?php $target_array = array( '_blank' => '_blank (new window or tab)', '' => '_none (same window or tab)', '_top' => '_top (current window or tab, with no frames)' );
-								echo '<select name="defaultlinktarget" id="defaultlinktarget">';
-									foreach ( $target_array as $target_value => $target_item ) {
-									echo '<option value="' . $target_value . '" ' . selected( $target_value, $genoptions['defaultlinktarget'] ) . '>' . $target_item . '</option>';
-									}
-									echo '</select>';
-								?></td>
-						</tr>
-						<tr>
-							<td><?php _e( 'Default protocol for new links in admin when not specified', 'link-library' ); ?></td>
-							<td><?php $target_array = array( 'http' => 'http://', 'https' => 'https://' );
-								echo '<select name="defaultprotocoladmin" id="defaultprotocoladmin">';
-								foreach ( $target_array as $target_value => $target_item ) {
-									echo '<option value="' . $target_value . '" ' . selected( $target_value, $genoptions['defaultprotocoladmin'] ) . '>' . $target_item . '</option>';
-								}
-								echo '</select>';
-								?></td>
-						</tr>
-						<tr>
-							<td class="lltooltip" title="<?php _e( 'Enter comma-separate list of pages on which the Link Library stylesheet and scripts should be loaded. Primarily used if you display Link Library using the API', 'link-library' ); ?>"><?php _e( 'Additional pages to load styles and scripts', 'link-library' ); ?></td>
-							<td class="lltooltip" title="<?php _e( 'Enter comma-separate list of pages on which the Link Library stylesheet and scripts should be loaded. Primarily used if you display Link Library using the API', 'link-library' ); ?>">
-								<input type="text" id="includescriptcss" name="includescriptcss" size="40" value="<?php echo $genoptions['includescriptcss']; ?>" />
-							</td>
-						</tr>
-						<tr>
-							<td><?php _e( 'Debug Mode', 'link-library' ); ?></td>
-							<td>
-								<input type="checkbox" id="debugmode" name="debugmode" <?php checked( $genoptions['debugmode'] ); ?>/></td>
-						</tr>
-						<tr>
-							<td><?php _e( 'Delete file if link points to local file', 'link-library' ); ?></td>
-							<td>
-								<input type="checkbox" id="deletelocalfile" name="deletelocalfile" <?php checked( $genoptions['deletelocalfile'] ); ?>/></td>
-						</tr>
-						<tr>
-							<td class="lltooltip" title="<?php _e( 'This function is only possible when showing one category at a time and while the default category is not shown.', 'link-library' ); ?>"><?php _e( 'Page Title Prefix', 'link-library' ); ?></td>
-							<td class="lltooltip" title="<?php _e( 'This function is only possible when showing one category at a time and while the default category is not shown.', 'link-library' ); ?>">
-								<input type="text" id="pagetitleprefix" name="pagetitleprefix" size="10" value="<?php echo $genoptions['pagetitleprefix']; ?>" />
-							</td>
-						</tr>
-						<tr>
-							<td class="lltooltip" title="<?php _e( 'This function is only possible when showing one category at a time and while the default category is not shown.', 'link-library' ); ?>"><?php _e( 'Page Title Suffix', 'link-library' ); ?></td>
-							<td class="lltooltip" title="<?php _e( 'This function is only possible when showing one category at a time and while the default category is not shown.', 'link-library' ); ?>">
-								<input type="text" id="pagetitlesuffix" name="pagetitlesuffix" size="10" value="<?php echo $genoptions['pagetitlesuffix']; ?>" />
-							</td>
-						</tr>
-						<tr>
-							<td class='lltooltip' title='<?php _e( 'Path for images files that are uploaded manually or generated through thumbnail generation service', 'link-library' ); ?>'><?php _e( 'Link Image File Path', 'link-library' ); ?></td>
-							<td colspan='4' class='lltooltip' title='<?php _e( 'Path for images files that are uploaded manually or generated through thumbnail generation service', 'link-library' ); ?>'>
-								<select id="imagefilepath" name="imagefilepath">
-									<option value="absolute" <?php selected( $genoptions['imagefilepath'], 'absolute' ); ?>><?php _e( 'Absolute', 'link-library' ); ?>
-									<option value="relative" <?php selected( $genoptions['imagefilepath'], 'relative' ); ?>><?php _e( 'Relative', 'link-library' ); ?>
-								</select></td>
-						</tr>
-						<tr>
-							<td colspan="2"><hr /></td>
-						</tr>
-						<tr>
-							<td><?php _e( 'Thumbnail Generator', 'link-library' ); ?></td>
-							<td>
-								<select id="thumbnailgenerator" name="thumbnailgenerator">
-									<option value="robothumb" <?php selected( $genoptions['thumbnailgenerator'], 'robothumb' ); ?>>Robothumb.com
-									<option value="shrinktheweb" <?php selected( $genoptions['thumbnailgenerator'], 'shrinktheweb' ); ?>>Shrink The Web
-									<option value="pagepeeker" <?php selected( $genoptions['thumbnailgenerator'], 'pagepeeker' ); ?>>PagePeeker
-									<option value="wordpressmshots" <?php selected( $genoptions['thumbnailgenerator'], 'wordpressmshots' ); ?>>WordPress.com mshots
-									<option value="thumbshots" <?php selected( $genoptions['thumbnailgenerator'], 'thumbshots' ); ?>>Thumbshots.org
-									<option value="google" <?php selected( $genoptions['thumbnailgenerator'], 'google' ); ?>>Google PageSpeed
-								</select>
-							</td>
-						</tr>
-						<tr class="thumbshotsapikey" <?php if ( $genoptions['thumbnailgenerator'] != 'thumbshots' ) {
-							echo 'style="display:none;"';
-						} ?>>
-							<td class='lltooltip' title='<?php _e( 'API Key for Thumbshots.com thumbnail generation accounts', 'link-library' ); ?>'><?php _e( 'Thumbshots API Key', 'link-library' ); ?></td>
-							<td colspan='4' class='lltooltip' title='<?php _e( 'API Key for Thumbshots.com thumbnail generation accounts', 'link-library' ); ?>'>
-								<input type="text" id="thumbshotscid" name="thumbshotscid" size="20" value="<?php echo $genoptions['thumbshotscid']; ?>" />
-							</td>
-						</tr>
-						<tr class="shrinkthewebaccesskey" <?php if ( $genoptions['thumbnailgenerator'] != 'shrinktheweb' ) {
-							echo 'style="display:none;"';
-						} ?>>
-							<td class='lltooltip' title='<?php _e( 'Access Key for shrinktheweb.com thumbnail generation accounts', 'link-library' ); ?>'><?php _e( 'Shrink The Web Access Key', 'link-library' ); ?></td>
-							<td colspan='4' class='lltooltip' title='<?php _e( 'Access Key for shrinktheweb.com thumbnail generation accounts', 'link-library' ); ?>'>
-								<input type="text" id="shrinkthewebaccesskey" name="shrinkthewebaccesskey" size="20" value="<?php echo $genoptions['shrinkthewebaccesskey']; ?>" />
-							</td>
-						</tr>
-						<tr class="shrinkthewebsizes" <?php if ( $genoptions['thumbnailgenerator'] != 'shrinktheweb' ) {
-							echo 'style="display:none;"';
-						} ?>>
-							<td><?php _e( 'Shrink the web Thumbnail size' ); ?>
-							</td>
-							<td>
-								<select id="stwthumbnailsize" name="stwthumbnailsize">
-									<?php $sizes = array( '75x57', '90x68', '100x75', '120x90', '200x150', '320x240' );
-
-									foreach ( $sizes as $size ) { ?>
-									<option value="<?php echo $size; ?>" <?php selected( $genoptions['stwthumbnailsize'], $size ); ?>><?php echo $size; ?>
-										<?php } ?>
-								</select>
-							</td>
-						</tr>
-						<tr class="pagepeekersizes" <?php if ( $genoptions['thumbnailgenerator'] != 'pagepeeker' ) {
-							echo 'style="display:none;"';
-						} ?>>
-							<td><?php _e( 'PagePeeker Thumbnail size' ); ?>
-							</td>
-							<td>
-								<select id="pagepeekersize" name="pagepeekersize">
-									<?php $sizes = array( 't' => '90 x 68', 's' => '120x90', 'm' => '200 x 150', 'l' => '400 x 300', 'x'=> '480 x 360' );
-
-									foreach ( $sizes as $code => $size ) { ?>
-									<option value="<?php echo $code; ?>" <?php selected( $genoptions['pagepeekersize'], $code ); ?>><?php echo $size; ?>
-										<?php } ?>
-								</select>
-							</td>
-						</tr>
-						<tr class="pagepeekerid" <?php if ( $genoptions['thumbnailgenerator'] != 'pagepeeker' ) {
-							echo 'style="display:none;"';
-						} ?>>
-							<td><?php _e( 'PagePeeker API Key (for paid or free unbranded accounts)' ); ?>
-							</td>
-							<td colspan='4' class='lltooltip' title='<?php _e( 'Pagepeeker API Key for premium thumbnail generation', 'link-library' ); ?>'>
-								<input type="text" id="pagepeekerid" name="pagepeekerid" size="20" value="<?php echo $genoptions['pagepeekerid']; ?>" />
-							</td>
-							</td>
-						</tr>
-						<tr class="robothumbsize" <?php if ( $genoptions['thumbnailgenerator'] != 'robothumb' ) {
-							echo 'style="display:none;"';
-						} ?>>
-							<td><?php _e( 'Robothumb Thumbnail size' ); ?>
-							</td>
-							<td>
-								<select id="thumbnailsize" name="thumbnailsize">
-								<?php $sizes = array( '100x75', '120x90', '160x120', '180x135', '240x180', '320x240', '560x420', '640x480', '800x600' );
-
-								foreach ( $sizes as $size ) { ?>
-									<option value="<?php echo $size; ?>" <?php selected( $genoptions['thumbnailsize'], $size ); ?>><?php echo $size; ?>
-								<?php } ?>
-								</select>
-							</td>
-						</tr>
-						<tr class="wordpressmshotswarning" <?php if ( $genoptions['thumbnailgenerator'] != 'wordpressmshots' ) {
-							echo 'style="display:none;"';
-						} ?>>
-							<td colspan="2"><?php _e( 'The WordPress mshots service is only free for non-commercial applications. If using it on a commercial site, contact <a href="https://automattic.com/contact/">Automattic</a> to get a license for use.' ); ?>
-							</td>
-						</tr>
-						<tr class="wordpressmshotssize" <?php if ( $genoptions['thumbnailgenerator'] != 'wordpressmshots' ) {
-							echo 'style="display:none;"';
-						} ?>>
-							<td><?php _e( 'WordPress.com mshots Thumbnail size' ); ?>
-							</td>
-							<td>
-								<select id="thumbnailsize" name="thumbnailsize">
-								<?php $sizes = array( '100x75', '120x90', '160x120', '180x135', '240x180', '320x240', '560x420', '640x480', '800x600', '1280x960' );
-
-								foreach ( $sizes as $size ) { ?>
-									<option value="<?php echo $size; ?>" <?php selected( $genoptions['thumbnailsize'], $size ); ?>><?php echo $size; ?>
-								<?php } ?>
-								</select>
-							</td>
-						</tr>
-						<tr>
-							<td colspan="2"><hr /></td>
-						</tr>
-						<tr>
-							<td><?php _e( 'Log link creation activity on BuddyPress feed', 'link-library' ); ?></td>
-							<td>
-								<input type="checkbox" id="bp_log_activity" name="bp_log_activity" <?php checked( $genoptions['bp_log_activity'] ); ?> />
-							</td>
-						</tr>
-						<tr>
-							<td><?php _e( 'Link Page URL (relative or absolute)', 'link-library' ); ?></td>
-							<td>
-								<input type="text" id="bp_link_page_url" name="bp_link_page_url" size="60" value="<?php echo $genoptions['bp_link_page_url']; ?>" />
-							</td>
-						</tr>
-						<tr>
-							<td><?php _e( 'Library Configuration used for Links page', 'link-library' ); ?></td>
-							<td>
-								<SELECT id="bp_link_settings" name="bp_link_settings" style='width: 300px'>
-									<option>Select a library configuration</option>
-									<?php if ( empty( $genoptions['numberstylesets'] ) ) {
-										$numberofsets = 1;
-									} else {
-										$numberofsets = $genoptions['numberstylesets'];
-									}
-									for ( $counter = 1; $counter <= $numberofsets; $counter ++ ): ?>
-										<?php $tempoptionname = "LinkLibraryPP" . $counter;
-										$tempoptions          = get_option( $tempoptionname ); ?>
-										<option value="<?php echo $counter ?>" <?php selected( $genoptions['bp_link_settings'], $counter ); ?>><?php _e( 'Library', 'link-library' ); ?> <?php echo $counter ?><?php if ( ! empty( $tempoptions ) && isset( $tempoptions['settingssetname'] ) ) {
-												echo " (" . stripslashes( $tempoptions['settingssetname'] ) . ")";
-											} ?></option>
-									<?php endfor; ?>
-								</SELECT>
-							</td>
-						</tr>
-						<tr>
-							<td colspan="2"><hr /></td>
-						</tr>
-						<tr class="captchagenerator">
-							<td><?php _e( 'Captcha generator' ); ?>
-							</td>
-							<td>
-								<select id="captchagenerator" name="captchagenerator">
-									<?php $captcha_generators = array( 'easycaptcha' => 'Easy Captcha', 'recaptcha' => 'Google reCAPTCHA' );
-
-									foreach ( $captcha_generators as $key => $captcha_generator ) { ?>
-									<option value="<?php echo $key; ?>" <?php selected( $genoptions['captchagenerator'], $key ); ?>><?php echo $captcha_generator; ?>
-										<?php } ?>
-								</select>
-							</td>
-						</tr>
-						<tr>
-							<td class="lltooltip" title="<?php _e( 'Sign up for the reCAPTCHA service before activating this feature to get your Site and Secret Keys', 'link-library' ); ?>"><?php _e( 'Google reCAPTCHA Site Key' ); ?>
-							</td>
-							<td class="lltooltip" title="<?php _e( 'Sign up for the reCAPTCHA service before activating this feature to get your Site and Secret Keys', 'link-library' ); ?>">
-								<input type="text" id="recaptchasitekey" name="recaptchasitekey" size="60" value="<?php echo $genoptions['recaptchasitekey']; ?>" />
-							</td>
-						</tr>
-						<tr>
-							<td class="lltooltip" title="<?php _e( 'Sign up for the reCAPTCHA service before activating this feature to get your Site and Secret Keys', 'link-library' ); ?>"><?php _e( 'Google reCAPTCHA Secret Key' ); ?>
-							</td>
-							<td class="lltooltip" title="<?php _e( 'Sign up for the reCAPTCHA service before activating this feature to get your Site and Secret Keys', 'link-library' ); ?>">
-								<input type="text" id="recaptchasecretkey" name="recaptchasecretkey" size="60" value="<?php echo $genoptions['recaptchasecretkey']; ?>" />
-							</td>
-						</tr>
-						<tr>
-							<td colspan="2"><hr /></td>
-						</tr>
-						<tr>
-							<td><?php _e( 'Links Date Format', 'link-library' ); ?> (<a target="datehelp" href="https://codex.wordpress.org/Formatting_Date_and_Time"><?php _e( 'Help', 'link-library' ); ?></a>)
-							</td>
-							<td>
-								<input type="text" id="links_updated_date_format" name="links_updated_date_format" size="20" value="<?php echo get_option( 'links_updated_date_format' ); ?>" />
-							</td>
-						</tr>
-						<tr>
-							<td class='lltooltip' title='<?php _e( 'Enter list of additional link protocols, seperated by commas', 'link-library' ); ?>'><?php _e( 'Additional protocols', 'link-library' ); ?></td>
-							<td class='lltooltip' title='<?php _e( 'Enter list of additional link protocols, seperated by commas', 'link-library' ); ?>'><input type="text" id="extraprotocols" name="extraprotocols" size="20" value="<?php echo $genoptions['extraprotocols']; ?>" /></td>
-						</tr>
-						<tr>
-							<td><?php _e( 'Time before clearing RSS display cache (in seconds)', 'link-library' ); ?></td>
-							<td>
-								<input type="text" id="rsscachedelay" name="rsscachedelay" size="5" value="<?php echo intval( $genoptions['rsscachedelay'] ); ?>" /></td>
-						</tr>
-					</table>
-				</td>
-				<?php if ( isset( $genoptions['hidedonation'] ) && !$genoptions['hidedonation'] ) { ?>
-				<td style='padding: 8px; border: 1px solid #cccccc;vertical-align:top !important;'>
-
-						<div style="width: 400px"><h3>Support the author - Second Edition</h3><br />
-							<table>
-								<tr>
-									<td>
-										<a href="http://www.packtpub.com/wordpress-plugin-development-cookbook/book"><img src='<?php echo plugins_url( 'icons/7683os_cover_small.jpg', __FILE__ ); ?>'>
-									</td>
-									<td></a>The second edition of my plugin development cookbook is now available. Learn how to create your own plugins with my book.<br /><br />Order now!<br /><br /><a href="https://www.packtpub.com/web-development/wordpress-plugin-development-cookbook-second-edition">Packt Publishing</a><br /><a href="https://amzn.to/2s1U7GP">Amazon.com</a><br /><a href="https://www.amazon.ca/WordPress-Plugin-Development-Cookbook-powerful-ebook/dp/B073V39F6X/ref=sr_1_2?ie=UTF8&qid=1526738915&sr=8-2&keywords=wordpress+plugin+development+cookbook">Amazon.ca</a>
-									</td>
-								</tr>
-							</table>
-						</div>
-				</td>
+			<input type='hidden' value='<?php echo $genoptions['schemaversion']; ?>' name='schemaversion' id='schemaversion' />
+			<table>
+				<!-- <tr>
+					<td colspan="2"><h4>Link Library 6.0 Upgrade Tools</h4></td>
+				</tr>
+				<tr>
+					<td><?php _e( 'Re-import', 'link-library' ); ?></td>
+					<td><button class="button" type="button" <?php echo "onclick=\"if ( confirm('" . esc_js( __( "Using the re-import function will delete all links in your Link Library and re-import links from the old Link Library 5.9 format to version 6.x. Only use this function if you recently upgraded from 5.9 to 6.x and are having issues with the converter links.", "link-library" ) ) . "') ) window.location.href='edit.php?page=link-library-general-options&amp;post_type=link_library_links&amp;ll60reupdate=1&amp;_wpnonce=" . wp_create_nonce( 'll60reupdate' ) . "' \""; ?>><?php _e( 'Re-import links', 'link-library' ); ?></button></td>
+				</tr>
+				<tr>
+					<td><?php _e( 'Category mapping table', 'link-library' ); ?></td>
+					<td><input class="button" type="submit" id="ll60catmapping" name="ll60catmapping" value="<?php _e( 'Export category mapping', 'link-library' ); ?>" /></td>
+				</tr>
+				<tr>
+					<td><?php _e( 'Delete old Link Library 5.9 Links', 'link-library' ); ?></td>
+					<td><input class="button" type="submit" id="deletell59links" name="deletell59links" value="<?php _e( 'Delete old links', 'link-library' ); ?>" /></td>
+				</tr>
+				<tr>
+					<td colspan="2"><h4><?php _e( 'General Options', 'link-library' ); ?></h4></td>
+				</tr> -->
+				<?php if ( !is_multisite() ) { ?>
+				<tr>
+					<td><?php _e( 'Update channel', 'link-library' ); ?></td>
+					<td><select id="updatechannel" name="updatechannel">
+							<option value="standard" <?php selected( $genoptions['updatechannel'], 'standard' ); ?>><?php _e( 'Standard channel - Updates as they are released', 'link-library' ); ?>
+							<option value="monthly" <?php selected( $genoptions['updatechannel'], 'monthly' ); ?>><?php _e( 'Monthly Channel - Updates once per month', 'link-library' ); ?>
+						</select></td>
+				</tr>
 				<?php } ?>
-		</table>
+				<tr>
+					<td><?php _e( 'Number of Libraries', 'link-library' ); ?></td>
+					<td>
+						<input type="text" id="numberstylesets" name="numberstylesets" size="5" value="<?php echo $genoptions['numberstylesets']; ?>" />
+					</td>
+					<td><?php _e( 'Link Library Post Slug', 'link-library' ); ?></td>
+					<td>
+						<input type="text" id="cptslug" name="cptslug" size="20" value="<?php echo $genoptions['cptslug']; ?>" />
+					</td>
+				</tr>
+				<tr>
+					<td><?php _e( 'Taxonomy for link category', 'link-library' ); ?></td>
+					<td><select id="cattaxonomy" name="cattaxonomy">
+							<option value="link_library_category" <?php selected( $genoptions['cattaxonomy'], 'link_library_category' ); ?>><?php _e( 'Link Library Categories', 'link-library' ); ?>
+							<option value="category" <?php selected( $genoptions['cattaxonomy'], 'category' ); ?>><?php _e( 'Post Categories', 'link-library' ); ?>
+						</select></td>
+					<td><?php _e( 'Taxonomy for link tags', 'link-library' ); ?></td>
+					<td><select id="tagtaxonomy" name="tagtaxonomy">
+							<option value="link_library_tags" <?php selected( $genoptions['tagtaxonomy'], 'link_library_tags' ); ?>><?php _e( 'Link Library Tags', 'link-library' ); ?>
+							<option value="post_tag" <?php selected( $genoptions['tagtaxonomy'], 'post_tag' ); ?>><?php _e( 'Post Tags', 'link-library' ); ?>
+						</select></td>
+				</tr>
+				<tr>
+					<td><?php _e( 'Articles to be ignored when sorting (separate with |)', 'link-library' ); ?></td>
+					<td>
+						<input type="text" id="ignoresortarticles" name="ignoresortarticles" value="<?php echo $genoptions['ignoresortarticles']; ?>" />
+					</td>
+				</tr>
+				<tr>
+					<td><?php _e(  'Individual link pages can be seen by visitors', 'link-library' ); ?></td>
+					<td><input type="checkbox" id="publicly_queryable" name="publicly_queryable" <?php checked( $genoptions['publicly_queryable'] ); ?>/></td>
+				</tr>
+				<tr>
+					<td><?php _e( 'Links appear in search results', 'link-library' ); ?></td>
+					<td><input type="checkbox" id="exclude_from_search" name="exclude_from_search" <?php checked( $genoptions['exclude_from_search'] ); ?>/></td>
+					<td><?php _e( 'Links appear in main site RSS feed', 'link-library' ); ?></td>
+					<td><input type="checkbox" id="add_to_main_rss" name="add_to_main_rss" <?php checked( $genoptions['add_to_main_rss'] ); ?>/></td>
+				</tr>
+				<tr>
+					<td><?php _e( 'Minimum role for Link Library configuration', 'link-library' ); ?></td>
+					<td>
+						<?php global $wp_roles;
+						if ( $wp_roles ):?>
+							<select name='rolelevel' style='width: 200px'>
+								<?php $roles = $wp_roles->roles;
+
+								foreach ( $roles as $role ):
+									$selectedterm = selected( $genoptions['rolelevel'], $role['name'], false ); ?>
+									<option value='<?php echo $role['name']; ?>' <?php echo $selectedterm; ?>><?php echo $role['name']; ?></option>
+								<?php endforeach; ?>
+							</select>
+						<?php endif; ?>
+					</td>
+					<td><?php _e( 'Minimum role for Link editing', 'link-library' ); ?></td>
+					<td>
+						<?php global $wp_roles;
+						if ( $wp_roles ):?>
+							<select name='editlevel' style='width: 200px'>
+								<?php $roles = $wp_roles->roles;
+
+								foreach ( $roles as $role ):
+									$selectedterm = selected( $genoptions['editlevel'], $role['name'], false ); ?>
+									<option value='<?php echo $role['name']; ?>' <?php echo $selectedterm; ?>><?php echo $role['name']; ?></option>
+								<?php endforeach; ?>
+							</select>
+						<?php endif; ?>
+					</td>
+				</tr>
+				<tr>
+					<td class="lltooltip" title="<?php _e( 'Changes how categories to be displayed are selected in library configurations. Specifying through a comma-separated list allows user to specify order to display the categories, when used in conjunction with the Results Order option' ); ?>"><?php _e( 'Category selection method', 'link-library' ); ?></td>
+					<td><select id="catselectmethod" name="catselectmethod">
+							<option value="commalist" <?php selected( $genoptions['catselectmethod'], 'commalist' ); ?>><?php _e( 'Comma-separated ID list', 'link-library' ); ?>
+							<option value="multiselectlist" <?php selected( $genoptions['catselectmethod'], 'multiselectlist' ); ?>><?php _e( 'Multi-select List', 'link-library' ); ?>
+						</select></td>
+					<td colspan="2" rowspan="12">
+					<?php if ( isset( $genoptions['hidedonation'] ) && !$genoptions['hidedonation'] ) { ?>
+					<h3>Support the author - Third Edition just released!</h3><br />
+					<a href="https://www.packtpub.com/product/wordpress-plugin-development-cookbook-third-edition/9781801810777"><img style="height:150px;float:left;margin: 10px;" src='<?php echo plugins_url( 'icons/7683os_cover_small.jpg', __FILE__ ); ?>'></a>
+					<p>The third edition of my plugin development cookbook is now available. Learn how to create your own plugins with my book, including some brand new chapters on creating blocks for the Block Editor and working with external data sources.<br /><br />Order now!<br /><br /><a href="https://www.packtpub.com/product/wordpress-plugin-development-cookbook-third-edition/9781801810777">Packt Publishing</a><br /><a href="https://www.amazon.com/WordPress-Plugin-Development-Cookbook-complete/dp/180181077X/">Amazon.com</a><br /><a href="https://www.amazon.ca/WordPress-Plugin-Development-Cookbook-complete/dp/180181077X/">Amazon.ca</a></p>
+					<?php } ?>
+					</td>
+				</tr>
+				<tr>
+					<td><?php _e( 'Default link target in editor', 'link-library' ); ?></td>
+					<td><?php $target_array = array( '_blank' => __( '_blank (new window or tab)', 'link-library' ), '' => __( '_none (same window or tab)', 'link-library' ), '_top' => __( '_top (current window or tab, with no frames)', 'link-library' ) );
+						echo '<select name="defaultlinktarget" id="defaultlinktarget">';
+							foreach ( $target_array as $target_value => $target_item ) {
+							echo '<option value="' . $target_value . '" ' . selected( $target_value, $genoptions['defaultlinktarget'] ) . '>' . $target_item . '</option>';
+							}
+							echo '</select>';
+						?></td>
+				</tr>
+				<tr>
+					<td><?php _e( 'Display excerpt section in editor', 'link-library' ); ?></td>
+					<td><input type="checkbox" id="showexcerpt" name="showexcerpt" <?php checked( $genoptions['showexcerpt'] ); ?>/></td>
+				</tr>
+				<tr>
+					<td><?php _e( 'Default protocol for new links in admin when not specified', 'link-library' ); ?></td>
+					<td><?php $target_array = array( 'http' => 'http://', 'https' => 'https://' );
+						echo '<select name="defaultprotocoladmin" id="defaultprotocoladmin">';
+						foreach ( $target_array as $target_value => $target_item ) {
+							echo '<option value="' . $target_value . '" ' . selected( $target_value, $genoptions['defaultprotocoladmin'] ) . '>' . $target_item . '</option>';
+						}
+						echo '</select>';
+						?></td>
+				</tr>
+				<tr>
+					<td><?php _e( 'Time before clearing RSS display cache (in seconds)', 'link-library' ); ?></td>
+					<td>
+						<input type="text" id="rsscachedelay" name="rsscachedelay" size="5" value="<?php echo intval( $genoptions['rsscachedelay'] ); ?>" /></td>
+				</tr>
+				<tr>
+					<td class="lltooltip" title="<?php _e( 'Enter comma-separate list of pages on which the Link Library stylesheet and scripts should be loaded. Primarily used if you display Link Library using the API', 'link-library' ); ?>"><?php _e( 'Additional pages to load styles and scripts', 'link-library' ); ?></td>
+					<td class="lltooltip" title="<?php _e( 'Enter comma-separate list of pages on which the Link Library stylesheet and scripts should be loaded. Primarily used if you display Link Library using the API', 'link-library' ); ?>">
+						<input type="text" id="includescriptcss" name="includescriptcss" size="40" value="<?php echo $genoptions['includescriptcss']; ?>" />
+					</td>
+				</tr>
+				<tr>
+					<td><?php _e( 'Debug Mode', 'link-library' ); ?></td>
+					<td>
+						<input type="checkbox" id="debugmode" name="debugmode" <?php checked( $genoptions['debugmode'] ); ?>/></td>
+				</tr>
+				<tr>
+					<td><?php _e( 'Delete file if link points to local file', 'link-library' ); ?></td>
+					<td>
+						<input type="checkbox" id="deletelocalfile" name="deletelocalfile" <?php checked( $genoptions['deletelocalfile'] ); ?>/></td>
+				</tr>
+				<tr>
+					<td class="lltooltip" title="<?php _e( 'This function is only possible when showing one category at a time and while the default category is not shown.', 'link-library' ); ?>"><?php _e( 'Page Title Prefix', 'link-library' ); ?></td>
+					<td class="lltooltip" title="<?php _e( 'This function is only possible when showing one category at a time and while the default category is not shown.', 'link-library' ); ?>">
+						<input type="text" id="pagetitleprefix" name="pagetitleprefix" size="10" value="<?php echo $genoptions['pagetitleprefix']; ?>" />
+					</td>
+				</tr>
+				<tr>
+					<td class="lltooltip" title="<?php _e( 'This function is only possible when showing one category at a time and while the default category is not shown.', 'link-library' ); ?>"><?php _e( 'Page Title Suffix', 'link-library' ); ?></td>
+					<td class="lltooltip" title="<?php _e( 'This function is only possible when showing one category at a time and while the default category is not shown.', 'link-library' ); ?>">
+						<input type="text" id="pagetitlesuffix" name="pagetitlesuffix" size="10" value="<?php echo $genoptions['pagetitlesuffix']; ?>" />
+					</td>
+				</tr>
+				<tr>
+					<td class='lltooltip' title='<?php _e( 'Path for images files that are uploaded manually or generated through thumbnail generation service', 'link-library' ); ?>'><?php _e( 'Link Image File Path', 'link-library' ); ?></td>
+					<td colspan='4' class='lltooltip' title='<?php _e( 'Path for images files that are uploaded manually or generated through thumbnail generation service', 'link-library' ); ?>'>
+						<select id="imagefilepath" name="imagefilepath">
+							<option value="absolute" <?php selected( $genoptions['imagefilepath'], 'absolute' ); ?>><?php _e( 'Absolute', 'link-library' ); ?>
+							<option value="relative" <?php selected( $genoptions['imagefilepath'], 'relative' ); ?>><?php _e( 'Relative', 'link-library' ); ?>
+						</select></td>
+				</tr>
+				<tr>
+					<td class='lltooltip' title='<?php _e( 'Enter list of additional link protocols, seperated by commas', 'link-library' ); ?>'><?php _e( 'Additional protocols', 'link-library' ); ?></td>
+					<td class='lltooltip' title='<?php _e( 'Enter list of additional link protocols, seperated by commas', 'link-library' ); ?>'><input type="text" id="extraprotocols" name="extraprotocols" size="20" value="<?php echo $genoptions['extraprotocols']; ?>" /></td>
+				</tr>
+				<tr>
+					<td><?php _e( 'Links Date Format', 'link-library' ); ?> (<a target="datehelp" href="https://codex.wordpress.org/Formatting_Date_and_Time"><?php _e( 'Help', 'link-library' ); ?></a>)
+					</td>
+					<td>
+						<input type="text" id="links_updated_date_format" name="links_updated_date_format" size="20" value="<?php echo get_option( 'links_updated_date_format' ); ?>" />
+					</td>
+				</tr>
+			</table>
 		</div>
 
 		<script type="text/javascript">
@@ -3601,6 +2887,172 @@ wp_editor( $post->post_content, 'content', $editor_config );
 		</script>
 	<?php
 	}
+
+function general_thumbnail_generation_meta_box( $data ) {
+	$genoptions = $data['genoptions'];
+	?>
+
+	<div style='padding-top:15px' id="ll-thumbnail-generation" class="content-section">
+		<h2><?php _e( 'URL Fields', 'link-library' ); ?></h2>
+		<table>
+			<tr>
+				<td><?php _e( 'Thumbnail Generator', 'link-library' ); ?></td>
+				<td>
+					<select id="thumbnailgenerator" name="thumbnailgenerator">
+						<option value="robothumb" <?php selected( $genoptions['thumbnailgenerator'], 'robothumb' ); ?>>Robothumb.com
+						<option value="shrinktheweb" <?php selected( $genoptions['thumbnailgenerator'], 'shrinktheweb' ); ?>>Shrink The Web
+						<option value="pagepeeker" <?php selected( $genoptions['thumbnailgenerator'], 'pagepeeker' ); ?>>PagePeeker
+						<option value="wordpressmshots" <?php selected( $genoptions['thumbnailgenerator'], 'wordpressmshots' ); ?>>WordPress.com mshots
+						<option value="thumbshots" <?php selected( $genoptions['thumbnailgenerator'], 'thumbshots' ); ?>>Thumbshots.org
+						<option value="google" <?php selected( $genoptions['thumbnailgenerator'], 'google' ); ?>>Google PageSpeed
+					</select>
+				</td>
+			</tr>
+			<tr class="thumbshotsapikey" <?php if ( $genoptions['thumbnailgenerator'] != 'thumbshots' ) {
+				echo 'style="display:none;"';
+			} ?>>
+				<td class='lltooltip' title='<?php _e( 'API Key for Thumbshots.com thumbnail generation accounts', 'link-library' ); ?>'><?php _e( 'Thumbshots API Key', 'link-library' ); ?></td>
+				<td colspan='4' class='lltooltip' title='<?php _e( 'API Key for Thumbshots.com thumbnail generation accounts', 'link-library' ); ?>'>
+					<input type="text" id="thumbshotscid" name="thumbshotscid" size="20" value="<?php echo $genoptions['thumbshotscid']; ?>" />
+				</td>
+			</tr>
+			<tr class="shrinkthewebaccesskey" <?php if ( $genoptions['thumbnailgenerator'] != 'shrinktheweb' ) {
+				echo 'style="display:none;"';
+			} ?>>
+				<td class='lltooltip' title='<?php _e( 'Access Key for shrinktheweb.com thumbnail generation accounts', 'link-library' ); ?>'><?php _e( 'Shrink The Web Access Key', 'link-library' ); ?></td>
+				<td colspan='4' class='lltooltip' title='<?php _e( 'Access Key for shrinktheweb.com thumbnail generation accounts', 'link-library' ); ?>'>
+					<input type="text" id="shrinkthewebaccesskey" name="shrinkthewebaccesskey" size="20" value="<?php echo $genoptions['shrinkthewebaccesskey']; ?>" />
+				</td>
+			</tr>
+			<tr class="shrinkthewebsizes" <?php if ( $genoptions['thumbnailgenerator'] != 'shrinktheweb' ) {
+				echo 'style="display:none;"';
+			} ?>>
+				<td><?php _e( 'Shrink the web Thumbnail size' ); ?>
+				</td>
+				<td>
+					<select id="stwthumbnailsize" name="stwthumbnailsize">
+						<?php $sizes = array( '75x57', '90x68', '100x75', '120x90', '200x150', '320x240' );
+
+						foreach ( $sizes as $size ) { ?>
+						<option value="<?php echo $size; ?>" <?php selected( $genoptions['stwthumbnailsize'], $size ); ?>><?php echo $size; ?>
+							<?php } ?>
+					</select>
+				</td>
+			</tr>
+			<tr class="pagepeekersizes" <?php if ( $genoptions['thumbnailgenerator'] != 'pagepeeker' ) {
+				echo 'style="display:none;"';
+			} ?>>
+				<td><?php _e( 'PagePeeker Thumbnail size' ); ?>
+				</td>
+				<td>
+					<select id="pagepeekersize" name="pagepeekersize">
+						<?php $sizes = array( 't' => '90 x 68', 's' => '120x90', 'm' => '200 x 150', 'l' => '400 x 300', 'x'=> '480 x 360' );
+
+						foreach ( $sizes as $code => $size ) { ?>
+						<option value="<?php echo $code; ?>" <?php selected( $genoptions['pagepeekersize'], $code ); ?>><?php echo $size; ?>
+							<?php } ?>
+					</select>
+				</td>
+			</tr>
+			<tr class="pagepeekerid" <?php if ( $genoptions['thumbnailgenerator'] != 'pagepeeker' ) {
+				echo 'style="display:none;"';
+			} ?>>
+				<td><?php _e( 'PagePeeker API Key (for paid or free unbranded accounts)' ); ?>
+				</td>
+				<td colspan='4' class='lltooltip' title='<?php _e( 'Pagepeeker API Key for premium thumbnail generation', 'link-library' ); ?>'>
+					<input type="text" id="pagepeekerid" name="pagepeekerid" size="20" value="<?php echo $genoptions['pagepeekerid']; ?>" />
+				</td>
+				</td>
+			</tr>
+			<tr class="robothumbsize" <?php if ( $genoptions['thumbnailgenerator'] != 'robothumb' ) {
+				echo 'style="display:none;"';
+			} ?>>
+				<td><?php _e( 'Robothumb Thumbnail size', 'link-library' ); ?>
+				</td>
+				<td>
+					<select id="thumbnailsize" name="thumbnailsize">
+					<?php $sizes = array( '100x75', '120x90', '160x120', '180x135', '240x180', '320x240', '560x420', '640x480', '800x600' );
+
+					foreach ( $sizes as $size ) { ?>
+						<option value="<?php echo $size; ?>" <?php selected( $genoptions['thumbnailsize'], $size ); ?>><?php echo $size; ?>
+					<?php } ?>
+					</select>
+				</td>
+			</tr>
+			<tr class="wordpressmshotswarning" <?php if ( $genoptions['thumbnailgenerator'] != 'wordpressmshots' ) {
+				echo 'style="display:none;"';
+			} ?>>
+				<td colspan="2"><?php _e( 'The WordPress mshots service is only free for non-commercial applications. If using it on a commercial site, contact <a href="https://automattic.com/contact/">Automattic</a> to get a license for use.' ); ?>
+				</td>
+			</tr>
+			<tr class="wordpressmshotssize" <?php if ( $genoptions['thumbnailgenerator'] != 'wordpressmshots' ) {
+				echo 'style="display:none;"';
+			} ?>>
+				<td><?php _e( 'WordPress.com mshots Thumbnail size' ); ?>
+				</td>
+				<td>
+					<select id="thumbnailsize" name="thumbnailsize">
+					<?php $sizes = array( '100x75', '120x90', '160x120', '180x135', '240x180', '320x240', '560x420', '640x480', '800x600', '1280x960' );
+
+					foreach ( $sizes as $size ) { ?>
+						<option value="<?php echo $size; ?>" <?php selected( $genoptions['thumbnailsize'], $size ); ?>><?php echo $size; ?>
+					<?php } ?>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td><?php _e( 'Enable automatic generation of missing thumbnails', 'link-library' ); ?></td>
+				<td><input type="checkbox" id="autothumbgen" name="autothumbgen" <?php checked( $genoptions['autothumbgen'] ); ?> /></td>
+			</tr>
+			<tr>
+				<td><?php _e( 'Automatic thumbnail generation frequency', 'link-library' ); ?></td>
+				<td><select id="autothumbgenschedule" name="autothumbgenschedule">
+					<?php $cronschedules = wp_get_schedules();
+						foreach ( $cronschedules as $key => $cronschedule ) {
+							echo '<option value="' . $key . '" ' . selected( $genoptions['autothumbgenschedule'], $key ) . '>' . $cronschedule['display'] . '</option>';
+						} ?></select>							
+			</tr>
+		</table>
+	</div>
+<?php
+}
+
+function general_captcha_meta_box( $data ) {
+	$genoptions = $data['genoptions'];
+	?>
+
+	<div style='padding-top:15px' id="ll-captcha" class="content-section">
+		<table>
+			<tr class="captchagenerator">
+				<td><?php _e( 'Captcha generator', 'link-library' ); ?>
+				</td>
+				<td>
+					<select id="captchagenerator" name="captchagenerator">
+						<?php $captcha_generators = array( 'easycaptcha' => 'Easy Captcha', 'recaptcha' => 'Google reCAPTCHA' );
+
+						foreach ( $captcha_generators as $key => $captcha_generator ) { ?>
+						<option value="<?php echo $key; ?>" <?php selected( $genoptions['captchagenerator'], $key ); ?>><?php echo $captcha_generator; ?>
+							<?php } ?>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td class="lltooltip" title="<?php _e( 'Sign up for the reCAPTCHA service before activating this feature to get your Site and Secret Keys', 'link-library' ); ?>"><?php _e( 'Google reCAPTCHA Site Key', 'link-library' ); ?>
+				</td>
+				<td class="lltooltip" title="<?php _e( 'Sign up for the reCAPTCHA service before activating this feature to get your Site and Secret Keys', 'link-library' ); ?>">
+					<input type="text" id="recaptchasitekey" name="recaptchasitekey" size="60" value="<?php echo $genoptions['recaptchasitekey']; ?>" />
+				</td>
+			</tr>
+			<tr>
+				<td class="lltooltip" title="<?php _e( 'Sign up for the reCAPTCHA service before activating this feature to get your Site and Secret Keys', 'link-library' ); ?>"><?php _e( 'Google reCAPTCHA Secret Key', 'link-library' ); ?>
+				</td>
+				<td class="lltooltip" title="<?php _e( 'Sign up for the reCAPTCHA service before activating this feature to get your Site and Secret Keys', 'link-library' ); ?>">
+					<input type="text" id="recaptchasecretkey" name="recaptchasecretkey" size="60" value="<?php echo $genoptions['recaptchasecretkey']; ?>" />
+				</td>
+			</tr>
+		</table>
+	</div>
+<?php }
 
 function general_custom_fields_meta_box( $data ) {
 	$genoptions = $data['genoptions'];
@@ -3662,7 +3114,7 @@ function general_custom_fields_meta_box( $data ) {
 					<tr>
 						<td></td>
 						<td></td>
-						<td>Custom HTML for <?php echo $value; ?></td>
+						<td><?php _e( 'Custom HTML for', 'link-library' ); echo ' ' . $value; ?></td>
 						<td><input type="text" size="60" name="customlist<?php echo $customlistfieldnumber; ?>html[]" value="<?php if ( isset( $genoptions['customlist' . $customlistfieldnumber . 'html'][$index] ) ) { echo stripslashes( $genoptions['customlist' . $customlistfieldnumber . 'html'][$index] ); } ?>"></td>
 					</tr>
 				<?php } } ?>
@@ -3676,7 +3128,7 @@ function general_custom_fields_meta_box( $data ) {
 		$genoptions  = $data['genoptions'];
 		?>
 		<div style='padding-top:15px' id="ll-singleitem" class="content-section">
-			<p>This section allows you to specify a template for individual link pages. These individual pages will be shown to visitors if you set the Link Source to Dedicated Page under the Advanced settings of Library Configurations and allow users to create a more complete internal page describing an external link, before visitors go to this external page.</p>
+			<p><?php _e( 'This section allows you to specify a template for individual link pages. These individual pages will be shown to visitors if you set the Link Source to Dedicated Page under the Advanced settings of Library Configurations and allow users to create a more complete internal page describing an external link, before visitors go to this external page.', 'link-library' ); ?></p>
 			<?php
 			$editorsettings = array( 'media_buttons' => false,
 			                         'textarea_rows' => 15,
@@ -3684,55 +3136,55 @@ function general_custom_fields_meta_box( $data ) {
 			                         'wpautop' => false );
 
 			wp_editor( isset( $genoptions['single_link_layout'] ) ? stripslashes( $genoptions['single_link_layout'] ) : '', 'single_link_layout', $editorsettings ); ?>
-			<p>The codes that are available to put in this layout template are:</p>
+			<p><?php _e( 'The codes that are available to put in this layout template are', 'link-library' ); ?>:</p>
 			<table>
 				<tr>
-					<th>Tag Name</th>
-					<th>Description</th>
+					<th><?php _e( 'Tag Name', 'link-library' ); ?></th>
+					<th><?php _e( 'Description', 'link-library' ); ?></th>
 				</tr>
 				<tr>
 					<td>[link_content]</td>
-					<td>Text added in the new full-page content field of the link editor</td>
+					<td><?php _e( 'Text added in the new full-page content field of the link editor', 'link-library' ); ?></td>
 				</tr>
 				<tr>
 					<td>[link_title]</td>
-					<td>The name of the link, text only</td>
+					<td><?php _e( 'The name of the link, text only', 'link-library' ); ?></td>
 				</tr>
 				<tr>
 					<td>[link]</td>
-					<td>Link title, with link tag and link url</td>
+					<td><?php _e( 'Link title, with link tag and link url', 'link-library' ); ?></td>
 				</tr>
 				<tr>
 					<td>[link_address]</td>
-					<td>Link URL only, without link tag</td>
+					<td><?php _e( 'Link URL only, without link tag', 'link-library' ); ?></td>
 				</tr>
 				<tr>
 					<td>[link_description]</td>
-					<td>The link description</td>
+					<td><?php _e( 'The link description', 'link-library' ); ?></td>
 				</tr>
 				<tr>
 					<td>[link_large_description]</td>
-					<td>The link large description</td>
+					<td><?php _e( 'The link large description', 'link-library' ); ?></td>
 				</tr>
 				<tr>
 					<td>[link_category]</td>
-					<td>Category or categories that are assigned to link, listed in alphabetical order and separated with commas</td>
+					<td><?php _e( 'Category or categories that are assigned to link, listed in alphabetical order and separated with commas', 'link-library' ); ?></td>
 				</tr>
 				<tr>
 					<td>[link_image]</td>
-					<td>Link image URL. You need to add img src tag or other code to display image.</td>
+					<td><?php _e( 'Link image URL. You need to add img src tag or other code to display image.', 'link-library' ); ?></td>
 				</tr>
 				<tr>
 					<td>[link_email]</td>
-					<td>Link e-mail</td>
+					<td><?php _e( 'Link e-mail', 'link-library' ); ?></td>
 				</tr>
 				<tr>
 					<td>[link_telephone]</td>
-					<td>Link telephone number</td>
+					<td><?php _e( 'Link telephone number', 'link-library' ); ?></td>
 				</tr>
 				<tr>
 					<td>[link_price_or_free]</td>
-					<td>Display link price, or the word Free if the price is 0</td>
+					<td><?php _e( 'Display link price, or the word Free if the price is 0', 'link-library' ); ?></td>
 				</tr>
 			</table>
 		</div>
@@ -3743,16 +3195,16 @@ function general_custom_fields_meta_box( $data ) {
 		$genoptions  = $data['genoptions'];
 		?>
 		<div style='padding-top:15px' id="ll-globalsearchresultslayout" class="content-section">
-			<p>This section allows you to specify a template for links when they appear in global site search results. For this to happen, you need to activate the <strong>Individual link pages can be seen by visitors</strong> and <strong>Links appear in search results</strong> options under the General section of Global Settings.</p>
+			<p><?php _e( 'This section allows you to specify a template for links when they appear in global site search results. For this to happen, you need to activate the <strong>Individual link pages can be seen by visitors</strong> and <strong>Links appear in search results</strong> options under the General section of Global Settings.', 'link-library' ); ?></p>
 
-			<h3>Options</h3>
+			<h3><?php _e( 'Options', 'link-library' ); ?></h3>
 
 			<table>
 				<tr>
-					<td>Use Link URL for item link</td>
+					<td><?php _e( 'Use Link URL for item link', 'link-library' ); ?></td>
 					<td><input type="checkbox" id="globalsearchresultslinkurl" name="globalsearchresultslinkurl" <?php checked( $genoptions['globalsearchresultslinkurl'] ); ?>/></td></td>
 					<td></td>
-					<td>Add prefix to item title</td>
+					<td><?php _e( 'Add prefix to item title', 'link-library' ); ?></td>
 					<td><input type="text" id="globalsearchresultstitleprefix" name="globalsearchresultstitleprefix" size="60" value="<?php echo $genoptions['globalsearchresultstitleprefix']; ?>" /></td></td>
 				</td>
 
@@ -3764,55 +3216,55 @@ function general_custom_fields_meta_box( $data ) {
 			                         'wpautop' => false );
 
 			wp_editor( isset( $genoptions['global_search_results_layout'] ) ? stripslashes( $genoptions['global_search_results_layout'] ) : '', 'global_search_results_layout', $editorsettings ); ?>
-			<p>The codes that are available to put in this layout template are:</p>
+			<p><?php _e( 'The codes that are available to put in this layout template are:', 'link-library' ); ?></p>
 			<table>
 				<tr>
-					<th>Tag Name</th>
-					<th>Description</th>
+					<th><?php _e( 'Tag Name', 'link-library' ); ?></th>
+					<th><?php _e( 'Description', 'link-library' ); ?></th>
 				</tr>
 				<tr>
 					<td>[link_content]</td>
-					<td>Text added in the new full-page content field of the link editor</td>
+					<td><?php _e( 'Text added in the new full-page content field of the link editor', 'link-library' ); ?></td>
 				</tr>
 				<tr>
 					<td>[link_title]</td>
-					<td>The name of the link, text only</td>
+					<td><?php _e( 'The name of the link, text only', 'link-library' ); ?></td>
 				</tr>
 				<tr>
 					<td>[link]</td>
-					<td>Link title, with link tag and link url</td>
+					<td><?php _e( 'Link title, with link tag and link url', 'link-library' ); ?></td>
 				</tr>
 				<tr>
 					<td>[link_address]</td>
-					<td>Link URL only, without link tag</td>
+					<td><?php _e( 'Link URL only, without link tag', 'link-library' ); ?></td>
 				</tr>
 				<tr>
 					<td>[link_description]</td>
-					<td>The link description</td>
+					<td><?php _e( 'The link description', 'link-library' ); ?></td>
 				</tr>
 				<tr>
 					<td>[link_large_description]</td>
-					<td>The link large description</td>
+					<td><?php _e( 'The link large description', 'link-library' ); ?></td>
 				</tr>
 				<tr>
 					<td>[link_category]</td>
-					<td>Category or categories that are assigned to link, listed in alphabetical order and separated with commas</td>
+					<td><?php _e( 'Category or categories that are assigned to link, listed in alphabetical order and separated with commas', 'link-library' ); ?></td>
 				</tr>
 				<tr>
 					<td>[link_image]</td>
-					<td>Link image URL. You need to add img src tag or other code to display image.</td>
+					<td><?php _e( 'Link image URL. You need to add img src tag or other code to display image.', 'link-library' ); ?></td>
 				</tr>
 				<tr>
 					<td>[link_email]</td>
-					<td>Link e-mail</td>
+					<td><?php _e( 'Link e-mail', 'link-library' ); ?></td>
 				</tr>
 				<tr>
 					<td>[link_telephone]</td>
-					<td>Link telephone number</td>
+					<td><?php _e( 'Link telephone number', 'link-library' ); ?></td>
 				</tr>
 				<tr>
 					<td>[link_price_or_free]</td>
-					<td>Display link price, or the word Free if the price is 0</td>
+					<td><?php _e( 'Display link price, or the word Free if the price is 0', 'link-library' ); ?></td>
 				</tr>
 			</table>
 		</div>
@@ -4032,8 +3484,9 @@ function general_custom_fields_meta_box( $data ) {
 	<?php
 	}
 
-	function general_importexport_meta_box() {
+	function general_importexport_meta_box( $data ) {
 		require_once plugin_dir_path( __FILE__ ) . 'wp_dropdown_posts.php';
+		$genoptions = $data['genoptions'];
 		?>
 		<div style='padding-top:15px' id="ll-importexport" class="content-section">
 			<table>
@@ -4041,6 +3494,12 @@ function general_custom_fields_meta_box( $data ) {
 					<td><?php _e( 'Export all links to a CSV file', 'link-library' ); ?></td>
 					<td>
 						<input class="button" type="submit" id="exportalllinks" name="exportalllinks" value="<?php _e( 'Export All Links', 'link-library' ); ?>" />
+					</td>
+				</tr>
+				<tr>
+					<td><?php _e( 'Export all categories to a CSV file', 'link-library' ); ?></td>
+					<td>
+						<input class="button" type="submit" id="exportallcategories" name="exportallcategories" value="<?php _e( 'Export All Categories', 'link-library' ); ?>" />
 					</td>
 				</tr>
 			</table>
@@ -4056,6 +3515,27 @@ function general_custom_fields_meta_box( $data ) {
 				<tr>
 					<td><?php _e( 'Update items when URL is identical', 'link-library' ); ?></td>
 					<td><input type="checkbox" id="updatesameurl" name="updatesameurl" checked="checked" /></td>
+				</tr>
+			</table>
+			<hr />
+			<h4><?php _e( 'Scheduled Automated Links Import', 'link-library' ); ?></h4>
+			<table>
+				<tr>
+					<td class='lltooltip' style='width: 330px'><?php _e( 'Enable', 'link-library' ); ?></td>
+					<td><input type="checkbox" id="enableautolinksimport" name="enableautolinksimport" <?php checked( $genoptions['enableautolinksimport'] ); ?> /></td>
+				</tr>
+				<tr>
+					<td class='lltooltip' style='width: 330px'><?php _e( 'CSV file URL (can be local or remote)', 'link-library' ); ?></td>
+					<td><input size="80" name="importlinksurl" type="text" value="<?php echo $genoptions['importlinksurl']; ?>"/></td>
+					</td>
+				</tr>
+				<tr>
+					<td><?php _e( 'Update frequency', 'link-library' ); ?></td>
+					<td><select id="importlinksschedule" name="importlinksschedule">
+						<?php $cronschedules = wp_get_schedules();
+						    foreach ( $cronschedules as $key => $cronschedule ) {
+								echo '<option value="' . $key . '" ' . selected( $genoptions['importlinksschedule'], $key ) . '>' . $cronschedule['display'] . '</option>';
+							} ?></select>							
 				</tr>
 			</table>
 			<hr />
@@ -4097,7 +3577,7 @@ function general_custom_fields_meta_box( $data ) {
 											if ( !empty( $any_posts ) ) {
 												$post_type_data = get_post_type_object( $site_post_type ); ?>
 
-												<input type="radio" name="siteimportlinksscope" value="specific<?php echo $site_post_type; ?>"> <?php _e( 'Specific ' . $post_type_data->labels->singular_name, 'link-library' ); ?>
+												<input type="radio" name="siteimportlinksscope" value="specific<?php echo $site_post_type; ?>"> <?php echo __( 'Specific', 'link-library' ) . ' ' . $post_type_data->labels->singular_name; ?>
 												<?php wp_dropdown_posts( array( 'post_type' => $site_post_type, 'select_name' => $site_post_type . '_id' ) ); ?><br /><br />
 											<?php } }
 									}
@@ -4111,7 +3591,7 @@ function general_custom_fields_meta_box( $data ) {
 						$linkcats = get_terms( $genoptions['cattaxonomy'], array( 'hide_empty' => false ) );
 
 						if ( $linkcats ) { ?>
-							Category for new links <select name="siteimportcat" id="siteimportcat">
+							<?php _e( 'Category for new links', 'link-library' ); ?> <select name="siteimportcat" id="siteimportcat">
 								<?php foreach ( $linkcats as $linkcat ) { ?>
 									<option value="<?php echo $linkcat->term_id; ?>"><?php echo $linkcat->name; ?></option>
 								<?php } ?>
@@ -4124,6 +3604,44 @@ function general_custom_fields_meta_box( $data ) {
 		</div>
 		<?php
 	}
+
+	function general_buddypress_meta_box( $data ) {
+		require_once plugin_dir_path( __FILE__ ) . 'wp_dropdown_posts.php';
+		$genoptions = $data['genoptions'];
+		?>
+		<div style='padding-top:15px' id="ll-buddypress" class="content-section">
+			<table>
+				<tr>
+					<td><?php _e( 'Log link creation activity on BuddyPress feed', 'link-library' ); ?></td>
+					<td><input type="checkbox" id="bp_log_activity" name="bp_log_activity" <?php checked( $genoptions['bp_log_activity'] ); ?> /></td>
+				</tr>
+				<tr>
+					<td><?php _e( 'Link Page URL (relative or absolute)', 'link-library' ); ?></td>
+					<td><input type="text" id="bp_link_page_url" name="bp_link_page_url" size="60" value="<?php echo $genoptions['bp_link_page_url']; ?>" /></td>
+				</tr>
+				<tr>
+					<td><?php _e( 'Library Configuration used for Links page', 'link-library' ); ?></td>
+					<td>
+						<SELECT id="bp_link_settings" name="bp_link_settings" style='width: 300px'>
+							<option><?php _e( 'Select a library configuration', 'link-library' ); ?></option>
+							<?php if ( empty( $genoptions['numberstylesets'] ) ) {
+								$numberofsets = 1;
+							} else {
+								$numberofsets = $genoptions['numberstylesets'];
+							}
+							for ( $counter = 1; $counter <= $numberofsets; $counter ++ ): ?>
+								<?php $tempoptionname = "LinkLibraryPP" . $counter;
+								$tempoptions          = get_option( $tempoptionname ); ?>
+								<option value="<?php echo $counter ?>" <?php selected( $genoptions['bp_link_settings'], $counter ); ?>><?php _e( 'Library', 'link-library' ); ?> <?php echo $counter ?><?php if ( ! empty( $tempoptions ) && isset( $tempoptions['settingssetname'] ) ) {
+										echo " (" . stripslashes( $tempoptions['settingssetname'] ) . ")";
+									} ?></option>
+							<?php endfor; ?>
+						</SELECT>
+					</td>
+				</tr>
+			</table>
+		</div>
+	<?php }
 
 	function general_save_meta_box() {
 		?>
@@ -4279,7 +3797,7 @@ function general_custom_fields_meta_box( $data ) {
 
 		<textarea name='fullstylesheet' id='fancy-textarea' style='font-family:Courier' rows="30" cols="100"><?php echo stripslashes( $genoptions['fullstylesheet'] ); ?></textarea>
 		<div>
-			<input type="submit" name="submitstyle" value="<?php _e( 'Submit', 'link-library' ); ?>" /><span style='padding-left: 650px'><input type="submit" name="resetstyle" value="<?php _e( 'Reset to default', 'link-library' ); ?>" /></span>
+			<input type="submit" class="button button-primary submitstyle" name="submitstyle" value="<?php _e( 'Submit', 'link-library' ); ?>" /><span style='padding-left: 650px'><input type="submit" class="button button-primary resetstyle" name="resetstyle" value="<?php _e( 'Reset to default', 'link-library' ); ?>" /></span>
 		</div>
 
 		<script>
@@ -4352,7 +3870,7 @@ function general_custom_fields_meta_box( $data ) {
 					<th class="lltooltip" title='<?php _e( 'Link Library Supports the Creation of an unlimited number of configurations to display link lists on your site', 'link-library' ); ?>'>
 						<?php _e( 'Code to insert on a Wordpress page', 'link-library' ); ?>
 					</th>
-					<th>Optional Parameters</th>
+					<th><?php _e( 'Optional Parameters', 'link-library' ); ?></th>
 				</tr>
 				</thead>
 				<tr>
@@ -4362,47 +3880,47 @@ function general_custom_fields_meta_box( $data ) {
 					<td><?php echo "[link-library settings=" . $settings . "]"; ?></td>
 					<td><table style="padding-left:16px;">
 							<tr>
-								<td><strong>Parameter</strong></td><td><strong>Description</strong></td>
+								<td><strong><?php _e( 'Parameter', 'link-library' ); ?></strong></td><td><strong><?php _e( 'Description', 'link-library' ); ?></strong></td>
 							</tr>
 							<tr>
 								<td>[link-library settings="<?php echo $settings; ?>" categorylistoverride="28"]</td>
-								<td>Overrides the list of categories to be displayed in the link list, comma-separated list of category IDs</td>
+								<td><?php _e( 'Overrides the list of categories to be displayed in the link list, comma-separated list of category IDs', 'link-library' ); ?></td>
 							</tr>
 							<tr>
 								<td>[link-library settings="<?php echo $settings; ?>" excludecategoryoverride="28"]</td>
-								<td>Overrides the list of categories to be excluded in the link list, comma-separated list of category IDs</td>
+								<td><?php _e( 'Overrides the list of categories to be excluded in the link list, comma-separated list of category IDs', 'link-library' ); ?></td>
 							</tr>
 							<tr>
 								<td>[link-library settings="<?php echo $settings; ?>" taglistoverride="28"]</td>
-								<td>Overrides the list of tags to be displayed in the link list, comma-separated list of tag IDs</td>
+								<td><?php _e( 'Overrides the list of tags to be displayed in the link list, comma-separated list of tag IDs', 'link-library' ); ?></td>
 							</tr>
 							<tr>
 								<td>[link-library settings="<?php echo $settings; ?>" notesoverride=0]</td>
-								<td>Set to 0 or 1 to display or not display link notes</td>
+								<td><?php _e( 'Set to 0 or 1 to display or not display link notes', 'link-library' ); ?></td>
 							</tr>
 							<tr>
 								<td>[link-library settings="<?php echo $settings; ?>" descoverride=0]</td>
-								<td>Set to 0 or 1 to display or not display link descriptions</td>
+								<td><?php _e( 'Set to 0 or 1 to display or not display link descriptions', 'link-library' ); ?></td>
 							</tr>
 							<tr>
 								<td>[link-library settings="<?php echo $settings; ?>" rssoverride=0]</td>
-								<td>Set to 0 or 1 to display or not display rss information</td>
+								<td><?php _e( 'Set to 0 or 1 to display or not display rss information', 'link-library' ); ?></td>
 							</tr>
 							<tr>
 								<td>[link-library settings="<?php echo $settings; ?>" tableoverride=0]</td>
-								<td>Set to 0 or 1 to display links in an unordered list or a table</td>
+								<td><?php _e( 'Set to 0 or 1 to display links in an unordered list or a table', 'link-library' ); ?></td>
 							</tr>
 							<tr>
 								<td>[link-library settings="<?php echo $settings; ?>" maxlinksoverride=5]</td>
-								<td>Overrides the max number of links to be displayed</td>
+								<td><?php _e( 'Overrides the max number of links to be displayed', 'link-library' ); ?></td>
 							</tr>
 							<tr>
 								<td>[link-library settings="<?php echo $settings; ?>" linkorderoverride="date"]</td>
-								<td>Changes the link display order. Valid values are 'name', 'id', 'random', 'date', 'pubdate', 'hits', 'uservotes', 'scpo'</td>
+								<td><?php _e( 'Changes the link display order. Valid values are', 'link-library' ); ?> 'name', 'id', 'random', 'date', 'pubdate', 'hits', 'uservotes', 'scpo'</td>
 							</tr>
 							<tr>
 								<td>[link-library settings="<?php echo $settings; ?>" linkdirectionoverride="ASC"]</td>
-								<td>Changes the order in which links are displayed. Valid values are 'ASC', 'DESC'</td>
+								<td><?php _e( 'Changes the order in which links are displayed. Valid values are', 'link-library' ); ?> 'ASC', 'DESC'</td>
 							</tr>
 						</table></td>
 				</tr>
@@ -4414,23 +3932,23 @@ function general_custom_fields_meta_box( $data ) {
 					<td>
 						<table style="padding-left:16px;">
 							<tr>
-								<td><strong>Parameter</strong></td><td><strong>Description</strong></td>
+								<td><strong><?php _e( 'Parameter', 'link-library' ); ?></strong></td><td><strong><?php _e( 'Description', 'link-library' ); ?></strong></td>
 							</tr>
 							<tr>
 								<td>[link-library-cats settings="<?php echo $settings; ?>" categorylistoverride="28"]</td>
-								<td>Overrides the list of categories to be displayed in the category list, comma-separated list of category IDs</td>
+								<td><?php _e( 'Overrides the list of categories to be displayed in the category list, comma-separated list of category IDs', 'link-library' ); ?></td>
 							</tr>
 							<tr>
 								<td>[link-library-cats settings="<?php echo $settings; ?>" excludecategoryoverride="28"]</td>
-								<td>Overrides the list of categories to be excluded in the category list, comma-separated list of category IDs</td>
+								<td><?php _e( 'Overrides the list of categories to be excluded in the category list, comma-separated list of category IDs', 'link-library' ); ?></td>
 							</tr>
 							<tr>
 								<td>[link-library-cats settings="<?php echo $settings; ?>" targetlibrary="1"]</td>
-								<td>Specifies the library to be updated when making category selections</td>
+								<td><?php _e( 'Specifies the library to be updated when making category selections', 'link-library' ); ?></td>
 							</tr>
 							<tr>
 								<td>[link-library-cats settings="<?php echo $settings; ?>" taglistoverride="42"]</td>
-								<td>Overrides the list of tags to be displayed in the category list, comma-separated list of tag IDs</td>
+								<td><?php _e( 'Overrides the list of tags to be displayed in the category list, comma-separated list of tag IDs', 'link-library' ); ?></td>
 							</tr>
 						</table>
 					</td>
@@ -4481,7 +3999,7 @@ function general_custom_fields_meta_box( $data ) {
 			<div class="ll_preset" id="#preset<?php echo $layout->ID; ?>">
 				<strong><?php _e( 'Layout', 'link-library' ); echo ' ' . $layout->ID . ": " . $layout->Desc; ?></strong><br /><br />
 				<img style="max-width: 400px; border: 2px solid black;" src="<?php echo plugins_url( "presets/" . $layout->Image, __FILE__ ); ?>"<br /><br /><br />
-				<button class="button" type="button" <?php echo "onclick=\"if ( confirm('" . esc_js( sprintf( __( "You are about to change the layout of Library '%s' and reset all its options\n  'Cancel' to stop, 'OK' to modify.", "link-library" ), $settings ) ) . "') ) window.location.href='admin.php?page=link-library-settingssets&amp;settings=" . $settings . "&_wpnonce=" . wp_create_nonce( 'llnewlayout' ). "&newlayout=" . $layout->ID . "'\""; ?>><?php _e( 'Apply Layout', 'link-library' ); ?> <?php echo $layout->ID; ?></button>
+				<button class="button" type="button" <?php echo "onclick=\"if ( confirm('" . esc_js( sprintf( __( "WARNING: You are about to change the layout of Library '%s' and reset all its options to their defaults. You should export your settings if you want to be able to roll back. 'Cancel' to stop, 'OK' to modify.", "link-library" ), $settings ) ) . "') ) window.location.href='admin.php?page=link-library-settingssets&amp;settings=" . $settings . "&_wpnonce=" . wp_create_nonce( 'llnewlayout' ). "&newlayout=" . $layout->ID . "'\""; ?>><?php _e( 'Apply Layout', 'link-library' ); ?> <?php echo $layout->ID; ?></button>
 			</div>
 			<?php } ?>
 		</div>
@@ -4636,15 +4154,15 @@ function general_custom_fields_meta_box( $data ) {
 					<td style='width: 200px' class="lltooltip" title="<?php _e( 'Select if AJAX should be used to only reload the list of links without reloading the whole page or HTML GET to reload entire page with a new link. The Permalinks option must be enabled for HTML GET + Permalink to work correctly.', 'link-library' ); ?>"><?php _e( 'Switching Method', 'link-library' ); ?></td>
 					<td>
 						<select name="showonecatmode" id="showonecatmode" style="width:200px;">
-							<option value="AJAX"<?php selected( $options['showonecatmode'] == 'AJAX' || empty( $options['showonecatmode'] ) ); ?>>AJAX
+							<option value="AJAX"<?php selected( $options['showonecatmode'] == 'AJAX' || empty( $options['showonecatmode'] ) ); ?>><?php _e( 'AJAX', 'link-library' ); ?>
 							</option>
-							<option value="HTMLGET"<?php selected( $options['showonecatmode'] == 'HTMLGET' ); ?>>HTML GET
+							<option value="HTMLGET"<?php selected( $options['showonecatmode'] == 'HTMLGET' ); ?>><?php _e( 'HTML GET', 'link-library' ); ?>
 							</option>
-							<option value="HTMLGETSLUG"<?php selected( $options['showonecatmode'] == 'HTMLGETSLUG' ); ?>>HTML GET Using Slugs
+							<option value="HTMLGETSLUG"<?php selected( $options['showonecatmode'] == 'HTMLGETSLUG' ); ?>><?php _e( 'HTML GET Using Slugs', 'link-library' ); ?>
 							</option>
-							<option value="HTMLGETCATNAME"<?php selected( $options['showonecatmode'] == 'HTMLGETCATNAME' ); ?>>HTML GET Using Category Name
+							<option value="HTMLGETCATNAME"<?php selected( $options['showonecatmode'] == 'HTMLGETCATNAME' ); ?>><?php _e( 'HTML GET Using Category Name', 'link-library' ); ?>
 							</option>
-							<option value="HTMLGETPERM"<?php selected( $options['showonecatmode'] == 'HTMLGETPERM' ); ?>>HTML GET + Permalink
+							<option value="HTMLGETPERM"<?php selected( $options['showonecatmode'] == 'HTMLGETPERM' ); ?>><?php _e( 'HTML GET + Permalink', 'link-library' ); ?>
 							</option>
 						</select>
 					</td>
@@ -4718,6 +4236,16 @@ function general_custom_fields_meta_box( $data ) {
 					</td>
 					<td>
 						<input type="text" id="rewritepage" name="rewritepage" size="40" value="<?php echo $options['rewritepage']; ?>" />
+					</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td></td>
+					<td>
+						<?php _e( 'Library Categories Page', 'link-library' ); ?>
+					</td>
+					<td>
+						<input type="text" id="rewritecategoriespage" name="rewritecategoriespage" size="40" value="<?php echo $options['rewritecategoriespage']; ?>" />
 					</td>
 				</tr>
 				<tr>
@@ -4855,6 +4383,7 @@ function general_custom_fields_meta_box( $data ) {
 							<option value="unordered" <?php selected( $options['flatlist'] == 'unordered' ); ?>><?php _e( 'Unordered List', 'link-library' ); ?></option>
 							<option value="dropdown" <?php selected( $options['flatlist'] == 'dropdown' ); ?>><?php _e( 'Drop-Down List', 'link-library' ); ?></option>
 							<option value="dropdowndirect" <?php selected( $options['flatlist'] == 'dropdowndirect' ); ?>><?php _e( 'Drop-Down List Direct Access', 'link-library' ); ?></option>
+							<option value="simpledivs" <?php selected( $options['flatlist'] == 'simpledivs' ); ?>><?php _e( 'Simple Divs', 'link-library' ); ?></option>
 							<option value="toggles" <?php selected( $options['flatlist'] == 'toggles' ); ?>><?php _e( 'Visibility Toggles', 'link-library' ); ?></option>
 							<option value="togglesshowhideall" <?php selected( $options['flatlist'] == 'togglesshowhideall' ); ?>><?php _e( 'Visibility Toggles with Show/Hide All buttons', 'link-library' ); ?></option>
 						</select>
@@ -5133,7 +4662,7 @@ function general_custom_fields_meta_box( $data ) {
 				<td style='width:75px;'>
 					<select id="showupdatedpos" name="showupdatedpos">
 						<?php
-						$show_updated_pos_options = array( 'before' => 'Before Link Fields', 'after' => 'After Link Fields' );
+						$show_updated_pos_options = array( 'before' => __( 'Before Link Fields', 'link-library' ), 'after' => __( 'After Link Fields', 'link-library' ) );
 
 						foreach( $show_updated_pos_options as $show_updated_pos_option_key => $show_updated_pos_option ) { ?>
 							<option value="<?php echo $show_updated_pos_option_key; ?>" <?php selected( $options['showupdatedpos'], $show_updated_pos_option_key ); ?>><?php echo $show_updated_pos_option; ?></option>
@@ -5887,7 +5416,7 @@ function general_custom_fields_meta_box( $data ) {
 							</td>
 							<td>
 								<input type="text" id="linkcurrency" name="linkcurrency" size="3" value="<?php echo stripslashes( $options['linkcurrency'] ); ?>"  class="lltooltip" title='<?php _e( 'Currency symbol to be displayed next to price', 'link-library' ); ?>' />
-								Show 0.00 as free <input type="checkbox" id="show0asfree" name="show0asfree" <?php checked( $options['show0asfree'] ); ?>/>
+								<?php _e( 'Show 0.00 as free', 'link-library' ); ?> <input type="checkbox" id="show0asfree" name="show0asfree" <?php checked( $options['show0asfree'] ); ?>/>
 							</td>
 							<td>
 								<select name="linkcurrencyplacement" id="linkcurrencyplacement" style="width:200px;">
@@ -6200,7 +5729,7 @@ function general_custom_fields_meta_box( $data ) {
 			</tr>
 		</table>
 
-		<h2>Inline RSS Preview</h2>
+		<h2><?php _e( 'Inline RSS Preview', 'link-library' ); ?></h2>
 		<table>	
 			<tr>
 				<td>
@@ -6253,7 +5782,7 @@ function general_custom_fields_meta_box( $data ) {
 			</tr>
 		</table>
 		
-		<h2>RSS Library Shortcode</h2>
+		<h2><?php _e( 'RSS Library Shortcode', 'link-library' ); ?></h2>
 		<table>
 			<tr>			
 				<td>
@@ -6290,32 +5819,32 @@ function general_custom_fields_meta_box( $data ) {
 		<textarea name='rsslibrarytemplate' id='fancy-textarea' style='font-family:Courier' rows="10" cols="100"><?php echo stripslashes( $options['rsslibrarytemplate'] ); ?></textarea>
 		<table>
 				<tr>
-					<th>Tag Name</th>
-					<th>Description</th>
+					<th><?php _e( 'Tag Name', 'link-library' ); ?></th>
+					<th><?php _e( 'Description', 'link-library' ); ?></th>
 				</tr>
 				<tr>
 					<td>[link_title]</td>
-					<td>The name of the link, text only</td>
+					<td><?php _e( 'The name of the link, text only', 'link-library' ); ?></td>
 				</tr>
 				<tr>
 					<td>[link_category]</td>
-					<td>The category(ies) assigned to the link</td>
+					<td><?php _e( 'The category(ies) assigned to the link', 'link-library' ); ?></td>
 				</tr>
 				<tr>
 					<td>[rss_item_title]</td>
-					<td>RSS item title</td>
+					<td><?php _e( 'RSS item title', 'link-library' ); ?></td>
 				</tr>
 				<tr>
 					<td>[rss_item_date]</td>
-					<td>RSS item date</td>
+					<td><?php _e( 'RSS item date', 'link-library' ); ?></td>
 				</tr>
 				<tr>
 					<td>[rss_item_time]</td>
-					<td>RSS item time</td>
+					<td><?php _e( 'RSS item time', 'link-library' ); ?></td>
 				</tr>
 				<tr>
 					<td>[rss_item_content]</td>
-					<td>RSS item content</td>
+					<td><?php _e( 'RSS item content', 'link-library' ); ?></td>
 				</tr>
 			</table>
 		</div>
@@ -6460,7 +5989,7 @@ function general_custom_fields_meta_box( $data ) {
 						$options['searchnoresultstext'] = __( 'No links found matching your search criteria', 'link-library' );
 					} ?>
 					<td style='padding-right:20px'>
-						<input type="text" id="searchnoresultstext" name="searchnoresultstext" size="80" value="<?php echo $options['searchnoresultstext']; ?>" />
+						<input type="text" id="searchnoresultstext" name="searchnoresultstext" size="80" value="<?php echo stripslashes( $options['searchnoresultstext'] );?>" />
 					</td>
 				</tr>
 				<tr>
@@ -6491,6 +6020,14 @@ function general_custom_fields_meta_box( $data ) {
 					</td>
 					<td style='width:75px;padding-right:20px'>
 						<input type="checkbox" id="searchfromallcats" name="searchfromallcats" <?php checked( $options['searchfromallcats'] ); ?>/>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<?php _e( 'Suppress all output if search results are empty', 'link-library' ); ?>
+					</td>
+					<td style='width:75px;padding-right:20px'>
+						<input type="checkbox" id="suppressonemptysearch" name="suppressonemptysearch" <?php checked( $options['suppressonemptysearch'] ); ?>/>
 					</td>
 				</tr>
 			</table>
@@ -6769,14 +6306,14 @@ function general_custom_fields_meta_box( $data ) {
 
 		<table class='widefat striped' style='width:100%;margin:15px 5px 10px 0px;clear:none;'>
 		<thead>
-		<th style='width: 60px'>Field Name</th>
+		<th style='width: 60px'><?php _e( 'Field Name', 'link-library' ); ?></th>
 		<th style='width: 120px'><?php _e( 'Display', 'link-library' ); ?></th>
 		<th style='width: 80px'><?php _e( 'Label', 'link-library' ); ?></th>
 		<th style='width: 80px'><?php _e( 'Tooltip', 'link-library' ); ?></th>
 		<th style='width: 80px'><?php _e( 'Additional Details', 'link-library' ); ?></th>
 		</thead>
 		<tr>
-			<td style='width: 60px'>Form Title</td>
+			<td style='width: 60px'><?php _e( 'Form Title', 'link-library' ); ?></td>
 			<td></td>
 			<td><input type="text" id="addnewlinkmsg" name="addnewlinkmsg" size="30" value="<?php echo $options['addnewlinkmsg']; ?>" /></td>
 			<td></td>
@@ -6875,7 +6412,7 @@ function general_custom_fields_meta_box( $data ) {
 
 								if ( $linkcats ) { ?>
 									<select name="addlinkdefaultcat" id="addlinkdefaultcat" value="<?php echo $options['addlinkdefaultcat']; ?>">
-										<option value="nodefaultcat">No default category</option>
+										<option value="nodefaultcat"><?php _e( 'No default category', 'link-library' ); ?></option>
 										<?php foreach ( $linkcats as $linkcat ) { ?>
 											<option value="<?php echo $linkcat->term_id; ?>" <?php selected( $linkcat->term_id, $options['addlinkdefaultcat'] ); ?>><?php echo $linkcat->name; ?></option>
 										<?php } ?>
@@ -7154,9 +6691,9 @@ function general_custom_fields_meta_box( $data ) {
 						<tr>
 							<td style='width:200px;background-color:<?php echo $colorarray[$colorindex]; ?>;color:#fff;'><?php echo $arrayelements; ?>- <?php echo $genoptions['customlist' . $customlistfieldid . 'label']; ?></td>
 							<td><select name="showcustomlist<?php echo $customlistfieldid; ?>" id="showcustomlist<?php echo $customlistfieldid; ?>" style="width:80px;">
-									<option value="hide"<?php selected( $options['showcustomlist' . $customlistfieldid] == 'hide' ); ?>><?php _e( 'Hide', 'link-library' ); ?></option>
-									<option value="show"<?php selected( $options['showcustomlist' . $customlistfieldid] == 'show' ); ?>><?php _e( 'Show', 'link-library' ); ?></option>
-									<option value="required"<?php selected( $options['showcustomlist' . $customlistfieldid] == 'required' ); ?>><?php _e( 'Required', 'link-library' ); ?></option>
+									<option value="hide" <?php selected( $options['showcustomlist' . $customlistfieldid] == 'hide' ); ?>><?php _e( 'Hide', 'link-library' ); ?></option>
+									<option value="show" <?php selected( $options['showcustomlist' . $customlistfieldid] == 'show' ); ?>><?php _e( 'Show', 'link-library' ); ?></option>
+									<option value="required" <?php selected( $options['showcustomlist' . $customlistfieldid] == 'required' ); ?>><?php _e( 'Required', 'link-library' ); ?></option>
 								</select></td>
 							<td></td>
 							<td><input type="text" id="customlist<?php echo $customlistfieldid; ?>tooltip" name="customlist<?php echo $customlistfieldid; ?>tooltip" size="30" value="<?php echo $options['customlist' . $customlistfieldid . 'tooltip']; ?>" /></td>
@@ -7179,6 +6716,19 @@ function general_custom_fields_meta_box( $data ) {
 		<tr>
 			<td colspan=5 class="lltooltip" title='<?php _e( 'Following this link shows a list of all links awaiting moderation', 'link-library' ); ?>.'>
 				<a href="<?php echo esc_url( add_query_arg( 's', 'LinkLibrary%3AAwaitingModeration%3ARemoveTextToApprove', admin_url( 'link-manager.php' ) ) ); ?>"><?php _e( 'View list of links awaiting moderation', 'link-library' ); ?></a>
+			</td>
+		</tr>
+		<tr>
+			<td style='width:200px'><?php _e( 'User Submission Form display mode', 'link-library' ); ?></td>
+			<td><select name="addlinkformdisplaymode" id="addlinkformdisplaymode" style="width:140px;">
+									<option value="inline" <?php selected( $options['addlinkformdisplaymode'] == 'inline' ); ?>><?php _e( 'Inline form', 'link-library' ); ?></option>
+									<option value="popup" <?php selected( $options['addlinkformdisplaymode'] == 'popup' ); ?>><?php _e( 'Pop-up', 'link-library' ); ?></option>
+				</select></td>
+		</tr>
+		<tr>
+			<td style='width:200px'><?php _e( 'Pop-up button label', 'link-library' ); ?></td>
+			<td colspan=6 >
+				<input type="text" id="popupbuttonlabel" name="popupbuttonlabel" size="90" value="<?php echo $options['popupbuttonlabel']; ?>" />
 			</td>
 		</tr>
 		<tr>
@@ -7374,6 +6924,16 @@ function general_custom_fields_meta_box( $data ) {
 			</tr>
 			<tr>
 				<td>
+					<input class="button" type='submit' id="secondaryurlcheck" name="secondaryurlcheck" value="<?php _e( 'Check Secondary URL Links', 'link-library' ); ?>" />
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<input class="button" type='submit' id="imagelinkcheck" name="imagelinkcheck" value="<?php _e( 'Check Image Links', 'link-library' ); ?>" />
+				</td>
+			</tr>
+			<tr>
+				<td>
 					<input class="button" type='submit' id="emptycatcheck" name="emptycatcheck" value="<?php _e( 'Check Links Missing Categories', 'link-library' ); ?>" />
 				</td>
 			</tr>
@@ -7462,7 +7022,7 @@ function general_custom_fields_meta_box( $data ) {
 			<tr>
 				<td><?php _e( 'Target', 'link-library' ); ?></td>
 				<td><?php
-					$target_array = array( '_blank' => '_blank (new window or tab)', '' => '_none (same window or tab)', '_top' => '_top (current window or tab)' );
+					$target_array = array( '_blank' => __( '_blank (new window or tab)', 'link-library' ), '' => __( '_none (same window or tab)', 'link-library' ), '_top' => __( '_top (current window or tab)', 'link-library' ) );
 					echo '<select name="link_target" id="link_target">';
 					echo '<option value="' . $defaultlinktarget . '" ' . selected( $defaultlinktarget, $link_target ) . '>' . $target_array[$defaultlinktarget] . '</option>';
 					unset( $target_array[$defaultlinktarget] );
@@ -7772,7 +7332,7 @@ function general_custom_fields_meta_box( $data ) {
 			</tr>
 			<tr>
 				<td style='width: 200px'><?php _e( 'Updated Date', 'link-library' ); ?></td>
-				<td><span style="float:left;padding-top:6px">Set Manually
+				<td><span style="float:left;padding-top:6px"><?php _e( 'Set Manually', 'link-library' ); ?>
 					<input type="checkbox" id="link_updated_manual" name="link_updated_manual" <?php checked( $link_updated_manual ); ?>/></span>
 					<input type="text" <?php if ( !$link_updated_manual || empty( $link_updated_manual ) ) {
 						echo 'disabled="disabled"';
@@ -8097,7 +7657,7 @@ function general_custom_fields_meta_box( $data ) {
 
 		$columns['link_library_updated'] = 'Updated';
 		$columns['link_library_url'] = 'URL';
-		
+
 		if ( $genoptions['cattaxonomy'] == 'link_library_category' ) {
 			$columns['link_library_categories'] = 'Categories';
 		}
@@ -8234,7 +7794,7 @@ function general_custom_fields_meta_box( $data ) {
 	        <?php
 	         switch ( $column_name ) {
 	         case 'link_library_url':
-	             ?><span class="title">URL</span><input type="text" name="link_url" id="link_url" /><?php
+	             ?><span class="title"><?php _e( 'URL', 'link-library' ); ?></span><input type="text" name="link_url" id="link_url" /><?php
 	             break;
 	         }
 	        ?>
@@ -8275,7 +7835,7 @@ function general_custom_fields_meta_box( $data ) {
 		?>
 
 		<div id="link_library_network_options" class="wrap">
-			<h2>Link Library Network Options</h2>
+			<h2><?php _e( 'Link Library Network Options', 'link-library' ); ?></h2>
 
 			<form name="link_library_network_options_form" method="post">
 				<input type="hidden" name="link-library-submit-settings" value="1">
@@ -8424,7 +7984,7 @@ function general_custom_fields_meta_box( $data ) {
 				echo $link->ID . ' - ' . $link->post_title . ': ' . $link->meta_value . ' <a href="' . esc_url( add_query_arg( array( 'action' => 'edit', 'post' => $link->ID ), admin_url( 'post.php' ) ) ) . '">Edit</a><br /><br />';
 			}
 		} else {
-			echo 'No duplicate URL links found';
+			_e( 'No links found with an empty category', 'link-library' );
 		}
 
 		echo '<br />';
@@ -8475,6 +8035,10 @@ function link_library_reciprocal_link_checker() {
 			$args['meta_key'] = 'link_url';
 		} elseif( 'rss' == $check_type )  {
 			$args['meta_key'] = 'link_rss';
+		} elseif ( 'secondary' == $check_type ) {
+			$args['meta_key'] = 'link_second_url';
+		} elseif ( 'image' == $check_type ) {
+			$args['meta_key'] = 'link_image';
 		}
 
 		$the_link_query = new WP_Query( $args );
@@ -8486,6 +8050,8 @@ function link_library_reciprocal_link_checker() {
 				global $my_link_library_plugin;
 				$link_url = get_post_meta( get_the_ID(), 'link_url', true );
 				$link_rss = get_post_meta( get_the_ID(), 'link_rss', true );
+				$link_secondary_url = get_post_meta( get_the_ID(), 'link_second_url', true );
+				$link_image = get_post_meta( get_the_ID(), 'link_image', true );
 
 				if ( 'reciprocal' == $check_type ) {
 					$link_reciprocal = get_post_meta( get_the_ID(), 'link_reciprocal', true );
@@ -8494,7 +8060,11 @@ function link_library_reciprocal_link_checker() {
 					$reciprocal_result = $my_link_library_plugin->CheckReciprocalLink( $RecipCheckAddress, $link_url, 'broken' );
 				} elseif ( 'rss' == $check_type ) {
 					$reciprocal_result = $my_link_library_plugin->CheckReciprocalLink( $RecipCheckAddress, $link_rss, 'rss' );
-				} 
+				} elseif ( 'secondary' == $check_type ) {
+					$reciprocal_result = $my_link_library_plugin->CheckReciprocalLink( $RecipCheckAddress, $link_secondary_url, 'secondary' );
+				} elseif ( 'image' == $check_type ) {
+					$reciprocal_result = $my_link_library_plugin->CheckReciprocalLink( $RecipCheckAddress, $link_image, 'image' );
+				}
 
 				$broken_responses = array( 'exists_redirected', 'exists_protocol_redirect', 'exists_subdomain_redirect', 'exists_redirected_subfolder', 'exists_redirected_fileurl' );
 
@@ -8516,7 +8086,7 @@ function link_library_reciprocal_link_checker() {
 					}
 				}
 
-				if ( ( 'reciprocal' == $check_type && $reciprocal_result == 'exists_found' ) || 'broken' == $check_type && !in_array( $reciprocal_result, $broken_responses ) && strpos( $reciprocal_result, 'exists' ) !== false ) {
+				if ( ( 'reciprocal' == $check_type && $reciprocal_result == 'exists_found' ) || in_array( $check_type, array( 'broken', 'secondary', 'image' ) ) && !in_array( $reciprocal_result, $broken_responses ) && strpos( $reciprocal_result, 'exists' ) !== false ) {
 					echo '<div class="nextcheckitem"></div>';
 					wp_reset_postdata();
 					die();

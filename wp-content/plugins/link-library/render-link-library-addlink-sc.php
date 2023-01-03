@@ -67,6 +67,69 @@ function addlink_render_category_list( $categories, $select_name, $depth, $order
 	return $output;
 }
 
+function RenderLinkLibraryAddLinkButton( $LLPluginClass, $generaloptions, $libraryoptions, $settings, $code ) {
+
+	$libraryoptions = wp_parse_args( $libraryoptions, ll_reset_options( 1, 'list', 'return' ) );
+	extract( $libraryoptions );
+
+	$output .= '';
+
+	$popup_link = add_query_arg( array( 'link_library_popup_content' => 'true', 'settings' => $settings ), home_url() );
+	$output .= '<button id="submitnewlink">' . $popupbuttonlabel . '</button>';
+
+	$output .= "<script type='text/javascript'>";
+	$output .= "jQuery(document).ready(function() {";
+
+	if ( !wp_is_mobile() ) {
+		$output .= "\tjQuery('#submitnewlink').colorbox({href:'" . esc_url( $popup_link ) . "', opacity: 0.3, iframe:true, width:'50%', height:'90%'});";
+	} else {
+		$output .= "\tjQuery('#submitnewlink').colorbox({href:'" . esc_url( $popup_link ) . "', opacity: 0.3, iframe:true, width:'90%', height:'90%'});";
+	}
+	
+	$output .= "});";
+	$output .= "</script>";
+
+	return $output;
+}
+
+function link_library_link_submission_popup_form( $LLPluginClass ) {
+	$genoptions = get_option( 'LinkLibraryGeneral' );
+	$genoptions = wp_parse_args( $genoptions, ll_reset_gen_settings( 'return' ) );
+
+	if ( empty( $_GET['settings'] ) ) {
+		$settings = 1;
+	} elseif ( isset( $_GET['settings'] ) ) {
+		$settings = intval( $_GET['settings'] );
+	}
+
+	if ( $settings > $genoptions['numberstylesets'] ) {
+		$settings = 1;
+	}
+
+	$settingsname = 'LinkLibraryPP' . $settings;
+	$options = get_option( $settingsname );
+	$options = wp_parse_args( $options, ll_reset_options( 1, 'list', 'return' ) );
+	?>
+
+	<head>
+	<link rel="stylesheet" type="text/css" media="screen" href="<?php echo get_stylesheet_uri(); ?>" />
+
+	<?php 
+		if ( isset( $genoptions['fullstylesheet'] ) ) {
+			echo "<style id='LinkLibraryStyle' type='text/css'>\n";
+			echo stripslashes( $genoptions['fullstylesheet'] );
+			echo "</style>\n";
+		}
+	?>
+	
+	</head>
+	<body style="margin: 10%">
+	<?php echo RenderLinkLibraryAddLinkForm( $LLPluginClass, $genoptions, $options, $settings, 'link-library-addlink' ); ?>
+	</body>
+
+	<?php 
+}
+
 function RenderLinkLibraryAddLinkForm( $LLPluginClass, $generaloptions, $libraryoptions, $settings, $code ) {
 
 	wp_enqueue_script( 'form-validator' );
@@ -412,8 +475,8 @@ function RenderLinkLibraryAddLinkForm( $LLPluginClass, $generaloptions, $library
 						}
 
 						if ( $debugmode ) {
-							$output .= "\n<!-- Category query for add link form:" . print_r($linkcatquery, TRUE) . "-->\n\n";
-							$output .= "\n<!-- Results of Category query for add link form:" . print_r($linkcats, TRUE) . "-->\n";
+							$output .= "\n<!-- Category query for add link form:" . print_r( $link_categories_query_args, TRUE) . "-->\n\n";
+							$output .= "\n<!-- Results of Category query for add link form:" . print_r( $linkcats, TRUE) . "-->\n";
 						}
 
 						if ( $linkcats ) {

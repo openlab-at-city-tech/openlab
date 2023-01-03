@@ -3,7 +3,7 @@
 Plugin Name: Link Library
 Plugin URI: http://wordpress.org/extend/plugins/link-library/
 Description: Display links on pages with a variety of options
-Version: 7.3.9
+Version: 7.4.19
 Author: Yannick Lefebvre
 Author URI: http://ylefebvre.github.io/
 Text Domain: link-library
@@ -12,7 +12,7 @@ A plugin for the blogging MySQL/PHP-based WordPress.
 Copyright 2022 Yannick Lefebvre
 
 Translations:
-French Translation courtesy of Luc Capronnier
+French Translation courtesy of Michel G. et Luc Capronnier
 Danish Translation courtesy of GeorgWP (http://wordpress.blogos.dk)
 Italian Translation courtesy of Gianni Diurno
 Serbian Translation courtesy of Ogi Djuraskovic (firstsiteguide.com)
@@ -43,14 +43,9 @@ require_once(ABSPATH . '/wp-admin/includes/bookmark.php');
 require_once plugin_dir_path( __FILE__ ) . 'link-library-defaults.php';
 require_once plugin_dir_path( __FILE__ ) . 'rssfeed.php';
 require_once plugin_dir_path( __FILE__ ) . '/upvote-downvote/thumbs-rating.php';
-//require_once plugin_dir_path( __FILE__ ) . 'blocks/link-library-main.php';
 
 global $my_link_library_plugin;
 global $my_link_library_plugin_admin;
-
-/* if ( !get_option( 'link_manager_enabled' ) ) {
-    add_filter( 'pre_option_link_manager_enabled', '__return_true' );
-} */
 
 function link_library_tweak_plugins_http_filter( $response, $r, $url ) {
 	if ( stristr( $url, 'api.wordpress.org/plugins/update-check/1.1' ) ) {
@@ -332,7 +327,33 @@ class link_library_plugin {
 		if ( $genoptions['add_to_main_rss'] ) {
 			add_action( 'request', array( $this, 'link_library_rss_feed_request' ) );
 			add_filter( 'the_content_feed', array( $this, 'll_display_single_link' ) );
-		}		
+		}
+
+		add_action( 'link_library_import_links', array( $this, 'll_import_links' ), 10, 0 );
+		add_action( 'link_library_gen_thumbs', array( $this, 'll_gen_thumbs' ), 10, 0 );
+	}
+
+	function ll_import_links() {
+		require_once plugin_dir_path( __FILE__ ) . 'link-library-link-importer.php';
+
+		$genoptions = get_option( 'LinkLibraryGeneral' );
+		$genoptions = wp_parse_args( $genoptions, ll_reset_gen_settings( 'return' ) );
+
+		$row = 0;
+		$successfulimport = 0;
+		$successfulupdate = 0;
+
+		link_library_import_links( $genoptions, $row, $successfulimport, $successfulupdate );
+	}
+
+	function ll_gen_thumbs() {
+		require_once plugin_dir_path( __FILE__ ) . 'link-library-image-generator.php';
+
+		$options = array();
+		$options['categorylist_cpt'] = '';
+		$options['uselocalimagesoverthumbshots'] = true;
+
+		link_library_image_generator( $this, $options, true );
 	}
 
 	function ll_rest_api_init() {
@@ -449,21 +470,20 @@ class link_library_plugin {
 
 		$post_type_args = array(
 			'labels' => array(
-				'name' => 'Link Library',
-				'singular_name' => 'Link',
-				'add_new' => 'Add New',
-				'add_new_item' => 'Add New Link',
-				'edit' => 'Edit',
-				'edit_item' => 'Edit Link',
-				'new_item' => 'New Link',
-				'view' => 'View',
-				'view_item' => 'View Link',
-				'search_items' => 'Search Links',
-				'not_found' => 'No Links found',
-				'not_found_in_trash' =>
-					'No Links found in Trash',
-				'parent' => 'Parent Link',
-				'all_items' => 'All Links',
+				'name' => __( 'Link Library', 'link-library' ),
+				'singular_name' => __( 'Link', 'link-library' ),
+				'add_new' => __( 'Add New', 'link-library' ),
+				'add_new_item' => __( 'Add New Link', 'link-library' ),
+				'edit' => __( 'Edit', 'link-library' ),
+				'edit_item' => __( 'Edit Link', 'link-library' ),
+				'new_item' => __( 'New Link', 'link-library' ),
+				'view' => __( 'View', 'link-library' ),
+				'view_item' => __( 'View Link', 'link-library' ),
+				'search_items' => __( 'Search Links', 'link-library' ),
+				'not_found' => __( 'No Links found', 'link-library' ),
+				'not_found_in_trash' => __( 'No Links found in Trash', 'link-library' ),
+				'parent' => __( 'Parent Link', 'link-library' ),
+				'all_items' => __( 'All Links', 'link-library' ),
 				'menu_name' => _x('Link Library %%PENDING_COUNT%%', 'Link Library', 'link-library'),
 			),
 			'show_in_nav_menu' => true,
@@ -480,10 +500,21 @@ class link_library_plugin {
 			'rewrite' => array( 'slug' => $genoptions['cptslug'] . '/%' . $genoptions['cattaxonomy'] . '%' )
 		);
 
+		if ( class_exists( 'WPGraphQL' ) ) {
+			$post_type_args['show_in_graphql'] = true;
+            $post_type_args['hierarchical'] = true;
+            $post_type_args['graphql_single_name'] = 'linklibrary';
+            $post_type_args['graphql_plural_name'] = 'linklibrary';
+		}		
+
 		if ( $genoptions['exclude_from_search'] && $genoptions['publicly_queryable'] ) {
 			unset( $post_type_args['exclude_from_search'] );
 			unset( $post_type_args['publicly_queryable'] );
 			$post_type_args['public'] = true;
+		}
+
+		if ( $genoptions['showexcerpt'] ) {
+			$post_type_args['supports'][] = 'excerpt';
 		}
 
 		register_post_type( 'link_library_links', $post_type_args );
@@ -493,9 +524,9 @@ class link_library_plugin {
 			'link_library_links',
 			array(
 				'labels' => array(
-					'name' => 'Link Library Categories',
-					'add_new_item' => 'Add New Link Library Category',
-					'new_item_name' => 'New Link Library Category'
+					'name' => __( 'Link Library Categories', 'link-library' ),
+					'add_new_item' => __( 'Add New Link Library Category', 'link-library' ),
+					'new_item_name' => __( 'New Link Library Category', 'link-library' )
 				),
 				'show_ui' => ( $genoptions['cattaxonomy'] == 'link_library_category' ? true : false ),
 				'show_tagcloud' => false,
@@ -510,9 +541,9 @@ class link_library_plugin {
 			'link_library_links',
 			array(
 				'hierarchical' => false,
-				'labels' => array( 'name' => 'Tags',
-								   'add_new_item' => 'Add New Link Library Tag',
-								   'new_item_name' => 'New Link Library Tag' ),
+				'labels' => array( 'name' => __( 'Tags', 'link-library' ),
+								   'add_new_item' => __( 'Add New Link Library Tag', 'link-library' ),
+								   'new_item_name' => __( 'New Link Library Tag', 'link-library' ) ),
 				'show_ui' => ( $genoptions['tagtaxonomy'] == 'link_library_tags' ? true : false ),
 				'rewrite' => false,
 				'show_in_rest' => true
@@ -1148,13 +1179,18 @@ class link_library_plugin {
 	}
 
 	function CheckReciprocalLink( $RecipCheckAddress = '', $external_link = '', $request_type = 'reciprocal' ) {
-		$response = wp_remote_get( $external_link, array( 'user-agent' => 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36', 'timeout' => 10 ) );
+		$response = wp_remote_get( $external_link, array( 'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36', 'timeout' => 10 ) );
 
 		if( is_wp_error( $response ) ) {
-			$response_code = $response->get_error_code();
-			if ( 'http_request_failed' == $response_code ) {
-				return 'error_403';
-			}
+			$data = file_get_contents( $external_link );
+			if ( false !== $data ) {
+				return 'exists_found';
+			} else {
+				$response_code = $response->get_error_code();
+				if ( 'http_request_failed' == $response_code ) {
+					return 'error_403';
+				}
+			}			
 		} elseif ( $response['response']['code'] == '200' ) {
 
 			$original_protocol = '';
@@ -1183,7 +1219,7 @@ class link_library_plugin {
 			$parse_original_url = parse_url( $external_link );
 			$parse_actual_url = parse_url( $response['http_response']->get_response_object()->url );
 
-			if ( ( 'broken' == $request_type || 'rss' == $request_type ) && $parse_original_url['host'] != $parse_actual_url['host'] ) {
+			if ( ( 'broken' == $request_type || 'rss' == $request_type || 'secondary' == $request_type || 'image' == $request_type ) && $parse_original_url['host'] != $parse_actual_url['host'] ) {
 				$original_host_segments = explode( '.', $parse_original_url['host'] );
 				$actual_host_segments = explode( '.', $parse_actual_url['host'] );
 
@@ -1194,7 +1230,7 @@ class link_library_plugin {
 				}				
 			}
 
-			if ( ( 'broken' == $request_type || 'rss' == $request_type ) && $parse_original_url['host'] == $parse_actual_url['host'] && $link_url_without_protocol != $response_url_without_protocol ) {
+			if ( ( 'broken' == $request_type || 'rss' == $request_type || 'secondary' == $request_type || 'image' == $request_type ) && $parse_original_url['host'] == $parse_actual_url['host'] && $link_url_without_protocol != $response_url_without_protocol ) {
 				$basename = basename( $parse_actual_url['path'] );
 				if ( false !== strpos( $basename, '.' ) ) {
 					return 'exists_redirected_fileurl';
@@ -1203,11 +1239,11 @@ class link_library_plugin {
 				}				
 			}
 			
-			if ( ( 'broken' == $request_type || 'rss' == $request_type ) && $link_url_without_protocol != $response_url_without_protocol ) {
+			if ( ( 'broken' == $request_type || 'rss' == $request_type || 'secondary' == $request_type || 'image' == $request_type ) && $link_url_without_protocol != $response_url_without_protocol ) {
 				return 'exists_redirected';
-			} elseif ( ( 'broken' == $request_type || 'rss' == $request_type ) && !empty( $original_protocol ) && !empty( $actual_protocol ) && $original_protocol != $actual_protocol ) {
+			} elseif ( ( 'broken' == $request_type || 'rss' == $request_type || 'secondary' == $request_type || 'image' == $request_type ) && !empty( $original_protocol ) && !empty( $actual_protocol ) && $original_protocol != $actual_protocol ) {
 				return 'exists_protocol_redirect';
-			} elseif ( ( 'broken' == $request_type || 'rss' == $request_type ) && empty( $RecipCheckAddress ) ) {
+			} elseif ( ( 'broken' == $request_type || 'rss' == $request_type || 'secondary' == $request_type || 'image' == $request_type ) && empty( $RecipCheckAddress ) ) {
 				return 'exists_notfound';
 			} else {
 				return 'exists_found';
@@ -1270,7 +1306,8 @@ class link_library_plugin {
 			'excludecategoryoverride' => '',
 			'settings' => '',
 			'targetlibrary' => '',
-			'taglistoverride' => ''
+			'taglistoverride' => '',
+			'parent_cat_id' => 0
 		), $atts ) );
 
 		$genoptions = get_option( 'LinkLibraryGeneral' );
@@ -1393,7 +1430,9 @@ class link_library_plugin {
 			$timeoutput = "\n<!-- [link-library-cats] shortcode execution time: " . ( microtime( true ) - $mainoutputstarttime ) . "-->\n";
 		}
 
-		return ( true == $genoptions['debugmode'] ? $timeoutputstart : '' ) . RenderLinkLibraryCategories( $this, $genoptions, $options, $settings, $targetlibrary )  . ( true == $genoptions['debugmode'] ? $timeoutput : '' );
+
+		$parent_id_array = array();
+		return ( true == $genoptions['debugmode'] ? $timeoutputstart : '' ) . RenderLinkLibraryCategories( $this, $genoptions, $options, $settings, $targetlibrary, $parent_cat_id, 0, $parent_id_array )  . ( true == $genoptions['debugmode'] ? $timeoutput : '' );
 	}
 
 	/********************************************** Function to Process [link-library-search] shortcode *********************************************/
@@ -1486,7 +1525,12 @@ class link_library_plugin {
 		}
 
 		require_once plugin_dir_path( __FILE__ ) . 'render-link-library-addlink-sc.php';
-		return RenderLinkLibraryAddLinkForm( $this, $genoptions, $options, $settings, $code);
+		if ( 'inline' == $options['addlinkformdisplaymode'] ) {
+			return RenderLinkLibraryAddLinkForm( $this, $genoptions, $options, $settings, $code );
+		} elseif ( 'popup' == $options['addlinkformdisplaymode'] ) {
+			return RenderLinkLibraryAddLinkButton( $this, $genoptions, $options, $settings, $code );
+		}
+		
 	}
 
 	/********************************************** Function to Process [link-library-count] shortcode ***************************************/
@@ -1581,6 +1625,7 @@ class link_library_plugin {
 			'pricelabel' => __( 'Price', 'link-library' ),
 			'alphabeticlabel' => __( 'Link Name', 'link-library' ),
 			'showalphabeticfilters' => true,
+			'showapplybutton' => false,
 			'settings' => ''
 		), $atts ) );
 
@@ -1608,7 +1653,7 @@ class link_library_plugin {
 		}
 
 		require_once plugin_dir_path( __FILE__ ) . 'render-link-library-tag-filter-sc.php';
-		return RenderLinkLibraryFilterBox( $this, $genoptions, $options, $settings, $includetagsids, $excludetagsids, $showtagfilters, $taglabel, $showpricefilters, $pricelabel, $showalphabeticfilters, $alphabeticlabel );
+		return RenderLinkLibraryFilterBox( $this, $genoptions, $options, $settings, $includetagsids, $excludetagsids, $showtagfilters, $taglabel, $showpricefilters, $pricelabel, $showalphabeticfilters, $alphabeticlabel, $showapplybutton );
 	}
 
 	/********************************************** Function to Process [link-library] shortcode *********************************************/
@@ -2064,6 +2109,7 @@ class link_library_plugin {
 		$settingssetsids = array();
 		$load_jquery = false;
 		$load_thickbox = false;
+		$load_colorbox = false;
 		$load_recaptcha = false;
 		$load_masonry = false;
 		$load_style = '';
@@ -2081,6 +2127,7 @@ class link_library_plugin {
 		if ( is_admin() ) {
 			$load_jquery = false;
 			$load_thickbox = false;
+			$load_colorbox = false;
 			$load_style = false;
 		} else {
 			foreach ( $posts as $post ) {
@@ -2157,9 +2204,13 @@ class link_library_plugin {
 						$load_thickbox = true;
 					}
 
-					if ($options['publishrssfeed'] == true) {
+					if ( $options['publishrssfeed'] == true ) {
 						global $rss_settings;
 						$rss_settings = $settingsetid;
+					}
+
+					if ( $options['addlinkformdisplaymode'] ) {
+						$load_colorbox = true;
 					}
 				}
 			}
@@ -2195,6 +2246,11 @@ class link_library_plugin {
 			wp_enqueue_style ( 'thickbox' );
 		}
 
+		if ( $load_colorbox ) {
+			wp_enqueue_script( 'colorbox', plugins_url( 'colorbox/jquery.colorbox-min.js', __FILE__ ), array( 'jquery' ), "1.3.9" );
+			wp_enqueue_style( 'colorboxstyle', plugins_url( 'colorbox/colorbox.css', __FILE__ ) );
+		}
+
 		if ( $load_recaptcha && $genoptions['captchagenerator'] ) {
 			wp_enqueue_script( 'google_recaptcha', 'https://www.google.com/recaptcha/api.js', array(), false, true );
 		}
@@ -2224,6 +2280,10 @@ class link_library_plugin {
 			require_once plugin_dir_path( __FILE__ ) . 'cssgenerator.php';
 			link_library_generate_css( $this );
 			return '';
+		} elseif ( !empty( $_GET['link_library_popup_content'] ) ) {
+			require_once plugin_dir_path( __FILE__ ) . 'render-link-library-addlink-sc.php';
+			link_library_link_submission_popup_form( $this );
+			exit();
 		} else {
 			return $template;
 		}
