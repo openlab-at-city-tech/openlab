@@ -6,9 +6,9 @@ Author: ThemeInWP
 Author URI: https://www.themeinwp.com
 Description: ePortfolio is a free minimalist, SEO optimized multi-purpose WordPress Portfolio theme. ePortfolio is an ideal choice to create portfolio sites for photographers, digital marketers, agencies, graphic designers, video producers, web designers, web developers, professional bloggers and other freelance artistic or creative workers. This theme is compatible with Gutenberg, Elementor as well as other page builder plugins which helps you to deliver your content smoothly. Check our demo here:https://demo.themeinwp.com/eportfolio/
 Requires at least: 5.3
-Tested up to: 6.0
+Tested up to: 6.1
 Requires PHP: 5.6
-Version: 1.1.9
+Version: 1.2.0
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: eportfolio
@@ -378,15 +378,6 @@ textarea {
 /*--------------------------------------------------------------
 ## Links
 --------------------------------------------------------------*/
-a {
-    color: royalblue;
-}
-a:visited {
-    color: purple;
-}
-a:hover, a:focus, a:active {
-    color: midnightblue;
-}
 a:focus {
     outline: thin dotted;
 }
@@ -1306,7 +1297,7 @@ object {
 .page-links .post-page-numbers.current, .twp-categories.twp-categories-with-line li {
     border-color: #ffaaa6;
 }
-.twp-not-found h1, .comments-area .comment-list li .comment-meta a:visited, .comments-area .comment-list li .comment-meta a, .twp-single-article .entry-footer .edit-link a, .twp-single-article .entry-footer .edit-link, .twp-bio-widget .twp-basic-info .twp-title-with-social-icon h5, .twp-author-meta.twp-author-meta-primary {
+.twp-not-found h1, .comments-area .comment-list li .comment-meta a, .twp-single-article .entry-footer .edit-link a, .twp-single-article .entry-footer .edit-link, .twp-bio-widget .twp-basic-info .twp-title-with-social-icon h5, .twp-author-meta.twp-author-meta-primary {
     color: #ffaaa6;
 }
 .post-navigation .nav-links .nav-previous,
@@ -1339,7 +1330,7 @@ object {
     line-height: 1;
     border-style: solid;
     border-width: 1px;
-    padding: 10px 30px;
+    padding: 15px 30px;
     font-size: 0.9rem;
     text-transform: uppercase;
 }
@@ -1421,10 +1412,8 @@ a {
     -webkit-transition: all 0.3s linear;
     -moz-transition: all 0.3s linear;
 }
-a:visited {
-    color: black;
-}
-a:hover {
+a:hover,
+a:focus {
     color: #ffaaa6;
 }
 .twp-image-hover {
@@ -1435,7 +1424,8 @@ a:hover {
     -webkit-backface-visibility: hidden;
     -moz-backface-visibility: hidden;
 }
-.twp-image-hover:hover {
+.twp-image-hover:hover,
+.twp-image-hover:focus {
     transform: scale(1.1, 1.1);
     -webkit-transform: scale(1.1, 1.1);
     -moz-transform: scale(1.1, 1.1);
@@ -1574,10 +1564,8 @@ body::-webkit-scrollbar {
 p a {
     color: #ffaaa6;
 }
-p a:visited {
-    color: #ffaaa6;
-}
-p a:hover {
+p a:hover,
+p a:focus {
     color: black;
 }
 .twp-author-meta {
@@ -1629,10 +1617,8 @@ p a:hover {
     top: 0;
     right: 0;
 }
-.twp-categories ul li a:visited {
-    color: gray;
-}
-.twp-categories ul li a:hover {
+.twp-categories ul li a:hover,
+.twp-categories ul li a:focus {
     color: #ffaaa6;
 }
 .twp-categories ul li:last-child a:after {
@@ -1708,7 +1694,8 @@ p a:hover {
     -moz-animation: scale-out-bottom-left 0.5s cubic-bezier(0.55, 0.085, 0.68, 0.53) both;
     animation: scale-out-bottom-left 0.5s cubic-bezier(0.55, 0.085, 0.68, 0.53) both;
 }
-.twp-overlay-image-hover:hover:before {
+.twp-overlay-image-hover:hover:before,
+.twp-overlay-image-hover:focus:before {
     -webkit-animation: scale-in-bottom-left 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
     -o-animation: scale-in-bottom-left 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
     -moz-animation: scale-in-bottom-left 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
@@ -1765,7 +1752,9 @@ p a:hover {
     content: none;
 }
 .pagination .twp-caption:hover,
-.page-links .twp-caption:hover {
+.pagination .twp-caption:focus,
+.page-links .twp-caption:hover,
+.page-links .twp-caption:focus {
     color: black;
 }
 .posts-navigation {
@@ -1880,7 +1869,8 @@ p a:hover {
     font-family: fontAwesome;
     font-size: 1rem;
 }
-.slick-arrow:hover {
+.slick-arrow:hover,
+.slick-arrow:focus {
     color: #ffaaa6;
 }
 .slick-prev {
@@ -2010,7 +2000,8 @@ p a:hover {
     vertical-align: middle;
 }
 @media (min-width: 1050px) {
-    .twp-close-icon:hover {
+    .twp-close-icon:hover,
+    .twp-close-icon:focus {
         -webkit-animation: rotate-center 0.3s linear both;
         -o-animation: rotate-center 0.3s linear both;
         -moz-animation: rotate-center 0.3s linear both;
@@ -2040,7 +2031,8 @@ p a:hover {
     background-color: white;
 }
 @media (min-width: 1050px) {
-    .twp-close-icon.twp-rotate-90:hover {
+    .twp-close-icon.twp-rotate-90:hover,
+    .twp-close-icon.twp-rotate-90:focus {
         -webkit-animation: rotate-partial 0.3s linear both;
         -o-animation: rotate-partial 0.3s linear both;
         -moz-animation: rotate-partial 0.3s linear both;
@@ -2094,16 +2086,20 @@ p a:hover {
 .twp-menu-icon.twp-white-menu-icon span:before, .twp-menu-icon.twp-white-menu-icon span:after {
     background-color: white;
 }
-.twp-menu-icon:hover span:first-child {
+.twp-menu-icon:hover span:first-child,
+.twp-menu-icon:focus span:first-child {
     width: 40px;
 }
-.twp-menu-icon:hover span:nth-child(2) {
+.twp-menu-icon:hover span:nth-child(2),
+.twp-menu-icon:focus span:nth-child(2) {
     width: 50px;
 }
-.twp-menu-icon:hover span:nth-child(3) {
+.twp-menu-icon:hover span:nth-child(3),
+.twp-menu-icon:focus span:nth-child(3) {
     width: 45px;
 }
-.twp-menu-icon:hover span:last-child {
+.twp-menu-icon:hover span:last-child,
+.twp-menu-icon:focus span:last-child {
     width: 40px;
 }
 ul.twp-social-icons {
@@ -2134,12 +2130,14 @@ ul.twp-social-icons li a[href*="t.me"]:before {
 ul.twp-social-icons li a[href*=twitter]:before {
     content: "";
 }
-ul.twp-social-icons li a:hover[href*=twitter]:before, ul.twp-social-icons li a:focus-within[href*=twitter]:before {
+ul.twp-social-icons li a:hover[href*=twitter]:before,
+ul.twp-social-icons li a:focus[href*=twitter]:before {
     transform: scale(1.2);
     -webkit-transform: scale(1.2);
     -moz-transform: scale(1.2);
 }
-ul.twp-social-icons li a:hover[href*="t.me"]:before, ul.twp-social-icons li a:focus-within[href*="t.me"]:before {
+ul.twp-social-icons li a:hover[href*="t.me"]:before,
+ul.twp-social-icons li a:focus[href*="t.me"]:before {
     transform: scale(1.2);
     -webkit-transform: scale(1.2);
     -moz-transform: scale(1.2);
@@ -2147,12 +2145,14 @@ ul.twp-social-icons li a:hover[href*="t.me"]:before, ul.twp-social-icons li a:fo
 ul.twp-social-icons li a[href*=facebook]:before {
     content: "";
 }
-ul.twp-social-icons li a:hover[href*=facebook]:before, ul.twp-social-icons li a:focus-within[href*=facebook]:before {
+ul.twp-social-icons li a:hover[href*=facebook]:before,
+ul.twp-social-icons li a:focus[href*=facebook]:before {
     transform: scale(1.2);
     -webkit-transform: scale(1.2);
     -moz-transform: scale(1.2);
 }
-ul.twp-social-icons li a:hover[href*="t.me"]:before, ul.twp-social-icons li a:focus-within[href*="t.me"]:before {
+ul.twp-social-icons li a:hover[href*="t.me"]:before,
+ul.twp-social-icons li a:focus[href*="t.me"]:before {
     transform: scale(1.2);
     -webkit-transform: scale(1.2);
     -moz-transform: scale(1.2);
@@ -2160,12 +2160,14 @@ ul.twp-social-icons li a:hover[href*="t.me"]:before, ul.twp-social-icons li a:fo
 ul.twp-social-icons li a[href*=dribbble]:before {
     content: "";
 }
-ul.twp-social-icons li a:hover[href*=dribbble]:before, ul.twp-social-icons li a:focus-within[href*=dribbble]:before {
+ul.twp-social-icons li a:hover[href*=dribbble]:before,
+ul.twp-social-icons li a:focus[href*=dribbble]:before {
     transform: scale(1.2);
     -webkit-transform: scale(1.2);
     -moz-transform: scale(1.2);
 }
-ul.twp-social-icons li a:hover[href*="t.me"]:before, ul.twp-social-icons li a:focus-within[href*="t.me"]:before {
+ul.twp-social-icons li a:hover[href*="t.me"]:before,
+ul.twp-social-icons li a:focus[href*="t.me"]:before {
     transform: scale(1.2);
     -webkit-transform: scale(1.2);
     -moz-transform: scale(1.2);
@@ -2173,12 +2175,14 @@ ul.twp-social-icons li a:hover[href*="t.me"]:before, ul.twp-social-icons li a:fo
 ul.twp-social-icons li a[href*=linkedin]:before {
     content: "";
 }
-ul.twp-social-icons li a:hover[href*=linkedin]:before, ul.twp-social-icons li a:focus-within[href*=linkedin]:before {
+ul.twp-social-icons li a:hover[href*=linkedin]:before,
+ul.twp-social-icons li a:focus[href*=linkedin]:before {
     transform: scale(1.2);
     -webkit-transform: scale(1.2);
     -moz-transform: scale(1.2);
 }
-ul.twp-social-icons li a:hover[href*="t.me"]:before, ul.twp-social-icons li a:focus-within[href*="t.me"]:before {
+ul.twp-social-icons li a:hover[href*="t.me"]:before,
+ul.twp-social-icons li a:focus[href*="t.me"]:before {
     transform: scale(1.2);
     -webkit-transform: scale(1.2);
     -moz-transform: scale(1.2);
@@ -2186,12 +2190,14 @@ ul.twp-social-icons li a:hover[href*="t.me"]:before, ul.twp-social-icons li a:fo
 ul.twp-social-icons li a[href*=instagram]:before {
     content: "";
 }
-ul.twp-social-icons li a:hover[href*=instagram]:before, ul.twp-social-icons li a:focus-within[href*=instagram]:before {
+ul.twp-social-icons li a:hover[href*=instagram]:before,
+ul.twp-social-icons li a:focus[href*=instagram]:before {
     transform: scale(1.2);
     -webkit-transform: scale(1.2);
     -moz-transform: scale(1.2);
 }
-ul.twp-social-icons li a:hover[href*="t.me"]:before, ul.twp-social-icons li a:focus-within[href*="t.me"]:before {
+ul.twp-social-icons li a:hover[href*="t.me"]:before,
+ul.twp-social-icons li a:focus[href*="t.me"]:before {
     transform: scale(1.2);
     -webkit-transform: scale(1.2);
     -moz-transform: scale(1.2);
@@ -2199,12 +2205,14 @@ ul.twp-social-icons li a:hover[href*="t.me"]:before, ul.twp-social-icons li a:fo
 ul.twp-social-icons li a[href*=youtube]:before {
     content: "";
 }
-ul.twp-social-icons li a:hover[href*=youtube]:before, ul.twp-social-icons li a:focus-within[href*=youtube]:before {
+ul.twp-social-icons li a:hover[href*=youtube]:before,
+ul.twp-social-icons li a:focus[href*=youtube]:before {
     transform: scale(1.2);
     -webkit-transform: scale(1.2);
     -moz-transform: scale(1.2);
 }
-ul.twp-social-icons li a:hover[href*="t.me"]:before, ul.twp-social-icons li a:focus-within[href*="t.me"]:before {
+ul.twp-social-icons li a:hover[href*="t.me"]:before,
+ul.twp-social-icons li a:focus[href*="t.me"]:before {
     transform: scale(1.2);
     -webkit-transform: scale(1.2);
     -moz-transform: scale(1.2);
@@ -2212,12 +2220,14 @@ ul.twp-social-icons li a:hover[href*="t.me"]:before, ul.twp-social-icons li a:fo
 ul.twp-social-icons li a[href*=vimeo]:before {
     content: "";
 }
-ul.twp-social-icons li a:hover[href*=vimeo]:before, ul.twp-social-icons li a:focus-within[href*=vimeo]:before {
+ul.twp-social-icons li a:hover[href*=vimeo]:before,
+ul.twp-social-icons li a:focus[href*=vimeo]:before {
     transform: scale(1.2);
     -webkit-transform: scale(1.2);
     -moz-transform: scale(1.2);
 }
-ul.twp-social-icons li a:hover[href*="t.me"]:before, ul.twp-social-icons li a:focus-within[href*="t.me"]:before {
+ul.twp-social-icons li a:hover[href*="t.me"]:before,
+ul.twp-social-icons li a:focus[href*="t.me"]:before {
     transform: scale(1.2);
     -webkit-transform: scale(1.2);
     -moz-transform: scale(1.2);
@@ -2225,12 +2235,14 @@ ul.twp-social-icons li a:hover[href*="t.me"]:before, ul.twp-social-icons li a:fo
 ul.twp-social-icons li a[href*=wordpress]:before {
     content: "";
 }
-ul.twp-social-icons li a:hover[href*=wordpress]:before, ul.twp-social-icons li a:focus-within[href*=wordpress]:before {
+ul.twp-social-icons li a:hover[href*=wordpress]:before,
+ul.twp-social-icons li a:focus[href*=wordpress]:before {
     transform: scale(1.2);
     -webkit-transform: scale(1.2);
     -moz-transform: scale(1.2);
 }
-ul.twp-social-icons li a:hover[href*="t.me"]:before, ul.twp-social-icons li a:focus-within[href*="t.me"]:before {
+ul.twp-social-icons li a:hover[href*="t.me"]:before,
+ul.twp-social-icons li a:focus[href*="t.me"]:before {
     transform: scale(1.2);
     -webkit-transform: scale(1.2);
     -moz-transform: scale(1.2);
@@ -2238,12 +2250,14 @@ ul.twp-social-icons li a:hover[href*="t.me"]:before, ul.twp-social-icons li a:fo
 ul.twp-social-icons li a[href*=pinterest]:before {
     content: "";
 }
-ul.twp-social-icons li a:hover[href*=pinterest]:before, ul.twp-social-icons li a:focus-within[href*=pinterest]:before {
+ul.twp-social-icons li a:hover[href*=pinterest]:before,
+ul.twp-social-icons li a:focus[href*=pinterest]:before {
     transform: scale(1.2);
     -webkit-transform: scale(1.2);
     -moz-transform: scale(1.2);
 }
-ul.twp-social-icons li a:hover[href*="t.me"]:before, ul.twp-social-icons li a:focus-within[href*="t.me"]:before {
+ul.twp-social-icons li a:hover[href*="t.me"]:before,
+ul.twp-social-icons li a:focus[href*="t.me"]:before {
     transform: scale(1.2);
     -webkit-transform: scale(1.2);
     -moz-transform: scale(1.2);
@@ -2251,12 +2265,14 @@ ul.twp-social-icons li a:hover[href*="t.me"]:before, ul.twp-social-icons li a:fo
 ul.twp-social-icons li a[href*=tumblr]:before {
     content: "";
 }
-ul.twp-social-icons li a:hover[href*=tumblr]:before, ul.twp-social-icons li a:focus-within[href*=tumblr]:before {
+ul.twp-social-icons li a:hover[href*=tumblr]:before,
+ul.twp-social-icons li a:focus[href*=tumblr]:before {
     transform: scale(1.2);
     -webkit-transform: scale(1.2);
     -moz-transform: scale(1.2);
 }
-ul.twp-social-icons li a:hover[href*="t.me"]:before, ul.twp-social-icons li a:focus-within[href*="t.me"]:before {
+ul.twp-social-icons li a:hover[href*="t.me"]:before,
+ul.twp-social-icons li a:focus[href*="t.me"]:before {
     transform: scale(1.2);
     -webkit-transform: scale(1.2);
     -moz-transform: scale(1.2);
@@ -2264,12 +2280,14 @@ ul.twp-social-icons li a:hover[href*="t.me"]:before, ul.twp-social-icons li a:fo
 ul.twp-social-icons li a[href*=whatsapp]:before {
     content: "";
 }
-ul.twp-social-icons li a:hover[href*=whatsapp]:before, ul.twp-social-icons li a:focus-within[href*=whatsapp]:before {
+ul.twp-social-icons li a:hover[href*=whatsapp]:before,
+ul.twp-social-icons li a:focus[href*=whatsapp]:before {
     transform: scale(1.2);
     -webkit-transform: scale(1.2);
     -moz-transform: scale(1.2);
 }
-ul.twp-social-icons li a:hover[href*="t.me"]:before, ul.twp-social-icons li a:focus-within[href*="t.me"]:before {
+ul.twp-social-icons li a:hover[href*="t.me"]:before,
+ul.twp-social-icons li a:focus[href*="t.me"]:before {
     transform: scale(1.2);
     -webkit-transform: scale(1.2);
     -moz-transform: scale(1.2);
@@ -2277,12 +2295,14 @@ ul.twp-social-icons li a:hover[href*="t.me"]:before, ul.twp-social-icons li a:fo
 ul.twp-social-icons li a[href*=reddit]:before {
     content: "";
 }
-ul.twp-social-icons li a:hover[href*=reddit]:before, ul.twp-social-icons li a:focus-within[href*=reddit]:before {
+ul.twp-social-icons li a:hover[href*=reddit]:before,
+ul.twp-social-icons li a:focus[href*=reddit]:before {
     transform: scale(1.2);
     -webkit-transform: scale(1.2);
     -moz-transform: scale(1.2);
 }
-ul.twp-social-icons li a:hover[href*="t.me"]:before, ul.twp-social-icons li a:focus-within[href*="t.me"]:before {
+ul.twp-social-icons li a:hover[href*="t.me"]:before,
+ul.twp-social-icons li a:focus[href*="t.me"]:before {
     transform: scale(1.2);
     -webkit-transform: scale(1.2);
     -moz-transform: scale(1.2);
@@ -2290,12 +2310,14 @@ ul.twp-social-icons li a:hover[href*="t.me"]:before, ul.twp-social-icons li a:fo
 ul.twp-social-icons li a[href*=vk]:before {
     content: "";
 }
-ul.twp-social-icons li a:hover[href*=vk]:before, ul.twp-social-icons li a:focus-within[href*=vk]:before {
+ul.twp-social-icons li a:hover[href*=vk]:before,
+ul.twp-social-icons li a:focus[href*=vk]:before {
     transform: scale(1.2);
     -webkit-transform: scale(1.2);
     -moz-transform: scale(1.2);
 }
-ul.twp-social-icons li a:hover[href*="t.me"]:before, ul.twp-social-icons li a:focus-within[href*="t.me"]:before {
+ul.twp-social-icons li a:hover[href*="t.me"]:before,
+ul.twp-social-icons li a:focus[href*="t.me"]:before {
     transform: scale(1.2);
     -webkit-transform: scale(1.2);
     -moz-transform: scale(1.2);
@@ -2303,20 +2325,19 @@ ul.twp-social-icons li a:hover[href*="t.me"]:before, ul.twp-social-icons li a:fo
 ul.twp-social-icons li a[href*=telegram]:before {
     content: "";
 }
-ul.twp-social-icons li a:hover[href*=telegram]:before, ul.twp-social-icons li a:focus-within[href*=telegram]:before {
+ul.twp-social-icons li a:hover[href*=telegram]:before,
+ul.twp-social-icons li a:focus[href*=telegram]:before {
     transform: scale(1.2);
     -webkit-transform: scale(1.2);
     -moz-transform: scale(1.2);
 }
-ul.twp-social-icons li a:hover[href*="t.me"]:before, ul.twp-social-icons li a:focus-within[href*="t.me"]:before {
+ul.twp-social-icons li a:hover[href*="t.me"]:before,
+ul.twp-social-icons li a:focus[href*="t.me"]:before {
     transform: scale(1.2);
     -webkit-transform: scale(1.2);
     -moz-transform: scale(1.2);
 }
 ul.twp-social-icons.twp-social-icons-white a {
-    color: white;
-}
-ul.twp-social-icons.twp-social-icons-white a:visited {
     color: white;
 }
 ul.twp-social-icons-rounded {
@@ -2369,19 +2390,13 @@ ul.twp-social-icons-rounded li a[href*=twitter] {
 ul.twp-social-icons-rounded li a[href*=twitter]:before {
     content: "";
 }
-ul.twp-social-icons-rounded li a:visited[href*=twitter] {
-    color: white;
-    background-color: #1ca0fe;
-}
-ul.twp-social-icons-rounded li a:visited[href*="t.me"] {
-    color: white;
-    background-color: #0088CC;
-}
-ul.twp-social-icons-rounded li a:hover[href*=twitter], ul.twp-social-icons-rounded li a:focus-within[href*=twitter] {
+ul.twp-social-icons-rounded li a:hover[href*=twitter],
+ul.twp-social-icons-rounded li a:focus[href*=twitter] {
     color: #1ca0fe;
     background-color: white;
 }
-ul.twp-social-icons-rounded li a:hover[href*="t.me"], ul.twp-social-icons-rounded li a:focus-within[href*="t.me"] {
+ul.twp-social-icons-rounded li a:hover[href*="t.me"],
+ul.twp-social-icons-rounded li a:focus[href*="t.me"] {
     color: #0088CC;
     background-color: white;
 }
@@ -2393,19 +2408,13 @@ ul.twp-social-icons-rounded li a[href*=facebook] {
 ul.twp-social-icons-rounded li a[href*=facebook]:before {
     content: "";
 }
-ul.twp-social-icons-rounded li a:visited[href*=facebook] {
-    color: white;
-    background-color: #3b5999;
-}
-ul.twp-social-icons-rounded li a:visited[href*="t.me"] {
-    color: white;
-    background-color: #0088CC;
-}
-ul.twp-social-icons-rounded li a:hover[href*=facebook], ul.twp-social-icons-rounded li a:focus-within[href*=facebook] {
+ul.twp-social-icons-rounded li a:hover[href*=facebook],
+ul.twp-social-icons-rounded li a:focus[href*=facebook] {
     color: #3b5999;
     background-color: white;
 }
-ul.twp-social-icons-rounded li a:hover[href*="t.me"], ul.twp-social-icons-rounded li a:focus-within[href*="t.me"] {
+ul.twp-social-icons-rounded li a:hover[href*="t.me"],
+ul.twp-social-icons-rounded li a:focus[href*="t.me"] {
     color: #0088CC;
     background-color: white;
 }
@@ -2417,19 +2426,13 @@ ul.twp-social-icons-rounded li a[href*=dribbble] {
 ul.twp-social-icons-rounded li a[href*=dribbble]:before {
     content: "";
 }
-ul.twp-social-icons-rounded li a:visited[href*=dribbble] {
-    color: white;
-    background-color: #ea4c89;
-}
-ul.twp-social-icons-rounded li a:visited[href*="t.me"] {
-    color: white;
-    background-color: #0088CC;
-}
-ul.twp-social-icons-rounded li a:hover[href*=dribbble], ul.twp-social-icons-rounded li a:focus-within[href*=dribbble] {
+ul.twp-social-icons-rounded li a:hover[href*=dribbble],
+ul.twp-social-icons-rounded li a:focus[href*=dribbble] {
     color: #ea4c89;
     background-color: white;
 }
-ul.twp-social-icons-rounded li a:hover[href*="t.me"], ul.twp-social-icons-rounded li a:focus-within[href*="t.me"] {
+ul.twp-social-icons-rounded li a:hover[href*="t.me"],
+ul.twp-social-icons-rounded li a:focus[href*="t.me"] {
     color: #0088CC;
     background-color: white;
 }
@@ -2441,19 +2444,13 @@ ul.twp-social-icons-rounded li a[href*=linkedin] {
 ul.twp-social-icons-rounded li a[href*=linkedin]:before {
     content: "";
 }
-ul.twp-social-icons-rounded li a:visited[href*=linkedin] {
-    color: white;
-    background-color: #0177b5;
-}
-ul.twp-social-icons-rounded li a:visited[href*="t.me"] {
-    color: white;
-    background-color: #0088CC;
-}
-ul.twp-social-icons-rounded li a:hover[href*=linkedin], ul.twp-social-icons-rounded li a:focus-within[href*=linkedin] {
+ul.twp-social-icons-rounded li a:hover[href*=linkedin],
+ul.twp-social-icons-rounded li a:focus[href*=linkedin] {
     color: #0177b5;
     background-color: white;
 }
-ul.twp-social-icons-rounded li a:hover[href*="t.me"], ul.twp-social-icons-rounded li a:focus-within[href*="t.me"] {
+ul.twp-social-icons-rounded li a:hover[href*="t.me"],
+ul.twp-social-icons-rounded li a:focus[href*="t.me"] {
     color: #0088CC;
     background-color: white;
 }
@@ -2465,19 +2462,13 @@ ul.twp-social-icons-rounded li a[href*=instagram] {
 ul.twp-social-icons-rounded li a[href*=instagram]:before {
     content: "";
 }
-ul.twp-social-icons-rounded li a:visited[href*=instagram] {
-    color: white;
-    background-color: #E1306c;
-}
-ul.twp-social-icons-rounded li a:visited[href*="t.me"] {
-    color: white;
-    background-color: #0088CC;
-}
-ul.twp-social-icons-rounded li a:hover[href*=instagram], ul.twp-social-icons-rounded li a:focus-within[href*=instagram] {
+ul.twp-social-icons-rounded li a:hover[href*=instagram],
+ul.twp-social-icons-rounded li a:focus[href*=instagram] {
     color: #E1306c;
     background-color: white;
 }
-ul.twp-social-icons-rounded li a:hover[href*="t.me"], ul.twp-social-icons-rounded li a:focus-within[href*="t.me"] {
+ul.twp-social-icons-rounded li a:hover[href*="t.me"],
+ul.twp-social-icons-rounded li a:focus[href*="t.me"] {
     color: #0088CC;
     background-color: white;
 }
@@ -2489,19 +2480,13 @@ ul.twp-social-icons-rounded li a[href*=youtube] {
 ul.twp-social-icons-rounded li a[href*=youtube]:before {
     content: "";
 }
-ul.twp-social-icons-rounded li a:visited[href*=youtube] {
-    color: white;
-    background-color: #ff0000;
-}
-ul.twp-social-icons-rounded li a:visited[href*="t.me"] {
-    color: white;
-    background-color: #0088CC;
-}
-ul.twp-social-icons-rounded li a:hover[href*=youtube], ul.twp-social-icons-rounded li a:focus-within[href*=youtube] {
+ul.twp-social-icons-rounded li a:hover[href*=youtube],
+ul.twp-social-icons-rounded li a:focus[href*=youtube] {
     color: #ff0000;
     background-color: white;
 }
-ul.twp-social-icons-rounded li a:hover[href*="t.me"], ul.twp-social-icons-rounded li a:focus-within[href*="t.me"] {
+ul.twp-social-icons-rounded li a:hover[href*="t.me"],
+ul.twp-social-icons-rounded li a:focus[href*="t.me"] {
     color: #0088CC;
     background-color: white;
 }
@@ -2513,19 +2498,13 @@ ul.twp-social-icons-rounded li a[href*=vimeo] {
 ul.twp-social-icons-rounded li a[href*=vimeo]:before {
     content: "";
 }
-ul.twp-social-icons-rounded li a:visited[href*=vimeo] {
-    color: white;
-    background-color: #1ab7ea;
-}
-ul.twp-social-icons-rounded li a:visited[href*="t.me"] {
-    color: white;
-    background-color: #0088CC;
-}
-ul.twp-social-icons-rounded li a:hover[href*=vimeo], ul.twp-social-icons-rounded li a:focus-within[href*=vimeo] {
+ul.twp-social-icons-rounded li a:hover[href*=vimeo],
+ul.twp-social-icons-rounded li a:focus[href*=vimeo] {
     color: #1ab7ea;
     background-color: white;
 }
-ul.twp-social-icons-rounded li a:hover[href*="t.me"], ul.twp-social-icons-rounded li a:focus-within[href*="t.me"] {
+ul.twp-social-icons-rounded li a:hover[href*="t.me"],
+ul.twp-social-icons-rounded li a:focus[href*="t.me"] {
     color: #0088CC;
     background-color: white;
 }
@@ -2537,19 +2516,13 @@ ul.twp-social-icons-rounded li a[href*=wordpress] {
 ul.twp-social-icons-rounded li a[href*=wordpress]:before {
     content: "";
 }
-ul.twp-social-icons-rounded li a:visited[href*=wordpress] {
-    color: white;
-    background-color: #0074aa;
-}
-ul.twp-social-icons-rounded li a:visited[href*="t.me"] {
-    color: white;
-    background-color: #0088CC;
-}
-ul.twp-social-icons-rounded li a:hover[href*=wordpress], ul.twp-social-icons-rounded li a:focus-within[href*=wordpress] {
+ul.twp-social-icons-rounded li a:hover[href*=wordpress],
+ul.twp-social-icons-rounded li a:focus[href*=wordpress] {
     color: #0074aa;
     background-color: white;
 }
-ul.twp-social-icons-rounded li a:hover[href*="t.me"], ul.twp-social-icons-rounded li a:focus-within[href*="t.me"] {
+ul.twp-social-icons-rounded li a:hover[href*="t.me"],
+ul.twp-social-icons-rounded li a:focus[href*="t.me"] {
     color: #0088CC;
     background-color: white;
 }
@@ -2561,19 +2534,13 @@ ul.twp-social-icons-rounded li a[href*=pinterest] {
 ul.twp-social-icons-rounded li a[href*=pinterest]:before {
     content: "";
 }
-ul.twp-social-icons-rounded li a:visited[href*=pinterest] {
-    color: white;
-    background-color: #bd071c;
-}
-ul.twp-social-icons-rounded li a:visited[href*="t.me"] {
-    color: white;
-    background-color: #0088CC;
-}
-ul.twp-social-icons-rounded li a:hover[href*=pinterest], ul.twp-social-icons-rounded li a:focus-within[href*=pinterest] {
+ul.twp-social-icons-rounded li a:hover[href*=pinterest],
+ul.twp-social-icons-rounded li a:focus[href*=pinterest] {
     color: #bd071c;
     background-color: white;
 }
-ul.twp-social-icons-rounded li a:hover[href*="t.me"], ul.twp-social-icons-rounded li a:focus-within[href*="t.me"] {
+ul.twp-social-icons-rounded li a:hover[href*="t.me"],
+ul.twp-social-icons-rounded li a:focus[href*="t.me"] {
     color: #0088CC;
     background-color: white;
 }
@@ -2585,19 +2552,13 @@ ul.twp-social-icons-rounded li a[href*=tumblr] {
 ul.twp-social-icons-rounded li a[href*=tumblr]:before {
     content: "";
 }
-ul.twp-social-icons-rounded li a:visited[href*=tumblr] {
-    color: white;
-    background-color: #3e5a70;
-}
-ul.twp-social-icons-rounded li a:visited[href*="t.me"] {
-    color: white;
-    background-color: #0088CC;
-}
-ul.twp-social-icons-rounded li a:hover[href*=tumblr], ul.twp-social-icons-rounded li a:focus-within[href*=tumblr] {
+ul.twp-social-icons-rounded li a:hover[href*=tumblr],
+ul.twp-social-icons-rounded li a:focus[href*=tumblr] {
     color: #3e5a70;
     background-color: white;
 }
-ul.twp-social-icons-rounded li a:hover[href*="t.me"], ul.twp-social-icons-rounded li a:focus-within[href*="t.me"] {
+ul.twp-social-icons-rounded li a:hover[href*="t.me"],
+ul.twp-social-icons-rounded li a:focus[href*="t.me"] {
     color: #0088CC;
     background-color: white;
 }
@@ -2609,19 +2570,13 @@ ul.twp-social-icons-rounded li a[href*=whatsapp] {
 ul.twp-social-icons-rounded li a[href*=whatsapp]:before {
     content: "";
 }
-ul.twp-social-icons-rounded li a:visited[href*=whatsapp] {
-    color: white;
-    background-color: #00e676;
-}
-ul.twp-social-icons-rounded li a:visited[href*="t.me"] {
-    color: white;
-    background-color: #0088CC;
-}
-ul.twp-social-icons-rounded li a:hover[href*=whatsapp], ul.twp-social-icons-rounded li a:focus-within[href*=whatsapp] {
+ul.twp-social-icons-rounded li a:hover[href*=whatsapp],
+ul.twp-social-icons-rounded li a:focus[href*=whatsapp] {
     color: #00e676;
     background-color: white;
 }
-ul.twp-social-icons-rounded li a:hover[href*="t.me"], ul.twp-social-icons-rounded li a:focus-within[href*="t.me"] {
+ul.twp-social-icons-rounded li a:hover[href*="t.me"],
+ul.twp-social-icons-rounded li a:focus[href*="t.me"] {
     color: #0088CC;
     background-color: white;
 }
@@ -2633,19 +2588,13 @@ ul.twp-social-icons-rounded li a[href*=reddit] {
 ul.twp-social-icons-rounded li a[href*=reddit]:before {
     content: "";
 }
-ul.twp-social-icons-rounded li a:visited[href*=reddit] {
-    color: white;
-    background-color: #ff4500;
-}
-ul.twp-social-icons-rounded li a:visited[href*="t.me"] {
-    color: white;
-    background-color: #0088CC;
-}
-ul.twp-social-icons-rounded li a:hover[href*=reddit], ul.twp-social-icons-rounded li a:focus-within[href*=reddit] {
+ul.twp-social-icons-rounded li a:hover[href*=reddit],
+ul.twp-social-icons-rounded li a:focus[href*=reddit] {
     color: #ff4500;
     background-color: white;
 }
-ul.twp-social-icons-rounded li a:hover[href*="t.me"], ul.twp-social-icons-rounded li a:focus-within[href*="t.me"] {
+ul.twp-social-icons-rounded li a:hover[href*="t.me"],
+ul.twp-social-icons-rounded li a:focus[href*="t.me"] {
     color: #0088CC;
     background-color: white;
 }
@@ -2657,19 +2606,13 @@ ul.twp-social-icons-rounded li a[href*=vk] {
 ul.twp-social-icons-rounded li a[href*=vk]:before {
     content: "";
 }
-ul.twp-social-icons-rounded li a:visited[href*=vk] {
-    color: white;
-    background-color: #4a76a8;
-}
-ul.twp-social-icons-rounded li a:visited[href*="t.me"] {
-    color: white;
-    background-color: #0088CC;
-}
-ul.twp-social-icons-rounded li a:hover[href*=vk], ul.twp-social-icons-rounded li a:focus-within[href*=vk] {
+ul.twp-social-icons-rounded li a:hover[href*=vk],
+ul.twp-social-icons-rounded li a:focus[href*=vk] {
     color: #4a76a8;
     background-color: white;
 }
-ul.twp-social-icons-rounded li a:hover[href*="t.me"], ul.twp-social-icons-rounded li a:focus-within[href*="t.me"] {
+ul.twp-social-icons-rounded li a:hover[href*="t.me"],
+ul.twp-social-icons-rounded li a:focus[href*="t.me"] {
     color: #0088CC;
     background-color: white;
 }
@@ -2681,19 +2624,13 @@ ul.twp-social-icons-rounded li a[href*=telegram] {
 ul.twp-social-icons-rounded li a[href*=telegram]:before {
     content: "";
 }
-ul.twp-social-icons-rounded li a:visited[href*=telegram] {
-    color: white;
-    background-color: #0088CC;
-}
-ul.twp-social-icons-rounded li a:visited[href*="t.me"] {
-    color: white;
-    background-color: #0088CC;
-}
-ul.twp-social-icons-rounded li a:hover[href*=telegram], ul.twp-social-icons-rounded li a:focus-within[href*=telegram] {
+ul.twp-social-icons-rounded li a:hover[href*=telegram],
+ul.twp-social-icons-rounded li a:focus[href*=telegram] {
     color: #0088CC;
     background-color: white;
 }
-ul.twp-social-icons-rounded li a:hover[href*="t.me"], ul.twp-social-icons-rounded li a:focus-within[href*="t.me"] {
+ul.twp-social-icons-rounded li a:hover[href*="t.me"],
+ul.twp-social-icons-rounded li a:focus[href*="t.me"] {
     color: #0088CC;
     background-color: white;
 }
@@ -2736,19 +2673,24 @@ ul.twp-social-icons-rounded li a:hover[href*="t.me"], ul.twp-social-icons-rounde
     background-color: #E1306c;
     border-color: #E1306c;
 }
-.twp-bio-social-widget a:hover {
+.twp-bio-social-widget a:hover,
+.twp-bio-social-widget a:focus {
     background-color: white;
 }
-.twp-bio-social-widget a:hover[href*=facebook] {
+.twp-bio-social-widget a:hover[href*=facebook],
+.twp-bio-social-widget a:focus[href*=facebook] {
     color: #3b5999;
 }
-.twp-bio-social-widget a:hover[href*=twitter] {
+.twp-bio-social-widget a:hover[href*=twitter],
+.twp-bio-social-widget a:focus[href*=twitter] {
     color: #1ca0fe;
 }
-.twp-bio-social-widget a:hover[href*=linkedin] {
+.twp-bio-social-widget a:hover[href*=linkedin],
+.twp-bio-social-widget a:focus[href*=linkedin] {
     color: #0177b5;
 }
-.twp-bio-social-widget a:hover[href*=instagram] {
+.twp-bio-social-widget a:hover[href*=instagram],
+.twp-bio-social-widget a:focus[href*=instagram] {
     color: #E1306c;
 }
 .twp-mobile-menu-section .twp-mobile-menu ul > li > a {
@@ -2756,27 +2698,9 @@ ul.twp-social-icons-rounded li a:hover[href*="t.me"], ul.twp-social-icons-rounde
 }
 .twp-mobile-menu-section .twp-mobile-menu ul > li ul {
     position: relative;
-    padding-left: 15px;
 }
-@media (min-width: 1050px) {
-    .twp-mobile-menu-section .twp-mobile-menu ul > li ul {
-        top: -30px;
-        height: 0;
-        overflow: hidden;
-        transition: all 0.3s linear;
-        -webkit-transition: all 0.3s linear;
-        -moz-transition: all 0.3s linear;
-    }
-}
-.twp-mobile-menu-section .twp-mobile-menu ul > li ul li a {
-    font-size: 1rem;
-}
-.twp-mobile-menu-section .twp-mobile-menu ul > li ul li:hover > ul, .twp-mobile-menu-section .twp-mobile-menu ul > li ul li:focus-within > ul {
-    height: auto;
-    overflow: visible;
-    top: 0;
-}
-.twp-mobile-menu-section .twp-mobile-menu ul > li:hover > ul, .twp-mobile-menu-section .twp-mobile-menu ul > li:focus-within > ul {
+.twp-mobile-menu-section .twp-mobile-menu ul > li:hover > ul,
+.twp-mobile-menu-section .twp-mobile-menu ul > li:focus > ul {
     height: auto;
     overflow: visible;
     top: 0;
@@ -2792,10 +2716,13 @@ ul.twp-social-icons-rounded li a:hover[href*="t.me"], ul.twp-social-icons-rounde
     background-color: #ffaaa6;
     color: white;
 }
-.twp-mobile-menu-section .twp-mobile-menu ul {
-    transition: all 0.3s linear;
-    -webkit-transition: all 0.3s linear;
-    -moz-transition: all 0.3s linear;
+.twp-mobile-menu-section .twp-mobile-menu ul li {
+    position: relative;
+}
+.twp-mobile-menu-section .twp-mobile-menu .submenu-wrapper {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
 }
 .twp-mobile-menu-section .twp-mobile-menu ul li a {
     display: block;
@@ -2806,23 +2733,12 @@ ul.twp-social-icons-rounded li a:hover[href*="t.me"], ul.twp-social-icons-rounde
     -webkit-transition: all 0.3s linear;
     -moz-transition: all 0.3s linear;
 }
-.twp-mobile-menu-section .twp-mobile-menu ul li a:hover {
+.twp-mobile-menu-section .twp-mobile-menu ul li a:hover,
+.twp-mobile-menu-section .twp-mobile-menu ul li a:focus {
     color: #ffaaa6;
 }
 .twp-mobile-menu-section .twp-mobile-menu ul li a .twp-menu-description {
     margin: 0 5px;
-}
-.twp-mobile-menu-section .twp-mobile-menu ul .down-arrow > a {
-    position: relative;
-}
-.twp-mobile-menu-section .twp-mobile-menu ul .down-arrow > a:after {
-    display: block;
-    position: absolute;
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    font-family: fontAwesome;
-    content: "";
 }
 .twp-mobile-menu-section {
     position: fixed;
@@ -2837,7 +2753,8 @@ ul.twp-social-icons-rounded li a:hover[href*="t.me"], ul.twp-social-icons-rounde
     transition: all 0.5s ease;
     width: 100%;
 }
-.twp-mobile-menu-section a {
+.twp-mobile-menu-section a,
+.twp-mobile-menu-section .fa {
     color: white;
 }
 @media (min-width: 1050px) {
@@ -2876,7 +2793,8 @@ ul.twp-social-icons-rounded li a:hover[href*="t.me"], ul.twp-social-icons-rounde
     -webkit-transition: all 0.3s linear;
     -moz-transition: all 0.3s linear;
 }
-.twp-bio-widget .twp-basic-info .twp-image-section .data-bg:hover {
+.twp-bio-widget .twp-basic-info .twp-image-section .data-bg:hover,
+.twp-bio-widget .twp-basic-info .twp-image-section .data-bg:focus {
     border-radius: 0;
 }
 .twp-bio-widget .twp-basic-info .twp-title-with-social-icon {
@@ -3023,10 +2941,8 @@ ul.twp-social-icons-rounded li a:hover[href*="t.me"], ul.twp-social-icons-rounde
 .twp-post-with-bg-image .twp-gallery-post .twp-desc.twp-overlay-black a {
     color: white;
 }
-.twp-post-with-bg-image .twp-gallery-post .twp-desc.twp-overlay-black a:visited {
-    color: white;
-}
-.twp-post-with-bg-image .twp-gallery-post .twp-desc.twp-overlay-black a:hover {
+.twp-post-with-bg-image .twp-gallery-post .twp-desc.twp-overlay-black a:hover,
+.twp-post-with-bg-image .twp-gallery-post .twp-desc.twp-overlay-black a:focus {
     color: #ffaaa6;
 }
 @media (min-width: 768px) {
@@ -3060,11 +2976,13 @@ ul.twp-social-icons-rounded li a:hover[href*="t.me"], ul.twp-social-icons-rounde
     -webkit-line-clamp: 2;
 }
 @media (min-width: 1050px) {
-    .twp-post-with-bg-image .twp-gallery-post:hover .twp-desc {
+    .twp-post-with-bg-image .twp-gallery-post:hover .twp-desc,
+    .twp-post-with-bg-image .twp-gallery-post:focus .twp-desc {
         left: 30px;
     }
 }
-.twp-post-with-bg-image .twp-gallery-post:hover .post-thumbnail .twp-post-format-icon {
+.twp-post-with-bg-image .twp-gallery-post:hover .post-thumbnail .twp-post-format-icon,
+.twp-post-with-bg-image .twp-gallery-post:focus .post-thumbnail .twp-post-format-icon {
     position: absolute;
     left: 50%;
     bottom: initial;
@@ -3141,13 +3059,15 @@ ul.twp-social-icons-rounded li a:hover[href*="t.me"], ul.twp-social-icons-rounde
 .twp-full-width-post .twp-gallery-post .post-thumbnail img {
     display: none;
 }
-.twp-full-width-post .twp-gallery-post .post-thumbnail:hover:before {
+.twp-full-width-post .twp-gallery-post .post-thumbnail:hover:before,
+.twp-full-width-post .twp-gallery-post .post-thumbnail:focus:before {
     -webkit-animation: scale-in-bottom-left 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
     -o-animation: scale-in-bottom-left 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
     -moz-animation: scale-in-bottom-left 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
     animation: scale-in-bottom-left 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
 }
-.twp-full-width-post .twp-gallery-post .post-thumbnail:hover .post-thumbnail .twp-post-format-icon {
+.twp-full-width-post .twp-gallery-post .post-thumbnail:hover .post-thumbnail .twp-post-format-icon,
+.twp-full-width-post .twp-gallery-post .post-thumbnail:focus .post-thumbnail .twp-post-format-icon {
     position: absolute;
     left: 50%;
     bottom: initial;
@@ -3182,10 +3102,8 @@ ul.twp-social-icons-rounded li a:hover[href*="t.me"], ul.twp-social-icons-rounde
     color: gray;
     font-size: 0.9rem;
 }
-.twp-single-article .entry-footer .tags-links a:visited {
-    color: gray;
-}
-.twp-single-article .entry-footer .tags-links a:hover {
+.twp-single-article .entry-footer .tags-links a:hover,
+.twp-single-article .entry-footer .tags-links a:focus {
     color: #ffaaa6;
 }
 .twp-single-article .entry-footer .edit-link {
@@ -3215,10 +3133,8 @@ ul.twp-social-icons-rounded li a:hover[href*="t.me"], ul.twp-social-icons-rounde
 .twp-single-article .entry-header .twp-author-meta a {
     color: #ffaaa6;
 }
-.twp-single-article .entry-header .twp-author-meta a:visited {
-    color: #ffaaa6;
-}
-.twp-single-article .entry-header .twp-author-meta a:hover {
+.twp-single-article .entry-header .twp-author-meta a:hover,
+.twp-single-article .entry-header .twp-author-meta a:focus {
     color: gray;
 }
 .post-navigation {
@@ -3261,15 +3177,21 @@ ul.twp-social-icons-rounded li a:hover[href*="t.me"], ul.twp-social-icons-rounde
     color: white;
 }
 .post-navigation .nav-links .nav-previous:hover:before,
-.post-navigation .nav-links .nav-next:hover:before {
+.post-navigation .nav-links .nav-previous:focus:before,
+.post-navigation .nav-links .nav-next:hover:before,
+.post-navigation .nav-links .nav-next:focus:before {
     background-color: rgba(255, 170, 166, 0.7);
 }
 .post-navigation .nav-links .nav-previous:hover a,
-.post-navigation .nav-links .nav-next:hover a {
+.post-navigation .nav-links .nav-previous:focus a,
+.post-navigation .nav-links .nav-next:hover a,
+.post-navigation .nav-links .nav-next:focus a {
     color: black;
 }
 .post-navigation .nav-links .nav-previous:hover:after,
-.post-navigation .nav-links .nav-next:hover:after {
+.post-navigation .nav-links .nav-previous:focus:after,
+.post-navigation .nav-links .nav-next:hover:after,
+.post-navigation .nav-links .nav-next:focus:after {
     color: black;
 }
 .post-navigation .nav-links .nav-previous:after {
@@ -3288,10 +3210,8 @@ ul.twp-social-icons-rounded li a:hover[href*="t.me"], ul.twp-social-icons-rounde
     -webkit-line-clamp: 2;
     color: white;
 }
-.post-navigation .nav-links a:visited {
-    color: white;
-}
-.post-navigation .nav-links a:hover {
+.post-navigation .nav-links a:hover,
+.post-navigation .nav-links a:focus {
     color: black;
 }
 .twp-single-article .post-thumbnail {
@@ -3554,7 +3474,9 @@ ul.twp-social-icons-rounded li a:hover[href*="t.me"], ul.twp-social-icons-rounde
     -moz-transition: all 0.3s linear;
 }
 .widget .search-form .search-submit:hover,
-.twp-menubar-search .search-form .search-submit:hover {
+.widget .search-form .search-submit:focus,
+.twp-menubar-search .search-form .search-submit:hover,
+.twp-menubar-search .search-form .search-submit:focus {
     background-color: #ffaaa6;
     color: black;
 }
@@ -3728,10 +3650,8 @@ ul.twp-social-icons-rounded li a:hover[href*="t.me"], ul.twp-social-icons-rounde
 .site-footer a {
     color: white;
 }
-.site-footer a:visited {
-    color: white;
-}
-.site-footer a:hover {
+.site-footer a:hover,
+.site-footer a:focus {
     color: #ffaaa6;
 }
 .twp-full-width-post {
@@ -3795,10 +3715,8 @@ ul.twp-social-icons-rounded li a:hover[href*="t.me"], ul.twp-social-icons-rounde
 .twp-header a {
     color: white;
 }
-.twp-header a:visited {
-    color: white;
-}
-.twp-header a:hover {
+.twp-header a:hover,
+.twp-header a:focus {
     color: #ffaaa6;
 }
 .twp-header .twp-nav-section,
@@ -3814,11 +3732,25 @@ ul.twp-social-icons-rounded li a:hover[href*="t.me"], ul.twp-social-icons-rounde
     flex-wrap: wrap;
     justify-content: space-between;
 }
-.twp-header .twp-menu-section button {
+.menu .sub-menu {
+    display: none;
+}
+.twp-header .twp-menu-section button,
+.theme-btn-toggle {
     padding: 0;
     background-color: transparent;
     border: 0;
     cursor: pointer;
+}
+.twp-header .twp-menu-section button {
+    width: 100%;
+}
+.theme-btn-toggle .fa {
+    font-size: 16px;
+    transition: transform .15s linear;
+}
+.submenu-toggle.button-toggle-active .fa {
+    transform: rotate(180deg);
 }
 .twp-header .site-branding {
     padding: 90px 30px 90px 30px;
@@ -3890,9 +3822,6 @@ ul.twp-social-icons-rounded li a:hover[href*="t.me"], ul.twp-social-icons-rounde
     background-color: transparent;
     color: black;
 }
-.comment-form input[type=submit]:visited, .comments-area .comment-respond .comment-form .logged-in-as a:visited, .comments-area .comment-list li .comment-reply-link:visited {
-    color: black;
-}
 .comments-area .comment-list li .comment-content p:before, .comments-area .comment-list li .comment-meta .comment-metadata .edit-link:before, .comments-area .comment-list li .comment-meta .comment-metadata time:before {
     display: block;
     position: absolute;
@@ -3910,7 +3839,8 @@ ul.twp-social-icons-rounded li a:hover[href*="t.me"], ul.twp-social-icons-rounde
 .comments-area .comment-list li {
     padding-top: 30px;
 }
-.comments-area .comment-list li .comment-meta a:hover {
+.comments-area .comment-list li .comment-meta a:hover,
+.comments-area .comment-list li .comment-meta a:focus {
     color: gray;
 }
 .comments-area .comment-list li .comment-meta b {
@@ -4018,7 +3948,8 @@ ul.twp-social-icons-rounded li a:hover[href*="t.me"], ul.twp-social-icons-rounde
         width: initial;
     }
 }
-.comments-area .comment-respond .comment-form .logged-in-as a:hover {
+.comments-area .comment-respond .comment-form .logged-in-as a:hover,
+.comments-area .comment-respond .comment-form .logged-in-as a:focus {
     color: white;
 }
 .comment-form textarea, .comment-form input[type=text], .comment-form input[type=email], .comment-form input[type=url] {
@@ -4035,7 +3966,8 @@ ul.twp-social-icons-rounded li a:hover[href*="t.me"], ul.twp-social-icons-rounde
     width: 100%;
     text-align: center;
 }
-.comment-form input[type=submit]:hover {
+.comment-form input[type=submit]:hover,
+.comment-form input[type=submit]:focus {
     background-color: #ffaaa6;
     color: white;
 }
@@ -4140,10 +4072,8 @@ ul.twp-social-icons-rounded li a:hover[href*="t.me"], ul.twp-social-icons-rounde
 .twp-eportfolio-photography-slider a {
     color: white;
 }
-.twp-eportfolio-photography-slider a:visited {
-    color: white;
-}
-.twp-eportfolio-photography-slider a:hover {
+.twp-eportfolio-photography-slider a:hover,
+.twp-eportfolio-photography-slider a:focus {
     color: #ffaaa6;
 }
 .twp-eportfolio-photography-slider .slick-arrow {
@@ -4164,7 +4094,8 @@ ul.twp-social-icons-rounded li a:hover[href*="t.me"], ul.twp-social-icons-rounde
 .twp-eportfolio-photography-slider .slick-arrow.slick-disabled {
     z-index: 1;
 }
-.twp-eportfolio-photography-slider .slick-arrow:hover {
+.twp-eportfolio-photography-slider .slick-arrow:hover,
+.twp-eportfolio-photography-slider .slick-arrow:focus {
     color: #ffaaa6;
 }
 .twp-eportfolio-photography-slider .slick-prev {
@@ -4241,10 +4172,8 @@ ul.twp-social-icons-rounded li a:hover[href*="t.me"], ul.twp-social-icons-rounde
     font-size: 0.8rem;
     color: white;
 }
-.twp-eportfolio-photography-slider .twp-photography-post .twp-categories a:visited {
-    color: white;
-}
-.twp-eportfolio-photography-slider .twp-photography-post .twp-categories a:hover {
+.twp-eportfolio-photography-slider .twp-photography-post .twp-categories a:hover,
+.twp-eportfolio-photography-slider .twp-photography-post .twp-categories a:focus {
     color: #ffaaa6;
 }
 .twp-eportfolio-photography-slider .twp-photography-post .twp-desc {

@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ePortfolio\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-01 15:15+0000\n"
+"POT-Creation-Date: 2022-12-20 09:57+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -311,6 +311,7 @@ msgid "Enable Switch/toggle Option on Blog Layout"
 msgstr ""
 
 #. Name of the theme
+#: classes/about.php:17
 msgid "ePortfolio"
 msgstr ""
 
@@ -342,11 +343,7 @@ msgid ""
 "com/eportfolio/"
 msgstr ""
 
-#: classes/about.php:22
-msgid "ePortfolio Options"
-msgstr ""
-
-#: inc/customize/customizer.php:47
+#: inc/customize/customizer.php:48
 msgid "ePortfolio Pro"
 msgstr ""
 
@@ -777,6 +774,10 @@ msgstr ""
 msgid "Short Description Details"
 msgstr ""
 
+#: inc/template-functions.php:242
+msgid "Show sub menu"
+msgstr ""
+
 #: inc/single-meta.php:82
 msgid "Single Page/Post Layout"
 msgstr ""
@@ -907,7 +908,7 @@ msgstr ""
 msgid "Unlock all the Features with %1$s Pro"
 msgstr ""
 
-#: inc/customize/customizer.php:48
+#: inc/customize/customizer.php:49
 msgid "Upgrade To Pro"
 msgstr ""
 

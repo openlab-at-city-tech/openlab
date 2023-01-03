@@ -1,9 +1,9 @@
 === ePortfolio ===
 Contributors: themeinwp
 Requires at least: 5.3
-Tested up to: 6.0
+Tested up to: 6.1
 Requires PHP: 5.6
-Stable tag: 1.1.9
+Stable tag: 1.2.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -84,6 +84,11 @@ License: Apache License, Version 2.0
 
 
 == Changelog ==
+= 1.2.0 - Dec 20 2022 =
+* Update - Navigation submenu open on click
+* Update - Customizer option reset to default value on color options
+* Update - Paged option
+
 = 1.1.9 - Sep 01 2022 =
 * Fixed RTL issue on slick
 * Update Display slides if column 1 is selected on Gallery

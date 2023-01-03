@@ -694,6 +694,15 @@ html[dir="rtl"] .eportfolio-checkbox-wrap label:after {
 .widgets-holder-wrap [id*="eportfolio"] .widget-top .toggle-indicator {
     color: #000;
 }
+#adminmenu .wp-submenu a[href^="themes.php?page=eportfolio"] {
+    background-color: #f8d92f;
+    color: #000 !important;
+}
+#adminmenu .wp-submenu a[href^="themes.php?page=eportfolio"]:hover,
+#adminmenu .wp-submenu a[href^="themes.php?page=eportfolio"]:focus {
+    background-color: #eb2f21;
+    color: #fff !important;
+}
 .quick-loader-wrapper {
     display: none;
     vertical-align: middle;

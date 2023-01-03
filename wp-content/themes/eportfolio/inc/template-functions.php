@@ -220,3 +220,40 @@ function eportfolio_after_import_setup() {
     }
 }
 add_action( 'pt-ocdi/after_import', 'eportfolio_after_import_setup' );
+
+
+
+if( !function_exists( 'eportfolio_add_sub_toggles_to_main_menu' ) ) :
+
+    function eportfolio_add_sub_toggles_to_main_menu( $args, $item, $depth ) {
+
+        // Add sub menu toggles to the Expanded Menu with toggles.
+        if( $args->theme_location == 'primary-nav' ){
+
+            // Wrap the menu item link contents in a div, used for positioning.
+            $args->before = '<div class="submenu-wrapper">';
+            $args->after  = '';
+
+            // Add a toggle to items with children.
+            if( in_array( 'menu-item-has-children', $item->classes, true ) ){
+
+                $toggle_target_string = '.menu-item.menu-item-' . $item->ID . ' > .sub-menu';
+                // Add the sub menu toggle.
+                $args->after .= '<button class="theme-btn-toggle submenu-toggle" data-toggle-target="' . $toggle_target_string . '" data-toggle-type="slidetoggle" data-toggle-duration="250" aria-expanded="false"><span class="btn__content" tabindex="-1"><span class="screen-reader-text">' . __( 'Show sub menu', 'eportfolio' ) . '</span><span class="fa fa-chevron-down"></span></span></button>';
+
+            }
+
+            // Close the wrapper.
+            $args->after .= '</div>';
+
+            // Add sub menu icons to the primary menu without toggles.
+        }
+
+        return $args;
+
+    }
+
+endif;
+
+add_filter( 'nav_menu_item_args', 'eportfolio_add_sub_toggles_to_main_menu', 10, 3 );
+

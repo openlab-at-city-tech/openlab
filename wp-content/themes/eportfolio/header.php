@@ -117,6 +117,6 @@
 				</div>
 			</div>
 		<?php } ?>
-		<?php  if (is_home() ) {
+		<?php  if (is_home() && !is_paged()) {
 			do_action('eportfolio_action_blog_banner_slider');
 		}
