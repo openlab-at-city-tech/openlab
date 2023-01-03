@@ -25,6 +25,14 @@ if ( ! class_exists( 'ExactDN' ) ) {
 		protected $user_exclusions = array();
 
 		/**
+		 * A list of user-defined page/URL exclusions, populated by validate_user_exclusions().
+		 *
+		 * @access protected
+		 * @var array $user_page_exclusions
+		 */
+		protected $user_page_exclusions = array();
+
+		/**
 		 * A list of image sizes registered for attachments.
 		 *
 		 * @access protected
@@ -230,6 +238,7 @@ if ( ! class_exists( 'ExactDN' ) ) {
 			// Overrides for admin-ajax images.
 			add_filter( 'exactdn_admin_allow_image_downsize', array( $this, 'allow_admin_image_downsize' ), 10, 2 );
 			add_filter( 'exactdn_admin_allow_image_srcset', array( $this, 'allow_admin_image_downsize' ), 10, 2 );
+			add_filter( 'exactdn_admin_allow_plugin_url', array( $this, 'allow_admin_image_downsize' ), 10, 2 );
 			// Overrides for "pass through" images.
 			add_filter( 'exactdn_pre_args', array( $this, 'exactdn_remove_args' ), 10, 3 );
 			// Overrides for user exclusions.
@@ -288,9 +297,18 @@ if ( ! class_exists( 'ExactDN' ) ) {
 				$this->debug_message( "could not break down URL: $this->site_url" );
 				return;
 			}
-			if ( ! $this->get_exactdn_option( 'local_domain' ) ) {
-				$this->set_exactdn_option( 'local_domain', $this->upload_domain );
+
+			$stored_local_domain = $this->get_exactdn_option( 'local_domain' );
+			if ( empty( $stored_local_domain ) ) {
+				$this->set_exactdn_option( 'local_domain', base64_encode( $this->upload_domain ) );
+				$stored_local_domain = $this->upload_domain;
+			} elseif ( false !== strpos( $stored_local_domain, '.' ) ) {
+				$this->set_exactdn_option( 'local_domain', base64_encode( $stored_local_domain ) );
+			} else {
+				$stored_local_domain = base64_decode( $stored_local_domain );
 			}
+			$this->debug_message( "saved domain is $stored_local_domain" );
+
 			$this->debug_message( "allowing images from here: $this->upload_domain" );
 			if (
 				(
@@ -304,8 +322,8 @@ if ( ! class_exists( 'ExactDN' ) ) {
 				$this->debug_message( "removing this from urls: $this->remove_path" );
 			}
 			if (
-				$this->get_exactdn_option( 'local_domain' ) !== $this->upload_domain &&
-				! $this->allow_image_domain( $this->get_exactdn_option( 'local_domain' ) ) &&
+				$stored_local_domain !== $this->upload_domain &&
+				! $this->allow_image_domain( $stored_local_domain ) &&
 				is_admin()
 			) {
 				add_action( 'admin_notices', $this->prefix . 'notice_exactdn_domain_mismatch' );
@@ -821,6 +839,11 @@ if ( ! class_exists( 'ExactDN' ) ) {
 				if ( is_array( $user_exclusions ) ) {
 					foreach ( $user_exclusions as $exclusion ) {
 						if ( ! is_string( $exclusion ) ) {
+							continue;
+						}
+						$exclusion = trim( $exclusion );
+						if ( 0 === strpos( $exclusion, 'page:' ) ) {
+							$this->user_page_exclusions[] = str_replace( 'page:', '', $exclusion );
 							continue;
 						}
 						if ( $this->content_path && false !== strpos( $exclusion, $this->content_path ) ) {
@@ -2026,7 +2049,9 @@ if ( ! class_exists( 'ExactDN' ) ) {
 
 				// If an image is requested with a size known to WordPress, use that size's settings with ExactDN.
 				if ( is_string( $size ) && array_key_exists( $size, $this->image_sizes() ) ) {
+					// Get all the size data.
 					$image_args = $this->image_sizes();
+					// Then retrieve just the one size from the full list stored in $image_args.
 					$image_args = $image_args[ $size ];
 					$this->debug_message( "image args for $size: " . $this->implode( ',', $image_args ) );
 
@@ -2034,11 +2059,17 @@ if ( ! class_exists( 'ExactDN' ) ) {
 
 					$image_meta = image_get_intermediate_size( $attachment_id, $size );
 
+					// Tracking this separately, because the width/height from the $image_meta might get blown out.
+					$full_width  = false;
+					$full_height = false;
+
 					// 'full' is a special case: We need consistent data regardless of the requested size.
 					if ( 'full' === $size ) {
 						$image_meta   = wp_get_attachment_metadata( $attachment_id );
 						$intermediate = false;
 						$got_meta     = true;
+						$full_width   = ! empty( $image_meta['width'] ) ? (int) $image_meta['width'] : false;
+						$full_height  = ! empty( $image_meta['height'] ) ? (int) $image_meta['height'] : false;
 					} elseif ( ! $image_meta ) {
 						$this->debug_message( 'still do not have meta, getting it now' );
 						// If we still don't have any image meta at this point, it's probably from a custom thumbnail size
@@ -2047,17 +2078,27 @@ if ( ! class_exists( 'ExactDN' ) ) {
 						$got_meta   = true;
 
 						if ( isset( $image_meta['width'], $image_meta['height'] ) ) {
+							$full_width    = ! empty( $image_meta['width'] ) ? (int) $image_meta['width'] : false;
+							$full_height   = ! empty( $image_meta['height'] ) ? (int) $image_meta['height'] : false;
 							$image_resized = image_resize_dimensions( $image_meta['width'], $image_meta['height'], $image_args['width'], $image_args['height'], $image_args['crop'] );
 							if ( $image_resized ) { // This could be false when the requested image size is larger than the full-size image.
+								// The new dimensions here are what we'd use to crop/scale the image. If crop is truthy, then the dimensions
+								// will not match the original dimensions. This is why we track $full_width/$full_height separately.
+								$this->debug_message( 'new full-size parameters, 6 and 7 are the scaled dimensions:' );
+								if ( is_array( $image_resized ) ) {
+									$this->debug_message( implode( ', ', $image_resized ) );
+								}
 								$image_meta['width']  = $image_resized[6];
 								$image_meta['height'] = $image_resized[7];
 							}
 						}
 					}
 					if ( isset( $image_meta['width'], $image_meta['height'] ) ) {
+						// This might seem strange, but we'll constrain this by size name ($size) shortly.
 						$image_args['width']  = $image_meta['width'];
 						$image_args['height'] = $image_meta['height'];
 
+						// Make the custom $content_width apply here.
 						global $content_width;
 						if ( defined( 'EXACTDN_CONTENT_WIDTH' ) && ! empty( $content_width ) ) {
 							$real_content_width = $content_width;
@@ -2065,6 +2106,7 @@ if ( ! class_exists( 'ExactDN' ) ) {
 						}
 						// NOTE: it will constrain an image to $content_width which is expected behavior in core, so far as I can see.
 						list( $image_args['width'], $image_args['height'] ) = image_constrain_size_for_editor( $image_args['width'], $image_args['height'], $size, 'display' );
+						// And then set $content_width back to normal.
 						if ( defined( 'EXACTDN_CONTENT_WIDTH' ) && ! empty( $real_content_width ) ) {
 							$content_width = $real_content_width;
 						}
@@ -2087,7 +2129,9 @@ if ( ! class_exists( 'ExactDN' ) ) {
 							$size_meta = $image_meta;
 							// Because we don't have the "real" meta, just the height/width for the specific size.
 							$this->debug_message( 'getting attachment meta now' );
-							$image_meta = wp_get_attachment_metadata( $attachment_id );
+							$image_meta  = wp_get_attachment_metadata( $attachment_id );
+							$full_width  = ! empty( $image_meta['width'] ) ? (int) $image_meta['width'] : false;
+							$full_height = ! empty( $image_meta['height'] ) ? (int) $image_meta['height'] : false;
 						}
 						if ( 'resize' === $transform && $image_meta && isset( $image_meta['width'], $image_meta['height'] ) ) {
 							// Lets make sure that we don't upscale images since wp never upscales them as well.
@@ -2101,9 +2145,9 @@ if ( ! class_exists( 'ExactDN' ) ) {
 					}
 
 					if (
-						! empty( $image_meta['sizes'] ) && ! empty( $image_meta['width'] ) && ! empty( $image_meta['height'] ) &&
-						(int) $image_args['width'] === (int) $image_meta['width'] &&
-						(int) $image_args['height'] === (int) $image_meta['height']
+						$full_width && $full_height &&
+						(int) $image_args['width'] === (int) $full_width &&
+						(int) $image_args['height'] === (int) $full_height
 					) {
 						$this->debug_message( 'image args match size of original, just use that' );
 						$size = 'full';
@@ -2319,7 +2363,6 @@ if ( ! class_exists( 'ExactDN' ) ) {
 			}
 
 			$this->debug_message( "image_src = $image_src" );
-			$upload_dir      = wp_get_upload_dir();
 			$resize_existing = defined( 'EXACTDN_RESIZE_EXISTING' ) && EXACTDN_RESIZE_EXISTING;
 			$w_descriptor    = true;
 
@@ -2358,10 +2401,16 @@ if ( ! class_exists( 'ExactDN' ) ) {
 				$this->debug_message( 'continuing: ' . $width . ' vs. ' . $source['value'] );
 
 				// It's quicker to get the full size with the data we have already, if available.
-				if ( ! empty( $attachment_id ) ) {
-					$url = wp_get_attachment_url( $attachment_id );
+				if ( ! empty( $full_url ) ) {
+					$url = $full_url;
+				} elseif ( ! empty( $attachment_id ) ) {
+					$full_url = wp_get_attachment_url( $attachment_id );
+					$url      = $full_url;
 				} else {
-					$url = $this->strip_image_dimensions_maybe( $url );
+					$full_url = $this->strip_image_dimensions_maybe( $url );
+					if ( $full_url === $url ) {
+						$full_url = '';
+					}
 				}
 				$this->debug_message( "building srcs from $url" );
 
@@ -2392,8 +2441,40 @@ if ( ! class_exists( 'ExactDN' ) ) {
 			 */
 			$multipliers = apply_filters( 'exactdn_srcset_multipliers', array( .2, .4, .6, .8, 1, 2, 3, 1920 ) );
 
-			$this->debug_message( "building url from {$upload_dir['baseurl']} and {$image_meta['file']}" );
-			$url = trailingslashit( $upload_dir['baseurl'] ) . $image_meta['file'];
+			if ( empty( $url ) || empty( $multipliers ) ) {
+				// No URL, or no multipliers, bail!
+				return $sources;
+			}
+
+			if ( ! empty( $full_url ) ) {
+				$this->debug_message( "already built url via db: $full_url" );
+				$url = $full_url;
+			} elseif ( 0 === strpos( $image_meta['file'], '/' ) ) {
+				$this->debug_message( 'full meta appears to be absolute path, retrieving URL via wp_get_attachment_url()' );
+				$url = \wp_get_attachment_url( $attachment_id );
+			} else {
+				$base_dir  = \dirname( $url );
+				$meta_file = $image_meta['file'];
+				$this->debug_message( "checking to see if we can join $base_dir with $meta_file" );
+				if ( false !== \strpos( $meta_file, '/' ) ) {
+					$meta_dir = \dirname( $meta_file );
+					if ( \str_ends_with( $base_dir, $meta_dir ) ) {
+						$meta_file = \wp_basename( $meta_file );
+						$this->debug_message( "trimmed file down to $meta_file" );
+					} else {
+						// This happens if there is object versioning, or thumbs in a sub-folder.
+						$this->debug_message( "could not splice $base_dir and $meta_file" );
+						$base_dir = false;
+					}
+				}
+				if ( $base_dir ) {
+					$this->debug_message( "building url from $base_dir and $meta_file" );
+					$url = \trailingslashit( $base_dir ) . $meta_file;
+				} else {
+					$this->debug_message( 'splicing disabled previously, or empty base_dir, so retrieving URL via wp_get_attachment_url()' );
+					$url = \wp_get_attachment_url( $attachment_id );
+				}
+			}
 
 			if ( ! $w_descriptor ) {
 				$this->debug_message( 'using x descriptors instead of w' );
@@ -3127,6 +3208,18 @@ if ( ! class_exists( 'ExactDN' ) ) {
 		 * @return boolean True to skip the page, unchanged otherwise.
 		 */
 		function skip_page( $skip = false, $uri = '' ) {
+			if ( $this->is_iterable( $this->user_page_exclusions ) ) {
+				foreach ( $this->user_page_exclusions as $page_exclusion ) {
+					if ( '/' === $page_exclusion && '/' === $uri ) {
+						return true;
+					} elseif ( '/' === $page_exclusion ) {
+						continue;
+					}
+					if ( false !== strpos( $uri, $page_exclusion ) ) {
+						return true;
+					}
+				}
+			}
 			if ( false !== strpos( $uri, 'bricks=run' ) ) {
 				return true;
 			}
@@ -3155,6 +3248,9 @@ if ( ! class_exists( 'ExactDN' ) ) {
 				return true;
 			}
 			if ( false !== strpos( $uri, '?fl_builder' ) ) {
+				return true;
+			}
+			if ( false !== strpos( $uri, 'is-editor-iframe=' ) ) {
 				return true;
 			}
 			if ( false !== strpos( $uri, 'tatsu=' ) ) {
@@ -3195,6 +3291,9 @@ if ( ! class_exists( 'ExactDN' ) ) {
 		 */
 		function parse_enqueue( $url ) {
 			if ( is_admin() ) {
+				return $url;
+			}
+			if ( function_exists( 'affwp_is_affiliate_portal' ) && affwp_is_affiliate_portal() ) {
 				return $url;
 			}
 			if ( apply_filters( 'exactdn_skip_page', false, $this->request_uri ) ) {

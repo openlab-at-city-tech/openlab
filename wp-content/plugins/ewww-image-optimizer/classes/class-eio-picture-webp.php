@@ -32,6 +32,14 @@ class EIO_Picture_Webp extends EIO_Page_Parser {
 	protected $user_element_exclusions = array();
 
 	/**
+	 * A list of user-defined page/URL exclusions, populated by validate_user_exclusions().
+	 *
+	 * @access protected
+	 * @var array $user_page_exclusions
+	 */
+	protected $user_page_exclusions = array();
+
+	/**
 	 * Request URI.
 	 *
 	 * @var string $request_uri
@@ -124,6 +132,18 @@ class EIO_Picture_Webp extends EIO_Page_Parser {
 		if ( empty( $uri ) ) {
 			$uri = $this->request_uri;
 		}
+		if ( $this->is_iterable( $this->user_page_exclusions ) ) {
+			foreach ( $this->user_page_exclusions as $page_exclusion ) {
+				if ( '/' === $page_exclusion && '/' === $uri ) {
+					return false;
+				} elseif ( '/' === $page_exclusion ) {
+					continue;
+				}
+				if ( false !== strpos( $uri, $page_exclusion ) ) {
+					return false;
+				}
+			}
+		}
 		if ( false !== strpos( $uri, 'bricks=run' ) ) {
 			return false;
 		}
@@ -155,6 +175,9 @@ class EIO_Picture_Webp extends EIO_Page_Parser {
 			return false;
 		}
 		if ( false !== strpos( $uri, '?fl_builder' ) ) {
+			return false;
+		}
+		if ( false !== strpos( $uri, 'is-editor-iframe=' ) ) {
 			return false;
 		}
 		if ( '/print/' === substr( $uri, -7 ) ) {
@@ -306,7 +329,7 @@ class EIO_Picture_Webp extends EIO_Page_Parser {
 					}
 					$pic_img = $image;
 					$this->set_attribute( $pic_img, 'data-eio', 'p', true );
-					$picture_tag = "<picture><source srcset=\"$srcset_webp\" $sizes_attr type='image/webp'>$pic_img</picture>";
+					$picture_tag = "<picture><source srcset=\"$srcset_webp\" $sizes_attr type=\"image/webp\">$pic_img</picture>";
 					ewwwio_debug_message( "going to swap\n$image\nwith\n$picture_tag" );
 					$buffer = str_replace( $image, $picture_tag, $buffer );
 				}
@@ -399,6 +422,11 @@ class EIO_Picture_Webp extends EIO_Page_Parser {
 			if ( is_array( $user_exclusions ) ) {
 				foreach ( $user_exclusions as $exclusion ) {
 					if ( ! is_string( $exclusion ) ) {
+						continue;
+					}
+					$exclusion = trim( $exclusion );
+					if ( 0 === strpos( $exclusion, 'page:' ) ) {
+						$this->user_page_exclusions[] = str_replace( 'page:', '', $exclusion );
 						continue;
 					}
 					if (

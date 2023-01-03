@@ -57,9 +57,6 @@ if ( ! class_exists( 'EWWW_Nextcellent' ) ) {
 		 */
 		function dispatch_new_images( $gallery, $images ) {
 			global $ewwwio_ngg_background;
-			if ( ! class_exists( 'WP_Background_Process' ) ) {
-				require_once( EWWW_IMAGE_OPTIMIZER_PLUGIN_PATH . 'background.php' );
-			}
 			if ( ! is_object( $ewwwio_ngg_background ) ) {
 				$ewwwio_ngg_background = new EWWWIO_Ngg_Background_Process();
 			}
@@ -350,7 +347,7 @@ if ( ! class_exists( 'EWWW_Nextcellent' ) ) {
 				}
 				$backup_available = false;
 				global $wpdb;
-				$optimized_images  = $wpdb->get_results( $wpdb->prepare( "SELECT image_size,orig_size,resize,converted,level,backup,updated FROM $wpdb->ewwwio_images WHERE attachment_id = %d AND gallery = 'nextcell' AND image_size <> 0 ORDER BY orig_size DESC", $id ), ARRAY_A );
+				$optimized_images  = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $wpdb->ewwwio_images WHERE attachment_id = %d AND gallery = 'nextcell' AND image_size <> 0 ORDER BY orig_size DESC", $id ), ARRAY_A );
 				$ewww_manual_nonce = wp_create_nonce( 'ewww-manual-' . $id );
 				// If we have a valid status, display it, the image size, and give a re-optimize link.
 				if ( ! empty( $optimized_images ) ) {

@@ -33,6 +33,14 @@ if ( ! class_exists( 'EIO_Lazy_Load' ) ) {
 		protected $user_element_exclusions = array();
 
 		/**
+		 * A list of user-defined page/URL exclusions, populated by validate_user_exclusions().
+		 *
+		 * @access protected
+		 * @var array $user_page_exclusions
+		 */
+		protected $user_page_exclusions = array();
+
+		/**
 		 * A list of user-defined inclusions to lazy load for "external" CSS background images.
 		 *
 		 * @access protected
@@ -160,7 +168,10 @@ if ( ! class_exists( 'EIO_Lazy_Load' ) ) {
 			add_filter( 'eio_allow_admin_lazyload', array( $this, 'allow_admin_lazyload' ) );
 
 			// Load the appropriate JS.
-			if ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) {
+			if (
+				defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG
+				|| defined( strtoupper( $this->prefix ) . 'SCRIPT_DEBUG' ) && constant( strtoupper( $this->prefix ) . 'SCRIPT_DEBUG' )
+			) {
 				// Load the non-minified and separate versions of the lazy load scripts.
 				add_action( 'wp_enqueue_scripts', array( $this, 'debug_script' ), 1 );
 			} else {
@@ -199,6 +210,18 @@ if ( ! class_exists( 'EIO_Lazy_Load' ) ) {
 			if ( empty( $uri ) ) {
 				$uri = $this->request_uri;
 			}
+			if ( $this->is_iterable( $this->user_page_exclusions ) ) {
+				foreach ( $this->user_page_exclusions as $page_exclusion ) {
+					if ( '/' === $page_exclusion && '/' === $uri ) {
+						return false;
+					} elseif ( '/' === $page_exclusion ) {
+						continue;
+					}
+					if ( false !== strpos( $uri, $page_exclusion ) ) {
+						return false;
+					}
+				}
+			}
 			if ( false !== strpos( $uri, 'bricks=run' ) ) {
 				return false;
 			}
@@ -235,6 +258,9 @@ if ( ! class_exists( 'EIO_Lazy_Load' ) ) {
 			if ( false !== strpos( $uri, '?giveDonationFormInIframe' ) ) {
 				return false;
 			}
+			if ( false !== strpos( $uri, 'is-editor-iframe=' ) ) {
+				return false;
+			}
 			if ( '/print/' === substr( $uri, -7 ) ) {
 				return false;
 			}
@@ -260,6 +286,9 @@ if ( ! class_exists( 'EIO_Lazy_Load' ) ) {
 			}
 			if ( ! did_action( 'parse_query' ) ) {
 				return $should_process;
+			}
+			if ( function_exists( 'affwp_is_affiliate_portal' ) && affwp_is_affiliate_portal() ) {
+				return false;
 			}
 			if ( $this->is_amp() ) {
 				return false;
@@ -744,12 +773,12 @@ if ( ! class_exists( 'EIO_Lazy_Load' ) ) {
 								$webp_image_urls = apply_filters( 'eio_ll_multiple_bg_images_for_webp', $bg_image_urls );
 								$bg_image_urls   = wp_json_encode( $bg_image_urls );
 								$webp_image_urls = wp_json_encode( $webp_image_urls );
-								$this->set_attribute( $element, 'data-bg', $bg_image_urls );
+								$this->set_attribute( $element, 'data-back', $bg_image_urls );
 								if ( $bg_image_urls !== $webp_image_urls ) {
-									$this->set_attribute( $element, 'data-bg-webp', $webp_image_urls );
+									$this->set_attribute( $element, 'data-back-webp', $webp_image_urls );
 								}
 							} elseif ( ! empty( $bg_image_urls[0] ) ) {
-								$this->set_attribute( $element, 'data-bg', $bg_image_urls[0] );
+								$this->set_attribute( $element, 'data-back', $bg_image_urls[0] );
 							}
 							$element = str_replace( $style, $new_style, $element );
 						}
@@ -858,6 +887,11 @@ if ( ! class_exists( 'EIO_Lazy_Load' ) ) {
 				if ( is_array( $user_exclusions ) ) {
 					foreach ( $user_exclusions as $exclusion ) {
 						if ( ! is_string( $exclusion ) ) {
+							continue;
+						}
+						$exclusion = trim( $exclusion );
+						if ( 0 === strpos( $exclusion, 'page:' ) ) {
+							$this->user_page_exclusions[] = str_replace( 'page:', '', $exclusion );
 							continue;
 						}
 						if (
@@ -1232,6 +1266,7 @@ if ( ! class_exists( 'EIO_Lazy_Load' ) ) {
 			$plugin_file = constant( strtoupper( $this->prefix ) . 'PLUGIN_FILE' );
 			wp_enqueue_script( 'eio-lazy-load-pre', plugins_url( '/includes/lazysizes-pre.js', $plugin_file ), array(), $this->version, EIO_LL_FOOTER );
 			wp_enqueue_script( 'eio-lazy-load-uvh', plugins_url( '/includes/ls.unveilhooks.js', $plugin_file ), array(), $this->version, EIO_LL_FOOTER );
+			wp_enqueue_script( 'eio-lazy-load-uvh-addon', plugins_url( '/includes/ls.unveilhooks-addon.js', $plugin_file ), array(), $this->version, EIO_LL_FOOTER );
 			wp_enqueue_script( 'eio-lazy-load-post', plugins_url( '/includes/lazysizes-post.js', $plugin_file ), array(), $this->version, EIO_LL_FOOTER );
 			wp_enqueue_script( 'eio-lazy-load', plugins_url( '/includes/lazysizes.js', $plugin_file ), array(), $this->version, EIO_LL_FOOTER );
 			if ( defined( strtoupper( $this->prefix ) . 'LAZY_PRINT' ) && constant( strtoupper( $this->prefix ) . 'LAZY_PRINT' ) ) {
