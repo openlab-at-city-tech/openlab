@@ -18,6 +18,9 @@ function ngg_ajax_operation() {
 	if ( !is_user_logged_in() )
 		die('-1');
 
+    if (!wp_verify_nonce($_POST['_wpnonce'], 'ngg-ajax'))
+        die('-1');
+
 	// check for correct NextGEN capability
 	if ( !current_user_can('NextGEN Upload images') && !current_user_can('NextGEN Manage gallery') )
 		die('-1');
@@ -98,6 +101,9 @@ function createNewThumb() {
 	if ( !current_user_can('NextGEN Manage gallery') )
 		die('-1');
 
+    if (!wp_verify_nonce($_POST['nonce'], 'ngg_update_thumbnail'))
+        die('-1');
+
 	$id = (int) $_POST['id'];
 
 	$x = round( $_POST['x'] * $_POST['rr'], 0);
@@ -129,6 +135,9 @@ function ngg_rotateImage() {
 	// check for correct capability
 	if ( !is_user_logged_in() )
 		die('-1');
+
+    if (!wp_verify_nonce($_POST['nonce'], 'ngg-rotate-image'))
+        die('-1');
 
 	// check for correct NextGEN capability
 	if ( !current_user_can('NextGEN Manage gallery') )
@@ -167,27 +176,4 @@ function ngg_rotateImage() {
 
 	header('HTTP/1.1 500 Internal Server Error');
 	die( $result );
-}
-
-add_action('wp_ajax_ngg_dashboard', 'ngg_ajax_dashboard');
-
-function ngg_ajax_dashboard() {
-
-   	require_once( dirname( dirname(__FILE__) ) . '/admin/admin.php');
-	require_once( dirname( dirname(__FILE__) ) . '/admin/overview.php');
-
-   	if ( !current_user_can('NextGEN Gallery overview') )
-		die('-1');
-
-    @header( 'Content-Type: ' . get_option( 'html_type' ) . '; charset=' . get_option( 'blog_charset' ) );
-    @header( 'X-Content-Type-Options: nosniff' );
-
-    switch ( $_GET['jax'] ) {
-
-    case 'dashboard_primary' :
-    	ngg_overview_news();
-    	break;
-    }
-
-    die();
 }

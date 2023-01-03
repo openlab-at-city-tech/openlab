@@ -1,8 +1,14 @@
 NextGEN Gallery
 by Imagely
 
+= V3.30  - 10.05.2022 =
+* Fixed:   Rotating images was broken for some users after the last release.
+
+= V3.29  - 09.28.2022 =
+* Fixed:   Added nonce verification to some legacy XHR handlers.
+
 = V3.28  - 07.20.2022 =
-* NEW:     Added NGG_DISABLE_IMAGICK constant to disable use of ImageMagick
+* NEW:     Added NGG_DISABLE_IMAGICK constant to disable use of ImageMagick.
 
 = V3.27  - 05.25.2022 =
 * Fixed:   A possible PHP warning in the third party compatibility warning.

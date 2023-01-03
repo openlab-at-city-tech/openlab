@@ -35,15 +35,21 @@ $preview_image = $storage->get_image_url($id, 'full');
 
 <script type='text/javascript'>
 	var selectedImage = "thumb<?php echo $id ?>";
-	
-	function rotateImage() {
+    var rotateImageNonce = '<?php print wp_create_nonce('ngg-rotate-image'); ?>';
+
+    function rotateImage() {
 		
 		var rotate_angle = jQuery('input[name=ra]:checked').val();
-		
+
 		jQuery.ajax({
 		  url: ajaxurl,
 		  type : "POST",
-		  data:  {action: 'rotateImage', id: <?php echo $id ?>, ra: rotate_angle},
+		  data:  {
+              action: 'rotateImage',
+              nonce: rotateImageNonce,
+              id: <?php print esc_attr($id); ?>,
+              ra: rotate_angle
+          },
 		  cache: false,
 		  success: function (msg) { 
 				var d = new Date();
