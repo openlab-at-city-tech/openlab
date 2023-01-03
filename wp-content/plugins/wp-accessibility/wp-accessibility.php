@@ -17,7 +17,7 @@
  * Domain Path: /lang
  * License:     GPL-2.0+
  * License URI: http://www.gnu.org/license/gpl-2.0.txt
- * Version: 1.9.2
+ * Version: 2.0.1
  */
 
 /*
@@ -54,7 +54,7 @@ add_action( 'plugins_loaded', 'wpa_load_textdomain' );
  * Load internationalization.
  */
 function wpa_load_textdomain() {
-	load_plugin_textdomain( 'wp-accessibility', false, dirname( plugin_basename( __FILE__ ) ) . '/lang' );
+	load_plugin_textdomain( 'wp-accessibility' );
 }
 
 add_action( 'admin_menu', 'wpa_admin_menu' );
@@ -70,7 +70,7 @@ function wpa_admin_menu() {
  * Install on activation.
  */
 function wpa_install() {
-	$wpa_version = '1.9.2';
+	$wpa_version = '2.0.1';
 	if ( 'true' !== get_option( 'wpa_installed' ) ) {
 		add_option( 'rta_from_tag_clouds', 'on' );
 		add_option( 'asl_styles_focus', '' );
@@ -133,32 +133,12 @@ function wpa_plugin_action( $links, $file ) {
 	return $links;
 }
 
-add_action( 'wp_enqueue_scripts', 'wpacc_enqueue_scripts' );
+add_action( 'wp_enqueue_scripts', 'wpacc_enqueue_scripts', 101 );
 /**
- * Enqueue accessibility scripts dependent on options.
+ * Enqueue accessibility feature scripts.
  */
 function wpacc_enqueue_scripts() {
-	$version = wpa_check_version();
-	if ( 'on' === get_option( 'wpa_labels' ) ) {
-		wp_enqueue_script( 'wpa-labels', plugins_url( 'js/wpa.labels.js', __FILE__ ), array( 'jquery' ), $version, true );
-		$labels = array(
-			's'       => __( 'Search', 'wp-accessibility' ),
-			'author'  => __( 'Name', 'wp-accessibility' ),
-			'email'   => __( 'Email', 'wp-accessibility' ),
-			'url'     => __( 'Website', 'wp-accessibility' ),
-			'comment' => __( 'Comment', 'wp-accessibility' ),
-		);
-		/**
-		 * Customize labels passed to automatically label core WordPress fields.
-		 *
-		 * @hook wpa_labels
-		 * @param {array} $labels Array of labels for search and comment fields.
-		 *
-		 * @return {array}
-		 */
-		$labels = apply_filters( 'wpa_labels', $labels );
-		wp_localize_script( 'wpa-labels', 'wpalabels', $labels );
-	}
+	$version = ( SCRIPT_DEBUG ) ? rand( 10000, 100000 ) : wpa_check_version();
 	if ( 'link' === get_option( 'wpa_longdesc' ) ) {
 		wp_enqueue_script( 'longdesc.link', plugins_url( 'js/longdesc.link.js', __FILE__ ), array( 'jquery' ), $version, true );
 		wp_localize_script(
@@ -166,6 +146,28 @@ function wpacc_enqueue_scripts() {
 			'wparest',
 			array(
 				'url' => get_rest_url( null, 'wp/v2/media' ),
+			)
+		);
+	}
+	if ( 'on' === get_option( 'wpa_show_alt' ) ) {
+		/**
+		 * Modify the selector used to attach the alt attribute toggle button on images. Default `.hentry img[alt!=""], .comment-content img[alt!=""]`.
+		 *
+		 * @hook wpa_show_alt_selector
+		 *
+		 * @since 2.0.0
+		 *
+		 * @param {string} $selector Valid jQuery selector string.
+		 *
+		 * @return {string}
+		 */
+		$selector = apply_filters( 'wpa_show_alt_selector', '.hentry img[alt!=""], .comment-content img[alt!=""]' );
+		wp_enqueue_script( 'alt.button', plugins_url( 'js/alt.button.js', __FILE__ ), array( 'jquery' ), $version, true );
+		wp_localize_script(
+			'alt.button',
+			'wpalt',
+			array(
+				'selector' => $selector,
 			)
 		);
 	}
@@ -180,10 +182,6 @@ function wpacc_enqueue_scripts() {
 			)
 		);
 	}
-	// aria-current was added in 5.3; don't enqueue this script on newer versions.
-	if ( version_compare( $GLOBALS['wp_version'], '5.3', '<' ) ) {
-		wp_enqueue_script( 'current.menu', plugins_url( 'js/current-menu-item.js', __FILE__ ), array( 'jquery' ), $version, true );
-	}
 }
 
 add_action( 'wp_enqueue_scripts', 'wpa_stylesheet' );
@@ -191,7 +189,7 @@ add_action( 'wp_enqueue_scripts', 'wpa_stylesheet' );
  * Enqueue stylesheets for WP Accessibility.
  */
 function wpa_stylesheet() {
-	$version = wpa_check_version();
+	$version = ( SCRIPT_DEBUG ) ? rand( 10000, 100000 ) : wpa_check_version();
 	wp_register_style( 'wpa-style', plugins_url( 'css/wpa-style.css', __FILE__ ), array(), $version );
 	if ( 'link' === get_option( 'wpa_longdesc' ) || 'jquery' === get_option( 'wpa_longdesc' ) || 'on' === get_option( 'asl_enable' ) || ! empty( get_option( 'wpa_post_types', array() ) ) ) {
 		wp_enqueue_style( 'wpa-style' );
@@ -200,7 +198,7 @@ function wpa_stylesheet() {
 		if ( is_admin_bar_showing() ) {
 			$top = '37px';
 		}
-		$add_css    = wpa_css();
+		$add_css    = ( ! wpa_accessible_theme() ) ? wpa_css() : '';
 		$custom_css = ':root { --admin-bar-top : ' . $top . '; }';
 		wp_add_inline_style( 'wpa-style', wp_filter_nohtml_kses( stripcslashes( $add_css . $custom_css ) ) );
 	}
@@ -323,6 +321,16 @@ $class#skiplinks a:active, $vis $class#skiplinks a:focus {
 	$focus
 }
 	";
+	/**
+	 * Filter CSS styles output on front-end for skip links.
+	 *
+	 * @hook wpa_skiplink_styles
+	 *
+	 * @param {string} $styles Styles configured by settings.
+	 *
+	 * @return {string}
+	 */
+	$styles = apply_filters( 'wpa_skiplink_styles', $styles );
 
 	return $styles;
 }
@@ -341,6 +349,7 @@ function wpa_css() {
 		:focus { outline: 2px solid$color!important; outline-offset: 2px !important; }
 		";
 	}
+
 	return $styles;
 }
 
@@ -360,9 +369,10 @@ add_action( 'wp_enqueue_scripts', 'wpa_jquery_asl', 100 );
  * Enqueue JS needed for WP Accessibility options.
  */
 function wpa_jquery_asl() {
+	$version    = ( SCRIPT_DEBUG ) ? rand( 10000, 100000 ) : wpa_check_version();
 	$visibility = ( 'on' === get_option( 'asl_visible' ) ) ? 'wpa-visible' : 'wpa-hide';
 	$output     = '';
-	if ( 'on' === get_option( 'asl_enable' ) ) {
+	if ( 'on' === get_option( 'asl_enable' ) && ! wpa_accessible_theme() ) {
 		$html = '';
 		/**
 		 * Customize the default value for extra skiplink. Turns on extra skiplink options in WP Accessibility versions > 1.9.0.
@@ -391,16 +401,35 @@ function wpa_jquery_asl() {
 		 */
 		$default_sitemap = apply_filters( 'asl_sitemap', '' );
 		$sitemap         = esc_url( get_option( 'asl_sitemap', $default_sitemap ) );
-		$html           .= ( '' !== $content ) ? "<a href=\"#$content\" class='no-scroll'>" . __( 'Skip to Content', 'wp-accessibility' ) . '</a> ' : '';
-		$html           .= ( '' !== $nav ) ? "<a href=\"#$nav\" class='no-scroll'>" . __( 'Skip to navigation', 'wp-accessibility' ) . '</a> ' : '';
-		$html           .= ( '' !== $sitemap ) ? "<a href=\"$sitemap\" class='no-scroll'>" . __( 'Site map', 'wp-accessibility' ) . '</a> ' : '';
-		$html           .= ( '' !== $extra && '' !== $extra_text ) ? "<a href=\"$extra\" class='no-scroll'>$extra_text</a> " : '';
+		$html           .= ( '' !== $content ) ? "<a href=\"#$content\" class='no-scroll et_smooth_scroll_disabled'>" . __( 'Skip to Content', 'wp-accessibility' ) . '</a> ' : '';
+		$html           .= ( '' !== $nav ) ? "<a href=\"#$nav\" class='no-scroll et_smooth_scroll_disabled'>" . __( 'Skip to navigation', 'wp-accessibility' ) . '</a> ' : '';
+		$html           .= ( '' !== $sitemap ) ? "<a href=\"$sitemap\" class='no-scroll et_smooth_scroll_disabled'>" . __( 'Site map', 'wp-accessibility' ) . '</a> ' : '';
+		$html           .= ( '' !== $extra && '' !== $extra_text ) ? "<a href=\"$extra\" class='no-scroll et_smooth_scroll_disabled'>$extra_text</a> " : '';
 		$is_rtl          = ( is_rtl() ) ? '-rtl' : '-ltr';
 		$skiplinks       = __( 'Skip links', 'wp-accessibility' );
 		$output          = ( '' !== $html ) ? "<div class=\"$visibility$is_rtl\" id=\"skiplinks\" role=\"navigation\" aria-label=\"" . esc_attr( $skiplinks ) . "\">$html</div>" : '';
 	}
 
-	wp_enqueue_script( 'wp-accessibility', plugins_url( 'js/wp-accessibility.js', __FILE__ ), array( 'jquery' ), '1.0.3', true );
+	$labels = array(
+		's'       => __( 'Search', 'wp-accessibility' ),
+		'author'  => __( 'Name', 'wp-accessibility' ),
+		'email'   => __( 'Email', 'wp-accessibility' ),
+		'url'     => __( 'Website', 'wp-accessibility' ),
+		'comment' => __( 'Comment', 'wp-accessibility' ),
+	);
+	/**
+	 * Customize labels passed to automatically label core WordPress fields.
+	 *
+	 * @hook wpa_labels
+	 * @param {array} $labels Array of labels for search and comment fields.
+	 *
+	 * @return {array}
+	 */
+	$labels = apply_filters( 'wpa_labels', $labels );
+	$dir    = ( 'on' === get_option( 'wpa_lang' ) && ! wpa_accessible_theme() ) ? ( ( is_rtl() ) ? 'rtl' : 'ltr' ) : false;
+	$lang   = ( 'on' === get_option( 'wpa_lang' ) && ! wpa_accessible_theme() ) ? get_bloginfo( 'language' ) : false;
+
+	wp_enqueue_script( 'wp-accessibility', plugins_url( 'js/wp-accessibility.js', __FILE__ ), array( 'jquery' ), $version, true );
 	/**
 	 * Filter target element selector for underlines. Default `a`.
 	 *
@@ -411,6 +440,16 @@ function wpa_jquery_asl() {
 	 * @return string
 	 */
 	$target = apply_filters( 'wpa_underline_target', 'a' );
+	/**
+	 * Filter whether console log messages about remediation actions will be sent.
+	 *
+	 * @hook wpa_view_remediation_logs
+	 *
+	 * @param {bool} $visible Default `true` if user is logged in and has capabilities to manage options.
+	 *
+	 * @return {bool}
+	 */
+	$errors_enabled = apply_filters( 'wpa_view_remediation_logs', current_user_can( 'manage_options' ) );
 	wp_localize_script(
 		'wp-accessibility',
 		'wpa',
@@ -425,8 +464,13 @@ function wpa_jquery_asl() {
 				'enabled' => ( 'on' === get_option( 'wpa_underline' ) ) ? true : false,
 				'target'  => $target,
 			),
-			'dir'       => ( is_rtl() ) ? 'rtl' : 'ltr',
-			'lang'      => get_bloginfo( 'language' ),
+			'dir'       => $dir,
+			'lang'      => $lang,
+			'titles'    => ( 'on' === get_option( 'wpa_image_titles' ) ) ? true : false,
+			'labels'    => ( 'on' === get_option( 'wpa_labels' ) && ! wpa_accessible_theme() ) ? true : false,
+			'wpalabels' => $labels,
+			'current'   => ( version_compare( $GLOBALS['wp_version'], '5.3', '<' ) ) ? true : false,
+			'errors'    => ( $errors_enabled ) ? true : false,
 		)
 	);
 }
@@ -527,30 +571,13 @@ function wpa_search_error( $template ) {
 	return $template;
 }
 
-if ( 'on' === get_option( 'wpa_image_titles' ) ) {
-	add_filter( 'the_content', 'wpa_image_titles', 100 );
-	add_filter( 'post_thumbnail_html', 'wpa_image_titles', 100 );
-	add_filter( 'wp_get_attachment_image', 'wpa_image_titles', 100 );
-}
-
-/**
- * Filter out title attributes on images.
- *
- * @param string $content A block of content in an image, post thumbnail, or post content.
- *
- * @return string $content minus title attributes.
- */
-function wpa_image_titles( $content ) {
-	$results = array();
-	preg_match_all( '|[\s]title="[^"]*"|U', $content, $results );
-	foreach ( $results[0] as $img ) {
-		$content = str_replace( $img, '', $content );
-	}
-
-	return $content;
-}
-
-if ( 'on' === get_option( 'wpa_more' ) ) {
+if ( 'on' === get_option( 'wpa_more' ) && ! wpa_accessible_theme() ) {
+	add_filter(
+		'body_class',
+		function( $classes ) {
+			return array_merge( $classes, array( 'wpa-excerpt' ) );
+		}
+	);
 	add_filter( 'get_the_excerpt', 'wpa_custom_excerpt_more', 100 );
 	add_filter( 'excerpt_more', 'wpa_excerpt_more', 100 );
 	add_filter( 'the_content_more_link', 'wpa_content_more', 100 );
@@ -816,7 +843,7 @@ function wpa_get_content_summary( $post_id ) {
 	 */
 	$heading = apply_filters( 'wpa_summary_heading', __( 'Summary', 'wp-accessibility' ), $post_id );
 	/**
-	 * Filter the heading leve for content summaries. Default `h2`.
+	 * Filter the heading level for content summaries. Default `h2`.
 	 *
 	 * @hook wpa_summary_heading_level
 	 *

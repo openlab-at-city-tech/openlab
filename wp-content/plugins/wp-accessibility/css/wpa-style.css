@@ -31,20 +31,24 @@
 	z-index: 100000; /* Above WP toolbar. */
 }
 
+.wpa-alt,
 .wpa-ld {
 	display: inline-block;
 	position: relative;
 }
 
 /* basic support for themes that don't define alignleft and alignright for non-image elements. */
+div.alignleft.wpa-alt,
 div.alignleft.wpa-ld {
 	float: left;
 }
 
+div.alignright.wpa-alt,
 div.alignright.wpa-ld {
 	float: right;
 }
 
+div.aligncenter.wpa-alt,
 div.aligncenter.wpa-ld {
 	display: block;
 	margin: 0 auto;
@@ -56,7 +60,8 @@ div.aligncenter.wpa-ld {
 	outline-offset: 1px;
 }
 
-.wpa-ld a, .wpa-ld button {
+.wpa-alt button.wpa-toggle,
+.wpa-ld a.wpa-toggle, .wpa-ld button.wpa-toggle {
 	bottom: 2px;
 	left: 2px;
 	position: absolute;
@@ -64,28 +69,38 @@ div.aligncenter.wpa-ld {
 	min-width: 24px;
 }
 
-.top-left .wpa-ld a, .top-left .wpa-ld button {
+.top-left .wpa-alt a.wpa-toggle, .top-left .wpa-alt button.wpa-toggle,
+.top-left .wpa-ld a.wpa-toggle, .top-left .wpa-ld button.wpa-toggle {
 	top: 2px;
 	bottom: auto;
 }
 
-.top-right .wpa-ld a, .top-right .wpa-ld button {
+.top-right .wpa-alt a.wpa-toggle, .top-right .wpa-alt button.wpa-toggle,
+.top-right .wpa-ld a.wpa-toggle, .top-right .wpa-ld button.wpa-toggle {
 	top: 2px;
 	right: 2px;
 	left: auto;
 	bottom: auto;
 }
 
-.bottom-right .wpa-ld a, .bottom-right .wpa-ld button {
+.bottom-right .wpa-alt a.wpa-toggle, .bottom-right .wpa-alt button.wpa-toggle,
+.bottom-right .wpa-ld a.wpa-toggle, .bottom-right .wpa-ld button.wpa-toggle {
 	right: 2px;
 	left: auto;
 }
 
-.wpa-ld img {
-	display: block;
+.wpa-alt .wpa-ld button {
+	left: 2.5em;
 }
 
-.wpa-ld button, .wpa-ld button:active, .wpa-ld button:focus, .wpa-ld button:hover {
+.top-right .wpa-alt .wpa-ld button,
+.bottom-right .wpa-alt .wpa-ld button {
+	left: auto;
+	right: 2.5em;
+}
+
+.wpa-alt button.wpa-toggle, .wpa-alt button.wpa-toggle:active, .wpa-alt button.wpa-toggle:focus, .wpa-alt button.wpa-toggle:hover,
+.wpa-ld button.wpa-toggle, .wpa-ld button.wpa-toggle:active, .wpa-ld button.wpa-toggle:focus, .wpa-ld button.wpa-toggle:hover {
 	border: 1px solid #777;
 	border-radius: 2px;
 	z-index: 10;
@@ -101,21 +116,48 @@ div.aligncenter.wpa-ld {
 	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
 	background: rgba(255, 255, 255, .95);
-	padding: 1.5em;
+	padding: 2em 1em;
 	text-align: left;
 }
 
+.wpa-alt .wpa-alt-text {
+	position: absolute;
+	width: calc( 100% - 2em );
+	height: 6em;
+	bottom: 0;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+	background: rgba(255, 255, 255, .95);
+	padding: 1.5em;
+	margin: 1em;
+	border-radius: 15px;
+	box-shadow: 0 0 6px #333;
+	text-align: left;
+	z-index: 10;
+}
+
+.top-right .wpa-alt .wpa-alt-text,
+.top-left .wpa-alt .wpa-alt-text {
+	bottom: auto;
+	top: 0;
+	margin-top: 2.5em;
+}
+
+.rtl .wpa-alt .wpa-alt-text,
 .rtl .wpa-ld .longdesc {
 	text-align: right;
 }
 
-.wpa-ld button, .wpa-ld button:active, .wpa-ld button:focus, .wpa-ld button:hover, .wpa-ld a {
-	font-size: 1em;
-	font-weight: 400;
+.wpa-alt button.wpa-toggle, .wpa-alt button.wpa-toggle:active, .wpa-alt button.wpa-toggle:focus, .wpa-alt button.wpa-toggle:hover, .wpa-alt a.wpa-toggle,
+.wpa-ld button.wpa-toggle, .wpa-ld button.wpa-toggle:active, .wpa-ld button.wpa-toggle:focus, .wpa-ld button.wpa-toggle:hover, .wpa-ld a.wpa-toggle {
+	font-size: 1rem;
 	background: rgba(255, 255, 255, .8) !important;
 	padding: 0;
+	font-weight: 700;
+	font-family: Menlo, Consolas, Monaco, Liberation Mono, Lucida Console, monospace;
 	color: #000 !important;
-	padding: 3px 6px;
+	padding: 2px 4px;
 	border-radius: 3px;
 }
 
@@ -123,11 +165,14 @@ div.aligncenter.wpa-ld {
 	line-height: inherit;
 }
 
+.wpa-alt button:focus, .wpa-alt button:hover,
 .wpa-ld button:focus, .wpa-ld button:hover {
 	background: rgba(0, 0, 0, .8) !important;
 	color: #fff !important;
 	border: 1px solid #000 !important;
 	cursor: pointer;
+	outline: 2px solid #a00 !important;
+	outline-offset: 1px;
 }
 
 .template-longdesc {
@@ -165,4 +210,14 @@ label.wpa-screen-reader-text {
 .wpa-content-summary div p:last-of-type {
 	margin-bottom: 0;
 	padding-bottom: 0;
+}
+
+.wpa-excerpt .wp-block-read-more,
+.wpa-excerpt .wp-block-post-excerpt__more-text {
+	display: none !important;
+}
+
+.wpa-excerpt .wp-block-post-excerpt .continue {
+	margin-top: 1rem;
+	display: block;
 }

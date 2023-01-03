@@ -74,9 +74,11 @@ function wpa_update_settings() {
 		}
 
 		if ( isset( $_POST['action'] ) && 'features' === $_POST['action'] ) {
+			$wpa_show_alt          = ( isset( $_POST['wpa_show_alt'] ) ) ? 'on' : 'off';
 			$wpa_longdesc          = ( isset( $_POST['wpa_longdesc'] ) ) ? sanitize_text_field( $_POST['wpa_longdesc'] ) : 'false';
 			$wpa_longdesc_featured = ( isset( $_POST['wpa_longdesc_featured'] ) ) ? sanitize_text_field( $_POST['wpa_longdesc_featured'] ) : 'false';
 			$wpa_post_types        = ( isset( $_POST['wpa_post_types'] ) ) ? map_deep( $_POST['wpa_post_types'], 'sanitize_text_field' ) : array();
+			update_option( 'wpa_show_alt', $wpa_show_alt );
 			update_option( 'wpa_longdesc', $wpa_longdesc );
 			update_option( 'wpa_longdesc_featured', $wpa_longdesc_featured );
 			update_option( 'wpa_post_types', $wpa_post_types );
@@ -109,7 +111,6 @@ function wpa_update_settings() {
 			$wpa_focus                   = ( isset( $_POST['wpa_focus'] ) ) ? 'on' : '';
 			$wpa_focus_color             = ( isset( $_POST['wpa_focus_color'] ) ) ? str_replace( '#', '', $_POST['wpa_focus_color'] ) : '';
 			$wpa_continue                = ( isset( $_POST['wpa_continue'] ) ) ? sanitize_text_field( $_POST['wpa_continue'] ) : __( 'Continue Reading', 'wp-accessibility' );
-			$wpa_insert_roles            = ( isset( $_POST['wpa_insert_roles'] ) ) ? 'on' : '';
 			$wpa_complementary_container = ( isset( $_POST['wpa_complementary_container'] ) ) ? str_replace( '#', '', sanitize_text_field( $_POST['wpa_complementary_container'] ) ) : '';
 			update_option( 'wpa_lang', $wpa_lang );
 			update_option( 'wpa_target', $wpa_target );
@@ -122,7 +123,6 @@ function wpa_update_settings() {
 			update_option( 'wpa_focus', $wpa_focus );
 			update_option( 'wpa_focus_color', $wpa_focus_color );
 			update_option( 'wpa_continue', $wpa_continue );
-			update_option( 'wpa_insert_roles', $wpa_insert_roles );
 			$message = __( 'Miscellaneous Accessibility Settings Updated', 'wp-accessibility' );
 
 			return "<div class='updated'><p>" . $message . '</p></div>';
@@ -376,7 +376,7 @@ function wpa_admin_settings() {
 											<?php
 										} else {
 											?>
-											<li><?php _e( '<strong>Four disabled features:</strong> Site language, continue reading text, landmark roles and standard form labels are defined in your <code>accessibility-ready</code> theme.', 'wp-accessibility' ); ?></li>
+											<li><?php _e( '<strong>Three disabled features:</strong> Site language, continue reading text and standard form labels are defined in your <code>accessibility-ready</code> theme.', 'wp-accessibility' ); ?></li>
 											<?php
 										}
 										?>
@@ -398,7 +398,7 @@ function wpa_admin_settings() {
 										</li>
 										<li>
 											<input type="checkbox" id="wpa_image_titles" name="wpa_image_titles" <?php checked( get_option( 'wpa_image_titles' ), 'on' ); ?>/>
-											<label for="wpa_image_titles"><?php _e( 'Remove title attributes inserted into post content and featured images.', 'wp-accessibility' ); ?></label>
+											<label for="wpa_image_titles"><?php _e( 'Remove title attributes from elements with preferred accessible names.', 'wp-accessibility' ); ?></label>
 										</li>
 										<li>
 											<input type="checkbox" id="wpa_focus" name="wpa_focus" <?php checked( get_option( 'wpa_focus' ), 'on' ); ?>/>
@@ -436,6 +436,10 @@ function wpa_admin_settings() {
 										<li>
 											<input type="checkbox" id="wpa_longdesc_featured" name="wpa_longdesc_featured" <?php checked( get_option( 'wpa_longdesc_featured' ), 'on' ); ?>/>
 											<label for="wpa_longdesc_featured"><?php _e( 'Support <code>longdesc</code> on featured images', 'wp-accessibility' ); ?></label>
+										</li>
+										<li>
+											<input type="checkbox" id="wpa_show_alt" name="wpa_show_alt" <?php checked( get_option( 'wpa_show_alt' ), 'on' ); ?>/>
+											<label for="wpa_show_alt"><?php _e( 'Add toggle to view image <code>alt</code> text in comments and post content.', 'wp-accessibility' ); ?></label>
 										</li>
 										<li>
 											<fieldset>
@@ -610,7 +614,7 @@ function wpa_admin_sidebar() {
 	<div class="postbox-container" id="wpa-sidebar">
 		<div class="metabox-holder">
 			<div class="ui-sortable meta-box-sortables">
-				<div class="postbox">
+				<div class="postbox wpa-support-me promotion">
 					<h2 class='hndle'><?php _e( 'Support this Plugin', 'wp-accessibility' ); ?></h2>
 
 					<div class="inside">
@@ -626,22 +630,56 @@ function wpa_admin_sidebar() {
 									}
 								}(document, "script", "twitter-wjs");</script>
 						</p>
-						<p><?php _e( "If you've found WP Accessibility useful, then please <a href='https://wordpress.org/plugins/wp-accessibility/'>rate it five stars</a>, <a href='https://www.joedolson.com/donate/'>make a donation</a>, or <a href='https://translate.wordpress.org/projects/wp-plugins/wp-accessibility'>help with translation</a>.", 'wp-accessibility' ); ?></p>
-
-						<div>
-							<p class="wpa-donate">
-								<a href="https://www.joedolson.com/donate/"><?php _e( 'Support WP Accessibility', 'wp-accessibility' ); ?></a>
+						<div class="wpa-flex">
+							<img src="<?php echo plugins_url( 'imgs/awd-logo-disc.png', __FILE__ ); ?>" alt="Joe Dolson Accessible Web Design" />
+							<p class="small">
+								<?php _e( "If you find WP Accessibility useful, please <a href='https://wordpress.org/plugins/wp-accessibility/'>rate it five stars</a> or <a href='https://translate.wordpress.org/projects/wp-plugins/wp-accessibility'>help with translation</a>.", 'wp-accessibility' ); ?>
 							</p>
 						</div>
+						<p>
+							<a href="https://github.com/sponsors/joedolson"><?php _e( 'Support WP Accessibility', 'wp-accessibility' ); ?></a>
+						</p>
 					</div>
 				</div>
+				<?php
+				$pro  = false;
+				$edac = false;
+				if ( function_exists( 'edac_check_plugin_active' ) ) {
+					$pro  = edac_check_plugin_active( 'accessibility-checker-pro/accessibility-checker-pro.php' );
+					$edac = true;
+				}
+				if ( ! $pro ) {
+					$promo_text = ( $edac ) ? __( 'Finding Accessibility Checker useful? Go Pro for more advanced accessibility testing options!', 'wp-accessibility' ) : __( 'Try Accessibility Checker by Equalize Digital - fast and efficient accessibility testing for your site!', 'wp-accessibility' );
+					?>
+				<div class="postbox equalize-digital-promotion promotion">
+					<h2 class='hndle'><?php _e( 'Ready to fix your site?', 'wp-accessibility' ); ?></h2>
+
+					<div class="inside">
+						<div class="wpa-flex">
+							<img src="<?php echo plugins_url( 'imgs/Equalize-Digital-Accessibility-Emblem-400x400-1.png', __FILE__ ); ?>" alt="Accessibility Checker" />
+							<p class="small">
+								<?php echo esc_html( $promo_text ); ?>
+							</p>
+						</div>
+						<p class="coupon small"><strong><?php _e( 'Use coupon code <code>WPAccessibility</code> for 20% off!', 'wp-accessibility' ); ?></strong></p>
+						<p class="wpa-affiliate">
+							<a href="https://equalizedigital.com/accessibility-checker/pricing/?ref=joedolson&discount=WPAccessibility&campaign=wpaccessibility" aria-describedby="wpa-affiliate-notice"><?php _e( 'Get Accessibility Checker', 'wp-accessibility' ); ?></a>
+						</p>
+						<p class="wpa-affiliate-notice" id="wpa-affiliate-notice">
+							(<?php _e( 'Affiliate Link', 'wp-accessibility' ); ?>)
+						</p>
+					</div>
+				</div>
+					<?php
+				}
+				?>
 
 				<div class="postbox">
 					<h2 class='hndle'><?php _e( 'Accessibility References', 'wp-accessibility' ); ?></h2>
 
 					<div class="inside">
 						<ul>
-							<li><a href="http://make.wordpress.org/accessibility/wp-accessibility-plugin/">Plugin Documentation</a></li>
+							<li><a href="https://docs.joedolson.com/wp-accessibility/">Plugin Documentation</a></li>
 							<li><a href="http://make.wordpress.org/accessibility/">Make WordPress: Accessibility</a></li>
 							<li><a href="https://make.wordpress.org/themes/handbook/review/accessibility/">WordPress Theme Accessibility Guidelines</a></li>
 							<li><a href="https://www.joedolson.com/tools/color-contrast.php">Color Contrast Testing</a></li>
@@ -688,17 +726,6 @@ function wpa_admin_sidebar() {
 				</div>
 			<?php } ?>
 
-				<div class="postbox">
-					<h2 class='hndle'><?php _e( 'Contributing References', 'wp-accessibility' ); ?></h2>
-					<div class="inside">
-						<ul>
-							<li><a href="http://www.accessibleculture.org/articles/2010/08/continue-reading-links-in-wordpress/">Continue Reading Links in WordPress</a></li>
-							<li><a href="http://www.mothereffingtoolconfuser.com">Mother Effing Tool Confuser</a></li>
-							<li><a href="https://wordpress.org/extend/plugins/remove-title-attributes/">Remove Title Attributes</a></li>
-							<li><a href="https://wordpress.org/extend/plugins/img-title-removal/">IMG Title Removal</a></li>
-						</ul>
-					</div>
-				</div>
 				<div class="postbox" id="privacy">
 					<h2 class='hndle'><?php _e( 'Privacy', 'wp-accessibility' ); ?></h2>
 
