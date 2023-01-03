@@ -82,7 +82,7 @@ function ass_get_group_unsubscribe_link_for_user( $user_id = 0, $group_id = 0, $
  * @param BP_Activity_Activity $activity Activity object.
  * @return string
  */
-function ass_group_notification_activity_content_before_save( $retval = '', BP_Activity_Activity $activity ) {
+function ass_group_notification_activity_content_before_save( $retval = '', BP_Activity_Activity $activity = null ) {
 	// If not bbPress content, bail.
 	if ( 0 !== strpos( $activity->type, 'bbp_' ) ) {
 		return $retval;
@@ -621,14 +621,6 @@ function bpges_generate_notification( BPGES_Queued_Item $queued_item ) {
 		$action_for_subject_line  = apply_filters( 'bpges_activity_action', $action_for_subject_line, $activity );
 		$action_for_email_content = apply_filters( 'bpges_activity_action', $action_for_email_content, $activity );
 	}
-
-	/**
-	 * Filters the activity action used when generating notifications.
-	 *
-	 * @param string $action
-	 * @param object $activity
-	 */
-	$action = apply_filters( 'bpges_activity_action', $action, $activity );
 
 	/* Subject & Content */
 	$blogname    = '[' . get_blog_option( BP_ROOT_BLOG, 'blogname' ) . ']';
