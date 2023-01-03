@@ -36,9 +36,6 @@ jQuery(document).ready(function ($) {
                     percentPosition: true
                 });
             });
-            /*$(window).on("load resize", function(){
-                $(".widget_block .masonry-view .advgb-recent-posts").isotope();
-            });*/
 
             // Woo Products
             $(".widget_block .advgb-woo-products.slider-view").on("init", function(event){

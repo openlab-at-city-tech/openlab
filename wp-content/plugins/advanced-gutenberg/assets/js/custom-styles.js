@@ -21,7 +21,7 @@ jQuery(document).ready(function ($) {
                     },
                     success: function (res, stt) {
                         if (stt === 'success') {
-                            $(that).parent().before('<li class="advgb-customstyles-items" data-id-customstyle="' + res.id + '"><a><i class="title-icon"></i> <span class="advgb-customstyles-items-title">' + res.title + '</span></a><a class="copy"><i class="mi mi-content-copy"></i></a><a class="trash"><i class="mi mi-delete"></i></a><a class="edit"><i class="mi mi-edit"></i></a><ul style="margin-left: 30px"><li class="advgb-customstyles-items-class">('+ res.name +')</li></ul></li>');
+                            $(that).parent().before('<li class="advgb-customstyles-items" data-id-customstyle="' + res.id + '"><a><i class="title-icon"></i><span class="advgb-customstyles-items-title">' + res.title + '</span></a><a class="copy"><span class="dashicons dashicons-admin-page"></span></a><a class="trash"><span class="dashicons dashicons-no"></span></a><ul style="margin-left: 30px"><li class="advgb-customstyles-items-class">('+ res.name +')</li></ul></li>');
                             initCustomStyleMenu();
                         } else {
                             alert(stt);
@@ -94,7 +94,7 @@ jQuery(document).ready(function ($) {
                     },
                     success: function (res, stt) {
                         if (stt === 'success') {
-                            $(that).parents('.advgb-customstyles-list').find('li').last().before('<li class="advgb-customstyles-items" data-id-customstyle="' + res.id + '"><a><i class="title-icon" style="background-color: '+res.identifyColor+'"></i> <span class="advgb-customstyles-items-title">' + res.title + '</span></a><a class="copy"><i class="mi mi-content-copy"></i></a><a class="trash"><i class="mi mi-delete"></i></a><a class="edit"><i class="mi mi-edit"></i></a><ul style="margin-left: 30px"><li class="advgb-customstyles-items-class">('+ res.name +')</li></ul></li>');
+                            $(that).parents('.advgb-customstyles-list').find('li').last().before('<li class="advgb-customstyles-items" data-id-customstyle="' + res.id + '"><a><i class="title-icon" style="background-color: '+res.identifyColor+'"></i><span class="advgb-customstyles-items-title">' + res.title + '</span></a><a class="copy"><span class="dashicons dashicons-admin-page"></span></a><a class="trash"><span class="dashicons dashicons-no"></span></a><ul style="margin-left: 30px"><li class="advgb-customstyles-items-class">('+ res.name +')</li></ul></li>');
                             initCustomStyleMenu();
                         } else {
                             alert(stt);
@@ -108,111 +108,6 @@ jQuery(document).ready(function ($) {
             })
         })();
 
-        (initCustomStyleEdit = function () {
-            $('#mybootstrap .advgb-customstyles-items a.edit').unbind('click').click(function (e) {
-                e.stopPropagation();
-                $this = this;
-                link = $(this).parent().find('a span.advgb-customstyles-items-title');
-                oldTitle = link.text().trim();
-                $(link).attr('contentEditable', true);
-                $(link).addClass('editable');
-                $(link).selectText();
-
-                $('#mybootstrap a span.editable').bind('click.mm', hstop);  // Click on the editable objects
-                $(link).bind('keypress.mm', hpress);                        // Press enter to validate name
-                $('*').not($(link)).bind('click.mm', houtside);             // Click outside the editable objects
-                $(link).keyup(function (e) {
-                    // Press ESC key will cancel renaming action
-                    if (e.which === 27) {
-                        e.preventDefault();
-                        unbindall();
-                        $(link).text(oldTitle);
-                        $(link).removeAttr('contentEditable');
-                        $(link).removeClass('editable');
-                    }
-                });
-
-                function unbindall() {
-                    $('#mybootstrap a span.editable').unbind('click.mm', hstop);       // Click on the editable objects
-                    $(link).unbind('keypress.mm', hpress);                    // Press enter to validate name
-                    $('*').not($(link)).unbind('click.mm', houtside);         // Click outside the editable objects
-                }
-
-                // Click on the editable objects
-                function hstop(e) {
-                    e.stopPropagation();
-                    return false;
-                }
-
-                // Press enter to validate name
-                function hpress(e) {
-                    if (e.which === 13) {
-                        e.preventDefault();
-                        unbindall();
-                        updateName($(link).text());
-                        $(link).removeAttr('contentEditable');
-                        $(link).removeClass('editable');
-                    }
-                }
-
-                // Click outside the editable objects
-                function houtside(e) {
-                    unbindall();
-                    updateName($(link).text());
-                    $(link).removeAttr('contentEditable');
-                    $(link).removeClass('editable');
-                }
-
-                function updateName(title) {
-                    var nonce_val = $('#advgb_cstyles_nonce_field').val();
-                    var id = $(link).parents('li').data('id-customstyle');
-                    title = title.trim();
-                    if (title !== '') {
-                        $.ajax({
-                            url: ajaxurl,
-                            type: 'POST',
-                            dataType: 'json',
-                            data: {
-                                action: 'advgb_custom_styles_ajax',
-                                nonce: nonce_val,
-                                id: id,
-                                task: 'edit',
-                                title: title
-                            },
-                            success: function (res, stt) {
-                                if (stt === 'success') {
-                                    $(link).text(res.title);
-
-                                    if (typeof autosaveNotification !== "undefined") {
-                                        clearTimeout(autosaveNotification);
-                                    }
-
-                                    autosaveNotification = setTimeout(function() {
-                                        $('#savedInfo').fadeIn(200).delay(2000).fadeOut(1000);
-                                    }, 500);
-                                } else {
-                                    $(link).text(oldTitle);
-                                    alert(stt);
-                                }
-                            },
-                            error: function(jqxhr, textStatus, error) {
-                                $(link).text(oldTitle);
-                                alert(textStatus + " : " + error);
-                            }
-                        })
-                    } else {
-                        $(link).text(oldTitle);
-                        return false;
-                    }
-
-                    $(link).parent().css('white-space', 'normal');
-                    setTimeout(function() {
-                        $(link).parent().css('white-space', '');
-                    }, 200);
-                }
-            })
-        })();
-
         // Choose custom style
         (initTableLinks = function () {
             $('#mybootstrap .advgb-customstyles-items').unbind('click').click(function (e) {
@@ -222,23 +117,6 @@ jQuery(document).ready(function ($) {
                 return false;
             })
         })();
-
-        // Function to select text when clicking edit
-        $.fn.selectText = function(){
-            var doc = document        , element = this[0]        , range, selection    ;
-            if (doc.body.createTextRange) {
-                range = document.body.createTextRange();
-                range.moveToElementText(element);
-                range.select();
-            } else if (window.getSelection) {
-                selection = window.getSelection();
-                range = document.createRange();
-                range.selectNodeContents(element);
-                selection.removeAllRanges();
-                selection.addRange(range);
-            }
-            element.focus();
-        };
     }
 
     // Add Codemirror
@@ -392,6 +270,7 @@ jQuery(document).ready(function ($) {
 
     // Save custome style
     function saveCustomStyleChanges() {
+        var myStyleTitle = $('#advgb-customstyles-title').val().trim();
         var myClassname =  $('#advgb-customstyles-classname').val().trim();
         var myIdentifyColor =  $('#advgb-customstyles-identify-color').val().trim();
         var nonce_val = $('#advgb_cstyles_nonce_field').val();
@@ -403,6 +282,7 @@ jQuery(document).ready(function ($) {
             data: {
                 action: 'advgb_custom_styles_ajax',
                 id: myStyleId,
+                title: myStyleTitle,
                 name: myClassname,
                 mycss: myCustomCss,
                 mycolor: myIdentifyColor,

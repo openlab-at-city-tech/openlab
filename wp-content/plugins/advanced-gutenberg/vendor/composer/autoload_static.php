@@ -4,20 +4,54 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit5d444adf6eda7c19fcdac7859964c7c3
+class ComposerStaticInitcaa25cd4a92d0c39cf3c0119a8c1a373
 {
     public static $files = array (
+        '0078757fbd019a5f202f2be6585c3626' => __DIR__ . '/..' . '/publishpress/wordpress-banners/BannersMain.php',
         '41c664bd04a95c2d6a2f2a3e00f06593' => __DIR__ . '/..' . '/publishpress/wordpress-reviews/ReviewsController.php',
+    );
+
+    public static $prefixLengthsPsr4 = array (
+        'P' => 
+        array (
+            'Psr\\Container\\' => 14,
+            'PPVersionNotices\\' => 17,
+        ),
+    );
+
+    public static $prefixDirsPsr4 = array (
+        'Psr\\Container\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/container/src',
+        ),
+        'PPVersionNotices\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/publishpress/wordpress-version-notices/src',
+        ),
+    );
+
+    public static $prefixesPsr0 = array (
+        'P' => 
+        array (
+            'Pimple' => 
+            array (
+                0 => __DIR__ . '/..' . '/pimple/pimple/src',
+            ),
+        ),
     );
 
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
+        'Wolfcast\\BrowserDetection' => __DIR__ . '/..' . '/wolfcast/browser-detection/lib/BrowserDetection.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->classMap = ComposerStaticInit5d444adf6eda7c19fcdac7859964c7c3::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitcaa25cd4a92d0c39cf3c0119a8c1a373::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitcaa25cd4a92d0c39cf3c0119a8c1a373::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInitcaa25cd4a92d0c39cf3c0119a8c1a373::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInitcaa25cd4a92d0c39cf3c0119a8c1a373::$classMap;
 
         }, null, ClassLoader::class);
     }

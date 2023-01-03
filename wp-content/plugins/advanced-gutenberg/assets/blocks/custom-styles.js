@@ -131,7 +131,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
     if (typeof advgbBlocks.customStyles !== 'undefined' && advgbBlocks.customStyles) {
         advgbBlocks.customStyles.unshift({
             id: 0,
-            label: __('Select a custom style', 'advanced-gutenberg'),
+            label: __('Select a block style', 'advanced-gutenberg'),
             value: '',
             identifyColor: ''
         });
@@ -147,7 +147,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
                     'div',
                     { className: 'advgb-custom-styles-wrapper' },
                     React.createElement(SelectControl, {
-                        label: [__('Custom styles', 'advanced-gutenberg'), React.createElement('span', { className: 'components-panel__color-area',
+                        label: [__('Block styles', 'advanced-gutenberg'), React.createElement('span', { className: 'components-panel__color-area',
                             key: 'customstyle-identify',
                             style: {
                                 background: props.attributes.identifyColor,

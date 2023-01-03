@@ -4,22 +4,7 @@ This is a library for protecting WordPress plugins to run twice instances at the
 
 ## Installation
 
-This library should be added as a composer requirement.
-
-First you need to include the repository, adding the following code to the `composer.json` file:
-
-```json
-{
-    "repositories": [
-        {
-        "type": "git",
-        "url": "https://github.com/publishpress/publishpress-instance-protection"
-        }
-    ]
-}
-```
-
-Then require the library running the command:
+This library should be added as a composer requirement running the command:
 
 ```shell
 composer require publishpress/publishpress-instance-protection

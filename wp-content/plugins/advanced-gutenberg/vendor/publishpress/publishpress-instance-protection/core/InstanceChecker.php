@@ -57,7 +57,7 @@ class InstanceChecker
 
     public function getVersion()
     {
-        return '1.0.2';
+        return '1.0.3';
     }
 
     public function init()
@@ -209,7 +209,7 @@ class InstanceChecker
                     <div class="multiple-instances-warning">
                         <p>
                             <span class="dashicons dashicons-warning"></span>
-                            <?php echo esc_html__('This plugin is outdated. You already have a more recent version installed. Please remove this version.', 'publishpress-intance-protection'); ?>
+                            <?php echo esc_html__('This plugin is outdated. You already have a more recent version installed. Please remove this version.', 'publishpress-instance-protection'); ?>
                         </p>
                     </div>
                 </td>
@@ -240,7 +240,7 @@ class InstanceChecker
                         <p>
                             <span class="dashicons dashicons-warning"></span>
                             <?php echo sprintf(
-                               esc_html__('This plugin is not installed in the standard folder. The current path is %s but it is expected to be %s.', 'publishpress-intance-protection'),
+                               esc_html__('This plugin is not installed in the standard folder. The current path is %1$s but it is expected to be %2$s.', 'publishpress-instance-protection'),
                                 '<code>' . esc_html($pluginFile) . '</code>',
                                 '<code>' . esc_html($expectedPath) . '</code>'
                             );
@@ -266,7 +266,7 @@ class InstanceChecker
         add_action('admin_notices', function() use ($pluginName) {
             ?>
             <div class="notice notice-success is-dismissible">
-                <p><?php echo sprintf(esc_html__('You have activated multiple instances of %s. Please keep only one activated and remove the others.', 'publishpress-intance-protection'), esc_html($pluginName)); ?></p>
+                <p><?php echo sprintf(esc_html__('You have activated multiple instances of %s. Please keep only one activated and remove the others.', 'publishpress-instance-protection'), esc_html($pluginName)); ?></p>
             </div>
             <?php
         });
@@ -286,7 +286,7 @@ class InstanceChecker
         add_action('admin_notices', function() use ($pluginName, $freePluginName) {
             ?>
             <div class="notice notice-success is-dismissible">
-                <p><?php echo sprintf(esc_html__('Please deactivate %s when %s is activated.', 'publishpress-intance-protection'), esc_html($freePluginName), esc_html($pluginName)); ?></p>
+                <p><?php echo sprintf(esc_html__('Please deactivate %1$s when %2$s is activated.', 'publishpress-instance-protection'), esc_html($freePluginName), esc_html($pluginName)); ?></p>
             </div>
             <?php
         });
