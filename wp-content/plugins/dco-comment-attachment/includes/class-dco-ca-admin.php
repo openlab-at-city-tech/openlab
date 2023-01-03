@@ -39,7 +39,11 @@ class DCO_CA_Admin extends DCO_CA_Base {
 		parent::init_hooks();
 
 		add_filter( 'comment_row_actions', array( $this, 'add_comment_action_links' ), 10, 2 );
-		add_action( 'admin_action_deleteattachment', array( $this, 'delete_attachment_action' ) );
+		add_action( 'admin_action_deletecommentattachment', array( $this, 'delete_attachment_action' ) );
+		add_filter( 'bulk_actions-edit-comments', array( $this, 'add_comments_bulk_actions' ) );
+		add_action( 'admin_action_deleteattachment', array( $this, 'delete_attachment_bulk_action' ) );
+		add_filter( 'ngettext', array( $this, 'show_bulk_action_message' ), 10, 5 );
+		add_filter( 'removable_query_args', array( $this, 'add_removable_query_args' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 		add_action( 'wp_ajax_delete_attachment', array( $this, 'delete_attachment_ajax' ) );
 		add_action( 'add_meta_boxes_comment', array( $this, 'add_attachment_metabox' ) );
@@ -70,10 +74,10 @@ class DCO_CA_Admin extends DCO_CA_Base {
 			$nonce      = wp_create_nonce( "delete-comment-attachment_$comment_id" );
 
 			$del_attach_nonce = esc_html( '_wpnonce=' . $nonce );
-			$url              = esc_url( "comment.php?c=$comment_id&action=deleteattachment&$del_attach_nonce" );
+			$url              = esc_url( "comment.php?c=$comment_id&action=deletecommentattachment&$del_attach_nonce" );
 
-			$title                       = esc_html__( 'Delete Attachment', 'dco-comment-attachment' );
-			$actions['deleteattachment'] = "<a href='$url' class='dco-del-attachment' data-id='$comment_id' data-nonce='$nonce'>$title</a>";
+			$title                              = esc_html__( 'Delete Attachment', 'dco-comment-attachment' );
+			$actions['deletecommentattachment'] = "<a href='$url' class='dco-del-attachment' data-id='$comment_id' data-nonce='$nonce'>$title</a>";
 		}
 
 		return $actions;
@@ -118,6 +122,113 @@ class DCO_CA_Admin extends DCO_CA_Base {
 
 		wp_safe_redirect( $redir );
 		exit();
+	}
+
+	/**
+	 * Adds additional bulk actions.
+	 *
+	 * @since 2.4.0
+	 *
+	 * @param array $actions An array of the available bulk actions.
+	 * @return array An array with standard bulk actions
+	 *               and attachment bulk actions.
+	 */
+	public function add_comments_bulk_actions( $actions ) {
+		$actions['deleteattachment'] = __( 'Delete Attachment', 'dco-comment-attachment' );
+
+		return $actions;
+	}
+
+	/**
+	 * Handles a bulk action to delete comment attachments on the comments page.
+	 *
+	 * @since 2.4.0
+	 */
+	public function delete_attachment_bulk_action() {
+		check_admin_referer( 'bulk-comments' );
+
+		if ( isset( $_REQUEST['delete_comments'] ) && is_array( $_REQUEST['delete_comments'] ) ) {
+			$comment_ids = array_map( 'absint', $_REQUEST['delete_comments'] );
+		} else {
+			return;
+		}
+
+		$redirect_to = remove_query_arg( array( 'trashed', 'untrashed', 'deleted', 'spammed', 'unspammed', 'approved', 'unapproved', 'ids', 'deletedattachment' ), wp_get_referer() );
+
+		wp_defer_comment_counting( true );
+
+		$count = 0;
+		foreach ( $comment_ids as $comment_id ) {
+			if ( ! current_user_can( 'edit_comment', $comment_id ) ) {
+				continue;
+			}
+
+			$comment = get_comment( $comment_id );
+			if ( ! $comment ) {
+				continue;
+			}
+
+			$delete = $this->get_option( 'delete_attachment_action' );
+			if ( $this->delete_attachment( $comment_id, $delete ) ) {
+				$count ++;
+			}
+		}
+
+		wp_defer_comment_counting( false );
+
+		$redirect_to = add_query_arg( 'deletedattachment', $count, $redirect_to );
+
+		// @see DCO_CA_Admin::show_bulk_action_message() for details.
+		$redirect_to = add_query_arg( 'approved', $count, $redirect_to );
+
+		wp_safe_redirect( $redirect_to );
+		exit;
+	}
+
+	/**
+	 * Shows bulk action updated message.
+	 *
+	 * @since 2.4.0
+	 *
+	 * @param string $translation Translated text.
+	 * @param string $single      The text to be used if the number is singular.
+	 * @param string $plural      The text to be used if the number is plural.
+	 * @param string $number      The number to compare against to use either the singular or plural form.
+	 * @param string $domain      Text domain. Unique identifier for retrieving translated strings.
+	 *
+	 * @return string Filtered translated text.
+	 */
+	public function show_bulk_action_message( $translation, $single, $plural, $number, $domain ) {
+		/**
+		 * There is no hook in WordPress to add updated message for custom comments bulk action.
+		 * So we override the approval message if attachment deletion was triggered.
+		 */
+		// phpcs:disable WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		if ( ! isset( $_REQUEST['deletedattachment'] ) || ! $_REQUEST['deletedattachment'] ) {
+			return $translation;
+		}
+		// phpcs:enable
+
+		if ( '%s comment approved.' === $single && '%s comments approved.' === $plural && 'default' === $domain ) {
+			/* translators: %s: Number of comments. */
+			$translation = sprintf( _n( 'Attachments deleted from %s comment.', 'Attachments deleted from %s comments.', $number, 'dco-comment-attachment' ), $number );
+		}
+
+		return $translation;
+	}
+
+	/**
+	 * Adds single-use URL parameters.
+	 *
+	 * @since 2.4.0
+	 *
+	 * @param array $removable_query_args An array of query variable names to remove from the URL.
+	 * @return array An array of query variable names to remove from the URL.
+	 */
+	public function add_removable_query_args( $removable_query_args ) {
+		$removable_query_args[] = 'deletedattachment';
+
+		return $removable_query_args;
 	}
 
 	/**
@@ -271,12 +382,13 @@ class DCO_CA_Admin extends DCO_CA_Base {
 		check_admin_referer( 'update-comment_' . $comment_id );
 
 		$attachment_id = isset( $_POST['dco_attachment_id'] ) ? array_map( 'intval', $_POST['dco_attachment_id'] ) : array();
-		if ( $attachment_id ) {
-			// We need to delete the last empty element, because it's used
-			// as a placeholder in the attachments edit form.
-			// @see DCO_CA_Admin::render_attachment_metabox.
-			array_pop( $attachment_id );
 
+		// We need to delete the last empty element, because it's used
+		// as a placeholder in the attachments edit form.
+		// @see DCO_CA_Admin::render_attachment_metabox.
+		array_pop( $attachment_id );
+
+		if ( $attachment_id ) {
 			$this->assign_attachment( $comment_id, $attachment_id );
 		} else {
 			$this->unassign_attachment( $comment_id );

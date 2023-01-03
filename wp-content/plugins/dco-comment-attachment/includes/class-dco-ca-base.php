@@ -67,8 +67,8 @@ class DCO_CA_Base {
 	 * @since 1.0.0
 	 *
 	 * @param int $comment_id Optional. The comment ID.
-	 * @return int|string The assigned attachment ID on success,
-	 *                    empty string on failure.
+	 * @return int|array|string The assigned attachment ID(s) on success,
+	 *                          empty string on failure.
 	 */
 	public function get_attachment_id( $comment_id = 0 ) {
 		$meta_key = $this->get_attachment_meta_key();
@@ -113,8 +113,8 @@ class DCO_CA_Base {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param int $comment_id The comment ID.
-	 * @param int $attachment_id The attachment ID.
+	 * @param int       $comment_id The comment ID.
+	 * @param int|array $attachment_id The attachment ID(s).
 	 * @return int|bool Meta ID on success, false on failure.
 	 */
 	public function assign_attachment( $comment_id, $attachment_id ) {
