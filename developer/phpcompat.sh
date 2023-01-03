@@ -5,7 +5,8 @@ dirs=("wp-content/plugins" "wp-content/themes" "wp-content/mu-plugins" "wp-conte
 passing=0
 
 ignores=(
-  'wp-content/plugins/anthologize'
+  'wp-content/plugins/anthologize/pear/'
+  'wp-content/plugins/anthologize/tecknickcom/include/'
   'wp-content/plugins/awesome-flickr-gallery-plugin/afgFlickr/afgFlickr.php'
 #  'wp-content/plugins/backtype-connect/parser_php4.php'
   'wp-content/plugins/bbpress/includes/users/template.php' # punt
@@ -63,7 +64,7 @@ do
   for subdir in ${subdirs[*]}
   do
     echo "Testing $subdir..."
-    results=$(./vendor/bin/phpcs -p --extensions=php,inc --standard=PHPCompatibilityWP --warning-severity=0 --runtime-set testVersion 7.2 $ignore $subdir)
+    results=$(./vendor/bin/phpcs -p --extensions=php,inc --standard=PHPCompatibilityWP --warning-severity=0 --runtime-set testVersion 8.0 $ignore $subdir)
     if [ $? -eq 1 ]
     then
       echo "$results"
