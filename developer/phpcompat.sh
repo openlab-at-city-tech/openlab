@@ -35,6 +35,9 @@ ignores=(
   'wp-content/plugins/osm'
   'wp-content/plugins/out-of-the-box/includes/dropbox-sdk/src/Dropbox/Security/'
   'wp-content/plugins/out-of-the-box/vendors/phpThumb'
+
+  # Only called on old PHP
+  'wp-content/plugins/out-of-the-box/vendors/dropbox-sdk/src/Dropbox/Security/McryptRandomStringGenerator.php'
   'wp-content/plugins/papercite/lib/PEAR.php'
   'wp-content/plugins/query-monitor/collectors/environment.php'
   'wp-content/plugins/query-monitor/wp-content/db.php'
