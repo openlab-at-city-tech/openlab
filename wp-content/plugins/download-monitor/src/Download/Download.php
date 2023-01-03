@@ -33,6 +33,12 @@ class DLM_Download {
 	/** @var int */
 	private $download_count = 0;
 
+	/** @var int */
+	private $meta_download_count = 0;
+
+	/** @var int */
+	private $total_download_count = 0;
+
 	/** @var bool */
 	private $redirect_only = false;
 
@@ -51,6 +57,20 @@ class DLM_Download {
 	/** @var array */
 	private $version_ids = array();
 
+	/** @var int */
+	private $completed_downloads = 0;
+
+	/** @var int */
+	private $failed_downloads = 0;
+
+	/** @var int */
+	private $redirected_downloads = 0;
+
+	/** @var int */
+	private $logged_in_downloads = 0;
+
+	/** @var int */
+	private $non_logged_in_downloads = 0;
 	/**
 	 * @var WP_Post
 	 * @deprecated 4.0
@@ -293,6 +313,52 @@ class DLM_Download {
 	}
 
 	/**
+	 * @return int
+	 */
+	public function get_meta_download_count() {
+
+		// set default download count
+		$download_count = $this->meta_download_count;
+
+		// set download count of latest version if set
+		if ( null != $this->get_version() && ! $this->get_version()->is_latest() ) {
+			$download_count = $this->get_version()->get_meta_download_count();
+		}
+
+		return $download_count;
+	}
+
+	/**
+	 * @param int $download_count
+	 */
+	public function set_meta_download_count( $download_count ) {
+		$this->meta_download_count = $download_count;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function get_total_download_count() {
+
+		// set default download count
+		$download_count = $this->total_download_count;
+
+		// set download count of latest version if set
+		if ( null != $this->get_version() && ! $this->get_version()->is_latest() ) {
+			$download_count = $this->get_version()->get_download_count();
+		}
+
+		return apply_filters( 'dlm_download_count', $download_count, $this );
+	}
+
+	/**
+	 * @param int $download_count
+	 */
+	public function set_total_download_count( $download_count ) {
+		$this->total_download_count = $download_count;
+	}
+
+	/**
 	 * Get download image
 	 *
 	 * @param string $size
@@ -349,6 +415,18 @@ class DLM_Download {
 				$value = $this->id;
 				break;
 		}
+		// If WPML is active we should return the original home_url to avoid 404 pages.
+		//@todo: If Downloads will be made translatable in the future then this should be removed.
+		// First we need to make sure they are not translated.
+		$wpml_options      = get_option( 'icl_sitepress_settings', false );
+		$is_dlm_translated = false;
+		if ( $wpml_options && isset( $wpml_options['custom_posts_sync_option'] ) && in_array( 'dlm_download', $wpml_options['custom_posts_sync_option'] ) ) {
+			$is_dlm_translated = true;
+		}
+
+		if ( $is_dlm_translated ) {
+			add_filter( 'wpml_get_home_url', array( $this, 'wpml_download_link' ), 15, 2 );
+		}
 
 		if ( get_option( 'permalink_structure' ) ) {
 			// Fix for translation plugins that modify the home_url
@@ -357,6 +435,16 @@ class DLM_Download {
 		} else {
 			$link = add_query_arg( $endpoint, $value, home_url( '', $scheme ) );
 		}
+
+		// Now we can remove the filter as the link is generated.
+		//@todo: If Downloads will be made translatable in the future then this should be removed.
+		if ( $is_dlm_translated ) {
+			remove_filter( 'wpml_get_home_url', array( $this, 'wpml_download_link' ), 15, 2 );
+		}
+
+		// Add the timestamp to the Download's link to prevent unwanted behaviour with caching plugins/hosts
+		$timestamp = time();
+		$link      = add_query_arg( 'tmstv', $timestamp, $link );
 
 		// only add version argument when current version isn't latest version
 		if ( null !== $this->get_version() && false === $this->get_version()->is_latest() ) {
@@ -463,22 +551,22 @@ class DLM_Download {
 	 * @return array
 	 */
 	public function get_version_ids() {
+
 		if ( empty( $this->version_ids ) ) {
 
 			if ( apply_filters( 'dlm_download_use_version_transient', true, $this ) ) {
 
-				$transient_name = 'dlm_file_version_ids_' . $this->get_id();
-
-				if ( false === ( $this->version_ids = get_transient( $transient_name ) ) ) {
+				$transient_name    = 'dlm_file_version_ids_' . $this->get_id();
+				$this->version_ids = get_transient( $transient_name );
+				// If there is no transient, get the versions from the database.
+				if ( false === $this->version_ids ) {
 					$this->version_ids = download_monitor()->service( 'version_manager' )->get_version_ids( $this->get_id() );
-
 					set_transient( $transient_name, $this->version_ids, YEAR_IN_SECONDS );
 				}
-
 			} else {
+
 				$this->version_ids = download_monitor()->service( 'version_manager' )->get_version_ids( $this->get_id() );
 			}
-
 		}
 
 		return $this->version_ids;
@@ -880,5 +968,108 @@ class DLM_Download {
 		DLM_Debug_Logger::deprecated( 'DLM_Download::the_filetype()' );
 
 		echo esc_html( $this->get_version()->get_filetype() );
+	}
+
+	/**
+	 * Get completed number of downloads
+	 *
+	 * @return mixed
+	 */
+	public function set_completed_downloads( $completed_downloads ) {
+		$this->completed_downloads = $completed_downloads;
+	}
+
+	/**
+	 * Get failed number of downloads
+	 *
+	 * @return mixed
+	 */
+	public function set_failed_downloads( $failed_downloads ) {
+		$this->failed_downloads = $failed_downloads;
+	}
+
+	/**
+	 * Get redirected number of downloads
+	 *
+	 * @return mixed
+	 */
+	public function set_redirected_downloads( $redirected_downloads ) {
+		$this->redirected_downloads = $redirected_downloads;
+	}
+
+	/**
+	 * Get completed number of downloads
+	 *
+	 * @return mixed
+	 */
+	public function get_completed_downloads() {
+		return $this->completed_downloads;
+	}
+
+	/**
+	 * Get failed number of downloads
+	 *
+	 * @return mixed
+	 */
+	public function get_failed_downloads() {
+		return $this->failed_downloads;
+	}
+
+	/**
+	 * Get redirected number of downloads
+	 *
+	 * @return mixed
+	 */
+	public function get_redirected_downloads() {
+		return $this->redirected_downloads;
+	}
+
+	/**
+	 * Set logged in number of downloads
+	 *
+	 * @return mixed
+	 */
+	public function set_logged_in_downloads( $logged_in_downloads ) {
+		return $this->logged_in_downloads = $logged_in_downloads;
+	}
+
+	/**
+	 * Set non logged in number of downloads
+	 *
+	 * @return mixed
+	 */
+	public function set_non_logged_in_downloads( $non_logged_in_downloads ) {
+		return $this->non_logged_in_downloads = $non_logged_in_downloads;
+	}
+
+	/**
+	 * Get failed number of downloads
+	 *
+	 * @return mixed
+	 */
+	public function get_logged_in_downloads() {
+		return $this->logged_in_downloads;
+	}
+
+	/**
+	 * Get redirected number of downloads
+	 *
+	 * @return mixed
+	 */
+	public function get_non_logged_in_downloads() {
+		return $this->non_logged_in_downloads;
+	}
+
+	/**
+	 * Fix for WPML setting language for download links. IF the downloads are made trasnlatable this will need to be deleted.
+	 *
+	 * @param string $home_url Home URL made by WPML.
+	 * @param string $url Original URL.
+	 *
+	 * @return string $home_url The correct home URL for Download Monitor.
+	 */
+	public function wpml_download_link( $home_url, $url ) {
+
+		return $url;
 	}
 }

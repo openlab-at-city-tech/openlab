@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * DLM_Utils
+ *
+ * Modified @since 4.5.0
+ */
 abstract class DLM_Utils {
 
 	/**
@@ -124,7 +129,7 @@ abstract class DLM_Utils {
 	 * @return string
 	 */
 	public static function basename( $filepath ) {
-		return preg_replace('/^.+[\\\\\\/]/', '', $filepath);
+		return preg_replace( '/^.+[\\\\\\/]/', '', $filepath );
 	}
 
 	/**
@@ -182,6 +187,101 @@ abstract class DLM_Utils {
 
 		return implode( DIRECTORY_SEPARATOR, $common_parts );
 
+	}
+
+	/**
+	 *Check for existing table
+	 *
+	 * @param string $table The table we are checking.
+	 *
+	 * @return bool
+	 */
+	public static function table_checker( $table ) {
+		global $wpdb;
+
+		if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $table ) ) ) {
+
+			return true;
+
+		}
+
+		return false;
+	}
+
+
+	/**
+	 *Check for existing column inside a table
+	 *
+	 * @param string $table_name The table in witch we are checking.
+	 * 
+	 * @param string $col_name The column we are checking for.
+	 *
+	 * @return bool
+	 */
+	public static function column_checker( $table_name, $col_name ) {
+		global $wpdb;
+	 
+		$diffs   = 0;
+		$results = $wpdb->get_results( "DESC $table_name" );
+	 
+		foreach ( $results as $row ) {
+	 
+			if ( $row->Field === $col_name ) {
+	 
+				return true;
+			} // End if found our column.
+		}
+	 
+		return false;
+	}
+
+	/*
+	*
+	* Generate html attributes based on array
+	*
+	* @param array atributes
+	*
+	* @return string
+	* @since 4.6.0
+	*
+	*/
+	public static function generate_attributes( $attributes ) {
+		$return = '';
+
+		// Let's unset the inner_html attribute so that it doesn't end up in our attributes
+		if ( isset( $attributes['inner_html'] ) ) {
+			unset( $attributes['inner_html'] );
+		}
+
+		foreach ( $attributes as $name => $value ) {
+
+			if ( is_array( $value ) && 'class' == $name ) {
+				$value = implode( ' ', $value );
+			}elseif ( is_array( $value ) ) {
+				$value = json_encode( $value );
+			}
+
+			if ( in_array( $name, array( 'alt', 'rel', 'title' ) ) ) {
+				$value = str_replace( '<script', '&lt;script', $value );
+				$value = strip_tags( htmlspecialchars( $value ) );
+				$value = preg_replace( '@<(script|style)[^>]*?>.*?</\\1>@si', '', $value );
+			}
+
+			$return .= ' ' . esc_attr( $name ) . '="' . esc_attr( $value ) . '"';
+		}
+
+		return $return;
+
+	}
+
+	/**
+	 * Get visitor UUID
+	 *
+	 * @return string
+	 * @since 4.6.0
+	 */
+	public static function get_visitor_uuid() {
+		return md5( self::get_visitor_ip() );
 	}
 
 }

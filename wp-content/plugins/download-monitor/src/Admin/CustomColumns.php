@@ -2,12 +2,39 @@
 
 class DLM_Custom_Columns {
 
+	// Variable used for columns in order to not ge the download for each column.
+	private $column_download;
+
 	public function setup() {
 		add_filter( 'manage_edit-dlm_download_columns', array( $this, 'add_columns' ) );
 		add_action( 'manage_dlm_download_posts_custom_column', array( $this, 'column_data' ), 2 );
 		add_filter( 'manage_edit-dlm_download_sortable_columns', array( $this, 'sortable_columns' ) );
 		add_filter( 'the_title', array( $this, 'prepend_id_to_title' ), 15, 2 );
 		add_filter( 'list_table_primary_column', array( $this, 'set_primary_column_name' ), 10, 2 );
+	}
+
+	/**
+	 * Get the download based on post ID, used for setting columns info
+	 *
+	 * @param  mixed $post_id
+	 * @return object $download
+	 */
+	private function get_download( $post_id ) {
+
+		/** @var DLM_Download $download */
+		$downloads = download_monitor()->service( 'download_repository' )->retrieve(
+			array(
+				'p'           => absint( $post_id ),
+				'post_status' => array( 'any', 'trash' ),
+			),
+			1
+		);
+
+		if ( 0 == count( $downloads ) ) {
+			return;
+		}
+
+		return $downloads[0];
 	}
 
 	/**
@@ -27,6 +54,7 @@ class DLM_Custom_Columns {
 		$columns["download_cat"]    = __( "Categories", 'download-monitor' );
 		$columns["version"]         = __( "Version", 'download-monitor' );
 		$columns["shortcode"]       = __( "Shortcode", 'download-monitor' );
+		$columns["download_link"]   = __( "Download link", 'download-monitor' );
 		$columns["download_tag"]    = __( "Tags", 'download-monitor' );
 		$columns["download_count"]  = __( "Download count", 'download-monitor' );
 		$columns["featured"]        = __( "Featured", 'download-monitor' );
@@ -49,23 +77,21 @@ class DLM_Custom_Columns {
 	public function column_data( $column ) {
 		global $post;
 
-		/** @var DLM_Download $download */
-		$downloads = download_monitor()->service( 'download_repository' )->retrieve( array(
-			'p'           => absint( $post->ID ),
-			'post_status' => array( 'any', 'trash' )
-		), 1 );
-
-		if ( 0 == count( $downloads ) ) {
-			return;
+		if ( ! isset( $this->column_download ) || $post->ID !== $this->column_download->get_id() ) {
+			// Store our download in a variable so that we won't have to get the column for each column that uses it.
+			$this->column_download = $this->get_download( $post->ID );
 		}
 
-		$download = $downloads[0];
 		switch ( $column ) {
 			case "download_title":
 				global $wp_list_table;
 
 				/** @var DLM_Download_Version $file */
-				$file = $download->get_version();
+				$file = $this->column_download->get_version();
+
+				if ( ! $wp_list_table ) {
+					$wp_list_table = _get_list_table( 'WP_Posts_List_Table' );
+				}
 
 				if ( ! $wp_list_table ) {
 					$wp_list_table = _get_list_table( 'WP_Posts_List_Table' );
@@ -74,8 +100,8 @@ class DLM_Custom_Columns {
 				$wp_list_table->column_title( $post );
 
 				if ( $file->get_filename() ) {
-					echo '<a class="dlm-file-link" href="' . esc_url( $download->get_the_download_link() ) . '"><code>' . esc_html( $file->get_filename() );
-					if ( $size = $download->get_version()->get_filesize_formatted() ) {
+					echo '<a class="dlm-file-link" href="' . esc_url( $this->column_download->get_the_download_link() ) . '"><code>' . esc_html( $file->get_filename() );
+					if ( $size = $this->column_download->get_version()->get_filesize_formatted() ) {
 						echo ' &ndash; ' . esc_html( $size );
 					}
 					echo '</code></a>';
@@ -93,30 +119,31 @@ class DLM_Custom_Columns {
 					}
 				}
 				break;
-			case "download_tag" :
-				if ( ! $terms = get_the_term_list( $post->ID, 'dlm_download_tag', '', ', ', '' ) ) {
+			case 'download_tag':
+				$terms = get_the_term_list( $post->ID, 'dlm_download_tag', '', ', ', '' );
+				if ( ! $terms ) {
 					echo '<span class="na">&ndash;</span>';
 				} else {
 					echo wp_kses_post( $terms );
 				}
 				break;
-			case "featured" :
-				if ( $download->is_featured() ) {
+			case 'featured':
+				if ( $this->column_download->is_featured() ) {
 					echo '<span class="yes">' . esc_html__( 'Yes', 'download-monitor' ) . '</span>';
 				} else {
 					echo '<span class="na">&ndash;</span>';
 				}
 				break;
 			case "locked_download" :
-				$is_locked = apply_filters( 'dlm_download_is_locked', $download->is_members_only(), $download );
+				$is_locked = apply_filters( 'dlm_download_is_locked', $this->column_download->is_members_only(), $this->column_download );
 				if ( $is_locked ) {
 					echo '<span class="yes">' . esc_html__( 'Yes', 'download-monitor' ) . '</span>';
 				} else {
 					echo '<span class="na">&ndash;</span>';
 				}
 				break;
-			case "redirect_only" :
-				if ( $download->is_redirect_only() ) {
+			case 'redirect_only':
+				if ( $this->column_download->is_redirect_only() ) {
 					echo '<span class="yes">' . esc_html__( 'Yes', 'download-monitor' ) . '</span>';
 				} else {
 					echo '<span class="na">&ndash;</span>';
@@ -124,7 +151,7 @@ class DLM_Custom_Columns {
 				break;
 			case "version" :
 				/** @var DLM_Download_Version $file */
-				$file = $download->get_version();
+				$file = $this->column_download->get_version();
 				if ( $file && $file->get_version() ) {
 					echo esc_html( $file->get_version() );
 				} else {
@@ -133,17 +160,13 @@ class DLM_Custom_Columns {
 				break;
 
 			case "shortcode" :
-				echo '<button class="wpchill-tooltip-button copy-dlm-shortcode button button-primary dashicons dashicons-shortcode" style="width:40px;"><div class="wpchill-tooltip-content"><span class="dlm-copy-text">' . esc_html__( 'Copy shortcode', 'download-monitor' ) . '</span><div class="dl-shortcode-copy"><code>[download id="' . absint( $post->ID ) . '"]</code><input type="text" value="[download id=\'' . absint( $post->ID ) . '\']" class="hidden"></div></div></button>';
+				echo '<button class="wpchill-tooltip-button copy-dlm-shortcode button button-primary dashicons dashicons-shortcode" style="width:40px;"><div class="wpchill-tooltip-content"><span class="dlm-copy-text">' . esc_html__( 'Copy shortcode', 'download-monitor' ) . '</span><div class="dl-shortcode-copy"><code>[download id="' . absint( $post->ID ) . '"]</code><input type="text" readonly value="[download id=\'' . absint( $post->ID ) . '\']" class="dlm-copy-shortcode-input"></div></div></button>';
+				break;
+			case "download_link" :
+				echo '<button class="wpchill-tooltip-button copy-dlm-shortcode button button-primary dashicons dashicons-admin-links" style="width:40px;"><div class="wpchill-tooltip-content"><span class="dlm-copy-text">' . esc_html__( 'Copy download link', 'download-monitor' ) . '</span><div class="dl-shortcode-copy">' . esc_url( $this->column_download->get_the_download_link() ) . '<input type="text" readonly value="' . esc_url( $this->column_download->get_the_download_link() ) . '" class="dlm-copy-shortcode-input"></div></div></button>';
 				break;
 			case "download_count" :
-				echo number_format( $download->get_download_count(), 0, '.', ',' );
-				break;
-			case "featured" :
-				if ( $download->is_featured() ) {
-					echo '<img src="' . esc_url( download_monitor()->get_plugin_url() ) . '/assets/images/on.png" alt="yes" />';
-				} else {
-					echo '<span class="na">&ndash;</span>';
-				}
+				echo number_format( $this->column_download->get_download_count(), 0, '.', ',' );
 				break;
 		}
 	}
@@ -159,11 +182,12 @@ class DLM_Custom_Columns {
 	 */
 	public function sortable_columns( $columns ) {
 		$custom = array(
-			'download_id'       => 'download_id',
-			'download_count'    => 'download_count',
-			'featured'          => 'featured',
-			'locked_download'   => 'locked_download',
-			'redirect_only'     => 'redirect_only',
+			'download_id'     => 'download_id',
+			'download_title'  => 'download_title',
+			'download_count'  => 'download_count',
+			'featured'        => 'featured',
+			'locked_download' => 'locked_download',
+			'redirect_only'   => 'redirect_only',
 		);
 
 		return wp_parse_args( $custom, $columns );
@@ -202,12 +226,12 @@ class DLM_Custom_Columns {
 	 *
 	 * @return string
 	 */
-	public function set_primary_column_name( $column_name, $context ){
-		if( 'edit-dlm_download' === $context ){
+	public function set_primary_column_name( $column_name, $context ) {
+		if ( 'edit-dlm_download' === $context ) {
 
 			return 'download_title';
 		}
 
 		return $column_name;
-    }
+	}
 }

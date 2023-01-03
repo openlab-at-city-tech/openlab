@@ -71,6 +71,12 @@ class DLM_Settings_Page {
 						exit;
 					}
 					break;
+				case 'dlm_redo_upgrade':
+					if ( DLM_Admin_Helper::redo_upgrade() ) {
+						wp_redirect( add_query_arg( array( 'dlm_action_done' => $action ), admin_url( 'edit.php?post_type=dlm_download&page=download-monitor-settings&tab=advanced&section=misc' ) ) );
+						exit;
+					}
+					break;
 			}
 		}
 
@@ -114,6 +120,12 @@ class DLM_Settings_Page {
 				case 'dlm_regenerate_robots':
 					echo "<p>" . esc_html__( 'Robots.txt file successfully regenerated!', 'download-monitor' ) . "</p>";
 					break;
+				case 'dlm_redo_upgrade':
+					echo "<p>" . esc_html__( 'Environment set for Download Monitor database upgrade!', 'download-monitor' ) . "</p>";
+					break;
+				default:
+					echo "<p>" . esc_html__( 'Download Monitor action completed!', 'download-monitor' ) . "</p>";
+					break;
 			}
 			?>
 		</div>
@@ -142,11 +154,12 @@ class DLM_Settings_Page {
 		$admin_settings = new DLM_Admin_Settings();
 		$settings       = $admin_settings->get_settings();
 		$tab            = $this->get_active_tab();
+		$active_section = $this->get_active_section( $settings[ $tab ]['sections'] );
 
 		// print global notices
 		$this->print_global_notices();
 		?>
-		<div class="wrap dlm-admin-settings <?php echo esc_attr( $tab ); ?>">
+		<div class="wrap dlm-admin-settings <?php echo esc_attr( $tab ) . ' ' . esc_attr( $active_section ); ?>">
 			<hr class="wp-header-end">
 			<form method="post" action="options.php">
 
@@ -165,8 +178,6 @@ class DLM_Settings_Page {
 
 				// loop fields for this tab
 				if ( isset( $settings[ $tab ] ) ) {
-
-					$active_section = $this->get_active_section( $settings[ $tab ]['sections'] );
 
 					if ( count( $settings[ $tab ]['sections'] ) > 1 ) {
 
@@ -311,29 +322,30 @@ class DLM_Settings_Page {
 	 *
 	 * @param bool $extra_class
 	 */
-	public static function dlm_page_header($extra_class = '') {
+	public static function dlm_page_header( $extra_class = '' ) {
 
 		// Only display the header on pages that belong to dlm
 		if ( ! apply_filters( 'dlm_page_header', false ) ) {
 			return;
 		}
 		?>
-		<div class="dlm-page-header <?php echo ( $extra_class ) ? esc_attr( $extra_class ) : ''; ?>">
-			<div class="dlm-header-logo">
+        <div class="dlm-page-header <?php echo ( $extra_class ) ? esc_attr( $extra_class ) : ''; ?>">
+            <div class="dlm-header-logo">
 
-				<img src="<?php echo esc_url( DLM_URL . 'assets/images/logo.png' ); ?>" class="dlm-logo" />
-			</div>
-			<div class="dlm-header-links">
-				<a href="https://www.download-monitor.com/kb/" target="_blank" rel="noreferrer nofollow" id="get-help"
-				   class="button button-secondary"><span
-							class="dashicons dashicons-external"></span><?php esc_html_e( 'Documentation', 'download-monitor' ); ?>
-				</a>
-				<a class="button button-secondary"
-				   href="https://www.download-monitor.com/contact/" target="_blank" rel="noreferrer nofollow"><span
-							class="dashicons dashicons-email-alt"></span><?php echo esc_html__( 'Contact us for support!', 'download-monitor' ); ?>
-				</a>
-			</div>
-		</div>
+                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTA1IiBoZWlnaHQ9IjEwNSIgdmlld0JveD0iMCAwIDEwNSAxMDUiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxwYXRoIGQ9Ik01Mi41IDAuMDAwNTk5Njc0QzM4LjU3NTYgMC4wMDA1OTk2NzQgMjUuMjIxOSA1LjUzMjAzIDE1LjM3NzYgMTUuMzc4MUM1LjUzMTQ2IDI1LjIyMjkgMCAzOC41NzY2IDAgNTIuNTAwM0MwIDY2LjQyNCA1LjUzMTQ2IDc5Ljc3ODMgMTUuMzc3NiA4OS42MjI1QzI1LjIyMjUgOTkuNDY4NiAzOC41NzYyIDEwNSA1Mi41IDEwNUM2Ni40MjM4IDEwNSA3OS43NzgxIDk5LjQ2ODYgODkuNjIyNCA4OS42MjI1Qzk5LjQ2ODUgNzkuNzc3NyAxMDUgNjYuNDI0IDEwNSA1Mi41MDAzQzEwNSA0My4yODQ1IDEwMi41NzQgMzQuMjMwOCA5Ny45NjY0IDI2LjI1MDJDOTMuMzU4NyAxOC4yNjk1IDg2LjczMDQgMTEuNjQxNiA3OC43NDk3IDcuMDMzNTRDNzAuNzY5IDIuNDI1ODEgNjEuNzE1MiAwIDUyLjQ5OTQgMEw1Mi41IDAuMDAwNTk5Njc0Wk00MC40Nzc3IDM4LjI3MThMNDcuMjQ5OSA0NS4wOTY5VjI2LjI0OTZINTcuNzUwMVY0NS4wOTY5TDY0LjUyMjMgMzguMzI0Nkw3MS45MjUyIDQ1LjcyNzVMNTIuNSA2NS4xNTI2TDMzLjAyMiA0NS42NzQ3TDQwLjQ3NzcgMzguMjcxOFpNNzguNzQ5MSA3OC43NTExSDI2LjI0ODVWNjguMjUxSDc4Ljc0OTFWNzguNzUxMVoiIGZpbGw9InVybCgjcGFpbnQwX2xpbmVhcl8zN184NSkiLz4KPGRlZnM+CjxsaW5lYXJHcmFkaWVudCBpZD0icGFpbnQwX2xpbmVhcl8zN184NSIgeDE9Ii0zNy41MjkzIiB5MT0iMS4wOTMzNGUtMDYiIHgyPSI5NS45NzY2IiB5Mj0iMTA3Ljg3MSIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiPgo8c3RvcCBvZmZzZXQ9IjAuMTEwMTEzIiBzdG9wLWNvbG9yPSIjNURERUZCIi8+CjxzdG9wIG9mZnNldD0iMC40NDM1NjgiIHN0b3AtY29sb3I9IiM0MTlCQ0EiLz4KPHN0b3Agb2Zmc2V0PSIwLjYzNjEyMiIgc3RvcC1jb2xvcj0iIzAwOENENSIvPgo8c3RvcCBvZmZzZXQ9IjAuODU1OTk3IiBzdG9wLWNvbG9yPSIjMDI1RUEwIi8+CjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzAyNTM4RCIvPgo8L2xpbmVhckdyYWRpZW50Pgo8L2RlZnM+Cjwvc3ZnPgo=" class="dlm-logo"/>
+            </div>
+            <div class="dlm-header-links">
+                <?php do_action( 'dlm_page_header_links' ); ?>
+                <a href="https://www.download-monitor.com/kb/" target="_blank" rel="noreferrer nofollow" id="get-help"
+                   class="button button-secondary"><span
+                            class="dashicons dashicons-external"></span><?php esc_html_e( 'Documentation', 'download-monitor' ); ?>
+                </a>
+                <a class="button button-secondary"
+                   href="https://www.download-monitor.com/contact/" target="_blank" rel="noreferrer nofollow"><span
+                            class="dashicons dashicons-email-alt"></span><?php echo esc_html__( 'Contact us for support!', 'download-monitor' ); ?>
+                </a>
+            </div>
+        </div>
 		<?php
 	}
 
@@ -638,6 +650,7 @@ Deny from all
 			'priority'   => 40
 		);
 
+		set_transient( 'dlm_robots_txt', $transient, DAY_IN_SECONDS );
 		return $settings;
 	}
 
@@ -673,30 +686,6 @@ Deny from all
 			}
 		}
 		return false;
-	}
-
-	/**
-	 * Undocumented function
-	 *
-	 * @return void
-	 */
-	public function redo_upgrade() {
-
-		global $wp, $wpdb, $pagenow;
-
-		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
-			return false;
-		}
-
-		// Drop the dlm_reports_log
-		$drop_statement = "DROP TABLE IF EXISTS {$wpdb->prefix}dlm_reports_log";
-		$wpdb->query( $drop_statement );
-
-		// Delete upgrade history and set the need DB pgrade
-		delete_option( 'dlm_db_upgraded' );
-		set_transient( 'dlm_needs_upgrade', '1', 30 * DAY_IN_SECONDS );
-
-		return true;
 	}
 
 	/**

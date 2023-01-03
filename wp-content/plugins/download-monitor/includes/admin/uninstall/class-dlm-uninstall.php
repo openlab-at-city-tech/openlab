@@ -40,7 +40,7 @@ class DLM_Uninstall {
 
 		$current_screen = get_current_screen();
 		if ( in_array( $current_screen->base, array( 'plugins', 'plugins-network' ) ) ) {
-			wp_enqueue_style( 'dlm-uninstall', $plugin_url . '/assets/css/dlm-uninstall.css' );
+			wp_enqueue_style( 'dlm-uninstall', $plugin_url . '/assets/css/dlm-uninstall.min.css', array(), DLM_VERSION );
 			wp_enqueue_script( 'dlm-uninstall', $plugin_url . '/assets/js/dlm-uninstall.js', array( 'jquery' ), DLM_VERSION, true );
 			wp_localize_script( 'dlm-uninstall', 'wpDLMUninstall', array(
 					'redirect_url' => admin_url( '/plugins.php' ),
@@ -283,6 +283,8 @@ class DLM_Uninstall {
 					$wpdb->prefix . 'dlm_order_item',
 					$wpdb->prefix . 'dlm_order_transaction',
 					$wpdb->prefix . 'dlm_order',
+					$wpdb->prefix . 'dlm_reports_log',
+					$wpdb->prefix . 'dlm_downloads',
 				)
 			);
 

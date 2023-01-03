@@ -797,6 +797,13 @@ if ( ! class_exists( 'Download_Monitor_Usage_Tracker' ) ) {
 		 */
 		public function optin_notice() {
 
+			if ( function_exists( 'get_current_screen' ) ) {
+				$current_screen = get_current_screen();
+				if ( 'dlm_download_page_download-monitor-about-page' === $current_screen->base ) {
+					return;
+				}
+			}
+
 			// Check for plugin args.
 			if ( isset( $_GET['plugin'] ) && $this->plugin_name === $_GET['plugin'] && isset( $_GET['plugin_action'] ) ) {
 
@@ -1336,8 +1343,8 @@ if ( ! class_exists( 'Download_Monitor_Usage_Tracker' ) ) {
 										'name'     => $this->plugin_name.'_wisdom_tracking',
 										'std'      => '0',
 										'label'    => __( 'Track data', 'download-monitor' ),
-										'cb_label' => __( 'We would like to track its usage on your site. We don\'t record any sensitive data, only information regarding the WordPress environment and Download Monitor settings, which we will use to help us make improvements.', 'download-monitor' ),
-										'desc'     => '',
+										'cb_label' => '',
+										'desc' => __( 'We would like to track its usage on your site. We don\'t record any sensitive data, only information regarding the WordPress environment and Download Monitor settings, which we will use to help us make improvements.', 'download-monitor' ),
 										'type'     => 'checkbox'
 								),
 						)

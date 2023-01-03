@@ -27,21 +27,31 @@ class DLM_Shortcodes {
 	}
 
 	/**
-	 * total_downloads function.
+	 * Total downloads function
+	 * Will be based on the download_log table and not meta.
 	 *
 	 * @access public
 	 * @return int
 	 */
 	public function total_downloads() {
+
 		global $wpdb;
 
-		$total = $wpdb->get_var( "
-			SELECT SUM( meta_value ) FROM $wpdb->postmeta
-			LEFT JOIN $wpdb->posts on $wpdb->postmeta.post_id = $wpdb->posts.ID
-			WHERE meta_key = '_download_count'
-			AND post_type = 'dlm_download'
-			AND post_status = 'publish'
-		" );
+		$total = 0;
+
+		if ( DLM_Utils::table_checker( $wpdb->dlm_downloads ) ) {
+			$total = $wpdb->get_results( "SELECT download.download_count FROM {$wpdb->dlm_downloads} as download;",ARRAY_A );
+			$total = array_sum( array_column( $total, 'download_count' ) );
+		} else {
+
+			if ( ! DLM_Logging::is_logging_enabled() ) {
+
+				return esc_html__( 'Logging is not enabled.', 'download-monitor' );
+			}
+
+			return esc_html__( 'Log table not present.', 'download-monitor' );
+
+		}
 
 		return apply_filters( 'dlm_shortcode_total_downloads', $total );
 	}
@@ -141,8 +151,7 @@ class DLM_Shortcodes {
 				}
 
 				// get output
-				$output = ob_get_clean();
-
+				$output .= ob_get_clean();
 				// check if we need to wpautop()
 				if ( 'true' === $autop || true === $autop ) {
 					$output = wpautop( $output );
@@ -317,10 +326,12 @@ class DLM_Shortcodes {
 			'paginate'                  => false
 		), $atts ) );
 
-		$post__in     = ! empty( $include ) ? explode( ',', $include ) : '';
-		$post__not_in = ! empty( $exclude ) ? explode( ',', $exclude ) : '';
-		$order        = strtoupper( $order );
-		$meta_key     = '';
+		$post__in       = ! empty( $include ) ? explode( ',', $include ) : '';
+		$post__not_in   = ! empty( $exclude ) ? explode( ',', $exclude ) : '';
+		$tag_not_in     = ! empty( $exclude_tag ) ? explode( ',', $exclude_tag ) : '';
+		$order          = strtoupper( $order );
+		$meta_key       = '';
+		$order_by_count = '';
 
 		switch ( $orderby ) {
 			case 'title' :
@@ -338,8 +349,7 @@ class DLM_Shortcodes {
 			case 'hits' :
 			case 'count' :
 			case 'download_count' :
-				$orderby  = 'meta_value_num';
-				$meta_key = '_download_count';
+				$order_by_count = '1';
 				break;
 			default :
 				$orderby = 'title';
@@ -347,17 +357,18 @@ class DLM_Shortcodes {
 		}
 
 		$args = array(
-			'post_type'    => 'dlm_download',
-			'post_status'  => 'publish',
-			'orderby'      => $orderby,
-			'order'        => $order,
-			'meta_key'     => $meta_key,
-			'post__in'     => $post__in,
-			'post__not_in' => $post__not_in,
-			'meta_query'   => array()
+			'post_type'      => 'dlm_download',
+			'post_status'    => 'publish',
+			'orderby'        => $orderby,
+			'order'          => $order,
+			'meta_key'       => $meta_key,
+			'post__in'       => $post__in,
+			'post__not_in'   => $post__not_in,
+			'meta_query'     => array(),
+			'order_by_count' => $order_by_count,
 		);
 
-		if ( $category || $tag || $exclude_tag ) {
+		if ( $category || $tag || ! empty( $tag_not_in ) ) {
 			$args['tax_query'] = array( 'relation' => 'AND' );
 
 			$tags = array_filter( explode( ',', $tag ) );
@@ -419,11 +430,11 @@ class DLM_Shortcodes {
 				);
 			}
 
-			if ( ! empty( $exclude_tag ) ) {
+			if ( ! empty( $tag_not_in ) ) {
 				$args['tax_query'][] = array(
 					'taxonomy' => 'dlm_download_tag',
 					'field'    => 'slug',
-					'terms'    => $exclude_tag,
+					'terms'    => $tag_not_in,
 					'operator' => 'NOT IN'
 				);
 			}
@@ -461,7 +472,7 @@ class DLM_Shortcodes {
 		}
 
 		// fetch downloads
-		$downloads = download_monitor()->service( 'download_repository' )->retrieve( $args, $per_page, $offset );
+		$downloads   = download_monitor()->service( 'download_repository' )->retrieve( $args, $per_page, $offset );
 
 		// make all downloads filterable
 		$downloads = apply_filters( 'dlm_shortcode_downloads_downloads', $downloads );

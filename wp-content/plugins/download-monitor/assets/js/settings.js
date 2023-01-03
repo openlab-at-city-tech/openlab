@@ -15,9 +15,9 @@ jQuery(function ($) {
 			$('#setting-dlm_count_unique_ips').closest('tr').hide();
 		}
 	}).change();
-
+	
 	$(document).ready(function () {
-
+		
 		// load lazy-select elements
 		$.each($('.dlm-lazy-select'), function () {
 

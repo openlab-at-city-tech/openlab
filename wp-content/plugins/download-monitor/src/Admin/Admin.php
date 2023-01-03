@@ -7,7 +7,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * DLM_Admin class.
  *
- * TODO Future: Look into making this class smaller
  */
 class DLM_Admin {
 
@@ -32,7 +31,6 @@ class DLM_Admin {
 		add_action( 'init', array( $this, 'required_classes' ), 30 );
 
 		// Remove admin notices from DLM pages
-		//@todo: uncomment this after we release our extensions with the proper modifications
 		add_action( 'admin_notices', array(  $this, 'remove_admin_notices' ), 9 );
 
 		// Admin menus
@@ -48,26 +46,19 @@ class DLM_Admin {
 		$settings_page = new DLM_Settings_Page();
 		$settings_page->setup();
 
-		// setup logs
-		$log_page = new DLM_Log_Page();
-		$log_page->setup();
-
 		// setup report
 		$reports_page = new DLM_Reports_Page();
 		$reports_page->setup();
 
+		// Handle all functinality that involves Media Library
+		$dlm_media_library = DLM_Media_Library::get_instance();
+
 		// Dashboard
 		add_action( 'wp_dashboard_setup', array( $this, 'admin_dashboard' ) );
-
 		// Admin Footer Text
 		add_filter( 'admin_footer_text', array( $this, 'admin_footer_text' ), 1 );
-
 		// flush rewrite rules on shutdown
 		add_action( 'shutdown', array( $this, 'maybe_flush_rewrites' ) );
-
-		// filter attachment thumbnails in media library for files in dlm_uploads
-		add_filter( 'wp_prepare_attachment_for_js', array( $this, 'filter_thumbnails_protected_files_grid' ), 10, 1 );
-		add_filter( 'wp_get_attachment_image_src', array( $this, 'filter_thumbnails_protected_files_list' ), 10, 1 );
 
 		// Legacy Upgrader
 		$lu_check = new DLM_LU_Checker();
@@ -75,12 +66,11 @@ class DLM_Admin {
 			$lu_message = new DLM_LU_Message();
 			$lu_message->display();
 		}
-
 		// Sets the rewrite rule option if dlm_download_endpoint option is changed.
 		add_filter( 'pre_update_option_dlm_download_endpoint', array( $this, 'set_rewrite_rules_flag_on_endpoint_change'), 15, 2 );
-
 		// Checks and flushes rewrite rule if rewrite flag option is set.
 		add_action( 'admin_init', array( $this, 'check_rewrite_rules') );
+
 	}
 
 	/**
@@ -139,57 +129,6 @@ class DLM_Admin {
 	}
 
 	/**
-	 * filter attachment thumbnails in media library grid view for files in dlm_uploads
-	 *
-	 * @param array $response
-	 *
-	 * @return array
-	 */
-	public function filter_thumbnails_protected_files_grid( $response ) {
-
-		if ( apply_filters( 'dlm_filter_thumbnails_protected_files', true ) ) {
-			$upload_dir = wp_upload_dir();
-
-			if ( strpos( $response['url'], $upload_dir['baseurl'] . '/dlm_uploads' ) !== false ) {
-				if ( ! empty( $response['sizes'] ) ) {
-					$dlm_protected_thumb = download_monitor()->get_plugin_url() . '/assets/images/protected-file-thumbnail.png';
-					foreach ( $response['sizes'] as $rs_key => $rs_val ) {
-						$rs_val['url']                = $dlm_protected_thumb;
-						$response['sizes'][ $rs_key ] = $rs_val;
-					}
-				}
-			}
-		}
-
-		return $response;
-	}
-
-	/**
-	 * filter attachment thumbnails in media library list view for files in dlm_uploads
-	 *
-	 * @param bool|array $image
-	 *
-	 * @return bool|array
-	 */
-	public function filter_thumbnails_protected_files_list( $image ) {
-		if ( apply_filters( 'dlm_filter_thumbnails_protected_files', true ) ) {
-			if ( $image ) {
-
-				$upload_dir = wp_upload_dir();
-
-				if ( strpos( $image[0], $upload_dir['baseurl'] . '/dlm_uploads' ) !== false ) {
-					$image[0] = $dlm_protected_thumb = download_monitor()->get_plugin_url() . '/assets/images/protected-file-thumbnail.png';
-					$image[1] = 60;
-					$image[2] = 60;
-				}
-			}
-
-		}
-
-		return $image;
-	}
-
-	/**
 	 * admin_enqueue_scripts function.
 	 *
 	 * @access public
@@ -198,10 +137,10 @@ class DLM_Admin {
 	public function admin_enqueue_scripts( $hook ) {
 		global $post;
 
-		wp_enqueue_style( 'download_monitor_menu_css', download_monitor()->get_plugin_url() . '/assets/css/menu.css', array(), DLM_VERSION );
+		wp_enqueue_style( 'download_monitor_others', download_monitor()->get_plugin_url() . '/assets/css/others.min.css', array(), DLM_VERSION );
 
 		if ( $hook == 'index.php' ) {
-			wp_enqueue_style( 'download_monitor_dashboard_css', download_monitor()->get_plugin_url() . '/assets/css/dashboard.css', array(), DLM_VERSION );
+			wp_enqueue_style( 'download_monitor_dashboard_css', download_monitor()->get_plugin_url() . '/assets/css/dashboard.min.css', array(), DLM_VERSION );
 		}
 
 		$enqueue = false;
@@ -210,12 +149,12 @@ class DLM_Admin {
 			if (
 				( ! empty( $_GET['post_type'] ) && in_array( $_GET['post_type'], array(
 						'dlm_download',
-						\Never5\DownloadMonitor\Shop\Util\PostType::KEY
+						\WPChill\DownloadMonitor\Shop\Util\PostType::KEY
 					) ) )
 				||
 				( ! empty( $post->post_type ) && in_array( $post->post_type, array(
 						'dlm_download',
-						\Never5\DownloadMonitor\Shop\Util\PostType::KEY
+						\WPChill\DownloadMonitor\Shop\Util\PostType::KEY
 					) ) )
 			) {
 				$enqueue = true;
@@ -245,8 +184,8 @@ class DLM_Admin {
 		wp_enqueue_script( 'jquery-blockui', download_monitor()->get_plugin_url() . '/assets/js/blockui.min.js', array( 'jquery' ), '2.61' );
 		wp_enqueue_script( 'jquery-ui-sortable' );
 		wp_enqueue_script( 'jquery-ui-datepicker' );
-		wp_enqueue_style( 'jquery-ui-style', download_monitor()->get_plugin_url() . '/assets/css/jquery-ui.css', array(), DLM_VERSION );
-		wp_enqueue_style( 'download_monitor_admin_css', download_monitor()->get_plugin_url() . '/assets/css/admin.css', array( 'dashicons' ), DLM_VERSION );
+		wp_enqueue_style( 'jquery-ui-style', download_monitor()->get_plugin_url() . '/assets/css/jquery-ui.min.css', array(), DLM_VERSION );
+		wp_enqueue_style( 'download_monitor_admin_css', download_monitor()->get_plugin_url() . '/assets/css/admin.min.css', array( 'dashicons' ), DLM_VERSION );
 	}
 
 	/**
@@ -260,7 +199,6 @@ class DLM_Admin {
 		 * @hooked DLM_Settings_Page add_settings_page() - 30
 		 * @hooked DLM_Admin_Extensions extensions_pages() - 30
 		 * @hooked DLM_Reports_Page add_admin_menu() - 30
-		 * @hooked DLM_Log_Page add_logs_menu() - 30
 		 * @hooked Orders orders_menu() - 30
 		 *
 		 */
@@ -395,4 +333,5 @@ class DLM_Admin {
 		}
 
 	}
+
 }

@@ -45,20 +45,23 @@ if ( ! class_exists( 'WPChill_Welcome' ) ) {
 		}
 
 		/**
+		 * Display button function.
+		 *
+		 * @param string $text Button text.
+		 * @param string $link Button URL.
+		 * @param string $class Button class.
+		 * @param bool   $fill Show style.
+		 * @param string $color Button color.
+		 * @param string $text_color Text color.
+		 * @param string $border_color Border color.
+		 *
 		 * @since 1.0.0
-		 * Renders buttons
-		 *
-		 * @param string $text
-		 *
-		 * @param string $url
-		 *
-		 * @param bool   $fill
-		 *
-		 * @param string $color
 		 */
-		public function display_button( $text, $link, $fill = true, $color = '#5D3CE4' ) {
-			$style = 'style="background-color:' . sanitize_hex_color( $color ) . ';border-color:' . sanitize_hex_color( $color ) . ';color:#fff;"';
-			echo '<a href="' . esc_attr( $link ) . '" ' . ( $fill ? $style : '' ) . ' class="wpmtst-btn wpmtst-btn-block wpmtst-btn-lg">' . esc_html( $text ) . '</a>';
+		public function display_button( $text, $link, $class = 'button-primary', $fill = true, $color = '#5D3CE4', $text_color = '#fff', $border_color = '' ) {
+			$border_color = empty( $border_color ) ? $color : $border_color;
+			$style        = 'style="border:1px solid;background-color:' . ( 'transparent' !== $color ? sanitize_hex_color( $color ) : 'transparent' ) . ';border-color:' . sanitize_hex_color( $border_color ) . ';color:' . sanitize_hex_color( $text_color ) . ';"';
+			echo '<a href="' . esc_attr( $link ) . '" ' . ( $fill ? $style : '' ) . ' class="button ' . esc_attr( $class ) . '">' . esc_html( $text ) . '</a>';
+			//wpmtst-btn wpmtst-btn-block wpmtst-btn-lg - former button classes
 		}
 
 		/**
@@ -72,15 +75,19 @@ if ( ! class_exists( 'WPChill_Welcome' ) ) {
 		 * @param string $icon (icon URL)
 		 *
 		 * @param bool   $pro
+		 * @param string $link The URL to unlock the extension
 		 */
-		public function display_extension( $title, $description = '', $icon = '', $pro = false, $pro_color = '#5333ED' ) {
+		public function display_extension( $title, $description = '', $icon = '', $pro = false, $pro_color = '#5333ED', $extension_name = false ) {
 
 			echo '<div class="feature-block">';
+			echo '<div class="feature-block__header">';
 			if ( '' != $icon ) {
 				echo '<img src="' . esc_attr( $icon ) . '">';
 			}
 			echo '<h5>' . esc_html( $title ) . ( ( $pro ) ? '<div style="background-color:' . esc_attr( $pro_color ) . '" class="pro-label">PRO</div>' : '' ) . '</h5>';
-			echo '<p>' . esc_html( $description ) . '</p>';
+			echo '</div>';
+			echo '<p>' . wp_kses_post( $description ) . '</p>';
+			echo $extension_name ? '<a href="https://www.download-monitor.com/pricing/?utm_source=plugin&utm_medium=extension-block&utm_campaign=' . esc_attr( $extension_name ) . '">' . esc_html__( 'Upgrade to unlock', 'download-monitor' ) . '</a>' : '';
 			echo '</div>';
 		}
 
@@ -190,31 +197,31 @@ if ( ! class_exists( 'WPChill_Welcome' ) ) {
                     </g>
                 </svg>';
 
-				$svg_args = array(
-					'svg'   => array(
-						'class'           => true,
-						'aria-hidden'     => true,
-						'aria-labelledby' => true,
-						'role'            => true,
-						'xmlns'           => true,
-						'width'           => true,
-						'height'          => true,
-						'viewbox'         => true, // <= Must be lower case!
-						'id'              => true,
-					),
-					'g'     => array( 'fill' => true ),
-					'title' => array( 'title' => true ),
-					'path'  => array(
-						'd'    => true,
-						'fill' => true,
-					),
-					'style' => array( 'type' => true ),
-				);
+			$svg_args = array(
+				'svg'   => array(
+					'class'           => true,
+					'aria-hidden'     => true,
+					'aria-labelledby' => true,
+					'role'            => true,
+					'xmlns'           => true,
+					'width'           => true,
+					'height'          => true,
+					'viewbox'         => true, // <= Must be lower case!
+					'id'              => true,
+				),
+				'g'     => array( 'fill' => true ),
+				'title' => array( 'title' => true ),
+				'path'  => array(
+					'd'    => true,
+					'fill' => true,
+				),
+				'style' => array( 'type' => true ),
+			);
 
-				echo '<style>';
-				echo '.svg-' . absint( $id ) . '{ fill:' . sanitize_hex_color( $color ) . ';}';
-				echo '</style>';
-				echo '<div class="stars_wrapper">' . wp_kses( $star . $star . $star . $star . $star, $svg_args ) . '</div>';
+			echo '<style>';
+			echo '.svg-' . absint( $id ) . '{ fill:' . sanitize_hex_color( $color ) . ';}';
+			echo '</style>';
+			echo '<div class="stars_wrapper">' . wp_kses( $star . $star . $star . $star . $star, $svg_args ) . '</div>';
 		}
 
 		/**

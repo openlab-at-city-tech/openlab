@@ -149,9 +149,10 @@ class DLM_Custom_Actions {
 			if ( 'download_id' == $vars['orderby'] ) {
 				$vars['orderby'] = 'ID';
 			} elseif ( 'download_count' == $vars['orderby'] ) {
-				$vars = array_merge( $vars, array(
-					'meta_key' => '_download_count',
-					'orderby'  => 'meta_value_num'
+				$vars = array_merge(
+					$vars,
+					array(
+						'order_by_count' => '1',
 				) );
 
 			} elseif ( 'featured' == $vars['orderby'] ) {
@@ -176,8 +177,18 @@ class DLM_Custom_Actions {
 					'meta_key' => '_redirect_only',
 					'orderby'  => 'meta_value'
 				) );
+			} elseif ( 'download_title' === $vars['orderby'] ) {
+				$vars['orderby'] = 'title';
 			}
 		}
+
+		/**
+		 * Add arguments to query before querying
+		 * @hooked ( DLM_Backwards_Compatibility, orderby_compatibility )
+		 * 
+		 * @since 4.6.0
+		 */
+		do_action( 'dlm_query_args', $vars );
 
 		return apply_filters( 'dlm_admin_sort_columns', $vars);
 	}
@@ -340,7 +351,7 @@ class DLM_Custom_Actions {
 
 		// Only for downloads
 		if ( 'dlm_download' === $post->post_type && 'trash' !== $post->post_status ) {
-			$actions['dlm_duplicate_download'] = '<a href="javascript:;" class="dlm-duplicate-download" rel="' . $post->ID . '" data-value="' . wp_create_nonce( 'dlm_duplicate_download_nonce' ) . '">' . __( 'Duplicate Download', 'dlm-download-duplicator' ) . '</a>';
+			$actions['dlm_duplicate_download'] = '<a href="javascript:;" class="dlm-duplicate-download" rel="' . $post->ID . '" data-value="' . wp_create_nonce( 'dlm_duplicate_download_nonce' ) . '">' . __( 'Duplicate Download', 'download-monitor' ) . '</a>';
 		}
 
 		return $actions;
@@ -449,6 +460,6 @@ class DLM_Custom_Actions {
 	 * Display admin notice
 	 */
 	public function admin_notice() {
-		echo '<div class="updated"><p>' . __( 'Download succesfully duplicated!', 'dlm-download-duplicator' ) . '</p></div>' . PHP_EOL;
+		echo '<div class="updated"><p>' . esc_html__( 'Download succesfully duplicated!', 'download-monitor' ) . '</p></div>' . PHP_EOL;
 	}
 }

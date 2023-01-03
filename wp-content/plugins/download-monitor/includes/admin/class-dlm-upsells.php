@@ -104,14 +104,20 @@ class DLM_Upsells {
 	 * @param       $extension
 	 * @param null  $utm_source
 	 * @param array $features
+	 * @param string $utm_source
+	 * @param string $icon
 	 *
 	 * @return string
 	 *
 	 * @since 4.4.5
 	 */
-	public function generate_upsell_box( $title, $description, $tab, $extension, $features = array(), $utm_source = null ) {
+	public function generate_upsell_box( $title, $description, $tab, $extension, $features = array(), $utm_source = null, $icon = false ) {
 
 		echo '<div class="wpchill-upsell">';
+
+		if ( $icon ) {
+			echo '<img src="' . esc_url( DLM_URL . 'assets/images/upsells/' . $icon ) . '">';
+		}
 
 		if ( ! empty( $title ) ) {
 			echo '<h2>' . esc_html( $title ) . '</h2>';
@@ -140,15 +146,10 @@ class DLM_Upsells {
 		}
 
 		echo '<p class="wpchill-upsell-description">' . esc_html( $description ) . '</p>';
-		echo '<p>';
-		$buttons = '<a target="_blank" href="' . admin_url( 'edit.php?post_type=dlm_download&page=dlm-lite-vs-pro' ) . '" class="button">' . esc_html__( 'LITE vs PRO', 'download-monitor' ) . '</a>';
-		$buttons .= '<a target="_blank" href="https://www.download-monitor.com/pricing/?utm_source=' . ( !empty( $extension ) ? esc_html( $extension ). '_metabox' : '' ) . '&utm_medium=lite-vs-pro&utm_campaign=' . ( !empty( $extension ) ? esc_html( str_replace( ' ', '_', $extension ) ) : '' ) . '" class="button-primary button">' . esc_html__( 'Get PRO!', 'download-monitor' ) . '</a>';
-
-		echo wp_kses_post( apply_filters( 'dlm_upsell_buttons', $buttons, $tab ) );
+		echo '<a target="_blank" href="https://www.download-monitor.com/pricing/?utm_source=' . ( !empty( $extension ) ? esc_html( $extension ). '_metabox' : '' ) . '&utm_medium=lite-vs-pro&utm_campaign=' . ( !empty( $extension ) ? esc_html( str_replace( ' ', '_', $extension ) ) : '' ) . '"><div class="dlm-available-with-pro"><span class="dashicons dashicons-lock"></span><span>' . esc_html__( 'AVAILABLE WITH PRO', 'download-monitor' ) . '</span></div></a>';
 
 		echo '</p>';
 		echo '</div>';
-
 	}
 
 	/**
@@ -367,7 +368,10 @@ class DLM_Upsells {
 				__( 'Email notifications', 'download-monitor' ),
 				__( 'Create an email alert to be notified each time one of your files has been downloaded.', 'download-monitor' ),
 				'general',
-				'email-notification'
+				'email-notification',
+				false,
+				false,
+				'email_notification.png'
 			);
 		}
 
@@ -858,7 +862,7 @@ class DLM_Upsells {
 	/**
 	 * Add the Upgrade to PRO plugin action link
 	 *
-	 * @param $links
+	 * @param array $links Plugin action links.
 	 *
 	 * @return array
 	 *
@@ -866,16 +870,22 @@ class DLM_Upsells {
 	 */
 	public function filter_action_links( $links ) {
 
-		$dlm_extensions = DLM_Admin_Extensions::get_instance();
-		$extensions     = $dlm_extensions->get_available_extensions();
+		$dlm_extensions       = DLM_Admin_Extensions::get_instance();
+		$extensions           = $dlm_extensions->get_available_extensions();
+		$licensed_extensions  = $dlm_extensions->get_licensed_extensions();
+		$installed_extensions = $dlm_extensions->get_installed_extensions();
 
-		if ( count( $extensions ) > 0 ) {
-			$upgrade = array( '<a target="_blank" style="color: orange;font-weight: bold;" href="https://www.download-monitor.com/pricing/?utm_source=download-monitor&utm_medium=plugins-page&utm_campaign=upsell">' . esc_html__( 'Upgrade to PRO!', 'download-monitor' ) . '</a>' );
+		if ( 0 < count( $extensions ) ) {
+			if ( 0 !== count( $licensed_extensions ) && 0 < count( $installed_extensions ) ) { // If there are any licensed extensions ( active ) we show the Upgrade button, not the upgrade to PRO button.
+				$upgrade = array( '<a target="_blank" style="color: orange;font-weight: bold;" href="https://www.download-monitor.com/pricing/?utm_source=download-monitor&utm_medium=plugins-page&utm_campaign=upsell">' . esc_html__( 'Upgrade!', 'download-monitor' ) . '</a>' );
+			} else { // Show the upgrade to PRO button if no extensions are licensed.
+				$upgrade = array( '<a target="_blank" style="color: orange;font-weight: bold;" href="https://www.download-monitor.com/pricing/?utm_source=download-monitor&utm_medium=plugins-page&utm_campaign=upsell">' . esc_html__( 'Upgrade to PRO!', 'download-monitor' ) . '</a>' );
+			}
+
 			return array_merge( $upgrade, $links );
 		}
 
 		return $links;
-
 	}
 }
 
