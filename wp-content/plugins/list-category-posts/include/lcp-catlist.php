@@ -79,6 +79,7 @@ class CatList{
       'name'             => $this->params['name'],
       'categorypage'     => $this->params['categorypage'],
       'child_categories' => $this->params['child_categories'],
+      'main_cat_only'    => $this->params['main_cat_only'],
     ], $this->lcp_category_id);
     $processed_params = LcpParameters::get_instance()->get_query_params($this->params);
     $args = array_merge($args, $processed_params);
@@ -87,6 +88,8 @@ class CatList{
     // for WP_Query compatibility
     // http://core.trac.wordpress.org/browser/tags/3.7.1/src/wp-includes/post.php#L1686
     $args['posts_per_page'] = $args['numberposts'];
+
+    do_action( 'lcp_pre_run_query', $args );
 
     if ('no' === $this->params['main_query']) {
       // Use a standard Loop with WP_Query.
@@ -99,8 +102,11 @@ class CatList{
     }
     $this->posts_count = $lcp_query->found_posts;
 
-    remove_all_filters('posts_orderby');
+    if ( $this->params[ 'keep_orderby_filters' ] !== 'yes' ) {
+      remove_all_filters('posts_orderby');
+    }
     remove_filter('posts_where', array(LcpParameters::get_instance(), 'starting_with'));
+    remove_filter('posts_results', [ LcpCategory::get_instance(), 'filter_by_main_category' ]);
 
     return $lcp_query;
   }
