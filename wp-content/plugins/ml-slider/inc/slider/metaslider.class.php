@@ -457,11 +457,11 @@ class MetaSlider
     public function wp_add_inline_script($handle, $data, $position = 'after')
     {
         if (function_exists('wp_add_inline_script')) {
-return wp_add_inline_script($handle, $data, $position);
+            return wp_add_inline_script($handle, $data, $position);
         }
         global $wp_scripts;
-        if (!$data) {
-return false;
+        if (! $data) {
+            return false;
         }
 
         // First fetch any existing scripts

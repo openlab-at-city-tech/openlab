@@ -5,7 +5,7 @@
  * Plugin Name: MetaSlider
  * Plugin URI:  https://www.metaslider.com
  * Description: Easy to use slideshow plugin. Create SEO optimised responsive slideshows with Nivo Slider, Flex Slider, Coin Slider and Responsive Slides.
- * Version:     3.27.13
+ * Version:     3.28.2
  * Author:      MetaSlider
  * Author URI:  https://www.metaslider.com
  * License:     GPL-2.0+
@@ -47,7 +47,7 @@ if (! class_exists('MetaSliderPlugin')) {
          *
          * @var string
          */
-        public $version = '3.27.13';
+        public $version = '3.28.2';
 
         /**
          * Pro installed version number
@@ -1560,7 +1560,7 @@ if (! class_exists('MetaSliderPlugin')) {
                                                                 ),
                                                                 'sliceDown' => array(
                                                                     'class' => 'option nivo',
-                                                                    'label' => __("Slide Down", "ml-slider")
+                                                                    'label' => __("Slice Down", "ml-slider")
                                                                 ),
                                                                 'sliceUp' => array(
                                                                     'class' => 'option nivo',
@@ -1568,31 +1568,31 @@ if (! class_exists('MetaSliderPlugin')) {
                                                                 ),
                                                                 'sliceUpLeft' => array(
                                                                     'class' => 'option nivo',
-                                                                    'label' => __("Slide Up Left", "ml-slider")
+                                                                    'label' => __("Slice Up Left", "ml-slider")
                                                                 ),
                                                                 'sliceUpDown' => array(
                                                                     'class' => 'option nivo',
-                                                                    'label' => __("Slice Up Down", "ml-slider")
+                                                                    'label' => __("Slide Up Down", "ml-slider")
                                                                 ),
-                                                                'slideUpDownLeft' => array(
+                                                                'sliceUpDownLeft' => array(
                                                                     'class' => 'option nivo',
-                                                                    'label' => __("Slide Up Down Left", "ml-slider")
+                                                                    'label' => __("Slice Up Down Left", "ml-slider")
                                                                 ),
                                                                 'fold' => array(
-                                                                    'class' => 'option nivo',
+                                                                    'class' => 'option nivo flex responsive',
                                                                     'label' => __("Fold", "ml-slider")
                                                                 ),
                                                                 'fade' => array(
-                                                                    'class' => 'option nivo flex responsive',
+                                                                    'class' => 'option nivo',
                                                                     'label' => __("Fade", "ml-slider")
                                                                 ),
                                                                 'slideInRight' => array(
                                                                     'class' => 'option nivo',
-                                                                    'label' => __("Slide In Right", "ml-slider")
+                                                                    'label' => __("Slide in Right", "ml-slider")
                                                                 ),
                                                                 'slideInLeft' => array(
                                                                     'class' => 'option nivo',
-                                                                    'label' => __("Slide In Left", "ml-slider")
+                                                                    'label' => __("Slide in Left", "ml-slider")
                                                                 ),
                                                                 'boxRandom' => array(
                                                                     'class' => 'option nivo',
@@ -1605,6 +1605,10 @@ if (! class_exists('MetaSliderPlugin')) {
                                                                 'boxRainReverse' => array(
                                                                     'class' => 'option nivo',
                                                                     'label' => __("Box Rain Reverse", "ml-slider")
+                                                                ),
+                                                                'boxRainGrow' => array(
+                                                                    'class' => 'option nivo',
+                                                                    'label' => __("Box Rain Grow", "ml-slider")
                                                                 ),
                                                                 'boxRainGrowReverse' => array(
                                                                     'class' => 'option nivo',

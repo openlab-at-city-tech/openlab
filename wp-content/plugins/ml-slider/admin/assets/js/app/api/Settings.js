@@ -45,6 +45,14 @@ const Settings = {
 			}
 		})
 	},
+	getUserSetting(setting) {
+		return api.get('settings/user/', {
+			params: {
+				action: 'ms_get_user_details',
+				setting: setting,
+			}
+		})
+	},
 	get(setting) {
 		return api.get('settings/single', {
 			params: {

@@ -141,11 +141,11 @@ class MetaSlider_Analytics
         if (is_multisite()) {
             return $this;
         }
-        if (!class_exists('MSAppsero/Client')) {
+        if (!class_exists('Appsero\\Client')) {
             require_once(METASLIDER_PATH . 'lib/appsero/src/Client.php');
         }
         add_filter('ml-slider_tracker_data', array($this, 'filterTrackingData'));
-        $client = new MSAppsero\Client($key, $name, $path);
+        $client = new Appsero\Client($key, $name, $path);
         $this->appsero = $client->insights();
         return $this;
     }
@@ -282,9 +282,18 @@ class MetaSlider_Analytics
     public function optin()
     {
         $current_user = wp_get_current_user();
+
+        //check if there is a custom email added for optin
+        $optin_email = get_option('metaslider_optin_email');
+        if (!empty($optin_email)) {
+            $use_email = filter_var($optin_email, FILTER_SANITIZE_EMAIL);
+        } else {
+            $use_email = $current_user->user_email;
+        }
+
         update_option('metaslider_optin_user_extras', array(
             'id' => $current_user->ID,
-            'email' => $current_user->user_email,
+            'email' => $use_email,
             'ip' => isset($_SERVER['REMOTE_ADDR']) ? sanitize_text_field($_SERVER['REMOTE_ADDR']) : '', // phpcs:ignore WordPressVIPMinimum.Variables.ServerVariables.UserControlledHeaders
             'time' => time()
         ));

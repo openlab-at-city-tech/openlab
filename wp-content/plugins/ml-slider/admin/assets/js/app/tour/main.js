@@ -10,7 +10,7 @@ MainTour.options.defaults = {
 
 MainTour.addStep('add-slide', {
 	title: __('Add a slide', 'ml-slider'),
-	text: __('Thank you for using MetaSlider. To get started, press here to add your first slide.', 'ml-slider'),
+	text: __('Thanks for using MetaSlider. To get started, click the "Add Slide" button to create your first slide.', 'ml-slider'),
 	attachTo: { element: '#add-new-slide', on: 'bottom' },
 	buttons: []
 })

@@ -659,7 +659,7 @@ class MetaImageSlide extends MetaSlide
 
         // add caption
         if (strlen($slide['caption'])) {
-            $html .= '<div class="caption-wrap"><div class="caption">' . $slide['caption'] . '</div></div>';
+            $html .= '<div class="caption-wrap"><div class="caption">' . apply_shortcodes($slide['caption']) . '</div></div>';
         }
 
         $attributes = apply_filters('metaslider_flex_slider_list_item_attributes', array(
@@ -701,13 +701,25 @@ class MetaImageSlide extends MetaSlide
         }
 
         $meta = wp_get_attachment_metadata($slide_id);
+        $default_settings = MetaSlider_Slideshow_Settings::defaults();
 
         if (isset($meta['width'], $meta['height'])) {
             $image_width = $meta['width'];
             $image_height = $meta['height'];
-            $container_width = $this->settings['width'];
-            $container_height = $this->settings['height'];
 
+            //if slider width and height is empty, get default settings and cast to int
+            if ( !empty( $this->settings['height'] )) {
+                $container_height = (int)$this->settings['height'];
+            } else {
+                $container_height = (int)$default_settings['height'];
+            }
+
+            if ( !empty( $this->settings['width'] )) {
+                $container_width = (int)$this->settings['width'];
+            } else {
+                $container_width = (int)$default_settings['width'];
+            }
+            
             $new_image_height = $image_height * ($container_width / $image_width);
 
             if ($new_image_height < $container_height) {
@@ -745,7 +757,7 @@ class MetaImageSlide extends MetaSlide
         $html = $this->build_image_tag($attributes);
 
         if (strlen($slide['caption'])) {
-            $html .= "<span>{$slide['caption']}</span>";
+            $html .= "<span>". apply_shortcodes($slide['caption']) ."</span>";
         }
 
         $attributes = apply_filters('metaslider_coin_slider_anchor_attributes', array(
@@ -779,7 +791,7 @@ class MetaImageSlide extends MetaSlide
         $html = $this->build_image_tag($attributes);
 
         if (strlen($slide['caption'])) {
-            $html .= '<div class="caption-wrap"><div class="caption">' . $slide['caption'] . '</div></div>';
+            $html .= '<div class="caption-wrap"><div class="caption">' . apply_shortcodes($slide['caption']) . '</div></div>';
         }
 
         $anchor_attributes = apply_filters('metaslider_responsive_slider_anchor_attributes', array(

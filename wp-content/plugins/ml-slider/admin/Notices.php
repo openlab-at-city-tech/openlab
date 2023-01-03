@@ -578,8 +578,9 @@ class MetaSlider_Notices extends Updraft_Notices_1_0
 
         // Handle seasonal notices
         $ad_data = array();
+        $to_upper = strtoupper($ad_identifier);
         foreach ($all_notices as $notice) {
-            if (isset($notice['discount_code']) && $notice['discount_code'] === $ad_identifier) {
+            if (isset($notice['discount_code']) && strtoupper($notice['discount_code']) === $to_upper ) {
                 $ad_data = $notice;
             }
         }

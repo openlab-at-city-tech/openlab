@@ -193,7 +193,7 @@ body .metaslider .flexslider .flex-direction-nav li {
     box-shadow: none!important;
     display: block;
     background-color: transparent;
-    background-image: url('../sliders/flexslider/bg_direction_nav.png');
+    background-image: url('bg_direction_nav.png');
     background-repeat:  no-repeat;
     position: absolute;
     top: 50%;

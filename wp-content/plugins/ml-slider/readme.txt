@@ -2,9 +2,9 @@
 Contributors: matchalabs, DavidAnderson, dnutbourne, kbat82, andergmartins, htmgarcia
 Tags: slideshow, slider, image slider, carousel, gallery, flexslider, wordpress slider, nivoslider, rotating banner, responsive slideshow, seo slideshow, unsplash
 Requires at least: 3.5
-Stable tag: 3.27.13
-Requires PHP: 5.4
-Tested up to: 6.0
+Stable tag: 3.28.2
+Requires PHP: 5.6
+Tested up to: 6.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -273,7 +273,7 @@ The not so easy way:
 
 == Frequently Asked Questions ==
 
-https://www.metaslider.com/documentation/
+https://www.metaslider.com/docs/
 
 = How do I include a slideshow in the header of my site? =
 
@@ -298,17 +298,17 @@ Add the 'restrict_to' parameter to the shortcode, eg:
 
 Theme specific instructions:
 
-https://www.metaslider.com/documentation/theme-integration/
+https://www.metaslider.com/docs-category/theme-integration/
 
 = It's not working - what can I do? =
 
 Check out the troubleshooting page here:
 
-https://www.metaslider.com/documentation/troubleshooting/
+https://www.metaslider.com/docs/troubleshooting/
 
 = MetaSlider is cropping my images in the wrong place - what can I do? =
 
-See https://www.metaslider.com/documentation/image-cropping/
+See https://www.metaslider.com/docs/image-cropping/
 
 == Screenshots ==
 
@@ -324,7 +324,36 @@ See https://www.metaslider.com/documentation/image-cropping/
 The format is based on [Keep a Changelog recommendations](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-= [3.27.13] - 22 Sep, 2022 =
+= [3.28.2] - 20 Dec, 2022 =
+
+* FIXED: Fix conditional loading for lib Appsero, #326;
+
+= [3.28.1] - 20 Dec, 2022 =
+
+* FIXED: Update Appsero Client library fixing a CSRF issue, #319, #317;
+* FIXED: Fix effects that were not working, #310;
+* FIXED: Fix compatibility with plugin qTranslate-XT, #294;
+* FIXED: Fix thumbnails that were not working in the slideshows list, #98;
+* CHANGED: Change modal box making clear we are asking to collecting the email, #153;
+
+
+= [3.28.0] - 01 Dec, 2022 =
+
+* FIXED: Fix console errors (Vue.js Errors) when language is switched to "Deutsch (Schweiz, DU), #212";
+* FIXED: Embed external Google fonts in the plugin to not make remote calls, #225;
+* FIXED: Fix CSS for preview in Gutenberg, #289;
+* FIXED: Fix export slideshows feature when having more than 20 slideshows, #271;
+* FIXED: Fix links in the readme file, #288;
+* FIXED: Fix style and image on Gutenberg block, #255;
+* FIXED: Smart pad feature breaks on PHP 8, #272;
+* FIXED: Small error with hover text in toolbar, #276;
+* CHANGED: Change min PHP version to 5.6;
+
+= [3.27.14] - 17 Nov, 2022 =
+
+* FIXED: Fix banner that will not dismiss, #285;
+
+= [3.27.13] - 26 Sep, 2022 =
 
 * FIXED: Fix Unsplash library, #248;
 * FIXED: Fix PHP warnings about undefined array keys: "post_excerpt", "new_window", #246;

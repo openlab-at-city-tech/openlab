@@ -10,6 +10,7 @@
 }
 .wp-block-metaslider-slider iframe {
 	transition: height 0.6s;
+	width:100%;
 }
 
 .ms-preview {

@@ -200,7 +200,7 @@ class MetaSlide
     public function slide_exists_in_slideshow($slider_id, $slide_id)
     {
 
-        return has_term("{$slider_id}", 'ml-slider', $slide_id);
+        return has_term($slider_id, 'ml-slider', $slide_id);
     }
 
     /**
@@ -356,7 +356,7 @@ class MetaSlide
 
             $selected = $pos == 0 ? "class='selected'" : "";
 
-            $return .= "<li {$selected} ><a tabindex='0' href='#' data-tab_id='tab-{$pos}'>{$tab['title']}</a></li>";
+            $return .= "<li {$selected} ><a tabindex='0' href='#' data-tab_id='tab-" . esc_attr($pos) . "'>" . esc_html($tab['title']) . "</a></li>";
         }
 
         $return .= "</ul>";
@@ -553,7 +553,6 @@ class MetaSlide
      */
     public function get_thumb()
     {
-
         if (get_post_type($this->slide->ID) == 'attachment') {
             $image = wp_get_attachment_image_src($this->slide->ID, 'thumbnail');
         } else {

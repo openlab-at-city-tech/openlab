@@ -73,6 +73,7 @@ class MetaSlider_Api
 
         // Settings
         add_action('wp_ajax_ms_update_user_setting', array(self::$instance, 'save_user_setting'));
+        add_action('wp_ajax_ms_get_user_details', array(self::$instance, 'get_user_details'));
         add_action('wp_ajax_ms_update_all_slideshow_settings', array(self::$instance, 'save_all_slideshow_settings'));
         add_action('wp_ajax_ms_update_single_slideshow_setting', array(self::$instance, 'save_single_slideshow_setting'));
         add_action('wp_ajax_ms_get_slideshow_default_settings', array(self::$instance, 'get_slideshow_default_settings'));
@@ -709,6 +710,19 @@ class MetaSlider_Api
     }
 
     /**
+     * Get current user's email for optin email
+     */
+    public function get_user_details()
+    {
+        if (!$this->can_access()) {
+            $this->deny_access();
+        }
+
+        $current_user = wp_get_current_user();
+        wp_send_json_success($current_user->user_email, 200);
+    }
+
+    /**
      * Get default settings
      */
     public function get_slideshow_default_settings()
@@ -1093,6 +1107,12 @@ if (class_exists('WP_REST_Controller')) :
             register_rest_route($this->namespace, '/settings/user/save', array(array(
                 'methods' => 'POST',
                 'callback' => array($this->api, 'save_user_setting'),
+                'permission_callback' => array($this->api, 'can_access')
+            )));
+
+            register_rest_route($this->namespace, '/settings/user', array(array(
+                'methods' => 'GET',
+                'callback' => array($this->api, 'get_user_details'),
                 'permission_callback' => array($this->api, 'can_access')
             )));
 

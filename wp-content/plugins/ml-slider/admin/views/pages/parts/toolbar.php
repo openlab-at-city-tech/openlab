@@ -34,7 +34,8 @@
                                 <button
                                     @click.prevent="preview()"
                                     id="preview-slideshow"
-                                    title="<?php echo esc_attr(htmlentities(__('Save & open preview', 'ml-slider'))); ?><br><?php echo esc_html(htmlentities(_x('(alt + p)', 'This is a keyboard shortcut.', 'ml-slider'))); ?>" class="ms-toolbar-button"
+                                    class="ms-toolbar-button tipsy-tooltip-bottom-toolbar"
+                                    title="<?php echo esc_attr(htmlentities(__('Save & open preview', 'ml-slider'))); ?><?php echo esc_html(htmlentities(_x(' (alt + p)', 'This is a keyboard shortcut.', 'ml-slider'))); ?>" class="ms-toolbar-button"
                                     :disabled="locked"
                                     :class="{'disabled': locked}">
                                     <svg
@@ -101,7 +102,7 @@
                                     @click.prevent="save()"
                                     title="<?php esc_attr_e('Save slideshow', 'ml-slider'); ?>"
                                     id="ms-save"
-                                    class="ms-toolbar-button"
+                                    class="ms-toolbar-button tipsy-tooltip-bottom-toolbar"
                                     :disabled="locked"
                                     :class="{'disabled': locked}">
                                     <svg

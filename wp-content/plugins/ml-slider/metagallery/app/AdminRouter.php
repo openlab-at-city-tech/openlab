@@ -349,16 +349,15 @@ class AdminRouter
     }
 
     /**
-     * Adds various inline JS/CSS scripts directly to the head
-     *
-     * @since 0.1.0
-     * @return void
-     */
+    * Adds various inline JS/CSS scripts directly to the head
+    *
+    * @since 0.1.0
+    * @return void
+    */
     public function addScopedInlineScripts()
     {
         // helper style for Alpinejs.
         // phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedStylesheet
-        echo '<link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500&family=Rubik:wght@500&display=swap" rel="stylesheet">';
         echo '<style>[x-cloak] { display: none!important; }</style>';
     }
 
@@ -391,6 +390,14 @@ class AdminRouter
     {
         ?>
         <style>
+            @font-face {
+              font-family: 'Rubik';
+              src: url('<?php echo METAGALLERY_BASE_URL."resources/fonts/"; ?>Rubik.ttf') format('truetype');
+            }
+            @font-face {
+              font-family: 'IBM Plex Sans';
+              src: url('<?php echo METAGALLERY_BASE_URL."resources/fonts/"; ?>IBMPlexSans-Regular.ttf') format('truetype');
+            }
             .wp-has-submenu a[href="admin.php?page=metagallery"] {
                 margin-top: 10px !important;
             }

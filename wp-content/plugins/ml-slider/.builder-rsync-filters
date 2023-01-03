@@ -35,7 +35,7 @@
 - /vendor/woocommerce/FlexSlider/demo
 - /mix
 - bin
-- builder
+- dev-workspace
 - builder.yml
 - codeception.dist.yml
 - cypress
@@ -59,3 +59,4 @@
 - webpack.config.js
 - webpack.mix.js
 - .builder-rsync-filters
+- .composer-auth.json
