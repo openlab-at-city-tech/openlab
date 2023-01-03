@@ -698,7 +698,7 @@ class BP_Docs_Query {
 	 *
 	 * @since 1.1.19
 	 */
-	public static function define_wp_tiny_mce() {
+	static function define_wp_tiny_mce() {
 		function wp_tiny_mce() {
 			return;
 		}
