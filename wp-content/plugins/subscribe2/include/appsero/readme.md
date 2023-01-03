@@ -98,13 +98,13 @@ Make sure you call this function directly, never use any action hook to call thi
 
 ## More Usage
 
-Sometimes you wouldn't want to show the notice, or want to customize the notice message. You can do that as well.
-
 ```php
 $client = new Appsero\Client( 'a4a8da5b-b419-4656-98e9-4a42e9044892', 'Twenty Twelve', __FILE__ );
 ```
 
 #### 1. Hiding the notice
+
+Sometimes you wouldn't want to show the notice, or want to customize the notice message. You can do that as well.
 
 ```php
 $client->insights()
@@ -135,13 +135,15 @@ $client->insights()
        ->init();
 ```
 
-or
+Or if you want to run a query then pass callback, we will call the function when it is necessary.
 
 ```php
 $metadata = function () {
+    $total_posts = wp_count_posts();
+
     return array(
-        'key'     => 'value',
-        'another' => 'another_value'
+        'total_posts' => $total_posts,
+        'another'     => 'another_value'
     );
 };
 $client->insights()
@@ -149,6 +151,33 @@ $client->insights()
        ->init();
 ```
 
+#### 4. Set textdomain
+
+You may set your own textdomain to translate text.
+
+```php
+$client->set_textdomain( 'your-project-textdomain' );
+```
+
+
+
+
+#### 5. Get Plugin Data
+If you want to get the most used plugins with your plugin or theme, send the active plugins' data to Appsero.
+```php
+$client->insights()
+       ->add_plugin_data()
+       ->init();
+```
+---
+
+#### 6. Set Notice Message
+Change opt-in message text
+```php
+$client->insights()
+       ->notice("Your custom notice text")
+       ->init();
+```
 ---
 
 ### Check License Validity
@@ -180,6 +209,9 @@ Or check by pricing plan title
 if ( $twenty_twelve_license->is_valid_by( 'title', 'Business' ) ) {
     // Your special code here
 }
+
+// Set custom options key for storing the license info
+$twenty_twelve_license->set_option_key( 'my_plugin_license' );
 ```
 
 ### Use your own license form
@@ -199,6 +231,34 @@ if ( ! $twenty_twelve_license->error ) {
 } else {
     $twenty_twelve_license->error; // has error message here
 }
+```
+
+### Set Custom Deactivation Reasons
+
+First set your deactivation reasons in Appsero dashboard then map them in your plugin/theme using filter hook.
+
+- **id** is the deactivation slug
+- **text** is the deactivation title
+- **placeholder** will show on textarea field
+- **icon** You can set SVG icon with 23x23 size
+
+```php
+add_filter( 'appsero_custom_deactivation_reasons', function () {
+    return [
+        [
+            'id'          => 'looks-buggy',
+            'text'        => 'Looks buggy',
+            'placeholder' => 'Can you please tell which feature looks buggy?',
+            'icon'        => '',
+        ],
+        [
+            'id'          => 'bad-ui',
+            'text'        => 'Bad UI',
+            'placeholder' => 'Could you tell us a bit more?',
+            'icon'        => '',
+        ],
+    ];
+} );
 ```
 
 ## Credits

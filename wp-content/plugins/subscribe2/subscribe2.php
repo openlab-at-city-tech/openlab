@@ -3,7 +3,7 @@
 Plugin Name: Subscribe2
 Plugin URI: https://getwemail.io
 Description: Notifies an email list when new entries are posted.
-Version: 10.37
+Version: 10.39
 Author: weMail
 Author URI: https://getwemail.io
 Licence: GPLv3
@@ -35,13 +35,14 @@ if ( version_compare( $GLOBALS['wp_version'], '4.4', '<' ) || ! function_exists(
 	if ( ! function_exists( 'add_action' ) ) {
 		$exit_msg = __( "I'm just a plugin, please don't call me directly", 'subscribe2' );
 	} else {
-		// Translators: Subscribe2 needs WordPress 4.4 or above, exit if not on a compatible version
+		/* translators: Placeholders: 1) - Subscribe2 needs WordPress 4.4 or above, 2) exit if not on a compatible version */
 		$exit_msg = sprintf( __( 'This version of Subscribe2 requires WordPress 4.4 or greater. Please update %1$s or use an older version of %2$s.', 'subscribe2' ), '<a href="http://codex.wordpress.org/Updating_WordPress">WordPress</a>', '<a href="https://subscribe2.wordpress.com/subscribe2-html/">Subscribe2</a>' );
 	}
+
 	exit( esc_html( $exit_msg ) );
 }
 
-// stop Subscribe2 being activated site wide on Multisite installs
+// Stop Subscribe2 being activated site wide on Multisite installs.
 if ( ! function_exists( 'is_plugin_active_for_network' ) ) {
 	require_once ABSPATH . '/wp-admin/includes/plugin.php';
 }
@@ -52,15 +53,15 @@ if ( is_plugin_active_for_network( plugin_basename( __FILE__ ) ) ) {
 	exit( esc_html( $exit_msg ) );
 }
 
-// our version number. Don't touch this or any line below
-// unless you know exactly what you are doing
-define( 'S2VERSION', '10.37' );
+// Our version number. Don't touch this or any line below.
+// Unless you know exactly what you are doing.
+define( 'S2VERSION', '10.39' );
 define( 'S2PLUGIN', __FILE__ );
 define( 'S2PATH', trailingslashit( dirname( __FILE__ ) ) );
 define( 'S2DIR', trailingslashit( dirname( plugin_basename( __FILE__ ) ) ) );
 define( 'S2URL', plugin_dir_url( dirname( __FILE__ ) ) . S2DIR );
 
-// Set maximum execution time to 5 minutes
+// Set maximum execution time to 5 minutes.
 if ( function_exists( 'set_time_limit' ) ) {
 	set_time_limit( 300 );
 }

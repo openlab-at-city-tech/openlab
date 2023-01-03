@@ -1,11 +1,23 @@
 <?php
+
 /**
- * List Table class used in WordPress 4.3.x and above
+ * List Table class used in WordPress 4.3.x and above.
  */
 class S2_List_Table extends WP_List_Table {
+
+	/**
+	 * @var false|mixed|null
+	 */
 	private $date_format = '';
+
+	/**
+	 * @var false|mixed|null
+	 */
 	private $time_format = '';
 
+	/**
+	 * Class constructor
+	 */
 	public function __construct() {
 		global $status, $page;
 
@@ -16,10 +28,19 @@ class S2_List_Table extends WP_List_Table {
 				'ajax'     => false,
 			)
 		);
+
 		$this->date_format = get_option( 'date_format' );
 		$this->time_format = get_option( 'time_format' );
 	}
 
+	/**
+	 * Default list table column.
+	 *
+	 * @param array  $item
+	 * @param string $column_name
+	 *
+	 * @return mixed|void
+	 */
 	public function column_default( $item, $column_name ) {
 		global $current_tab;
 		switch ( $column_name ) {
@@ -29,83 +50,122 @@ class S2_List_Table extends WP_List_Table {
 		}
 	}
 
+	/**
+	 * Email column
+	 *
+	 * @param array $item
+	 *
+	 * @return string
+	 */
 	public function column_email( $item ) {
-		global $current_tab;
+		global $mysubscribe2, $current_tab;
+
 		if ( 'registered' === $current_tab ) {
 			$actions = array(
 				'edit' => sprintf( '<a href="?page=%s&amp;id=%d">%s</a>', 's2', rawurlencode( $item['id'] ), __( 'Edit', 'subscribe2' ) ),
 			);
+
 			return sprintf( '%1$s %2$s', $item['email'], $this->row_actions( $actions ) );
-		} else {
-			global $mysubscribe2;
-			if ( '0' === $mysubscribe2->is_public( $item['email'] ) ) {
-				return sprintf( '<span style="color:#FF0000"><abbr title="%2$s">%1$s</abbr></span>', $item['email'], $item['ip'] );
-			} else {
-				return sprintf( '<abbr title="%2$s">%1$s</abbr>', $item['email'], $item['ip'] );
-			}
 		}
+
+		if ( '0' === $mysubscribe2->is_public( $item['email'] ) ) {
+			return sprintf( '<span style="color:#FF0000"><abbr title="%2$s">%1$s</abbr></span>', $item['email'], $item['ip'] );
+		}
+
+		return sprintf( '<abbr title="%2$s">%1$s</abbr>', $item['email'], $item['ip'] );
 	}
 
+	/**
+	 * Date column
+	 *
+	 * @param array $item
+	 *
+	 * @return string
+	 */
 	public function column_date( $item ) {
 		global $current_tab;
+
 		if ( 'registered' === $current_tab ) {
 			$timestamp = strtotime( $item['date'] );
 			return sprintf( '<abbr title="%2$s">%1$s</abbr>', date_i18n( $this->date_format, $timestamp ), date_i18n( $this->time_format, $timestamp ) );
-		} else {
-			$timestamp = strtotime( $item['date'] . ' ' . $item['time'] );
-			return sprintf( '<abbr title="%2$s">%1$s</abbr>', date_i18n( $this->date_format, $timestamp ), date_i18n( $this->time_format, $timestamp ) );
 		}
+
+		$timestamp = strtotime( $item['date'] . ' ' . $item['time'] );
+		return sprintf( '<abbr title="%2$s">%1$s</abbr>', date_i18n( $this->date_format, $timestamp ), date_i18n( $this->time_format, $timestamp ) );
 	}
 
+	/**
+	 * Checkbox column.
+	 *
+	 * @param array $item
+	 *
+	 * @return string
+	 */
 	public function column_cb( $item ) {
 		return sprintf( '<input type="checkbox" name="%1$s[]" value="%2$s" />', $this->_args['singular'], $item['email'] );
 	}
 
+	/**
+	 * Get table columns.
+	 *
+	 * @return array
+	 */
 	public function get_columns() {
 		global $current_tab;
+
 		$columns = array(
 			'cb'    => '<input type="checkbox" />',
 			'email' => _x( 'Email', 'column name', 'subscribe2' ),
 			'date'  => _x( 'Date', 'column name', 'subscribe2' ),
 		);
+
 		return $columns;
 	}
 
+	/**
+	 * Get table sortable columns.
+	 *
+	 * @return array
+	 */
 	public function get_sortable_columns() {
 		global $current_tab;
+
 		$sortable_columns = array(
 			'email' => array( 'email', true ),
 			'date'  => array( 'date', false ),
 		);
+
 		return $sortable_columns;
 	}
 
+	/**
+	 * Print out list table column headers.
+	 *
+	 * @param bool $with_id
+	 *
+	 * @return void
+	 */
 	public function print_column_headers( $with_id = true ) {
 		list( $columns, $hidden, $sortable, $primary ) = $this->get_column_info();
 
 		$current_url = set_url_scheme( 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] );
 		$current_url = remove_query_arg( 'paged', $current_url );
 
-		if ( isset( $_REQUEST['what'] ) ) {
+		$what     = ! empty( $_REQUEST['what'] ) ? sanitize_text_field( $_REQUEST['what'] ) : '';
+		$order    = ! empty( $_GET['order'] ) ? sanitize_text_field( $_GET['order'] ) : '';
+		$order_by = ! empty( $_GET['orderby'] ) ? sanitize_text_field( $_GET['orderby'] ) : '';
+
+		if ( ! empty( $what ) ) {
 			$current_url = add_query_arg(
 				array(
-					'what' => $_REQUEST['what'],
+					'what' => $what,
 				),
 				$current_url
 			);
 		}
 
-		if ( isset( $_GET['orderby'] ) ) {
-			$current_orderby = $_GET['orderby'];
-		} else {
-			$current_orderby = '';
-		}
-
-		if ( isset( $_GET['order'] ) && 'desc' === $_GET['order'] ) {
-			$current_order = 'desc';
-		} else {
-			$current_order = 'asc';
-		}
+		$current_order   = ( ! empty( $order ) && 'desc' === $order ) ? 'desc' : 'asc';
+		$current_orderby = ! empty( $order_by ) ? $order_by : '';
 
 		if ( ! empty( $columns['cb'] ) ) {
 			static $cb_counter = 1;
@@ -115,7 +175,7 @@ class S2_List_Table extends WP_List_Table {
 		}
 
 		foreach ( $columns as $column_key => $column_display_name ) {
-			$class = array( 'manage-column', "column-$column_key" );
+			$class = array( 'manage-column', 'column-' . $column_key );
 
 			if ( in_array( $column_key, $hidden, true ) ) {
 				$class[] = 'hidden';
@@ -133,7 +193,7 @@ class S2_List_Table extends WP_List_Table {
 				list( $orderby, $desc_first ) = $sortable[ $column_key ];
 
 				if ( $current_orderby === $orderby ) {
-					$order   = 'asc' === $current_order ? 'desc' : 'asc';
+					$order   = ( 'asc' === $current_order ) ? 'desc' : 'asc';
 					$class[] = 'sorted';
 					$class[] = $current_order;
 				} else {
@@ -157,40 +217,57 @@ class S2_List_Table extends WP_List_Table {
 		}
 	}
 
+	/**
+	 * Handle subscriber table actions.
+	 *
+	 * @return array
+	 */
 	public function get_bulk_actions() {
 		global $current_tab;
+
+		$actions = array();
 		if ( 'registered' === $current_tab ) {
-			if ( is_multisite() ) {
-				return array();
-			} else {
-				return array(
-					'delete' => __( 'Delete', 'subscribe2' ),
-				);
-			}
+			$actions = ! is_multisite() ? array( 'delete' => __( 'Delete', 'subscribe2' ) ) : $actions;
 		} else {
 			$actions = array(
 				'delete' => __( 'Delete', 'subscribe2' ),
 				'toggle' => __( 'Toggle', 'subscribe2' ),
 			);
-			return $actions;
 		}
+
+		return $actions;
 	}
 
+	/**
+	 * Handle subscriber table bulk actions.
+	 *
+	 * @return void
+	 */
 	public function process_bulk_action() {
-		if ( in_array( $this->current_action(), array( 'delete', 'toggle' ), true ) ) {
-			if ( ! isset( $_REQUEST['subscriber'] ) ) {
-				echo '<div id="message" class="error"><p><strong>' . esc_html__( 'No users were selected.', 'subscribe2' ) . '</strong></p></div>';
-				return;
-			}
+		if ( ! in_array( $this->current_action(), array( 'delete', 'toggle' ), true ) ) {
+			return;
 		}
-		if ( 'delete' === $this->current_action() ) {
+
+		if ( empty( $_REQUEST['_wpnonce'] ) || ! wp_verify_nonce( sanitize_key( $_REQUEST['_wpnonce'] ), 'bulk-subscribers' ) ) {
+			echo '<div id="message" class="error"><p><strong>' . __( 'Error: Nonce verification failed.', 'subscribe2' ) . '</strong></p></div>';
+			return;
+		}
+
+		if ( ! isset( $_REQUEST['subscriber'] ) ) {
+			echo '<div id="message" class="error"><p><strong>' . esc_html__( 'No users were selected.', 'subscribe2' ) . '</strong></p></div>';
+			return;
+		}
+
+		if ( 'delete' === $this->current_action() && current_user_can( 'delete_user' ) ) {
 			global $mysubscribe2, $current_user, $subscribers;
+
 			$message = array();
 			foreach ( $_REQUEST['subscriber'] as $address ) {
 				$address = trim( stripslashes( $address ) );
 				if ( false !== $mysubscribe2->is_public( $address ) ) {
 					$mysubscribe2->delete( $address );
 					$key = array_search( $address, $subscribers, true );
+
 					unset( $subscribers[ $key ] );
 					$message['public_deleted'] = __( 'Address(es) deleted!', 'subscribe2' );
 				} else {
@@ -205,28 +282,40 @@ class S2_List_Table extends WP_List_Table {
 								unset( $subscribers[ $key ] );
 							}
 						}
+
 						wp_delete_user( $user->ID, $current_user->ID );
 					}
 				}
 			}
+
 			$final_message = implode( '<br><br>', array_filter( $message ) );
 			echo '<div id="message" class="updated fade"><p><strong>' . esc_html( $final_message ) . '</strong></p></div>';
 		}
-		if ( 'toggle' === $this->current_action() ) {
+
+		if ( 'toggle' === $this->current_action() && current_user_can( 'edit_users' ) ) {
 			global $mysubscribe2, $current_user, $subscribers;
+
 			$mysubscribe2->ip = $current_user->user_login;
 			foreach ( $_REQUEST['subscriber'] as $address ) {
 				$address = trim( stripslashes( $address ) );
 				$mysubscribe2->toggle( $address );
-				if ( 'confirmed' === $_POST['what'] || 'unconfirmed' === $_POST['what'] ) {
+				if ( 'confirmed' === sanitize_text_field( $_POST['what'] ) || 'unconfirmed' === sanitize_text_field( $_POST['what'] ) ) {
 					$key = array_search( $address, $subscribers, true );
 					unset( $subscribers[ $key ] );
 				}
 			}
+
 			echo '<div id="message" class="updated fade"><p><strong>' . esc_html__( 'Status changed!', 'subscribe2' ) . '</strong></p></div>';
 		}
 	}
 
+	/**
+	 * Subscribers list pagination.
+	 *
+	 * @param string $which
+	 *
+	 * @return void
+	 */
 	public function pagination( $which ) {
 		if ( empty( $this->_pagination_args ) ) {
 			return;
@@ -235,6 +324,7 @@ class S2_List_Table extends WP_List_Table {
 		$total_items     = intval( $this->_pagination_args['total_items'] );
 		$total_pages     = intval( $this->_pagination_args['total_pages'] );
 		$infinite_scroll = false;
+
 		if ( isset( $this->_pagination_args['infinite_scroll'] ) ) {
 			$infinite_scroll = $this->_pagination_args['infinite_scroll'];
 		}
@@ -243,7 +333,7 @@ class S2_List_Table extends WP_List_Table {
 			$this->screen->render_screen_reader_content( 'heading_pagination' );
 		}
 
-		// Translators: Pagination
+		/* translators: Placeholders: %s - pagination */
 		$output = '<span class="displaying-num">' . sprintf( _n( '%s item', '%s items', $total_items, 'subscribe2' ), number_format_i18n( $total_items ) ) . '</span>';
 
 		if ( isset( $_POST['what'] ) ) {
@@ -253,13 +343,12 @@ class S2_List_Table extends WP_List_Table {
 		}
 
 		$current_url = set_url_scheme( 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] );
-
 		$current_url = remove_query_arg( array( 'hotkeys_highlight_last', 'hotkeys_highlight_first' ), $current_url );
 
 		if ( isset( $_REQUEST['what'] ) ) {
 			$current_url = add_query_arg(
 				array(
-					'what' => $_REQUEST['what'],
+					'what' => sanitize_text_field( $_REQUEST['what'] ),
 				),
 				$current_url
 			);
@@ -268,7 +357,7 @@ class S2_List_Table extends WP_List_Table {
 		if ( isset( $_POST['s'] ) ) {
 			$current_url = add_query_arg(
 				array(
-					's' => $_POST['s'],
+					's' => sanitize_key( $_POST['s'] ),
 				),
 				$current_url
 			);
@@ -288,13 +377,16 @@ class S2_List_Table extends WP_List_Table {
 			$disable_first = true;
 			$disable_prev  = true;
 		}
+
 		if ( 2 === $current ) {
 			$disable_first = true;
 		}
+
 		if ( $current === $total_pages ) {
 			$disable_last = true;
 			$disable_next = true;
 		}
+
 		if ( $current === $total_pages - 1 ) {
 			$disable_last = true;
 		}
@@ -334,7 +426,7 @@ class S2_List_Table extends WP_List_Table {
 		}
 
 		$html_total_pages = sprintf( "<span class='total-pages'>%s</span>", number_format_i18n( $total_pages ) );
-		// Translators: Pagination
+		/* translators: Placeholders: %s - pagination */
 		$page_links[] = $total_pages_before . sprintf( _x( '%1$s of %2$s', 'paging', 'subscribe2' ), $html_current_page, $html_total_pages ) . $total_pages_after;
 
 		if ( $disable_next ) {
@@ -363,6 +455,7 @@ class S2_List_Table extends WP_List_Table {
 		if ( ! empty( $infinite_scroll ) ) {
 			$pagination_links_class = ' hide-if-js';
 		}
+
 		$output .= "\n<span class='$pagination_links_class'>" . join( "\n", $page_links ) . '</span>';
 
 		if ( $total_pages ) {
@@ -376,6 +469,11 @@ class S2_List_Table extends WP_List_Table {
 		echo $this->_pagination; // phpcs:ignore WordPress.Security.EscapeOutput
 	}
 
+	/**
+	 * Prepare subscriber lists.
+	 *
+	 * @return void
+	 */
 	public function prepare_items() {
 		global $mysubscribe2, $subscribers, $current_tab;
 
@@ -383,12 +481,13 @@ class S2_List_Table extends WP_List_Table {
 		$screen        = get_current_screen();
 		$screen_option = $screen->get_option( 'per_page', 'option' );
 		$per_page      = get_user_meta( $user, $screen_option, true );
+
 		if ( empty( $per_page ) || $per_page < 1 ) {
 			$per_page = $screen->get_option( 'per_page', 'default' );
 		}
 
-		$columns  = $this->get_columns();
 		$hidden   = array();
+		$columns  = $this->get_columns();
 		$sortable = $this->get_sortable_columns();
 
 		$this->_column_headers = array( $columns, $hidden, $sortable );
@@ -419,8 +518,10 @@ class S2_List_Table extends WP_List_Table {
 			$orderby = ( ! empty( $_REQUEST['orderby'] ) ) ? $_REQUEST['orderby'] : 'email';
 			$order   = ( ! empty( $_REQUEST['order'] ) ) ? $_REQUEST['order'] : 'asc';
 			$result  = strcasecmp( $a[ $orderby ], $b[ $orderby ] );
+
 			return ( 'asc' === $order ) ? $result : -$result;
 		}
+
 		usort( $data, 'usort_reorder' );
 
 		if ( isset( $_POST['what'] ) ) {
@@ -428,6 +529,7 @@ class S2_List_Table extends WP_List_Table {
 		} else {
 			$current_page = $this->get_pagenum();
 		}
+
 		$total_items = count( $data );
 		$data        = array_slice( $data, ( ( $current_page - 1 ) * $per_page ), $per_page );
 		$this->items = $data;

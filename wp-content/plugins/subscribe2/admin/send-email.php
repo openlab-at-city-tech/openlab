@@ -5,9 +5,11 @@ if ( ! function_exists( 'add_action' ) ) {
 
 global $current_user;
 
+$s2_admin = ! empty( $_POST['s2_admin'] ) ? sanitize_key( $_POST['s2_admin'] ) : '';
+
 // was anything POSTed?
-if ( isset( $_POST['s2_admin'] ) && 'mail' === $_POST['s2_admin'] ) {
-	if ( false === wp_verify_nonce( $_REQUEST['_wpnonce'], 'subscribe2-write_subscribers' . S2VERSION ) ) {
+if ( 'mail' === $s2_admin ) {
+	if ( isset( $_REQUEST['_wpnonce'] ) && ! wp_verify_nonce( sanitize_key( $_REQUEST['_wpnonce'] ), 'subscribe2-write_subscribers' . S2VERSION ) ) {
 		die( '<p>' . esc_html__( 'Security error! Your request cannot be completed.', 'subscribe2' ) . '</p>' );
 	}
 
@@ -107,16 +109,15 @@ echo '<form method="post" enctype="multipart/form-data">' . "\r\n";
 
 wp_nonce_field( 'subscribe2-write_subscribers' . S2VERSION );
 
+$body = ! empty( $_POST['content'] ) ? esc_textarea( $_POST['content'] ) : '';
 if ( isset( $_POST['subject'] ) ) {
 	$subject = stripslashes( esc_html( $_POST['subject'] ) );
 } else {
 	$subject = __( 'A message from', 'subscribe2' ) . ' ' . html_entity_decode( get_option( 'blogname' ), ENT_QUOTES );
 }
-if ( ! isset( $_POST['content'] ) ) {
-	$body = '';
-}
+
 echo '<p>' . esc_html__( 'Subject', 'subscribe2' ) . ': <input type="text" size="69" name="subject" value="' . esc_attr( $subject ) . '" /> <br><br>';
-echo '<textarea rows="12" cols="75" name="content">' . esc_textarea( $body ) . '</textarea>';
+echo '<textarea rows="12" cols="75" name="content">' . $body . '</textarea>';
 echo "<br><div id=\"upload_files\"><input type=\"file\" name=\"file[]\"></div>\r\n";
 echo '<input type="button" class="button-secondary" name="addmore" value="' . esc_attr( __( 'Add More Files', 'subscribe2' ) ) . "\" onClick=\"add_file_upload();\" />\r\n";
 echo "<br><br>\r\n";

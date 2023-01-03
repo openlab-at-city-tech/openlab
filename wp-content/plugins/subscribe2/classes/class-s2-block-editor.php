@@ -1,5 +1,10 @@
 <?php
+
+/**
+ * Block editor handler class.
+ */
 class S2_Block_Editor {
+
 	/**
 	 * Constructor
 	 */
