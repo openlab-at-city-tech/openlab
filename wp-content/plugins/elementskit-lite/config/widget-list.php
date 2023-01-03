@@ -490,6 +490,18 @@ class Widget_List extends \ElementsKit_Lite\Core\Config_List {
 					'package'         => 'pro-disabled',
 					'widget-category' => 'general', // General
 				),
+				'stylish-list' => array(
+					'slug'            => 'stylish-list',
+					'title'           => 'Stylish List',
+					'package'         => 'pro-disabled',
+					'widget-category' => 'general', // General
+				),
+				'team-slider' => array(
+					'slug'            => 'team-slider',
+					'title'           => 'team Carousel Slider',
+					'package'         => 'pro-disabled',
+					'widget-category' => 'general', // General
+				),
 			)
 		);
 	}

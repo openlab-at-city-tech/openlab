@@ -960,6 +960,7 @@ class ElementsKit_Widget_Image_Box extends Widget_Base {
 				'type' => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%', 'em' ],
 				'selectors' => [
+                    '{{WRAPPER}} .elementskit-box-header' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 					'{{WRAPPER}} .elementskit-box-header img' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
@@ -1561,15 +1562,6 @@ class ElementsKit_Widget_Image_Box extends Widget_Base {
 			$image_html = Group_Control_Image_Size::get_attachment_image_html( $settings, 'ekit_image_box_thumbnail', 'ekit_image_box_image' );
         }
 
-        // Image  wrapper
-        $link_wrapper_start = '';
-        $link_wrapper_end = '';
-
-        if (($settings['ekit_image_box_enable_btn'] == 'yes')) {
-            $link_wrapper_start .= '<a ' . $this->get_render_attribute_string('link') . '>';
-            $link_wrapper_end .= ' </a>';
-        }
-
         // Button
         $btn_text = $settings['ekit_image_box_btn_text'];
 
@@ -1623,12 +1615,9 @@ class ElementsKit_Widget_Image_Box extends Widget_Base {
                                 }
                             ?>
 
-                        <?php endif; ?>
-
-                        <?php
-				    $ekit_image_box_title_html = ($link_wrapper_start . ($settings['ekit_image_box_title_text']) . $link_wrapper_end);
-                        echo wp_kses($ekit_image_box_title_html, \ElementsKit_Lite\Utils::get_kses_array());
-				    ?>
+                        <?php endif; 
+                            echo wp_kses($settings['ekit_image_box_title_text'], \ElementsKit_Lite\Utils::get_kses_array());
+                        ?>
 
                         <?php if(($settings['ekit_image_box_front_title_icons'] != '') && ($settings['ekit_image_box_front_title_icon_position'] == 'right') && ($settings['ekit_image_box_style_simple'] == 'floating-style')) : ?>
                                 

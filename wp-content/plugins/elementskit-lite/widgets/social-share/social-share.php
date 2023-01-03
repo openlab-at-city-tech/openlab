@@ -188,7 +188,7 @@ class ElementsKit_Widget_Social_Share extends Widget_Base {
                     'pinterest'     => esc_html__( 'Pinterest', 'elementskit-lite' ),
                     'linkedin'      => esc_html__( 'Linkedin', 'elementskit-lite' ),
                     'tumblr'        => esc_html__( 'Tumblr', 'elementskit-lite' ),
-                    'snapchat'        => esc_html__( 'Snapchat', 'elementskit-lite' ),
+                    // 'snapchat'        => esc_html__( 'Snapchat', 'elementskit-lite' ),
                     'flicker'        => esc_html__( 'Flicker', 'elementskit-lite' ),
                     'vkontakte'     => esc_html__( 'Vkontakte', 'elementskit-lite' ),
                     'odnoklassniki' => esc_html__( 'Odnoklassniki', 'elementskit-lite' ),

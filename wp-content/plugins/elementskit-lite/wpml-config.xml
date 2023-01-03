@@ -755,5 +755,23 @@
 				<field type="Price Menu: Button Link" editor_type="LINK">button_link>url</field>
 			</fields-in-item>
 		</widget>
+		<widget name="elementskit-team-slider">
+			<conditions>
+				<condition key="widgetType">elementskit-team-slider</condition>
+			</conditions>
+			<fields-in-item items_of="ekit_team_members">
+				<field type="Team Carousel Slider: Member Name" editor_type="LINE">name</field>
+				<field type="Team Carousel Slider: Member Position" editor_type="LINE">position</field>
+				<field type="Team Carousel Slider: About Member" editor_type="AREA">short_description</field>
+				<field type="Team Carousel Slider: Phone" editor_type="LINE">popup_phone</field>
+				<field type="Team Carousel Slider: Email" editor_type="LINE">popup_email</field>
+				<field type="Team Carousel Slider: About Member" editor_type="AREA">popup_description</field>
+				<field type="Team Carousel Slider: " editor_type="LINK">link_0>url</field>
+				<field type="Team Carousel Slider: " editor_type="LINK">link_1>url</field>
+				<field type="Team Carousel Slider: " editor_type="LINK">link_2>url</field>
+				<field type="Team Carousel Slider: " editor_type="LINK">link_3>url</field>
+				<field type="Team Carousel Slider: " editor_type="LINK">link_4>url</field>
+			</fields-in-item>
+		</widget>
 	</elementor-widgets>
 </wpml-config>

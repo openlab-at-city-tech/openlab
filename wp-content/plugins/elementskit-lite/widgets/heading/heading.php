@@ -652,7 +652,7 @@ class ElementsKit_Widget_Heading extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Typography::get_type(), [
 			'name'		 => 'ekit_heading_focused_title_typography',
-			'selector'	 => '{{WRAPPER}} .elementskit-section-title-wraper .elementskit-section-title > span',
+			'selector'	 => '{{WRAPPER}} .elementskit-section-title-wraper .elementskit-section-title span:last-child, {{WRAPPER}} .elementskit-section-title-wraper .elementskit-section-title > span',
 			]
 		);
 
@@ -661,6 +661,7 @@ class ElementsKit_Widget_Heading extends Widget_Base {
 				'label'		 =>esc_html__( 'Text decoration color', 'elementskit-lite' ),
 				'type'		 => Controls_Manager::COLOR,
 				'selectors'	 => [
+					'{{WRAPPER}} .elementskit-section-title-wraper .elementskit-section-title span:last-child' => 'text-decoration-color: {{VALUE}};',
 					'{{WRAPPER}} .elementskit-section-title-wraper .elementskit-section-title > span' => 'text-decoration-color: {{VALUE}};',
 				],
 			]
@@ -1204,9 +1205,9 @@ class ElementsKit_Widget_Heading extends Widget_Base {
 				'type'		 => Controls_Manager::COLOR,
 				'selectors'	 => [
 					'{{WRAPPER}} .elementskit-section-title-wraper .elementskit-border-divider' => 'background: linear-gradient(90deg, {{VALUE}} 0%, {{VALUE}} 100%);',
-					'{{WRAPPER}} .elementskit-section-title-wraper .elementskit-border-divider:before' => 'background-color: {{VALUE}};box-shadow: 9px 0px 0px 0px {{VALUE}}, 18px 0px 0px 0px {{VALUE}};',
+					'{{WRAPPER}} .elementskit-section-title-wraper .elementskit-border-divider:before' => 'background-color: {{VALUE}}; color: {{VALUE}};',
 					'{{WRAPPER}} .elementskit-section-title-wraper .elementskit-border-divider.elementskit-style-long' => 'color: {{VALUE}};',
-					'{{WRAPPER}} .elementskit-section-title-wraper .elementskit-border-star' => 'background: linear-gradient(90deg, {{VALUE}} 0%, {{VALUE}} 38%, rgba(255, 255, 255, 0) 38%, rgba(255, 255, 255, 0) 62%, {{VALUE}} 62%, {{VALUE}} 100%);',
+					'{{WRAPPER}} .elementskit-section-title-wraper .elementskit-border-star' => 'color: {{VALUE}}',
 					'{{WRAPPER}} .elementskit-section-title-wraper .elementskit-border-star:after' => 'background-color: {{VALUE}};',
 				],
 				'condition'		=> [
@@ -1393,14 +1394,20 @@ class ElementsKit_Widget_Heading extends Widget_Base {
 			if(!empty($ekit_heading_title)):
 				if ( ! empty( $ekit_heading_link['url'] ) ) {
 					$this->add_link_attributes( 'ekit_heading_link', $ekit_heading_link );
-
-					echo('<a '.$this->get_render_attribute_string( 'ekit_heading_link' ).'> '. '<'.esc_attr($title_tag).' class="ekit-heading--title elementskit-section-title '.esc_attr($title_text_fill.''.$title_border).'">
-					'.wp_kses($ekit_title, \ElementsKit_Lite\Utils::get_kses_array()).'
-					</'.esc_attr($title_tag).'>' .'</a>');
-				}else {
-					echo ('<'.esc_attr($title_tag).' class="ekit-heading--title elementskit-section-title '.esc_attr($title_text_fill.''.$title_border).'">
-					'.wp_kses($ekit_title, \ElementsKit_Lite\Utils::get_kses_array()).'
-					</'.esc_attr($title_tag).'>');
+					echo sprintf(
+						'<a %1$s><%2$s class="ekit-heading--title elementskit-section-title %3$s">%4$s</%2$s></a>',
+						$this->get_render_attribute_string('ekit_heading_link'), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Already escaped by elementor
+						esc_attr($title_tag),
+						esc_attr($title_text_fill.''.$title_border),
+						wp_kses($ekit_title, \ElementsKit_Lite\Utils::get_kses_array())
+					);
+				} else {
+					echo sprintf(
+						'<%1$s class="ekit-heading--title elementskit-section-title %2$s">%3$s</%1$s>',
+						esc_attr($title_tag),
+						esc_attr($title_text_fill.''.$title_border),
+						wp_kses($ekit_title, \ElementsKit_Lite\Utils::get_kses_array())
+					);
 				}
 			endif;
 

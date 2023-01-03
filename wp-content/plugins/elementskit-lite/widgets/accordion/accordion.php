@@ -447,8 +447,6 @@ class ElementsKit_Widget_Accordion extends Widget_Base {
             ]
         );
 
-
-
         $this->add_responsive_control(
             'ekit_accordion_title_margin_bottom', [
                 'label'			 =>esc_html__( 'Margin Bottom', 'elementskit-lite' ),
@@ -557,11 +555,9 @@ class ElementsKit_Widget_Accordion extends Widget_Base {
             ]
         );
 
-
         $this->end_controls_section();
 
         //Slide border
-
         $this->start_controls_section(
             'ekit_accordion_section_border_style', [
                 'label'	 =>esc_html__( 'Border', 'elementskit-lite' ),
@@ -655,6 +651,22 @@ class ElementsKit_Widget_Accordion extends Widget_Base {
         
         $this->end_controls_tabs();
 
+        $this->add_control(
+            'ekit_accordion_last_child_border_bottom',
+            [
+                'label' => esc_html__( 'Disable Border for last Element?', 'elementskit-lite' ),
+                'type' => Controls_Manager::SWITCHER,
+                'label_on' => esc_html__( 'Yes', 'elementskit-lite' ),
+                'label_off' => esc_html__( 'No', 'elementskit-lite' ),
+                'default' => '',
+                'return_value' => 'yes',
+                'separator' => 'before',
+                'selectors' => [
+                    '{{WRAPPER}} .ekit-wid-con > .elementskit-accordion > .elementskit-card:last-child' => 'border: 0px;',
+                ]
+            ]
+        );
+
         $this->end_controls_section();
 
         //Icon Style Section
@@ -665,18 +677,6 @@ class ElementsKit_Widget_Accordion extends Widget_Base {
             ]
         );
 
-        $this->add_responsive_control(
-			'ekit_accordion_section_icon_margin',
-			[
-				'label' => esc_html__( 'Margin', 'elementskit-lite' ),
-				'type' => Controls_Manager::DIMENSIONS,
-				'size_units' => [ 'px', '%', 'em' ],
-				'selectors' => [
-					'{{WRAPPER}} .ekit_accordion_icon_group, {{WRAPPER}} .ekit_accordion_icon_left_group' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
-				],
-			]
-		);
-
         $this->start_controls_tabs(
             'ekit_accordion_style_tabs_icon'
         );
@@ -686,19 +686,7 @@ class ElementsKit_Widget_Accordion extends Widget_Base {
                 'label' => esc_html__( 'Slide Closed Icon', 'elementskit-lite' ),
             ]
         );
-
-        $this->add_control(
-            'ekit_accordion_icon_color_close', [
-                'label'		 =>esc_html__( 'Color', 'elementskit-lite' ),
-                'type'		 => Controls_Manager::COLOR,
-                'selectors'	 => [
-                    '{{WRAPPER}} .elementskit-accordion .elementskit-card-header .elementskit-btn-link .icon-open' => 'color: {{VALUE}};',
-                    '{{WRAPPER}} .elementskit-accordion .elementskit-card-header .elementskit-btn-link[aria-expanded="false"] svg path' => 'stroke: {{VALUE}}; fill: {{VALUE}};',
-                ],
-            ]
-        );
-
-
+        
         $this->add_responsive_control(
             'ekit_accordion_icon_typography_close',
             [
@@ -713,6 +701,17 @@ class ElementsKit_Widget_Accordion extends Widget_Base {
                 'selectors' => [
                     '{{WRAPPER}} .elementskit-accordion .elementskit-card-header .elementskit-btn-link  .icon-open' => 'font-size: {{SIZE}}{{UNIT}};',
                     '{{WRAPPER}} .elementskit-accordion .elementskit-card-header .elementskit-btn-link svg'  => 'max-width: {{SIZE}}{{UNIT}}; height: auto;'
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'ekit_accordion_icon_color_close', [
+                'label'		 =>esc_html__( 'Color', 'elementskit-lite' ),
+                'type'		 => Controls_Manager::COLOR,
+                'selectors'	 => [
+                    '{{WRAPPER}} .elementskit-accordion .elementskit-card-header .elementskit-btn-link .icon-open' => 'color: {{VALUE}};',
+                    '{{WRAPPER}} .elementskit-accordion .elementskit-card-header .elementskit-btn-link[aria-expanded="false"] svg path' => 'stroke: {{VALUE}}; fill: {{VALUE}};',
                 ],
             ]
         );
@@ -741,22 +740,30 @@ class ElementsKit_Widget_Accordion extends Widget_Base {
             ]
         );
 
+        $this->add_group_control(
+            Group_Control_Background::get_type(),
+            [
+                'name' => 'ekit_accordion_icon_box_bg',
+                'label' => esc_html__( 'Background', 'elementskit-lite' ),
+                'types' => [ 'classic', 'gradient' ],
+                'selector' => '{{WRAPPER}} .elementskit-accordion .elementskit-card-header .elementskit-btn-link[aria-expanded="false"] > .ekit_accordion_icon_group',
+            ]
+        );
+
+        $this->add_group_control(
+            Group_Control_Border::get_type(),
+            [
+                'name' => 'ekit_accordion_icon_border',
+                'label' => esc_html__( 'Border', 'elementskit-lite' ),
+                'selector' => '{{WRAPPER}} .elementskit-accordion .elementskit-card-header .elementskit-btn-link[aria-expanded="false"] > .ekit_accordion_icon_group',
+            ]
+        );
+
         $this->end_controls_tab();
         $this->start_controls_tab(
             'ekit_accordion_icon_close_tab',
             [
                 'label' => esc_html__( ' Slide Open icon', 'elementskit-lite' ),
-            ]
-        );
-
-        $this->add_control(
-            'ekit_accordion_icon_color', [
-                'label'		 =>esc_html__( 'Color', 'elementskit-lite' ),
-                'type'		 => Controls_Manager::COLOR,
-                'selectors'	 => [
-                    '{{WRAPPER}} .elementskit-accordion .elementskit-card-header .elementskit-btn-link .icon-closed' => 'color: {{VALUE}};',
-                    '{{WRAPPER}} .elementskit-accordion .elementskit-card-header .elementskit-btn-link[aria-expanded="true"] svg path'   => 'stroke: {{VALUE}}; fill: {{VALUE}};',
-                ],
             ]
         );
 
@@ -775,6 +782,17 @@ class ElementsKit_Widget_Accordion extends Widget_Base {
                     '{{WRAPPER}} .elementskit-accordion .elementskit-card .elementskit-card-header .elementskit-btn-link .icon-closed' => 'font-size: {{SIZE}}{{UNIT}};',
                     '{{WRAPPER}} .elementskit-accordion .elementskit-card .elementskit-card-header .elementskit-btn-link svg'  => 'max-width: {{SIZE}}{{UNIT}}; height: auto;'
                 ]
+            ]
+        );
+
+        $this->add_control(
+            'ekit_accordion_icon_color', [
+                'label'		 =>esc_html__( 'Color', 'elementskit-lite' ),
+                'type'		 => Controls_Manager::COLOR,
+                'selectors'	 => [
+                    '{{WRAPPER}} .elementskit-accordion .elementskit-card-header .elementskit-btn-link .icon-closed' => 'color: {{VALUE}};',
+                    '{{WRAPPER}} .elementskit-accordion .elementskit-card-header .elementskit-btn-link[aria-expanded="true"] svg path'   => 'stroke: {{VALUE}}; fill: {{VALUE}};',
+                ],
             ]
         );
 
@@ -802,10 +820,66 @@ class ElementsKit_Widget_Accordion extends Widget_Base {
             ]
         );
 
+        $this->add_group_control(
+            Group_Control_Background::get_type(),
+            [
+                'name' => 'ekit_accordion_closed_icon_bg',
+                'label' => esc_html__( 'Background', 'elementskit-lite' ),
+                'types' => [ 'classic', 'gradient' ],
+                'selector' => '{{WRAPPER}} .elementskit-accordion .elementskit-card-header .elementskit-btn-link .ekit_accordion_icon_group',
+            ]
+        );
+
+        $this->add_group_control(
+            Group_Control_Border::get_type(),
+            [
+                'name' => 'ekit_accordion_closed_icon_border',
+                'label' => esc_html__( 'Border', 'elementskit-lite' ),
+                'selector' => '{{WRAPPER}} .elementskit-accordion .elementskit-card-header .elementskit-btn-link .ekit_accordion_icon_group',
+            ]
+        );
+
         $this->end_controls_tab();
 
         $this->end_controls_tabs();
 
+        $this->add_control(
+            'ekit_accordion_icon_border_radious',
+            [
+                'label' => esc_html__( 'Border Radius', 'elementskit-lite' ),
+                'type' => Controls_Manager::DIMENSIONS,
+                'size_units' => [ 'px', '%', 'em' ],
+                'separator' => 'before',
+                'selectors' => [
+                    '{{WRAPPER}} .elementskit-accordion .elementskit-card-header .elementskit-btn-link .ekit_accordion_icon_group' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+                ],
+            ]
+        );
+
+        $this->add_responsive_control(
+            'ekit_accordion_icon_padding',
+            [
+                'label' => esc_html__( 'Padding', 'elementskit-lite' ),
+                'type' => Controls_Manager::DIMENSIONS,
+                'size_units' => [ 'px', '%', 'em' ],
+                'selectors' => [
+                    '{{WRAPPER}} .elementskit-accordion .elementskit-card .elementskit-card-header .elementskit-btn-link .ekit_accordion_icon_group' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+                ],
+            ]
+        );
+
+        $this->add_responsive_control(
+			'ekit_accordion_section_icon_margin',
+			[
+				'label' => esc_html__( 'Margin', 'elementskit-lite' ),
+				'type' => Controls_Manager::DIMENSIONS,
+				'size_units' => [ 'px', '%', 'em' ],
+				'selectors' => [
+					'{{WRAPPER}} .ekit_accordion_icon_group, {{WRAPPER}} .ekit_accordion_icon_left_group' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				],
+			]
+		);
+ 
         $this->end_controls_section();
         
         $this->insert_pro_message();
@@ -832,7 +906,6 @@ class ElementsKit_Widget_Accordion extends Widget_Base {
         $acc_id = uniqid();
         
         ?>
-
 
         <div class="elementskit-accordion <?php echo esc_attr( $ekit_accordion_style ); ?>" id="accordion-<?php echo esc_attr($acc_id); ?>">
 

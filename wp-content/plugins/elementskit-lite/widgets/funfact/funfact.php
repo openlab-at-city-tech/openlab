@@ -14,12 +14,13 @@ class ElementsKit_Widget_Funfact extends Widget_Base {
 
 	public $base;
 
-
-	public function __construct($data = [], $args = null) {
-		parent::__construct($data, $args);
-		$this->add_script_depends('elementor-waypoints');
+	public function get_style_depends() {
+		return [ 'odometer' ];
 	}
 
+	public function get_script_depends() {
+		return [ 'elementor-waypoints','odometer'];
+	}
 
 	public function get_name() {
 		return Handler::get_name();
@@ -256,30 +257,48 @@ class ElementsKit_Widget_Funfact extends Widget_Base {
 			]
 		);
 
-
-		$this->add_responsive_control(
-			'ekit_funfact_text_align',
-			[
-				'label'   => esc_html__('Alignment', 'elementskit-lite'),
-				'type'    => Controls_Manager::CHOOSE,
+		$this->add_control(
+            'ekit_funfact_style',
+            [
+                'label' => esc_html__( 'Choose Animation Style', 'elementskit-lite' ),
+                'type' => Controls_Manager::SELECT,
+                'default' => 'static',
 				'options' => [
-					'left'   => [
-						'title' => esc_html__('Left', 'elementskit-lite'),
-						'icon'  => 'eicon-text-align-left',
-					],
-					'center' => [
-						'title' => esc_html__('Center', 'elementskit-lite'),
-						'icon'  => 'eicon-text-align-center',
-					],
-					'right'  => [
-						'title' => esc_html__('Right', 'elementskit-lite'),
-						'icon'  => 'eicon-text-align-right',
-					],
-				],
-				'default' => 'center',
-				'toggle'  => true,
+                    'static'  => esc_html__( 'Static', 'elementskit-lite' ),
+                    'sliding'  => esc_html__( 'Sliding', 'elementskit-lite' ),
+                ],
+            ]
+        );
+
+		$this->add_control(
+			'ekit_funfact_animation_duration',
+			[
+				'label' => esc_html__( 'Animation Duration (ms)', 'elementskit-lite' ),
+				'type' => Controls_Manager::NUMBER,
+				'min' => 500,
+				'max' => 5000,
+				'step' => 100,
+				'default' => 3500,
 			]
 		);
+
+		$this->add_control(
+            'ekit_funfact_icon_position',
+            [
+                'label' => esc_html__( 'Icon Position', 'elementskit-lite' ),
+                'type' => Controls_Manager::SELECT,
+                'default' => 'position_top',
+				'options' => [
+                    'position_top'  => esc_html__( 'Top', 'elementskit-lite' ),
+                    'position_left'  => esc_html__( 'Left', 'elementskit-lite' ),
+                    'position_right'  => esc_html__( 'Right', 'elementskit-lite' ),
+                ],
+				'condition' => [
+					'ekit_funfact_icon_type' => [ 'icon', 'image_icon' ],
+				],
+            ]
+        );
+
 		$this->add_control(
 			'ekit_funfact_title_size',
 			[
@@ -770,7 +789,33 @@ class ElementsKit_Widget_Funfact extends Widget_Base {
 				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
-
+		
+		$this->add_responsive_control(
+			'ekit_funfact_text_align',
+			[
+				'label'   => esc_html__('Alignment', 'elementskit-lite'),
+				'type'    => Controls_Manager::CHOOSE,
+				'options' => [
+					'left'   => [
+						'title' => esc_html__('Left', 'elementskit-lite'),
+						'icon'  => 'eicon-text-align-left',
+					],
+					'center' => [
+						'title' => esc_html__('Center', 'elementskit-lite'),
+						'icon'  => 'eicon-text-align-center',
+					],
+					'right'  => [
+						'title' => esc_html__('Right', 'elementskit-lite'),
+						'icon'  => 'eicon-text-align-right',
+					],
+				],
+				'default' => 'center',
+				'selectors' => [
+					'{{WRAPPER}} .elementskit-funfact' => 'justify-content: {{VALUE}}; display: flex;',
+				],
+				'toggle'  => true,
+			]
+		);
 
 		$this->add_control(
 			'ekit_funfact_heading_number',
@@ -896,6 +941,18 @@ class ElementsKit_Widget_Funfact extends Widget_Base {
 				'default'    => [
 					'size' => 15,
 					'unit' => 'px',
+				],
+			]
+		);
+
+		$this->add_responsive_control(
+			'ekit_funfact_content_margin',
+			[
+				'label'      => esc_html__('Content Margin', 'elementskit-lite'),
+				'type'       => Controls_Manager::DIMENSIONS,
+				'size_units' => ['px', '%', 'em'],
+				'selectors'  => [
+					'{{WRAPPER}} .funfact-content ' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
 		);
@@ -1266,7 +1323,7 @@ class ElementsKit_Widget_Funfact extends Widget_Base {
 				<div class="vertical-bar <?php echo esc_attr($settings['ekit_funfact_enable_vertical_border_position']); ?>"></div>
 			<?php endif; ?>
 
-			<div class="elementskit-funfact-inner">
+			<div class="elementskit-funfact-inner <?php echo !empty($settings['ekit_funfact_icon_position']) ? esc_attr($settings['ekit_funfact_icon_position']) : ''; ?>">
 				<?php if(($settings['ekit_funfact_icon_type'] == 'image_icon') || ($settings['ekit_funfact_icon_type'] == 'icon')) : ?>
 					<div class="funfact-icon"> <?php
 
@@ -1306,7 +1363,8 @@ class ElementsKit_Widget_Funfact extends Widget_Base {
 						<?php echo esc_html( $settings['ekit_funfact_number_prefix'] ); ?>
 						<span class="number-percentage"
 						      data-value="<?php echo esc_attr( $settings['ekit_funfact_number'] ); ?>"
-						      data-animation-duration="3500">0</span>
+						      data-animation-duration="<?php echo esc_attr($settings['ekit_funfact_animation_duration']); ?>"
+							  data-style="<?php echo esc_attr($settings['ekit_funfact_style']); ?>">0</span>
 						<?php echo esc_html( $settings['ekit_funfact_number_suffix'] ); ?>
 						<?php if($settings['ekit_funfact_super'] == 'yes') : ?>
 							<span class="super"><?php echo wp_kses($settings['ekit_funfact_super_text'], \ElementsKit_Lite\Utils::get_kses_array()); ?></span>
