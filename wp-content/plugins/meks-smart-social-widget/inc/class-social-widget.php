@@ -14,6 +14,7 @@ class MKS_Social_Widget extends WP_Widget {
 
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_scripts' ) );
+		add_filter( 'use_widgets_block_editor', '__return_false' );
 
 		$this->defaults = array(
 			'title' => __( 'Follow Me', 'meks-smart-social-widget' ),
@@ -59,15 +60,16 @@ class MKS_Social_Widget extends WP_Widget {
 		<?php endif; ?>
 
 		<?php if ( !empty( $instance['social'] ) ): ?>
-		<?php
-			$size_style = 'style="width: '.esc_attr( $instance['size'] ).'px; height: '.esc_attr( $instance['size'] ).'px; font-size: '.esc_attr( $instance['font_size'] ).'px;line-height:'.esc_attr( $instance['size']+ceil( $instance['font_size']/3.5 ) ).'px;"';
-		$target = 'target="'.esc_attr( $instance['target'] ).'"';
-?>
+			<?php
+				$size_style = 'style="width: '.esc_attr( $instance['size'] ).'px; height: '.esc_attr( $instance['size'] ).'px; font-size: '.esc_attr( $instance['font_size'] ).'px;line-height:'.esc_attr( $instance['size']+ceil( $instance['font_size']/3.5 ) ).'px;"';
+
+				$target = $instance['target'] == '_blank' ? 'target="'.esc_attr( $instance['target'] ).'" rel="noopener"' : 'target="'.esc_attr( $instance['target'] ).'"' ;
+			?>
 			<ul class="mks_social_widget_ul">
-			  <?php foreach ( $instance['social'] as $item ) : ?>
-		  		<li><a href="<?php echo $item['url']; ?>" title="<?php echo esc_attr( $this->get_social_title( $item['icon'] ) ); ?>" class="socicon-<?php echo esc_attr( $item['icon'] ); ?> <?php echo esc_attr( 'soc_'.$instance['style'] ); ?>" <?php echo $target; ?> <?php echo $size_style; ?>><span><?php echo $item['icon']; ?></span></a></li>
-		  	<?php endforeach; ?>
-		  </ul>
+			<?php foreach ( $instance['social'] as $item ) : ?>
+				<li><a href="<?php echo $item['url']; ?>" title="<?php echo esc_attr( $this->get_social_title( $item['icon'] ) ); ?>" class="socicon-<?php echo esc_attr( $item['icon'] ); ?> <?php echo esc_attr( 'soc_'.$instance['style'] ); ?>" <?php echo $target; ?> <?php echo $size_style; ?>><span><?php echo $item['icon']; ?></span></a></li>
+			<?php endforeach; ?>
+			</ul>
 		<?php endif; ?>
 
 
