@@ -1,6 +1,6 @@
 <?php
 
-define( 'TOC_VERSION', '2106' );
+define( 'TOC_VERSION', '2212' );
 define( 'TOC_POSITION_BEFORE_FIRST_HEADING', 1 );
 define( 'TOC_POSITION_TOP', 2 );
 define( 'TOC_POSITION_BOTTOM', 3 );
@@ -190,6 +190,8 @@ if ( ! class_exists( 'TOC_Plus' ) ) :
 						'heading_levels' => $this->options['heading_levels'],
 						'exclude'        => $this->options['exclude'],
 						'collapse'       => false,
+						'no_numbers'     => false,
+						'start'          => $this->options['start'],
 					],
 					$atts
 				)
@@ -235,6 +237,14 @@ if ( ! class_exists( 'TOC_Plus' ) ) :
 			if ( $collapse ) {
 				$this->options['visibility_hide_by_default'] = true;
 				$re_enqueue_scripts = true;
+			}
+
+			if ( $no_numbers ) {
+				$this->options['ordered_list'] = false;
+			}
+
+			if ( is_numeric( $start ) ) {
+				$this->options['start'] = $start;
 			}
 
 			if ( $re_enqueue_scripts ) {
@@ -309,7 +319,7 @@ if ( ! class_exists( 'TOC_Plus' ) ) :
 				shortcode_atts(
 					[
 						'heading'      => $this->options['sitemap_heading_type'],
-						'label'        => htmlentities( $this->options['sitemap_pages'], ENT_COMPAT, 'UTF-8' ),
+						'label'        => $this->options['sitemap_pages'],
 						'no_label'     => false,
 						'exclude'      => '',
 						'exclude_tree' => '',
@@ -318,13 +328,15 @@ if ( ! class_exists( 'TOC_Plus' ) ) :
 				)
 			);
 
+			$heading = intval( $heading );	// make sure it's an integer
+
 			if ( $heading < 1 || $heading > 6 ) {  // h1 to h6 are valid
 				$heading = $this->options['sitemap_heading_type'];
 			}
 
 			$html = '<div class="toc_sitemap">';
 			if ( ! $no_label ) {
-				$html .= '<h' . $heading . ' class="toc_sitemap_pages">' . $label . '</h' . $heading . '>';
+				$html .= '<h' . $heading . ' class="toc_sitemap_pages">' . htmlentities( $label, ENT_COMPAT, 'UTF-8' ) . '</h' . $heading . '>';
 			}
 			$html .=
 					'<ul class="toc_sitemap_pages_list">' .
@@ -341,7 +353,7 @@ if ( ! class_exists( 'TOC_Plus' ) ) :
 				shortcode_atts(
 					[
 						'heading'      => $this->options['sitemap_heading_type'],
-						'label'        => htmlentities( $this->options['sitemap_categories'], ENT_COMPAT, 'UTF-8' ),
+						'label'        => $this->options['sitemap_categories'],
 						'no_label'     => false,
 						'exclude'      => '',
 						'exclude_tree' => '',
@@ -350,13 +362,15 @@ if ( ! class_exists( 'TOC_Plus' ) ) :
 				)
 			);
 
+			$heading = intval( $heading );	// make sure it's an integer
+
 			if ( $heading < 1 || $heading > 6 ) {  // h1 to h6 are valid
 				$heading = $this->options['sitemap_heading_type'];
 			}
 
 			$html = '<div class="toc_sitemap">';
 			if ( ! $no_label ) {
-				$html .= '<h' . $heading . ' class="toc_sitemap_categories">' . $label . '</h' . $heading . '>';
+				$html .= '<h' . $heading . ' class="toc_sitemap_categories">' . htmlentities( $label, ENT_COMPAT, 'UTF-8' ) . '</h' . $heading . '>';
 			}
 			$html .=
 					'<ul class="toc_sitemap_categories_list">' .
@@ -1547,7 +1561,7 @@ if ( ! class_exists( 'TOC_Plus' ) ) :
 						}
 
 						// add container, toc title and list items
-						$html = '<div id="toc_container" class="' . $css_classes . '">';
+						$html = '<div id="toc_container" class="' . htmlentities( $css_classes, ENT_COMPAT, 'UTF-8' ) . '">';
 						if ( $this->options['show_heading_text'] ) {
 							$toc_title = htmlentities( $this->options['heading_text'], ENT_COMPAT, 'UTF-8' );
 							if ( false !== strpos( $toc_title, '%PAGE_TITLE%' ) ) {
@@ -1624,6 +1638,11 @@ if ( ! class_exists( 'toc_widget' ) ) :
 		 */
 		function widget( $args, $instance ) {
 			global $toc_plus, $wp_query;
+
+			if ( is_null( $wp_query->post ) ) {
+				return;
+			}
+
 			$items               = '';
 			$custom_toc_position = '';
 			$find                = [];
@@ -1637,7 +1656,7 @@ if ( ! class_exists( 'toc_widget' ) ) :
 
 				extract( $args );
 
-				$items = $toc_plus->extract_headings( $find, $replace, wptexturize( $post->post_content ) );
+				$items = $toc_plus->extract_headings( $find, $replace, wptexturize( do_shortcode( $post->post_content ) ) );
 				$title = ( array_key_exists( 'title', $instance ) ) ? apply_filters( 'widget_title', $instance['title'] ) : '';
 				if ( false !== strpos( $title, '%PAGE_TITLE%' ) ) {
 					$title = str_replace( '%PAGE_TITLE%', get_the_title(), $title );
