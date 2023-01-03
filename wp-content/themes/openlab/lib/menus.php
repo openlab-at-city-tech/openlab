@@ -647,9 +647,12 @@ function openlab_group_docs_submenu() {
     }
 
     $menu_list = [
-        $base_url                   => 'All Docs',
-        $base_url . '/create'       => 'New Doc'
+        $base_url => 'All Docs',
     ];
+
+	if ( is_user_logged_in() && current_user_can( 'bp_docs_create' ) ) {
+        $menu_list[ $base_url . '/create' ] = 'New Doc';
+	}
 
     if( isset( $_GET['s'] ) ) {
         $menu_list += [
