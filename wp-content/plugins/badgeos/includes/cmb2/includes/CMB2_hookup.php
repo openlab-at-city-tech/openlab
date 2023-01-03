@@ -342,12 +342,12 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 
 			} else {
 
-				$before = array_slice( $columns, 0, absint( $column['position'] ) );
+				$before                 = array_slice( $columns, 0, absint( $column['position'] ) );
 				$before[ $field['id'] ] = $column['name'];
-				$columns = $before + $columns;
+				$columns                = $before + $columns;
 			}
 
-			$column['field'] = $field;
+			$column['field']               = $field;
 			$this->columns[ $field['id'] ] = $column;
 		}
 
@@ -361,12 +361,14 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 	 */
 	public function column_display( $column_name, $object_id ) {
 		if ( isset( $this->columns[ $column_name ] ) ) {
-				$field = new CMB2_Field( array(
-					'field_args'  => $this->columns[ $column_name ]['field'],
-					'object_type' => $this->object_type,
-					'object_id'   => $this->cmb->object_id( $object_id ),
-					'cmb_id'      => $this->cmb->cmb_id,
-				) );
+				$field = new CMB2_Field(
+					array(
+						'field_args'  => $this->columns[ $column_name ]['field'],
+						'object_type' => $this->object_type,
+						'object_id'   => $this->cmb->object_id( $object_id ),
+						'cmb_id'      => $this->cmb->cmb_id,
+					)
+				);
 
 				$this->cmb->get_field( $field )->render_column();
 		}
@@ -425,7 +427,7 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 		 * To output the fields 'naked' (without a postbox wrapper/style), then
 		 * add a `'remove_box_wrap' => true` to your metabox registration array.
 		 */
-		$add_wrap = ! empty( $title ) || ! $this->cmb->prop( 'remove_box_wrap' );
+		$add_wrap   = ! empty( $title ) || ! $this->cmb->prop( 'remove_box_wrap' );
 		$add_handle = $add_wrap && ! empty( $title );
 
 		// Open the context-box wrap.
@@ -598,7 +600,7 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 	public function user_new_metabox( $section ) {
 		if ( $section == $this->cmb->prop( 'new_user_section' ) ) {
 			$object_id = $this->cmb->object_id();
-			$this->cmb->object_id( isset( $_REQUEST['user_id'] ) ? $_REQUEST['user_id'] : $object_id );
+			$this->cmb->object_id( isset( $_REQUEST['user_id'] ) ? sanitize_text_field( $_REQUEST['user_id'] ) : $object_id );
 			$this->user_metabox();
 		}
 	}
@@ -739,7 +741,7 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 		$can_edit = current_user_can( 'moderate_comments', $comment_id );
 
 		if ( $this->can_save( get_comment_type( $comment_id ) ) && $can_edit ) {
-			$this->cmb->save_fields( $comment_id, 'comment', $_POST );
+			$this->cmb->save_fields( $comment_id, 'comment', array_map( 'sanitize_text_field', $_POST ) );
 		}
 	}
 
@@ -753,7 +755,7 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 	public function save_user( $user_id ) {
 		// check permissions
 		if ( $this->can_save( 'user' ) ) {
-			$this->cmb->save_fields( $user_id, 'user', $_POST );
+			$this->cmb->save_fields( $user_id, 'user', array_map( 'sanitize_text_field', $_POST ) );
 		}
 	}
 
@@ -771,7 +773,7 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 
 		// check permissions
 		if ( $this->taxonomy_can_save( $taxonomy ) && $this->can_save( 'term' ) ) {
-			$this->cmb->save_fields( $term_id, 'term', $_POST );
+			$this->cmb->save_fields( $term_id, 'term', array_map( 'sanitize_text_field', $_POST ) );
 		}
 	}
 

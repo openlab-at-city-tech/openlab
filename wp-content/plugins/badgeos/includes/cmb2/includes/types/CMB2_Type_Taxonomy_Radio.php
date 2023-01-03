@@ -15,9 +15,12 @@ class CMB2_Type_Taxonomy_Radio extends CMB2_Type_Taxonomy_Base {
 
 	public function render() {
 		return $this->rendered(
-			$this->types->radio( array(
-				'options' => $this->get_term_options(),
-			), 'taxonomy_radio' )
+			$this->types->radio(
+				array(
+					'options' => $this->get_term_options(),
+				),
+				'taxonomy_radio'
+			)
 		);
 	}
 
@@ -56,10 +59,13 @@ class CMB2_Type_Taxonomy_Radio extends CMB2_Type_Taxonomy_Base {
 			 */
 			$option_none_value = apply_filters( "cmb2_taxonomy_radio_{$field_id}_default_value", $option_none_value );
 
-			$options .= $this->list_term_input( (object) array(
-				'slug' => $option_none_value,
-				'name' => $option_none,
-			), $saved_term );
+			$options .= $this->list_term_input(
+				(object) array(
+					'slug' => $option_none_value,
+					'name' => $option_none,
+				),
+				$saved_term
+			);
 		}
 
 		$options .= $this->loop_terms( $all_terms, $saved_term );

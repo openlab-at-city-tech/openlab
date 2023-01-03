@@ -20,10 +20,13 @@ class CMB2_Type_Textarea_Code extends CMB2_Type_Textarea {
 	 * @return string       Form textarea element
 	 */
 	public function render( $args = array() ) {
-		$args = wp_parse_args( $args, array(
-			'class' => 'cmb2-textarea-code',
-			'desc'  => '</pre>' . $this->_desc( true ),
-		) );
+		$args = wp_parse_args(
+			$args,
+			array(
+				'class' => 'cmb2-textarea-code',
+				'desc'  => '</pre>' . $this->_desc( true ),
+			)
+		);
 
 		if ( true !== $this->field->options( 'disable_codemirror' )
 			&& function_exists( 'wp_enqueue_code_editor' ) ) {

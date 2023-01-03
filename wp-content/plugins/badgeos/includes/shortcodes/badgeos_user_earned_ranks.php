@@ -157,7 +157,6 @@ function badgeos_earned_ranks_shortcode( $atts = array () ){
         }
     }
 
-    global $user_ID;
     extract( shortcode_atts( array(
         'rank_type'   => 'all',
         'limit'       => '10',
@@ -199,7 +198,7 @@ function badgeos_earned_ranks_shortcode( $atts = array () ){
     // Search
     if ( $show_search != 'false' ) {
 
-        $search = isset( $_POST['earned_ranks_list_search'] ) ? $_POST['earned_ranks_list_search'] : '';
+        $search = isset( $_POST['earned_ranks_list_search'] ) ? sanitize_text_field( $_POST['earned_ranks_list_search'] ) : '';
         $ranks_html .= '<div id="badgeos-ranks-search">';
         $ranks_html .= '<form id="earned_ranks_list_search_go_form" class="earned_ranks_list_search_go_form" action="'. get_permalink( get_the_ID() ) .'" method="post">';
         $ranks_html .= sprintf( __( 'Search: %s', 'badgeos' ), '<input type="text" id="earned_ranks_list_search" name="earned_ranks_list_search" class="earned_ranks_list_search" value="'. $search .'">' );

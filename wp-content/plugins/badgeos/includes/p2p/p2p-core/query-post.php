@@ -19,20 +19,22 @@ class P2P_Query_Post {
 			return;
 		}
 
-		if ( null === $r )
+		if ( null === $r ) {
 			return;
+		}
 
 		list( $wp_query->_p2p_query, $wp_query->query_vars ) = $r;
 
-		$wp_query->is_home = false;
+		$wp_query->is_home    = false;
 		$wp_query->is_archive = true;
 	}
 
 	static function posts_clauses( $clauses, $wp_query ) {
 		global $wpdb;
 
-		if ( !isset( $wp_query->_p2p_query ) )
+		if ( ! isset( $wp_query->_p2p_query ) ) {
 			return $clauses;
+		}
 
 		return $wp_query->_p2p_query->alter_clauses( $clauses, "$wpdb->posts.ID" );
 	}
@@ -40,8 +42,9 @@ class P2P_Query_Post {
 	static function capture( $request, $wp_query ) {
 		global $wpdb;
 
-		if ( !isset( $wp_query->_p2p_capture ) )
+		if ( ! isset( $wp_query->_p2p_capture ) ) {
 			return $request;
+		}
 
 		$wp_query->_p2p_sql = $request;
 
@@ -52,8 +55,9 @@ class P2P_Query_Post {
 	 * Pre-populates the p2p meta cache to decrease the number of queries.
 	 */
 	static function cache_p2p_meta( $the_posts, $wp_query ) {
-		if ( isset( $wp_query->_p2p_query ) && !empty( $the_posts ) )
+		if ( isset( $wp_query->_p2p_query ) && ! empty( $the_posts ) ) {
 			update_meta_cache( 'p2p', wp_list_pluck( $the_posts, 'p2p_id' ) );
+		}
 
 		return $the_posts;
 	}

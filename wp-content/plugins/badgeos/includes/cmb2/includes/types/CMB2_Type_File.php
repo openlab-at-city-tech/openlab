@@ -23,23 +23,27 @@ class CMB2_Type_File extends CMB2_Type_File_Base {
 		$field   = $this->field;
 		$options = (array) $field->options();
 
-		$a = $this->args = $this->parse_args( 'file', array(
-			'class'           => 'cmb2-upload-file regular-text',
-			'id'              => $this->_id(),
-			'name'            => $this->_name(),
-			'value'           => $field->escaped_value(),
-			'id_value'        => null,
-			'desc'            => $this->_desc( true ),
-			'size'            => 45,
-			'js_dependencies' => 'media-editor',
-			'preview_size'    => $field->args( 'preview_size' ),
-			'query_args'      => $field->args( 'query_args' ),
+		$a = $this->args = $this->parse_args(
+			'file',
+			array(
+				'class'           => 'cmb2-upload-file regular-text',
+				'id'              => $this->_id(),
+				'name'            => $this->_name(),
+				'value'           => $field->escaped_value(),
+				'id_value'        => null,
+				'desc'            => $this->_desc( true ),
+				'size'            => 45,
+				'js_dependencies' => 'media-editor',
+				'preview_size'    => $field->args( 'preview_size' ),
+				'query_args'      => $field->args( 'query_args' ),
 
-			// if options array and 'url' => false, then hide the url field
-			'type'            => array_key_exists( 'url', $options ) && false === $options['url']
-				? 'hidden'
-				: 'text',
-		), $args );
+				// if options array and 'url' => false, then hide the url field
+				'type'            => array_key_exists( 'url', $options ) && false === $options['url']
+					? 'hidden'
+					: 'text',
+			),
+			$args
+		);
 
 		// get an array of image size meta data, fallback to 'large'
 		$this->args['img_size_data'] = $img_size_data = parent::get_image_size_data(
@@ -49,26 +53,28 @@ class CMB2_Type_File extends CMB2_Type_File_Base {
 
 		$output = '';
 
-		$output .= parent::render( array(
-			'type'  => $a['type'],
-			'class' => $a['class'],
-			'value' => $a['value'],
-			'id'    => $a['id'],
-			'name'  => $a['name'],
-			'size'  => $a['size'],
-			'desc'  => '',
-			'data-previewsize' => sprintf( '[%d,%d]', $img_size_data['width'], $img_size_data['height'] ),
-			'data-sizename'    => $img_size_data['name'],
-			'data-queryargs'   => ! empty( $a['query_args'] ) ? json_encode( $a['query_args'] ) : '',
-			'js_dependencies'  => $a['js_dependencies'],
-		) );
+		$output .= parent::render(
+			array(
+				'type'             => $a['type'],
+				'class'            => $a['class'],
+				'value'            => $a['value'],
+				'id'               => $a['id'],
+				'name'             => $a['name'],
+				'size'             => $a['size'],
+				'desc'             => '',
+				'data-previewsize' => sprintf( '[%d,%d]', $img_size_data['width'], $img_size_data['height'] ),
+				'data-sizename'    => $img_size_data['name'],
+				'data-queryargs'   => ! empty( $a['query_args'] ) ? json_encode( $a['query_args'] ) : '',
+				'js_dependencies'  => $a['js_dependencies'],
+			)
+		);
 
 		// Now remove the data-iterator attribute if it exists.
 		// (Possible if being used within a custom field)
 		// This is not elegant, but compensates for CMB2_Types::_id
 		// automagically & inelegantly adding the data-iterator attribute.
 		// Single responsibility principle? pffft
-		$parts = explode( '"', $this->args['id'] );
+		$parts            = explode( '"', $this->args['id'] );
 		$this->args['id'] = $parts[0];
 
 		$output .= sprintf(
@@ -85,32 +91,41 @@ class CMB2_Type_File extends CMB2_Type_File_Base {
 		}
 		$output .= '</div>';
 
- 		return $this->rendered( $output );
+		return $this->rendered( $output );
 	}
 
 	public function get_file_preview_output() {
 		if ( ! $this->is_valid_img_ext( $this->args['value'] ) ) {
 
-			return $this->file_status_output( array(
-				'value'     => $this->args['value'],
-				'tag'       => 'div',
-				'cached_id' => $this->args['id'],
-			) );
+			return $this->file_status_output(
+				array(
+					'value'     => $this->args['value'],
+					'tag'       => 'div',
+					'cached_id' => $this->args['id'],
+				)
+			);
 		}
 
 		if ( $this->args['id_value'] ) {
-			$image = wp_get_attachment_image( $this->args['id_value'], $this->args['preview_size'], null, array(
-				'class' => 'cmb-file-field-image',
-			) );
+			$image = wp_get_attachment_image(
+				$this->args['id_value'],
+				$this->args['preview_size'],
+				null,
+				array(
+					'class' => 'cmb-file-field-image',
+				)
+			);
 		} else {
 			$image = '<img style="max-width: ' . absint( $this->args['img_size_data']['width'] ) . 'px; width: 100%;" src="' . $this->args['value'] . '" class="cmb-file-field-image" alt="" />';
 		}
 
-		return $this->img_status_output( array(
-			'image'     => $image,
-			'tag'       => 'div',
-			'cached_id' => $this->args['id'],
-		) );
+		return $this->img_status_output(
+			array(
+				'image'     => $image,
+				'tag'       => 'div',
+				'cached_id' => $this->args['id'],
+			)
+		);
 	}
 
 	public function get_id_field_output() {
@@ -122,12 +137,14 @@ class CMB2_Type_File extends CMB2_Type_File_Base {
 		 */
 		$this->types->field = $this->get_id_field();
 
-		$output = parent::render( array(
-			'type'  => 'hidden',
-			'class' => 'cmb2-upload-file-id',
-			'value' => $this->types->field->value,
-			'desc'  => '',
-		) );
+		$output = parent::render(
+			array(
+				'type'  => 'hidden',
+				'class' => 'cmb2-upload-file-id',
+				'value' => $this->types->field->value,
+				'desc'  => '',
+			)
+		);
 
 		// We need to put the original field object back
 		// or other fields in a custom field will be broken.
@@ -141,7 +158,7 @@ class CMB2_Type_File extends CMB2_Type_File_Base {
 		// reset field args for attachment id
 		$args = array(
 			// if we're looking at a file in a group, we need to get the non-prefixed id
-			'id' => ( $this->field->group ? $this->field->args( '_id' ) : $this->args['id'] ) . '_id',
+			'id'                          => ( $this->field->group ? $this->field->args( '_id' ) : $this->args['id'] ) . '_id',
 			'disable_hash_data_attribute' => true,
 		);
 

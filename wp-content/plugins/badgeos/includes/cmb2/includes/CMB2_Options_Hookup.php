@@ -36,7 +36,7 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 	 * @param CMB2 $cmb The CMB2 object to hookup
 	 */
 	public function __construct( CMB2 $cmb, $option_key ) {
-		$this->cmb = $cmb;
+		$this->cmb        = $cmb;
 		$this->option_key = $option_key;
 	}
 
@@ -195,7 +195,11 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 			<?php if ( ! empty( $tabs ) ) : ?>
 				<h2 class="nav-tab-wrapper">
 					<?php foreach ( $tabs as $option_key => $tab_title ) : ?>
-						<a class="nav-tab<?php if ( self::is_page( $option_key ) ) : ?> nav-tab-active<?php endif; ?>" href="<?php menu_page_url( $option_key ); ?>"><?php echo wp_kses_post( $tab_title ); ?></a>
+						<a class="nav-tab
+						<?php
+						if ( self::is_page( $option_key ) ) :
+							?>
+							 nav-tab-active<?php endif; ?>" href="<?php menu_page_url( $option_key ); ?>"><?php echo wp_kses_post( $tab_title ); ?></a>
 					<?php endforeach; ?>
 				</h2>
 			<?php endif; ?>
@@ -283,7 +287,7 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 		) {
 
 			$updated = $this->cmb
-				->save_fields( $this->option_key, $this->cmb->object_type(), $_POST )
+				->save_fields( $this->option_key, $this->cmb->object_type(), array_map( 'sanitize_text_field', $_POST ) )
 				->was_updated(); // Will be false if no values were changed/updated.
 
 			$url = add_query_arg( 'settings-updated', $updated ? 'true' : 'false', $url );
@@ -295,6 +299,7 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 
 	/**
 	 * Replaces get_option with get_site_option
+	 *
 	 * @since 2.2.5
 	 * @return mixed Value set for the network option.
 	 */
@@ -304,6 +309,7 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 
 	/**
 	 * Replaces update_option with update_site_option
+	 *
 	 * @since 2.2.5
 	 * @return bool Success/Failure
 	 */

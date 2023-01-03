@@ -7,22 +7,26 @@ function p2p_list_cluster( $items, $callback ) {
 
 /** @internal */
 function _p2p_expand_direction( $direction ) {
-	if ( !$direction )
+	if ( ! $direction ) {
 		return array();
+	}
 
-	if ( 'any' == $direction )
+	if ( 'any' == $direction ) {
 		return array( 'from', 'to' );
-	else
+	} else {
 		return array( $direction );
+	}
 }
 
 /** @internal */
 function _p2p_compress_direction( $directions ) {
-	if ( empty( $directions ) )
+	if ( empty( $directions ) ) {
 		return false;
+	}
 
-	if ( count( $directions ) > 1 )
+	if ( count( $directions ) > 1 ) {
 		return 'any';
+	}
 
 	return reset( $directions );
 }
@@ -31,8 +35,8 @@ function _p2p_compress_direction( $directions ) {
 function _p2p_flip_direction( $direction ) {
 	$map = array(
 		'from' => 'to',
-		'to' => 'from',
-		'any' => 'any',
+		'to'   => 'from',
+		'any'  => 'any',
 	);
 
 	return $map[ $direction ];
@@ -40,14 +44,16 @@ function _p2p_flip_direction( $direction ) {
 
 /** @internal */
 function _p2p_normalize( $items ) {
-	if ( !is_array( $items ) )
+	if ( ! is_array( $items ) ) {
 		$items = array( $items );
+	}
 
 	foreach ( $items as &$item ) {
-		if ( is_a( $item, 'P2P_Item' ) )
+		if ( is_a( $item, 'P2P_Item' ) ) {
 			$item = $item->get_id();
-		elseif ( is_object( $item ) )
+		} elseif ( is_object( $item ) ) {
 			$item = $item->ID;
+		}
 	}
 
 	return $items;
@@ -67,8 +73,9 @@ function _p2p_extract_post_types( $sides ) {
 	$ptypes = array();
 
 	foreach ( $sides as $side ) {
-		if ( 'post' == $side->get_object_type() )
+		if ( 'post' == $side->get_object_type() ) {
 			_p2p_append( $ptypes, $side->query_vars['post_type'] );
+		}
 	}
 
 	return array_unique( $ptypes );
@@ -80,8 +87,7 @@ function _p2p_meta_sql_helper( $query ) {
 
 	if ( isset( $query[0] ) ) {
 		$meta_query = $query;
-	}
-	else {
+	} else {
 		$meta_query = array();
 
 		foreach ( $query as $key => $value ) {
@@ -106,19 +112,22 @@ function _p2p_append( &$arr, $values ) {
 
 /** @internal */
 function _p2p_first( $args ) {
-	if ( empty( $args ) )
+	if ( empty( $args ) ) {
 		return false;
+	}
 
 	return reset( $args );
 }
 
 /** @internal */
 function _p2p_get_other_id( $item ) {
-	if ( $item->ID == $item->p2p_from )
+	if ( $item->ID == $item->p2p_from ) {
 		return $item->p2p_to;
+	}
 
-	if ( $item->ID == $item->p2p_to )
+	if ( $item->ID == $item->p2p_to ) {
 		return $item->p2p_from;
+	}
 
 	trigger_error( "Corrupted data for item $inner_item->ID", E_USER_WARNING );
 }

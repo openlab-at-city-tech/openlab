@@ -76,7 +76,7 @@ class CMB2_Ajax {
 		}
 
 		// Set width of embed
-		$embed_width = isset( $_REQUEST['oembed_width'] ) && intval( $_REQUEST['oembed_width'] ) < 640 ? intval( $_REQUEST['oembed_width'] ) : '640';
+		$embed_width = isset( $_REQUEST['oembed_width'] ) && intval( $_REQUEST['oembed_width'] ) < 640 ? sanitize_text_field( $_REQUEST['oembed_width'] ) : '640';
 
 		// Set url
 		$oembed_url = esc_url( $oembed_string );
@@ -89,13 +89,15 @@ class CMB2_Ajax {
 		$this->ajax_update = true;
 
 		// Get embed code (or fallback link)
-		$html = $this->get_oembed( array(
-			'url'         => $oembed_url,
-			'object_id'   => $_REQUEST['object_id'],
-			'object_type' => isset( $_REQUEST['object_type'] ) ? $_REQUEST['object_type'] : 'post',
-			'oembed_args' => $embed_args,
-			'field_id'    => $_REQUEST['field_id'],
-		) );
+		$html = $this->get_oembed(
+			array(
+				'url'         => $oembed_url,
+				'object_id'   => sanitize_text_field( $_REQUEST['object_id'] ),
+				'object_type' => isset( $_REQUEST['object_type'] ) ? sanitize_text_field( $_REQUEST['object_type'] ) : 'post',
+				'oembed_args' => $embed_args,
+				'field_id'    => sanitize_text_field( $_REQUEST['field_id'] ),
+			)
+		);
 
 		wp_send_json_success( $html );
 	}
@@ -115,12 +117,15 @@ class CMB2_Ajax {
 		// Sanitize object_id
 		$this->object_id = is_numeric( $args['object_id'] ) ? absint( $args['object_id'] ) : sanitize_text_field( $args['object_id'] );
 
-		$args = wp_parse_args( $args, array(
-			'object_type' => 'post',
-			'oembed_args' => array(),
-			'field_id'    => false,
-			'wp_error'    => false,
-		) );
+		$args = wp_parse_args(
+			$args,
+			array(
+				'object_type' => 'post',
+				'oembed_args' => array(),
+				'field_id'    => false,
+				'wp_error'    => false,
+			)
+		);
 
 		$this->embed_args =& $args;
 
@@ -140,7 +145,7 @@ class CMB2_Ajax {
 			}
 
 			// Ok, we need to hijack the oembed cache system
-			$this->hijack = true;
+			$this->hijack      = true;
 			$this->object_type = $args['object_type'];
 
 			// Gets ombed cache from our object's meta (vs postmeta)
@@ -266,7 +271,7 @@ class CMB2_Ajax {
 			$status = call_user_func_array( array( cmb2_options( $this->object_id ), $action ), $args );
 		} else {
 
-			$args = array( $this->object_type, $this->object_id, $meta_key );
+			$args   = array( $this->object_type, $this->object_id, $meta_key );
 			$args[] = 'update' === $action ? $func_args[1] : true;
 
 			// Cache the result to our metadata
@@ -285,7 +290,7 @@ class CMB2_Ajax {
 	 * @return void
 	 */
 	public static function clean_stale_options_page_oembeds( $option_key ) {
-		$options = cmb2_options( $option_key )->get_options();
+		$options  = cmb2_options( $option_key )->get_options();
 		$modified = false;
 		if ( is_array( $options ) ) {
 

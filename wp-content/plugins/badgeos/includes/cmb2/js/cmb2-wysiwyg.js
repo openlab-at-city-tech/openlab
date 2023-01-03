@@ -1,16 +1,16 @@
 /**
  * Used for WYSIWYG logic
  */
-window.CMB2 = window.CMB2 || {};
+window.CMB2         = window.CMB2 || {};
 window.CMB2.wysiwyg = window.CMB2.wysiwyg || {};
 
 ( function(window, document, $, wysiwyg, undefined ) {
 	'use strict';
 
 	// Private variables
-	var toBeDestroyed = [];
+	var toBeDestroyed   = [];
 	var toBeInitialized = [];
-	var all = wysiwyg.all = {};
+	var all             = wysiwyg.all = {};
 
 	// Private functions
 
@@ -25,10 +25,12 @@ window.CMB2.wysiwyg = window.CMB2.wysiwyg || {};
 
 		// Don't initialize until they've all been destroyed.
 		if ( 0 === toBeDestroyed.length ) {
-			toBeInitialized.forEach( function ( toInit ) {
-				toBeInitialized.splice( toBeInitialized.indexOf( toInit ), 1 );
-				wysiwyg.init.apply( wysiwyg, toInit );
-			} );
+			toBeInitialized.forEach(
+				function ( toInit ) {
+					toBeInitialized.splice( toBeInitialized.indexOf( toInit ), 1 );
+					wysiwyg.init.apply( wysiwyg, toInit );
+				}
+			);
 		} else {
 			window.setTimeout( delayedInit, 100 );
 		}
@@ -42,10 +44,12 @@ window.CMB2.wysiwyg = window.CMB2.wysiwyg || {};
 	 * @return {void}
 	 */
 	function delayedDestroy() {
-		toBeDestroyed.forEach( function( id ) {
-			toBeDestroyed.splice( toBeDestroyed.indexOf( id ), 1 );
-			wysiwyg.destroy( id );
-		} );
+		toBeDestroyed.forEach(
+			function( id ) {
+				toBeDestroyed.splice( toBeDestroyed.indexOf( id ), 1 );
+				wysiwyg.destroy( id );
+			}
+		);
 	}
 
 	/**
@@ -62,7 +66,7 @@ window.CMB2.wysiwyg = window.CMB2.wysiwyg || {};
 		var fieldid = data.fieldid;
 
 		if ( ! all[ groupid ] || ! all[ groupid ][ fieldid ] ) {
-			all[ groupid ] = all[ groupid ] || {};
+			all[ groupid ]            = all[ groupid ] || {};
 			all[ groupid ][ fieldid ] = {
 				template : wp.template( 'cmb2-wysiwyg-' + groupid + '-' + fieldid ),
 				defaults : {
@@ -131,20 +135,22 @@ window.CMB2.wysiwyg = window.CMB2.wysiwyg || {};
 	wysiwyg.initAll = function() {
 		var $this,data,initiated;
 
-		$( '.cmb2-wysiwyg-placeholder' ).each( function() {
-			$this = $( this );
-			data  = $this.data();
+		$( '.cmb2-wysiwyg-placeholder' ).each(
+			function() {
+				$this = $( this );
+				data  = $this.data();
 
-			if ( data.groupid ) {
+				if ( data.groupid ) {
 
-				data.id    = $this.attr( 'id' );
-				data.name  = $this.attr( 'name' );
-				data.value = $this.val();
+					  data.id    = $this.attr( 'id' );
+					  data.name  = $this.attr( 'name' );
+					  data.value = $this.val();
 
-				wysiwyg.init( $this, data, false );
-				initiated = true;
+					  wysiwyg.init( $this, data, false );
+					  initiated = true;
+				}
 			}
-		} );
+		);
 
 		if ( true === initiated ) {
 			if ( 'undefined' !== typeof window.QTags ) {
@@ -201,9 +207,11 @@ window.CMB2.wysiwyg = window.CMB2.wysiwyg || {};
 	 * @return {void}
 	 */
 	wysiwyg.shiftStart = function( evt, $btn, $from, $to ) {
-		$from.add( $to ).find( '.wp-editor-wrap textarea' ).each( function() {
-			wysiwyg.destroy( $( this ).attr( 'id' ) );
-		} );
+		$from.add( $to ).find( '.wp-editor-wrap textarea' ).each(
+			function() {
+				wysiwyg.destroy( $( this ).attr( 'id' ) );
+			}
+		);
 	};
 
 	/**
@@ -219,9 +227,11 @@ window.CMB2.wysiwyg = window.CMB2.wysiwyg || {};
 	 * @return {void}
 	 */
 	wysiwyg.shiftComplete = function( evt, $btn, $from, $to ) {
-		$from.add( $to ).each( function() {
-			wysiwyg.initRow( $( this ), evt );
-		} );
+		$from.add( $to ).each(
+			function() {
+				wysiwyg.initRow( $( this ), evt );
+			}
+		);
 	};
 
 	/**
@@ -237,28 +247,30 @@ window.CMB2.wysiwyg = window.CMB2.wysiwyg || {};
 	wysiwyg.initRow = function( $row, evt ) {
 		var $toReplace, data, defVal;
 
-		$row.find( '.cmb2-wysiwyg-inner-wrap' ).each( function() {
-			$toReplace    = $( this );
-			data          = $toReplace.data();
-			defVal        = window.CMB2.getFieldArg( data.hash, 'default', '' );
-			defVal        = 'undefined' !== typeof defVal && false !== defVal ? defVal : '';
+		$row.find( '.cmb2-wysiwyg-inner-wrap' ).each(
+			function() {
+				$toReplace = $( this );
+				data       = $toReplace.data();
+				defVal     = window.CMB2.getFieldArg( data.hash, 'default', '' );
+				defVal     = 'undefined' !== typeof defVal && false !== defVal ? defVal : '';
 
-			data.iterator = $row.data( 'iterator' );
-			data.fieldid  = data.id;
-			data.id       = data.groupid + '_' + data.iterator + '_' + data.fieldid;
-			data.name     = data.groupid + '[' + data.iterator + '][' + data.fieldid + ']';
-			data.value    = 'cmb2_add_row' !== evt.type && $toReplace.find( '.wp-editor-area' ).length ? $toReplace.find( '.wp-editor-area' ).val() : defVal;
+				data.iterator = $row.data( 'iterator' );
+				data.fieldid  = data.id;
+				data.id       = data.groupid + '_' + data.iterator + '_' + data.fieldid;
+				data.name     = data.groupid + '[' + data.iterator + '][' + data.fieldid + ']';
+				data.value    = 'cmb2_add_row' !== evt.type && $toReplace.find( '.wp-editor-area' ).length ? $toReplace.find( '.wp-editor-area' ).val() : defVal;
 
-			// The destroys might not have happened yet.  Don't init until they have.
-			if ( 0 === toBeDestroyed.length ) {
+				// The destroys might not have happened yet.  Don't init until they have.
+				if ( 0 === toBeDestroyed.length ) {
 
-				wysiwyg.init( $toReplace, data );
+					  wysiwyg.init( $toReplace, data );
 
-			} else {
-				toBeInitialized.push( [$toReplace, data] );
-				window.setTimeout( delayedInit, 100 );
+				} else {
+					toBeInitialized.push( [$toReplace, data] );
+					window.setTimeout( delayedInit, 100 );
+				}
 			}
-		} );
+		);
 
 	};
 
@@ -279,7 +291,7 @@ window.CMB2.wysiwyg = window.CMB2.wysiwyg || {};
 		}
 
 		var mceActive = window.cmb2_l10.user_can_richedit && window.tinyMCE;
-		var qtActive = 'function' === typeof window.quicktags;
+		var qtActive  = 'function' === typeof window.quicktags;
 		$.extend( data, getGroupData( data ) );
 
 		initOptions( data );

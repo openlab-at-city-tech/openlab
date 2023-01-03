@@ -15,12 +15,15 @@ class CMB2_Type_Text_Datetime_Timestamp extends CMB2_Type_Picker_Base {
 	public function render( $args = array() ) {
 		$field = $this->field;
 
-		$args = wp_parse_args( $this->args, array(
-			'value'      => $field->escaped_value(),
-			'desc'       => $this->_desc(),
-			'datepicker' => array(),
-			'timepicker' => array(),
-		) );
+		$args = wp_parse_args(
+			$this->args,
+			array(
+				'value'      => $field->escaped_value(),
+				'desc'       => $this->_desc(),
+				'datepicker' => array(),
+				'timepicker' => array(),
+			)
+		);
 
 		if ( empty( $args['value'] ) ) {
 			$args['value'] = $field->escaped_value();
@@ -40,13 +43,16 @@ class CMB2_Type_Text_Datetime_Timestamp extends CMB2_Type_Picker_Base {
 	}
 
 	public function date_args( $args, $has_good_value ) {
-		$date_args = wp_parse_args( $args['datepicker'], array(
-			'class' => 'cmb2-text-small cmb2-datepicker',
-			'name'  => $this->_name( '[date]' ),
-			'id'    => $this->_id( '_date' ),
-			'value' => $has_good_value ? $this->field->get_timestamp_format( 'date_format', $args['value'] ) : '',
-			'desc'  => '',
-		) );
+		$date_args = wp_parse_args(
+			$args['datepicker'],
+			array(
+				'class' => 'cmb2-text-small cmb2-datepicker',
+				'name'  => $this->_name( '[date]' ),
+				'id'    => $this->_id( '_date' ),
+				'value' => $has_good_value ? $this->field->get_timestamp_format( 'date_format', $args['value'] ) : '',
+				'desc'  => '',
+			)
+		);
 
 		$date_args['rendered'] = true;
 
@@ -55,14 +61,17 @@ class CMB2_Type_Text_Datetime_Timestamp extends CMB2_Type_Picker_Base {
 	}
 
 	public function time_args( $args, $has_good_value ) {
-		$time_args = wp_parse_args( $args['timepicker'], array(
-			'class' => 'cmb2-timepicker text-time',
-			'name'  => $this->_name( '[time]' ),
-			'id'    => $this->_id( '_time' ),
-			'value' => $has_good_value ? $this->field->get_timestamp_format( 'time_format', $args['value'] ) : '',
-			'desc'  => $args['desc'],
-			'js_dependencies' => array( 'jquery-ui-core', 'jquery-ui-datepicker', 'jquery-ui-datetimepicker' ),
-		) );
+		$time_args = wp_parse_args(
+			$args['timepicker'],
+			array(
+				'class'           => 'cmb2-timepicker text-time',
+				'name'            => $this->_name( '[time]' ),
+				'id'              => $this->_id( '_time' ),
+				'value'           => $has_good_value ? $this->field->get_timestamp_format( 'time_format', $args['value'] ) : '',
+				'desc'            => $args['desc'],
+				'js_dependencies' => array( 'jquery-ui-core', 'jquery-ui-datepicker', 'jquery-ui-datetimepicker' ),
+			)
+		);
 
 		$time_args['rendered'] = true;
 

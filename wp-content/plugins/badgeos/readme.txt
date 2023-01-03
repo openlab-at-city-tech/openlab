@@ -1,10 +1,10 @@
 === BadgeOS ===
 Contributors: badgeos, learningtimes, wooninjas
 Donate link: http://badgeos.org/contribute/donate/
-Tags: badge, badges, openbadges, learningtimes, OBI, mozilla, open badges, achievement, award, reward, engagement, submission, nomination, API, open credit, credit
+Tags: badge, badges, openbadges, gamification, learningtimes, OBI, mozilla, open badges, achievement, points, ranks, award, reward, engagement, submission, nomination, API, open credit, credit
 Requires at least: 4.0
-Tested up to: 5.8.3
-Stable tag: 3.6.14
+Tested up to: 6.1
+Stable tag: 3.7.1.5
 License: GNU AGPLv3
 License URI: http://www.gnu.org/licenses/agpl-3.0.html
 
@@ -12,142 +12,112 @@ BadgeOS turns your site into an achievement and badging system. Easily create ba
 
 == Description ==
 
-[BadgeOS](http://badgeos.org "BadgeOS")&trade; turns your WordPress site into an achievement, badging and engagement management system. Your users complete steps, demonstrate skills and knowledge, and earn digital badges/points/ranks. Easily define the achievements, organize the badge requirements any way you like, and choose from and combine a range of assessment options to determine whether each task or requirement has been achieved.
+[BadgeOS](http://badgeos.org "BadgeOS")&trade; allows you to gamify your WordPress site by rewarding users with digital badges, points and ranks for interacting with the website.
 
-Create badges and set up the achievements/points/ranks to earn them. Badges are Mozilla OBI compatible and shareable via BadgeOS Social Share add-on
+You can easily create unlimited achievements and ranks using different actions as triggers. You can also award different point types to your users based on the tasks they complete.
 
-BadgeOS is extremely powerful and infinitely extensible. Check out some of the out-of-the-box features:
-
-
-**Many ways to define achievements and give badges**
-
-*   Reviewed submissions
-*   Auto-approving submissions
-*   Nominations and review
-*   Site activity (triggers based on publising posts and pages, commenting and logging in to your site)
-*   Completing specific other achievements one or a specific number of times
-*   Completing one, select or all achievements of a specific type
-*   Option to Award/Revoke Badges/Points/Ranks in bulk
-*   Point/Rank award on completing the required steps/triggers
-*   Admin Given Badges/Points/Ranks
-*   Option to transfer points to other users via BadgeOS Transfer Points add-on
-*   Community Activity (with the powerful [BadgeOS Community Add-on](http://wordpress.org/extend/plugins/badgeos-community-add-on/ "BadgeOS Community Add-on"))
-*   Integration with [LearnDash](https://badgeos.org/downloads/badgeos-learndash-pro/ "BadgeOS LearnDash Pro") and [LifterLMS](https://badgeos.org/downloads/lifterlms-badgeos-integration/ "BadgeOS LifterLMS Integration")
-*   Integration with [EDD](https://badgeos.org/downloads/badgeos-edd-integration-addon/ "BadgeOS EDD Integration") and [WooCommerce](https://badgeos.org/downloads/badgeos-woocommerce-integration/ "BadgeOS WooCommerce Integration")
-*   See growing catalog of [BadgeOS Add-ons](http://badgeos.org/add-ons/ "BadgeOS Add-ons").
+[Documentation](https://badgeos.org/docs/ "Documentation") | [BadgeOS Addons](https://badgeos.org/add-ons/ "BadgeOS Addons") | [Blogs](https://badgeos.org/developers/ "Developer Resources") | [Developer Resources](https://badgeos.org/blog/ "Blogs")
 
 
-**Define an Unlimited Number of Achievement Types**
+**Reward Your Users**
+= BadgeOS allows you to add efficient gamification elements to your site: =
+*  **Points:** Award and deduct point types based on the user’s actions on the site.
+*  **Achievements:** Award users for completing a specific task, set of tasks or collecting a certain amount of points. 
+*  **Ranks:** Create a user-hierarchy that your users can climb up as they interact with your site.
 
-*   Create as many types of achievement as you like
-*   Name achievement types whatever you wish
-*   Easily define how they relate to one another using the 'Required Steps' tool
-*   Set default images for each achievement type or select unique images for every achievement item
+**Open Badge Compliance**
 
-**Define an Unlimited Number of Rank Types**
+BadgeOS is the only plugin that allows you to create Open Badge Compliant achievements that contain digital information that can be verified on the site of the badge issues or using third-party verification tools.
 
-*   Create as many types of rank as you like
-*   Name rank types whatever you wish
-*   Easily define how they relate to one another using the 'Required Steps' tool
-*   Set default images for each rank type or select unique images for every achievement item
+**Use A Wide Range Of Triggers To Award Badges, Points and Ranks**
+= You can reward your users based on a wide range of triggers: =
+* Log in to website
+* Login for X days
+* Not login for X days
+* Comment on a post
+* Comment on a specific post
+* Publish a new post
+* Visit a post
+* Award to author when a user visits post
+* Publish a new page
+* Visit a page
+* Award to author when a user visits page
+* Register to the website
+* Daily visit to the website
+* On User Birthday
+* Achievement to the first X users
+* After completing the number of days
+* After completing the number of months
+* After completing the number of years
+* Specific Achievement 
+* Any achievement of a type
+* All achievements of type
+* Remove Achievements on points deduct
 
-**Define an Unlimited Number of Point Types**
+Ranks and badges can also be earned by meeting point thresholds. Additionally, admins can also manually award and revoke achievements, points and ranks.
 
-*   Create as many types of points as you like
-*   Name point types whatever you wish
-*   Easily define how they relate to one another using the 'Required Steps' tool
-*   Set default images for each rank type or select unique images for every achievement item
+**Features:**
+= BadgeOS’s extensive features include the following: =
+*  **Achievements:** Create unlimited achievement types such as badges, medals, and trophies.
+*  **Ranks:** Build a hierarchy system for your users with different rank types and ranks (for example Tiers, Levels, Stages).
+*  **Points:** You can award and deduct points and configure unlimited point types.
+*  **Open Badge Compliance:** BadgeOS allows you to issue open-badge compliant, verifiable badges to validate knowledge and skills.
+*  **Shareable Badges:** Badges are Mozilla Open Badge (OBI) compatible through integration of the “BadgeOS Social Sharing” add-on. User can share earned OB standard badges to Facebook, Twitter, Linkedin, and any other platform using embed code.
+*  **Required Steps Manager:** BadgeOS uses a simple interface to define required steps to earn achievements, points and ranks. There is also an option to award badge by doing 1 step out of many.
+*  **Log Entries:** The BadgeOS plugin provides an option to the admin to log all the gamification  entries.
+*  **Not Earned Image Option:** BadgeOS allows you to set a not earned image for the achievements. So users could view a different badge image until they earned that specific achievement.
+*  **Thumbnail Size:** In BadgeOS plugin you can customize the thumbnail size as per your site style
+*  **Built-in Assests:** BadgeOS now includes several free assets or icon image packs that can be used as default images for any of your achievement types.
+*  **Delete Data on Uninstall:** If this option is enabled, it will delete all BadgeOS database entries on uninstall, including posts, setting options, user meta.
+*  **Default View:** Using this option, you can determine whether certain BadgeOS shortcodes will be displayed as a list or a grid.
+*  **Shortcodes and Blocks:** Shortcodes and blocks provide you with additional ways to insert BadgeOS content into any page or post
+*  **Widgets:** The BadgeOS plugin provides several widgets to display BadgeOS information that can be placed anywhere your theme has designated as a widget area.
+*  **Email Notifications:** With BadgeOS email notifications, you can send email notifications to users when they earn an achievement, rank or points.
+*  **Bulk Options:** You can award and revoke achievements, ranks and points in bulk.
 
-**Design Beautiful Badge and Achievement Images from within WordPress**
+**BadgeOS Integrates With The Best WordPress Plugins**
+= Learning Management System =
+*  [LearnDash](https://badgeos.org/downloads/learndash-add-on/ "LearnDash")
+*  [TutorLMS](https://badgeos.org/downloads/badgeos-tutorlms-integration/ "TutorLMS")
+*  [LifterLMS](https://badgeos.org/downloads/lifterlms-badgeos-integration/ "LifterLMS")
 
-*   Use "[BadgeOS Badge Builder]( https://badgeos.org/downloads/badgeos-badge-builder/ "BadgeOS Badge Builder" )" to create professional looking badge/point/rank images right from within WordPress
-*   Launch the Badge Builder from any achievement/point/rank types editing screen in WordPress admin
-*   Choose from a variety of badge shapes and border styles
-*   Select from a library of thousands of Noun Project icons, or upload your own to the center of any badge
-*   Add or remove a banner with text to your badge
-*   Full color palette selection for border, fill, icon and banner
-*   Saves automatically to your WordPress Media Library for easy re-use for other achievements or anywhere else on your site
-*   Edit previously created badge and achievement images and save new versions to your Media Library
+= Communities =
+*  [BuddyPress](https://badgeos.org/downloads/community/ "BuddyPress")
+*  [bbPress](https://badgeos.org/downloads/community/ "bbPress")
 
-**Sharable Badges**
+= Memberships =
+*  [Paid Memberships Pro](https://badgeos.org/downloads/badgeos-paid-membership-pro-integration/ "Paid Memberships Pro")
+*  [Restrict Content Pro](https://badgeos.org/downloads/badgeos-restrict-content-pro-integration/ "Restrict Content Pro")
+*  [MemberPress](https://badgeos.org/downloads/badgeos-memberpress-integration/ "MemberPress")
 
-*   Badges are Mozilla Open Badge (OBI) compatible through integration of the "[BadgeOS Social Sharing](https://badgeos.org/downloads/badgeos-social-sharing/ "BadgeOS Social Sharing" )" add-on
-*   Share earned OB standard badges to Facebook, Twitter, Linked Inn, and any other platform using embed code
-*   Allowed Badges can be automatically baked into OB standard badges
+= E-commerce =
+* [WooCommerce](https://badgeos.org/downloads/badgeos-woocommerce-integration/ "WooCommerce")
+* [Easy Digital Download Integration](https://badgeos.org/downloads/badgeos-edd-integration-addon/ "Easy Digital Download Integration")
 
-**'Required Steps' Manager**
+= Other =
+* [Zapier](https://badgeos.org/downloads/badgeos-zapier-integration/ "Zapier")
 
-*   Simple yet powerful admin interface for defining the "Required Steps" for any badge or achievement/Points/Ranks.
-*   Easily link together one or more triggers, steps or actions into the conditions needed to earn a badge/Points/Ranks or mark an achievement.
-*   Extend the Required Steps options using the free [BadgeOS Community Add-on](http://wordpress.org/extend/plugins/badgeos-community-add-on/ "BadgeOS Community Add-on").
-*   Also extend Required Steps with other [BadgeOS Add-ons](http://badgeos.org/add-ons "BadgeOS Add-ons").
-
-
-**Reward User Progress**
-
-*   Issue badges for any combination of achievements
-*   Award points for commenting, logging in, making submissions, completing any combination of tasks
-*   Display a congratulatory message, customizable per Achievement, on each achievement page.
-
-**Earned Achievements Widget**
-
-* Shows logged in users what badges/points/ranks they have earned.
-* Option to choose which specific achievement/points/ranks types to display in the widget.
-* Set the parameters for the widget to decide how many recent badges/ranks to display.
-* Option to show logged in users total points they have earned (if you are using BadgeOS points mechanism).
-
-**Theme Agnostic, Shortcodes and Shortcode Embedder**
-
-* BadgeOS works with just about any standard WordPress theme.
-* No special hooks or theme updates are needed.
-* Turn any page or post into a way to display available achievements/points/ranks and for users to track their progress.
-* Multiple options and parameters for each shortcode for great flexibility.
-* Shortcode WYSIWYG embedder - appears in the toolbar of all WordPress content editor areas, allowing you to transform any page or post into part of your achievement system -- without referencing any of the shortcodes.
-* Shortcodes to bring submission and nomination review to the front-end of your site.
-* Shortcode to integrate specific available achievements into any post or page of your site.
-* [Shortcode documentation](http://badgeos.org/support/shortcodes/ "BadgeOS Shortcodes") in the plugin menu and on BadgeOS.org.
-* Just activate BadgeOS and place simple shortcodes on any page or post, and you've got an engagement management system running on your WordPress site!
-
-
-**Submission and Nomination Review**
-
-* Easily review submissions and nominations from members.
-* Approve or deny submissions with one click.
-* Shortcodes with multiple options for review of submissions on any page or post on your site.
-* Powerful shortcodes to add an achievement submission or nomination form to any post or page.
-* Add comments to engage the member and elaborate on your decisions.
-* Optional notification emails inform you when people on your site have made submissions or nominated peers.
-* Submission Notification Settings: Specify an unlimited number of email addresses for submission admin notifications.
-* Notifications for: new submissions, new comments, and submission status changes
-* Filter Submissions to only show those from members of specific BuddyPress Groups (requires plugins: [BuddyPress](http://wordpress.org/extend/plugins/buddypress/ "BuddyPress") and [BadgeOS Community Add-on](http://wordpress.org/extend/plugins/badgeos-community-add-on/ "BadgeOS Community Add-on"))
-
-
-= Extensibility and BadgeOS Add-ons =
-
-* BadgeOS is designed to be a true operating system for turning any WordPress site into an engagement management application.
-* BadgeOS offers a growing catalog of [Add-ons](http://badgeos.org/add-ons/ "BadgeOS Add-ons") to the plugin that enhance core functionality with specialized functions.
-* Built with expandability in mind to allow virtually anything to trigger and recognize achievement.
-* Check out some of the [BadgeOS customizations](http://badgeos.org/services/badgeos-customization/ "We'll help you customize your BadgeOS site") we've already implemented to get a sense for what is possible with BadgeOS.
-* [Developer Documentation and APIs](http://badgeos.org/developers/ "BadgeOS Developer Resources") are freely available.  [Share your own BadgeOS add-ons](http://badgeos.org/developers/share "Share Your BadgeOS Add-Ons") with the community today.
-
-
-= Stay Connected / Helpful Links =
-
-BadgeOS is made available by [LearningTimes, LLC](http://www.learningtimes.com/ "LearningTimes web site"). Here are some ways to stay connected and to see what else we are up to:
-
-* [BadgeOS.org](http://badgeos.org/ "BadgeOS web site") - Contact Us, Video Tutorials, Examples, News
-* [LearningTimes](http://www.learningtimes.com "LearningTimes web site") - Online learning programs, development and expertise
-* [BadgeOS Developer Resources](http://badgeos.org/developers "BadgeOS Developer Docs and APIs") - Open documentation, APIs and resources for BadgeOS developers.
-* [Facebook](https://web.facebook.com/groups/1899542540365937/ "BadgeOS on Facebook") - BadgeOS on Facebook
-* [Twitter](https://twitter.com/BadgeOs "BadgeOS on Twitter") - BadgeOS Tweets
-* [E-Mailing List](http://badgeos.org/join-list/ "BadgeOS Occasional Mailing List - No spam!") - Occasional updates via e-mail
-* [GitHub](https://github.com/opencredit/badgeos "BadgeOS on GitHub") - Report issues, contribute code
-
-= Developer Documentation: =
-
-BadgeOS is built with expandability in mind to allow virtually anything to trigger and recognize achievement. The [Developer Resources](http://badgeos.org/developers/ "BadgeOS Developers") area of the BadgeOS site provides links to documentation, APIs and guides to extending BadgeOS and integrating it with other plugins and systems.  [Share](http://badgeos.org/developers/share/ "Share Yoru Plugins and Add-Ons") your BadgeOS Add-Ons and BadgeOS-compatible plugins.
-
-Want to contribute to BadgeOS core? That's great! Visit our [GitHub site for the project at](https://github.com/opencredit/badgeos/tree/master#contributing "BadgeOS on GitHub").
+= Enhance BadgeOS With More Functions With Our Add-ons =
+* [Activity Codes](https://badgeos.org/downloads/activity-codes/ "Activity Codes")
+* [Auto Messages](https://badgeos.org/downloads/auto-messages/ "Auto Messages")
+* [Badge Builder](https://badgeos.org/downloads/badgeos-badge-builder/ "Badge Builder")
+* [BadgeStack](https://badgeos.org/downloads/badgestack/ "BadgeStack")
+* [Central Account](https://badgeos.org/downloads/badgeos-central-account-add-on/ "Central Account")
+* [Community](https://badgeos.org/downloads/community/ "Community")
+* [Congratulations](https://badgeos.org/downloads/congratulations/ "Congratulations")
+* [Group Management](https://badgeos.org/downloads/group-management/ "Group Management")
+* [Guest Achievements](https://badgeos.org/downloads/guest-achievements/ "Guest Achievements")
+* [Interactive Progress Map](https://badgeos.org/downloads/interactive-progress-map/ "Interactive Progress Map")
+* [Invite Codes](https://badgeos.org/downloads/invite-codes/ "Invite Codes")
+* [Leaderboards](https://badgeos.org/downloads/leaderboards/ "Leaderboards")
+* [Referring Links](https://badgeos.org/downloads/referring-link/ "Referring Links")
+* [Reports](https://badgeos.org/downloads/reports/ "Reports")
+* [REST API](https://badgeos.org/downloads/badgeos-rest-api/ "REST API")
+* [Share2Earn](https://badgeos.org/downloads/badgeos-share2earn/ "Share2Earn")
+* [Social Sharing](https://badgeos.org/downloads/badgeos-social-sharing/ "Social Sharing")
+* [Submissions and Nominations](https://badgeos.org/downloads/badgeos-nominations-submissions/ "Submissions and Nominations")
+* [Suggested Achievements](https://badgeos.org/downloads/suggested-achievements-widget/ "Suggested Achievements")
+* [Transfer Points](https://badgeos.org/downloads/badgeos-transfer-points/ "Transfer Points")
 
 = License Info =
 
@@ -156,8 +126,6 @@ LearningTimes, LLC licenses BadgeOS to you under the terms of the GNU Affero Gen
 There is NO WARRANTY for this software, express or implied, including the implied warranties of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License, version 3, at [http://www.gnu.org/licenses/agpl-3.0.html](http://www.gnu.org/licenses/agpl-3.0.html "License") for more details.
 
 == Installation ==
-
-
 1. Upload 'badgeos' to the '/wp-content/plugins/' directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
 3. Visit the BadgeOS menu to add Badges/ranks and set up new Achievement/Point/Rank types.
@@ -191,11 +159,11 @@ Yes! After installing BadgeOS, enable Credly Integration in the BadgeOS menu. Th
 
 Yes, our designers are available to create custom badges that represent your brand, the kind of achievements you recognize, and the audience you are reaching.  From a single badge to a complete constellation, our team of professional badge designers get to know your needs through a tested Badge Design Process which consistently produces successful and delightful results.
 
-See examples and learn more at: [http://badgeos.org/services/badge-design/](http://badgeos.org/services/badge-design/ "Badge Design")
+learn more at: [http://badgeos.org/services/badge-design/](http://badgeos.org/services/badge-design/ "Badge Design")
 
 = Do you offer services to help us design, build or customize our BadgeOS site? =
 
-Yes, we do. We especially enjoy working on innovative projects with forward-thinking teams extending achievement recognition into new environments and surfacing achievement in new ways. See [examples](http://badgeos.org/about/sample-sites/ "Sample pojects") and learn more at: [http://badgeos.org/services/badgeos-customization/](http://badgeos.org/services/badgeos-customization/ "BadgeOS Customization").
+Yes, we do. We especially enjoy working on innovative projects with forward-thinking teams extending achievement recognition into new environments and surfacing achievement in new ways. learn more at: [http://badgeos.org/services/badgeos-customization/](http://badgeos.org/services/badgeos-customization/ "BadgeOS Customization").
 
 = Where should I report issues or bugs? =
 
@@ -205,10 +173,6 @@ The ideal place for bug and issue reporting is on the [GitHub](https://github.co
 
 Thanks for asking!  Please do share back code modifications or enhancements you make for inclusion in BadgeOS core or as add-ons. (Functions that are specialized for just some users are likely best as add-on plugins to BadgeOS. We can help figure that out with you.) Visit us on [GitHub](https://github.com/opencredit/badgeos "BadgeOS on GitHub") to share your code with the BadgeOS community.
 
-= Credly is really cool. How can I learn more about it? =
-
-[Credly](https://credly.com/ "Credly web site") is the universal way to recognize, store and share life's achievements. We've integrated Credly into BadgeOS because it's downright the easiest, most fun way to collect evidence of all your achievements in one place and then share them out when and where it matters most. There are a rapidly growing number of platforms and apps that are using the Credly "Open Credit" API to enable sharable badges; the BadgeOS WordPress integration is just one great example! Visit us [Credly.com](https://credly.com "Credly on the Web") to learn more or [contact](https://credly.com/contact "Contact us") us for guidance with using the free Open Credit API in your own projects or applications.
-
 
 == Screenshots ==
 
@@ -216,36 +180,79 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 
 2. Use BadgeOS to create an unlimited number of achievement types, and easily define how they relate to one another.
 
-3. Earned badges on your BadgeOS site are "Open Badges" that are sharable via Credly to virtually any social network, site, blog or the Mozilla Backpack.
+3. BadgeOS gives you a simple yet powerful admin interface for defining the "Required Steps" for any badge or achievement.
 
-4. Use the integrated Credly Badge Builder to easily create beautiful badge images right from within WordPress. Launch the Badge Builder from any achievement or achievement type editing screen.
+4. BadgeOS shortcodes make it easy to turn any WordPress page into an achievements page, regardless of the theme you are using.
 
-5. Choose from a variety of badge shapes and border styles, and adjust the colors of each element.
+5. Use the "BadgeOS Shortcode" button available in any WordPress content area to easily configure and insert a shortcode for any BadgeOS component. With just a click or two, you can add custom, dynamic achievement elements (such as lists of badges or other achievements, submission review pages, submission forms, or individual achievements) anywhere on your site.
 
-6. Select from a library of thousands of Noun Project icons, or upload your own to the center of any badge.
+6. Daily visit Trigger
 
-7. BadgeOS gives you a simple yet powerful admin interface for defining the "Required Steps" for any badge or achievement.
+7. Register to the website trigger
 
-8. BadgeOS shortcodes make it easy to turn any WordPress page into an achievements page, regardless of the theme you are using.
+8. Point types on achievements
 
-9. Use the "BadgeOS Shortcode" button available in any WordPress content area to easily configure and insert a shortcode for any BadgeOS component. With just a click or two, you can add custom, dynamic achievement elements (such as lists of badges or other achievements, submission review pages, submission forms, or individual achievements) anywhere on your site.
+9. Earned point types on Profile
 
-10. Daily visit Trigger
+10. Rank requirement
 
-11. Register to the website trigger
-
-12. Point types on achievements
-
-13. Earned point types on Profile
-
-14. Rank requirement
-
-15. Ranks data
+11. Ranks data
 
 == Changelog ==
 
+= 3.7.1.5 =
+* New: Shortcode/block to show BadgeOS user dashboard.
+* Fix: Email content issue.
+
+= 3.7.1.4 =
+* Fix: Open badge integration pages.
+* Fix: Earned open badges download link in user profile.
+* Fix: Metabox value output conflicting with BadgeOS addons.
+* Fix: Limit issue for badge and rank awarding list in user profile. 
+
+= 3.7.1.3 =
+* Fix: CSRF checks.
+* Fix: Ajax request issues.
+* Fix: Evidence block issue.
+* Fix: Open badge verification issue.
+* Fix: Achievement double emails issue.
+* Fix: Widgets/blocks/shortcodes issues.
+* Fix: Bulk achievement award/revoke issues.
+* Fix: Triggers that can be used with specific options.
+
+= 3.7.1.2 =
+* Fix: Shortcodes filename issue.
+* Fix: Minor issues.
+
+= 3.7.1.1 =
+* improvement: Plugin coding standard.
+
+= 3.7.1 =
+* Fix: SQL tainted queries.
+* Fix: Unsanitize parameters in shortcodes/widgets/blocks.
+* Fix: Steps saving issue with achievements/points/ranks.
+* Fix: Achievement/Ranks/Points image resizing issues from default settings.
+* Fix: Remove limit for downloading assets from assets menu.
+
+= 3.7.0 =
+* New: Added "On User Birthday" trigger on achievements, ranks, and points award.
+* New: Added a tick mark on the last earned ranks single and listing shortcodes.
+* New: Added a tick mark on the last earned achievements single and listing shortcodes.
+* New: Added "Remove a Rank" and "Remove an Achievement" triggers on points deduct.
+* New: Added "Achievement to the first X users" trigger on Achievements.
+* New: Added "Points to the first X users" trigger on Points.
+* New: Added "Rank to the first X users" trigger on Ranks.
+* New: Added two new filters i.e "badgeos_attachment_email" and "badgeos_evidence_page_content" on evidence page.
+* New: Added wpautop() function on evidence page content.
+* New: Added the Achievement, Rank, and Points award Emails on the bulk award.
+* New: Added the option to add a badge and have it achievable by doing 1 step out of many ones under the achievement's required section.
+* Fix: Updated the existing filters of the evidence page.
+* Fix: Improved the existing triggers.
+* Fix: Made the plugin compatible with the latest WordPress.
+* Fix: Minor Issues.
+
 = 3.6.14 =
-* Fix: Content duplication issue in evidence shortcode 
+* Fix: Content duplication issue in evidence shortcode. 
 
 = 3.6.13 =
 * New: Option last earned added in achievement list shortcode filter 

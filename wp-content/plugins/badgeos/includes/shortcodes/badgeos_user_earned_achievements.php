@@ -189,8 +189,6 @@ function badgeos_earned_achievements_shortcode( $atts = array () ){
         return '';
     }
 
-    global $user_ID;
-
     $passed_user_id = get_current_user_id();
     if( isset( $atts['user_id'] ) && ! empty( $atts['user_id'] ) ) {
         $passed_user_id = $atts['user_id'];
@@ -263,7 +261,7 @@ function badgeos_earned_achievements_shortcode( $atts = array () ){
     // Search
     if ( $show_search != 'false' ) {
 
-        $search = isset( $_POST['achievements_list_search'] ) ? $_POST['achievements_list_search'] : '';
+        $search = isset( $_POST['achievements_list_search'] ) ? sanitize_text_field( $_POST['achievements_list_search'] ) : '';
         $badges .= '<div id="badgeos-achievements-search">';
         $badges .= '<form id="earned_achievements_list_search_go_form" class="earned_achievements_list_search_go_form" action="'. get_permalink( get_the_ID() ) .'" method="post">';
         $badges .= sprintf( __( 'Search: %s', 'badgeos' ), '<input type="text" id="earned_achievements_list_search" name="earned_achievements_list_search" class="earned_achievements_list_search" value="'. $search .'">' );

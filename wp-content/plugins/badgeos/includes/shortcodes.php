@@ -1,6 +1,6 @@
 <?php
 /**
- * Custom Shortcodes
+ * Custom Shortcodes.
  *
  * @package BadgeOS
  * @subpackage Front-end
@@ -9,20 +9,21 @@
  * @link https://credly.com
  */
 
-include( plugin_dir_path( dirname( __FILE__ ) ) . 'includes/shortcodes/badgeos_achievements_list.php' );
-include( plugin_dir_path( dirname( __FILE__ ) ) . 'includes/shortcodes/badgeos_achievement.php' );
-include( plugin_dir_path( dirname( __FILE__ ) ) . 'includes/shortcodes/badgeos_user_earned_achievements.php' );
-include( plugin_dir_path( dirname( __FILE__ ) ) . 'includes/shortcodes/badgeos_user_earned_ranks.php' );
-include( plugin_dir_path( dirname( __FILE__ ) ) . 'includes/shortcodes/badgeos_user_earned_points.php' );
-include( plugin_dir_path( dirname( __FILE__ ) ) . 'includes/shortcodes/badgeos_rank.php' );
-include( plugin_dir_path( dirname( __FILE__ ) ) . 'includes/shortcodes/badgeos_ranks.php' );
-include( plugin_dir_path( dirname( __FILE__ ) ) . 'includes/shortcodes/evidence-shortcode.php' );
+require plugin_dir_path( dirname( __FILE__ ) ) . 'includes/shortcodes/badgeos_achievements_list.php';
+require plugin_dir_path( dirname( __FILE__ ) ) . 'includes/shortcodes/badgeos_achievement.php';
+require plugin_dir_path( dirname( __FILE__ ) ) . 'includes/shortcodes/badgeos_user_earned_achievements.php';
+require plugin_dir_path( dirname( __FILE__ ) ) . 'includes/shortcodes/badgeos_user_earned_ranks.php';
+require plugin_dir_path( dirname( __FILE__ ) ) . 'includes/shortcodes/badgeos_user_earned_points.php';
+require plugin_dir_path( dirname( __FILE__ ) ) . 'includes/shortcodes/badgeos_rank.php';
+require plugin_dir_path( dirname( __FILE__ ) ) . 'includes/shortcodes/badgeos_ranks.php';
+require plugin_dir_path( dirname( __FILE__ ) ) . 'includes/shortcodes/evidence-shortcode.php';
+require plugin_dir_path( dirname( __FILE__ ) ) . 'includes/shortcodes/user-dashboard.php';
 /**
  * Register a new BadgeOS Shortcode
  *
  * @since  1.4.0
  *
- * @param  array  $args Shortcode Args.
+ * @param  array $args Shortcode Args.
  * @return object       Shortcode Object.
  */
 function badgeos_register_shortcode( $args ) {
@@ -71,12 +72,12 @@ function badgeos_shortcode_help_render_help( $shortcode = array() ) {
 		</ul>
 		<p>%6$s</p>
 		',
-		$shortcode->name,
-		$shortcode->slug,
-		$shortcode->description,
-		__( 'Attributes:', 'badgeos' ),
-		badgeos_shortcode_help_render_attributes( $shortcode->attributes ),
-		badgeos_shortcode_help_render_example( $shortcode )
+		esc_html( $shortcode->name ),
+		esc_html( $shortcode->slug ),
+		esc_html( $shortcode->description ),
+		esc_html__( 'Attributes:', 'badgeos' ),
+		wp_kses_post( badgeos_shortcode_help_render_attributes( $shortcode->attributes ) ),
+		wp_kses_post( badgeos_shortcode_help_render_example( $shortcode ) )
 	);
 }
 
@@ -92,8 +93,8 @@ function badgeos_shortcode_help_render_attributes( $attributes ) {
 	$output = '';
 	if ( ! empty( $attributes ) ) {
 		foreach ( $attributes as $attribute => $details ) {
-			$accepts = ! empty( $details['values'] ) ? sprintf( __( 'Accepts: %s', 'badgeos' ), '<code>' . implode( ', ', $details['values'] ) . '</code>' ) : '';
-			$default = ! empty( $details['default'] ) ? sprintf( __( 'Default: %s', 'badgeos' ), '<code>' . $details['default'] . '</code>' ) : '';
+			$accepts = ! empty( $details['values'] ) ? sprintf( esc_html__( 'Accepts: %s', 'badgeos' ), '<code>' . implode( ', ', $details['values'] ) . '</code>' ) : '';
+			$default = ! empty( $details['default'] ) ? sprintf( esc_html__( 'Default: %s', 'badgeos' ), '<code>' . $details['default'] . '</code>' ) : '';
 			$output .= sprintf(
 				'<li><strong>%1$s</strong> – %2$s <em>%3$s %4$s</em></li>',
 				esc_attr( $attribute ),
@@ -112,14 +113,14 @@ function badgeos_shortcode_help_render_attributes( $attributes ) {
  *
  * @since  1.4.0
  *
- * @param  array  $shortcode Shortcode object.
+ * @param  array $shortcode Shortcode object.
  * @return string            HTML Markup.
  */
 function badgeos_shortcode_help_render_example( $shortcode = array() ) {
-	$attributes = wp_list_pluck( $shortcode->attributes, 'default' );
-	$examples = array_map( 'badgeos_shortcode_help_attributes', array_keys( $attributes ), array_values( $attributes ) );
+	$attributes         = wp_list_pluck( $shortcode->attributes, 'default' );
+	$examples           = array_map( 'badgeos_shortcode_help_attributes', array_keys( $attributes ), array_values( $attributes ) );
 	$flattened_examples = implode( ' ', $examples );
-	return sprintf( __( 'Example: %s', 'badgeos' ), "<code>[{$shortcode->slug} {$flattened_examples}]</code>" );
+	return sprintf( esc_html__( 'Example: %s', 'badgeos' ), "<code>[{$shortcode->slug} {$flattened_examples}]</code>" );
 }
 
 /**

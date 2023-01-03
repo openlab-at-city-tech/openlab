@@ -15,10 +15,13 @@ class CMB2_Type_Taxonomy_Multicheck extends CMB2_Type_Taxonomy_Base {
 
 	public function render() {
 		return $this->rendered(
-			$this->types->radio( array(
-				'class'   => $this->get_wrapper_classes(),
-				'options' => $this->get_term_options(),
-			), 'taxonomy_multicheck' )
+			$this->types->radio(
+				array(
+					'class'   => $this->get_wrapper_classes(),
+					'options' => $this->get_term_options(),
+				),
+				'taxonomy_multicheck'
+			)
 		);
 	}
 

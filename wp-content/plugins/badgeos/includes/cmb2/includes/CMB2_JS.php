@@ -134,7 +134,7 @@ class CMB2_JS {
 	 */
 	public static function register_colorpicker_alpha( $enqueue = false ) {
 		// Only use minified files if SCRIPT_DEBUG is off
-		$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+		$min  = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 		$func = $enqueue ? 'wp_enqueue_script' : 'wp_register_script';
 		$func( 'wp-color-picker-alpha', CMB2_Utils::url( "js/wp-color-picker-alpha{$min}.js" ), array( 'wp-color-picker' ), '2.1.3' );
 	}
@@ -161,12 +161,16 @@ class CMB2_JS {
 	protected static function colorpicker_frontend() {
 		wp_register_script( 'iris', admin_url( 'js/iris.min.js' ), array( 'jquery-ui-draggable', 'jquery-ui-slider', 'jquery-touch-punch' ), CMB2_VERSION );
 		wp_register_script( 'wp-color-picker', admin_url( 'js/color-picker.min.js' ), array( 'iris' ), CMB2_VERSION );
-		wp_localize_script( 'wp-color-picker', 'wpColorPickerL10n', array(
-			'clear'         => esc_html__( 'Clear', 'cmb2' ),
-			'defaultString' => esc_html__( 'Default', 'cmb2' ),
-			'pick'          => esc_html__( 'Select Color', 'cmb2' ),
-			'current'       => esc_html__( 'Current Color', 'cmb2' ),
-		) );
+		wp_localize_script(
+			'wp-color-picker',
+			'wpColorPickerL10n',
+			array(
+				'clear'         => esc_html__( 'Clear', 'cmb2' ),
+				'defaultString' => esc_html__( 'Default', 'cmb2' ),
+				'pick'          => esc_html__( 'Select Color', 'cmb2' ),
+				'current'       => esc_html__( 'Current Color', 'cmb2' ),
+			)
+		);
 	}
 
 	/**
@@ -181,7 +185,7 @@ class CMB2_JS {
 		}
 
 		$localized = true;
-		$l10n = array(
+		$l10n      = array(
 			'fields'            => self::$fields,
 			'ajax_nonce'        => wp_create_nonce( 'ajax_nonce' ),
 			'ajaxurl'           => admin_url( '/admin-ajax.php' ),
@@ -220,7 +224,7 @@ class CMB2_JS {
 					'stepMinute'    => 5,
 				),
 			),
-			'strings' => array(
+			'strings'           => array(
 				'upload_file'  => esc_html__( 'Use this file', 'cmb2' ),
 				'upload_files' => esc_html__( 'Use these files', 'cmb2' ),
 				'remove_image' => esc_html__( 'Remove Image', 'cmb2' ),
@@ -232,9 +236,11 @@ class CMB2_JS {
 		);
 
 		if ( isset( self::$dependencies['code-editor'] ) && function_exists( 'wp_enqueue_code_editor' ) ) {
-			$l10n['defaults']['code_editor'] = wp_enqueue_code_editor( array(
-				'type' => 'text/html',
-			) );
+			$l10n['defaults']['code_editor'] = wp_enqueue_code_editor(
+				array(
+					'type' => 'text/html',
+				)
+			);
 		}
 
 		wp_localize_script( self::$handle, self::$js_variable, apply_filters( 'cmb2_localized_data', $l10n ) );

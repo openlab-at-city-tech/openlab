@@ -22,35 +22,41 @@ abstract class P2P_Dropdown {
 
 		$labels = $this->ctype->get( 'current', 'labels' );
 
-		if ( isset( $labels->dropdown_title ) )
+		if ( isset( $labels->dropdown_title ) ) {
 			$title = $labels->dropdown_title;
-		elseif ( isset( $labels->column_title ) )
+		} elseif ( isset( $labels->column_title ) ) {
 			$title = $labels->column_title;
-		else
+		} else {
 			$title = $this->title;
+		}
 
-		return scbForms::input( array(
-			'type' => 'select',
-			'name' => array( 'p2p', $this->ctype->name, $direction ),
-			'choices' => self::get_choices( $this->ctype ),
-			'text' => $title,
-		), $_GET );
+		return scbForms::input(
+			array(
+				'type'    => 'select',
+				'name'    => array( 'p2p', $this->ctype->name, $direction ),
+				'choices' => self::get_choices( $this->ctype ),
+				'text'    => $title,
+			),
+			array_map( 'sanitize_text_field', $_GET )
+		);
 	}
 
 	protected static function get_qv() {
-		if ( !isset( $_GET['p2p'] ) )
+		if ( ! isset( $_GET['p2p'] ) ) {
 			return array();
+		}
 
 		$args = array();
 
-		$tmp = reset( $_GET['p2p'] );
+		$tmp = reset( sanitize_text_field( $_GET['p2p'] ) );
 
-		$args['connected_type'] = key( $_GET['p2p'] );
+		$args['connected_type'] = key( sanitize_text_field( $_GET['p2p'] ) );
 
 		list( $args['connected_direction'], $args['connected_items'] ) = each( $tmp );
 
-		if ( !$args['connected_items'] )
+		if ( ! $args['connected_items'] ) {
 			return array();
+		}
 
 		return $args;
 	}
@@ -58,14 +64,15 @@ abstract class P2P_Dropdown {
 	protected static function get_choices( $directed ) {
 		$extra_qv = array(
 			'p2p:per_page' => -1,
-			'p2p:context' => 'admin_dropdown'
+			'p2p:context'  => 'admin_dropdown',
 		);
 
 		$connected = $directed->get_connected( 'any', $extra_qv, 'abstract' );
 
 		$options = array();
-		foreach ( $connected->items as $item )
+		foreach ( $connected->items as $item ) {
 			$options[ $item->get_id() ] = $item->get_title();
+		}
 
 		return $options;
 	}

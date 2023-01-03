@@ -18,10 +18,10 @@ class P2P_Column_Post extends P2P_Column {
 
 	function get_admin_link( $item ) {
 		$args = array(
-			'connected_type' => $this->ctype->name,
+			'connected_type'      => $this->ctype->name,
 			'connected_direction' => $this->ctype->flip_direction()->get_direction(),
-			'connected_items' => $item->get_id(),
-			'post_type' => get_current_screen()->post_type
+			'connected_items'     => $item->get_id(),
+			'post_type'           => get_current_screen()->post_type,
 		);
 
 		return add_query_arg( $args, admin_url( 'edit.php' ) );

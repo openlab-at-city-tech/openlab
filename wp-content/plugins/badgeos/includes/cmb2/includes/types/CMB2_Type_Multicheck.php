@@ -24,14 +24,19 @@ class CMB2_Type_Multicheck extends CMB2_Type_Radio {
 			? 'cmb2-checkbox-list no-select-all cmb2-list'
 			: 'cmb2-checkbox-list cmb2-list';
 
-		$args = $this->parse_args( $this->type, array(
-			'class'   => $classes,
-			'options' => $this->concat_items( array(
-				'name'   => $this->_name() . '[]',
-				'method' => 'list_input_checkbox',
-			) ),
-			'desc' => $this->_desc( true ),
-		) );
+		$args = $this->parse_args(
+			$this->type,
+			array(
+				'class'   => $classes,
+				'options' => $this->concat_items(
+					array(
+						'name'   => $this->_name() . '[]',
+						'method' => 'list_input_checkbox',
+					)
+				),
+				'desc'    => $this->_desc( true ),
+			)
+		);
 
 		return $this->rendered( $this->ul( $args ) );
 	}

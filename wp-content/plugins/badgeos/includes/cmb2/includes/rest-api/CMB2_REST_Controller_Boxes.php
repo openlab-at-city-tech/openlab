@@ -1,6 +1,6 @@
 <?php
 /**
- * CMB2 objects/boxes endpoint for WordPres REST API.
+ * CMB2 objects/boxes endpoint for WordPress REST API.
  * Allows access to boxes configuration data.
  *
  * @todo  Add better documentation.
@@ -58,30 +58,38 @@ class CMB2_REST_Controller_Boxes extends CMB2_REST_Controller {
 		// $args['context']['default'] = 'view';
 		// $args['context']['enum'] = array( 'view', 'embed' );
 		// Returns all boxes data.
-		register_rest_route( $this->namespace, '/' . $this->rest_base, array(
+		register_rest_route(
+			$this->namespace,
+			'/' . $this->rest_base,
 			array(
-				'methods'             => WP_REST_Server::READABLE,
-				'permission_callback' => array( $this, 'get_items_permissions_check' ),
-				'callback'            => array( $this, 'get_items' ),
-				'args'                => $args,
-			),
-			'schema' => array( $this, 'get_item_schema' ),
-		) );
+				array(
+					'methods'             => WP_REST_Server::READABLE,
+					'permission_callback' => array( $this, 'get_items_permissions_check' ),
+					'callback'            => array( $this, 'get_items' ),
+					'args'                => $args,
+				),
+				'schema' => array( $this, 'get_item_schema' ),
+			)
+		);
 
 		$args['_rendered'] = array(
 			'description' => __( 'Includes the fully rendered attributes, \'form_open\', \'form_close\', as well as the enqueued \'js_dependencies\' script handles, and \'css_dependencies\' stylesheet handles.', 'cmb2' ),
 		);
 
 		// Returns specific box's data.
-		register_rest_route( $this->namespace, '/' . $this->rest_base . '/(?P<cmb_id>[\w-]+)', array(
+		register_rest_route(
+			$this->namespace,
+			'/' . $this->rest_base . '/(?P<cmb_id>[\w-]+)',
 			array(
-				'methods'             => WP_REST_Server::READABLE,
-				'permission_callback' => array( $this, 'get_item_permissions_check' ),
-				'callback'            => array( $this, 'get_item' ),
-				'args'                => $args,
-			),
-			'schema' => array( $this, 'get_item_schema' ),
-		) );
+				array(
+					'methods'             => WP_REST_Server::READABLE,
+					'permission_callback' => array( $this, 'get_item_permissions_check' ),
+					'callback'            => array( $this, 'get_item' ),
+					'args'                => $args,
+				),
+				'schema' => array( $this, 'get_item_schema' ),
+			)
+		);
 	}
 
 	/**
@@ -119,9 +127,13 @@ class CMB2_REST_Controller_Boxes extends CMB2_REST_Controller {
 
 		$boxes = CMB2_REST::get_all();
 		if ( empty( $boxes ) ) {
-			return new WP_Error( 'cmb2_rest_no_boxes', __( 'No boxes found.', 'cmb2' ), array(
-				'status' => 403,
-			) );
+			return new WP_Error(
+				'cmb2_rest_no_boxes',
+				__( 'No boxes found.', 'cmb2' ),
+				array(
+					'status' => 403,
+				)
+			);
 		}
 
 		$boxes_data = array();
@@ -211,16 +223,16 @@ class CMB2_REST_Controller_Boxes extends CMB2_REST_Controller {
 		$boxes_data = $cmb->meta_box;
 
 		if ( isset( $this->request['_rendered'] ) && $this->namespace_base !== ltrim( CMB2_REST_Controller::get_intial_route(), '/' ) ) {
-			$boxes_data['form_open'] = $this->get_cb_results( array( $cmb, 'render_form_open' ) );
+			$boxes_data['form_open']  = $this->get_cb_results( array( $cmb, 'render_form_open' ) );
 			$boxes_data['form_close'] = $this->get_cb_results( array( $cmb, 'render_form_close' ) );
 
 			global $wp_scripts, $wp_styles;
 			$before_css = $wp_styles->queue;
-			$before_js = $wp_scripts->queue;
+			$before_js  = $wp_scripts->queue;
 
 			CMB2_JS::enqueue();
 
-			$boxes_data['js_dependencies'] = array_values( array_diff( $wp_scripts->queue, $before_js ) );
+			$boxes_data['js_dependencies']  = array_values( array_diff( $wp_scripts->queue, $before_js ) );
 			$boxes_data['css_dependencies'] = array_values( array_diff( $wp_styles->queue, $before_css ) );
 		}
 
@@ -252,16 +264,16 @@ class CMB2_REST_Controller_Boxes extends CMB2_REST_Controller {
 
 		return array(
 			// Standard Link Relations -- http://v2.wp-api.org/extending/linking/
-			'self' => array(
+			'self'                   => array(
 				'href' => rest_url( $boxbase . $query_string ),
 			),
-			'collection' => array(
+			'collection'             => array(
 				'href' => rest_url( $this->namespace_base . $query_string ),
 			),
 			// Custom Link Relations -- http://v2.wp-api.org/extending/linking/
 			// TODO URL should document relationship.
 			'https://cmb2.io/fields' => array(
-				'href' => rest_url( trailingslashit( $boxbase ) . 'fields' . $query_string ),
+				'href'       => rest_url( trailingslashit( $boxbase ) . 'fields' . $query_string ),
 				'embeddable' => true,
 			),
 		);

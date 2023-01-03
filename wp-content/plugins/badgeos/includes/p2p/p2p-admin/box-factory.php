@@ -23,11 +23,14 @@ class P2P_Box_Factory extends P2P_Factory {
 			}
 		}
 
-		$box_args = wp_parse_args( $box_args, array(
-			'context' => 'side',
-			'priority' => 'default',
-			'can_create_post' => true
-		) );
+		$box_args = wp_parse_args(
+			$box_args,
+			array(
+				'context'         => 'side',
+				'priority'        => 'default',
+				'can_create_post' => true,
+			)
+		);
 
 		return $box_args;
 	}
@@ -37,10 +40,11 @@ class P2P_Box_Factory extends P2P_Factory {
 	}
 
 	function add_item( $directed, $object_type, $post_type, $title ) {
-		if ( !self::show_box( $directed, $GLOBALS['post'] ) )
+		if ( ! self::show_box( $directed, $GLOBALS['post'] ) ) {
 			return;
+		}
 
-		$box = $this->create_box( $directed );
+		$box      = $this->create_box( $directed );
 		$box_args = $this->queue[ $directed->name ];
 
 		add_meta_box(
@@ -64,12 +68,15 @@ class P2P_Box_Factory extends P2P_Factory {
 	private function create_box( $directed ) {
 		$box_args = $this->queue[ $directed->name ];
 
-		$title_class = str_replace( 'P2P_Side_', 'P2P_Field_Title_',
-			get_class( $directed->get( 'opposite', 'side' ) ) );
+		$title_class = str_replace(
+			'P2P_Side_',
+			'P2P_Field_Title_',
+			get_class( $directed->get( 'opposite', 'side' ) )
+		);
 
 		$columns = array(
-			'delete' => new P2P_Field_Delete,
-			'title' => new $title_class( $directed->get( 'opposite', 'labels' )->singular_name ),
+			'delete' => new P2P_Field_Delete(),
+			'title'  => new $title_class( $directed->get( 'opposite', 'labels' )->singular_name ),
 		);
 
 		foreach ( $directed->fields as $key => $data ) {
@@ -87,18 +94,20 @@ class P2P_Box_Factory extends P2P_Factory {
 	 * Collect metadata from all boxes.
 	 */
 	function save_post( $post_id, $post ) {
-		if ( 'revision' == $post->post_type || defined( 'DOING_AJAX' ) )
+		if ( 'revision' == $post->post_type || defined( 'DOING_AJAX' ) ) {
 			return;
+		}
 
 		if ( isset( $_POST['p2p_connections'] ) ) {
 			// Loop through the hidden fields instead of through $_POST['p2p_meta'] because empty checkboxes send no data.
 			foreach ( $_POST['p2p_connections'] as $p2p_id ) {
-				$data = scbForms::get_value( array( 'p2p_meta', $p2p_id ), $_POST, array() );
+				$data = scbForms::get_value( array( 'p2p_meta', $p2p_id ), array_map( 'sanitize_text_field', $_POST ), array() );
 
 				$connection = p2p_get_connection( $p2p_id );
 
-				if ( ! $connection )
+				if ( ! $connection ) {
 					continue;
+				}
 
 				$fields = p2p_type( $connection->p2p_type )->fields;
 
@@ -128,24 +137,28 @@ class P2P_Box_Factory extends P2P_Factory {
 	function wp_ajax_p2p_box() {
 		check_ajax_referer( P2P_BOX_NONCE, 'nonce' );
 
-		$ctype = p2p_type( $_REQUEST['p2p_type'] );
-		if ( !$ctype || !isset( $this->queue[$ctype->name] ) )
-			die(0);
+		$ctype = p2p_type( sanitize_text_field( $_REQUEST['p2p_type'] ) );
+		if ( ! $ctype || ! isset( $this->queue[ $ctype->name ] ) ) {
+			die( 0 );
+		}
 
-		$directed = $ctype->set_direction( $_REQUEST['direction'] );
-		if ( !$directed )
-			die(0);
+		$directed = $ctype->set_direction( sanitize_text_field( $_REQUEST['direction'] ) );
+		if ( ! $directed ) {
+			die( 0 );
+		}
 
-		$post = get_post( $_REQUEST['from'] );
-		if ( !$post )
-			die(0);
+		$post = get_post( sanitize_text_field( $_REQUEST['from'] ) );
+		if ( ! $post ) {
+			die( 0 );
+		}
 
-		if ( !self::show_box( $directed, $post ) )
-			die(-1);
+		if ( ! self::show_box( $directed, $post ) ) {
+			die( -1 );
+		}
 
 		$box = $this->create_box( $directed );
 
-		$method = 'ajax_' . $_REQUEST['subaction'];
+		$method = 'ajax_' . sanitize_text_field( $_REQUEST['subaction'] );
 
 		$box->$method();
 	}

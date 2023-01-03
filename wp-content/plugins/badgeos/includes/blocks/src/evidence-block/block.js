@@ -96,7 +96,6 @@ registerBlockType("bos/badgeos-evidence-block", {
 		let user_lists = [];
 		wp.apiFetch({ path: `badgeos/block-achievements-award-list/0/0`, method: 'GET' }).then(posts =>
 			posts.map(function (post) {
-				console.log(post);
 				entries.push(post);
 			})
 		);

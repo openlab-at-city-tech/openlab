@@ -1,4 +1,13 @@
 <?php
+/**
+ * BadgeOS Shortcode
+ *
+ * @package BadgeOS
+ * @subpackage Classes
+ * @author LearningTimes, LLC
+ * @license http://www.gnu.org/licenses/agpl.txt GNU AGPL v3.0
+ * @link https://credly.com
+ */
 
 class BadgeOS_Shortcode {
 
@@ -27,7 +36,7 @@ class BadgeOS_Shortcode {
 			'output_callback' => '',
 			'attributes'      => array(),
 		);
-		$args = wp_parse_args( $_args, $defaults );
+		$args     = wp_parse_args( $_args, $defaults );
 
 		$this->name            = $args['name'];
 		$this->description     = $args['description'];
@@ -38,7 +47,7 @@ class BadgeOS_Shortcode {
 
 	private function _set_attribute_defaults( $attributes = array() ) {
 		foreach ( $attributes as $attribute => $details ) {
-			$attr_defaults = array(
+			$attr_defaults            = array(
 				'name'        => '',
 				'type'        => '',
 				'description' => '',

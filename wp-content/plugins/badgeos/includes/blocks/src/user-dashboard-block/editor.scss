@@ -1,0 +1,84 @@
+/**
+ * #.# Editor Styles
+ *
+ * CSS for just Backend enqueued after style.scss
+ * which makes it higher in priority.
+ */
+
+.wp-block-bos-block-blocks  {
+  background: $green;
+  border: 0.2rem solid $black;
+  color: $black;
+  margin: 0 auto;
+  max-width: 740px;
+  padding: 2rem;
+}
+
+.secure-block-inspector {
+	.is-opened{
+		min-height: 100% !important;
+	}
+	label.secure-block-inspector__label {
+		max-width: 100%;
+	}
+
+	.secure-block-inspector__control {
+		width: 100%;
+
+		> div > div {
+			margin-top: 0px;
+		}
+	}
+
+	.muted {
+		opacity: .6;
+	}
+}
+
+.badgeos-user-table{
+	width: 100%;
+	border-collapse: collapse;
+}
+.badgeos-user-table td,.badgeos-user-table  th {
+	border: 1px solid #dddddd;
+	text-align: left;
+	padding: 8px;
+}
+.badgeos-user-points-cell{
+	display: flex;
+	align-items: center;
+	gap: 5px;
+}
+.badgeos-user-dash-tabs{
+	border-top: 2px solid rgb(58, 56, 56);
+	padding-top: 10px;
+	display: flex;
+    gap: 10px;
+	margin-bottom: 20px;
+}
+.badgeos-user-dash-tabs span{
+	padding: 5px;
+    border: 1px solid;
+    border-radius: 10px;
+    background: #d8eff1;
+	cursor: pointer;
+}
+.badgeos-all-points{
+	width: 25%;
+    background: #97c9ff;
+    padding: 20px;
+    border-radius: 20px;
+}
+.badgeos-user-earned{
+	width: 25%;
+    background: #7ac4a1;
+    padding: 20px;
+    border-radius: 20px;
+}
+.badgeos-table-below-div{
+	display: flex;
+	gap: 20px;
+	margin-top: 20px;
+	padding-bottom: 10px;
+	border-bottom: 2px solid rgb(58, 56, 56);
+}

@@ -18,18 +18,23 @@ class P2P_Shortcodes {
 	private static function get_list( $attr, $method ) {
 		global $post;
 
-		$attr = shortcode_atts( array(
-			'type' => '',
-			'mode' => 'ul',
-		), $attr );
+		$attr = shortcode_atts(
+			array(
+				'type' => '',
+				'mode' => 'ul',
+			),
+			$attr
+		);
 
-		return P2P_List_Renderer::query_and_render( array(
-			'ctype' => $attr['type'],
-			'method' => $method,
-			'item' => $post,
-			'mode' => $attr['mode'],
-			'context' => 'shortcode'
-		) );
+		return P2P_List_Renderer::query_and_render(
+			array(
+				'ctype'   => $attr['type'],
+				'method'  => $method,
+				'item'    => $post,
+				'mode'    => $attr['mode'],
+				'context' => 'shortcode',
+			)
+		);
 	}
 }
 

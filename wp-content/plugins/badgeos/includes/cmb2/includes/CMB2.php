@@ -59,42 +59,42 @@ class CMB2 extends CMB2_Base {
 	 * @since 1.0.1
 	 */
 	protected $mb_defaults = array(
-		'id'               => '',
-		'title'            => '',
+		'id'                      => '',
+		'title'                   => '',
 		// Post type slug, or 'user', 'term', 'comment', or 'options-page'.
-		'object_types'     => array(),
+		'object_types'            => array(),
 
-		 /*
-		  * The context within the screen where the boxes should display. Available contexts vary
-		  * from screen to screen. Post edit screen contexts include 'normal', 'side', and 'advanced'.
-		  *
-		  * For placement in locations outside of a metabox, other options include:
-		  * 'form_top', 'before_permalink', 'after_title', 'after_editor'
-		  *
-		  * Comments screen contexts include 'normal' and 'side'. Default is 'normal'.
-		 */
-		'context'          => 'normal',
-		'priority'         => 'high',
-		'show_names'       => true, // Show field names on the left.
-		'show_on_cb'       => null, // Callback to determine if metabox should display.
-		'show_on'          => array(), // Post IDs or page templates to display this metabox. overrides 'show_on_cb'.
-		'cmb_styles'       => true, // Include CMB2 stylesheet.
-		'enqueue_js'       => true, // Include CMB2 JS.
-		'fields'           => array(),
+		/*
+		 * The context within the screen where the boxes should display. Available contexts vary
+		 * from screen to screen. Post edit screen contexts include 'normal', 'side', and 'advanced'.
+		 *
+		 * For placement in locations outside of a metabox, other options include:
+		 * 'form_top', 'before_permalink', 'after_title', 'after_editor'
+		 *
+		 * Comments screen contexts include 'normal' and 'side'. Default is 'normal'.
+		*/
+	   'context'                  => 'normal',
+		'priority'                => 'high',
+		'show_names'              => true, // Show field names on the left.
+		'show_on_cb'              => null, // Callback to determine if metabox should display.
+		'show_on'                 => array(), // Post IDs or page templates to display this metabox. overrides 'show_on_cb'.
+		'cmb_styles'              => true, // Include CMB2 stylesheet.
+		'enqueue_js'              => true, // Include CMB2 JS.
+		'fields'                  => array(),
 
 		/*
 		 * Handles hooking CMB2 forms/metaboxes into the post/attachement/user/options-page screens
- 		 * and handles hooking in and saving those fields.
+		  * and handles hooking in and saving those fields.
 		 */
-		'hookup'           => true,
-		'save_fields'      => true, // Will not save during hookup if false.
-		'closed'           => false, // Default metabox to being closed.
-		'taxonomies'       => array(),
-		'new_user_section' => 'add-new-user', // or 'add-existing-user'.
-		'new_term_section' => true,
-		'show_in_rest'     => false,
-		'classes'          => null, // Optionally add classes to the CMB2 wrapper
-		'classes_cb'       => '', // Optionally add classes to the CMB2 wrapper (via a callback)
+		'hookup'                  => true,
+		'save_fields'             => true, // Will not save during hookup if false.
+		'closed'                  => false, // Default metabox to being closed.
+		'taxonomies'              => array(),
+		'new_user_section'        => 'add-new-user', // or 'add-existing-user'.
+		'new_term_section'        => true,
+		'show_in_rest'            => false,
+		'classes'                 => null, // Optionally add classes to the CMB2 wrapper
+		'classes_cb'              => '', // Optionally add classes to the CMB2 wrapper (via a callback)
 
 		/*
 		 * The following parameter is for post alternate-context metaboxes only.
@@ -102,7 +102,7 @@ class CMB2 extends CMB2_Base {
 		 * To output the fields 'naked' (without a postbox wrapper/style), then
 		 * add a `'remove_box_wrap' => true` to your metabox registration array.
 		 */
-		'remove_box_wrap' => false,
+		'remove_box_wrap'         => false,
 
 		/*
 		 * The following parameters are for options-page metaboxes,
@@ -110,18 +110,18 @@ class CMB2 extends CMB2_Base {
 		 */
 
 		// 'menu_title'    => null, // Falls back to 'title' (above). Do not define here so we can set a fallback.
-		'message_cb'       => '', // Optionally define the options-save message (via a callback).
-		'option_key'       => '', // The actual option key and admin menu page slug.
-		'parent_slug'      => '', // Used as first param in add_submenu_page().
-		'capability'       => 'manage_options', // Cap required to view options-page.
-		'icon_url'         => '', // Menu icon. Only applicable if 'parent_slug' is left empty.
-		'position'         => null, // Menu position. Only applicable if 'parent_slug' is left empty.
+		'message_cb'              => '', // Optionally define the options-save message (via a callback).
+		'option_key'              => '', // The actual option key and admin menu page slug.
+		'parent_slug'             => '', // Used as first param in add_submenu_page().
+		'capability'              => 'manage_options', // Cap required to view options-page.
+		'icon_url'                => '', // Menu icon. Only applicable if 'parent_slug' is left empty.
+		'position'                => null, // Menu position. Only applicable if 'parent_slug' is left empty.
 
-		'admin_menu_hook'  => 'admin_menu', // Alternately 'network_admin_menu' to add network-level options page.
-		'display_cb'       => false, // Override the options-page form output (CMB2_Hookup::options_page_output()).
-		'save_button'      => '', // The text for the options-page save button. Defaults to 'Save'.
+		'admin_menu_hook'         => 'admin_menu', // Alternately 'network_admin_menu' to add network-level options page.
+		'display_cb'              => false, // Override the options-page form output (CMB2_Hookup::options_page_output()).
+		'save_button'             => '', // The text for the options-page save button. Defaults to 'Save'.
 		'disable_settings_errors' => false, // On settings pages (not options-general.php sub-pages), allows disabling.
-		'tab_group'        => '', // Tab-group identifier, enables options page tab navigation.
+		'tab_group'               => '', // Tab-group identifier, enables options page tab navigation.
 		// 'tab_title'    => null, // Falls back to 'title' (above). Do not define here so we can set a fallback.
 		// 'autoload'     => true, // Defaults to true, the options-page option will be autloaded.
 	);
@@ -179,12 +179,12 @@ class CMB2 extends CMB2_Base {
 			wp_die( esc_html__( 'Metabox configuration is required to have an ID parameter.', 'cmb2' ) );
 		}
 
-		$this->cmb_id = $config['id'];
-		$this->meta_box = wp_parse_args( $config, $this->mb_defaults );
+		$this->cmb_id             = $config['id'];
+		$this->meta_box           = wp_parse_args( $config, $this->mb_defaults );
 		$this->meta_box['fields'] = array();
 
 		// Ensures object_types is an array.
-		$this->set_prop( 'object_types', $this->box_types() ) ;
+		$this->set_prop( 'object_types', $this->box_types() );
 		$this->object_id( $object_id );
 
 		if ( $this->is_options_page_mb() ) {
@@ -246,7 +246,7 @@ class CMB2 extends CMB2_Base {
 	 */
 	public function render_form_open( $object_id = 0, $object_type = '' ) {
 		$object_type = $this->object_type( $object_type );
-		$object_id = $this->object_id( $object_id );
+		$object_id   = $this->object_id( $object_id );
 
 		echo "\n<!-- Begin CMB2 Fields -->\n";
 
@@ -258,8 +258,8 @@ class CMB2 extends CMB2_Base {
 		 * @param array  $cmb_id      The current box ID.
 		 * @param int    $object_id   The ID of the current object.
 		 * @param string $object_type The type of object you are working with.
-		 *	                           Usually `post` (this applies to all post-types).
-		 *	                           Could also be `comment`, `user` or `options-page`.
+		 *                             Usually `post` (this applies to all post-types).
+		 *                             Could also be `comment`, `user` or `options-page`.
 		 * @param array  $cmb         This CMB2 object.
 		 */
 		do_action( 'cmb2_before_form', $this->cmb_id, $object_id, $object_type, $this );
@@ -297,12 +297,12 @@ class CMB2 extends CMB2_Base {
 		// Use the callback to fetch classes.
 		if ( $added_classes = $this->get_param_callback_result( 'classes_cb' ) ) {
 			$added_classes = is_array( $added_classes ) ? $added_classes : array( $added_classes );
-			$classes = array_merge( $classes, $added_classes );
+			$classes       = array_merge( $classes, $added_classes );
 		}
 
 		if ( $added_classes = $this->prop( 'classes' ) ) {
 			$added_classes = is_array( $added_classes ) ? $added_classes : array( $added_classes );
-			$classes = array_merge( $classes, $added_classes );
+			$classes       = array_merge( $classes, $added_classes );
 		}
 
 		/**
@@ -363,7 +363,7 @@ class CMB2 extends CMB2_Base {
 	 */
 	public function render_form_close( $object_id = 0, $object_type = '' ) {
 		$object_type = $this->object_type( $object_type );
-		$object_id = $this->object_id( $object_id );
+		$object_id   = $this->object_id( $object_id );
 
 		echo '</div></div>';
 
@@ -389,8 +389,8 @@ class CMB2 extends CMB2_Base {
 		 * @param array  $cmb_id      The current box ID.
 		 * @param int    $object_id   The ID of the current object.
 		 * @param string $object_type The type of object you are working with.
-		 *	                           Usually `post` (this applies to all post-types).
-		 *	                           Could also be `comment`, `user` or `options-page`.
+		 *                             Usually `post` (this applies to all post-types).
+		 *                             Could also be `comment`, `user` or `options-page`.
 		 * @param array  $cmb         This CMB2 object.
 		 */
 		do_action( 'cmb2_after_form', $this->cmb_id, $object_id, $object_type, $this );
@@ -441,7 +441,7 @@ class CMB2 extends CMB2_Base {
 	public function render_group( $args ) {
 		$field_group = false;
 
-		if ( $args instanceof CMB2_Field  ) {
+		if ( $args instanceof CMB2_Field ) {
 			$field_group = 'group' === $args->type() ? $args : false;
 		} elseif ( isset( $args['id'], $args['fields'] ) && is_array( $args['fields'] ) ) {
 			$field_group = $this->get_field( $args );
@@ -524,7 +524,7 @@ class CMB2 extends CMB2_Base {
 	 * @return string                  The attributes string.
 	 */
 	public function group_wrap_attributes( $field_group ) {
-		$classes = 'cmb-nested cmb-field-list cmb-repeatable-group';
+		$classes  = 'cmb-nested cmb-field-list cmb-repeatable-group';
 		$classes .= $field_group->options( 'sortable' ) ? ' sortable' : ' non-sortable';
 		$classes .= $field_group->args( 'repeatable' ) ? ' repeatable' : ' non-repeatable';
 
@@ -710,9 +710,9 @@ class CMB2 extends CMB2_Base {
 	public function save_fields( $object_id = 0, $object_type = '', $data_to_save = array() ) {
 
 		// Fall-back to $_POST data.
-		$this->data_to_save = ! empty( $data_to_save ) ? $data_to_save : $_POST;
-		$object_id = $this->object_id( $object_id );
-		$object_type = $this->object_type( $object_type );
+		$this->data_to_save = ! empty( $data_to_save ) ? $data_to_save : array_map( 'sanitize_post', $_POST );
+		$object_id          = $this->object_id( $object_id );
+		$object_type        = $this->object_type( $object_type );
 
 		$this->process_fields();
 
@@ -828,8 +828,8 @@ class CMB2 extends CMB2_Base {
 		 * Fires after all fields have been saved.
 		 *
 		 * The dynamic portion of the hook name, $object_type, refers to the metabox/form's object type
-		 * 	Usually `post` (this applies to all post-types).
-		 *  	Could also be `comment`, `user` or `options-page`.
+		 *  Usually `post` (this applies to all post-types).
+		 *      Could also be `comment`, `user` or `options-page`.
 		 *
 		 * @param int    $object_id   The ID of the current object
 		 * @param array  $cmb_id      The current box ID
@@ -845,8 +845,8 @@ class CMB2 extends CMB2_Base {
 		 * The dynamic portion of the hook name, $this->cmb_id, is the meta_box id.
 		 *
 		 * The dynamic portion of the hook name, $object_type, refers to the metabox/form's object type
-		 * 	Usually `post` (this applies to all post-types).
-		 *  	Could also be `comment`, `user` or `options-page`.
+		 *  Usually `post` (this applies to all post-types).
+		 *      Could also be `comment`, `user` or `options-page`.
 		 *
 		 * @param int    $object_id   The ID of the current object
 		 * @param string $updated     Array of field ids that were updated.
@@ -887,12 +887,12 @@ class CMB2 extends CMB2_Base {
 			return;
 		}
 
-		$old        = $field_group->get_data();
+		$old = $field_group->get_data();
 		// Check if group field has sanitization_cb.
 		$group_vals = $field_group->sanitization_cb( $this->data_to_save[ $base_id ] );
 		$saved      = array();
 
-		$field_group->index = 0;
+		$field_group->index        = 0;
 		$field_group->data_to_save = $this->data_to_save;
 
 		foreach ( array_values( $field_group->fields() ) as $field_args ) {
@@ -980,17 +980,17 @@ class CMB2 extends CMB2_Base {
 		// Try to get our object ID from the global space.
 		switch ( $this->object_type() ) {
 			case 'user':
-				$object_id = isset( $_REQUEST['user_id'] ) ? wp_unslash( $_REQUEST['user_id'] ) : $object_id;
+				$object_id = isset( $_REQUEST['user_id'] ) ? sanitize_text_field( $_REQUEST['user_id'] ) : $object_id;
 				$object_id = ! $object_id && 'user-new.php' !== $pagenow && isset( $GLOBALS['user_ID'] ) ? $GLOBALS['user_ID'] : $object_id;
 				break;
 
 			case 'comment':
-				$object_id = isset( $_REQUEST['c'] ) ? wp_unslash( $_REQUEST['c'] ) : $object_id;
+				$object_id = isset( $_REQUEST['c'] ) ? sanitize_text_field( $_REQUEST['c'] ) : $object_id;
 				$object_id = ! $object_id && isset( $GLOBALS['comments']->comment_ID ) ? $GLOBALS['comments']->comment_ID : $object_id;
 				break;
 
 			case 'term':
-				$object_id = isset( $_REQUEST['tag_ID'] ) ? wp_unslash( $_REQUEST['tag_ID'] ) : $object_id;
+				$object_id = isset( $_REQUEST['tag_ID'] ) ? sanitize_text_field( $_REQUEST['tag_ID'] ) : $object_id;
 				break;
 
 			case 'options-page':
@@ -1002,7 +1002,7 @@ class CMB2 extends CMB2_Base {
 
 			default:
 				$object_id = isset( $GLOBALS['post']->ID ) ? $GLOBALS['post']->ID : $object_id;
-				$object_id = isset( $_REQUEST['post'] ) ? wp_unslash( $_REQUEST['post'] ) : $object_id;
+				$object_id = isset( $_REQUEST['post'] ) ? sanitize_text_field( $_REQUEST['post'] ) : $object_id;
 				break;
 		}
 
@@ -1083,7 +1083,7 @@ class CMB2 extends CMB2_Base {
 		$types = $this->box_types();
 
 		if ( empty( $keys ) ) {
-			$keys = '';
+			$keys  = '';
 			$types = $this->deinit_options_mb( $types );
 		} else {
 
@@ -1095,7 +1095,7 @@ class CMB2 extends CMB2_Base {
 		$this->set_prop( 'option_key', $keys );
 
 		// Reset the object types.
-		$this->set_prop( 'object_types', array_unique( $types ) ) ;
+		$this->set_prop( 'object_types', array_unique( $types ) );
 	}
 
 	/**
@@ -1160,18 +1160,18 @@ class CMB2 extends CMB2_Base {
 	 */
 	public function doing_options_page() {
 		$found_key = false;
-		$keys = $this->options_page_keys();
+		$keys      = $this->options_page_keys();
 
 		if ( empty( $keys ) ) {
 			return $found_key;
 		}
 
 		if ( ! empty( $_GET['page'] ) && in_array( $_GET['page'], $keys ) ) {
-			$found_key = $_GET['page'];
+			$found_key = sanitize_text_field( $_GET['page'] );
 		}
 
 		if ( ! empty( $_POST['action'] ) && in_array( $_POST['action'], $keys ) ) {
-			$found_key = $_POST['action'];
+			$found_key = sanitize_text_field( $_POST['action'] );
 		}
 
 		return $found_key ? $found_key : false;
@@ -1194,8 +1194,8 @@ class CMB2 extends CMB2_Base {
 			$values = $this->meta_box['show_on']['value'];
 		} elseif ( ! empty( $this->meta_box['show_on']['options-page'] ) ) {
 			$values = $this->meta_box['show_on']['options-page'];
-		} elseif ( $this->prop( 'option_key') ) {
-			$values = $this->prop( 'option_key');
+		} elseif ( $this->prop( 'option_key' ) ) {
+			$values = $this->prop( 'option_key' );
 		}
 
 		if ( $values ) {
@@ -1316,7 +1316,7 @@ class CMB2 extends CMB2_Base {
 		$field_id = is_string( $field ) ? $field : $field['id'];
 
 		$parent_field_id = ! empty( $field_group ) ? $field_group->id() : '';
-		$ids = $this->get_field_ids( $field_id, $parent_field_id );
+		$ids             = $this->get_field_ids( $field_id, $parent_field_id );
 
 		if ( ! $ids ) {
 			return false;
@@ -1395,7 +1395,7 @@ class CMB2 extends CMB2_Base {
 	 * @since 2.1.0
 	 * @param array $fields          Array of fields to add.
 	 * @param mixed $parent_field_id Parent field id or null.
- 	 *
+	 *
 	 * @return CMB2
 	 */
 	protected function add_fields( $fields, $parent_field_id = null ) {
@@ -1436,13 +1436,11 @@ class CMB2 extends CMB2_Base {
 		switch ( $field['type'] ) {
 			case 'file':
 			case 'file_list':
-
 				// Initiate attachment JS hooks.
 				add_filter( 'wp_prepare_attachment_for_js', array( 'CMB2_Type_File_Base', 'prepare_image_sizes_for_js' ), 10, 3 );
 				break;
 
 			case 'oembed':
-
 				// Initiate oembed Ajax hooks.
 				cmb2_ajax();
 				break;
@@ -1489,10 +1487,13 @@ class CMB2 extends CMB2_Base {
 
 		$column = is_array( $field['column'] ) ? $field['column'] : array();
 
-		$field['column'] = wp_parse_args( $column, array(
-			'name'     => isset( $field['name'] ) ? $field['name'] : '',
-			'position' => false,
-		) );
+		$field['column'] = wp_parse_args(
+			$column,
+			array(
+				'name'     => isset( $field['name'] ) ? $field['name'] : '',
+				'position' => false,
+			)
+		);
 
 		return $field;
 	}
@@ -1653,7 +1654,7 @@ class CMB2 extends CMB2_Base {
 	 * @return mixed            Field index or false.
 	 */
 	public function search_old_school_array( $field_id, $fields ) {
-		$ids = wp_list_pluck( $fields, 'id' );
+		$ids   = wp_list_pluck( $fields, 'id' );
 		$index = array_search( $field_id, $ids );
 		return false !== $index ? $index : false;
 	}
