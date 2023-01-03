@@ -588,29 +588,105 @@ function flBuilderLayoutDataEZTOC( $data ) {
 }
 
 /**
- * Avada Theme Compatibility
- * add inline custom css to set ez toc container
- * on sidebar, for scrolling setup
- * @since 2.0.35
+ * Thrive Theme Builder Compatibility
+ * add inline custom CSS to remove double line
+ * on links of our Easy TOC container
+ * @since 2.0.38
  */
-if ( in_array( 'fusion-core/fusion-core.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) && ( 'Avada Child' == apply_filters( 'current_theme', get_option( 'current_theme' ) ) || 'Avada' == apply_filters( 'current_theme', get_option( 'current_theme' ) ) ) ) {
+if ( 'Thrive Theme Builder' == apply_filters( 'current_theme', get_option( 'current_theme' ) ) ) {
 
-	add_action( 'wp_enqueue_scripts', 'enqueueScriptsforAvada', -1 );
+    add_action( 'wp_head', 'ezTocEnqueueScriptsforThriveThemeBuilder' );
 
-	if( ! function_exists( 'enqueueScriptsforAvada' ) ) {
-    	function enqueueScriptsforAvada() {
-
-			wp_register_style( 'ez-toc-avada', '', array( 'ez-toc' ), ezTOC::VERSION );
-			wp_enqueue_style( 'ez-toc-avada' );
-		    $inlineCSSAvada = <<<INLINECSSAVADA
-.sidebar .fusion-sidebar-inner-content #ez-toc-container nav {
-	overflow-y: scroll;
-	height: auto;
-	max-height: 35vh;
-	padding-bottom: 60px;
-}\n\n
+    if( ! function_exists( 'ezTocEnqueueScriptsforThriveThemeBuilder' ) ) {
+    	function ezTocEnqueueScriptsforThriveThemeBuilder() {
+            echo <<<INLINECSSAVADA
+<style>#ez-toc-container a:hover{text-decoration: none;}</style>
 INLINECSSAVADA;
-		    wp_add_inline_style( 'ez-toc-avada', $inlineCSSAvada );
-		}
-	}
+        }
+    }
+}
+
+/**
+ * Kalium - Medical Theme Compatibility
+ * remove duplicate eztoc containers
+ * in faq sections
+ * @since 2.0.38
+ */
+if ( in_array( 'js_composer/js_composer.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) && ( 'Kalium - Medical Theme' == apply_filters( 'current_theme', get_option( 'current_theme' ) ) || 'Kalium' == apply_filters( 'current_theme', get_option( 'current_theme' ) ) ) ) {
+    add_shortcode( 'vc_toggle', 'eztoc_vc_toggle_modified' );
+    function eztoc_vc_toggle_modified( $atts, $content, $tag ) {
+        if ( 'vc_toggle' == $tag ) {
+
+            /**
+             * Shortcode attributes
+             * @var $atts
+             * @var $title
+             * @var $el_class
+             * @var $style
+             * @var $color
+             * @var $size
+             * @var $open
+             * @var $css_animation
+             * @var $el_id
+             * @var $content - shortcode content
+             * @var $css
+             * Shortcode class
+             * @var WPBakeryShortCode_Vc_Toggle $this_WPBakeryShortCode_Vc_Toggle
+             */
+            $title = $el_class = $style = $color = $size = $open = $css_animation = $css = $el_id = '';
+
+            $inverted = false;
+            $atts = vc_map_get_attributes('vc_toggle', $atts);
+            extract($atts);
+
+    // checking is color inverted
+            $style = str_replace('_outline', '', $style, $inverted);
+            /**
+             * @since 4.4
+             */
+            $elementClass = array(
+                'base' => apply_filters(VC_SHORTCODE_CUSTOM_CSS_FILTER_TAG, 'vc_toggle', 'vc_toggle', $atts),
+                // TODO: check this code, don't know how to get base class names from params
+                'style' => 'vc_toggle_' . $style,
+                'color' => ( $color ) ? 'vc_toggle_color_' . $color : '',
+                'inverted' => ( $inverted ) ? 'vc_toggle_color_inverted' : '',
+                'size' => ( $size ) ? 'vc_toggle_size_' . $size : '',
+                'open' => ( 'true' === $open ) ? 'vc_toggle_active' : '',
+                'extra' => $atts['css'],
+                'css_animation' => '',
+                    // TODO: remove getCssAnimation as function in helpers
+            );
+
+            $class_to_filter = trim(implode(' ', $elementClass));
+            $class_to_filter .= vc_shortcode_custom_css_class($css, ' ');
+            $css_class = apply_filters(VC_SHORTCODE_CUSTOM_CSS_FILTER_TAG, $class_to_filter, 'vc_toggle', $atts);
+
+            $heading_output = apply_filters('wpb_toggle_heading', $atts['title'], array(
+                'title' => $title,
+                'open' => $open,
+                    ));
+            $output = '<div ' . ( isset( $el_id ) && ! empty( $el_id ) ? 'id="' . esc_attr( $el_id ) . '"' : '' ) . ' class="' . esc_attr( $css_class ) . '"><div class="vc_toggle_title">' . $heading_output . '<i class="vc_toggle_icon"></i></div><div class="vc_toggle_content">' . wpb_js_remove_wpautop( $content, true ) . '</div></div>';
+
+            return $output;
+        }
+    }
+}
+
+/**
+ * Foodie Pro Theme Compatibility
+ * for working sticky toggle
+ * in right way
+ * @since 2.0.39
+ */
+if ( 'Foodie Pro' == apply_filters( 'current_theme', get_option( 'current_theme' ) ) ) {
+    add_action( 'wp_head', 'ezTocEnqueueScriptsforFoodieProTheme' );
+
+    if( ! function_exists( 'ezTocEnqueueScriptsforFoodieProTheme' ) ) {
+    	function ezTocEnqueueScriptsforFoodieProTheme() {
+            echo <<<INLINECSSFOODPRO
+<style>@media only screen and (max-width: 940px){ .ez-toc-sticky #ez-toc-sticky-container .menu-toggle,#ez-toc-container .menu-toggle, #ez-toc-widget-container .menu-toggle{display:none} .ez-toc-sticky #ez-toc-sticky-container nav,#ez-toc-container nav, #ez-toc-widget-container nav {display:block}  }</style>
+INLINECSSFOODPRO;
+        }
+    }
+
 }

@@ -559,7 +559,7 @@
 									}
 									else if ($type === "uri")
 									{
-										$value = str_replace(array("\0", "\r", "\n", "\t", " "), "", $value);
+										$value = str_replace(array("\0", "\r", "\n", "\t", " "), array("", "", "", "", "%20"), trim($value));
 										$pos = strpos($value, ":");
 										if ($pos !== false)  $value = preg_replace('/[^a-z]/', "", strtolower(substr($value, 0, $pos))) . substr($value, $pos);
 									}
@@ -1136,32 +1136,34 @@
 			$this->y = count($ids);
 		}
 
-		public function rewind()
+		public function rewind(): void
 		{
 			$this->x = 0;
 		}
 
-		public function valid()
+		public function valid(): bool
 		{
 			return ($this->x < $this->y);
 		}
 
+		#[\ReturnTypeWillChange]
 		public function current()
 		{
 			return $this->tfn->Get($this->ids[$this->x]);
 		}
 
+		#[\ReturnTypeWillChange]
 		public function key()
 		{
 			return $this->ids[$this->x];
 		}
 
-		public function next()
+		public function next(): void
 		{
 			$this->x++;
 		}
 
-		public function count()
+		public function count(): int
 		{
 			return $this->y;
 		}
@@ -1363,7 +1365,7 @@
 								switch ($rules[$x][$x2]["type"])
 								{
 									case "id":  $backtrack = (!isset($this->nodes[$id2]["attrs"]["id"]) || $this->nodes[$id2]["attrs"]["id"] !== $rules[$x][$x2]["id"]);  break;
-									case "element":  $backtrack = (strcasecmp($this->nodes[$id2]["tag"], (isset($rules[$x][$x2]["namespace"]) && $rules[$x][$x2]["namespace"] !== false ? $rules[$x][$x2]["namespace"] . ":" : "") . $rules[$x][$x2]["tag"]) !== 0);  break;
+									case "element":  $backtrack = ($rules[$x][$x2]["tag"] !== "*" && strcasecmp($this->nodes[$id2]["tag"], (isset($rules[$x][$x2]["namespace"]) && $rules[$x][$x2]["namespace"] !== false ? $rules[$x][$x2]["namespace"] . ":" : "") . $rules[$x][$x2]["tag"]) !== 0);  break;
 									case "class":  $backtrack = (!isset($this->nodes[$id2]["attrs"]["class"]) || !isset($this->nodes[$id2]["attrs"]["class"][$rules[$x][$x2]["class"]]));  break;
 									case "attr":
 									{

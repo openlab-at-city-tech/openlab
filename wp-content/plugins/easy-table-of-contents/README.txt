@@ -3,9 +3,9 @@ Contributors: magazine3
 Donate link: https://tocwp.com/
 Tags: table of contents, toc
 Requires at least: 5.3
-Tested up to: 6.1
+Tested up to: 6.1.1
 Requires PHP: 5.6.20
-Stable tag: 2.0.37
+Stable tag: 2.0.41.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -105,11 +105,46 @@ Easy Table Contents is a fork of the excellent [Table of Contents Plus](https://
 4. Activate the plugin on the Plugins admin page.
 
 == Changelog ==
+= 2.0.41.1 01/03/2023 =
+* BUG: Links not working in the Japanese language. #387
+
+= 2.0.41 01/02/2023 =
+* BUG: Deprecated: Return type of TagFilterNodeIterator::current() should either be compatible with Iterator::current(): mixed, or the #356
+* NEW: Avada theme conflicted with the sidebar widget. #315
+* NEW: Side bar headings are not scrolling down. #341
+* BUG: While adding the TOC in the Gutenberg block, the H2 subheadings are showing, but not when we add the TOC through the shortcode. #351
+* BUG: Smooth Scroll Offset #143
+* BUG: Conflict issue with latest version in Generatepress Theme #370
+
+= 2.0.40 12/13/2022 =
+* BUG: Broken CSS after the new update #352
+* BUG: Fixed TOC is combine & conflict with sidebar shortcode TOC #349
+* BUG: Numbers are wrong #330
+* BUG: Getting Header " H5 " AND " H6 " as strings below the Table of Content. #288
+* BUG: Smooth Scroll Offset #143
+
+= 2.0.39 11/30/2022 =
+* BUG: Toggle Icons going to opposite side when rtl option settings used #348
+* BUG: Newsletter subscribe form is not popping up during plugin activation. #344
+* BUG: Causing CLS issues #339
+* BUG: Unable to access Divi module when Sticky Toggle is enable. #309
+* BUG: When the name of the Open Button Text in sticky toggle is long, the sticky toggle is not working on mobile devices. #294
+
+= 2.0.38 11/21/2022 =
+* BUG: Deactivate Feedback Form need to be filtered #345
+* NEW: BFCM internal offer #342
+* BUG: Ajax call is missing security nonce #340
+* BUG: On hover, the contents heads show in two lines. #337
+* BUG: Easy table of content is visible in FAQ section #321
+* BUG: TOC Container Toggle is working on widget TOC container. #316
+* BUG: Problem with TOC on mobile #284
+* NEW: Admin General Settings Section Tabs customization #270
+
 = 2.0.37 11/11/2022 =
 * BUG: Need to test compatibility with wp 6.1. #335
 * BUG: Warning: Trying to access array offset on value of type null #334
 * BUG: Numbers are wrong #330
-* BUG: Add a new functionality "reset to default settings" #293
+* NEW: Add a new functionality "reset to default settings" #293
 * BUG: Shortcode are not working with Salient theme #271
 
 = 2.0.36.1 11/07/2022 =
