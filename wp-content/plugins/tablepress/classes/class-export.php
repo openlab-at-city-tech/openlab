@@ -13,6 +13,7 @@ defined( 'ABSPATH' ) || die( 'No direct script access allowed!' );
 
 /**
  * TablePress Table Export Class
+ *
  * @package TablePress
  * @subpackage Export/Import
  * @author Tobias Bäthge
@@ -142,20 +143,50 @@ class TablePress_Export {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $string    Content of a cell.
-	 * @param string $delimiter CSV delimiter character.
-	 * @return string Wrapped string for CSV export
+	 * @param string $cell_content Content of a cell.
+	 * @param string $delimiter    CSV delimiter character.
+	 * @return string Wrapped string for CSV export.
 	 */
-	protected function csv_wrap_and_escape( $string, $delimiter ) {
+	protected function csv_wrap_and_escape( $cell_content, $delimiter ) {
+		// Return early if the cell is empty. No escaping or wrapping is needed then.
+		if ( '' === $cell_content ) {
+			return $cell_content;
+		}
+
+		// Escape potentially dangerous functions that could be used for CSV injection attacks in external spreadsheet software.
+		$active_content_triggers = array( '=', '+', '-', '@' );
+		if ( in_array( $cell_content[0], $active_content_triggers, true ) ) {
+			$functions_to_escape = array(
+				'cmd|',
+				'rundll32',
+				'DDE(',
+				'IMPORTXML(',
+				'IMPORTFEED(',
+				'IMPORTHTML(',
+				'IMPORTRANGE(',
+				'IMPORTDATA(',
+				'IMAGE(',
+				'HYPERLINK(',
+				'WEBSERVICE(',
+			);
+			foreach ( $functions_to_escape as $function ) {
+				if ( false !== stripos( $cell_content, $function ) ) {
+					$cell_content = "'" . $cell_content; // Prepend a ' to indicate that the cell format is a text string.
+					break;
+				}
+			}
+		}
+
 		// Escape CSV delimiter for RegExp (e.g. '|').
 		$delimiter = preg_quote( $delimiter, '#' );
-		if ( 1 === preg_match( '#' . $delimiter . '|"|\n|\r#i', $string ) || ' ' === substr( $string, 0, 1 ) || ' ' === substr( $string, -1 ) ) {
+		if ( 1 === preg_match( '#' . $delimiter . '|"|\n|\r#i', $cell_content ) || ' ' === $cell_content[0] || ' ' === substr( $cell_content, -1 ) ) {
 			// Escape single " as double "".
-			$string = str_replace( '"', '""', $string );
+			$cell_content = str_replace( '"', '""', $cell_content );
 			// Wrap string in "".
-			$string = '"' . $string . '"';
+			$cell_content = '"' . $cell_content . '"';
 		}
-		return $string;
+
+		return $cell_content;
 	}
 
 	/**

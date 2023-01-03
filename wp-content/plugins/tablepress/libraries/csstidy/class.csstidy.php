@@ -12,38 +12,6 @@
 defined( 'ABSPATH' ) || die( 'No direct script access allowed!' );
 
 /**
- * CSSTidy - CSS Parser and Optimiser
- *
- * CSS Parser class
- *
- * Copyright 2005, 2006, 2007 Florian Schmitz
- *
- * This file is part of CSSTidy.
- *
- *  CSSTidy is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; either version 2.1 of the License, or
- *  (at your option) any later version.
- *
- *  CSSTidy is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU Lesser General Public License for more details.
- *
- *  You should have received a copy of the GNU Lesser General Public License
- *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
- *
- * @license https://opensource.org/licenses/lgpl-license.php GNU Lesser General Public License
- * @package CSSTidy
- * @author Florian Schmitz (floele at gmail dot com) 2005-2007
- * @author Brett Zamir (brettz9 at yahoo dot com) 2007
- * @author Nikolay Matsievsky (speed at webo dot name) 2009-2010
- * @author Cedric Morin (cedric at yterium dot com) 2010-2012
- * @author Christopher Finke (cfinke at gmail.com) 2012
- * @author Mark Scherer (remove $GLOBALS once and for all + PHP5.4 comp) 2012
- */
-
-/**
  * Defines constants.
  *
  * @TODO: Make these class constants of CSSTidy.
@@ -143,14 +111,6 @@ class TablePress_CSSTidy {
 	 * @var string
 	 */
 	public $namespace = '';
-
-	/**
-	 * The CSSTidy version.
-	 *
-	 * @since 1.0.0
-	 * @var string
-	 */
-	public $version = '1.5.3';
 
 	/**
 	 * The settings.
@@ -339,8 +299,7 @@ class TablePress_CSSTidy {
 	 * @since 1.0.0
 	 */
 	public function __construct() {
-		include __DIR__ . '/data.inc.php';
-		$this->data = $data;
+		$this->data = require __DIR__ . '/data.inc.php';
 
 		$this->settings['remove_bslash'] = true;
 		$this->settings['compress_colors'] = true;
@@ -399,29 +358,6 @@ class TablePress_CSSTidy {
 	}
 
 	/**
-	 * Load a template.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param string $template Template used by set_cfg to load a template via a configuration setting.
-	 */
-	protected function _load_template( $template ) {
-		switch ( $template ) {
-			case 'default':
-				$this->load_template( 'default' );
-				break;
-			case 'highest':
-			case 'high':
-			case 'low':
-				$this->load_template( $template . '_compression' );
-				break;
-			default:
-				$this->load_template( $template );
-				break;
-		}
-	}
-
-	/**
 	 * Set the value of a setting.
 	 *
 	 * @since 1.0.0
@@ -434,7 +370,7 @@ class TablePress_CSSTidy {
 		if ( isset( $this->settings[ $setting ] ) && '' !== $value ) {
 			$this->settings[ $setting ] = $value;
 			if ( 'template' === $setting ) {
-				$this->_load_template( $this->settings['template'] );
+				$this->load_template( $this->settings['template'] );
 			}
 			return true;
 		}
@@ -584,27 +520,22 @@ class TablePress_CSSTidy {
 	 *
 	 * @link http://csstidy.sourceforge.net/templates.php
 	 *
-	 * @param string $content   Either file name (if $from_file is true), content of a template file, "high_compression", "highest_compression", "low_compression", or "default".
+	 * @param string $content   Either file name (if $from_file is true), content of a template file, "default", "low", high", or "highest".
 	 * @param bool   $from_file Optional. Uses $content as filename if true.
 	 */
 	protected function load_template( $content, $from_file = true ) {
-		$predefined_templates = &$this->data['csstidy']['predefined_templates'];
-		if ( in_array( $content, array( 'default', 'low_compression', 'high_compression', 'highest_compression' ), true ) ) {
-			$this->template = $predefined_templates[ $content ];
+		if ( in_array( $content, array( 'default', 'low', 'high', 'highest' ), true ) ) {
+			$this->template = $this->data['csstidy']['predefined_templates'][ $content ];
 			return;
 		}
 
 		if ( $from_file ) {
 			$content = strip_tags( file_get_contents( $content ), '<span>' );
 		}
+
 		// Unify newlines (because the output also only uses \n).
 		$content = str_replace( "\r\n", "\n", $content );
-		$template = explode( '|', $content );
-
-		$template_count = count( $template );
-		for ( $i = 0; $i < $template_count; $i++ ) {
-			$this->template[ $i ] = $template[ $i ];
-		}
+		$this->template = explode( '|', $content );
 	}
 
 	/**
@@ -1129,7 +1060,7 @@ class TablePress_CSSTidy {
 	 *
 	 * @param string $comment CSS Comment.
 	 */
-	protected function css_add_important_comment($comment) {
+	protected function css_add_important_comment( $comment ) {
 		if ( $this->get_cfg( 'preserve_css' ) || '' === trim( $comment ) ) {
 			return;
 		}
@@ -1205,8 +1136,8 @@ class TablePress_CSSTidy {
 	 * @since 1.0.0
 	 *
 	 * @param string $current_media Media.
-	 * @param string $media         Media.
-	 * @param bool   $at_root
+	 * @param string $new_media     Media.
+	 * @param bool   $at_root       Optional. Default false.
 	 * @return string [return value]
 	 */
 	protected function css_new_media_section( $current_media, $new_media, $at_root = false ) {
@@ -1399,7 +1330,9 @@ class TablePress_CSSTidy {
 	 */
 	public function property_is_valid( $property ) {
 		$property = strtolower( $property );
-		if ( in_array( trim( $property ), $this->data['csstidy']['multiple_properties'], true ) ) {
+		if ( 0 === strpos( $property, '--' ) ) {
+			$property = '--custom'; // Replace custom properties with a temporary placeholder that is marked as valid in the list of properties.
+		} elseif ( in_array( trim( $property ), $this->data['csstidy']['multiple_properties'], true ) ) {
 			$property = trim( $property );
 		}
 		$all_properties = &$this->data['csstidy']['all_properties'];

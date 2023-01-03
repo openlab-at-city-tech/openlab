@@ -13,28 +13,13 @@ defined( 'ABSPATH' ) || die( 'No direct script access allowed!' );
 
 /**
  * Base Controller class
+ *
  * @package TablePress
  * @subpackage Controllers
  * @author Tobias Bäthge
  * @since 1.0.0
  */
 abstract class TablePress_Controller {
-
-	/**
-	 * Instance of the Options Model.
-	 *
-	 * @since 1.0.0
-	 * @var TablePress_Options_Model
-	 */
-	public $model_options;
-
-	/**
-	 * Instance of the Table Model.
-	 *
-	 * @since 1.0.0
-	 * @var TablePress_Table_Model
-	 */
-	public $model_table;
 
 	/**
 	 * File name of the admin screens' parent page in the admin menu.
@@ -58,18 +43,11 @@ abstract class TablePress_Controller {
 	 * @since 1.0.0
 	 */
 	public function __construct() {
-		/*
-		 * References to the TablePress models (only for backwards compatibility in TablePress Extensions!).
-		 * Using `TablePress::$model_options` and `TablePress::$model_table` is recommended!
-		 */
-		$this->model_options = TablePress::$model_options;
-		$this->model_table = TablePress::$model_table;
-
 		// Update check, in all controllers (frontend and admin), to make sure we always have up-to-date options, should be done very early.
 		$this->plugin_update_check();
 
 		/**
-		 * Filter the admin menu parent page, which is needed for the construction of plugin URLs.
+		 * Filters the admin menu parent page, which is needed for the construction of plugin URLs.
 		 *
 		 * @since 1.0.0
 		 *
@@ -143,21 +121,13 @@ abstract class TablePress_Controller {
 				if ( $current_plugin_options_db_version < 25 ) {
 					TablePress::$model_table->add_mime_type_to_posts();
 				}
-
-				// Convert old parameter names to new ones in DataTables "Custom Commands".
-				if ( $current_plugin_options_db_version < 26 ) {
-					TablePress::$model_table->convert_datatables_parameter_names_tp15();
-				}
 			}
 		}
 
 		// Maybe update the table scheme in each existing table, independently from updating the plugin options.
 		if ( TablePress::$model_options->get( 'table_scheme_db_version' ) < TablePress::table_scheme_version ) {
 			TablePress::$model_table->merge_table_options_defaults();
-
-			TablePress::$model_options->update( array(
-				'table_scheme_db_version' => TablePress::table_scheme_version,
-			) );
+			TablePress::$model_options->update( 'table_scheme_db_version', TablePress::table_scheme_version );
 		}
 
 		/*
@@ -165,10 +135,17 @@ abstract class TablePress_Controller {
 		 * User Options are not saved in DB until first change occurs.
 		 */
 		if ( is_user_logged_in() && ( TablePress::$model_options->get( 'user_options_db_version' ) < TablePress::db_version ) ) {
+			// Reset the postboxes on the "Edit" screen when updating from a TablePress version older than 2.0.1.
+			if ( TablePress::$model_options->get( 'user_options_db_version' ) < 50 ) {
+				$user_id = get_current_user_id();
+				delete_user_option( $user_id, 'meta-box-order_tablepress_edit', true );
+				delete_user_option( $user_id, 'screen_layout_tablepress_edit', true );
+				delete_user_option( $user_id, 'closedpostboxes_tablepress_edit', true );
+				delete_user_option( $user_id, 'metaboxhidden_tablepress_edit', true );
+			}
+
 			TablePress::$model_options->merge_user_options_defaults();
-			TablePress::$model_options->update( array(
-				'user_options_db_version' => TablePress::db_version,
-			) );
+			TablePress::$model_options->update( 'user_options_db_version', TablePress::db_version );
 		}
 	}
 

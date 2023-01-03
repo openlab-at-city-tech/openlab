@@ -13,6 +13,7 @@ defined( 'ABSPATH' ) || die( 'No direct script access allowed!' );
 
 /**
  * TablePress Base View class
+ *
  * @package TablePress
  * @subpackage Views
  * @author Tobias Bäthge
@@ -98,18 +99,28 @@ abstract class TablePress_View {
 		// Enable two column layout.
 		add_filter( "get_user_option_screen_layout_{$screen->id}", array( $this, 'set_current_screen_layout_columns' ) );
 
+		$common_content = '<p>' . sprintf( __( 'More information about TablePress can be found on the <a href="%1$s">plugin website</a> or on its page in the <a href="%2$s">WordPress Plugin Directory</a>.', 'tablepress' ), 'https://tablepress.org/', 'https://wordpress.org/plugins/tablepress/' ) . '</p>';
+		$common_content .= '<p>' . sprintf( __( 'For technical information, please see the <a href="%s">Documentation</a>.', 'tablepress' ), 'https://tablepress.org/documentation/' ) . ' ' . sprintf( __( 'Common questions are answered in the <a href="%s">FAQ</a>.', 'tablepress' ), 'https://tablepress.org/faq/' ) . '</p>';
+
+		if ( tb_tp_fs()->is_free_plan() ) {
+			$common_content .= '<p>' . sprintf( __( '<a href="%1$s">Support</a> is provided through the <a href="%2$s">WordPress Support Forums</a>.', 'tablepress' ), 'https://tablepress.org/support/', 'https://wordpress.org/tags/tablepress' ) . ' '
+						. sprintf( __( 'Before asking for support, please carefully read the <a href="%s">Frequently Asked Questions</a>, where you will find answers to the most common questions, and search through the forums.', 'tablepress' ), 'https://tablepress.org/faq/' ) . '</p>';
+			$common_content .= '<p><strong>' . sprintf( __( 'More great features for you and your site’s visitors and priority email support are available with a Premium license plan of TablePress. <a href="%s">Go check them out!</a>', 'tablepress' ), 'https://tablepress.org/premium/' ) . '</strong></p>';
+		}
+
 		$screen->add_help_tab( array(
 			'id'      => 'tablepress-help', // This should be unique for the screen.
 			'title'   => __( 'TablePress Help', 'tablepress' ),
-			'content' => '<p>' . $this->help_tab_content() . '</p>'
-						. '<p>' . sprintf( __( 'More information about TablePress can be found on the <a href="%1$s">plugin website</a> or on its page in the <a href="%2$s">WordPress Plugin Directory</a>.', 'tablepress' ), 'https://tablepress.org/', 'https://wordpress.org/plugins/tablepress/' ) . ' '
-						. sprintf( __( 'For technical information, please see the <a href="%s">Documentation</a>.', 'tablepress' ), 'https://tablepress.org/documentation/' ) . ' '
-						. sprintf( __( '<a href="%1$s">Support</a> is provided through the <a href="%2$s">WordPress Support Forums</a>.', 'tablepress' ), 'https://tablepress.org/support/', 'https://wordpress.org/tags/tablepress' ) . ' '
-						. sprintf( __( 'Before asking for support, please carefully read the <a href="%s">Frequently Asked Questions</a>, where you will find answers to the most common questions, and search through the forums.', 'tablepress' ), 'https://tablepress.org/faq/' ) . '<br />'
-						. sprintf( __( 'If you like the plugin, <a href="%1$s"><strong>a donation</strong></a> is recommended.', 'tablepress' ), 'https://tablepress.org/donate/' ) . '</p>',
+			'content' => '<p>' . $this->help_tab_content() . '</p>' . $common_content,
 		) );
-		// "sidebar" in the help tab.
-		$screen->set_help_sidebar( '<p><strong>' . __( 'For more information:', 'tablepress' ) . '</strong></p><p><a href="https://tablepress.org/">TablePress Website</a></p><p><a href="https://tablepress.org/faq/">TablePress FAQ</a></p><p><a href="https://tablepress.org/documentation/">TablePress Documentation</a></p><p><a href="https://tablepress.org/support/">TablePress Support</a></p>' );
+		// "Sidebar" in the help tab.
+		$screen->set_help_sidebar(
+			'<p><strong>' . __( 'For more information:', 'tablepress' ) . '</strong></p>'
+			. '<p><a href="https://tablepress.org/">TablePress Website</a></p>'
+			. '<p><a href="https://tablepress.org/faq/">TablePress FAQ</a></p>'
+			. '<p><a href="https://tablepress.org/documentation/">TablePress Documentation</a></p>'
+			. '<p><a href="https://tablepress.org/support/">TablePress Support</a></p>'
+		);
 	}
 
 	/**
@@ -153,12 +164,7 @@ abstract class TablePress_View {
 		if ( is_rtl() ) {
 			$this->admin_page->enqueue_style( 'common-rtl', array( 'tablepress-common' ) );
 		}
-		$this->admin_page->enqueue_script( 'common', array( 'jquery', 'postbox' ), array( // phpcs:ignore PEAR.Functions.FunctionCallSignature.MultipleArguments
-			'common' => array(
-				'ays_delete_single_table'    => _n( 'Do you really want to delete this table?', 'Do you really want to delete these tables?', 1, 'tablepress' ),
-				'ays_delete_multiple_tables' => _n( 'Do you really want to delete this table?', 'Do you really want to delete these tables?', 2, 'tablepress' ),
-			),
-		) );
+		$this->admin_page->enqueue_script( 'common', array( 'postbox' ) );
 
 		$this->admin_page->add_admin_footer_text();
 
@@ -176,21 +182,22 @@ abstract class TablePress_View {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $text  Text for the header message.
-	 * @param string $class Optional. Additional CSS class for the header message.
-	 * @param string $title Optional. Text for the header title.
+	 * @param string $text      Text for the header message.
+	 * @param string $css_class Optional. Additional CSS class for the header message.
+	 * @param string $title     Optional. Text for the header title.
 	 */
-	protected function add_header_message( $text, $class = 'notice-success', $title = '' ) {
-		if ( ! stripos( $class, 'not-dismissible' ) ) {
-			$class .= ' is-dismissible';
+	protected function add_header_message( $text, $css_class = 'notice-success', $title = '' ) {
+		if ( ! strpos( $css_class, 'not-dismissible' ) ) {
+			$css_class .= ' is-dismissible';
 		}
-		if ( ! empty( $title ) ) {
+		if ( '' !== $title ) {
 			$title = "<h3>{$title}</h3>";
 		}
-		if ( ! empty( $text ) ) {
+		// Wrap the message text in HTML <p> tags if it does not already start with one (potentially with attributes), indicating custom message HTML.
+		if ( '' !== $text && 0 !== strpos( $text, '<p' ) ) {
 			$text = "<p>{$text}</p>";
 		}
-		$this->header_messages[] = "<div class=\"notice {$class}\">{$title}{$text}</div>\n";
+		$this->header_messages[] = "<div class=\"notice {$css_class}\">{$title}{$text}</div>\n";
 	}
 
 	/**
@@ -202,8 +209,13 @@ abstract class TablePress_View {
 	 */
 	protected function process_action_messages( array $action_messages ) {
 		if ( $this->data['message'] && isset( $action_messages[ $this->data['message'] ] ) ) {
-			$class = ( 'error' === substr( $this->data['message'], 0, 5 ) ) ? 'notice-error' : 'notice-success';
-			$this->add_header_message( "<strong>{$action_messages[ $this->data['message'] ]}</strong>", $class );
+			$class = ( 0 === strpos( $this->data['message'], 'error' ) ) ? 'notice-error' : 'notice-success';
+
+			if ( '' !== $this->data['error_details'] ) {
+				$this->data['error_details'] = '</p><p>' . sprintf( __( 'Error code: %s', 'tablepress' ), '<code>' . esc_html( $this->data['error_details'] ) . '</code>' );
+			}
+
+			$this->add_header_message( "<strong>{$action_messages[ $this->data['message'] ]}</strong>{$this->data['error_details']}", $class );
 		}
 	}
 
@@ -339,7 +351,11 @@ abstract class TablePress_View {
 		?>
 		<div id="tablepress-page" class="wrap">
 		<?php
-		$this->print_nav_tab_menu();
+			$this->print_nav_tab_menu();
+		?>
+		<div id="tablepress-body">
+		<hr class="wp-header-end" />
+		<?php
 		// Print all header messages.
 		foreach ( $this->header_messages as $message ) {
 			echo $message;
@@ -349,7 +365,7 @@ abstract class TablePress_View {
 		?>
 		<form action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" method="post"<?php echo $enctype; ?>>
 			<?php
-			$this->do_text_boxes( 'header' );
+				$this->do_text_boxes( 'header' );
 			?>
 			<div id="poststuff">
 				<div id="post-body" class="metabox-holder columns-<?php echo ( isset( $GLOBALS['screen_layout_columns'] ) && ( 2 === $GLOBALS['screen_layout_columns'] ) ) ? '2' : '1'; ?>">
@@ -377,6 +393,7 @@ abstract class TablePress_View {
 			</div>
 		</form>
 		</div>
+		</div>
 		<?php
 	}
 
@@ -387,8 +404,19 @@ abstract class TablePress_View {
 	 */
 	protected function print_nav_tab_menu() {
 		?>
-		<div id="tablepress-nav" class="nav-tab-wrapper">
-			<h1 class="wp-heading-inline"><?php _e( 'TablePress', 'tablepress' ); ?></h1>
+		<div id="tablepress-header" class="header">
+			<h1 class="name"><img src="<?php echo plugins_url( 'admin/img/tablepress-icon.png', TABLEPRESS__FILE__ ); ?>" class="tablepress-icon" alt="<?php esc_attr_e( 'TablePress plugin logo', 'tablepress' ); ?>" /><?php _e( 'TablePress', 'tablepress' ); ?><?php echo tb_tp_fs()->is_plan_or_trial( 'pro', true ) ? ' Pro' : ( tb_tp_fs()->is_plan_or_trial( 'max', true ) ? ' Max' : '' ); ?></h1>
+			<?php if ( tb_tp_fs()->is_free_plan() ) : ?>
+				<div class="buttons">
+					<a href="<?php echo 'https://tablepress.org/premium/'; ?>" class="tablepress-button">
+						<span><?php _e( 'Upgrade to Premium', 'tablepress' ); ?></span>
+						<span class="dashicons dashicons-arrow-right-alt"></span>
+					</a>
+				</div>
+			<?php endif; ?>
+		</div>
+		<nav id="tablepress-nav">
+			<ul class="nav-menu">
 			<?php
 			foreach ( $this->data['view_actions'] as $action => $entry ) {
 				if ( '' === $entry['nav_tab_title'] ) {
@@ -399,12 +427,13 @@ abstract class TablePress_View {
 				}
 
 				$url = esc_url( TablePress::url( array( 'action' => $action ) ) );
-				$active = ( $action === $this->action ) ? ' nav-tab-active' : '';
-				$separator = ( 'options' === $action ) ? ' nav-tab-separator' : ''; // Make the "Plugin Options" entry a separator, for some spacing.
-				echo "<a class=\"nav-tab{$active}{$separator}\" href=\"{$url}\">{$entry['nav_tab_title']}</a>";
+				$active = ( $action === $this->action ) ? ' active' : '';
+				$separator = ( 'export' === $action ) ? ' separator' : ''; // Make the "Export" entry a separator, for some spacing.
+				echo "<li class=\"nav-item\"><a id=\"tablepress-nav-item-{$action}\" class=\"nav-link{$active}{$separator}\" href=\"{$url}\">{$entry['nav_tab_title']}</a></li>";
 			}
 			?>
-		</div><hr class="wp-header-end" />
+			</ul>
+		</nav>
 		<?php
 	}
 
@@ -419,7 +448,7 @@ abstract class TablePress_View {
 	protected function textbox_submit_button( array $data, array $box ) {
 		$caption = isset( $data['submit_button_caption'] ) ? $data['submit_button_caption'] : __( 'Save Changes', 'tablepress' );
 		?>
-		<p class="submit"><input type="submit" value="<?php echo esc_attr( $caption ); ?>" class="button button-primary button-large" name="submit" /></p>
+		<p class="submit"><input type="submit" value="<?php echo esc_attr( $caption ); ?>" class="button button-primary button-large" /></p>
 		<?php
 	}
 
@@ -449,20 +478,17 @@ abstract class TablePress_View {
 		// Get dismissed pointers.
 		$dismissed = explode( ',', (string) get_user_meta( get_current_user_id(), 'dismissed_wp_pointers', true ) );
 
-		$got_pointers = false;
+		$pointers_on_page = false;
 		foreach ( array_diff( $this->wp_pointers, $dismissed ) as $pointer ) {
 			// Bind pointer print function.
 			add_action( "admin_footer-{$GLOBALS['hook_suffix']}", array( $this, 'wp_pointer_' . $pointer ) );
-			$got_pointers = true;
+			$pointers_on_page = true;
 		}
 
-		if ( ! $got_pointers ) {
-			return;
+		if ( $pointers_on_page ) {
+			wp_enqueue_style( 'wp-pointer' );
+			wp_enqueue_script( 'wp-pointer' );
 		}
-
-		// Add pointers script and style to queue.
-		wp_enqueue_style( 'wp-pointer' );
-		wp_enqueue_script( 'wp-pointer' );
 	}
 
 } // class TablePress_View

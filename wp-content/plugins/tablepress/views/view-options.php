@@ -13,6 +13,7 @@ defined( 'ABSPATH' ) || die( 'No direct script access allowed!' );
 
 /**
  * Plugin Options View class
+ *
  * @package TablePress
  * @subpackage Views
  * @author Tobias Bäthge
@@ -29,24 +30,14 @@ class TablePress_Options_View extends TablePress_View {
 	 * @param array  $data   Data for this view.
 	 */
 	public function setup( $action, array $data ) {
-		parent::setup( $action, $data );
-
-		// Enqueue WordPress copy of CodeMirror, with CSS linting, etc.
-		$codemirror_settings = wp_enqueue_code_editor( array( 'type' => 'text/css' ) );
-		if ( ! empty( $codemirror_settings ) ) {
-			// Load CSS adjustments for CodeMirror and the added vertical resizing.
-			$this->admin_page->enqueue_style( 'codemirror', array( 'code-editor' ) ); // phpcs:ignore PEAR.Functions.FunctionCallSignature.MultipleArguments
-			$this->admin_page->enqueue_script( 'codemirror', array( 'jquery', 'jquery-ui-resizable' ), array( // phpcs:ignore PEAR.Functions.FunctionCallSignature.MultipleArguments
-				'codemirror_settings' => $codemirror_settings,
-			) );
+		if ( current_user_can( 'tablepress_edit_options' ) ) {
+			// Register the feature pointer "Custom CSS" textarea, before running `parent::setup();`. This is done here as the target HTML element does not exist for all users.
+			$this->wp_pointers[] = 'tp20_options_custom_css_css_variables';
 		}
 
-		$this->admin_page->enqueue_script( 'options', array( 'jquery' ), array( // phpcs:ignore PEAR.Functions.FunctionCallSignature.MultipleArguments
-			'strings' => array(
-				'uninstall_warning_1' => __( 'Do you really want to uninstall TablePress and delete ALL data?', 'tablepress' ),
-				'uninstall_warning_2' => __( 'Are you really sure?', 'tablepress' ),
-			),
-		) );
+		parent::setup( $action, $data );
+
+		$this->admin_page->enqueue_script( 'options' );
 
 		$this->process_action_messages( array(
 			'success_save'                  => __( 'Options saved successfully.', 'tablepress' ),
@@ -56,10 +47,17 @@ class TablePress_Options_View extends TablePress_View {
 
 		$this->add_text_box( 'head', array( $this, 'textbox_head' ), 'normal' );
 		if ( current_user_can( 'tablepress_edit_options' ) ) {
+			// Enqueue WordPress copy of CodeMirror, with CSS linting, etc., for the "Custom CSS" textarea, which is only shown to admins.
+			$codemirror_settings = wp_enqueue_code_editor( array( 'type' => 'text/css' ) );
+			if ( ! empty( $codemirror_settings ) ) {
+				// Load CSS adjustments for CodeMirror and the added vertical resizing.
+				$this->admin_page->enqueue_style( 'codemirror', array( 'code-editor' ) );
+				$this->admin_page->enqueue_script( 'codemirror' );
+			}
+
 			$this->add_meta_box( 'frontend-options', __( 'Frontend Options and Styling', 'tablepress' ), array( $this, 'postbox_frontend_options' ), 'normal' );
 		}
 		$this->add_meta_box( 'user-options', __( 'User Options', 'tablepress' ), array( $this, 'postbox_user_options' ), 'normal' );
-		$this->data['submit_button_caption'] = __( 'Save Changes', 'tablepress' );
 		$this->add_text_box( 'submit', array( $this, 'textbox_submit_button' ), 'submit' );
 		if ( current_user_can( 'deactivate_plugin', TABLEPRESS_BASENAME ) && current_user_can( 'tablepress_edit_options' ) && current_user_can( 'tablepress_delete_tables' ) && ! is_plugin_active_for_network( TABLEPRESS_BASENAME ) ) {
 			$this->add_text_box( 'uninstall-tablepress', array( $this, 'textbox_uninstall_tablepress' ), 'submit' );
@@ -93,7 +91,6 @@ class TablePress_Options_View extends TablePress_View {
 	public function postbox_frontend_options( array $data, array $box ) {
 		?>
 <table class="tablepress-postbox-table fixed">
-<tbody>
 	<tr>
 		<th class="column-1" scope="row"><label for="option-custom-css"><?php _e( 'Custom CSS', 'tablepress' ); ?></label>:</th>
 		<td class="column-2"><label for="option-use-custom-css"><input type="checkbox" id="option-use-custom-css" name="options[use_custom_css]" value="true"<?php checked( $data['frontend_options']['use_custom_css'] ); ?> /> <?php _e( 'Load this &#8220;Custom CSS&#8221; code to change the table styling:', 'tablepress' ); ?></label>
@@ -102,7 +99,7 @@ class TablePress_Options_View extends TablePress_View {
 	<tr>
 		<td class="column-1"></td>
 		<td class="column-2">
-			<textarea name="options[custom_css]" id="option-custom-css" class="large-text" rows="8"><?php echo esc_textarea( $data['frontend_options']['custom_css'] ); ?></textarea>
+			<textarea name="options[custom_css]" id="option-custom-css" class="large-text" rows="8" autocomplete="off"><?php echo esc_textarea( $data['frontend_options']['custom_css'] ); ?></textarea>
 			<p class="description">
 			<?php
 				printf( __( '&#8220;Custom CSS&#8221; (<a href="%s">Cascading Style Sheets</a>) can be used to change the styling or layout of a table.', 'tablepress' ), 'https://www.htmldog.com/guides/css/beginner/' );
@@ -116,7 +113,6 @@ class TablePress_Options_View extends TablePress_View {
 			</p>
 		</td>
 	</tr>
-</tbody>
 </table>
 		<?php
 	}
@@ -130,10 +126,6 @@ class TablePress_Options_View extends TablePress_View {
 	 * @param array $box  Information about the meta box.
 	 */
 	public function postbox_user_options( array $data, array $box ) {
-		?>
-<table class="tablepress-postbox-table fixed">
-<tbody>
-		<?php
 		// Get list of current admin menu entries.
 		$entries = array();
 		foreach ( $GLOBALS['menu'] as $entry ) {
@@ -162,11 +154,11 @@ class TablePress_Options_View extends TablePress_View {
 		}
 		$select_box .= "</select>\n";
 		?>
+<table class="tablepress-postbox-table fixed">
 	<tr>
 		<th class="column-1" scope="row"><label for="option-admin-menu-parent-page"><?php _e( 'Admin menu entry', 'tablepress' ); ?>:</label></th>
 		<td class="column-2"><?php printf( __( 'TablePress shall be shown in this section of my admin menu: %s', 'tablepress' ), $select_box ); ?></td>
 	</tr>
-</tbody>
 </table>
 		<?php
 	}
@@ -192,6 +184,25 @@ class TablePress_Options_View extends TablePress_View {
 		</p>
 		<p><a href="<?php echo TablePress::url( array( 'action' => 'uninstall_tablepress' ), true, 'admin-post.php' ); ?>" id="uninstall-tablepress" class="button"><?php _e( 'Uninstall TablePress', 'tablepress' ); ?></a></p>
 		<?php
+	}
+
+	/**
+	 * Sets the content for the WP feature pointer about the CSS Custom Variables on the "Options" screen.
+	 *
+	 * @since 2.0.0
+	 */
+	public function wp_pointer_tp20_options_custom_css_css_variables() {
+		$content  = '<h3>' . __( 'TablePress feature: Styling tables with CSS Custom Properties', 'tablepress' ) . '</h3>';
+		$content .= '<p>' . __( 'Did you know?', 'tablepress' ) . ' ' . __( 'To change the table colors, you can easily set new ones with CSS variables.', 'tablepress' ) . ' ' . sprintf( __( '<a href="%s">Read more in the TablePress FAQ.</a>', 'tablepress' ), 'https://tablepress.org/faq/' ) . '</p>';
+
+		$this->admin_page->print_wp_pointer_js(
+			'tp20_options_custom_css_css_variables',
+			'#option-custom-css + .CodeMirror',
+			array(
+				'content'  => $content,
+				'position' => array( 'edge' => 'top', 'align' => 'center' ),
+			)
+		);
 	}
 
 } // class TablePress_Options_View
