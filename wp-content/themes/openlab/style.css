@@ -11827,6 +11827,10 @@ p.private-membership-indicator {
 .bp-docs .doctable-panel {
   padding-bottom: 0;
 }
+.bp-docs .doc-search-element input {
+  height: 24px;
+  line-height: 18px;
+}
 .bp-docs .docs-info-header {
   background: transparent !important;
   padding: 0 !important;

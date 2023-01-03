@@ -5,8 +5,8 @@
 				<form action="" method="get" class="form-inline">
 					<div class="form-group">
 						<label class="sr-only" for="docSearch">Search Docs</label>
-						<input id="docSearch" class="form-control" name="s" value="<?php the_search_query() ?>">
-						<input class="btn btn-primary top-align" name="search_submit" type="submit" value="<?php _e('Search', 'bp-docs') ?>" />
+						<input id="docSearch" name="s" value="<?php the_search_query() ?>">
+						<input class="" name="search_submit" type="submit" value="<?php _e('Search', 'bp-docs') ?>" />
 					</div>
 				</form>
 			</div>
