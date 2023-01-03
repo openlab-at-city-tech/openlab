@@ -202,3 +202,80 @@ add_filter(
 		return bp_docs_get_doc_link();
 	}
 );
+
+/**
+ * Get the info header for a list of docs
+ *
+ * Contains things like tag filters
+ *
+ * @param int $doc_id optional The post_id of the doc
+ * @return str Permalink for the group doc
+ */
+function openlab_bp_docs_info_header() {
+	do_action( 'bp_docs_before_info_header' );
+
+	$filters = bp_docs_get_current_filters();
+
+	// Set the message based on the current filters
+	if ( empty( $filters ) ) {
+		$message = 'Viewing <strong>all</strong> docs.';
+	} else {
+		$message = array();
+
+		$message = apply_filters( 'bp_docs_info_header_message', $message, $filters );
+
+		$message = array_map(
+			function( $m ) {
+				$m = str_replace(
+					[
+						'You are viewing',
+						'with the following tags',
+						'You are searching for docs',
+					],
+					[
+						'Viewing',
+						'with the tag',
+						'Viewing docs',
+					],
+					$m
+				);
+
+				$m = preg_replace(
+					'|the term <em>(.*?)</em>|',
+					'the term: \1',
+					$m
+				);
+
+				return $m;
+			},
+			$message
+		);
+
+		$message = implode( "<br />", $message );
+
+		// We are viewing a subset of docs, so we'll add a link to clear filters
+		// Figure out what the possible filter query args are.
+		$filter_args = apply_filters( 'bp_docs_filter_types', array() );
+		$filter_args = wp_list_pluck( $filter_args, 'query_arg' );
+		$filter_args = array_merge( $filter_args, array( 'search_submit', 'folder' ) );
+	}
+
+	?>
+
+	<p class="currently-viewing"><?php echo $message ?></p>
+
+	<?php if ( $filter_titles = bp_docs_filter_titles() ) : ?>
+		<div class="docs-filters">
+			<p id="docs-filter-meta">
+				<?php printf( __( 'Filter by: %s', 'buddypress-docs' ), $filter_titles ) ?>
+			</p>
+
+			<div id="docs-filter-sections">
+				<?php do_action( 'bp_docs_filter_sections' ) ?>
+			</div>
+		</div>
+
+		<div class="clear"> </div>
+	<?php endif ?>
+	<?php
+}

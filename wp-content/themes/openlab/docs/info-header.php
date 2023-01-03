@@ -11,11 +11,7 @@
 				</form>
 			</div>
 
-			<div class="bp-docs-pagination">
-				<div class="bp-docs-pagination-count">
-					<?php printf(__('Viewing %1$s-%2$s of %3$s docs', 'bp-docs'), bp_docs_get_current_docs_start(), bp_docs_get_current_docs_end(), bp_docs_get_total_docs_num()) ?>
-				</div>
-			</div>
+			<?php openlab_bp_docs_info_header(); ?>
 		</div>
 	</div>
 </div>
