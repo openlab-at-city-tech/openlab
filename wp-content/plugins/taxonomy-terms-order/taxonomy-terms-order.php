@@ -3,7 +3,7 @@
 Plugin Name: Category Order and Taxonomy Terms Order
 Plugin URI: http://www.nsp-code.com
 Description: Order Categories and all custom taxonomies terms (hierarchically) and child terms using a Drag and Drop Sortable javascript capability. 
-Version: 1.6.1
+Version: 1.7.4
 Author: Nsp-Code
 Author URI: https://www.nsp-code.com
 Author Email: electronice_delphi@yahoo.com
@@ -18,21 +18,40 @@ Domain Path: /languages/
     register_deactivation_hook(__FILE__, 'TO_deactivated');
     register_activation_hook(__FILE__, 'TO_activated');
 
-    function TO_activated() 
+    function TO_activated( $network_wide ) 
         {
             global $wpdb;
-            
-            //check if the menu_order column exists;
-            $query = "SHOW COLUMNS FROM $wpdb->terms 
-                        LIKE 'term_order'";
-            $result = $wpdb->query($query);
-            
-            if ($result == 0)
-                {
-                    $query = "ALTER TABLE $wpdb->terms ADD `term_order` INT( 4 ) NULL DEFAULT '0'";
-                    $result = $wpdb->query($query); 
+                 
+            // check if it is a network activation
+            if ( $network_wide ) 
+                {                   
+                    // Get all blog ids
+                    $blogids = $wpdb->get_col("SELECT blog_id FROM $wpdb->blogs");
+                    foreach ( $blogids as $blog_id ) 
+                        {
+                            switch_to_blog( $blog_id );
+                            tto_activate();
+                            restore_current_blog();
+                        }
+                    
+                    return;
                 }
-
+                else
+                tto_activate();
+        }
+        
+        
+    add_action( 'wp_initialize_site', 'TO_wp_initialize_site', 99, 2 );       
+    function TO_wp_initialize_site( $blog_data, $args )
+        {
+            global $wpdb;
+         
+            if (is_plugin_active_for_network('taxonomy-terms-order/taxonomy-terms-order.php')) 
+                {
+                    switch_to_blog( $blog_data->blog_id );
+                    tto_activate();                    
+                    restore_current_blog();
+                }
         }
         
     function TO_deactivated() 
@@ -70,9 +89,8 @@ Domain Path: /languages/
             wp_enqueue_style( 'to.css');
         } 
         
-    add_action('admin_menu', 'TOPluginMenu', 99);
-
-    function TOPluginMenu() 
+    add_action('admin_menu', 'TO_PluginMenu', 99);
+    function TO_PluginMenu() 
         {
             include (TOPATH . '/include/interface.php');
             include (TOPATH . '/include/terms_walker.php');
@@ -113,11 +131,11 @@ Domain Path: /languages/
                         continue;                
                     
                     if ($post_type == 'post')
-                        add_submenu_page('edit.php', __('Taxonomy Order', 'taxonomy-terms-order'), __('Taxonomy Order', 'taxonomy-terms-order'), $capability, 'to-interface-'.$post_type, 'TOPluginInterface' );
+                        add_submenu_page('edit.php', __('Taxonomy Order', 'taxonomy-terms-order'), __('Taxonomy Order', 'taxonomy-terms-order'), $capability, 'to-interface-'.$post_type, 'TO_PluginInterface' );
                         elseif ($post_type == 'attachment')
-                        add_submenu_page('upload.php', __('Taxonomy Order', 'taxonomy-terms-order'), __('Taxonomy Order', 'taxonomy-terms-order'), $capability, 'to-interface-'.$post_type, 'TOPluginInterface' );   
+                        add_submenu_page('upload.php', __('Taxonomy Order', 'taxonomy-terms-order'), __('Taxonomy Order', 'taxonomy-terms-order'), $capability, 'to-interface-'.$post_type, 'TO_PluginInterface' );   
                         else
-                        add_submenu_page('edit.php?post_type='.$post_type, __('Taxonomy Order', 'taxonomy-terms-order'), __('Taxonomy Order', 'taxonomy-terms-order'), $capability, 'to-interface-'.$post_type, 'TOPluginInterface' );
+                        add_submenu_page('edit.php?post_type='.$post_type, __('Taxonomy Order', 'taxonomy-terms-order'), __('Taxonomy Order', 'taxonomy-terms-order'), $capability, 'to-interface-'.$post_type, 'TO_PluginInterface' );
                 }
         }
 
@@ -166,8 +184,8 @@ Domain Path: /languages/
             return $orderby;
         }
 
-    add_action( 'wp_ajax_update-taxonomy-order', 'TOsaveAjaxOrder' );
-    function TOsaveAjaxOrder()
+    add_action( 'wp_ajax_update-taxonomy-order', 'TO_saveAjaxOrder' );
+    function TO_saveAjaxOrder()
         {
             global $wpdb;
             
