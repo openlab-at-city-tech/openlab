@@ -41,6 +41,10 @@ ignores=(
   'wp-content/plugins/the-events-calendar/src/Tribe/Views/V2/Repository/Event_Period.php'
   'wp-content/plugins/the-events-calendar/src/Tribe/Templates.php'
 #  'wp-content/plugins/threewp-broadcast/src/sdk/wordpress/updater/edd.php'
+
+  # Uses some removed mcrypt constants. Not sure how to address.
+  'wp-content/plugins/watupro/lib/recaptcha/recaptchalib.php'
+
   'wp-content/plugins/wp-document-revisions/tests'
   'wp-content/plugins/wp-post-to-pdf'
   'wp-content/plugins/wp-simile-timeline'
