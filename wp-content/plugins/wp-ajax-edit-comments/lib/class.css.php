@@ -123,7 +123,12 @@ table.inputs td {\n
 	\ttext-align: {$icon_margin};\n
 	\tmargin-{$icon_margin}: 10px;\n
 }\n
-textarea, input { border: 1px solid #CCC; " . $rtl == 'true' ? "direction:rtl;" : '' . "}\n
+textarea, input { border: 1px solid #CCC; " .
+
+// phpcs:ignore PHPCompatibility.Operators.RemovedTernaryAssociativity.Found
+$rtl == 'true' ? "direction:rtl;" : '' .
+
+"}\n
 textarea { position: relative; width: 98%; clear:left; " . $rtl == 'true' ? "float:right;" : '' . "}\n
 #buttons div {\n
 	\tfloat: {$rtl_float};\n
