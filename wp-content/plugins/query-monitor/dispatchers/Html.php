@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 /**
  * General HTML request dispatcher.
  *
@@ -46,7 +46,10 @@ class QM_Dispatcher_Html extends QM_Dispatcher {
 		add_action( 'wp_ajax_qm_editor_set', array( $this, 'ajax_editor_set' ) );
 		add_action( 'wp_ajax_nopriv_qm_auth_off', array( $this, 'ajax_off' ) );
 
-		add_action( 'shutdown', array( $this, 'dispatch' ), 0 );
+		// 9 is a magic number, it's the latest we can realistically use due to plugins
+		// which call `fastcgi_finish_request()` in a `shutdown` callback hooked on the
+		// default priority of 10, and QM needs to dispatch its output before those.
+		add_action( 'shutdown', array( $this, 'dispatch' ), 9 );
 
 		add_action( 'wp_footer', array( $this, 'action_footer' ) );
 		add_action( 'admin_footer', array( $this, 'action_footer' ) );
@@ -85,8 +88,9 @@ class QM_Dispatcher_Html extends QM_Dispatcher {
 		$expiration = time() + ( 2 * DAY_IN_SECONDS );
 		$secure = self::secure_cookie();
 		$cookie = wp_generate_auth_cookie( get_current_user_id(), $expiration, 'logged_in' );
+		$domain = COOKIE_DOMAIN ?: '';
 
-		setcookie( QM_COOKIE, $cookie, $expiration, COOKIEPATH, COOKIE_DOMAIN, $secure, false );
+		setcookie( QM_COOKIE, $cookie, $expiration, COOKIEPATH, $domain, $secure, false );
 
 		wp_send_json_success();
 
@@ -102,8 +106,9 @@ class QM_Dispatcher_Html extends QM_Dispatcher {
 		}
 
 		$expiration = time() - 31536000;
+		$domain = COOKIE_DOMAIN ?: '';
 
-		setcookie( QM_COOKIE, ' ', $expiration, COOKIEPATH, COOKIE_DOMAIN );
+		setcookie( QM_COOKIE, ' ', $expiration, COOKIEPATH, $domain );
 
 		wp_send_json_success();
 
@@ -121,8 +126,9 @@ class QM_Dispatcher_Html extends QM_Dispatcher {
 		$expiration = time() + ( 2 * YEAR_IN_SECONDS );
 		$secure = self::secure_cookie();
 		$editor = wp_unslash( $_POST['editor'] );
+		$domain = COOKIE_DOMAIN ?: '';
 
-		setcookie( QM_EDITOR_COOKIE, $editor, $expiration, COOKIEPATH, COOKIE_DOMAIN, $secure, false );
+		setcookie( QM_EDITOR_COOKIE, $editor, $expiration, COOKIEPATH, $domain, $secure, false );
 
 		wp_send_json_success( $editor );
 
@@ -170,6 +176,7 @@ class QM_Dispatcher_Html extends QM_Dispatcher {
 
 		if ( ! file_exists( $this->qm->plugin_path( 'assets/query-monitor.css' ) ) ) {
 			add_action( 'admin_notices', array( $this, 'build_warning' ) );
+			return;
 		}
 
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_assets' ), -9999 );
@@ -229,7 +236,7 @@ class QM_Dispatcher_Html extends QM_Dispatcher {
 		wp_enqueue_style(
 			'query-monitor',
 			$this->qm->plugin_url( 'assets/query-monitor.css' ),
-			array( 'dashicons' ),
+			array(),
 			$this->qm->plugin_ver( 'assets/query-monitor.css' )
 		);
 		wp_enqueue_script(
@@ -337,10 +344,7 @@ class QM_Dispatcher_Html extends QM_Dispatcher {
 	 * @return void
 	 */
 	protected function before_output() {
-
-		require_once $this->qm->plugin_path( 'output/Html.php' );
-
-		foreach ( glob( $this->qm->plugin_path( 'output/html/*.php' ) ) as $file ) {
+		foreach ( (array) glob( $this->qm->plugin_path( 'output/html/*.php' ) ) as $file ) {
 			require_once $file;
 		}
 
@@ -354,7 +358,7 @@ class QM_Dispatcher_Html extends QM_Dispatcher {
 		 *
 		 * @since 3.0.0
 		 *
-		 * @param array $menus Array of menus.
+		 * @param array<string, mixed[]> $menus Array of menus.
 		 */
 		$this->admin_bar_menu = apply_filters( 'qm/output/menus', array() );
 
@@ -363,7 +367,7 @@ class QM_Dispatcher_Html extends QM_Dispatcher {
 		 *
 		 * @since 3.0.0
 		 *
-		 * @param array $admin_bar_menu Array of menus.
+		 * @param array<string, mixed[]> $admin_bar_menu Array of menus.
 		 */
 		$this->panel_menu = apply_filters( 'qm/output/panel_menus', $this->admin_bar_menu );
 
@@ -406,6 +410,27 @@ class QM_Dispatcher_Html extends QM_Dispatcher {
 		echo 'var qm = ' . json_encode( $json ) . ';' . "\n\n";
 		echo '</script>' . "\n\n";
 
+		echo '<svg id="qm-icon-container">';
+		foreach ( (array) glob( $this->qm->plugin_path( 'assets/icons/*.svg' ) ) as $icon ) {
+			if ( ! $icon ) {
+				continue;
+			}
+
+			$icon_name = basename( $icon, '.svg' );
+			$contents = (string) file_get_contents( $icon );
+
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			echo str_replace(
+				'<path ',
+				sprintf(
+					'<path id="qm-icon-%s" ',
+					$icon_name
+				),
+				$contents
+			);
+		}
+		echo '</svg>';
+
 		echo '<div id="query-monitor-main" data-theme="auto" class="' . implode( ' ', array_map( 'esc_attr', $class ) ) . '" dir="ltr">';
 		echo '<div id="qm-side-resizer" class="qm-resizer"></div>';
 		echo '<div id="qm-title" class="qm-resizer">';
@@ -444,10 +469,17 @@ class QM_Dispatcher_Html extends QM_Dispatcher {
 
 		echo '</select>';
 
+		$settings = QueryMonitor::icon( 'admin-generic' );
+		$toggle = QueryMonitor::icon( 'image-rotate-left' );
+		$close = QueryMonitor::icon( 'no-alt' );
+
 		echo '</div>';
-		echo '<button class="qm-title-button qm-button-container-settings" aria-label="' . esc_attr__( 'Settings', 'query-monitor' ) . '"><span class="dashicons dashicons-admin-generic" aria-hidden="true"></span></button>';
-		echo '<button class="qm-title-button qm-button-container-position" aria-label="' . esc_html__( 'Toggle panel position', 'query-monitor' ) . '"><span class="dashicons dashicons-image-rotate-left" aria-hidden="true"></span></button>';
-		echo '<button class="qm-title-button qm-button-container-close" aria-label="' . esc_attr__( 'Close Panel', 'query-monitor' ) . '"><span class="dashicons dashicons-no-alt" aria-hidden="true"></span></button>';
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo '<button class="qm-title-button qm-button-container-settings" aria-label="' . esc_attr__( 'Settings', 'query-monitor' ) . '">' . $settings . '</button>';
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo '<button class="qm-title-button qm-button-container-position" aria-label="' . esc_html__( 'Toggle panel position', 'query-monitor' ) . '">' . $toggle . '</button>';
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo '<button class="qm-title-button qm-button-container-close" aria-label="' . esc_attr__( 'Close Panel', 'query-monitor' ) . '">' . $close . '</button>';
 		echo '</div>'; // #qm-title
 
 		echo '<div id="qm-wrapper">';
@@ -518,7 +550,10 @@ class QM_Dispatcher_Html extends QM_Dispatcher {
 
 		echo '<p><button class="qm-auth qm-button" data-qm-text-on="' . esc_attr( $text['on'] ) . '" data-qm-text-off="' . esc_attr( $text['off'] ) . '">' . esc_html( $text[ $state ] ) . '</button></p>';
 
-		echo '<p data-qm-state-visibility="on"><span class="dashicons dashicons-yes qm-dashicons-yes"></span> ' . esc_html__( 'Authentication cookie is set', 'query-monitor' ) . '</p>';
+		$yes = QueryMonitor::icon( 'yes-alt' );
+
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo '<p data-qm-state-visibility="on">' . $yes . ' ' . esc_html__( 'Authentication cookie is set', 'query-monitor' ) . '</p>';
 
 		echo '</section>';
 
@@ -549,7 +584,11 @@ class QM_Dispatcher_Html extends QM_Dispatcher {
 		echo '</p><p>';
 		echo '<button class="qm-editor-button qm-button">' . esc_html__( 'Set editor cookie', 'query-monitor' ) . '</button>';
 		echo '</p>';
-		echo '<p id="qm-editor-save-status"><span class="dashicons dashicons-yes qm-dashicons-yes"></span> ' . esc_html__( 'Saved! Reload to apply changes.', 'query-monitor' ) . '</p>';
+
+		$yes = QueryMonitor::icon( 'yes-alt' );
+
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo '<p id="qm-editor-save-status">' . $yes . ' ' . esc_html__( 'Saved! Reload to apply changes.', 'query-monitor' ) . '</p>';
 		echo '</section>';
 
 		echo '<section>';
@@ -562,7 +601,6 @@ class QM_Dispatcher_Html extends QM_Dispatcher {
 		echo '<li><label><input type="radio" class="qm-theme-toggle qm-radio" name="qm-theme" value="light"/>' . esc_html_x( 'Light', 'colour scheme', 'query-monitor' ) . '</label></li>';
 		echo '<li><label><input type="radio" class="qm-theme-toggle qm-radio" name="qm-theme" value="dark"/>' . esc_html_x( 'Dark', 'colour scheme', 'query-monitor' ) . '</label></li>';
 		echo '</ul>';
-
 		echo '</section>';
 		echo '</div>';
 
@@ -798,6 +836,11 @@ class QM_Dispatcher_Html extends QM_Dispatcher {
 			return false;
 		}
 
+		// Don't dispatch inside the Site Editor:
+		if ( isset( $_SERVER['SCRIPT_NAME'] ) && '/wp-admin/site-editor.php' === $_SERVER['SCRIPT_NAME'] ) {
+			return false;
+		}
+
 		return true;
 	}
 
@@ -831,6 +874,10 @@ class QM_Dispatcher_Html extends QM_Dispatcher {
 
 		/** Back-compat filter. Please use `qm/dispatch/html` instead */
 		if ( ! apply_filters( 'qm/process', true, is_admin_bar_showing() ) ) {
+			return false;
+		}
+
+		if ( ! file_exists( $this->qm->plugin_path( 'assets/query-monitor.css' ) ) ) {
 			return false;
 		}
 
