@@ -531,7 +531,7 @@ class ImageProcessor
 										if ($colorindex >= $n) {
 											$alpha = 255;
 										} else {
-											$alpha = ord($transparency{$colorindex});
+											$alpha = ord($transparency[ $colorindex ]);
 										} // 0-255
 										if ($alpha > 0) {
 											imagesetpixel($imgalpha, $xpx, $ypx, $alpha);
@@ -1039,7 +1039,7 @@ class ImageProcessor
 								if ($colorindex >= $n) {
 									$alpha = 255;
 								} else {
-									$alpha = ord($transparency{$colorindex});
+									$alpha = ord($transparency[ $colorindex ]);
 								} // 0-255
 								$mimgdata .= chr($alpha);
 							}
