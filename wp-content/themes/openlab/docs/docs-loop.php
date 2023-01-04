@@ -101,7 +101,7 @@
 
 			<div id="bp-docs-pagination">
 				<div id="bp-docs-pagination-count">
-					<?php printf(__('Viewing %1$s-%2$s of %3$s docs', 'bp-docs'), bp_docs_get_current_docs_start(), bp_docs_get_current_docs_end(), bp_docs_get_total_docs_num()) ?>
+					<?php printf( 'Viewing %1$s-%2$s (of %3$s total)', bp_docs_get_current_docs_start(), bp_docs_get_current_docs_end(), bp_docs_get_total_docs_num() ) ?>
 				</div>
 
 				<div id="bp-docs-paginate-links">
