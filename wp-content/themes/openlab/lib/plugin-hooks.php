@@ -554,9 +554,6 @@ function openlab_filter_bbpress_search_parameters( $r ) {
 
 	$r['paged'] = ! empty( $_GET['search_paged'] ) ? (int) $_GET['search_paged'] : 1;
 
-	// for testing
-	$r['posts_per_page'] = 3;
-
 	return $r;
 }
 add_filter( 'bbp_after_has_search_results_parse_args', 'openlab_filter_bbpress_search_parameters' );
