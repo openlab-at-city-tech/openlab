@@ -44,4 +44,4 @@ jobs:
         run: developer/phpcompat.sh
 
       - name: Run PHP lint
-        run: php ~/repo/developer/lint-php.php
+        run: php developer/lint-php.php
