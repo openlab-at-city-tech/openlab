@@ -120,7 +120,7 @@ class AECUtility {
 			$chars = "%CDEF#cGHIJ\:ab!@defg9ABhijklmn<>;opqrstuvwxyz10234/+_-=5678MKL^&*NOP";
 			$pass = '';
 			for ($i = 0; $i < 50; $i++) {
-				$pass .= $chars{rand(0, strlen($chars)-1)};
+				$pass .= $chars[ rand(0, strlen($chars)-1) ];
 			} //end for
 			return $pass;
 		} //end random
