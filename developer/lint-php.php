@@ -19,6 +19,7 @@ function lint( $dir = 'C:\dev\\' )
 		'/wp-content/plugins/wp-document-revisions/tests',
 		'/wp-content/plugins/anthologize/vendor/pear/pear/', // Not loaded because we have zlib.
 		'/wp-content/plugins/wp-post-to-pdf', // Plugin is deprecated and throws lots of false positives
+		'/wp-content/plugins/out-of-the-box/vendors/phpThumb',
 	];
 
 	$excluded_files = [
