@@ -218,7 +218,7 @@ function openlab_bp_docs_info_header() {
 
 	// Set the message based on the current filters
 	if ( empty( $filters ) ) {
-		$message = 'Viewing <strong>All</strong> Docs.';
+		$message = 'Viewing <strong>All</strong> Docs';
 	} else {
 		$message = array();
 
