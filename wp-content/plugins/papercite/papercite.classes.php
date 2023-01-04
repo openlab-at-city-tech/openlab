@@ -482,7 +482,7 @@ class Papercite
                                 $parser->processTitles($processtitles);
                                 if (!$parser->parse($data)) {
                                     $this->cache[$biburi] = false;
-                                    continue;
+                                    continue 2;
                                 } else {
                                     $this->cache[$biburi] = &$parser->data;
                                 }
