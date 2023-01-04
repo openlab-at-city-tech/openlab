@@ -64,12 +64,12 @@
 
 		<?php endif; ?>
 
+		<?php bbp_get_template_part( 'form', 'reply' ); ?>
+
 		<div class="bbp-back-to-course-discussion">
 			<?php /* Trick: use the buddypress string so it gets translated */ ?>
 			<p><a class="btn btn-primary link-btn" href="<?php bp_group_permalink(); ?>forum/"><span class="fa fa-chevron-circle-left"></span> <?php _e( 'All Topics', 'openlab' ); ?></a></p>
 		</div>
-
-		<?php bbp_get_template_part( 'form', 'reply' ); ?>
 
 	<?php endif; ?>
 
