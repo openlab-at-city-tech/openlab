@@ -49,6 +49,7 @@ if ( comments_open() ) {
 				)
             ),
 			'logged_in_as'              => '', // Empty. For styling purposes it's moved to title_reply
+			'label_submit'              => 'Submit',
             'submit_button'             => sprintf(
                 '%s <button type="button" class="btn btn-default" id="openlab-cancel-doc-reply">%s</button>',
                 '<input name="%1$s" type="submit" id="%2$s" class="%3$s" value="%4$s" />',
