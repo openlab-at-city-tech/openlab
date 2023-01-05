@@ -452,7 +452,7 @@ function kbgv_plugin_init(){
 		$val = ini_get('upload_max_filesize');
 		$val = trim($val);
 		// check whether we've used shorthand, like "2M", instead of raw bytes:
-		$last = strtolower($val{strlen($val)-1});
+		$last = strtolower($val[ strlen($val)-1 ]);
 	    switch($last) {
 	        case 'g':
 	            $val *= 1024;
