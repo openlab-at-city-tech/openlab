@@ -17,7 +17,6 @@ function lint( $dir = 'C:\dev\\' )
 		'/wp-content/uploads',
 		'/wp-content/plugins/buddypress/bp-forums/bbpress',
 		'/wp-content/plugins/wp-document-revisions/tests',
-		'/wp-content/plugins/kb-gradebook', // Not used.
 		'/wp-content/plugins/anthologize/vendor/pear/pear/', // Not loaded because we have zlib.
 		'/wp-content/plugins/anthologize/vendor/pear/file_archive/', // Not loaded because we have zlib.
 		'/wp-content/plugins/wp-post-to-pdf', // Plugin is deprecated and throws lots of false positives
