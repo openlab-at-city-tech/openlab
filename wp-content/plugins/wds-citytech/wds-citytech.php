@@ -3371,3 +3371,21 @@ add_filter( 'bp_docs_enable_attachments', '__return_false' );
  * Disable Akismet scanning for buddypress-docs.
  */
 add_filter( 'bp_docs_use_akismet', '__return_false' );
+
+/**
+ * Ensure that advanced-excerpt 'allowed_tags' option is an array.
+ *
+ * An array_search() call on a boolean triggers a fatal error in PHP 8+.
+ *
+ * See http://redmine.citytech.cuny.edu/issues/3129
+ */
+add_filter(
+	'option_advanced_excerpt',
+	function( $option ) {
+		if ( isset( $option['allowed_tags'] ) && ! is_array( $option['allowed_tags'] ) ) {
+			$option['allowed_tags'] = array();
+		}
+
+		return $option;
+	}
+);
