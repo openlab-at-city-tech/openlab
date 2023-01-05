@@ -50,25 +50,25 @@ define('KBGV_WPUSERS', false ); // set to TRUE if all your students have a WP lo
 		1.0 stores grade data in a different manner from pre-1.0. Any grade data that you uploaded on a pre-1.0 version of this plugin will be lost when you upgrade.
 	Sorry. Since very few people use this plugin, I didn't want to bother with creating an updater to convert the data from the old format to the new one. Before you upgrade,
 	However, your list of courses and your students' passwords will not be lost.
-	
+
 	IMPORTANT IMPORTANT IMPORTANT
 	I wrote this for SMALL classes. If you've got a lot of students in a single spreadsheet, this might cause serious CPU usage problems. I would advise against
 	using this if you have more than a few dozen students in a single spreadsheet. (For this plugin to scale for large classes, it would need to create its own tables
 	rather than just saving a large array to the DB.)
-	
+
 	FEATURE REQUESTS?
 	Unless you have money, I'm probably not going to do coding for you. I'm sorry. I made this for myself. I release it so others can use it if they want, but really, this is
 	open source software--if you think something could be spiced up, just do it yourself. If you make really cool improvements, send them my way and maybe I'll integrate
 	them into the code and add your name as a developer to the WP plugins repository.
-	
+
 	OPTION PREFIXES
-	Moving from 0.1.3 to 1.0 entailed a complete rewrite, along with modifications to how we use options. The 0.1+ branch used kbgv_ as prefix for all options. 
+	Moving from 0.1.3 to 1.0 entailed a complete rewrite, along with modifications to how we use options. The 0.1+ branch used kbgv_ as prefix for all options.
 	Options that preserved their structure continue to use that prefix (kbgv_courses, kbgv_students). But options with a new structure now use kbgvNEW_ as
 	a prefix.
-	
+
 	FUNCTION NAMESPACE
 	Everything global in here starts with kbgv_ 	(stands for KB Grade Viewer)
-	
+
 	DATABASE STRUCTURE
 	All data is stored via WP's options interface.
 	* kbgv_courses			Contains an array of available courses (as array values; keys are meaningless)
@@ -76,14 +76,14 @@ define('KBGV_WPUSERS', false ); // set to TRUE if all your students have a WP lo
 	* kbgv_ . md5(coursename)	deprecated in favor of...
 	* kbgvNEW_ . md5(coursename)	Contains a multidimensional array of grade info for one of the courses in kbgv_courses. Keys are student emails (with a couple additional
 						keys containing extra info), values are an array of the student's grades as imported from CSV.
-	
+
 	CODE FLOW - STUDENT VIEW
 	* Student navigates to a PAGE (not post) that the teacher has set up containing our slug (you can set the slug with the setting at the top of this file).
 		(Using the included widget makes this easier on the students.)
 	* On first visit, student clicks "request my password" to have password emailed to her
 	* On subsequent visits, student enters email and password to check grade information.
 	* Note that the student is NOT LOGGED IN to anything. This is not a WP login being used, just a posted email and password.
-	
+
 	CODE FLOW - TEACHER VIEW
 	* Teacher goes to Manage -> KB Gradebook
 	* Teacher selects an existing course or creates a new one
@@ -122,7 +122,7 @@ function kbgv_plugin_init(){
 			$alert = '<div id="message" class="updated fade">'.$out[1].'</div>';
 		echo $alert.'<div class="wrap">'.$out[0].'</div>';
 	}
-	
+
 	///////////////////////////////////////////////
 	// ADMIN PAGES -- return an array. First value is HTML to display, second value is an alert/error (if any) to display
 	///////////////////////////////////////////////
@@ -187,13 +187,13 @@ function kbgv_plugin_init(){
 		}
 		return array( $out, $alert );
 	}
-	
+
 	function kbgv_uploadCSVPage($args){
 		extract( $args );
 		// in case we've been sent back to this step by the next one, let's make sure we'll recognize the course name:
 		if (''!=$_POST['class'] && ''==$_POST['existing_course'])
 			$_POST['existing_course'] = $_POST['class'];
-		
+
 		// validate inputs:
 		if (''==$_POST['existing_course'] && ''==$_POST['new_course']){
 			$alert .= "<p>Error: You did not select a course.</p>";
@@ -214,7 +214,7 @@ function kbgv_plugin_init(){
 				return kbgv_selectCoursePage($args);
 			}
 			$coursename = $_POST['existing_course'];
-		} 
+		}
 		// now let's validate if a new course was typed in:
 		if ( '' != $_POST['new_course'] ){
 			if ( is_array($courselist) && in_array( $_POST['new_course'], $courselist ) ){
@@ -229,7 +229,7 @@ function kbgv_plugin_init(){
 				$args['alert'] = $alert;
 				return kbgv_selectCoursePage($args);
 			}
-		}		
+		}
 		// okay, we're good. Continue.
 		$out .= '
 			<h2>Step 2: Upload Grades</h2>
@@ -252,7 +252,7 @@ function kbgv_plugin_init(){
 		';
 		return array($out, $alert );
 	}
-	
+
 	function kbgv_writeMessagePage($args){
 		extract($args);
 		// check inputs
@@ -302,7 +302,7 @@ function kbgv_plugin_init(){
 			$args['alert'] = $alert;
 			return kbgv_uploadCSVPage($args);
 		}
-		
+
 		// alright, we saved all the grade info, now we need to check whether to generate any new passwords
 		$passwords = get_option( 'kbgv_students' ); // array: keys are emails, passwords are values
 		if (is_array($passwords)){
@@ -314,7 +314,7 @@ function kbgv_plugin_init(){
 		if (is_array($newStudents) && count($newStudents)>0){
 			// generate new passwords:
 			foreach( $newStudents as $newStudent )
-				$passwords[ $newStudent ] = kbgv_generate_one_password(); 
+				$passwords[ $newStudent ] = kbgv_generate_one_password();
 			if (!kbgv_update_option( 'kbgv_students', $passwords )){
 				$alert .= '<p>Unable to write student emails to database. Please try again later.</p>';
 				$args['alert'] = $alert;
@@ -355,7 +355,7 @@ function kbgv_plugin_init(){
 		$strippedMsg = str_replace( array('<p>','</p>','<br />'), '', $defaultMsg );
 		if ( strip_tags($defaultMsg) == $strippedMsg )
 			$defaultMsg = $strippedMsg;
-		
+
 		// detect whether existing message is plain text or html
 		if ($defaultMsg != strip_tags( $defaultMsg ))
 			$checked = 'checked="checked"'; // there was HTML in there, apparently
@@ -379,7 +379,7 @@ function kbgv_plugin_init(){
 		';
 		return array( $out, $alert );
 	}
-	
+
 	function kbgv_errorCheckPage($args){
 		extract($args);
 		// as usual, start by validating inputs
@@ -416,7 +416,7 @@ function kbgv_plugin_init(){
 		// delete_option( $opt . '_temp' ); // no, don't delete it. Otherwise, if they go "back" to adjust the message, they get an error.
 
 		$alert .= '<p>Message saved successfully.</p>';
-	
+
 		$out .= '
 			<h2>All Done!</h2>
 			<p>';
@@ -479,7 +479,7 @@ function kbgv_plugin_init(){
 		// first row in CSV is assumed to be headings
 		$cols = $arr[0];
 		array_shift( $arr );
-		
+
 		// must have at least 2 columns. One column is student email addresses, others hold grades.
 		if (count($cols) < 2)
 			return 'Sorry, but your CSV file has too few columns.';
@@ -499,7 +499,7 @@ function kbgv_plugin_init(){
 			$cleanCols[] = $cleanCol;
 		}
 		unset( $cleanCol );
-		
+
 		// verify that $emailCol is valid. We check it against $cols, which allows duplicates, so the first instance of $emailCol gets used.
 		$emailCol = kbgv_sanitizeColumn($emailCol);
 		if (''==$emailCol)
@@ -530,7 +530,7 @@ function kbgv_plugin_init(){
 				$out[ $email ][ $cleanCols[$k] ] = $v; // rename $arr's keys to make them easier to use later
 			}
 		}
-		
+
 		if ($bad>0){
 			$bad = "<strong>$bad</strong> of the email addresses in your spreadsheet were invalid.";
 			$out['alert'] .= "<p>$bad</p>";
@@ -563,7 +563,7 @@ function kbgv_plugin_init(){
 		$name = htmlspecialchars(  $name  , ENT_QUOTES);
 		return $name;
 	}
-	
+
 	// clean up the msg that the teacher wants to display to students
 	function kbgv_cleanupMsg($msg,$html){
 		$msg = stripslashes( trim($msg) );
@@ -571,7 +571,7 @@ function kbgv_plugin_init(){
 			return stripslashes( wp_filter_post_kses( $msg ) ); // not sure why wp_filter_post_kses does an addslashes() to the string...
 		// else: Let's clean up the text and make it into html
 		$msg = htmlspecialchars( $msg, ENT_QUOTES );
-		
+
 		// if there's an [AUTOTABLE] in there, put it on its own line
 		$msg = str_replace( '[AUTOTABLE]', "\n\n[AUTOTABLE]\n\n", $msg );
 
@@ -584,7 +584,7 @@ function kbgv_plugin_init(){
 		$msg = str_replace( "\n\n", '</p><p>', $msg );
 		$msg = str_replace( "\n", "<br />\n", $msg );
 		$msg = str_replace( '</p><p>', "</p>\n\n<p>", $msg ); // has to come after the <br /> replacement
-		
+
 		// don't put <p> tags around an autotable
 		$msg = str_replace( '<p>[AUTOTABLE]</p>', '[AUTOTABLE]', $msg );
 
@@ -628,7 +628,7 @@ function kbgv_plugin_init(){
 		$out .= '</tbody></table>';
 		return $out;
 	}
-	
+
 	// for displaying message to student. $grades is a row from $arr, $msg is $arr['msg']
 	function kbgv_generateGradeMsg($grades,$msg,$cols){
 		if (!is_array($grades))
@@ -657,7 +657,7 @@ function kbgv_plugin_init(){
 		}
 		return false;
 	}
-	
+
 	// does what it sounds like it does
 	function kbgv_validateEmail($email) {
 		if (''==$email)
@@ -705,13 +705,13 @@ function kbgv_plugin_init(){
 		// alright, we're in business:
 
 		$_POST['kbcourse'] = kbgv_cleanup_coursename( $_POST['kbcourse'] );
-		
+
 		// make life easier for everybody:
 		$_POST['kbemail'] = strtolower( $_POST['kbemail'] );
 		$_POST['kbpwd'] = strtolower( $_POST['kbpwd'] );
 
 		$students = get_option('kbgv_students');
-		
+
 		$postpath = get_permalink();
 		if ( strpos( $postpath, '?' ) )		// figure out how to append GETs to the current permalink
 			$postpath .= "&amp;";
@@ -747,9 +747,9 @@ function kbgv_plugin_init(){
 		else
 			return str_replace( $slug, $out, $content );
 	}
-	
+
 	// helpers for kbgv_page_filter() follow:
-	
+
 	// we're not using our randomly generated passwords; we're using WP's usernames and passwords
 	function kbgv_studentsAreWpUsers( $postpath, $students ){
 		$login = get_bloginfo('url') . '/wp-login.php';
@@ -805,7 +805,7 @@ function kbgv_plugin_init(){
 		$grades = $grades[ $userdata->user_email ];
 		return kbgv_generateGradeMsg( $grades, $msg, $cols );
 	}
-	
+
 	// student wants to request password by email
 	function kbgv_reqPwdForm( $postpath ){
 		$out .= '
@@ -920,18 +920,18 @@ function kbgv_widget_init() {
 		return;
 
 	function widget_kbgradeviewer($args) {
-		
+
 		extract($args);
 
 		$options = get_option('widget_kbgradeviewer');
 		$title = $options['title'];
 		$action = $options['action'];
-		
+
 		$courses = get_option('kbgv_courses');
-		
+
 		if ( !is_array( $courses ) )	// no sense in displaying the widget if there isn't course data
 			return;
-		
+
 		if ( '' == $action )	// require this.
 			return;
 
@@ -984,7 +984,7 @@ function kbgv_widget_init() {
 		// Be sure you format your options to be valid HTML attributes.
 		$title = htmlspecialchars($options['title'], ENT_QUOTES);
 		$action = htmlspecialchars($options['action'], ENT_QUOTES);
-		
+
 		// Here is our little form segment. Notice that we don't need a
 		// complete form. This will be embedded into the existing form.
 		echo '<p><label for="kbgradeviewer-title">' . __('Title:') . ' </label></p><p><input style="width: 500px;" id="kbgradeviewer-title" name="kbgradeviewer-title" type="text" value="'.$title.'" /></p>';
@@ -992,7 +992,7 @@ function kbgv_widget_init() {
 		echo '<p><small>The grade viewing page can be any page that contains <code>'.KBGV_SLUG.'</code> in the body. The widget will not display unless a URL is provided.</small></p>';
 		echo '<input type="hidden" id="kbgradeviewer-submit" name="kbgradeviewer-submit" value="1" />';
 	}
-	
+
 	register_sidebar_widget(array('KB Gradebook', 'widgets'), 'widget_kbgradeviewer');
 
 	register_widget_control(array('KB Gradebook', 'widgets'), 'widget_kbgradeviewer_control', 550, 200);
