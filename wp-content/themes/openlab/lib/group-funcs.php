@@ -100,7 +100,7 @@ function openlab_group_privacy_settings($group_type) {
 		$selected_privacy = null; // Will be determined in openlab_site_privacy_settings_markup().
 	} else {
 		$clone_steps      = groups_get_groupmeta( bp_get_new_group_id(), 'clone_steps', true );
-		$has_site         = in_array( 'site', $clone_steps, true );
+		$has_site         = is_array( $clone_steps ) && ! empty( $clone_steps ) && in_array( 'site', $clone_steps, true );
 		$selected_privacy = 1;
 	}
 	?>
