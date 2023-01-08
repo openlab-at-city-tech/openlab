@@ -1355,7 +1355,7 @@ function openlab_get_acknowledgements( $group_id ) {
 		if ( $clone_history ) {
 			$view_ancestors_link = add_query_arg( 'ancestor-of', $group_id, $group_directory_url );
 
-			$clone_info_parts['descendants'] = sprintf(
+			$clone_info_parts['ancestors'] = sprintf(
 				'<a href="%s">View the %s(s)</a> that this %s is based on.',
 				esc_html( $view_ancestors_link ),
 				$group_type_label,
