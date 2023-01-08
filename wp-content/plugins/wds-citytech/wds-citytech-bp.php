@@ -816,7 +816,7 @@ add_action(
 			if ( is_string( $to ) ) {
 				$user_email = $to;
 			} elseif ( is_array( $to ) ) {
-				foreach ( $to as $to_email => $to_username ) {
+				foreach ( $to[0] as $to_email => $to_username ) {
 					$user_email = $to_email;
 					break;
 				}
