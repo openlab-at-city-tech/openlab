@@ -2156,15 +2156,15 @@ function openlab_doc_list_comments_render( $comment, $args, $depth ) {
             <div class="comments-list-item-header-date">
                 <a href="<?php echo htmlspecialchars( get_comment_link( $comment->comment_ID ) ); ?>"><?php
                     /* translators: 1: date, 2: time */
-                    printf( 
-                        __('%1$s at %2$s'), 
-                        get_comment_date(),  
-                        get_comment_time() 
+                    printf(
+                        __('%1$s at %2$s'),
+                        get_comment_date(),
+                        get_comment_time()
                     ); ?>
                 </a>
             </div>
             <div class="comments-list-item-header-actions">
-                <?php edit_comment_link( 'Edit', '', '' ); ?> | 
+                <?php edit_comment_link( 'Edit', '', '' ); ?> |
                 <?php comment_reply_link( array_merge(
                     $args,
                     array(
