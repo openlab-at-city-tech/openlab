@@ -802,6 +802,9 @@ add_action(
 	0
 );
 
+/**
+ * Corrects the unsubscribe URL in outgoing emails to OL members.
+ */
 add_action(
 	'bp_send_email',
 	function( $email, $email_type, $to, $args ) {
@@ -810,9 +813,20 @@ add_action(
 		} elseif ( is_numeric( $to ) ) {
 			$user_id = $to;
 		} else {
-			$user = get_user_by( 'email', $to );
-			if ( $user ) {
-				$user_id = $user->ID;
+			if ( is_string( $to ) ) {
+				$user_email = $to;
+			} elseif ( is_array( $to ) ) {
+				foreach ( $to as $to_email => $to_username ) {
+					$user_email = $to_email;
+					break;
+				}
+			}
+
+			if ( ! empty( $user_email ) ) {
+				$user = get_user_by( 'email', $user_email );
+				if ( $user ) {
+					$user_id = $user->ID;
+				}
 			}
 		}
 
