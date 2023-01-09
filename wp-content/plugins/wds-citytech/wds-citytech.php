@@ -3166,6 +3166,10 @@ function openlab_wonderplugin_gallery_force_license_key( $value ) {
 	}
 
 	$info = unserialize( $value );
+	if ( ! is_object ) {
+		$info = new stdClass();
+	}
+
 	$info->key = WONDERPLUGIN_GALLERY_LICENSE_KEY;
 	$info->key_status = 'valid';
 	$info->key_expire = 0;
