@@ -233,20 +233,19 @@ function openlab_bp_group_documents_display_content() {
 		<?php } else { ?>
 			<div id="message" class="info">
 				<p class="bold">
-					<?php if ( $current_category ) : ?>
-						No files have been added yet. Add a new file below.
-					<?php else : ?>
-						No files have been added yet. Add a new file below.
-					<?php endif; ?>
-
-					<?php if ( $user_can_upload ) : ?>
-						<div class="upload-new-file">
-							<?php if ( 'add' === $template->operation ) { ?>
-								<a class="btn btn-primary link-btn" id="bp-group-documents-upload-button" href="" style="display:none;">Add new file</a>
-							<?php } ?>
-						</div>
-					<?php endif; ?>
+					No files have been added yet. 
+					<?php if( is_user_logged_in() && $user_can_upload ) { ?>
+					Add a new file below.
+					<?php } ?>
 				</p>
+
+				<?php if ( $user_can_upload ) : ?>
+					<div class="upload-new-file">
+						<?php if ( 'add' === $template->operation ) { ?>
+							<a class="btn btn-primary link-btn" id="bp-group-documents-upload-button" href="" style="display:none;">Add new file</a>
+						<?php } ?>
+					</div>
+				<?php endif; ?>
 			</div>
 
 		<?php } ?>
