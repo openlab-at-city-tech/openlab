@@ -5,6 +5,7 @@ $args = openlab_group_activities_loop_args( $type, $filter );
 
 $filter_options = [
 	'' 						=> __( 'All Activity', 'openlab' ),
+	'created_announcement,created_announcement_reply' => __( 'Announcements', 'openlab' ),
 	'new_blog_post' 		=> __( 'Posts', 'openlab' ),
 	'new_blog_comment' 		=> __( 'Comments', 'openlab' ),
 	'joined_group'			=> __( 'Group Memberships', 'buddypress' ),

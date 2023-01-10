@@ -1576,20 +1576,21 @@ function openlab_get_user_activity_action( $activity = null ) {
  */
 function openlab_get_activity_view_button_label( $activity_type = '' ) {
 	$labels = array(
-		'edited_group_document' => 'File',
-		'added_group_document'  => 'File',
-		'bp_doc_created'        => 'Doc',
-		'bp_doc_edited'	        => 'Doc',
-		'bp_doc_comment'		=> 'Comment',
-		'bpeo_create_event'     => 'Event',
-		'created_announcement'  => 'Announcement',
-		'new_blog_comment'      => 'Reply',
-		'bbp_topic_create'		=> 'Topic',
-		'bbp_reply_create'      => 'Reply',
-		'new_blog_post'			=> 'Post',
-		'new_blog_comment'		=> 'Comment',
-		'created_group'			=> 'Group',
-		'joined_group'			=> 'Group'
+		'edited_group_document' 		=> 'File',
+		'added_group_document'  		=> 'File',
+		'bp_doc_created'        		=> 'Doc',
+		'bp_doc_edited'	        		=> 'Doc',
+		'bp_doc_comment'				=> 'Comment',
+		'bpeo_create_event'     		=> 'Event',
+		'created_announcement'  		=> 'Announcement',
+		'created_announcement_reply'	=> 'Reply',
+		'new_blog_comment'      		=> 'Reply',
+		'bbp_topic_create'				=> 'Topic',
+		'bbp_reply_create'      		=> 'Reply',
+		'new_blog_post'					=> 'Post',
+		'new_blog_comment'				=> 'Comment',
+		'created_group'					=> 'Group',
+		'joined_group'					=> 'Group'
 	);
 
 	if( $labels[$activity_type] ) {
