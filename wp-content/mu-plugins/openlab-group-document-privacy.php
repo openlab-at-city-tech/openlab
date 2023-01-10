@@ -20,6 +20,28 @@ function cac_catch_group_doc_request() {
 	// Sanity and security checks on passed data.
 	$file_deets = explode( '/', $doc_id );
 
+	// External links should have more slashes
+	if( count( $file_deets ) > 2 ) {
+		if( $file_deets[1] == 'https:' || $file_deets[1] == 'http:' ) {
+			// Remove Group ID
+			unset( $file_deets[0] );
+			
+			// Regenerate the external link
+			$external_link = join('/', $file_deets);
+
+			// Check if it's valid URL
+			if(filter_var($external_link, FILTER_VALIDATE_URL) === false) {
+				bp_core_add_message( 'Invalid external url.', 'error' );
+				bp_core_redirect( bp_get_root_domain() );
+			}
+
+			wp_redirect( $external_link );
+		}
+
+		bp_core_add_message( 'Invalid external url.', 'error' );
+		bp_core_redirect( bp_get_root_domain() );
+	}
+
 	// File paths containing slashes should be ignored.
 	if ( 2 < count( $file_deets ) ) {
 		status_header( 404 );
