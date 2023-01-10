@@ -305,7 +305,7 @@ function openlab_bp_group_documents_display_content() {
 							<div class="panel-heading"><?php echo esc_html( $header_text ); ?></div>
 							<div class="panel-body">
 								<?php if( 'add' === $template->operation ) { ?>
-								<p>You can link to an external file, such as a Google Doc or a Dropbox file, or you can upload a file from your computer.</p>
+								<p>You can link to an external file, such as a OneDrive or Dropbox file. Or you can upload a file from your computer.</p>
 								<?php } ?>
 
 								<input type="hidden" name="bp_group_documents_operation" value="<?php echo esc_attr( $template->operation ); ?>" />
