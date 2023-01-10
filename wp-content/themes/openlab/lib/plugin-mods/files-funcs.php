@@ -242,7 +242,7 @@ function openlab_bp_group_documents_display_content() {
 					<?php if ( $user_can_upload ) : ?>
 						<div class="upload-new-file">
 							<?php if ( 'add' === $template->operation ) { ?>
-								<a class="btn btn-primary link-btn" id="bp-group-documents-upload-button" href="" style="display:none;"><?php esc_html_e( 'Upload a New Document', 'bp-group-documents' ); ?></a>
+								<a class="btn btn-primary link-btn" id="bp-group-documents-upload-button" href="" style="display:none;">Add new file</a>
 							<?php } ?>
 						</div>
 					<?php endif; ?>
