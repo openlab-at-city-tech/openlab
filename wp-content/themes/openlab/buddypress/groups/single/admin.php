@@ -112,14 +112,28 @@ $portfolio_sharing = groups_get_groupmeta( bp_get_current_group_id(), 'enable_po
 			$docs_enabled          = openlab_is_docs_enabled_for_group();
 			$files_enabled         = openlab_is_files_enabled_for_group();
 
+			if ( 'portfolio' === $group_type ) {
+				$show_announcement_toggle = false;
+				$heading_text             = 'Discussion, Docs, and File Library Settings';
+				$helper_text              = 'These settings enable or disable Discussions, Docs, and File Library on your ' . $group_label_uc . ' profile.';
+			} else {
+				$show_announcement_toggle = true;
+				$heading_text             = 'Announcements, Discussion, Docs, and File Library Settings';
+				$helper_text              = 'These settings enable or disable Announcements, Discussions, Docs, and File Library on your ' . $group_label_uc . ' profile.';
+			}
+
 			?>
 			<div class="panel panel-default">
-				<div class="panel-heading">Announcements, Discussion, Docs, and File Library Settings</div>
+				<div class="panel-heading"><?php echo esc_html( $heading_text ); ?></div>
 				<div class="panel-body">
-					<p id="discussion-settings-tag">These settings enable or disable Announcements, Discussions, Docs, and File Library on your <?php echo $group_label_uc; ?> profile.</p>
-					<div class="checkbox checkbox-float">
-						<label><input type="checkbox" name="openlab-edit-group-announcements" id="group-show-announcements" value="1"<?php checked( $announcements_enabled ); ?> /> Enable Announcements</label>
-					</div>
+					<p id="discussion-settings-tag"><?php echo esc_html( $helper_text ); ?></p>
+
+					<?php if ( $show_announcement_toggle ) : ?>
+						<div class="checkbox checkbox-float">
+							<label><input type="checkbox" name="openlab-edit-group-announcements" id="group-show-announcements" value="1"<?php checked( $announcements_enabled ); ?> /> Enable Announcements</label>
+						</div>
+					<?php endif; ?>
+
 					<div class="checkbox checkbox-float">
 						<label><input type="checkbox" name="openlab-edit-group-forum" id="group-show-forum" value="1"<?php checked( $forum_enabled ); ?> /> Enable Discussion</label>
 					</div>
