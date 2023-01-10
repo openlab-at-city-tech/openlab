@@ -1620,6 +1620,9 @@ function openlab_get_activity_button_link( $activity ) {
 		case 'bp_doc_created':
 		case 'bp_doc_edited':
 			return $activity->primary_link;
+		case 'joined_group':
+			$group = bp_get_group_by( 'id', $activity->item_id );
+			return bp_get_group_permalink( $group );
 		case 'default':
 			return $activity->primary_link;
 	}
