@@ -477,7 +477,7 @@ function olgc_allow_empty_comment( $allow, $commentdata ) {
 		return $allow;
 	}
 
-	return ! empty( $_POST['olgc-grade'] );
+	return 0 !== strlen( $_POST['olgc-grade'] );
 }
 add_filter( 'allow_empty_comment', 'olgc_allow_empty_comment', 10, 2 );
 
