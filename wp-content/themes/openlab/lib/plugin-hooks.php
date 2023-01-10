@@ -667,6 +667,9 @@ function openlab_refresh_term_cache_after_ordering_update() {
 
 add_action( 'tto/update-order', 'openlab_refresh_term_cache_after_ordering_update' );
 
+/**
+ * Change the text displayed along with the pagination on the bbpress main page
+ */
 function openlab_forum_pagination_count( $html ) {
 	$bbp = bbpress();
 
@@ -709,15 +712,51 @@ function openlab_forum_pagination_count( $html ) {
 add_filter( 'bbp_get_forum_pagination_count', 'openlab_forum_pagination_count' );
 
 /**
- * Change icons on the prev/next buttons in bbp topics pagination
+ * Change the text displayed along with the pagination on the bbpress search results page
  */
-function openlab_bbp_topic_pagination($arr) {
+function openlab_search_results_pagination_count() {
+	$bbp = bbpress();
+
+	// Define local variable(s)
+	$retstr = '';
+
+	// Set pagination values
+	$total_int = intval( $bbp->search_query->found_posts    );
+	$ppp_int   = intval( $bbp->search_query->posts_per_page );
+	$start_int = intval( ( $bbp->search_query->paged - 1 ) * $ppp_int ) + 1;
+	$to_int    = intval( ( $start_int + ( $ppp_int - 1 ) > $total_int )
+			? $total_int
+			: $start_int + ( $ppp_int - 1 ) );
+
+	// Format numbers for display
+	$total_num = bbp_number_format( $total_int );
+	$from_num  = bbp_number_format( $start_int );
+	$to_num    = bbp_number_format( $to_int    );
+
+	// Single page of results
+	if ( empty( $to_num ) ) {
+		$retstr = sprintf( _n( 'Viewing %1$s', 'Viewing %1$s results', $total_int, 'bbpress' ), $total_num );
+
+	// Several pages of results
+	} else {
+		$retstr = sprintf( _n( 'Viewing %2$s (of %4$s total)', 'Viewing %2$s to %3$s (of %4$s total)', $bbp->search_query->post_count, 'bbpress' ), $bbp->search_query->post_count, $from_num, $to_num, $total_num );
+	}
+
+	return $retstr;
+}
+add_filter( 'bbp_get_search_pagination_count', 'openlab_search_results_pagination_count' );
+
+/**
+ * Change icons on the prev/next buttons in bbpress pagination
+ */
+function openlab_change_bbpress_pagination_prev_and_next_icons($arr) {
     $arr['next_text'] = '<span class="fa fa-long-arrow-right"></span>';
 	$arr['prev_text'] = '<span class="fa fa-long-arrow-left"></span>';
 	
     return $arr;
 }
-add_filter( 'bbp_topic_pagination', 'openlab_bbp_topic_pagination' );
+add_filter( 'bbp_topic_pagination', 'openlab_change_bbpress_pagination_prev_and_next_icons' );
+add_filter( 'bbp_search_results_pagination', 'openlab_change_bbpress_pagination_prev_and_next_icons' );
 
 function openlab_bbp_topic_pagination_count( $string ) {
 	$bbp = bbpress();

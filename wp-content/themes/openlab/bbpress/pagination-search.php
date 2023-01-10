@@ -15,11 +15,11 @@
 	<div class="row">
 		<div class="col-sm-16 col-xs-24">
 			<div class="bbp-pagination-row-flex">
-				<div class="pagination-links">
-					<?php bbp_forum_pagination_links(); ?>
+				<div class="pagination-links search-pagination-links">
+					<?php bbp_search_pagination_links(); ?>
 				</div>
 				<div class="bbp-pagination-count">
-					<?php bbp_forum_pagination_count(); ?>
+					<?php bbp_search_pagination_count(); ?>
 				</div>
 			</div>
 		</div>

@@ -3781,7 +3781,7 @@ a.delete-doc-button {
         flex-flow: row wrap;
         align-items: flex-end;
 
-        .pagination-links {
+        .pagination-links { 
             .pagination {
                 display: flex;
 
@@ -3836,6 +3836,59 @@ a.delete-doc-button {
                         }
                     }
                 }
+            }
+        }
+
+        .search-pagination-links {
+            display: flex;
+            flex-flow: row wrap;
+            align-items: center;
+
+            > span,
+            > a {
+                display: flex;
+                flex-flow: row wrap;
+                align-items: center;
+                justify-content: center;
+                height: 24px;
+                padding: 0 7px;
+                font-size: 14px !important;
+                border: 1px solid #ccc !important;
+                text-decoration: none;
+
+                &:not(:last-child) {
+                    margin-right: 6px !important;
+                }
+
+                &:last-child {
+                    margin-right: 16px !important;
+                }
+
+                &.current {
+                    background-color: #f1f1f1;
+                    color: rgba(68,68,68,.8);
+                }
+
+                &:hover {
+                    text-decoration: none;
+                    background-color: #f1f1f1;
+                    color: rgba(68,68,68,.8);
+                }
+
+                &:first-child {
+                    border-bottom-left-radius: 0;
+                    border-top-left-radius: 0;
+                
+                }
+
+                &:last-child {
+                    border-top-right-radius: 0;
+                    border-bottom-right-radius: 0;
+                }
+            }
+
+            > a {
+                color: #444;
             }
         }
     }
