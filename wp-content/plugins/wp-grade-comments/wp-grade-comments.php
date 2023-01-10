@@ -117,7 +117,7 @@ function olgc_insert_comment( $comment_id, $comment ) {
 	// Grade
 	if ( olgc_is_instructor() && wp_verify_nonce( $_POST['_olgc_nonce'], 'olgc-grade-entry-' . $comment->comment_post_ID ) && ! empty( $_POST['olgc-add-a-grade'] ) && isset( $_POST['olgc-grade'] ) ) {
 		$grade = trim( wp_unslash( $_POST['olgc-grade'] ) );
-		if ( $grade ) {
+		if ( 0 !== strlen( $grade ) ) {
 			update_comment_meta( $comment_id, 'olgc_grade', $grade );
 		} else {
 			delete_comment_meta( $comment_id, 'olgc_grade' );
