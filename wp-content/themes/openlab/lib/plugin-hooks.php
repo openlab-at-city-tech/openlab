@@ -752,7 +752,7 @@ add_filter( 'bbp_get_search_pagination_count', 'openlab_search_results_paginatio
 function openlab_change_bbpress_pagination_prev_and_next_icons($arr) {
     $arr['next_text'] = '<span class="fa fa-long-arrow-right"></span>';
 	$arr['prev_text'] = '<span class="fa fa-long-arrow-left"></span>';
-	
+
     return $arr;
 }
 add_filter( 'bbp_topic_pagination', 'openlab_change_bbpress_pagination_prev_and_next_icons' );
@@ -784,27 +784,27 @@ function openlab_bp_docs_info_header_message() {
 
 	// All docs
 	if ( empty( $filters ) ) {
-		$message = __( 'Viewing <strong>All</strong> Docs', 'openlab' );	
+		$message = __( 'Viewing <strong>All</strong> Docs', 'openlab' );
 	} else {
-		
+
 		// Search
 		if ( ! empty( $filters['search_terms'] ) ) {
 			$message = sprintf( __( 'Viewing docs containing the term: %s', 'bp-docs' ), esc_html( $filters['search_terms'] ) );
 		}
-		
+
 		// Tag
 		if ( ! empty( $filters['tags'] ) ) {
 			$tagtext = array();
-	
+
 			foreach ( $filters['tags'] as $tag ) {
 				$tagtext[] = bp_docs_get_tag_link( array( 'tag' => $tag ) );
 			}
-	
+
 			$message = sprintf( __( 'Viewing docs with the tag: %s', 'buddypress-docs' ), implode( ', ', $tagtext ) );
 		}
 	}
 	?>
-	<p class="currently-viewing"><?php echo $message ?></p>	
+	<p class="currently-viewing"><?php echo $message ?></p>
 	<?php
 }
 
