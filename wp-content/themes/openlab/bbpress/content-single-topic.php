@@ -54,6 +54,12 @@
 
 		<?php if ( bbp_has_replies() ) : ?>
 
+			<div class="row ol-single-forum-topic-search">
+				<div class="col-sm-offset-16 col-sm-8 col-xs-24">
+					<?php bbp_get_template_part( 'content', 'search' ); ?>
+				</div>
+			</div>
+
 			<div class="panel panel-default">
 
 				<?php bbp_get_template_part( 'loop', 'replies' ); ?>

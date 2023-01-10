@@ -10662,6 +10662,9 @@ a.delete-doc-button {
 #content #bbpress-forums .bbp-topic-tags {
   padding: 12px 8px 0 0;
 }
+#content #bbpress-forums .ol-single-forum-topic-search {
+  margin-bottom: 15px;
+}
 @media (max-width: 767px) {
   #content #bbpress-forums .forum-titles .bbp-topic-title,
   #content #bbpress-forums .bp_group .bbp-topic-title {
