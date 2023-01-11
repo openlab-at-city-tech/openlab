@@ -508,6 +508,10 @@ add_filter(
 		if ( isset( $tokens['group'] ) && $tokens['group'] instanceof BP_Groups_Group ) {
 			$formatted_tokens['openlab.group_type']    = openlab_get_group_type_label( [ 'group_id' => $tokens['group']->id ] );
 			$formatted_tokens['openlab.group_type_uc'] = openlab_get_group_type_label( [ 'group_id' => $tokens['group']->id, 'case' => 'upper' ] );
+
+			if ( ! isset( $tokens['group.url'] ) ) {
+				$formatted_tokens['group.url'] = bp_get_group_permalink( $tokens['group'] );
+			}
 		}
 
 		return $formatted_tokens;
