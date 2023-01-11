@@ -511,3 +511,33 @@ add_filter(
    10,
    2
 );
+
+/**
+ * Appends OL footer to outgoing emails.
+ */
+function openlab_add_footer_to_outgoing_emails( $phpmailer ) {
+   // Do nothing to HTML emails.
+   if ( $phpmailer->isHTML() ) {
+	   return;
+   }
+
+   // Previous check may not have worked.
+   $body = $phpmailer->Body;
+   if ( 0 === strpos( $body, '<' ) ) {
+	   return;
+   }
+
+   $footer = '
+---------------
+
+The OpenLab at City Tech: A place to work, learn, and share!
+https://openlab.citytech.cuny.edu
+
+Help: https://openlab.citytech.cuny.edu/blog/help/openlab-help/
+About: https://openlab.citytech.cuny.edu/about/';
+
+   $body .= $footer;
+
+   $phpmailer->Body = $body;
+}
+add_action( 'phpmailer_init', 'openlab_add_footer_to_outgoing_emails' );
