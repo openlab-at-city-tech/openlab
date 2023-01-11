@@ -538,7 +538,7 @@ add_filter(
  */
 add_action(
 	'bp_ges_before_bp_send_email',
-	function( $type ) {
+	function( $email_type ) {
 		if ( 'bp-ges-notice' !== $email_type ) {
 			return;
 		}
