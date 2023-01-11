@@ -1602,7 +1602,7 @@ function openlab_get_activity_view_button_label( $activity_type = '' ) {
 		case 'new_avatar' :
 		case 'updated_profile' :
 			return 'View Profile';
-	);
+	}
 }
 
 /**
