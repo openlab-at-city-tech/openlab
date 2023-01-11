@@ -1608,7 +1608,7 @@ function openlab_get_activity_view_button_label( $activity_type = '' ) {
 		'bpges_notice'					=> 'Group'
 	);
 
-	if( $labels[$activity_type] ) {
+	if( isset( $labels[$activity_type] ) ) {
 		$label = 'View ' . $labels[$activity_type];
 		return $label;
 	}
