@@ -505,17 +505,20 @@ add_filter(
 add_filter(
 	'bp_email_set_tokens',
 	function( $formatted_tokens, $tokens, $email ) {
-		// Some source senders do not send this.
-		if ( ! isset( $tokens['group'] ) && bp_is_group() ) {
-			$formatted_tokens['group'] = groups_get_current_group();
+		// Source senders are inconsistent about the way that the group info is provided.
+		$group_id = null;
+		if ( isset( $tokens['group.id'] ) ) {
+			$group_id = $tokens['group.id'];
+		} elseif ( isset( $tokens['group'] ) && $tokens['group'] instanceof BP_Groups_Group ) {
+			$group_id = $tokens['group']->id;
 		}
 
-		if ( isset( $tokens['group'] ) && $tokens['group'] instanceof BP_Groups_Group ) {
-			$formatted_tokens['openlab.group_type']    = openlab_get_group_type_label( [ 'group_id' => $tokens['group']->id ] );
-			$formatted_tokens['openlab.group_type_uc'] = openlab_get_group_type_label( [ 'group_id' => $tokens['group']->id, 'case' => 'upper' ] );
+		if ( $group_id ) {
+			$formatted_tokens['openlab.group_type']    = openlab_get_group_type_label( [ 'group_id' => $group_id );
+			$formatted_tokens['openlab.group_type_uc'] = openlab_get_group_type_label( [ 'group_id' => $group_id, 'case' => 'upper' ] );
 
 			if ( ! isset( $tokens['group.url'] ) ) {
-				$formatted_tokens['group.url'] = bp_get_group_permalink( $tokens['group'] );
+				$formatted_tokens['group.url'] = bp_get_group_permalink( $group_id );
 			}
 		}
 
