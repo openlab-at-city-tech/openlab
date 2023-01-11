@@ -401,3 +401,23 @@ function ol_comment_moderation_text( $notify_message, $comment_id ) {
 	return $notify_message;
 }
 add_filter( 'comment_moderation_text', 'ol_comment_moderation_text', 10, 2);
+
+/**
+ * Adds custom OL tokens to outgoing emails.
+ */
+add_filter(
+	'bp_after_send_email_parse_args',
+	function( $args ) {
+		$read_reply_link = '';
+		if ( ! empty( $args['tokens']['thread.url'] ) ) {
+			$read_reply_link = sprintf(
+				'<a href="%s">Go to the post</a> to read or reply.',
+				$args['tokens']['thread.url']
+			);
+		}
+
+		$args['tokens']['openlab.read-reply-link'] = $read_reply_link;
+
+		return $args;
+	}
+);

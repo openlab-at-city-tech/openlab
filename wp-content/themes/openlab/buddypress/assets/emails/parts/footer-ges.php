@@ -11,7 +11,7 @@
 			<p><span class="footer_text">{{{ges.email-setting-description}}}</span><br>
 			Go to <a href="{{{group.url}}}notifications/">Membership > Your Email Options</a> to change your email settings for this {{{ges.group-type}}}.</p>
 
-			<p><b>Please note</b>: You cannot reply by email to this notification. <a href="{{{thread.url}}}">Go to the post</a> to read or reply.</p>
+			<p><b>Please note</b>: You cannot reply by email to this notification. {{{openlab.read-reply-link}}}</p>
 		</td>
 	</tr>
 </table>
