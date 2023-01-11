@@ -410,8 +410,20 @@ add_filter(
 	function( $args ) {
 		$read_reply_link = '';
 		if ( ! empty( $args['tokens']['thread.url'] ) ) {
+			$read_reply_link_text = '<a href="%s">Go to the post</a> to read or reply.';
+
+			if ( ! empty( $args['activity'] ) ) {
+				switch ( $args['activity']->type ) {
+					case 'bp_doc_comment' :
+					case 'bp_doc_created' :
+					case 'bp_doc_edited' :
+						$read_reply_link_text = '<a href="%s">Go to the Doc</a> to read, edit, or comment.';
+					break;
+				}
+			}
+
 			$read_reply_link = sprintf(
-				'<a href="%s">Go to the post</a> to read or reply.',
+				$read_reply_link_text,
 				$args['tokens']['thread.url']
 			);
 		}
