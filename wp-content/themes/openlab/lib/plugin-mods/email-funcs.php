@@ -530,3 +530,26 @@ add_filter(
 	10,
 	3
 );
+
+/**
+ * Ensure that restrictive kses is not run on bp-ges-notice.
+ *
+ * This helps us avoid breakage to custom HTML in the email template.
+ */
+add_action(
+	'bp_ges_before_bp_send_email',
+	function( $type ) {
+		if ( 'bp-ges-notice' !== $email_type ) {
+			return;
+		}
+
+		remove_filter( 'bp_email_set_content_html', 'bp_activity_filter_kses', 6 );
+
+		add_action(
+			'bp_ges_after_bp_send_email',
+			function() {
+				add_filter( 'bp_email_set_content_html', 'bp_activity_filter_kses', 6 );
+			}
+		);
+	}
+);
