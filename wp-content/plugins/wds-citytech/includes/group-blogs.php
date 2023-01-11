@@ -1814,8 +1814,9 @@ add_action( 'wp_insert_comment', 'openlab_olgc_notify_instructor', 20, 2 );
  * @param WP_Comment $comment    Comment object.
  */
 function openlab_olpc_notify_comment_author_of_reply( $comment_id, $comment ) {
+	$olgc_is_private = get_comment_meta( $comment_id, 'olgc_is_private', true );
 	$olpc_is_private = get_comment_meta( $comment_id, 'ol_is_private', true );
-	if ( ! $olpc_is_private ) {
+	if ( $olgc_is_private && ! $olpc_is_private ) {
 		return;
 	}
 
