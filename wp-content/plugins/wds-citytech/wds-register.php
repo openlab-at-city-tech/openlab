@@ -170,7 +170,7 @@ function wds_get_register_fields( $account_type, $post_data = array() ) {
 	/* Use the profile field loop to render input fields for the 'base' profile field group */
 	$return = '';
 	if ( function_exists( 'bp_has_profile' ) ) :
-		if ( 'Staff' === $account_type || 'Faculty' === $account_type ) :
+		if ( 'staff' === $account_type || 'faculty' === $account_type ) :
 			?>
 			<div class="editfield field_name alt form-group">
 				<label for="ol-offices"><span class="label-text">School / Office / Department</span> <span class="label-gloss">(required)</span></label>
@@ -182,7 +182,7 @@ function wds_get_register_fields( $account_type, $post_data = array() ) {
 				openlab_academic_unit_selector( $selector_args );
 				?>
 			</div>
-		<?php elseif ( 'Alumni' === $account_type || 'Student' === $account_type ) : ?>
+		<?php elseif ( 'alumni' === $account_type || 'student' === $account_type ) : ?>
 			<?php
 			$depts   = [];
 			$checked = openlab_get_user_academic_units( 0 );
