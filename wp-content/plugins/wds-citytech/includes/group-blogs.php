@@ -1754,16 +1754,18 @@ function openlab_olgc_notify_instructor( $comment_id, $comment ) {
 
 	$subject = sprintf( 'A new private comment on %s in %s', $post->post_title, $group->name );
 
-	$message = sprintf(
-		'There is a new private comment on your site %s.
+	$comment_link = get_comment_link( $comment );
 
-Post name: %s
-Comment author: %s
+	$message = sprintf(
+		'There is a new private comment on your site %s.<br /><br />
+
+Post name: %s<br />
+Comment author: %s<br />
 Comment URL: %s',
 		get_option( 'blogname' ),
 		$post->post_title,
-		bp_core_get_user_displayname( $comment_author_user->ID ),
-		get_comment_link( $comment )
+		bp_core_get_userlink( $comment_author_user->ID ),
+		sprintf( '<a href="%s">%s</a>', $comment_link, $comment_link )
 	);
 
 	$comment_user = get_userdata( $comment->user_id );
@@ -1825,16 +1827,18 @@ function openlab_olpc_notify_comment_author_of_reply( $comment_id, $comment ) {
 
 	$subject = sprintf( 'A new reply to your private comment on %s in %s', $comment_post->post_title, $group->name );
 
-	$message = sprintf(
-		'There is a new reply to your private comment on the site %s.
+	$comment_link = get_comment_link( $comment );
 
-Post name: %s
-Comment author: %s
+	$message = sprintf(
+		'There is a new reply to your private comment on the site %s.<br /><br />
+
+Post name: %s<br />
+Comment author: %s<br />
 Comment URL: %s',
 		get_option( 'blogname' ),
 		$comment_post->post_title,
-		bp_core_get_user_displayname( $comment->user_id ),
-		get_comment_link( $comment )
+		bp_core_get_userlink( $comment->user_id ),
+		sprintf( '<a href="%s">', $comment_link, $comment_link )
 	);
 
 	wp_mail( $recipient->user_email, $subject, $message );
