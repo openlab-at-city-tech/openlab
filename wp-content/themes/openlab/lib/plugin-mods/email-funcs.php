@@ -505,6 +505,11 @@ add_filter(
 add_filter(
 	'bp_email_set_tokens',
 	function( $formatted_tokens, $tokens, $email ) {
+		// Some source senders do not send this.
+		if ( ! isset( $tokens['group'] ) && bp_is_group() ) {
+			$formatted_tokens['group'] = groups_get_current_group();
+		}
+
 		if ( isset( $tokens['group'] ) && $tokens['group'] instanceof BP_Groups_Group ) {
 			$formatted_tokens['openlab.group_type']    = openlab_get_group_type_label( [ 'group_id' => $tokens['group']->id ] );
 			$formatted_tokens['openlab.group_type_uc'] = openlab_get_group_type_label( [ 'group_id' => $tokens['group']->id, 'case' => 'upper' ] );
