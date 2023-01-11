@@ -5,6 +5,7 @@ $args = openlab_activities_loop_args( $type, $filter );
 
 $filter_options = [
 	'' 						=> __( 'All Activity', 'openlab' ),
+	'created_announcement,created_announcement_reply' => __( 'Announcements', 'openlab' ),
 	'new_blog_post' 		=> __( 'Posts', 'openlab' ),
 	'new_blog_comment' 		=> __( 'Comments', 'openlab' ),
 	'created_group'			=> __( 'New Groups', 'openlab' ),
@@ -16,6 +17,11 @@ $filter_options = [
 	'bbp_topic_create'		=> __( 'New Discussion Topics', 'openlab' ),
 	'bbp_reply_create'		=> __( 'Discussion Replies', 'openlab' )
 ];
+
+// Remove "Announcements" when viewing mentions
+if( isset( $_GET['type'] ) && $_GET['type'] == 'mentions' ) {
+	unset( $filter_options['created_announcement,created_announcement_reply'] );
+}
 ?>
 
 <?php echo openlab_submenu_markup( 'my-activity' ); ?>
