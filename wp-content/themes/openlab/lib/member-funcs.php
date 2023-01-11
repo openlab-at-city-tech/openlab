@@ -67,9 +67,8 @@ function openlab_list_members( $view ) {
 	}
 
 	// Set up the bp_has_members() arguments
-	// Note that we're not taking user_type into account. We'll do that with a query filter
 	$args = array(
-		'member_type' => null,
+		'member_type' => $user_type,
 		'per_page'    => 48,
 		'type'        => openlab_get_current_filter( 'sort' ),
 	);
@@ -108,29 +107,6 @@ function openlab_list_members( $view ) {
 			$include_noop = true;
 		} else {
 			$include_arrays[] = $search_terms_matches;
-		}
-	}
-
-	if ( $user_type && ! $include_noop ) {
-		$user_type_matches = $wpdb->get_col(
-			$wpdb->prepare(
-				"SELECT user_id
-			 FROM {$bp->profile->table_name_data}
-			 WHERE field_id = 7
-			       AND
-			       value = %s",
-				$user_type
-			)
-		);
-
-		if ( empty( $user_type_matches ) ) {
-			$user_type_matches = array( 0 );
-		}
-
-		if ( empty( $user_type_matches ) ) {
-			$include_noop = true;
-		} else {
-			$include_arrays[] = $user_type_matches;
 		}
 	}
 
