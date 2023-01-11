@@ -1583,7 +1583,7 @@ function openlab_get_activity_view_button_label( $activity_type = '' ) {
 			return 'View Reply';
 
 		case 'bbp_topic_create' :
-			return 'View Topic';
+			return 'View Discussion Topic';
 
 		case 'new_blog_post' :
 			return 'View Post';
