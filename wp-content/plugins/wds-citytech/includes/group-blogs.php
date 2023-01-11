@@ -1768,6 +1768,8 @@ Comment URL: %s',
 		sprintf( '<a href="%s">%s</a>', $comment_link, $comment_link )
 	);
 
+	$message = openlab_comment_email_boilerplate( $message );
+
 	$comment_user = get_userdata( $comment->user_id );
 
 	foreach ( $admins as $admin ) {
@@ -1840,6 +1842,8 @@ Comment URL: %s',
 		bp_core_get_userlink( $comment->user_id ),
 		sprintf( '<a href="%s">', $comment_link, $comment_link )
 	);
+
+	$message = openlab_comment_email_boilerplate( $message );
 
 	wp_mail( $recipient->user_email, $subject, $message );
 }
