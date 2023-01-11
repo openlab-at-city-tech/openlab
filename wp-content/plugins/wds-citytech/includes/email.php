@@ -184,33 +184,12 @@ function ol_comment_notification_headers( $message_headers, $comment_id ) {
 		return false;
 	}
 
-	$blogname = wp_specialchars_decode( get_option( 'blogname' ), ENT_QUOTES );
-	$wp_email = 'wordpress@' . preg_replace( '#^www\.#', '', wp_parse_url( network_home_url(), PHP_URL_HOST ) );
-
-
-	if ( '' === $comment->comment_author ) {
-		$from = "From: \"$blogname\" <$wp_email>";
-		if ( '' !== $comment->comment_author_email ) {
-			$reply_to = "Reply-To: $comment->comment_author_email";
-		}
-	} else {
-		$from = "From: \"$comment->comment_author\" <$wp_email>";
-		if ( '' !== $comment->comment_author_email ) {
-			$reply_to = "Reply-To: \"$comment->comment_author_email\" <$comment->comment_author_email>";
-		}
-	}
-
-	$message_headers = "$from\n"
-	. 'Content-Type: text/html; charset="' . get_option( 'blog_charset' ) . "\"\n";
-
-	if ( isset( $reply_to ) ) {
-		$message_headers .= $reply_to . "\n";
-	}
+	$message_headers = 'Content-Type: text/html; charset="' . get_option( 'blog_charset' ) . "\"\n";
 
 	return $message_headers;
 }
-add_filter( 'comment_notification_headers', 'ol_comment_notification_headers', 10, 2);
-add_filter( 'comment_moderation_headers', 'ol_comment_notification_headers', 10, 2);
+add_filter( 'comment_notification_headers', 'ol_comment_notification_headers', 10, 2 );
+add_filter( 'comment_moderation_headers', 'ol_comment_notification_headers', 10, 2 );
 
 /**
  * Change "<br />|" with "<br />" in the comment notification email content,
