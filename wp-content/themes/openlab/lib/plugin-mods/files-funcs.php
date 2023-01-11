@@ -233,7 +233,7 @@ function openlab_bp_group_documents_display_content() {
 		<?php } else { ?>
 			<div id="message" class="info">
 				<p class="bold">
-					No files have been added yet. 
+					No files have been added yet.
 					<?php if( is_user_logged_in() && $user_can_upload ) { ?>
 					Add a new file below.
 					<?php } ?>
