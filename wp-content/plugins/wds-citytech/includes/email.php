@@ -542,14 +542,13 @@ function openlab_add_footer_to_outgoing_emails( $phpmailer ) {
 	   return;
    }
 
-   $footer = '
----------------
+   $footer = '<br /><br />' . '---------------' . '<br /><br />' .
 
-The OpenLab at City Tech: A place to work, learn, and share!
-https://openlab.citytech.cuny.edu
+'The OpenLab at City Tech: A place to work, learn, and share!<br />
+<a href="https://openlab.citytech.cuny.edu">https://openlab.citytech.cuny.edu</a><br /><br />
 
-Help: https://openlab.citytech.cuny.edu/blog/help/openlab-help/
-About: https://openlab.citytech.cuny.edu/about/';
+Help: <a href="https://openlab.citytech.cuny.edu/blog/help/openlab-help/">https://openlab.citytech.cuny.edu/blog/help/openlab-help/</a><br />
+About: <a href="https://openlab.citytech.cuny.edu/about/">https://openlab.citytech.cuny.edu/about/</a>';
 
    $body .= $footer;
 
