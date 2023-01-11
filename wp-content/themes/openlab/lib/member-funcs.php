@@ -1554,8 +1554,15 @@ function openlab_get_user_activity_action( $activity = null ) {
 		$output = str_replace( 'in the forum <a href="' . $group_link . 'forum/">' . bp_get_group_name() . '</a>', '', $output );
 	}
 
+	// Create DateTime from the activity date
+	$activity_datetime = new DateTime( $activity->date_recorded );
+	// Create TimeZone from the timezone selected in the WP Settings
+	$wp_timezone = new DateTimeZone( wp_timezone_string() );
+	// Set timezone to the activity DateTime
+	$activity_datetime->setTimezone( $wp_timezone );
+
 	// Modify activity date format, remove link and add "on" before the date
-	$output .= ' on ' . date('F d, Y \a\t g:i a', strtotime( $activity->date_recorded ) );
+	$output .= ' on ' . $activity_datetime->format('F d, Y \a\t g:i a');
 	$output = wpautop( $output );
 
 	// Activity view button
