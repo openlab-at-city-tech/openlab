@@ -244,14 +244,17 @@ add_filter(
 		}
 
 		// Add a timestamp and trailing colon to the activity action.
-		$action_with_timestamp = $args['tokens']['ges.action'] . ' at ' . date( 'g:ia, F j, Y', strtotime( $args['activity']->date_recorded ) );
+		$add_timestamp = ! in_array( $args['activity']->type, [ 'bpeo_create_event', 'bpeo_edit_evint' ], true );
+		if ( $add_timestamp ) {
+			$action_with_timestamp = $args['tokens']['ges.action'] . ' at ' . date( 'g:ia, F j, Y', strtotime( $args['activity']->date_recorded ) );
 
-		$has_trailing_colon = ! empty( $args['activity']->content );
-		if ( $has_trailing_colon ) {
-			$action_with_timestamp .= ':';
+			$has_trailing_colon = ! empty( $args['activity']->content );
+			if ( $has_trailing_colon ) {
+				$action_with_timestamp .= ':';
+			}
+
+			$args['tokens']['ges.action'] = $action_with_timestamp;
 		}
-
-		$args['tokens']['ges.action'] = $action_with_timestamp;
 
 		// Text for the View button.
 		$view_text = openlab_get_activity_view_button_label( $args['activity']->type );
