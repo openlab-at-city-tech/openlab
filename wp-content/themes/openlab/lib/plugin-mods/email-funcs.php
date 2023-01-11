@@ -256,6 +256,13 @@ add_filter(
 			$args['tokens']['ges.action'] = $action_with_timestamp;
 		}
 
+		// Customize the subject line.
+		switch ( $args['activity']->type ) {
+			case 'new_blog_comment' :
+				$args['tokens']['ges.subject'] = preg_replace( '/(.*?) left a comment on the post (.*?) in (.*)/', '\1 commented on \2 in \3', $args['tokens']['ges.subject'] );
+			break;
+		}
+
 		// Text for the View button.
 		$view_text = openlab_get_activity_view_button_label( $args['activity']->type );
 		if ( ! $view_text ) {
