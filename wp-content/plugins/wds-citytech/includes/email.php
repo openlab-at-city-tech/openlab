@@ -256,20 +256,30 @@ function ol_comment_notification_text( $notify_message, $comment_id ) {
 			break;
 	}
 
-	$notify_message .= get_permalink( $comment->comment_post_ID ) . "#comments<br /><br />";
+	$comments_url    = get_permalink( $comment->comment_post_ID ) . "#comments<br /><br />";
+	$notify_message .= '<a href="' . $comments_url . '">' . $comments_url . '</a>' . "<br /><br />";
+
+	$comment_url = get_comment_link( $comment );
 	/* translators: %s: Comment URL. */
-	$notify_message .= sprintf( __( 'Permalink: %s' ), get_comment_link( $comment ) ) . "<br />";
+	$notify_message .= sprintf( __( 'Permalink: %s' ), '<a href="' . $comment_url . '">' . $comment_url . '</a>' ) . "<br />";
 
 	if ( user_can( $post->post_author, 'edit_comment', $comment->comment_ID ) ) {
 		if ( EMPTY_TRASH_DAYS ) {
+			$trash_url = admin_url( "comment.php?action=trash&c={$comment_id}#wpbody-content" );
+
 			/* translators: Comment moderation. %s: Comment action URL. */
-			$notify_message .= sprintf( __( 'Trash it: %s' ), admin_url( "comment.php?action=trash&c={$comment->comment_ID}#wpbody-content" ) ) . "<br />";
+			$notify_message .= sprintf( __( 'Trash it: %s' ), '<a href="' . $trash_url . '">' . $trash_url . '</a>' ) . "<br />";
+			/* translators: Comment moderation. %s: Comment action URL. */
 		} else {
+			$delete_url = admin_url( "comment.php?action=delete&c={$comment_id}#wpbody-content" );
+
 			/* translators: Comment moderation. %s: Comment action URL. */
-			$notify_message .= sprintf( __( 'Delete it: %s' ), admin_url( "comment.php?action=delete&c={$comment->comment_ID}#wpbody-content" ) ) . "<br />";
+			$notify_message .= sprintf( __( 'Delete it: %s' ), '<a href="' . $delete_url . '">' . $delete_url . '</a>' ) . "<br />";
 		}
+
+		$spam_url = admin_url( "comment.php?action=spam&c={$comment_id}#wpbody-content" );
 		/* translators: Comment moderation. %s: Comment action URL. */
-		$notify_message .= sprintf( __( 'Spam it: %s' ), admin_url( "comment.php?action=spam&c={$comment->comment_ID}#wpbody-content" ) ) . "<br />";
+		$notify_message .= sprintf( __( 'Spam it: %s' ), '<a href="' . $spam_url . '">' . $spam_url . '</a>' ) . "<br />";
 	}
 
 	// Remove <p> from the message
