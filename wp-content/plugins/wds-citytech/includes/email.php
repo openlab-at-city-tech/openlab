@@ -347,19 +347,24 @@ function ol_comment_moderation_text( $notify_message, $comment_id ) {
 			break;
 	}
 
-	/* translators: Comment moderation. %s: Comment action URL. */
-	$notify_message .= sprintf( __( 'Approve it: %s' ), admin_url( "comment.php?action=approve&c={$comment_id}#wpbody-content" ) ) . "<br />";
+	$approve_url     = admin_url( "comment.php?action=approve&c={$comment_id}#wpbody-content" );
+	$notify_message .= sprintf( __( 'Approve it: %s' ), '<a href="' . $approve_url . '">' . $approve_url . '</a>' ) . "<br />";
 
 	if ( EMPTY_TRASH_DAYS ) {
+		$trash_url = admin_url( "comment.php?action=trash&c={$comment_id}#wpbody-content" );
+
 		/* translators: Comment moderation. %s: Comment action URL. */
-		$notify_message .= sprintf( __( 'Trash it: %s' ), admin_url( "comment.php?action=trash&c={$comment_id}#wpbody-content" ) ) . "<br />";
+		$notify_message .= sprintf( __( 'Trash it: %s' ), '<a href="' . $trash_url . '">' . $trash_url . '</a>' ) . "<br />";
 	} else {
+		$delete_url = admin_url( "comment.php?action=delete&c={$comment_id}#wpbody-content" );
+
 		/* translators: Comment moderation. %s: Comment action URL. */
-		$notify_message .= sprintf( __( 'Delete it: %s' ), admin_url( "comment.php?action=delete&c={$comment_id}#wpbody-content" ) ) . "<br />";
+		$notify_message .= sprintf( __( 'Delete it: %s' ), '<a href="' . $delete_url . '">' . $delete_url . '</a>' ) . "<br />";
 	}
 
+	$spam_url = admin_url( "comment.php?action=spam&c={$comment_id}#wpbody-content" );
 	/* translators: Comment moderation. %s: Comment action URL. */
-	$notify_message .= sprintf( __( 'Spam it: %s' ), admin_url( "comment.php?action=spam&c={$comment_id}#wpbody-content" ) ) . "<br />";
+	$notify_message .= sprintf( __( 'Spam it: %s' ), '<a href="' . $spam_url . '">' . $spam_url . '</a>' ) . "<br />";
 
 	$notify_message .= sprintf(
 		/* translators: Comment moderation. %s: Number of comments awaiting approval. */
@@ -370,7 +375,9 @@ function ol_comment_moderation_text( $notify_message, $comment_id ) {
 		),
 		number_format_i18n( $comments_waiting )
 	) . "<br />";
-	$notify_message .= admin_url( 'edit-comments.php?comment_status=moderated#wpbody-content' ) . "<br />";
+
+	$moderate_url    = admin_url( 'edit-comments.php?comment_status=moderated#wpbody-content' ) . "<br />";
+	$notify_message .= '<a href="' . $moderate_url . '">' . $moderate_url . '</a>' . "<br />";
 
 	// Remove <p> from the message
 	$notify_message = str_replace( '<p>', '', $notify_message);
