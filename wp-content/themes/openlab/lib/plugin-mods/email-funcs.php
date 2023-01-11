@@ -514,6 +514,9 @@ add_filter(
 			}
 		}
 
+		// This is a workaround for the lack of reliable timestamps on individual items.
+		$formatted_tokens['openlab.timestamp'] = date( 'g:ia, F j, Y' );
+
 		return $formatted_tokens;
 	},
 	10,
