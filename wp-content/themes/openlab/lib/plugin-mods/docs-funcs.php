@@ -279,3 +279,17 @@ function openlab_bp_docs_info_header() {
 	<?php endif ?>
 	<?php
 }
+
+/**
+ * Add an excerpt as the content of Docs activity.
+ *
+ * @param array $args Activity args.
+ */
+function openlab_add_excerpt_to_docs_activity( $args ) {
+	$doc = get_post( $args['secondary_item_id'] );
+
+	$args['content'] = bp_create_excerpt( $doc->post_content );
+
+	return $args;
+}
+add_filter( 'bp_docs_activity_args', 'openlab_add_excerpt_to_docs_activity' );
