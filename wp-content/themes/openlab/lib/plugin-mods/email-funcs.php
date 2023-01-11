@@ -263,6 +263,15 @@ add_filter(
 			break;
 		}
 
+		// Customize content.
+		switch ( $args['activity']->type ) {
+			case 'bpeo_create_event' :
+			case 'bpeo_edit_event' :
+			case 'bpeo_delete_event' :
+				$args['tokens']['usermessage'] = '';
+			break;
+		}
+
 		// Text for the View button.
 		$view_text = openlab_get_activity_view_button_label( $args['activity']->type );
 		if ( ! $view_text ) {
