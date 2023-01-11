@@ -422,10 +422,17 @@ add_filter(
 				}
 			}
 
-			$read_reply_link = sprintf(
-				$read_reply_link_text,
-				$args['tokens']['thread.url']
-			);
+			// Special cases where the text should not appear.
+			if ( ! empty( $args['activity'] ) && in_array( $args['activity']->type, [ 'added_group_document', 'edited_group_document', 'deleted_group_document' ], true ) ) {
+				$read_reply_link_text = '';
+			}
+
+			if ( $read_reply_link_text ) {
+				$read_reply_link = sprintf(
+					$read_reply_link_text,
+					$args['tokens']['thread.url']
+				);
+			}
 		}
 
 		$args['tokens']['openlab.read-reply-link'] = $read_reply_link;
