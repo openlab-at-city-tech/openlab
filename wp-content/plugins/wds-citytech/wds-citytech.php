@@ -13,6 +13,7 @@ define( 'WDS_CITYTECH_URL', plugin_dir_url( __FILE__ ) );
 
 require 'wds-register.php';
 require 'wds-docs.php';
+require 'includes/activity.php';
 require 'includes/block-editor.php';
 require 'includes/oembed.php';
 require 'includes/library-widget.php';
