@@ -1554,7 +1554,7 @@ function openlab_get_user_activity_action( $activity = null ) {
 		$output = str_replace( 'in the forum <a href="' . $group_link . 'forum/">' . bp_get_group_name() . '</a>', '', $output );
 	} else {
 		if( $activity->type == 'bbp_topic_create' || $activity->type == 'bbp_reply_create' ) {
-			$output = str_replace( 'in the forum', 'in', $output );
+			$output = str_replace( 'in the forum', 'in the group', $output );
 		}
 	}
 
@@ -1601,7 +1601,11 @@ function openlab_get_activity_view_button_label( $activity_type = '' ) {
 		'new_blog_post'					=> 'Post',
 		'new_blog_comment'				=> 'Comment',
 		'created_group'					=> 'Group',
-		'joined_group'					=> 'Group'
+		'joined_group'					=> 'Group',
+		'new_blog'						=> 'Site',
+		'new_avatar'					=> 'Profile',
+		'updated_profile'				=> 'Profile',
+		'bpges_notice'					=> 'Group'
 	);
 
 	if( $labels[$activity_type] ) {
@@ -1633,6 +1637,7 @@ function openlab_get_activity_button_link( $activity ) {
 			return $activity->primary_link;
 		case 'created_group':
 		case 'joined_group':
+		case 'bpges_notice':
 			$group = bp_get_group_by( 'id', $activity->item_id );
 			return bp_get_group_permalink( $group );
 		case 'default':

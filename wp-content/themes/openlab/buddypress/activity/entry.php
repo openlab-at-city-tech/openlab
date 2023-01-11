@@ -2,24 +2,58 @@
 // Activity ID
 $activity_id = bp_get_activity_id();
 
-// Group ID
-$group_id = openlab_get_group_id_by_activity_id( $activity_id );
+// Activity component (groups/blogs)
+$activity_component = bp_get_activity_object_name();
 
-// Get group by ID
-$group = groups_get_group( $group_id );
+switch( $activity_component ) {
+	case 'blogs':
+		// Get site/blog by activity item id
+		$blog = get_blog_details( array( 'blog_id' => bp_get_activity_item_id() ) );
+			
+		// Get site/blog name
+		$item_name = $blog->blogname;
 
-// Get group data
-$group_name = bp_get_group_name( $group );
-$group_url = bp_get_group_permalink( $group );
-$group_avatar_url = bp_get_group_avatar_url( $group, 'full' );
+		// Get site/blog url
+		$item_url = $blog->siteurl;
+
+		// Get default avatar uri to be used for this type of activity
+		$item_avatar_url = openlab_get_default_avatar_uri();
+		break;
+	case 'members':
+	case 'xprofile':
+		$item_name = bp_core_get_user_displayname( bp_get_activity_user_id() );
+		$item_url = bp_core_get_userlink( bp_get_activity_user_id(), false, true );
+		$item_avatar_url = bp_core_fetch_avatar( array(
+			'item_id' => bp_get_activity_user_id(),
+			'html'	=> false
+		 ) );
+		break;
+	case 'friends':
+		$item_name = '';
+		$item_url = '';
+		$item_avatar_url = openlab_get_default_avatar_uri();
+		break;
+	case 'groups':
+	default:
+		// Group ID
+		$group_id = openlab_get_group_id_by_activity_id( $activity_id );
+
+		// Get group by ID
+		$group = groups_get_group( $group_id );
+
+		// Get group data
+		$item_name = bp_get_group_name( $group );
+		$item_url = bp_get_group_permalink( $group );
+		$item_avatar_url = bp_get_group_avatar_url( $group, 'full' );
+}
 ?>
 <div class="group-item">
 	<div class="group-item-wrapper">
 		<div class="activity-entry-row">
 			<div class="activity-entry-avatar">
 				<div class="activity-avatar">
-					<a href="<?php echo $group_url; ?>" title="<?php echo $group_name; ?>">
-						<img src="<?php echo $group_avatar_url; ?>" class="img-responsive" alt="<?php echo $group_name; ?>" />
+					<a href="<?php echo $item_url; ?>" title="<?php echo $item_name; ?>">
+						<img src="<?php echo $item_avatar_url; ?>" class="img-responsive" alt="<?php echo $item_name; ?>" />
 					</a>
 				</div>
 			</div>
@@ -27,7 +61,7 @@ $group_avatar_url = bp_get_group_avatar_url( $group, 'full' );
 				<div class="activity-header">
 					<div class="activity-header-title">
 						<p class="item-title h2">
-							<a class="no-deco" href="<?php echo $group_url; ?>" title="<?php echo $group_name; ?>"><?php echo $group_name; ?></a>
+							<a class="no-deco" href="<?php echo $item_url; ?>" title="<?php echo $item_name; ?>"><?php echo $item_name; ?></a>
 						</p>
 					</div>
 					<?php if ( is_user_logged_in() ) : ?>
