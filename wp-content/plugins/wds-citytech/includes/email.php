@@ -256,7 +256,7 @@ function ol_comment_notification_text( $notify_message, $comment_id ) {
 			break;
 	}
 
-	$comments_url    = get_permalink( $comment->comment_post_ID ) . "#comments<br /><br />";
+	$comments_url    = get_permalink( $comment->comment_post_ID ) . "#comments";
 	$notify_message .= '<a href="' . $comments_url . '">' . $comments_url . '</a>' . "<br /><br />";
 
 	$comment_url = get_comment_link( $comment );
