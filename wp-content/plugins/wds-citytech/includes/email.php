@@ -279,7 +279,7 @@ function ol_comment_notification_text( $notify_message, $comment_id ) {
 
 	return $notify_message;
 }
-add_filter( 'comment_notification_text', 'ol_comment_notification_text', 10, 2);
+add_filter( 'comment_notification_text', 'ol_comment_notification_text', 10, 2 );
 
 /**
  * Change "<br />|" with "<br />" in the comment held for moderation notification email content,
@@ -379,7 +379,22 @@ function ol_comment_moderation_text( $notify_message, $comment_id ) {
 
 	return $notify_message;
 }
-add_filter( 'comment_moderation_text', 'ol_comment_moderation_text', 10, 2);
+add_filter( 'comment_moderation_text', 'ol_comment_moderation_text', 10, 2 );
+
+/**
+ * Adds 'Hello' and footer 'note' to comment-related emails.
+ */
+function openlab_comment_email_boilerplate( $content ) {
+	return sprintf(
+		'Hello,' . "<br /><br />" .
+		'%s' .  "<br /><br />" .
+		'Please note: You are receiving this message because you are an administrator or author. You may receive a second notification delivered to all members.',
+		$content
+
+	);
+}
+add_filter( 'comment_moderation_text', 'openlab_comment_email_boilerplate', 20 );
+add_filter( 'comment_notification_text', 'openlab_comment_email_boilerplate', 20 );
 
 /**
  * Adds custom OL tokens to outgoing emails.
