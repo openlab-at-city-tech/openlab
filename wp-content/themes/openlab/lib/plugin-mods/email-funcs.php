@@ -243,6 +243,16 @@ add_filter(
 			return $args;
 		}
 
+		// Add a timestamp and trailing colon to the activity action.
+		$action_with_timestamp = $args['tokens']['ges.action'] . ' at ' . date( 'g:ia, F j, Y', strtotime( $args['activity']->date_recorded ) );
+
+		$has_trailing_colon = ! empty( $args['activity']->content );
+		if ( $has_trailing_colon ) {
+			$action_with_timestamp .= ':';
+		}
+
+		$args['tokens']['ges.action'] = $action_with_timestamp;
+
 		// Text for the View button.
 		$view_text = openlab_get_activity_view_button_label( $args['activity']->type );
 		if ( ! $view_text ) {
