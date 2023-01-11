@@ -634,63 +634,9 @@ function openlab_bp_group_documents_custom_pagination_links( $template ) {
 }
 
 /**
- * Convert email notifications to BP mail.
+ * Suppress native email notifications in favor of bp-ges-single.
  */
-function openlab_group_documents_email_notification( $document ) {
-	global $bp;
-
-	if ( ! openlab_notify_group_members_of_this_action() ) {
-		return;
-	}
-
-	$user_name         = bp_core_get_userlink( bp_loggedin_user_id() );
-	$user_profile_link = bp_core_get_userlink( bp_loggedin_user_id(), false, true );
-	$group_name        = $bp->groups->current_group->name;
-	$group_link        = bp_get_group_permalink( $bp->groups->current_group );
-	$document_name     = $document->name;
-	$document_link     = $document->get_url();
-
-	$email_args = array(
-		'tokens' => array(
-			'bpgd.author-name' => $user_name,
-			'bpgd.author-url'  => $user_profile_link,
-			'bpgd.file-link'   => sprintf( '<a href="%s">%s</a>', $document_link, $document_name ),
-			'bpgd.file-name'   => $document_name,
-			'bpgd.file-url'    => $document_link,
-			'bpgd.group-name'  => $group_name,
-			'bpgd.group-url'   => $group_link,
-		),
-	);
-
-	// These will be all the emails getting the notification.
-	$emails = array();
-
-	$group_user_subscriptions = ass_get_subscriptions_for_group( bp_get_current_group_id() );
-
-	//now get all member emails, checking to make sure not to send any emails twice
-	$user_ids = BP_Groups_Member::get_group_member_ids( $bp->groups->current_group->id );
-	foreach ( (array) $user_ids as $user_id ) {
-		if ( 'no' === get_user_meta( $user_id, 'notification_group_documents_upload_member' ) ) {
-			continue;
-		}
-
-		// Don't send if the user gets doesn't get immediate emails for this group.
-		if ( isset( $group_user_subscriptions[ $user_id ] ) && in_array( $group_user_subscriptions[ $user_id ], [ 'no', 'sum', 'dig' ], true ) ) {
-			continue;
-		}
-
-		$ud = bp_core_get_core_userdata( $user_id );
-		if ( ! in_array( $ud->user_email, $emails, true ) ) {
-			$emails[ $user_id ] = $ud->user_email;
-		}
-	}
-
-	foreach ( $emails as $current_id => $current_email ) {
-		bp_send_email( 'bpgd_file_uploaded_to_group', $current_id, $email_args );
-	}
-}
 remove_action( 'bp_group_documents_add_success', 'bp_group_documents_email_notification', 10 );
-add_action( 'bp_group_documents_add_success', 'openlab_group_documents_email_notification', 10 );
 
 /**
  * Customization for Group Documents activity notifications.
@@ -703,13 +649,6 @@ function openlab_group_documents_activity_notification_control( $send_it, $activ
 	switch ( $activity->type ) {
 		case 'added_group_document' :
 		case 'deleted_group_document' :
-			if ( 'bp_ges_add_to_digest_queue_for_user' === current_action() ) {
-				return openlab_notify_group_members_of_this_action() && 'no' !== $sub;
-			} else {
-				// We roll our own.
-				return false;
-			}
-
 		case 'edited_group_document' :
 			return openlab_notify_group_members_of_this_action() && 'no' !== $sub;
 
