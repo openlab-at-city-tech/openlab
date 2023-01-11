@@ -514,7 +514,7 @@ add_filter(
 		}
 
 		if ( $group_id ) {
-			$formatted_tokens['openlab.group_type']    = openlab_get_group_type_label( [ 'group_id' => $group_id );
+			$formatted_tokens['openlab.group_type']    = openlab_get_group_type_label( [ 'group_id' => $group_id ] );
 			$formatted_tokens['openlab.group_type_uc'] = openlab_get_group_type_label( [ 'group_id' => $group_id, 'case' => 'upper' ] );
 
 			if ( ! isset( $tokens['group.url'] ) ) {
