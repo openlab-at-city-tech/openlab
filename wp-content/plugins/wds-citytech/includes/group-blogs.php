@@ -1768,27 +1768,6 @@ Comment URL: %s',
 
 	$comment_user = get_userdata( $comment->user_id );
 
-	$wp_email = 'wordpress@' . preg_replace( '#^www\.#', '', wp_parse_url( network_home_url(), PHP_URL_HOST ) );
-
-	if ( ! $comment_user ) {
-		$blogname = wp_specialchars_decode( get_option( 'blogname' ), ENT_QUOTES );
-		$from     = "From: \"$blogname\" <$wp_email>";
-		if ( '' !== $comment->comment_author_email ) {
-			$reply_to = "Reply-To: $comment->comment_author_email";
-		}
-	} else {
-		$from = "From: \"$comment_user->display_name\" <$wp_email>";
-		if ( '' !== $comment_user->user_email ) {
-			$reply_to = "Reply-To: \"$comment_user->user_email\" <$comment_user->user_email>";
-		}
-	}
-
-	$message_headers = "$from\n";
-
-	if ( isset( $reply_to ) ) {
-		$message_headers .= $reply_to . "\n";
-	}
-
 	foreach ( $admins as $admin ) {
 		// Don't send notification to instructor of her own comment.
 		if ( (int) $admin->user_id === (int) $comment_author_user->ID ) {
@@ -1800,7 +1779,7 @@ Comment URL: %s',
 			continue;
 		}
 
-		wp_mail( $admin_user->user_email, $subject, $message, $message_headers );
+		wp_mail( $admin_user->user_email, $subject, $message );
 	}
 
 	// Don't allow core notification to be sent.
