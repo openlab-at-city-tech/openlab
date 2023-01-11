@@ -409,8 +409,9 @@ function openlab_group_blog_activity( $activity ) {
 			$userlink = '<a href="' . esc_attr( $comment->comment_author_url ) . '">' . esc_html( $comment->comment_author ) . '</a>';
 		}
 		$activity->action = sprintf(
-			__( '%1$s commented on %2$s in the group %3$s', 'groupblog' ),
+			'%1$s left a %2$s on the post %3$s in the group %4$s',
 			$userlink,
+			'<a href="' . esc_url( get_comment_link( $comment ) ) . '">comment</a>',
 			'<a href="' . get_permalink( $post->ID ) . '">' . esc_html( $post->post_title ) . '</a>',
 			'<a href="' . bp_get_group_permalink( $group ) . '">' . esc_html( $group->name ) . '</a>'
 		);
