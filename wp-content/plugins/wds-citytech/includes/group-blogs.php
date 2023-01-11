@@ -396,7 +396,7 @@ function openlab_group_blog_activity( $activity ) {
 	// Replace the necessary values to display in group activity stream
 	if ( 'new_blog_post' == $activity->type ) {
 		$activity->action = sprintf(
-			__( '%1$s wrote a new blog post %2$s in the group %3$s', 'groupblog' ),
+			'%1$s posted %2$s in %3$s',
 			bp_core_get_userlink( $activity->user_id ),
 			'<a href="' . get_permalink( $post->ID ) . '">' . esc_html( $post->post_title ) . '</a>',
 			'<a href="' . bp_get_group_permalink( $group ) . '">' . esc_html( $group->name ) . '</a>'
