@@ -376,7 +376,7 @@ function ol_comment_moderation_text( $notify_message, $comment_id ) {
 		number_format_i18n( $comments_waiting )
 	) . "<br />";
 
-	$moderate_url    = admin_url( 'edit-comments.php?comment_status=moderated#wpbody-content' ) . "<br />";
+	$moderate_url    = admin_url( 'edit-comments.php?comment_status=moderated#wpbody-content' );
 	$notify_message .= '<a href="' . $moderate_url . '">' . $moderate_url . '</a>' . "<br />";
 
 	// Remove <p> from the message
