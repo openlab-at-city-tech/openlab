@@ -225,7 +225,7 @@ function ol_comment_notification_text( $notify_message, $comment_id ) {
 
 	$post   = get_post( $comment->comment_post_ID );
 	$comment_content = wp_specialchars_decode( $comment->comment_content );
-	
+
 	$comment_author_domain = '';
 	if ( WP_Http::is_ip_address( $comment->comment_author_IP ) ) {
 		$comment_author_domain = gethostbyaddr( $comment->comment_author_IP );
