@@ -202,12 +202,14 @@ class GF_Zapier extends GFFeedAddOn {
 		require_once plugin_dir_path( __FILE__ ) . 'includes/rest/class-requirements-controller.php';
 		require_once plugin_dir_path( __FILE__ ) . 'includes/rest/class-sample-entry-controller.php';
 		require_once plugin_dir_path( __FILE__ ) . 'includes/rest/class-sample-entries-controller.php';
+		require_once plugin_dir_path( __FILE__ ) . 'includes/rest/class-transfer-entries-controller.php';
 		require_once plugin_dir_path( __FILE__ ) . 'includes/rest/class-feeds-controller.php';
 
 		$controllers = array(
 			REST\Requirements_Controller::class,
 			REST\Sample_Entry_Controller::class,
 			REST\Sample_Entries_Controller::class,
+			REST\Transfer_Entries_Controller::class,
 			REST\Feeds_Controller::class,
 		);
 
