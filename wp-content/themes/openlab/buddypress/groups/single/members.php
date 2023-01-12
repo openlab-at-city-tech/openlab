@@ -41,13 +41,14 @@ if ( bp_group_has_members( $members_args ) ) : ?>
                                                 <a class="no-deco truncate-on-the-fly hyphenate" href="<?php bp_member_permalink() ?>" data-basevalue="28" data-minvalue="20" data-basewidth="152"><?php bp_member_name(); ?></a><span class="original-copy hidden"><?php bp_member_name(); ?></span>
                                             </p>
 				<span class="activity"><?php openlab_member_joined_since() ?></span>
-				
-				<?php 
+
+				<?php /*
+				<?php
 				// Show "Hide my membership" checkbox for the logged in user and non-mods only
-				if( ( bp_get_member_user_id() === bp_loggedin_user_id() ) && ! current_user_can( 'bp_moderate' ) ) { 
+				if( ( bp_get_member_user_id() === bp_loggedin_user_id() ) && ! current_user_can( 'bp_moderate' ) ) {
 
 					// Check if current user's membership is private for this group.
-					$isPrivate = openlab_is_my_membership_private( bp_get_current_group_id() );	
+					$isPrivate = openlab_is_my_membership_private( bp_get_current_group_id() );
 				?>
 				<div class="group-item-membership-privacy">
 					<label>
@@ -60,6 +61,7 @@ if ( bp_group_has_members( $members_args ) ) : ?>
 				if( current_user_can( 'bp_moderate' ) && in_array( bp_get_member_user_id(), $private_users, true ) ) { ?>
 				<p class="private-membership-indicator"><span class="fa fa-eye-slash"></span> Membership hidden</p>
 				<?php } ?>
+				*/ ?>
 
 				<?php do_action( 'bp_group_members_list_item' ) ?>
 
