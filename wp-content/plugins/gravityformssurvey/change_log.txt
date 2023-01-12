@@ -1,3 +1,10 @@
+### 3.8 | 2023-01-11
+- Added support for the Theme Framework and implemented new Orbital styles.
+- Fixed an accessibility issue with the Likert field by adding an aria-labelledby attribute to radio inputs.
+- Fixed an issue that causes the field values and associated toggle to show in the Choices UI of the form editor.
+- Fixed an issue where Likert table borders don't show in old versions of Firefox.
+
+
 ### 3.7 | 2021-04-29
 - Added right-to-left language support for the Rating, Rank, and Likert survey field types.
 - Fixed an issue where script tags are output above the document head element.

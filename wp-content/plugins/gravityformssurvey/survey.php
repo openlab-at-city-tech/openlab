@@ -3,7 +3,7 @@
 Plugin Name: Gravity Forms Survey Add-On
 Plugin URI: https://gravityforms.com
 Description: Allows you to quickly and easily deploy Surveys on your web site using the power of Gravity Forms.
-Version: 3.7
+Version: 3.8
 Author: Gravity Forms
 Author URI: https://gravityforms.com
 License: GPL-2.0+
@@ -11,7 +11,7 @@ Text Domain: gravityformssurvey
 Domain Path: /languages
 
 ------------------------------------------------------------------------
-Copyright 2012-2021 Rocketgenius, Inc.
+Copyright 2012-2023 Rocketgenius, Inc.
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -33,7 +33,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die();
 }
 
-define( 'GF_SURVEY_VERSION', '3.7' );
+define( 'GF_SURVEY_VERSION', '3.8' );
 
 add_action( 'gform_loaded', array( 'GF_Survey_Bootstrap', 'load' ), 5 );
 
