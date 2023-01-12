@@ -222,7 +222,7 @@ function openlab_embed_handler_geogebra( $matches, $attr, $url ) {
 		'<div class="geogebra-iframe-container" style="position: relative; width: 100%%; height: 0; padding-bottom: 56.25%%;">
 		<iframe
 			scrolling="no"
-			src="https://www.geogebra.org/material/iframe/id/%s/rc/false/ai/false/sdz/false/smb/false/stb/false/stbh/true/ld/false/sri/false/sfsb/true"
+			src="https://www.geogebra.org/material/iframe/id/%s/rc/true/ai/true/sdz/true/smb/true/stb/true/stbh/true/ld/false/sri/false/sfsb/true/szb/true"
 			style="position: absolute; top: 0; left: 0; width:100%%; height:100%%; border: 0;" allowfullscreen>
 		</iframe>
 		</div>',
