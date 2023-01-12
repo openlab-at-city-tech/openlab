@@ -1,4 +1,4 @@
-<?php 
+<?php
 // Get private users of the group
 $private_users = openlab_get_group_private_users( bp_get_group_id() );
 
@@ -18,7 +18,7 @@ if ( bp_group_has_members( $members_args ) ) : ?>
 		<ul class="nav nav-inline">
 			<?php openlab_group_membership_tabs(); ?>
 		</ul>
-	</div><!-- .item-list-tabs --> 
+	</div><!-- .item-list-tabs -->
         <div id="member-count" class="pag-count col-sm-8 align-right">
 			<?php bp_group_member_pagination_count() ?>
 		</div>
@@ -56,7 +56,7 @@ if ( bp_group_has_members( $members_args ) ) : ?>
 					</label>
 				</div>
 				<?php } ?>
-				<?php 
+				<?php
 				// Show hidden membership label for the mods
 				if( current_user_can( 'bp_moderate' ) && in_array( bp_get_member_user_id(), $private_users, true ) ) { ?>
 				<p class="private-membership-indicator"><span class="fa fa-eye-slash"></span> Membership hidden</p>
