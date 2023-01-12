@@ -572,3 +572,8 @@ About: <a href="https://openlab.citytech.cuny.edu/about/">https://openlab.cityte
    $phpmailer->Body = $body;
 }
 add_action( 'phpmailer_init', 'openlab_add_footer_to_outgoing_emails' );
+
+/**
+ * Ensure that the summary is added to weekly as well as daily digests.
+ */
+add_filter( 'bpges_add_summary_to_digest', '__return_true' );
