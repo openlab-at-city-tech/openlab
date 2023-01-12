@@ -331,7 +331,7 @@ add_filter(
 		$group = groups_get_group( $group_id );
 
 		$exclude_hidden = ! current_user_can( 'bp_moderate' );
-		$descendant_ids = openlab_get_clone_descendants_of_group( $group_id, [ $group->creator_id ], $exclude_hidden );
+		$descendant_ids = openlab_get_clone_descendants_of_group( $group_id, [], $exclude_hidden );
 		if ( ! $descendant_ids ) {
 			$descendant_ids = [ 0 ];
 		}
