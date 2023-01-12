@@ -45,7 +45,7 @@ class GF_Environment_Config_Handler {
 	 *
 	 * @return mixed
 	 */
-	protected function get_environment_setting( $name, $default = false ) {
+	public function get_environment_setting( $name, $default = false ) {
 		$option_name = "gf_env_{$name}";
 		$setting = $this->cache->get( $option_name, $found );
 		if ( ! $found ) {
@@ -100,6 +100,17 @@ class GF_Environment_Config_Handler {
 	}
 
 	/**
+	 * Gets the hide_update_message config value.
+	 *
+	 * @since 2.6.7
+	 *
+	 * @return bool Returns true if install wizard is supposed to be hidden. Returns false otherwise.
+	 */
+	public function get_hide_update_message() {
+		return (bool) $this->get_environment_setting( 'hide_update_message', false );
+	}
+
+	/**
 	 * Gets the support_url config value.
 	 *
 	 * @since 2.6.7
@@ -108,6 +119,17 @@ class GF_Environment_Config_Handler {
 	 */
 	public function get_support_url() {
 		return $this->get_environment_setting( 'support_url', 'https://gravityforms.com/support/' );
+	}
+
+	/**
+	 * Gets the unregistered_license_message config value.
+	 *
+	 * @since 2.6.7
+	 *
+	 * @return string The message to be displayed when the license is unregistered.
+	 */
+	public function get_unregistered_license_message() {
+		return $this->get_environment_setting( 'unregistered_license_message' );
 	}
 
 	/**
@@ -122,6 +144,43 @@ class GF_Environment_Config_Handler {
 		// If environment config is set to hide install wizard, override gform_pending_intallation option with 0. Otherwise, use existing option.
 		$hide_install_wizard = $this->get_hide_install_wizard();
 		return $hide_install_wizard ? 0 : false;
+	}
+
+	/**
+	 * Maybe hides the automatic update message on the plugin's page.
+	 *
+	 * @since 2.6.8
+	 */
+	public function maybe_hide_plugin_page_message() {
+
+		if ( $this->get_hide_update_message() ) {
+			remove_filter( 'transient_update_plugins', array( 'GFForms', 'check_update' ) );
+			remove_filter( 'site_transient_update_plugins', array( 'GFForms', 'check_update' ) );
+		}
+	}
+
+	/**
+	 * Maybe hides the automatic update message on the Update page.
+	 *
+	 * @since 2.6.8
+	 *
+	 * @hook gform_updates_list, 20
+	 *
+	 * @param array $updates Updates array being filtered.
+	 */
+	public function maybe_hide_update_page_message( $updates ) {
+
+		if ( ! $this->get_hide_update_message() ) {
+			return $updates;
+		}
+
+		foreach ( $updates as & $update ) {
+			if ( $update['slug'] == 'gravityforms' ) {
+				$update['latest_version'] = '';
+			}
+		}
+
+		return $updates;
 	}
 
 

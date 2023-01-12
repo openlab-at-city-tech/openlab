@@ -289,10 +289,8 @@ class GFFormDetail {
 			id="form_editor_fields_container"
 			class="<?php esc_attr_e( $form_editor_class ); ?>"
 			data-js="form-editor"
-			<?php if ( ! $no_conflict_mode ) { ?>
 			<?php echo ! empty( $form['fields'] ) ? 'data-simplebar' : ''; ?>
 			<?php echo ! empty( $form['fields'] ) && is_rtl() ? 'data-simplebar-direction="rtl"' : ''; ?>
-			<?php } ?>
 		>
 		<?php
 		$has_pages  = GFCommon::has_pages( $form );
