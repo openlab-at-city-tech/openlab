@@ -1,6 +1,7 @@
 .gquiz-indicator,
 .gquiz-incorrect-response img,
 .gquiz-correct-response img {
+    display: inline;
     margin-left: 15px;
     vertical-align: middle;
 }

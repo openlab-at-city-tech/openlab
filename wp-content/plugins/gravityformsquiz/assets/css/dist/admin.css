@@ -1,0 +1,326 @@
+/* # Form Editor - FIELD SETTINGS */
+#gquiz_gfield_settings_choices_container li input.field-choice-price, #gquiz_gfield_settings_choices_container li input.field-choice-value {
+	display: none;
+}
+#gquiz_gfield_settings_choices_container {
+	max-height: 230px;
+	overflow: auto;
+	padding: 0.5rem 0 0.875rem;
+}
+.gquiz-field .choices_setting, .gquiz-setting-choices .show_values_setting, .gquiz-field .other_choice_setting, .gquiz-field li.label_setting {
+	display: none !important;
+}
+/* # Form Editor - FIELD SETTINGS - CHOICE ROW "QUIZ ANSWERS" */
+.gquiz-choice-row {
+	align-items: center;
+	display: flex;
+	flex-flow: row nowrap;
+	padding: 0;
+	width: 100%;
+}
+#gquiz-field-choices .gquiz-choice-row + .gquiz-choice-row {
+	margin-top: 0.5rem;
+}
+.gquiz-choices-help {
+	background: 0 10px url(../../../images/exclamation.png) no-repeat;
+	font-size: 0.8em;
+	margin-left: 10px;
+	padding: 10px 0 0 20px;
+}
+.gform-flyout__body .gquiz-choices-help {
+		background: none;
+		bottom: -7px;
+		color: #242748;
+		font-size: 0.9em;
+		-webkit-margin-after: 0;
+		        margin-block-end: 0;
+		-webkit-margin-before: 10px;
+		        margin-block-start: 10px;
+		margin-inline: 0;
+		padding: 0;
+		position: relative;
+	}
+.gform-flyout__body .gquiz-choices-help::before {
+			bottom: -3px;
+			content: "\e988";
+			font-family: "gform-icons-admin" !important;
+			font-size: 1rem;
+			font-style: normal;
+			font-feature-settings: normal;
+			font-variant: normal;
+			font-weight: normal;
+			line-height: 1;
+			margin-block: 0;
+			-webkit-margin-end: 5px;
+			        margin-inline-end: 5px;
+			-webkit-margin-start: 0;
+			        margin-inline-start: 0;
+			position: relative;
+			speak: never;
+			text-transform: none;
+		}
+.gquiz-choice-row .gquiz-button-correct-choice, .gquiz-choice-row .gquiz-weighted-score .gquiz-choice-weight {
+	margin-block: 0;
+	margin-inline: 0.3125rem;
+}
+.gquiz-choice-handle:not(.field-choice-handle) {
+	background: url(../../../images/icon-handle.svg) center center no-repeat;
+	cursor: move;
+	display: inline-block;
+	height: 0.75rem;
+	vertical-align: middle;
+	width: 0.625rem;
+}
+html:not([dir="rtl"]) .gquiz-choice-handle:not(.field-choice-handle) {
+	margin-right: 0.3125rem;
+}
+html[dir="rtl"] .gquiz-choice-handle:not(.field-choice-handle) {
+	margin-left: 0.3125rem;
+}
+/* # Form editor - FIELD SETTINGS - INPUT STYLES */
+.gquiz-answers-heading {
+	align-items: center;
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: space-between;
+	margin-bottom: 0.5rem;
+}
+.panel-block-tabs__body--settings .gquiz-answers-heading label {
+	display: block;
+	margin-bottom: 0;
+}
+.gquiz-choice-row .field-choice-text[type="text"], .gquiz-weighted-score .gquiz-choice-row .gquiz-choice-weight {
+	margin: auto 0.3125rem;
+}
+.gquiz-choice-row .field-choice-text[type="text"] {
+	flex: 1 0 auto;
+	max-width: 14.75rem;
+	width: 80%;
+}
+.choices-ui__section-label, .choices-ui__section:not([data-type="bulk-choices"]) {
+	display: none;
+}
+.gform-flyout .gform-flyout__body #gquiz_gfield_settings_choices_container {
+		max-height: none;
+		overflow: visible;
+	}
+.gform-flyout .gform-flyout__body .choices-ui__section-label, .gform-flyout .gform-flyout__body .choices-ui__section {
+		display: block;
+	}
+.gform-flyout .gform-flyout__body .section_label {
+		font-weight: 500;
+	}
+.gform-flyout .gform-flyout__body .gquiz-choice-row .field-choice-text[type="text"] {
+		flex: auto;
+		max-width: none;
+		width: calc(100% - 110px);
+	}
+.gform-flyout .gform-flyout__body ul li.gquiz-setting-answer-explanation {
+		margin-top: 10px;
+		width: 100%;
+	}
+.gform-flyout .gform-flyout__body ul li.gquiz-setting-answer-explanation label {
+			margin-bottom: 5px;
+		}
+.gform-flyout .gform-flyout__body ul li.gquiz-setting-answer-explanation textarea {
+			border: 1px solid #c3c5db;
+		}
+.gform-flyout .gform-flyout__body ul li.gquiz-setting-answer-explanation textarea:focus {
+			border: 1px solid #3985b7;
+		}
+/* # Form editor - FIELD SETTINGS - WEIGHTED */
+.gquiz-choice-row .gquiz-choice-weight {
+	display: none;
+	text-align: center;
+	width: 2.25rem;
+}
+.gquiz-choice-weight {
+	flex: 1 0 54px;
+	max-width: 54px;
+}
+.gquiz-weighted-score .gquiz-choice-row .gquiz-choice-weight {
+	display: inline !important;
+}
+.gform-flyout__body .gquiz-weighted-score .gquiz-choice-row .gquiz-choice-weight {
+	display: block !important;
+}
+/* # Form editor - FIELD SETTINGS - SHOW VALUES */
+#gquiz_gfield_settings_choices_container.gquiz-choice-values-visible li input.field-choice-value {
+	display: block;
+}
+.gform-flyout__body #gquiz_gfield_settings_choices_container.gquiz-choice-values-visible li input.field-choice-value {
+	margin-right: 0.3125rem;
+}
+.gform-flyout__body .gquiz-setting-choices .choices-ui__options-list .other_choice_setting {
+	display: none !important;
+}
+/* # Form editor - CORRECT/INCORRECT CHOICE INDICATORS */
+.gquiz-button-correct-choice {
+	background: url(../../../images/icon-check-inactive.svg) center center no-repeat;
+	border: 0 none;
+	box-shadow: none;
+	cursor: pointer;
+	height: 1rem;
+	position: relative;
+	width: 1rem;
+}
+.gquiz-button-correct-choice:focus {
+		outline: none;
+	}
+.gform-admin .gform-choice .gform-choice__selected-label.gquiz-button-correct-choice.chosen-as-correct {
+	background: #22a753;
+	border-color: #e1f6ed;
+}
+.chosen-as-correct:not(.gform-choice__selected-label) {
+	background: url(../../../images/icon-check-active.svg) center center no-repeat;
+}
+/* # Form editor - INSERT/DELETE CHOICE BUTTONS */
+.gquiz-insert-choice, .gquiz-delete-choice {
+	background-position: center;
+	background-repeat: no-repeat;
+	height: 0.625rem;
+	width: 0.625rem;
+}
+.gquiz-insert-choice:hover, .gquiz-delete-choice:hover {
+		cursor: pointer;
+	}
+.gquiz-insert-choice {
+	background-image: url(../../../images/icon-add.svg);
+	margin: 0 0.25rem;
+}
+.gquiz-delete-choice {
+	background-image: url(../../../images/icon-close-small.svg);
+}
+html[dir="rtl"] .gquiz-delete-choice {
+	-webkit-margin-start: 0.25rem;
+	        margin-inline-start: 0.25rem;
+}
+html[dir="rtl"] .gquiz-weighted-score-wrapper {
+	float: left;
+}
+html[dir="rtl"] .gquiz-weighted-score-wrapper .gf_tooltip {
+	margin-left: 0;
+	margin-right: 0.5rem;
+}
+.gquiz-insert-choice:not(.gform-st-icon)::before, .gquiz-delete-choice:not(.gform-st-icon)::before {
+	content: none !important;
+}
+/* # Form settings */
+#gquiz-grading-letter-container, #gquiz-settings-grades-container, #gquiz-grading-pass-fail-container {
+	cursor: default;
+	margin: 20px 0;
+}
+#gquiz-form-setting-pass-grade-value {
+	display: inline-block;
+	margin-bottom: 15px;
+	position: relative;
+}
+#gform_setting_passPercent .gform-settings-input__container--with-append {
+	display: flex;
+}
+#passPercent, .percentage-input {
+	display: inline-block;
+	text-align: center;
+	width: 75px !important;
+}
+#passPercent ~ .gform-settings-field__text-append, .percentage-input ~ .gform-settings-field__text-append {
+	background-color: #fdfdff;
+	border-color: #9092b2;
+	display: inline-block;
+}
+#gquiz-settings-grades-container {
+	overflow: auto;
+	padding: 5px;
+}
+#gquiz-settings-grades-container label {
+		display: block;
+		line-height: 125%;
+		margin: 0 0 3px;
+	}
+#gquiz-settings-grades-container input.gquiz-grade-input {
+		width: 20%;
+	}
+.gquiz-grade-handle {
+	background: url(../../../images/icon-handle.svg) center center no-repeat;
+	border: 0 none;
+	cursor: move;
+	display: inline-block;
+	height: 0.75rem;
+	vertical-align: middle;
+	width: 0.625rem;
+}
+html:not([dir="rtl"]) #gquiz-grades .gquiz-grade-value[type="text"] {
+	border-bottom-right-radius: 0;
+	border-right: 0;
+	border-top-right-radius: 0;
+}
+html[dir="rtl"] #gquiz-grades .gquiz-grade-value[type="text"] {
+	border-bottom-left-radius: 0;
+	border-left: 0;
+	border-top-left-radius: 0;
+}
+#gquiz-grades .gquiz-grade-handle {
+	-webkit-margin-end: 0.625rem;
+	        margin-inline-end: 0.625rem;
+}
+#gquiz-grades {
+	margin-top: 0.5rem;
+}
+#gquiz-grades li {
+		align-items: center;
+		display: flex;
+		flex-flow: row nowrap;
+		justify-content: center;
+	}
+.gquiz-grades-header-label {
+	cursor: default;
+	display: inline !important;
+	font-size: 13px;
+	padding-left: 25px;
+}
+.gquiz-grades-header-value {
+	display: inline !important;
+	font-size: 13px;
+	padding-left: 192px;
+}
+#gquiz-grading-options {
+	margin: 8px 0;
+}
+.gquiz-grade-buttons {
+	display: inline-block;
+	flex: 1;
+	padding: 0 0.625rem;
+}
+.gquiz-grade-row-button {
+	background: transparent center center no-repeat;
+	border: 0 none;
+	display: inline-block;
+	height: 1rem;
+	margin: 0 0.3125rem;
+	width: 1rem;
+}
+.gquiz-add-grade {
+	background-image: url(../../../images/icon-add.svg);
+}
+.gquiz-delete-grade {
+	background-image: url(../../../images/icon-close-small.svg);
+}
+.gquiz-greater-than-or-equal {
+	color: #999;
+	display: inline-block;
+	margin: 0 0.625rem;
+}
+.gquiz-percentage {
+	color: #999;
+	font-size: 13px;
+}
+.gquiz-percentage-container {
+	align-content: center;
+	display: flex;
+}
+#gaddon-setting-row-grading input {
+	font-size: inherit;
+	padding: 3px 5px;
+}
+
+/*# sourceMappingURL=admin.css.map */

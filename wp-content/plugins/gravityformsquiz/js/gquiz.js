@@ -28,7 +28,7 @@ function gquizShowAnswer(radioInput) {
     fieldContainer = jQuery(radioInput).closest('.ginput_container');
     answerExplanation = gquizAnswers[fieldId].explanation;
     if (answerExplanation) {
-        answerExplanation = '<div class="gquiz-answer-explanation">' + utf8_decode(base64_decode(answerExplanation)) + '</div>';
+        answerExplanation = '<div class="gquiz-answer-explanation gfield_description">' + utf8_decode(base64_decode(answerExplanation)) + '</div>';
         fieldContainer.append(answerExplanation);
     }
 }
