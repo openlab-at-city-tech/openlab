@@ -27,6 +27,7 @@ const addMarker = ( value, data ) => {
 		type: 'ol/attributions',
 		attributes: {
 			href: `#ref-${ id }`,
+			'data-href': `#ref-${ id }`,
 			id: `anchor-${ id }`,
 			'aria-label': `See attribution`
 		},
