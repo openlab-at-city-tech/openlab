@@ -1748,17 +1748,7 @@ class GFAPI {
 			return $form;
 		}
 
-		/**
-		 * Allows the form logged in user requirement to be overridden.
-		 *
-		 * @since 2.4
-		 *
-		 * @param bool  $require_login Indicates if the user must be logged in to use the current form.
-		 * @param array $form          The form currently being validated.
-		 */
-		$require_login = gf_apply_filters( array( 'gform_require_login', $form_id, ), (bool) rgar( $form, 'requireLogin' ), $form );
-
-		if ( $require_login && ! is_user_logged_in() ) {
+		if ( GFCommon::form_requires_login( $form ) && ! is_user_logged_in() ) {
 			return new WP_Error( 'login_required', __( 'You must be logged in to use this form.', 'gravityforms' ) );
 		}
 

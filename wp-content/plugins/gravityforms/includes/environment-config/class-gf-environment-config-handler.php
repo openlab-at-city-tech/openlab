@@ -78,6 +78,17 @@ class GF_Environment_Config_Handler {
 	}
 
 	/**
+	 * Gets the hide_background_updates config value.
+	 *
+	 * @since 2.6.9
+	 *
+	 * @return bool Returns true if the background updates setting is supposed to be hidden from the UI. Returns false otherwise.
+	 */
+	public function get_hide_background_updates() {
+		return (bool) $this->get_environment_setting( 'hide_background_updates', false );
+	}
+
+	/**
 	 * Gets the hide_install_wizard config value.
 	 *
 	 * @since 2.6.7
@@ -132,19 +143,22 @@ class GF_Environment_Config_Handler {
 
 
 	/**
-	 * Target of the gform_plugin_settings_fields filter. Removes the license key and license key detail sections from the array.
+	 * Target of the gform_plugin_settings_fields filter. Removes sections from the settings page that are configured to be hidden.
 	 *
-	 * @since 2.6.7
+	 * @since 2.6.9
 	 *
 	 * @param array $fields The settings fields to be filtered.
 	 *
-	 * @return array The $fields array without the license_key and license_key_details sections.
+	 * @return array Returns the filtered $fields array.
 	 */
-	public function remove_license_from_settings( $fields ) {
+	public function maybe_hide_setting( $fields ) {
 
 		if ( $this->get_hide_license() ) {
 			unset( $fields['license_key'] );
 			unset( $fields['license_key_details'] );
+		}
+		if ( $this->get_hide_background_updates() ) {
+			unset( $fields['background_updates'] );
 		}
 		return $fields;
 	}

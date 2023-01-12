@@ -1,3 +1,13 @@
+### 2.6.8.2
+- Updated the minimum WordPress version on the System Status page to 6.0.
+- Fixed issue which causes Products to display images as HTML in email notifications.
+- Fixed an issue where some legacy admin notifications have a corrupt routing property resulting in the "Cannot send email because the TO address is invalid" error.
+- Added a new environment variable to hide the background updates setting.
+- Fixed an issue that causes the "Enable Other Choice" setting for option based fields (Radio, Checkbox etc) to not display in the Flyout when the Quiz add-on is enabled.
+
+### 2.6.8.1
+- Fixed an issue where the gform_require_login filter isn't called in all contexts the form requireLogin property is checked.
+
 ### 2.6.8 | 2022-11-09
 - Fixed an accessibility issue with the consent field description.
 - Fixed an accessibility issue that prevents the show/hide password button from read by screen readers.
