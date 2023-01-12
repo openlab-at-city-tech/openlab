@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 2.2.9
+
+	- Improved performance by decreasing the number of calls to `get_plugins()`.
+
 ## 2.2.8
 
 	- Fixed issue where a license validation function was being called on every request.

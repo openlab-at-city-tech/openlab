@@ -3,7 +3,7 @@
  * Plugin Name: Gravity Perks
  * Plugin URI: https://gravitywiz.com/
  * Description: Effortlessly install and manage small functionality enhancements (aka "perks") for Gravity Forms.
- * Version: 2.2.8
+ * Version: 2.2.9
  * Author: Gravity Wiz
  * Author URI: https://gravitywiz.com/
  * License: GPL2
@@ -12,7 +12,7 @@
  * Update URI: https://gravitywiz.com/updates/gravityperks
  */
 
-define( 'GRAVITY_PERKS_VERSION', '2.2.8' );
+define( 'GRAVITY_PERKS_VERSION', '2.2.9' );
 
 /**
  * Include the perk model as early as possible to when Perk plugins are loaded, they can safely extend
@@ -1449,11 +1449,10 @@ class GravityPerks {
 	}
 
 	/**
-	* Play it safe and require WP's plugin.php before calling the get_plugins() function.
-	*
 	* @return array An array of installed plugins.
 	*/
 	public static function get_plugins( $clear_cache = false ) {
+		// Ensure that WordPress plugin functions are loaded before calling them as get_plugins() can be called at various times.
 		require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
 
 		$plugins = get_plugins();
@@ -1467,14 +1466,19 @@ class GravityPerks {
 	}
 
 	/**
-	* Confirm whether the our custom plugin header 'Perk' is available.
+	* Confirm whether our custom plugin header 'Perk' is available.
 	*
 	* When activating Gravity Perks, the plugin cache has already been created without the custom 'Perk' header.
 	*
 	*/
 	public static function plugins_have_perk_plugin_header( $plugins ) {
-		$plugin = reset( $plugins );
-		return $plugin && isset( $plugin['Perk'] );
+		foreach ( $plugins as $plugin ) {
+			if ( rgar( $plugin, 'Perk' ) ) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**
