@@ -64,7 +64,7 @@ function olur_report_callbacks() {
 		'Activity' => array(
 
 			array( 'PROFILES', 'Total Instances', 'Total Unique Users', 'Students', 'Faculty', 'Staff', 'Alumni', 'Other Users' ),
-			array( 'label' => 'New Avatar', 'component' => 'profile', 'type' => 'new_avatar' ),
+			array( 'label' => 'New Avatar', 'component' => 'members', 'type' => 'new_avatar' ),
 			array( 'label' => 'Profile Update', 'component' => 'xprofile', 'type' => 'updated_profile' ),
 
 			// @todo These are probably not accurate because of 'site_public'.
