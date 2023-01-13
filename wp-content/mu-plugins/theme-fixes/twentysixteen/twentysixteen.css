@@ -6,6 +6,10 @@
 	text-decoration: none;
 }
 
+.site-description {
+	margin-bottom: .1em;
+}
+
 @media screen and (min-width: 44.375em) {
 	body.admin-bar:not(.custom-background-image):before,
 	body.admin-bar:not(.custom-background-image):after {
