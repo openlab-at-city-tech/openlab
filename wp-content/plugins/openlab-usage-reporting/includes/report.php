@@ -70,7 +70,7 @@ function olur_report_callbacks() {
 			// @todo These are probably not accurate because of 'site_public'.
 			'',
 			array( 'SITES', 'Total Instances', 'Total Unique Users', 'Students', 'Faculty', 'Staff', 'Alumni', 'Other Users', 'Groups', 'Courses', 'Clubs', 'Projects', 'ePortfolios', 'Portfolios' ),
-			array( 'label' => 'New Site', 'component' => 'blog', 'type' => 'new_blog' ),
+			array( 'label' => 'New Site', 'component' => 'blogs', 'type' => 'new_blog' ),
 			array( 'label' => 'New Site Posts', 'component' => 'groups', 'type' => 'new_blog_post' ),
 			array( 'label' => 'New Site Comments', 'component' => 'groups', 'type' => 'new_blog_comment' ),
 
