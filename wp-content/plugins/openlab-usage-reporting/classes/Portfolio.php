@@ -34,8 +34,7 @@ class Portfolio implements Counter {
 			foreach ( (array) $group_status as $status ) {
 				$statuses[] = $wpdb->prepare( '%s', $status );
 			}
-			$status_join  = "JOIN {$bp->groups->table_name} g ON ( g.id = a.item_id )";
-			$status_where = "AND a.item_id IN (SELECT id FROM {$bp->groups->table_name} WHERE status IN ( " . implode( ', ', $statuses ) . " ))";
+			$status_where = "AND g.status IN ( " . implode( ', ', $statuses ) . " )";
 		}
 
 		// Start
