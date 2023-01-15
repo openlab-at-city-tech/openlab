@@ -1534,6 +1534,10 @@ function openlab_get_user_activity_action( $activity = null ) {
 		}
 	}
 
+	if( $activity->type == 'added_group_document' ) {
+		$output = str_replace( 'uploaded the file:', 'added the file', $output );
+	}
+
 	// Create DateTime from the activity date
 	$activity_datetime = new DateTime( $activity->date_recorded );
 	// Create TimeZone from the timezone selected in the WP Settings
