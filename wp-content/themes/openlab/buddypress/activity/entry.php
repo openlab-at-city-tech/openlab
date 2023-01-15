@@ -16,8 +16,17 @@ switch( $activity_component ) {
 		// Get site/blog url
 		$item_url = $blog->siteurl;
 
+		// Get site/blog group
+		global $bp, $wpdb;
+
+		$group_site = $wpdb->get_col( $wpdb->prepare( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = %s AND meta_value = %s", array( 'wds_bp_group_site_id', (string) bp_get_activity_item_id() ) ) );
+	
+		// Get group by ID
+		$group_id = $group_site[0];
+		$group = groups_get_group( $group_id );
+
 		// Get default avatar uri to be used for this type of activity
-		$item_avatar_url = openlab_get_default_avatar_uri();
+		$item_avatar_url = bp_get_group_avatar_url( $group, 'full' );
 		break;
 	case 'members':
 	case 'xprofile':
@@ -32,6 +41,19 @@ switch( $activity_component ) {
 		$item_name = '';
 		$item_url = '';
 		$item_avatar_url = openlab_get_default_avatar_uri();
+		break;
+	case 'events':
+		// Group Id 
+		$group_id = openlab_get_group_id_by_event_id( $activity_id );
+
+		// Get group by ID
+		$group = groups_get_group( $group_id );
+
+		// Get group data
+		$item_name = bp_get_group_name( $group );
+		$item_url = bp_get_group_permalink( $group );
+		$item_avatar_url = bp_get_group_avatar_url( $group, 'full' );
+
 		break;
 	case 'groups':
 	default:

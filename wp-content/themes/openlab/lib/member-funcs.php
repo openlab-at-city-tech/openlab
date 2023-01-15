@@ -1435,6 +1435,31 @@ function openlab_get_group_id_by_activity_id( $activity_id ) {
     }
 }
 
+function openlab_get_group_id_by_event_id( $activity_id ) {
+	if( ! empty( $activity_id ) ) {
+		global $wpdb;
+
+		// BuddyPress activity table
+		$activity_table = $wpdb->prefix . 'bp_activity';
+
+		// Get activity event id
+		$event_id = $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT secondary_item_id FROM $activity_table WHERE id = %s AND component = %s",
+				$activity_id, 'events'
+			)
+		);
+
+		if( ! empty( $event_id ) ) {
+			$group_ids = (array) bpeo_get_event_groups( $event_id );
+			
+			if( isset( $group_ids[0] ) ) {
+				return $group_ids[0];
+			}
+		}
+	}
+}
+
 /**
  * Change the date format in the activity text displayed on
  * the "My Activity" page.
