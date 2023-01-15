@@ -1560,7 +1560,7 @@ function openlab_get_user_activity_action( $activity = null ) {
 	}
 
 	if( $activity->type == 'added_group_document' ) {
-		$output = str_replace( 'uploaded the file:', 'added the file', $output );
+		$output = str_replace( 'uploaded the file', 'added the file', $output );
 	}
 
 	// Create DateTime from the activity date
