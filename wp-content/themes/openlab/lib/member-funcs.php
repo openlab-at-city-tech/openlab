@@ -1565,7 +1565,7 @@ function openlab_get_activity_view_button_label( $activity_type = '' ) {
 	switch ( $activity_type ) {
 		case 'edited_group_document' :
 		case 'added_group_document' :
-			return 'Download File';
+			return 'View File';
 
 		case 'bp_doc_created' :
 		case 'bp_doc_edited' :
