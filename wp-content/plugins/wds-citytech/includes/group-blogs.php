@@ -1772,7 +1772,12 @@ Comment URL: %s',
 
 	$comment_user = get_userdata( $comment->user_id );
 
+	$post_author_is_admin = false;
 	foreach ( $admins as $admin ) {
+		if ( (int) $admin->user_id === $post->post_author ) {
+			$post_author_is_admin = true;
+		}
+
 		// Don't send notification to instructor of her own comment.
 		if ( (int) $admin->user_id === (int) $comment_author_user->ID ) {
 			continue;
@@ -1786,8 +1791,10 @@ Comment URL: %s',
 		wp_mail( $admin_user->user_email, $subject, $message );
 	}
 
-	// Don't allow core notification to be sent.
-	remove_action( 'comment_post', 'wp_new_comment_notify_postauthor' );
+	// Don't allow duplicate core notification to be sent.
+	if ( $post_author_is_admin ) {
+		remove_action( 'comment_post', 'wp_new_comment_notify_postauthor' );
+	}
 }
 add_action( 'wp_insert_comment', 'openlab_olgc_notify_instructor', 20, 2 );
 
@@ -1800,7 +1807,7 @@ add_action( 'wp_insert_comment', 'openlab_olgc_notify_instructor', 20, 2 );
 function openlab_olpc_notify_comment_author_of_reply( $comment_id, $comment ) {
 	$olgc_is_private = get_comment_meta( $comment_id, 'olgc_is_private', true );
 	$olpc_is_private = get_comment_meta( $comment_id, 'ol_is_private', true );
-	if ( $olgc_is_private && ! $olpc_is_private ) {
+	if ( ! $olgc_is_private && ! $olpc_is_private ) {
 		return;
 	}
 
