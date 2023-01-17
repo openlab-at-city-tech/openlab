@@ -1721,6 +1721,72 @@ function openlab_catch_olgc_notice_dismissals() {
 add_action( 'admin_init', 'openlab_catch_olgc_notice_dismissals' );
 
 /**
+ * Email the post author when a wp-grade-comments or openlab-private-comments "private" comment is posted.
+ *
+ * @param int        $comment_id ID of the comment.
+ * @param WP_Comment $comment    Comment object.
+ */
+function openlab_olgc_notify_postauthor( $comment_id, $comment ) {
+	$olgc_is_private = get_comment_meta( $comment_id, 'olgc_is_private', true );
+	$olpc_is_private = get_comment_meta( $comment_id, 'ol_is_private', true );
+	if ( ! $olgc_is_private && ! $olpc_is_private ) {
+		return;
+	}
+
+	$group_id = openlab_get_group_id_by_blog_id( get_current_blog_id() );
+	if ( ! $group_id ) {
+		return;
+	}
+
+	// Sanity check.
+	$comment_author_user = get_user_by( 'email', $comment->comment_author_email );
+	if ( ! $comment_author_user ) {
+		return;
+	}
+
+	$post = get_post( $comment->comment_post_ID );
+	if ( ! ( $post instanceof WP_Post ) ) {
+		return;
+	}
+
+	// No self-notifications.
+	if ( (int) $post->post_author === (int) $comment_author_user->ID ) {
+		return;
+	}
+
+	$author_user = get_user_by( 'id', $post->post_author );
+	if ( ! $author_user ) {
+		return;
+	}
+
+	// Don't allow duplicate core notification to be sent.
+	remove_action( 'comment_post', 'wp_new_comment_notify_postauthor' );
+
+	$group = groups_get_group( $group_id );
+
+	$subject = sprintf( 'A new private comment on %s in %s', $post->post_title, $group->name );
+
+	$comment_link = get_comment_link( $comment );
+
+	$message = sprintf(
+		'There is a new private comment on your site %s.<br /><br />
+
+Post name: %s<br />
+Comment author: %s<br />
+Comment URL: %s',
+		get_option( 'blogname' ),
+		$post->post_title,
+		bp_core_get_userlink( $comment_author_user->ID ),
+		sprintf( '<a href="%s">%s</a>', $comment_link, $comment_link )
+	);
+
+	$message = openlab_comment_email_boilerplate( $message );
+
+	wp_mail( $author_user->user_email, $subject, $message );
+}
+add_action( 'wp_insert_comment', 'openlab_olgc_notify_postauthor', 20, 2 );
+
+/**
  * Email the course instructor when a wp-grade-comments or openlab-private-comments "private" comment is posted.
  *
  * @param int        $comment_id ID of the comment.
@@ -1772,12 +1838,7 @@ Comment URL: %s',
 
 	$comment_user = get_userdata( $comment->user_id );
 
-	$post_author_is_admin = false;
 	foreach ( $admins as $admin ) {
-		if ( (int) $admin->user_id === $post->post_author ) {
-			$post_author_is_admin = true;
-		}
-
 		// Don't send notification to instructor of her own comment.
 		if ( (int) $admin->user_id === (int) $comment_author_user->ID ) {
 			continue;
@@ -1789,11 +1850,6 @@ Comment URL: %s',
 		}
 
 		wp_mail( $admin_user->user_email, $subject, $message );
-	}
-
-	// Don't allow duplicate core notification to be sent.
-	if ( $post_author_is_admin ) {
-		remove_action( 'comment_post', 'wp_new_comment_notify_postauthor' );
 	}
 }
 add_action( 'wp_insert_comment', 'openlab_olgc_notify_instructor', 20, 2 );
