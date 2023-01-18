@@ -1,0 +1,151 @@
+/* FILE: blocks/_latest-posts.scss */
+
+.wp-block-latest-posts {
+
+	&:not(.alignwide):not(.alignfull) {
+		margin-#{$left}: 0;
+	}
+
+	li {
+		// We need the flex column layout also to stack the vertical
+		// margin of children elements.
+		display: flex;
+		flex-direction: column;
+		padding: var(--posts_list_entry_padding_vertical) var(--posts_list_entry_padding_horizontal);
+		background: var(--color_body_background);
+		border-top: var(--border_decorative_width) solid var(--color_border_decorative);
+		transition: box-shadow .3s;
+
+		&:hover,
+		&:focus-within {
+			box-shadow: var(--drop_shadow);
+		}
+
+		> * {
+			margin-top: var(--typography_font_size_base);
+			margin-bottom: var(--typography_font_size_base);
+
+			&:first-child {
+				margin-top: 0;
+			}
+
+			&:last-child {
+				margin-bottom: 0;
+			}
+
+		}
+
+		&:not(:first-child) {
+			margin-top: 1em;
+		}
+
+	}
+
+	li .wp-block-latest-posts__featured-image {
+		order: -10;
+		float: none; // If `alignleft/right` class is applied via block settings.
+		margin-top: calc( -1 * var(--posts_list_entry_padding_vertical) );
+		margin-left: calc( -1 * var(--posts_list_entry_padding_horizontal) );
+		margin-right: calc( -1 * var(--posts_list_entry_padding_horizontal) );
+
+		img {
+			width: 100%;
+		}
+
+	}
+
+	a:not(.link-more) { // Post title.
+		display: block;
+		font-family: var(--typography_font_headings);
+		font-size: calc( var(--typography_heading_size_posts) * 1em );;
+		font-weight: 300;
+		line-height: 1.25;
+		text-transform: uppercase;
+		text-decoration: none;
+		color: var(--color_body_headings);
+
+		&:hover,
+		&:focus {
+			text-decoration: underline;
+			text-underline-offset: .15em;
+			text-decoration-thickness: 1px;
+		}
+
+	}
+
+	.entry-meta {
+		margin-top: -1rem;
+		margin-bottom: 1rem;
+		opacity: .75;
+
+		&:hover,
+		&:focus-within {
+			opacity: 1;
+		}
+
+		> *:not(:first-child)::before {
+			content: '\2022 '; // &bull;
+			display: inline-block;
+			margin: 0 .5em;
+		}
+
+	}
+
+		&__post-author,
+		&__post-date {
+			display: inline;
+			margin: .25em 0;
+			font-size: inherit;
+			color: inherit;
+		}
+
+	&.is-grid {
+		align-items: flex-start; // Prevent equal column height.
+
+		li {
+			margin: calc( var(--posts_list_gap) / 2 ) 0;
+		}
+
+		@include media( map_get( $breakpoint, 'm' ) ) {
+
+			&:not(.alignwide):not(.alignfull) {
+				width: calc( 100% + var(--posts_list_gap) );
+				margin: calc( var(--posts_list_gap) / 2 * -1 );
+			}
+
+			li {
+				width: calc( 100% - var(--posts_list_gap) );
+			}
+
+			&[class*="columns-"] li {
+				margin: calc( var(--posts_list_gap) / 2 );
+			}
+
+		}
+
+	}
+
+	// Columns.
+
+		&[class*="columns-"] li {
+			width: 100%;
+		}
+
+		@for $i from 2 through 6 {
+			&.columns-#{ $i } li {
+				@extend %posts_list_columns_#{$i};
+			}
+		}
+
+}
+
+.has-text-color .wp-block-latest-posts,
+.wp-block-latest-posts.has-text-color,
+.wp-block-cover .wp-block-latest-posts {
+	border-color: currentColor;
+
+	a:not(.link-more) { // Post title.
+		color: inherit;
+	}
+
+}

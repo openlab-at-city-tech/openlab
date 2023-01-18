@@ -1,0 +1,17 @@
+/* FILE: editor-block/_custom-properties.scss */
+
+:root {
+	// Block editor UI margin applied on blocks.
+	// Used to compensate for block width.
+	--block_ui_margin: var(--zero);
+	--block_ui_border: var(--zero);
+
+	--block_ui_compensation: calc( 2 * var(--block_ui_margin) + var(--block_ui_border) );
+	--editor_width_addon: var(--block_ui_compensation);
+}
+
+// Backwards compatibility (WP5.3-):
+.editor-block-list__layout {
+	--block_ui_margin: 14px;
+	--block_ui_border: 2px;
+}

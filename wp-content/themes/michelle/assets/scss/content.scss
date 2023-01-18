@@ -1,0 +1,20 @@
+/* FILE: content.scss */
+
+//
+// Content styles.
+//
+// @package    Michelle
+// @copyright  WebMan Design, Oliver Juhas
+//
+// @since    1.0.0
+// @version  1.3.11
+//
+
+$left: left;
+$right: right;
+$rtl_multiplier: 1; // For `translateX` transform, for example.
+
+@import '_tools/_index';
+@import '_setup/_index';
+
+@import 'content/_index';

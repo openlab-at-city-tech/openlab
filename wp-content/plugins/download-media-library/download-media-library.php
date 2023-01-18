@@ -16,8 +16,8 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 // Enable allow_url_fopen
 if( !(ini_get('allow_url_fopen') )) {
-   ini_set(allow_url_fopen, 'On');
-} 
+   ini_set('allow_url_fopen', 'On');
+}
 
 // Sets the plugin path/url.
 define( 'MTDML_PATH', plugin_dir_path( __FILE__ ) );

@@ -5,9 +5,11 @@ require_once WPCF7_PLUGIN_DIR . '/includes/capabilities.php';
 require_once WPCF7_PLUGIN_DIR . '/includes/functions.php';
 require_once WPCF7_PLUGIN_DIR . '/includes/formatting.php';
 require_once WPCF7_PLUGIN_DIR . '/includes/pipe.php';
+require_once WPCF7_PLUGIN_DIR . '/includes/pocket-holder.php';
 require_once WPCF7_PLUGIN_DIR . '/includes/form-tag.php';
 require_once WPCF7_PLUGIN_DIR . '/includes/form-tags-manager.php';
 require_once WPCF7_PLUGIN_DIR . '/includes/shortcodes.php';
+require_once WPCF7_PLUGIN_DIR . '/includes/swv/swv.php';
 require_once WPCF7_PLUGIN_DIR . '/includes/contact-form-functions.php';
 require_once WPCF7_PLUGIN_DIR . '/includes/contact-form-template.php';
 require_once WPCF7_PLUGIN_DIR . '/includes/contact-form.php';
@@ -22,6 +24,7 @@ require_once WPCF7_PLUGIN_DIR . '/includes/integration.php';
 require_once WPCF7_PLUGIN_DIR . '/includes/config-validator.php';
 require_once WPCF7_PLUGIN_DIR . '/includes/rest-api.php';
 require_once WPCF7_PLUGIN_DIR . '/includes/block-editor/block-editor.php';
+require_once WPCF7_PLUGIN_DIR . '/includes/html-formatter.php';
 
 if ( is_admin() ) {
 	require_once WPCF7_PLUGIN_DIR . '/admin/admin.php';
@@ -52,6 +55,7 @@ class WPCF7 {
 		self::load_module( 'quiz' );
 		self::load_module( 'really-simple-captcha' );
 		self::load_module( 'recaptcha' );
+		self::load_module( 'reflection' );
 		self::load_module( 'response' );
 		self::load_module( 'select' );
 		self::load_module( 'sendinblue' );
@@ -79,22 +83,22 @@ class WPCF7 {
 	 * Retrieves a named entry from the option array of Contact Form 7.
 	 *
 	 * @param string $name Array item key.
-	 * @param mixed $default Optional. Default value to return if the entry
-	 *                       does not exist. Default false.
+	 * @param mixed $default_value Optional. Default value to return if the entry
+	 *                             does not exist. Default false.
 	 * @return mixed Array value tied to the $name key. If nothing found,
-	 *               the $default value will be returned.
+	 *               the $default_value value will be returned.
 	 */
-	public static function get_option( $name, $default = false ) {
+	public static function get_option( $name, $default_value = false ) {
 		$option = get_option( 'wpcf7' );
 
 		if ( false === $option ) {
-			return $default;
+			return $default_value;
 		}
 
 		if ( isset( $option[$name] ) ) {
 			return $option[$name];
 		} else {
-			return $default;
+			return $default_value;
 		}
 	}
 

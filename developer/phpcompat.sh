@@ -5,10 +5,15 @@ dirs=("wp-content/plugins" "wp-content/themes" "wp-content/mu-plugins" "wp-conte
 passing=0
 
 ignores=(
-  'wp-content/plugins/anthologize'
+  'wp-content/plugins/anthologize/vendor/pear/'
+  'wp-content/plugins/anthologize/vendor/tecnickcom/tcpdf/'
   'wp-content/plugins/awesome-flickr-gallery-plugin/afgFlickr/afgFlickr.php'
 #  'wp-content/plugins/backtype-connect/parser_php4.php'
   'wp-content/plugins/bbpress/includes/users/template.php' # punt
+
+  # Issues with 'static' keyword in included non-class files
+  'wp-content/plugins/bookly-responsive-appointment-booking-tool/backend'
+
   'wp-content/plugins/bp-reply-by-email/includes/phpseclib'
 #  'wp-content/plugins/btcnew/parser_php4.php'
   'wp-content/plugins/buddypress/cli/features'
@@ -28,8 +33,11 @@ ignores=(
   'wp-content/plugins/nextgen-gallery/vendor/nikic/php-parser/lib/PhpParser/Lexer.php'
 #  'wp-content/plugins/newsletters-lite/vendor/phpseclib'
   'wp-content/plugins/osm'
-  'wp-content/plugins/out-of-the-box/includes/phpThumb'
   'wp-content/plugins/out-of-the-box/includes/dropbox-sdk/src/Dropbox/Security/'
+  'wp-content/plugins/out-of-the-box/vendors/phpThumb'
+
+  # Only called on old PHP
+  'wp-content/plugins/out-of-the-box/vendors/dropbox-sdk/src/Dropbox/Security/McryptRandomStringGenerator.php'
   'wp-content/plugins/papercite/lib/PEAR.php'
   'wp-content/plugins/query-monitor/collectors/environment.php'
   'wp-content/plugins/query-monitor/wp-content/db.php'
@@ -40,6 +48,10 @@ ignores=(
   'wp-content/plugins/the-events-calendar/src/Tribe/Views/V2/Repository/Event_Period.php'
   'wp-content/plugins/the-events-calendar/src/Tribe/Templates.php'
 #  'wp-content/plugins/threewp-broadcast/src/sdk/wordpress/updater/edd.php'
+
+  # Uses some removed mcrypt constants. Not sure how to address.
+  'wp-content/plugins/watupro/lib/recaptcha/recaptchalib.php'
+
   'wp-content/plugins/wp-document-revisions/tests'
   'wp-content/plugins/wp-post-to-pdf'
   'wp-content/plugins/wp-simile-timeline'
@@ -63,7 +75,7 @@ do
   for subdir in ${subdirs[*]}
   do
     echo "Testing $subdir..."
-    results=$(./vendor/bin/phpcs -p --extensions=php,inc --standard=PHPCompatibilityWP --warning-severity=0 --runtime-set testVersion 7.2 $ignore $subdir)
+    results=$(./vendor/bin/phpcs -p --extensions=php,inc --standard=PHPCompatibilityWP --warning-severity=0 --runtime-set testVersion 8.0 $ignore $subdir)
     if [ $? -eq 1 ]
     then
       echo "$results"

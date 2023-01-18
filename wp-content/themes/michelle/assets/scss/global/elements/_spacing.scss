@@ -1,0 +1,13 @@
+/* FILE: global/elements/_spacing.scss */
+
+@if not variable-exists( 'selector_editor_wrapper' ) {
+	#{ $selectors_margin_bottom } {
+		margin-top: 0;
+		margin-bottom: var(--gap);
+
+		&:last-child {
+			margin-bottom: 0;
+		}
+
+	}
+}

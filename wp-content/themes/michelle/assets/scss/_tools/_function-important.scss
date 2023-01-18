@@ -1,0 +1,21 @@
+//
+// Applies !important rule based on context.
+//
+// Requires `$important_contexts` list variable to be defined!
+//
+// @since    1.0.0
+// @version  1.3.0
+//
+// @param  string $context
+//
+@function _important( $context ) {
+
+	// Output
+
+		@if index( $important_contexts, $context ) {
+			@return !important;
+		} @else {
+			@return null;
+		}
+
+}

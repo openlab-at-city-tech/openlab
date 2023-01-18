@@ -1,0 +1,25 @@
+.bookly-ace-editor {
+    min-height: 360px;
+    width: 100%;
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
+    color: #495057;
+}
+
+.bookly-ace-editor.bookly-ace-editor-h80 {
+    min-height: 80px;
+}
+
+.ace_bookly_each, .ace_bookly_endeach {
+    color: #e36209;
+}
+.ace_bookly_if, .ace_bookly_endif {
+    color: #d73a49;
+}
+.ace_bookly_code {
+    color: #005cc5;
+}
+
+.rtl .bookly-tbs #bookly-ace-editor, .rtl #bookly-tbs .bookly-ace-editor * {
+    text-align: initial;
+}

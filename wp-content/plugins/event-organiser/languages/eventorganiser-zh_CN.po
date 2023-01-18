@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-12 23:08+0000\n"
+"POT-Creation-Date: 2022-11-15 21:07+0000\n"
 "PO-Revision-Date: 2016-11-27T01:15:02+00:00\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -56,7 +56,7 @@ msgid "Include 'Add To Google' link"
 msgstr "包含“添加到谷歌”链接"
 
 #: classes/class-eo-agenda-widget.php:140 event-organiser-edit.php:151
-#: includes/event-organiser-event-functions.php:1382
+#: includes/event-organiser-event-functions.php:1388
 msgid "All day"
 msgstr "全天"
 
@@ -248,7 +248,7 @@ msgstr "活动分类"
 
 #: classes/class-eo-widget-categories.php:25
 #: includes/event-organiser-cpt.php:95 includes/event-organiser-cpt.php:106
-#: includes/event-organiser-event-functions.php:1563
+#: includes/event-organiser-event-functions.php:1569
 #: templates/event-meta-event-single.php:62
 msgid "Categories"
 msgstr "分类"
@@ -288,7 +288,7 @@ msgstr "地点"
 msgid "Select Venue"
 msgstr "选择地点"
 
-#: classes/class-eventorganiser-shortcodes.php:464
+#: classes/class-eventorganiser-shortcodes.php:472
 msgid "There is no excerpt because this is a protected post."
 msgstr "暂无摘要，因为这是一篇受保护的文章。"
 
@@ -370,7 +370,7 @@ msgid "24 hour time"
 msgstr "24小时"
 
 #: event-organiser-calendar.php:256
-#: includes/event-organiser-event-functions.php:1500
+#: includes/event-organiser-event-functions.php:1506
 msgid "Loading&#8230;"
 msgstr "加载中..."
 
@@ -639,7 +639,7 @@ msgid "day of week"
 msgstr ""
 
 #: event-organiser-edit.php:225
-#: includes/event-organiser-event-functions.php:856
+#: includes/event-organiser-event-functions.php:862
 #: includes/event-organiser-register.php:307
 msgid "until"
 msgstr "直到"
@@ -1612,7 +1612,7 @@ msgid "Choose from the most used tags"
 msgstr "从最常用的标签中选择"
 
 #: includes/event-organiser-cpt.php:163
-#: includes/event-organiser-event-functions.php:1571
+#: includes/event-organiser-event-functions.php:1577
 #: templates/event-meta-event-single.php:66
 msgid "Tags"
 msgstr "标签"
@@ -1943,77 +1943,77 @@ msgstr "颜色"
 msgid "Assign the category a colour."
 msgstr "为分类指定颜色"
 
-#: includes/event-organiser-event-functions.php:777
+#: includes/event-organiser-event-functions.php:783
 #: includes/event-organiser-register.php:313
 msgid "last"
 msgstr "最后"
 
-#: includes/event-organiser-event-functions.php:777
+#: includes/event-organiser-event-functions.php:783
 #: includes/event-organiser-register.php:309
 msgid "first"
 msgstr "第一"
 
-#: includes/event-organiser-event-functions.php:777
+#: includes/event-organiser-event-functions.php:783
 #: includes/event-organiser-register.php:310
 msgid "second"
 msgstr "第二"
 
-#: includes/event-organiser-event-functions.php:777
+#: includes/event-organiser-event-functions.php:783
 #: includes/event-organiser-register.php:311
 msgid "third"
 msgstr "第三"
 
-#: includes/event-organiser-event-functions.php:777
+#: includes/event-organiser-event-functions.php:783
 #: includes/event-organiser-register.php:312
 msgid "fourth"
 msgstr "第四"
 
-#: includes/event-organiser-event-functions.php:787
+#: includes/event-organiser-event-functions.php:793
 msgid "one time only"
 msgstr "仅一次"
 
-#: includes/event-organiser-event-functions.php:790
+#: includes/event-organiser-event-functions.php:796
 msgid "custom recurrence"
 msgstr ""
 
-#: includes/event-organiser-event-functions.php:797
+#: includes/event-organiser-event-functions.php:803
 #: includes/event-organiser-register.php:298
 msgid "every day"
 msgstr "每天"
 
-#: includes/event-organiser-event-functions.php:799
+#: includes/event-organiser-event-functions.php:805
 #: includes/event-organiser-register.php:299
 #, php-format
 msgid "every %d days"
 msgstr "每%d天"
 
-#: includes/event-organiser-event-functions.php:805
+#: includes/event-organiser-event-functions.php:811
 #: includes/event-organiser-register.php:300
 msgid "every week on"
 msgstr ""
 
-#: includes/event-organiser-event-functions.php:807
+#: includes/event-organiser-event-functions.php:813
 #: includes/event-organiser-register.php:301
 #, php-format
 msgid "every %d weeks on"
 msgstr ""
 
-#: includes/event-organiser-event-functions.php:818
+#: includes/event-organiser-event-functions.php:824
 #: includes/event-organiser-register.php:302
 msgid "every month on the"
 msgstr ""
 
-#: includes/event-organiser-event-functions.php:820
+#: includes/event-organiser-event-functions.php:826
 #: includes/event-organiser-register.php:303
 #, php-format
 msgid "every %d months on the"
 msgstr ""
 
-#: includes/event-organiser-event-functions.php:849
+#: includes/event-organiser-event-functions.php:855
 msgid "every year"
 msgstr "每年"
 
-#: includes/event-organiser-event-functions.php:851
+#: includes/event-organiser-event-functions.php:857
 #, php-format
 msgid "every %d years"
 msgstr "每%d 年"
@@ -2169,11 +2169,11 @@ msgstr ""
 msgid "Event does not contain any dates."
 msgstr ""
 
-#: includes/event.php:1080
+#: includes/event.php:1085
 msgid "Occurrence not deleted. Occurrence not found."
 msgstr ""
 
-#: includes/event.php:1136
+#: includes/event.php:1141
 msgid "There is already an occurrence on this date"
 msgstr ""
 

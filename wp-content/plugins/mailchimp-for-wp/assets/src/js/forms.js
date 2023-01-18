@@ -2,11 +2,12 @@ const mc4wp = window.mc4wp || {}
 const forms = require('./forms/forms.js')
 require('./forms/conditional-elements.js')
 
-function trigger (event, args) {
-  forms.trigger(args[0].id + '.' + event, args)
-  forms.trigger(event, args)
-}
-
+/**
+ * Binds event to document but only fires if event was triggered inside a .mc4wp-form element
+ * @param {string} evtName
+ * @param {function} cb
+ * @private
+ */
 function bind (evtName, cb) {
   document.addEventListener(evtName, evt => {
     if (!evt.target) {
@@ -14,53 +15,70 @@ function bind (evtName, cb) {
     }
 
     const el = evt.target
-    let fireEvent = false
-
-    if (typeof el.className === 'string') {
-      fireEvent = el.className.indexOf('mc4wp-form') > -1
-    }
-
-    if (!fireEvent && typeof el.matches === 'function') {
-      fireEvent = el.matches('.mc4wp-form *')
-    }
-
+    const fireEvent = (typeof el.className === 'string' && el.className.indexOf('mc4wp-form') > -1) || (typeof el.matches === 'function' && el.matches('.mc4wp-form *'))
     if (fireEvent) {
       cb.call(evt, evt)
     }
   }, true)
 }
 
-bind('submit', (event) => {
-  const form = forms.getByElement(event.target)
-
-  if (!event.defaultPrevented) {
-    forms.trigger(form.id + '.submit', [form, event])
+/**
+ * Handles 'submit' events for any .mc4wp-form element
+ * @param {Event} evt
+ * @private
+ */
+function onSubmit (evt) {
+  if (evt.defaultPrevented) {
+    return
   }
 
-  if (!event.defaultPrevented) {
-    forms.trigger('submit', [form, event])
+  const form = forms.getByElement(evt.target)
+  if (!evt.defaultPrevented) {
+    forms.trigger('submit', [form, evt])
   }
-})
-bind('focus', (event) => {
-  const form = forms.getByElement(event.target)
+}
+
+/**
+ * Handles 'focus' events for any relevant element inside a .mc4wp-form
+ * @param {Event} evt
+ * @private
+ */
+function onFocus (evt) {
+  const form = forms.getByElement(evt.target)
   if (!form.started) {
-    trigger('started', [form, event])
+    forms.trigger('started', [form, evt])
     form.started = true
   }
-})
-bind('change', (event) => {
-  const form = forms.getByElement(event.target)
-  trigger('change', [form, event])
-})
+}
+
+/**
+ * Handles 'change' events for any relevant element inside a .mc4wp-form
+ * @param {Event} evt
+ * @private
+ */
+function onChange (evt) {
+  const form = forms.getByElement(evt.target)
+  forms.trigger('change', [form, evt])
+}
+
+/**
+ * Copies over listeners which were added before this script was loaded
+ * These are stored in a temporary variable called `mc4wp.listeners` which we print very early on in wp_head().
+ * @param {object} lstnr
+ * @private
+ */
+function registerListener (lstnr) {
+  forms.on(lstnr.event, lstnr.callback)
+}
+
+// bind event listeners
+bind('submit', onSubmit)
+bind('focus', onFocus)
+bind('change', onChange)
 
 // register early listeners
 if (mc4wp.listeners) {
-  const listeners = mc4wp.listeners
-  for (let i = 0; i < listeners.length; i++) {
-    forms.on(listeners[i].event, listeners[i].callback)
-  }
-
-  // delete temp listeners array, so we don't bind twice
+  [].forEach.call(mc4wp.listeners, registerListener)
   delete mc4wp.listeners
 }
 

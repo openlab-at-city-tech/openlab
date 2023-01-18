@@ -14,9 +14,7 @@ su_add_shortcode(
 		'atts'           => array(
 			'style'         => array(
 				'type'    => 'select',
-				'values'  => array(
-					'default' => __( 'Default', 'shortcodes-ultimate' ),
-				),
+				'values'  => su_get_available_styles_for( 'tabs' ),
 				'default' => 'default',
 				'name'    => __( 'Style', 'shortcodes-ultimate' ),
 				'desc'    => __( 'Choose style for this tabs', 'shortcodes-ultimate' ),

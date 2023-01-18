@@ -202,6 +202,7 @@ class WPLNST_Core_HTTP_Request {
 				'CURLOPT_HTTPHEADER' 		=> array('Content-Type: application/x-www-form-urlencoded; charset=utf-8'),
 				'CURLOPT_CONNECTTIMEOUT' 	=> 5,
 				'CURLOPT_TIMEOUT' 			=> 5,
+				'CURLOPT_USERPWD' 			=> 'citytech:devsonly'
 			));
 
 			// Debug point

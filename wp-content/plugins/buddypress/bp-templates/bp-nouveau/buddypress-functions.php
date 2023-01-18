@@ -3,7 +3,8 @@
  * Functions of BuddyPress's "Nouveau" template pack.
  *
  * @since 3.0.0
- * @version 3.1.0
+ * @package BuddyPress
+ * @version 10.0.0
  *
  * @buddypress-template-pack {
  *   Template Pack ID:       nouveau
@@ -32,8 +33,11 @@ defined( 'ABSPATH' ) || exit;
  * @since 3.0.0
  */
 class BP_Nouveau extends BP_Theme_Compat {
+
 	/**
 	 * Instance of this class.
+	 *
+	 * @var BP_Nouveau|null
 	 */
 	protected static $instance = null;
 
@@ -41,6 +45,8 @@ class BP_Nouveau extends BP_Theme_Compat {
 	 * Return the instance of this class.
 	 *
 	 * @since 3.0.0
+	 *
+	 * @return BP_Nouveau
 	 */
 	public static function get_instance() {
 		if ( null === self::$instance ) {
@@ -75,7 +81,7 @@ class BP_Nouveau extends BP_Theme_Compat {
 		}
 
 		$this->includes_dir  = trailingslashit( $this->dir ) . 'includes/';
-		$this->directory_nav = new BP_Core_Nav();
+		$this->directory_nav = new BP_Core_Nav( bp_get_root_blog_id() );
 	}
 
 	/**
@@ -133,8 +139,8 @@ class BP_Nouveau extends BP_Theme_Compat {
 	 * @since 3.0.0
 	 */
 	protected function setup_support() {
-		$width         = 1300;
-		$top_offset    = 150;
+		$width      = 1300;
+		$top_offset = 150;
 
 		/** This filter is documented in bp-core/bp-core-avatars.php. */
 		$avatar_height = apply_filters( 'bp_core_avatar_full_height', $top_offset );
@@ -170,12 +176,33 @@ class BP_Nouveau extends BP_Theme_Compat {
 		// We need to neutralize the BuddyPress core "bp_core_render_message()" once it has been added.
 		add_action( 'bp_actions', array( $this, 'neutralize_core_template_notices' ), 6 );
 
-		// Scripts.
-		add_action( 'bp_enqueue_scripts', array( $this, 'register_scripts' ), 2 ); // Register theme JS.
+		// Scripts & Styles.
+		$registration_params = array(
+			'hook'     => 'bp_enqueue_scripts',
+			'priority' => 2,
+		);
+
+		/*
+		 * The WordPress Full Site Editing feature needs Scripts
+		 * and Styles to be registered earlier.
+		 */
+		if ( current_theme_supports( 'block-templates' ) ) {
+			$registration_params['hook']     = 'bp_init';
+			$registration_params['priority'] = 20;
+		}
+
+		// Register theme JS.
+		add_action( $registration_params['hook'], array( $this, 'register_scripts' ), $registration_params['priority'] );
+
+		// Enqueue theme CSS.
+		add_action( 'bp_enqueue_scripts', array( $this, 'enqueue_styles' ) );
+
+		// Enqueue theme JS.
+		add_action( 'bp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
+
+		// Enqueue theme script localization.
+		add_filter( 'bp_enqueue_scripts', array( $this, 'localize_scripts' ) );
 		remove_action( 'bp_enqueue_scripts', 'bp_core_confirmation_js' );
-		add_action( 'bp_enqueue_scripts', array( $this, 'enqueue_styles' ) ); // Enqueue theme CSS.
-		add_action( 'bp_enqueue_scripts', array( $this, 'enqueue_scripts' ) ); // Enqueue theme JS.
-		add_filter( 'bp_enqueue_scripts', array( $this, 'localize_scripts' ) ); // Enqueue theme script localization.
 
 		// Body no-js class.
 		add_filter( 'body_class', array( $this, 'add_nojs_body_class' ), 20, 1 );
@@ -190,7 +217,9 @@ class BP_Nouveau extends BP_Theme_Compat {
 		add_action( 'widgets_init', 'bp_nouveau_register_sidebars', 11 );
 
 		// Register the Primary Object nav widget.
-		add_action( 'bp_widgets_init', array( 'BP_Nouveau_Object_Nav_Widget', 'register_widget' ) );
+		if ( bp_core_retain_legacy_widgets() ) {
+			add_action( 'bp_widgets_init', array( 'BP_Nouveau_Object_Nav_Widget', 'register_widget' ) );
+		}
 
 		// Set the BP Uri for the Ajax customizer preview.
 		add_filter( 'bp_uri', array( $this, 'customizer_set_uri' ), 10, 1 );
@@ -338,34 +367,21 @@ class BP_Nouveau extends BP_Theme_Compat {
 		 *
 		 * @param array $value Array of scripts to register.
 		 */
-		$scripts = apply_filters( 'bp_nouveau_register_scripts', array(
-			'bp-nouveau' => array(
-				'file'         => 'js/buddypress-nouveau%s.js',
-				'dependencies' => $dependencies,
-				'version'      => $this->version,
-				'footer'       => true,
-			),
-		) );
+		$scripts = apply_filters(
+			'bp_nouveau_register_scripts',
+			array(
+				'bp-nouveau' => array(
+					'file'         => 'js/buddypress-nouveau%s.js',
+					'dependencies' => $dependencies,
+					'version'      => $this->version,
+					'footer'       => true,
+				),
+			)
+		);
 
 		// Bail if no scripts.
 		if ( empty( $scripts ) ) {
 			return;
-		}
-
-		// Add The password verify if needed.
-		if ( bp_is_active( 'settings' ) || bp_get_signup_allowed() ) {
-			/**
-			 * BP Nouveau is now directly using the `wp-admin/js/user-profile.js` script.
-			 *
-			 * Setting the user password is now more consistent with how WordPress handles it.
-			 *
-			 * @deprecated 5.0.0
-			 */
-			$scripts['bp-nouveau-password-verify'] = array(
-				'file'         => 'js/password-verify%s.js',
-				'dependencies' => array( 'bp-nouveau', 'password-strength-meter' ),
-				'footer'       => true,
-			);
 		}
 
 		foreach ( $scripts as $handle => $script ) {
@@ -498,6 +514,14 @@ class BP_Nouveau extends BP_Theme_Compat {
 		// Used to transport the settings inside the Ajax requests.
 		if ( is_customize_preview() ) {
 			$params['customizer_settings'] = bp_nouveau_get_temporary_setting( 'any' );
+		}
+
+		$required_password_strength = bp_members_user_pass_required_strength();
+		if ( $required_password_strength ) {
+			$params['bpPasswordVerify'] = array(
+				'tooWeakPasswordWarning' => __( 'Your password is too weak, please use a stronger password.', 'buddypress' ),
+				'requiredPassStrength'   => bp_members_user_pass_required_strength(),
+			);
 		}
 
 		/**
@@ -653,8 +677,8 @@ class BP_Nouveau extends BP_Theme_Compat {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param  string $path the BP Uri.
-	 * @return string       the BP Uri.
+	 * @param  string $path The BP Uri.
+	 * @return string       The BP Uri.
 	 */
 	public function customizer_set_uri( $path ) {
 		if ( ! defined( 'DOING_AJAX' ) || ! DOING_AJAX ) {
@@ -679,6 +703,7 @@ class BP_Nouveau extends BP_Theme_Compat {
 
 		return $path;
 	}
+
 	/**
 	 * Modify "registration disabled" message in Nouveau template pack.
 	 * Modify welcome message in Nouveau template pack.
@@ -689,7 +714,7 @@ class BP_Nouveau extends BP_Theme_Compat {
 	 *
 	 * @return array $messages
 	 */
-	function filter_registration_messages( $messages ) {
+	public function filter_registration_messages( $messages ) {
 		// Change the "registration is disabled" message.
 		$disallowed_message = bp_members_invitations_get_modified_registration_disabled_message();
 		if ( $disallowed_message ) {

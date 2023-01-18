@@ -4,7 +4,6 @@
  *
  */
 ?>
-
 <div class="mapp-modal-featured">
 	<?php the_post_thumbnail(); ?>
 </div>
@@ -30,4 +29,3 @@
 		</div>
 	</div>
 </article>
-

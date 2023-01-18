@@ -60,7 +60,7 @@ class GF_Field_Likert extends GF_Field {
 		$id       = $this->id;
 		$field_id = $form_id == 0 ? "input_$id" : 'input_' . $form_id . "_$id";
 
-		return sprintf( "<div class='ginput_container ginput_container_likert'><table class='gsurvey-likert' id='%s'>%s</table></div>", esc_attr( $field_id ), $this->get_likert_rows( $value, $disabled_text, $form_id ) );
+		return sprintf( "<div class='ginput_container ginput_container_likert'><table aria-label='%s' class='gsurvey-likert' id='%s'>%s</table></div>", esc_attr( $this->label ), esc_attr( $field_id ), $this->get_likert_rows( $value, $disabled_text, $form_id ) );
 	}
 
 	/**
@@ -88,15 +88,19 @@ class GF_Field_Likert extends GF_Field {
 		$num_rows      = $multiple_rows ? count( $this->gsurveyLikertRows ) : 1;
 
 		// Start column header row.
-		$content = '<thead>';
+		$content  = '<thead>';
 		$content .= '<tr>';
 
 		if ( $multiple_rows ) {
-			$content .= "<th scope='col' class='gsurvey-likert-row-label'></th>";
+			$content .= "<td scope='col' class='gsurvey-likert-row-label'></td>";
 		}
 
+		$choice_id = 1;
 		foreach ( $this->choices as $choice ) {
-			$content .= sprintf( "<th scope='col' class='gsurvey-likert-choice-label'>%s</th>", $choice['text'] );
+			$role     = $multiple_rows ? '' : "role='presentation'";
+			$head_id  = $choice_id . '_' . $form_id . '_' . $this->id;
+			$content .= sprintf( "<th id='likert_col_%s' scope='col' %s class='gsurvey-likert-choice-label'>%s</th>", esc_attr( $head_id ), $role, $choice['text'] );
+			$choice_id ++;
 		}
 
 		$content .= '</tr>';
@@ -108,14 +112,16 @@ class GF_Field_Likert extends GF_Field {
 		$content .= '<tbody>';
 		for ( $i = 1; $i <= $num_rows; $i ++ ) {
 
-			$index     = $i - 1;
-			$id        = $multiple_rows ? $this->inputs[ $index ]['id'] : $this->id;
-			$row_text  = $this->gsurveyLikertRows[ $index ]['text'];
-			$row_value = $this->gsurveyLikertRows[ $index ]['value'];
+			$index           = $i - 1;
+			$id              = $multiple_rows ? $this->inputs[ $index ]['id'] : $this->id;
+			$row_text        = $this->gsurveyLikertRows[ $index ]['text'];
+			$row_value       = $this->gsurveyLikertRows[ $index ]['value'];
+			$aria_labelledBy = '';
 
 			$content .= '<tr>';
 			if ( $multiple_rows ) {
-				$content .= "<td data-label='' class='gsurvey-likert-row-label'>{$row_text}</td>";
+				$row_id   = ( $index + 1 ) . '_' . $form_id . '_' . $this->id;
+				$content .= "<td id='likert_row_" . esc_attr( $row_id ) . "' data-label='' class='gsurvey-likert-row-label'>{$row_text}</td>";
 			}
 
 			$choice_id = 1;
@@ -130,7 +136,7 @@ class GF_Field_Likert extends GF_Field {
 				$selected   = $this->is_choice_selected( $value, $row_value, $choice['value'] );
 
 				if ( $selected ) {
-					$checked = "checked='checked'";
+					$checked     = "checked='checked'";
 					$cell_class .= ' gsurvey-likert-selected';
 				}
 
@@ -138,12 +144,14 @@ class GF_Field_Likert extends GF_Field {
 				$field_value = $multiple_rows ? $row_value . ':' . $choice['value'] : $choice['value'];
 				$input_id    = sprintf( 'choice_%d_%s_%d', $form_id, str_replace( '.', '_', $id ), $choice_id );
 
-				$logic_event = version_compare( GFForms::$version, '2.4-beta-1', '<' ) ? $this->get_conditional_logic_event( 'click' ) : '';
+				$logic_event     = version_compare( GFForms::$version, '2.4-beta-1', '<' ) ? $this->get_conditional_logic_event( 'click' ) : '';
+				$col_id          = 'likert_col_' . $choice_id . '_' . $form_id . '_' . $this->id;
+				$aria_labelledBy = ( $multiple_rows ? 'likert_row_' . $row_id . ' ' : '' ) . $col_id;
 
-				$content .= sprintf( "<td data-label='%s' class='%s'><input name='%s' type='radio' value='%s' %s id='%s' %s %s %s/></td>", esc_attr( wp_strip_all_tags( $choice['text'], true ) ), $cell_class, $input_name, esc_attr( $field_value ), $checked, $input_id, $disabled_text, $this->get_tabindex(), $logic_event );
+				$content .= sprintf( "<td data-label='%s' class='%s'><input name='%s' type='radio' value='%s' %s id='%s' %s %s %s aria-labelledby='%s'/></td>", esc_attr( wp_strip_all_tags( $choice['text'], true ) ), $cell_class, $input_name, esc_attr( $field_value ), $checked, $input_id, $disabled_text, $this->get_tabindex(), $logic_event, esc_attr( $aria_labelledBy ) );
 				$choice_id ++;
 			}
-			
+
 			$content .= '</tr>';
 
 			if ( $this->is_form_editor() && $count >= 5 ) {
@@ -154,8 +162,8 @@ class GF_Field_Likert extends GF_Field {
 		}
 
 		if ( $count < $num_rows ) {
-			// Form editor context
-			$cols = $multiple_rows ? count( $this->choices ) + 1 : count( $this->choices );
+			// Form editor context.
+			$cols     = $multiple_rows ? count( $this->choices ) + 1 : count( $this->choices );
 			$content .= sprintf( "<tr><td colspan='%d'>" . esc_html__( '%d of %d items shown. Edit field to view all', 'gravityformssurvey' ) . '</td></tr>', $cols, $count, $num_rows );
 		}
 

@@ -12,6 +12,7 @@ defined( 'ABSPATH' ) || die( 'No direct script access allowed!' );
 
 /**
  * TablePress class
+ *
  * @package TablePress
  * @author Tobias Bäthge
  * @since 1.0.0
@@ -26,7 +27,7 @@ abstract class TablePress {
 	 * @since 1.0.0
 	 * @const string
 	 */
-	const version = '1.14'; // phpcs:ignore Generic.NamingConventions.UpperCaseConstantName.ClassConstantNotUpperCase
+	const version = '2.0.2'; // phpcs:ignore Generic.NamingConventions.UpperCaseConstantName.ClassConstantNotUpperCase
 
 	/**
 	 * TablePress internal plugin version ("options scheme" version).
@@ -36,7 +37,7 @@ abstract class TablePress {
 	 * @since 1.0.0
 	 * @const int
 	 */
-	const db_version = 43; // phpcs:ignore Generic.NamingConventions.UpperCaseConstantName.ClassConstantNotUpperCase
+	const db_version = 51; // phpcs:ignore Generic.NamingConventions.UpperCaseConstantName.ClassConstantNotUpperCase
 
 	/**
 	 * TablePress "table scheme" (data format structure) version.
@@ -100,22 +101,17 @@ abstract class TablePress {
 	 */
 	public static function run() {
 		/**
-		 * Fires when TablePress is loaded.
+		 * Fires before TablePress is loaded.
+		 *
+		 * The `tablepress_loaded` action hook might be a better choice in most situations, as TablePress options will then be available.
 		 *
 		 * @since 1.0.0
 		 */
 		do_action( 'tablepress_run' );
 
-		// Exit early if TablePress doesn't have to be loaded.
-		if ( ( 'wp-login.php' === basename( $_SERVER['SCRIPT_FILENAME'] ) ) // Login screen
-			|| ( defined( 'XMLRPC_REQUEST' ) && XMLRPC_REQUEST )
-			|| ( defined( 'DOING_CRON' ) && DOING_CRON ) ) {
-			return;
-		}
-
-		// Check if minimum requirements are fulfilled, currently WordPress 5.6.
-		include( ABSPATH . WPINC . '/version.php' ); // Include an unmodified $wp_version.
-		if ( version_compare( str_replace( '-src', '', $wp_version ), '5.6', '<' ) ) {
+		// Check if minimum requirements are fulfilled, currently WordPress 5.8.
+		include ABSPATH . WPINC . '/version.php'; // Include an unmodified $wp_version.
+		if ( version_compare( str_replace( '-src', '', $wp_version ), '5.8', '<' ) ) {
 			// Show error notice to admins, if WP is not installed in the minimum required version, in which case TablePress will not work.
 			if ( current_user_can( 'update_plugins' ) ) {
 				add_action( 'admin_notices', array( 'TablePress', 'show_minimum_requirements_error_notice' ) );
@@ -125,7 +121,7 @@ abstract class TablePress {
 		}
 
 		/**
-		 * Filter the string that is used as the [table] Shortcode.
+		 * Filters the string that is used as the [table] Shortcode.
 		 *
 		 * @since 1.0.0
 		 *
@@ -133,7 +129,7 @@ abstract class TablePress {
 		 */
 		self::$shortcode = apply_filters( 'tablepress_table_shortcode', self::$shortcode );
 		/**
-		 * Filter the string that is used as the [table-info] Shortcode.
+		 * Filters the string that is used as the [table-info] Shortcode.
 		 *
 		 * @since 1.0.0
 		 *
@@ -145,15 +141,42 @@ abstract class TablePress {
 		self::$model_options = self::load_model( 'options' );
 		self::$model_table = self::load_model( 'table' );
 
+		// Exit early, i.e. before a controller is loaded, if TablePress functionality is likely not needed.
+		$exit_early = false;
+		if ( ( isset( $_SERVER['SCRIPT_FILENAME'] ) && 'wp-login.php' === basename( $_SERVER['SCRIPT_FILENAME'] ) ) // Detect the WordPress Login screen.
+			|| ( defined( 'XMLRPC_REQUEST' ) && XMLRPC_REQUEST )
+			|| wp_doing_cron() ) {
+			$exit_early = true;
+		}
+		/**
+		 * Filters whether TablePress should exit early, e.g. during wp-login.php, XML-RPC, and WP-Cron requests.
+		 *
+		 * @since 2.0.0
+		 *
+		 * @param bool $exit_early Whether TablePress should exit early.
+		 */
+		if ( apply_filters( 'tablepress_exit_early', $exit_early ) ) {
+			return;
+		}
+
 		if ( is_admin() ) {
 			$controller = 'admin';
 			if ( wp_doing_ajax() ) {
 				$controller .= '_ajax';
 			}
-		} else {
-			$controller = 'frontend';
+			self::load_controller( $controller );
 		}
-		self::$controller = self::load_controller( $controller );
+		// Load the frontend controller in all scenarios, so that Shortcode render functions are always available.
+		self::$controller = self::load_controller( 'frontend' );
+
+		/**
+		 * Fires after TablePress is loaded.
+		 *
+		 * The `tablepress_run` action hook can be used if code has to run before TablePress is loaded.
+		 *
+		 * @since 2.0.0
+		 */
+		do_action( 'tablepress_loaded' );
 	}
 
 	/**
@@ -161,13 +184,13 @@ abstract class TablePress {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $file   Name of the PHP file with the class.
-	 * @param string $folder Name of the folder with $class's $file.
+	 * @param string $file   Name of the PHP file.
+	 * @param string $folder Name of the folder with the file.
 	 */
 	public static function load_file( $file, $folder ) {
 		$full_path = TABLEPRESS_ABSPATH . $folder . '/' . $file;
 		/**
-		 * Filter the full path of a file that shall be loaded.
+		 * Filters the full path of a file that shall be loaded.
 		 *
 		 * @since 1.0.0
 		 *
@@ -182,30 +205,30 @@ abstract class TablePress {
 	}
 
 	/**
-	 * Create a new instance of the $class, which is stored in $file in the $folder subfolder
+	 * Create a new instance of the $class_name, which is stored in $file in the $folder subfolder
 	 * of the plugin's directory.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $class  Name of the class.
-	 * @param string $file   Name of the PHP file with the class.
-	 * @param string $folder Name of the folder with $class's $file.
-	 * @param mixed  $params Optional. Parameters that are passed to the constructor of $class.
+	 * @param string $class_name Name of the class.
+	 * @param string $file       Name of the PHP file with the class.
+	 * @param string $folder     Name of the folder with $class_name's $file.
+	 * @param mixed  $params     Optional. Parameters that are passed to the constructor of $class_name.
 	 * @return object Initialized instance of the class.
 	 */
-	public static function load_class( $class, $file, $folder, $params = null ) {
+	public static function load_class( $class_name, $file, $folder, $params = null ) {
 		/**
-		 * Filter name of the class that shall be loaded.
+		 * Filters name of the class that shall be loaded.
 		 *
 		 * @since 1.0.0
 		 *
-		 * @param string $class Name of the class that shall be loaded.
+		 * @param string $class_name Name of the class that shall be loaded.
 		 */
-		$class = apply_filters( 'tablepress_load_class_name', $class );
-		if ( ! class_exists( $class, false ) ) {
+		$class_name = apply_filters( 'tablepress_load_class_name', $class_name );
+		if ( ! class_exists( $class_name, false ) ) {
 			self::load_file( $file, $folder );
 		}
-		$the_class = new $class( $params );
+		$the_class = new $class_name( $params );
 		return $the_class;
 	}
 
@@ -287,7 +310,7 @@ abstract class TablePress {
 	 * @param string      $action    Action for which the nonce should be checked.
 	 * @param string|bool $item      Optional. Item for which the action should be performed, like "table".
 	 * @param string      $query_arg Optional. Name of the nonce query string argument in $_POST.
-	 * @param bool $ajax Whether the nonce comes from an AJAX request.
+	 * @param bool        $ajax Whether the nonce comes from an AJAX request.
 	 */
 	public static function check_nonce( $action, $item = false, $query_arg = '_wpnonce', $ajax = false ) {
 		$nonce_action = self::nonce( $action, $item );
@@ -306,7 +329,7 @@ abstract class TablePress {
 	 * @since 1.0.0
 	 *
 	 * @param string $column Column string.
-	 * @return int $number Column number, 1-based.
+	 * @return int Column number, 1-based.
 	 */
 	public static function letter_to_number( $column ) {
 		$column = strtoupper( $column );
@@ -326,7 +349,7 @@ abstract class TablePress {
 	 * @since 1.0.0
 	 *
 	 * @param int $number Column number, 1-based.
-	 * @return string $column Column string.
+	 * @return string Column string.
 	 */
 	public static function number_to_letter( $number ) {
 		$column = '';
@@ -376,7 +399,7 @@ abstract class TablePress {
 	 */
 	public static function get_user_display_name( $user_id ) {
 		$user = get_userdata( $user_id );
-		return ( $user && isset( $user->display_name ) ) ? $user->display_name : sprintf( '<em>%s</em>', __( 'unknown', 'tablepress' ) );
+		return ( isset( $user->display_name ) ) ? $user->display_name : sprintf( '<em>%s</em>', __( 'unknown', 'tablepress' ) );
 	}
 
 	/**
@@ -387,15 +410,43 @@ abstract class TablePress {
 	 *
 	 * @since 1.11.0
 	 *
-	 * @param string $class The CSS class name to be sanitized.
+	 * @param string $css_class The CSS class name to be sanitized.
 	 * @return string The sanitized CSS class.
 	 */
-	public static function sanitize_css_class( $class ) {
+	public static function sanitize_css_class( $css_class ) {
 		// Strip out any %-encoded octets.
-		$sanitized_class = preg_replace( '|%[a-fA-F0-9][a-fA-F0-9]|', '', $class );
+		$sanitized_css_class = preg_replace( '|%[a-fA-F0-9][a-fA-F0-9]|', '', $css_class );
 		// Limit to A-Z, a-z, 0-9, ':', '_', and '-'.
-		$sanitized_class = preg_replace( '/[^A-Za-z0-9:_-]/', '', $sanitized_class );
-		return $sanitized_class;
+		$sanitized_css_class = preg_replace( '/[^A-Za-z0-9:_-]/', '', $sanitized_css_class );
+		return $sanitized_css_class;
+	}
+
+	/**
+	 * Retrieves all information of a WP_Error object as a string.
+	 *
+	 * @since 1.4.0
+	 *
+	 * @param WP_Error $wp_error A WP_Error object.
+	 * @return string All error codes, messages, and data of the WP_Error.
+	 */
+	public static function get_wp_error_string( $wp_error ) {
+		$error_strings = array();
+		$error_codes = $wp_error->get_error_codes();
+		// Reverse order to get latest errors first.
+		$error_codes = array_reverse( $error_codes );
+		foreach ( $error_codes as $error_code ) {
+			$error_strings[ $error_code ] = $error_code;
+			$error_messages = $wp_error->get_error_messages( $error_code );
+			$error_messages = implode( ', ', $error_messages );
+			if ( ! empty( $error_messages ) ) {
+				$error_strings[ $error_code ] .= " ({$error_messages})";
+			}
+			$error_data = $wp_error->get_error_data( $error_code );
+			if ( ! is_null( $error_data ) ) {
+				$error_strings[ $error_code ] .= " [{$error_data}]";
+			}
+		}
+		return implode( ";\n", $error_strings );
 	}
 
 	/**
@@ -409,14 +460,13 @@ abstract class TablePress {
 	 * @return string The URL for the given parameters (already run through esc_url() with $add_nonce === true!).
 	 */
 	public static function url( array $params = array(), $add_nonce = false, $target = '' ) {
-
 		// Default action is "list", if no action given.
 		if ( ! isset( $params['action'] ) ) {
 			$params['action'] = 'list';
 		}
 		$nonce_action = $params['action'];
 
-		if ( $target ) {
+		if ( '' !== $target ) {
 			$params['action'] = "tablepress_{$params['action']}";
 		} else {
 			$params['page'] = 'tablepress';
@@ -444,7 +494,7 @@ abstract class TablePress {
 
 		$url = add_query_arg( $params, admin_url( $target ) );
 		if ( $add_nonce ) {
-			$url = wp_nonce_url( $url, self::nonce( $nonce_action, $params['item'] ) ); // wp_nonce_url() does esc_html()
+			$url = wp_nonce_url( $url, self::nonce( $nonce_action, $params['item'] ) ); // wp_nonce_url() does esc_html().
 		}
 		return $url;
 	}
@@ -481,6 +531,35 @@ abstract class TablePress {
 			'<strong>Attention:</strong> ' .
 			'The installed version of WordPress is too old for the TablePress plugin! TablePress requires an up-to-date version! <strong>Please <a href="' . esc_url( admin_url( 'update-core.php' ) ) . '">update your WordPress installation</a></strong>!' .
 			"</p></div>\n";
+	}
+
+	/**
+	 * Determines whether the site uses the block editor, so that certain text and input fields referring to Shortcodes can be displayed or not.
+	 *
+	 * @since 2.0.1
+	 *
+	 * @return bool True if the site uses the block editor, false otherwise.
+	 */
+	public static function site_uses_block_editor() {
+		$site_uses_block_editor = use_block_editor_for_post_type( 'post' )
+			&& ! is_plugin_active( 'beaver-builder-lite-version/fl-builder.php' )
+			&& ! is_plugin_active( 'classic-editor/classic-editor.php' )
+			&& ! is_plugin_active( 'classic-editor-addon/classic-editor-addon.php' )
+			&& ! is_plugin_active( 'elementor/elementor.php' )
+			&& ! is_plugin_active( 'siteorigin-panels/siteorigin-panels.php' );
+
+		/**
+		 * Filters the outcome of the check whether the site uses the block editor.
+		 *
+		 * This can be used when certain conditions (e.g. new site builders) are not (yet) accounted for.
+		 *
+		 * @since 2.0.1
+		 *
+		 * @param bool $site_uses_block_editor True if the site uses the block editor, false otherwise.
+		 */
+		$site_uses_block_editor = apply_filters( 'tablepress_site_uses_block_editor', $site_uses_block_editor );
+
+		return $site_uses_block_editor;
 	}
 
 } // class TablePress

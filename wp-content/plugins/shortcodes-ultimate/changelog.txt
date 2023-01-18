@@ -1,3 +1,49 @@
+### 5.12.3
+
+* Tested compatibility with WordPress 6.1
+
+
+### 5.12.2
+
+* Fixed issue with Shortcode Generator Presets, introduced in the previous update
+* Tested compatibility with WordPress 6
+
+
+### 5.12.1
+
+**Security release**
+
+This update fixes a security vulnerability in the shortcode generator. Thanks to Dave John for discovering it.
+
+
+### 5.12.0
+
+**What's new**
+
+- New options `class` and `class_single` for the *Posts* shortcode. Use new options to specify custom CSS classes for the container and for a single post item respectively.
+- Tested compatibility with WordPress 5.9
+
+
+### 5.11.2
+
+**Fixed**
+
+- Fixed *Pro Tip* translation in shortcode generator. Thanks to (Pieterjan Deneys)[https://wordpress.org/support/topic/bug-untranslated-string/]
+
+
+### 5.11.1
+
+**What's new**
+
+- Updated ForkAwesome library, now it includes [52 new icons](https://forkaweso.me/Fork-Awesome/icons/)
+
+**Fixed**
+
+- Minor improvements to the plugin settings UX
+- Fixed some typos
+- Fixed issue in `[su_posts]` where posts with thumbnails were generating PHP warnings. Thanks to [@dimabr](https://wordpress.org/support/topic/su_posts/#post-14756135)
+
+
 ### 5.11.0
 
 **What's changed**

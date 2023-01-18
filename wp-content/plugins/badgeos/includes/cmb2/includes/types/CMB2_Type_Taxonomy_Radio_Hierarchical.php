@@ -21,14 +21,17 @@ class CMB2_Type_Taxonomy_Radio_Hierarchical extends CMB2_Type_Taxonomy_Radio {
 
 	public function render() {
 		return $this->rendered(
-			$this->types->radio( array(
-				'options' => $this->get_term_options(),
-			), 'taxonomy_radio_hierarchical' )
+			$this->types->radio(
+				array(
+					'options' => $this->get_term_options(),
+				),
+				'taxonomy_radio_hierarchical'
+			)
 		);
 	}
 
 	protected function list_term_input( $term, $saved_term ) {
-		$options = parent::list_term_input( $term, $saved_term );
+		$options  = parent::list_term_input( $term, $saved_term );
 		$children = $this->build_children( $term, $saved_term );
 
 		if ( ! empty( $children ) ) {

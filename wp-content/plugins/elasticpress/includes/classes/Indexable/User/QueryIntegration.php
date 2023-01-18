@@ -24,11 +24,15 @@ class QueryIntegration {
 	/**
 	 * Checks to see if we should be integrating and if so, sets up the appropriate actions and filters.
 	 *
+	 * @param string $indexable_slug Indexable slug. Optional.
+	 *
 	 * @since 0.9
+	 * @since 3.6.0 Added $indexable_slug
 	 */
-	public function __construct() {
+	public function __construct( $indexable_slug = 'user' ) {
 		// Ensure that we are currently allowing ElasticPress to override the normal WP_Query
-		if ( Utils\is_indexing() ) {
+		// Indexable->is_full_reindexing() is not available at this point yet, so using the IndexHelper version of it.
+		if ( \ElasticPress\IndexHelper::factory()->is_full_reindexing( $indexable_slug ) ) {
 			return;
 		}
 
@@ -87,11 +91,12 @@ class QueryIntegration {
 			 *
 			 * $query->elasticsearch_success = true;
 			 */
+			$query->query_vars['elasticsearch_success'] = true;
 
 			$fields    = $query->get( 'fields' );
 			$new_users = [];
 
-			if ( 'all_with_meta' === $fields ) {
+			if ( in_array( $fields, [ 'all', 'all_with_meta' ], true ) ) {
 				foreach ( $ep_query['documents'] as $document ) {
 					$new_users[] = $document['ID'];
 				}
@@ -103,12 +108,15 @@ class QueryIntegration {
 					$user->elasticsearch = true; // Super useful for debugging.
 
 					foreach ( $fields as $field ) {
+						if ( 'id' === $field ) {
+							$field = 'ID';
+						}
 						$user->$field = $document[ $field ];
 					}
 
 					$new_users[] = $user;
 				}
-			} elseif ( is_string( $fields ) && ! empty( $fields ) && 'all' !== $fields ) {
+			} elseif ( is_string( $fields ) && ! empty( $fields ) ) {
 				foreach ( $ep_query['documents'] as $document ) {
 					$new_users[] = $document[ $fields ];
 				}

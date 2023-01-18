@@ -3,7 +3,7 @@
 Plugin Name: WP-Polls
 Plugin URI: https://lesterchan.net/portfolio/programming/php/
 Description: Adds an AJAX poll system to your WordPress blog. You can easily include a poll into your WordPress's blog post/page. WP-Polls is extremely customizable via templates and css styles and there are tons of options for you to choose to ensure that WP-Polls runs the way you wanted. It now supports multiple selection of answers.
-Version: 2.75.6
+Version: 2.77.0
 Author: Lester 'GaMerZ' Chan
 Author URI: https://lesterchan.net
 Text Domain: wp-polls
@@ -11,7 +11,7 @@ Text Domain: wp-polls
 
 
 /*
-	Copyright 2021  Lester Chan  (email : lesterchan@gmail.com)
+	Copyright 2022  Lester Chan  (email : lesterchan@gmail.com)
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -29,7 +29,7 @@ Text Domain: wp-polls
 */
 
 ### Version
-define( 'WP_POLLS_VERSION', '2.75.6' );
+define( 'WP_POLLS_VERSION', '2.77.0' );
 
 
 ### Create Text Domain For Translations
@@ -750,7 +750,13 @@ if ( ! function_exists( 'get_ipaddress' ) ) {
 	}
 }
 function poll_get_ipaddress() {
-	return apply_filters( 'wp_polls_ipaddress', wp_hash( get_ipaddress() ) );
+	$ip = get_ipaddress();
+	$poll_options = get_option( 'poll_options' );
+	if ( ! empty( $poll_options ) && ! empty( $poll_options['ip_header'] ) && ! empty( $_SERVER[ $poll_options['ip_header'] ] ) ) {
+		$ip = esc_attr( $_SERVER[ $poll_options['ip_header'] ] );
+	}
+
+	return apply_filters( 'wp_polls_ipaddress', wp_hash( $ip ) );
 }
 function poll_get_hostname() {
 	$hostname = gethostbyaddr( get_ipaddress() );
@@ -1341,11 +1347,16 @@ function in_pollarchive() {
 	return true;
 }
 
-function vote_poll_process($poll_id, $poll_aid_array = [])
-{
+function vote_poll_process( $poll_id, $poll_aid_array = [] ) {
 	global $wpdb, $user_identity, $user_ID;
 
-	do_action('wp_polls_vote_poll');
+	do_action( 'wp_polls_vote_poll' );
+
+	// Acquire lock
+	$fp_lock = polls_acquire_lock( $poll_id );
+	if ( $fp_lock === false ) {
+		throw new InvalidArgumentException( sprintf( __( 'Unable to obtain lock for Poll ID #%s', 'wp-polls'), $poll_id ) );
+	}
 
 	$polla_aids = $wpdb->get_col( $wpdb->prepare( "SELECT polla_aid FROM $wpdb->pollsa WHERE polla_qid = %d", $poll_id ) );
 	$is_real = count( array_intersect( $poll_aid_array, $polla_aids ) ) === count( $poll_aid_array );
@@ -1359,7 +1370,7 @@ function vote_poll_process($poll_id, $poll_aid_array = [])
 	}
 
 	if (empty($poll_aid_array)) {
-		throw new InvalidArgumentException(sprintf(__('No anwsers given for Poll ID #%s', 'wp-polls'), $poll_id));
+		throw new InvalidArgumentException(sprintf(__('No answers given for Poll ID #%s', 'wp-polls'), $poll_id));
 	}
 
 	if($poll_id === 0) {
@@ -1441,6 +1452,10 @@ function vote_poll_process($poll_id, $poll_aid_array = [])
 			);
 		}
 	}
+
+	// Release lock
+	polls_release_lock( $fp_lock, $poll_id );
+
 	do_action( 'wp_polls_vote_poll_success' );
 
 	return display_pollresult($poll_id, $poll_aid_array, false);
@@ -1631,6 +1646,35 @@ function manage_poll() {
 	}
 }
 
+function polls_acquire_lock( $poll_id ) {
+	$fp = fopen( polls_lock_file( $poll_id ), 'w+' );
+
+	if ( ! flock( $fp, LOCK_EX | LOCK_NB ) ) {
+		return false;
+	}
+
+	ftruncate( $fp, 0 );
+	fwrite( $fp, microtime( true ) );
+
+	return $fp;
+}
+
+function polls_release_lock( $fp, $poll_id ) {
+	if ( is_resource( $fp ) ) {
+		fflush( $fp );
+		flock( $fp, LOCK_UN );
+		fclose( $fp );
+		unlink( polls_lock_file( $poll_id ) );
+
+		return true;
+	}
+
+	return false;
+}
+
+function polls_lock_file( $poll_id ) {
+	return apply_filters( 'wp_polls_lock_file', get_temp_dir() . '/wp-polls-' . $poll_id . '.lock', $poll_id );
+}
 
 function _polls_get_ans_sort() {
 	$order_by = get_option( 'poll_ans_sortby' );
@@ -1939,8 +1983,12 @@ function polls_activate() {
 	add_option('poll_cookielog_expiry', 0);
 	add_option('poll_template_pollarchivepagingheader', '');
 	add_option('poll_template_pollarchivepagingfooter', '');
+
 	// Database Upgrade For WP-Polls 2.50
 	delete_option('poll_archive_show');
+
+	// Database Upgrade for WP-Polls 2.76
+	add_option( 'poll_options', array( 'ip_header' => '' ) );
 
 	// Index
 	$index = $wpdb->get_results( "SHOW INDEX FROM $wpdb->pollsip;" );

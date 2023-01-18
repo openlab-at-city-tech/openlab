@@ -1,9 +1,9 @@
 === Font Awesome ===
 Contributors: fontawesome, mlwilkerson, robmadole, frrrances, deathnfudge
-Stable tag: 4.1.1
+Stable tag: 4.3.2
 Tags: font, awesome, fontawesome, font-awesome, icon, svg, webfont
 Requires at least: 4.7
-Tested up to: 5.9
+Tested up to: 6.1.1
 Requires PHP: 5.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -26,8 +26,6 @@ Our official plugin lets you use Font Awesome the way you want:
 * Troubleshoot and resolve issues when multiple versions of Font Awesome are loading on your site from other plugins/themes, which can cause unexpected icon display or technical issues.
 * Make things even awesomer using icons from Font Awesome Version 6.
 * Use your uploaded icons from your Pro Kits.
-
-*Note: The plugin is not compatible on WordPress multisite at this time.*
 
 == How to Use ==
 
@@ -107,6 +105,9 @@ You can get more information about using the plugin, details for available setti
 
 
 == Upgrade Notice ==
+= 4.3.0 =
+Introduces support for multisite. On multisite configurations, previous installations of this plugin must be cleaned up before attempting to upgrade to this version. See Changelog for details.
+
 = 4.0.1 =
 Fixes bugs in the editor integration with the new Icon Chooser, introduced in 4.0.0. Temporarily disables Icon Chooser integration from Classic Editor in WordPress 4. See Changelog.
 
@@ -160,6 +161,42 @@ You can get more information about all the available settings and troubleshootin
 
 
 == Changelog ==
+
+= 4.3.2 =
+* Security Fix: escape shortcode attribute values.
+
+= 4.3.1 =
+* Increase network request timeout to accommodate some slow-running Icon Chooser searches.
+  We've recently added some new functionality to the Font Awesome API server. We're in
+  the process of optimizing it for performance. In the meantime, some icon searches that
+  return lots of search results are running slowly. Increasing the timeout
+  allows those searches to run longer before considering it an error.
+
+= 4.3.0 =
+* Introduce support for Sharp Solid.
+  The Icon Chooser now includes Sharp Solid among the available styles when using
+  a Font Awesome Pro Kit.
+* Introduce support for WordPress multisite. Allows installing the plugin network-wide
+  and configuring each site separately.
+  Previous versions of this plugin were not compatible with multisite, though it was
+  possible to install and get partial functionality on multisite. However, this
+  could also result in a confusing database state. If you're running multisite,
+  it's important that any installation of a previous plugin version is totally cleaned
+  up before trying to install this version. Upgrading on multisite without cleaning up
+  first will probably result in an error. A previous installation can usually be
+  cleaned up by deactivating and uninstalling it. Uninstall must be done by clicking
+  "Delete" on the deactivated plugin's entry in the plugin list in the admin dashboard.
+  It may also work to install the previous 4.2.0 version and then uninstall it, just
+  to get its cleanup code to run.
+  This has no impact on sites that are not running in multisite mode. If you're not
+  running multisite, upgrading to this version should be smooth and problem-free.
+
+= 4.2.0 =
+* Make Font Awesome 6 the default version on new activations.
+* On the version selection dropdown, distinguish between the latest 5.x and the latest 6.x.
+* Maintenance updates to JavaScript dependencies.
+* Developers: the latest_version() method has been deprecated and replaced by two alternatives:
+  latest_version_5() and latest_version_6().
 
 = 4.1.1 =
 * Simplified upgrade logic: makes the upgrade process on the first page load

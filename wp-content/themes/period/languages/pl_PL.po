@@ -1,0 +1,612 @@
+# Copyright (C) 2018 Compete Themes
+# This file is distributed under the GNU General Public License v2 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: Period 1.220\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/support/theme/style\n"
+"POT-Creation-Date: 2018-11-05 14:35:13+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2019-04-02 15:45+0200\n"
+"Language-Team: \n"
+"X-Generator: Poedit 2.2.1\n"
+"Last-Translator: \n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 "
+"|| n%100>14) ? 1 : 2);\n"
+"Language: pl\n"
+
+#: 404.php:6
+msgid "404: Page Not Found"
+msgstr "404: Nie znaleziono strony"
+
+#: 404.php:9
+msgid ""
+"Looks like nothing was found on this url.  Double-check that the url is "
+"correct or try the search form below to find what you were looking for."
+msgstr ""
+"Wygląda na to że nic nie znaleziono pod tym adresem. Sprawdź czy adres jest "
+"prawidłowy lub spróbuj użyć poniższej wyszukiwarki, aby znaleźć to czego "
+"szukasz."
+
+#: comments.php:12 comments.php:32 comments.php:54
+msgid "Be First to Comment"
+msgstr "Bądź pierwszym komentującym"
+
+#: comments.php:12 comments.php:32 comments.php:54
+msgid "One Comment"
+msgstr "Jeden komentarz"
+
+#: comments.php:46
+msgid ""
+"Comments are closed, but <a href=\"%s\" title=\"Trackback URL for this post"
+"\">trackbacks</a> and pingbacks are open."
+msgstr ""
+"Komentarze są zablokowane, ale <a href=\"%s\" title=\"Trackback URL for this "
+"post\">trackback</a> i pingback jest włączony."
+
+#: comments.php:68 comments.php:85
+msgid "Comments are closed."
+msgstr "Komentarze są zablokowane."
+
+#: content/comments-link.php:2
+msgid "comment icon"
+msgstr "ikona komentarza"
+
+#: content/comments-link.php:5
+msgid "Comments closed"
+msgstr "Komentarze zablokowane"
+
+#: content/comments-link.php:5 content/comments-link.php:8
+msgid "1 Comment"
+msgstr "1 Komentarz"
+
+#: content/comments-link.php:8
+msgid "Leave a Comment"
+msgstr "Zostaw komentarz"
+
+#: content/post-nav-attachment.php:3
+msgid "Previous Image"
+msgstr "Poprzedni obraz"
+
+#: content/post-nav-attachment.php:6
+msgid "Next Image"
+msgstr "Następny obraz"
+
+#: content/post-nav.php:6
+msgid "Previous Post"
+msgstr "Poprzedni post"
+
+#: content/post-nav.php:9
+msgid "No Older Posts"
+msgstr "Nie ma starszych postów"
+
+#: content/post-nav.php:15 content/post-nav.php:28
+msgid "Return to Blog"
+msgstr "Wróć do bloga"
+
+#: content/post-nav.php:19
+msgid "Next Post"
+msgstr "Następny post"
+
+#: content/post-nav.php:22
+msgid "No Newer Posts"
+msgstr "Nie ma nowszych postów"
+
+#: content/post-tags.php:8
+msgid "View all posts tagged %s"
+msgstr "Zobacz wszystkie posty z tagiem %s"
+
+#: content/search-bar.php:11 searchform.php:3 searchform.php:6
+msgid "Search"
+msgstr "Szukaj"
+
+#: content/search-bar.php:12
+msgid "Search..."
+msgstr "Szukaj…"
+
+#: content/search-bar.php:13 searchform.php:5
+msgid "Search for:"
+msgstr "Szukaj:"
+
+#: content-page.php:12 content.php:13 templates/full-width.php:22
+msgid "Pages:"
+msgstr "Strony:"
+
+#: footer.php:15
+msgid "<a href=\"%1$s\">%2$s WordPress Theme</a> by Compete Themes."
+msgstr "<a href=\"%1$s\">%2$s WordPress Theme</a> od Compete Themes."
+
+#: functions.php:19
+msgid ""
+"Hey! Sorry to interrupt, but you've been using Period for a little while "
+"now. If you're happy with this theme, could you take a minute to leave a "
+"review? <i>You won't see this notice again after closing it.</i>"
+msgstr ""
+"Hej! Przepraszam, że przeszkadzam, ale używasz Period od jakiegoś czasu. "
+"Jeśli jesteś zadowolony z tego szablonu, czy mógłbyś poświęcić chwilę do "
+"zostawienia recenzji?<i>Nie zobaczysz tego powiadomienia ponownie jeśli je "
+"zamkniesz.</i>"
+
+#: functions.php:52
+msgid "Primary"
+msgstr "Główny"
+
+#: functions.php:71
+msgid "Primary Sidebar"
+msgstr "Główny pasek boczny"
+
+#: functions.php:73
+msgid ""
+"Widgets in this area will be shown in the sidebar next to the main post "
+"content"
+msgstr "Widgety"
+
+#: functions.php:101
+msgid "Your comment is awaiting moderation."
+msgstr "Twój komentarz czeka na potwierdzenie."
+
+#: functions.php:125
+msgid "(optional)"
+msgstr "(opcjonalnie)"
+
+#: functions.php:131
+msgid "Jane Doe"
+msgstr "Jan Kowalski"
+
+#: functions.php:138
+msgid "name@email.com"
+msgstr "imie@email.com"
+
+#: functions.php:144
+msgid "Website"
+msgstr "Strona"
+
+#: functions.php:198 functions.php:262
+msgid "Continue reading"
+msgstr "Kontynuuj czytanie"
+
+#: functions.php:467
+msgid "Featured"
+msgstr "Promowane"
+
+#: functions.php:534
+msgid "Customizer settings deleted."
+msgstr "Ustawienia personalizacji usunięte."
+
+#: functions.php:540
+msgid "%s successfully activated!"
+msgstr "%s aktywowany pomyślnie!"
+
+#: functions.php:749
+msgid "Scroll to the top"
+msgstr "Przewiń do góry"
+
+#: header.php:11
+msgid "Press \"Enter\" to skip to content"
+msgstr "Naciśnij “Enter” aby skoczyć do treści"
+
+#: inc/customizer.php:15
+msgid "Front Page"
+msgstr "Strona główna"
+
+#: inc/customizer.php:30
+msgid "Layout"
+msgstr "Szablon"
+
+#: inc/customizer.php:31
+msgid "Change your layouts across the site"
+msgstr "Zmień swoje szablony na całej stronie"
+
+#: inc/customizer.php:39
+msgid "Logo"
+msgstr "Logo"
+
+#: inc/customizer.php:49
+msgid "Upload a logo"
+msgstr "Wgraj logo"
+
+#: inc/customizer.php:62
+msgid "Adjust the size of the logo"
+msgstr "Dopasuj rozmiar loga"
+
+#: inc/customizer.php:83
+msgid "Social Media Icons"
+msgstr "Ikony portali społecznościowych"
+
+#: inc/customizer.php:85
+msgid "Add the URL for each of your social profiles."
+msgstr "Dodaj URL dla każdego profilu społecznościowego."
+
+#: inc/customizer.php:98
+msgid "Email Address"
+msgstr "Adres email"
+
+#: inc/customizer.php:109
+msgid "Phone"
+msgstr "Telefon"
+
+#: inc/customizer.php:119
+msgid "Google Plus"
+msgstr "Google Plus"
+
+#: inc/customizer.php:121
+msgid "RSS"
+msgstr "RSS"
+
+#: inc/customizer.php:123
+msgid "SoundCloud"
+msgstr "SoundCloud"
+
+#: inc/customizer.php:125
+msgid "SlideShare"
+msgstr "SlideShare"
+
+#: inc/customizer.php:127
+msgid "CodePen"
+msgstr "CodePen"
+
+#: inc/customizer.php:129
+msgid "StumbleUpon"
+msgstr "StumbleUpon"
+
+#: inc/customizer.php:131
+msgid "DeviantArt"
+msgstr "DeviantArt"
+
+#: inc/customizer.php:133
+msgid "Hacker News"
+msgstr "Hacker News"
+
+#: inc/customizer.php:135
+msgid "Google Wallet"
+msgstr "Google Wallet"
+
+#: inc/customizer.php:137
+msgid "WhatsApp"
+msgstr "WhatsApp"
+
+#: inc/customizer.php:139
+msgid "QQ"
+msgstr "QQ"
+
+#: inc/customizer.php:141
+msgid "VK"
+msgstr "VK"
+
+#: inc/customizer.php:143
+msgid "WeChat"
+msgstr "WeChat"
+
+#: inc/customizer.php:145
+msgid "Tencent Weibo"
+msgstr "Tencent Weibo"
+
+#: inc/customizer.php:147
+msgid "PayPal"
+msgstr "PayPal"
+
+#: inc/customizer.php:149
+msgid "OK.ru"
+msgstr "OK.ru"
+
+#: inc/customizer.php:151
+msgid "Stack Overflow"
+msgstr "Stack Overflow"
+
+#: inc/customizer.php:153
+msgid "Contact Form"
+msgstr "Formularz kontaktowy"
+
+#: inc/customizer.php:165
+msgid ""
+"Accepts Skype link protocol (<a href=\"%s\" target=\"_blank\">learn more</a>)"
+msgstr ""
+"Akceptuje protokół Skype (<a href=\"%s\" target=\"_blank\">learn more</a>)"
+
+#: inc/customizer.php:191
+msgid "Search Bar"
+msgstr "Pasek wyszukiwania"
+
+#: inc/customizer.php:202
+msgid "Show search bar at top of site?"
+msgstr "Pokazywać pasek wyszukiwania na górze strony?"
+
+#: inc/customizer.php:206 inc/customizer.php:378 inc/customizer.php:394
+#: inc/customizer.php:466 inc/customizer.php:510
+msgid "Show"
+msgstr "Pokaż"
+
+#: inc/customizer.php:207 inc/customizer.php:379 inc/customizer.php:395
+#: inc/customizer.php:467 inc/customizer.php:511
+msgid "Hide"
+msgstr "Ukryj"
+
+#: inc/customizer.php:215
+msgid "Posts"
+msgstr "Posty"
+
+#: inc/customizer.php:217 inc/customizer.php:241 inc/customizer.php:265
+#: inc/customizer.php:289
+msgid ""
+"Want more layouts? Check out the <a target=\"_blank\" href=\"%1$s\">%2$s Pro "
+"plugin</a>."
+msgstr ""
+"Chcesz więcej szablonów? Sprawdź <a target=\"_blank\" href=\"%1$s\">plugin "
+"%2$s Pro</a>."
+
+#: inc/customizer.php:228 inc/customizer.php:252 inc/customizer.php:276
+#: inc/customizer.php:300
+msgid "Choose your layout"
+msgstr "Wybierz swój szablon"
+
+#: inc/customizer.php:233 inc/customizer.php:257 inc/customizer.php:281
+#: inc/customizer.php:305 inc/customizer.php:525
+msgid "Right sidebar"
+msgstr "Prawy pasek boczny"
+
+#: inc/customizer.php:234 inc/customizer.php:258 inc/customizer.php:282
+#: inc/customizer.php:306 inc/customizer.php:526
+msgid "Left sidebar"
+msgstr "Lewy pasek boczny"
+
+#: inc/customizer.php:239
+msgid "Pages"
+msgstr "Strony"
+
+#: inc/customizer.php:263
+msgid "Blog"
+msgstr "Blog"
+
+#: inc/customizer.php:287
+msgid "Archives"
+msgstr "Archiwa"
+
+#: inc/customizer.php:324
+msgid "Show full posts on blog?"
+msgstr "Pokazywać całe posty na blogu?"
+
+#: inc/customizer.php:329 inc/customizer.php:418 inc/customizer.php:485
+msgid "Yes"
+msgstr "Tak"
+
+#: inc/customizer.php:330 inc/customizer.php:419 inc/customizer.php:486
+msgid "No"
+msgstr "Nie"
+
+#: inc/customizer.php:340
+msgid "Excerpt word count"
+msgstr "Długość zajawki w słowach"
+
+#: inc/customizer.php:347
+msgid "Continue Reading"
+msgstr "Kontynuuj czytanie"
+
+#: inc/customizer.php:352
+msgid "Read More button text"
+msgstr "Tekst przycisku Czytaj dalej"
+
+#: inc/customizer.php:362
+msgid "Display Controls"
+msgstr "Ustawienia Wyświetlania"
+
+#: inc/customizer.php:364
+msgid ""
+"Want more options like these? Check out the <a target=\"_blank\" href=\"%1$s"
+"\">%2$s Pro plugin</a>."
+msgstr ""
+"Potrzebujesz więcej takich opcji? Sprawdź <a target=\"_blank\" href=\"%1$s"
+"\">plugin %2$s Pro</a>."
+
+#: inc/customizer.php:374
+msgid "Post author name in byline"
+msgstr "Nazwa autora pod nagłówkiem"
+
+#: inc/customizer.php:390
+msgid "Post date in byline"
+msgstr "Data posta pod nagłówkiem"
+
+#: inc/customizer.php:403
+msgid "Scroll-to-Top Arrow"
+msgstr "Strzałka “przewiń do góry”"
+
+#: inc/customizer.php:413
+msgid "Display Scroll-to-top arrow?"
+msgstr "Wyświetlać strzałkę “przewiń do góry”?"
+
+#: inc/customizer.php:439
+msgid "Custom CSS"
+msgstr "Własny CSS"
+
+#: inc/customizer.php:450
+msgid "Add Custom CSS Here"
+msgstr "Dodaj tutaj własny CSS"
+
+#: inc/customizer.php:527
+msgid "No sidebar - Narrow"
+msgstr "Bez paska bocznego - Wąski"
+
+#: inc/customizer.php:528
+msgid "No sidebar - Wide"
+msgstr "Bez paska bocznego - Szeroki"
+
+#: inc/customizer.php:529
+msgid "Two column - Right sidebar"
+msgstr "Dwie kolumny - Prawy pasek boczny"
+
+#: inc/customizer.php:530
+msgid "Two column - Left sidebar"
+msgstr "Dwie kolumny - Lewy pasek boczny"
+
+#: inc/customizer.php:531
+msgid "Two column - No Sidebar - Narrow"
+msgstr "Dwie kolumny - Bez paska bocznego - Wąski"
+
+#: inc/customizer.php:532
+msgid "Two column - No Sidebar - Wide"
+msgstr "Dwie kolumny - Bez paska bocznego - Szeroki"
+
+#: inc/review.php:113
+msgid "Click here to leave your review"
+msgstr "Kliknij tutaj aby zostawić recenzję"
+
+#: index.php:21
+msgid "Previous"
+msgstr "Poprzedni"
+
+#: index.php:22
+msgid "Next"
+msgstr "Następny"
+
+#: search.php:9
+msgid "%1$d search result for \"%2$s\""
+msgid_plural "%1$d search results for \"%2$s\""
+msgstr[0] "%1$d wynik wyszukiwania dla “%2$s”"
+msgstr[1] "%1$d wyniki wyszukiwania dla “%2$s”"
+msgstr[2] "%1$d wyniki wyszukiwania dla “%2$s”"
+
+#: search.php:11
+msgid "No search results for \"%s\""
+msgstr "Brak wyników wyszukiwania dla “%s”"
+
+#: search.php:34
+msgid "Can't find what you're looking for?  Try refining your search:"
+msgstr ""
+"Nie znalazłeś tego czego szukasz? Spróbuj zmienić kryteria wyszukiwania:"
+
+#: searchform.php:5
+msgid "Search for..."
+msgstr "Szukaj…"
+
+#: sidebar-primary.php:12
+msgid "Sidebar"
+msgstr "Pasek boczny"
+
+#: theme-options.php:4 theme-options.php:20
+msgid "%s Dashboard"
+msgstr "%s Dashboard"
+
+#. Description of the plugin/theme
+msgid ""
+"Period is a dark, clean, and SEO-optimized blogging theme. As a responsive "
+"theme, it displays your content beautifully across phones, widescreen "
+"monitors, and everything in between. With special attention to typography, "
+"accessibility, and minimalism, Period has a design you can trust for "
+"presenting your content. Now with WooCommerce support, you can include an "
+"eCommerce shop right on your website (for free). Use Period to blog about "
+"the news, music, travel, business, gaming, you name it! It’s equally well-"
+"suited for a corporate blog or personal podcast. Preview Period on desktop, "
+"tablets, and mobile devices with the interactive live demo: https://www."
+"competethemes.com/demos/?theme=period"
+msgstr ""
+"Period to ciemny, schludny i zoptymalizowany pod SEO szablon blogowy. Ten "
+"responsywny szablon wyświetla twoją treść treść bez zarzutu poczynając od "
+"telefonów do szerokokątnych. Period został zaprojektowany ze szczególną "
+"uwagą na typografię, dostępność i minimalizm, któremu możesz zaufać w "
+"wyświetlaniu Twoich treści. Teraz wraz ze wsparciem WooComerce możesz "
+"umieścić sklep internetowy prosto na twojej stronie (za darmo). Użyj "
+"szablonu period do blogowania o nowościach, muzycie, podróżach, grach lub o "
+"czym tylko zechcesz! Pasuje zarówno dla firmowego bloga lub prywatnego "
+"podcastu. Zobacz jak wygląda szablon Period na komputerze, tabletach i "
+"urządzeniach mobilnych na interaktywnym demo: https://www.competethemes.com/"
+"demos/?theme=period"
+
+#. Template Name of the plugin/theme
+msgid "Full-width"
+msgstr "Pełna szerokość"
+
+#: comments.php:12 comments.php:32 comments.php:54 content/comments-link.php:5
+#: content/comments-link.php:8
+msgctxt "noun: 5 comments"
+msgid "% Comments"
+msgstr "% komentarzy"
+
+#: content/archive-header.php:4
+msgctxt "noun: Site Title posts"
+msgid "Posts"
+msgstr "Posty"
+
+#: content/post-byline.php:14
+msgctxt "This blog post was published on some date"
+msgid "Published %s"
+msgstr "Opublikowano %s"
+
+#: content/post-byline.php:16
+msgctxt "This blog post was published by some author"
+msgid "Published by %s"
+msgstr "Opublikowano przez %s"
+
+#: content/post-byline.php:18
+msgctxt "This blog post was published on some date by some author"
+msgid "Published %1$s by %2$s"
+msgstr "Opublikowano %1$s przez %2$s"
+
+#: content/post-categories.php:10
+msgctxt "Published in post category"
+msgid "Published in"
+msgstr "Opublikowano w"
+
+#: content/post-categories.php:15
+msgctxt "category, category, AND category"
+msgid "and"
+msgstr "i"
+
+#: content/post-categories.php:17
+msgctxt "View all posts in post category"
+msgid "View all posts in %s"
+msgstr "Zobacz wszystkie posty w %s"
+
+#: functions.php:108
+msgctxt "verb: reply to this comment"
+msgid "Reply"
+msgstr "Odpowiedz"
+
+#: functions.php:113
+msgctxt "verb: edit this comment"
+msgid "Edit"
+msgstr "Edytuj"
+
+#: functions.php:130
+msgctxt "noun"
+msgid "Name"
+msgstr "Imię"
+
+#: functions.php:137
+msgctxt "noun"
+msgid "Email"
+msgstr "Email"
+
+#: functions.php:166
+msgctxt "noun"
+msgid "Comment"
+msgstr "Komentarz"
+
+#: functions.php:402 functions.php:403
+msgctxt "noun"
+msgid "email"
+msgstr "email"
+
+#: functions.php:454 inc/scripts.php:18
+msgctxt "verb: open the dropdown menu"
+msgid "open dropdown menu"
+msgstr "otwórz wysuwane menu"
+
+#: header.php:23 inc/scripts.php:16
+msgctxt "verb: open the menu"
+msgid "open menu"
+msgstr "otwórz menu"
+
+#: inc/customizer.php:314
+msgctxt "noun: blog section"
+msgid "Blog"
+msgstr "Blog"
+
+#: inc/scripts.php:17
+msgctxt "verb: close the menu"
+msgid "close menu"
+msgstr "zamknij menu"
+
+#: inc/scripts.php:19
+msgctxt "verb: close the dropdown menu"
+msgid "close dropdown menu"
+msgstr "zamknij wysuwane menu"

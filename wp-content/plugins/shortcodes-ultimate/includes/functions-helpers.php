@@ -89,7 +89,7 @@ function su_get_config( $key = null, $default = false ) {
  * @param string  $message Error message.
  * @return string          Error message markup.
  */
-function su_error_message( $title = '', $message = '' ) {
+function su_error_message( $title = '', $message = '', $echo = false ) {
 
 	if ( ! su_current_user_can_insert() ) {
 		return;
@@ -99,11 +99,19 @@ function su_error_message( $title = '', $message = '' ) {
 		$title = "<strong>${title}:</strong> ";
 	}
 
-	return sprintf(
+	$output = sprintf(
 		'<p class="su-error" style="padding:5px 10px;color:#8f3a35;border-left:3px solid #8f3a35;background:#fff7f6;line-height:1.35">%1$s%2$s</p>',
 		$title,
 		$message
 	);
+
+	if ( $echo ) {
+		// phpcs:disable
+		echo $output;
+		// phpcs:enable
+	}
+
+	return $output;
 
 }
 
@@ -427,4 +435,40 @@ function su_partial( $file, $data = array() ) {
 	// phpcs:disable
 	echo su_get_partial( $file, $data );
 	// phpcs:enable
+}
+
+function su_has_active_addons() {
+
+	foreach ( array( 'skins', 'extra', 'maker' ) as $addon ) {
+
+		if ( function_exists( "run_shortcodes_ultimate_{$addon}" ) ) {
+			return true;
+		}
+	}
+
+	return false;
+
+}
+
+function su_has_all_active_addons() {
+
+	foreach ( array( 'skins', 'extra', 'maker' ) as $addon ) {
+
+		if ( ! function_exists( "run_shortcodes_ultimate_{$addon}" ) ) {
+			return false;
+		}
+	}
+
+	return true;
+
+}
+
+function su_load_textdomain() {
+
+	$domain    = 'shortcodes-ultimate';
+	$languages = plugin_dir_path( SU_PLUGIN_FILE ) . 'languages/';
+	$mofile    = $languages . $domain . '-' . determine_locale() . '.mo';
+
+	load_textdomain( $domain, $mofile );
+
 }

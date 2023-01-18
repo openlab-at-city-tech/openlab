@@ -1,0 +1,535 @@
+# Copyright (C) 2016 Compete Themes
+# This file is distributed under the GNU General Public License v2 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: Period 1.04\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/support/theme/style\n"
+"POT-Creation-Date: 2016-10-07 13:44+0900\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2016-10-17 23:23+0900\n"
+"Language-Team: \n"
+"X-Generator: Poedit 1.8.8\n"
+"Last-Translator: \n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Language: ru\n"
+
+#: 404.php:6
+msgid "404: Page Not Found"
+msgstr "404: Страница не найдена"
+
+#: 404.php:9
+msgid ""
+"Looks like nothing was found on this url.  Double-check that the url is "
+"correct or try the search form below to find what you were looking for."
+msgstr ""
+"Похоже, ничего не было найдено по этому URL. Дважды проверьте, что URL-адрес "
+"является правильным или используйте форму поиска ниже, чтобы найти то, что "
+"вы искали."
+
+#: comments.php:12 comments.php:32 comments.php:54
+msgid "Be First to Comment"
+msgstr "Ваш комментарий будет первым"
+
+#: comments.php:12 comments.php:32 comments.php:54
+msgid "One Comment"
+msgstr "Один Коментарий"
+
+#: comments.php:12 comments.php:32 comments.php:54 content/comments-link.php:5
+#: content/comments-link.php:8
+msgid "% Comments"
+msgstr "% Комментарии"
+
+#: comments.php:46
+msgid ""
+"Comments are closed, but <a href=\"%s\" title=\"Trackback URL for this post"
+"\">trackbacks</a> and pingbacks are open."
+msgstr ""
+"Комментарии закрыты, но <a href=«%1$s» title=«URL обратной ссылки»>обратные "
+"ссылки</a> и pingbacks ещё работают."
+
+#: comments.php:68 comments.php:75
+msgid "Comments are closed."
+msgstr "Комментарии недоступны"
+
+#: content/archive-header.php:4
+msgid "Posts"
+msgstr "Записи"
+
+#: content/comments-link.php:2
+msgid "comment icon"
+msgstr "значок комментария"
+
+#: content/comments-link.php:5
+msgid "Comments closed"
+msgstr "Коментарии недоступны"
+
+#: content/comments-link.php:5 content/comments-link.php:8
+msgid "1 Comment"
+msgstr "1 Коментарий"
+
+#: content/comments-link.php:8
+msgid "Leave a Comment"
+msgstr "Оставить комментарий"
+
+#: content/post-categories.php:10
+msgid "Published in"
+msgstr "Опубликовано в"
+
+#: content/post-categories.php:17
+msgid "View all posts in %s"
+msgstr "Просмотреть все записи в%s"
+
+#: content/post-nav-attachment.php:3
+msgid "Previous Image"
+msgstr "Предыдущее изображение"
+
+#: content/post-nav-attachment.php:6
+msgid "Next Image"
+msgstr "Следующее изображение"
+
+#: content/post-nav.php:6
+msgid "Previous Post"
+msgstr "Предыдущая запись"
+
+#: content/post-nav.php:9
+msgid "No Older Posts"
+msgstr "Нет предыдущих записей"
+
+#: content/post-nav.php:15 content/post-nav.php:28
+msgid "Return to Blog"
+msgstr "Вернуться на главную"
+
+#: content/post-nav.php:19
+msgid "Next Post"
+msgstr "Следующая запись"
+
+#: content/post-nav.php:22
+msgid "No Newer Posts"
+msgstr "Нет новых записей"
+
+#: content/post-tags.php:8
+msgid "View all posts tagged %s"
+msgstr "Просмотреть все публикации, помеченные %s"
+
+#: content/search-bar.php:11 searchform.php:3 searchform.php:6
+msgid "Search"
+msgstr "Поиск"
+
+#: content/search-bar.php:12
+msgid "Search..."
+msgstr "Поиск..."
+
+#: content/search-bar.php:13 searchform.php:5
+msgid "Search for:"
+msgstr "Поиск в:"
+
+#: content-page.php:12 content.php:13
+msgid "Pages:"
+msgstr "Страницы:"
+
+#: footer.php:15
+msgid "<a href=\"%s\">Period WordPress Theme</a> by Compete Themes."
+msgstr "<a href=\"%s\">Тема Period WordPress</a> от  Compete Themes."
+
+#: functions.php:32
+msgid "Primary"
+msgstr "Главная"
+
+#: functions.php:43
+msgid "Primary Sidebar"
+msgstr "Главная боковая панель"
+
+#: functions.php:45
+msgid ""
+"Widgets in this area will be shown in the sidebar next to the main post "
+"content"
+msgstr ""
+"Виджеты в этой области будут отображаться на боковой панели рядом с основным "
+"содержимым сообщения"
+
+#: functions.php:72
+msgid "Your comment is awaiting moderation."
+msgstr "Ваш комментарий ожидает модерации."
+
+#: functions.php:79
+msgid "Reply"
+msgstr "Ответить"
+
+#: functions.php:84
+msgid "Edit"
+msgstr "Редактировать"
+
+#: functions.php:96
+msgid "(optional)"
+msgstr "(опционально)"
+
+#: functions.php:101
+msgid "Name"
+msgstr "Имя"
+
+#: functions.php:102
+msgid "Jane Doe"
+msgstr ""
+
+#: functions.php:108
+msgid "Email"
+msgstr "Электронная почта"
+
+#: functions.php:109
+msgid "name@email.com"
+msgstr ""
+
+#: functions.php:115
+msgid "Website"
+msgstr "Веб-сайт"
+
+#: functions.php:130
+msgid "Comment"
+msgstr "Комментарий"
+
+#: functions.php:161 functions.php:170 functions.php:186
+msgid "Continue reading"
+msgstr "Читать полностью"
+
+#: functions.php:329 functions.php:330
+msgid "email"
+msgstr "Электронная почта"
+
+#: functions.php:381 inc/scripts.php:12
+msgid "open dropdown menu"
+msgstr "Открыть выпадающее меню"
+
+#: functions.php:392
+msgid "Featured"
+msgstr "Рекомендуемые"
+
+#: functions.php:450
+msgid "Customizer settings deleted"
+msgstr "Изменения через  настройщика удалены"
+
+#: header.php:11
+msgid "Press \"Enter\" to skip to content"
+msgstr "Нажмите \"Enter\", чтобы перейти к содержанию"
+
+#: header.php:23 inc/scripts.php:10
+msgid "open menu"
+msgstr "откройте меню"
+
+#: inc/customizer.php:15
+msgid "Front Page"
+msgstr "Главная страница"
+
+#: inc/customizer.php:27
+msgid "Logo"
+msgstr "Логотип"
+
+#: inc/customizer.php:37
+msgid "Upload a logo"
+msgstr "Загрузить логотип"
+
+#: inc/customizer.php:50
+msgid "Adjust the size of the logo"
+msgstr "Отрегулируйте размер логотипа"
+
+#: inc/customizer.php:71
+msgid "Social Media Icons"
+msgstr "Иконки социальных сетей"
+
+#: inc/customizer.php:73
+msgid "Add the URL for each of your social profiles."
+msgstr "Добавьте ссылки на ваши профили в социальных сетях."
+
+#: inc/customizer.php:86
+msgid "Email Address"
+msgstr "Адрес электронной почты"
+
+#: inc/customizer.php:135
+msgid ""
+"Accepts Skype link protocol (<a href=\"%s\" target=\"_blank\">learn more</a>)"
+msgstr ""
+"Принять протокол Skype (<a href=\"%s\" target=\"_blank\">узнать больше</a>)"
+
+#: inc/customizer.php:161
+msgid "Search Bar"
+msgstr "Панель поиска"
+
+#: inc/customizer.php:172
+msgid "Show search bar at top of site?"
+msgstr "Показать панель поиска в верхней части сайта?"
+
+#: inc/customizer.php:176 inc/customizer.php:275 inc/customizer.php:291
+#: inc/customizer.php:326 inc/customizer.php:370
+msgid "Show"
+msgstr "Показать"
+
+#: inc/customizer.php:177 inc/customizer.php:276 inc/customizer.php:292
+#: inc/customizer.php:327 inc/customizer.php:371
+msgid "Hide"
+msgstr "Скрыть"
+
+#: inc/customizer.php:185
+msgid "Layout"
+msgstr "Макет страниц"
+
+#: inc/customizer.php:187
+msgid ""
+"Want more layouts? Check out the <a target=\"_blank\" href=\"%s\">Period Pro "
+"plugin</a>."
+msgstr ""
+"Хотите больше различных схем? Ознакомьтесь с плагином<a target=\"_blank\" "
+"href=\"%s\"> Period Pro</a>."
+
+#: inc/customizer.php:197
+msgid "Choose your layout"
+msgstr "Выберите схему расположения блоков"
+
+#: inc/customizer.php:202 inc/customizer.php:385
+msgid "Right sidebar"
+msgstr "Правая боковая панель"
+
+#: inc/customizer.php:203 inc/customizer.php:386
+msgid "Left sidebar"
+msgstr "Левая боковая панель"
+
+#: inc/customizer.php:211
+msgid "Blog"
+msgstr "Блог"
+
+#: inc/customizer.php:221
+msgid "Show full posts on blog?"
+msgstr "Показать полные сообщения на блоге?"
+
+#: inc/customizer.php:226 inc/customizer.php:345
+msgid "Yes"
+msgstr "Да"
+
+#: inc/customizer.php:227 inc/customizer.php:346
+msgid "No"
+msgstr "Нет"
+
+#: inc/customizer.php:237
+msgid "Excerpt word count"
+msgstr "Количество слов"
+
+#: inc/customizer.php:244
+msgid "Continue Reading"
+msgstr "Читать полностью"
+
+#: inc/customizer.php:249
+msgid "Read More button text"
+msgstr "Текст кнопки"
+
+#: inc/customizer.php:259
+msgid "Display Controls"
+msgstr "Настройка публикаций"
+
+#: inc/customizer.php:261
+msgid ""
+"Want more options like these? Check out the <a target=\"_blank\" href=\"%s"
+"\"> Period Pro plugin</a>."
+msgstr ""
+"Хотите больше возможностей, как эти? Ознакомьтесь с <a target=\"_blank\" "
+"href=\"%s\"> Period Pro плагин</a>."
+
+#: inc/customizer.php:271
+msgid "Post author name in byline"
+msgstr "Имя автора"
+
+#: inc/customizer.php:287
+msgid "Post date in byline"
+msgstr "Дата публикации"
+
+#: inc/customizer.php:300
+msgid "Custom CSS"
+msgstr "Пользовательские CSS"
+
+#: inc/customizer.php:311
+msgid "Add Custom CSS Here"
+msgstr "Добавьте пользовательские CSS-стили"
+
+#: inc/customizer.php:387
+msgid "No sidebar - Narrow"
+msgstr ""
+
+#: inc/customizer.php:388
+msgid "No sidebar - Wide"
+msgstr ""
+
+#: inc/customizer.php:389
+msgid "Two column - Right sidebar"
+msgstr ""
+
+#: inc/customizer.php:390
+msgid "Two column - Left sidebar"
+msgstr ""
+
+#: inc/customizer.php:391
+msgid "Two column - No Sidebar - Narrow"
+msgstr ""
+
+#: inc/customizer.php:392
+msgid "Two column - No Sidebar - Wide"
+msgstr ""
+
+#: inc/customizer.php:402
+msgid "View the Period Pro Plugin"
+msgstr "Посмотреть Period Pro плагин"
+
+#: inc/scripts.php:11
+msgid "close menu"
+msgstr "закрыть меню"
+
+#: inc/scripts.php:13
+msgid "close dropdown menu"
+msgstr ""
+
+#: index.php:21
+msgid "Previous"
+msgstr "Назад"
+
+#: index.php:22
+msgid "Next"
+msgstr "Далее"
+
+#: search.php:9
+msgid "%d search result for \"%s\""
+msgid_plural "%d search results for <span class=\"query\">\"%s\"</span>"
+msgstr[0] "%d результат поиска по запросу\"%s\""
+msgstr[1] "%d результата поиска по запросу\"%s\""
+msgstr[2] "%d результатов поиска по запросу\"%s\""
+
+#: search.php:11
+msgid "No search results for <span class=\"query\">\"%s\"</span>"
+msgstr "Ничего не найдено по запросу <span class=\"query\">\"%s\"</span>"
+
+#: search.php:34
+msgid "Can't find what you're looking for?  Try refining your search:"
+msgstr ""
+"Не може найти то, что вы ищете? Попробуйте уточнить или изменить параметры "
+"поиска:"
+
+#: searchform.php:5
+msgid "Search for..."
+msgstr "Искать..."
+
+#: sidebar-primary.php:3
+msgid "Sidebar"
+msgstr "Боковая панель"
+
+#: theme-options.php:4 theme-options.php:19
+msgid "Period Dashboard"
+msgstr "Period Панель управления"
+
+#: theme-options.php:22
+msgid "Customization"
+msgstr "Настройка"
+
+#: theme-options.php:23
+msgid ""
+"Click the \"Customize\" link in your menu, or use the button below to get "
+"started customizing Period"
+msgstr ""
+"Нажмите \"Настроить\" в меню, или используйте кнопку ниже, чтобы начать "
+"настройку Period"
+
+#: theme-options.php:26
+msgid "Use Customizer"
+msgstr "Запустить"
+
+#: theme-options.php:30
+msgid "Support"
+msgstr "Поддержка"
+
+#: theme-options.php:31
+msgid ""
+"You can find the knowledgebase, changelog, support forum, and more in the "
+"Period Support Center"
+msgstr ""
+"Вы можете найти базу знаний, журнал изменений, форум поддержки и многое "
+"другое в Центре поддержки"
+
+#: theme-options.php:34
+msgid "Visit Support Center"
+msgstr "Посетите Центр поддержки"
+
+#: theme-options.php:38
+msgid "Period Pro"
+msgstr "Period Pro плагин"
+
+#: theme-options.php:39
+msgid ""
+"Download the Period Pro plugin and unlock custom colors, new layouts, "
+"sliders, and more"
+msgstr ""
+"Скачайте Period Pro плагин и разблокируйте пользовательские цвета, новые "
+"макеты и многое другое"
+
+#: theme-options.php:42
+msgid "See Full Feature List"
+msgstr "Полный список функций"
+
+#: theme-options.php:46
+msgid "WordPress Resources"
+msgstr "WordPress Ресурсы"
+
+#: theme-options.php:47
+msgid ""
+"Save time and money searching for WordPress products by following our "
+"recommendations"
+msgstr ""
+"Экономьте время и деньги в поисках продуктов WordPress, следуя нашим "
+"рекомендациям"
+
+#: theme-options.php:50
+msgid "View Resources"
+msgstr "Просмотреть ресурсы"
+
+#: theme-options.php:54 theme-options.php:56
+msgid "Leave a Review"
+msgstr "Оставить отзыв"
+
+#: theme-options.php:55
+msgid "Help others find Period by leaving a review on wordpress.org."
+msgstr "Помоги другим найти Period, оставив отзыв на портале wordpress.org."
+
+#: theme-options.php:59 theme-options.php:67
+msgid "Reset Customizer Settings"
+msgstr "Сбросить изменения"
+
+#: theme-options.php:61
+msgid ""
+"<strong>Warning:</strong> Clicking this button will erase the Period theme's "
+"current settings in the <a href='%s'>Customizer</a>."
+msgstr ""
+"<strong>Внимание:</strong> При нажатии на эту кнопку, текущие настройки темы "
+"Period будут удалены."
+
+#. Description of the plugin/theme
+msgid ""
+"Period displays your content beautifully across phones, widescreen monitors, "
+"and everything in between. With special attention to typography, "
+"accessibility, and space, Period is a design you can trust for displaying "
+"your content."
+msgstr ""
+"Period прекрасно отображает контент на различных устройствах от экрана "
+"телефона, до широкоформатного монитора. С особым вниманием к типографии, "
+"доступности и пространству, дизайн которому вы можете доверить демонстрацию "
+"вашего контента."
+
+#: content/post-byline.php:14
+msgctxt "This blog post was published on some date"
+msgid "Published %s"
+msgstr "Опубликовано %s"
+
+#: content/post-byline.php:16
+msgctxt "This blog post was published by some author"
+msgid "Published by %s"
+msgstr "Опубликовал %s"
+
+#: content/post-byline.php:18
+msgctxt "This blog post was published on some date by some author"
+msgid "Published %1$s by %2$s"
+msgstr "Опубликовано %1$s, автор: %2$s"

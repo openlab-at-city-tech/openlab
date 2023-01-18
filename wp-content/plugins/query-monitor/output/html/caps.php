@@ -1,11 +1,13 @@
-<?php
+<?php declare(strict_types = 1);
 /**
  * User capability checks output for HTML pages.
  *
  * @package query-monitor
  */
 
-defined( 'ABSPATH' ) || exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 class QM_Output_Html_Caps extends QM_Output_Html {
 
@@ -21,10 +23,16 @@ class QM_Output_Html_Caps extends QM_Output_Html {
 		add_filter( 'qm/output/menus', array( $this, 'admin_menu' ), 105 );
 	}
 
+	/**
+	 * @return string
+	 */
 	public function name() {
 		return __( 'Capability Checks', 'query-monitor' );
 	}
 
+	/**
+	 * @return void
+	 */
 	public function output() {
 		$collector = $this->collector;
 
@@ -49,18 +57,18 @@ class QM_Output_Html_Caps extends QM_Output_Html {
 			return;
 		}
 
+		/** @var QM_Data_Caps */
 		$data = $this->collector->get_data();
 
-		if ( ! empty( $data['caps'] ) ) {
+		if ( ! empty( $data->caps ) ) {
 			$this->before_tabular_output();
 
-			$results    = array(
+			$results = array(
 				'true',
 				'false',
 			);
-			$show_user  = ( count( $data['users'] ) > 1 );
-			$parts      = $data['parts'];
-			$components = $data['components'];
+			$parts = $data->parts;
+			$components = $data->components;
 
 			usort( $parts, 'strcasecmp' );
 			usort( $components, 'strcasecmp' );
@@ -71,9 +79,9 @@ class QM_Output_Html_Caps extends QM_Output_Html {
 			echo $this->build_filter( 'name', $parts, __( 'Capability Check', 'query-monitor' ) ); // WPCS: XSS ok;
 			echo '</th>';
 
-			$users = $data['users'];
+			$users = $data->users;
 
-			usort( $users, 'strcasecmp' );
+			sort( $users );
 
 			echo '<th scope="col" class="qm-filterable-column qm-num">';
 			echo $this->build_filter( 'user', $users, __( 'User', 'query-monitor' ) ); // WPCS: XSS ok;
@@ -91,14 +99,14 @@ class QM_Output_Html_Caps extends QM_Output_Html {
 
 			echo '<tbody>';
 
-			foreach ( $data['caps'] as $row ) {
+			foreach ( $data->caps as $row ) {
 				$component = $row['component'];
 
-				$row_attr                      = array();
-				$row_attr['data-qm-name']      = implode( ' ', $row['parts'] );
-				$row_attr['data-qm-user']      = $row['user'];
+				$row_attr = array();
+				$row_attr['data-qm-name'] = implode( ' ', $row['parts'] );
+				$row_attr['data-qm-user'] = $row['user'];
 				$row_attr['data-qm-component'] = $component->name;
-				$row_attr['data-qm-result']    = ( $row['result'] ) ? 'true' : 'false';
+				$row_attr['data-qm-result'] = ( $row['result'] ) ? 'true' : 'false';
 
 				if ( 'core' !== $component->context ) {
 					$row_attr['data-qm-component'] .= ' non-core';
@@ -145,8 +153,8 @@ class QM_Output_Html_Caps extends QM_Output_Html {
 
 				$stack = array();
 
-				foreach ( $row['filtered_trace'] as $item ) {
-					$stack[] = self::output_filename( $item['display'], $item['calling_file'], $item['calling_line'] );
+				foreach ( $row['filtered_trace'] as $frame ) {
+					$stack[] = self::output_filename( $frame['display'], $frame['calling_file'], $frame['calling_line'] );
 				}
 
 				$caller = array_shift( $stack );
@@ -180,7 +188,7 @@ class QM_Output_Html_Caps extends QM_Output_Html {
 
 			echo '<tfoot>';
 
-			$count = count( $data['caps'] );
+			$count = count( $data->caps );
 
 			echo '<tr>';
 			echo '<td colspan="5">';
@@ -204,6 +212,10 @@ class QM_Output_Html_Caps extends QM_Output_Html {
 		}
 	}
 
+	/**
+	 * @param array<string, mixed[]> $menu
+	 * @return array<string, mixed[]>
+	 */
 	public function admin_menu( array $menu ) {
 		$menu[ $this->collector->id() ] = $this->menu( array(
 			'title' => $this->name(),
@@ -214,6 +226,11 @@ class QM_Output_Html_Caps extends QM_Output_Html {
 
 }
 
+/**
+ * @param array<string, QM_Output> $output
+ * @param QM_Collectors $collectors
+ * @return array<string, QM_Output>
+ */
 function register_qm_output_html_caps( array $output, QM_Collectors $collectors ) {
 	$collector = QM_Collectors::get( 'caps' );
 	if ( $collector ) {

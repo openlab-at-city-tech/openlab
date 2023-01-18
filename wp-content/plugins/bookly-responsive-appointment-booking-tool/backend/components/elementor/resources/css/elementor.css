@@ -1,0 +1,42 @@
+.bookly-elementor-section {
+    margin: 8px
+}
+
+.bookly-elementor-section:before {
+    content: "";
+    height: 28px;
+    width: 28px;
+    position: absolute;
+    top: 6px;
+    left: 9px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: 0;
+    background-image: url(../../../../resources/images/bookly_28.png)
+}
+
+.bookly-elementor-section-title {
+    font-weight: 600 !important
+}
+
+.bookly-elementor-section-description {
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 18px;
+    color: #6d7882;
+    min-height: 42px;
+}
+
+.bookly-elementor-right {
+    float: right;
+}
+
+.elementor-element .icon .bookly::before {
+    content: "";
+    height: 28px;
+    display: block;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: 50%;
+    background-image: url(../../../../resources/images/bookly_28.png)
+}

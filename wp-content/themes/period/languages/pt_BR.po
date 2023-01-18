@@ -1,0 +1,537 @@
+# Copyright (C) 2016 Compete Themes
+# This file is distributed under the GNU General Public License v2 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: Period 1.05\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/support/theme/style\n"
+"POT-Creation-Date: 2017-02-25 04:51-0300\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2017-05-19 10:54-0300\n"
+"Language-Team: \n"
+"X-Generator: Poedit 2.0.1\n"
+"Last-Translator: \n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Language: pt_BR\n"
+
+#: 404.php:6
+msgid "404: Page Not Found"
+msgstr "404: Página Não Encontrada"
+
+#: 404.php:9
+msgid ""
+"Looks like nothing was found on this url.  Double-check that the url is "
+"correct or try the search form below to find what you were looking for."
+msgstr ""
+"Parece que nada foi encontrado nesta url.  Verifique se a url está correta "
+"ou tente o formulário de pesquisa abaixo para encontrar o que você estava "
+"procurando."
+
+#: comments.php:12 comments.php:32 comments.php:54
+msgid "Be First to Comment"
+msgstr "Seja o/a primeiro/a a comentar"
+
+#: comments.php:12 comments.php:32 comments.php:54
+msgid "One Comment"
+msgstr "Um Comentário"
+
+#: comments.php:12 comments.php:32 comments.php:54 content/comments-link.php:5
+#: content/comments-link.php:8
+msgid "% Comments"
+msgstr "% Comentários"
+
+#: comments.php:46
+msgid ""
+"Comments are closed, but <a href=\"%s\" title=\"Trackback URL for this post"
+"\">trackbacks</a> and pingbacks are open."
+msgstr ""
+"Os comentários estão fechados, mas você pode deixar um trackback: <a class="
+"\"trackback-link\" href=\"%s\" title=“Endereço do Trackback de seu post\" "
+"rel=\"trackback\">Endereço do Trackback de seu post</a>."
+
+#: comments.php:68 comments.php:75
+msgid "Comments are closed."
+msgstr "Os comentários estão fechados."
+
+#: content/archive-header.php:4
+msgid "Posts"
+msgstr "Posts"
+
+#: content/comments-link.php:2
+msgid "comment icon"
+msgstr "ícone de comentário"
+
+#: content/comments-link.php:5
+msgid "Comments closed"
+msgstr "Comentários encerrados"
+
+#: content/comments-link.php:5 content/comments-link.php:8
+msgid "1 Comment"
+msgstr "1 Comentário"
+
+#: content/comments-link.php:8
+msgid "Leave a Comment"
+msgstr "Deixe um comentário"
+
+#: content/post-categories.php:10
+msgid "Published in"
+msgstr "Publicado em"
+
+#: content/post-categories.php:17
+msgid "View all posts in %s"
+msgstr "Ver todos os posts em %s"
+
+#: content/post-nav-attachment.php:3
+msgid "Previous Image"
+msgstr "Imagem Anterior"
+
+#: content/post-nav-attachment.php:6
+msgid "Next Image"
+msgstr "Próxima Imagem"
+
+#: content/post-nav.php:6
+msgid "Previous Post"
+msgstr "Post Anterior"
+
+#: content/post-nav.php:9
+msgid "No Older Posts"
+msgstr "Não há posts mais antigos"
+
+#: content/post-nav.php:15 content/post-nav.php:28
+msgid "Return to Blog"
+msgstr "Voltar ao Blog"
+
+#: content/post-nav.php:19
+msgid "Next Post"
+msgstr "Próximo Post"
+
+#: content/post-nav.php:22
+msgid "No Newer Posts"
+msgstr "Não há posts mais recentes"
+
+#: content/post-tags.php:8
+msgid "View all posts tagged %s"
+msgstr "Ver todos os posts marcados com %s"
+
+#: content/search-bar.php:11 searchform.php:3 searchform.php:6
+msgid "Search"
+msgstr "Pesquisar"
+
+#: content/search-bar.php:12
+msgid "Search..."
+msgstr "Pesquisar..."
+
+#: content/search-bar.php:13 searchform.php:5
+msgid "Search for:"
+msgstr "Pesquisar:"
+
+#: content-page.php:12 content.php:13
+msgid "Pages:"
+msgstr "Páginas"
+
+#: footer.php:15
+msgid "<a href=\"%s\">Period WordPress Theme</a> by Compete Themes."
+msgstr "<a href=\"%s\">Tema de WordPress Period</a> por Compete Themes."
+
+#: functions.php:37
+msgid "Primary"
+msgstr "Primário"
+
+#: functions.php:49
+msgid "Primary Sidebar"
+msgstr "Barra Lateral Primária"
+
+#: functions.php:51
+msgid ""
+"Widgets in this area will be shown in the sidebar next to the main post "
+"content"
+msgstr ""
+"Widgets nesta área serão mostrados na barra lateral ao lado da área "
+"principal de conteúdo"
+
+#: functions.php:79
+msgid "Your comment is awaiting moderation."
+msgstr "Seu comentário está aguardando moderação."
+
+#: functions.php:86
+msgid "Reply"
+msgstr "Responder"
+
+#: functions.php:91
+msgid "Edit"
+msgstr "Editar"
+
+#: functions.php:103
+msgid "(optional)"
+msgstr "(opcional)"
+
+#: functions.php:108
+msgid "Name"
+msgstr "Nome"
+
+#: functions.php:109
+msgid "Jane Doe"
+msgstr "Jane Doe"
+
+#: functions.php:115
+msgid "Email"
+msgstr "Email"
+
+#: functions.php:116
+msgid "name@email.com"
+msgstr "nome@email.com"
+
+#: functions.php:122
+msgid "Website"
+msgstr "Site"
+
+#: functions.php:137
+msgid "Comment"
+msgstr "Comentário"
+
+#: functions.php:168 functions.php:177 functions.php:193
+msgid "Continue reading"
+msgstr "Continue lendo"
+
+#: functions.php:344 functions.php:345
+msgid "email"
+msgstr "email"
+
+#: functions.php:390 inc/scripts.php:18
+msgid "open dropdown menu"
+msgstr "abrir menu dropdown"
+
+#: functions.php:403
+msgid "Featured"
+msgstr "Destacado"
+
+#: functions.php:467
+msgid "Customizer settings deleted."
+msgstr "Configurações do customizador deletadas."
+
+#: functions.php:473
+msgid "Period successfully activated!"
+msgstr "Period ativado com sucesso!"
+
+#: header.php:11
+msgid "Press \"Enter\" to skip to content"
+msgstr "Aperte \"Enter\" para pular para o conteúdo"
+
+#: header.php:23 inc/scripts.php:16
+msgid "open menu"
+msgstr "abrir menu"
+
+#: inc/customizer.php:15
+msgid "Front Page"
+msgstr "Página Inicial"
+
+#: inc/customizer.php:29
+msgid ""
+"<a target=\"_blank\" href=\"%s\">Period Pro</a> is the plugin that makes "
+"advanced customization simple - and fun too!"
+msgstr ""
+"<a target=\"_blank\" href=\"%s\">Period Pro</a> é um plugin que deixa as "
+"customizações avançadas simples - e divertidas!"
+
+#: inc/customizer.php:30
+msgid "Period Pro adds the following features to Period:"
+msgstr "Period Pro adiciona os seguintes recursos ao Period:"
+
+#: inc/customizer.php:32
+msgid "6 new layouts"
+msgstr "6 layouts novos"
+
+#: inc/customizer.php:33
+msgid "Custom colors"
+msgstr "Cores customizadas"
+
+#: inc/customizer.php:34
+msgid "New fonts"
+msgstr "Fontes novas"
+
+#: inc/customizer.php:35
+msgid "+ 10 more features"
+msgstr "+ 10 recursos novos"
+
+#: inc/customizer.php:37
+msgid "View Period Pro"
+msgstr "Ver Period Pro"
+
+#: inc/customizer.php:47 theme-options.php:32
+msgid "Period Pro"
+msgstr "Period Pro"
+
+#: inc/customizer.php:67
+msgid "Logo"
+msgstr "Logo"
+
+#: inc/customizer.php:77
+msgid "Upload a logo"
+msgstr "Faça upload de um logo"
+
+#: inc/customizer.php:90
+msgid "Adjust the size of the logo"
+msgstr "Ajuste o tamanho do logo"
+
+#: inc/customizer.php:111
+msgid "Social Media Icons"
+msgstr "Ícones de Mídia Social"
+
+#: inc/customizer.php:113
+msgid "Add the URL for each of your social profiles."
+msgstr "Adicione a URL para cada um de seus perfis sociais."
+
+#: inc/customizer.php:126
+msgid "Email Address"
+msgstr "Endereço de Email"
+
+#: inc/customizer.php:175
+msgid ""
+"Accepts Skype link protocol (<a href=\"%s\" target=\"_blank\">learn more</a>)"
+msgstr ""
+"Aceita o protocolo de link do Skype (<a href=\"%s\" target=\"_blank\">saiba "
+"mais</a>)"
+
+#: inc/customizer.php:201
+msgid "Search Bar"
+msgstr "Barra de Pesquisa"
+
+#: inc/customizer.php:212
+msgid "Show search bar at top of site?"
+msgstr "Mostrar barra de pesquisa no topo do site?"
+
+#: inc/customizer.php:216 inc/customizer.php:315 inc/customizer.php:331
+#: inc/customizer.php:379 inc/customizer.php:423
+msgid "Show"
+msgstr "Mostrar"
+
+#: inc/customizer.php:217 inc/customizer.php:316 inc/customizer.php:332
+#: inc/customizer.php:380 inc/customizer.php:424
+msgid "Hide"
+msgstr "Esconder"
+
+#: inc/customizer.php:225
+msgid "Layout"
+msgstr "Layout"
+
+#: inc/customizer.php:227
+msgid ""
+"Want more layouts? Check out the <a target=\"_blank\" href=\"%s\">Period Pro "
+"plugin</a>."
+msgstr ""
+"Quer mais layouts? Veja o <a target=\"_blank\" href=\"%s\">plugin Period "
+"Pro</a>."
+
+#: inc/customizer.php:237
+msgid "Choose your layout"
+msgstr "Escolha seu layout"
+
+#: inc/customizer.php:242 inc/customizer.php:438
+msgid "Right sidebar"
+msgstr "Barra Lateral Direita"
+
+#: inc/customizer.php:243 inc/customizer.php:439
+msgid "Left sidebar"
+msgstr "Barra Lateral Esquerda"
+
+#: inc/customizer.php:251
+msgid "Blog"
+msgstr "Blog"
+
+#: inc/customizer.php:261
+msgid "Show full posts on blog?"
+msgstr "Mostrar posts inteiros no blog?"
+
+#: inc/customizer.php:266 inc/customizer.php:398
+msgid "Yes"
+msgstr "Sim"
+
+#: inc/customizer.php:267 inc/customizer.php:399
+msgid "No"
+msgstr "Não"
+
+#: inc/customizer.php:277
+msgid "Excerpt word count"
+msgstr "Número de palavras do excerto"
+
+#: inc/customizer.php:284
+msgid "Continue Reading"
+msgstr "Continue Lendo"
+
+#: inc/customizer.php:289
+msgid "Read More button text"
+msgstr "Texto do botão Leia Mais"
+
+#: inc/customizer.php:299
+msgid "Display Controls"
+msgstr "Controles de Display"
+
+#: inc/customizer.php:301
+msgid ""
+"Want more options like these? Check out the <a target=\"_blank\" href=\"%s"
+"\"> Period Pro plugin</a>."
+msgstr ""
+"Quer mais opções como essas? Veja o <a target=\"_blank\" href=\"%s\"> plugin "
+"Period Pro</a>."
+
+#: inc/customizer.php:311
+msgid "Post author name in byline"
+msgstr "Nome de autor/a do post no byline"
+
+#: inc/customizer.php:327
+msgid "Post date in byline"
+msgstr "Data do post no byline"
+
+#: inc/customizer.php:352
+msgid "Custom CSS"
+msgstr "CSS Customizado"
+
+#: inc/customizer.php:363
+msgid "Add Custom CSS Here"
+msgstr "Adicione CSS customizado aqui"
+
+#: inc/customizer.php:440
+msgid "No sidebar - Narrow"
+msgstr "Sem barra lateral - Estreito"
+
+#: inc/customizer.php:441
+msgid "No sidebar - Wide"
+msgstr "Sem barra lateral - Largo"
+
+#: inc/customizer.php:442
+msgid "Two column - Right sidebar"
+msgstr "Duas colunas - Barra lateral direita"
+
+#: inc/customizer.php:443
+msgid "Two column - Left sidebar"
+msgstr "Duas colunas - Barra lateral esquerda"
+
+#: inc/customizer.php:444
+msgid "Two column - No Sidebar - Narrow"
+msgstr "Duas colunas - Sem barra lateral - Estreito"
+
+#: inc/customizer.php:445
+msgid "Two column - No Sidebar - Wide"
+msgstr "Duas colunas - Sem barra lateral - Largo"
+
+#: inc/scripts.php:17
+msgid "close menu"
+msgstr "fechar menu"
+
+#: inc/scripts.php:19
+msgid "close dropdown menu"
+msgstr "fechar menu dropdown"
+
+#: index.php:21
+msgid "Previous"
+msgstr "Anterior"
+
+#: index.php:22
+msgid "Next"
+msgstr "Próximo"
+
+#: search.php:9
+msgid "%1$d search result for \"%2$s\""
+msgid_plural "%1$d search results for \"%2$s\""
+msgstr[0] "%1$d resultado de pesquisa para \"%2$s\""
+msgstr[1] "%1$d resultados de pesquisa para \"%2$s\""
+
+#: search.php:11
+msgid "No search results for \"%s\""
+msgstr "Sem resultados de pesquisa para \"%s\""
+
+#: search.php:34
+msgid "Can't find what you're looking for?  Try refining your search:"
+msgstr "Não consegue achar o que está procurando? Tente refinar sua pesquisa:"
+
+#: searchform.php:5
+msgid "Search for..."
+msgstr "Pesquisar por..."
+
+#: sidebar-primary.php:3
+msgid "Sidebar"
+msgstr "Barra lateral"
+
+#: theme-options.php:4 theme-options.php:19
+msgid "Period Dashboard"
+msgstr "Period Dashboard"
+
+#: theme-options.php:23
+msgid "Get Started"
+msgstr "Começar"
+
+#: theme-options.php:24
+msgid ""
+"Not sure where to start? The Period Support Center is filled with tutorials "
+"that will take you step-by-step through every feature in Period."
+msgstr ""
+"Não sabe onde começar? O Centro de Ajuda Period está cheio de tutoriais que "
+"vão te explicar passo-a-passo cada recurso do Period."
+
+#: theme-options.php:27
+msgid "Visit Support Center"
+msgstr "Visite o Centro de Ajuda"
+
+#: theme-options.php:33
+msgid ""
+"Download the Period Pro plugin and unlock custom colors, new layouts, "
+"sliders, and more"
+msgstr ""
+"Baixe o plugin Period Pro e destrave cores customizadas, novos layouts, "
+"sliders, e mais"
+
+#: theme-options.php:36
+msgid "See Full Feature List"
+msgstr "Veja a lista completa de recursos"
+
+#: theme-options.php:41 theme-options.php:43
+msgid "Leave a Review"
+msgstr "Deixe uma resenha"
+
+#: theme-options.php:42
+msgid "Help others find Period by leaving a review on wordpress.org."
+msgstr ""
+"Ajude outros a encontrarem o Period deixando uma resenha em wordpress.org."
+
+#: theme-options.php:46 theme-options.php:54
+msgid "Reset Customizer Settings"
+msgstr "Resetar Configurações do Customizador"
+
+#: theme-options.php:48
+msgid ""
+"<strong>Warning:</strong> Clicking this button will erase the Period theme's "
+"current settings in the <a href='%s'>Customizer</a>."
+msgstr ""
+"<strong>Atenção:</strong> Clicar este botão vai apagar as configurações "
+"atuais do tema Period no <a href='%s'>Customizador</a>."
+
+#. Description of the plugin/theme
+msgid ""
+"Period displays your content beautifully across phones, widescreen monitors, "
+"and everything in between. With special attention to typography, "
+"accessibility, and space, Period is a design you can trust for displaying "
+"your content. Preview on desktop, tablets, and mobile with our interactive "
+"live demo: https://www.competethemes.com/demos/?theme=period"
+msgstr ""
+"Period mostra seu conteúdo lindamente através de celulares, monitores "
+"widescreen, e todos os tamanhos de telas. Com atenção especial à tipografia, "
+"acessibilidade e espaço, Period é um design que você pode confiar para "
+"mostrar seu conteúdo. Dê uma olhada na demonstração em desktop, tablet e "
+"celular com nossa demo interativa: https://www.competethemes.com/demos/?"
+"theme=period"
+
+#: content/post-byline.php:14
+msgctxt "This blog post was published on some date"
+msgid "Published %s"
+msgstr "Publicado em %s"
+
+#: content/post-byline.php:16
+msgctxt "This blog post was published by some author"
+msgid "Published by %s"
+msgstr "Publicado por %s"
+
+#: content/post-byline.php:18
+msgctxt "This blog post was published on some date by some author"
+msgid "Published %1$s by %2$s"
+msgstr "Publicado em %1$s por %2$s"

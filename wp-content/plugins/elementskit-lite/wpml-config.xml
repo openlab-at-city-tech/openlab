@@ -1,0 +1,777 @@
+<wpml-config>
+	<custom-types>
+		<custom-type translate="1">elementskit_template</custom-type>
+	</custom-types>
+	<elementor-widgets>
+		<widget name="elementskit-image-accordion">
+			<conditions>
+				<condition key="widgetType">elementskit-image-accordion</condition>
+			</conditions>
+			<fields-in-item items_of="ekit_img_accordion_items">
+				<field type="Image Accordion: Title" editor_type="LINE">ekit_img_accordion_title</field>
+				<field type="Image Accordion: Button Label" editor_type="LINE">ekit_img_accordion_button_label</field>
+				<field type="Image Accordion: Wrap URL" editor_type="LINK">ekit_img_accordion_wrap_link_url>url</field>
+				<field type="Image Accordion: Button URL" editor_type="LINK">ekit_img_accordion_button_url>url</field>
+				<field type="Image Accordion: Project Link" editor_type="LINK">ekit_img_accordion_project_link>url</field>
+			</fields-in-item>
+		</widget>
+		<widget name="elementskit-accordion">
+			<conditions>
+				<condition key="widgetType">elementskit-accordion</condition>
+			</conditions>
+			<fields-in-item items_of="ekit_accordion_items">
+				<field type="Accordion: Title" editor_type="LINE">acc_title</field>
+				<field type="Accordion: Description" editor_type="VISUAL">acc_content</field>
+			</fields-in-item>
+		</widget>
+		<widget name="elementskit-faq">
+			<conditions>
+				<condition key="widgetType">elementskit-faq</condition>
+			</conditions>
+			<fields-in-item items_of="ekit_accordion_items">
+				<field type="FAQ: Title" editor_type="LINE">ekit_faq_title</field>
+				<field type="FAQ: Content" editor_type="AREA">ekit_faq_content</field>
+			</fields-in-item>
+		</widget>
+		<widget name="elementskit-testimonial">
+			<conditions>
+				<condition key="widgetType">elementskit-testimonial</condition>
+			</conditions>
+			<fields-in-item items_of="ekit_testimonial_data">
+				<field type="Testimonial: Client Name" editor_type="LINE">client_name</field>
+				<field type="Testimonial: Designation" editor_type="LINE">designation</field>
+				<field type="Testimonial: Review" editor_type="AREA">review</field>
+				<field type="Testimonial: Link" editor_type="LINK">link>url</field>
+			</fields-in-item>
+		</widget>
+		<widget name="elementskit-pricing">
+			<conditions>
+				<condition key="widgetType">elementskit-pricing</condition>
+			</conditions>
+			<fields>
+				<field type="Pricing Table: Table Title" editor_type="LINE">ekit_pricing_table_title</field>
+				<field type="Pricing Table: Table Subtitle" editor_type="LINE">ekit_pricing_table_subtitle</field>
+				<field type="Pricing Table: Currency" editor_type="LINE">ekit_pricing_currency_icon</field>
+				<field type="Pricing Table: Price" editor_type="LINE">ekit_pricing_table_price</field>
+				<field type="Pricing Table: Duration" editor_type="LINE">ekit_pricing_table_duration</field>
+				<field type="Pricing Table: Table Content" editor_type="AREA">ekit_pricing_table_content</field>
+				<field type="Pricing Table: Label" editor_type="LINE">ekit_pricing_btn_text</field>
+				<field type="Pricing Table: Link" editor_type="LINK">ekit_pricing_btn_link>url</field>
+			</fields>
+			<fields-in-item items_of="ekit_pricing_table_content_repeater">
+				<field type="Pricing Table: List text" editor_type="LINE">ekit_pricVISUALing_list</field>
+				<field type="Pricing Table: Info Text" editor_type="LINE">ekit_pricing_list_info</field>
+			</fields-in-item>
+		</widget>
+		<widget name="elementskit-social-media">
+			<conditions>
+				<condition key="widgetType">elementskit-social-media</condition>
+			</conditions>
+			<fields-in-item items_of="ekit_socialmedia_add_icons">
+				<field type="Social Media: Label" editor_type="LINE">ekit_socialmedia_label</field>
+				<field type="Social Media: Link" editor_type="LINK">ekit_socialmedia_link>url</field>
+			</fields-in-item>
+		</widget>
+		<widget name="elementskit-simple-tab">
+			<conditions>
+				<condition key="widgetType">elementskit-simple-tab</condition>
+			</conditions>
+			<fields-in-item items_of="ekit_tab_items">
+				<field type="Tab: Title" editor_type="LINE">ekit_tab_title</field>
+				<field type="Tab: Content" editor_type="VISUAL">ekit_tab_content</field>
+			</fields-in-item>
+		</widget>
+		<widget name="elementskit-business-hours">
+			<conditions>
+				<condition key="widgetType">elementskit-business-hours</condition>
+			</conditions>
+			<fields-in-item items_of="ekit_business_openday_list">
+				<field type="Business Hours: Day" editor_type="LINE">ekit_business_day</field>
+				<field type="Business Hours: Day" editor_type="LINE">ekit_business_time</field>
+			</fields-in-item>
+		</widget>
+		<widget name="elementskit-social-share">
+			<conditions>
+				<condition key="widgetType">elementskit-social-share</condition>
+			</conditions>
+			<fields-in-item items_of="ekit_socialshare_add_icons">
+				<field type="Social Share: Label" editor_type="LINE">ekit_socialshare_label</field>
+			</fields-in-item>
+		</widget>
+		<widget name="elementskit-advance-accordion">
+			<conditions>
+				<condition key="widgetType">elementskit-advance-accordion</condition>
+			</conditions>
+			<fields-in-item items_of="ekit_accordion_items">
+				<field type="Advanced Accordion: Title" editor_type="LINE">acc_title</field>
+			</fields-in-item>
+		</widget>
+		<widget name="elementskit-tab">
+			<conditions>
+				<condition key="widgetType">elementskit-tab</condition>
+			</conditions>
+			<fields-in-item items_of="ekit_tab_items">
+				<field type="Advanced Tab: Title" editor_type="LINE">ekit_tab_title</field>
+				<field type="Advanced Tab: Sub-Title" editor_type="LINE">ekit_tab_sub_title</field>
+			</fields-in-item>
+		</widget>
+		<widget name="elementskit-hotspot">
+			<conditions>
+				<condition key="widgetType">elementskit-hotspot</condition>
+			</conditions>
+			<fields-in-item items_of="ekit_location_repeater">
+				<field type="Hotspot: Title" editor_type="LINE">ekit_hotspot_title</field>
+			</fields-in-item>
+		</widget>
+		<widget name="elementskit-gallery">
+			<conditions>
+				<condition key="widgetType">elementskit-gallery</condition>
+			</conditions>
+			<fields-in-item items_of="ekit_gallery_items">
+				<field type="Gallery: Title" editor_type="LINE">ekit_gallery_filter_label</field>
+			</fields-in-item>
+		</widget>
+		<widget name="elementskit-chart">
+			<conditions>
+				<condition key="widgetType">elementskit-chart</condition>
+			</conditions>
+			<fields-in-item items_of="ekit_charts_labels_data">
+				<field type="Chart: Name" editor_type="LINE">ekit_chart_label</field>
+			</fields-in-item>
+		</widget>
+		<widget name="elementskit-table">
+			<conditions>
+				<condition key="widgetType">elementskit-table</condition>
+			</conditions>
+			<fields-in-item items_of="ekit_table_build_header">
+				<field type="Table: Text" editor_type="LINE">table_header_content</field>
+			</fields-in-item>
+		</widget>
+		<widget name="elementskit-timeline">
+			<conditions>
+				<condition key="widgetType">elementskit-timeline</condition>
+			</conditions>
+			<fields-in-item items_of="ekit_timelinehr_content_repeater">
+				<field type="Timeline: Title" editor_type="LINE">ekit_timeline_line_title</field>
+				<field type="Timeline: Sub Title" editor_type="LINE">ekit_timeline_line_subtitle</field>
+				<field type="Timeline: Description" editor_type="AREA">ekit_timeline_line_content</field>
+				<field type="Timeline: Date" editor_type="LINE">ekit_timeline_content_date</field>
+				<field type="Timeline: Address" editor_type="LINE">ekit_timelinehr_content_address</field>
+			</fields-in-item>
+		</widget>
+		<widget name="elementskit-category-list">
+			<conditions>
+				<condition key="widgetType">elementskit-category-list</condition>
+			</conditions>
+			<fields-in-item items_of="ekit_timelinehr_content_repeater">
+				<field type="Category List: Test" editor_type="LINE">text</field>
+			</fields-in-item>
+		</widget>
+		<widget name="elementskit-page-list">
+			<conditions>
+				<condition key="widgetType">elementskit-page-list</condition>
+			</conditions>
+			<fields-in-item items_of="icon_list">
+				<field type="Page List: Title" editor_type="LINE">text</field>
+				<field type="Page List: Sub-Title" editor_type="LINE">ekit_menu_widget_sub_title</field>
+				<field type="Page List: Label" editor_type="LINE">ekit_menu_list_label_title</field>
+				<field type="Page List: Link" editor_type="LINK">ekit_page_list_website_link>url</field>
+			</fields-in-item>
+		</widget>
+		<widget name="elementskit-post-list">
+			<conditions>
+				<condition key="widgetType">elementskit-post-list</condition>
+			</conditions>
+			<fields-in-item items_of="icon_list">
+				<field type="Post List: Title" editor_type="LINE">text</field>
+			</fields-in-item>
+		</widget>
+		<widget name="elementskit-header-info">
+			<conditions>
+				<condition key="widgetType">elementskit-header-info</condition>
+			</conditions>
+			<fields-in-item items_of="ekit_headerinfo_group">
+				<field type="Header Info: Text" editor_type="LINE">ekit_headerinfo_text</field>
+				<field type="Header Info: Link" editor_type="LINK">ekit_headerinfo_link>url</field>
+			</fields-in-item>
+		</widget>
+		<widget name="elementskit-back-to-top">
+			<conditions>
+				<condition key="widgetType">elementskit-back-to-top</condition>
+			</conditions>
+			<fields>
+				<field type="Back to Top: Button Text" editor_type="LINE">ekit_btn_text</field>
+			</fields>
+		</widget>
+		<widget name="elementskit-blog-posts">
+			<conditions>
+				<condition key="widgetType">elementskit-blog-posts</condition>
+			</conditions>
+			<fields>
+				<field type="Blog Posts: Label" editor_type="LINE">ekit_blog_posts_btn_text</field>
+			</fields>
+		</widget>
+		<widget name="elementskit-button">
+			<conditions>
+				<condition key="widgetType">elementskit-button</condition>
+			</conditions>
+			<fields>
+				<field type="Button: Label" editor_type="LINE">ekit_btn_text</field>
+				<field type="Button: URL" editor_type="LINK">ekit_btn_url>url</field>
+			</fields>
+		</widget>
+		<widget name="elementskit-client-logo">
+			<conditions>
+				<condition key="widgetType">elementskit-client-logo</condition>
+			</conditions>
+			<fields-in-item items_of="ekit_client_logo_repiter">
+				<field type="Client Logo: Client Name" editor_type="LINE">ekit_client_logo_list_title</field>
+				<field type="Caldera Forms: Link" editor_type="LINK">ekit_client_logo_website_link>url</field>
+			</fields-in-item>
+		</widget>
+		<widget name="elementskit-countdown-timer">
+			<conditions>
+				<condition key="widgetType">elementskit-countdown-timer</condition>
+			</conditions>
+			<fields>
+				<field type="Countdown Timer: Weeks" editor_type="LINE">ekit_countdown_timer_weeks_label</field>
+				<field type="Countdown Timer: Days" editor_type="LINE">ekit_countdown_timer_days_label</field>
+				<field type="Countdown Timer: Hours" editor_type="LINE">ekit_countdown_timer_hours_label</field>
+				<field type="Countdown Timer: Minutes" editor_type="LINE">ekit_countdown_timer_minutes_hours_label</field>
+				<field type="Countdown Timer: Seconds" editor_type="LINE">ekit_countdown_timer_seconds_hours_label</field>
+				<field type="Countdown Timer: On Expiry Title" editor_type="LINE">ekit_countdown_timer_title</field>
+				<field type="Countdown Timer: On Expiry Content" editor_type="LINE">ekit_countdown_timer_expiry_content</field>
+			</fields>
+		</widget>
+		<widget name="elementskit-drop-caps">
+			<conditions>
+				<condition key="widgetType">elementskit-drop-caps</condition>
+			</conditions>
+			<fields>
+				<field type="Drop Caps: Content" editor_type="LINE">ekit_dropcaps_text</field>
+			</fields>
+		</widget>
+		<widget name="elementskit-dual-button">
+			<conditions>
+				<condition key="widgetType">elementskit-dual-button</condition>
+			</conditions>
+			<fields>
+				<field type="Dual Button: Text" editor_type="LINE">ekit_button_middle_text</field>
+				<field type="Dual Button: Text" editor_type="LINE">ekit_button_one_text</field>
+				<field type="Dual Button: Link" editor_type="LINK">ekit_button_one_link>url</field>
+				<field type="Dual Button: Text" editor_type="LINE">ekit_button_two_text</field>
+				<field type="Dual Button: Link" editor_type="LINK">ekit_button_two_link>url</field>
+			</fields>
+		</widget>
+		<widget name="elementskit-fluent-forms">
+			<conditions>
+				<condition key="widgetType">elementskit-fluent-forms</condition>
+			</conditions>
+			<fields>
+				<field type="Fluent Forms: Title" editor_type="LINE">form_title_custom</field>
+				<field type="Fluent Forms: Description" editor_type="AREA">form_description_custom</field>
+			</fields>
+		</widget>
+		<widget name="elementskit-funfact">
+			<conditions>
+				<condition key="widgetType">elementskit-funfact</condition>
+			</conditions>
+			<fields>
+				<field type="Funfact: Number Prefix" editor_type="LINE">ekit_funfact_number_prefix</field>
+				<field type="Funfact: Number Suffix" editor_type="LINE">ekit_funfact_number_suffix</field>
+				<field type="Funfact: Title" editor_type="LINE">ekit_funfact_title_text</field>
+				<field type="Funfact: Super" editor_type="LINE">ekit_funfact_super_text</field>
+			</fields>
+		</widget>
+		<widget name="elementskit-header-offcanvas">
+			<conditions>
+				<condition key="widgetType">elementskit-header-offcanvas</condition>
+			</conditions>
+			<fields>
+				<field type="Header Offcanvas: Text" editor_type="LINE">ekit_offcanvas_menu_text</field>
+			</fields>
+		</widget>
+		<widget name="elementskit-header-search">
+			<conditions>
+				<condition key="widgetType">elementskit-header-search</condition>
+			</conditions>
+			<fields>
+				<field type="Header Offcanvas: Placeholder Text" editor_type="LINE">ekit_search_placeholder_text</field>
+			</fields>
+		</widget>
+		<widget name="elementskit-heading">
+			<conditions>
+				<condition key="widgetType">elementskit-heading</condition>
+			</conditions>
+			<fields>
+				<field type="Heading: Heading Title" editor_type="LINE">ekit_heading_title</field>
+				<field type="Heading: Link" editor_type="LINK">ekit_heading_link>url</field>
+				<field type="Heading: Heading Sub Title" editor_type="LINE">ekit_heading_sub_title</field>
+				<field type="Heading: Heading Description" editor_type="VISUAL">ekit_heading_extra_title</field>
+				<field type="Heading: Content" editor_type="LINE">shadow_text_content</field>
+			</fields>
+		</widget>
+		<widget name="elementskit-icon-box">
+			<conditions>
+				<condition key="widgetType">elementskit-icon-box</condition>
+			</conditions>
+			<fields>
+				<field type="Icon Box: Title" editor_type="LINE">ekit_icon_box_title_text</field>
+				<field type="Icon Box: Content" editor_type="AREA">ekit_icon_box_description_text</field>
+				<field type="Icon Box: Label" editor_type="LINE">ekit_icon_box_btn_text</field>
+				<field type="Icon Box: URL" editor_type="LINK">ekit_icon_box_btn_url>url</field>
+				<field type="Icon Box: Link" editor_type="LINK">ekit_icon_box_global_link>url</field>
+				<field type="Icon Box: Title" editor_type="LINE">ekit_icon_box_badge_title</field>
+			</fields>
+		</widget>
+		<widget name="elementskit-icon-hover">
+			<conditions>
+				<condition key="widgetType">elementskit-icon-hover</condition>
+			</conditions>
+			<fields>
+				<field type="Icon Hover: Title" editor_type="LINE">ekit_icon_box_title_text</field>
+			</fields>
+		</widget>
+		<widget name="elementskit-image-box">
+			<conditions>
+				<condition key="widgetType">elementskit-image-box</condition>
+			</conditions>
+			<fields>
+				<field type="Image Box: Link" editor_type="LINK">ekit_image_box_website_link>url</field>
+				<field type="Image Box: Title" editor_type="LINE">ekit_image_box_title_text</field>
+				<field type="Image Box: Description" editor_type="AREA">ekit_image_box_description_text</field>
+				<field type="Image Box: Label" editor_type="LINE">ekit_image_box_btn_text</field>
+				<field type="Image Box: URL" editor_type="LINK">ekit_image_box_btn_url>url</field>
+			</fields>
+		</widget>
+		<widget name="elementskit-image-comparison">
+			<conditions>
+				<condition key="widgetType">elementskit-image-comparison</condition>
+			</conditions>
+			<fields>
+				<field type="Image Comparison: Label" editor_type="LINE">ekit_img_comparison_label_before</field>
+				<field type="Image Comparison: Label" editor_type="LINE">ekit_img_comparison_label_after</field>
+			</fields>
+		</widget>
+		<widget name="elementskit-lottie">
+			<conditions>
+				<condition key="widgetType">elementskit-lottie</condition>
+			</conditions>
+			<fields>
+				<field type="Lottie: ''" editor_type="LINE">ekit_lottie_url</field>
+				<field type="Lottie: ''" editor_type="LINK">ekit_lottie_link>url</field>
+			</fields>
+		</widget>
+		<widget name="elementskit-mail-chimp">
+			<conditions>
+				<condition key="widgetType">elementskit-mail-chimp</condition>
+			</conditions>
+			<fields>
+				<field type="MailChimp: Opt-in Success Message" editor_type="LINE">ekit_mail_chimp_opt_in_success_message</field>
+				<field type="MailChimp: Placeholder" editor_type="LINE">ekit_mail_chimp_first_name_placeholder</field>
+				<field type="MailChimp: Label" editor_type="LINE">ekit_mail_chimp_last_name_label</field>
+				<field type="MailChimp: Placeholder" editor_type="LINE">ekit_mail_chimp_last_name_placeholder</field>
+				<field type="MailChimp: Label" editor_type="LINE">ekit_mail_chimp_phone_label</field>
+				<field type="MailChimp: Placeholder" editor_type="LINE">ekit_mail_chimp_phone_placeholder</field>
+				<field type="MailChimp: Label" editor_type="LINE">ekit_mail_chimp_email_address_label</field>
+				<field type="MailChimp: Placeholder" editor_type="LINE">ekit_mail_chimp_email_address_placeholder</field>
+				<field type="MailChimp: Submit Button Text" editor_type="LINE">ekit_mail_chimp_submit</field>
+				<field type="MailChimp: Success Message" editor_type="LINE">ekit_mail_chimp_success_message</field>
+			</fields>
+		</widget>
+		<widget name="ekit-nav-menu">
+			<conditions>
+				<condition key="widgetType">ekit-nav-menu</condition>
+			</conditions>
+			<fields>
+				<field type="ElementsKit Nav Menu: Custom Link" editor_type="LINK">elementskit_nav_menu_logo_link>url</field>
+				<field type="ElementsKit Nav Menu: Conatiner width" editor_type="LINE">elementskit_submenu_container_width</field>
+			</fields>
+		</widget>
+		<widget name="elementskit-piechart">
+			<conditions>
+				<condition key="widgetType">elementskit-piechart</condition>
+			</conditions>
+			<fields>
+				<field type="Pie Chart: Title" editor_type="LINE">ekit_piechart_title</field>
+				<field type="Pie Chart: Description" editor_type="AREA">ekit_piechart_item_description</field>
+			</fields>
+		</widget>
+		<widget name="elementskit-progressbar">
+			<conditions>
+				<condition key="widgetType">elementskit-progressbar</condition>
+			</conditions>
+			<fields>
+				<field type="Progress Bar: Title" editor_type="LINE">ekit_progressbar_title</field>
+			</fields>
+		</widget>
+		<widget name="elementskit-progressbar">
+			<conditions>
+				<condition key="widgetType">elementskit-progressbar</condition>
+			</conditions>
+			<fields>
+				<field type="Progress Bar: Title" editor_type="LINE">ekit_progressbar_title</field>
+			</fields>
+		</widget>
+		<widget name="elementskit-team">
+			<conditions>
+				<condition key="widgetType">elementskit-team</condition>
+			</conditions>
+			<fields>
+				<field type="Team: Member Name" editor_type="LINE">ekit_team_name</field>
+				<field type="Team: Member Position" editor_type="LINE">ekit_team_position</field>
+				<field type="Team: About Member" editor_type="AREA">ekit_team_short_description</field>
+				<field type="Team: About Member" editor_type="AREA">ekit_team_description</field>
+				<field type="Team: Phone" editor_type="LINE">ekit_team_phone</field>
+				<field type="Team: Email" editor_type="LINE">ekit_team_email</field>
+			</fields>
+			<fields-in-item items_of="ekit_team_social_icons">
+				<field type="Team: Label" editor_type="LINE">ekit_team_label</field>
+				<field type="Team: Link" editor_type="LINK">ekit_team_link</field>
+			</fields-in-item>
+		</widget>
+		<widget name="elementskit-video">
+			<conditions>
+				<condition key="widgetType">elementskit-video</condition>
+			</conditions>
+			<fields>
+				<field type="Video: Button Title" editor_type="LINE">ekit_video_popup_button_title</field>
+				<field type="Video: URL to Embed" editor_type="LINE">ekit_video_popup_url</field>
+			</fields>
+		</widget>
+		<widget name="elementskit-advance-accordion">
+			<conditions>
+				<condition key="widgetType">elementskit-advance-accordion</condition>
+			</conditions>
+			<fields-in-item items_of="ekit_accordion_items">
+				<field type="Advanced Accordion: Title" editor_type="LINE">acc_title</field>
+			</fields-in-item>
+		</widget>
+		<widget name="elementskit-advanced-slider">
+			<conditions>
+				<condition key="widgetType">elementskit-advanced-slider</condition>
+			</conditions>
+			<fields-in-item items_of="ekit_slider_tab_items">
+				<field type="Advanced Slider: Title" editor_type="LINE">ekit_slider_title</field>
+			</fields-in-item>
+		</widget>
+		<widget name="elementskit-tab">
+			<conditions>
+				<condition key="widgetType">elementskit-tab</condition>
+			</conditions>
+			<fields-in-item items_of="ekit_tab_items">
+				<field type="Advanced Tab: Title" editor_type="LINE">ekit_tab_title</field>
+				<field type="Advanced Tab: Sub Title" editor_type="LINE">ekit_tab_sub_title</field>
+			</fields-in-item>
+		</widget>
+		<widget name="elementskit-advanced-toggle">
+			<conditions>
+				<condition key="widgetType">elementskit-advanced-toggle</condition>
+			</conditions>
+			<fields-in-item items_of="ekit_toggle_items">
+				<field type="Advanced Toggle: Title" editor_type="LINE">ekit_toggle_title</field>
+			</fields-in-item>
+		</widget>
+		<widget name="elementskit-behance-feed">
+			<conditions>
+				<condition key="widgetType">elementskit-behance-feed</condition>
+			</conditions>
+			<fields>
+				<field type="Behance Feed: Behance username" editor_type="LINE">behance_user_name</field>
+			</fields>
+		</widget>
+		<widget name="elementskit-blog-posts">
+			<conditions>
+				<condition key="widgetType">elementskit-blog-posts</condition>
+			</conditions>
+			<fields>
+				<field type="Blog Posts: Label" editor_type="LINE">ekit_blog_posts_btn_text</field>
+			</fields>
+		</widget>
+		<widget name="elementskit-chart">
+			<conditions>
+				<condition key="widgetType">elementskit-chart</condition>
+			</conditions>
+			<fields>
+				<field type="Chart: Title" editor_type="LINE">ekit_charts_title_text</field>
+			</fields>
+			<fields-in-item items_of="ekit_charts_labels_data">
+				<field type="Chart: Name" editor_type="LINE">ekit_chart_label</field>
+			</fields-in-item>
+			<fields-in-item items_of="ekit_charts_data_set">
+				<field type="Chart: Label" editor_type="LINE">ekit_chart_data_label</field>
+			</fields-in-item>
+			<fields-in-item items_of="ekit_charts_data_set2">
+				<field type="Chart: Label" editor_type="LINE">ekit_chart_data_label</field>
+			</fields-in-item>
+		</widget>
+		<widget name="elementskit-creative-button">
+			<conditions>
+				<condition key="widgetType">elementskit-creative-button</condition>
+			</conditions>
+			<fields>
+				<field type="Creative Button: Label" editor_type="LINE">ekit_btn_text</field>
+				<field type="Creative Button: URL" editor_type="LINK">ekit_btn_url>url</field>
+			</fields>
+		</widget>
+		<widget name="elementskit-gallery">
+			<conditions>
+				<condition key="widgetType">elementskit-gallery</condition>
+			</conditions>
+			<fields>
+				<field type="Gallery: 'All' Filter Label" editor_type="LINE">ekit_gallery_filter_all_label</field>
+			</fields>
+			<fields-in-item items_of="ekit_gallery_items">
+				<field type="Gallery: Filter Label" editor_type="LINE">ekit_gallery_filter_label</field>
+			</fields-in-item>
+		</widget>
+		<widget name="elementskit-google-map">
+			<conditions>
+				<condition key="widgetType">elementskit-google-map</condition>
+			</conditions>
+			<fields>
+				<field type="Google Map: Address" editor_type="LINE">map_addr</field>
+				<field type="Google Map: Title" editor_type="LINE">map_basic_marker_title</field>
+				<field type="Google Map: Content" editor_type="AREA">map_basic_marker_content</field>
+				<field type="Google Map: Content" editor_type="VISUAL">map_overlay_content</field>
+			</fields>
+			<fields-in-item items_of="map_markers">
+				<field type="Gallery: Filter Label" editor_type="LINE">ekit_gallery_filter_label</field>
+				<field type="Gallery: Tooltrip" editor_type="LINE">map_marker_title</field>
+				<field type="Gallery: Content" editor_type="AREA">map_marker_content</field>
+			</fields-in-item>			
+		</widget>
+		<widget name="elementskit-hotspot">
+			<conditions>
+				<condition key="widgetType">elementskit-hotspot</condition>
+			</conditions>
+			<fields-in-item items_of="ekit_location_repeater">
+				<field type="Hotspot: Title" editor_type="LINE">ekit_hotspot_title</field>
+				<field type="Hotspot: Description" editor_type="VISUAL">ekit_hotspot_address</field>
+			</fields-in-item>			
+		</widget>
+		<widget name="elementskit-image-swap">
+			<conditions>
+				<condition key="widgetType">elementskit-image-swap</condition>
+			</conditions>
+			<fields>
+				<field type="Image Swap: Link" editor_type="LINK">ekit_img_swap_link>url</field>
+			</fields>			
+			<fields-in-item items_of="ekit_location_repeater">
+				<field type="Image Swap: Title" editor_type="LINE">ekit_hotspot_title</field>
+			</fields-in-item>			
+		</widget>
+		<widget name="elementskit-instagram-feed">
+			<conditions>
+				<condition key="widgetType">elementskit-instagram-feed</condition>
+			</conditions>
+			<fields>
+				<field type="Instagram Feed: Follow Button Text" editor_type="LINE">ekit_instagram_feed_ins_follow_text</field>
+				<field type="Instagram Feed: Follow link" editor_type="LINE">ekit_instagram_feed_ins_follow_link</field>
+			</fields>								
+		</widget>
+		<widget name="elementskit-motion-text">
+			<conditions>
+				<condition key="widgetType">elementskit-motion-text</condition>
+			</conditions>
+			<fields>
+				<field type="Motion Text: Title" editor_type="LINE">ekit_motion_text_content_text</field>
+				<field type="Motion Text: Link" editor_type="LINK">ekit_motion_text_sub_title_website_link>url</field>
+			</fields>								
+		</widget>
+		<widget name="elementskit-pinterest-feed">
+			<conditions>
+				<condition key="widgetType">elementskit-pinterest-feed</condition>
+			</conditions>
+			<fields>
+				<field type="Pinterest Feed: Username" editor_type="LINE">pinterest_user_name</field>
+				<field type="Pinterest Feed: Board name" editor_type="LINE">pinterest_board_name</field>
+			</fields>								
+		</widget>
+		<widget name="elementskit-popup-modal">
+			<conditions>
+				<condition key="widgetType">elementskit-popup-modal</condition>
+			</conditions>
+			<fields>
+				<field type="Popup Modal: Content" editor_type="VISUAL">popup_content</field>
+				<field type="Popup Modal: Title Text" editor_type="LINE">popup_title</field>
+				<field type="Popup Modal: Subtitle Text" editor_type="LINE">popup_subtitle</field>
+				<field type="Popup Modal: Label" editor_type="LINE">footer_cta_text</field>
+				<field type="Popup Modal: Url" editor_type="LINE">footer_cta_url</field>
+			</fields>								
+		</widget>
+		<widget name="elementskit-table">
+			<conditions>
+				<condition key="widgetType">elementskit-table</condition>
+			</conditions>
+			<fields>
+				<field type="Table: Enter a CSV File URL" editor_type="LINK">ekit_table_csv_url>url</field>
+				<field type="Table: Enter a Google Sheet URL" editor_type="LINK">ekit_table_google_sheet_viewer_url>url</field>
+				<field type="Table: Serial Header Text" editor_type="LINE">show_serial_header_text</field>
+				<field type="Table: Search Placeholder" editor_type="LINE">search_placeholder</field>
+				<field type="Table: Prev Text" editor_type="LINE">ekit_table_navigation_prev_text</field>
+				<field type="Table: Next Text" editor_type="LINE">ekit_table_navigation_next_text</field>
+				<field type="Table: Info Text" editor_type="LINE">info_text</field>
+				<field type="Table: Entries Text" editor_type="LINE">entries_text</field>
+			</fields>								
+			<fields-in-item items_of="table_body_content">
+				<field type="Table: Text" editor_type="VISUAL">cell_text</field>
+				<field type="Table: URL" editor_type="LINK">body_cell_url>url</field>
+			</fields-in-item>								
+		</widget>
+		<widget name="elementskit-timeline">
+			<conditions>
+				<condition key="widgetType">elementskit-timeline</condition>
+			</conditions>
+			<fields-in-item items_of="ekit_timelinehr_content_repeater">
+				<field type="Timeline: Sub Title" editor_type="LINE">ekit_timeline_line_subtitle</field>
+				<field type="Timeline: Title" editor_type="LINE">ekit_timeline_line_title</field>
+				<field type="Timeline: Title Link" editor_type="LINK">ekit_timeline_date_link>url</field>
+				<field type="Timeline: Description" editor_type="AREA">ekit_timeline_line_content</field>
+				<field type="Timeline: Date" editor_type="LINE">ekit_timeline_content_date</field>
+				<field type="Timeline: Address" editor_type="LINE">ekit_timelinehr_content_address</field>
+			</fields-in-item>								
+		</widget>
+		<widget name="elementskit-twitter-feed">
+			<conditions>
+				<condition key="widgetType">elementskit-twitter-feed</condition>
+			</conditions>
+			<fields>
+				<field type="Twitter Feed: Label" editor_type="LINE">ekit_twitter_follow_btn_text</field>
+			</fields>								
+		</widget>
+		<widget name="elementskit-unfold">
+			<conditions>
+				<condition key="widgetType">elementskit-unfold</condition>
+			</conditions>
+			<fields>
+				<field type="Unfold: Title" editor_type="LINE">unfold_title</field>
+				<field type="Unfold: Content" editor_type="VISUAL">unfold_content</field>
+				<field type="Unfold: Expand Button Text" editor_type="LINE">unfold_expand_btn_text</field>
+				<field type="Unfold: Collapse Button Text" editor_type="LINE">unfold_collapse_btn_text</field>
+			</fields>								
+		</widget>
+		<widget name="ekit-vertical-menu">
+			<conditions>
+				<condition key="widgetType">ekit-vertical-menu</condition>
+			</conditions>
+			<fields>
+				<field type="Vertical menu: Title" editor_type="LINE">elementskit_vertical_menu_toggle_title</field>
+				
+			</fields>								
+		</widget>
+		<widget name="elementskit-video-gallery">
+			<conditions>
+				<condition key="widgetType">elementskit-video-gallery</condition>
+			</conditions>
+			<fields-in-item items_of="video_content">
+				<field type="Video Gallery: URL" editor_type="LINK">video_url>url</field>
+				<field type="Video Gallery: Category" editor_type="LINE">video_category</field>				
+			</fields-in-item>								
+		</widget>
+		<widget name="elementskit-whatsapp">
+			<conditions>
+				<condition key="widgetType">elementskit-whatsapp</condition>
+			</conditions>
+			<fields-in-item items_of="video_content">
+				<field type="WhatsApp: Username" editor_type="LINE">whatsapp_username</field>
+				<field type="WhatsApp: User Text" editor_type="AREA">whatsapp_user_text</field>				
+				<field type="WhatsApp: Asking Text" editor_type="AREA">whatsapp_asking_text</field>				
+				<field type="WhatsApp: Input Placeholder" editor_type="LINE">whatsapp_input_placeholder</field>				
+				<field type="WhatsApp: Whatsapp Number" editor_type="AREA">whatsapp_number</field>				
+			</fields-in-item>								
+		</widget>
+		<widget name="elementskit-woo-category-list">
+			<conditions>
+				<condition key="widgetType">elementskit-woo-category-list</condition>
+			</conditions>
+			<fields>
+				<field type="Woo Category List: URL" editor_type="LINK">ekit_featured_cat_link>url</field>			
+			</fields>								
+		</widget>
+		<widget name="elementskit-zoom">
+			<conditions>
+				<condition key="widgetType">elementskit-zoom</condition>
+			</conditions>
+			<fields>
+				<field type="Zoom: Meeting Heading Text" editor_type="LINE">ekit_meeting_heading_text</field>			
+				<field type="Zoom: Heading" editor_type="LINE">ekit_protected_heading</field>			
+				<field type="Zoom: Sub Heading" editor_type="LINE">ekit_protected_subheading</field>			
+				<field type="Zoom: Placeholder Text" editor_type="LINE">ekit_protected_placeholder_text</field>			
+				<field type="Zoom: Submit BTN Text" editor_type="LINE">ekit_protected_submit_text</field>			
+				<field type="Zoom: Timer Heading" editor_type="LINE">ekit_zoom_timer_heading</field>			
+				<field type="Zoom: Days Text" editor_type="LINE">ekit_zoom_timer_days_text</field>			
+				<field type="Zoom: Hours Text" editor_type="LINE">ekit_zoom_timer_hours_text</field>			
+				<field type="Zoom: Minutes Text" editor_type="LINE">ekit_zoom_timer_minutes_text</field>			
+				<field type="Zoom: Seconds Text" editor_type="LINE">ekit_zoom_timer_seconds_text</field>			
+				<field type="Zoom: Title" editor_type="LINE">ekit_meeting_id_label</field>			
+				<field type="Zoom: Title" editor_type="LINE">ekit_meeting_topic_label</field>			
+				<field type="Zoom: Title" editor_type="LINE">ekit_meeting_status_label</field>			
+				<field type="Zoom: Title" editor_type="LINE">ekit_meeting_start_time_label</field>			
+				<field type="Zoom: Title" editor_type="LINE">ekit_meeting_duration_label</field>			
+				<field type="Zoom: Title" editor_type="LINE">ekit_meeting_timezone_label</field>			
+				<field type="Zoom: Title" editor_type="LINE">ekit_meeting_start_url_label</field>			
+				<field type="Zoom: Button Text" editor_type="LINE">ekit_meeting_start_url_btn_text</field>			
+				<field type="Zoom: Title" editor_type="LINE">ekit_meeting_join_url_label</field>			
+				<field type="Zoom: Button Text" editor_type="LINE">ekit_meeting_join_url_btn_text</field>			
+			</fields>								
+		</widget>
+		<widget name="elementskit-image-hover-effect">
+			<conditions>
+				<condition key="widgetType">elementskit-image-hover-effect</condition>
+			</conditions>
+			<fields>
+				<field type="Image Hover Effect: Title" editor_type="LINE">ekit_hover_title</field>
+				<field type="Image Hover Effect: Description" editor_type="AREA">ekit_hover_description</field>
+				<field type="Image Hover Effect: Image Link URL" editor_type="LINK">ekit_hover_link</field>
+				<field type="Image Hover Effect: Button Text" editor_type="LINE">ekit_image_button_text</field>
+				<field type="Image Hover Effect: Button Link URL" editor_type="LINK">ekit_image_button_link</field>
+			</fields>
+		</widget>
+        <widget name="elementskit-fancy-animated-text">
+			<conditions>
+				<condition key="widgetType">elementskit-fancy-animated-text</condition>
+			</conditions>
+			<fields>
+				<field type="Fancy Heading: Prefix Text" editor_type="LINE">ekit_fancy_prefix_text</field>
+				<field type="Fancy Heading: Highlighted Text" editor_type="LINE">ekit_fancy_highlighted_text</field>
+				<field type="Fancy Heading: Suffix Text" editor_type="LINE">ekit_fancy_suffix_text</field>
+				<field type="Fancy Heading: Link (Optional)" editor_type="LINK">ekit_fancy_text_link>url</field>
+			</fields>								
+			<fields-in-item items_of="ekit_fancy_text_lists">
+				<field type="Fancy Heading: Fancy Text" editor_type="LINE">ekit_fancy_text</field>
+			</fields-in-item>
+        </widget>								
+		<widget name="elementskit-price-menu">
+			<conditions>
+				<condition key="widgetType">elementskit-price-menu</condition>
+			</conditions>
+			<fields-in-item items_of="ekit_price_list">
+				<field type="Price Menu: Title" editor_type="LINE">title</field>
+				<field type="Price Menu: Description" editor_type="AREA">description</field>
+				<field type="Price Menu: Price" editor_type="LINE">price</field>
+				<field type="Price Menu: Link" editor_type="LINK">link>url</field>
+				<field type="Price Menu: Button Text" editor_type="LINE">button_text</field>
+				<field type="Price Menu: Button Link" editor_type="LINK">button_link>url</field>
+			</fields-in-item>
+		</widget>
+		<widget name="elementskit-team-slider">
+			<conditions>
+				<condition key="widgetType">elementskit-team-slider</condition>
+			</conditions>
+			<fields-in-item items_of="ekit_team_members">
+				<field type="Team Carousel Slider: Member Name" editor_type="LINE">name</field>
+				<field type="Team Carousel Slider: Member Position" editor_type="LINE">position</field>
+				<field type="Team Carousel Slider: About Member" editor_type="AREA">short_description</field>
+				<field type="Team Carousel Slider: Phone" editor_type="LINE">popup_phone</field>
+				<field type="Team Carousel Slider: Email" editor_type="LINE">popup_email</field>
+				<field type="Team Carousel Slider: About Member" editor_type="AREA">popup_description</field>
+				<field type="Team Carousel Slider: " editor_type="LINK">link_0>url</field>
+				<field type="Team Carousel Slider: " editor_type="LINK">link_1>url</field>
+				<field type="Team Carousel Slider: " editor_type="LINK">link_2>url</field>
+				<field type="Team Carousel Slider: " editor_type="LINK">link_3>url</field>
+				<field type="Team Carousel Slider: " editor_type="LINK">link_4>url</field>
+			</fields-in-item>
+		</widget>
+	</elementor-widgets>
+</wpml-config>

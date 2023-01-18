@@ -63,9 +63,11 @@ class ResourceCaster
 
     public static function castMysqlLink($h, array $a, Stub $stub, $isNested)
     {
+		// phpcs:disable PHPCompatibility.Extensions.RemovedExtensions
         $a['host'] = mysql_get_host_info($h);
         $a['protocol'] = mysql_get_proto_info($h);
         $a['server'] = mysql_get_server_info($h);
+		// phpcs:enable PHPCompatibility.Extensions.RemovedExtensions
 
         return $a;
     }

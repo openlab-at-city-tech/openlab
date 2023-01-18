@@ -6,7 +6,7 @@ class P2P_Directed_Connection_Type {
 	protected $direction;
 
 	function __construct( $ctype, $direction ) {
-		$this->ctype = $ctype;
+		$this->ctype     = $ctype;
 		$this->direction = $direction;
 	}
 
@@ -36,16 +36,16 @@ class P2P_Directed_Connection_Type {
 
 	public function get( $side, $field ) {
 		static $map = array(
-			'current' => array(
-				'to' => 'to',
+			'current'  => array(
+				'to'   => 'to',
 				'from' => 'from',
-				'any' => 'from'
+				'any'  => 'from',
 			),
 			'opposite' => array(
-				'to' => 'from',
+				'to'   => 'from',
 				'from' => 'to',
-				'any' => 'to'
-			)
+				'any'  => 'to',
+			),
 		);
 
 		return $this->ctype->get_field( $field, $map[ $side ][ $this->direction ] );
@@ -54,21 +54,24 @@ class P2P_Directed_Connection_Type {
 	private function abstract_query( $qv, $which, $output = 'abstract' ) {
 		$side = $this->get( $which, 'side' );
 
-		$qv = $this->get_final_qv( $qv, $which );
+		$qv    = $this->get_final_qv( $qv, $which );
 		$query = $side->do_query( $qv );
 
-		if ( 'raw' == $output )
+		if ( 'raw' == $output ) {
 			return $query;
+		}
 
 		return $side->get_list( $query );
 	}
 
 	protected function recognize_any( $item, $which = 'current' ) {
-		if ( 'any' == $item )
-			return new P2P_Item_Any;
+		if ( 'any' == $item ) {
+			return new P2P_Item_Any();
+		}
 
-		if ( is_a( $item, 'P2P_Item_Any' ) )
+		if ( is_a( $item, 'P2P_Item_Any' ) ) {
 			return $item;
+		}
 
 		return $this->recognize( $item, $which );
 	}
@@ -92,14 +95,14 @@ class P2P_Directed_Connection_Type {
 	 * @return bool|object False on failure; A WP_Query instance on success.
 	 */
 	public function get_related( $item, $extra_qv = array(), $output = 'raw' ) {
-		$extra_qv['fields'] = 'ids';
+		$extra_qv['fields']       = 'ids';
 		$extra_qv['p2p:per_page'] = -1;
 
 		$connected = $this->get_connected( $item, $extra_qv, 'abstract' );
 
 		$additional_qv = array(
-			'p2p:exclude' => _p2p_normalize( $item ),
-			'p2p:per_page' => -1
+			'p2p:exclude'  => _p2p_normalize( $item ),
+			'p2p:per_page' => -1,
 		);
 
 		return $this->flip_direction()->get_connected( $connected->items, $additional_qv, $output );
@@ -114,25 +117,31 @@ class P2P_Directed_Connection_Type {
 	 * @return object
 	 */
 	public function get_connected( $item, $extra_qv = array(), $output = 'raw' ) {
-		$args = array_merge( $extra_qv, array(
-			'connected_type' => $this->name,
-			'connected_direction' => $this->direction,
-			'connected_items' => $item
-		) );
+		$args = array_merge(
+			$extra_qv,
+			array(
+				'connected_type'      => $this->name,
+				'connected_direction' => $this->direction,
+				'connected_items'     => $item,
+			)
+		);
 
 		return $this->abstract_query( $args, 'opposite', $output );
 	}
 
 	public function get_orderby_key() {
-		if ( !$this->sortable || 'any' == $this->direction )
+		if ( ! $this->sortable || 'any' == $this->direction ) {
 			return false;
+		}
 
-		if ( 'any' == $this->sortable || $this->direction == $this->sortable )
+		if ( 'any' == $this->sortable || $this->direction == $this->sortable ) {
 			return '_order_' . $this->direction;
+		}
 
 		// Back-compat
-		if ( 'from' == $this->direction )
+		if ( 'from' == $this->direction ) {
 			return $this->sortable;
+		}
 
 		return false;
 	}
@@ -159,13 +168,13 @@ class P2P_Directed_Connection_Type {
 
 		if ( 'one' == $this->get( 'current', 'cardinality' ) ) {
 			$to_check = 'any';
-		} elseif ( !$this->duplicate_connections ) {
+		} elseif ( ! $this->duplicate_connections ) {
 			$to_check = $item;
 		} else {
 			return $to_exclude;
 		}
 
-		$extra_qv['fields'] = 'ids';
+		$extra_qv['fields']       = 'ids';
 		$extra_qv['p2p:per_page'] = -1;
 
 		$already_connected = $this->get_connected( $to_check, $extra_qv, 'abstract' )->items;
@@ -186,34 +195,42 @@ class P2P_Directed_Connection_Type {
 	 */
 	public function connect( $from_arg, $to_arg, $meta = array() ) {
 		$from = $this->recognize( $from_arg, 'current' );
-		if ( !$from )
+		if ( ! $from ) {
 			return new WP_Error( 'first_parameter', 'Invalid first parameter.' );
+		}
 
 		$to = $this->recognize( $to_arg, 'opposite' );
-		if ( !$to )
+		if ( ! $to ) {
 			return new WP_Error( 'second_parameter', 'Invalid second parameter.' );
+		}
 
-		if ( !$this->self_connections && $from->get_id() == $to->get_id() )
+		if ( ! $this->self_connections && $from->get_id() == $to->get_id() ) {
 			return new WP_Error( 'self_connection', 'Connection between an element and itself is not allowed.' );
+		}
 
-		if ( !$this->duplicate_connections && $this->get_p2p_id( $from, $to ) )
+		if ( ! $this->duplicate_connections && $this->get_p2p_id( $from, $to ) ) {
 			return new WP_Error( 'duplicate_connection', 'Duplicate connections are not allowed.' );
+		}
 
 		if ( 'one' == $this->get( 'opposite', 'cardinality' ) ) {
-			if ( $this->has_connections( $from ) )
+			if ( $this->has_connections( $from ) ) {
 				return new WP_Error( 'cardinality_opposite', 'Cardinality problem (opposite).' );
+			}
 		}
 
 		if ( 'one' == $this->get( 'current', 'cardinality' ) ) {
-			if ( $this->flip_direction()->has_connections( $to ) )
+			if ( $this->flip_direction()->has_connections( $to ) ) {
 				return new WP_Error( 'cardinality_current', 'Cardinality problem (current).' );
+			}
 		}
 
-		$p2p_id = $this->create_connection( array(
-			'from' => $from,
-			'to' => $to,
-			'meta' => array_merge( $meta, $this->data )
-		) );
+		$p2p_id = $this->create_connection(
+			array(
+				'from' => $from,
+				'to'   => $to,
+				'meta' => array_merge( $meta, $this->data ),
+			)
+		);
 
 		// Store additional default values
 		foreach ( $this->fields as $key => $args ) {
@@ -231,15 +248,17 @@ class P2P_Directed_Connection_Type {
 
 		$connections = $this->get_connected( $item, $extra_qv, 'abstract' );
 
-		return !empty( $connections->items );
+		return ! empty( $connections->items );
 	}
 
 	protected function get_default( $args, $p2p_id ) {
-		if ( isset( $args['default_cb'] ) )
+		if ( isset( $args['default_cb'] ) ) {
 			return call_user_func( $args['default_cb'], p2p_get_connection( $p2p_id ), $this->direction );
+		}
 
-		if ( !isset( $args['default'] ) )
+		if ( ! isset( $args['default'] ) ) {
 			return null;
+		}
 
 		return $args['default'];
 	}
@@ -254,22 +273,28 @@ class P2P_Directed_Connection_Type {
 	 */
 	public function disconnect( $from_arg, $to_arg ) {
 		$from = $this->recognize( $from_arg, 'current' );
-		if ( !$from )
+		if ( ! $from ) {
 			return new WP_Error( 'first_parameter', 'Invalid first parameter.' );
+		}
 
 		$to = $this->recognize_any( $to_arg, 'opposite' );
-		if ( !$to )
+		if ( ! $to ) {
 			return new WP_Error( 'second_parameter', 'Invalid second parameter.' );
+		}
 
 		return $this->delete_connections( compact( 'from', 'to' ) );
 	}
 
 	public function get_p2p_id( $from, $to ) {
-		return _p2p_first( $this->get_connections( array(
-			'from' => $from,
-			'to' => $to,
-			'fields' => 'p2p_id'
-		) ) );
+		return _p2p_first(
+			$this->get_connections(
+				array(
+					'from'   => $from,
+					'to'     => $to,
+					'fields' => 'p2p_id',
+				)
+			)
+		);
 	}
 
 	/**
@@ -281,8 +306,9 @@ class P2P_Directed_Connection_Type {
 		$args['direction'] = $this->direction;
 
 		foreach ( array( 'from', 'to' ) as $key ) {
-			if ( isset( $args[ $key ] ) && is_a( $args[ $key ], 'P2P_Item_Any' ) )
+			if ( isset( $args[ $key ] ) && is_a( $args[ $key ], 'P2P_Item_Any' ) ) {
 				$args[ $key ] = 'any';
+			}
 		}
 
 		return call_user_func( 'p2p_' . $method, $this->name, $args );

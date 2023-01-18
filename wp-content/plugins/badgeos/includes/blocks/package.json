@@ -13,8 +13,9 @@
     "babel-loader": "^7.1.1",
     "babel-plugin-transform-react-jsx": "^6.24.1",
     "babel-preset-env": "^1.6.0",
-    "cgb-scripts": "1.22.0",
+    "cgb-scripts": "^1.22.0",
     "cross-env": "^5.0.1",
+    "node-sass": "^4.14.1",
     "react-select": "^2.0.0",
     "server-side-render-resource": "^1.1.0",
     "webpack": "^3.1.0"

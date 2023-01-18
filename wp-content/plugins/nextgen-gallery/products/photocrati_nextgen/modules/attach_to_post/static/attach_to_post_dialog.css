@@ -1,3 +1,8 @@
+@font-face {
+    font-family: 'Lato';
+    src: url('../../nextgen_admin/static/Lato-Regular.ttf') format('truetype')
+}
+
 /* Thickbox-based IGW Rules */
 
 #TB_window.ngg_tb_window {
@@ -168,7 +173,7 @@ div[aria-label="Block: Classic"] .nggPlaceholder h3 {
     color: black !important;
     text-transform: uppercase;
     font-size: 21px;
-    font-family: Lato, sans-serif !important;
+    font-family: "Lato", sans-serif !important;
     font-weight: 700 !important;
     letter-spacing: 3px !important;
     margin-bottom: 0;
@@ -184,7 +189,7 @@ div[aria-label="Block: Classic"] .nggPlaceholderButton {
     display: inline-block !important;
     font-size: 12px;
     font-weight: bold;
-    font-family: Lato, sans-serif !important;
+    font-family: "Lato", sans-serif !important;
     height: 36px !important;
     line-height: 36px !important;
     letter-spacing: 1.2px;

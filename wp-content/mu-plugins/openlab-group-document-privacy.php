@@ -3,6 +3,10 @@
 define( 'BP_GROUP_DOCUMENTS_SECURE_PATH', ABSPATH . '/wp-content/uploads/group-documents/' );
 
 function cac_filter_doc_url( $doc_url, $group_id, $file ) {
+	if( 'link' == openlab_get_document_type( $file ) ) {
+		return $file;
+	}
+
 	$url = bp_get_root_domain() . '?get_group_doc=' . $group_id . '/' . $file;
 	return $url;
 }

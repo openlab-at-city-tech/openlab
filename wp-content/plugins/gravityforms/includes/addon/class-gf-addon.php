@@ -10,6 +10,8 @@ if ( ! class_exists( 'GFForms' ) ) {
 
 use Gravity_Forms\Gravity_Forms\Settings\Settings;
 use Gravity_Forms\Gravity_Forms\TranslationsPress_Updater;
+use Gravity_Forms\Gravity_Forms\Save_Form\GF_Save_Form_Service_Provider;
+use Gravity_Forms\Gravity_Forms\Save_Form\GF_Save_Form_Helper;
 
 /**
  * Class GFAddOn
@@ -123,7 +125,25 @@ abstract class GFAddOn {
 	 *
 	 * @var array
 	 */
-	private static $results_addons = [];
+	private static $results_addons = array();
+
+	/**
+	 * stores a list of the scripts that will be enqueued after passing _can_enqueue_script.
+	 *
+	 * @since 2.6
+	 *
+	 * @var array
+	 */
+	private static $registered_scripts = array();
+
+	/**
+	 * stores a list of the styles that will be enqueued after passing _can_enqueue_script.
+	 *
+	 * @since 2.6
+	 *
+	 * @var array
+	 */
+	private static $registered_styles = array();
 
 	/**
 	 * Class constructor which hooks the instance into the WordPress init action
@@ -247,6 +267,12 @@ abstract class GFAddOn {
 		// Get minimum requirements state.
 		$meets_requirements = $this->meets_minimum_requirements();
 
+		// If saving form via AJAX initialize add-ons admin to catch any actions hooked to the after form save actions.
+		$save_form_helper = GFForms::get_service_container()->get( GF_Save_Form_Service_Provider::GF_SAVE_FROM_HELPER );
+		if ( RG_CURRENT_PAGE == 'admin-ajax.php' && $save_form_helper->is_ajax_save_action() ) {
+			$this->init_admin();
+		}
+
 		if ( RG_CURRENT_PAGE == 'admin-ajax.php' ) {
 
 			//If gravity forms is supported, initialize AJAX
@@ -359,6 +385,32 @@ abstract class GFAddOn {
 	 */
 	public static function get_results_addon() {
 		return self::$results_addons;
+	}
+
+	/**
+	 * Returns a list of the registered scripts that will be enqueued.
+	 *
+	 * This contains the scripts that pass _can_enqueue_script.
+	 *
+	 * @since 2.6
+	 *
+	 * @return array
+	 */
+	public static function get_registered_scripts() {
+		return self::$registered_scripts;
+	}
+
+	/**
+	 * Returns a list of the registered styles.
+	 *
+	 * This contains the styles that pass _can_enqueue_script.
+	 *
+	 * @since 2.6
+	 *
+	 * @return array
+	 */
+	public static function get_registered_styles() {
+		return self::$registered_styles;
 	}
 
 	/**
@@ -814,6 +866,13 @@ abstract class GFAddOn {
 	 *                // post - Specifies a set of post ($_POST) values.
 	 *                // If all specified posted values match the current request, the script will be enqueued
 	 *                array( 'post' => 'posted_field=val' )
+	 *
+	 *                // If a nested condition is used, it will be considered a "match" if ALL sub-conditions match.
+	 *                // In the following example, the condition will match if you are on the plugin settings page AND on the signature tab
+	 *                array(
+	 *                    'admin_page' => array( 'plugin_settings' )
+	 *                    'tab'        => 'signature',
+	 *                ),
 	 *            )
 	 *        ),
 	 *        array(
@@ -830,7 +889,7 @@ abstract class GFAddOn {
 	 *            "enqueue"  => array(
 	 *                // field_types - Specifies one or more field types that requires this script.
 	 *                // The script will only be enqueued if the current form has a field of any of the specified field types.
-	 *                // Only applies when a current form is available.
+	 *                // Only applies when a current form is available (website front end, but also in the form editor, preview, entry details, results, etc...)
 	 *                array( 'field_types' => array( 'signature' ) )
 	 *            )
 	 *        )
@@ -925,6 +984,7 @@ abstract class GFAddOn {
 			if ( isset( $script['enqueue'] ) && $this->_can_enqueue_script( $script['enqueue'], $form, $is_ajax ) ) {
 				$this->add_no_conflict_scripts( array( $script['handle'] ) );
 				wp_enqueue_script( $script['handle'] );
+				self::$registered_scripts[] = $script;
 				if ( isset( $script['strings'] ) ) {
 					wp_localize_script( $script['handle'], $script['handle'] . '_strings', $script['strings'] );
 				}
@@ -944,6 +1004,7 @@ abstract class GFAddOn {
 			$media   = isset( $style['media'] ) ? $style['media'] : 'all';
 			wp_register_style( $style['handle'], $src, $deps, $version, $media );
 			if ( $this->_can_enqueue_script( $style['enqueue'], $form, $is_ajax ) ) {
+				self::$registered_styles[] = $style;
 				$this->add_no_conflict_styles( array( $style['handle'] ) );
 				if ( $this->is_preview() ) {
 					$this->_preview_styles[] = $style['handle'];
@@ -954,6 +1015,7 @@ abstract class GFAddOn {
 				}
 			}
 		}
+
 	}
 
 	/**
@@ -4391,11 +4453,12 @@ abstract class GFAddOn {
 	public function add_form_settings_menu( $tabs, $form_id ) {
 
 		$tabs[] = array(
-			'name'         => $this->_slug,
-			'label'        => $this->get_short_title(),
-			'query'        => array( 'fid' => null ),
-			'capabilities' => $this->_capabilities_form_settings,
-			'icon'         => $this->get_menu_icon(),
+			'name'           => $this->_slug,
+			'label'          => $this->get_short_title(),
+			'query'          => array( 'fid' => null ),
+			'capabilities'   => $this->_capabilities_form_settings,
+			'icon'           => $this->get_menu_icon(),
+			'icon_namespace' => $this->get_icon_namespace(),
 		);
 
 		return $tabs;
@@ -4427,11 +4490,12 @@ abstract class GFAddOn {
 		// Register settings page.
 		GFForms::add_settings_page(
 			array(
-				'name'      => $this->_slug,
-				'tab_label' => $this->get_short_title(),
-				'icon'      => $this->get_menu_icon(),
-				'title'     => $this->plugin_settings_title(),
-				'handler'   => array( $this, 'plugin_settings_page' ),
+				'name'           => $this->_slug,
+				'tab_label'      => $this->get_short_title(),
+				'icon'           => $this->get_menu_icon(),
+				'icon_namespace' => $this->get_icon_namespace(),
+				'title'          => $this->plugin_settings_title(),
+				'handler'        => array( $this, 'plugin_settings_page' ),
 			)
 		);
 
@@ -5000,7 +5064,10 @@ abstract class GFAddOn {
 		if ( ! $this->current_user_can_uninstall() ) {
 			return;
 		}
-		$icon        = array( 'icon' => $this->get_menu_icon() );
+		$icon        = array(
+			'icon'           => $this->get_menu_icon(),
+			'icon_namespace' => $this->get_icon_namespace(),
+		);
 		$icon_markup = GFCommon::get_icon_markup( $icon, 'dashicon-admin-generic' );
 
 		// Show different panel styles for the uninstall page and the individual settings pages.
@@ -5066,7 +5133,10 @@ abstract class GFAddOn {
 		if ( ! $this->current_user_can_uninstall() ) {
 			return;
 		}
-		$icon        = array( 'icon' => $this->get_menu_icon() );
+		$icon        = array(
+			'icon'           => $this->get_menu_icon(),
+			'icon_namespace' => $this->get_icon_namespace(),
+		);
 		$icon_markup = GFCommon::get_icon_markup( $icon, 'dashicon-admin-generic' );
 		$url         = add_query_arg( array( 'subview' => $this->get_slug() ), admin_url( 'admin.php?page=gf_settings' ) );
 		?>
@@ -5661,7 +5731,7 @@ abstract class GFAddOn {
 			$full_path = $this->_full_path;
 		}
 
-		return plugins_url( null, $full_path );
+		return plugins_url( '', $full_path );
 	}
 
 	/**
@@ -5670,7 +5740,7 @@ abstract class GFAddOn {
 	 * @return string
 	 */
 	final public static function get_gfaddon_base_url() {
-		return plugins_url( null, __FILE__ );
+		return plugins_url( '', __FILE__ );
 	}
 
 	/**
@@ -5751,13 +5821,7 @@ abstract class GFAddOn {
 			return true;
 		}
 
-		if ( class_exists( 'GFCommon' ) ) {
-			$is_correct_version = version_compare( GFCommon::$version, $min_gravityforms_version, '>=' );
-
-			return $is_correct_version;
-		} else {
-			return false;
-		}
+		return version_compare( GFForms::$version, $min_gravityforms_version, '>=' );
 	}
 
 	/**
@@ -5775,9 +5839,21 @@ abstract class GFAddOn {
 	 * @return string
 	 */
 	public function get_menu_icon() {
-
 		return 'gform-icon--cog';
+	}
 
+	/**
+	 * Return the plugin's icon namespace.
+	 * For implementation of a custom font icon kit.
+	 * Used by GFCommon::get_icon_markup() and assumes your font icon kit
+	 * is setup in a similar fashion to Gravity Forms (`class="gform-icon gform-icon--icon-name"`).
+	 * The namespace declared here should not include the `-icon`.
+	 *
+	 * @return string|null
+	 * @since 2.6
+	 */
+	public function get_icon_namespace() {
+		return null;
 	}
 
 	/**
@@ -5828,8 +5904,14 @@ abstract class GFAddOn {
 	 * Returns TRUE if the current page is the form editor page. Otherwise, returns FALSE
 	 */
 	public function is_form_editor() {
-
-		if ( rgget( 'page' ) == 'gf_edit_forms' && ! rgempty( 'id', $_GET ) && rgempty( 'view', $_GET ) ) {
+		/**
+		* @var Gravity_Forms\Gravity_Forms\Save_Form\GF_Save_Form_Helper $save_form_helper
+		*/
+		$save_form_helper = GFForms::get_service_container()->get( GF_Save_Form_Service_Provider::GF_SAVE_FROM_HELPER );
+		if (
+				rgget( 'page' ) == 'gf_edit_forms' && ! rgempty( 'id', $_GET ) && rgempty( 'view', $_GET )
+				|| $save_form_helper->is_ajax_save_action()
+		) {
 			return true;
 		}
 

@@ -17,17 +17,21 @@ class CMB2_Type_Wysiwyg extends CMB2_Type_Textarea {
 
 	/**
 	 * Handles outputting a 'wysiwyg' element
+	 *
 	 * @since  1.1.0
 	 * @return string Form wysiwyg element
 	 */
 	public function render( $args = array() ) {
 		$field = $this->field;
-		$a = $this->parse_args( 'wysiwyg', array(
-			'id'      => $this->_id(),
-			'value'   => $field->escaped_value( 'stripslashes' ),
-			'desc'    => $this->_desc( true ),
-			'options' => $field->options(),
-		) );
+		$a     = $this->parse_args(
+			'wysiwyg',
+			array(
+				'id'      => $this->_id(),
+				'value'   => $field->escaped_value( 'stripslashes' ),
+				'desc'    => $this->_desc( true ),
+				'options' => $field->options(),
+			)
+		);
 
 		if ( ! $field->group ) {
 			return $this->rendered( $this->get_wp_editor( $a ) . $a['desc'] );
@@ -42,13 +46,18 @@ class CMB2_Type_Wysiwyg extends CMB2_Type_Textarea {
 		add_action( is_admin() ? 'admin_footer' : 'wp_footer', array( $this, 'add_wysiwyg_template_for_group' ) );
 
 		return $this->rendered(
-			sprintf( '<div class="cmb2-wysiwyg-wrap">%s', parent::render( array(
-				'class'         => 'cmb2_textarea cmb2-wysiwyg-placeholder',
-				'data-groupid'  => $field->group->id(),
-				'data-iterator' => $field->group->index,
-				'data-fieldid'  => $field->id( true ),
-				'desc'          => '</div>' . $this->_desc( true ),
-			) ) )
+			sprintf(
+				'<div class="cmb2-wysiwyg-wrap">%s',
+				parent::render(
+					array(
+						'class'         => 'cmb2_textarea cmb2-wysiwyg-placeholder',
+						'data-groupid'  => $field->group->id(),
+						'data-iterator' => $field->group->index,
+						'data-fieldid'  => $field->id( true ),
+						'desc'          => '</div>' . $this->_desc( true ),
+					)
+				)
+			)
 		);
 	}
 
@@ -59,29 +68,35 @@ class CMB2_Type_Wysiwyg extends CMB2_Type_Textarea {
 	}
 
 	public function add_wysiwyg_template_for_group() {
-		$group_id = $this->field->group->id();
-		$field_id = $this->field->id( true );
-		$hash     = $this->field->hash_id();
-		$options  = $this->field->options();
+		$group_id                 = $this->field->group->id();
+		$field_id                 = $this->field->id( true );
+		$hash                     = $this->field->hash_id();
+		$options                  = $this->field->options();
 		$options['textarea_name'] = 'cmb2_n_' . $group_id . $field_id;
 
 		// Initate the editor with special id/value/name so we can retrieve the options in JS.
-		$editor = $this->get_wp_editor( array(
-			'value'   => 'cmb2_v_' . $group_id . $field_id,
-			'id'      => 'cmb2_i_' . $group_id . $field_id,
-			'options' => $options,
-		) );
+		$editor = $this->get_wp_editor(
+			array(
+				'value'   => 'cmb2_v_' . $group_id . $field_id,
+				'id'      => 'cmb2_i_' . $group_id . $field_id,
+				'options' => $options,
+			)
+		);
 
 		// Then replace the special id/value/name with underscore placeholders.
-		$editor = str_replace( array(
-			'cmb2_n_' . $group_id . $field_id,
-			'cmb2_v_' . $group_id . $field_id,
-			'cmb2_i_' . $group_id . $field_id,
-			), array(
-			'{{ data.name }}',
-			'{{{ data.value }}}',
-			'{{ data.id }}',
-		), $editor );
+		$editor = str_replace(
+			array(
+				'cmb2_n_' . $group_id . $field_id,
+				'cmb2_v_' . $group_id . $field_id,
+				'cmb2_i_' . $group_id . $field_id,
+			),
+			array(
+				'{{ data.name }}',
+				'{{{ data.value }}}',
+				'{{ data.id }}',
+			),
+			$editor
+		);
 
 		// And put the editor instance in a JS template wrapper.
 		echo '<script type="text/template" id="tmpl-cmb2-wysiwyg-' . $group_id . '-' . $field_id . '">';

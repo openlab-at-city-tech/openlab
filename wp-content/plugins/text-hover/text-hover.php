@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: Text Hover
- * Version:     4.1
+ * Version:     4.2
  * Plugin URI:  https://coffee2code.com/wp-plugins/text-hover/
  * Author:      Scott Reilly
  * Author URI:  https://coffee2code.com/
@@ -10,7 +10,7 @@
  * Text Domain: text-hover
  * Description: Add hover text (aka tooltips) to content in posts. Handy for providing explanations of names, terms, phrases, abbreviations, and acronyms.
  *
- * Compatible with WordPress 4.9+ through 5.7+.
+ * Compatible with WordPress 4.9+ through 5.9+.
  *
  * =>> Read the accompanying readme.txt file for instructions and documentation.
  * =>> Also, visit the plugin's homepage for additional information and updates.
@@ -18,11 +18,11 @@
  *
  * @package Text_Hover
  * @author  Scott Reilly
- * @version 4.1
+ * @version 4.2
  */
 
 /*
-	Copyright (c) 2007-2021 by Scott Reilly (aka coffee2code)
+	Copyright (c) 2007-2022 by Scott Reilly (aka coffee2code)
 
 	This program is free software; you can redistribute it and/or
 	modify it under the terms of the GNU General Public License
@@ -79,7 +79,7 @@ final class c2c_TextHover extends c2c_Plugin_064 {
 	 * Constructor.
 	 */
 	protected function __construct() {
-		parent::__construct( '4.1', 'text-hover', 'c2c', __FILE__, array() );
+		parent::__construct( '4.2', 'text-hover', 'c2c', __FILE__, array() );
 		register_activation_hook( __FILE__, array( __CLASS__, 'activation' ) );
 
 		return self::$instance = $this;
@@ -132,7 +132,6 @@ final class c2c_TextHover extends c2c_Plugin_064 {
 				'default'          => false,
 				'label'            => __( 'Only text hover once per term per post?', 'text-hover' ),
 				'help'             => __( 'If checked, then each term will only have a text hover occur for the first instance it appears in a post.', 'text-hover' ),
-				'more_help'        => __( 'Note: this setting currently does not apply if the term contains a multibyte character.', 'text-hover' ),
 			),
 			'case_sensitive' => array(
 				'input'            => 'checkbox',
@@ -152,12 +151,15 @@ final class c2c_TextHover extends c2c_Plugin_064 {
 				'datatype'         => 'hash',
 				'default'          => 'early',
 				'options'          => array(
-					'early' => __( 'Early', 'text-hover' ),
-					'late'  => __( 'Late', 'text-hover' )
+					'early' => __( 'early', 'text-hover' ),
+					'late'  => __( 'late', 'text-hover' )
 				),
 				'label'            => __( 'When to process text?', 'text-hover' ),
 				/* translators: %s: The name of a filter provided by the plugin. */
-				'help'             => sprintf( __( "Text hover replacements can happen 'early' (before most other text processing for posts) or 'late' (after most other text processing for posts). By default the plugin handles text early, but depending on the replacements you've defined and the plugins you're using, you can eliminate certain conflicts by switching to 'late'. Finer-grained control can be achieved via the <code>%s</code> filter.", 'text-hover' ), 'c2c_text_hover_filter_priority' ),
+				'help'             => sprintf(
+					__( "Text hover replacements can happen 'early' (before most other text processing for posts) or 'late' (after most other text processing for posts). By default the plugin handles text early, but depending on the replacements you've defined and the plugins you're using, you can eliminate certain conflicts by switching to 'late'. Finer-grained control can be achieved via the %s filter.", 'text-hover' ),
+					'<code>c2c_text_hover_filter_priority</code>'
+				),
 			),
 			'more_filters' => array(
 				'input'            => 'inline_textarea',
@@ -179,7 +181,7 @@ final class c2c_TextHover extends c2c_Plugin_064 {
 	 *
 	 * The values do not take into account any user-specified filters from the
 	 * more_filters setting nor any filtering. A value returned here does not
-	 * necessary mean it'll get processed for text hover.
+	 * necessarily mean it'll get processed for text hover.
 	 *
 	 * Currently supported third-party plugins:
 	 *
@@ -288,6 +290,45 @@ final class c2c_TextHover extends c2c_Plugin_064 {
 
 		add_filter( 'get_comment_text',    array( $this, 'text_hover_comment_text' ), 11 );
 		add_filter( 'get_comment_excerpt', array( $this, 'text_hover_comment_text' ), 11 );
+
+		add_filter( $this->get_hook( 'before_update_option' ), array( $this, 'sanitize_text_to_hover' ), 1 );
+	}
+
+	/**
+	 * Sanitizes the 'text_to_hover' setting to only include very basic
+	 * markup.
+	 *
+	 * @param array $options Plugin settings.
+	 * @return array
+	 */
+	public function sanitize_text_to_hover( $options ) {
+		if ( empty( $options['text_to_hover'] ) ) {
+			return $options;
+		}
+
+		$allowed_tags = array(
+			'a'             => array(
+				'href'  => array(),
+				'title' => array(),
+			),
+			'b'             => array(),
+			'cite'          => array(),
+			'code'          => array(),
+			'em'            => array(),
+			'i'             => array(),
+			'q'             => array(
+				'cite'  => array(),
+			),
+			's'             => array(),
+			'strikethrough' => array(),
+			'strong'        => array(),
+		);
+
+		foreach ( $options['text_to_hover'] as $key => $val ) {
+			$options['text_to_hover'][ $key ] = wp_kses( $val, $allowed_tags );
+		}
+
+		return $options;
 	}
 
 	/**

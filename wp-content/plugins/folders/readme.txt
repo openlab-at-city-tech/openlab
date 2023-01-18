@@ -2,8 +2,8 @@
 Contributors: galdub, tomeraharon, premio
 Tags: folder, folders, replace media, pages folders, media library, posts folders, media folders, media replace, file manager, directories, media library folders, media library folder
 Requires at least: 3.0.0
-Tested up to: 5.9
-Stable tag: 2.7.5
+Tested up to: 6.1
+Stable tag: 2.8.8
 Plugin URI: https://premio.io/downloads/folders/
 
 Folders is a WordPress plugin that will help you quickly create unlimited folders and organize and manage your Media Library files, Pages & Posts in folders
@@ -14,9 +14,9 @@ NEW! Create <strong>Unlimited Folders</strong> In The Free Version 🎉
 
 Folders is a WordPress plugin that enables users to quickly organize all of their Pages, Posts, and Media files in folders. You can easily drag and drop items into directories and change the folders tree view (hierarchy) as you wish. Looking for some awesome pro features? Check out <a href="https://premio.io/downloads/folders" target="_blank" title="Folders pro plans"><strong>Folders Pro Plans</strong></a>.
 
-[youtube  https://www.youtube.com/watch?v=GKq5jvuoRY0]
+[youtube  https://www.youtube.com/watch?v=1SqDey4idlQ]
 
-= How Folders Plugin Can Help You =
+= 💪 How Folders Plugin Can Help You =
 
 There are several ways professionals are using the Folders file manager plugin to organize their WordPress content:
 
@@ -28,24 +28,25 @@ There are several ways professionals are using the Folders file manager plugin t
 * Media replace: replace media files with other files. Whenever you replace media, the change will reflect throughout your website on all your pages, posts, etc.
 
 
-<strong>Note:</strong> adding a page/post/image into a folder will not change its URL. Folders plugin creates virtual folders, it doesn't create actual folders in your server or WordPress installation.
+<strong>Note:</strong> adding a page/post/image into a folder will not change its URL. The folders plugin creates virtual folders, it doesn't create actual folders in your server or WordPress installation.
 
-= Live Demo =
+= ▶️ Live Demo =
 A live demo for the Folders plugin is available at <a href="https://demo.premio.io/folders/?utm_source=wordpressorg" target="_blank" title="Premio.io demo site">Premio's demo site</a>.
 
-= Join the Premio community =
+= 👬Join the Premio community =
 Have any questions or feature suggestions? We'd love to hear from you. <strong><a href="https://www.facebook.com/groups/premioplugins/" target="_blank" title="Premio Facebook group">Join our Facebook group</a></strong> to share ideas and get updates about new features.
 
-= So How Does it Work? =
+= 🛠️ So How Does it Work? =
 
 It’s rather simple really – once you install the plugin, you can begin using it. If you’re a content creator, you can upload text, images, videos, and audio at the click of a button. Then you can organize everything you upload into neat folders. For instance, you can create a media folder, content folder, and image folder, then have them all organized by date. It has a drag and drop interface, making it user-friendly for everyone. It’s like having your own media library at your own disposal. You can create this media library for yourself or others – it’s perfect for website owners and content professionals!
 
-= FOLDERS PLUGIN FEATURES =
+= 🔥 FOLDERS PLUGIN FEATURES =
 
 * <strong>Create unlimited folders</strong>
 * Drag and drop pages, posts, and media library
 * New! Media replace - replace media files with other files uploaded by you
 * New! Import folders from other plugins - import folders from FileBird, Enhanced Media Library, Wicked Folders, Real Media Library, and WP Media Folder
+* New! Keyboard shortcuts ⌨️ - you can do quick actions with your folders using keyboard shortcuts. For example, you can now create new folders, rename folders, duplicate a folder, reorder folders, and much more  - all from your keyboard!
 * You can also move media library files, pages, posts, or any custom post to folders without using our drag and drop feature. Whenever you select any element or select some elements in bulk, you can move it to a folder using our dropdown menu
 * NEW! - Undo action - undo your last action in Folders with the click of a button
 * Select specific folders when you add media to your pages, posts or any other post type
@@ -66,19 +67,20 @@ It’s rather simple really – once you install the plugin, you can begin using
 * Add and remove folders menu from pages, posts, and media
 * Minimize the folders area if you need extra space
 
-= FOLDERS PLUGIN PRO FEATURES 🚀 =
+= 🚀 FOLDERS PLUGIN PRO FEATURES =
 * <a href="https://premio.io/downloads/folders?utm_source=wporg" target="_blank" title="Folders pro plans"><strong>Upgrade to pro</strong></a> to get unlimited sub-folders :)
-* Create folders for each post type - use folders with other plugins that have custom post type (e.g. Elementor templates, WooCommerce & more)
-* NEW! 🎉 Dynamic Folders - automatically filter posts, pages, custom posts, media library files based on author, date, file types & more
-* Download any media library folder as ZIP: you can download any media library folder as a zip file. Use this feature to organize your website files and download them locally
+* Create folders for each post type - use folders with other plugins that have custom post types (e.g. Elementor templates, WooCommerce & more)
+* New! 🎉 Dynamic Folders - automatically filter posts, pages, custom posts, media library files based on author, date, file types & more
+* New! 🎉 Delete unused media library files - using the Folders plugin, you can now search for unused media files that take up unnecessary space on your server, and clean them with just a few clicks. You'll see your unused media library sorted from the biggest files to the smallest media library files.
+* Download any media library folder as a ZIP: you can download any media library folder as a zip file. Use this feature to organize your website files and download them locally
 * Sticky folders - you can pin your folders to the upper part of the folders navigation area. Use the sticky folders feature to make your most important folders accessible at all times
 * Add stars to important directories
-* NEW! Upload folders from your PC - upload your local computer folders, and all its structure (including subfolders and its content) will be recreated on your WordPress website
+* NEW! Upload folders from your PC - upload your local computer folders, and all its structure (including subfolders and their content) will be recreated on your WordPress website
 * Lock folders - locked folders stay pinned, and cannot be dragged or deleted (you can lock all folders/unlock all folders too)
-* NEW! Auto rename file based on title - replace the actual file name of media files with the title from the WordPress editor
+* NEW! Auto rename file based on the title - replace the actual file name of media files with the title from the WordPress editor
 * NEW! Advanced Media Replacements - replace media files when uploading and update all references in the database, change dates, organize by newer date & more without hurting your SEO
 * Duplicate folders - duplicate an existing folder with all its content
-* Sort your folders based on creation date
+* Sort your folders based on the creation date
 * Upload directly to a media library folder - you can easily upload images or any other kind of files to a specific folder
 * Select a default folder for your media library, posts, pages, and custom posts - you can select the folder that will load by default when you open your media library, pages, posts, and custom posts. For example, you can show all the unassigned files whenever you open the media library
 * Create media library folders directly when you upload new media files
@@ -87,19 +89,20 @@ It’s rather simple really – once you install the plugin, you can begin using
 * Customize the look and feel of your folders. Change the colors, font, and size of your media folder, pages, posts, and custom posts folders
 * Replace media for all file types - Replace any kind of files while uploading including PDF/SVG/DOCS/XLSX/etc
 * Compare the new media library file with the old file when you replace media - compare old media library files with the new one and compare size, dimension & more
-* NEW! Folders user restriction - when enabled, users will only be able to access their folders and media. Only Admin users will be able to view all folders (can be enabled for the Dynamic Folders as well)
-* NEW! Move files to trash by default before deleting - when enabled, files will be moved to trash to prevent mistakes, and then you can delete permanently from the trash
+* NEW! Folders user restriction - when enabled, users will only be able to access their folders and media. Only Admin users will be able to view all folders (which can be enabled for the Dynamic Folders as well)
+* NEW! Move files to the trash by default before deleting - when enabled, files will be moved to the trash to prevent mistakes, and then you can delete them permanently from the trash
 
-= Replace media files =
+= 🔁 Replace media files =
 With the Folders plugin, you can replace media library files with other files. This feature is a life-saver whenever you need to replace a media file on all of your pages, posts, etc. When you replace a media file, the change will reflect on all of your pages, posts, and more. Check out the media replace feature in action:
 [youtube  https://www.youtube.com/watch?v=16MrxVo2EC4]
+The media replacer code was forked from Enable Media Replace
 
-= Import folders =
+= 👋 Import folders =
 You can import folders data from FileBird, Enhanced Media Library, Wicked Folders, Real Media Library, WP Media Folder, HappyFiles (Happy Files), and Mediamatic 
 
-= Here Are Some Use Cases =
+= 💻 Here Are Some Use Cases =
 
-Wondering how you can use this pages, posts, and media library folders plugin for your online business? Here’s are a few use cases:
+Wondering how you can use these pages, posts, and media library folders plugin for your online business? Here’s are a few use cases:
 
 <strong>Bloggers:</strong> Easily upload content for blogs, including text, photos, videos, and audio files. Then manage everything you upload by placing them in clearly labeled media library folders. 
 Web developers: Design websites in an organized fashion by uploading graphics, animations, site elements, and content – all packaged neatly in directories. 
@@ -113,29 +116,29 @@ Web developers: Design websites in an organized fashion by uploading graphics, a
 
 <strong>Digital Agencies:</strong> You're creating all sorts of content for your clients daily - ads, blog posts, social media content, videos, media categories, and all kind of WordPress media library files. Now, you can easily organize it all by file type, topic, campaign, or other categories using the Folders plugin.
 
-= GDPR AND PRIVACY =
+= 🔒 GDPR AND PRIVACY =
 Folders plugin is GDPR compliant:
 
 * We don’t store any visitor or user data
 * We don’t send any data to remote servers
-* Our plugin is only used to organize WordPress media library, pages, and posts
+* Our plugin is only used to organize the WordPress media library, pages, and posts
 
-The plugin is compatible with Gutenberg, Elementor website builder, Divi, Visual Composer, WPbakery, Beaver Builder, and with any WordPress theme. 
+The plugin is compatible with Gutenberg, Elementor website builder, Divi, Visual Composer, WPbakery, Beaver Builder, and any WordPress theme. 
 
 Download this plugin today for free and get unlimited folders to organize your WP content. Then unlock unlimited folders with the Pro Plan for max organization! 
 
-= Testimonials =
+= 🤗 Testimonials =
 
 > "Wow, great tool to optimize WordPress productivity<br>
-> This is such a great tool and fixes something that WordPress lacks in its media library options. I’m going to start adding this to all client WordPress sites moving forward for the ease of use and added organization. Thanks for your work!"<br><br>
+> This is such a great tool and fixes something that WordPress lacks in its media library options. I’m going to start adding this to all client WordPress sites moving forward for ease of use and added organization. Thanks for your work!"<br><br>
 > <strong>Justin Parsons, See Justin Code</strong><br>
 
 > Order your chaos!<br>
-> We have thousands of images in our library and tons of products in our online store. So I needed something to get some order in this chaos: enter Folders. The free version gives you a good start. It is immediately clear how you can get about organising your stuff. I got the upgrade almost immediately, I liked it so much. You can organise your images, pages, products and lots more. No more endless lists. Highly recommended."<br><br>
+> We have thousands of images in our library and tons of products in our online store. So I needed something to get some order in this chaos: enter Folders. The free version gives you a good start. It is immediately clear how you can get about organizing your stuff. I got the upgrade almost immediately, I liked it so much. You can organize your images, pages, products, and lots more. No more endless lists. Highly recommended."<br><br>
 > <strong>Jan-Wouter Stigter, Malta Furniture Ltd</strong><br>
 
 > "Clean, easy to work with, and support group very helpful!<br>
-> The plugin work great for organizing my media, pages, and posts. It’s clean, intuitive, and best of all, it does not slow down the loading of my media unlike other similar plugins I tried. I especially am appreciative of the willingness of the developers/support staff for input for possible improvements of their plugin and their helpfulness and quick response in solving my issues. I would definitely recommend."<br><br>
+> The plugin works great for organizing my media, pages, and posts. It’s clean, intuitive, and best of all, it does not slow down the loading of my media, unlike other similar plugins I tried. I especially am appreciative of the willingness of the developers/support staff for input for possible improvements of their plugin and their helpfulness and quick response in solving my issues. I would definitely recommend."<br><br>
 > <strong>Cynthia Corley, CC Custom Works</strong><br>
 
 == Screenshots ==
@@ -151,14 +154,14 @@ Download this plugin today for free and get unlimited folders to organize your W
 
 Step 1: Download, install and activate the Folders plugin
 
-Step 2: In the “Folder Settings” menu, select if you want Folders to appear in your media library, pages, posts or any custom post
+Step 2: In the “Folder Settings” menu, select if you want Folders to appear in your media library, pages, posts, or any custom post
 
 Step 3: Create new folders and drag & drop elements into your new folders
 
 == Frequently Asked Questions ==
 
 = Is there a folder limit? =
-No. you can create as many folderes as you wish!
+No. you can create as many folders as you wish!
 
 = Is there a time limit for the free plan? =
 No. you can use the free plan as long as you want.
@@ -178,11 +181,11 @@ No! just activate the plugin and you're good to go.
 = Can I use Folders plugin on more than 1 domain? =
 There 2 ways to do it:
 1. You can install the free Folders plugin on any website you want
-2. You can buy the Pro plan that includes licenses for 5 domains, or the Agency plan that includes licenses for 20 domains.
+2. You can buy the Pro plan that includes licenses for 5 domains, or the Agency plan that includes licenses for 50  domains (bigger plans are also availabe).
 Check out our <a href="https://premio.io/downloads/folders/" target="_blank" title="Folders plans page">plans page</a>.
 
 = How long is my paid Folders plugin license valid for? =
-Once you purchase any <a href="https://premio.io/downloads/folders/" target="_blank" title=Folders plans page">paid plan</a> of Folders, you can use it forever. Support and updates are available for 1 year. You can renew your license each year to get another year of support and updates.
+Once you purchase any <a href="https://premio.io/downloads/folders/" target="_blank" title="Folders plans page">paid plan</a> of Folders, you can use it forever. Support and updates are available for 1 year. You can renew your license each year to get another year of support and updates.
 
 = Will Folders stop working if I don’t renew my license? =
 Of course NOT! 🙂
@@ -195,6 +198,36 @@ Just follow our <a href="https://premio.io/wordpress-premio-pro-version-installa
 A live demo for the Folders plugin is available at <a href="https://demo.premio.io/folders/?utm_source=wordpressorg" target="_blank" title="Premio.io demo site">Premio's demo site</a>.
 
 == Changelog ==
+
+= 2.8.8 =
+Minor bug fixed
+
+= 2.8.7 =
+WordPress 6.1 Folders compatibility adjustments
+
+= 2.8.6 =
+- We've added a horizontal scroll to the folders view
+- Importing folders works better and faster now, the same goes for uploading folders and media library scan for used files (Pro)
+- Published/Drafts view works for specific folders too
+- Fixed some bugs
+
+= 2.8.5 =
+WPML Folders bug fixed
+
+= 2.8.4 =
+Infrastructure improvements
+
+= 2.8.3 =
+Texts changed
+
+= 2.8.2 =
+Keyboard shortcuts bugs fixed.
+
+= 2.8.1 =
+Bugs fixed
+
+= 2.8 =
+We’ve keyboard shortcuts and added the option to clean unused media library files in the Pro version. We’ve also fixed some bugs :)
 
 = 2.7.5 =
 Bugs fixed
@@ -219,7 +252,7 @@ Undo your last action and fixed some bugs and plugin conflicts
 
 = 2.6.8 =
 Unlimited folders are now available in the free version 🎉
-We've also added an option to purge all plugin's data on removal + fixed some bugs
+We've also added an option to purge all plugin data on removal + fixed some bugs
 
 = 2.6.7 =
 List view folders bulk actions bug fixed
@@ -234,7 +267,7 @@ Import folders from HappyFiles (Happy Files) and Mediamatic + fixed some bugs
 iPad bugs fixed
 
 = 2.6.3 =
-Replace media feature, import option (FileBird, Enhanced Media Library, Wicked Folders, Real Media Library, and WP Media Folder), create multiple folders at once (comma separated), option to hide Folders settings from main menu, bug fixed
+Replace media feature, import option (FileBird, Enhanced Media Library, Wicked Folders, Real Media Library, and WP Media Folder), create multiple folders at once (comma separated), option to hide Folders settings from the main menu, bug fixed
 
 = 2.6.2 =
 WordPress 5.6 compatibility + Visual composer overlapping bug fixed
@@ -291,13 +324,13 @@ Added support for non-public custom posts
 Width issue for posts, pages, and custom posts + onboarding for new users
 
 = 2.4.4 =
-From now on when you clone/edit/publish pages, posts and custom posts in a specific folder, you'll stay in that folder
+From now on when you clone/edit/publish pages, posts, and custom posts in a specific folder, you'll stay in that folder
 
 = 2.4.3 =
-Small bugs fixed including: folder filtering bugs (trash, draft etc), WooCommerce products duplicate bug, quick edit in folders, Media Library Assistant compatibility and more
+Small bugs fixed including folder filtering bugs (trash, draft etc), WooCommerce products duplicate bug, quick edit in folders, Media Library Assistant compatibility, and more
 
 = 2.4.2 =
-Added a progress bar when you upload files to the media library folders. You can now track how many files were uploaded in real time. We've also fixed a default folders bug.
+Added a progress bar when you upload files to the media library folders. You can now track how many files were uploaded in real-time. We've also fixed a default folders bug.
 
 = 2.4.1 =
 PHP 7.3 fix
@@ -318,7 +351,7 @@ Translation support change
 Added translation support
 
 = 2.3.5 =
-Folder order when adding a media library file to posts/pages fix, and infrastructure improvments
+Folder order when adding a media library file to posts/pages fix, and infrastructure improvements
 
 = 2.3.4 =
 Thrive Themes Architect bug fixed

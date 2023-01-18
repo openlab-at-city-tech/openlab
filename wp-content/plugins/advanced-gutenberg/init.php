@@ -43,6 +43,9 @@ if (!defined('GUTENBERG_VERSION_REQUIRED')) {
 }
 
 require_once(plugin_dir_path(__FILE__) . '/install.php');
+require_once(plugin_dir_path(__FILE__) . '/incl/utilities-main.php');
+require_once(plugin_dir_path(__FILE__) . '/incl/block-settings-main.php');
+require_once(plugin_dir_path(__FILE__) . '/incl/block-controls-main.php');
 require_once(plugin_dir_path(__FILE__) . '/incl/advanced-gutenberg-main.php');
 new AdvancedGutenbergMain();
 

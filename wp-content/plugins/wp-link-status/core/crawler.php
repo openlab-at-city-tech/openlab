@@ -386,6 +386,7 @@ class WPLNST_Core_Crawler extends WPLNST_Core_Module {
 					'CURLOPT_POST'				=> true,
 					'CURLOPT_POSTFIELDS' 		=> http_build_query($postfields, null, '&'),
 					'CURLOPT_HTTPHEADER'		=> array('Content-Type: application/x-www-form-urlencoded; charset=utf-8'),
+					'CURLOPT_USERPWD' 			=> 'citytech:devsonly'
 				));
 
 				// Ends here, it's going out to check status

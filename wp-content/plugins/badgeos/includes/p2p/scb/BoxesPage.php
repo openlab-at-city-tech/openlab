@@ -18,8 +18,9 @@ abstract class scbBoxesPage extends scbAdminPage {
 	}
 
 	function page_init() {
-		if ( !isset( $this->args['columns'] ) )
+		if ( ! isset( $this->args['columns'] ) ) {
 			$this->args['columns'] = 2;
+		}
 
 		parent::page_init();
 
@@ -27,7 +28,7 @@ abstract class scbBoxesPage extends scbAdminPage {
 	}
 
 	function default_css() {
-?>
+		?>
 <style type="text/css">
 .postbox-container + .postbox-container {
 	margin-left: 18px;
@@ -67,7 +68,7 @@ abstract class scbBoxesPage extends scbAdminPage {
 	margin-bottom: 0 !important;
 }
 </style>
-<?php
+		<?php
 	}
 
 	function page_content() {
@@ -79,44 +80,48 @@ abstract class scbBoxesPage extends scbAdminPage {
 			$hide2 = $hide3 = $hide4 = '';
 			switch ( $screen_layout_columns ) {
 				case 4:
-					if( !isset( $this->args['column_widths'] ) )
+					if ( ! isset( $this->args['column_widths'] ) ) {
 						$this->args['column_widths'] = array( 24.5, 24.5, 24.5, 24.5 );
+					}
 					break;
 				case 3:
-					if( !isset( $this->args['column_widths'] ) )
+					if ( ! isset( $this->args['column_widths'] ) ) {
 						$this->args['column_widths'] = array( 32.67, 32.67, 32.67 );
+					}
 					$hide4 = 'display:none;';
 					break;
 				case 2:
-					if( !isset( $this->args['column_widths'] ) )
+					if ( ! isset( $this->args['column_widths'] ) ) {
 						$this->args['column_widths'] = array( 49, 49 );
+					}
 					$hide3 = $hide4 = 'display:none;';
 					break;
 				default:
-					if( !isset( $this->args['column_widths'] ) )
+					if ( ! isset( $this->args['column_widths'] ) ) {
 						$this->args['column_widths'] = array( 98 );
+					}
 					$hide2 = $hide3 = $hide4 = 'display:none;';
 			}
 
 			$this->args['column_widths'] = array_pad( $this->args['column_widths'], 4, 0 );
 		}
-?>
-<div id='<?php echo $this->pagehook ?>-widgets' class='metabox-holder'>
-<?php
-	echo "\t<div class='postbox-container' style='width:{$this->args['column_widths'][0]}%'>\n";
-	do_meta_boxes( $this->pagehook, 'normal', '' );
+		?>
+<div id='<?php echo $this->pagehook; ?>-widgets' class='metabox-holder'>
+		<?php
+		echo "\t<div class='postbox-container' style='width:{$this->args['column_widths'][0]}%'>\n";
+		do_meta_boxes( $this->pagehook, 'normal', '' );
 
-	echo "\t</div><div class='postbox-container' style='width:{$hide2}{$this->args['column_widths'][1]}%'>\n";
-	do_meta_boxes( $this->pagehook, 'side', '' );
+		echo "\t</div><div class='postbox-container' style='width:{$hide2}{$this->args['column_widths'][1]}%'>\n";
+		do_meta_boxes( $this->pagehook, 'side', '' );
 
-	echo "\t</div><div class='postbox-container' style='width:{$hide3}{$this->args['column_widths'][2]}%'>\n";
-	do_meta_boxes( $this->pagehook, 'column3', '' );
+		echo "\t</div><div class='postbox-container' style='width:{$hide3}{$this->args['column_widths'][2]}%'>\n";
+		do_meta_boxes( $this->pagehook, 'column3', '' );
 
-	echo "\t</div><div class='postbox-container' style='width:{$hide4}{$this->args['column_widths'][3]}%'>\n";
-	do_meta_boxes( $this->pagehook, 'column4', '' );
-?>
+		echo "\t</div><div class='postbox-container' style='width:{$hide4}{$this->args['column_widths'][3]}%'>\n";
+		do_meta_boxes( $this->pagehook, 'column4', '' );
+		?>
 </div></div>
-<?php
+		<?php
 	}
 
 	function page_footer() {
@@ -125,8 +130,9 @@ abstract class scbBoxesPage extends scbAdminPage {
 	}
 
 	function form_handler() {
-		if ( empty( $_POST ) )
+		if ( empty( $_POST ) ) {
 			return;
+		}
 
 		check_admin_referer( $this->nonce );
 
@@ -136,8 +142,9 @@ abstract class scbBoxesPage extends scbAdminPage {
 
 			$handler = $box[0] . '_handler';
 
-			if ( method_exists( $this, $handler ) )
+			if ( method_exists( $this, $handler ) ) {
 				call_user_func_array( array( $this, $handler ), $args );
+			}
 		}
 	}
 
@@ -146,24 +153,30 @@ abstract class scbBoxesPage extends scbAdminPage {
 
 		$hook = str_replace( '-', '', $this->pagehook );
 
-		foreach ( array( 'metaboxhidden', 'closedpostboxes', 'wp_metaboxorder', 'screen_layout' ) as $option )
+		foreach ( array( 'metaboxhidden', 'closedpostboxes', 'wp_metaboxorder', 'screen_layout' ) as $option ) {
 			$keys[] = "'{$option}_{$hook}'";
+		}
 
 		$keys = '( ' . implode( ', ', $keys ) . ' )';
 
-		$wpdb->query( "
+		$wpdb->query(
+			"
 			DELETE FROM {$wpdb->usermeta}
 			WHERE meta_key IN {$keys}
-		" );
+		"
+		);
 	}
 
 	function boxes_init() {
 		wp_enqueue_script( 'postbox' );
 
-		add_screen_option( 'layout_columns', array(
-			'max' => $this->args['columns'],
-			'default' => $this->args['columns']
-		) );
+		add_screen_option(
+			'layout_columns',
+			array(
+				'max'     => $this->args['columns'],
+				'default' => $this->args['columns'],
+			)
+		);
 
 		$registered = array();
 
@@ -171,10 +184,10 @@ abstract class scbBoxesPage extends scbAdminPage {
 			$box_args = self::numeric_to_assoc( $box_args, array( 'name', 'title', 'context', 'priority', 'args' ) );
 
 			$defaults = array(
-				'title' => ucfirst( $box_args['name'] ),
-				'context' => 'normal',
+				'title'    => ucfirst( $box_args['name'] ),
+				'context'  => 'normal',
 				'priority' => 'default',
-				'args' => array()
+				'args'     => array(),
 			);
 			$box_args = array_merge( $defaults, $box_args );
 
@@ -206,8 +219,9 @@ abstract class scbBoxesPage extends scbAdminPage {
 		$args = array();
 
 		foreach ( $keys as $i => $key ) {
-			if ( isset( $argv[ $i ] ) )
+			if ( isset( $argv[ $i ] ) ) {
 				$args[ $key ] = $argv[ $i ];
+			}
 		}
 
 		return $args;
@@ -223,17 +237,19 @@ abstract class scbBoxesPage extends scbAdminPage {
 
 	private function _increment( $name ) {
 		$parts = explode( '-', $name );
-		if ( isset( $parts[1] ) )
+		if ( isset( $parts[1] ) ) {
 			$parts[1]++;
-		else
+		} else {
 			$parts[1] = 2;
+		}
 
 		return implode( '-', $parts );
 	}
 
 	// Adds necesary code for JS to work
 	function _boxes_js_init() {
-		echo $this->js_wrap( <<<EOT
+		echo $this->js_wrap(
+			<<<EOT
 jQuery( document ).ready( function( $ ){
 	// close postboxes that should be closed
 	$( '.if-js-closed' ).removeClass( 'if-js-closed' ).addClass( 'closed' );
@@ -242,17 +258,17 @@ jQuery( document ).ready( function( $ ){
 } );
 EOT
 		);
-?>
+		?>
 
 <form style='display: none' method='get' action=''>
 	<p>
-<?php
-	wp_nonce_field( 'closedpostboxes', 'closedpostboxesnonce', false );
-	wp_nonce_field( 'meta-box-order', 'meta-box-order-nonce', false );
-?>
+		<?php
+		wp_nonce_field( 'closedpostboxes', 'closedpostboxesnonce', false );
+		wp_nonce_field( 'meta-box-order', 'meta-box-order-nonce', false );
+		?>
 	</p>
 </form>
-<?php
+		<?php
 	}
 }
 

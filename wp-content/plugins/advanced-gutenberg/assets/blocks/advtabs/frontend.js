@@ -26,11 +26,21 @@ jQuery(document).ready(function ($) {
             event.preventDefault();
             var currentTabActive = $( event.target ).closest( '.advgb-tab' );
             var href = currentTabActive.find( 'a' ).attr( 'href' );
+            var currentContentActive = bodyContainers.find( '.advgb-tab-body[aria-labelledby="' + href.replace( /^#/, "" ) + '"]' );
 
             tabs.removeClass( 'advgb-tab-active' );
             currentTabActive.addClass( 'advgb-tab-active' );
             bodyContainers.find( '.advgb-tab-body' ).hide();
-            bodyContainers.find( '.advgb-tab-body[aria-labelledby="' + href.replace( /^#/, "" ) + '"]' ).show();
+            currentContentActive.show();
+            // Check if Images Slider is present in the current active tab's content
+            if( currentContentActive.find('.advgb-images-slider-block').length && $.fn.slick ) {
+                currentContentActive.find('.advgb-images-slider-block > .slick-initialized').slick(
+                    'slickSetOption',
+                    'refresh',
+                    true,
+                    true
+                );
+            }
         } );
 
         tabs.eq( activeTab ).trigger( 'click' ); // Default

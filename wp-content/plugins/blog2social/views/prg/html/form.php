@@ -12,7 +12,9 @@
                 <label class="col-md-6 del-padding-left hidden-sm hidden-xs"><small> <?php esc_html_e('Language', 'blog2social') ?></small></label>
                 <div class="col-md-6 del-padding-left">
                     <select name="kategorie_id" id="prg_cat" class="form-control b2s-select">
-                        <?php echo $item->getCategoryHtml(); ?>
+                        <?php echo wp_kses($item->getCategoryHtml(), array(
+                            'option' => array('value' => array())
+                        )); ?>
                     </select>
                 </div>
                 <div class="col-md-6 del-padding-left">
@@ -127,7 +129,12 @@
                         <label class="col-md-12 del-padding-left"><small><?php esc_html_e('Country', 'blog2social') ?></small></label>
                         <div class="col-md-12 del-padding-left">
                             <select name="land_mandant" id="prg_land_mandant" class="form-control b2s-select">
-                                <?php echo $item->getCountryHtml(); ?>
+                                <?php echo wp_kses($item->getCountryHtml(), array(
+                                    'option' => array(
+                                        'value' => array(),
+                                        'selected' => array()
+                                    )
+                                )); ?>
                             </select>
                         </div>
                     </div>
@@ -204,7 +211,12 @@
                         <label class="col-md-12 del-padding-left"><small><?php esc_html_e('Country', 'blog2social') ?></small></label>
                         <div class="col-md-12 del-padding-left">
                             <select name="land_presse" id="prg_land_presse" class="form-control b2s-select">
-                                <?php echo $item->getCountryHtml(); ?>
+                                <?php echo wp_kses($item->getCountryHtml(), array(
+                                    'option' => array(
+                                        'value' => array(),
+                                        'selected' => array()
+                                    )
+                                )); ?>
                             </select>
                         </div>
                     </div>

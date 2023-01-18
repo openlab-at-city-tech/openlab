@@ -78,10 +78,21 @@ add_filter('wp_nav_menu_objects', 'openlab_wp_menu_customizations', 11, 2);
  * Hooked to bp_screens at 1 because apparently BP is broken??
  */
 function openlab_modify_options_nav() {
-    if (bp_is_group() && openlab_is_portfolio() && !bp_is_group_create()) {
-        buddypress()->groups->nav->edit_nav(array(
-            'name' => 'Profile',
-                ), 'home', bp_get_current_group_slug());
+    if ( bp_is_group() && openlab_is_portfolio() && !bp_is_group_create() ) {
+		$group_type_label = openlab_get_group_type_label(
+			[
+				'group_id' => bp_get_current_group_id(),
+				'case'     => 'upper',
+			]
+		);
+
+        buddypress()->groups->nav->edit_nav(
+			[
+				'name' => $group_type_label . ' Profile',
+			],
+            'home',
+			bp_get_current_group_slug()
+		);
 
         buddypress()->groups->nav->edit_nav(array(
             'name' => 'Settings',
@@ -307,6 +318,12 @@ function openlab_submenu_markup($type = '', $opt_var = NULL, $row_wrapper = true
             $submenu_text = 'My Messages<span aria-hidden="true">:</span> ';
             $menu = openlab_my_messages_submenu();
             break;
+
+        case 'my-activity':
+            $submenu_text = 'My Activity<span aria-hidden="true">:</span> ';
+            $menu = openlab_my_activity_submenu();
+            break;
+
         case 'groups':
             $group_menu = openlab_my_groups_submenu($opt_var);
             $menu = $group_menu['menu'];
@@ -318,6 +335,22 @@ function openlab_submenu_markup($type = '', $opt_var = NULL, $row_wrapper = true
                 $width .= ' has-menu-items group-item';
             }
 
+            break;
+        case 'group-activity':
+            $submenu_text = 'Activity<span aria-hideen="true">:</span> ';
+            $menu = openlab_group_activity_submenu();
+            break;
+        case 'group-files':
+            $submenu_text = 'File Library<span aria-hidden="true">:</span> ';
+            $menu = openlab_group_files_submenu();
+            break;
+        case 'group-forum':
+            $submenu_text = 'Discussion<span aria-hidden="true">:</span> ';
+            $menu = openlab_group_forum_submenu();
+            break;
+        case 'group-docs':
+            $submenu_text = 'Docs<span aria-hidden="true">:</span> ';
+            $menu = openlab_group_docs_submenu();
             break;
         default:
             $submenu_text = 'My Settings<span aria-hidden="true">:</span> ';
@@ -397,7 +430,7 @@ function openlab_my_groups_submenu($group) {
     $span_end = '</span>';
 
     //get account type to see if they're faculty
-    $faculty = xprofile_get_field_data('Account Type', get_current_user_id());
+    $member_type = openlab_get_user_member_type( get_current_user_id() );
 
     $submenu_text = 'My ' . ucfirst($group) . 's';
 
@@ -407,7 +440,7 @@ function openlab_my_groups_submenu($group) {
         // determines if there are any courses - if not, only show "create"
         $filters['wds_group_type'] = openlab_page_slug_to_grouptype();
 
-        if ( is_super_admin( get_current_user_id() ) || $faculty == "Faculty" ) {
+        if ( is_super_admin( get_current_user_id() ) || 'faculty' === $member_type ) {
 			$can_create = true;
 		} else {
 			$can_create = false;
@@ -519,6 +552,155 @@ function openlab_my_messages_submenu() {
     return openlab_submenu_gen($menu_list);
 }
 
+function openlab_my_activity_submenu() {
+	$base_url = bp_loggedin_user_domain() . 'my-activity';
+
+	$current_item = $base_url;
+	if ( ! empty( $_GET['type'] ) && in_array( $_GET['type'], [ 'mine', 'favorites', 'mentions', 'starred' ], true ) ) {
+		$current_item .= '?type=' . $_GET['type'];
+
+	}
+
+	$menu_list = [
+		$base_url                     => 'All',
+		$base_url . '?type=mine'      => 'Mine',
+		$base_url . '?type=favorites' => 'Favorites',
+		$base_url . '?type=mentions'  => '@Mentions',
+		$base_url . '?type=starred'   => 'Starred',
+	];
+
+	return openlab_submenu_gen( $menu_list, false, $current_item  );
+}
+
+// Submenus for group discussion pages
+function openlab_group_forum_submenu() {
+    $base_url = bp_get_group_permalink( groups_get_current_group() ) . 'forum';
+
+    $menu_list = [
+        $base_url                   => 'All Topics'
+    ];
+
+    $current_item = $base_url;
+    if( bp_action_variable() == 'topic' ) {
+        $menu_list += [
+            $base_url . '#new-post' => 'New Topic'
+        ];
+
+        $bbp = bbpress();
+
+        // Forum data
+        $offset = 0;
+        $forum_ids = bbp_get_group_forum_ids(bp_get_current_group_id());
+        $forum_id = array_shift($forum_ids);
+        $bbp->current_forum_id = $forum_id;
+
+        bbp_set_query_name('bbp_single_forum');
+
+        // Get the topic
+        bbp_has_topics(array(
+            'name' => bp_action_variable($offset + 1),
+            'posts_per_page' => 1,
+            'show_stickies' => false
+        ));
+
+        if( bbp_topics() ) {
+            bbp_the_topic();
+
+            $menu_list += [
+                bbp_get_topic_permalink() => bbp_get_topic_title()
+            ];
+
+            $current_item = bbp_get_topic_permalink();
+        }
+    } else {
+        $menu_list += [
+            '#new-post' => 'New Topic'
+        ];
+    }
+
+    if( isset( $_GET['bbp_search'] ) ) {
+        $menu_list += [
+            $base_url . '?bbp_search=' . $_GET['bbp_search']  => 'Search Results'
+        ];
+
+        $current_item = $base_url . '?bbp_search=' . $_GET['bbp_search'];
+    }
+
+    return openlab_submenu_gen( $menu_list, false, $current_item );
+}
+
+function openlab_group_docs_submenu() {
+    global $bp, $groups_template;
+
+    $group_id = null;
+    if( bp_is_group() ) {
+        $group_id = groups_get_current_group();
+    } elseif (!empty($groups_template->group)) {
+        $group_id = $groups_template->group;
+    }
+
+    $base_url = bp_get_group_permalink( $group_id ) . 'docs';
+
+    $current_item = $base_url;
+    if( bp_docs_current_view() == 'create' ) {
+        $current_item = $base_url . '/create';
+    }
+
+    $menu_list = [
+        $base_url => 'All Docs',
+    ];
+
+	if ( is_user_logged_in() && current_user_can( 'bp_docs_create' ) ) {
+        $menu_list[ $base_url . '/create' ] = 'New Doc';
+	}
+
+    if( isset( $_GET['s'] ) ) {
+        $menu_list += [
+            $base_url . '?s=' . $_GET['s']  => 'Search Results'
+        ];
+
+        $current_item = $base_url . '?s=' . $_GET['s'];
+    }
+
+    if( isset( $_GET['bpd_tag'] ) ) {
+        $menu_list += [
+            $base_url . '?bpd_tag=' . $_GET['bpd_tag']  => 'Tag Results'
+        ];
+
+        $current_item = $base_url . '?bpd_tag=' . $_GET['bpd_tag'];
+    }
+
+    $current_doc = bp_docs_get_current_doc();
+    if ( $current_doc ) {
+        $doc_url = trailingslashit( bp_get_group_permalink() ) . BP_DOCS_SLUG . '/' . $current_doc->post_name;
+        $current_item = $doc_url;
+        $menu_list += [
+            $doc_url => $current_doc->post_title
+        ];
+    }
+
+    return openlab_submenu_gen( $menu_list, false, $current_item );
+}
+
+function openlab_group_activity_submenu() {
+    $base_url = bp_get_group_permalink( groups_get_current_group() ) . 'activity';
+
+    $current_item = $base_url;
+	if ( ! empty( $_GET['type'] ) && in_array( $_GET['type'], [ 'mine', 'mentions', 'starred' ], true ) ) {
+		$current_item .= '?type=' . $_GET['type'];
+
+	}
+
+    $menu_list = [
+        $base_url                       => 'All',
+        $base_url . '?type=mine'        => 'Mine',
+        $base_url . '?type=mentions'    => '@Mentions',
+        $base_url . '?type=starred'     => 'Starred'
+    ];
+
+    return openlab_submenu_gen( $menu_list, false, $current_item );
+}
+
 //sub-menus for my-invites pages
 function openlab_my_invitations_submenu() {
     global $bp;
@@ -534,7 +716,26 @@ function openlab_my_invitations_submenu() {
     return openlab_submenu_gen($menu_list);
 }
 
-function openlab_submenu_gen($items, $timestamp = false) {
+function openlab_group_files_submenu() {
+    $base_url = bp_get_group_permalink( groups_get_current_group() ) . 'files';
+    $current_item = $base_url;
+
+    $user_can_upload = current_user_can( 'bp_moderate' ) || groups_is_user_member( bp_loggedin_user_id(), bp_get_current_group_id() );
+
+    $menu_list = [
+        $base_url                           => 'All Files'
+    ];
+
+    if( $user_can_upload ) {
+        $menu_list += [
+            $base_url . '?action=add_new_file'  => 'Add New File'
+        ];
+    }
+
+    return openlab_submenu_gen( $menu_list, false, $current_item );
+}
+
+function openlab_submenu_gen( $items, $timestamp = false, $current_item = null ) {
     global $bp, $post;
 
     if (empty($items)) {
@@ -573,9 +774,11 @@ function openlab_submenu_gen($items, $timestamp = false) {
         //now search the slug for this item to see if the page identifier is there - if it is, this is the current page
         $current_check = false;
 
-        if ($page_identify) {
-            $current_check = strpos($item, $page_identify);
-        }
+		if ( $current_item ) {
+			$current_check = $current_item === $item;
+		} elseif ( $page_identify ) {
+			$current_check = strpos($item, $page_identify);
+		}
 
         //special case for send invitations page hitting the same time as invitations received
         if ($page_identify == "invites" && $title == "Sent Invitations") {
@@ -662,7 +865,7 @@ function openlab_filter_subnav_home($subnav_item) {
 
     $displayed_user_id = bp_is_user() ? bp_displayed_user_id() : bp_loggedin_user_id();
     $group_label = openlab_get_group_type_label('case=upper');
-    $new_label = '<span class="inline-visible-xs">' . $group_label . '</span> Profile';
+    $new_label = $group_label . ' Profile';
 
     $new_item = str_replace("Home", $new_label, $subnav_item);
 
@@ -744,13 +947,16 @@ function openlab_filter_subnav_members($subnav_item) {
     }
 
     //get total member count
-    $total_mem = bp_core_number_format(groups_get_groupmeta(bp_get_current_group_id(), 'total_member_count'));
+    $total_mem = (int) bp_core_number_format(groups_get_groupmeta(bp_get_current_group_id(), 'total_member_count'));
+    if( ! current_user_can( 'bp_moderate' ) ) {
+        $private_users = openlab_get_group_private_users( bp_get_current_group_id() );
+        $total_mem -= count( $private_users );
+    }
 
-    //added classes to span
     if ($total_mem > 0) {
-        $new_item = str_replace('<span>' . $total_mem . '</span>', '<span class="mol-count pull-right count-' . $total_mem . ' gray">' . $total_mem . '</span>', $new_item);
+        $new_item = preg_replace('/<span[^>]*>.*?<\/span>/is', '<span class="mol-count pull-right count-' . $total_mem . ' gray">' . $total_mem . '</span>', $new_item);
     } else {
-        $new_item = str_replace('<span>' . $total_mem . '</span>', '', $new_item);
+        $new_item = preg_replace('/<span[^>]*>.*?<\/span>/is', '', $new_item);
     }
 
     return $new_item;
@@ -768,36 +974,28 @@ function openlab_filter_subnav_docs($subnav_item) {
 
     $group_slug = bp_get_group_slug();
 
-    $docs_arg = Array("posts_per_page" => "3",
-        "post_type" => "bp_doc",
-        "tax_query" =>
-        Array(Array("taxonomy" => "bp_docs_associated_item",
-                "field" => "slug",
-                "terms" => $group_slug)));
-    $query = new WP_Query($docs_arg);
+	$query_builder = new BP_Docs_Query(
+		[
+			'group_id' => bp_get_current_group_id(),
+			'doc_slug' => '',
+		]
+	);
+	$the_wp_query  = $query_builder->get_wp_query();
 
-    $total_doc_count = !empty($query->found_posts) ? $query->found_posts : 0;
+    $total_doc_count = ! empty( $the_wp_query->found_posts ) ? $the_wp_query->found_posts : 0;
 
-    //legacy issue - some DB entries list doc_count as greater than 0 when in fact it is 0
-    //if that's the case, the search replace below will not work properly
-    $doc_count = groups_get_groupmeta($bp->groups->current_group->id, 'bp-docs-count');
-
-    if ($doc_count == $total_doc_count) {
-        $span_count = $total_doc_count;
+    if ( $total_doc_count > 0 ) {
+        $new_item = str_replace(
+			'</a></li>',
+			'<span class="mol-count pull-right count-' . esc_attr( $total_doc_count ) . ' gray">' . esc_html( $total_doc_count ) . '</span></a></li>',
+			$subnav_item
+		);
     } else {
-        $span_count = $doc_count;
-    }
-
-    wp_reset_query();
-
-    if ($total_doc_count > 0) {
-        $new_item = str_replace('<span>' . $span_count . '</span>', '<span class="mol-count pull-right count-' . $total_doc_count . ' gray">' . $total_doc_count . '</span>', $subnav_item);
-    } else {
-        $new_item = str_replace('<span>' . $span_count . '</span>', '', $subnav_item);
-    }
+		$new_item = $subnav_item;
+	}
 
     //update "current" class to "current-menu-item" to unify site identification of current menu page
-    $new_item = str_replace("current selected", "current-menu-item", $new_item);
+    $new_item = str_replace( "current selected", "current-menu-item", $new_item );
 
     return $new_item;
 }
@@ -820,13 +1018,13 @@ function openlab_filter_subnav_nav_group_documents($subnav_item) {
         $subnav_item = str_replace('</a>', ' ' . $span . '</a>', $subnav_item);
     }
 
+	$subnav_item = str_replace( 'Documents', 'File Library', $subnav_item );
+	$subnav_item = str_replace( 'Files', 'File Library', $subnav_item );
+
     return $subnav_item;
 }
 
 add_filter('bp_get_options_nav_group-documents', 'openlab_filter_subnav_nav_group_documents');
-
-
-add_filter('bp_get_options_nav_nav-forum', 'openlab_filter_subnav_forums');
 
 /**
  * Modify the Discussion subnav item in group contexts.
@@ -857,6 +1055,8 @@ function openlab_filter_subnav_forums($subnav_item) {
 
     return $subnav_item;
 }
+add_filter( 'bp_get_options_nav_nav-forum', 'openlab_filter_subnav_forums' );
+
 
 add_filter('bp_get_options_nav_nav-invite-anyone', 'openlab_filter_subnav_nav_invite_anyone');
 
@@ -920,6 +1120,44 @@ function openlab_filter_subnav_nav_upcoming($subnav_item) {
 
 add_filter('bp_get_options_nav_new-event', 'openlab_filter_subnav_nav_new_event');
 
+/**
+ * Filters the 'Activity' option nav item.
+ */
+function openlab_filter_subnav_nav_activity( $subnav_item ) {
+    return str_replace( 'current selected', 'current-menu-item', $subnav_item );
+}
+add_filter( 'bp_get_options_nav_activity', 'openlab_filter_subnav_nav_activity' );
+
+/**
+ * Filters the 'Announcements' option nav item.
+ */
+function openlab_filter_subnav_nav_announcements( $subnav_item ) {
+	$count_query = new WP_Query(
+		[
+			'post_type'      => 'openlab_announcement',
+			'post_status'    => 'publish',
+			'posts_per_page' => -1,
+			'meta_query'     => [
+				[
+					'key'   => 'openlab_announcement_group_id',
+					'value' => bp_get_current_group_id(),
+				]
+			],
+			'fields'         => 'ids',
+		]
+	);
+
+	$count = $count_query->found_posts;
+
+	if ( $count ) {
+        $span        = sprintf( '<span class="mol-count pull-right count-%s gray">%s</span>', intval( $count ), esc_html( number_format_i18n( $count ) ) );
+        $subnav_item = str_replace('</a>', ' ' . $span . '</a>', $subnav_item);
+	}
+
+    return str_replace( 'current selected', 'current-menu-item', $subnav_item );
+}
+add_filter( 'bp_get_options_nav_nav-announcements', 'openlab_filter_subnav_nav_announcements' );
+
 function openlab_filter_subnav_nav_new_event($subnav_item) {
 
     $subnav_item = str_replace("current selected", "current-menu-item", $subnav_item);
@@ -940,22 +1178,30 @@ function openlab_group_submenu_nav() {
         return;
     }
 
-    $positions = array(
-        'home' => 10,
-        'admin' => 11,
-        'nav-forum' => 25,
-        'members' => 35,
-        'files' => 60,
-    );
+	$positions = array(
+		'home'          => 10,
+		'announcements' => 20,
+		'forum'         => 50,
+		'docs'          => 60,
+		'files'         => 70,
+		'events'        => 80,
+		'members'       => 90,
+		'admin'         => 100,
+	);
 
-    foreach ($positions as $slug => $position) {
-        buddypress()->groups->nav->edit_nav(array(
-            'position' => $position,
-                ), $slug, bp_get_current_group_slug());
+    foreach ( $positions as $slug => $position ) {
+        buddypress()->groups->nav->edit_nav(
+			[
+				'position' => $position,
+			],
+			$slug,
+			bp_get_current_group_slug()
+		);
     }
-}
 
-add_action('bp_screens', 'openlab_group_submenu_nav', 1);
+//	var_dump( buddypress()->groups->nav ); die;
+}
+add_action( 'bp_screens', 'openlab_group_submenu_nav', 1 );
 
 /**
  * Markup for group admin tabs
@@ -986,12 +1232,11 @@ function openlab_group_admin_tabs($group = false) {
 		<li <?php if ('group-settings' == $current_tab) : ?> class="current-menu-item"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/group-settings">Settings</a></li>
 
 		<?php
-		$account_type = xprofile_get_field_data('Account Type', $bp->loggedin_user->id);
-		if ($account_type == "Student") {
-			$profile = "ePortfolio";
-		} else {
-			$profile = "Portfolio";
-		}
+		$profile = openlab_get_portfolio_label(
+			[
+				'user_id' => bp_loggedin_user_id(),
+			]
+		);
 		?>
 
 		<li class="delete-button <?php if ('delete-group' == $current_tab) : ?> current-menu-item<?php endif; ?>" ><span class="fa fa-minus-circle"></span><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/delete-group">Delete <?php echo $profile; ?></a></li>
@@ -1087,41 +1332,6 @@ function openlab_docs_tabs() {
         <?php $doc_obj = bp_docs_get_current_doc(); ?>
         --><li class="current-menu-item"><?php echo $doc_obj->post_title; ?></li><!--
     <?php endif; ?>
-    -->
-    <?php
-}
-
-function openlab_forum_tabs() {
-    global $bp, $groups_template, $wp_query;
-    $group = ( $groups_template->group ) ? $groups_template->group : $bp->groups->current_group;
-    // Load up bbPress once
-    $bbp = bbpress();
-
-    /** Query Resets ***************************************************** */
-    // Forum data
-    $forum_ids = bbp_get_group_forum_ids(bp_get_current_group_id());
-    $forum_id = array_shift($forum_ids);
-    $offset = 0;
-
-    $bbp->current_forum_id = $forum_id;
-
-    bbp_set_query_name('bbp_single_forum');
-
-    // Get the topic
-    bbp_has_topics(array(
-        'name' => bp_action_variable($offset + 1),
-        'posts_per_page' => 1,
-        'show_stickies' => false
-    ));
-
-    // Setup the topic
-    bbp_the_topic();
-    ?>
-
-    <li <?php echo (!bp_action_variable() ? 'class="current-menu-item"' : ''); ?> ><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/forum/">Discussion</a></li><!--
-    <?php if (bp_action_variable() == 'topic'): ?>
-        --><li class="current-menu-item hyphenate"><span><?php bbp_topic_title() ?></span></li><!--
-            <?php endif; ?>
     -->
     <?php
 }

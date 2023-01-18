@@ -13,8 +13,9 @@ require_once dirname( __FILE__ ) . '/scb/load.php';
  * @since 1.3.4
  */
 function _badgeos_p2p_load() {
-	if ( function_exists( 'p2p_register_connection_type' ) )
+	if ( function_exists( 'p2p_register_connection_type' ) ) {
 		return;
+	}
 
 	define( 'P2P_PLUGIN_VERSION', '1.6.3-alpha' );
 	define( 'P2P_TEXTDOMAIN', 'badgeos' );
@@ -38,8 +39,8 @@ scb_init( '_badgeos_p2p_load' );
 function _badgeos_p2p_load_admin() {
 	P2P_Autoload::register( 'P2P_', dirname( __FILE__ ) . '/p2p-admin' );
 
-	new P2P_Box_Factory;
-	new P2P_Column_Factory;
-	new P2P_Dropdown_Factory;
-	new P2P_Tools_Page;
+	new P2P_Box_Factory();
+	new P2P_Column_Factory();
+	new P2P_Dropdown_Factory();
+	new P2P_Tools_Page();
 }

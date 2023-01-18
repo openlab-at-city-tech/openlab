@@ -1,13 +1,13 @@
 <?php
 /*
-  Plugin Name: CM Tooltip Glossary
-  Plugin URI: https://www.cminds.com/
-  Description: Easily create a Glossary, Encyclopedia or Dictionary of your custom terms. Plugin parses posts and pages searching for defined glossary terms and adds links to the glossary term page. Hovering over the link shows a tooltip with the definition.
-  Version: 3.9.21
-  Text Domain: enchanced-tooltipglossary
-  Author: CreativeMindsSolutions
-  Author URI: https://www.cminds.com/
- */
+Plugin Name: CM Tooltip Glossary
+Plugin URI: https://www.cminds.com/
+Description: Easily create a Glossary, Encyclopedia or Dictionary of your custom terms. Plugin parses posts and pages searching for defined glossary terms and adds links to the glossary term page. Hovering over the link shows a tooltip with the definition.
+Version: 4.1.6
+Text Domain: enchanced-tooltipglossary
+Author: CreativeMindsSolutions
+Author URI: https://www.cminds.com/
+*/
 
 try {
     if ( !ini_get( 'max_execution_time' ) || (ini_get( 'max_execution_time' ) < 300 && ini_get( 'max_execution_time' ) !== 0) ) {
@@ -33,7 +33,7 @@ try {
  * @since 1.0
  */
 if ( !defined( 'CMTT_VERSION' ) ) {
-	define( 'CMTT_VERSION', '3.9.20' );
+	define( 'CMTT_VERSION', '4.1.6' );
 }
 
 /**
@@ -78,7 +78,7 @@ if ( !defined( 'CMTT_PLUGIN_FILE' ) ) {
  * @since 1.0
  */
 if ( !defined( 'CMTT_URL' ) ) {
-	define( 'CMTT_URL', 'https://www.cminds.com/store/tooltipglossary/' );
+	define( 'CMTT_URL', 'https://www.cminds.com/wordpress-plugins-library/tooltipglossary/' );
 }
 
 /**
@@ -87,10 +87,14 @@ if ( !defined( 'CMTT_URL' ) ) {
  * @since 1.0
  */
 if ( !defined( 'CMTT_RELEASE_NOTES' ) ) {
-	define( 'CMTT_RELEASE_NOTES', 'https://tooltip.cminds.com/release-notes/' );
+	define( 'CMTT_RELEASE_NOTES', 'https://www.cminds.com/wordpress-plugins-library/cm-tooltip-glossary-changelog/' );
 }
 
-include_once plugin_dir_path( __FILE__ ) . "glossaryFree.php";
+require_once plugin_dir_path( __FILE__ ) . "glossaryFree.php";
 register_activation_hook( __FILE__, array( 'CMTT_Free', '_install' ) );
+
+add_action('cmtt_include_files_after', function( ) {
+	require_once plugin_dir_path( __FILE__ ). 'package/cminds-free.php';
+});
 
 CMTT_Free::init();

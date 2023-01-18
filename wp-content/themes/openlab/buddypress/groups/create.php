@@ -6,9 +6,9 @@
 
     <?php
     // re-direct to courses page if user does not have permissions for course creation page
-    $account_type = xprofile_get_field_data('Account Type', get_current_user_id());
+    $account_type = openlab_get_user_member_type( get_current_user_id() );
     $group_type = isset($_GET['type']) ? $_GET['type'] : 'club';
-    if ('course' === $group_type && !is_super_admin() && $account_type != "Faculty") {
+    if ('course' === $group_type && !is_super_admin() && $account_type !== "faculty") {
         wp_redirect(home_url('courses'));
     }
 
@@ -45,10 +45,6 @@
 
     ?>
     <h1 class="entry-title mol-title"><?php echo esc_html( $page_title ); ?></h1>
-    <?php
-    // get account type to see if they're faculty
-    $faculty = xprofile_get_field_data('Account Type', get_current_user_id());
-    ?>
 
     <?php echo openlab_create_group_menu($group_type); ?>
 

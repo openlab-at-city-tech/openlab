@@ -133,18 +133,25 @@ function media_upload_nextgen_form($errors) {
 ?>
 
 <script type="text/javascript">
-<!--
-	function NGGSetAsThumbnail(id, nonce){
+    function NGGSetAsThumbnail(id, wp_nonce, ngg_nonce) {
 		if (top.set_ngg_post_thumbnail) {
-			top.set_ngg_post_thumbnail(id, nonce);
+			top.set_ngg_post_thumbnail(id, wp_nonce);
 			return;
 		}
+
 		var $link = jQuery('a#ngg-post-thumbnail-' + id);
-	
-		$link.text( setPostThumbnailL10n.saving );
-		jQuery.post(ajaxurl, {
-			action:"ngg_set_post_thumbnail", post_id: post_id, thumbnail_id: id, cookie: encodeURIComponent(document.cookie)
-		}, function(str){
+
+		$link.text(setPostThumbnailL10n.saving);
+		jQuery.post(
+            ajaxurl,
+            {
+                action: "ngg_set_post_thumbnail",
+                post_id: post_id,
+                thumbnail_id: id,
+                cookie: encodeURIComponent(document.cookie),
+                nonce: ngg_nonce
+		},
+        function(str) {
 			var win = window.dialogArguments || opener || parent || top;
 			$link.text( setPostThumbnailL10n.setThumbnail );
 			if ( str == '0' ) {
@@ -159,12 +166,10 @@ function media_upload_nextgen_form($errors) {
 				var $dummy = $link.next();
 				$dummy.attr('id', 'wp-post-thumbnail-' + str);
 				$dummy.show();
-				WPSetAsThumbnail(str, nonce);
+				WPSetAsThumbnail(str, wp_nonce);
 			}
-		}
-		);
+		});
 	}
-//-->
 </script>
 
 <form id="filter" action="" method="get">
@@ -311,8 +316,9 @@ if ($chromeless)
 						<td class="savesend">
 							<?php
 							if ( $calling_post_id && current_theme_supports( 'post-thumbnails', get_post_type( $calling_post_id ) ) )
-								$ajax_nonce = wp_create_nonce( "set_post_thumbnail-$calling_post_id" );
-								echo "<a class='ngg-post-thumbnail' id='ngg-post-thumbnail-" . $picid . "' href='#' onclick='NGGSetAsThumbnail(\"$picid\", \"$ajax_nonce\");return false;'>" . esc_html__( 'Use as featured image' ) . "</a>";
+								$ajax_nonce   = wp_create_nonce( "set_post_thumbnail-$calling_post_id" );
+                                $second_nonce = wp_create_nonce( "ngg_set_post_thumbnails");
+								echo "<a class='ngg-post-thumbnail' id='ngg-post-thumbnail-" . $picid . "' href='#' onclick='NGGSetAsThumbnail(\"$picid\", \"$ajax_nonce\", \"$second_nonce\"); return false;'>" . esc_html__( 'Use as featured image' ) . "</a>";
 								echo "<a class='ngg-post-thumbnail-standin' href='#' style='display:none;'></a>";
 							?>
 							<button type="submit" id="ngg-mlitp-<?php echo esc_attr($picid); ?>" class="button ngg-mlitp" value="1" name="send[<?php echo $picid ?>]"><?php esc_html_e( 'Insert into Post' ); ?></button>

@@ -8,10 +8,11 @@ class scbUtil {
 	static function do_scripts( $handles ) {
 		global $wp_scripts;
 
-		if ( ! is_a( $wp_scripts, 'WP_Scripts' ) )
+		if ( ! is_a( $wp_scripts, 'WP_Scripts' ) ) {
 			$wp_scripts = new WP_Scripts();
+		}
 
-		$wp_scripts->do_items( ( array ) $handles );
+		$wp_scripts->do_items( (array) $handles );
 	}
 
 	// Force style enqueue
@@ -20,24 +21,26 @@ class scbUtil {
 
 		global $wp_styles;
 
-		if ( ! is_a( $wp_styles, 'WP_Styles' ) )
+		if ( ! is_a( $wp_styles, 'WP_Styles' ) ) {
 			$wp_styles = new WP_Styles();
+		}
 
 		ob_start();
-		$wp_styles->do_items( ( array ) $handles );
+		$wp_styles->do_items( (array) $handles );
 		$content = str_replace( array( "'", "\n" ), array( '"', '' ), ob_get_clean() );
 
 		echo "<script type='text/javascript'>\n";
 		echo "jQuery(function ($) { $('head').prepend('$content'); });\n";
-		echo "</script>";
+		echo '</script>';
 	}
 
 	// Enable delayed activation; to be used with scb_init()
 	static function add_activation_hook( $plugin, $callback ) {
-		if ( defined( 'SCB_LOAD_MU' ) )
+		if ( defined( 'SCB_LOAD_MU' ) ) {
 			register_activation_hook( $plugin, $callback );
-		else
+		} else {
 			add_action( 'scb_activation_' . plugin_basename( $plugin ), $callback );
+		}
 	}
 
 	// For debugging
@@ -48,10 +51,11 @@ class scbUtil {
 	// Allows more than one uninstall hooks.
 	// Also prevents an UPDATE query on each page load.
 	static function add_uninstall_hook( $plugin, $callback ) {
-		if ( !is_admin() )
+		if ( ! is_admin() ) {
 			return;
+		}
 
-		register_uninstall_hook( $plugin, '__return_false' );	// dummy
+		register_uninstall_hook( $plugin, '__return_false' );   // dummy
 
 		add_action( 'uninstall_' . plugin_basename( $plugin ), $callback );
 	}
@@ -63,7 +67,7 @@ class scbUtil {
 
 	// Get the current, full URL
 	static function get_current_url() {
-		return ( is_ssl() ? 'https://' : 'http://' ) . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+		return ( is_ssl() ? 'https://' : 'http://' ) . sanitize_text_field( $_SERVER['HTTP_HOST'] ) . sanitize_text_field( $_SERVER['REQUEST_URI'] );
 	}
 
 	// Apply a function to each element of a ( nested ) array recursively
@@ -97,8 +101,9 @@ class scbUtil {
 
 	// Prepare an array for an IN statement
 	static function array_to_sql( $values ) {
-		foreach ( $values as &$val )
+		foreach ( $values as &$val ) {
 			$val = "'" . esc_sql( trim( $val ) ) . "'";
+		}
 
 		return implode( ',', $values );
 	}
@@ -107,10 +112,11 @@ class scbUtil {
 	static function split_at( $delim, $str ) {
 		$i = strpos( $str, $delim );
 
-		if ( false === $i )
+		if ( false === $i ) {
 			return false;
+		}
 
-		$start = substr( $str, 0, $i );
+		$start  = substr( $str, 0, $i );
 		$finish = substr( $str, $i );
 
 		return array( $start, $finish );
@@ -119,7 +125,7 @@ class scbUtil {
 
 // Return a standard admin notice
 function scb_admin_notice( $msg, $class = 'updated' ) {
-	return html( "div class='$class fade'", html( "p", $msg ) );
+	return html( "div class='$class fade'", html( 'p', $msg ) );
 }
 
 // Transform a list of objects into an associative array
@@ -127,11 +133,13 @@ function scb_list_fold( $list, $key, $value ) {
 	$r = array();
 
 	if ( is_array( reset( $list ) ) ) {
-		foreach ( $list as $item )
+		foreach ( $list as $item ) {
 			$r[ $item[ $key ] ] = $item[ $value ];
+		}
 	} else {
-		foreach ( $list as $item )
+		foreach ( $list as $item ) {
 			$r[ $item->$key ] = $item->$value;
+		}
 	}
 
 	return $r;
@@ -149,8 +157,9 @@ function scb_list_group_by( $list, $fn ) {
 	foreach ( $list as $item ) {
 		$key = call_user_func( $fn, $item );
 
-		if ( null === $key )
+		if ( null === $key ) {
 			continue;
+		}
 
 		$groups[ $key ][] = $item;
 	}
@@ -158,7 +167,7 @@ function scb_list_group_by( $list, $fn ) {
 	return $groups;
 }
 
-//_____Database Table Utilities_____
+// _____Database Table Utilities_____
 
 /**
  * Register a table with $wpdb
@@ -169,11 +178,12 @@ function scb_list_group_by( $list, $fn ) {
 function scb_register_table( $key, $name = false ) {
 	global $wpdb;
 
-	if ( !$name )
+	if ( ! $name ) {
 		$name = $key;
+	}
 
 	$wpdb->tables[] = $name;
-	$wpdb->$key = $wpdb->prefix . $name;
+	$wpdb->$key     = $wpdb->prefix . $name;
 }
 
 /**
@@ -181,7 +191,7 @@ function scb_register_table( $key, $name = false ) {
  *
  * @param string $key The key used in scb_register_table()
  * @param string $columns The SQL columns for the CREATE TABLE statement
- * @param array $opts Various other options
+ * @param array  $opts Various other options
  */
 function scb_install_table( $key, $columns, $opts = array() ) {
 	global $wpdb;
@@ -192,17 +202,22 @@ function scb_install_table( $key, $columns, $opts = array() ) {
 		$opts = array( 'upgrade_method' => $opts );
 	}
 
-	$opts = wp_parse_args( $opts, array(
-		'upgrade_method' => 'dbDelta',
-		'table_options' => '',
-	) );
+	$opts = wp_parse_args(
+		$opts,
+		array(
+			'upgrade_method' => 'dbDelta',
+			'table_options'  => '',
+		)
+	);
 
 	$charset_collate = '';
 	if ( $wpdb->has_cap( 'collation' ) ) {
-		if ( ! empty( $wpdb->charset ) )
+		if ( ! empty( $wpdb->charset ) ) {
 			$charset_collate = "DEFAULT CHARACTER SET $wpdb->charset";
-		if ( ! empty( $wpdb->collate ) )
+		}
+		if ( ! empty( $wpdb->collate ) ) {
 			$charset_collate .= " COLLATE $wpdb->collate";
+		}
 	}
 
 	$table_options = $charset_collate . ' ' . $opts['table_options'];
@@ -213,8 +228,9 @@ function scb_install_table( $key, $columns, $opts = array() ) {
 		return;
 	}
 
-	if ( 'delete_first' == $opts['upgrade_method'] )
+	if ( 'delete_first' == $opts['upgrade_method'] ) {
 		$wpdb->query( "DROP TABLE IF EXISTS $full_table_name;" );
+	}
 
 	$wpdb->query( "CREATE TABLE IF NOT EXISTS $full_table_name ( $columns ) $table_options;" );
 }
@@ -222,82 +238,87 @@ function scb_install_table( $key, $columns, $opts = array() ) {
 function scb_uninstall_table( $key ) {
 	global $wpdb;
 
-	$wpdb->query( "DROP TABLE IF EXISTS " . $wpdb->$key );
+	$wpdb->query( 'DROP TABLE IF EXISTS ' . $wpdb->$key );
 }
 
-//_____Minimalist HTML framework_____
+// _____Minimalist HTML framework_____
 
 /**
  * Generate an HTML tag. Atributes are escaped. Content is NOT escaped.
  */
-if ( ! function_exists( 'html' ) ):
-function html( $tag ) {
-	static $SELF_CLOSING_TAGS = array( 'area', 'base', 'basefont', 'br', 'hr', 'input', 'img', 'link', 'meta' );
+if ( ! function_exists( 'html' ) ) :
+	function html( $tag ) {
+		static $SELF_CLOSING_TAGS = array( 'area', 'base', 'basefont', 'br', 'hr', 'input', 'img', 'link', 'meta' );
 
-	$args = func_get_args();
+		$args = func_get_args();
 
-	$tag = array_shift( $args );
+		$tag = array_shift( $args );
 
-	if ( is_array( $args[0] ) ) {
-		$closing = $tag;
-		$attributes = array_shift( $args );
-		foreach ( $attributes as $key => $value ) {
-			if ( false === $value )
-				continue;
+		if ( is_array( $args[0] ) ) {
+			$closing    = $tag;
+			$attributes = array_shift( $args );
+			foreach ( $attributes as $key => $value ) {
+				if ( false === $value ) {
+					continue;
+				}
 
-			if ( true === $value )
-				$value = $key;
+				if ( true === $value ) {
+					$value = $key;
+				}
 
-			$tag .= ' ' . $key . '="' . esc_attr( $value ) . '"';
+				$tag .= ' ' . $key . '="' . esc_attr( $value ) . '"';
+			}
+		} else {
+			list( $closing ) = explode( ' ', $tag, 2 );
 		}
-	} else {
-		list( $closing ) = explode( ' ', $tag, 2 );
+
+		if ( in_array( $closing, $SELF_CLOSING_TAGS ) ) {
+			return "<{$tag} />";
+		}
+
+		$content = implode( '', $args );
+
+		return "<{$tag}>{$content}</{$closing}>";
 	}
-
-	if ( in_array( $closing, $SELF_CLOSING_TAGS ) ) {
-		return "<{$tag} />";
-	}
-
-	$content = implode( '', $args );
-
-	return "<{$tag}>{$content}</{$closing}>";
-}
 endif;
 
 // Generate an <a> tag
-if ( ! function_exists( 'html_link' ) ):
-function html_link( $url, $title = '' ) {
-	if ( empty( $title ) )
-		$title = $url;
+if ( ! function_exists( 'html_link' ) ) :
+	function html_link( $url, $title = '' ) {
+		if ( empty( $title ) ) {
+			$title = $url;
+		}
 
-	return html( 'a', array( 'href' => $url ), $title );
-}
+		return html( 'a', array( 'href' => $url ), $title );
+	}
 endif;
 
 function scb_get_query_flags( $wp_query = null ) {
-	if ( !$wp_query )
+	if ( ! $wp_query ) {
 		$wp_query = $GLOBALS['wp_query'];
+	}
 
 	$flags = array();
 	foreach ( get_object_vars( $wp_query ) as $key => $val ) {
-		if ( 'is_' == substr( $key, 0, 3 ) && $val )
+		if ( 'is_' == substr( $key, 0, 3 ) && $val ) {
 			$flags[] = substr( $key, 3 );
+		}
 	}
 
 	return $flags;
 }
 
-//_____Compatibility layer_____
+// _____Compatibility layer_____
 
 // WP < ?
 if ( ! function_exists( 'set_post_field' ) ) :
-function set_post_field( $field, $value, $post_id ) {
-	global $wpdb;
+	function set_post_field( $field, $value, $post_id ) {
+		global $wpdb;
 
-	$post_id = absint( $post_id );
-	$value = sanitize_post_field( $field, $value, $post_id, 'db' );
+		$post_id = absint( $post_id );
+		$value   = sanitize_post_field( $field, $value, $post_id, 'db' );
 
-	return $wpdb->update( $wpdb->posts, array( $field => $value ), array( 'ID' => $post_id ) );
-}
+		return $wpdb->update( $wpdb->posts, array( $field => $value ), array( 'ID' => $post_id ) );
+	}
 endif;
 

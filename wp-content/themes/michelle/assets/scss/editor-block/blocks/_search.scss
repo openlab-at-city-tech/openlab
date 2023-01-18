@@ -1,0 +1,5 @@
+/* FILE: editor-block/blocks/_search.scss */
+
+#{ $selector_editor_wrapper } .wp-block-search__button {
+	font-size: calc( var(--typography_font_size_base) * #{ $button_font_size } );
+}

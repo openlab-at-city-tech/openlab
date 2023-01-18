@@ -142,6 +142,14 @@ if ( ! class_exists( 'EIO_Base' ) ) {
 		 * @return string The full path to a writable plugin resource folder.
 		 */
 		function set_content_dir( $sub_folder ) {
+			if (
+				defined( 'EWWWIO_CONTENT_DIR' ) &&
+				trailingslashit( WP_CONTENT_DIR ) . trailingslashit( 'ewww' ) !== EWWWIO_CONTENT_DIR
+			) {
+				$content_dir       = EWWWIO_CONTENT_DIR;
+				$this->content_url = str_replace( WP_CONTENT_DIR, WP_CONTENT_URL, $content_dir );
+				return $content_dir;
+			}
 			$content_dir = WP_CONTENT_DIR . $sub_folder;
 			if ( ! is_writable( WP_CONTENT_DIR ) || ! empty( $_ENV['PANTHEON_ENVIRONMENT'] ) ) {
 				$upload_dir = wp_get_upload_dir();
@@ -207,6 +215,7 @@ if ( ! class_exists( 'EIO_Base' ) ) {
 			if ( ! is_string( $message ) && ! is_int( $message ) && ! is_float( $message ) ) {
 				return;
 			}
+			$message = "$message";
 			if ( defined( 'WP_CLI' ) && WP_CLI ) {
 				WP_CLI::debug( $message );
 				return;
@@ -302,6 +311,23 @@ if ( ! class_exists( 'EIO_Base' ) ) {
 		}
 
 		/**
+		 * Checks if the S3 Uploads plugin is installed and active.
+		 *
+		 * @return bool True if it is fully active and rewriting/offloading media, false otherwise.
+		 */
+		function s3_uploads_enabled() {
+			// For version 3.x.
+			if ( class_exists( 'S3_Uploads\Plugin', false ) && function_exists( 'S3_Uploads\enabled' ) && \S3_Uploads\enabled() ) {
+				return true;
+			}
+			// Pre version 3.
+			if ( class_exists( 'S3_Uploads', false ) && function_exists( 's3_uploads_enabled' ) && \s3_uploads_enabled() ) {
+				return true;
+			}
+			return false;
+		}
+
+		/**
 		 * Retrieve option: use 'site' setting if plugin is network activated, otherwise use 'blog' setting.
 		 *
 		 * Retrieves multi-site and single-site options as appropriate as well as allowing overrides with
@@ -379,9 +405,18 @@ if ( ! class_exists( 'EIO_Base' ) ) {
 		 * @return bool True for an AMP endpoint, false otherwise.
 		 */
 		function is_amp() {
+			// Just return false if we can't properly check yet.
+			if ( ! did_action( 'parse_request' ) ) {
+				return false;
+			}
 			if ( ! did_action( 'wp' ) ) {
 				return false;
 			}
+			global $wp_query;
+			if ( ! isset( $wp_query ) || ! ( $wp_query instanceof WP_Query ) ) {
+				return false;
+			}
+
 			if ( function_exists( 'amp_is_request' ) && amp_is_request() ) {
 				return true;
 			}
@@ -415,6 +450,7 @@ if ( ! class_exists( 'EIO_Base' ) ) {
 
 		/**
 		 * Make sure this is really and truly a "front-end request", excluding page builders and such.
+		 * Note this is not currently used anywhere, each module has it's own list.
 		 *
 		 * @return bool True for front-end requests, false for admin/builder requests.
 		 */
@@ -431,6 +467,7 @@ if ( ! class_exists( 'EIO_Base' ) ) {
 				'/print/' === substr( $uri, -7 ) ||
 				strpos( $uri, 'elementor-preview=' ) !== false ||
 				strpos( $uri, 'et_fb=' ) !== false ||
+				strpos( $uri, 'is-editor-iframe=' ) !== false ||
 				strpos( $uri, 'vc_editable=' ) !== false ||
 				strpos( $uri, 'tatsu=' ) !== false ||
 				( ! empty( $_POST['action'] ) && 'tatsu_get_concepts' === sanitize_text_field( wp_unslash( $_POST['action'] ) ) ) || // phpcs:ignore WordPress.Security.NonceVerification
@@ -505,6 +542,82 @@ if ( ! class_exists( 'EIO_Base' ) ) {
 			return is_file( $file );
 		}
 
+		/**
+		 * Check if a file/directory is readable.
+		 *
+		 * @param string $file The path to check.
+		 * @return bool True if it is, false if it ain't.
+		 */
+		function is_readable( $file ) {
+			$this->get_filesystem();
+			return $this->filesystem->is_readable( $file );
+		}
+
+		/**
+		 * Check filesize, and prevent errors by ensuring file exists, and that the cache has been cleared.
+		 *
+		 * @param string $file The name of the file.
+		 * @return int The size of the file or zero.
+		 */
+		function filesize( $file ) {
+			$file = realpath( $file );
+			if ( $this->is_file( $file ) ) {
+				$this->get_filesystem();
+				// Flush the cache for filesize.
+				clearstatcache();
+				// Find out the size of the new PNG file.
+				return $this->filesystem->size( $file );
+			} else {
+				return 0;
+			}
+		}
+
+		/**
+		 * Check if file is in an approved location and remove it.
+		 *
+		 * @param string $file The path of the file to check.
+		 * @param string $dir The path of the folder constraint. Optional.
+		 * @return bool True if the file was removed, false otherwise.
+		 */
+		function delete_file( $file, $dir = '' ) {
+			$file = realpath( $file );
+			if ( ! empty( $dir ) ) {
+				return \wp_delete_file_from_directory( $file, $dir );
+			}
+
+			$wp_dir      = realpath( ABSPATH );
+			$upload_dir  = \wp_get_upload_dir();
+			$upload_dir  = realpath( $upload_dir['basedir'] );
+			$content_dir = realpath( WP_CONTENT_DIR );
+
+			if ( false !== strpos( $file, $upload_dir ) ) {
+				return \wp_delete_file_from_directory( $file, $upload_dir );
+			}
+			if ( false !== strpos( $file, $content_dir ) ) {
+				return \wp_delete_file_from_directory( $file, $content_dir );
+			}
+			if ( false !== strpos( $file, $wp_dir ) ) {
+				return \wp_delete_file_from_directory( $file, $wp_dir );
+			}
+			return false;
+		}
+
+		/**
+		 * Setup the filesystem class.
+		 */
+		function get_filesystem() {
+			require_once( ABSPATH . 'wp-admin/includes/class-wp-filesystem-base.php' );
+			require_once( ABSPATH . 'wp-admin/includes/class-wp-filesystem-direct.php' );
+			if ( ! defined( 'FS_CHMOD_DIR' ) ) {
+				define( 'FS_CHMOD_DIR', ( fileperms( ABSPATH ) & 0777 | 0755 ) );
+			}
+			if ( ! defined( 'FS_CHMOD_FILE' ) ) {
+				define( 'FS_CHMOD_FILE', ( fileperms( ABSPATH . 'index.php' ) & 0777 | 0644 ) );
+			}
+			if ( ! isset( $this->filesystem ) || ! is_object( $this->filesystem ) ) {
+				$this->filesystem = new \WP_Filesystem_Direct( '' );
+			}
+		}
 
 		/**
 		 * Make sure an array/object can be parsed by a foreach().
@@ -570,6 +683,15 @@ if ( ! class_exists( 'EIO_Base' ) ) {
 		}
 
 		/**
+		 * Clear output buffers without throwing a fit.
+		 */
+		function ob_clean() {
+			if ( ob_get_length() ) {
+				ob_end_clean();
+			}
+		}
+
+		/**
 		 * Set an option: use 'site' setting if plugin is network activated, otherwise use 'blog' setting.
 		 *
 		 * @param string $option_name The name of the option to save.
@@ -624,6 +746,7 @@ if ( ! class_exists( 'EIO_Base' ) ) {
 					)
 				) {
 					// We will wait until the paths loop to fix this one.
+					$this->debug_message( 'skipping domains and going to URLs' );
 					continue;
 				}
 				if ( false !== strpos( $url, $allowed_domain ) ) {
@@ -640,6 +763,9 @@ if ( ! class_exists( 'EIO_Base' ) ) {
 					continue;
 				}
 				$this->debug_message( "looking for path $allowed_url in $url" );
+				if ( ! empty( $this->s3_active ) && ! empty( $this->s3_object_prefix ) ) {
+					$this->debug_message( "checking first for $this->s3_active and $allowed_url" . $this->s3_object_prefix );
+				}
 				if (
 					! empty( $this->s3_active ) && // We've got an S3 configuration, and...
 					false !== strpos( $url, $this->s3_active ) && // the S3 domain is present in the URL, and...
@@ -776,22 +902,23 @@ if ( ! class_exists( 'EIO_Base' ) ) {
 				} elseif ( ! empty( $s3_bucket ) && ! is_wp_error( $s3_bucket ) && method_exists( $as3cf, 'get_storage_provider' ) ) {
 					$s3_domain = $as3cf->get_storage_provider()->get_url_domain( $s3_bucket, $s3_region );
 				}
+				if ( $as3cf->get_setting( 'enable-object-prefix' ) ) {
+					$this->s3_object_prefix = $as3cf->get_setting( 'object-prefix' );
+					$this->debug_message( $this->s3_object_prefix );
+				} else {
+					$this->s3_object_prefix = '';
+					$this->debug_message( 'no WOM prefix' );
+				}
 				if ( ! empty( $s3_domain ) && $as3cf->get_setting( 'serve-from-s3' ) ) {
 					$this->s3_active = $s3_domain;
 					$this->debug_message( "found S3 domain of $s3_domain with bucket $s3_bucket and region $s3_region" );
 					$this->allowed_urls[] = $s3_scheme . '://' . $s3_domain . '/';
 					if ( $as3cf->get_setting( 'enable-delivery-domain' ) && $as3cf->get_setting( 'delivery-domain' ) ) {
 						$delivery_domain         = $as3cf->get_setting( 'delivery-domain' );
-						$this->allowed_urls[]    = $s3_scheme . '://' . $delivery_domain . '/';
+						$this->allowed_urls[]    = $s3_scheme . '://' . \trailingslashit( $delivery_domain ) . trailingslashit( trim( $this->s3_object_prefix, '/' ) );
 						$this->allowed_domains[] = $delivery_domain;
 						$this->debug_message( "found WOM delivery domain of $delivery_domain" );
 					}
-				}
-				if ( $as3cf->get_setting( 'enable-object-prefix' ) ) {
-					$this->s3_object_prefix = $as3cf->get_setting( 'object-prefix' );
-					$this->debug_message( $as3cf->get_setting( 'object-prefix' ) );
-				} else {
-					$this->debug_message( 'no WOM prefix' );
 				}
 				if ( $as3cf->get_setting( 'object-versioning' ) ) {
 					$this->s3_object_version = true;
@@ -799,32 +926,21 @@ if ( ! class_exists( 'EIO_Base' ) ) {
 				}
 			}
 
-			if (
-				class_exists( 'S3_Uploads' ) &&
-				function_exists( 's3_uploads_enabled' ) && s3_uploads_enabled() &&
-				method_exists( 'S3_Uploads', 'get_instance' ) && method_exists( 'S3_Uploads', 'get_s3_url' )
-			) {
-				$s3_uploads_instance  = \S3_Uploads::get_instance();
-				$s3_uploads_url       = $s3_uploads_instance->get_s3_url();
-				$this->allowed_urls[] = $s3_uploads_url;
-				$this->debug_message( "found S3 URL from S3_Uploads: $s3_uploads_url" );
-				$s3_domain       = $this->parse_url( $s3_uploads_url, PHP_URL_HOST );
-				$s3_scheme       = $this->parse_url( $s3_uploads_url, PHP_URL_SCHEME );
-				$this->s3_active = $s3_domain;
-			}
-
-			if (
-				class_exists( 'S3_Uploads\Plugin' ) &&
-				function_exists( 's3_uploads_enabled' ) && s3_uploads_enabled() &&
-				method_exists( 'S3_Uploads\Plugin', 'get_instance' ) && method_exists( 'S3_Uploads', 'get_s3_url\Plugin' )
-			) {
-				$s3_uploads_instance  = \S3_Uploads\Plugin::get_instance();
-				$s3_uploads_url       = $s3_uploads_instance->get_s3_url();
-				$this->allowed_urls[] = $s3_uploads_url;
-				$this->debug_message( "found S3 URL from S3_Uploads: $s3_uploads_url" );
-				$s3_domain       = $this->parse_url( $s3_uploads_url, PHP_URL_HOST );
-				$s3_scheme       = $this->parse_url( $s3_uploads_url, PHP_URL_SCHEME );
-				$this->s3_active = $s3_domain;
+			if ( $this->s3_uploads_enabled() ) {
+				if ( method_exists( 'S3_Uploads\Plugin', 'get_instance' ) && method_exists( 'S3_Uploads\Plugin', 'get_s3_url' ) ) {
+					$s3_uploads_instance = \S3_Uploads\Plugin::get_instance();
+					$s3_uploads_url      = $s3_uploads_instance->get_s3_url();
+				} elseif ( method_exists( 'S3_Uploads', 'get_instance' ) && method_exists( 'S3_Uploads', 'get_s3_url' ) ) {
+					$s3_uploads_instance = \S3_Uploads::get_instance();
+					$s3_uploads_url      = $s3_uploads_instance->get_s3_url();
+				}
+				if ( ! empty( $s3_uploads_url ) ) {
+					$this->allowed_urls[] = $s3_uploads_url;
+					$this->debug_message( "found S3 URL from S3_Uploads: $s3_uploads_url" );
+					$s3_domain       = $this->parse_url( $s3_uploads_url, PHP_URL_HOST );
+					$s3_scheme       = $this->parse_url( $s3_uploads_url, PHP_URL_SCHEME );
+					$this->s3_active = $s3_domain;
+				}
 			}
 
 			if ( class_exists( 'wpCloud\StatelessMedia\EWWW' ) && function_exists( 'ud_get_stateless_media' ) ) {
@@ -844,7 +960,7 @@ if ( ! class_exists( 'EIO_Base' ) ) {
 
 			// NOTE: we don't want this for Easy IO as they might be using SWIS to deliver
 			// JS/CSS from a different CDN domain, and that will break with Easy IO!
-			if ( 'ExactDN' !== get_class( $this ) && 'EIO_Base' !== get_class( $this ) && function_exists( 'swis' ) && swis()->settings->get_option( 'cdn_domain' ) ) {
+			if ( 'ExactDN' !== get_class( $this ) && 'EIO_Base' !== get_class( $this ) && function_exists( 'swis' ) && is_object( swis()->settings ) && swis()->settings->get_option( 'cdn_domain' ) ) {
 				$this->allowed_urls[]    = swis()->settings->get_option( 'cdn_domain' );
 				$this->allowed_domains[] = $this->parse_url( swis()->settings->get_option( 'cdn_domain' ), PHP_URL_HOST );
 			}
@@ -859,7 +975,7 @@ if ( ! class_exists( 'EIO_Base' ) ) {
 				$home_domain = $this->parse_url( $home_url, PHP_URL_HOST );
 				$site_domain = $this->parse_url( $site_url, PHP_URL_HOST );
 				// If the home domain does not match the upload url, and the site domain does match...
-				if ( false === strpos( $upload_dir['baseurl'], $home_domain ) && false !== strpos( $upload_dir['baseurl'], $site_domain ) ) {
+				if ( $home_domain && false === strpos( $upload_dir['baseurl'], $home_domain ) && $site_domain && false !== strpos( $upload_dir['baseurl'], $site_domain ) ) {
 					$this->debug_message( "using WP URL (via get_site_url) with $site_domain rather than $home_domain" );
 					$home_url = $site_url;
 				}
@@ -872,6 +988,14 @@ if ( ! class_exists( 'EIO_Base' ) ) {
 			// But this is used by Easy IO, so it should be derived from the above logic instead, which already matches the site/home URLs against the upload URL.
 			$this->upload_domain     = $this->parse_url( $this->site_url, PHP_URL_HOST );
 			$this->allowed_domains[] = $this->upload_domain;
+			// For when plugins don't do a very good job of updating URLs for mapped multi-site domains.
+			if ( is_multisite() && false === strpos( $upload_dir['baseurl'], $this->upload_domain ) ) {
+				$this->debug_message( 'upload domain does not match the home URL' );
+				$origin_upload_domain = $this->parse_url( $upload_dir['baseurl'], PHP_URL_HOST );
+				if ( $origin_upload_domain ) {
+					$this->allowed_domains[] = $origin_upload_domain;
+				}
+			}
 			// Grab domain aliases that might point to the same place as the upload_domain.
 			if ( ! $this->s3_active && 0 !== strpos( $this->upload_domain, 'www' ) ) {
 				$this->allowed_domains[] = 'www.' . $this->upload_domain;

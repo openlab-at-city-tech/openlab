@@ -2,7 +2,7 @@
   "private": true,
   "name": "openlab-attributions",
   "description": "Add formatted attributions to post content.",
-  "version": "1.0.0",
+  "version": "2.0.1",
   "author": "George Mamadashvili",
   "license": "GPL-2.0+",
   "main": "dist/js/block-editor.js",
@@ -18,9 +18,11 @@
     "format:scripts": "cross-env eslint './dist/js/**/*.js' --fix"
   },
   "dependencies": {
+    "@wordpress/i18n": "^4.2.0",
     "classnames": "^2.2.6",
     "nanoid": "^2.1.1",
     "react-contenteditable": "^3.3.5",
+    "react-modal-resizable-draggable": "^0.1.6",
     "react-tippy": "^1.2.3"
   },
   "devDependencies": {
@@ -30,9 +32,9 @@
     "@wordpress/eslint-plugin": "^8.0.2",
     "cross-env": "^7.0.3",
     "eslint": "^7.20.0",
-    "laravel-mix": "^6.0.34",
-    "postcss": "^8.3.9",
-    "resolve-url-loader": "^4.0.0",
+    "laravel-mix": "^6.0.11",
+    "postcss": "^8.2.6",
+    "resolve-url-loader": "^3.1.2",
     "sass": "^1.32.8",
     "sass-loader": "^8.0.2"
   }

@@ -1,0 +1,46 @@
+.bookly-columnizer .bookly-hour.bookly-slot-in-waiting-list span.bookly-time-additional {
+    color: #f4662f!important;
+}
+#bookly-step-settings > div > .col-md-3:nth-child(4n+1) {
+    clear: both;
+}
+
+#bookly-tbs .bookly-animate {
+    -webkit-transition: background-color 500ms ease-in;
+    -ms-transition: background-color 500ms ease-in;
+    transition: background-color 500ms ease-in;
+}
+#bookly-tbs .bookly-form label input[type="radio"] {
+    display: inline-block!important;
+    width: 16px!important;
+    height: 16px!important;
+    margin-left: 1px!important;
+}
+
+#bookly-tbs .bookly-form button {
+    border-radius: 4px;
+}
+
+#bookly-tbs .bookly-form ul {
+    padding: 0;
+}
+
+#bookly-tbs .bookly-form select {
+    max-width: none;
+    min-height: unset;
+    background: none;
+    -webkit-appearance: revert;
+}
+
+#bookly-tbs .bookly-editable{
+    display: inline-block;
+    line-height: 16px;
+    min-width: 8px;
+    min-height: 14px;
+}
+
+@media (max-width: 767px) {
+    #bookly-tbs .bookly-form .bookly-progress-tracker {
+        display: none !important;
+    }
+}

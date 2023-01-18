@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-12 23:08+0000\n"
+"POT-Creation-Date: 2022-11-15 21:07+0000\n"
 "PO-Revision-Date: 2017-04-14T23:01:46+00:00\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -56,7 +56,7 @@ msgid "Include 'Add To Google' link"
 msgstr "'Add To Google'-Link anzeigen"
 
 #: classes/class-eo-agenda-widget.php:140 event-organiser-edit.php:151
-#: includes/event-organiser-event-functions.php:1382
+#: includes/event-organiser-event-functions.php:1388
 msgid "All day"
 msgstr "ganztags"
 
@@ -253,7 +253,7 @@ msgstr "Terminkategorien"
 
 #: classes/class-eo-widget-categories.php:25
 #: includes/event-organiser-cpt.php:95 includes/event-organiser-cpt.php:106
-#: includes/event-organiser-event-functions.php:1563
+#: includes/event-organiser-event-functions.php:1569
 #: templates/event-meta-event-single.php:62
 msgid "Categories"
 msgstr "Terminkategorien"
@@ -293,7 +293,7 @@ msgstr "Veranstaltungsorte"
 msgid "Select Venue"
 msgstr "Veranstaltungsort wählen"
 
-#: classes/class-eventorganiser-shortcodes.php:464
+#: classes/class-eventorganiser-shortcodes.php:472
 msgid "There is no excerpt because this is a protected post."
 msgstr "Es gibt keine Kurzfassung, da dies ein geschützter Artikel ist."
 
@@ -382,7 +382,7 @@ msgid "24 hour time"
 msgstr "24-Stunden-Zeit"
 
 #: event-organiser-calendar.php:256
-#: includes/event-organiser-event-functions.php:1500
+#: includes/event-organiser-event-functions.php:1506
 msgid "Loading&#8230;"
 msgstr "Laden&#8230;"
 
@@ -661,7 +661,7 @@ msgid "day of week"
 msgstr "Tag der Woche"
 
 #: event-organiser-edit.php:225
-#: includes/event-organiser-event-functions.php:856
+#: includes/event-organiser-event-functions.php:862
 #: includes/event-organiser-register.php:307
 msgid "until"
 msgstr "bis"
@@ -1690,7 +1690,7 @@ msgid "Choose from the most used tags"
 msgstr "Aus den meist verwendeten Terminschlagworten auswählen"
 
 #: includes/event-organiser-cpt.php:163
-#: includes/event-organiser-event-functions.php:1571
+#: includes/event-organiser-event-functions.php:1577
 #: templates/event-meta-event-single.php:66
 msgid "Tags"
 msgstr "Terminschlagworte"
@@ -2071,77 +2071,77 @@ msgstr "Farbe"
 msgid "Assign the category a colour."
 msgstr "Der Unterrichtskategorie eine Farbe zuweisen."
 
-#: includes/event-organiser-event-functions.php:777
+#: includes/event-organiser-event-functions.php:783
 #: includes/event-organiser-register.php:313
 msgid "last"
 msgstr "letzten"
 
-#: includes/event-organiser-event-functions.php:777
+#: includes/event-organiser-event-functions.php:783
 #: includes/event-organiser-register.php:309
 msgid "first"
 msgstr "ersten"
 
-#: includes/event-organiser-event-functions.php:777
+#: includes/event-organiser-event-functions.php:783
 #: includes/event-organiser-register.php:310
 msgid "second"
 msgstr "zweiten"
 
-#: includes/event-organiser-event-functions.php:777
+#: includes/event-organiser-event-functions.php:783
 #: includes/event-organiser-register.php:311
 msgid "third"
 msgstr "dritten"
 
-#: includes/event-organiser-event-functions.php:777
+#: includes/event-organiser-event-functions.php:783
 #: includes/event-organiser-register.php:312
 msgid "fourth"
 msgstr "vierten"
 
-#: includes/event-organiser-event-functions.php:787
+#: includes/event-organiser-event-functions.php:793
 msgid "one time only"
 msgstr "einmalig"
 
-#: includes/event-organiser-event-functions.php:790
+#: includes/event-organiser-event-functions.php:796
 msgid "custom recurrence"
 msgstr "Eigene Wiederholung"
 
-#: includes/event-organiser-event-functions.php:797
+#: includes/event-organiser-event-functions.php:803
 #: includes/event-organiser-register.php:298
 msgid "every day"
 msgstr "jeden Tag"
 
-#: includes/event-organiser-event-functions.php:799
+#: includes/event-organiser-event-functions.php:805
 #: includes/event-organiser-register.php:299
 #, php-format
 msgid "every %d days"
 msgstr "alle %d Tage"
 
-#: includes/event-organiser-event-functions.php:805
+#: includes/event-organiser-event-functions.php:811
 #: includes/event-organiser-register.php:300
 msgid "every week on"
 msgstr "jede Woche am"
 
-#: includes/event-organiser-event-functions.php:807
+#: includes/event-organiser-event-functions.php:813
 #: includes/event-organiser-register.php:301
 #, php-format
 msgid "every %d weeks on"
 msgstr "alle %d Wochen am"
 
-#: includes/event-organiser-event-functions.php:818
+#: includes/event-organiser-event-functions.php:824
 #: includes/event-organiser-register.php:302
 msgid "every month on the"
 msgstr "jeden Monat am"
 
-#: includes/event-organiser-event-functions.php:820
+#: includes/event-organiser-event-functions.php:826
 #: includes/event-organiser-register.php:303
 #, php-format
 msgid "every %d months on the"
 msgstr "alle %d Monate am"
 
-#: includes/event-organiser-event-functions.php:849
+#: includes/event-organiser-event-functions.php:855
 msgid "every year"
 msgstr "jedes Jahr"
 
-#: includes/event-organiser-event-functions.php:851
+#: includes/event-organiser-event-functions.php:857
 #, php-format
 msgid "every %d years"
 msgstr "alle %d Jahre"
@@ -2303,11 +2303,11 @@ msgstr "Ungültiger monatlicher Zeitplan (ungültige Ordnungszahl)"
 msgid "Event does not contain any dates."
 msgstr "Der Termin enthält keine Datumsangaben."
 
-#: includes/event.php:1080
+#: includes/event.php:1085
 msgid "Occurrence not deleted. Occurrence not found."
 msgstr "Ereignis nicht gelöscht bzw. nicht gefunden."
 
-#: includes/event.php:1136
+#: includes/event.php:1141
 #, fuzzy
 msgid "There is already an occurrence on this date"
 msgstr "An diesem Datum wurde bereits ein Ereignis eingetragen."

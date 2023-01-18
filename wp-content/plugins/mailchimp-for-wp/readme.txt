@@ -1,10 +1,10 @@
 === MC4WP: Mailchimp for WordPress ===
 Contributors: Ibericode, DvanKooten, hchouhan, lapzor
-Donate link: https://www.mc4wp.com/#utm_source=wp-plugin-repo&utm_medium=mailchimp-for-wp&utm_campaign=donate-link
+Donate link: https://www.mc4wp.com/contribute/#utm_source=wp-plugin-repo&utm_medium=mailchimp-for-wp&utm_campaign=donate-link
 Tags: mailchimp, mc4wp, email, marketing, newsletter, subscribe, widget, mc4wp, contact form 7, woocommerce, buddypress, ibericode, mailchimp form
 Requires at least: 4.6
-Tested up to: 5.9
-Stable tag: 4.8.7
+Tested up to: 6.1
+Stable tag: 4.8.12
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Requires PHP: 5.3
@@ -195,6 +195,29 @@ The plugin provides various filter & action hooks that allow you to modify or ex
 6. Dive into detailed sign-up statistics (premium feature).
 
 == Changelog ==
+
+
+#### 4.8.12 - Dec 06, 2022
+
+- Minor performance, memory usage & size optimizations for all JavaScript code bundled with this plugin.
+
+
+#### 4.8.11 - Nov 1, 2022
+
+- Improved default styling for the WooCommerce sign-up checkbox integration.
+- Add `<strong>` to allowed HTML elements for GDPR disclaimer text on settings pages.
+- Remove all references to obsolete placeholders.js polyfill.
+- Move the GiveWP sign-up checkbox closer to the email input field. Thanks [Matthew Lewis](https://github.com/Matthew-Lewis).
+
+
+#### 4.8.10 - Sep 14, 2022
+
+- Fix mc4wp_get_request_ip_address() to return an IP address that matches Mailchimp's validation format when X-Forwarded-For header contains a port component.
+
+
+#### 4.8.8 - Aug 25, 2022
+
+- Fix mc4wp_get_request_ip_address() to pass new Mailchimp validation format. This fixes the "This value is not a valid IP." error some users using a proxy may have been seeing.
 
 
 #### 4.8.7 - Mar 2, 2022

@@ -226,6 +226,353 @@ class EWWWIO_CLI extends WP_CLI_Command {
 				}
 		} // End switch().
 	}
+
+	/**
+	 * Restore images from cloud/local backups.
+	 *
+	 * ## OPTIONS
+	 *
+	 * <reset>
+	 * : optional, start the process over instead of resuming from last position
+	 *
+	 * ## EXAMPLES
+	 *
+	 *     wp-cli ewwwio restore --reset
+	 *
+	 * @synopsis [--reset]
+	 *
+	 * @param array $args A numeric array of required arguments.
+	 * @param array $assoc_args An associative array of optional arguments.
+	 */
+	function restore( $args, $assoc_args ) {
+		if ( ! empty( $assoc_args['reset'] ) ) {
+			delete_option( 'ewww_image_optimizer_bulk_restore_position' );
+		}
+		global $eio_backup;
+		global $wpdb;
+		if ( strpos( $wpdb->charset, 'utf8' ) === false ) {
+			ewww_image_optimizer_db_init();
+			global $ewwwdb;
+		} else {
+			$ewwwdb = $wpdb;
+		}
+
+		$completed = 0;
+		$position  = (int) get_option( 'ewww_image_optimizer_bulk_restore_position' );
+		$per_page  = 200;
+
+		ewwwio_debug_message( "searching for $per_page records starting at $position" );
+		$optimized_images = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $wpdb->ewwwio_images WHERE id > %d AND pending = 0 AND image_size > 0 AND updates > 0 ORDER BY id LIMIT %d", $position, $per_page ), ARRAY_A );
+
+		$restorable_images = (int) $wpdb->get_var( $wpdb->prepare( "SELECT count(id) FROM $wpdb->ewwwio_images WHERE id > %d AND pending = 0 AND image_size > 0 AND updates > 0", $position ) );
+
+		/* translators: %d: number of images */
+		WP_CLI::line( sprintf( __( 'There are %d images that may be restored.', 'ewww-image-optimizer' ), $restorable_images ) );
+		WP_CLI::confirm( __( 'You should take a site backup before performing a bulk action on your images. Do you wish to continue?', 'ewww-image-optimizer' ) );
+
+		// Because some plugins might have loose filters (looking at you WPML).
+		remove_all_filters( 'wp_delete_file' );
+
+		while ( ewww_image_optimizer_iterable( $optimized_images ) ) {
+			foreach ( $optimized_images as $optimized_image ) {
+				$completed++;
+				ewwwio_debug_message( "submitting {$optimized_image['id']} to be restored" );
+				$optimized_image['path'] = \ewww_image_optimizer_absolutize_path( $optimized_image['path'] );
+				$eio_backup->restore_file( $optimized_image );
+				$error_message = $eio_backup->get_error();
+				if ( $error_message ) {
+					WP_CLI::warning( "$completed/$restorable_images: $error_message" );
+				} else {
+					WP_CLI::success( "$completed/$restorable_images: {$optimized_image['path']}" );
+				}
+				update_option( 'ewww_image_optimizer_bulk_restore_position', $optimized_image['id'], false );
+			} // End foreach().
+			$optimized_images = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $wpdb->ewwwio_images WHERE id > %d AND pending = 0 AND image_size > 0 AND updates > 0 ORDER BY id LIMIT %d", $optimized_image['id'], $per_page ), ARRAY_A );
+		}
+
+		delete_option( 'ewww_image_optimizer_bulk_restore_position' );
+	}
+
+	/**
+	 * Remove pre-scaled original size versions of image uploads.
+	 *
+	 * ## OPTIONS
+	 *
+	 * <reset>
+	 * : optional, start the process back at the beginning instead of resuming from last position
+	 *
+	 * ## EXAMPLES
+	 *
+	 *     wp-cli ewwwio remove_originals --reset
+	 *
+	 * @synopsis [--reset]
+	 *
+	 * @param array $args A numeric array of required arguments.
+	 * @param array $assoc_args An associative array of optional arguments.
+	 */
+	function remove_originals( $args, $assoc_args ) {
+		if ( ! empty( $assoc_args['reset'] ) ) {
+			delete_option( 'ewww_image_optimizer_delete_originals_resume' );
+		}
+		global $wpdb;
+
+		$per_page = 200;
+		$position = (int) get_option( 'ewww_image_optimizer_delete_originals_resume' );
+
+		$cleanable_uploads = (int) $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT count(ID) FROM $wpdb->posts WHERE ID > %d AND (post_type = 'attachment' OR post_type = 'ims_image') AND post_mime_type LIKE %s",
+				(int) $position,
+				'%image%'
+			)
+		);
+
+		/* translators: %d: number of image uploads */
+		WP_CLI::line( sprintf( __( 'This process removes the originals that WordPress preserves for thumbnail generation. %d media uploads will checked for originals to remove.', 'ewww-image-optimizer' ), $cleanable_uploads ) );
+		WP_CLI::confirm( __( 'You should take a site backup before performing a bulk action on your images. Do you wish to continue?', 'ewww-image-optimizer' ) );
+
+		/**
+		 * Require the files that contain functions for the images table and bulk processing images outside the library.
+		 */
+		require_once( EWWW_IMAGE_OPTIMIZER_PLUGIN_PATH . 'aux-optimize.php' );
+
+		\ewwwio_debug_message( "searching for $per_page records starting at $position" );
+
+		$attachments = $wpdb->get_col(
+			$wpdb->prepare(
+				"SELECT ID FROM $wpdb->posts WHERE ID > %d AND (post_type = 'attachment' OR post_type = 'ims_image') AND post_mime_type LIKE %s ORDER BY ID LIMIT %d",
+				(int) $position,
+				'%image%',
+				(int) $per_page
+			)
+		);
+
+		$progress = \WP_CLI\Utils\make_progress_bar( __( 'Deleting originals', 'ewww-image-optimizer' ), $cleanable_uploads );
+
+		// Because some plugins might have loose filters (looking at you WPML).
+		\remove_all_filters( 'wp_delete_file' );
+
+		while ( \ewww_image_optimizer_iterable( $attachments ) ) {
+			foreach ( $attachments as $id ) {
+				$new_meta = \ewwwio_remove_original_image( $id );
+				if ( \ewww_image_optimizer_iterable( $new_meta ) ) {
+					\wp_update_attachment_metadata( $id, $new_meta );
+				}
+				\update_option( 'ewww_image_optimizer_delete_originals_resume', $id, false );
+				$progress->tick();
+			}
+			$attachments = $wpdb->get_col(
+				$wpdb->prepare(
+					"SELECT ID FROM $wpdb->posts WHERE ID > %d AND (post_type = 'attachment' OR post_type = 'ims_image') AND post_mime_type LIKE %s ORDER BY ID LIMIT %d",
+					(int) $id,
+					'%image%',
+					(int) $per_page
+				)
+			);
+		}
+		$progress->finish();
+
+		WP_CLI::success( __( 'Finished', 'ewww-image-optimizer' ) );
+
+		\delete_option( 'ewww_image_optimizer_delete_originals_resume' );
+	}
+
+	/**
+	 * Remove the original version of converted images.
+	 *
+	 * @param array $args A numeric array of required arguments.
+	 * @param array $assoc_args An associative array of optional arguments.
+	 */
+	function remove_converted_originals( $args, $assoc_args ) {
+		if ( ! empty( $assoc_args['reset'] ) ) {
+			delete_option( 'ewww_image_optimizer_delete_originals_resume' );
+		}
+		global $wpdb;
+		if ( strpos( $wpdb->charset, 'utf8' ) === false ) {
+			ewww_image_optimizer_db_init();
+			global $ewwwdb;
+		} else {
+			$ewwwdb = $wpdb;
+		}
+
+		$per_page = 200;
+
+		$converted_count = (int) $wpdb->get_var( "SELECT count(id) FROM $wpdb->ewwwio_images WHERE converted != ''" );
+
+		/* translators: %d: number of converted images */
+		WP_CLI::line( sprintf( __( 'This process will remove the originals after you have converted images (PNG to JPG and friends). %d images will checked for originals to remove.', 'ewww-image-optimizer' ), $converted_count ) );
+		WP_CLI::confirm( __( 'You should take a site backup before performing a bulk action on your images. Do you wish to continue?', 'ewww-image-optimizer' ) );
+
+		$converted_images = $wpdb->get_results( $wpdb->prepare( "SELECT path,converted,id FROM $wpdb->ewwwio_images WHERE converted != '' ORDER BY id DESC LIMIT %d", $per_page ), ARRAY_A );
+
+		$progress = \WP_CLI\Utils\make_progress_bar( __( 'Deleting converted images', 'ewww-image-optimizer' ), $converted_count );
+
+		// Because some plugins might have loose filters (looking at you WPML).
+		\remove_all_filters( 'wp_delete_file' );
+
+		while ( \ewww_image_optimizer_iterable( $converted_images ) ) {
+			foreach ( $converted_images as $optimized_image ) {
+				$file = \ewww_image_optimizer_absolutize_path( $optimized_image['converted'] );
+				\ewwwio_debug_message( "$file was converted, checking if it still exists" );
+				if ( ! \ewww_image_optimizer_stream_wrapped( $file ) && \ewwwio_is_file( $file ) ) {
+					\ewwwio_debug_message( "removing original: $file" );
+					if ( \ewwwio_delete_file( $file ) ) {
+						\ewwwio_debug_message( "removed $file" );
+					} else {
+						/* translators: %s: file name */
+						WP_CLI::warning( sprintf( __( 'Could not delete %s, please remove manually or fix permissions and try again.', 'ewww-image-optimizer' ), $file ) );
+					}
+				}
+				$wpdb->update(
+					$wpdb->ewwwio_images,
+					array(
+						'converted' => '',
+					),
+					array(
+						'id' => $optimized_image['id'],
+					)
+				);
+				$progress->tick();
+			} // End foreach().
+			$converted_images = $wpdb->get_results( $wpdb->prepare( "SELECT path,converted,id FROM $wpdb->ewwwio_images WHERE converted != '' ORDER BY id DESC LIMIT %d", $per_page ), ARRAY_A );
+		}
+		$progress->finish();
+
+		WP_CLI::success( __( 'Finished', 'ewww-image-optimizer' ) );
+
+		\delete_option( 'ewww_image_optimizer_delete_originals_resume' );
+	}
+
+	/**
+	 * Remove all WebP images.
+	 *
+	 * ## OPTIONS
+	 *
+	 * <reset>
+	 * : optional, start the process back at the beginning instead of resuming from last position
+	 *
+	 * ## EXAMPLES
+	 *
+	 *     wp-cli ewwwio remove_webp --reset
+	 *
+	 * @synopsis [--reset]
+	 *
+	 * @param array $args A numeric array of required arguments.
+	 * @param array $assoc_args An associative array of optional arguments.
+	 */
+	function remove_webp( $args, $assoc_args ) {
+		if ( ! empty( $assoc_args['reset'] ) ) {
+			delete_option( 'ewww_image_optimizer_webp_clean_position' );
+		}
+		global $wpdb;
+		if ( strpos( $wpdb->charset, 'utf8' ) === false ) {
+			ewww_image_optimizer_db_init();
+			global $ewwwdb;
+		} else {
+			$ewwwdb = $wpdb;
+		}
+
+		$completed = 0;
+		$per_page  = 200;
+
+		$resume    = get_option( 'ewww_image_optimizer_webp_clean_position' );
+		$position1 = is_array( $resume ) && ! empty( $resume['stage1'] ) ? (int) $resume['stage1'] : 0;
+		$position2 = is_array( $resume ) && ! empty( $resume['stage2'] ) ? (int) $resume['stage2'] : 0;
+
+		$cleanable_uploads = (int) $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT count(ID) FROM $wpdb->posts WHERE ID > %d AND (post_type = 'attachment' OR post_type = 'ims_image') AND (post_mime_type LIKE %s OR post_mime_type LIKE %s)",
+				(int) $position1,
+				'%image%',
+				'%pdf%'
+			)
+		);
+		$cleanable_records = (int) $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT count(id) FROM $wpdb->ewwwio_images WHERE id > %d AND pending = 0 AND image_size > 0 AND updates > 0",
+				$position2
+			)
+		);
+
+		/* translators: 1: number of image uploads, 2: number of database records */
+		WP_CLI::line( sprintf( __( 'WebP copies of %1$d media uploads will be removed first, then %2$d records in the optimization history will be checked to remove any remaining WebP images.', 'ewww-image-optimizer' ), $cleanable_uploads, $cleanable_records ) );
+		WP_CLI::confirm( __( 'You should take a site backup before performing a bulk action on your images. Do you wish to continue?', 'ewww-image-optimizer' ) );
+
+		/**
+		 * Require the files that contain functions for the images table and bulk processing images outside the library.
+		 */
+		require_once( EWWW_IMAGE_OPTIMIZER_PLUGIN_PATH . 'aux-optimize.php' );
+
+		ewwwio_debug_message( "searching for $per_page records starting at $position1" );
+
+		$attachment_ids = $wpdb->get_col(
+			$wpdb->prepare(
+				"SELECT ID FROM $wpdb->posts WHERE ID > %d AND (post_type = 'attachment' OR post_type = 'ims_image') AND (post_mime_type LIKE %s OR post_mime_type LIKE %s) ORDER BY ID LIMIT %d",
+				(int) $position1,
+				'%image%',
+				'%pdf%',
+				(int) $per_page
+			)
+		);
+
+		$progress1 = \WP_CLI\Utils\make_progress_bar( __( 'Stage 1:', 'ewww-image-optimizer' ), $cleanable_uploads );
+
+		// Because some plugins might have loose filters (looking at you WPML).
+		\remove_all_filters( 'wp_delete_file' );
+
+		while ( \ewww_image_optimizer_iterable( $attachment_ids ) ) {
+			foreach ( $attachment_ids as $id ) {
+				\ewww_image_optimizer_delete_webp( $id );
+				$resume['stage1'] = (int) $id;
+				\update_option( 'ewww_image_optimizer_webp_clean_position', $resume, false );
+				$progress1->tick();
+			}
+			$attachment_ids = $wpdb->get_col(
+				$wpdb->prepare(
+					"SELECT ID FROM $wpdb->posts WHERE ID > %d AND (post_type = 'attachment' OR post_type = 'ims_image') AND (post_mime_type LIKE %s OR post_mime_type LIKE %s) ORDER BY ID LIMIT %d",
+					(int) $id,
+					'%image%',
+					'%pdf%',
+					(int) $per_page
+				)
+			);
+		}
+		$progress1->finish();
+
+		\ewwwio_debug_message( "searching for $per_page records starting at $position2" );
+
+		$optimized_images = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT * FROM $wpdb->ewwwio_images WHERE id > %d AND pending = 0 AND image_size > 0 AND updates > 0 ORDER BY id LIMIT %d",
+				(int) $position2,
+				(int) $per_page
+			),
+			ARRAY_A
+		);
+
+		$progress2 = \WP_CLI\Utils\make_progress_bar( __( 'Stage 2:', 'ewww-image-optimizer' ), $cleanable_records );
+
+		while ( \ewww_image_optimizer_iterable( $optimized_images ) ) {
+			foreach ( $optimized_images as $optimized_image ) {
+				\ewww_image_optimizer_aux_images_webp_clean( $optimized_image );
+				$resume['stage2'] = $optimized_image['id'];
+				\update_option( 'ewww_image_optimizer_webp_clean_position', $resume, false );
+				$progress2->tick();
+			}
+			$optimized_images = $wpdb->get_results(
+				$wpdb->prepare(
+					"SELECT * FROM $wpdb->ewwwio_images WHERE id > %d AND pending = 0 AND image_size > 0 AND updates > 0 ORDER BY id LIMIT %d",
+					(int) $optimized_image['id'],
+					(int) $per_page
+				),
+				ARRAY_A
+			);
+		}
+		$progress2->finish();
+		WP_CLI::success( __( 'Finished', 'ewww-image-optimizer' ) );
+
+		\delete_option( 'ewww_image_optimizer_webp_clean_position' );
+	}
 }
 
 WP_CLI::add_command( 'ewwwio', 'EWWWIO_CLI' );

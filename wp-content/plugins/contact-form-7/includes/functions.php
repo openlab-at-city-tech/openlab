@@ -127,12 +127,34 @@ function wpcf7_array_flatten( $input ) {
 
 
 /**
+ * Excludes unset or blank text values from the given array.
+ *
+ * @param array $input The array.
+ * @return array Array without blank text values.
+ */
+function wpcf7_exclude_blank( $input ) {
+	$output = array_filter( $input,
+		function ( $i ) {
+			return isset( $i ) && '' !== $i;
+		}
+	);
+
+	return array_values( $output );
+}
+
+
+/**
  * Creates a comma-separated list from a multi-dimensional array.
  *
  * @param mixed $input Array or item of array.
+ * @param string|array $args Optional. Output options.
  * @return string Comma-separated list.
  */
-function wpcf7_flat_join( $input ) {
+function wpcf7_flat_join( $input, $args = '' ) {
+	$args = wp_parse_args( $args, array(
+		'separator' => ', ',
+	) );
+
 	$input = wpcf7_array_flatten( $input );
 	$output = array();
 
@@ -142,7 +164,7 @@ function wpcf7_flat_join( $input ) {
 		}
 	}
 
-	return implode( ', ', $output );
+	return implode( $args['separator'], $output );
 }
 
 
@@ -150,7 +172,12 @@ function wpcf7_flat_join( $input ) {
  * Returns true if HTML5 is supported.
  */
 function wpcf7_support_html5() {
-	return (bool) apply_filters( 'wpcf7_support_html5', true );
+	return (bool) wpcf7_apply_filters_deprecated(
+		'wpcf7_support_html5',
+		array( true ),
+		'5.6',
+		''
+	);
 }
 
 
@@ -213,35 +240,43 @@ function wpcf7_load_css() {
  * @return string Formatted HTML attributes.
  */
 function wpcf7_format_atts( $atts ) {
-	$html = '';
+	$atts_filtered = array();
 
-	$prioritized_atts = array( 'type', 'name', 'value' );
+	foreach ( $atts as $name => $value ) {
+		$name = strtolower( trim( $name ) );
 
-	foreach ( $prioritized_atts as $att ) {
-		if ( isset( $atts[$att] ) ) {
-			$value = trim( $atts[$att] );
-			$html .= sprintf( ' %s="%s"', $att, esc_attr( $value ) );
-			unset( $atts[$att] );
-		}
-	}
-
-	foreach ( $atts as $key => $value ) {
-		$key = strtolower( trim( $key ) );
-
-		if ( ! preg_match( '/^[a-z_:][a-z_:.0-9-]*$/', $key ) ) {
+		if ( ! preg_match( '/^[a-z_:][a-z_:.0-9-]*$/', $name ) ) {
 			continue;
 		}
 
-		$value = trim( $value );
+		static $boolean_attributes = array(
+			'checked', 'disabled', 'multiple', 'readonly', 'required', 'selected',
+		);
 
-		if ( '' !== $value ) {
-			$html .= sprintf( ' %s="%s"', $key, esc_attr( $value ) );
+		if ( in_array( $name, $boolean_attributes ) and '' === $value ) {
+			$value = false;
+		}
+
+		if ( is_numeric( $value ) ) {
+			$value = (string) $value;
+		}
+
+		if ( null === $value or false === $value ) {
+			unset( $atts_filtered[$name] );
+		} elseif ( true === $value ) {
+			$atts_filtered[$name] = $name; // boolean attribute
+		} elseif ( is_string( $value ) ) {
+			$atts_filtered[$name] = trim( $value );
 		}
 	}
 
-	$html = trim( $html );
+	$output = '';
 
-	return $html;
+	foreach ( $atts_filtered as $name => $value ) {
+		$output .= sprintf( ' %1$s="%2$s"', $name, esc_attr( $value ) );
+	}
+
+	return trim( $output );
 }
 
 
@@ -254,22 +289,20 @@ function wpcf7_format_atts( $atts ) {
  * @return string Formatted anchor element.
  */
 function wpcf7_link( $url, $anchor_text, $args = '' ) {
-	$defaults = array(
-		'id' => '',
-		'class' => '',
+	$args = wp_parse_args( $args, array(
+		'id' => null,
+		'class' => null,
+	) );
+
+	$atts = array_merge( $args, array(
+		'href' => esc_url( $url ),
+	) );
+
+	return sprintf(
+		'<a %1$s>%2$s</a>',
+		wpcf7_format_atts( $atts ),
+		esc_html( $anchor_text )
 	);
-
-	$args = wp_parse_args( $args, $defaults );
-	$args = array_intersect_key( $args, $defaults );
-	$atts = wpcf7_format_atts( $args );
-
-	$link = sprintf( '<a href="%1$s"%3$s>%2$s</a>',
-		esc_url( $url ),
-		esc_html( $anchor_text ),
-		$atts ? ( ' ' . $atts ) : ''
-	);
-
-	return $link;
 }
 
 
@@ -283,7 +316,7 @@ function wpcf7_get_request_uri() {
 		$request_uri = add_query_arg( array() );
 	}
 
-	return esc_url_raw( $request_uri );
+	return sanitize_url( $request_uri );
 }
 
 
@@ -440,7 +473,7 @@ function wpcf7_rmdir_p( $dir ) {
 /**
  * Builds a URL-encoded query string.
  *
- * @see https://developer.wordpress.org/reference/functions/_http_build_query/
+ * @link https://developer.wordpress.org/reference/functions/_http_build_query/
  *
  * @param array $args URL query parameters.
  * @param string $key Optional. If specified, used to prefix key name.
@@ -477,13 +510,13 @@ function wpcf7_build_query( $args, $key = '' ) {
 /**
  * Returns the number of code units in a string.
  *
- * @see http://www.w3.org/TR/html5/infrastructure.html#code-unit-length
+ * @link http://www.w3.org/TR/html5/infrastructure.html#code-unit-length
  *
- * @param string $string Input string.
+ * @param string $text Input string.
  * @return int|bool The number of code units, or false if
  *                  mb_convert_encoding is not available.
  */
-function wpcf7_count_code_units( $string ) {
+function wpcf7_count_code_units( $text ) {
 	static $use_mb = null;
 
 	if ( is_null( $use_mb ) ) {
@@ -494,18 +527,18 @@ function wpcf7_count_code_units( $string ) {
 		return false;
 	}
 
-	$string = (string) $string;
-	$string = str_replace( "\r\n", "\n", $string );
+	$text = (string) $text;
+	$text = str_replace( "\r\n", "\n", $text );
 
-	$encoding = mb_detect_encoding( $string, mb_detect_order(), true );
+	$encoding = mb_detect_encoding( $text, mb_detect_order(), true );
 
 	if ( $encoding ) {
-		$string = mb_convert_encoding( $string, 'UTF-16', $encoding );
+		$text = mb_convert_encoding( $text, 'UTF-16', $encoding );
 	} else {
-		$string = mb_convert_encoding( $string, 'UTF-16', 'UTF-8' );
+		$text = mb_convert_encoding( $text, 'UTF-16', 'UTF-8' );
 	}
 
-	$byte_count = mb_strlen( $string, '8bit' );
+	$byte_count = mb_strlen( $text, '8bit' );
 
 	return floor( $byte_count / 2 );
 }
@@ -515,27 +548,27 @@ function wpcf7_count_code_units( $string ) {
  * Returns true if WordPress is running on the localhost.
  */
 function wpcf7_is_localhost() {
-	$server_name = strtolower( $_SERVER['SERVER_NAME'] );
-	return in_array( $server_name, array( 'localhost', '127.0.0.1' ) );
+	$sitename = wp_parse_url( network_home_url(), PHP_URL_HOST );
+	return in_array( strtolower( $sitename ), array( 'localhost', '127.0.0.1' ) );
 }
 
 
 /**
  * Marks a function as deprecated and informs when it has been used.
  *
- * @param string $function The function that was called.
+ * @param string $function_name The function that was called.
  * @param string $version The version of Contact Form 7 that deprecated
  *                        the function.
  * @param string $replacement The function that should have been called.
  */
-function wpcf7_deprecated_function( $function, $version, $replacement ) {
+function wpcf7_deprecated_function( $function_name, $version, $replacement ) {
 	if ( WP_DEBUG ) {
 		if ( function_exists( '__' ) ) {
 			trigger_error(
 				sprintf(
 					/* translators: 1: PHP function name, 2: version number, 3: alternative function name */
 					__( 'Function %1$s is <strong>deprecated</strong> since Contact Form 7 version %2$s! Use %3$s instead.', 'contact-form-7' ),
-					$function, $version, $replacement
+					$function_name, $version, $replacement
 				),
 				E_USER_DEPRECATED
 			);
@@ -543,7 +576,7 @@ function wpcf7_deprecated_function( $function, $version, $replacement ) {
 			trigger_error(
 				sprintf(
 					'Function %1$s is <strong>deprecated</strong> since Contact Form 7 version %2$s! Use %3$s instead.',
-					$function, $version, $replacement
+					$function_name, $version, $replacement
 				),
 				E_USER_DEPRECATED
 			);
@@ -555,42 +588,56 @@ function wpcf7_deprecated_function( $function, $version, $replacement ) {
 /**
  * Fires functions attached to a deprecated filter hook.
  *
- * @param string $tag The name of the filter hook.
+ * @param string $hook_name The name of the filter hook.
  * @param array $args Array of additional function arguments to be
  *                    passed to apply_filters().
  * @param string $version The version of Contact Form 7 that deprecated
  *                        the hook.
  * @param string $replacement The hook that should have been used.
  */
-function wpcf7_apply_filters_deprecated( $tag, $args, $version, $replacement ) {
-	if ( ! has_filter( $tag ) ) {
+function wpcf7_apply_filters_deprecated( $hook_name, $args, $version, $replacement = '' ) {
+	if ( ! has_filter( $hook_name ) ) {
 		return $args[0];
 	}
 
-	if ( WP_DEBUG ) {
-		trigger_error(
-			sprintf(
-				/* translators: 1: WordPress hook name, 2: version number, 3: alternative hook name */
-				__( 'Hook %1$s is <strong>deprecated</strong> since Contact Form 7 version %2$s! Use %3$s instead.', 'contact-form-7' ),
-				$tag, $version, $replacement
-			),
-			E_USER_DEPRECATED
-		);
+	if ( WP_DEBUG and apply_filters( 'deprecated_hook_trigger_error', true ) ) {
+		if ( $replacement ) {
+			trigger_error(
+				sprintf(
+					/* translators: 1: WordPress hook name, 2: version number, 3: alternative hook name */
+					__( 'Hook %1$s is <strong>deprecated</strong> since Contact Form 7 version %2$s! Use %3$s instead.', 'contact-form-7' ),
+					$hook_name,
+					$version,
+					$replacement
+				),
+				E_USER_DEPRECATED
+			);
+		} else {
+			trigger_error(
+				sprintf(
+					/* translators: 1: WordPress hook name, 2: version number */
+					__( 'Hook %1$s is <strong>deprecated</strong> since Contact Form 7 version %2$s with no alternative available.', 'contact-form-7' ),
+					$hook_name,
+					$version
+				),
+				E_USER_DEPRECATED
+			);
+		}
 	}
 
-	return apply_filters_ref_array( $tag, $args );
+	return apply_filters_ref_array( $hook_name, $args );
 }
 
 
 /**
  * Marks something as being incorrectly called.
  *
- * @param string $function The function that was called.
+ * @param string $function_name The function that was called.
  * @param string $message A message explaining what has been done incorrectly.
  * @param string $version The version of Contact Form 7 where the message
  *                        was added.
  */
-function wpcf7_doing_it_wrong( $function, $message, $version ) {
+function wpcf7_doing_it_wrong( $function_name, $message, $version ) {
 	if ( WP_DEBUG ) {
 		if ( function_exists( '__' ) ) {
 			if ( $version ) {
@@ -605,7 +652,7 @@ function wpcf7_doing_it_wrong( $function, $message, $version ) {
 				sprintf(
 					/* translators: Developer debugging message. 1: PHP function name, 2: Explanatory message, 3: Contact Form 7 version number. */
 					__( 'Function %1$s was called incorrectly. %2$s %3$s', 'contact-form-7' ),
-					$function,
+					$function_name,
 					$message,
 					$version
 				),
@@ -622,7 +669,7 @@ function wpcf7_doing_it_wrong( $function, $message, $version ) {
 			trigger_error(
 				sprintf(
 					'Function %1$s was called incorrectly. %2$s %3$s',
-					$function,
+					$function_name,
 					$message,
 					$version
 				),

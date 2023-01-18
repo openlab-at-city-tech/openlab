@@ -13,52 +13,52 @@ namespace OpenLab\Attributions\Helpers;
 function get_licenses() {
 	$licenses = [
 		[
-			'label' => 'Unknown',
+			'label' => __( 'Unknown', 'openlab-attributions' ),
 			'value' => 'u',
 			'url'   => '',
 		],
 		[
-			'label' => 'Standard Copyright',
+			'label' => __( 'Standard Copyright', 'openlab-attributions' ),
 			'value' => 'c',
 			'url'   => '',
 		],
 		[
-			'label' => 'Public Domain',
+			'label' => __( 'Public Domain', 'openlab-attributions' ),
 			'value' => 'pd',
 			'url'   => '',
 		],
 		[
-			'label' => 'Fair Use',
+			'label' => __( 'Fair Use', 'openlab-attributions' ),
 			'value' => 'fu',
 			'url'   => '',
 		],
 		[
-			'label' => 'CC BY',
+			'label' => __( 'CC BY', 'openlab-attributions' ),
 			'value' => 'cc-by',
 			'url'   => 'https://creativecommons.org/licenses/by/4.0',
 		],
 		[
-			'label' => 'CC BY-SA',
+			'label' => __( 'CC BY-SA', 'openlab-attributions' ),
 			'value' => 'cc-by-sa',
 			'url'   => 'https://creativecommons.org/licenses/by-sa/4.0',
 		],
 		[
-			'label' => 'CC BY-ND',
+			'label' => __( 'CC BY-ND', 'openlab-attributions' ),
 			'value' => 'cc-by-nd',
 			'url'   => 'https://creativecommons.org/licenses/by-nd/4.0',
 		],
 		[
-			'label' => 'CC BY-NC',
+			'label' => __( 'CC BY-NC', 'openlab-attributions' ),
 			'value' => 'cc-by-nc',
 			'url'   => 'https://creativecommons.org/licenses/by-nc/4.0',
 		],
 		[
-			'label' => 'CC BY-NC-SA',
+			'label' => __( 'CC BY-NC-SA', 'openlab-attributions' ),
 			'value' => 'cc-by-nc-sa',
 			'url'   => 'https://creativecommons.org/licenses/by-nc-sa/4.0',
 		],
 		[
-			'label' => 'CC BY-NC-ND',
+			'label' => __( 'CC BY-NC-ND', 'openlab-attributions' ),
 			'value' => 'cc-by-nc-nd',
 			'url'   => 'https://creativecommons.org/licenses/by-nc-nd/4.0',
 		],
@@ -75,9 +75,12 @@ function get_licenses() {
  */
 function get_the_license( $value ) {
 	$licenses = get_licenses();
-	$license  = array_filter( $licenses, function( $item ) use ( $value ) {
-		return $item['value'] === $value;
-	} );
+	$license  = array_filter(
+		$licenses,
+		function( $item ) use ( $value ) {
+			return $item['value'] === $value;
+		}
+	);
 
 	return end( $license );
 }
@@ -114,11 +117,12 @@ function format_license( $value ) {
 			break;
 
 		case 'u':
-			$text = 'License unknown.';
+			$text = __( 'License unknown.', 'openlab-attributions' );
 			break;
 
 		default:
-			$text = sprintf( 'Licensed under %s.', format( $license['label'], $license['url'] ) );
+			// translators: Link to license.
+			$text = sprintf( esc_html__( 'Licensed under %s.', 'openlab-attributions' ), format( $license['label'], $license['url'] ) );
 			break;
 	}
 
@@ -139,7 +143,8 @@ function format_adapted_from( $item ) {
 
 	if ( $is_legacy ) {
 		return sprintf(
-			'Adapted from the <a href="%s">original work</a>',
+			// translators: URL of the original work
+			__( 'Adapted from the <a href="%s">original work</a>', 'openlab-attributions' ),
 			$item['derivative']
 		);
 	}
@@ -148,14 +153,16 @@ function format_adapted_from( $item ) {
 
 	if ( empty( $item['adaptedAuthor'] ) ) {
 		return sprintf(
-			'Adapted from %1$s, licensed under %2$s.',
+			// translators: 1. Link to original work; 2. Link to license
+			__( 'Adapted from %1$s, licensed under %2$s.', 'openlab-attributions' ),
 			format( $item['adaptedTitle'], $item['derivative'] ),
 			format( $license['label'], $license['url'] )
 		);
 	}
 
 	return sprintf(
-		'Adapted from %1$s by %2$s, licensed under %3$s.',
+		// translators: 1. Link to original work; 2. Author name; 3. Link to license
+		__( 'Adapted from %1$s by %2$s, licensed under %3$s.', 'openlab-attributions' ),
 		format( $item['adaptedTitle'], $item['derivative'] ),
 		format( $item['adaptedAuthor'], null ),
 		format( $license['label'], $license['url'] )
@@ -205,9 +212,14 @@ function get_the_attribution( $item ) {
 	if ( ! empty( $item['adaptedTitle'] ) || ! empty( $item['derivative'] ) ) {
 		$attribution .= sprintf(
 			'%1$s%2$s',
-			empty( $parts ) ? '' : ' / ',
+			empty( $parts ) ? '' : ' ',
 			format_adapted_from( $item )
 		);
+	}
+
+	// Append "." at the end of the sentence if there is none.
+	if( substr($attribution, -1) != '.' ) {
+		$attribution .= '.';
 	}
 
 	return $attribution;

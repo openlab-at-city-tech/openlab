@@ -64,13 +64,13 @@ function olur_report_callbacks() {
 		'Activity' => array(
 
 			array( 'PROFILES', 'Total Instances', 'Total Unique Users', 'Students', 'Faculty', 'Staff', 'Alumni', 'Other Users' ),
-			array( 'label' => 'New Avatar', 'component' => 'profile', 'type' => 'new_avatar' ),
+			array( 'label' => 'New Avatar', 'component' => 'members', 'type' => 'new_avatar' ),
 			array( 'label' => 'Profile Update', 'component' => 'xprofile', 'type' => 'updated_profile' ),
 
 			// @todo These are probably not accurate because of 'site_public'.
 			'',
 			array( 'SITES', 'Total Instances', 'Total Unique Users', 'Students', 'Faculty', 'Staff', 'Alumni', 'Other Users', 'Groups', 'Courses', 'Clubs', 'Projects', 'ePortfolios', 'Portfolios' ),
-			array( 'label' => 'New Site', 'component' => 'groups', 'type' => 'new_blog' ),
+			array( 'label' => 'New Site', 'component' => 'blogs', 'type' => 'new_blog' ),
 			array( 'label' => 'New Site Posts', 'component' => 'groups', 'type' => 'new_blog_post' ),
 			array( 'label' => 'New Site Comments', 'component' => 'groups', 'type' => 'new_blog_comment' ),
 
@@ -195,6 +195,36 @@ function olur_generate_report_data( $start, $end ) {
 
 		// Insert an empty row after each section.
 		$data[] = array();
+	}
+
+	return $data;
+}
+
+/**
+ * Generate report data.
+ *
+ * @param string $start MySQL-formatted start date.
+ * @param string $end MySQL-formatted end date.
+ * @return array
+ */
+function olur_generate_report_data_row( $class, $callback, $start, $end ) {
+	$class_name = '\OLUR\\' . $class;
+	$counter    = new $class_name;
+
+	$counter->set_start( $start );
+	$counter->set_end( $end );
+
+	// If the query doesn't have a label, it's a literal.
+	// Used for blank rows and other labels.
+	if ( ! isset( $callback['label'] ) ) {
+		$data = $callback;
+	} else {
+		$counter->set_label( $callback['label'] );
+		unset( $callback['label'] );
+
+		$counter->query( $callback );
+
+		$data = $counter->format_results_for_csv();
 	}
 
 	return $data;

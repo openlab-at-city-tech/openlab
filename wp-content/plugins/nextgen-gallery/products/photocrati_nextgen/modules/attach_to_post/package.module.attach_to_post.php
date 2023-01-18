@@ -541,6 +541,10 @@ class Mixin_Attach_To_Post extends Mixin
     {
         $this->object->enqueue_backend_resources();
         $this->object->do_not_cache();
+        // If Elementor is also active a fatal error is generated due to this method not existing
+        if (!function_exists('wp_print_media_templates')) {
+            require_once ABSPATH . WPINC . '/media-template.php';
+        }
         // Enqueue resources
         return $this->object->render_view('photocrati-attach_to_post#attach_to_post', array('page_title' => $this->object->_get_page_title(), 'tabs' => $this->object->_get_main_tabs(), 'logo' => $this->get_static_url('photocrati-nextgen_admin#imagely_icon.png')), $return);
     }

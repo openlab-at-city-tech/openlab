@@ -1,0 +1,1 @@
+!function(i){"undefined"!=typeof bpSignupPreview&&"function"==typeof window.tb_show&&i(function(){i(".bp-thickbox").on("click",function(n){n.preventDefault();n=i(n.target).prop("href").split("#TB_inline&")[1];window.tb_show("BuddyPress","#TB_inline?"+n),window.bpAdjustThickbox(bpSignupPreview.modalLabel,"1em")})})}(jQuery);

@@ -180,6 +180,9 @@ class GFQuiz extends GFAddOn {
 		add_filter( 'gform_entry_meta_conditional_logic_confirmations', array( $this, 'conditional_logic_filters' ), 10, 3 );
 		add_filter( 'gform_entry_meta_conditional_logic_notifications', array( $this, 'conditional_logic_filters' ), 10, 3 );
 
+		// filter field_filters from POST to properly handle conditional logic for exports
+		add_filter( 'gform_field_filter_from_post', array( $this, 'fix_integer_values_for_exports' ) );
+
 		parent::init();
 	}
 
@@ -290,38 +293,67 @@ class GFQuiz extends GFAddOn {
 	 * @return array
 	 */
 	public function styles() {
-		$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG || isset( $_GET['gform_debug'] ) ? '' : '.min';
+		$min  = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG || isset( $_GET['gform_debug'] ) ? '' : '.min';
+		$base = $this->get_base_url();
 
-		$styles = array(
-			array(
-				'handle'  => 'gquiz_form_editor_css',
-				'src'     => $this->get_enqueue_src( "gquiz_form_editor{$min}.css" ),
-				'version' => $this->_version,
-				'enqueue' => array(
-					array( 'admin_page' => array( 'form_editor' ) ),
-				),
-			),
-			array(
-				'handle'  => 'gquiz_form_settings_css',
-				'src'     => $this->get_enqueue_src( "gquiz_form_settings{$min}.css" ),
-				'version' => $this->_version,
-				'enqueue' => array(
-					array(
-						'admin_page' => array( 'form_settings' ),
-						'tab'        => array( 'gravityformsquiz' ),
+		if ( ! $this->is_gravityforms_supported( self::LATEST_UI_VERSION ) ) {
+			$styles = array(
+				array(
+					'handle'  => 'gquiz_form_editor_css',
+					'src'     => $base . "/legacy/css/gquiz_form_editor{$min}.css",
+					'version' => $this->_version,
+					'enqueue' => array(
+						array( 'admin_page' => array( 'form_editor' ) ),
 					),
 				),
-			),
-			array(
-				'handle'  => 'gquiz_css',
-				'src'     => $this->get_enqueue_src( "gquiz{$min}.css" ),
-				'version' => $this->_version,
-				'enqueue' => array(
-					array( 'field_types' => array( 'quiz' ) ),
-					array( 'admin_page' => array( 'form_editor', 'results', 'entry_view', 'entry_detail' ) ),
+				array(
+					'handle'  => 'gquiz_form_settings_css',
+					'src'     => $base . "/legacy/css/gquiz_form_settings{$min}.css",
+					'version' => $this->_version,
+					'enqueue' => array(
+						array(
+							'admin_page' => array( 'form_settings' ),
+							'tab'        => array( 'gravityformsquiz' ),
+						),
+					),
 				),
-			),
-		);
+				array(
+					'handle'  => 'gquiz_css',
+					'src'     => $base . "/legacy/css/gquiz{$min}.css",
+					'version' => $this->_version,
+					'enqueue' => array(
+						array( 'field_types' => array( 'quiz' ) ),
+						array( 'admin_page' => array( 'form_editor', 'results', 'entry_view', 'entry_detail' ) ),
+					),
+				),
+			);
+		} else {
+			$styles = array(
+				array(
+					'handle'  => 'gquiz_form_editor_css',
+					'src'     => $base . "/assets/css/dist/admin{$min}.css",
+					'version' => $this->_version,
+					'enqueue' => array(
+						array( 'admin_page' => array( 'form_editor' ) ),
+						array(
+							'admin_page' => array( 'form_settings' ),
+							'tab'        => array( 'gravityformsquiz' ),
+						),
+					),
+				),
+				array(
+					'handle'  => 'gquiz_css',
+					'src'     => $base . "/assets/css/dist/theme{$min}.css",
+					'version' => $this->_version,
+					'enqueue' => array(
+						array( 'field_types' => array( 'quiz' ) ),
+						array( 'admin_page' => array( 'form_editor', 'results', 'entry_view', 'entry_detail' ) ),
+					),
+				),
+			);
+		}
+
+
 
 		return array_merge( parent::styles(), $styles );
 	}
@@ -2398,7 +2430,7 @@ class GFQuiz extends GFAddOn {
 				</select>
 
 			</li>
-			<li class="gquiz-setting-choices field_setting">
+			<li class="gquiz-setting-choices field_setting" data-js="choices-ui-setting" data-type="main">
 
 				<div class="gquiz-answers-heading">
 					<label for="gquiz-choice-text-0" class="section_label">
@@ -2406,31 +2438,43 @@ class GFQuiz extends GFAddOn {
 						<?php gform_tooltip( 'gquiz_field_choices' ); ?>
 					</label>
 
-					<div class="gquiz-weighted-score-wrapper">
-						<input id="gquiz-weighted-score-enabled" type="checkbox" onclick="gquizToggleWeightedScore( this );">
-						<label class="inline gfield_value_label" for="gquiz-weighted-score-enabled">
-							<?php esc_html_e( 'weighted score', 'gravityformsquiz' ); ?>
-						</label>
-						<?php gform_tooltip( 'gquiz_weighted_score' ); ?>
-
-						<div class="gquiz-values-visible-wrapper"<?php echo $show_values_style; ?>>
-							<input type="checkbox" id="gquiz_field_choice_values_visible" onclick="gquizToggleValues();"/>
-							<label for="gquiz_field_choice_values_visible" class="inline gfield_value_label">
-								<?php esc_html_e( 'show values', 'gravityformsquiz' ); ?>
+					<ul class="gquiz-weighted-score-wrapper">
+						<li class="gquiz-setting-weighted-score-enabled field_setting" data-js="choices-ui-setting" data-type="option">
+							<input id="gquiz-weighted-score-enabled" type="checkbox" onclick="gquizToggleWeightedScore( this );">
+							<label class="inline gfield_value_label" for="gquiz-weighted-score-enabled">
+								<?php esc_html_e( 'Weighted score', 'gravityformsquiz' ); ?>
 							</label>
-						</div>
-					</div>
+							<?php gform_tooltip( 'gquiz_weighted_score' ); ?>
+						</li>
+						<li class="gquiz-setting-values-visible-wrapper field_setting" data-js="choices-ui-setting" data-type="option">
+							<div class="gquiz-values-visible-wrapper"<?php echo $show_values_style; ?>>
+								<input type="checkbox" id="gquiz_field_choice_values_visible" onclick="gquizToggleValues();"/>
+								<label for="gquiz_field_choice_values_visible" class="inline gfield_value_label">
+									<?php esc_html_e( 'Show values', 'gravityformsquiz' ); ?>
+								</label>
+							</div>
+						</li>
+					</ul>
 				</div>
 
 				<div id="gquiz_gfield_settings_choices_container">
 					<ul id="gquiz-field-choices"></ul>
 				</div>
 
-				<?php $window_title = esc_html__( 'Bulk Add / Predefined Choices', 'gravityformsquiz' ); ?>
-				<input type='button'
-					value='<?php echo esc_attr( $window_title ); ?>'
-					onclick="gquizOpenBulkAdd( '<?php echo esc_js( $window_title ); ?>' )"
-					class="button" />
+				<div class="choices-ui__section" data-js="choices-ui-section" data-type="options">
+					<h6 class="choices-ui__section-label"><?php esc_html_e( 'Options', 'gravityforms' ) ?></h6>
+					<ul class="choices-ui__options-list" data-js="choices-ui-option-list"></ul>
+				</div>
+
+				<div class="choices-ui__section" data-js="choices-ui-section" data-type="bulk-choices">
+					<h6 class="choices-ui__section-label"><?php esc_html_e( 'Add Bulk Choices', 'gravityforms' ) ?></h6>
+					<?php $window_title = esc_html__( 'Bulk Add / Predefined Choices', 'gravityformsquiz' ); ?>
+					<input
+						type='button'
+						value='<?php echo esc_attr( $window_title ); ?>'
+						onclick="gquizOpenBulkAdd( '<?php echo esc_js( $window_title ); ?>' )"
+						class="gform-button gform-button--white gform-button--size-sm" />
+				</div>
 
 			</li>
 
@@ -2438,7 +2482,7 @@ class GFQuiz extends GFAddOn {
 		} elseif ( $position == 1368 ) {
 			//right after the other_choice_setting
 			?>
-			<li class="gquiz-setting-randomize-quiz-choices field_setting">
+			<li class="gquiz-setting-randomize-quiz-choices field_setting" data-js="choices-ui-setting" data-type="option">
 
 				<input type="checkbox" id="gquiz-randomize-quiz-choices" onclick="var value = jQuery(this).is(':checked'); SetFieldProperty('gquizEnableRandomizeQuizChoices', value);">
 				<label for="gquiz-randomize-quiz-choices" class="inline">
@@ -2447,7 +2491,7 @@ class GFQuiz extends GFAddOn {
 				</label>
 
 			</li>
-			<li class="gquiz-setting-show-answer-explanation field_setting">
+			<li class="gquiz-setting-show-answer-explanation field_setting" data-js="choices-ui-setting" data-type="option">
 
 				<input type="checkbox" id="gquiz-show-answer-explanation"
 				       onclick="var value = jQuery(this).is(':checked'); SetFieldProperty('gquizShowAnswerExplanation', value); gquiz_toggle_answer_explanation(value);"/>
@@ -2457,7 +2501,7 @@ class GFQuiz extends GFAddOn {
 				</label>
 
 			</li>
-			<li class="gquiz-setting-answer-explanation field_setting">
+			<li class="gquiz-setting-answer-explanation field_setting" data-js="choices-ui-setting" data-type="option">
 				<label for="gquiz-answer-explanation">
 					<?php esc_html_e( 'Quiz answer explanation', 'gravityformsquiz' ); ?>
 					<?php gform_tooltip( 'gquiz_answer_explanation' ); ?>
@@ -2577,7 +2621,7 @@ class GFQuiz extends GFAddOn {
 
 			$field_markup = '<div class="gquiz-field">' . PHP_EOL;
 			if ( $show_question ) {
-				$field_markup .= '    <div class="gquiz-field-label">';
+				$field_markup .= '    <div class="gquiz-field-label gfield-label">';
 				$field_markup .= GFCommon::get_label( $field );
 				$field_markup .= '    </div>' . PHP_EOL;
 			}
@@ -2658,7 +2702,7 @@ class GFQuiz extends GFAddOn {
 			$field_markup .= '    </div>' . PHP_EOL;
 
 			if ( $field->gquizShowAnswerExplanation ) {
-				$field_markup .= '<div class="gquiz-answer-explanation">' . PHP_EOL;
+				$field_markup .= '<div class="gquiz-answer-explanation gfield_description">' . PHP_EOL;
 				$field_markup .= $field->gquizAnswerExplanation . PHP_EOL;
 				$field_markup .= '</div><br>' . PHP_EOL;
 			}
@@ -3061,13 +3105,12 @@ class GFQuiz extends GFAddOn {
 
 		$updated_quiz_settings = $this->apply_misspelled_array_key_fix( $key_mapping, $quiz_settings );
 
-		if ( ! array_diff( $quiz_settings, $updated_quiz_settings ) ) {
+		if ( empty( $updated_quiz_settings ) ) {
 			return;
 		}
 
 		$form_meta['gravityformsquiz'] = $updated_quiz_settings;
 		GFFormsModel::update_form_meta( $form->id, $form_meta );
-
 	}
 
 	/**
@@ -3081,6 +3124,7 @@ class GFQuiz extends GFAddOn {
 	 * @return array
 	 */
 	private function apply_misspelled_array_key_fix( $key_mapping, $quiz_settings ) {
+		$needs_updating        = false;
 		$updated_quiz_settings = $quiz_settings;
 
 		foreach ( $key_mapping as $legacy_key => $new_key ) {
@@ -3088,11 +3132,38 @@ class GFQuiz extends GFAddOn {
 				continue;
 			}
 
+			$needs_updating                    = true;
 			$updated_quiz_settings[ $new_key ] = $quiz_settings[ $legacy_key ];
 			unset( $updated_quiz_settings[ $legacy_key ] );
 		}
 
+		if ( ! $needs_updating ) {
+			return array();
+		}
+
 		return $updated_quiz_settings;
+	}
+
+	/**
+	 * If a field filter uses a numeric value, we need to add `is_numeric` to the array
+	 * to ensure the comparison runs properly.
+	 *
+	 * @since 3.9
+	 *
+	 * @filter gform_field_filter_from_post
+	 *
+	 * @param $field_filter
+	 *
+	 * @return mixed
+	 */
+	public function fix_integer_values_for_exports( $field_filter ) {
+		if ( ! \GFCommon::is_numeric( $field_filter['value'] ) ) {
+			return $field_filter;
+		}
+
+		$field_filter['is_numeric'] = true;
+
+		return $field_filter;
 	}
 
 } // end class

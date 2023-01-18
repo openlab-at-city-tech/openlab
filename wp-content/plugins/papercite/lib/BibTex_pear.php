@@ -495,7 +495,7 @@ class PaperciteStructures_BibTex
             $arr = explode('{', $entry);
             $ret['cite'] = trim($arr[1]);
             $ret['entrytype'] = strtolower(trim($arr[0]));
-            if ('@' == $ret['entrytype']{0}) {
+            if ('@' == $ret['entrytype'][ 0 ]) {
                 $ret['entrytype'] = substr($ret['entrytype'], 1);
             }
             if ($this->_options['validate']) {
@@ -570,9 +570,9 @@ class PaperciteStructures_BibTex
         //Then it is possible that the braces are equal even if the '=' is in an equation.
         if ($ret) {
             $entrycopy = trim($entry);
-            $lastchar  = $entrycopy{strlen($entrycopy)-1};
+            $lastchar  = $entrycopy[ strlen($entrycopy)-1 ];
             if (',' == $lastchar) {
-                $lastchar = $entrycopy{strlen($entrycopy)-2};
+                $lastchar = $entrycopy[ strlen($entrycopy)-2 ];
             }
             if ('"' == $lastchar) {
                 //The return value is set to false

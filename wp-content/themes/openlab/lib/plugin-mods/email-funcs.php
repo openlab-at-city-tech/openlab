@@ -194,3 +194,362 @@ add_action(
 	},
 	6
 );
+
+/**
+ * Force GES emails to look in a standardized location for templates.
+ */
+add_filter(
+	'bp_email_get_template',
+	function( $paths, $object ) {
+		if ( ! ( $object instanceof WP_Post ) ) {
+			return $paths;
+		}
+
+		$situations = get_the_terms( $object->ID, bp_get_email_tax_type() );
+
+		$is_bp_ges_single = false;
+		$is_bp_ges_digest = false;
+		foreach ( $situations as $situation ) {
+			if ( 'bp-ges-single' === $situation->slug ) {
+				$is_bp_ges_single = true;
+				break;
+			}
+
+			if ( 'bp-ges-digest' === $situation->slug ) {
+				$is_bp_ges_digest = true;
+				break;
+			}
+		}
+
+		if ( $is_bp_ges_single ) {
+			array_unshift( $paths, 'assets/emails/single-bp-email-bp-ges-single.php' );
+		} elseif ( $is_bp_ges_digest ) {
+			array_unshift( $paths, 'assets/emails/single-bp-email-bp-ges-digest.php' );
+		}
+
+		return $paths;
+	},
+	10,
+	2
+);
+
+/**
+ * Provide additional email args for BPGES single emails.
+ */
+add_filter(
+	'ass_send_email_args',
+	function( $args, $email_type ) {
+		if ( 'bp-ges-single' !== $email_type ) {
+			return $args;
+		}
+
+		// Add a timestamp and trailing colon to the activity action.
+		$add_timestamp = ! in_array( $args['activity']->type, [ 'bpeo_create_event', 'bpeo_edit_evint' ], true );
+		if ( $add_timestamp ) {
+			$action_with_timestamp = $args['tokens']['ges.action'] . ' at ' . date( 'g:ia, F j, Y', strtotime( $args['activity']->date_recorded ) );
+
+			$has_trailing_colon = ! empty( $args['activity']->content );
+			if ( $has_trailing_colon ) {
+				$action_with_timestamp .= ':';
+			}
+
+			$args['tokens']['ges.action'] = $action_with_timestamp;
+		}
+
+		// Customize the subject line.
+		switch ( $args['activity']->type ) {
+			case 'new_blog_comment' :
+				$args['tokens']['ges.subject'] = preg_replace( '/(.*?) left a comment on the post (.*?) in (.*)/', '\1 commented on \2 in \3', $args['tokens']['ges.subject'] );
+			break;
+		}
+
+		// Customize content.
+		switch ( $args['activity']->type ) {
+			case 'bpeo_create_event' :
+			case 'bpeo_edit_event' :
+			case 'bpeo_delete_event' :
+				$args['tokens']['usermessage'] = '';
+			break;
+		}
+
+		// Text for the View button.
+		$view_text = openlab_get_activity_view_button_label( $args['activity']->type );
+		if ( ! $view_text ) {
+			$view_text = 'View';
+		}
+
+		$args['tokens']['ges.view-text'] = $view_text;
+
+		// Modified 'email setting' text.
+		$args['tokens']['ges.email-setting-description'] = str_replace( ' for this group', '', $args['tokens']['ges.email-setting-description'] );
+
+		// Group type label.
+		$args['tokens']['ges.group-type'] = openlab_get_group_type_label(
+			[
+				'group_id' => $args['activity']->item_id,
+			]
+		);
+
+		return $args;
+	},
+	10,
+	2
+);
+
+/**
+ * Replace 'in the group' with group-type-specific string in outgoing emails.
+ */
+add_filter(
+	'bpges_activity_action',
+	function( $action, $activity ) {
+		return openlab_replace_group_type_in_activity_action( $action, $activity->item_id );
+	},
+	10,
+	2
+);
+
+add_action(
+	'bp_email_set_tokens',
+	function( $retval, $tokens, BP_Email $email ) {
+		$sender = $email->get_from();
+		$email->set_from( $sender->get_address(), get_option( 'blogname' ) );
+		return $retval;
+	},
+	20,
+	3
+);
+
+/**
+ * Stash the digest summary markup in a parameter that can be converted to an email token.
+ */
+add_filter(
+	'ass_digest_summary_full',
+	function( $summary, $summary_ul, $summary_body ) {
+		global $bp_ges_tokens;
+		$bp_ges_tokens['summary_body'] = $summary_body;
+		return $summary;
+	},
+	10,
+	3
+);
+
+/**
+ * Provide additional email args for BPGES digest emails.
+ */
+add_filter(
+	'ass_send_email_args',
+	function( $args, $email_type ) {
+		if ( 'bp-ges-digest' !== $email_type ) {
+			return $args;
+		}
+
+		global $bp_ges_tokens;
+
+		$args['tokens']['ges.summary_body'] = $bp_ges_tokens['summary_body'];
+
+		if ( 'dig' === $args['tokens']['subscription_type'] ) {
+			$args['tokens']['ges.digest_intro']              = 'Here is the activity for your <b>OpenLab daily digest</b> subscriptions:';
+			$args['tokens']['ges.email-setting-description'] = 'You have received this message because you are subscribed to a daily digest of activity in some of your groups on City Tech OpenLab.';
+		} else {
+			$args['tokens']['ges.digest_intro']              = 'Here is the activity for your <b>OpenLab weekly digest</b> subscriptions:';
+			$args['tokens']['ges.email-setting-description'] = 'You have received this message because you are subscribed to a weekly digest of activity in some of your groups on City Tech OpenLab.';
+		}
+
+		return $args;
+
+		// Text for the View button.
+		$view_text = openlab_get_activity_view_button_label( $args['activity']->type );
+		if ( ! $view_text ) {
+			$view_text = 'View';
+		}
+
+		$args['tokens']['ges.view-text'] = $view_text;
+
+		// Modified 'email setting' text.
+		$args['tokens']['ges.email-setting-description'] = str_replace( ' for this group', '', $args['tokens']['ges.email-setting-description'] );
+
+		// Group type label.
+		$args['tokens']['ges.group-type'] = openlab_get_group_type_label(
+			[
+				'group_id' => $args['activity']->item_id,
+			]
+		);
+
+		return $args;
+	},
+	10,
+	2
+);
+
+/**
+ * Don't allow BPGES to swap out the "Hi" salutation.
+ */
+add_filter(
+	'bp_email_get_salutation',
+	function( $salutation ) {
+		remove_filter( 'bp_email_get_salutation', 'ass_digest_filter_salutation' );
+		return $salutation;
+	},
+	5
+);
+
+/**
+ * Reformat the title section of digests.
+ */
+add_filter(
+	'ass_digest_group_message_title',
+	function( $message, $group_id, $subscription_type ) {
+		return '';
+		return $message;
+	},
+	10,
+	3
+);
+
+/**
+ * Reformat the group section of digests.
+ */
+add_filter(
+	'ass_digest_format_item_group',
+	function( $markup, $group_id, $type, $activity_ids, $user_id ) {
+		$group = groups_get_group( $group_id );
+		$group_permalink = bp_get_group_permalink( groups_get_group( $group_id ) );
+
+		$markup = '<table cellpadding="0" cellspacing="0" width="100%" style="border: 1px solid #ddd; border-radius: 3px;">';
+
+		$markup .= '<tr>';
+		$markup .= '<td bgcolor="#efefef" style="padding: 10px 20px; font-family: sans-serif;">';
+		$markup .= '<b>' . esc_html( $group->name ) . '</b>';
+		$markup .= '</td>';
+		$markup .= '</tr>';
+
+		$markup .= '<tr>';
+		$markup .= '<td style="padding: 10px 20px; font-family: sans-serif; border-top: 1px solid #ddd;">';
+
+		foreach ( $activity_ids as $activity_id ) {
+			$activity = new BP_Activity_Activity( $activity_id );
+
+			// No need for the 'in [group]' in this context.
+			$activity_action = preg_replace( '| in <a[^>]+>.*?</a>$|', '', $activity->action );
+
+			$timestamp        = strtotime( $item->date_recorded );
+			$time_posted      = get_date_from_gmt( $item->date_recorded, get_option( 'time_format' ) );
+			$date_posted      = get_date_from_gmt( $item->date_recorded, get_option( 'date_format' ) );
+			$activity_action .= sprintf( ' at %s, %s:', $time_posted, $date_posted );
+
+			// Links should be bold.
+			$activity_action = preg_replace( '|(<a [^>]+>.*?</a>)|', '<b>\1</b>', $activity_action );
+
+			$markup .= '<table cellspacing="0" cellpadding="0" border="0" width="100%">';
+			$markup .= '<tr>';
+			$markup .= '<td style="padding: 20px 0; font-family: sans-serif; mso-height-rule: exactly;" class="body_text_size">';
+
+			$markup .= '<p>' . $activity_action . '</p>';
+			$markup .= '<p>' . bp_create_excerpt( $activity->content ) . '</p>';
+			$markup .= '<p><a style="display: inline-block; background-color: #2b2b2b; color: #fff; padding: 6px 12px; border-radius: 3px; text-decoration: none;" href="' . esc_url( $activity->primary_link ) . '">' . esc_html( openlab_get_activity_view_button_label( $activity->type ) ) . '</a></p>';
+
+			$markup .= '</td>';
+			$markup .= '</tr>';
+			$markup .= '</table>';
+
+			$markup .= '<hr color="#ddd" height="1" style="border-width: 1px 0 0 0;" />';
+		}
+
+		$markup .= '</td>';
+		$markup .= '</tr>';
+
+		$markup .= '<tr>';
+		$markup .= '<td style="padding: 0 20px 20px 20px; font-family: sans-serif; mso-height-rule: exactly; font-size: 14px;">';
+		$markup .= sprintf( '<p>Go to <a href="%s">Membership &gt; Your Email Options</a> to change your email settings for this %s.', esc_url( bp_get_group_permalink( $group ) . 'notifications/' ), esc_html( openlab_get_group_type_label( [ 'group_id' => $group_id ] ) ) );
+		$markup .= '</td>';
+		$markup .= '</tr>';
+
+		$markup .= '</table>';
+
+		// Empty row for spacing.
+		$markup .= '<table><tr><td height="30">&nbsp;</td></tr></table>';
+
+		return $markup;
+	},
+	10,
+	5
+);
+
+/**
+ * Don't allow BPGES to append digest footer messages.
+ *
+ * We add them ourselves, as part of the template.
+ */
+add_filter( 'ass_digest_footer', '__return_empty_string' );
+add_filter( 'ass_digest_disable_notifications', '__return_empty_string' );
+
+/**
+ * Customize subject line of BPGES digests.
+ */
+add_filter(
+	'ass_digest_title',
+	function( $title, $type ) {
+		if ( 'dig' === $type ) {
+			return 'Your City Tech OpenLab Daily Digest';
+		} else {
+			return 'Your City Tech OpenLab Weekly Digest';
+		}
+	},
+	10,
+	2
+);
+
+/**
+ * Adds custom OpenLab tokens to those passed to emails.
+ */
+add_filter(
+	'bp_email_set_tokens',
+	function( $formatted_tokens, $tokens, $email ) {
+		// Source senders are inconsistent about the way that the group info is provided.
+		$group_id = null;
+		if ( isset( $tokens['group.id'] ) ) {
+			$group_id = $tokens['group.id'];
+		} elseif ( isset( $tokens['group'] ) && $tokens['group'] instanceof BP_Groups_Group ) {
+			$group_id = $tokens['group']->id;
+		}
+
+		if ( $group_id ) {
+			$formatted_tokens['openlab.group_type']    = openlab_get_group_type_label( [ 'group_id' => $group_id ] );
+			$formatted_tokens['openlab.group_type_uc'] = openlab_get_group_type_label( [ 'group_id' => $group_id, 'case' => 'upper' ] );
+
+			if ( ! isset( $tokens['group.url'] ) ) {
+				$formatted_tokens['group.url'] = bp_get_group_permalink( $group_id );
+			}
+		}
+
+		// This is a workaround for the lack of reliable timestamps on individual items.
+		$formatted_tokens['openlab.timestamp'] = date( 'g:ia, F j, Y' );
+
+		return $formatted_tokens;
+	},
+	10,
+	3
+);
+
+/**
+ * Ensure that restrictive kses is not run on bp-ges-notice.
+ *
+ * This helps us avoid breakage to custom HTML in the email template.
+ */
+add_action(
+	'bp_ges_before_bp_send_email',
+	function( $email_type ) {
+		if ( 'bp-ges-notice' !== $email_type ) {
+			return;
+		}
+
+		remove_filter( 'bp_email_set_content_html', 'bp_activity_filter_kses', 6 );
+
+		add_action(
+			'bp_ges_after_bp_send_email',
+			function() {
+				add_filter( 'bp_email_set_content_html', 'bp_activity_filter_kses', 6 );
+			}
+		);
+	}
+);

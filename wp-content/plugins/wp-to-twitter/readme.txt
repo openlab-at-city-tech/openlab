@@ -1,13 +1,13 @@
 === WP to Twitter ===
 Contributors: joedolson
-Donate link: http://www.joedolson.com/donate/
+Donate link: https://www.joedolson.com/donate/
 Tags: twitter, microblogging, bitly, yourls, redirect, shortener, post, links, social, sharing, media, tweet
 Requires at least: 4.9.8
-Tested up to: 5.8
+Tested up to: 6.0
 Requires PHP: 5.6
 License: GPLv2 or later
 Text Domain: wp-to-twitter
-Stable tag: 3.5.5
+Stable tag: 3.6.2
 
 Posts a Twitter update when you update your WordPress blog or add a link, with your chosen URL shortening service.
 
@@ -31,15 +31,15 @@ WP to Twitter uses a customizable Tweet template for Tweets sent when updating o
 * Use alternate URLs in place of post permalinks
 * Support for Google Analytics
 * Support for XMLRPC remote clients
-* Select from YOURLS, Goo.gl, Bit.ly, jotURL, or Su.pr as external URL shorteners.
+* Use [YOURLS](https://yourls.org), [Bit.ly]you(https://wordpress.org/plugins/codehaveli-bitly-url-shortener/), [jotURL](https://joturl.com), or [Hum](https://wordpress.org/plugins/hum/) as external URL shorteners.
 * Rate limiting: make sure you don't exceed Twitter's API rate limits. 
 
 = Premium Features =
 
-Upgrade to [WP Tweets Pro](http://www.joedolson.com/wp-tweets-pro/) for extra features, including:
+[Upgrade to WP Tweets Pro](https://www.joedolson.com/wp-tweets-pro/) for extra features, including:
 
 * Authors can set up their own Twitter accounts in their profiles
-* Time delayed Tweeting 
+* Time delayed Tweeting
 * Scheduled Tweet management
 * Simultaneously Tweet to site and author Twitter accounts
 * Preview and Tweet comments
@@ -48,7 +48,7 @@ Upgrade to [WP Tweets Pro](http://www.joedolson.com/wp-tweets-pro/) for extra fe
 * Integrated Twitter Card support
 * Support for Player Cards with integrated captions
 * Automatically schedule Tweets of old posts
-* [Get a license for WP Tweets PRO!](http://www.joedolson.com/wp-tweets-pro/)
+* [Get a license for WP Tweets PRO!](https://www.joedolson.com/wp-tweets-pro/)
 
 Want to stay up to date on WP to Twitter? [Follow me on Twitter!](https://twitter.com/joedolson)
 
@@ -63,6 +63,31 @@ Translating my plug-ins is always appreciated. Work on WP to Twitter translation
 Check out my <a href="https://github.com/joedolson/plugin-extensions/tree/master/wp-to-twitter">GitHub repository of plug-in extensions</a>.
 
 == Changelog ==
+
+= 3.6.2 =
+
+* Bug fix: YOURLS returns a 400 error if a URL is re-submitted, but WP to Twitter only handled JSON object if a 200 was returned.
+* Bug fix: Provide context labels for wp_die and die calls
+* Bug fix: Hum shortener threw errors if you attempted to shorten a link, since it only works for posts.
+* Bug fix: Missing sanitization in AJAX Tweet requests from admin.
+* Bug fix: Correctly handle YOURLS url shortening requests when there is already an existing shortened URL for that path.
+
+= 3.6.1 =
+
+* Bug fix: Don't expect a nonce or attempt to handle post meta if post not submitted from WordPress admin.
+
+= 3.6.0 =
+
+* Bug fix: Fix incorrect textdomains.
+* Security: Missing nonce verification in metabox.
+* Change: New filter `wpt_postpone_rendering` to allow Pro to delay template rendering.
+* Docs: Start adding hook docs - https://joedolson.github.io/wp-to-twitter/. Work in progress.
+
+= 3.5.6 =
+
+* Bug fix: Change in link to Twitter API error codes.
+* Bug fix: Restore sales page, accidentally removed in previous update.
+* Change: Option added to enable debugging from admin (in Advanced Settings.)
 
 = 3.5.5 =
 

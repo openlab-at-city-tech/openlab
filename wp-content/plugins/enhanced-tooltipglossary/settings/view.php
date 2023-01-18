@@ -36,7 +36,7 @@
 
         <?php
         // check permalink settings
-        if (get_option('permalink_structure') == '') {
+        if (\CM\CMTT_Settings::get('permalink_structure') == '') {
             echo '<span style="color:red">Your WordPress Permalinks needs to be set to allow plugin to work correctly. Please Go to <a href="' . admin_url() . 'options-permalink.php" target="new">Settings->Permalinks</a> to set Permalinks to Post Name.</span><br><br>';
         }
         ?>
@@ -46,21 +46,42 @@
     <br/>
     <div class="clear"></div>
 
-    <form method="post">
+    <form method="post" id="cminds_settings_form">
+
+        <div id="cminds_settings_search--container">
+            <input id="cminds_settings_search" placeholder="Search in settings..."><span id="cminds_settings_search_clear">&times;</span>
+        </div>
+
         <?php wp_nonce_field('update-options'); ?>
         <input type="hidden" name="action" value="update" />
 
-        <div id="cm_settings_tabs">
+        <div id="cm_settings_tabs" class="glossarySettingsTabs">
             <div class="glossary_loading"></div>
 
             <?php
             \CM\CMTT_Settings::renderSettingsTabsControls();
+
             \CM\CMTT_Settings::renderSettingsTabs();
             ?>
-
-            <div id="tabs-1">
+            <div id="tabs-0" class="settings-tab">
                 <div class="block">
-                    <h3>General Settings</h3>
+                    <?php echo do_shortcode('[cminds_free_guide id="cmtt"]'); ?>
+                </div>
+            </div>
+            <div id="tabs-99" class="settings-tab">
+                <div class="block">
+                    <?php echo do_shortcode('[cminds_upgrade_box id="cmtt"]'); ?>
+                </div>
+            </div>
+            <div id="tabs-1" class="settings-tab">
+                <div class="cminds_settings_toggle_tabs cminds_settings_toggle-opened">Toggle All</div>
+                <div class="block">
+                    <h3 class="section-title">
+                        <span>General Settings</span> 
+                        <svg class="tab-arrow" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="#6BC07F">
+                        <path d="M0 7.33l2.829-2.83 9.175 9.339 9.167-9.339 2.829 2.83-11.996 12.17z"></path>
+                        </svg>
+                    </h3>
                     <table class="floated-form-table form-table">
                         <tr valign="top" class="whole-line">
                             <th scope="row">Glossary Index Page ID</th>
@@ -92,7 +113,7 @@
                                        name="cmtt_excludeGlossaryTermPagesFromSearch" <?php checked(true, \CM\CMTT_Settings::get('cmtt_excludeGlossaryTermPagesFromSearch', '0')); ?>
                                        value="1"/>
                             </td>
-                            <td colspan="2" class="cmtt_field_help_container">Uncheck this to remove Glossary Term pages from search results.</td>
+                            <td colspan="2" class="cm_field_help_container">Uncheck this to remove Glossary Term pages from search results.</td>
                         </tr>
                         <tr valign="top">
                             <th scope="row">Glossary Terms Permalink</th>
@@ -155,14 +176,19 @@
                     </table>
                 </div>
                 <div class="block">
-                    <h3>Term highlighting</h3>
+                    <h3 class="section-title">
+                        <span>Term highlighting</span>
+                        <svg class="tab-arrow" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="#6BC07F">
+                        <path d="M0 7.33l2.829-2.83 9.175 9.339 9.167-9.339 2.829 2.83-11.996 12.17z"></path>
+                        </svg>
+                    </h3>
                     <table class="floated-form-table form-table">
                         <tr valign="top">
                             <th scope="row">Highlight terms on given post types:</th>
-                            <td>
+                            <td class="field-multiselect">
                                 <input type="hidden" name="cmtt_glossaryOnPosttypes" value="0" />
                                 <?php
-                                echo CMTT_Free::outputCustomPostTypesList();
+                                echo CMTT_Free::outputCustomPostTypesList('cmtt_glossaryOnPosttypes', 1);
                                 ?>
                             </td>
                             <td colspan="2" class="cm_field_help_container">Select the custom post types where you'd like the Glossary Terms to be highlighted.</td>
@@ -201,7 +227,7 @@
                             </td>
                         </tr>
                         <tr valign="top" class="onlyinpro">
-                            <th scope="row">Treat variations/synonyms the same as base term?</th>
+                            <th scope="row">Highlight each variations/synonyms of the term?</th>
                             <td>
                                 <?php echo \CM\CMTT_Settings::renderOnlyin(); ?>
                             </td>
@@ -243,7 +269,12 @@
                     <div class="clear"></div>
                 </div>
                 <div class="block">
-                    <h3>Performance &amp; Debug</h3>
+                    <h3 class="section-title">
+                        <span>Performance &amp; Debug</span>
+                        <svg class="tab-arrow" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="#6BC07F">
+                        <path d="M0 7.33l2.829-2.83 9.175 9.339 9.167-9.339 2.829 2.83-11.996 12.17z"></path>
+                        </svg>
+                    </h3>
                     <table class="floated-form-table form-table">
                         <tr valign="top" class="onlyinpro">
                             <th scope="row">Add RSS feeds?</th>
@@ -307,6 +338,14 @@
                             </td>
                             <td colspan="2" class="cm_field_help_container">Select this option if you want to use the internal caching mechanisms.</td>
                         </tr>
+                        <tr valign="top">
+                            <th scope="row">Clear caches actively</th>
+                            <td>
+                                <input type="hidden" name="cmtt_glossaryClearCaches" value="0" />
+                                <input type="checkbox" name="cmtt_glossaryClearCaches" <?php checked(true, \CM\CMTT_Settings::get('cmtt_glossaryClearCaches', FALSE)); ?> value="1" />
+                            </td>
+                            <td colspan="2" class="cm_field_help_container">Select this option if you want to actively clear the internal caching mechanisms. <strong>Only works if the mechanisms are already disabled, also increases the database usage, so it's best to deactivate after a while (week).</strong></td>
+                        </tr>
                         <tr valign="top" class="onlyinpro">
                             <th scope="row">Remove the parsing of the excerpts?</th>
                             <td>
@@ -363,9 +402,14 @@
                                 Select this option if you want use non-minified version of the tooltip.js file.<br/>
                             </td>
                         </tr>
-                        <tr valign="top" class="onlyinpro">
+                        <tr valign="top">
                             <th scope="row">Turn on AMP</th>
-                            <td><?php echo \CM\CMTT_Settings::renderOnlyin(); ?></td>
+                            <td>
+                                <input type="hidden" name="cmtt_glossaryTurnOnAmp" value="0"/>
+                                <input type="checkbox"
+                                       name="cmtt_glossaryTurnOnAmp" <?php checked(true, \CM\CMTT_Settings::get('cmtt_glossaryTurnOnAmp', 0)); ?>
+                                       value="1"/>
+                            </td>
                             <td colspan="2" class="cm_field_help_container">
                                 Select this option if you want to show tooltips in AMP pages.<br/>
                                 <a href="https://creativeminds.helpscoutdocs.com/article/2648-cm-tooltip-cmtg-extras-amp-support-accelerated-mobile-pages"
@@ -391,11 +435,26 @@
                                 after the CM Tooltip parser has processed the content.
                             </td>
                         </tr>
+	                    <tr valign="top">
+		                    <th scope="row">Shortcode for Glossary Index
+		                    </th>
+		                    <td><input type="text" name="cmtt_glossaryShortcode"
+		                               value="<?php echo \CM\CMTT_Settings::get( 'cmtt_glossaryShortcode', 'glossary' ); ?>"/>
+		                    </td>
+		                    <td colspan="2" class="cm_field_help_container"><strong>Warning!</strong>Only change this option
+			                    if there is a problem with displaying the Glossary Index page.!
+		                    </td>
+	                    </tr>
                     </table>
                     <div class="clear"></div>
                 </div>
                 <div class="block onlyinpro">
-                    <h3>Backup</h3>
+                    <h3 class="section-title">
+                        <span>Backup</span>
+                        <svg class="tab-arrow" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="#6BC07F">
+                        <path d="M0 7.33l2.829-2.83 9.175 9.339 9.167-9.339 2.829 2.83-11.996 12.17z"></path>
+                        </svg>
+                    </h3>
                     <p>Easily backup your glossary to the file. You can create/download a backup on the <a href="<?php echo admin_url('admin.php?page=cmtt_importexport'); ?>">Import/Export</a> page.</p>
                     <table class="floated-form-table form-table">
                         <tr valign="top" class="onlyinpro">
@@ -431,7 +490,12 @@
                     </table>
                 </div>
                 <div class="block">
-                    <h3>Referrals</h3>
+                    <h3 class="section-title">
+                        <span>Referrals</span>
+                        <svg class="tab-arrow" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="#6BC07F">
+                        <path d="M0 7.33l2.829-2.83 9.175 9.339 9.167-9.339 2.829 2.83-11.996 12.17z"></path>
+                        </svg>
+                    </h3>
                     <p>Refer new users to any of the CM Plugins and you'll receive a minimum of <strong>15%</strong> of their purchase! For more information please visit CM Plugins <a href="http://www.cminds.com/referral-program/" target="new">Affiliate page</a></p>
                     <table>
                         <tr valign="top">
@@ -464,9 +528,15 @@
                     </table>
                 </div>
             </div>
-            <div id="tabs-2">
+            <div id="tabs-2" class="settings-tab">
+                <div class="cminds_settings_toggle_tabs cminds_settings_toggle-opened">Toggle All</div>
                 <div class="block">
-                    <h3>Glossary Index Page Settings</h3>
+                    <h3 class="section-title">
+                        <span>Glossary Index Page Settings</span>
+                        <svg class="tab-arrow" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="#6BC07F">
+                        <path d="M0 7.33l2.829-2.83 9.175 9.339 9.167-9.339 2.829 2.83-11.996 12.17z"></path>
+                        </svg>
+                    </h3>
                     <table class="floated-form-table form-table">
                         <tr valign="top" class="onlyinpro">
                             <th scope="row">Remove the link from Glossary Index to the Glossary Term pages?</th>
@@ -541,7 +611,12 @@
                     </table>
                 </div>
                 <div class="block onlyinpro">
-                    <h3>Sharing box</h3>
+                    <h3 class="section-title">
+                        <span>Styling</span>
+                        <svg class="tab-arrow" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="#6BC07F">
+                        <path d="M0 7.33l2.829-2.83 9.175 9.339 9.167-9.339 2.829 2.83-11.996 12.17z"></path>
+                        </svg>
+                    </h3>
                     <table class="floated-form-table form-table">
                         <tr valign="top" class="onlyinpro">
                             <th scope="row">Show the sharing box on the Glossary Index Page?</th>
@@ -551,7 +626,12 @@
                     </table>
                 </div>
                 <div class="block onlyinpro">
-                    <h3>Pagination</h3>
+                    <h3 class="section-title">
+                        <span>Pagination</span>
+                        <svg class="tab-arrow" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="#6BC07F">
+                        <path d="M0 7.33l2.829-2.83 9.175 9.339 9.167-9.339 2.829 2.83-11.996 12.17z"></path>
+                        </svg>
+                    </h3>
                     <table class="floated-form-table form-table">
                         <tr valign="top" class="onlyinpro">
                             <th scope="row">Paginate Glossary Index page (items per page)</th>
@@ -574,11 +654,19 @@
                     </table>
                 </div>
                 <div class="block onlyinpro">
-                    <h3>Alphabetic index</h3>
+                    <h3 class="section-title">
+                        <span>Alphabetic index</span>
+                        <svg class="tab-arrow" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="#6BC07F">
+                        <path d="M0 7.33l2.829-2.83 9.175 9.339 9.167-9.339 2.829 2.83-11.996 12.17z"></path>
+                        </svg>
+                    </h3>
                     <table class="floated-form-table form-table">
-                        <tr valign="top" class="onlyinpro">
+                        <tr valign="top">
                             <th scope="row">Display Alphabetical Index</th>
-                            <td><?php echo \CM\CMTT_Settings::renderOnlyin(); ?></td>
+                            <td>
+                                <input type="hidden" name="cmtt_index_enabled" value="0" />
+                                <input type="checkbox" name="cmtt_index_enabled" <?php checked(true, \CM\CMTT_Settings::get('cmtt_index_enabled', 1)); ?> value="1" />
+                            </td>
                             <td colspan="2" class="cm_field_help_container">If you uncheck this option the alphabetical index will not be displayed on the Glossary Index Page</td>
                         </tr>
                         <tr valign="top" class="onlyinpro">
@@ -587,9 +675,9 @@
                             <td colspan="2" class="cm_field_help_container">If you check this option the alphabetical index will be stretched to 100% width
                             </td>
                         </tr>
-                        <tr valign="top" class="onlyinpro">
+                        <tr valign="top">
                             <th scope="row">Letters in alphabetic index</th>
-                            <td><?php echo \CM\CMTT_Settings::renderOnlyin(); ?></td>
+                            <td><input type="text" class="cmtt_longtext" name="cmtt_index_letters" value="<?php echo esc_attr(implode(',', \CM\CMTT_Settings::get('cmtt_index_letters', array()))); ?>" /></td>
                             <td colspan="2" class="cm_field_help_container">Which letters should be shown in alphabetic index (separate by commas)</td>
                         </tr>
                         <tr valign="top" class="onlyinpro">
@@ -620,7 +708,7 @@
                         <tr valign="top" class="onlyinpro">
                             <th scope="row">Use titles for sorting instead of permalinks?</th>
                             <td><?php echo \CM\CMTT_Settings::renderOnlyin(); ?></td>
-                            <td colspan="2" class="cm_field_help_container">By default the terms in the Glossary Index are sorted by their slug(permalink part), which allows to differentiate terms with the same title (multiple meanings). You can switch to sorting by title if that better suits your needs.<td>
+                            <td colspan="2" class="cm_field_help_container">By default the terms in the Glossary Index are sorted by their slug(permalink part), which allows to differentiate terms with the same title (multiple meanings). You can switch to sorting by title if that better suits your needs.</td>
                         </tr>
                         <tr valign="top" class="onlyinpro">
                             <th scope="row">What locale should be used for sorting?</th>
@@ -636,9 +724,15 @@
                     </table>
                 </div>
             </div>
-            <div id="tabs-3">
+            <div id="tabs-3" class="settings-tab">
+                <div class="cminds_settings_toggle_tabs cminds_settings_toggle-opened">Toggle All</div>
                 <div class="block">
-                    <h3>Glossary Term - Display</h3>
+                    <h3 class="section-title">
+                        <span>Glossary Term - Display</span>
+                        <svg class="tab-arrow" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="#6BC07F">
+                        <path d="M0 7.33l2.829-2.83 9.175 9.339 9.167-9.339 2.829 2.83-11.996 12.17z"></path>
+                        </svg>
+                    </h3>
                     <table class="floated-form-table form-table">
                         <tr valign="top" class="onlyinpro">
                             <th scope="row">Choose the template for glossary term?</th>
@@ -684,7 +778,11 @@
                     </table>
                 </div>
                 <div class="block">
-                    <h3>Glossary Term - Links</h3>
+                    <h3 class="section-title">
+                        <span>Glossary Term - Links</span>
+                        <svg class="tab-arrow" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="#6BC07F">
+                        <path d="M0 7.33l2.829-2.83 9.175 9.339 9.167-9.339 2.829 2.83-11.996 12.17z"></path>
+                        </svg></h3>
                     <table class="floated-form-table form-table">
                         <tr valign="top">
                             <th scope="row">Remove link to the glossary term page?</th>
@@ -712,7 +810,7 @@
                         </tr>
                         <tr valign="top">
                             <th scope="row">Link underline</th>
-                            <td>Style: <select name="cmtt_tooltipLinkUnderlineStyle">
+                            <td style="display: block">Style: <select name="cmtt_tooltipLinkUnderlineStyle">
                                     <option value="none" <?php selected('none', \CM\CMTT_Settings::get('cmtt_tooltipLinkUnderlineStyle')); ?>>None</option>
                                     <option value="solid" <?php selected('solid', \CM\CMTT_Settings::get('cmtt_tooltipLinkUnderlineStyle')); ?>>Solid</option>
                                     <option value="dotted" <?php selected('dotted', \CM\CMTT_Settings::get('cmtt_tooltipLinkUnderlineStyle')); ?>>Dotted</option>
@@ -720,11 +818,11 @@
                                 </select><br />
                                 Width: <input type="number" name="cmtt_tooltipLinkUnderlineWidth" value="<?php echo \CM\CMTT_Settings::get('cmtt_tooltipLinkUnderlineWidth'); ?>" step="1" min="0" max="10"/>px<br />
                                 Color: <input type="text" class="colorpicker" name="cmtt_tooltipLinkUnderlineColor" value="<?php echo \CM\CMTT_Settings::get('cmtt_tooltipLinkUnderlineColor'); ?>" /></td>
-                            <td colspan="2" class="cmtt_field_help_container">Set style of glossary link underline</td>
+                            <td colspan="2" class="cm_field_help_container">Set style of glossary link underline</td>
                         </tr>
                         <tr valign="top">
                             <th scope="row">Link underline (hover)</th>
-                            <td>Style: <select name="cmtt_tooltipLinkHoverUnderlineStyle">
+                            <td style="display: block">Style: <select name="cmtt_tooltipLinkHoverUnderlineStyle">
                                     <option value="none" <?php selected('none', \CM\CMTT_Settings::get('cmtt_tooltipLinkHoverUnderlineStyle')); ?>>None</option>
                                     <option value="solid" <?php selected('solid', \CM\CMTT_Settings::get('cmtt_tooltipLinkHoverUnderlineStyle')); ?>>Solid</option>
                                     <option value="dotted" <?php selected('dotted', \CM\CMTT_Settings::get('cmtt_tooltipLinkHoverUnderlineStyle')); ?>>Dotted</option>
@@ -732,84 +830,97 @@
                                 </select><br />
                                 Width: <input type="number" name="cmtt_tooltipLinkHoverUnderlineWidth" value="<?php echo \CM\CMTT_Settings::get('cmtt_tooltipLinkHoverUnderlineWidth'); ?>" step="1" min="0" max="10"/>px<br />
                                 Color: <input type="text" class="colorpicker" name="cmtt_tooltipLinkHoverUnderlineColor" value="<?php echo \CM\CMTT_Settings::get('cmtt_tooltipLinkHoverUnderlineColor'); ?>" /></td>
-                            <td colspan="2" class="cmtt_field_help_container">Set style of glossary link underline on mouse hover</td>
+                            <td colspan="2" class="cm_field_help_container">Set style of glossary link underline on mouse hover</td>
                         </tr>
                         <tr valign="top">
                             <th scope="row">Link text color</th>
                             <td><input type="text" class="colorpicker" name="cmtt_tooltipLinkColor" value="<?php echo \CM\CMTT_Settings::get('cmtt_tooltipLinkColor'); ?>" /></td>
-                            <td colspan="2" class="cmtt_field_help_container">Set color of glossary link text color</td>
+                            <td colspan="2" class="cm_field_help_container">Set color of glossary link text color</td>
                         </tr>
                         <tr valign="top">
                             <th scope="row">Link text color (hover)</th>
                             <td><input type="text" class="colorpicker" name="cmtt_tooltipLinkHoverColor" value="<?php echo \CM\CMTT_Settings::get('cmtt_tooltipLinkHoverColor'); ?>" /></td>
-                            <td colspan="2" class="cmtt_field_help_container">Set color of glossary link text color on mouse hover</td>
+                            <td colspan="2" class="cm_field_help_container">Set color of glossary link text color on mouse hover</td>
                         </tr>
                     </table>
                 </div>
                 <div class="block onlyinpro">
-                    <h3>Glossary Term - Related Articles &amp; Terms</h3>
-                    <table class="floated-form-table form-table">
-                        <tr valign="top" class="onlyinpro">
-                            <th scope="row">Show related articles</th>
-                            <td><?php echo \CM\CMTT_Settings::renderOnlyin(); ?></td>
-                            <td colspan="2" class="cm_field_help_container">Select this option if you want to show list of related articles (posts, pages) on glossary term description page</td>
-                        </tr>
-                        <tr valign="top" class="onlyinpro">
-                            <th scope="row">Order of the related articles by:</th>
-                            <td><?php echo \CM\CMTT_Settings::renderOnlyin(); ?></td>
-                            <td colspan="2" class="cm_field_help_container">How the related articles should be ordered?</td>
-                        </tr>
-                        <tr valign="top" class="onlyinpro">
-                            <th scope="row">Number of related articles:</th>
-                            <td><?php echo \CM\CMTT_Settings::renderOnlyin(); ?></td>
-                            <td colspan="2" class="cm_field_help_container">How many related articles should be shown?</td>
-                        </tr>
-                        <tr valign="top" class="onlyinpro">
-                            <th scope="row">Post types to index:</th>
-                            <td><?php echo \CM\CMTT_Settings::renderOnlyin(); ?></td>
-                            <td colspan="2" class="cm_field_help_container">Which post types should be indexed? (select more by holding down ctrl key)</td>
-                        </tr>
+                    <h3 class="section-title">
+                        <span>Glossary Term - Related Articles &amp; Terms</span>
+                        <svg class="tab-arrow" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="#6BC07F">
+                        <path d="M0 7.33l2.829-2.83 9.175 9.339 9.167-9.339 2.829 2.83-11.996 12.17z"></path>
+                        </svg>
+                    </h3>
+                    <div class="block">
+                        <h3 class="section-title">Related Articles</h3>
+                        <table class="floated-form-table form-table">
+                            <tr valign="top" class="onlyinpro">
+                                <th scope="row">Show related articles</th>
+                                <td><?php echo \CM\CMTT_Settings::renderOnlyin(); ?></td>
+                                <td colspan="2" class="cm_field_help_container">Select this option if you want to show list of related articles (posts, pages) on glossary term description page</td>
+                            </tr>
+                            <tr valign="top" class="onlyinpro">
+                                <th scope="row">Order of the related articles by:</th>
+                                <td><?php echo \CM\CMTT_Settings::renderOnlyin(); ?></td>
+                                <td colspan="2" class="cm_field_help_container">How the related articles should be ordered?</td>
+                            </tr>
+                            <tr valign="top" class="onlyinpro">
+                                <th scope="row">Number of related articles:</th>
+                                <td><?php echo \CM\CMTT_Settings::renderOnlyin(); ?></td>
+                                <td colspan="2" class="cm_field_help_container">How many related articles should be shown?</td>
+                            </tr>
+                            <tr valign="top" class="onlyinpro">
+                                <th scope="row">Post types to index:</th>
+                                <td><?php echo \CM\CMTT_Settings::renderOnlyin(); ?></td>
+                                <td colspan="2" class="cm_field_help_container">Which post types should be indexed? (select more by holding down ctrl key)</td>
+                            </tr>
 
-                        <tr valign="top" class="onlyinpro">
-                            <th scope="row">Refresh related articles index:</th>
-                            <td><?php echo \CM\CMTT_Settings::renderOnlyin(); ?></td>
-                            <td colspan="2" class="cm_field_help_container">The index for relations between articles (posts, pages) and glossary terms is being rebuilt on daily basis. Click this button if you want to do it manually (it may take a while)</td>
-                        </tr>
+                            <tr valign="top" class="onlyinpro">
+                                <th scope="row">Refresh related articles index:</th>
+                                <td><?php echo \CM\CMTT_Settings::renderOnlyin(); ?></td>
+                                <td colspan="2" class="cm_field_help_container">The index for relations between articles (posts, pages) and glossary terms is being rebuilt on daily basis. Click this button if you want to do it manually (it may take a while)</td>
+                            </tr>
 
-                        <tr valign="top" class="onlyinpro">
-                            <th scope="row">Auto-add parsed pages to related articles index?</th>
-                            <td><?php echo \CM\CMTT_Settings::renderOnlyin(); ?></td>
-                            <td colspan="2" class="cm_field_help_container">Select this option if you want to automatically add the parsed pages to the glossary index when they're parsed.</td>
-                        </tr>
-
-                    </table>
-                </div>
-                <div class="block onlyinpro">
-                    <h3>Glossary Term - Synonyms</h3>
-                    <table class="floated-form-table form-table">
-                        <tr valign="top" class="onlyinpro">
-                            <th scope="row">Show synonyms list</th>
-                            <td><?php echo \CM\CMTT_Settings::renderOnlyin(); ?></td>
-                            <td colspan="2" class="cm_field_help_container">Select this option if you want to show list of synonyms of the term on glossary term description page</td>
-                        </tr>
-                        <tr valign="top" class="onlyinpro">
-                            <th scope="row">Show synonyms list in tooltip</th>
-                            <td><?php echo \CM\CMTT_Settings::renderOnlyin(); ?></td>
-                            <td colspan="2" class="cm_field_help_container">Select this option if you want to show the list of synonyms of the term tooltip</td>
-                        </tr>
-                        <tr valign="top" class="onlyinpro">
-                            <th scope="row">Show synonyms in Glossary Index Page</th>
-                            <td><?php echo \CM\CMTT_Settings::renderOnlyin(); ?></td>
-                            <td colspan="2" class="cm_field_help_container">
-                                Select this option if you want to show synonyms as terms in Glossary Index Page
-                            </td>
-                        </tr>
-                    </table>
+                            <tr valign="top" class="onlyinpro">
+                                <th scope="row">Auto-add parsed pages to related articles index?</th>
+                                <td><?php echo \CM\CMTT_Settings::renderOnlyin(); ?></td>
+                                <td colspan="2" class="cm_field_help_container">Select this option if you want to automatically add the parsed pages to the glossary index when they're parsed.</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="block onlyinpro">
+                        <h3>Glossary Term - Synonyms</h3>
+                        <table class="floated-form-table form-table">
+                            <tr valign="top" class="onlyinpro">
+                                <th scope="row">Show synonyms list</th>
+                                <td><?php echo \CM\CMTT_Settings::renderOnlyin(); ?></td>
+                                <td colspan="2" class="cm_field_help_container">Select this option if you want to show list of synonyms of the term on glossary term description page</td>
+                            </tr>
+                            <tr valign="top" class="onlyinpro">
+                                <th scope="row">Show synonyms list in tooltip</th>
+                                <td><?php echo \CM\CMTT_Settings::renderOnlyin(); ?></td>
+                                <td colspan="2" class="cm_field_help_container">Select this option if you want to show the list of synonyms of the term tooltip</td>
+                            </tr>
+                            <tr valign="top" class="onlyinpro">
+                                <th scope="row">Show synonyms in Glossary Index Page</th>
+                                <td><?php echo \CM\CMTT_Settings::renderOnlyin(); ?></td>
+                                <td colspan="2" class="cm_field_help_container">
+                                    Select this option if you want to show synonyms as terms in Glossary Index Page
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
                 </div>
             </div>
-            <div id="tabs-4">
+            <div id="tabs-4" class="settings-tab">
+                <div class="cminds_settings_toggle_tabs cminds_settings_toggle-opened">Toggle All</div>
                 <div class="block">
-                    <h3>Tooltip - Content</h3>
+                    <h3 class="section-title">
+                        <span>Tooltip - Content</span>
+                        <svg class="tab-arrow" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="#6BC07F">
+                        <path d="M0 7.33l2.829-2.83 9.175 9.339 9.167-9.339 2.829 2.83-11.996 12.17z"></path>
+                        </svg>
+                    </h3>
                     <?php //do_action('cminds_cmtt_admin_tooltip_preview'); ?>
                     <table class="floated-form-table form-table">
                         <th scope="row">Show tooltip?</th>
@@ -930,7 +1041,11 @@
                     </table>
                 </div>
                 <div class="block onlyinpro">
-                    <h3>Tooltip - Mobile Support & Activation</h3>
+                    <h3 class="section-title">
+                        <span>Tooltip - Mobile Support & Activation</span>   
+                        <svg class="tab-arrow" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="#6BC07F">
+                        <path d="M0 7.33l2.829-2.83 9.175 9.339 9.167-9.339 2.829 2.83-11.996 12.17z"></path>
+                        </svg></h3>
                     <table class="floated-form-table form-table">
                         <tr valign="top" class="onlyinpro">
                             <th scope="row">Disable tooltips on mobile devices?</th>

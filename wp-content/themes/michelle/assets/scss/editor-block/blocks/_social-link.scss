@@ -1,0 +1,17 @@
+/* FILE: editor-block/blocks/_social-link.scss */
+
+#{ $selector_editor_wrapper } .wp-block-social-link {
+	width: auto !important;
+
+	&s {
+		max-width: $max_width_entry_content;
+		margin-left: auto;
+		margin-right: auto;
+	}
+
+}
+
+[data-align="left"] .wp-block-social-links,
+[data-align="right"] .wp-block-social-links {
+	width: auto !important;
+}

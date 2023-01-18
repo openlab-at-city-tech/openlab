@@ -1,0 +1,291 @@
+/*
+Theme Name: Miniva
+
+Adding support for languages written in a Right To Left (RTL) direction is easy -
+it's just a matter of overwriting all the horizontal positioning attributes
+of your CSS stylesheet in a separate stylesheet file named rtl.css.
+
+https://codex.wordpress.org/Right-to-Left_Language_Support
+
+*/
+
+body {
+	direction: rtl;
+	unicode-bidi: embed;
+}
+
+blockquote {
+	border-left: none;
+	border-right: 5px solid rgba(0, 0, 0, 0.1);
+}
+
+th {
+	text-align: right;
+}
+
+@media (max-width: 767.98px) {
+	.main-navigation li {
+		text-align: right;
+	}
+
+	.main-navigation li li {
+		padding-left: 0;
+		padding-right: 20px;
+	}
+}
+
+@media (min-width: 768px) {
+	.primary-menu ul {
+		left: auto;
+		right: -999em;
+	}
+
+	.primary-menu ul ul {
+		left: auto;
+		right: -999em;
+	}
+
+	.primary-menu ul li:hover > ul,
+	.primary-menu ul li.focus > ul {
+		left: auto;
+		right: 100%;
+	}
+
+	.primary-menu li:hover > ul,
+	.primary-menu li.focus > ul {
+		right: auto;
+	}
+
+	.primary-menu li li {
+		text-align: right;
+	}
+
+	.menu-default .primary-menu > li:first-child > a {
+		margin-left: auto;
+		margin-right: 0;
+	}
+
+	.primary-menu li > a:after {
+		margin-left: auto;
+		margin-right: 10px;
+	}
+
+	.primary-menu > li > a:after {
+		transform: rotate(270deg);
+	}
+
+	.primary-menu li li > a:after {
+		right: auto;
+		left: 10px;
+	}
+
+	li.header-search {
+		margin-left: 0;
+		margin-right: 5px;
+	}
+
+	.main-navigation .search-form {
+		right: auto;
+		left: 0;
+	}
+
+	.logo-side .main-navigation .search-form {
+		right: auto;
+		left: 20px;
+	}
+
+	.header-search .search-form .search-field {
+		padding-left: 0;
+		padding-right: 24px;
+	}
+
+	.header-search .search-form .search-field:focus {
+		padding-left: 0;
+		padding-right: 40px;
+	}
+
+	.header-search .search-form label .icon {
+		left: auto;
+		right: 12px;
+	}
+}
+
+.menu-toggle:before {
+	margin-right: auto;
+	margin-left: 0.5em;
+}
+
+.comment-navigation .nav-previous,
+.posts-navigation .nav-previous,
+.post-navigation .nav-previous {
+	float: right;
+}
+
+.comment-navigation .nav-next,
+.posts-navigation .nav-next,
+.post-navigation .nav-next {
+	float: left;
+	text-align: left;
+}
+
+.post-navigation .nav-previous a {
+	padding-left: 1em;
+	padding-right: 0;
+}
+
+.post-navigation .nav-next a {
+	padding-right: 1em;
+	padding-left: 0;
+}
+
+.post-navigation .nav-previous span:before {
+	margin-right: 0;
+	margin-left: 0.3em;
+}
+
+.post-navigation .nav-next span:after {
+	margin-left: 0;
+	margin-right: 0.3em;
+}
+
+.jetpack-social-navigation {
+	float: left;
+}
+
+.search-form .search-field {
+	border-right: 1px solid #ddd;
+	border-left: none;
+	border-radius: 0 3px 3px 0;
+}
+
+.search-form .search-submit {
+	border-radius: 3px 0 0 3px;
+}
+
+.widget ul.sub-menu,
+.widget ul.children {
+	margin: 0.4em 1.5em 0 0;
+}
+
+.tagcloud a {
+	margin: 0 0 5px 2px;
+}
+
+.calendar_wrap #next {
+	text-align: left;
+}
+
+@media (min-width: 992px) {
+	.error-404 .widget {
+		float: right;
+	}
+
+	.error-404 .widget:nth-child(odd) {
+		padding-right: 0;
+		padding-left: 20px;
+	}
+
+	.error-404 .widget:nth-child(even) {
+		padding-left: 0;
+		padding-right: 20px;
+	}
+}
+
+.custom-logo-link + .site-branding-text {
+	margin-left: 0;
+	margin-right: 10px;
+}
+
+@media (min-width: 992px) {
+	.logo-side .main-navigation {
+		margin-left: 0;
+		margin-right: 30px;
+	}
+}
+
+@media (min-width: 1200px) {
+	.logo-side .main-navigation {
+		margin-left: 0;
+		margin-right: 60px;
+	}
+}
+
+@media (min-width: 992px) {
+	.footer-widgets > div {
+		float: right;
+	}
+
+	.site-info {
+		float: right;
+		text-align: right;
+	}
+}
+
+.entry-meta > span,
+.entry-footer > span {
+	margin-right: 0;
+	margin-left: 0.3em;
+}
+
+.more-link:after {
+	content: " \2190";
+}
+
+@media (min-width: 576px) {
+	.entry-media {
+		float: right;
+	}
+
+	.entry-media .post-thumbnail {
+		margin: 0 0 0 30px;
+	}
+}
+
+.entry-author .author-avatar {
+	float: right;
+}
+
+.entry-author .author-heading {
+	margin-left: 0;
+	margin-right: 70px;
+}
+
+.entry-author .author-link:after {
+	content: " \2190";
+}
+
+.comment {
+	padding: 0 50px 0 0;
+}
+
+.comment-author .avatar {
+	left: auto;
+	right: 0;
+}
+
+.comment-list .edit-link {
+	margin: 0 0.8em 0 0;
+}
+
+.comment-form p label {
+	padding-left: 0;
+	padding-right: 2px;
+}
+
+.comment-respond #cancel-comment-reply-link {
+	margin-left: 10px;
+}
+
+@media (min-width: 768px) {
+	.featured-2 article {
+		float: right;
+	}
+
+	.featured-3 article {
+		float: right;
+	}
+}
+
+.input-group-btn .btn {
+	border-radius: 3px 0 0 3px;
+}

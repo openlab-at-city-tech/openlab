@@ -1,143 +1,143 @@
-# Copyright (C) 2021 Erick Hitter
+# Copyright (C) 2022 Erick Hitter
 # This file is distributed under the same license as the Taxonomy Dropdown Widget package.
 msgid ""
 msgstr ""
-"Project-Id-Version: Taxonomy Dropdown Widget 2.3.1\n"
+"Project-Id-Version: Taxonomy Dropdown Widget 2.3.3\n"
 "Report-Msgid-Bugs-To: "
 "https://wordpress.org/support/plugin/tag-dropdown-widget\n"
-"POT-Creation-Date: 2021-03-27 21:17:12+00:00\n"
+"POT-Creation-Date: 2022-06-25 19:33:06+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2021-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2022-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"X-Generator: grunt-wp-i18n 0.5.4\n"
-"X-Poedit-KeywordsList: "
-"__;_e;_x:1,2c;_ex:1,2c;_n:1,2;_nx:1,2,4c;_n_noop:1,2;_nx_noop:1,2,3c;esc_"
-"attr__;esc_html__;esc_attr_e;esc_html_e;esc_attr_x:1,2c;esc_html_x:1,2c;\n"
 "Language: en\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Country: United States\n"
 "X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: "
+"__;_e;_x:1,2c;_ex:1,2c;_n:1,2;_nx:1,2,4c;_n_noop:1,2;_nx_noop:1,2,3c;esc_"
+"attr__;esc_html__;esc_attr_e;esc_html_e;esc_attr_x:1,2c;esc_html_x:1,2c;\n"
 "X-Poedit-Basepath: ../\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-Bookmarks: \n"
 "X-Textdomain-Support: yes\n"
+"X-Generator: grunt-wp-i18n 1.0.3\n"
 
-#: tag-dropdown-widget.php:550
+#: tag-dropdown-widget.php:566
 msgid "Basic Settings"
 msgstr ""
 
-#: tag-dropdown-widget.php:553
+#: tag-dropdown-widget.php:569
 msgid "Taxonomy"
 msgstr ""
 
-#: tag-dropdown-widget.php:562
+#: tag-dropdown-widget.php:578
 msgid "Title:"
 msgstr ""
 
-#: tag-dropdown-widget.php:567
+#: tag-dropdown-widget.php:583
 msgid "Default dropdown item:"
 msgstr ""
 
-#: tag-dropdown-widget.php:571
+#: tag-dropdown-widget.php:587
 msgid "Order"
 msgstr ""
 
-#: tag-dropdown-widget.php:574
+#: tag-dropdown-widget.php:590
 msgid "Order terms by:"
 msgstr ""
 
-#: tag-dropdown-widget.php:577
+#: tag-dropdown-widget.php:593
 msgid "Name"
 msgstr ""
 
-#: tag-dropdown-widget.php:580
+#: tag-dropdown-widget.php:596
 msgid "Post count"
 msgstr ""
 
-#: tag-dropdown-widget.php:584
+#: tag-dropdown-widget.php:600
 msgid "Order terms:"
 msgstr ""
 
-#: tag-dropdown-widget.php:587
+#: tag-dropdown-widget.php:603
 msgid "Ascending"
 msgstr ""
 
-#: tag-dropdown-widget.php:590
+#: tag-dropdown-widget.php:606
 msgid "Descending"
 msgstr ""
 
-#: tag-dropdown-widget.php:593
+#: tag-dropdown-widget.php:609
 msgid "Term Display"
 msgstr ""
 
-#: tag-dropdown-widget.php:596
+#: tag-dropdown-widget.php:612
 msgid "Limit number of terms shown to:"
 msgstr ""
 
-#: tag-dropdown-widget.php:598
+#: tag-dropdown-widget.php:614
 msgid "Enter <strong>0</strong> for no limit."
 msgstr ""
 
-#: tag-dropdown-widget.php:602
+#: tag-dropdown-widget.php:618
 msgid "Trim long term names to <em>x</em> characters:</label>"
 msgstr ""
 
-#: tag-dropdown-widget.php:604
+#: tag-dropdown-widget.php:620
 msgid "Enter <strong>0</strong> to show full tag names."
 msgstr ""
 
-#: tag-dropdown-widget.php:608
+#: tag-dropdown-widget.php:624
 msgid "Indicator that term names are trimmed:"
 msgstr ""
 
-#: tag-dropdown-widget.php:610
+#: tag-dropdown-widget.php:626
 msgid "Leave blank to use an elipsis (&hellip;)."
 msgstr ""
 
-#: tag-dropdown-widget.php:615
+#: tag-dropdown-widget.php:631
 msgid "Include terms that aren't assigned to any objects (empty terms)."
 msgstr ""
 
-#: tag-dropdown-widget.php:620
+#: tag-dropdown-widget.php:636
 msgid "Display object (post) counts after term names."
 msgstr ""
 
-#: tag-dropdown-widget.php:623
+#: tag-dropdown-widget.php:639
 msgid "Include/Exclude Terms"
 msgstr ""
 
-#: tag-dropdown-widget.php:626
+#: tag-dropdown-widget.php:642
 msgid "Include/exclude terms:"
 msgstr ""
 
-#: tag-dropdown-widget.php:629
+#: tag-dropdown-widget.php:645
 msgid "Include only the term IDs listed below"
 msgstr ""
 
-#: tag-dropdown-widget.php:632
+#: tag-dropdown-widget.php:648
 msgid "Exclude the term IDs listed below"
 msgstr ""
 
-#: tag-dropdown-widget.php:636
+#: tag-dropdown-widget.php:652
 msgid "Term IDs to include/exclude based on above setting:"
 msgstr ""
 
-#: tag-dropdown-widget.php:638
+#: tag-dropdown-widget.php:654
 msgid "Enter comma-separated list of term IDs."
 msgstr ""
 
-#: tag-dropdown-widget.php:641
+#: tag-dropdown-widget.php:657
 msgid "Advanced"
 msgstr ""
 
-#: tag-dropdown-widget.php:644
+#: tag-dropdown-widget.php:660
 msgid "Show terms assigned to at least this many posts:"
 msgstr ""
 
-#: tag-dropdown-widget.php:646
+#: tag-dropdown-widget.php:662
 msgid "Set to <strong>0</strong> to display all terms matching the above criteria."
 msgstr ""
 

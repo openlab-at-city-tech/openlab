@@ -3,9 +3,9 @@ Contributors: TigrouMeow
 Tags: clean, delete, file, files, images, image, media, library, upload, acf
 Donate link: https://meowapps.com/donation/
 Requires at least: 5.0
-Tested up to: 5.9
+Tested up to: 6.1
 Requires PHP: 7.0
-Stable tag: 6.3.0
+Stable tag: 6.5.2 
 
 Clean your WordPress from unused files, broken media entries. Powerful engine and beautiful UI!
 
@@ -13,9 +13,11 @@ Clean your WordPress from unused files, broken media entries. Powerful engine an
 
 Media Cleaner cleans your Media Library from the media entries (and files) which aren't used in your website, as well as broken entries. An internal trash allows you to make sure everything works properly before deleting the media entries (and files) permanently. It uses a smart analysis powered by many implementations for specific plugins and themes.
 
+This is the perfect companion to [Database Cleaner](https://wordpress.org/plugins/database-cleaner/).
+
 **Before using this plugin, make sure you have a proper backup of your install. This step is not optional; it is required. You cannot trust any tools modifying or deleting your files.**
 
-For compatibility, Pro version and important information, please read this until the end. Last but not least, it is necessary to read the [tutorial](https://meowapps.com/media-cleaner-tutorial/). It is available on the official website, here: [Media Cleaner](https://meowapps.com/plugin/media-cleaner/). 
+To know more about compatibility, important information and Pro version, please read this until the end. Last but not least, it is necessary to read the [tutorial](https://meowapps.com/media-cleaner/tutorial/). It is available on the official website, here: [Media Cleaner](https://meowapps.com/media-cleaner/). 
 
 === IMPORTANT ===
 
@@ -31,11 +33,13 @@ This plugin works with any kind of media entry, including retina and/or WebP ver
 
 === PRO VERSION ===
 
-The Pro version adds Filesystem Analysis, extra support for complex plugins, Live Site option and WP-CLI support.
+[Media Cleaner Pro](https://meowapps.com/media-cleaner/) adds Filesystem Analysis, extra support for complex plugins, an 'Live Site' option and WP-CLI support. 
 
-With the Filesystem Analysis, [Media Cleaner Pro](https://meowapps.com/plugin/media-cleaner/) scans your physical /uploads directory, and match it against the Media Library. It also has extra support for complex plugins, such as:
+With the Filesystem Analysis, [Media Cleaner Pro](https://meowapps.com/media-cleaner/) scans your physical /uploads directory, and match it against the Media Library.
 
-- ACF (+ ACF Widgets)
+Extra support concerns complex plugins, such as:
+
+- ACF, Metabox
 - Divi Builder
 - Fusion Builder (Avada)
 - WPBakery Page Builder
@@ -45,16 +49,21 @@ With the Filesystem Analysis, [Media Cleaner Pro](https://meowapps.com/plugin/me
 - Brizy Builder
 - Oxygen Builder
 - Slider Revolution
+- Justified Image Grid
 - Avia Framework
-- And more (Theme X, YooTheme, WP Residence, WCFM MarketPlace, UberMenu, Justified Image Grid, ZipList Recipe, SmartSlider, Jet Engine, Cornerstone, etc...)
+- ... and many, many more!
 
-The Live Site option will analyze the online version of your website, which might enhance the accuracy of the Cleaner in edge-cases.
+The Live Site option will analyze the online version of your website, which might enhance the accuracy of the Cleaner in some edge cases.
 
-Last but not least, [Media Cleaner Pro](https://meowapps.com/plugin/media-cleaner/) has support for WP-CLI. If you have direct access (SSH) to your server, you will be able to run the plugin at a much higher speed or have it run automatically, if you’d like.
+Last but not least, [Media Cleaner Pro](https://meowapps.com/media-cleaner/) has support for WP-CLI. If you have direct access (SSH) to your server, you will be able to run the plugin at a much higher speed or have it run automatically, if you’d like.
 
 === BE CAREFUL: PREPARE A BACKUP ===
 
 Better to be safe than sorry. This plugin deletes files! Therefore, backup is not only important, it is **required**. Do not use this plugin if you are not ready. I can't help you if you damage your media library permanently without a backup.
+
+=== DATABASE CLEANER ===
+
+To make everything perfect, you will also need to clean and optimize your database. If you enjoy how Media Cleaner is made and supported, you will love [Database Cleaner](https://wordpress.org/plugins/database-cleaner/). Please give it a try!
 
 === SPECIAL THANKS ===
 
@@ -75,15 +84,88 @@ Better to be safe than sorry. This plugin deletes files! Therefore, backup is no
 
 == Changelog ==
 
+= 6.5.2 (2022/12/26) =
+* Add: Support for Global Gallery, Lana Downloads Manager, Powerpress, Connections Business Directory, Wonderful Plugin 3D Carousel.
+* Update: Better support for Avada (Fusion Builder).
+* Update: Live content is not restricted to Posts and Pages anymore (it can be used for any custom post type).
+
+= 6.5.1 (2022/12/09) =
+* Update: Better support for WPBakery and Elementor.
+* Note: Please try my new [Database Cleaner](https://wordpress.org/plugins/database-cleaner/)! You'll love it!
+
+= 6.5.0 (2022/11/12) =
+* Add: In the Edit Media page, you can now see the post/page where your media are used.
+* Fix: Avoid a few errors in some specific cases.
+
+= 6.4.9 (2022/10/24) =
+* Fix: Improved (and fixed) the accuracy of the explanation displayed before the scan.
+
+= 6.4.7 (2022/10/10) =
+* Add: Fixed a potential issue while scanning the widgets.
+
+= 6.4.6 (2022/09/27) =
+* Add: Option to skip trash.
+* Update: Better and faster handling of options (big refactor).
+* Update: Tiny UI enhancements to make this a bit better.
+* Add: Better support for ACF Blocks.
+
+= 6.4.5 (2022/09/10) =
+* Add: Support for Ultimate Responsive Image Slider.
+* Add: Support for Presto Player.
+
+= 6.4.4 (2022/09/01) =
+= Fix: Avoid duplicate issues, even if a file is analyzed twice for some reason.
+* Add: Auto-retry in the UI.
+
+= 6.4.2 (2022/08/03) =
+* Fix: Tiny UI issues in Safari.
+
+= 6.4.1 (2022/07/25) =
+* Add: Select a range of items by using shift.
+* Info: New plugin the the family! 🎉 It is simply called Database Cleaner, and it aims to be... the best Database Cleaner! You can find it [here](https://wordpress.org/plugins/database-cleaner).
+* Info: I am working hard on Media Cleaner. If you want to give me some love and motivation, write a simple and nice review [here](https://wordpress.org/support/plugin/media-cleaner/reviews/?rate=5#new-post). Thank you so much! 💖
+
+= 6.4.0 (2022/06/30) =
+* Add: Support for retry when an error occurs.
+* Fix: There was an issue with the resolution of some filepaths.
+
+= 6.3.9 (2022/06/23) =
+* Add: Support of the source tag.
+
+= 6.3.8 (2022/06/13) =
+* Fix: The links and thumbnails were broken in the Dashboard Trash.
+
+= 6.3.7 (2022/06/07) =
+* Fix: Better support for filters for filesystem scan (and a little optimization as well).
+* Fix: Better support for backgrounds/overlays in elementor.
+
+= 6.3.6 (2022/05/17) =
+* Fix: Support for Elementor background images.
+
+= 6.3.5 (2022/05/05) =
+* Fix: There were a few warnings related to undeclared arrays.
+* Add: Support for Metabox.
+
+= 6.3.4 (2022/04/29) =
+* Fix: Issue with Elementor.
+* Fix: Issue with JetEngine.
+* Add: Support for ACF Photo Gallery.
+
+= 6.3.2 (2022/03/22) =
+* Fix: Better support for WebP.
+
+= 6.3.1 (2022/03/15) =
+* Add: Do not rely on the Media Trash anymore (MEDIA_TRASH)!
+* Fix: Better support for WPBakery.
+* Add: Support for Google Web Stories.
+* Info: There is no need to add MEDIA_TRASH anymore :) You can remove it from your wp-config.php if you added it in there. 
+
 = 6.3.0 (2022/02/20) =
 * Fix: When a Media entry is removed from Media Library, also remove it from the Issues in the Cleaner Dashboard.
 
 = 6.2.9 (2022/02/14) =
 * Update: Consider SVGs as images.
-
-= 6.2.8 (2022/01/28) =
 * Update: Support for WordPress 5.9.
-* Info: I am working hard on Media Cleaner. If you want to give me some love and motivation, write a simple and nice review [here](https://wordpress.org/support/plugin/media-cleaner/reviews/?rate=5#new-post). Thank you so much! 💖
 
 = 6.2.7 (2021/12/11) =
 * Add: Support for Jet Engine and its metaboxes and fields.
@@ -335,7 +417,7 @@ Better to be safe than sorry. This plugin deletes files! Therefore, backup is no
 * Update: Compatibility with WordPress 5.1.
 
 = 5.1.0 =
-* Add: Filters for Filesystem scan. Please have a look at the tutorial (https://meowapps.com/media-cleaner-tutorial/), there is now a section about those filters.
+* Add: Filters for Filesystem scan. Please have a look at the tutorial (https://meowapps.com/media-cleaner/tutorial/), there is now a section about those filters.
 * Fix: Query for metakey.
 * Fix: Thumbnails matching.
 * Update: Compatibility for WordPress 5 and Gutenberg.

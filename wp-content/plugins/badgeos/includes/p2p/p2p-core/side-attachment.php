@@ -15,9 +15,12 @@ class P2P_Side_Attachment extends P2P_Side_Post {
 	}
 
 	function get_base_qv( $q ) {
-		return array_merge( parent::get_base_qv( $q ), array(
-			'post_status' => 'inherit'
-		) );
+		return array_merge(
+			parent::get_base_qv( $q ),
+			array(
+				'post_status' => 'inherit',
+			)
+		);
 	}
 }
 

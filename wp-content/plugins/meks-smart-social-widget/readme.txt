@@ -3,8 +3,8 @@ Contributors: mekshq
 Donate link: https://mekshq.com/
 Tags: social, icons, widget, linkedin, reddit, vimeo, dribble, instagram, pinterest
 Requires at least: 3.0
-Tested up to: 5.7
-Stable tag: 1.5
+Tested up to: 6.0
+Stable tag: 1.6
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl.html
 
@@ -46,6 +46,10 @@ For any questions, error reports and suggestions please visit https://mekshq.com
 4. Widget in action - example 3
 
 == Changelog ==
+
+= 1.6 =
+
+* Modified: The plugin disables Widgets Block Editor (introduced since WP 5.8), as it currently works properly with Classic Widgets Editor 
 
 = 1.5 =
 

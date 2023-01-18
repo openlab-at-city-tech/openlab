@@ -2,6 +2,7 @@
 <div class="b2s-container">
     <div class="b2s-inbox">
         <div class="col-md-12 del-padding-left">
+            <?php require_once (B2S_PLUGIN_DIR . 'views/b2s/html/sidebar.php'); ?>
             <div class="col-md-9 del-padding-left del-padding-right">
                 <!--Header|Start - Include-->
                 <?php require_once (B2S_PLUGIN_DIR . 'views/b2s/html/header.php'); ?>
@@ -22,7 +23,7 @@
                                 <a href="#b2s-support-sharing-debugger" class="b2s-support-sharing-debugger" data-toggle="tab"><?php esc_html_e('Sharing-Debugger', 'blog2social') ?> <span class="label label-success"><?php esc_html_e("NEW", "blog2social") ?></span></a>
                             </li>
                             <li>
-                                <a target="_blank" href="<?php echo B2S_Tools::getSupportLink('howto'); ?>"><?php esc_html_e('Step-by-Step-Guide', 'blog2social') ?></a>
+                                <a target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('howto')); ?>"><?php esc_html_e('Step-by-Step-Guide', 'blog2social') ?></a>
                             </li>
                         </ul>
                         <hr class="b2s-support-line">
@@ -32,7 +33,7 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="col-md-12">
-                                            <form action="<?php echo B2S_Tools::getSupportLink('faq_direct'); ?>" method="GET" target="_blank">
+                                            <form action="<?php echo esc_url(B2S_Tools::getSupportLink('faq_direct')); ?>" method="GET" target="_blank">
                                                 <input type="hidden" name="action" value="search" />
                                                 <h4 class="b2s-text-bold"><?php esc_html_e('How can we help?', 'blog2social') ?></h4>
                                                 <div class="input-group">
@@ -61,8 +62,8 @@
                                                         <div class="alert alert-danger b2s-community-error" data-error-type="invalid_data" style="display: none;"><?php esc_html_e('Unknown error has occurred. Please try again.', 'blog2social') ?></div>
                                                         <div class="alert alert-danger b2s-community-error" data-error-type="invalid_password" style="display: none;"><?php esc_html_e('Enter at least 8 characters', 'blog2social') ?></div>
                                                         <div class="alert alert-danger b2s-community-error" data-error-type="invalid_email" style="display: none;"><?php esc_html_e('Invalid email address', 'blog2social') ?></div>
-                                                        <div class="alert alert-danger b2s-community-error" data-error-type="exists_email" style="display: none;"><?php esc_html_e('Email address is taken.', 'blog2social') ?> <a target="_blank" href="<?php echo B2S_Tools::getSupportLink('community_lostpw') ?>"><?php esc_html_e('Forgot Password?', 'blog2social') ?></a></div>
-                                                        <div class="alert alert-danger b2s-community-error" data-error-type="exists_username" style="display: none;"><?php esc_html_e('Username is taken.', 'blog2social') ?> <a target="_blank" href="<?php echo B2S_Tools::getSupportLink('community_lostpw') ?>"><?php esc_html_e('Forgot Password?', 'blog2social') ?></a></div>
+                                                        <div class="alert alert-danger b2s-community-error" data-error-type="exists_email" style="display: none;"><?php esc_html_e('Email address is taken.', 'blog2social') ?> <a target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('community_lostpw')) ?>"><?php esc_html_e('Forgot Password?', 'blog2social') ?></a></div>
+                                                        <div class="alert alert-danger b2s-community-error" data-error-type="exists_username" style="display: none;"><?php esc_html_e('Username is taken.', 'blog2social') ?> <a target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('community_lostpw')) ?>"><?php esc_html_e('Forgot Password?', 'blog2social') ?></a></div>
                                                         <div class="input-group form-group">
                                                             <span class="input-group-addon btn-light"><i class="glyphicon glyphicon-user"></i></span>
                                                             <input type="text" id="b2s-community-username" name="fullname" placeholder="<?php esc_html_e('User name', 'blog2social') ?>" class="form-control">
@@ -88,16 +89,16 @@
                                                     <div class="b2s-community-register-success text-center alert alert-success" style="display:none;">
                                                         <p class="b2s-bold"><?php esc_html_e('Yay :) You successfully registered for the Blog2Social Community!', 'blog2social') ?></p>
                                                         <br>
-                                                        <a target="_blank" href="<?php echo B2S_Tools::getSupportLink('community') ?>" class="btn btn-primary"><?php esc_html_e('Go to the Blog2Social Community', 'blog2social') ?></a>
+                                                        <a target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('community')) ?>" class="btn btn-primary"><?php esc_html_e('Go to the Blog2Social Community', 'blog2social') ?></a>
                                                     </div>
                                                     <br>
                                                 <?php } ?>
-                                                <a target="_blank" href="<?php echo B2S_Tools::getSupportLink('community') ?>" class="btn btn-success b2s-community-btn"><?php esc_html_e('Browse the Blog2Social support community', 'blog2social') ?></a>
+                                                <a target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('community')) ?>" class="btn btn-success b2s-community-btn"><?php esc_html_e('Browse the Blog2Social support community', 'blog2social') ?></a>
                                                 <?php if($registerdCommunity == false) { ?>
                                                     <br><br>
                                                     <p><?php echo sprintf(__('<b>Already registered?</b> <a href="%s" target="_blank">Login to your support account</a> to ask questions or join the discussion.', 'blog2social'), 'https://community.blog2social.com/'); ?></p>
                                                     <br>
-                                                    <a target="_blank" href="<?php echo B2S_Tools::getSupportLink('community_lostpw') ?>"><?php esc_html_e('Forgot username or password?', 'blog2social') ?></a>
+                                                    <a target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('community_lostpw')) ?>"><?php esc_html_e('Forgot username or password?', 'blog2social') ?></a>
                                                 <?php } ?>
                                             </div>
                                         </div>
@@ -105,17 +106,17 @@
                                             <h4 class="b2s-bold"><?php esc_html_e('Frequently asked questions', 'blog2social') ?></h4>
                                             <div class="b2s-faq-area">
                                                 <ul class="b2s-faq-links-list">
-                                                    <li><a class="b2s-faq-link" target="_blank" href="<?php echo B2S_Tools::getSupportLink('faq_installation'); ?>"><?php esc_html_e('Installation', 'blog2social') ?></a></li>
-                                                    <li><a class="b2s-faq-link" target="_blank" href="<?php echo B2S_Tools::getSupportLink('faq_network'); ?>"><?php esc_html_e('Connecting Social Networks', 'blog2social') ?></a></li>
-                                                    <li><a class="b2s-faq-link" target="_blank" href="<?php echo B2S_Tools::getSupportLink('faq_sharing'); ?>"><?php esc_html_e('Autoposting, Sharing und Re-Sharing', 'blog2social') ?></a></li>
-                                                    <li><a class="b2s-faq-link" target="_blank" href="<?php echo B2S_Tools::getSupportLink('faq_customize'); ?>"><?php esc_html_e('Customizing Social Media Posts', 'blog2social') ?></a></li>
-                                                    <li><a class="b2s-faq-link" target="_blank" href="<?php echo B2S_Tools::getSupportLink('faq_scheduling'); ?>"><?php esc_html_e('Scheduling and Best Time Manager', 'blog2social') ?></a></li>
-                                                    <li><a class="b2s-faq-link" target="_blank" href="<?php echo B2S_Tools::getSupportLink('faq_repoting'); ?>"><?php esc_html_e('Reporting', 'blog2social') ?></a></li>
-                                                    <li><a class="b2s-faq-link" target="_blank" href="<?php echo B2S_Tools::getSupportLink('faq_licence'); ?>"><?php esc_html_e('Contracting and Licensing', 'blog2social') ?></a></li>
-                                                    <li><a class="b2s-faq-link" target="_blank" href="<?php echo B2S_Tools::getSupportLink('faq_security'); ?>"><?php esc_html_e('Security', 'blog2social') ?></a></li>
-                                                    <li><a class="b2s-faq-link" target="_blank" href="<?php echo B2S_Tools::getSupportLink('faq_troubleshooting'); ?>"><?php esc_html_e('Troubleshooting for Error Messages', 'blog2social') ?></a></li>
-                                                    <li><a class="b2s-faq-link" target="_blank" href="<?php echo B2S_Tools::getSupportLink('faq_affiliate'); ?>"><?php esc_html_e('Affiliate Program', 'blog2social') ?></a></li>
-                                                    <li><a class="b2s-faq-link" target="_blank" href="<?php echo B2S_Tools::getSupportLink('faq_settings'); ?>"><?php esc_html_e('Helpful Network Settings', 'blog2social') ?></a></li>
+                                                    <li><a class="b2s-faq-link" target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('faq_installation')); ?>"><?php esc_html_e('Installation', 'blog2social') ?></a></li>
+                                                    <li><a class="b2s-faq-link" target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('faq_network')); ?>"><?php esc_html_e('Connecting Social Networks', 'blog2social') ?></a></li>
+                                                    <li><a class="b2s-faq-link" target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('faq_sharing')); ?>"><?php esc_html_e('Autoposting, Sharing und Re-Sharing', 'blog2social') ?></a></li>
+                                                    <li><a class="b2s-faq-link" target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('faq_customize')); ?>"><?php esc_html_e('Customizing Social Media Posts', 'blog2social') ?></a></li>
+                                                    <li><a class="b2s-faq-link" target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('faq_scheduling')); ?>"><?php esc_html_e('Scheduling and Best Time Manager', 'blog2social') ?></a></li>
+                                                    <li><a class="b2s-faq-link" target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('faq_repoting')); ?>"><?php esc_html_e('Reporting', 'blog2social') ?></a></li>
+                                                    <li><a class="b2s-faq-link" target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('faq_licence')); ?>"><?php esc_html_e('Contracting and Licensing', 'blog2social') ?></a></li>
+                                                    <li><a class="b2s-faq-link" target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('faq_security')); ?>"><?php esc_html_e('Security', 'blog2social') ?></a></li>
+                                                    <li><a class="b2s-faq-link" target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('faq_troubleshooting')); ?>"><?php esc_html_e('Troubleshooting for Error Messages', 'blog2social') ?></a></li>
+                                                    <li><a class="b2s-faq-link" target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('faq_affiliate')); ?>"><?php esc_html_e('Affiliate Program', 'blog2social') ?></a></li>
+                                                    <li><a class="b2s-faq-link" target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('faq_settings')); ?>"><?php esc_html_e('Helpful Network Settings', 'blog2social') ?></a></li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -123,7 +124,7 @@
                                         <br>
                                         <div class="col-md-12">
                                             <h4 class="b2s-text-bold"><?php esc_html_e('Sales Support', 'blog2social') ?></h4>
-                                            <a target="_blank" href="<?php echo B2S_Tools::getSupportLink('faq'); ?>">
+                                            <a target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('faq')); ?>">
                                                 <p><?php esc_html_e('Click here to find the right license for your needs or to contact the sales team for any payment issues.', 'blog2social') ?></p>
                                             </a>
                                         </div>
@@ -131,7 +132,7 @@
                                 </div>
                             </div>
                             <div class="tab-pane" id="b2s-support-check-system">
-                                <p class="b2s-bold"><?php esc_html_e('The Troubleshooting tool helps you with conflicts that can be caused by the system environment of your blog. So you can always check your settings on Wordpress.', 'blog2social'); ?> <a href="<?php echo B2S_Tools::getSupportLink('troubleshooting_tool_support'); ?>" target="_blank"><?php esc_html_e('How to use the Troubleshooting tool', 'blog2social') ?></a></p>
+                                <p class="b2s-bold"><?php esc_html_e('The Troubleshooting tool helps you with conflicts that can be caused by the system environment of your blog. So you can always check your settings on Wordpress.', 'blog2social'); ?> <a href="<?php echo esc_url(B2S_Tools::getSupportLink('troubleshooting_tool_support')); ?>" target="_blank"><?php esc_html_e('How to use the Troubleshooting tool', 'blog2social') ?></a></p>
                                 <div class="row b2s-loading-area width-100">
                                     <br>
                                     <div class="b2s-loader-impulse b2s-loader-impulse-md"></div>
@@ -167,17 +168,17 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <h3><?php esc_html_e("Enter a URL to see how your link preview will look on social media.", "blog2social"); ?></h3>
-                                        <p class="b2s-bold"><?php esc_html_e("Are you are experiencing incorrect images and/or titles being pulled by Facebook or other social media platforms? Social Debugger or code validator tools show you a preview of what your social media post will look like when it's published and help you to fix inconsistencies and errors.", "blog2social"); ?> <a href="<?php echo B2S_Tools::getSupportLink('debugger_support'); ?>" target="_blank"><?php esc_html_e('More', 'blog2social') ?></a></p>
+                                        <p class="b2s-bold"><?php esc_html_e("Are you are experiencing incorrect images and/or titles being pulled by Facebook or other social media platforms? Social Debugger or code validator tools show you a preview of what your social media post will look like when it's published and help you to fix inconsistencies and errors.", "blog2social"); ?> <a href="<?php echo esc_url(B2S_Tools::getSupportLink('debugger_support')); ?>" target="_blank"><?php esc_html_e('More', 'blog2social') ?></a></p>
                                         <div class="b2s-sharing-debugger-result-area">
                                             <div class="clearfix"></div>
                                             <br>
                                             <div>
-                                                <img class="b2s-feature-img-with-24" src="<?php echo plugins_url('/assets/images/portale/1_flat.png', B2S_PLUGIN_FILE); ?>" alt="Facebook">  <span class="b2s-text-bold"><?php esc_html_e("Facebook Open Graph Meta Tags", "blog2social") ?>
-                                                    | <a class="btn-link" href="<?php echo B2S_Tools::getSupportLink("open_graph_tags"); ?>" target="_blank"><?php esc_html_e("Learn how to edit and adjust Open Graph tags.", "blog2social"); ?></a>
+                                                <img class="b2s-feature-img-with-24" src="<?php echo esc_url(plugins_url('/assets/images/portale/1_flat.png', B2S_PLUGIN_FILE)); ?>" alt="Facebook">  <span class="b2s-text-bold"><?php esc_html_e("Facebook Open Graph Meta Tags", "blog2social") ?>
+                                                    | <a class="btn-link" href="<?php echo esc_url(B2S_Tools::getSupportLink("open_graph_tags")); ?>" target="_blank"><?php esc_html_e("Learn how to edit and adjust Open Graph tags.", "blog2social"); ?></a>
                                                 </span>
                                             </div>
                                             <div class="input-group col-md-7 b2s-padding-top-8">
-                                                <input type="text" name="b2s-debug-url" class="input-sm form-control" id="b2s-debug-url" value="<?php echo get_site_url(); ?>" data-network-id="1" placeholder="<?php esc_html_e("For example your Wordpress Home Page", "blog2social"); ?>">
+                                                <input type="text" name="b2s-debug-url" class="input-sm form-control" id="b2s-debug-url" value="<?php echo esc_attr(get_site_url()); ?>" data-network-id="1" placeholder="<?php esc_html_e("For example your Wordpress Home Page", "blog2social"); ?>">
                                                 <span class="input-group-btn">
                                                     <button class="btn btn-primary btn-sm b2s-btn-sharing-debugger" data-network-id="1" b2s-url-query="https://developers.facebook.com/tools/debug/sharing/?q="><?php esc_html_e("Debug & Preview", "blog2social") ?></button>
                                                 </span>
@@ -185,10 +186,10 @@
                                             <div class="clearfix"></div>
                                             <br>
                                             <div>
-                                                <img class="b2s-feature-img-with-24" src="<?php echo plugins_url('/assets/images/portale/3_flat.png', B2S_PLUGIN_FILE); ?>" alt="Linkedin">  <span class="b2s-text-bold"><?php esc_html_e("LinkedIn Post Inspector", "blog2social") ?></span>
+                                                <img class="b2s-feature-img-with-24" src="<?php echo esc_url(plugins_url('/assets/images/portale/3_flat.png', B2S_PLUGIN_FILE)); ?>" alt="Linkedin">  <span class="b2s-text-bold"><?php esc_html_e("LinkedIn Post Inspector", "blog2social") ?></span>
                                             </div>
                                             <div class="input-group col-md-7 b2s-padding-top-8">
-                                                <input type="text" name="b2s-debug-url" class="input-sm form-control" id="b2s-debug-url" value="<?php echo get_site_url(); ?>" data-network-id="3" placeholder="<?php esc_html_e("For example your Wordpress Home Page", "blog2social"); ?>">
+                                                <input type="text" name="b2s-debug-url" class="input-sm form-control" id="b2s-debug-url" value="<?php echo esc_attr(get_site_url()); ?>" data-network-id="3" placeholder="<?php esc_html_e("For example your Wordpress Home Page", "blog2social"); ?>">
                                                 <span class="input-group-btn">
                                                     <button class="btn btn-primary btn-sm b2s-btn-sharing-debugger" data-network-id="3" b2s-url-query="https://www.linkedin.com/post-inspector/inspect/"><?php esc_html_e("Inspect Post", "blog2social") ?></button>
                                                 </span>
@@ -196,10 +197,10 @@
                                             <div class="clearfix"></div>
                                             <br>
                                             <div>
-                                                <img class="b2s-feature-img-with-24" src="<?php echo plugins_url('/assets/images/portale/6_flat.png', B2S_PLUGIN_FILE); ?>" alt="Linkedin">  <span class="b2s-text-bold"><?php esc_html_e("Pinterest Rich Pins Validator", "blog2social") ?></span>
+                                                <img class="b2s-feature-img-with-24" src="<?php echo esc_url(plugins_url('/assets/images/portale/6_flat.png', B2S_PLUGIN_FILE)); ?>" alt="Linkedin">  <span class="b2s-text-bold"><?php esc_html_e("Pinterest Rich Pins Validator", "blog2social") ?></span>
                                             </div>
                                             <div class="input-group col-md-7 b2s-padding-top-8">
-                                                <input type="text" name="b2s-debug-url" class="input-sm form-control" id="b2s-debug-url" value="<?php echo get_site_url(); ?>" data-network-id="6" placeholder="<?php esc_html_e("For example your Wordpress Home Page", "blog2social"); ?>">
+                                                <input type="text" name="b2s-debug-url" class="input-sm form-control" id="b2s-debug-url" value="<?php echo esc_attr(get_site_url()); ?>" data-network-id="6" placeholder="<?php esc_html_e("For example your Wordpress Home Page", "blog2social"); ?>">
                                                 <span class="input-group-btn">
                                                     <button class="btn btn-primary btn-sm b2s-btn-sharing-debugger" data-network-id="6" b2s-url-query="https://developers.pinterest.com/tools/url-debugger/?link="><?php esc_html_e("validate", "blog2social") ?></button>
                                                 </span>
@@ -207,8 +208,8 @@
                                             <div class="clearfix"></div>
                                             <br>
                                             <div>
-                                                <img class="b2s-feature-img-with-24" src="<?php echo plugins_url('/assets/images/portale/2_flat.png', B2S_PLUGIN_FILE); ?>" alt="Twitter">  <span class="b2s-text-bold"><?php esc_html_e("Twitter Card Validator", "blog2social") ?>
-                                                    | <a class="btn-link" href="<?php echo B2S_Tools::getSupportLink("twitter_cards"); ?>" target="_blank"><?php esc_html_e("Learn how to edit and adjust Twitter Card tags.", "blog2social"); ?></a>
+                                                <img class="b2s-feature-img-with-24" src="<?php echo esc_url(plugins_url('/assets/images/portale/2_flat.png', B2S_PLUGIN_FILE)); ?>" alt="Twitter">  <span class="b2s-text-bold"><?php esc_html_e("Twitter Card Validator", "blog2social") ?>
+                                                    | <a class="btn-link" href="<?php echo esc_url(B2S_Tools::getSupportLink("twitter_cards")); ?>" target="_blank"><?php esc_html_e("Learn how to edit and adjust Twitter Card tags.", "blog2social"); ?></a>
                                                 </span>
                                             </div>
                                             <div class="b2s-padding-top-8">
@@ -225,7 +226,6 @@
                 </div>
                 <!--Content|End-->
             </div>
-            <?php require_once (B2S_PLUGIN_DIR . 'views/b2s/html/sidebar.php'); ?>
         </div>
     </div>
 </div>

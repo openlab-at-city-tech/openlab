@@ -1,145 +1,107 @@
-this["wp"] = this["wp"] || {}; this["wp"]["dom"] =
-/******/ (function(modules) { // webpackBootstrap
-/******/ 	// The module cache
-/******/ 	var installedModules = {};
-/******/
-/******/ 	// The require function
-/******/ 	function __webpack_require__(moduleId) {
-/******/
-/******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId]) {
-/******/ 			return installedModules[moduleId].exports;
-/******/ 		}
-/******/ 		// Create a new module (and put it into the cache)
-/******/ 		var module = installedModules[moduleId] = {
-/******/ 			i: moduleId,
-/******/ 			l: false,
-/******/ 			exports: {}
-/******/ 		};
-/******/
-/******/ 		// Execute the module function
-/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-/******/
-/******/ 		// Flag the module as loaded
-/******/ 		module.l = true;
-/******/
-/******/ 		// Return the exports of the module
-/******/ 		return module.exports;
-/******/ 	}
-/******/
-/******/
-/******/ 	// expose the modules object (__webpack_modules__)
-/******/ 	__webpack_require__.m = modules;
-/******/
-/******/ 	// expose the module cache
-/******/ 	__webpack_require__.c = installedModules;
-/******/
-/******/ 	// define getter function for harmony exports
-/******/ 	__webpack_require__.d = function(exports, name, getter) {
-/******/ 		if(!__webpack_require__.o(exports, name)) {
-/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
-/******/ 		}
-/******/ 	};
-/******/
-/******/ 	// define __esModule on exports
-/******/ 	__webpack_require__.r = function(exports) {
-/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
-/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
-/******/ 		}
-/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
-/******/ 	};
-/******/
-/******/ 	// create a fake namespace object
-/******/ 	// mode & 1: value is a module id, require it
-/******/ 	// mode & 2: merge all properties of value into the ns
-/******/ 	// mode & 4: return value when already ns object
-/******/ 	// mode & 8|1: behave like require
-/******/ 	__webpack_require__.t = function(value, mode) {
-/******/ 		if(mode & 1) value = __webpack_require__(value);
-/******/ 		if(mode & 8) return value;
-/******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
-/******/ 		var ns = Object.create(null);
-/******/ 		__webpack_require__.r(ns);
-/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
-/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
-/******/ 		return ns;
-/******/ 	};
-/******/
-/******/ 	// getDefaultExport function for compatibility with non-harmony modules
-/******/ 	__webpack_require__.n = function(module) {
-/******/ 		var getter = module && module.__esModule ?
-/******/ 			function getDefault() { return module['default']; } :
-/******/ 			function getModuleExports() { return module; };
-/******/ 		__webpack_require__.d(getter, 'a', getter);
-/******/ 		return getter;
-/******/ 	};
-/******/
-/******/ 	// Object.prototype.hasOwnProperty.call
-/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
-/******/
-/******/ 	// __webpack_public_path__
-/******/ 	__webpack_require__.p = "";
-/******/
-/******/
-/******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = "2sUP");
-/******/ })
+/******/ (function() { // webpackBootstrap
+/******/ 	"use strict";
+/******/ 	// The require scope
+/******/ 	var __webpack_require__ = {};
+/******/ 	
 /************************************************************************/
-/******/ ({
-
-/***/ "2sUP":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
+/******/ 	/* webpack/runtime/compat get default export */
+/******/ 	!function() {
+/******/ 		// getDefaultExport function for compatibility with non-harmony modules
+/******/ 		__webpack_require__.n = function(module) {
+/******/ 			var getter = module && module.__esModule ?
+/******/ 				function() { return module['default']; } :
+/******/ 				function() { return module; };
+/******/ 			__webpack_require__.d(getter, { a: getter });
+/******/ 			return getter;
+/******/ 		};
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	!function() {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__webpack_require__.d = function(exports, definition) {
+/******/ 			for(var key in definition) {
+/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	!function() {
+/******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	!function() {
+/******/ 		// define __esModule on exports
+/******/ 		__webpack_require__.r = function(exports) {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	}();
+/******/ 	
+/************************************************************************/
+var __webpack_exports__ = {};
 // ESM COMPAT FLAG
 __webpack_require__.r(__webpack_exports__);
 
 // EXPORTS
-__webpack_require__.d(__webpack_exports__, "focus", function() { return /* binding */ build_module_focus; });
-__webpack_require__.d(__webpack_exports__, "computeCaretRect", function() { return /* reexport */ computeCaretRect; });
-__webpack_require__.d(__webpack_exports__, "documentHasTextSelection", function() { return /* reexport */ documentHasTextSelection; });
-__webpack_require__.d(__webpack_exports__, "documentHasUncollapsedSelection", function() { return /* reexport */ documentHasUncollapsedSelection; });
-__webpack_require__.d(__webpack_exports__, "documentHasSelection", function() { return /* reexport */ documentHasSelection; });
-__webpack_require__.d(__webpack_exports__, "getRectangleFromRange", function() { return /* reexport */ getRectangleFromRange; });
-__webpack_require__.d(__webpack_exports__, "getScrollContainer", function() { return /* reexport */ getScrollContainer; });
-__webpack_require__.d(__webpack_exports__, "getOffsetParent", function() { return /* reexport */ getOffsetParent; });
-__webpack_require__.d(__webpack_exports__, "isEntirelySelected", function() { return /* reexport */ isEntirelySelected; });
-__webpack_require__.d(__webpack_exports__, "isHorizontalEdge", function() { return /* reexport */ isHorizontalEdge; });
-__webpack_require__.d(__webpack_exports__, "isNumberInput", function() { return /* reexport */ isNumberInput; });
-__webpack_require__.d(__webpack_exports__, "isTextField", function() { return /* reexport */ isTextField; });
-__webpack_require__.d(__webpack_exports__, "isVerticalEdge", function() { return /* reexport */ isVerticalEdge; });
-__webpack_require__.d(__webpack_exports__, "placeCaretAtHorizontalEdge", function() { return /* reexport */ placeCaretAtHorizontalEdge; });
-__webpack_require__.d(__webpack_exports__, "placeCaretAtVerticalEdge", function() { return /* reexport */ placeCaretAtVerticalEdge; });
-__webpack_require__.d(__webpack_exports__, "replace", function() { return /* reexport */ replace; });
-__webpack_require__.d(__webpack_exports__, "remove", function() { return /* reexport */ remove; });
-__webpack_require__.d(__webpack_exports__, "insertAfter", function() { return /* reexport */ insertAfter; });
-__webpack_require__.d(__webpack_exports__, "unwrap", function() { return /* reexport */ unwrap; });
-__webpack_require__.d(__webpack_exports__, "replaceTag", function() { return /* reexport */ replaceTag; });
-__webpack_require__.d(__webpack_exports__, "wrap", function() { return /* reexport */ wrap; });
-__webpack_require__.d(__webpack_exports__, "__unstableStripHTML", function() { return /* reexport */ stripHTML; });
-__webpack_require__.d(__webpack_exports__, "isEmpty", function() { return /* reexport */ isEmpty; });
-__webpack_require__.d(__webpack_exports__, "removeInvalidHTML", function() { return /* reexport */ removeInvalidHTML; });
-__webpack_require__.d(__webpack_exports__, "isRTL", function() { return /* reexport */ isRTL; });
-__webpack_require__.d(__webpack_exports__, "safeHTML", function() { return /* reexport */ safeHTML; });
-__webpack_require__.d(__webpack_exports__, "getPhrasingContentSchema", function() { return /* reexport */ getPhrasingContentSchema; });
-__webpack_require__.d(__webpack_exports__, "isPhrasingContent", function() { return /* reexport */ isPhrasingContent; });
-__webpack_require__.d(__webpack_exports__, "isTextContent", function() { return /* reexport */ isTextContent; });
-__webpack_require__.d(__webpack_exports__, "getFilesFromDataTransfer", function() { return /* reexport */ getFilesFromDataTransfer; });
+__webpack_require__.d(__webpack_exports__, {
+  "__unstableStripHTML": function() { return /* reexport */ stripHTML; },
+  "computeCaretRect": function() { return /* reexport */ computeCaretRect; },
+  "documentHasSelection": function() { return /* reexport */ documentHasSelection; },
+  "documentHasTextSelection": function() { return /* reexport */ documentHasTextSelection; },
+  "documentHasUncollapsedSelection": function() { return /* reexport */ documentHasUncollapsedSelection; },
+  "focus": function() { return /* binding */ build_module_focus; },
+  "getFilesFromDataTransfer": function() { return /* reexport */ getFilesFromDataTransfer; },
+  "getOffsetParent": function() { return /* reexport */ getOffsetParent; },
+  "getPhrasingContentSchema": function() { return /* reexport */ getPhrasingContentSchema; },
+  "getRectangleFromRange": function() { return /* reexport */ getRectangleFromRange; },
+  "getScrollContainer": function() { return /* reexport */ getScrollContainer; },
+  "insertAfter": function() { return /* reexport */ insertAfter; },
+  "isEmpty": function() { return /* reexport */ isEmpty; },
+  "isEntirelySelected": function() { return /* reexport */ isEntirelySelected; },
+  "isFormElement": function() { return /* reexport */ isFormElement; },
+  "isHorizontalEdge": function() { return /* reexport */ isHorizontalEdge; },
+  "isNumberInput": function() { return /* reexport */ isNumberInput; },
+  "isPhrasingContent": function() { return /* reexport */ isPhrasingContent; },
+  "isRTL": function() { return /* reexport */ isRTL; },
+  "isTextContent": function() { return /* reexport */ isTextContent; },
+  "isTextField": function() { return /* reexport */ isTextField; },
+  "isVerticalEdge": function() { return /* reexport */ isVerticalEdge; },
+  "placeCaretAtHorizontalEdge": function() { return /* reexport */ placeCaretAtHorizontalEdge; },
+  "placeCaretAtVerticalEdge": function() { return /* reexport */ placeCaretAtVerticalEdge; },
+  "remove": function() { return /* reexport */ remove; },
+  "removeInvalidHTML": function() { return /* reexport */ removeInvalidHTML; },
+  "replace": function() { return /* reexport */ replace; },
+  "replaceTag": function() { return /* reexport */ replaceTag; },
+  "safeHTML": function() { return /* reexport */ safeHTML; },
+  "unwrap": function() { return /* reexport */ unwrap; },
+  "wrap": function() { return /* reexport */ wrap; }
+});
 
 // NAMESPACE OBJECT: ./node_modules/@wordpress/dom/build-module/focusable.js
 var focusable_namespaceObject = {};
 __webpack_require__.r(focusable_namespaceObject);
-__webpack_require__.d(focusable_namespaceObject, "find", function() { return find; });
+__webpack_require__.d(focusable_namespaceObject, {
+  "find": function() { return find; }
+});
 
 // NAMESPACE OBJECT: ./node_modules/@wordpress/dom/build-module/tabbable.js
 var tabbable_namespaceObject = {};
 __webpack_require__.r(tabbable_namespaceObject);
-__webpack_require__.d(tabbable_namespaceObject, "isTabbableIndex", function() { return isTabbableIndex; });
-__webpack_require__.d(tabbable_namespaceObject, "find", function() { return tabbable_find; });
-__webpack_require__.d(tabbable_namespaceObject, "findPrevious", function() { return findPrevious; });
-__webpack_require__.d(tabbable_namespaceObject, "findNext", function() { return findNext; });
+__webpack_require__.d(tabbable_namespaceObject, {
+  "find": function() { return tabbable_find; },
+  "findNext": function() { return findNext; },
+  "findPrevious": function() { return findPrevious; },
+  "isTabbableIndex": function() { return isTabbableIndex; }
+});
 
-// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/focusable.js
+;// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/focusable.js
 /**
  * References:
  *
@@ -256,18 +218,10 @@ function find(context) {
   });
 }
 
-// EXTERNAL MODULE: external "lodash"
-var external_lodash_ = __webpack_require__("YLtl");
-
-// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/tabbable.js
-/**
- * External dependencies
- */
-
+;// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/tabbable.js
 /**
  * Internal dependencies
  */
-
 
 /**
  * Returns the tab index of the given element. In contrast with the tabIndex
@@ -341,7 +295,7 @@ function createStatefulCollapseRadioGroup() {
 
     if (hasChosen) {
       const hadChosenElement = CHOSEN_RADIO_BY_NAME[name];
-      result = Object(external_lodash_["without"])(result, hadChosenElement);
+      result = result.filter(e => e !== hadChosenElement);
     }
 
     CHOSEN_RADIO_BY_NAME[name] = element;
@@ -428,20 +382,30 @@ function tabbable_find(context) {
  *
  * @param {Element} element The focusable element before which to look. Defaults
  *                          to the active element.
+ *
+ * @return {Element|undefined} Preceding tabbable element.
  */
 
 function findPrevious(element) {
   const focusables = find(element.ownerDocument.body);
-  const index = focusables.indexOf(element); // Remove all focusables after and including `element`.
+  const index = focusables.indexOf(element);
+
+  if (index === -1) {
+    return undefined;
+  } // Remove all focusables after and including `element`.
+
 
   focusables.length = index;
-  return Object(external_lodash_["last"])(filterTabbable(focusables));
+  const tabbable = filterTabbable(focusables);
+  return tabbable[tabbable.length - 1];
 }
 /**
  * Given a focusable element, find the next tabbable element.
  *
  * @param {Element} element The focusable element after which to look. Defaults
  *                          to the active element.
+ *
+ * @return {Element|undefined} Next tabbable element.
  */
 
 function findNext(element) {
@@ -449,25 +413,26 @@ function findNext(element) {
   const index = focusables.indexOf(element); // Remove all focusables before and including `element`.
 
   const remaining = focusables.slice(index + 1);
-  return Object(external_lodash_["first"])(filterTabbable(remaining));
+  return filterTabbable(remaining)[0];
 }
 
-// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/utils/assert-is-defined.js
+;// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/utils/assert-is-defined.js
 function assertIsDefined(val, name) {
   if (false) {}
 }
 
-// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/dom/get-rectangle-from-range.js
+;// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/dom/get-rectangle-from-range.js
 /**
  * Internal dependencies
  */
 
 /**
- * Get the rectangle of a given Range.
+ * Get the rectangle of a given Range. Returns `null` if no suitable rectangle
+ * can be found.
  *
  * @param {Range} range The range.
  *
- * @return {DOMRect} The rectangle.
+ * @return {DOMRect?} The rectangle.
  */
 
 function getRectangleFromRange(range) {
@@ -540,7 +505,14 @@ function getRectangleFromRange(range) {
     range.setEnd(parentNode, index);
   }
 
-  let rect = range.getClientRects()[0]; // If the collapsed range starts (and therefore ends) at an element node,
+  const rects = range.getClientRects(); // If we have multiple rectangles for a collapsed range, there's no way to
+  // know which it is, so don't return anything.
+
+  if (rects.length > 1) {
+    return null;
+  }
+
+  let rect = rects[0]; // If the collapsed range starts (and therefore ends) at an element node,
   // `getClientRects` can be empty in some browsers. This can be resolved
   // by adding a temporary text node with zero-width space to the range.
   //
@@ -560,7 +532,7 @@ function getRectangleFromRange(range) {
   return rect;
 }
 
-// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/dom/compute-caret-rect.js
+;// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/dom/compute-caret-rect.js
 /**
  * Internal dependencies
  */
@@ -586,7 +558,7 @@ function computeCaretRect(win) {
   return getRectangleFromRange(range);
 }
 
-// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/dom/document-has-text-selection.js
+;// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/dom/document-has-text-selection.js
 /**
  * Internal dependencies
  */
@@ -611,7 +583,7 @@ function documentHasTextSelection(doc) {
   return !!range && !range.collapsed;
 }
 
-// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/dom/is-html-input-element.js
+;// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/dom/is-html-input-element.js
 /* eslint-disable jsdoc/valid-types */
 
 /**
@@ -620,10 +592,10 @@ function documentHasTextSelection(doc) {
  */
 function isHTMLInputElement(node) {
   /* eslint-enable jsdoc/valid-types */
-  return !!node && node.nodeName === 'INPUT';
+  return (node === null || node === void 0 ? void 0 : node.nodeName) === 'INPUT';
 }
 
-// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/dom/is-text-field.js
+;// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/dom/is-text-field.js
 /**
  * Internal dependencies
  */
@@ -642,47 +614,30 @@ function isHTMLInputElement(node) {
 
 function isTextField(node) {
   /* eslint-enable jsdoc/valid-types */
-  const nonTextInputs = ['button', 'checkbox', 'hidden', 'file', 'radio', 'image', 'range', 'reset', 'submit', 'number'];
+  const nonTextInputs = ['button', 'checkbox', 'hidden', 'file', 'radio', 'image', 'range', 'reset', 'submit', 'number', 'email', 'time'];
   return isHTMLInputElement(node) && node.type && !nonTextInputs.includes(node.type) || node.nodeName === 'TEXTAREA' ||
   /** @type {HTMLElement} */
   node.contentEditable === 'true';
 }
 
-// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/dom/is-number-input.js
-/**
- * Internal dependencies
- */
-
-/* eslint-disable jsdoc/valid-types */
-
-/**
- * Check whether the given element is an input field of type number
- * and has a valueAsNumber
- *
- * @param {Node} node The HTML node.
- *
- * @return {node is HTMLInputElement} True if the node is input and holds a number.
- */
-
-function isNumberInput(node) {
-  /* eslint-enable jsdoc/valid-types */
-  return isHTMLInputElement(node) && node.type === 'number' && !!node.valueAsNumber;
-}
-
-// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/dom/input-field-has-uncollapsed-selection.js
+;// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/dom/input-field-has-uncollapsed-selection.js
 /**
  * Internal dependencies
  */
 
 
 /**
- * Check whether the given element, assumed an input field or textarea,
- * contains a (uncollapsed) selection of text.
+ * Check whether the given input field or textarea contains a (uncollapsed)
+ * selection of text.
  *
- * Note: this is perhaps an abuse of the term "selection", since these elements
- * manage selection differently and aren't covered by Selection#collapsed.
+ * CAVEAT: Only specific text-based HTML inputs support the selection APIs
+ * needed to determine whether they have a collapsed or uncollapsed selection.
+ * This function defaults to returning `true` when the selection cannot be
+ * inspected, such as with `<input type="time">`. The rationale is that this
+ * should cause the block editor to defer to the browser's native selection
+ * handling (e.g. copying and pasting), thereby reducing friction for the user.
  *
- * See: https://developer.mozilla.org/en-US/docs/Web/API/Window/getSelection#Related_objects.
+ * See: https://html.spec.whatwg.org/multipage/input.html#do-not-apply
  *
  * @param {Element} element The HTML element.
  *
@@ -690,9 +645,12 @@ function isNumberInput(node) {
  */
 
 function inputFieldHasUncollapsedSelection(element) {
-  if (!isTextField(element) && !isNumberInput(element)) {
+  if (!isHTMLInputElement(element) && !isTextField(element)) {
     return false;
-  }
+  } // Safari throws a type error when trying to get `selectionStart` and
+  // `selectionEnd` on non-text <input> elements, so a try/catch construct is
+  // necessary.
+
 
   try {
     const {
@@ -701,41 +659,40 @@ function inputFieldHasUncollapsedSelection(element) {
     } =
     /** @type {HTMLInputElement | HTMLTextAreaElement} */
     element;
-    return selectionStart !== null && selectionStart !== selectionEnd;
+    return (// `null` means the input type doesn't implement selection, thus we
+      // cannot determine whether the selection is collapsed, so we
+      // default to true.
+      selectionStart === null || // when not null, compare the two points
+      selectionStart !== selectionEnd
+    );
   } catch (error) {
-    // Safari throws an exception when trying to get `selectionStart`
-    // on non-text <input> elements (which, understandably, don't
-    // have the text selection API). We catch this via a try/catch
-    // block, as opposed to a more explicit check of the element's
-    // input types, because of Safari's non-standard behavior. This
-    // also means we don't have to worry about the list of input
-    // types that support `selectionStart` changing as the HTML spec
-    // evolves over time.
-    return false;
+    // This is Safari's way of saying that the input type doesn't implement
+    // selection, so we default to true.
+    return true;
   }
 }
 
-// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/dom/document-has-uncollapsed-selection.js
+;// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/dom/document-has-uncollapsed-selection.js
 /**
  * Internal dependencies
  */
 
 
 /**
- * Check whether the current document has any sort of selection. This includes
- * ranges of text across elements and any selection inside `<input>` and
- * `<textarea>` elements.
+ * Check whether the current document has any sort of (uncollapsed) selection.
+ * This includes ranges of text across elements and any selection inside
+ * textual `<input>` and `<textarea>` elements.
  *
  * @param {Document} doc The document to check.
  *
- * @return {boolean} Whether there is any sort of "selection" in the document.
+ * @return {boolean} Whether there is any recognizable text selection in the document.
  */
 
 function documentHasUncollapsedSelection(doc) {
   return documentHasTextSelection(doc) || !!doc.activeElement && inputFieldHasUncollapsedSelection(doc.activeElement);
 }
 
-// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/dom/document-has-selection.js
+;// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/dom/document-has-selection.js
 /**
  * Internal dependencies
  */
@@ -743,8 +700,8 @@ function documentHasUncollapsedSelection(doc) {
 
 
 /**
- * Check whether the current document has a selection. This checks for both
- * focus in an input field and general text selection.
+ * Check whether the current document has a selection. This includes focus in
+ * input fields, textareas, and general rich-text selection.
  *
  * @param {Document} doc The document to check.
  *
@@ -752,10 +709,10 @@ function documentHasUncollapsedSelection(doc) {
  */
 
 function documentHasSelection(doc) {
-  return !!doc.activeElement && (isTextField(doc.activeElement) || isNumberInput(doc.activeElement) || documentHasTextSelection(doc));
+  return !!doc.activeElement && (isHTMLInputElement(doc.activeElement) || isTextField(doc.activeElement) || documentHasTextSelection(doc));
 }
 
-// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/dom/get-computed-style.js
+;// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/dom/get-computed-style.js
 /**
  * Internal dependencies
  */
@@ -773,7 +730,7 @@ function getComputedStyle(element) {
   return element.ownerDocument.defaultView.getComputedStyle(element);
 }
 
-// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/dom/get-scroll-container.js
+;// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/dom/get-scroll-container.js
 /**
  * Internal dependencies
  */
@@ -801,7 +758,11 @@ function getScrollContainer(node) {
     if (/(auto|scroll)/.test(overflowY)) {
       return node;
     }
-  } // Continue traversing
+  }
+
+  if (node.ownerDocument === node.parentNode) {
+    return node;
+  } // Continue traversing.
 
 
   return getScrollContainer(
@@ -809,7 +770,7 @@ function getScrollContainer(node) {
   node.parentNode);
 }
 
-// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/dom/get-offset-parent.js
+;// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/dom/get-offset-parent.js
 /**
  * Internal dependencies
  */
@@ -849,7 +810,7 @@ function getOffsetParent(node) {
   /** @type {Element} */
   closestElement).position !== 'static') {
     return closestElement;
-  } // offsetParent is undocumented/draft
+  } // offsetParent is undocumented/draft.
 
 
   return (
@@ -858,7 +819,7 @@ function getOffsetParent(node) {
   );
 }
 
-// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/dom/is-input-or-text-area.js
+;// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/dom/is-input-or-text-area.js
 /* eslint-disable jsdoc/valid-types */
 
 /**
@@ -870,7 +831,7 @@ function isInputOrTextArea(element) {
   return element.tagName === 'INPUT' || element.tagName === 'TEXTAREA';
 }
 
-// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/dom/is-entirely-selected.js
+;// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/dom/is-entirely-selected.js
 /**
  * Internal dependencies
  */
@@ -953,7 +914,33 @@ function isDeepChild(query, container, propName) {
   return false;
 }
 
-// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/dom/is-rtl.js
+;// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/dom/is-form-element.js
+/**
+ * Internal dependencies
+ */
+
+/**
+ *
+ * Detects if element is a form element.
+ *
+ * @param {Element} element The element to check.
+ *
+ * @return {boolean} True if form element and false otherwise.
+ */
+
+function isFormElement(element) {
+  if (!element) {
+    return false;
+  }
+
+  const {
+    tagName
+  } = element;
+  const checkForInputTextarea = isInputOrTextArea(element);
+  return checkForInputTextarea || tagName === 'BUTTON' || tagName === 'SELECT';
+}
+
+;// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/dom/is-rtl.js
 /**
  * Internal dependencies
  */
@@ -970,7 +957,7 @@ function isRTL(element) {
   return getComputedStyle(element).direction === 'rtl';
 }
 
-// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/dom/get-range-height.js
+;// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/dom/get-range-height.js
 /**
  * Gets the height of the range without ignoring zero width rectangles, which
  * some browsers ignore when creating a union.
@@ -1000,7 +987,7 @@ function getRangeHeight(range) {
   return lowestBottom - highestTop;
 }
 
-// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/dom/is-selection-forward.js
+;// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/dom/is-selection-forward.js
 /**
  * Internal dependencies
  */
@@ -1052,7 +1039,7 @@ function isSelectionForward(selection) {
   return true;
 }
 
-// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/dom/caret-range-from-point.js
+;// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/dom/caret-range-from-point.js
 /**
  * Polyfill.
  * Get a collapsed range for a given point.
@@ -1091,7 +1078,7 @@ function caretRangeFromPoint(doc, x, y) {
  * @typedef {{ readonly offset: number; readonly offsetNode: Node; getClientRect(): DOMRect | null; }} CaretPosition
  */
 
-// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/dom/hidden-caret-range-from-point.js
+;// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/dom/hidden-caret-range-from-point.js
 /**
  * Internal dependencies
  */
@@ -1128,7 +1115,7 @@ function hiddenCaretRangeFromPoint(doc, x, y, container) {
   return range;
 }
 
-// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/dom/is-edge.js
+;// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/dom/is-edge.js
 /**
  * Internal dependencies
  */
@@ -1249,7 +1236,7 @@ function isEdge(container, isReverse) {
   return onlyVertical ? hasVerticalDiff : hasVerticalDiff && hasHorizontalDiff;
 }
 
-// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/dom/is-horizontal-edge.js
+;// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/dom/is-horizontal-edge.js
 /**
  * Internal dependencies
  */
@@ -1267,7 +1254,40 @@ function isHorizontalEdge(container, isReverse) {
   return isEdge(container, isReverse);
 }
 
-// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/dom/is-vertical-edge.js
+;// CONCATENATED MODULE: external ["wp","deprecated"]
+var external_wp_deprecated_namespaceObject = window["wp"]["deprecated"];
+var external_wp_deprecated_default = /*#__PURE__*/__webpack_require__.n(external_wp_deprecated_namespaceObject);
+;// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/dom/is-number-input.js
+/**
+ * WordPress dependencies
+ */
+
+/**
+ * Internal dependencies
+ */
+
+
+/* eslint-disable jsdoc/valid-types */
+
+/**
+ * Check whether the given element is an input field of type number.
+ *
+ * @param {Node} node The HTML node.
+ *
+ * @return {node is HTMLInputElement} True if the node is number input.
+ */
+
+function isNumberInput(node) {
+  external_wp_deprecated_default()('wp.dom.isNumberInput', {
+    since: '6.1',
+    version: '6.5'
+  });
+  /* eslint-enable jsdoc/valid-types */
+
+  return isHTMLInputElement(node) && node.type === 'number' && !isNaN(node.valueAsNumber);
+}
+
+;// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/dom/is-vertical-edge.js
 /**
  * Internal dependencies
  */
@@ -1285,7 +1305,7 @@ function isVerticalEdge(container, isReverse) {
   return isEdge(container, isReverse, true);
 }
 
-// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/dom/place-caret-at-edge.js
+;// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/dom/place-caret-at-edge.js
 /**
  * Internal dependencies
  */
@@ -1311,9 +1331,15 @@ function getRange(container, isReverse, x) {
   const isReverseDir = isRTL(container) ? !isReverse : isReverse;
   const containerRect = container.getBoundingClientRect(); // When placing at the end (isReverse), find the closest range to the bottom
   // right corner. When placing at the start, to the top left corner.
+  // Ensure x is defined and within the container's boundaries. When it's
+  // exactly at the boundary, it's not considered within the boundaries.
 
   if (x === undefined) {
     x = isReverse ? containerRect.right - 1 : containerRect.left + 1;
+  } else if (x <= containerRect.left) {
+    x = containerRect.left + 1;
+  } else if (x >= containerRect.right) {
+    x = containerRect.right - 1;
   }
 
   const y = isReverseDir ? containerRect.bottom - 1 : containerRect.top + 1;
@@ -1381,7 +1407,7 @@ function placeCaretAtEdge(container, isReverse, x) {
   selection.addRange(range);
 }
 
-// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/dom/place-caret-at-horizontal-edge.js
+;// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/dom/place-caret-at-horizontal-edge.js
 /**
  * Internal dependencies
  */
@@ -1397,7 +1423,7 @@ function placeCaretAtHorizontalEdge(container, isReverse) {
   return placeCaretAtEdge(container, isReverse, undefined);
 }
 
-// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/dom/place-caret-at-vertical-edge.js
+;// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/dom/place-caret-at-vertical-edge.js
 /**
  * Internal dependencies
  */
@@ -1414,7 +1440,7 @@ function placeCaretAtVerticalEdge(container, isReverse, rect) {
   return placeCaretAtEdge(container, isReverse, rect === null || rect === void 0 ? void 0 : rect.left);
 }
 
-// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/dom/insert-after.js
+;// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/dom/insert-after.js
 /**
  * Internal dependencies
  */
@@ -1433,7 +1459,7 @@ function insertAfter(newNode, referenceNode) {
   referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
 }
 
-// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/dom/remove.js
+;// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/dom/remove.js
 /**
  * Internal dependencies
  */
@@ -1450,7 +1476,7 @@ function remove(node) {
   node.parentNode.removeChild(node);
 }
 
-// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/dom/replace.js
+;// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/dom/replace.js
 /**
  * Internal dependencies
  */
@@ -1471,7 +1497,7 @@ function replace(processedNode, newNode) {
   remove(processedNode);
 }
 
-// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/dom/unwrap.js
+;// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/dom/unwrap.js
 /**
  * Internal dependencies
  */
@@ -1495,7 +1521,7 @@ function unwrap(node) {
   parent.removeChild(node);
 }
 
-// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/dom/replace-tag.js
+;// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/dom/replace-tag.js
 /**
  * Internal dependencies
  */
@@ -1521,7 +1547,7 @@ function replaceTag(node, tagName) {
   return newNode;
 }
 
-// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/dom/wrap.js
+;// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/dom/wrap.js
 /**
  * Internal dependencies
  */
@@ -1539,7 +1565,7 @@ function wrap(newNode, referenceNode) {
   newNode.appendChild(referenceNode);
 }
 
-// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/dom/safe-html.js
+;// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/dom/safe-html.js
 /**
  * Internal dependencies
  */
@@ -1583,7 +1609,11 @@ function safeHTML(html) {
   return body.innerHTML;
 }
 
-// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/dom/strip-html.js
+;// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/dom/strip-html.js
+/**
+ * Internal dependencies
+ */
+
 /**
  * Internal dependencies
  */
@@ -1605,7 +1635,7 @@ function stripHTML(html) {
   return doc.body.textContent || '';
 }
 
-// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/dom/is-empty.js
+;// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/dom/is-empty.js
 /**
  * Recursively checks if an element is empty. An element is not empty if it
  * contains text or contains elements with attributes such as images.
@@ -1638,11 +1668,7 @@ function isEmpty(element) {
   }
 }
 
-// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/phrasing-content.js
-/**
- * External dependencies
- */
-
+;// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/phrasing-content.js
 /**
  * All phrasing content elements.
  *
@@ -1666,7 +1692,6 @@ function isEmpty(element) {
  *
  * @type {ContentSchema}
  */
-
 const textContentSchema = {
   strong: {},
   em: {},
@@ -1720,8 +1745,13 @@ const textContentSchema = {
 // Possible: strong > em > strong.
 // Impossible: strong > strong.
 
-Object(external_lodash_["without"])(Object.keys(textContentSchema), '#text', 'br').forEach(tag => {
-  textContentSchema[tag].children = Object(external_lodash_["omit"])(textContentSchema, tag);
+const excludedElements = ['#text', 'br'];
+Object.keys(textContentSchema).filter(element => !excludedElements.includes(element)).forEach(tag => {
+  const {
+    [tag]: removedTag,
+    ...restSchema
+  } = textContentSchema;
+  textContentSchema[tag].children = restSchema;
 });
 /**
  * Embedded content elements.
@@ -1775,8 +1805,28 @@ function getPhrasingContentSchema(context) {
   if (context !== 'paste') {
     return phrasingContentSchema;
   }
+  /**
+   * @type {Partial<ContentSchema>}
+   */
 
-  return Object(external_lodash_["omit"])({ ...phrasingContentSchema,
+
+  const {
+    u,
+    // Used to mark misspelling. Shouldn't be pasted.
+    abbr,
+    // Invisible.
+    data,
+    // Invisible.
+    time,
+    // Invisible.
+    wbr,
+    // Invisible.
+    bdi,
+    // Invisible.
+    bdo,
+    // Invisible.
+    ...remainingContentSchema
+  } = { ...phrasingContentSchema,
     // We shouldn't paste potentially sensitive information which is not
     // visible to the user when pasted, so strip the attributes.
     ins: {
@@ -1785,14 +1835,8 @@ function getPhrasingContentSchema(context) {
     del: {
       children: phrasingContentSchema.del.children
     }
-  }, ['u', // Used to mark misspelling. Shouldn't be pasted.
-  'abbr', // Invisible.
-  'data', // Invisible.
-  'time', // Invisible.
-  'wbr', // Invisible.
-  'bdi', // Invisible.
-  'bdo' // Invisible.
-  ]);
+  };
+  return remainingContentSchema;
 }
 /**
  * Find out whether or not the given node is phrasing content.
@@ -1818,7 +1862,7 @@ function isTextContent(node) {
   return textContentSchema.hasOwnProperty(tag) || tag === 'span';
 }
 
-// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/dom/is-element.js
+;// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/dom/is-element.js
 /* eslint-disable jsdoc/valid-types */
 
 /**
@@ -1830,11 +1874,7 @@ function isElement(node) {
   return !!node && node.nodeType === node.ELEMENT_NODE;
 }
 
-// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/dom/clean-node-list.js
-/**
- * External dependencies
- */
-
+;// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/dom/clean-node-list.js
 /**
  * Internal dependencies
  */
@@ -1845,6 +1885,7 @@ function isElement(node) {
 
 
 
+const noop = () => {};
 /* eslint-disable jsdoc/valid-types */
 
 /**
@@ -1870,6 +1911,7 @@ function isElement(node) {
  * @param {Schema}   schema   An array of functions that can mutate with the provided node.
  * @param {boolean}  inline   Whether to clean for inline mode.
  */
+
 
 function cleanNodeList(nodeList, doc, schema, inline) {
   Array.from(nodeList).forEach((
@@ -1903,7 +1945,7 @@ function cleanNodeList(nodeList, doc, schema, inline) {
               name
             } = _ref;
 
-            if (name !== 'class' && !Object(external_lodash_["includes"])(attributes, name)) {
+            if (name !== 'class' && !attributes.includes(name)) {
               node.removeAttribute(name);
             }
           }); // Strip invalid classes.
@@ -1922,7 +1964,7 @@ function cleanNodeList(nodeList, doc, schema, inline) {
                 className) => item.test(className);
               }
 
-              return external_lodash_["noop"];
+              return noop;
             });
             Array.from(node.classList).forEach(name => {
               if (!mattchers.some(isMatch => isMatch(name))) {
@@ -1982,7 +2024,7 @@ function cleanNodeList(nodeList, doc, schema, inline) {
   });
 }
 
-// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/dom/remove-invalid-html.js
+;// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/dom/remove-invalid-html.js
 /**
  * Internal dependencies
  */
@@ -2004,7 +2046,7 @@ function removeInvalidHTML(HTML, schema, inline) {
   return doc.body.innerHTML;
 }
 
-// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/dom/index.js
+;// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/dom/index.js
 
 
 
@@ -2031,7 +2073,8 @@ function removeInvalidHTML(HTML, schema, inline) {
 
 
 
-// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/data-transfer.js
+
+;// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/data-transfer.js
 /**
  * Gets all files from a DataTransfer object.
  *
@@ -2058,7 +2101,7 @@ function getFilesFromDataTransfer(dataTransfer) {
   return files;
 }
 
-// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/index.js
+;// CONCATENATED MODULE: ./node_modules/@wordpress/dom/build-module/index.js
 /**
  * Internal dependencies
  */
@@ -2077,14 +2120,6 @@ const build_module_focus = {
 
 
 
-
-/***/ }),
-
-/***/ "YLtl":
-/***/ (function(module, exports) {
-
-(function() { module.exports = window["lodash"]; }());
-
-/***/ })
-
-/******/ });
+(window.wp = window.wp || {}).dom = __webpack_exports__;
+/******/ })()
+;

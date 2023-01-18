@@ -70,7 +70,7 @@ if ( !class_exists( 'MeowCommon_Admin' ) ) {
 					'license' => 
 						$this->is_registered() ? 
 							('<span style="color: #a75bd6;">' . __( 'Pro Version', $this->domain ) . '</span>') : 
-								( $isIssue ? (sprintf( '<span style="color: #ff3434;">' . __( 'License Issue', $this->domain ), $this->prefix ) . '</span>') : (sprintf( '<span>' . __( '<a target="_blank" href="https://store.meowapps.com">Get the <u>Pro Version</u></a>', $this->domain ), $this->prefix ) . '</span>') ),
+								( $isIssue ? (sprintf( '<span style="color: #ff3434;">' . __( 'License Issue', $this->domain ), $this->prefix ) . '</span>') : (sprintf( '<span>' . __( '<a target="_blank" href="https://meowapps.com">Get the <u>Pro Version</u></a>', $this->domain ), $this->prefix ) . '</span>') ),
 				);
 				$links = array_merge( $new_links, $links );
 			}
@@ -101,7 +101,7 @@ if ( !class_exists( 'MeowCommon_Admin' ) ) {
 			}
 			$html = '<div class="notice notice-error">';
 			$html .= sprintf(
-				__( '<p>It looks like you are using the free version of the plugin (<b>%s</b>) but a license for the Pro version was also found. The Pro version might have been replaced by the Free version during an update (might be caused by a temporarily issue). If it is the case, <b>please download it again</b> from the <a target="_blank" href="https://store.meowapps.com">Meow Store</a>. If you wish to continue using the free version and clear this message, click on this button.', $this->domain ),
+				__( '<p>It looks like you are using the free version of the plugin (<b>%s</b>) but a license for the Pro version was also found. The Pro version might have been replaced by the Free version during an update (might be caused by a temporarily issue). If it is the case, <b>please download it again</b> from the <a target="_blank" href="https://meowapps.com">Meow Store</a>. If you wish to continue using the free version and clear this message, click on this button.', $this->domain ),
 				$this->nice_name_from_file( $this->mainfile ) );
 				$html .= '<p>
 				<form method="post" action="">
@@ -141,11 +141,12 @@ if ( !class_exists( 'MeowCommon_Admin' ) ) {
 		}
 
 		function is_registered() {
-			return apply_filters( $this->prefix . '_meowapps_is_registered', false, $this->prefix  );
+			$is_registered = apply_filters( $this->prefix . '_meowapps_is_registered', false, $this->prefix );
+			return $is_registered;
 		}
 
 		function get_phpinfo() {
-			if ( !current_user_can( 'administrator' ) ) {
+			if ( !current_user_can( 'administrator' ) || !function_exists( 'phpinfo' ) ) {
 				return;
 			}
 			ob_start();

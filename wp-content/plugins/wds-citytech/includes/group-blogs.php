@@ -396,7 +396,7 @@ function openlab_group_blog_activity( $activity ) {
 	// Replace the necessary values to display in group activity stream
 	if ( 'new_blog_post' == $activity->type ) {
 		$activity->action = sprintf(
-			__( '%1$s wrote a new blog post %2$s in the group %3$s', 'groupblog' ),
+			'%1$s posted %2$s in %3$s',
 			bp_core_get_userlink( $activity->user_id ),
 			'<a href="' . get_permalink( $post->ID ) . '">' . esc_html( $post->post_title ) . '</a>',
 			'<a href="' . bp_get_group_permalink( $group ) . '">' . esc_html( $group->name ) . '</a>'
@@ -409,8 +409,9 @@ function openlab_group_blog_activity( $activity ) {
 			$userlink = '<a href="' . esc_attr( $comment->comment_author_url ) . '">' . esc_html( $comment->comment_author ) . '</a>';
 		}
 		$activity->action = sprintf(
-			__( '%1$s commented on %2$s in the group %3$s', 'groupblog' ),
+			'%1$s left a %2$s on the post %3$s in the group %4$s',
 			$userlink,
+			'<a href="' . esc_url( get_comment_link( $comment ) ) . '">comment</a>',
 			'<a href="' . get_permalink( $post->ID ) . '">' . esc_html( $post->post_title ) . '</a>',
 			'<a href="' . bp_get_group_permalink( $group ) . '">' . esc_html( $group->name ) . '</a>'
 		);
@@ -1546,7 +1547,7 @@ function openlab_get_groupblog_template( $user_id, $group_id ) {
 
 	switch ( $group_type ) {
 		case 'portfolio':
-			$account_type = strtolower( xprofile_get_field_data( 'Account Type', $user_id ) );
+			$account_type = openlab_get_user_member_type( $user_id );
 
 			switch ( $account_type ) {
 				case 'faculty':
@@ -1625,7 +1626,7 @@ class OpenLab_GroupBlog_Template_Picker {
 
 	public function get_user_type() {
 		if ( ! $this->account_type ) {
-			$account_type       = strtolower( xprofile_get_field_data( 'Account Type', $this->user_id ) );
+			$account_type       = openlab_get_user_member_type( $this->user_id );
 			$this->account_type = $account_type;
 		}
 
@@ -1720,6 +1721,72 @@ function openlab_catch_olgc_notice_dismissals() {
 add_action( 'admin_init', 'openlab_catch_olgc_notice_dismissals' );
 
 /**
+ * Email the post author when a wp-grade-comments or openlab-private-comments "private" comment is posted.
+ *
+ * @param int        $comment_id ID of the comment.
+ * @param WP_Comment $comment    Comment object.
+ */
+function openlab_olgc_notify_postauthor( $comment_id, $comment ) {
+	$olgc_is_private = get_comment_meta( $comment_id, 'olgc_is_private', true );
+	$olpc_is_private = get_comment_meta( $comment_id, 'ol_is_private', true );
+	if ( ! $olgc_is_private && ! $olpc_is_private ) {
+		return;
+	}
+
+	$group_id = openlab_get_group_id_by_blog_id( get_current_blog_id() );
+	if ( ! $group_id ) {
+		return;
+	}
+
+	// Sanity check.
+	$comment_author_user = get_user_by( 'email', $comment->comment_author_email );
+	if ( ! $comment_author_user ) {
+		return;
+	}
+
+	$post = get_post( $comment->comment_post_ID );
+	if ( ! ( $post instanceof WP_Post ) ) {
+		return;
+	}
+
+	// No self-notifications.
+	if ( (int) $post->post_author === (int) $comment_author_user->ID ) {
+		return;
+	}
+
+	$author_user = get_user_by( 'id', $post->post_author );
+	if ( ! $author_user ) {
+		return;
+	}
+
+	// Don't allow duplicate core notification to be sent.
+	remove_action( 'comment_post', 'wp_new_comment_notify_postauthor' );
+
+	$group = groups_get_group( $group_id );
+
+	$subject = sprintf( 'A new private comment on %s in %s', $post->post_title, $group->name );
+
+	$comment_link = get_comment_link( $comment );
+
+	$message = sprintf(
+		'There is a new private comment on your site %s.<br /><br />
+
+Post name: %s<br />
+Comment author: %s<br />
+Comment URL: %s',
+		get_option( 'blogname' ),
+		$post->post_title,
+		bp_core_get_userlink( $comment_author_user->ID ),
+		sprintf( '<a href="%s">%s</a>', $comment_link, $comment_link )
+	);
+
+	$message = openlab_comment_email_boilerplate( $message );
+
+	wp_mail( $author_user->user_email, $subject, $message );
+}
+add_action( 'wp_insert_comment', 'openlab_olgc_notify_postauthor', 20, 2 );
+
+/**
  * Email the course instructor when a wp-grade-comments or openlab-private-comments "private" comment is posted.
  *
  * @param int        $comment_id ID of the comment.
@@ -1748,20 +1815,28 @@ function openlab_olgc_notify_instructor( $comment_id, $comment ) {
 		return;
 	}
 
-	$subject = sprintf( 'New private comment on %s', get_option( 'blogname' ) );
+	$group = groups_get_group( $group_id );
+	$post  = get_post( $comment->comment_post_ID );
 
-	$post    = get_post( $comment->comment_post_ID );
+	$subject = sprintf( 'A new private comment on %s in %s', $post->post_title, $group->name );
+
+	$comment_link = get_comment_link( $comment );
+
 	$message = sprintf(
-		'There is a new private comment on your site %s.
+		'There is a new private comment on your site %s.<br /><br />
 
-Post name: %s
-Comment author: %s
+Post name: %s<br />
+Comment author: %s<br />
 Comment URL: %s',
 		get_option( 'blogname' ),
 		$post->post_title,
-		bp_core_get_user_displayname( $comment_author_user->ID ),
-		get_comment_link( $comment )
+		bp_core_get_userlink( $comment_author_user->ID ),
+		sprintf( '<a href="%s">%s</a>', $comment_link, $comment_link )
 	);
+
+	$message = openlab_comment_email_boilerplate( $message );
+
+	$comment_user = get_userdata( $comment->user_id );
 
 	foreach ( $admins as $admin ) {
 		// Don't send notification to instructor of her own comment.
@@ -1778,6 +1853,64 @@ Comment URL: %s',
 	}
 }
 add_action( 'wp_insert_comment', 'openlab_olgc_notify_instructor', 20, 2 );
+
+/**
+ * Email authors of private comments when they receive replies.
+ *
+ * @param int        $comment_id ID of the comment.
+ * @param WP_Comment $comment    Comment object.
+ */
+function openlab_olpc_notify_comment_author_of_reply( $comment_id, $comment ) {
+	$olgc_is_private = get_comment_meta( $comment_id, 'olgc_is_private', true );
+	$olpc_is_private = get_comment_meta( $comment_id, 'ol_is_private', true );
+	if ( ! $olgc_is_private && ! $olpc_is_private ) {
+		return;
+	}
+
+	$parent_comment = get_comment( $comment->comment_parent );
+	if ( ! $parent_comment ) {
+		return;
+	}
+
+	$comment_post = get_post( $comment->comment_post_ID );
+	if ( ! $comment_post ) {
+		return;
+	}
+
+	// Post authors receive notification separately.
+	if ( $comment->user_id === $comment_post->user_id ) {
+		return;
+	}
+
+	$recipient = get_user_by( 'id', $parent_comment->user_id );
+	if ( ! $recipient ) {
+		return;
+	}
+
+	$group_id = openlab_get_group_id_by_blog_id( get_current_blog_id() );
+	$group    = groups_get_group( $group_id );
+
+	$subject = sprintf( 'A new reply to your private comment on %s in %s', $comment_post->post_title, $group->name );
+
+	$comment_link = get_comment_link( $comment );
+
+	$message = sprintf(
+		'There is a new reply to your private comment on the site %s.<br /><br />
+
+Post name: %s<br />
+Comment author: %s<br />
+Comment URL: %s',
+		get_option( 'blogname' ),
+		$comment_post->post_title,
+		bp_core_get_userlink( $comment->user_id ),
+		sprintf( '<a href="%s">', $comment_link, $comment_link )
+	);
+
+	$message = openlab_comment_email_boilerplate( $message );
+
+	wp_mail( $recipient->user_email, $subject, $message );
+}
+add_action( 'wp_insert_comment', 'openlab_olpc_notify_comment_author_of_reply', 20, 2 );
 
 /**
  * Show a notice on the dashboard of cloned course sites.

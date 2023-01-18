@@ -1,9 +1,10 @@
 <?php
-
 /**
  *  Member related functions
  *
  */
+use OpenLab\Favorites\Favorite\Query;
+
 function openlab_is_admin_truly_member( $group = false ) {
 	global $groups_template;
 
@@ -66,9 +67,8 @@ function openlab_list_members( $view ) {
 	}
 
 	// Set up the bp_has_members() arguments
-	// Note that we're not taking user_type into account. We'll do that with a query filter
 	$args = array(
-		'member_type' => null,
+		'member_type' => $user_type,
 		'per_page'    => 48,
 		'type'        => openlab_get_current_filter( 'sort' ),
 	);
@@ -107,29 +107,6 @@ function openlab_list_members( $view ) {
 			$include_noop = true;
 		} else {
 			$include_arrays[] = $search_terms_matches;
-		}
-	}
-
-	if ( $user_type && ! $include_noop ) {
-		$user_type_matches = $wpdb->get_col(
-			$wpdb->prepare(
-				"SELECT user_id
-			 FROM {$bp->profile->table_name_data}
-			 WHERE field_id = 7
-			       AND
-			       value = %s",
-				$user_type
-			)
-		);
-
-		if ( empty( $user_type_matches ) ) {
-			$user_type_matches = array( 0 );
-		}
-
-		if ( empty( $user_type_matches ) ) {
-			$include_noop = true;
-		} else {
-			$include_arrays[] = $user_type_matches;
 		}
 	}
 
@@ -342,7 +319,7 @@ function openlab_displayed_user_account_type() {
 }
 
 function openlab_get_displayed_user_account_type() {
-	return xprofile_get_field_data( 'Account Type', bp_displayed_user_id() );
+	return openlab_get_user_member_type( bp_displayed_user_id() );
 }
 
 /**
@@ -396,15 +373,15 @@ function openlab_group_status_message( $group = null ) {
 				// this is the case, and the group is not
 				// public, don't mention anything about the Site.
 				if ( $private_group_has_disabled_requests ) {
-					$message = 'This ' . $group_label . ' is PRIVATE and membership is by invitation only.';
+					$message = 'private' === $group->status ? 'This ' . $group_label . ' is PRIVATE and membership is by invitation only.' : 'This ' . $group_label . ' is HIDDEN and membership is by invitation only.';
 				} else {
-					$message = 'This ' . $group_label . ' is PRIVATE.';
+					$message = 'private' === $group->status ? 'This ' . $group_label . ' is PRIVATE.' : 'This ' . $group_label . ' is HIDDEN';
 				}
 			} else {
 				if ( $private_group_has_disabled_requests ) {
-					$message = 'This ' . $group_label . ' Profile is PRIVATE and membership is by invitation only, but the ' . $group_label . ' Site is OPEN to all visitors.';
+					$message = 'private' === $group->status ? 'This ' . $group_label . ' Profile is PRIVATE and membership is by invitation only, but the ' . $group_label . ' Site is OPEN to all visitors.' : 'This ' . $group_label . ' Profile is HIDDEN and membership is by invitation only, but the ' . $group_label . ' Site is OPEN to all visitors.';
 				} else {
-					$message = 'This ' . $group_label . ' Profile is PRIVATE, but the ' . $group_label . ' Site is OPEN to all visitors.';
+					$message = 'private' === $group->status ? 'This ' . $group_label . ' Profile is PRIVATE, but the ' . $group_label . ' Site is OPEN to all visitors.' : 'This ' . $group_label . ' Profile is HIDDEN, but the ' . $group_label . ' Site is OPEN to all visitors.';
 				}
 			}
 
@@ -419,9 +396,9 @@ function openlab_group_status_message( $group = null ) {
 				}
 			} else {
 				if ( $private_group_has_disabled_requests ) {
-					$message = 'This ' . $group_label . ' Profile is PRIVATE and is by invitation only, but all logged-in OpenLab members may view the ' . $group_label . ' Site.';
+					$message = 'private' === $group->status ? 'This ' . $group_label . ' Profile is PRIVATE and is by invitation only, but all logged-in OpenLab members may view the ' . $group_label . ' Site.' : 'This ' . $group_label . ' Profile is HIDDEN and is by invitation only, but all logged-in OpenLab members may view the ' . $group_label . ' Site.';
 				} else {
-					$message = 'This ' . $group_label . ' Profile is PRIVATE, but all logged-in OpenLab members may view the ' . $group_label . ' Site.';
+					$message = 'private' === $group->status ? 'This ' . $group_label . ' Profile is PRIVATE, but all logged-in OpenLab members may view the ' . $group_label . ' Site.' : 'This ' . $group_label . ' Profile is HIDDEN, but all logged-in OpenLab members may view the ' . $group_label . ' Site.';
 				}
 			}
 
@@ -436,9 +413,9 @@ function openlab_group_status_message( $group = null ) {
 				}
 			} else {
 				if ( $private_group_has_disabled_requests ) {
-					$message = 'This ' . $group_label . ' is PRIVATE and membership is by invitation only. You must be a member of the ' . $group_label . ' to view the ' . $group_label . ' Site.';
+					$message = 'private' === $group->status ? 'This ' . $group_label . ' is PRIVATE and membership is by invitation only. You must be a member of the ' . $group_label . ' to view the ' . $group_label . ' Site.' : 'This ' . $group_label . ' is HIDDEN and membership is by invitation only. You must be a member of the ' . $group_label . ' to view the ' . $group_label . ' Site.';
 				} else {
-					$message = 'This ' . $group_label . ' is PRIVATE. You must be a member of the ' . $group_label . ' to view the ' . $group_label . ' Site.';
+					$message = 'private' === $group->status ? 'This ' . $group_label . ' is PRIVATE. You must be a member of the ' . $group_label . ' to view the ' . $group_label . ' Site.' : 'This ' . $group_label . ' is HIDDEN. You must be a member of the ' . $group_label . ' to view the ' . $group_label . ' Site.';
 				}
 			}
 
@@ -453,9 +430,9 @@ function openlab_group_status_message( $group = null ) {
 				}
 			} else {
 				if ( $private_group_has_disabled_requests ) {
-					$message = 'This ' . $group_label . ' is PRIVATE and membership is by invitation only. You must be an administrator to view the ' . $group_label . ' Site.';
+					$message = 'private' === $group->status ? 'This ' . $group_label . ' is PRIVATE and membership is by invitation only. You must be an administrator to view the ' . $group_label . ' Site.' : 'This ' . $group_label . ' is HIDDEN and membership is by invitation only. You must be an administrator to view the ' . $group_label . ' Site.';
 				} else {
-					$message = 'This ' . $group_label . ' is PRIVATE. You must be an administrator to view the ' . $group_label . ' Site.';
+					$message = 'private' === $group->status ? 'This ' . $group_label . ' is PRIVATE. You must be an administrator to view the ' . $group_label . ' Site.' : 'This ' . $group_label . ' is HIDDEN. You must be an administrator to view the ' . $group_label . ' Site.';
 				}
 			}
 
@@ -625,10 +602,20 @@ function cuny_profile_activty_block( $type, $title, $last, $desc_length = 135 ) 
 			'group_type'    => $type,
 			'get_activity'  => false,
 		);
+
+		// Get private groups of the user
+		$private_groups = openlab_get_user_private_membership( bp_displayed_user_id() );
+		$exclude_groups = '';
+
+		// Exclude private groups if not current user's profile or don't have moderate access.
+		if( ! bp_is_my_profile() && ! current_user_can( 'bp_moderate' ) ) {
+			$exclude_groups = '&exclude=' . implode(',', $private_groups);
+		}
+
 		$groups         = openlab_get_groups_of_user( $get_group_args );
 
 		//echo $ids;
-		if ( ! empty( $groups['group_ids_sql'] ) && bp_has_groups( 'include=' . $groups['group_ids_sql'] . '&per_page=20' ) ) :
+		if ( ! empty( $groups['group_ids_sql'] ) && bp_has_groups( 'include=' . $groups['group_ids_sql'] . '&per_page=20' . $exclude_groups ) ) :
 			//    if ( bp_has_groups( 'include='.$ids.'&per_page=3&max=3' ) ) :
 			?>
 			<div id="<?php echo $type; ?>-activity-stream" class="<?php echo $type; ?>-list activity-list item-list<?php echo $last; ?> col-sm-8 col-xs-12">
@@ -677,6 +664,10 @@ function cuny_profile_activty_block( $type, $title, $last, $desc_length = 135 ) 
 										<p class="truncate-on-the-fly hyphenate" data-link="<?php echo bp_get_group_permalink(); ?>" data-includename="<?php echo bp_get_group_name(); ?>" data-basevalue="65" data-basewidth="143"><?php echo $activity; ?></p>
 										<p class="original-copy hidden"><?php echo $activity; ?></p>
 									</div>
+
+									<?php if( current_user_can( 'bp_moderate' ) && in_array( bp_get_group_id(), $private_groups, true ) ) { ?>
+									<p class="private-membership-indicator"><span class="fa fa-eye-slash"></span> Membership hidden</p>
+									<?php } ?>
 
 								</div>
 
@@ -785,7 +776,7 @@ function cuny_member_profile_header() {
 
 	$this_user_id = isset( $site_members_template->member->id ) ? $site_members_template->member->id : bp_displayed_user_id();
 
-	$account_type = xprofile_get_field_data( 'Account Type', $this_user_id );
+	$account_type = openlab_get_user_member_type( $this_user_id );
 
 	//
 	//     whenever profile is viewed, update user meta for first name and last name so this shows up
@@ -814,7 +805,6 @@ function cuny_member_profile_header() {
 		$this_user_id = isset( $site_members_template->member->id ) ? $site_members_template->member->id : bp_displayed_user_id();
 		do_action( 'bp_before_member_home_content' );
 		?>
-		<?php $account_type = xprofile_get_field_data( 'Account Type', $this_user_id ); ?>
 
 		<div id="member-header-avatar" class="alignleft group-header-avatar col-sm-8 col-xs-12">
 			<div id="avatar-wrapper">
@@ -885,7 +875,10 @@ function cuny_member_profile_header() {
 							openlab_get_xprofile_field_id( 'Last Name' ),
 							openlab_get_xprofile_field_id( 'Major Program of Study' ),
 							openlab_get_xprofile_field_id( 'Department' ),
+							openlab_get_xprofile_field_id( 'Email address (Student)' ),
 						);
+
+						$exclude_fields = array_values( $exclude_fields );
 
 						$has_profile_args = array(
 							'exclude_fields' => $exclude_fields,
@@ -893,11 +886,11 @@ function cuny_member_profile_header() {
 						);
 
 						// This field is shown first for Student, Alumni; after Title for others.
-						$show_dept_field_next = in_array( $account_type, array( 'Student', 'Alumni' ) );
+						$show_dept_field_next = in_array( $account_type, array( 'student', 'alumni' ) );
 
 						// Special case: faculty/staff doesn't have Title data.
 						if ( ! $show_dept_field_next ) {
-							$title_field_id = 'Faculty' === $account_type ? 16 : 206;
+							$title_field_id = 'faculty' === $account_type ? 16 : 206;
 							$user_title     = xprofile_get_field_data( $title_field_id, bp_displayed_user_id() );
 							if ( ! $user_title ) {
 								$show_dept_field_next = true;
@@ -906,7 +899,7 @@ function cuny_member_profile_header() {
 
 						$user_units = openlab_get_user_academic_units( bp_displayed_user_id() );
 						$department = openlab_generate_department_name( $user_units );
-						$dept_label = in_array( $account_type, array( 'Student', 'Alumni' ), true ) ? 'Major Program of Study' : 'Department';
+						$dept_label = in_array( $account_type, array( 'student', 'alumni' ), true ) ? 'Major Program of Study' : 'Department';
 
 						?>
 
@@ -1037,11 +1030,11 @@ add_filter( 'bp_get_add_friend_button', 'openlab_custom_add_friend_button' );
 function openlab_member_header() {
 	$this_user_id = isset( $site_members_template->member->id ) ? $site_members_template->member->id : bp_displayed_user_id();
 	?>
-	<?php $account_type = xprofile_get_field_data( 'Account Type', $this_user_id ); ?>
+	<?php $account_type = openlab_get_user_member_type_label( $this_user_id ); ?>
 
 	<h1 class="entry-title profile-title clearfix">
 		<span class="profile-name"><?php bp_displayed_user_fullname(); ?>&rsquo;s Profile</span>
-		<span class="profile-type pull-right hidden-xs"><?php echo $account_type; ?></span>
+		<span class="profile-type pull-right hidden-xs"><?php echo esc_html( $account_type ); ?></span>
 		<button data-target="#sidebar-mobile" class="mobile-toggle direct-toggle pull-right visible-xs" type="button">
 			<span class="sr-only">Toggle navigation</span>
 			<span class="icon-bar"></span>
@@ -1055,7 +1048,7 @@ function openlab_member_header() {
 		</div>
 	<?php endif; ?>
 	<div class="clearfix visible-xs">
-		<span class="profile-type pull-left"><?php echo $account_type; ?></span>
+		<span class="profile-type pull-left"><?php echo esc_html( $account_type ); ?></span>
 		<div class="info-line pull-right"><span class="timestamp info-line-timestamp"><span class="fa fa-undo" aria-hidden="true"></span> <?php bp_last_activity( bp_displayed_user_id() ); ?></span></div>
 	</div>
 	<?php
@@ -1295,4 +1288,484 @@ function openlab_set_user_academic_units( $user_id, $units ) {
 			add_user_meta( $user_id, $meta_key, $to_add_value );
 		}
 	}
+}
+
+/**
+ * Register the My Activity nav item with BuddyPress.
+ */
+function openlab_register_my_activity() {
+	bp_core_new_nav_item(
+		[
+			'name'                    => 'My Activity',
+			'slug'                    => 'my-activity',
+			'component_id'            => 'my-activity',
+			'show_for_displayed_user' => false,
+			'position'                => 5,
+			'screen_function'         => 'openlab_load_my_activity',
+		]
+	);
+}
+add_action( 'bp_setup_nav', 'openlab_register_my_activity' );
+
+/**
+ * Load the My Activity template.
+ */
+function openlab_load_my_activity() {
+	if ( ! bp_is_my_profile() ) {
+		return false;
+	}
+
+	bp_core_load_template( 'members/single/plugins' );
+}
+
+
+/**
+ * Construct the array of arguments for the activities loop.
+ *
+ */
+function openlab_activities_loop_args( $activity_type = '', $filter = '' ) {
+    $args['count_total'] = true;
+
+	if( ! empty( $filter ) ) {
+		$args['action'] = $filter;
+	}
+
+    switch( $activity_type ) {
+        case 'mine':
+            $args += [
+                'scope' => 'just-me',
+            ];
+            break;
+        case 'favorites':
+            $favorites = Query::get_results(
+                [
+                    'user_id' => bp_loggedin_user_id(),
+                ]
+            );
+
+            $group_ids = '';
+
+            if( $favorites ) {
+                $group_ids = [];
+                foreach( $favorites as $favorite ) {
+                    array_push( $group_ids, $favorite->get_group_id() );
+                }
+            }
+
+            $args += [
+                'filter_query'	=> [
+                    'relation'	=> 'AND',
+                    'component'	=> [
+                        'column'	=> 'component',
+                        'value'		=> 'groups',
+                    ],
+                    'group_id'	=> [
+                        'column'	=> 'item_id',
+                        'value'		=> $group_ids,
+                        'compare'	=> 'IN',
+                    ],
+                ],
+            ];
+
+            break;
+        case 'mentions':
+            $args += [
+                'scope' => 'mentions'
+            ];
+            break;
+        case 'starred':
+            $args += [
+                'scope' => 'favorites'
+            ];
+            break;
+        default:
+            $args += [
+                'scope' => 'groups',
+            ];
+    }
+
+    return $args;
+}
+
+/**
+ * User's activity stream pagination.
+ *
+ */
+function openlab_activities_pagination_links() {
+    global $activities_template;
+
+    $pagination = paginate_links(array(
+        'base' => add_query_arg(array('acpage' => '%#%') ),
+        'format' => '',
+        'total' => ceil((int) $activities_template->total_activity_count / (int) $activities_template->pag_num),
+        'current' => $activities_template->pag_page,
+        'prev_text' => _x('<i class="fa fa-angle-left" aria-hidden="true"></i><span class="sr-only">Previous</span>', 'Group pagination previous text', 'buddypress'),
+        'next_text' => _x('<i class="fa fa-angle-right" aria-hidden="true"></i><span class="sr-only">Next</span>', 'Group pagination next text', 'buddypress'),
+        'mid_size' => 3,
+        'type' => 'list',
+        'before_page_number' => '<span class="sr-only">Page</span>',
+    ));
+
+    $pagination = str_replace('page-numbers', 'page-numbers pagination', $pagination);
+
+    //for screen reader only text - current page
+    $pagination = str_replace('current\'><span class="sr-only">Page', 'current\'><span class="sr-only">Current Page', $pagination);
+
+    return $pagination;
+}
+
+/**
+ * Get group id based on the activity id
+ *
+ */
+function openlab_get_group_id_by_activity_id( $activity_id ) {
+    if( ! empty( $activity_id ) ) {
+        global $wpdb;
+
+        // BuddyPress activity table
+        $activity_table = $wpdb->prefix . 'bp_activity';
+
+        // Get group id based on the activity id
+        return $wpdb->get_var(
+            $wpdb->prepare(
+                "SELECT item_id FROM $activity_table WHERE id = %s",
+                $activity_id
+            )
+        );
+    }
+}
+
+function openlab_get_group_id_by_event_id( $activity_id ) {
+	if( ! empty( $activity_id ) ) {
+		global $wpdb;
+
+		// BuddyPress activity table
+		$activity_table = $wpdb->prefix . 'bp_activity';
+
+		// Get activity event id
+		$event_id = $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT secondary_item_id FROM $activity_table WHERE id = %s AND component = %s",
+				$activity_id, 'events'
+			)
+		);
+
+		if( ! empty( $event_id ) ) {
+			$group_ids = (array) bpeo_get_event_groups( $event_id );
+			
+			if( isset( $group_ids[0] ) ) {
+				return $group_ids[0];
+			}
+		}
+	}
+}
+
+/**
+ * Change the date format in the activity text displayed on
+ * the "My Activity" page.
+ *
+ */
+function openlab_change_activity_date_format() {
+	$activity_date = bp_get_activity_date_recorded();
+	return date('F n, Y \a\t g:i a', strtotime( $activity_date ) );
+}
+
+/**
+ * Ajax fav/unfav activity item
+ *
+ */
+add_action( 'wp_ajax_openlab_fav_activity', 'openlab_fav_activity' );
+function openlab_fav_activity() {
+
+	if( isset( $_POST['activity_id'] ) && isset( $_POST['user_action'] ) ) {
+		$activity_id = intval( $_POST['activity_id'] );
+		$action = $_POST['user_action'];
+		$user_id = bp_loggedin_user_id();
+
+		if( $action === 'fav' ) {
+			if( bp_activity_add_user_favorite( $activity_id ) ) {
+				echo json_encode( array(
+					'success'	=> true,
+					'activity'	=> $activity_id,
+					'action'	=> $action,
+					'user_id'	=> $user_id,
+					'message'	=> __( 'Activity added to favorite list.', 'openlab' ),
+				) );
+				wp_die();
+			}
+		} else {
+			if( bp_activity_remove_user_favorite( $activity_id ) ) {
+				echo json_encode( array(
+					'success'	=> true,
+					'activity'	=> $activity_id,
+					'action'	=> $action,
+					'user_id'	=> $user_id,
+					'message'	=> __( 'Activity removed from favorite list.', 'openlab' ),
+				) );
+				wp_die();
+			}
+		}
+
+		echo json_encode( array(
+			'success'	=> false,
+			'message'	=> 'Something went wrong.',
+		) );
+		wp_die();
+	}
+
+	echo json_encode( array(
+		'success'	=> false,
+		'message'	=> 'Missing activity id and action.',
+	) );
+	wp_die();
+}
+
+/**
+ * Change the date format of the member joined since text
+ *
+ */
+function openlab_member_joined_since() {
+	global $members_template;
+
+	return printf(
+		__( 'joined %s', 'buddypress' ),
+		date( 'F j, Y', strtotime( $members_template->member->date_modified ) )
+	);
+}
+
+/**
+ * Modify the output of the activity items in the "My Activity" page
+ *
+ */
+function openlab_get_user_activity_action( $activity = null ) {
+	global $activities_template;
+
+	if ( null === $activity ) {
+		$activity = $activities_template->activity;
+	}
+
+	// Get activity body content
+	$output = $activity->action;
+
+	// Remove "in the group/forum" text from the activity on the group activity stream
+	if( bp_is_group() ) {
+		$group = bp_get_group( bp_get_current_group_id() );
+		$group_link = bp_get_group_permalink( $group );
+		$output = str_replace( 'in the group <a href="' . $group_link . '">' . bp_get_group_name() . '</a>', '', $output );
+		$output = str_replace( 'in the forum <a href="' . $group_link . 'forum/">' . bp_get_group_name() . '</a>', '', $output );
+	} else {
+		if( $activity->type == 'bbp_topic_create' || $activity->type == 'bbp_reply_create' ) {
+			$output = str_replace( 'in the forum', 'in the group', $output );
+		}
+	}
+
+	if( $activity->type == 'added_group_document' ) {
+		$output = str_replace( 'uploaded the file', 'added the file', $output );
+	}
+
+	// Create DateTime from the activity date
+	$activity_datetime = new DateTime( $activity->date_recorded );
+	// Create TimeZone from the timezone selected in the WP Settings
+	$wp_timezone = new DateTimeZone( wp_timezone_string() );
+	// Set timezone to the activity DateTime
+	$activity_datetime->setTimezone( $wp_timezone );
+
+	// Modify activity date format, remove link and add "on" before the date
+	$output .= ' on ' . $activity_datetime->format('F d, Y \a\t g:i a');
+	$output = wpautop( $output );
+
+	// Activity view button
+	$view_button_label = openlab_get_activity_view_button_label( $activity->type );
+	$view_button_link = openlab_get_activity_button_link( $activity );
+
+	// Append activity view button
+	if( $view_button_label ) {
+		$output .= '<a href="' . $view_button_link . '" class="btn btn-xs btn-primary">' . $view_button_label . '</a>';
+	}
+
+	return $output;
+}
+
+/**
+ * Create button label based on the activity type
+ *
+ */
+function openlab_get_activity_view_button_label( $activity_type = '' ) {
+	switch ( $activity_type ) {
+		case 'edited_group_document' :
+		case 'added_group_document' :
+			return 'View File';
+
+		case 'bp_doc_created' :
+		case 'bp_doc_edited' :
+		case 'bp_doc_comment' :
+			return 'View Doc';
+
+		case 'bpeo_create_event' :
+			return 'View Event';
+
+		case 'created_announcement' :
+			return 'View Announcement';
+
+		case 'created_announcement_reply' :
+		case 'bbp_reply_create' :
+			return 'View Reply';
+
+		case 'bbp_topic_create' :
+			return 'View Discussion Topic';
+
+		case 'new_blog_post' :
+			return 'View Post';
+
+		case 'new_blog_comment' :
+			return 'View Comment';
+
+		case 'created_group' :
+		case 'joined_group'	:
+		case 'bpges_notice' :
+			return 'View Group';
+
+		case 'new_blog' :
+			return 'View Site';
+
+		case 'new_avatar' :
+		case 'updated_profile' :
+			return 'View Profile';
+	}
+}
+
+/**
+ * Get link for the button, based on the activity
+ *
+ */
+function openlab_get_activity_button_link( $activity ) {
+	global $activities_template;
+
+	if( null === $activity ) {
+		$activity = $activities_template->activity;
+	}
+
+	switch( $activity->type ) {
+		case 'edited_group_document':
+		case 'added_group_document':
+			$document = new BP_Group_Documents( (string)$activity->secondary_item_id );
+			return $document->get_url( false );
+		case 'bp_doc_created':
+		case 'bp_doc_edited':
+			return $activity->primary_link;
+		case 'created_group':
+		case 'joined_group':
+		case 'bpges_notice':
+			$group = bp_get_group_by( 'id', $activity->item_id );
+			return bp_get_group_permalink( $group );
+		case 'default':
+			return $activity->primary_link;
+	}
+
+	return $activity->primary_link;
+}
+
+/**
+ * Check if the membership for the specified group is private
+ * for the logged user.
+ *
+ */
+function openlab_is_my_membership_private( $group_id ) {
+	// Skip if group id is missing
+	if ( empty( $group_id ) ) {
+		return false;
+	}
+
+	global $wpdb;
+
+	// Get private membership table
+	$table_name = $wpdb->prefix . 'private_membership';
+
+	// Get current user id
+	$user_id = bp_loggedin_user_id();
+
+	// Check if the membership is private based on user id and group id
+	$query = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $table_name WHERE `user_id` = %d AND `group_id` = %d", $user_id, $group_id ) );
+
+	// If there is a record, return true. Otherwise, return false
+	if ( $query ) {
+		return true;
+	}
+
+	return false;
+}
+
+/**
+ * Get user private membership group
+ */
+function openlab_get_user_private_membership( $user_id ) {
+	// Skip if user id is missing
+	if ( empty( $user_id ) ) {
+		return [];
+	}
+
+	global $wpdb;
+	$table_name = $wpdb->prefix . 'private_membership';
+	$query = $wpdb->get_results( $wpdb->prepare( "SELECT `group_id` FROM $table_name WHERE `user_id` = %d", $user_id ), OBJECT_K );
+
+	$private_groups = array();
+
+	if ( $query ) {
+		foreach ( $query as $item ) {
+			$private_groups[] = (int) $item->group_id;
+		}
+	}
+
+	return $private_groups;
+}
+
+/**
+ * Update private membership table with the user's
+ * group privacy data.
+ */
+add_action( 'wp_ajax_openlab_update_member_group_privacy', 'openlab_update_member_group_privacy' );
+function openlab_update_member_group_privacy() {
+	global $wpdb;
+
+	// Get private membership table
+	$table_name = $wpdb->prefix . 'private_membership';
+
+	// Get current user id
+	$user_id = bp_loggedin_user_id();
+
+	// Check if group id is provded in the request
+	if( ! isset( $_POST['group_id'] ) ) {
+		echo json_encode( array(
+			'success'	=> false,
+			'message'	=> 'Group ID is missing.'
+		) );
+		die();
+	}
+
+	$group_id = $_POST['group_id'];
+	$is_private = ( $_POST['is_private'] ) ? filter_var($_POST['is_private'], FILTER_VALIDATE_BOOLEAN) : false;
+
+	if( $is_private ) {
+		if( $wpdb->insert( $table_name, array( 'user_id' => $user_id, 'group_id' => $group_id ) ) ) {
+			echo json_encode( array(
+				'success'	=> true,
+				'message'	=> 'User membership is set to private'
+			) );
+			die();
+		}
+	} else {
+		if( $wpdb->delete( $table_name, array( 'user_id' => $user_id, 'group_id' => $group_id ) ) ) {
+			echo json_encode( array(
+				'success'	=> true,
+				'message'	=> 'User membership is set to public.'
+			) );
+			die();
+		}
+	}
+
+	echo json_encode( array(
+		'success'	=> false,
+		'message'	=> 'Something went wrong'
+	) );
+	die();
 }

@@ -85,7 +85,6 @@ function badgeos_earned_points_shortcode( $atts = array () ){
         }
     }
 
-    global $user_ID;
     extract( shortcode_atts( array(
         'point_type'  => '',
         'show_title'  => 'true',

@@ -224,14 +224,14 @@ add_filter( 'messages_send_notice', 'openlab_send_notice_email', 10, 2 );
 function openlab_redirect_to_profile_edit_group() {
 	if ( bp_is_user_profile_edit() ) {
 		if ( ! bp_action_variables( 1 ) ) {
-			 $account_type = bp_get_profile_field_data( 'field=Account Type&user_id=' . bp_displayed_user_id() );
-			if ( $account_type == 'Student' ) {
+			 $account_type = openlab_get_user_member_type( bp_displayed_user_id() );
+			if ( $account_type === 'student' ) {
 				$pgroup = '2';
-			} elseif ( $account_type == 'Faculty' ) {
+			} elseif ( $account_type === 'faculty' ) {
 				$pgroup = '3';
-			} elseif ( $account_type == 'Alumni' ) {
+			} elseif ( $account_type === 'alumni' ) {
 				$pgroup = '4';
-			} elseif ( $account_type == 'Staff' ) {
+			} elseif ( $account_type === 'staff' ) {
 				$pgroup = '5';
 			} else {
 				$pgroup = '1';
@@ -418,39 +418,46 @@ add_filter( 'bp_docs_enable_group_create_step', '__return_false' );
 add_filter(
 	'groups_created_group',
 	function( $group_id ) {
-		if ( openlab_is_portfolio( $group_id ) ) {
-			return;
-		}
+		if ( ! openlab_is_portfolio( $group_id ) ) {
+			// Cloned groups should keep their cloned settings.
+			$clone_source_group_id = groups_get_groupmeta( $group_id, 'clone_source_group_id', true );
+			if ( $clone_source_group_id ) {
+				if ( openlab_is_announcements_enabled_for_group( $clone_source_group_id ) ) {
+					groups_delete_groupmeta( $group_id, 'openlab_disable_announcements' );
+				} else {
+					groups_update_groupmeta( $group_id, 'openlab_disable_announcements', '1' );
+				}
 
-		// Cloned groups should keep their cloned settings.
-		$clone_source_group_id = groups_get_groupmeta( $group_id, 'clone_source_group_id', true );
-		if ( $clone_source_group_id ) {
-			if ( openlab_is_forum_enabled_for_group( $clone_source_group_id ) ) {
-				groups_delete_groupmeta( $group_id, 'openlab_disable_forum' );
-			} else {
-				groups_update_groupmeta( $group_id, 'openlab_disable_forum', '1' );
+				if ( openlab_is_forum_enabled_for_group( $clone_source_group_id ) ) {
+					groups_delete_groupmeta( $group_id, 'openlab_disable_forum' );
+				} else {
+					groups_update_groupmeta( $group_id, 'openlab_disable_forum', '1' );
+				}
+
+				if ( openlab_is_files_enabled_for_group( $clone_source_group_id ) ) {
+					groups_delete_groupmeta( $group_id, 'group_documents_documents_disabled' );
+				} else {
+					groups_update_groupmeta( $group_id, 'group_documents_documents_disabled', '1' );
+				}
+
+				$doc_settings = bp_docs_get_group_settings( $clone_source_group_id );
+				groups_update_groupmeta( $group_id, 'bp-docs', $doc_settings );
+
+				if ( openlab_is_calendar_enabled_for_group( $clone_source_group_id ) ) {
+					groups_update_groupmeta( $group_id, 'calendar_is_disabled', '0' );
+				} else {
+					groups_update_groupmeta( $group_id, 'calendar_is_disabled', '1' );
+				}
+
+				return;
 			}
-
-			if ( openlab_is_files_enabled_for_group( $clone_source_group_id ) ) {
-				groups_delete_groupmeta( $group_id, 'group_documents_documents_disabled' );
-			} else {
-				groups_update_groupmeta( $group_id, 'group_documents_documents_disabled', '1' );
-			}
-
-			$doc_settings = bp_docs_get_group_settings( $clone_source_group_id );
-			groups_update_groupmeta( $group_id, 'bp-docs', $doc_settings );
-
-			if ( openlab_is_calendar_enabled_for_group( $clone_source_group_id ) ) {
-				groups_update_groupmeta( $group_id, 'calendar_is_disabled', '0' );
-			} else {
-				groups_update_groupmeta( $group_id, 'calendar_is_disabled', '1' );
-			}
-
-			return;
 		}
 
 		$site_id = openlab_get_site_id_by_group_id( $group_id );
 		if ( $site_id ) {
+			// Announcements.
+			groups_update_groupmeta( $group_id, 'openlab_disable_announcements', '1' );
+
 			// Discussion
 			groups_update_groupmeta( $group_id, 'openlab_disable_forum', '1' );
 
@@ -574,7 +581,7 @@ function openlab_send_group_join_admin_notification( $group_id, $user_id ) {
 		return;
 	}
 
-	$subject = sprintf( 'A new member has joined your group %s [%s]', $group->name, bp_get_option( 'blogname' ) );
+	$subject = sprintf( 'A new member has joined %s', $group->name );
 	$message = sprintf(
 		'A new member has joined your group %1$s on the %2$s.
 
@@ -627,6 +634,9 @@ function openlab_get_xprofile_field_id( $field_name ) {
 
 		case 'Account Type' :
 			return 7;
+
+		case 'Email address (Student)' :
+			return 195;
 	}
 }
 
@@ -790,6 +800,9 @@ add_action(
 	0
 );
 
+/**
+ * Corrects the unsubscribe URL in outgoing emails to OL members.
+ */
 add_action(
 	'bp_send_email',
 	function( $email, $email_type, $to, $args ) {
@@ -798,9 +811,20 @@ add_action(
 		} elseif ( is_numeric( $to ) ) {
 			$user_id = $to;
 		} else {
-			$user = get_user_by( 'email', $to );
-			if ( $user ) {
-				$user_id = $user->ID;
+			if ( is_string( $to ) ) {
+				$user_email = $to;
+			} elseif ( is_array( $to ) ) {
+				foreach ( $to[0] as $to_email => $to_username ) {
+					$user_email = $to_email;
+					break;
+				}
+			}
+
+			if ( ! empty( $user_email ) ) {
+				$user = get_user_by( 'email', $user_email );
+				if ( $user ) {
+					$user_id = $user->ID;
+				}
 			}
 		}
 
@@ -839,3 +863,11 @@ remove_filter( 'ass_clean_content', 'strip_tags', 4 );
 add_action( 'admin_head', function() {
 	remove_action( 'admin_head', 'bpges_39_migration_admin_notice' );
 }, 5 );
+
+/**
+ * Get a link to a group.
+ */
+function openlab_get_group_link( $group_id ) {
+	$group = groups_get_group( $group_id );
+	return sprintf( '<a href="%s">%s</a>', esc_attr( bp_get_group_permalink( $group ) ), esc_html( $group->name ) );
+}

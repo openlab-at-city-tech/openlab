@@ -1,0 +1,157 @@
+.nv-upsell {
+    background: #fff;
+    padding: 21px;
+    border-radius: 3px;
+}
+
+.nv-upsell .upsell-pro-label {
+    font-weight: bold;
+    background: #a7a7a7;
+    color: #fff;
+    text-transform: uppercase;
+    padding: 2px 6px 2px 7px;
+    letter-spacing: .1px;
+    font-size: 12px;
+    border-radius: 3px;
+    margin-right: 10px;
+}
+
+.nv-upsell-features li {
+    line-height: 24px;
+    margin-bottom: 23px;
+    font-size: 14px;
+}
+.nv-upsell-features li:last-child {
+    margin-bottom: 20px;
+}
+.nv-upsell-features.no-explained li {
+    margin-bottom: 0;
+}
+.nv-upsell-features.no-explained li:last-child {
+    margin-bottom: 0;
+}
+
+.nv-upsell .button {
+    margin-right: 21px;
+    width: 100%;
+    text-align: center;
+    letter-spacing: .2px;
+}
+
+.nv-upsell hr {
+    margin-top: 22px;
+    margin-bottom: 16px;
+}
+
+.nv-upsell-feature-list li:before {
+    line-height: 37px;
+}
+
+.nv-upsell-feature-list li {
+    line-height: 22px;
+    font-size: 14px;
+    font-style: italic;
+    margin-bottom: 6px;
+}
+
+.nv-upsell-feature-list li:last-child {
+    margin-bottom: 0;
+}
+
+.nv-upsell-content{
+    margin-bottom: 10px;
+}
+
+#customize-controls #accordion-section-neve_upsells_section.control-section .accordion-section-title:hover {
+    background-color: #0073aa;
+    color: #fff;
+}
+
+#customize-controls #accordion-section-neve_upsells_section.control-section .accordion-section-title:hover:after {
+    color: #fff;
+}
+
+.customize-control-nv_simple_upsell {
+	background: transparent !important;
+}
+.nv-simple-upsell {
+	display: flex;
+	border-top: 1px solid #ccc;
+	padding-top: 10px;
+	align-items: center;
+}
+.nv-simple-upsell p {
+	margin: 0 10px 0 0;
+	font-weight: 600;
+	font-size: 12px;
+}
+
+.nv-simple-upsell a.button {
+	font-weight: 600;
+	font-size: 12px;
+	line-height: normal;
+	min-height: unset;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 6px 12px 7px;
+	flex-grow: 0;
+}
+
+
+.control-section-nv_simple_upsell_section {
+	padding: 12px 15px;
+}
+
+li#customize-control-neve_checkout_page_layout .option.upsell {
+    position: relative;
+}
+
+li#customize-control-neve_checkout_page_layout .option.upsell label {
+    pointer-events: none;
+}
+
+li#customize-control-neve_checkout_page_layout .option.upsell button {
+    filter: saturate(0);
+}
+
+li#customize-control-neve_checkout_page_layout .option.upsell:hover .upsell-btn {
+    display:block;
+}
+
+li#customize-control-neve_checkout_page_layout .upsell-btn {
+    pointer-events: all;
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 10px 10px;
+    vertical-align:middle;
+    font-size:10px;
+    line-height: normal;
+    font-weight: bold;
+    box-shadow: rgba(91, 91, 92, 0.5) 0px 8px 30px 0px;
+    white-space: nowrap;
+    display:none;
+    color: #0073AA;
+}
+
+.upsell-btn .dashicons {
+    vertical-align: middle;
+    text-decoration: none;
+    font-size:18px;
+    font-weight: normal;
+    color: #0073AA;
+    margin:0;
+}
+
+li#customize-control-neve_checkout_page_layout .option.upsell .dashicons-lock {
+    font-size:14px;
+    position: absolute;
+    top: 0;
+    right: 5px;
+    color: #0073AA;
+    z-index: 1;
+    opacity: 0.45;
+}

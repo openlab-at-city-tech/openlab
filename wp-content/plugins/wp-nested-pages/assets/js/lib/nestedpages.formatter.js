@@ -28,6 +28,7 @@ NestedPages.Formatter = function()
 				}
 				
 				var open = ( $(row).children('ol:visible').length > 0 ) ? true : false;
+
 				var html = '<div class="child-toggle-spacer"></div>';
 				html += '<a href="#"';
 				if ( open ) html += ' class="open"';
@@ -37,6 +38,11 @@ NestedPages.Formatter = function()
 				if ( ($(row).children('ol').children('.np-hide').length > 0) && ($(row).children('ol').children('.np-hide.shown').length === 0) ){
 					$(button).find('a').hide();
 				} else if ( ($(row).children('ol').children('.np-hide').length > 0) && ($(row).children('ol').children('.np-hide.shown').length > 0) ){
+					$(button).find('a').show();
+				}
+
+				// Bug fix for pages with child hidden pages, but other pages in the hierarchy are not hidden
+				if ( $(row).children('ol').find('.page-row').not('.np-hide').length > 0 ){
 					$(button).find('a').show();
 				}
 
@@ -75,6 +81,9 @@ NestedPages.Formatter = function()
 				var padding = ( parent_count * amount ) + padding;
 				$(this).find(indent_element).css('padding-left', padding + 'px');
 				return;
+			}
+			if ( parent_count < 1 ){
+				$(this).find(indent_element).css('padding-left', '0px');
 			}
 			if ( !NestedPages.jsData.sortable || $(this).hasClass('no-sort') ){
 				$(this).find('.row-inner').css('padding-left', '10px');	

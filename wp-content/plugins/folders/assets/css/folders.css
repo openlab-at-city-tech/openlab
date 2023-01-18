@@ -180,6 +180,7 @@ li.jstree-node .jstree-hovered .star-icon, li.jstree-node .jstree-hovered .stick
     top: -10px;
     width: 20px;
     height: 20px;
+    z-index: 100001
 }
 .close-popup-button a {
     display: block;
@@ -601,4 +602,79 @@ span.dashicons.dashicons-cloud-upload {
 }
 .dynamic-menu li.new-folder, .dynamic-menu li.new-folder-pro {
     border-bottom: solid 1px #d8d8d8;
+}
+.view-shortcodes {
+    display: inline-block;
+    text-decoration: none;
+    color: #3c434a;
+    vertical-align: super;
+}
+.view-shortcodes svg {
+    width: 16px;
+    display: inline-block;
+    height: auto;
+}
+.wcp-container .folder-tooltip.view-shortcodes:after {
+    top: 36px !important;
+    bottom: auto !important;
+    font-size: 10px !important;
+}
+.wcp-container .folder-tooltip.view-shortcodes:before {
+    top: 26px !important;
+    bottom: auto !important;
+    transform: rotate(180deg) !important;
+    margin-left: -5px !important;
+}
+
+
+.keyboard-shortcut {
+    width: 100%;
+}
+.keyboard-shortcut tr td, .keyboard-shortcut tr th {
+    padding: 8px 0;
+    vertical-align: middle;
+    text-align: left;
+    font-weight: normal;
+}
+.keyboard-shortcut tr td {
+    text-align: right;
+    vertical-align: middle;
+}
+.keyboard-shortcut tr td span:not(.dashicons) {
+    display: inline-block;
+    padding: 2px 5px;
+}
+.keyboard-shortcut tr td span.key-button {
+    padding: 2px 8px;
+    background: #eaeaea;
+    border-radius: 2px;
+}
+.keyboard-shortcut tr td span.dashicons {
+    width: auto;
+    height: auto;
+    font-size: 14px;
+    display: inline-block;
+    vertical-align: middle;
+}
+.os-content {
+    background: #ffffff;
+}
+.custom-scroll-menu.hor-scroll .horizontal-scroll-menu {
+    width: fit-content;
+    background: #fff;
+    min-width: 100%;
+}
+.custom-scroll-menu.hor-scroll .jstree-default .jstree-anchor {
+    width: auto;
+    min-width: calc(100% - 24px);
+}
+.os-viewport {
+    background: #ffffff;
+}
+.custom-scroll-menu.hor-scroll .horizontal-scroll-menu .folder-actions {
+    background: #ffffff;
+    padding: 0 15px 0 4px;
+}
+.custom-scroll-menu.hor-scroll .horizontal-scroll-menu .folder-actions {
+
 }

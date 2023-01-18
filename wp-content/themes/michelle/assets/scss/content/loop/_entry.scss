@@ -1,0 +1,37 @@
+/* FILE: content/loop/_entry.scss */
+
+.posts .entry {
+	display: flex;
+	flex-direction: column;
+	width: calc( 100% - var(--posts_list_gap) );
+	padding: var(--posts_list_entry_padding_vertical) var(--posts_list_entry_padding_horizontal);
+	margin: calc( var(--posts_list_gap) / 2 );
+	background: var(--color_body_background);
+	border-top: var(--border_decorative_width) solid var(--color_border_decorative);
+	transition: box-shadow .3s;
+
+	@include media( map_get( $breakpoint, 'l' ) ) {
+		width: calc( 50% - var(--posts_list_gap) );
+		max-width: calc( 50% - var(--posts_list_gap) );
+	}
+
+	&:hover,
+	&:focus-within {
+		box-shadow: var(--drop_shadow);
+	}
+
+	> * {
+		margin-top: 1rem;
+		margin-bottom: 1rem;
+
+		&:first-child {
+			margin-top: 0;
+		}
+
+		&:last-child {
+			margin-bottom: 0;
+		}
+
+	}
+
+}

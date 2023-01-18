@@ -55,6 +55,8 @@ class GF_Field_Quiz extends GF_Field {
 			'gquiz-setting-choices',
 			'gquiz-setting-show-answer-explanation',
 			'gquiz-setting-randomize-quiz-choices',
+			'gquiz-setting-weighted-score-enabled',
+			'gquiz-setting-values-visible-wrapper',
 		);
 	}
 

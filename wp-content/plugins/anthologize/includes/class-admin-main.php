@@ -15,6 +15,8 @@ class Anthologize_Admin_Main {
 
 		add_action( 'admin_menu', array( $this, 'dashboard_hooks' ), 990 );
 
+		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_assets' ] );
+
 		require( dirname( __FILE__ ) . '/class-ajax-handlers.php' );
 		$ajax_handlers = new Anthologize_Ajax_Handlers();
 
@@ -297,6 +299,17 @@ class Anthologize_Admin_Main {
 	}
 
 	/**
+	 * Loads global assets.
+	 *
+	 * These are assets that should be loaded on every admin page.
+	 *
+	 * @since 0.8.1
+	 */
+	public function enqueue_assets() {
+		wp_enqueue_style( 'anthologize-admin-general' );
+	}
+
+	/**
 	 * Loads the project organizer when an 'edit' parameter is passed with the url
 	 *
 	 * @package Anthologize
@@ -524,7 +537,7 @@ class Anthologize_Admin_Main {
 						<tr>
 
 						<th scope="row"  class="post-title">
-							<a href="admin.php?page=anthologize&amp;action=edit&amp;project_id=<?php the_ID() ?>" class="row-title"><?php the_title(); ?></a>
+							<a href="admin.php?page=anthologize&amp;action=edit&amp;project_id=<?php the_ID() ?>" class="row-title"><?php echo esc_html( get_the_title() ); ?></a>
 
 							<br />
 

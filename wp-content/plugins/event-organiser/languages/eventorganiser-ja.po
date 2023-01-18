@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-12 23:08+0000\n"
+"POT-Creation-Date: 2022-11-15 21:07+0000\n"
 "PO-Revision-Date: 2017-05-02T14:20:11+00:00\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -56,7 +56,7 @@ msgid "Include 'Add To Google' link"
 msgstr "'Googleに追加' リンクを入れる"
 
 #: classes/class-eo-agenda-widget.php:140 event-organiser-edit.php:151
-#: includes/event-organiser-event-functions.php:1382
+#: includes/event-organiser-event-functions.php:1388
 msgid "All day"
 msgstr "終日"
 
@@ -252,7 +252,7 @@ msgstr "イベントカテゴリ"
 
 #: classes/class-eo-widget-categories.php:25
 #: includes/event-organiser-cpt.php:95 includes/event-organiser-cpt.php:106
-#: includes/event-organiser-event-functions.php:1563
+#: includes/event-organiser-event-functions.php:1569
 #: templates/event-meta-event-single.php:62
 msgid "Categories"
 msgstr "カテゴリ"
@@ -292,7 +292,7 @@ msgstr "会場"
 msgid "Select Venue"
 msgstr "会場を選択"
 
-#: classes/class-eventorganiser-shortcodes.php:464
+#: classes/class-eventorganiser-shortcodes.php:472
 msgid "There is no excerpt because this is a protected post."
 msgstr "保護されている投稿なので抜粋はありません。"
 
@@ -374,7 +374,7 @@ msgid "24 hour time"
 msgstr "24時間表示"
 
 #: event-organiser-calendar.php:256
-#: includes/event-organiser-event-functions.php:1500
+#: includes/event-organiser-event-functions.php:1506
 msgid "Loading&#8230;"
 msgstr "読み込み中..."
 
@@ -653,7 +653,7 @@ msgid "day of week"
 msgstr "曜日"
 
 #: event-organiser-edit.php:225
-#: includes/event-organiser-event-functions.php:856
+#: includes/event-organiser-event-functions.php:862
 #: includes/event-organiser-register.php:307
 msgid "until"
 msgstr "まで"
@@ -1675,7 +1675,7 @@ msgid "Choose from the most used tags"
 msgstr "よく使うタグから選ぶ"
 
 #: includes/event-organiser-cpt.php:163
-#: includes/event-organiser-event-functions.php:1571
+#: includes/event-organiser-event-functions.php:1577
 #: templates/event-meta-event-single.php:66
 msgid "Tags"
 msgstr "タグ"
@@ -2049,77 +2049,77 @@ msgstr "色"
 msgid "Assign the category a colour."
 msgstr "カテゴリの色を設定します。"
 
-#: includes/event-organiser-event-functions.php:777
+#: includes/event-organiser-event-functions.php:783
 #: includes/event-organiser-register.php:313
 msgid "last"
 msgstr "最後の"
 
-#: includes/event-organiser-event-functions.php:777
+#: includes/event-organiser-event-functions.php:783
 #: includes/event-organiser-register.php:309
 msgid "first"
 msgstr "1回"
 
-#: includes/event-organiser-event-functions.php:777
+#: includes/event-organiser-event-functions.php:783
 #: includes/event-organiser-register.php:310
 msgid "second"
 msgstr "2回"
 
-#: includes/event-organiser-event-functions.php:777
+#: includes/event-organiser-event-functions.php:783
 #: includes/event-organiser-register.php:311
 msgid "third"
 msgstr "3回"
 
-#: includes/event-organiser-event-functions.php:777
+#: includes/event-organiser-event-functions.php:783
 #: includes/event-organiser-register.php:312
 msgid "fourth"
 msgstr "4回"
 
-#: includes/event-organiser-event-functions.php:787
+#: includes/event-organiser-event-functions.php:793
 msgid "one time only"
 msgstr "1回のみ"
 
-#: includes/event-organiser-event-functions.php:790
+#: includes/event-organiser-event-functions.php:796
 msgid "custom recurrence"
 msgstr "カスタム周期"
 
-#: includes/event-organiser-event-functions.php:797
+#: includes/event-organiser-event-functions.php:803
 #: includes/event-organiser-register.php:298
 msgid "every day"
 msgstr "毎日"
 
-#: includes/event-organiser-event-functions.php:799
+#: includes/event-organiser-event-functions.php:805
 #: includes/event-organiser-register.php:299
 #, php-format
 msgid "every %d days"
 msgstr "%d日ごと"
 
-#: includes/event-organiser-event-functions.php:805
+#: includes/event-organiser-event-functions.php:811
 #: includes/event-organiser-register.php:300
 msgid "every week on"
 msgstr "毎週"
 
-#: includes/event-organiser-event-functions.php:807
+#: includes/event-organiser-event-functions.php:813
 #: includes/event-organiser-register.php:301
 #, php-format
 msgid "every %d weeks on"
 msgstr "%d週ごと"
 
-#: includes/event-organiser-event-functions.php:818
+#: includes/event-organiser-event-functions.php:824
 #: includes/event-organiser-register.php:302
 msgid "every month on the"
 msgstr "毎月の"
 
-#: includes/event-organiser-event-functions.php:820
+#: includes/event-organiser-event-functions.php:826
 #: includes/event-organiser-register.php:303
 #, php-format
 msgid "every %d months on the"
 msgstr "%d月ごとの"
 
-#: includes/event-organiser-event-functions.php:849
+#: includes/event-organiser-event-functions.php:855
 msgid "every year"
 msgstr "毎年"
 
-#: includes/event-organiser-event-functions.php:851
+#: includes/event-organiser-event-functions.php:857
 #, php-format
 msgid "every %d years"
 msgstr "%d年ごと"
@@ -2284,12 +2284,12 @@ msgstr "無効な月間スケジュール（無効な序数）"
 msgid "Event does not contain any dates."
 msgstr "イベントに日程が入っていません。"
 
-#: includes/event.php:1080
+#: includes/event.php:1085
 msgid "Occurrence not deleted. Occurrence not found."
 msgstr ""
 "繰り返しイベントは削除されませんでした。繰り返しイベントが見つかりません。"
 
-#: includes/event.php:1136
+#: includes/event.php:1141
 msgid "There is already an occurrence on this date"
 msgstr "この日には既に繰り返しイベントがあります"
 

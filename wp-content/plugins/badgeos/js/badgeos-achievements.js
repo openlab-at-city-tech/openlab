@@ -23,6 +23,7 @@ jQuery(function ($) {
 			url: data_ajaxurl,
 			data: {
 				'action': 'get-ranks-list',
+				'nonce': BadgeosData.security,
 				'types': types,
 				'limit': data_limit,
 				'user_id': data_user_id,
@@ -98,6 +99,7 @@ jQuery(function ($) {
 			url: data_ajaxurl,
 			data: {
 				'action': 'get-earned-ranks',
+				'nonce': BadgeosData.security,
 				'rank_type': data_type,
 				'limit': data_limit,
 				'user_id': data_user_id,
@@ -176,6 +178,7 @@ jQuery(function ($) {
 			url: data_ajaxurl,
 			data: {
 				'action': 'get-earned-achievements',
+				'nonce': BadgeosData.security,
 				'type': data_type,
 				'limit': data_limit,
 				'user_id': data_user_id,
@@ -260,12 +263,11 @@ jQuery(function ($) {
 		var data_image_width = $mainobj.attr("data-image_width");
 		var data_image_height = $mainobj.attr("data-image_height");
 
-		$mainobj.find('div.badgeos-spinner').show();
-
 		$.ajax({
 			url: data_ajaxurl,
 			data: {
 				'action': 'get-achievements',
+				'nonce': BadgeosData.security,
 				'type': data_type,
 				'limit': data_limit,
 				'show_parent': data_show_child,
@@ -698,4 +700,12 @@ jQuery(function ($) {
 	$('#open-badgeos-verification').on('click', function () {
 		badgeos_ob_verification_process(this);
 	});
+	jQuery(document).ready(function () {
+		jQuery(".badge-os").hide();
+		jQuery(".bdgo-pts").show();
+		jQuery(".user-dash-tab").click(function (event) {
+		  jQuery(".badge-os").hide();
+		  jQuery("." + event.target.id).show();
+		});
+	  });
 });

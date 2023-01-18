@@ -3,9 +3,9 @@ Contributors: kylephillips
 Donate link: https://github.com/sponsors/kylephillips/
 Tags: pages, admin, nested, tree view, page tree, sort, quick edit, structure
 Requires at least: 3.8
-Tested up to: 5.9
+Tested up to: 6.1
 Requires PHP: 5.4
-Stable tag: 3.1.19
+Stable tag: 3.2.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -104,6 +104,35 @@ No. The menu synchronization currently only works within the pages post type.
 9. The Nested Pages interface can be enabled on a per-post-type basis, with customizable options for each type.
 
 == Changelog ==
+
+= 3.2.3 =
+* Adds the ability to clone the post/page tree in hierarchical post types.
+* Adds option to set the maximum nesting level per post type. To configure, visit Settings > Nested Pages > Post Types, and select the post type you'd like to configure. The option can be located under the "Maximum Nesting Depth" tab.
+* Fixes bug where nav menu was being added when saving plugin options, even when "Disable menu sync completely" was selected.
+
+= 3.2.2 =
+* Adds option to default new pages to hide in the generated nav menu.
+* Adds two new filters: "nestedpages_page_listing" & "nestedpages_show_links". These filters allow access to add the "Links" interface to post types other than pages.
+* Fixes bug in page tree where toggle arrow was not shown if a hidden page was a child. The toggle arrow will still not show if the child list contains only hidden pages. In this case, select the "Show Hidden" link to reveal the toggle.
+* Fixes bug in WPML-enabled sites, where the total translation count did not include posts without a source language code.
+* Fixes bug in WPML-enabled sites where the default language post count was not accurate.
+
+= 3.2.1 =
+* Reverts previous wp_update_post change to prevent server errors on large sites. Replaces with optional "nestedpages_use_update_post" filter to enable hook when needed.
+
+= 3.2.0 =
+* Resolves issue where post_updated action was not firing after reordering of nested view.
+* Adds ability to save a custom URL for pages in the nav menu (Example: outputting an anchor link rather than the page's link). To add a custom link, select quick edit, followed by the "Menu Options" tab. There is a new "Custom URL" input.
+* Corrects previous version's Yoast indicator display.
+* Fixes bug where padding was not reset correctly when dragging a sub-level item to the primary/main level
+
+= 3.1.22 =
+* Fixes deprecation notice from new Yoast release
+
+= 3.1.21 =
+* Fixes issue where Nested Pages menu persists in some instances when "Disable menu completely" is checked/enabled.
+* Tested with WordPress V6
+* Security Updates
 
 = 3.1.20 =
 * Fixes bug where menu item descriptions (Added in the Appearance > Menus interface) were being removed when synchronizing the Nested Pages menu

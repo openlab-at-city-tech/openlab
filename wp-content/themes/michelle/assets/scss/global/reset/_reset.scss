@@ -1,0 +1,24 @@
+/* FILE: global/reset/_reset.scss */
+
+html {
+	box-sizing: border-box;
+	overflow-y: scroll;
+	// overscroll-behavior: none;
+	scroll-behavior: smooth;
+
+	@media (prefers-reduced-motion: reduce) {
+		scroll-behavior: auto;
+	}
+
+}
+
+* {
+	border-color: inherit;
+
+	&,
+	&::before,
+	&::after {
+		box-sizing: inherit;
+	}
+
+}

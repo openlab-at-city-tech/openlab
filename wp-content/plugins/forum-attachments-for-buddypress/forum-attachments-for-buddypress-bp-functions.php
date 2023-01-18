@@ -128,14 +128,17 @@ add_action( 'groups_new_forum_topic_post', 'bb_attachments_process_post', 1, 2);
 
 
 
-register_activation_hook( str_replace( 
+/*
+register_activation_hook( str_replace(
 	array(
 		str_replace("/","\\",BB_PLUGIN_DIR),
 		str_replace("/","\\",BB_CORE_PLUGIN_DIR)
 		),
 	array("user#","core#"),
-	__FILE__), 
+	__FILE__),
 	'bb_attachments_install');
+*/
+
 function curPageURL() {
  $pageURL = 'http';
  if ($_SERVER["HTTPS"] == "on") {$pageURL .= "s";}

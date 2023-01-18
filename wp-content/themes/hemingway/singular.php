@@ -23,8 +23,12 @@
 		</div><!-- .posts -->
 	
 	</div><!-- .content -->
+
+	<?php if ( ! is_page_template( array( 'template-fullwidth.php', 'template-nosidebar.php' ) ) ) : ?>
 	
-	<?php get_sidebar(); ?>
+		<?php get_sidebar(); ?>
+
+	<?php endif; ?>
 		
 </main><!-- .wrapper -->
 		

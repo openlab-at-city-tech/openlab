@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * @package Widget_Base
+ * @package ePortfolio
  * @version 1.2.1
  */
 

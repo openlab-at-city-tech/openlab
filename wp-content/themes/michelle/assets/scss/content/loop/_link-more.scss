@@ -1,0 +1,10 @@
+/* FILE: content/loop/_link-more.scss */
+
+.link-more {
+	font-weight: 700;
+
+	.entry-summary + &-container {
+		padding-top: 1em;
+	}
+
+}

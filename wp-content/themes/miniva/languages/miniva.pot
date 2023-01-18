@@ -1,0 +1,467 @@
+# Copyright (C) 2022 Tajam
+# This file is distributed under the GNU General Public License v2 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: Miniva 1.6.5\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/theme/miniva\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2022-06-04T03:15:47+02:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.5.0\n"
+"X-Domain: miniva\n"
+
+#. Theme Name of the theme
+msgid "Miniva"
+msgstr ""
+
+#. Theme URI of the theme
+#: inc/extras.php:259
+msgid "https://tajam.id/miniva/"
+msgstr ""
+
+#. Description of the theme
+msgid "A fast, lightweight, and mobile-friendly WordPress theme for bloggers. Miniva is built with simplicity, accessibility and performance in mind. The clean and minimal design helps readers focus on your content. It supports AMP and several Jetpack modules including featured content, infinite scroll, content options and social menu. See the theme demo at https://tajam.id/miniva-demo/"
+msgstr ""
+
+#. Author of the theme
+msgid "Tajam"
+msgstr ""
+
+#. Author URI of the theme
+msgid "https://tajam.id/"
+msgstr ""
+
+#: 404.php:18
+msgid "Oops! That page can&rsquo;t be found."
+msgstr ""
+
+#: 404.php:22
+msgid "It looks like nothing was found at this location. Maybe try one of the links below or a search?"
+msgstr ""
+
+#: 404.php:31
+msgid "Most Used Categories"
+msgstr ""
+
+#. translators: %1$s: smiley
+#: 404.php:49
+msgid "Try looking in the monthly archives. %1$s"
+msgstr ""
+
+#. translators: 1: title.
+#: comments.php:35
+msgid "One thought on &ldquo;%1$s&rdquo;"
+msgstr ""
+
+#. translators: 1: comment count number, 2: title.
+#: comments.php:41
+msgctxt "comments title"
+msgid "%1$s thought on &ldquo;%2$s&rdquo;"
+msgid_plural "%1$s thoughts on &ldquo;%2$s&rdquo;"
+msgstr[0] ""
+msgstr[1] ""
+
+#: comments.php:68
+msgid "Comments are closed."
+msgstr ""
+
+#: functions.php:53
+#: header.php:63
+msgid "Primary"
+msgstr ""
+
+#: functions.php:111
+#: inc/extras.php:91
+msgid "expand sub menu"
+msgstr ""
+
+#: functions.php:112
+#: inc/extras.php:92
+msgid "collapse sub menu"
+msgstr ""
+
+#: functions.php:144
+msgid "Sidebar"
+msgstr ""
+
+#: functions.php:146
+msgid "Add widgets here."
+msgstr ""
+
+#: header.php:30
+msgid "Skip to content"
+msgstr ""
+
+#: header.php:64
+msgid "Menu"
+msgstr ""
+
+#: inc/customizer.php:236
+msgid "Header"
+msgstr ""
+
+#: inc/customizer.php:240
+msgid "Logo Position"
+msgstr ""
+
+#: inc/customizer.php:247
+msgid "Centered Logo"
+msgstr ""
+
+#: inc/customizer.php:254
+msgid "Centered Menu"
+msgstr ""
+
+#: inc/customizer.php:261
+msgid "Show Search Button"
+msgstr ""
+
+#: inc/customizer.php:265
+msgid "Content"
+msgstr ""
+
+#: inc/customizer.php:269
+msgid "Posts Layout"
+msgstr ""
+
+#: inc/customizer.php:276
+msgid "Sidebar Layout"
+msgstr ""
+
+#: inc/customizer.php:283
+msgid "Blog Display"
+msgstr ""
+
+#: inc/customizer.php:285
+msgid "Choose between a full post or an excerpt for the blog and archive pages."
+msgstr ""
+
+#: inc/customizer.php:287
+msgid "Full post"
+msgstr ""
+
+#: inc/customizer.php:288
+msgid "Post excerpt"
+msgstr ""
+
+#: inc/customizer.php:294
+msgid "Excerpt Length"
+msgstr ""
+
+#: inc/customizer.php:300
+msgid "Welcome Text"
+msgstr ""
+
+#: inc/customizer.php:301
+msgid "A short text dislayed on front page."
+msgstr ""
+
+#: inc/customizer.php:307
+msgid "Show full height featured image in single posts & pages"
+msgstr ""
+
+#. Template Name of the theme
+#: inc/customizer.php:311
+#: inc/extras.php:105
+msgid "Widgetized Page"
+msgstr ""
+
+#: inc/customizer.php:315
+msgid "Hide page title and content in widgetized page template"
+msgstr ""
+
+#: inc/customizer.php:325
+msgid "Link / accent color"
+msgstr ""
+
+#: inc/customizer.php:331
+msgid "Submenu Color"
+msgstr ""
+
+#: inc/customizer.php:333
+msgid "Light"
+msgstr ""
+
+#: inc/customizer.php:334
+msgid "Dark"
+msgstr ""
+
+#: inc/customizer.php:340
+msgid "More"
+msgstr ""
+
+#: inc/customizer.php:346
+#: inc/theme-info.php:48
+msgid "Miniva Pro"
+msgstr ""
+
+#: inc/customizer.php:347
+#: inc/theme-info.php:49
+msgid "Get Miniva Pro Add-on for additional features including WooCommerce support, dark color scheme, featured slider, and many more..."
+msgstr ""
+
+#: inc/customizer.php:348
+#: inc/theme-info.php:50
+msgid "https://tajam.id/miniva-pro/"
+msgstr ""
+
+#: inc/customizer.php:349
+#: inc/theme-info.php:51
+msgid "Learn more about Miniva Pro"
+msgstr ""
+
+#: inc/extras.php:36
+msgid "Red"
+msgstr ""
+
+#: inc/extras.php:41
+msgid "Orange"
+msgstr ""
+
+#: inc/extras.php:46
+msgid "Green"
+msgstr ""
+
+#: inc/extras.php:51
+msgid "Blue"
+msgstr ""
+
+#: inc/extras.php:56
+msgid "Black"
+msgstr ""
+
+#: inc/extras.php:61
+msgid "Gray"
+msgstr ""
+
+#: inc/extras.php:66
+msgid "Light Gray"
+msgstr ""
+
+#: inc/extras.php:107
+msgid "This widget area is located below the main content in widgetized page template."
+msgstr ""
+
+#: inc/extras.php:118
+msgid "Footer"
+msgstr ""
+
+#: inc/extras.php:120
+msgid "Footer widget area"
+msgstr ""
+
+#: inc/extras.php:204
+msgctxt "label"
+msgid "Search for:"
+msgstr ""
+
+#: inc/extras.php:205
+msgctxt "placeholder"
+msgid "Search &hellip;"
+msgstr ""
+
+#: inc/extras.php:209
+msgctxt "submit button"
+msgid "Search"
+msgstr ""
+
+#: inc/extras.php:257
+msgid "Powered by"
+msgstr ""
+
+#: inc/extras.php:260
+msgid "Miniva WordPress Theme"
+msgstr ""
+
+#: inc/header-layouts.php:17
+msgid "Top"
+msgstr ""
+
+#: inc/header-layouts.php:18
+msgid "Side"
+msgstr ""
+
+#: inc/layouts.php:17
+msgid "Large Image"
+msgstr ""
+
+#: inc/layouts.php:18
+msgid "Small Image"
+msgstr ""
+
+#: inc/layouts.php:19
+msgid "Grid"
+msgstr ""
+
+#: inc/layouts.php:57
+msgid "Right Sidebar"
+msgstr ""
+
+#: inc/layouts.php:58
+msgid "Left Sidebar"
+msgstr ""
+
+#. translators: %s: Name of current post. Only visible to screen readers
+#: inc/posts.php:197
+msgid "Continue reading<span class=\"screen-reader-text\"> \"%s\"</span>"
+msgstr ""
+
+#: inc/posts.php:210
+#: template-parts/content-page.php:30
+msgid "Pages:"
+msgstr ""
+
+#. translators: %s: post date.
+#: inc/template-tags.php:30
+msgctxt "post date"
+msgid "Posted on %s"
+msgstr ""
+
+#. translators: %s: post author.
+#: inc/template-tags.php:46
+msgctxt "post author"
+msgid "by %s"
+msgstr ""
+
+#. translators: used between list items, there is a space after the comma
+#: inc/template-tags.php:63
+msgid ", "
+msgstr ""
+
+#. translators: 1: list of categories.
+#: inc/template-tags.php:66
+msgid "Posted in %1$s"
+msgstr ""
+
+#. translators: used between list items, there is a space after the comma
+#: inc/template-tags.php:70
+msgctxt "list item separator"
+msgid ", "
+msgstr ""
+
+#. translators: 1: list of tags.
+#: inc/template-tags.php:73
+msgid "Tagged %1$s"
+msgstr ""
+
+#. translators: %s: post title
+#: inc/template-tags.php:83
+msgid "Leave a Comment<span class=\"screen-reader-text\"> on %s</span>"
+msgstr ""
+
+#. translators: %s: Name of current post. Only visible to screen readers
+#: inc/template-tags.php:100
+#: template-parts/content-page.php:44
+msgid "Edit <span class=\"screen-reader-text\">%s</span>"
+msgstr ""
+
+#: inc/theme-info.php:13
+#: inc/theme-info.php:14
+msgid "Theme Info"
+msgstr ""
+
+#: inc/theme-info.php:34
+msgid "Documentation"
+msgstr ""
+
+#: inc/theme-info.php:35
+msgid "If you need help in installation or configuration of the theme, please read the theme documentation on our website."
+msgstr ""
+
+#: inc/theme-info.php:36
+msgid "https://tajam.id/miniva/documentation/"
+msgstr ""
+
+#: inc/theme-info.php:37
+msgid "Read Documentation"
+msgstr ""
+
+#: inc/theme-info.php:41
+msgid "Support Forum"
+msgstr ""
+
+#: inc/theme-info.php:42
+msgid "Have any issues or questions that are beyond the scope of the documentation? Post your question in the support forum."
+msgstr ""
+
+#: inc/theme-info.php:43
+msgid "https://wordpress.org/support/theme/miniva/"
+msgstr ""
+
+#: inc/theme-info.php:44
+msgid "Go to Support Forum"
+msgstr ""
+
+#. translators: 1: theme name, 2: theme version.
+#: inc/theme-info.php:62
+msgid "Welcome to %1$s %2$s"
+msgstr ""
+
+#: inc/theme-info.php:83
+msgid "Customize Theme"
+msgstr ""
+
+#. translators: %s: theme name.
+#: inc/theme-info.php:88
+msgid "%s uses the WordPress Customizer for all theme settings. Click on \"Customize\" to open the Customizer."
+msgstr ""
+
+#: inc/theme-info.php:92
+msgid "Customize"
+msgstr ""
+
+#. translators: 1: theme name.
+#: inc/theme-info.php:169
+msgid "Thanks for choosing %1$s. To get started with %1$s please visit the theme info page."
+msgstr ""
+
+#. translators: %s: theme name.
+#: inc/theme-info.php:176
+msgid "Get Started with %s"
+msgstr ""
+
+#. translators: %s: search query.
+#: search.php:22
+msgid "Search Results for: %s"
+msgstr ""
+
+#: single.php:28
+#: template-centered.php:30
+#: template-fullwidth.php:30
+msgid "Previous Post"
+msgstr ""
+
+#: single.php:29
+#: template-centered.php:31
+#: template-fullwidth.php:31
+msgid "Next Post"
+msgstr ""
+
+#. Template Name of the theme
+msgid "Centered"
+msgstr ""
+
+#. Template Name of the theme
+msgid "Full Width"
+msgstr ""
+
+#: template-parts/content-none.php:14
+msgid "Nothing Found"
+msgstr ""
+
+#. translators: 1: link to WP admin new post page.
+#: template-parts/content-none.php:24
+msgid "Ready to publish your first post? <a href=\"%1$s\">Get started here</a>."
+msgstr ""
+
+#: template-parts/content-none.php:37
+msgid "Sorry, but nothing matched your search terms. Please try again with some different keywords."
+msgstr ""
+
+#: template-parts/content-none.php:44
+msgid "It seems we can&rsquo;t find what you&rsquo;re looking for. Perhaps searching can help."
+msgstr ""

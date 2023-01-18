@@ -4,12 +4,13 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitfb459d561ae441259befd145de9f3839
+class ComposerStaticInit5564f927e47b2b9767e42a1b8989104b
 {
     public static $prefixLengthsPsr4 = array (
         'T' => 
         array (
             'Tribe\\' => 6,
+            'TEC\\Common\\' => 11,
         ),
         'P' => 
         array (
@@ -29,6 +30,10 @@ class ComposerStaticInitfb459d561ae441259befd145de9f3839
         'Tribe\\' => 
         array (
             0 => __DIR__ . '/../..' . '/src/Tribe',
+        ),
+        'TEC\\Common\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/src/Common',
         ),
         'Psr\\Log\\' => 
         array (
@@ -63,8 +68,11 @@ class ComposerStaticInitfb459d561ae441259befd145de9f3839
 
     public static $classMap = array (
         'Firebase\\JWT\\BeforeValidException' => __DIR__ . '/..' . '/firebase/php-jwt/src/BeforeValidException.php',
+        'Firebase\\JWT\\CachedKeySet' => __DIR__ . '/..' . '/firebase/php-jwt/src/CachedKeySet.php',
         'Firebase\\JWT\\ExpiredException' => __DIR__ . '/..' . '/firebase/php-jwt/src/ExpiredException.php',
+        'Firebase\\JWT\\JWK' => __DIR__ . '/..' . '/firebase/php-jwt/src/JWK.php',
         'Firebase\\JWT\\JWT' => __DIR__ . '/..' . '/firebase/php-jwt/src/JWT.php',
+        'Firebase\\JWT\\Key' => __DIR__ . '/..' . '/firebase/php-jwt/src/Key.php',
         'Firebase\\JWT\\SignatureInvalidException' => __DIR__ . '/..' . '/firebase/php-jwt/src/SignatureInvalidException.php',
         'Monolog\\ErrorHandler' => __DIR__ . '/..' . '/monolog/monolog/src/Monolog/ErrorHandler.php',
         'Monolog\\Formatter\\ChromePHPFormatter' => __DIR__ . '/..' . '/monolog/monolog/src/Monolog/Formatter/ChromePHPFormatter.php',
@@ -170,6 +178,8 @@ class ComposerStaticInitfb459d561ae441259befd145de9f3839
         'Psr\\Log\\Test\\DummyTest' => __DIR__ . '/..' . '/psr/log/Psr/Log/Test/DummyTest.php',
         'Psr\\Log\\Test\\LoggerInterfaceTest' => __DIR__ . '/..' . '/psr/log/Psr/Log/Test/LoggerInterfaceTest.php',
         'Psr\\Log\\Test\\TestLogger' => __DIR__ . '/..' . '/psr/log/Psr/Log/Test/TestLogger.php',
+        'TEC\\Common\\Editor\\Full_Site\\Template_Utils' => __DIR__ . '/../..' . '/src/Common/Editor/Full_Site/Template_Utils.php',
+        'TEC\\Common\\Storage\\Timed_Option' => __DIR__ . '/../..' . '/src/Common/Storage/Timed_Option.php',
         'Tribe\\Admin\\Conditional_Content\\Black_Friday' => __DIR__ . '/../..' . '/src/Tribe/Admin/Conditional_Content/Black_Friday.php',
         'Tribe\\Admin\\Conditional_Content\\Datetime_Conditional_Abstract' => __DIR__ . '/../..' . '/src/Tribe/Admin/Conditional_Content/Datetime_Conditional_Abstract.php',
         'Tribe\\Admin\\Conditional_Content\\End_Of_Year_Sale' => __DIR__ . '/../..' . '/src/Tribe/Admin/Conditional_Content/End_Of_Year_Sale.php',
@@ -180,7 +190,10 @@ class ComposerStaticInitfb459d561ae441259befd145de9f3839
         'Tribe\\Admin\\Notice\\Marketing\\Stellar_Sale' => __DIR__ . '/../..' . '/src/Tribe/Admin/Notice/Marketing/Stellar_Sale.php',
         'Tribe\\Admin\\Notice\\Service_Provider' => __DIR__ . '/../..' . '/src/Tribe/Admin/Notice/Service_Provider.php',
         'Tribe\\Admin\\Notice\\WP_Version' => __DIR__ . '/../..' . '/src/Tribe/Admin/Notice/WP_Version.php',
+        'Tribe\\Admin\\Pages' => __DIR__ . '/../..' . '/src/Tribe/Admin/Pages.php',
+        'Tribe\\Admin\\Settings' => __DIR__ . '/../..' . '/src/Tribe/Admin/Settings.php',
         'Tribe\\Admin\\Troubleshooting' => __DIR__ . '/../..' . '/src/Tribe/Admin/Troubleshooting.php',
+        'Tribe\\Admin\\Upsell_Notice\\Main' => __DIR__ . '/../..' . '/src/Tribe/Admin/Upsell_Notice/Main.php',
         'Tribe\\Customizer\\Control' => __DIR__ . '/../..' . '/src/Tribe/Customizer/Control.php',
         'Tribe\\Customizer\\Controls\\Heading' => __DIR__ . '/../..' . '/src/Tribe/Customizer/Controls/Heading.php',
         'Tribe\\Customizer\\Controls\\Number' => __DIR__ . '/../..' . '/src/Tribe/Customizer/Controls/Number.php',
@@ -190,6 +203,9 @@ class ComposerStaticInitfb459d561ae441259befd145de9f3839
         'Tribe\\Customizer\\Controls\\Toggle' => __DIR__ . '/../..' . '/src/Tribe/Customizer/Controls/Toggle.php',
         'Tribe\\DB_Lock' => __DIR__ . '/../..' . '/src/Tribe/DB_Lock.php',
         'Tribe\\Dialog\\View' => __DIR__ . '/../..' . '/src/Tribe/Dialog/View.php',
+        'Tribe\\Editor\\Compatibility' => __DIR__ . '/../..' . '/src/Tribe/Editor/Compatibility.php',
+        'Tribe\\Editor\\Compatibility\\Classic_Editor' => __DIR__ . '/../..' . '/src/Tribe/Editor/Compatibility/Classic_Editor.php',
+        'Tribe\\Editor\\Compatibility\\Divi' => __DIR__ . '/../..' . '/src/Tribe/Editor/Compatibility/Divi.php',
         'Tribe\\Log\\Action_Logger' => __DIR__ . '/../..' . '/src/Tribe/Log/Action_Logger.php',
         'Tribe\\Log\\Canonical_Formatter' => __DIR__ . '/../..' . '/src/Tribe/Log/Canonical_Formatter.php',
         'Tribe\\Log\\Monolog_Logger' => __DIR__ . '/../..' . '/src/Tribe/Log/Monolog_Logger.php',
@@ -258,10 +274,10 @@ class ComposerStaticInitfb459d561ae441259befd145de9f3839
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitfb459d561ae441259befd145de9f3839::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitfb459d561ae441259befd145de9f3839::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInitfb459d561ae441259befd145de9f3839::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInitfb459d561ae441259befd145de9f3839::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit5564f927e47b2b9767e42a1b8989104b::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit5564f927e47b2b9767e42a1b8989104b::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit5564f927e47b2b9767e42a1b8989104b::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInit5564f927e47b2b9767e42a1b8989104b::$classMap;
 
         }, null, ClassLoader::class);
     }

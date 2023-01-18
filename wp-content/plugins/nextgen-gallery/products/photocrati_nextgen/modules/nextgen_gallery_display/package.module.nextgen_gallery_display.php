@@ -335,12 +335,13 @@ class Mixin_Display_Type_Controller extends Mixin
         // Enqueue lightbox library
         $this->object->enqueue_lightbox_resources($displayed_gallery);
     }
-    function enqueue_ngg_styles()
+    /**
+     * This function does nothing but remains for compatibility with NextGEN Pro which may invoke it.
+     *
+     * @TODO: Remove this method once Pro's minimum NGG version has been updated.
+     */
+    public function enqueue_ngg_styles()
     {
-        $settings = C_NextGen_Settings::get_instance();
-        if ((!is_multisite() || is_multisite() && $settings->wpmuStyle) && $settings->activateCSS) {
-            wp_enqueue_style('nggallery', C_NextGen_Style_Manager::get_instance()->get_selected_stylesheet_url(), array(), NGG_SCRIPT_VERSION);
-        }
     }
     function get_render_mode()
     {
@@ -1229,6 +1230,7 @@ class C_Displayed_Gallery extends C_DataMapper_Model
     function get_entity_count($returns = 'included')
     {
         $retval = 0;
+        // TODO: don't use count() here on the PHP end
         // Is this an image query?
         $source_obj = $this->object->get_source();
         if (in_array('image', $source_obj->returns)) {

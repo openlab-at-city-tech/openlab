@@ -139,7 +139,7 @@ class B2S_PostBox {
             }
         }
 
-        $content = '<div class="b2s-post-meta-box">
+       $content = '<div class="b2s-post-meta-box">
                     <div id="b2s-server-connection-fail" class="b2s-info-error"><button class="b2s-btn-close-meta-box b2s-close-icon" data-area-id="b2s-server-connection-fail" title="close notice"></button>' . esc_html__('The connection to the server failed. Please try again! You can find more information and solutions in the', 'blog2social') . '<a target="_blank" href="' . esc_url(B2S_Tools::getSupportLink('connection_guide')) . '"> ' . esc_html__('guide for server connection', 'blog2social') . '</a>.</div>
                     <div id="b2s-heartbeat-fail" class="b2s-info-error"><button class="b2s-btn-close-meta-box b2s-close-icon" data-area-id="b2s-heartbeat-fail" title="close notice"></button>' . esc_html__('WordPress uses heartbeats by default, Blog2Social as well. Please enable heartbeats for using Blog2Social!', 'blog2social') . $b2sHeartbeatFaqLink . ' </div>
                     <div id="b2s-post-meta-box-state-no-publish-future-customize" class="b2s-info-error"><button class="b2s-btn-close-meta-box b2s-close-icon" data-area-id="b2s-post-meta-box-state-no-publish-future-customize" title="close notice"></button>' . esc_html__('Your post is still on draft or pending status. Please make sure that your post is published or scheduled to be published on this blog. You can then auto-post or schedule and customize your social media posts with Blog2Social.', 'blog2social') . '</div>
@@ -178,10 +178,10 @@ class B2S_PostBox {
                     <input type="checkbox" class="b2s-enable-auto-post" id="b2s-enable-auto-post" name="b2s-enable-auto-post" value="1" ' . (($autoPostActive) ? 'checked' : '') . '><label for="b2s-enable-auto-post">' . esc_html__('enable Auto-Posting', 'blog2social') . '</label>
                     ' . ((isset($advancedOptions)) ? $advancedOptions : '') . '
                     <a href="#b2s-post-box-calendar-header" id="b2s-post-box-calendar-btn">' . esc_html__('show calendar', 'blog2social') . '</a>
-                    <input type="hidden" name="b2s-profile-selected" value="' . ((isset($selectedProfileId)) ? $selectedProfileId : '-1') . '">
-                    <input type="hidden" name="b2s-profile-default" value="' . ((isset($defaultProfile)) ? $defaultProfile : '-1') . '">
-                    <input type="hidden" name="b2s-twitter-default" value="' . ((isset($defaultTwitter)) ? $defaultTwitter : '0') . '">
-                    <input type="hidden" name="b2s-best-times-default" value="' . ((isset($bestTimesDefault)) ? $bestTimesDefault : '0') . '">
+                    <input type="hidden" name="b2s-profile-selected" value="' . ((isset($selectedProfileId)) ? esc_attr($selectedProfileId) : '-1') . '">
+                    <input type="hidden" name="b2s-profile-default" value="' . ((isset($defaultProfile)) ? esc_attr($defaultProfile) : '-1') . '">
+                    <input type="hidden" name="b2s-twitter-default" value="' . ((isset($defaultTwitter)) ? esc_attr($defaultTwitter) : '0') . '">
+                    <input type="hidden" name="b2s-best-times-default" value="' . ((isset($bestTimesDefault)) ? esc_attr($bestTimesDefault) : '0') . '">
                     </div>';
         }
         $content .= '</div>
@@ -259,42 +259,42 @@ class B2S_PostBox {
                             </div>
                             <div class="b2s-meta-box-modal-body">
                                 <div class="b2s-network-imgs">
-                                    <img class="pull-left hidden-xs b2s-img-network" alt="' . esc_attr('Facebook') . '" src="' . plugins_url('/assets/images/portale/1_flat.png', B2S_PLUGIN_FILE) . '">
-                                    <img class="pull-left hidden-xs b2s-img-network" alt="' . esc_attr('Twitter') . '" src="' . plugins_url('/assets/images/portale/2_flat.png', B2S_PLUGIN_FILE) . '">
-                                    <img class="pull-left hidden-xs b2s-img-network" alt="' . esc_attr('LinkedIn') . '" src="' . plugins_url('/assets/images/portale/3_flat.png', B2S_PLUGIN_FILE) . '">
-                                    <img class="pull-left hidden-xs b2s-img-network" alt="' . esc_attr('Tumblr') . '" src="' . plugins_url('/assets/images/portale/4_flat.png', B2S_PLUGIN_FILE) . '">
-                                    <img class="pull-left hidden-xs b2s-img-network" alt="' . esc_attr('Pinterest') . '" src="' . plugins_url('/assets/images/portale/6_flat.png', B2S_PLUGIN_FILE) . '">
-                                    <img class="pull-left hidden-xs b2s-img-network" alt="' . esc_attr('Flickr') . '" src="' . plugins_url('/assets/images/portale/7_flat.png', B2S_PLUGIN_FILE) . '">
-                                    <img class="pull-left hidden-xs b2s-img-network" alt="' . esc_attr('Diigo') . '" src="' . plugins_url('/assets/images/portale/9_flat.png', B2S_PLUGIN_FILE) . '">
-                                    <img class="pull-left hidden-xs b2s-img-network" alt="' . esc_attr('Medium') . '" src="' . plugins_url('/assets/images/portale/11_flat.png', B2S_PLUGIN_FILE) . '">
-                                    <img class="pull-left hidden-xs b2s-img-network" alt="' . esc_attr('Instagram') . '" src="' . plugins_url('/assets/images/portale/12_flat.png', B2S_PLUGIN_FILE) . '">
-                                    <img class="pull-left hidden-xs b2s-img-network" alt="' . esc_attr('Torial') . '" src="' . plugins_url('/assets/images/portale/14_flat.png', B2S_PLUGIN_FILE) . '">
-                                    <img class="pull-left hidden-xs b2s-img-network" alt="' . esc_attr('Reddit') . '" src="' . plugins_url('/assets/images/portale/15_flat.png', B2S_PLUGIN_FILE) . '">
-                                    <img class="pull-left hidden-xs b2s-img-network" alt="' . esc_attr('Bloglovin') . '" src="' . plugins_url('/assets/images/portale/16_flat.png', B2S_PLUGIN_FILE) . '">
-                                    <img class="pull-left hidden-xs b2s-img-network" alt="' . esc_attr('VKontakte') . '" src="' . plugins_url('/assets/images/portale/17_flat.png', B2S_PLUGIN_FILE) . '">
-                                    <img class="pull-left hidden-xs b2s-img-network" alt="' . esc_attr('XING') . '" src="' . plugins_url('/assets/images/portale/19_flat.png', B2S_PLUGIN_FILE) . '">
-                                    <img class="pull-left hidden-xs b2s-img-network" alt="' . esc_attr('Imgur') . '" src="' . plugins_url('/assets/images/portale/21_flat.png', B2S_PLUGIN_FILE) . '">
-                                    <img class="pull-left hidden-xs b2s-img-network" alt="' . esc_attr('Google My Business') . '" src="' . plugins_url('/assets/images/portale/18_flat.png', B2S_PLUGIN_FILE) . '">
+                                    <img class="pull-left hidden-xs b2s-img-network" alt="' . esc_attr('Facebook') . '" src="' . esc_url(plugins_url('/assets/images/portale/1_flat.png', B2S_PLUGIN_FILE)) . '">
+                                    <img class="pull-left hidden-xs b2s-img-network" alt="' . esc_attr('Twitter') . '" src="' . esc_url(plugins_url('/assets/images/portale/2_flat.png', B2S_PLUGIN_FILE)) . '">
+                                    <img class="pull-left hidden-xs b2s-img-network" alt="' . esc_attr('LinkedIn') . '" src="' . esc_url(plugins_url('/assets/images/portale/3_flat.png', B2S_PLUGIN_FILE)) . '">
+                                    <img class="pull-left hidden-xs b2s-img-network" alt="' . esc_attr('Tumblr') . '" src="' . esc_url(plugins_url('/assets/images/portale/4_flat.png', B2S_PLUGIN_FILE)) . '">
+                                    <img class="pull-left hidden-xs b2s-img-network" alt="' . esc_attr('Pinterest') . '" src="' . esc_url(plugins_url('/assets/images/portale/6_flat.png', B2S_PLUGIN_FILE)) . '">
+                                    <img class="pull-left hidden-xs b2s-img-network" alt="' . esc_attr('Flickr') . '" src="' . esc_url(plugins_url('/assets/images/portale/7_flat.png', B2S_PLUGIN_FILE)) . '">
+                                    <img class="pull-left hidden-xs b2s-img-network" alt="' . esc_attr('Diigo') . '" src="' . esc_url(plugins_url('/assets/images/portale/9_flat.png', B2S_PLUGIN_FILE)) . '">
+                                    <img class="pull-left hidden-xs b2s-img-network" alt="' . esc_attr('Medium') . '" src="' . esc_url(plugins_url('/assets/images/portale/11_flat.png', B2S_PLUGIN_FILE)) . '">
+                                    <img class="pull-left hidden-xs b2s-img-network" alt="' . esc_attr('Instagram') . '" src="' . esc_url(plugins_url('/assets/images/portale/12_flat.png', B2S_PLUGIN_FILE)) . '">
+                                    <img class="pull-left hidden-xs b2s-img-network" alt="' . esc_attr('Torial') . '" src="' . esc_url(plugins_url('/assets/images/portale/14_flat.png', B2S_PLUGIN_FILE)) . '">
+                                    <img class="pull-left hidden-xs b2s-img-network" alt="' . esc_attr('Reddit') . '" src="' . esc_url(plugins_url('/assets/images/portale/15_flat.png', B2S_PLUGIN_FILE)) . '">
+                                    <img class="pull-left hidden-xs b2s-img-network" alt="' . esc_attr('Bloglovin') . '" src="' . esc_url(plugins_url('/assets/images/portale/16_flat.png', B2S_PLUGIN_FILE)) . '">
+                                    <img class="pull-left hidden-xs b2s-img-network" alt="' . esc_attr('VKontakte') . '" src="' . esc_url(plugins_url('/assets/images/portale/17_flat.png', B2S_PLUGIN_FILE)) . '">
+                                    <img class="pull-left hidden-xs b2s-img-network" alt="' . esc_attr('XING') . '" src="' . esc_url(plugins_url('/assets/images/portale/19_flat.png', B2S_PLUGIN_FILE)) . '">
+                                    <img class="pull-left hidden-xs b2s-img-network" alt="' . esc_attr('Imgur') . '" src="' . esc_url(plugins_url('/assets/images/portale/21_flat.png', B2S_PLUGIN_FILE)) . '">
+                                    <img class="pull-left hidden-xs b2s-img-network" alt="' . esc_attr('Google My Business') . '" src="' . esc_url(plugins_url('/assets/images/portale/18_flat.png', B2S_PLUGIN_FILE)) . '">
                                 </div>
                                 <br>
-                                <p class="b2s-bold">' . sprintf(__('Under <a href="%s">Network Settings</a> you can define which network selection is used. <a href="%s" target="_blank">Create a network selection.</a>', 'blog2social'), 'admin.php?page=blog2social-network', B2S_Tools::getSupportLink('network_grouping')) . '</p>
+                                <p class="b2s-bold">' . sprintf(__('Under <a href="%s">Network Settings</a> you can define which network selection is used. <a href="%s" target="_blank">Create a network selection.</a>', 'blog2social'), 'admin.php?page=blog2social-network', esc_url(B2S_Tools::getSupportLink('network_grouping'))) . '</p>
                                 <h4>' . esc_html__('Available networks', 'blog2social') . '</h4>
-                                <span class="b2s-bold">' . esc_attr('Facebook (Profile & Seiten)') . '</span><br>
-                                <span class="b2s-bold">' . esc_attr('Twitter (1 Profil)') . '</span><br>
-                                <span class="b2s-bold">' . esc_attr('LinkedIn') . '</span><br>
-                                <span class="b2s-bold">' . esc_attr('Tumblr') . '</span><br>
-                                <span class="b2s-bold">' . esc_attr('Pinterest') . '</span><br>
-                                <span class="b2s-bold">' . esc_attr('Flickr') . '</span><br>
-                                <span class="b2s-bold">' . esc_attr('Diigo') . '</span><br>
-                                <span class="b2s-bold">' . esc_attr('Medium') . '</span><br>
-                                <span class="b2s-bold">' . esc_attr('Instagram') . '</span><br>
-                                <span class="b2s-bold">' . esc_attr('Torial') . '</span><br>
-                                <span class="b2s-bold">' . esc_attr('Reddit') . '</span><br>
-                                <span class="b2s-bold">' . esc_attr('Bloglovin') . '</span><br>
-                                <span class="b2s-bold">' . esc_attr('VKontakte (Profile & Seiten)') . '</span><br>
-                                <span class="b2s-bold">' . esc_attr('XING (Profile & Seiten)') . '</span><br>
-                                <span class="b2s-bold">' . esc_attr('Imgur') . '</span><br>
-                                <span class="b2s-bold">' . esc_attr('Google My Business') . '</span><br>
+                                <span class="b2s-bold">' . esc_html('Facebook (Profile & Seiten)') . '</span><br>
+                                <span class="b2s-bold">' . esc_html('Twitter (1 Profil)') . '</span><br>
+                                <span class="b2s-bold">' . esc_html('LinkedIn') . '</span><br>
+                                <span class="b2s-bold">' . esc_html('Tumblr') . '</span><br>
+                                <span class="b2s-bold">' . esc_html('Pinterest') . '</span><br>
+                                <span class="b2s-bold">' . esc_html('Flickr') . '</span><br>
+                                <span class="b2s-bold">' . esc_html('Diigo') . '</span><br>
+                                <span class="b2s-bold">' . esc_html('Medium') . '</span><br>
+                                <span class="b2s-bold">' . esc_html('Instagram') . '</span><br>
+                                <span class="b2s-bold">' . esc_html('Torial') . '</span><br>
+                                <span class="b2s-bold">' . esc_html('Reddit') . '</span><br>
+                                <span class="b2s-bold">' . esc_html('Bloglovin') . '</span><br>
+                                <span class="b2s-bold">' . esc_html('VKontakte (Profile & Seiten)') . '</span><br>
+                                <span class="b2s-bold">' . esc_html('XING (Profile & Seiten)') . '</span><br>
+                                <span class="b2s-bold">' . esc_html('Imgur') . '</span><br>
+                                <span class="b2s-bold">' . esc_html('Google My Business') . '</span><br>
                             </div>
                         </div>
                     </div>
@@ -349,7 +349,7 @@ class B2S_PostBox {
                 <option value="0" ' . ((!$bestTimes) ? 'selected' : '') . '>' . esc_html__('immediately after publishing', 'blog2social') . '</option>
                 <option value="1" ' . (($bestTimes) ? 'selected' : '') . '>' . esc_html__('at best times', 'blog2social') . '</option>
                 </select></div>';
-            $content .= "<input id='b2s-post-meta-box-best-time-settings' class='post-format' name='b2s-post-meta-box-best-time-settings' value='" . serialize($bestTimeSettings) . "' type='hidden'> ";
+            $content .= "<input id='b2s-post-meta-box-best-time-settings' class='post-format' name='b2s-post-meta-box-best-time-settings' value='" . json_encode($bestTimeSettings) . "' type='hidden'> ";
         }
         if (!$show) {
             $content .= '</div>';

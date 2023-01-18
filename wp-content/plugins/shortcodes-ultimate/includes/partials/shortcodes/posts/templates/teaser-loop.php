@@ -12,12 +12,12 @@
  */
 ?>
 
-<div class="su-posts su-posts-teaser-loop">
+<div class="su-posts su-posts-teaser-loop <?php echo esc_attr( $atts['class'] ); ?>">
 	<?php if ( $posts->have_posts() ) : ?>
 		<?php while ( $posts->have_posts() ) : ?>
 			<?php $posts->the_post(); ?>
 
-			<div id="su-post-<?php the_ID(); ?>" class="su-post">
+			<div id="su-post-<?php the_ID(); ?>" class="su-post <?php echo esc_attr( $atts['class_single'] ); ?>">
 				<?php if ( has_post_thumbnail() ) : ?>
 					<a class="su-post-thumbnail" href="<?php the_permalink(); ?>"><?php the_post_thumbnail(); ?></a>
 				<?php endif; ?>

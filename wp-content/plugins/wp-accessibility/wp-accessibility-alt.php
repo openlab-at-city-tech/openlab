@@ -62,6 +62,8 @@ function wpa_media_value( $column, $id ) {
 						echo '<span class="missing"><span class="dashicons dashicons-no" aria-hidden="true"></span> <a href="' . get_edit_post_link( $id ) . '#attachment_alt">' . __( 'Invalid <code>alt</code>', 'wp-accessibility' ) . '</a></span>';
 					} elseif ( wpa_suspicious_alt( $alt ) ) {
 						echo '<span class="missing"><span class="dashicons dashicons-no" aria-hidden="true"></span> <a href="' . get_edit_post_link( $id ) . '#attachment_alt">' . __( 'Suspicious <code>alt</code>', 'wp-accessibility' ) . '</a></span>';
+					} elseif ( wpa_long_alt( $alt ) ) {
+						echo '<span class="long"><span class="dashicons dashicons-warning" aria-hidden="true"></span> <a href="' . get_edit_post_link( $id ) . '#attachment_alt">' . __( 'Long <code>alt</code> text', 'wp-accessibility' ) . '</a></span>';
 					} else {
 						echo '<span class="ok"><span class="dashicons dashicons-yes" aria-hidden="true"></span> ' . __( 'Has <code>alt</code>', 'wp-accessibility' ) . '</span>';
 					}
@@ -76,6 +78,32 @@ function wpa_media_value( $column, $id ) {
 }
 
 /**
+ * Check whether an alt is unusually long.
+ *
+ * @param string $alt Alt attribute.
+ *
+ * @return bool
+ */
+function wpa_long_alt( $alt ) {
+	$length = strlen( $alt );
+	/**
+	 * What length of an alt text is considered long. Default `140`.
+	 *
+	 * @hook wpa_long_alt
+	 *
+	 * @param {int} $limit Default length to call alt text long.
+	 *
+	 * @return int
+	 */
+	$limit = apply_filters( 'wpa_long_alt', 140 );
+	if ( $length > $limit ) {
+		return true;
+	}
+
+	return false;
+}
+
+/**
  * Check whether an alt attribute contains suspect strings.
  *
  * @param string $alt Alt attribute.
@@ -86,13 +114,34 @@ function wpa_suspicious_alt( $alt ) {
 	$case_insensitive = array(
 		'logo',
 		'image',
+		'picture',
+		'alt text',
+		'alternative text',
 	);
+	/**
+	 * Filter array of case insensitive strings that make alt text suspicious.
+	 *
+	 * @hook wpa_case_insensitive
+	 *
+	 * @param {array} $case_insensitive Array of strings.
+	 *
+	 * @return array
+	 */
 	$case_insensitive = apply_filters( 'wpa_case_insensitive', $case_insensitive );
 	$case_sensitive   = array(
 		'DSC',
 		'IMG',
 	);
-	$case_sensitive   = apply_filters( 'wpa_case_sensitive', $case_sensitive );
+	/**
+	 * Filter array of case sensitive strings that make alt text suspicious.
+	 *
+	 * @hook wpa_case_sensitive
+	 *
+	 * @param {array} $case_sensitive Array of strings.
+	 *
+	 * @return array
+	 */
+	$case_sensitive = apply_filters( 'wpa_case_sensitive', $case_sensitive );
 	foreach ( $case_insensitive as $term ) {
 		if ( false !== stripos( $alt, $term ) ) {
 			return true;
@@ -175,7 +224,7 @@ function wpa_alt_attribute( $html, $id, $caption, $title, $align, $url, $size, $
 	if ( true === $noalt ) {
 		$html = str_replace( 'alt="' . $alt . '"', 'alt=""', $html );
 	}
-	if ( ( '' === $alt || $alt === $title ) && true !== $noalt ) {
+	if ( ( '' === $alt || $alt === $title || wpa_suspicious_alt( $alt ) ) && true !== $noalt ) {
 		if ( $alt === $title ) {
 			$warning = __( 'The alt text for this image is the same as the title. In most cases, that means that the alt attribute has been automatically provided from the image file name.', 'wp-accessibility' );
 			$image   = 'alt-same.png';
@@ -185,8 +234,9 @@ function wpa_alt_attribute( $html, $id, $caption, $title, $align, $url, $size, $
 		}
 	}
 	if ( $warning ) {
-		return $html . "<img class='wpa-image-missing-alt size-" . esc_attr( $size ) . ' ' . esc_attr( $align ) . "' src='" . plugins_url( "imgs/$image", __FILE__ ) . "' alt='" . esc_attr( $warning ) . "' />";
+		return '<div class="wp-block-image">' . $html . '</div>';
 	}
+
 	return $html;
 }
 
@@ -195,5 +245,14 @@ add_action( 'init', 'wpa_add_editor_styles' );
  * Enqueue custom editor styles for WP Accessibility. Used in display of img replacements.
  */
 function wpa_add_editor_styles() {
-	add_editor_style( plugins_url( 'css/editor-style.css', __FILE__ ) );
+	$wpa_version = ( SCRIPT_DEBUG ) ? rand( 10000, 100000 ) : wpa_check_version();
+	add_editor_style( plugins_url( 'css/editor-style.css', __FILE__ ), false, $wpa_version );
+}
+
+add_action( 'enqueue_block_editor_assets', 'wpa_block_editor_assets' );
+/**
+ * Enqueue custom block editor styles for WP Accessibility. Used in display of img replacements.
+ */
+function wpa_block_editor_assets() {
+	wp_enqueue_style( 'wpa-block-styles', plugins_url( 'css/editor-style.css', __FILE__ ), false, wpa_check_version() );
 }

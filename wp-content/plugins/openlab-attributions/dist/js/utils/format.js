@@ -1,7 +1,7 @@
 /**
  * WordPress dependencies
  */
-import { sprintf } from '@wordpress/i18n';
+import { sprintf, __ } from '@wordpress/i18n';
 
 /**
  * Internal dependencies
@@ -42,11 +42,11 @@ function formatLicense( value ) {
 			break;
 
 		case 'u':
-			text = 'License unknown.';
+			text = __( 'License unknown.', 'openlab-attributions' );
 			break;
 
 		default:
-			text = `Licensed under ${ format( license.label, license.url ) }.`;
+			text = sprintf( __( 'Licensed under %s', 'openlab-attributions' ), format( license.label, license.url ) );
 			break;
 	}
 
@@ -74,7 +74,7 @@ function formatAdaptedFrom( {
 
 	if ( isLegacy ) {
 		return sprintf(
-			'Adapted from the <a href="%s">original work</a>',
+			__( 'Adapted from the <a href="%s">original work</a>', 'openlab-attributions' ),
 			derivative
 		);
 	}
@@ -83,14 +83,14 @@ function formatAdaptedFrom( {
 
 	if ( ! adaptedAuthor ) {
 		return sprintf(
-			'Adapted from %1$s, licensed under %2$s.',
+			__( 'Adapted from %1$s, licensed under %2$s.', 'openlab-attributions' ),
 			format( adaptedTitle, derivative ),
 			format( license?.label, license?.url )
 		);
 	}
 
 	return sprintf(
-		'Adapted from %1$s by %2$s, licensed under %3$s.',
+		__( 'Adapted from %1$s by %2$s, licensed under %3$s.', 'openlab-attributions' ),
 		format( adaptedTitle, derivative ),
 		format( adaptedAuthor, null ),
 		format( license?.label, license?.url )
@@ -134,8 +134,13 @@ export function formatAttribution( data ) {
 	let attribution = parts.join( '. ' );
 
 	if ( data.adaptedTitle || data.derivative ) {
-		const separator = parts.length > 0 ? ' / ' : '';
+		const separator = parts.length > 0 ? '. ' : '';
 		attribution += `${ separator }${ formatAdaptedFrom( data ) }`;
+	}
+
+	// Append "." at the end of the sentence if there is none.dd 
+	if( attribution.substring(attribution.length -1) != '.' ) {
+		attribution += '.';
 	}
 
 	return attribution;

@@ -19,8 +19,8 @@
 		img.attr('class', '');
 		img.wrap('<div class="wpa-ld" />')
 		img.parent('.wpa-ld').addClass(classes);
-		img.parent('.wpa-ld').append('<div class="longdesc" aria-live="assertive"></div>');
-		img.parent('.wpa-ld').append('<button>' + wparest.text + '</button>');
+		img.parent('.wpa-ld').append('<button aria-expanded="false" class="wpa-toggle">' + wparest.text + '</button>');
+		img.parent('.wpa-ld').append('<div class="longdesc"></div>');
 		var container = img.parent('.wpa-ld').children('.longdesc');
 		container.hide();
 		container.load( longdesc + ' #desc_' + image_id );
@@ -28,8 +28,10 @@
 			e.preventDefault();
 			var visible = container.is( ':visible' );
 			if ( visible ) {
+				$( this ).attr( 'aria-expanded', 'false' );
 				container.hide();
 			} else {
+				$( this ).attr( 'aria-expanded', 'true' );
 				container.show(150);
 			}
 		});
@@ -40,30 +42,42 @@
 		wpa_load_image( img );
 	});
 
-	function wpa_draw_longdesc( img, image_id, longdesc ) {
+	function wpa_draw_longdesc( img, image_id, longdesc, rawdesc ) {
 		var classes = img.attr('class');
 		img.attr('class', '').attr('longdesc', longdesc );
 		img.attr('id','longdesc-return-' + image_id );
 		img.wrap('<div class="wpa-ld" />')
 		img.parent('.wpa-ld').addClass(classes);
-		img.parent('.wpa-ld').append('<div class="longdesc" aria-live="assertive"></div>');
-		img.parent('.wpa-ld').append('<button>' + wparest.text + '</button>');
+		img.parent('.wpa-ld').append('<button aria-expanded="false" class="wpa-toggle">' + wparest.text + '</button>');
+		img.parent('.wpa-ld').append('<div class="longdesc"></div>');
 		var container = img.parent('.wpa-ld').children('.longdesc');
 		container.hide();
-		container.load( longdesc + ' #desc_' + image_id );
+		container.load( longdesc + ' #desc_' + image_id, {limit:25}, 
+			function( responseText, textStatus, xhr ) {
+				if ( 'error' === textStatus ) {
+					container.html( rawdesc );
+				}
+			}
+		);
 		img.parent('.wpa-ld').children('button').on( 'click', function(e) {
 			e.preventDefault();
 			var visible = container.is( ':visible' );
 			if ( visible ) {
+				$( this ).attr( 'aria-expanded', 'false' );
 				container.hide();
 			} else {
+				$( this ).attr( 'aria-expanded', 'true' );
 				container.show(150);
 			}
 		});
 	}
 
 	function wpa_load_image( img ) {
-		var id = img.attr( 'class' ).replace( 'wp-image-', '' );
+		var classes = img.attr( 'class' );
+		if ( '' === classes ) {
+			classes = img.parent( '.wpa-alt' ).attr( 'class' ).replace( 'wpa-alt ', '' );
+		}
+		var id = classes.replace( 'wp-image-', '' );
 		var api = wparest.url + '/' + id;
 
 		$.get( api )
@@ -77,7 +91,7 @@
 					var url = new URL( response.link );
 					url.searchParams.set( 'longdesc', id );
 					url.toString();
-					wpa_draw_longdesc( img, id, url );
+					wpa_draw_longdesc( img, id, url, rawdesc );
 				}
 			})
 			.fail( function() {

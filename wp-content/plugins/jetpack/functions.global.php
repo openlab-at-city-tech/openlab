@@ -11,7 +11,6 @@
  */
 
 use Automattic\Jetpack\Connection\Client;
-use Automattic\Jetpack\Device_Detection;
 use Automattic\Jetpack\Redirect;
 use Automattic\Jetpack\Status\Host;
 use Automattic\Jetpack\Sync\Functions;
@@ -22,6 +21,8 @@ use Automattic\Jetpack\Sync\Functions;
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
+
+require_once __DIR__ . '/functions.is-mobile.php';
 
 /**
  * Hook into Core's _deprecated_function
@@ -144,16 +145,15 @@ function jetpack_get_future_removed_version( $version ) {
 }
 
 /**
- * Determine if this site is an WoA site or not looking first at the 'at_options' option.
- * As a fallback, check for presence of wpcomsh plugin to determine if a current site has undergone AT.
+ * Determine if this site is an WoA site or not by looking for presence of the wpcomsh plugin.
  *
  * @since 4.8.1
- * @deprecated  $$next_version$$
+ * @deprecated 10.3.0
  *
  * @return bool
  */
 function jetpack_is_atomic_site() {
-	jetpack_deprecated_function( __FUNCTION__, 'Automattic/Jetpack/Status/Host::is_woa_site', '$$next_version$$' );
+	jetpack_deprecated_function( __FUNCTION__, 'Automattic/Jetpack/Status/Host::is_woa_site', 'jetpack-10.3.0' );
 	return ( new Host() )->is_woa_site();
 }
 
@@ -398,64 +398,6 @@ function jetpack_is_file_supported_for_sideloading( $file ) {
 }
 
 /**
- * Determine if the current User Agent matches the passed $kind
- *
- * @param string $kind Category of mobile device to check for.
- *                         Either: any, dumb, smart.
- * @param bool   $return_matched_agent Boolean indicating if the UA should be returned.
- *
- * @return bool|string Boolean indicating if current UA matches $kind. If
- *                              $return_matched_agent is true, returns the UA string
- */
-function jetpack_is_mobile( $kind = 'any', $return_matched_agent = false ) {
-
-	/**
-	 * Filter the value of jetpack_is_mobile before it is calculated.
-	 *
-	 * Passing a truthy value to the filter will short-circuit determining the
-	 * mobile type, returning the passed value instead.
-	 *
-	 * @since  4.2.0
-	 *
-	 * @param bool|string $matches Boolean if current UA matches $kind or not. If
-	 *                             $return_matched_agent is true, should return the UA string
-	 * @param string      $kind Category of mobile device being checked
-	 * @param bool        $return_matched_agent Boolean indicating if the UA should be returned
-	 */
-	$pre = apply_filters( 'pre_jetpack_is_mobile', null, $kind, $return_matched_agent );
-	if ( $pre ) {
-		return $pre;
-	}
-
-	$return      = false;
-	$device_info = Device_Detection::get_info();
-
-	if ( 'any' === $kind ) {
-		$return = $device_info['is_phone'];
-	} elseif ( 'smart' === $kind ) {
-		$return = $device_info['is_smartphone'];
-	} elseif ( 'dumb' === $kind ) {
-		$return = $device_info['is_phone'] && ! $device_info['is_smartphone'];
-	}
-
-	if ( $return_matched_agent && true === $return ) {
-		$return = $device_info['is_phone_matched_ua'];
-	}
-
-	/**
-	 * Filter the value of jetpack_is_mobile
-	 *
-	 * @since  4.2.0
-	 *
-	 * @param bool|string $matches Boolean if current UA matches $kind or not. If
-	 *                             $return_matched_agent is true, should return the UA string
-	 * @param string      $kind Category of mobile device being checked
-	 * @param bool        $return_matched_agent Boolean indicating if the UA should be returned
-	 */
-	return apply_filters( 'jetpack_is_mobile', $return, $kind, $return_matched_agent );
-}
-
-/**
  * Determine whether the current request is for accessing the frontend.
  *
  * @return bool True if it's a frontend request, false otherwise.
@@ -466,7 +408,6 @@ function jetpack_is_frontend() {
 	if (
 		is_admin() ||
 		wp_doing_ajax() ||
-		wp_doing_cron() ||
 		wp_is_json_request() ||
 		wp_is_jsonp_request() ||
 		wp_is_xml_request() ||

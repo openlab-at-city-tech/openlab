@@ -25,6 +25,7 @@ function openlab_hide_plugins( $plugins ) {
 		'badgeos-badgestack-add-on/badgeos-badgestack.php',
 		'bbpress/bbpress.php',
 		'blog2social/blog2social.php',
+		'bookly-responsive-appointment-booking-tool/main.php',
 		'bp-customizable-group-categories/bp-customizable-group-categories.php',
 		'bp-event-organiser/bp-event-organiser.php',
 		'bp-reply-by-email/loader.php',
@@ -34,6 +35,7 @@ function openlab_hide_plugins( $plugins ) {
 		'cubepoints/cubepoints.php',
 		'dk-pdf/dk-pdf.php',
 		'download-media-library/download-media-library.php',
+		'dw-question-answer/dw-question-answer.php',
 		'dynamic-widgets/dynamic-widgets.php',
 		'easy-table/easy-table.php',
 		'elasticpress/elasticpress.php',
@@ -43,7 +45,6 @@ function openlab_hide_plugins( $plugins ) {
 		'enable-jquery-migrate-helper/enable-jquery-migrate-helper.php',
 		'enigma/enigma.php',
 		'ewww-image-optimizer/ewww-image-optimizer.php',
-		'expire-sticky-posts/expire-sticky-posts.php',
 		'featured-content-gallery/content-gallery.php',
 		'fix-simplepie-errors/_fix-simplepie-errors.php',
 		'google-document-embedder/gviewer.php',
@@ -116,6 +117,7 @@ function openlab_hide_plugins( $plugins ) {
 			'bp-system-report/bp-system-report.php',
 			'buddypress/bp-loader.php',
 			'buddypress-docs/loader.php',
+			'buddypress-docs-in-group/loader.php',
 			'buddypress-group-email-subscription/bp-activity-subscription.php',
 			'bp-template-pack/loader.php',
 			'staticpress/plugin.php',
@@ -143,6 +145,12 @@ function openlab_hide_plugins( $plugins ) {
 	}
 
 	$blog_specific_whitelist = array(
+		'elementor/elementor.php' => [
+			8100, // bmi - http://redmine.citytech.cuny.edu/issues/3100
+		],
+		'elementskit-lite/elementskit-lite.php' => [
+			8100, // bmi - http://redmine.citytech.cuny.edu/issues/3100
+		],
 		'fixed-toc/fixed-toc.php'         => array(
 			12249, // openlabguide - https://redmine.citytech.cuny.edu/issues/2562
 		),
@@ -151,9 +159,15 @@ function openlab_hide_plugins( $plugins ) {
 			11261, // openstax-bio - https://redmine.citytech.cuny.edu/issues/2088
 			15333, // ssw-fall2020 - http://redmine.citytech.cuny.edu/issues/2847
 		),
+		'ml-slider/ml-slider.php' => [
+			8100, // bmi - http://redmine.citytech.cuny.edu/issues/3100
+		],
 		'openlab-comd-gform.php'          => array(
 			14428, // gracegallery - http://redmine.citytech.cuny.edu/issues/2692#change-18693
 		),
+		'ultimate-responsive-image-slider/ultimate-responsive-image-slider.php' => [
+			8100, // bmi - http://redmine.citytech.cuny.edu/issues/3100
+		],
 	);
 
 	foreach ( $blog_specific_whitelist as $plugin_file => $whitelisted_blogs ) {

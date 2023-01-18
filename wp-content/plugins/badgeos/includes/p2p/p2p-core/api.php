@@ -9,7 +9,7 @@
  * @return bool|object False on failure, P2P_Connection_Type instance on success.
  */
 function p2p_register_connection_type( $args ) {
-	if ( !did_action('init') ) {
+	if ( ! did_action( 'init' ) ) {
 		trigger_error( "Connection types should not be registered before the 'init' hook." );
 	}
 
@@ -18,8 +18,9 @@ function p2p_register_connection_type( $args ) {
 	if ( count( $argv ) > 1 ) {
 		$args = array();
 		foreach ( array( 'from', 'to', 'reciprocal' ) as $i => $key ) {
-			if ( isset( $argv[ $i ] ) )
+			if ( isset( $argv[ $i ] ) ) {
 				$args[ $key ] = $argv[ $i ];
+			}
 		}
 	} else {
 		$args = $argv[0];
@@ -30,20 +31,22 @@ function p2p_register_connection_type( $args ) {
 	}
 
 	if ( isset( $args['prevent_duplicates'] ) ) {
-		$args['duplicate_connections'] = !$args['prevent_duplicates'];
+		$args['duplicate_connections'] = ! $args['prevent_duplicates'];
 	}
 
 	if ( isset( $args['show_ui'] ) ) {
 		$args['admin_box'] = array(
-			'show' => _p2p_pluck( $args, 'show_ui' )
+			'show' => _p2p_pluck( $args, 'show_ui' ),
 		);
 
-		if ( isset( $args['context'] ) )
+		if ( isset( $args['context'] ) ) {
 			$args['admin_box']['context'] = _p2p_pluck( $args, 'context' );
+		}
 	}
 
-	if ( !isset( $args['admin_box'] ) )
+	if ( ! isset( $args['admin_box'] ) ) {
 		$args['admin_box'] = 'any';
+	}
 
 	$ctype = P2P_Connection_Type_Factory::register( $args );
 
@@ -67,7 +70,7 @@ function p2p_type( $p2p_type ) {
  * Check if a certain connection exists.
  *
  * @param string $p2p_type A valid connection type.
- * @param array $args Query args.
+ * @param array  $args Query args.
  *
  * @return bool
  */
@@ -83,23 +86,26 @@ function p2p_connection_exists( $p2p_type, $args = array() ) {
  * Retrieve connections.
  *
  * @param string $p2p_type A valid connection type.
- * @param array $args Query args:
+ * @param array  $args Query args:
  *
- * - 'direction': Can be 'from', 'to' or 'any'
- * - 'from': Object id. The first end of the connection. (optional)
- * - 'to': Object id. The second end of the connection. (optional)
- * - 'fields': Which field of the connection to return. Can be:
- * 		'all', 'object_id', 'p2p_from', 'p2p_to', 'p2p_id' or 'count'
+ *  - 'direction': Can be 'from', 'to' or 'any'
+ *  - 'from': Object id. The first end of the connection. (optional)
+ *  - 'to': Object id. The second end of the connection. (optional)
+ *  - 'fields': Which field of the connection to return. Can be:
+ *       'all', 'object_id', 'p2p_from', 'p2p_to', 'p2p_id' or 'count'
  *
  * @return array
  */
 function p2p_get_connections( $p2p_type, $args = array() ) {
-	$args = wp_parse_args( $args, array(
-		'direction' => 'from',
-		'from' => 'any',
-		'to' => 'any',
-		'fields' => 'all',
-	) );
+	$args = wp_parse_args(
+		$args,
+		array(
+			'direction' => 'from',
+			'from'      => 'any',
+			'to'        => 'any',
+			'fields'    => 'all',
+		)
+	);
 
 	$r = array();
 
@@ -110,20 +116,28 @@ function p2p_get_connections( $p2p_type, $args = array() ) {
 			$dirs = array_reverse( $dirs );
 		}
 
-		if ( 'object_id' == $args['fields'] )
+		if ( 'object_id' == $args['fields'] ) {
 			$fields = ( 'to' == $direction ) ? 'p2p_from' : 'p2p_to';
-		else
+		} else {
 			$fields = $args['fields'];
+		}
 
-		$r = array_merge( $r, _p2p_get_connections( $p2p_type, array(
-			'from' => $dirs[0],
-			'to' => $dirs[1],
-			'fields' => $fields
-		) ) );
+		$r = array_merge(
+			$r,
+			_p2p_get_connections(
+				$p2p_type,
+				array(
+					'from'   => $dirs[0],
+					'to'     => $dirs[1],
+					'fields' => $fields,
+				)
+			)
+		);
 	}
 
-	if ( 'count' == $args['fields'] )
+	if ( 'count' == $args['fields'] ) {
 		return array_sum( $r );
+	}
 
 	return $r;
 }
@@ -135,11 +149,13 @@ function _p2p_get_connections( $p2p_type, $args = array() ) {
 	$where = $wpdb->prepare( 'WHERE p2p_type = %s', $p2p_type );
 
 	foreach ( array( 'from', 'to' ) as $key ) {
-		if ( 'any' == $args[ $key ] )
+		if ( 'any' == $args[ $key ] ) {
 			continue;
+		}
 
-		if ( empty( $args[ $key ] ) )
+		if ( empty( $args[ $key ] ) ) {
 			return array();
+		}
 
 		$value = scbUtil::array_to_sql( _p2p_normalize( $args[ $key ] ) );
 
@@ -147,24 +163,25 @@ function _p2p_get_connections( $p2p_type, $args = array() ) {
 	}
 
 	switch ( $args['fields'] ) {
-	case 'p2p_id':
-	case 'p2p_from':
-	case 'p2p_to':
-		$sql_field = $args['fields'];
-		break;
-	case 'count':
-		$sql_field = 'COUNT(*)';
-		break;
-	default:
-		$sql_field = '*';
+		case 'p2p_id':
+		case 'p2p_from':
+		case 'p2p_to':
+			$sql_field = $args['fields'];
+			break;
+		case 'count':
+			$sql_field = 'COUNT(*)';
+			break;
+		default:
+			$sql_field = '*';
 	}
 
 	$query = "SELECT $sql_field FROM $wpdb->p2p $where";
 
-	if ( '*' == $sql_field )
+	if ( '*' == $sql_field ) {
 		return $wpdb->get_results( $query );
-	else
+	} else {
 		return $wpdb->get_col( $query );
+	}
 }
 
 /**
@@ -183,7 +200,7 @@ function p2p_get_connection( $p2p_id ) {
 /**
  * Create a connection.
  *
- * @param int $p2p_type A valid connection type.
+ * @param int   $p2p_type A valid connection type.
  * @param array $args Connection information.
  *
  * @return bool|int False on failure, p2p_id on success.
@@ -191,18 +208,22 @@ function p2p_get_connection( $p2p_id ) {
 function p2p_create_connection( $p2p_type, $args ) {
 	global $wpdb;
 
-	$args = wp_parse_args( $args, array(
-		'direction' => 'from',
-		'from' => false,
-		'to' => false,
-		'meta' => array()
-	) );
+	$args = wp_parse_args(
+		$args,
+		array(
+			'direction' => 'from',
+			'from'      => false,
+			'to'        => false,
+			'meta'      => array(),
+		)
+	);
 
 	list( $from ) = _p2p_normalize( $args['from'] );
-	list( $to ) = _p2p_normalize( $args['to'] );
+	list( $to )   = _p2p_normalize( $args['to'] );
 
-	if ( !$from || !$to )
+	if ( ! $from || ! $to ) {
 		return false;
+	}
 
 	$dirs = array( $from, $to );
 
@@ -210,16 +231,20 @@ function p2p_create_connection( $p2p_type, $args ) {
 		$dirs = array_reverse( $dirs );
 	}
 
-	$wpdb->insert( $wpdb->p2p, array(
-		'p2p_type' => $p2p_type,
-		'p2p_from' => $dirs[0],
-		'p2p_to' => $dirs[1]
-	) );
+	$wpdb->insert(
+		$wpdb->p2p,
+		array(
+			'p2p_type' => $p2p_type,
+			'p2p_from' => $dirs[0],
+			'p2p_to'   => $dirs[1],
+		)
+	);
 
 	$p2p_id = $wpdb->insert_id;
 
-	foreach ( $args['meta'] as $key => $value )
+	foreach ( $args['meta'] as $key => $value ) {
 		p2p_add_meta( $p2p_id, $key, $value );
+	}
 
 	do_action( 'p2p_created_connection', $p2p_id );
 
@@ -229,7 +254,7 @@ function p2p_create_connection( $p2p_type, $args ) {
 /**
  * Delete one or more connections.
  *
- * @param int $p2p_type A valid connection type.
+ * @param int   $p2p_type A valid connection type.
  * @param array $args Connection information.
  *
  * @return int Number of connections deleted
@@ -250,14 +275,15 @@ function p2p_delete_connections( $p2p_type, $args = array() ) {
 function p2p_delete_connection( $p2p_id ) {
 	global $wpdb;
 
-	if ( empty( $p2p_id ) )
+	if ( empty( $p2p_id ) ) {
 		return 0;
+	}
 
 	$p2p_ids = array_map( 'absint', (array) $p2p_id );
 
 	do_action( 'p2p_delete_connections', $p2p_ids );
 
-	$where = "WHERE p2p_id IN (" . implode( ',', $p2p_ids ) . ")";
+	$where = 'WHERE p2p_id IN (' . implode( ',', $p2p_ids ) . ')';
 
 	$count = $wpdb->query( "DELETE FROM $wpdb->p2p $where" );
 	$wpdb->query( "DELETE FROM $wpdb->p2pmeta $where" );
@@ -285,14 +311,15 @@ function p2p_delete_meta( $p2p_id, $key, $value = '' ) {
  * List some items.
  *
  * @param object|array A P2P_List instance, a WP_Query instance, or a list of post objects
- * @param array $args (optional)
+ * @param array                                                                            $args (optional)
  */
 function p2p_list_posts( $posts, $args = array() ) {
 	if ( is_a( $posts, 'P2P_List' ) ) {
 		$list = $posts;
 	} else {
-		if ( is_a( $posts, 'WP_Query' ) )
+		if ( is_a( $posts, 'WP_Query' ) ) {
 			$posts = $posts->posts;
+		}
 
 		$list = new P2P_List( $posts, 'P2P_Item_Post' );
 	}
@@ -312,7 +339,7 @@ function p2p_distribute_connected( $items, $connected, $prop_name ) {
 	$indexed_list = array();
 
 	foreach ( $items as $item ) {
-		$item->$prop_name = array();
+		$item->$prop_name          = array();
 		$indexed_list[ $item->ID ] = $item;
 	}
 

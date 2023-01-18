@@ -1477,24 +1477,29 @@
           localPart = emailParts[0],
           domain = emailParts[1];
 
-      if (localPart && domain) {
+      if ( email !== "" ) {
+        if (localPart && domain) {
 
-        if( localPart.indexOf('"') == 0 ) {
-          var len = localPart.length;
-          localPart = localPart.replace(/\"/g, '');
-          if( localPart.length != (len-2) ) {
-            return false; // It was not allowed to have more than two apostrophes
+          if( localPart.indexOf('"') == 0 ) {
+            var len = localPart.length;
+            localPart = localPart.replace(/\"/g, '');
+            if( localPart.length != (len-2) ) {
+              return false; // It was not allowed to have more than two apostrophes
+            }
           }
+  
+          return $.formUtils.validators.validate_domain.validatorFunction(emailParts[1]) &&
+                localPart.indexOf('.') != 0 &&
+                localPart.substring(localPart.length-1, localPart.length) != '.' &&
+                localPart.indexOf('..') == -1 &&
+                !(/[^\w\+\.\-\#\-\_\~\!\$\&\'\(\)\*\+\,\;\=\:]/.test(localPart));
         }
-
-        return $.formUtils.validators.validate_domain.validatorFunction(emailParts[1]) &&
-              localPart.indexOf('.') != 0 &&
-              localPart.substring(localPart.length-1, localPart.length) != '.' &&
-              localPart.indexOf('..') == -1 &&
-              !(/[^\w\+\.\-\#\-\_\~\!\$\&\'\(\)\*\+\,\;\=\:]/.test(localPart));
+  
+        return false;
+      } else {
+        return true;
       }
-
-      return false;
+      
     },
     errorMessage: '',
     errorMessageKey: 'badEmail'

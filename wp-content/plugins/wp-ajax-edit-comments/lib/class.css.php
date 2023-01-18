@@ -109,6 +109,11 @@ table.inputs {\n
 	\tborder: 0;\n";
 if ($rtl == 'true') {
 	$content .= "\ttext-align:left;\n";
+	$direction_text = 'direction:rtl;';
+	$float_text = 'direction:rtl;';
+} else {
+	$direction_text = '';
+	$float_text = '';
 }
 $content .= "
 }\n	
@@ -123,8 +128,8 @@ table.inputs td {\n
 	\ttext-align: {$icon_margin};\n
 	\tmargin-{$icon_margin}: 10px;\n
 }\n
-textarea, input { border: 1px solid #CCC; " . $rtl == 'true' ? "direction:rtl;" : '' . "}\n
-textarea { position: relative; width: 98%; clear:left; " . $rtl == 'true' ? "float:right;" : '' . "}\n
+textarea, input { border: 1px solid #CCC; " . $direction_text . "}\n
+textarea { position: relative; width: 98%; clear:left; " . $float_text . "}\n
 #buttons div {\n
 	\tfloat: {$rtl_float};\n
 	\tmargin-right: 5px;\n

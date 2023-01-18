@@ -26,6 +26,13 @@ class B2S_Tools {
                 if (!defined("B2S_PLUGIN_TRAIL_END")) {
                     define('B2S_PLUGIN_TRAIL_END', $tokenInfo['B2S_PLUGIN_TRAIL_END']);
                 }
+                
+            }
+            if(isset($version->permission_insight)) {
+                $tokenInfo['B2S_PLUGIN_PERMISSION_INSIGHTS'] = (int) $version->permission_insight;
+                if (!defined("B2S_PLUGIN_PERMISSION_INSIGHTS")) {
+                    define('B2S_PLUGIN_PERMISSION_INSIGHTS', $tokenInfo['B2S_PLUGIN_PERMISSION_INSIGHTS']);
+                }
             }
             if (!isset($version->version)) {
                 define('B2S_PLUGIN_NOTICE', 'CONNECTION');
@@ -259,6 +266,15 @@ class B2S_Tools {
         if($type == 'community_lostpw'){
             return 'https://community.blog2social.com/lostpw';
         }
+        if($type == 'license_key'){
+            return ($lang == 'en') ? 'https://www.blog2social.com/en/faq/index.php?solution_id=1062' : '';
+        }
+        if($type == 'auto_post_troubleshoot'){
+            return ($lang == 'en') ? 'https://www.blog2social.com/en/faq/index.php?solution_id=1187' : 'https://www.blog2social.com/de/faq/index.php?action=artikel&cat=9&id=186&artlang=de';
+        }
+        if($type == 'auto_post_import_troubleshoot'){
+            return ($lang == 'en') ? 'https://www.blog2social.com/en/faq/index.php?solution_id=1188' : 'https://www.blog2social.com/de/faq/index.php?action=artikel&cat=9&id=186&artlang=de';
+        }
         if($type == 'auto_post_assign'){
             return ($lang == 'en') ? 'https://www.blog2social.com/en/faq/index.php?action=artikel&cat=3&id=72&artlang=en' : 'https://www.blog2social.com/de/faq/index.php?action=artikel&cat=3&id=79&artlang=de';
         }
@@ -376,6 +392,45 @@ class B2S_Tools {
         if($type == 'network_guide_link_27'){
             return ($lang == 'en') ? 'https://www.blog2social.com/en/faq/index.php?action=artikel&cat=2&id=197&artlang=en' : 'https://www.blog2social.com/de/faq/index.php?action=artikel&cat=2&id=193&artlang=de';
         }
+        if($type == 'NETWORK_12_NO_PERMISSION'){
+            return ($lang == 'en') ? 'https://www.blog2social.com/en/faq/index.php?solution_id=1195' : 'https://www.blog2social.com/de/faq/index.php?solution_id=1194';
+        }
+        if($type == 'NETWORK_12_ACCESS_RESTRICTED'){
+            return ($lang == 'en') ? 'https://www.blog2social.com/en/faq/index.php?solution_id=1195' : 'https://www.blog2social.com/de/faq/index.php?solution_id=1194';
+        }
+        if($type == 'NETWORK_12_SESSION_INVALID'){
+            return ($lang == 'en') ? 'https://www.blog2social.com/en/faq/index.php?solution_id=1181' : 'https://www.blog2social.com/de/faq/index.php?solution_id=1175';
+        }
+        if($type == 'NETWORK_12_RESOURCE_DOSE_NOT_EXIST'){
+            return ($lang == 'en') ? 'https://www.blog2social.com/en/faq/index.php?solution_id=1198' : 'https://www.blog2social.com/de/faq/index.php?solution_id=1195';
+        }
+        if($type == 'NETWORK_12_NOT_BUSINESS'){
+            return ($lang == 'en') ? 'https://www.blog2social.com/en/faq/index.php?solution_id=1185' : 'https://www.blog2social.com/de/faq/index.php?solution_id=1182';
+        }
+        if($type == 'metrics_feedback'){
+            return ($lang == 'de') ? 'https://docs.google.com/forms/d/e/1FAIpQLSeif2AifR7lbSwYchCg08HysfgLuhMCtktf1qrE75UVxJlpUQ/viewform?usp=sf_link' : 'https://docs.google.com/forms/d/e/1FAIpQLSetoOeysUKSKK15ZgbvOVIfTovM67MNzPyncL7n6OvEwlZp0A/viewform?usp=sf_link';
+        }
+        if($type == 'b2s_premium_upgrade'){
+            return ($lang == 'de') ? 'https://b2s.li/blog2social-premium-kaufen' : 'https://b2s.li/upgrade-to-blog2social-premium';
+        }
+        if($type == 'b2s_license_advice'){
+            return ($lang == 'de') ? 'https://service.blog2social.com/de/question?o=faq' : 'https://service.blog2social.com/en/question?o=faq';
+        }
+        if($type == 'b2s_reviews'){
+            return ($lang == 'de') ? 'https://www.blog2social.com/de/blog/testberichte/' : 'https://www.blog2social.com/en/blog/reviews/';
+        }
+        if($type == 'autopost_checklist_wp'){
+            return ($lang == 'de') ? 'https://www.blog2social.com/de/faq/index.php?action=artikel&cat=3&id=79' : 'https://www.blog2social.com/en/faq/index.php?solution_id=1071';
+        }
+        if($type == 'autopost_checklist_rss'){
+            return ($lang == 'de') ? 'https://www.blog2social.com/de/faq/index.php?action=artikel&cat=3&id=116' : 'https://www.blog2social.com/en/faq/index.php?solution_id=1115';
+        }
+        if($type == 'yoast_warning_og_guide'){
+            return ($lang == 'de') ? 'https://www.blog2social.com/de/faq/index.php?action=artikel&lang=de&cat=9&id=184&artlang=de' : 'https://www.blog2social.com/en/faq/index.php?action=artikel&cat=9&id=189&artlang=en';
+        }
+        if($type == 'twitter_card_guide'){
+            return ($lang == 'de') ? 'https://www.blog2social.com/de/faq/index.php?action=artikel&cat=4&id=109&artlang=de' : 'https://www.blog2social.com/en/faq/index.php?action=artikel&cat=4&id=109&artlang=en';
+        }
         return false;
     }
 
@@ -425,10 +480,10 @@ class B2S_Tools {
                     if (isset($userDetails['B2S_PLUGIN_USER_VERSION']) && (int) $userDetails['B2S_PLUGIN_USER_VERSION'] > 0) {
                         $userVersion = $userDetails['B2S_PLUGIN_USER_VERSION'];
                         if(is_array($b2sVersionType) && isset($b2sVersionType[$userVersion]) && !empty($b2sVersionType[$userVersion])){
-                            $ver = " (Blog2Social " . esc_html__('License', 'blog2social') . ": " . $b2sVersionType[$userVersion] . ")";
+                            $ver = " (Blog2Social " . esc_html__('License', 'blog2social') . ": " . esc_html($b2sVersionType[$userVersion]) . ")";
                         }
                     }
-                    $options .= '<option value="' . $user->data->ID . '" ' . (($user->data->ID == $selectId) ? "selected" : "") . '>' . esc_attr($user->data->display_name) . " (" . esc_attr($user->data->user_email) . ")" . $ver . '</option>';
+                    $options .= '<option value="' . esc_attr($user->data->ID) . '" ' . (($user->data->ID == $selectId) ? "selected" : "") . '>' . esc_html($user->data->display_name) . " (" . esc_html($user->data->user_email) . ")" . $ver . '</option>';
                 }
             }
         }
@@ -563,6 +618,32 @@ class B2S_Tools {
         arsort($wordCountArr);
         $wordCountArr = array_slice($wordCountArr, 0, 10);
         return $wordCountArr;
+    }
+    
+    public static function sanitize_array($array = array()) {
+        if(is_array($array) && !empty($array)) {
+            foreach ($array as $key => &$value) {
+                if (is_array($value)) {
+                    $value = self::sanitize_array($value);
+                } else {
+                    $value = sanitize_text_field($value);
+                }
+            }
+        }
+        return $array;
+    }
+    
+    public static function esc_html_array($array = array(), $kses = array()) {
+        if(is_array($array) && !empty($array)) {
+            foreach ($array as $key => &$value) {
+                if (is_array($value)) {
+                    $value = self::esc_html_array($value);
+                } else {
+                    $value = wp_kses($value, $kses);
+                }
+            }
+        }
+        return $array;
     }
     
 }

@@ -13,6 +13,7 @@ defined( 'ABSPATH' ) || die( 'No direct script access allowed!' );
 
 /**
  * CSV Parsing class
+ *
  * @package TablePress
  * @subpackage Import
  * @author Tobias Bäthge
@@ -46,6 +47,7 @@ class CSV_Parser {
 
 	/**
 	 * The preferred delimiter characters, only used when all filtering method return multiple possible delimiters (happens very rarely).
+	 * There must not be more than 9 characters in the preferred delimiter character list, see `_check_delimiter_count()`.
 	 *
 	 * @since 1.0.0
 	 * @var string
@@ -131,22 +133,22 @@ class CSV_Parser {
 				if ( ! $enclosed || $next_char !== $this->enclosure ) {
 					$enclosed = ! $enclosed; // Flip bool.
 				} elseif ( $enclosed ) {
-					$i++; // Skip next character.
+					++$i; // Skip next character.
 				}
 			} elseif ( ( "\n" === $curr_char && "\r" !== $prev_char || "\r" === $curr_char ) && ! $enclosed ) {
 				// Reached end of a line.
-				$current_line++;
+				++$current_line;
 				if ( $current_line >= $this->delimiter_search_max_lines ) {
 					break;
 				}
 			} elseif ( ! $enclosed ) {
 				// At this point, $curr_char seems to be used as a delimiter, as it is not enclosed.
-				// Count $curr_char if it is not in the $this->non_delimiter_chars list
+				// Count $curr_char if it is not in the $this->non_delimiter_chars list.
 				if ( 0 === preg_match( '#[' . $this->non_delimiter_chars . ']#i', $curr_char ) ) {
 					if ( ! isset( $delimiter_count[ $curr_char ][ $current_line ] ) ) {
-						$delimiter_count[ $curr_char ][ $current_line ] = 0; // Initialize empty
+						$delimiter_count[ $curr_char ][ $current_line ] = 0; // Initialize empty.
 					}
-					$delimiter_count[ $curr_char ][ $current_line ]++;
+					++$delimiter_count[ $curr_char ][ $current_line ];
 				}
 			}
 		}
@@ -211,9 +213,12 @@ class CSV_Parser {
 
 		// At this point, count is equal in all lines, so determine a string to sort priority.
 		$match = ( $almost ) ? 2 : 1;
+		// There must not be more than 9 characters in the preferred delimiter character list.
 		$pref = strpos( $this->preferred_delimiter_chars, $char );
-		$pref = ( false !== $pref ) ? str_pad( $pref, 3, '0', STR_PAD_LEFT ) : '999';
-		return $pref . $match . '.' . ( 99999 - str_pad( $first, 5, '0', STR_PAD_LEFT ) );
+		if ( false === $pref ) {
+			$pref = 9;
+		}
+		return $pref . $match . '.' . ( 99999 - $first );
 	}
 
 	/**
@@ -266,7 +271,7 @@ class CSV_Parser {
 				} elseif ( $next_char === $this->enclosure ) {
 					// Enclosure character within enclosed cell (" encoded as "").
 					$cell_content .= $curr_char;
-					$i++; // Skip next character
+					++$i; // Skip next character.
 				} elseif ( $next_char !== $delimiter && "\r" !== $next_char && "\n" !== $next_char ) {
 					// for-loop (instead of while-loop) that skips whitespace.
 					for ( $x = ( $i + 1 ); isset( $data[ $x ] ) && '' === ltrim( $data[ $x ], $white_spaces ); $x++ ) {
@@ -302,7 +307,7 @@ class CSV_Parser {
 				$row[ $column ] = ( $was_enclosed ) ? $cell_content : trim( $cell_content );
 				$cell_content = '';
 				$was_enclosed = false;
-				$column++;
+				++$column;
 
 				// End of line.
 				if ( "\n" === $curr_char || "\r" === $curr_char ) {
@@ -312,7 +317,7 @@ class CSV_Parser {
 					$column = 0;
 					if ( "\r" === $curr_char && "\n" === $next_char ) {
 						// Skip next character in \r\n line breaks.
-						$i++;
+						++$i;
 					}
 				}
 			} else {

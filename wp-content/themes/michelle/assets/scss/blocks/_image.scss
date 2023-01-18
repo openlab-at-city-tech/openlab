@@ -1,0 +1,39 @@
+/* FILE: blocks/_image.scss */
+
+.wp-block-image {
+
+	.alignleft,
+	.alignright {
+		margin-top: 0;
+	}
+
+}
+
+// No RTL here.
+.is-style-padding-left,
+.is-style-padding-right {
+
+	img {
+		display: block;
+		max-width: calc( 50vw + var(--layout_width_content) / 2 - var(--scrollbar_width) / 2 );
+	}
+
+}
+
+.is-style-padding-left {
+	padding-left: var(--body_padding);
+
+	img {
+		margin-left: auto;
+	}
+
+}
+
+.is-style-padding-right {
+	padding-right: var(--body_padding);
+
+	img {
+		margin-right: auto;
+	}
+
+}

@@ -33,7 +33,7 @@ abstract class P2P_Side {
 		$class = $this->item_type;
 
 		if ( is_a( $arg, 'P2P_Item' ) ) {
-			if ( !is_a( $arg, $class ) ) {
+			if ( ! is_a( $arg, $class ) ) {
 				return false;
 			}
 
@@ -41,8 +41,9 @@ abstract class P2P_Side {
 		}
 
 		$raw_item = $this->recognize( $arg );
-		if ( !$raw_item )
+		if ( ! $raw_item ) {
 			return false;
+		}
 
 		return new $class( $raw_item );
 	}

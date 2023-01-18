@@ -8,8 +8,8 @@ class scbTable {
 	protected $upgrade_method;
 
 	function __construct( $name, $file, $columns, $upgrade_method = 'dbDelta' ) {
-		$this->name = $name;
-		$this->columns = $columns;
+		$this->name           = $name;
+		$this->columns        = $columns;
 		$this->upgrade_method = $upgrade_method;
 
 		scb_register_table( $name );

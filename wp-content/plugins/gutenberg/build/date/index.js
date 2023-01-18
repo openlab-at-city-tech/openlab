@@ -1,16 +1,16 @@
 /******/ (function() { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 8:
+/***/ 7812:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
-var moment = module.exports = __webpack_require__(5177);
+var moment = module.exports = __webpack_require__(2828);
 moment.tz.load(__webpack_require__(1128));
 
 
 /***/ }),
 
-/***/ 5341:
+/***/ 9971:
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;//! moment-timezone-utils.js
@@ -24,7 +24,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 
 	/*global define*/
     if ( true && module.exports) {
-        module.exports = factory(__webpack_require__(8));     // Node
+        module.exports = factory(__webpack_require__(7812));     // Node
     } else if (true) {
 		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(6292)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
 		__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
@@ -357,7 +357,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 
 /***/ }),
 
-/***/ 5177:
+/***/ 2828:
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;//! moment-timezone.js
@@ -1149,28 +1149,43 @@ var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be in strict mode.
 !function() {
 "use strict";
+// ESM COMPAT FLAG
 __webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "setSettings": function() { return /* binding */ setSettings; },
-/* harmony export */   "__experimentalGetSettings": function() { return /* binding */ __experimentalGetSettings; },
-/* harmony export */   "format": function() { return /* binding */ format; },
-/* harmony export */   "date": function() { return /* binding */ date; },
-/* harmony export */   "gmdate": function() { return /* binding */ gmdate; },
-/* harmony export */   "dateI18n": function() { return /* binding */ dateI18n; },
-/* harmony export */   "gmdateI18n": function() { return /* binding */ gmdateI18n; },
-/* harmony export */   "isInTheFuture": function() { return /* binding */ isInTheFuture; },
-/* harmony export */   "getDate": function() { return /* binding */ getDate; }
-/* harmony export */ });
-/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(6292);
-/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var moment_timezone_moment_timezone__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5177);
-/* harmony import */ var moment_timezone_moment_timezone__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(moment_timezone_moment_timezone__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var moment_timezone_moment_timezone_utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5341);
-/* harmony import */ var moment_timezone_moment_timezone_utils__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(moment_timezone_moment_timezone_utils__WEBPACK_IMPORTED_MODULE_2__);
+
+// EXPORTS
+__webpack_require__.d(__webpack_exports__, {
+  "__experimentalGetSettings": function() { return /* binding */ __experimentalGetSettings; },
+  "date": function() { return /* binding */ date; },
+  "dateI18n": function() { return /* binding */ dateI18n; },
+  "format": function() { return /* binding */ format; },
+  "getDate": function() { return /* binding */ getDate; },
+  "getSettings": function() { return /* binding */ getSettings; },
+  "gmdate": function() { return /* binding */ gmdate; },
+  "gmdateI18n": function() { return /* binding */ gmdateI18n; },
+  "isInTheFuture": function() { return /* binding */ isInTheFuture; },
+  "setSettings": function() { return /* binding */ setSettings; }
+});
+
+// EXTERNAL MODULE: external "moment"
+var external_moment_ = __webpack_require__(6292);
+var external_moment_default = /*#__PURE__*/__webpack_require__.n(external_moment_);
+// EXTERNAL MODULE: ./node_modules/moment-timezone/moment-timezone.js
+var moment_timezone = __webpack_require__(2828);
+// EXTERNAL MODULE: ./node_modules/moment-timezone/moment-timezone-utils.js
+var moment_timezone_utils = __webpack_require__(9971);
+;// CONCATENATED MODULE: external ["wp","deprecated"]
+var external_wp_deprecated_namespaceObject = window["wp"]["deprecated"];
+var external_wp_deprecated_default = /*#__PURE__*/__webpack_require__.n(external_wp_deprecated_namespaceObject);
+;// CONCATENATED MODULE: ./packages/date/build-module/index.js
 /**
  * External dependencies
  */
 
+
+
+/**
+ * WordPress dependencies
+ */
 
 
 /** @typedef {import('moment').Moment} Moment */
@@ -1211,6 +1226,7 @@ __webpack_require__.r(__webpack_exports__);
  * @property {MomentLocaleSpecification['weekdaysShort']} weekdaysShort Locale weekdays short.
  * @property {MeridiemConfig}                             meridiem      Meridiem config.
  * @property {MomentLocaleSpecification['relativeTime']}  relative      Relative time config.
+ * @property {0|1|2|3|4|5|6}                              startOfWeek   Day that the week starts on.
  */
 
 /* eslint-enable jsdoc/valid-types */
@@ -1258,7 +1274,8 @@ let settings = {
       MM: '%d months',
       y: 'a year',
       yy: '%d years'
-    }
+    },
+    startOfWeek: 0
   },
   formats: {
     time: 'g: i a',
@@ -1279,12 +1296,29 @@ let settings = {
  */
 
 function setSettings(dateSettings) {
-  settings = dateSettings; // Backup and restore current locale.
+  settings = dateSettings;
+  setupWPTimezone(); // Does moment already have a locale with the right name?
 
-  const currentLocale = moment__WEBPACK_IMPORTED_MODULE_0___default().locale();
-  moment__WEBPACK_IMPORTED_MODULE_0___default().updateLocale(dateSettings.l10n.locale, {
-    // Inherit anything missing from the default locale.
-    parentLocale: currentLocale,
+  if (external_moment_default().locales().includes(dateSettings.l10n.locale)) {
+    // Is that locale misconfigured, e.g. because we are on a site running
+    // WordPress < 6.0?
+    if (external_moment_default().localeData(dateSettings.l10n.locale).longDateFormat('LTS') === null) {
+      // Delete the misconfigured locale.
+      // @ts-ignore Type definitions are incorrect - null is permitted.
+      external_moment_default().defineLocale(dateSettings.l10n.locale, null);
+    } else {
+      // We have a properly configured locale, so no need to create one.
+      return;
+    }
+  } // defineLocale() will modify the current locale, so back it up.
+
+
+  const currentLocale = external_moment_default().locale(); // Create locale.
+
+  external_moment_default().defineLocale(dateSettings.l10n.locale, {
+    // Inherit anything missing from English. We don't load
+    // moment-with-locales.js so English is all there is.
+    parentLocale: 'en',
     months: dateSettings.l10n.months,
     monthsShort: dateSettings.l10n.monthsShort,
     weekdays: dateSettings.l10n.weekdays,
@@ -1300,35 +1334,46 @@ function setSettings(dateSettings) {
 
     longDateFormat: {
       LT: dateSettings.formats.time,
-      // @ts-ignore Forcing this to `null`
-      LTS: null,
-      // @ts-ignore Forcing this to `null`
-      L: null,
+      LTS: external_moment_default().localeData('en').longDateFormat('LTS'),
+      L: external_moment_default().localeData('en').longDateFormat('L'),
       LL: dateSettings.formats.date,
       LLL: dateSettings.formats.datetime,
-      // @ts-ignore Forcing this to `null`
-      LLLL: null
+      LLLL: external_moment_default().localeData('en').longDateFormat('LLLL')
     },
     // From human_time_diff?
     // Set to `(number, withoutSuffix, key, isFuture) => {}` instead.
     relativeTime: dateSettings.l10n.relative
-  });
-  moment__WEBPACK_IMPORTED_MODULE_0___default().locale(currentLocale);
-  setupWPTimezone();
+  }); // Restore the locale to what it was.
+
+  external_moment_default().locale(currentLocale);
 }
 /**
  * Returns the currently defined date settings.
  *
- * @return {Object} Settings, including locale data.
+ * @return {DateSettings} Settings, including locale data.
+ */
+
+function getSettings() {
+  return settings;
+}
+/**
+ * Returns the currently defined date settings.
+ *
+ * @deprecated
+ * @return {DateSettings} Settings, including locale data.
  */
 
 function __experimentalGetSettings() {
-  return settings;
+  external_wp_deprecated_default()('wp.date.__experimentalGetSettings', {
+    since: '6.1',
+    alternative: 'wp.date.getSettings'
+  });
+  return getSettings();
 }
 
 function setupWPTimezone() {
   // Create WP timezone based off dateSettings.
-  moment__WEBPACK_IMPORTED_MODULE_0___default().tz.add(moment__WEBPACK_IMPORTED_MODULE_0___default().tz.pack({
+  external_moment_default().tz.add(external_moment_default().tz.pack({
     name: WP_ZONE,
     abbrs: [WP_ZONE],
     untils: [null],
@@ -1370,7 +1415,7 @@ const HOUR_IN_SECONDS = 60 * MINUTE_IN_SECONDS;
  */
 
 const formatMap = {
-  // Day
+  // Day.
   d: 'DD',
   D: 'ddd',
   j: 'D',
@@ -1385,7 +1430,7 @@ const formatMap = {
    * @return {string} Formatted date.
    */
   S(momentDate) {
-    // Do - D
+    // Do - D.
     const num = momentDate.format('D');
     const withOrdinal = momentDate.format('Do');
     return withOrdinal.replace(num, '');
@@ -1401,13 +1446,13 @@ const formatMap = {
    * @return {string} Formatted date.
    */
   z(momentDate) {
-    // DDD - 1
+    // DDD - 1.
     return (parseInt(momentDate.format('DDD'), 10) - 1).toString();
   },
 
-  // Week
+  // Week.
   W: 'W',
-  // Month
+  // Month.
   F: 'MMMM',
   m: 'MM',
   M: 'MMM',
@@ -1424,7 +1469,7 @@ const formatMap = {
     return momentDate.daysInMonth();
   },
 
-  // Year
+  // Year.
 
   /**
    * Gets whether the current year is a leap year.
@@ -1440,7 +1485,7 @@ const formatMap = {
   o: 'GGGG',
   Y: 'YYYY',
   y: 'YY',
-  // Time
+  // Time.
   a: 'a',
   A: 'A',
 
@@ -1452,7 +1497,7 @@ const formatMap = {
    * @return {number} Formatted date.
    */
   B(momentDate) {
-    const timezoned = moment__WEBPACK_IMPORTED_MODULE_0___default()(momentDate).utcOffset(60);
+    const timezoned = external_moment_default()(momentDate).utcOffset(60);
     const seconds = parseInt(timezoned.format('s'), 10),
           minutes = parseInt(timezoned.format('m'), 10),
           hours = parseInt(timezoned.format('H'), 10);
@@ -1467,7 +1512,7 @@ const formatMap = {
   s: 'ss',
   u: 'SSSSSS',
   v: 'SSS',
-  // Timezone
+  // Timezone.
   e: 'zz',
 
   /**
@@ -1500,10 +1545,22 @@ const formatMap = {
     return sign * (parts[0] * HOUR_IN_MINUTES + parts[1]) * MINUTE_IN_SECONDS;
   },
 
-  // Full date/time
+  // Full date/time.
   c: 'YYYY-MM-DDTHH:mm:ssZ',
-  // .toISOString
-  r: 'ddd, D MMM YYYY HH:mm:ss ZZ',
+
+  // .toISOString.
+
+  /**
+   * Formats the date as RFC2822.
+   *
+   * @param {Moment} momentDate Moment instance.
+   *
+   * @return {string} Formatted date.
+   */
+  r(momentDate) {
+    return momentDate.locale('en').format('ddd, DD MMM YYYY HH:mm:ss ZZ');
+  },
+
   U: 'X'
 };
 /**
@@ -1521,7 +1578,7 @@ function format(dateFormat) {
   let dateValue = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new Date();
   let i, char;
   const newFormat = [];
-  const momentDate = moment__WEBPACK_IMPORTED_MODULE_0___default()(dateValue);
+  const momentDate = external_moment_default()(dateValue);
 
   for (i = 0; i < dateFormat.length; i++) {
     char = dateFormat[i]; // Is this an escape?
@@ -1561,7 +1618,7 @@ function format(dateFormat) {
  *                                                        See php.net/date.
  * @param {Moment | Date | string | undefined} dateValue  Date object or string, parsable
  *                                                        by moment.js.
- * @param {string | undefined}                 timezone   Timezone to output result in or a
+ * @param {string | number | undefined}        timezone   Timezone to output result in or a
  *                                                        UTC offset. Defaults to timezone from
  *                                                        site.
  *
@@ -1590,7 +1647,7 @@ function date(dateFormat) {
 
 function gmdate(dateFormat) {
   let dateValue = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new Date();
-  const dateMoment = moment__WEBPACK_IMPORTED_MODULE_0___default()(dateValue).utc();
+  const dateMoment = external_moment_default()(dateValue).utc();
   return format(dateFormat, dateMoment);
 }
 /**
@@ -1599,15 +1656,15 @@ function gmdate(dateFormat) {
  * Backward Compatibility Notice: if `timezone` is set to `true`, the function
  * behaves like `gmdateI18n`.
  *
- * @param {string}                             dateFormat PHP-style formatting string.
- *                                                        See php.net/date.
- * @param {Moment | Date | string | undefined} dateValue  Date object or string, parsable by
- *                                                        moment.js.
- * @param {string | boolean | undefined}       timezone   Timezone to output result in or a
- *                                                        UTC offset. Defaults to timezone from
- *                                                        site. Notice: `boolean` is effectively
- *                                                        deprecated, but still supported for
- *                                                        backward compatibility reasons.
+ * @param {string}                                dateFormat PHP-style formatting string.
+ *                                                           See php.net/date.
+ * @param {Moment | Date | string | undefined}    dateValue  Date object or string, parsable by
+ *                                                           moment.js.
+ * @param {string | number | boolean | undefined} timezone   Timezone to output result in or a
+ *                                                           UTC offset. Defaults to timezone from
+ *                                                           site. Notice: `boolean` is effectively
+ *                                                           deprecated, but still supported for
+ *                                                           backward compatibility reasons.
  *
  * @see https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
  * @see https://en.wikipedia.org/wiki/ISO_8601#Time_offsets_from_UTC
@@ -1645,7 +1702,7 @@ function dateI18n(dateFormat) {
 
 function gmdateI18n(dateFormat) {
   let dateValue = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new Date();
-  const dateMoment = moment__WEBPACK_IMPORTED_MODULE_0___default()(dateValue).utc();
+  const dateMoment = external_moment_default()(dateValue).utc();
   dateMoment.locale(settings.l10n.locale);
   return format(dateFormat, dateMoment);
 }
@@ -1658,8 +1715,8 @@ function gmdateI18n(dateFormat) {
  */
 
 function isInTheFuture(dateValue) {
-  const now = moment__WEBPACK_IMPORTED_MODULE_0___default().tz(WP_ZONE);
-  const momentObject = moment__WEBPACK_IMPORTED_MODULE_0___default().tz(dateValue, WP_ZONE);
+  const now = external_moment_default().tz(WP_ZONE);
+  const momentObject = external_moment_default().tz(dateValue, WP_ZONE);
   return momentObject.isAfter(now);
 }
 /**
@@ -1672,17 +1729,17 @@ function isInTheFuture(dateValue) {
 
 function getDate(dateString) {
   if (!dateString) {
-    return moment__WEBPACK_IMPORTED_MODULE_0___default().tz(WP_ZONE).toDate();
+    return external_moment_default().tz(WP_ZONE).toDate();
   }
 
-  return moment__WEBPACK_IMPORTED_MODULE_0___default().tz(dateString, WP_ZONE).toDate();
+  return external_moment_default().tz(dateString, WP_ZONE).toDate();
 }
 /**
  * Creates a moment instance using the given timezone or, if none is provided, using global settings.
  *
  * @param {Moment | Date | string | undefined} dateValue Date object or string, parsable
  *                                                       by moment.js.
- * @param {string | undefined}                 timezone  Timezone to output result in or a
+ * @param {string | number | undefined}        timezone  Timezone to output result in or a
  *                                                       UTC offset. Defaults to timezone from
  *                                                       site.
  *
@@ -1694,10 +1751,13 @@ function getDate(dateString) {
 
 function buildMoment(dateValue) {
   let timezone = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
-  const dateMoment = moment__WEBPACK_IMPORTED_MODULE_0___default()(dateValue);
+  const dateMoment = external_moment_default()(dateValue);
 
   if (timezone && !isUTCOffset(timezone)) {
-    return dateMoment.tz(timezone);
+    // The ! isUTCOffset() check guarantees that timezone is a string.
+    return dateMoment.tz(
+    /** @type {string} */
+    timezone);
   }
 
   if (timezone && isUTCOffset(timezone)) {
@@ -1708,7 +1768,7 @@ function buildMoment(dateValue) {
     return dateMoment.tz(settings.timezone.string);
   }
 
-  return dateMoment.utcOffset(settings.timezone.offset);
+  return dateMoment.utcOffset(+settings.timezone.offset);
 }
 /**
  * Returns whether a certain UTC offset is valid or not.
@@ -1728,7 +1788,7 @@ function isUTCOffset(offset) {
 }
 
 setupWPTimezone();
-//# sourceMappingURL=index.js.map
+
 }();
 (window.wp = window.wp || {}).date = __webpack_exports__;
 /******/ })()

@@ -54,7 +54,7 @@ class Tribe__Events__Rewrite extends Tribe__Rewrite {
 
 		/**
 		 * Deprecated piece of code, but we need it in place to make sure
-		 * we dont break with older version of Event Tickets.
+		 * we don't break with older version of Event Tickets.
 		 *
 		 * @todo  remove once we have common version compare back working
 		 */
@@ -587,7 +587,9 @@ class Tribe__Events__Rewrite extends Tribe__Rewrite {
 					// Remove leading/trailing slashes to get something like `grand-parent/parent/child`.
 					$category_slug = trim( $category_slug, '/' );
 
-					$dynamic_matchers[ "{$cat_regex}/(?:[^/]+/)*([^/]+)" ] = "{$localized_slug}/{$category_slug}";
+					// Create a capturing and non-capturing version of the taxonomy match.
+					$dynamic_matchers["(?:{$cat_regex})/(?:[^/]+/)*([^/]+)"] = "{$localized_slug}/{$category_slug}";
+					$dynamic_matchers["{$cat_regex}/(?:[^/]+/)*([^/]+)"] = "{$localized_slug}/{$category_slug}";
 				}
 			}
 		}
@@ -637,7 +639,11 @@ class Tribe__Events__Rewrite extends Tribe__Rewrite {
 			return $query_vars;
 		}
 
-		parse_str( parse_url( $url, PHP_URL_QUERY ), $url_query_vars );
+		$query_string   = parse_url( $url, PHP_URL_QUERY );
+		$url_query_vars = [];
+		if ( ! empty( $query_string ) ) {
+			parse_str( $query_string, $url_query_vars );
+		}
 
 		if (
 			! isset( $query_vars['eventDisplay'], $url_query_vars['eventDisplay'] )
@@ -740,7 +746,7 @@ class Tribe__Events__Rewrite extends Tribe__Rewrite {
 
 		$flags           = I18n::COMPILE_STRTOLOWER;
 		$localized_bases = tribe( 'tec.i18n' )
-			->get_i18n_strings_for_domains( $bases, [ $locale ], $domains, $flags );
+			->get_i18n_url_strings_for_domains( $bases, [ $locale ], $domains, $flags );
 
 		$return = array_filter(
 			array_map(

@@ -63,7 +63,6 @@ $data['csstidy']['at_rules'] = array(
 	'import'            => 'iv',
 	'namespace'         => 'iv',
 	'media'             => 'at',
-	'supports'          => 'at',
 	'keyframes'         => 'at',
 	'-moz-keyframes'    => 'at',
 	'-o-keyframes'      => 'at',
@@ -108,6 +107,12 @@ $data['csstidy']['unit_values'] = array(
 	'margin-right',
 	'margin-bottom',
 	'margin-left',
+	'margin-block',
+	'margin-block-start',
+	'margin-block-end',
+	'margin-inline',
+	'margin-inline-start',
+	'margin-inline-end',
 	'max-height',
 	'max-width',
 	'min-height',
@@ -302,7 +307,6 @@ $data['csstidy']['replace_colors']['yellowgreen'] = '#9acd32';
 /**
  * A list of all shorthand properties that are divided into four properties and/or have four subvalues.
  *
- * @TODO Are there new ones in CSS3?
  * @see dissolve_4value_shorthands()
  * @see merge_4value_shorthands()
  */
@@ -311,14 +315,16 @@ $data['csstidy']['shorthands']['border-color'] = array( 'border-top-color', 'bor
 $data['csstidy']['shorthands']['border-style'] = array( 'border-top-style', 'border-right-style', 'border-bottom-style', 'border-left-style' );
 $data['csstidy']['shorthands']['border-width'] = array( 'border-top-width', 'border-right-width', 'border-bottom-width', 'border-left-width' );
 $data['csstidy']['shorthands']['margin'] = array( 'margin-top', 'margin-right', 'margin-bottom', 'margin-left' );
+$data['csstidy']['shorthands']['margin-block'] = array( 'margin-block-start', 'margin-block-end' );
+$data['csstidy']['shorthands']['margin-inline'] = array( 'margin-inline-start', 'margin-inline-end' );
 $data['csstidy']['shorthands']['padding'] = array( 'padding-top', 'padding-right', 'padding-bottom', 'padding-left' );
-$data['csstidy']['shorthands']['-moz-border-radius'] = 0;
 
 /**
  * All CSS Properties.
  *
  * @see CSSTidy::property_is_next()
  */
+$data['csstidy']['all_properties']['accent-color'] = 'CSS3.0';
 $data['csstidy']['all_properties']['align-content'] = 'CSS3.0';
 $data['csstidy']['all_properties']['align-items'] = 'CSS3.0';
 $data['csstidy']['all_properties']['align-self'] = 'CSS3.0';
@@ -334,6 +340,7 @@ $data['csstidy']['all_properties']['animation-name'] = 'CSS3.0';
 $data['csstidy']['all_properties']['animation-play-state'] = 'CSS3.0';
 $data['csstidy']['all_properties']['animation-timing-function'] = 'CSS3.0';
 $data['csstidy']['all_properties']['appearance'] = 'CSS3.0';
+$data['csstidy']['all_properties']['aspect-ratio'] = 'CSS3.0';
 $data['csstidy']['all_properties']['azimuth'] = 'CSS2.0,CSS2.1,CSS3.0';
 $data['csstidy']['all_properties']['backface-visibility'] = 'CSS3.0';
 $data['csstidy']['all_properties']['background'] = 'CSS1.0,CSS2.0,CSS2.1,CSS3.0';
@@ -346,7 +353,6 @@ $data['csstidy']['all_properties']['background-position'] = 'CSS1.0,CSS2.0,CSS2.
 $data['csstidy']['all_properties']['background-repeat'] = 'CSS1.0,CSS2.0,CSS2.1,CSS3.0';
 $data['csstidy']['all_properties']['background-size'] = 'CSS3.0';
 $data['csstidy']['all_properties']['baseline-shift'] = 'CSS3.0';
-$data['csstidy']['all_properties']['binding'] = 'CSS3.0';
 $data['csstidy']['all_properties']['bleed'] = 'CSS3.0';
 $data['csstidy']['all_properties']['bookmark-label'] = 'CSS3.0';
 $data['csstidy']['all_properties']['bookmark-level'] = 'CSS3.0';
@@ -451,6 +457,7 @@ $data['csstidy']['all_properties']['font-stretch'] = 'CSS2.0,CSS3.0';
 $data['csstidy']['all_properties']['font-style'] = 'CSS1.0,CSS2.0,CSS2.1,CSS3.0';
 $data['csstidy']['all_properties']['font-variant'] = 'CSS1.0,CSS2.0,CSS2.1,CSS3.0';
 $data['csstidy']['all_properties']['font-weight'] = 'CSS1.0,CSS2.0,CSS2.1,CSS3.0';
+$data['csstidy']['all_properties']['gap'] = 'CSS3.0';
 $data['csstidy']['all_properties']['grid'] = 'CSS3.0';
 $data['csstidy']['all_properties']['grid-area'] = 'CSS3.0';
 $data['csstidy']['all_properties']['grid-auto-columns'] = 'CSS3.0';
@@ -504,6 +511,12 @@ $data['csstidy']['all_properties']['margin-bottom'] = 'CSS1.0,CSS2.0,CSS2.1,CSS3
 $data['csstidy']['all_properties']['margin-left'] = 'CSS1.0,CSS2.0,CSS2.1,CSS3.0';
 $data['csstidy']['all_properties']['margin-right'] = 'CSS1.0,CSS2.0,CSS2.1,CSS3.0';
 $data['csstidy']['all_properties']['margin-top'] = 'CSS1.0,CSS2.0,CSS2.1,CSS3.0';
+$data['csstidy']['all_properties']['margin-block'] = 'CSS1.0,CSS2.0,CSS2.1,CSS3.0';
+$data['csstidy']['all_properties']['margin-block-start'] = 'CSS1.0,CSS2.0,CSS2.1,CSS3.0';
+$data['csstidy']['all_properties']['margin-block-end'] = 'CSS1.0,CSS2.0,CSS2.1,CSS3.0';
+$data['csstidy']['all_properties']['margin-inline'] = 'CSS1.0,CSS2.0,CSS2.1,CSS3.0';
+$data['csstidy']['all_properties']['margin-inline-start'] = 'CSS1.0,CSS2.0,CSS2.1,CSS3.0';
+$data['csstidy']['all_properties']['margin-inline-end'] = 'CSS1.0,CSS2.0,CSS2.1,CSS3.0';
 $data['csstidy']['all_properties']['marker-offset'] = 'CSS2.0,CSS3.0';
 $data['csstidy']['all_properties']['marks'] = 'CSS2.0,CSS3.0';
 $data['csstidy']['all_properties']['marquee-direction'] = 'CSS3.0';
@@ -637,8 +650,10 @@ $data['csstidy']['all_properties']['text-indent'] = 'CSS1.0,CSS2.0,CSS2.1,CSS3.0
 $data['csstidy']['all_properties']['text-justify'] = 'CSS3.0';
 $data['csstidy']['all_properties']['text-outline'] = 'CSS3.0';
 $data['csstidy']['all_properties']['text-shadow'] = 'CSS2.0,CSS3.0';
+$data['csstidy']['all_properties']['text-size-adjust'] = 'CSS3.0';
 $data['csstidy']['all_properties']['text-space-collapse'] = 'CSS3.0';
 $data['csstidy']['all_properties']['text-transform'] = 'CSS1.0,CSS2.0,CSS2.1,CSS3.0';
+$data['csstidy']['all_properties']['text-underline-offset'] = 'CSS3.0';
 $data['csstidy']['all_properties']['text-underline-position'] = 'CSS3.0';
 $data['csstidy']['all_properties']['text-wrap'] = 'CSS3.0';
 $data['csstidy']['all_properties']['top'] = 'CSS2.0,CSS2.1,CSS3.0';
@@ -669,6 +684,8 @@ $data['csstidy']['all_properties']['word-break'] = 'CSS3.0';
 $data['csstidy']['all_properties']['word-spacing'] = 'CSS1.0,CSS2.0,CSS2.1,CSS3.0';
 $data['csstidy']['all_properties']['word-wrap'] = 'CSS3.0';
 $data['csstidy']['all_properties']['z-index'] = 'CSS2.0,CSS2.1,CSS3.0';
+$data['csstidy']['all_properties']['zoom'] = 'CSS3.0';
+$data['csstidy']['all_properties']['--custom'] = 'CSS3.0'; // Placeholder for custom properties, used in TablePress_CSSTidy::property_is_valid().
 
 /**
  * An array containing all properties that can accept a quoted string as a value.
@@ -686,65 +703,137 @@ $data['csstidy']['multiple_properties'] = array_merge( $data['csstidy']['color_v
  *
  * @see CSSTidy::load_template()
  */
-$data['csstidy']['predefined_templates']['default'][] = '<span class="at">'; //string before @rule
-$data['csstidy']['predefined_templates']['default'][] = '</span> <span class="format">{</span>' . "\n"; //bracket after @-rule
-$data['csstidy']['predefined_templates']['default'][] = '<span class="selector">'; //string before selector
-$data['csstidy']['predefined_templates']['default'][] = '</span> <span class="format">{</span>' . "\n"; //bracket after selector
-$data['csstidy']['predefined_templates']['default'][] = '<span class="property">'; //string before property
-$data['csstidy']['predefined_templates']['default'][] = '</span><span class="value">'; //string after property+before value
-$data['csstidy']['predefined_templates']['default'][] = '</span><span class="format">;</span>' . "\n"; //string after value
-$data['csstidy']['predefined_templates']['default'][] = '<span class="format">}</span>'; //closing bracket - selector
-$data['csstidy']['predefined_templates']['default'][] = "\n\n"; //space between blocks {...}
-$data['csstidy']['predefined_templates']['default'][] = "\n" . '<span class="format">}</span>' . "\n\n"; //closing bracket @-rule
-$data['csstidy']['predefined_templates']['default'][] = ''; //indent in @-rule
-$data['csstidy']['predefined_templates']['default'][] = '<span class="comment">'; // before comment
-$data['csstidy']['predefined_templates']['default'][] = '</span>' . "\n"; // after comment
+$data['csstidy']['predefined_templates']['default'][] = ''; // string before @rule
+$data['csstidy']['predefined_templates']['default'][] = " {\n"; // bracket after @-rule
+$data['csstidy']['predefined_templates']['default'][] = ''; // string before selector
+$data['csstidy']['predefined_templates']['default'][] = " {\n"; // bracket after selector
+$data['csstidy']['predefined_templates']['default'][] = "\t"; // string before property
+$data['csstidy']['predefined_templates']['default'][] = ' '; // string after property+before value
+$data['csstidy']['predefined_templates']['default'][] = ';'; // string after value
+$data['csstidy']['predefined_templates']['default'][] = '}'; // closing bracket - selector
+$data['csstidy']['predefined_templates']['default'][] = "\n\n"; // space between blocks {...}
+$data['csstidy']['predefined_templates']['default'][] = "\n}\n\n"; // closing bracket @-rule
+$data['csstidy']['predefined_templates']['default'][] = "\t"; // indent in @-rule
+$data['csstidy']['predefined_templates']['default'][] = ''; // before comment
+$data['csstidy']['predefined_templates']['default'][] = "\n"; // after comment
 $data['csstidy']['predefined_templates']['default'][] = "\n"; // after each line @-rule
 
-$data['csstidy']['predefined_templates']['high_compression'][] = '<span class="at">';
-$data['csstidy']['predefined_templates']['high_compression'][] = '</span> <span class="format">{</span>' . "\n";
-$data['csstidy']['predefined_templates']['high_compression'][] = '<span class="selector">';
-$data['csstidy']['predefined_templates']['high_compression'][] = '</span><span class="format">{</span>';
-$data['csstidy']['predefined_templates']['high_compression'][] = '<span class="property">';
-$data['csstidy']['predefined_templates']['high_compression'][] = '</span><span class="value">';
-$data['csstidy']['predefined_templates']['high_compression'][] = '</span><span class="format">;</span>';
-$data['csstidy']['predefined_templates']['high_compression'][] = '<span class="format">}</span>';
-$data['csstidy']['predefined_templates']['high_compression'][] = "\n";
-$data['csstidy']['predefined_templates']['high_compression'][] = "\n" . '<span class="format">}' . "\n" . '</span>';
-$data['csstidy']['predefined_templates']['high_compression'][] = '';
-$data['csstidy']['predefined_templates']['high_compression'][] = '<span class="comment">'; // before comment
-$data['csstidy']['predefined_templates']['high_compression'][] = '</span>' . "\n"; // after comment
-$data['csstidy']['predefined_templates']['high_compression'][] = "\n";
+$data['csstidy']['predefined_templates']['low'][] = '<span class="at">';
+$data['csstidy']['predefined_templates']['low'][] = '</span> <span class="format">{</span>' . "\n";
+$data['csstidy']['predefined_templates']['low'][] = '<span class="selector">';
+$data['csstidy']['predefined_templates']['low'][] = '</span>' . "\n" . '<span class="format">{</span>' . "\n";
+$data['csstidy']['predefined_templates']['low'][] = '	<span class="property">';
+$data['csstidy']['predefined_templates']['low'][] = '</span><span class="value">';
+$data['csstidy']['predefined_templates']['low'][] = '</span><span class="format">;</span>' . "\n";
+$data['csstidy']['predefined_templates']['low'][] = '<span class="format">}</span>';
+$data['csstidy']['predefined_templates']['low'][] = "\n\n";
+$data['csstidy']['predefined_templates']['low'][] = "\n" . '<span class="format">}</span>' . "\n\n";
+$data['csstidy']['predefined_templates']['low'][] = '	';
+$data['csstidy']['predefined_templates']['low'][] = '<span class="comment">';
+$data['csstidy']['predefined_templates']['low'][] = "</span>\n";
+$data['csstidy']['predefined_templates']['low'][] = "\n";
 
-$data['csstidy']['predefined_templates']['highest_compression'][] = '<span class="at">';
-$data['csstidy']['predefined_templates']['highest_compression'][] = '</span><span class="format">{</span>';
-$data['csstidy']['predefined_templates']['highest_compression'][] = '<span class="selector">';
-$data['csstidy']['predefined_templates']['highest_compression'][] = '</span><span class="format">{</span>';
-$data['csstidy']['predefined_templates']['highest_compression'][] = '<span class="property">';
-$data['csstidy']['predefined_templates']['highest_compression'][] = '</span><span class="value">';
-$data['csstidy']['predefined_templates']['highest_compression'][] = '</span><span class="format">;</span>';
-$data['csstidy']['predefined_templates']['highest_compression'][] = '<span class="format">}</span>';
-$data['csstidy']['predefined_templates']['highest_compression'][] = '';
-$data['csstidy']['predefined_templates']['highest_compression'][] = '<span class="format">}</span>';
-$data['csstidy']['predefined_templates']['highest_compression'][] = '';
-$data['csstidy']['predefined_templates']['highest_compression'][] = '<span class="comment">'; // before comment
-$data['csstidy']['predefined_templates']['highest_compression'][] = '</span>' . "\n"; // after comment
-$data['csstidy']['predefined_templates']['highest_compression'][] = '';
+$data['csstidy']['predefined_templates']['high'][] = '<span class="at">';
+$data['csstidy']['predefined_templates']['high'][] = '</span> <span class="format">{</span>' . "\n";
+$data['csstidy']['predefined_templates']['high'][] = '<span class="selector">';
+$data['csstidy']['predefined_templates']['high'][] = '</span><span class="format">{</span>';
+$data['csstidy']['predefined_templates']['high'][] = '<span class="property">';
+$data['csstidy']['predefined_templates']['high'][] = '</span><span class="value">';
+$data['csstidy']['predefined_templates']['high'][] = '</span><span class="format">;</span>';
+$data['csstidy']['predefined_templates']['high'][] = '<span class="format">}</span>';
+$data['csstidy']['predefined_templates']['high'][] = "\n";
+$data['csstidy']['predefined_templates']['high'][] = "\n" . '<span class="format">}' . "\n" . '</span>';
+$data['csstidy']['predefined_templates']['high'][] = '';
+$data['csstidy']['predefined_templates']['high'][] = '<span class="comment">';
+$data['csstidy']['predefined_templates']['high'][] = "</span>\n";
+$data['csstidy']['predefined_templates']['high'][] = "\n";
 
-$data['csstidy']['predefined_templates']['low_compression'][] = '<span class="at">';
-$data['csstidy']['predefined_templates']['low_compression'][] = '</span> <span class="format">{</span>' . "\n";
-$data['csstidy']['predefined_templates']['low_compression'][] = '<span class="selector">';
-$data['csstidy']['predefined_templates']['low_compression'][] = '</span>' . "\n" . '<span class="format">{</span>' . "\n";
-$data['csstidy']['predefined_templates']['low_compression'][] = '	<span class="property">';
-$data['csstidy']['predefined_templates']['low_compression'][] = '</span><span class="value">';
-$data['csstidy']['predefined_templates']['low_compression'][] = '</span><span class="format">;</span>' . "\n";
-$data['csstidy']['predefined_templates']['low_compression'][] = '<span class="format">}</span>';
-$data['csstidy']['predefined_templates']['low_compression'][] = "\n\n";
-$data['csstidy']['predefined_templates']['low_compression'][] = "\n" . '<span class="format">}</span>' . "\n\n";
-$data['csstidy']['predefined_templates']['low_compression'][] = '	';
-$data['csstidy']['predefined_templates']['low_compression'][] = '<span class="comment">'; // before comment
-$data['csstidy']['predefined_templates']['low_compression'][] = '</span>' . "\n"; // after comment
-$data['csstidy']['predefined_templates']['low_compression'][] = "\n";
+$data['csstidy']['predefined_templates']['highest'][] = '<span class="at">';
+$data['csstidy']['predefined_templates']['highest'][] = '</span><span class="format">{</span>';
+$data['csstidy']['predefined_templates']['highest'][] = '<span class="selector">';
+$data['csstidy']['predefined_templates']['highest'][] = '</span><span class="format">{</span>';
+$data['csstidy']['predefined_templates']['highest'][] = '<span class="property">';
+$data['csstidy']['predefined_templates']['highest'][] = '</span><span class="value">';
+$data['csstidy']['predefined_templates']['highest'][] = '</span><span class="format">;</span>';
+$data['csstidy']['predefined_templates']['highest'][] = '<span class="format">}</span>';
+$data['csstidy']['predefined_templates']['highest'][] = '';
+$data['csstidy']['predefined_templates']['highest'][] = '<span class="format">}</span>';
+$data['csstidy']['predefined_templates']['highest'][] = '';
+$data['csstidy']['predefined_templates']['highest'][] = '<span class="comment">';
+$data['csstidy']['predefined_templates']['highest'][] = "</span>\n";
+$data['csstidy']['predefined_templates']['highest'][] = '';
 
-// Add TablePress specific modifications.
-require __DIR__ . '/data-tp.inc.php';
+// Support browser prefixes for properties only in the latest CSS draft.
+foreach ( $data['csstidy']['all_properties'] as $property => $levels ) {
+	if ( false === strpos( $levels, ',' ) ) {
+		$data['csstidy']['all_properties'][ '-moz-' . $property ] = $levels;
+		$data['csstidy']['all_properties'][ '-webkit-' . $property ] = $levels;
+		$data['csstidy']['all_properties'][ '-ms-' . $property ] = $levels;
+		$data['csstidy']['all_properties'][ '-o-' . $property ] = $levels;
+
+		if ( in_array( $property, $data['csstidy']['unit_values'] ) ) {
+			$data['csstidy']['unit_values'][] = '-moz-' . $property;
+			$data['csstidy']['unit_values'][] = '-webkit-' . $property;
+			$data['csstidy']['unit_values'][] = '-ms-' . $property;
+			$data['csstidy']['unit_values'][] = '-o-' . $property;
+		}
+
+		if ( in_array( $property, $data['csstidy']['color_values'] ) ) {
+			$data['csstidy']['color_values'][] = '-moz-' . $property;
+			$data['csstidy']['color_values'][] = '-webkit-' . $property;
+			$data['csstidy']['color_values'][] = '-ms-' . $property;
+			$data['csstidy']['color_values'][] = '-o-' . $property;
+		}
+	}
+}
+
+// Allow vendor prefixes for any property that is allowed to be used multiple times inside a single selector.
+foreach ( $data['csstidy']['multiple_properties'] as $property ) {
+	if ( '-' !== $property[0] ) {
+		$data['csstidy']['multiple_properties'][] = '-o-' . $property;
+		$data['csstidy']['multiple_properties'][] = '-ms-' . $property;
+		$data['csstidy']['multiple_properties'][] = '-webkit-' . $property;
+		$data['csstidy']['multiple_properties'][] = '-moz-' . $property;
+	}
+}
+
+/**
+ * Non-standard CSS properties. They're not part of any spec, but we say
+ * they're in all of them so that we can support them.
+ */
+$data['csstidy']['all_properties']['-webkit-user-select'] = 'CSS2.0,CSS2.1,CSS3.0';
+$data['csstidy']['all_properties']['-ms-user-select'] = 'CSS2.0,CSS2.1,CSS3.0';
+$data['csstidy']['all_properties']['user-select'] = 'CSS2.0,CSS2.1,CSS3.0';
+$data['csstidy']['all_properties']['-webkit-filter'] = 'CSS2.0,CSS2.1,CSS3.0';
+$data['csstidy']['all_properties']['-moz-filter'] = 'CSS2.0,CSS2.1,CSS3.0';
+$data['csstidy']['all_properties']['-ms-filter'] = 'CSS2.0,CSS2.1,CSS3.0';
+$data['csstidy']['all_properties']['filter'] = 'CSS2.0,CSS2.1,CSS3.0';
+$data['csstidy']['all_properties']['scrollbar-face-color'] = 'CSS2.0,CSS2.1,CSS3.0';
+$data['csstidy']['all_properties']['-ms-interpolation-mode'] = 'CSS2.0,CSS2.1,CSS3.0';
+$data['csstidy']['all_properties']['text-rendering'] = 'CSS2.0,CSS2.1,CSS3.0';
+$data['csstidy']['all_properties']['-webkit-transform-origin-x'] = 'CSS3.0';
+$data['csstidy']['all_properties']['-webkit-transform-origin-y'] = 'CSS3.0';
+$data['csstidy']['all_properties']['-webkit-transform-origin-z'] = 'CSS3.0';
+$data['csstidy']['all_properties']['-webkit-font-smoothing'] = 'CSS3.0';
+$data['csstidy']['all_properties']['-moz-osx-font-smoothing'] = 'CSS3.0';
+$data['csstidy']['all_properties']['-font-smooth'] = 'CSS3.0';
+$data['csstidy']['all_properties']['text-overflow'] = 'CSS3.0';
+$data['csstidy']['all_properties']['-o-text-overflow'] = 'CSS3.0';
+$data['csstidy']['all_properties']['-ms-touch-action'] = 'CSS3.0';
+$data['csstidy']['all_properties']['-webkit-overflow-scrolling'] = 'CSS3.0';
+$data['csstidy']['all_properties']['pointer-events'] = 'CSS3.0';
+$data['csstidy']['all_properties']['font-feature-settings'] = 'CSS3.0';
+$data['csstidy']['all_properties']['font-kerning'] = 'CSS3.0';
+$data['csstidy']['all_properties']['font-language-override'] = 'CSS3.0';
+$data['csstidy']['all_properties']['font-synthesis'] = 'CSS3.0';
+$data['csstidy']['all_properties']['font-variant-alternates'] = 'CSS3.0';
+$data['csstidy']['all_properties']['font-variant-caps'] = 'CSS3.0';
+$data['csstidy']['all_properties']['font-variant-east-asian'] = 'CSS3.0';
+$data['csstidy']['all_properties']['font-variant-ligatures'] = 'CSS3.0';
+$data['csstidy']['all_properties']['font-variant-numeric'] = 'CSS3.0';
+$data['csstidy']['all_properties']['font-variant-position'] = 'CSS3.0';
+$data['csstidy']['all_properties']['font-variation-settings'] = 'CSS3.0';
+$data['csstidy']['all_properties']['line-height-step'] = 'CSS3.0';
+$data['csstidy']['all_properties']['-webkit-text-fill-color'] = 'CSS3.0';
+
+return $data;

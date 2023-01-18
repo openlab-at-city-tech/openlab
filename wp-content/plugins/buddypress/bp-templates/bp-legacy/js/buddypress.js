@@ -1,6 +1,6 @@
 /* jshint undef: false, unused:false */
 /* @version 1.7.0 */
-/* @version 8.0.0 */
+/* @version 10.0.0 */
 // AJAX Functions
 var jq = jQuery;
 
@@ -557,6 +557,16 @@ jq( function() {
 			c_id = target.attr('href').substr( 10, target.attr('href').length );
 			form = jq( '#ac-form-' + a_id );
 
+			if ( ! form.length ) {
+				var viewDiscussionLink = target.closest( 'li.activity' ).find( '.activity-meta a.view' ).prop( 'href' );
+
+				if ( viewDiscussionLink ) {
+					window.location.href = viewDiscussionLink;
+				}
+
+				return false;
+			}
+
 			form.css( 'display', 'none' );
 			form.removeClass('root');
 			jq('.ac-form').hide();
@@ -671,8 +681,9 @@ jq( function() {
 		/* Deleting an activity comment */
 		if ( target.hasClass('acomment-delete') ) {
 			link_href = target.attr('href');
-			comment_li = target.parent().parent();
-			form = comment_li.parents('div.activity-comments').children('form');
+			comment_li = target.closest( 'li' );
+
+			form = comment_li.find( 'form.ac-form' );
 
 			nonce = link_href.split('_wpnonce=');
 			nonce = nonce[1];
@@ -687,7 +698,9 @@ jq( function() {
 			jq('.activity-comments ul .error').remove();
 
 			/* Reset the form position */
-			comment_li.parents('.activity-comments').append(form);
+			if ( form && form.length ) {
+				comment_li.closest( '.activity-comments' ).append( form );
+			}
 
 			jq.post( ajaxurl, {
 				action: 'delete_activity_comment',
@@ -2009,8 +2022,8 @@ function bp_legacy_theme_hide_comments() {
 		comment_lis = jq(this).children('ul').children('li');
 		comment_count = ' ';
 
-		if ( jq('#' + parent_li.attr('id') + ' li').length ) {
-			comment_count = jq('#' + parent_li.attr('id') + ' li').length;
+		if ( jq('#' + parent_li.attr('id') + ' li[id*="acomment-"]').length ) {
+			comment_count = jq('#' + parent_li.attr('id') + ' li[id*="acomment-"]').length;
 		}
 
 		comment_lis.each( function(i) {

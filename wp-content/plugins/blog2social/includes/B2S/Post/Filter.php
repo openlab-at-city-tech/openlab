@@ -16,7 +16,7 @@ class B2S_Post_Filter {
     protected $searchPostSharedById;
     protected $postAuthor;
 
-    function __construct($type, $title = "", $authorId = 0, $postStatus = "", $schedDate = "", $postCat = "", $postType = "", $postShareStatus="", $postsPerPage = 15, $sharedById = 0, $sharedToNetwork = 0) {  //type=all,publish,sched
+    function __construct($type, $title = "", $authorId = 0, $postStatus = "", $schedDate = "", $postCat = "", $postType = "", $postShareStatus="", $postsPerPage = 25, $sharedById = 0, $sharedToNetwork = 0) {  //type=all,publish,sched
         require_once(B2S_PLUGIN_DIR . 'includes/Options.php');
         $options = new B2S_Options((int) B2S_PLUGIN_BLOG_USER_ID);
         $optionPostFilters = $options->_getOption('post_filters');
@@ -29,7 +29,7 @@ class B2S_Post_Filter {
         $this->searchSchedDate = (empty($schedDate) && isset($optionPostFilters['searchSchedDate'])) ? $optionPostFilters['searchSchedDate'] : $schedDate;
         $this->searchPostCat = (empty($postCat) && isset($optionPostFilters['searchPostCat'])) ? $optionPostFilters['searchPostCat'] : $postCat;
         $this->searchPostType = (empty($postType) && isset($optionPostFilters['searchPostType'])) ? $optionPostFilters['searchPostType'] : $postType;
-        $this->postsPerPage = ((int)$postsPerPage != 15 && isset($optionPostFilters['postsPerPage']) && (int)$optionPostFilters['postsPerPage'] > 0) ? (int)$optionPostFilters['searchAuthorId'] : (int)$postsPerPage;
+        $this->postsPerPage = (isset($optionPostFilters['postsPerPage']) && (int)$optionPostFilters['postsPerPage'] > 0) ? (int)$optionPostFilters['postsPerPage'] : (int)$postsPerPage;
         $this->searchPostSharedById = ((int)$sharedById == 0 && isset($optionPostFilters['searchPostSharedById']) && (int)$optionPostFilters['searchPostSharedById'] > 0) ? (int)$optionPostFilters['searchPostSharedById'] : (int)$sharedById;
         $this->searchSharedToNetwork = ((int)$sharedToNetwork == 0 && isset($optionPostFilters['searchSharedToNetwork']) && (int)$optionPostFilters['searchSharedToNetwork'] > 0) ? (int)$optionPostFilters['searchSharedToNetwork'] : (int)$sharedToNetwork;
     }
@@ -161,7 +161,7 @@ class B2S_Post_Filter {
     }
     
     private function getPostPerPageHtml() {
-        return '<input type="hidden" id="b2sPostsPerPage" name="b2sPostsPerPage" value="25">';
+        return '<input type="hidden" id="b2sPostsPerPage" name="b2sPostsPerPage" value="'.$this->postsPerPage.'">';
     }
     
     private function getPostSharedByHtml() {
@@ -184,7 +184,7 @@ class B2S_Post_Filter {
         $networks = unserialize(B2S_PLUGIN_NETWORK);
         foreach ($networks as $var) {
             $networkId = array_search($var, $networks);
-            if(in_array($networkId, array(1, 2, 3, 4, 12, 6, 18, 19, 17, 16, 11, 14, 7, 9, 15, 24))) {
+            if(in_array($networkId, array(1, 2, 3, 4, 12, 6, 18, 19, 17, 16, 11, 14, 7, 9, 15, 24, 25, 26, 27))) {
                 $selected = ($networkId == (int) $this->searchSharedToNetwork) ? 'selected' : '';
                 $autor .= '<option ' . $selected . ' value="' . esc_attr($networkId) . '">' . esc_html($var) . '</option>';
             }

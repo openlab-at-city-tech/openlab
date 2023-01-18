@@ -19,6 +19,7 @@
  * @var string $random_widget_cache_ttl_field
  * @var string $slug_field
  * @var string $update_legacy_featured_images_field
+ * @var string $dynamic_image_filename_separator_use_dash
  */
 ?>
 <table>
@@ -117,4 +118,6 @@
     <?php print $disable_fontawesome_field; ?>
 
     <?php print $disable_ngg_tags_page_field; ?>
+
+    <?php print $dynamic_image_filename_separator_use_dash; ?>
 </table>

@@ -2,8 +2,8 @@
 Contributors: photocrati, imagely
 Tags: wordpress gallery plugin, gallery, nextgen, nextgen gallery, photo gallery, image gallery, photography, slideshow, images, photo, photo album, watermark
 Requires at least: 5.5.4
-Stable tag: 3.18
-Tested up to: 5.8
+Stable tag: 3.30
+Tested up to: 6.0.2
 License: GPLv3
 Requires PHP: 5.6
 
@@ -179,7 +179,47 @@ For more information, feel free to visit the official website for the NextGEN Ga
 
 == Changelog ==
 
-= V3.18  - 12.08.2021
+= V3.30  - 10.05.2022 =
+* Fixed:   Rotating images was broken for some users after the last release.
+
+= V3.29  - 09.28.2022 =
+* Fixed:   Added nonce verification to some legacy XHR handlers.
+
+= V3.28  - 07.20.2022 =
+* NEW:     Added NGG_DISABLE_IMAGICK constant to disable use of ImageMagick.
+
+= V3.27  - 05.25.2022 =
+* Fixed:   A possible PHP warning in the third party compatibility warning.
+* Fixed:   PHP 8 may emit a warning in the taxonomy controller when viewing the site frontpage while no posts or pages exist.
+* Fixed:   ThickBox's loadingAnimation.gif and tb-close.png URL were incorrect.
+
+= V3.25  - 04.27.2022 =
+* Fixed:   A change in NextGEN 3.23 broke albums pagination.
+* Fixed:   Compatibility with TinyMCE editor used by Advanced Custom Fields.
+* Fixed:   Insert Gallery Window popup failed to load when Elementor is active.
+
+= V3.24  - 03.23.2022 =
+* Fixed:   A possible PHP warning could be generated if the global $post->content is an integer or boolean.
+* Fixed:   Activating NextGEN for the first time generated a PHP warning when registering default settings.
+* Fixed:   NextGEN widgets JS/CSS was enqueued on all frontend pages.
+* Fixed:   Some errors generated while image uploading were not being displayed to the user.
+
+= V3.23  - 02.09.2022 =
+* Fixed:   A potential PHP fatal error in C_Photocrati_Transient_Manager when using external object caching.
+* Fixed:   Manage Gallery page could create a javascript error if the page loads quickly enough.
+* Fixed:   Sorting images order was broken by WordPress 5.9
+* Changed: Google Fonts is no longer used for fonts loaded in the admin.
+
+= V3.22  - 01.20.2022 =
+* Fixed:   When viewing certain images NextGEN was using nggdb::get_unique_slug() on each viewing.
+
+= V3.21  - 01.19.2022 =
+* NEW:     Introducing constant NGG_DISABLE_PHOTOCRATI_CACHE_TRACKER which tracks all NGG transients when using an external object cache.
+* NEW:     Adding an option to separate generated images with dashes instead of underscores for better SEO.
+* Changed: Removed the "Custom styles" feature which was deprecated in December of 2020.
+* Fixed:   PHP 8.1 warnings of deprecations.
+
+= V3.18  - 12.08.2021 =
 * NEW:     Added a constant "NGG_DISABLE_SHORTCODE_MANAGER" to disable content protection workarounds that can be a source of incompatibility itself.
 * NEW:     Added notice to users that ctypes methods are required by NextGEN Gallery.
 * Fixed:   Compatibility with EditorsKit invalidating NextGEN Gallery blocks.
@@ -187,48 +227,48 @@ For more information, feel free to visit the official website for the NextGEN Ga
 * Fixed:   PHP warnings about undefined array key access when using the XMLRPC API (Lightroom)
 * Fixed:   Searching for images on Manage Galleries could result in duplicates.
 
-= V3.17  - 09.15.2021
+= V3.17  - 09.15.2021 =
 * Fixed:   NGG 3.16 created a problem with the Manage Gallery page's Edit Thumbnail, Rotate Image, and View Meta popups
 
-= V3.16  - 09.08.2021
+= V3.16  - 09.08.2021 =
 * Fixed:   Links on "Extensions" page were incorrect
 * Fixed:   Incompatibility with WP User Manager caused Manage Gallery bulk actions to be unusable
 * Fixed:   Images that failed to upload would be treated as a success in the UI if the server HTTP response code is 200
 * Changed: Removed the "Ambassadors" tab from the Overview page
 
-= V3.15  - 08.23.2021
+= V3.15  - 08.23.2021 =
 * Fixed:   A warning was generated on every request for users of PHP 5.6
 
-= V3.14  - 08.18.2021
+= V3.14  - 08.18.2021 =
 * NEW:     Added support for unanimated WebP images
 * Fixed:   PHP warning was generated when enqueueing frontend resources
 * Fixed:   "Scan folder for new images" was failing with PHP 8+
 
-= V3.13  - 08.04.2021
+= V3.13  - 08.04.2021 =
 * Fixed:   All WP-Admin links had "/wp-admin/" removed for some users
 
-= V3.12  - 07.13.2021
+= V3.12  - 07.13.2021 =
 * Fixed:   PHP warning generated for some Nimble Builder users
 * Changed: Added 'ngg_marketing_parameters' filter
 
-= V3.11  - 05.26.2021
+= V3.11  - 05.26.2021 =
 * Fixed:   Now compatible with NimbleBuilder
 * Fixed:   Importing images from the Media Library was broken due to a z-index issue
 
-= V3.10  - 05.19.2021
+= V3.10  - 05.19.2021 =
 * NEW:     Added option under Misc Options to disable the /ngg_tag/ page feature
 * Fixed:   Misc performance improvements to NGG 3.9.0
 * Fixed:   Opening the rotate-image dialog a second time could show the incorrect image
 * Fixed:   Paginated galleries on paginated WP posts linked to the incorrect URL
 * Fixed:   Widgets were not rendering correctly with some third party page builders
 
-= V3.9.3 - 04.20.2021
+= V3.9.3 - 04.20.2021 =
 * Changed: Updated uppy.js
 * Fixed:   Conflict with Avada builder
 * Fixed:   ACG fields cannot be toggled
 * Fixed:   Activation issues with NextGEN Starter
 
-= V3.9.2 - 04.07.2021
+= V3.9.2 - 04.07.2021 =
 * Fixed:   call_user_func() warning when rendering shortcodes in widgets (1168)
 * Fixed:   do_shortcode and legacy shortcodes (1170)
 * Fixed:   Incorrect use of wp_localize_script (1171)

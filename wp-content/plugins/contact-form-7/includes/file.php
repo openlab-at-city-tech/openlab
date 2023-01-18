@@ -33,34 +33,15 @@ function wpcf7_unship_uploaded_file( $file, $args = '' ) {
 		}
 	}
 
-	if ( $args['required'] and ! array_filter( $tmp_names ) ) {
-		return new WP_Error( 'wpcf7_invalid_required',
-			wpcf7_get_message( 'invalid_required' )
-		);
-	}
+	if ( isset( $args['schema'] ) and isset( $args['name'] ) ) {
+		$result = $args['schema']->validate( array(
+			'file' => true,
+			'field' => $args['name'],
+		) );
 
-	// File type validation
-	$file_type_pattern = wpcf7_acceptable_filetypes(
-		$args['filetypes'], 'regex'
-	);
-
-	$file_type_pattern = '/\.(' . $file_type_pattern . ')$/i';
-
-	foreach ( $names as $name ) {
-		if ( ! empty( $name ) and ! preg_match( $file_type_pattern, $name ) ) {
-			return new WP_Error( 'wpcf7_upload_file_type_invalid',
-				wpcf7_get_message( 'upload_file_type_invalid' )
-			);
+		if ( is_wp_error( $result ) ) {
+			return $result;
 		}
-	}
-
-	// File size validation
-	$total_size = array_sum( $sizes );
-
-	if ( $args['limit'] < $total_size ) {
-		return new WP_Error( 'wpcf7_upload_file_too_large',
-			wpcf7_get_message( 'upload_file_too_large' )
-		);
 	}
 
 	// Move uploaded file to tmp dir
@@ -117,23 +98,23 @@ function wpcf7_file_messages( $messages ) {
 	return array_merge( $messages, array(
 		'upload_failed' => array(
 			'description' => __( "Uploading a file fails for any reason", 'contact-form-7' ),
-			'default' => __( "There was an unknown error uploading the file.", 'contact-form-7' )
+			'default' => __( "There was an unknown error uploading the file.", 'contact-form-7' ),
 		),
 
 		'upload_file_type_invalid' => array(
 			'description' => __( "Uploaded file is not allowed for file type", 'contact-form-7' ),
-			'default' => __( "You are not allowed to upload files of this type.", 'contact-form-7' )
+			'default' => __( "You are not allowed to upload files of this type.", 'contact-form-7' ),
 		),
 
 		'upload_file_too_large' => array(
 			'description' => __( "Uploaded file is too large", 'contact-form-7' ),
-			'default' => __( "The file is too big.", 'contact-form-7' )
+			'default' => __( "The uploaded file is too large.", 'contact-form-7' ),
 		),
 
 		'upload_failed_php_error' => array(
 			'description' => __( "Uploading a file fails for PHP error", 'contact-form-7' ),
-			'default' => __( "There was an error uploading the file.", 'contact-form-7' )
-		)
+			'default' => __( "There was an error uploading the file.", 'contact-form-7' ),
+		),
 	) );
 }
 
@@ -162,6 +143,37 @@ function wpcf7_file_form_enctype_filter( $enctype ) {
 
 
 /**
+ * Converts a MIME type string to an array of corresponding file extensions.
+ *
+ * @param string $mime MIME type.
+ *                     Wildcard (*) is available for the subtype part.
+ * @return array Corresponding file extensions.
+ */
+function wpcf7_convert_mime_to_ext( $mime ) {
+	static $mime_types = array();
+
+	$mime_types = wp_get_mime_types();
+
+	$results = array();
+
+	if ( preg_match( '%^([a-z]+)/([*]|[a-z0-9.+-]+)$%i', $mime, $matches ) ) {
+		foreach ( $mime_types as $key => $val ) {
+			if ( '*' === $matches[2] and str_starts_with( $val, $matches[1] . '/' )
+		 	or $val === $matches[0] ) {
+				$results = array_merge( $results, explode( '|', $key ) );
+			}
+		}
+	}
+
+	$results = array_unique( $results );
+	$results = array_filter( $results );
+	$results = array_values( $results );
+
+	return $results;
+}
+
+
+/**
  * Returns a formatted list of acceptable filetypes.
  *
  * @param string|array $types Optional. Array of filetypes.
@@ -169,70 +181,67 @@ function wpcf7_file_form_enctype_filter( $enctype ) {
  * @return string Formatted list of acceptable filetypes.
  */
 function wpcf7_acceptable_filetypes( $types = 'default', $format = 'regex' ) {
-	if ( 'default' === $types
-	or empty( $types ) ) {
+	if ( 'default' === $types or empty( $types ) ) {
 		$types = array(
-			'jpg',
-			'jpeg',
-			'png',
-			'gif',
-			'pdf',
-			'doc',
-			'docx',
-			'ppt',
-			'pptx',
-			'odt',
-			'avi',
-			'ogg',
-			'm4a',
-			'mov',
-			'mp3',
-			'mp4',
-			'mpg',
-			'wav',
-			'wmv',
+			'audio/*',
+			'video/*',
+			'image/*',
 		);
 	} else {
-		$types_tmp = (array) $types;
-		$types = array();
-
-		foreach ( $types_tmp as $val ) {
-			if ( is_string( $val ) ) {
-				$val = preg_split( '/[\s|,]+/', $val );
-			}
-
-			$types = array_merge( $types, (array) $val );
-		}
-	}
-
-	$types = array_unique( array_filter( $types ) );
-
-	$output = '';
-
-	foreach ( $types as $type ) {
-		$type = trim( $type, ' ,.|' );
-
-		$type = str_replace(
-			array( '.', '+', '*', '?' ),
-			array( '\.', '\+', '\*', '\?' ),
-			$type
+		$types = array_map(
+			function ( $type ) {
+				if ( is_string( $type ) ) {
+					return preg_split( '/[\s|,]+/', strtolower( $type ) );
+				}
+			},
+			(array) $types
 		);
 
-		if ( '' === $type ) {
-			continue;
-		}
-
-		if ( 'attr' === $format
-		or 'attribute' === $format ) {
-			$output .= sprintf( '.%s', $type );
-			$output .= ',';
-		} else {
-			$output .= $type;
-			$output .= '|';
-		}
+		$types = wpcf7_array_flatten( $types );
+		$types = array_filter( array_unique( $types ) );
 	}
 
-	return trim( $output, ' ,|' );
+	if ( 'attr' === $format or 'attribute' === $format ) {
+		$types = array_map(
+			function ( $type ) {
+				if ( false === strpos( $type, '/' ) ) {
+					return sprintf( '.%s', trim( $type, '.' ) );
+				} elseif ( preg_match( '%^([a-z]+)/[*]$%i', $type, $matches ) ) {
+					if ( in_array( $matches[1], array( 'audio', 'video', 'image' ) ) ) {
+						return $type;
+					} else {
+						return '';
+					}
+				} elseif ( wpcf7_convert_mime_to_ext( $type ) ) {
+					return $type;
+				}
+			},
+			$types
+		);
+
+		$types = array_filter( $types );
+
+		return implode( ',', $types );
+
+	} elseif ( 'regex' === $format ) {
+		$types = array_map(
+			function ( $type ) {
+				if ( false === strpos( $type, '/' ) ) {
+					return preg_quote( trim( $type, '.' ) );
+				} elseif ( $type = wpcf7_convert_mime_to_ext( $type ) ) {
+					return $type;
+				}
+			},
+			$types
+		);
+
+		$types = wpcf7_array_flatten( $types );
+		$types = array_filter( array_unique( $types ) );
+
+		return implode( '|', $types );
+	}
+
+	return '';
 }
 
 
@@ -251,9 +260,28 @@ function wpcf7_init_uploads() {
 	if ( is_dir( $dir ) and is_writable( $dir ) ) {
 		$htaccess_file = path_join( $dir, '.htaccess' );
 
-		if ( ! file_exists( $htaccess_file )
-		and $handle = @fopen( $htaccess_file, 'w' ) ) {
-			fwrite( $handle, "Deny from all\n" );
+		if ( file_exists( $htaccess_file ) ) {
+			list( $first_line_comment ) = (array) file(
+				$htaccess_file,
+				FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES
+			);
+
+			if ( '# Apache 2.4+' === $first_line_comment ) {
+				return;
+			}
+		}
+
+		if ( $handle = @fopen( $htaccess_file, 'w' ) ) {
+			fwrite( $handle, "# Apache 2.4+\n" );
+			fwrite( $handle, "<IfModule authz_core_module>\n" );
+			fwrite( $handle, "    Require all denied\n" );
+			fwrite( $handle, "</IfModule>\n" );
+			fwrite( $handle, "\n" );
+			fwrite( $handle, "# Apache 2.2\n" );
+			fwrite( $handle, "<IfModule !authz_core_module>\n" );
+			fwrite( $handle, "    Deny from all\n" );
+			fwrite( $handle, "</IfModule>\n" );
+
 			fclose( $handle );
 		}
 	}
@@ -303,7 +331,7 @@ function wpcf7_upload_tmp_dir() {
 
 
 add_action(
-	'template_redirect',
+	'shutdown',
 	'wpcf7_cleanup_upload_files',
 	20, 0
 );
@@ -316,14 +344,6 @@ add_action(
  *                 Default 100.
  */
 function wpcf7_cleanup_upload_files( $seconds = 60, $max = 100 ) {
-	if ( is_admin()
-	or 'GET' != $_SERVER['REQUEST_METHOD']
-	or is_robots()
-	or is_feed()
-	or is_trackback() ) {
-		return;
-	}
-
 	$dir = trailingslashit( wpcf7_upload_tmp_dir() );
 
 	if ( ! is_dir( $dir )

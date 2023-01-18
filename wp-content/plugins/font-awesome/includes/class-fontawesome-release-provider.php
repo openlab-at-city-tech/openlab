@@ -121,12 +121,29 @@ class FontAwesome_Release_Provider {
 	 * @throws ReleaseMetadataMissingException
 	 */
 	private function __construct() {
-		$option_value = get_option( self::OPTIONS_KEY );
+		$option_value = self::get_option();
 
 		if ( $option_value ) {
-			$this->releases       = $option_value['data']['releases'];
-			$this->refreshed_at   = $option_value['refreshed_at'];
-			$this->latest_version = $option_value['data']['latest'];
+			$this->releases     = $option_value['data']['releases'];
+			$this->refreshed_at = $option_value['refreshed_at'];
+
+			/**
+			 * Gracefully handle the upgrade scenario from plugin version 4.1.1 where
+			 * there was a "latest", referring to the latest 5.x, but not yet
+			 * keys for "latest_version_5" and "latest_version_6".
+			 */
+			$latest_version_5 = isset( $option_value['data']['latest_version_5'] )
+				? $option_value['data']['latest_version_5']
+				: ( isset( $option_value['data']['latest'] )
+					? $option_value['data']['latest']
+					: null
+				);
+
+			$this->latest_version_5 = $latest_version_5;
+
+			$this->latest_version_6 = isset( $option_value['data']['latest_version_6'] )
+				? $option_value['data']['latest_version_6']
+				: null;
 		} else {
 			throw new ReleaseMetadataMissingException();
 		}
@@ -147,7 +164,10 @@ class FontAwesome_Release_Provider {
 	public static function load_releases() {
 		$query = <<< EOD
 query {
-	latest: release(version: "latest") {
+	latest_version_5: release(version: "5.x") {
+		version
+	}
+	latest_version_6: release(version: "6.x") {
 		version
 	}
 	releases {
@@ -185,22 +205,28 @@ EOD;
 			);
 		}
 
-		$refreshed_at   = time();
-		$latest_version = isset( $body['data']['latest']['version'] ) ? $body['data']['latest']['version'] : null;
+		$refreshed_at     = time();
+		$latest_version_5 = isset( $body['data']['latest_version_5']['version'] ) ? $body['data']['latest_version_5']['version'] : null;
+		$latest_version_6 = isset( $body['data']['latest_version_6']['version'] ) ? $body['data']['latest_version_6']['version'] : null;
 
-		if ( is_null( $latest_version ) ) {
-			throw ApiResponseException::with_wp_error( new WP_Error( 'missing_latest_version' ) );
+		if ( is_null( $latest_version_5 ) ) {
+			throw ApiResponseException::with_wp_error( new WP_Error( 'missing_latest_version_5' ) );
+		}
+
+		if ( is_null( $latest_version_6 ) ) {
+			throw ApiResponseException::with_wp_error( new WP_Error( 'missing_latest_version_6' ) );
 		}
 
 		$option_value = array(
 			'refreshed_at' => $refreshed_at,
 			'data'         => array(
-				'latest'   => $latest_version,
-				'releases' => $releases,
+				'latest_version_5' => $latest_version_5,
+				'latest_version_6' => $latest_version_6,
+				'releases'         => $releases,
 			),
 		);
 
-		update_option( self::OPTIONS_KEY, $option_value, false );
+		self::update_option( $option_value );
 	}
 
 	/**
@@ -332,7 +358,7 @@ EOD;
 		}
 
 		// If this is the same query as last time, then our LAST_USED_RELEASE_TRANSIENT should be current.
-		$last_used_transient = get_site_transient( self::LAST_USED_RELEASE_TRANSIENT );
+		$last_used_transient = self::get_last_used_release();
 
 		if ( $last_used_transient ) {
 			// For simplicity, we're require that it's exactly what we're looking for, else we'll re-build and overwrite it.
@@ -373,24 +399,141 @@ EOD;
 			'resources'         => $resources,
 		);
 
-		set_site_transient( self::LAST_USED_RELEASE_TRANSIENT, $transient_value, self::LAST_USED_RELEASE_TRANSIENT_EXPIRY );
+		self::update_last_used_release( $transient_value );
 
 		return new FontAwesome_ResourceCollection( $version, $resources );
 	}
 
 	/**
-	 * Returns a version number corresponding to the most recent minor release.
+	 * Returns a version number corresponding to the most recent minor release
+	 * in the 5.x line.
 	 *
-	 * Internal use only. Clients should use the FontAwesome::latest_version()
-	 * public API method instead.
+	 * Internal use only. Clients should use the FontAwesome::latest_version_5()
+	 * or FontAwesome::latest_version_6() public API methods instead.
 	 *
 	 * @internal
 	 * @ignore
-	 * @return string|null most recent major.minor.patch version or null if there's
+	 * @deprecated
+	 * @return string|null most recent major.minor.patch 5.x version or null if there's
 	 *   not yet been a successful query to the API server for releases metadata.
 	 */
 	public function latest_version() {
-		return $this->latest_version;
+		return $this->latest_version_5;
+	}
+
+	/**
+	 * Returns a version number corresponding to the most recent minor release
+	 * in the 5.x line.
+	 *
+	 * Internal use only. Clients should use the FontAwesome::latest_version_5()
+	 * public API methods instead.
+	 *
+	 * @internal
+	 * @ignore
+	 * @deprecated
+	 * @return string|null most recent major.minor.patch 5.x version or null if there's
+	 *   not yet been a successful query to the API server for releases metadata.
+	 */
+	public function latest_version_5() {
+		return $this->latest_version_5;
+	}
+
+	/**
+	 * Returns a version number corresponding to the most recent minor release
+	 * in the 6.x line.
+	 *
+	 * Internal use only. Clients should use the FontAwesome::latest_version_6()
+	 * public API methods instead.
+	 *
+	 * @internal
+	 * @ignore
+	 * @deprecated
+	 * @return string|null most recent major.minor.patch 6.x version or null if there's
+	 *   not yet been a successful query to the API server for releases metadata.
+	 */
+	public function latest_version_6() {
+		return $this->latest_version_6;
+	}
+
+	/**
+	 * In multisite mode, we will store the releases metadata just once for the
+	 * whole network in a network option.
+	 *
+	 * Internal use only, not part of this plugin's public API.
+	 *
+	 * @internal
+	 * @ignore
+	 */
+	public static function update_option( $option_value ) {
+		if ( is_multisite() ) {
+			$network_id = get_current_network_id();
+			return update_network_option( $network_id, self::OPTIONS_KEY, $option_value );
+		} else {
+			return update_option( self::OPTIONS_KEY, $option_value, false );
+		}
+	}
+
+	/**
+	 * In multisite mode, we will store the releases metadata just once for the
+	 * whole network in a network option.
+	 *
+	 * Internal use only, not part of this plugin's public API.
+	 *
+	 * @internal
+	 * @ignore
+	 */
+	public static function get_option() {
+		if ( is_multisite() ) {
+			$network_id = get_current_network_id();
+			return get_network_option( $network_id, self::OPTIONS_KEY );
+		} else {
+			return get_option( self::OPTIONS_KEY );
+		}
+	}
+
+	/**
+	 * Internal use only, not part of this plugin's public API.
+	 *
+	 * @internal
+	 * @ignore
+	 */
+	public static function delete_option() {
+		if ( is_multisite() ) {
+			$network_id = get_current_network_id();
+			return delete_network_option( $network_id, self::OPTIONS_KEY );
+		} else {
+			return delete_option( self::OPTIONS_KEY );
+		}
+	}
+
+	/**
+	 * Internal use only, not part of this plugin's public API.
+	 *
+	 * @internal
+	 * @ignore
+	 */
+	public static function get_last_used_release() {
+		return get_transient( self::LAST_USED_RELEASE_TRANSIENT );
+	}
+
+	/**
+	 * Internal use only, not part of this plugin's public API.
+	 *
+	 * @internal
+	 * @ignore
+	 */
+	public static function update_last_used_release( $transient_value ) {
+		return set_transient( self::LAST_USED_RELEASE_TRANSIENT, $transient_value, self::LAST_USED_RELEASE_TRANSIENT_EXPIRY );
+	}
+
+	/**
+	 * Internal use only, not part of this plugin's public API.
+	 *
+	 * @internal
+	 * @ignore
+	 */
+	public static function delete_last_used_release() {
+		return delete_transient( self::LAST_USED_RELEASE_TRANSIENT );
 	}
 }
 

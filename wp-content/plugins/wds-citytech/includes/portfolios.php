@@ -153,15 +153,13 @@ function openlab_get_portfolio_label( $args = array() ) {
 	}
 
 	if ( empty( $r['user_type'] ) ) {
-		$r['user_type'] = xprofile_get_field_data( 'Account Type', $r['user_id'] );
+		$r['user_type'] = openlab_get_user_member_type( $r['user_id'] );
 	}
 
 	// Sanitize
 	if ( ! in_array( strtolower( $r['user_type'] ), array( 'student', 'staff', 'faculty' ) ) ) {
 		$r['user_type'] = 'student';
 	}
-
-	$r['user_type'] = strtolower( $r['user_type'] );
 
 	if ( 'student' == $r['user_type'] ) {
 		$label = 'ePortfolio';
@@ -288,7 +286,7 @@ function openlab_get_group_member_portfolios( $group_id = false, $sort_by = 'dis
 			$portfolio = array(
 				'user_id'           => $member->ID,
 				'user_display_name' => $member->display_name,
-				'user_type'         => xprofile_get_field_data( 'Account Type', $member->ID ),
+				'user_type'         => openlab_get_user_member_type( $member->ID ),
 				'portfolio_id'      => $portfolio_id,
 				'portfolio_url'     => $portfolio_url,
 				'portfolio_title'   => $portfolio_title,
@@ -535,7 +533,7 @@ function openlab_portfolio_list_group_display() {
 
 		<ul class="group-member-portfolio-list sidebar-sublinks inline-element-list group-data-list">
 		<?php foreach ( $portfolio_data as $pdata ) : ?>
-			<?php $display_string = isset( $pdata['user_type'] ) && in_array( $pdata['user_type'], array( 'Faculty', 'Staff' ) ) ? '%s&#8217;s Portfolio' : '%s&#8217;s ePortfolio'; ?>
+			<?php $display_string = isset( $pdata['user_type'] ) && in_array( $pdata['user_type'], array( 'faculty', 'staff' ) ) ? '%s&#8217;s Portfolio' : '%s&#8217;s ePortfolio'; ?>
 			<li><a href="<?php echo esc_url( $pdata['portfolio_url'] ); ?>"><?php echo esc_html( sprintf( $display_string, $pdata['user_display_name'] ) ); ?></a></li>
 		<?php endforeach ?>
 		</ul>
@@ -602,7 +600,8 @@ add_action( 'bp_actions', 'openlab_remove_bpges_settings_for_portfolios', 1 );
 function openlab_associate_portfolio_group_with_user( $group_id, $user_id ) {
 	bp_update_user_meta( $user_id, 'portfolio_group_id', $group_id );
 
-	$account_type = xprofile_get_field_data( 'Account Type', $user_id );
+	// We store the label for backward compatibility.
+	$account_type = openlab_get_user_member_type_label( $user_id );
 	groups_update_groupmeta( $group_id, 'portfolio_user_type', $account_type );
 }
 

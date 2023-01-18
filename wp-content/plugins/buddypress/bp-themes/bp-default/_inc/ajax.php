@@ -133,7 +133,7 @@ function bp_dtheme_ajax_querystring( $query_string, $object ) {
 	}
 
 	$object_search_text = bp_get_search_default_text( $object );
- 	if ( ! empty( $_POST['search_terms'] ) && $object_search_text != $_POST['search_terms'] && 'false' != $_POST['search_terms'] && 'undefined' != $_POST['search_terms'] )
+ 	if ( ! empty( $_POST['search_terms'] ) && ( $object_search_text != $_POST['search_terms'] ) && ( 'false' != $_POST['search_terms'] ) && ( 'undefined' != $_POST['search_terms'] ) && is_scalar( $_POST['search_terms'] ) )
 		$qs[] = 'search_terms=' . urlencode( $_POST['search_terms'] );
 
 	// Now pass the querystring to override default values.
@@ -291,7 +291,7 @@ function bp_dtheme_post_update() {
 	}
 
 	if ( false === $activity_id ) {
-		exit( '-1<div id="message" class="error"><p>' . __( 'There was a problem posting your update, please try again.', 'buddypress' ) . '</p></div>' );
+		exit( '-1<div id="message" class="error"><p>' . __( 'There was a problem posting your update. Please try again.', 'buddypress' ) . '</p></div>' );
 	} elseif ( is_wp_error( $activity_id ) && $activity_id->get_error_code() ) {
 		exit( '-1<div id="message" class="error bp-ajax-message"><p>' . $activity_id->get_error_message() . '</p></div>' );
 	}

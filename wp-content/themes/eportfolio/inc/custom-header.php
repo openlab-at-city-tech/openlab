@@ -4,7 +4,6 @@
  *
  * You can add an optional custom header image to header.php like so ...
  *
-	<?php the_header_image_tag(); ?>
  *
  * @link https://developer.wordpress.org/themes/functionality/custom-headers/
  *
@@ -23,6 +22,7 @@
  */
 function eportfolio_custom_header_setup() {
 	add_theme_support( 'custom-header', apply_filters( 'eportfolio_custom_header_args', array(
+		'default-text-color'     => 'fff',
 		'width'            => 1080,
 		'height'           => 1920,
 		'flex-height'      => true,
@@ -60,15 +60,21 @@ if ( ! function_exists( 'eportfolio_header_style' ) ) :
 			.site-description {
 				position: absolute;
 				clip: rect(1px, 1px, 1px, 1px);
+                display: none;
 			}
 		<?php
 		// If the user has set a custom color for the text use that.
 		else :
 			?>
-			.site-title a,
-			.site-description {
-				color: #<?php echo esc_attr( $header_text_color ); ?>;
-			}
+        .site-title a,
+        #masthead ul.twp-social-icons.twp-social-icons-white a {
+            color: #<?php echo esc_attr( $header_text_color ); ?>;
+        }
+
+        #masthead .twp-menu-icon.twp-white-menu-icon span:before,
+        #masthead .twp-menu-icon.twp-white-menu-icon span:after {
+            background-color: #<?php echo esc_attr( $header_text_color ); ?>;
+        }
 		<?php endif; ?>
 		</style>
 		<?php

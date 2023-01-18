@@ -56,6 +56,8 @@ jQuery(window).on("load", function () {
     }
     jQuery('.b2s-re-post-settings-option').trigger('change');
     jQuery('#b2s-re-post-profil-dropdown').trigger('change');
+    
+    jQuery('.b2s-re-post-delete-checked').hide();
 
 });
 

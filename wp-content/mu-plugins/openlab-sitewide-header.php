@@ -30,6 +30,10 @@ function openlab_sitewide_header($location = 'header') {
 }
 
 function openlab_sitewide_header_to_admin_and_group_sites() {
+	// Don't load on widgets or other API requests.
+	if ( defined( 'REST_REQUEST' ) && REST_REQUEST ) {
+		return;
+	}
 
     if (get_current_blog_id() !== 1 || is_admin()) {
         ?>
@@ -45,7 +49,7 @@ function openlab_sitewide_header_to_admin_and_group_sites() {
 add_action('wp_footer', 'openlab_sitewide_header_to_admin_and_group_sites');
 add_action('in_admin_header', 'openlab_sitewide_header_to_admin_and_group_sites');
 
-function openlab_mu_site_wide_bp_search($mode = 'desktop', $location) {
+function openlab_mu_site_wide_bp_search( $mode = 'desktop', $location = '' ) {
     $mobile_mup = '';
 
     if ($mode == 'desktop'):

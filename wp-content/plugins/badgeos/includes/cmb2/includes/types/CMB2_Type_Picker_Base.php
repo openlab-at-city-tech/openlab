@@ -42,7 +42,7 @@ abstract class CMB2_Type_Picker_Base extends CMB2_Type_Text {
 				: array();
 
 			$data[ $arg . 'Format' ] = $js_format;
-			$atts[ $att ] = function_exists( 'wp_json_encode' )
+			$atts[ $att ]            = function_exists( 'wp_json_encode' )
 				? wp_json_encode( $data )
 				: json_encode( $data );
 		}

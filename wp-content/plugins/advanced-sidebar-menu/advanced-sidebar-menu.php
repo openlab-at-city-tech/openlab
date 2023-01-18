@@ -4,13 +4,13 @@
  * Plugin URI: https://onpointplugins.com/advanced-sidebar-menu/
  * Description: Creates dynamic menus based on parent/child relationship of your pages or categories.
  * Author: OnPoint Plugins
- * Version: 8.6.4
+ * Version: 9.0.4
  * Author URI: https://onpointplugins.com
  * Text Domain: advanced-sidebar-menu
  * Domain Path: /languages/
  * Network: false
- * Requires at least: 5.2
- * Requires PHP: 5.6.0
+ * Requires at least: 5.8.0
+ * Requires PHP: 7.0.0
  *
  * @package advanced-sidebar-menu
  */
@@ -19,11 +19,14 @@ if ( defined( 'ADVANCED_SIDEBAR_BASIC_VERSION' ) ) {
 	return;
 }
 
-define( 'ADVANCED_SIDEBAR_BASIC_VERSION', '8.6.4' );
-define( 'ADVANCED_SIDEBAR_MENU_REQUIRED_PRO_VERSION', '8.3.1' );
+define( 'ADVANCED_SIDEBAR_BASIC_VERSION', '9.0.4' );
+define( 'ADVANCED_SIDEBAR_MENU_REQUIRED_PRO_VERSION', '9.0.0' );
 define( 'ADVANCED_SIDEBAR_DIR', plugin_dir_path( __FILE__ ) );
 define( 'ADVANCED_SIDEBAR_MENU_URL', plugin_dir_url( __FILE__ ) );
 
+use Advanced_Sidebar_Menu\Blocks\Block_Abstract;
+use Advanced_Sidebar_Menu\Blocks\Categories;
+use Advanced_Sidebar_Menu\Blocks\Pages;
 use Advanced_Sidebar_Menu\Cache;
 use Advanced_Sidebar_Menu\Core;
 use Advanced_Sidebar_Menu\Debug;
@@ -49,6 +52,10 @@ use Advanced_Sidebar_Menu\Widget\Widget_Abstract;
  */
 function advanced_sidebar_menu_load() {
 	Core::init();
+	// Blocks.
+	Categories::init();
+	Pages::init();
+
 	Cache::init();
 	Debug::init();
 	Notice::init();
@@ -57,6 +64,8 @@ function advanced_sidebar_menu_load() {
 	if ( Notice::instance()->is_conflicting_pro_version() ) {
 		remove_action( 'plugins_loaded', 'advanced_sidebar_menu_pro_init', 11 );
 	}
+
+	load_plugin_textdomain( 'advanced-sidebar-menu', false, 'advanced-sidebar-menu/languages' );
 }
 
 add_action( 'plugins_loaded', 'advanced_sidebar_menu_load' );
@@ -75,6 +84,11 @@ function advanced_sidebar_menu_autoload( $class ) {
 		Widget_Abstract::class => 'Widget/Widget_Abstract.php',
 		Widget_Page::class     => 'Widget/Page.php',
 		Widget_Category::class => 'Widget/Category.php',
+
+		// Blocks.
+		Block_Abstract::class  => 'Blocks/Block_Abstract.php',
+		Categories::class      => 'Blocks/Categories.php',
+		Pages::class           => 'Blocks/Pages.php',
 
 		// Core.
 		Cache::class           => 'Cache.php',
@@ -105,36 +119,3 @@ function advanced_sidebar_menu_autoload( $class ) {
 }
 
 spl_autoload_register( 'advanced_sidebar_menu_autoload' );
-
-add_action( 'plugins_loaded', 'advanced_sidebar_menu_translate' );
-/**
- * Load translations
- *
- * @return void
- */
-function advanced_sidebar_menu_translate() {
-	load_plugin_textdomain( 'advanced-sidebar-menu', false, 'advanced-sidebar-menu/languages' );
-}
-
-add_action( 'advanced-sidebar-menu/widget/page/after-form', 'advanced_sidebar_menu_widget_docs', 99, 2 );
-add_action( 'advanced-sidebar-menu/widget/category/after-form', 'advanced_sidebar_menu_widget_docs', 99, 2 );
-
-/**
- * Add a link to widget docs inside the widget.
- *
- * @param array     $instance - Widget settings.
- * @param WP_Widget $widget   - Current widget.
- */
-function advanced_sidebar_menu_widget_docs( $instance, WP_Widget $widget ) {
-	$anchor = Widget_Category::NAME === $widget->id_base ? 'categories-menu' : 'pages-menu';
-	?>
-	<p class="advanced-sidebar-widget-documentation">
-		<a
-			href="https://onpointplugins.com/advanced-sidebar-menu/#advanced-sidebar-<?php echo esc_attr( $anchor ); ?>"
-			target="_blank"
-			rel="noopener noreferrer">
-			<?php esc_html_e( 'widget documentation', 'advanced-sidebar-menu' ); ?>
-		</a>
-	</p>
-	<?php
-}

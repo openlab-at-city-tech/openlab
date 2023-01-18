@@ -41,9 +41,9 @@ abstract class CMB2_Type_Base {
 	 * @param array      $args
 	 */
 	public function __construct( CMB2_Types $types, $args = array() ) {
-		$this->types = $types;
+		$this->types      = $types;
 		$args['rendered'] = isset( $args['rendered'] ) ? (bool) $args['rendered'] : true;
-		$this->args = $args;
+		$this->args       = $args;
 	}
 
 	/**
@@ -120,7 +120,7 @@ abstract class CMB2_Type_Base {
 	 * Handles parsing and filtering attributes while preserving any passed in via field config.
 	 *
 	 * @since  2.2.4
-	 * @param  array  $type_overrides Type override arguments
+	 * @param  array $type_overrides Type override arguments
 	 * @return array                  Parsed arguments
 	 */
 	protected function parse_args_from_overrides( $type_overrides = array() ) {

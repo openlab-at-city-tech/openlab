@@ -44,7 +44,7 @@ class SharDB extends wpdb {
 	var $last_found_rows_result = null;
 
 	function __construct($dbuser, $dbpassword, $dbname, $dbhost) {
-		register_shutdown_function( array( $this, '__destruct' ) );
+//		register_shutdown_function( array( $this, '__destruct' ) );
 
 		if ( defined( 'WP_DEBUG' ) )
 			$this->show_errors = (bool) WP_DEBUG;

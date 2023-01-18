@@ -348,7 +348,9 @@ if (!class_exists(__NAMESPACE__ . '\CmindsFreePackage')) {
             $submitValue = filter_input(INPUT_POST, 'cminds_poweredby_change');
 
             if (null !== $optionValue || null !== $submitValue) {
-                update_option($this->getPoweredByOption(), $optionValue);
+				if(is_admin() && is_user_logged_in() && current_user_can('manage_options')) {
+					update_option($this->getPoweredByOption(), $optionValue);
+				}
             }
         }
 
@@ -396,7 +398,7 @@ if (!class_exists(__NAMESPACE__ . '\CmindsFreePackage')) {
              */
             $authorUrl .= '<div style="display:block;clear:both;"></div><span class="cminds_poweredby">';
             $authorUrl .= '<a href="' . $currentPlugin->addAffiliateCode('https://www.cminds.com/') . '" target="_blank" class="cminds_poweredbylink">CreativeMinds</a> ';
-            $authorUrl .= ' <a href="' . $currentPlugin->addAffiliateCode('https://www.cminds.com/wordpress_plugins/') . '" target="_blank" class="cminds_poweredbylink">WordPress Plugin</a>';
+            $authorUrl .= ' <a href="' . $currentPlugin->addAffiliateCode('https://www.cminds.com/wordpress-plugins/') . '" target="_blank" class="cminds_poweredbylink">WordPress Plugin</a>';
             $authorUrl .= ' <a href="' . $currentPlugin->addAffiliateCode($currentPlugin->getOption('plugin-store-url')) . '" target="_blank" class="cminds_poweredbylink">' . $currentPlugin->getOption('plugin-name') . '</a>';
             $authorUrl .= '</span><div style="display:block;clear:both;"></div>';
 

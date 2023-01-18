@@ -33,14 +33,19 @@ class CMB2_Type_Radio extends CMB2_Type_Multi_Base {
 	}
 
 	public function render() {
-		$args = $this->parse_args( $this->type, array(
-			'class'   => 'cmb2-radio-list cmb2-list',
-			'options' => $this->concat_items( array(
-				'label'  => 'test',
-				'method' => 'list_input',
-			) ),
-			'desc' => $this->_desc( true ),
-		) );
+		$args = $this->parse_args(
+			$this->type,
+			array(
+				'class'   => 'cmb2-radio-list cmb2-list',
+				'options' => $this->concat_items(
+					array(
+						'label'  => 'test',
+						'method' => 'list_input',
+					)
+				),
+				'desc'    => $this->_desc( true ),
+			)
+		);
 
 		return $this->rendered( $this->ul( $args ) );
 	}

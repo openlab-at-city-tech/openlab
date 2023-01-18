@@ -36,6 +36,15 @@ class Text_Hover_Test extends WP_UnitTestCase {
 
 	public static function setUpBeforeClass() {
 		c2c_TextHover::get_instance()->install();
+
+		add_role(
+			'manage_options_but_no_unfiltered_html',
+			'Admin without unfiltered HTML',
+			array(
+				'manage_options'  => true,
+				'unfiltered_html' => false,
+			)
+		);
 	}
 
 	public function setUp() {
@@ -243,7 +252,7 @@ class Text_Hover_Test extends WP_UnitTestCase {
 	}
 
 	public function test_version() {
-		$this->assertEquals( '4.1', $this->obj->version() );
+		$this->assertEquals( '4.2', $this->obj->version() );
 	}
 
 	public function test_instance_object_is_returned() {
@@ -687,6 +696,25 @@ class Text_Hover_Test extends WP_UnitTestCase {
 
 		$this->assertEquals( 11, has_filter( $filter, array( $this->obj, 'text_hover_comment_text' ) ) );
 		$this->assertGreaterThan( 0, strpos( apply_filters( $filter, 'a coffee2code' ), $expected ) );
+	}
+
+	public function test_disallowed_markup_is_stripped() {
+		$orig_text_to_hover = self::$text_to_hover;
+		self::$text_to_hover['xss'] = '<script>alert(1);</script> Hi';
+		self::$text_to_hover['myspan'] = 'This has <span>text in a span</span>.';
+
+		$this->set_option();
+
+		$this->assertEquals(
+			"<abbr class='c2c-text-hover' title='alert(1); Hi'>xss</abbr>",
+			$this->text_hover( 'xss' )
+		);
+		$this->assertEquals(
+			"<abbr class='c2c-text-hover' title='This has text in a span.'>myspan</abbr>",
+			$this->text_hover( 'myspan' )
+		);
+
+		self::$text_to_hover = $orig_text_to_hover;
 	}
 
 	/**

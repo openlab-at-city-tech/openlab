@@ -152,3 +152,7 @@ input.searchsubmit {
 .widget ul li {
     color: #000;
 }
+
+#respond .comment-form-author label, #respond .comment-form-email label, #respond .comment-form-url label, #respond .comment-form-comment label {
+    position: unset;
+}

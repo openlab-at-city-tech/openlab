@@ -2,8 +2,8 @@
 Contributors: publishpress, stevejburge, htmgarcia
 Tags: gutenberg, gutenberg blocks, gutenberg block, block editor, blocks
 Requires at least: 5.0
-Tested up to: 5.9.1
-Stable tag: 2.11.6
+Tested up to: 6.1.1
+Stable tag: 3.1.1
 Requires PHP: 5.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -14,13 +14,12 @@ PublishPress Blocks include accordions, galleries, sliders, tabs, maps and more.
 
 [PublishPress Blocks](https://publishpress.com/blocks/) has everything you need to build professional websites with the WordPress block editor. The extra blocks include layout options, sliders, buttons, icons, image galleries, maps, tabs, testimonials, accordions, and more.
 
-## 5 powerful block editor features in PublishPress Blocks
+## 4 powerful block editor features in PublishPress Blocks
 
-1. **The best Latest News / Content block in WordPress**: The Content Display block allows you to show posts, pages and other content types in many beautiful layouts.
-2. **Over 20 extra Gutenberg blocks**: The blocks include accordions, galleries, sliders, tabs, maps, tables, recent posts, and more.
-3. **Permissions for the block editor**: You can control who can use each block, including default WordPress blocks.
-4. **Custom CSS styles for your blocks**: You can add your own CSS styles for your blocks. Anyone editing posts can quickly add the styles to blocks.
-5. **Block layout and page-builder features**: Choose from dozens of page builder layouts. Each one is customizable for desktop, tablet and mobile devices.
+1. **Block Permissions**: You can control who can use each block, including default WordPress blocks.
+2. **PublishPress Blocks**: The blocks include accordions, galleries, sliders, tabs, maps, tables, recent posts, and more.
+3. **Block Styles**: You can add your own CSS styles for your blocks. Anyone editing posts can quickly add the styles to blocks.
+4. **Block Controls**: You can schedule when blocks are shown, and add user role restrictions.
 
 ## PublishPress Blocks Pro
 
@@ -43,36 +42,36 @@ This block really is the best way to showcase your posts in the Gutenberg editor
 
 PublishPress Blocks has everything you need to build professional websites with WordPress. Here's an introduction to the blocks available with the PublishPress Blocks plugin:
 
-- **[Accordion block](https://publishpress.com/knowledge-base/advanced-accordion-block/)**: You can create an Advanced Accordion block when you need to display a lot of content in a small area. Your site visitors will be able to click on accordion bars that slide out to reveal content.
-- **[Button block](https://publishpress.com/knowledge-base/advanced-button-block/)**: The Advanced Button block is based on the default Button block in Gutenberg. This improved version of the button block has tons of extra features including advanced styling such as hover, margin, border, padding, shadows and more.
-- **[Columns Manager block](https://publishpress.com/knowledge-base/columns-manager-block/)**: The Columns Manager block is based on the default Columns block in Gutenberg. This new version of the block has many extra features including extra layout options, padding, margins and much more.
+- **[Accordion block](https://publishpress.com/knowledge-base/advanced-accordion-block/)**: You can create a PublishPress Accordion block when you need to display a lot of content in a small area. Your site visitors will be able to click on accordion bars that slide out to reveal content.
+- **[Button block](https://publishpress.com/knowledge-base/advanced-button-block/)**: The PublishPress Button block is based on the default Button block in Gutenberg. This improved version of the button block has tons of extra features including advanced styling such as hover, margin, border, padding, shadows and more.
+- **[Columns Manager block](https://publishpress.com/knowledge-base/columns-manager-block/)**: The PublishPress Columns block is based on the default Columns block in Gutenberg. This new version of the block has many extra features including extra layout options, padding, margins and much more.
 - **[Contact Form block](https://publishpress.com/knowledge-base/contact-form-block/)**: The Contact Form Block allows you to create a form and take messages from customers. You can customize every aspect of the form including the fields, text, colors, styling and spam protection. You can also view and export all entries from your forms.
-- **[Content Display block](https://publishpress.com/knowledge-base/content-display-block/)**: PublishPress Blocks has a block to display your latest posts. Several views are available including Grid, List, Slider, Frontpage, Newspaper and Masonry. Some views have its own layouts and settings
-- **[Count Up block](https://publishpress.com/knowledge-base/count-up-block/)**: The Count Up block is perfect for showcasing a number in Gutenberg. You can use it to show how many clients you have, how much money you have raised, how many cups of coffee you've served, or anything else.
-- **[Google Maps block](https://publishpress.com/knowledge-base/map-block/)**: The Map Block allows you to display a Google Map in the Gutenberg editor. You can create maps with custom icons, tooltips, description, zoom levels and much more.
-- **[Icon block](https://publishpress.com/knowledge-base/advanced-icon-block/)**: The Advanced Icon block allows you to add icons to WordPress content. This block uses Google's Material Design icons. You can customize the style, size, color, link, margin, padding, background, border and more.
-- **[Image block](https://publishpress.com/knowledge-base/advanced-image-block/)**: The Advanced Image block is based on the default Image block in Gutenberg. This improved version of the block has tons of extra features including focal points, overlays, custom text and more.
-- **[Images Slider block](https://publishpress.com/knowledge-base/images-slider-block/)**: If you want to show multiple images in a slider / slideshow, then the Images Slider Block is a great option. This Gutenberg block has advanced features including overlays, auto height, text, color and alignment options.
-- **[Info Box block](https://publishpress.com/knowledge-base/info-box-block/)**: The Info Box Block is a great way to show important information in the Gutenberg editor. You can have large, colorful icon displayed next to a large title and some text. This block allows you to use Google's Material Design icons.
-- **[List block](https://publishpress.com/knowledge-base/advanced-list-block/)**: The Advanced List block is based on the default List block in Gutenberg. This improved version of the block has tons of extra features including advanced styling such as custom icons, text size, margin, padding and more.
-- **[Login / Register Form block](https://publishpress.com/knowledge-base/login-register-form-block/)**: The Login / Register Form Block allows you to load a WordPress login or register form inside Gutenberg. You can also setup a redirect URL after login and customize the design by adding your own logo and colors.
-- **[Newsletter block](https://publishpress.com/knowledge-base/newsletter-block/)**: The Newsletter block can save your future customers email for your marketing operations. You can create a sign-up block that's customized with your own styling and text.
-- **[Search bar block](https://publishpress.com/knowledge-base/search-bar-block/)**: The Search Bar block allows you to add a very customizable search form into Gutenberg. You can change the colors, icons, width and text of your search bar.
-- **[Social Links block](https://publishpress.com/knowledge-base/social-links-block/)**: You can share your social media profiles very easily by using the Social Links block. This block allows you to add links to your company / organization / personal profile on all the major social networks.
-- **[Summary block](https://publishpress.com/knowledge-base/summary-block/)**: The Summary block allows you to show a Table of Contents for your posts created with Gutenberg. WordPress automatically creates this Table of Contents using the headings in your post. This block enables you to place that Table of Contents so your visitors can see it.
-- **[Table block](https://publishpress.com/knowledge-base/advanced-table-block/)**: The Advanced Table block is based on the default Table block in Gutenberg. This improved version of the block has tons of extra table features including advanced styling such as margin, padding, alignment, colors and more.
-- **[Tabs block](https://publishpress.com/knowledge-base/advanced-tabs-block/)**: You can create an Advanced Tabs block when you need to display a lot of content in a small area. The tabs are mobile-friendly, can be horizontal or vertical, and can be customized with your colors and design.
-- **[Testimonial block](https://publishpress.com/knowledge-base/testimonial-block/)**: The Testimonial Block allows you to add clients testimonials to Gutenberg. You can add testimonials using columns or a slider. You can show the avatar, name, job position and description for each testimonial.
-- **[Video block](https://publishpress.com/knowledge-base/advanced-video-block/)**: The Advanced Video block is based on the default Video block in Gutenberg. The Advanced Video block is most useful for videos hosted on your WordPress site. This block has tons of extra features, including advanced styling, for locally-hosted videos.
+- **[Content Display block](https://publishpress.com/knowledge-base/recent-posts-block/)**: PublishPress Blocks has a block to display your latest posts. Several views are available including Grid, List, Slider, Frontpage, Newspaper and Masonry. Some views have its own layouts and settings
+- **[Count Up block](https://publishpress.com/knowledge-base/count-up-block/)**: The PublishPress Count Up block is perfect for showcasing a number in Gutenberg. You can use it to show how many clients you have, how much money you have raised, how many cups of coffee you've served, or anything else.
+- **[Google Maps block](https://publishpress.com/knowledge-base/map-block/)**: The PublishPress Map block allows you to display a Google Map in the Gutenberg editor. You can create maps with custom icons, tooltips, description, zoom levels and much more.
+- **[Icon block](https://publishpress.com/knowledge-base/advanced-icon-block/)**: The PublishPress Icon block allows you to add icons to WordPress content. This block uses Google's Material Design icons. You can customize the style, size, color, link, margin, padding, background, border and more.
+- **[Image block](https://publishpress.com/knowledge-base/advanced-image-block/)**: The PublishPress Image block is based on the default Image block in Gutenberg. This improved version of the block has tons of extra features including focal points, overlays, custom text and more.
+- **[Images Slider block](https://publishpress.com/knowledge-base/images-slider-block/)**: If you want to show multiple images in a slider / slideshow, then the PublishPress Images Slider Block is a great option. This Gutenberg block has advanced features including overlays, auto height, text, color and alignment options.
+- **[Info Box block](https://publishpress.com/knowledge-base/info-box-block/)**: The PublishPress Info Box Block is a great way to show important information in the Gutenberg editor. You can have large, colorful icon displayed next to a large title and some text. This block allows you to use Google's Material Design icons.
+- **[List block](https://publishpress.com/knowledge-base/advanced-list-block/)**: The PublishPress List block is based on the default List block in Gutenberg. This improved version of the block has tons of extra features including advanced styling such as custom icons, text size, margin, padding and more.
+- **[Login / Register Form block](https://publishpress.com/knowledge-base/login-register-form-block/)**: The PublishPress Login & Register block allows you to load a WordPress login or register form inside Gutenberg. You can also setup a redirect URL after login and customize the design by adding your own logo and colors.
+- **[Newsletter block](https://publishpress.com/knowledge-base/newsletter-block/)**: The PublishPress Newsletter block can save your future customers email for your marketing operations. You can create a sign-up block that's customized with your own styling and text.
+- **[Search bar block](https://publishpress.com/knowledge-base/search-bar-block/)**: The PublishPress Search Bar block allows you to add a very customizable search form into Gutenberg. You can change the colors, icons, width and text of your search bar.
+- **[Social Links block](https://publishpress.com/knowledge-base/social-links-block/)**: You can share your social media profiles very easily by using the PublishPress Social Links block. This block allows you to add links to your company / organization / personal profile on all the major social networks.
+- **[Table of Contents block](https://publishpress.com/knowledge-base/summary-block/)**: The PublishPress Table of Contents block allows you to show a Table of Contents for your posts created with Gutenberg. WordPress automatically creates this Table of Contents using the headings in your post. This block enables you to place that Table of Contents so your visitors can see it.
+- **[Table block](https://publishpress.com/knowledge-base/advanced-table-block/)**: The PublishPress Table block is based on the default Table block in Gutenberg. This improved version of the block has tons of extra table features including advanced styling such as margin, padding, alignment, colors and more.
+- **[Tabs block](https://publishpress.com/knowledge-base/advanced-tabs-block/)**: You can create a PublishPress Tabs block when you need to display a lot of content in a small area. The tabs are mobile-friendly, can be horizontal or vertical, and can be customized with your colors and design.
+- **[Testimonial block](https://publishpress.com/knowledge-base/testimonial-block/)**: The PublishPress Testimonial block allows you to add clients testimonials to Gutenberg. You can add testimonials using columns or a slider. You can show the avatar, name, job position and description for each testimonial.
+- **[Video block](https://publishpress.com/knowledge-base/advanced-video-block/)**: The PublishPress Video block is based on the default Video block in Gutenberg. The PublishPress Video block is most useful for videos hosted on your WordPress site. This block has tons of extra features, including advanced styling, for locally-hosted videos.
 - **[WooCommerce block](https://publishpress.com/knowledge-base/woo-products-block/)**: PublishPress Blocks comes with a block to display your WooCommerce products. There are 2 layouts available for the Woo Products block: the Grid and Slider views.
 
 And there are also three blocks available in PublishPress Blocks Pro:
 
-- **[Countdown block](https://publishpress.com/knowledge-base/countdown-block/)**: With the Countdown blocks, you can create a highly customizable countdown to an event. This block is available in PublishPress Blocks Pro.
+- **[Countdown block](https://publishpress.com/knowledge-base/countdown-block/)**: With the PublishPress Countdown blocks, you can create a highly customizable countdown to an event. This block is available in PublishPress Blocks Pro.
 - **[Feature List block](https://publishpress.com/knowledge-base/feature-list-block/)**: With the Pro version of the PublishPress Blocks plugin, you can create an Features List block when you need to show a list of all the items available with a product or service.
 - **[Pricing Table block](https://publishpress.com/knowledge-base/pricing-table-block/)**: With the Pro version of the PublishPress Blocks plugin, you can create a Pricing Table block when you need to show people the purchase or subscription options on your site.
 
-## User Role Permissions for Gutenberg Blocks
+## Block Permissions
 
 PublishPress Blocks allows you to enable or disable Gutenberg blocks for user roles. For example, you can disable the “Classic” block if you don’t want users to rely on the old WordPress editor.
 
@@ -80,15 +79,23 @@ Using the PublishPress Blocks plugin, you can allow some user roles to use the G
 
 [Click here to see how to control permissions for Gutenberg blocks](https://publishpress.com/knowledge-base/editor-profiles/).
 
-## Custom CSS Styles for Blocks
+## Blocks Styles
 
 You create custom, reusable CSS styles and make them available to end users. Name the style, and let the content editors use it when they need it. This is a very useful feature that empowers your users to add pre-defined CSS styles to any Gutenberg block.
 
-[Click here to see how to create custom styles for blocks](https://publishpress.com/knowledge-base/custom-css/).
+[Click here to see how to create block styles](https://publishpress.com/knowledge-base/custom-css/).
+
+## Block Controls
+
+Using the PublishPress Blocks plugin, you can schedule when blocks are shown, and add user role restrictions.
+
+Block Controls works with almost any block, including blocks from third party plugins.
+
+[Click here to read how to use block controls](https://publishpress.com/knowledge-base/how-to-use-block-controls/)
 
 ## Page Builder Block Layout Options
 
-PublishPress Blocks allows you to create flexible and beautiful page builder layouts. You get 24 layout options with different options for desktop, tablet and mobile devices. You can create these layouts with the Columns Manager block. This Columns Manager block is based on the default Columns block in Gutenberg. This new version of the Gutenberg block has many extra features including extra layout options, padding, margins and much more.
+PublishPress Blocks allows you to create flexible and beautiful page builder layouts. You get 23 layout options with different options for desktop, tablet and mobile devices. You can create these layouts with the PublishPress Columns block. The PublishPress Columns block is based on the default Columns block in Gutenberg. This new version of the Gutenberg block has many extra features including extra layout options, padding, margins and much more.
 
 [Click here to see more about the block layout options](https://publishpress.com/knowledge-base/columns-manager-block)
 
@@ -111,7 +118,7 @@ Together, these plugins are a suite of powerful publishing tools for WordPress. 
 
 =  Bug Reports =
 
-Bug reports for PublishPress Permissions are welcome in our [repository on GitHub](https://github.com/publishpress/publishpress-permissions). Please note that GitHub is not a support forum, and that issues that aren't properly qualified as bugs will be closed.
+Bug reports for PublishPress Blocks are welcome in our [repository on GitHub](https://github.com/publishpress/publishpress-blocks). Please note that GitHub is not a support forum, and that issues that aren't properly qualified as bugs will be closed.
 
 = Follow the PublishPress team =
 
@@ -136,31 +143,31 @@ We reply to every question about the editor on the forum here, just ask :) We al
 
 = How do I add accordion blocks in Gutenberg? =
 
-You can create an Advanced Accordion block by clicking the Advanced Accordion button in the PublishPress Blocks category. When you first create this block, you will see 2 accordion elements that display by default. Once created, you can adjust the header, body or border options for your accordion. The Accordion block also allows you to customize the borders of the accordion areas:
+You can create a PublishPress Accordion block by clicking the "Accordion - PublishPress" button in the PublishPress Blocks category. When you first create this block, you will see 2 accordion elements that display by default. Once created, you can adjust the header, body or border options for your accordion. The Accordion block also allows you to customize the borders of the accordion areas:
 
 [Click here for more on Gutenberg accordion blocks](https://publishpress.com/knowledge-base/advanced-accordion-block/).
 
 = How do I add button blocks in Gutenberg? =
 
-The Advanced Button block is based on the default Button block in Gutenberg. This improved version of the button block has tons of extra features including advanced styling such as hover, margin, border, padding, shadows and more. You can create an Advanced Button by clicking its button in the PublishPress Blocks section. There are options for customizing the test size, background color and text color for the button. There are also customization options for the color, borders, margin, and padding of your buttons. You can choose settings that control what visitors see when they hover over your button blocks.
+The PublishPress Button block is based on the default Button block in Gutenberg. This improved version of the button block has tons of extra features including advanced styling such as hover, margin, border, padding, shadows and more. You can create a PublishPress Button block by clicking the "Accordion - PublishPress" button in the PublishPress Blocks section. There are options for customizing the test size, background color and text color for the button. There are also customization options for the color, borders, margin, and padding of your buttons. You can choose settings that control what visitors see when they hover over your button blocks.
 
 [Click here for more on Gutenberg button blocks](https://publishpress.com/knowledge-base/advanced-button-block/).
 
 = How do I add icon blocks in Gutenberg? =
 
-The Advanced Icon block allows you to add icons to WordPress content. This block uses Google's Material Design icons. You can customize the style, size, color, link, margin, padding, background, border and more. You can create an Advanced Icon block by clicking its button in the PublishPress Blocks category. After you choose an icon, you will see extra settings in the right sidebar, including Icon Size, Icon Color, Icon Background, Border, Border Size, Border Radius.
+The PublishPress Icon block allows you to add icons to WordPress content. This block uses Google's Material Design icons. You can customize the style, size, color, link, margin, padding, background, border and more. You can create a PublishPress Icon block by clicking the "Icon - PublishPress" button in the PublishPress Blocks section. After you choose an icon, you will see extra settings in the right sidebar, including Icon Size, Icon Color, Icon Background, Border, Border Size, Border Radius.
 
 [Click here for more on Gutenberg icon blocks](https://publishpress.com/knowledge-base/advanced-icon-block/).
 
 = How do I add list blocks in Gutenberg? =
 
-The Advanced List block is based on the default List block in Gutenberg. This improved version of the block has tons of extra features including advanced styling such as custom icons, text size, margin, padding and more. You can create an Advanced List block by clicking its button in the PublishPress Blocks category. After creating the Advanced List block, you can adjust the settings from the right sidebar. You can change the icon and it's settings which include List icon, Icon size, Line height, Margin, Padding, and more.
+The PublishPress List block is based on the default List block in Gutenberg. This improved version of the block has tons of extra features including advanced styling such as custom icons, text size, margin, padding and more. You can create a PublishPress List block by clicking the "List - PublishPress" button in the PublishPress Blocks section. After creating the PublishPress List block, you can adjust the settings from the right sidebar. You can change the icon and it's settings which include List icon, Icon size, Line height, Margin, Padding, and more.
 
-[Click here for more on Gutenberg list blocks](https://publishpress.com/knowledge-base/advanced-icon-block/).
+[Click here for more on Gutenberg list blocks](https://publishpress.com/knowledge-base/advanced-list-block/).
 
 = How do I add table blocks in Gutenberg? =
 
-The Advanced Table block is based on the default Table block in Gutenberg. This improved version of the block has tons of extra table features including advanced styling such as margin, padding, alignment, colors and more. You can create a table by clicking the Advanced Table button in the PublishPress Blocks category. After choosing the Advanced Table block, you can choose the number of columns and rows for your table layout. You can edit the table after setting the number of columns and rows. The options include:<br />
+The PublishPress Table block is based on the default Table block in Gutenberg. This improved version of the block has tons of extra table features including advanced styling such as margin, padding, alignment, colors and more. You can create a PublishPress Table block by clicking the "Table - PublishPress" button in the PublishPress Blocks section. After choosing the PublishPress Table block, you can choose the number of columns and rows for your table layout. You can edit the table after setting the number of columns and rows. The options include:<br />
 
 * Add Row Before
 * Add Row After
@@ -175,13 +182,13 @@ The Advanced Table block is based on the default Table block in Gutenberg. This 
 
 = How do I add tabs blocks in Gutenberg? =
 
-You can create an Advanced Tabs block when you need to display a lot of content in a small area. The tabs are mobile-friendly, can be horizontal or vertical, and can be customized with your colors and design. To insert an Advanced Tabs block, click the Advanced Tabs button in the PublishPress Blocks category. You can add tabs using the large + icon. You can remove tabs using the yellow X icon. The block settings allow you to adjust the tab direction and also which tab people will see when they open the page.
+You can create a PublishPress Tabs block when you need to display a lot of content in a small area. The tabs are mobile-friendly, can be horizontal or vertical, and can be customized with your colors and design. To insert a PublishPress Tabs block, click the "Tabs - PublishPress" button in the PublishPress Blocks category. You can add tabs using the large + icon. You can remove tabs using the yellow X icon. The block settings allow you to adjust the tab direction and also which tab people will see when they open the page.
 
 [Click here for more on Gutenberg tabs blocks](https://publishpress.com/knowledge-base/advanced-tabs-block/).
 
 = How do I add columns blocks in Gutenberg? =
 
-The Columns Manager block is based on the default Columns block in Gutenberg. This new version of the block has many extra features including extra layout options, padding, margins and much more. If you want to create a block containing other blocks inside, you should choose the Columns Manager in PublishPress Blocks category. Then you can add any types of block you want in each column. You can choose different layouts for Desktop, Tablet, and Mobile displays. You can also choose the space between columns, padding, margin, and much more.
+The PublishPress Columns block is based on the default Columns block in Gutenberg. This new version of the block has many extra features including extra layout options, padding, margins and much more. If you want to create a block containing other blocks inside, you should choose "Columns - PublishPress" in PublishPress Blocks category. Then you can add any types of block you want in each column. You can choose different layouts for Desktop, Tablet, and Mobile displays. You can also choose the space between columns, padding, margin, and much more.
 
 [Click here for more on Gutenberg columns blocks](https://publishpress.com/knowledge-base/columns-manager-block/).
 
@@ -191,14 +198,14 @@ No. The impact is minimal because our plugin relies heavily on tools provided by
 
 Many of our blocks are built on top of the default Gutenberg blocks, so little extra code is necessary. And if you decide to stop using PublishPress Blocks, any Gutenberg block will safely turn back to regular HTML. This means that PublishPress Blocks is a safe option to use, because your content is not locked into our plugin forever.
 
-[Read more about disabling PubishPress Blocks](https://publishpress.com/knowledge-base/disable-advanced-gutenberg/).
+[Read more about disabling PublishPress Blocks](https://publishpress.com/knowledge-base/disable-advanced-gutenberg/).
 
 = Can I add a lightbox display to the WordPress gallery block? =
 
 Yes, with the PublishPress Blocks plugin, you can show WordPress images inside a lightbox modal. This feature is not available in the normal WordPress gallery block. This feature is on the Configuration screen in PublishPress Blocks. This will modify the default “Gallery” block in WordPress.
 
 * Open galleries in lightbox: This will automatically add a lightbox display to images in the “Gallery” block.
-* Image caption: This feature will automatically take the ALT text for an image and show it as captions for images in lightboxes. You can choose between displaying the caption below the image or over.
+* Image caption: This feature will automatically take the alt text or caption for an image and show it as captions for images in lightboxes. You can choose between display the caption below the image or over.
 
 = Can I add anchor links to WordPress blocks? =
 
@@ -210,11 +217,11 @@ Yes, it is possible to create anchor links for Gutenberg blocks. This allows you
 
 This feature is available for all PublishPress blocks, except for these:
 
-* Advanced Icons
-* Columns Manager
+* Icons
+* Columns
 * Info Box
-* Recent Posts
-* Testimonials
+* Content Display
+* Testimonial
 
 = What happens to my content if I disable PublishPress Blocks?
 
@@ -229,7 +236,7 @@ All of these are good Gutenberg block plugins. PublishPress Blocks has particula
 * The best Latest News / Content block in WordPress
 * Over 20 extra Gutenberg blocks
 * Permissions for the block editor
-* Custom CSS styles for your blocks
+* Block styles to add reusable custom CSS to any block
 * Block layout and page-builder features
 
 = Can I share a link to install PublishPress Blocks? =
@@ -239,12 +246,12 @@ Yes, we use the phrase "publishpress-advg-install" to share install links. You w
 == Screenshots ==
 
 1. Content Display Block: PublishPress Blocks include Content Display, a powerful block to show posts, pages and custom post types in many beautiful layouts.
-2. Block permissions: PublishPress Blocks allows you to enable or disable blocks for some users.
-3. Column Layouts: PublishPress Blocks allows you to create flexible and beautiful layouts. You get 24 layouts options with different options for desktop, tablet and mobile devices.
+2. Block permissions: PublishPress Blocks allows you to enable or disable blocks per user role.
+3. Column Layouts: PublishPress Blocks allows you to create flexible and beautiful layouts. You get 23 layouts options with different options for desktop, tablet and mobile devices.
 4. WooCommerce Products: PublishPress Blocks comes with a block to display your latest WooCommerce products.
 5. Countdown Block: Create a customizable countdown block with a lot of settings, including date and time layout, font size, and more.
 6. Content Blocks: PublishPress Blocks has multiple blocks to improve your content. You can create a Table of Contents block, build stylish lists with icons, and add attractive buttons with many design options.
-7. Image and Video Blocks: With the Advanced Video block, you can display remote or local videos with a customizable player and tons of options. The Advanced Image block: get more controls over your images with zoom, opacity, captions and much more.
+7. Image and Video Blocks: With the PublishPress Video block, you can display remote or local videos with a customizable player and tons of options. The PublishPress Image block: get more controls over your images with zoom, opacity, captions and much more.
 8. Email and Contact Form Blocks: You can create Contact form and also Newsletter sign-up blocks.
 9. Gutenberg Accordion Block: You can display content in an accordion layout. The content of each accordion can be visually edited.
 10. Gutenberg Info Box and Icon Blocks: The Info Box blocks allows you to show information with an icon, title and text with custom styles.
@@ -253,9 +260,118 @@ Yes, we use the phrase "publishpress-advg-install" to share install links. You w
 13. Testimonial Blocks: The Testimonial Block allows you to add clients testimonials to Gutenberg.
 14. Login & Register Gutenberg Block: This block allows you to load a WordPress login or registration form inside Gutenberg.
 15. Gallery Enhancements: PublishPress Blocks has major improvements for the default WordPress galleries, including lightbox displays, image captions, and better image navigation.
-16. Custom Styles for Blocks: You create custom CSS styles and make them available to end users.
+16. Block Styles: You create custom CSS styles for blocks and make them available to end users.
 
 == Changelog ==
+
+= 3.1.1 - 16 Nov 2022 =
+  * Add: Base path constant
+  * Add: Reusable methods for FormTokenField
+  * Fix: Vendor path constant
+  * Fix: Undefined window._wpGutenbergDefaultPost in initializeEditor()
+  * Fix: Make title and subtitle linkable for Image block custom URL
+  * Fix: Reset icon moved to a new line when date is longer in Schedule block control
+  * Fix: Padding for date picker popup
+  * Fix: Can't select items from core List block
+  * Fix: Forced 100% width for core Button block
+  * Fix: Bring back Upgrade to Pro boxes in editor
+
+= 3.1.0 - 26 Oct 2022 =
+  * Add: Block Controls admin page
+  * Add: User roles block control
+  * Add: Rename old accordions and tabs blocks as deprecated
+  * Add: Edit Block style title above the class name
+  * Add: Allow to dynamically exclude blocks when calling advgbGetBlocksFeature()
+  * Fix: Server check to active Legacy widget block for Block Permissions
+  * Fix: Adjust force active/inactive blocks javascript check in Block Permissions
+  * Fix: Add each block control at the time and when enabled
+  * Fix: Disabled menu features should be hidden always
+  * Remove: Edit Block style title through the styles list
+
+= 3.0.1 - 6 Oct 2022 =
+  * Fix: Potential non load of version notices library
+  * Fix: Don't add Blocks menu custom CSS classes if menu is not created
+  * Fix: Settings panel title for Video block
+  * Fix: Block styles label in editor dropdown
+  * Fix: Links to settings from Login & Register, Map, Newsletter and Contact Form blocks
+  * Fix: Wrong tab name returns a "not found" message
+
+= 3.0.0 - 3 Oct 2022 =
+  * Add: Separated admin pages
+  * Add: Admin dashboard
+  * Add: PublishPress brand color as default icon color
+  * Add: New names for PublishPress blocks
+
+= 2.14.2 - 25 Aug 2022 =
+  * Add: Extend supported blocks setting to support blocks not listed in Block access
+  * Fix: Authors and Series order by from Content Display make some legacy widgets to disappear in frontend
+  * Fix: Allow to enable Container block through Block access
+  * Fix: Cropped read more link when having padding in Content Display block
+
+= 2.14.1 - 3 Aug 2022 =
+  * Add: Pre-populate title and text with image properties from media library (title, alt, caption and description) for Images Slider block
+  * Fix: Block Access support for third party plugins blocks
+  * Fix: Block access for super admin in multisite child site
+  * Fix: Custom styles conflict with Block controls class in editor preview
+  * Fix: Images slider inside Advanced Tabs
+
+= 2.14.0 - 25 Jul 2022 =
+  * Add: Block controls to schedule blocks visibility
+
+= 2.13.3 - 6 Jul 2022 =
+  * Add: Blue color from WordPress core to unit elements (px, %) for Content Display block
+  * Add: Choose to display author, date, excerpt, read more, category, tags, comment counts and custom taxonomies for up to 5 first posts in Content Display block
+  * Add: Offset posts filter to Content Display block
+  * Add: Featured image color overlay and opacity for headline style to Content Display block
+  * Add: JSON translations for French, Danish and Norwegian
+  * Fix: Center featured image when using default slider view for Content Display block
+  * Fix: Don't output text after title and text before read more when empty in editor for Content Display block
+  * Fix: Lost password link broken in Login/Register Form block
+  * Fix: Slideshow view text in editor preview is cropped for Content Display block
+  * Fix: Make email and password fields required for Login/Register Form block
+  * Remove: PublishPress Series box from editor preview in Content Display block
+
+= 2.13.2.1 - 21 Jun 2022 =
+  * Add: Exclude posts shared method for Content Display block
+  * Fix: Limit request for post suggestions in Exclude for Content Display block
+
+= 2.13.2 - 2 Jun 2022 =
+  * Add: Toggle to check/uncheck all blocks in Block Access screen
+  * Add: PublishPress Series order by option
+  * Add: Select posts by id
+  * Fix: Edit title and text over the image for Images Slider block
+  * Fix: Undefined postTitleVsIdMap error in Content Display block
+  * Fix: Console error already registered WordPress 6.0 new core blocks
+  * Remove: Select posts by title
+
+= 2.13.1 - 17 May 2022 =
+  * Add: Plugin Instance Protection
+  * Add: PublishPress Series support to Content Display block
+  * Fix: Don't display post info and categories/tags, taxonomies wrappers when empty for Content Display block
+  * Fix: Reset categories attribute when changing post type
+  * Fix: Duplicated padding/margin icons for Info Box block
+  * Fix: Forced scroll to top issue in editor caused by masonry in Content Display block
+
+= 2.13.0 - 26 Apr 2022 =
+  * Add: Target support to author link for Content Display block
+  * Fix: Make responsive headings translatable
+  * Remove: Deprecated profiles post type and its capabilities
+
+= 2.12.0 - 30 Mar 2022 =
+  * Add: Ad to upgrade to Pro for Advanced List, Count Up, Testimonial and Advanced Image blocks
+  * Add: Updated translations for Spanish (ES), French, Norwegian and Danish
+  * Add: Spanish (MX) translations
+  * Add: Id attribute to Count Up block
+  * Add: Center alignment through CSS file for Count Up block
+  * Add: Block id as class to Content Display block
+  * Fix: Check if category exists when outputting blocks in access screen
+  * Fix: Text format for counter displayed as raw HTML in frontend for Count Up block
+  * Fix: Duplicated id for Testimonial block
+  * Fix: Title and subtitle output with RichText for Advanced Image block
+  * Fix: Title and text output with RichText for Images Slider block
+  * Fix: Tags attribute messing with CPT in frontend after switching from post to CPT
+  * Fix: Load styles in frontend for Content Display block
+  * Remove: Inline center alignment for Count Up block
 
 = 2.11.6 - 10 Mar 2022 =
   * Add: Improved design for Advanced Tabs remove and add settings

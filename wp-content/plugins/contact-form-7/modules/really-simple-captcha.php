@@ -45,7 +45,7 @@ function wpcf7_captchac_form_tag_handler( $tag ) {
 	}
 
 	$class = wpcf7_form_controls_class( $tag->type );
-	$class .= ' wpcf7-captcha-' . $tag->name;
+	$class .= ' wpcf7-captcha-' . str_replace( ':', '', $tag->name );
 
 	$atts = array();
 	$atts['class'] = $tag->get_class_option( $class );
@@ -82,8 +82,10 @@ function wpcf7_captchac_form_tag_handler( $tag ) {
 	$prefix = substr( $filename, 0, strrpos( $filename, '.' ) );
 
 	$html = sprintf(
-		'<input type="hidden" name="_wpcf7_captcha_challenge_%1$s" value="%2$s" /><img %3$s />',
-		$tag->name, esc_attr( $prefix ), $atts
+		'<input type="hidden" name="%1$s" value="%2$s" /><img %3$s />',
+		esc_attr( sprintf( '_wpcf7_captcha_challenge_%s', $tag->name ) ),
+		esc_attr( $prefix ),
+		$atts
 	);
 
 	return $html;
@@ -143,11 +145,11 @@ function wpcf7_captchar_form_tag_handler( $tag ) {
 	$atts['type'] = 'text';
 	$atts['name'] = $tag->name;
 
-	$atts = wpcf7_format_atts( $atts );
-
 	$html = sprintf(
-		'<span class="wpcf7-form-control-wrap %1$s"><input %2$s />%3$s</span>',
-		sanitize_html_class( $tag->name ), $atts, $validation_error
+		'<span class="wpcf7-form-control-wrap" data-name="%1$s"><input %2$s />%3$s</span>',
+		esc_attr( $tag->name ),
+		wpcf7_format_atts( $atts ),
+		$validation_error
 	);
 
 	return $html;
@@ -410,23 +412,44 @@ function wpcf7_init_captcha() {
 		return $captcha;
 	}
 
-	if ( wp_mkdir_p( $dir ) ) {
-		$htaccess_file = path_join( $dir, '.htaccess' );
+	$result = wp_mkdir_p( $dir );
 
-		if ( file_exists( $htaccess_file ) ) {
+	if ( ! $result ) {
+		return false;
+	}
+
+	$htaccess_file = path_join( $dir, '.htaccess' );
+
+	if ( file_exists( $htaccess_file ) ) {
+		list( $first_line_comment ) = (array) file(
+			$htaccess_file,
+			FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES
+		);
+
+		if ( '# Apache 2.4+' === $first_line_comment ) {
 			return $captcha;
 		}
+	}
 
-		if ( $handle = fopen( $htaccess_file, 'w' ) ) {
-			fwrite( $handle, 'Order deny,allow' . "\n" );
-			fwrite( $handle, 'Deny from all' . "\n" );
-			fwrite( $handle, '<Files ~ "^[0-9A-Za-z]+\\.(jpeg|gif|png)$">' . "\n" );
-			fwrite( $handle, '    Allow from all' . "\n" );
-			fwrite( $handle, '</Files>' . "\n" );
-			fclose( $handle );
-		}
-	} else {
-		return false;
+	if ( $handle = @fopen( $htaccess_file, 'w' ) ) {
+		fwrite( $handle, "# Apache 2.4+\n" );
+		fwrite( $handle, "<IfModule authz_core_module>\n" );
+		fwrite( $handle, "    Require all denied\n" );
+		fwrite( $handle, '    <FilesMatch "^\w+\.(jpe?g|gif|png)$">' . "\n" );
+		fwrite( $handle, "        Require all granted\n" );
+		fwrite( $handle, "    </FilesMatch>\n" );
+		fwrite( $handle, "</IfModule>\n" );
+		fwrite( $handle, "\n" );
+		fwrite( $handle, "# Apache 2.2\n" );
+		fwrite( $handle, "<IfModule !authz_core_module>\n" );
+		fwrite( $handle, "    Order deny,allow\n" );
+		fwrite( $handle, "    Deny from all\n" );
+		fwrite( $handle, '    <FilesMatch "^\w+\.(jpe?g|gif|png)$">' . "\n" );
+		fwrite( $handle, "        Allow from all\n" );
+		fwrite( $handle, "    </FilesMatch>\n" );
+		fwrite( $handle, "</IfModule>\n" );
+
+		fclose( $handle );
 	}
 
 	return $captcha;
@@ -470,7 +493,7 @@ function wpcf7_captcha_url( $filename ) {
 		$url = 'https:' . substr( $url, 5 );
 	}
 
-	return apply_filters( 'wpcf7_captcha_url', esc_url_raw( $url ) );
+	return apply_filters( 'wpcf7_captcha_url', sanitize_url( $url ) );
 }
 
 function wpcf7_generate_captcha( $options = null ) {
@@ -547,7 +570,7 @@ function wpcf7_remove_captcha( $prefix ) {
 	$captcha->remove( $prefix );
 }
 
-add_action( 'template_redirect', 'wpcf7_cleanup_captcha_files', 20, 0 );
+add_action( 'shutdown', 'wpcf7_cleanup_captcha_files', 20, 0 );
 
 function wpcf7_cleanup_captcha_files() {
 	if ( ! $captcha = wpcf7_init_captcha() ) {

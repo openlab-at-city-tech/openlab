@@ -5,10 +5,12 @@ const widgetSearchComments = document.querySelectorAll('.ep-widget-search-commen
 let selectedResultIndex;
 
 widgetSearchComments.forEach((element) => {
+	const { id } = element;
 	const input = document.createElement('input');
 	input.setAttribute('autocomplete', 'off');
 	input.setAttribute('type', 'search');
 	input.setAttribute('class', 'ep-widget-search-comments-input');
+	input.setAttribute('id', `${id}-s`);
 
 	const resultList = document.createElement('ul');
 	resultList.setAttribute('class', 'ep-widget-search-comments-results');
@@ -44,7 +46,7 @@ function hideResultsBox(inputElement) {
 /**
  * Update the result list
  *
- * @param {Object} comments Comments to be showed
+ * @param {object}           comments     Comments to be showed
  * @param {HTMLInputElement} inputElement The input element used in the widget
  */
 const updateResultsBox = (comments, inputElement) => {
@@ -114,8 +116,8 @@ function hasMinimumLength(inputElement) {
 /**
  * Add class to the widget element while results are being loaded
  *
- * @param {boolean} isLoading Whether results are loading
- * @param {Node} inputElement Search input field
+ * @param {boolean} isLoading    Whether results are loading
+ * @param {Node}    inputElement Search input field
  */
 function setIsLoading(isLoading, inputElement) {
 	const widget = findAncestorByClass(inputElement, 'ep-widget-search-comments');
@@ -131,12 +133,12 @@ function setIsLoading(isLoading, inputElement) {
  *	Fetch comments
  *
  * @param {HTMLInputElement} inputElement The input element used in the widget
- * @return {(false|Promise)} Try to fetch comments
+ * @returns {(false|Promise)} Try to fetch comments
  */
 function fetchResults(inputElement) {
 	if (hasMinimumLength(inputElement)) {
 		const widget = findAncestorByClass(inputElement, 'ep-widget-search-comments');
-		const postTypeElement = widget.querySelector('#ep-widget-search-comments-post-type');
+		const postTypeElement = widget.querySelector('.ep-widget-search-comments-post-type');
 		const postTypeQueryParameter = postTypeElement?.value
 			? `&post_type=${postTypeElement.value.trim()}`
 			: '';

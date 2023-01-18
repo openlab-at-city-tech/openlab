@@ -3,7 +3,7 @@
 class P2P_Autoload {
 
 	protected function __construct( $prefix, $basedir ) {
-		$this->prefix = $prefix;
+		$this->prefix  = $prefix;
 		$this->basedir = $basedir;
 	}
 

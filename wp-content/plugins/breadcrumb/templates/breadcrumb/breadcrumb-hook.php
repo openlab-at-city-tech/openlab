@@ -9,18 +9,17 @@ function breadcrumb_main_items(){
 
     $breadcrumb_items = apply_filters('breadcrumb_items_array', $breadcrumb_items);
 
-    //echo '<pre>'.var_export($breadcrumb_items, true).'</pre>';
 
 
     if(!empty($breadcrumb_items)):
         ?>
-        <ul>
+        <ol>
             <?php
             foreach ($breadcrumb_items as $item_index => $item):
                 do_action('breadcrumb_main_item_loop', $item);
             endforeach;
             ?>
-        </ul>
+        </ol>
         <?php
     else:
         ?>
@@ -52,17 +51,15 @@ function breadcrumb_main_item_loop($item){
     $link = isset($item['link']) ? $item['link'] : '';
     $link = apply_filters('breadcrumb_link_url', $link);
 
-    //echo '<pre>'.var_export(($title_original), true).'</pre>';
-    //echo '<pre>'.var_export(($title), true).'</pre>';
 
 
     if(!empty($title)){
         ?>
         <li >
             <a title="<?php echo esc_attr($title_original); ?>" href="<?php echo esc_url_raw($link); ?>">
-                <span><?php echo $title; ?></span>
+                <span><?php echo wp_kses_post($title); ?></span>
             </a>
-            <span class="separator"><?php echo $breadcrumb_separator; ?></span>
+            <span class="separator"><?php echo wp_kses_post($breadcrumb_separator); ?></span>
         </li>
         <?php
     }
@@ -78,7 +75,6 @@ function breadcrumb_main_schema(){
 
     $breadcrumb_items_count = count($breadcrumb_items);
 
-    //echo '<pre>'.var_export($breadcrumb_items_count, true).'</pre>';
 
     ?>
     <script type="application/ld+json">
@@ -98,11 +94,11 @@ function breadcrumb_main_schema(){
                         ?>
                         {
                             "@type": "ListItem",
-                            "position":<?php echo $i; ?>,
+                            "position":<?php echo esc_attr($i); ?>,
                             "item":
                             {
-                                "@id": "<?php echo $link; ?>",
-                                "name": "<?php echo $title; ?>"
+                                "@id": "<?php echo esc_url_raw($link); ?>",
+                                "name": "<?php echo wp_kses_post($title); ?>"
                             }
                         }<?php if($i < $breadcrumb_items_count) echo ','; ?>
                         <?php
@@ -166,18 +162,18 @@ function breadcrumb_main_style_css(){
             padding: 0 10px;
         }
         .breadcrumb-container {
-            font-size: <?php echo $breadcrumb_font_size; ?>  !important;
-            padding: <?php echo $breadcrumb_padding; ?>;
-            margin: <?php echo $breadcrumb_margin; ?>;
+            font-size: <?php echo esc_attr($breadcrumb_font_size); ?>  !important;
+            padding: <?php echo esc_attr($breadcrumb_padding); ?>;
+            margin: <?php echo esc_attr($breadcrumb_margin); ?>;
         }
         .breadcrumb-container li a{
-            color:  <?php echo $breadcrumb_link_color; ?>  !important;
-            font-size:  <?php echo $breadcrumb_font_size; ?>  !important;
-            line-height:  <?php echo $breadcrumb_font_size; ?>  !important;
+            color:  <?php echo esc_attr($breadcrumb_link_color); ?>  !important;
+            font-size:  <?php echo esc_attr($breadcrumb_font_size); ?>  !important;
+            line-height:  <?php echo esc_attr($breadcrumb_font_size); ?>  !important;
         }
         .breadcrumb-container li .separator {
-            color: <?php echo $breadcrumb_separator_color; ?>  !important;
-            font-size:  <?php echo $breadcrumb_font_size; ?>  !important;
+            color: <?php echo esc_attr($breadcrumb_separator_color); ?>  !important;
+            font-size:  <?php echo esc_attr($breadcrumb_font_size); ?>  !important;
         }
         <?php
         if($breadcrumb_display_last_separator=='no'){
@@ -193,7 +189,10 @@ function breadcrumb_main_style_css(){
 
     $themes_css = breadcrumb_themes_css($breadcrumb_themes);
 
-    echo $themes_css;
+//To Code reviewers
+// no need escape here we have already done for each variable above
+
+    echo ($themes_css);
 
 
 }
@@ -210,7 +209,7 @@ function breadcrumb_main_custom_scripts(){
     ?>
     <style type="text/css">
         <?php
-        echo esc_html($breadcrumb_custom_css);
+        echo wp_kses_post($breadcrumb_custom_css);
         ?>
     </style>
     <script>

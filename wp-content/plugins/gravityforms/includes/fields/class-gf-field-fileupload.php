@@ -151,13 +151,14 @@ class GF_Field_FileUpload extends GF_Field {
 	}
 
 	public function validate( $value, $form ) {
+		$file_names = array();
 		$input_name = 'input_' . $this->id;
 		GFCommon::log_debug( __METHOD__ . '(): Validating field ' . $input_name );
 
 		$allowed_extensions = ! empty( $this->allowedExtensions ) ? GFCommon::clean_extensions( explode( ',', strtolower( $this->allowedExtensions ) ) ) : array();
 		if ( $this->multipleFiles ) {
 			$file_names = isset( GFFormsModel::$uploaded_files[ $form['id'] ][ $input_name ] ) ? GFFormsModel::$uploaded_files[ $form['id'] ][ $input_name ] : array();
-		} else {
+		} elseif ( ! empty( $_FILES[ $input_name ] ) ) {
 			$max_upload_size_in_bytes = isset( $this->maxFileSize ) && $this->maxFileSize > 0 ? $this->maxFileSize * 1048576 : wp_max_upload_size();
 			$max_upload_size_in_mb    = $max_upload_size_in_bytes / 1048576;
 			if ( ! empty( $_FILES[ $input_name ]['name'] ) && $_FILES[ $input_name ]['error'] > 0 ) {
@@ -325,7 +326,7 @@ class GF_Field_FileUpload extends GF_Field {
 					)
 				);
 
-				if ( rgar( $form, 'requireLogin' ) ) {
+				if ( GFCommon::form_requires_login( $form ) ) {
 					$plupload_init['multipart_params'][ '_gform_file_upload_nonce_' . $form_id ] = wp_create_nonce( 'gform_file_upload_' . $form_id, '_gform_file_upload_nonce_' . $form_id );
 				}
 
@@ -496,10 +497,22 @@ class GF_Field_FileUpload extends GF_Field {
 			$value = rgar( $lead, strval( $this->id ) );
 		}
 
-		return $this->get_multifile_value( $form['id'], $input_name, $value );
+		return $this->get_multifile_value( $form['id'], $input_name, $value, $lead_id );
 	}
 
-	public function get_multifile_value( $form_id, $input_name, $value ) {
+	/**
+	 * Get the value of the multifile input.
+	 *
+	 * @since 2.6.8 Added $entry_id parameter.
+	 *
+	 * @param int    $form_id    ID of the form
+	 * @param string $input_name Name of the input (input_1)
+	 * @param string $value      Value of the input
+	 * @param int    $entry_id   ID of the entry
+	 *
+	 * @return string
+	 */
+	public function get_multifile_value( $form_id, $input_name, $value, $entry_id = null ) {
 		global $_gf_uploaded_files;
 
 		GFCommon::log_debug( __METHOD__ . '(): Starting.' );
@@ -514,8 +527,10 @@ class GF_Field_FileUpload extends GF_Field {
 
 					// File was previously uploaded to form; do not process temp.
 					if ( ! isset( $file_info['temp_filename'] ) ) {
+						$existing_file = $this->check_existing_entry( $entry_id, $input_name, $file_info );
+
 						$uploaded_path        = GFFormsModel::get_file_upload_path( $form_id, $file_info['uploaded_filename'], false );
-						$uploaded_files[ $i ] = $uploaded_path['url'];
+						$uploaded_files[ $i ] = $existing_file ? : $uploaded_path['url'];
 						continue;
 					}
 
@@ -547,6 +562,44 @@ class GF_Field_FileUpload extends GF_Field {
 		$value_safe = $this->sanitize_entry_value( $value, $form_id );
 
 		return $value_safe;
+	}
+
+	/**
+	 * Check existing entry for the file to re-use its URL rather than recreating as the date may be different.
+	 *
+	 * @since 2.6.8
+	 *
+	 * @param int    $entry_id   The id of the current entry
+	 * @param string $input_name The name of the input field (input_1)
+	 * @param array  $file_info  Array of file details
+	 *
+	 * @return mixed Array of file details or URL of existing file
+	 */
+	public function check_existing_entry( $entry_id, $input_name, $file_info ) {
+		$existing_entry = $entry_id ? GFAPI::get_entry( $entry_id ) : null;
+
+		if ( ! $existing_entry || is_wp_error( $existing_entry ) ) {
+			return $file_info;
+		}
+
+		$input_id          = str_replace( 'input_', '', $input_name );
+		$existing_files    = GFCommon::maybe_decode_json( rgar( $existing_entry, $input_id ) );
+		$existing_file_url = null;
+
+		foreach ( $existing_files as $existing_file ) {
+			$existing_file_pathinfo = pathinfo( $existing_file );
+
+			if ( $file_info['uploaded_filename'] === $existing_file_pathinfo['basename'] ) {
+				$existing_file_url = $existing_file;
+				break;
+			}
+		}
+
+		if ( $existing_file_url ) {
+			$file_info = $existing_file_url;
+		}
+
+		return $file_info;
 	}
 
 	/**

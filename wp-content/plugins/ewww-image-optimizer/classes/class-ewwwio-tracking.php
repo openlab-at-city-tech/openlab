@@ -99,8 +99,21 @@ class EWWWIO_Tracking {
 		if ( ! function_exists( 'ewww_image_optimizer_aux_images_table_count_pending' ) ) {
 			require_once( EWWW_IMAGE_OPTIMIZER_PLUGIN_PATH . 'aux-optimize.php' );
 		}
-		$data['images_optimized'] = ewww_image_optimizer_get_option( 'ewww_image_optimizer_cloud_key' ) ? 0 : ewww_image_optimizer_aux_images_table_count();
-		$data['bytes_saved']      = ewww_image_optimizer_get_option( 'ewww_image_optimizer_cloud_key' ) ? 0 : ewww_image_optimizer_savings();
+		if (
+			ewww_image_optimizer_get_option( 'ewww_image_optimizer_cloud_key' ) ||
+			! ewww_image_optimizer_os_supported() ||
+			( defined( 'EWWW_IMAGE_OPTIMIZER_NOEXEC' ) && EWWW_IMAGE_OPTIMIZER_NOEXEC )
+		) {
+			$total_images  = 0;
+			$total_savings = 0;
+		} else {
+			$total_images  = ewww_image_optimizer_aux_images_table_count();
+			$total_sizes   = ewww_image_optimizer_savings();
+			$total_savings = $total_sizes[1] - $total_sizes[0];
+		}
+
+		$data['images_optimized'] = $total_images;
+		$data['bytes_saved']      = $total_savings;
 
 		$data['nextgen']          = class_exists( 'EWWW_Nextgen' ) ? true : false;
 		$data['nextcellent']      = class_exists( 'EWWW_Nextcellent' ) ? true : false;
@@ -108,9 +121,15 @@ class EWWWIO_Tracking {
 		$data['memory_limit']     = ewwwio_memory_limit();
 		$data['time_limit']       = (int) ini_get( 'max_execution_time' );
 		$data['operating_system'] = ewww_image_optimizer_function_exists( 'php_uname' ) ? php_uname( 's' ) : '';
-		$data['image_library']    = ewww_image_optimizer_gd_support() ? 'gd' : '';
-		$data['image_library']    = ewww_image_optimizer_imagick_support() ? 'imagick' : '';
-		$data['image_library']    = ewww_image_optimizer_gmagick_support() ? 'gmagick' : '';
+
+		$data['image_library'] = '';
+		if ( ewww_image_optimizer_gmagick_support() ) {
+			$data['image_library'] = 'gmagick';
+		} elseif ( ewww_image_optimizer_imagick_support() ) {
+			$data['image_library'] = 'imagick';
+		} elseif ( ewww_image_optimizer_gd_support() ) {
+			$data['image_library'] = 'gd';
+		}
 
 		$data['cloud_api']     = ewww_image_optimizer_get_option( 'ewww_image_optimizer_cloud_key' ) ? true : false;
 		$data['keep_metadata'] = ewww_image_optimizer_get_option( 'ewww_image_optimizer_metadata_remove' ) ? false : true;
@@ -137,7 +156,6 @@ class EWWWIO_Tracking {
 		$data['disable_pngout']         = (bool) ewww_image_optimizer_get_option( 'ewww_image_optimizer_disable_pngout' );
 		$data['pngout_level']           = ewww_image_optimizer_get_option( 'ewww_image_optimizer_cloud_key' ) ? 9 : (int) ewww_image_optimizer_get_option( 'ewww_image_optimizer_pngout_level' );
 		$data['jpg_quality']            = (int) apply_filters( 'jpeg_quality', 82 );
-		$data['parallel_opt']           = (bool) ewww_image_optimizer_get_option( 'ewww_image_optimizer_parallel_optimization' );
 		$data['background_opt']         = (bool) ewww_image_optimizer_get_option( 'ewww_image_optimizer_background_optimization' );
 		$data['scheduled_opt']          = (bool) ewww_image_optimizer_get_option( 'ewww_image_optimizer_auto' );
 		$data['include_media_folders']  = (bool) ewww_image_optimizer_get_option( 'ewww_image_optimizer_include_media_paths' );

@@ -7,6 +7,7 @@ jQuery(window).on("load", function () {
     
     jQuery(".b2s-import-auto-post-type").chosen();
     jQuery(".b2s-import-auto-post-categories").chosen();
+    jQuery(".b2s-import-auto-post-taxonomies").chosen();
     jQuery(".b2s-auto-post-assign-user").chosen();
 
     jQuery('.b2s-network-item-auth-list[data-network-count="true"]').each(function () {
@@ -163,6 +164,18 @@ jQuery(document).on('click', '.b2sAutoPostBestTimesInfoModalBtn', function () {
 jQuery(document).on('change', '.b2s-auto-post-area-toggle', function() {
     if(jQuery(this).is(':checked')) {
         jQuery('.b2s-auto-post-area[data-area-type="'+jQuery(this).data('area-type')+'"]').show();
+        if(jQuery(this).data('area-type') == 'manuell') {
+            if(jQuery('.b2s-autopost-m-show-modal').val() == '1') {
+                jQuery('#b2sAutoPostMInfoModal').modal('show');
+                jQuery('.b2s-autopost-m-show-modal').val('0');
+            }
+        }
+        if(jQuery(this).data('area-type') == 'import') {
+            if(jQuery('.b2s-autopost-a-show-modal').val() == '1') {
+                jQuery('#b2sAutoPostAInfoModal').modal('show');
+                jQuery('.b2s-autopost-a-show-modal').val('0');
+            }
+        }
     } else {
         jQuery('.b2s-auto-post-area[data-area-type="'+jQuery(this).data('area-type')+'"]').hide();
     }

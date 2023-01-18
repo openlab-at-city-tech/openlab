@@ -1,0 +1,500 @@
+# Copyright (C) 2016 Compete Themes
+# This file is distributed under the GNU General Public License v2 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: Period 1.04\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/support/theme/style\n"
+"POT-Creation-Date: 2016-09-19 23:13+0200\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2016-09-21 14:37+0200\n"
+"Language-Team: \n"
+"X-Generator: Poedit 1.8.9\n"
+"Last-Translator: \n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: de_DE\n"
+
+#: 404.php:6
+msgid "404: Page Not Found"
+msgstr "404: Die Seite wurde nicht gefunden."
+
+#: 404.php:9
+msgid ""
+"Looks like nothing was found on this url.  Double-check that the url is correct or try the search form "
+"below to find what you were looking for."
+msgstr "Benutze das unten stehende Suchformular, um zu finden, was du sucht..."
+
+#: comments.php:12 comments.php:32 comments.php:54
+msgid "Be First to Comment"
+msgstr "Schreibe als erster einen Kommentar..."
+
+#: comments.php:12 comments.php:32 comments.php:54
+msgid "One Comment"
+msgstr "1 Kommentar"
+
+#: comments.php:12 comments.php:32 comments.php:54 content/comments-link.php:5 content/comments-link.php:8
+msgid "% Comments"
+msgstr "% Kommentare"
+
+#: comments.php:46
+msgid ""
+"Comments are closed, but <a href=\"%s\" title=\"Trackback URL for this post\">trackbacks</a> and pingbacks "
+"are open."
+msgstr ""
+"Die Kommentarfunktion ist deaktiviert, aber <a href=“%s” title=“Trackback-URL für diesen "
+"Eintrag”>Trackbacks</a> und Dingbacks sind offen."
+
+#: comments.php:68 comments.php:75
+msgid "Comments are closed."
+msgstr "Die Kommentarfunktion ist deaktiviert."
+
+#: content/archive-header.php:4
+msgid "Posts"
+msgstr "Beiträge"
+
+#: content/comments-link.php:2
+msgid "comment icon"
+msgstr "Kommentar Symbol"
+
+#: content/comments-link.php:5
+msgid "Comments closed"
+msgstr "Kommentare geschlossen."
+
+#: content/comments-link.php:5 content/comments-link.php:8
+msgid "1 Comment"
+msgstr "1 Kommentar"
+
+#: content/comments-link.php:8
+msgid "Leave a Comment"
+msgstr "Schreibe einen Kommentar..."
+
+#: content/post-categories.php:10
+msgid "Published in"
+msgstr "Veröffentlicht in:"
+
+#: content/post-categories.php:17
+msgid "View all posts in %s"
+msgstr "Zeige alle Beiträge in %s"
+
+#: content/post-nav-attachment.php:3
+msgid "Previous Image"
+msgstr "Vorheriges Bild anzeigen..."
+
+#: content/post-nav-attachment.php:6
+msgid "Next Image"
+msgstr "Nächstes Bild anzeigen..."
+
+#: content/post-nav.php:6
+msgid "Previous Post"
+msgstr "Vorheriger Beitrag..."
+
+#: content/post-nav.php:9
+msgid "No Older Posts"
+msgstr "Kein älterer Beitrag."
+
+#: content/post-nav.php:15 content/post-nav.php:28
+msgid "Return to Blog"
+msgstr "Zurück zum Blog."
+
+#: content/post-nav.php:19
+msgid "Next Post"
+msgstr "Nächster Beitrag..."
+
+#: content/post-nav.php:22
+msgid "No Newer Posts"
+msgstr "Kein neuerer Beitrag."
+
+#: content/post-tags.php:8
+msgid "View all posts tagged %s"
+msgstr "Zeige alle Beiträge aus %s an."
+
+#: content/search-bar.php:11 searchform.php:3 searchform.php:6
+msgid "Search"
+msgstr "Suche"
+
+#: content/search-bar.php:12
+msgid "Search..."
+msgstr "Suche..."
+
+#: content/search-bar.php:13 searchform.php:5
+msgid "Search for:"
+msgstr "Suche nach:"
+
+#: content-page.php:12 content.php:13
+msgid "Pages:"
+msgstr "Seiten:"
+
+#: footer.php:15
+msgid "<a href=\"%s\">Period WordPress Theme</a> by Compete Themes."
+msgstr "<a href=\"%s\">Period WordPress Theme</a> von Compete Themes."
+
+#: functions.php:32
+msgid "Primary"
+msgstr "Primär"
+
+#: functions.php:43
+msgid "Primary Sidebar"
+msgstr "Primäre Seitenleiste"
+
+#: functions.php:45
+msgid "Widgets in this area will be shown in the sidebar next to the main post content"
+msgstr "Widgets hier hinzufügen, um sie in der Seitenleiste einzubauen."
+
+#: functions.php:72
+msgid "Your comment is awaiting moderation."
+msgstr "Dein Kommentar wartet auf die Freischaltung eines Autors."
+
+#: functions.php:79
+msgid "Reply"
+msgstr "Antworten"
+
+#: functions.php:84
+msgid "Edit"
+msgstr "Bearbeiten"
+
+#: functions.php:96
+msgid "(optional)"
+msgstr "(optional)"
+
+#: functions.php:101
+msgid "Name"
+msgstr "Name"
+
+#: functions.php:102
+msgid "Jane Doe"
+msgstr "Jane Doe"
+
+#: functions.php:108
+msgid "Email"
+msgstr "E-Mail"
+
+#: functions.php:109
+msgid "name@email.com"
+msgstr "name@email.com"
+
+#: functions.php:115
+msgid "Website"
+msgstr "Website"
+
+#: functions.php:130
+msgid "Comment"
+msgstr "Kommentar"
+
+#: functions.php:161 functions.php:170 functions.php:186
+msgid "Continue reading"
+msgstr "Weiterlesen"
+
+#: functions.php:329 functions.php:330
+msgid "email"
+msgstr "email"
+
+#: functions.php:381 inc/scripts.php:12
+msgid "open dropdown menu"
+msgstr "Das Ausklappmenü-Menü öffnen."
+
+#: functions.php:392
+msgid "Featured"
+msgstr "Gekennzeichnet"
+
+#: functions.php:450
+msgid "Customizer settings deleted"
+msgstr "Deine Einstellungen wurden gelöscht."
+
+#: header.php:11
+msgid "Press \"Enter\" to skip to content"
+msgstr "Drücke \"Enter\", um den Text zu überspringen."
+
+#: header.php:23 inc/scripts.php:10
+msgid "open menu"
+msgstr "Öffne das Menü"
+
+#: inc/customizer.php:15
+msgid "Front Page"
+msgstr "Startseite"
+
+#: inc/customizer.php:27
+msgid "Logo"
+msgstr "Header-Bild"
+
+#: inc/customizer.php:37
+msgid "Upload a logo"
+msgstr "Aktuelles Header-Bild"
+
+#: inc/customizer.php:50
+msgid "Adjust the size of the logo"
+msgstr "Größe von dem Header-Bild ändern..."
+
+#: inc/customizer.php:71
+msgid "Social Media Icons"
+msgstr "Soziale Medien"
+
+#: inc/customizer.php:73
+msgid "Add the URL for each of your social profiles."
+msgstr ""
+"Passe die Felder mit der URL deines social media Profils an. Solltest du nicht bei allen sozialen "
+"Netzwerken angemeldet sein, so lasse das Feld leer."
+
+#: inc/customizer.php:86
+msgid "Email Address"
+msgstr "E-Mail-Adresse"
+
+#: inc/customizer.php:135
+msgid "Accepts Skype link protocol (<a href=\"%s\" target=\"_blank\">learn more</a>)"
+msgstr "Akzeptiert das Skype link Protokoll. (<a href=\"%s\" target=\"_blank\">erfahre mehr</a>)"
+
+#: inc/customizer.php:161
+msgid "Search Bar"
+msgstr "Suchleiste"
+
+#: inc/customizer.php:172
+msgid "Show search bar at top of site?"
+msgstr "Die Suchleiste auf der Seite anzeigen?"
+
+#: inc/customizer.php:176 inc/customizer.php:275 inc/customizer.php:291 inc/customizer.php:326
+#: inc/customizer.php:370
+msgid "Show"
+msgstr "Anzeigen"
+
+#: inc/customizer.php:177 inc/customizer.php:276 inc/customizer.php:292 inc/customizer.php:327
+#: inc/customizer.php:371
+msgid "Hide"
+msgstr "Verstecken"
+
+#: inc/customizer.php:185
+msgid "Layout"
+msgstr "Layout"
+
+#: inc/customizer.php:187
+msgid "Want more layouts? Check out the <a target=\"_blank\" href=\"%s\">Period Pro plugin</a>."
+msgstr ""
+"Benötigst du weitere Layouts? Erwerbe hierfür das <a target=\"_blank\" href=\"%s\">Period Pro Plugin</a>."
+
+#: inc/customizer.php:197
+msgid "Choose your layout"
+msgstr "Wähle dein Layout aus..."
+
+#: inc/customizer.php:202 inc/customizer.php:385
+msgid "Right sidebar"
+msgstr "Rechte Seitenleiste"
+
+#: inc/customizer.php:203 inc/customizer.php:386
+msgid "Left sidebar"
+msgstr "Linke Seitenleiste"
+
+#: inc/customizer.php:211
+msgid "Blog"
+msgstr "Blog"
+
+#: inc/customizer.php:221
+msgid "Show full posts on blog?"
+msgstr "Soll der vollständige Blogbeitrag angezeigt werden?"
+
+#: inc/customizer.php:226 inc/customizer.php:345
+msgid "Yes"
+msgstr "Ja"
+
+#: inc/customizer.php:227 inc/customizer.php:346
+msgid "No"
+msgstr "Nein"
+
+#: inc/customizer.php:237
+msgid "Excerpt word count"
+msgstr "Angezeigte Wörter."
+
+#: inc/customizer.php:244
+msgid "Continue Reading"
+msgstr "Weiterlesen..."
+
+#: inc/customizer.php:249
+msgid "Read More button text"
+msgstr "Eigener Text anstelle von \"Weiterlesen...\""
+
+#: inc/customizer.php:259
+msgid "Display Controls"
+msgstr "Anzeigeeinstellung"
+
+#: inc/customizer.php:261
+msgid "Want more options like these? Check out the <a target=\"_blank\" href=\"%s\"> Period Pro plugin</a>."
+msgstr ""
+"Benötigst du mehr dieser Besonderheiten? Erwerbe das <a target=\"_blank\" href=\"%s\">Period Pro Plugin</"
+"a>."
+
+#: inc/customizer.php:271
+msgid "Post author name in byline"
+msgstr "Autor Name"
+
+#: inc/customizer.php:287
+msgid "Post date in byline"
+msgstr "Datum"
+
+#: inc/customizer.php:300
+msgid "Custom CSS"
+msgstr "CSS"
+
+#: inc/customizer.php:311
+msgid "Add Custom CSS Here"
+msgstr "Benutzerdefinierte CSS-Anpassung."
+
+#: inc/customizer.php:387
+msgid "No sidebar - Narrow"
+msgstr "Keine Seitenleiste - Schmal"
+
+#: inc/customizer.php:388
+msgid "No sidebar - Wide"
+msgstr "Keine Seitenleiste - Breit"
+
+#: inc/customizer.php:389
+msgid "Two column - Right sidebar"
+msgstr "2 Spalten - Rechte Seitenleiste"
+
+#: inc/customizer.php:390
+msgid "Two column - Left sidebar"
+msgstr "2 Spalten - Linke Seitenleiste"
+
+#: inc/customizer.php:391
+msgid "Two column - No Sidebar - Narrow"
+msgstr "2 Spalten - Keine Seitenleiste - Schmal"
+
+#: inc/customizer.php:392
+msgid "Two column - No Sidebar - Wide"
+msgstr "2 Spalten - Keine Seitenleiste - Breit"
+
+#: inc/customizer.php:402
+msgid "View the Period Pro Plugin"
+msgstr "Schau dir das Period Pro Plugin an."
+
+#: inc/scripts.php:11
+msgid "close menu"
+msgstr "Menü schließen."
+
+#: inc/scripts.php:13
+msgid "close dropdown menu"
+msgstr "Ausklappmenü schließen."
+
+#: index.php:21
+msgid "Previous"
+msgstr "Zurück"
+
+#: index.php:22
+msgid "Next"
+msgstr "Weiter"
+
+#: search.php:9
+msgid "%d search result for \"%s\""
+msgid_plural "%d search results for <span class=\"query\">\"%s\"</span>"
+msgstr[0] "%d Suchergebnis für \"%s\""
+msgstr[1] "%d Suchergenisse für <span class=\"query\">\"%s\"</span>"
+
+#: search.php:11
+msgid "No search results for <span class=\"query\">\"%s\"</span>"
+msgstr "Kein Suchergebnis für <span class=\"query\">\"%s\"</span> gefunden."
+
+#: search.php:34
+msgid "Can't find what you're looking for?  Try refining your search:"
+msgstr "Wurde nicht das gefunden, wonach du gesucht hast? Versuche deine Suchanfrage zu verfeinern."
+
+#: searchform.php:5
+msgid "Search for..."
+msgstr "Suche nach..."
+
+#: sidebar-primary.php:3
+msgid "Sidebar"
+msgstr "Seitenleiste"
+
+#: theme-options.php:4 theme-options.php:19
+msgid "Period Dashboard"
+msgstr "Übersichtseite"
+
+#: theme-options.php:22
+msgid "Customization"
+msgstr "Einstellungen"
+
+#: theme-options.php:23
+msgid "Click the \"Customize\" link in your menu, or use the button below to get started customizing Period"
+msgstr "Um Period auf deine Wünsche anzupassen, drücke auf \"Anpassen\""
+
+#: theme-options.php:26
+msgid "Use Customizer"
+msgstr "Anpassen"
+
+#: theme-options.php:30
+msgid "Support"
+msgstr "Period Support"
+
+#: theme-options.php:31
+msgid "You can find the knowledgebase, changelog, support forum, and more in the Period Support Center"
+msgstr "Hier findest du die Knowledgebase, das Änderungsprotokoll, das Forum und vieles mehr"
+
+#: theme-options.php:34
+msgid "Visit Support Center"
+msgstr "Support"
+
+#: theme-options.php:38
+msgid "Period Pro"
+msgstr "Period Pro"
+
+#: theme-options.php:39
+msgid "Download the Period Pro plugin and unlock custom colors, new layouts, sliders, and more"
+msgstr ""
+"Downloade das Period Pro Plugin, um z.B. die benutzerdefinierte Farbanpassung, neue Layouts, Sliders und "
+"vieles mehr zu aktivieren"
+
+#: theme-options.php:42
+msgid "See Full Feature List"
+msgstr "Vollständiger Funktionsumfang"
+
+#: theme-options.php:46
+msgid "WordPress Resources"
+msgstr "Produktempfehlungen"
+
+#: theme-options.php:47
+msgid "Save time and money searching for WordPress products by following our recommendations"
+msgstr "Spare Zeit und Geld, indem du in unseren WordPress-Produktempfehlungen suchst"
+
+#: theme-options.php:50
+msgid "View Resources"
+msgstr "Ansehen"
+
+#: theme-options.php:54 theme-options.php:56
+msgid "Leave a Review"
+msgstr "Produktrezension"
+
+#: theme-options.php:55
+msgid "Help others find Period by leaving a review on wordpress.org."
+msgstr "Helfe anderen Personen dabei, Period auf wordpress.org zu finden."
+
+#: theme-options.php:59 theme-options.php:67
+msgid "Reset Customizer Settings"
+msgstr "Zurücksetzen"
+
+#: theme-options.php:61
+msgid ""
+"<strong>Warning:</strong> Clicking this button will erase the Period theme's current settings in the <a "
+"href='%s'>Customizer</a>."
+msgstr ""
+"<strong>Warnung:</strong> Deine gesamten <a href='%s'>Einstellungen</a> werden unwiederbringlich gelöscht."
+
+#. Description of the plugin/theme
+msgid ""
+"Period displays your content beautifully across phones, widescreen monitors, and everything in between. "
+"With special attention to typography, accessibility, and space, Period is a design you can trust for "
+"displaying your content."
+msgstr ""
+"Period präsentiert deine Inhalte vom Smartphone bis zum Breitbildmonitor. Mit Augenmerk auf Typografie, "
+"Barrierefreiheit und Anordnung ist Period ein Design, welchem du vertrauen kannst."
+
+#: content/post-byline.php:14
+msgctxt "This blog post was published on some date"
+msgid "Published %s"
+msgstr "Veröffentlicht %s"
+
+#: content/post-byline.php:16
+msgctxt "This blog post was published by some author"
+msgid "Published by %s"
+msgstr "Veröffentlicht von %s."
+
+#: content/post-byline.php:18
+msgctxt "This blog post was published on some date by some author"
+msgid "Published %1$s by %2$s"
+msgstr "Veröffentlicht %1$s von %2$s."

@@ -107,7 +107,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         InspectorControls = _wpBlockEditor.InspectorControls;
 
 
-    var SUPPORTED_BLOCKS = ['advgb/accordion-item', 'advgb/accordions', 'advgb/adv-tabs', 'advgb/adv-tab', 'advgb/recent-posts', 'advgb/images-slider', 'advgb/button'];
+    var SUPPORTED_BLOCKS = ['advgb/accordion-item', 'advgb/accordions', 'advgb/adv-tabs', 'advgb/adv-tab', 'advgb/recent-posts', 'advgb/images-slider', 'advgb/button', 'advgb/list', 'advgb/count-up', 'advgb/testimonial', 'advgb/image'];
 
     function advgbGetBlockTitle(name) {
         switch (name) {
@@ -133,6 +133,22 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
                 return __('Button', 'advanced-gutenberg');
                 break;
 
+            case 'advgb/list':
+                return __('List', 'advanced-gutenberg');
+                break;
+
+            case 'advgb/count-up':
+                return __('Count Up', 'advanced-gutenberg');
+                break;
+
+            case 'advgb/testimonial':
+                return __('Testimonial', 'advanced-gutenberg');
+                break;
+
+            case 'advgb/image':
+                return __('Image', 'advanced-gutenberg');
+                break;
+
             default:
                 return __('PublishPress', 'advanced-gutenberg');
                 break;
@@ -142,7 +158,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
     // Add Upgrade to Pro Ad in sidebar
     addFilter('editor.BlockEdit', 'advgb/proAd', function (BlockEdit) {
         return function (props) {
-            return [React.createElement(BlockEdit, _extends({ key: 'block-edit-custom-class-name' }, props)), props.isSelected && SUPPORTED_BLOCKS.includes(props.name) && React.createElement(
+            return [props.isSelected && SUPPORTED_BLOCKS.includes(props.name) && React.createElement(
                 InspectorControls,
                 { key: 'advgb-custom-controls' },
                 React.createElement(
@@ -156,7 +172,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
                         __('Upgrade to Pro', 'advanced-gutenberg')
                     )
                 )
-            )];
+            ), React.createElement(BlockEdit, _extends({ key: 'block-edit-custom-class-name' }, props))];
         };
     });
 })(wp.i18n, wp.hooks, wp.blockEditor);

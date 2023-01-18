@@ -41,38 +41,18 @@ register_activation_hook(ADVANCED_GUTENBERG_PLUGIN, function () {
         update_option('advgb_settings', array(
             'gallery_lightbox' => 1,
             'gallery_lightbox_caption' => '1',
-            'blocks_icon_color' => '#5952de',
+            'blocks_icon_color' => '#655997',
             'disable_wpautop' => 0,
             'enable_columns_visual_guide' => 1,
-            'enable_block_access' => 0,
+            'enable_block_access' => 1,
             'enable_custom_styles' => 1,
             'enable_advgb_blocks' => 1,
             'enable_pp_branding' => 1,
+            'enable_core_blocks_features' => 1,
+            'block_controls' => 1,
+            'block_extend' => 0
         ));
     }
-
-    // Add cap to users
-    global $wp_roles;
-
-    $wp_roles->add_cap('administrator', 'edit_advgb_profiles');
-    $wp_roles->add_cap('administrator', 'edit_others_advgb_profiles');
-    $wp_roles->add_cap('administrator', 'create_advgb_profiles');
-    $wp_roles->add_cap('administrator', 'publish_advgb_profiles');
-    $wp_roles->add_cap('administrator', 'delete_advgb_profiles');
-    $wp_roles->add_cap('administrator', 'delete_others_advgb_profiles');
-    $wp_roles->add_cap('administrator', 'read_advgb_profile');
-    $wp_roles->add_cap('administrator', 'read_private_advgb_profiles');
-
-    $wp_roles->add_cap('editor', 'read_advgb_profile');
-    $wp_roles->add_cap('editor', 'read_private_advgb_profiles');
-    $wp_roles->add_cap('editor', 'edit_advgb_profiles');
-
-    $wp_roles->add_cap('author', 'edit_advgb_profiles');
-    $wp_roles->add_cap('author', 'read_advgb_profile');
-    $wp_roles->add_cap('author', 'read_private_advgb_profiles');
-
-    $wp_roles->add_cap('contributor', 'read_advgb_profile');
-    $wp_roles->add_cap('contributor', 'read_private_advgb_profiles');
 
     // Delete deprecated options
     delete_option( 'advgb_jureview_installation_time' );
@@ -143,8 +123,6 @@ if ( !function_exists('advgb_some_specific_updates') ) {
                 if( $blocks_by_role_access ) {
                     update_option( 'advgb_blocks_user_roles', $blocks_by_role_access );
                 }
-
-                // Don't delete post type advgb_profile to keep a backup!
             }
         }
 

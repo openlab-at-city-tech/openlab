@@ -21,11 +21,7 @@ su_add_shortcode(
 			),
 			'style'         => array(
 				'type'    => 'select',
-				'values'  => array(
-					'default' => __( 'Default', 'shortcodes-ultimate' ),
-					'fancy'   => __( 'Fancy', 'shortcodes-ultimate' ),
-					'simple'  => __( 'Simple', 'shortcodes-ultimate' ),
-				),
+				'values'  => su_get_available_styles_for( 'spoiler' ),
 				'default' => 'default',
 				'name'    => __( 'Style', 'shortcodes-ultimate' ),
 				'desc'    => __( 'Choose style for this spoiler', 'shortcodes-ultimate' ),

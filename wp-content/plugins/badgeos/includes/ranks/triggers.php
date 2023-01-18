@@ -1,6 +1,6 @@
 <?php
 /**
- * Ranks Triggers
+ * Ranks Triggers.
  *
  * @package Badgeos
  * @subpackage Ranks
@@ -10,229 +10,239 @@
  */
 
 /**
- * Helper function for returning our available ranks actvity triggers
+ * Helper function for returning our available ranks actvity triggers.
  *
- * @return array An array of all our activity triggers stored as 'value' => 'Display Name'
+ * @return array An array of all our activity triggers stored as 'value' => 'Display Name'.
  */
 function get_badgeos_ranks_req_activity_triggers() {
-	
-	$GLOBALS['badgeos']->badgeos_ranks_req_activity_triggers = apply_filters( 'badgeos_ranks_req_activity_triggers',
+
+	$GLOBALS['badgeos']->badgeos_ranks_req_activity_triggers = apply_filters(
+		'badgeos_ranks_req_activity_triggers',
 		array(
-			'badgeos_wp_login'     			=> __( 'Log in to Website', 'badgeos' ),
-			'badgeos_new_comment'  			=> __( 'Comment on a post', 'badgeos' ),
-			'badgeos_specific_new_comment' 	=> __( 'Comment on a specific post', 'badgeos' ),
-            'badgeos_new_post'     			=> __( 'Publish a new post', 'badgeos' ),
-            'badgeos_visit_a_post'          => __( 'Visit a Post', 'badgeos' ),
-            'badgeos_award_author_on_visit_post'   => __( 'Award author when a user visits post', 'badgeos' ),
-            'badgeos_new_page'     			=> __( 'Publish a new page', 'badgeos' ),
-            'badgeos_visit_a_page'          => __( 'Visit a Page', 'badgeos' ),
-            'badgeos_award_author_on_visit_page'   => __( 'Award author when a user visits page', 'badgeos' ),
-			'user_register'     			=> __( 'Register to the website', 'badgeos' ),
-            'badgeos_daily_visit'     		=> __( 'Daily visit website', 'badgeos' ),
-            'badgeos_on_completing_num_of_year' => __( 'After completing the number of years', 'badgeos' ),
-            'badgeos_on_completing_num_of_month' => __( 'After completing the number of month', 'badgeos' ),
-            'badgeos_on_completing_num_of_day' => __( 'After completing the number of day', 'badgeos' ),
+			'badgeos_wp_login'                   => __( 'Log in to Website', 'badgeos' ),
+			'badgeos_new_comment'                => __( 'Comment on a post', 'badgeos' ),
+			'badgeos_specific_new_comment'       => __( 'Comment on a specific post', 'badgeos' ),
+			'badgeos_new_post'                   => __( 'Publish a new post', 'badgeos' ),
+			'badgeos_visit_a_post'               => __( 'Visit a Post', 'badgeos' ),
+			'badgeos_award_author_on_visit_post' => __( 'Award author when a user visits post', 'badgeos' ),
+			'badgeos_new_page'                   => __( 'Publish a new page', 'badgeos' ),
+			'badgeos_visit_a_page'               => __( 'Visit a Page', 'badgeos' ),
+			'badgeos_points_on_birthday'         => __( 'On User Birthday', 'badgeos' ),
+			'badgeos_award_author_on_visit_page' => __( 'Award author when a user visits page', 'badgeos' ),
+			'user_register'                      => __( 'Register to the website', 'badgeos' ),
+			'badgeos_daily_visit'                => __( 'Daily visit website', 'badgeos' ),
+			'badgeos_on_completing_num_of_year'  => __( 'After completing the number of years', 'badgeos' ),
+			'badgeos_on_completing_num_of_month' => __( 'After completing the number of month', 'badgeos' ),
+			'badgeos_on_completing_num_of_day'   => __( 'After completing the number of day', 'badgeos' ),
+			'badgeos_on_the_first_x_users'       => __( 'Rank to the first X users', 'badgeos' ),
 		)
 	);
-    return apply_filters( 'badgeos_activity_triggers_for_all', $GLOBALS['badgeos']->badgeos_ranks_req_activity_triggers );
+	return apply_filters( 'badgeos_activity_triggers_for_all', $GLOBALS['badgeos']->badgeos_ranks_req_activity_triggers );
 }
 
 /**
- * Load up our activity triggers so we can add actions to them
+ * Load up our activity triggers so we can add actions to them.
  *
  * @return void
  */
 function badgeos_ranks_load_activity_triggers() {
 
 	/**
-     * Grab our activity triggers
-     */
+	 * Grab our activity triggers
+	 */
 	$activity_triggers = get_badgeos_ranks_req_activity_triggers();
-    
-    /**
-     * Loop through each trigger and add our trigger event to the hook
-     */
-    foreach ( $activity_triggers as $trigger => $trigger_data ) {
 
-        if( is_array( $trigger_data ) ) {
-            if( count( $trigger_data['sub_triggers'] ) > 0 ) {
-                foreach( $trigger_data['sub_triggers'] as $tdata ) {
-                    add_action( trim( $tdata['trigger'] ), 'badgeos_dynamic_ranks_req_trigger_event', 10, 20 );
-                }
-            }
-        } else
-            add_action( $trigger, 'badgeos_ranks_req_trigger_event', 10, 20 );
-    }
-    
+	/**
+	 * Loop through each trigger and add our trigger event to the hook.
+	 */
+	foreach ( $activity_triggers as $trigger => $trigger_data ) {
+
+		if ( is_array( $trigger_data ) ) {
+			if ( count( $trigger_data['sub_triggers'] ) > 0 ) {
+				foreach ( $trigger_data['sub_triggers'] as $tdata ) {
+					add_action( trim( $tdata['trigger'] ), 'badgeos_dynamic_ranks_req_trigger_event', 10, 20 );
+				}
+			}
+		} else {
+			add_action( $trigger, 'badgeos_ranks_req_trigger_event', 10, 20 );
+		}
+	}
+
 }
 add_action( 'init', 'badgeos_ranks_load_activity_triggers' );
 
 /**
- * Handle each of our dynamic activity triggers
+ * Handle each of our dynamic activity triggers.
  *
  * @since 1.0.0
- * @return mixed
+ * @return mixed.
  */
-function badgeos_dynamic_ranks_req_trigger_event( ) {
-    /**
-     * Setup all our globals
-     */
-    global $user_ID, $blog_id, $wpdb;
+function badgeos_dynamic_ranks_req_trigger_event() {
+	/**
+	 * Setup all our globals
+	 */
+	global $blog_id, $wpdb;
 
-    $site_id = $blog_id;
+	$site_id = $blog_id;
 
-    $args = func_get_args();
+	$args = func_get_args();
 
-    /**
-     * Grab our current trigger
-     */
-    $this_trigger = current_filter();
+	/**
+	 * Grab our current trigger
+	 */
+	$this_trigger = current_filter();
 
+	/**
+	 * Grab the user ID
+	 */
+	$user_id = $args[0];
+	if ( intval( $user_id ) < 1 ) {
+		$user_id = get_current_user_id();
+	}
 
-    /**
-     * Grab the user ID
-     */
-    $user_id = $args[0];
-    if( intval( $user_id ) < 1 ) {
-        $user_id = get_current_user_id();
-    }
+	$user_data = get_user_by( 'id', $user_id );
 
-    $user_data = get_user_by( 'id', $user_id );
+	/**
+	 * Sanity check, if we don't have a user object, bail here
+	 */
+	if ( ! is_object( $user_data ) ) {
+		return $args[0];
+	}
 
-    /**
-     * Sanity check, if we don't have a user object, bail here
-     */
-    if ( ! is_object( $user_data ) )
-        return $args[ 0 ];
+	/**
+	 * If the user doesn't satisfy the trigger requirements, bail here
+	 */
+	if ( ! apply_filters( 'badgeos_user_rank_deserves_trigger', true, $user_id, $this_trigger, $site_id, $args ) ) {
+		return $args[0];
+	}
 
-    /**
-     * If the user doesn't satisfy the trigger requirements, bail here
-     */
-    if ( ! apply_filters( 'badgeos_user_rank_deserves_trigger', true, $user_id, $this_trigger, $site_id, $args ) )
-        return $args[ 0 ];
-
-    /**
-     * Now determine if any Achievements are earned based on this trigger event
-     */
-    $triggered_ranks = $wpdb->get_results( $wpdb->prepare(
-        "SELECT p.ID as post_id 
+	/**
+	 * Now determine if any Achievements are earned based on this trigger event
+	 */
+	$triggered_ranks = $wpdb->get_results(
+		$wpdb->prepare(
+			"SELECT p.ID as post_id 
 							FROM $wpdb->postmeta AS pm
 							INNER JOIN $wpdb->posts AS p ON ( p.ID = pm.post_id AND pm.meta_key = '_badgeos_rank_subtrigger_value' ) where p.post_status = 'publish' AND pm.meta_value = %s
 							",
-        $this_trigger
-    ) );
+			$this_trigger
+		)
+	);
 
-    if( !empty( $triggered_ranks ) ) {
-        foreach ( $triggered_ranks as $rank ) {
-            $parent_id = badgeos_get_parent_id( $rank->post_id );
-            if( absint($parent_id) > 0) {
-                $step_params = badgeos_utilities::get_post_meta( $rank->post_id, '_badgeos_fields_data', true );
-                $step_params = badgeos_extract_array_from_query_params( $step_params );
-                if( apply_filters("badgeos_check_dynamic_trigger_filter", true, 'ranks', $this_trigger, $step_params, $args[ 1 ]) ) {
-                    $new_count = badgeos_ranks_update_user_trigger_count( $rank->post_id, $parent_id,$user_id, $this_trigger, $site_id, $args );
-                    badgeos_maybe_award_rank( $rank->post_id,$parent_id,$user_id, $this_trigger, $site_id, $args );
-                }
-            }
-        }
-    }
+	if ( ! empty( $triggered_ranks ) ) {
+		foreach ( $triggered_ranks as $rank ) {
+			$parent_id = badgeos_get_parent_id( $rank->post_id );
+			if ( absint( $parent_id ) > 0 ) {
+				$step_params = badgeos_utilities::get_post_meta( $rank->post_id, '_badgeos_fields_data', true );
+				$step_params = badgeos_extract_array_from_query_params( $step_params );
+				if ( apply_filters( 'badgeos_check_dynamic_trigger_filter', true, 'ranks', $this_trigger, $step_params, $args[1] ) ) {
+					$new_count = badgeos_ranks_update_user_trigger_count( $rank->post_id, $parent_id, $user_id, $this_trigger, $site_id, $args );
+					badgeos_maybe_award_rank( $rank->post_id, $parent_id, $user_id, $this_trigger, $site_id, $args );
+				}
+			}
+		}
+	}
 
-    return $args[ 0 ];
+	return $args[0];
 }
 
 /**
- * Handle each of our ranks activity triggers
+ * Handle each of our ranks activity triggers.
  *
  * @return mixed
  */
 function badgeos_ranks_req_trigger_event() {
 
 	/**
-     * Setup all our globals
-     */
-	global $user_ID, $blog_id, $wpdb;
+	 * Setup all our globals.
+	 */
+	global $blog_id, $wpdb;
 
 	$site_id = $blog_id;
 
 	$args = func_get_args();
-    
+
 	/**
-     * Grab our current trigger
-     */
+	 * Grab our current trigger.
+	 */
 	$this_trigger = current_filter();
 
-	
 	/**
-     * Grab the user ID
-     */
-	$user_id = badgeos_trigger_get_user_id( $this_trigger, $args );
+	 * Grab the user ID.
+	 */
+	$user_id   = badgeos_trigger_get_user_id( $this_trigger, $args );
 	$user_data = get_user_by( 'id', $user_id );
 
 	/**
-     * Sanity check, if we don't have a user object, bail here
-     */
-	if ( ! is_object( $user_data ) )
-		return $args[ 0 ];
+	 * Sanity check, if we don't have a user object, bail here.
+	 */
+	if ( ! is_object( $user_data ) ) {
+		return $args[0];
+	}
 
 	/**
-     * If the user doesn't satisfy the trigger requirements, bail here
-     */
-	if ( ! apply_filters( 'badgeos_user_rank_deserves_trigger', true, $user_id, $this_trigger, $site_id, $args ) )
-		return $args[ 0 ];
+	 * If the user doesn't satisfy the trigger requirements, bail here.
+	 */
+	if ( ! apply_filters( 'badgeos_user_rank_deserves_trigger', true, $user_id, $this_trigger, $site_id, $args ) ) {
+		return $args[0];
+	}
 
 	/**
-     * Now determine if any Achievements are earned based on this trigger event
-     */
-	$triggered_ranks = $wpdb->get_results( $wpdb->prepare(
-							"SELECT p.ID as post_id 
+	 * Now determine if any Achievements are earned based on this trigger event.
+	 */
+	$triggered_ranks = $wpdb->get_results(
+		$wpdb->prepare(
+			"SELECT p.ID as post_id 
 							FROM $wpdb->postmeta AS pm
 							INNER JOIN $wpdb->posts AS p ON ( p.ID = pm.post_id AND pm.meta_key = '_rank_trigger_type' ) where p.post_status = 'publish' AND pm.meta_value = %s
 							",
-							$this_trigger
-						) );
-    
-	if( !empty( $triggered_ranks ) ) {
-		foreach ( $triggered_ranks as $rank ) { 
+			$this_trigger
+		)
+	);
+
+	if ( ! empty( $triggered_ranks ) ) {
+		foreach ( $triggered_ranks as $rank ) {
 			$parent_id = badgeos_get_parent_id( $rank->post_id );
-			if( absint($parent_id) > 0) { 
-                
-                if( apply_filters( 'badgeos_user_rank_trigger', true, $rank->post_id, $parent_id,$user_id, $this_trigger, $site_id, $args ) ) {
-                    $new_count = badgeos_ranks_update_user_trigger_count( $rank->post_id, $parent_id,$user_id, $this_trigger, $site_id, $args );
-                }
-				    
-				badgeos_maybe_award_rank( $rank->post_id,$parent_id,$user_id, $this_trigger, $site_id, $args );
-				
-			} 
+			if ( absint( $parent_id ) > 0 ) {
+
+				if ( apply_filters( 'badgeos_user_rank_trigger', true, $rank->post_id, $parent_id, $user_id, $this_trigger, $site_id, $args ) ) {
+					$new_count = badgeos_ranks_update_user_trigger_count( $rank->post_id, $parent_id, $user_id, $this_trigger, $site_id, $args );
+				}
+
+				badgeos_maybe_award_rank( $rank->post_id, $parent_id, $user_id, $this_trigger, $site_id, $args );
+
+			}
 		}
 	}
-	
-	return $args[ 0 ];
+
+	return $args[0];
 }
 
 /**
- * Wrapper function for returning a user's array of credit triggers
+ * Wrapper function for returning a user's array of credit triggers.
  *
- * @param  integer $user_id The given user's ID
- * @param  integer $site_id The desired Site ID to check
- * @return array            An array of the triggers a user has triggered
+ * @param  integer $step_id    The given step ID.
+ * @param  integer $user_id The desired User's ID to check.
+ * @param  integer $site_id The desired Site ID to check.
+ * @return array            An array of the triggers a user has triggered.
  */
 function badgeos_ranks_get_user_triggers( $step_id, $user_id = 0, $site_id = 0 ) {
 
 	/**
-     * Grab all of the user's triggers
-     */
-	$user_triggers = ( $array_exists = badgeos_utilities::get_user_meta( $user_id, '_badgeos_ranks_triggers', true ) ) ? $array_exists : array();
-
+	 * Grab all of the user's triggers
+	 */
+	$user_triggers = ! empty( badgeos_utilities::get_user_meta( $user_id, '_badgeos_ranks_triggers', true ) ) ? badgeos_utilities::get_user_meta( $user_id, '_badgeos_ranks_triggers', true ) : array();
 
 	/**
-     * Use current site ID if site ID is not set, AND not explicitly set to false
-     */
+	 * Use current site ID if site ID is not set, AND not explicitly set to false.
+	 */
 	if ( ! $site_id && false !== $site_id ) {
 		$site_id = get_current_blog_id();
 	}
 
 	/**
-     * Return only the triggers that are relevant to the provided $site_id
-     */
+	 * Return only the triggers that are relevant to the provided $site_id.
+	 */
 	if ( $site_id && isset( $user_triggers[ $site_id ] ) ) {
 		return $user_triggers[ $site_id ];
 	} else {
@@ -241,83 +251,87 @@ function badgeos_ranks_get_user_triggers( $step_id, $user_id = 0, $site_id = 0 )
 }
 
 /**
- * Get the count for the number of times a user has triggered a particular credit trigger
+ * Get the count for the number of times a user has triggered a particular credit trigger.
  *
- * @param  integer $user_id The given user's ID
- * @param  string  $trigger The given trigger we're checking
- * @param  integer $site_id The desired Site ID to check
- * @param  array $args        The triggered args
- * @return integer          The total number of times a user has triggered the trigger
+ * @param  integer $step_id The given step ID.
+ * @param  integer $user_id The given user's ID.
+ * @param  string  $trigger The given trigger we're checking.
+ * @param  integer $site_id The desired Site ID to check.
+ * @param  array   $args        The triggered args.
+ * @return integer          The total number of times a user has triggered the trigger.
  */
 function ranks_get_user_trigger_count( $step_id, $user_id, $trigger, $site_id = 0, $args = array() ) {
 
 	/**
-     * Set to current site id
-     */
-	if ( ! $site_id )
+	 * Set to current site id.
+	 */
+	if ( ! $site_id ) {
 		$site_id = get_current_blog_id();
+	}
 
 	/**
-     * Grab the user's logged triggers
-     */
+	 * Grab the user's logged triggers.
+	 */
 	$user_triggers = badgeos_ranks_get_user_triggers( $step_id, $user_id, $site_id );
 
 	$trigger = apply_filters( 'ranks_get_user_trigger_name', $trigger, $user_id, $site_id, $step_id, $args );
 
 	/**
-     * If we have any triggers, return the current count for the given trigger
-     */
-	if ( ! empty( $user_triggers ) && isset( $user_triggers[$trigger."_".$step_id] ) ) {
-        return absint( $user_triggers[$trigger."_".$step_id] );
-    } else {
-        return 0;
-    }
+	 * If we have any triggers, return the current count for the given trigger.
+	 */
+	if ( ! empty( $user_triggers ) && isset( $user_triggers[ $trigger . '_' . $step_id ] ) ) {
+		return absint( $user_triggers[ $trigger . '_' . $step_id ] );
+	} else {
+		return 0;
+	}
 
 }
- 
-/**
- * Update the user's credit trigger count for a given trigger by 1
- *
- * @param  integer $step_id The given step ID
- * @param  integer $rank_id The given rank ID
- * @param  integer $user_id The given user's ID
- * @param  string  $trigger The trigger we're updating
- * @param  integer $site_id The desired Site ID to update
- * @param  array   $args    The triggered args
- * @return integer          The updated trigger count
- */
 
+/**
+ * Update the user's credit trigger count for a given trigger by 1.
+ *
+ * @param  integer $step_id The given step ID.
+ * @param  integer $rank_id The given rank ID.
+ * @param  integer $user_id The given user's ID.
+ * @param  string  $trigger The trigger we're updating.
+ * @param  integer $site_id The desired Site ID to update.
+ * @param  array   $args    The triggered args.
+ * @return integer          The updated trigger count.
+ */
 function badgeos_ranks_update_user_trigger_count( $step_id, $rank_id, $user_id, $trigger, $site_id = 0, $args = array() ) {
 
-    /**
-     * Set to current site id
-     */
-	if ( ! $site_id )
+	/**
+	 * Set to current site id.
+	 */
+	if ( ! $site_id ) {
 		$site_id = get_current_blog_id();
+	}
 
 	/**
-     * Grab the current count and increase it by 1
-     */
+	 * Grab the current count and increase it by 1.
+	 */
 	$trigger_count = absint( ranks_get_user_trigger_count( $step_id, $user_id, $trigger, $site_id, $args ) );
 
 	$increment = 1;
-	if( $increment = apply_filters( 'badgeos_ranks_update_user_trigger_count', $increment, $user_id, $step_id, $rank_id, $trigger, $site_id, $args ) )
-		$trigger_count += (int) $increment;
-	else	
-		return $increment;
+	$filter    = apply_filters( 'badgeos_ranks_update_user_trigger_count', $increment, $user_id, $step_id, $rank_id, $trigger, $site_id, $args );
 
+	if ( $increment === $filter ) {
+		$trigger_count += (int) $increment;
+	} else {
+		return $increment;
+	}
 
 	/**
-     * Update the triggers arary with the new count
-     */
-	$user_triggers = badgeos_ranks_get_user_triggers( $step_id, $user_id, false  );
+	 * Update the triggers arary with the new count.
+	 */
+	$user_triggers = badgeos_ranks_get_user_triggers( $step_id, $user_id, false );
 
-	$user_triggers[$site_id][$trigger."_".$step_id] = $trigger_count;
+	$user_triggers[ $site_id ][ $trigger . '_' . $step_id ] = $trigger_count;
 
 	badgeos_utilities::update_user_meta( $user_id, '_badgeos_ranks_triggers', $user_triggers );
 
 	/**
-     * Send back our trigger count for other purposes
-     */
+	 * Send back our trigger count for other purposes.
+	 */
 	return $trigger_count;
 }

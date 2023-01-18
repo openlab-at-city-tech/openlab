@@ -1,0 +1,77 @@
+/* FILE: global/modifiers/_others.scss */
+
+// Responsive
+
+	$important_modifiers: _important( 'modifier_responsive' );
+
+	.is-displayed-on-desktop,
+	.is-style-display-on-desktop {
+		@include media( ( map_get( $breakpoint, $mobile_menu_breakpoint ), 'max-width' ) ) {
+			display: none $important_modifiers;
+		}
+	}
+
+	.is-hidden-on-tablet,
+	.is-style-hidden-on-tablet {
+		@include media( ( map_get( $breakpoint, 'l' ), 'max-width' ) ) {
+			display: none $important_modifiers;
+		}
+	}
+
+	.is-stacked-on-tablet,
+	.is-style-stacked-on-tablet {
+
+		&:not(.is-not-stacked-on-mobile) {
+
+			@include media( ( map_get( $breakpoint, 'l' ), 'max-width' ) ) {
+				display: block $important_modifiers;
+			}
+
+			> *:not(:only-child),
+			> [class*="wp-block-"]:not(:only-child) {
+				@include media( ( map_get( $breakpoint, 'l' ), 'max-width' ) ) {
+					width: 100% $important_modifiers;
+					margin-left: auto $important_modifiers;
+					margin-right: auto $important_modifiers;
+				}
+			}
+
+		}
+
+	}
+
+	$important_modifiers: null; // Required reset.
+
+// Overflow
+
+	$important_modifiers: _important( 'modifier_overflow' );
+
+	.has-hidden-overflow {
+		overflow: hidden $important_modifiers;
+	}
+
+	.has-hidden-overflow-x {
+		overflow-x: hidden $important_modifiers;
+	}
+
+	.has-hidden-overflow-y {
+		overflow-y: hidden $important_modifiers;
+	}
+
+	$important_modifiers: null; // Required reset.
+
+// White space
+
+	$important_modifiers: _important( 'modifier_white_space' );
+
+	.has-nowrap-white-space {
+		white-space: nowrap $important_modifiers;
+	}
+
+	.has-responsive-nowrap-white-space {
+		@include media( map_get( $breakpoint, 'l' ) ) {
+			white-space: nowrap $important_modifiers;
+		}
+	}
+
+	$important_modifiers: null; // Required reset.

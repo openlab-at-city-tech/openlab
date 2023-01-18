@@ -92,7 +92,6 @@ class A_NextGen_Basic_Tagcloud_Controller extends Mixin
     {
         $this->call_parent('enqueue_frontend_resources', $displayed_gallery);
         wp_enqueue_style('photocrati-nextgen_basic_tagcloud-style', $this->get_static_url('photocrati-nextgen_basic_tagcloud#nextgen_basic_tagcloud.css'), array(), NGG_SCRIPT_VERSION);
-        $this->enqueue_ngg_styles();
     }
 }
 /**
@@ -263,7 +262,7 @@ class C_Taxonomy_Controller extends C_MVC_Controller
         $tag = urldecode(get_query_var('ngg_tag') ? get_query_var('ngg_tag') : get_query_var('name'));
         $tag = stripslashes(M_NextGen_Data::strip_html($tag));
         // Tags may not include HTML
-        if (!$this->ngg_tag_detection_has_run && !is_admin() && !empty($tag) && (stripos($wp->request, 'ngg_tag') === 0 || isset($wp_query->query_vars['page_id']) && $wp_query->query_vars['page_id'] === 'ngg_tag')) {
+        if (!$this->ngg_tag_detection_has_run && !is_admin() && !empty($tag) && is_string($wp->request) && (stripos($wp->request, 'ngg_tag') === 0 || isset($wp_query->query_vars['page_id']) && $wp_query->query_vars['page_id'] === 'ngg_tag')) {
             $this->ngg_tag_detection_has_run = TRUE;
             // Wordpress somewhat-correctly generates several notices, so silence them as they're really unnecessary
             if (!defined('WP_DEBUG') || !WP_DEBUG) {

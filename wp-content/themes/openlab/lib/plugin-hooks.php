@@ -40,159 +40,7 @@ require_once STYLESHEETPATH . '/lib/plugin-mods/files-funcs.php';
  * Plugin: BuddyPress Docs
  * See also: openlab/buddypress/groups/single/docs for template overrides
  */
-
-/**
- * Checks whether Docs is enabled for a group.
- *
- * @param int $group_id Group ID.
- * @return bool
- */
-function openlab_is_docs_enabled_for_group( $group_id = null ) {
-	if ( null === $group_id ) {
-		$group_id = bp_get_current_group_id();
-	}
-
-	// Default to true in case no value is found.
-	if ( ! $group_id ) {
-		return true;
-	}
-
-	$group_settings = bp_docs_get_group_settings( $group_id );
-
-	// Default to true in case no value is found, except for portfolios.
-	if ( ! $group_settings || ! isset( $group_settings['group-enable'] ) ) {
-		return ! openlab_is_portfolio( $group_id );
-	}
-
-	return ! empty( $group_settings['group-enable'] );
-}
-
-/**
- * Plugin: BuddyPress Docs
- * Don't allow BuddyPress Docs to use its own theme compatibility layer
- */
-add_filter( 'bp_docs_do_theme_compat', '__return_false' );
-
-/**
- * Plugin: BuddyPress Docs
- * Overriding the BP Docs header file to clean up sub menus
- * @param type $menu_template
- * @return string
- */
-function openlab_hide_docs_native_menu() {
-	$path = STYLESHEETPATH . '/buddypress/groups/single/docs/docs-header.php';
-	return $path;
-}
-add_filter( 'bp_docs_header_template', 'openlab_hide_docs_native_menu' );
-
-/**
- * Plugin: BuddyPress Docs
- * Custom templates for BP Docs pages
- * Allows for layout control and Bootstrap injection
- * @param type $path
- * @param type $template
- * @return type
- */
-function openlab_custom_docs_templates( $path, $template ) {
-	if ( 'list' === $template->current_view ) {
-		$path = bp_locate_template( 'groups/single/docs/docs-loop.php', false );
-	} elseif ( 'create' === $template->current_view || 'edit' === $template->current_view ) {
-		$path = bp_locate_template( 'groups/single/docs/edit-doc.php', false );
-	} elseif ( 'single' === $template->current_view ) {
-		$path = bp_locate_template( 'groups/single/docs/single-doc.php', false );
-	}
-
-	return $path;
-}
-add_filter( 'bp_docs_template', 'openlab_custom_docs_templates', 10, 2 );
-
-/**
- * Allow super admins to edit any BuddyPress Doc
- * @global type $bp
- * @param type $user_can
- * @param type $action
- * @return boolean
- */
-function openlab_allow_super_admins_to_edit_bp_docs( $user_can, $action ) {
-	global $bp;
-
-	if ( 'edit' === $action ) {
-		if ( is_super_admin() || (int) bp_loggedin_user_id() === (int) get_the_author_meta( 'ID' ) || $user_can ) {
-			$user_can                                 = true;
-			$bp->bp_docs->current_user_can[ $action ] = 'yes';
-		} else {
-			$user_can                                 = false;
-			$bp->bp_docs->current_user_can[ $action ] = 'no';
-		}
-	}
-
-	return $user_can;
-}
-add_filter( 'bp_docs_current_user_can', 'openlab_allow_super_admins_to_edit_bp_docs', 10, 2 );
-
-/**
- * Hack alert! Allow group avatars to be deleted
- *
- * There is a bug in BuddyPress Docs that blocks group avatar deletion, because
- * BP Docs is too greedy about setting its current view, and thinks that you're
- * trying to delete a Doc instead. Instead of fixing that, which I have no
- * patience for at the moment, I'm just going to override BP Docs's current
- * view in the case of deleting an avatar.
- */
-function openlab_fix_avatar_delete( $view ) {
-	if ( bp_is_group_admin_page() ) {
-		$view = '';
-	}
-
-	return $view;
-}
-
-add_filter( 'bp_docs_get_current_view', 'openlab_fix_avatar_delete', 9999 );
-
-/**
- * Inject "Notify members" interface before Docs comment submit button.
- */
-add_filter(
-	'comment_form_submit_button',
-	function( $button ) {
-		if ( ! bp_docs_is_existing_doc() ) {
-			return $button;
-		}
-
-		ob_start();
-		?>
-		<div class="notify-group-members-ui">
-			<?php openlab_notify_group_members_ui( true ); ?>
-		</div>
-		<?php
-		$ui = ob_get_contents();
-		ob_end_clean();
-
-		return $ui . $button;
-	},
-	100
-);
-
-/**
- * Email notification management.
- */
-function openlab_docs_activity_notification_control( $send_it, $activity, $user_id, $sub ) {
-	if ( ! $send_it ) {
-		return $send_it;
-	}
-
-	switch ( $activity->type ) {
-		case 'bp_doc_created':
-		case 'bp_doc_edited':
-		case 'bp_doc_comment':
-			return openlab_notify_group_members_of_this_action() && 'no' !== $sub;
-
-		default:
-			return $send_it;
-	}
-}
-add_action( 'bp_ass_send_activity_notification_for_user', 'openlab_docs_activity_notification_control', 100, 4 );
-add_action( 'bp_ges_add_to_digest_queue_for_user', 'openlab_docs_activity_notification_control', 100, 4 );
+require_once STYLESHEETPATH . '/lib/plugin-mods/docs-funcs.php';
 
 /**
  * BuddyPress Group Email Subscription
@@ -276,11 +124,7 @@ add_action(
  * Adding the forums submenu into the BBPress layout
  */
 function openlab_forum_tabs_output() {
-	?>
-	<ul class="nav nav-inline">
-		<?php openlab_forum_tabs(); ?>
-	</ul>
-	<?php
+	echo openlab_submenu_markup( 'group-forum' );
 }
 
 add_action( 'bbp_before_group_forum_display', 'openlab_forum_tabs_output' );
@@ -458,9 +302,18 @@ add_filter( 'bbp_is_site_public', 'openlab_bbp_force_site_public_to_1', 10, 2 );
  * Handle feature toggling for groups.
  */
 function openlab_group_feature_toggle( $group_id ) {
+	$group = groups_get_group( $group_id );
+
+	// Announcements.
+	$enable_announcements = ! empty( $_POST['openlab-edit-group-announcements'] );
+	if ( $enable_announcements ) {
+		groups_delete_groupmeta( $group_id, 'openlab_announcements_disabled' );
+	} else {
+		groups_update_groupmeta( $group_id, 'openlab_announcements_disabled', '1' );
+	}
+
 	// Discussion.
 	$enable_forum        = ! empty( $_POST['openlab-edit-group-forum'] );
-	$group               = groups_get_group( $group_id );
 	$group->enable_forum = $enable_forum;
 	$group->save();
 
@@ -657,7 +510,7 @@ function openlab_remove_bbpress_forum_title( $title ) {
 			$is_single_forum_template = true;
 		}
 
-		if ( ! empty( $db['function'] ) && 'openlab_forum_tabs' === $db['function'] ) {
+		if ( ! empty( $db['function'] ) && 'openlab_group_forum_submenu' === $db['function'] ) {
 			$is_forum_nav = true;
 		}
 	}
@@ -670,6 +523,65 @@ function openlab_remove_bbpress_forum_title( $title ) {
 }
 add_filter( 'bbp_get_forum_title', 'openlab_remove_bbpress_forum_title' );
 add_filter( 'bbp_get_topic_title', 'openlab_remove_bbpress_forum_title' );
+
+/**
+ * Filters bbPress's default search parameters.
+ *
+ * @param array $r
+ * @return array
+ */
+function openlab_filter_bbpress_search_parameters( $r ) {
+	if ( ! bp_is_group() ) {
+		return $r;
+	}
+
+	unset( $r['post_type']['forum'] );
+
+	if ( ! isset( $r['meta_query'] ) ) {
+		$r['meta_query'] = [];
+	}
+
+	$forum_ids = bbp_get_group_forum_ids( bp_get_current_group_id() );
+	if ( ! $forum_ids ) {
+		$forum_ids = [ 0 ];
+	}
+
+	$r['meta_query'][] = [
+		'key'     => '_bbp_forum_id',
+		'value'   => $forum_ids,
+		'compare' => 'IN',
+	];
+
+	$r['paged'] = ! empty( $_GET['search_paged'] ) ? (int) $_GET['search_paged'] : 1;
+
+	return $r;
+}
+add_filter( 'bbp_after_has_search_results_parse_args', 'openlab_filter_bbpress_search_parameters' );
+
+/**
+ * Filters bbPress's default search pagination parameters.
+ *
+ * @param array $r
+ * @return array
+ */
+function openlab_filter_bbpress_search_pagination_parameters( $r ) {
+	if ( ! bp_is_group() ) {
+		return $r;
+	}
+
+	if ( empty( $_GET['bbp_search'] ) ) {
+		return $r;
+	}
+
+	$search_term  = wp_unslash( $_GET['bbp_search'] );
+	$search_paged = ! empty( $_GET['search_paged'] ) ? (int) $_GET['search_paged'] : 1;
+
+	$r['base']    = add_query_arg( 'bbp_search', $search_term, bp_get_group_permalink( groups_get_current_group() ) . 'forum/' ) . '&search_paged=%#%';
+	$r['current'] = $search_paged;
+
+	return $r;
+}
+add_filter( 'bbp_search_results_pagination', 'openlab_filter_bbpress_search_pagination_parameters' );
 
 /**
  * Email notification management.
@@ -754,3 +666,168 @@ function openlab_refresh_term_cache_after_ordering_update() {
 }
 
 add_action( 'tto/update-order', 'openlab_refresh_term_cache_after_ordering_update' );
+
+/**
+ * Change the text displayed along with the pagination on the bbpress main page
+ */
+function openlab_forum_pagination_count( $html ) {
+	$bbp = bbpress();
+
+	// Define local variable(s)
+	$retstr = '';
+
+	// Topic query exists
+	if ( ! empty( $bbp->topic_query ) ) {
+
+		// Set pagination values
+		$count_int = intval( $bbp->topic_query->post_count );
+		$start_num = intval( ( $bbp->topic_query->paged - 1 ) * $bbp->topic_query->posts_per_page ) + 1;
+		$total_int = ! empty( $bbp->topic_query->found_posts )
+			? (int) $bbp->topic_query->found_posts
+			: $count_int;
+
+		// Format numbers for display
+		$count_num = bbp_number_format( $count_int );
+		$from_num  = bbp_number_format( $start_num );
+		$total     = bbp_number_format( $total_int );
+		$to_num    = bbp_number_format( ( $start_num + ( $bbp->topic_query->posts_per_page - 1 ) > $bbp->topic_query->found_posts )
+			? $bbp->topic_query->found_posts
+			: $start_num + ( $bbp->topic_query->posts_per_page - 1 ) );
+
+		// Several topics in a forum with a single page
+		if ( empty( $to_num ) ) {
+			$retstr = sprintf( _n( 'Viewing %1$s', 'Viewing %1$s', $total_int, 'bbpress' ), $total );
+
+		// Several topics in a forum with several pages
+		} else {
+			$retstr = sprintf( _n( 'Viewing topic %2$s (of %4$s total)', 'Viewing %2$s to %3$s (of %4$s total)', $total_int, 'bbpress' ), $count_num, $from_num, $to_num, $total );
+		}
+
+		// Escape results of _n()
+		$retstr = esc_html( $retstr );
+	}
+
+	return $retstr;
+}
+add_filter( 'bbp_get_forum_pagination_count', 'openlab_forum_pagination_count' );
+
+/**
+ * Change the text displayed along with the pagination on the bbpress search results page
+ */
+function openlab_search_results_pagination_count() {
+	$bbp = bbpress();
+
+	// Define local variable(s)
+	$retstr = '';
+
+	// Set pagination values
+	$total_int = intval( $bbp->search_query->found_posts    );
+	$ppp_int   = intval( $bbp->search_query->posts_per_page );
+	$start_int = intval( ( $bbp->search_query->paged - 1 ) * $ppp_int ) + 1;
+	$to_int    = intval( ( $start_int + ( $ppp_int - 1 ) > $total_int )
+			? $total_int
+			: $start_int + ( $ppp_int - 1 ) );
+
+	// Format numbers for display
+	$total_num = bbp_number_format( $total_int );
+	$from_num  = bbp_number_format( $start_int );
+	$to_num    = bbp_number_format( $to_int    );
+
+	// Single page of results
+	if ( empty( $to_num ) ) {
+		$retstr = sprintf( _n( 'Viewing %1$s', 'Viewing %1$s results', $total_int, 'bbpress' ), $total_num );
+
+	// Several pages of results
+	} else {
+		$retstr = sprintf( _n( 'Viewing %2$s (of %4$s total)', 'Viewing %2$s to %3$s (of %4$s total)', $bbp->search_query->post_count, 'bbpress' ), $bbp->search_query->post_count, $from_num, $to_num, $total_num );
+	}
+
+	return $retstr;
+}
+add_filter( 'bbp_get_search_pagination_count', 'openlab_search_results_pagination_count' );
+
+/**
+ * Change icons on the prev/next buttons in bbpress pagination
+ */
+function openlab_change_bbpress_pagination_prev_and_next_icons($arr) {
+    $arr['next_text'] = '<span class="fa fa-long-arrow-right"></span>';
+	$arr['prev_text'] = '<span class="fa fa-long-arrow-left"></span>';
+
+    return $arr;
+}
+add_filter( 'bbp_topic_pagination', 'openlab_change_bbpress_pagination_prev_and_next_icons' );
+add_filter( 'bbp_search_results_pagination', 'openlab_change_bbpress_pagination_prev_and_next_icons' );
+
+function openlab_bbp_topic_pagination_count( $string ) {
+	$bbp = bbpress();
+
+	// We are threading replies
+	if ( bbp_thread_replies() ) {
+		$walker  = new BBP_Walker_Reply();
+		$threads = absint( $walker->get_number_of_root_elements( $bbp->reply_query->posts ) - 1 );
+		$string  = sprintf( _n( 'Viewing %1$s replies', 'Viewing %1$s replies', $threads, 'bbpress' ), bbp_number_format( $threads ) );
+	}
+
+	return $string;
+}
+add_filter( 'bbp_get_topic_pagination_count', 'openlab_bbp_topic_pagination_count' );
+
+
+function openlab_bbp_single_topic_description() {
+	return '';
+}
+add_filter( 'bbp_get_single_topic_description', 'openlab_bbp_single_topic_description' );
+
+function openlab_bp_docs_info_header_message() {
+	$filters = bp_docs_get_current_filters();
+	$message = '';
+
+	// All docs
+	if ( empty( $filters ) ) {
+		$message = __( 'Viewing <strong>All</strong> Docs', 'openlab' );
+	} else {
+
+		// Search
+		if ( ! empty( $filters['search_terms'] ) ) {
+			$message = sprintf( __( 'Viewing docs containing the term: %s', 'bp-docs' ), esc_html( $filters['search_terms'] ) );
+		}
+
+		// Tag
+		if ( ! empty( $filters['tags'] ) ) {
+			$tagtext = array();
+
+			foreach ( $filters['tags'] as $tag ) {
+				$tagtext[] = bp_docs_get_tag_link( array( 'tag' => $tag ) );
+			}
+
+			$message = sprintf( __( 'Viewing docs with the tag: %s', 'buddypress-docs' ), implode( ', ', $tagtext ) );
+		}
+	}
+	?>
+	<p class="currently-viewing"><?php echo $message ?></p>
+	<?php
+}
+
+add_filter( 'bp_docs_paginate_links', 'openlab_bp_docs_paginate_links' );
+function openlab_bp_docs_paginate_links() {
+	global $bp, $wp_query, $wp_rewrite;
+
+	$page_links_total = $bp->bp_docs->doc_query->max_num_pages;
+
+	$pagination_args = array(
+		'base' 		=> add_query_arg( 'paged', '%#%' ),
+		'format' 	=> '',
+		'prev_text' 	=> '<span class="fa fa-long-arrow-left">',
+		'next_text' 	=> '<span class="fa fa-long-arrow-right"></span>',
+		'total' 	=> $page_links_total,
+		'end_size'  => 2,
+	);
+
+	if ( $wp_rewrite->using_permalinks() ) {
+		$pagination_args['base'] = apply_filters( 'bp_docs_page_links_base_url', user_trailingslashit( trailingslashit( bp_docs_get_archive_link() ) . $wp_rewrite->pagination_base . '/%#%/', 'bp-docs-directory' ), $wp_rewrite->pagination_base );
+	}
+
+	$page_links = paginate_links( $pagination_args );
+
+	echo $page_links;
+}

@@ -38,6 +38,7 @@ class GP_Media_Library extends GWPerk {
 
 		// functionality
 		add_filter( 'gform_entry_post_save', array( $this, 'maybe_upload_to_media_library' ), 10, 2 );
+		add_action( 'gform_post_add_entry', array( $this, 'maybe_upload_to_media_library' ), 10, 2 );
 		add_action( 'gform_after_update_entry', array( $this, 'maybe_upload_to_media_library_after_update' ), 10, 2 );
 		add_action( 'wp_ajax_rg_delete_file', array( $this, 'hijack_delete_file' ), 9 );
 		add_action( 'gform_delete_lead', array( $this, 'maybe_delete_from_media_library' ) );
@@ -45,6 +46,9 @@ class GP_Media_Library extends GWPerk {
 		add_action( 'gform_after_create_post', array( $this, 'acf_integration' ), 10, 3 );
 		add_action( 'gform_advancedpostcreation_post_after_creation', array( $this, 'apc_acf_integration' ), 10, 4 );
 		add_action( 'gform_advancedpostcreation_post_after_creation', array( $this, 'apc_custom_field_integration' ), 10, 4 );
+
+		add_action( 'gform_after_create_post', array( $this, 'check_for_featured_image_custom_field' ), 10, 3 );
+
 		add_action( 'gravityview/fields/fileupload/link_content', array( $this, 'gravityview_file_upload_content' ), 10, 2 );
 
 		add_filter( 'gform_admin_pre_render', array( $this, 'add_image_merge_tags' ) );
@@ -84,27 +88,29 @@ class GP_Media_Library extends GWPerk {
 	public function field_settings_js() {
 		?>
 
-		<script type="">
+		<script>
 			window.gpmlSupportedFieldTypes = <?php echo json_encode( $this->get_supported_field_types() ); ?>;
 
-			(function ($) {
+			(
+				function ( $ ) {
 
-				$(document).ready(function () {
-					for (fieldType in fieldSettings) {
-						if (
-							fieldSettings.hasOwnProperty(fieldType)
-							&& $.inArray(fieldType, window.gpmlSupportedFieldTypes) !== -1
-						) {
-							fieldSettings[fieldType] += ', .gpml-field-setting';
+					$( document ).ready( function () {
+						for ( fieldType in fieldSettings ) {
+							if (
+								fieldSettings.hasOwnProperty( fieldType )
+								&& $.inArray( fieldType, window.gpmlSupportedFieldTypes ) !== - 1
+							) {
+								fieldSettings[fieldType] += ', .gpml-field-setting';
+							}
 						}
-					}
-				});
+					} );
 
-				$(document).bind('gform_load_field_settings', function (event, field, form) {
-					$('#gpml-enable').prop('checked', field['uploadMediaLibrary'] == true);
-				});
+					$( document ).bind( 'gform_load_field_settings', function ( event, field, form ) {
+						$( '#gpml-enable' ).prop( 'checked', field['uploadMediaLibrary'] == true );
+					} );
 
-			})(jQuery);
+				}
+			)( jQuery );
 		</script>
 
 		<?php
@@ -124,8 +130,8 @@ class GP_Media_Library extends GWPerk {
 		 */
 		foreach ( $form['fields'] as $field ) {
 			if ( $this->is_applicable_field( $field ) ) {
-				$label = _n( 'Media Library ID', 'Media Library IDs', $field->multipleFiles ? 2 : 1, 'gp-media-library' );
-				$label = sprintf( '%s (%s)', $label, $field->get_field_label( false, '' ) );
+				$label                                                    = _n( 'Media Library ID', 'Media Library IDs', $field->multipleFiles ? 2 : 1, 'gp-media-library' );
+				$label                                                    = sprintf( '%s (%s)', $label, $field->get_field_label( false, '' ) );
 				$entry_meta[ $this->get_file_ids_meta_key( $field->id ) ] = array(
 					'label'             => esc_html( $label ),
 					'is_default_column' => false,
@@ -141,6 +147,7 @@ class GP_Media_Library extends GWPerk {
 		if ( strpos( $field_id, 'gpml_ids_' ) !== false && is_array( $entry[ $field_id ] ) ) {
 			$value = implode( ', ', $entry[ $field_id ] );
 		}
+
 		return $value;
 	}
 
@@ -274,7 +281,9 @@ class GP_Media_Library extends GWPerk {
 					'file_array' => $file_array,
 					'post_id'    => 0,
 					'desc'       => null,
-					'post_data'  => array( 'post_meta' => array() )
+					'post_data'  => array(
+						'post_meta' => array(),
+					),
 				), $field, $entry );
 
 				/**
@@ -287,7 +296,23 @@ class GP_Media_Library extends GWPerk {
 					unset( $GLOBALS['post'] );
 				}
 
+				$intermediate_image_sizes_filter = function ( $image_sizes ) use ( $field ) {
+					/**
+					 * Filter the image sizes to create after files are uploaded
+					 *
+					 * @param $image_sizes array Names of image sizes to allow
+					 *
+					 * @since 1.2.23
+					 */
+					return gf_apply_filters(
+						array( 'gpml_image_sizes', $field->formId, $field->id ),
+						$image_sizes
+					);
+				};
+
+				add_filter( 'intermediate_image_sizes', $intermediate_image_sizes_filter );
 				$id = media_handle_sideload( $media_data['file_array'], $media_data['post_id'], $media_data['desc'], $media_data['post_data'] );
+				remove_filter( 'intermediate_image_sizes', $intermediate_image_sizes_filter );
 
 				// Restore the WordPress post global if it was unset above.
 				if ( isset( $_globals_post ) ) {
@@ -357,10 +382,18 @@ class GP_Media_Library extends GWPerk {
 		$field_id   = intval( rgpost( 'field_id' ) );
 		$file_index = intval( rgpost( 'file_index' ) );
 
-		$file_id = $this->get_file_ids( $entry_id, $field_id, $file_index );
+		$file_ids = $this->get_file_ids( $entry_id, $field_id );
+
+		if ( is_array( $file_ids ) ) {
+			$file_id = array_splice( $file_ids, $file_index, 1 );
+			$file_id = array_pop( $file_id );
+		} else {
+			$file_id = $file_ids;
+		}
 
 		if ( ! empty( $file_id ) ) {
 			wp_delete_attachment( $file_id, true );
+			$this->update_file_ids( $entry_id, $field_id, $file_ids );
 		}
 
 	}
@@ -371,22 +404,23 @@ class GP_Media_Library extends GWPerk {
 			return;
 		}
 
+		$entry = GFAPI::get_entry( $entry_id );
+		$form  = GFAPI::get_form( $entry['form_id'] );
+
 		/**
 		 * Filter whether files imported into the Media Library from a given entry should be deleted when the entry is deleted.
 		 *
 		 * @param bool $should_delete Whether the entry's Media Library files should be deleted. Defaults to `true`.
 		 * @param int $entry_id The ID of the entry that has been deleted.
+		 * @param array $form The form that the entry is being deleted in.
 		 *
 		 * @since 1.2.7
 		 *
 		 */
-		$should_delete = apply_filters( 'gpml_delete_entry_files_from_media_library', true, $entry_id );
+		$should_delete = gf_apply_filters( array( 'gpml_delete_entry_files_from_media_library', $form['id'] ), true, $entry_id, $form );
 		if ( ! $should_delete ) {
 			return;
 		}
-
-		$entry = GFAPI::get_entry( $entry_id );
-		$form  = GFAPI::get_form( $entry['form_id'] );
 
 		foreach ( $form['fields'] as $field ) {
 			if ( $this->is_applicable_field( $field ) ) {
@@ -427,26 +461,31 @@ class GP_Media_Library extends GWPerk {
 
 		<script type="text/javascript">
 
-			(function ($) {
+			(
+				function ( $ ) {
 
-				var imageMergeTags = <?php echo json_encode( $this->get_image_merge_tags( $form ) ); ?>;
+					var imageMergeTags = <?php echo json_encode( $this->get_image_merge_tags( $form ) ); ?>;
 
-				if (window.gform) {
+					if ( window.gform ) {
 
-					gform.addFilter('gform_merge_tags', function (mergeTags, elementId, hideAllFields, excludeFieldTypes, isPrepop, option) {
-						mergeTags['gpml'] = {label: '<?php _e( 'GP Media Library', 'gp-media-library' ); ?>', tags: []};
-						for (var i = 0; i < imageMergeTags.length; i++) {
-							mergeTags['gpml'].tags.push({
-								tag: imageMergeTags[i].tag,
-								label: imageMergeTags[i].label
-							});
-						}
-						return mergeTags;
-					});
+						gform.addFilter( 'gform_merge_tags', function ( mergeTags, elementId, hideAllFields, excludeFieldTypes, isPrepop, option ) {
+							mergeTags['gpml'] = {
+								label: '<?php _e( 'GP Media Library', 'gp-media-library' ); ?>',
+								tags: []
+							};
+							for ( var i = 0; i < imageMergeTags.length; i ++ ) {
+								mergeTags['gpml'].tags.push( {
+									tag: imageMergeTags[i].tag,
+									label: imageMergeTags[i].label
+								} );
+							}
+							return mergeTags;
+						} );
+
+					}
 
 				}
-
-			})(jQuery);
+			)( jQuery );
 
 		</script>
 
@@ -609,9 +648,9 @@ class GP_Media_Library extends GWPerk {
 
 		if ( rgar( $notification, 'enableAttachments' ) ) {
 
-			$form = GFAPI::get_form( $entry['form_id'] );
+			$form     = GFAPI::get_form( $entry['form_id'] );
 			$file_ids = $this->get_file_ids_by_entry( $entry, $form );
-			$ids  = ( count( $file_ids ) > 0 ) ? call_user_func_array( 'array_merge', $file_ids ) : array();
+			$ids      = ( count( $file_ids ) > 0 ) ? call_user_func_array( 'array_merge', $file_ids ) : array();
 
 			foreach ( $ids as $id ) {
 				$url = wp_get_attachment_url( $id );
@@ -625,6 +664,23 @@ class GP_Media_Library extends GWPerk {
 		}
 
 		return $email;
+	}
+
+	public function check_for_featured_image_custom_field( $post_id, $entry, $form ) {
+
+		foreach ( $form['fields'] as $field ) {
+			if ( $field->type === 'post_custom_field' && $field->postCustomFieldName === '_thumbnail_id' && $this->is_applicable_field( $field ) ) {
+				$file_id = $this->get_file_ids( $entry['id'], $field->id, 0 );
+				// User reported that image did not display for them because it was unattached to the post. Consider this
+				// an exploratory addition.
+				wp_update_post( array(
+					'ID'          => $file_id,
+					'post_parent' => $post_id,
+				) );
+				set_post_thumbnail( $post_id, $file_id );
+			}
+		}
+
 	}
 
 
@@ -677,10 +733,7 @@ class GP_Media_Library extends GWPerk {
 
 				foreach ( $acf_fields as $acf_field ) {
 
-					if ( $acf_field['name'] != $field->postCustomFieldName || ! in_array( $acf_field['type'], array(
-							'image',
-							'file'
-						) ) ) {
+					if ( $acf_field['name'] != $field->postCustomFieldName || ! in_array( $acf_field['type'], $this->acf_get_supported_fields_types() ) ) {
 						continue;
 					}
 
@@ -733,10 +786,29 @@ class GP_Media_Library extends GWPerk {
 
 			$custom_field = $mapping['key'] == 'gf_custom' ? $mapping['custom_key'] : $mapping['key'];
 
-			$this->acf_update_field( $post_id, $custom_field, $field, $entry );
+			$this->acf_update_field( $post_id, $custom_field, $field, $entry, $mappings );
 
 		}
 
+	}
+
+	/**
+	 * Check if the featured image has been mapped via an Advanced Post Creation custom field mapping.
+	 *
+	 * Since APC supports mapping to Single File Upload fields by default, a manual mapping would indicate the user is
+	 * mapping a multi-file upload.
+	 *
+	 * @param array $custom_field_map An array of Advanced Post Creation custom field mappings.
+	 *
+	 * @return bool|string
+	 */
+	public function apc_get_featured_image_field( $custom_field_map ) {
+		foreach ( $custom_field_map as $mapping ) {
+			if ( in_array( '_thumbnail_id', array( $mapping['key'], $mapping['custom_key'] ) ) ) {
+				return (int) rgar( $mapping, 'value', $mapping['custom_value'] );
+			}
+		}
+		return false;
 	}
 
 	public function acf_get_field_value( $format, $entry, $gf_field, $is_multi = false ) {
@@ -762,20 +834,76 @@ class GP_Media_Library extends GWPerk {
 		return $value;
 	}
 
-	public function acf_update_field( $post_id, $acf_field_name, $gf_field, $entry ) {
+	public function acf_update_field( $post_id, $acf_field_name, $gf_field, $entry, $custom_field_map = array() ) {
 
-		$acf_field = acf_get_field( $acf_field_name );
-		if ( ! in_array( $acf_field['type'], array( 'image', 'file', 'gallery' ) ) ) {
-			return;
+		$acf_field       = acf_get_field( $acf_field_name );
+		$acf_field_types = array_merge( $this->acf_get_supported_fields_types(), array( 'repeater' ) );
+		if ( ! $acf_field || ! in_array( $acf_field['type'], $acf_field_types, true ) ) {
+			return false;
 		}
 
-		$value = $this->acf_get_field_value( 'id', $entry, $gf_field, $acf_field['type'] == 'gallery' );
+		if ( $acf_field['type'] === 'repeater' ) {
+			return $this->acf_update_repeater_field( $post_id, $acf_field, $gf_field, $entry );
+		}
+
+		$value = $this->acf_get_field_value( 'id', $entry, $gf_field, $acf_field['type'] === 'gallery' );
 		if ( ! $value ) {
-			return;
+			return false;
 		}
 
-		update_field( $acf_field['key'], $value, $post_id );
+		// If featured image is mapped to same field as this custom field (and this custom field is a gallery) remove the
+		// first file from the gallery since it is already being used as the featured image.
+		if ( $this->apc_get_featured_image_field( $custom_field_map ) === (int) $gf_field->id && $acf_field['type'] === 'gallery' ) {
+			$value = array_slice( $value, 1 );
+		}
 
+		return update_field( $acf_field['key'], $value, $post_id );
+	}
+
+	public function acf_update_repeater_field( $post_id, $acf_field_name, $gf_field, $entry ) {
+
+		$acf_field = is_array( $acf_field_name ) ? $acf_field_name : acf_get_field( $acf_field_name );
+		if ( ! $acf_field ) {
+			return false;
+		}
+
+		$target_sub_field = false;
+
+		foreach ( $acf_field['sub_fields'] as $acf_sub_field ) {
+			if ( in_array( $acf_sub_field['type'], $this->acf_get_supported_fields_types(), true ) ) {
+				$target_sub_field = $acf_sub_field;
+				break;
+			}
+		}
+
+		if ( ! $target_sub_field ) {
+			return false;
+		}
+
+		$value = $this->acf_get_field_value( 'id', $entry, $gf_field, true );
+
+		foreach ( $value as $file ) {
+			add_row( $acf_field['key'], array( $target_sub_field['key'] => $file ), $post_id );
+		}
+
+		return true;
+	}
+
+	public function acf_get_supported_fields_types() {
+		/**
+		 * Filter which Advanced Custom Fields field types are supported by GP Media Library.
+		 *
+		 * @param array $supported_field_types An array of supported ACF field types.
+		 *
+		 * @since 1.2.21
+		 *
+		 */
+		return apply_filters( 'gpml_supported_acf_field_types', array(
+			'image',
+			'file',
+			'image_aspect_ratio_crop',
+			'gallery'
+		) );
 	}
 
 
@@ -784,25 +912,22 @@ class GP_Media_Library extends GWPerk {
 	public function apc_custom_field_integration( $post_id, $feed, $entry, $form ) {
 
 		$auto_custom_fields = array(
-			'_product_image_gallery' /* WooCommerce product gallery */
+			'_thumbnail_id', /* Get first image for multi-file upload mappings */
+			'_product_image_gallery', /* WooCommerce product gallery */
 		);
 
 		/**
 		 * Filter which custom fields GP Media Library will attempt to convert to use image IDs.
 		 *
 		 * @param array $auto_custom_fields A list of custom field keys that should use image IDs.
-		 * @param int $post_id ID of the post for which custom fields are being processed.
-		 * @param array $entry The current entry ID.
-		 * @param array $form The current form.
-		 * @param array $feed The current APC feed.
+		 * @param int   $post_id            ID of the post for which custom fields are being processed.
+		 * @param array $entry              The current entry ID.
+		 * @param array $form               The current form.
+		 * @param array $feed               The current APC feed.
 		 *
 		 * @since 1.2.8
-		 *
 		 */
-		$auto_custom_fields = gf_apply_filters( array(
-			'gpml_auto_convert_custom_fields',
-			$form['id']
-		), $auto_custom_fields, $post_id, $entry, $form, $feed );
+		$auto_custom_fields = gf_apply_filters( array( 'gpml_auto_convert_custom_fields', $form['id'] ), $auto_custom_fields, $post_id, $entry, $form, $feed );
 
 		$mappings = rgars( $feed, 'meta/postMetaFields', array() );
 
@@ -824,7 +949,11 @@ class GP_Media_Library extends GWPerk {
 			}
 
 			if ( is_array( $value ) ) {
-				$value = implode( ',', $value );
+				if ( $key === '_thumbnail_id' ) {
+					$value = $value[0];
+				} else {
+					$value = implode( ',', $value );
+				}
 			}
 
 			update_post_meta( $post_id, $key, $value );
@@ -885,6 +1014,7 @@ class GP_Media_Library extends GWPerk {
 		}
 
 		return $ids;
+
 	}
 
 	public function update_file_ids( $entry_id, $field_id, $file_ids ) {

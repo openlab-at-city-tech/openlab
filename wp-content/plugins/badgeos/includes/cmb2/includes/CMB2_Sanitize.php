@@ -196,7 +196,7 @@ class CMB2_Sanitize {
 	public function colorpicker() {
 		// for repeatable
 		if ( is_array( $this->value ) ) {
-			$check = $this->value;
+			$check       = $this->value;
 			$this->value = array();
 			foreach ( $check as $key => $val ) {
 				if ( $val && '#' != $val ) {
@@ -219,7 +219,7 @@ class CMB2_Sanitize {
 		// for repeatable
 		if ( is_array( $this->value ) ) {
 			foreach ( $this->value as $key => $val ) {
-				$val = trim( $val );
+				$val                 = trim( $val );
 				$this->value[ $key ] = is_email( $val ) ? $val : '';
 			}
 		} else {
@@ -243,7 +243,7 @@ class CMB2_Sanitize {
 
 		global $wp_locale;
 
-		$search = array( $wp_locale->number_format['thousands_sep'], $wp_locale->number_format['decimal_point'] );
+		$search  = array( $wp_locale->number_format['thousands_sep'], $wp_locale->number_format['decimal_point'] );
 		$replace = array( '', '.' );
 
 		// Strip slashes. Example: 2\'180.00.
@@ -455,7 +455,7 @@ class CMB2_Sanitize {
 		$i       = $this->field->group->index;
 
 		// Check group $alldata data
-		$id_val  = isset( $alldata[ $base_id ][ $i ][ $id_key ] )
+		$id_val = isset( $alldata[ $base_id ][ $i ][ $id_key ] )
 			? absint( $alldata[ $base_id ][ $i ][ $id_key ] )
 			: '';
 
@@ -465,7 +465,7 @@ class CMB2_Sanitize {
 		}
 
 		return array(
-			'value' => $this->text_url(),
+			'value'                  => $this->text_url(),
 			'supporting_field_value' => $id_val,
 			'supporting_field_id'    => $id_key,
 		);
@@ -488,7 +488,7 @@ class CMB2_Sanitize {
 		if ( $this->value && ! $id_val ) {
 			$id_val = CMB2_Utils::image_id_from_url( $this->value );
 
-		// If there is an ID but user emptied the input value, remove the ID.
+			// If there is an ID but user emptied the input value, remove the ID.
 		} elseif ( ! $this->value && $id_val ) {
 			$id_val = null;
 		}
@@ -511,10 +511,12 @@ class CMB2_Sanitize {
 	 * @since  2.2.0
 	 */
 	public function _new_supporting_field( $new_field_id ) {
-		return $this->field->get_field_clone( array(
-			'id' => $new_field_id,
-			'sanitization_cb' => false,
-		) );
+		return $this->field->get_field_clone(
+			array(
+				'id'              => $new_field_id,
+				'sanitization_cb' => false,
+			)
+		);
 	}
 
 	/**

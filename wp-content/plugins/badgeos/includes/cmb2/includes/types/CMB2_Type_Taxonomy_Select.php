@@ -47,19 +47,23 @@ class CMB2_Type_Taxonomy_Select extends CMB2_Type_Taxonomy_Base {
 			 */
 			$option_none_value = apply_filters( "cmb2_taxonomy_select_{$field_id}_default_value", $option_none_value );
 
-			$options .= $this->select_option( array(
-				'label'   => $option_none,
-				'value'   => $option_none_value,
-				'checked' => $saved_term == $option_none_value,
-			) );
+			$options .= $this->select_option(
+				array(
+					'label'   => $option_none,
+					'value'   => $option_none_value,
+					'checked' => $saved_term == $option_none_value,
+				)
+			);
 		}
 
 		$options .= $this->loop_terms( $all_terms, $saved_term );
 
 		return $this->rendered(
-			$this->types->select( array(
-				'options' => $options,
-			) )
+			$this->types->select(
+				array(
+					'options' => $options,
+				)
+			)
 		);
 	}
 
@@ -67,11 +71,13 @@ class CMB2_Type_Taxonomy_Select extends CMB2_Type_Taxonomy_Base {
 		$options = '';
 
 		foreach ( $all_terms as $term ) {
-			$options .= $this->select_option( array(
-				'label'   => $term->name,
-				'value'   => $term->slug,
-				'checked' => $saved_term === $term->slug,
-			) );
+			$options .= $this->select_option(
+				array(
+					'label'   => $term->name,
+					'value'   => $term->slug,
+					'checked' => $saved_term === $term->slug,
+				)
+			);
 		}
 
 		return $options;

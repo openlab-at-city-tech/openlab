@@ -1,4 +1,8 @@
 wp.domReady( function() {
+	if ( ! wp.data.select( 'core/edit-post' ) ) {
+		return
+	}
+
 	var openLabFixedToolbar = localStorage.getItem( 'openLabFixedToolbar' );
 	var hasFixedToolbar = wp.data.select( 'core/edit-post' ).isFeatureActive( 'fixedToolbar' );
 	var isFullscreenMode = wp.data.select( 'core/edit-post' ).isFeatureActive( 'fullscreenMode' );

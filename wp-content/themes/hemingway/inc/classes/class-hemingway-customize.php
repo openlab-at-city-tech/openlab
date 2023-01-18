@@ -10,6 +10,44 @@ if ( ! class_exists( 'Hemingway_Customize' ) ) :
 		public static function register( $wp_customize ) {
 
 			/* ------------------------------------------------------------------------
+			 * Theme Options Panel
+			 * ------------------------------------------------------------------------ */
+
+			$wp_customize->add_panel( 'hemingway_theme_options', array(
+				'priority'       => 30,
+				'capability'     => 'edit_theme_options',
+				'theme_supports' => '',
+				'title'          => esc_html__( 'Theme Options', 'hemingway' ),
+				'description'    => esc_html__( 'Options included in the Hemingway theme.', 'hemingway' ),
+			) );
+
+			/* ------------------------------------------------------------------------
+			 * Sidebar Options
+			 * ------------------------------------------------------------------------ */
+
+			$wp_customize->add_section( 'hemingway_sidebar_options', array(
+				'title' 		=> esc_html__( 'Sidebar', 'hemingway' ),
+				'priority' 		=> 20,
+				'capability' 	=> 'edit_theme_options',
+				'description' 	=> esc_html__( 'Settings for the sidebar.', 'hemingway' ),
+				'panel'			=> 'hemingway_theme_options',
+			) );
+
+			/* Show Sidebar on Mobile -------- */
+
+			$wp_customize->add_setting( 'hemingway_show_sidebar_on_mobile', array(
+				'capability' 		=> 'edit_theme_options',
+				'sanitize_callback' => 'hemingway_sanitize_checkbox',
+			) );
+
+			$wp_customize->add_control( 'hemingway_show_sidebar_on_mobile', array(
+				'type' 			=> 'checkbox',
+				'section' 		=> 'hemingway_sidebar_options',
+				'label' 		=> esc_html__( 'Show Sidebar on Mobile', 'hemingway' ),
+				'description' 	=> esc_html__( 'Check to display the sidebar on mobile in Hemingway.', 'hemingway' ),
+			) );
+
+			/* ------------------------------------------------------------------------
 			 * Accent Color
 			 * ------------------------------------------------------------------------ */
 			
@@ -53,6 +91,16 @@ if ( ! class_exists( 'Hemingway_Customize' ) ) :
 					'settings' => 'hemingway_logo',
 				) ) );
 
+			}
+
+			/* ------------------------------------------------------------------------
+			 * Sanitation Functions
+			 * ------------------------------------------------------------------------ */
+
+			/* Sanitize Checkbox ------------- */
+
+			function hemingway_sanitize_checkbox( $checked ) {
+				return ( ( isset( $checked ) && true == $checked ) ? true : false );
 			}
 
 		}

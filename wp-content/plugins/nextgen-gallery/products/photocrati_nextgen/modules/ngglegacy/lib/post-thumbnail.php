@@ -19,9 +19,9 @@ class nggPostThumbnail {
 		
 		add_filter( 'admin_post_thumbnail_html', array( $this, 'admin_post_thumbnail'), 10, 2 );
 		add_action( 'wp_ajax_ngg_set_post_thumbnail', array( $this, 'ajax_set_post_thumbnail') );
+
 		// Adding filter for the new post_thumbnail
 		add_filter( 'post_thumbnail_html', array( $this, 'ngg_post_thumbnail'), 10, 5 );
-		return;		
 	}
 
 	/**
@@ -160,6 +160,9 @@ class nggPostThumbnail {
 		// check for correct capability
 		if ( !is_user_logged_in() )
 			die( '-1' );
+
+        if (!wp_verify_nonce($_POST['nonce'], 'ngg_set_post_thumbnails'))
+            die('-1');
 
 		// get the post id as global variable, otherwise the ajax_nonce failed later
 		$post_ID = intval( $_POST['post_id'] );

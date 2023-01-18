@@ -354,6 +354,11 @@ function bp_groups_admin_load() {
 		}
 
 		if ( ! empty( $user_names ) ) {
+			$new_members = count( $user_names );
+
+			if ( 1 < $new_members ) {
+				bp_groups_defer_group_members_count( true );
+			}
 
 			foreach( array_values( $user_names ) as $user_name ) {
 				$un = trim( $user_name );
@@ -371,6 +376,10 @@ function bp_groups_admin_load() {
 						$success_new[] = $un;
 					}
 				}
+			}
+
+			if ( 1 < $new_members ) {
+				bp_groups_defer_group_members_count( false, $group_id );
 			}
 		}
 
@@ -663,7 +672,7 @@ function bp_groups_admin_edit() {
 					<div id="post-body" class="metabox-holder columns-<?php echo 1 == get_current_screen()->get_columns() ? '1' : '2'; ?>">
 						<div id="post-body-content">
 							<div id="postdiv">
-								<div id="bp_groups_name" class="postbox">
+								<div id="bp_groups_name" class="groupbox">
 									<h2><?php _e( 'Name and Description', 'buddypress' ); ?></h2>
 									<div class="inside">
 										<label for="bp-groups-name" class="screen-reader-text"><?php
@@ -936,7 +945,8 @@ function bp_groups_admin_edit_metabox_members( $item ) {
 			bp_groups_get_group_manage_members_script_data( $item->id )
 		);
 
-		bp_get_template_part( 'common/js-templates/group-members/index' );
+		// Inject the Group Manage Members interface.
+		bp_groups_manage_group_members_interface( 'admin_footer' );
 
 		/**
 		 * Echo out the JavaScript variable.

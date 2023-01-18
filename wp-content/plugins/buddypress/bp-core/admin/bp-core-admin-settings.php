@@ -192,7 +192,7 @@ function bp_admin_setting_callback_members_invitations() {
 	<input id="bp-enable-members-invitations" name="bp-enable-members-invitations" type="checkbox" value="1" <?php checked( bp_get_members_invitations_allowed() ); ?> />
 	<label for="bp-enable-members-invitations"><?php _e( 'Allow registered members to invite people to join this network', 'buddypress' ); ?></label>
 	<?php if ( ! bp_get_signup_allowed() ) : ?>
-		<p class="description"><?php _e( 'Public registration is currently disabled. However, invitees will still be able to register if network invitations are enabled.', 'buddypress' ); ?></p>
+		<p class="description"><?php esc_html_e( 'Public registration is currently disabled. However, invitees will still be able to register if network invitations are enabled.', 'buddypress' ); ?></p>
 	<?php endif; ?>
 	<?php
 	/**
@@ -201,6 +201,36 @@ function bp_admin_setting_callback_members_invitations() {
 	 * @since 8.0.0
 	 */
 	do_action( 'bp_admin_settings_after_members_invitations' );
+}
+
+/**
+ * Allow new users to request membership to the network.
+ *
+ * @since 10.0.0
+ */
+function bp_admin_setting_callback_membership_requests() {
+?>
+	<input id="bp-enable-membership-requests" name="bp-enable-membership-requests" type="checkbox" value="1" <?php checked( bp_get_membership_requests_required( 'raw' ) ); ?> <?php disabled( bp_get_signup_allowed() ); ?> />
+	<label for="bp-enable-membership-requests"><?php esc_html_e( 'Allow visitors to request site membership. If enabled, an administrator must approve each new site membership request.', 'buddypress' ); ?></label>
+	<?php if ( bp_get_signup_allowed() ) : ?>
+		<?php if ( is_multisite() ) : ?>
+			<p class="description"><?php esc_html_e( 'With a WP multisite setup, to require membership requests for new signups, choose one of the following two options from the Network Settings > Registration Settings pane:', 'buddypress' ); ?><p>
+				<ul>
+					<li><p class="description"><?php esc_html_e( 'To allow the submission of membership requests but not allow site creation requests, select "Registration is disabled".', 'buddypress' ) ?></p></li>
+					<li><p class="description"><?php esc_html_e( 'To allow the submission of membership requests and to allow new sites to be created by your users, choose "Logged in users may register new sites".', 'buddypress' ) ?></p></li>
+				</ul>
+			<p class="description"><?php esc_html_e( 'The other two options, "User accounts may be registered" and "Both sites and user accounts can be registered," are open in nature and membership requests will not be enabled if one of those options is selected.', 'buddypress' ); ?><p>
+		<?php else : ?>
+			<p class="description"><?php esc_html_e( 'Public registration is currently enabled. If you wish to require approval for new memberships, disable public registration and enable the membership requests feature.', 'buddypress' ); ?></p>
+		<?php endif; ?>
+	<?php endif; ?>
+	<?php
+	/**
+	 * Fires after the output of the membership requests settings section.
+	 *
+	 * @since 10.0.0
+	 */
+	do_action( 'bp_admin_settings_after_membership_requests' );
 }
 
 /** XProfile ******************************************************************/
@@ -288,16 +318,10 @@ function bp_core_admin_settings() {
 
 	// We're saving our own options, until the WP Settings API is updated to work with Multisite.
 	$form_action = add_query_arg( 'page', 'bp-settings', bp_get_admin_url( 'admin.php' ) );
-
+	bp_core_admin_tabbed_screen_header( __( 'BuddyPress Settings', 'buddypress' ), __( 'Options', 'buddypress' ) );
 	?>
 
-	<div class="wrap">
-
-		<h1 class="wp-heading-inline"><?php esc_html_e( 'BuddyPress Settings', 'buddypress' ); ?></h1>
-		<hr class="wp-header-end">
-
-		<h2 class="nav-tab-wrapper"><?php bp_core_admin_tabs( esc_html__( 'Options', 'buddypress' ) ); ?></h2>
-
+	<div class="buddypress-body">
 		<form action="<?php echo esc_url( $form_action ) ?>" method="post">
 
 			<?php settings_fields( 'buddypress' ); ?>

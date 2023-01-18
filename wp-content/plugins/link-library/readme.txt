@@ -3,14 +3,16 @@ Contributors: jackdewey
 Donate link: https://ylefebvre.github.io/wordpress-plugins/link-library/
 Tags: link, list, directory, page, library, AJAX, RSS, feeds, inline, search, paging, add, submit, import, batch, pop-up
 Requires at least: 4.4
-Tested up to: 5.8
-Stable tag: 7.2.7
+Tested up to: 6.1.1
+Stable tag: 7.4.19
 
 The purpose of this plugin is to add the ability to output a list of link categories and a complete list of links with notes and descriptions.
 
 == Description ==
 
 This plugin is used to be able to create a page on your web site that will contain a list of all of the link categories that you have defined inside of the Links section of the Wordpress administration, along with all links defined in these categories. The user can select a sub-set of categories to be displayed or not displayed. Link Library also offers a mode where only one category is shown at a time, using AJAX or HTML Get queries to load other categories based on user input. It can display a search box and find results based on queries. It can also display a form to accept user submissions and allow the site administrator to moderate them before listing the new entries. Finally, it can generate an RSS feed for your link collection so that people can be aware of additions to your link library.
+
+You can try it out in a temporary copy of WordPress [here](https://demo.tastewp.com/link-library).
 
 For links that carry RSS feed information, Link Library can display a preview of the latest feed items inline with the all links or in a separate preview window.
 
@@ -47,6 +49,162 @@ In addition to specifying a library, categories to be displayed can be specified
 Further configuration is available under the Link Library Settings panel.
 
 == Changelog ==
+
+= 7.4.19 =
+* Translation update
+
+= 7.4.18 =
+* Restored plugin book section
+
+= 7.4.17 =
+* Added option to schedule automatic generation of missing thumbnails
+
+= 7.4.16 =
+* Added new configuration section under Global Options > Import/Export Links to be able to schedule automated import of links
+* Added missing files for pop-dialog functionality introduced in 7.4.15
+* Modified link search when displaying categories to search in content and not only link title
+* Removed some leftover debug functions
+
+= 7.4.15 =
+* Added new mode for user link submission form to only display button and have form appear in pop-up dialog
+
+= 7.4.14 =
+* Added missing / characters when displaying list of categories in permalink mode and in breadcrumbs
+
+= 7.4.13 =
+* Added new option to specify page containing category list when using HTML Get + Permalinks switching method with breadcrumbs
+
+= 7.4.12 =
+* Update to allow for translation of text that was previously hard-coded
+* Updated french translation
+
+= 7.4.11 =
+* Modified form validator script to allow for empty e-mail addresses in user link submission form if field set to Show and not Required
+
+= 7.4.10 =
+* Fix to allow non-admin users to be able to see edit links on Link Library visitor-facing pages
+
+= 7.4.9 =
+* Added new display mode for category list ([link-library-cats]) called Simple Divs
+
+= 7.4.8 =
+* Added option to [link-library-filters] shortcode to display apply button (showapplybutton)
+
+= 7.4.7 =
+* Fix for display of hierarchical categories in [link-library-cats] shortcode
+
+= 7.4.6 =
+* Relaxed HTMl tags parsing for custom field before and after content
+
+= 7.4.5 =
+* Further refinement of accepted HTML tags for advanced configuration table
+
+= 7.4.4 =
+* Fixes for warnings in usersubmission.php
+
+= 7.4.3 =
+* Further refinement of accepted HTML tags for advanced configuration table
+
+= 7.4.2 =
+* Implemented some accessibility functions in tag filter
+* Fixed advanced table to accept HTML values once again
+
+= 7.4.1 =
+* Security fixes
+* Added support for WPGraphQL
+
+= 7.4 =
+* Corrected PHP warning in render-link-library-addlink-sc.php
+
+= 7.3.21 =
+* Fix for AJAX category switching when using New editor on some themes
+* Additional fixes for [link-library-cats] shortcode for sites with hierarchical categories
+
+= 7.3.20 =
+* Fixes for [link-library-cats] shortcode for sites with hierarchical categories
+
+= 7.3.19 =
+* Fixed additional french translations
+* Changed colors of Submit and Reset buttons in stylesheet editor
+* Added new option under search tab configuration to suppress output if no results are found
+
+= 7.3.18 =
+* Fixed issue introduced in 7.3.16
+
+= 7.3.17 =
+* Modified to allow excludecategoryoverride to work with sub-categories in [link-library-cat] shortcode
+
+= 7.3.16 =
+* Added parameter to [link-library-cats] shortcode called parent_cat_id. Should be set to empty "" if using categorylistoverride and only specifying sub-categories
+* Corrected some errors in French translation
+
+= 7.3.15 =
+* Corrected error message when running empty cat link checker and none are found
+
+= 7.3.14 =
+* Added two new types of link checking tools: Check Secondary Links and Check image links
+
+= 7.3.13 =
+* Added new tool under Global Options > Import/Export to export list of categories with IDs
+
+= 7.3.12 =
+* Add general option to show excerpt section in link editor
+
+= 7.3.11 =
+* Fix to allow single quotes in empty search results message field
+
+= 7.3.10 =
+* Fix for error when displaying part of the Global Options section
+* Updated promotional section in Global Options page with newest book published
+
+= 7.3.9 =
+* Additional improvements to link creation page display on mobile devices
+
+= 7.3.8 =
+* Brought back mechanism to help with large imports from pre-6.0 versions to current revisions.
+
+= 7.3.7 =
+* Improved display of link creation page on mobile devices
+
+= 7.3.6 =
+* Fix for item sorting with publication date
+
+= 7.3.5 =
+* Additional fixes for featured item sorting
+
+= 7.3.4 =
+* Fixed problem with quotes getting escaped in library-specific stylesheet editor
+
+= 7.3.3 =
+* Fixed problem with featured links not longer appearing ahead of other link when ordering by title and having specified articles to be ignored
+
+= 7.3.2 =
+* Fixed problems with new option to ignore specific articles introduced in version 7.3 beta 2
+
+= 7.3.1 =
+* Added extra field to Link Library widget to allow users to select category(ies) to be displayed
+
+= 7.3 =
+* Official 7.3 version containing all features from beta 1 to 4
+
+= 7.3 Beta 4 =
+* Added CSS rules for new visibility toggle buttons
+
+= 7.3 Beta 3 =
+* Added new option when displaying categories as visibility toggles to add show all and hide all buttons
+
+= 7.3 Beta 2 =
+* Added new global option to specify articles to be ignored when sorting links by title
+
+= 7.3 Beta 1 =
+* Added support to use post categories instead of Link Library categories
+* Added support to use post tags instead of Link Library tags
+
+= 7.2.9 =
+* Fixed additional potential security issues
+
+= 7.2.8 =
+* Fixed potential security issues in plugin admin section
 
 = 7.2.7 =
 * Increased character limit for user form fields from 255 to 1024 characters

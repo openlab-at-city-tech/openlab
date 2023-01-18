@@ -176,10 +176,3 @@ textarea::selection {
 }
 @media print {
 }
-
-@media screen and (max-width:800px) {
-	.sidebar {
-		display: block;
-		margin-top: 96px;
-	}
-}

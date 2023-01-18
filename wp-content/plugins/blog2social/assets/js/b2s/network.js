@@ -926,6 +926,25 @@ jQuery(document).on('click', '.b2s-edit-template-btn', function () {
                     jQuery('.b2s-edit-template-save-btn').removeClass('b2s-btn-disabled');
                 }
                 jQuery('.b2s-edit-template-post-content').trigger('keyup');
+                if(networkId == 12) {
+                    Coloris({
+                        el: '.b2s-edit-template-colorpicker',
+                        theme: 'polaroid',
+                        swatches: [
+                            '#ffffff',
+                            '#000000',
+                            '#ff0000',
+                            '#00ff00',
+                            '#0000ff',
+                            '#ffff00',
+                            '#c3073f',
+                            '#5cdb95',
+                            '#659dbd',
+                            '#f9db7a',
+                            '#e46de0'
+                        ]
+                    });
+                }
             } else {
                 if (data.error == 'nonce') {
                     jQuery('.b2s-nonce-check-fail').show();
@@ -943,7 +962,7 @@ jQuery(window).on("load", function () {
             jQuery('.b2s-edit-template-post-format[data-network-type=' + jQuery(this).attr('data-network-type') + ']').val('0');
             jQuery('.b2s-edit-template-image-preview[data-network-type=' + jQuery(this).attr('data-network-type') + ']').hide();
             jQuery('.b2s-edit-template-link-preview[data-network-type=' + jQuery(this).attr('data-network-type') + ']').show();
-            if(jQuery('#b2s-edit-template-network-id').val() == 1 || jQuery('#b2s-edit-template-network-id').val() == 2) {
+            if(jQuery('#b2s-edit-template-network-id').val() == 1 || jQuery('#b2s-edit-template-network-id').val() == 2 || jQuery('#b2s-edit-template-network-id').val() == 24) {
                 jQuery('.b2s-edit-template-enable-link-area[data-network-type=' + jQuery(this).attr('data-network-type') + ']').hide();
             }
         });
@@ -954,7 +973,7 @@ jQuery(window).on("load", function () {
             jQuery('.b2s-edit-template-post-format[data-network-type=' + jQuery(this).attr('data-network-type') + ']').val('1');
             jQuery('.b2s-edit-template-link-preview[data-network-type=' + jQuery(this).attr('data-network-type') + ']').hide();
             jQuery('.b2s-edit-template-image-preview[data-network-type=' + jQuery(this).attr('data-network-type') + ']').show();
-            if(jQuery('#b2s-edit-template-network-id').val() == 1 || jQuery('#b2s-edit-template-network-id').val() == 2) {
+            if(jQuery('#b2s-edit-template-network-id').val() == 1 || jQuery('#b2s-edit-template-network-id').val() == 2 || jQuery('#b2s-edit-template-network-id').val() == 24) {
                 jQuery('.b2s-edit-template-enable-link-area[data-network-type=' + jQuery(this).attr('data-network-type') + ']').show();
             }
         });
@@ -1180,6 +1199,7 @@ jQuery(document).on('click', '.b2s-edit-template-save-btn', function () {
             } else {
                 template_data[networkType]['shuffleHashtags'] = false;
             }
+            template_data[networkType]['frameColor'] = jQuery('#b2s-edit-template-colorpicker').val();
         }
     });
 
@@ -1211,6 +1231,7 @@ jQuery(document).on('click', '.b2s-edit-template-save-btn', function () {
                 setTimeout(function () {
                     jQuery('.b2s-edit-template-save-success').fadeOut();
                 }, 3000);
+                jQuery('#b2s-edit-template').modal('hide');
             } else {
                 if (data.error == 'nonce') {
                     jQuery('.b2s-nonce-check-fail').show();
@@ -1308,7 +1329,11 @@ jQuery(document).on('click', '.b2s-auth-network-6-login-btn', function () {
                 if (typeof data.error != 'undefined' && data.error != '') {
                     jQuery('.b2s-auth-network-6-info[data-info="' + data.error + '"]').show();
                 } else {
-                    jQuery('.b2s-auth-network-6-info[data-info="login"]').show();
+                    jQuery('.b2s-auth-network-6-extension-info-area').show();
+                    jQuery('.b2s-auth-network-6-extension-continue-btn').show();
+                    var messageData = {action: 'BWEC', type: 'BWECT'};
+                    window.postMessage(messageData, '*');
+                    return false;
                 }
                 jQuery('.b2s-auth-network-6-login-btn').show();
             }

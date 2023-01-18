@@ -13,11 +13,14 @@ class P2P_Field_Order implements P2P_Field {
 	}
 
 	function render( $p2p_id, $_ ) {
-		return html( 'input', array(
-			'type' => 'hidden',
-			'name' => "p2p_order[$this->sort_key][]",
-			'value' => $p2p_id
-		) );
+		return html(
+			'input',
+			array(
+				'type'  => 'hidden',
+				'name'  => "p2p_order[$this->sort_key][]",
+				'value' => $p2p_id,
+			)
+		);
 	}
 }
 

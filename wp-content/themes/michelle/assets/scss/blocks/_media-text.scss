@@ -1,0 +1,298 @@
+/* FILE: blocks/_media-text.scss */
+
+.wp-block-media-text {
+
+	&__media {
+		height: 100%;
+		overflow: hidden;
+
+		img {
+			object-fit: cover;
+			width: 100%;
+			height: 100%;
+		}
+
+	}
+
+	&__content {
+		width: 100%;
+		margin-left: auto;
+		margin-right: auto;
+		z-index: 1;
+	}
+
+		&.is-style-narrow-content > .wp-block-media-text__content {
+			max-width: var(--layout_width_entry_content);
+		}
+
+		.wp-block-media-text__content {
+
+			.alignfull,
+			.alignwide,
+			.alignwide-wrap {
+				width: auto;
+				max-width: none;
+				padding-left: 0;
+				padding-right: 0;
+				margin-left: auto;
+				margin-right: auto;
+			}
+
+			.alignfull,
+			.alignwide {
+				width: auto;
+
+				@media (min-width: 601px) {
+					margin-left: calc( var(--white_space) * -1 ); // No RTL here.
+				}
+
+			}
+
+			hr {
+				@if variable-exists( 'selector_editor_wrapper' ) {
+					max-width: none !important;
+				} @else {
+					max-width: none;
+				}
+			}
+
+		}
+
+			@include media( map_get( $breakpoint, 'xl' ) ) {
+				&.alignfull .wp-block-media-text__content {
+					.alignfull,
+					.alignwide {
+						margin-left: calc( var(--white_space) * -1.5 ); // No RTL here.
+					}
+				}
+			}
+
+		&.has-media-on-the-right .wp-block-media-text__content {
+
+			.alignfull,
+			.alignwide {
+				margin-left: auto; // No RTL here.
+
+				@media (min-width: 601px) {
+					margin-right: calc( var(--white_space) * -1 ); // No RTL here.
+				}
+
+			}
+
+		}
+
+			@include media( map_get( $breakpoint, 'xl' ) ) {
+				&.has-media-on-the-right.alignfull .wp-block-media-text__content {
+					.alignfull,
+					.alignwide {
+						margin-right: calc( var(--white_space) * -1.5 ); // No RTL here.
+					}
+				}
+			}
+
+	&.has-background {
+		padding: 0;
+	}
+
+	&.has-media-on-top,
+	&.is-style-media-on-top {
+		display: block;
+
+		> .wp-block-media-text__media img {
+			// width: auto; // Can not set this as it causes horizontal scrolling.
+			max-width: 100%;
+			height: auto;
+			object-fit: fill; // This is default value.
+		}
+
+		> .wp-block-media-text__content {
+			@extend %block_inner_container;
+			padding: 2em 0 0;
+
+			.alignfull,
+			.alignwide {
+				margin-left: auto; // No RTL here.
+				margin-right: auto; // No RTL here.
+			}
+
+		}
+
+		&.has-background > .wp-block-media-text__content {
+			padding: 2em 10%;
+		}
+
+		&.is-image-fill > .wp-block-media-text__media {
+
+			&,
+			> a {
+				min-height: 38vh;
+			}
+
+		}
+
+		// Making it simpler to align image:
+		&.is-vertically-aligned-center > .wp-block-media-text__media {
+			text-align: center;
+		}
+		&.is-vertically-aligned-bottom > .wp-block-media-text__media {
+			text-align: $right;
+		}
+		&.has-background[class*="is-vertically-aligned-"] > .wp-block-media-text__media {
+			padding: 2em 10% 0;
+		}
+
+	}
+
+	&.is-style-stacked-on-tablet {
+		@include media(
+			( 601, 'min-width' ),
+			( map_get( $breakpoint, 'l' ), 'max-width' )
+		) {
+
+			> .wp-block-media-text__media img {
+				width: auto;
+				max-width: 100%;
+				height: auto;
+				object-fit: fill; // This is default value.
+			}
+
+			> .wp-block-media-text__content {
+				padding-left: 0;
+				padding-right: 0;
+
+				.alignfull,
+				.alignwide {
+					margin-left: auto; // No RTL here.
+					margin-right: auto; // No RTL here.
+				}
+
+			}
+
+			&:not(.has-background) > .wp-block-media-text__content {
+				padding-bottom: 0;
+			}
+
+			&.has-background > .wp-block-media-text__content {
+				padding-left: 10%;
+				padding-right: 10%;
+			}
+
+			&.is-image-fill > .wp-block-media-text__media {
+
+				&,
+				> a {
+					min-height: 38vh;
+				}
+
+			}
+
+		}
+	}
+
+	@supports ( mask-image: url('') ) {
+		&.is-style-overlap-gradient {
+			--media_text_overlap_size: var(--white_space);
+
+			&.alignfull {
+				@include media( map_get( $breakpoint, 'xl' ) ) {
+					--media_text_overlap_size: 12vw;
+				}
+
+				@include media( map_get( $breakpoint, 'xxl' ) ) {
+					--media_text_overlap_size: 18vw;
+				}
+			}
+
+			// Matching WordPress block media query:
+			@media (max-width: 600px) {
+
+				> .wp-block-media-text__media {
+					mask-image: linear-gradient( to top, rgba( #000, 0 ), #000 var(--media_text_overlap_size) );
+				}
+
+			}
+
+			@media (min-width: 601px) {
+
+				> .wp-block-media-text__content {
+					position: relative;
+					width: auto;
+				}
+
+				&:not(.has-media-on-the-right) {
+
+					> .wp-block-media-text__media {
+						mask-image: linear-gradient( to left, rgba( #000, 0 ), #000 var(--media_text_overlap_size) ); // No RTL here.
+					}
+
+					> .wp-block-media-text__content {
+						padding-left: 0; // No RTL here.
+						margin-left: calc( -1 * var(--media_text_overlap_size) ); // No RTL here.
+						margin-right: 0; // No RTL here.
+					}
+
+					&.has-background > .wp-block-media-text__content {
+						padding-right: 20%; // No RTL here.
+					}
+
+				}
+
+				&.has-media-on-the-right {
+
+					> .wp-block-media-text__media {
+						mask-image: linear-gradient( to right, rgba( #000, 0 ), #000 var(--media_text_overlap_size) ); // No RTL here.
+					}
+
+					> .wp-block-media-text__content {
+						padding-right: 0; // No RTL here.
+						margin-right: calc( -1 * var(--media_text_overlap_size) ); // No RTL here.
+						margin-left: 0; // No RTL here.
+					}
+
+					&.has-background > .wp-block-media-text__content {
+						padding-left: 20%; // No RTL here.
+					}
+
+				}
+
+			}
+
+		}
+	}
+
+}
+
+.wp-block-media-text .wp-block-media-text__content {
+	padding: 12% 0;
+	padding-left: 15%; // No RTL here.
+
+	@media (max-width: 600px) {
+		padding-top: 2em;
+	}
+}
+
+.has-media-on-the-right > .wp-block-media-text__content {
+	padding-left: 0; // No RTL here.
+	padding-right: 15%; // No RTL here.
+}
+
+.alignfull > .wp-block-media-text__content,
+.has-background > .wp-block-media-text__content {
+	padding-left: 10%; // No RTL here.
+	padding-right: 10%; // No RTL here.
+}
+
+// Matching WordPress block media query:
+@media (max-width: 600px) {
+
+	.wp-block-media-text:not(.has-background):not(.alignfull) > .wp-block-media-text__content {
+		padding-left: 0; // No RTL here.
+		padding-right: 0; // No RTL here.
+	}
+
+	.alignfull > .wp-block-media-text__content {
+		padding-left: 6%; // No RTL here.
+		padding-right: 6%; // No RTL here.
+	}
+
+}

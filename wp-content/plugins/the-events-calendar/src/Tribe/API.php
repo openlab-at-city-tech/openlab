@@ -8,6 +8,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( '-1' );
 }
 
+use Tribe__Date_Utils as Dates;
+use Tribe__Timezones as Timezones;
+
 if ( ! class_exists( 'Tribe__Events__API' ) ) {
 	class Tribe__Events__API {
 		public static $valid_venue_keys = [
@@ -449,24 +452,43 @@ if ( ! class_exists( 'Tribe__Events__API' ) ) {
 				return $data;
 			}
 
+			$utc_tz = new DateTimeZone( 'UTC' );
+			$is_utc_offset = Tribe__Events__Timezones::is_utc_offset( $data['EventTimezone'] );
+
 			// Additionally store datetimes in UTC
 			if ( empty( $data['EventStartDateUTC'] ) ) {
-				$data['EventStartDateUTC'] = Tribe__Events__Timezones::to_utc( $data['EventStartDate'], $data['EventTimezone'] );
+				if ( $is_utc_offset ) {
+					// Convert a UTC offset timezone to a localized timezone, e.g. UTC-5 to America/New_York.
+					$data['EventStartDateUTC'] = Tribe__Date_Utils::immutable( $data['EventStartDate'], $data['EventTimezone'] )
+					                                              ->setTimezone( $utc_tz )
+					                                              ->format( Tribe__Date_Utils::DBDATETIMEFORMAT );
+				} else {
+					$data['EventStartDateUTC'] = Tribe__Events__Timezones::to_utc( $data['EventStartDate'], $data['EventTimezone'] );
+				}
 			}
 
 			if ( empty( $data['EventEndDateUTC'] ) ) {
-				$data['EventEndDateUTC']   = Tribe__Events__Timezones::to_utc( $data['EventEndDate'], $data['EventTimezone'] );
+				if ( $is_utc_offset ) {
+					// Convert a UTC offset timezone to a localized timezone, e.g. UTC-5 to America/New_York.
+					$data['EventEndDateUTC'] = Tribe__Date_Utils::immutable( $data['EventEndDate'], $data['EventTimezone'] )
+					                                            ->setTimezone( $utc_tz )
+					                                            ->format( Tribe__Date_Utils::DBDATETIMEFORMAT );
+				} else {
+					$data['EventEndDateUTC'] = Tribe__Events__Timezones::to_utc( $data['EventEndDate'], $data['EventTimezone'] );
+				}
 			}
 
 			// sanity check that start date < end date
-			$start_timestamp = strtotime( $data['EventStartDate'] );
-			$end_timestamp   = strtotime( $data['EventEndDate'] );
+			$timezone        = Timezones::build_timezone_object( $data['EventTimezone'] );
+			$start_timestamp = Dates::build_date_object( $data['EventStartDate'], $timezone )->getTimestamp();
+			$end_timestamp   = Dates::build_date_object( $data['EventEndDate'], $timezone )->getTimestamp();
 
 			if ( $start_timestamp > $end_timestamp ) {
 				$data['EventEndDate'] = $data['EventStartDate'];
+				$end_timestamp        = Dates::build_date_object( $data['EventStartDate'], $timezone )->getTimestamp();
 			}
 
-			$data['EventDuration'] = strtotime( $data['EventEndDate'] ) - $start_timestamp;
+			$data['EventDuration'] = $end_timestamp - $start_timestamp;
 
 			return $data;
 		}//end prepare_event_date_meta

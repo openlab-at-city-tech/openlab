@@ -16,10 +16,14 @@
 		},
 		"label": {
 			"type": "string"
+		},
+		"rel": {
+			"type": "string"
 		}
 	},
 	"usesContext": [
 		"openInNewTab",
+		"showLabels",
 		"iconColorValue",
 		"iconBackgroundColorValue"
 	],

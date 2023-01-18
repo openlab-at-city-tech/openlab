@@ -1427,3 +1427,7 @@ select#media-attachment-dynamic-filter {
 .image-details .media-frame.mode-select.hide-router .media-frame-content {
     overflow: auto;
 }
+
+body .folder-modal.image-details .media-frame-menu {
+    display: none;
+}

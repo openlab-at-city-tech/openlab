@@ -1,0 +1,14 @@
+/* FILE: editor-block/blocks/_group.scss */
+
+.wp-block-group__inner-container > .wp-block:last-child {
+	margin-bottom: 0;
+}
+
+.wp-block-group .wp-block-group__inner-container .block-list-appender {
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.wp-block-group.has-background:not(:last-child) {
+	margin-bottom: var(--gap); // Don't understand why WP sets this to zero...
+}

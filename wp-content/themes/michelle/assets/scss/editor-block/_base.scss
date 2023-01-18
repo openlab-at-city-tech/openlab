@@ -1,0 +1,132 @@
+/* FILE: editor-block/_base.scss */
+
+.editor-styles-wrapper {
+	// Not using `$selector_editor_wrapper` here because
+	// specificity should be as low as possible!
+	box-sizing: border-box; // WP 5.9 fix for block pattern preview.
+
+	*,
+	*::after,
+	*::before {
+		box-sizing: inherit; // WP 5.9 fix for block pattern preview.
+		border-color: inherit;
+	}
+
+	// WP6.0+ fix:
+	html & {
+		--wp--style--block-gap: var(--gap);
+	}
+
+}
+
+#{ $selector_editor_wrapper } {
+	padding-top: 0; // This is being taken care of in of _post-title.scss.
+	// For bottom padding see below.
+
+	// Colors.
+
+		html & {
+			background-color: var(--color_body_background);
+			color: var(--color_body_text);
+			border-color: var(--color_body_border);
+		}
+
+	// Elements.
+
+		#{ $selectors_margin_bottom } {
+			margin-top: 0;
+			margin-bottom: var(--gap);
+		}
+
+		a {
+			color: var(--color_accent);
+		}
+
+		li {
+
+			ul,
+			ol {
+
+				&:last-child {
+					margin-bottom: 0;
+				}
+
+			}
+
+		}
+
+		ul,
+		ol {
+			padding: 0;
+
+			ul {
+				list-style: disc;
+			}
+
+		}
+
+		ul[class*="wp-block-"],
+		ol[class*="wp-block-"] {
+			padding-#{$left}: 0;
+		}
+
+		[data-type*="gallery"] ul {
+			margin: 0;
+			list-style: none;
+		}
+
+		blockquote,
+		.wp-block-quote {
+			border: 0;
+		}
+
+		blockquote {
+
+			p {
+
+				&,
+				&:last-child {
+					margin-bottom: 1em;
+				}
+
+			}
+
+		}
+
+		[style*="font-size:"] {
+
+			h1, h2, h3, h4, h5, h6 {
+				font-size: inherit;
+			}
+
+		}
+
+		[style*="font-weight:"] {
+
+			h1, h2, h3, h4, h5, h6 {
+				font-weight: inherit;
+			}
+
+		}
+
+}
+
+.block-editor-block-list__layout {
+	// No need to match bottom padding to front-end content.
+
+	&.wp-block,
+	.wp-block & {
+		padding-bottom: 0;
+	}
+
+}
+
+h1, h2, h3, h4, h5, h6 {
+
+	#{ $selector_editor_wrapper } &:focus,
+	.wp-block.is-selected > & {
+		text-transform: none;
+		letter-spacing: 0;
+	}
+
+}

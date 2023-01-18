@@ -5,8 +5,9 @@ class P2P_Indeterminate_Directed_Connection_Type extends P2P_Directed_Connection
 	protected function recognize( $arg, $unused = null ) {
 		foreach ( array( 'current', 'opposite' ) as $side ) {
 			$item = $this->get( $side, 'side' )->item_recognize( $arg );
-			if ( $item )
+			if ( $item ) {
 				return $item;
+			}
 		}
 
 		return false;
@@ -24,10 +25,12 @@ class P2P_Indeterminate_Directed_Connection_Type extends P2P_Directed_Connection
 
 		// need to be inclusive
 		if ( isset( $other_qv['post_type'] ) ) {
-			$args['post_type'] = array_unique( array_merge(
-				(array) $args['post_type'],
-				(array) $other_qv['post_type']
-			) );
+			$args['post_type'] = array_unique(
+				array_merge(
+					(array) $args['post_type'],
+					(array) $other_qv['post_type']
+				)
+			);
 		}
 
 		return $args;
@@ -36,8 +39,9 @@ class P2P_Indeterminate_Directed_Connection_Type extends P2P_Directed_Connection
 	protected function get_non_connectable( $item, $extra_qv ) {
 		$to_exclude = parent::get_non_connectable( $item, $extra_qv );
 
-		if ( !$this->self_connections )
+		if ( ! $this->self_connections ) {
 			$to_exclude[] = $item->get_id();
+		}
 
 		return $to_exclude;
 	}

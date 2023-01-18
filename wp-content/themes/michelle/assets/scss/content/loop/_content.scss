@@ -1,0 +1,15 @@
+/* FILE: content/loop/_content.scss */
+
+.posts .entry-content {
+	margin-top: 0;
+
+	&:empty {
+		display: none;
+	}
+
+}
+
+.search-results-count {
+	font-size: var(--typography_font_size_S_em);
+	font-style: italic;
+}

@@ -44,6 +44,7 @@ require_once( STYLESHEETPATH . '/lib/page-funcs.php' );
 require_once( STYLESHEETPATH . '/lib/sidebar-funcs.php' );
 require_once( STYLESHEETPATH . '/lib/plugin-hooks.php' );
 require_once( STYLESHEETPATH . '/lib/theme-hooks.php' );
+require_once( STYLESHEETPATH . '/lib/group-announcements.php' );
 
 // Initialize async cloning.
 openlab_clone_async_process();
@@ -109,6 +110,22 @@ function openlab_load_scripts() {
 
     if (bp_is_register_page()) {
         wp_enqueue_script('password-strength-meter');
+    }
+
+    if( bp_is_user() || bp_is_group() ) {
+        wp_enqueue_script( 'openlab-activity', $stylesheet_dir_uri . '/js/activity.js', [ 'jquery' ] );
+        wp_localize_script( 'openlab-activity', 'activityVars', array(
+            'ajax_url' => admin_url( 'admin-ajax.php' )
+        ) );
+    }
+
+    wp_enqueue_script( 'openlab-group-documents', $stylesheet_dir_uri . '/js/group-documents.js', [ 'jquery' ] );
+
+    if( bp_is_group() ) {
+        wp_enqueue_script( 'openlab-group-membership', $stylesheet_dir_uri . '/js/membership-privacy.js', [ 'jquery' ] );
+        wp_localize_script( 'openlab-group-membership', 'membershipVars', array(
+            'ajax_url'  => admin_url( 'admin-ajax.php' )
+        ) );
     }
 }
 
@@ -291,7 +308,6 @@ function openlab_profile_field_input_attributes() {
             $attributes[] = "data-parsley-errors-container='#{$field_name}_confirm_error'";
             break;
 
-        case 'Account Type' :
         case 'Major Program of Study':
         case 'Department':
 

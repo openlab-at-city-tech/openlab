@@ -4,7 +4,7 @@ if(preg_match('#' . basename(__FILE__) . '#', $_SERVER['PHP_SELF'])) { die('You 
 /**
  * Plugin Name: NextGEN Gallery
  * Description: The most popular gallery plugin for WordPress and one of the most popular plugins of all time with over 30 million downloads.
- * Version: 3.18
+ * Version: 3.30
  * Author: Imagely
  * Plugin URI: https://www.imagely.com/wordpress-gallery-plugin/nextgen-gallery/
  * Author URI: https://www.imagely.com
@@ -98,7 +98,7 @@ class C_NextGEN_Bootstrap
                 fastcgi_finish_request();
             }
             else {
-                throw new E_Clean_Exit;
+                exit();
             }
         }
 		elseif (!($exception instanceof E_Clean_Exit)) {
@@ -217,9 +217,6 @@ class C_NextGEN_Bootstrap
 		// Load the (mostly deprecated) resource manager
 		include_once('non_pope/class.photocrati_resource_manager.php');
 		C_Photocrati_Resource_Manager::init();
-
-		// Load the style manager
-		include_once('non_pope/class.nextgen_style_manager.php');
 
 		// Load the shortcode manager
 		include_once('non_pope/class.nextgen_shortcode_manager.php');
@@ -430,15 +427,9 @@ class C_NextGEN_Bootstrap
 		// Handle activation redirect to overview page
 		add_action('init', array($this, 'handle_activation_redirect'));
 
-		// Register our test suite
-		add_filter('simpletest_suites', array(&$this, 'add_testsuite'));
-
 		// Ensure that settings manager is saved as an array
 		add_filter('pre_update_option_' . $this->_settings_option_name, array($this, 'persist_settings'));
 		add_filter('pre_update_site_option_' . $this->_settings_option_name, array($this, 'persist_settings'));
-
-		// If the selected stylesheet is using an unsafe path, then notify the user
-		add_action('all_admin_notices', array(&$this, 'display_stylesheet_notice'));
 
 		// Delete displayed gallery transients periodically
 		if (NGG_CRON_ENABLED) {
@@ -562,26 +553,6 @@ class C_NextGEN_Bootstrap
 			$settings = $settings->to_array();
 		}
 		return $settings;
-	}
-
-	/**
-	 * Displays a notice to the user that the current stylesheet location is unsafe
-	 */
-	function display_stylesheet_notice()
-	{
-		if (C_NextGen_Style_Manager::get_instance()->is_directory_unsafe()) {
-			$styles		= C_NextGen_Style_Manager::get_instance();
-			$filename	= $styles->get_selected_stylesheet();
-			$abspath	= $styles->find_selected_stylesheet_abspath();
-			$newpath	= $styles->new_dir;
-
-			echo "<div class='updated error'>
-                <h3>WARNING: NextGEN Gallery Stylesheet NOT Upgrade-safe</h3>
-                <p>
-                <strong>{$filename}</strong> is currently stored in <strong>{$abspath}</strong>, which isn't upgrade-safe. Please move the stylesheet to
-                <strong>{$newpath}</strong> to ensure that your customizations persist after updates.
-            </p></div>";
-		}
 	}
 
 	/**
@@ -712,7 +683,7 @@ class C_NextGEN_Bootstrap
 		define('NGG_PRODUCT_URL', path_join(str_replace("\\" , '/', NGG_PLUGIN_URL), 'products'));
 		define('NGG_MODULE_URL', path_join(str_replace("\\", '/', NGG_PRODUCT_URL), 'photocrati_nextgen/modules'));
 		define('NGG_PLUGIN_STARTED_AT', microtime());
-		define('NGG_PLUGIN_VERSION', '3.18');
+		define('NGG_PLUGIN_VERSION', '3.30');
 
 		define(
 			'NGG_SCRIPT_VERSION',
@@ -720,16 +691,6 @@ class C_NextGEN_Bootstrap
 				? (string)mt_rand(0, mt_getrandmax())
 				: NGG_PLUGIN_VERSION
 		);
-
-		if (!defined('NGG_HIDE_STRICT_ERRORS')) {
-			define('NGG_HIDE_STRICT_ERRORS', TRUE);
-		}
-
-		// Should we display E_STRICT errors?
-		if (NGG_HIDE_STRICT_ERRORS) {
-			$level = error_reporting();
-			if ($level != 0) error_reporting($level & ~E_STRICT);
-		}
 
 		// Should we display NGG debugging information?
 		if (!defined('NGG_DEBUG')) {
@@ -802,42 +763,13 @@ class C_NextGEN_Bootstrap
         }, -10);
 	}
 
-    /**
-	 * Defines the NextGEN Test Suite
-	 * @param array $suites
-	 * @return array
-	 */
-	function add_testsuite($suites=array())
-	{
-		$tests_dir = NGG_TESTS_DIR;
-
-		if (file_exists($tests_dir)) {
-
-			// Include mock objects
-			// TODO: These mock objects should be moved to the appropriate
-			// test folder
-			require_once(path_join($tests_dir, 'mocks.php'));
-
-			// Define the NextGEN Test Suite
-			$suites['nextgen'] = array(
-//                path_join($tests_dir, 'mvc'),
-				path_join($tests_dir, 'datamapper'),
-				path_join($tests_dir, 'nextgen_data'),
-				path_join($tests_dir, 'gallery_display')
-			);
-		}
-
-		return $suites;
-	}
-
-
 	/**
 	 * Returns the path to a file within the plugin root folder
      *
 	 * @param string $file_name
 	 * @return string
 	 */
-	function file_path($file_name=NULL)
+	function file_path($file_name = NULL)
 	{
 		$path = dirname(__FILE__);
 		if ($file_name != null)
@@ -852,87 +784,29 @@ class C_NextGEN_Bootstrap
      * @param string|null $dir (optional)
 	 * @return string
 	 */
-	function directory_path($dir=NULL)
+	function directory_path($dir = NULL)
 	{
 		return $this->file_path($dir);
 	}
 
 	/**
-	 * Determines the location of the plugin - within a theme or plugin
+	 * Determine the path to the NGG directory.
+     *
+     * @TODO Remove this, it's silly.
 	 * @return string
 	 */
-	function get_plugin_location()
+	function path_uri()
 	{
-		return 'plugin';
-	}
+        // Note: paths could not match but STILL being contained in the theme (i.e. WordPress returns the wrong path for the theme directory, either with wrong formatting or wrong encoding)
+        $base = basename(dirname(__FILE__));
 
+        // This is needed when using symlinks, if the user renames the plugin folder everything will break though
+        if ($base != 'nextgen-gallery')
+            $base = 'nextgen-gallery';
 
-	/**
-	 * Gets the URI for a particular path
-	 * @param string $path
-	 * @param boolean $url_encode
-	 * @return string
-	 */
-	function path_uri($path = null, $url_encode = false)
-	{
-		$location = $this->get_plugin_location();
-		$uri = null;
-
-		$path = str_replace(array('/', '\\'), '/', $path);
-
-		if ($url_encode)
-		{
-			$path_list = explode('/', $path);
-
-			foreach ($path_list as $index => $path_item)
-			{
-				$path_list[$index] = urlencode($path_item);
-			}
-
-			$path = implode('/', $path_list);
-		}
-
-		if ($location == 'theme')
-		{
-			$theme_uri = get_stylesheet_directory_uri();
-
-			$uri = $theme_uri . 'nextgen-gallery';
-
-			if ($path != null)
-			{
-				$uri .= '/' . $path;
-			}
-		}
-		else
-		{
-			// XXX Note, paths could not match but STILL being contained in the theme (i.e. WordPress returns the wrong path for the theme directory, either with wrong formatting or wrong encoding)
-			$base = basename(dirname(__FILE__));
-
-			if ($base != 'nextgen-gallery')
-			{
-				// XXX this is needed when using symlinks, if the user renames the plugin folder everything will break though
-				$base = 'nextgen-gallery';
-			}
-
-			if ($path != null)
-			{
-				$base .= '/' . $path;
-			}
-
-			$uri = plugins_url($base);
-		}
+        $uri = plugins_url($base);
 
 		return $uri;
-	}
-
-	/**
-	 * Returns the URI for a particular file
-	 * @param string $file_name
-	 * @return string
-	 */
-	function file_uri($file_name = NULL)
-	{
-		return $this->path($file_name);
 	}
 }
 

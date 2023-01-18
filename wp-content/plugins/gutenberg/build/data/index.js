@@ -1,7 +1,7 @@
 /******/ (function() { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 3909:
+/***/ 2167:
 /***/ (function(module) {
 
 "use strict";
@@ -316,7 +316,7 @@ module.exports = EquivalentKeyMap;
 
 /***/ }),
 
-/***/ 9884:
+/***/ 9125:
 /***/ (function(module) {
 
 function combineReducers( reducers ) {
@@ -455,7 +455,7 @@ __webpack_require__.d(__webpack_exports__, {
   "AsyncModeProvider": function() { return /* reexport */ async_mode_provider_context; },
   "RegistryConsumer": function() { return /* reexport */ RegistryConsumer; },
   "RegistryProvider": function() { return /* reexport */ context; },
-  "combineReducers": function() { return /* reexport */ (turbo_combine_reducers_default()); },
+  "combineReducers": function() { return /* binding */ build_module_combineReducers; },
   "controls": function() { return /* reexport */ controls; },
   "createReduxStore": function() { return /* reexport */ createReduxStore; },
   "createRegistry": function() { return /* reexport */ createRegistry; },
@@ -469,10 +469,12 @@ __webpack_require__.d(__webpack_exports__, {
   "resolveSelect": function() { return /* binding */ build_module_resolveSelect; },
   "select": function() { return /* binding */ build_module_select; },
   "subscribe": function() { return /* binding */ subscribe; },
+  "suspendSelect": function() { return /* binding */ suspendSelect; },
   "use": function() { return /* binding */ use; },
   "useDispatch": function() { return /* reexport */ use_dispatch; },
   "useRegistry": function() { return /* reexport */ useRegistry; },
   "useSelect": function() { return /* reexport */ useSelect; },
+  "useSuspenseSelect": function() { return /* reexport */ useSuspenseSelect; },
   "withDispatch": function() { return /* reexport */ with_dispatch; },
   "withRegistry": function() { return /* reexport */ with_registry; },
   "withSelect": function() { return /* reexport */ with_select; }
@@ -484,7 +486,10 @@ __webpack_require__.r(selectors_namespaceObject);
 __webpack_require__.d(selectors_namespaceObject, {
   "getCachedResolvers": function() { return getCachedResolvers; },
   "getIsResolving": function() { return getIsResolving; },
+  "getResolutionError": function() { return getResolutionError; },
+  "getResolutionState": function() { return getResolutionState; },
   "hasFinishedResolution": function() { return hasFinishedResolution; },
+  "hasResolutionFailed": function() { return hasResolutionFailed; },
   "hasStartedResolution": function() { return hasStartedResolution; },
   "isResolving": function() { return isResolving; }
 });
@@ -493,6 +498,8 @@ __webpack_require__.d(selectors_namespaceObject, {
 var actions_namespaceObject = {};
 __webpack_require__.r(actions_namespaceObject);
 __webpack_require__.d(actions_namespaceObject, {
+  "failResolution": function() { return failResolution; },
+  "failResolutions": function() { return failResolutions; },
   "finishResolution": function() { return finishResolution; },
   "finishResolutions": function() { return finishResolutions; },
   "invalidateResolution": function() { return invalidateResolution; },
@@ -506,12 +513,11 @@ __webpack_require__.d(actions_namespaceObject, {
 var plugins_namespaceObject = {};
 __webpack_require__.r(plugins_namespaceObject);
 __webpack_require__.d(plugins_namespaceObject, {
-  "controls": function() { return plugins_controls; },
   "persistence": function() { return persistence; }
 });
 
 // EXTERNAL MODULE: ./node_modules/turbo-combine-reducers/index.js
-var turbo_combine_reducers = __webpack_require__(9884);
+var turbo_combine_reducers = __webpack_require__(9125);
 var turbo_combine_reducers_default = /*#__PURE__*/__webpack_require__.n(turbo_combine_reducers);
 ;// CONCATENATED MODULE: external "lodash"
 var external_lodash_namespaceObject = window["lodash"];
@@ -1244,11 +1250,13 @@ if (false) {}
 
 
 // EXTERNAL MODULE: ./node_modules/equivalent-key-map/equivalent-key-map.js
-var equivalent_key_map = __webpack_require__(3909);
+var equivalent_key_map = __webpack_require__(2167);
 var equivalent_key_map_default = /*#__PURE__*/__webpack_require__.n(equivalent_key_map);
 ;// CONCATENATED MODULE: external ["wp","reduxRoutine"]
 var external_wp_reduxRoutine_namespaceObject = window["wp"]["reduxRoutine"];
 var external_wp_reduxRoutine_default = /*#__PURE__*/__webpack_require__.n(external_wp_reduxRoutine_namespaceObject);
+;// CONCATENATED MODULE: external ["wp","compose"]
+var external_wp_compose_namespaceObject = window["wp"]["compose"];
 ;// CONCATENATED MODULE: ./packages/data/build-module/factory.js
 /**
  * Creates a selector function that takes additional curried argument with the
@@ -1265,15 +1273,18 @@ var external_wp_reduxRoutine_default = /*#__PURE__*/__webpack_require__.n(extern
  *
  * @example
  * ```js
+ * import { store as coreStore } from '@wordpress/core-data';
+ * import { store as editorStore } from '@wordpress/editor';
+ *
  * const getCurrentPostId = createRegistrySelector( ( select ) => ( state ) => {
- *   return select( 'core/editor' ).getCurrentPostId();
+ *   return select( editorStore ).getCurrentPostId();
  * } );
  *
  * const getPostEdits = createRegistrySelector( ( select ) => ( state ) => {
  *   // calling another registry selector just like any other function
  *   const postType = getCurrentPostType( state );
  *   const postId = getCurrentPostId( state );
- *	 return select( 'core' ).getEntityRecordEdits( 'postType', postType, postId );
+ *	 return select( coreStore ).getEntityRecordEdits( 'postType', postType, postId );
  * } );
  * ```
  *
@@ -1288,7 +1299,7 @@ var external_wp_reduxRoutine_default = /*#__PURE__*/__webpack_require__.n(extern
  * @return {Function} Registry selector that can be registered with a store.
  */
 function createRegistrySelector(registrySelector) {
-  // create a selector function that is bound to the registry referenced by `selector.registry`
+  // Create a selector function that is bound to the registry referenced by `selector.registry`
   // and that has the same API as a regular selector. Binding it in such a way makes it
   // possible to call the selector directly from another selector.
   const selector = function () {
@@ -1331,22 +1342,21 @@ function createRegistryControl(registryControl) {
   registryControl.isRegistryControl = true;
   return registryControl;
 }
-//# sourceMappingURL=factory.js.map
-;// CONCATENATED MODULE: ./packages/data/build-module/controls.js
-/**
- * External dependencies
- */
 
+;// CONCATENATED MODULE: ./packages/data/build-module/controls.js
 /**
  * Internal dependencies
  */
-
 
 /** @typedef {import('./types').StoreDescriptor} StoreDescriptor */
 
 const SELECT = '@@data/SELECT';
 const RESOLVE_SELECT = '@@data/RESOLVE_SELECT';
 const DISPATCH = '@@data/DISPATCH';
+
+function isObject(object) {
+  return object !== null && typeof object === 'object';
+}
 /**
  * Dispatches a control action for triggering a synchronous registry select.
  *
@@ -1371,6 +1381,7 @@ const DISPATCH = '@@data/DISPATCH';
  * @return {Object} The control descriptor.
  */
 
+
 function controls_select(storeNameOrDescriptor, selectorName) {
   for (var _len = arguments.length, args = new Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
     args[_key - 2] = arguments[_key];
@@ -1378,7 +1389,7 @@ function controls_select(storeNameOrDescriptor, selectorName) {
 
   return {
     type: SELECT,
-    storeKey: (0,external_lodash_namespaceObject.isObject)(storeNameOrDescriptor) ? storeNameOrDescriptor.name : storeNameOrDescriptor,
+    storeKey: isObject(storeNameOrDescriptor) ? storeNameOrDescriptor.name : storeNameOrDescriptor,
     selectorName,
     args
   };
@@ -1416,7 +1427,7 @@ function resolveSelect(storeNameOrDescriptor, selectorName) {
 
   return {
     type: RESOLVE_SELECT,
-    storeKey: (0,external_lodash_namespaceObject.isObject)(storeNameOrDescriptor) ? storeNameOrDescriptor.name : storeNameOrDescriptor,
+    storeKey: isObject(storeNameOrDescriptor) ? storeNameOrDescriptor.name : storeNameOrDescriptor,
     selectorName,
     args
   };
@@ -1450,7 +1461,7 @@ function dispatch(storeNameOrDescriptor, actionName) {
 
   return {
     type: DISPATCH,
-    storeKey: (0,external_lodash_namespaceObject.isObject)(storeNameOrDescriptor) ? storeNameOrDescriptor.name : storeNameOrDescriptor,
+    storeKey: isObject(storeNameOrDescriptor) ? storeNameOrDescriptor.name : storeNameOrDescriptor,
     actionName,
     args
   };
@@ -1488,7 +1499,7 @@ const builtinControls = {
     return registry.dispatch(storeKey)[actionName](...args);
   })
 };
-//# sourceMappingURL=controls.js.map
+
 ;// CONCATENATED MODULE: ./node_modules/is-promise/index.mjs
 function isPromise(obj) {
   return !!obj && (typeof obj === 'object' || typeof obj === 'function') && typeof obj.then === 'function';
@@ -1518,7 +1529,7 @@ const promiseMiddleware = () => next => action => {
 };
 
 /* harmony default export */ var promise_middleware = (promiseMiddleware);
-//# sourceMappingURL=promise-middleware.js.map
+
 ;// CONCATENATED MODULE: ./packages/data/build-module/store/index.js
 const coreDataStore = {
   name: 'core/data',
@@ -1562,7 +1573,7 @@ const coreDataStore = {
 
 };
 /* harmony default export */ var store = (coreDataStore);
-//# sourceMappingURL=index.js.map
+
 ;// CONCATENATED MODULE: ./packages/data/build-module/resolvers-cache-middleware.js
 /**
  * External dependencies
@@ -1598,9 +1609,9 @@ const createResolversCacheMiddleware = (registry, reducerKey) => () => next => a
 
     resolversByArgs.forEach((value, args) => {
       // resolversByArgs is the map Map([ args ] => boolean) storing the cache resolution status for a given selector.
-      // If the value is false it means this resolver has finished its resolution which means we need to invalidate it,
-      // if it's true it means it's inflight and the invalidation is not necessary.
-      if (value !== false || !resolver.shouldInvalidate(action, ...args)) {
+      // If the value is "finished" or "error" it means this resolver has finished its resolution which means we need
+      // to invalidate it, if it's true it means it's inflight and the invalidation is not necessary.
+      if ((value === null || value === void 0 ? void 0 : value.status) !== 'finished' && (value === null || value === void 0 ? void 0 : value.status) !== 'error' || !resolver.shouldInvalidate(action, ...args)) {
         return;
       } // Trigger cache invalidation
 
@@ -1612,7 +1623,7 @@ const createResolversCacheMiddleware = (registry, reducerKey) => () => next => a
 };
 
 /* harmony default export */ var resolvers_cache_middleware = (createResolversCacheMiddleware);
-//# sourceMappingURL=resolvers-cache-middleware.js.map
+
 ;// CONCATENATED MODULE: ./packages/data/build-module/redux-store/thunk-middleware.js
 function createThunkMiddleware(args) {
   return () => next => action => {
@@ -1623,30 +1634,24 @@ function createThunkMiddleware(args) {
     return next(action);
   };
 }
-//# sourceMappingURL=thunk-middleware.js.map
+
 ;// CONCATENATED MODULE: ./packages/data/build-module/redux-store/metadata/utils.js
+/**
+ * External dependencies
+ */
+
 /**
  * Higher-order reducer creator which creates a combined reducer object, keyed
  * by a property on the action object.
  *
- * @template {any} TState
- * @template {import('redux').AnyAction} TAction
- *
- * @param {string} actionProperty Action property by which to key object.
- *
- * @return {(reducer: import('redux').Reducer<TState, TAction>) => import('redux').Reducer<Record<string, TState>, TAction>} Higher-order reducer.
+ * @param  actionProperty Action property by which to key object.
+ * @return Higher-order reducer.
  */
 const onSubKey = actionProperty => reducer => function () {
-  let state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] :
-  /** @type {Record<string, TState>} */
-  {};
+  let state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
   let action = arguments.length > 1 ? arguments[1] : undefined;
   // Retrieve subkey from action. Do not track if undefined; useful for cases
   // where reducer is scoped by action shape.
-
-  /** @type {keyof state} */
-
-  /* eslint-enable jsdoc/no-undefined-types */
   const key = action[actionProperty];
 
   if (key === undefined) {
@@ -1665,12 +1670,33 @@ const onSubKey = actionProperty => reducer => function () {
     [key]: nextKeyState
   };
 };
-//# sourceMappingURL=utils.js.map
+/**
+ * Normalize selector argument array by defaulting `undefined` value to an empty array
+ * and removing trailing `undefined` values.
+ *
+ * @param  args Selector argument array
+ * @return Normalized state key array
+ */
+
+function selectorArgsToStateKey(args) {
+  if (args === undefined || args === null) {
+    return [];
+  }
+
+  const len = args.length;
+  let idx = len;
+
+  while (idx > 0 && args[idx - 1] === undefined) {
+    idx--;
+  }
+
+  return idx === len ? args : args.slice(0, idx);
+}
+
 ;// CONCATENATED MODULE: ./packages/data/build-module/redux-store/metadata/reducer.js
 /**
  * External dependencies
  */
-
 
 
 /**
@@ -1690,31 +1716,82 @@ const subKeysIsResolved = onSubKey('selectorName')(function () {
 
   switch (action.type) {
     case 'START_RESOLUTION':
+      {
+        const nextState = new (equivalent_key_map_default())(state);
+        nextState.set(selectorArgsToStateKey(action.args), {
+          status: 'resolving'
+        });
+        return nextState;
+      }
+
     case 'FINISH_RESOLUTION':
       {
-        const isStarting = action.type === 'START_RESOLUTION';
         const nextState = new (equivalent_key_map_default())(state);
-        nextState.set(action.args, isStarting);
+        nextState.set(selectorArgsToStateKey(action.args), {
+          status: 'finished'
+        });
+        return nextState;
+      }
+
+    case 'FAIL_RESOLUTION':
+      {
+        const nextState = new (equivalent_key_map_default())(state);
+        nextState.set(selectorArgsToStateKey(action.args), {
+          status: 'error',
+          error: action.error
+        });
         return nextState;
       }
 
     case 'START_RESOLUTIONS':
-    case 'FINISH_RESOLUTIONS':
       {
-        const isStarting = action.type === 'START_RESOLUTIONS';
         const nextState = new (equivalent_key_map_default())(state);
 
         for (const resolutionArgs of action.args) {
-          nextState.set(resolutionArgs, isStarting);
+          nextState.set(selectorArgsToStateKey(resolutionArgs), {
+            status: 'resolving'
+          });
         }
 
+        return nextState;
+      }
+
+    case 'FINISH_RESOLUTIONS':
+      {
+        const nextState = new (equivalent_key_map_default())(state);
+
+        for (const resolutionArgs of action.args) {
+          nextState.set(selectorArgsToStateKey(resolutionArgs), {
+            status: 'finished'
+          });
+        }
+
+        return nextState;
+      }
+
+    case 'FAIL_RESOLUTIONS':
+      {
+        const nextState = new (equivalent_key_map_default())(state);
+        action.args.forEach((resolutionArgs, idx) => {
+          const resolutionState = {
+            status: 'error',
+            error: undefined
+          };
+          const error = action.errors[idx];
+
+          if (error) {
+            resolutionState.error = error;
+          }
+
+          nextState.set(selectorArgsToStateKey(resolutionArgs), resolutionState);
+        });
         return nextState;
       }
 
     case 'INVALIDATE_RESOLUTION':
       {
         const nextState = new (equivalent_key_map_default())(state);
-        nextState.delete(action.args);
+        nextState.delete(selectorArgsToStateKey(action.args));
         return nextState;
       }
   }
@@ -1741,12 +1818,24 @@ const isResolved = function () {
       return {};
 
     case 'INVALIDATE_RESOLUTION_FOR_STORE_SELECTOR':
-      return (0,external_lodash_namespaceObject.has)(state, [action.selectorName]) ? (0,external_lodash_namespaceObject.omit)(state, [action.selectorName]) : state;
+      {
+        if (action.selectorName in state) {
+          const {
+            [action.selectorName]: removedSelector,
+            ...restState
+          } = state;
+          return restState;
+        }
+
+        return state;
+      }
 
     case 'START_RESOLUTION':
     case 'FINISH_RESOLUTION':
+    case 'FAIL_RESOLUTION':
     case 'START_RESOLUTIONS':
     case 'FINISH_RESOLUTIONS':
+    case 'FAIL_RESOLUTIONS':
     case 'INVALIDATE_RESOLUTION':
       return subKeysIsResolved(state, action);
   }
@@ -1755,80 +1844,140 @@ const isResolved = function () {
 };
 
 /* harmony default export */ var metadata_reducer = (isResolved);
-//# sourceMappingURL=reducer.js.map
+
 ;// CONCATENATED MODULE: ./packages/data/build-module/redux-store/metadata/selectors.js
 /**
  * External dependencies
  */
 
+/**
+ * Internal dependencies
+ */
+
+
 /** @typedef {Record<string, import('./reducer').State>} State */
 
+/** @typedef {import('./reducer').StateValue} StateValue */
+
+/** @typedef {import('./reducer').Status} Status */
+
+/**
+ * Returns the raw resolution state value for a given selector name,
+ * and arguments set. May be undefined if the selector has never been resolved
+ * or not resolved for the given set of arguments, otherwise true or false for
+ * resolution started and completed respectively.
+ *
+ * @param {State}      state        Data state.
+ * @param {string}     selectorName Selector name.
+ * @param {unknown[]?} args         Arguments passed to selector.
+ *
+ * @return {StateValue|undefined} isResolving value.
+ */
+
+function getResolutionState(state, selectorName, args) {
+  const map = (0,external_lodash_namespaceObject.get)(state, [selectorName]);
+
+  if (!map) {
+    return;
+  }
+
+  return map.get(selectorArgsToStateKey(args));
+}
 /**
  * Returns the raw `isResolving` value for a given selector name,
  * and arguments set. May be undefined if the selector has never been resolved
  * or not resolved for the given set of arguments, otherwise true or false for
  * resolution started and completed respectively.
  *
- * @param {State}     state        Data state.
- * @param {string}    selectorName Selector name.
- * @param {unknown[]} args         Arguments passed to selector.
+ * @param {State}      state        Data state.
+ * @param {string}     selectorName Selector name.
+ * @param {unknown[]?} args         Arguments passed to selector.
  *
  * @return {boolean | undefined} isResolving value.
  */
 
 function getIsResolving(state, selectorName, args) {
-  const map = (0,external_lodash_namespaceObject.get)(state, [selectorName]);
-
-  if (!map) {
-    return undefined;
-  }
-
-  return map.get(args);
+  const resolutionState = getResolutionState(state, selectorName, args);
+  return resolutionState && resolutionState.status === 'resolving';
 }
 /**
  * Returns true if resolution has already been triggered for a given
  * selector name, and arguments set.
  *
- * @param {State}     state        Data state.
- * @param {string}    selectorName Selector name.
- * @param {unknown[]} [args]       Arguments passed to selector (default `[]`).
+ * @param {State}      state        Data state.
+ * @param {string}     selectorName Selector name.
+ * @param {unknown[]?} args         Arguments passed to selector.
  *
  * @return {boolean} Whether resolution has been triggered.
  */
 
-function hasStartedResolution(state, selectorName) {
-  let args = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [];
-  return getIsResolving(state, selectorName, args) !== undefined;
+function hasStartedResolution(state, selectorName, args) {
+  return getResolutionState(state, selectorName, args) !== undefined;
 }
 /**
  * Returns true if resolution has completed for a given selector
  * name, and arguments set.
  *
- * @param {State}     state        Data state.
- * @param {string}    selectorName Selector name.
- * @param {unknown[]} [args]       Arguments passed to selector.
+ * @param {State}      state        Data state.
+ * @param {string}     selectorName Selector name.
+ * @param {unknown[]?} args         Arguments passed to selector.
  *
  * @return {boolean} Whether resolution has completed.
  */
 
-function hasFinishedResolution(state, selectorName) {
-  let args = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [];
-  return getIsResolving(state, selectorName, args) === false;
+function hasFinishedResolution(state, selectorName, args) {
+  var _getResolutionState;
+
+  const status = (_getResolutionState = getResolutionState(state, selectorName, args)) === null || _getResolutionState === void 0 ? void 0 : _getResolutionState.status;
+  return status === 'finished' || status === 'error';
+}
+/**
+ * Returns true if resolution has failed for a given selector
+ * name, and arguments set.
+ *
+ * @param {State}      state        Data state.
+ * @param {string}     selectorName Selector name.
+ * @param {unknown[]?} args         Arguments passed to selector.
+ *
+ * @return {boolean} Has resolution failed
+ */
+
+function hasResolutionFailed(state, selectorName, args) {
+  var _getResolutionState2;
+
+  return ((_getResolutionState2 = getResolutionState(state, selectorName, args)) === null || _getResolutionState2 === void 0 ? void 0 : _getResolutionState2.status) === 'error';
+}
+/**
+ * Returns the resolution error for a given selector name, and arguments set.
+ * Note it may be of an Error type, but may also be null, undefined, or anything else
+ * that can be `throw`-n.
+ *
+ * @param {State}      state        Data state.
+ * @param {string}     selectorName Selector name.
+ * @param {unknown[]?} args         Arguments passed to selector.
+ *
+ * @return {Error|unknown} Last resolution error
+ */
+
+function getResolutionError(state, selectorName, args) {
+  const resolutionState = getResolutionState(state, selectorName, args);
+  return (resolutionState === null || resolutionState === void 0 ? void 0 : resolutionState.status) === 'error' ? resolutionState.error : null;
 }
 /**
  * Returns true if resolution has been triggered but has not yet completed for
  * a given selector name, and arguments set.
  *
- * @param {State}     state        Data state.
- * @param {string}    selectorName Selector name.
- * @param {unknown[]} [args]       Arguments passed to selector.
+ * @param {State}      state        Data state.
+ * @param {string}     selectorName Selector name.
+ * @param {unknown[]?} args         Arguments passed to selector.
  *
  * @return {boolean} Whether resolution is in progress.
  */
 
-function isResolving(state, selectorName) {
-  let args = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [];
-  return getIsResolving(state, selectorName, args) === true;
+function isResolving(state, selectorName, args) {
+  var _getResolutionState3;
+
+  return ((_getResolutionState3 = getResolutionState(state, selectorName, args)) === null || _getResolutionState3 === void 0 ? void 0 : _getResolutionState3.status) === 'resolving';
 }
 /**
  * Returns the list of the cached resolvers.
@@ -1841,7 +1990,7 @@ function isResolving(state, selectorName) {
 function getCachedResolvers(state) {
   return state;
 }
-//# sourceMappingURL=selectors.js.map
+
 ;// CONCATENATED MODULE: ./packages/data/build-module/redux-store/metadata/actions.js
 /**
  * Returns an action object used in signalling that selector resolution has
@@ -1877,14 +2026,33 @@ function finishResolution(selectorName, args) {
   };
 }
 /**
+ * Returns an action object used in signalling that selector resolution has
+ * failed.
+ *
+ * @param {string}        selectorName Name of selector for which resolver triggered.
+ * @param {unknown[]}     args         Arguments to associate for uniqueness.
+ * @param {Error|unknown} error        The error that caused the failure.
+ *
+ * @return {{ type: 'FAIL_RESOLUTION', selectorName: string, args: unknown[], error: Error|unknown }} Action object.
+ */
+
+function failResolution(selectorName, args, error) {
+  return {
+    type: 'FAIL_RESOLUTION',
+    selectorName,
+    args,
+    error
+  };
+}
+/**
  * Returns an action object used in signalling that a batch of selector resolutions has
  * started.
  *
- * @param {string}    selectorName Name of selector for which resolver triggered.
- * @param {unknown[]} args         Array of arguments to associate for uniqueness, each item
- *                                 is associated to a resolution.
+ * @param {string}      selectorName Name of selector for which resolver triggered.
+ * @param {unknown[][]} args         Array of arguments to associate for uniqueness, each item
+ *                                   is associated to a resolution.
  *
- * @return {{ type: 'START_RESOLUTIONS', selectorName: string, args: unknown[] }} Action object.
+ * @return {{ type: 'START_RESOLUTIONS', selectorName: string, args: unknown[][] }} Action object.
  */
 
 function startResolutions(selectorName, args) {
@@ -1898,11 +2066,11 @@ function startResolutions(selectorName, args) {
  * Returns an action object used in signalling that a batch of selector resolutions has
  * completed.
  *
- * @param {string}    selectorName Name of selector for which resolver triggered.
- * @param {unknown[]} args         Array of arguments to associate for uniqueness, each item
- *                                 is associated to a resolution.
+ * @param {string}      selectorName Name of selector for which resolver triggered.
+ * @param {unknown[][]} args         Array of arguments to associate for uniqueness, each item
+ *                                   is associated to a resolution.
  *
- * @return {{ type: 'FINISH_RESOLUTIONS', selectorName: string, args: unknown[] }} Action object.
+ * @return {{ type: 'FINISH_RESOLUTIONS', selectorName: string, args: unknown[][] }} Action object.
  */
 
 function finishResolutions(selectorName, args) {
@@ -1910,6 +2078,26 @@ function finishResolutions(selectorName, args) {
     type: 'FINISH_RESOLUTIONS',
     selectorName,
     args
+  };
+}
+/**
+ * Returns an action object used in signalling that a batch of selector resolutions has
+ * completed and at least one of them has failed.
+ *
+ * @param {string}            selectorName Name of selector for which resolver triggered.
+ * @param {unknown[]}         args         Array of arguments to associate for uniqueness, each item
+ *                                         is associated to a resolution.
+ * @param {(Error|unknown)[]} errors       Array of errors to associate for uniqueness, each item
+ *                                         is associated to a resolution.
+ * @return {{ type: 'FAIL_RESOLUTIONS', selectorName: string, args: unknown[], errors: Array<Error|unknown> }} Action object.
+ */
+
+function failResolutions(selectorName, args, errors) {
+  return {
+    type: 'FAIL_RESOLUTIONS',
+    selectorName,
+    args,
+    errors
   };
 }
 /**
@@ -1956,7 +2144,7 @@ function invalidateResolutionForStoreSelector(selectorName) {
     selectorName
   };
 }
-//# sourceMappingURL=actions.js.map
+
 ;// CONCATENATED MODULE: ./packages/data/build-module/redux-store/index.js
 /**
  * External dependencies
@@ -1968,6 +2156,7 @@ function invalidateResolutionForStoreSelector(selectorName) {
 /**
  * WordPress dependencies
  */
+
 
 
 /**
@@ -1983,9 +2172,15 @@ function invalidateResolutionForStoreSelector(selectorName) {
 
 /** @typedef {import('../types').DataRegistry} DataRegistry */
 
-/** @typedef {import('../types').StoreDescriptor} StoreDescriptor */
+/**
+ * @typedef {import('../types').StoreDescriptor<C>} StoreDescriptor
+ * @template C
+ */
 
-/** @typedef {import('../types').ReduxStoreConfig} ReduxStoreConfig */
+/**
+ * @typedef {import('../types').ReduxStoreConfig<State,Actions,Selectors>} ReduxStoreConfig
+ * @template State,Actions,Selectors
+ */
 
 const trimUndefinedValues = array => {
   const result = [...array];
@@ -1997,6 +2192,15 @@ const trimUndefinedValues = array => {
   }
 
   return result;
+}; // Convert Map objects to plain objects
+
+
+const mapToObject = (key, state) => {
+  if (state instanceof Map) {
+    return Object.fromEntries(state);
+  }
+
+  return state;
 };
 /**
  * Create a cache to track whether resolvers started running or not.
@@ -2044,12 +2248,13 @@ function createResolversCache() {
  * } );
  * ```
  *
- * @param {string}           key     Unique namespace identifier.
- * @param {ReduxStoreConfig} options Registered store options, with properties
- *                                   describing reducer, actions, selectors,
- *                                   and resolvers.
+ * @template State,Actions,Selectors
+ * @param {string}                                    key     Unique namespace identifier.
+ * @param {ReduxStoreConfig<State,Actions,Selectors>} options Registered store options, with properties
+ *                                                            describing reducer, actions, selectors,
+ *                                                            and resolvers.
  *
- * @return {StoreDescriptor} Store Object.
+ * @return   {StoreDescriptor<ReduxStoreConfig<State,Actions,Selectors>>} Store Object.
  */
 
 
@@ -2109,12 +2314,15 @@ function createReduxStore(key, options) {
       }
 
       const resolveSelectors = mapResolveSelectors(selectors, store);
+      const suspendSelectors = mapSuspendSelectors(selectors, store);
 
       const getSelectors = () => selectors;
 
       const getActions = () => actions;
 
-      const getResolveSelectors = () => resolveSelectors; // We have some modules monkey-patching the store object
+      const getResolveSelectors = () => resolveSelectors;
+
+      const getSuspendSelectors = () => suspendSelectors; // We have some modules monkey-patching the store object
       // It's wrong to do so but until we refactor all of our effects to controls
       // We need to keep the same "store" instance here.
 
@@ -2150,6 +2358,7 @@ function createReduxStore(key, options) {
         resolvers,
         getSelectors,
         getResolveSelectors,
+        getSuspendSelectors,
         getActions,
         subscribe
       };
@@ -2173,18 +2382,16 @@ function instantiateReduxStore(key, options, registry, thunkArgs) {
     ...builtinControls
   };
   const normalizedControls = (0,external_lodash_namespaceObject.mapValues)(controls, control => control.isRegistryControl ? control(registry) : control);
-  const middlewares = [resolvers_cache_middleware(registry, key), promise_middleware, external_wp_reduxRoutine_default()(normalizedControls)];
-
-  if (options.__experimentalUseThunks) {
-    middlewares.push(createThunkMiddleware(thunkArgs));
-  }
-
+  const middlewares = [resolvers_cache_middleware(registry, key), promise_middleware, external_wp_reduxRoutine_default()(normalizedControls), createThunkMiddleware(thunkArgs)];
   const enhancers = [applyMiddleware(...middlewares)];
 
   if (typeof window !== 'undefined' && window.__REDUX_DEVTOOLS_EXTENSION__) {
     enhancers.push(window.__REDUX_DEVTOOLS_EXTENSION__({
       name: key,
-      instanceId: key
+      instanceId: key,
+      serialize: {
+        replacer: mapToObject
+      }
     }));
   }
 
@@ -2198,7 +2405,7 @@ function instantiateReduxStore(key, options, registry, thunkArgs) {
   });
   return createStore(enhancedReducer, {
     root: initialState
-  }, (0,external_lodash_namespaceObject.flowRight)(enhancers));
+  }, (0,external_wp_compose_namespaceObject.compose)(enhancers));
 }
 /**
  * Maps selectors to a store.
@@ -2266,30 +2473,109 @@ function mapActions(actions, store) {
 
 
 function mapResolveSelectors(selectors, store) {
-  return (0,external_lodash_namespaceObject.mapValues)((0,external_lodash_namespaceObject.omit)(selectors, ['getIsResolving', 'hasStartedResolution', 'hasFinishedResolution', 'isResolving', 'getCachedResolvers']), (selector, selectorName) => function () {
-    for (var _len3 = arguments.length, args = new Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
-      args[_key3] = arguments[_key3];
+  const {
+    getIsResolving,
+    hasStartedResolution,
+    hasFinishedResolution,
+    hasResolutionFailed,
+    isResolving,
+    getCachedResolvers,
+    getResolutionState,
+    getResolutionError,
+    ...storeSelectors
+  } = selectors;
+  return (0,external_lodash_namespaceObject.mapValues)(storeSelectors, (selector, selectorName) => {
+    // If the selector doesn't have a resolver, just convert the return value
+    // (including exceptions) to a Promise, no additional extra behavior is needed.
+    if (!selector.hasResolver) {
+      return async function () {
+        for (var _len3 = arguments.length, args = new Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+          args[_key3] = arguments[_key3];
+        }
+
+        return selector.apply(null, args);
+      };
     }
 
-    return new Promise(resolve => {
-      const hasFinished = () => selectors.hasFinishedResolution(selectorName, args);
-
-      const getResult = () => selector.apply(null, args); // trigger the selector (to trigger the resolver)
-
-
-      const result = getResult();
-
-      if (hasFinished()) {
-        return resolve(result);
+    return function () {
+      for (var _len4 = arguments.length, args = new Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
+        args[_key4] = arguments[_key4];
       }
 
-      const unsubscribe = store.subscribe(() => {
+      return new Promise((resolve, reject) => {
+        const hasFinished = () => selectors.hasFinishedResolution(selectorName, args);
+
+        const finalize = result => {
+          const hasFailed = selectors.hasResolutionFailed(selectorName, args);
+
+          if (hasFailed) {
+            const error = selectors.getResolutionError(selectorName, args);
+            reject(error);
+          } else {
+            resolve(result);
+          }
+        };
+
+        const getResult = () => selector.apply(null, args); // Trigger the selector (to trigger the resolver)
+
+
+        const result = getResult();
+
         if (hasFinished()) {
-          unsubscribe();
-          resolve(getResult());
+          return finalize(result);
         }
+
+        const unsubscribe = store.subscribe(() => {
+          if (hasFinished()) {
+            unsubscribe();
+            finalize(getResult());
+          }
+        });
       });
-    });
+    };
+  });
+}
+/**
+ * Maps selectors to functions that throw a suspense promise if not yet resolved.
+ *
+ * @param {Object} selectors Selectors to map.
+ * @param {Object} store     The redux store the selectors select from.
+ *
+ * @return {Object} Selectors mapped to their suspense functions.
+ */
+
+
+function mapSuspendSelectors(selectors, store) {
+  return (0,external_lodash_namespaceObject.mapValues)(selectors, (selector, selectorName) => {
+    // Selector without a resolver doesn't have any extra suspense behavior.
+    if (!selector.hasResolver) {
+      return selector;
+    }
+
+    return function () {
+      for (var _len5 = arguments.length, args = new Array(_len5), _key5 = 0; _key5 < _len5; _key5++) {
+        args[_key5] = arguments[_key5];
+      }
+
+      const result = selector.apply(null, args);
+
+      if (selectors.hasFinishedResolution(selectorName, args)) {
+        if (selectors.hasResolutionFailed(selectorName, args)) {
+          throw selectors.getResolutionError(selectorName, args);
+        }
+
+        return result;
+      }
+
+      throw new Promise(resolve => {
+        const unsubscribe = store.subscribe(() => {
+          if (selectors.hasFinishedResolution(selectorName, args)) {
+            resolve();
+            unsubscribe();
+          }
+        });
+      });
+    };
   });
 }
 /**
@@ -2314,8 +2600,8 @@ function mapResolvers(resolvers, selectors, store, resolversCache) {
     }
 
     return { ...resolver,
-      // copy the enumerable properties of the resolver function
-      fulfill: resolver // add the fulfill method
+      // Copy the enumerable properties of the resolver function.
+      fulfill: resolver // Add the fulfill method.
 
     };
   });
@@ -2329,8 +2615,8 @@ function mapResolvers(resolvers, selectors, store, resolversCache) {
     }
 
     const selectorResolver = function () {
-      for (var _len4 = arguments.length, args = new Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
-        args[_key4] = arguments[_key4];
+      for (var _len6 = arguments.length, args = new Array(_len6), _key6 = 0; _key6 < _len6; _key6++) {
+        args[_key6] = arguments[_key6];
       }
 
       async function fulfillSelector() {
@@ -2352,8 +2638,13 @@ function mapResolvers(resolvers, selectors, store, resolversCache) {
         setTimeout(async () => {
           resolversCache.clear(selectorName, args);
           store.dispatch(startResolution(selectorName, args));
-          await fulfillResolver(store, mappedResolvers, selectorName, ...args);
-          store.dispatch(finishResolution(selectorName, args));
+
+          try {
+            await fulfillResolver(store, mappedResolvers, selectorName, ...args);
+            store.dispatch(finishResolution(selectorName, args));
+          } catch (error) {
+            store.dispatch(failResolution(selectorName, args, error));
+          }
         });
       }
 
@@ -2387,8 +2678,8 @@ async function fulfillResolver(store, resolvers, selectorName) {
     return;
   }
 
-  for (var _len5 = arguments.length, args = new Array(_len5 > 3 ? _len5 - 3 : 0), _key5 = 3; _key5 < _len5; _key5++) {
-    args[_key5 - 3] = arguments[_key5];
+  for (var _len7 = arguments.length, args = new Array(_len7 > 3 ? _len7 - 3 : 0), _key7 = 3; _key7 < _len7; _key7++) {
+    args[_key7 - 3] = arguments[_key7];
   }
 
   const action = resolver.fulfill(...args);
@@ -2397,7 +2688,7 @@ async function fulfillResolver(store, resolvers, selectorName) {
     await store.dispatch(action);
   }
 }
-//# sourceMappingURL=index.js.map
+
 ;// CONCATENATED MODULE: ./packages/data/build-module/utils/emitter.js
 /**
  * Create an event emitter.
@@ -2448,7 +2739,7 @@ function createEmitter() {
 
   };
 }
-//# sourceMappingURL=emitter.js.map
+
 ;// CONCATENATED MODULE: ./packages/data/build-module/registry.js
 /**
  * External dependencies
@@ -2494,6 +2785,9 @@ function createEmitter() {
  * @property {Function} registerStore registers store.
  */
 
+function getStoreName(storeNameOrDescriptor) {
+  return typeof storeNameOrDescriptor === 'string' ? storeNameOrDescriptor : storeNameOrDescriptor.name;
+}
 /**
  * Creates a new store registry, given an optional object of initial store
  * configurations.
@@ -2504,32 +2798,54 @@ function createEmitter() {
  * @return {WPDataRegistry} Data registry.
  */
 
+
 function createRegistry() {
   let storeConfigs = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
   let parent = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
   const stores = {};
   const emitter = createEmitter();
-
-  const __experimentalListeningStores = new Set();
+  const listeningStores = new Set();
   /**
    * Global listener called for each store's update.
    */
-
 
   function globalListener() {
     emitter.emit();
   }
   /**
-   * Subscribe to changes to any data.
+   * Subscribe to changes to any data, either in all stores in registry, or
+   * in one specific store.
    *
-   * @param {Function} listener Listener function.
+   * @param {Function}                listener              Listener function.
+   * @param {string|StoreDescriptor?} storeNameOrDescriptor Optional store name.
    *
    * @return {Function} Unsubscribe function.
    */
 
 
-  const subscribe = listener => {
-    return emitter.subscribe(listener);
+  const subscribe = (listener, storeNameOrDescriptor) => {
+    // subscribe to all stores
+    if (!storeNameOrDescriptor) {
+      return emitter.subscribe(listener);
+    } // subscribe to one store
+
+
+    const storeName = getStoreName(storeNameOrDescriptor);
+    const store = stores[storeName];
+
+    if (store) {
+      return store.subscribe(listener);
+    } // Trying to access a store that hasn't been registered,
+    // this is a pattern rarely used but seen in some places.
+    // We fallback to global `subscribe` here for backward-compatibility for now.
+    // See https://github.com/WordPress/gutenberg/pull/27466 for more info.
+
+
+    if (!parent) {
+      return emitter.subscribe(listener);
+    }
+
+    return parent.subscribe(listener, storeNameOrDescriptor);
   };
   /**
    * Calls a selector given the current state and extra arguments.
@@ -2542,44 +2858,42 @@ function createRegistry() {
 
 
   function select(storeNameOrDescriptor) {
-    const storeName = (0,external_lodash_namespaceObject.isObject)(storeNameOrDescriptor) ? storeNameOrDescriptor.name : storeNameOrDescriptor;
-
-    __experimentalListeningStores.add(storeName);
-
+    const storeName = getStoreName(storeNameOrDescriptor);
+    listeningStores.add(storeName);
     const store = stores[storeName];
 
     if (store) {
       return store.getSelectors();
     }
 
-    return parent && parent.select(storeName);
+    return parent === null || parent === void 0 ? void 0 : parent.select(storeName);
   }
 
-  function __experimentalMarkListeningStores(callback, ref) {
-    __experimentalListeningStores.clear();
+  function __unstableMarkListeningStores(callback, ref) {
+    listeningStores.clear();
 
-    const result = callback.call(this);
-    ref.current = Array.from(__experimentalListeningStores);
-    return result;
+    try {
+      return callback.call(this);
+    } finally {
+      ref.current = Array.from(listeningStores);
+    }
   }
   /**
-   * Given the name of a registered store, returns an object containing the store's
-   * selectors pre-bound to state so that you only need to supply additional arguments,
-   * and modified so that they return promises that resolve to their eventual values,
-   * after any resolvers have ran.
+   * Given a store descriptor, returns an object containing the store's selectors pre-bound to
+   * state so that you only need to supply additional arguments, and modified so that they return
+   * promises that resolve to their eventual values, after any resolvers have ran.
    *
-   * @param {string|StoreDescriptor} storeNameOrDescriptor Unique namespace identifier for the store
-   *                                                       or the store descriptor.
+   * @param {StoreDescriptor|string} storeNameOrDescriptor The store descriptor. The legacy calling
+   *                                                       convention of passing the store name is
+   *                                                       also supported.
    *
    * @return {Object} Each key of the object matches the name of a selector.
    */
 
 
   function resolveSelect(storeNameOrDescriptor) {
-    const storeName = (0,external_lodash_namespaceObject.isObject)(storeNameOrDescriptor) ? storeNameOrDescriptor.name : storeNameOrDescriptor;
-
-    __experimentalListeningStores.add(storeName);
-
+    const storeName = getStoreName(storeNameOrDescriptor);
+    listeningStores.add(storeName);
     const store = stores[storeName];
 
     if (store) {
@@ -2587,6 +2901,30 @@ function createRegistry() {
     }
 
     return parent && parent.resolveSelect(storeName);
+  }
+  /**
+   * Given a store descriptor, returns an object containing the store's selectors pre-bound to
+   * state so that you only need to supply additional arguments, and modified so that they throw
+   * promises in case the selector is not resolved yet.
+   *
+   * @param {StoreDescriptor|string} storeNameOrDescriptor The store descriptor. The legacy calling
+   *                                                       convention of passing the store name is
+   *                                                       also supported.
+   *
+   * @return {Object} Object containing the store's suspense-wrapped selectors.
+   */
+
+
+  function suspendSelect(storeNameOrDescriptor) {
+    const storeName = getStoreName(storeNameOrDescriptor);
+    listeningStores.add(storeName);
+    const store = stores[storeName];
+
+    if (store) {
+      return store.getSuspendSelectors();
+    }
+
+    return parent && parent.suspendSelect(storeName);
   }
   /**
    * Returns the available actions for a part of the state.
@@ -2599,7 +2937,7 @@ function createRegistry() {
 
 
   function dispatch(storeNameOrDescriptor) {
-    const storeName = (0,external_lodash_namespaceObject.isObject)(storeNameOrDescriptor) ? storeNameOrDescriptor.name : storeNameOrDescriptor;
+    const storeName = getStoreName(storeNameOrDescriptor);
     const store = stores[storeName];
 
     if (store) {
@@ -2610,7 +2948,6 @@ function createRegistry() {
   } //
   // Deprecated
   // TODO: Remove this after `use()` is removed.
-  //
 
 
   function withPlugins(attributes) {
@@ -2707,37 +3044,13 @@ function createRegistry() {
     registerStoreInstance(storeName, store);
     return store.store;
   }
-  /**
-   * Subscribe handler to a store.
-   *
-   * @param {string[]} storeName The store name.
-   * @param {Function} handler   The function subscribed to the store.
-   * @return {Function} A function to unsubscribe the handler.
-   */
-
-
-  function __experimentalSubscribeStore(storeName, handler) {
-    if (storeName in stores) {
-      return stores[storeName].subscribe(handler);
-    } // Trying to access a store that hasn't been registered,
-    // this is a pattern rarely used but seen in some places.
-    // We fallback to regular `subscribe` here for backward-compatibility for now.
-    // See https://github.com/WordPress/gutenberg/pull/27466 for more info.
-
-
-    if (!parent) {
-      return subscribe(handler);
-    }
-
-    return parent.__experimentalSubscribeStore(storeName, handler);
-  }
 
   function batch(callback) {
     emitter.pause();
-    (0,external_lodash_namespaceObject.forEach)(stores, store => store.emitter.pause());
+    Object.values(stores).forEach(store => store.emitter.pause());
     callback();
     emitter.resume();
-    (0,external_lodash_namespaceObject.forEach)(stores, store => store.emitter.resume());
+    Object.values(stores).forEach(store => store.emitter.resume());
   }
 
   let registry = {
@@ -2748,19 +3061,22 @@ function createRegistry() {
     subscribe,
     select,
     resolveSelect,
+    suspendSelect,
     dispatch,
     use,
     register,
     registerGenericStore,
     registerStore,
-    __experimentalMarkListeningStores,
-    __experimentalSubscribeStore
+    __unstableMarkListeningStores
   }; //
   // TODO:
   // This function will be deprecated as soon as it is no longer internally referenced.
-  //
 
   function use(plugin, options) {
+    if (!plugin) {
+      return;
+    }
+
     registry = { ...registry,
       ...plugin(registry, options)
     };
@@ -2779,27 +3095,50 @@ function createRegistry() {
 
   return withPlugins(registry);
 }
-//# sourceMappingURL=registry.js.map
+
 ;// CONCATENATED MODULE: ./packages/data/build-module/default-registry.js
 /**
  * Internal dependencies
  */
 
 /* harmony default export */ var default_registry = (createRegistry());
-//# sourceMappingURL=default-registry.js.map
-;// CONCATENATED MODULE: ./packages/data/build-module/plugins/controls/index.js
-/**
- * WordPress dependencies
+
+;// CONCATENATED MODULE: ./node_modules/is-plain-object/dist/is-plain-object.mjs
+/*!
+ * is-plain-object <https://github.com/jonschlinkert/is-plain-object>
+ *
+ * Copyright (c) 2014-2017, Jon Schlinkert.
+ * Released under the MIT License.
  */
 
-/* harmony default export */ var plugins_controls = (registry => {
-  external_wp_deprecated_default()('wp.data.plugins.controls', {
-    since: '5.4',
-    hint: 'The controls plugins is now baked-in.'
-  });
-  return registry;
-});
-//# sourceMappingURL=index.js.map
+function is_plain_object_isObject(o) {
+  return Object.prototype.toString.call(o) === '[object Object]';
+}
+
+function is_plain_object_isPlainObject(o) {
+  var ctor,prot;
+
+  if (is_plain_object_isObject(o) === false) return false;
+
+  // If has modified constructor
+  ctor = o.constructor;
+  if (ctor === undefined) return true;
+
+  // If has modified prototype
+  prot = ctor.prototype;
+  if (is_plain_object_isObject(prot) === false) return false;
+
+  // If constructor does not have an Object-specific method
+  if (prot.hasOwnProperty('isPrototypeOf') === false) {
+    return false;
+  }
+
+  // Most likely a plain Object
+  return true;
+}
+
+
+
 ;// CONCATENATED MODULE: ./packages/data/build-module/plugins/persistence/storage/object.js
 let objectStorage;
 const storage = {
@@ -2825,7 +3164,7 @@ const storage = {
 
 };
 /* harmony default export */ var object = (storage);
-//# sourceMappingURL=object.js.map
+
 ;// CONCATENATED MODULE: ./packages/data/build-module/plugins/persistence/storage/default.js
 /**
  * Internal dependencies
@@ -2845,11 +3184,12 @@ try {
 }
 
 /* harmony default export */ var storage_default = (default_storage);
-//# sourceMappingURL=default.js.map
+
 ;// CONCATENATED MODULE: ./packages/data/build-module/plugins/persistence/index.js
 /**
  * External dependencies
  */
+
 
 /**
  * Internal dependencies
@@ -2998,7 +3338,7 @@ function persistencePlugin(registry, pluginOptions) {
       const reducers = keys.reduce((accumulator, key) => Object.assign(accumulator, {
         [key]: (state, action) => action.nextState[key]
       }), {});
-      getPersistedState = withLazySameState(turbo_combine_reducers_default()(reducers));
+      getPersistedState = withLazySameState(build_module_combineReducers(reducers));
     } else {
       getPersistedState = (state, action) => action.nextState;
     }
@@ -3032,7 +3372,7 @@ function persistencePlugin(registry, pluginOptions) {
           type: '@@WP/PERSISTENCE_RESTORE'
         });
 
-        if ((0,external_lodash_namespaceObject.isPlainObject)(initialState) && (0,external_lodash_namespaceObject.isPlainObject)(persistedState)) {
+        if (is_plain_object_isPlainObject(initialState) && is_plain_object_isPlainObject(persistedState)) {
           // If state is an object, ensure that:
           // - Other keys are left intact when persisting only a
           //   subset of keys.
@@ -3057,68 +3397,14 @@ function persistencePlugin(registry, pluginOptions) {
 
   };
 }
-/**
- * Move the 'features' object in local storage from the sourceStoreName to the
- * interface store.
- *
- * @param {Object} persistence     The persistence interface.
- * @param {string} sourceStoreName The name of the store that has persisted
- *                                 preferences to migrate to the interface
- *                                 package.
- */
 
-
-function migrateFeaturePreferencesToInterfaceStore(persistence, sourceStoreName) {
-  var _state$sourceStoreNam;
-
-  const interfaceStoreName = 'core/interface';
-  const state = persistence.get();
-  const sourcePreferences = (_state$sourceStoreNam = state[sourceStoreName]) === null || _state$sourceStoreNam === void 0 ? void 0 : _state$sourceStoreNam.preferences;
-  const sourceFeatures = sourcePreferences === null || sourcePreferences === void 0 ? void 0 : sourcePreferences.features;
-
-  if (sourceFeatures) {
-    var _state$interfaceStore, _state$interfaceStore2;
-
-    const targetFeatures = (_state$interfaceStore = state[interfaceStoreName]) === null || _state$interfaceStore === void 0 ? void 0 : (_state$interfaceStore2 = _state$interfaceStore.preferences) === null || _state$interfaceStore2 === void 0 ? void 0 : _state$interfaceStore2.features; // Avoid migrating features again if they've previously been migrated.
-
-    if (!(targetFeatures !== null && targetFeatures !== void 0 && targetFeatures[sourceStoreName])) {
-      // Set the feature values in the interface store, the features
-      // object is keyed by 'scope', which matches the store name for
-      // the source.
-      persistence.set(interfaceStoreName, {
-        preferences: {
-          features: { ...targetFeatures,
-            [sourceStoreName]: sourceFeatures
-          }
-        }
-      }); // Remove feature preferences from the source.
-
-      persistence.set(sourceStoreName, {
-        preferences: { ...sourcePreferences,
-          features: undefined
-        }
-      });
-    }
-  }
-}
-/**
- * Deprecated: Remove this function and the code in WordPress Core that calls
- * it once WordPress 6.0 is released.
- */
-
-persistencePlugin.__unstableMigrate = pluginOptions => {
-  const persistence = createPersistenceInterface(pluginOptions);
-  migrateFeaturePreferencesToInterfaceStore(persistence, 'core/edit-widgets');
-  migrateFeaturePreferencesToInterfaceStore(persistence, 'core/customize-widgets');
-  migrateFeaturePreferencesToInterfaceStore(persistence, 'core/edit-post');
-};
+persistencePlugin.__unstableMigrate = () => {};
 
 /* harmony default export */ var persistence = (persistencePlugin);
-//# sourceMappingURL=index.js.map
+
 ;// CONCATENATED MODULE: ./packages/data/build-module/plugins/index.js
 
 
-//# sourceMappingURL=index.js.map
 ;// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/extends.js
 function _extends() {
   _extends = Object.assign || function (target) {
@@ -3139,8 +3425,6 @@ function _extends() {
 }
 ;// CONCATENATED MODULE: external ["wp","element"]
 var external_wp_element_namespaceObject = window["wp"]["element"];
-;// CONCATENATED MODULE: external ["wp","compose"]
-var external_wp_compose_namespaceObject = window["wp"]["compose"];
 ;// CONCATENATED MODULE: external "React"
 var external_React_namespaceObject = window["React"];
 ;// CONCATENATED MODULE: ./node_modules/use-memo-one/dist/use-memo-one.esm.js
@@ -3250,7 +3534,7 @@ const RegistryConsumer = Consumer;
  */
 
 /* harmony default export */ var context = (Provider);
-//# sourceMappingURL=context.js.map
+
 ;// CONCATENATED MODULE: ./packages/data/build-module/components/registry-provider/use-registry.js
 /**
  * WordPress dependencies
@@ -3304,7 +3588,7 @@ const RegistryConsumer = Consumer;
 function useRegistry() {
   return (0,external_wp_element_namespaceObject.useContext)(Context);
 }
-//# sourceMappingURL=use-registry.js.map
+
 ;// CONCATENATED MODULE: ./packages/data/build-module/components/async-mode-provider/context.js
 /**
  * WordPress dependencies
@@ -3324,10 +3608,11 @@ const AsyncModeConsumer = (/* unused pure expression or super */ null && (contex
  *
  * ```js
  * import { useSelect, AsyncModeProvider } from '@wordpress/data';
+ * import { store as blockEditorStore } from '@wordpress/block-editor';
  *
  * function BlockCount() {
  *   const count = useSelect( ( select ) => {
- *     return select( 'core/block-editor' ).getBlockCount()
+ *     return select( blockEditorStore ).getBlockCount()
  *   }, [] );
  *
  *   return count;
@@ -3352,7 +3637,7 @@ const AsyncModeConsumer = (/* unused pure expression or super */ null && (contex
  */
 
 /* harmony default export */ var async_mode_provider_context = (context_Provider);
-//# sourceMappingURL=context.js.map
+
 ;// CONCATENATED MODULE: ./packages/data/build-module/components/async-mode-provider/use-async-mode.js
 /**
  * WordPress dependencies
@@ -3366,7 +3651,7 @@ const AsyncModeConsumer = (/* unused pure expression or super */ null && (contex
 function useAsyncMode() {
   return (0,external_wp_element_namespaceObject.useContext)(context_Context);
 }
-//# sourceMappingURL=use-async-mode.js.map
+
 ;// CONCATENATED MODULE: ./packages/data/build-module/components/use-select/index.js
 /**
  * External dependencies
@@ -3390,7 +3675,22 @@ function useAsyncMode() {
 const noop = () => {};
 
 const renderQueue = (0,external_wp_priorityQueue_namespaceObject.createQueue)();
-/** @typedef {import('../../types').StoreDescriptor} StoreDescriptor */
+/**
+ * @typedef {import('../../types').StoreDescriptor<C>} StoreDescriptor
+ * @template C
+ */
+
+/**
+ * @typedef {import('../../types').ReduxStoreConfig<State,Actions,Selectors>} ReduxStoreConfig
+ * @template State,Actions,Selectors
+ */
+
+/**
+ * @typedef {import('../../types').UseSelectReturn<T>} UseSelectReturn
+ * @template T
+ */
+
+/** @typedef {import('../../types').MapSelect} MapSelect */
 
 /**
  * Custom react hook for retrieving props from registered selectors.
@@ -3398,28 +3698,25 @@ const renderQueue = (0,external_wp_priorityQueue_namespaceObject.createQueue)();
  * In general, this custom React hook follows the
  * [rules of hooks](https://reactjs.org/docs/hooks-rules.html).
  *
- * @param {Function|StoreDescriptor|string} mapSelect Function called on every state change. The
- *                                                    returned value is exposed to the component
- *                                                    implementing this hook. The function receives
- *                                                    the `registry.select` method on the first
- *                                                    argument and the `registry` on the second
- *                                                    argument.
- *                                                    When a store key is passed, all selectors for
- *                                                    the store will be returned. This is only meant
- *                                                    for usage of these selectors in event
- *                                                    callbacks, not for data needed to create the
- *                                                    element tree.
- * @param {Array}                           deps      If provided, this memoizes the mapSelect so the
- *                                                    same `mapSelect` is invoked on every state
- *                                                    change unless the dependencies change.
+ * @template {MapSelect | StoreDescriptor<any>} T
+ * @param {T}         mapSelect Function called on every state change. The returned value is
+ *                              exposed to the component implementing this hook. The function
+ *                              receives the `registry.select` method on the first argument
+ *                              and the `registry` on the second argument.
+ *                              When a store key is passed, all selectors for the store will be
+ *                              returned. This is only meant for usage of these selectors in event
+ *                              callbacks, not for data needed to create the element tree.
+ * @param {unknown[]} deps      If provided, this memoizes the mapSelect so the same `mapSelect` is
+ *                              invoked on every state change unless the dependencies change.
  *
  * @example
  * ```js
  * import { useSelect } from '@wordpress/data';
+ * import { store as myCustomStore } from 'my-custom-store';
  *
  * function HammerPriceDisplay( { currency } ) {
  *   const price = useSelect( ( select ) => {
- *     return select( 'my-shop' ).getPrice( 'hammer', currency )
+ *     return select( myCustomStore ).getPrice( 'hammer', currency );
  *   }, [ currency ] );
  *   return new Intl.NumberFormat( 'en-US', {
  *     style: 'currency',
@@ -3446,9 +3743,10 @@ const renderQueue = (0,external_wp_priorityQueue_namespaceObject.createQueue)();
  *
  * ```js
  * import { useSelect } from '@wordpress/data';
+ * import { store as myCustomStore } from 'my-custom-store';
  *
  * function Paste( { children } ) {
- *   const { getSettings } = useSelect( 'my-shop' );
+ *   const { getSettings } = useSelect( myCustomStore );
  *   function onPaste() {
  *     // Do something with the settings.
  *     const settings = getSettings();
@@ -3456,8 +3754,7 @@ const renderQueue = (0,external_wp_priorityQueue_namespaceObject.createQueue)();
  *   return <div onPaste={ onPaste }>{ children }</div>;
  * }
  * ```
- *
- * @return {Function}  A custom react hook.
+ * @return {UseSelectReturn<T>} A custom react hook.
  */
 
 function useSelect(mapSelect, deps) {
@@ -3479,37 +3776,34 @@ function useSelect(mapSelect, deps) {
   const _mapSelect = hasMappingFunction ? callbackMapper : null;
 
   const registry = useRegistry();
-  const isAsync = useAsyncMode(); // React can sometimes clear the `useMemo` cache.
-  // We use the cache-stable `useMemoOne` to avoid
-  // losing queues.
-
-  const queueContext = useMemoOne(() => ({
-    queue: true
-  }), [registry]);
-  const [, forceRender] = (0,external_wp_element_namespaceObject.useReducer)(s => s + 1, 0);
+  const isAsync = useAsyncMode();
+  const latestRegistry = (0,external_wp_element_namespaceObject.useRef)(registry);
   const latestMapSelect = (0,external_wp_element_namespaceObject.useRef)();
   const latestIsAsync = (0,external_wp_element_namespaceObject.useRef)(isAsync);
   const latestMapOutput = (0,external_wp_element_namespaceObject.useRef)();
-  const latestMapOutputError = (0,external_wp_element_namespaceObject.useRef)();
-  const isMountedAndNotUnsubscribing = (0,external_wp_element_namespaceObject.useRef)(); // Keep track of the stores being selected in the _mapSelect function,
+  const latestMapOutputError = (0,external_wp_element_namespaceObject.useRef)(); // Keep track of the stores being selected in the _mapSelect function,
   // and only subscribe to those stores later.
 
   const listeningStores = (0,external_wp_element_namespaceObject.useRef)([]);
-  const trapSelect = (0,external_wp_element_namespaceObject.useCallback)(callback => registry.__experimentalMarkListeningStores(callback, listeningStores), [registry]); // Generate a "flag" for used in the effect dependency array.
+  const wrapSelect = (0,external_wp_element_namespaceObject.useCallback)(callback => registry.__unstableMarkListeningStores(() => callback(registry.select, registry), listeningStores), [registry]); // Generate a "flag" for used in the effect dependency array.
   // It's different than just using `mapSelect` since deps could be undefined,
   // in that case, we would still want to memoize it.
 
   const depsChangedFlag = (0,external_wp_element_namespaceObject.useMemo)(() => ({}), deps || []);
   let mapOutput;
+  let selectorRan = false;
 
   if (_mapSelect) {
     mapOutput = latestMapOutput.current;
+    const hasReplacedRegistry = latestRegistry.current !== registry;
     const hasReplacedMapSelect = latestMapSelect.current !== _mapSelect;
+    const hasLeftAsyncMode = latestIsAsync.current && !isAsync;
     const lastMapSelectFailed = !!latestMapOutputError.current;
 
-    if (hasReplacedMapSelect || lastMapSelectFailed) {
+    if (hasReplacedRegistry || hasReplacedMapSelect || hasLeftAsyncMode || lastMapSelectFailed) {
       try {
-        mapOutput = trapSelect(() => _mapSelect(registry.select, registry));
+        mapOutput = wrapSelect(_mapSelect);
+        selectorRan = true;
       } catch (error) {
         let errorMessage = `An error occurred while running 'mapSelect': ${error.message}`;
 
@@ -3530,71 +3824,192 @@ function useSelect(mapSelect, deps) {
       return;
     }
 
+    latestRegistry.current = registry;
     latestMapSelect.current = _mapSelect;
-    latestMapOutput.current = mapOutput;
-    latestMapOutputError.current = undefined;
-    isMountedAndNotUnsubscribing.current = true; // This has to run after the other ref updates
-    // to avoid using stale values in the flushed
-    // callbacks or potentially overwriting a
-    // changed `latestMapOutput.current`.
+    latestIsAsync.current = isAsync;
 
-    if (latestIsAsync.current !== isAsync) {
-      latestIsAsync.current = isAsync;
-      renderQueue.flush(queueContext);
+    if (selectorRan) {
+      latestMapOutput.current = mapOutput;
     }
-  });
+
+    latestMapOutputError.current = undefined;
+  }); // React can sometimes clear the `useMemo` cache.
+  // We use the cache-stable `useMemoOne` to avoid
+  // losing queues.
+
+  const queueContext = useMemoOne(() => ({
+    queue: true
+  }), [registry]);
+  const [, forceRender] = (0,external_wp_element_namespaceObject.useReducer)(s => s + 1, 0);
+  const isMounted = (0,external_wp_element_namespaceObject.useRef)(false);
   (0,external_wp_compose_namespaceObject.useIsomorphicLayoutEffect)(() => {
     if (!hasMappingFunction) {
       return;
     }
 
     const onStoreChange = () => {
-      if (isMountedAndNotUnsubscribing.current) {
-        try {
-          const newMapOutput = trapSelect(() => latestMapSelect.current(registry.select, registry));
+      try {
+        const newMapOutput = wrapSelect(latestMapSelect.current);
 
-          if (external_wp_isShallowEqual_default()(latestMapOutput.current, newMapOutput)) {
-            return;
-          }
-
-          latestMapOutput.current = newMapOutput;
-        } catch (error) {
-          latestMapOutputError.current = error;
+        if (external_wp_isShallowEqual_default()(latestMapOutput.current, newMapOutput)) {
+          return;
         }
 
-        forceRender();
+        latestMapOutput.current = newMapOutput;
+      } catch (error) {
+        latestMapOutputError.current = error;
       }
-    }; // catch any possible state changes during mount before the subscription
-    // could be set.
 
-
-    if (latestIsAsync.current) {
-      renderQueue.add(queueContext, onStoreChange);
-    } else {
-      onStoreChange();
-    }
+      forceRender();
+    };
 
     const onChange = () => {
+      if (!isMounted.current) {
+        return;
+      }
+
       if (latestIsAsync.current) {
         renderQueue.add(queueContext, onStoreChange);
       } else {
         onStoreChange();
       }
-    };
+    }; // Catch any possible state changes during mount before the subscription
+    // could be set.
 
-    const unsubscribers = listeningStores.current.map(storeName => registry.__experimentalSubscribeStore(storeName, onChange));
+
+    onStoreChange();
+    const unsubscribers = listeningStores.current.map(storeName => registry.subscribe(onChange, storeName));
+    isMounted.current = true;
     return () => {
-      isMountedAndNotUnsubscribing.current = false; // The return value of the subscribe function could be undefined if the store is a custom generic store.
-
+      // The return value of the subscribe function could be undefined if the store is a custom generic store.
       unsubscribers.forEach(unsubscribe => unsubscribe === null || unsubscribe === void 0 ? void 0 : unsubscribe());
-      renderQueue.flush(queueContext);
+      renderQueue.cancel(queueContext);
+      isMounted.current = false;
     }; // If you're tempted to eliminate the spread dependencies below don't do it!
     // We're passing these in from the calling function and want to make sure we're
     // examining every individual value inside the `deps` array.
-  }, [registry, trapSelect, hasMappingFunction, depsChangedFlag]);
+  }, [registry, wrapSelect, hasMappingFunction, depsChangedFlag]);
+  (0,external_wp_element_namespaceObject.useDebugValue)(mapOutput);
   return hasMappingFunction ? mapOutput : registry.select(mapSelect);
 }
-//# sourceMappingURL=index.js.map
+/**
+ * A variant of the `useSelect` hook that has the same API, but will throw a
+ * suspense Promise if any of the called selectors is in an unresolved state.
+ *
+ * @param {Function} mapSelect Function called on every state change. The
+ *                             returned value is exposed to the component
+ *                             using this hook. The function receives the
+ *                             `registry.suspendSelect` method as the first
+ *                             argument and the `registry` as the second one.
+ * @param {Array}    deps      A dependency array used to memoize the `mapSelect`
+ *                             so that the same `mapSelect` is invoked on every
+ *                             state change unless the dependencies change.
+ *
+ * @return {Object} Data object returned by the `mapSelect` function.
+ */
+
+function useSuspenseSelect(mapSelect, deps) {
+  const _mapSelect = (0,external_wp_element_namespaceObject.useCallback)(mapSelect, deps);
+
+  const registry = useRegistry();
+  const isAsync = useAsyncMode();
+  const latestRegistry = (0,external_wp_element_namespaceObject.useRef)(registry);
+  const latestMapSelect = (0,external_wp_element_namespaceObject.useRef)();
+  const latestIsAsync = (0,external_wp_element_namespaceObject.useRef)(isAsync);
+  const latestMapOutput = (0,external_wp_element_namespaceObject.useRef)();
+  const latestMapOutputError = (0,external_wp_element_namespaceObject.useRef)(); // Keep track of the stores being selected in the `mapSelect` function,
+  // and only subscribe to those stores later.
+
+  const listeningStores = (0,external_wp_element_namespaceObject.useRef)([]);
+  const wrapSelect = (0,external_wp_element_namespaceObject.useCallback)(callback => registry.__unstableMarkListeningStores(() => callback(registry.suspendSelect, registry), listeningStores), [registry]); // Generate a "flag" for used in the effect dependency array.
+  // It's different than just using `mapSelect` since deps could be undefined,
+  // in that case, we would still want to memoize it.
+
+  const depsChangedFlag = (0,external_wp_element_namespaceObject.useMemo)(() => ({}), deps || []);
+  let mapOutput = latestMapOutput.current;
+  let mapOutputError = latestMapOutputError.current;
+  const hasReplacedRegistry = latestRegistry.current !== registry;
+  const hasReplacedMapSelect = latestMapSelect.current !== _mapSelect;
+  const hasLeftAsyncMode = latestIsAsync.current && !isAsync;
+  let selectorRan = false;
+
+  if (hasReplacedRegistry || hasReplacedMapSelect || hasLeftAsyncMode) {
+    try {
+      mapOutput = wrapSelect(_mapSelect);
+      selectorRan = true;
+    } catch (error) {
+      mapOutputError = error;
+    }
+  }
+
+  (0,external_wp_compose_namespaceObject.useIsomorphicLayoutEffect)(() => {
+    latestRegistry.current = registry;
+    latestMapSelect.current = _mapSelect;
+    latestIsAsync.current = isAsync;
+
+    if (selectorRan) {
+      latestMapOutput.current = mapOutput;
+    }
+
+    latestMapOutputError.current = mapOutputError;
+  }); // React can sometimes clear the `useMemo` cache.
+  // We use the cache-stable `useMemoOne` to avoid
+  // losing queues.
+
+  const queueContext = useMemoOne(() => ({
+    queue: true
+  }), [registry]);
+  const [, forceRender] = (0,external_wp_element_namespaceObject.useReducer)(s => s + 1, 0);
+  const isMounted = (0,external_wp_element_namespaceObject.useRef)(false);
+  (0,external_wp_compose_namespaceObject.useIsomorphicLayoutEffect)(() => {
+    const onStoreChange = () => {
+      try {
+        const newMapOutput = wrapSelect(latestMapSelect.current);
+
+        if (external_wp_isShallowEqual_default()(latestMapOutput.current, newMapOutput)) {
+          return;
+        }
+
+        latestMapOutput.current = newMapOutput;
+      } catch (error) {
+        latestMapOutputError.current = error;
+      }
+
+      forceRender();
+    };
+
+    const onChange = () => {
+      if (!isMounted.current) {
+        return;
+      }
+
+      if (latestIsAsync.current) {
+        renderQueue.add(queueContext, onStoreChange);
+      } else {
+        onStoreChange();
+      }
+    }; // catch any possible state changes during mount before the subscription
+    // could be set.
+
+
+    onStoreChange();
+    const unsubscribers = listeningStores.current.map(storeName => registry.subscribe(onChange, storeName));
+    isMounted.current = true;
+    return () => {
+      // The return value of the subscribe function could be undefined if the store is a custom generic store.
+      unsubscribers.forEach(unsubscribe => unsubscribe === null || unsubscribe === void 0 ? void 0 : unsubscribe());
+      renderQueue.cancel(queueContext);
+      isMounted.current = false;
+    };
+  }, [registry, wrapSelect, depsChangedFlag]);
+
+  if (mapOutputError) {
+    throw mapOutputError;
+  }
+
+  return mapOutput;
+}
+
 ;// CONCATENATED MODULE: ./packages/data/build-module/components/with-select/index.js
 
 
@@ -3619,6 +4034,7 @@ function useSelect(mapSelect, deps) {
  * @example
  * ```js
  * import { withSelect } from '@wordpress/data';
+ * import { store as myCustomStore } from 'my-custom-store';
  *
  * function PriceDisplay( { price, currency } ) {
  * 	return new Intl.NumberFormat( 'en-US', {
@@ -3628,7 +4044,7 @@ function useSelect(mapSelect, deps) {
  * }
  *
  * const HammerPriceDisplay = withSelect( ( select, ownProps ) => {
- * 	const { getPrice } = select( 'my-shop' );
+ * 	const { getPrice } = select( myCustomStore );
  * 	const { currency } = ownProps;
  *
  * 	return {
@@ -3656,7 +4072,7 @@ const withSelect = mapSelectToProps => (0,external_wp_compose_namespaceObject.cr
 }), 'withSelect');
 
 /* harmony default export */ var with_select = (withSelect);
-//# sourceMappingURL=index.js.map
+
 ;// CONCATENATED MODULE: ./packages/data/build-module/components/use-dispatch/use-dispatch-with-map.js
 /**
  * External dependencies
@@ -3710,7 +4126,7 @@ const useDispatchWithMap = (dispatchMap, deps) => {
 };
 
 /* harmony default export */ var use_dispatch_with_map = (useDispatchWithMap);
-//# sourceMappingURL=use-dispatch-with-map.js.map
+
 ;// CONCATENATED MODULE: ./packages/data/build-module/components/with-dispatch/index.js
 
 
@@ -3742,9 +4158,10 @@ const useDispatchWithMap = (dispatchMap, deps) => {
  * }
  *
  * import { withDispatch } from '@wordpress/data';
+ * import { store as myCustomStore } from 'my-custom-store';
  *
  * const SaleButton = withDispatch( ( dispatch, ownProps ) => {
- *     const { startSale } = dispatch( 'my-shop' );
+ *     const { startSale } = dispatch( myCustomStore );
  *     const { discountPercent } = ownProps;
  *
  *     return {
@@ -3779,11 +4196,12 @@ const useDispatchWithMap = (dispatchMap, deps) => {
  * }
  *
  * import { withDispatch } from '@wordpress/data';
+ * import { store as myCustomStore } from 'my-custom-store';
  *
  * const SaleButton = withDispatch( ( dispatch, ownProps, { select } ) => {
  *    // Stock number changes frequently.
- *    const { getStockNumber } = select( 'my-shop' );
- *    const { startSale } = dispatch( 'my-shop' );
+ *    const { getStockNumber } = select( myCustomStore );
+ *    const { startSale } = dispatch( myCustomStore );
  *    return {
  *        onClick() {
  *            const discountPercent = getStockNumber() > 50 ? 10 : 20;
@@ -3812,7 +4230,7 @@ const withDispatch = mapDispatchToProps => (0,external_wp_compose_namespaceObjec
 }, 'withDispatch');
 
 /* harmony default export */ var with_dispatch = (withDispatch);
-//# sourceMappingURL=index.js.map
+
 ;// CONCATENATED MODULE: ./packages/data/build-module/components/with-registry/index.js
 
 
@@ -3839,13 +4257,21 @@ const withRegistry = (0,external_wp_compose_namespaceObject.createHigherOrderCom
   registry: registry
 }))), 'withRegistry');
 /* harmony default export */ var with_registry = (withRegistry);
-//# sourceMappingURL=index.js.map
+
 ;// CONCATENATED MODULE: ./packages/data/build-module/components/use-dispatch/use-dispatch.js
 /**
  * Internal dependencies
  */
 
-/** @typedef {import('../../types').StoreDescriptor} StoreDescriptor */
+/**
+ * @typedef {import('../../types').StoreDescriptor<StoreConfig>} StoreDescriptor
+ * @template StoreConfig
+ */
+
+/**
+ * @typedef {import('../../types').UseDispatchReturn<StoreNameOrDescriptor>} UseDispatchReturn
+ * @template StoreNameOrDescriptor
+ */
 
 /**
  * A custom react hook returning the current registry dispatch actions creators.
@@ -3853,11 +4279,12 @@ const withRegistry = (0,external_wp_compose_namespaceObject.createHigherOrderCom
  * Note: The component using this hook must be within the context of a
  * RegistryProvider.
  *
- * @param {string|StoreDescriptor} [storeNameOrDescriptor] Optionally provide the name of the
- *                                                         store or its descriptor from which to
- *                                                         retrieve action creators. If not
- *                                                         provided, the registry.dispatch
- *                                                         function is returned instead.
+ * @template {undefined | string | StoreDescriptor<any>} [StoreNameOrDescriptor=undefined]
+ * @param {StoreNameOrDescriptor} [storeNameOrDescriptor] Optionally provide the name of the
+ *                                                        store or its descriptor from which to
+ *                                                        retrieve action creators. If not
+ *                                                        provided, the registry.dispatch
+ *                                                        function is returned instead.
  *
  * @example
  * This illustrates a pattern where you may need to retrieve dynamic data from
@@ -3867,6 +4294,7 @@ const withRegistry = (0,external_wp_compose_namespaceObject.createHigherOrderCom
  * ```jsx
  * import { useDispatch, useSelect } from '@wordpress/data';
  * import { useCallback } from '@wordpress/element';
+ * import { store as myCustomStore } from 'my-custom-store';
  *
  * function Button( { onClick, children } ) {
  *   return <button type="button" onClick={ onClick }>{ children }</button>
@@ -3874,10 +4302,10 @@ const withRegistry = (0,external_wp_compose_namespaceObject.createHigherOrderCom
  *
  * const SaleButton = ( { children } ) => {
  *   const { stockNumber } = useSelect(
- *     ( select ) => select( 'my-shop' ).getStockNumber(),
+ *     ( select ) => select( myCustomStore ).getStockNumber(),
  *     []
  *   );
- *   const { startSale } = useDispatch( 'my-shop' );
+ *   const { startSale } = useDispatch( myCustomStore );
  *   const onClick = useCallback( () => {
  *     const discountPercent = stockNumber > 50 ? 10: 20;
  *     startSale( discountPercent );
@@ -3889,7 +4317,7 @@ const withRegistry = (0,external_wp_compose_namespaceObject.createHigherOrderCom
  * //
  * // <SaleButton>Start Sale!</SaleButton>
  * ```
- * @return {Function}  A custom react hook.
+ * @return {UseDispatchReturn<StoreNameOrDescriptor>} A custom react hook.
  */
 
 const useDispatch = storeNameOrDescriptor => {
@@ -3900,7 +4328,7 @@ const useDispatch = storeNameOrDescriptor => {
 };
 
 /* harmony default export */ var use_dispatch = (useDispatch);
-//# sourceMappingURL=use-dispatch.js.map
+
 ;// CONCATENATED MODULE: ./packages/data/build-module/index.js
 /**
  * External dependencies
@@ -3938,6 +4366,7 @@ const useDispatch = storeNameOrDescriptor => {
  * The combineReducers helper function turns an object whose values are different
  * reducing functions into a single reducing function you can pass to registerReducer.
  *
+ * @type  {import('./types').combineReducers}
  * @param {Object} reducers An object whose values correspond to different reducing
  *                          functions that need to be combined into one.
  *
@@ -3973,20 +4402,22 @@ const useDispatch = storeNameOrDescriptor => {
  *                    object, and constructs a state object with the same shape.
  */
 
-
+const build_module_combineReducers = (turbo_combine_reducers_default());
 /**
- * Given the name or descriptor of a registered store, returns an object of the store's selectors.
+ * Given a store descriptor, returns an object of the store's selectors.
  * The selector functions are been pre-bound to pass the current state automatically.
  * As a consumer, you need only pass arguments of the selector, if applicable.
  *
- * @param {string|StoreDescriptor} storeNameOrDescriptor Unique namespace identifier for the store
- *                                                       or the store descriptor.
+ * @param {StoreDescriptor|string} storeNameOrDescriptor The store descriptor. The legacy calling
+ *                                                       convention of passing the store name is
+ *                                                       also supported.
  *
  * @example
  * ```js
  * import { select } from '@wordpress/data';
+ * import { store as myCustomStore } from 'my-custom-store';
  *
- * select( 'my-shop' ).getPrice( 'hammer' );
+ * select( myCustomStore ).getPrice( 'hammer' );
  * ```
  *
  * @return {Object} Object containing the store's selectors.
@@ -3994,19 +4425,20 @@ const useDispatch = storeNameOrDescriptor => {
 
 const build_module_select = default_registry.select;
 /**
- * Given the name of a registered store, returns an object containing the store's
- * selectors pre-bound to state so that you only need to supply additional arguments,
- * and modified so that they return promises that resolve to their eventual values,
- * after any resolvers have ran.
+ * Given a store descriptor, returns an object containing the store's selectors pre-bound to state
+ * so that you only need to supply additional arguments, and modified so that they return promises
+ * that resolve to their eventual values, after any resolvers have ran.
  *
- * @param {string|StoreDescriptor} storeNameOrDescriptor Unique namespace identifier for the store
- *                                                       or the store descriptor.
+ * @param {StoreDescriptor|string} storeNameOrDescriptor The store descriptor. The legacy calling
+ *                                                       convention of passing the store name is
+ *                                                       also supported.
  *
  * @example
  * ```js
  * import { resolveSelect } from '@wordpress/data';
+ * import { store as myCustomStore } from 'my-custom-store';
  *
- * resolveSelect( 'my-shop' ).getPrice( 'hammer' ).then(console.log)
+ * resolveSelect( myCustomStore ).getPrice( 'hammer' ).then(console.log)
  * ```
  *
  * @return {Object} Object containing the store's promise-wrapped selectors.
@@ -4014,20 +4446,35 @@ const build_module_select = default_registry.select;
 
 const build_module_resolveSelect = default_registry.resolveSelect;
 /**
- * Given the name of a registered store, returns an object of the store's action creators.
+ * Given a store descriptor, returns an object containing the store's selectors pre-bound to state
+ * so that you only need to supply additional arguments, and modified so that they throw promises
+ * in case the selector is not resolved yet.
+ *
+ * @param {StoreDescriptor|string} storeNameOrDescriptor The store descriptor. The legacy calling
+ *                                                       convention of passing the store name is
+ *                                                       also supported.
+ *
+ * @return {Object} Object containing the store's suspense-wrapped selectors.
+ */
+
+const suspendSelect = default_registry.suspendSelect;
+/**
+ * Given a store descriptor, returns an object of the store's action creators.
  * Calling an action creator will cause it to be dispatched, updating the state value accordingly.
  *
  * Note: Action creators returned by the dispatch will return a promise when
  * they are called.
  *
- * @param {string|StoreDescriptor} storeNameOrDescriptor Unique namespace identifier for the store
- *                                                       or the store descriptor.
+ * @param {StoreDescriptor|string} storeNameOrDescriptor The store descriptor. The legacy calling
+ *                                                       convention of passing the store name is
+ *                                                       also supported.
  *
  * @example
  * ```js
  * import { dispatch } from '@wordpress/data';
+ * import { store as myCustomStore } from 'my-custom-store';
  *
- * dispatch( 'my-shop' ).setPrice( 'hammer', 9.75 );
+ * dispatch( myCustomStore ).setPrice( 'hammer', 9.75 );
  * ```
  * @return {Object} Object containing the action creators.
  */
@@ -4035,10 +4482,14 @@ const build_module_resolveSelect = default_registry.resolveSelect;
 const build_module_dispatch = default_registry.dispatch;
 /**
  * Given a listener function, the function will be called any time the state value
- * of one of the registered stores has changed. This function returns a `unsubscribe`
- * function used to stop the subscription.
+ * of one of the registered stores has changed. If you specify the optional
+ * `storeNameOrDescriptor` parameter, the listener function will be called only
+ * on updates on that one specific registered store.
  *
- * @param {Function} listener Callback function.
+ * This function returns an `unsubscribe` function used to stop the subscription.
+ *
+ * @param {Function}                listener              Callback function.
+ * @param {string|StoreDescriptor?} storeNameOrDescriptor Optional store name.
  *
  * @example
  * ```js
@@ -4106,7 +4557,7 @@ const use = default_registry.use;
  */
 
 const register = default_registry.register;
-//# sourceMappingURL=index.js.map
+
 }();
 (window.wp = window.wp || {}).data = __webpack_exports__;
 /******/ })()

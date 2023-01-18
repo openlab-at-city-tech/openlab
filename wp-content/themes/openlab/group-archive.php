@@ -7,8 +7,8 @@ $can_create  = is_user_logged_in() && bp_user_can_create_groups();
 $create_link = bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/create/step/group-details/?type=' . $group_type . '&new=true';
 
 if ( $group_type === 'course' ) {
-	$user_type  = xprofile_get_field_data( 'Account Type', bp_loggedin_user_id() );
-	$can_create = ( is_super_admin() || 'Faculty' === $user_type );
+	$user_type  = openlab_get_user_member_type( bp_loggedin_user_id() );
+	$can_create = ( is_super_admin() || 'faculty' === $user_type );
 } elseif ( $group_type === 'portfolio' ) {
 	$can_create = false;
 }

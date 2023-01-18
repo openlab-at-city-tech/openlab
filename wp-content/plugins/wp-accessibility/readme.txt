@@ -4,8 +4,8 @@ Donate link: http://www.joedolson.com/donate/
 Tags: title, accessibility, accessible, navigation, wcag, a11y, section508, focus, alt text, labels, aria
 Requires at least: 3.4.2
 Requires PHP: 5.6
-Tested up to: 5.9
-Stable tag: 1.7.14
+Tested up to: 6.1
+Stable tag: 2.0.1
 Text Domain: wp-accessibility
 License: GPLv2 or later
 
@@ -55,7 +55,7 @@ These are tools provided to help you identify issues you may need to fix.
 * Enable diagnostic CSS to show CSS-detectable problems in visual editor or on front-end of site.
 * Search your media library on content in alt text fields.
 
-Learn more! <a href="http://make.wordpress.org/accessibility/wp-accessibility-plugin/">Read about the accessibility issues corrected</a> by WP Accessibility!
+Learn more! <a href="https://docs.joedolson.com/wp-accessibility/">Read about the accessibility issues corrected</a> by WP Accessibility!
 
 The plug-in is intended to help with deficiencies commonly found in themes and to solve some issues in WordPress core. It can't correct every problem (by a long shot), but provides tools to fix some issues, supplement the accessibility of your site, or identify problems.
 
@@ -75,6 +75,72 @@ The plug-in is intended to help with deficiencies commonly found in themes and t
 = Future =
 
 [Suggest a change!](https://github.com/joedolson/wp-accessibility/issues/)
+
+= 2.0.1 =
+
+* Add `.et_smooth_scroll_disabled` to skip links to override Divi's inaccessible smooth scrolling.
+* Add promotional affiliate links for Equalize Digital's Accessibility Checker
+
+= 2.0.0 =
+
+* New feature: Show alt attributes toggle on content images.
+* New feature: Ensure users can adjust scale even if maximum-scale set to 1.0.
+* New feature: Alt enforcement indicators now present in block editor.
+* New feature: Flag missing captions or subtitles in uploaded videos in editor.
+* Updated feature: [Remove title attributes](https://docs.joedolson.com/wp-accessibility/2022/10/29/remove-title-attributes/) now more intelligent.
+* Updated feature: Modernized alt attribute enforcement tools.
+* Change: Combine remediation scripting in wp-accessibility.js.
+* Change: Disable accessibility-ready duplicating features if theme changed to accessibility-ready.
+* Bug fix: aria-expanded missing in some cases for longdesc disclosures.
+* Bug fix: Main JS file did not have a version number.
+* Bug fix: Run feature JS after running remediation JS.
+* Bug fix: Fix DOM ordering with image disclosure buttons.
+* Retired language directory call. Translation files haven't been updated since version Oct 2014.
+
+= 1.9.2 =
+
+* Bug fix: Alignment classes should only apply when wpa-ld class present.
+* Bug fix: Escape widget title content.
+* Bug fix: Set cookies with SameSite = Strict. Props [@ute-arbeit](https://github.com/joedolson/wp-accessibility/commits?author=ute-arbeit).
+* Bug fix: Check that post_type param is in query object when searching alt attributes.
+
+= 1.9.1 =
+
+* Bug fix: Duplicate skiplink styles: if custom styles used, default settings could be appended to them as a duplicate.
+* Filters: Add filters to configure deprecated skiplinks if necessary.
+* Show default CSS when enabled for reference.
+
+= 1.9.0 =
+
+* Update: Significant reorganization of settings.
+* Feature: Create & prepend simplified content summaries.
+* Feature: Raise warning on long alt text.
+* Feature: Generate color contrast via GET to make bookmarkable.
+* Increase boldness of automatic focus outline.
+* Set default focus outline color.
+* Use wp_add_inline_styles for customizable CSS.
+* Update automatic link underlines to skip `nav` elements.
+* Bug fix: some incorrect textdomains.
+* Bug fix: toolbar tooltips should be dismissable without changing focus or hover. Support `esc` key.
+* Bug fix: Incorrect variable passed to color contrast, causing incorrect values.
+* Auto generation of hook documentation: https://joedolson.github.io/wp-accessibility/
+
+= 1.8.1 =
+
+* Update: Fix accessibility issues in longdesc disclosure button.
+* Add: style variations on longdesc disclosure to adjust position. (.top-left, .top-right, .bottom-right)
+* Update tested to for WP 6.0.
+
+= 1.8.0 =
+
+* Update: tabindex check should not remove tabindex on `a` elements without `href`.
+* Update: check for the button role on elements that are not focusable and add tabindex.
+* Update: Larger longdesc button.
+* Update admin script & css enqueuing.
+* Change color picker.
+* Make admin responsive.
+* Admin text updates.
+* Return false for accessible theme test if Oxygen Builder active.
 
 = 1.7.14 =
 

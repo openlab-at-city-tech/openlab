@@ -144,7 +144,26 @@ if ( ! function_exists( 'tribe_get_request_var' ) ) {
 	 * @return mixed
 	 */
 	function tribe_get_request_var( $var, $default = null ) {
-		$unsafe = Tribe__Utils__Array::get_in_any( [ $_GET, $_POST, $_REQUEST ], $var, $default );
+		$requests = [];
+
+		// Prevent a slew of warnings every time we call this.
+		if ( isset( $_REQUEST ) ) {
+			$requests[] = (array) $_REQUEST;
+		}
+
+		if ( isset( $_GET ) ) {
+			$requests[] = (array) $_GET;
+		}
+
+		if ( isset( $_POST ) ) {
+			$requests[] = (array) $_POST;
+		}
+
+		if ( empty( $requests ) ) {
+			return $default;
+		}
+
+		$unsafe = Tribe__Utils__Array::get_in_any( $requests, $var, $default );
 		return tribe_sanitize_deep( $unsafe );
 	}
 }
@@ -241,6 +260,7 @@ if ( ! function_exists( 'tribe_is_truthy' ) ) {
 			'yes',
 			'true',
 		] );
+
 		// Makes sure we are dealing with lowercase for testing
 		if ( is_string( $var ) ) {
 			$var = strtolower( $var );
@@ -564,6 +584,17 @@ if ( ! function_exists( 'tribe_is_regex' ) ) {
 	 */
 	function tribe_is_regex( $candidate ) {
 		if ( ! is_string( $candidate ) ) {
+			return false;
+		}
+
+		$n = strlen( $candidate );
+		// regex must be at least 2 delimiters + 1 character - invalid regex.
+		if ( $n < 3 ) {
+			return false;
+		}
+
+		// Missing or mismatched delimiters - invalid regex.
+		if ( $candidate[0] !== $candidate[ $n - 1 ] ) {
 			return false;
 		}
 
@@ -1096,7 +1127,7 @@ if ( ! function_exists( 'tribe_sanitize_deep' ) ) {
 			return $value;
 		}
 		if ( is_string( $value ) ) {
-			$value = filter_var( $value, FILTER_UNSAFE_RAW );
+			$value = filter_var( $value, FILTER_SANITIZE_STRING );
 			return $value;
 		}
 		if ( is_int( $value ) ) {

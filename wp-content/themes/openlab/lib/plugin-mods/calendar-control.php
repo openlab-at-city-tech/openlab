@@ -554,3 +554,16 @@ function openlab_bpeo_activity_notification_control( $send_it, $activity, $user_
 }
 add_action( 'bp_ass_send_activity_notification_for_user', 'openlab_bpeo_activity_notification_control', 5, 4 );
 add_action( 'bp_ges_add_to_digest_queue_for_user', 'openlab_bpeo_activity_notification_control', 5, 4 );
+
+/**
+ * Remove trailing period on BPEO activity actions.
+ *
+ * May want to fix this upstream at some point.
+ */
+add_filter(
+	'bpeo_activity_action',
+	function( $action ) {
+		return rtrim( $action, ".\n" );
+	},
+	20
+);

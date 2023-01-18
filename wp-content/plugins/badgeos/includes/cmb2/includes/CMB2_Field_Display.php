@@ -133,7 +133,6 @@ class CMB2_Field_Display {
 				foreach ( $this->field->value as $val ) {
 					$this->value = $val;
 					echo '<li>', $this->_display(), '</li>';
-					;
 				}
 				echo '</ul>';
 			}
@@ -303,13 +302,13 @@ class CMB2_Display_Text_Date_Timezone extends CMB2_Field_Display {
 			return;
 		}
 
-		$datetime = maybe_unserialize( $this->value );
+		$datetime    = maybe_unserialize( $this->value );
 		$this->value = $tzstring = '';
 
 		if ( $datetime && $datetime instanceof DateTime ) {
-			$tz       = $datetime->getTimezone();
-			$tzstring = $tz->getName();
-			$this->value    = $datetime->getTimestamp();
+			$tz          = $datetime->getTimezone();
+			$tzstring    = $tz->getName();
+			$this->value = $datetime->getTimestamp();
 		}
 
 		$date = $this->field->get_timestamp_format( 'date_format', $this->value );
@@ -372,7 +371,7 @@ class CMB2_Display_Taxonomy_Multicheck extends CMB2_Field_Display {
 
 			$links = array();
 			foreach ( $terms as $term ) {
-				$link = get_edit_term_link( $term->term_id, $taxonomy );
+				$link    = get_edit_term_link( $term->term_id, $taxonomy );
 				$links[] = '<a href="' . esc_url( $link ) . '">' . esc_html( $term->name ) . '</a>';
 			}
 			// Then loop and output.
@@ -399,9 +398,11 @@ class CMB2_Display_File extends CMB2_Field_Display {
 		$types = new CMB2_Types( $this->field );
 		$type  = $types->get_new_render_type( $this->field->type(), 'CMB2_Type_File_Base' );
 
-		$id = $this->field->get_field_clone( array(
-			'id' => $this->field->_id() . '_id',
-		) )->escaped_value( 'absint' );
+		$id = $this->field->get_field_clone(
+			array(
+				'id' => $this->field->_id() . '_id',
+			)
+		)->escaped_value( 'absint' );
 
 		$this->file_output( $this->value, $id, $type );
 	}
@@ -416,11 +417,16 @@ class CMB2_Display_File extends CMB2_Field_Display {
 			$img_size = $this->field->args( 'preview_size' );
 
 			if ( $id ) {
-				$image = wp_get_attachment_image( $id, $img_size, null, array(
-					'class' => 'cmb-image-display',
-				) );
+				$image = wp_get_attachment_image(
+					$id,
+					$img_size,
+					null,
+					array(
+						'class' => 'cmb-image-display',
+					)
+				);
 			} else {
-				$size = is_array( $img_size ) ? $img_size[0] : 200;
+				$size  = is_array( $img_size ) ? $img_size[0] : 200;
 				$image = '<img class="cmb-image-display" style="max-width: ' . absint( $size ) . 'px; width: 100%; height: auto;" src="' . $url_value . '" alt="" />';
 			}
 
@@ -428,7 +434,8 @@ class CMB2_Display_File extends CMB2_Field_Display {
 
 		} else {
 
-			printf( '<div class="file-status"><span>%1$s <strong><a href="%2$s">%3$s</a></strong></span></div>',
+			printf(
+				'<div class="file-status"><span>%1$s <strong><a href="%2$s">%3$s</a></strong></span></div>',
 				esc_html( $field_type->_text( 'file_text', esc_html__( 'File:', 'cmb2' ) ) ),
 				$url_value,
 				CMB2_Utils::get_file_name_from_path( $url_value )
@@ -471,14 +478,16 @@ class CMB2_Display_oEmbed extends CMB2_Field_Display {
 			return;
 		}
 
-		cmb2_do_oembed( array(
-			'url'         => $this->value,
-			'object_id'   => $this->field->object_id,
-			'object_type' => $this->field->object_type,
-			'oembed_args' => array(
-				'width' => '300',
-			),
-			'field_id'    => $this->field->id(),
-		) );
+		cmb2_do_oembed(
+			array(
+				'url'         => $this->value,
+				'object_id'   => $this->field->object_id,
+				'object_type' => $this->field->object_type,
+				'oembed_args' => array(
+					'width' => '300',
+				),
+				'field_id'    => $this->field->id(),
+			)
+		);
 	}
 }

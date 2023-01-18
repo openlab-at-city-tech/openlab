@@ -71,7 +71,16 @@ function activation_meta( $user_id, $key, $user ) {
 	}
 
 	if ( empty( $data->account_type ) ) {
-		xprofile_set_field_data( 'Account Type', $user_id, $data->account_type );
+		// The name is sent, and we have to find the corresponding slug.
+		$mt_slug      = '';
+		$member_types = openlab_get_member_types();
+		foreach ( $member_types as $member_type ) {
+			if ( $data->account_type === $member_type->name ) {
+				$mt_slug = $member_type->slug;
+				break;
+			}
+		}
+		openlab_set_user_member_type( $user_id, $mt_slug );
 	}
 }
 add_action( 'bp_core_activated_user', __NAMESPACE__ . '\\activation_meta', 10, 3 );

@@ -28,6 +28,7 @@ function eportfolio_customize_register( $wp_customize ) {
 
 	$wp_customize->get_setting( 'blogname' )->transport         = 'postMessage';
 	$wp_customize->get_setting( 'blogdescription' )->transport  = 'postMessage';
+	$wp_customize->get_setting( 'header_textcolor' )->transport = 'postMessage';
 
 	
 	/*option panel for page-template details*/
@@ -71,6 +72,6 @@ add_action( 'customize_preview_init', 'eportfolio_customize_preview_js' );
 function eportfolio_customizer_css() {
 	wp_enqueue_script('eportfolio_customize_admin_js', get_template_directory_uri().'/assets/twp/js/customizer-admin.js', array('customize-controls'));
 
-	wp_enqueue_style( 'eportfolio_customize_controls', get_template_directory_uri() . '/assets/twp/css/customizer-controll.css' );
+	wp_enqueue_style( 'eportfolio_customize_controls', get_template_directory_uri() . '/assets/twp/css/customizer-control.css' );
 }
 add_action( 'customize_controls_enqueue_scripts', 'eportfolio_customizer_css',0 );

@@ -4,22 +4,22 @@
 
 Plugin Name:  SyntaxHighlighter Evolved
 Plugin URI:   https://alex.blog/wordpress-plugins/syntaxhighlighter/
-Version:      3.6.1
+Version:      3.6.2
 Description:  Easily post syntax-highlighted code to your site without having to modify the code at all. Uses Alex Gorbatchev's <a href="http://alexgorbatchev.com/SyntaxHighlighter/">SyntaxHighlighter</a>. Includes a new editor block.
 Author:       Alex Mills (Viper007Bond)
 Author URI:   https://alex.blog/
 Text Domain:  syntaxhighlighter
 License:      GPL2
 License URI:  https://www.gnu.org/licenses/gpl-2.0.html
-Requires at least: 5.6
-Tested up to: 5.8
+Requires at least: 5.7
+Tested up to: 5.9
 Requires PHP: 7.0
 
 **************************************************************************/
 
 class SyntaxHighlighter {
 	// All of these variables are private. Filters are provided for things that can be modified.
-	public $pluginver            = '3.6.1';  // Plugin version
+	public $pluginver            = '3.6.2';  // Plugin version
 	public $agshver              = false;    // Alex Gorbatchev's SyntaxHighlighter version (dynamically set below due to v2 vs v3)
 	public $shfolder             = false;    // Controls what subfolder to load SyntaxHighlighter from (v2 or v3)
 	public $settings             = array();  // Contains the user's settings
@@ -150,6 +150,7 @@ class SyntaxHighlighter {
 		wp_register_script( 'syntaxhighlighter-brush-ruby',       plugins_url( $this->shfolder . '/scripts/shBrushRuby.js',       __FILE__ ), array( 'syntaxhighlighter-core' ), $this->agshver );
 		wp_register_script( 'syntaxhighlighter-brush-scala',      plugins_url( $this->shfolder . '/scripts/shBrushScala.js',      __FILE__ ), array( 'syntaxhighlighter-core' ), $this->agshver );
 		wp_register_script( 'syntaxhighlighter-brush-sql',        plugins_url( $this->shfolder . '/scripts/shBrushSql.js',        __FILE__ ), array( 'syntaxhighlighter-core' ), $this->agshver );
+		wp_register_script( 'syntaxhighlighter-brush-swift',      plugins_url( $this->shfolder . '/scripts/shBrushSwift.js',      __FILE__ ), array( 'syntaxhighlighter-core' ), $this->agshver );
 		wp_register_script( 'syntaxhighlighter-brush-vb',         plugins_url( $this->shfolder . '/scripts/shBrushVb.js',         __FILE__ ), array( 'syntaxhighlighter-core' ), $this->agshver );
 		wp_register_script( 'syntaxhighlighter-brush-xml',        plugins_url( $this->shfolder . '/scripts/shBrushXml.js',        __FILE__ ), array( 'syntaxhighlighter-core' ), $this->agshver );
 		wp_register_script( 'syntaxhighlighter-brush-yaml',       plugins_url( $this->shfolder . '/scripts/shBrushYaml.js',       __FILE__ ), array( 'syntaxhighlighter-core' ), $this->agshver );
@@ -232,6 +233,7 @@ class SyntaxHighlighter {
 			'ruby'          => 'ruby',
 			'scala'         => 'scala',
 			'sql'           => 'sql',
+			'swift'         => 'swift',
 			'vb'            => 'vb',
 			'vbnet'         => 'vb',
 			'xml'           => 'xml',
@@ -273,6 +275,7 @@ class SyntaxHighlighter {
 			'r'          => __( 'R',                         'syntaxhighlighter' ),
 			'ruby'       => __( 'Ruby / Ruby on Rails',      'syntaxhighlighter' ),
 			'scala'      => __( 'Scala',                     'syntaxhighlighter' ),
+			'swift'      => __( 'Swift',                     'syntaxhighlighter' ),
 			'sql'        => __( 'SQL',                       'syntaxhighlighter' ),
 			'vb'         => __( 'Visual Basic',              'syntaxhighlighter' ),
 			'xml'        => __( 'HTML / XHTML / XML / XSLT', 'syntaxhighlighter' ),

@@ -1,12 +1,12 @@
 === BuddyPress ===
-Contributors: johnjamesjacoby, DJPaul, boonebgorges, r-a-y, imath, mercime, tw2113, dcavins, hnla, karmatosed, slaFFik, dimensionmedia, henrywright, netweb, offereins, espellcaste, modemlooper, danbp, Venutius, apeatling, shanebp
-Tags: user profiles, activity streams, messaging, friends, user groups, notifications, community, social networking, intranet
-License: GPLv2 or later
-License URI: https://www.gnu.org/licenses/gpl-2.0.html
-Requires at least: 4.9
-Requires PHP: 5.6
-Tested up to: 5.8
-Stable tag: 9.1.1
+Contributors:      johnjamesjacoby, DJPaul, boonebgorges, r-a-y, imath, mercime, tw2113, dcavins, hnla, karmatosed, slaFFik, dimensionmedia, henrywright, netweb, offereins, espellcaste, modemlooper, danbp, Venutius, apeatling, shanebp
+Tags:              profiles, groups, activity, direct messaging, notifications, friends, community, social networking
+License:           GNU General Public License v2 or later
+License URI:       https://www.gnu.org/licenses/gpl-2.0.html
+Requires PHP:      5.6
+Requires at least: 5.4
+Tested up to:      6.1
+Stable tag:        10.6.0
 
 BuddyPress helps site builders & developers add community features to their websites, with user profiles, activity streams, and more!
 
@@ -125,6 +125,30 @@ Try <a href="https://wordpress.org/plugins/bbpress/">bbPress</a>. It integrates 
 
 == Upgrade Notice ==
 
+= 10.6.0 =
+See: https://codex.buddypress.org/releases/version-10-6-0/
+
+= 10.5.0 =
+See: https://codex.buddypress.org/releases/version-10-5-0/
+
+= 10.4.0 =
+See: https://codex.buddypress.org/releases/version-10-4-0/
+
+= 10.3.0 =
+See: https://codex.buddypress.org/releases/version-10-3-0/
+
+= 10.2.0 =
+See: https://codex.buddypress.org/releases/version-10-2-0/
+
+= 10.1.0 =
+See: https://codex.buddypress.org/releases/version-10-1-0/
+
+= 10.0.0 =
+See: https://codex.buddypress.org/releases/version-10-0-0/
+
+= 9.2.0 =
+See: https://codex.buddypress.org/releases/version-9-2-0/
+
 = 9.1.1 =
 See: https://codex.buddypress.org/releases/version-9-1-1/
 
@@ -180,6 +204,30 @@ See: https://codex.buddypress.org/releases/version-5-1-0/
 See: https://codex.buddypress.org/releases/version-5-0-0/
 
 == Changelog ==
+
+= 10.6.0 =
+See: https://codex.buddypress.org/releases/version-10-6-0/
+
+= 10.5.0 =
+See: https://codex.buddypress.org/releases/version-10-5-0/
+
+= 10.4.0 =
+See: https://codex.buddypress.org/releases/version-10-4-0/
+
+= 10.3.0 =
+See: https://codex.buddypress.org/releases/version-10-3-0/
+
+= 10.2.0 =
+See: https://codex.buddypress.org/releases/version-10-2-0/
+
+= 10.1.0 =
+See: https://codex.buddypress.org/releases/version-10-1-0/
+
+= 10.0.0 =
+See: https://codex.buddypress.org/releases/version-10-0-0/
+
+= 9.2.0 =
+See: https://codex.buddypress.org/releases/version-9-2-0/
 
 = 9.1.1 =
 See: https://codex.buddypress.org/releases/version-9-1-1/

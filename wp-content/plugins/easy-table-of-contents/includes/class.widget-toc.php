@@ -189,25 +189,20 @@ if ( ! class_exists( 'ezTOC_Widget' ) ) {
 					$class[] = 'counter-flat';
 				}
 
-				switch ( ezTOC_Option::get( 'counter' ) ) {
-
-					case 'numeric':
-						$class[] = 'counter-numeric';
-						break;
-
-					case 'roman':
-						$class[] = 'counter-roman';
-						break;
-
-					case 'decimal':
-						$class[] = 'counter-decimal';
-						break;
-				}
+				if( ezTOC_Option::get( 'heading-text-direction', 'ltr' ) == 'ltr' ) {
+                    $class[] = 'ez-toc-widget-container';
+                }
+                if( ezTOC_Option::get( 'heading-text-direction', 'ltr' ) == 'rtl' ) {
+                    $class[] = 'ez-toc-widget-container-rtl';
+                }
 
 				if ( $instance['affix'] ) {
 
 					$class[] = 'ez-toc-affix';
 				}
+
+
+                $class[] = 'ez-toc-widget-direction';
 
 				$custom_classes = ezTOC_Option::get( 'css_container_class', '' );
 
@@ -226,9 +221,10 @@ if ( ! class_exists( 'ezTOC_Widget' ) ) {
 				$class = array_map( 'trim', $class );
 				$class = array_map( 'sanitize_html_class', $class );
 
-				echo $before_widget;
+				echo $before_widget;				
+				do_action( 'ez_toc_before_widget_container');
 
-				echo '<div class="ez-toc-widget-container ' . implode( ' ', $class ) . '">' . PHP_EOL;
+				echo '<div id="ez-toc-widget-container" class="ez-toc-widget-container ' . implode( ' ', $class ) . '">' . PHP_EOL;
 
 				do_action( 'ez_toc_before_widget' );
 
@@ -245,40 +241,59 @@ if ( ! class_exists( 'ezTOC_Widget' ) ) {
 					?>
 
 					<?php echo $before_title; ?>
+                                        <span class="ez-toc-title-container">
 
-					<span class="ez-toc-title-container">
+                                        <style type="text/css">
+                                                #<?php echo $this->id ?> .ez-toc-widget-container ul.ez-toc-list li.active{
+                                                        background-color: <?php echo esc_attr( $instance['highlight_color'] ); ?>;
+                                                }
+                                        </style>
 
-						<style type="text/css">
-							#<?php echo $this->id ?> .ez-toc-widget-container ul.ez-toc-list li.active::before {
-								background-color: <?php echo esc_attr( $instance['highlight_color'] ); ?>;
-							}
-						</style>
+                                        <span class="ez-toc-title"><?php echo $title; ?></span>
+                                        <span class="ez-toc-title-toggle">
+                                            <?php if ( 'css' != ezTOC_Option::get( 'toc_loading' ) ): ?>
 
-						<span class="ez-toc-title"><?php echo $title; ?></span>
 
-						<span class="ez-toc-title-toggle">
 
-							<?php
-							if ( ezTOC_Option::get( 'visibility' ) ) {
 
-								echo '<a class="ez-toc-pull-right ez-toc-btn ez-toc-btn-xs ez-toc-btn-default ez-toc-toggle"><i class="ez-toc-glyphicon ez-toc-icon-toggle"></i></a>';
-							}
-							?>
+                                                    <?php
+                                                    if ( ezTOC_Option::get( 'visibility' ) ) {
 
-						</span>
+                                                            echo '<a href="#" class="ez-toc-pull-right ez-toc-btn ez-toc-btn-xs ez-toc-btn-default ez-toc-toggle" aria-label="Widget Easy TOC toggle icon">' . ezTOC::getTOCToggleIcon() . '</a>';
+                                                    }
+                                                    ?>
 
-					</span>
+
+
+
+                                            <?php else: ?>
+                                                <?php 
+                                                $toggle_view='';
+						if(ezTOC_Option::get('visibility_hide_by_default')==true){
+							$toggle_view= "checked";
+						}
+                                                $cssIconID = uniqid();
+                                                $htmlCSSIcon = '<label for="ez-toc-cssicon-toggle-item-' . $cssIconID . '" class="ez-toc-pull-right ez-toc-btn ez-toc-btn-xs ez-toc-btn-default ez-toc-toggle">' . ezTOC::getTOCToggleIcon() . '</label>';
+                                                echo $htmlCSSIcon;
+                                                ?>
+                                            <?php endif; ?>
+                                            </span>
+                                        </span>
 
 					<?php echo $after_title; ?>
-
+                                        <?php if ( 'css' == ezTOC_Option::get( 'toc_loading' ) ): ?>
+                                            <label for="ez-toc-cssicon-toggle-item-<?= $cssIconID ?>" class="cssiconcheckbox">1</label><input type="checkbox" id="ez-toc-cssicon-toggle-item-<?= $cssIconID ?>" <?= $toggle_view?> style="display:none" />
+                                        <?php endif; ?>
 					<?php
+                                        
 				}
-
+				do_action( 'ez_toc_before' );
 				echo '<nav>'. PHP_EOL . $post->getTOCList() . '</nav>' . PHP_EOL;
-
+				do_action( 'ez_toc_after' );
 				do_action( 'ez_toc_after_widget' );
 
 				echo '</div>' . PHP_EOL;
+				do_action( 'ez_toc_after_widget_container' );
 
 				echo $after_widget;
 
@@ -331,7 +346,7 @@ if ( ! class_exists( 'ezTOC_Widget' ) ) {
 			$defaults = array(
 				'affix' => '0',
 				'highlight_color' => '#ededed',
-				'title' => '',
+				'title' => 'Table of Contents',
 			);
 
 			$instance = wp_parse_args( (array) $instance, $defaults );

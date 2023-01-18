@@ -53,16 +53,15 @@ class GF_System_Report {
 		?>
 		<div class="alert info">
 			<p><?php _e( 'The following is a system report containing useful technical information for troubleshooting issues. If you need further help after viewing the report, click on the "Copy System Report" button below to copy the report and paste it in your message to support.', 'gravityforms' ); ?></p>
-			<button class="button" onclick="function (e) { e.preventDefault() }" id="gf_copy_report" data-clipboard-target="#gf_system_report"><?php _e( 'Copy System Report', 'gravityforms' ); ?> <i aria-hidden="true" class="dashicons dashicons-arrow-right-alt" ></i></button>
+			<button class="button" type="button" id="gf_copy_report" data-clipboard-target="#gf_system_report"><?php _e( 'Copy System Report', 'gravityforms' ); ?> <i aria-hidden="true" class="dashicons dashicons-arrow-right-alt" ></i></button>
 
-			<div class="gf_copy_message inline" id="gf_copy_error_message">
+			<div class="gf_copy_message" id="gf_copy_error_message">
 				<p><span class="dashicons dashicons-yes"></span><?php esc_html_e( 'Report generated!', 'gravityforms' ); echo ' <b>Press Ctrl+C to copy it.</b>'; ?></p>
 			</div>
 
-			<div class="gf_copy_message inline" id="gf_copy_success">
+			<div class="gf_copy_message" id="gf_copy_success">
 				<p><span class="dashicons dashicons-yes"></span><?php esc_html_e( 'Report Copied!', 'gravityforms' ) ?></p>
 			</div>
-
 
 			<textarea id="gf_system_report" readonly="readonly" ><?php echo esc_html( $system_report_text ) ?></textarea>
 		</div>
@@ -1033,9 +1032,14 @@ class GF_System_Report {
 				$value                     = false;
 				$validation_message        = __( 'Table does not exist', 'gravityforms' );
 				$validation_message_export = 'Table does not exist';
-
+				// If table does not have auto-increment set on id field, set validation message.
+			} elseif ( ! gf_upgrade()->is_auto_increment_enabled( $table_name ) ) {
+				$has_failed_tables         = true;
+				$value                     = false;
+				$validation_message        = __( 'Table has incorrect auto-increment settings.', 'gravityforms' );
+				$validation_message_export = 'Table has incorrect auto-increment settings.';
+				// If table schema is incorrect, set validation message.
 			} elseif ( ! gf_upgrade()->check_table_schema( $table_name ) ) {
-
 				$has_failed_tables         = true;
 				$value                     = false;
 				$validation_message        = __( 'Table has not been upgraded successfully.', 'gravityforms' );
@@ -1446,7 +1450,8 @@ class GF_System_Report {
 	 * Determine if there are any active Add-Ons that extend a specific class.
 	 *
 	 * @since  2.2
-	 * @access private
+ 	 * @since  2.6 access changed to public
+	 * @access public
 	 *
 	 * @param string $class_name Class name to check if Add-Ons are a subclass of.
 	 *
@@ -1455,7 +1460,7 @@ class GF_System_Report {
 	 *
 	 * @return bool
 	 */
-	private static function has_addons_of( $class_name ) {
+	public static function has_addons_of( $class_name ) {
 
 		// Get active Add-Ons.
 		$gf_addons = GFAddOn::get_registered_addons();
@@ -1486,7 +1491,8 @@ class GF_System_Report {
 	 * Determine if there are any active Add-Ons with a payment callback.
 	 *
 	 * @since  2.2
-	 * @access private
+ 	 * @since  2.6 access changed to public
+	 * @access public
 	 *
 	 * @uses GFAddOn::get_instance()
 	 * @uses GFAddOn::get_registered_addons()
@@ -1494,7 +1500,7 @@ class GF_System_Report {
 	 *
 	 * @return bool
 	 */
-	private static function has_payment_callback_addons() {
+	public static function has_payment_callback_addons() {
 
 		// Get active Add-Ons.
 		$gf_addons = GFAddOn::get_registered_addons();

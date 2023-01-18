@@ -79,23 +79,10 @@ require get_template_directory() . '/inc/classes/class-hamilton-customize.php';
 if ( ! function_exists( 'hamilton_load_style' ) ) :
 	function hamilton_load_style() {
 
-		$dependencies = array();
 		$theme_version = wp_get_theme( 'hamilton' )->get( 'Version' );
 
-		/**
-		 * Translators: If there are characters in your language that are not
-		 * supported by the theme fonts, translate this to 'off'. Do not translate
-		 * into your own language.
-		 */
-		$google_fonts = _x( 'on', 'Google Fonts: on or off', 'hamilton' );
-
-		if ( 'off' !== $google_fonts ) {
-			// Register Google Fonts
-			wp_register_style( 'hamilton-fonts', '//fonts.googleapis.com/css?family=Libre+Franklin:300,400,400i,500,700,700i&amp;subset=latin-ext', false, $theme_version, 'all' );
-			$dependencies[] = 'hamilton-fonts';
-		}
-
-		wp_enqueue_style( 'hamilton-style', get_stylesheet_uri(), $dependencies, $theme_version );
+		wp_register_style( 'hamilton-fonts', get_theme_file_uri( '/assets/css/fonts.css' ) );
+		wp_enqueue_style( 'hamilton-style', get_stylesheet_uri(), array( 'hamilton-fonts' ), $theme_version );
 		
 	}
 	add_action( 'wp_enqueue_scripts', 'hamilton_load_style' );
@@ -109,20 +96,7 @@ endif;
 if ( ! function_exists( 'hamilton_add_editor_styles' ) ) :
 	function hamilton_add_editor_styles() {
 
-		$editor_styles = array( 'assets/css/hamilton-classic-editor-styles.css' );
-
-		/**
-		 * Translators: If there are characters in your language that are not
-		 * supported by the theme fonts, translate this to 'off'. Do not translate
-		 * into your own language.
-		 */
-		$google_fonts = _x( 'on', 'Google Fonts: on or off', 'hamilton' );
-
-		if ( 'off' !== $google_fonts ) {
-			$editor_styles[] = '//fonts.googleapis.com/css?family=Libre+Franklin:300,400,400i,500,700,700i&amp;subset=latin-ext';
-		}
-
-		add_editor_style( $editor_styles );
+		add_editor_style( array( 'assets/css/hamilton-classic-editor-styles.css', 'assets/css/fonts.css' ) );
 
 	}
 	add_action( 'init', 'hamilton_add_editor_styles' );
@@ -394,29 +368,12 @@ endif;
    --------------------------------------------------------------------------------------------- */
 
 if ( ! function_exists( 'hamilton_block_editor_styles' ) ) :
-
 	function hamilton_block_editor_styles() {
 
-		$dependencies = array();
 		$theme_version = wp_get_theme( 'hamilton' )->get( 'Version' );
 
-		/**
-		 * Translators: If there are characters in your language that are not
-		 * supported by the theme fonts, translate this to 'off'. Do not translate
-		 * into your own language.
-		 */
-		$google_fonts = _x( 'on', 'Google Fonts: on or off', 'hamilton' );
-
-		if ( 'off' !== $google_fonts ) {
-
-			// Register Google Fonts
-			wp_register_style( 'hamilton-block-editor-styles-font', '//fonts.googleapis.com/css?family=Libre+Franklin:300,400,400i,500,700,700i&amp;subset=latin-ext', false, 1.0, 'all' );
-			$dependencies[] = 'hamilton-block-editor-styles-font';
-
-		}
-
-		// Enqueue the editor styles
-		wp_enqueue_style( 'hamilton-block-editor-styles', get_theme_file_uri( '/assets/css/hamilton-block-editor-styles.css' ), $dependencies, $theme_version, 'all' );
+		wp_register_style( 'hamilton-block-editor-styles-font', get_theme_file_uri( '/assets/css/fonts.css' ) );
+		wp_enqueue_style( 'hamilton-block-editor-styles', get_theme_file_uri( '/assets/css/hamilton-block-editor-styles.css' ), array( 'hamilton-block-editor-styles-font' ), $theme_version, 'all' );
 
 	}
 	add_action( 'enqueue_block_editor_assets', 'hamilton_block_editor_styles', 1 );

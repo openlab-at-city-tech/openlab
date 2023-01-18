@@ -101,31 +101,31 @@ function gquizGetChoices(field) {
     var str = '';
     var weight;
     for (var i = 0; i < field.choices.length; i++) {
-        buttonClass = 'gquiz-button-correct-choice';
+        buttonClass = 'gquiz-button-correct-choice field-choice-button gform-choice__selected-label';
 
         if (field.choices[i].gquizIsCorrect === true) {
         	buttonClass += ' chosen-as-correct';
 		}
 
-        str += "<li class='gquiz-choice-row' data-index='" + i + "'>";
-        str += '<i class="gquiz-choice-handle"></i>';
+        str += "<li class=' field-choice-row gform-choice gquiz-choice-row' data-index='" + i + "'>";
+        str += '<i class="gquiz-choice-handle field-choice-handle gform-choice__handle gform-icon gform-icon--drag"></i>';
 
-		str += "<button class='" + buttonClass + "' title='" + gquiz_strings.toggleCorrectIncorrect + "' onclick=\"gquiz_toggle_correct_choice(this, '" + i + "');\"></button>";
+		str += "<button class='" + buttonClass + "' title='" + gquiz_strings.toggleCorrectIncorrect + "' onclick=\"gquiz_toggle_correct_choice(this, '" + i + "');\"><i class='gform-choice__selected-icon gform-icon gform-icon--check'></i></button>";
 
-		str += "<input type='text' id='gquiz-choice-text-" + i + "' value=\"" + field.choices[i].text.replace(/"/g, "&quot;") + "\"  class='field-choice-input field-choice-text' />";
-        str += "<input type='text' id='gquiz-choice-value-" + i + "' value=\"" + field.choices[i].value + "\" class='field-choice-input field-choice-value' >";
+		str += "<input type='text' id='gquiz-choice-text-" + i + "' value=\"" + field.choices[i].text.replace(/"/g, "&quot;") + "\"  class='field-choice-input field-choice-text field-choice-text--radio gform-choice__input gform-choice__input--label gform-input gform-input--text' />";
+        str += "<input type='text' id='gquiz-choice-value-" + i + "' value=\"" + field.choices[i].value + "\" class='field-choice-input field-choice-value field-choice-value--radio gform-choice__input gform-choice__input--value gform-input gform-input--text' >";
 
         if (typeof field.choices[i].gquizWeight == 'undefined') {
             field.choices[i].gquizWeight = field.choices[i].gquizIsCorrect == true ? 1 : 0;
         }
         weight = field.choices[i].gquizWeight;
 
-        str += "<input id='gquiz-choice-weight-" + i + "' type='text' class='gquiz-choice-weight' onkeyup='gquizSetFieldChoice(" + i + ");' value='" + weight + "' /> ";
+        str += "<input id='gquiz-choice-weight-" + i + "' type='text' class='gquiz-choice-weight field-choice-value--radio gform-choice__input gform-choice__input--value gform-input gform-input--text' onkeyup='gquizSetFieldChoice(" + i + ");' value='" + weight + "' /> ";
 
-        str += "<button class='gf_insert_field_choice gquiz-insert-choice' aria-label='Add Answer'></button>";
+        str += "<button class='gf_insert_field_choice gquiz-insert-choice field-choice-button field-choice-button--insert gf_insert_field_choice gform-choice__button gform-choice__button--add gform-st-icon gform-st-icon--circle-plus' aria-label='Add Answer'></button>";
 
         if (field.choices.length > 1) {
-            str += "<button class='gf_delete_field_choice gquiz-delete-choice' aria-label='Remove Answer'></button>";
+            str += "<button class='gf_delete_field_choice gquiz-delete-choice field-choice-button field-choice-button--delete gf_delete_field_choice gform-choice__button gform-choice__button--add gform-st-icon gform-st-icon--circle-minus' aria-label='Remove Answer'></button>";
         }
 
         str += '</li>';

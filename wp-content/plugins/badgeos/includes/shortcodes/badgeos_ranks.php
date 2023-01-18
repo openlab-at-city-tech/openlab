@@ -147,9 +147,6 @@ function badgeos_ranks_list_shortcode_callback( $atts = array () ) {
         }
     }
 
-    
-
-    global $user_ID;
     extract( shortcode_atts( array(
         'types'   => 'all',
         'limit'       => '10',
@@ -191,7 +188,7 @@ function badgeos_ranks_list_shortcode_callback( $atts = array () ) {
     // Search
     if ( $show_search != 'false' ) {
 
-        $search = isset( $_POST['rank_lists_list_search'] ) ? $_POST['rank_lists_list_search'] : '';
+        $search = isset( $_POST['rank_lists_list_search'] ) ? sanitize_text_field( $_POST['rank_lists_list_search'] ) : '';
         $ranks_html .= '<div id="badgeos-ranks-search">';
         $ranks_html .= '<form id="rank_lists_list_search_go_form" class="rank_lists_list_search_go_form" action="'. get_permalink( get_the_ID() ) .'" method="post">';
         $ranks_html .= sprintf( __( 'Search: %s', 'badgeos' ), '<input type="text" id="rank_lists_list_search" name="rank_lists_list_search" class="rank_lists_list_search" value="'. $search .'">' );

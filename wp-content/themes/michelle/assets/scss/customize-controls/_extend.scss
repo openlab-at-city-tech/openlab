@@ -1,0 +1,22 @@
+/* FILE: customize-controls/_extend.scss */
+
+%customizer_headings {
+
+	h3,
+	h4 {
+		padding: 1em 20px;
+		margin: 2em -20px .5em;
+		text-transform: uppercase;
+		font-size: 1em;
+		letter-spacing: 1px;
+		color: #555;
+		border-top: 2px solid #bbb;
+	}
+
+	h4 {
+		padding: 1em 0;
+		margin: 1em 0 .5em;
+		border-top-style: dotted;
+	}
+
+}

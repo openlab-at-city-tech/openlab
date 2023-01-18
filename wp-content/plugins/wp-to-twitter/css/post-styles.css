@@ -136,6 +136,7 @@
 .wpt-debug-details {
 	display: none;
 	white-space: pre-wrap;
+	padding: 10px;
 }
 
 #wp2t-debug .wpt-debug-log button {

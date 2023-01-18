@@ -32,8 +32,8 @@ class CMB2_Type_File_Base extends CMB2_Type_Text {
 		 * @param array $valid_types The valid image file extensions.
 		 */
 		$is_valid_types = apply_filters( 'cmb2_valid_img_types', $valid_types );
-		$is_valid = $file_ext && in_array( $file_ext, (array) $is_valid_types );
-		$field_id = $this->field->id();
+		$is_valid       = $file_ext && in_array( $file_ext, (array) $is_valid_types );
+		$field_id       = $this->field->id();
 
 		/**
 		 * Filter for determining if a field value has a valid image file-type extension.
@@ -57,7 +57,8 @@ class CMB2_Type_File_Base extends CMB2_Type_Text {
 	 * @return string       Image wrap output
 	 */
 	public function img_status_output( $args ) {
-		return sprintf( '<%1$s class="img-status cmb2-media-item">%2$s<p class="cmb2-remove-wrapper"><a href="#" class="cmb2-remove-file-button"%3$s>%4$s</a></p>%5$s</%1$s>',
+		return sprintf(
+			'<%1$s class="img-status cmb2-media-item">%2$s<p class="cmb2-remove-wrapper"><a href="#" class="cmb2-remove-file-button"%3$s>%4$s</a></p>%5$s</%1$s>',
 			$args['tag'],
 			$args['image'],
 			isset( $args['cached_id'] ) ? ' rel="' . $args['cached_id'] . '"' : '',
@@ -74,7 +75,8 @@ class CMB2_Type_File_Base extends CMB2_Type_Text {
 	 * @return string       File wrap output
 	 */
 	public function file_status_output( $args ) {
-		return sprintf( '<%1$s class="file-status cmb2-media-item"><span>%2$s <strong>%3$s</strong></span>&nbsp;&nbsp; (<a href="%4$s" target="_blank" rel="external">%5$s</a> / <a href="#" class="cmb2-remove-file-button"%6$s>%7$s</a>)%8$s</%1$s>',
+		return sprintf(
+			'<%1$s class="file-status cmb2-media-item"><span>%2$s <strong>%3$s</strong></span>&nbsp;&nbsp; (<a href="%4$s" target="_blank" rel="external">%5$s</a> / <a href="#" class="cmb2-remove-file-button"%6$s>%7$s</a>)%8$s</%1$s>',
 			$args['tag'],
 			esc_html( $this->_text( 'file_text', esc_html__( 'File:', 'cmb2' ) ) ),
 			CMB2_Utils::get_file_name_from_path( $args['value'] ),
@@ -192,8 +194,8 @@ class CMB2_Type_File_Base extends CMB2_Type_Text {
 			if ( isset( $meta['sizes'][ $size ] ) ) {
 
 				$attachment_url = wp_get_attachment_url( $attachment->ID );
-				$base_url = str_replace( wp_basename( $attachment_url ), '', $attachment_url );
-				$size_meta = $meta['sizes'][ $size ];
+				$base_url       = str_replace( wp_basename( $attachment_url ), '', $attachment_url );
+				$size_meta      = $meta['sizes'][ $size ];
 
 				$response['sizes'][ $size ] = array(
 					'url'         => $base_url . $size_meta['file'],

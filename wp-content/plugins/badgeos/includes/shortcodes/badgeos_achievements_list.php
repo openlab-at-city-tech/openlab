@@ -209,7 +209,6 @@ function badgeos_achievements_list_shortcode( $atts = array () ){
         return '';
     }
 
-	global $user_ID;
 	extract( shortcode_atts( array(
 		'type'        => 'all',
 		'limit'       => '10',
@@ -278,7 +277,7 @@ function badgeos_achievements_list_shortcode( $atts = array () ){
 					$badges .= '<option value="all">' . sprintf( __( 'All %s', 'badgeos' ), $post_type_plural );
 
 					// If logged in
-					if ( $user_ID > 0 ) {
+					if ( $user_id > 0 ) {
 						$badges .= '<option value="completed">' . sprintf( __( 'Completed %s', 'badgeos' ), $post_type_plural );
 						$badges .= '<option value="not-completed">' . sprintf( __( 'Not Completed %s', 'badgeos' ), $post_type_plural );
 						$badges .= '<option value="last-earned">' . sprintf( __( 'Last Earned %s', 'badgeos' ), $post_type_plural );
@@ -295,7 +294,7 @@ function badgeos_achievements_list_shortcode( $atts = array () ){
 		// Search
 		if ( $show_search != 'false' ) {
 
-			$search = isset( $_POST['achievements_list_search'] ) ? $_POST['achievements_list_search'] : '';
+			$search = isset( $_POST['achievements_list_search'] ) ? sanitize_text_field( $_POST['achievements_list_search'] ) : '';
 			$badges .= '<div id="badgeos-achievements-search">';
             $badges .= '<form id="achievements_list_search_go_form" class="achievements_list_search_go_form" action="'. get_permalink( get_the_ID() ) .'" method="post">';
             $badges .= sprintf( __( 'Search: %s', 'badgeos' ), '<input type="text" id="achievements_list_search" name="achievements_list_search" class="achievements_list_search" value="'. $search .'">' );
@@ -326,7 +325,6 @@ function badgeos_achievements_list_shortcode( $atts = array () ){
     $maindiv = '<div class="badgeos_achievement_main_container" data-url="'.esc_url( admin_url( 'admin-ajax.php', 'relative' ) ).'" data-type="'.$type.'" data-limit="'.$limit.'" data-show_child="'.$show_child.'" data-show_parent="'.$show_parent.'" data-show_filter="'.$show_filter.'" data-show_search="'.$show_search.'" data-group_id="'.$group_id.'" data-user_id="'.$user_id.'" data-wpms="'.$wpms.'" data-orderby="'.$orderby.'" data-order="'.$order.'" data-include="'.$include.'" data-exclude="'.$exclude.'" data-meta_key="'.$meta_key.'" data-meta_value="'.$meta_value.'" data-show_title="'.$show_title.'" data-show_thumb="'.$show_thumb.'" data-show_description="'.$show_description.'" data-show_steps="'.$show_steps.'" data-default_view="'.$default_view.'" data-image_width="'.$image_width.'" data-image_height="'.$image_height.'">';
     $maindiv .= $badges;
     $maindiv .= '</div>';
-
 
     // Reset Post Data
 	wp_reset_postdata();

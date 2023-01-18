@@ -6,9 +6,12 @@ class DLM_Post_Type_Manager {
 	 * Setup hooks
 	 */
 	public function setup() {
+		add_action( 'rest_api_init', array( $this, 'register_dlm_download_post_meta_rest' ) );
 		add_action( 'init', array( $this, 'register' ), 10 );
 
 		add_filter( 'views_edit-dlm_download', array( $this, 'add_extensions_tab' ), 10, 1 );
+
+		add_action( 'current_screen', array( $this, 'disable_geditor'));
 	}
 
 	/**
@@ -64,7 +67,9 @@ class DLM_Post_Type_Manager {
 				) ),
 				'has_archive'         => false,
 				'show_in_nav_menus'   => false,
-				'menu_position'       => 35
+				'menu_position'       => 35,
+				'show_in_rest'        => true,
+				'menu_icon'           => 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTA1IiBoZWlnaHQ9IjEwNSIgdmlld0JveD0iMCAwIDEwNSAxMDUiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxwYXRoIGQ9Ik01Mi41IDAuMDAwNTk5Njc0QzM4LjU3NTYgMC4wMDA1OTk2NzQgMjUuMjIxOSA1LjUzMjAzIDE1LjM3NzYgMTUuMzc4MUM1LjUzMTQ2IDI1LjIyMjkgMCAzOC41NzY2IDAgNTIuNTAwM0MwIDY2LjQyNCA1LjUzMTQ2IDc5Ljc3ODMgMTUuMzc3NiA4OS42MjI1QzI1LjIyMjUgOTkuNDY4NiAzOC41NzYyIDEwNSA1Mi41IDEwNUM2Ni40MjM4IDEwNSA3OS43NzgxIDk5LjQ2ODYgODkuNjIyNCA4OS42MjI1Qzk5LjQ2ODUgNzkuNzc3NyAxMDUgNjYuNDI0IDEwNSA1Mi41MDAzQzEwNSA0My4yODQ1IDEwMi41NzQgMzQuMjMwOCA5Ny45NjY0IDI2LjI1MDJDOTMuMzU4NyAxOC4yNjk1IDg2LjczMDQgMTEuNjQxNiA3OC43NDk3IDcuMDMzNTRDNzAuNzY5IDIuNDI1ODEgNjEuNzE1MiAwIDUyLjQ5OTQgMEw1Mi41IDAuMDAwNTk5Njc0Wk00MC40Nzc3IDM4LjI3MThMNDcuMjQ5OSA0NS4wOTY5VjI2LjI0OTZINTcuNzUwMVY0NS4wOTY5TDY0LjUyMjMgMzguMzI0Nkw3MS45MjUyIDQ1LjcyNzVMNTIuNSA2NS4xNTI2TDMzLjAyMiA0NS42NzQ3TDQwLjQ3NzcgMzguMjcxOFpNNzguNzQ5MSA3OC43NTExSDI2LjI0ODVWNjguMjUxSDc4Ljc0OTFWNzguNzUxMVoiIGZpbGw9IndoaXRlIi8+Cjwvc3ZnPgo='
 			) )
 		);
 
@@ -100,6 +105,27 @@ class DLM_Post_Type_Manager {
 
 		do_action( 'dlm_after_post_type_register' );
 
+
+	}
+
+	public function register_dlm_download_post_meta_rest() {
+		register_rest_field( 'dlm_download', 'featured', array(
+			'get_callback' => function( $post_arr ) {
+				return get_post_meta( $post_arr['id'], '_featured', true );
+
+			},
+		));
+		register_rest_field( 'dlm_download', 'download_count', array(
+			'get_callback' => function( $post_arr ) {
+				return get_post_meta( $post_arr['id'], '_download_count', true );
+
+			},
+		));
+		register_rest_field( 'dlm_download', 'author', array(
+			'get_callback' => function( $post_arr ) {
+				return get_the_author_meta( 'nickname', $post_arr['author'] );
+			},
+		));
 
 	}
 
@@ -151,4 +177,18 @@ class DLM_Post_Type_Manager {
 		<?php
 	}
 
+	/**
+	 * Explicitely disable the gutenberg editor for downloads
+	 * This is needed because the download edit page is not compatible with the gutenberg editor
+	 */
+	public function disable_geditor() {
+
+		$screen = get_current_screen();
+		if( $screen->post_type == 'dlm_download' ) {
+			add_filter( 'use_block_editor_for_post_type', '__return_false', 100 );
+		}
+
+		}
+
 }
+

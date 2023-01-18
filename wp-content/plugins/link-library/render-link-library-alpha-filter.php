@@ -30,7 +30,7 @@ function RenderLinkLibraryAlphaFilter( $LLPluginClass, $generaloptions, $library
 
 	$linkcatquery .= ' )) ';
 
-	$linkcatquery .= 'WHERE tt.taxonomy = "link_library_category"';
+	$linkcatquery .= 'WHERE tt.taxonomy = "' . $generaloptions['cattaxonomy'] . '"';
 
 	if ( !empty( $categorylist_cpt ) ) {
 		$linkcatquery .= ' AND t.term_id in ( ' . $categorylist_cpt . ' )';
@@ -55,7 +55,7 @@ function RenderLinkLibraryAlphaFilter( $LLPluginClass, $generaloptions, $library
 	$currentcatletter = '';
 	if ( isset( $_GET['catletter'] ) && 'normal' == $searchmode ) {
 		if ( isset( $_GET['catletter'] ) && strlen( $_GET['catletter'] ) == 1 ) {
-			$currentcatletter = $_GET['catletter'];
+			$currentcatletter = sanitize_text_field( $_GET['catletter'] );
 		}
 	} elseif ( 'normal' == $searchmode ) {
 		if ( $cat_letter_filter_autoselect ) {

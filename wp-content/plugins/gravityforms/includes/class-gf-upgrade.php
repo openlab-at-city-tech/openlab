@@ -13,6 +13,7 @@ class GF_Upgrade {
 
 	private $versions = null;
 
+	private $auto_increment_tables_cache_key = 'gf_tables_auto_increment_settings';
 	/**
 	 * Contains all DB versions that require a manual upgrade via the upgrade wizard.
 	 *
@@ -157,6 +158,8 @@ class GF_Upgrade {
 
 		// Upgrading schema
 		$this->upgrade_schema();
+
+		$this->test_auto_increment();
 
 		// Start upgrade routine
 		if ( $force_upgrade || ! ( defined( 'GFORM_AUTO_DB_MIGRATION_DISABLED' ) && GFORM_AUTO_DB_MIGRATION_DISABLED ) ) {
@@ -315,9 +318,158 @@ class GF_Upgrade {
 		// Clear all transients to make sure the new version doesn't use cached results.
 		GFCache::flush( true );
 
+		$this->remove_obsolete_admin_notices();
+
 		$this->add_post_upgrade_admin_notices();
 
 		GFCommon::log_debug( __METHOD__ . '(): Upgrade Completed.' );
+	}
+
+	/**
+	 * Make sure tables have the correct auto_increment settings.
+	 *
+	 * @since 2.6.4
+	 */
+	private function test_auto_increment() {
+		global $wpdb;
+
+		GFCommon::log_debug( __METHOD__ . '(): Testing whether tables have auto_increment set correctly.' );
+
+		$table_rows = $this->get_auto_increment_tables();
+
+		foreach ( $table_rows as $row ) {
+
+			$is_auto_increment = $this->is_auto_increment_enabled( $row['table'], $row['auto_increment_flag'] );
+			if ( ! $is_auto_increment ) {
+				$this->fix_auto_increment( $row['table'], $row['column_data_type'] );
+			}
+		}
+	}
+
+	/**
+	 * Determines if the especified table has auto_increment enabled for the id column.
+	 *
+	 * @since 2.6.4
+	 *
+	 * @param string $table_name The table name.
+	 * @param string $extra The "extra" column of the information_schema.colums table. If not specified, will lookup the value.
+	 *
+	 * @return bool Returns true if the specified table has auto_increment enabled. Returns false otherwise.
+	 */
+	public function is_auto_increment_enabled( $table_name, $extra = null ) {
+		if ( $extra === null ) {
+			// Lookup extra from schema info table.
+			$extra = $this->get_auto_increment_setting( $table_name );
+		}
+
+		return $extra === null || strpos( $extra, 'auto_increment' ) !== false;
+	}
+
+	/**
+	 * Gets the auto_increment setting of a specific table.
+	 *
+	 * @since 2.6.4
+	 *
+	 * @param string $table_name The table name.
+	 *
+	 * @return string|null Returns the "extra" column of the information_schema.colums table. Or returns null if table does not exist in the database.
+	 */
+	private function get_auto_increment_setting( $table_name ) {
+		$tables = $this->get_auto_increment_tables();
+
+		foreach ( $tables as $table ) {
+			if ( rgar( $table, 'table' ) == $table_name ) {
+				return $table['auto_increment_flag'];
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Gets the auto increment setting for all GF tables.
+	 *
+	 * @since 2.6.4
+	 *
+	 * @return array Returns an array with table name and "extra" column of the information_schema.colums table.
+	 */
+	private function get_auto_increment_tables() {
+		global $wpdb;
+
+		$table_rows = GFCache::get( $this->auto_increment_tables_cache_key );
+
+		// Check cache first.
+		if ( ! empty( $table_rows ) ) {
+			return $table_rows;
+		}
+
+		// Tables that should have an ID column with auto increment enabled.
+		$table_names = array(
+			$wpdb->prefix . 'gf_form',
+			$wpdb->prefix . 'gf_form_view',
+			$wpdb->prefix . 'gf_form_revisions',
+			$wpdb->prefix . 'gf_entry',
+			$wpdb->prefix . 'gf_entry_notes',
+			$wpdb->prefix . 'gf_entry_meta',
+			$wpdb->prefix . 'gf_addon_feed',
+			$wpdb->prefix . 'gf_addon_payment_transaction',
+			$wpdb->prefix . 'gf_addon_payment_callback',
+		);
+
+		// create a string of %s - one for each array value.
+		$placeholders = join( ',', array_fill( 0, count( $table_names ), '%s' ) );
+
+		$table_rows = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT table_name as `table`, extra as auto_increment_flag, column_type as column_data_type
+				FROM information_schema.columns
+				WHERE table_schema=%s AND table_name in ( {$placeholders} )
+				AND column_name = 'id'",
+				array_merge( array( $wpdb->dbname ), $table_names )
+			),
+			ARRAY_A
+		);
+
+		GFCommon::log_debug( sprintf( '%s(): Checking tables for auto_increment flag: %s', __METHOD__, print_r( $table_rows, 1 ) ) );
+
+		// Set cache so that only one query is executed if this method is called more than once in a page life cycle.
+		GFCache::set( $this->auto_increment_tables_cache_key, $table_rows );
+
+		return $table_rows;
+	}
+
+	/**
+	 * Turn on auto_increment for a broken table.
+	 *
+	 * @since 2.6.4
+	 *
+	 * @param string $table_name The name of the table to fix.
+	 * @param string $column_type The data type of the id column.
+	 *
+	 * @return bool|int False if the query failed, or the id of the entry if successful
+	 */
+	private function fix_auto_increment( $table_name, $column_type ) {
+		GFCommon::log_debug( __METHOD__ . '(): Fixing the auto_increment settings for' . $table_name );
+
+		global $wpdb;
+
+		$max    = $wpdb->query( "select id from {$table_name} order by id desc" );
+		$new_id = $max + 1;
+
+		$sql = $wpdb->query(
+			$wpdb->prepare(
+				'ALTER TABLE %1$s
+				AUTO_INCREMENT = %2$d, 
+				CHANGE COLUMN `id` `id` %3$s not null auto_increment',
+				$table_name,
+				$new_id,
+				$column_type
+			)
+		);
+
+		// Deleting auto increment cache so that new table meta is retrieved.
+		GFCache::delete( $this->auto_increment_tables_cache_key );
+
+		return $sql;
 	}
 
 	/**
@@ -728,10 +880,13 @@ WHERE lfv.id NOT IN
 	/**
 	 * Upgrade leads to 2.3
 	 *
-	 * @return bool
+	 * @return bool Indicates if the background upgrader needs more time to complete the upgrade.
 	 */
 	public function gf_upgrade_230_migrate_leads() {
-		global $wpdb;
+		$lead_table = GFFormsModel::get_lead_table_name();
+		if ( ! GFCommon::table_exists( $lead_table ) ) {
+			return false;
+		}
 
 		if ( defined( 'GFORM_DB_MIGRATION_BATCH_SIZE' ) ) {
 			$limit = GFORM_DB_MIGRATION_BATCH_SIZE;
@@ -739,14 +894,59 @@ WHERE lfv.id NOT IN
 			$limit = 20000;
 		}
 
-		$lead_table = GFFormsModel::get_lead_table_name();
-		$entry_table = GFFormsModel::get_entry_table_name();
 		$time_start = microtime( true );
+
+		if (
+			$this->migrate_230_lead_properties( $lead_table, $limit, $time_start ) ||
+			$this->migrate_230_lead_details( $limit, $time_start ) ||
+			$this->migrate_230_lead_meta( $limit, $time_start )
+		) {
+			return true;
+		}
+
+		$this->update_upgrade_status( esc_html__( 'Entry details migrated.', 'gravityforms' ) );
+
+		return false;
+	}
+
+	/**
+	 * Migrates the rg_lead table.
+	 *
+	 * @since 2.6.7
+	 *
+	 * @param string $lead_table The name of the table to be migrated.
+	 * @param int    $limit      The migration batch size.
+	 * @param float  $time_start The time the migration started, in seconds.
+	 *
+	 * @return bool|void
+	 */
+	public function migrate_230_lead_properties( $lead_table, $limit, $time_start ) {
+		global $wpdb;
+
+		$entry_table = GFFormsModel::get_entry_table_name();
 
 		$lead_ids_sql = "SELECT l2.id
 FROM {$lead_table} l2
 WHERE l2.id NOT IN ( SELECT e.id FROM {$entry_table} e )
 LIMIT {$limit}";
+
+		// Find out which columns exist for this installation.
+		$lead_columns   = array_flip( $wpdb->get_col( 'DESC ' . $lead_table ) );
+		$entry_columns  = GFFormsModel::get_lead_db_columns();
+		$select_columns = array();
+
+		foreach ( $entry_columns as $column ) {
+			if ( ! isset( $lead_columns[ $column ] ) ) {
+				// Pad the list to prevent errors for missing columns when the insert into query runs.
+				$select_columns[] = $column === 'status' ? "'active'" : 'null';
+				continue;
+			}
+
+			$select_columns[] = $column;
+		}
+
+		$insert_columns = implode( ', ', $entry_columns );
+		$select_columns = implode( ', ', $select_columns );
 
 		do {
 
@@ -769,9 +969,9 @@ LIMIT {$limit}";
 					// Add the lead header to the data
 					$sql = "
 INSERT INTO $entry_table
-(id, form_id, post_id, date_created, date_updated, is_starred, is_read, ip, source_url, user_agent, currency, payment_status, payment_date, payment_amount, payment_method, transaction_id, is_fulfilled, created_by, transaction_type, status)
+($insert_columns)
 SELECT
-id, form_id, post_id, date_created, null, is_starred, is_read, ip, source_url, user_agent, currency, payment_status, payment_date, payment_amount, payment_method, transaction_id, is_fulfilled, created_by, transaction_type, status
+$select_columns
 FROM
 $lead_table l
 WHERE l.id IN ( {$lead_ids_in} )";
@@ -785,15 +985,16 @@ WHERE l.id IN ( {$lead_ids_in} )";
 						exit;
 					}
 
-					$current_time = microtime( true );
+					$current_time   = microtime( true );
 					$execution_time = ( $current_time - $time_start );
 					if ( $execution_time > 15 ) {
 						$sql_remaining = "SELECT COUNT(l2.id)
 FROM {$lead_table} l2
 WHERE l2.id NOT IN ( SELECT e.id FROM {$entry_table} e )";
-						$remaining = $wpdb->get_var( $sql_remaining );
+						$remaining     = $wpdb->get_var( $sql_remaining );
 						if ( $remaining > 0 ) {
 							$this->update_upgrade_status( sprintf( esc_html__( 'Migrating leads. Step 1/3 Migrating entry headers. %d rows remaining.', 'gravityforms' ), $remaining ) );
+
 							return true;
 						}
 					}
@@ -801,9 +1002,26 @@ WHERE l2.id NOT IN ( SELECT e.id FROM {$entry_table} e )";
 			}
 		} while ( ! empty( $lead_ids ) );
 
-		// Lead details
+		return false;
+	}
 
+	/**
+	 * Migrates the rg_lead_detail table, if it exists.
+	 *
+	 * @since 2.6.7
+	 *
+	 * @param int   $limit      The migration batch size.
+	 * @param float $time_start The time the migration started, in seconds.
+	 *
+	 * @return bool|void
+	 */
+	public function migrate_230_lead_details( $limit, $time_start ) {
 		$lead_details_table = GFFormsModel::get_lead_details_table_name();
+		if ( ! GFCommon::table_exists( $lead_details_table ) ) {
+			return false;
+		}
+
+		global $wpdb;
 		$entry_meta_table = GFFormsModel::get_entry_meta_table_name();
 
 		$lead_detail_ids_sql = "
@@ -816,7 +1034,7 @@ LIMIT {$limit}";
 			$lead_detail_ids = $wpdb->get_col( $lead_detail_ids_sql );
 
 			if ( $wpdb->last_error ) {
-				error_log('error: ' . $wpdb->last_error );
+				error_log( 'error: ' . $wpdb->last_error );
 				/* translators: %s: the database error */
 				$this->update_upgrade_status( sprintf( esc_html__( 'Error Migrating Entry Details: %s', 'gravityforms' ), $wpdb->last_error ) );
 				// wp_die() is not used here because it would trigger another async task
@@ -841,37 +1059,53 @@ WHERE ld.id IN ( {$lead_detail_ids_in} )";
 				$wpdb->query( $sql );
 
 				if ( $wpdb->last_error ) {
-					error_log('error: ' . $wpdb->last_error );
+					error_log( 'error: ' . $wpdb->last_error );
 					/* translators: %s: the database error */
 					$this->update_upgrade_status( sprintf( esc_html__( 'Error Migrating Entry Details: %s', 'gravityforms' ), $wpdb->last_error ) );
 					// wp_die() is not used here because it would trigger another async task
 					exit;
 				}
 
-				$current_time = microtime( true );
+				$current_time   = microtime( true );
 				$execution_time = ( $current_time - $time_start );
 				if ( $execution_time > 15 ) {
 					$sql_remaining = "
 SELECT COUNT(ld.id)
 FROM {$lead_details_table} ld
 WHERE ld.id NOT IN ( SELECT em.id FROM {$entry_meta_table} em )";
-					$remaining = $wpdb->get_var( $sql_remaining );
+					$remaining     = $wpdb->get_var( $sql_remaining );
 					if ( $remaining > 0 ) {
 						$this->update_upgrade_status( sprintf( esc_html__( 'Migrating leads. Step 2/3 Migrating entry details. %d rows remaining.', 'gravityforms' ), $remaining ) );
+
 						return true;
 					}
 				}
 			}
 		} while ( ! empty( $lead_detail_ids ) );
 
-		// Lead meta
+		return false;
+	}
 
-		$lead_meta_table = GFFormsModel::get_lead_meta_table_name();
+	/**
+	 * Migrates the rg_lead_meta table, if it exists.
+	 *
+	 * @since 2.6.7
+	 *
+	 * @param int   $limit      The migration batch size.
+	 * @param float $time_start The time the migration started, in seconds.
+	 *
+	 * @return bool|void
+	 */
+	public function migrate_230_lead_meta( $limit, $time_start ) {
+		$lead_meta_table  = GFFormsModel::get_lead_meta_table_name();
+		if ( ! GFCommon::table_exists( $lead_meta_table ) ) {
+			return false;
+		}
+
+		global $wpdb;
 		$entry_meta_table = GFFormsModel::get_entry_meta_table_name();
-
-		$charset_db = empty( $wpdb->charset ) ? 'utf8mb4' : $wpdb->charset;
-
-		$collate = ! empty( $wpdb->collate ) ? " COLLATE {$wpdb->collate}" : '';
+		$charset_db       = empty( $wpdb->charset ) ? 'utf8mb4' : $wpdb->charset;
+		$collate          = ! empty( $wpdb->collate ) ? " COLLATE {$wpdb->collate}" : '';
 
 		$lead_meta_ids_sql = "
 SELECT
@@ -916,7 +1150,7 @@ WHERE lm.id IN ( {$lead_meta_ids_in} )";
 					exit;
 				}
 
-				$current_time = microtime( true );
+				$current_time   = microtime( true );
 				$execution_time = ( $current_time - $time_start );
 				if ( $execution_time > 15 ) {
 					$sql_remaining = "
@@ -925,16 +1159,16 @@ FROM
   {$lead_meta_table} lm
 WHERE NOT EXISTS
       (SELECT * FROM {$entry_meta_table} em WHERE em.entry_id = lm.lead_id AND CONVERT(em.meta_key USING {$charset_db}) = CONVERT(lm.meta_key USING {$charset_db}) {$collate})";
-					$remaining = $wpdb->get_var( $sql_remaining );
+					$remaining     = $wpdb->get_var( $sql_remaining );
 					if ( $remaining > 0 ) {
 						$this->update_upgrade_status( sprintf( esc_html__( 'Migrating leads. Step 3/3 Migrating entry meta. %d rows remaining.', 'gravityforms' ), $remaining ) );
+
 						return true;
 					}
 				}
 			}
 		} while ( ! empty( $lead_meta_ids ) );
 
-		$this->update_upgrade_status( esc_html__( 'Entry details migrated.', 'gravityforms' ) );
 		return false;
 	}
 
@@ -1126,6 +1360,7 @@ WHERE ln.id NOT IN
 	 * Upgrade routine from gravity forms version 2.0.4.7 and below
 	 */
 	protected function post_upgrade_schema_2047() {
+		remove_filter( 'query', array( 'GFForms', 'filter_query' ) );
 
 		global $wpdb;
 
@@ -1848,19 +2083,20 @@ HAVING count(*) > 1;" );
 	}
 
 	/**
+	 * Removes notices from previous versions that are no longer relevant.
+	 *
+	 * @since 2.6
+	 */
+	public function remove_obsolete_admin_notices() {
+		GFCommon::remove_dismissible_message( 'gravityforms_update_2_5' );
+	}
+
+	/**
 	 * Adds dismissible admin notices.
 	 *
 	 * @since 2.3
 	 */
 	public function add_post_upgrade_admin_notices() {
-		$previous_version = get_option( 'rg_form_version' );
-
-		if ( version_compare( $previous_version, '2.5', '>=' ) ) {
-			require_once( GFCommon::get_base_path() . '/includes/messages/class-dismissable-messages.php' );
-			$dismissable = new \Gravity_Forms\Gravity_Forms\Messages\Dismissable_Messages();
-			$dismissable->add_internal('gravityforms_update_2_5', 'success', false, true, null );
-		}
-
 		$previous_db_version = get_option( 'gf_previous_db_version' );
 
 		$key = sanitize_key( 'gravityforms_outdated_addons_2.3' );

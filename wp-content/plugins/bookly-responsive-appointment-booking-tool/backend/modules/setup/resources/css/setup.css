@@ -1,0 +1,75 @@
+#bookly-setup-form > .card {
+    min-height: 514px;
+    max-width: 800px;
+    position: relative;
+    padding-bottom: 38px;
+}
+
+.bookly-setup-footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    margin-left: -20px !important;
+    padding: 10px;
+}
+
+.bookly-stepper {
+    flex-direction: row !important;
+}
+
+.bookly-stepper-number {
+    border: 2px solid rgba(0, 0, 0, .12);
+    color: #007bff;
+    font-weight: bold;
+    background-color: white;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.active .bookly-stepper-number {
+    border: 2px solid #007bff;
+    color: white;
+    font-weight: bold;
+    background-color: #007bff;
+}
+
+.active .bookly-stepper-title {
+    color: #007bff;
+}
+
+.bookly-stepper-interval {
+    background-color: rgba(0, 0, 0, .12);
+    height: 1px;
+    margin: auto 10px;
+}
+
+
+.bookly-stepper-interval.active {
+    background-color: #007bff;
+}
+
+.bookly-stepper-small-title {
+    color: #007bff;
+    font-weight: bold;
+}
+
+@media only screen and (max-width: 400px) {
+    .bookly-stepper-interval {
+        margin: auto;
+    }
+}
+
+@media only screen and (min-width: 768px) {
+    #bookly-tbs .card.bookly-item-card {
+        border: none;
+    }
+
+    #bookly-tbs .card.bookly-item-card .card-body {
+        padding: 0;
+        margin: 0;
+    }
+}

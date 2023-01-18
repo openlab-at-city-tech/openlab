@@ -1,6 +1,6 @@
 <?php
 
-namespace Easy_Plugins\Table_Of_Contents\TOCString;
+namespace Easy_Plugins\Table_Of_Contents\String;
 
 /**
  * Replace `<br />` tags with parameter.
@@ -206,6 +206,7 @@ function force_balance_tags( $text ) {
  *
  * @return array|string
  */
+if ( ! function_exists( __NAMESPACE__ . '\mb_substr_replace' ) ) :
 function mb_substr_replace( $string, $replacement, $start, $length = null ) {
 
 	if ( is_array( $string ) ) {
@@ -253,7 +254,7 @@ function mb_substr_replace( $string, $replacement, $start, $length = null ) {
 
 	return join( $smatches[0] );
 }
-
+endif;
 /**
  * Returns a string with all items from the $find array replaced with their matching
  * items in the $replace array.  This does a one to one replacement (rather than globally).
@@ -270,6 +271,7 @@ function mb_substr_replace( $string, $replacement, $start, $length = null ) {
  *
  * @return mixed|string
  */
+if ( ! function_exists( __NAMESPACE__ . '\mb_find_replace' ) ) :
 function mb_find_replace( &$find = false, &$replace = false, &$string = '' ) {
 
 	if ( is_array( $find ) && is_array( $replace ) && $string ) {
@@ -306,7 +308,19 @@ function mb_find_replace( &$find = false, &$replace = false, &$string = '' ) {
 						get_option( 'blog_charset' )
 					);
 
-					$start = mb_strpos( $string, $needle );
+					$umlauts = false;
+          			$umlauts = apply_filters( 'eztoc_modify_umlauts', $umlauts );
+          			if($umlauts){
+						$string = html_entity_decode(
+							$string,
+							ENT_QUOTES,
+							get_option( 'blog_charset' )
+						);
+					}
+
+					$needle = str_replace(array('’','“','”'), array('\'','"','"'), $needle);
+
+                    $start = mb_strpos( $string, $needle );
 				}
 
 				/*
@@ -340,3 +354,22 @@ function mb_find_replace( &$find = false, &$replace = false, &$string = '' ) {
 
 	return $string;
 }
+endif;
+
+if( ! function_exists( __NAMESPACE__ . '\insertElementByPTag' ) ):
+/**
+ * insertElementByPTag Method
+ *
+ * @since 2.0.36
+ * @param $content
+ * @param $toc
+ * @return false|string
+ * @throws \DOMException
+*/
+function insertElementByPTag($content, $toc)
+{
+	$find = array('</p>');
+	$replace = array('</p>' . $toc);
+	return mb_find_replace( $find, $replace, $content );
+}
+endif;

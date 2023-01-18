@@ -699,6 +699,20 @@
 			_temp8.appendChild(_temp9);
 
 			/* for star  */
+			var _temp12 = document.createElement('span');
+			_temp12.className = 'default-folder';
+			_temp3.appendChild(_temp12);
+
+			var _temp13 = document.createElement('i');
+			_temp13.className = 'pfolder-active-icon';
+			_temp12.appendChild(_temp13);
+
+			/* for lock  */
+			var _temp11 = document.createElement('span');
+			_temp11.className = 'dashicons dashicons-lock';
+			_temp3.appendChild(_temp11);
+
+			/* for star  */
 			var _temp10 = document.createElement('span');
 			_temp10.className = 'premio-folder-count';
 			_temp3.appendChild(_temp10);
@@ -819,16 +833,24 @@
 						}
 					}, this))
 				.on('keydown.jstree', '.jstree-anchor', $.proxy(function (e) {
-						if(e.target.tagName && e.target.tagName.toLowerCase() === "input") { return true; }
-						if(this._data.core.rtl) {
-							if(e.which === 37) { e.which = 39; }
-							else if(e.which === 39) { e.which = 37; }
-						}
-						var f = this._kbevent_to_func(e);
-						if (f) {
-							var r = f.call(this, e);
-							if (r === false || r === true) {
-								return r;
+						var isCtrlPressed = (e.ctrlKey || e.metaKey) ? true : false;
+						if(!isCtrlPressed) {
+							if (e.target.tagName && e.target.tagName.toLowerCase() === "input") {
+								return true;
+							}
+							if (this._data.core.rtl) {
+								if (e.which === 37) {
+									e.which = 39;
+								} else if (e.which === 39) {
+									e.which = 37;
+								}
+							}
+							var f = this._kbevent_to_func(e);
+							if (f) {
+								var r = f.call(this, e);
+								if (r === false || r === true) {
+									return r;
+								}
 							}
 						}
 					}, this))
@@ -3789,7 +3811,6 @@
 			var t1, t2;
 			if($.isArray(obj)) {
 				obj = obj.slice();
-				console.log(obj);
 				for(t1 = 0, t2 = obj.length; t1 < t2; t1++) {
 					this.set_text(obj[t1], val);
 				}
@@ -6620,6 +6641,7 @@
 					}
 				})
 				.on('keydown', 'a', function (e) {
+						var isCtrlPressed = (e.ctrlKey || e.metaKey) ? true : false;
 						var o = null;
 						switch(e.which) {
 							case 13:
@@ -6652,7 +6674,7 @@
 								}
 								break;
 							case 40:
-								if(vakata_context.is_visible) {
+								if(vakata_context.is_visible && !isCtrlPressed) {
 									o = vakata_context.element.find("ul:visible").addBack().last().children(".vakata-context-hover").removeClass("vakata-context-hover").nextAll("li:not(.vakata-context-separator)").first();
 									if(!o.length) { o = vakata_context.element.find("ul:visible").addBack().last().children("li:not(.vakata-context-separator)").first(); }
 									o.addClass("vakata-context-hover").children('a').focus();
@@ -7053,22 +7075,27 @@
 				lastmv = false;
 			})
 			.on('keyup.jstree keydown.jstree', function (e, data) {
-				data = $.vakata.dnd._get();
-				if(data && data.data && data.data.jstree) {
-					if (e.type === "keyup" && e.which === 27) {
-						if (opento) { clearTimeout(opento); }
-						lastmv = false;
-						laster = false;
-						lastev = false;
-						opento = false;
-						marker.hide().detach();
-						$.vakata.dnd._clean();
-					} else {
-						data.helper.find('.jstree-copy').first()[ data.data.origin && (data.data.origin.settings.dnd.always_copy || (data.data.origin.settings.dnd.copy && (e.metaKey || e.ctrlKey))) ? 'show' : 'hide' ]();
-						if(lastev) {
-							lastev.metaKey = e.metaKey;
-							lastev.ctrlKey = e.ctrlKey;
-							$.vakata.dnd._trigger('move', lastev);
+				var isCtrlPressed = (e.ctrlKey || e.metaKey) ? true : false;
+				if(!isCtrlPressed) {
+					data = $.vakata.dnd._get();
+					if (data && data.data && data.data.jstree) {
+						if (e.type === "keyup" && e.which === 27) {
+							if (opento) {
+								clearTimeout(opento);
+							}
+							lastmv = false;
+							laster = false;
+							lastev = false;
+							opento = false;
+							marker.hide().detach();
+							$.vakata.dnd._clean();
+						} else {
+							data.helper.find('.jstree-copy').first()[data.data.origin && (data.data.origin.settings.dnd.always_copy || (data.data.origin.settings.dnd.copy && (e.metaKey || e.ctrlKey))) ? 'show' : 'hide']();
+							if (lastev) {
+								lastev.metaKey = e.metaKey;
+								lastev.ctrlKey = e.ctrlKey;
+								$.vakata.dnd._trigger('move', lastev);
+							}
 						}
 					}
 				}

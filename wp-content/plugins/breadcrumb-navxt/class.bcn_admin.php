@@ -44,7 +44,7 @@ use mtekk\adminKit\{adminKit, form, message, setting};
  */
 class bcn_admin extends adminKit
 {
-	const version = '7.0.2';
+	const version = '7.1.0';
 	protected $full_name = 'Breadcrumb NavXT Settings';
 	protected $short_name = 'Breadcrumb NavXT';
 	protected $access_level = 'bcn_manage_options';
@@ -322,6 +322,42 @@ class bcn_admin extends adminKit
 		}
 	}
 	/**
+	 * A message function that checks for post types added after the settings defaults were established
+	 */
+	function unknown_custom_types_warn()
+	{
+		foreach($GLOBALS['wp_post_types'] as $post_type)
+		{
+			//If we haven't seen this post type before, warn the user
+			if(!isset($this->settings['Hpost_' . $post_type->name . '_template']))
+			{
+				$this->messages[] = new message(
+						sprintf(
+								esc_html__('Warning: The post type %1$s (%2$s) was registered after the Breadcrumb NavXT default settings. It will not show up in the settings.', 'breadcrumb-navxt'),
+								$post_type->labels->singular_name,
+								$post_type->name),
+						'warning',
+						true,
+						$post_type->name);
+			}
+		}
+		foreach($GLOBALS['wp_taxonomies'] as $taxonomy)
+		{
+			if(!isset($this->settings['Htax_' . $taxonomy->name . '_template']))
+			{
+				//If we haven't seen this taxonomy before, warn the user
+				$this->messages[] = new message(
+						sprintf(
+								esc_html__('Warning: The taxonomy %1$s (%2$s) was registered after the Breadcrumb NavXT default settings. It will not show up in the settings.', 'breadcrumb-navxt'),
+								$taxonomy->label,
+								$taxonomy->name),
+						'warning',
+						true,
+						$taxonomy->name);
+			}
+		}
+	}
+	/**
 	 * Function checks the current site to see if the blog options should be disabled
 	 * 
 	 * @return boool Whether or not the blog options should be disabled
@@ -348,6 +384,8 @@ class bcn_admin extends adminKit
 		$this->security();
 		//Do a check on deprecated settings
 		$this->deprecated_settings_warn();
+		//Do a check for unknown CPTs and Taxnomies
+		$this->unknown_custom_types_warn();
 		//Do a check for multisite settings mode
 		$this->multisite_settings_warn();
 		do_action($this->unique_prefix . '_settings_pre_messages', $this->settings);
@@ -416,8 +454,8 @@ class bcn_admin extends adminKit
 			//Loop through all of the post types in the array
 			foreach($wp_post_types as $post_type)
 			{
-				//Check for non-public CPTs
-				if(!apply_filters('bcn_show_cpt_private', $post_type->public, $post_type->name))
+				//Check for non-public CPTs and if the CPT wasn't known when defaults were generated
+				if(!apply_filters('bcn_show_cpt_private', $post_type->public, $post_type->name) || !isset($this->settings['Hpost_' . $post_type->name . '_template']))
 				{
 					continue;
 				}
@@ -443,7 +481,13 @@ class bcn_admin extends adminKit
 					<?php
 							$this->form->input_check($this->settings['bpost_' . $post_type->name . '_archive_display'], sprintf(__('Show the breadcrumb for the %s post type archives in the breadcrumb trail.', 'breadcrumb-navxt'), $singular_name_lc), !$post_type->has_archive);
 						}
-						if(!in_array($post_type->name, array('page')))
+						if(in_array($post_type->name, array('page')))
+						{
+							$this->form->input_hidden($this->settings['bpost_' . $post_type->name . '_hierarchy_display']);
+							$this->form->input_hidden($this->settings['bpost_' . $post_type->name . '_hierarchy_parent_first']);
+							$this->form->input_hidden($this->settings['bpost_' . $post_type->name . '_taxonomy_referer']);
+						}
+						else
 						{
 							$this->form->input_check($this->settings['bpost_' . $post_type->name . '_hierarchy_display'], sprintf(__('Show the hierarchy (specified below) leading to a %s in the breadcrumb trail.', 'breadcrumb-navxt'), $singular_name_lc), false, '', 'adminkit-enset-ctrl adminkit-enset');
 							$this->form->input_check($this->settings['bpost_' . $post_type->name . '_hierarchy_parent_first'], sprintf(__('Use the parent of the %s as the primary hierarchy, falling back to the hierarchy selected below when the parent hierarchy is exhausted.', 'breadcrumb-navxt'), $singular_name_lc), false, '', 'adminkit-enset');
@@ -494,6 +538,7 @@ class bcn_admin extends adminKit
 				<?php
 			}
 			do_action($this->unique_prefix . '_after_settings_tab_post', $this->settings);
+			//FIXME: Why don't we use the taxonomy loop for all taxonomies? We do it with posts now
 			?>
 			</fieldset>
 			<fieldset id="tax" class="bcn_options alttab">
@@ -523,8 +568,8 @@ class bcn_admin extends adminKit
 			//Loop through all of the taxonomies in the array
 			foreach($wp_taxonomies as $taxonomy)
 			{
-				//Check for non-public taxonomies
-				if(!apply_filters('bcn_show_tax_private', $taxonomy->public, $taxonomy->name, null))
+				//Check for non-public taxonomies and if the taxonomy wasn't known when defaults were generated
+				if(!apply_filters('bcn_show_tax_private', $taxonomy->public, $taxonomy->name, null) || !isset($this->settings['Htax_' . $taxonomy->name . '_template']))
 				{
 					continue;
 				}

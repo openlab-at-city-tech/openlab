@@ -1,11 +1,20 @@
 <?php
-if ( ! defined( 'ABSPATH' ) ) exit;
+/**
+ * Admin folders help
+ *
+ * @author  : Premio <contact@premio.io>
+ * @license : GPL2
+ * */
+
+if (! defined('ABSPATH')) {
+    exit;
+}
 ?>
 <style>
-    .folder-help-btn{position:fixed;right:20px;bottom:20px;z-index:1001}.folder-help-btn a{display:block;border:3px solid #fff;width:50px;height:50px;-webkit-border-radius:50%;-moz-border-radius:50%;border-radius:50%;position:relative}.folder-help-btn a img{width:100%;height:auto;display:block;-webkit-border-radius:50%;-moz-border-radius:50%;border-radius:50%}.folder-help-form{position:fixed;right:85px;border:1px solid #e9edf0;bottom:25px;background:#fff;-webkit-border-radius:10px;-moz-border-radius:10px;border-radius:10px;width:320px;z-index:1001;direction:ltr;opacity:0;transition:.4s;-webkit-transition:.4s;-moz-transition:.4s;display:none}.folder-help-form.active{opacity:1;pointer-events:inherit;display:block}.folder-help-header{background:#f4f4f4;border-bottom:solid 1px #e9edf0;padding:5px 20px;-webkit-border-radius:10px;-moz-border-radius:10px;border-radius:10px 10px 0 0;font-size:16px;text-align:right}.folder-help-header b{float:left}.folder-help-content{margin-bottom:10px;padding:20px 20px 10px}.folder-help-form p{margin:0 0 1em}.folder-form-field{margin-bottom:10px}.folder-form-field input,.folder-form-field textarea{-webkit-border-radius:5px;-moz-border-radius:5px;border-radius:5px;padding:5px;width:100%;box-sizing:border-box;border:1px solid #c5c5c5}.folder-form-field textarea{width:100%;height:100px;margin-bottom:10px}.folder-help-button{border:none;padding:8px 0;width:100%;background:#ff6624;color:#fff;border-radius:18px;cursor:pointer}.folder-help-form .error-message{font-weight:400;font-size:14px;display:block}.folder-help-form input.input-error,.folder-help-form textarea.input-error{border-color:#dc3232}.folder-help-btn span.tooltiptext{position:absolute;background:#000;font-size:12px;color:#fff;top:-35px;width:140%;text-align:center;left:-20%;border-radius:5px;direction:ltr}p.error-p,p.success-p{margin:0;font-size:14px;text-align:center}.folder-help-btn span.tooltiptext:after{bottom:-20px;content:"";transform:translateX(-50%);height:10px;width:0;border-width:10px 5px 0;border-style:solid;border-color:#000 transparent transparent;left:50%;position:absolute}.folder-help-btn{display:none}p.success-p{color:green}p.error-p{color:#dc3232}html[dir=rtl] .folder-help-btn{left:20px;right:auto}html[dir=rtl] .folder-help-form{left:85px;right:auto}.folder-popup-body h3{line-height:24px}.folder-popup-overlay .form-control input{width:100%;margin:0 0 15px 0}body.plugins-php .tooltiptext{display:none}
+    .folder-help-btn,.folder-help-form{position:fixed;z-index:1001;display:none}.folders-help .folder-help-btn{display:block!important}.folder-help-btn{right:20px;bottom:20px}.folder-help-btn a{display:block;border:3px solid #fff;width:50px;height:50px;-webkit-border-radius:50%;-moz-border-radius:50%;border-radius:50%;position:relative}.folder-help-btn a img{width:100%;height:auto;display:block;-webkit-border-radius:50%;-moz-border-radius:50%;border-radius:50%}.folder-help-form{right:85px;border:1px solid #e9edf0;bottom:25px;background:#fff;-webkit-border-radius:10px;-moz-border-radius:10px;border-radius:10px;width:320px;direction:ltr;opacity:0;transition:.4s;-webkit-transition:.4s;-moz-transition:.4s}.folder-help-form.active{opacity:1;pointer-events:inherit;display:block}.folder-help-header{background:#f4f4f4;border-bottom:1px solid #e9edf0;padding:5px 20px;-webkit-border-radius:10px;-moz-border-radius:10px;border-radius:10px 10px 0 0;font-size:16px;text-align:right}.folder-help-header b{float:left}.folder-help-content{margin-bottom:10px;padding:20px 20px 10px}.folder-help-form p{margin:0 0 1em}.folder-form-field{margin-bottom:10px}.folder-form-field input,.folder-form-field textarea{-webkit-border-radius:5px;-moz-border-radius:5px;border-radius:5px;padding:5px;width:100%;box-sizing:border-box;border:1px solid #c5c5c5}.folder-form-field textarea{width:100%;height:100px;margin-bottom:0}.folder-help-button{border:none;padding:8px 0;width:100%;background:#ff6624;color:#fff;border-radius:18px;cursor:pointer}.folder-help-form .error-message{font-weight:400;font-size:14px;display:block}.folder-help-form input.input-error,.folder-help-form textarea.input-error{border-color:#dc3232}.folder-help-btn span.tooltiptext{position:absolute;background:#000;font-size:12px;color:#fff;top:-35px;width:140%;text-align:center;left:-20%;border-radius:5px;direction:ltr}p.error-p,p.success-p{margin:0;font-size:14px;text-align:center}.folder-help-btn span.tooltiptext:after{bottom:-20px;content:"";transform:translateX(-50%);height:10px;width:0;border-width:10px 5px 0;border-style:solid;border-color:#000 transparent transparent;left:50%;position:absolute}p.success-p{color:green}p.error-p{color:#dc3232}html[dir=rtl] .folder-help-btn{left:20px;right:auto}html[dir=rtl] .folder-help-form{left:85px;right:auto}.folder-popup-body h3{line-height:24px}.folder-popup-overlay .form-control input{width:100%;margin:0 0 15px}body.plugins-php .tooltiptext{display:none}.help-form-footer{text-align:center}.help-form-footer p{margin:0;padding:0}.help-form-footer p+p{margin:0;padding:10px 0}
 </style>
 <div class="folder-help-form">
-    <form action="<?php echo esc_url(admin_url( 'admin-ajax.php' )) ?>" method="post" id="folder-help-form">
+    <form action="<?php echo esc_url(admin_url('admin-ajax.php')) ?>" method="post" id="folder-help-form">
         <div class="folder-help-header">
             <b>Gal Dubinski</b> Co-Founder at Premio
         </div>
@@ -23,12 +32,20 @@ if ( ! defined( 'ABSPATH' ) ) exit;
                 <input type="hidden" id="folder_help_nonce" name="folder_help_nonce" value="<?php echo esc_attr(wp_create_nonce('wcp_folder_help_nonce')) ?>"  >
             </div>
         </div>
+        <div class="help-form-footer">
+            <p>Or</p>
+            <p><a href="https://premio.io/help/folders/?utm_source=pluginspage" target="_blank"><?php esc_html_e("Visit our Help Center >>", 'folders'); ?></a></p>
+        </div>
     </form>
 </div>
 <div class="folder-help-btn">
     <!-- Free/Pro Only URL Change -->
-    <a class="folder-help-tooltip" href="javascript:;"><img src="<?php echo esc_url(WCP_FOLDER_URL."assets/images/owner.png") ?>" alt="<?php esc_html_e("Need help?", 'folders'); ?>"  /></a>
-    <span class="tooltiptext">Need help?</span>
+    <a class="folder-help-tooltip" href="javascript:;"><img src="<?php echo esc_url(WCP_FOLDER_URL."assets/images/owner.jpg") ?>" alt="<?php esc_html_e("Need help?", 'folders'); ?>"  /></a>
+    <?php
+    $option = get_option("hide_folders_cta");
+    if ($option !== "yes") { ?>
+        <span class="tooltiptext">Need help?</span>
+    <?php } ?>
 </div>
 <script>
     jQuery(document).ready(function(){
@@ -37,7 +54,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
             jQuery(".folder-help-button").text("<?php esc_html_e("Sending Request...") ?>");
             formData = jQuery(this).serialize();
             jQuery.ajax({
-                url: "<?php echo esc_url(admin_url( 'admin-ajax.php' )) ?>",
+                url: "<?php echo esc_url(admin_url('admin-ajax.php')) ?>",
                 data: formData,
                 type: "post",
                 success: function(responseText){
@@ -56,6 +73,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
                         jQuery(".folder-help-button").text("<?php esc_html_e("Done!", 'folders'); ?>");
                         setTimeout(function(){
                             jQuery(".folder-help-header").remove();
+                            jQuery(".help-form-footer").remove();
                             jQuery(".folder-help-content").html("<p class='success-p'><?php esc_html_e("Your message is sent successfully.", 'folders'); ?></p>");
                         },1000);
                     } else if(responseArray.status == 0) {
@@ -69,6 +87,20 @@ if ( ! defined( 'ABSPATH' ) ) exit;
             e.stopPropagation();
             jQuery(".folder-help-btn").toggle();
             jQuery(".folder-help-form").toggleClass("active");
+            if(jQuery(".folder-help-btn .tooltiptext").length) {
+                jQuery(".folder-help-btn .tooltiptext").remove();
+                jQuery.ajax({
+                    url: "<?php echo esc_url(admin_url('admin-ajax.php')) ?>",
+                    data: {
+                        nonce: "<?php echo wp_create_nonce("hide_folders_cta") ?>",
+                        action: "hide_folders_cta"
+                    },
+                    type: "post",
+                    success: function (responseText) {
+
+                    }
+                });
+            }
 
         });
         jQuery(".folder-help-form").click(function(e){

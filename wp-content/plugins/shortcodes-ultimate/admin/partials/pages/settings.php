@@ -2,6 +2,10 @@
 
 <div class="su-admin-settings wrap">
 
+	<?php if ( ! su_fs()->can_use_premium_code() && ! su_has_active_addons() ) : ?>
+		<?php su_partial( 'admin/partials/notices/pro.php', array( 'page' => 'settings' ) ); ?>
+	<?php endif; ?>
+
 	<h1 class="su-admin-settings-page-title">
 		<img src="<?php echo esc_attr( su_get_plugin_url() . 'admin/images/plugin-icon.svg' ); ?>" alt="" width="36" height="36">
 		<?php esc_html_e( 'Shortcodes Ultimate Settings', 'shortcodes-ultimate' ); ?>

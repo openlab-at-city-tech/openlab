@@ -1,0 +1,7 @@
+/* FILE: editor-block/blocks/_image.scss */
+
+.wp-block-image > .components-resizable-box__container {
+	max-width: 100% !important;
+	height: auto !important;
+	vertical-align: middle;
+}

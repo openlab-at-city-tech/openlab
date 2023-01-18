@@ -19,20 +19,33 @@ class Friend implements Counter {
 			'total' => '',
 		);
 
-		$all_member_types = array( 'student', 'faculty', 'staff', 'alumni', 'other' );
-		if ( 'total' === $query['type'] ) {
-			$member_types = $all_member_types;
-		} else {
-			$member_types = (array) $query['type'];
+		$join  = [];
+		$where = [];
+
+		if ( 'total' !== $query['type'] ) {
+			$ut_term = get_term_by( 'slug', $query['type'], 'bp_member_type' );
+			if ( $ut_term ) {
+				$join[]  = "JOIN {$wpdb->term_relationships} tr ON (tr.object_id = f.initiator_user_id)";
+				$where[] = $wpdb->prepare( "tr.term_taxonomy_id = %d", $ut_term->term_taxonomy_id );
+			}
 		}
 
-		$initiator_mt_where = $this->get_member_type_where_clause( $member_types );
-
-		$base_sql = $wpdb->prepare( "SELECT COUNT(*) FROM {$bp->friends->table_name} WHERE initiator_user_id IN ( SELECT user_id FROM {$bp->profile->table_name_data} xp WHERE {$initiator_mt_where} ) AND date_created >= %s AND date_created <= %s", $this->start, $this->end );
+		$where[] = $wpdb->prepare( "date_created >= %s AND date_created <= %s", $this->start, $this->end );
 
 		foreach ( $counts as $count_type => &$count ) {
-			$friend_mt_where = $this->get_member_type_where_clause( $count_type );
-			$mt_base_sql = "$base_sql AND friend_user_id IN ( SELECT user_id FROM {$bp->profile->table_name_data} xp WHERE {$friend_mt_where} )";
+			$type_join  = $join;
+			$type_where = $where;
+
+			if ( 'total' !== $count_type ) {
+				$friend_mt_term = get_term_by( 'slug', $count_type, 'bp_member_type' );
+
+				if ( $friend_mt_term ) {
+					$type_join[]    = "JOIN {$wpdb->term_relationships} tr2 ON (tr2.object_id = f.friend_user_id)";
+					$type_where[]   = $wpdb->prepare( "tr2.term_taxonomy_id = %d", $friend_mt_term->term_taxonomy_id );
+				}
+			}
+
+			$mt_base_sql = "SELECT COUNT(*) FROM {$bp->friends->table_name} f " . implode( ' ', $type_join ) . " WHERE " . implode( ' AND ', $type_where );
 
 			$confirmed = $wpdb->get_var( "$mt_base_sql AND is_confirmed = 1" );
 			$pending   = $wpdb->get_var( "$mt_base_sql AND is_confirmed = 0" );
@@ -42,26 +55,5 @@ class Friend implements Counter {
 
 		$this->counts = $counts;
 		return $this->counts;
-	}
-
-	protected function get_member_type_where_clause( $member_type ) {
-		global $wpdb;
-
-		$all_member_types = array( 'student', 'faculty', 'staff', 'alumni', 'other' );
-		if ( 'total' === $member_type ) {
-			$member_types = $all_member_types;
-		} else {
-			$member_types = (array) $member_type;
-		}
-
-		$clause = '';
-		foreach ( $member_types as &$mt ) {
-			$mt = $wpdb->prepare( '%s', ucwords( $mt ) );
-		}
-		$member_types = implode( ',', $member_types );
-
-		$clause = "xp.field_id = 7 AND xp.value IN ({$member_types})";
-
-		return $clause;
 	}
 }

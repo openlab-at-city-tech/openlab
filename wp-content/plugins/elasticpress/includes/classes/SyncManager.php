@@ -185,7 +185,7 @@ abstract class SyncManager {
 		}
 
 		// Bulk sync them all.
-		Indexables::factory()->get( $this->indexable_slug )->bulk_index( array_keys( $this->sync_queue ) );
+		Indexables::factory()->get( $this->indexable_slug )->bulk_index_dynamically( array_keys( $this->sync_queue ) );
 
 		/**
 		 * Make sure to reset sync queue in case an shutdown happens before a redirect
@@ -201,8 +201,9 @@ abstract class SyncManager {
 	 * @return boolean
 	 */
 	public function can_index_site() {
-		if ( defined( 'EP_IS_NETWORK' ) && EP_IS_NETWORK ) {
-			return Utils\is_site_indexable();
+		if ( ( defined( 'EP_IS_NETWORK' ) && EP_IS_NETWORK ) && ! Utils\is_site_indexable() ) {
+			$this->tear_down();
+			return false;
 		}
 
 		return true;
@@ -272,4 +273,11 @@ abstract class SyncManager {
 	 * @since 3.0
 	 */
 	abstract public function setup();
+
+	/**
+	 * Implementation (for multisite) should un-setup hooks/filters if applicable.
+	 *
+	 * @since 4.0
+	 */
+	abstract public function tear_down();
 }

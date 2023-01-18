@@ -234,17 +234,20 @@ class BP_Component {
 	 * }
 	 */
 	public function setup_globals( $args = array() ) {
-		$r = wp_parse_args( $args, array(
-			'slug'                  => $this->id,
-			'root_slug'             => '',
-			'has_directory'         => false,
-			'directory_title'       => '',
-			'notification_callback' => '',
-			'search_string'         => '',
-			'global_tables'         => '',
-			'meta_tables'           => '',
-			'block_globals'         => array(),
-		) );
+		$r = bp_parse_args(
+			$args,
+			array(
+				'slug'                  => $this->id,
+				'root_slug'             => '',
+				'has_directory'         => false,
+				'directory_title'       => '',
+				'notification_callback' => '',
+				'search_string'         => '',
+				'global_tables'         => '',
+				'meta_tables'           => '',
+				'block_globals'         => array(),
+			)
+		);
 
 		/** Slugs ************************************************************
 		 */
@@ -505,6 +508,9 @@ class BP_Component {
 		if ( bp_support_blocks() ) {
 			add_action( 'bp_blocks_init', array( $this, 'blocks_init' ), 10 );
 		}
+
+		// Set directory page states.
+		add_filter( 'bp_admin_display_directory_states', array( $this, 'admin_directory_states' ), 10, 2 );
 
 		/**
 		 * Fires at the end of the setup_actions method inside BP_Component.
@@ -983,6 +989,33 @@ class BP_Component {
 		 * @since 6.0.0
 		 */
 		do_action( 'bp_' . $this->id . '_blocks_init' );
+	}
+
+	/**
+	 * Add component's directory states.
+	 *
+	 * @since 10.0.0
+	 *
+	 * @param string[] $states An array of post display states.
+	 * @param WP_Post  $post   The current post object.
+	 * @return array           The component's directory states.
+	 */
+	public function admin_directory_states( $states = array(), $post = null ) {
+		if ( $this->has_directory ) {
+			/**
+			 * Filter here to edit the component's directory states.
+			 *
+			 * This is a dynamic hook that is based on the component string ID.
+			 *
+			 * @since 10.0.0
+			 *
+			 * @param string[] $states An array of post display states.
+			 * @param WP_Post  $post   The current post object.
+			 */
+			return apply_filters( 'bp_' . $this->id . '_admin_directory_states', $states, $post );
+		}
+
+		return $states;
 	}
 }
 endif; // BP_Component.

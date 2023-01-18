@@ -269,10 +269,10 @@ function link_library_process_user_submission( $my_link_library_plugin ) {
 				foreach ( $captureddata['link_category'] as $cat_element ) {
 					if ( $cat_element == 'new' && !empty( $captureddata['link_user_category'] ) ) {
 
-						$existingcat = get_term_by( 'name', $captureddata['link_user_category'], 'link_library_category' );
+						$existingcat = get_term_by( 'name', $captureddata['link_user_category'], $genoptions['cattaxonomy'] );
 
 						if ( empty( $existingcat ) ) {
-							$new_category = wp_insert_term( $captureddata['link_user_category'], 'link_library_category', array( 'description' => '', 'slug' => sanitize_text_field( $captureddata['link_user_category'] ) ) );
+							$new_category = wp_insert_term( $captureddata['link_user_category'], $genoptions['cattaxonomy'], array( 'description' => '', 'slug' => sanitize_text_field( $captureddata['link_user_category'] ) ) );
 
 							$newlinkcat[] = $new_category['term_id'];
 							$newlinkcatlist[$new_category['term_id']] = sanitize_text_field( $captureddata['link_user_category'] );
@@ -287,7 +287,7 @@ function link_library_process_user_submission( $my_link_library_plugin ) {
 						$message  = 7;
 					} else {
 						$newlinkcat[] = $cat_element;
-						$existingcat = get_term_by( 'id', $cat_element, 'link_library_category' );
+						$existingcat = get_term_by( 'id', $cat_element, $genoptions['cattaxonomy'] );
 						$newlinkcatlist[$existingcat->term_id] = $existingcat->name;
 
 						$message = 8;
@@ -305,10 +305,10 @@ function link_library_process_user_submission( $my_link_library_plugin ) {
 							$user_tag_array = explode( ',', $captureddata['link_user_tags'] );
 
 							foreach( $user_tag_array as $user_tag ) {
-								$existingtag = get_term_by( 'name', $user_tag, 'link_library_tags' );
+								$existingtag = get_term_by( 'name', $user_tag, $genoptions['tagtaxonomy'] );
 
 								if ( empty( $existingtag ) ) {
-									$new_tag = wp_insert_term( $user_tag, 'link_library_tags', array( 'description' => '', 'slug' => sanitize_text_field( $captureddata['link_user_tags'] ) ) );
+									$new_tag = wp_insert_term( $user_tag, $genoptions['tagtaxonomy'], array( 'description' => '', 'slug' => sanitize_text_field( $captureddata['link_user_tags'] ) ) );
 
 									$newlinktags[] = $new_tag['term_id'];
 								} else {
@@ -318,7 +318,7 @@ function link_library_process_user_submission( $my_link_library_plugin ) {
 						} elseif ( $cat_element == 'new' && empty( $captureddata['link_user_tags'] ) ) {
 							$message  = 24;
 						} else {
-							$existingtagid = get_term_by( 'id', $tag_element, 'link_library_tags' );
+							$existingtagid = get_term_by( 'id', $tag_element, $genoptions['tagtaxonomy'] );
 							$newlinktags[] = $existingtagid->name;
 						}
 					}
@@ -332,7 +332,7 @@ function link_library_process_user_submission( $my_link_library_plugin ) {
 
 							if ( $reciprocal_return == 'exists_found' ) {
 								$newlinkvisibility = 'publish';
-								unset ( $message );
+								$message = "";
 							} else {
 								$newlinkvisibility = 'pending';
 							}
@@ -341,7 +341,7 @@ function link_library_process_user_submission( $my_link_library_plugin ) {
 						}
 					} else {
 						$newlinkvisibility = 'publish';
-						unset ( $message );
+						$message = "";
 					}
 
 					$username = '';
@@ -377,7 +377,7 @@ function link_library_process_user_submission( $my_link_library_plugin ) {
 
 											$cattext .= $new_cat_id . '">';
 										} elseif ( 'HTMLGETSLUG' == $showonecatmode ) {
-											$temp_term = get_term_by( 'id', $new_cat_id, 'link_library_category' );
+											$temp_term = get_term_by( 'id', $new_cat_id, $genoptions['cattaxonomy'] );
 											$cattext = '<a href="';
 
 											if ( !empty( $genoptions['bp_link_page_url'] ) && strpos( $genoptions['bp_link_page_url'], '?' ) != false ) {
@@ -390,12 +390,12 @@ function link_library_process_user_submission( $my_link_library_plugin ) {
 
 											$cattext .= $temp_term->slug . '">';
 										} elseif ( 'HTMLGETPERM' == $showonecatmode ) {
-											$temp_term = get_term_by( 'id', $new_cat_id, 'link_library_category' );
+											$temp_term = get_term_by( 'id', $new_cat_id, $genoptions['cattaxonomy'] );
 											$cattext = '<a href="' . $genoptions['bp_link_page_url'] . '/' . $catname->slug . '">';
 										}
 									} else if ( $catanchor ) {
 										if ( !$pagination ) {
-											$temp_term = get_term_by( 'id', $new_cat_id, 'link_library_category' );
+											$temp_term = get_term_by( 'id', $new_cat_id, $genoptions['cattaxonomy'] );
 
 											$cattext = '<a href="' . $genoptions['bp_link_page_url'] . '/#' . $temp_term->slug . '">';
 										}
@@ -429,11 +429,11 @@ function link_library_process_user_submission( $my_link_library_plugin ) {
 					if ( !empty( $new_link_ID ) ) {
 
 						if ( !empty( $newlinkcat ) ) {
-							wp_set_post_terms( $new_link_ID, $newlinkcat, 'link_library_category', false );
+							wp_set_post_terms( $new_link_ID, $newlinkcat, $genoptions['cattaxonomy'], false );
 						}
 
 						if ( !empty( $newlinktags ) ) {
-							wp_set_post_terms( $new_link_ID, $newlinktags, 'link_library_tags', false );
+							wp_set_post_terms( $new_link_ID, $newlinktags, $genoptions['tagtaxonomy'], false );
 						}
 
 						if ( isset( $_FILES['linkfile'] ) ) {
@@ -498,8 +498,6 @@ function link_library_process_user_submission( $my_link_library_plugin ) {
 						update_post_meta( $new_link_ID, 'submitter_comment', $captureddata['ll_submittercomment'] );
 						update_post_meta( $new_link_ID, 'link_reference', $captureddata['ll_linkreference'] );
 
-						update_post_meta( $new_link_ID, 'link_submitter_comment', $submittercomment );
-
 						update_post_meta( $new_link_ID, 'link_textfield', sanitize_text_field( $captureddata['link_textfield'] ) );
 
 						update_post_meta( $new_link_ID, 'link_no_follow', false );
@@ -555,7 +553,7 @@ function link_library_process_user_submission( $my_link_library_plugin ) {
 
 						if ( !empty( $newlinkcat ) ) {
 							foreach ( $newlinkcat as $link_cat ) {
-								$existingcat = get_term_by( 'id', $link_cat, 'link_library_category' );
+								$existingcat = get_term_by( 'id', $link_cat, $genoptions['cattaxonomy'] );
 								if ( !empty( $existingcat ) ) {
 									$link_category_names_array[] = $existingcat->name;
 								}
@@ -571,7 +569,7 @@ function link_library_process_user_submission( $my_link_library_plugin ) {
 
 						if ( !empty( $newlinktags ) ) {
 							foreach ( $newlinktags as $link_tag ) {
-								$existingtag = get_term_by( 'id', $link_tag, 'link_library_tags' );
+								$existingtag = get_term_by( 'id', $link_tag, $genoptions['tagtaxonomy'] );
 								if ( !empty( $existingtag ) ) {
 									$link_tags_names_array[] = $existingtag->name;
 								}
@@ -783,6 +781,8 @@ function link_library_process_user_submission( $my_link_library_plugin ) {
 	} else {
 		if ( isset ( $_POST['pageid'] ) && is_numeric( $_POST['pageid'] ) ) {
 			$redirectaddress = get_permalink( $_POST['pageid'] );
+		} else {
+			$redirectaddress = add_query_arg( array( 'link_library_popup_content' => 'true', 'settings' => $settings ), home_url() );
 		}
 	}
 

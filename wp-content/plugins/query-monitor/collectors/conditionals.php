@@ -1,16 +1,28 @@
-<?php
+<?php declare(strict_types = 1);
 /**
  * Template conditionals collector.
  *
  * @package query-monitor
  */
 
-defined( 'ABSPATH' ) || exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
-class QM_Collector_Conditionals extends QM_Collector {
+/**
+ * @extends QM_DataCollector<QM_Data_Conditionals>
+ */
+class QM_Collector_Conditionals extends QM_DataCollector {
 
 	public $id = 'conditionals';
 
+	public function get_storage(): QM_Data {
+		return new QM_Data_Conditionals();
+	}
+
+	/**
+	 * @return void
+	 */
 	public function process() {
 
 		/**
@@ -71,9 +83,9 @@ class QM_Collector_Conditionals extends QM_Collector {
 		 */
 		$conds = apply_filters( 'query_monitor_conditionals', $conds );
 
-		$true  = array();
+		$true = array();
 		$false = array();
-		$na    = array();
+		$na = array();
 
 		foreach ( $conds as $cond ) {
 			if ( function_exists( $cond ) ) {
@@ -95,12 +107,17 @@ class QM_Collector_Conditionals extends QM_Collector {
 				$na[] = $cond;
 			}
 		}
-		$this->data['conds'] = compact( 'true', 'false', 'na' );
+		$this->data->conds = compact( 'true', 'false', 'na' );
 
 	}
 
 }
 
+/**
+ * @param array<string, QM_Collector> $collectors
+ * @param QueryMonitor $qm
+ * @return array<string, QM_Collector>
+ */
 function register_qm_collector_conditionals( array $collectors, QueryMonitor $qm ) {
 	$collectors['conditionals'] = new QM_Collector_Conditionals();
 	return $collectors;

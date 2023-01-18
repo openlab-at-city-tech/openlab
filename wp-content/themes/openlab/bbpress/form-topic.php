@@ -9,8 +9,6 @@
 
 <?php if ( ! bbp_is_single_forum() ) : ?>
 
-	<div id="bbpress-forums">
-
 	<?php bbp_breadcrumb(); ?>
 
 	<?php endif; ?>
@@ -35,9 +33,9 @@
 					<div class="panel-heading">
 						<?php
 						if ( bbp_is_topic_edit() ) {
-							printf( __( 'Now Editing &ldquo;%s&rdquo;', 'bbpress' ), bbp_get_topic_title() );
+							printf( __( 'Editing &ldquo;%s&rdquo;', 'bbpress' ), get_the_title( bbp_get_topic_id() ) );
 						} else {
-							bbp_is_single_forum() ? printf( __( 'Create New Topic in &ldquo;%s&rdquo;', 'bbpress' ), bbp_get_forum_title() ) : _e( 'Create New Topic', 'bbpress' );
+							_e( 'Create New Topic', 'bbpress' );
 						}
 						?>
 					</div>
@@ -152,11 +150,31 @@
 
 							<?php endif; ?>
 
+							<?php if ( bbp_allow_revisions() && bbp_is_topic_edit() ) : ?>
+
+							<?php do_action( 'bbp_theme_before_topic_form_revisions' ); ?>
+
+							<p class="bbp-form">
+								<legend>
+									<input name="bbp_log_topic_edit" id="bbp_log_topic_edit" type="checkbox" value="1" <?php bbp_form_topic_log_edit(); ?> tabindex="<?php bbp_tab_index(); ?>" />
+									<label for="bbp_log_topic_edit"><?php _e( 'Keep a log of this edit:', 'bbpress' ); ?></label><br />
+								</legend>
+
+								<div>
+									<label for="bbp_topic_edit_reason"><?php printf( __( 'Optional reason for editing:', 'bbpress' ), bbp_get_current_user_name() ); ?></label><br />
+									<input type="text" value="<?php bbp_form_topic_edit_reason(); ?>" tabindex="<?php bbp_tab_index(); ?>" size="40" name="bbp_topic_edit_reason" id="bbp_topic_edit_reason" />
+								</div>
+							</p>
+
+							<?php do_action( 'bbp_theme_after_topic_form_revisions' ); ?>
+
+							<?php endif; ?>
+
 							<?php if ( bbp_is_subscriptions_active() && ! bbp_is_anonymous() && ( ! bbp_is_topic_edit() || ( bbp_is_topic_edit() && ! bbp_is_topic_anonymous() ) ) ) : ?>
 
 								<?php do_action( 'bbp_theme_before_topic_form_subscriptions' ); ?>
 
-								<p>
+								<p class="<?php echo ! bbp_is_topic_edit() ? 'bbp-reply-form-checkbox-p' : ''; ?>">
 									<input name="bbp_topic_subscription" id="bbp_topic_subscription" type="checkbox" value="bbp_subscribe" <?php bbp_form_topic_subscribed(); ?> tabindex="<?php bbp_tab_index(); ?>" />
 
 									<?php if ( bbp_is_topic_edit() && ( bbp_get_topic_author_id() !== bbp_get_current_user_id() ) ) : ?>
@@ -174,51 +192,31 @@
 
 							<?php endif; ?>
 
-							<?php if ( bbp_allow_revisions() && bbp_is_topic_edit() ) : ?>
-
-								<?php do_action( 'bbp_theme_before_topic_form_revisions' ); ?>
-
-								<fieldset class="bbp-form">
-									<legend>
-										<input name="bbp_log_topic_edit" id="bbp_log_topic_edit" type="checkbox" value="1" <?php bbp_form_topic_log_edit(); ?> tabindex="<?php bbp_tab_index(); ?>" />
-										<label for="bbp_log_topic_edit"><?php _e( 'Keep a log of this edit:', 'bbpress' ); ?></label><br />
-									</legend>
-
-									<div>
-										<label for="bbp_topic_edit_reason"><?php printf( __( 'Optional reason for editing:', 'bbpress' ), bbp_get_current_user_name() ); ?></label><br />
-										<input type="text" value="<?php bbp_form_topic_edit_reason(); ?>" tabindex="<?php bbp_tab_index(); ?>" size="40" name="bbp_topic_edit_reason" id="bbp_topic_edit_reason" />
-									</div>
-								</fieldset>
-
-								<?php do_action( 'bbp_theme_after_topic_form_revisions' ); ?>
-
-							<?php endif; ?>
-
 						</div>
+						<?php do_action( 'bbp_theme_before_topic_form_submit_wrapper' ); ?>
+
+							<div class="bbp-submit-wrapper">
+
+								<?php do_action( 'bbp_theme_before_topic_form_submit_button' ); ?>
+
+								<?php if ( ! bbp_is_topic_edit() ) : ?>
+									<div class="notify-group-members-ui">
+										<?php openlab_notify_group_members_ui( true ); ?>
+									</div>
+								<?php endif; ?>
+
+								<button type="submit" tabindex="<?php bbp_tab_index(); ?>" id="bbp_topic_submit" name="bbp_topic_submit" class="btn btn-primary submit"><?php esc_html_e( 'Submit', 'bbpress' ); ?></button>
+
+								<?php do_action( 'bbp_theme_after_topic_form_submit_button' ); ?>
+
+							</div>
+
+							<?php do_action( 'bbp_theme_after_topic_form_submit_wrapper' ); ?>
+
+							<?php bbp_topic_form_fields(); ?>
+
 					</div>
 				</div>
-
-				<?php do_action( 'bbp_theme_before_topic_form_submit_wrapper' ); ?>
-
-				<div class="bbp-submit-wrapper">
-
-					<?php do_action( 'bbp_theme_before_topic_form_submit_button' ); ?>
-
-					<?php if ( ! bbp_is_topic_edit() ) : ?>
-						<div class="notify-group-members-ui">
-							<?php openlab_notify_group_members_ui( true ); ?>
-						</div>
-					<?php endif; ?>
-
-					<button type="submit" tabindex="<?php bbp_tab_index(); ?>" id="bbp_topic_submit" name="bbp_topic_submit" class="btn btn-primary submit"><?php esc_html_e( 'Submit', 'bbpress' ); ?></button>
-
-					<?php do_action( 'bbp_theme_after_topic_form_submit_button' ); ?>
-
-				</div>
-
-				<?php do_action( 'bbp_theme_after_topic_form_submit_wrapper' ); ?>
-
-				<?php bbp_topic_form_fields(); ?>
 
 				<?php do_action( 'bbp_theme_after_topic_form' ); ?>
 
@@ -245,7 +243,5 @@
 	<?php endif; ?>
 
 	<?php if ( ! bbp_is_single_forum() ) : ?>
-
-	</div>
 
 <?php endif; ?>

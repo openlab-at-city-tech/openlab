@@ -9,18 +9,23 @@ namespace Advanced_Sidebar_Menu\Menus;
  * @since  7.0.0
  */
 abstract class Menu_Abstract {
+	const WIDGET = 'menu-abstract';
+
+	// Options shared between menus.
 	const DISPLAY_ALL              = 'display_all';
 	const EXCLUDE                  = 'exclude';
 	const INCLUDE_CHILDLESS_PARENT = 'include_childless_parent';
 	const INCLUDE_PARENT           = 'include_parent';
 	const LEVELS                   = 'levels';
-	const LEVEL_CHILD              = 'child';
-	const LEVEL_DISPLAY_ALL        = 'display-all';
-	const LEVEL_GRANDCHILD         = 'grandchild';
-	const LEVEL_PARENT             = 'parent';
 	const ORDER                    = 'order';
 	const ORDER_BY                 = 'order_by';
 	const TITLE                    = 'title';
+
+	// Possible level values.
+	const LEVEL_CHILD       = 'child';
+	const LEVEL_DISPLAY_ALL = 'display-all';
+	const LEVEL_GRANDCHILD  = 'grandchild';
+	const LEVEL_PARENT      = 'parent';
 
 	/**
 	 * Widget Args
@@ -37,7 +42,7 @@ abstract class Menu_Abstract {
 	public $instance;
 
 	/**
-	 * Track the ids which have been used in case of
+	 * Track the ids, which have been used in case of
 	 * plugins like Elementor that we need to manually increment.
 	 *
 	 * @since 7.6.0
@@ -126,8 +131,15 @@ abstract class Menu_Abstract {
 	protected function increment_widget_id() {
 		// Block widgets loaded via the REST API don't have full widget args.
 		if ( ! isset( $this->args['widget_id'] ) ) {
-			$this->args['widget_id'] = wp_hash( microtime() );
+			// Prefix any leading digits or hyphens with '_'.
+			$this->args['widget_id'] = \preg_replace( '/^([\d-])/', '_$1', wp_hash( wp_json_encode( $this->instance ) ) );
+		} elseif ( ! empty( $_POST ) ) { //phpcs:ignore
+			// Page builders send one widget at a time, so we use their settings
+			// to differentiate between multiple widgets of the same type.
+			// Page builders send `POST` when updating preview.
+			$this->args['widget_id'] .= wp_hash( wp_json_encode( $this->instance ) );
 		}
+
 		if ( \in_array( $this->args['widget_id'], self::$unique_widget_ids, true ) ) {
 			$suffix = 2;
 			do {
@@ -204,9 +216,8 @@ abstract class Menu_Abstract {
 	 * @return bool
 	 */
 	public function is_excluded( $id ) {
-		$exclude = $this->get_excluded_ids();
-
-		return in_array( (int) $id, $exclude, true );
+		$excluded = \in_array( (int) $id, $this->get_excluded_ids(), true );
+		return apply_filters( 'advanced-sidebar-menu/menus/' . static::WIDGET . '/is-excluded', $excluded, $id, $this->get_widget_args(), $this->get_widget_instance(), $this );
 	}
 
 
@@ -216,14 +227,17 @@ abstract class Menu_Abstract {
 	 * @return array
 	 */
 	public function get_excluded_ids() {
-		return array_map( 'intval', array_filter( explode( ',', $this->instance[ self::EXCLUDE ] ), 'is_numeric' ) );
+		if ( empty( $this->instance[ self::EXCLUDE ] ) ) {
+			return [];
+		}
+		return \array_map( 'intval', \array_filter( \explode( ',', $this->instance[ self::EXCLUDE ] ), 'is_numeric' ) );
 	}
 
 
 	/**
-	 * Echos the title of the widget to the page
+	 * Echos the title of the widget to the page.
 	 *
-	 * @todo find somewhere more appropriate for this?
+	 * @return void
 	 */
 	public function title() {
 		if ( ! empty( $this->instance[ self::TITLE ] ) ) {
@@ -242,7 +256,7 @@ abstract class Menu_Abstract {
 	 *
 	 * @static
 	 *
-	 * @var Page|Category
+	 * @var Page|Category|null
 	 */
 	protected static $current;
 
@@ -252,7 +266,7 @@ abstract class Menu_Abstract {
 	 *
 	 * @static
 	 *
-	 * @return Page|Category
+	 * @return Page|Category|null
 	 */
 	public static function get_current() {
 		return self::$current;

@@ -1,5 +1,15 @@
 <?php
-if ( ! defined( 'ABSPATH' ) ) exit;
+/**
+ * Admin folders deactiavte form
+ *
+ * @author  : Premio <contact@premio.io>
+ * @license : GPL2
+ * */
+
+if (! defined('ABSPATH')) {
+    exit;
+}
+
 ?>
     <style>
         .folder-hidden{overflow:hidden}.folder-popup-overlay .folder-internal-message{margin:3px 0 3px 22px;display:none}.folder-reason-input{margin:3px 0 3px 22px;display:none}.folder-reason-input input[type=text]{width:100%;display:block}.folder-popup-overlay{background:rgba(0,0,0,.8);position:fixed;top:0;left:0;height:100%;width:100%;z-index:1000;overflow:auto;visibility:hidden;opacity:0;transition:opacity .3s ease-in-out :}.folder-popup-overlay.folder-active{opacity:1;visibility:visible}.folder-serveypanel{width:600px;background:#fff;margin:65px auto 0}.folder-popup-header{background:#f1f1f1;padding:20px;border-bottom:1px solid #ccc}.folder-popup-header h2{margin:0}.folder-popup-body{padding:10px 20px}.folder-popup-footer{background:#f9f3f3;padding:10px 20px;border-top:1px solid #ccc}.folder-popup-footer:after{content:"";display:table;clear:both}.action-btns{float:right}.folder-anonymous{display:none}.attention,.error-message{color:red;font-weight:600;display:none}.folder-spinner{display:none}.folder-spinner img{margin-top:3px}.folder-hidden-input{padding:10px 0 0;display:none}.folder-hidden-input input[type=text]{padding:0 10px;width:100%;height:26px;line-height:26px}.folder-hidden-input textarea{padding:10px;width:100%;height:100px;margin:0 0 10px 0}span.folder-error-message{color:#d00;font-weight:600}.form-control textarea{width:100%;height:100px;margin-bottom:10px}td.plugin-title {display: table-cell;}
@@ -14,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
                 <div class="folder-popup-body">
                     <h3><?php esc_html_e('Your feedback will help us improve the product, please tell us why did you decide to deactivate Folders :)', 'folders'); ?></h3>
                     <div class="form-control">
-                        <input type="email" value="<?php echo get_option( 'admin_email' ) ?>" placeholder="<?php echo _e("Email address", 'folders'); ?>" id="folder-deactivate-email_id">
+                        <input type="email" value="<?php echo get_option('admin_email') ?>" placeholder="<?php echo _e("Email address", 'folders'); ?>" id="folder-deactivate-email_id">
                     </div>
                     <div class="form-control">
                         <label></label>
@@ -122,4 +132,4 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
         })(jQuery); // This invokes the function above and allows us to use '$' in place of 'jQuery' in our code.
     </script>
-<?php include_once dirname(__FILE__)."/help.php" ?>
+<?php require_once dirname(__FILE__)."/help.php";

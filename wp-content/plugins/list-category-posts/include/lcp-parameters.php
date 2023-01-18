@@ -2,6 +2,7 @@
 require_once LCP_PATH . 'lcp-utils.php';
 require_once LCP_PATH . 'lcp-date-query.php';
 require_once LCP_PATH . 'lcp-meta-query.php';
+require_once LCP_PATH . 'lcp-taxonomies.php';
 
 class LcpParameters{
   // Singleton implementation
@@ -9,11 +10,14 @@ class LcpParameters{
   private $starting_with = null;
   private $utils;
   private $params;
+  private $cat_sticky_posts;
 
   // Use Trait for before/after date queries:
   use LcpDateQuery;
   // Use Trait for meta query
   use LcpMetaQuery;
+  // Use Trait for custom taxonomies
+  use LcpTaxonomies;
 
   public static function get_instance(){
     if( !isset( self::$instance ) ){
@@ -87,7 +91,7 @@ class LcpParameters{
     // Current tags
     $currenttags = $params['currenttags'];
     if ( $currenttags === 'yes' || $currenttags === 'all' ) {
-      $tags = $this->lcp_get_current_tags();
+      $tags = $this->lcp_get_current_terms( 'post_tag' );
 
       if ( !empty($tags) ) {
         // OR relationship
@@ -111,26 +115,7 @@ class LcpParameters{
     }
 
     // Custom taxonomy support
-    // Why didn't I document this?!?
-    if ( $this->utils->lcp_not_empty('taxonomy') && $this->utils->lcp_not_empty('terms') ){
-      if ( strpos($params['terms'],'+') !== false ) {
-        $terms = explode("+",$params['terms']);
-        $operator = 'AND';
-      } else {
-        $terms = explode(",",$params['terms']);
-        $operator = 'IN';
-      }
-
-      $args['tax_query'] = array(array(
-        'taxonomy' => $params['taxonomy'],
-        'field' => 'slug',
-        'terms' => $terms,
-        'operator' => $operator
-      ));
-    }
-
-    // Multiple taxonomies support
-    $args = $this->lcp_taxonomies($args);
+    $args = $this->create_tax_query($args, $params);
 
     // Tag support
     if ( $this->utils->lcp_not_empty('tags') ) {
@@ -147,7 +132,36 @@ class LcpParameters{
       add_filter('posts_where' , array( $this, 'starting_with') );
     }
 
+    // Post stickiness
+    if ( 'yes' === $params['ignore_sticky_posts'] ) {
+      $args['ignore_sticky_posts'] = true;
+    }
+
+    if ( $params[ 'cat_sticky_posts' ] === 'yes' ) {
+      add_action( 'lcp_pre_run_query', [ $this, 'get_cat_sticky_posts' ] );
+      add_filter( 'the_posts', [ $this, 'move_sticky_to_top' ] );
+    }
+
     return $args;
+  }
+
+  public function get_cat_sticky_posts( $args ) {
+    $sticky_ids = get_option( 'sticky_posts' );
+    $sticky_query = new WP_Query(
+      array_merge( $args, [ 'post__in' => $sticky_ids ] )
+    );
+    $this->cat_sticky_posts = $sticky_query->posts;
+  }
+
+  public function move_sticky_to_top( $posts ) {
+    remove_action( 'lcp_pre_run_query', [ $this, 'get_cat_sticky_posts' ] );
+    if ( null == $this->cat_sticky_posts ) return $posts;
+
+    $newposts = array_merge( $this->cat_sticky_posts, $posts );
+
+    $this->cat_sticky_posts = null;
+
+    return $newposts;
   }
 
     private function lcp_check_basic_params($args){
@@ -182,36 +196,6 @@ class LcpParameters{
     return $args;
   }
 
-    private function lcp_taxonomies($args){
-      // Multiple taxonomies support in the form
-      // taxonomies_or="tax1:{term1_1,term1_2};tax2:{term2_1,term2_2,term2_3}"
-      // taxonomies_and="tax1:{term1_1,term1_2};tax2:{term2_1,term2_2,term2_3}"
-      if ( $this->utils->lcp_not_empty('taxonomies_or') ||
-           $this->utils->lcp_not_empty('taxonomies_and') ) {
-        if($this->utils->lcp_not_empty('taxonomies_or')) {
-          $operator = "OR";
-          $taxonomies = $this->params['taxonomies_or'];
-        } else {
-          $operator = "AND";
-          $taxonomies = $this->params['taxonomies_and'];
-        }
-        $count = preg_match_all('/([^:]+):\{([^:]+)\}(?:;|$)/im', $taxonomies, $matches, PREG_SET_ORDER, 0);
-        if($count > 0) {
-          $tax_arr = array('relation' => $operator);
-          foreach ($matches as $match) {
-            $tax_term = array(
-              'taxonomy' => $match[1],
-              'field' => 'slug',
-              'terms' => explode(",",$match[2])
-            );
-            array_push($tax_arr, $tax_term);
-          }
-          $args['tax_query'] = $tax_arr;
-        }
-      }
-      return $args;
-    }
-
   private function lcp_types_and_statuses($args){
     // Post type, status, parent params:
     if($this->utils->lcp_not_empty('post_type')):
@@ -238,15 +222,16 @@ class LcpParameters{
     return $args;
   }
 
-  private function lcp_get_current_tags(){
-    $tags = get_the_tags();
-    $tag_ids = array();
-    if( !empty($tags) ){
-      foreach ($tags as $tag) {
-        array_push($tag_ids, $tag->term_id);
+  // Duplicated in LcpTaxonomies, for now.
+  private function lcp_get_current_terms($taxonomy) {
+    $terms = get_the_terms(0, $taxonomy);
+    $term_ids = array();
+    if( !empty( $terms ) ) {
+      foreach ( $terms as $term ) {
+        array_push( $term_ids, $term->term_id );
       }
     }
-    return $tag_ids;
+    return $term_ids;
   }
 
   public function starting_with($where){

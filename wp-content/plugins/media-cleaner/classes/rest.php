@@ -10,21 +10,15 @@ class Meow_WPMC_Rest
 		$this->admin = $admin;
 		$this->engine = $core->engine;
 		add_action( 'rest_api_init', array( $this, 'rest_api_init' ) );
-		add_filter( 'pre_update_option', array( $this, 'pre_update_option' ), 10, 3 );
 	}
 
 	function rest_api_init() {
 		try {
 			// SETTINGS
-			register_rest_route( $this->namespace, '/enable_trash_media', array(
-				'methods' => 'POST',
-				'permission_callback' => array( $this->core, 'can_access_settings' ),
-				'callback' => array( $this, 'rest_enable_trash_media' )
-			) );
-			register_rest_route( $this->namespace, '/update_option', array(
+			register_rest_route( $this->namespace, '/update_options', array(
 				'methods' => 'POST',
 				'permission_callback' => array( $this->core, 'can_access_features' ),
-				'callback' => array( $this, 'rest_update_option' )
+				'callback' => array( $this, 'rest_update_options' )
 			) );
 			register_rest_route( $this->namespace, '/all_settings', array(
 				'methods' => 'GET',
@@ -147,23 +141,6 @@ class Meow_WPMC_Rest
     return $value;
   }
 
-	/**
-   * Filters and performs validation for certain options
-   * @param mixed $value Option value
-   * @param string $option Option name
-   * @param mixed $old_value The current value of the option
-   * @return mixed The actual value to be stored
-   */
-  function pre_update_option( $value, $option, $old_value ) {
-    if ( strpos( $option, 'wpmc_' ) !== 0 ) return $value; // Never touch extraneous options
-    $validated = $this->validate_option( $option, $value );
-    if ( $validated instanceof WP_Error ) {
-      // TODO: Show warning for invalid option value
-      return $old_value;
-    }
-    return $validated;
-  }
-
 	function rest_reset_issues() {
 		$this->core->reset_issues();
 		return new WP_REST_Response( [ 'success' => true, 'message' => 'Issues were reset.' ], 200 );
@@ -215,9 +192,14 @@ class Meow_WPMC_Rest
 		$params = $request->get_json_params();
 		$limit = isset( $params['limit'] ) ? $params['limit'] : 0;
 		$source = isset( $params['source'] ) ? $params['source'] : null;
-		$limitsize = get_option( 'wpmc_posts_buffer', 5 );
+		$limitsize = $this->core->get_option( 'posts_buffer' );
 		$finished = false;
 		$message = ""; // will be filled by extractRefsFrom...
+
+		// Randomly throw an exception
+		// if ( rand( 0, 2 ) !== 1 ) {
+		// 	throw new Exception( 'Random Exception' );
+		// }
 
 		if ( $source === 'content' ) {
 			$finished = $this->engine->extractRefsFromContent( $limit, $limitsize, $message );
@@ -266,8 +248,8 @@ class Meow_WPMC_Rest
 	function rest_retrieve_medias( $request ) {
 		$params = $request->get_json_params();
 		$limit = isset( $params['limit'] ) ? $params['limit'] : 0;
-		$limitsize = get_option( 'wpmc_medias_buffer', 100 );
-		$unattachedOnly = get_option( 'wpmc_attach_is_use', false );
+		$limitsize = $this->core->get_option( 'medias_buffer' );
+		$unattachedOnly = $this->core->get_option( 'attach_is_use' );
 		$results = $this->engine->get_media_entries( $limit, $limitsize, $unattachedOnly );
 		$finished = count( $results ) < $limitsize;
 		$message = sprintf( __( "Retrieved %d targets.", 'media-cleaner' ), count( $results ) );
@@ -350,116 +332,26 @@ class Meow_WPMC_Rest
 		return new WP_REST_Response( [ 'success' => true ], 200 );
 	}
 
-	function rest_enable_trash_media() {
-		$is_defined = defined( 'MEDIA_TRASH' );
-		if ( $is_defined && MEDIA_TRASH ) {
-			return new WP_REST_Response([ 'success' => false, 'message' => 'Already been set.' ], 200 );
-		}
-
-		try {
-			$conf = ABSPATH . 'wp-config.php';
-			$stream = fopen( $conf, 'r+' );
-			if ( $stream === false )  {
-				return new WP_REST_Response([ 'success' => false, 'message' => 'Failed to open the config file.' ], 200 );
-			}
-
-			try {
-				if ( !flock( $stream, LOCK_EX ) ) {
-					return new WP_REST_Response([ 'success' => false, 'message' => 'Failed to lock the config file.' ], 200 );
-				}
-				$stat = fstat( $stream );
-
-				/* Find out the ideal position to write on */
-				$found = false;
-				$patterns = array (
-					array (
-						'regex' => '^\/\*\s*' . preg_quote( "That's all, stop editing!" ) . '.*?\s*\*\/',
-						'where' => 'above'
-					)
-				);
-				$current = 0;
-				while ( !feof( $stream ) ) {
-					$line = fgets( $stream ); // Read line by line
-					if ( $line === false ) break; // No more lines
-					$prev = $current; // Previous position
-					$current = ftell( $stream ); // Current position
-					foreach ( $patterns as $item ) {
-						if ( !preg_match( '/'.$item['regex'].'/', trim( $line ) ) ) { 
-							continue;
-						}
-						$found = true;
-						if ( $item['where'] == 'above' ) {
-							fseek( $stream, $prev );
-							$current = $prev;
-						}
-						break 2;
-					}
-				}
-
-				/* Check if the position is found */
-				if ( !$found ) {
-					return new WP_REST_Response([ 'success' => false, 'message' => 'Cannot determine the position.' ], 200 );
-				}
-
-				/* Write the constant definition line */
-				$new = "define( 'MEDIA_TRASH', true );" . PHP_EOL;
-				$rest = fread( $stream, $stat['size'] - $current );
-				fseek( $stream, $current );
-				$written = fwrite( $stream, $new . $rest );
-
-				/* All done */
-				if ( $written === false ) {
-					return new WP_REST_Response([ 'success' => false, 'message' => 'Failed to write.' ], 200 );
-				}
-				fclose( $stream );
-			} 
-			catch ( Exception $e ) {
-				fclose( $stream );
-				return new WP_REST_Response([ 'success' => false, 'message' => $e->getMessage() ], 200 );
-			}
-		} 
-		catch ( Exception $e ) {
-			$result['data']['message'] = $e->getMessage();
-			$result['data']['code'] = $e->getCode();
-			return new WP_REST_Response([ 'success' => false, 'message' => $e->getMessage() ], 200 );
-		}
-
-		return new WP_REST_Response([ 'success' => true ], 200 );
-	}
-
 	function rest_all_settings() {
 		return new WP_REST_Response( [
 			'success' => true,
-			'data' => array_merge( $this->admin->get_all_options(), [
-				'incompatible_plugins' => !class_exists( 'MeowPro_WPMC_Core' ) ? Meow_WPMC_Support::get_issues() : [],
-				'media_trash' => MEDIA_TRASH,
+			'data' => array_merge( $this->core->get_all_options(), [
+				'incompatible_plugins' => !class_exists( 'MeowPro_WPMC_Core' ) ? Meow_WPMC_Support::get_issues() : []
 			])
 		], 200 );
 	}
 
-	function rest_update_option( $request ) {
-		$params = $request->get_json_params();
+	function rest_update_options( $request ) {
 		try {
-			$name = $params['name'];
-			$options = $this->admin->list_options();
-			if ( !array_key_exists( $name, $options ) ) {
-				return new WP_REST_Response([ 'success' => false, 'message' => 'This option does not exist.' ], 200 );
-			}
-			$value = is_bool( $params['value'] ) ? ( $params['value'] ? '1' : '' ) : $params['value'];
-			$success = update_option( $name, $value );
-			if ( $success ) {
-				$res = $this->validate_updated_option( $name );
-				$result = $res['result'];
-				$message = $res['message'];
-				return new WP_REST_Response([ 'success' => $result, 'message' => $message ], 200 );
-			}
-			return new WP_REST_Response([ 'success' => false, 'message' => "Could not update option." ], 200 );
+			$params = $request->get_json_params();
+			$value = $params['options'];
+			$options = $this->core->update_options( $value );
+			$success = !!$options;
+			$message = __( $success ? 'OK' : "Could not update options.", 'media-cleaner' );
+			return new WP_REST_Response([ 'success' => $success, 'message' => $message, 'options' => $options ], 200 );
 		} 
-		catch (Exception $e) {
-			return new WP_REST_Response([
-				'success' => false,
-				'message' => $e->getMessage(),
-			], 500 );
+		catch ( Exception $e ) {
+			return new WP_REST_Response([ 'success' => false, 'message' => $e->getMessage() ], 500 );
 		}
 	}
 
@@ -546,13 +438,29 @@ class Meow_WPMC_Rest
 				$attachment_src_large = wp_get_attachment_image_src( $entry->postId, 'large' );
 				$thumbnail = empty( $attachment_src ) ? null : $attachment_src[0];
 				$image = empty( $attachment_src_large ) ? null : $attachment_src_large[0];
+				// This was working when the Post Type" was attachment"
 				if ( $filterBy == 'trash' && !empty( $thumbnail ) ) {
 					$new_url = $this->core->clean_url( $thumbnail );
 					$thumbnail = htmlspecialchars( trailingslashit( $base ) . $new_url, ENT_QUOTES );
 				}
+				if ( $filterBy == 'trash' && empty( $thumbnail ) ) {
+					$file = get_post_meta( $entry->postId, '_wp_attached_file', true );
+					$featured_image = wp_get_attachment_metadata( $entry->postId );
+					$thumbnail = "";
+					$image = htmlspecialchars( trailingslashit( $base ) . $file, ENT_QUOTES );
+					if ( isset( $featured_image['sizes']['thumbnail']['file'] ) ) {
+						$path = pathinfo( $file );
+						$thumbnail = $featured_image['sizes']['thumbnail']['file'];
+						$thumbnail = htmlspecialchars( trailingslashit( $base ) .
+							trailingslashit( $path['dirname'] ) . $thumbnail, ENT_QUOTES );
+					}
+					else {
+						$thumbnail = $image;
+					}
+				}
 				$entry->thumbnail_url = $thumbnail;
 				$entry->image_url = $image;
-				$entry->title = get_the_title( $entry->postId );
+				$entry->title = html_entity_decode( get_the_title( $entry->postId ) );
 			}
 		}
 
@@ -609,30 +517,6 @@ class Meow_WPMC_Rest
 			$data = $this->core->recover( $entryId );
 		}
 		return new WP_REST_Response( [ 'success' => true, 'data' => $data ], 200 );
-	}
-
-	function validate_updated_option( $option_name ) {
-		$medias = get_option( 'wpmc_medias_buffer', 100 );
-		$posts = get_option( 'wpmc_posts_buffer', 5 );
-		$analysis = get_option( 'wpmc_analysis_buffer', 100 );
-		$fileOp = get_option( 'wpmc_file_op_buffer', 20 );
-		$delay = get_option( 'wpmc_delay', 100 );
-		if ( $medias === '' )
-			update_option( 'wpmc_medias_buffer', 100 );
-		if ( $posts === '' )
-			update_option( 'wpmc_posts_buffer', 5 );
-		if ( $analysis === '' )
-			update_option( 'wpmc_analysis_buffer', 100 );
-		if ( $fileOp === '' )
-			update_option( 'wpmc_file_op_buffer', 20 );
-		if ( $delay === '' )
-			update_option( 'wpmc_delay', 100 );
-		return $this->createValidationResult();
-	}
-
-	function createValidationResult( $result = true, $message = null) {
-		$message = $message ? $message : __( 'OK', 'media-cleaner' );
-		return ['result' => $result, 'message' => $message];
 	}
 
 	function get_issues_ids($search) {

@@ -74,6 +74,10 @@
 /**
  * Reset the WP Admin page styles for Gutenberg-like pages.
  */
+.wp-block-post-title {
+  word-break: break-word;
+  box-sizing: border-box;
+}
 .wp-block-post-title a {
   display: inline-block;
 }

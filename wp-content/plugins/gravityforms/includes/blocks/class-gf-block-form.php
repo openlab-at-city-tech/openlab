@@ -66,7 +66,7 @@ class GF_Block_Form extends GF_Block {
 	public static function get_instance() {
 
 		if ( null === self::$_instance ) {
-			self::$_instance = new self;
+			self::$_instance = new self();
 		}
 
 		return self::$_instance;
@@ -93,6 +93,7 @@ class GF_Block_Form extends GF_Block {
 			'wp-element',
 			'wp-components',
 			'wp-i18n',
+			'gform_gravityforms_admin',
 		);
 
 		global $pagenow;
@@ -104,9 +105,9 @@ class GF_Block_Form extends GF_Block {
 			array(
 				'handle'    => $this->script_handle,
 				'in_footer' => true,
-				'src'       => GFCommon::get_base_url() . "/js/blocks{$min}.js",
+				'src'       => GFCommon::get_base_url() . "/assets/js/dist/blocks{$min}.js",
 				'deps'      => $deps,
-				'version'   => $min ? GFForms::$version : filemtime( GFCommon::get_base_path() . '/js/blocks.js' ),
+				'version'   => $min ? GFForms::$version : filemtime( GFCommon::get_base_path() . '/assets/js/dist/blocks.js' ),
 				'callback'  => array( $this, 'localize_script' ),
 			),
 		);
@@ -168,12 +169,14 @@ class GF_Block_Form extends GF_Block {
 			}
 		}
 
+		$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG || isset( $_GET['gform_debug'] ) ? '' : '.min';
+
 		return array(
 			array(
 				'handle'  => $this->style_handle,
-				'src'     => GFCommon::get_base_url() . '/css/blocks.min.css',
+				'src'     => GFCommon::get_base_url() . "/assets/css/dist/blocks{$min}.css",
 				'deps'    => $deps,
-				'version' => defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? filemtime( GFCommon::get_base_path() . '/css/blocks.min.css' ) : GFForms::$version,
+				'version' => defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? filemtime( GFCommon::get_base_path() . "/assets/css/dist/blocks{$min}.css" ) : GFForms::$version,
 			),
 		);
 
@@ -199,7 +202,7 @@ class GF_Block_Form extends GF_Block {
 		$description  = isset( $attributes['description'] ) ? $attributes['description'] : true;
 		$ajax         = isset( $attributes['ajax'] ) ? $attributes['ajax'] : false;
 		$tabindex     = isset( $attributes['tabindex'] ) ? intval( $attributes['tabindex'] ) : 0;
-		$field_values = isset( $attributes['fieldValues'] ) ? $attributes['fieldValues'] : null;
+		$field_values = isset( $attributes['fieldValues'] ) ? $attributes['fieldValues'] : '';
 
 		// If form ID was not provided or form does not exist, return.
 		if ( ! $form_id || ( $form_id && ! GFAPI::get_form( $form_id ) ) ) {
@@ -235,10 +238,10 @@ class GF_Block_Form extends GF_Block {
 		$field_values = htmlspecialchars( $field_values );
 		$field_values = str_replace( array( '[', ']' ), array( '&#91;', '&#93;' ), $field_values );
 
-		// If no field values are set, set field values to null.
+		// If no field values are set, set field values to a empty string
 		parse_str( $field_values, $field_value_array );
 		if ( empty( $field_value_array ) ) {
-			$field_values = null;
+			$field_values = '';
 		}
 
 		return sprintf( '[gravityforms id="%d" title="%s" description="%s" ajax="%s" tabindex="%d" field_values="%s"]', $form_id, ( $title ? 'true' : 'false' ), ( $description ? 'true' : 'false' ), ( $ajax ? 'true' : 'false' ), $tabindex, $field_values );

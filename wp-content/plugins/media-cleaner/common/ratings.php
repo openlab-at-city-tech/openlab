@@ -19,6 +19,10 @@ if ( !class_exists( 'MeowCommon_Ratings' ) ) {
         $rating_date = $this->create_rating_date();
         if ( time() > $rating_date ) {
           add_action( 'admin_notices', array( $this, 'admin_notices_rating' ) );
+					add_filter( 'safe_style_css', function( $styles ) {
+						$styles[] = 'display';
+						return $styles;
+					} );
         }
       }
 		}
@@ -31,9 +35,9 @@ if ( !class_exists( 'MeowCommon_Ratings' ) ) {
 		function create_rating_date() {
 			$rating_date = get_option( $this->prefix . '_rating_date' );
 			if ( empty( $rating_date ) ) {
-				$two_months = strtotime( '+2 months' );
-				$six_months = strtotime( '+4 months' );
-				$rating_date = mt_rand( $two_months, $six_months );
+				$two_weeks = strtotime( '+2 weeks' );
+				$three_weeks = strtotime( '+3 weeks' );
+				$rating_date = mt_rand( $two_weeks, $three_weeks );
 				update_option( $this->prefix . '_rating_date', $rating_date, false );
 			}
 			return $rating_date;
@@ -53,39 +57,87 @@ if ( !class_exists( 'MeowCommon_Ratings' ) ) {
 				return;
 			}
 			else if ( isset( $_POST[$this->prefix . '_did_it'] ) ) {
-				$twenty_years = strtotime( '+10 years' );
+				$twenty_years = strtotime( '+100 years' );
 				update_option( $this->prefix . '_rating_date', $twenty_years, false );
 				return;
 			}
 			$rating_date = get_option( $this->prefix . '_rating_date' );
-			$html = '<div class="notice notice-success" data-rating-date="' . date( 'Y-m-d', $rating_date ) . '">';
+			$html = wp_kses_post( '<div class="notice notice-success" data-rating-date="' .
+				date( 'Y-m-d', $rating_date ) . '">' );
+			$esc_nice_name = esc_attr( $this->nice_name_from_file( $this->mainfile ) );
+			if ( $esc_nice_name === 'Wp Retina 2x Pro' ) {
+				$esc_nice_name = "Perfect Images Pro";
+			}
+			else if ( $esc_nice_name === 'Wp Retina 2x' ) {
+				$esc_nice_name = "Perfect Images";
+			}
+			$esc_short_url = esc_attr( $this->nice_short_url_from_file( $this->mainfile ) );
+			$escaped_prefix = $this->prefix;
 			$html .= '<p style="font-size: 100%;">';
+			// Translators: %1$s is a plugin nicename, %2$s is a short url (slug)
 			$html .= sprintf(
-				// translators: %1$s is a plugin nicename, %2$s is a short url (slug)
-				__( 'You have been using <b>%1$s</b> for some time now. Thank you! Could you kindly share your opinion with me, along with, maybe, features you would like to see implemented? Then, please <a style="font-weight: bold; color: #b926ff;" target="_blank" href="https://wordpress.org/support/plugin/%2$s/reviews/?rate=5#new-post">write a little review</a>. That will also bring me joy and motivation! I will get back to you :)', $this->domain ),
-				$this->nice_name_from_file( $this->mainfile ),
-				$this->nice_short_url_from_file( $this->mainfile )
+				__( '<h2 class="title">You have been using <b>%1$s</b> for some time now. Thank you 💕</h2>Could you take one minute and write a <b>little review</b> for me? That would <b>really</b> bring me joy and motivation 🥰<br />In the review, don\'t hesitate to share your feature requests and remarks. I will try my best!
+					', $this->domain ), $esc_nice_name
 			);
-			$html .= '<p>
-				<form method="post" action="" style="float: right;">
-					<input type="hidden" name="' . $this->prefix . '_never_remind_me" value="true">
-					<input type="submit" name="submit" id="submit" class="button button-red" value="'
-					. __( 'Never remind me!', $this->domain ) . '">
-				</form>
-				<form method="post" action="" style="float: right; margin-right: 10px;">
-					<input type="hidden" name="' . $this->prefix . '_remind_me" value="true">
+			$html .= '<div style="padding: 20px 0 12px 0; display: flex; align-items: center;">';
+			$html .= '<a target="_blank" class="button button-primary" style="margin-right: 10px;" 
+					href="https://wordpress.org/support/plugin/' . $esc_short_url . '/reviews/?rate=5#new-post">
+					✍🏼 Yes, let\'s write it now!
+				</a>
+				<form method="post" action="" style="margin-right: 10px;">
+					<input type="hidden" name="' . $escaped_prefix . '_did_it" value="true">
 					<input type="submit" name="submit" id="submit" class="button button-primary" value="'
-					. __( 'Remind me in a few weeks...', $this->domain ) . '">
+					. __( '🥰 I did it', $this->domain ) . '">
 				</form>
-				<form method="post" action="" style="float: right; margin-right: 10px;">
-					<input type="hidden" name="' . $this->prefix . '_did_it" value="true">
+
+				<div style="flex: auto;"></div>
+
+				<form method="post" action="" style="margin-right: 10px;">
+					<input type="hidden" name="' . $escaped_prefix . '_remind_me" value="true">
 					<input type="submit" name="submit" id="submit" class="button button-primary" value="'
-					. __( 'Yes, I did it!', $this->domain ) . '">
+					. __( '⏰ Remind me later', $this->domain ) . '">
 				</form>
-				<div style="clear: both;"></div>
-			</p>';
+
+				<form method="post" action="">
+					<input type="hidden" name="' . $escaped_prefix . '_never_remind_me" value="true">
+					<input type="submit" name="submit" id="submit" class="button-link" style="font-size: small;" value="'
+					. __( 'Hide this', $this->domain ) . '">
+				</form>
+			</div>';
 			$html .= '</div>';
-			wp_kses_post( $html );
+			echo wp_kses( $html, array(
+				'div' => array(
+					'class' => array(),
+					'data-rating-date' => array(),
+					'style' => array(),
+				),
+				'p' => array(
+					'style' => array(),
+				),
+				'h2' => array(
+					'class' => array(),
+				),
+				'b' => array(),
+				'a' => array(
+					'href' => array(),
+					'target' => array(),
+					'class' => array(),
+					'style' => array(),
+				),
+				'form' => array(
+					'method' => array(),
+					'action' => array(),
+					'class' => array(),
+					'style' => array(),
+				),
+				'input' => array(
+					'type' => array(),
+					'name' => array(),
+					'value' => array(),
+					'id' => array(),
+					'class' => array(),
+				),
+			) );
 		}
 
 		function nice_short_url_from_file( $file ) {

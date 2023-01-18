@@ -75,7 +75,7 @@ class CMB2_Option {
 	 * @return bool  Delete success or failure
 	 */
 	public function delete_option() {
-		$deleted = $this->key ? delete_option( $this->key ) : true;
+		$deleted       = $this->key ? delete_option( $this->key ) : true;
 		$this->options = $deleted ? array() : $this->options;
 		return $this->options;
 	}
@@ -204,7 +204,7 @@ class CMB2_Option {
 	 * Retrieve option value based on name of option.
 	 *
 	 * @uses apply_filters() Calls 'cmb2_override_option_get_{$this->key}' hook to allow
-	 * 	overwriting the option value to be retrieved.
+	 *  overwriting the option value to be retrieved.
 	 *
 	 * @since  1.0.1
 	 * @param  mixed $default Optional. Default value to return if the option does not exist.

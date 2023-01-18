@@ -64,7 +64,7 @@ function createNonceMiddleware(nonce) {
 }
 
 /* harmony default export */ var nonce = (createNonceMiddleware);
-//# sourceMappingURL=nonce.js.map
+
 ;// CONCATENATED MODULE: ./packages/api-fetch/build-module/middlewares/namespace-endpoint.js
 /**
  * @type {import('../types').APIFetchMiddleware}
@@ -92,7 +92,7 @@ const namespaceAndEndpointMiddleware = (options, next) => {
 };
 
 /* harmony default export */ var namespace_endpoint = (namespaceAndEndpointMiddleware);
-//# sourceMappingURL=namespace-endpoint.js.map
+
 ;// CONCATENATED MODULE: ./packages/api-fetch/build-module/middlewares/root-url.js
 /**
  * Internal dependencies
@@ -133,7 +133,7 @@ const createRootURLMiddleware = rootURL => (options, next) => {
 };
 
 /* harmony default export */ var root_url = (createRootURLMiddleware);
-//# sourceMappingURL=root-url.js.map
+
 ;// CONCATENATED MODULE: external ["wp","url"]
 var external_wp_url_namespaceObject = window["wp"]["url"];
 ;// CONCATENATED MODULE: ./packages/api-fetch/build-module/middlewares/preloading.js
@@ -147,12 +147,10 @@ var external_wp_url_namespaceObject = window["wp"]["url"];
  */
 
 function createPreloadingMiddleware(preloadedData) {
-  const cache = Object.keys(preloadedData).reduce((result, path) => {
-    result[(0,external_wp_url_namespaceObject.normalizePath)(path)] = preloadedData[path];
-    return result;
-  },
-  /** @type {Record<string, any>} */
-  {});
+  const cache = Object.fromEntries(Object.entries(preloadedData).map(_ref => {
+    let [path, data] = _ref;
+    return [(0,external_wp_url_namespaceObject.normalizePath)(path), data];
+  }));
   return (options, next) => {
     const {
       parse = true
@@ -162,10 +160,13 @@ function createPreloadingMiddleware(preloadedData) {
     let rawPath = options.path;
 
     if (!rawPath && options.url) {
-      const pathFromQuery = (0,external_wp_url_namespaceObject.getQueryArg)(options.url, 'rest_route');
+      const {
+        rest_route: pathFromQuery,
+        ...queryArgs
+      } = (0,external_wp_url_namespaceObject.getQueryArgs)(options.url);
 
       if (typeof pathFromQuery === 'string') {
-        rawPath = pathFromQuery;
+        rawPath = (0,external_wp_url_namespaceObject.addQueryArgs)(pathFromQuery, queryArgs);
       }
     }
 
@@ -177,12 +178,12 @@ function createPreloadingMiddleware(preloadedData) {
     const path = (0,external_wp_url_namespaceObject.normalizePath)(rawPath);
 
     if ('GET' === method && cache[path]) {
-      const cacheData = cache[path]; // Unsetting the cache key ensures that the data is only used a single time
+      const cacheData = cache[path]; // Unsetting the cache key ensures that the data is only used a single time.
 
       delete cache[path];
       return prepareResponse(cacheData, !!parse);
     } else if ('OPTIONS' === method && cache[method] && cache[method][path]) {
-      const cacheData = cache[method][path]; // Unsetting the cache key ensures that the data is only used a single time
+      const cacheData = cache[method][path]; // Unsetting the cache key ensures that the data is only used a single time.
 
       delete cache[method][path];
       return prepareResponse(cacheData, !!parse);
@@ -209,7 +210,7 @@ function prepareResponse(responseData, parse) {
 }
 
 /* harmony default export */ var preloading = (createPreloadingMiddleware);
-//# sourceMappingURL=preloading.js.map
+
 ;// CONCATENATED MODULE: ./packages/api-fetch/build-module/middlewares/fetch-all-middleware.js
 /**
  * WordPress dependencies
@@ -350,7 +351,7 @@ const fetchAllMiddleware = async (options, next) => {
 };
 
 /* harmony default export */ var fetch_all_middleware = (fetchAllMiddleware);
-//# sourceMappingURL=fetch-all-middleware.js.map
+
 ;// CONCATENATED MODULE: ./packages/api-fetch/build-module/middlewares/http-v1.js
 /**
  * Set of HTTP methods which are eligible to be overridden.
@@ -396,7 +397,7 @@ const httpV1Middleware = (options, next) => {
 };
 
 /* harmony default export */ var http_v1 = (httpV1Middleware);
-//# sourceMappingURL=http-v1.js.map
+
 ;// CONCATENATED MODULE: ./packages/api-fetch/build-module/middlewares/user-locale.js
 /**
  * WordPress dependencies
@@ -423,7 +424,7 @@ const userLocaleMiddleware = (options, next) => {
 };
 
 /* harmony default export */ var user_locale = (userLocaleMiddleware);
-//# sourceMappingURL=user-locale.js.map
+
 ;// CONCATENATED MODULE: ./packages/api-fetch/build-module/utils/response.js
 /**
  * WordPress dependencies
@@ -511,7 +512,7 @@ function parseAndThrowError(response) {
     throw error || unknownError;
   });
 }
-//# sourceMappingURL=response.js.map
+
 ;// CONCATENATED MODULE: ./packages/api-fetch/build-module/middlewares/media-upload.js
 /**
  * WordPress dependencies
@@ -596,7 +597,7 @@ const mediaUploadMiddleware = (options, next) => {
 };
 
 /* harmony default export */ var media_upload = (mediaUploadMiddleware);
-//# sourceMappingURL=media-upload.js.map
+
 ;// CONCATENATED MODULE: ./packages/api-fetch/build-module/index.js
 /**
  * WordPress dependencies
@@ -702,7 +703,7 @@ const defaultFetchHandler = nextOptions => {
     headers['Content-Type'] = 'application/json';
   }
 
-  const responsePromise = window.fetch( // fall back to explicitly passing `window.location` which is the behavior if `undefined` is passed
+  const responsePromise = window.fetch( // Fall back to explicitly passing `window.location` which is the behavior if `undefined` is passed.
   url || path || window.location.href, { ...DEFAULT_OPTIONS,
     ...remainingOptions,
     body,
@@ -777,7 +778,7 @@ apiFetch.createRootURLMiddleware = root_url;
 apiFetch.fetchAllMiddleware = fetch_all_middleware;
 apiFetch.mediaUploadMiddleware = media_upload;
 /* harmony default export */ var build_module = (apiFetch);
-//# sourceMappingURL=index.js.map
+
 (window.wp = window.wp || {}).apiFetch = __webpack_exports__["default"];
 /******/ })()
 ;

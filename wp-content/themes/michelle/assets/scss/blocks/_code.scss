@@ -1,0 +1,25 @@
+/* FILE: blocks/_code.scss */
+
+$code_font_size: 14px;
+$code_line_height: 21px;
+
+.wp-block-code {
+	padding: 0;
+
+	code,
+	// Textarea is for block editor.
+	textarea {
+		display: block;
+		padding: ( $code_line_height + 1 ) $code_line_height ( $code_line_height - 1 );
+		margin: 0;
+		font-size: $code_font_size;
+		line-height: $code_line_height;
+		background-image: repeating-linear-gradient(
+			rgba( #000, .05 ),
+			rgba( #000, .05 ) $code_line_height,
+			rgba( #fff, .10 ) $code_line_height,
+			rgba( #fff, .10 ) $code_line_height*2
+		);
+	}
+
+}

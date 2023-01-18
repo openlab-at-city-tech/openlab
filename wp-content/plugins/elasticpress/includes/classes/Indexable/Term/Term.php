@@ -43,7 +43,7 @@ class Term extends Indexable {
 		];
 
 		$this->sync_manager      = new SyncManager( $this->slug );
-		$this->query_integration = new QueryIntegration();
+		$this->query_integration = new QueryIntegration( $this->slug );
 	}
 
 	/**
@@ -221,6 +221,12 @@ class Term extends Indexable {
 		 * Support `slug` query var
 		 */
 		if ( ! empty( $query_vars['slug'] ) ) {
+			if ( ! is_array( $query_vars['slug'] ) ) {
+				$query_vars['slug'] = array( $query_vars['slug'] );
+			}
+
+			$query_vars['slug'] = array_map( 'sanitize_title', $query_vars['slug'] );
+
 			$filter['bool']['must'][] = [
 				'terms' => [
 					'slug.raw' => (array) $query_vars['slug'],
@@ -354,75 +360,8 @@ class Term extends Indexable {
 			 */
 			$prepared_search_fields = apply_filters( 'ep_term_search_fields', $prepared_search_fields, $query_vars );
 
-			$query = [
-				'bool' => [
-					'should' => [
-						[
-							'multi_match' => [
-								'query'  => $search,
-								'type'   => 'phrase',
-								'fields' => $prepared_search_fields,
-								/**
-								 * Filter term match phrase boost amount
-								 *
-								 * @hook ep_term_match_phrase_boost
-								 * @param  {int} $boos Boost amount for match phrase
-								 * @param  {array} $query_vars Query variables
-								 * @since  3.4
-								 * @return {int} New boost amount
-								 */
-								'boost'  => apply_filters( 'ep_term_match_phrase_boost', 4, $prepared_search_fields, $query_vars ),
-							],
-						],
-						[
-							'multi_match' => [
-								'query'     => $search,
-								'fields'    => $prepared_search_fields,
-								/**
-								 * Filter term match boost amount
-								 *
-								 * @hook ep_term_match_boost
-								 * @param  {int} $boost Boost amount for match
-								 * @param  {array} $query_vars Query variables
-								 * @since  3.4
-								 * @return {int} New boost amount
-								 */
-								'boost'     => apply_filters( 'ep_term_match_boost', 2, $prepared_search_fields, $query_vars ),
-								'fuzziness' => 0,
-								'operator'  => 'and',
-							],
-						],
-						[
-							'multi_match' => [
-								'fields'    => $prepared_search_fields,
-								'query'     => $search,
-								/**
-								 * Filter term fuzziness amount
-								 *
-								 * @hook ep_term_fuzziness_arg
-								 * @param  {int} $fuzziness Amount of fuziness to factor into search
-								 * @param  {array} $query_vars Query variables
-								 * @since  3.4
-								 * @return {int} New boost amount
-								 */
-								'fuzziness' => apply_filters( 'ep_term_fuzziness_arg', 1, $prepared_search_fields, $query_vars ),
-							],
-						],
-					],
-				],
-			];
-
-			/**
-			 * Filter Elasticsearch query used for Terms indexable
-			 *
-			 * @hook ep_term_formatted_args_query
-			 * @param  {array} $query Elasticsearch query
-			 * @param  {array} $query_vars Query variables
-			 * @since  3.4
-			 * @return {array} New query
-			 */
-			$formatted_args['query'] = apply_filters( 'ep_term_formatted_args_query', $query, $query_vars );
-
+			$search_algorithm        = $this->get_search_algorithm( $search, $prepared_search_fields, $query_vars );
+			$formatted_args['query'] = $search_algorithm->get_query( 'term', $search, $prepared_search_fields, $query_vars );
 		} else {
 			$formatted_args['query']['match_all'] = [
 				'boost' => 1,
@@ -478,7 +417,7 @@ class Term extends Indexable {
 				'key' => $query_vars['meta_key'],
 			];
 
-			if ( isset( $query_vars['meta_value'] ) ) {
+			if ( isset( $query_vars['meta_value'] ) && '' !== $query_vars['meta_value'] ) {
 				$meta_query_array['value'] = $query_vars['meta_value'];
 			}
 
@@ -579,12 +518,12 @@ class Term extends Indexable {
 	}
 
 	/**
-	 * Put mapping for terms
+	 * Generate the mapping array
 	 *
-	 * @since  3.1
-	 * @return boolean
+	 * @since  3.6.0
+	 * @return array
 	 */
-	public function put_mapping() {
+	public function generate_mapping() {
 		$es_version = Elasticsearch::factory()->get_elasticsearch_version();
 
 		if ( empty( $es_version ) ) {
@@ -619,7 +558,7 @@ class Term extends Indexable {
 		 */
 		$mapping = apply_filters( 'ep_term_mapping', $mapping );
 
-		return Elasticsearch::factory()->put_mapping( $this->get_index_name(), $mapping );
+		return $mapping;
 	}
 
 	/**
@@ -972,63 +911,33 @@ class Term extends Indexable {
 			return $sort;
 		}
 
-		switch ( $orderby ) {
-			case 'name':
-				$es_version    = Elasticsearch::factory()->get_elasticsearch_version();
-				$es_field_name = 'name.sortable';
+		$from_to = [
+			'slug'        => 'slug.raw',
+			'id'          => 'term_id',
+			'description' => 'description.sortable',
+		];
 
-				if ( version_compare( $es_version, '7.0', '<' ) ) {
-					$es_field_name = 'name.raw';
-				}
-
-				break;
-
-			case 'slug':
-				$es_field_name = 'slug.raw';
-				break;
-
-			case 'term_id':
-			case 'id':
-				$es_field_name = 'term_id';
-				break;
-
-			case 'description':
-				$es_field_name = 'description.sortable';
-				break;
-
-			case 'meta_value':
-				if ( ! empty( $args['meta_key'] ) ) {
-					$es_field_name = 'meta.' . $args['meta_key'] . '.value';
-				}
-
-				break;
-
-			case 'meta_value_num':
-				if ( ! empty( $args['meta_key'] ) ) {
-					$es_field_name = 'meta.' . $args['meta_key'] . '.long';
-				}
-
-				break;
-
-			case 'description':
-				$es_field_name = 'description.sortable';
-				break;
-
-			case 'parent':
-			case 'count':
-			default:
-				$es_field_name = $orderby;
-				break;
+		if ( in_array( $orderby, [ 'meta_value', 'meta_value_num' ], true ) ) {
+			if ( empty( $args['meta_key'] ) ) {
+				return $sort;
+			} else {
+				$from_to['meta_value']     = 'meta.' . $args['meta_key'] . '.value';
+				$from_to['meta_value_num'] = 'meta.' . $args['meta_key'] . '.long';
+			}
 		}
 
-		// For `meta_value` and `meta_value_num`, for example, there is a chance this wasn't set.
-		if ( ! empty( $es_field_name ) ) {
-			$sort[] = array(
-				$es_field_name => array(
-					'order' => $order,
-				),
-			);
+		if ( 'name' === $orderby ) {
+			$es_version      = Elasticsearch::factory()->get_elasticsearch_version();
+			$from_to['name'] = version_compare( $es_version, '7.0', '<' ) ? 'name.raw' : 'name.sortable';
 		}
+
+		$orderby = $from_to[ $orderby ] ?? $orderby;
+
+		$sort[] = array(
+			$orderby => array(
+				'order' => $order,
+			),
+		);
 
 		return $sort;
 	}

@@ -1,3 +1,8 @@
+@font-face {
+    font-family: 'Lato';
+    src: url('../../nextgen_admin/static/Lato-Regular.ttf') format('truetype')
+}
+
 #ngg_page_content .ngg_page_content_main {
     min-height: 0;
 }
@@ -90,7 +95,7 @@
 #ngg_page_content #gallery_name {
     min-width: 200px !important;
     font-size: 13px !important;
-    font-family: Lato, sans-serif;
+    font-family: "Lato", sans-serif;
     font-weight: 400;
     color: black !important;
     vertical-align: middle;

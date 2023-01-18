@@ -90,6 +90,8 @@ function eventorganiser_pre_get_posts( $query ) {
 	if( ! eventorganiser_is_event_query( $query, true ) )
 		return $query;
 
+	// WP will cast stdClass Object to WP_Object loosing event data if caching is enabled.
+	$query->set('cache_results', false);
 
 	//@see https://github.com/stephenharris/Event-Organiser/issues/30
 	if( $query->is_main_query() ){
@@ -98,7 +100,7 @@ function eventorganiser_pre_get_posts( $query ) {
 		}
 	}
 
-	$blog_now = new DateTime(null, eo_get_blog_timezone());
+	$blog_now = new DateTime("now", eo_get_blog_timezone());
 
 	//Determine whether or not to show past events and each occurrence. //If not set, use options
 	//@see https://core.trac.wordpress.org/ticket/16471
@@ -620,7 +622,7 @@ function _eventorganiser_update_event_dates_cache( $events, $query ){
 	foreach ( $events as $event ) {
 
 		$id = $event->ID;
-		$cached_event = wp_cache_get( 'eventorganiser_occurrences_'.$id );
+		$cached_event = (array) wp_cache_get( 'eventorganiser_occurrences_'.$id );
 
 		if ( isset( $cached_event[$event->occurrence_id] ) ) {
 			continue;

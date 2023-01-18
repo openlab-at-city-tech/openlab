@@ -17,22 +17,22 @@ global $bp, $wp_query;
                 <?php elseif ($bp->current_action == 'docs'): ?>
 
                     <ul class="nav nav-inline">
-                        <?php openlab_docs_tabs(); ?>
+                        <?php echo openlab_submenu_markup( 'group-docs' ); ?>
                     </ul>
 
                 <?php elseif ($bp->current_action == 'files'): ?>
 
-                    <div class="row">
-                        <div class="submenu col-sm-17">
-                            <ul class="nav nav-inline">
-                                <li class="current-menu-item"><a href=""><?php _e('Files', 'bp-group-documents'); ?></a></li>
-                            </ul>
-                        </div>
-                    </div>
+                    <?php echo openlab_submenu_markup( 'group-files' ); ?>
 
                 <?php elseif ($bp->current_component === 'events' || $bp->current_action === 'events'): ?>
 
                     <?php //do nothing - event sub nav is handled via template override in buddypress/groups/single/subnav-events.php ?>
+
+				<?php elseif ( bp_is_current_action( 'announcements' ) ) : ?>
+
+					<ul class="nav nav-inline">
+						<li class="current-menu-item">Announcements</li>
+					</ul>
 
                 <?php else: ?>
 

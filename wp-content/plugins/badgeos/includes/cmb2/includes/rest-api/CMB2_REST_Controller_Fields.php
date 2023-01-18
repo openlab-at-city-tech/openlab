@@ -1,6 +1,6 @@
 <?php
 /**
- * CMB2 objects/fields endpoint for WordPres REST API.
+ * CMB2 objects/fields endpoint for WordPress REST API.
  * Allows access to fields registered to a specific box.
  *
  * @todo  Add better documentation.
@@ -23,13 +23,13 @@ class CMB2_REST_Controller_Fields extends CMB2_REST_Controller_Boxes {
 	 */
 	public function register_routes() {
 		$args = array(
-			'_embed' => array(
+			'_embed'      => array(
 				'description' => __( 'Includes the box object which the fields are registered to in the response.', 'cmb2' ),
 			),
-			'_rendered' => array(
+			'_rendered'   => array(
 				'description' => __( 'When the \'_rendered\' argument is passed, the renderable field attributes will be returned fully rendered. By default, the names of the callback handers for the renderable attributes will be returned.', 'cmb2' ),
 			),
-			'object_id' => array(
+			'object_id'   => array(
 				'description' => __( 'To view or modify the field\'s value, the \'object_id\' and \'object_type\' arguments are required.', 'cmb2' ),
 			),
 			'object_type' => array(
@@ -38,43 +38,51 @@ class CMB2_REST_Controller_Fields extends CMB2_REST_Controller_Boxes {
 		);
 
 		// Returns specific box's fields.
-		register_rest_route( $this->namespace, '/' . $this->rest_base . '/(?P<cmb_id>[\w-]+)/fields/', array(
+		register_rest_route(
+			$this->namespace,
+			'/' . $this->rest_base . '/(?P<cmb_id>[\w-]+)/fields/',
 			array(
-				'methods'             => WP_REST_Server::READABLE,
-				'permission_callback' => array( $this, 'get_items_permissions_check' ),
-				'callback'            => array( $this, 'get_items' ),
-				'args'                => $args,
-			),
-			'schema' => array( $this, 'get_item_schema' ),
-		) );
+				array(
+					'methods'             => WP_REST_Server::READABLE,
+					'permission_callback' => array( $this, 'get_items_permissions_check' ),
+					'callback'            => array( $this, 'get_items' ),
+					'args'                => $args,
+				),
+				'schema' => array( $this, 'get_item_schema' ),
+			)
+		);
 
-		$delete_args = $args;
-		$delete_args['object_id']['required'] = true;
+		$delete_args                            = $args;
+		$delete_args['object_id']['required']   = true;
 		$delete_args['object_type']['required'] = true;
 
 		// Returns specific field data.
-		register_rest_route( $this->namespace, '/' . $this->rest_base . '/(?P<cmb_id>[\w-]+)/fields/(?P<field_id>[\w-]+)', array(
+		register_rest_route(
+			$this->namespace,
+			'/' . $this->rest_base . '/(?P<cmb_id>[\w-]+)/fields/(?P<field_id>[\w-]+)',
 			array(
-				'methods'             => WP_REST_Server::READABLE,
-				'permission_callback' => array( $this, 'get_item_permissions_check' ),
-				'callback'            => array( $this, 'get_item' ),
-				'args'                => $args,
-			),
-			array(
-				'methods'             => WP_REST_Server::EDITABLE,
-				'permission_callback' => array( $this, 'update_item_permissions_check' ),
-				'callback'            => array( $this, 'update_item' ),
-				'args'                => $this->get_endpoint_args_for_item_schema( WP_REST_Server::EDITABLE ),
-				'args'                => $args,
-			),
-			array(
-				'methods'             => WP_REST_Server::DELETABLE,
-				'permission_callback' => array( $this, 'delete_item_permissions_check' ),
-				'callback'            => array( $this, 'delete_item' ),
-				'args'                => $delete_args,
-			),
-			'schema' => array( $this, 'get_item_schema' ),
-		) );
+				array(
+					'methods'             => WP_REST_Server::READABLE,
+					'permission_callback' => array( $this, 'get_item_permissions_check' ),
+					'callback'            => array( $this, 'get_item' ),
+					'args'                => $args,
+				),
+				array(
+					'methods'             => WP_REST_Server::EDITABLE,
+					'permission_callback' => array( $this, 'update_item_permissions_check' ),
+					'callback'            => array( $this, 'update_item' ),
+					'args'                => $this->get_endpoint_args_for_item_schema( WP_REST_Server::EDITABLE ),
+					'args'                => $args,
+				),
+				array(
+					'methods'             => WP_REST_Server::DELETABLE,
+					'permission_callback' => array( $this, 'delete_item_permissions_check' ),
+					'callback'            => array( $this, 'delete_item' ),
+					'args'                => $delete_args,
+				),
+				'schema' => array( $this, 'get_item_schema' ),
+			)
+		);
 	}
 
 	/**
@@ -233,9 +241,13 @@ class CMB2_REST_Controller_Fields extends CMB2_REST_Controller_Boxes {
 		$this->initiate_rest_read_box( $request, 'field_value_update' );
 
 		if ( ! $this->request['value'] ) {
-			return new WP_Error( 'cmb2_rest_update_field_error', __( 'CMB2 Field value cannot be updated without the value parameter specified.', 'cmb2' ), array(
-				'status' => 400,
-			) );
+			return new WP_Error(
+				'cmb2_rest_update_field_error',
+				__( 'CMB2 Field value cannot be updated without the value parameter specified.', 'cmb2' ),
+				array(
+					'status' => 400,
+				)
+			);
 		}
 
 		return $this->modify_field_value( 'updated' );
@@ -294,9 +306,13 @@ class CMB2_REST_Controller_Fields extends CMB2_REST_Controller_Boxes {
 	public function modify_field_value( $activity ) {
 
 		if ( ! $this->request['object_id'] || ! $this->request['object_type'] ) {
-			return new WP_Error( 'cmb2_rest_modify_field_value_error', __( 'CMB2 Field value cannot be modified without the object_id and object_type parameters specified.', 'cmb2' ), array(
-				'status' => 400,
-			) );
+			return new WP_Error(
+				'cmb2_rest_modify_field_value_error',
+				__( 'CMB2 Field value cannot be modified without the object_id and object_type parameters specified.', 'cmb2' ),
+				array(
+					'status' => 400,
+				)
+			);
 		}
 
 		if ( is_wp_error( $this->rest_box ) ) {
@@ -309,9 +325,13 @@ class CMB2_REST_Controller_Fields extends CMB2_REST_Controller_Boxes {
 		);
 
 		if ( ! $this->field ) {
-			return new WP_Error( 'cmb2_rest_no_field_by_id_error', __( 'No field found by that id.', 'cmb2' ), array(
-				'status' => 403,
-			) );
+			return new WP_Error(
+				'cmb2_rest_no_field_by_id_error',
+				__( 'No field found by that id.', 'cmb2' ),
+				array(
+					'status' => 403,
+				)
+			);
 		}
 
 		$this->field->args[ "value_{$activity}" ] = (bool) 'deleted' === $activity
@@ -338,9 +358,13 @@ class CMB2_REST_Controller_Fields extends CMB2_REST_Controller_Boxes {
 		$this->field = $this->rest_box->field_can_read( $field, true );
 
 		if ( ! $this->field ) {
-			return new WP_Error( 'cmb2_rest_no_field_by_id_error', __( 'No field found by that id.', 'cmb2' ), array(
-				'status' => 403,
-			) );
+			return new WP_Error(
+				'cmb2_rest_no_field_by_id_error',
+				__( 'No field found by that id.', 'cmb2' ),
+				array(
+					'status' => 403,
+				)
+			);
 		}
 
 		return $this->prepare_item( $this->prepare_field_response() );
@@ -356,7 +380,7 @@ class CMB2_REST_Controller_Fields extends CMB2_REST_Controller_Boxes {
 	 */
 	public function prepare_field_response() {
 		$field_data = $this->prepare_field_data( $this->field );
-		$response = rest_ensure_response( $field_data );
+		$response   = rest_ensure_response( $field_data );
 
 		$response->add_links( $this->prepare_links( $this->field ) );
 
@@ -373,10 +397,10 @@ class CMB2_REST_Controller_Fields extends CMB2_REST_Controller_Boxes {
 	 * @return array             Array of field data.
 	 */
 	protected function prepare_field_data( CMB2_Field $field ) {
-		$field_data = array();
+		$field_data       = array();
 		$params_to_ignore = array( 'show_in_rest', 'options' );
 		$params_to_rename = array(
-			'label_cb' => 'label',
+			'label_cb'   => 'label',
 			'options_cb' => 'options',
 		);
 
@@ -437,15 +461,15 @@ class CMB2_REST_Controller_Fields extends CMB2_REST_Controller_Boxes {
 		$query_string = $this->get_query_string();
 
 		$links = array(
-			'self' => array(
+			'self'       => array(
 				'href' => rest_url( trailingslashit( $boxbase ) . 'fields/' . $field->_id() . $query_string ),
 			),
 			'collection' => array(
 				'href' => rest_url( trailingslashit( $boxbase ) . 'fields' . $query_string ),
 			),
-			'up' => array(
+			'up'         => array(
 				'embeddable' => true,
-				'href' => rest_url( $boxbase . $query_string ),
+				'href'       => rest_url( $boxbase . $query_string ),
 			),
 		);
 

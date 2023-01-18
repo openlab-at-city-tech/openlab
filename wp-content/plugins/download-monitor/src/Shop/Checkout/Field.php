@@ -1,8 +1,8 @@
 <?php
 
-namespace Never5\DownloadMonitor\Shop\Checkout;
+namespace WPChill\DownloadMonitor\Shop\Checkout;
 
-use Never5\DownloadMonitor\Shop\Services\Services;
+use WPChill\DownloadMonitor\Shop\Services\Services;
 
 class Field {
 
@@ -198,7 +198,7 @@ class Field {
 
 		foreach ( $fields as $field ) {
 			$val = ( isset( $values[ $field['name'] ] ) ) ? $values[ $field['name'] ] : "";
-			echo wp_kses_post( $this->generate( $field, $val ) );
+			echo $this->generate( $field, $val );
 		}
 
 	}

@@ -1,0 +1,173 @@
+/* FILE: _extend/_widgets.scss */
+
+%widget_calendar {
+	text-align: inherit;
+
+	caption {
+		font-size: var(--typography_font_size_S_em);
+		font-weight: 700;
+		font-style: normal;
+		text-transform: uppercase;
+		letter-spacing: var(--letter_spacing);
+		caption-side: top;
+	}
+
+	table {
+		margin: 0;
+		font-family: inherit;
+		text-align: center;
+		border-collapse: separate;
+		border-width: 0;
+
+		caption {
+			color: inherit;
+		}
+
+	}
+
+	tr {
+
+		th,
+		td {
+			width: auto;
+			height: 2em;
+			padding: 0;
+			text-align: center;
+			vertical-align: middle;
+		}
+
+	}
+
+	thead {
+
+		th {
+			font-size: var(--typography_font_size_S_em);
+			font-weight: 700;
+			background: var(--color_body_headings);
+			color: var(--color_body_background);
+			border-width: 0;
+		}
+
+	}
+
+	tbody {
+
+		a {
+			display: block;
+			width: 100%;
+			height: 100%;
+			text-decoration: none;
+			line-height: 2;
+			background: var(--color_button_background);
+			color: var(--color_button_text);
+			transition: background .3s;
+
+			&:focus {
+				outline-color: var(--color_accent);
+			}
+
+		}
+
+	}
+
+	tfoot {
+
+		a {
+			color: inherit;
+		}
+
+	}
+
+	.pad {
+		visibility: hidden;
+	}
+
+	.wp-calendar-nav {
+		margin-top: .5em;
+		font-size: var(--typography_font_size_S_em);
+		font-weight: 700;
+		text-align: inherit;
+		text-transform: uppercase;
+		letter-spacing: var(--letter_spacing);
+
+		a {
+			text-decoration: none;
+
+			&:hover,
+			&:focus {
+				text-decoration: underline;
+			}
+
+		}
+
+	}
+
+}
+
+%widget_tag_cloud {
+
+	a {
+		display: inline-block;
+		padding: .15em .5em;
+		margin: .15em 0;
+		font-size: var(--typography_font_size_S_em);
+		text-decoration: none;
+		text-transform: uppercase;
+		letter-spacing: var(--letter_spacing);
+		background: var(--color_button_background);
+		color: var(--color_button_text);
+		white-space: nowrap;
+
+		&::before {
+			content: '#';
+		}
+
+		&:hover,
+		&:focus,
+		&:active {
+			background: none;
+			color: inherit;
+		}
+
+	}
+
+}
+
+%widget_list_items {
+	margin: 0;
+	list-style: none;
+
+	ul {
+		margin-#{$left}: .5em;
+		margin-top: .25em;
+		margin-bottom: -.25em;
+		list-style: inherit; // This is required in case the parent was set with a class (such as categories block).
+	}
+
+	li {
+		padding: .25em 0;
+
+		&::before {
+			content: '\2014'; // &mdash;
+			margin-#{$right}: .25em;
+			speak: none;
+		}
+
+	}
+
+	a {
+		text-decoration: none;
+
+		&:hover,
+		&:focus {
+			text-decoration: underline;
+		}
+
+	}
+
+	// For WooCommerce:
+	.chosen {
+		font-weight: 700;
+	}
+
+}

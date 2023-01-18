@@ -1,7 +1,4 @@
 /*!
-* Do not modify this file directly.  It is compiled SASS code.
-*/
-/*!
 * CleanSlate
 *   github.com/premasagar/cleanslate
 *
@@ -114,7 +111,6 @@
   -ms-perspective-origin: 50% 50% !important;
   -o-perspective-origin: 50% 50% !important;
   perspective-origin: 50% 50% !important;
-  -webkit-backface-visibility: visible !important;
   backface-visibility: visible !important;
   text-shadow: none !important;
   transition: all 0s ease 0s !important;
@@ -479,4 +475,3 @@
 .cleanslate pre {
   white-space: pre !important;
 }
-/*# sourceMappingURL=cleanslate-rtl.css.map */

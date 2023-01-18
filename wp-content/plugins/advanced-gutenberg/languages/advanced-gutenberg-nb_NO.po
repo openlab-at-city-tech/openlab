@@ -1,0 +1,5313 @@
+# Translation of Plugins - Gutenberg Blocks &#8211; PublishPress Blocks Gutenberg Editor Plugin - Stable (latest release) in Norwegian (Bokmål)
+# This file is distributed under the same license as the Plugins - Gutenberg Blocks &#8211; PublishPress Blocks Gutenberg Editor Plugin - Stable (latest release) package.
+msgid ""
+msgstr ""
+"Project-Id-Version: Plugins - Gutenberg Blocks &#8211; PublishPress Blocks "
+"Gutenberg Editor Plugin - Stable (latest release)\n"
+"POT-Creation-Date: 2022-10-25 14:40-0500\n"
+"PO-Revision-Date: 2022-10-25 14:40-0500\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: nb_NO\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Poedit 3.2\n"
+
+#: assets/blocks/block-controls.js:229 assets/blocks/blocks.js:5149
+msgid "Change date"
+msgstr ""
+
+#: assets/blocks/block-controls.js:267 assets/blocks/blocks.js:5187
+msgid "time"
+msgstr ""
+
+#: assets/blocks/block-controls.js:267 assets/blocks/blocks.js:5187
+msgid "WordPress settings timezone"
+msgstr ""
+
+#: assets/blocks/block-controls.js:624 incl/advanced-gutenberg-main.php:1763
+#: incl/pages/block-controls.php:30 incl/pages/main.php:50
+msgid "Block Controls"
+msgstr ""
+
+#: assets/blocks/block-controls.js:633
+msgid "Enable block schedule"
+msgstr ""
+
+#: assets/blocks/block-controls.js:634
+msgid "Setup when to start showing and/or stop showing this block"
+msgstr ""
+
+#: assets/blocks/block-controls.js:647
+msgid "Now"
+msgstr ""
+
+#: assets/blocks/block-controls.js:648
+msgid "Start showing"
+msgstr ""
+
+#: assets/blocks/block-controls.js:659
+msgid "Never"
+msgstr ""
+
+#: assets/blocks/block-controls.js:660
+msgid "Stop showing"
+msgstr ""
+
+#: assets/blocks/block-controls.js:686
+msgid "\"Stop showing\" date should be after \"Start showing\" date!"
+msgstr ""
+
+#: assets/blocks/block-controls.js:689
+msgid "Recurring"
+msgstr ""
+
+#: assets/blocks/block-controls.js:694
+msgid ""
+"If Recurring is enabled, this block will be displayed every year between the "
+"selected dates."
+msgstr ""
+
+#: assets/blocks/block-controls.js:703
+msgid "Enable block user roles"
+msgstr ""
+
+#: assets/blocks/block-controls.js:704
+msgid "Choose which users this block will be visible"
+msgstr ""
+
+#: assets/blocks/block-controls.js:720
+msgid "Show to everyone"
+msgstr ""
+
+#: assets/blocks/block-controls.js:723
+msgid "Show to logged in users"
+msgstr ""
+
+#: assets/blocks/block-controls.js:726
+msgid "Show to logged out users"
+msgstr ""
+
+#: assets/blocks/block-controls.js:729
+msgid "Show to the selected user roles"
+msgstr ""
+
+#: assets/blocks/block-controls.js:732
+msgid "Hide to the selected user roles"
+msgstr ""
+
+#: assets/blocks/block-controls.js:741
+msgid "Select user roles"
+msgstr ""
+
+#: assets/blocks/block-controls.js:742
+msgid "Search"
+msgstr ""
+
+#: assets/blocks/blocks.js:5294
+msgid "Icon List"
+msgstr "Ikonliste"
+
+#: assets/blocks/blocks.js:5342
+msgid "Search icons"
+msgstr "Søk ikoner"
+
+#: assets/blocks/blocks.js:5349 assets/blocks/blocks.js:24672
+#: assets/blocks/blocks.js:24774
+msgid "Style"
+msgstr "Stil"
+
+#: assets/blocks/blocks.js:5352
+msgid "Filled"
+msgstr "Fylt"
+
+#: assets/blocks/blocks.js:5352 assets/blocks/blocks.js:8226
+msgid "Outlined"
+msgstr "Omrisset"
+
+#: assets/blocks/blocks.js:5352
+msgid "Rounded"
+msgstr "Avrundet"
+
+#: assets/blocks/blocks.js:5352
+msgid "Two-Tone"
+msgstr "To-tonet"
+
+#: assets/blocks/blocks.js:5352
+msgid "Sharp"
+msgstr "Skarp"
+
+#: assets/blocks/blocks.js:5405
+msgid "Apply"
+msgstr "Bruk"
+
+#: assets/blocks/blocks.js:5592 assets/blocks/blocks.js:16615
+#: assets/blocks/blocks.js:21503 assets/blocks/blocks.js:23668
+msgid "Notice"
+msgstr "Varsel"
+
+#: assets/blocks/blocks.js:5596
+msgid ""
+"This accordion block has been replaced by a new and better one.\n"
+"                                 This block will be removed in a future "
+"version.\n"
+"                                 Please transform this to an Accordion Item "
+"block\n"
+"                                 and drag them into new Adv. Accordion block "
+"as soon as possible."
+msgstr ""
+
+#: assets/blocks/blocks.js:5601 assets/blocks/blocks.js:6187
+#: assets/blocks/blocks.js:7063 incl/block-settings-main.php:17
+msgid "Accordion Settings"
+msgstr "Tekkspillinnstillinger"
+
+#: assets/blocks/blocks.js:5603 assets/blocks/blocks.js:6189
+#: assets/blocks/blocks.js:7065 incl/block-settings-main.php:20
+msgid "Bottom spacing"
+msgstr "Knappe-mellomrom"
+
+#: assets/blocks/blocks.js:5605
+msgid ""
+"Define space to next block. This will override Block spacing option "
+"(Frontend view only)"
+msgstr ""
+"Definer mellomrom til neste blokk. Dette vil overstyre alternativet for "
+"blokk-mellomrom (kun på fronten)"
+
+#: assets/blocks/blocks.js:5615 assets/blocks/blocks.js:6217
+#: assets/blocks/blocks.js:7086 incl/block-settings-main.php:34
+msgid "Header Settings"
+msgstr "Innstillinger for sidetopp"
+
+#: assets/blocks/blocks.js:5618 assets/blocks/blocks.js:6220
+#: assets/blocks/blocks.js:7089
+msgid "Header Icon Style"
+msgstr "Ikon-stil for toppområde"
+
+#: assets/blocks/blocks.js:5643 assets/blocks/blocks.js:5695
+#: assets/blocks/blocks.js:6245 assets/blocks/blocks.js:6297
+#: assets/blocks/blocks.js:7114 assets/blocks/blocks.js:7166
+#: assets/blocks/blocks.js:7884 assets/blocks/blocks.js:9518
+#: assets/blocks/blocks.js:11812 assets/blocks/blocks.js:14371
+#: assets/blocks/blocks.js:16742 assets/blocks/blocks.js:17276
+#: assets/blocks/blocks.js:18364 assets/blocks/blocks.js:23804
+#: incl/block-settings-main.php:684 incl/block-settings-main.php:1470
+msgid "Color Settings"
+msgstr "Fargeinnstillinger"
+
+#: assets/blocks/blocks.js:5646 assets/blocks/blocks.js:5670
+#: assets/blocks/blocks.js:6248 assets/blocks/blocks.js:6272
+#: assets/blocks/blocks.js:7117 assets/blocks/blocks.js:7141
+#: assets/blocks/blocks.js:7610 assets/blocks/blocks.js:7741
+#: assets/blocks/blocks.js:11814 assets/blocks/blocks.js:12972
+#: assets/blocks/blocks.js:13001 assets/blocks/blocks.js:28671
+#: assets/blocks/blocks.js:28700 assets/blocks/blocks.js:29595
+#: incl/block-settings-main.php:37 incl/block-settings-main.php:92
+#: incl/block-settings-main.php:164 incl/block-settings-main.php:288
+#: incl/block-settings-main.php:986 incl/block-settings-main.php:1001
+#: incl/block-settings-main.php:1016 incl/block-settings-main.php:1079
+#: incl/block-settings-main.php:1193 incl/block-settings-main.php:1249
+#: incl/block-settings-main.php:1349 incl/block-settings-main.php:1405
+#: incl/block-settings-main.php:1798 incl/block-settings-main.php:1867
+msgid "Background Color"
+msgstr "Bakgrunnsfarge"
+
+#: assets/blocks/blocks.js:5652 assets/blocks/blocks.js:5676
+#: assets/blocks/blocks.js:6254 assets/blocks/blocks.js:6278
+#: assets/blocks/blocks.js:7123 assets/blocks/blocks.js:7147
+#: assets/blocks/blocks.js:7616 assets/blocks/blocks.js:7748
+#: assets/blocks/blocks.js:11820 assets/blocks/blocks.js:12978
+#: assets/blocks/blocks.js:13007 assets/blocks/blocks.js:18378
+#: assets/blocks/blocks.js:28677 assets/blocks/blocks.js:28706
+#: incl/block-settings-main.php:42 incl/block-settings-main.php:97
+#: incl/block-settings-main.php:159 incl/block-settings-main.php:283
+#: incl/block-settings-main.php:991 incl/block-settings-main.php:1006
+#: incl/block-settings-main.php:1021 incl/block-settings-main.php:1198
+#: incl/block-settings-main.php:1354 incl/block-settings-main.php:1483
+msgid "Text Color"
+msgstr "Tekstfarge"
+
+#: assets/blocks/blocks.js:5658 assets/blocks/blocks.js:6260
+#: assets/blocks/blocks.js:7129 assets/blocks/blocks.js:7992
+#: assets/blocks/blocks.js:8716 assets/blocks/blocks.js:19526
+#: incl/block-settings-main.php:817 incl/block-settings-main.php:855
+#: incl/block-settings-main.php:893 incl/block-settings-main.php:1855
+msgid "Icon Color"
+msgstr "Ikonfarge"
+
+#: assets/blocks/blocks.js:5667 assets/blocks/blocks.js:6269
+#: assets/blocks/blocks.js:7138
+msgid "Body Color Settings"
+msgstr "Fargeinnstillinger for brødtekst"
+
+#: assets/blocks/blocks.js:5685 assets/blocks/blocks.js:6287
+#: assets/blocks/blocks.js:7156 assets/blocks/blocks.js:13016
+#: assets/blocks/blocks.js:16140 assets/blocks/blocks.js:16708
+#: assets/blocks/blocks.js:21351 assets/blocks/blocks.js:23770
+#: assets/blocks/blocks.js:28715 incl/block-settings-main.php:104
+#: incl/block-settings-main.php:171 incl/block-settings-main.php:1028
+#: incl/block-settings-main.php:1205 incl/block-settings-main.php:1361
+#: incl/block-settings-main.php:1707
+msgid "Border Settings"
+msgstr "Kantlinjeinnstillinger"
+
+#: assets/blocks/blocks.js:5687 assets/blocks/blocks.js:6289
+#: assets/blocks/blocks.js:7158 assets/blocks/blocks.js:11850
+#: assets/blocks/blocks.js:13018 assets/blocks/blocks.js:16721
+#: assets/blocks/blocks.js:21364 assets/blocks/blocks.js:23783
+#: assets/blocks/blocks.js:28717 incl/block-settings-main.php:107
+#: incl/block-settings-main.php:174 incl/block-settings-main.php:1031
+#: incl/block-settings-main.php:1213 incl/block-settings-main.php:1369
+msgid "Border Style"
+msgstr "Kantlinjestil"
+
+#: assets/blocks/blocks.js:5689 assets/blocks/blocks.js:6291
+#: assets/blocks/blocks.js:7160 assets/blocks/blocks.js:7556
+#: assets/blocks/blocks.js:11852 assets/blocks/blocks.js:13020
+#: assets/blocks/blocks.js:16004 assets/blocks/blocks.js:16723
+#: assets/blocks/blocks.js:21366 assets/blocks/blocks.js:23785
+#: assets/blocks/blocks.js:28719 incl/block-settings-main.php:112
+#: incl/block-settings-main.php:179 incl/block-settings-main.php:1035
+#: incl/block-settings-main.php:1218 incl/block-settings-main.php:1374
+#: incl/block-settings-main.php:1719
+msgid "Solid"
+msgstr "Heltrukken"
+
+#: assets/blocks/blocks.js:5689 assets/blocks/blocks.js:6291
+#: assets/blocks/blocks.js:7160 assets/blocks/blocks.js:7556
+#: assets/blocks/blocks.js:11852 assets/blocks/blocks.js:13020
+#: assets/blocks/blocks.js:16004 assets/blocks/blocks.js:16723
+#: assets/blocks/blocks.js:21366 assets/blocks/blocks.js:23785
+#: assets/blocks/blocks.js:28719 incl/block-settings-main.php:116
+#: incl/block-settings-main.php:183 incl/block-settings-main.php:1036
+#: incl/block-settings-main.php:1222 incl/block-settings-main.php:1378
+#: incl/block-settings-main.php:1727
+msgid "Dashed"
+msgstr "Stiplet"
+
+#: assets/blocks/blocks.js:5689 assets/blocks/blocks.js:6291
+#: assets/blocks/blocks.js:7160 assets/blocks/blocks.js:7556
+#: assets/blocks/blocks.js:11852 assets/blocks/blocks.js:13020
+#: assets/blocks/blocks.js:16004 assets/blocks/blocks.js:16723
+#: assets/blocks/blocks.js:21366 assets/blocks/blocks.js:23785
+#: assets/blocks/blocks.js:28719 incl/block-settings-main.php:120
+#: incl/block-settings-main.php:187 incl/block-settings-main.php:1037
+#: incl/block-settings-main.php:1226 incl/block-settings-main.php:1382
+#: incl/block-settings-main.php:1723
+msgid "Dotted"
+msgstr "Prikket"
+
+#: assets/blocks/blocks.js:5698 assets/blocks/blocks.js:6300
+#: assets/blocks/blocks.js:7169 assets/blocks/blocks.js:7779
+#: assets/blocks/blocks.js:7782 assets/blocks/blocks.js:8737
+#: assets/blocks/blocks.js:11867 assets/blocks/blocks.js:11869
+#: assets/blocks/blocks.js:13026 assets/blocks/blocks.js:13029
+#: assets/blocks/blocks.js:16153 assets/blocks/blocks.js:16156
+#: assets/blocks/blocks.js:16710 assets/blocks/blocks.js:19433
+#: assets/blocks/blocks.js:19549 assets/blocks/blocks.js:21353
+#: assets/blocks/blocks.js:23772 assets/blocks/blocks.js:28725
+#: assets/blocks/blocks.js:28728 assets/blocks/blocks.js:29601
+#: incl/block-settings-main.php:126 incl/block-settings-main.php:193
+#: incl/block-settings-main.php:1041 incl/block-settings-main.php:1084
+#: incl/block-settings-main.php:1208 incl/block-settings-main.php:1364
+#: incl/block-settings-main.php:1733 incl/block-settings-main.php:1803
+#: incl/block-settings-main.php:1872
+msgid "Border Color"
+msgstr "Kantlinjefarge"
+
+#: assets/blocks/blocks.js:5706 assets/blocks/blocks.js:6308
+#: assets/blocks/blocks.js:7177 assets/blocks/blocks.js:7790
+#: assets/blocks/blocks.js:11858 assets/blocks/blocks.js:13037
+#: assets/blocks/blocks.js:16164 assets/blocks/blocks.js:21372
+#: assets/blocks/blocks.js:28736
+msgid "Border width"
+msgstr "Kantlinjebredde"
+
+#: assets/blocks/blocks.js:5715 assets/blocks/blocks.js:6317
+#: assets/blocks/blocks.js:7186 assets/blocks/blocks.js:7759
+#: assets/blocks/blocks.js:13046 assets/blocks/blocks.js:28745
+msgid "Border radius"
+msgstr "Kantlinjeradius"
+
+#: assets/blocks/blocks.js:5726
+msgid "Accordions State"
+msgstr "Trekkspill-status"
+
+#: assets/blocks/blocks.js:5728 assets/blocks/blocks.js:6199
+#: assets/blocks/blocks.js:7075 incl/block-settings-main.php:27
+msgid "Initial Collapsed"
+msgstr "Opprinnelig sammentrukket"
+
+#: assets/blocks/blocks.js:5729
+msgid ""
+"Make all accordions collapsed by default, enable this setting to apply to "
+"all accordions."
+msgstr ""
+
+#: assets/blocks/blocks.js:5771 assets/blocks/blocks.js:6361
+#: assets/blocks/blocks.js:28236
+msgid "Enter header…"
+msgstr "Angi topptekst..."
+
+#: assets/blocks/blocks.js:5862
+msgid "Accordion (deprecated) - PublishPress"
+msgstr ""
+
+#: assets/blocks/blocks.js:5863 assets/blocks/blocks.js:6399
+#: assets/blocks/blocks.js:7285
+msgid "Create a sliding accordion display for your content."
+msgstr ""
+
+#: assets/blocks/blocks.js:5869 assets/blocks/blocks.js:6406
+#: assets/blocks/blocks.js:7291 assets/blocks/blocks.js:21744
+#: assets/blocks/blocks.js:27170
+msgid "accordion"
+msgstr "trekkspill"
+
+#: assets/blocks/blocks.js:5869 assets/blocks/blocks.js:6406
+#: assets/blocks/blocks.js:7291 assets/blocks/blocks.js:10311
+#: assets/blocks/blocks.js:21744 assets/blocks/blocks.js:27170
+#: assets/blocks/blocks.js:28326
+msgid "list"
+msgstr "liste"
+
+#: assets/blocks/blocks.js:5869 assets/blocks/blocks.js:6406
+#: assets/blocks/blocks.js:7291 assets/blocks/blocks.js:21744
+#: assets/blocks/blocks.js:27170
+msgid "faq"
+msgstr "faq"
+
+#: assets/blocks/blocks.js:6191 assets/blocks/blocks.js:7067
+msgid "Define space between each accordion (Frontend view only)"
+msgstr "Definer mellomrom mellom hvert trekkspill (Vises kun på fronten)"
+
+#: assets/blocks/blocks.js:6200 assets/blocks/blocks.js:7076
+msgid "Make all accordions collapsed by default."
+msgstr "Gjør alle trekkspill sammentrukket som standard."
+
+#: assets/blocks/blocks.js:6207
+msgid "Header Tag"
+msgstr ""
+
+#: assets/blocks/blocks.js:6398
+msgid "Accordion Item - PublishPress"
+msgstr ""
+
+#: assets/blocks/blocks.js:6410
+msgid "Header text"
+msgstr ""
+
+#: assets/blocks/blocks.js:7040
+msgid "Advanced Accordion"
+msgstr "Avansert trekkspill"
+
+#: assets/blocks/blocks.js:7054 assets/blocks/blocks.js:25426
+msgid "Refresh"
+msgstr "Oppfrisk"
+
+#: assets/blocks/blocks.js:7284 incl/pages/block-settings.php:52
+msgid "Accordion - PublishPress"
+msgstr ""
+
+#: assets/blocks/blocks.js:7291
+msgid "advanced accordion"
+msgstr ""
+
+#: assets/blocks/blocks.js:7556 assets/blocks/blocks.js:9434
+#: assets/blocks/blocks.js:10046 assets/blocks/blocks.js:11852
+#: assets/blocks/blocks.js:13020 assets/blocks/blocks.js:14336
+#: assets/blocks/blocks.js:14911 assets/blocks/blocks.js:16004
+#: assets/blocks/blocks.js:18311 assets/blocks/blocks.js:24256
+#: incl/block-settings-main.php:345 incl/block-settings-main.php:475
+#: incl/block-settings-main.php:1543 incl/block-settings-main.php:1582
+#: incl/block-settings-main.php:1715
+msgid "None"
+msgstr "Ingen"
+
+#: assets/blocks/blocks.js:7556 assets/blocks/blocks.js:16004
+msgid "Double"
+msgstr "Dobbel"
+
+#: assets/blocks/blocks.js:7556 assets/blocks/blocks.js:16004
+msgid "Groove"
+msgstr "Rille"
+
+#: assets/blocks/blocks.js:7556 assets/blocks/blocks.js:16004
+msgid "Ridge"
+msgstr "Rygg"
+
+#: assets/blocks/blocks.js:7556 assets/blocks/blocks.js:16004
+msgid "Inset"
+msgstr "Innstående"
+
+#: assets/blocks/blocks.js:7556 assets/blocks/blocks.js:16004
+msgid "Outset"
+msgstr "Utstående"
+
+#: assets/blocks/blocks.js:7622 incl/block-settings-main.php:293
+msgid "Shadow Color"
+msgstr "Skyggefarge"
+
+#: assets/blocks/blocks.js:7643
+msgid "Advanced Button"
+msgstr "Avansert knapp"
+
+#: assets/blocks/blocks.js:7661
+msgid "Add text…"
+msgstr "Legg til tekst..."
+
+#: assets/blocks/blocks.js:7698
+msgid "Button link"
+msgstr "Knappelenke"
+
+#: assets/blocks/blocks.js:7702 assets/blocks/blocks.js:9443
+msgid "Link URL"
+msgstr "Lenke-URL"
+
+#: assets/blocks/blocks.js:7705 assets/blocks/blocks.js:9446
+#: incl/pages/custom-styles.php:111
+msgid "Preview"
+msgstr "Forhåndsvis"
+
+#: assets/blocks/blocks.js:7719
+msgid "Open in new tab"
+msgstr "Åpne i ny fane"
+
+#: assets/blocks/blocks.js:7728
+msgid "Text/Color"
+msgstr "Tekst/farge"
+
+#: assets/blocks/blocks.js:7730 assets/blocks/blocks.js:10096
+msgid "Text size"
+msgstr "Tekststørrelse"
+
+#: assets/blocks/blocks.js:7757 assets/blocks/blocks.js:8733
+#: assets/blocks/blocks.js:11829
+msgid "Border"
+msgstr "Kantlinje"
+
+#: assets/blocks/blocks.js:7768 assets/blocks/blocks.js:16142
+#: incl/block-settings-main.php:1710
+msgid "Border style"
+msgstr "Kantlinjestil"
+
+#: assets/blocks/blocks.js:7802 assets/blocks/blocks.js:8845
+#: assets/blocks/blocks.js:10172 assets/blocks/blocks.js:15332
+#: assets/blocks/blocks.js:16241 assets/blocks/blocks.js:19617
+#: assets/blocks/blocks.js:19787 assets/blocks/blocks.js:19949
+#: incl/block-settings-main.php:556
+msgid "Margin"
+msgstr "Avstand"
+
+#: assets/blocks/blocks.js:7804
+msgid "Margin top"
+msgstr "Avstand topp"
+
+#: assets/blocks/blocks.js:7813
+msgid "Margin right"
+msgstr "Avstand høyre"
+
+#: assets/blocks/blocks.js:7822
+msgid "Margin bottom"
+msgstr "Avstand bunn"
+
+#: assets/blocks/blocks.js:7831
+msgid "Margin left"
+msgstr "Avstand venstre"
+
+#: assets/blocks/blocks.js:7842 assets/blocks/blocks.js:8800
+#: assets/blocks/blocks.js:10182 assets/blocks/blocks.js:11879
+#: assets/blocks/blocks.js:15290 assets/blocks/blocks.js:16218
+#: assets/blocks/blocks.js:19458 assets/blocks/blocks.js:19574
+#: assets/blocks/blocks.js:19744 assets/blocks/blocks.js:19906
+#: incl/block-settings-main.php:563
+msgid "Padding"
+msgstr "Utfylling"
+
+#: assets/blocks/blocks.js:7844
+msgid "Padding top"
+msgstr "Polstring topp"
+
+#: assets/blocks/blocks.js:7853
+msgid "Padding right"
+msgstr "Polstring høyre"
+
+#: assets/blocks/blocks.js:7862
+msgid "Padding bottom"
+msgstr "Polstring bunn"
+
+#: assets/blocks/blocks.js:7871
+msgid "Padding left"
+msgstr "Polstring venstre"
+
+#: assets/blocks/blocks.js:7882
+msgid "Hover"
+msgstr "Oversveve"
+
+#: assets/blocks/blocks.js:7890 assets/blocks/blocks.js:21444
+msgid "Shadow"
+msgstr "Skygge"
+
+#: assets/blocks/blocks.js:7892 assets/blocks/blocks.js:21446
+#: assets/blocks/blocks.js:26974
+msgid "Opacity (%)"
+msgstr "Ugjennomsiktighet (%)"
+
+#: assets/blocks/blocks.js:7901 assets/blocks/blocks.js:21455
+#: assets/blocks/blocks.js:26983 assets/blocks/blocks.js:29506
+msgid "Transition speed (ms)"
+msgstr "Overgangshastighet (ms)"
+
+#: assets/blocks/blocks.js:7910 assets/blocks/blocks.js:21464
+#: assets/blocks/blocks.js:26992
+msgid "Shadow H offset"
+msgstr "Horisontal forskyvning av skygge"
+
+#: assets/blocks/blocks.js:7919 assets/blocks/blocks.js:21473
+#: assets/blocks/blocks.js:27001
+msgid "Shadow V offset"
+msgstr "Vertikal forskyvning av skygge"
+
+#: assets/blocks/blocks.js:7928 assets/blocks/blocks.js:21482
+#: assets/blocks/blocks.js:27010
+msgid "Shadow blur"
+msgstr "Skygge-uklarhet"
+
+#: assets/blocks/blocks.js:7937 assets/blocks/blocks.js:21491
+#: assets/blocks/blocks.js:27019
+msgid "Shadow spread"
+msgstr "Skyggespredning"
+
+#: assets/blocks/blocks.js:7952 incl/block-settings-main.php:794
+#: incl/block-settings-main.php:832 incl/block-settings-main.php:870
+msgid "Icon"
+msgstr "Ikon"
+
+#: assets/blocks/blocks.js:7954
+msgid "Display icon"
+msgstr ""
+
+#: assets/blocks/blocks.js:7967 assets/blocks/blocks.js:8681
+#: assets/blocks/blocks.js:19510
+msgid "Icon Library (Material Icon)"
+msgstr "Ikonbibliotek (Material-ikoner)"
+
+#: assets/blocks/blocks.js:7979 assets/blocks/blocks.js:8695
+#: assets/blocks/blocks.js:19522
+msgid "Icon Selection"
+msgstr "Ikon-valg"
+
+#: assets/blocks/blocks.js:7983 assets/blocks/blocks.js:19533
+msgid "Icon Size (px)"
+msgstr "Ikonstørrelse (px)"
+
+#: assets/blocks/blocks.js:7999
+msgid "Icon Position"
+msgstr ""
+
+#: assets/blocks/blocks.js:8001 assets/blocks/blocks.js:9554
+#: assets/blocks/blocks.js:16770 assets/blocks/blocks.js:18399
+#: assets/blocks/blocks.js:21410 assets/blocks/blocks.js:25051
+#: assets/blocks/blocks.js:29638 incl/block-settings-main.php:437
+#: incl/block-settings-main.php:912 incl/block-settings-main.php:958
+#: incl/block-settings-main.php:1270 incl/block-settings-main.php:1517
+#: incl/block-settings-main.php:1762
+msgid "Left"
+msgstr "Venstre"
+
+#: assets/blocks/blocks.js:8001 assets/blocks/blocks.js:9554
+#: assets/blocks/blocks.js:16770 assets/blocks/blocks.js:18399
+#: assets/blocks/blocks.js:21410 assets/blocks/blocks.js:25051
+#: incl/block-settings-main.php:445 incl/block-settings-main.php:914
+#: incl/block-settings-main.php:960 incl/block-settings-main.php:1274
+#: incl/block-settings-main.php:1525 incl/block-settings-main.php:1770
+msgid "Right"
+msgstr "Høyre"
+
+#: assets/blocks/blocks.js:8007
+msgid "Icon Spacing (px)"
+msgstr ""
+
+#: assets/blocks/blocks.js:8011
+msgid "Spacing between icon and text"
+msgstr ""
+
+#: assets/blocks/blocks.js:8192 incl/pages/block-settings.php:53
+msgid "Button - PublishPress"
+msgstr ""
+
+#: assets/blocks/blocks.js:8193
+msgid "Button block with more options and styles."
+msgstr ""
+
+#: assets/blocks/blocks.js:8199
+msgid "button"
+msgstr "knapp"
+
+#: assets/blocks/blocks.js:8199
+msgid "advanced button"
+msgstr ""
+
+#: assets/blocks/blocks.js:8199
+msgid "link"
+msgstr "lenke"
+
+#: assets/blocks/blocks.js:8226 assets/blocks/blocks.js:8701
+#: assets/blocks/blocks.js:12151 assets/blocks/blocks.js:23687
+#: assets/blocks/blocks.js:24674 assets/blocks/blocks.js:24776
+#: assets/blocks/blocks.js:27181 incl/advanced-gutenberg-main.php:3895
+#: incl/pages/settings/general.php:119
+msgid "Default"
+msgstr "Standard"
+
+#: assets/blocks/blocks.js:8226
+msgid "Squared"
+msgstr "Kvadratisk"
+
+#: assets/blocks/blocks.js:8226
+msgid "Squared Outline"
+msgstr "Kvadratisk omriss"
+
+#: assets/blocks/blocks.js:8637
+msgid "Advanced Icon"
+msgstr "Avansert ikon"
+
+#: assets/blocks/blocks.js:8655
+msgid "Icon Count"
+msgstr "Antall ikoner"
+
+#: assets/blocks/blocks.js:8657
+msgid "Number of Icons"
+msgstr "Antall ikoner"
+
+#: assets/blocks/blocks.js:8675
+msgid "Icon "
+msgstr ""
+
+#: assets/blocks/blocks.js:8699 assets/blocks/blocks.js:14392
+msgid "Icon Style"
+msgstr "Ikonstil"
+
+#: assets/blocks/blocks.js:8701 assets/blocks/blocks.js:12934
+#: assets/blocks/blocks.js:14909 assets/blocks/blocks.js:24249
+#: assets/blocks/blocks.js:24252 assets/blocks/blocks.js:24254
+msgid "Stacked"
+msgstr "Stablet"
+
+#: assets/blocks/blocks.js:8707 incl/block-settings-main.php:542
+#: incl/block-settings-main.php:918 incl/block-settings-main.php:1860
+msgid "Icon Size"
+msgstr "Ikonstørrelse"
+
+#: assets/blocks/blocks.js:8723
+msgid "Icon Background"
+msgstr "Ikon-bakgrunn"
+
+#: assets/blocks/blocks.js:8744
+msgid "Border Size(px)"
+msgstr "Kantlinjestørrelse(px)"
+
+#: assets/blocks/blocks.js:8753
+msgid "Border Radius(%)"
+msgstr "Kantlinjeradius(%)"
+
+#: assets/blocks/blocks.js:8763 assets/blocks/blocks.js:8769
+#: assets/blocks/blocks.js:18505
+msgid "Link"
+msgstr "Lenke"
+
+#: assets/blocks/blocks.js:8782
+msgid "Link Target"
+msgstr "Lenkemål"
+
+#: assets/blocks/blocks.js:8784
+msgid "Same Window"
+msgstr "Samme vindu"
+
+#: assets/blocks/blocks.js:8784
+msgid "New Window"
+msgstr "Nytt vindu"
+
+#: assets/blocks/blocks.js:8790
+msgid "Title for Accessibility"
+msgstr "Tittel for tilgjengelighet"
+
+#: assets/blocks/blocks.js:8809 assets/blocks/blocks.js:8854
+#: assets/blocks/blocks.js:15299 assets/blocks/blocks.js:15341
+#: assets/blocks/blocks.js:19467 assets/blocks/blocks.js:19583
+#: assets/blocks/blocks.js:19626 assets/blocks/blocks.js:19753
+#: assets/blocks/blocks.js:19796 assets/blocks/blocks.js:19915
+#: assets/blocks/blocks.js:19958
+msgid "Unit"
+msgstr "Enhet"
+
+#: assets/blocks/blocks.js:9022 incl/pages/block-settings.php:54
+msgid "Icon - PublishPress"
+msgstr ""
+
+#: assets/blocks/blocks.js:9023 assets/blocks/blocks.js:20342
+msgid "Icon block with more options and styles."
+msgstr ""
+
+#: assets/blocks/blocks.js:9029 assets/blocks/blocks.js:10311
+#: assets/blocks/blocks.js:20348
+msgid "icon"
+msgstr "ikon"
+
+#: assets/blocks/blocks.js:9029
+msgid "advanced icon"
+msgstr ""
+
+#: assets/blocks/blocks.js:9392 assets/blocks/blocks.js:9430
+msgid "Advanced Image"
+msgstr "Avansert bilde"
+
+#: assets/blocks/blocks.js:9410
+msgid "Change image"
+msgstr "Endre bilde"
+
+#: assets/blocks/blocks.js:9417 assets/blocks/blocks.js:18569
+msgid "Remove image"
+msgstr "Fjern bilde"
+
+#: assets/blocks/blocks.js:9432 assets/blocks/blocks.js:18309
+#: incl/block-settings-main.php:340 incl/block-settings-main.php:1424
+msgid "Action on click"
+msgstr "Handling ved klikk"
+
+#: assets/blocks/blocks.js:9434 assets/blocks/blocks.js:18311
+#: incl/block-settings-main.php:1429
+msgid "Open image in lightbox"
+msgstr "Åpne bilde i lysboks"
+
+#: assets/blocks/blocks.js:9434 incl/block-settings-main.php:353
+msgid "Open custom URL"
+msgstr "Åpne tilpasset URL"
+
+#: assets/blocks/blocks.js:9449
+msgid "Enter URL…"
+msgstr "Oppgi URL..."
+
+#: assets/blocks/blocks.js:9455 assets/blocks/blocks.js:25111
+msgid "Open link in new tab"
+msgstr "Åpne lenke i ny fane"
+
+#: assets/blocks/blocks.js:9464 incl/block-settings-main.php:366
+msgid "Image Size"
+msgstr "Bildestørrelse"
+
+#: assets/blocks/blocks.js:9466 assets/blocks/blocks.js:14343
+#: assets/blocks/blocks.js:18317 assets/blocks/blocks.js:26820
+#: assets/blocks/post-sidebar.js:129 incl/block-settings-main.php:369
+#: incl/block-settings-main.php:596 incl/block-settings-main.php:1439
+#: incl/pages/settings/general.php:125
+msgid "Full width"
+msgstr "Full bredde"
+
+#: assets/blocks/blocks.js:9473 assets/blocks/blocks.js:18340
+#: assets/blocks/blocks.js:23223 incl/block-settings-main.php:374
+#: incl/block-settings-main.php:752 incl/block-settings-main.php:1456
+msgid "Height"
+msgstr "Høyde"
+
+#: assets/blocks/blocks.js:9482 assets/blocks/blocks.js:18331
+#: assets/blocks/blocks.js:26827 incl/block-settings-main.php:381
+#: incl/block-settings-main.php:1449
+msgid "Width"
+msgstr "Bredde"
+
+#: assets/blocks/blocks.js:9491
+msgid "Focal Point Picker"
+msgstr "Fokuspunkt-velger"
+
+#: assets/blocks/blocks.js:9499
+msgid "Overlay opacity default"
+msgstr "Standard ugjennomsiktighet for overlegg"
+
+#: assets/blocks/blocks.js:9508
+msgid "Overlay opacity hover"
+msgstr "Ugjennomsiktighet for overlegg ved oversveving"
+
+#: assets/blocks/blocks.js:9521 assets/blocks/blocks.js:18372
+#: incl/block-settings-main.php:393 incl/block-settings-main.php:1478
+#: incl/block-settings-main.php:1952
+msgid "Title Color"
+msgstr "Tittelfarge"
+
+#: assets/blocks/blocks.js:9527 incl/block-settings-main.php:398
+msgid "Subtitle Color"
+msgstr "Farge på undertittel"
+
+#: assets/blocks/blocks.js:9533 assets/blocks/blocks.js:14374
+#: assets/blocks/blocks.js:25075 incl/block-settings-main.php:403
+msgid "Overlay Color"
+msgstr "Dekkefarge"
+
+#: assets/blocks/blocks.js:9542 assets/blocks/blocks.js:11919
+#: assets/blocks/blocks.js:18387 incl/block-settings-main.php:410
+#: incl/block-settings-main.php:1490
+msgid "Text Alignment"
+msgstr "Tekstjustering"
+
+#: assets/blocks/blocks.js:9544 assets/blocks/blocks.js:18389
+#: incl/block-settings-main.php:413 incl/block-settings-main.php:1493
+msgid "Vertical Alignment"
+msgstr "Vertikal justering"
+
+#: assets/blocks/blocks.js:9546 assets/blocks/blocks.js:18391
+#: assets/blocks/blocks.js:29638 incl/block-settings-main.php:418
+#: incl/block-settings-main.php:1498 incl/block-settings-main.php:1631
+msgid "Top"
+msgstr "Topp"
+
+#: assets/blocks/blocks.js:9546 assets/blocks/blocks.js:9554
+#: assets/blocks/blocks.js:16770 assets/blocks/blocks.js:18391
+#: assets/blocks/blocks.js:18399 assets/blocks/blocks.js:21410
+#: incl/block-settings-main.php:422 incl/block-settings-main.php:441
+#: incl/block-settings-main.php:913 incl/block-settings-main.php:959
+#: incl/block-settings-main.php:1266 incl/block-settings-main.php:1502
+#: incl/block-settings-main.php:1521 incl/block-settings-main.php:1766
+msgid "Center"
+msgstr "Midten"
+
+#: assets/blocks/blocks.js:9546 assets/blocks/blocks.js:18391
+#: assets/blocks/blocks.js:29638 incl/block-settings-main.php:426
+#: incl/block-settings-main.php:1506 incl/block-settings-main.php:1639
+#: incl/pages/settings/images.php:53
+msgid "Bottom"
+msgstr "Bunn"
+
+#: assets/blocks/blocks.js:9552 assets/blocks/blocks.js:18397
+#: incl/block-settings-main.php:432 incl/block-settings-main.php:1512
+msgid "Horizontal Alignment"
+msgstr "Horisontal justering"
+
+#: assets/blocks/blocks.js:9591
+msgid "Open media library"
+msgstr "Åpne mediebiblioteket"
+
+#: assets/blocks/blocks.js:9610
+msgid "Enter title…"
+msgstr "Angi tittel..."
+
+#: assets/blocks/blocks.js:9628
+msgid "Enter subtitle…"
+msgstr "Angi undertittel..."
+
+#: assets/blocks/blocks.js:9742 incl/pages/block-settings.php:55
+msgid "Image - PublishPress"
+msgstr ""
+
+#: assets/blocks/blocks.js:9743
+msgid "Image/photo block with more options and styles."
+msgstr ""
+
+#: assets/blocks/blocks.js:9749
+msgid "image"
+msgstr "bilde"
+
+#: assets/blocks/blocks.js:9749
+msgid "advanced image"
+msgstr ""
+
+#: assets/blocks/blocks.js:9749
+msgid "photo"
+msgstr "foto"
+
+#: assets/blocks/blocks.js:9749 assets/blocks/blocks.js:17069
+#: assets/blocks/blocks.js:20348
+msgid "box"
+msgstr "boks"
+
+#: assets/blocks/blocks.js:10046 incl/block-settings-main.php:479
+msgid "Pushpin"
+msgstr "Knappenål"
+
+#: assets/blocks/blocks.js:10046 incl/block-settings-main.php:483
+msgid "Configuration"
+msgstr "Konfigurasjon"
+
+#: assets/blocks/blocks.js:10046 incl/block-settings-main.php:487
+msgid "Flag"
+msgstr "Flagg"
+
+#: assets/blocks/blocks.js:10046 incl/block-settings-main.php:491
+msgid "Star"
+msgstr "Stjerne"
+
+#: assets/blocks/blocks.js:10046 incl/block-settings-main.php:495
+msgid "Checkmark"
+msgstr "Avkrysningsmerke"
+
+#: assets/blocks/blocks.js:10046
+msgid "Checkmark 2"
+msgstr "Avkrysningsmerke 2"
+
+#: assets/blocks/blocks.js:10046
+msgid "Checkmark 3"
+msgstr "Avkrysningsmerke 3"
+
+#: assets/blocks/blocks.js:10046 incl/block-settings-main.php:499
+msgid "Minus"
+msgstr "Minus"
+
+#: assets/blocks/blocks.js:10046
+msgid "Minus 2"
+msgstr "Minus 2"
+
+#: assets/blocks/blocks.js:10046 incl/block-settings-main.php:52
+#: incl/block-settings-main.php:503
+msgid "Plus"
+msgstr "Pluss"
+
+#: assets/blocks/blocks.js:10046
+msgid "Plus 2"
+msgstr "Pluss 2"
+
+#: assets/blocks/blocks.js:10046 incl/block-settings-main.php:507
+msgid "Play"
+msgstr "Spill av"
+
+#: assets/blocks/blocks.js:10046
+msgid "Arrow right"
+msgstr "Høyrepil"
+
+#: assets/blocks/blocks.js:10046
+msgid "Arrow right 2"
+msgstr "Høyrepil 2"
+
+#: assets/blocks/blocks.js:10046
+msgid "X Cross 2"
+msgstr "X-kryss 2"
+
+#: assets/blocks/blocks.js:10046 incl/block-settings-main.php:515
+msgid "X Cross"
+msgstr "X-kryss"
+
+#: assets/blocks/blocks.js:10046 incl/block-settings-main.php:519
+msgid "Warning"
+msgstr "Advarsel"
+
+#: assets/blocks/blocks.js:10046 incl/block-settings-main.php:523
+msgid "Help"
+msgstr "Hjelp"
+
+#: assets/blocks/blocks.js:10046 incl/block-settings-main.php:527
+msgid "Info"
+msgstr "Info"
+
+#: assets/blocks/blocks.js:10046
+msgid "Info 2"
+msgstr "Info 2"
+
+#: assets/blocks/blocks.js:10046 incl/block-settings-main.php:531
+msgid "Circle"
+msgstr "Sirkel"
+
+#: assets/blocks/blocks.js:10071
+msgid "Advanced List"
+msgstr "Avansert liste"
+
+#: assets/blocks/blocks.js:10081
+msgid "Refresh this list when it conflict with other lists styles"
+msgstr "Oppfrisk denne listen når den er i konflikt med andre listestiler"
+
+#: assets/blocks/blocks.js:10094 assets/blocks/blocks.js:19833
+#: incl/block-settings-main.php:455 incl/block-settings-main.php:1112
+#: incl/block-settings-main.php:2060
+msgid "Text Settings"
+msgstr "Tekstinnstillinger"
+
+#: assets/blocks/blocks.js:10109 assets/blocks/blocks.js:19504
+#: incl/block-settings-main.php:467 incl/block-settings-main.php:1852
+msgid "Icon Settings"
+msgstr "Ikoninnstillinger"
+
+#: assets/blocks/blocks.js:10112
+msgid "List icon"
+msgstr "Liste-ikon"
+
+#: assets/blocks/blocks.js:10139 incl/block-settings-main.php:537
+msgid "Icon color"
+msgstr "Ikonfarge"
+
+#: assets/blocks/blocks.js:10152 assets/blocks/blocks.js:27676
+msgid "Icon size"
+msgstr "Ikonstørrelse"
+
+#: assets/blocks/blocks.js:10162
+msgid "Line height"
+msgstr "Linjehøyde"
+
+#: assets/blocks/blocks.js:10202
+msgid "Write advanced list…"
+msgstr "Skriv avansert liste"
+
+#: assets/blocks/blocks.js:10304 incl/pages/block-settings.php:56
+msgid "List - PublishPress"
+msgstr ""
+
+#: assets/blocks/blocks.js:10305
+msgid "List block with custom icons and styles."
+msgstr "Listeblokk med tilpassede ikoner og stiler."
+
+#: assets/blocks/blocks.js:10311
+msgid "advanced list"
+msgstr ""
+
+#: assets/blocks/blocks.js:10714
+msgid "At least 1 row of current section must present."
+msgstr "Minst 1 rad fra inneværende seksjon må være tilstede."
+
+#: assets/blocks/blocks.js:11331 assets/blocks/blocks.js:11352
+msgid "Cannot select multi cells from difference section!"
+msgstr "Kan ikke velge flere celler fra ulike seksjoner!"
+
+#: assets/blocks/blocks.js:11449 assets/blocks/blocks.js:11739
+msgid "Advanced Table"
+msgstr "Avansert tabell"
+
+#: assets/blocks/blocks.js:11457
+msgid "Column Count"
+msgstr "Antall kolonner"
+
+#: assets/blocks/blocks.js:11466
+msgid "Row Count"
+msgstr "Antall rader"
+
+#: assets/blocks/blocks.js:11479
+msgid "Create"
+msgstr "Opprett"
+
+#: assets/blocks/blocks.js:11487
+msgid ""
+"Hint: Hold CTRL key for multi cells selection. Hold SHIFT key for range "
+"cells selection."
+msgstr ""
+"Hint: Hold Ctrl-tasten for å velge flere ruter. Hold shift-tasten for å "
+"velge et område med ruter."
+
+#: assets/blocks/blocks.js:11496
+msgid "Add Row Before"
+msgstr "Legg til rad før"
+
+#: assets/blocks/blocks.js:11503
+msgid "Add Row After"
+msgstr "Legg til rad etter"
+
+#: assets/blocks/blocks.js:11510
+msgid "Delete Row"
+msgstr "Slett rad"
+
+#: assets/blocks/blocks.js:11517
+msgid "Add Column Before"
+msgstr "Legg til kolonne foran"
+
+#: assets/blocks/blocks.js:11524
+msgid "Add Column After"
+msgstr "Legg til kolonne etter"
+
+#: assets/blocks/blocks.js:11531
+msgid "Delete Column"
+msgstr "Slett kolonne"
+
+#: assets/blocks/blocks.js:11543
+msgid "Split Merged Cells"
+msgstr "Del opp sammenslåtte celler"
+
+#: assets/blocks/blocks.js:11558
+msgid "Merge Cells"
+msgstr "Slå sammen celler"
+
+#: assets/blocks/blocks.js:11566
+msgid "Border Top"
+msgstr "Kantlinje toppp"
+
+#: assets/blocks/blocks.js:11578
+msgid "Border Right"
+msgstr "Kantlinje høyre"
+
+#: assets/blocks/blocks.js:11590
+msgid "Border Bottom"
+msgstr "Kantlinje bunn"
+
+#: assets/blocks/blocks.js:11602
+msgid "Border Left"
+msgstr "Kantlinje venstre"
+
+#: assets/blocks/blocks.js:11614
+msgid "Border All"
+msgstr "Alle kantlinjer"
+
+#: assets/blocks/blocks.js:11625
+msgid "Border None"
+msgstr "Ingen kantlinje"
+
+#: assets/blocks/blocks.js:11640
+msgid "Border Vertical"
+msgstr "Vertikal kantlinje"
+
+#: assets/blocks/blocks.js:11652
+msgid "Border Horizontal"
+msgstr "Horisontal kantlinje"
+
+#: assets/blocks/blocks.js:11664
+msgid "Border Inner"
+msgstr "Indre kantlinje"
+
+#: assets/blocks/blocks.js:11676
+msgid "Border Outer"
+msgstr "Ytre kantlinje"
+
+#: assets/blocks/blocks.js:11694
+msgid "Align left"
+msgstr "Juster venstre"
+
+#: assets/blocks/blocks.js:11698
+msgid "Align center"
+msgstr "Juster midten"
+
+#: assets/blocks/blocks.js:11702
+msgid "Align right"
+msgstr "Juster høyre"
+
+#: assets/blocks/blocks.js:11706
+msgid "Align justify"
+msgstr "Juster strukket"
+
+#: assets/blocks/blocks.js:11717
+msgid "Align top"
+msgstr "Juster topp"
+
+#: assets/blocks/blocks.js:11726
+msgid "Align middle"
+msgstr "Juster midten"
+
+#: assets/blocks/blocks.js:11735
+msgid "Align bottom"
+msgstr "Juster bunn"
+
+#: assets/blocks/blocks.js:11751
+msgid "Edit Table"
+msgstr "Rediger tabell"
+
+#: assets/blocks/blocks.js:11756
+msgid "Refresh table (Use this after using undo or redo)"
+msgstr "Oppfrisk tabell (Bruk dette etter å ha brukt angre eller gjør på nytt)"
+
+#: assets/blocks/blocks.js:11768 incl/block-settings-main.php:574
+msgid "Table Settings"
+msgstr "Tabellinnstillinger"
+
+#: assets/blocks/blocks.js:11770
+msgid "Max width (px)"
+msgstr "Maksbredde (px)"
+
+#: assets/blocks/blocks.js:11771
+msgid "Set this to 0 to make max-width is 100%"
+msgstr "Sett dette til 0 for å gjøre max-bredder 100%"
+
+#: assets/blocks/blocks.js:11780
+msgid "Fixed width table cells"
+msgstr "Fast bredde på tabellcellene"
+
+#: assets/blocks/blocks.js:11787
+msgid "Table header"
+msgstr "Tabell-hode"
+
+#: assets/blocks/blocks.js:11794
+msgid "Table footer"
+msgstr "Tabell-bunn"
+
+#: assets/blocks/blocks.js:11801
+msgid "Border collapsed"
+msgstr "Kantlinje sammentrukket"
+
+#: assets/blocks/blocks.js:11810
+msgid "Cell Settings"
+msgstr "Celleinnstillinger"
+
+#: assets/blocks/blocks.js:11881 incl/block-settings-main.php:250
+#: incl/block-settings-main.php:1822 incl/block-settings-main.php:1891
+#: incl/block-settings-main.php:2002 incl/block-settings-main.php:2082
+msgid "Padding Top"
+msgstr "Polstring topp"
+
+#: assets/blocks/blocks.js:11890 incl/block-settings-main.php:257
+#: incl/block-settings-main.php:1843 incl/block-settings-main.php:1912
+#: incl/block-settings-main.php:2023 incl/block-settings-main.php:2103
+msgid "Padding Right"
+msgstr "Polstring høyre"
+
+#: assets/blocks/blocks.js:11899 incl/block-settings-main.php:264
+#: incl/block-settings-main.php:1829 incl/block-settings-main.php:1898
+#: incl/block-settings-main.php:2009 incl/block-settings-main.php:2089
+msgid "Padding Bottom"
+msgstr "Polstring bunn"
+
+#: assets/blocks/blocks.js:11908 incl/block-settings-main.php:271
+#: incl/block-settings-main.php:1836 incl/block-settings-main.php:1905
+#: incl/block-settings-main.php:2016 incl/block-settings-main.php:2096
+msgid "Padding Left"
+msgstr "Polstring venstre"
+
+#: assets/blocks/blocks.js:11922
+msgid "Horizontal Align"
+msgstr "Horisontal justering"
+
+#: assets/blocks/blocks.js:11938 incl/block-settings-main.php:1626
+msgid "Vertical Align"
+msgstr "Vertikal justering"
+
+#: assets/blocks/blocks.js:12005 incl/pages/block-settings.php:57
+msgid "Table - PublishPress"
+msgstr ""
+
+#: assets/blocks/blocks.js:12006
+msgid "Table block with more styles and functions."
+msgstr ""
+
+#: assets/blocks/blocks.js:12012
+msgid "table"
+msgstr "tabell"
+
+#: assets/blocks/blocks.js:12012
+msgid "advanced table"
+msgstr ""
+
+#: assets/blocks/blocks.js:12012
+msgid "cell"
+msgstr "celle"
+
+#: assets/blocks/blocks.js:12012
+msgid "data"
+msgstr "data"
+
+#: assets/blocks/blocks.js:12151
+msgid "Stripes"
+msgstr "Striper"
+
+#: assets/blocks/blocks.js:12506 incl/block-settings-main.php:976
+msgid "Horizontal"
+msgstr "Horisontalt"
+
+#: assets/blocks/blocks.js:12506 incl/block-settings-main.php:980
+msgid "Vertical"
+msgstr "Vertikalt"
+
+#: assets/blocks/blocks.js:12730 incl/advanced-gutenberg-main.php:1081
+msgid "copy"
+msgstr ""
+
+#: assets/blocks/blocks.js:12750
+msgid "Tab Header"
+msgstr ""
+
+#: assets/blocks/blocks.js:12840 assets/blocks/blocks.js:15019
+#: assets/blocks/blocks.js:24543
+msgid "desktop"
+msgstr ""
+
+#: assets/blocks/blocks.js:12843 assets/blocks/blocks.js:15022
+#: assets/blocks/blocks.js:24546
+msgid "tablet"
+msgstr ""
+
+#: assets/blocks/blocks.js:12846 assets/blocks/blocks.js:15025
+#: assets/blocks/blocks.js:24549
+msgid "mobile"
+msgstr ""
+
+#: assets/blocks/blocks.js:12886
+msgid "Advanced Tabs"
+msgstr "Avanserte faner"
+
+#: assets/blocks/blocks.js:12894 incl/block-settings-main.php:971
+msgid "Tabs Style"
+msgstr "Fanestil"
+
+#: assets/blocks/blocks.js:12956
+msgid "Tabs Settings"
+msgstr "Faneinnstillinger"
+
+#: assets/blocks/blocks.js:12958
+msgid "Initial Open Tab"
+msgstr "Opprinnelig åpen fane"
+
+#: assets/blocks/blocks.js:12969 assets/blocks/blocks.js:28668
+msgid "Tab Colors"
+msgstr "Fanefarger"
+
+#: assets/blocks/blocks.js:12984 assets/blocks/blocks.js:28683
+msgid "Active Tab Background Color"
+msgstr "Bakgrunnsfarge på aktiv fane"
+
+#: assets/blocks/blocks.js:12990 assets/blocks/blocks.js:28689
+msgid "Active Tab Text Color"
+msgstr "Farge på aktiv fane"
+
+#: assets/blocks/blocks.js:12998 assets/blocks/blocks.js:28697
+msgid "Body Colors"
+msgstr "Brødtekstfarge"
+
+#: assets/blocks/blocks.js:13091 assets/blocks/blocks.js:28789
+msgid "Title…"
+msgstr "Tittel..."
+
+#: assets/blocks/blocks.js:13098
+msgid "HTML Anchor"
+msgstr ""
+
+#: assets/blocks/blocks.js:13108
+msgid "Move back"
+msgstr ""
+
+#: assets/blocks/blocks.js:13122
+msgid "Move forward"
+msgstr ""
+
+#: assets/blocks/blocks.js:13136
+msgid "Duplicate tab"
+msgstr ""
+
+#: assets/blocks/blocks.js:13151 assets/blocks/blocks.js:28794
+msgid "Remove tab"
+msgstr "Fjern fane"
+
+#: assets/blocks/blocks.js:13175 assets/blocks/blocks.js:28822
+msgid "Add tab"
+msgstr "Legg til fane"
+
+#: assets/blocks/blocks.js:13229 assets/blocks/blocks.js:13834
+#: assets/blocks/blocks.js:13897 assets/blocks/blocks.js:13949
+#: assets/blocks/blocks.js:28886
+msgid "Tab 1"
+msgstr "Fane 1"
+
+#: assets/blocks/blocks.js:13229 assets/blocks/blocks.js:13834
+#: assets/blocks/blocks.js:13897 assets/blocks/blocks.js:13949
+#: assets/blocks/blocks.js:28889
+msgid "Tab 2"
+msgstr "Fane 2"
+
+#: assets/blocks/blocks.js:13229 assets/blocks/blocks.js:13834
+#: assets/blocks/blocks.js:13897 assets/blocks/blocks.js:13949
+#: assets/blocks/blocks.js:28892
+msgid "Tab 3"
+msgstr "Fane 3"
+
+#: assets/blocks/blocks.js:13312 incl/pages/block-settings.php:58
+msgid "Tabs - PublishPress"
+msgstr ""
+
+#: assets/blocks/blocks.js:13313 assets/blocks/blocks.js:28942
+msgid "Create horizontal or vertical tabs to display your content."
+msgstr ""
+
+#: assets/blocks/blocks.js:13319 assets/blocks/blocks.js:28948
+msgid "tabs"
+msgstr "faner"
+
+#: assets/blocks/blocks.js:13319
+msgid "advanced tabs"
+msgstr ""
+
+#: assets/blocks/blocks.js:13319 assets/blocks/blocks.js:28948
+msgid "cards"
+msgstr "kort"
+
+#: assets/blocks/blocks.js:13803
+msgid "Tab Item - PublishPress"
+msgstr ""
+
+#: assets/blocks/blocks.js:13848
+msgid "tab"
+msgstr "fane"
+
+#: assets/blocks/blocks.js:14246
+msgid "Advanced Video"
+msgstr "Avansert video"
+
+#: assets/blocks/blocks.js:14265
+msgid "Change image preview"
+msgstr "Endre forhåndsvisning av bilde"
+
+#: assets/blocks/blocks.js:14273
+msgid "Remove image preview"
+msgstr "Fjern forhåndsvisning av bilde"
+
+#: assets/blocks/blocks.js:14286 incl/block-settings-main.php:588
+msgid "Video Settings"
+msgstr "Video-innstillinger"
+
+#: assets/blocks/blocks.js:14288
+msgid "Open video in light box"
+msgstr "Åpne video i lysboks"
+
+#: assets/blocks/blocks.js:14289
+msgid "Lightbox offers additional display options."
+msgstr "Lysboks tilby ytterligere visningsalternativer."
+
+#: assets/blocks/blocks.js:14299 assets/blocks/blocks.js:24680
+msgid "Autoplay"
+msgstr "Auto-avspill"
+
+#: assets/blocks/blocks.js:14306
+msgid "Loop"
+msgstr "Løkke"
+
+#: assets/blocks/blocks.js:14313
+msgid "Muted"
+msgstr "Dempet"
+
+#: assets/blocks/blocks.js:14320
+msgid "Playback Controls"
+msgstr "Avspillingskontroller"
+
+#: assets/blocks/blocks.js:14327
+msgid "Play inline"
+msgstr "Spill innenlinjes"
+
+#: assets/blocks/blocks.js:14334
+msgid "Video preloading"
+msgstr "Forhåndslasting av video"
+
+#: assets/blocks/blocks.js:14336
+msgid "Auto"
+msgstr "Auto"
+
+#: assets/blocks/blocks.js:14336
+msgid "Metadata"
+msgstr "Metadata"
+
+#: assets/blocks/blocks.js:14350
+msgid "Video width"
+msgstr "Videobredde"
+
+#: assets/blocks/blocks.js:14359
+msgid "Video height"
+msgstr "Videohøyde"
+
+#: assets/blocks/blocks.js:14380
+msgid "Play Button Color"
+msgstr "Farge på avspillingsknapp"
+
+#: assets/blocks/blocks.js:14389
+msgid "Play Button"
+msgstr "Avspillingsknapp"
+
+#: assets/blocks/blocks.js:14417
+msgid "Play Button Size"
+msgstr "Størrelse på avspillingsknapp"
+
+#: assets/blocks/blocks.js:14453
+msgid "Select image preview"
+msgstr "Velg forhåndsvisning av bilde"
+
+#: assets/blocks/blocks.js:14503
+msgid "Youtube/Vimeo video URL/ID…"
+msgstr "Youtube/Vimeo video-URL/ID…"
+
+#: assets/blocks/blocks.js:14517
+msgid "Fetch video content"
+msgstr "Hent videoinnhold"
+
+#: assets/blocks/blocks.js:14534
+msgid "Load local video"
+msgstr "Last lokal video"
+
+#: assets/blocks/blocks.js:14547
+msgid "Current Video"
+msgstr "Nåværende video"
+
+#: assets/blocks/blocks.js:14570
+msgid "Wrong video URL/ID. Please try another."
+msgstr ""
+
+#: assets/blocks/blocks.js:14571
+msgid "Not selected yet."
+msgstr "Ikke valgt ennå."
+
+#: assets/blocks/blocks.js:14674 incl/pages/block-settings.php:59
+msgid "Video - PublishPress"
+msgstr ""
+
+#: assets/blocks/blocks.js:14675
+msgid "Add more options and styles for videos in your Media Library."
+msgstr ""
+
+#: assets/blocks/blocks.js:14681
+msgid "video"
+msgstr "video"
+
+#: assets/blocks/blocks.js:14681
+msgid "advanced video"
+msgstr ""
+
+#: assets/blocks/blocks.js:14681
+msgid "embed"
+msgstr "bygg inn"
+
+#: assets/blocks/blocks.js:14681
+msgid "media"
+msgstr "media"
+
+#: assets/blocks/blocks.js:14906
+msgid "One column"
+msgstr "Én kolonne"
+
+#: assets/blocks/blocks.js:14906
+msgid "100"
+msgstr "100"
+
+#: assets/blocks/blocks.js:14906
+msgid "Two columns; equal split"
+msgstr "To kolonner, likt fordelt"
+
+#: assets/blocks/blocks.js:14906
+msgid "50 / 50"
+msgstr "50 / 50"
+
+#: assets/blocks/blocks.js:14906
+msgid "Two columns; two-thirds, one-third split"
+msgstr "To kolonner, to tredelers, én tredels fordeling"
+
+#: assets/blocks/blocks.js:14906
+msgid "66 / 33"
+msgstr "66 / 33"
+
+#: assets/blocks/blocks.js:14906
+msgid "Two columns; one-third, two-thirds split"
+msgstr "To kolonner, én tredels, to tredelers fordeling"
+
+#: assets/blocks/blocks.js:14906
+msgid "33 / 66"
+msgstr "33 / 66"
+
+#: assets/blocks/blocks.js:14906
+msgid "Two columns; one-quarter, three-quarters split"
+msgstr "To kolonner, én firedels, tre firedelers fordeling"
+
+#: assets/blocks/blocks.js:14906
+msgid "25 / 75"
+msgstr "25 / 75"
+
+#: assets/blocks/blocks.js:14906
+msgid "Two columns; three-quarters, one-quarter split"
+msgstr "To kolonner, tre firedelers, én firedels fordeling"
+
+#: assets/blocks/blocks.js:14906
+msgid "75 / 25"
+msgstr "75 / 25"
+
+#: assets/blocks/blocks.js:14906
+msgid "Two columns; one-fifth, four-fifths split"
+msgstr "Tre kolonner, en femdel, fire femdelers fordeling"
+
+#: assets/blocks/blocks.js:14906
+msgid "20 / 80"
+msgstr "20 / 80"
+
+#: assets/blocks/blocks.js:14906
+msgid "Two columns; four-fifths, one-fifth split"
+msgstr "To kolonner, fire femdeler, en femdels fordeling"
+
+#: assets/blocks/blocks.js:14906
+msgid "80 / 20"
+msgstr "80 / 20"
+
+#: assets/blocks/blocks.js:14906
+msgid "Three columns; equal split"
+msgstr "Tre kolonner; fordelt likt"
+
+#: assets/blocks/blocks.js:14906
+msgid "33 / 33 / 33"
+msgstr "33 / 33 / 33"
+
+#: assets/blocks/blocks.js:14906
+msgid "Three columns; wider one-half left column"
+msgstr "Tre kolonner, bredere en halvdels venstrekolonne"
+
+#: assets/blocks/blocks.js:14906
+msgid "50 / 25 / 25"
+msgstr "50 / 25 / 25"
+
+#: assets/blocks/blocks.js:14906
+msgid "Three columns; wider one-half right column"
+msgstr "Tre kolonner, bredere en halvdels høyrekolonne"
+
+#: assets/blocks/blocks.js:14906
+msgid "25 / 25 / 50"
+msgstr "25 / 25 / 50"
+
+#: assets/blocks/blocks.js:14906
+msgid "Three columns; wider one-half center column"
+msgstr "Tre kolonner, bredere en halvdels midtkolonne"
+
+#: assets/blocks/blocks.js:14906
+msgid "25 / 50 / 25"
+msgstr "25 / 50 / 25"
+
+#: assets/blocks/blocks.js:14906
+msgid "Three columns; wider three-fifths center column"
+msgstr "Tre kolonner, bredere tre femdelers midtkolonne"
+
+#: assets/blocks/blocks.js:14906
+msgid "20 / 60 / 20"
+msgstr "20 / 60 / 20"
+
+#: assets/blocks/blocks.js:14906
+msgid "Three columns; wider three-fifths left column"
+msgstr "Tre kolonner, bredere tre femdelers venstrekolonne"
+
+#: assets/blocks/blocks.js:14906
+msgid "60 / 20 / 20"
+msgstr "60 / 20 / 20"
+
+#: assets/blocks/blocks.js:14906
+msgid "Three columns; wider three-fifths right column"
+msgstr "Tre kolonner, bredere tre femdelers høyrekolonne"
+
+#: assets/blocks/blocks.js:14906
+msgid "20 / 20 / 60"
+msgstr "20 / 20 / 60"
+
+#: assets/blocks/blocks.js:14906
+msgid "Three columns; wider four-sixths center column"
+msgstr "Tre kolonner, bredere fire seksdelers midtkolonne"
+
+#: assets/blocks/blocks.js:14906
+msgid "16.6 / 66.6 / 16.6"
+msgstr "16,6 / 66,6 / 16,6"
+
+#: assets/blocks/blocks.js:14906
+msgid "Four columns; equal split"
+msgstr "Fire kolonner, likt fordelt"
+
+#: assets/blocks/blocks.js:14906
+msgid "25 / 25 / 25 / 25"
+msgstr "25 / 25 / 25 / 25"
+
+#: assets/blocks/blocks.js:14906
+msgid "Four columns; wider one-half left column"
+msgstr "Fire kolonner, bredere halvdels venstrekolonne"
+
+#: assets/blocks/blocks.js:14906
+msgid "50 / 16.6 / 16.6 / 16.6"
+msgstr "50 / 16,6 / 16,6 / 16,6"
+
+#: assets/blocks/blocks.js:14906
+msgid "Four columns; wider one-half right column"
+msgstr "Fire kolonner, bredere en halvdels høyrekolonne"
+
+#: assets/blocks/blocks.js:14906
+msgid "16.6 / 16.6 / 16.6 / 50"
+msgstr "16,6 / 16,6 / 16,6 / 50"
+
+#: assets/blocks/blocks.js:14906
+msgid "Four columns; wider two-fifths right column"
+msgstr "Fire kolonner, bredere to femdelers høyrekolonne"
+
+#: assets/blocks/blocks.js:14906
+msgid "20 / 20 / 20 / 40"
+msgstr "20 / 20 / 20 / 40"
+
+#: assets/blocks/blocks.js:14906
+msgid "Four columns; wider two-fifths left column"
+msgstr "Fire kolonner, bredere to femdelers venstrekolonne"
+
+#: assets/blocks/blocks.js:14906
+msgid "40 / 20 / 20 / 20"
+msgstr "40 / 20 / 20 / 20"
+
+#: assets/blocks/blocks.js:14906
+msgid "Five columns; equal split"
+msgstr "Fem kolonner, likt fordelt"
+
+#: assets/blocks/blocks.js:14906
+msgid "20 / 20 / 20 / 20 / 20"
+msgstr "20 / 20 / 20 / 20 / 20"
+
+#: assets/blocks/blocks.js:14906
+msgid "Six columns; equal split"
+msgstr "Seks kolonner; fordelt likt"
+
+#: assets/blocks/blocks.js:14906
+msgid "16.6 / 16.6 / 16.6 / 16.6 / 16.6 / 16.6"
+msgstr "16,6 / 16,6 / 16,6 / 16,6 / 16,6 / 16,6"
+
+#: assets/blocks/blocks.js:14907
+msgid "Three: 100 - 1/2 - 1/2"
+msgstr "Tre: 100 - 1/2 - 1/2"
+
+#: assets/blocks/blocks.js:14907
+msgid "Three: 1/2 - 1/2 - 100"
+msgstr "Tre: 1/2 - 1/2 - 100"
+
+#: assets/blocks/blocks.js:14907
+msgid "Four: Two Columns"
+msgstr "Fire: To kolonner"
+
+#: assets/blocks/blocks.js:14907
+msgid "Six: Two Columns"
+msgstr "Seks: To kolonner"
+
+#: assets/blocks/blocks.js:14907
+msgid "Six: Three Columns"
+msgstr "Seks: Tre kolonner"
+
+#: assets/blocks/blocks.js:15080
+msgid "Columns Manager"
+msgstr "Kolonnebehandler"
+
+#: assets/blocks/blocks.js:15086
+msgid "Choose a columns layout"
+msgstr "Velg en kolonneutforming"
+
+#: assets/blocks/blocks.js:15134
+msgid "Vertical Align Top"
+msgstr "Vertikaljuster topp"
+
+#: assets/blocks/blocks.js:15146
+msgid "Vertical Align Middle"
+msgstr "Vertikaljuster midten"
+
+#: assets/blocks/blocks.js:15158
+msgid "Vertical Align Bottom"
+msgstr "Vertikaljuster bunn"
+
+#: assets/blocks/blocks.js:15170
+msgid "Inner Columns Full Height"
+msgstr "Full høyde for indre kolonner"
+
+#: assets/blocks/blocks.js:15182
+msgid "Columns Manager "
+msgstr "Kolonnebehandler"
+
+#: assets/blocks/blocks.js:15195 incl/block-settings-main.php:1535
+msgid "Columns Settings"
+msgstr "Kolonneinnstillinger"
+
+#: assets/blocks/blocks.js:15198
+msgid "Responsive Settings"
+msgstr "Innstillinger for responsivitet"
+
+#: assets/blocks/blocks.js:15262
+msgid "Space between columns"
+msgstr "Mellomrom mellom kolonner"
+
+#: assets/blocks/blocks.js:15273 incl/block-settings-main.php:1577
+msgid "Vertical space when collapsed"
+msgstr "Vertikalt mellomrom når sammentrukket"
+
+#: assets/blocks/blocks.js:15281
+msgid "Collapsed Order RTL"
+msgstr ""
+
+#: assets/blocks/blocks.js:15290 assets/blocks/blocks.js:16218
+msgid " Padding"
+msgstr "Polstring"
+
+#: assets/blocks/blocks.js:15332 assets/blocks/blocks.js:16241
+msgid " Margin"
+msgstr "Avstand"
+
+#: assets/blocks/blocks.js:15375 incl/block-settings-main.php:1623
+msgid "Row Settings"
+msgstr "Radinnsillinger"
+
+#: assets/blocks/blocks.js:15377 incl/block-settings-main.php:1649
+msgid "Columns Wrapped"
+msgstr "Kolonner innpakket"
+
+#: assets/blocks/blocks.js:15378
+msgid ""
+"If your columns overflow they available space, they will be placed on a new "
+"line."
+msgstr ""
+
+#: assets/blocks/blocks.js:15385 assets/blocks/blocks.js:17111
+#: incl/block-settings-main.php:1654
+msgid "Wrapper Tag"
+msgstr "Tagg for innpakning"
+
+#: assets/blocks/blocks.js:15393 incl/block-settings-main.php:1689
+msgid "Content Max Width"
+msgstr "Maks-bredde for innholdet"
+
+#: assets/blocks/blocks.js:15416 incl/block-settings-main.php:1696
+msgid "Content Min Height"
+msgstr "Minimumshøyde for innholdet"
+
+#: assets/blocks/blocks.js:15439
+msgid "Content Max Height"
+msgstr "Maks-høyde for innholdet"
+
+#: assets/blocks/blocks.js:15808 incl/pages/block-settings.php:60
+msgid "Columns - PublishPress"
+msgstr ""
+
+#: assets/blocks/blocks.js:15809
+msgid ""
+"Create flexible layouts for your content with advanced options and styles."
+msgstr ""
+
+#: assets/blocks/blocks.js:15815 assets/blocks/blocks.js:16392
+msgid "columns"
+msgstr "kolonner"
+
+#: assets/blocks/blocks.js:15815
+msgid "columns manager"
+msgstr ""
+
+#: assets/blocks/blocks.js:15815 assets/blocks/blocks.js:16392
+#: assets/blocks/blocks.js:17069
+msgid "row"
+msgstr "rad"
+
+#: assets/blocks/blocks.js:15815 assets/blocks/blocks.js:16392
+msgid "layout"
+msgstr "oppsett"
+
+#: assets/blocks/blocks.js:16123 incl/block-settings-main.php:1754
+msgid "Column Settings"
+msgstr "Kolonneinnstillinger"
+
+#: assets/blocks/blocks.js:16125
+msgid "Width (%)"
+msgstr "Bredde (%)"
+
+#: assets/blocks/blocks.js:16128
+msgid "Available: "
+msgstr "Tilgjengelig:"
+
+#: assets/blocks/blocks.js:16130
+msgid ""
+"Set to 0 = auto. This will override predefine layout styles. Recommend for "
+"experience users!"
+msgstr ""
+"Sett til 0 = auto, Dette vil overstyre forhåndsdefinerte oppsettstiler. "
+"Anbefalt for erfarne brukere."
+
+#: assets/blocks/blocks.js:16173 assets/blocks/blocks.js:16729
+#: assets/blocks/blocks.js:23791 assets/blocks/blocks.js:26938
+msgid "Border radius (px)"
+msgstr "Kantlinjeradius (px)"
+
+#: assets/blocks/blocks.js:16206
+msgid " text alignment"
+msgstr "tekstjustering"
+
+#: assets/blocks/blocks.js:16224 assets/blocks/blocks.js:16247
+msgid "Unit (px)"
+msgstr "Enhet (px)"
+
+#: assets/blocks/blocks.js:16384 incl/pages/block-settings.php:61
+msgid "Column - PublishPress"
+msgstr ""
+
+#: assets/blocks/blocks.js:16386
+msgid "Column in row."
+msgstr "Kolonne i rad."
+
+#: assets/blocks/blocks.js:16604
+msgid "Contact Form"
+msgstr "Kontaktskjema"
+
+#: assets/blocks/blocks.js:16612 assets/blocks/blocks.js:23683
+#: incl/block-settings-main.php:1284
+msgid "Form Settings"
+msgstr "Skjemainnstillinger"
+
+#: assets/blocks/blocks.js:16619 assets/blocks/blocks.js:21507
+#: assets/blocks/blocks.js:23672
+msgid "We strongly recommend to enable Google reCAPTCHA to avoid spam."
+msgstr ""
+
+#: assets/blocks/blocks.js:16624 assets/blocks/blocks.js:21512
+#: assets/blocks/blocks.js:23677
+msgid "You can enable it in Settings"
+msgstr ""
+
+#: assets/blocks/blocks.js:16630
+msgid "Email sender"
+msgstr "E-postsender"
+
+#: assets/blocks/blocks.js:16634
+msgid ""
+"An email will be sent to the admin email (by default) whenever a contact "
+"form is submitted. You can change it in "
+msgstr ""
+"En e-post vil bli sendt til admin e-post (som standard) for hvert "
+"kontaktskjema som sendes inn. Du kan endre det i"
+
+#: assets/blocks/blocks.js:16639
+msgid "settings"
+msgstr "innstillinger"
+
+#: assets/blocks/blocks.js:16646 assets/blocks/blocks.js:23704
+#: incl/block-settings-main.php:1155 incl/block-settings-main.php:1311
+msgid "Text Label"
+msgstr "Tekst-etikett"
+
+#: assets/blocks/blocks.js:16648
+msgid "Name input placeholder"
+msgstr "Plassholder for navnefelt"
+
+#: assets/blocks/blocks.js:16655 assets/blocks/blocks.js:21318
+#: assets/blocks/blocks.js:23724
+msgid "Email input placeholder"
+msgstr "Plassholder for e-postfelt"
+
+#: assets/blocks/blocks.js:16662
+msgid "Message input placeholder"
+msgstr "Plassholder for meldingsfelt"
+
+#: assets/blocks/blocks.js:16669 assets/blocks/blocks.js:23731
+msgid "Submit text"
+msgstr "Innsendingstekst"
+
+#: assets/blocks/blocks.js:16676 assets/blocks/blocks.js:23738
+msgid "Empty field warning text"
+msgstr "Varslingstekst ved tomt felt"
+
+#: assets/blocks/blocks.js:16683 assets/blocks/blocks.js:23745
+msgid "Submit success text"
+msgstr "Tekst ved vellykket innsending"
+
+#: assets/blocks/blocks.js:16691 assets/blocks/blocks.js:23753
+#: assets/blocks/blocks.js:26886 incl/block-settings-main.php:1190
+#: incl/block-settings-main.php:1346
+msgid "Input Color"
+msgstr "Farge for innmatingsfelt"
+
+#: assets/blocks/blocks.js:16693 assets/blocks/blocks.js:21423
+#: assets/blocks/blocks.js:23755 assets/blocks/blocks.js:26889
+#: assets/blocks/blocks.js:26924 assets/blocks/blocks.js:26951
+msgid "Background color"
+msgstr "Bakgrunnsfarge"
+
+#: assets/blocks/blocks.js:16699 assets/blocks/blocks.js:21342
+#: assets/blocks/blocks.js:21429 assets/blocks/blocks.js:23761
+#: assets/blocks/blocks.js:26895 assets/blocks/blocks.js:26931
+#: assets/blocks/blocks.js:26957
+msgid "Text color"
+msgstr "Tekstfarge"
+
+#: assets/blocks/blocks.js:16713 assets/blocks/blocks.js:21356
+#: assets/blocks/blocks.js:23775
+msgid "Border color"
+msgstr "Kantlinjefarge"
+
+#: assets/blocks/blocks.js:16740 assets/blocks/blocks.js:21383
+#: assets/blocks/blocks.js:23802 incl/block-settings-main.php:1241
+#: incl/block-settings-main.php:1397
+msgid "Submit Button Settings"
+msgstr "Innstillinger for innsendingsknapp"
+
+#: assets/blocks/blocks.js:16745 assets/blocks/blocks.js:21385
+#: assets/blocks/blocks.js:23807
+msgid "Border and Text"
+msgstr "Kantlinje og tekst"
+
+#: assets/blocks/blocks.js:16751 assets/blocks/blocks.js:19426
+#: assets/blocks/blocks.js:19542 assets/blocks/blocks.js:21392
+#: assets/blocks/blocks.js:23813
+msgid "Background"
+msgstr "Bakgrunn"
+
+#: assets/blocks/blocks.js:16759 assets/blocks/blocks.js:21399
+#: assets/blocks/blocks.js:23821
+msgid "Button border radius"
+msgstr "Kantlinjeradius for knapp"
+
+#: assets/blocks/blocks.js:16768 assets/blocks/blocks.js:21408
+msgid "Button position"
+msgstr "Knappeposisjon"
+
+#: assets/blocks/blocks.js:16910 incl/pages/block-settings.php:62
+msgid "Contact Form - PublishPress"
+msgstr ""
+
+#: assets/blocks/blocks.js:16911
+msgid "Fastest way to create a contact form for your page."
+msgstr "Raskeste måte å lage et kontaktskjema på din side."
+
+#: assets/blocks/blocks.js:16917
+msgid "contact"
+msgstr "kontakt"
+
+#: assets/blocks/blocks.js:16917 assets/blocks/blocks.js:23953
+msgid "form"
+msgstr "skjema"
+
+#: assets/blocks/blocks.js:17062
+msgid "Container - PublishPress"
+msgstr ""
+
+#: assets/blocks/blocks.js:17063
+msgid "Block for containing other blocks."
+msgstr "Blokk som skal inneholde andre blokker."
+
+#: assets/blocks/blocks.js:17069
+msgid "container"
+msgstr "beholder"
+
+#: assets/blocks/blocks.js:17109 assets/blocks/blocks.js:19423
+#: incl/block-settings-main.php:1795
+msgid "Container Settings"
+msgstr "Beholderinnstillinger"
+
+#: assets/blocks/blocks.js:17266 assets/blocks/pro-ad.js:141
+msgid "Count Up"
+msgstr "Tell opppover"
+
+#: assets/blocks/blocks.js:17274 incl/block-settings-main.php:704
+msgid "Count Up Settings"
+msgstr "Innstillinger for teller opp"
+
+#: assets/blocks/blocks.js:17279 assets/blocks/blocks.js:21281
+#: incl/block-settings-main.php:687
+msgid "Header Color"
+msgstr "Hodefarge"
+
+#: assets/blocks/blocks.js:17285 incl/block-settings-main.php:692
+msgid "Count Up Color"
+msgstr "Farge for teller opp"
+
+#: assets/blocks/blocks.js:17291 assets/blocks/blocks.js:29661
+#: incl/block-settings-main.php:697 incl/block-settings-main.php:1125
+msgid "Description Color"
+msgstr "Farge for beskrivelse"
+
+#: assets/blocks/blocks.js:17299 assets/blocks/blocks.js:24991
+#: assets/blocks/blocks.js:29435 assets/blocks/blocks.js:30513
+#: incl/block-settings-main.php:1067 incl/block-settings-main.php:1137
+msgid "Columns"
+msgstr "Kolonner"
+
+#: assets/blocks/blocks.js:17308
+msgid "Counter Number Size"
+msgstr "Størrelse for teller"
+
+#: assets/blocks/blocks.js:17319
+msgid "Counter Up Symbol"
+msgstr "Symbol for teller opp"
+
+#: assets/blocks/blocks.js:17335 assets/blocks/blocks.js:17352
+#: assets/blocks/blocks.js:17369
+msgid "After"
+msgstr "Etter"
+
+#: assets/blocks/blocks.js:17335 assets/blocks/blocks.js:17352
+#: assets/blocks/blocks.js:17369
+msgid "Before"
+msgstr "Før"
+
+#: assets/blocks/blocks.js:17375
+msgid ""
+"Use toggle buttons above to define symbol placement before/after the number "
+"(toggle on is after)."
+msgstr ""
+"Bruk veksleknappene ovenfor til å definere symbolplasseringen før/etter "
+"tallet (på betyr etter)."
+
+#: assets/blocks/blocks.js:17396 assets/blocks/blocks.js:17447
+#: assets/blocks/blocks.js:17465 assets/blocks/blocks.js:17516
+#: assets/blocks/blocks.js:17534 assets/blocks/blocks.js:17585
+#: assets/blocks/blocks.js:28856
+msgid "Enter text…"
+msgstr "Oppgi tekst..."
+
+#: assets/blocks/blocks.js:17693 incl/pages/block-settings.php:63
+msgid "Count Up - PublishPress"
+msgstr ""
+
+#: assets/blocks/blocks.js:17694
+msgid "Create an animated display for important numbers."
+msgstr ""
+
+#: assets/blocks/blocks.js:17700
+msgid "numbers"
+msgstr "tall"
+
+#: assets/blocks/blocks.js:17700
+msgid "count"
+msgstr "antall"
+
+#: assets/blocks/blocks.js:17700
+msgid "increase"
+msgstr "øke"
+
+#: assets/blocks/blocks.js:18260 assets/blocks/blocks.js:18299
+#: assets/blocks/pro-ad.js:129
+msgid "Images Slider"
+msgstr "Bildekarusell"
+
+#: assets/blocks/blocks.js:18264
+msgid "Image Slider Block"
+msgstr "Bildekarusellblokk"
+
+#: assets/blocks/blocks.js:18265
+msgid "No images selected. Adding images to start using this block."
+msgstr ""
+"Ingen bilder valgt. Legg til bilder for å begynne å bruke denne blokken."
+
+#: assets/blocks/blocks.js:18290
+msgid "Add images"
+msgstr "Legg til bilder"
+
+#: assets/blocks/blocks.js:18307
+msgid "Image Settings"
+msgstr "Bildeinnstillinger"
+
+#: assets/blocks/blocks.js:18311 incl/block-settings-main.php:1433
+msgid "Open custom link"
+msgstr "Åpne tilpasset lenke"
+
+#: assets/blocks/blocks.js:18324
+msgid "Auto height"
+msgstr "Auto-høyde"
+
+#: assets/blocks/blocks.js:18349 incl/block-settings-main.php:1463
+msgid "Always show overlay"
+msgstr "Vis alltid overlegg"
+
+#: assets/blocks/blocks.js:18356
+msgid "Enable RTL"
+msgstr "Slå på RTL"
+
+#: assets/blocks/blocks.js:18366 incl/block-settings-main.php:1473
+msgid "Hover Color"
+msgstr "Oversvevefarge"
+
+#: assets/blocks/blocks.js:18483
+msgid "Title"
+msgstr "Tittel"
+
+#: assets/blocks/blocks.js:18494
+msgid "Text"
+msgstr "Tekst"
+
+#: assets/blocks/blocks.js:18521
+msgid "Move Left"
+msgstr "Flytt til venstre"
+
+#: assets/blocks/blocks.js:18541 assets/blocks/pro-ad.js:149
+msgid "Image"
+msgstr "Bilde"
+
+#: assets/blocks/blocks.js:18549
+msgid "Move Right"
+msgstr "Flytt til høyre"
+
+#: assets/blocks/blocks.js:18605
+msgid "Add image"
+msgstr "Legg til bilde"
+
+#: assets/blocks/blocks.js:18706 incl/pages/block-settings.php:64
+msgid "Images Slider - PublishPress"
+msgstr ""
+
+#: assets/blocks/blocks.js:18707
+msgid "Display your images in a slider."
+msgstr "Vis dine bilder i en karusell."
+
+#: assets/blocks/blocks.js:18713
+msgid "slide"
+msgstr "lysbilde"
+
+#: assets/blocks/blocks.js:18713
+msgid "gallery"
+msgstr "galleri"
+
+#: assets/blocks/blocks.js:18713
+msgid "photos"
+msgstr "fotografier"
+
+#: assets/blocks/blocks.js:19404
+msgid "Info Box"
+msgstr "Info-boks"
+
+#: assets/blocks/blocks.js:19440 assets/blocks/blocks.js:19556
+msgid "Border Width (px)"
+msgstr "Kantlinjebredde (px)"
+
+#: assets/blocks/blocks.js:19449 assets/blocks/blocks.js:19565
+msgid "Border Radius (px)"
+msgstr "Kantlinjeradius (px)"
+
+#: assets/blocks/blocks.js:19663 incl/block-settings-main.php:1949
+msgid "Title Settings"
+msgstr "Tittelinnstillinger"
+
+#: assets/blocks/blocks.js:19667 assets/blocks/blocks.js:19837
+#: incl/block-settings-main.php:390 incl/block-settings-main.php:2063
+msgid "Color"
+msgstr "Farge"
+
+#: assets/blocks/blocks.js:19695 assets/blocks/blocks.js:19865
+msgid "Font Size"
+msgstr "Skriftstørrelse"
+
+#: assets/blocks/blocks.js:19726 assets/blocks/blocks.js:19896
+#: incl/block-settings-main.php:549
+msgid "Line Height"
+msgstr "Linjehøyde"
+
+#: assets/blocks/blocks.js:19736 incl/block-settings-main.php:1971
+msgid "HTML Tag"
+msgstr "HTML-element"
+
+#: assets/blocks/blocks.js:19738 incl/block-settings-main.php:1976
+msgid "H1"
+msgstr "H1"
+
+#: assets/blocks/blocks.js:19738 incl/block-settings-main.php:1980
+msgid "H2"
+msgstr "H2"
+
+#: assets/blocks/blocks.js:19738 incl/block-settings-main.php:1984
+msgid "H3"
+msgstr "H3"
+
+#: assets/blocks/blocks.js:19738 incl/block-settings-main.php:1988
+msgid "H4"
+msgstr "H4"
+
+#: assets/blocks/blocks.js:19738 incl/block-settings-main.php:1992
+msgid "H5"
+msgstr "H5"
+
+#: assets/blocks/blocks.js:19738 incl/block-settings-main.php:1996
+msgid "H6"
+msgstr "H6"
+
+#: assets/blocks/blocks.js:20341 incl/pages/block-settings.php:65
+msgid "Info Box - PublishPress"
+msgstr ""
+
+#: assets/blocks/blocks.js:20348
+msgid "info"
+msgstr "info"
+
+#: assets/blocks/blocks.js:20684 assets/blocks/blocks.js:20721
+msgid "Click to change logo"
+msgstr "Klikk her for å bytte logo"
+
+#: assets/blocks/blocks.js:20764 assets/blocks/blocks.js:29739
+#: assets/blocks/blocks.js:29754 assets/blocks/blocks.js:29769
+msgid "Text…"
+msgstr "Tekst..."
+
+#: assets/blocks/blocks.js:20782 assets/blocks/blocks.js:21051
+#: assets/blocks/blocks.js:21182
+msgid "Register…"
+msgstr "Registrer..."
+
+#: assets/blocks/blocks.js:20802
+msgid "Welcome text…"
+msgstr "Velkommen-tekst..."
+
+#: assets/blocks/blocks.js:20826 assets/blocks/blocks.js:21075
+msgid "Username label…"
+msgstr "Brukernavn-etikett..."
+
+#: assets/blocks/blocks.js:20875
+msgid "Password label…"
+msgstr "Passord-etikett"
+
+#: assets/blocks/blocks.js:20935
+msgid "Remember me…"
+msgstr "Husk meg..."
+
+#: assets/blocks/blocks.js:20967
+msgid "Login…"
+msgstr "Logg inn..."
+
+#: assets/blocks/blocks.js:20994
+msgid "Lost password…"
+msgstr "Mistet passord..."
+
+#: assets/blocks/blocks.js:21030
+msgid "Back…"
+msgstr "Tilbake..."
+
+#: assets/blocks/blocks.js:21124
+msgid "Email label…"
+msgstr "E-postetikett..."
+
+#: assets/blocks/blocks.js:21192
+msgid "Login/Register Form"
+msgstr "Innloggingssskjema"
+
+#: assets/blocks/blocks.js:21200
+msgid "Options"
+msgstr "Alternativer"
+
+#: assets/blocks/blocks.js:21203
+msgid "Switch View"
+msgstr "Bytt visning"
+
+#: assets/blocks/blocks.js:21215
+msgid "Form State"
+msgstr "Skjemastatus"
+
+#: assets/blocks/blocks.js:21217
+msgid "Initial Form"
+msgstr "Opprinnelig skjema"
+
+#: assets/blocks/blocks.js:21218
+msgid "Form that show on load."
+msgstr "Skjema som vises ved lasting."
+
+#: assets/blocks/blocks.js:21220
+msgid "Login"
+msgstr "Logg inn"
+
+#: assets/blocks/blocks.js:21220
+msgid "Register"
+msgstr "Registrer"
+
+#: assets/blocks/blocks.js:21227
+msgid "Redirect After Login"
+msgstr "Omdiriger etter innlogging"
+
+#: assets/blocks/blocks.js:21229
+msgid "Home"
+msgstr "Hjem"
+
+#: assets/blocks/blocks.js:21229 incl/advanced-gutenberg-main.php:1735
+msgid "Dashboard"
+msgstr "Kontrollpanel"
+
+#: assets/blocks/blocks.js:21229 assets/blocks/blocks.js:23302
+#: incl/block-settings-main.php:768
+msgid "Custom"
+msgstr "Tilpasset"
+
+#: assets/blocks/blocks.js:21235
+msgid "Custom redirect link"
+msgstr "Tilpasset viderekoblingslenke"
+
+#: assets/blocks/blocks.js:21242
+msgid "Form Width (px)"
+msgstr "Skjemabredde (px)"
+
+#: assets/blocks/blocks.js:21251
+msgid "Show Logo"
+msgstr "Vis logo"
+
+#: assets/blocks/blocks.js:21258
+msgid "Logo Width (px)"
+msgstr "Logobredde (px)"
+
+#: assets/blocks/blocks.js:21267
+msgid "Show input field icon"
+msgstr "Vis ikon for innmatingsfelt"
+
+#: assets/blocks/blocks.js:21274
+msgid "Show register/header link"
+msgstr "Vis registrer/hodelenke"
+
+#: assets/blocks/blocks.js:21284
+msgid "Header color"
+msgstr "Hodefarge"
+
+#: assets/blocks/blocks.js:21292
+msgid "Show lost password link"
+msgstr "Vis lenke for mistet passordet"
+
+#: assets/blocks/blocks.js:21301
+msgid "Input placeholder"
+msgstr "Plassholder for innmatingsfelt"
+
+#: assets/blocks/blocks.js:21303
+msgid "Login input placeholder"
+msgstr "Plassholder innlogginsfeltet"
+
+#: assets/blocks/blocks.js:21310
+msgid "Username input placeholder"
+msgstr "Plassholder for brukernavn-feltet"
+
+#: assets/blocks/blocks.js:21311 assets/blocks/blocks.js:21319
+msgid "Use in register form"
+msgstr "Bruk i registreringsskjema"
+
+#: assets/blocks/blocks.js:21327
+msgid "Text/Input Color"
+msgstr "Farge for tekst/innmating"
+
+#: assets/blocks/blocks.js:21330
+msgid "Input background color"
+msgstr "Bakgrunnsfarge for innmatingsfelt"
+
+#: assets/blocks/blocks.js:21336
+msgid "Input color"
+msgstr "Farge for innmatingsfelt"
+
+#: assets/blocks/blocks.js:21418
+msgid "Submit Button Hover"
+msgstr "Oversveve søkeknapp"
+
+#: assets/blocks/blocks.js:21420 assets/blocks/blocks.js:26948
+msgid "Hover Colors"
+msgstr "Oversvevefarger"
+
+#: assets/blocks/blocks.js:21435 assets/blocks/blocks.js:26963
+msgid "Shadow color"
+msgstr "Skyggefarge"
+
+#: assets/blocks/blocks.js:21522
+msgid "Registration Form"
+msgstr "Registreringsskjema"
+
+#: assets/blocks/blocks.js:21523
+msgid ""
+"Registration for your website is currently disabled, enable it in WordPress "
+"General settings to use registration form"
+msgstr ""
+"Registrering på ditt nettsted er for tiden slått av. Slå det på i WordPress "
+"Innstillinger generelt for å bruke registreringsskjemaet"
+
+#: assets/blocks/blocks.js:21737
+msgid "Login and Register - PublishPress"
+msgstr ""
+
+#: assets/blocks/blocks.js:21738
+msgid "Create a login form for your post/page."
+msgstr "Lag et innloggingsskjema på ditt innlegg/din side"
+
+#: assets/blocks/blocks.js:23088
+msgid "No matching address found!"
+msgstr "Ingen passende adresse funnet!"
+
+#: assets/blocks/blocks.js:23128
+msgid "Map"
+msgstr "Kart"
+
+#: assets/blocks/blocks.js:23136
+msgid "Map settings"
+msgstr "Kartinnstillinger"
+
+#: assets/blocks/blocks.js:23141
+msgid "Address"
+msgstr "Adresse"
+
+#: assets/blocks/blocks.js:23149
+msgid "Use Lat/Lng"
+msgstr "Bruk bredde/lengde"
+
+#: assets/blocks/blocks.js:23152
+msgid "Enter address…"
+msgstr "Angi adresse..."
+
+#: assets/blocks/blocks.js:23163
+msgid "Fetch Location"
+msgstr "Hent plassering"
+
+#: assets/blocks/blocks.js:23172
+msgid "Current"
+msgstr "Nåværende"
+
+#: assets/blocks/blocks.js:23187
+msgid "Location"
+msgstr "Plassering"
+
+#: assets/blocks/blocks.js:23195
+msgid "Use Address"
+msgstr "Bruk adresse"
+
+#: assets/blocks/blocks.js:23198
+msgid "Enter latitude…"
+msgstr "Oppgi breddegrad..."
+
+#: assets/blocks/blocks.js:23199 incl/block-settings-main.php:726
+msgid "Latitude"
+msgstr "Breddegrad"
+
+#: assets/blocks/blocks.js:23206
+msgid "Enter longitude…"
+msgstr "Oppi lengdegrad..."
+
+#: assets/blocks/blocks.js:23207 incl/block-settings-main.php:733
+msgid "Longitude"
+msgstr "Lengdegrad"
+
+#: assets/blocks/blocks.js:23214
+msgid "Zoom level"
+msgstr "Forstørrelsesgrad"
+
+#: assets/blocks/blocks.js:23245
+msgid "Marker Icon (27x43 px)"
+msgstr "Markør-ikon (27x43 px)"
+
+#: assets/blocks/blocks.js:23256
+msgid "Remove"
+msgstr "Fjern"
+
+#: assets/blocks/blocks.js:23264
+msgid "Choose icon"
+msgstr "Velg ikon"
+
+#: assets/blocks/blocks.js:23268
+msgid "Marker icon"
+msgstr "Markør-ikon"
+
+#: assets/blocks/blocks.js:23273 incl/block-settings-main.php:777
+msgid "Marker Title"
+msgstr "Markørtittel"
+
+#: assets/blocks/blocks.js:23275
+msgid "Enter custom title…"
+msgstr "Oppgi tilpasset tittel..."
+
+#: assets/blocks/blocks.js:23281
+msgid "Marker description"
+msgstr "Markørbeskrivelse"
+
+#: assets/blocks/blocks.js:23283
+msgid "Enter custom description…"
+msgstr "Oppgi tilpasset beskrivelse..."
+
+#: assets/blocks/blocks.js:23289
+msgid "Open marker tooltip"
+msgstr "Åpne markørtips"
+
+#: assets/blocks/blocks.js:23296
+msgid "Map styles"
+msgstr "Kartstiler"
+
+#: assets/blocks/blocks.js:23297
+msgid "Custom map style is recommended for experienced users only."
+msgstr "Tilpasset kartstil er kun anbefalt for erfarne brukere."
+
+#: assets/blocks/blocks.js:23302
+msgid "Standard"
+msgstr "Standard"
+
+#: assets/blocks/blocks.js:23305
+msgid "Custom code"
+msgstr "Tilpasset kode"
+
+#: assets/blocks/blocks.js:23310
+msgid "Invalid JSON"
+msgstr "Ugyldig JSON"
+
+#: assets/blocks/blocks.js:23312
+msgid ""
+"Paste your custom map styles in json format into the text field. You can "
+"create your own map styles by follow one of these links: "
+msgstr ""
+
+#: assets/blocks/blocks.js:23322
+msgid "Enter your json code here…"
+msgstr "Legg inn din json-kode her..."
+
+#: assets/blocks/blocks.js:23337
+msgid "No API Key Provided!"
+msgstr "Ingen API-nøkkel oppgitt!"
+
+#: assets/blocks/blocks.js:23338
+msgid ""
+"Opps! Look like you have not configured your Google API Key yet. Add an API "
+"Key and refresh the page to start using Map Block. This is a requirement "
+"enforced by Google."
+msgstr ""
+
+#: assets/blocks/blocks.js:23346
+msgid "Add Google API Key in Settings"
+msgstr ""
+
+#: assets/blocks/blocks.js:23412 incl/pages/block-settings.php:66
+msgid "Map - PublishPress"
+msgstr ""
+
+#: assets/blocks/blocks.js:23413
+msgid "Display a location using Google Maps."
+msgstr ""
+
+#: assets/blocks/blocks.js:23419
+msgid "google map"
+msgstr "google-kart"
+
+#: assets/blocks/blocks.js:23419
+msgid "location"
+msgstr "posisjon"
+
+#: assets/blocks/blocks.js:23419
+msgid "address"
+msgstr "adresse"
+
+#: assets/blocks/blocks.js:23657
+msgid "Newsletter"
+msgstr "Nyhetsbrev"
+
+#: assets/blocks/blocks.js:23665
+msgid "Newsletter Settings"
+msgstr "Innstillinger for nyhesbrev"
+
+#: assets/blocks/blocks.js:23685 incl/block-settings-main.php:1287
+msgid "Form style"
+msgstr "Skjemastil"
+
+#: assets/blocks/blocks.js:23687 incl/block-settings-main.php:1296
+msgid "Alternative"
+msgstr "Alternativ"
+
+#: assets/blocks/blocks.js:23693
+msgid "Form width (px)"
+msgstr "Skjemabredde (px)"
+
+#: assets/blocks/blocks.js:23709
+msgid "First Name input placeholder"
+msgstr "Plassholder for fornavnfelt"
+
+#: assets/blocks/blocks.js:23716
+msgid "Last Name input placeholder"
+msgstr "Plassholder for ettternavnfelt"
+
+#: assets/blocks/blocks.js:23878 assets/blocks/blocks.js:24091
+msgid "First Name"
+msgstr "Fornavn"
+
+#: assets/blocks/blocks.js:23893 assets/blocks/blocks.js:24106
+msgid "Last Name"
+msgstr "Etternavn"
+
+#: assets/blocks/blocks.js:23946 incl/pages/block-settings.php:67
+msgid "Newsletter - PublishPress"
+msgstr ""
+
+#: assets/blocks/blocks.js:23947
+msgid "Fastest way to create a newsletter form for your page."
+msgstr "Raskeste måte å lage et nyhetsbrev-skjema for din side."
+
+#: assets/blocks/blocks.js:23953
+msgid "newsletter"
+msgstr "nyhetsbrev"
+
+#: assets/blocks/blocks.js:23953
+msgid "email"
+msgstr "e-post"
+
+#: assets/blocks/blocks.js:24249 assets/blocks/blocks.js:24252
+#: assets/blocks/blocks.js:24254
+msgid "The leading post on top, the rest in 2 columns below"
+msgstr ""
+
+#: assets/blocks/blocks.js:24249 assets/blocks/blocks.js:24252
+msgid "The leading post on top, the rest in 3 columns below"
+msgstr ""
+
+#: assets/blocks/blocks.js:24249 assets/blocks/blocks.js:24252
+msgid "The leading post on top, the rest in 4 columns below"
+msgstr ""
+
+#: assets/blocks/blocks.js:24249 assets/blocks/blocks.js:24252
+msgid "The leading post on top, the rest in 5 columns below"
+msgstr ""
+
+#: assets/blocks/blocks.js:24249 assets/blocks/blocks.js:24252
+#: assets/blocks/blocks.js:24254
+msgid "All posts in 2 columns grid"
+msgstr ""
+
+#: assets/blocks/blocks.js:24249 assets/blocks/blocks.js:24252
+msgid "All posts in 3 columns grid"
+msgstr ""
+
+#: assets/blocks/blocks.js:24249 assets/blocks/blocks.js:24252
+msgid "All posts in 4 columns grid"
+msgstr ""
+
+#: assets/blocks/blocks.js:24249 assets/blocks/blocks.js:24252
+msgid "All posts in 5 columns grid"
+msgstr ""
+
+#: assets/blocks/blocks.js:24258
+msgid "The leading post in the left, 1 post in the right"
+msgstr ""
+
+#: assets/blocks/blocks.js:24258
+msgid "The leading post in the left, 2 posts in the right"
+msgstr ""
+
+#: assets/blocks/blocks.js:24258
+msgid "The leading post in the left, 3 posts in the right"
+msgstr ""
+
+#: assets/blocks/blocks.js:24258
+msgid "The leading post in the left, 4 posts in the right"
+msgstr ""
+
+#: assets/blocks/blocks.js:24258
+msgid "The leading post in the left, 5 posts in the right"
+msgstr ""
+
+#: assets/blocks/blocks.js:24258
+msgid "The leading post in the right, 1 post in the left"
+msgstr ""
+
+#: assets/blocks/blocks.js:24258
+msgid "The leading post in the right, 2 posts in the left"
+msgstr ""
+
+#: assets/blocks/blocks.js:24258
+msgid "The leading post in the right, 3 posts in the left"
+msgstr ""
+
+#: assets/blocks/blocks.js:24258
+msgid "The leading post in the right, 4 posts in the left"
+msgstr ""
+
+#: assets/blocks/blocks.js:24258
+msgid "The leading post in the right, 5 posts in the left"
+msgstr ""
+
+#: assets/blocks/blocks.js:24258
+msgid "The leading post on top, the rest of posts below"
+msgstr ""
+
+#: assets/blocks/blocks.js:24258
+msgid ""
+"The leading post on top, below 2 columns with 1 post in the left and 1 post "
+"in the right"
+msgstr ""
+
+#: assets/blocks/blocks.js:24258
+msgid ""
+"The leading post on top, below 2 columns with 1 post in the left and 2 posts "
+"in the right"
+msgstr ""
+
+#: assets/blocks/blocks.js:24258
+msgid ""
+"The leading post on top, below 2 columns with 1 post in the left and 3 posts "
+"in the right"
+msgstr ""
+
+#: assets/blocks/blocks.js:24262
+msgid "For all posts"
+msgstr "For alle innlegg"
+
+#: assets/blocks/blocks.js:24262
+msgid "For the first post"
+msgstr ""
+
+#: assets/blocks/blocks.js:24262
+msgid "For the first 2 posts"
+msgstr ""
+
+#: assets/blocks/blocks.js:24262
+msgid "For the first 3 posts"
+msgstr ""
+
+#: assets/blocks/blocks.js:24262
+msgid "For the first 4 posts"
+msgstr ""
+
+#: assets/blocks/blocks.js:24262
+msgid "For the first 5 posts"
+msgstr ""
+
+#: assets/blocks/blocks.js:24670
+msgid "Slider View Settings"
+msgstr ""
+
+#: assets/blocks/blocks.js:24674 assets/blocks/blocks.js:24776
+msgid "Headline"
+msgstr "Overskrift"
+
+#: assets/blocks/blocks.js:24689
+msgid "Frontpage View Settings"
+msgstr "Innstillinger for forsidevisning"
+
+#: assets/blocks/blocks.js:24776
+msgid "Boxed"
+msgstr "Bokset"
+
+#: assets/blocks/blocks.js:24782 assets/blocks/blocks.js:24826
+msgid "Space between columns and rows"
+msgstr "Mellomrom mellom kolonner og rader"
+
+#: assets/blocks/blocks.js:24792
+msgid "Newspaper View Settings"
+msgstr "Innstillinger for avis-visning"
+
+#: assets/blocks/blocks.js:24824
+msgid "Masonry View Settings"
+msgstr "Innstillinger for murverkvisning"
+
+#: assets/blocks/blocks.js:24836
+msgid "Post Settings"
+msgstr "Innleggsinnstillinger"
+
+#: assets/blocks/blocks.js:24838
+msgid "Post Type"
+msgstr "Innholdstype"
+
+#: assets/blocks/blocks.js:24860
+msgid "Filters"
+msgstr "Filtre"
+
+#: assets/blocks/blocks.js:24867
+msgid "To enable filters, clear Advanced Filters > Display these posts only"
+msgstr ""
+
+#: assets/blocks/blocks.js:24882
+msgid "Show content with these Categories"
+msgstr "Vis innhold med disse kategoriene"
+
+#: assets/blocks/blocks.js:24899
+msgid "Show content with these Tags"
+msgstr "Vis innhold med disse stikkordene"
+
+#: assets/blocks/blocks.js:24900
+msgid "Type a tag"
+msgstr "Skriv et stikkord"
+
+#: assets/blocks/blocks.js:24915
+msgid "Show content with these "
+msgstr "Vis innhold med disse"
+
+#: assets/blocks/blocks.js:24921 assets/blocks/blocks.js:26527
+#: assets/blocks/blocks.js:26530
+msgid "Author"
+msgstr "Forfatter"
+
+#: assets/blocks/blocks.js:24922 assets/blocks/blocks.js:26594
+#: assets/blocks/blocks.js:30475 assets/blocks/blocks.js:30483
+msgid "All"
+msgstr "Alle"
+
+#: assets/blocks/blocks.js:24929
+msgid "Only shows posts written by the user viewing the block"
+msgstr ""
+
+#: assets/blocks/blocks.js:24936
+msgid "Exclude current post"
+msgstr "Utelat inneværende innlegg"
+
+#: assets/blocks/blocks.js:24937
+msgid "If this post is listed in the block, you can exclude it."
+msgstr ""
+
+#: assets/blocks/blocks.js:24947
+msgid "Exclude these posts"
+msgstr "Utelukk disse innleggene"
+
+#: assets/blocks/blocks.js:24948 assets/blocks/blocks.js:24980
+msgid "Search by title"
+msgstr "Søk etter tittel"
+
+#: assets/blocks/blocks.js:24954
+msgid "Offset the first posts"
+msgstr ""
+
+#: assets/blocks/blocks.js:24970
+msgid "Advanced Filters"
+msgstr ""
+
+#: assets/blocks/blocks.js:24979
+msgid "Display these posts only"
+msgstr ""
+
+#: assets/blocks/blocks.js:24989
+msgid "Display Settings"
+msgstr "Visningsinnstillinger"
+
+#: assets/blocks/blocks.js:25003
+msgid "Columns (Tablet)"
+msgstr "Kolonner (nettbrett)"
+
+#: assets/blocks/blocks.js:25012
+msgid "Columns (Mobile)"
+msgstr "Kolonner (mobil)"
+
+#: assets/blocks/blocks.js:25022
+msgid "Display Featured Image"
+msgstr "Vis fremhevet bilde"
+
+#: assets/blocks/blocks.js:25040
+msgid "Enable Placeholder Image"
+msgstr ""
+
+#: assets/blocks/blocks.js:25046
+msgid ""
+"If a post doesn't have a featured image, the placeholder image will be "
+"displayed instead"
+msgstr ""
+
+#: assets/blocks/blocks.js:25049
+msgid "Position"
+msgstr "Plassering"
+
+#: assets/blocks/blocks.js:25061
+msgid "Image opacity"
+msgstr ""
+
+#: assets/blocks/blocks.js:25084
+msgid "Display Caption"
+msgstr "Vis undertekst"
+
+#: assets/blocks/blocks.js:25093
+msgid "Display Post Author"
+msgstr "Vis innleggsforfatter"
+
+#: assets/blocks/blocks.js:25120
+msgid "Display Post Date"
+msgstr "Vis innleggsdato"
+
+#: assets/blocks/blocks.js:25122 assets/blocks/blocks.js:25181
+#: assets/blocks/blocks.js:25197
+msgid "Hide"
+msgstr "Skjul"
+
+#: assets/blocks/blocks.js:25122
+msgid "Created Date"
+msgstr "Opprettet dato"
+
+#: assets/blocks/blocks.js:25122
+msgid "Updated Date"
+msgstr "Oppdatert dato"
+
+#: assets/blocks/blocks.js:25139
+msgid "Post Date Format"
+msgstr "Datoformat for innlegg"
+
+#: assets/blocks/blocks.js:25141
+msgid "Absolute"
+msgstr "Absolutt"
+
+#: assets/blocks/blocks.js:25141
+msgid "Relative"
+msgstr "Relativ"
+
+#: assets/blocks/blocks.js:25148
+msgid "Display Post Time"
+msgstr "Vis publiseringstid"
+
+#: assets/blocks/blocks.js:25160
+msgid "Display Comment Counts"
+msgstr "Vis kommentarantall"
+
+#: assets/blocks/blocks.js:25179
+msgid "Display Category"
+msgstr "Vis kategori"
+
+#: assets/blocks/blocks.js:25181 assets/blocks/blocks.js:25197
+msgid "Show"
+msgstr "Vis"
+
+#: assets/blocks/blocks.js:25181 assets/blocks/blocks.js:25197
+msgid "Show & Link"
+msgstr "Vis og lenke"
+
+#: assets/blocks/blocks.js:25195
+msgid "Display Tags"
+msgstr "Vis stikkord"
+
+#: assets/blocks/blocks.js:25220
+msgid "Display these taxonomies"
+msgstr "Vis disse taksonomiene"
+
+#: assets/blocks/blocks.js:25237
+msgid "Link above taxonomies"
+msgstr "Lenke ovenfor taksonomier"
+
+#: assets/blocks/blocks.js:25247
+msgid "Display Read More Link"
+msgstr "Vis Les mer-lenke"
+
+#: assets/blocks/blocks.js:25265
+msgid "Read more text"
+msgstr "Les mer-tekst"
+
+#: assets/blocks/blocks.js:25274
+msgid "Display Post Excerpt"
+msgstr "Vis innleggsutdrag"
+
+#: assets/blocks/blocks.js:25292
+msgid "First Post text as Excerpt"
+msgstr "Første innleggstekst som utdrag"
+
+#: assets/blocks/blocks.js:25293
+msgid "Display some part of first text found in post as excerpt."
+msgstr "Vis en del av første tekst funnet i innlegget som utdrag."
+
+#: assets/blocks/blocks.js:25301
+msgid "Post Text Excerpt length"
+msgstr "Lengde på innleggsutdrag"
+
+#: assets/blocks/blocks.js:25312
+msgid "Text after title"
+msgstr "Tekst etter tittel"
+
+#: assets/blocks/blocks.js:25313
+msgid "Include text/HTML after title"
+msgstr "Inkluder tekst/HTML etter tittel"
+
+#: assets/blocks/blocks.js:25320
+msgid "Text before read more"
+msgstr "Tekst foran les mer"
+
+#: assets/blocks/blocks.js:25321
+msgid "Include text/HTML before read more"
+msgstr "Inkluder tekst/HTML foran les mer"
+
+#: assets/blocks/blocks.js:25333
+msgid "Reorder Sections"
+msgstr ""
+
+#: assets/blocks/blocks.js:25335
+msgid "Sections order"
+msgstr ""
+
+#: assets/blocks/blocks.js:25336
+msgid ""
+"When the image in desktop floats next to the content, or is displayed as "
+"background, the image order is ignored. Also the image order in mobile can "
+"be ignored for some views."
+msgstr ""
+
+#: assets/blocks/blocks.js:25351 assets/blocks/blocks.js:25413
+#: assets/blocks/pro-ad.js:125
+msgid "Content Display"
+msgstr "Innholdsvisning"
+
+#: assets/blocks/blocks.js:25359
+msgid "Content Display Block"
+msgstr "Innholdsvisningsblokk"
+
+#: assets/blocks/blocks.js:25361
+msgid "No posts found! Try to change filters or publish posts."
+msgstr "Ingen innlegg funnet! Prøv å endre filtrene eller publiser innlegg."
+
+#: assets/blocks/blocks.js:25368
+msgid "Grid View"
+msgstr "Rutenettvisning"
+
+#: assets/blocks/blocks.js:25375
+msgid "List View"
+msgstr "Listevisning"
+
+#: assets/blocks/blocks.js:25382 assets/blocks/blocks.js:30447
+msgid "Slider View"
+msgstr "Karusellvisning"
+
+#: assets/blocks/blocks.js:25389
+msgid "Frontpage View"
+msgstr "Forsidevisning"
+
+#: assets/blocks/blocks.js:25396
+msgid "Newspaper View"
+msgstr "Avis-visning"
+
+#: assets/blocks/blocks.js:25404
+msgid "Masonry View"
+msgstr "Murverkvisning"
+
+#: assets/blocks/blocks.js:25454 assets/blocks/blocks.js:25483
+msgid "Post Image"
+msgstr "Innleggsbilde"
+
+#: assets/blocks/blocks.js:25641 assets/blocks/recent-posts/block.php:413
+msgid "Read More"
+msgstr "Les mer"
+
+#: assets/blocks/blocks.js:26277
+msgid "Content Display - PublishPress"
+msgstr ""
+
+#: assets/blocks/blocks.js:26278
+msgid ""
+"Displays your content in grid, list, slider, frontpage, newspaper, and "
+"masonry views with beautiful layouts and styles."
+msgstr ""
+
+#: assets/blocks/blocks.js:26284
+msgid "recent posts"
+msgstr "siste innlegg"
+
+#: assets/blocks/blocks.js:26284
+msgid "latest posts"
+msgstr "siste innlegg"
+
+#: assets/blocks/blocks.js:26284
+msgid "posts slide"
+msgstr "innleggskarusell-element"
+
+#: assets/blocks/blocks.js:26284
+msgid "posts grid"
+msgstr "innleggsrutenett"
+
+#: assets/blocks/blocks.js:26284
+msgid "posts"
+msgstr "innlegg"
+
+#: assets/blocks/blocks.js:26284
+msgid "pages"
+msgstr "sider"
+
+#: assets/blocks/blocks.js:26513
+msgid "Created: Newest to oldest"
+msgstr ""
+
+#: assets/blocks/blocks.js:26516
+msgid "Created: Oldest to newest"
+msgstr ""
+
+#. translators: label for ordering posts by title in ascending order
+#: assets/blocks/blocks.js:26520 assets/blocks/blocks.js:26527
+msgid "A → Z"
+msgstr "A → Å"
+
+#. translators: label for ordering posts by title in descending order
+#: assets/blocks/blocks.js:26524 assets/blocks/blocks.js:26530
+msgid "Z → A"
+msgstr "Å → A"
+
+#: assets/blocks/blocks.js:26533
+msgid "Modified: Newest to oldest"
+msgstr ""
+
+#: assets/blocks/blocks.js:26536
+msgid "Modified: Oldest to newest"
+msgstr ""
+
+#: assets/blocks/blocks.js:26539
+msgid "Post ID Descending"
+msgstr ""
+
+#: assets/blocks/blocks.js:26542
+msgid "Post ID Ascending"
+msgstr ""
+
+#: assets/blocks/blocks.js:26549
+msgid "Randomize"
+msgstr "Gjør tilfeldig"
+
+#: assets/blocks/blocks.js:26557
+msgid "Comments, decreasing order"
+msgstr "Kommentarer, synkende rekkefølge"
+
+#: assets/blocks/blocks.js:26560
+msgid "Comments, increasing order"
+msgstr "Kommentarer, stigende rekkefølge"
+
+#: assets/blocks/blocks.js:26567
+msgid "Series order"
+msgstr ""
+
+#: assets/blocks/blocks.js:26574
+msgid "Order by"
+msgstr "Sorter etter"
+
+#: assets/blocks/blocks.js:26593 assets/blocks/blocks.js:30481
+msgid "Category"
+msgstr "Kategori"
+
+#: assets/blocks/blocks.js:26599 assets/blocks/blocks.js:29435
+msgid "Number of items"
+msgstr "Antall elementer"
+
+#: assets/blocks/blocks.js:26810
+msgid "Search Bar"
+msgstr "Søkestripe"
+
+#: assets/blocks/blocks.js:26818
+msgid "Search Bar State"
+msgstr "Status for søkestripe"
+
+#: assets/blocks/blocks.js:26838
+msgid "Search Icon Settings"
+msgstr "Innstillinger for søke-ikon"
+
+#: assets/blocks/blocks.js:26840
+msgid "Search icon on the right"
+msgstr "Søke-ikon til høyre"
+
+#: assets/blocks/blocks.js:26852
+msgid "Search icon"
+msgstr "Søkeikon"
+
+#: assets/blocks/blocks.js:26877
+msgid "Search Input Settings"
+msgstr "Innstillinger for søkefelt"
+
+#: assets/blocks/blocks.js:26879
+msgid "Search placeholder"
+msgstr "Plassholder for søk"
+
+#: assets/blocks/blocks.js:26905
+msgid "Search Button Settings"
+msgstr "Innstillinger for søkeknapp"
+
+#: assets/blocks/blocks.js:26907
+msgid "Show submit button"
+msgstr "Vis innsendningsknapp"
+
+#: assets/blocks/blocks.js:26914
+msgid "Search button on the left"
+msgstr "Søkeknapp til venstre"
+
+#: assets/blocks/blocks.js:26939
+msgid "Affect both input and button."
+msgstr "Påvirker både innmatingsfelt og knapp."
+
+#: assets/blocks/blocks.js:26972
+msgid "Hover Shadow"
+msgstr "Oversveveskygge"
+
+#: assets/blocks/blocks.js:27163
+msgid "Search Bar - PublishPress"
+msgstr ""
+
+#: assets/blocks/blocks.js:27164
+msgid "Easy to create a search bar for your site."
+msgstr "Enkelt å lage en søkestripe for ditt nettsted."
+
+#: assets/blocks/blocks.js:27181
+msgid "Classic"
+msgstr "Klassisk"
+
+#: assets/blocks/blocks.js:27529
+msgid "Social Links"
+msgstr "Sosiale lenker"
+
+#: assets/blocks/blocks.js:27541
+msgid "Add item"
+msgstr "Legg til element"
+
+#: assets/blocks/blocks.js:27549
+msgid "Remove selected item"
+msgstr "Fjern valge element"
+
+#: assets/blocks/blocks.js:27575
+msgid "Preset Icons"
+msgstr "Forhåndsvalgte ikoner"
+
+#: assets/blocks/blocks.js:27577
+msgid "Type here to search…"
+msgstr "Skriv her for å søke..."
+
+#: assets/blocks/blocks.js:27621
+msgid "Custom icon"
+msgstr "Tilpasset ikon"
+
+#: assets/blocks/blocks.js:27646
+msgid "Upload/Choose"
+msgstr "Last opp/velg"
+
+#: assets/blocks/blocks.js:27652 assets/blocks/blocks.js:27655
+msgid "Preset Icon Color"
+msgstr "Forhåndsvalgt ikonfarge"
+
+#: assets/blocks/blocks.js:27674
+msgid "Icons settings"
+msgstr "Innstillinger for ikoner"
+
+#: assets/blocks/blocks.js:27685
+msgid "Icon space"
+msgstr "Ikon-mellomrom"
+
+#: assets/blocks/blocks.js:27721 assets/blocks/blocks.js:27840
+#: assets/blocks/blocks.js:27891
+msgid "Social link icon"
+msgstr "Ikon for sosial lenke"
+
+#: assets/blocks/blocks.js:27738
+msgid "Social link:"
+msgstr "Sosial lenke:"
+
+#: assets/blocks/blocks.js:27741
+msgid "Enter social link…"
+msgstr "Oppgi sosial lenke..."
+
+#: assets/blocks/blocks.js:27788 incl/pages/block-settings.php:68
+msgid "Social Links - PublishPress"
+msgstr ""
+
+#: assets/blocks/blocks.js:27789
+msgid "Create a styling display of links to your social media profiles."
+msgstr ""
+
+#: assets/blocks/blocks.js:27795
+msgid "social icons"
+msgstr "sosiale ikoner"
+
+#: assets/blocks/blocks.js:27795
+msgid "shares"
+msgstr "delinger"
+
+#: assets/blocks/blocks.js:27795
+msgid "icon link"
+msgstr "ikonlenke"
+
+#: assets/blocks/blocks.js:27970 incl/pages/block-settings.php:69
+msgid "Table of Contents - PublishPress"
+msgstr ""
+
+#: assets/blocks/blocks.js:27994
+msgid "Insert Table of Contents"
+msgstr "Sett inn innholdsfortegnelse"
+
+#: assets/blocks/blocks.js:28024
+msgid ""
+"After manually changing the anchor, remember to refresh Table of Contents "
+"block to make the links work!"
+msgstr ""
+"Etter manuell endring av ankeret, husk å oppfriske "
+"innholdsfortegnelsesblokken for å få lenkene til å virke!"
+
+#: assets/blocks/blocks.js:28155
+msgid "Table of Contents"
+msgstr "Innholdsfortegnelse"
+
+#: assets/blocks/blocks.js:28160
+msgid ""
+"Your current post/page has no headings. Try add some headings and update "
+"this block later"
+msgstr ""
+"Ditt inneværende innlegg/side har ingen overskrifter. Prøv å legge til noen "
+"og oppdater denne blokken senere"
+
+#: assets/blocks/blocks.js:28167
+msgid "Update"
+msgstr "Oppdater"
+
+#: assets/blocks/blocks.js:28215
+msgid "Update Table of Contents"
+msgstr "Oppdater Innholdsfortegnelse"
+
+#: assets/blocks/blocks.js:28225
+msgid "Table of Contents settings"
+msgstr "Innstillinger for innholdsfortegnelse"
+
+#: assets/blocks/blocks.js:28227 incl/block-settings-main.php:939
+msgid "Load minimized"
+msgstr "Last minimalisert"
+
+#: assets/blocks/blocks.js:28234 incl/block-settings-main.php:944
+msgid "Table of Contents header title"
+msgstr ""
+
+#: assets/blocks/blocks.js:28242 assets/blocks/blocks.js:28245
+msgid "Anchor Color"
+msgstr "Ankerfarge"
+
+#: assets/blocks/blocks.js:28320
+msgid "Show the table of contents of current post/page."
+msgstr "Vis innholdsfortegnelsen for inneværende innlegg/side."
+
+#: assets/blocks/blocks.js:28326
+msgid "summary"
+msgstr "sammendrag"
+
+#: assets/blocks/blocks.js:28326
+msgid "table of content"
+msgstr "innholdsfortegnelse"
+
+#: assets/blocks/blocks.js:28326
+msgid "table of contents"
+msgstr "innholdsfortegnelse"
+
+#: assets/blocks/blocks.js:28827
+msgid "New Tab"
+msgstr "Ny fane"
+
+#: assets/blocks/blocks.js:28827
+msgid "Enter your content."
+msgstr "Oppgi ditt innhold."
+
+#: assets/blocks/blocks.js:28887 assets/blocks/blocks.js:28890
+#: assets/blocks/blocks.js:28893
+msgid ""
+"Filler text (also placeholder text or dummy text) is text that shares some "
+"characteristics of a real written text, but is random or otherwise generated."
+msgstr ""
+
+#: assets/blocks/blocks.js:28941
+msgid "Tabs (deprecated) - PublishPress"
+msgstr ""
+
+#: assets/blocks/blocks.js:29418 assets/blocks/pro-ad.js:145
+msgid "Testimonial"
+msgstr "Omtale"
+
+#: assets/blocks/blocks.js:29426
+msgid "Testimonial Settings"
+msgstr "Innstillinger for omtaler"
+
+#: assets/blocks/blocks.js:29428
+msgid "Slider view"
+msgstr "Karusellvisning"
+
+#: assets/blocks/blocks.js:29436
+msgid "Range in Normal view is 1-3, and in Slider view is 4-10."
+msgstr "Området er for normalvisning 1-3 og for karusellvisning 4-10."
+
+#: assets/blocks/blocks.js:29448
+msgid "Items to show"
+msgstr "Elementer å vise"
+
+#: assets/blocks/blocks.js:29457
+msgid "Items to scroll"
+msgstr "Elementer å skrolle"
+
+#: assets/blocks/blocks.js:29467
+msgid "Slider Settings"
+msgstr "Karusellinnstillinger"
+
+#: assets/blocks/blocks.js:29469
+msgid "Center mode"
+msgstr "Senter-modus"
+
+#: assets/blocks/blocks.js:29476
+msgid "Pause on hover"
+msgstr "Pause når pekeren er over"
+
+#: assets/blocks/blocks.js:29483
+msgid "Auto play"
+msgstr "Autoavspilling"
+
+#: assets/blocks/blocks.js:29490
+msgid "Autoplay speed (ms)"
+msgstr "Autoavspillingshastighet (ms)"
+
+#: assets/blocks/blocks.js:29499
+msgid "Infinite Loop"
+msgstr "Uendelig løkke"
+
+#: assets/blocks/blocks.js:29515
+msgid "Show dots"
+msgstr "Vis prikker"
+
+#: assets/blocks/blocks.js:29522
+msgid "Show arrows"
+msgstr "Vis piler"
+
+#: assets/blocks/blocks.js:29532
+msgid "Arrow size"
+msgstr "Pil-størrelse"
+
+#: assets/blocks/blocks.js:29541
+msgid "Arrow border size"
+msgstr "Pil-kantlinjestørrelse"
+
+#: assets/blocks/blocks.js:29550
+msgid "Arrow border radius (%)"
+msgstr "Pil-kantlinjeradius (%)"
+
+#: assets/blocks/blocks.js:29561
+msgid "Slider Colors"
+msgstr "Karusellfarger"
+
+#: assets/blocks/blocks.js:29564
+msgid "Arrow and Border Color"
+msgstr "Pil- og kantlinjefarge"
+
+#: assets/blocks/blocks.js:29570
+msgid "Dots Color"
+msgstr "Prikkefarge"
+
+#: assets/blocks/blocks.js:29580
+msgid "Avatar"
+msgstr "Avatar"
+
+#: assets/blocks/blocks.js:29582
+msgid "Display Avatar"
+msgstr "Vis avatar"
+
+#: assets/blocks/blocks.js:29592
+msgid "Avatar Colors"
+msgstr "Avatar-farger"
+
+#: assets/blocks/blocks.js:29609 incl/block-settings-main.php:1089
+msgid "Border Radius (%)"
+msgstr "Kantlinjeradius (%)"
+
+#: assets/blocks/blocks.js:29618 incl/block-settings-main.php:131
+#: incl/block-settings-main.php:198 incl/block-settings-main.php:1046
+#: incl/block-settings-main.php:1096 incl/block-settings-main.php:1738
+#: incl/block-settings-main.php:1808 incl/block-settings-main.php:1877
+msgid "Border Width"
+msgstr "Kantlinjebredde"
+
+#: assets/blocks/blocks.js:29627 incl/block-settings-main.php:1103
+msgid "Avatar Size"
+msgstr "Avatar-størrelse"
+
+#: assets/blocks/blocks.js:29636
+msgid "Avatar Position"
+msgstr "Avatarplassering"
+
+#: assets/blocks/blocks.js:29638
+msgid "right"
+msgstr "høyre"
+
+#: assets/blocks/blocks.js:29646
+msgid "Text Colors"
+msgstr "Tekstfarger"
+
+#: assets/blocks/blocks.js:29649 incl/block-settings-main.php:1115
+msgid "Name Color"
+msgstr "Farge for navn"
+
+#: assets/blocks/blocks.js:29655 incl/block-settings-main.php:1120
+msgid "Position Color"
+msgstr "Farge for plassering"
+
+#: assets/blocks/blocks.js:29698
+msgid "Click to change avatar"
+msgstr "Klikk for å endre avatar"
+
+#: assets/blocks/blocks.js:29714
+msgid "Show default avatar"
+msgstr "Vis standard avatar"
+
+#: assets/blocks/blocks.js:29943 incl/pages/block-settings.php:70
+msgid "Testimonial - PublishPress"
+msgstr ""
+
+#: assets/blocks/blocks.js:29944
+msgid "Block for creating personal or team/group information."
+msgstr "Blokk for å lage person- eller team/gruppe-informasjon."
+
+#: assets/blocks/blocks.js:29950
+msgid "testimonial"
+msgstr "omtale"
+
+#: assets/blocks/blocks.js:29950
+msgid "personal"
+msgstr "personlig"
+
+#: assets/blocks/blocks.js:29950
+msgid "about"
+msgstr "om"
+
+#: assets/blocks/blocks.js:30440
+msgid "Normal View"
+msgstr "Normalvisning"
+
+#: assets/blocks/blocks.js:30458
+msgid "Woo Products"
+msgstr "Woo-produkter"
+
+#: assets/blocks/blocks.js:30471
+msgid "Products Settings"
+msgstr "Innstillinger for produkter"
+
+#: assets/blocks/blocks.js:30473
+msgid "Product Status"
+msgstr "Produktstatus"
+
+#: assets/blocks/blocks.js:30475
+msgid "Featured"
+msgstr "Fremhevet"
+
+#: assets/blocks/blocks.js:30475
+msgid "On Sale"
+msgstr "På salg"
+
+#: assets/blocks/blocks.js:30483
+msgid "Selected"
+msgstr "Valgt"
+
+#: assets/blocks/blocks.js:30511 incl/block-settings-main.php:1134
+msgid "Layout Settings"
+msgstr "Innstillinger for oppsett"
+
+#: assets/blocks/blocks.js:30522 incl/block-settings-main.php:1144
+msgid "Number of Products"
+msgstr "Antall produkter"
+
+#: assets/blocks/blocks.js:30531
+msgid "Order"
+msgstr "Rekkefølge"
+
+#: assets/blocks/blocks.js:30533
+msgid "Newest to oldest"
+msgstr "Nyeste til eldste"
+
+#: assets/blocks/blocks.js:30533
+msgid "Oldest to newest"
+msgstr "Eldste til nyeste"
+
+#: assets/blocks/blocks.js:30533
+msgid "Price: high to low"
+msgstr "Pris: Høy til lav"
+
+#: assets/blocks/blocks.js:30533
+msgid "Price: low to high"
+msgstr "Pris: Lav til høy"
+
+#: assets/blocks/blocks.js:30533
+msgid "Highest Rating first"
+msgstr "Høyeste vurdering først"
+
+#: assets/blocks/blocks.js:30533
+msgid "Most sale first"
+msgstr "Størst salg først"
+
+#: assets/blocks/blocks.js:30533
+msgid "Title: Alphabetical"
+msgstr "Tittel: Alfabetisk"
+
+#: assets/blocks/blocks.js:30533
+msgid "Title: Alphabetical reversed"
+msgstr "Tittel: Omvendt alfabetisk"
+
+#: assets/blocks/blocks.js:30571
+msgid "Add to cart"
+msgstr "Legg i handlekurven"
+
+#: assets/blocks/blocks.js:30580
+msgid "No products found."
+msgstr "Ingen produkter funnet."
+
+#: assets/blocks/blocks.js:30588
+msgid "Loading"
+msgstr "Laster"
+
+#: assets/blocks/blocks.js:30596
+msgid "Woo Products Block"
+msgstr "Produktblokk for Woo"
+
+#: assets/blocks/blocks.js:30601
+msgid ""
+"WooCommerce has not been detected, make sure WooCommerce is installed and "
+"activated."
+msgstr ""
+"WooCommerce er ikke oppdaget. Sørg for at WooCommerce er installert og "
+"aktivert."
+
+#: assets/blocks/blocks.js:30611
+msgid "Try again"
+msgstr "Prøv igjen"
+
+#: assets/blocks/blocks.js:30664 incl/pages/block-settings.php:71
+msgid "Woo Products - PublishPress"
+msgstr ""
+
+#: assets/blocks/blocks.js:30665
+msgid "Listing your products in a easy way."
+msgstr "Viser din produktliste på en enkel måte."
+
+#: assets/blocks/blocks.js:30671
+msgid "woo commerce"
+msgstr "woocommerce"
+
+#: assets/blocks/blocks.js:30671
+msgid "products list"
+msgstr "produktliste"
+
+#: assets/blocks/blocks.js:30671
+msgid "price list"
+msgstr "prisliste"
+
+#: assets/blocks/custom-styles.js:134
+msgid "Select a block style"
+msgstr ""
+
+#: assets/blocks/custom-styles.js:150
+msgid "Block styles"
+msgstr ""
+
+#: assets/blocks/custom-styles.js:162
+msgid "This option let you add custom style for the current block"
+msgstr ""
+
+#: assets/blocks/newsletter/frontend.js:33
+msgid "You need to fill all fields!"
+msgstr "Du må fylle inn alle feltene!"
+
+#: assets/blocks/newsletter/frontend.js:39
+msgid "Email is valid."
+msgstr "E-post er gyldig"
+
+#: assets/blocks/newsletter/frontend.js:41
+msgid "Use a valid email address!"
+msgstr "Bruk en gyldig e-postadresse!"
+
+#: assets/blocks/newsletter/frontend.js:66
+msgid "Submitted with success!"
+msgstr "Sendt inn!"
+
+#: assets/blocks/post-sidebar.js:126
+msgid "PublishPress Blocks Settings"
+msgstr "Innstillinger for PublishPress-blokker"
+
+#: assets/blocks/post-sidebar.js:128 assets/blocks/post-sidebar.js:129
+msgid "Inherit from global settings"
+msgstr "Arv fra globale innstillinger"
+
+#: assets/blocks/post-sidebar.js:128
+msgid "Enable"
+msgstr "Slå på"
+
+#: assets/blocks/post-sidebar.js:128
+msgid "Disable"
+msgstr "Slå av"
+
+#: assets/blocks/post-sidebar.js:129
+msgid "Original"
+msgstr "Original"
+
+#: assets/blocks/post-sidebar.js:129 incl/pages/settings/general.php:122
+msgid "Large"
+msgstr "Stor"
+
+#: assets/blocks/post-sidebar.js:198
+msgid "These settings will override the PublishPress Blocks global settings."
+msgstr ""
+"Disse innstillingene vil overstyre globale innstillinger for PublishPress."
+
+#: assets/blocks/post-sidebar.js:202
+msgid "Editor width"
+msgstr "Redigeringsbredde"
+
+#: assets/blocks/post-sidebar.js:206
+msgid "Change your editor width"
+msgstr "Endre bredden på redigeringsområdet"
+
+#: assets/blocks/post-sidebar.js:229
+msgid "Columns Visual Guide"
+msgstr "Visuell veileder for kolonner"
+
+#: assets/blocks/post-sidebar.js:233
+msgid "Border to materialize PublishPress Blocks Column block"
+msgstr "Kantlinje for å materialisere PublishPress kolonneblokk"
+
+#: assets/blocks/pro-ad.js:116
+msgid "Accordion"
+msgstr "Trekkspill"
+
+#: assets/blocks/pro-ad.js:121
+msgid "Tabs"
+msgstr "Faner"
+
+#: assets/blocks/pro-ad.js:133
+msgid "Button"
+msgstr ""
+
+#: assets/blocks/pro-ad.js:137
+msgid "List"
+msgstr "Liste"
+
+#. Author of the plugin/theme
+#: assets/blocks/pro-ad.js:153
+msgid "PublishPress"
+msgstr "PublishPress"
+
+#: assets/blocks/pro-ad.js:167
+#, javascript-format
+msgid "Want more features in your %s blocks?"
+msgstr ""
+
+#: assets/blocks/pro-ad.js:172 incl/advanced-gutenberg-main.php:824
+#: incl/pages/main.php:112
+msgid "Upgrade to Pro"
+msgstr "Oppgrader til Pro"
+
+#: assets/blocks/recent-posts/block.php:293
+#: assets/blocks/recent-posts/block.php:1088
+#: assets/blocks/recent-posts/block.php:1101
+msgid "Posted on"
+msgstr "Publisert"
+
+#: assets/blocks/recent-posts/block.php:295
+#: assets/blocks/recent-posts/block.php:1089
+#: assets/blocks/recent-posts/block.php:1102
+msgid "Updated on"
+msgstr "Oppdatert"
+
+#: assets/blocks/recent-posts/block.php:300
+#: assets/blocks/recent-posts/block.php:1075
+msgid "Posted"
+msgstr "Publisert"
+
+#: assets/blocks/recent-posts/block.php:300
+#: assets/blocks/recent-posts/block.php:302
+#: assets/blocks/recent-posts/block.php:1075
+#: assets/blocks/recent-posts/block.php:1076
+msgid "ago"
+msgstr "siden"
+
+#: assets/blocks/recent-posts/block.php:302
+#: assets/blocks/recent-posts/block.php:1076
+msgid "Updated"
+msgstr "Oppdatert"
+
+#: assets/js/main.js:93
+msgid "Changes saved!"
+msgstr ""
+
+#: assets/js/main.js:94
+msgid " Error: changes can't be saved."
+msgstr ""
+
+#: assets/js/settings.js:95
+msgid "Edit block"
+msgstr "Rediger blokk"
+
+#: assets/js/settings.js:95
+msgid "default config"
+msgstr "standardkonfigurasjon"
+
+#. Plugin Name of the plugin/theme
+#: incl/advanced-gutenberg-main.php:253 incl/advanced-gutenberg-main.php:1749
+#: incl/pages/block-settings.php:90 incl/pages/main.php:8
+#: incl/pages/main.php:32
+msgid "PublishPress Blocks"
+msgstr "PublishPress blokker"
+
+#: incl/advanced-gutenberg-main.php:802
+#, php-format
+msgid ""
+"You're using PublishPress Blocks Free. The Pro version has more features and "
+"support. %sUpgrade to Pro%s"
+msgstr ""
+
+#: incl/advanced-gutenberg-main.php:1024 incl/advanced-gutenberg-main.php:1145
+#: incl/advanced-gutenberg-main.php:1201
+msgid "No permission!"
+msgstr "Ingen tilgang!"
+
+#: incl/advanced-gutenberg-main.php:1030 incl/advanced-gutenberg-main.php:1155
+#: incl/advanced-gutenberg-main.php:1206 incl/advanced-gutenberg-main.php:1266
+#: incl/advanced-gutenberg-main.php:1349
+msgid "Invalid nonce token!"
+msgstr ""
+
+#: incl/advanced-gutenberg-main.php:1047 incl/pages/custom-styles.php:49
+msgid "Style title"
+msgstr ""
+
+#: incl/advanced-gutenberg-main.php:1159
+msgid "Error: wrong data"
+msgstr ""
+
+#: incl/advanced-gutenberg-main.php:1187
+msgid "Error: can't edit this feature"
+msgstr ""
+
+#: incl/advanced-gutenberg-main.php:1271 incl/advanced-gutenberg-main.php:1354
+#: incl/advanced-gutenberg-main.php:1404
+msgid "Bad Request!"
+msgstr "Ugyldig forespørsel!"
+
+#: incl/advanced-gutenberg-main.php:1278 incl/advanced-gutenberg-main.php:1361
+#: incl/advanced-gutenberg-main.php:1411
+msgid "Server error. Try again later!"
+msgstr "Serverfeil. Prøv igjen senere!"
+
+#: incl/advanced-gutenberg-main.php:1286 incl/advanced-gutenberg-main.php:1369
+#: incl/advanced-gutenberg-main.php:1419
+msgid "Cannot validate captcha"
+msgstr "Kan ikke bekrefte captcha"
+
+#: incl/advanced-gutenberg-main.php:1291 incl/advanced-gutenberg-main.php:1374
+#: incl/advanced-gutenberg-main.php:1424
+msgid "Captcha validation error"
+msgstr "Feil ved bekreftelse av captcha"
+
+#: incl/advanced-gutenberg-main.php:1314 incl/pages/settings/forms.php:13
+msgid "Website Contact"
+msgstr "Nettsted for kontakt"
+
+#: incl/advanced-gutenberg-main.php:1319
+msgid "You have received a contact from your website."
+msgstr "Du har mottatt en kontakt fra ditt nettsted"
+
+#: incl/advanced-gutenberg-main.php:1321
+msgid "Name"
+msgstr "Navn"
+
+#: incl/advanced-gutenberg-main.php:1322 incl/block-settings-main.php:804
+#: incl/block-settings-main.php:842 incl/block-settings-main.php:880
+msgid "Email"
+msgstr "E-post"
+
+#: incl/advanced-gutenberg-main.php:1323
+msgid "Date"
+msgstr "Dato"
+
+#: incl/advanced-gutenberg-main.php:1324
+msgid "Message"
+msgstr "Melding"
+
+#: incl/advanced-gutenberg-main.php:1331
+msgid "Error while sending the form. Please try again."
+msgstr ""
+
+#: incl/advanced-gutenberg-main.php:1427
+msgid "Captcha validated"
+msgstr "Captcha bekreftet"
+
+#: incl/advanced-gutenberg-main.php:1430
+msgid "Captcha is empty"
+msgstr "Captcha er tom"
+
+#: incl/advanced-gutenberg-main.php:1742 incl/advanced-gutenberg-main.php:2012
+#: incl/pages/main.php:23
+msgid "Block Permissions"
+msgstr ""
+
+#: incl/advanced-gutenberg-main.php:1756 incl/pages/custom-styles.php:19
+#: incl/pages/main.php:41
+msgid "Block Styles"
+msgstr ""
+
+#: incl/advanced-gutenberg-main.php:1770 incl/pages/settings.php:22
+msgid "Settings"
+msgstr "Innstillinger"
+
+#: incl/advanced-gutenberg-main.php:2177
+#, php-format
+msgid ""
+"If you like %sPublishPress Blocks%s please leave us a %s rating. Thank you!"
+msgstr ""
+
+#: incl/advanced-gutenberg-main.php:2193
+msgid "About PublishPress Blocks"
+msgstr ""
+
+#: incl/advanced-gutenberg-main.php:2196
+msgid "About"
+msgstr ""
+
+#: incl/advanced-gutenberg-main.php:2203 incl/advanced-gutenberg-main.php:2206
+msgid "Documentation"
+msgstr ""
+
+#: incl/advanced-gutenberg-main.php:2214
+msgid "Contact the PublishPress team"
+msgstr ""
+
+#: incl/advanced-gutenberg-main.php:2217
+msgid "Contact"
+msgstr ""
+
+#: incl/advanced-gutenberg-main.php:2243
+msgid "PublishPress Blocks logo"
+msgstr "Logo for PublishPress blokker"
+
+#: incl/advanced-gutenberg-main.php:3047
+#, php-format
+msgid "%s saved successfully!"
+msgstr ""
+
+#: incl/advanced-gutenberg-main.php:3057
+#, php-format
+msgid "%s can't be saved. Please try again."
+msgstr ""
+
+#: incl/advanced-gutenberg-main.php:3103
+#: incl/pages/block-controls/blocks.php:10 incl/pages/block-settings.php:97
+msgid "Search blocks"
+msgstr "Søk blokker"
+
+#: incl/advanced-gutenberg-main.php:3107
+msgid "Enable or disable all blocks"
+msgstr ""
+
+#: incl/advanced-gutenberg-main.php:3121 incl/advanced-gutenberg-main.php:3166
+#: incl/pages/block-controls/blocks.php:28
+#: incl/pages/block-controls/blocks.php:73
+msgid "To save this configuration, enable at least one block."
+msgstr ""
+
+#: incl/advanced-gutenberg-main.php:3134 incl/advanced-gutenberg-main.php:3157
+#, php-format
+msgid "Save %s"
+msgstr ""
+
+#: incl/advanced-gutenberg-main.php:3143
+#: incl/pages/block-controls/blocks.php:50
+msgid "Loading..."
+msgstr ""
+
+#: incl/advanced-gutenberg-main.php:3384 incl/advanced-gutenberg-main.php:3385
+msgid "Block Config"
+msgstr "Blokkonfigurasjon"
+
+#: incl/advanced-gutenberg-main.php:3441
+msgid "Default configuration for this block is not available."
+msgstr ""
+
+#: incl/advanced-gutenberg-main.php:3491
+#, php-format
+msgid "Page not found. Go to %sDashboard%s"
+msgstr ""
+
+#: incl/advanced-gutenberg-main.php:3909
+msgid "Type field not defined"
+msgstr "Felttypen ikke definert"
+
+#: incl/advanced-gutenberg-main.php:5168
+msgid "User registration is currently not allowed."
+msgstr "Brukerregistrering er for tiden ikke tillatt."
+
+#: incl/advanced-gutenberg-main.php:5169
+msgid "Captcha must be checked!"
+msgstr "Captcha må krysses av!"
+
+#: incl/advanced-gutenberg-main.php:5170
+msgid "Username or password is incorrect!"
+msgstr "Brukernavn eller passord er feil!"
+
+#: incl/block-settings-main.php:47
+msgid "Header Icon"
+msgstr "Hode-ikon"
+
+#: incl/block-settings-main.php:56
+msgid "Plus Circle"
+msgstr "Pluss-sirkel"
+
+#: incl/block-settings-main.php:60
+msgid "Plus Circle Outline"
+msgstr "Plusskvadrat-omriss"
+
+#: incl/block-settings-main.php:64
+msgid "Plus Square Outline"
+msgstr "Plusskvadrat-omriss"
+
+#: incl/block-settings-main.php:68
+msgid "Unfold Arrow"
+msgstr "Utbrettingspil"
+
+#: incl/block-settings-main.php:72
+msgid "Horizontal Dots"
+msgstr "Vannrette prikker"
+
+#: incl/block-settings-main.php:76
+msgid "Arrow Down"
+msgstr "Nedpil"
+
+#: incl/block-settings-main.php:82
+msgid "Header Icon Color"
+msgstr "Farge for hode-ikon"
+
+#: incl/block-settings-main.php:89 incl/block-settings-main.php:1013
+msgid "Body Settings"
+msgstr "Innstillinger for brødtekst"
+
+#: incl/block-settings-main.php:138 incl/block-settings-main.php:205
+#: incl/block-settings-main.php:1053 incl/block-settings-main.php:1232
+#: incl/block-settings-main.php:1254 incl/block-settings-main.php:1388
+#: incl/block-settings-main.php:1410 incl/block-settings-main.php:1745
+#: incl/block-settings-main.php:1815 incl/block-settings-main.php:1884
+msgid "Border Radius"
+msgstr "Kantlinjeradius"
+
+#: incl/block-settings-main.php:149
+msgid "Text and Color"
+msgstr "Tekst og farge"
+
+#: incl/block-settings-main.php:152 incl/block-settings-main.php:458
+msgid "Text Size"
+msgstr "Tekststørrelse"
+
+#: incl/block-settings-main.php:214
+msgid "Margin Settings"
+msgstr "Avstandsinnstillinger"
+
+#: incl/block-settings-main.php:217 incl/block-settings-main.php:1919
+#: incl/block-settings-main.php:2030 incl/block-settings-main.php:2110
+msgid "Margin Top"
+msgstr "Avstand topp"
+
+#: incl/block-settings-main.php:224 incl/block-settings-main.php:1940
+#: incl/block-settings-main.php:2051 incl/block-settings-main.php:2131
+msgid "Margin Right"
+msgstr "Avstand høyre"
+
+#: incl/block-settings-main.php:231 incl/block-settings-main.php:1926
+#: incl/block-settings-main.php:2037 incl/block-settings-main.php:2117
+msgid "Margin Bottom"
+msgstr "Avstand bunn"
+
+#: incl/block-settings-main.php:238 incl/block-settings-main.php:1933
+#: incl/block-settings-main.php:2044 incl/block-settings-main.php:2124
+msgid "Margin Left"
+msgstr "Avstand venstre"
+
+#: incl/block-settings-main.php:247
+msgid "Padding Settings"
+msgstr "Innstillinger for polstring"
+
+#: incl/block-settings-main.php:280
+msgid "Hover Settings"
+msgstr "Innstillinger for oversveve"
+
+#: incl/block-settings-main.php:298
+msgid "Shadow H Offset"
+msgstr "H-forskyvning for skygge"
+
+#: incl/block-settings-main.php:305
+msgid "Shadow V Offset"
+msgstr "V-forskyvning for skygge"
+
+#: incl/block-settings-main.php:312
+msgid "Shadow Blur"
+msgstr "Skygge-uskarphet"
+
+#: incl/block-settings-main.php:319
+msgid "Shadow Spread"
+msgstr "Skyggesprut"
+
+#: incl/block-settings-main.php:326
+msgid "Transition Speed"
+msgstr "Forvandingshastighet"
+
+#: incl/block-settings-main.php:337
+msgid "Click action"
+msgstr "Klikk-handling"
+
+#: incl/block-settings-main.php:349
+msgid "Open image in a lightbox"
+msgstr "Åpne bilde i en lysboks"
+
+#: incl/block-settings-main.php:359
+msgid "Open link in a new tab"
+msgstr "Åpne lenke i en ny fane"
+
+#: incl/block-settings-main.php:470
+msgid "Icon style"
+msgstr "Ikonstil"
+
+#: incl/block-settings-main.php:511
+msgid "Arrow Right"
+msgstr "Høyrepil"
+
+#: incl/block-settings-main.php:577
+msgid "Max width"
+msgstr "Maks bredde"
+
+#: incl/block-settings-main.php:591
+msgid "Open video in lightbox"
+msgstr "Åpne video i lysboks"
+
+#: incl/block-settings-main.php:601
+msgid "Video Width"
+msgstr "Videobredde"
+
+#: incl/block-settings-main.php:608
+msgid "Video Height"
+msgstr "Videohøyde"
+
+#: incl/block-settings-main.php:615
+msgid "Overlay color"
+msgstr "Farge på overlegg"
+
+#: incl/block-settings-main.php:622
+msgid "Play Button Settings"
+msgstr "Innstillinger for avspillingsknapp"
+
+#: incl/block-settings-main.php:625
+msgid "Button Icon"
+msgstr "Knappe-ikon"
+
+#: incl/block-settings-main.php:630 incl/block-settings-main.php:1292
+msgid "Normal"
+msgstr "Normal"
+
+#: incl/block-settings-main.php:634
+msgid "Filled Circle"
+msgstr "Fylt sirkel"
+
+#: incl/block-settings-main.php:638
+msgid "Outline Circle"
+msgstr "Sirkelomriss"
+
+#: incl/block-settings-main.php:642
+msgid "Video Camera"
+msgstr "Videokamera"
+
+#: incl/block-settings-main.php:646
+msgid "Filled Square"
+msgstr "Fylt kvadrat"
+
+#: incl/block-settings-main.php:650
+msgid "Star Sticker"
+msgstr "Stjernemerke"
+
+#: incl/block-settings-main.php:656
+msgid "Button Size"
+msgstr "Knappestørrelse"
+
+#: incl/block-settings-main.php:663
+msgid "Button Color"
+msgstr "Knappefarge"
+
+#: incl/block-settings-main.php:672 incl/block-settings-main.php:905
+#: incl/block-settings-main.php:936 incl/block-settings-main.php:1064
+#: incl/block-settings-main.php:1780
+msgid "General Settings"
+msgstr "Generelle innstillinger"
+
+#: incl/block-settings-main.php:675
+msgid "Number of columns"
+msgstr "Antall kolonner"
+
+#: incl/block-settings-main.php:707
+msgid "Count Up Number Size"
+msgstr "Tallstørrelse for teller opp"
+
+#: incl/block-settings-main.php:718
+msgid "Location Settings"
+msgstr "Innstillinger for plassering"
+
+#: incl/block-settings-main.php:742
+msgid "Map Settings"
+msgstr "Kartinnstillinger"
+
+#: incl/block-settings-main.php:745
+msgid "Zoom Level"
+msgstr "Forstørrelsesgrad"
+
+#: incl/block-settings-main.php:759
+msgid "Map style"
+msgstr "Kartstil"
+
+#: incl/block-settings-main.php:763
+msgid "Silver"
+msgstr "Sølv"
+
+#: incl/block-settings-main.php:764
+msgid "Retro"
+msgstr "Retro"
+
+#: incl/block-settings-main.php:765 incl/pages/settings/recaptcha.php:104
+msgid "Dark"
+msgstr "Mørk"
+
+#: incl/block-settings-main.php:766
+msgid "Night"
+msgstr "Natt"
+
+#: incl/block-settings-main.php:767
+msgid "Aubergine"
+msgstr "Aubergine"
+
+#: incl/block-settings-main.php:774
+msgid "Marker Settings"
+msgstr "Markørinnstillinger"
+
+#: incl/block-settings-main.php:782
+msgid "Marker Description"
+msgstr "Markørbeskrivelse"
+
+#: incl/block-settings-main.php:791
+msgid "Icon 1 Settings"
+msgstr "Innstillinger for ikon 1"
+
+#: incl/block-settings-main.php:798 incl/block-settings-main.php:836
+#: incl/block-settings-main.php:874
+msgid "Blogger"
+msgstr "Gamle Blogger"
+
+#: incl/block-settings-main.php:799 incl/block-settings-main.php:837
+#: incl/block-settings-main.php:875
+msgid "Facebook"
+msgstr "Facebook"
+
+#: incl/block-settings-main.php:800 incl/block-settings-main.php:838
+#: incl/block-settings-main.php:876
+msgid "Flickr"
+msgstr "Flickr"
+
+#: incl/block-settings-main.php:801 incl/block-settings-main.php:839
+#: incl/block-settings-main.php:877
+msgid "Google Plus"
+msgstr "Google Plus"
+
+#: incl/block-settings-main.php:802 incl/block-settings-main.php:840
+#: incl/block-settings-main.php:878
+msgid "Instagram"
+msgstr "Instagram"
+
+#: incl/block-settings-main.php:803 incl/block-settings-main.php:841
+#: incl/block-settings-main.php:879
+msgid "LinkedIn"
+msgstr "LinkedIn"
+
+#: incl/block-settings-main.php:805 incl/block-settings-main.php:843
+#: incl/block-settings-main.php:881
+msgid "Picasa"
+msgstr "Picasa"
+
+#: incl/block-settings-main.php:806 incl/block-settings-main.php:844
+#: incl/block-settings-main.php:882
+msgid "Pinterest"
+msgstr "Pinterest"
+
+#: incl/block-settings-main.php:807 incl/block-settings-main.php:845
+#: incl/block-settings-main.php:883
+msgid "Reddit"
+msgstr "Reddit"
+
+#: incl/block-settings-main.php:808 incl/block-settings-main.php:846
+#: incl/block-settings-main.php:884
+msgid "Skype"
+msgstr "Skype"
+
+#: incl/block-settings-main.php:809 incl/block-settings-main.php:847
+#: incl/block-settings-main.php:885
+msgid "Sound Cloud"
+msgstr "Sound Cloud"
+
+#: incl/block-settings-main.php:810 incl/block-settings-main.php:848
+#: incl/block-settings-main.php:886
+msgid "Tumblr"
+msgstr "Tumblr"
+
+#: incl/block-settings-main.php:811 incl/block-settings-main.php:849
+#: incl/block-settings-main.php:887
+msgid "Twitter"
+msgstr "Twitter"
+
+#: incl/block-settings-main.php:812 incl/block-settings-main.php:850
+#: incl/block-settings-main.php:888
+msgid "Vimeo"
+msgstr "Vimeo"
+
+#: incl/block-settings-main.php:813 incl/block-settings-main.php:851
+#: incl/block-settings-main.php:889
+msgid "Youtube"
+msgstr "Youtube"
+
+#: incl/block-settings-main.php:822 incl/block-settings-main.php:860
+#: incl/block-settings-main.php:898
+msgid "Icon Link"
+msgstr "Ikon-lenke"
+
+#: incl/block-settings-main.php:829
+msgid "Icon 2 Settings"
+msgstr "Innstillinger for ikon 2"
+
+#: incl/block-settings-main.php:867
+msgid "Icon 3 Settings"
+msgstr "Innstillinger for ikon 3"
+
+#: incl/block-settings-main.php:908
+msgid "Icon Alignment"
+msgstr "Ikonjustering"
+
+#: incl/block-settings-main.php:925
+msgid "Icon Space"
+msgstr "Ikon-mellomrom"
+
+#: incl/block-settings-main.php:949
+msgid "Anchor color"
+msgstr "Ankerfarge"
+
+#: incl/block-settings-main.php:954
+msgid "Table of Contents Alignment"
+msgstr "Justering av innholdsfortegnelse"
+
+#: incl/block-settings-main.php:968
+msgid "Tab Settings"
+msgstr "Faneinnstillinger"
+
+#: incl/block-settings-main.php:998
+msgid "Active Tab Settings"
+msgstr "Innstillinger for aktiv fane"
+
+#: incl/block-settings-main.php:1076
+msgid "Avatar Settings"
+msgstr "Avatar-innstillinger"
+
+#: incl/block-settings-main.php:1158
+msgid "Name placeholder"
+msgstr "Plassholder for navn"
+
+#: incl/block-settings-main.php:1163 incl/block-settings-main.php:1324
+msgid "Email placeholder"
+msgstr "Plassholder for e-post"
+
+#: incl/block-settings-main.php:1168
+msgid "Message placeholder"
+msgstr "Plassholder for melding"
+
+#: incl/block-settings-main.php:1173 incl/block-settings-main.php:1329
+msgid "Submit label"
+msgstr "Innsendingsetikett"
+
+#: incl/block-settings-main.php:1178 incl/block-settings-main.php:1334
+msgid "Success text"
+msgstr "Tekst ved vellykket"
+
+#: incl/block-settings-main.php:1183 incl/block-settings-main.php:1339
+msgid "Error text"
+msgstr "Tekst ved feil"
+
+#: incl/block-settings-main.php:1244 incl/block-settings-main.php:1400
+msgid "Border and Text Color"
+msgstr "Kantlinje- og tekstfarge"
+
+#: incl/block-settings-main.php:1261
+msgid "Button Position"
+msgstr "Knappeposisjon"
+
+#: incl/block-settings-main.php:1302
+msgid "Form width"
+msgstr "Skjemabredde"
+
+#: incl/block-settings-main.php:1314
+msgid "First Name placeholder"
+msgstr "Plassholder for fornavn"
+
+#: incl/block-settings-main.php:1319
+msgid "Last Name placeholder"
+msgstr "Plassholder for ettternavn"
+
+#: incl/block-settings-main.php:1421
+msgid "Images Settings"
+msgstr "Bildeinnstillinger"
+
+#: incl/block-settings-main.php:1444
+msgid "Auto Height"
+msgstr "Auto-høyde"
+
+#: incl/block-settings-main.php:1538
+msgid "Space between column"
+msgstr "Mellomrom mellom kolonne"
+
+#: incl/block-settings-main.php:1547 incl/block-settings-main.php:1586
+msgid "10px"
+msgstr "10px"
+
+#: incl/block-settings-main.php:1551 incl/block-settings-main.php:1590
+msgid "20px"
+msgstr "20px"
+
+#: incl/block-settings-main.php:1555 incl/block-settings-main.php:1594
+msgid "30px"
+msgstr "30px"
+
+#: incl/block-settings-main.php:1559 incl/block-settings-main.php:1598
+msgid "40px"
+msgstr "40px"
+
+#: incl/block-settings-main.php:1563 incl/block-settings-main.php:1602
+msgid "50px"
+msgstr "50px"
+
+#: incl/block-settings-main.php:1567 incl/block-settings-main.php:1606
+msgid "70px"
+msgstr "70px"
+
+#: incl/block-settings-main.php:1571 incl/block-settings-main.php:1610
+msgid "90px"
+msgstr "90px"
+
+#: incl/block-settings-main.php:1616
+msgid "Collapsed order RTL"
+msgstr ""
+
+#: incl/block-settings-main.php:1635
+msgid "Middle"
+msgstr "Midten"
+
+#: incl/block-settings-main.php:1643
+msgid "Full Height"
+msgstr "Full høyde"
+
+#: incl/block-settings-main.php:1659
+msgid "Div"
+msgstr "Div"
+
+#: incl/block-settings-main.php:1663
+msgid "Header"
+msgstr "Toppområde"
+
+#: incl/block-settings-main.php:1667
+msgid "Section"
+msgstr "Seksjon"
+
+#: incl/block-settings-main.php:1671
+msgid "Main"
+msgstr "Hoved"
+
+#: incl/block-settings-main.php:1675
+msgid "Article"
+msgstr "Artikkel"
+
+#: incl/block-settings-main.php:1679
+msgid "Aside"
+msgstr "Sideordnet"
+
+#: incl/block-settings-main.php:1683
+msgid "Footer"
+msgstr "Bunnområde"
+
+#: incl/block-settings-main.php:1757
+msgid "Text alignment"
+msgstr "Tekstjustering"
+
+#: incl/block-settings-main.php:1783
+msgid "Number of icons"
+msgstr "Antall ikoner"
+
+#: incl/block-settings-main.php:1957 incl/block-settings-main.php:2068
+msgid "Font Size (px)"
+msgstr "Skriftstørrelse (px)"
+
+#: incl/block-settings-main.php:1964 incl/block-settings-main.php:2075
+msgid "Line Height (px)"
+msgstr "Linjehøyde (px)"
+
+#: incl/pages/block-controls.php:14
+msgid "Controls saved successfully!"
+msgstr ""
+
+#: incl/pages/block-controls.php:16
+msgid "Blocks saved successfully!"
+msgstr ""
+
+#: incl/pages/block-controls.php:18 incl/pages/settings.php:15
+msgid "Settings saved successfully!"
+msgstr ""
+
+#: incl/pages/block-controls.php:37
+msgid "Controls"
+msgstr ""
+
+#: incl/pages/block-controls.php:41
+msgid "Blocks"
+msgstr "Blokker"
+
+#: incl/pages/block-controls/blocks.php:14
+msgid "Enable or disable controls for all blocks"
+msgstr ""
+
+#: incl/pages/block-controls/blocks.php:41
+msgid "Save Blocks Settings"
+msgstr ""
+
+#: incl/pages/block-controls/blocks.php:64
+msgid "Save Blocks"
+msgstr ""
+
+#: incl/pages/block-controls/controls.php:12
+msgid "Schedule control"
+msgstr ""
+
+#: incl/pages/block-controls/controls.php:22
+msgid "Every block can have a “Start showing” and/or “Stop showing” option."
+msgstr ""
+
+#: incl/pages/block-controls/controls.php:31
+msgid "User role control"
+msgstr ""
+
+#: incl/pages/block-controls/controls.php:41
+msgid "Every block can have a “User roles” option."
+msgstr ""
+
+#: incl/pages/block-controls/controls.php:55
+msgid "Save Controls"
+msgstr ""
+
+#: incl/pages/block-settings.php:123 incl/pages/settings/images.php:84
+msgid "Edit"
+msgstr "Rediger"
+
+#: incl/pages/block-settings.php:133
+msgid ""
+"No blocks available. Please go to a post edit (without saving either "
+"modifying anything). Then come back to Block Settings to see the blocks list."
+msgstr ""
+
+#: incl/pages/block-settings/block-config.php:12
+#: incl/pages/block-settings/block-config.php:24
+msgid "Save"
+msgstr "Lagre"
+
+#: incl/pages/block-settings/block-config.php:15
+msgid "block"
+msgstr "blokk"
+
+#: incl/pages/custom-styles.php:12
+msgid "Your styles have been saved!"
+msgstr ""
+
+#: incl/pages/custom-styles.php:33
+msgid "Copy"
+msgstr "Kopier"
+
+#: incl/pages/custom-styles.php:34
+msgid "Delete"
+msgstr "Slett"
+
+#: incl/pages/custom-styles.php:38
+msgid "Add new style"
+msgstr ""
+
+#: incl/pages/custom-styles.php:57
+msgid "Class name"
+msgstr ""
+
+#: incl/pages/custom-styles.php:67
+msgid ""
+"This option help you identify specific custom styles in the list\n"
+"                                            (usually set this same as the "
+"custom style's background color)"
+msgstr ""
+
+#: incl/pages/custom-styles.php:72
+msgid "Identification color"
+msgstr "Identifikasjonsfarge"
+
+#: incl/pages/custom-styles.php:86
+msgid "Custom CSS"
+msgstr "Tilpasset CSS"
+
+#: incl/pages/custom-styles.php:92
+msgid "Hint: Use \"Ctrl + Space\" for auto completion"
+msgstr "Hint: Bruk \"Ctrl + mellomrom\" for autofullføring"
+
+#: incl/pages/custom-styles.php:105
+msgid "Save styles"
+msgstr "Lagre stiler"
+
+#: incl/pages/custom-styles.php:114
+msgid "Previous Paragraph."
+msgstr "Forrige avsnitt."
+
+#: incl/pages/custom-styles.php:118
+msgid "Example text with this style"
+msgstr "Eksempeltekst med stil"
+
+#: incl/pages/custom-styles.php:121
+msgid "Following Paragraph."
+msgstr "Etterfølgende avsnitt."
+
+#: incl/pages/main.php:25
+msgid ""
+"You can control who can use each block, including default WordPress blocks."
+msgstr ""
+
+#: incl/pages/main.php:34
+msgid ""
+"Enable extra blocks including content displays, sliders, buttons, icons, "
+"tabs, accordions, and more."
+msgstr ""
+
+#: incl/pages/main.php:43
+msgid ""
+"You can add your own CSS styles for your blocks. Anyone editing posts can "
+"quickly add the styles to blocks."
+msgstr ""
+
+#: incl/pages/main.php:52
+msgid ""
+"Schedule blocks to be published and unpublished. Every block can have a "
+"“Start showing” and/or “Stop showing” option."
+msgstr ""
+
+#: incl/pages/main.php:60
+#, php-format
+msgid "Extend Supported Blocks %sBeta%s"
+msgstr ""
+
+#: incl/pages/main.php:65
+msgid ""
+"If some blocks are not listed in Block Permissions, try enabling this "
+"feature."
+msgstr ""
+
+#: incl/pages/main.php:73
+msgid "Core Blocks Features"
+msgstr ""
+
+#: incl/pages/main.php:75
+msgid ""
+"Add Google Fonts support to core blocks including paragraphs and headings."
+msgstr ""
+
+#: incl/pages/main.php:93
+msgid "PublishPress Blocks Pro"
+msgstr ""
+
+#: incl/pages/main.php:95
+msgid "Priority, personal support"
+msgstr ""
+
+#: incl/pages/main.php:96
+msgid "Pro features for Accordion block"
+msgstr ""
+
+#: incl/pages/main.php:97
+msgid "Pro features for Tabs block"
+msgstr ""
+
+#: incl/pages/main.php:98
+msgid "Pro features for Content Display block"
+msgstr ""
+
+#: incl/pages/main.php:99
+msgid "Pro features for Images Slider block"
+msgstr ""
+
+#: incl/pages/main.php:100
+msgid "Pro features for Button block"
+msgstr ""
+
+#: incl/pages/main.php:101
+msgid "Pro features for List block"
+msgstr ""
+
+#: incl/pages/main.php:102
+msgid "Pro features for Count Up block"
+msgstr ""
+
+#: incl/pages/main.php:103
+msgid "Pro features for Testimonial block"
+msgstr ""
+
+#: incl/pages/main.php:104
+msgid "Pro features for Advanced Image block"
+msgstr ""
+
+#: incl/pages/main.php:105
+msgid "Google Fonts support"
+msgstr ""
+
+#: incl/pages/main.php:106
+msgid "Countdown block"
+msgstr ""
+
+#: incl/pages/main.php:107
+msgid "Pricing Table block"
+msgstr ""
+
+#: incl/pages/main.php:108
+msgid "Feature List block"
+msgstr ""
+
+#: incl/pages/main.php:109
+msgid "Remove PublishPress ads and branding"
+msgstr ""
+
+#: incl/pages/settings.php:29
+msgid "General"
+msgstr ""
+
+#: incl/pages/settings.php:38
+msgid "Images"
+msgstr ""
+
+#: incl/pages/settings.php:42
+msgid "Maps"
+msgstr ""
+
+#: incl/pages/settings.php:46
+msgid "Email & Forms"
+msgstr ""
+
+#: incl/pages/settings.php:50
+msgid "reCAPTCHA"
+msgstr ""
+
+#: incl/pages/settings.php:54
+msgid "Data Export"
+msgstr ""
+
+#: incl/pages/settings.php:64
+msgid "License"
+msgstr ""
+
+#: incl/pages/settings/data.php:15
+msgid "Download Contacts Form data"
+msgstr "Last ned kontakskjemadata"
+
+#: incl/pages/settings/data.php:19
+msgid "Data stored through Contact form blocks."
+msgstr ""
+
+#: incl/pages/settings/data.php:31 incl/pages/settings/data.php:64
+msgid "CSV"
+msgstr "CSV"
+
+#: incl/pages/settings/data.php:40 incl/pages/settings/data.php:73
+msgid "JSON"
+msgstr "JSON"
+
+#: incl/pages/settings/data.php:48
+msgid "Download Newsletter Form data"
+msgstr "Last ned skjemadata for nyhetsbrev"
+
+#: incl/pages/settings/data.php:52
+msgid "Data stored through Newsletter form blocks."
+msgstr ""
+
+#: incl/pages/settings/forms.php:27
+msgid ""
+"These email settings apply to messages sent through PublishPress Contact "
+"form block."
+msgstr ""
+
+#: incl/pages/settings/forms.php:35
+msgid "Sender name"
+msgstr "Sendernavn"
+
+#: incl/pages/settings/forms.php:50
+msgid "Sender email"
+msgstr "E-postsender"
+
+#: incl/pages/settings/forms.php:65
+msgid "Email title"
+msgstr "E-posttittel"
+
+#: incl/pages/settings/forms.php:80
+msgid "Email receiver"
+msgstr "E-postmottaker"
+
+#: incl/pages/settings/forms.php:101
+msgid "Save Form Settings"
+msgstr ""
+
+#: incl/pages/settings/general.php:43
+msgid "Display PublishPress branding"
+msgstr ""
+
+#: incl/pages/settings/general.php:44
+msgid "PublishPress logo and links in the footer of the admin pages"
+msgstr ""
+
+#: incl/pages/settings/general.php:52
+msgid "Enable blocks spacing"
+msgstr "Slå på mellomrom for blokker"
+
+#: incl/pages/settings/general.php:63
+msgid "Vertical spacing between blocks"
+msgstr ""
+
+#: incl/pages/settings/general.php:72
+msgid "Blocks spacing"
+msgstr "Mellomrom for blokker"
+
+#: incl/pages/settings/general.php:89
+msgid "Blocks icon color"
+msgstr "Ikonfarge for blokker"
+
+#: incl/pages/settings/general.php:104
+msgid "Apply in admin to blocks from PublishPress Blocks plugin."
+msgstr ""
+
+#: incl/pages/settings/general.php:113
+msgid "Gutenberg editor width"
+msgstr ""
+
+#: incl/pages/settings/general.php:133
+msgid "Enable columns visual guide"
+msgstr "Slå på visuell veiledning for kolonner"
+
+#: incl/pages/settings/general.php:144
+msgid "Visual guide for PublishPress Blocks Columns block"
+msgstr ""
+
+#: incl/pages/settings/general.php:153
+msgid "Remove autop"
+msgstr ""
+
+#: incl/pages/settings/general.php:164
+msgid ""
+"Autop WordPress function is used to prevent unwanted paragraphs to be added"
+msgstr ""
+
+#: incl/pages/settings/general.php:178
+msgid "Save General Settings"
+msgstr ""
+
+#: incl/pages/settings/images.php:24
+msgid "Open galleries in lightbox"
+msgstr "Åpne gallerier i lysboks"
+
+#: incl/pages/settings/images.php:35
+msgid "Open gallery images as a lightbox style popup"
+msgstr "Åpne galleribilder i en lightbox"
+
+#: incl/pages/settings/images.php:44
+msgid "Image caption"
+msgstr "Bildetekst"
+
+#: incl/pages/settings/images.php:50
+msgid "Disabled"
+msgstr "Slått av"
+
+#: incl/pages/settings/images.php:56
+msgid "Overlay"
+msgstr "Overlegg"
+
+#: incl/pages/settings/images.php:63
+msgid "Display caption text on images loaded as lightbox in galleries."
+msgstr ""
+
+#: incl/pages/settings/images.php:72
+msgid "Default thumbnail"
+msgstr "Standard fremhevet bilde"
+
+#: incl/pages/settings/images.php:85
+msgid "Reset to default"
+msgstr "Tilbakestil til standard"
+
+#: incl/pages/settings/images.php:91
+msgid ""
+"Set the default post thumbnail to use in Content Display blocks for posts "
+"without featured image."
+msgstr ""
+
+#: incl/pages/settings/images.php:105
+msgid "Save Image Settings"
+msgstr ""
+
+#: incl/pages/settings/maps.php:12
+msgid "Google API key"
+msgstr ""
+
+#: incl/pages/settings/maps.php:28
+msgid "How to create a Google API Key"
+msgstr "Hvordan opprette en Google API-nøkkel?"
+
+#: incl/pages/settings/maps.php:35
+msgid "A Google API key is required to use the Map block without any warning."
+msgstr ""
+"En Google API-nøkkel er nødvending for å vise kartblokken uten advarsel."
+
+#: incl/pages/settings/maps.php:49
+msgid "Save Maps Settings"
+msgstr ""
+
+#: incl/pages/settings/recaptcha.php:16
+#, php-format
+msgid ""
+"Use the Google reCAPTCHA to avoid spam in PublishPress Blocks forms. Get "
+"credentials for your domain by registering %shere%s."
+msgstr ""
+
+#: incl/pages/settings/recaptcha.php:27
+msgid "Enable reCAPTCHA"
+msgstr "Slå på reCAPTCHA"
+
+#: incl/pages/settings/recaptcha.php:42
+msgid "Site key"
+msgstr ""
+
+#: incl/pages/settings/recaptcha.php:43 incl/pages/settings/recaptcha.php:59
+msgid "required"
+msgstr "påkrevet"
+
+#: incl/pages/settings/recaptcha.php:58
+msgid "Secret key"
+msgstr ""
+
+#: incl/pages/settings/recaptcha.php:74
+msgid "Language"
+msgstr ""
+
+#: incl/pages/settings/recaptcha.php:81
+msgid "Auto detect"
+msgstr "Oppdag automatisk"
+
+#: incl/pages/settings/recaptcha.php:88
+msgid "Language codes list"
+msgstr ""
+
+#: incl/pages/settings/recaptcha.php:95
+msgid "Theme"
+msgstr ""
+
+#: incl/pages/settings/recaptcha.php:101
+msgid "Light"
+msgstr ""
+
+#: incl/pages/settings/recaptcha.php:107
+msgid "Invisible"
+msgstr ""
+
+#: incl/pages/settings/recaptcha.php:114
+msgid ""
+"We strongly recommend not using Invisible reCAPTCHA if you have more than 1 "
+"Newsletter or Contact forms block in a page."
+msgstr ""
+
+#: incl/pages/settings/recaptcha.php:129
+msgid "Save reCAPTCHA Settings"
+msgstr ""
+
+#: install.php:20
+msgid "Gutenberg is not detected! Activate it or"
+msgstr "Gutenberg er ikke oppdage! Aktiver den eller"
+
+#: install.php:21
+msgid "Install Gutenberg Now!"
+msgstr "Installer Gutenberg nå!"
+
+#: install.php:29
+msgid "We require at least Gutenberg version "
+msgstr "Vi krever minst Gutenberg-versjon"
+
+#: install.php:31
+msgid "Please update Gutenberg then comeback later!"
+msgstr "Vennligst oppdater Gutenberg og kom tilbake senere!"
+
+#: vendor/publishpress/publishpress-instance-protection/core/InstanceChecker.php:212
+msgid ""
+"This plugin is outdated. You already have a more recent version installed. "
+"Please remove this version."
+msgstr ""
+
+#: vendor/publishpress/publishpress-instance-protection/core/InstanceChecker.php:243
+#, php-format
+msgid ""
+"This plugin is not installed in the standard folder. The current path is %s "
+"but it is expected to be %s."
+msgstr ""
+
+#: vendor/publishpress/publishpress-instance-protection/core/InstanceChecker.php:269
+#, php-format
+msgid ""
+"You have activated multiple instances of %s. Please keep only one activated "
+"and remove the others."
+msgstr ""
+
+#: vendor/publishpress/publishpress-instance-protection/core/InstanceChecker.php:289
+#, php-format
+msgid "Please deactivate %s when %s is activated."
+msgstr ""
+
+#: vendor/publishpress/wordpress-reviews/ReviewsController.php:332
+#, php-format
+msgid ""
+"Hey, you've been using %1$s for %2$s on your site. We hope the plugin has "
+"been useful. Please could you quickly leave a 5-star rating on WordPress."
+"org? It really does help to keep %1$s growing."
+msgstr ""
+
+#: vendor/publishpress/wordpress-reviews/ReviewsController.php:342
+msgid "1 week"
+msgstr ""
+
+#: vendor/publishpress/wordpress-reviews/ReviewsController.php:350
+msgid "1 month"
+msgstr ""
+
+#: vendor/publishpress/wordpress-reviews/ReviewsController.php:361
+msgid "3 months"
+msgstr ""
+
+#: vendor/publishpress/wordpress-reviews/ReviewsController.php:615
+#, php-format
+msgid "Click here to add your rating for %s"
+msgstr ""
+
+#: vendor/publishpress/wordpress-reviews/ReviewsController.php:621
+msgid "Maybe later"
+msgstr ""
+
+#: vendor/publishpress/wordpress-reviews/ReviewsController.php:626
+msgid "I already did"
+msgstr ""
+
+#: vendor/publishpress/wordpress-version-notices/src/Module/MenuLink/Module.php:129
+msgid "Amazing! We are redirecting you to our site..."
+msgstr ""
+
+#. Plugin URI of the plugin/theme
+msgid "https://publishpress.com/blocks/"
+msgstr "https://publishpress.com/blocks/"
+
+#. Description of the plugin/theme
+msgid ""
+"PublishPress Blocks has everything you need to build professional websites "
+"with the Gutenberg editor."
+msgstr ""
+
+#. Author URI of the plugin/theme
+msgid "https://publishpress.com/"
+msgstr "https://publishpress.com/"
+
+#~ msgid "Advanced Video Settings"
+#~ msgstr "Avanserte video-innstillinger"
+
+#~ msgid "Add Google API Key"
+#~ msgstr "Legg til Google API-nøkkel"
+
+#~ msgid "Select a custom style"
+#~ msgstr "Velg en tilpasset stil"
+
+#~ msgid "Custom styles"
+#~ msgstr "Tilpassede stiler"
+
+#~ msgid "All modifications were saved!"
+#~ msgstr "Alle endringer ble lagret!"
+
+#~ msgid "Accordion Item"
+#~ msgstr "Trekkspill-element"
+
+#~ msgid "Advanced icon block with more options and styles."
+#~ msgstr "Avansert ikon-blokk med flere alternativer og stiler."
+
+#~ msgid "Advanced image/photo block with more options and styles."
+#~ msgstr "Avansert bilde/fotoblokk med flere alternativer og stiler."
+
+#~ msgid "Advanced table block with more styles and functions."
+#~ msgstr "Avansert tabellblokk med flere stiler og funksjoner."
+
+#~ msgid "Tab Item"
+#~ msgstr "Faneelement"
+
+#~ msgid "Adv. Column"
+#~ msgstr "Avansert kolonne"
+
+#~ msgid "Container"
+#~ msgstr "Beholder"
+
+#~ msgid "Block Settings"
+#~ msgstr "Blokkinnnstillinger"
+
+#~ msgid "Custom Styles"
+#~ msgstr "Tilpassede stiler"
+
+#~ msgid "Blocks Settings"
+#~ msgstr "Innstillinger for blokker"
+
+#~ msgid "Enable block access"
+#~ msgstr "Slå på blokk-tilgang"
+
+#~ msgid "Enable custom styles"
+#~ msgstr "Slå på tilpassede stiler"
+
+#~ msgid "Enable block access to deactivate blocks by user role"
+#~ msgstr "Slå på blokk-tilgang for å deaktivere blokker etter brukerrolle"
+
+#~ msgid "Save Block Access"
+#~ msgstr "Lagre blokk-tilgang"
+
+#~ msgid "Block Access saved successfully!"
+#~ msgstr "Blokk-tilgang lagret!"
+
+#~ msgid "You do not have permission to manage Block Access"
+#~ msgstr "Du har ikke tillatelse til å behandle blokk-tilgang"
+
+#~ msgid "Block Access"
+#~ msgstr "Blokktilgang"
+
+#~ msgid "Enable border to materialize PublishPress Blocks Column block"
+#~ msgstr "Slå på kantlinje for å materialisere PublishPress kolonneblokk"
+
+#~ msgid ""
+#~ "Set color for blocks icons on admin, only apply to PublishPress Blocks"
+#~ msgstr ""
+#~ "Bestem farge for blokk-ikoner på admin. Påvirker bare PublishPress-blokker"
+
+#~ msgid "Remove Autop"
+#~ msgstr "Fjern autop"
+
+#~ msgid "Set the default post thumbnail to use in Content Display blocks."
+#~ msgstr "Bestem standard fremhevet bilde å bruke i innholdsvisningsblokkene."
+
+#~ msgid "Display caption text on images loaded as lightbox in galleries"
+#~ msgstr "Standard bildetekst for bilder lastet i lightbox i gallerier"
+
+#~ msgid "reCAPTCHA Theme"
+#~ msgstr "reCAPTCHA-tema"
+
+#~ msgid "reCAPTCHA Language"
+#~ msgstr "reCAPTCHA-språk"
+
+#~ msgid "reCAPTCHA Secret Key"
+#~ msgstr "Hemmelig nøkkel for reCAPTCHA"
+
+#~ msgid "reCAPTCHA Site Key"
+#~ msgstr "Nettstedsnøkkel for reCAPTCHA"
+
+#~ msgid " here"
+#~ msgstr "her"
+
+#~ msgid "Contact Form: Receiver Information"
+#~ msgstr "Kontaktskjema: Mottakerinformasjon"
+
+#~ msgid "Contact Form: Sender Information"
+#~ msgstr "Kontaktskjema: Senderinformasjon"
+
+#~ msgid "Forms reCaptcha"
+#~ msgstr "reCaptcha for skjema"
+
+#~ msgid "Error while sending form. Try again!"
+#~ msgstr "Feil ved innsending av skjema. Prøv igjen!"
+
+#~ msgid "separate by comma"
+#~ msgstr "adskilt med komma"
+
+#~ msgid "Email and Form settings"
+#~ msgstr "Innstillinger for e-post og skjema"
+
+#~ msgid "Forms data"
+#~ msgstr "Skjemadata"
+
+#~ msgid "Email settings"
+#~ msgstr "E-postinnstillinger"
+
+#~ msgid "Email & Form"
+#~ msgstr "E-post og skjema"
+
+#~ msgid "Define the admin Gutenberg editor width size"
+#~ msgstr "Definer redigeringsbredden i blokkredigeringen"
+
+#~ msgid "Update now"
+#~ msgstr "Oppdater nå"
+
+#~ msgid "Your current version is"
+#~ msgstr "Din nåværende versjon er"
+
+#~ msgid "and above"
+#~ msgstr "og over"
+
+#~ msgid "Our plugin works great with Gutenberg version"
+#~ msgstr "Vår utvidelse virker flott med Gutenberg-versjon"
+
+#~ msgid "You need to activate Gutenberg to use our plugin!"
+#~ msgstr "Du må aktivere Gutenberg for å bruke vår utvidelse!"
+
+#~ msgid "Search settings"
+#~ msgstr "Søkeinnstillinger"
+
+#~ msgid "Your styles have been saved"
+#~ msgstr "Dine stiler har blitt lagret"
+
+#~ msgid "Enable block spacing settings"
+#~ msgstr "Slå på innstillinger for mellomrom for blokker"
+
+#~ msgid ""
+#~ "Apply a minimal vertical block spacing automatically. Default is None. "
+#~ "Values in pixels"
+#~ msgstr ""
+#~ "Bruk et minimum vertikalt mellomrom automatisk. Standard er ingen. "
+#~ "Verdier i piksler"
+
+#~ msgid "Google API Key"
+#~ msgstr "Google API-nøkkel"
+
+#~ msgid "Style class"
+#~ msgstr "Stilklasse"
+
+#~ msgid "Add new class"
+#~ msgstr "Legg til ny klasse"
+
+#~ msgid "new-class"
+#~ msgstr "ny-klasse"
+
+#~ msgid "New class"
+#~ msgstr "Ny klasse"
+
+#~ msgid "Settings saved successfully"
+#~ msgstr "Innstillinger lagret"

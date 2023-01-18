@@ -273,6 +273,10 @@ class GFImageChoices extends GFAddOn {
 
 	public function frontend_inline_styles( $form ) {
 
+        if ( is_admin() || wp_doing_ajax() ) {
+            return;
+        }
+
 		$form_id = rgar( $form, 'id' );
 		$form_settings = $this->get_form_settings( $form );
 
@@ -296,7 +300,7 @@ class GFImageChoices extends GFAddOn {
 
 		$output_responsive_list_css = apply_filters('gfic_responsive_list_css', false);
 
-		$form_markup_version = ( GFCommon::is_legacy_markup_enabled( $form ) ) ? 1 : 2;
+		$form_markup_version = ( !method_exists('GFCommon', 'is_legacy_markup_enabled') || GFCommon::is_legacy_markup_enabled( $form ) ) ? 1 : 2;
 		if ( $form_markup_version == 2 ):
 			ob_start();
 			?>
@@ -462,6 +466,7 @@ class GFImageChoices extends GFAddOn {
 
 		$elementor_compat = ( $this->is_elementor_installed() ) ? $this->get_plugin_setting('gf_image_choices_elementor_lightbox_compat') : '';
 		wp_localize_script( 'gf_image_choices_js', 'imageChoicesVars', array(
+			'gf_version' => GFCommon::$version,
 			'is_gf_min_2_5' => GFIC_GF_MIN_2_5,
 			'elementorCompat' => ( !empty( $elementor_compat ) ) ? $elementor_compat : '',
 		) );
@@ -478,6 +483,7 @@ class GFImageChoices extends GFAddOn {
 		$elementor_compat = ( $this->is_elementor_installed() ) ? $this->get_plugin_setting('gf_image_choices_elementor_lightbox_compat') : '';
 
 		wp_localize_script( 'gf_image_choices_js', 'imageChoicesVars', array(
+			'gf_version' => GFCommon::$version,
 			'is_gf_min_2_5' => GFIC_GF_MIN_2_5,
 			'elementorCompat' => ( !empty( $elementor_compat ) ) ? $elementor_compat : '',
 			'lazyLoadGlobal' => $lazy_load_global_value,
@@ -2351,6 +2357,7 @@ class GFImageChoices extends GFAddOn {
 			$form_lazy_load_value = (isset($form_settings['gf_image_choices_lazy_load'])) ? $form_settings['gf_image_choices_lazy_load'] : $lazy_load_global_value;
 			$lazy_load = ( $form_lazy_load_value === '' ) ? $lazy_load_global_value : $form_lazy_load_value;
 
+            $img_alt = get_post_meta( $imgID, '_wp_attachment_image_alt', true );
 
 			$lightboxImg = ( !empty($imgID) ) ? wp_get_attachment_image_src($imgID, $form_lightbox_size) : '';
 			if ( !empty($lightboxImg) ) {
@@ -2366,14 +2373,14 @@ class GFImageChoices extends GFAddOn {
 			else if ( !empty($lazy_load ) && !is_admin() ) {
 				$img_markup = implode("", array(
 					'<span class="image-choices-choice-image-wrap jetsloth-lazy" data-lazy-bg="' . $img . '">',
-					'<img src="" data-lazy-src="' . $img . '" alt="" class="image-choices-choice-image jetsloth-lazy" data-lightbox-src="' . $lightboxImg . '" />',
+					'<img src="" data-lazy-src="' . $img . '" alt="' . $img_alt . '" class="image-choices-choice-image jetsloth-lazy" data-lightbox-src="' . $lightboxImg . '" />',
 					'</span>',
 				));
 			}
 			else {
 				$img_markup = implode("", array(
 					'<span class="image-choices-choice-image-wrap" style="background-image:url('.$img.')">',
-					'<img src="'.$img.'" alt="" class="image-choices-choice-image" data-lightbox-src="'.$lightboxImg.'" />',
+					'<img src="'.$img.'" alt="' . $img_alt . '" class="image-choices-choice-image" data-lightbox-src="'.$lightboxImg.'" />',
 					'</span>',
 				));
 			}

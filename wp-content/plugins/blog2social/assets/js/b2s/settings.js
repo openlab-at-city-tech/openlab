@@ -351,6 +351,9 @@ jQuery(document).on('click', '#b2s-general-settings-legacy-mode', function () {
                     jQuery('#b2s-general-settings-legacy-mode').prop('checked', false);
                 } else {
                     jQuery('#b2s-general-settings-legacy-mode').prop('checked', true);
+                    jQuery('#b2s_og_active').prop('checked', false);
+                    jQuery('#b2s_card_active').prop('checked', false);
+                    jQuery('#b2s_oembed_active').prop('checked', false);
                 }
             } else {
                 if(data.error == 'nonce') {

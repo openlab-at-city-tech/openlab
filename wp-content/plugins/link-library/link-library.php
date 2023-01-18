@@ -3,16 +3,16 @@
 Plugin Name: Link Library
 Plugin URI: http://wordpress.org/extend/plugins/link-library/
 Description: Display links on pages with a variety of options
-Version: 7.2.7
+Version: 7.4.19
 Author: Yannick Lefebvre
 Author URI: http://ylefebvre.github.io/
 Text Domain: link-library
 
 A plugin for the blogging MySQL/PHP-based WordPress.
-Copyright 2021 Yannick Lefebvre
+Copyright 2022 Yannick Lefebvre
 
 Translations:
-French Translation courtesy of Luc Capronnier
+French Translation courtesy of Michel G. et Luc Capronnier
 Danish Translation courtesy of GeorgWP (http://wordpress.blogos.dk)
 Italian Translation courtesy of Gianni Diurno
 Serbian Translation courtesy of Ogi Djuraskovic (firstsiteguide.com)
@@ -43,14 +43,9 @@ require_once(ABSPATH . '/wp-admin/includes/bookmark.php');
 require_once plugin_dir_path( __FILE__ ) . 'link-library-defaults.php';
 require_once plugin_dir_path( __FILE__ ) . 'rssfeed.php';
 require_once plugin_dir_path( __FILE__ ) . '/upvote-downvote/thumbs-rating.php';
-//require_once plugin_dir_path( __FILE__ ) . 'blocks/link-library-main.php';
 
 global $my_link_library_plugin;
 global $my_link_library_plugin_admin;
-
-/* if ( !get_option( 'link_manager_enabled' ) ) {
-    add_filter( 'pre_option_link_manager_enabled', '__return_true' );
-} */
 
 function link_library_tweak_plugins_http_filter( $response, $r, $url ) {
 	if ( stristr( $url, 'api.wordpress.org/plugins/update-check/1.1' ) ) {
@@ -332,7 +327,33 @@ class link_library_plugin {
 		if ( $genoptions['add_to_main_rss'] ) {
 			add_action( 'request', array( $this, 'link_library_rss_feed_request' ) );
 			add_filter( 'the_content_feed', array( $this, 'll_display_single_link' ) );
-		}		
+		}
+
+		add_action( 'link_library_import_links', array( $this, 'll_import_links' ), 10, 0 );
+		add_action( 'link_library_gen_thumbs', array( $this, 'll_gen_thumbs' ), 10, 0 );
+	}
+
+	function ll_import_links() {
+		require_once plugin_dir_path( __FILE__ ) . 'link-library-link-importer.php';
+
+		$genoptions = get_option( 'LinkLibraryGeneral' );
+		$genoptions = wp_parse_args( $genoptions, ll_reset_gen_settings( 'return' ) );
+
+		$row = 0;
+		$successfulimport = 0;
+		$successfulupdate = 0;
+
+		link_library_import_links( $genoptions, $row, $successfulimport, $successfulupdate );
+	}
+
+	function ll_gen_thumbs() {
+		require_once plugin_dir_path( __FILE__ ) . 'link-library-image-generator.php';
+
+		$options = array();
+		$options['categorylist_cpt'] = '';
+		$options['uselocalimagesoverthumbshots'] = true;
+
+		link_library_image_generator( $this, $options, true );
 	}
 
 	function ll_rest_api_init() {
@@ -344,7 +365,6 @@ class link_library_plugin {
 	}
 
 	function ll_rest_settings_list( WP_REST_Request $request ) {
-
 		$genoptions = get_option( 'LinkLibraryGeneral' );
 		$genoptions = wp_parse_args( $genoptions, ll_reset_gen_settings( 'return' ) );
 		
@@ -450,21 +470,20 @@ class link_library_plugin {
 
 		$post_type_args = array(
 			'labels' => array(
-				'name' => 'Link Library',
-				'singular_name' => 'Link',
-				'add_new' => 'Add New',
-				'add_new_item' => 'Add New Link',
-				'edit' => 'Edit',
-				'edit_item' => 'Edit Link',
-				'new_item' => 'New Link',
-				'view' => 'View',
-				'view_item' => 'View Link',
-				'search_items' => 'Search Links',
-				'not_found' => 'No Links found',
-				'not_found_in_trash' =>
-					'No Links found in Trash',
-				'parent' => 'Parent Link',
-				'all_items' => 'All Links',
+				'name' => __( 'Link Library', 'link-library' ),
+				'singular_name' => __( 'Link', 'link-library' ),
+				'add_new' => __( 'Add New', 'link-library' ),
+				'add_new_item' => __( 'Add New Link', 'link-library' ),
+				'edit' => __( 'Edit', 'link-library' ),
+				'edit_item' => __( 'Edit Link', 'link-library' ),
+				'new_item' => __( 'New Link', 'link-library' ),
+				'view' => __( 'View', 'link-library' ),
+				'view_item' => __( 'View Link', 'link-library' ),
+				'search_items' => __( 'Search Links', 'link-library' ),
+				'not_found' => __( 'No Links found', 'link-library' ),
+				'not_found_in_trash' => __( 'No Links found in Trash', 'link-library' ),
+				'parent' => __( 'Parent Link', 'link-library' ),
+				'all_items' => __( 'All Links', 'link-library' ),
 				'menu_name' => _x('Link Library %%PENDING_COUNT%%', 'Link Library', 'link-library'),
 			),
 			'show_in_nav_menu' => true,
@@ -474,17 +493,28 @@ class link_library_plugin {
 			'menu_position' => 10,
 			'supports' =>
 				array( 'title', 'editor', 'comments' ),
-			'taxonomies' => array( 'link_library_category' ),
+			'taxonomies' => array( $genoptions['cattaxonomy'], $genoptions['tagtaxonomy'] ),
 			'menu_icon' =>
 				'dashicons-admin-links',
 			'has_archive' => false,
-			'rewrite' => array( 'slug' => $genoptions['cptslug'] . '/%link_library_category%' )
+			'rewrite' => array( 'slug' => $genoptions['cptslug'] . '/%' . $genoptions['cattaxonomy'] . '%' )
 		);
+
+		if ( class_exists( 'WPGraphQL' ) ) {
+			$post_type_args['show_in_graphql'] = true;
+            $post_type_args['hierarchical'] = true;
+            $post_type_args['graphql_single_name'] = 'linklibrary';
+            $post_type_args['graphql_plural_name'] = 'linklibrary';
+		}		
 
 		if ( $genoptions['exclude_from_search'] && $genoptions['publicly_queryable'] ) {
 			unset( $post_type_args['exclude_from_search'] );
 			unset( $post_type_args['publicly_queryable'] );
 			$post_type_args['public'] = true;
+		}
+
+		if ( $genoptions['showexcerpt'] ) {
+			$post_type_args['supports'][] = 'excerpt';
 		}
 
 		register_post_type( 'link_library_links', $post_type_args );
@@ -494,11 +524,11 @@ class link_library_plugin {
 			'link_library_links',
 			array(
 				'labels' => array(
-					'name' => 'Link Library Categories',
-					'add_new_item' => 'Add New Link Library Category',
-					'new_item_name' => 'New Link Library Category'
+					'name' => __( 'Link Library Categories', 'link-library' ),
+					'add_new_item' => __( 'Add New Link Library Category', 'link-library' ),
+					'new_item_name' => __( 'New Link Library Category', 'link-library' )
 				),
-				'show_ui' => true,
+				'show_ui' => ( $genoptions['cattaxonomy'] == 'link_library_category' ? true : false ),
 				'show_tagcloud' => false,
 				'hierarchical' => true,
 				'rewrite' => $genoptions['publicly_queryable'],
@@ -511,10 +541,10 @@ class link_library_plugin {
 			'link_library_links',
 			array(
 				'hierarchical' => false,
-				'labels' => array( 'name' => 'Tags',
-								   'add_new_item' => 'Add New Link Library Tag',
-								   'new_item_name' => 'New Link Library Tag' ),
-				'show_ui' => true,
+				'labels' => array( 'name' => __( 'Tags', 'link-library' ),
+								   'add_new_item' => __( 'Add New Link Library Tag', 'link-library' ),
+								   'new_item_name' => __( 'New Link Library Tag', 'link-library' ) ),
+				'show_ui' => ( $genoptions['tagtaxonomy'] == 'link_library_tags' ? true : false ),
 				'rewrite' => false,
 				'show_in_rest' => true
 			)
@@ -740,6 +770,12 @@ class link_library_plugin {
 		$genoptions = get_option( 'LinkLibraryGeneral' );
 
 		if ( isset( $_GET['ll60reupdate'] ) ) {
+			if ( !current_user_can( 'manage_options' ) ) {
+				return;
+			}
+
+			check_admin_referer( 'll60reupdate' );
+
 			global $wpdb;
 
 			$wpdb->get_results ( 'DELETE a,b,c
@@ -758,10 +794,18 @@ class link_library_plugin {
 			require plugin_dir_path( __FILE__ ) . 'link-library-update-60.php';
 			link_library_60_update( $this );
 		} elseif ( isset( $_GET['continue60update'] ) ) {
+			if ( !current_user_can( 'manage_options' ) ) {
+				return;
+			}
+
 			require plugin_dir_path( __FILE__ ) . 'link-library-update-60.php';
 			link_library_60_update( $this, true );
 		} else {
 			if ( ( false == $link_library_60_update && !empty( $genoptions ) ) ) {
+				if ( !current_user_can( 'manage_options' ) ) {
+					return;
+				}
+				
 				require plugin_dir_path( __FILE__ ) . 'link-library-update-60.php';
 				link_library_60_update( $this );
 			}
@@ -781,10 +825,10 @@ class link_library_plugin {
 					$post_link = $link_url;
 				}
 			} else {
-				if ( !empty( $post_link ) && false !== strpos( $post_link, '%link_library_category%' ) ) {
-					$link_cat_type_term = get_the_terms( $post->ID, 'link_library_category' );
+				if ( !empty( $post_link ) && false !== strpos( $post_link, '%' . $genoptions['cattaxonomy'] . '%' ) ) {
+					$link_cat_type_term = get_the_terms( $post->ID, $genoptions['cattaxonomy'] );
 					if ( !empty( $link_cat_type_term ) ) {
-						$post_link = str_replace( '%link_library_category%', array_pop( $link_cat_type_term )->slug, $post_link );
+						$post_link = str_replace( '%' . $genoptions['cattaxonomy'] . '%', array_pop( $link_cat_type_term )->slug, $post_link );
 					}
 				}
 			}
@@ -996,16 +1040,20 @@ class link_library_plugin {
 		}
 
 		if ( !empty( $settingssetsids ) ) {
+			$processedsettings = array();
 			foreach ( $settingssetsids as $setting ) {
-				$settingsname = 'LinkLibraryPP' . $setting;
-				$options = get_option( $settingsname );
-				$options = wp_parse_args( $options, ll_reset_options( 1, 'list', 'return' ) );
+				if ( !in_array( $setting, $processedsettings ) ) {
+					$processedsettings[] = $setting;
+					$settingsname = 'LinkLibraryPP' . $setting;
+					$options = get_option( $settingsname );
+					$options = wp_parse_args( $options, ll_reset_options( 1, 'list', 'return' ) );
 
-				if ( !empty( $options['stylesheet'] ) ) {
-					echo "<style id='LinkLibrarySettings" . $setting . "Style' type='text/css'>\n";
-					echo stripslashes( $options['stylesheet'] ) . "\n";
-					echo "</style>\n";
-				}
+					if ( !empty( $options['stylesheet'] ) ) {
+						echo "<style id='LinkLibrarySettings" . $setting . "Style' type='text/css'>\n";
+						echo stripslashes( $options['stylesheet'] ) . "\n";
+						echo "</style>\n";
+					}
+				}				
 			}
 		}
 	}
@@ -1020,7 +1068,7 @@ class link_library_plugin {
 			$genoptions = get_option( 'LinkLibraryGeneral' );
 
 			$categoryname = ( isset( $wp_query->query_vars['cat_name'] ) ? $wp_query->query_vars['cat_name'] : '' );
-			$catid = ( isset( $_GET['cat_id'] ) ? intval($_GET['cat_id']) : '' );
+			$catid = ( isset( $_GET['cat_id'] ) ? intval( $_GET['cat_id'] ) : '' );
 
 			$linkcatquery = 'SELECT t.name ';
 			$linkcatquery .= 'FROM ' . $this->db_prefix() . 'terms t LEFT JOIN ' . $this->db_prefix(). 'term_taxonomy tt ON (t.term_id = tt.term_id) ';
@@ -1131,13 +1179,18 @@ class link_library_plugin {
 	}
 
 	function CheckReciprocalLink( $RecipCheckAddress = '', $external_link = '', $request_type = 'reciprocal' ) {
-		$response = wp_remote_get( $external_link, array( 'user-agent' => 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36', 'timeout' => 10 ) );
+		$response = wp_remote_get( $external_link, array( 'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36', 'timeout' => 10 ) );
 
 		if( is_wp_error( $response ) ) {
-			$response_code = $response->get_error_code();
-			if ( 'http_request_failed' == $response_code ) {
-				return 'error_403';
-			}
+			$data = file_get_contents( $external_link );
+			if ( false !== $data ) {
+				return 'exists_found';
+			} else {
+				$response_code = $response->get_error_code();
+				if ( 'http_request_failed' == $response_code ) {
+					return 'error_403';
+				}
+			}			
 		} elseif ( $response['response']['code'] == '200' ) {
 
 			$original_protocol = '';
@@ -1166,7 +1219,7 @@ class link_library_plugin {
 			$parse_original_url = parse_url( $external_link );
 			$parse_actual_url = parse_url( $response['http_response']->get_response_object()->url );
 
-			if ( ( 'broken' == $request_type || 'rss' == $request_type ) && $parse_original_url['host'] != $parse_actual_url['host'] ) {
+			if ( ( 'broken' == $request_type || 'rss' == $request_type || 'secondary' == $request_type || 'image' == $request_type ) && $parse_original_url['host'] != $parse_actual_url['host'] ) {
 				$original_host_segments = explode( '.', $parse_original_url['host'] );
 				$actual_host_segments = explode( '.', $parse_actual_url['host'] );
 
@@ -1177,7 +1230,7 @@ class link_library_plugin {
 				}				
 			}
 
-			if ( ( 'broken' == $request_type || 'rss' == $request_type ) && $parse_original_url['host'] == $parse_actual_url['host'] && $link_url_without_protocol != $response_url_without_protocol ) {
+			if ( ( 'broken' == $request_type || 'rss' == $request_type || 'secondary' == $request_type || 'image' == $request_type ) && $parse_original_url['host'] == $parse_actual_url['host'] && $link_url_without_protocol != $response_url_without_protocol ) {
 				$basename = basename( $parse_actual_url['path'] );
 				if ( false !== strpos( $basename, '.' ) ) {
 					return 'exists_redirected_fileurl';
@@ -1186,11 +1239,11 @@ class link_library_plugin {
 				}				
 			}
 			
-			if ( ( 'broken' == $request_type || 'rss' == $request_type ) && $link_url_without_protocol != $response_url_without_protocol ) {
+			if ( ( 'broken' == $request_type || 'rss' == $request_type || 'secondary' == $request_type || 'image' == $request_type ) && $link_url_without_protocol != $response_url_without_protocol ) {
 				return 'exists_redirected';
-			} elseif ( ( 'broken' == $request_type || 'rss' == $request_type ) && !empty( $original_protocol ) && !empty( $actual_protocol ) && $original_protocol != $actual_protocol ) {
+			} elseif ( ( 'broken' == $request_type || 'rss' == $request_type || 'secondary' == $request_type || 'image' == $request_type ) && !empty( $original_protocol ) && !empty( $actual_protocol ) && $original_protocol != $actual_protocol ) {
 				return 'exists_protocol_redirect';
-			} elseif ( ( 'broken' == $request_type || 'rss' == $request_type ) && empty( $RecipCheckAddress ) ) {
+			} elseif ( ( 'broken' == $request_type || 'rss' == $request_type || 'secondary' == $request_type || 'image' == $request_type ) && empty( $RecipCheckAddress ) ) {
 				return 'exists_notfound';
 			} else {
 				return 'exists_found';
@@ -1253,7 +1306,8 @@ class link_library_plugin {
 			'excludecategoryoverride' => '',
 			'settings' => '',
 			'targetlibrary' => '',
-			'taglistoverride' => ''
+			'taglistoverride' => '',
+			'parent_cat_id' => 0
 		), $atts ) );
 
 		$genoptions = get_option( 'LinkLibraryGeneral' );
@@ -1285,7 +1339,7 @@ class link_library_plugin {
 			foreach( $category_list_array as $index => $category_text ) {
 				if ( !is_numeric( $category_text ) ) {
 					$update_list = true;
-					$matched_term = get_term_by( 'slug', $category_text, 'link_library_category' );
+					$matched_term = get_term_by( 'slug', $category_text, $genoptions['cattaxonomy'] );
 
 					if ( $matched_term ) {
 						$category_list_array[$index] = $matched_term->term_id;
@@ -1307,7 +1361,7 @@ class link_library_plugin {
 			foreach( $exclude_category_list_array as $index => $category_text ) {
 				if ( !is_numeric( $category_text ) ) {
 					$update_list = true;
-					$matched_term = get_term_by( 'slug', $category_text, 'link_library_category' );
+					$matched_term = get_term_by( 'slug', $category_text, $genoptions['cattaxonomy'] );
 
 					if ( $matched_term ) {
 						$exclude_category_list_array[$index] = $matched_term->term_id;
@@ -1329,7 +1383,7 @@ class link_library_plugin {
 			foreach( $tag_list_array as $index => $tag_text ) {
 				if ( !is_numeric( $tag_text ) ) {
 					$update_list = true;
-					$matched_term = get_term_by( 'slug', $tag_text, 'link_library_tags' );
+					$matched_term = get_term_by( 'slug', $tag_text, $genoptions['tagtaxonomy'] );
 
 					if ( $matched_term ) {
 						$tag_list_array[$index] = $matched_term->term_id;
@@ -1351,7 +1405,7 @@ class link_library_plugin {
 			foreach( $exclude_tag_list_array as $index => $tag_text ) {
 				if ( !is_numeric( $tag_text ) ) {
 					$update_list = true;
-					$matched_term = get_term_by( 'slug', $tag_text, 'link_library_tags' );
+					$matched_term = get_term_by( 'slug', $tag_text, $genoptions['tagtaxonomy'] );
 
 					if ( $matched_term ) {
 						$exclude_tag_list_array[$index] = $matched_term->term_id;
@@ -1376,7 +1430,9 @@ class link_library_plugin {
 			$timeoutput = "\n<!-- [link-library-cats] shortcode execution time: " . ( microtime( true ) - $mainoutputstarttime ) . "-->\n";
 		}
 
-		return ( true == $genoptions['debugmode'] ? $timeoutputstart : '' ) . RenderLinkLibraryCategories( $this, $genoptions, $options, $settings, $targetlibrary )  . ( true == $genoptions['debugmode'] ? $timeoutput : '' );
+
+		$parent_id_array = array();
+		return ( true == $genoptions['debugmode'] ? $timeoutputstart : '' ) . RenderLinkLibraryCategories( $this, $genoptions, $options, $settings, $targetlibrary, $parent_cat_id, 0, $parent_id_array )  . ( true == $genoptions['debugmode'] ? $timeoutput : '' );
 	}
 
 	/********************************************** Function to Process [link-library-search] shortcode *********************************************/
@@ -1469,7 +1525,12 @@ class link_library_plugin {
 		}
 
 		require_once plugin_dir_path( __FILE__ ) . 'render-link-library-addlink-sc.php';
-		return RenderLinkLibraryAddLinkForm( $this, $genoptions, $options, $settings, $code);
+		if ( 'inline' == $options['addlinkformdisplaymode'] ) {
+			return RenderLinkLibraryAddLinkForm( $this, $genoptions, $options, $settings, $code );
+		} elseif ( 'popup' == $options['addlinkformdisplaymode'] ) {
+			return RenderLinkLibraryAddLinkButton( $this, $genoptions, $options, $settings, $code );
+		}
+		
 	}
 
 	/********************************************** Function to Process [link-library-count] shortcode ***************************************/
@@ -1519,7 +1580,7 @@ class link_library_plugin {
 
 		if ( !empty( $options['categorylist_cpt'] ) ) {
 			$catlistarray = explode( ',', $options['categorylist_cpt'] );
-			$link_query_args['tax_query'] = array( array( 'taxonomy' => 'link_library_category',
+			$link_query_args['tax_query'] = array( array( 'taxonomy' => $genoptions['cattaxonomy'],
 														  'field' => 'term_id',
 														  'terms' => $catlistarray,
 														  'operator' => 'IN' ) );
@@ -1527,7 +1588,7 @@ class link_library_plugin {
 
 		if ( !empty( $options['excludecategorylist_cpt'] ) ) {
 			$catlistexcludearray = explode( ',', $options['excludecategorylist_cpt'] );
-			$link_query_args['tax_query'] = array( array( 'taxonomy' => 'link_library_category',
+			$link_query_args['tax_query'] = array( array( 'taxonomy' => $genoptions['cattaxonomy'],
 														  'field' => 'term_id',
 														  'terms' => $catlistexcludearray,
 														  'operator' => 'NOT IN' ) );
@@ -1564,6 +1625,7 @@ class link_library_plugin {
 			'pricelabel' => __( 'Price', 'link-library' ),
 			'alphabeticlabel' => __( 'Link Name', 'link-library' ),
 			'showalphabeticfilters' => true,
+			'showapplybutton' => false,
 			'settings' => ''
 		), $atts ) );
 
@@ -1591,7 +1653,7 @@ class link_library_plugin {
 		}
 
 		require_once plugin_dir_path( __FILE__ ) . 'render-link-library-tag-filter-sc.php';
-		return RenderLinkLibraryFilterBox( $this, $genoptions, $options, $settings, $includetagsids, $excludetagsids, $showtagfilters, $taglabel, $showpricefilters, $pricelabel, $showalphabeticfilters, $alphabeticlabel );
+		return RenderLinkLibraryFilterBox( $this, $genoptions, $options, $settings, $includetagsids, $excludetagsids, $showtagfilters, $taglabel, $showpricefilters, $pricelabel, $showalphabeticfilters, $alphabeticlabel, $showapplybutton );
 	}
 
 	/********************************************** Function to Process [link-library] shortcode *********************************************/
@@ -1726,7 +1788,7 @@ class link_library_plugin {
 			foreach( $category_list_array as $index => $category_text ) {
 				if ( !is_numeric( $category_text ) ) {
 					$update_list = true;
-					$matched_term = get_term_by( 'slug', $category_text, 'link_library_category' );
+					$matched_term = get_term_by( 'slug', $category_text, $genoptions['cattaxonomy'] );
 
 					if ( $matched_term ) {
 						$category_list_array[$index] = $matched_term->term_id;
@@ -1748,7 +1810,7 @@ class link_library_plugin {
 			foreach( $exclude_category_list_array as $index => $category_text ) {
 				if ( !is_numeric( $category_text ) ) {
 					$update_list = true;
-					$matched_term = get_term_by( 'slug', $category_text, 'link_library_category' );
+					$matched_term = get_term_by( 'slug', $category_text, $genoptions['cattaxonomy'] );
 
 					if ( $matched_term ) {
 						$exclude_category_list_array[$index] = $matched_term->term_id;
@@ -1770,7 +1832,7 @@ class link_library_plugin {
 			foreach( $tag_list_array as $index => $tag_text ) {
 				if ( !is_numeric( $tag_text ) ) {
 					$update_list = true;
-					$matched_term = get_term_by( 'slug', $tag_text, 'link_library_tags' );
+					$matched_term = get_term_by( 'slug', $tag_text, $genoptions['tagtaxonomy'] );
 
 					if ( $matched_term ) {
 						$tag_list_array[$index] = $matched_term->term_id;
@@ -1792,7 +1854,7 @@ class link_library_plugin {
 			foreach( $exclude_tag_list_array as $index => $tag_text ) {
 				if ( !is_numeric( $tag_text ) ) {
 					$update_list = true;
-					$matched_term = get_term_by( 'slug', $tag_text, 'link_library_tags' );
+					$matched_term = get_term_by( 'slug', $tag_text, $genoptions['tagtaxonomy'] );
 
 					if ( $matched_term ) {
 						$exclude_tag_list_array[$index] = $matched_term->term_id;
@@ -1929,7 +1991,7 @@ class link_library_plugin {
 			foreach( $category_list_array as $index => $category_text ) {
 				if ( !is_numeric( $category_text ) ) {
 					$update_list = true;
-					$matched_term = get_term_by( 'slug', $category_text, 'link_library_category' );
+					$matched_term = get_term_by( 'slug', $category_text, $genoptions['cattaxonomy'] );
 
 					if ( $matched_term ) {
 						$category_list_array[$index] = $matched_term->term_id;
@@ -1951,7 +2013,7 @@ class link_library_plugin {
 			foreach( $exclude_category_list_array as $index => $category_text ) {
 				if ( !is_numeric( $category_text ) ) {
 					$update_list = true;
-					$matched_term = get_term_by( 'slug', $category_text, 'link_library_category' );
+					$matched_term = get_term_by( 'slug', $category_text, $genoptions['cattaxonomy'] );
 
 					if ( $matched_term ) {
 						$exclude_category_list_array[$index] = $matched_term->term_id;
@@ -1973,7 +2035,7 @@ class link_library_plugin {
 			foreach( $tag_list_array as $index => $tag_text ) {
 				if ( !is_numeric( $tag_text ) ) {
 					$update_list = true;
-					$matched_term = get_term_by( 'slug', $tag_text, 'link_library_tags' );
+					$matched_term = get_term_by( 'slug', $tag_text, $genoptions['tagtaxonomy'] );
 
 					if ( $matched_term ) {
 						$tag_list_array[$index] = $matched_term->term_id;
@@ -1995,7 +2057,7 @@ class link_library_plugin {
 			foreach( $exclude_tag_list_array as $index => $tag_text ) {
 				if ( !is_numeric( $tag_text ) ) {
 					$update_list = true;
-					$matched_term = get_term_by( 'slug', $tag_text, 'link_library_tags' );
+					$matched_term = get_term_by( 'slug', $tag_text, $genoptions['tagtaxonomy'] );
 
 					if ( $matched_term ) {
 						$exclude_tag_list_array[$index] = $matched_term->term_id;
@@ -2029,7 +2091,10 @@ class link_library_plugin {
 	}	
 
 	function link_library_tagcloud( $atts = '' ) {
-		$link_library_terms = get_terms( array( 'taxonomy' => 'link_library_category' ) );
+		$genoptions = get_option( 'LinkLibraryGeneral' );
+		$genoptions = wp_parse_args( $genoptions, ll_reset_gen_settings( 'return' ) );
+		
+		$link_library_terms = get_terms( array( 'taxonomy' => $genoptions['cattaxonomy'] ) );
 		$output = wp_generate_tag_cloud( $link_library_terms );
 		return $output;
 	}
@@ -2044,6 +2109,7 @@ class link_library_plugin {
 		$settingssetsids = array();
 		$load_jquery = false;
 		$load_thickbox = false;
+		$load_colorbox = false;
 		$load_recaptcha = false;
 		$load_masonry = false;
 		$load_style = '';
@@ -2061,6 +2127,7 @@ class link_library_plugin {
 		if ( is_admin() ) {
 			$load_jquery = false;
 			$load_thickbox = false;
+			$load_colorbox = false;
 			$load_style = false;
 		} else {
 			foreach ( $posts as $post ) {
@@ -2137,9 +2204,13 @@ class link_library_plugin {
 						$load_thickbox = true;
 					}
 
-					if ($options['publishrssfeed'] == true) {
+					if ( $options['publishrssfeed'] == true ) {
 						global $rss_settings;
 						$rss_settings = $settingsetid;
+					}
+
+					if ( $options['addlinkformdisplaymode'] ) {
+						$load_colorbox = true;
 					}
 				}
 			}
@@ -2175,6 +2246,11 @@ class link_library_plugin {
 			wp_enqueue_style ( 'thickbox' );
 		}
 
+		if ( $load_colorbox ) {
+			wp_enqueue_script( 'colorbox', plugins_url( 'colorbox/jquery.colorbox-min.js', __FILE__ ), array( 'jquery' ), "1.3.9" );
+			wp_enqueue_style( 'colorboxstyle', plugins_url( 'colorbox/colorbox.css', __FILE__ ) );
+		}
+
 		if ( $load_recaptcha && $genoptions['captchagenerator'] ) {
 			wp_enqueue_script( 'google_recaptcha', 'https://www.google.com/recaptcha/api.js', array(), false, true );
 		}
@@ -2204,6 +2280,10 @@ class link_library_plugin {
 			require_once plugin_dir_path( __FILE__ ) . 'cssgenerator.php';
 			link_library_generate_css( $this );
 			return '';
+		} elseif ( !empty( $_GET['link_library_popup_content'] ) ) {
+			require_once plugin_dir_path( __FILE__ ) . 'render-link-library-addlink-sc.php';
+			link_library_link_submission_popup_form( $this );
+			exit();
 		} else {
 			return $template;
 		}
@@ -2270,7 +2350,7 @@ class link_library_plugin {
 				$link_email = esc_html( get_post_meta( get_the_ID(), 'link_email', true ) );
 				$link_phone_number = esc_html( get_post_meta( get_the_ID(), 'link_telephone', true ) );
 
-				$link_terms = wp_get_post_terms( get_the_ID(), 'link_library_category' );
+				$link_terms = wp_get_post_terms( get_the_ID(), $genoptions['cattaxonomy'] );
 				$link_terms_list = '';
 				$link_terms_array = array();
 				if ( is_array( $link_terms ) ) {
@@ -2405,6 +2485,7 @@ class Link_Library_Widget extends WP_Widget {
 
 		$selected_library = ( !empty( $instance['selected_library'] ) ? $instance['selected_library'] : 1 );
 		$widget_title = ( !empty( $instance['widget_title'] ) ? esc_attr( $instance['widget_title'] ) : 'Links' );
+		$category_list_override = ( !empty( $instance['cat_list_override'] ) ? esc_attr( $instance['cat_list_override'] ) : '' );
 		?>
 		<p>
 			<label for="<?php echo $this->get_field_id( 'widget_title' ); ?>">
@@ -2416,7 +2497,7 @@ class Link_Library_Widget extends WP_Widget {
 			</label>
 		</p>
 		<p>
-			<label for="<?php echo $this->get_field_id( 'nb_book_reviews' ); ?>">
+			<label for="<?php echo $this->get_field_id( 'selected_library' ); ?>">
 				<?php echo 'Select library configuration to display:'; ?>
 				<select id="<?php echo $this->get_field_id( 'selected_library' ); ?>"
 						name="<?php echo $this->get_field_name( 'selected_library' ); ?>">
@@ -2437,6 +2518,15 @@ class Link_Library_Widget extends WP_Widget {
 				</select>
 			</label>
 		</p>
+		<p>
+			<label for="<?php echo $this->get_field_id( 'cat_list_override' ); ?>">
+				<?php echo 'Comma-separated list of categories to display:'; ?>
+				<input type="text"
+					   id="<?php echo $this->get_field_id( 'cat_list_override' );?>"
+					   name="<?php echo $this->get_field_name( 'cat_list_override' ); ?>"
+					   value="<?php echo $category_list_override; ?>" />
+			</label>
+		</p>
 	<?php }
 
 	function widget( $args, $instance ) {
@@ -2445,13 +2535,22 @@ class Link_Library_Widget extends WP_Widget {
 		// Retrieve widget configuration options
 		$selected_library = ( !empty( $instance['selected_library'] ) ? $instance['selected_library'] : 1 );
 		$widget_title = ( !empty( $instance['widget_title'] ) ? esc_attr( $instance['widget_title'] ) : 'Links' );
+		$category_list_override = ( !empty( $instance['cat_list_override'] ) ? esc_attr( $instance['cat_list_override'] ) : '' );
 
 		// Display widget title
 		echo $before_widget . $before_title;
 		echo apply_filters( 'widget_title', $widget_title );
 		echo $after_title;
 
-		echo do_shortcode( '[link-library settings="' . $selected_library . '"]');
+		$shortcode_string = '[link-library settings="' . $selected_library . '"';
+
+		if ( !empty( $category_list_override ) ) {
+			$shortcode_string .= ' categorylistoverride="' . $category_list_override . '"';
+		}
+		
+		$shortcode_string .= ']';
+
+		echo do_shortcode( $shortcode_string );
 
 		echo $after_widget;
 	}

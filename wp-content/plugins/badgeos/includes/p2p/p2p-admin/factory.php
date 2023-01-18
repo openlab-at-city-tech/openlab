@@ -14,8 +14,9 @@ abstract class P2P_Factory {
 	function check_ctype( $ctype, $args ) {
 		$sub_args = $this->expand_arg( $args );
 
-		if ( !$sub_args['show'] )
+		if ( ! $sub_args['show'] ) {
 			return false;
+		}
 
 		$this->queue[ $ctype->name ] = (object) $sub_args;
 	}
@@ -25,16 +26,19 @@ abstract class P2P_Factory {
 		if ( isset( $args[ $this->key ] ) ) {
 			$sub_args = $args[ $this->key ];
 
-			if ( !is_array( $sub_args ) ) {
+			if ( ! is_array( $sub_args ) ) {
 				$sub_args = array( 'show' => $sub_args );
 			}
 		} else {
 			$sub_args = array( 'show' => false );
 		}
 
-		$sub_args = wp_parse_args( $sub_args, array(
-			'show' => 'any',
-		) );
+		$sub_args = wp_parse_args(
+			$sub_args,
+			array(
+				'show' => 'any',
+			)
+		);
 
 		return $sub_args;
 	}
@@ -44,12 +48,13 @@ abstract class P2P_Factory {
 		$screen = get_current_screen();
 
 		$screen_map = array(
-			'edit' => 'post',
-			'users' => 'user'
+			'edit'  => 'post',
+			'users' => 'user',
 		);
 
-		if ( !isset( $screen_map[ $screen->base ] ) )
+		if ( ! isset( $screen_map[ $screen->base ] ) ) {
 			return;
+		}
 
 		$object_type = $screen_map[ $screen->base ];
 
@@ -70,7 +75,7 @@ abstract class P2P_Factory {
 
 				$directed = $ctype->set_direction( $direction );
 
-				$this->add_item( $directed, $object_type, $post_type, $title[$key] );
+				$this->add_item( $directed, $object_type, $post_type, $title[ $key ] );
 			}
 		}
 	}
@@ -81,7 +86,7 @@ abstract class P2P_Factory {
 	protected static function get_title( $directions, $ctype ) {
 		$title = array(
 			'from' => $ctype->get_field( 'title', 'from' ),
-			'to' => $ctype->get_field( 'title', 'to' )
+			'to'   => $ctype->get_field( 'title', 'to' ),
 		);
 
 		if ( count( $directions ) > 1 && $title['from'] == $title['to'] ) {
@@ -94,8 +99,9 @@ abstract class P2P_Factory {
 
 	protected static function determine_directions( $ctype, $object_type, $post_type, $show_ui ) {
 		$direction = $ctype->direction_from_types( $object_type, $post_type );
-		if ( !$direction )
+		if ( ! $direction ) {
 			return array();
+		}
 
 		return $ctype->strategy->directions_for_admin( $direction, $show_ui );
 	}

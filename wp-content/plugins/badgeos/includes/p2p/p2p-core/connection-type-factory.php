@@ -6,21 +6,21 @@ class P2P_Connection_Type_Factory {
 
 	public static function register( $args ) {
 		$defaults = array(
-			'name' => false,
-			'from' => 'post',
-			'to' => 'post',
-			'from_query_vars' => array(),
-			'to_query_vars' => array(),
-			'fields' => array(),
-			'data' => array(),
-			'cardinality' => 'many-to-many',
+			'name'                  => false,
+			'from'                  => 'post',
+			'to'                    => 'post',
+			'from_query_vars'       => array(),
+			'to_query_vars'         => array(),
+			'fields'                => array(),
+			'data'                  => array(),
+			'cardinality'           => 'many-to-many',
 			'duplicate_connections' => false,
-			'self_connections' => false,
-			'sortable' => false,
-			'title' => array(),
-			'from_labels' => '',
-			'to_labels' => '',
-			'reciprocal' => false,
+			'self_connections'      => false,
+			'sortable'              => false,
+			'title'                 => array(),
+			'from_labels'           => '',
+			'to_labels'             => '',
+			'reciprocal'            => false,
 		);
 
 		$args = shortcode_atts( $defaults, $args );
@@ -36,14 +36,14 @@ class P2P_Connection_Type_Factory {
 			$sides[ $direction ] = self::create_side( $args, $direction );
 		}
 
-		if ( !$args['name'] ) {
+		if ( ! $args['name'] ) {
 			trigger_error( "Connection types without a 'name' parameter are deprecated.", E_USER_WARNING );
 			$args['name'] = self::generate_name( $sides, $args );
 		}
 
 		$args = apply_filters( 'p2p_connection_type_args', $args, $sides );
 
-		$ctype = new P2P_Connection_Type( $args, $sides );
+		$ctype           = new P2P_Connection_Type( $args, $sides );
 		$ctype->strategy = self::get_direction_strategy( $sides, _p2p_pluck( $args, 'reciprocal' ) );
 
 		self::$instances[ $ctype->name ] = $ctype;
@@ -54,15 +54,17 @@ class P2P_Connection_Type_Factory {
 	private static function create_side( &$args, $direction ) {
 		$object = _p2p_pluck( $args, $direction );
 
-		if ( in_array( $object, array( 'user', 'attachment' ) ) )
+		if ( in_array( $object, array( 'user', 'attachment' ) ) ) {
 			$object_type = $object;
-		else
+		} else {
 			$object_type = 'post';
+		}
 
 		$query_vars = _p2p_pluck( $args, $direction . '_query_vars' );
 
-		if ( 'post' == $object_type )
+		if ( 'post' == $object_type ) {
 			$query_vars['post_type'] = (array) $object;
+		}
 
 		$class = 'P2P_Side_' . ucfirst( $object_type );
 
@@ -75,7 +77,7 @@ class P2P_Connection_Type_Factory {
 			$sides['to']->get_object_type(),
 			$sides['from']->query_vars,
 			$sides['to']->query_vars,
-			$args['data']
+			$args['data'],
 		);
 
 		return md5( serialize( $vals ) );
@@ -83,16 +85,17 @@ class P2P_Connection_Type_Factory {
 
 	private static function get_direction_strategy( $sides, $reciprocal ) {
 		if ( $sides['from']->is_same_type( $sides['to'] ) &&
-		     $sides['from']->is_indeterminate( $sides['to'] ) ) {
-			if ( $reciprocal )
+			 $sides['from']->is_indeterminate( $sides['to'] ) ) {
+			if ( $reciprocal ) {
 				$class = 'P2P_Reciprocal_Connection_Type';
-			else
+			} else {
 				$class = 'P2P_Indeterminate_Connection_Type';
+			}
 		} else {
 			$class = 'P2P_Determinate_Connection_Type';
 		}
 
-		return new $class;
+		return new $class();
 	}
 
 	public static function get_all_instances() {
@@ -100,8 +103,9 @@ class P2P_Connection_Type_Factory {
 	}
 
 	public static function get_instance( $hash ) {
-		if ( isset( self::$instances[ $hash ] ) )
+		if ( isset( self::$instances[ $hash ] ) ) {
 			return self::$instances[ $hash ];
+		}
 
 		return false;
 	}

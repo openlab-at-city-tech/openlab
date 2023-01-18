@@ -3,100 +3,57 @@
 /**
  * Replaces double line breaks with paragraph elements.
  *
- * This is a variant of wpautop() that is specifically tuned for
- * form content uses.
- *
- * @param string $pee The text which has to be formatted.
+ * @param string $input The text which has to be formatted.
  * @param bool $br Optional. If set, this will convert all remaining
- *                 line breaks after paragraphing. Default true.
+ *             line breaks after paragraphing. Default true.
  * @return string Text which has been converted into correct paragraph tags.
  */
-function wpcf7_autop( $pee, $br = 1 ) {
-	if ( trim( $pee ) === '' ) {
-		return '';
-	}
+function wpcf7_autop( $input, $br = true ) {
+	$placeholders = array();
 
-	$pee = $pee . "\n"; // just to make things a little easier, pad the end
-	$pee = preg_replace( '|<br />\s*<br />|', "\n\n", $pee );
-	// Space things out a little
-	/* wpcf7: remove select and input */
-	$allblocks = '(?:table|thead|tfoot|caption|col|colgroup|tbody|tr|td|th|div|dl|dd|dt|ul|ol|li|pre|form|map|area|blockquote|address|math|style|p|h[1-6]|hr|fieldset|legend|section|article|aside|hgroup|header|footer|nav|figure|figcaption|details|menu|summary)';
-	$pee = preg_replace( '!(<' . $allblocks . '[^>]*>)!', "\n$1", $pee );
-	$pee = preg_replace( '!(</' . $allblocks . '>)!', "$1\n\n", $pee );
+	// Replace non-HTML embedded elements with placeholders.
+	$input = preg_replace_callback(
+		'/<(math|svg).*?<\/\1>/is',
+		function ( $matches ) use ( &$placeholders ) {
+			$placeholder = sprintf(
+				'<%1$s id="%2$s" />',
+				WPCF7_HTMLFormatter::placeholder_inline,
+				sha1( $matches[0] )
+			);
 
-	/* wpcf7: take care of [response], [recaptcha], and [hidden] tags */
-	$form_tags_manager = WPCF7_FormTagsManager::get_instance();
-	$block_hidden_form_tags = $form_tags_manager->collect_tag_types(
-		array( 'display-block', 'display-hidden' ) );
-	$block_hidden_form_tags = sprintf( '(?:%s)',
-		implode( '|', $block_hidden_form_tags ) );
+			list( $placeholder ) =
+				WPCF7_HTMLFormatter::normalize_start_tag( $placeholder );
 
-	$pee = preg_replace( '!(\[' . $block_hidden_form_tags . '[^]]*\])!',
-		"\n$1\n\n", $pee );
+			$placeholders[$placeholder] = $matches[0];
 
-	$pee = str_replace( array( "\r\n", "\r" ), "\n", $pee ); // cross-platform newlines
+			return $placeholder;
+		},
+		$input
+	);
 
-	if ( strpos( $pee, '<object' ) !== false ) {
-		$pee = preg_replace( '|\s*<param([^>]*)>\s*|', "<param$1>", $pee ); // no pee inside object/embed
-		$pee = preg_replace( '|\s*</embed>\s*|', '</embed>', $pee );
-	}
+	$formatter = new WPCF7_HTMLFormatter( array(
+		'auto_br' => $br,
+	) );
 
-	$pee = preg_replace( "/\n\n+/", "\n\n", $pee ); // take care of duplicates
-	// make paragraphs, including one at the end
-	$pees = preg_split( '/\n\s*\n/', $pee, -1, PREG_SPLIT_NO_EMPTY );
-	$pee = '';
+	$chunks = $formatter->separate_into_chunks( $input );
 
-	foreach ( $pees as $tinkle ) {
-		$pee .= '<p>' . trim( $tinkle, "\n" ) . "</p>\n";
-	}
+	$output = $formatter->format( $chunks );
 
-	$pee = preg_replace( '!<p>([^<]+)</(div|address|form|fieldset)>!', "<p>$1</p></$2>", $pee );
+	// Restore from placeholders.
+	$output = str_replace(
+		array_keys( $placeholders ),
+		array_values( $placeholders ),
+		$output
+	);
 
-	$pee = preg_replace( '|<p>\s*</p>|', '', $pee ); // under certain strange conditions it could create a P of entirely whitespace
-
-	$pee = preg_replace( '!<p>\s*(</?' . $allblocks . '[^>]*>)\s*</p>!', "$1", $pee ); // don't pee all over a tag
-	$pee = preg_replace( "|<p>(<li.+?)</p>|", "$1", $pee ); // problem with nested lists
-	$pee = preg_replace( '|<p><blockquote([^>]*)>|i', "<blockquote$1><p>", $pee );
-	$pee = str_replace( '</blockquote></p>', '</p></blockquote>', $pee );
-	$pee = preg_replace( '!<p>\s*(</?' . $allblocks . '[^>]*>)!', "$1", $pee );
-	$pee = preg_replace( '!(</?' . $allblocks . '[^>]*>)\s*</p>!', "$1", $pee );
-
-	/* wpcf7: take care of [response], [recaptcha], and [hidden] tag */
-	$pee = preg_replace( '!<p>\s*(\[' . $block_hidden_form_tags . '[^]]*\])!',
-		"$1", $pee );
-	$pee = preg_replace( '!(\[' . $block_hidden_form_tags . '[^]]*\])\s*</p>!',
-		"$1", $pee );
-
-	if ( $br ) {
-		/* wpcf7: add textarea */
-		$pee = preg_replace_callback(
-			'/<(script|style|textarea).*?<\/\\1>/s',
-			'wpcf7_autop_preserve_newline_callback', $pee );
-		$pee = preg_replace( '|(?<!<br />)\s*\n|', "<br />\n", $pee ); // optionally make line breaks
-		$pee = str_replace( '<WPPreserveNewline />', "\n", $pee );
-
-		/* wpcf7: remove extra <br /> just added before [response], [recaptcha], and [hidden] tags */
-		$pee = preg_replace( '!<br />\n(\[' . $block_hidden_form_tags . '[^]]*\])!',
-			"\n$1", $pee );
-	}
-
-	$pee = preg_replace( '!(</?' . $allblocks . '[^>]*>)\s*<br />!', "$1", $pee );
-	$pee = preg_replace( '!<br />(\s*</?(?:p|li|div|dl|dd|dt|th|pre|td|ul|ol)[^>]*>)!', '$1', $pee );
-
-	if ( strpos( $pee, '<pre' ) !== false ) {
-		$pee = preg_replace_callback( '!(<pre[^>]*>)(.*?)</pre>!is',
-			'clean_pre', $pee );
-	}
-
-	$pee = preg_replace( "|<br />$|", '', $pee );
-	$pee = preg_replace( "|\n</p>$|", '</p>', $pee );
-
-	return $pee;
+	return $output;
 }
 
 
 /**
  * Newline preservation help function for wpcf7_autop().
+ *
+ * @deprecated 5.7 Unnecessary to use any more.
  *
  * @param array $matches preg_replace_callback() matches array.
  * @return string Text including newline placeholders.
@@ -152,18 +109,18 @@ function wpcf7_strip_quote( $text ) {
  * Navigates through an array, object, or scalar, and
  * strips quote characters surrounding the each value.
  *
- * @param mixed $arr The array or string to be processed.
+ * @param mixed $input The array or string to be processed.
  * @return mixed Processed value.
  */
-function wpcf7_strip_quote_deep( $arr ) {
-	if ( is_string( $arr ) ) {
-		return wpcf7_strip_quote( $arr );
+function wpcf7_strip_quote_deep( $input ) {
+	if ( is_string( $input ) ) {
+		return wpcf7_strip_quote( $input );
 	}
 
-	if ( is_array( $arr ) ) {
+	if ( is_array( $input ) ) {
 		$result = array();
 
-		foreach ( $arr as $key => $text ) {
+		foreach ( $input as $key => $text ) {
 			$result[$key] = wpcf7_strip_quote_deep( $text );
 		}
 
@@ -198,35 +155,35 @@ function wpcf7_normalize_newline( $text, $to = "\n" ) {
  * Navigates through an array, object, or scalar, and
  * normalizes newline characters in the each value.
  *
- * @param mixed $arr The array or string to be processed.
+ * @param mixed $input The array or string to be processed.
  * @param string $to Optional. The newline character that is used in the output.
  * @return mixed Processed value.
  */
-function wpcf7_normalize_newline_deep( $arr, $to = "\n" ) {
-	if ( is_array( $arr ) ) {
+function wpcf7_normalize_newline_deep( $input, $to = "\n" ) {
+	if ( is_array( $input ) ) {
 		$result = array();
 
-		foreach ( $arr as $key => $text ) {
+		foreach ( $input as $key => $text ) {
 			$result[$key] = wpcf7_normalize_newline_deep( $text, $to );
 		}
 
 		return $result;
 	}
 
-	return wpcf7_normalize_newline( $arr, $to );
+	return wpcf7_normalize_newline( $input, $to );
 }
 
 
 /**
  * Strips newline characters.
  *
- * @param string $str Input text.
+ * @param string $text Input text.
  * @return string Processed one-line text.
  */
-function wpcf7_strip_newline( $str ) {
-	$str = (string) $str;
-	$str = str_replace( array( "\r", "\n" ), '', $str );
-	return trim( $str );
+function wpcf7_strip_newline( $text ) {
+	$text = (string) $text;
+	$text = str_replace( array( "\r", "\n" ), '', $text );
+	return trim( $text );
 }
 
 

@@ -29,7 +29,7 @@ class nggManageAlbum {
 	 * @access privat
 	 * @var array
 	 */
-	var $albums = false;
+	var $albums = [];
 
 	/**
 	 * The amount of all galleries
@@ -172,9 +172,12 @@ class nggManageAlbum {
 
 			$album = new stdClass();
 			$album->name = $_POST['newalbum'];
-			if (C_Album_Mapper::get_instance()->save($album)) {
+			if (C_Album_Mapper::get_instance()->save($album))
+			{
 				$this->currentID = $_REQUEST['act_album'] = $album->{$album->id_field};
+
 				$this->albums[$this->currentID] = $album;
+
 				do_action('ngg_add_album', $this->currentID);
                 wp_redirect(admin_url('admin.php?page=nggallery-manage-album&act_album=' . $album->{$album->id_field}));
 			}

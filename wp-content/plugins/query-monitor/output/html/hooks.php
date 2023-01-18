@@ -1,11 +1,13 @@
-<?php
+<?php declare(strict_types = 1);
 /**
  * Hooks and actions output for HTML pages.
  *
  * @package query-monitor
  */
 
-defined( 'ABSPATH' ) || exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 class QM_Output_Html_Hooks extends QM_Output_Html {
 
@@ -21,31 +23,37 @@ class QM_Output_Html_Hooks extends QM_Output_Html {
 		add_filter( 'qm/output/menus', array( $this, 'admin_menu' ), 80 );
 	}
 
+	/**
+	 * @return string
+	 */
 	public function name() {
 		return __( 'Hooks & Actions', 'query-monitor' );
 	}
 
+	/**
+	 * @return void
+	 */
 	public function output() {
-
+		/** @var QM_Data_Hooks */
 		$data = $this->collector->get_data();
 
-		if ( empty( $data['hooks'] ) ) {
+		if ( empty( $data->hooks ) ) {
 			return;
 		}
 
 		$this->before_tabular_output();
 
-		$callback_label = $data['all_hooks'] ? __( 'Callback', 'query-monitor' ) : __( 'Action', 'query-monitor' );
+		$callback_label = $data->all_hooks ? __( 'Callback', 'query-monitor' ) : __( 'Action', 'query-monitor' );
 
 		echo '<thead>';
 		echo '<tr>';
 		echo '<th scope="col" class="qm-filterable-column">';
-		echo $this->build_filter( 'name', $data['parts'], __( 'Hook', 'query-monitor' ) ); // WPCS: XSS ok.
+		echo $this->build_filter( 'name', $data->parts, __( 'Hook', 'query-monitor' ) ); // WPCS: XSS ok.
 		echo '</th>';
 		echo '<th scope="col">' . esc_html__( 'Priority', 'query-monitor' ) . '</th>';
 		echo '<th scope="col">' . esc_html( $callback_label ) . '</th>';
 		echo '<th scope="col" class="qm-filterable-column">';
-		echo $this->build_filter( 'component', $data['components'], __( 'Component', 'query-monitor' ), array(
+		echo $this->build_filter( 'component', $data->components, __( 'Component', 'query-monitor' ), array(
 			'highlight' => 'subject',
 		) ); // WPCS: XSS ok.
 		echo '</th>';
@@ -53,18 +61,22 @@ class QM_Output_Html_Hooks extends QM_Output_Html {
 		echo '</thead>';
 
 		echo '<tbody>';
-		self::output_hook_table( $data['hooks'] );
+		self::output_hook_table( $data->hooks );
 		echo '</tbody>';
 
 		$this->after_tabular_output();
 	}
 
+	/**
+	 * @param array<int, mixed[]> $hooks
+	 * @return void
+	 */
 	public static function output_hook_table( array $hooks ) {
-		$core = __( 'Core', 'query-monitor' );
+		$core = __( 'WordPress Core', 'query-monitor' );
 
 		foreach ( $hooks as $hook ) {
-			$row_attr                      = array();
-			$row_attr['data-qm-name']      = implode( ' ', $hook['parts'] );
+			$row_attr = array();
+			$row_attr['data-qm-name'] = implode( ' ', $hook['parts'] );
 			$row_attr['data-qm-component'] = implode( ' ', $hook['components'] );
 
 			if ( ! empty( $row_attr['data-qm-component'] ) && $core !== $row_attr['data-qm-component'] ) {
@@ -89,11 +101,11 @@ class QM_Output_Html_Hooks extends QM_Output_Html {
 
 				foreach ( $hook['actions'] as $action ) {
 					$component = '';
-					$subject   = '';
+					$subject = '';
 
 					if ( isset( $action['callback']['component'] ) ) {
 						$component = $action['callback']['component']->name;
-						$subject   = $component;
+						$subject = $component;
 					}
 
 					if ( $core !== $component ) {
@@ -111,7 +123,8 @@ class QM_Output_Html_Hooks extends QM_Output_Html {
 						echo '<th scope="row" rowspan="' . intval( $rowspan ) . '" class="qm-nowrap qm-ltr"><span class="qm-sticky">';
 						echo '<code>' . esc_html( $hook['name'] ) . '</code>';
 						if ( 'all' === $hook['name'] ) {
-							echo '<br><span class="qm-warn"><span class="dashicons dashicons-warning" aria-hidden="true"></span>';
+							// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+							echo '<br><span class="qm-warn">' . QueryMonitor::icon( 'warning' );
 							printf(
 								/* translators: %s: Action name */
 								esc_html__( 'Warning: The %s action is extremely resource intensive. Try to avoid using it.', 'query-monitor' ),
@@ -163,7 +176,8 @@ class QM_Output_Html_Hooks extends QM_Output_Html {
 						echo '<code>' . esc_html( $action['callback']['name'] ) . '</code>';
 
 						if ( isset( $action['callback']['error'] ) ) {
-							echo '<br><span class="dashicons dashicons-warning" aria-hidden="true"></span>';
+							// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+							echo '<br>' . QueryMonitor::icon( 'warning' );
 							echo esc_html( sprintf(
 								/* translators: %s: Error message text */
 								__( 'Error: %s', 'query-monitor' ),
@@ -196,6 +210,11 @@ class QM_Output_Html_Hooks extends QM_Output_Html {
 
 }
 
+/**
+ * @param array<string, QM_Output> $output
+ * @param QM_Collectors $collectors
+ * @return array<string, QM_Output>
+ */
 function register_qm_output_html_hooks( array $output, QM_Collectors $collectors ) {
 	$collector = QM_Collectors::get( 'hooks' );
 	if ( $collector ) {

@@ -16,7 +16,9 @@ class P2P_Storage {
 	}
 
 	static function install() {
-		scb_install_table( 'p2p', "
+		scb_install_table(
+			'p2p',
+			"
 			p2p_id bigint(20) unsigned NOT NULL auto_increment,
 			p2p_from bigint(20) unsigned NOT NULL,
 			p2p_to bigint(20) unsigned NOT NULL,
@@ -25,9 +27,12 @@ class P2P_Storage {
 			KEY p2p_from (p2p_from),
 			KEY p2p_to (p2p_to),
 			KEY p2p_type (p2p_type)
-		" );
+		"
+		);
 
-		scb_install_table( 'p2pmeta', "
+		scb_install_table(
+			'p2pmeta',
+			"
 			meta_id bigint(20) unsigned NOT NULL auto_increment,
 			p2p_id bigint(20) unsigned NOT NULL default '0',
 			meta_key varchar(255) default NULL,
@@ -35,7 +40,8 @@ class P2P_Storage {
 			PRIMARY KEY  (meta_id),
 			KEY p2p_id (p2p_id),
 			KEY meta_key (meta_key)
-		" );
+		"
+		);
 	}
 
 	static function uninstall() {
@@ -51,9 +57,12 @@ class P2P_Storage {
 		foreach ( P2P_Connection_Type_Factory::get_all_instances() as $p2p_type => $ctype ) {
 			foreach ( array( 'from', 'to' ) as $direction ) {
 				if ( $object_type == $ctype->side[ $direction ]->get_object_type() ) {
-					p2p_delete_connections( $p2p_type, array(
-						$direction => $object_id,
-					) );
+					p2p_delete_connections(
+						$p2p_type,
+						array(
+							$direction => $object_id,
+						)
+					);
 				}
 			}
 		}

@@ -157,7 +157,7 @@ if ( ! class_exists( 'CMB2_Bootstrap_242', false ) ) {
 			spl_autoload_register( 'cmb2_autoload_classes' );
 
 			// Kick the whole thing off.
-			require_once( cmb2_dir( 'bootstrap.php' ) );
+			require_once cmb2_dir( 'bootstrap.php' );
 			cmb2_bootstrap();
 		}
 

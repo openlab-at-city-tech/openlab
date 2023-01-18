@@ -21,7 +21,7 @@ class P2P_Side_Post extends P2P_Side {
 
 		$ptype_object = get_post_type_object( $ptype );
 
-		if ( !$ptype_object ) {
+		if ( ! $ptype_object ) {
 			throw new P2P_Exception( "Can't find $ptype." );
 		}
 
@@ -32,14 +32,19 @@ class P2P_Side_Post extends P2P_Side {
 		if ( isset( $q['post_type'] ) && 'any' != $q['post_type'] ) {
 			$common = array_intersect( $this->query_vars['post_type'], (array) $q['post_type'] );
 
-			if ( !$common )
+			if ( ! $common ) {
 				unset( $q['post_type'] );
+			}
 		}
 
-		return array_merge( $this->query_vars, $q, array(
-			'suppress_filters' => false,
-			'ignore_sticky_posts' => true,
-		) );
+		return array_merge(
+			$this->query_vars,
+			$q,
+			array(
+				'suppress_filters'    => false,
+				'ignore_sticky_posts' => true,
+			)
+		);
 	}
 
 	function get_desc() {
@@ -60,7 +65,7 @@ class P2P_Side_Post extends P2P_Side {
 			$labels = $this->get_ptype()->labels;
 		} catch ( P2P_Exception $e ) {
 			trigger_error( $e->getMessage(), E_USER_WARNING );
-			$labels = new stdClass;
+			$labels = new stdClass();
 		}
 
 		return $labels;
@@ -76,27 +81,31 @@ class P2P_Side_Post extends P2P_Side {
 	}
 
 	function can_create_item() {
-		if ( count( $this->query_vars['post_type'] ) > 1 )
+		if ( count( $this->query_vars['post_type'] ) > 1 ) {
 			return false;
+		}
 
-		if ( count( $this->query_vars ) > 1 )
+		if ( count( $this->query_vars ) > 1 ) {
 			return false;
+		}
 
 		return true;
 	}
 
 	function translate_qv( $qv ) {
 		$map = array(
-			'include' => 'post__in',
-			'exclude' => 'post__not_in',
-			'search' => 's',
-			'page' => 'paged',
-			'per_page' => 'posts_per_page'
+			'include'  => 'post__in',
+			'exclude'  => 'post__not_in',
+			'search'   => 's',
+			'page'     => 'paged',
+			'per_page' => 'posts_per_page',
 		);
 
-		foreach ( $map as $old => $new )
-			if ( isset( $qv["p2p:$old"] ) )
-				$qv[$new] = _p2p_pluck( $qv, "p2p:$old" );
+		foreach ( $map as $old => $new ) {
+			if ( isset( $qv[ "p2p:$old" ] ) ) {
+				$qv[ $new ] = _p2p_pluck( $qv, "p2p:$old" );
+			}
+		}
 
 		return $qv;
 	}
@@ -106,7 +115,7 @@ class P2P_Side_Post extends P2P_Side {
 	}
 
 	function capture_query( $args ) {
-		$q = new WP_Query;
+		$q               = new WP_Query();
 		$q->_p2p_capture = true;
 
 		$q->query( $args );
@@ -117,8 +126,8 @@ class P2P_Side_Post extends P2P_Side {
 	function get_list( $wp_query ) {
 		$list = new P2P_List( $wp_query->posts, $this->item_type );
 
-		$list->current_page = max( 1, $wp_query->get('paged') );
-		$list->total_pages = $wp_query->max_num_pages;
+		$list->current_page = max( 1, $wp_query->get( 'paged' ) );
+		$list->total_pages  = $wp_query->max_num_pages;
 
 		return $list;
 	}
@@ -129,27 +138,31 @@ class P2P_Side_Post extends P2P_Side {
 			$side->query_vars['post_type']
 		);
 
-		return !empty( $common );
+		return ! empty( $common );
 	}
 
 	protected function recognize( $arg ) {
-		if ( is_object( $arg ) && !isset( $arg->post_type ) )
+		if ( is_object( $arg ) && ! isset( $arg->post_type ) ) {
 			return false;
+		}
 
 		$post = get_post( $arg );
 
-		if ( !is_object( $post ) )
+		if ( ! is_object( $post ) ) {
 			return false;
+		}
 
-		if ( !$this->recognize_post_type( $post->post_type ) )
+		if ( ! $this->recognize_post_type( $post->post_type ) ) {
 			return false;
+		}
 
 		return $post;
 	}
 
 	public function recognize_post_type( $post_type ) {
-		if ( !post_type_exists( $post_type ) )
+		if ( ! post_type_exists( $post_type ) ) {
 			return false;
+		}
 
 		return in_array( $post_type, $this->query_vars['post_type'] );
 	}

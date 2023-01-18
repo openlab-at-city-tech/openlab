@@ -177,22 +177,42 @@ html[dir="rtl"] .image-choices-admin-field.image-choices-use-images input[type="
 /* Both GF 2.5 + and GF < 2.5 */
 #field_settings.image-choices-field-settings .image-choices-setting-use-images,
 #field_settings_container.image-choices-field-settings .image-choices-setting-use-images,
+#gfield_settings_choices_container.image-choices-field-settings .image-choices-setting-use-images,
+#gquiz_gfield_settings_choices_container.image-choices-field-settings .image-choices-setting-use-images,
 .toplevel_page_gf_edit_forms .image-choices-admin-field .image-choices-setting-use-images {
   display: block !important; }
 
-#field_settings.image-choices-field-settings .image-choices-enabled .button.image-choices-option-upload-button,
+#field_settings.image-choices-field-settings .image-choices-enabled .button.image-choices-option-upload-button, #field_settings.image-choices-field-settings.image-choices-enabled .button.image-choices-option-upload-button,
 #field_settings_container.image-choices-field-settings .image-choices-enabled .button.image-choices-option-upload-button,
-.toplevel_page_gf_edit_forms .image-choices-admin-field .image-choices-enabled .button.image-choices-option-upload-button {
+#field_settings_container.image-choices-field-settings.image-choices-enabled .button.image-choices-option-upload-button,
+#gfield_settings_choices_container.image-choices-field-settings .image-choices-enabled .button.image-choices-option-upload-button,
+#gfield_settings_choices_container.image-choices-field-settings.image-choices-enabled .button.image-choices-option-upload-button,
+#gquiz_gfield_settings_choices_container.image-choices-field-settings .image-choices-enabled .button.image-choices-option-upload-button,
+#gquiz_gfield_settings_choices_container.image-choices-field-settings.image-choices-enabled .button.image-choices-option-upload-button,
+.toplevel_page_gf_edit_forms .image-choices-admin-field .image-choices-enabled .button.image-choices-option-upload-button,
+.toplevel_page_gf_edit_forms .image-choices-admin-field.image-choices-enabled .button.image-choices-option-upload-button {
   display: inline-block !important; }
 
-#field_settings.image-choices-field-settings .image-choices-enabled .image-choices-has-image .image-choices-option-preview-wrap,
+#field_settings.image-choices-field-settings .image-choices-enabled .image-choices-has-image .image-choices-option-preview-wrap, #field_settings.image-choices-field-settings.image-choices-enabled .image-choices-has-image .image-choices-option-preview-wrap,
 #field_settings_container.image-choices-field-settings .image-choices-enabled .image-choices-has-image .image-choices-option-preview-wrap,
-.toplevel_page_gf_edit_forms .image-choices-admin-field .image-choices-enabled .image-choices-has-image .image-choices-option-preview-wrap {
+#field_settings_container.image-choices-field-settings.image-choices-enabled .image-choices-has-image .image-choices-option-preview-wrap,
+#gfield_settings_choices_container.image-choices-field-settings .image-choices-enabled .image-choices-has-image .image-choices-option-preview-wrap,
+#gfield_settings_choices_container.image-choices-field-settings.image-choices-enabled .image-choices-has-image .image-choices-option-preview-wrap,
+#gquiz_gfield_settings_choices_container.image-choices-field-settings .image-choices-enabled .image-choices-has-image .image-choices-option-preview-wrap,
+#gquiz_gfield_settings_choices_container.image-choices-field-settings.image-choices-enabled .image-choices-has-image .image-choices-option-preview-wrap,
+.toplevel_page_gf_edit_forms .image-choices-admin-field .image-choices-enabled .image-choices-has-image .image-choices-option-preview-wrap,
+.toplevel_page_gf_edit_forms .image-choices-admin-field.image-choices-enabled .image-choices-has-image .image-choices-option-preview-wrap {
   display: inline-block !important; }
 
-#field_settings.image-choices-field-settings .image-choices-enabled .image-choices-has-image .image-choices-option-upload-button,
+#field_settings.image-choices-field-settings .image-choices-enabled .image-choices-has-image .image-choices-option-upload-button, #field_settings.image-choices-field-settings.image-choices-enabled .image-choices-has-image .image-choices-option-upload-button,
 #field_settings_container.image-choices-field-settings .image-choices-enabled .image-choices-has-image .image-choices-option-upload-button,
-.toplevel_page_gf_edit_forms .image-choices-admin-field .image-choices-enabled .image-choices-has-image .image-choices-option-upload-button {
+#field_settings_container.image-choices-field-settings.image-choices-enabled .image-choices-has-image .image-choices-option-upload-button,
+#gfield_settings_choices_container.image-choices-field-settings .image-choices-enabled .image-choices-has-image .image-choices-option-upload-button,
+#gfield_settings_choices_container.image-choices-field-settings.image-choices-enabled .image-choices-has-image .image-choices-option-upload-button,
+#gquiz_gfield_settings_choices_container.image-choices-field-settings .image-choices-enabled .image-choices-has-image .image-choices-option-upload-button,
+#gquiz_gfield_settings_choices_container.image-choices-field-settings.image-choices-enabled .image-choices-has-image .image-choices-option-upload-button,
+.toplevel_page_gf_edit_forms .image-choices-admin-field .image-choices-enabled .image-choices-has-image .image-choices-option-upload-button,
+.toplevel_page_gf_edit_forms .image-choices-admin-field.image-choices-enabled .image-choices-has-image .image-choices-option-upload-button {
   display: none !important; }
 
 #field_settings.image-choices-field-settings.image-choices-use-images[class*="gfield_product"] .image-choices-setting-show-prices,
@@ -207,6 +227,18 @@ html[dir="rtl"] .image-choices-admin-field.image-choices-use-images input[type="
 #field_settings_container.image-choices-field-settings.image-choices-use-images .image-choices-setting-use-lightbox,
 #field_settings_container.image-choices-field-settings.image-choices-use-images .image-choices-setting-layout,
 #field_settings_container.image-choices-field-settings.image-choices-use-images .image-choices-setting-entry-value,
+#gfield_settings_choices_container.image-choices-field-settings.image-choices-use-images[class*="gfield_product"] .image-choices-setting-show-prices,
+#gfield_settings_choices_container.image-choices-field-settings.image-choices-use-images .image-choices-setting-title,
+#gfield_settings_choices_container.image-choices-field-settings.image-choices-use-images .image-choices-setting-show-labels,
+#gfield_settings_choices_container.image-choices-field-settings.image-choices-use-images .image-choices-setting-use-lightbox,
+#gfield_settings_choices_container.image-choices-field-settings.image-choices-use-images .image-choices-setting-layout,
+#gfield_settings_choices_container.image-choices-field-settings.image-choices-use-images .image-choices-setting-entry-value,
+#gquiz_gfield_settings_choices_container.image-choices-field-settings.image-choices-use-images[class*="gfield_product"] .image-choices-setting-show-prices,
+#gquiz_gfield_settings_choices_container.image-choices-field-settings.image-choices-use-images .image-choices-setting-title,
+#gquiz_gfield_settings_choices_container.image-choices-field-settings.image-choices-use-images .image-choices-setting-show-labels,
+#gquiz_gfield_settings_choices_container.image-choices-field-settings.image-choices-use-images .image-choices-setting-use-lightbox,
+#gquiz_gfield_settings_choices_container.image-choices-field-settings.image-choices-use-images .image-choices-setting-layout,
+#gquiz_gfield_settings_choices_container.image-choices-field-settings.image-choices-use-images .image-choices-setting-entry-value,
 .toplevel_page_gf_edit_forms .image-choices-admin-field.image-choices-use-images[class*="gfield_product"] .image-choices-setting-show-prices,
 .toplevel_page_gf_edit_forms .image-choices-admin-field.image-choices-use-images .image-choices-setting-title,
 .toplevel_page_gf_edit_forms .image-choices-admin-field.image-choices-use-images .image-choices-setting-show-labels,
@@ -216,23 +248,33 @@ html[dir="rtl"] .image-choices-admin-field.image-choices-use-images input[type="
   display: block !important; }
 
 /* GF 2.5+ */
-#field_settings_container .image-choices-option-preview-wrap {
+#field_settings_container .image-choices-option-preview-wrap,
+#gfield_settings_choices_container .image-choices-option-preview-wrap,
+#gquiz_gfield_settings_choices_container .image-choices-option-preview-wrap {
   margin: 0 8px 0 5px;
   padding: 3px; }
 
-#field_settings_container .image-choices-option-preview {
+#field_settings_container .image-choices-option-preview,
+#gfield_settings_choices_container .image-choices-option-preview,
+#gquiz_gfield_settings_choices_container .image-choices-option-preview {
   width: 30px;
   height: 30px; }
 
-#field_settings_container .image-choices-option-image-remove {
+#field_settings_container .image-choices-option-image-remove,
+#gfield_settings_choices_container .image-choices-option-image-remove,
+#gquiz_gfield_settings_choices_container .image-choices-option-image-remove {
   width: 20px;
   height: 20px;
   margin: -10px 0 0 -10px; }
-  #field_settings_container .image-choices-option-image-remove i {
+  #field_settings_container .image-choices-option-image-remove i,
+  #gfield_settings_choices_container .image-choices-option-image-remove i,
+  #gquiz_gfield_settings_choices_container .image-choices-option-image-remove i {
     line-height: 20px;
     font-size: 15px; }
 
-#field_settings_container .button.image-choices-option-upload-button {
+#field_settings_container .button.image-choices-option-upload-button,
+#gfield_settings_choices_container .button.image-choices-option-upload-button,
+#gquiz_gfield_settings_choices_container .button.image-choices-option-upload-button {
   font-size: 11px;
   border: 1px solid #ffffff;
   padding: 3px;
@@ -243,47 +285,89 @@ html[dir="rtl"] .image-choices-admin-field.image-choices-use-images input[type="
   vertical-align: middle; }
 
 #field_settings_container.image-choices-field-settings #gfield_settings_choices_container,
-#field_settings_container.image-choices-field-settings .gfield_settings_input_choices_container {
+#field_settings_container.image-choices-field-settings .gfield_settings_input_choices_container,
+#gfield_settings_choices_container.image-choices-field-settings #gfield_settings_choices_container,
+#gfield_settings_choices_container.image-choices-field-settings .gfield_settings_input_choices_container,
+#gquiz_gfield_settings_choices_container.image-choices-field-settings #gfield_settings_choices_container,
+#gquiz_gfield_settings_choices_container.image-choices-field-settings .gfield_settings_input_choices_container {
   max-height: none;
   margin-bottom: 20px; }
 
-#field_settings_container.image-choices-field-settings .image-choices-enabled .gfield_choice_header_label {
+#field_settings_container.image-choices-field-settings .image-choices-enabled .gfield_choice_header_label,
+#gfield_settings_choices_container.image-choices-field-settings .image-choices-enabled .gfield_choice_header_label,
+#gquiz_gfield_settings_choices_container.image-choices-field-settings .image-choices-enabled .gfield_choice_header_label {
   padding-left: 50px; }
 
-#field_settings_container.image-choices-field-settings .image-choices-enabled .field-choice-input.field-choice-text {
+#field_settings_container.image-choices-field-settings .image-choices-enabled .field-choice-input.field-choice-text,
+#gfield_settings_choices_container.image-choices-field-settings .image-choices-enabled .field-choice-input.field-choice-text,
+#gquiz_gfield_settings_choices_container.image-choices-field-settings .image-choices-enabled .field-choice-input.field-choice-text {
   width: 180px !important; }
 
 #field_settings_container.image-choices-field-settings .image-choices-enabled.choice_with_value .gfield_choice_header_value,
 #field_settings_container.image-choices-field-settings .image-choices-enabled.choice_with_value .gfield_choice_header_label,
 #field_settings_container.image-choices-field-settings .image-choices-enabled.choice_with_value .field-choice-input.field-choice-text,
-#field_settings_container.image-choices-field-settings .image-choices-enabled.choice_with_value .field-choice-input.field-choice-value {
+#field_settings_container.image-choices-field-settings .image-choices-enabled.choice_with_value .field-choice-input.field-choice-value,
+#gfield_settings_choices_container.image-choices-field-settings .image-choices-enabled.choice_with_value .gfield_choice_header_value,
+#gfield_settings_choices_container.image-choices-field-settings .image-choices-enabled.choice_with_value .gfield_choice_header_label,
+#gfield_settings_choices_container.image-choices-field-settings .image-choices-enabled.choice_with_value .field-choice-input.field-choice-text,
+#gfield_settings_choices_container.image-choices-field-settings .image-choices-enabled.choice_with_value .field-choice-input.field-choice-value,
+#gquiz_gfield_settings_choices_container.image-choices-field-settings .image-choices-enabled.choice_with_value .gfield_choice_header_value,
+#gquiz_gfield_settings_choices_container.image-choices-field-settings .image-choices-enabled.choice_with_value .gfield_choice_header_label,
+#gquiz_gfield_settings_choices_container.image-choices-field-settings .image-choices-enabled.choice_with_value .field-choice-input.field-choice-text,
+#gquiz_gfield_settings_choices_container.image-choices-field-settings .image-choices-enabled.choice_with_value .field-choice-input.field-choice-value {
   width: 90px !important; }
 
-#field_settings_container.image-choices-field-settings .image-choices-enabled.choice_with_value .gfield_choice_header_value {
+#field_settings_container.image-choices-field-settings .image-choices-enabled.choice_with_value .gfield_choice_header_value,
+#gfield_settings_choices_container.image-choices-field-settings .image-choices-enabled.choice_with_value .gfield_choice_header_value,
+#gquiz_gfield_settings_choices_container.image-choices-field-settings .image-choices-enabled.choice_with_value .gfield_choice_header_value {
   padding-left: 0; }
 
 #field_settings_container.image-choices-field-settings .image-choices-enabled.choice_with_price .gfield_choice_header_label,
 #field_settings_container.image-choices-field-settings .image-choices-enabled.choice_with_price .gfield_choice_header_price,
 #field_settings_container.image-choices-field-settings .image-choices-enabled.choice_with_price .field-choice-input.field-choice-text,
-#field_settings_container.image-choices-field-settings .image-choices-enabled.choice_with_price .field-choice-input.field-choice-price {
+#field_settings_container.image-choices-field-settings .image-choices-enabled.choice_with_price .field-choice-input.field-choice-price,
+#gfield_settings_choices_container.image-choices-field-settings .image-choices-enabled.choice_with_price .gfield_choice_header_label,
+#gfield_settings_choices_container.image-choices-field-settings .image-choices-enabled.choice_with_price .gfield_choice_header_price,
+#gfield_settings_choices_container.image-choices-field-settings .image-choices-enabled.choice_with_price .field-choice-input.field-choice-text,
+#gfield_settings_choices_container.image-choices-field-settings .image-choices-enabled.choice_with_price .field-choice-input.field-choice-price,
+#gquiz_gfield_settings_choices_container.image-choices-field-settings .image-choices-enabled.choice_with_price .gfield_choice_header_label,
+#gquiz_gfield_settings_choices_container.image-choices-field-settings .image-choices-enabled.choice_with_price .gfield_choice_header_price,
+#gquiz_gfield_settings_choices_container.image-choices-field-settings .image-choices-enabled.choice_with_price .field-choice-input.field-choice-text,
+#gquiz_gfield_settings_choices_container.image-choices-field-settings .image-choices-enabled.choice_with_price .field-choice-input.field-choice-price {
   width: 90px !important; }
 
-#field_settings_container.image-choices-field-settings .image-choices-enabled.choice_with_price .gfield_choice_header_price {
+#field_settings_container.image-choices-field-settings .image-choices-enabled.choice_with_price .gfield_choice_header_price,
+#gfield_settings_choices_container.image-choices-field-settings .image-choices-enabled.choice_with_price .gfield_choice_header_price,
+#gquiz_gfield_settings_choices_container.image-choices-field-settings .image-choices-enabled.choice_with_price .gfield_choice_header_price {
   padding-left: 3px; }
 
 #field_settings_container.image-choices-field-settings .image-choices-enabled.choice_with_value_and_price .gfield_choice_header_label,
-#field_settings_container.image-choices-field-settings .image-choices-enabled.choice_with_value_and_price .field-choice-input.field-choice-text {
+#field_settings_container.image-choices-field-settings .image-choices-enabled.choice_with_value_and_price .field-choice-input.field-choice-text,
+#gfield_settings_choices_container.image-choices-field-settings .image-choices-enabled.choice_with_value_and_price .gfield_choice_header_label,
+#gfield_settings_choices_container.image-choices-field-settings .image-choices-enabled.choice_with_value_and_price .field-choice-input.field-choice-text,
+#gquiz_gfield_settings_choices_container.image-choices-field-settings .image-choices-enabled.choice_with_value_and_price .gfield_choice_header_label,
+#gquiz_gfield_settings_choices_container.image-choices-field-settings .image-choices-enabled.choice_with_value_and_price .field-choice-input.field-choice-text {
   width: 70px !important; }
 
 #field_settings_container.image-choices-field-settings .image-choices-enabled.choice_with_value_and_price .gfield_choice_header_value,
-#field_settings_container.image-choices-field-settings .image-choices-enabled.choice_with_value_and_price .field-choice-input.field-choice-value {
+#field_settings_container.image-choices-field-settings .image-choices-enabled.choice_with_value_and_price .field-choice-input.field-choice-value,
+#gfield_settings_choices_container.image-choices-field-settings .image-choices-enabled.choice_with_value_and_price .gfield_choice_header_value,
+#gfield_settings_choices_container.image-choices-field-settings .image-choices-enabled.choice_with_value_and_price .field-choice-input.field-choice-value,
+#gquiz_gfield_settings_choices_container.image-choices-field-settings .image-choices-enabled.choice_with_value_and_price .gfield_choice_header_value,
+#gquiz_gfield_settings_choices_container.image-choices-field-settings .image-choices-enabled.choice_with_value_and_price .field-choice-input.field-choice-value {
   width: 70px !important; }
 
 #field_settings_container.image-choices-field-settings .image-choices-enabled.choice_with_value_and_price .gfield_choice_header_price,
-#field_settings_container.image-choices-field-settings .image-choices-enabled.choice_with_value_and_price .field-choice-input.field-choice-price {
+#field_settings_container.image-choices-field-settings .image-choices-enabled.choice_with_value_and_price .field-choice-input.field-choice-price,
+#gfield_settings_choices_container.image-choices-field-settings .image-choices-enabled.choice_with_value_and_price .gfield_choice_header_price,
+#gfield_settings_choices_container.image-choices-field-settings .image-choices-enabled.choice_with_value_and_price .field-choice-input.field-choice-price,
+#gquiz_gfield_settings_choices_container.image-choices-field-settings .image-choices-enabled.choice_with_value_and_price .gfield_choice_header_price,
+#gquiz_gfield_settings_choices_container.image-choices-field-settings .image-choices-enabled.choice_with_value_and_price .field-choice-input.field-choice-price {
   width: 60px !important; }
 
-#field_settings_container.image-choices-field-settings .image-choices-enabled.choice_with_value_and_price .gfield_choice_header_price {
+#field_settings_container.image-choices-field-settings .image-choices-enabled.choice_with_value_and_price .gfield_choice_header_price,
+#gfield_settings_choices_container.image-choices-field-settings .image-choices-enabled.choice_with_value_and_price .gfield_choice_header_price,
+#gquiz_gfield_settings_choices_container.image-choices-field-settings .image-choices-enabled.choice_with_value_and_price .gfield_choice_header_price {
   padding-left: 3px; }
 
 /* GF < 2.5 */

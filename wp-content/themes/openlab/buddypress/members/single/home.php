@@ -7,7 +7,11 @@
 <?php do_action( 'bp_before_member_body' );
 
 		if ( bp_is_user_activity() || !bp_current_component() ) :
-                        cuny_student_profile();
+			cuny_student_profile();
+
+		elseif ( bp_is_current_component( 'my-activity' ) ) :
+			bp_get_template_part( 'members/single/my-activity' );
+
 		elseif ( bp_is_user_blogs() ) :
 			bp_get_template_part( 'members/single/blogs'    );
 

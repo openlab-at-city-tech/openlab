@@ -20,6 +20,7 @@ class GFSurvey extends GFAddOn {
 	protected $_title = 'Gravity Forms Survey Add-On';
 	protected $_short_title = 'Survey';
 	protected $_enable_rg_autoupgrade = true;
+	protected $_enable_theme_layer = true;
 
 	/**
 	 * Whether this add-on has access to the Gravity Forms settings renderer.
@@ -186,8 +187,8 @@ class GFSurvey extends GFAddOn {
 				'version' => $this->_version,
 				'deps'    => $gsurvey_js_deps,
 				'enqueue' => array(
-					array( 'admin_page' => array( 'form_editor', 'results', 'entry_view', 'entry_detail', 'entry_edit' ) ),
-					array( 'field_types' => array( 'survey' ) ),
+					array( $this, 'should_enqueue_gravity_theme' ),
+					array( 'admin_page', array( 'entry_detail_edit' ) ),
 				),
 			),
 		);
@@ -223,28 +224,102 @@ class GFSurvey extends GFAddOn {
 
 		$styles = array(
 			array(
-				'handle'  => 'gsurvey_form_editor_css',
-				'src'     => $this->get_base_url() . "/css/gsurvey_form_editor{$min}.css",
+				'handle'  => 'gsurvey_admin',
+				'src'     => $this->get_base_url() . "/assets/css/dist/admin{$min}.css",
 				'version' => $this->_version,
 				'enqueue' => array(
 					array( 'admin_page' => array( 'form_editor' ) ),
+					array(
+						'admin_page' => array( 'results', 'entry_view', 'entry_detail', 'entry_edit' ),
+						'field_types' => array( 'survey' ),
+					),
 				),
 			),
 			array(
 				'handle'  => 'gsurvey_css',
-				'src'     => $this->get_base_url() . "/css/gsurvey{$min}.css",
+				'src'     => $this->get_base_url() . "/assets/css/dist/theme{$min}.css",
 				'version' => $this->_version,
 				'media'   => 'screen',
 				'enqueue' => array(
-					array( 'admin_page' => array( 'form_editor', 'results', 'entry_view', 'entry_detail', 'entry_edit' ) ),
+					array( $this, 'should_enqueue_gravity_theme' ),
 					array(
 						'field_types' => array( 'survey' )
 					),
 				),
 			),
+			array(
+				'handle'  => 'gsurvey-theme-foundation',
+				'src'     => $this->get_base_url() . "/assets/css/dist/theme-foundation{$min}.css",
+				'version' => $this->_version,
+				'media'   => 'screen',
+				'enqueue' => array(
+					array( $this, 'should_enqueue_theme_framework' ),
+				),
+			),
+			array(
+				'handle'  => 'gsurvey-theme-framework',
+				'src'     => $this->get_base_url() . "/assets/css/dist/theme-framework{$min}.css",
+				'version' => $this->_version,
+				'media'   => 'screen',
+				'enqueue' => array(
+					array( $this, 'should_enqueue_theme_framework' ),
+				),
+			),
 		);
 
 		return array_merge( parent::styles(), $styles );
+	}
+
+
+	/**
+	 * Returns true if the Gravity Theme css file should be enqueued on this page. Returns false otherwise.
+	 *
+	 * @since 3.8
+	 *
+	 * @param array $form Current form object.
+	 * @param bool  $is_ajax Whether form is being embedded with ajax enabled.
+	 *
+	 * @return bool Returns true if the Gravity Theme css file should be enqueued on this page. Returns false otherwise.
+	 */
+	public function should_enqueue_gravity_theme( $form, $is_ajax ) {
+		// Always enqueue in the form editor.
+		if ( GFCommon::is_form_editor() ) {
+			return true;
+		}
+
+		// In 2.7 and above, enqueue in the block editor
+		if ( $this->is_gravityforms_supported( '2.7-RC-1' ) ) {
+			return GFCommon::is_block_editor_page();
+		}
+
+		return false;
+	}
+
+	/**
+	 * Returns true if the theme framework css files should be enqueued on this page. Returns false otherwise.
+	 *
+	 * @since 3.8
+	 *
+	 * @param array $form Current form object.
+	 * @param bool  $is_ajax Whether or not form is being embedded with ajax enabled.
+	 *
+	 * @return bool Returns true if the theme framework css files should be enqueued on this page. Returns false otherwise.
+	 */
+	public function should_enqueue_theme_framework( $form, $is_ajax ) {
+		if ( ! $this->is_gravityforms_supported( '2.7-RC-1' ) ) {
+			return false;
+		}
+
+		// Always enqueue on block editor page.
+		if ( GFCommon::is_block_editor_page() ) {
+			return true;
+		}
+
+		// Enqueues theme framework when there is a survey field on a non-admin or preview page.
+		$has_survey_field = (bool) GFCommon::get_fields_by_type( $form, 'survey' );
+		$is_gf_admin_page = GFForms::get_page();
+
+		return $has_survey_field && ! $is_gf_admin_page && ! $this->is_preview();
 	}
 
 	/**
@@ -340,6 +415,32 @@ class GFSurvey extends GFAddOn {
 
 	}
 
+	/**
+	 * Outputs custom css properties to the page so that the survey fields can have custom properties based on block settings selections.
+	 *
+	 * @since 3.8
+	 *
+	 * @param int   $form_id        Current form id.
+	 * @param array $settings       Current settings.
+	 * @param array $block_settings Current block settings.
+	 *
+	 * @return array Returns an array containing the custom css properties to be output to the page.
+	 */
+	public function theme_layer_form_css_properties( $form_id, $settings, $block_settings ) {
+
+		$label_color = rgar( $block_settings, 'labelColor' );
+		if ( ! $label_color ) {
+			return array();
+		}
+
+		$color_util          = new \Gravity_Forms\Gravity_Forms\Util\Colors\Color_Modifier();
+		$rgb                 = $color_util->convert_hex_to_rgb( $label_color );
+		$encoded_color       = urlencode( $label_color );
+		return array(
+			'gform-survey-theme-field-likert-row-odd-background-color' => "rgb({$rgb['r']},{$rgb['g']},{$rgb['b']},0.08)",
+			'gform-survey-theme-icon-control-rank' => "url(\"data:image/svg+xml,%3Csvg width='8' height='14' viewBox='0 0 8 14' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M4 0C4.26522 5.96046e-08 4.51957 0.105357 4.70711 0.292893L7.70711 3.29289C8.09763 3.68342 8.09763 4.31658 7.70711 4.70711C7.31658 5.09763 6.68342 5.09763 6.29289 4.70711L4 2.41421L1.70711 4.70711C1.31658 5.09763 0.683417 5.09763 0.292893 4.70711C-0.0976311 4.31658 -0.097631 3.68342 0.292893 3.29289L3.29289 0.292893C3.48043 0.105357 3.73478 0 4 0ZM0.292893 9.29289C0.683417 8.90237 1.31658 8.90237 1.70711 9.29289L4 11.5858L6.29289 9.29289C6.68342 8.90237 7.31658 8.90237 7.70711 9.29289C8.09763 9.68342 8.09763 10.3166 7.70711 10.7071L4.70711 13.7071C4.31658 14.0976 3.68342 14.0976 3.29289 13.7071L0.292893 10.7071C-0.0976311 10.3166 -0.0976311 9.68342 0.292893 9.29289Z' fill='{$encoded_color}'/%3E%3C/svg%3E\")",
+		);
+	}
 
 	// # RESULTS & SCORING ----------------------------------------------------------------------------------------------
 

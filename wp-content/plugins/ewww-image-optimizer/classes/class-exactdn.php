@@ -25,6 +25,14 @@ if ( ! class_exists( 'ExactDN' ) ) {
 		protected $user_exclusions = array();
 
 		/**
+		 * A list of user-defined page/URL exclusions, populated by validate_user_exclusions().
+		 *
+		 * @access protected
+		 * @var array $user_page_exclusions
+		 */
+		protected $user_page_exclusions = array();
+
+		/**
 		 * A list of image sizes registered for attachments.
 		 *
 		 * @access protected
@@ -113,6 +121,13 @@ if ( ! class_exists( 'ExactDN' ) ) {
 		private $srcset_attr = 'srcset';
 
 		/**
+		 * Request URI.
+		 *
+		 * @var string $request_uri
+		 */
+		public $request_uri = '';
+
+		/**
 		 * Register (once) actions and filters for ExactDN. If you want to use this class, use the global.
 		 */
 		function __construct() {
@@ -129,10 +144,14 @@ if ( ! class_exists( 'ExactDN' ) ) {
 				return;
 			}
 
-			$uri = add_query_arg( null, null );
-			$this->debug_message( "request uri is $uri" );
+			$this->request_uri = add_query_arg( null, null );
+			if ( false === strpos( $this->request_uri, 'page=ewww-image-optimizer-options' ) ) {
+				$this->debug_message( "request uri is {$this->request_uri}" );
+			} else {
+				$this->debug_message( 'request uri is EWWW IO settings' );
+			}
 
-			if ( '/robots.txt' === $uri || '/sitemap.xml' === $uri ) {
+			if ( '/robots.txt' === $this->request_uri || '/sitemap.xml' === $this->request_uri ) {
 				return;
 			}
 
@@ -142,9 +161,9 @@ if ( ! class_exists( 'ExactDN' ) ) {
 			 * Allow pre-empting the parsers by page.
 			 *
 			 * @param bool Whether to skip parsing the page.
-			 * @param string $uri The URL of the page.
+			 * @param string The URI/path of the page.
 			 */
-			if ( apply_filters( 'exactdn_skip_page', false, $uri ) ) {
+			if ( apply_filters( 'exactdn_skip_page', false, $this->request_uri ) ) {
 				return;
 			}
 
@@ -219,6 +238,7 @@ if ( ! class_exists( 'ExactDN' ) ) {
 			// Overrides for admin-ajax images.
 			add_filter( 'exactdn_admin_allow_image_downsize', array( $this, 'allow_admin_image_downsize' ), 10, 2 );
 			add_filter( 'exactdn_admin_allow_image_srcset', array( $this, 'allow_admin_image_downsize' ), 10, 2 );
+			add_filter( 'exactdn_admin_allow_plugin_url', array( $this, 'allow_admin_image_downsize' ), 10, 2 );
 			// Overrides for "pass through" images.
 			add_filter( 'exactdn_pre_args', array( $this, 'exactdn_remove_args' ), 10, 3 );
 			// Overrides for user exclusions.
@@ -254,7 +274,9 @@ if ( ! class_exists( 'ExactDN' ) ) {
 				add_filter( 'style_loader_src', array( $this, 'parse_enqueue' ), 9999 );
 				add_filter( 'script_loader_src', array( $this, 'parse_enqueue' ), 9999 );
 			}
-			$this->set_option( 'exactdn_prevent_db_queries', true );
+			if ( ! $this->get_option( 'exactdn_prevent_db_queries' ) ) {
+				$this->set_option( 'exactdn_prevent_db_queries', true );
+			}
 
 			// Improve the default content_width for Twenty Nineteen.
 			global $content_width;
@@ -275,9 +297,18 @@ if ( ! class_exists( 'ExactDN' ) ) {
 				$this->debug_message( "could not break down URL: $this->site_url" );
 				return;
 			}
-			if ( ! $this->get_exactdn_option( 'local_domain' ) ) {
-				$this->set_exactdn_option( 'local_domain', $this->upload_domain );
+
+			$stored_local_domain = $this->get_exactdn_option( 'local_domain' );
+			if ( empty( $stored_local_domain ) ) {
+				$this->set_exactdn_option( 'local_domain', base64_encode( $this->upload_domain ) );
+				$stored_local_domain = $this->upload_domain;
+			} elseif ( false !== strpos( $stored_local_domain, '.' ) ) {
+				$this->set_exactdn_option( 'local_domain', base64_encode( $stored_local_domain ) );
+			} else {
+				$stored_local_domain = base64_decode( $stored_local_domain );
 			}
+			$this->debug_message( "saved domain is $stored_local_domain" );
+
 			$this->debug_message( "allowing images from here: $this->upload_domain" );
 			if (
 				(
@@ -291,8 +322,8 @@ if ( ! class_exists( 'ExactDN' ) ) {
 				$this->debug_message( "removing this from urls: $this->remove_path" );
 			}
 			if (
-				$this->get_exactdn_option( 'local_domain' ) !== $this->upload_domain &&
-				! $this->allow_image_domain( $this->get_exactdn_option( 'local_domain' ) ) &&
+				$stored_local_domain !== $this->upload_domain &&
+				! $this->allow_image_domain( $stored_local_domain ) &&
 				is_admin()
 			) {
 				add_action( 'admin_notices', $this->prefix . 'notice_exactdn_domain_mismatch' );
@@ -810,6 +841,11 @@ if ( ! class_exists( 'ExactDN' ) ) {
 						if ( ! is_string( $exclusion ) ) {
 							continue;
 						}
+						$exclusion = trim( $exclusion );
+						if ( 0 === strpos( $exclusion, 'page:' ) ) {
+							$this->user_page_exclusions[] = str_replace( 'page:', '', $exclusion );
+							continue;
+						}
 						if ( $this->content_path && false !== strpos( $exclusion, $this->content_path ) ) {
 							$exclusion = preg_replace( '#([^"\'?>]+?)?' . $this->content_path . '/#i', '', $exclusion );
 						}
@@ -901,6 +937,9 @@ if ( ! class_exists( 'ExactDN' ) ) {
 			if ( $this->is_json( $content ) ) {
 				return $content;
 			}
+			if ( apply_filters( 'exactdn_skip_page', false, $this->request_uri ) ) {
+				return $content;
+			}
 
 			$started = microtime( true );
 			$this->debug_message( '<b>' . __METHOD__ . '()</b>' );
@@ -934,8 +973,8 @@ if ( ! class_exists( 'ExactDN' ) ) {
 					$fullsize_url = false;
 
 					// Identify image source.
-					$src      = $images['img_url'][ $index ];
-					$src_orig = $images['img_url'][ $index ];
+					$src      = trim( $images['img_url'][ $index ] );
+					$src_orig = $images['img_url'][ $index ]; // Don't trim, because we'll use it for search/replacement later.
 					if ( is_string( $src ) ) {
 						$this->debug_message( $src );
 					} else {
@@ -977,7 +1016,7 @@ if ( ! class_exists( 'ExactDN' ) ) {
 					}
 					// Support Lazy Load plugins.
 					// Don't modify $tag yet as we need unmodified version later.
-					$lazy_load_src = $this->get_attribute( $images['img_tag'][ $index ], 'data-lazy-src' );
+					$lazy_load_src = trim( $this->get_attribute( $images['img_tag'][ $index ], 'data-lazy-src' ) );
 					if ( $lazy_load_src ) {
 						$placeholder_src      = $src;
 						$placeholder_src_orig = $src;
@@ -988,7 +1027,7 @@ if ( ! class_exists( 'ExactDN' ) ) {
 						$srcset_fill          = true;
 					}
 					// Must be a legacy Jetpack thing as far as I can tell, no matches found in any currently installed plugins.
-					$lazy_load_src = $this->get_attribute( $images['img_tag'][ $index ], 'data-lazy-original' );
+					$lazy_load_src = trim( $this->get_attribute( $images['img_tag'][ $index ], 'data-lazy-original' ) );
 					if ( ! $lazy && $lazy_load_src ) {
 						$placeholder_src      = $src;
 						$placeholder_src_orig = $src;
@@ -997,7 +1036,7 @@ if ( ! class_exists( 'ExactDN' ) ) {
 						$lazy                 = true;
 					}
 					if ( ! $lazy && strpos( $images['img_tag'][ $index ], 'a3-lazy-load/assets/images/lazy_placeholder' ) ) {
-						$lazy_load_src = $this->get_attribute( $images['img_tag'][ $index ], 'data-src' );
+						$lazy_load_src = trim( $this->get_attribute( $images['img_tag'][ $index ], 'data-src' ) );
 					}
 					if (
 						! $lazy &&
@@ -1021,7 +1060,7 @@ if ( ! class_exists( 'ExactDN' ) ) {
 						$srcset_fill          = true;
 					}
 					if ( ! $lazy && strpos( $images['img_tag'][ $index ], 'revslider/admin/assets/images/dummy' ) ) {
-						$lazy_load_src = $this->get_attribute( $images['img_tag'][ $index ], 'data-lazyload' );
+						$lazy_load_src = trim( $this->get_attribute( $images['img_tag'][ $index ], 'data-lazyload' ) );
 					}
 					if ( ! $lazy && $lazy_load_src ) {
 						$placeholder_src      = $src;
@@ -1187,6 +1226,11 @@ if ( ! class_exists( 'ExactDN' ) ) {
 						} elseif ( ! empty( $images['figure_class'][ $index ] ) && false !== strpos( $images['figure_class'][ $index ], 'alignwide' ) && current_theme_supports( 'align-wide' ) ) {
 							$constrain_width = (int) apply_filters( 'exactdn_wide_align_image_width', max( 1500, $content_width ) );
 						}
+						if ( ! empty( $images['div_class'][ $index ] ) && false !== strpos( $images['div_class'][ $index ], 'alignfull' ) && current_theme_supports( 'align-wide' ) ) {
+							$constrain_width = (int) apply_filters( 'exactdn_full_align_image_width', max( 1920, $content_width ) );
+						} elseif ( ! empty( $images['div_class'][ $index ] ) && false !== strpos( $images['div_class'][ $index ], 'alignwide' ) && current_theme_supports( 'align-wide' ) ) {
+							$constrain_width = (int) apply_filters( 'exactdn_wide_align_image_width', max( 1500, $content_width ) );
+						}
 						// If width is available, constrain to $content_width.
 						if ( false !== $width && false === strpos( $width, '%' ) && is_numeric( $constrain_width ) ) {
 							if ( $width > $constrain_width && false !== $height && false === strpos( $height, '%' ) ) {
@@ -1288,7 +1332,7 @@ if ( ! class_exists( 'ExactDN' ) ) {
 							} elseif ( ! empty( $images['link_url'][ $index ] ) && $this->validate_image_url( $images['link_url'][ $index ] ) ) {
 								$new_tag = preg_replace(
 									'#(href=["|\'])' . $images['link_url'][ $index ] . '(["|\'])#i',
-									'\1' . $this->generate_url( $images['link_url'][ $index ] ) . '\2',
+									'\1' . $this->generate_url( $images['link_url'][ $index ], array( 'w' => 2560 ) ) . '\2',
 									$new_tag,
 									1
 								);
@@ -1322,7 +1366,7 @@ if ( ! class_exists( 'ExactDN' ) ) {
 							}
 
 							// Cleanup ExactDN URL.
-							$exactdn_url = str_replace( '&#038;', '&', esc_url( $exactdn_url ) );
+							$exactdn_url = str_replace( '&#038;', '&', esc_url( trim( $exactdn_url ) ) );
 							// Supplant the original source value with our ExactDN URL.
 							$this->debug_message( "replacing $src_orig with $exactdn_url" );
 							if ( $is_relative ) {
@@ -1336,7 +1380,7 @@ if ( ! class_exists( 'ExactDN' ) ) {
 								$placeholder_src = $this->generate_url( $placeholder_src );
 
 								if ( $placeholder_src !== $placeholder_src_orig ) {
-									$new_tag = str_replace( $placeholder_src_orig, str_replace( '&#038;', '&', esc_url( $placeholder_src ) ), $new_tag );
+									$new_tag = str_replace( $placeholder_src_orig, str_replace( '&#038;', '&', esc_url( trim( $placeholder_src ) ) ), $new_tag );
 								}
 
 								unset( $placeholder_src );
@@ -1421,7 +1465,7 @@ if ( ! class_exists( 'ExactDN' ) ) {
 						// If Lazy Load is in use, pass placeholder image through ExactDN.
 						$placeholder_src = $this->generate_url( $placeholder_src );
 						if ( $placeholder_src !== $placeholder_src_orig ) {
-							$new_tag = str_replace( $placeholder_src_orig, str_replace( '&#038;', '&', esc_url( $placeholder_src ) ), $new_tag );
+							$new_tag = str_replace( $placeholder_src_orig, str_replace( '&#038;', '&', esc_url( trim( $placeholder_src ) ) ), $new_tag );
 							// Replace original tag with modified version.
 							$content = str_replace( $tag, $new_tag, $content );
 						}
@@ -1485,10 +1529,10 @@ if ( ! class_exists( 'ExactDN' ) ) {
 								// Replace original tag with modified version.
 								$content = str_replace( $images['img_tag'][ $index ], $new_tag, $content );
 							}
-						}
-					}
-				} // End foreach().
-			} // End if();
+						} // End if() -- no srcset or sizes attributes found.
+					} // End if() -- not a feed and EIO_SRCSET_FILL enabled.
+				} // End foreach() -- of all images found in the page.
+			} // End if() -- we found images in the page at all.
 
 			// Process <a> elements in the page for image URLs.
 			$content = $this->filter_image_links( $content );
@@ -1537,7 +1581,7 @@ if ( ! class_exists( 'ExactDN' ) ) {
 			$this->debug_message( '<b>' . __METHOD__ . '()</b>' );
 			$elements = $this->get_elements_from_html( $content, 'a' );
 			if ( $this->is_iterable( $elements ) ) {
-				$args = array();
+				$args = array( 'w' => 2560 );
 				if ( defined( 'EIO_PRESERVE_LINKED_IMAGES' ) && EIO_PRESERVE_LINKED_IMAGES ) {
 					$args = array(
 						'lossy' => 0,
@@ -1649,47 +1693,56 @@ if ( ! class_exists( 'ExactDN' ) ) {
 					if ( empty( $style ) ) {
 						continue;
 					}
+					$new_style = $style;
 					$this->debug_message( "checking style attr for background-image: $style" );
-					$bg_image_url = $this->get_background_image_url( $style );
-					$orig_bg_url  = $bg_image_url;
-
-					// Check for relative URLs that start with a slash.
-					if (
-						'/' === substr( $bg_image_url, 0, 1 ) &&
-						'/' !== substr( $bg_image_url, 1, 1 ) &&
-						false === strpos( $this->upload_domain, 'amazonaws.com' ) &&
-						false === strpos( $this->upload_domain, 'digitaloceanspaces.com' ) &&
-						false === strpos( $this->upload_domain, 'storage.googleapis.com' )
-					) {
-						$bg_image_url = '//' . $this->upload_domain . $bg_image_url;
+					$bg_image_urls = $this->get_background_image_urls( $style );
+					$bg_autoscale  = apply_filters( 'easyio_background_image_autoscale', true );
+					if ( count( $bg_image_urls ) > 1 ) {
+						$bg_autoscale = false;
 					}
+					foreach ( $bg_image_urls as $bg_image_url ) {
+						$orig_bg_url = $bg_image_url;
 
-					if ( $this->validate_image_url( $bg_image_url ) ) {
-						/** This filter is already documented in class-exactdn.php */
-						if ( apply_filters( 'exactdn_skip_image', false, $bg_image_url, $element ) ) {
-							continue;
+						// Check for relative URLs that start with a slash.
+						if (
+							'/' === substr( $bg_image_url, 0, 1 ) &&
+							'/' !== substr( $bg_image_url, 1, 1 ) &&
+							false === strpos( $this->upload_domain, 'amazonaws.com' ) &&
+							false === strpos( $this->upload_domain, 'digitaloceanspaces.com' ) &&
+							false === strpos( $this->upload_domain, 'storage.googleapis.com' )
+						) {
+							$bg_image_url = '//' . $this->upload_domain . $bg_image_url;
 						}
-						$args          = array();
-						$element_class = $this->get_attribute( $element, 'class' );
-						if ( false !== strpos( $element_class, 'alignfull' ) && current_theme_supports( 'align-wide' ) ) {
-							$args['w'] = apply_filters( 'exactdn_full_align_bgimage_width', 1920, $bg_image_url );
-						} elseif ( false !== strpos( $element_class, 'wp-block-cover' ) && false !== strpos( $element_class, 'has-parallax' ) ) {
-							$args['w'] = apply_filters( 'exactdn_wp_cover_parallax_bgimage_width', 1920, $bg_image_url );
-						} elseif ( false !== strpos( $element_class, 'alignwide' ) && current_theme_supports( 'align-wide' ) ) {
-							$args['w'] = apply_filters( 'exactdn_wide_align_bgimage_width', 1500, $bg_image_url );
-						} elseif ( false !== strpos( $element_class, 'et_parallax_bg' ) ) {
-							$args['w'] = apply_filters( 'exactdn_et_parallax_bgimage_width', 1920, $bg_image_url );
-						} elseif ( 'div' === $tag_type && $content_width ) {
-							$args['w'] = apply_filters( 'exactdn_content_bgimage_width', $content_width, $bg_image_url );
+
+						if ( $this->validate_image_url( $bg_image_url ) ) {
+							/** This filter is already documented in class-exactdn.php */
+							if ( apply_filters( 'exactdn_skip_image', false, $bg_image_url, $element ) ) {
+								continue;
+							}
+							$args          = array();
+							$element_class = $this->get_attribute( $element, 'class' );
+							if ( false !== strpos( $element_class, 'alignfull' ) && current_theme_supports( 'align-wide' ) ) {
+								$args['w'] = apply_filters( 'exactdn_full_align_bgimage_width', 1920, $bg_image_url );
+							} elseif ( false !== strpos( $element_class, 'wp-block-cover' ) && false !== strpos( $element_class, 'has-parallax' ) ) {
+								$args['w'] = apply_filters( 'exactdn_wp_cover_parallax_bgimage_width', 1920, $bg_image_url );
+							} elseif ( false !== strpos( $element_class, 'alignwide' ) && current_theme_supports( 'align-wide' ) ) {
+								$args['w'] = apply_filters( 'exactdn_wide_align_bgimage_width', 1500, $bg_image_url );
+							} elseif ( false !== strpos( $element_class, 'et_parallax_bg' ) ) {
+								$args['w'] = apply_filters( 'exactdn_et_parallax_bgimage_width', 1920, $bg_image_url );
+							} elseif ( 'div' === $tag_type && $content_width ) {
+								$args['w'] = apply_filters( 'exactdn_content_bgimage_width', $content_width, $bg_image_url );
+							}
+							if ( ( isset( $args['w'] ) && empty( $args['w'] ) ) || ! $bg_autoscale ) {
+								unset( $args['w'] );
+							}
+							$exactdn_bg_image_url = $this->generate_url( $bg_image_url, $args );
+							if ( $bg_image_url !== $exactdn_bg_image_url ) {
+								$new_style = str_replace( $orig_bg_url, $exactdn_bg_image_url, $new_style );
+							}
 						}
-						if ( isset( $args['w'] ) && empty( $args['w'] ) ) {
-							unset( $args['w'] );
-						}
-						$exactdn_bg_image_url = $this->generate_url( $bg_image_url, $args );
-						if ( $bg_image_url !== $exactdn_bg_image_url ) {
-							$new_style = str_replace( $orig_bg_url, $exactdn_bg_image_url, $style );
-							$element   = str_replace( $style, $new_style, $element );
-						}
+					}
+					if ( $style !== $new_style ) {
+						$element = str_replace( $style, $new_style, $element );
 					}
 					if ( $element !== $elements[ $index ] ) {
 						$content = str_replace( $elements[ $index ], $element, $content );
@@ -1805,8 +1858,8 @@ if ( ! class_exists( 'ExactDN' ) ) {
 					$this->debug_message( 'searching for #(https?:)?//(?:www\.)?' . $escaped_upload_domain . $this->remove_path . '/#i and replacing with $1//' . $this->exactdn_domain . '/' );
 					$content = preg_replace( '#(https?:)?//(?:www\.)?' . $escaped_upload_domain . $this->remove_path . '/#i', '$1//' . $this->exactdn_domain . '/', $content );
 				} else {
-					$this->debug_message( 'searching for #(https?:)?//(?:www\.)?' . $escaped_upload_domain . '/([^"\'?&>]+?)?(nextgen-image|' . $this->include_path . '|' . $this->content_path . ')/#i and replacing with $1//' . $this->exactdn_domain . '/$2$3/' );
-					$content = preg_replace( '#(https?:)?//(?:www\.)?' . $escaped_upload_domain . '/([^"\'?>]+?)?(nextgen-image|' . $this->include_path . '|' . $this->content_path . ')/#i', '$1//' . $this->exactdn_domain . '/$2$3/', $content );
+					$this->debug_message( 'searching for #(https?:)?//(?:www\.)?' . $escaped_upload_domain . '(/[^"\'?&>:/]+?)*?/(nextgen-image|' . $this->include_path . '|' . $this->content_path . ')/#i and replacing with $1//' . $this->exactdn_domain . '$2/$3/' );
+					$content = preg_replace( '#(https?:)?//(?:www\.)?' . $escaped_upload_domain . '(/[^"\'?&>:/]+?)*?/(nextgen-image|' . $this->include_path . '|' . $this->content_path . ')/#i', '$1//' . $this->exactdn_domain . '$2/$3/', $content );
 				}
 				$content = str_replace( '?wpcontent-bypass?', $this->content_path, $content );
 			}
@@ -1827,6 +1880,9 @@ if ( ! class_exists( 'ExactDN' ) ) {
 			if ( ! empty( $_REQUEST['action'] ) && 'alm_get_posts' === $_REQUEST['action'] ) { // phpcs:ignore WordPress.Security.NonceVerification
 				return true;
 			}
+			if ( ! empty( $_POST['action'] ) && 'do_filter_products' === $_POST['action'] ) { // phpcs:ignore WordPress.Security.NonceVerification
+				return true;
+			}
 			if ( ! empty( $_POST['action'] ) && 'eddvbugm_viewport_downloads' === $_POST['action'] ) { // phpcs:ignore WordPress.Security.NonceVerification
 				return true;
 			}
@@ -1834,6 +1890,9 @@ if ( ! class_exists( 'ExactDN' ) ) {
 				return true;
 			}
 			if ( ! empty( $_POST['action'] ) && 'filter_listing' === $_POST['action'] && ! empty( $_POST['layout'] ) && ! empty( $_POST['paged'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
+				return true;
+			}
+			if ( ! empty( $_POST['action'] ) && 'load_more_posts' === $_POST['action'] ) { // phpcs:ignore WordPress.Security.NonceVerification
 				return true;
 			}
 			if ( ! empty( $_POST['action'] ) && 'mabel-rpn-getnew-purchased-products' === $_POST['action'] ) { // phpcs:ignore WordPress.Security.NonceVerification
@@ -1938,6 +1997,10 @@ if ( ! class_exists( 'ExactDN' ) ) {
 			if ( apply_filters( 'exactdn_override_image_downsize', false, compact( 'image', 'attachment_id', 'size' ) ) ) {
 				return $image;
 			}
+			// Make it easier to skip all images by URI.
+			if ( apply_filters( 'exactdn_skip_page', false, $this->request_uri ) ) {
+				return $image;
+			}
 
 			if ( function_exists( 'aq_resize' ) ) {
 				$this->debug_message( 'aq_resize detected, image_downsize filter bypassed' );
@@ -1986,7 +2049,9 @@ if ( ! class_exists( 'ExactDN' ) ) {
 
 				// If an image is requested with a size known to WordPress, use that size's settings with ExactDN.
 				if ( is_string( $size ) && array_key_exists( $size, $this->image_sizes() ) ) {
+					// Get all the size data.
 					$image_args = $this->image_sizes();
+					// Then retrieve just the one size from the full list stored in $image_args.
 					$image_args = $image_args[ $size ];
 					$this->debug_message( "image args for $size: " . $this->implode( ',', $image_args ) );
 
@@ -1994,11 +2059,17 @@ if ( ! class_exists( 'ExactDN' ) ) {
 
 					$image_meta = image_get_intermediate_size( $attachment_id, $size );
 
+					// Tracking this separately, because the width/height from the $image_meta might get blown out.
+					$full_width  = false;
+					$full_height = false;
+
 					// 'full' is a special case: We need consistent data regardless of the requested size.
 					if ( 'full' === $size ) {
 						$image_meta   = wp_get_attachment_metadata( $attachment_id );
 						$intermediate = false;
 						$got_meta     = true;
+						$full_width   = ! empty( $image_meta['width'] ) ? (int) $image_meta['width'] : false;
+						$full_height  = ! empty( $image_meta['height'] ) ? (int) $image_meta['height'] : false;
 					} elseif ( ! $image_meta ) {
 						$this->debug_message( 'still do not have meta, getting it now' );
 						// If we still don't have any image meta at this point, it's probably from a custom thumbnail size
@@ -2007,17 +2078,27 @@ if ( ! class_exists( 'ExactDN' ) ) {
 						$got_meta   = true;
 
 						if ( isset( $image_meta['width'], $image_meta['height'] ) ) {
+							$full_width    = ! empty( $image_meta['width'] ) ? (int) $image_meta['width'] : false;
+							$full_height   = ! empty( $image_meta['height'] ) ? (int) $image_meta['height'] : false;
 							$image_resized = image_resize_dimensions( $image_meta['width'], $image_meta['height'], $image_args['width'], $image_args['height'], $image_args['crop'] );
 							if ( $image_resized ) { // This could be false when the requested image size is larger than the full-size image.
+								// The new dimensions here are what we'd use to crop/scale the image. If crop is truthy, then the dimensions
+								// will not match the original dimensions. This is why we track $full_width/$full_height separately.
+								$this->debug_message( 'new full-size parameters, 6 and 7 are the scaled dimensions:' );
+								if ( is_array( $image_resized ) ) {
+									$this->debug_message( implode( ', ', $image_resized ) );
+								}
 								$image_meta['width']  = $image_resized[6];
 								$image_meta['height'] = $image_resized[7];
 							}
 						}
 					}
 					if ( isset( $image_meta['width'], $image_meta['height'] ) ) {
+						// This might seem strange, but we'll constrain this by size name ($size) shortly.
 						$image_args['width']  = $image_meta['width'];
 						$image_args['height'] = $image_meta['height'];
 
+						// Make the custom $content_width apply here.
 						global $content_width;
 						if ( defined( 'EXACTDN_CONTENT_WIDTH' ) && ! empty( $content_width ) ) {
 							$real_content_width = $content_width;
@@ -2025,6 +2106,7 @@ if ( ! class_exists( 'ExactDN' ) ) {
 						}
 						// NOTE: it will constrain an image to $content_width which is expected behavior in core, so far as I can see.
 						list( $image_args['width'], $image_args['height'] ) = image_constrain_size_for_editor( $image_args['width'], $image_args['height'], $size, 'display' );
+						// And then set $content_width back to normal.
 						if ( defined( 'EXACTDN_CONTENT_WIDTH' ) && ! empty( $real_content_width ) ) {
 							$content_width = $real_content_width;
 						}
@@ -2047,7 +2129,9 @@ if ( ! class_exists( 'ExactDN' ) ) {
 							$size_meta = $image_meta;
 							// Because we don't have the "real" meta, just the height/width for the specific size.
 							$this->debug_message( 'getting attachment meta now' );
-							$image_meta = wp_get_attachment_metadata( $attachment_id );
+							$image_meta  = wp_get_attachment_metadata( $attachment_id );
+							$full_width  = ! empty( $image_meta['width'] ) ? (int) $image_meta['width'] : false;
+							$full_height = ! empty( $image_meta['height'] ) ? (int) $image_meta['height'] : false;
 						}
 						if ( 'resize' === $transform && $image_meta && isset( $image_meta['width'], $image_meta['height'] ) ) {
 							// Lets make sure that we don't upscale images since wp never upscales them as well.
@@ -2061,9 +2145,9 @@ if ( ! class_exists( 'ExactDN' ) ) {
 					}
 
 					if (
-						! empty( $image_meta['sizes'] ) && ! empty( $image_meta['width'] ) && ! empty( $image_meta['height'] ) &&
-						(int) $image_args['width'] === (int) $image_meta['width'] &&
-						(int) $image_args['height'] === (int) $image_meta['height']
+						$full_width && $full_height &&
+						(int) $image_args['width'] === (int) $full_width &&
+						(int) $image_args['height'] === (int) $full_height
 					) {
 						$this->debug_message( 'image args match size of original, just use that' );
 						$size = 'full';
@@ -2270,13 +2354,15 @@ if ( ! class_exists( 'ExactDN' ) ) {
 			) {
 				return $sources;
 			}
+			if ( apply_filters( 'exactdn_skip_page', false, $this->request_uri ) ) {
+				return $sources;
+			}
 
 			if ( ! is_array( $sources ) ) {
 				return $sources;
 			}
 
 			$this->debug_message( "image_src = $image_src" );
-			$upload_dir      = wp_get_upload_dir();
 			$resize_existing = defined( 'EXACTDN_RESIZE_EXISTING' ) && EXACTDN_RESIZE_EXISTING;
 			$w_descriptor    = true;
 
@@ -2315,10 +2401,16 @@ if ( ! class_exists( 'ExactDN' ) ) {
 				$this->debug_message( 'continuing: ' . $width . ' vs. ' . $source['value'] );
 
 				// It's quicker to get the full size with the data we have already, if available.
-				if ( ! empty( $attachment_id ) ) {
-					$url = wp_get_attachment_url( $attachment_id );
+				if ( ! empty( $full_url ) ) {
+					$url = $full_url;
+				} elseif ( ! empty( $attachment_id ) ) {
+					$full_url = wp_get_attachment_url( $attachment_id );
+					$url      = $full_url;
 				} else {
-					$url = $this->strip_image_dimensions_maybe( $url );
+					$full_url = $this->strip_image_dimensions_maybe( $url );
+					if ( $full_url === $url ) {
+						$full_url = '';
+					}
 				}
 				$this->debug_message( "building srcs from $url" );
 
@@ -2349,8 +2441,40 @@ if ( ! class_exists( 'ExactDN' ) ) {
 			 */
 			$multipliers = apply_filters( 'exactdn_srcset_multipliers', array( .2, .4, .6, .8, 1, 2, 3, 1920 ) );
 
-			$this->debug_message( "building url from {$upload_dir['baseurl']} and {$image_meta['file']}" );
-			$url = trailingslashit( $upload_dir['baseurl'] ) . $image_meta['file'];
+			if ( empty( $url ) || empty( $multipliers ) ) {
+				// No URL, or no multipliers, bail!
+				return $sources;
+			}
+
+			if ( ! empty( $full_url ) ) {
+				$this->debug_message( "already built url via db: $full_url" );
+				$url = $full_url;
+			} elseif ( 0 === strpos( $image_meta['file'], '/' ) ) {
+				$this->debug_message( 'full meta appears to be absolute path, retrieving URL via wp_get_attachment_url()' );
+				$url = \wp_get_attachment_url( $attachment_id );
+			} else {
+				$base_dir  = \dirname( $url );
+				$meta_file = $image_meta['file'];
+				$this->debug_message( "checking to see if we can join $base_dir with $meta_file" );
+				if ( false !== \strpos( $meta_file, '/' ) ) {
+					$meta_dir = \dirname( $meta_file );
+					if ( \str_ends_with( $base_dir, $meta_dir ) ) {
+						$meta_file = \wp_basename( $meta_file );
+						$this->debug_message( "trimmed file down to $meta_file" );
+					} else {
+						// This happens if there is object versioning, or thumbs in a sub-folder.
+						$this->debug_message( "could not splice $base_dir and $meta_file" );
+						$base_dir = false;
+					}
+				}
+				if ( $base_dir ) {
+					$this->debug_message( "building url from $base_dir and $meta_file" );
+					$url = \trailingslashit( $base_dir ) . $meta_file;
+				} else {
+					$this->debug_message( 'splicing disabled previously, or empty base_dir, so retrieving URL via wp_get_attachment_url()' );
+					$url = \wp_get_attachment_url( $attachment_id );
+				}
+			}
 
 			if ( ! $w_descriptor ) {
 				$this->debug_message( 'using x descriptors instead of w' );
@@ -2359,15 +2483,17 @@ if ( ! class_exists( 'ExactDN' ) ) {
 
 			if (
 				/** Short-circuit via exactdn_srcset_multipliers filter. */
-				is_array( $multipliers )
+				is_array( $multipliers ) &&
+				/** This isn't an SVG image. */
+				'.svg' !== strtolower( substr( $image_meta['file'], -4 ) ) &&
 				/** This filter is already documented in class-exactdn.php */
-				&& ! apply_filters( 'exactdn_skip_image', false, $url, null )
+				! apply_filters( 'exactdn_skip_image', false, $url, null ) &&
 				/** The original url is valid/allowed. */
-				&& $this->validate_image_url( $url )
+				$this->validate_image_url( $url ) &&
 				/** Verify basic meta is intact. */
-				&& isset( $image_meta['width'] ) && isset( $image_meta['height'] ) && isset( $image_meta['file'] )
+				isset( $image_meta['width'] ) && isset( $image_meta['height'] ) && isset( $image_meta['file'] ) &&
 				/** Verify we have the requested width/height. */
-				&& isset( $size_array[0] ) && isset( $size_array[1] )
+				isset( $size_array[0] ) && isset( $size_array[1] )
 			) {
 
 				$fullwidth  = $image_meta['width'];
@@ -2461,6 +2587,9 @@ if ( ! class_exists( 'ExactDN' ) ) {
 			$started = microtime( true );
 			$this->debug_message( '<b>' . __METHOD__ . '()</b>' );
 			if ( ! doing_filter( 'the_content' ) ) {
+				return $sizes;
+			}
+			if ( apply_filters( 'exactdn_skip_page', false, $this->request_uri ) ) {
 				return $sizes;
 			}
 			$content_width = $this->get_content_width();
@@ -2640,8 +2769,26 @@ if ( ! class_exists( 'ExactDN' ) ) {
 				add_filter( 'exactdn_override_image_downsize', '__return_true', PHP_INT_MAX );
 				add_filter( 'exactdn_skip_image', '__return_true', PHP_INT_MAX ); // This skips existing srcset indices.
 				add_filter( 'exactdn_srcset_multipliers', '__return_false', PHP_INT_MAX ); // This one skips the additional multipliers.
+			} elseif ( is_string( $route ) && false !== strpos( $route, 'wp/v2/media/' ) && ! empty( $request['context'] ) && 'view' === $request['context'] ) {
+				$this->debug_message( 'REST API media endpoint, could be editor, we may never know...' );
+				// We don't want ExactDN urls anywhere near the editor, so disable everything we can.
+				add_filter( 'exactdn_override_image_downsize', '__return_true', PHP_INT_MAX );
+				add_filter( 'exactdn_skip_image', '__return_true', PHP_INT_MAX ); // This skips existing srcset indices.
+				add_filter( 'exactdn_srcset_multipliers', '__return_false', PHP_INT_MAX ); // This one skips the additional multipliers.
 			} elseif ( is_string( $route ) && false !== strpos( $route, 'wp/v2/media' ) && ! empty( $request['post'] ) && ! empty( $request->get_file_params() ) ) {
 				$this->debug_message( 'REST API media endpoint (new upload)' );
+				// We don't want ExactDN urls anywhere near the editor, so disable everything we can.
+				add_filter( 'exactdn_override_image_downsize', '__return_true', PHP_INT_MAX );
+				add_filter( 'exactdn_skip_image', '__return_true', PHP_INT_MAX ); // This skips existing srcset indices.
+				add_filter( 'exactdn_srcset_multipliers', '__return_false', PHP_INT_MAX ); // This one skips the additional multipliers.
+			} elseif ( is_string( $route ) && false !== strpos( $route, '/ToolsetBlocks/' ) ) {
+				$this->debug_message( 'REST API media endpoint (ToolsetBlocks)' );
+				// We don't want ExactDN urls anywhere near the editor, so disable everything we can.
+				add_filter( 'exactdn_override_image_downsize', '__return_true', PHP_INT_MAX );
+				add_filter( 'exactdn_skip_image', '__return_true', PHP_INT_MAX ); // This skips existing srcset indices.
+				add_filter( 'exactdn_srcset_multipliers', '__return_false', PHP_INT_MAX ); // This one skips the additional multipliers.
+			} elseif ( is_string( $route ) && false !== strpos( $route, '/toolset-dynamic-sources/' ) ) {
+				$this->debug_message( 'REST API media endpoint (toolset-dynamic-sources)' );
 				// We don't want ExactDN urls anywhere near the editor, so disable everything we can.
 				add_filter( 'exactdn_override_image_downsize', '__return_true', PHP_INT_MAX );
 				add_filter( 'exactdn_skip_image', '__return_true', PHP_INT_MAX ); // This skips existing srcset indices.
@@ -2778,15 +2925,28 @@ if ( ! class_exists( 'ExactDN' ) ) {
 			// Build URL, first removing WP's resized string so we pass the original image to ExactDN.
 			if ( preg_match( '#(-\d+x\d+)\.(' . implode( '|', $this->extensions ) . '){1}(?:\?.+)?$#i', $src, $src_parts ) ) {
 				$stripped_src = str_replace( $src_parts[1], '', $src );
-				$upload_dir   = wp_get_upload_dir();
+				$scaled_src   = str_replace( $src_parts[1], '-scaled', $src );
 
-				// Extracts the file path to the image minus the base url.
-				$file_path = substr( $stripped_src, strlen( $upload_dir['baseurl'] ) );
-
-				if ( is_file( $upload_dir['basedir'] . $file_path ) ) {
-					$src = $stripped_src;
+				$file = false;
+				if ( $this->allowed_urls && $this->allowed_domains ) {
+					$file = $this->cdn_to_local( $src );
 				}
-				$this->debug_message( 'stripped dims' );
+				if ( ! $file ) {
+					$file = $this->url_to_path_exists( $src );
+				}
+				if ( $file ) {
+					// Extracts the file path to the image minus the base url.
+					$file_path   = str_replace( $src_parts[1], '', $file );
+					$scaled_path = str_replace( $src_parts[1], '-scaled', $file );
+
+					if ( $this->is_file( $file_path ) ) {
+						$src = $stripped_src;
+						$this->debug_message( 'stripped dims to original' );
+					} elseif ( $this->is_file( $scaled_path ) ) {
+						$src = $scaled_src;
+						$this->debug_message( 'stripped dims to scaled' );
+					}
+				}
 			}
 			return $src;
 		}
@@ -2911,10 +3071,6 @@ if ( ! class_exists( 'ExactDN' ) ) {
 		function filter_facetwp_json_output( $output ) {
 			$this->debug_message( '<b>' . __METHOD__ . '()</b>' );
 			if ( empty( $output['template'] ) || ! is_string( $output['template'] ) ) {
-				$this->debug_message( 'no template data available' );
-				if ( $this->function_exists( 'print_r' ) ) {
-					$this->debug_message( print_r( $output, true ) );
-				}
 				return $output;
 			}
 			$this->filtering_the_page = true;
@@ -2929,10 +3085,10 @@ if ( ! class_exists( 'ExactDN' ) ) {
 		}
 
 		/**
-		 * Handle direct image urls within Plugins.
+		 * Handle direct image URLs within Plugins.
 		 *
-		 * @param string $image A url for an image.
-		 * @return string The ExactDNified image url.
+		 * @param string $image A URL for an image.
+		 * @return string The ExactDNified image URL.
 		 */
 		function plugin_get_image_url( $image ) {
 			// Don't foul up the admin side of things, unless a plugin wants to.
@@ -3033,6 +3189,9 @@ if ( ! class_exists( 'ExactDN' ) ) {
 			if ( strpos( $image_url, 'public/images/spacer.' ) ) {
 				return array();
 			}
+			if ( strpos( $image_url, '/images/default/blank.gif' ) ) {
+				return array();
+			}
 			if ( '.svg' === substr( $image_url, -4 ) ) {
 				return array();
 			}
@@ -3049,6 +3208,21 @@ if ( ! class_exists( 'ExactDN' ) ) {
 		 * @return boolean True to skip the page, unchanged otherwise.
 		 */
 		function skip_page( $skip = false, $uri = '' ) {
+			if ( $this->is_iterable( $this->user_page_exclusions ) ) {
+				foreach ( $this->user_page_exclusions as $page_exclusion ) {
+					if ( '/' === $page_exclusion && '/' === $uri ) {
+						return true;
+					} elseif ( '/' === $page_exclusion ) {
+						continue;
+					}
+					if ( false !== strpos( $uri, $page_exclusion ) ) {
+						return true;
+					}
+				}
+			}
+			if ( false !== strpos( $uri, 'bricks=run' ) ) {
+				return true;
+			}
 			if ( false !== strpos( $uri, '?brizy-edit' ) ) {
 				return true;
 			}
@@ -3074,6 +3248,9 @@ if ( ! class_exists( 'ExactDN' ) ) {
 				return true;
 			}
 			if ( false !== strpos( $uri, '?fl_builder' ) ) {
+				return true;
+			}
+			if ( false !== strpos( $uri, 'is-editor-iframe=' ) ) {
 				return true;
 			}
 			if ( false !== strpos( $uri, 'tatsu=' ) ) {
@@ -3114,6 +3291,12 @@ if ( ! class_exists( 'ExactDN' ) ) {
 		 */
 		function parse_enqueue( $url ) {
 			if ( is_admin() ) {
+				return $url;
+			}
+			if ( function_exists( 'affwp_is_affiliate_portal' ) && affwp_is_affiliate_portal() ) {
+				return $url;
+			}
+			if ( apply_filters( 'exactdn_skip_page', false, $this->request_uri ) ) {
 				return $url;
 			}
 			if ( did_action( 'cornerstone_boot_app' ) || did_action( 'cs_before_preview_frame' ) ) {
@@ -3266,6 +3449,7 @@ if ( ! class_exists( 'ExactDN' ) ) {
 
 			$jpg_quality  = apply_filters( 'jpeg_quality', null, 'image_resize' );
 			$webp_quality = apply_filters( 'webp_quality', 75, 'image/webp' );
+			$avif_quality = apply_filters( 'avif_quality', 45, 'image/avif' );
 
 			$more_args = array();
 			if ( false === strpos( $image_url, 'strip=all' ) && $this->get_option( $this->prefix . 'metadata_remove' ) ) {
@@ -3276,22 +3460,26 @@ if ( ! class_exists( 'ExactDN' ) ) {
 				unset( $args['lossy'] );
 			} elseif ( isset( $args['lossy'] ) && false !== strpos( $image_url, 'lossy=0' ) ) {
 				unset( $args['lossy'] );
-			} elseif ( $this->plan_id > 1 && false === strpos( $image_url, 'lossy=' ) && ! $this->get_option( 'exactdn_lossy' ) ) {
+			} elseif ( false === strpos( $image_url, 'lossy=' ) && ! $this->get_option( 'exactdn_lossy' ) ) {
 				$more_args['lossy'] = 0;
-			} elseif ( false === strpos( $image_url, 'lossy=' ) && 1 === $this->plan_id ) {
-				$more_args['lossy'] = 1;
 			} elseif ( false === strpos( $image_url, 'lossy=' ) && $this->get_option( 'exactdn_lossy' ) ) {
-				$more_args['lossy'] = is_numeric( $this->get_option( 'exactdn_lossy' ) ) ? (int) $this->get_option( 'exactdn_lossy' ) : 80;
+				$more_args['lossy'] = is_numeric( $this->get_option( 'exactdn_lossy' ) ) ? (int) $this->get_option( 'exactdn_lossy' ) : 1;
 			}
-			if ( $this->plan_id > 1 && false === strpos( $image_url, 'quality=' ) && ! is_null( $jpg_quality ) && 82 !== (int) $jpg_quality ) {
+			if ( false === strpos( $image_url, 'quality=' ) && ! is_null( $jpg_quality ) && 82 !== (int) $jpg_quality ) {
 				$more_args['quality'] = $jpg_quality;
 			}
-			if ( $this->plan_id > 1 && false === strpos( $image_url, 'quality=' ) && 75 !== (int) $webp_quality && $webp_quality < $jpg_quality ) {
-				$more_args['quality'] = $webp_quality;
+			if ( false === strpos( $image_url, 'webp=' ) && 75 !== (int) $webp_quality ) {
+				$more_args['webp'] = $webp_quality;
+			}
+			if ( false === strpos( $image_url, 'avif=' ) && 45 !== (int) $avif_quality ) {
+				$more_args['avif'] = $avif_quality;
 			}
 			if ( defined( 'EIO_WEBP_SHARP_YUV' ) && EIO_WEBP_SHARP_YUV ) {
 				$more_args['sharp'] = 1;
+			} elseif ( $this->get_option( $this->prefix . 'sharpen' ) ) {
+				$more_args['sharp'] = 1;
 			}
+
 			// Merge given args with the automatic (option-based) args, and also makes sure args is an array if it was previously a string.
 			$args = wp_parse_args( $args, $more_args );
 

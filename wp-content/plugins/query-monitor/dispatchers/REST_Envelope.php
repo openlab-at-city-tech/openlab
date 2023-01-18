@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 /**
  * REST API enveloped request dispatcher.
  *
@@ -18,9 +18,9 @@ class QM_Dispatcher_REST_Envelope extends QM_Dispatcher {
 	/**
 	 * Filters the enveloped form of a REST API response to add QM's data.
 	 *
-	 * @param array            $envelope Envelope data.
-	 * @param WP_REST_Response $response Original response data.
-	 * @return array Envelope data.
+	 * @param array<string, mixed> $envelope Envelope data.
+	 * @param WP_REST_Response     $response Original response data.
+	 * @return array<string, mixed> Envelope data.
 	 */
 	public function filter_rest_envelope_response( array $envelope, WP_REST_Response $response ) {
 		if ( ! $this->should_dispatch() ) {
@@ -33,7 +33,7 @@ class QM_Dispatcher_REST_Envelope extends QM_Dispatcher {
 
 		/* @var QM_Output_Raw[] */
 		foreach ( $this->get_outputters( 'raw' ) as $id => $output ) {
-			$data[ $id ] = $output->output();
+			$data[ $id ] = $output->get_output();
 		}
 
 		$this->after_output();
@@ -43,14 +43,18 @@ class QM_Dispatcher_REST_Envelope extends QM_Dispatcher {
 		return $envelope;
 	}
 
+	/**
+	 * @return void
+	 */
 	protected function before_output() {
-		require_once $this->qm->plugin_path( 'output/Raw.php' );
-
-		foreach ( glob( $this->qm->plugin_path( 'output/raw/*.php' ) ) as $file ) {
+		foreach ( (array) glob( $this->qm->plugin_path( 'output/raw/*.php' ) ) as $file ) {
 			include_once $file;
 		}
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function is_active() {
 		if ( ! self::user_can_view() ) {
 			return false;
@@ -61,6 +65,11 @@ class QM_Dispatcher_REST_Envelope extends QM_Dispatcher {
 
 }
 
+/**
+ * @param array<string, QM_Dispatcher> $dispatchers
+ * @param QM_Plugin $qm
+ * @return array<string, QM_Dispatcher>
+ */
 function register_qm_dispatcher_rest_envelope( array $dispatchers, QM_Plugin $qm ) {
 	$dispatchers['rest_envelope'] = new QM_Dispatcher_REST_Envelope( $qm );
 	return $dispatchers;

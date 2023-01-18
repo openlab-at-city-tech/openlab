@@ -68,6 +68,10 @@ function openlab_register_embed_handlers() {
 		. '#',
 		'openlab_pinterest_embed_handler'
 	);
+
+	wp_embed_register_handler( 'miro', '#https?://(?:[a-z]{2}\.)?miro\.com/#i', 'openlab_embed_handler_miro' );
+	wp_embed_register_handler( 'desmos', '#https?://([^\.]+)\.desmos\.com/#i', 'openlab_embed_handler_desmos' );
+	wp_embed_register_handler( 'geogebra', '#https?://([^\.]+)\.geogebra\.org/#i', 'openlab_embed_handler_geogebra' );
 }
 add_action( 'init', 'openlab_register_embed_handlers' );
 
@@ -147,4 +151,83 @@ function openlab_pinterest_embed_handler( $matches, $attr, $url ) {
 	}
 
 	return $return;
+}
+
+/**
+ * Miro.com embed callback
+ */
+function openlab_embed_handler_miro( $matches, $attr, $url ) {
+	$path = parse_url( $url, PHP_URL_PATH );
+
+	// Create array and remove empty values
+	$path = array_filter( explode( '/', $path ) );
+
+	// ID is always last in the array
+	$id = end($path);
+
+	$embed = sprintf(
+		'<div class="miro-iframe-container" style="position: relative; width: 100%%; height: 0; padding-bottom: 56.25%%;">
+		<iframe
+			src="https://miro.com/app/live-embed/%s?embedAutoplay=true"
+			style="position: absolute; top: 0; left: 0; width:100%%; height:100%%; border: 0;"
+			frameborder=0
+			scrolling="no"
+			allowFullScreen>
+		</iframe>
+		</div>',
+		esc_attr( $id )
+	);
+
+	return $embed;
+}
+
+/**
+ * Desmos.com embed callback
+ */
+function openlab_embed_handler_desmos( $matches, $attr, $url, $rawattr ) {
+	$path = parse_url( $url, PHP_URL_PATH );
+
+	// Create array and remove empty values
+	$path = array_filter( explode( '/', $path ) );
+
+	// ID is always last in the array
+	$id = end($path);
+
+	$embed = sprintf(
+		'<div class="desmos-iframe-container" style="position: relative; width: 100%%; height: 0; padding-bottom: 56.25%%;">
+		<iframe
+			src="https://www.desmos.com/calculator/%s?embed"
+			style="position: absolute; top: 0; left: 0; width:100%%; height:100%%; border: 0;" frameborder=0>
+		</iframe>
+		</div>',
+		esc_attr( $id )
+	);
+
+	return $embed;
+}
+
+/**
+ * Geogebra.org embed callback
+ */
+function openlab_embed_handler_geogebra( $matches, $attr, $url ) {
+	$path = parse_url( $url, PHP_URL_PATH );
+
+	// Create array and remove empty values
+	$path = array_filter( explode( '/', $path ) );
+
+	// ID is always last in the array
+	$id = end($path);
+
+	$embed = sprintf(
+		'<div class="geogebra-iframe-container" style="position: relative; width: 100%%; height: 0; padding-bottom: 56.25%%;">
+		<iframe
+			scrolling="no"
+			src="https://www.geogebra.org/material/iframe/id/%s/rc/true/ai/true/sdz/true/smb/true/stb/true/stbh/true/ld/false/sri/false/sfsb/true/szb/true"
+			style="position: absolute; top: 0; left: 0; width:100%%; height:100%%; border: 0;" allowfullscreen>
+		</iframe>
+		</div>',
+		esc_attr( $id )
+	);
+
+	return $embed;
 }

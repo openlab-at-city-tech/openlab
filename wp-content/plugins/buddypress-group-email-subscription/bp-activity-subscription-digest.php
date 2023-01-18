@@ -202,9 +202,7 @@ function bpges_generate_digest( $user_id, $type, $group_activity_ids, $is_previe
 		$group_permalink = ass_get_login_redirect_url( bp_get_group_permalink( $group ) );
 
 		// Might be nice here to link to anchor tags in the message.
-		if ( 'dig' == $type ) {
-			$summary .= apply_filters( 'ass_digest_summary', "<li class=\"digest-group-summary\" {$ass_email_css['summary']}><a href='{$group_permalink}'>$group_name</a> " . sprintf( __( '(%s items)', 'buddypress-group-email-subscription' ), count( $activity_ids ) ) ."</li>\n", $ass_email_css['summary'], $group_slug, $group_name, $activity_ids );
-		}
+		$summary .= apply_filters( 'ass_digest_summary', "<li class=\"digest-group-summary\" {$ass_email_css['summary']}><a href='{$group_permalink}'>$group_name</a> " . sprintf( __( '(%s items)', 'buddypress-group-email-subscription' ), count( $activity_ids ) ) ."</li>\n", $ass_email_css['summary'], $group_slug, $group_name, $activity_ids );
 
 		$activity_message .= ass_digest_format_item_group( $group_id, $activity_ids, $type, $group_name, $group_slug, $user_id );
 
@@ -217,8 +215,20 @@ function bpges_generate_digest( $user_id, $type, $group_activity_ids, $is_previe
 	}
 
 	// show group summary for digest, and follow help text for weekly summary
-	if ( 'dig' == $type ) {
-		$message .= apply_filters( 'ass_digest_summary_full', __( 'Group Summary', 'buddypress-group-email-subscription') . ":\n<ul class=\"digest-group-summaries\" {$ass_email_css['summary_ul']}>" .  $summary . "</ul>", $ass_email_css['summary_ul'], $summary );
+	$summary = apply_filters( 'ass_digest_summary_full', __( 'Group Summary', 'buddypress-group-email-subscription') . ":\n<ul class=\"digest-group-summaries\" {$ass_email_css['summary_ul']}>" .  $summary . "</ul>", $ass_email_css['summary_ul'], $summary );
+
+	/**
+	 * Filters whether the summary should be added to the digest.
+	 *
+	 * For legacy reasons, it's appended only to daily digests by default.
+	 *
+	 * @since 4.0.5
+	 *
+	 * @param bool $add_summary_to_digest
+	 */
+	$add_summary_to_digest = apply_filters( 'bpges_add_summary_to_digest', 'dig' === $type );
+	if ( $add_summary_to_digest ) {
+		$message .= $summary;
 	}
 
 	// the meat of the message which we generated above goes here

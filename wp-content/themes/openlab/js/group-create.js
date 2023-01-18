@@ -328,9 +328,6 @@ jQuery( document ).ready(
 						// Section Code
 						$( 'input[name="wds_section_code"]' ).val( r.section_code );
 
-						// Additional Description
-						$( 'textarea[name="wds_course_html"]' ).val( r.additional_description );
-
 						// Associated site
 						if ( r.site_id ) {
 							// Show the Site Details section.

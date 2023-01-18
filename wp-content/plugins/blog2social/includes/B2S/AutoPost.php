@@ -17,7 +17,7 @@ class B2S_AutoPost {
     private $optionPostFormat;
     private $allowHashTag;
     private $userVersion;
-    private $allowHtml = array(4, 11, 14);
+    private $allowHtml = array(4, 11, 14, 25);
     private $default_template;
 
     function __construct($postId = 0, $blogPostData = array(), $current_user_date = '0000-00-00 00:00:00', $myTimeSettings = false, $title = '', $content = '', $excerpt = '', $url = '', $imageUrl = '', $keywords = '', $b2sPostLang = 'en', $optionPostFormat = array(), $allowHashTag = true, $userVersion = 0) {
@@ -280,7 +280,7 @@ class B2S_AutoPost {
                     $hashTags = substr($hashTags, 0, $pos - 1);
                 }
             }
-            return (!empty($hashTags) ? (!empty($add) ? $add . $hashTags : $hashTags) : '');
+            return (!empty($hashTags) ? (!empty($add) ? $add . trim($hashTags) : trim($hashTags)) : '');
         } else {
             return '';
         }
@@ -398,7 +398,7 @@ class B2S_AutoPost {
                     'network_details_id' => $networkDetailsId,
                     'post_for_approve' => (int) $shareApprove,
                     'hook_action' => (((int) $shareApprove == 0) ? 1 : 0),
-                    'post_format' => (($shareData['post_format'] !== '') ? (((int) $shareData['post_format'] > 0) ? 1 : 0) : null)
+                    'post_format' => ((isset($shareData['post_format']) && $shareData['post_format'] !== '') ? (((int) $shareData['post_format'] > 0) ? 1 : 0) : null)
                         ), array('%d', '%d', '%s', '%s', '%d', '%d', '%s', '%s', '%d', '%d', '%d'));
                 $insertId = $wpdb->insert_id;
                 B2S_Rating::trigger();

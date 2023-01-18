@@ -52,10 +52,10 @@ SQL;
 		// Check content is a different option depending on the method
 		$check_content = false;
 		if ( $method === 'media' ) {
-			$check_content = get_option( 'wpmc_content', true );
+			$check_content = $this->core->get_option( 'content' );
 		}
 		else if ( $method === 'files' ) {
-			$check_content = get_option( 'wpmc_filesystem_content', false );
+			$check_content = $this->core->get_option( 'filesystem_content' );
 		}
 
 		if ( $method == 'media' && !$check_content ) {
@@ -131,7 +131,7 @@ SQL;
 			$message = __( "Skipped, as it is not needed for the Media Library method.", 'media-cleaner' );
 			return true;
 		}
-		$check_library = get_option(' wpmc_media_library', true );
+		$check_library = $this->core->get_option( 'media_library' );
 		if ( !$check_library ) {
 			$message = __( "Skipped, as Media Library is not selected.", 'media-cleaner' );
 			return true;
@@ -192,9 +192,9 @@ WHERE p.post_status = 'inherit'
 $extraAnd
 AND p.post_type = 'attachment'
 SQL;
-		if ( get_option( 'wpmc_images_only' ) ) {
+		if ( $this->core->get_option( 'images_only' ) ) {
 			// Get only media entries which are images
-			$q .= " AND p.post_mime_type IN ( 'image/jpeg', 'image/gif', 'image/png',
+			$q .= " AND p.post_mime_type IN ( 'image/jpeg', 'image/gif', 'image/png', 'image/webp',
 				'image/bmp', 'image/tiff', 'image/x-icon', 'image/svg' )";
 		}
 
@@ -217,7 +217,27 @@ SQL;
 	}
 
 	function check_file( $file ) {
-		return apply_filters( 'wpmc_check_file', true, $file );
+		// Basically, wpmc_check_file returns either true if it's used, or
+		// the codename of the issue.
+		$issue = apply_filters( 'wpmc_check_file', false, $file );
+		$used = $issue === true;
+		if ( !$used ) {
+			global $wpdb;
+			$filepath = trailingslashit( $this->core->upload_path ) . stripslashes( $file );
+			$clean_path = $this->core->clean_uploaded_filename( $file );
+			$table_name = $wpdb->prefix . "mclean_scan";
+			$filesize = file_exists( $filepath ) ? filesize ($filepath) : 0;
+			$wpdb->insert( $table_name,
+				array(
+					'time' => current_time('mysql'),
+					'type' => 0,
+					'path' => $clean_path,
+					'size' => $filesize,
+					'issue' => $issue
+				)
+			);
+		}
+		return $used;
 	}
 
 }

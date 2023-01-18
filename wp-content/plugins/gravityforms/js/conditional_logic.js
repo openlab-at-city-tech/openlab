@@ -16,9 +16,12 @@ function gf_apply_rules(formId, fields, isInit){
 	jQuery(document).trigger( 'gform_pre_conditional_logic', [ formId, fields, isInit ] );
 	for(var i=0; i < fields.length; i++){
 		gf_apply_field_rule(formId, fields[i], isInit, function(){
-			jQuery(document).trigger('gform_post_conditional_logic', [formId, fields, isInit]);
-			if(window["gformCalculateTotalPrice"]){
-				window["gformCalculateTotalPrice"](formId);
+			var is_last_field = ( i >= fields.length - 1 );
+			if( is_last_field ) {
+				jQuery(document).trigger('gform_post_conditional_logic', [formId, fields, isInit]);
+				if(window["gformCalculateTotalPrice"]){
+					window["gformCalculateTotalPrice"](formId);
+				}
 			}
 		});
 	}
@@ -351,7 +354,24 @@ function gf_do_field_action(formId, action, fieldId, isInit, callback){
 		//calling callback function on the last dependent field, to make sure it is only called once
 		do_callback = (i+1) == dependent_fields.length ? callback : null;
 
-		gf_do_action(action, targetId, conditional_logic["animation"], defaultValues, isInit, do_callback, formId);
+		/**
+		 * Allow add-ons to abort gf_do_action() function.
+		 *
+		 * @since 2.6.2
+		 *
+		 * @param bool   $doAbort      The value being filtered. True to abort conditional logic action, false to continue. Defaults to false.
+		 * @param string $action       The conditional logic action that will be performed. Possible values: show or hide
+		 * @param string $targetId     HTML element id that will be the targed of the conditional logic action.
+		 * @param bool   $doAnimation  True to perform animation while showing/hiding field. False to hide/show field without animation.
+		 * @param array  $defaultValue Array containg default field values.
+		 * @param bool   $isInit       True if form is being initialized (i.e. before user has interacted with any input). False otherwise.
+		 * @param array  $formId       The current form ID.
+		 * @param func   $do_callback   Callback function to be executed after conditional logic is executed.
+		 */
+		let abort = gform.applyFilters( 'gform_abort_conditional_logic_do_action', false, action, targetId, conditional_logic[ "animation" ], defaultValues, isInit, formId, do_callback );
+		if ( ! abort ) {
+			gf_do_action( action, targetId, conditional_logic[ "animation" ], defaultValues, isInit, do_callback, formId );
+		}
 
 		gform.doAction('gform_post_conditional_logic_field_action', formId, action, targetId, defaultValues, isInit);
 	}
@@ -361,7 +381,24 @@ function gf_do_next_button_action(formId, action, fieldId, isInit){
 	var conditional_logic = window["gf_form_conditional_logic"][formId];
 	var targetId = "#gform_next_button_" + formId + "_" + fieldId;
 
-	gf_do_action(action, targetId, conditional_logic["animation"], null, isInit, null, formId);
+	/**
+	 * Allow add-ons to abort gf_do_action() function.
+	 *
+	 * @since 2.6.2
+	 *
+	 * @param bool   $doAbort      The value being filtered. True to abort conditional logic action, false to continue. Defaults to false.
+	 * @param string $action       The conditional logic action that will be performed. Possible values: show or hide
+	 * @param string $targetId     HTML element id that will be the targed of the conditional logic action.
+	 * @param bool   $doAnimation  True to perform animation while showing/hiding field. False to hide/show field without animation.
+	 * @param array  $defaultValue Array containg default field values.
+	 * @param bool   $isInit       True if form is being initialized (i.e. before user has interacted with any input). False otherwise.
+	 * @param array  $formId       The current form ID.
+	 * @param func   $do_callback   Callback function to be executed after conditional logic is executed.
+	 */
+	let abort = gform.applyFilters( 'gform_abort_conditional_logic_do_action', false, action, targetId, conditional_logic[ "animation" ], null, isInit, formId, null );
+	if ( ! abort ) {
+		gf_do_action( action, targetId, conditional_logic[ "animation" ], null, isInit, null, formId );
+	}
 }
 
 function gf_do_action(action, targetId, useAnimation, defaultValues, isInit, callback, formId){

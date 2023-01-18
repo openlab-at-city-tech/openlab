@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 function bp_members_render_member_block( $attributes = array() ) {
 	$bp = buddypress();
 
-	$block_args = wp_parse_args(
+	$block_args = bp_parse_args(
 		$attributes,
 		array(
 			'itemID'              => 0,
@@ -180,7 +180,7 @@ function bp_members_render_member_block( $attributes = array() ) {
 function bp_members_render_members_block( $attributes = array() ) {
 	$bp = buddypress();
 
-	$block_args = wp_parse_args(
+	$block_args = bp_parse_args(
 		$attributes,
 		array(
 			'itemIDs'            => array(),
@@ -346,6 +346,23 @@ function bp_members_blocks_add_script_data() {
 		return;
 	}
 
+	$path = sprintf(
+		'/%1$s/%2$s/%3$s',
+		bp_rest_namespace(),
+		bp_rest_version(),
+		buddypress()->members->id
+	);
+
+	wp_localize_script(
+		'bp-dynamic-members-script',
+		'bpDynamicMembersSettings',
+		array(
+			'path'  => ltrim( $path, '/' ),
+			'root'  => esc_url_raw( get_rest_url() ),
+			'nonce' => wp_create_nonce( 'wp_rest' ),
+		)
+	);
+
 	// Include the common JS template.
 	echo bp_get_dynamic_template_part( 'assets/widgets/dynamic-members.php' );
 
@@ -366,7 +383,7 @@ function bp_members_blocks_add_script_data() {
  * @return string           HTML output.
  */
 function bp_members_render_dynamic_members_block( $attributes = array() ) {
-	$block_args = wp_parse_args(
+	$block_args = bp_parse_args(
 		$attributes,
 		array(
 			'title'         => __( 'Members', 'buddypress' ),
@@ -457,7 +474,7 @@ function bp_members_render_dynamic_members_block( $attributes = array() ) {
 					/* translators: %s: total friend count */
 					$extra = sprintf( _n( '%s friend', '%s friends', $user->total_friend_count, 'buddypress' ), number_format_i18n( $user->total_friend_count ) );
 				} else {
-					/* translators: %s: a human time diff. */
+					/* translators: %s: last activity timestamp (e.g. "Active 1 hour ago") */
 					$extra = sprintf( __( 'Active %s', 'buddypress' ), bp_core_time_since( $user->last_activity ) );
 				}
 
@@ -486,7 +503,7 @@ function bp_members_render_dynamic_members_block( $attributes = array() ) {
 				);
 			}
 		}
-	} else {
+	} elseif ( defined( 'WP_USE_THEMES' ) ) {
 		// Get corresponding members.
 		$path = sprintf(
 			'/%1$s/%2$s/%3$s',
@@ -500,10 +517,7 @@ function bp_members_render_dynamic_members_block( $attributes = array() ) {
 			$path
 		);
 
-		$preloaded_members = array();
-		if ( bp_is_running_wp( '5.0.0' ) ) {
-			$preloaded_members = rest_preload_api_request( '', $default_path );
-		}
+		$preloaded_members = rest_preload_api_request( '', $default_path );
 
 		buddypress()->members->block_globals['bp/dynamic-members']->items[ $widget_id ] = (object) array(
 			'selector'   => $widget_id,
@@ -515,15 +529,6 @@ function bp_members_render_dynamic_members_block( $attributes = array() ) {
 		if ( ! has_action( 'wp_footer', 'bp_members_blocks_add_script_data', 1 ) ) {
 			wp_set_script_translations( 'bp-dynamic-members-script', 'buddypress' );
 			wp_enqueue_script( 'bp-dynamic-members-script' );
-			wp_localize_script(
-				'bp-dynamic-members-script',
-				'bpDynamicMembersSettings',
-				array(
-					'path'  => ltrim( $path, '/' ),
-					'root'  => esc_url_raw( get_rest_url() ),
-					'nonce' => wp_create_nonce( 'wp_rest' ),
-				)
-			);
 
 			add_action( 'wp_footer', 'bp_members_blocks_add_script_data', 1 );
 		}

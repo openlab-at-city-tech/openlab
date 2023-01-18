@@ -1,0 +1,44 @@
+/* FILE: global/footer/_site-info.scss */
+
+.site-info {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	align-items: center;
+
+	&-section {
+		padding: 6vh var(--body_padding);
+		background: var(--color_footer_background);
+		color: var(--color_footer_text);
+	}
+
+	&-item {
+		width: 100%;
+
+		@include media( map_get( $breakpoint, $mobile_menu_breakpoint ) ) {
+			width: auto;
+		}
+
+		&:not(:last-child) {
+			margin-bottom: 1em;
+
+			@include media( map_get( $breakpoint, $mobile_menu_breakpoint ) ) {
+				margin-#{$right}: 1em;
+				margin-bottom: 0;
+			}
+
+		}
+
+	}
+
+	.sep {
+		display: inline-block;
+		margin: 0 .25em;
+		opacity: .5;
+	}
+
+	a {
+		color: var(--color_footer_link);
+	}
+
+}

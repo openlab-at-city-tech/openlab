@@ -4,8 +4,6 @@ if ( ! class_exists( 'GFForms' ) ) {
 	die();
 }
 
-require_once( ABSPATH . WPINC . '/post.php' );
-
 /**
  * Class GF_Forms_Model_Legacy
  *
@@ -2563,9 +2561,15 @@ class GF_Forms_Model_Legacy {
 
 		$lead_table_name   = self::get_lead_table_name();
 
-		$sql = $wpdb->prepare( "SELECT count(id)
+		$result = $wpdb->get_var( "SHOW COLUMNS FROM $lead_table_name LIKE 'status'" );
+
+		if ( $result ) {
+			$sql = $wpdb->prepare( "SELECT count(id)
 								FROM $lead_table_name
 								WHERE status=%s", $status );
+		} else {
+			$sql = "SELECT count(id) FROM $lead_table_name";
+		}
 
 		return $wpdb->get_var( $sql );
 	}

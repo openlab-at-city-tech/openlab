@@ -112,6 +112,8 @@ class M_Marketing extends C_Base_Module
 
             $forms->add_form(NGG_OTHER_OPTIONS_SLUG, 'marketing_image_protection');
         });
+
+        add_action('in_admin_header', [$this, 'admin_header']);
     }
 
     function _register_utilities()
@@ -174,7 +176,40 @@ class M_Marketing extends C_Base_Module
 
     function initialize()
     {
-        
+    }
+
+    public function admin_header()
+    {
+        if (self::is_plus_or_pro_enabled())
+            return;
+
+        if (empty($_REQUEST['page']))
+            return;
+
+        // The following detects if we are viewing a NextGEN admin page.
+        $is_modern_page = FALSE;
+        $keys = ['ngg', 'nggallery', 'nextgen-gallery'];
+        foreach ($keys as $key) {
+            $search = strpos($_REQUEST['page'], $key) !== FALSE;
+            if ($search)
+                $is_modern_page = TRUE;
+        }
+
+        if (!M_NextGen_Admin::is_ngg_legacy_page() && !$is_modern_page)
+            return;
+
+        $url = self::get_utm_link('https://www.imagely.com/wordpress-gallery-plugin/nextgen-pro/', 'topbar', 'getnextgenpro');
+
+        $message = sprintf(
+            __('You are using NextGEN Gallery. To unlock more features, consider <a href="%s" target="_blank">upgrading to NextGEN Pro</a>.', 'nggallery'),
+            $url
+        );
+
+        $view = new C_MVC_View('photocrati-marketing#admin-header-banner', [
+            'message' => $message
+        ]);
+
+        print $view->render(TRUE);
     }
 
     /**

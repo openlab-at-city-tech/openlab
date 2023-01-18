@@ -17,6 +17,7 @@
 		"map",
 		"markdown",
 		"opentable",
+		"payments",
 		"pinterest",
 		"podcast-player",
 		"publicize",
@@ -37,13 +38,22 @@
 		"subscriptions",
 		"tiled-gallery",
 		"videopress",
-		"wordads"
+		"wordads",
+		"payments-intro",
+		"post-publish-qr-post-panel",
+		"payment-buttons"
 	],
 	"beta": [
-		"amazon"
+		"amazon",
+		"contact-form/salesforce-lead-form",
+		"google-docs-embed",
+		"recipe",
+		"videopress/video",
+		"videopress/video-chapters"
 	],
 	"experimental": [
 		"anchor-fm",
+		"blogging-prompts",
 		"premium-content",
 		"conversation",
 		"dialogue"
@@ -65,13 +75,11 @@
 		"opentable",
 		"pinterest",
 		"rating-star",
-		"recurring-payments",
 		"related-posts",
 		"repeat-visitor",
 		"revue",
 		"simple-payments",
 		"slideshow",
-		"subscriptions",
 		"tiled-gallery",
 		"videopress",
 		"wordads"

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 /**
  * Plugin CLI command.
  *
@@ -7,6 +7,9 @@
 
 class QM_CLI extends QM_Plugin {
 
+	/**
+	 * @param string $file
+	 */
 	protected function __construct( $file ) {
 
 		# Register command
@@ -19,16 +22,20 @@ class QM_CLI extends QM_Plugin {
 
 	/**
 	 * Enable QM by creating the symlink for db.php
+	 *
+	 * @return void
 	 */
 	public function enable() {
 		$drop_in = WP_CONTENT_DIR . '/db.php';
 
 		if ( file_exists( $drop_in ) ) {
-			if ( false !== strpos( file_get_contents( $drop_in ), 'class QM_DB' ) ) {
+			$contents = file_get_contents( $drop_in );
+
+			if ( false !== $contents && false !== strpos( $contents, 'class QM_DB' ) ) {
 				WP_CLI::success( "Query Monitor's wp-content/db.php is already in place" );
 				exit( 0 );
 			} else {
-				WP_CLI::error( 'Unknown wp-content/db.php already is already in place' );
+				WP_CLI::error( 'Unknown wp-content/db.php is already in place' );
 			}
 		}
 
@@ -49,6 +56,10 @@ class QM_CLI extends QM_Plugin {
 		}
 	}
 
+	/**
+	 * @param string $file
+	 * @return self
+	 */
 	public static function init( $file = null ) {
 
 		static $instance = null;

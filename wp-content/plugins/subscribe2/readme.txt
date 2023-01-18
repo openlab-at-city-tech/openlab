@@ -3,8 +3,8 @@ Contributors: tareq1988, nizamuddinbabu, wemail
 Donate link: https://getwemail.io
 Tags: posts, subscription, email, subscribe, notify, notification, newsletter, post notification, email marketing, optin, form
 Requires at least: 4.0
-Tested up to: 5.8
-Stable tag: 10.37
+Tested up to: 6.1.1
+Stable tag: 10.39
 Requires PHP: 5.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -71,6 +71,14 @@ This token will automatically be replaced by dynamic subscription information an
 [Visit FAQ site](https://subscribe2.wordpress.com/support/faqs/)
 
 == Changelog ==
+
+= 10.39 (23st December, 2022) =
+
+ * Fix classic editor page meta field error.
+
+= 10.38 (21st December, 2022) =
+
+ * Fix security related issues & also make compatible with wp v6.1.1
 
 = 10.37 (23rd November, 2021) =
 

@@ -111,6 +111,10 @@ jQuery(document).ready(function($) {
 				$('#ewwwio-api-activation-result').html(ewww_response.success);
 				$('#ewwwio-api-activation-result').removeClass('error');
 				$('#ewwwio-api-activation-result').show();
+				$('.easyio-manual-ui').hide();
+				$('.easyio-cloud-key-ui').show();
+				$('#ewww_image_optimizer_cloud_key').attr('type', 'password');
+				ewww_vars.easy_autoreg = 1;
 				ewwwCloudEnable();
 			}
 		});
@@ -127,24 +131,62 @@ jQuery(document).ready(function($) {
 			$('#ewww_image_optimizer_png_level option').prop('disabled', false);
 			$('#ewww_image_optimizer_pdf_level option').prop('disabled', false);
 			$('#ewww_image_optimizer_svg_level option').prop('disabled', false);
-			$('#ewww_image_optimizer_backup_files').prop('disabled', false);
+			$('#ewww_image_optimizer_backup_files option').prop('disabled', false);
 			$('#ewww_image_optimizer_jpg_level').val(30);
 			$('#ewww_image_optimizer_png_level').val(20);
 			$('#ewww_image_optimizer_gif_level').val(10);
 			$('#ewww_image_optimizer_pdf_level').val(10);
 			$('#ewww_image_optimizer_svg_level').val(10);
-			$('#ewww_image_optimizer_backup_files').prop('checked', true);
 		}
 	}
+	var easyio_registration_error = '';
 	$('#ewwwio-easy-activate').on( 'click', function() {
+		$('#ewwwio-easy-activate').hide();
+		$('#ewwwio-easy-deregister').hide();
+		$('#ewwwio-easy-activation-result').hide();
+		$('#ewwwio-easy-activation-processing').show();
+		if (! ewww_vars.easyio_site_registered && ewww_vars.easy_autoreg) {
+			var ewww_post_data = {
+				action: 'ewww_exactdn_register_site',
+				ewww_wpnonce: ewww_vars._wpnonce,
+				blog_id: ewww_vars.blog_id,
+			};
+			$.post(ajaxurl, ewww_post_data, function(response) {
+				try {
+					var ewww_response = JSON.parse(response);
+				} catch (err) {
+					$('#ewwwio-easy-activation-processing').hide();
+					$('#ewwwio-easy-activation-result').html(ewww_vars.invalid_response);
+					$('#ewwwio-easy-activation-result').addClass('error');
+					$('#ewwwio-easy-activation-result').show();
+					console.log( 'registration response: ' + response );
+					return false;
+				}
+				if ( ewww_response.error ) {
+					easyio_registration_error = ewww_response.error;
+				} else if ( ! ewww_response.status ) {
+					$('#ewwwio-easy-activation-processing').hide();
+					$('#ewwwio-easy-activation-result').html(ewww_vars.invalid_response);
+					$('#ewwwio-easy-activation-result').addClass('error');
+					$('#ewwwio-easy-activation-result').show();
+					console.log( 'registration response: ' + response );
+					return false;
+				}
+				setTimeout( activateExactDNSite, 5000 );
+				return false;
+			});
+		} else {
+			activateExactDNSite();
+			return false;
+		}
+		return false;
+	});
+	function activateExactDNSite() {
 		var ewww_post_action = 'ewww_exactdn_activate';
 		var ewww_post_data = {
 			action: ewww_post_action,
 			ewww_wpnonce: ewww_vars._wpnonce,
 		};
-		$('#ewwwio-easy-activate').hide();
-		$('#ewwwio-easy-activation-result').hide();
-		$('#ewwwio-easy-activation-processing').show();
 		$.post(ajaxurl, ewww_post_data, function(response) {
 			try {
 				var ewww_response = JSON.parse(response);
@@ -157,6 +199,9 @@ jQuery(document).ready(function($) {
 				return false;
 			}
 			if ( ewww_response.error ) {
+				if ( easyio_registration_error ) {
+					ewww_response.error = easyio_registration_error + '<br>' + ewww_response.error;
+				}
 				$('#ewwwio-easy-activation-processing').hide();
 				$('#ewwwio-easy-activate').show();
 				$('#ewwwio-easy-activation-result').html(ewww_response.error);
@@ -175,7 +220,7 @@ jQuery(document).ready(function($) {
 				$('#ewwwio-easy-activation-result').show();
 				$('.ewwwio-exactdn-options input').prop('disabled', false);
 				$('.ewwwio-exactdn-options').show();
-				$('p.ewwwio-easy-setup-instructions').hide();
+				$('.ewwwio-easy-setup-instructions').hide();
 				$('#ewww_image_optimizer_webp_container').hide();
 				$('.ewww_image_optimizer_webp_setting_container').hide();
 				$('.ewww_image_optimizer_webp_rewrite_setting_container').hide();
@@ -183,7 +228,7 @@ jQuery(document).ready(function($) {
 			}
 		});
 		return false;
-	});
+	}
 	var exactdn_blog_ids   = [];
 	var exactdn_blog_count = 0;
 	var exactdn_cancelled  = false;
@@ -194,18 +239,15 @@ jQuery(document).ready(function($) {
 		exactdn_blog_ids   = Array.from(ewww_vars.network_blog_ids);
 		exactdn_blog_count = exactdn_blog_ids.length;
 		$('#ewww_image_optimizer_exactdn_container .button-secondary').hide();
-		//$('#ewwwio-easy-activate-network').hide();
-		//$('#ewwwio-easy-deactivate').hide();
-		//$('#ewwwio-easy-register-network').hide();
 		$('#ewwwio-easy-cancel-network-operation').show();
 		$('#ewwwio-easy-activation-result').hide();
 		$('#ewwwio-easy-activation-processing').show();
 		$('#ewwwio-easy-activation-progressbar').progressbar({ max: exactdn_blog_count });
 		$('#ewwwio-easy-activation-progressbar').show();
-		activateExactDNSite();
+		activateExactDNMultiSite();
 		return false;
 	});
-	function activateExactDNSite() {
+	function activateExactDNMultiSite() {
 		var ewww_post_data = {
 			action: 'ewww_exactdn_activate_site',
 			ewww_wpnonce: ewww_vars._wpnonce,
@@ -240,12 +282,12 @@ jQuery(document).ready(function($) {
 				return false;
 			} else {
 				$('#ewwwio-easy-activation-processing').hide();
-				$('p.ewwwio-easy-setup-instructions').hide();
+				$('.ewwwio-easy-setup-instructions').hide();
 				$('p.ewwwio-easy-description').hide();
 				$('#ewwwio-easy-activation-progressbar').progressbar('option', 'value', exactdn_blogs_done);
 			}
 			if ( exactdn_blog_ids.length ) {
-				activateExactDNSite();
+				activateExactDNMultiSite();
 			} else {
 				$('#ewwwio-easy-cancel-network-operation').hide();
 				if (exactdn_cancelled) {
@@ -273,9 +315,6 @@ jQuery(document).ready(function($) {
 		exactdn_blog_ids   = Array.from(ewww_vars.network_blog_ids);
 		exactdn_blog_count = exactdn_blog_ids.length;
 		$('#ewww_image_optimizer_exactdn_container .button-secondary').hide();
-		//$('#ewwwio-easy-activate-network').hide();
-		//$('#ewwwio-easy-register-network').hide();
-		//$('#ewwwio-easy-deactivate').hide();
 		$('#ewwwio-easy-cancel-network-operation').show();
 		$('#ewwwio-easy-activation-result').hide();
 		$('#ewwwio-easy-activation-processing').show();
@@ -321,7 +360,7 @@ jQuery(document).ready(function($) {
 				return false;
 			} else {
 				$('#ewwwio-easy-activation-processing').hide();
-				$('p.ewwwio-easy-setup-instructions').hide();
+				$('.ewwwio-easy-setup-instructions').hide();
 				$('p.ewwwio-easy-description').hide();
 				$('#ewwwio-easy-activation-progressbar').progressbar('option', 'value', exactdn_blogs_done);
 			}
@@ -347,7 +386,59 @@ jQuery(document).ready(function($) {
 		exactdn_cancelled = true;
 		$('#ewwwio-easy-cancel-network-operation').hide();
 		return false;
-	})
+	});
+	$('#ewwwio-easy-deregister').on( 'click', function() {
+		$('#ewwwio-easy-activate').hide();
+		$('#ewwwio-easy-deregister').hide();
+		$('#ewwwio-easy-activation-result').hide();
+		$('#ewwwio-easy-activation-processing').show();
+		if (ewww_vars.easyio_site_id) {
+			deregisterExactDNSite();
+		} else {
+			$('#ewwwio-easy-activation-processing').hide();
+			$('#ewwwio-easy-activation-result').html(ewww_vars.invalid_response);
+			$('#ewwwio-easy-activation-result').addClass('error');
+			$('#ewwwio-easy-activation-result').show();
+		}
+		return false;
+	});
+	function deregisterExactDNSite() {
+		var ewww_post_data = {
+			action: 'ewww_exactdn_deregister_site',
+			ewww_wpnonce: ewww_vars._wpnonce,
+			site_id: ewww_vars.easyio_site_id,
+		};
+		$.post(ajaxurl, ewww_post_data, function(response) {
+			try {
+				var ewww_response = JSON.parse(response);
+			} catch (err) {
+				$('#ewwwio-easy-activation-processing').hide();
+				$('#ewwwio-easy-activation-result').html(ewww_vars.invalid_response);
+				$('#ewwwio-easy-activation-result').addClass('error');
+				$('#ewwwio-easy-activation-result').show();
+				console.log( 'de-registration response: ' + response );
+				return false;
+			}
+			if ( ewww_response.error ) {
+				$('#ewwwio-easy-activation-processing').hide();
+				$('#ewwwio-easy-activation-result').html(ewww_response.error);
+				$('#ewwwio-easy-activation-result').addClass('error');
+				$('#ewwwio-easy-activation-result').show();
+			} else if ( ! ewww_response.success ) {
+				$('#ewwwio-easy-activation-processing').hide();
+				$('#ewwwio-easy-activation-result').html(ewww_vars.invalid_response);
+				$('#ewwwio-easy-activation-result').addClass('error');
+				$('#ewwwio-easy-activation-result').show();
+				console.log( 'de-registration response: ' + response );
+			} else {
+				$('#ewwwio-easy-activation-processing').hide();
+				$('#ewwwio-easy-activation-result').html(ewww_response.success);
+				$('#ewwwio-easy-activation-result').removeClass('error');
+				$('#ewwwio-easy-activation-result').show();
+			}
+		});
+		return false;
+	}
 	$('#ewww_image_optimizer_webp').on(
 		'click',
 		function() {
@@ -494,7 +585,6 @@ jQuery(document).ready(function($) {
 	$('li.ewww-general-nav').addClass('ewww-selected');
 	if($('#ewww_image_optimizer_debug').length){
 		$('#ewww-resize-settings').hide();
-		console.log($('#ewww_image_optimizer_debug').length);
 	}
 	// New tabs.
 	$('#ewww-local-settings').hide();

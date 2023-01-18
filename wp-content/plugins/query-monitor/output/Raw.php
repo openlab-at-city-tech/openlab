@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 /**
  * Abstract output class for raw output encoded as JSON.
  *
@@ -6,9 +6,4 @@
  */
 
 abstract class QM_Output_Raw extends QM_Output {
-
-	public function output() {
-		return $this->get_output();
-	}
-
 }

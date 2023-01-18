@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 /**
  * Abstract output class for HTML pages.
  *
@@ -7,21 +7,32 @@
 
 abstract class QM_Output_Html extends QM_Output {
 
+	/**
+	 * @var string|false|null
+	 */
 	protected static $file_link_format = null;
 
-	protected $current_id   = null;
+	/**
+	 * @var string|null
+	 */
+	protected $current_id = null;
+
+	/**
+	 * @var string|null
+	 */
 	protected $current_name = null;
 
+	/**
+	 * @return string
+	 */
 	public function name() {
-		_deprecated_function(
-			esc_html( get_class( $this->collector ) . '::name()' ),
-			'3.5',
-			esc_html( get_class( $this ) . '::name()' )
-		);
-
-		return $this->collector->name();
+		return $this->collector->id;
 	}
 
+	/**
+	 * @param array<string, mixed[]> $menu
+	 * @return array<string, mixed[]>
+	 */
 	public function admin_menu( array $menu ) {
 
 		$menu[ $this->collector->id() ] = $this->menu( array(
@@ -31,14 +42,22 @@ abstract class QM_Output_Html extends QM_Output {
 
 	}
 
+	/**
+	 * @return string
+	 */
 	public function get_output() {
 		ob_start();
 		// compat until I convert all the existing outputters to use `get_output()`
 		$this->output();
-		$out = ob_get_clean();
+		$out = (string) ob_get_clean();
 		return $out;
 	}
 
+	/**
+	 * @param string $id
+	 * @param string $name
+	 * @return void
+	 */
 	protected function before_tabular_output( $id = null, $name = null ) {
 		if ( null === $id ) {
 			$id = $this->collector->id();
@@ -47,7 +66,7 @@ abstract class QM_Output_Html extends QM_Output {
 			$name = $this->name();
 		}
 
-		$this->current_id   = $id;
+		$this->current_id = $id;
 		$this->current_name = $name;
 
 		printf(
@@ -64,6 +83,9 @@ abstract class QM_Output_Html extends QM_Output {
 		);
 	}
 
+	/**
+	 * @return void
+	 */
 	protected function after_tabular_output() {
 		echo '</table>';
 		echo '</div>';
@@ -71,6 +93,11 @@ abstract class QM_Output_Html extends QM_Output {
 		$this->output_concerns();
 	}
 
+	/**
+	 * @param string $id
+	 * @param string $name
+	 * @return void
+	 */
 	protected function before_non_tabular_output( $id = null, $name = null ) {
 		if ( null === $id ) {
 			$id = $this->collector->id();
@@ -79,7 +106,7 @@ abstract class QM_Output_Html extends QM_Output {
 			$name = $this->name();
 		}
 
-		$this->current_id   = $id;
+		$this->current_id = $id;
 		$this->current_name = $name;
 
 		printf(
@@ -96,6 +123,9 @@ abstract class QM_Output_Html extends QM_Output {
 		);
 	}
 
+	/**
+	 * @return void
+	 */
 	protected function after_non_tabular_output() {
 		echo '</div>';
 		echo '</div>';
@@ -103,6 +133,9 @@ abstract class QM_Output_Html extends QM_Output {
 		$this->output_concerns();
 	}
 
+	/**
+	 * @return void
+	 */
 	protected function output_concerns() {
 		$concerns = array(
 			'concerned_actions' => array(
@@ -161,6 +194,11 @@ abstract class QM_Output_Html extends QM_Output {
 		echo '</div>';
 	}
 
+	/**
+	 * @param string $id
+	 * @param string $name
+	 * @return void
+	 */
 	protected function before_debug_bar_output( $id = null, $name = null ) {
 		if ( null === $id ) {
 			$id = $this->collector->id();
@@ -181,10 +219,17 @@ abstract class QM_Output_Html extends QM_Output {
 		);
 	}
 
+	/**
+	 * @return void
+	 */
 	protected function after_debug_bar_output() {
 		echo '</div>';
 	}
 
+	/**
+	 * @param string $notice
+	 * @return string
+	 */
 	protected function build_notice( $notice ) {
 		$return = '<section>';
 		$return .= '<div class="qm-notice">';
@@ -197,7 +242,11 @@ abstract class QM_Output_Html extends QM_Output {
 		return $return;
 	}
 
-	public static function output_inner( $vars ) {
+	/**
+	 * @param array<string, mixed> $vars
+	 * @return void
+	 */
+	public static function output_inner( array $vars ) {
 
 		echo '<table>';
 
@@ -233,19 +282,24 @@ abstract class QM_Output_Html extends QM_Output {
 	/**
 	 * Returns the table filter controls. Safe for output.
 	 *
-	 * @param  string   $name   The name for the `data-` attributes that get filtered by this control.
-	 * @param  string[] $values Option values for this control.
-	 * @param  string   $label  Label text for the filter control.
-	 * @param  array    $args {
-	 *     @type string $highlight The name for the `data-` attributes that get highlighted by this control.
-	 *     @type array  $prepend   Associative array of options to prepend to the list of values.
-	 *     @type array  $append    Associative array of options to append to the list of values.
+	 * @param  string         $name   The name for the `data-` attributes that get filtered by this control.
+	 * @param  (string|int)[] $values Option values for this control.
+	 * @param  string         $label  Label text for the filter control.
+	 * @param  array          $args {
+	 *     @type string   $highlight The name for the `data-` attributes that get highlighted by this control.
+	 *     @type string[] $prepend   Associative array of options to prepend to the list of values.
+	 *     @type string[] $append    Associative array of options to append to the list of values.
 	 * }
+	 * @phpstan-param array{
+	 *   highlight?: string,
+	 *   prepend?: array<string, string>,
+	 *   append?: array<string, string>,
+	 * } $args
 	 * @return string Markup for the table filter controls.
 	 */
-	protected function build_filter( $name, array $values, $label, $args = array() ) {
+	protected function build_filter( $name, $values, $label, $args = array() ) {
 
-		if ( empty( $values ) ) {
+		if ( empty( $values ) || ! is_array( $values ) ) {
 			return esc_html( $label ); // Return label text, without being marked up as a label element.
 		}
 
@@ -257,16 +311,17 @@ abstract class QM_Output_Html extends QM_Output {
 
 		$args = array_merge( array(
 			'highlight' => '',
-			'prepend'   => array(),
-			'append'    => array(),
+			'prepend' => array(),
+			'append' => array(),
+			'all' => _x( 'All', '"All" option for filters', 'query-monitor' ),
 		), $args );
 
-		$core_val = __( 'Core', 'query-monitor' );
+		$core_val = __( 'WordPress Core', 'query-monitor' );
 		$core_key = array_search( $core_val, $values, true );
 
 		if ( 'component' === $name && count( $values ) > 1 && false !== $core_key ) {
 			$args['append'][ $core_val ] = $core_val;
-			$args['append']['non-core']  = __( 'Non-Core', 'query-monitor' );
+			$args['append']['non-core'] = __( 'Non-WordPress Core', 'query-monitor' );
 			unset( $values[ $core_key ] );
 		}
 
@@ -275,7 +330,7 @@ abstract class QM_Output_Html extends QM_Output {
 		$out = '<div class="qm-filter-container">';
 		$out .= '<label for="' . esc_attr( $filter_id ) . '">' . esc_html( $label ) . '</label>';
 		$out .= '<select id="' . esc_attr( $filter_id ) . '" class="qm-filter" data-filter="' . esc_attr( $name ) . '" data-highlight="' . esc_attr( $args['highlight'] ) . '">';
-		$out .= '<option value="">' . esc_html_x( 'All', '"All" option for filters', 'query-monitor' ) . '</option>';
+		$out .= '<option value="">' . esc_html( $args['all'] ) . '</option>';
 
 		if ( ! empty( $args['prepend'] ) ) {
 			foreach ( $args['prepend'] as $value => $label ) {
@@ -323,7 +378,7 @@ abstract class QM_Output_Html extends QM_Output {
 
 		$out .= '</span>';
 		$out .= '<button class="qm-sort-controls" aria-label="' . esc_attr__( 'Sort data by this column', 'query-monitor' ) . '">';
-		$out .= '<span class="qm-sort-arrow" aria-hidden="true"></span>';
+		$out .= QueryMonitor::icon( 'arrow-down' );
 		$out .= '</button>';
 		$out .= '</label>';
 		return $out;
@@ -339,10 +394,50 @@ abstract class QM_Output_Html extends QM_Output {
 		return $out;
 	}
 
+	/**
+	 * Returns a filter trigger.
+	 *
+	 * @param string $target
+	 * @param string $filter
+	 * @param string $value
+	 * @param string $label
+	 * @return string
+	 */
+	protected static function build_filter_trigger( $target, $filter, $value, $label ) {
+		return sprintf(
+			'<button class="qm-filter-trigger" data-qm-target="%1$s" data-qm-filter="%2$s" data-qm-value="%3$s">%4$s%5$s</button>',
+			esc_attr( $target ),
+			esc_attr( $filter ),
+			esc_attr( $value ),
+			$label,
+			QueryMonitor::icon( 'filter' )
+		);
+	}
+
+	/**
+	 * Returns a link.
+	 *
+	 * @param string $href
+	 * @param string $label
+	 * @return string
+	 */
+	protected static function build_link( $href, $label ) {
+		return sprintf(
+			'<a href="%1$s" class="qm-link">%2$s%3$s</a>',
+			esc_attr( $href ),
+			$label,
+			QueryMonitor::icon( 'external' )
+		);
+	}
+
+	/**
+	 * @param array<string, mixed> $args
+	 * @return array<string, mixed>
+	 */
 	protected function menu( array $args ) {
 
 		return array_merge( array(
-			'id'   => esc_attr( "query-monitor-{$this->collector->id}" ),
+			'id' => esc_attr( "query-monitor-{$this->collector->id}" ),
 			'href' => esc_attr( '#' . $this->collector->id() ),
 		), $args );
 
@@ -361,10 +456,10 @@ abstract class QM_Output_Html extends QM_Output {
 		$sql = trim( $sql );
 
 		$regex = 'ADD|AFTER|ALTER|AND|BEGIN|COMMIT|CREATE|DELETE|DESCRIBE|DO|DROP|ELSE|END|EXCEPT|EXPLAIN|FROM|GROUP|HAVING|INNER|INSERT|INTERSECT|LEFT|LIMIT|ON|OR|ORDER|OUTER|RENAME|REPLACE|RIGHT|ROLLBACK|SELECT|SET|SHOW|START|THEN|TRUNCATE|UNION|UPDATE|USE|USING|VALUES|WHEN|WHERE|XOR';
-		$sql   = preg_replace( '# (' . $regex . ') #', '<br> $1 ', $sql );
+		$sql = preg_replace( '# (' . $regex . ') #', '<br> $1 ', $sql );
 
-		$keywords = '\b(?:ACTION|ADD|AFTER|ALTER|AND|ASC|AS|AUTO_INCREMENT|BEGIN|BETWEEN|BIGINT|BINARY|BIT|BLOB|BOOLEAN|BOOL|BREAK|BY|CASE|COLLATE|COLUMNS?|COMMIT|CONTINUE|CREATE|DATA(?:BASES?)?|DATE(?:TIME)?|DECIMAL|DECLARE|DEC|DEFAULT|DELAYED|DELETE|DESCRIBE|DESC|DISTINCT|DOUBLE|DO|DROP|DUPLICATE|ELSE|END|ENUM|EXCEPT|EXISTS|EXPLAIN|FIELDS|FLOAT|FOREIGN|FOR|FROM|FULL|FUNCTION|GROUP|HAVING|IF|IGNORE|INDEX|INNER|INSERT|INTEGER|INTERSECT|INTERVAL|INTO|INT|IN|IS|JOIN|KEYS?|LEFT|LIKE|LIMIT|LONG(?:BLOB|TEXT)|MEDIUM(?:BLOB|INT|TEXT)|MERGE|MIDDLEINT|NOT|NO|NULLIF|ON|ORDER|OR|OUTER|PRIMARY|PROC(?:EDURE)?|REGEXP|RENAME|REPLACE|RIGHT|RLIKE|ROLLBACK|SCHEMA|SELECT|SET|SHOW|SMALLINT|START|TABLES?|TEXT(?:SIZE)?|THEN|TIME(?:STAMP)?|TINY(?:BLOB|INT|TEXT)|TRUNCATE|UNION|UNIQUE|UNSIGNED|UPDATE|USE|USING|VALUES?|VAR(?:BINARY|CHAR)|WHEN|WHERE|WHILE|XOR)\b';
-		$sql      = preg_replace( '#' . $keywords . '#', '<b>$0</b>', $sql );
+		$keywords = '\b(?:ACTION|ADD|AFTER|ALTER|AND|ASC|AS|AUTO_INCREMENT|BEGIN|BETWEEN|BIGINT|BINARY|BIT|BLOB|BOOLEAN|BOOL|BREAK|BY|CASE|COLLATE|COLUMNS?|COMMIT|CONTINUE|CREATE|DATA(?:BASES?)?|DATE(?:TIME)?|DECIMAL|DECLARE|DEC|DEFAULT|DELAYED|DELETE|DESCRIBE|DESC|DISTINCT|DOUBLE|DO|DROP|DUPLICATE|ELSE|END|ENUM|EXCEPT|EXISTS|EXPLAIN|FIELDS|FLOAT|FORCE|FOREIGN|FOR|FROM|FULL|FUNCTION|GROUP|HAVING|IF|IGNORE|INDEX|INNER|INSERT|INTEGER|INTERSECT|INTERVAL|INTO|INT|IN|IS|JOIN|KEYS?|LEFT|LIKE|LIMIT|LONG(?:BLOB|TEXT)|MEDIUM(?:BLOB|INT|TEXT)|MERGE|MIDDLEINT|NOT|NO|NULLIF|ON|ORDER|OR|OUTER|PRIMARY|PROC(?:EDURE)?|REGEXP|RENAME|REPLACE|RIGHT|RLIKE|ROLLBACK|SCHEMA|SELECT|SET|SHOW|SMALLINT|START|TABLES?|TEXT(?:SIZE)?|THEN|TIME(?:STAMP)?|TINY(?:BLOB|INT|TEXT)|TRUNCATE|UNION|UNIQUE|UNSIGNED|UPDATE|USE|USING|VALUES?|VAR(?:BINARY|CHAR)|WHEN|WHERE|WHILE|XOR)\b';
+		$sql = preg_replace( '#' . $keywords . '#', '<b>$0</b>', $sql );
 
 		return '<code>' . $sql . '</code>';
 
@@ -426,28 +521,30 @@ abstract class QM_Output_Html extends QM_Output {
 			}
 		}
 
-		$link = sprintf( self::get_file_link_format(), rawurlencode( $file ), intval( $link_line ) );
+		/** @var string */
+		$link_format = self::get_file_link_format();
+		$link = sprintf( $link_format, rawurlencode( $file ), intval( $link_line ) );
 
 		if ( $is_filename ) {
-			$format = '<a href="%s" class="qm-edit-link">%s</a>';
+			$format = '<a href="%1$s" class="qm-edit-link">%2$s%3$s</a>';
 		} else {
-			$format = '<a href="%s" class="qm-edit-link"><code>%s</code></a>';
+			$format = '<a href="%1$s" class="qm-edit-link"><code>%2$s</code>%3$s</a>';
 		}
 
 		return sprintf(
 			$format,
 			esc_attr( $link ),
-			esc_html( $text )
+			esc_html( $text ),
+			QueryMonitor::icon( 'edit' )
 		);
 	}
 
 	/**
 	 * Provides a protocol URL for edit links in QM stack traces for various editors.
 	 *
-	 * @param string $editor the chosen code editor
-	 * @param string $default_format a format to use if no editor is found
-	 *
-	 * @return string a protocol URL format
+	 * @param string       $editor         The chosen code editor.
+	 * @param string|false $default_format A format to use if no editor is found.
+	 * @return string|false A protocol URL format or boolean false.
 	 */
 	public static function get_editor_file_link_format( $editor, $default_format ) {
 		switch ( $editor ) {
@@ -468,6 +565,9 @@ abstract class QM_Output_Html extends QM_Output {
 		}
 	}
 
+	/**
+	 * @return string|false
+	 */
 	public static function get_file_link_format() {
 		if ( ! isset( self::$file_link_format ) ) {
 			$format = ini_get( 'xdebug.file_link_format' );
@@ -485,7 +585,7 @@ abstract class QM_Output_Html extends QM_Output {
 			 * @link https://querymonitor.com/blog/2019/02/clickable-stack-traces-and-function-names-in-query-monitor/
 			 * @since 3.0.0
 			 *
-			 * @param string $format The format of the clickable file link.
+			 * @param string|false $format The format of the clickable file link, or false if there is none.
 			 */
 			$format = apply_filters( 'qm/output/file_link_format', $format );
 			if ( empty( $format ) ) {
@@ -498,6 +598,9 @@ abstract class QM_Output_Html extends QM_Output {
 		return self::$file_link_format;
 	}
 
+	/**
+	 * @return array<string, string>
+	 */
 	public static function get_file_path_map() {
 		/**
 		 * Filters the file path mapping for clickable file links.
@@ -510,6 +613,9 @@ abstract class QM_Output_Html extends QM_Output {
 		return apply_filters( 'qm/output/file_path_map', array() );
 	}
 
+	/**
+	 * @return bool
+	 */
 	public static function has_clickable_links() {
 		return ( false !== self::get_file_link_format() );
 	}

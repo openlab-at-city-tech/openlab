@@ -160,9 +160,6 @@ function wpt_settings_tabs() {
 		'support'    => __( 'Get Help', 'wp-to-twitter' ),
 		'pro'        => $pro_text,
 	);
-	if ( ! function_exists( 'wpt_pro_exists' ) ) {
-		unset( $pages['pro'] );
-	}
 
 	$pages     = apply_filters( 'wpt_settings_tabs_pages', $pages, $current );
 	$admin_url = admin_url( 'admin.php?page=wp-tweets-pro' );
@@ -220,6 +217,7 @@ function wpt_handle_errors() {
 				</p>
 			</form>
 		</div>';
+
 		echo $error;
 	}
 }
@@ -403,7 +401,7 @@ function wpt_is_valid_url( $url ) {
  * @param string $headers Headers to add.
  * @param string $return Array key from fetched object to return.
  *
- * @return value from query.
+ * @return string|false value from query.
  */
 function wpt_fetch_url( $url, $method = 'GET', $body = '', $headers = '', $return = 'body' ) {
 	$request = new WP_Http;
@@ -425,7 +423,7 @@ function wpt_fetch_url( $url, $method = 'GET', $body = '', $headers = '', $retur
 				return $result;
 			}
 		} else {
-			return $result['response']['code'];
+			return $result['body'];
 		}
 		// Failure (server problem...).
 	} else {
@@ -677,9 +675,9 @@ $plugins_string
 	if ( isset( $_POST['wpt_support'] ) ) {
 		$nonce = $_REQUEST['_wpnonce'];
 		if ( ! wp_verify_nonce( $nonce, 'wp-to-twitter-nonce' ) ) {
-			die( 'Security check failed' );
+			wp_die( 'WP to Twitter: Security check failed' );
 		}
-		$request      = ( ! empty( $_POST['support_request'] ) ) ? stripslashes( $_POST['support_request'] ) : false;
+		$request      = ( ! empty( $_POST['support_request'] ) ) ? stripslashes( sanitize_textarea_field( $_POST['support_request'] ) ) : false;
 		$has_donated  = ( isset( $_POST['has_donated'] ) ) ? 'Donor' : 'No donation';
 		$has_read_faq = ( isset( $_POST['has_read_faq'] ) ) ? 'Read FAQ' : false;
 		if ( function_exists( 'wpt_pro_exists' ) && true === wpt_pro_exists() ) {
@@ -694,7 +692,7 @@ $plugins_string
 		if ( 'www.' === substr( $sitename, 0, 4 ) ) {
 			$sitename = substr( $sitename, 4 );
 		}
-		$response_email = ( isset( $_POST['response_email'] ) ) ? $_POST['response_email'] : false;
+		$response_email = ( isset( $_POST['response_email'] ) ) ? sanitize_email( $_POST['response_email'] ) : false;
 		$from_email     = 'wordpress@' . $sitename;
 		$from           = "From: $current_user->display_name <$response_email>\r\nReply-to: $current_user->display_name <$response_email>\r\n";
 

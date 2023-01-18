@@ -1,0 +1,1851 @@
+/* Global */
+.bookly-list-none {
+    list-style: none;
+}
+
+.bookly-left {
+    float: left !important;
+}
+
+.bookly-right {
+    float: right !important;
+}
+
+.bookly-clear {
+    clear: both !important;
+}
+
+.bookly-rtext {
+    text-align: right !important;
+}
+
+.bookly-bold {
+    font-weight: bold !important;
+}
+
+.bookly-list {
+    margin-left: 10px !important;
+}
+
+.bookly-clear-bottom {
+    margin-bottom: 0 !important;
+}
+
+.bookly-none {
+    display: none !important;
+}
+
+.bookly-nowrap {
+    white-space: nowrap;
+}
+
+.bookly-inline-block {
+    display: inline-block !important;
+}
+
+.bookly-btn {
+    text-decoration: none;
+}
+
+.bookly-btn[disabled] {
+    opacity: 0.5;
+}
+
+/* Layout */
+.bookly-box {
+    margin: 0 0 20px;
+    overflow: hidden;
+}
+
+.bookly-table {
+    display: table;
+    table-layout: fixed;
+    width: 100%;
+}
+
+.bookly-table > * {
+    display: table-cell;
+    vertical-align: top;
+    width: auto;
+}
+
+.bookly-table::before,
+.bookly-table::after {
+    content: unset !important;
+}
+
+/* Form Elements */
+.bookly-form {
+    margin: 0 auto;
+}
+
+.bookly-form * {
+    box-sizing: border-box;
+    font-family: inherit;
+    font-size: 14px;
+    line-height: inherit;
+}
+
+.bookly-form input[type="text"],
+.bookly-form input[type="number"],
+.bookly-form input[type="password"],
+.bookly-form select,
+.bookly-form textarea {
+    font-size: 14px !important;
+    line-height: normal !important;
+    border: 1px solid silver !important;
+    border-radius: 4px !important;
+    width: 100% !important;
+}
+
+.bookly-form input[type="text"],
+.bookly-form input[type="number"],
+.bookly-form input[type="password"],
+.bookly-form select {
+    height: auto !important;
+}
+
+.bookly-form input[type="text"],
+.bookly-form input[type="checkbox"],
+.bookly-form input[type="radio"],
+.bookly-form input[type="number"],
+.bookly-form input[type="password"],
+.bookly-form select,
+.bookly-form textarea {
+    display: inline-block;
+    margin: 0 !important;
+    outline: none !important;
+}
+
+.bookly-form input[type="text"],
+.bookly-form input[type="number"],
+.bookly-form input[type="password"],
+.bookly-form textarea {
+    padding: 6px 7px 5px !important;
+}
+
+.bookly-form select {
+    padding: 5px 6px 4px !important;
+}
+
+.bookly-form label {
+    display: inline;
+    float: none;
+    width: auto;
+    font-size: 14px;
+}
+
+.bookly-form img {
+    display: inline;
+}
+
+.bookly-form .bookly-label-error {
+    font-size: 12px;
+    font-weight: bold;
+    margin-top: 5px;
+}
+
+.bookly-form .bookly-btn + input[type=file] {
+    width: 0;
+    height: 0;
+    opacity: 0;
+    display: block;
+}
+
+.bookly-form-group > label {
+    display: inline-block;
+    font-weight: bold;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.bookly-form-group > div {
+    margin: 5px 14px 0 0;
+}
+
+/* Buttons */
+.bookly-nav-steps {
+    padding-top: 20px !important;
+    border-top: 1px solid silver !important;
+    overflow: hidden;
+}
+
+.bookly-box.bookly-nav-steps {
+    margin-bottom: 10px;
+    margin-left: -5px;
+    margin-right: -5px;
+}
+
+.bookly-box.bookly-nav-steps button {
+    margin-bottom: 10px;
+    margin-right: 5px;
+    margin-left: 5px;
+}
+
+.bookly-btn {
+    padding: 9px 18px !important;
+    border: 0 !important;
+    min-width: 118px;
+    display: block;
+    text-align: center;
+    line-height: normal;
+    border-radius: 4px !important;
+    background: #f4662f;
+    cursor: pointer !important;
+    height: auto !important;
+    outline: none !important;
+}
+
+.bookly-btn,
+.bookly-btn > span {
+    color: #fff !important;
+    font-size: 18px !important;
+    line-height: 17px !important;
+    font-weight: bold !important;
+    text-transform: uppercase !important;
+}
+
+button.bookly-btn:hover,
+button.bookly-btn:active,
+button.bookly-round:hover,
+button.bookly-round:active,
+button.bookly-square:hover,
+button.bookly-square:active {
+    background-image: none !important;
+}
+
+.bookly-time-next,
+.bookly-time-prev {
+    min-width: 60px;
+    height: 35px !important;
+    padding: 0 5px !important;
+}
+
+.bookly-time-next {
+    background-position: 50% -56px;
+}
+
+.bookly-time-prev {
+    background-position: 50% 8px;
+}
+
+.bookly-square,
+.bookly-round {
+    width: 28px;
+    height: 28px;
+    padding: 0 !important;
+    line-height: 0 !important;
+    border: 0 !important;
+    outline: none !important;
+    background-repeat: no-repeat;
+}
+
+.bookly-round {
+    border-radius: 50% !important;
+}
+
+span.bookly-round {
+    display: block;
+}
+
+.bookly-square {
+    border-radius: 15%;
+}
+
+.bookly-checkbox-group > input[type='checkbox'] {
+    width: 0 !important;
+    height: 0 !important;
+    max-width: 0px !important;
+    max-height: 0px !important;
+    min-width: 0px !important;
+    min-height: 0px !important;
+    opacity: 0;
+}
+
+.bookly-checkbox-group > input[type='checkbox']:focus + label > i {
+    border-radius: 3px;
+    outline: 0;
+    box-shadow: 0px 0px 1px 0px rgba(37, 0, 255, 1) inset;
+}
+
+.bookly-checkbox-group > input[type='checkbox']:not(:checked) + label > i {
+    background-image: url(../../../frontend/resources/images/square-24.png);
+}
+
+.bookly-checkbox-group > input[type='checkbox']:checked + label > i {
+    background-image: url(../../../frontend/resources/images/checkbox-16.png);
+}
+
+.bookly-checkbox-group > input[type='checkbox']:disabled + label > i {
+    background-image: url(../../../frontend/resources/images/x-24.png) !important;
+    opacity: 0.8;
+    cursor: not-allowed;
+}
+
+.bookly-checkbox-group label {
+    font-weight: bold;
+}
+
+.bookly-row label {
+    vertical-align: text-top;
+}
+
+.bookly-checkbox-group label:nth-child(3) {
+    margin-left: 4px;
+}
+
+.bookly-round-button {
+    cursor: pointer !important;
+}
+
+.bookly-round-button:first-child {
+    margin-right: 5px !important;
+}
+
+.bookly-round-button img {
+    border: 0 !important;
+    box-shadow: none;
+}
+
+.bookly-triangle {
+    width: 29px;
+    height: 29px;
+    border-left: 16px solid transparent;
+    border-right: 16px solid transparent;
+    border-bottom: 26px solid;
+}
+
+.bookly-back-step {
+    margin-right: 10px;
+    float: left !important;
+}
+
+.bookly-next-step {
+    float: right !important;
+}
+
+.bookly-mobile-prev-step {
+    margin-right: 10px;
+}
+
+/* Progress Tracker */
+.bookly-progress-tracker {
+    margin: 0 0 20px !important;
+    padding: 0 !important;
+}
+
+.bookly-progress-tracker > div {
+    padding-left: 4px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-weight: bold;
+    overflow: hidden;
+}
+
+.bookly-progress-tracker .step {
+    height: 15px;
+    background: #bec3c7;
+    margin-top: 5px;
+}
+
+.bookly-progress-tracker > div:first-child .step {
+    border-radius: 5px 0 0 5px;
+}
+
+.bookly-progress-tracker > div:last-child .step {
+    border-radius: 0 5px 5px 0;
+}
+
+.bookly-progress-tracker > div:first-child {
+    padding-left: 0;
+}
+
+/* Service */
+.bookly-service-step .bookly-date-from {
+    cursor: text !important;
+}
+
+.bookly-service-step .bookly-available-date,
+.bookly-service-step .bookly-week-days,
+.bookly-repeat-step .bookly-week-days,
+.bookly-service-step .bookly-time-range {
+    margin-bottom: 20px !important;
+}
+
+.bookly-service-step .bookly-available-date .bookly-form-group > div {
+    margin-right: 0;
+}
+
+.bookly-service-step .bookly-available-date,
+.bookly-service-step .bookly-week-days {
+    margin-right: 14px !important;
+}
+
+.bookly-service-step .bookly-week-days,
+.bookly-repeat-step .bookly-week-days {
+    width: auto;
+}
+
+.bookly-service-step .bookly-week-days > div,
+.bookly-repeat-step .bookly-week-days > div {
+    text-align: center;
+    min-width: 35px;
+}
+
+.bookly-service-step .bookly-week-days label,
+.bookly-repeat-step .bookly-week-days label {
+    display: block !important;
+    width: 23px;
+    height: 23px;
+    padding: 0;
+    margin: -12px auto 0;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.bookly-service-step .bookly-week-days input[type='checkbox'],
+.bookly-repeat-step .bookly-week-days input[type='checkbox'] {
+    width: 0 !important;
+    height: 0 !important;
+    max-width: 0px !important;
+    max-height: 0px !important;
+    min-width: 0px !important;
+    min-height: 0px !important;
+    opacity: 0;
+}
+
+.bookly-service-step .bookly-week-days input[type='checkbox']:checked + label,
+.bookly-repeat-step .bookly-week-days input[type='checkbox']:checked + label {
+    background: #f56530 url("../images/checkbox.png") 0 0 no-repeat;
+}
+
+.bookly-service-step .bookly-week-days input[type='checkbox']:focus + label,
+.bookly-repeat-step .bookly-week-days input[type='checkbox']:focus + label {
+    outline: 0;
+    box-shadow: 0px 0px 1px 0px rgba(37, 0, 255, 1) inset;
+}
+
+.bookly-service-step .bookly-week-days label input,
+.bookly-repeat-step .bookly-week-days label input {
+    visibility: hidden;
+}
+
+.bookly-service-step .bookly-time-range select {
+    width: auto !important;
+}
+
+.bookly-mobile-step-1,
+.bookly-details-step {
+    margin: 0 -14px 0 0;
+}
+
+.bookly-mobile-step-1 .bookly-nav-steps {
+    display: none;
+}
+
+.bookly-chain-actions {
+    width: 50px;
+}
+
+/* Extras */
+.bookly-mw-150 {
+    max-width: 150px;
+}
+
+.bookly-extra-step .bookly-extras-item {
+    display: inline-block;
+    width: 25%;
+    margin: 0 -2px !important;
+    margin-bottom: 2px !important;
+    vertical-align: top !important;
+}
+
+.bookly-extra-step .bookly-extras-thumb {
+    border: 2px solid #bec3c7;
+    padding: 10px;
+    line-height: normal;
+    border-radius: 5px;
+    margin: 3px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.bookly-extra-step .bookly-extras-thumb img {
+    max-width: 100%;
+}
+
+.bookly-extra-step .bookly-extras-thumb div {
+    background-position: center;
+}
+
+.bookly-extra-step div.bookly-extras-summary {
+    display: inline-block;
+    font-weight: bold;
+}
+
+.bookly-extra-step .bookly-extras-item .bookly-extras-count-controls {
+    margin-top: 10px;
+    text-align: center;
+}
+
+.bookly-extra-step .bookly-extras-count-controls > * {
+    vertical-align: middle;
+}
+
+.bookly-extra-step .bookly-extras-item .bookly-extras-total-price {
+    font-weight: bold;
+    margin-top: 5px;
+    text-align: center;
+}
+
+.bookly-extra-step .bookly-extras-item input {
+    width: 3em !important;
+    text-align: center;
+}
+
+.bookly-extra-step .bookly-extras-increment {
+    margin-left: 5px;
+}
+
+/* Time */
+.bookly-time-step {
+    overflow: hidden;
+    position: relative;
+    margin-bottom: 20px !important;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.bookly-columnizer-wrap {
+    position: relative;
+}
+
+.bookly-columnizer {
+    min-height: .01%;
+    white-space: nowrap;
+    position: relative;
+}
+
+.bookly-columnizer .bookly-time-screen {
+    display: inline-block;
+    *display: inline;
+    min-height: .01%;
+}
+
+#bookly-tbs .bookly-columnizer .bookly-time-screen {
+    overflow: hidden;
+    overflow-x: auto;
+}
+
+.bookly-columnizer .bookly-column {
+    min-width: 127px;
+    padding: 0 5px;
+    display: inline-block;
+    zoom: 1;
+    vertical-align: top;
+    float: none !important;
+}
+
+.bookly-columnizer .bookly-column.bookly-column-wide {
+    min-width: 205px;
+}
+
+.bookly-columnizer .bookly-column.bookly-column-wide span.bookly-time-main {
+    float: left;
+    margin-left: 10px;
+}
+
+.bookly-columnizer .bookly-column.bookly-column-wide span.bookly-time-additional {
+    float: right;
+    margin-right: 10px;
+}
+
+.bookly-columnizer .bookly-day,
+.bookly-columnizer .bookly-hour {
+    display: block !important;
+    min-width: 0;
+    width: 100%;
+    margin: 1.5px 0 !important;
+    background: white;
+    height: 36px;
+    padding: 6px;
+    font-size: 13px !important;
+    line-height: 20px;
+    text-align: center;
+    float: none !important;
+    vertical-align: middle;
+    text-transform: none;
+    border: 1px solid #cccccc !important;
+    border-radius: 4px;
+}
+
+.bookly-columnizer .bookly-day {
+    cursor: default !important;
+    text-decoration: none;
+}
+
+.bookly-columnizer .bookly-hour {
+    background: white !important;
+    cursor: pointer;
+}
+
+.bookly-columnizer .bookly-hour span {
+    font-weight: normal;
+    color: #333 !important;
+}
+
+.bookly-columnizer .bookly-hour.bookly-slot-in-waiting-list {
+    background-color: #d6d6d6 !important;
+}
+
+.bookly-columnizer .bookly-hour.bookly-slot-in-special-hour .bookly-time-main {
+    font-weight: bold;
+}
+
+.bookly-columnizer .bookly-hour .ladda-label {
+    display: inline-block;
+}
+
+.bookly-schedule-date,
+.bookly-columnizer .bookly-day {
+    background: #f4662f;
+    color: white !important;
+    font-weight: bold !important;
+    border: 1px solid #f4662f;
+}
+
+.bookly-columnizer .booked,
+.bookly-columnizer .booked:hover {
+    opacity: .5;
+    cursor: default !important;
+}
+
+.bookly-columnizer .booked span {
+    text-decoration: line-through;
+}
+
+.bookly-columnizer .bookly-hour .bookly-hour-icon {
+    display: block;
+    float: left;
+    width: 18px;
+    height: 18px;
+    margin-top: 1px;
+    margin-right: 5px;
+    background: url("../images/success.png") 0 0 no-repeat;
+}
+
+@media (hover) {
+    .bookly-columnizer .bookly-hour:hover {
+        border: 2px solid #f4662f;
+        color: #f4662f;
+    }
+
+    .bookly-columnizer .bookly-hour.booked:hover {
+        border: 1px solid #cccccc !important;
+        color: #333333 !important;
+    }
+
+    .bookly-columnizer .bookly-hour.booked:hover .bookly-hour-icon span {
+        visibility: hidden;
+    }
+
+    .bookly-columnizer .bookly-hour:hover .bookly-hour-icon {
+        background: none;
+        border: 2px solid #f4662f;
+        color: #f4662f;
+        width: auto;
+        height: auto;
+        padding: 3px;
+        border-radius: 25px;
+        margin-right: 3px;
+    }
+
+    .bookly-columnizer .bookly-hour.booked:hover .bookly-hour-icon {
+        border: 2px solid #cccccc !important;
+    }
+
+    .bookly-columnizer .bookly-hour:hover .bookly-hour-icon span {
+        background: #f4662f;
+        width: 8px;
+        height: 8px;
+        border-radius: 10px;
+        display: block;
+    }
+}
+
+.bookly-time-step .bookly-columnizer > button {
+    display: none !important;
+}
+
+.bookly-time-step .bookly-columnizer > .bookly-column {
+    display: none !important;
+}
+
+.bookly-slot-calendar {
+    margin: 0 20px 20px 0;
+    float: left;
+}
+
+.bookly-slot-calendar .picker,
+.bookly-slot-calendar .picker__holder {
+    position: static;
+}
+
+.bookly-not-time-screen {
+    font-size: 16px;
+    height: 296px;
+    margin-left: 320px;
+    font-weight: bold;
+}
+
+.bookly-not-time-screen.bookly-not-calendar {
+    height: auto;
+    margin-left: 0;
+    padding-bottom: 15px;
+}
+
+.bookly-spin-overlay {
+    position: relative;
+    opacity: .5;
+}
+
+.bookly-spin-overlay .bookly-spin {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-left: -20px;
+    margin-top: -20px;
+}
+
+select.bookly-time-zone-switcher {
+    width: 220px !important;
+}
+
+/* Repeat */
+.bookly-repeat-step {
+    margin-bottom: 20px !important;
+    min-width: 260px;
+}
+
+.bookly-repeat-step .bookly-row {
+    margin: 12px 0 12px 0 !important;
+}
+
+.bookly-repeat-step .bookly-week-days {
+    margin-bottom: 0 !important;
+}
+
+.bookly-repeat-step .bookly-get-schedule {
+    display: inline-block;
+}
+
+.bookly-repeat-step .bookly-schedule-date,
+.bookly-repeat-step .bookly-schedule-time {
+    width: 100px !important;
+    text-align: center;
+    vertical-align: middle;
+    text-transform: none;
+    border-radius: 4px;
+    height: 28px;
+    margin-right: 6px;
+    margin-top: 2px;
+    margin-bottom: 4px;
+}
+
+.bookly-repeat-step .bookly-schedule-time select {
+    border: 0 !important;
+    height: 26px !important;
+    background-color: #fff;
+    padding: 0 !important;
+}
+
+.bookly-repeat-step .bookly-schedule-date input {
+    background-color: #fff;
+    border: 0 !important;
+    height: 26px !important;
+    float: none !important;
+}
+
+.bookly-repeat-step .bookly-schedule-row {
+    border: 1px solid #cccccc !important;
+    border-radius: 3px;
+    display: flex;
+}
+
+.bookly-schedule-row .bookly-rounds-group {
+    float: right !important;
+    margin-top: 2px;
+    margin-bottom: 4px;
+    height: 28px;
+}
+
+.bookly-repeat-step .bookly-schedule-row > div {
+    float: left;
+    line-height: 25px;
+}
+
+.bookly-repeat-step .bookly-schedule-row .bookly-schedule-appointment > div,
+.bookly-repeat-step .bookly-schedule-row .bookly-schedule-intersect > div {
+    float: left;
+}
+
+.bookly-schedule-slots > div:not(:last-child) {
+    margin-bottom: 12px;
+}
+
+.bookly-repeat-step .bookly-schedule-row .bookly-schedule-intersect {
+    margin: 2px 2px 4px 0;
+}
+
+.bookly-repeat-step .bookly-schedule-row > div:first-child {
+    width: 36px;
+    height: 36px;
+    padding: 4px;
+    text-align: center;
+    font-size: 20px;
+}
+
+.bookly-repeat-step .bookly-schedule-row > div:last-child {
+    width: calc(100% - 36px);
+    border-left: 1px solid #cccccc !important;
+    padding: 2px 2px 0 4px;
+}
+
+.bookly-repeat-step .bookly-schedule-row .bookly-schedule-time {
+    border: 1px solid #cccccc !important;
+    border-radius: 4px;
+}
+
+.bookly-repeat-step .bookly-schedule-row .bookly-hidden-info {
+    display: none;
+}
+
+.bookly-repeat-step .bookly-schedule-row .bookly-hidden-info > span {
+    line-height: 32px;
+}
+
+.bookly-schedule-appointment.bookly-appointment-hidden > * {
+    display: none !important;
+    height: 0;
+}
+
+.bookly-schedule-appointment.bookly-appointment-hidden .bookly-hidden-info {
+    display: block !important;
+    width: 100%;
+}
+
+/* pagination */
+.bookly-pagination {
+    display: flex;
+    padding-left: 0;
+    list-style: none;
+    margin: 0;
+}
+
+.bookly-pagination li {
+    display: list-item;
+    text-align: match-parent;
+    margin: 0 -1px 0 0 !important;
+}
+
+.bookly-pagination li a {
+    position: relative;
+    display: block;
+    text-decoration: none;
+    border: 1px solid #cccccc;
+    width: 35px;
+    height: 35px;
+    line-height: 32px;
+    text-align: center;
+}
+
+.bookly-pagination li a:focus {
+    z-index: 3;
+    outline: 0;
+}
+
+.bookly-pagination li.active a {
+    color: #fff;
+}
+
+.bookly-pagination li:first-child a {
+    border-top-left-radius: .25rem;
+    border-bottom-left-radius: .25rem
+}
+
+.bookly-pagination li:last-child a {
+    border-top-right-radius: .25rem;
+    border-bottom-right-radius: .25rem
+}
+
+.bookly-visible-sm {
+    display: none;
+}
+
+/* well */
+.bookly-well {
+    border: 1px solid #cccccc !important;
+    padding-right: 6px;
+    padding-left: 6px;
+    border-radius: 4px;
+    background-color: #F2DEDE;
+    vertical-align: middle;
+    display: table;
+}
+
+.bookly-well > div:nth-child(1) {
+    margin: 5px 5px 5px 0;
+    float: left;
+}
+
+.bookly-well > div:nth-child(2) {
+    min-height: 38px;
+    vertical-align: middle;
+    display: table-cell;
+    width: 100%;
+}
+
+.popover .editable-container,
+.popover .control-group {
+    min-width: 300px;
+}
+
+label.bookly-checkbox-label input[type=checkbox] {
+    position: relative;
+    vertical-align: middle;
+    bottom: 1px;
+}
+
+.bookly-round-md {
+    width: 35px;
+    height: 35px;
+}
+
+.bookly-triangle-md {
+    margin: 5px 5px 5px 0;
+    width: 35px;
+    height: 35px;
+    border-left: 22px solid transparent;
+    border-right: 22px solid transparent;
+    border-bottom: 35px solid;
+    float: left;
+}
+
+.bookly-icon-sm {
+    height: 100%;
+    display: block;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+.bookly-icon-sm i {
+    margin: 0;
+    padding: 0;
+}
+
+.bookly-icon-md {
+    height: 24px;
+    width: 24px;
+    display: block;
+    margin-left: 6px;
+    background-repeat: no-repeat;
+}
+
+.bookly-triangle .bookly-icon-sm {
+    margin-left: -2px;
+    margin-top: 11px;
+    height: 16px;
+    padding-left: 4px;
+}
+
+.bookly-round-md .bookly-icon-md {
+    margin: 6px;
+}
+
+.bookly-round .bookly-icon-md {
+    margin: 6px;
+}
+
+button.bookly-round,
+label.bookly-square {
+    cursor: pointer;
+}
+
+.bookly-round .ladda-label {
+    display: inline !important;
+}
+
+.bookly-icon-sm.bookly-icon-restore {
+    background-image: url(../../../frontend/resources/images/redo-16.png);
+}
+
+.bookly-icon-sm.bookly-icon-exclamation {
+    background-image: url(../../../frontend/resources/images/exclamation-16.png);
+}
+
+.bookly-icon-sm.bookly-icon-i {
+    background-image: url(../../../frontend/resources/images/info-16.png);
+}
+
+.bookly-icon-sm.bookly-icon-edit {
+    background-image: url(../../../frontend/resources/images/edit-16.png);
+}
+
+.bookly-icon-sm.bookly-icon-plus {
+    background-image: url(../../../frontend/resources/images/plus-16.png);
+}
+
+.bookly-icon-sm.bookly-icon-minus {
+    background-image: url(../../../frontend/resources/images/minus-16.png);
+}
+
+.bookly-icon-sm.bookly-icon-drop {
+    background-image: url(../../../frontend/resources/images/delete-16.png);
+}
+
+.bookly-icon-sm.bookly-icon-check {
+    background-image: url(../../../frontend/resources/images/check-16.png);
+}
+
+.bookly-icon-user {
+    height: 16px;
+    width: 16px;
+    display: inline-block;
+    margin: 4px 2px 0 2px;
+    vertical-align: top;
+    background-image: url(../../../frontend/resources/images/user-16.png);
+}
+
+/* Cart */
+.bookly-go-to-cart {
+    width: 35px;
+    height: 35px;
+    float: left !important;
+}
+
+.bookly-cart .bookly-mobile-version {
+    display: none;
+}
+
+.bookly-cart table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    border: none !important;
+    table-layout: auto;
+    width: 100%;
+    margin: 0 !important;
+}
+
+.bookly-cart table .bookly-round {
+    vertical-align: bottom;
+}
+
+.bookly-cart table th,
+.bookly-cart table td {
+    border: 0;
+    text-align: left;
+    padding: 8px;
+}
+
+.bookly-cart tbody.bookly-mobile-version td,
+.bookly-cart tbody.bookly-mobile-version th {
+    border-top: 1px solid rgba(51, 51, 51, 0.1);
+}
+
+.bookly-cart th,
+.bookly-cart tr.bookly-cart-primary,
+.bookly-cart tr.bookly-cart-primary td,
+.bookly-cart tfoot tr,
+.bookly-cart tfoot tr th {
+    border-top: 1px solid rgba(51, 51, 51, 0.1);
+    font-size: 14px !important;
+}
+
+.bookly-cart th {
+    border-width: 0 0 1px 0;
+    font-weight: 700;
+    padding-top: 0 !important;
+}
+
+.bookly-cart table tfoot th,
+.bookly-cart table tfoot td {
+    border-top: 2px solid rgba(51, 51, 51, 0.1);
+}
+
+.bookly-cart table tr.bookly-cart-sub-item td:first-child {
+    padding-left: 25px;
+}
+
+.bookly-cart tbody.bookly-desktop-version,
+.bookly-cart tbody.bookly-desktop-version td,
+.bookly-cart tbody.bookly-mobile-version tr.bookly-cart-sub-item th,
+.bookly-cart tbody.bookly-mobile-version tr.bookly-cart-sub-item td {
+    border: 0 !important;
+}
+
+/* Details */
+.bookly-guest > .bookly-btn {
+    display: inline-block;
+    margin: 0 14px 12px 0;
+}
+
+.bookly-guest > .fb_iframe_widget_fluid {
+    display: inline-block;
+}
+
+.bookly-guest > * {
+    vertical-align: top;
+}
+
+.bookly-details-step .bookly-form-group input[type="text"].bookly-captcha {
+    display: block;
+    width: 160px !important;
+    margin: 10px 0 0 !important;
+}
+
+.bookly-details-step .bookly-form-group .intl-tel-input {
+    display: block;
+}
+
+.bookly-details-step .bookly-form-group .intl-tel-input input {
+    padding-left: 45px !important;
+}
+
+.bookly-details-step .bookly-table,
+.bookly-details-step .bookly-table > * {
+    overflow: visible !important;
+}
+
+.bookly-details-step .bookly-form-group textarea {
+    resize: vertical;
+}
+
+.bookly-details-step .bookly-custom-field-row > div > div > label,
+.bookly-details-step .bookly-custom-field-row > div > div > label > input[type="radio"],
+.bookly-details-step .bookly-custom-field-row > div > div > label > input[type="checkbox"] {
+    cursor: pointer;
+}
+
+.bookly-details-step .bookly-custom-field-row > div > div > label > * {
+    vertical-align: middle;
+}
+
+/* Payment */
+.bookly-form input.bookly-user-coupon, .bookly-form input.bookly-user-gift, .bookly-form input.bookly-user-tips {
+    width: 100px !important;
+    margin: 0 10px !important;
+}
+
+.bookly-form select.bookly-card-exp {
+    width: auto !important;
+    margin-right: 10px !important;
+}
+
+.bookly-form input.bookly-card-cvc {
+    width: 50px !important;
+}
+
+.bookly-form .bookly-payment-nav > div > label,
+.bookly-form .bookly-payment-nav > div > label > input[type="radio"] {
+    cursor: pointer;
+}
+
+.bookly-form .bookly-payment-nav > div > label > * {
+    vertical-align: middle;
+}
+
+.bookly-form .bookly-payment-nav > div > label > img {
+    margin-left: 10px;
+}
+
+/* Modal Dialog */
+.bookly-fade {
+    display: none;
+}
+
+.bookly-in {
+    display: block;
+}
+
+.bookly-close:hover,
+.bookly-close:focus,
+.bookly-close {
+    float: right;
+    font-size: 21px;
+    font-weight: 700;
+    line-height: 1;
+    color: #000;
+    text-shadow: 0 1px 0 #fff;
+    filter: alpha(opacity=20);
+    opacity: .2;
+    -webkit-appearance: none;
+    padding: 0;
+    cursor: pointer;
+    background: none;
+    border: 0;
+    margin-top: -25px;
+}
+
+.bookly-close:focus,
+.bookly-close:hover {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+    opacity: .5;
+    background: none;
+}
+
+.bookly-modal {
+    position: fixed;
+    width: 100%;
+    left: 0;
+    top: 0;
+    z-index: 9999;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.bookly-modal .bookly-modal-dialog {
+    width: 400px;
+    position: absolute;
+    left: 50%;
+    margin-left: -200px;
+    top: 100px;
+}
+
+.bookly-modal .bookly-modal-content {
+    position: relative;
+    background-color: #fff;
+    -webkit-background-clip: padding-box;
+    background-clip: padding-box;
+    border: 1px solid rgba(0, 0, 0, .2);
+    border-radius: 6px;
+    outline: 0;
+    -webkit-box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
+    box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
+}
+
+.bookly-modal .bookly-modal-content .bookly-modal-header {
+    min-height: 16.5px;
+    padding: 15px;
+    border-bottom: 1px solid #e5e5e5;
+    color: #666;
+}
+
+.bookly-modal .bookly-modal-content .bookly-modal-header h4 {
+    margin: 0;
+    padding: 0;
+    font-size: 22px;
+}
+
+.bookly-modal .bookly-modal-content .bookly-modal-footer {
+    padding: 15px;
+    text-align: right;
+    border-top: 1px solid #e5e5e5;
+}
+
+.bookly-modal .bookly-modal-content .bookly-modal-footer .bookly-btn-submit:focus,
+.bookly-modal .bookly-modal-content .bookly-modal-footer .bookly-btn-submit:active,
+.bookly-modal .bookly-modal-content .bookly-modal-footer .bookly-btn-submit:hover,
+.bookly-modal .bookly-modal-content .bookly-modal-footer .bookly-btn-submit {
+    display: inline-block;
+    padding: 6px 12px !important;
+    border: 0;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    border-radius: 4px;
+    color: #fff;
+    text-transform: capitalize;
+}
+
+.bookly-modal .bookly-modal-content .bookly-modal-footer .bookly-btn-cancel {
+    border: 0;
+    background: none;
+    color: #21759b;
+    cursor: pointer;
+    padding: 0;
+    vertical-align: -2px;
+    font-size: 14px;
+}
+
+.bookly-modal .bookly-modal-content .bookly-modal-body {
+    position: relative;
+    padding: 15px;
+    font-size: 14px;
+}
+
+.bookly-modal .bookly-modal-content .bookly-modal-body .bookly-form-group {
+    margin-bottom: 10px;
+}
+
+.bookly-modal .bookly-modal-content .bookly-modal-body .bookly-form-group label {
+    font-size: 14px;
+}
+
+.bookly-modal .bookly-modal-content .bookly-modal-body div > div > label {
+    cursor: pointer;
+}
+
+.bookly-modal .bookly-modal-content .bookly-modal-body div > div > label > * {
+    vertical-align: middle;
+    cursor: pointer;
+}
+
+@media (max-width: 768px) {
+    .bookly-modal .bookly-modal-dialog {
+        width: auto;
+        left: 15px;
+        right: 15px;
+        margin: 30px auto;
+        top: 50px;
+    }
+}
+
+/* Picker */
+.bookly-form .picker__holder {
+    width: 310px !important;
+    overflow: hidden !important;
+    -webkit-border-radius: 5px 5px !important;
+    -moz-border-radius: 5px 5px !important;
+    border-radius: 5px 5px !important;
+    top: 2px;
+    left: 0px;
+    outline: none;
+    bottom: auto;
+}
+
+.bookly-form .picker {
+    width: auto !important;
+    right: auto !important;
+    top: auto !important;
+    bottom: auto !important;
+    left: auto !important;
+}
+
+.bookly-form .picker__header {
+    position: inherit;
+}
+
+.bookly-form .picker__nav--next {
+    position: inherit;
+    float: right;
+}
+
+.bookly-form .picker__nav--prev {
+    position: inherit;
+    float: left;
+}
+
+.bookly-form .picker:before,
+.bookly-form .picker:after {
+    display: none !important;
+}
+
+.bookly-form .picker__frame * {
+    font-size: 14px !important;
+    font-weight: bold !important;
+    border: 0 !important;
+    color: #fff !important;
+}
+
+.bookly-form .picker__frame {
+    position: static;
+    margin-bottom: 0 !important;
+}
+
+.bookly-form .picker__weekday {
+    font-weight: normal !important;
+    text-align: center !important;
+    padding: 0 !important;
+    padding-bottom: .5em !important;
+    border: 0 !important;
+    background: none !important;
+}
+
+.bookly-form .picker__day--selected,
+.bookly-form .picker__day--selected:hover,
+.bookly-form .picker--focused .picker__day--selected,
+.bookly-form .picker__day--infocus:hover,
+.bookly-form .picker__day--outfocus:hover {
+    background: #fff !important;
+    border-radius: 4px !important;
+}
+
+.bookly-form .picker__day--highlighted {
+    border-color: #fff !important;
+}
+
+.bookly-form .picker__button--today:before {
+    display: none !important;
+}
+
+.bookly-form .picker__nav--prev:before {
+    border-left: 0 !important;
+}
+
+.bookly-form .picker__nav--next:before {
+    border-right: 0 !important;
+}
+
+.bookly-form .picker--focused .picker__day--highlighted {
+    background: none !important;
+    border-radius: 4px !important;
+}
+
+.bookly-form .picker--focused .picker__day--highlighted:hover {
+    background: white !important;
+}
+
+.bookly-form .picker--focused .picker__day--selected {
+    background: white !important;
+}
+
+.bookly-form .picker__button--today:hover,
+.bookly-form .picker__button--clear:hover {
+    background: white !important;
+    border-bottom-color: white !important;
+}
+
+.bookly-form .picker__table {
+    margin-top: .75em !important;
+    margin-bottom: .75em !important;
+    line-height: normal !important;
+    background: none !important;
+}
+
+.bookly-form .picker__table td {
+    text-align: center !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: none !important;
+}
+
+.bookly-form .picker__table tr,
+.bookly-form .picker__table tbody,
+.bookly-form .picker__table thead {
+    background: none !important;
+}
+
+.bookly-form .picker__nav--prev {
+    left: 0;
+}
+
+.bookly-form .picker__nav--next {
+    right: 0;
+}
+
+.bookly-form .picker__nav--prev,
+.bookly-form .picker__nav--next {
+    box-sizing: content-box;
+    background: white !important;
+    border-radius: 50%;
+    padding: 6px;
+    top: -3px;
+}
+
+.bookly-form .picker__day--today {
+    border: 1px solid white !important;
+    -webkit-border-radius: 4px !important;
+    -moz-border-radius: 4px !important;
+    border-radius: 4px !important;
+    position: inherit;
+}
+
+.bookly-form .picker__day--today:before {
+    display: none;
+}
+
+.bookly-form .picker__button--today,
+.bookly-form .picker__button--clear {
+    padding: 5px 0 !important;
+    width: 33% !important;
+    -webkit-border-radius: 4px !important;
+    -moz-border-radius: 4px !important;
+    border-radius: 4px !important;
+    margin-bottom: 10px !important;
+    float: none !important;
+    background: white !important;
+}
+
+.bookly-form .picker__day--outfocus,
+.bookly-form .picker__day--disabled {
+    color: rgba(255, 255, 255, 0.5) !important;
+    background: none !important;
+}
+
+.bookly-form .picker__day--disabled:hover {
+    background: white;
+}
+
+.bookly-form .picker__nav--disabled {
+    opacity: 0;
+    cursor: default;
+}
+
+.bookly-form .bookly-image-box {
+    height: 298px;
+    position: relative;
+}
+
+.bookly-form .bookly-image-box img {
+    position: absolute;
+    left: calc(50% - 149px);
+    top: calc(50% - 149px);
+}
+
+.bookly-form .bookly-loading:before {
+    content: '';
+    position: absolute;
+    left: calc(50% - 16px);
+    top: calc(50% - 16px);
+    width: 32px;
+    height: 32px;
+    background: url('../../../backend/resources/images/ajax_loader_32x32.gif') no-repeat;
+    background-size: contain;
+}
+
+.bookly-row .bookly-text,
+.bookly-row .bookly-text-center,
+.bookly-row .bookly-col-label {
+    padding-top: 6px;
+    margin-bottom: 0;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.bookly-row .bookly-text-center {
+    text-align: center;
+}
+
+.bookly-row .bookly-col-label {
+    text-align: right;
+}
+
+.bookly-row {
+    margin: 0 !important;
+    overflow: hidden;
+}
+
+.bookly-col-1,
+.bookly-col-2,
+.bookly-col-3,
+.bookly-col-4,
+.bookly-col-5,
+.bookly-col-6,
+.bookly-col-7,
+.bookly-col-8,
+.bookly-col-9,
+.bookly-col-10,
+.bookly-col-11,
+.bookly-col-12 {
+    float: left !important;
+    padding-left: 2px;
+    padding-right: 2px;
+}
+
+.bookly-col-12 {
+    width: 100%;
+}
+
+.bookly-col-11 {
+    width: 91.66666667%;
+}
+
+.bookly-col-10 {
+    width: 83.33333333%;
+}
+
+.bookly-col-9 {
+    width: 75%;
+}
+
+.bookly-col-8 {
+    width: 66.66666667%;
+}
+
+.bookly-col-7 {
+    width: 58.33333333%;
+}
+
+.bookly-col-6 {
+    width: 50%;
+}
+
+.bookly-col-5 {
+    width: 41.66666667%;
+}
+
+.bookly-col-4 {
+    width: 33.33333333%;
+}
+
+.bookly-col-3 {
+    width: 25%;
+}
+
+.bookly-col-2 {
+    width: 16.66666667%;
+}
+
+.bookly-col-1 {
+    width: 8.33333333%;
+}
+
+.powered-by-bookly {
+    font-size: 14px !important;
+    color: #666666;
+    text-align: center;
+}
+
+.powered-by-bookly a {
+    color: inherit;
+}
+
+.powered-by-bookly a:first-child {
+    text-decoration: none !important;
+}
+
+/* Other */
+.bookly-form *:focus {
+    outline: 0;
+    box-shadow: 0px 0px 1px 0px rgba(37, 0, 255, 1) inset;
+}
+
+.bookly-form ::-webkit-input-placeholder {
+    color: #bbb !important;
+}
+
+.bookly-form ::-moz-placeholder {
+    color: #bbb !important;
+}
+
+/* Firefox 19+ */
+.bookly-form :-moz-placeholder {
+    color: #bbb !important;
+}
+
+/* Firefox 18- */
+.bookly-form :-ms-input-placeholder {
+    color: #bbb !important;
+}
+
+.bookly-form .bookly-category-info, .bookly-form .bookly-service-info, .bookly-form .bookly-staff-info {
+    margin-top: -10px;
+}
+
+/* Mobile */
+@media screen and (max-width: 650px) {
+    .bookly-form-group label:empty {
+        display: none !important;
+    }
+
+    .bookly-form-group > div {
+        margin-right: 0 !important;
+    }
+
+    .bookly-table > * {
+        display: block;
+    }
+
+    .bookly-repeat-step .bookly-table > * {
+        display: table-cell;
+    }
+
+    .bookly-table .bookly-form-group {
+        margin: 0 0 20px;
+        width: 100% !important;
+    }
+
+    .bookly-table .bookly-form-group:last-child {
+        margin: 0;
+    }
+
+    .bookly-progress-tracker {
+        display: none;
+    }
+
+    .bookly-mobile-step-1 .bookly-nav-steps {
+        display: block;
+    }
+
+    .bookly-mobile-step-2 {
+        display: none;
+    }
+
+    .bookly-select-mobile {
+        width: 95%;
+        margin-top: 5px;
+    }
+
+    .bookly-mobile-next-step, .bookly-mobile-prev-step {
+        display: block !important;
+    }
+
+    .bookly-mobile-float-none {
+        float: none !important;
+    }
+
+    /* Service */
+    .bookly-service-step .bookly-available-date,
+    .bookly-service-step .bookly-week-days {
+        margin-right: 0 !important;
+    }
+
+    .bookly-service-step .bookly-week-days,
+    .bookly-repeat-step .bookly-week-days {
+        width: 100%;
+    }
+
+    .bookly-service-step .bookly-week-days > div {
+        display: table-cell;
+    }
+
+    .bookly-service-step .bookly-time-to,
+    .bookly-service-step .bookly-time-from {
+        display: inline-block;
+        width: 48% !important;
+    }
+
+    .bookly-service-step .bookly-time-to {
+        float: right !important;
+    }
+
+    .bookly-service-step .bookly-time-range select {
+        width: 100% !important;
+    }
+
+    .bookly-mobile-step-1 {
+        margin-right: 0;
+    }
+
+    .bookly-not-time-screen {
+        height: auto !important;
+        margin-left: 0 !important;
+        margin-bottom: 15px;
+        clear: both;
+    }
+
+    .bookly-time-step {
+        clear: both;
+    }
+
+    .bookly-btn {
+        width: auto !important;
+        min-width: 0;
+        padding: 9px 18px !important;
+        background-image: none !important;
+    }
+
+    .bookly-go-to-cart {
+        padding: 8px !important;
+        width: 35px !important;
+        height: 35px !important;
+    }
+
+    .bookly-form .picker__holder {
+        left: 0 !important;
+    }
+
+    .bookly-extra-step .bookly-extras-item {
+        width: 50%;
+    }
+
+    .bookly-cart .bookly-mobile-version {
+        display: table-row-group;
+    }
+
+    .bookly-cart .bookly-desktop-version {
+        display: none;
+    }
+
+    .bookly-col-12,
+    .bookly-col-11,
+    .bookly-col-10,
+    .bookly-col-9,
+    .bookly-col-8,
+    .bookly-col-7,
+    .bookly-col-6,
+    .bookly-col-5,
+    .bookly-col-4,
+    .bookly-col-3,
+    .bookly-col-2,
+    .bookly-col-1 {
+        width: 100%;
+        padding: 0;
+    }
+
+    .bookly-visible-sm {
+        display: block;
+    }
+
+    .bookly-visible-md {
+        display: none !important;
+    }
+
+    .bookly-margin-top {
+        margin-top: 12px;
+    }
+
+    .bookly-row .bookly-col-label,
+    .bookly-row .bookly-text-center {
+        text-align: left;
+        text-transform: capitalize;
+        padding-top: 0;
+    }
+
+    .bookly-repeat-step .bookly-schedule-row > div:first-child {
+        width: 31px;
+    }
+
+    .bookly-repeat-step .bookly-schedule-row > div:last-child {
+        width: calc(100% - 31px);
+        padding: 2px 2px 0 2px;
+    }
+
+    .bookly-repeat-step .bookly-schedule-date, .bookly-repeat-step .bookly-schedule-time {
+        margin-right: 2px;
+    }
+
+    .bookly-repeat-step .bookly-schedule-time {
+        width: 90px !important;
+    }
+}
+
+/* intlTelInput.js */
+.iti-flag {
+    background-image: url("../images/flags.png");
+}
+
+@media only screen and (min-resolution: 2dppx) {
+    .iti-flag {
+        background-image: url("../images/flags@2x.png")
+    }
+}
+
+.bookly-radio-loading {
+    border: 2px solid lightgrey;
+    border-top: 2px solid black;
+    border-radius: 50%;
+    width: 13px;
+    height: 13px;
+    animation: bookly-radio-loading-spin 2s linear infinite;
+}
+
+@keyframes bookly-radio-loading-spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.pac-container {
+    z-index: 1000000 !important;
+}

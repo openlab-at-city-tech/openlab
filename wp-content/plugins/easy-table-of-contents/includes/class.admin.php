@@ -31,14 +31,37 @@ if ( ! class_exists( 'ezTOC_Admin' ) ) {
 		 * @static
 		 */
 		private function hooks() {
+            global $pagenow;
 
+            if($pagenow == 'options-general.php' && isset($_REQUEST['page']) && !empty($_REQUEST['page']) &&
+            $_REQUEST['page'] == 'table-of-contents') {
+                add_action( 'admin_head', array( $this,'_clean_other_plugins_stuff' ) );
+            }
 			add_action( 'admin_init', array( $this, 'registerScripts' ) );
 			add_action( 'admin_menu', array( $this, 'menu' ) );
 			add_action( 'init', array( $this, 'registerMetaboxes' ), 99 );
 			add_filter( 'plugin_action_links_' . EZ_TOC_BASE_NAME, array( $this, 'pluginActionLinks' ), 10, 2 );
+			add_action( 'admin_enqueue_scripts', array( $this, 'load_scripts' ) );
+			add_action('wp_ajax_eztoc_send_query_message', array( $this, 'eztoc_send_query_message'));
 		}
 
-		/**
+        /**
+         * Attach to admin_head hook to hide all admin notices.
+         *
+         * @scope public
+         * @since  2.0.33
+         * @return void
+         * @uses remove_all_actions()
+         */
+        public function _clean_other_plugins_stuff()
+        {
+            remove_all_actions('admin_notices');
+            remove_all_actions('network_admin_notices');
+            remove_all_actions('all_admin_notices');
+            remove_all_actions('user_admin_notices');
+        }
+
+        /**
 		 * Callback to add the Settings link to the plugin action links.
 		 *
 		 * @access private
@@ -52,15 +75,13 @@ if ( ! class_exists( 'ezTOC_Admin' ) ) {
 		 */
 		public  function pluginActionLinks( $links, $file ) {
 
-			$action = array();
-
-			$action[] = sprintf(
-				'<a href="%1$s">%2$s</a>',
-				esc_url( add_query_arg( 'page', 'table-of-contents', self_admin_url( 'options-general.php' ) ) ),
-				esc_html__( 'Settings', 'easy-table-of-contents' )
-			);
-
-			return array_merge( $action, $links );
+		    $url = add_query_arg( 'page', 'table-of-contents', self_admin_url( 'options-general.php' ) );
+		    $setting_link = '<a href="' . esc_url( $url ) . '">' . __( 'Settings', 'easy-table-of-contents' ) . '</a> |';
+		 	$setting_link .= '<a href="https://tocwp.com/contact/" target="_blank">' . __( ' Support', 'easy-table-of-contents' ) . '</a> |';
+		 	$setting_link .= '<a href="https://tocwp.com/pricing/" target="_blank">' . __( ' Upgrade', 'easy-table-of-contents' ) . '</a> |';
+		 	$setting_link .= '<a href="https://tocwp.com/" target="_blank">' . __( ' Website', 'easy-table-of-contents' ) . '</a>';
+		    array_push( $links, $setting_link );
+		    return $links;
 		}
 
 		/**
@@ -74,6 +95,142 @@ if ( ! class_exists( 'ezTOC_Admin' ) ) {
 
 			wp_register_script( 'cn_toc_admin_script', EZ_TOC_URL . 'assets/js/admin.js', array( 'jquery', 'wp-color-picker' ), ezTOC::VERSION, true );
 			wp_register_style( 'cn_toc_admin_style', EZ_TOC_URL . 'assets/css/admin.css', array( 'wp-color-picker' ), ezTOC::VERSION );
+
+
+//                                wp_enqueue_style( 'ez-toc' );
+//                                self::inlineStickyToggleCSS();
+			wp_enqueue_script( 'cn_toc_admin_script' );
+            $data = array(
+                'ajax_url'      		       => admin_url( 'admin-ajax.php' ),
+                'eztoc_security_nonce'         => wp_create_nonce('eztoc_ajax_check_nonce'),
+            );
+
+            $data = apply_filters( 'eztoc_localize_filter', $data, 'eztoc_admin_data' );
+
+            wp_localize_script( 'cn_toc_admin_script', 'cn_toc_admin_data', $data );
+			self::inlineAdminStickyToggleJS();
+                        
+                        self::inlineAdminOccasionalAdsPopUpCSS_JS();
+		}
+                
+                /**
+                 * inlineAdminOccasionalAdsPopUpCSS_JS Method
+		 * Prints out inline occasional ads PopUp JS.
+		 *
+		 * @access private
+		 * @return void
+		 * @since  2.0.38
+		 * @static
+		*/
+                private static function inlineAdminOccasionalAdsPopUpCSS_JS() {
+                    $inlineAdminOccasionalAdsPopUpCCS = <<<INLINEOCCASIONALADSPOPUSCCS
+details#eztoc-ocassional-pop-up-container{position:fixed;right:1rem;bottom:1rem;margin-top:2rem;color:#6b7280;display:flex;flex-direction:column;margin-right: 15px;z-index:99999}details#eztoc-ocassional-pop-up-container div.eztoc-ocassional-pop-up-contents{background-color:#1e1e27;box-shadow:0 5px 10px rgba(0,0,0,.15);padding:25px 25px 10px;border-radius:8px;position:absolute;max-height:calc(100vh - 100px);width:325px;max-width:calc(100vw - 2rem);bottom:calc(100% + 1rem);right:0;overflow:auto;transform-origin:100% 100%;color:#95a3b9;margin-bottom:44px}details#eztoc-ocassional-pop-up-container div.eztoc-ocassional-pop-up-contents::-webkit-scrollbar{width:15px;background-color:#1e1e27}details#eztoc-ocassional-pop-up-container div.eztoc-ocassional-pop-up-contents::-webkit-scrollbar-thumb{width:5px;border-radius:99em;background-color:#95a3b9;border:5px solid #1e1e27}details#eztoc-ocassional-pop-up-container div.eztoc-ocassional-pop-up-contents>*+*{margin-top:.75em}details#eztoc-ocassional-pop-up-container div.eztoc-ocassional-pop-up-contents p>code{font-size:1rem;font-family:monospace}details#eztoc-ocassional-pop-up-container div.eztoc-ocassional-pop-up-contents pre{white-space:pre-line;border:1px solid #95a3b9;border-radius:6px;font-family:monospace;padding:.75em;font-size:.875rem;color:#fff}details#eztoc-ocassional-pop-up-container[open] div.eztoc-ocassional-pop-up-contents{bottom:0;-webkit-animation:.25s ez_toc_ocassional_pop_up_scale;animation:.25s ez_toc_ocassional_pop_up_scale}details#eztoc-ocassional-pop-up-container span.eztoc-promotion-close-btn{font-weight:400;font-size:20px;background:#37474f;font-family:sans-serif;border-radius:30px;color:#fff;position:absolute;right:-10px;z-index:99999;padding:0 8px;top:-331px;cursor:pointer;line-height:28px}details#eztoc-ocassional-pop-up-container div.eztoc-ocassional-pop-up-contents img.eztoc-promotion-surprise-icon{width:40px;float:left;margin-right:10px}details#eztoc-ocassional-pop-up-container div.eztoc-ocassional-pop-up-contents p.eztoc-ocassional-pop-up-headline{font-size:22px;margin:0;line-height:47px;font-weight:500;color:#fff}details#eztoc-ocassional-pop-up-container div.eztoc-ocassional-pop-up-contents p.eztoc-ocassional-pop-up-headline span{color:#ea4c89;font-weight:700}details#eztoc-ocassional-pop-up-container div.eztoc-ocassional-pop-up-contents p.eztoc-ocassional-pop-up-second-headline{font-size:16px;color:#fff}details#eztoc-ocassional-pop-up-container div.eztoc-ocassional-pop-up-contents a.eztoc-ocassional-pop-up-offer-btn{background:#ea4c89;padding:13px 38px 14px;color:#fff;text-align:center;border-radius:60px;font-size:18px;display:inline-flex;align-items:center;margin:0 auto 15px;text-decoration:none;line-height:1.2;transform:perspective(1px) translateZ(0);box-shadow:0 0 20px 5px rgb(0 0 0 / 6%);transition:.3s ease-in-out;box-shadow:3px 5px .65em 0 rgb(0 0 0 / 15%);display:inherit}details#eztoc-ocassional-pop-up-container div.eztoc-ocassional-pop-up-contents p.eztoc-ocassional-pop-up-last-line{font-size:12px;color:#a6a6a6}details#eztoc-ocassional-pop-up-container summary{display:inline-flex;margin-left:auto;margin-right:auto;justify-content:center;align-items:center;font-weight:600;padding:.5em 1.25em;border-radius:99em;color:#fff;background-color:#185adb;box-shadow:0 5px 15px rgba(0,0,0,.1);list-style:none;text-align:center;cursor:pointer;transition:.15s;position:relative;font-size:.9rem;z-index:99999}details#eztoc-ocassional-pop-up-container summary::-webkit-details-marker{display:none}details#eztoc-ocassional-pop-up-container summary:hover,summary:focus{background-color:#1348af}details#eztoc-ocassional-pop-up-container summary svg{width:25px;margin-left:5px;vertical-align:baseline}@-webkit-keyframes ez_toc_ocassional_pop_up_scale{0%{transform:ez_toc_ocassional_pop_up_scale(0)}100%{transform:ez_toc_ocassional_pop_up_scale(1)}}@keyframes ez_toc_ocassional_pop_up_scale{0%{transform:ez_toc_ocassional_pop_up_scale(0)}100%{transform:ez_toc_ocassional_pop_up_scale(1)}}
+INLINEOCCASIONALADSPOPUSCCS;
+                            
+                    wp_add_inline_style( 'cn_toc_admin_style', $inlineAdminOccasionalAdsPopUpCCS );
+                    
+                    $inlineAdminOccasionalAdsPopUpJS = <<<INLINEOCCASIONALADSPOPUSJS
+function eztoc_set_admin_occasional_ads_pop_up_cookie(){var o=new Date;o.setFullYear(o.getFullYear()+1),document.cookie="eztoc_hide_admin_occasional_ads_pop_up_cookie_feedback=1; expires="+o.toUTCString()+"; path=/"}function eztoc_delete_admin_occasional_ads_pop_up_cookie(){document.cookie="eztoc_hide_admin_occasional_ads_pop_up_cookie_feedback=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;"}function eztoc_get_admin_occasional_ads_pop_up_cookie(){for(var o="eztoc_hide_admin_occasional_ads_pop_up_cookie_feedback=",a=decodeURIComponent(document.cookie).split(";"),e=0;e<a.length;e++){for(var c=a[e];" "==c.charAt(0);)c=c.substring(1);if(0==c.indexOf(o))return c.substring(o.length,c.length)}return""}jQuery(function(o){var a=eztoc_get_admin_occasional_ads_pop_up_cookie();void 0!==a&&""!==a&&o("details#eztoc-ocassional-pop-up-container").attr("open",!1),o("details#eztoc-ocassional-pop-up-container span.eztoc-promotion-close-btn").click(function(a){o("details#eztoc-ocassional-pop-up-container summary").click()}),o("details#eztoc-ocassional-pop-up-container summary").click(function(a){var e=o(this).parents("details#eztoc-ocassional-pop-up-container"),c=o(e).attr("open");void 0!==c&&!1!==c?eztoc_set_admin_occasional_ads_pop_up_cookie():eztoc_delete_admin_occasional_ads_pop_up_cookie()})});      
+INLINEOCCASIONALADSPOPUSJS;
+                            
+			wp_add_inline_script( 'cn_toc_admin_script', $inlineAdminOccasionalAdsPopUpJS );
+                }
+
+		/**
+		 * inlineAdminStickyToggleJS Method
+		 * Prints out inline Sticky Toggle JS after the core CSS file to allow overriding core styles via options.
+		 *
+		 * @access private
+		 * @return void
+		 * @since  2.0.32
+		 * @static
+		 */
+		private static function inlineAdminStickyToggleJS() {
+            $stickyToggleOpenButtonTextJS = "";
+            if( empty( ezTOC_Option::get( 'sticky-toggle-open-button-text' ) ) ) {
+                $stickyToggleOpenButtonTextJS = "$('input[name=\"ez-toc-settings[sticky-toggle-open-button-text]\"').val('Index')";
+            }
+			$inlineAdminStickyToggleJS = <<<INLINESTICKYTOGGLEJS
+/**
+ * Admin Sticky Sidebar JS
+ */
+jQuery(function($) {
+
+    let stickyToggleCheckbox = $('#eztoc-general').find("input[name='ez-toc-settings[sticky-toggle]']");
+    let stickyToggleWidth = $('#eztoc-general').find("select[name='ez-toc-settings[sticky-toggle-width]']");
+    let stickyToggleWidthCustom = $('#eztoc-general').find("input[name='ez-toc-settings[sticky-toggle-width-custom]']");
+    let stickyToggleHeight = $('#eztoc-general').find("select[name='ez-toc-settings[sticky-toggle-height]']");
+    let stickyToggleHeightCustom = $('#eztoc-general').find("input[name='ez-toc-settings[sticky-toggle-height-custom]']");
+    
+    
+    
+    $stickyToggleOpenButtonTextJS
+    
+    
+    if($(stickyToggleCheckbox).prop('checked') == false) {
+        $(stickyToggleWidth).parents('tr').hide(500);
+        $(stickyToggleWidthCustom).parents('tr').hide(500);
+        $(stickyToggleHeight).parents('tr').hide(500);
+        $(stickyToggleHeightCustom).parents('tr').hide(500);
+        $(stickyToggleWidth).val('auto');
+        $(stickyToggleHeight).val('auto');
+        $('input[name="ez-toc-settings[sticky-toggle-open-button-text]"').parents('tr').hide(500);
+        $('input[name="ez-toc-settings[sticky-toggle-open-button-text]"').val('Index');
+    }
+    $(document).on("change, click", "input[name='ez-toc-settings[sticky-toggle]']", function() {
+    
+        if($(stickyToggleCheckbox).prop('checked') == true) {
+            $(stickyToggleWidth).parents('tr').show(500);
+            $(stickyToggleHeight).parents('tr').show(500);
+            $('input[name="ez-toc-settings[sticky-toggle-open-button-text]"').parents('tr').show(500);
+            $('input[name="ez-toc-settings[sticky-toggle-open-button-text]"').val('Index');
+        } else {
+            $(stickyToggleWidth).parents('tr').hide(500);
+            $(stickyToggleWidthCustom).parents('tr').hide(500);
+            $(stickyToggleHeight).parents('tr').hide(500);
+            $(stickyToggleHeightCustom).parents('tr').hide(500);
+            $('input[name="ez-toc-settings[sticky-toggle-open-button-text]"').parents('tr').hide(500);
+            $(stickyToggleWidth).val('auto');
+            $(stickyToggleHeight).val('auto');
+            $('input[name="ez-toc-settings[sticky-toggle-open-button-text]"').val('Index');
+        }
+        
+    });
+     
+    
+    if($(stickyToggleWidth).val() == '' || $(stickyToggleWidth).val() != 'custom')
+        $(stickyToggleWidthCustom).parents('tr').hide();
+        
+    $(document).on("change", "select[name='ez-toc-settings[sticky-toggle-width]']", function() {
+        console.log("change-stickyToggleWidth");
+        if($(stickyToggleWidth).val() == 'custom') {
+            $(stickyToggleWidthCustom).val('350px');
+            $(stickyToggleWidthCustom).parents('tr').show(500);
+        } else {
+            $(stickyToggleWidthCustom).val('');
+            $(stickyToggleWidthCustom).parents('tr').hide(500);
+        }
+    });
+     
+    
+    if($(stickyToggleHeight).val() == '' || $(stickyToggleHeight).val() != 'custom')
+        $(stickyToggleHeightCustom).parents('tr').hide();
+        
+    $(document).on("change", "select[name='ez-toc-settings[sticky-toggle-height]']", function() {
+        console.log("change-stickyToggleHeight");
+        if($(stickyToggleHeight).val() == 'custom') {
+            $(stickyToggleHeightCustom).val('800px');
+            $(stickyToggleHeightCustom).parents('tr').show(500);
+        } else {
+            $(stickyToggleHeightCustom).val('');
+            $(stickyToggleHeightCustom).parents('tr').hide(500);
+        }
+    });
+    
+    
+});
+INLINESTICKYTOGGLEJS;
+			wp_add_inline_script( 'cn_toc_admin_script', $inlineAdminStickyToggleJS );
 		}
 
 		/**
@@ -432,6 +589,121 @@ if ( ! class_exists( 'ezTOC_Admin' ) ) {
 
 			}
 
+		}
+
+
+	     /**
+	     * Enqueue Admin js scripts
+	     *
+	     */
+		public function load_scripts($pagenow){
+
+			if (isset($pagenow) && $pagenow != 'settings_page_table-of-contents' && strpos($pagenow, 'table-of-contents') == false) {
+                
+                return false;
+             }
+
+			  wp_enqueue_script( 'eztoc-admin-js', EZ_TOC_URL . 'assets/js/eztoc-admin.js',array('jquery'), ezTOC::VERSION,true );
+
+				 $data = array(     
+					'ajax_url'      		       => admin_url( 'admin-ajax.php' ),
+					'eztoc_security_nonce'         => wp_create_nonce('eztoc_ajax_check_nonce'),  
+				);								
+
+				$data = apply_filters('eztoc_localize_filter',$data,'eztoc_admin_data');
+
+				wp_localize_script( 'eztoc-admin-js', 'eztoc_admin_data', $data );
+		}
+
+     /**
+     * This is a ajax handler function for sending email from user admin panel to us. 
+     * @return type json string
+     */
+
+		public function eztoc_send_query_message(){   
+		    
+		        if ( ! isset( $_POST['eztoc_security_nonce'] ) ){
+		           return; 
+		        }
+		        if ( !wp_verify_nonce( $_POST['eztoc_security_nonce'], 'eztoc_ajax_check_nonce' ) ){
+		           return;  
+		        }   
+		        $message        = $this->eztoc_sanitize_textarea_field($_POST['message']); 
+		        $email          = $this->eztoc_sanitize_textarea_field($_POST['email']);   
+		                                
+		        if(function_exists('wp_get_current_user')){
+
+		            $user           = wp_get_current_user();
+
+		         
+		            $message = '<p>'.$message.'</p><br><br>'.'Query from Easy Table of Content plugin support tab';
+		            
+		            $user_data  = $user->data;        
+		            $user_email = $user_data->user_email;     
+		            
+		            if($email){
+		                $user_email = $email;
+		            }            
+		            //php mailer variables        
+		            $sendto    = 'team@magazine3.in';
+		            $subject   = "Easy Table of Content Query";
+		            
+		            $headers[] = 'Content-Type: text/html; charset=UTF-8';
+		            $headers[] = 'From: '. esc_attr($user_email);            
+		            $headers[] = 'Reply-To: ' . esc_attr($user_email);
+		            // Load WP components, no themes.   
+
+		            $sent = wp_mail($sendto, $subject, $message, $headers); 
+
+		            if($sent){
+
+		                 echo json_encode(array('status'=>'t'));  
+
+		            }else{
+
+		                echo json_encode(array('status'=>'f'));            
+
+		            }
+		            
+		        }
+		                        
+		        wp_die();           
+		}
+
+		public function eztoc_sanitize_textarea_field( $str ) {
+
+			if ( is_object( $str ) || is_array( $str ) ) {
+				return '';
+			}
+
+			$str = (string) $str;
+
+			$filtered = wp_check_invalid_utf8( $str );
+
+			if ( strpos( $filtered, '<' ) !== false ) {
+				$filtered = wp_pre_kses_less_than( $filtered );
+				// This will strip extra whitespace for us.
+				$filtered = wp_strip_all_tags( $filtered, false );
+
+				// Use HTML entities in a special case to make sure no later
+				// newline stripping stage could lead to a functional tag.
+				$filtered = str_replace( "<\n", "&lt;\n", $filtered );
+			}
+			
+			$filtered = trim( $filtered );
+
+			$found = false;
+			while ( preg_match( '/%[a-f0-9]{2}/i', $filtered, $match ) ) {
+				$filtered = str_replace( $match[0], '', $filtered );
+				$found    = true;
+			}
+
+			if ( $found ) {
+				// Strip out the whitespace that may now exist after removing the octets.
+				$filtered = trim( preg_replace( '/ +/', ' ', $filtered ) );
+			}
+
+			return $filtered;
 		}
 
 		/**

@@ -44,7 +44,7 @@ function wpmc_scan_postmeta_woocommerce( $id ) {
 	$downloable_files = get_post_meta( $id, '_downloadable_files', true );
 	if ( !empty( $downloable_files ) ) {
 		foreach ( $downloable_files as $file ) {
-			$wpmc->add_reference_url( $wpmc->clean_url( $file['file'] ), 'WOOCOOMMERCE DL (URL)' );
+			$wpmc->add_reference_url( $wpmc->clean_url( $file['file'] ), 'WOOCOOMMERCE DOWNLOAD (URL)', $id );
 		}
 	} 
 
@@ -56,7 +56,7 @@ function wpmc_scan_postmeta_woocommerce( $id ) {
 		$ids = explode( ',', $values );
 		$galleries_images_wc = array_merge( $galleries_images_wc, $ids );
 	}
-	$wpmc->add_reference_id( $galleries_images_wc, 'WOOCOOMMERCE (ID)' );
+	$wpmc->add_reference_id( $galleries_images_wc, 'WOOCOOMMERCE GALLERY (ID)', $id );
 }
 
 ?>

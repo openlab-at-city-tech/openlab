@@ -92,67 +92,70 @@ if ($thumbnail_crop_frame != null)
 <link rel="stylesheet" href="<?php echo NGGALLERY_URLPATH; ?>/admin/js/Jcrop/css/jquery.Jcrop.css" type="text/css" />
 
 <script type="text/javascript">
-//<![CDATA[	
-	var status = 'edit';
-	var xT, yT, wT, hT, selectedCoords;
-	var selectedImage = "thumb<?php echo $id ?>";
+    var status = 'edit';
+    var xT, yT, wT, hT, selectedCoords;
+    var selectedImage = "thumb<?php echo $id ?>";
 
-	function showPreview(coords)
-	{
-		if (status != 'edit') {
-			jQuery('#actualThumb').hide();
-			jQuery('#previewNewThumb').hide();
-			status = 'edit';	
-		}
-		
-		var rx = <?php echo $WidthHtmlPrev; ?> / coords.w;
-		var ry = <?php echo $HeightHtmlPrev; ?> / coords.h;
-		
-		jQuery('#imageToEditPreview').css({
-			width: Math.round(rx * <?php echo $resizedPreviewInfo['newWidth']; ?>) + 'px',
-			height: Math.round(ry * <?php echo $resizedPreviewInfo['newHeight']; ?>) + 'px',
-			marginLeft: '-' + Math.round(rx * coords.x) + 'px',
-			marginTop: '-' + Math.round(ry * coords.y) + 'px'
-		});
-		
-		xT = coords.x;
-		yT = coords.y;
-		wT = coords.w;
-		hT = coords.h;
-		
-		jQuery("#sizeThumb").html(xT+" "+yT+" "+wT+" "+hT);
-	};
-	
-	function updateThumb() {
-		
-		if ( (wT == 0) || (hT == 0) || (wT == undefined) || (hT == undefined) ) {
-			alert("<?php _e('Select with the mouse the area for the new thumbnail', 'nggallery'); ?>");
-			return false;			
-		}
-				
-		jQuery.ajax({
-		  url: ajaxurl,
-		  type : "POST",
-          data:  {x: xT, y: yT, w: wT, h: hT, action: 'createNewThumb', id: <?php echo $id; ?>, rr: <?php echo str_replace(',','.',$rr); ?>},
-		  cache: false,
-		  success: function(data){
-					var d = new Date();
-					newUrl = jQuery("#"+selectedImage).attr("src") + "?" + d.getTime();
-					jQuery("#"+selectedImage).attr("src" , newUrl);
-					
-					jQuery('#thumbMsg').html("<?php _e('Thumbnail updated', 'nggallery') ?>");
-					jQuery('#thumbMsg').css({'display':'block'});
-					setTimeout(function(){ jQuery('#thumbMsg').html(''); }, 1500);
-			},
-		  error: function() {
-		  			jQuery('#thumbMsg').html("<?php _e('Error updating thumbnail', 'nggallery') ?>");
-					jQuery('#thumbMsg').css({'display':'block'});
-					setTimeout(function(){ jQuery('#thumbMsg').fadeOut('slow'); }, 1500);
-		    }
-		});
+    function showPreview(coords) {
+        if (status != 'edit') {
+            jQuery('#actualThumb').hide();
+            jQuery('#previewNewThumb').hide();
+            status = 'edit';
+        }
 
-	};
-//]]>
+        var rx = <?php echo $WidthHtmlPrev; ?> / coords.w;
+        var ry = <?php echo $HeightHtmlPrev; ?> / coords.h;
+
+        jQuery('#imageToEditPreview').css({
+            width: Math.round(rx * <?php echo $resizedPreviewInfo['newWidth']; ?>) + 'px',
+            height: Math.round(ry * <?php echo $resizedPreviewInfo['newHeight']; ?>) + 'px',
+            marginLeft: '-' + Math.round(rx * coords.x) + 'px',
+            marginTop: '-' + Math.round(ry * coords.y) + 'px'
+        });
+
+        xT = coords.x;
+        yT = coords.y;
+        wT = coords.w;
+        hT = coords.h;
+
+        jQuery("#sizeThumb").html(xT+" "+yT+" "+wT+" "+hT);
+    };
+
+    function updateThumb(nonce) {
+        if ( (wT == 0) || (hT == 0) || (wT == undefined) || (hT == undefined) ) {
+            alert("<?php _e('Select with the mouse the area for the new thumbnail', 'nggallery'); ?>");
+            return false;
+        }
+
+        jQuery.ajax({
+            url: ajaxurl,
+            type : "POST",
+            data:  {
+                x: xT,
+                y: yT,
+                w: wT,
+                h: hT,
+                action: 'createNewThumb',
+                id: <?php echo $id; ?>, rr: <?php echo str_replace(',','.',$rr); ?>,
+                nonce: nonce
+            },
+            cache: false,
+            success: function(data){
+                var d = new Date();
+                newUrl = jQuery("#"+selectedImage).attr("src") + "?" + d.getTime();
+                jQuery("#"+selectedImage).attr("src" , newUrl);
+
+                jQuery('#thumbMsg').html("<?php _e('Thumbnail updated', 'nggallery') ?>");
+                jQuery('#thumbMsg').css({'display':'block'});
+                setTimeout(function(){ jQuery('#thumbMsg').html(''); }, 1500);
+            },
+            error: function() {
+                jQuery('#thumbMsg').html("<?php _e('Error updating thumbnail', 'nggallery') ?>");
+                jQuery('#thumbMsg').css({'display':'block'});
+                setTimeout(function(){ jQuery('#thumbMsg').fadeOut('slow'); }, 1500);
+            }
+        });
+    }
 </script>
 
 <table align="center">
@@ -178,7 +181,8 @@ if ($thumbnail_crop_frame != null)
 </table>
 <div id="ngg-overlay-dialog-bottom">
     <div id="thumbMsg"></div>
-	<input type="button" name="update" value="<?php esc_attr_e('Update', 'nggallery'); ?>" onclick="updateThumb()" class="button-secondary" />
+    <?php $update_thumb_nonce = wp_create_nonce('ngg_update_thumbnail'); ?>
+	<input type="button" name="update" value="<?php esc_attr_e('Update', 'nggallery'); ?>" onclick="updateThumb('<?php print esc_attr($update_thumb_nonce); ?>')" class="button-secondary" />
 </div>
 
 <script type="text/javascript">

@@ -1,7 +1,7 @@
 <?php defined( 'ABSPATH' ) || exit;
 
 return apply_filters(
-	'su/data/groups',
+	'su/config/groups',
 	array(
 		'all'     => __( 'All', 'shortcodes-ultimate' ),
 		'content' => __( 'Content', 'shortcodes-ultimate' ),

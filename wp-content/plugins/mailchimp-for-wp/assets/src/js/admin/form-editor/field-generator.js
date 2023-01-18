@@ -89,11 +89,11 @@ generators.checkbox = function (config) {
 
     return m('label', [
       m('input', {
-        name: name,
+        name,
         type: config.type,
         value: choice.value,
         checked: choice.selected,
-        required: required,
+        required,
         oncreate: setAttributes
       }),
       ' ',
@@ -146,8 +146,8 @@ generators.default = function (config) {
 /**
  * Generates an HTML string based on a field (config) object
  *
- * @param config
- * @returns {*}
+ * @param {object} config
+ * @returns {string}
  */
 function generate (config) {
   const labelAtts = {}

@@ -1,5 +1,5 @@
 /*!
- * jQuery UI Sortable 1.13.1
+ * jQuery UI Sortable 1.13.2
  * http://jqueryui.com
  *
  * Copyright jQuery Foundation and other contributors
@@ -34,7 +34,7 @@
 "use strict";
 
 return $.widget( "ui.sortable", $.ui.mouse, {
-	version: "1.13.1",
+	version: "1.13.2",
 	widgetEventPrefix: "sort",
 	ready: false,
 	options: {
@@ -196,8 +196,8 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 
 		//Prepare the dragged items parent
 		this.appendTo = $( o.appendTo !== "parent" ?
-			o.appendTo :
-			this.currentItem.parent() );
+				o.appendTo :
+				this.currentItem.parent() );
 
 		//Create and append the visible helper
 		this.helper = this._createHelper( event );
@@ -356,10 +356,10 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 			scrolled = false;
 
 		if ( this.scrollParent[ 0 ] !== this.document[ 0 ] &&
-			this.scrollParent[ 0 ].tagName !== "HTML" ) {
+				this.scrollParent[ 0 ].tagName !== "HTML" ) {
 
 			if ( ( this.overflowOffset.top + this.scrollParent[ 0 ].offsetHeight ) -
-				event.pageY < o.scrollSensitivity ) {
+					event.pageY < o.scrollSensitivity ) {
 				this.scrollParent[ 0 ].scrollTop =
 					scrolled = this.scrollParent[ 0 ].scrollTop + o.scrollSpeed;
 			} else if ( event.pageY - this.overflowOffset.top < o.scrollSensitivity ) {
@@ -368,7 +368,7 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 			}
 
 			if ( ( this.overflowOffset.left + this.scrollParent[ 0 ].offsetWidth ) -
-				event.pageX < o.scrollSensitivity ) {
+					event.pageX < o.scrollSensitivity ) {
 				this.scrollParent[ 0 ].scrollLeft = scrolled =
 					this.scrollParent[ 0 ].scrollLeft + o.scrollSpeed;
 			} else if ( event.pageX - this.overflowOffset.left < o.scrollSensitivity ) {
@@ -381,7 +381,7 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 			if ( event.pageY - this.document.scrollTop() < o.scrollSensitivity ) {
 				scrolled = this.document.scrollTop( this.document.scrollTop() - o.scrollSpeed );
 			} else if ( this.window.height() - ( event.pageY - this.document.scrollTop() ) <
-				o.scrollSensitivity ) {
+					o.scrollSensitivity ) {
 				scrolled = this.document.scrollTop( this.document.scrollTop() + o.scrollSpeed );
 			}
 
@@ -390,7 +390,7 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 					this.document.scrollLeft() - o.scrollSpeed
 				);
 			} else if ( this.window.width() - ( event.pageX - this.document.scrollLeft() ) <
-				o.scrollSensitivity ) {
+					o.scrollSensitivity ) {
 				scrolled = this.document.scrollLeft(
 					this.document.scrollLeft() + o.scrollSpeed
 				);
@@ -462,7 +462,7 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 			// no action if the item moved is the parent of the item checked
 			if ( itemElement !== this.currentItem[ 0 ] &&
 				this.placeholder[ intersection === 1 ?
-					"next" : "prev" ]()[ 0 ] !== itemElement &&
+				"next" : "prev" ]()[ 0 ] !== itemElement &&
 				!$.contains( this.placeholder[ 0 ], itemElement ) &&
 				( this.options.type === "semi-dynamic" ?
 						!$.contains( this.element[ 0 ], itemElement ) :
@@ -473,7 +473,7 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 				this.direction = intersection === 1 ? "down" : "up";
 
 				if ( this.options.tolerance === "pointer" ||
-					this._intersectsWithSides( item ) ) {
+						this._intersectsWithSides( item ) ) {
 					this._rearrange( event, item );
 				} else {
 					break;
@@ -855,7 +855,7 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 
 			//We ignore calculating positions of all connected containers when we're not over them
 			if ( this.currentContainer && item.instance !== this.currentContainer &&
-				item.item[ 0 ] !== this.currentItem[ 0 ] ) {
+					item.item[ 0 ] !== this.currentItem[ 0 ] ) {
 				continue;
 			}
 
@@ -922,7 +922,7 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 					var element = $( "<" + nodeName + ">", that.document[ 0 ] );
 
 					that._addClass( element, "ui-sortable-placeholder",
-						className || that.currentItem[ 0 ].className )
+							className || that.currentItem[ 0 ].className )
 						._removeClass( element, "ui-sortable-helper" );
 
 					if ( nodeName === "tbody" ) {
@@ -960,7 +960,7 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 					// always assign the height of the dragged item given forcePlaceholderSize
 					// is true.
 					if ( !p.height() || ( o.forcePlaceholderSize &&
-						( nodeName === "tbody" || nodeName === "tr" ) ) ) {
+							( nodeName === "tbody" || nodeName === "tr" ) ) ) {
 						p.height(
 							that.currentItem.innerHeight() -
 							parseInt( that.currentItem.css( "paddingTop" ) || 0, 10 ) -
@@ -1110,7 +1110,7 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 
 			//Update overflowOffset
 			if ( this.scrollParent[ 0 ] !== this.document[ 0 ] &&
-				this.scrollParent[ 0 ].tagName !== "HTML" ) {
+					this.scrollParent[ 0 ].tagName !== "HTML" ) {
 				this.overflowOffset = this.scrollParent.offset();
 			}
 

@@ -7,10 +7,11 @@ class P2P_Reciprocal_Connection_Type extends P2P_Indeterminate_Connection_Type {
 	}
 
 	function directions_for_admin( $direction, $show_ui ) {
-		if ( $show_ui )
+		if ( $show_ui ) {
 			$directions = array( 'any' );
-		else
+		} else {
 			$directions = array();
+		}
 
 		return $directions;
 	}

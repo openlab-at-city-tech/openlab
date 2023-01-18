@@ -13,7 +13,7 @@ function createCookie(name, value, days) {
 		var expires = '';
 	}
 
-	document.cookie = name + "=" + value + expires + "; path=/";
+	document.cookie = name + "=" + value + expires + "; path=/; SameSite=Strict;";
 }
 
 function readCookie(name) {
@@ -38,6 +38,17 @@ function eraseCookie(name) {
 		$('body').addClass('desaturated');
 		$('#is_normal_color').attr('id', 'is_grayscale').attr('aria-pressed', true).addClass('active');
 	}
+
+	$( '.a11y-toggle' ).on( 'focus', function(e) {
+		$( this ).removeClass( 'tooltip-dismissed' );
+	});
+
+	$( '.a11y-toggle' ).on( 'keyup', function(e) {
+		if ( e.keyCode == 27 ) {
+			$( this ).addClass( 'tooltip-dismissed' );
+		}
+	});
+
 
 	if (readCookie('a11y-high-contrast')) {
 		$('body').addClass('contrast');

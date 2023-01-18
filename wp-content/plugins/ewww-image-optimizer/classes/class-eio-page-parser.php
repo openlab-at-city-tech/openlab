@@ -52,9 +52,9 @@ if ( ! class_exists( 'EIO_Page_Parser' ) ) {
 			$unquoted_pattern = '';
 			$search_pattern   = '#(?P<img_tag><img\s[^\\\\>]*?>)#is';
 			if ( $hyperlinks ) {
-				$this->debug_message( 'using figure+hyperlink(a) patterns with src required' );
-				$search_pattern   = '#(?:<figure[^>]*?\s+?class\s*=\s*["\'](?P<figure_class>[\w\s-]+?)["\'][^>]*?>\s*)?(?:<a[^>]*?\s+?href\s*=\s*["\'](?P<link_url>[^\s]+?)["\'][^>]*?>\s*)?(?P<img_tag><img[^>]*?\s+?src\s*=\s*("|\')(?P<img_url>(?!\4)[^\\\\]+?)\4[^>]*?>){1}(?:\s*</a>)?#is';
-				$unquoted_pattern = '#(?:<figure[^>]*?\s+?class\s*=\s*(?P<figure_class>[\w-]+)[^>]*?>\s*)?(?:<a[^>]*?\s+?href\s*=\s*(?P<link_url>[^"\'\\\\<>][^\s<>]+)[^>]*?>\s*)?(?P<img_tag><img[^>]*?\s+?src\s*=\s*(?P<img_url>[^"\'\\\\<>][^\s\\\\<>]+)(?:\s[^>]*?)?>){1}(?:\s*</a>)?#is';
+				$this->debug_message( 'using div/figure+hyperlink(a) patterns with src required' );
+				$search_pattern   = '#(?:<div[^>]*?\s+?class\s*=\s*["\'](?P<div_class>[\w\s-]+?)["\'][^>]*?>\s*(?:<span[^>]*?></span>)?)?(?:<figure[^>]*?\s+?class\s*=\s*["\'](?P<figure_class>[\w\s-]+?)["\'][^>]*?>\s*)?(?:<a[^>]*?\s+?href\s*=\s*["\'](?P<link_url>[^\s]+?)["\'][^>]*?>\s*)?(?P<img_tag><img[^>]*?\s+?src\s*=\s*("|\')(?P<img_url>(?!\5)[^\\\\]+?)\5[^>]*?>){1}(?:\s*</a>)?#is';
+				$unquoted_pattern = '#(?:<div[^>]*?\s+?class\s*=\s*(?P<div_class>[\w-]+?)[^>]*?>\s*(?:<span[^>]*?></span>)?)?(?:<figure[^>]*?\s+?class\s*=\s*(?P<figure_class>[\w-]+?)[^>]*?>\s*)?(?:<a[^>]*?\s+?href\s*=\s*(?P<link_url>[^"\'\\\\<>][^\s<>]+)[^>]*?>\s*)?(?P<img_tag><img[^>]*?\s+?src\s*=\s*(?P<img_url>[^"\'\\\\<>][^\s\\\\<>]+)(?:\s[^>]*?)?>){1}(?:\s*</a>)?#is';
 			} elseif ( $src_required ) {
 				$this->debug_message( 'using plain img pattern, src still required' );
 				$search_pattern   = '#(?P<img_tag><img[^>]*?\s+?src\s*=\s*("|\')(?P<img_url>(?!\2)[^\\\\]+?)\2[^>]*?>)#is';
@@ -318,15 +318,36 @@ if ( ! class_exists( 'EIO_Page_Parser' ) ) {
 		}
 
 		/**
-		 * Get a CSS background-image URL.
+		 * Get CSS background-image URLs.
 		 *
 		 * @param string $attribute An element's style attribute. Do not pass a full HTML element.
-		 * @return string The URL from the background/background-image property.
+		 * @return array An array containing URL(s) from the background/background-image property.
+		 */
+		function get_background_image_urls( $attribute ) {
+			$urls = array();
+			if ( ( false !== strpos( $attribute, 'background:' ) || false !== strpos( $attribute, 'background-image:' ) ) && false !== strpos( $attribute, 'url(' ) ) {
+				if ( preg_match_all( '#url\((?P<bg_url>[^)]+)\)#', $attribute, $prop_matches ) ) {
+					if ( $this->is_iterable( $prop_matches['bg_url'] ) ) {
+						foreach ( $prop_matches['bg_url'] as $url ) {
+							$urls[] = trim( html_entity_decode( $url, ENT_QUOTES | ENT_HTML401 ), "'\"\t\n\r " );
+						}
+					}
+				}
+			}
+			return $urls;
+		}
+
+		/**
+		 * Get a single CSS background-image URL. For backwords compat.
+		 *
+		 * @param string $attribute An element's style attribute. Do not pass a full HTML element.
+		 * @return array An array containing URL(s) from the background/background-image property.
 		 */
 		function get_background_image_url( $attribute ) {
 			if ( ( false !== strpos( $attribute, 'background:' ) || false !== strpos( $attribute, 'background-image:' ) ) && false !== strpos( $attribute, 'url(' ) ) {
-				if ( preg_match( '#url\(([^)]+)\)#', $attribute, $prop_match ) ) {
-					return trim( html_entity_decode( $prop_match[1], ENT_QUOTES | ENT_HTML401 ), "'\"\t\n\r " );
+				$background_urls = $this->get_background_image_urls( $attribute );
+				if ( ! empty( $background_urls[0] ) ) {
+					return $background_urls[0];
 				}
 			}
 			return '';
@@ -359,16 +380,21 @@ if ( ! class_exists( 'EIO_Page_Parser' ) ) {
 			if ( 'class' === $name ) {
 				$element = preg_replace( "#\s$name\s+([^=])#", ' $1', $element );
 			}
+			// Remove empty attributes first.
 			$element = preg_replace( "#\s$name=\"\"#", ' ', $element );
-			$value   = trim( $value );
+			// Remove/escape double-quotes with the encoded version, so that we can safely enclose the value in double-quotes.
+			$value = str_replace( '"', '&#34;', $value );
+			$value = trim( $value );
 			if ( $replace ) {
 				// Don't forget, back references cannot be used in character classes.
-				$new_element = preg_replace( '#\s' . $name . '\s*=\s*("|\')(?!\1).*?\1#is', ' ' . $name . '=${1}' . $value . '${1}', $element );
+				$new_element = preg_replace( '#\s' . $name . '\s*=\s*("|\')(?!\1).*?\1#is', ' ' . $name . '="' . $value . '"', $element );
 				if ( strpos( $new_element, "$name=" ) && $new_element !== $element ) {
 					$element = $new_element;
 					return;
 				}
+				// Purge un-quoted attribute patterns, so the new value can be inserted further down.
 				$new_element = preg_replace( '#\s' . $name . '\s*=\s*[^"\'][^\s>]+#is', ' ', $element );
+				// But if we couldn't purge the attribute, then bail out.
 				if ( preg_match( '#\s' . $name . '\s*=\s*#', $new_element ) && $new_element === $element ) {
 					$this->debug_message( "$name replacement failed, still exists in $element" );
 					return;
@@ -379,10 +405,11 @@ if ( ! class_exists( 'EIO_Page_Parser' ) ) {
 			if ( false === strpos( $element, '/>' ) ) {
 				$closing = '>';
 			}
-			if ( false === strpos( $value, '"' ) ) {
+			if ( false === strpos( $value, '"' ) ) { // This should always be true, since we escape double-quotes above.
 				$element = rtrim( $element, $closing ) . " $name=\"$value\"$closing";
 				return;
 			}
+			// If we get here, something is kind of weird, since double-quotes were supposed to be escaped.
 			$element = rtrim( $element, $closing ) . " $name='$value'$closing";
 		}
 
@@ -406,10 +433,24 @@ if ( ! class_exists( 'EIO_Page_Parser' ) ) {
 		 */
 		function remove_background_image( $attribute ) {
 			if ( false !== strpos( $attribute, 'background:' ) && false !== strpos( $attribute, 'url(' ) ) {
-				$attribute = preg_replace( '#\s?url\([^)]+\)#', '', $attribute );
+				$new_attribute = preg_replace( '#\s?url\([^)]+\)#', '', $attribute );
+				if ( $new_attribute !== $attribute ) {
+					return $new_attribute;
+				}
 			}
 			if ( false !== strpos( $attribute, 'background-image:' ) && false !== strpos( $attribute, 'url(' ) ) {
-				$attribute = preg_replace( '#background-image:\s*url\([^)]+\);?#', '', $attribute );
+				$new_attribute = preg_replace( '#background-image:\s*(,?\s*url\([^)]+\))+;?\s*#', '', $attribute );
+				if ( $new_attribute !== $attribute ) {
+					$new_attribute = preg_replace( '#background-image:\s*;?\s*$#', '', $new_attribute );
+					return $new_attribute;
+				}
+			}
+			if ( false !== strpos( $attribute, 'background-image:' ) && false !== strpos( $attribute, 'url(' ) ) {
+				$new_attribute = preg_replace( '#,?\s*url\([^)]+\)#', '', $attribute );
+				if ( $new_attribute !== $attribute ) {
+					$new_attribute = preg_replace( '#background-image:\s*;?\s*$#', '', $new_attribute );
+					return $new_attribute;
+				}
 			}
 			return $attribute;
 		}

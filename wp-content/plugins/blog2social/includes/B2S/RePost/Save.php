@@ -99,12 +99,13 @@ class B2S_RePost_Save {
                     if ($schedData !== false && is_array($schedData)) {
                         $schedData = array_merge($schedData, $defaultPostData);
                     }
-                    if (((int) $value->networkId == 12 && isset($this->optionPostFormat[12][0]['addLink']) && $this->optionPostFormat[12][0]['addLink'] === false) || ((int) $value->networkId == 24 && isset($this->optionPostFormat[24][0]['addLink']) && $this->optionPostFormat[24][0]['addLink'] === false)) {
+
+                    if (((int) $value->networkId == 12) && isset($this->optionPostFormat[$value->networkId][$value->networkType]['addLink']) && $this->optionPostFormat[$value->networkId][$value->networkType]['addLink'] == false) {
+                        $schedData['url'] = '';
+                    } else if (((int) $value->networkId == 1 || (int) $value->networkId == 2 || (int) $value->networkId == 24) && isset($this->optionPostFormat[$value->networkId][$value->networkType]['format']) && (int) $this->optionPostFormat[$value->networkId][$value->networkType]['format'] == 1 && isset($this->optionPostFormat[$value->networkId][$value->networkType]['addLink']) && $this->optionPostFormat[$value->networkId][$value->networkType]['addLink'] == false) {
                         $schedData['url'] = '';
                     }
-                    if (((int) $value->networkId == 1 || (int) $value->networkId == 2) && isset($this->optionPostFormat[1][$value->networkType]['format']) && $this->optionPostFormat[1][$value->networkType]['format'] == 1 && isset($this->optionPostFormat[1][$value->networkType]['addLink']) && $this->optionPostFormat[1][$value->networkType]['addLink'] === false) {
-                        $schedData['url'] = '';
-                    }
+
                     $this->saveShareData($schedData, $value->networkId, $value->networkType, $value->networkAuthId, $shareApprove, strip_tags($value->networkUserName), $schedDate, $schedDateUtc);
                 }
             }
@@ -382,7 +383,7 @@ class B2S_RePost_Save {
                     $hashTags = substr($hashTags, 0, $pos - 1);
                 }
             }
-            return (!empty($hashTags) ? (!empty($add) ? $add . $hashTags : $hashTags) : '');
+            return (!empty($hashTags) ? (!empty($add) ? $add . trim($hashTags) : trim($hashTags)) : '');
         } else {
             return '';
         }

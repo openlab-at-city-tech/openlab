@@ -1,0 +1,47 @@
+/* FILE: editor-block/_accessibility.scss */
+
+#{ $selector_editor_wrapper } .wp-block.screen-reader-text,
+#{ $selector_editor_wrapper } .wp-block > .screen-reader-text,
+#{ $selector_editor_wrapper } .wp-block.is-style-screen-reader-text,
+#{ $selector_editor_wrapper } .wp-block > .is-style-screen-reader-text {
+	position: relative !important;
+	clip: auto !important;
+	clip-path: none !important;
+	width: auto !important;
+	height: auto !important;
+	padding: 0 !important;
+	margin-top: 0 !important;
+	font-size: 1em !important;
+	font-weight: 700 !important;
+	text-transform: none !important;
+	letter-spacing: 0 !important;
+	background: none !important;
+
+	&:not(:hover):not(:focus):not(:focus-within) {
+		opacity: .5;
+	}
+
+	&::before {
+		content: ")";
+		display: inline-block;
+		margin: $ratio_maj +em;
+		font-size: 16px;
+		font-weight: 700;
+		speak: none;
+		transform: rotate( 90deg );
+	}
+
+}
+
+#{ $selector_editor_wrapper } .wp-block:hover > .screen-reader-text,
+#{ $selector_editor_wrapper } .is-selected > .screen-reader-text,
+#{ $selector_editor_wrapper } .screen-reader-text:hover,
+#{ $selector_editor_wrapper } .screen-reader-text:focus,
+#{ $selector_editor_wrapper } .screen-reader-text:focus-within,
+#{ $selector_editor_wrapper } .wp-block:hover > .is-style-screen-reader-text,
+#{ $selector_editor_wrapper } .is-selected > .is-style-screen-reader-text,
+#{ $selector_editor_wrapper } .is-style-screen-reader-text:hover,
+#{ $selector_editor_wrapper } .is-style-screen-reader-text:focus,
+#{ $selector_editor_wrapper } .is-style-screen-reader-text:focus-within {
+	opacity: 1 !important;
+}

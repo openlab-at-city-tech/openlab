@@ -24,6 +24,12 @@
  *
  ***/
 
+/***** 0.5 Load Lato font *****/
+@font-face {
+  font-family: 'Lato';
+  src: url('./Lato-Regular.ttf') format('truetype')
+}
+
 /***** 1) NGG Admin CSS: Original 2.0 CSS *****/
 
 .ngg-admin .notice,
@@ -125,7 +131,7 @@ body div.ui-tooltip {
   background: #ffffff;
   box-shadow: 0 0 12px 6px rgba(0, 0, 0, 0.03);
   box-sizing: border-box;
-  font-family: lato, sans-serif;
+  font-family: "Lato", sans-serif;
   float: left;
   height: auto;
   margin-top: 25px;
@@ -214,7 +220,7 @@ body div.ui-tooltip {
   letter-spacing: 1px;
   font-size: 11px;
   font-weight: bold;
-  font-family: Lato, sans-serif;
+  font-family: "Lato", sans-serif;
   vertical-align: middle;
 }
 

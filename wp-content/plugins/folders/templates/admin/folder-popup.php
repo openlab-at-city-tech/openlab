@@ -1,17 +1,28 @@
-<?php if(!defined('ABSPATH')) exit; ?>
+<?php
+/**
+ * Admin folders popup data
+ *
+ * @author  : Premio <contact@premio.io>
+ * @license : GPL2
+ * */
+
+if (!defined('ABSPATH')) {
+    exit;
+}
+?>
 <div class="folder-popup" id="folder-intro-popup">
     <div class="folder-popup-box">
         <div class="folder-popup-header">
-            Welcome to Folders &#127881;
+            <?php esc_html_e("Welcome to Folders", "folders")  ?> &#127881;
             <button class="close-folder-popup"><span class="dashicons dashicons-no-alt"></span></button>
             <div class="clear"></div>
         </div>
         <div class="folder-popup-content">
-            Select the places where you want Folders to appear (Media Library, Posts, Pages, Custom Posts). Need help? Visit our <a target="_blank" href="https://premio.io/help/folders/?utm_soruce=wordpressfolders">Help Center</a>.
-            <iframe width="420" height="240" src="https://www.youtube.com/embed/GKq5jvuoRY0?rel=0&start=14"></iframe>
+            <?php printf(esc_html__("Select the places where you want Folders to appear (Media Library, Posts, Pages, Custom Posts). Need help? Visit our %s", "folders"), '<a target="_blank" href="https://premio.io/help/folders/?utm_soruce=wordpressfolders">'.esc_html__("Help Center", "folders")."</a>.") ?>
+            <iframe width="420" height="240" src="https://www.youtube.com/embed/1SqDey4idlQ?rel=0"></iframe>
         </div>
         <div class="folder-popup-footer">
-            <button type="button">Go to Folders</button>
+            <button type="button"><?php esc_html_e("Go to Folders", "folders"); ?></button>
         </div>
     </div>
 </div>
@@ -40,6 +51,8 @@
             });
             if(jQuery("#import-third-party-plugin-data").length) {
                 jQuery("#import-third-party-plugin-data").show();
+            } else if($("#wordpress-popup").length) {
+                $("#wordpress-popup").show();
             }
         });
 
@@ -63,6 +76,9 @@
 
                 }
             });
+            if(jQuery("#wordpress-popup").length) {
+                jQuery("#wordpress-popup").show();
+            }
         });
 
         jQuery(document).on("click", ".folder-popup-box", function(e){

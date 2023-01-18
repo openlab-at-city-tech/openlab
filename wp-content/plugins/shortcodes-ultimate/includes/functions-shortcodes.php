@@ -50,6 +50,10 @@ function su_get_shortcode( $id ) {
 	return Shortcodes_Ultimate_Shortcodes::get( $id );
 }
 
+function su_get_groups() {
+	return Shortcodes_Ultimate_Shortcodes::get_groups();
+}
+
 /**
  * Get shortcode default settings.
  *

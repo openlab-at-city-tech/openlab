@@ -39,10 +39,13 @@
 .mapp-library {
 	border: 1px solid gray;
 	display: flex;
-	height: calc(100vh - 125px);
-	margin-right: 20px;
+	margin-left: auto;
+	margin-right: auto;
 	margin-top: 20px;
+	max-width: 1024px;
+	min-height: calc(100vh - 125px);
 	overflow: hidden;
+	width: calc(100% - 64px);
 }
 
 .mapp-library .mapp-pick {
@@ -56,15 +59,15 @@
 
 /*
 	-----------------------------------------------------------------------------------
-	Map MCE
+	Classic Editor button
 	-----------------------------------------------------------------------------------
 */
 
-.mapp-mce {
+.mapp-classic {
 	display: inline-block;
 }
 
-.mapp-mce button.mapp-mce-button {
+.mapp-classic button.mapp-classic-button {
 	display: flex;
 	align-items: center;
 }
@@ -157,15 +160,19 @@
 	-----------------------------------------------------------------------------------
 */
 
+.mapp-pick-modal {
+	max-width: 1200px;
+}
+
 /* Fill container when displayed in library */
-.mapp-library .mapp-pick {
+.mapp-pick {
 	display: flex;
 	flex: 1;
+	overflow: hidden;
 	position: relative;
 }
 
-/* Toggling */
-.mapp-list-panel, .mapp-edit-panel {
+.mapp-pick-list {
 	background-color: white;
 	display: flex;
 	flex-direction: column;
@@ -173,26 +180,19 @@
 	overflow: hidden;
 }
 
-.mapp-edit-panel .components-spinner {
-	position: relative;
-	top: 50%; left: 50%;
-	transform: translateX(-50%) translateY(-50%);
+.mapp-pick-infinite {
+	height : 2px;
+	margin-bottom : 40px;
 }
 
-/* In modal (not in library) hide list when editing */
-.mapp-gt-modal.mapp-mode-edit .mapp-list-panel {
-	flex: 0;
-	height: 0px;
-}
-
-.mapp-pick-filter-wrapper {
+.mapp-pick-header {
 	align-items: center;
 	border-bottom: 1px solid lightgray;
 	display: flex;
 	flex-wrap: wrap;
 	gap: 10px;
 	justify-content: space-between;
-	padding: 0 10px;
+	padding: 0 10px 10px 10px;
 }
 
 .mapp-pick-filter-tabs {
@@ -225,36 +225,42 @@
 	padding: 1px 6px;
 }
 
-.mapp-pick-type {
-	align-self: center;
-	margin-right: 10px;
-	margin-top: 10px;
-}
-
-.mapp-pick-search-wrapper {
+.mapp-pick-sort-search {
 	align-items: center;
 	display: flex;
 }
 
-.mapp-pick-search-wrapper .dashicon {
-	color: #aaa;
-	position: relative;
-	left: -32px;
-}s
-
-.mapp-pick-search-wrapper .components-spinner {
-	margin: 0;
+.mapp-pick-sort {
+	align-items: center;
+	display: flex;
+	margin-right: 10px;
 }
 
-.mapp-pick-search label {
+.mapp-pick-sort-label {
 	margin-right: 5px;
+}
+
+.mapp-pick-search {
+	align-items: center;
+	display: flex;
+	position: relative;
+}
+
+.mapp-pick-search-label {
+	margin-right: 5px;
+}
+
+.mapp-pick-search .dashicon {
+	position: absolute;
+	left: 5px;
+	z-index: 1;
 }
 
 .mapp-pick-search input {
 	margin-bottom: 8px;
-	max-width: 300px;
+	max-width: 225px;
 	margin-bottom: 0 !important;
-	padding-right: 32px !important;
+	padding-left: 28px !important;
 	width: 100%;
 }
 
@@ -269,52 +275,29 @@
 	top: 45%;
 }
 
+/* In post editor, right margin adds some room for scrollbar in modal */
 .mapp-pick-items-section {
-	display: flex;
 	flex: 1;
-	flex-direction: column;
-	overflow: hidden;
+	margin-bottom: 20px;
+	margin-right: 20px;
+	overflow: auto;
+}
+
+.mapp-library .mapp-pick-items-section {
+	margin-right: 0;
 }
 
 .mapp-pick-items  {
 	display: flex;
 	flex: 1;
 	flex-direction: column;
-	overflow: auto;
-}
-
-/* If header is placed outside scroll area, headings are offset by scrollbar width */
-.mapp-pick-items-header {
-	align-items: center;
-	background-color: white;
-	border-bottom: 1px solid lightgray;
-	display: flex;
-	padding: 10px 20px;
-	position: sticky;
-	top: 0;
-	z-index: 1;
-}
-
-.mapp-pick-items-header a {
-	box-shadow: none;
-	text-decoration: none;
-}
-
-/* Sort icon */
-.mapp-pick-items-header .dashicons-leftright {
-	color: lightgray;
-	transform: rotate(90deg);
-}
-
-.mapp-pick-items-header .dashicons-leftright:hover {
-	color: gray;
 }
 
 .mapp-pick-item {
 	align-items: stretch;					/* Make map title fill its whole column so it's easier to click  */
 	border-bottom: 1px solid lightgray;
 	display: flex;
-	padding: 10px 20px;
+	padding: 15px 20px;
 	text-overflow: ellipsis;
 }
 
@@ -323,62 +306,84 @@
 	text-decoration: none;
 }
 
-
-.mapp-pick-item.mapp-selected, .mapp-pick-item:hover {
+.mapp-pick-item.mapp-selected {
 	background-color: #ededed;
 }
 
-.mapp-pick-col-map_title, .mapp-pick-col-post_title, .mapp-pick-col-mapid {
-	cursor: pointer;
+.mapp-pick-col-actions {
+	max-width: 250px;
+	text-align: right;
+	width: 50%;
+}
+
+.mapp-pick-actions button.is-opened svg {
+	border: 1px solid lightgray;
+}
+
+.mapp-pick-col-title {
+	flex: 1;
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
 }
 
-.mapp-pick-col-map_title > div {
+.mapp-pick-all .mapp-pick-col-title, .mapp-pick-object .mapp-pick-col-title {
+	cursor: pointer;
+}
+
+.mapp-pick-col-title > div {
 	overflow: hidden;
 	padding-right: 10px;
 	text-overflow: ellipsis;
 }
 
-.mapp-pick-col-map_title {
-	cursor: pointer;
-	flex: 1;
+.mapp-pick-col-title .mapp-title {
+	font-size: 16px;
+	font-weight: 600;
 }
 
-.mapp-pick-col-post_title {
-	width: 25%;
-}
-
-.mapp-pick-col-mapid {
-	width: 15%;
-}
-
-.mapp-pick-col-shortcode {
-	width: 15%;
-}
-
-.mapp-pick-actions {
+.mapp-pick-col-title .mapp-mapid {
+	color: darkgray;
 	margin-top: 5px;
 }
 
-.mapp-pick-actions a:not(:last-child):after {
-	color: gray;
-	content: "|";
-	margin-left: 5px;
-	margin-right: 5px;
-}
+.mapp-pick-col-title .mapp-postlink {}
 
 .mapp-pick-toolbar {
-	border-top: 1px solid lightgray;
-	padding: 5px 20px;
-	white-space: nowrap;
+	display: flex;
+	justify-content: center;
+	padding: 20px;
 }
 
-.mapp-pick-toolbar button {
-	margin-right: 10px;
+.mapp-pick-toolbar .components-spinner {
+	width: 32px;
+	height: 32px;
 }
 
+.mapp-skeleton .mapp-title {
+	height: 1.3em;
+	width: 30em;
+}
+
+.mapp-skeleton .mapp-mapid, .mapp-skeleton .mapp-postlink {
+	height: 1.3em;
+	width: 10em;
+}
+
+.mapp-skeleton .mapp-title, .mapp-skeleton .mapp-mapid, .mapp-skeleton .mapp-postlink {
+	background-color: #e2e5e7;
+	background-image: linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0));
+	background-size: 40px 100%;
+	background-repeat: no-repeat;
+	background-position: left -40px top 0;
+	animation: shine 1s ease infinite;
+}
+
+@keyframes shine {
+	to {
+		background-position: right -40px top 0;
+	}
+}
 
 /*
 	-----------------------------------------------------------------------------------
@@ -391,6 +396,11 @@
 	flex: 1;
 	flex-direction: column;
 	overflow: hidden;
+}
+
+.mapp-edit-title {
+	max-width: 500px;
+	width: 90%;
 }
 
 .mapp-edit-title input {
@@ -424,10 +434,6 @@
 	overflow: auto;
 }
 
-.mapp-edit-list .mapp-item.mapp-edit-dragover {
-	border-top: 1px solid black;
-}
-
 .mapp-edit-map {
 	display: flex;
 	flex-direction: column;
@@ -445,7 +451,7 @@
 
 .mapp-edit .mapp-wrapper {
 	height: 100% !important;
-	padding-bottom: 0px;
+	padding-bottom: 0px !important;
 }
 
 .mapp-edit-toolbar {
@@ -462,10 +468,9 @@
 	float: right;
 }
 
-.mapp-edit .mapp-sidebar-open.mapp-sidebar {
-	width: 300px;
+.mapp-edit .mapp-iw {
+	flex: 1;
 }
-
 
 /*
 	-----------------------------------------------------------------------------------
@@ -521,6 +526,10 @@
 	Map Settings
 	-----------------------------------------------------------------------------------
 */
+
+.mapp-settings {
+	overflow: hidden;
+}
 
 .mapp-settings-row {
 	display: flex;
@@ -623,6 +632,10 @@ button.mapp-query-refresh {
 	flex: 1;
 }
 
+.mapp-query-help {
+	margin-bottom: 10px;
+}
+
 /*
 	-----------------------------------------------------------------------------------
 	GT document sidebar document panel
@@ -630,12 +643,7 @@ button.mapp-query-refresh {
 */
 
 .mapp-document-panel {}
-
-.mapp-document-list { max-height: 200px; overflow: auto; margin-bottom: 10px; }
-.mapp-document-header { display: flex; padding-bottom: 5px; }
-.mapp-document-item { display: flex; padding-bottom: 5px;  }
-.mapp-document-col-map_title { flex: 1; margin-right: 5px; }
-.mapp-document-col-mapid { width: 50px; }
+.mapp-document-panel .components-button { margin-top: 10px; }
 
 /*
 	-----------------------------------------------------------------------------------
@@ -643,26 +651,27 @@ button.mapp-query-refresh {
 	-----------------------------------------------------------------------------------
 */
 
-/* Go for a large dialog, IB will restrict as needed */
-.mapp-ib-wrapper.mapp-ib-edit {
-	max-height: 80%;
+/* font setting on mapp-layout interfers with dashicons */
+.mapp-edit .dashicons {
+	font-family: 'dashicons';
+}
+
+/* Customize IW/IB */
+.mapp-edit .mapp-ib-wrapper {
+	height: 400px !important;
+	max-height: calc(100% - 80px);
 	max-width: 80%;
+	width: 600px !important;
 }
 
-.mapp-ib-wrapper.mapp-ib-edit .mapp-ib-content {
-	width: 600px;
-	height: 400px;
-}
-
-.mapp-ib-wrapper.mapp-ib-edit .mapp-ib {
-	height: 100%;
-}
-
-.mapp-iw-edit {
-	display: flex;
+.mapp-edit .mapp-ib-content {
 	flex: 1;
-	flex-direction: column;
-	overflow: auto;
+	overflow: hidden;
+}
+
+.mapp-edit .mapp-ib {
+	flex: 1;
+	overflow: hidden;
 	padding: 10px;
 }
 
@@ -671,10 +680,12 @@ button.mapp-query-refresh {
 	align-items: center;
 }
 
-.mapp-poi-header .mapp-poi-title {
+.mapp-poi-title {
+	display: flex;
 	flex: 1;
-	font-weight: bold;
+	font-weight: 500;
 	min-width: 0;
+	padding: 8px;
 }
 
 /* Set fixed icon size, otherwise Leaflet will incorrectly position the popup */
@@ -683,61 +694,23 @@ button.mapp-query-refresh {
 	height: 32px;
 }
 
-.mapp-poi-url {
-	width: 100%;
-}
-
-.mapp-poi-editor-toolbar {
-	align-items: center;
-	display: flex;
-	justify-content: space-between;
-	padding: 3px 0;
-}
-
-.mapp-poi-toolbar button {
-	margin-right: 5px;
-}
-
-.mapp-poi-visual, .mapp-poi-html {
-	cursor: pointer;
-}
-
-.mapp-poi-visual.mapp-active, .mapp-poi-html.mapp-active {
-	font-weight: bold;
-}
-
-.mapp-poi-main {
-	display: flex;
-	flex: 1;
-	overflow-wrap: break-word;
-}
-
-.mapp-poi-main textarea {
-	width: 100%;
-}
-
-/* TinyMCE by default sizes width 100% which obscures right edge */
-.mapp-poi-main .mce-tinymce {
-	border: 1px solid lightgray;
-/*	width: auto !important;*/
-}
-
-.mapp-poi-main .mce-tinymce, .mapp-poi-main .mce-stack-layout, .mapp-poi-main .mce-edit-area{
-	display: flex;
-	flex-direction: column;
-	flex: 1;
+.mapp-poi-kml {
+	border-bottom: 1px solid lightgray;
 	overflow: hidden;
-	width: auto !important;
+	padding: 5px 0;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 
 .mapp-poi-toolbar {
 	align-items: center;
 	display: flex;
+	justify-content: space-between;
 	margin-top: 5px;
 }
 
 .mapp-poi-toolbar button {
-	margin-right: 3px !important;
+	margin-right: 5px;
 }
 
 /* Leaflet sets cursor for all img tags in popups, so override */
@@ -745,6 +718,101 @@ button.mapp-query-refresh {
 	cursor: pointer;
 }
 
+.mapp-poi-images {
+	display: flex;
+	margin: 5px 0;
+	overflow: auto;
+}
+
+.mapp-poi-images .mapp-poi-image {
+	align-items: center;
+	border: 1px solid lightgray;
+	cursor: pointer;
+	display: flex;
+	flex-shrink: 0;
+	height : 96px;
+	justify-content: center;
+	overflow: hidden;
+	position: relative;
+	width : 96px;
+	margin-right: 5px;
+}
+
+.mapp-poi-images .mapp-poi-image img {
+	max-height: 100%;
+}
+
+.mapp-poi-images .mapp-poi-embed, .mapp-poi-images .mapp-poi-embed iframe {
+	height: 100%;
+	width: 100%;
+}
+
+.mapp-poi-images .mapp-poi-embed .components-spinner {
+	margin: 0;
+}
+
+.mapp-poi-image-delete {
+	background-color: white;
+	border: 1px solid gray;
+	padding: 2px;
+	position: absolute;
+	right: 1px;
+	top: 1px;
+}
+
+/*
+	-----------------------------------------------------------------------------------
+	POI editor MCE Control
+	-----------------------------------------------------------------------------------
+*/
+
+.mapp-iw .mapp-mce-visual, .mapp-iw .mapp-mce-html {
+	border-bottom: 2px solid white !important;
+	cursor: pointer;
+	display: inline-block;
+	padding: 5px !important;
+}
+
+.mapp-iw .mapp-mce-tabs a.mapp-active, .mapp-iw .mapp-mce-tabs a.mapp-active:hover {
+	border-bottom: 2px solid black !important;
+}
+
+.mapp-iw .mapp-mce-visual:hover, .mapp-iw .mapp-mce-html:hover {
+	background-color: #e9f0f5;
+}
+
+.mapp-mce-toolbar {
+	align-items: center;
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 2px;
+}
+
+.mapp-mce-main {
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+	overflow: hidden;
+	overflow-wrap: break-word;
+}
+
+.mapp-mce-main textarea {
+	width: 100%;
+}
+
+/* TinyMCE by default sizes width 100% which obscures right edge */
+.mapp-mce-main .mce-tinymce {
+	border: 1px solid lightgray;
+/*	width: auto !important;*/
+}
+
+.mapp-mce-main .mce-tinymce, .mapp-mce-main .mce-stack-layout, .mapp-mce-main .mce-edit-area{
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+	overflow: hidden;
+	width: auto !important;
+}
 
 /*
 	-----------------------------------------------------------------------------------
@@ -862,10 +930,10 @@ button.mapp-query-refresh {
 	-----------------------------------------------------------------------------------
 */
 
-.mapp-attach-control {
+/*.mapp-attach-control .components-popover {
 	max-width: 360px;
 	width: 90vw;
-}
+}*/
 
 .mapp-attach-items {
 	max-height: 200px;
@@ -873,8 +941,9 @@ button.mapp-query-refresh {
 }
 
 .mapp-attach-item {
+	align-items: center;
+	cursor: pointer;
 	display: flex;
-	flex-direction: row;
 	padding: 10px;
 }
 
@@ -888,6 +957,7 @@ button.mapp-query-refresh {
 
 .mapp-attach-item-type {
 	background-color: #f0f0f0;
+	margin-left: 40px;
 	padding: 3px 8px;
 }
 
@@ -945,6 +1015,7 @@ div.mapp-control {
 
 .mapp-help-text {
 	font-style: italic;
+	padding: 5px 0;
 }
 
 .mapp-help-link {
@@ -970,7 +1041,36 @@ div.mapp-control {
 
 /*
 	-----------------------------------------------------------------------------------
-	GT options page
+	Option grids
+	-----------------------------------------------------------------------------------
+*/
+
+.mapp-crud .mapp-table {
+	background-color: white;
+	border: 1px solid lightgray;
+	margin-bottom: 5px;
+}
+
+.mapp-crud .mapp-label {
+	background-color: #f1f1f1;
+	border-bottom: 1px solid lightgray;
+	font-weight: 600;
+	padding: 5px 10px;
+}
+
+.mapp-crud .mapp-cell {
+	border: 1px solid lightgray;
+	padding: 5px 10px;
+	vertical-align: middle;
+}
+
+.mapp-crud .mapp-cell .components-base-control__field {
+	margin: 0;
+}
+
+/*
+	-----------------------------------------------------------------------------------
+	Options page
 	-----------------------------------------------------------------------------------
 */
 
@@ -1063,9 +1163,7 @@ div.mapp-control {
 }
 
 .mapp-option-value {
-	display: inline-block;
 	flex: 1;
-	vertical-align: middle;
 }
 
 .mapp-option-value select {
@@ -1117,11 +1215,15 @@ button.mapp-options-save {
 	box-shadow: none;
 }
 
-/* Styling to make styles JSON column full width and expand it on focus */
-.mapp-options .mapp-grid-styles, .mapp-options .mapp-grid-styles .mapp-grid-table { width: 100%; }
-.mapp-options .mapp-grid-styles .mapp-grid-cell-value { width: 100%; }
-.mapp-options .mapp-grid-styles .mapp-grid-cell-value textarea { width: 100%; }
-.mapp-options .mapp-grid-styles .mapp-grid-cell-value textarea:focus { min-height: 20em }
+/* Try to make meta keys combobox dropdown position absolute */
+.mapp-options .components-combobox-control__suggestions-container {
+	position: relative;
+}
+.mapp-options .components-form-token-field__suggestions-list {
+	border: 1px solid lightgray;
+	position: absolute;
+	top: 100%;
+}
 
 .mapp-option-mapbox {
 	align-items: center;
@@ -1161,9 +1263,13 @@ button.mapp-options-save {
 	margin-left: 10px;
 }
 
+.mapp-option-line-options .mapp-control {
+	margin-right: 20px;
+}
 
-.mapp-option-poilist-radios, .mapp-option-poilist-open, .mapp-option-poilist-page-size {
-	margin-top: 10px;
+.mapp-option-filters .mapp-tabs {
+	max-width: 1000px;
+	width: 90%;
 }
 
 .mapp-option-filters .mapp-option-value {
@@ -1204,6 +1310,33 @@ button.mapp-options-save {
 
 .mapp-option-filter .components-form-token-field__token {
 	margin-right: 2px;
+}
+
+button.mapp-option-geocode {
+	margin-bottom: 10px;
+	margin-right: 10px;
+}
+
+.mapp-option-geocode-log {
+	max-height: 200px;
+	overflow: auto;
+	padding-right: 40px;
+}
+
+.mapp-option-geocode-log-row {
+	display: table-row;
+}
+
+.mapp-option-geocode-log-row > div {
+	display: table-cell;
+	padding: 5px 15px;
+}
+
+.mapp-option-iframes-required .mapp-help-text {
+	background-color: lightyellow;
+	padding: 10px 0;
+	border: 1px solid yellow;
+	margin-top: 10px;
 }
 
 /*
@@ -1285,6 +1418,7 @@ button.mapp-options-save {
 	margin-right: 10px;
 }
 
+
 /*
 	-----------------------------------------------------------------------------------
 	Welcome guide
@@ -1313,6 +1447,14 @@ button.mapp-options-save {
 	height: 100%;
 }
 
+.mapp-guide-body {
+	text-align: center;
+}
+
+.mapp-guide .components-guide__footer {
+	padding-top: 10px;
+}
+
 .mapp-guide div {
 	box-sizing: border-box;
 }
@@ -1332,7 +1474,12 @@ button.mapp-options-save {
 
 .mapp-guide h1 {
 	line-height: 1em;
+	margin: 10px 0;
 	text-align: center;
+}
+
+.mapp-guide h2 {
+	margin: 10px 0;
 }
 
 .mapp-guide h3 {
@@ -1342,7 +1489,6 @@ button.mapp-options-save {
 
 .mapp-guide p {
 	margin: 10px;
-	text-align: center;
 }
 
 .mapp-guide p .components-external-link {
@@ -1407,7 +1553,7 @@ button.mapp-options-save {
 	list-style: disc;
 }
 
-.mapp-guide-engine h2, .mapp-guide-engine-footer {
+.mapp-guide-engine-title {
 	text-align: center;
 }
 
@@ -1453,6 +1599,10 @@ button.mapp-options-save {
 	}
 }
 
+/* WP positions the close tooltip incorrectly, so hide it */
+.mapp-guide .components-popover.components-tooltip {
+	display: none;
+}
 
 
 /*
@@ -2058,8 +2208,13 @@ button.mapp-style-toggle {
 	padding: 5px;
 }
 
-.mapp-style-snazzy-form {
+.mapp-style-snazzy-search {
+	align-items: center;
 	display: flex;
+}
+
+.mapp-style-snazzy-search input {
+	height: 100%;
 }
 
 .mapp-style-top-toolbar button {
@@ -2145,8 +2300,9 @@ button.mapp-style-toggle {
 
 a.mapp-templates-item {
 	border: 1px solid lightgray;
+	display: inline-block;
 	padding: 10px;
-	margin: 0 2px;
+	margin: 0 2px 4px 0;
 	text-decoration: none;
 }
 
@@ -2203,6 +2359,9 @@ a.mapp-templates-item {
 
 
 .mapp-templates-toolbar {
+	align-items: center;
+	display: flex;
+	justify-content: space-between;
 	padding-top: 10px;
 	border-top: 1px solid lightgray;
 }
@@ -2217,9 +2376,164 @@ a.mapp-templates-item {
 
 /*
 	-----------------------------------------------------------------------------------
+	DB Upgrader
+	-----------------------------------------------------------------------------------
+*/
+.mapp-upgrade-warning, .mapp-upgrade-error {
+	background-color: pink;
+	border: 1px solid red;
+	font-weight: 600;
+	margin: 10px 0;
+	padding: 10px;
+}
+
+.mapp-upgrade-success {
+	background-color: lightgreen;
+	border: 1px solid green;
+	font-weight: 600;
+	margin-top: 10px;
+	padding: 10px;
+}
+
+/*
+	-----------------------------------------------------------------------------------
+	Importer
+	-----------------------------------------------------------------------------------
+*/
+
+.mapp-import-header {
+	align-items: center;
+	display: flex;
+}
+
+.mapp-import-header a {
+	margin-left: 20px;
+	text-decoration: none;
+}
+
+.mapp-import {
+	margin-right: 20px;
+}
+
+.mapp-import h2 {
+	display: flex;
+	align-items: center;
+}
+
+.mapp-import .mapp-tabs {
+	display : block;
+}
+
+.mapp-import .mapp-tab-content {
+	padding: 10px;
+}
+
+.mapp-import-sheet-name {
+	align-items: center;
+	display: flex;
+}
+
+.mapp-import-sheet-name > input {
+	flex: 1;
+	margin-left: 10px;
+	max-width: 800px;
+}
+
+.mapp-import-file-name {
+	align-items : center;
+	display: flex;
+}
+
+.mapp-import-file-name input {
+	flex: 1;
+	margin-left: 10px;
+	max-width: 800px;
+}
+
+.mapp-import-help {
+	margin-top: 20px;
+}
+
+.mapp-import-help-links {
+	margin-top : 40px;
+}
+
+.mapp-import-overwrite-warning {
+	border: 1px solid yellow;
+	background: lightyellow;
+	margin-bottom: 10px;
+	padding: 10px;
+}
+
+.mapp-import-log {
+	max-height: 40vh;
+	overflow: auto;
+}
+
+.mapp-import-table {
+	border-collapse: collapse;
+	display: table;
+	table-layout: fixed;
+}
+
+.mapp-import-table-header {
+	display: table-header-group;
+}
+
+.mapp-import-table-header .mapp-import-cell {
+	font-weight: bold;
+}
+
+.mapp-import-cell {
+	background-color: white;
+	border: 1px solid lightgray;
+	display: table-cell;
+	overflow: hidden;
+	padding: 2px 5px;
+	text-overflow: ellipsis;
+}
+
+.mapp-import-cell-error {
+	background-color: pink;
+}
+
+.mapp-import-row {
+	display: table-row;
+}
+
+.mapp-import-error {
+	align-items: center;
+	display: block;
+	background-color: pink;
+	border: 1px solid red;
+	padding: 10px;
+}
+
+.mapp-import-info {
+	align-items: center;
+	display: block;
+	padding: 10px;
+}
+
+.mapp-import-info button {
+	margin-left: 20px;
+}
+
+ .mappress_page_mappress_import .components-modal__frame {
+	max-height: none;
+}
+
+
+/*
+	-----------------------------------------------------------------------------------
 	Deactivate
 	-----------------------------------------------------------------------------------
 */
+
+.mapp-deactivate {
+	max-width: 100vw;
+	width: 600px;
+}
 
 .mapp-deactivate * {
 	font-size: 16px;
@@ -2256,59 +2570,52 @@ a.mapp-deactivate-help {
 	margin-left: 10px;
 }
 
+.mapp-deactivate-tip {
+	background-color: lightyellow;
+	border: 1px solid yellow;
+	margin: 5px;
+	padding: 10px;
+}
+
+.mapp-deactivate-tip > div {
+	padding: 10px 0;
+}
+
+
 /*
 	-----------------------------------------------------------------------------------
-	GT Grid
+	Tabs
 	-----------------------------------------------------------------------------------
 */
+.mapp-tabs { display: inline-block; }
 
-.mapp-grid-table {
-	background-color: white;
+.mapp-tabs-nav {
 	border: 1px solid lightgray;
-	display: table;
-	margin-bottom: 5px;
+	display: flex;
+	margin-bottom: 15px;
 }
 
-.mapp-grid-header {
-	display: table-header-group;
+.mapp-tab {
+	align-items: center;
+	border-bottom: 2px solid white;
+	color: #2271b1;
+	cursor: pointer;
+	display: flex;
+	padding: 16px;
+	text-decoration: none;
 }
 
-.mapp-grid-header .mapp-grid-cell {
-	background-color: #f1f1f1;
-	border-bottom: 1px solid lightgray;
-	font-weight: 600;
-	padding: 5px;
+.mapp-tab:hover {
+	background-color: #e9f0f5;
 }
 
-.mapp-grid-body {
-	display: table-row-group;
+.mapp-tab.mapp-active {
+	border-bottom: 2px solid black;
+	color: black;
 }
 
-.mapp-grid-row {
-	display: table-row;
-}
+.mapp-tab-content {}
 
-.mapp-grid-cell {
-	border-bottom: 1px solid lightgray;
-	display: table-cell;
-	padding: 5px 10px;
-	text-align: center;
-	vertical-align: middle;
-}
-
-.mapp-grid-cell .components-base-control__field {
-	margin: 0;
-}
-
-.mapp-grid-row.mapp-dragover .mapp-grid-cell {
-	border-top: 1px solid black;
-}
-
-.mapp-grid-cell label {
-	margin: 0;
-}
-
-.mapp-grid-toolbar {}
 
 /*
 	-----------------------------------------------------------------------------------
@@ -2395,6 +2702,10 @@ a.mapp-deactivate-help {
 	-----------------------------------------------------------------------------------
 */
 
+.mapp-dragover {
+	border: 1px solid black !important;
+}
+
 .mapp-snackbar {
 	background-color: #333;
 	color: white;
@@ -2404,7 +2715,7 @@ a.mapp-deactivate-help {
 	opacity: 0;
 	padding: 20px;
 	position: fixed;
-	z-index: 100;
+	z-index: 1000;
 }
 
 .mapp-snackbar-show {
@@ -2416,10 +2727,6 @@ a.mapp-deactivate-help {
   5% {bottom: 30px; opacity: 1;}
   95% {bottom: 30px; opacity: 1;}
   to {bottom: 0; opacity: 0;}
-}
-
-.mapp-inline {
-	display: inline-block;
 }
 
 .mapp-review p {
@@ -2439,7 +2746,6 @@ a.mapp-deactivate-help {
 	margin-left: 10px !important;
 }
 
-.mapp-destructive {
+.mapp-destructive, .mapp-destructive:active, .mapp-destructive:hover {
 	color: #b32d2e;
-}
 }

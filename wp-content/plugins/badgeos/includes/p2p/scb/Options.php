@@ -4,21 +4,21 @@
 
 class scbOptions {
 
-	protected $key;		// the option name
+	protected $key;     // the option name
 
-	protected $defaults;	// the default values
+	protected $defaults;    // the default values
 
-	public $wp_filter_id;	// used by WP hooks
+	public $wp_filter_id;   // used by WP hooks
 
 	/**
 	 * Create a new set of options
 	 *
 	 * @param string $key Option name
 	 * @param string $file Reference to main plugin file
-	 * @param array $defaults An associative array of default values (optional)
+	 * @param array  $defaults An associative array of default values (optional)
 	 */
 	public function __construct( $key, $file, $defaults = array() ) {
-		$this->key = $key;
+		$this->key      = $key;
 		$this->defaults = $defaults;
 
 		if ( $file ) {
@@ -60,14 +60,15 @@ class scbOptions {
 	 * Set all data fields, certain fields or a single field
 	 *
 	 * @param string|array $field The field to update or an associative array
-	 * @param mixed $value The new value ( ignored if $field is array )
+	 * @param mixed        $value The new value ( ignored if $field is array )
 	 * @return null
 	 */
 	public function set( $field, $value = '' ) {
-		if ( is_array( $field ) )
+		if ( is_array( $field ) ) {
 			$newdata = $field;
-		else
+		} else {
 			$newdata = array( $field => $value );
+		}
 
 		$this->update( array_merge( $this->get(), $newdata ) );
 	}
@@ -94,12 +95,13 @@ class scbOptions {
 	 * Update raw data
 	 *
 	 * @param mixed $newdata
-	 * @param bool $clean wether to remove unrecognized keys or not
+	 * @param bool  $clean wether to remove unrecognized keys or not
 	 * @return null
 	 */
 	public function update( $newdata, $clean = true ) {
-		if ( $clean )
+		if ( $clean ) {
 			$newdata = $this->_clean( $newdata );
+		}
 
 		update_option( $this->key, array_merge( $this->get(), $newdata ) );
 	}
@@ -114,7 +116,7 @@ class scbOptions {
 	}
 
 
-//_____INTERNAL METHODS_____
+	// _____INTERNAL METHODS_____
 
 
 	// Saves an extra query
@@ -143,7 +145,7 @@ class scbOptions {
 	// Magic method: isset( $options->field )
 	function __isset( $field ) {
 		$data = $this->get();
-		return isset( $data[$field] );
+		return isset( $data[ $field ] );
 	}
 }
 

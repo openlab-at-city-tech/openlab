@@ -1,11 +1,13 @@
-<?php
+<?php declare(strict_types = 1);
 /**
  * Block editor data output for HTML pages.
  *
  * @package query-monitor
  */
 
-defined( 'ABSPATH' ) || exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 class QM_Output_Html_Block_Editor extends QM_Output_Html {
 
@@ -21,18 +23,25 @@ class QM_Output_Html_Block_Editor extends QM_Output_Html {
 		add_filter( 'qm/output/menus', array( $this, 'admin_menu' ), 55 );
 	}
 
+	/**
+	 * @return string
+	 */
 	public function name() {
 		return __( 'Blocks', 'query-monitor' );
 	}
 
+	/**
+	 * @return void
+	 */
 	public function output() {
+		/** @var QM_Data_Block_Editor */
 		$data = $this->collector->get_data();
 
-		if ( empty( $data['block_editor_enabled'] ) || empty( $data['post_blocks'] ) ) {
+		if ( empty( $data->block_editor_enabled ) || empty( $data->post_blocks ) ) {
 			return;
 		}
 
-		if ( ! $data['post_has_blocks'] ) {
+		if ( ! $data->post_has_blocks ) {
 			$this->before_non_tabular_output();
 
 			$notice = __( 'This post contains no blocks.', 'query-monitor' );
@@ -51,13 +60,13 @@ class QM_Output_Html_Block_Editor extends QM_Output_Html {
 		echo '<th scope="col">' . esc_html__( 'Block Name', 'query-monitor' ) . '</th>';
 		echo '<th scope="col">' . esc_html__( 'Attributes', 'query-monitor' ) . '</th>';
 
-		if ( isset( $data['has_block_context'] ) ) {
+		if ( $data->has_block_context ) {
 			echo '<th scope="col">' . esc_html__( 'Context', 'query-monitor' ) . '</th>';
 		}
 
 		echo '<th scope="col">' . esc_html__( 'Render Callback', 'query-monitor' ) . '</th>';
 
-		if ( isset( $data['has_block_timing'] ) ) {
+		if ( $data->has_block_timing ) {
 			echo '<th scope="col" class="qm-num">' . esc_html__( 'Render Time', 'query-monitor' ) . '</th>';
 		}
 
@@ -67,7 +76,7 @@ class QM_Output_Html_Block_Editor extends QM_Output_Html {
 
 		echo '<tbody>';
 
-		foreach ( $data['post_blocks'] as $i => $block ) {
+		foreach ( $data->post_blocks as $i => $block ) {
 			self::render_block( ++$i, $block, $data );
 		}
 
@@ -78,11 +87,11 @@ class QM_Output_Html_Block_Editor extends QM_Output_Html {
 
 		$colspan = 5;
 
-		if ( isset( $data['has_block_context'] ) ) {
+		if ( $data->has_block_context ) {
 			$colspan++;
 		}
 
-		if ( isset( $data['has_block_timing'] ) ) {
+		if ( $data->has_block_timing ) {
 			$colspan++;
 		}
 
@@ -91,8 +100,8 @@ class QM_Output_Html_Block_Editor extends QM_Output_Html {
 			intval( $colspan ),
 			sprintf(
 				/* translators: %s: Total number of content blocks used */
-				esc_html( _nx( 'Total: %s', 'Total: %s', $data['total_blocks'], 'Content blocks used', 'query-monitor' ) ),
-				'<span class="qm-items-number">' . esc_html( number_format_i18n( $data['total_blocks'] ) ) . '</span>'
+				esc_html( _nx( 'Total: %s', 'Total: %s', $data->total_blocks, 'Content blocks used', 'query-monitor' ) ),
+				'<span class="qm-items-number">' . esc_html( number_format_i18n( $data->total_blocks ) ) . '</span>'
 			)
 		);
 		echo '</tr>';
@@ -101,25 +110,32 @@ class QM_Output_Html_Block_Editor extends QM_Output_Html {
 		$this->after_tabular_output();
 	}
 
-	protected static function render_block( $i, array $block, array $data ) {
-		$block_error     = false;
-		$row_class       = '';
+	/**
+	 * @param int|string $i
+	 * @param array<string, mixed> $block
+	 * @param QM_Data_Block_Editor $data
+	 * @return void
+	 */
+	protected static function render_block( $i, array $block, QM_Data_Block_Editor $data ) {
+		$block_error = false;
+		$row_class = '';
 		$referenced_post = null;
 		$referenced_type = null;
-		$referenced_pto  = null;
-		$error_message   = null;
+		$referenced_template_part = null;
+		$referenced_pto = null;
+		$error_message = null;
 
 		if ( 'core/block' === $block['blockName'] && ! empty( $block['attrs']['ref'] ) ) {
 			$referenced_post = get_post( $block['attrs']['ref'] );
 
 			if ( ! $referenced_post ) {
-				$block_error   = true;
+				$block_error = true;
 				$error_message = esc_html__( 'Referenced block does not exist.', 'query-monitor' );
 			} else {
 				$referenced_type = $referenced_post->post_type;
-				$referenced_pto  = get_post_type_object( $referenced_type );
+				$referenced_pto = get_post_type_object( $referenced_type );
 				if ( 'wp_block' !== $referenced_type ) {
-					$block_error   = true;
+					$block_error = true;
 					$error_message = sprintf(
 						/* translators: %1$s: Erroneous post type name, %2$s: WordPress block post type name */
 						esc_html__( 'Referenced post is of type %1$s instead of %2$s.', 'query-monitor' ),
@@ -131,26 +147,26 @@ class QM_Output_Html_Block_Editor extends QM_Output_Html {
 		}
 
 		$media_blocks = array(
-			'core/audio'       => 'id',
-			'core/cover'       => 'id',
+			'core/audio' => 'id',
+			'core/cover' => 'id',
 			'core/cover-image' => 'id',
-			'core/file'        => 'id',
-			'core/image'       => 'id',
-			'core/media-text'  => 'mediaId', // (╯°□°）╯︵ ┻━┻
-			'core/video'       => 'id',
+			'core/file' => 'id',
+			'core/image' => 'id',
+			'core/media-text' => 'mediaId', // (╯°□°）╯︵ ┻━┻
+			'core/video' => 'id',
 		);
 
 		if ( isset( $media_blocks[ $block['blockName'] ] ) && is_array( $block['attrs'] ) && ! empty( $block['attrs'][ $media_blocks[ $block['blockName'] ] ] ) ) {
 			$referenced_post = get_post( $block['attrs'][ $media_blocks[ $block['blockName'] ] ] );
 
 			if ( ! $referenced_post ) {
-				$block_error   = true;
+				$block_error = true;
 				$error_message = esc_html__( 'Referenced media does not exist.', 'query-monitor' );
 			} else {
 				$referenced_type = $referenced_post->post_type;
-				$referenced_pto  = get_post_type_object( $referenced_type );
+				$referenced_pto = get_post_type_object( $referenced_type );
 				if ( 'attachment' !== $referenced_type ) {
-					$block_error   = true;
+					$block_error = true;
 					$error_message = sprintf(
 						/* translators: %1$s: Erroneous post type name, %2$s: WordPress attachment post type name */
 						esc_html__( 'Referenced media is of type %1$s instead of %2$s.', 'query-monitor' ),
@@ -159,6 +175,19 @@ class QM_Output_Html_Block_Editor extends QM_Output_Html {
 					);
 				}
 			}
+		}
+
+		$template_part_blocks = array(
+			'core/template-part' => true,
+		);
+
+		if ( isset( $template_part_blocks[ $block['blockName'] ] ) && is_array( $block['attrs'] ) && ! empty( $block['attrs']['slug'] ) && ! empty( $block['attrs']['theme'] ) ) {
+			$referenced_template_part = sprintf(
+				'%s//%s',
+				$block['attrs']['theme'],
+				$block['attrs']['slug']
+			);
+			$referenced_pto = get_post_type_object( 'wp_template_part' );
 		}
 
 		if ( $block_error ) {
@@ -179,13 +208,22 @@ class QM_Output_Html_Block_Editor extends QM_Output_Html {
 
 		if ( $error_message ) {
 			echo '<br>';
-			echo '<span class="dashicons dashicons-warning" aria-hidden="true"></span>';
-			echo $error_message; // WPCS: XSS ok;
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			echo QueryMonitor::icon( 'warning' );
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			echo $error_message;
 		}
 
 		if ( ! empty( $referenced_post ) && ! empty( $referenced_pto ) ) {
 			echo '<br>';
-			echo '<a href="' . esc_url( get_edit_post_link( $referenced_post ) ) . '" class="qm-link">' . esc_html( $referenced_pto->labels->edit_item ) . '</a>';
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			echo self::build_link( get_edit_post_link( $referenced_post ), esc_html( $referenced_pto->labels->edit_item ) );
+		}
+
+		if ( ! empty( $referenced_template_part ) ) {
+			echo '<br>';
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			echo self::build_link( QM_Util::get_site_editor_url( $referenced_template_part ), esc_html( $referenced_pto->labels->edit_item ) );
 		}
 
 		echo '</span></td>';
@@ -196,7 +234,7 @@ class QM_Output_Html_Block_Editor extends QM_Output_Html {
 		}
 		echo '</td>';
 
-		if ( $data['has_block_context'] ) {
+		if ( $data->has_block_context ) {
 			echo '<td class="qm-row-block-context">';
 			if ( isset( $block['context'] ) ) {
 				echo '<pre class="qm-pre-wrap"><code>' . esc_html( QM_Util::json_format( $block['context'] ) ) . '</code></pre>';
@@ -230,7 +268,8 @@ class QM_Output_Html_Block_Editor extends QM_Output_Html {
 				echo '<code>' . esc_html( $block['callback']['name'] ) . '</code>';
 
 				if ( isset( $block['callback']['error'] ) ) {
-					echo '<br><span class="dashicons dashicons-warning" aria-hidden="true"></span>';
+					// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+					echo '<br>' . QueryMonitor::icon( 'warning' );
 					echo esc_html( sprintf(
 						/* translators: %s: Error message text */
 						__( 'Error: %s', 'query-monitor' ),
@@ -241,7 +280,7 @@ class QM_Output_Html_Block_Editor extends QM_Output_Html {
 				echo '</td>';
 			}
 
-			if ( $data['has_block_timing'] ) {
+			if ( $data->has_block_timing ) {
 				echo '<td class="qm-num">';
 				if ( isset( $block['timing'] ) ) {
 					echo esc_html( number_format_i18n( $block['timing'], 4 ) );
@@ -251,7 +290,7 @@ class QM_Output_Html_Block_Editor extends QM_Output_Html {
 		} else {
 			echo '<td></td>';
 
-			if ( $data['has_block_timing'] ) {
+			if ( $data->has_block_timing ) {
 				echo '<td></td>';
 			}
 		}
@@ -284,10 +323,15 @@ class QM_Output_Html_Block_Editor extends QM_Output_Html {
 		}
 	}
 
+	/**
+	 * @param array<string, mixed[]> $menu
+	 * @return array<string, mixed[]>
+	 */
 	public function admin_menu( array $menu ) {
+		/** @var QM_Data_Block_Editor */
 		$data = $this->collector->get_data();
 
-		if ( empty( $data['block_editor_enabled'] ) || empty( $data['post_blocks'] ) ) {
+		if ( empty( $data->block_editor_enabled ) || empty( $data->post_blocks ) ) {
 			return $menu;
 		}
 
@@ -300,6 +344,11 @@ class QM_Output_Html_Block_Editor extends QM_Output_Html {
 
 }
 
+/**
+ * @param array<string, QM_Output> $output
+ * @param QM_Collectors $collectors
+ * @return array<string, QM_Output>
+ */
 function register_qm_output_html_block_editor( array $output, QM_Collectors $collectors ) {
 	$collector = QM_Collectors::get( 'block_editor' );
 	if ( $collector ) {

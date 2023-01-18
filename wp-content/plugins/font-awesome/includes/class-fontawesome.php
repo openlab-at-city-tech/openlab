@@ -126,7 +126,7 @@ class FontAwesome {
 	 *
 	 * @since 4.0.0
 	 */
-	const PLUGIN_VERSION = '4.1.1';
+	const PLUGIN_VERSION = '4.3.2';
 	/**
 	 * The namespace for this plugin's REST API.
 	 *
@@ -178,7 +178,7 @@ class FontAwesome {
 	 * @ignore
 	 * @internal
 	 */
-	const CONFLICT_DETECTOR_SOURCE = 'https://use.fontawesome.com/releases/v6.0.0-beta3/js/conflict-detection.js';
+	const CONFLICT_DETECTOR_SOURCE = 'https://use.fontawesome.com/releases/v6.1.1/js/conflict-detection.js';
 
 	/**
 	 * The custom data attribute added to script, link, and style elements enqueued
@@ -462,7 +462,7 @@ class FontAwesome {
 			 * default of the latest available version.
 			 */
 			if ( ! isset( $upgraded_options['version'] ) ) {
-				$upgraded_options['version'] = fa()->latest_version();
+				$upgraded_options['version'] = fa()->latest_version_6();
 			}
 
 			$should_upgrade = true;
@@ -545,6 +545,18 @@ class FontAwesome {
 		if ( boolval( $release_metadata ) ) {
 			update_option( FontAwesome_Release_Provider::OPTIONS_KEY, $release_metadata, false );
 		}
+
+		/**
+		 * Delete the old release metadata transient, if it exists.
+		 * It's no longer stored as a transient.
+		 */
+		delete_transient( 'font-awesome-releases' );
+
+		/**
+		 * Delete the old font-awesome-last-used-release site transient, if it exists.
+		 * It's no longer stored as a site (network-wide) transient.
+		 */
+		delete_site_transient( 'font-awesome-last-used-release' );
 
 		/**
 		 * Now we'll reset the release provider.
@@ -738,6 +750,32 @@ class FontAwesome {
 	}
 
 	/**
+	 * Returns the latest available full release version of Font Awesome 5 as a string,
+	 * or null if the releases metadata has not yet been successfully retrieved from the
+	 * API server.
+	 *
+	 * @since 4.2.0
+	 *
+	 * @return null|string
+	 */
+	public function latest_version_5() {
+		return $this->release_provider()->latest_version_5();
+	}
+
+	/**
+	 * Returns the latest available full release version of Font Awesome 6 as a string,
+	 * or null if the releases metadata has not yet been successfully retrieved from the
+	 * API server.
+	 *
+	 * @since 4.2.0
+	 *
+	 * @return null|string
+	 */
+	public function latest_version_6() {
+		return $this->release_provider()->latest_version_6();
+	}
+
+	/**
 	 * Queries the Font Awesome API to load releases metadata. Results are stored
 	 * in the wp database.
 	 *
@@ -786,7 +824,13 @@ class FontAwesome {
 	protected function maybe_refresh_releases() {
 		$refreshed_at = $this->releases_refreshed_at();
 
-		if ( is_null( $refreshed_at ) || ( time() - $refreshed_at ) > self::RELEASES_REFRESH_INTERVAL ) {
+		/**
+		 * If we've just upgraded from an older plugin version that didn't have this metadata value,
+		 * then we should refresh to get it.
+		 */
+		$latest_version_6 = $this->latest_version_6();
+
+		if ( is_null( $latest_version_6 ) || is_null( $refreshed_at ) || ( time() - $refreshed_at ) > self::RELEASES_REFRESH_INTERVAL ) {
 			return FontAwesome_Release_Provider::load_releases();
 		} else {
 			return 1;
@@ -1313,7 +1357,8 @@ class FontAwesome {
 				$current_conflicts = FontAwesome_Preference_Conflict_Detector::detect(
 					$options_for_comparison,
 					$client_preferences,
-					$this->latest_version()
+					$this->latest_version_5(),
+					$this->latest_version_6()
 				);
 				if ( count( $current_conflicts ) > 0 ) {
 					$conflicts[ $client_name ] = $current_conflicts;
@@ -1436,19 +1481,23 @@ class FontAwesome {
 	 * and "the latest stable release with major version 6, when available, otherwise
 	 * the latest pre-release with major version 6."
 	 *
-	 * These "5.x" and "6.x" symbolic versions should not be relied upon
-	 * as API at this time, because this schema may change. Suffice it to say
-	 * that if this function does not return a semver parseable version, then
-	 * it probably means that it's one of these symbolic versions, and there's
-	 * currently no way to reliably, programmatically convert that symbolic
-	 * version into the concrete version that will be loaded by the kit.
+	 * So if this function does not return a semver parseable version, then
+	 * it must be one of these symbolic versions.
+	 *
+	 * The recommended way to resolve the symbolic versions 'latest',
+	 * '5.x', or '6.x' into their current concrete values is to query the GraphQL
+	 * API like this:
+	 *
+	 * ```
+	 * query { release(version: "5.x") { version } }
+	 * ```
 	 *
 	 * @since 4.0.0
 	 * @see FontAwesome::latest_version()
 	 * @see FontAwesome::releases_refreshed_at()
 	 * @throws ConfigCorruptionException
 	 * @return string|null null if no version has yet been saved in the options
-	 * in the db. Otherwise, a version string.
+	 * in the db. Otherwise, 5.x, or 6.x, or a semantic version string.
 	 */
 	public function version() {
 		$options = $this->options();
@@ -1573,8 +1622,9 @@ class FontAwesome {
 									'onSettingsPage'       => true,
 									'clientPreferences'    => $this->client_preferences(),
 									'releases'             => array(
-										'available'      => $this->release_provider()->versions(),
-										'latest_version' => $this->latest_version(),
+										'available'        => $this->release_provider()->versions(),
+										'latest_version_5' => $this->latest_version_5(),
+										'latest_version_6' => $this->latest_version_6(),
 									),
 									'pluginVersion'        => FontAwesome::PLUGIN_VERSION,
 									'preferenceConflicts'  => $this->conflicts_by_option(),
@@ -2855,23 +2905,34 @@ EOT;
 	 * @ignore
 	 */
 	public function process_shortcode( $params ) {
+		$defaults = array(
+			'name'            => '',
+			'prefix'          => self::DEFAULT_PREFIX,
+			'class'           => '',
+			'style'           => null,
+			'aria-hidden'     => null,
+			'aria-label'      => null,
+			'aria-labelledby' => null,
+			'title'           => null,
+			'role'            => null,
+		);
+
+		$escaped_params = array();
+
+		foreach ( $defaults as $key => $value ) {
+			if ( array_key_exists( $key, $params ) ) {
+				$escaped                = esc_js( $params[ $key ] );
+				$escaped_params[ $key ] = $escaped;
+			}
+		}
+
 		/**
 		 * TODO: add extras to shortcode
 		 * class: just add extra classes
 		 */
 		$atts = shortcode_atts(
-			array(
-				'name'            => '',
-				'prefix'          => self::DEFAULT_PREFIX,
-				'class'           => '',
-				'style'           => null,
-				'aria-hidden'     => null,
-				'aria-label'      => null,
-				'aria-labelledby' => null,
-				'title'           => null,
-				'role'            => null,
-			),
-			$params,
+			$defaults,
+			$escaped_params,
 			self::SHORTCODE_TAG
 		);
 
@@ -3131,6 +3192,51 @@ EOT;
 }
 
 /**
+ * Iterates through each blog in the current network, switches to it,
+ * and invokes the given callback function, restoring the current blog
+ * after each callback invocation.
+ *
+ * Internal use only, not part of this plugin's public API.
+ *
+ * @internal
+ * @ignore
+ */
+function for_each_blog( $cb ) {
+	$network_id = get_current_network_id();
+	$site_count = get_sites(
+		array(
+			'network_id' => $network_id,
+			'count'      => true,
+		)
+	);
+	$limit      = 100;
+	$offset     = 0;
+
+	while ( $offset < $site_count ) {
+		$sites = get_sites(
+			array(
+				'network_id' => $network_id,
+				'offset'     => $offset,
+				'number'     => $limit,
+			)
+		);
+
+		foreach ( $sites as $site ) {
+			$blog_id = $site->blog_id;
+			switch_to_blog( $blog_id );
+
+			try {
+				$cb( $blog_id );
+			} finally {
+				restore_current_blog();
+			}
+		}
+
+		$offset = $offset + $limit;
+	}
+}
+
+/**
  * Convenience global function to get a singleton instance of the main Font Awesome
  * class.
  *
@@ -3141,4 +3247,34 @@ EOT;
  */
 function fa() {
 	return FontAwesome::instance();
+}
+
+/**
+ * This hook ensures that when we're in multisite mode, and a new site is activated
+ * after an initial plugin activation, that the plugin is initialized for that newly
+ * created site, but only if this plugin is otherwise network activated.
+ *
+ * If the plugin is only activated on a per-site basis, then creating a new site should
+ * not result in this plugin automatically being activated for it.
+ */
+if ( is_multisite() ) {
+	add_action(
+		'wp_initialize_site',
+		function ( $site ) {
+			if ( ! is_network_admin( FONTAWESOME_PLUGIN_FILE ) ) {
+				return;
+			}
+
+			require_once trailingslashit( FONTAWESOME_DIR_PATH ) . 'includes/class-fontawesome-activator.php';
+			switch_to_blog( $site->blog_id );
+
+			try {
+				FontAwesome_Activator::initialize_current_site( false );
+			} finally {
+				restore_current_blog();
+			}
+		},
+		99,
+		1
+	);
 }

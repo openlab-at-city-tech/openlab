@@ -231,7 +231,7 @@ class ngg_Thumbnail {
                     $CHANNEL = 3;
 					break;
                 case 'WEBP':
-                    $channel = $imageInfo['bits'];
+                    $CHANNEL = $imageInfo['bits'];
                     break;
             }
 		    $MB = 1048576;  // number of bytes in 1M
@@ -854,7 +854,11 @@ class ngg_Thumbnail {
 	 * @param int $wmSize
  	 * @param int $wmOpaque
      */
-	function watermarkCreateText($color = '000000',$wmFont, $wmSize = 10, $wmOpaque = 90 ){
+	function watermarkCreateText($color, $wmFont, $wmSize = 10, $wmOpaque = 90)
+    {
+        if (!$color)
+            $color = '000000';
+
 		// set font path
 		$wmFontPath = NGGALLERY_ABSPATH."fonts/".$wmFont;
 		if ( !is_readable($wmFontPath))
