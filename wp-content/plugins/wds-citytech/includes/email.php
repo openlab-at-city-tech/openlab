@@ -573,6 +573,33 @@ About: <a href="https://openlab.citytech.cuny.edu/about/">https://openlab.cityte
 }
 add_action( 'phpmailer_init', 'openlab_add_footer_to_outgoing_emails' );
 
+function openlab_convert_email_line_breaks_to_br_tags( $phpmailer ) {
+	// Ignore this with emails that are natively HTML.
+	if ( $phpmailer->isHTML() ) {
+		return;
+	}
+
+	// Another HTML email check.
+	$body = $phpmailer->Body;
+	if ( 0 === strpos( $body, '<' ) ) {
+		return;
+	}
+
+	// We only need to do this if the ContentType is 'text/html'.
+	if ( 'text/html' !== $phpmailer->ContentType ) {
+		return;
+	}
+
+	// Bail if the text already contains line breaks.
+	if ( preg_match( '/<br[ \/]*>/', $body ) ) {
+		return;
+	}
+
+	$body = preg_replace( '/\n/', '<br />' . "\n", $body );
+	$phpmailer->Body = $body;
+}
+add_action( 'phpmailer_init', 'openlab_convert_email_line_breaks_to_br_tags', 5 );
+
 /**
  * Ensure that the summary is added to weekly as well as daily digests.
  */
