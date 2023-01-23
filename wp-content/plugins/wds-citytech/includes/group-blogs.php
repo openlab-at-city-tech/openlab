@@ -1903,7 +1903,7 @@ Comment URL: %s',
 		get_option( 'blogname' ),
 		$comment_post->post_title,
 		bp_core_get_userlink( $comment->user_id ),
-		sprintf( '<a href="%s">', $comment_link, $comment_link )
+		sprintf( '<a href="%s">%s</a>', $comment_link, $comment_link )
 	);
 
 	$message = openlab_comment_email_boilerplate( $message );
