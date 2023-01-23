@@ -405,7 +405,7 @@ function openlab_comment_email_boilerplate( $content ) {
 	return sprintf(
 		'Hello,' . "<br /><br />" .
 		'%s' .  "<br /><br />" .
-		'Please note: You are receiving this message because you are an administrator or author. You may receive a second notification delivered to all members.',
+		'Please note: You are receiving this message because you are an administrator or author.',
 		$content
 
 	);
