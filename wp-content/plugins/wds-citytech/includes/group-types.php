@@ -807,7 +807,7 @@ function openlab_group_creators_metabox() {
 			<legend class="panel-heading">Acknowledgements</legend>
 
 			<div class="panel-body">
-				<p>The names below will be listed under Acknowledgements on the <?php echo esc_html( $group_type_label ); ?> Profile. You can add additioal acknowledgements by typing an OpenLab member's nam in the box below and selecting it from the dropdown list. You may also enter the names of non-members and press return.
+				<p>The names below will be listed under Acknowledgements on the <?php echo esc_html( $group_type_label ); ?> Profile. You can add additional acknowledgements by typing an OpenLab member's name in the box below and selecting it from the dropdown list. You may also enter the names of non-members and press return.
 
 				<div class="group-creators-section">
 					<div class="group-creator-edit-list-add-new">
