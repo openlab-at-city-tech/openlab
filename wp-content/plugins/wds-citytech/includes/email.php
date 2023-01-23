@@ -604,3 +604,17 @@ add_action( 'phpmailer_init', 'openlab_convert_email_line_breaks_to_br_tags', 5 
  * Ensure that the summary is added to weekly as well as daily digests.
  */
 add_filter( 'bpges_add_summary_to_digest', '__return_true' );
+
+/**
+ * Name on outgoing emails should never be 'WordPress'.
+ */
+add_filter(
+	'wp_mail_from_name',
+	function( $name ) {
+		if ( 'WordPress' === $name ) {
+			$name = 'City Tech OpenLab';
+		}
+
+		return $name;
+	}
+);
