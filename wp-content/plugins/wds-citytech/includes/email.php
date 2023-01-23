@@ -430,6 +430,12 @@ add_filter(
 					case 'bp_doc_edited' :
 						$read_reply_link_text = '<a href="%s">Go to the Doc</a> to read, edit, or comment.';
 					break;
+
+					case 'added_group_document' :
+						$document = new BP_Group_Documents( (string) $args['activity']->secondary_item_id );
+
+						$args['tokens']['thread.url'] = $document->get_url( false );
+					break;
 				}
 			}
 
