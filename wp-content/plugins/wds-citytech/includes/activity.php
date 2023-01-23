@@ -23,7 +23,7 @@ function openlab_modify_activity_action_on_save( BP_Activity_Activity $activity 
 			);
 
 			$activity->action = sprintf(
-				'%s uploaded the file %s in %s',
+				'%s added the file %s in %s',
 				bp_core_get_userlink( $activity->user_id ),
 				$file_link,
 				$group_link
