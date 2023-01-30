@@ -1,0 +1,47 @@
+version: "2"
+
+exclude_patterns:
+- images/
+- js/vendor/
+- languages/
+- tests/
+- vendor/
+- node_modules/
+- build/
+- "**.min.css"
+- "**.min.js"
+- "js/jquery-ui-classic.css"
+- "js/jquery-ui-fresh.css"
+
+plugins:
+  csslint:
+    enabled: false
+  duplication:
+    enabled: true
+    config:
+      languages:
+      - javascript
+      - php
+  eslint:
+    enabled: true
+  fixme:
+    enabled: true
+  markdownlint:
+    enabled: true
+    checks:
+      MD013:
+        enabled: false
+  phpcodesniffer:
+    enabled: true
+    config:
+      file_extensions: php
+      standard: WordPress
+      ignore_warnings: false
+      encoding: utf-8
+  phpmd:
+    enabled: true
+    config:
+      file_extensions: php
+      rulesets: codesize,naming,unusedcode
+  scss-lint:
+    enabled: false
