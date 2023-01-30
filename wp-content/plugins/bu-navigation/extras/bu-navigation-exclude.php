@@ -35,7 +35,7 @@ function bu_navigation_filter_pages_exclude( $pages ) {
 		$exclude_meta = $wpdb->get_results( $query, OBJECT_K );
 
 		if ( false === $exclude_meta ) {
-			$this->plugin->log( '%s - Error querying navigation exclusions: %s', __METHOD__, $wpdb->last_error );
+			//$this->plugin->log( '%s - Error querying navigation exclusions: %s', __METHOD__, $wpdb->last_error );
 			return $pages;
 		}
 
