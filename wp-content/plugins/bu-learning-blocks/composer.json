@@ -1,0 +1,41 @@
+{
+    "name": "bu-ist/bu-learning-modules",
+    "type": "wordpress-plugin",
+    "license": "GPL-2.0-or-later",
+    "description": "Learning blocks for WordPress",
+    "homepage": "https://bu.edu/",
+    "keywords": [
+        "gutenberg",
+        "wordpress",
+        "editor",
+        "wp",
+        "react",
+        "javascript"
+    ],
+    "support": {
+        "issues": "https://github.com/bu-ist/bu-learning-modules/issues"
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/bu-ist/bu-navigation-core-widget.git"
+        }
+    ],
+    "require-dev": {
+        "dealerdirect/phpcodesniffer-composer-installer": "*",
+        "squizlabs/php_codesniffer": "^3.1",
+        "wp-coding-standards/wpcs": "^0.14.0"
+    },
+    "require": {
+        "composer/installers": "~1.0",
+        "bu-ist/bu-navigation-core-widget": "1.0.2"
+    },
+    "extra": {
+        "installer-paths": {
+            "inc/{$name}": ["bu-ist/bu-navigation-core-widget"]
+        }
+    },
+    "scripts": {
+        "lint": "phpcs"
+    }
+}

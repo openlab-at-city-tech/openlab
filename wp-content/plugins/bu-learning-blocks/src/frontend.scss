@@ -1,0 +1,83 @@
+// Colors.
+$black: #222;
+$white: #f4f4f4;
+$gray: #dedede;
+$lightgray: #626e81;
+$green: #bada55;
+$accent: #5a3fd6;
+$dark: #f7b733;
+$light: rgba(254, 243, 224, 0.52);
+$aqua-forest: #6aac70;
+
+.bulb-pagination {
+
+	display: flex;
+	font-size: 0.8em;
+	margin-top: 0.8em;
+	margin-bottom: 0.8em;
+
+	%pagination-spacing {
+		margin: 2px 2px 2px 0;
+		padding: 6px 9px 5px 9px;
+	}
+
+	&-label {
+		@extend %pagination-spacing;
+		font-weight: bold;
+	}
+
+	a, span {
+		@extend %pagination-spacing;
+		text-decoration: none;
+		width: auto;
+		color: $black; /* Pagination text color */
+		background: #c0c0c0; /* Pagination non-active background color */
+		transition: background 0.15s ease-in-out;
+	}
+
+	a:hover {
+		color: $white;
+		background: $aqua-forest; /* Pagination background on hover */
+	}
+
+	.current {
+		padding: 6px 9px 5px 9px;
+		background: $lightgray; /* Current page background */
+		color: $white;
+	}
+}
+
+.bulb-learning-module {
+	// Adaptations to Responsive framework, suppress unnecessary footer metadata.
+	.single-meta, .archive-link-container {
+		display: none;
+	}
+
+	// **Adaptations for Twenty Twenty-One theme.
+	// Twenty Twenty-One sets rules on input elements that mess up Material UI checkboxes and radio buttons in the question components.
+	// This overrides the Twenty Twenty-One rules to match the Material UI settings, so the questions work in the front end.
+	input[type=checkbox], input[type=radio] {
+		position: absolute;
+		width: 100%;
+		height: 100%;
+
+		&:disabled {
+			opacity: 0;
+		}
+	}
+	// **End Twenty Twenty-One adaptations.
+}
+
+.bulb-archive-container {
+	margin-left: auto;
+	margin-right: auto;
+	width: 80%;
+}
+
+.bulb-list {
+	list-style-type: none;
+
+	&-item {
+		padding-left: 2%;
+	}
+}
