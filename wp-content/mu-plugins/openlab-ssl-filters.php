@@ -49,7 +49,7 @@ add_filter( 'upload_dir', 'openlab_ssl_upload_dir' );
 function openlab_ssl_widget_display_callback( $instance, $widget ) {
 	// A bit ham-handed, but whatevs
 	if ( ! empty( $instance ) ) {
-		$instance = map_deep( 'openlab_ssl_fix', $instance );
+		$instance = map_deep( $instance, 'openlab_ssl_fix' );
 	}
 
 	return $instance;
