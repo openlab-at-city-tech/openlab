@@ -40,7 +40,7 @@
 
 	<!-- Check for PHP cross-version compatibility. -->
 	<rule ref="PHPCompatibilityWP"/>
-	<config name="testVersion" value="7.4-"/>
+	<config name="testVersion" value="8.0-"/>
 
         <!-- Has some PHP files that contain only HTML markup -->
         <rule ref="Internal.NoCodeFound">
