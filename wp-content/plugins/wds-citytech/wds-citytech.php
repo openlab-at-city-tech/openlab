@@ -2172,6 +2172,13 @@ add_action( 'wp', 'openlab_swap_private_blog_message' );
 function openlab_private_blog_message() {
 	global $ds_more_privacy_options;
 
+	if( strpos($_SERVER['PHP_SELF'], 'wp-activate.php') && is_main_site()) return;		
+	if( strpos($_SERVER['PHP_SELF'], 'wp-activate.php') && !is_main_site()) {
+		$destination = network_home_url('wp-activate.php');
+		wp_redirect( $destination );
+		exit();
+	}
+
 	$blog_id   = get_current_blog_id();
 	$group_id  = openlab_get_group_id_by_blog_id( $blog_id );
 	$group_url = bp_get_group_permalink( groups_get_group( array( 'group_id' => $group_id ) ) );
@@ -2194,11 +2201,7 @@ function openlab_private_blog_message() {
 		if ( is_feed() && isset( $ds_more_privacy_options ) && method_exists( $ds_more_privacy_options, 'ds_feed_login' ) ) {
 			$ds_more_privacy_options->ds_feed_login();
 		} else {
-			nocache_headers();
-			header( 'HTTP/1.1 302 Moved Temporarily' );
-			header( 'Location: ' . wp_login_url() );
-			header( 'Status: 302 Moved Temporarily' );
-			exit();
+			auth_redirect();
 		}
 	}
 }
