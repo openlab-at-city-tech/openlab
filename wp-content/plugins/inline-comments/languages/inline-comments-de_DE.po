@@ -1,0 +1,539 @@
+# Copyright (C) 2014 Inline Comments
+# This file is distributed under the same license as the Inline Comments package.
+msgid ""
+msgstr ""
+"Project-Id-Version: Inline Comments 1.3\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/inline-comments\n"
+"POT-Creation-Date: 2014-10-19 13:29:51+00:00\n"
+"PO-Revision-Date: 2015-01-09 23:37+0100\n"
+"Last-Translator: Kevin Weber <k-iwi@web.de>\n"
+"Language-Team: Kevin Weber <k-iwi@web.de>\n"
+"Language: de_DE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.6.10\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: admin/class-admin-options.php:28
+msgid "Settings"
+msgstr "Einstellungen"
+
+#: admin/class-admin-options.php:34 admin/class-admin-options.php:75
+#: admin/class-register.php:32
+msgid "Inline Comments"
+msgstr "Inline Comments"
+
+#: admin/class-admin-options.php:75
+msgid "Website by Kevin Weber"
+msgstr "Website von Kevin Weber"
+
+#: admin/class-admin-options.php:75
+msgid "Version"
+msgstr "Version"
+
+#: admin/class-admin-options.php:76
+msgid "&hellip; revolutionise the way we comment online!"
+msgstr "&hellip; revolutionieren, wie wir online kommentieren!"
+
+#: admin/class-admin-options.php:80
+msgid "Basics"
+msgstr "Grundeinstellungen"
+
+#: admin/class-admin-options.php:81 admin/class-admin-options.php:161
+msgid "Styling"
+msgstr "Aussehen"
+
+#: admin/class-admin-options.php:82
+msgid "Advanced"
+msgstr "Weitere Einstellungen"
+
+#: admin/class-admin-options.php:92
+msgid "Basic Settings"
+msgstr "Grundeinstellungen"
+
+#: admin/class-admin-options.php:97
+msgid "Comment System"
+msgstr "Kommentarsystem"
+
+#: admin/class-admin-options.php:97
+msgid "Updated"
+msgstr "Updated"
+
+#: admin/class-admin-options.php:100
+msgid "WordPress Comments"
+msgstr "WordPress-Kommentare"
+
+#: admin/class-admin-options.php:108
+msgid "Selectors"
+msgstr "Selektoren"
+
+#: admin/class-admin-options.php:111
+msgid ""
+"Insert selectors in order to control beside which sections the comment "
+"bubbles should be displayed."
+msgstr ""
+"Füge Selektoren ein, um zu bestimmen, neben welchen Elementen/Paragraphen "
+"die Sprechblasen angezeigt werden sollen."
+
+#: admin/class-admin-options.php:111
+msgid "You can insert selectors like that:"
+msgstr "Du kannst Selektoren wie folgt einfügen:"
+
+#: admin/class-admin-options.php:111
+msgid "selector1, selector2, selectorN"
+msgstr "selector1, selector2, selectorN"
+
+#: admin/class-admin-options.php:111
+msgid "Example:"
+msgstr "Beispiel:"
+
+#: admin/class-admin-options.php:111
+msgid "h1, .single-post .entry-content p, span, blockquote"
+msgstr "h1, .single-post .entry-content p, span, blockquote"
+
+#: admin/class-admin-options.php:115
+msgid "Use Ajaxify (no page reload)"
+msgstr "Kein Neuladen der Seite"
+
+#: admin/class-admin-options.php:117
+msgid "Requires %1$sthat plugin%2$s."
+msgstr "Setzt %1$sAjaxify%2$s voraus."
+
+#: admin/class-admin-options.php:127
+msgid ""
+"Empower %1$sWP-Ajaxify-Comments%2$s (version 0.24.0 or higher) to add Ajax "
+"functionality to Inline Comments and improve the user experience: Your page "
+"will not reload after a comment is submitted."
+msgstr ""
+"Nutze das Plugin %1$sWP-Ajaxify-Comments%2$s (Version 0.24.0 oder höher) um "
+"Inline Comments mit Ajax-Technologie zu erweitern. Dadurch muss die Seite "
+"nicht mehr neu geladen werden, sobald ein Kommentar abgesendet wird, was die "
+"Benutzerfreundlichkeit erhöht. (Das Plugin muss von dir manuell installiert "
+"und aktiviert werden.)"
+
+#: admin/class-admin-options.php:130
+msgid "Recommended."
+msgstr "Empfohlene Einstellung."
+
+#: admin/class-admin-options.php:134
+msgid "Enable Inline Replies"
+msgstr "Inline-Antworten auf Kommentare erlauben"
+
+#: admin/class-admin-options.php:134 admin/class-admin-options.php:189
+#: admin/class-admin-options.php:235 admin/class-admin-options.php:271
+msgid "New!"
+msgstr "Neu!"
+
+#: admin/class-admin-options.php:136
+msgid ""
+"If checked, a reply link will be added below each inline comment and users "
+"can reply directly."
+msgstr ""
+"Zeige unter jedem Inline-Kommentar einen \"Antworten\"-Link an, sodass "
+"Nutzer direkt auf diesen Kommentar antworten können."
+
+#: admin/class-admin-options.php:140
+msgid "\"Slide Site\" Selector"
+msgstr "\"Slide Site\" Selektor"
+
+#: admin/class-admin-options.php:148
+msgid ""
+"This selector defines which content should slide left/right when the user "
+"clicks on a bubble. This setting depends on your theme's structure."
+msgstr ""
+"Mit diesem Selektor wird bestimmt, welcher Inhaltsbereich nach rechts bzw. "
+"links bewegt werden soll, wenn der Nutzer auf eine Sprechblase klickt. Diese "
+"Selektor hängt von dem Aufbau deines Themes ab."
+
+#: admin/class-admin-options.php:148
+msgid "Default is"
+msgstr "Standard"
+
+#: admin/class-admin-options.php:149
+msgid "You might try one of these selectors:"
+msgstr "Du kannst diese Selektoren testen:"
+
+#: admin/class-admin-options.php:166
+msgid "Custom CSS"
+msgstr "Custom CSS"
+
+#: admin/class-admin-options.php:166
+msgid "Add additional CSS. This should override any other stylesheets."
+msgstr ""
+"Nutze zusätzlichen CSS-Code. Dieser Code sollte jegliche andere Stylesheets "
+"überschreiben."
+
+#: admin/class-admin-options.php:170
+msgid "For example:"
+msgstr "Zum Beispiel:"
+
+#: admin/class-admin-options.php:173
+msgid ""
+"(You don't know CSS? Try the %1$shttp://kevinw.de/css-tutorial%2$sCSS "
+"Tutorial%3$s on W3Schools.)"
+msgstr ""
+"(Du kannst kein CSS? Versuche das %1$shttp://kevinw.de/css-tutorial%2$sCSS "
+"Tutorial%3$s bei W3Schools.)"
+
+#: admin/class-admin-options.php:182
+msgid "Position"
+msgstr "Position"
+
+#: admin/class-admin-options.php:184
+msgid "Left"
+msgstr "Links"
+
+#: admin/class-admin-options.php:185
+msgid "Right"
+msgstr "Rechts"
+
+#: admin/class-admin-options.php:189
+msgid "Display Avatars"
+msgstr "Avatare anzeigen"
+
+#: admin/class-admin-options.php:189
+msgid "next to each comment"
+msgstr "neben jedem Kommentar"
+
+#: admin/class-admin-options.php:191
+msgid "If checked, avatars will be displayed next to each comment."
+msgstr "Zeige neben jedem Inline-Kommentar ein Avatar."
+
+#: admin/class-admin-options.php:192
+msgid "Define avatar size (in px). Insert an integer higher than 0."
+msgstr "Avatar-Größe festlegen (in px). Füge eine Zahl größer 0 ein."
+
+#: admin/class-admin-options.php:196
+msgid "Bubble Style"
+msgstr "Bubble-Style"
+
+#: admin/class-admin-options.php:196
+msgid "for sections with no comments yet"
+msgstr "für Absätze ohne Kommentare"
+
+#: admin/class-admin-options.php:199
+msgid "Bubble"
+msgstr "Sprechblase"
+
+#: admin/class-admin-options.php:200
+msgid "Plain +"
+msgstr "Schlichtes +"
+
+#: admin/class-admin-options.php:205
+msgid "Background Colour"
+msgstr "Hintergrundfarbe"
+
+#: admin/class-admin-options.php:205 admin/class-admin-options.php:212
+msgid "for comment threads"
+msgstr " "
+
+#: admin/class-admin-options.php:212
+msgid "Background Opacity"
+msgstr "Deckkraft des Hintergrunds"
+
+#: admin/class-admin-options.php:214
+msgid ""
+"Insert a value from 0 to 1 where \"1\" means maximum covering power. Insert "
+"0.7 to make the opacity 70%."
+msgstr ""
+"Füge einen Wert zwischen 0 und 1 ein. \"1\" bedeutet maximale Deckkraft. "
+"Füge 0.7 für eine Deckkraft von 70% ein."
+
+#: admin/class-admin-options.php:218
+msgid "Hide Static Bubbles"
+msgstr "Sprechblasen verbergen"
+
+#: admin/class-admin-options.php:220
+msgid ""
+"This checkbox only affects bubbles that indicate a paragraph/element with at "
+"least one comment. If checked, the comment count bubbles will only be "
+"visible when the user hovers the specific paragraph. (By default, bubbles "
+"that indicate at least one comment are always visible.)"
+msgstr ""
+"Diese Einstellung betrifft nur Sprechblasen, die auf ein Element oder einen "
+"Absatz mit mindestens einem Kommentar hinweisen. Wenn aktiviert, dann werden "
+"die Sprechblasen nur angezeigt, wenn der Nutzer die Maus über den "
+"entsprechenden Absatz bewegt (= Hover). Standardmäßig sind die Sprechblasen "
+"immer sichtbar."
+
+#: admin/class-admin-options.php:230
+msgid "Advanced Settings"
+msgstr "Weitere Einstellungen"
+
+#: admin/class-admin-options.php:235
+msgid "Content Before"
+msgstr "Inhalt überhalb"
+
+#: admin/class-admin-options.php:235
+msgid "Insert HTML above the list of comments"
+msgstr "Füge HTML über der Kommentarliste ein"
+
+#: admin/class-admin-options.php:241
+msgid "Bubble Fade In"
+msgstr "Fade-in der Sprechblase"
+
+#: admin/class-admin-options.php:244 admin/class-admin-options.php:253
+msgid "No animation"
+msgstr "Keine Animation"
+
+#: admin/class-admin-options.php:245 admin/class-admin-options.php:254
+msgid "Basic animation"
+msgstr "Einfache Animation"
+
+#: admin/class-admin-options.php:250
+msgid "Bubble Fade Out"
+msgstr "Fade-out der Sprechblase"
+
+#: admin/class-admin-options.php:259
+msgid "Remove Closing \"x\""
+msgstr "Schließendes \"x\" entfernen"
+
+#: admin/class-admin-options.php:261
+msgid ""
+"If checked, the \"x\" at the right top of the comments wrapper will not be "
+"displayed."
+msgstr "Entferne das \"x\" in der rechten oberen Ecke des Kommentarfensters."
+
+#: admin/class-admin-options.php:265
+msgid "Remove Permalinks"
+msgstr "Permalinks entfernen"
+
+#: admin/class-admin-options.php:267
+msgid ""
+"If checked, the permalink icon next to each comment will not be displayed."
+msgstr ""
+"Entferne das Permalink-Symbol, das neben jedem Inline-Kommentar angezeigt "
+"wird."
+
+#: admin/class-admin-options.php:271
+msgid "Remove Field \"Website\""
+msgstr "Feld \"Website\" entfernen"
+
+#: admin/class-admin-options.php:273
+msgid ""
+"If checked, users cannot submit an URL/Website when they comment inline."
+msgstr ""
+"Entferne das \"Website\"-Feld, sodass Nutzer beim Schreiben eines Inline-"
+"Kommentars keine URL angeben können."
+
+#: admin/class-admin-options.php:277
+msgid "Remove Link \"Cancel\""
+msgstr "\"Schließen\"-Link entfernen"
+
+#: admin/class-admin-options.php:279
+msgid ""
+"If checked, the \"cancel\" link at the left bottom of the comments wrapper "
+"will not be displayed."
+msgstr ""
+"Entferne den \"Schließen\"-Link, der in der unteren linken Ecke des "
+"Kommentarfensters angezeigt wird."
+
+#: admin/class-admin-options.php:283
+msgid "Always Display Bubbles"
+msgstr "Alle Sprechblasen immer anzeigen"
+
+#: admin/class-admin-options.php:285
+msgid ""
+"If checked, the comment count bubbles will always be visible (and not only "
+"on hover). Bubbles will not fade."
+msgstr ""
+"Zeige alle Sprechblasen jederzeit an. Standardmäßig sind die Sprechblasen "
+"nur sichtbar, wenn der Nutzer die Maus über ein Element/einen Absatz bewegt."
+
+#: admin/class-admin-options.php:306
+msgid "that's me."
+msgstr "das bin ich."
+
+#: admin/class-admin-options.php:307
+msgid "I'm the developer of this plugin. Love it!"
+msgstr "Ich bin der Entwickler dieses Plugins. Love it!"
+
+#: admin/class-admin-options.php:310
+msgid "It's free!"
+msgstr "Es ist kostenlos!"
+
+#: admin/class-admin-options.php:311
+msgid ""
+"Support me with %1$sa delicious lunch%2$s or give this plugin a 5 star "
+"rating %3$son WordPress.org%4$s."
+msgstr ""
+"Unterstütze mich %1$smit einer Spende%2$s oder gib diesem Plugin eine 5-"
+"Sterne-Bewertung %3$s auf WordPress.org%4$s."
+
+#: admin/class-admin-options.php:321
+msgid "Personal tip: Must use plugins"
+msgstr "Geheimtipp: Must-have-Plugins"
+
+#: admin/class-admin-options.php:323
+msgid "Lazy Load for Videos"
+msgstr "Lazy Load for Videos"
+
+#: admin/class-admin-options.php:323 admin/class-admin-options.php:325
+msgid "(on my part)"
+msgstr "(von mir)"
+
+#: admin/class-admin-options.php:324
+msgid "WordPress SEO"
+msgstr "WordPress SEO"
+
+#: admin/class-admin-options.php:324
+msgid "(by Yoast)"
+msgstr "(von Yoast)"
+
+#: admin/class-admin-options.php:325
+msgid "wBounce"
+msgstr "wBounce"
+
+#: admin/class-admin-options.php:326
+msgid "Broken Link Checker"
+msgstr "Broken Link Checker"
+
+#: admin/class-admin-options.php:326
+msgid "(by Janis Elsts)"
+msgstr "(von Janis Elsts)"
+
+#: admin/class-register.php:17 admin/inc/signup.php:5
+msgid "Enter your email address"
+msgstr "E-Mail-Adresse eintragen"
+
+#: admin/class-register.php:31
+msgid "Edit your plugin settings: "
+msgstr "Bearbeite deine Plugin-Einstellungen:"
+
+#: admin/inc/class-no-premium.php:26
+msgid "Premium Extension"
+msgstr "Premium-Erweiterung"
+
+#: admin/inc/class-no-premium.php:28
+msgid ""
+"Right now, every feature for Inline Comments is available FOR FREE, except "
+"for the \"Remove branding\" option. This is what you get when you buy "
+"premium:"
+msgstr ""
+"Aktuell ist jede Funktion für Inline Comments KOSTENLOS verfügbar, "
+"abgesehen von der \"Branding entfernen\"-Option. Das bekommst du beim Kauf "
+"der Erweiterung:"
+
+#: admin/inc/class-no-premium.php:33
+msgid "Remove branding"
+msgstr "Branding entfernen"
+
+#: admin/inc/class-no-premium.php:35
+msgid "The premium extension automatically removes the subtle branding link."
+msgstr ""
+"Die Premium-Erweiterung entfernt automatisch das dezente \"i\" in der "
+"rechten oberen Ecke des Kommentarfelds."
+
+#: admin/inc/class-no-premium.php:39
+msgid "Get setup support"
+msgstr "Unterstützung bei der Einrichtung"
+
+#: admin/inc/class-no-premium.php:41
+msgid "I help you to choose the correct selectors."
+msgstr "I helfe dir, die richtigen Selektoren zu wählen."
+
+#: admin/inc/class-no-premium.php:45
+msgid "Lifetime updates"
+msgstr "Lebenslange Updates"
+
+#: admin/inc/class-no-premium.php:45
+msgid "Enjoy all coming features!"
+msgstr "Genieße alle zukünftigen Funktionen!"
+
+#: admin/inc/class-no-premium.php:47
+msgid ""
+"No matter what comes next: Once you've bought premium, you're going to get "
+"every new feature for free. What do you think of social logins (Twitter, "
+"Facebook) or Inline Comments for Editors?"
+msgstr ""
+"Egal was als passiert: Sobald du dir die Premium-Erweiterung gegönnt hast, "
+"bekommst du jede zukünftige Funktion kostenlos. Was hältst du zum Beispiel "
+"von sozialen Logins (Twitter, Facebook) und Inline Comments für "
+"Redakteure?"
+
+#: admin/inc/class-no-premium.php:51
+msgid "Push development"
+msgstr "Entwicklung fördern"
+
+#: admin/inc/class-no-premium.php:53
+msgid ""
+"This plugin does not anywhere near compensate my month-long time efforts "
+"financially. WordPress development is a hobby of mine and allows me to "
+"experiment. With your purchase, you sponsor me to spend at least a bit more "
+"time to enhance Inline Comments."
+msgstr ""
+"Der monatelange Aufwand für die Entwicklung und den Support dieses Plugins "
+"wird in keiner Weise durch finanzielle Einnahmen gerechtfertigt. WordPress-"
+"Entwicklung ist eines meiner Hobbys und ermöglicht mir zu experimentieren. "
+"Durch den Kauf der Erweiterung sponserst du mich und erlaubst mir, ein "
+"bisschen mehr Zeit zur Weiterentwicklung der Inline Comments aufzubringen."
+
+#: admin/inc/class-no-premium.php:57
+msgid "Request features"
+msgstr "Funktionen vorschlagen"
+
+#: admin/inc/class-no-premium.php:59
+msgid ""
+"I'm going to develop your feature request with priority (but no guarantee)."
+msgstr ""
+"Ich werde deinen Wunsch für eine neue Funktion mit Priorität umsetzen, wenn "
+"ich die Funktion ebenfalls für sinnvoll halte."
+
+#: admin/inc/class-no-premium.php:65
+msgid ""
+"Buy premium to get additional features, honour my month-long work and push "
+"development. The price might change/increase over time."
+msgstr ""
+"Gönne dir die Premium-Erweiterung, um zusätzliche Funktionen zu erhalten, "
+"meinen monatelangen Zeitaufwand zu honorieren und die Entwicklung "
+"voranzutreiben. Der Preis kann mit der Zeit variieren/ansteigen."
+
+#: admin/inc/class-no-premium.php:66
+msgid "Immediate download after purchase."
+msgstr "Direkter Download nach dem Kauf."
+
+#: frontend/class-comments.php:115
+msgid "<cite class=\"fn\">%s</cite>"
+msgstr ""
+
+#: frontend/class-comments.php:118
+msgid "Your comment is awaiting moderation."
+msgstr ""
+
+#: frontend/class-comments.php:165
+msgid "Logged in as <a href=\"%1$s\">%2$s</a>."
+msgstr ""
+
+#: frontend/class-comments.php:186
+msgid "Name"
+msgstr "Name"
+
+#: frontend/class-comments.php:191
+msgid "Email"
+msgstr "E-Mail"
+
+#: frontend/class-comments.php:199
+msgid "Website"
+msgstr "Website"
+
+#. Plugin URI of the plugin/theme
+msgid "http://kevinw.de/inline-comments/"
+msgstr "http://kevinw.de/inline-comments/"
+
+#. Description of the plugin/theme
+msgid ""
+"Inline Comments adds your comment system to the side of paragraphs and other "
+"sections (like headlines and images) of your post. It performs native with "
+"WordPress comments."
+msgstr ""
+"Inline Comments erweitern deine Texte und beliebige "
+"Elemente (wie Überschriften und Bilder) mit dem WordPress-Kommentarsystem."
+
+#. Author of the plugin/theme
+msgid "Kevin Weber"
+msgstr "Kevin Weber"
+
+#. Author URI of the plugin/theme
+msgid "http://kevinw.de/"
+msgstr "http://kevinw.de/"
