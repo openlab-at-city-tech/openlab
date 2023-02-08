@@ -1551,7 +1551,7 @@ function openlab_get_user_activity_action( $activity = null ) {
 	if( bp_is_group() ) {
 		$group = bp_get_group( bp_get_current_group_id() );
 		$group_link = bp_get_group_permalink( $group );
-		$output = str_replace( 'in the group <a href="' . $group_link . '">' . bp_get_group_name() . '</a>', '', $output );
+		$output = preg_replace( '/in the group <a href="[^"]+">' . preg_quote( bp_get_group_name() ) . '<\/a>/', '', $output );
 		$output = str_replace( 'in the forum <a href="' . $group_link . 'forum/">' . bp_get_group_name() . '</a>', '', $output );
 		$output = str_replace( 'in <a href="' . $group_link . '">' . bp_get_group_name() . '</a>', '', $output );
 	} else {
