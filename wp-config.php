@@ -66,6 +66,9 @@ define( 'BP_USE_WP_ADMIN_BAR', true );
 
 define( 'NGG_JQUERY_CONFLICT_DETECTION', false );
 
+// Don't let Neve show its onboarding panel.
+define( 'TI_ONBOARDING_DISABLED', true );
+
 /* That's all, stop editing! Happy blogging. */
 
 /** Absolute path to the WordPress directory. */
