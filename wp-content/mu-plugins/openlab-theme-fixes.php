@@ -96,6 +96,7 @@ add_action(
 	'admin_enqueue_scripts',
 	function() {
 		$t = get_stylesheet();
+		return;
 
 		switch ( $t ) {
 			case 'neve':
