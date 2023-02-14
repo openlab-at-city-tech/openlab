@@ -135,7 +135,7 @@ class WPSimileTimeline{
 	 * outputs the SIMILE JavaScript and CSS in the <head> element
 	 * ONLY when post_id is set in the SIMILE Timeline options
 	 * ---------------------------------------------------------------------------*/
-	function outputFrontendHeaderMarkup(){
+	public static function outputFrontendHeaderMarkup(){
 		global $post;
 	
 		if( WPSimileTimeline::isTimelinePage($post->ID)):
@@ -171,7 +171,7 @@ class WPSimileTimeline{
 	 * returns true when the current page has a timeline
 	 * TODO: Recognize a timeline page programatically. But how to trigger printing something in the head section of the HTML when a template function is called?
 	 * ---------------------------------------------------------------------------*/
-	function isTimelinePage($stl_currentpageid){
+	public static function isTimelinePage($stl_currentpageid){
 		$stl_istimelinepage = false;
 		$stl_timelinepages = get_option('stl_timelinepageids');
 		// Set timeline for all pages when the option is 0

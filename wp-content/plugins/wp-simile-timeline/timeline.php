@@ -50,7 +50,7 @@ class WPSimileTimelineLoader{
 	/*
 	 * Initializing WordPress hooks for plugin
 	 */
-	function init(){
+	public static function init(){
 		// uninstall hook
 		register_uninstall_hook(__FILE__, array('WPSimileTimelineLoader','uninstallPlugin'));
 		// add custom post boxes in post interface
@@ -186,7 +186,7 @@ class WPSimileTimelineLoader{
 	/*
 	 * Gather options from shortcode parameters and call output function
 	 */
-	function parseShortcodeCall($attributes){
+	public static function parseShortcodeCall($attributes){
 		if(WPSimileTimelineLoader::loadPlugin()){
 			$wpstl = WPSimileTimeline::singleton();
 			// make attributes available as variables (see http://codex.wordpress.org/Shortcode_API)
