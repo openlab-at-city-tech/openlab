@@ -318,7 +318,7 @@ function openlab_help_cats_loop() {
                         ?>
                         <li>
                             <h3 class="help-title no-margin no-margin-bottom"><a href="<?php echo get_permalink(); ?>"><?php the_title(); ?></a></h3>
-                            <div class="help-tags">Tags: <?php echo get_the_term_list($post_id, 'help_tags', '', ', ', ''); ?></div>
+                            <div class="help-tags">Tags: <?php echo get_the_term_list( get_the_ID(), 'help_tags', '', ', ', '' ); ?></div>
                         </li>
                         <?php
                     endwhile; // end of the loop.
