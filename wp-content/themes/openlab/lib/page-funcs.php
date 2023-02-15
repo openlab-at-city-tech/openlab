@@ -295,12 +295,6 @@ function cuny_home_square( $type ) {
 		return;
 	}
 
-	$meta_filter = new BP_Groups_Meta_Filter(
-		array(
-			'wds_group_type' => $type,
-		)
-	);
-
 	$i = 1;
 
 	$groups_args = array(
@@ -308,6 +302,12 @@ function cuny_home_square( $type ) {
 		'type'        => 'active',
 		'user_id'     => 0,
 		'show_hidden' => false,
+		'meta_query'  => [
+			[
+				'key'   => 'wds_group_type',
+				'value' => $type,
+			]
+		],
 	);
 
 	if ( bp_has_groups( $groups_args ) ) :
@@ -396,8 +396,6 @@ function cuny_home_square( $type ) {
 	}
 
 	echo $html; // WPCS: XSS ok
-
-	$meta_filter->remove_filters();
 }
 
 /**
