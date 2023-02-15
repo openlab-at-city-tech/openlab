@@ -81,15 +81,6 @@ add_filter( 'login_headerurl', function() { return get_site_url( 1 ); } );
 global $wpdb;
 //date_default_timezone_set( 'America/New_York' );
 
-function wds_default_signup_avatar( $img ) {
-	if ( false !== strpos( $img, 'mystery-man' ) ) {
-		$img = "<img src='" . wds_add_default_member_avatar() . "' width='200' height='200'>";
-	}
-
-	return $img;
-}
-add_filter( 'bp_get_signup_avatar', 'wds_default_signup_avatar' );
-
 /**
  * Get the stylesheet directory for the main site.
  */
