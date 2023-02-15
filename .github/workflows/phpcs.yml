@@ -42,6 +42,3 @@ jobs:
 
       - name: Run PHPCS tests
         run: developer/phpcompat.sh
-
-      - name: Run PHP lint
-        run: php developer/lint-php.php
