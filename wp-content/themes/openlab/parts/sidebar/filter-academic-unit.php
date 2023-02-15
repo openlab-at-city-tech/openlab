@@ -39,6 +39,7 @@ switch ( get_query_var( 'academic_unit_type' ) ) {
 	break;
 
 	case 'department' :
+	default :
 		$label     = 'Select Department';
 		$all_name  = 'All Departments';
 		$url_param = 'department';
