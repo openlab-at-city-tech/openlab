@@ -103,12 +103,12 @@ function openlab_help_loop() {
             </div>
 
         <?php elseif ($post->post_name == "openlab-help"): ?>
-            <h1 class="entry-title"><span class="profile-name hyphenate"><?php echo the_title(); ?></span>
+            <h1 class="entry-title"><span class="profile-name hyphenate"><?php the_title(); ?></span>
                 <?php echo openlab_toggle_button('#sidebar-menu-wrapper', true); ?>
             </h1>
             <div id="help-title"><h2 class="page-title"><?php _e('Do you have a question? You\'re in the right place!', 'buddypress') ?></h2></div>
         <?php else: ?>
-            <h1 class="entry-title"><span class="profile-name hyphenate"><?php echo the_title(); ?></span>
+            <h1 class="entry-title"><span class="profile-name hyphenate"><?php the_title(); ?></span>
                 <?php echo openlab_toggle_button('#sidebar-menu-wrapper', true); ?>
             </h1>
         <?php endif; ?>
