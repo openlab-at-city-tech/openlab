@@ -260,7 +260,7 @@ function openlab_tablepress_stylesheet( $atts ) {
 }
 add_filter( 'tablepress_shortcode_table_default_shortcode_atts', 'openlab_tablepress_stylesheet' );
 
-/**Jetpack**/
+/** Jetpack **/
 
 /**
  * Remove entire modules from Jetpack
