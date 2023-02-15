@@ -1234,7 +1234,6 @@ HTML;
 	 * Custom content menu.
 	 *
 	 * @param type $wp_admin_bar
-	 * @return type
 	 */
 	public function add_custom_content_menu( $wp_admin_bar ) {
 		$actions = array();
@@ -1389,7 +1388,6 @@ HTML;
 	 * Custom comments menu
 	 *
 	 * @param type $wp_admin_bar
-	 * @return type
 	 */
 	public function add_custom_comments_menu( $wp_admin_bar ) {
 		if ( ! current_user_can( 'edit_posts' ) ) {
