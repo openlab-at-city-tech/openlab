@@ -176,7 +176,7 @@ function openlab_theme_fixes_filter_bloginfo( $output ) {
 
 	return $output;
 }
-add_filter( 'bloginfo', 'openlab_theme_fixes_filter_bloginfo', 10, 2 );
+add_filter( 'bloginfo', 'openlab_theme_fixes_filter_bloginfo' );
 
 /**
  * Targeted enqueues for specific-theme, specific-script fixes
