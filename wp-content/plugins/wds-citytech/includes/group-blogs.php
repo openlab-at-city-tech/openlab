@@ -1596,6 +1596,10 @@ class OpenLab_GroupBlog_Template_Picker {
 	protected $template   = null;
 	protected $group_type = 'group';
 
+	protected $student_department;
+	protected $account_type;
+	protected $department_templates;
+
 	public function __construct( $user_id = 0 ) {
 		$user_id = intval( $user_id );
 		if ( ! $user_id ) {
