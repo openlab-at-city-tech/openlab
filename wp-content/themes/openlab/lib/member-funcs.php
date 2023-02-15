@@ -511,7 +511,7 @@ function openlab_get_groups_of_user( $args = array() ) {
 }
 
 function cuny_student_profile() {
-	global $site_members_template, $user_ID, $bp;
+	global $user_ID, $bp;
 
 	do_action( 'bp_before_member_home_content' );
 	?>
@@ -772,9 +772,9 @@ function cuny_profile_activty_block( $type, $title, $last, $desc_length = 135 ) 
 }
 
 function cuny_member_profile_header() {
-	global $site_members_template, $user_ID, $bp;
+	global $user_ID, $bp;
 
-	$this_user_id = isset( $site_members_template->member->id ) ? $site_members_template->member->id : bp_displayed_user_id();
+	$this_user_id = bp_displayed_user_id();
 
 	$account_type = openlab_get_user_member_type( $this_user_id );
 
@@ -802,7 +802,7 @@ function cuny_member_profile_header() {
 		<?php
 		do_action( 'bp_before_member_header' );
 
-		$this_user_id = isset( $site_members_template->member->id ) ? $site_members_template->member->id : bp_displayed_user_id();
+		$this_user_id = bp_displayed_user_id();
 		do_action( 'bp_before_member_home_content' );
 		?>
 
@@ -1028,7 +1028,7 @@ function openlab_custom_add_friend_button( $button ) {
 add_filter( 'bp_get_add_friend_button', 'openlab_custom_add_friend_button' );
 
 function openlab_member_header() {
-	$this_user_id = isset( $site_members_template->member->id ) ? $site_members_template->member->id : bp_displayed_user_id();
+	$this_user_id = bp_displayed_user_id();
 	?>
 	<?php $account_type = openlab_get_user_member_type_label( $this_user_id ); ?>
 
