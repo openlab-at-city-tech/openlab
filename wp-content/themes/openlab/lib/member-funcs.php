@@ -1452,7 +1452,7 @@ function openlab_get_group_id_by_event_id( $activity_id ) {
 
 		if( ! empty( $event_id ) ) {
 			$group_ids = (array) bpeo_get_event_groups( $event_id );
-			
+
 			if( isset( $group_ids[0] ) ) {
 				return $group_ids[0];
 			}
