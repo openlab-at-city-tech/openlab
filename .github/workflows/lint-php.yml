@@ -1,6 +1,9 @@
 name: OpenLab PHP Lint
 
-on: [ push ]
+on:
+  push:
+    paths:
+      - '**.php'
 
 jobs:
   deploy:

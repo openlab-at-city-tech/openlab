@@ -4,10 +4,6 @@ on:
   push:
     paths:
       - '**.php'
-    branches:
-      - master
-      - '1.*'
-  pull_request:
 
 jobs:
   phpcs:
