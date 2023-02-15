@@ -335,7 +335,6 @@ add_filter(
 			'MAT1375-S20-Batyr-D584'                 => 'obatyr@citytech.cuny.edu',
 			'MAT1375-S20-Bilsky-Bieniek-D575'        => 'cbilskybieniek@citytech.cuny.edu',
 			'MAT1375-S20-Bonanome-D573'              => 'mbonanome@citytech.cuny.edu',
-			'MAT1375-S20-Bonanome-D573'              => 'kparker@citytech.cuny.edu',
 			'MAT1375-S20-Bosso-D567'                 => 'kbosso@citytech.cuny.edu',
 			'MAT1375-S20-Camilien-D557'              => 'jcamilien@citytech.cuny.edu',
 			'MAT1375-S20-Camilien-W568'              => 'jcamilien@citytech.cuny.edu',
