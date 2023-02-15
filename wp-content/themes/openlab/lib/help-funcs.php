@@ -14,8 +14,8 @@
 function openlab_help_404_handler($redirect_url, $requested_url) {
     if (is_404() && strpos($requested_url, 'help')) {
         $redirect_url = site_url('blog/help/openlab-help');
-        return $redirect_url;
     }
+	return $redirect_url;
 }
 
 add_filter('redirect_canonical', 'openlab_help_404_handler', 10, 2);
