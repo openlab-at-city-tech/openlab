@@ -4,27 +4,27 @@
  * Description: Main class for the plugin. Does most of the frontend work.
  * Plugin URI: http://wordpress.org/extend/plugins/wp-simile-timeline/
  * Author: freshlabs
- * 
+ *
 	===========================================================================
 	SIMILE Timeline for WordPress
-	
+
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
 	the Free Software Foundation, either version 3 of the License, or
 	(at your option) any later version.
-	
+
 	This program is distributed in the hope that it will be useful,
 	but WITHOUT ANY WARRANTY; without even the implied warranty of
 	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 	GNU General Public License for more details.
-	
+
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	===========================================================================
 */
 class WPSimileTimeline{
 	var $_inited = false;
-	
+
 	// Parameters that can be used for the template tag and shortcode
 	var $api_parameters = array(
 		'cats' => null,
@@ -38,11 +38,11 @@ class WPSimileTimeline{
 	function __construct(){
 		// empty constructor
 	}
-	
+
 	/*
 	 * Default options for timeline settings
 	 */
-	function getDefaultOptions(){
+	public static function getDefaultOptions(){
 		$stl_timeline_default_options = array(
 			'stl_timelinepageids' => 0,
 			'stl_timeline_showfutureposts' => 0,
@@ -56,19 +56,19 @@ class WPSimileTimeline{
 		);
 		return $stl_timeline_default_options;
 	}
-	
-	function construct(){
+
+	public static function construct(){
 		if(!isset($GLOBALS["wpsimiletimeline_instance"])) {
 			$GLOBALS["wpsimiletimeline_instance"]=new WPSimileTimeline();
 		}
 	}
-	
-	function &singleton() {
+
+	public static function &singleton() {
 		if(isset($GLOBALS["wpsimiletimeline_instance"])) {
 			return $GLOBALS["wpsimiletimeline_instance"];
 		} else return null;
 	}
-	
+
 	function init(){
 		if(!$this->_inited){
 			// localize plugin
@@ -77,12 +77,12 @@ class WPSimileTimeline{
 				$moFile = dirname(dirname(__FILE__)) . "/locale/" . $currentLocale . ".mo";
 				if(@file_exists($moFile) && is_readable($moFile)) load_textdomain('stl_timeline', $moFile);
 			}
-			
+
 			$this->_inited = true;
 		}
 		return $this->_inited;
 	}
-	
+
 	/**
 	 * Updates options when option page is submitted
 	 */
@@ -91,7 +91,7 @@ class WPSimileTimeline{
 			if(check_admin_referer(STL_TIMELINE_NONCE_NAME)){
 				$postdata = $_POST;
 				$saved = WPSimileTimelineAdmin::saveAdminOptions($postdata);
-				
+
 				if(function_exists('add_settings_error')){
 					if($saved){
 						add_settings_error('stl_timeline_options', 'settings-updated', __('Settings saved.'), 'updated');
@@ -102,7 +102,7 @@ class WPSimileTimeline{
 				}
 			}
 		}
-		
+
 		// process delete requests (for hotzones and decorators)
 		if(!empty($_GET) && isset($_GET['action'])){
 			$nonce=$_REQUEST['_wpnonce'];
@@ -119,17 +119,17 @@ class WPSimileTimeline{
 					default:
 						break;
 				}
-				
+
 				if(function_exists('add_settings_error')){
 					add_settings_error('stl_timeline_options', 'settings-updated', __('Entry was successfully deleted.'), 'updated');
-				}	
+				}
 			}
 			else{
 				die("Security check");
 			}
 		}
 	}
-	
+
 	/** -----------------------------------------------------------------------------
 	 * outputFrontendHeaderMarkup
 	 * outputs the SIMILE JavaScript and CSS in the <head> element
@@ -137,7 +137,7 @@ class WPSimileTimeline{
 	 * ---------------------------------------------------------------------------*/
 	public static function outputFrontendHeaderMarkup(){
 		global $post;
-	
+
 		if( WPSimileTimeline::isTimelinePage($post->ID)):
 			// directly include SIMILE Ajax API (prototype/jQuery issues)
 			echo '<script src="'.STL_TIMELINE_FOLDER.'/src/timeline_ajax/simile-ajax-api.js" type="text/javascript"></script>';
@@ -148,7 +148,7 @@ class WPSimileTimeline{
 			'<link rel="stylesheet" href="' . STL_TIMELINE_DATA_FOLDER . '/timeline.css.php" type="text/css" />' . "\n";
 		endif;
 	}
-	
+
 	/** -----------------------------------------------------------------------------
 	 * print the necessary timeline markup (called by shortcode API) and Template Tag
 	 * ---------------------------------------------------------------------------*/
@@ -165,7 +165,7 @@ class WPSimileTimeline{
 		$script .= '" type="text/javascript"></script>';
 		return $r . $script;
 	}
-	
+
 	/** -----------------------------------------------------------------------------
 	 * loops all page ids given in the timeline options
 	 * returns true when the current page has a timeline

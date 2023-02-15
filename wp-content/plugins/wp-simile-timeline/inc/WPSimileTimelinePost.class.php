@@ -4,27 +4,27 @@
  * @author freshlabs
  * @link http://wordpress.org/extend/plugins/wp-simile-timeline/
  * @package wp-simile-timeline
- * 
+ *
 	===========================================================================
 	Copyright (C) 2006-2019 freshlabs
-	
+
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
 	the Free Software Foundation, either version 3 of the License, or
 	(at your option) any later version.
-	
+
 	This program is distributed in the hope that it will be useful,
 	but WITHOUT ANY WARRANTY; without even the implied warranty of
 	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 	GNU General Public License for more details.
-	
+
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	===========================================================================
 */
 
 class WPSimileTimelinePost {
-    
+
     private static $postEventDates = array(
         'stl_timeline_event_start',
         'stl_timeline_event_latest_start',
@@ -38,19 +38,19 @@ class WPSimileTimelinePost {
     function __construct() {
         // empty
     }
-    
+
     /**
-     * 
+     *
      * @return type Array of event types for posts
      */
     function getPostEventTypes(){
         return self::$postEventDates;
     }
-    
+
     /**
      * Install post types in posts database table
      */
-    function createColumns(){
+    public static function createColumns(){
         global $wpdb;
         foreach(self::$postEventDates as $column) {
            if(!WPSimileTimelineDatabase::columnExists($wpdb->posts, $column)) {
@@ -60,7 +60,7 @@ class WPSimileTimelinePost {
             }
         }
     }
-    
+
     /**
      * removes the database column on uninstalling
      * This deletes all event dates set for posts
@@ -99,10 +99,10 @@ class WPSimileTimelinePost {
                 $stl_hh = ($stl_hh > 23) ? $stl_hh -24 : $stl_hh;
                 $stl_mn = ($stl_mn > 59) ? $stl_mn -60 : $stl_mn;
                 $stl_ss = ($stl_ss > 59) ? $stl_ss -60 : $stl_ss;
-                
+
                 // Format years before 1000 to four digits with leading zeroes
                 #$stl_aa = sprintf("%04d", $stl_aa);
-                
+
                 // Handle dates B.C. - if checkbox is set, add prefix 'B', else 'A' for A.D.
                 #$prefix = 'A'; // Assume date is A.D. per default
                 $prefix = '';
@@ -119,11 +119,11 @@ class WPSimileTimelinePost {
                 $wpdb->query($wpdb->prepare("UPDATE $wpdb->posts SET $column = 'A0000-00-00 00:00:00' WHERE ID = %d", $pID));
         }
     }
-    
+
     /**
      * Save start and end dates of an event(post) to the database
      */
-    function updateEventDates($post_id){
+    public static function updateEventDates($post_id){
         if(!empty($_POST)){
             self::saveEventDate($post_id, $_POST, 'start');
             self::saveEventDate($post_id, $_POST, 'latest_start');
@@ -131,7 +131,7 @@ class WPSimileTimelinePost {
             self::saveEventDate($post_id, $_POST, 'earliest_end');
         }
     }
-    
+
     /**
      * Get the minimum or maximum date of wpdb->posts.$column in $categories
      */
@@ -146,7 +146,7 @@ class WPSimileTimelinePost {
 
         return $wpdb->get_var($query);
     }
-    
+
     /**
      * Get the date of the very first or last post dependant from the start date
      * @param type $minmax

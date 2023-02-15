@@ -65,25 +65,25 @@ class WPSimileTimelineLoader{
 		add_action('delete_term', array('WPSimileTimelineTerm','deleteTerm'));
 		// contextual help links
 		add_filter('contextual_help', array('WPSimileTimelineLoader', 'showContextualHelp'), 10, 3);
-		
+
 		// filters and shortcode for the frontend
 		add_filter('wp_head', array('WPSimileTimeline', 'outputFrontendHeaderMarkup'), 5);
 		add_shortcode('similetimeline', array('WPSimileTimelineLoader', 'parseShortcodeCall'));
 	}
-	
+
 	/*
 	 * load dependent class files and init the main plugin
 	 */
-	function loadPlugin(){
+	public static function loadPlugin(){
 		// init the actual plugin worker class
 		WPSimileTimeline::construct();
 		return true;
 	}
-	
+
 	/*
 	 * Install the plugin with basic parameters and necessary database tables
 	 */
-	function installPlugin(){
+	public static function installPlugin(){
 		// write default options
 		$stl_timeline_default_options = WPSimileTimeline::getDefaultOptions();
 		foreach($stl_timeline_default_options as $option=>$v){
@@ -93,7 +93,7 @@ class WPSimileTimelineLoader{
 		// add database columns for start and end dates
 		WPSimileTimelinePost::createColumns();
 		// add database table for category settings
-		WPSimileTimelineTerm::createTable();	
+		WPSimileTimelineTerm::createTable();
 		// update possibly new categories
 		WPSimileTimelineTerm::syncTerms();
 		// add database table for timeline bands
@@ -102,23 +102,23 @@ class WPSimileTimelineLoader{
 		WPSimileTimelineHotzone::createTable();
 		// add database table for timeline decorators
 		WPSimileTimelineDecorator::createTable();
-		
+
 		// execute version specific updates to database
 		WPSimileTimelineLoader::doVersionUpdates();
 	}
-	
+
 	/*
 	 * Execute version specific updates
 	 */
-	function doVersionUpdates(){
+	public static function doVersionUpdates(){
 
 		// process database updates
 		WPSimileTimelineDatabase::doUpdates();
-		
+
 		// Update to new version string
 		update_option('stl_timeline_plugin_version', STL_TIMELINE_PLUGIN_VERSION);
 	}
-	
+
 	/*
 	 * Plugin uninstaller. Removes all plugin related data from database
 	 */
@@ -144,7 +144,7 @@ class WPSimileTimelineLoader{
 	 * Add options page to WordPress admin menu and hook the needed scripts
 	 * Submission actions from the admin form are also processed here.
 	 */
-	function registerOptionsPage(){
+	public static function registerOptionsPage(){
 		if (function_exists('add_options_page')) {
 			$plugin_page = add_menu_page( 'SIMILE Timeline', 'SIMILE Timeline', 'activate_plugins', 'wp-simile-timeline', array('WPSimileTimelineLoader', 'showHtmlOptionsPage'), STL_TIMELINE_IMAGE_FOLDER.'/icon.png', 76.4 );
 			// register plugin's own scripts
@@ -153,7 +153,7 @@ class WPSimileTimelineLoader{
 			add_action('admin_print_scripts', array('WPSimileTimelineAdmin', 'outputAdminCss'));
 			// only add plugin related HTML head to option page
 			add_action('admin_print_scripts-'. $plugin_page, array('WPSimileTimelineAdmin', 'outputAdminScripts'));
-		} 
+		}
 
 		// safety upgrade in case plugin wasn't inited by mechanism or user
 		$version = get_option('stl_timeline_plugin_version');
@@ -170,19 +170,19 @@ class WPSimileTimelineLoader{
 			die();
 		}
 	}
-	
+
 	/*
 	 * Displays admin option page after loading plugin basics
 	 */
-	function showHtmlOptionsPage(){
+	public static function showHtmlOptionsPage(){
 		if(WPSimileTimelineLoader::loadPlugin()){
 			$wpstl = WPSimileTimeline::singleton();
 			$wpstl->init();
 			$wpstl->processOptions();
 			WPSimileTimelineAdmin::renderOptionsPage();
 		}
-	}	
-	
+	}
+
 	/*
 	 * Gather options from shortcode parameters and call output function
 	 */
@@ -195,18 +195,18 @@ class WPSimileTimelineLoader{
 			return stl_simile_timeline($cats, $id, $scriptfile, $theme, $start, $stop, true);
 		}
 	}
-	
+
 	/*
 	 * Custom box hook for post and page interface adds custom option box
 	 */
-	function addPostPanelEventDates() {
+	public static function addPostPanelEventDates() {
 		if(WPSimileTimelineLoader::loadPlugin()){
 			$wpstl = WPSimileTimeline::singleton();
 			$wpstl->init();
 			if( function_exists('add_meta_box')) {
 				add_meta_box( 'stl-timeline-event-data', __( 'SIMILE Timeline', 'stl_timeline' ), array('WPSimileTimelineAdmin', 'outputCustomPostDateOptions'), 'post', 'advanced' );
 				add_meta_box( 'stl-timeline-event-data', __( 'SIMILE Timeline', 'stl_timeline' ), array('WPSimileTimelineAdmin', 'outputCustomPostDateOptions'), 'page', 'advanced' );
-				
+
 				// Adding meta boxes for all registered custom posts
 				$post_types = WPSimileTimelineToolbox::getCustomPostTypes();
 				foreach($post_types as $post_type):
@@ -215,11 +215,11 @@ class WPSimileTimelineLoader{
 			}
 		}
 	}
-	
+
 	/*
 	 * Adds help links to WordPress help tab
 	 */
-	function showContextualHelp($contextual_help, $screen_id, $screen){
+	public static function showContextualHelp($contextual_help, $screen_id, $screen){
 		if($screen_id=='toplevel_page_wp-simile-timeline'){
 			$links = array(
 				__('WP SIMILE Timeline Support Group', 'stl_timeline') => 'http://groups.google.com/group/wp-simile-timeline/',
