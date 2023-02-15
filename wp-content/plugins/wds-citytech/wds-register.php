@@ -473,7 +473,6 @@ function openlab_save_meta_data_at_registration( $usermeta ) {
 	}
 
 	$usermeta['account_type'] = $account_type;
-	_b( $usermeta );
 
 	return $usermeta;
 }
