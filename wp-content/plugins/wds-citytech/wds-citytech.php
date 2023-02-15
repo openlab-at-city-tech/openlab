@@ -1645,8 +1645,8 @@ class Buddypress_Translation_Mangler {
 }
 
 function openlab_launch_translator() {
-	add_filter( 'gettext', array( 'Buddypress_Translation_Mangler', 'filter_gettext' ), 10, 4 );
-	add_filter( 'gettext', array( 'bbPress_Translation_Mangler', 'filter_gettext' ), 10, 4 );
+	add_filter( 'gettext', array( 'Buddypress_Translation_Mangler', 'filter_gettext' ), 10, 3 );
+	add_filter( 'gettext', array( 'bbPress_Translation_Mangler', 'filter_gettext' ), 10, 3 );
 	add_filter( 'gettext_with_context', 'openlab_gettext_with_context', 10, 4 );
 }
 
@@ -1703,7 +1703,7 @@ class Buddypress_Ajax_Translation_Mangler {
 }
 
 function openlab_launch_ajax_translator() {
-	add_filter( 'gettext', array( 'Buddypress_Ajax_Translation_Mangler', 'filter_gettext' ), 10, 4 );
+	add_filter( 'gettext', array( 'Buddypress_Ajax_Translation_Mangler', 'filter_gettext' ), 10, 3 );
 }
 
 add_action( 'bp_setup_globals', 'openlab_launch_ajax_translator' );
@@ -2842,7 +2842,7 @@ add_filter(
 		return array( 'do_not_allow' );
 	},
 	10,
-	4
+	3
 );
 
 /**
