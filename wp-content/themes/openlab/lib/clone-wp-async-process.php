@@ -34,7 +34,7 @@ class Clone_Async_Process extends WP_Async_Request {
 		remove_action( 'bp_activity_after_save', 'ass_group_notification_activity', 50 );
 
 		$source_group_id = groups_get_groupmeta( $group_id, 'clone_source_group_id', true );
-		$group_cloner    = new \OpenLab_Clone_Course_Group( $group_id, $source_group_id );
+		$group_cloner    = new \Openlab_Clone_Course_Group( $group_id, $source_group_id );
 
 		switch ( $the_step ) {
 			case 'groupmeta' :
