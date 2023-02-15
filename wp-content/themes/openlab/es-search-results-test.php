@@ -32,5 +32,5 @@ if ( $search_term ) {
 <?php endforeach; ?>
 </ul>
 
-<?php get_footer(); ?>
-
+<?php
+get_footer();

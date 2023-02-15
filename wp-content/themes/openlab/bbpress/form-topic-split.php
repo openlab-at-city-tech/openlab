@@ -117,5 +117,4 @@
 			<div class="entry-content"><?php is_user_logged_in() ? _e( 'You do not have the permissions to edit this topic!', 'bbpress' ) : _e( 'You cannot edit this topic.', 'bbpress' ); ?></div>
 		</div>
 
-	<?php endif; ?>
-
+	<?php endif;
