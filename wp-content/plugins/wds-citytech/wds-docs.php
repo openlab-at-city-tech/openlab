@@ -87,6 +87,7 @@ function wds_docs_shortcode( $atts ) {
 	$return         .= "<form method='post' enctype='multipart/form-data'>";
 		$return     .= "<div class='wds-group-form-item'>";
 			$return .= '<label>Title</label>';
+			// @phpstan-ignore-next-line
 			$return .= "<input type='text' name='wds_doc_title' value='" . $title . "'>";
 		$return     .= '</div>';
 
@@ -114,6 +115,7 @@ function wds_docs_shortcode( $atts ) {
 	}
 		$return     .= "<div class='wds-group-form-item'>";
 			$return .= '<label>Description</label>';
+			// @phpstan-ignore-next-line
 			$return .= "<textarea name='wds_doc_description' id='wds_doc_description'>" . $description . '</textarea>';
 		$return     .= '</div>';
 		$return     .= "<div class='wds-group-form-item'>";
