@@ -17,9 +17,6 @@ function openlab_bp_sidebar($type, $mobile_dropdown = false, $extra_classes = ''
         case 'members':
             bp_get_template_part('members/single/sidebar');
             break;
-        case 'register':
-            openlab_buddypress_register_actions();
-            break;
         case 'groups':
             get_sidebar('group-archive');
             break;
