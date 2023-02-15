@@ -225,8 +225,6 @@ class Openlab_Breadcrumb {
      * Echo the final completed breadcrumb in markup wrapper. Public.
      *
      * @since 1.5
-     *
-     * @return string HTML markup
      */
     function output($args = array()) {
 
