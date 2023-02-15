@@ -7,6 +7,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
       - uses: php-actions/composer@v6
 
       - name: PHPStan Static Analysis
