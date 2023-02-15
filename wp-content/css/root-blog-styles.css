@@ -1865,6 +1865,11 @@ form.submitting .wpcf7-spinner {
 	direction: ltr;
 }
 
+.wpcf7-reflection > output {
+	display: list-item;
+	list-style: none;
+}
+
 /*
 CSS for the gallery widget
 */
