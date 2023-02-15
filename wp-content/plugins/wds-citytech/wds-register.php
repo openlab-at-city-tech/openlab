@@ -376,10 +376,6 @@ if ( bp_has_profile( $has_profile_args ) ) :
 			$profile_field_ids = implode( ',', $pfids_a );
 		}
 
-		if ( isset( $group_id ) && 1 != $group_id ) {
-			$profile_field_ids = '3,7,241,' . $profile_field_ids;
-		}
-
 		$return .= '<input type="hidden" name="signup_profile_field_ids" id="signup_profile_field_ids" value="3,7,241,' . $profile_field_ids . '" />';
 
 		endwhile;
