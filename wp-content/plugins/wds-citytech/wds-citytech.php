@@ -297,34 +297,6 @@ function wds_load_account_type() {
 add_action( 'wp_ajax_wds_load_account_type', 'wds_load_account_type' );
 add_action( 'wp_ajax_nopriv_wds_load_account_type', 'wds_load_account_type' );
 
-function wds_bp_profile_group_tabs() {
-	global $bp, $group_name;
-
-	$groups = wp_cache_group( 'xprofile_groups_inc_empty', 'bp' );
-	if ( false === $groups ) {
-		$groups = BP_XProfile_Group::get( array( 'fetch_fields' => true ) );
-		wp_cache_set( 'xprofile_groups_inc_empty', $groups, 'bp' );
-	}
-
-	if ( empty( $group_name ) ) {
-		$group_name = bp_profile_group_name( false );
-	}
-
-	for ( $i = 0; $i < count( $groups ); $i++ ) {
-		if ( $group_name == $groups[ $i ]->name ) {
-			$selected = ' class="current"';
-		} else {
-			$selected = '';
-		}
-
-		if ( $groups[ $i ]->fields ) {
-			echo '<li' . $selected . '><a href="' . $bp->displayed_user->domain . $bp->profile->slug . '/edit/group/' . $groups[ $i ]->id . '">' . esc_attr( $groups[ $i ]->name ) . '</a></li>';
-		}
-	}
-
-	do_action( 'xprofile_profile_group_tabs' );
-}
-
 function wds_load_group_departments() {
 	global $wpdb, $bp;
 	$group           = $_POST['group'];
