@@ -177,6 +177,7 @@ $settings = bp_email_get_appearance_settings();
 
 			<!-- Email Footer : BEGIN -->
 			<?php bp_get_template_part( 'buddypress/assets/emails/parts/footer', '', $settings ); ?>
+			<?php bp_get_template_part( 'buddypress/assets/emails/parts/footer', 'bottom', $settings ); ?>
 			<!-- Email Footer : END -->
 
 			<!--[if (gte mso 9)|(IE)]>

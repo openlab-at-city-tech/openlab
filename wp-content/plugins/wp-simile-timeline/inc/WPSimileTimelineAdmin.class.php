@@ -4,21 +4,21 @@
  * @author freshlabs
  * @link http://wordpress.org/extend/plugins/wp-simile-timeline/
  * @package wp-simile-timeline
- * 
+ *
 	===========================================================================
 	SIMILE Timeline for WordPress
 	Copyright (C) 2006-2019 freshlabs
-	
+
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
 	the Free Software Foundation, either version 3 of the License, or
 	(at your option) any later version.
-	
+
 	This program is distributed in the hope that it will be useful,
 	but WITHOUT ANY WARRANTY; without even the implied warranty of
 	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 	GNU General Public License for more details.
-	
+
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	===========================================================================
@@ -27,7 +27,7 @@ class WPSimileTimelineAdmin{
 	function __construct(){
 
 	}
-	
+
 	/**
      * Saves user options selected in the Admin panel.
 	 */
@@ -36,14 +36,14 @@ class WPSimileTimelineAdmin{
 		#echo '<pre>';
 		#print_r($postdata);
 		#echo '</pre>';
-		#exit();		
+		#exit();
 		// Save options for bands, hotzones and highlight decorators
-		foreach($postdata['stl_timeline']['bands'] as $band){		
+		foreach($postdata['stl_timeline']['bands'] as $band){
 			$band_obj = new WPSimileTimelineBand();
 			$band_obj->set($band);
 			$band_obj->save();
 		}
-		
+
 		// Convert date arrays to date strings
 		if(!empty($postdata['stl_timeline_start']))
 			$postdata['stl_timeline_start'] = WPSimileTimelineToolbox::implodeDate($postdata['stl_timeline_start']);
@@ -67,29 +67,29 @@ class WPSimileTimelineAdmin{
 				update_option($option, $v);
 			}
 		}
-	
+
 		// Save timeline category settings
 		WPSimileTimelineAdmin::saveCategoryOptions($postdata);
-		
+
 		return $saved;
 	}
-	
+
 	/* ---------------------------------------------------------------------------------
 	 * update categories that are displayed by the timeline
 	 * --------------------------------------------------------------------------------*/
 	function saveCategoryOptions($postdata) {
-	
+
 	    $categories='';
 	    $wpst_term = new WPSimileTimelineTerm();
-	
+
 		if (!$categories)
 			$categories = $wpst_term->getAllTerms();
-	
+
 		if ($categories) {
 			$stl_cs = array();
 			foreach ($categories as $category) {
 				$active = 0;
-	
+
 				# save category color to database
 				if (!empty($postdata['stl_timeline']['categories'][$category->term_id]['color'])){
 					$wpst_term->updateTermColor($category->term_id, $postdata["stl_timeline"]['categories'][$category->term_id]['color']);
@@ -98,7 +98,7 @@ class WPSimileTimelineAdmin{
 				if (!empty($postdata['stl_timeline']['categories'][$category->term_id]['icon'])){
 					$wpst_term->updateTermIcon($category->term_id, $postdata["stl_timeline"]['categories'][$category->term_id]['icon']);
 				}
-				# save active state to database	
+				# save active state to database
 				if ( isset($postdata['stl_timeline']['categories'][$category->term_id]['status'])) {
 					array_push($stl_cs, $category->term_id);
 					// Update category active/inactive
@@ -113,27 +113,27 @@ class WPSimileTimelineAdmin{
 	/** -----------------------------------------------------------------------------
 	     register admin options JavaScript
 	 * ---------------------------------------------------------------------------*/
-	function registerAdminScripts(){
+	public static function registerAdminScripts(){
 		wp_register_script('stl_timeline_admin_script', WP_PLUGIN_URL . '/wp-simile-timeline/inc/timeline-admin.js');
 	}
-		
+
 	/** -----------------------------------------------------------------------------
 	     Outputs admin JavaScript
 	 * ---------------------------------------------------------------------------*/
-	function outputAdminScripts(){
+	public static function outputAdminScripts(){
 		wp_enqueue_script('colorpicker');
 		wp_enqueue_script('jquery-ui-core');
 		wp_enqueue_script('jquery-ui-tabs');
 		wp_enqueue_script('stl_timeline_admin_script');
 	}
-	
+
 	/** -----------------------------------------------------------------------------
      Outputs necessary admin CSS (for post + options page)
 	 * ---------------------------------------------------------------------------*/
-	function outputAdminCss(){
+	public static function outputAdminCss(){
 		echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"".WP_PLUGIN_URL."/wp-simile-timeline/inc/timeline-admin.css\" />\n";
 	}
-	
+
 	/** -----------------------------------------------------------------------------
 	 * stl_timeline_postdate_inner_custom_box
 	 * outputs content for custom option box in post/page interface
@@ -173,7 +173,7 @@ class WPSimileTimelineAdmin{
 		echo '</tbody>
 		</table>';
 	}
-	
+
 	/** -----------------------------------------------------------------------------
 	 * touchPostDateTime
 	 * output date selection elements
@@ -184,7 +184,7 @@ class WPSimileTimelineAdmin{
 		if ( $for_post )
 			// do not save the event date when post is saved as draft TODO: well, DO!
 			$edit = ( ('draft' == $post->post_status) && (!$value || '0000-00-00 00:00:00' == $value) ) ? false : true;
-	 
+
 		echo '<legend>';
 		// edit confirmation checkbox
 		echo '<input type="checkbox" class="checkbox" name="stl_timeline_'.$name.'[edit]" value="1" id="stl_timeline_'.$name.'_timestamp" /> ';
@@ -193,18 +193,18 @@ class WPSimileTimelineAdmin{
 		echo '&nbsp;&nbsp;<input type="checkbox" class="checkbox" name="stl_timeline_'.$name.'[reset]" value="1" id="stl_timeline_'.$name.'_timestamp_reset" /> ';
 		echo '<label for="stl_timeline_'.$name.'_timestamp_reset">'. __('Reset timestamp','stl_timeline').'</label>';
 		echo '</legend><br />';
-		
+
 		$post_date = ($for_post) ? $value : $comment->comment_date;
-		
+
 		WPSimileTimelineAdmin::outputDatepicker('stl_timeline_'.$name, $post_date, true, $edit);
 	}
-	
+
 	/** -----------------------------------------------------------------------------
 	 * WPSimileTimelineAdmin::outputDatepicker
 	 * Create and output Date Picker input elements
          * TODO: Implement dates BC
 	 * ---------------------------------------------------------------------------*/
-	function outputDatepicker($name, $date, $show_existing=true, $edit=1) {
+	public static function outputDatepicker($name, $date, $show_existing=true, $edit=1) {
 		global $month;
                 /*
                 echo $date;
@@ -215,15 +215,15 @@ class WPSimileTimelineAdmin{
                 $bc_checked = $is_date_bc ? ' checked' : '';
                 */
 		$stl_time_adj = time() + (get_option('gmt_offset') * 3600);
-		
+
 		$stl_jj = ($edit) ? adodb_date2('d', $date) : adodb_gmdate('d', $stl_time_adj);
 		$stl_mm = ($edit) ? adodb_date2('m', $date) : adodb_gmdate('m', $stl_time_adj);
 		$stl_aa = ($edit) ? adodb_date2('Y', $date) : adodb_gmdate('Y', $stl_time_adj);
 		$stl_hh = ($edit) ? adodb_date2('H', $date) : adodb_gmdate('H', $stl_time_adj);
 		$stl_mn = ($edit) ? adodb_date2('i', $date) : adodb_gmdate('i', $stl_time_adj);
 		$stl_ss = ($edit) ? adodb_date2('s', $date) : adodb_gmdate('s', $stl_time_adj);
-                
-                
+
+
 
 		if ($show_existing && $edit && $date != '0000-00-00 00:00:00' ) {
 			echo '<small>' . __('Existing timestamp', 'stl_timeline') . ': ';
@@ -236,7 +236,7 @@ class WPSimileTimelineAdmin{
                         #}
                         echo '</small>';
 		}
-		                                                
+
 		echo "<select name=\"".($name)."[month]\">\n";
 		for ($i = 1; $i < 13; $i = $i +1) {
 			echo "\t\t\t<option value=\"$i\"";
@@ -249,7 +249,7 @@ class WPSimileTimelineAdmin{
 			}
 			echo ">".$month["$stl_ii"]."</option>\n";
 		}
-		
+
 		echo '</select>';
 		echo '<input type="text" class="stl_timeline_2di" id="stl_jj_' . WPSimileTimelineToolbox::filterDomString($name) .'" name="' . $name . '[day]" value="' . $stl_jj . '" size="2" maxlength="2" />';
 		echo '<input type="text" class="stl_timeline_4di" id="stl_aa_' . WPSimileTimelineToolbox::filterDomString($name) .'" name="' . $name .'[year]" value="' . $stl_aa .'" size="4" maxlength="4" />';
@@ -261,11 +261,11 @@ class WPSimileTimelineAdmin{
                 #echo ' <label for="stl_is_bc_' . WPSimileTimelineToolbox::filterDomString($name) .'">' . _e('B.C.', 'stl_timeline') . '</label>';
 		echo '<input type="hidden" id="stl_ss_' . WPSimileTimelineToolbox::filterDomString($name) .'" name="' . $name .'[second]" value="' . $stl_ss .'" size="2" maxlength="2" />';
 	}
-	
+
 	/**
 	 * Prints a select element with time units
 	 */
-	function outputUnitSelectElement($name, $id, $value){
+	public static function outputUnitSelectElement($name, $id, $value){
 		$units = array(
 			 0 => __('Millisecond', 'stl_timeline'),
 			 1 => __('Second', 'stl_timeline'),
@@ -279,40 +279,40 @@ class WPSimileTimelineAdmin{
 			 9 => __('Century', 'stl_timeline'),
 			10 => __('Millenium', 'stl_timeline'),
 		);
-		
+
 		echo '<select name="' . $name . '" id="' . $id . '">';
 		foreach($units as $index=>$unit):
 		echo '<option' . WPSimileTimelineToolbox::outputOptionValue($index, $value) . '>' . $unit . '</option>';
 		endforeach;
 		echo '</select>';
 	}
-	
+
 	/**
 	 * Prints a select element for highlight decorator types
 	 */
-	function outputDecoratorTypeSelect($name, $active){
+	public static function outputDecoratorTypeSelect($name, $active){
 		$m = '<select name="'. $name . '" class="stl_timeline_decorator_type_picker">';
 		$m .= '<option' . WPSimileTimelineToolbox::outputOptionValue(0, $active) . '>' . __('Point in time', 'stl_timeline') . '</option>';
 		$m .= '<option' . WPSimileTimelineToolbox::outputOptionValue(1, $active) . '>' . __('Period in time', 'stl_timeline') . '</option>';
 		$m .= '</select>';
 		echo $m;
 	}
-	
+
 	/**
 	 * Build markup for JavaScript colorpicker
 	 */
-	function buildColorpickInput($field, $id, $palette, $hexvalue){
+	public static function buildColorpickInput($field, $id, $palette, $hexvalue){
 		$onclick = 'onclick="cp.select(document.getElementById(\''.WPSimileTimelineToolbox::filterDomString($field).'\'), \''.$palette.'\');return false;" ';
 		$attribs  = 'style="background: '.$hexvalue.';" class="stl-colorfield" name="' . $palette . '" id="' . $palette .'"';
 		$link = '<a href="#"' . $onclick . $attribs .'><span>' . __('Pick color', 'stl_timeline') . '</span></a>' . "\n";
 		$input = '		<input type="text" class="stl-colorvalue" value="'.$hexvalue.'" size="7" id="' . WPSimileTimelineToolbox::filterDomString($field) . '" name="' . $field . '" />';
 		return $link . $input;
 	}
-	
+
 	/**
 	 * Build markup for circle marker selector
 	 */
-	function buildIconSelector($field, $current){
+	public static function buildIconSelector($field, $current){
 		// Preset icons from SIMILE in Name=>URL format
 		$icons = array(
 			__('Default', 'stl_timeline')			=> 'null',
@@ -335,13 +335,13 @@ class WPSimileTimelineAdmin{
 		$input .= '</select>';
 		return $input;
 	}
-	
+
 	/**
 	 * Set terms to display in the timeline
 	 */
-	function outputTermsTable($term_type='category') {
+	public static function outputTermsTable($term_type='category') {
 		$row = '<tr>
-		        <th scope="col" style="width:150px;text-align:center;">' . __('Show in Timeline?', 'stl_timeline') . '</th> 
+		        <th scope="col" style="width:150px;text-align:center;">' . __('Show in Timeline?', 'stl_timeline') . '</th>
 		        <th scope="col" style="width:60px;">' . __('ID', 'stl_timeline') . '</th>
 		        <th scope="col" align="left" class="row-title">' . __('Name', 'stl_timeline') . '</th>
 		        <th scope="col" width="130" align="center">' . __('Color', 'stl_timeline') . '</th>
@@ -355,18 +355,18 @@ class WPSimileTimelineAdmin{
 			    <tfoot>'
 				. $row .
 			    '</tfoot>';
-	
+
 		$wpst_term = new WPSimileTimelineTerm();
 		$wpst_term->outputCategoryRows($term_type);
-	
+
 		echo '</table>';
 	}
-	
+
 	/* ---------------------------------------------------------------------------------
 	     Display User Options
 	 * --------------------------------------------------------------------------------*/
-	function renderOptionsPage(){
-		$stl_timeline_band = new WPSimileTimelineBand();		
+	public static function renderOptionsPage(){
+		$stl_timeline_band = new WPSimileTimelineBand();
 
 		$stl_timelinepageids = get_option('stl_timelinepageids');
 		$stl_timeline_showfutureposts = get_option('stl_timeline_showfutureposts');
@@ -377,12 +377,12 @@ class WPSimileTimelineAdmin{
 		$stl_timeline_start = get_option('stl_timeline_start');
 		$stl_timeline_stop = get_option('stl_timeline_stop');
 		$stl_timeline_showbubbledate = get_option('stl_timeline_showbubbledate');
-		
+
 		$stl_timeline_start = $stl_timeline_start == 0 ? '' : $stl_timeline_start;
 		$stl_timeline_stop = $stl_timeline_stop == 0 ? '' : $stl_timeline_stop;
-		
+
 		$stl_bands = $stl_timeline_band->find_all();
-		
+
 		$custom_taxonomies = WPSimileTimelineTerm::getCustomTaxonomies();
 
 	?>
@@ -408,8 +408,8 @@ class WPSimileTimelineAdmin{
 	******************************************************
 	Timeline Integration
 	******************************************************
-	-->	               
-	            <div id="stl-configuration">				
+	-->
+	            <div id="stl-configuration">
 	                <fieldset class="options">
 					<h3><?php _e('Timeline Configuration', 'stl_timeline'); ?></h3>
 					<table width="90%" cellpadding="8" class="form-table">
@@ -418,7 +418,7 @@ class WPSimileTimelineAdmin{
 					<td><input name="stl_timelinepageids" type="text" id="stl_timelinepageids" value="<?php echo $stl_timelinepageids; ?>" size="30" />
 					</td>
 					</tr>
-					
+
 					<tr valign="middle">
 					<th scope="row"><?php _e('Display future posts', 'stl_timeline') ?>:<br /><small><?php _e('Select this option if you want to show future posts in the timeline.', 'stl_timeline'); ?></small></th>
 					<td>
@@ -429,7 +429,7 @@ class WPSimileTimelineAdmin{
 					</fieldset>
 					</td>
 					</tr>
-					
+
 					<tr valign="middle">
 					<th scope="row"><?php _e('Timeline start and end', 'stl_timeline') ?>:<br /><small><?php _e('Sets start and end date for the scroll boundaries of the timeline.', 'stl_timeline'); ?></small></th>
 					<td>
@@ -447,7 +447,7 @@ class WPSimileTimelineAdmin{
 					</fieldset>
 					</td>
 					</tr>
-					
+
 					<tr valign="middle">
 					<th scope="row"><?php _e('Center timeline', 'stl_timeline') ?>:<br /><small><?php _e('Define where the timeline should be focused on load.<br />The default publish date will be used if the start or end date isn\'t set.', 'stl_timeline'); ?></small></th>
 					<td>
@@ -464,7 +464,7 @@ class WPSimileTimelineAdmin{
 					<label for="stl_timeline_startdate_ct">
 					<input name="stl_timeline_startdate" id="stl_timeline_startdate_ct" value="3" type="radio"<?php if($stl_timeline_startdate==3) echo ' checked="checked" '; ?> />
 					<?php _e('Center between first and last post', 'stl_timeline'); ?></label><br />
-					<?php /* TODO: Custom focus date 
+					<?php /* TODO: Custom focus date
 					<input name="stl_timeline_startdate" id="stl_timeline_startdate_sp" value="-1" type="radio"<?php if($stl_timeline_startdate < 0 || $stl_timeline_startdate>3) echo ' checked="checked" '; ?> />
 					<label><?php _e('Specific', 'stl_timeline'); ?></label>:
 					<input name="stl_timeline_startdate_custom" type="text" id="stl_timeline_startdate" value="<?php echo $stl_timeline_startdate; ?>" size="20" />
@@ -472,7 +472,7 @@ class WPSimileTimelineAdmin{
 					</fieldset>
 					</td>
 					</tr>
-					
+
 					<tr valign="middle">
 					<th scope="row"><?php _e('Image attachments (experimental)', 'stl_timeline') ?>:<br /><small><?php _e('Select how images that are attached to posts should be handled. Makes experimental use of the CompactPainter', 'stl_timeline'); ?></small></th>
 					<td>
@@ -489,7 +489,7 @@ class WPSimileTimelineAdmin{
 					</fieldset>
 					</td>
 					</tr>
-					
+
 					<tr valign="middle">
 					<th scope="row"><?php _e('Link Handling', 'stl_timeline') ?>:<br /><small><?php _e('Sets whether clicking links from the timeline will open an info bubble or jump directly to the linked post.', 'stl_timeline'); ?></small></th>
 					<td>
@@ -531,14 +531,14 @@ class WPSimileTimelineAdmin{
 						<?php WPSimileTimelineAdmin::outputTermsTable('category'); ?>
 						<p class="submit"><input type="submit" class="button-primary" name="Submit" value="<?php _e('Update Options', 'stl_timeline') ?>" /></p>
 					</fieldset>
-					
+
 					<fieldset class="options">
 					<h3><?php _e('Tags', 'stl_timeline'); ?></h3>
 						<p><small><?php printf(__('Select the tags the Timeline should display posts from.','stl_timeline') ); ?></small></p>
 						<?php WPSimileTimelineAdmin::outputTermsTable('post_tag'); ?>
 						<p class="submit"><input type="submit" class="button-primary" name="Submit" value="<?php _e('Update Options', 'stl_timeline') ?>" /></p>
 					</fieldset>
-					
+
 					<?php // custom taxonomies
 					foreach($custom_taxonomies as $custom_taxonomy):
 					?>
@@ -554,18 +554,18 @@ class WPSimileTimelineAdmin{
 	******************************************************
 	Timeline Appearance
 	******************************************************
-	-->		
+	-->
 				<div id="stl-design">
 				<fieldset class="options">
 				<h3><?php _e('Timeline Appearance', 'stl_timeline'); ?></h3>
 					<p><?php printf(__('These options define the default timeline theme. To use a custom theme, use the parameter %s with the shortcode or template tag.', 'stl_timeline'), '<code>theme</code>'); ?></p>
-					
+
 					<?php foreach($stl_bands as $band): ?>
 					<?php echo WPSimileTimelineAdmin::outputOptionsForBand($band); ?>
 					<input type="submit" class="button-primary" name="Submit" value="<?php _e('Update Options', 'stl_timeline') ?>" />
 					<br /><br />
 					<?php endforeach; ?>
-					
+
 					<?php
 					$newband = new WPSimileTimelineBand();
 					$newband->set(array(
@@ -573,7 +573,7 @@ class WPSimileTimelineAdmin{
 						'name' => ''
 					));
 					#echo WPSimileTimelineAdmin::outputOptionsForBand($newband); ?>
-					
+
 				</fieldset>
 				</div>
 	<!--
@@ -593,7 +593,7 @@ class WPSimileTimelineAdmin{
 					_e("The plugin will be deactivated after all plugin-related data has been removed.", 'stl_timeline');
 					?></p>
 					<p><?php _e("Sorry to hear that you have to do that for whatever reasons.", 'stl_timeline'); ?></p>
-	
+
 					<p>
 					<input type="submit" id="stl-delete-plugindata-button" value="<?php _e('Delete Plugin Data', 'stl_timeline'); ?>" class="button-secondary" />
 					<input type="checkbox" name="delete-action" id="stl-timeline-delete-confirm" value="purgedb" /> <label for="stl-timeline-delete-confirm"><?php _e('Yes, please purge plugin database entries', 'stl_timeline'); ?></label>
@@ -615,7 +615,7 @@ class WPSimileTimelineAdmin{
 						});
 					</script>
 			</fieldset>
-		</div>	
+		</div>
 	<!--
 	******************************************************
 	******************************************************
@@ -625,11 +625,11 @@ class WPSimileTimelineAdmin{
 		</div><!-- .wrap -->
 	<?php
 	}
-	
+
 	/* ---------------------------------------------------------------------------------
 	     Output option interface for Timeline bands
 	 * --------------------------------------------------------------------------------*/
-	function outputOptionsForBand($band){
+	public static function outputOptionsForBand($band){
 		$show_labels_checked = '';
 		if($band->show_labels == 1):
 			$show_labels_checked = 'checked="checked"';
@@ -695,7 +695,7 @@ class WPSimileTimelineAdmin{
 				</tr>
 				</tbody>
 				</table>
-				
+
 				<!--
 				******************************************************
 				Hotzones
@@ -716,7 +716,7 @@ class WPSimileTimelineAdmin{
 				endif; ?>
 
 				<?php WPSimileTimelineAdmin::outputHotzoneMarkup($band->id); ?>
-				
+
 				<tr class="nofoot stl-addrow">
 					<td colspan="5"><input type="button" value="<?php _e('Add new Hotzone', 'stl_timeline'); ?>" class="stl-addsubentry button-secondary" />
 					</td>
@@ -737,23 +737,23 @@ class WPSimileTimelineAdmin{
 				</thead>
 				<tbody class="stl-collapsible">
 				<?php
-				// List existing decorators *********************************** 
+				// List existing decorators ***********************************
 				if(!empty($band->decorators)):
 					foreach($band->decorators as $decorator):
 						WPSimileTimelineAdmin::outputDecoratorMarkup($band->id, $decorator);
 					endforeach;
 				endif; ?>
-				
+
 				<?php
 				// Construct for new decorator ********************************
 				WPSimileTimelineAdmin::outputDecoratorMarkup($band->id);
 				?>
-				
+
 				<tr class="nofoot stl-addrow">
 					<td colspan="5"><input type="button" value="<?php _e('Add new Decorator', 'stl_timeline'); ?>" class="stl-addsubentry button-secondary" />
 					</td>
 				</tr>
-	
+
 				</tbody>
 				</table>
 				<!-- -->
@@ -763,13 +763,13 @@ class WPSimileTimelineAdmin{
 		</table>
 		<?php
 	}
-	
+
 	/**
 	 * Output markup for a hotzone object
 	 * @param band_id Database ID of the related band object, default: new
 	 * @param hotzone Hotzone object that should be printed
-	 */	
-	function outputHotzoneMarkup($band_id='new', $hotzone=null){
+	 */
+	public static function outputHotzoneMarkup($band_id='new', $hotzone=null){
 		if($hotzone == null){
 			$hotzone = new WPSimileTimelineHotzone();
 			$hotzone->create(array(
@@ -802,7 +802,7 @@ class WPSimileTimelineAdmin{
 			});
 			</script>
 		</div>
-		<?php 
+		<?php
 		}else{
 		?>
 		<h4><?php _e('New Hotzone', 'stl_timeline'); ?></h4>
@@ -810,7 +810,7 @@ class WPSimileTimelineAdmin{
 		<div class="suboptions">
 		<input type="hidden" value="<?php echo $hotzone->id; ?>" name="<?php echo "stl_timeline[bands][$band_id][hotzones][$hotzone->id][id]"; ?>" />
 		<input type="hidden" value="<?php echo $band_id; ?>" name="<?php echo "stl_timeline[bands][$band_id][hotzones][$hotzone->id][stl_timeline_band_id]"; ?>" />
-		
+
 		<label for="<?php echo "stl_timelinehotzone_name_".$band_id.$hotzone->id; ?>"><?php _e('Name', 'stl_timeline'); ?></label>
 		<input type="text" value="<?php echo $hotzone->name; ?>" id="<?php echo "stl_timelinehotzone_name_".$band_id.$hotzone->id; ?>" name="<?php echo "stl_timeline[bands][$band_id][hotzones][$hotzone->id][name]"; ?>" />
 		<br />
@@ -830,18 +830,18 @@ class WPSimileTimelineAdmin{
 		<input type="text" size="3" value="<?php echo $hotzone->multiple; ?>" id="<?php echo "stl_timelinehotzone_multiple_".$band_id.$hotzone->id; ?>" name="<?php echo "stl_timeline[bands][$band_id][hotzones][$hotzone->id][multiple]"; ?>" />
 		<small>(<?php _e('show every n-th unit marker', 'stl_timeline'); ?></small>
 		</div>
-		
+
 		</td>
 	</tr>
 	<?php
 	}
-	
+
 	/**
 	 * Output markup for a decorator object
 	 * @param band_id Database ID of the related band object, default: new
 	 * @param decorator Decorator object that should be printed
 	 */
-	function outputDecoratorMarkup($band_id='new', $decorator=null){
+	public static function outputDecoratorMarkup($band_id='new', $decorator=null){
 		if($decorator == null){
 			$decorator = new WPSimileTimelineDecorator();
 			$decorator->create(array(
@@ -876,16 +876,16 @@ class WPSimileTimelineAdmin{
 			});
 			</script>
 		</div>
-		<?php 
+		<?php
 		}else{
 		?>
 		<h4><?php _e('New Highlight Decorator', 'stl_timeline'); ?></h4>
 		<?php } ?>
-		
+
 		<div class="suboptions">
 		<input type="hidden" value="<?php echo $decorator->id; ?>" name="<?php echo "stl_timeline[bands][$band_id][decorators][$decorator->id][id]"; ?>" />
 		<input type="hidden" value="<?php echo $band_id; ?>" name="<?php echo "stl_timeline[bands][$band_id][decorators][$decorator->id][stl_timeline_band_id]"; ?>" />
-		
+
 			<div>
 				<label for="<?php echo "stl_timelinedecorator_name_".$band_id.$decorator->id; ?>"><?php _e('Name', 'stl_timeline'); ?></label>
 				<input type="text" value="<?php echo $decorator->name; ?>" id="<?php echo "stl_timelinedecorator_name_".$band_id.$decorator->id; ?>" name="<?php echo "stl_timeline[bands][$band_id][decorators][$decorator->id][name]"; ?>" />
@@ -923,7 +923,7 @@ class WPSimileTimelineAdmin{
 				<input type="text" size="3" value="<?php echo $decorator->opacity; ?>" id="<?php echo "stl_timelinedecorator_opacity_".$band_id.$decorator->id; ?>" name="<?php echo "stl_timeline[bands][$band_id][decorators][$decorator->id][opacity]"; ?>" />
 			</div>
 		</div>
-		
+
 		</td>
 	</tr>
 	<?php

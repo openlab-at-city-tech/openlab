@@ -5,12 +5,12 @@
 
 /** CubePoints Points Widget declaration */
 class cp_pointsWidget extends WP_Widget {
- 
+
 	// constructor
-	function cp_pointsWidget() {
-		parent::WP_Widget('cp_pointsWidget', 'CubePoints', array('description' => 'Display the points of the current logged in user.'));	
+	function __construct() {
+		parent::__construct('cp_pointsWidget', 'CubePoints', array('description' => 'Display the points of the current logged in user.'));
 	}
- 
+
 	// widget main
 	function widget($args, $instance) {
 		extract($args, EXTR_SKIP);
@@ -27,7 +27,7 @@ class cp_pointsWidget extends WP_Widget {
 			} else {
 				$string = $instance['text_alt'];
 			}
-			
+
 			//start output
 			do_action('cp_pointsWidget_before');
 			if($instance['html']==''){
@@ -37,14 +37,14 @@ class cp_pointsWidget extends WP_Widget {
 						<?php do_action('cp_pointsWidget'); ?>
 				</ul>
 			<?php
-			} else { 
+			} else {
 				echo str_replace('%text%',$string,$instance['html']);
 			}
 			do_action('cp_pointsWidget_after');
 			echo $after_widget;
 		}
 	}
- 
+
 	// widget settings update
 	function update($new_instance, $old_instance) {
 		$instance = $old_instance;
@@ -54,31 +54,31 @@ class cp_pointsWidget extends WP_Widget {
 		$instance['html'] = trim($new_instance['html']);
 		return $instance;
 	}
- 
+
 	// widget settings form
 	function form($instance) {
 		$default = 	array( 'title' => __('My Points', 'cp') , 'text' => __('Points', 'cp') . ': %points%' , 'text_alt' => __('You need to be logged in to view your points.', 'cp'), 'advanced' => '' );
 		$instance = wp_parse_args( (array) $instance, $default );
- 
+
 		$field = 'title';
 		$field_id = $this->get_field_id($field);
 		$field_name = $this->get_field_name($field);
 		echo "\r\n".'<p><label for="'.$field_id.'">'.__('Title', 'cp').': <input type="text" class="widefat" id="'.$field_id.'" name="'.$field_name.'" value="'.esc_attr( $instance[$field] ).'" /><label></p>';
-		
+
 		$field = 'text';
 		$field_id = $this->get_field_id($field);
 		$field_name = $this->get_field_name($field);
 		echo "\r\n".'<p><label for="'.$field_id.'">'.__('Text', 'cp').': <input type="text" class="widefat" id="'.$field_id.'" name="'.$field_name.'" value="'.esc_attr( $instance[$field] ).'" /><label></p>';
-		
+
 		echo "\r\n".'<small><strong>'.__('Note', 'cp').':</strong> '.__('%points% would be replaced with the points of the logged in user', 'cp').'</small><br /><br />';
-		
+
 		$field = 'text_alt';
 		$field_id = $this->get_field_id($field);
 		$field_name = $this->get_field_name($field);
 		echo "\r\n".'<p><label for="'.$field_id.'">'.__('Text if user not logged in', 'cp').': <input type="text" class="widefat" id="'.$field_id.'" name="'.$field_name.'" value="'.esc_attr( $instance[$field] ).'" /><label></p>';
-		
+
 		echo "\r\n".'<small><strong>'.__('Note', 'cp').':</strong> '.__('Leave this field blank to hide the widget if no user is logged in', 'cp').'</small><br /><br />';
-		
+
 		$field = 'html';
 		$field_id = $this->get_field_id($field);
 		$field_name = $this->get_field_name($field);
@@ -91,12 +91,12 @@ class cp_pointsWidget extends WP_Widget {
 
 /** CubePoints Top Users Widget */
 class cp_topUsersWidget extends WP_Widget {
- 
+
 	// constructor
-	function cp_topUsersWidget() {
-		parent::WP_Widget('cp_topUsersWidget', 'CubePoints Top Users', array('description' => 'Use this widget to showcase the users with the most points.'));	
+	function __construct() {
+		parent::__construct('cp_topUsersWidget', 'CubePoints Top Users', array('description' => 'Use this widget to showcase the users with the most points.'));
 	}
- 
+
 	// widget main
 	function widget($args, $instance) {
 		extract($args, EXTR_SKIP);
@@ -124,7 +124,7 @@ class cp_topUsersWidget extends WP_Widget {
 		do_action('cp_topUsersWidget_after');
 		echo $after_widget;
 	}
- 
+
 	// widget settings update
 	function update($new_instance, $old_instance) {
 		$instance = $old_instance;
@@ -134,22 +134,22 @@ class cp_topUsersWidget extends WP_Widget {
 		$instance['style'] = trim($new_instance['style']);
 		return $instance;
 	}
- 
+
 	// widget settings form
 	function form($instance) {
 		$default = 	array( 'title' => __('Top Users', 'cp') , 'num' => 3 , 'text' => '%user% (%points%)', 'style' => 'list-style:none;' );
 		$instance = wp_parse_args( (array) $instance, $default );
- 
+
 		$field = 'title';
 		$field_id = $this->get_field_id($field);
 		$field_name = $this->get_field_name($field);
 		echo "\r\n".'<p><label for="'.$field_id.'">'.__('Title', 'cp').': <input type="text" class="widefat" id="'.$field_id.'" name="'.$field_name.'" value="'.esc_attr( $instance[$field] ).'" /><label></p>';
-		
+
 		$field = 'num';
 		$field_id = $this->get_field_id($field);
 		$field_name = $this->get_field_name($field);
 		echo "\r\n".'<p><label for="'.$field_id.'">'.__('Number of top users to show', 'cp').': <input type="text" class="widefat" id="'.$field_id.'" name="'.$field_name.'" value="'.esc_attr( $instance[$field] ).'" /><label></p>';
-		
+
 		$field = 'text';
 		$field_id = $this->get_field_id($field);
 		$field_name = $this->get_field_name($field);
@@ -164,7 +164,7 @@ class cp_topUsersWidget extends WP_Widget {
 		echo __('User ranking', 'cp') . ' - %place%' . '<br />';
 		echo __('Email MD5 hash', 'cp') . ' - %emailhash%' . '<br />';
 		echo '<br /></small>';
-		
+
 		$field = 'style';
 		$field_id = $this->get_field_id($field);
 		$field_name = $this->get_field_name($field);
@@ -175,13 +175,13 @@ class cp_topUsersWidget extends WP_Widget {
 
 add_action('widgets_init', 'cp_widgets');
 
-function cp_widgets(){	
+function cp_widgets(){
 	// register points widget
 	register_widget("cp_pointsWidget");
 
 	// register top users widget
 	register_widget("cp_topUsersWidget");
-	
+
 }
- 
+
 ?>

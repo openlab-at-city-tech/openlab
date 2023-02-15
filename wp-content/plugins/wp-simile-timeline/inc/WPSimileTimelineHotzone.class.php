@@ -4,27 +4,27 @@
  * @author freshlabs
  * @link http://wordpress.org/extend/plugins/wp-simile-timeline/
  * @package wp-simile-timeline
- * 
+ *
 	===========================================================================
 	SIMILE Timeline for WordPress
 	Copyright (C) 2006-2019 freshlabs
-	
+
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
 	the Free Software Foundation, either version 3 of the License, or
 	(at your option) any later version.
-	
+
 	This program is distributed in the hope that it will be useful,
 	but WITHOUT ANY WARRANTY; without even the implied warranty of
 	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 	GNU General Public License for more details.
-	
+
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	===========================================================================
 */
 class WPSimileTimelineHotzone{
-	
+
 	var $id;
 	var $name;
 	var $unit;
@@ -32,24 +32,24 @@ class WPSimileTimelineHotzone{
 	var $end_date;
 	var $magnify;
 	var $multiple;
-	
+
 	var $table_name = "stl_timeline_hotzones";
 
 	function __construct(){
 		// empty constructor
 	}
-	
+
 	/*
 	 * Installs table for Timeline hotzones
 	 */
-	function createTable(){
-			
+	public static function createTable(){
+
 		global $wpdb;
-		
+
 		$hotzone_object = new WPSimileTimelineHotzone();
 		$table_name = $wpdb->prefix . $hotzone_object->table_name;
 		if($wpdb->get_var("SHOW TABLES LIKE '$table_name'") != $table_name) {
-	
+
 			$sql = "CREATE TABLE " . $table_name . " (
 				  `id` int(11) NOT NULL auto_increment,
 				  `name` varchar(210) NOT NULL,
@@ -61,12 +61,12 @@ class WPSimileTimelineHotzone{
 				  `unit` int(11) NOT NULL,
 				  PRIMARY KEY  (`id`)
 				);";
-	
+
 			require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 			dbDelta($sql);
 	   }
 	}
-	
+
 	function create($data){
             foreach($data as $key=>$value){
                     $this->{$key} = $value;
@@ -84,7 +84,7 @@ class WPSimileTimelineHotzone{
                 $this->end_date = adodb_date2('Y-m-d H:i:s', $ds2);
             }
 	}
-	
+
 	/**
 	 * Saves to DB
 	 */
@@ -119,7 +119,7 @@ class WPSimileTimelineHotzone{
 			);
 		}
 	}
-	
+
 	function delete($id){
 		global $wpdb;
 
@@ -128,8 +128,8 @@ class WPSimileTimelineHotzone{
 			$wpdb->query($query);
 		}
 	}
-	
-	
+
+
 	function read($id) {
 		global $wpdb;
 
@@ -137,7 +137,7 @@ class WPSimileTimelineHotzone{
 
 		$get = "SELECT * FROM " . $table_name .  " WHERE stl_timeline_band_id = %d";
 		$res = $wpdb->get_results($wpdb->prepare($get, $id));
-		
+
 		$h = array();
 		foreach($res as $r){
 			$hotzone_object = new WPSimileTimelineHotzone();

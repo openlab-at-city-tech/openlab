@@ -90,6 +90,25 @@ add_action(
 );
 
 /**
+ * Loads admin-only JS for OpenLab site themes.
+ */
+add_action(
+	'admin_enqueue_scripts',
+	function() {
+		$t = get_stylesheet();
+		return;
+
+		switch ( $t ) {
+			case 'neve':
+				$subdir = $t;
+
+				wp_enqueue_script( $t, content_url( 'mu-plugins/theme-fixes/' . $subdir . '/' . $t . '-admin.js', array( 'jquery' ) ) );
+			break;
+		}
+	}
+);
+
+/**
  * Arrange themes so that preferred themes appear first in the list.
  */
 function openlab_reorder_theme_selections( $themes ) {

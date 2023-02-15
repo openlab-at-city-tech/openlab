@@ -4,27 +4,27 @@
  * @author freshlabs
  * @link http://wordpress.org/extend/plugins/wp-simile-timeline/
  * @package wp-simile-timeline
- * 
+ *
 	===========================================================================
 	SIMILE Timeline for WordPress
 	Copyright (C) 2006-2019 freshlabs
-	
+
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
 	the Free Software Foundation, either version 3 of the License, or
 	(at your option) any later version.
-	
+
 	This program is distributed in the hope that it will be useful,
 	but WITHOUT ANY WARRANTY; without even the implied warranty of
 	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 	GNU General Public License for more details.
-	
+
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	===========================================================================
 */
 class WPSimileTimelineDecorator{
-	
+
 	var $id;
 	var $name;
 	var $type;
@@ -41,18 +41,18 @@ class WPSimileTimelineDecorator{
 	function __construct(){
 		// empty constructor
 	}
-	
+
 	/**
 	 * Installs table for Highlight decorators
 	 */
-	function createTable(){
-			
+	public static function createTable(){
+
 		global $wpdb;
-	
+
 		$decorator_object = new WPSimileTimelineDecorator();
 		$table_name = $wpdb->prefix . $decorator_object->table_name;
 		if($wpdb->get_var("SHOW TABLES LIKE '$table_name'") != $table_name) {
-	
+
 			$sql = "CREATE TABLE " . $table_name . " (
 				  `id` int(11) NOT NULL auto_increment,
 				  `name` varchar(210) NOT NULL,
@@ -67,12 +67,12 @@ class WPSimileTimelineDecorator{
 				  `opacity` int(11) NOT NULL,
 				  PRIMARY KEY  (`id`)
 				);";
-	
+
 			require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 			dbDelta($sql);
 	   }
 	}
-	
+
 	function create($data){
             foreach($data as $key=>$value){
                     $this->{$key} = $value;
@@ -90,13 +90,13 @@ class WPSimileTimelineDecorator{
                 $this->end_date = adodb_date2('Y-m-d H:i:s', $ds2);
             }
 	}
-	
+
 	/**
 	 * Saves to DB
 	 */
 	function save(){
 		global $wpdb;
-		
+
 		if(isset($this->id) && $this->id != 'new'){
 			// update existing hotzone
 			$query = "UPDATE ".$wpdb->prefix. $this->table_name .
@@ -119,7 +119,7 @@ class WPSimileTimelineDecorator{
 			$wpdb->query($wpdb->prepare($query, $this->name, $this->type, $this->start_date, $this->end_date, $this->start_label, $this->end_label, $this->color, $this->css_class, $this->opacity, $this->stl_timeline_band_id));
 		}
 	}
-	
+
 	function delete($id){
 		global $wpdb;
 		if(isset($id)){
@@ -127,8 +127,8 @@ class WPSimileTimelineDecorator{
 			$wpdb->query($query);
 		}
 	}
-	
-	
+
+
 	function read($id) {
 		global $wpdb;
 
@@ -136,7 +136,7 @@ class WPSimileTimelineDecorator{
 
 		$get = "SELECT * FROM " . $table_name .  " WHERE stl_timeline_band_id = %d";
 		$res = $wpdb->get_results($wpdb->prepare($get, $id));
-		
+
 		$h = array();
 		foreach($res as $r){
 			$decorator_obj = new WPSimileTimelineDecorator();
@@ -145,7 +145,7 @@ class WPSimileTimelineDecorator{
 		}
 		return $h;
 	}
-	
+
 	function get_types(){
 		return array(
 			'Timeline.PointHighlightDecorator',

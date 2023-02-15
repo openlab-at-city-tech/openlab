@@ -1,0 +1,30 @@
+sudo: required
+
+dist: trusty
+
+language: php
+
+services:
+  - docker
+
+notifications:
+  email:
+    on_success: never
+    on_failure: change
+
+cache:
+  directories:
+    - $HOME/.composer/cache
+    - $HOME/.phpbrew
+    - $HOME/.npm
+
+before_install:
+  - nvm install && nvm use
+  - npm install npm -g
+
+jobs:
+  include:
+    - stage: test
+      env: WP_VERSION=latest DOCKER=true
+      script:
+        - ./bin/run-wp-unit-tests.sh

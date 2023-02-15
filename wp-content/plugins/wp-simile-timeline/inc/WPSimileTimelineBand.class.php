@@ -4,27 +4,27 @@
  * @author freshlabs
  * @link http://wordpress.org/extend/plugins/wp-simile-timeline/
  * @package wp-simile-timeline
- * 
+ *
 	===========================================================================
 	SIMILE Timeline for WordPress
 	Copyright (C) 2006-2019 freshlabs
-	
+
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
 	the Free Software Foundation, either version 3 of the License, or
 	(at your option) any later version.
-	
+
 	This program is distributed in the hope that it will be useful,
 	but WITHOUT ANY WARRANTY; without even the implied warranty of
 	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 	GNU General Public License for more details.
-	
+
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	===========================================================================
 */
 class WPSimileTimelineBand{
-	
+
 	var $id;
 	var $name;
 	var $height;
@@ -38,23 +38,23 @@ class WPSimileTimelineBand{
 
 	var $hotzones;
 	var $decorators;
-	
+
 	var $table_name = "stl_timeline_bands";
-	
+
 	function __construct(){
 		/* empty constructor */
 	}
-	
+
 	/* ---------------------------------------------------------------------------------
 	 * install table for Timeline bandds
 	 * --------------------------------------------------------------------------------*/
-	function createTable(){
-			
+	public static function createTable(){
+
 		global $wpdb;
-	
+
 		$table_name = $wpdb->prefix . "stl_timeline_bands";
 		if($wpdb->get_var("SHOW TABLES LIKE '$table_name'") != $table_name) {
-	
+
 			$sql = "CREATE TABLE " . $table_name . " (
 				  `id` int(11) NOT NULL auto_increment,
 				  `name` varchar(210) NOT NULL,
@@ -68,10 +68,10 @@ class WPSimileTimelineBand{
 				  `show_labels` int(11) NOT NULL,
 				  PRIMARY KEY  (`id`)
 				);";
-	
+
 			require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 			dbDelta($sql);
-			
+
 			// fill with standard timeline bands
 			$insert = "INSERT INTO " . $table_name . " (name, height, unit, interval_size, bg_color, interval_color, ether_highlight_color, highlight_label_color, show_labels) " .
 				  	  "VALUES (%s, %s, %d, %d, %s, %s, %s, %s, %d)";
@@ -91,7 +91,7 @@ class WPSimileTimelineBand{
 	 */
 	function save(){
 		global $wpdb;
-		
+
 		// Update existing band (id is set)
 		if(isset($this->id) && $this->id != 'new'){
 			$query = "UPDATE ".$wpdb->prefix. $this->table_name .
@@ -139,12 +139,12 @@ class WPSimileTimelineBand{
 				)
 			);
 		}
-		
+
 		// save related hotzones
 		if(!empty($this->hotzones)){
 			foreach($this->hotzones as $hotzone){
 				if($hotzone['stl_timeline_band_id'] == 'new'){
-					$hotzone['stl_timeline_band_id'] = $wpdb->insert_id; 
+					$hotzone['stl_timeline_band_id'] = $wpdb->insert_id;
 				}
 				if(!empty($hotzone['name'])){
 					$hotzone_object = new WPSimileTimelineHotzone();
@@ -157,7 +157,7 @@ class WPSimileTimelineBand{
 		if(!empty($this->decorators)){
 			foreach($this->decorators as $decorator){
 				if($decorator['stl_timeline_band_id'] == 'new'){
-					$decorator['stl_timeline_band_id'] = $wpdb->insert_id; 
+					$decorator['stl_timeline_band_id'] = $wpdb->insert_id;
 				}
 				if(!empty($decorator['name'])){
 					$decorator_obj = new WPSimileTimelineDecorator();
@@ -167,7 +167,7 @@ class WPSimileTimelineBand{
 			}
 		}
 	}
-	
+
 	/**
 	 * Read from DB
 	 */
@@ -180,12 +180,12 @@ class WPSimileTimelineBand{
 		$res = $wpdb->get_row($get);
 		return $res;
 	}
-	
+
 	/**
 	 * Delete band and related hotzones and decorators
 	 */
 	function delete($id){
-		
+
 	}
 
 	/**

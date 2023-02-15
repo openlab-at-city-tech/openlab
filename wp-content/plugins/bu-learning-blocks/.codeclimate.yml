@@ -1,0 +1,40 @@
+version: "2"
+
+checks:
+  argument-count:
+    enabled: true
+  complex-logic:
+    enabled: true
+  file-lines:
+    enabled: true
+  method-complexity:
+    enabled: true
+  method-count:
+    enabled: true
+  method-lines:
+    enabled: true
+    config:
+      threshold: 100
+  nested-control-flow:
+    enabled: true
+  return-statements:
+    enabled: true
+  similar-code:
+    enabled: false
+  identical-code:
+    enabled: true
+
+plugins:
+  eslint:
+    enabled: true
+  phpcodesniffer:
+    enabled: true
+    config:
+      file_extensions: php
+      standard: WordPress
+      ignore_warnings: false
+
+exclude_patterns:
+- "**/node_modules/"
+- "vendor/"
+- "build/"

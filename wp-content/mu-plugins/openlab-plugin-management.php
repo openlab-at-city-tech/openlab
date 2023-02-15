@@ -29,6 +29,8 @@ function openlab_hide_plugins( $plugins ) {
 		'bp-customizable-group-categories/bp-customizable-group-categories.php',
 		'bp-event-organiser/bp-event-organiser.php',
 		'bp-reply-by-email/loader.php',
+		'bu-learning-blocks/bu-learning-blocks.php', // #3149
+		'bu-navigation/bu-navigation.php', // #3149
 		'cac-featured-content/cac-featured-content.php',
 		'cac-non-cuny-signup/loader.php',
 		'cardboard/cardboard.php',
@@ -54,6 +56,7 @@ function openlab_hide_plugins( $plugins ) {
 		'gravity-forms-addons/gravity-forms-addons.php',
 		'gravityperks/gravityperks.php',
 		'import-html-pages/html-import.php',
+		'inline-comments/inline-comments.php',
 		'kb-gradebook/kb-gradebook.php',
 		'link-manager/link-manager.php',
 		'mailchimp-for-wp/mailchimp-for-wp.php',
