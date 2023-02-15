@@ -84,7 +84,6 @@ function openlab_ass_admin_notice_form() {
 /**
  * show group subscription settings on the notification page.
  * @global type $bp
- * @return boolean
  */
 function openlab_ass_group_subscribe_settings() {
     global $bp;
