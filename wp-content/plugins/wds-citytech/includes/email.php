@@ -10,11 +10,12 @@
  * @return type
  */
 function openlab_group_type_in_notification_subject( $subject ) {
+	global $groups_template;
 
 	if ( ! empty( $groups_template->group->id ) ) {
 		$group_id = $groups_template->group->id;
-	} elseif ( ! empty( $bp->groups->current_group->id ) ) {
-		$group_id = $bp->groups->current_group->id;
+	} elseif ( bp_is_group() ) {
+		$group_id = bp_get_current_group_id();
 	} else {
 		return $subject;
 	}
