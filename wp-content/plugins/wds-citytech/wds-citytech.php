@@ -2135,7 +2135,7 @@ add_action( 'wp', 'openlab_swap_private_blog_message' );
 function openlab_private_blog_message() {
 	global $ds_more_privacy_options;
 
-	if( strpos($_SERVER['PHP_SELF'], 'wp-activate.php') && is_main_site()) return;		
+	if( strpos($_SERVER['PHP_SELF'], 'wp-activate.php') && is_main_site()) return;
 	if( strpos($_SERVER['PHP_SELF'], 'wp-activate.php') && !is_main_site()) {
 		$destination = network_home_url('wp-activate.php');
 		wp_redirect( $destination );
