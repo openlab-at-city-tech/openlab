@@ -69,21 +69,92 @@ ignores_joined="${ignores_joined:${#separator}}" # remove leading separator
 
 ignore="--ignore=$ignores_joined"
 
-for dir in ${dirs[*]}
-do
-  subdirs=$(find $dir -maxdepth 1 -mindepth 1 -type d)
-  for subdir in ${subdirs[*]}
+###
+# Parallel processing helpers
+# See https://unix.stackexchange.com/questions/103920/parallelize-a-bash-for-loop
+#
+# Initialize a semaphore with a given number of tokens.
+open_sem(){
+    mkfifo pipe-$$
+    exec 3<>pipe-$$
+    rm pipe-$$
+    local i=$1
+    for((;i>0;i--)); do
+        printf %s 000 >&3
+    done
+}
+
+# Run the given command asynchronously and pop/push tokens.
+run_with_lock(){
+    local x
+    # this read waits until there is something to read
+    read -u 3 -n 3 x && ((0==x)) || exit $x
+    (
+     ( "$@"; )
+    # push the return code of the command to the semaphore
+    printf '%.3d' $? >&3
+    )&
+}
+# End parallel processing helpers.
+###
+
+# Run PHPCS on a given location with the global ignore rules defined above.
+run_subdir_phpcs() {
+  echo "Testing $1..."
+  results=$(./vendor/bin/phpcs -ps --extensions=php,inc --standard=developer/phpcs/CAC --warning-severity=0 --runtime-set testVersion 7.4- $ignore $1)
+  if [ $? -eq 1 ]
+  then
+    echo "$results"
+    passing=1
+  else
+    printf "."
+  fi
+}
+
+# Open 4 threads.
+open_sem 4
+
+if [ "$since" = "" ]
+then
+  for dir in ${dirs[*]}
   do
-    echo "Testing $subdir..."
-    results=$(./vendor/bin/phpcs -p --extensions=php,inc --standard=PHPCompatibilityWP --warning-severity=0 --runtime-set testVersion 8.0 $ignore $subdir)
-    if [ $? -eq 1 ]
+    subdirs=$(find $dir -maxdepth 1 -mindepth 1 -type d)
+
+    # If subdirectories are found, scan subdirectories. If none are found,
+    # scan the directory itself.
+    if [[ ${#subdirs} -gt 0 ]]
     then
-      echo "$results"
-      passing=1
+      for subdir in ${subdirs[*]}
+      do
+        # Run PHPCS on the subdirectory in an available thread.
+        run_with_lock run_subdir_phpcs $subdir
+      done
     else
-      echo "Passed"
+      # Run PHPCS on the directory in an available thread.
+      run_with_lock run_subdir_phpcs $dir
     fi
   done
-done
+else
+  echo "Examining only files edited in $since days"
+  for dir in ${dirs[*]}
+  do
+    files=$(find $dir -mtime $since -type f -name "*.php")
+    for file in ${files[*]}
+    do
+      echo "Testing $file..."
+      results=$(./vendor/bin/phpcs -p --extensions=php,inc --standard=PHPCompatibilityWP --warning-severity=0 --runtime-set testVersion 7.4- $ignore $file)
+      if [ $? -eq 1 ]
+      then
+        echo "$results"
+        passing=1
+      else
+        echo "Passed"
+      fi
+    done
+  done
+fi
+
+# Wait for any open jobs to finish before exiting.
+wait
 
 exit $passing
