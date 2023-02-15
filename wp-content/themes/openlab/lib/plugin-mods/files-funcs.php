@@ -669,14 +669,14 @@ function openlab_get_document_type( $file_name ) {
  *
  */
 function openlab_external_link_icon( $url ) {
-	$url = parse_url( $url );
+	$url_parts = parse_url( $url );
 
-	if( ! isset( $url['host'] ) ) {
+	if( ! isset( $url_parts['host'] ) ) {
 		return;
 	}
 	?>
-	<a role="presentation" class="group-documents-icon" href="<?php echo $file_name; ?>" target="_blank">
-		<img class="bp-group-documents-icon" src="<?php echo get_template_directory_uri(); ?>/images/doc-icons/<?php echo openlab_get_service_from_url( $url['host'] ); ?>.png" alt="">
+	<a role="presentation" class="group-documents-icon" href="<?php echo esc_url( $url ); ?>" target="_blank">
+		<img class="bp-group-documents-icon" src="<?php echo get_template_directory_uri(); ?>/images/doc-icons/<?php echo openlab_get_service_from_url( $url_parts['host'] ); ?>.png" alt="">
 		<span class="sr-only">View document</span>
 	</a>
 	<?php
