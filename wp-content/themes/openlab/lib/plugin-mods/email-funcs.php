@@ -432,9 +432,9 @@ add_filter(
 			// No need for the 'in [group]' in this context.
 			$activity_action = preg_replace( '| in <a[^>]+>.*?</a>$|', '', $activity->action );
 
-			$timestamp        = strtotime( $item->date_recorded );
-			$time_posted      = get_date_from_gmt( $item->date_recorded, get_option( 'time_format' ) );
-			$date_posted      = get_date_from_gmt( $item->date_recorded, get_option( 'date_format' ) );
+			$timestamp        = strtotime( $activity->date_recorded );
+			$time_posted      = get_date_from_gmt( $activity->date_recorded, get_option( 'time_format' ) );
+			$date_posted      = get_date_from_gmt( $activity->date_recorded, get_option( 'date_format' ) );
 			$activity_action .= sprintf( ' at %s, %s:', $time_posted, $date_posted );
 
 			// Links should be bold.
