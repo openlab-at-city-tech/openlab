@@ -13,12 +13,12 @@ class Clone_Async_Process extends WP_Async_Request {
 			return;
 		}
 
+		$group_id = (int) $_POST['group_id'];
+
 		$running = groups_get_groupmeta( $group_id, 'clone_in_progress', true );
 		if ( $running && ( ( time() - $running ) < ( 5 * MINUTES_IN_SECONDS ) ) ) {
 			return;
 		}
-
-		$group_id = (int) $_POST['group_id'];
 
 		$steps = groups_get_groupmeta( $group_id, 'clone_steps', true );
 
