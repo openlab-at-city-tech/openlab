@@ -225,6 +225,8 @@ class OpenLab_Library_Tools_Widget extends WP_Widget {
 		<?php wp_nonce_field( 'openlab_library_widget', 'openlab-library-widget-nonce', false ); ?>
 
 		<?php
+
+		return '';
 	}
 
 	public function update( $new_instance, $old_instance ) {
@@ -701,6 +703,8 @@ class OpenLab_Library_Subject_Guides_Widget extends WP_Widget {
 		<?php wp_nonce_field( 'openlab_library_subject_guides', 'openlab-library-subject-guides-nonce', false ); ?>
 
 		<?php
+
+		return '';
 	}
 
 	public function update( $new_instance, $old_instance ) {

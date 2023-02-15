@@ -136,6 +136,8 @@ class OpenLab_License_Widget extends WP_Widget {
 		</p>
 
 		<?php
+
+		return '';
 	}
 
 	public function update( $new_instance, $old_instance ) {
