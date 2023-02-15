@@ -415,7 +415,7 @@ add_filter( 'bp_activity_before_save', 'openlab_pre_save_comment_activity', 2 );
  * should have these features enabled.
  */
 add_filter( 'bp_docs_enable_group_create_step', '__return_false' );
-add_filter(
+add_action(
 	'groups_created_group',
 	function( $group_id ) {
 		if ( ! openlab_is_portfolio( $group_id ) ) {
