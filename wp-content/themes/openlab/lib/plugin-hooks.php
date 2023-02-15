@@ -651,7 +651,6 @@ function openlab_refresh_term_cache_after_ordering_update() {
 	if ( is_array( $unserialised_data ) ) {
 		foreach ( $unserialised_data as $key => $values ) {
 			$items = explode( '&', $values );
-			unset( $item );
 			foreach ( $items as $item_key => $item_ ) {
 				$items[ $item_key ] = trim( str_replace( 'item[]=', '', $item_ ) );
 			}
