@@ -2326,6 +2326,7 @@ class OpenLab_Course_Portfolios_Widget extends WP_Widget {
 					</p>
 
 		<?php
+		return '';
 	}
 
 	protected function enqueue_scripts() {
