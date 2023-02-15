@@ -512,7 +512,7 @@ function openlab_group_blog_remove_comment_activity( $comment_id ) {
 		bp_blogs_delete_activity(
 			array(
 				'item_id'           => $group_id,
-				'secondary_item_id' => $post_id,
+				'secondary_item_id' => $comment_id,
 				'component'         => 'groups',
 				'type'              => 'new_blog_comment',
 			)
