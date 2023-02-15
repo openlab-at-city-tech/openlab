@@ -351,23 +351,6 @@ function openlab_return_course_list( $school, $department ) {
 	return $list;
 }
 
-function openlab_group_post_count($filters, $group_args) {
-
-    $post_count = 0;
-
-    $meta_filter = new BP_Groups_Meta_Filter($filters);
-    if (bp_has_groups($group_args)) :
-
-        while (bp_groups()) : bp_the_group();
-            $post_count++;
-        endwhile;
-
-    endif;
-    $meta_filter->remove_filters();
-
-    return $post_count;
-}
-
 //a variation on bp_groups_pagination_count() to match design
 function cuny_groups_pagination_count($group_name = '') {
     global $bp, $groups_template;
