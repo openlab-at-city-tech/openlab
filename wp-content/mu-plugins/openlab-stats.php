@@ -5,6 +5,12 @@
  */
 
 class OpenLab_Stats {
+	protected $term;
+	protected $terms;
+	protected $year;
+	protected $start_date;
+	protected $end_date;
+
 	public function __construct() {
 		if ( ! is_admin() ) {
 			return;
