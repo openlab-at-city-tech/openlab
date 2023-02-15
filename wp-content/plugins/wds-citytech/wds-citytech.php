@@ -1321,7 +1321,7 @@ function ra_copy_blog_page( $group_id ) {
 						}
 
 						// copy media
-						OpenLab_Clone_Course_Site::copyr( $src_upload_dir['basedir'], str_replace( $src_id, $new_id, $src_upload_dir['basedir'] ) );
+						Openlab_Clone_Course_Site::copyr( $src_upload_dir['basedir'], str_replace( $src_id, $new_id, $src_upload_dir['basedir'] ) );
 
 						// update options
 						$skip_options = array(
