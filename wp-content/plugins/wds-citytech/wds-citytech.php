@@ -99,7 +99,7 @@ function openlab_get_default_avatar_uri() {
 	$uri = openlab_get_stylesheet_dir_uri() . '/images/default-avatar.jpg';
 	return str_replace( 'http://openlabdev.org', 'https://openlab.citytech.cuny.edu', $uri );
 }
-add_filter( 'bp_core_mysteryman_src', 'openlab_get_default_avatar_uri', 2, 7 );
+add_filter( 'bp_core_mysteryman_src', 'openlab_get_default_avatar_uri', 2 );
 
 /**
  * Custom default avatar

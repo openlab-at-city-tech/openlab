@@ -145,7 +145,7 @@ To view this $grouptype log in and follow the link below:
 		return $translation;
 	}
 }
-add_filter( 'gettext', array( 'bpass_Translation_Mangler', 'filter_gettext' ), 10, 4 );
+add_filter( 'gettext', array( 'bpass_Translation_Mangler', 'filter_gettext' ), 10, 3 );
 
 /**
  * Add members to wpms website if attached to bp group and they are a group member
