@@ -178,8 +178,7 @@ function openlab_help_categories_menu($items, $args) {
         }
 
         $help_args = array(
-            'hide_empty' => false,
-            'orderby' => 'term_order',
+            'orderby'    => 'term_order',
             'hide_empty' => false
         );
         $help_cats = get_terms('help_category', $help_args);
@@ -235,10 +234,9 @@ function openlab_help_categories_menu($items, $args) {
                     $help_cat_list .= '<ul>';
 
                     $child_args = array(
+                        'orderby'    => 'term_order',
                         'hide_empty' => false,
-                        'orderby' => 'term_order',
-                        'hide_empty' => false,
-                        'parent' => $help_cat->term_id
+                        'parent'     => $help_cat->term_id
                     );
                     $child_cats = get_terms('help_category', $child_args);
                     foreach ($child_cats as $child_cat) {
