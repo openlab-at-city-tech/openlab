@@ -18,7 +18,6 @@ add_action('wp_print_styles', 'openlab_dequeue_invite_anyone_styles', 999);
 /**
  * Invite new members custom
  * @global type $bp
- * @return type
  */
 function openlab_invite_anyone_screen_one_content() {
 
