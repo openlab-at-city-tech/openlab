@@ -40,7 +40,7 @@ add_filter( 'the_content', __NAMESPACE__ . '\\render_attributions', 12 );
  */
 function openlab_get_formatted_content_with_attributions($content = '') {
 	$doc = new DOMDocument();
-	@$doc->loadHTML($content);
+	@$doc->loadHTML( '<?xml encoding="UTF-8">' . $content );
 
 	$finder = new \DomXPath($doc);
 	$className = 'attribution-anchor';
