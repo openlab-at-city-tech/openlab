@@ -54,7 +54,7 @@ function openlab_get_formatted_content_with_attributions($content = '') {
 		$newNode->setAttribute('id', $node->getAttribute('id'));
 		$newNode->setAttribute('aria-label', $node->getAttribute('aria-label'));
 		$newNode->setAttribute('class', $node->getAttribute('class'));
-		
+
 		$node->parentNode->replaceChild($newNode, $node);
 	}
 
