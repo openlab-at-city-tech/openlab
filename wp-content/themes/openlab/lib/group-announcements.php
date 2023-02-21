@@ -336,11 +336,12 @@ function openlab_handle_announcement_post() {
 		$group_id = apply_filters( 'bp_activity_post_update_item_id', $_POST['whats-new-post-in'] );
 	}
 
+	$title = '';
 	if ( ! empty( $_POST['announcement-title'] ) ) {
 		$title = sanitize_text_field( wp_unslash( $_POST['announcement-title'] ) );
 	}
 
-	if ( ! $group_id ) {
+	if ( empty( $group_id ) ) {
 		return;
 	}
 
