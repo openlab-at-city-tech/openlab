@@ -12,7 +12,7 @@ function openlab_fix_fallback_menu_for_hemingway( $output ) {
 	}
 
 	$dbs    = debug_backtrace();
-	$gp_key = null;
+	$lp_key = null;
 	foreach ( $dbs as $key => $db ) {
 		if ( 'wp_list_pages' === $db['function'] ) {
 			$lp_key = $key;
