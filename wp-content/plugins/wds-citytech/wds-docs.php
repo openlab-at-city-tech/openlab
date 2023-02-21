@@ -96,9 +96,6 @@ function wds_docs_shortcode( $atts ) {
 	foreach ( $categories as $category ) {
 		if ( $category->cat_name ) {
 			$option = '<option value="' . $category->slug . '"';
-			if ( $category->cat_name == $meta_value ) {
-				$option .= ' selected';
-			}
 			$option .= '>';
 			$option .= $category->cat_name;
 			$option .= '</option>';
