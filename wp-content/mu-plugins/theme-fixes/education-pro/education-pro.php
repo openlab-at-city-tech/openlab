@@ -62,7 +62,11 @@ add_action(
 add_action(
 	'customize_controls_enqueue_scripts',
 	function() {
-		wp_enqueue_script( 'openlab-education-pro-customize', content_url( 'mu-plugins/theme-fixes/education-pro/customize.js', array( 'jquery' ) ) );
+		wp_enqueue_script(
+			'openlab-education-pro-customize',
+			content_url( 'mu-plugins/theme-fixes/education-pro/customize.js' ),
+			[ 'jquery' ]
+		);
 	}
 );
 
