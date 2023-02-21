@@ -340,7 +340,7 @@ function wds_load_group_departments() {
 	}
 	sort( $departments );
 
-	if ( 'portfolio' == strtolower( $group_type ) && $is_group_create ) {
+	if ( 'portfolio' == strtolower( $group_type ) && $is_group_create && isset( $dept_field ) ) {
 		$wds_departments = (array) bp_get_profile_field_data(
 			array(
 				'field'   => $dept_field,
@@ -767,9 +767,10 @@ function wds_load_group_type( $group_type ) {
 
 	$return = '';
 
+	$do_echo = false;
 	if ( $group_type ) {
-		$echo   = true;
-		$return = '<input type="hidden" name="group_type" value="' . ucfirst( $group_type ) . '">';
+		$do_echo = true;
+		$return  = '<input type="hidden" name="group_type" value="' . ucfirst( $group_type ) . '">';
 	} else {
 		$group_type = $_POST['group_type'];
 	}
@@ -929,7 +930,7 @@ function wds_load_group_type( $group_type ) {
 		$return .= '</table></div></div><!--.panel-->';
 	}
 
-	if ( $echo ) {
+	if ( $do_echo ) {
 		return $return;
 	} else {
 		$return = str_replace( "'", "\'", $return );
