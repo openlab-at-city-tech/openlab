@@ -647,7 +647,7 @@ function openlab_generate_announcement_activity( $announcement_id ) {
 	$group_id = (int) get_post_meta( $announcement_id, 'openlab_announcement_group_id', true );
 	$group    = groups_get_group( $group_id );
 
-	$hide_sitewide = ! empty( $group ) && isset( $group->status ) && 'public' !== $group->status;
+	$hide_sitewide = 'public' !== $group->status;
 
 	$announcement_url  = bp_get_group_permalink( $group ) . 'announcements/#announcement-item-' . $announcement_id;
 	$announcement_link = sprintf( '<a href="%s">%s</a>', esc_url( $announcement_url ), get_the_title( $post ) );
@@ -694,7 +694,7 @@ function openlab_generate_announcement_reply_activity( $reply_id, $announcement_
 	$group_id = (int) get_post_meta( $announcement_id, 'openlab_announcement_group_id', true );
 	$group    = groups_get_group( $group_id );
 
-	$hide_sitewide = ! empty( $group ) && isset( $group->status ) && 'public' !== $group->status;
+	$hide_sitewide = 'public' !== $group->status;
 
 	$announcement_url  = bp_get_group_permalink( $group ) . 'announcements/#announcement-item-' . $announcement_id;
 	$announcement_link = sprintf( '<a href="%s">%s</a>', esc_url( $announcement_url ), get_the_title( $post ) );
