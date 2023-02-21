@@ -242,7 +242,7 @@ function wds_default_theme() {
 		}
 		$theme = get_option( 'template' );
 		if ( 'bp-default' === $theme ) {
-			switch_theme( 'twentyten', 'twentyten' );
+			switch_theme( 'twentyten' );
 			wp_redirect( home_url() );
 			exit();
 		}
