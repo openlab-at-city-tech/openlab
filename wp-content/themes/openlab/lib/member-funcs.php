@@ -93,13 +93,11 @@ function openlab_list_members( $view ) {
 			 FROM {$bp->profile->table_name_data}
 			 WHERE field_id NOT IN ({$first_name_field_id}, {$last_name_field_id})";
 
-		if ( ! empty( $search_terms_a ) ) {
-			$match_clauses = array();
-			foreach ( $search_terms_a as $search_term ) {
-				$match_clauses[] = "value LIKE '%" . esc_sql( like_escape( $search_term ) ) . "%'";
-			}
-			$search_query .= ' AND ( ' . implode( ' AND ', $match_clauses ) . ' )';
+		$match_clauses = array();
+		foreach ( $search_terms_a as $search_term ) {
+			$match_clauses[] = "value LIKE '%" . esc_sql( like_escape( $search_term ) ) . "%'";
 		}
+		$search_query .= ' AND ( ' . implode( ' AND ', $match_clauses ) . ' )';
 
 		$search_terms_matches = $wpdb->get_col( $search_query );
 
