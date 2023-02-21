@@ -184,11 +184,12 @@ function openlab_loader_class() {
 add_action('wp_head', 'openlab_loader_class', 999);
 
 /**
- * Custom MCE buttons when needed
- * @param type $buttons
- * @return type
+ * Custom MCE buttons when needed.
+ *
+ * @param array $init TinyMCE initialization data.
+ * @return array
  */
-function openlab_mce_buttons($init, $editor) {
+function openlab_mce_buttons( $init ) {
 
     if (function_exists('bpeo_is_action')) {
         if (bpeo_is_action('new') || bpeo_is_action('edit')) {
@@ -205,8 +206,7 @@ function openlab_mce_buttons($init, $editor) {
 
     return $init;
 }
-
-add_filter('tiny_mce_before_init', 'openlab_mce_buttons', 10, 2);
+add_filter( 'tiny_mce_before_init', 'openlab_mce_buttons' );
 
 function openlab_group_creation_categories() {
     $cats_out = '';
