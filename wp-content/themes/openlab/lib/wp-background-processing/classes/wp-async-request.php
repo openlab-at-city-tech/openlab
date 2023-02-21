@@ -8,6 +8,8 @@
 
 namespace OpenLab;
 
+use \WP_Error;
+
 /**
  * Abstract WP_Async_Request class.
  *
@@ -79,7 +81,7 @@ abstract class WP_Async_Request {
 	/**
 	 * Dispatch the async request
 	 *
-	 * @return array|WP_Error
+	 * @return array|\WP_Error
 	 */
 	public function dispatch() {
 		$url  = add_query_arg( $this->get_query_args(), $this->get_query_url() );
