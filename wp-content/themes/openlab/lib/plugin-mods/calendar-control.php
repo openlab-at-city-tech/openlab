@@ -462,7 +462,7 @@ function openlab_bpeo_extra_venue_meta( $venue_id ) {
 			//check for legacy
 			$post_ids = get_metadata( 'eo_venue', $venue_id, '_postids', true );
 
-			if ( $post_ids && ! empty( $post_ids ) ) {
+			if ( $post_ids ) {
 
 				$post_ids[] = $_POST['post_ID'];
 				$post_ids   = array_unique( $post_ids );
@@ -480,7 +480,7 @@ function openlab_bpeo_extra_venue_meta( $venue_id ) {
 			//check for legacy
 			$user_ids = get_metadata( 'eo_venue', $venue_id, '_userids', true );
 
-			if ( $user_ids && ! empty( $user_ids ) ) {
+			if ( $user_ids ) {
 
 				$user_ids[] = $_POST['user_ID'];
 				$user_ids   = array_unique( $user_ids );
