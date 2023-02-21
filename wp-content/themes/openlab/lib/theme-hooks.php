@@ -61,9 +61,9 @@ add_filter('the_content', 'openlab_custom_the_content');
 
 /**
  * OpenLab main menu markup
- * @param type $location
+ * @param string $location
  */
-function openlab_main_menu($location = 'header') {
+function openlab_main_menu( $location = 'header' ) {
     ?>
     <nav class="navbar navbar-default oplb-bs navbar-location-<?php echo $location ?>" role="navigation">
         <?php openlab_sitewide_header($location); ?>
