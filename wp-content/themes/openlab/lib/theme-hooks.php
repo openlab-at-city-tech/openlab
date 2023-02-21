@@ -60,7 +60,8 @@ HTML;
 add_filter('the_content', 'openlab_custom_the_content');
 
 /**
- * OpenLab main menu markup
+ * OpenLab main menu markup.
+ *
  * @param string $location
  */
 function openlab_main_menu( $location = 'header' ) {

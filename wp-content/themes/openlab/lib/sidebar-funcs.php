@@ -49,8 +49,9 @@ function openlab_bp_sidebar($type, $mobile_dropdown = false, $extra_classes = ''
 }
 
 /**
- * Mobile sidebar - for when a piece of the sidebar needs to appear above the content in the mobile space
- * @param type $type
+ * Mobile sidebar - for when a piece of the sidebar needs to appear above the content in the mobile space.
+ *
+ * @param string $type Sidebar type. 'members', 'about'.
  */
 function openlab_bp_mobile_sidebar($type) {
 
@@ -123,10 +124,11 @@ function openlab_learnmore_sidebar() {
 }
 
 /**
- * Member pages sidebar - modularized for easier parsing of mobile menus
- * @param type $mobile
+ * Member pages sidebar - modularized for easier parsing of mobile menus.
+ *
+ * @param bool $mobile Whether to render the mobile menu. Default fals.
  */
-function openlab_member_sidebar_menu($mobile = false) {
+function openlab_member_sidebar_menu( $mobile = false ) {
 
     if (!$dud = bp_displayed_user_domain()) {
         $dud = bp_loggedin_user_domain(); // will always be the logged in user on my-*
