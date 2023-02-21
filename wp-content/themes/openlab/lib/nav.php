@@ -77,7 +77,8 @@ function openlab_loop_pagination_links_filter($has_items) {
             $count = (int) $t->total_member_count;
             break;
     }
-    if (empty($t)) {
+
+    if ( ! isset( $t ) || ! isset( $pagarg ) || ! isset( $count ) ) {
         return $has_items;
     }
     if ($count && (int) $t->pag_num) {
