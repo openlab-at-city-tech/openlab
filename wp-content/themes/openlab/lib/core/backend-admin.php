@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Custom admin functionality  
+ * Custom admin functionality
  */
 
 /**
@@ -74,7 +74,7 @@ function openlab_process_footer_links() {
         $links_data_out['accessibility_info_title'] = '';
 
         update_option('footer_link_accessibility_help_post', 0);
-        
+
         $links_data_out['error_message'] = 'Help post selection for the accessibility info link returned a zero value. This will hide that link in the footer. If this was not your intention, please try again or contact support.';
     }
 
