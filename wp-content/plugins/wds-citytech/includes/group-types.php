@@ -228,7 +228,7 @@ function openlab_group_is_hidden( $group_id = 0 ) {
 		$group = groups_get_group( array( 'group_id' => $group_id ) );
 	}
 
-	if ( empty( $group ) ) {
+	if ( empty( $group->id ) ) {
 		return $is_hidden;
 	} else {
 		return isset( $group->status ) && 'hidden' == $group->status;
