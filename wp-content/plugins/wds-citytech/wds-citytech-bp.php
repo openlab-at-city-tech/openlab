@@ -223,7 +223,7 @@ add_filter( 'messages_send_notice', 'openlab_send_notice_email', 10, 2 );
  */
 function openlab_redirect_to_profile_edit_group() {
 	if ( bp_is_user_profile_edit() ) {
-		if ( ! bp_action_variables( 1 ) ) {
+		if ( ! bp_action_variables() ) {
 			 $account_type = openlab_get_user_member_type( bp_displayed_user_id() );
 			if ( $account_type === 'student' ) {
 				$pgroup = '2';
