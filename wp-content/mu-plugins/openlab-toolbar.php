@@ -1138,7 +1138,9 @@ HTML;
 
 	public function add_custom_edit_menu( $wp_admin_bar ) {
 		global $tag, $wp_the_query;
-		$post = get_post();
+
+		$post       = get_post();
+		$post_label = '';
 		if ( $post instanceof WP_Post ) {
 			$post_label = str_replace( array( '-', '_' ), ' ', $post->post_type );
 		}
@@ -1147,6 +1149,7 @@ HTML;
 			$current_screen = get_current_screen();
 
 			if ( 'post' == $current_screen->base
+				&& $post_label
 				&& 'add' != $current_screen->action
 				&& ( $post_type_object = get_post_type_object( $post->post_type ) )
 				&& current_user_can( 'read_post', $post->ID )
@@ -1163,6 +1166,7 @@ HTML;
 					)
 				);
 			} elseif ( 'edit-tags' == $current_screen->base
+				&& $post_label
 				&& isset( $tag ) && is_object( $tag )
 				&& ( $tax = get_taxonomy( $tag->taxonomy ) )
 				&& $tax->public ) {
@@ -1185,6 +1189,7 @@ HTML;
 			}
 
 			if ( ! empty( $current_object->post_type )
+				&& $post_label
 				&& ( $post_type_object = get_post_type_object( $current_object->post_type ) )
 				&& current_user_can( 'edit_post', $current_object->ID )
 				&& $post_type_object->show_ui && $post_type_object->show_in_admin_bar ) {
@@ -1200,6 +1205,7 @@ HTML;
 					)
 				);
 			} elseif ( ! empty( $current_object->taxonomy )
+				&& $post_label
 				&& ( $tax = get_taxonomy( $current_object->taxonomy ) )
 				&& current_user_can( $tax->cap->edit_terms )
 				&& $tax->show_ui ) {
