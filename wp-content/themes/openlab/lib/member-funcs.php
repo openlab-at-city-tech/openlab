@@ -110,7 +110,7 @@ function openlab_list_members( $view ) {
 		}
 	}
 
-	if ( $user_school && ! $include_noop ) {
+	if ( ! empty( $user_school ) && ! $include_noop ) {
 		$user_school_matches = $wpdb->get_col(
 			$wpdb->prepare(
 				"SELECT user_id
@@ -128,7 +128,7 @@ function openlab_list_members( $view ) {
 		}
 	}
 
-	if ( $user_office && ! $include_noop ) {
+	if ( ! empty( $user_office ) && ! $include_noop ) {
 		$user_office_matches = $wpdb->get_col(
 			$wpdb->prepare(
 				"SELECT user_id
@@ -1083,6 +1083,7 @@ function openlab_messages_pagination() {
 		'mpage' => '%#%',
 	);
 
+	$pagination = '';
 	if ( (int) $messages_template->total_thread_count && (int) $messages_template->pag_num ) {
 		$pagination = paginate_links(
 			array(
