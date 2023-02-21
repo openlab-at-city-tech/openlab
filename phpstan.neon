@@ -1,5 +1,5 @@
 parameters:
-  level: 0
+  level: 1
   paths:
     - wp-content/mu-plugins
     - wp-content/plugins/wds-citytech
@@ -27,3 +27,23 @@ parameters:
     - wp-content/plugins/openlab-favorites
     - wp-content/plugins/papercite
     - wp-content/themes/genesis
+  ignoreErrors:
+    - # Template files have some variables included in parent scope.
+      message: '#Variable \$[a-zA-Z0-9\\_]+ might not be defined.$#'
+      paths:
+        - ./wp-content/themes/openlab/parts
+        - ./wp-content/themes/openlab/cac-featured-content
+        - ./wp-content/mu-plugins/parts
+
+    - # PHPStan doesn't know how to handle constants in most cases.
+      message: '#Constant [\$[a-zA-Z0-9\\_]+ not found#'
+
+    - # The $args variable is passed from get_template_part().
+      message: '#Variable \$args might not be defined.$#'
+      paths:
+        - ./wp-content/themes/openlab/buddypress/groups/single/announcements
+        - ./wp-content/themes/openlab/buddypress/assets/emails/parts
+
+    - # The $data variable is passed by the openlab-portfolio plugin.
+      message: '#Variable \$data might not be defined.$#'
+      path: ./wp-content/plugins/wds-citytech/views/portfolio
