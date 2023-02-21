@@ -530,7 +530,7 @@ function openlab_bpeo_render_silent_checkbox( $post_type, $location, $post ) {
 	<?php
 }
 add_action( 'do_meta_boxes', 'openlab_bpeo_render_silent_checkbox', 10, 3 );
-remove_action( 'do_meta_boxes', 'bpeo_render_silent_checkbox', 10, 3 );
+remove_action( 'do_meta_boxes', 'bpeo_render_silent_checkbox', 10 );
 
 /**
  * Trick: Hook in before bpeo_send_bpges_notification_for_user() and fake $_POST.
