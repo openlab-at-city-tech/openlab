@@ -496,6 +496,7 @@ add_action(
 			return;
 		}
 
+		$result = null;
 		if( $document->id ) {
 			global $wpdb, $bp;
 
