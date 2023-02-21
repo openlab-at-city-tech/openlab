@@ -549,12 +549,14 @@ add_action(
 			return;
 		}
 
-		if ( $emails ) {
-			buddypress()->invite_anyone->returned_data['error_emails'] = $emails;
-		}
+		if ( isset( buddypress()->invite_anyone ) ) {
+			if ( $emails ) {
+				buddypress()->invite_anyone->returned_data['error_emails'] = $emails;
+			}
 
-		if ( $group_id ) {
-			buddypress()->invite_anyone->returned_data['groups'] = [ $group_id ];
+			if ( $group_id ) {
+				buddypress()->invite_anyone->returned_data['groups'] = [ $group_id ];
+			}
 		}
 	},
 	8 // after IA
