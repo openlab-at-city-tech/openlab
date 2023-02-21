@@ -230,10 +230,11 @@ function openlab_invite_anyone_screen_one_content() {
 }
 
 /**
- * Custom invite anyone email textarea
- * @param type $returned_emails
+ * Custom invite anyone email textarea.
+ *
+ * @param string|array $returned_emails
  */
-function openlab_invite_anyone_email_fields($returned_emails = false) {
+function openlab_invite_anyone_email_fields( $returned_emails = '' ) {
     if (is_array($returned_emails))
         $returned_emails = implode("\n", $returned_emails);
     ?>
