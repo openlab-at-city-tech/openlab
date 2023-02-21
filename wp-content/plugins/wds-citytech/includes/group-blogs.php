@@ -1321,7 +1321,7 @@ function openlab_get_external_comments_by_group_id( $group_id = 0 ) {
 function openlab_format_rss_items( $feed_url, $num_items = 3 ) {
 	$feed_posts = fetch_feed( $feed_url );
 
-	if ( empty( $feed_posts ) || is_wp_error( $feed_posts ) ) {
+	if ( is_wp_error( $feed_posts ) ) {
 		return;
 	}
 
