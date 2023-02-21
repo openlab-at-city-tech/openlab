@@ -4,7 +4,7 @@
  * OpenLab Custom functionality for Contact Form 7
  */
 function openlab_wpcf7_save_contact_form($contact_form, $args, $context) {
-    
+
     $post_ID = $args['id'];
 
     //pull out any intro text
@@ -89,10 +89,10 @@ function openlab_wpcf7_contact_form_properties($properties) {
 
             //we'll also includes a heads up to the editor that the form code is now stored in source
             $intro .= <<<HTML
-                    
-                    
+
+
             ***Please Note: Form Code is now stored in the source; please contact the developers for updates to the form fields. Intro text may be modified***'
-                    
+
 HTML;
 
             $properties['form'] = $intro;
