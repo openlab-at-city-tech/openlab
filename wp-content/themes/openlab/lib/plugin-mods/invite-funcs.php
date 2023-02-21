@@ -448,12 +448,10 @@ add_action(
 			}
 
 			$email_domains = [ 'citytech.cuny.edu', 'mail.citytech.cuny.edu' ];
-			if ( is_array( $email_domains ) && ! empty( $email_domains ) ) {
-				$emaildomain = strtolower( substr( $email, 1 + strpos( $email, '@' ) ) );
-				if ( ! in_array( $emaildomain, $email_domains, true ) ) {
-					$status['illegal_address'][] = $email;
-					continue;
-				}
+			$emaildomain   = strtolower( substr( $email, 1 + strpos( $email, '@' ) ) );
+			if ( ! in_array( $emaildomain, $email_domains, true ) ) {
+				$status['illegal_address'][] = $email;
+				continue;
 			}
 
 			if ( is_email_address_unsafe( $email ) ) {
