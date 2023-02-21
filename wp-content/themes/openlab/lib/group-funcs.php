@@ -1328,7 +1328,7 @@ function openlab_show_site_posts_and_comments() {
 			$comment_args['main_site'] = true;
 
 			// See https://buddypress.trac.wordpress.org/ticket/8777, http://redmine.citytech.cuny.edu/issues/3125
-			remove_filter( 'comments_pre_query', 'bp_comments_pre_query', 10, 2 );
+			remove_filter( 'comments_pre_query', 'bp_comments_pre_query', 10 );
 			$wp_comments = get_comments( $comment_args );
 			add_filter( 'comments_pre_query', 'bp_comments_pre_query', 10, 2 );
 

@@ -31,7 +31,7 @@ function bootstrap() {
 
 	// Override stats and fix stats.
 	remove_action( 'loop_start','highlighter_stats_conditional_title' );
-	remove_filter( 'the_content', 'highlighter_stats_content', 10, 2 );
+	remove_filter( 'the_content', 'highlighter_stats_content', 10 );
 	add_filter( 'the_content', __NAMESPACE__ . '\\render_content_stats' );
 
 	add_filter( 'body_class', __NAMESPACE__ . '\\body_class' );

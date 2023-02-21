@@ -1380,7 +1380,7 @@ function ra_copy_blog_page( $group_id ) {
 							 * on the cloned site, and so the t.term_order clause will
 							 * always trigger an error.
 							 */
-							remove_filter( 'terms_clauses', 'TO_apply_order_filter', 10, 3 );
+							remove_filter( 'terms_clauses', 'TO_apply_order_filter', 10 );
 							OpenLab\NavMenus\add_group_menu_item( $group_id );
 							OpenLab\NavMenus\add_home_menu_item();
 							add_filter( 'terms_clauses', 'TO_apply_order_filter', 10, 3 );
@@ -1557,7 +1557,7 @@ add_filter(
 add_action(
 	'bp_screens',
 	function() {
-		remove_filter( 'bp_get_the_profile_field_value', 'xprofile_filter_link_profile_data', 9, 2 );
+		remove_filter( 'bp_get_the_profile_field_value', 'xprofile_filter_link_profile_data', 9 );
 	}
 );
 
@@ -2495,7 +2495,7 @@ function openlab_bp_email_add_link_color_to_template( $value, $property_name, $t
 
 	return $value;
 }
-remove_filter( 'bp_email_get_property', 'bp_email_add_link_color_to_template', 6, 3 );
+remove_filter( 'bp_email_get_property', 'bp_email_add_link_color_to_template', 6 );
 add_filter( 'bp_email_get_property', 'openlab_bp_email_add_link_color_to_template', 6, 3 );
 
 /**
@@ -2572,7 +2572,7 @@ add_filter( 'option_wpa_toolbar', '__return_empty_string' );
 add_filter(
 	'image_send_to_editor',
 	function( $retval ) {
-		remove_filter( 'image_send_to_editor', 'wpa_alt_attribute', 10, 8 );
+		remove_filter( 'image_send_to_editor', 'wpa_alt_attribute', 10 );
 		return $retval;
 	},
 	0
@@ -2788,7 +2788,7 @@ function openlab_secondary_mime( $check, $filetype, $filename, $mimes ) {
 
 		foreach ( $secondary_mimes as $secondary_mime ) {
 			// Run another check, but only for our secondary mime and not on core mime types.
-			remove_filter( 'wp_check_filetype_and_ext', 'openlab_secondary_mime', 99, 4 );
+			remove_filter( 'wp_check_filetype_and_ext', 'openlab_secondary_mime', 99 );
 			$check = wp_check_filetype_and_ext( $filetype, $filename, $secondary_mime );
 			add_filter( 'wp_check_filetype_and_ext', 'openlab_secondary_mime', 99, 4 );
 

@@ -729,10 +729,10 @@ class Openlab_Clone_Course_Site {
 
 		remove_action( 'bp_activity_after_save', 'ass_group_notification_activity', 50 );
 
-		remove_action ('to/get_terms_orderby/ignore', 'to_get_terms_orderby_ignore_coauthors', 10, 3);
-		remove_action ('to/get_terms_orderby/ignore', 'to_get_terms_orderby_ignore_woocommerce', 10, 3);
+		remove_action( 'to/get_terms_orderby/ignore', 'to_get_terms_orderby_ignore_coauthors', 10 );
+		remove_action( 'to/get_terms_orderby/ignore', 'to_get_terms_orderby_ignore_woocommerce', 10 );
 
-		remove_filter('terms_clauses', 'TO_apply_order_filter', 10, 3);
+		remove_filter( 'terms_clauses', 'TO_apply_order_filter', 10 );
 
 		switch_to_blog( $this->site_id );
 		$eo_is_active = is_plugin_active( 'event-organiser/event-organiser.php' );
@@ -749,7 +749,7 @@ class Openlab_Clone_Course_Site {
 		remove_action( 'delete_post', '_update_posts_count_on_delete' );
 		remove_action( 'delete_post', '_wp_delete_post_menu_item' );
 		remove_action( 'delete_attachment', '_delete_attachment_theme_mod' );
-		remove_action( 'publish_post', '_publish_post_hook', 5, 1 );
+		remove_action( 'publish_post', '_publish_post_hook', 5 );
 
 		$this->create_site();
 
@@ -798,7 +798,7 @@ class Openlab_Clone_Course_Site {
 		);
 
 		// We take care of this ourselves later on
-		remove_action( 'wpmu_new_blog', 'st_wpmu_new_blog', 10, 6 );
+		remove_action( 'wpmu_new_blog', 'st_wpmu_new_blog', 10 );
 
 		$site_id = wpmu_create_blog(
 			$domain,

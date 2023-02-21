@@ -8,7 +8,7 @@ namespace CityTech\Group_Activity;
 /**
  * Remove BP core hooks.
  */
-remove_action( 'bp_blogs_new_blog', 'bp_blogs_record_activity_on_site_creation', 10, 4 );
+remove_action( 'bp_blogs_new_blog', 'bp_blogs_record_activity_on_site_creation', 10 );
 
 /**
  * Return activity types we want to filter.
