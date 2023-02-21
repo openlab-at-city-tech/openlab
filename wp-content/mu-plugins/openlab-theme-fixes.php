@@ -83,7 +83,13 @@ add_action(
 			case 'koji' :
 			case 'lingonberry' :
 				$subdir = $t;
-				wp_enqueue_script( $t, content_url( 'mu-plugins/theme-fixes/' . $subdir . '/' . $t . '.js', array( 'jquery' ) ) );
+				wp_enqueue_script(
+					$t,
+					content_url( 'mu-plugins/theme-fixes/' . $subdir . '/' . $t . '.js' ),
+					[ 'jquery' ],
+					OL_VERSION,
+					true
+				);
 			break;
 		}
 	}
@@ -102,7 +108,13 @@ add_action(
 			case 'neve':
 				$subdir = $t;
 
-				wp_enqueue_script( $t, content_url( 'mu-plugins/theme-fixes/' . $subdir . '/' . $t . '-admin.js', array( 'jquery' ) ) );
+				wp_enqueue_script(
+					$t,
+					content_url( 'mu-plugins/theme-fixes/' . $subdir . '/' . $t . '-admin.js' ),
+					[ 'jquery' ],
+					OL_VERSION,
+					true
+				);
 			break;
 		}
 	}
