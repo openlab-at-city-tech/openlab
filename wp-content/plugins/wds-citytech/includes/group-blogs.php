@@ -533,6 +533,10 @@ function openlab_process_unlink_site() {
 	if ( bp_is_group_admin_page() && bp_is_action_variable( 'unlink-site', 1 ) ) {
 		check_admin_referer( 'unlink-site' );
 
+		if ( ! groups_is_user_admin( get_current_user_id(), bp_get_current_group_id() ) ) {
+			return;
+		}
+
 		$meta_to_delete = array(
 			'external_site_url',
 			'wds_bp_group_site_id',
