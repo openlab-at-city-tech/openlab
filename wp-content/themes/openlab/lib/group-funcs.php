@@ -1575,6 +1575,10 @@ function openlab_get_group_site_settings($group_id) {
     // Set up data. Look for local site first. Fall back on external site.
     $site_id = openlab_get_site_id_by_group_id($group_id);
 
+	$site_url   = groups_get_groupmeta($group_id, 'external_site_url');
+	$is_local   = false;
+	$is_visible = true;
+
     if ($site_id) {
         $site_url = get_blog_option($site_id, 'siteurl');
         $is_local = true;
@@ -1600,10 +1604,6 @@ function openlab_get_group_site_settings($group_id) {
                 $is_visible = isset($caps['administrator']);
                 break;
         }
-    } else {
-        $site_url = groups_get_groupmeta($group_id, 'external_site_url');
-        $is_local = false;
-        $is_visible = true;
     }
 
     $group_site_settings = array(
