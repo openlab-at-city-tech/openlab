@@ -36,7 +36,7 @@ function openlab_wpcf7_after_save($result) {
     if ($post_obj->post_name === 'contact-form-1') {
 
         $intro = get_post_meta($post_ID, '_form_intro', true);
-        if (!$intro || empty($intro)) {
+        if ( ! $intro ) {
             return false;
         }
 	$intro = '';
@@ -85,7 +85,7 @@ function openlab_wpcf7_contact_form_properties($properties) {
     if ($post_obj->post_name === 'contact-form-1') {
 
         $intro = get_post_meta($post_ID, '_form_intro', true);
-        if ($intro && !empty($intro)) {
+        if ( $intro ) {
 
             //we'll also includes a heads up to the editor that the form code is now stored in source
             $intro .= <<<HTML
