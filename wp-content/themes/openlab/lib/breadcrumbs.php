@@ -48,7 +48,7 @@ function openlab_specific_blog_breadcrumb($crumb, $args) {
             $term_link = get_term_link($current_term, 'help_category');
         }
 
-        if ($term_link && !is_wp_error($term_link)) {
+        if ( $term_link && ! is_wp_error( $term_link ) && ! empty( $current_term ) ) {
             $crumb .= ' / <a href="' . $term_link . '">' . $current_term->name . '</a>';
         }
         $crumb .= ' / ' . bp_create_excerpt($post->post_title, 50, array('ending' => __('&hellip;', 'buddypress')));
@@ -61,6 +61,9 @@ add_filter('openlab_archive_crumb', 'openlab_specific_archive_breadcrumb', 10, 2
 
 function openlab_specific_archive_breadcrumb($crumb, $args) {
     global $bp, $bp_current;
+
+	$b1 = '';
+	$b2 = '';
 
     $tax = get_query_var('taxonomy');
     if ($tax == 'help_category') {
@@ -106,7 +109,8 @@ function openlab_specific_archive_breadcrumb($crumb, $args) {
         $last_name = xprofile_get_field_data('Last Name', $bp->displayed_user->id);
         $b2 = ucfirst($bp->displayed_user->fullname); //.''.ucfirst( $last_name )
     }
-    if (bp_is_group() || !empty($bp->displayed_user->id)) {
+
+    if ( $b1 && $b2 && ( bp_is_group() || ! empty( $bp->displayed_user->id ) ) ) {
         $crumb = $b1 . ' / ' . $b2;
     }
 
@@ -409,8 +413,8 @@ class Openlab_Breadcrumb {
 
         global $post;
 
+		$crumb = '';
         if (is_attachment()) {
-            $crumb = '';
             if ($this->args['heirarchial_attachments']) { // if showing attachment parent
                 $attachment_parent = get_post($post->post_parent);
                 $crumb = $this->get_breadcrumb_link(
