@@ -119,9 +119,9 @@ function openlab_wpcf7_checkbox_accessible_form_tag_handler($tag) {
         }
 
         $radio_id = sanitize_title_with_dashes(sanitize_title($label));
-        
+
         $basetype = 'checkbox';
-        
+
         if($tag->basetype === 'radio_accessible'){
             $basetype = 'radio';
         }
