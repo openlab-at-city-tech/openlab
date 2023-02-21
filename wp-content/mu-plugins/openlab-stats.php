@@ -254,6 +254,8 @@ class OpenLab_Stats {
 		);
 
 		foreach ( $course_data as $cd ) {
+			$k = null;
+			$v = '';
 			switch ( $cd->meta_key ) {
 				case 'wds_group_school' :
 					$k = 'school';
@@ -287,7 +289,10 @@ class OpenLab_Stats {
 					$v = $cd->meta_value;
 					break;
 			}
-			$cdata[ $cd->group_id ][ $k ] = trim( $v );
+
+			if ( $k ) {
+				$cdata[ $cd->group_id ][ $k ] = trim( $v );
+			}
 		}
 		//echo '<pre>';
 		//print_r( $cdata ); die();
