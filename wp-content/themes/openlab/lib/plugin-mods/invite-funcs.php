@@ -116,7 +116,9 @@ function openlab_invite_anyone_screen_one_content() {
                     if (!isset($sent_invites)) {
                         $sent_invites = invite_anyone_get_invitations_by_inviter_id(bp_loggedin_user_id());
                         $sent_invites_count = $sent_invites->post_count;
-                    }
+                    } else {
+						$sent_invites_count = 0;
+					}
 
                     $limit_invite_count = (int) $iaoptions['limit_invites_per_user'] - (int) $sent_invites_count;
 
