@@ -69,7 +69,7 @@ function openlab_oplb_gradebook_gradebook_init_placeholder($placeholder){
         )
     );
 
-    if(!empty($this_group) && isset($this_group->name)){
+    if ( ! empty( $this_group->name ) ) {
         return $this_group->name;
     }
 
