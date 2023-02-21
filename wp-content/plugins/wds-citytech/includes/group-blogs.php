@@ -1545,6 +1545,7 @@ add_action( 'bp_actions', 'openlab_catch_refresh_feed_requests' );
 function openlab_get_groupblog_template( $user_id, $group_id ) {
 	$group_type = openlab_get_group_type( $group_id );
 
+	$template = '';
 	switch ( $group_type ) {
 		case 'portfolio':
 			$account_type = openlab_get_user_member_type( $user_id );
@@ -1573,6 +1574,10 @@ function openlab_get_groupblog_template( $user_id, $group_id ) {
 		default:
 			$template = 'template-' . strtolower( $group_type );
 			break;
+	}
+
+	if ( ! $template ) {
+		return 0;
 	}
 
 	// Get the ID.
