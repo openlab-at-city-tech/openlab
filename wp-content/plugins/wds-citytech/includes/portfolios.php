@@ -258,7 +258,7 @@ function openlab_get_group_member_portfolios( $group_id = false, $sort_by = 'dis
 			$portfolio_group   = groups_get_group( array( 'group_id' => $portfolio_id ) );
 			$portfolio_blog_id = openlab_get_site_id_by_group_id( $portfolio_id );
 
-			if ( empty( $portfolio_id ) || empty( $portfolio_group ) ) {
+			if ( empty( $portfolio_id ) || ! $portfolio_group->id ) ) {
 				continue;
 			}
 
