@@ -777,6 +777,7 @@ function openlab_group_profile_activity_list() {
 										$forum_ids = bbp_get_group_forum_ids(bp_get_current_group_id());
 
 										// Get the first forum ID
+										$forum_id = 0;
 										if (!empty($forum_ids)) {
 											$forum_id = (int) is_array($forum_ids) ? $forum_ids[0] : $forum_ids;
 										}
@@ -794,7 +795,8 @@ function openlab_group_profile_activity_list() {
 														$last_reply_id = bbp_get_topic_last_reply_id($topic_id);
 
 														// Oh, bbPress.
-														$last_reply = get_post($last_reply_id);
+														$last_reply         = get_post($last_reply_id);
+														$last_topic_content = '';
 														if (!empty($last_reply->post_content)) {
 															$last_topic_content = wds_content_excerpt(strip_tags($last_reply->post_content), 250);
 														}
@@ -1263,6 +1265,8 @@ function openlab_show_site_posts_and_comments() {
 
     $posts = array();
     $comments = array();
+
+	$site_url = '';
 
     add_filter( 'to/get_terms_orderby/ignore', '__return_true' );
     switch ($site_type) {
