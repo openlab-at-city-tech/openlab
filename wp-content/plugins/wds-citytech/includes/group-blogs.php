@@ -530,7 +530,7 @@ add_action( 'spam_comment', 'openlab_group_blog_remove_comment_activity' );
  * Catch 'unlink-site' requests, process, and send back
  */
 function openlab_process_unlink_site() {
-	if ( bp_is_group_admin_page( 'edit-details' ) && bp_is_action_variable( 'unlink-site', 1 ) ) {
+	if ( bp_is_group_admin_page() && bp_is_action_variable( 'unlink-site', 1 ) ) {
 		check_admin_referer( 'unlink-site' );
 
 		$meta_to_delete = array(
