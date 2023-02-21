@@ -748,6 +748,7 @@ function openlab_submenu_gen( $items, $timestamp = false, $current_item = null )
     $component = $bp->current_component;
     $page_slug = $post->post_name;
 
+	$page_identify = '';
     if ($action) {
         $page_identify = $action;
     } else if ($component) {
