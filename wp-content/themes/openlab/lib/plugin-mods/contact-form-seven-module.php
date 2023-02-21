@@ -280,6 +280,7 @@ function openlab_wpcf7_tag_generator_checkbox_accessible($contact_form, $args = 
         $type = 'checkbox_accessible';
     }
 
+	$description = '';
     if ('checkbox_accessible' == $type) {
         $description = __("Generate a form-tag for a group of checkboxes. For more details, see %s.", 'contact-form-7');
     } elseif ('radio_accessible' == $type) {
