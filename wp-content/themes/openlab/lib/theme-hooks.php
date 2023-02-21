@@ -232,7 +232,7 @@ function openlab_group_creation_categories() {
 
         $categories = bpcgc_get_terms_by_group_type($group_type);
 
-        if ($categories && !empty($categories)) {
+        if ( $categories ) {
 
             ob_start();
             include(locate_template('parts/forms/group-categories.php'));
