@@ -41,7 +41,7 @@ class class_breadcrumb_shortcodes  {
         ob_start();
 
         ?>
-        <div class="breadcrumb-container <?php echo $breadcrumb_themes; ?>">
+        <div class="breadcrumb-container <?php echo esc_attr($breadcrumb_themes); ?>">
             <?php
 
             do_action('breadcrumb_main', $atts);

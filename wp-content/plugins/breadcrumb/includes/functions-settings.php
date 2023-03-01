@@ -296,6 +296,7 @@ function breadcrumb_settings_tabs_content_builder(){
             jQuery(document).ready(function($){
                 breadcrumb_tag_options = <?php echo $breadcrumb_tag_options; ?>;
 
+console.log(breadcrumb_tag_options);
 
 
                 $(document).on('click','.breadcrumb-tags span',function(){
@@ -303,7 +304,11 @@ function breadcrumb_settings_tabs_content_builder(){
                     input_name = $(this).attr('input_name');
 
                     tag_options_html = breadcrumb_tag_options[tag_id];
-                    var res = tag_options_html.replace("{input_name}", input_name);
+
+
+
+
+                    var res = tag_options_html.replaceAll("{input_name}", input_name);
 
                     $(this).parent().parent().children('.elements').append(res);
 
