@@ -5,7 +5,7 @@ Tags: table of contents, toc
 Requires at least: 5.3
 Tested up to: 6.1.1
 Requires PHP: 5.6.20
-Stable tag: 2.0.41.1
+Stable tag: 2.0.45.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -15,7 +15,7 @@ Adds a user friendly and fully automatic way to create and display a table of co
 
 A user friendly, featured focused [Easy Table of Contents](https://tocwp.com/) plugin which allows you to insert a table of contents into your posts, pages and custom post types.
 
-[Home](https://tocwp.com/) | [Documentation](https://tocwp.com/docs/) | [Help](https://tocwp.com/contact/) | [Premium version Features](https://tocwp.com/pricing/)
+[Home](https://tocwp.com/) | [Help & Tech Support](https://tocwp.com/contact/) | [Documentation](https://tocwp.com/docs/)  | [Pro version Features](https://tocwp.com/pricing/)
 
 ### Features 
 * Automatically generate a table of contents for your posts, pages and custom post types by parsing its contents for headers.
@@ -55,17 +55,12 @@ Bug reports for Easy Table of Contents are [welcomed on GitHub](https://github.c
 
 ### [JOIN TELEGRAM GROUP COMMUNITY](https://t.me/+XADGN24lHNk0YjE1/)**: Purpose of this group is to get proper suggestions and feedback from plugin users and the community so that we can make the plugin even better.
 
-### Live Examples
-
-* [cMap Template Docs](http://connections-pro.com/documentation/cmap/)
-* [Circled Template Docs](http://connections-pro.com/documentation/circled/)
-* [Gridder Template Docs](http://connections-pro.com/documentation/gridder/)
-
 ### Roadmap 
 * Fragment caching for improved performance.
 * Improve SEO by adding options to add nofollow to TOC link and wrap TOC nav in noindex tag.
 * Improve accessibility.
 * Add Bullet and Arrow options for list counter style.
+* [View Full Road Map](https://github.com/ahmedkaludi/Easy-Table-of-Contents/milestones)
 
 ### Credit 
 
@@ -105,6 +100,44 @@ Easy Table Contents is a fork of the excellent [Table of Contents Plus](https://
 4. Activate the plugin on the Plugins admin page.
 
 == Changelog ==
+= 2.0.45.2 03/01/2023 =
+* BUG: The attribute 'area-label' may not appear in tag 'a' #424
+
+= 2.0.45.1 02/07/2023 =
+* BUG: Easy TOC is showing the wrong TOC on each post #416
+
+= 2.0.45 01/30/2023 =
+* BUG: Some linking span tags are not being created inside headings due to Internationalization characters #312
+* BUG: When a user adds the TOC while using Elementor PRO, the TOC does not scroll down. #372
+* BUG: TOC conflicts with the Beaver Builder plugin. #280
+* BUG: Empty space appears after removing the header label. #376
+* BUG: When selecting the "User defined" option in width then the TOC goes off to right side of the screen. #374
+
+= 2.0.44.3 01/27/2023 =
+* BUG: PHP 8.1 error on inc.plugin-compatibility.php:282 #295 #291
+
+= 2.0.44.2 01/25/2023 =
+* BUG: Warning and Fatal error with version 2.0.44.1 and PHP 8.1 #368
+
+= 2.0.44.1 01/25/2023 =
+* BUG: Update to 2.0.44 caused Dashboard critical error #368
+
+= 2.0.44 01/25/2023 =
+* BUG: Anchor links are no longer appearing in the URLs #394
+* BUG: While Heading created with Divi pixel are not working. #295
+* BUG: Need to make a feature or functionality where after clicking on the link, Toc should automatically get closed. #291
+* BUG: Some headings are not working with WP-Typography #407
+* BUG: Not working in Persian Language. #303
+* BUG: Heading not working in the Russian language on the Pale Moon Browser. #368
+
+= 2.0.43 01/13/2023 =
+* TWEAK: update readme #396
+* BUG: Anchor links are no longer appearing in the URLs #394
+* TWEAK: Remove Offer banner #393
+
+= 2.0.42 01/06/2023 =
+* BUG: Some bugs occurring due to a "-" in pages created with Elementor #306
+
 = 2.0.41.1 01/03/2023 =
 * BUG: Links not working in the Japanese language. #387
 
@@ -633,6 +666,10 @@ You can nest up 6 levels deep if needed. I hope this helps you understand how to
 = Is there any shortcode to add the table of content to anywhere I want ? =
 
 Yes you can add the TOC with this shortcode – [ez-toc] and with the help of this you can easily add the TOC in the content or anywhere in the WordPress and if you want to add the shortcode on the theme file then you can add it with the help of this code – <?php echo do_shortcode( ‘[ez-toc]’ ); ?> and with this, you can add the TOC on any file according to your need.
+
+== Contact | Help | Technical Support ==
+
+[Contact Us](https://tocwp.com/contact/)
 
 == Upgrade Notice ==
 

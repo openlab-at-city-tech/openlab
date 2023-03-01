@@ -268,7 +268,11 @@ class ezTOC_Post {
 			} else {
 				$content .= get_option( 'ez-toc-post-meta-content' )[ get_the_ID() ];
 			}
-		}
+		} else if ( ( in_array( 'divi-machine/divi-machine.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) || 'Pale Moon' == ez_toc_get_browser_name() || 'Fortunato Pro' == apply_filters( 'current_theme', get_option( 'current_theme' ) ) ) && false != get_option( 'ez-toc-post-content-core-level' ) ) {
+                    $content = get_option( 'ez-toc-post-content-core-level' );
+                } else {
+                       
+                }
 
 		$pages = array();
 
@@ -415,7 +419,11 @@ class ezTOC_Post {
 		/** @todo does this need to be used??? */
 		//self::$collision_collector = array();
 
-		$content = apply_filters( 'ez_toc_extract_headings_content', wptexturize( $content ) );
+		if ( in_array( 'elementor/elementor.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) || in_array( 'divi-machine/divi-machine.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) || 'Pale Moon' == ez_toc_get_browser_name() || 'Fortunato Pro' == apply_filters( 'current_theme', get_option( 'current_theme' ) ) ) {
+                    $content = apply_filters( 'ez_toc_extract_headings_content', $content );           
+                } else {
+                    $content = apply_filters( 'ez_toc_extract_headings_content', wptexturize( $content ) );
+                }
 
 		// get all headings
 		// the html spec allows for a maximum of 6 heading depths
@@ -606,7 +614,7 @@ class ezTOC_Post {
 					$found = false;
 
 					$against = html_entity_decode(
-						wptexturize( strip_tags( str_replace( array( "\r", "\n" ), ' ', $matches[ $i ][0] ) ) ),
+                                                ( in_array( 'divi-machine/divi-machine.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) || 'Pale Moon' == ez_toc_get_browser_name() || 'Fortunato Pro' == apply_filters( 'current_theme', get_option( 'current_theme' ) ) ) ? strip_tags( str_replace( array( "\r", "\n" ), ' ', $matches[ $i ][0] ) ) : wptexturize(strip_tags( str_replace( array( "\r", "\n" ), ' ', $matches[ $i ][0] ) ) ),
 						ENT_NOQUOTES,
 						get_option( 'blog_charset' )
 					);
@@ -616,7 +624,7 @@ class ezTOC_Post {
 						// Since WP manipulates the post content it is required that the excluded header and
 						// the actual header be manipulated similarly so a match can be made.
 						$pattern = html_entity_decode(
-							wptexturize( $excluded_headings[ $j ] ),
+							( in_array( 'divi-machine/divi-machine.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) || 'Pale Moon' == ez_toc_get_browser_name() || 'Fortunato Pro' == apply_filters( 'current_theme', get_option( 'current_theme' ) ) ) ? $excluded_headings[ $j ] : wptexturize($excluded_headings[ $j ]),
 							ENT_NOQUOTES,
 							get_option( 'blog_charset' )
 						);
@@ -719,8 +727,11 @@ class ezTOC_Post {
 				foreach ( $alt_headings as $original_heading => $alt_heading ) {
 
 					// Cleanup and texturize so alt heading can match heading in post content.
-					$original_heading = wptexturize( trim( $original_heading ) );
-
+                                        if ( in_array( 'divi-machine/divi-machine.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) || 'Pale Moon' == ez_toc_get_browser_name() || 'Fortunato Pro' == apply_filters( 'current_theme', get_option( 'current_theme' ) ) ) {
+                                            $original_heading = trim( $original_heading );
+                                        }else {
+                                            $original_heading = wptexturize( trim( $original_heading ) );
+                                        }
 					// Deal with special characters such as non-breakable space.
 					$original_heading = str_replace(
 						array( "\xc2\xa0" ),
@@ -1286,7 +1297,7 @@ class ezTOC_Post {
 				$html .= '<p class="ez-toc-title">' . esc_html__( htmlentities( $toc_title, ENT_COMPAT, 'UTF-8' ), 'easy-table-of-contents' ). '</p>' . PHP_EOL;
                                 
                         } else {
-                            $html .= '<p class="ez-toc-title">&nbsp;</p>' . PHP_EOL;
+                            $html .= '<p class="ez-toc-title"></p>' . PHP_EOL;
                         }
 
                         if (ezTOC_Option::get( 'toc_loading' ) != 'css') {
@@ -1307,7 +1318,7 @@ class ezTOC_Post {
                                     }
                                     
                                    
-                                    $html .= '<a href="#" class="ez-toc-pull-right ez-toc-btn ez-toc-btn-xs ez-toc-btn-default ez-toc-toggle" area-label="ez-toc-toggle-icon-1"><label for="item-' . $cssIconID . '" aria-label="'.__( 'Table of Content', 'easy-table-of-contents' ).'">'.$icon.'</label><input ' . $inputCheckboxExludeStyle . ' type="checkbox" id="item-' . $cssIconID . '"></a>';
+                                    $html .= '<a href="#" class="ez-toc-pull-right ez-toc-btn ez-toc-btn-xs ez-toc-btn-default ez-toc-toggle" aria-label="ez-toc-toggle-icon-1"><label for="item-' . $cssIconID . '" aria-label="'.__( 'Table of Content', 'easy-table-of-contents' ).'">'.$icon.'</label><input ' . $inputCheckboxExludeStyle . ' type="checkbox" id="item-' . $cssIconID . '"></a>';
                             } else {
                                     $toggle_view='';
                                     if(ezTOC_Option::get('visibility_hide_by_default')==true){
