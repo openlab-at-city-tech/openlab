@@ -28,15 +28,6 @@ final class Shortcodes_Ultimate_Upgrade {
 	private $saved_version_option;
 
 	/**
-	 * The full path of the upgrade file.
-	 *
-	 * @since    5.4.0
-	 * @access   private
-	 * @var      string    $upgrade_path   The full path of the upgrade file.
-	 */
-	private $upgrade_path;
-
-	/**
 	 * Define the functionality of the updater.
 	 *
 	 * @since   5.0.0
@@ -46,7 +37,6 @@ final class Shortcodes_Ultimate_Upgrade {
 
 		$this->current_version      = $plugin_version;
 		$this->saved_version_option = 'su_option_version';
-		$this->upgrade_path         = '';
 
 	}
 
@@ -96,13 +86,13 @@ final class Shortcodes_Ultimate_Upgrade {
 	 */
 	private function upgrade_to( $version ) {
 
-		$this->upgrade_path = plugin_dir_path( __FILE__ ) . 'upgrade/' . $version . '.php';
+		$upgrade_file = __DIR__ . '/upgrade/' . $version . '.php';
 
-		if ( ! file_exists( $this->upgrade_path ) ) {
+		if ( ! file_exists( $upgrade_file ) ) {
 			return;
 		}
 
-		include $this->upgrade_path;
+		include $upgrade_file;
 
 	}
 

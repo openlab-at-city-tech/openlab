@@ -303,7 +303,7 @@ function su_shortcode_posts( $atts = null, $content = null ) {
 		'any',
 	);
 	foreach ( $post_status as $unvalidated ) {
-		if ( in_array( $unvalidated, $available ) ) {
+		if ( in_array( $unvalidated, $available, true ) ) {
 			$validated[] = $unvalidated;
 		}
 	}
@@ -320,7 +320,7 @@ function su_shortcode_posts( $atts = null, $content = null ) {
 			array( 'IN', 'NOT IN', 'AND' ),
 			$tax_operator
 		);
-		if ( ! in_array( $tax_operator, array( 'IN', 'NOT IN', 'AND' ) ) ) {
+		if ( ! in_array( $tax_operator, array( 'IN', 'NOT IN', 'AND' ), true ) ) {
 			$tax_operator = 'IN';
 		}
 		$tax_args = array(
@@ -352,7 +352,7 @@ function su_shortcode_posts( $atts = null, $content = null ) {
 			$tax_operator            = isset( $original_atts[ 'tax_' . $count . '_operator' ] )
 				? $original_atts[ 'tax_' . $count . '_operator' ]
 				: 'IN';
-			$tax_operator            = in_array( $tax_operator, array( 'IN', 'NOT IN', 'AND' ) )
+			$tax_operator            = in_array( $tax_operator, array( 'IN', 'NOT IN', 'AND' ), true )
 				? $tax_operator
 				: 'IN';
 			$tax_args['tax_query'][] = array(
@@ -368,7 +368,7 @@ function su_shortcode_posts( $atts = null, $content = null ) {
 
 			if (
 				isset( $original_atts['tax_relation'] ) &&
-				in_array( $original_atts['tax_relation'], array( 'AND', 'OR' ) )
+				in_array( $original_atts['tax_relation'], array( 'AND', 'OR' ), true )
 			) {
 				$tax_relation = $original_atts['tax_relation'];
 			}
@@ -381,7 +381,7 @@ function su_shortcode_posts( $atts = null, $content = null ) {
 
 	// If post parent attribute, set up parent
 	if ( $post_parent ) {
-		if ( 'current' == $post_parent ) {
+		if ( 'current' === $post_parent ) {
 			global $post;
 			$post_parent = $post->ID;
 		}

@@ -321,12 +321,12 @@ function su_shortcode_button( $atts = null, $content = null ) {
 
 		if ( strpos( $atts['icon'], 'icon:' ) !== false ) {
 
-			$icon = '<i class="sui sui-' . trim( str_replace( 'icon:', '', $atts['icon'] ) ) . '" style="font-size:' . $styles['size'] . 'px;color:' . $atts['icon_color'] . '"></i>';
+			$icon = '<i class="sui sui-' . esc_attr( trim( str_replace( 'icon:', '', $atts['icon'] ) ) ) . '" style="font-size:' . $styles['size'] . 'px;color:' . esc_attr( $atts['icon_color'] ) . '"></i>';
 
 			su_query_asset( 'css', 'su-icons' );
 
 		} else {
-			$icon = '<img src="' . $atts['icon'] . '" alt="' . esc_attr( $content ) . '" style="' . implode( ';', $img_css ) . '" />';
+			$icon = '<img src="' . esc_attr( $atts['icon'] ) . '" alt="' . esc_attr( $content ) . '" style="' . implode( ';', $img_css ) . '" />';
 		}
 
 	} else {

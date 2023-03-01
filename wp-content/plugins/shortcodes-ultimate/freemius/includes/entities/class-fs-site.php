@@ -10,6 +10,9 @@
         exit;
     }
 
+    /**
+     * @property int $blog_id
+     */
     class FS_Site extends FS_Scope_Entity {
         /**
          * @var number
@@ -233,5 +236,19 @@
          */
         function is_beta() {
             return ( isset( $this->is_beta ) && true === $this->is_beta );
+        }
+
+        /**
+         * @author Leo Fajardo (@leorw)
+         * @since 2.5.1
+         *
+         * @param string $site_url
+         *
+         * @return bool
+         */
+        function is_clone( $site_url ) {
+            $clone_install_url = trailingslashit( fs_strip_url_protocol( $this->url ) );
+
+            return ( $clone_install_url !== $site_url );
         }
     }

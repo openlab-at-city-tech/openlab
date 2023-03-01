@@ -124,7 +124,7 @@ function su_shortcode_list( $atts = null, $content = null ) {
 	}
 
 	if ( strpos( $atts['icon'], 'icon:' ) !== false ) {
-		$atts['icon'] = '<i class="sui sui-' . trim( str_replace( 'icon:', '', $atts['icon'] ) ) . '" style="color:' . esc_attr( $atts['icon_color'] ) . '"></i>';
+		$atts['icon'] = '<i class="sui sui-' . esc_attr( trim( str_replace( 'icon:', '', $atts['icon'] ) ) ) . '" style="color:' . esc_attr( $atts['icon_color'] ) . '"></i>';
 		su_query_asset( 'css', 'su-icons' );
 	} else {
 		$atts['icon'] = '<img src="' . esc_attr( $atts['icon'] ) . '" alt="" />';

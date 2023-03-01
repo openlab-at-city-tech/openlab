@@ -122,7 +122,7 @@ function su_shortcode_custom_gallery( $atts = null, $content = null ) {
 			$atts['class'] .= ' su-lightbox-gallery';
 		}
 		// Open gallery
-		$return = '<div class="su-custom-gallery su-custom-gallery-title-' . $atts['title'] . su_get_css_class( $atts ) . '">';
+		$return = '<div class="su-custom-gallery su-custom-gallery-title-' . esc_attr( $atts['title'] ) . su_get_css_class( $atts ) . '">';
 		// Create slides
 		foreach ( $slides as $slide ) {
 			// Crop image

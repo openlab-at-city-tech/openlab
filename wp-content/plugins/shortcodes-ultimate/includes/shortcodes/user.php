@@ -11,22 +11,7 @@ su_add_shortcode(
 		'atts'     => array(
 			'field'   => array(
 				'type'    => 'select',
-				'values'  => array(
-					'first_name'          => __( 'First name', 'shortcodes-ultimate' ),
-					'last_name'           => __( 'Last name', 'shortcodes-ultimate' ),
-					'nickname'            => __( 'Nickname', 'shortcodes-ultimate' ),
-					'description'         => __( 'Description', 'shortcodes-ultimate' ),
-					'locale'              => __( 'Locale', 'shortcodes-ultimate' ),
-					'display_name'        => __( 'Display name', 'shortcodes-ultimate' ),
-					'ID'                  => __( 'ID', 'shortcodes-ultimate' ),
-					'user_login'          => __( 'Login', 'shortcodes-ultimate' ),
-					'user_nicename'       => __( 'Nice name', 'shortcodes-ultimate' ),
-					'user_email'          => __( 'Email', 'shortcodes-ultimate' ),
-					'user_url'            => __( 'URL', 'shortcodes-ultimate' ),
-					'user_registered'     => __( 'Registered', 'shortcodes-ultimate' ),
-					'user_activation_key' => __( 'Activation key', 'shortcodes-ultimate' ),
-					'user_status'         => __( 'Status', 'shortcodes-ultimate' ),
-				),
+				'values'  => su_get_config( 'user-fields' ),
 				'default' => 'display_name',
 				'name'    => __( 'Field', 'shortcodes-ultimate' ),
 				'desc'    => __( 'User data field name. Custom meta field names are also allowed.', 'shortcodes-ultimate' ),
@@ -67,13 +52,15 @@ function su_shortcode_user( $atts = null, $content = null ) {
 	$atts = su_parse_shortcode_atts( 'user', $atts );
 	$data = '';
 
-	if ( 'user_pass' === $atts['field'] ) {
-
+	if ( ! in_array( $atts['field'], array_keys( su_get_config( 'user-fields' ) ), true ) ) {
 		return su_error_message(
 			'User',
-			__( 'password field is not allowed', 'shortcodes-ultimate' )
+			sprintf(
+				'%s. <a href="https://getshortcodes.com/docs/user-data/#user-field-is-not-allowed">%s</a>',
+				__( 'field is not allowed', 'shortcodes-ultimate' ),
+				__( 'Learn more', 'shortcodes-ultimate' )
+			)
 		);
-
 	}
 
 	$atts['user_id'] = su_do_attribute( $atts['user_id'] );

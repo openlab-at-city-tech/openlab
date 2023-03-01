@@ -3432,10 +3432,12 @@
          * @author Leo Fajardo (@leorw)
          * @since 2.5.0
          *
+         * @param bool $only_if_manual_resolution_is_not_hidden
+         *
          * @return bool
          */
-        private function is_unresolved_clone() {
-            if ( ! $this->is_clone() ) {
+        private function is_unresolved_clone( $only_if_manual_resolution_is_not_hidden = false ) {
+            if ( ! $this->is_clone( $only_if_manual_resolution_is_not_hidden ) ) {
                 return false;
             }
 
@@ -3445,8 +3447,10 @@
         /**
          * @author Leo Fajardo (@leorw)
          * @since 2.5.0
+         *
+         * @param bool $only_if_manual_resolution_is_not_hidden
          */
-        function is_clone() {
+        function is_clone( $only_if_manual_resolution_is_not_hidden = false ) {
             if ( ! is_object( $this->_site ) ) {
                 return false;
             }
@@ -3461,9 +3465,15 @@
                 $blog_id = $this->_storage->network_install_blog_id;
             }
 
+            $site_url = Freemius::get_unfiltered_site_url( $blog_id, true, true );
+
+            if ( ! $this->_site->is_clone( $site_url ) ) {
+                return false;
+            }
+
             return (
-                trailingslashit( fs_strip_url_protocol( $this->_site->url ) ) !==
-                self::get_unfiltered_site_url( $blog_id, true, true )
+                ! $only_if_manual_resolution_is_not_hidden ||
+                ! FS_Clone_Manager::instance()->should_hide_manual_resolution()
             );
         }
 
@@ -3638,7 +3648,7 @@
             } else {
                 // Add hidden debug page.
                 $hook = FS_Admin_Menu_Manager::add_subpage(
-                    null,
+                    '',
                     $title,
                     $title,
                     'manage_options',
@@ -5237,7 +5247,7 @@
                     ( file_exists( fs_normalize_path( WP_PLUGIN_DIR . '/' . $this->premium_plugin_basename() ) ) )
                 ) &&
                 $this->has_release_on_freemius() &&
-                ( ! $this->is_unresolved_clone() )
+                ( ! $this->is_unresolved_clone( true ) )
             ) {
                 FS_Plugin_Updater::instance( $this );
             }
@@ -7305,12 +7315,12 @@
 
             $this->_admin_notices->add_sticky(
                 sprintf(
-                    $this->get_text_inline( 'You should receive an activation email for %s to your mailbox at %s. Please make sure you click the activation button in that email to %s.', 'pending-activation-message' ),
+                    $this->get_text_inline( 'You should receive a confirmation email for %s to your mailbox at %s. Please make sure you click the button in that email to %s.', 'pending-activation-message' ),
                     '<b>' . $this->get_plugin_name() . '</b>',
                     '<b>' . $email . '</b>',
                     ( $is_pending_trial ?
                         $this->get_text_inline( 'start the trial', 'start-the-trial' ) :
-                        $this->get_text_inline( 'complete the install', 'complete-the-install' ) )
+                        $this->get_text_inline( 'complete the opt-in', 'complete-the-opt-in' ) )
                 ),
                 'activation_pending',
                 'Thanks!'
@@ -9787,6 +9797,78 @@
             }
 
             return $diff;
+        }
+
+        /**
+         * @author Leo Fajardo (@leorw)
+         * @since  2.5.1
+         */
+        private function send_pending_clone_update_once() {
+            $this->_logger->entrance();
+
+            if ( ! empty( $this->_storage->clone_id ) ) {
+                return;
+            }
+
+            $install_clone = $this->get_api_site_scope()->call(
+                '/clones',
+                'post',
+                array( 'site_url' => self::get_unfiltered_site_url() )
+            );
+
+            if ( $this->is_api_result_entity( $install_clone ) ) {
+                $this->_storage->clone_id = $install_clone->id;
+            }
+        }
+
+        /**
+         * @author Leo Fajardo (@leorw)
+         * @since  2.5.1
+         *
+         * @param string  $resolution_type
+         * @param FS_Site $clone_context_install
+         */
+        function send_clone_resolution_update( $resolution_type, $clone_context_install ) {
+            $this->_logger->entrance();
+
+            if ( empty( $this->_storage->clone_id ) ) {
+                return;
+            }
+
+            $new_install_id = null;
+            $current_site   = null;
+
+            $flush = false;
+
+            /**
+             * If the current site is now different from the context install before the clone resolution, we need to override `$this->_site` so that the API call below will be made with the right install scope entity.
+             */
+            if ( $clone_context_install->id != $this->_site->id ) {
+                $new_install_id = $this->_site->id;
+                $current_site   = $this->_site;
+                $this->_site    = $clone_context_install;
+
+                $flush = true;
+            }
+
+            $this->get_api_site_scope( $flush )->call(
+                "/clones/{$this->_storage->clone_id}",
+                'put',
+                array(
+                    'resolution'     => $resolution_type,
+                    'new_install_id' => $new_install_id,
+                )
+            );
+
+            if ( is_object( $current_site ) ) {
+                /**
+                 * Ensure that the install scope entity is updated back to the previous install entity.
+                 */
+                $this->_site  = $current_site;
+
+                // Restore the previous install scope entity of the API.
+                $this->get_api_site_scope( true );
+            }
         }
 
         /**
@@ -17088,12 +17170,13 @@
                 $this->_register_account_hooks();
             }
 
-            if (
-                $this->is_user_in_admin() &&
-                $this->is_clone() &&
-                empty( FS_Clone_Manager::instance()->get_clone_identification_timestamp() )
-            ) {
-                FS_Clone_Manager::instance()->store_clone_identification_timestamp();
+            if ( $this->is_user_in_admin() && $this->is_clone() ) {
+                if ( empty( FS_Clone_Manager::instance()->get_clone_identification_timestamp() ) ) {
+                    FS_Clone_Manager::instance()->store_clone_identification_timestamp();
+                }
+
+                FS_Clone_Manager::instance()->maybe_update_clone_resolution_support_flag( $this->_storage->sdk_last_version );
+                $this->send_pending_clone_update_once();
             }
         }
 
@@ -18892,7 +18975,7 @@
             if ( ! $this->has_settings_menu() ) {
                 // Add the opt-in page without a menu item.
                 $hook = FS_Admin_Menu_Manager::add_subpage(
-                    null,
+                    '',
                     $this->get_plugin_name(),
                     $this->get_plugin_name(),
                     'manage_options',
@@ -19324,7 +19407,7 @@
                         $hook = FS_Admin_Menu_Manager::add_subpage(
                             $item['show_submenu'] ?
                                 $top_level_menu_slug :
-                                null,
+                                '',
                             $item['page_title'],
                             $menu_item,
                             $capability,
@@ -19339,7 +19422,7 @@
                         FS_Admin_Menu_Manager::add_subpage(
                             $item['show_submenu'] ?
                                 $top_level_menu_slug :
-                                null,
+                                '',
                             $item['page_title'],
                             $menu_item,
                             $capability,
@@ -22321,7 +22404,7 @@
         ) {
             $this->_logger->entrance();
 
-            if ( $this->is_unresolved_clone() ) {
+            if ( $this->is_unresolved_clone( true ) ) {
                 return false;
             }
 
@@ -23747,7 +23830,17 @@
         }
 
         static function _clean_admin_content_section_hook() {
-            self::_hide_admin_notices();
+            $hide_admin_notices = true;
+
+            if ( fs_request_is_action( 'allow_clone_resolution_notice' ) ) {
+                check_admin_referer( 'fs_allow_clone_resolution_notice' );
+
+                $hide_admin_notices = false;
+            }
+
+            if ( $hide_admin_notices ) {
+                self::_hide_admin_notices();
+            }
 
             // Hide footer.
             echo '<style>#wpfooter { display: none !important; }</style>';
@@ -23888,29 +23981,29 @@
         private function api_site_call( $path, $method = 'GET', $params = array(), $flush_instance = false ) {
             $result = $this->get_api_site_scope( $flush_instance )->call( $path, $method, $params );
 
-        /**
-         * Checks if the local install's URL is different from the remote install's URL, update the local install if necessary, and then run the clone handler if the install's URL is different from the URL of the site.
-         *
-         * @author Leo Fajardo (@leorw)
-         * @since 2.5.0
-         */
+            /**
+             * Checks if the local install's URL is different from the remote install's URL, update the local install if necessary, and then run the clone handler if the install's URL is different from the URL of the site.
+             *
+             * @author Leo Fajardo (@leorw)
+             * @since  2.5.0
+             */
             if (
                 $this->is_registered() &&
                 FS_Api::is_api_result_entity( $result ) &&
                 isset( $result->url )
             ) {
-            $stored_local_url  = trailingslashit( $this->_site->url );
+                $stored_local_url  = trailingslashit( $this->_site->url );
                 $stored_remote_url = trailingslashit( $result->url );
 
-            if ( $stored_local_url !== $stored_remote_url ) {
+                if ( $stored_local_url !== $stored_remote_url ) {
                     $this->_site->url = $result->url;
-                $this->_store_site();
-            }
+                    $this->_store_site();
+                }
 
-            if ( fs_strip_url_protocol( $stored_remote_url ) !== self::get_unfiltered_site_url( null, true, true ) ) {
+                if ( fs_strip_url_protocol( $stored_remote_url ) !== self::get_unfiltered_site_url( null, true, true ) ) {
                     FS_Clone_Manager::instance()->maybe_run_clone_resolution();
+                }
             }
-        }
 
             return $result;
         }
@@ -24793,9 +24886,7 @@
                 return $this->can_activate_theme( $this->get_premium_slug() );
             }
 
-            $premium_plugin = get_plugins( '/' . dirname( $premium_plugin_basename ) );
-
-            return ! empty( $premium_plugin );
+            return file_exists( fs_normalize_path( WP_PLUGIN_DIR . '/' . $premium_plugin_basename ) );
         }
 
         /**
@@ -25322,8 +25413,10 @@
         function _tabs_capture() {
             $this->_logger->entrance();
 
-            if ( ! $this->is_product_settings_page() ||
-                 ! $this->is_matching_url( $this->main_menu_url() )
+            if (
+                ! $this->is_product_settings_page() ||
+                ! $this->should_page_include_tabs() ||
+                ! $this->is_matching_url( $this->main_menu_url() )
             ) {
                 return;
             }
@@ -25377,8 +25470,10 @@
         function _store_tabs_styles() {
             $this->_logger->entrance();
 
-            if ( ! $this->is_product_settings_page() ||
-                 ! $this->is_matching_url( $this->main_menu_url() )
+            if (
+                ! $this->is_product_settings_page() ||
+                ! $this->should_page_include_tabs() ||
+                ! $this->is_matching_url( $this->main_menu_url() )
             ) {
                 return;
             }
