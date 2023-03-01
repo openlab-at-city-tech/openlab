@@ -611,9 +611,9 @@ function openlab_get_files_count() {
  * Buddypress Group Documents is very secretive about it's pagination, so we'll
  * have to do this with some str_replace fun.
  *
- * @param type $template
+ * @param BP_Group_Documents_Template $template BP_Group_Documents_Template template object.
  */
-function openlab_bp_group_documents_custom_pagination_links( $template ) {
+function openlab_bp_group_documents_custom_pagination_links( BP_Group_Documents_Template $template ) {
 
 	//dump the echoed legacy pagination into a string
 	ob_start();
