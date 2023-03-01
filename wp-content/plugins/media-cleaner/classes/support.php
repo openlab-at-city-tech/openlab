@@ -176,6 +176,10 @@ class Meow_WPMC_Support {
       array_push( $unsupported, 'WonderPlugin 3D Carousel' );
 		}
 
+		if ( defined( 'UNCODE_CORE_FILE' ) ) {
+			array_push( $unsupported, 'Uncode' );
+		}
+
     return $unsupported;
   }
 }

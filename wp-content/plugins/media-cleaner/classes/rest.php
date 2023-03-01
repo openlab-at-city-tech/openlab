@@ -20,6 +20,11 @@ class Meow_WPMC_Rest
 				'permission_callback' => array( $this->core, 'can_access_features' ),
 				'callback' => array( $this, 'rest_update_options' )
 			) );
+			register_rest_route( $this->namespace, '/reset_options', array(
+				'methods' => 'POST',
+				'permission_callback' => array( $this->core, 'can_access_features' ),
+				'callback' => array( $this, 'rest_reset_options' )
+			) );
 			register_rest_route( $this->namespace, '/all_settings', array(
 				'methods' => 'GET',
 				'permission_callback' => array( $this->core, 'can_access_features' ),
@@ -353,6 +358,11 @@ class Meow_WPMC_Rest
 		catch ( Exception $e ) {
 			return new WP_REST_Response([ 'success' => false, 'message' => $e->getMessage() ], 500 );
 		}
+	}
+
+	function rest_reset_options() {
+		$this->core->reset_options();
+		return new WP_REST_Response( [ 'success' => true, 'options' => $this->core->get_all_options() ], 200 );
 	}
 
 	function rest_reset_db() {

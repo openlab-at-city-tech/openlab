@@ -50,6 +50,7 @@ function wpmc_scan_postmeta_woocommerce( $id ) {
 
 	// Galleries
 	$galleries_images_wc = array();
+	$id = (int)$id;
 	$res = $wpdb->get_col( "SELECT meta_value FROM $wpdb->postmeta WHERE post_id = $id
 		AND meta_key = '_product_image_gallery'" );
 	foreach ( $res as $values ) {
