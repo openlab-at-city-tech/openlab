@@ -50,8 +50,19 @@ if ( ! class_exists( 'DLM_Reports' ) ) {
 
 			$this->date_format = get_option( 'date_format' ) . ' ' . get_option( 'time_format' );
 
+			$memory_limit = ini_get( 'memory_limit' );
+			if ( preg_match( '/^(\d+)(.)$/', $memory_limit, $matches ) ) {
+				if ( 'M' === $matches[2] ) {
+					$memory_limit = $matches[1];
+				} else if ( 'K' === $matches[2] ) {
+					$memory_limit = $matches[1] / 1024;
+				} else if ( 'G' === $matches[2] ) {
+					$memory_limit = $matches[1] * 1024;
+				}
+			}
+
 			$this->php_info = array(
-				'memory_limit'       => ini_get( 'memory_limit' ),
+				'memory_limit'       => absint( $memory_limit ),
 				'max_execution_time' => ini_get( 'max_execution_time' ),
 				'retrieved_rows'     => 10000
 			);
@@ -187,7 +198,7 @@ if ( ! class_exists( 'DLM_Reports' ) ) {
 				'title',
 				'slug'
 			) );
-			$rest_rout_downloadscpt = rest_url() . 'wp/v2/dlm_download?_fields=' . implode( ',', $cpt_fields );
+			$rest_rout_downloadscpt = rest_url() . 'wp/v2/dlm_download?_fields=' . implode( ',', $cpt_fields ) . '&_wpnonce=' . wp_create_nonce( 'wp_rest' ) . $current_user_can;
 			// Let's add the global variable that will hold our reporst class and the routes.
 			wp_add_inline_script( 'dlm_reports', 'let dlmReportsInstance = {}; dlm_admin_url = "' . admin_url() . '" ; const dlmDownloadReportsAPI ="' . $rest_route_download_reports . '"; const dlmUserReportsAPI ="' . $rest_route_user_reports . '"; const dlmUserDataAPI ="' . $rest_route_user_data . '"; const dlmTemplates = "' . $rest_route_templates . '"; const dlmDownloadsCptApiapi = "' . $rest_rout_downloadscpt . '"; const dlmPHPinfo =  ' . wp_json_encode( $this->php_info ) . ';', 'before' );
 		}
@@ -312,13 +323,13 @@ if ( ! class_exists( 'DLM_Reports' ) ) {
 
 			$offset       = isset( $_REQUEST['offset'] ) ? absint( sanitize_text_field( wp_unslash( $_REQUEST['offset'] ) ) ) : 0;
 			$count        = isset( $_REQUEST['limit'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['limit'] ) ) : 1000;
-			$offset_limit = $offset * 1000;
+			$offset_limit = $offset * $count;
 			$stats        = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$wpdb->dlm_reports} LIMIT {$offset_limit}, {$count};", null ), ARRAY_A );
 
 			return array(
 				'stats'  => $stats,
-				'offset' => ( 1000 === count( $stats ) ) ? $offset + 1 : '',
-				'done'   => 1000 > count( $stats ),
+				'offset' => ( absint( $count ) === count( $stats ) ) ? $offset + 1 : '',
+				'done'   => absint( $count ) > count( $stats ),
 			);
 		}
 
@@ -344,7 +355,7 @@ if ( ! class_exists( 'DLM_Reports' ) ) {
 
 			$offset       = isset( $_REQUEST['offset'] ) ? absint( sanitize_text_field( wp_unslash( $_REQUEST['offset'] ) ) ) : 0;
 			$count        = isset( $_REQUEST['limit'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['limit'] ) ) : $this->php_info['retrieved_rows'];
-			$offset_limit = $offset * $this->php_info['retrieved_rows'];
+			$offset_limit = $offset * $count;
 
 			$table_columns = apply_filters(
 				'dlm_download_log_columns',
@@ -363,8 +374,8 @@ if ( ! class_exists( 'DLM_Reports' ) ) {
 
 			return array(
 				'logs'   => $downloads,
-				'offset' => ( $this->php_info['retrieved_rows'] === count( $downloads ) ) ? $offset + 1 : '',
-				'done'   => $this->php_info['retrieved_rows'] > count( $downloads ),
+				'offset' => ( absint( $count ) === count( $downloads ) ) ? $offset + 1 : '',
+				'done'   => absint( $count ) > count( $downloads ),
 			);
 
 		}
@@ -401,7 +412,16 @@ if ( ! class_exists( 'DLM_Reports' ) ) {
 			}
 
 			$users_data = array();
-			$users      = get_users();
+
+			$offset       = isset( $_REQUEST['offset'] ) ? absint( sanitize_text_field( wp_unslash( $_REQUEST['offset'] ) ) ) : 0;
+			$count        = isset( $_REQUEST['limit'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['limit'] ) ) : 5000;
+			$offset_limit = $offset * $count;
+
+			$args = array(
+				'number' => $count,
+				'offset' => $offset_limit
+			);
+			$users      = get_users( $args );
 			foreach ( $users as $user ) {
 				$user_data    = $user->data;
 				$users_data[] = array(
@@ -415,7 +435,11 @@ if ( ! class_exists( 'DLM_Reports' ) ) {
 				);
 			}
 
-			return $users_data;
+			return array(
+				'logs'   => $users_data,
+				'offset' => ( absint( $count ) === count( $users ) ) ? $offset + 1 : '',
+				'done'   => absint( $count ) > count( $users ),
+			);
 		}
 
 		/**

@@ -65,8 +65,7 @@ class WP_DLM {
 		$this->services = new DLM_Services();
 
 		// Load plugin text domain.
-		load_textdomain( 'download-monitor', WP_LANG_DIR . '/download-monitor/download_monitor-' . get_locale() . '.mo' );
-		load_plugin_textdomain( 'download-monitor', false, dirname( plugin_basename( DLM_PLUGIN_FILE ) ) . '/languages' );
+		$this->load_textdomain();
 
 		// Table for Download Infos.
 		$wpdb->download_log = "{$wpdb->prefix}download_log";
@@ -141,7 +140,8 @@ class WP_DLM {
 			}*/
 
 			new DLM_Review();
-			
+			// Show the shop discontinued notice.
+			add_action( 'admin_notices', array( $this, 'shop_discontinued_notice' ), 8 );
 		}
 
 		// Set the DB Upgrader class to see if we need to upgrade the table or not.
@@ -220,10 +220,41 @@ class WP_DLM {
 			require_once( $this->get_plugin_path() . 'src/Shop/bootstrap.php' );
 		}
 
-		// Fix to whitelist our function for PolyLang
+		// Fix to whitelist our function for PolyLang.
 		add_filter( 'pll_home_url_white_list', array( $this, 'whitelist_polylang' ), 15, 1 );
-		// Generate attachment URL as Download link for protected files. Adding this here because we need it both in admin and in front
+		// Generate attachment URL as Download link for protected files. Adding this here because we need it both in admin and in front.
 		add_filter( 'wp_get_attachment_url', array( $this, 'generate_attachment_url' ), 15, 2 );
+	}
+
+	/**
+	 * Load Textdomain
+	 *
+	 * @since 4.7.72
+	 */
+	private function load_textdomain() {
+		$dlm_lang = dirname( DLM_FILE ) . '/languages/';
+
+		if ( get_user_locale() !== get_locale() ) {
+
+			unload_textdomain( 'download-monitor' );
+			$locale = apply_filters( 'plugin_locale', get_user_locale(), 'download-monitor' );
+
+			$lang_ext  = sprintf( '%1$s-%2$s.mo', 'download-monitor', $locale );
+			$lang_ext1 = WP_LANG_DIR . "/download-monitor/download-monitor-{$locale}.mo";
+			$lang_ext2 = WP_LANG_DIR . "/plugins/download-monitor/{$lang_ext}";
+
+			if ( file_exists( $lang_ext1 ) ) {
+				load_textdomain( 'download-monitor', $lang_ext1 );
+
+			} elseif ( file_exists( $lang_ext2 ) ) {
+				load_textdomain( 'download-monitor', $lang_ext2 );
+
+			} else {
+				load_plugin_textdomain( 'download-monitor', false, $dlm_lang );
+			}
+		} else {
+			load_plugin_textdomain( 'download-monitor', false, $dlm_lang );
+		}
 	}
 
 	/**
@@ -310,7 +341,7 @@ class WP_DLM {
 	 */
 	public function frontend_scripts() {
 		if ( apply_filters( 'dlm_frontend_scripts', true ) ) {
-			wp_register_style( 'dlm-frontend', $this->get_plugin_url() . '/assets/css/frontend.min.css' );
+			wp_register_style( 'dlm-frontend', $this->get_plugin_url() . '/assets/css/frontend.min.css', array(), DLM_VERSION );
 		}
 
 		// only enqueue preview stylesheet when we're in the preview.
@@ -337,7 +368,8 @@ class WP_DLM {
 			if ( '1' === get_option( 'dlm_no_access_modal', 0 ) ) {
 				wp_enqueue_style( 'dashicons' );
 			}
-
+			// @todo: delete the xhr_links attribute in the future as it will not be needed. It's only here for backwards
+			// compatibility as extensions might using it. Used prior to 4.7.72.
 			$dlm_xhr_data = apply_filters(
 				'dlm_xhr_data',
 				array(
@@ -357,11 +389,39 @@ class WP_DLM {
 			);
 
 			$xhr_data = array_merge( $dlm_xhr_data, $dlm_xhr_security_data );
+			// Let's create the URL pointer for the download link. It will be used as a global variable in the xhr.js file
+			// and will be used to check if is a true download request or not.
+			$scheme            = parse_url( get_option( 'home' ), PHP_URL_SCHEME );
+			$endpoint          = get_option( 'dlm_download_endpoint' );
+			$endpoint          = $endpoint ? $endpoint : 'download';
+			$wpml_options      = get_option( 'icl_sitepress_settings', false );
+			$is_dlm_translated = false;
+			if ( $wpml_options && isset( $wpml_options['custom_posts_sync_option'] ) && in_array( 'dlm_download', $wpml_options['custom_posts_sync_option'] ) ) {
+				$is_dlm_translated = true;
+			}
 
-			wp_add_inline_script('dlm-xhr', 'const dlmXHR = ' . json_encode( $xhr_data ) . '; dlmXHRinstance = {};', 'before');
-			wp_localize_script('dlm-xhr', 'dlmXHRtranslations', array(
-				'error' => __('An error occurred while trying to download the file. Please try again.', 'download-monitor')
-			));
+			if ( $is_dlm_translated ) {
+				add_filter( 'wpml_get_home_url', array( 'DLM_Utils', 'wpml_download_link' ), 15, 2 );
+			}
+
+			if ( get_option( 'permalink_structure' ) ) {
+				// Fix for translation plugins that modify the home_url.
+				$download_pointing_url = get_home_url( null, '', $scheme );
+				$download_pointing_url = $download_pointing_url . '/' . $endpoint . '/';
+			} else {
+				$download_pointing_url = add_query_arg( $endpoint, '', home_url( '', $scheme ) );
+			}
+
+			// Now we can remove the filter as the link is generated.
+			//@todo: If Downloads will be made translatable in the future then this should be removed.
+			if ( $is_dlm_translated ) {
+				remove_filter( 'wpml_get_home_url', array( 'DLM_Utils', 'wpml_download_link' ), 15, 2 );
+			}
+
+			wp_add_inline_script( 'dlm-xhr', 'const dlmXHR = ' . json_encode( $xhr_data ) . '; dlmXHRinstance = {}; const dlmXHRGlobalLinks = "' . esc_url( $download_pointing_url ) . '"; dlmXHRgif = "' . esc_url( includes_url( '/images/spinner.gif' ) ) .'"', 'before' );
+			wp_localize_script( 'dlm-xhr', 'dlmXHRtranslations', array(
+				'error' => __( 'An error occurred while trying to download the file. Please try again.', 'download-monitor' )
+			) );
 		}
 
 		do_action( 'dlm_frontend_scripts_after' );
@@ -601,15 +661,19 @@ class WP_DLM {
 	public function archive_filter_download_link( $post_link, $post ) {
 
 		// We exclude the search because there is a specific option for this
-		if ( 'dlm_download' == $post->post_type && !is_search() ) {
-			// fetch download object
-			try{
-				/** @var DLM_Download $download */
-				$download = download_monitor()->service( 'download_repository' )->retrieve_single( $post->ID );
+		if ( 'dlm_download' == $post->post_type && ! is_search() ) {
+			if ( ! isset( $GLOBALS['dlm_download'] ) ) {
+				// fetch download object
+				try {
+					/** @var DLM_Download $download */
+					$download                = download_monitor()->service( 'download_repository' )->retrieve_single( $post->ID );
+					$GLOBALS['dlm_download'] = $download;
 
-				return $download->get_the_download_link();
-			}
-			catch ( Exception $e ){
+					return $download->get_the_download_link();
+				} catch ( Exception $e ) {
+				}
+			} else {
+				return $GLOBALS['dlm_download']->get_the_download_link();
 			}
 		}
 
@@ -681,5 +745,24 @@ class WP_DLM {
 
 		// Return our Download Link instead of the original URL
 		return $url;
+	}
+
+	/**
+	 * Display shop discontinued notice.
+	 *
+	 * @return void
+	 * @since 4.7.76
+	 */
+	public function shop_discontinued_notice() {
+
+		if ( ! dlm_is_shop_enabled() || 0 != get_option( 'dlm_hide_notice-shop_disabled', 0 ) ) {
+			return;
+		}
+
+		?>
+		<div class="notice notice-error is-dismissible dlm-notice" id="shop_disabled" data-nonce="<?php echo esc_attr( wp_create_nonce( 'dlm_hide_notice-shop_disabled' ) );?>" style="margin-top:30px;">
+			<p><?php echo wp_kses_post( __( '<strong>Attention!</strong> Download Monitor shop functionality will no longer be supported begining <strong>April 2023</strong> and will be disabled in a future update.', 'download-monitor' ) ); ?></p>
+		</div>
+		<?php
 	}
 }

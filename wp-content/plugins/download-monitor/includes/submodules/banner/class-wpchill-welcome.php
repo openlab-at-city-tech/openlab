@@ -40,8 +40,7 @@ if ( ! class_exists( 'WPChill_Welcome' ) ) {
 		 * Enqueue admin Wellcome style
 		 */
 		public function welcome_style() {
-			wp_register_style( 'wpchill-welcome-style', plugins_url( '/assets/css/wpchill-welcome.css', __FILE__ ), null, '1.0.0' );
-			wp_print_styles( array( 'wpchill-welcome-style' ) );
+			wp_enqueue_style( 'wpchill-welcome-style', plugins_url( '/assets/css/wpchill-welcome.css', __FILE__ ), null, '1.0.0' );
 		}
 
 		/**
